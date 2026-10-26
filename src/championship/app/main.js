@@ -93,6 +93,8 @@ import { createLoadWatchdog, createLoadAttempt, LOAD_MAX_MS } from './loadWatchd
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
 import { configureCeremonyAudio, playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
+import { installArcadeFx } from './ui/arcadeFx.js';
+import { installTitleParade } from './titleParade.js';
 import { buildMedal, buildVersus } from '../presentation/ceremony/ceremonyScenes.js';
 import { createHighlightAudio } from '../presentation/highlight/highlightAudio.js';
 import { downloadSaveBackup, downloadRuntimeDiagnostics } from './downloadSaveBackup.js';
@@ -431,6 +433,11 @@ function bootSettings() {
 const settings = bootSettings();
 // Ceremonies (2026-10-15) play their synthesized cues through the same sfx bus.
 configureCeremonyAudio(() => settings.audio.output('sfx'));
+// Owner 2026-10-26: the arcade rebuild's motion and synthesized sounds on every key,
+// card, sheet and result, through the same sfx bus as the ceremonies.
+installArcadeFx({ getOutput: () => settings.audio.output('sfx') });
+// The rebuild's title parade, walking with each partner's own in-game walk animation.
+installTitleParade();
 // The Battle screens import display copy only; their two ceremonies are
 // handed in here, as the result highlight is.
 const battleCeremonies = Object.freeze({

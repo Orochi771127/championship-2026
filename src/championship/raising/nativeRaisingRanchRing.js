@@ -14,8 +14,8 @@ import { getCageDefinitionByModuleId } from "../cage/cageCatalog.js";
 import { RANCH_DECKS_LAYOUT, ranchRing, ringFieldTileOrigin, validateRanchLayout } from "../cage/ranchExpansion.js";
 import { createNativeRaisingGround, findNativeRaisingOpenTile, nativeRaisingEntryPosition, nativeRaisingSpawnPosition } from "./nativeRaisingGround.js";
 
-import { PRODUCT_RANCH_GRID, PRODUCT_RANCH_WORLD_WIDTH, PRODUCT_RANCH_WORLD_HEIGHT,
-  productFieldTileOrigin, productPlacementCells, productUnlockedSlots, validateProductRanch } from '../cage/productRanchGrid.js';
+import { PRODUCT_RANCH_GRID, PRODUCT_RANCH_WORLD_WIDTH, PRODUCT_RANCH_WORLD_HEIGHT, PRODUCT_RANCH_CELL_CAP,
+  productFieldTileOrigin, productLandCapacity, productOccupiedCellCount, validateProductRanch } from '../cage/productRanchGrid.js';
 
 import { reviewGroundField,parseRaisingGroundField } from "./raisingGroundReview.js";
 import sportsGround from '../../data/championship/catalogs/ranch-sports-ground.r1.json' with {type:'json'};
@@ -113,25 +113,23 @@ export function ranchRaisingEntryPosition(ground, definition, rng, poolSlot) {
   return tile.distance > 0 ? [tile.x * 32768, tile.y * 32768, position[2]] : position;
 }
 
-// Product adaptation: source terrain stays unscaled and shares the exact art
-// origin. Native tables and their original twenty-slot composer are untouched.
+// Product adaptation (hex cage world, 2026-10-26): source terrain stays
+// unscaled and shares the exact art origin. Only placed cages are ground; an
+// empty world position is void, and the world does not wrap.
 export function composeProductRanchGround(frame) {
-  const unlocked = frame.unlockedSlots ?? productUnlockedSlots(frame.gridAccess, frame.mainUnlockedCount ?? frame.unlockedCount, frame.testAccessOverride);
-  if (!validateProductRanch(frame.placements, unlocked)) throw new Error('INVALID_PRODUCT_RAISING_RANCH');
+  const capacity = frame.landCapacity ?? (frame.gridAccess ? productLandCapacity(frame.gridAccess, frame.mainUnlockedCount ?? frame.unlockedCount ?? 20, frame.testAccessOverride) : PRODUCT_RANCH_CELL_CAP);
+  if (!validateProductRanch(frame.placements, Math.max(capacity, productOccupiedCellCount(frame.placements)))) throw new Error('INVALID_PRODUCT_RAISING_RANCH');
   const width = PRODUCT_RANCH_WORLD_WIDTH / 8, height = PRODUCT_RANCH_WORLD_HEIGHT / 8;
   const terrain = new Uint8Array(width * height).fill(1), clearance = new Uint8Array(width * height);
   const owners = new Int16Array(width * height).fill(-1);
   const placements = frame.placements.map((p,ownerIndex)=>({...p,ownerIndex,definitionIndex:getCageDefinitionByModuleId(p.moduleId).cageDefinitionIndex}));
-  const occupied = new Set(placements.flatMap(productPlacementCells));
-  const steps = [...placements, ...unlocked.filter(slot=>!occupied.has(slot)).map(slotIndex=>({slotIndex,definitionIndex:36}))];
-  const wrap = n=>((n % width)+width)%width;
-  for (const p of steps) {
+  for (const p of placements) {
     const field = modelContactGround.get(p.definitionIndex) ?? reviewGroundField(p.definitionIndex) ?? selectedSportsGround.get(p.definitionIndex) ?? fields[p.definitionIndex];
-    const origin = productFieldTileOrigin(p.slotIndex, p.definitionIndex === 36 ? 0 : ORIGINAL_CAGE_DEFINITION_SHAPES[p.definitionIndex]);
+    const origin = productFieldTileOrigin(p.slotIndex, ORIGINAL_CAGE_DEFINITION_SHAPES[p.definitionIndex]);
     for (let sy=origin.cropTopTiles; sy<field.height; sy++) for (let sx=0; sx<field.width; sx++) {
-      const y=origin.tileY+sy;
-      if (y<0 || y>=height) continue;
-      const [owner,type,distance]=field.cells[sy*field.width+sx], index=y*width+wrap(origin.tileX+sx);
+      const y=origin.tileY+sy, x=origin.tileX+sx;
+      if (y<0 || y>=height || x<0 || x>=width) continue;
+      const [owner,type,distance]=field.cells[sy*field.width+sx], index=y*width+x;
       if (owner) { owners[index]=p.ownerIndex??-1; terrain[index]=type; }
       if (distance) clearance[index]=distance;
     }
@@ -139,7 +137,7 @@ export function composeProductRanchGround(frame) {
   const map = new Map(placements.map(p=>[p.ownerIndex,p]));
   const byInstance=new Map(placements.map(p=>[p.instanceId,p]));
   const placement=reference=>typeof reference==='string'?byInstance.get(reference)??null:placements.find(p=>p.definitionIndex===reference)??null;
-  const read = (values,x,y,fallback)=>!Number.isInteger(x)||!Number.isInteger(y)||y<0||y>=height ? fallback : values[y*width+wrap(x)];
+  const read = (values,x,y,fallback)=>!Number.isInteger(x)||!Number.isInteger(y)||y<0||y>=height||x<0||x>=width ? fallback : values[y*width+x];
   return Object.freeze(connectRanchGround({layoutVersion:PRODUCT_RANCH_GRID,width,height,pixelWidth:width*8,pixelHeight:height*8,
     placements,terrain,clearance,owners,
     readTerrain:(x,y)=>read(terrain,x,y,1), readClearance:(x,y)=>read(clearance,x,y,0),
@@ -174,8 +172,8 @@ export function alignRanchRaisingPosition(ground,position,reference) {
   let best=null;
   for(let ty=0;ty<ground.height;ty++)for(let tx=0;tx<ground.width;tx++){
     if(ground.readTerrain(tx,ty)===1||ground.cageAt(tx*8,ty*8)?.ownerIndex!==owner.ownerIndex)continue;
-    const px=tx*8+4,py=ty*8+4,dx=Math.abs(px-x)%ground.pixelWidth;
-    const distance=Math.min(dx,ground.pixelWidth-dx)**2+(py-y)**2;
+    const px=tx*8+4,py=ty*8+4;
+    const distance=(px-x)**2+(py-y)**2;
     const safe=ground.readClearance(tx,ty)>1;
     if(!best||(safe&&!best.safe)||(safe===best.safe&&distance<best.distance))best={px,py,distance,safe};
   }
@@ -190,8 +188,7 @@ export function findRanchRaisingOpenTile(ground,x,y,options={}) {
   let best=null;
   for(let ty=0;ty<ground.height;ty++)for(let tx=0;tx<ground.width;tx++){
     if(ground.readTerrain(tx,ty)===1 || !ground.cageAt(tx*8,ty*8))continue;
-    const raw=Math.abs(tx-((x%ground.width+ground.width)%ground.width));
-    const distance=Math.max(Math.min(raw,ground.width-raw),Math.abs(ty-y));
+    const distance=Math.max(Math.abs(tx-x),Math.abs(ty-y));
     if(!best||distance<best.distance)best={x:tx,y:ty,distance};
   }
   if(!best)throw new Error('PRODUCT_RANCH_NO_OPEN_GROUND');

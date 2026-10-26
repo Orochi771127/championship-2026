@@ -495,6 +495,13 @@ export function createChampionshipStandaloneApp({
     if(markDirty)savePort.markDirty();
   }
 
+  /** Cage instances that are currently a partner's home (live actors and saved assignments). */
+  function ranchResidentInstances() {
+    const homes=new Set(Object.values(raising?.nativeHome?.cageAssignments??{}));
+    for(const actor of raisingActors.values())if(actor.cageInstanceId)homes.add(actor.cageInstanceId);
+    return homes;
+  }
+
   function nativeRaisingActor(instanceId) {
     const profile=raisingNativeProfile(instanceId);
     if(!profile)return null;
@@ -2427,7 +2434,18 @@ export function createChampionshipStandaloneApp({
       if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
         throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
       }
-      requireCageEdit().removePlacement(moduleId, ...cageEditArgs());
+      // Hex cage world v1: a cage that is some partner's home cannot be taken
+      // away; the player moves the partner first (Owner direction 2026-10-26).
+      requireCageEdit().removePlacement(moduleId, ...cageEditArgs(), { residentInstances: ranchResidentInstances() });
+      publishScreens();
+      return this.getCageEditFrame();
+    },
+
+    moveCagePlacement(instanceId, slotIndex) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
+        throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
+      }
+      requireCageEdit().movePlacement(instanceId, slotIndex, ...cageEditArgs());
       publishScreens();
       return this.getCageEditFrame();
     },

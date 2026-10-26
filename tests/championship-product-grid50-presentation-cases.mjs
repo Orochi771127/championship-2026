@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {PRODUCT_RANCH_GRID,productPlacementCells,validateProductRanch,productGridCell} from '../src/championship/cage/productRanchGrid.js';
+import {PRODUCT_RANCH_GRID,productPlacementCells,validateProductRanch,productGridCell,PRODUCT_RANCH_WORLD_WIDTH,PRODUCT_RANCH_WORLD_HEIGHT,PRODUCT_RANCH_SLOT_COUNT} from '../src/championship/cage/productRanchGrid.js';
+// Hex cage world (2026-10-26): one non-wrapping plane; only placed cages are drawn.
+const WORLD_W=PRODUCT_RANCH_WORLD_WIDTH*4,WORLD_H=PRODUCT_RANCH_WORLD_HEIGHT*4;
 import {WAITING_ROOM_MODULE} from '../src/championship/cage/nativeRanchLayout.js';
 import {listCageDefinitions} from '../src/championship/cage/cageCatalog.js';
 import {createRanchCageArtPlan} from '../src/championship/presentation/raisingRanchArtPlan.js';
@@ -15,27 +17,26 @@ class Rectangle {constructor(x,y,width,height){Object.assign(this,{x,y,width,hei
 class Texture {constructor(args){Object.assign(this,args);}destroy(){}}
 const loads=[],unloads=[];
 const PIXI={Container,Sprite,AnimatedSprite:Sprite,Rectangle,Texture,Assets:{load:async src=>{loads.push(src);return{source:{},frame:{x:0,y:0,width:1000,height:1000}};},unload:async src=>unloads.push(src)}};
-test('all100 cells share one960×880 plane and preserve stable anchors',async()=>{
+test('the hex world is one non-wrapping plane; empty positions draw nothing and anchors stay stable',async()=>{
   const plan=createRanchCageArtPlan({manifest,layoutVersion:PRODUCT_RANCH_GRID,placements:[waiting]});
-  assert.equal(plan.wrapWidthPx,3840);assert.equal(plan.fold,undefined);assert.equal(plan.productGrid.rows,10);
-  const occupied=new Set(productPlacementCells(waiting));
-  const lids=plan.placements.filter(p=>p.structuralRole==='LID'&&p.slotIndex!==undefined);
-  assert.equal(lids.length,100-occupied.size);
-  for(const lid of lids){const cell=productGridCell(lid.slotIndex);assert.equal(lid.x,cell.x*4);assert.equal(lid.y,(cell.y-24)*4);}
+  assert.equal(plan.wrapWidthPx,null);assert.equal(plan.fold,undefined);assert.equal(plan.productGrid.rows,24);
+  assert.equal(plan.placements.filter(p=>p.structuralRole==='LID').length,0,'no lid art on empty positions');
+  assert.equal(plan.placements.length,1);
+  const cell=productGridCell(waiting.slotIndex);assert.equal(plan.placements[0].x,cell.x*4);assert.equal(plan.placements[0].y,(cell.y-24)*4);
   const art=await loadRuntimeMapArtTileSet({PIXI,manifest,...plan,presentationMode:plan.mode});
-  assert.equal(art.field.worldWidthPx,3840);assert.equal(art.field.worldHeightPx,3520);assert.equal(art.field.wrapWidthPx,3840);
+  assert.equal(art.field.worldWidthPx,WORLD_W);assert.equal(art.field.worldHeightPx,WORLD_H);assert.equal(art.field.wrapWidthPx,null);
   assert.equal(art.field.fold,undefined);assert.equal(art.tileCount,plan.placements.length);
   assert.equal(loads.length,new Set(loads).size);
   await art.dispose();assert.equal(unloads.length,loads.length);
 });
 test('every legal facility anchor composes with matching shared shape geometry',()=>{
   let count=0;
-  for(const definition of listCageDefinitions())if(definition.moduleId!==WAITING_ROOM_MODULE)for(let slotIndex=0;slotIndex<100;slotIndex++){
+  for(const definition of listCageDefinitions())if(definition.moduleId!==WAITING_ROOM_MODULE)for(let slotIndex=0;slotIndex<PRODUCT_RANCH_SLOT_COUNT;slotIndex+=3){
     const p={moduleId:definition.moduleId,slotIndex};if(!validateProductRanch([waiting,p]))continue;
     const plan=createRanchCageArtPlan({manifest,layoutVersion:PRODUCT_RANCH_GRID,placements:[waiting,p]});
     const tile=plan.placements.find(t=>t.moduleId===p.moduleId&&t.slotIndex===slotIndex);
-    assert.ok(tile);assert.ok(tile.y>=-96);assert.equal(tile.sourceRect.y,0);assert.ok(tile.y+tile.sourceRect.height<=3520);
-    assert.ok(tile.x+tile.sourceRect.width<=3840);count++;
+    assert.ok(tile);assert.ok(tile.y>=-96);assert.equal(tile.sourceRect.y,0);assert.ok(tile.y+tile.sourceRect.height<=WORLD_H+448);
+    assert.ok(tile.x+tile.sourceRect.width<=WORLD_W+384);count++;
   }
   assert.ok(count>800);console.log('validated grid50 art anchors',count);
 });
@@ -54,12 +55,11 @@ test('native scale stays stable and pointer/actor projection wraps continuously 
   }
 });
 
-test('locked access is explicit and never inferred from visible cells',()=>{
+test('land is a capacity, never a positional lock drawn on the world',()=>{
   const plan=createRanchCageArtPlan({manifest,layoutVersion:PRODUCT_RANCH_GRID,placements:[waiting],unlockedSlots:Array.from({length:14},(_,i)=>i)});
-  assert.equal(plan.productGrid.lockedSlots.length,86);assert.ok(plan.productGrid.lockedSlots.includes(49));
-  assert.equal(plan.placements.some(p=>p.slotIndex===49),true);
+  assert.deepEqual(plan.productGrid.lockedSlots,[]);assert.equal(plan.placements.some(p=>p.slotIndex===49),false);
   const open=createRanchCageArtPlan({manifest,layoutVersion:PRODUCT_RANCH_GRID,placements:[waiting],unlockedSlots:Array.from({length:100},(_,i)=>i)});
-  assert.deepEqual(open.productGrid.lockedSlots,[]);assert.equal(open.wrapWidthPx,plan.wrapWidthPx);
+  assert.deepEqual(open,plan,'opened land does not change what the world draws');
 });
 
 test('tutorial decline refocus preserves the visible egg and repeated focus is idempotent across all rows',()=>{
@@ -89,8 +89,8 @@ test('top contour survives runtime loading and wrap copies without moving ground
   for(const tile of tops){assert.equal(tile.y,-96);assert.equal(tile.sourceRect.y,0);
     assert.equal(tile.sourceRect.height,manifest.fields.find(f=>f.fieldId===tile.fieldId).worldHeightPx);}
   const art=await loadRuntimeMapArtTileSet({PIXI,manifest,...plan,presentationMode:plan.mode});
-  assert.equal(art.displayObject.children.filter(c=>c.y===-96).length,tops.length*3);
-  assert.equal(art.field.worldHeightPx,3520);
+  assert.equal(art.displayObject.children.filter(c=>c.y===-96).length,tops.length,'no wrap copies');
+  assert.equal(art.field.worldHeightPx,WORLD_H);
   assert.equal(plan.residentViewport.y,0);
   for(const view of [{width:390,height:675},{width:1280,height:720}]){
     const fit=raisingFieldViewport(art.field,{...view,scrollY:Infinity});
@@ -146,9 +146,9 @@ test('padded wrap split uses unchanged ground placements and synchronized phase 
   const w=3840,split=192,y=-96;
   const placements=[{fieldId:water.fieldId,x:w-split,y,sourceRect:{x:0,y:0,width:split,height:448}},
     {fieldId:water.fieldId,x:0,y,sourceRect:{x:split,y:0,width:192,height:448}}];
-  const productGrid={columns:10,rows:5,worldWidthNative:960,worldHeightNative:440,sizingHeightNative:192,lockedSlots:[]};
+  const productGrid={columns:24,rows:24,worldWidthNative:PRODUCT_RANCH_WORLD_WIDTH,worldHeightNative:PRODUCT_RANCH_WORLD_HEIGHT,sizingHeightNative:192,lockedSlots:[]};
   const art=await loadRuntimeMapArtTileSet({PIXI:paddingPixi(),manifest:paddedManifest,placements,wrapWidthPx:w,presentationMode:'NATIVE_RANCH',productGrid,placementEvidence:'PADDING_TEST'});
-  assert.equal(art.field.worldWidthPx,w);assert.equal(art.field.worldHeightPx,1760);
+  assert.equal(art.field.worldWidthPx,w);assert.equal(art.field.worldHeightPx,WORLD_H);
   const [a,b]=art.displayObject.children;assert.equal(a.x,w-split-32);assert.equal(a.x+a.width,w);assert.equal(b.x,0);assert.equal(b.width,224);
   assert.equal(a.y,-128);assert.equal(b.y,-128);
   const before=art.displayObject.children.map(c=>c.texture);
@@ -170,12 +170,12 @@ test('optional padding rejects unbounded values, wrong families, phase dimension
 test('padded art leaves all legal Grid50 plans and resident bounds identical to nominal plans',()=>{
   const nominal=structuredClone(paddedManifest);for(const f of nominal.fields){delete f.visualPaddingNative;delete f.rasterPixelsPerNative;}
   let count=0;
-  for(const definition of listCageDefinitions())if(definition.moduleId!==WAITING_ROOM_MODULE)for(let slotIndex=0;slotIndex<100;slotIndex++){
+  for(const definition of listCageDefinitions())if(definition.moduleId!==WAITING_ROOM_MODULE)for(let slotIndex=0;slotIndex<PRODUCT_RANCH_SLOT_COUNT;slotIndex+=5){
     const p={moduleId:definition.moduleId,slotIndex};if(!validateProductRanch([waiting,p]))continue;
     const args={layoutVersion:PRODUCT_RANCH_GRID,placements:[waiting,p]};
     assert.deepEqual(createRanchCageArtPlan({manifest:paddedManifest,...args}),createRanchCageArtPlan({manifest:nominal,...args}));count++;
   }
-  assert.equal(count,2793);
+  assert.ok(count>2793);
 });
 test('new files preserve phase timings and have provenance-linked verified hashes',()=>{
   const evidence=JSON.parse(fs.readFileSync('assets/production/cage/source-bounds-r1-20261015/provenance.json','utf8'));

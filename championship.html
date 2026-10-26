@@ -32,7 +32,7 @@
         } catch (error) { p = {}; }
         function query(text) { try { return window.matchMedia(text).matches === true; } catch (error) { return false; } }
         function pick(value, allowed, fallback) { return allowed.indexOf(value) >= 0 ? value : fallback; }
-        var choice = pick(p.theme, ["arena", "night", "clear", "warm", "classic", "system"], "arena");
+        var choice = pick(p.theme, ["arcade", "arena", "night", "clear", "warm", "classic", "system"], "arcade");
         var dark = typeof window.matchMedia === "function" ? query("(prefers-color-scheme: dark)") : true;
         var theme = choice === "system" ? (dark ? "night" : "arena") : choice;
         var motion = pick(p.reducedMotion, ["system", "on", "off"], "system");
@@ -53,7 +53,7 @@
         root.dataset.quality = quality;
         root.lang = pick(p.locale, ["zh-Hant", "en", "ja", "th", "vi"], "zh-Hant");
         var color = document.querySelector('meta[name="theme-color"]');
-        if (color) color.setAttribute("content", { arena: "#eef5fa", night: "#080b0a", clear: "#eef3f8", warm: "#f7efd6", classic: "#072f5e" }[theme]);
+        if (color) color.setAttribute("content", { arcade: "#2b1d4a", arena: "#eef5fa", night: "#080b0a", clear: "#eef3f8", warm: "#f7efd6", classic: "#072f5e" }[theme]);
         var scheme = document.querySelector('meta[name="color-scheme"]');
         if (scheme) scheme.setAttribute("content", theme === "night" || theme === "classic" ? "dark" : "light");
       })();
@@ -75,6 +75,11 @@
     <!-- Classic theme: the earlier interface skin, active only under data-theme="classic". -->
     <link rel="stylesheet" href="./src/championship/app/nativeUiSkin.css?v=classic-1">
     <link rel="stylesheet" href="./src/championship/app/mobileTouch.css?v=touch-20261011-r2">
+    <!-- Arcade theme (2026-10-26, default): the arcade rebuild's UI on this game. Scoped to
+         :root[data-theme="arcade"]; loads last so it wins over the base sheets. -->
+    <link rel="stylesheet" href="./src/championship/app/ui/screenLayout.css?v=layout-1">
+    <link rel="stylesheet" href="./src/championship/app/ui/arcadeMotion.css?v=motion-1">
+    <link rel="stylesheet" href="./src/championship/app/ui/arcade.css?v=arcade-1">
     <script type="importmap">
       { "imports": { "three": "./node_modules/three/build/three.module.js" } }
     </script>

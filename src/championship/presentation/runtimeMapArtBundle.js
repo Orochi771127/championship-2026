@@ -1,3 +1,4 @@
+import { PRODUCT_RANCH_COLUMNS, PRODUCT_RANCH_ROWS, PRODUCT_RANCH_WORLD_WIDTH, PRODUCT_RANCH_WORLD_HEIGHT } from '../cage/productRanchGrid.js';
 import { ORIGINAL_CAGE_STRUCTURAL_VISUALS } from "./originalCageVisualBindings.js";
 
 // Championship 2026 -- bounded runtime map-art bundles.
@@ -356,8 +357,8 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   // rows, with capPx of cropped hex tops (foldCap tiles) drawn above it.
   if(fold!==null&&(presentationMode!=='NATIVE_RANCH'||!['splitPx','ringPx','bandOffsetPx','capPx'].every(k=>Number.isFinite(fold[k]))
     ||!(fold.splitPx>0)||!(fold.ringPx>fold.splitPx)||!(fold.bandOffsetPx>0)||fold.capPx<0))fail('TILE_SET_FOLD_INVALID');
-  if(productGrid!==null&&(presentationMode!=='NATIVE_RANCH'||checked.family!=='CAGE'||fold!==null||productGrid.columns!==10||![5,10].includes(productGrid.rows)
-    ||productGrid.worldWidthNative!==960||productGrid.worldHeightNative!==productGrid.rows*88||productGrid.sizingHeightNative!==192
+  if(productGrid!==null&&(presentationMode!=='NATIVE_RANCH'||checked.family!=='CAGE'||fold!==null||productGrid.columns!==PRODUCT_RANCH_COLUMNS||productGrid.rows!==PRODUCT_RANCH_ROWS
+    ||productGrid.worldWidthNative!==PRODUCT_RANCH_WORLD_WIDTH||productGrid.worldHeightNative!==PRODUCT_RANCH_WORLD_HEIGHT||productGrid.sizingHeightNative!==192
     ||!Array.isArray(productGrid.lockedSlots)||productGrid.lockedSlots.some(slot=>!Number.isInteger(slot)||slot<0||slot>=productGrid.columns*productGrid.rows)))fail('PRODUCT_GRID_GEOMETRY_INVALID');
   const residentBounds = residentViewport ? freezeRecord({...residentViewport}) : null;
   if (residentBounds && (!['x','y','width','height'].every(key=>Number.isFinite(residentBounds[key]))
@@ -494,7 +495,7 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
     tileCount: loaded.length,
     field: Object.freeze({
       fieldId: `${checked.assetId}:composite`,
-      worldWidthPx: folded ? folded.splitPx : wrapWidthPx ?? worldWidthPx,
+      worldWidthPx: folded ? folded.splitPx : wrapWidthPx ?? (productGrid ? productGrid.worldWidthNative*nativePixelWorldScale : worldWidthPx),
       wrapWidthPx: folded ? null : wrapWidthPx,
       ...(folded ? { fold: Object.freeze({ splitPx: folded.splitPx, ringPx: folded.ringPx, annexWidthPx: folded.annexWidthPx,
         bandOffsetPx: folded.bandOffsetPx, capPx: folded.capPx }) } : {}),

@@ -9,7 +9,7 @@
 // slots and adds the fold the presentation shows the annex with. Tests replay
 // the repeat over every original layout and require the original's output.
 
-import { PRODUCT_RANCH_GRID, PRODUCT_RANCH_SLOT_COUNT, productGridCell, productPlacementCells, validateProductRanch, productFieldTileOrigin, PRODUCT_RANCH_WORLD_WIDTH, PRODUCT_RANCH_WORLD_HEIGHT } from "../cage/productRanchGrid.js";
+import { PRODUCT_RANCH_GRID, PRODUCT_RANCH_COLUMNS, PRODUCT_RANCH_ROWS, productGridCell, validateProductRanch, productFieldTileOrigin, PRODUCT_RANCH_WORLD_WIDTH, PRODUCT_RANCH_WORLD_HEIGHT } from "../cage/productRanchGrid.js";
 import { deepFreeze } from "../contracts/championshipContracts.js";
 import { getCageDefinitionByModuleId, MAX_SLOT_COUNT } from "../cage/cageCatalog.js";
 import { ORIGINAL_CAGE_DEFINITION_SHAPES, ORIGINAL_CAGE_SHAPE_MASKS } from "../cage/ranchSlotGeometry.js";
@@ -168,54 +168,36 @@ export function createRanchCageArtPlan(options) {
 
 
 
-/** Product-authored continuous five-row area, not a ROM geometry claim.
- * Uses the authoritative cell adapter; visual copies never add build slots. */
-export function createProductGridArtPlan({manifest,placements,unlockedSlots=null}) {
+/** Hex cage world (OWNER_APPROVED_ADAPTATION 2026-10-26), not a ROM geometry claim.
+ * Only placed cages are drawn; an empty world position is void (no lid art),
+ * and the world never wraps. Visual copies never add build slots. */
+export function createProductGridArtPlan({manifest,placements}) {
   if(manifest?.family!=="CAGE"||!Array.isArray(manifest.fields))fail("CAGE_MANIFEST_REQUIRED");
   if(!Array.isArray(placements)||!placements.length)fail("PLACEMENTS_REQUIRED");
   if(!validateProductRanch(placements))fail("PRODUCT_GRID_LAYOUT_INVALID");
   const fields=new Map(manifest.fields.map(field=>[field.fieldId,field]));
-  const occupied=new Set(),modules=new Set();
-  for(const placement of placements){
-    const cells=productPlacementCells(placement);
-    if(!Array.isArray(cells)||!cells.length||modules.has(placement.instanceId??placement.moduleId))fail("PRODUCT_GRID_LAYOUT_INVALID");
-    modules.add(placement.instanceId??placement.moduleId);
-    for(const cell of cells){if(occupied.has(cell))fail("PRODUCT_GRID_OCCUPANCY_OVERLAP");occupied.add(cell);}
-  }
-  if(unlockedSlots!==null&&(!Array.isArray(unlockedSlots)||unlockedSlots.some(slot=>!Number.isInteger(slot)||slot<0||slot>=PRODUCT_RANCH_SLOT_COUNT)))fail("PRODUCT_GRID_ACCESS_INVALID");
-  const available=new Set([...(unlockedSlots??[]),...occupied]);
-  const lockedSlots=Array.from({length:PRODUCT_RANCH_SLOT_COUNT},(_,slot)=>slot).filter(slot=>!available.has(slot));
   const lid=fields.get(LID_FIELD_ID);
   if(!lid)fail("PRODUCT_GRID_LID_REQUIRED");
-  const unit=lid.worldWidthPx/lid.nativeWidthPx,wrapWidthPx=PRODUCT_RANCH_WORLD_WIDTH*unit;
+  const unit=lid.worldWidthPx/lid.nativeWidthPx;
   const result=[];let residentViewport=null;
-  const all=[...placements.map(p=>({...p,definition:getCageDefinitionByModuleId(p.moduleId)})),
-    ...Array.from({length:PRODUCT_RANCH_SLOT_COUNT},(_,slotIndex)=>slotIndex).filter(slot=>!occupied.has(slot))
-      .map(slotIndex=>({slotIndex,moduleId:null,definition:null}))];
+  const all=placements.map(p=>({...p,definition:getCageDefinitionByModuleId(p.moduleId)}));
   all.sort((a,b)=>productGridCell(a.slotIndex).row-productGridCell(b.slotIndex).row||a.slotIndex-b.slotIndex);
   for(const p of all){
-    const cell=productGridCell(p.slotIndex),definitionIndex=p.definition?.cageDefinitionIndex??null;
-    const field=definitionIndex===null?lid:fields.get(getOriginalCageVisualBinding(definitionIndex)?.fieldId);
+    const definitionIndex=p.definition?.cageDefinitionIndex??null;
+    const field=fields.get(getOriginalCageVisualBinding(definitionIndex)?.fieldId);
     if(!field)fail("PRODUCT_GRID_FIELD_REQUIRED");
-    const shapeIndex=definitionIndex===null?SINGLE_CELL_SHAPE_INDEX:ORIGINAL_CAGE_DEFINITION_SHAPES[definitionIndex];
-    const origin=productFieldTileOrigin(p.slotIndex,shapeIndex);
-    // Keep the original top contour above native y=0. This is art overhang,
-    // not extra walkable cells or a displacement of the existing ground.
-    const x=origin.tileX*8*unit,cropTop=0;
-    const y=origin.tileY*8*unit;
-    const width=Math.min(field.worldWidthPx,wrapWidthPx-x),height=field.worldHeightPx-cropTop;
-    if(width<=0||height<=0)fail("PRODUCT_GRID_SOURCE_BOUNDS");
-    const identity={moduleId:p.moduleId,instanceId:p.instanceId??null,cageDefinitionIndex:definitionIndex,
-      ...(definitionIndex===null?{structuralRole:'LID'}:{})};
+    const origin=productFieldTileOrigin(p.slotIndex,ORIGINAL_CAGE_DEFINITION_SHAPES[definitionIndex]);
+    const x=origin.tileX*8*unit,y=origin.tileY*8*unit;
     result.push({slotIndex:p.slotIndex,fieldId:field.fieldId,worldWidthPx:field.worldWidthPx,worldHeightPx:field.worldHeightPx,
-      ...identity,x,y,sourceRect:{x:0,y:cropTop,width,height}});
-    if(width<field.worldWidthPx)result.push({fieldId:field.fieldId,...identity,x:0,y,fragmentOfSlot:p.slotIndex,
-      sourceRect:{x:width,y:cropTop,width:field.worldWidthPx-width,height}});
+      moduleId:p.moduleId,instanceId:p.instanceId??null,cageDefinitionIndex:definitionIndex,
+      x,y,sourceRect:{x:0,y:0,width:field.worldWidthPx,height:field.worldHeightPx}});
     // Preserve the established resident/drop bounds independently of the art.
     if(definitionIndex===35){const inset=origin.cropTopTiles*8*unit;
-      residentViewport={x,y:y+inset,width,height:height-inset};}
+      residentViewport={x,y:y+inset,width:field.worldWidthPx,height:field.worldHeightPx-inset};}
   }
-  return deepFreeze({mode:'NATIVE_RANCH',placementEvidence:'PRODUCT_AUTHORED_CONTINUOUS_GRID100_INSTANCES',wrapWidthPx,residentViewport,
-    placements:result,productGrid:{columns:10,rows:10,worldWidthNative:PRODUCT_RANCH_WORLD_WIDTH,worldHeightNative:PRODUCT_RANCH_WORLD_HEIGHT,sizingHeightNative:192,lockedSlots}});
+  return deepFreeze({mode:'NATIVE_RANCH',placementEvidence:'PRODUCT_AUTHORED_HEX_WORLD',wrapWidthPx:null,residentViewport,
+    placements:result,productGrid:{columns:PRODUCT_RANCH_COLUMNS,rows:PRODUCT_RANCH_ROWS,worldWidthNative:PRODUCT_RANCH_WORLD_WIDTH,
+      worldHeightNative:PRODUCT_RANCH_WORLD_HEIGHT,sizingHeightNative:192,lockedSlots:[]}});
 }
+
 

@@ -97,7 +97,7 @@ function assertApplication(app) {
     "selectHuntEquipment", "fitHuntPlugin", "selectHuntMemoryCard",
     "beginHunt", "exitHunt", "leaveScreen", "buyShopItem", "subscribeShop",
     "selectDatabaseSpecies", "renameDatabaseInstance",
-    "selectCageModule", "placeCageAt", "removeCagePlacement", "confirmCageEdit",
+    "selectCageModule", "placeCageAt", "removeCagePlacement", "moveCagePlacement", "confirmCageEdit",
     "setTamerRank",
     "beginEnclosureStroke", "extendEnclosureStroke", "endEnclosureStroke", "confirmHuntResult",
     "setHuntResultName", "abortEnclosureStroke",
@@ -390,6 +390,10 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
     },
     removeCagePlacement(moduleId) {
       app.removeCagePlacement(moduleId);
+      return commit();
+    },
+    moveCagePlacement(instanceId, slotIndex) {
+      app.moveCagePlacement(instanceId, slotIndex);
       return commit();
     },
     buyRanchTestRow(row) {

@@ -144,7 +144,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
         for(const m of [].concat(o.material)){m.transparent=false;m.alphaTest=.12;m.depthWrite=true;}
       }});
     }
-    const unit=field.nativePixelWorldScale, wrap=field.wrapWidthPx/unit;
+    // The hex cage world does not wrap: one copy of each cage (wrapWidthPx null).
+    const unit=field.nativePixelWorldScale, wrap=field.wrapWidthPx?field.wrapWidthPx/unit:null;
 
     // Detect compatible boundaries between same-theme adjacent placements to dissolve borders
     const taggedPlacements=placements.map((p,idx)=>({...p,ownerIndex:p.ownerIndex??idx}));
@@ -160,7 +161,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     } catch(_){/* fall back to distinct bounded cages */}
 
     for(const p of taggedPlacements.filter(p=>p.fragmentOfSlot===undefined&&!p.foldCap)) {
-      for(const shift of [-wrap,0,wrap]) {
+      for(const shift of wrap?[-wrap,0,wrap]:[0]) {
         const object=models.get(p.fieldId).scene.clone(true);
         const point=ranchNativeToWorld(p.x/unit+shift,p.y/unit);
         object.position.set(point.x,point.y,point.z);scene.add(object);
@@ -577,7 +578,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       }
     }
       cm07Ambient=createCm07Ambient(instances.filter(i=>i.p.fieldId==='field_cm07_01').map(i=>i.object));
-      supportOwnerResolver=createRanchSupportOwnerResolver({placements:supportPlacements,instances,unit:field.nativePixelWorldScale,wrapWidthNative:field.wrapWidthPx/field.nativePixelWorldScale});
+      supportOwnerResolver=createRanchSupportOwnerResolver({placements:supportPlacements,instances,unit:field.nativePixelWorldScale,wrapWidthNative:(field.wrapWidthPx??field.worldWidthPx)/field.nativePixelWorldScale});
     // Owner direction: navigation connections are invisible; original bridges and floors remain model geometry.
     signal?.throwIfAborted();
     Object.assign(pixi.style,{position:'relative',zIndex:'1'});pixi.parentElement.insertBefore(canvas,pixi);

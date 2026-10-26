@@ -32,7 +32,8 @@ const CATEGORY_TITLES = Object.freeze({
 });
 
 const THEME_CHOICES = Object.freeze([
-  { value: "arena", name: "晴空競技", desc: "明亮的天空與競技場配色，青綠連結線與金色獎勵（預設）。" },
+  { value: "arcade", name: "街機拍檔", desc: "粗黑框實體按鈕、網點紫底與鮮豔色塊的街機風格（預設）。" },
+  { value: "arena", name: "晴空競技", desc: "明亮的天空與競技場配色，青綠連結線與金色獎勵。" },
   { value: "night", name: "深色夜景", desc: "深色背景，適合夜間與長時間遊玩。" },
   { value: "clear", name: "藍白清爽", desc: "明亮的藍白配色，適合白天與戶外。" },
   { value: "warm", name: "經典暖黃", desc: "米黃紙色與琥珀色，柔和的暖色調。" },

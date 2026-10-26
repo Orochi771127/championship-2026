@@ -1,7 +1,8 @@
+import { PRODUCT_RANCH_GRID } from '../cage/productRanchGrid.js';
 // Read-only presentation admission from the already composed simulation ground.
 // XY connectivity is not a vertical support height or new navigation authority.
 export function readRaisingGroundSupport(ground,x,y){
-  if(ground?.layoutVersion!=='PRODUCT_GRID100_INSTANCES_V1'||!Number.isFinite(x)||!Number.isFinite(y))return null;
+  if(ground?.layoutVersion!==PRODUCT_RANCH_GRID||!Number.isFinite(x)||!Number.isFinite(y))return null;
   const width=ground.pixelWidth,height=ground.pixelHeight;
   if(!(width>0)||!(height>0)||y<0||y>=height||!ground.navigation?.component)return null;
   const wrappedX=((x%width)+width)%width,tx=Math.floor(wrappedX/8),ty=Math.floor(y/8);

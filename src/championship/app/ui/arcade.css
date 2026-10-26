@@ -1,0 +1,502 @@
+/* Arcade theme (Owner 2026-10-26, default): the arcade rebuild's UI on this game.
+ *
+ * Colours are tokens (ui/tokens.css, palette "arcade"); this sheet gives the
+ * components their arcade structure. It changes nothing for other themes.
+ *
+ * Iron rules (from the rebuild's juicy-monster-ui skill):
+ *   - pressables are ink-bordered physical keys: 6px slab, spring hover with a
+ *     shimmer sweep, 45ms press that compresses the slab to 2px;
+ *   - no backdrop-filter over the game, no blur shadows: dots and hard slabs;
+ *   - only transform / opacity / box-shadow / filter animate; no transition: all;
+ *   - hover motion only for fine pointers; reduced motion keeps colour only.
+ */
+
+/* ---- Stage ----------------------------------------------------------------- */
+:root[data-theme="arcade"],
+:root[data-theme="arcade"] body {
+  background: var(--ax-stage);
+  background-attachment: fixed;
+}
+:root[data-theme="arcade"] * {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* ---- Physical keys ------------------------------------------------------------ */
+/* Default faces at zero specificity, so every tone rule below can recolour a key. */
+:root[data-theme="arcade"] :where(*) {
+  --key-face: var(--ax-white);
+  --key-shade: var(--ax-white-sh);
+  --key-ink: var(--ax-ink);
+}
+:root[data-theme="arcade"] :is(
+  .cm-vs2-action, .cm-screen-primary, .cm-screen-back, .cm-vs5-action, .cm-choice,
+  .cm-toolbar__tool-done, .cm-settings__close, .cm-settings__back, .cm-hexworld__zoom,
+  .cm-hexworld__buy-land, :where(.cm-dialog, .cm-sheet__panel) button:where(:not(.cm-toolbar__cell)),
+  .cm-toolbar__quick-entry, .cm-vs2-shop__tab, .cm-vs5-cube__face, .cm-vs2-database__chip, .cm-arcade-key
+) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: var(--target);
+  border: var(--ax-border);
+  border-radius: var(--r-control);
+  background: var(--key-face);
+  color: var(--key-ink);
+  font-weight: var(--fw-heavy);
+  box-shadow: var(--ax-hl), 0 var(--ax-depth) 0 var(--key-shade);
+  transform: translateZ(0);
+  transition:
+    transform var(--ax-t-hover) var(--ax-spring),
+    box-shadow var(--ax-t-hover) var(--ax-spring),
+    filter var(--ax-t-hover) var(--ax-spring);
+  touch-action: manipulation;
+}
+/* 45° shimmer, swept on hover */
+:root[data-theme="arcade"] :is(
+  .cm-vs2-action, .cm-screen-primary, .cm-screen-back, .cm-vs5-action, .cm-choice,
+  .cm-toolbar__quick-entry, .cm-hexworld__buy-land, .cm-arcade-key
+)::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: -40%;
+  bottom: -40%;
+  left: -80%;
+  width: 60%;
+  background: linear-gradient(90deg, transparent 0, rgba(255, 255, 255, 0.85) 50%, transparent 100%);
+  transform: rotate(45deg);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  :root[data-theme="arcade"] :is(
+    .cm-vs2-action, .cm-screen-primary, .cm-screen-back, .cm-vs5-action, .cm-choice,
+    .cm-toolbar__tool-done, .cm-settings__close, .cm-settings__back, .cm-hexworld__zoom,
+    .cm-hexworld__buy-land, :where(.cm-dialog) button, .cm-toolbar__quick-entry, .cm-vs2-shop__tab, .cm-vs5-cube__face, .cm-vs2-database__chip, .cm-arcade-key
+  ):hover:not(:disabled) {
+    transform: translateY(-3px) scale(1.03) rotate(-0.8deg);
+    box-shadow: var(--ax-hl), 0 9px 0 var(--key-shade);
+    filter: saturate(1.12) brightness(1.04);
+  }
+  :root[data-theme="arcade"] :is(
+    .cm-vs2-action, .cm-screen-primary, .cm-screen-back, .cm-vs5-action, .cm-choice,
+    .cm-toolbar__quick-entry, .cm-hexworld__buy-land, .cm-arcade-key
+  ):hover:not(:disabled)::after { animation: ax-shimmer 620ms var(--ax-snap) both; }
+}
+:root[data-theme="arcade"] :is(
+  .cm-vs2-action, .cm-screen-primary, .cm-screen-back, .cm-vs5-action, .cm-choice,
+  .cm-toolbar__tool-done, .cm-settings__close, .cm-settings__back, .cm-hexworld__zoom,
+  .cm-hexworld__buy-land, :where(.cm-dialog) button, .cm-toolbar__quick-entry, .cm-vs2-shop__tab, .cm-vs5-cube__face, .cm-vs2-database__chip, .cm-arcade-key
+):focus-visible {
+  outline: none;
+  box-shadow: var(--ax-hl), 0 var(--ax-depth) 0 var(--key-shade), var(--focus-ring);
+}
+/* Press: 45ms of travel; the slab compresses to 2px. Kept after :hover. */
+:root[data-theme="arcade"] :is(
+  .cm-vs2-action, .cm-screen-primary, .cm-screen-back, .cm-vs5-action, .cm-choice,
+  .cm-toolbar__tool-done, .cm-settings__close, .cm-settings__back, .cm-hexworld__zoom,
+  .cm-hexworld__buy-land, :where(.cm-dialog) button, .cm-toolbar__quick-entry, .cm-vs2-shop__tab, .cm-vs5-cube__face, .cm-vs2-database__chip, .cm-arcade-key
+):active:not(:disabled) {
+  transform: translateY(4px) scale(0.98);
+  box-shadow: var(--ax-hl), 0 2px 0 var(--key-shade);
+  transition-duration: var(--ax-t-press);
+  transition-timing-function: var(--ax-snap);
+}
+:root[data-theme="arcade"] :is(
+  .cm-vs2-action, .cm-screen-primary, .cm-screen-back, .cm-vs5-action, .cm-choice,
+  .cm-hexworld__buy-land, .cm-toolbar__quick-entry, .cm-arcade-key
+):disabled {
+  filter: grayscale(0.85) brightness(0.85);
+  transform: translateY(4px);
+  box-shadow: var(--ax-hl), 0 2px 0 var(--key-shade);
+}
+@keyframes ax-shimmer {
+  from { transform: translateX(0) rotate(45deg); opacity: 1; }
+  to { transform: translateX(460%) rotate(45deg); opacity: 1; }
+}
+
+/* Faces: the one primary action is yellow, danger red, the rest cream. */
+:root[data-theme="arcade"] :is(.cm-screen-primary, .cm-vs2-action--primary, .cm-vs5-action--primary, .cm-hexworld__buy-land, [data-variant="primary"]) {
+  --key-face: var(--ax-yellow);
+  --key-shade: var(--ax-yellow-sh);
+}
+:root[data-theme="arcade"] :is(.cm-vs2-action--danger, .cm-hexworld__remove, [data-variant="danger"]) {
+  --key-face: var(--ax-red);
+  --key-shade: var(--ax-red-sh);
+  --key-ink: #fff;
+  text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55);
+}
+
+/* Chosen tab: yellow, pressed into the slab. */
+:root[data-theme="arcade"] :is(.cm-vs2-shop__tab, .cm-vs5-cube__face):is([data-active="true"], [aria-selected="true"], [aria-pressed="true"], [aria-current="true"]) {
+  --key-face: var(--ax-yellow);
+  --key-shade: var(--ax-yellow-sh);
+  color: var(--ax-ink);
+  transform: translateY(3px);
+  box-shadow: var(--ax-hl), 0 3px 0 var(--key-shade), 0 0 0 3px var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-ranch-zoom {
+  border: var(--ax-border);
+  border-radius: var(--r-control);
+  background: var(--ax-white);
+  color: var(--ax-ink);
+  box-shadow: var(--ax-hl), 0 5px 0 var(--ax-white-sh);
+  transition: transform var(--ax-t-hover) var(--ax-spring), box-shadow var(--ax-t-hover) var(--ax-spring);
+}
+:root[data-theme="arcade"] .cm-ranch-zoom:active:not(:disabled) { transform: translateY(4px); box-shadow: var(--ax-hl), 0 1px 0 var(--ax-white-sh); transition-duration: var(--ax-t-press); }
+
+/* ---- Paper panels ------------------------------------------------------------ */
+:root[data-theme="arcade"] :is(.cm-toolbar__menu, .cm-dialog, .cm-sheet__panel, .cm-toolbar__tool-hint, .cm-hexworld__selection) {
+  border: var(--ax-border);
+  background: var(--ax-paper);
+  box-shadow: var(--ax-hl), var(--ax-hard);
+  color: var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-toolbar__menu {
+  border-radius: var(--r-sheet);
+  animation: ax-pop 380ms var(--ax-spring) both;
+}
+:root[data-theme="arcade"] .cm-toolbar__entry {
+  border: var(--ax-border);
+  border-radius: var(--r-control);
+  background: var(--ax-white);
+  box-shadow: 0 4px 0 var(--ax-white-sh);
+  transition: transform var(--ax-t-hover) var(--ax-spring), box-shadow var(--ax-t-hover) var(--ax-spring);
+}
+:root[data-theme="arcade"] .cm-toolbar__group[data-prominent="true"] .cm-toolbar__entry:nth-child(1) { background: var(--ax-orange); box-shadow: 0 4px 0 var(--ax-orange-sh); }
+:root[data-theme="arcade"] .cm-toolbar__group[data-prominent="true"] .cm-toolbar__entry:nth-child(2) { background: var(--ax-red); box-shadow: 0 4px 0 var(--ax-red-sh); color: #fff; }
+:root[data-theme="arcade"] .cm-toolbar__group[data-prominent="true"] .cm-toolbar__entry:nth-child(3) { background: var(--ax-yellow); box-shadow: 0 4px 0 var(--ax-yellow-sh); }
+:root[data-theme="arcade"] .cm-toolbar__group[data-prominent="true"] .cm-toolbar__entry:nth-child(2) .cm-toolbar__entry-hint { color: rgba(255, 255, 255, 0.9); }
+:root[data-theme="arcade"] .cm-toolbar__entry:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--ax-white-sh); }
+@media (hover: hover) and (pointer: fine) {
+  :root[data-theme="arcade"] .cm-toolbar__entry:hover:not(:disabled) { transform: translateY(-2px) rotate(-0.5deg); }
+}
+:root[data-theme="arcade"] .cm-toolbar__group-title { color: var(--ax-ink); font-weight: var(--fw-heavy); }
+:root[data-theme="arcade"] .cm-toolbar__entry-hint { color: var(--c-text-3); }
+@keyframes ax-pop {
+  from { opacity: 0; transform: translateY(14px) scale(0.94); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---- Status bar: floating arcade pills over the stage -------------------------- */
+:root[data-theme="arcade"] .cm-status-bar,
+:root[data-theme="arcade"] .cm-status-bar[data-screen="RAISING_HOME"] {
+  background: transparent;
+  border-bottom: 0;
+  box-shadow: none;
+  pointer-events: none;
+}
+:root[data-theme="arcade"] .cm-status-bar > * { pointer-events: auto; }
+:root[data-theme="arcade"] :is(.cm-status-bar__season, .cm-status-bar__day, .cm-status-bar__currencies, .cm-status-bar__matches, .cm-status-bar__save, .cm-status-bar__mode) {
+  border: var(--ax-border);
+  border-radius: 999px;
+  background: var(--ax-paper);
+  box-shadow: var(--ax-hl), 0 4px 0 var(--ax-ink);
+  color: var(--ax-ink);
+  font-weight: var(--fw-heavy);
+  padding: 3px 12px;
+}
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar__currencies {
+  border: var(--ax-border);
+  border-radius: 999px;
+  background: var(--ax-yellow);
+  box-shadow: var(--ax-hl), 0 4px 0 var(--ax-ink);
+  padding: 2px 12px 2px 6px;
+}
+:root[data-theme="arcade"] body:has(#cm-root) :is(.cm-status-bar__bits-value, .cm-status-bar__diamond-text, .cm-status-bar__compact-value) {
+  color: var(--ax-ink);
+  font-weight: var(--fw-heavy);
+  text-shadow: none;
+}
+:root[data-theme="arcade"] .cm-status-bar__diamond { color: var(--ax-ink); }
+:root[data-theme="arcade"] .cm-status-bar__time {
+  padding: 3px 12px;
+  border: var(--ax-border);
+  border-radius: 999px;
+  background: var(--ax-ink);
+  color: var(--ax-yellow);
+  font-weight: var(--fw-heavy);
+  font-variant-numeric: tabular-nums;
+}
+:root[data-theme="arcade"] .cm-status-bar__matches { background: var(--ax-cyan); box-shadow: var(--ax-hl), 0 4px 0 var(--ax-cyan-sh), 0 4px 0 2px var(--ax-ink); }
+:root[data-theme="arcade"] .cm-status-bar__bits-value { color: var(--ax-ink); font-variant-numeric: tabular-nums; }
+
+/* ---- Toolbar: care-tool rail + quick dock ---------------------------------------- */
+:root[data-theme="arcade"] .cm-toolbar { pointer-events: none; }
+/* Only a shown toolbar becomes a flex column; [hidden] must keep display: none. */
+:root[data-theme="arcade"] .cm-toolbar:not([hidden]) { display: flex; flex-direction: column; }
+:root[data-theme="arcade"] .cm-toolbar > * { pointer-events: auto; }
+:root[data-theme="arcade"] .cm-toolbar__rail {
+  gap: 8px;
+  width: min(100% - 16px, 760px);
+  margin: 0 auto calc(8px + var(--safe-bottom));
+  padding: 10px 10px 14px;
+  border: var(--ax-border);
+  border-radius: 22px;
+  background: var(--ax-ink-2);
+  background-image: var(--ax-dots-light);
+  box-shadow: var(--ax-hl), 0 6px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-toolbar__cell {
+  --tile: var(--ax-white);
+  --tile-sh: var(--ax-white-sh);
+  min-height: 62px;
+  border: var(--ax-border);
+  border-radius: 14px;
+  background: var(--tile);
+  color: var(--ax-ink);
+  box-shadow: var(--ax-hl), 0 5px 0 var(--tile-sh);
+  transition: transform var(--ax-t-hover) var(--ax-spring), box-shadow var(--ax-t-hover) var(--ax-spring), filter var(--ax-t-hover) var(--ax-spring);
+}
+:root[data-theme="arcade"] .cm-toolbar__cell[data-icon="hand"]          { --tile: var(--ax-white);  --tile-sh: var(--ax-white-sh); }
+:root[data-theme="arcade"] .cm-toolbar__cell[data-icon="feed"]          { --tile: var(--ax-orange); --tile-sh: var(--ax-orange-sh); }
+:root[data-theme="arcade"] .cm-toolbar__cell[data-icon="protein"]       { --tile: var(--ax-yellow); --tile-sh: var(--ax-yellow-sh); }
+:root[data-theme="arcade"] .cm-toolbar__cell[data-icon="clean"]         { --tile: var(--ax-cyan);   --tile-sh: var(--ax-cyan-sh); }
+:root[data-theme="arcade"] .cm-toolbar__cell[data-icon="woundMedicine"] { --tile: var(--ax-pink);   --tile-sh: var(--ax-pink-sh); }
+:root[data-theme="arcade"] .cm-toolbar__cell[data-icon="medicine"]      { --tile: var(--ax-green);  --tile-sh: var(--ax-green-sh); }
+:root[data-theme="arcade"] .cm-toolbar__cell[data-icon="manage"]        { --tile: var(--ax-paper);  --tile-sh: var(--ax-white-sh); }
+:root[data-theme="arcade"] .cm-toolbar__cell[data-icon="system"]        { --tile: var(--ax-paper);  --tile-sh: var(--ax-white-sh); }
+:root[data-theme="arcade"] .cm-toolbar__cell[data-menu-id="MANAGEMENT"]::after { display: none; }
+:root[data-theme="arcade"] .cm-toolbar__cell[data-menu-id="MANAGEMENT"] { margin-left: 8px; }
+:root[data-theme="arcade"] .cm-toolbar__cell-label { color: var(--ax-ink); font-weight: var(--fw-heavy); }
+:root[data-theme="arcade"] .cm-toolbar__cell[data-icon="woundMedicine"] .cm-toolbar__cell-label { color: #fff; text-shadow: 0 1px 0 var(--ax-ink); }
+@media (hover: hover) and (pointer: fine) {
+  :root[data-theme="arcade"] .cm-toolbar__cell:hover:not(:disabled) {
+    background: var(--tile);
+    color: var(--ax-ink);
+    transform: translateY(-3px) rotate(-1deg);
+    box-shadow: var(--ax-hl), 0 8px 0 var(--tile-sh);
+  }
+}
+:root[data-theme="arcade"] .cm-toolbar__cell:active:not(:disabled) {
+  transform: translateY(4px) scale(0.97);
+  box-shadow: var(--ax-hl), 0 1px 0 var(--tile-sh);
+  transition-duration: var(--ax-t-press);
+}
+:root[data-theme="arcade"] .cm-toolbar__cell[aria-pressed="true"],
+:root[data-theme="arcade"] .cm-toolbar__cell[aria-expanded="true"] {
+  border-color: var(--ax-ink);
+  background: var(--tile);
+  color: var(--ax-ink);
+  transform: translateY(-4px);
+  box-shadow: var(--ax-hl), 0 9px 0 var(--tile-sh), 0 0 0 4px var(--ax-yellow), 0 0 0 7px var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-toolbar__cell:disabled { opacity: 0.45; filter: grayscale(0.7); }
+:root[data-theme="arcade"] .cm-toolbar__stock {
+  top: -8px;
+  left: auto;
+  right: -6px;
+  height: 20px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 999px;
+  background: var(--ax-ink);
+  color: #fff;
+  font-weight: var(--fw-heavy);
+  line-height: 16px;
+}
+:root[data-theme="arcade"] .cm-toolbar__cell[data-owned="0"] .cm-toolbar__stock { background: var(--ax-red); color: #fff; }
+:root[data-theme="arcade"] .cm-toolbar__tool-hint { border-radius: 999px; }
+:root[data-theme="arcade"] .cm-toolbar__tool-name { color: var(--ax-purple-sh); }
+
+/* One-tap destinations above the rail (the rebuild's main dock). */
+:root[data-theme="arcade"] .cm-toolbar__quick:not([hidden]) {
+  order: -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  width: min(100% - 16px, 560px);
+  margin: 0 auto 10px;
+}
+:root[data-theme="arcade"] .cm-toolbar__quick-entry {
+  display: grid;
+  grid-template-columns: auto;
+  justify-items: center;
+  align-content: center;
+  gap: 2px;
+  min-height: 58px;
+  padding: 6px 4px 8px;
+  border-radius: 16px;
+  font-size: var(--fs-body);
+}
+:root[data-theme="arcade"] .cm-toolbar__quick-entry .cm-toolbar__entry-icon { display: none; }
+:root[data-theme="arcade"] .cm-toolbar__quick-entry .cm-toolbar__entry-label { font-size: var(--fs-body); font-weight: var(--fw-heavy); line-height: 1.1; }
+:root[data-theme="arcade"] .cm-toolbar__quick-entry .cm-toolbar__entry-hint { display: none; }
+:root[data-theme="arcade"] .cm-toolbar__quick-entry[data-entry-id="hunt"]     { --key-face: var(--ax-orange); --key-shade: var(--ax-orange-sh); }
+:root[data-theme="arcade"] .cm-toolbar__quick-entry[data-entry-id="battle"]   { --key-face: var(--ax-red);    --key-shade: var(--ax-red-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
+:root[data-theme="arcade"] .cm-toolbar__quick-entry[data-entry-id="shop"]     { --key-face: var(--ax-yellow); --key-shade: var(--ax-yellow-sh); }
+:root[data-theme="arcade"] .cm-toolbar__quick-entry[data-entry-id="database"] { --key-face: var(--ax-purple); --key-shade: var(--ax-purple-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
+
+/* ---- Screens: titles on the stage, paper cards below ------------------------------ */
+:root[data-theme="arcade"] :is(.cm-vs2-title, .cm-vs5-title) {
+  color: #fff;
+  font-weight: var(--fw-heavy);
+  -webkit-text-stroke: 6px var(--ax-ink);
+  paint-order: stroke fill;
+  text-shadow: 0 4px 0 var(--ax-ink);
+  letter-spacing: 0.02em;
+}
+:root[data-theme="arcade"] :is(.cm-vs2-kicker, .cm-vs5-kicker):not([hidden]) {
+  display: inline-block;
+  justify-self: start;
+  align-self: start;
+  width: fit-content;
+  padding: 2px 10px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 999px;
+  background: var(--ax-ink);
+  color: var(--ax-yellow);
+  font-weight: var(--fw-heavy);
+  letter-spacing: 0.08em;
+}
+:root[data-theme="arcade"] :is(.cm-vs2-header, .cm-vs2-footer, .cm-screen-footer, .cm-vs5-footer, .cm-vs5-header) {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+:root[data-theme="arcade"] .cm-vs2-header__copy :is(p, span):not(.cm-vs2-kicker) { color: #fff; text-shadow: 0 2px 0 var(--ax-ink); }
+:root[data-theme="arcade"] :is(
+  .cm-vs2-shop__row, .cm-vs2-database__row, .cm-vs2-shop__detail, .cm-vs2-database__detail,
+  .cm-schedule-fixture, .cm-tamer-fields, .cm-vs2-gate, .cm-hunt-controls-panel, .cm-vs5-practice-member,
+  .cm-setting, .cm-settings__category
+) {
+  border: var(--ax-border);
+  border-radius: var(--r-card);
+  background: var(--ax-paper);
+  box-shadow: var(--ax-hl), 0 5px 0 var(--ax-ink);
+  color: var(--ax-ink);
+}
+/* Card motion (deal, tilt, lift) lives in ui/arcadeMotion.css; the skin deepens the slab. */
+@media (hover: hover) and (pointer: fine) {
+  :root[data-theme="arcade"] :is(.cm-vs2-shop__row, .cm-vs2-database__row, .cm-vs2-gate):hover { box-shadow: var(--ax-hl), 0 8px 0 var(--ax-ink); }
+}
+:root[data-theme="arcade"] :is(.cm-vs2-shop__row, .cm-vs2-database__row)[aria-selected="true"],
+:root[data-theme="arcade"] :is(.cm-vs2-shop__row, .cm-vs2-database__row)[aria-pressed="true"] {
+  background: var(--ax-yellow);
+  box-shadow: var(--ax-hl), 0 5px 0 var(--ax-yellow-sh), 0 0 0 3px var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-vs2-shop__status {
+  border: var(--ax-border);
+  border-radius: 999px;
+  background: var(--ax-white);
+  box-shadow: 0 4px 0 var(--ax-ink);
+  color: var(--ax-ink);
+  font-weight: var(--fw-heavy);
+}
+
+/* Dex: chips are small keys, the chosen stage yellow; the sheet is paper. */
+:root[data-theme="arcade"] .cm-vs2-database__chip { border: var(--ax-border); background: var(--ax-white); color: var(--ax-ink); font-weight: var(--fw-heavy); box-shadow: var(--ax-hl), 0 4px 0 var(--ax-white-sh); transition: transform var(--ax-t-hover) var(--ax-spring), box-shadow var(--ax-t-hover) var(--ax-spring); }
+:root[data-theme="arcade"] .cm-vs2-database__chip[aria-pressed="true"] { background: var(--ax-yellow); box-shadow: var(--ax-hl), 0 4px 0 var(--ax-yellow-sh); }
+:root[data-theme="arcade"] .cm-vs2-database__chip:active { transform: translateY(3px); box-shadow: var(--ax-hl), 0 1px 0 var(--ax-white-sh); transition-duration: var(--ax-t-press); }
+@media (hover: hover) and (pointer: fine) { :root[data-theme="arcade"] .cm-vs2-database__chip:hover { transform: translateY(-2px) rotate(-1deg); } }
+:root[data-theme="arcade"] .cm-vs2-database__sheet-scrim { background: rgba(20, 20, 31, 0.5) var(--ax-dots); }
+:root[data-theme="arcade"] .cm-vs2-database__sheet-panel { border: var(--ax-border); background: var(--ax-paper); box-shadow: var(--ax-hl), 0 8px 0 var(--ax-ink); animation: ax-pop 380ms var(--ax-spring) both; }
+:root[data-theme="arcade"] .cm-vs2-database__row .cm-dex-list-thumb,
+:root[data-theme="arcade"] .cm-vs2-database__row:not(.cm-vs2-database__row--thumb)::before { border: 2px solid var(--ax-ink); background: #e9f6ff; }
+
+/* Shop tabs wear the rebuild's category faces. */
+:root[data-theme="arcade"] .cm-vs2-shop__tab[data-category="TRAINING_GOODS"] { --key-face: var(--ax-orange); --key-shade: var(--ax-orange-sh); }
+:root[data-theme="arcade"] .cm-vs2-shop__tab[data-category="HUNT_ITEMS"]     { --key-face: var(--ax-green);  --key-shade: var(--ax-green-sh); }
+:root[data-theme="arcade"] .cm-vs2-shop__tab[data-category="PLUGINS"]        { --key-face: var(--ax-cyan);   --key-shade: var(--ax-cyan-sh); }
+:root[data-theme="arcade"] .cm-vs2-shop__tab[data-category="CAGES"]          { --key-face: var(--ax-purple); --key-shade: var(--ax-purple-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
+:root[data-theme="arcade"] .cm-vs2-shop__tab:not([data-active="true"]) { filter: saturate(0.55) brightness(1.08); }
+:root[data-theme="arcade"] .cm-vs2-shop__sheet-scrim { background: rgba(20, 20, 31, 0.5) var(--ax-dots); }
+:root[data-theme="arcade"] .cm-vs2-shop__sheet .cm-vs2-shop__detail { border: var(--ax-border); background: var(--ax-paper); box-shadow: var(--ax-hl), 0 8px 0 var(--ax-ink); animation: ax-pop 380ms var(--ax-spring) both; }
+:root[data-theme="arcade"] .cm-vs2-shop__detail-art { border: var(--ax-border); border-radius: var(--r-card); background: var(--ax-ink-2) var(--ax-dots-light); }
+:root[data-theme="arcade"] .cm-vs2-shop__card-art { border: 2px solid var(--ax-ink); background: #e9f6ff; }
+:root[data-theme="arcade"] .cm-vs2-shop__row { border-radius: var(--r-card); }
+:root[data-theme="arcade"] .cm-vs2-shop__status[data-tone="ok"] { background: #c9ffd9; }
+:root[data-theme="arcade"] .cm-vs2-shop__status[data-tone="refused"] { background: #ffe0b3; }
+
+/* Captions that sit straight on the stage or on dark panels read white with an ink edge. */
+:root[data-theme="arcade"] :is(.cm-vs2-gate3d__bar-copy, .cm-vs2-gate3d__hint, .cm-screen-lede, .cm-cage-board-hint, .cm-vs5-cube__note, .cm-vs2-database__filter > span) {
+  color: #fff;
+  text-shadow: 0 2px 0 var(--ax-ink);
+}
+
+/* Bars: chunky ink troughs, spring fills. */
+:root[data-theme="arcade"] :is(.cm-vs5-fighter__hp, .cm-vs5-meter, .cm-vs2-field__progress) {
+  border: 3px solid var(--ax-ink);
+  border-radius: 8px;
+  background-color: var(--ax-ink-2);
+}
+:root[data-theme="arcade"] :is(.cm-vs5-meter__fill, .cm-vs2-field__progress-fill) {
+  transition-timing-function: var(--ax-spring);
+}
+
+/* ---- Settings and dialogs ------------------------------------------------------- */
+:root[data-theme="arcade"] .cm-settings__content { background: var(--ax-paper-2); color: var(--ax-ink); }
+:root[data-theme="arcade"] .cm-settings {
+  background: var(--ax-stage);
+  color: var(--ax-ink);
+}
+:root[data-theme="arcade"] :is(.cm-dialog, .cm-sheet__panel) { border-radius: var(--r-sheet); animation: ax-pop 380ms var(--ax-spring) both; }
+:root[data-theme="arcade"] :is(.cm-dialog__scrim, .cm-sheet__scrim, .cm-sheet::before) { background: rgba(20, 20, 31, 0.5) var(--ax-dots); }
+
+/* ---- Hex world editor ------------------------------------------------------------ */
+:root[data-theme="arcade"] .cm-hexworld__viewport {
+  border: var(--ax-border);
+  border-radius: var(--r-card);
+  background: var(--ax-ink-2) var(--ax-dots-light);
+  box-shadow: var(--ax-hl), 0 6px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-hexworld__counter:not([hidden]) {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 14px;
+  border: var(--ax-border);
+  border-radius: 999px;
+  background: var(--ax-yellow);
+  box-shadow: 0 4px 0 var(--ax-ink);
+  color: var(--ax-ink);
+  font-weight: var(--fw-heavy);
+}
+:root[data-theme="arcade"] .cm-hexworld__counter[data-full="true"] { background: var(--ax-red); color: #fff; }
+:root[data-theme="arcade"] .cm-hexworld__cell[data-preview="ok"]      { animation: ax-tile-land 360ms var(--ax-spring) both; }
+
+@keyframes ax-tile-land {
+  0% { transform: scale(1.18, 0.82); }
+  55% { transform: scale(0.92, 1.08); }
+  100% { transform: none; }
+}
+
+/* ---- Phone portrait ---------------------------------------------------------------- */
+@media (max-width: 600px) {
+  :root[data-theme="arcade"] .cm-toolbar__rail { gap: 4px; width: calc(100% - 8px); padding: 6px 6px 10px; border-radius: 16px; }
+  :root[data-theme="arcade"] .cm-toolbar__cell { min-height: 54px; border-radius: 11px; border-width: 2px; }
+  :root[data-theme="arcade"] .cm-toolbar__cell::before { width: 28px; height: 28px; }
+  :root[data-theme="arcade"] .cm-toolbar__cell[data-menu-id="MANAGEMENT"] { margin-left: 2px; }
+  :root[data-theme="arcade"] .cm-toolbar__quick:not([hidden]) { gap: 6px; width: calc(100% - 8px); margin-bottom: 8px; }
+  :root[data-theme="arcade"] .cm-toolbar__quick-entry { min-height: 48px; padding: 4px 2px 6px; border-radius: 13px; }
+  :root[data-theme="arcade"] .cm-toolbar__quick-entry .cm-toolbar__entry-label { font-size: var(--fs-body-sm); }
+}
+
+/* ---- Phone landscape: the stage is short, so the dock stays one row tall ---------------- */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root[data-theme="arcade"] .cm-toolbar:not([hidden]) { display: flex; flex-direction: row; align-items: flex-end; justify-content: center; gap: 8px; padding: 0 max(8px, var(--safe-right)) 0 max(8px, var(--safe-left)); }
+  :root[data-theme="arcade"] .cm-toolbar__rail { width: auto; flex: 0 1 560px; margin: 0 0 calc(6px + var(--safe-bottom)); padding: 5px 6px 8px; gap: 4px; }
+  :root[data-theme="arcade"] .cm-toolbar__cell { min-height: 46px; padding: 2px; }
+  :root[data-theme="arcade"] .cm-toolbar__cell::before { width: 24px; height: 24px; }
+  :root[data-theme="arcade"] .cm-toolbar__cell-label { font-size: 10px; }
+  :root[data-theme="arcade"] .cm-toolbar__quick:not([hidden]) { order: -1; flex: 0 0 auto; width: auto; grid-template-columns: repeat(2, 72px); gap: 6px; margin: 0 0 calc(6px + var(--safe-bottom)); }
+  :root[data-theme="arcade"] .cm-toolbar__quick-entry { min-height: 34px; padding: 2px 4px 4px; grid-auto-flow: column; gap: 4px; }
+    :root[data-theme="arcade"] .cm-toolbar__quick-entry .cm-toolbar__entry-label { font-size: var(--fs-label); }
+}
+
+/* ---- Reduced motion: colour and opacity stay, travel goes ----------------------------- */
+:root[data-theme="arcade"][data-motion="reduced"] *,
+:root[data-theme="arcade"][data-motion="reduced"] *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+}
+:root[data-theme="arcade"][data-motion="reduced"] :is(
+  .cm-vs2-action, .cm-screen-primary, .cm-screen-back, .cm-vs5-action, .cm-choice, .cm-toolbar__cell,
+  .cm-toolbar__entry, .cm-toolbar__quick-entry, .cm-hexworld__buy-land, .cm-arcade-key,
+  .cm-vs2-shop__row, .cm-vs2-database__row, .cm-vs2-gate
+):is(:hover, :active, [aria-pressed="true"], [aria-expanded="true"]) {
+  transform: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="arcade"] *, :root[data-theme="arcade"] *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; }
+}

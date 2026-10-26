@@ -1,0 +1,599 @@
+/* Screen layout (Owner 2026-10-26): the arcade rebuild's arrangement on this game.
+ *
+ * Owner: 「把這個遊戲的 UI、HUD、圖鑑、商店還有狩獵對戰的整個介面配置都重新設計重新編排，
+ * 用重製版的那種編排跟配置樣式」. This sheet owns arrangement only -- grids, sheets,
+ * order, sizes -- in every palette; colours stay tokens and the arcade skin
+ * (ui/arcade.css) gives the arcade theme its ink and slabs. Three layouts:
+ * phone portrait (<= 600px wide), phone landscape (<= 500px tall), desktop.
+ */
+
+/* ======================================================================== *
+ * Shop: category tabs over a card grid; a card opens its detail sheet.
+ * Weighted like the dex below, over the earlier body[data-desktop-browse] rules.
+ * ======================================================================== */
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shell { position: relative; overflow: hidden; }
+/* The earlier wide layout named "detail / tabs / shelf" areas; this one has none. */
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] :is(.cm-vs2-shop__tabs, .cm-vs2-shop__shelf, .cm-vs2-shop__status, .cm-vs2-shop__detail) { grid-area: auto; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: none;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: var(--sp-3);
+  overflow: hidden;
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__tab { flex: 0 0 auto; min-width: 104px; padding: 0 18px; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__shelf {
+  display: block;
+  height: auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__arrow { display: none; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__list {
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  grid-auto-columns: unset;
+  gap: 16px;
+  height: auto;
+  padding: 6px 6px 18px;
+  overflow: visible;
+  scroll-snap-type: none;
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__row {
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: start;
+  gap: 8px;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  padding: 8px 8px 10px;
+  text-align: left;
+  scroll-snap-align: none;
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__card-art {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--r-control);
+  background: var(--c-surface-3);
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__card-art :is(img, .cm-facility-thumb) { width: 100%; height: 100%; object-fit: cover; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__card-art .cm-shop-goods-icon { width: 58%; height: 78%; background-size: contain; box-shadow: none; background-color: transparent; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__name { display: grid; gap: 2px; min-width: 0; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__name strong { font-size: var(--fs-body); font-weight: var(--fw-heavy); line-height: 1.2; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__meta { color: var(--c-gold-strong); font-size: var(--fs-label); font-weight: var(--fw-strong); white-space: normal; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop .cm-vs2-footer { grid-template-columns: auto; }
+
+/* The purchase line is a toast over the screen, not a row that pushes the grid. */
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__status {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  width: max-content;
+  z-index: var(--z-toast);
+  min-height: 0;
+  max-width: min(92vw, 520px);
+  padding: 8px 18px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__status:empty { display: none; }
+
+/* Detail sheet: centred card on desktop, bottom sheet on a phone. */
+.cm-vs2-shop__sheet { position: fixed; inset: 0; z-index: var(--z-dialog); display: grid; place-items: center; padding: 16px; }
+.cm-vs2-shop__sheet[hidden] { display: none; }
+.cm-vs2-shop__sheet-scrim { position: absolute; inset: 0; background: var(--c-scrim); }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+  gap: var(--sp-3);
+  width: min(520px, 100%);
+  height: auto;
+  min-height: 0;
+  align-self: center;
+  align-content: start;
+  max-height: calc(100% - 16px);
+  overflow-y: auto;
+  padding: var(--sp-4);
+  border-radius: var(--r-sheet);
+  background: var(--c-surface-1);
+  box-shadow: var(--shadow-lift);
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art { height: 200px; min-height: 0; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art .cm-vs2-shop__art-large { width: min(180px, 70%); height: min(180px, 90%); }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-description { max-height: none; }
+.cm-vs2-shop__detail-actions { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--sp-3); }
+.cm-vs2-shop__detail-actions .cm-vs2-action { min-height: 52px; }
+
+@media (max-width: 600px) {
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__tab { min-width: 0; padding: 0 4px; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .cm-vs2-shop__sheet { place-items: end stretch; padding: 0; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail { align-self: end; width: 100%; max-height: 86%; border-radius: var(--r-sheet) var(--r-sheet) 0 0; padding-bottom: max(var(--sp-4), var(--safe-bottom)); }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__list { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 10px; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__card-art { aspect-ratio: 2 / 1; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail { grid-template-columns: 200px minmax(0, 1fr); grid-template-rows: auto auto; width: min(680px, 100%); }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art { grid-row: 1 / span 2; height: auto; min-height: 160px; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-actions { grid-column: 2; }
+}
+
+/* ======================================================================== *
+ * Dex: stage chips over a portrait grid; an entry opens its detail sheet.
+ * Selectors are weighted to match the earlier desktop "list | detail" rules
+ * (body[data-desktop-browse] ... [data-mode]) and win by load order.
+ * ======================================================================== */
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-shop__body { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); grid-template-areas: none; overflow: hidden; }
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__catalog { grid-area: auto; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: var(--sp-3); min-height: 0; }
+/* The select remains the filter (keyboard, screen readers); the chips drive it. */
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__filter { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.cm-vs2-database__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.cm-vs2-database__chip {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--c-line-2);
+  border-radius: 999px;
+  background: var(--c-surface-1);
+  color: var(--c-text-1);
+  font: inherit;
+  font-weight: var(--fw-strong);
+  touch-action: manipulation;
+}
+.cm-vs2-database__chip[aria-pressed="true"] { background: var(--c-gold); color: var(--c-text-on-gold); border-color: var(--c-line-3); }
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database .cm-vs2-shop__list {
+  /* Rows are as tall as their cards; earlier list rules let them collapse to 22px. */
+  grid-auto-flow: row;
+  grid-template-rows: none;
+  grid-auto-rows: max-content;
+  grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+  gap: 14px;
+  padding: 6px 6px 18px;
+  min-height: 0;
+}
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database .cm-vs2-database__row {
+  display: grid;
+  height: auto;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-content: start;
+  justify-items: stretch;
+  gap: 6px;
+  min-height: 0;
+  padding: 7px 7px 9px;
+}
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row .cm-dex-list-thumb,
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row:not(.cm-vs2-database__row--thumb)::before {
+  display: block;
+  flex: none;
+  /* A fixed height: a percentage-wide square would let the grid size rows from the
+     image's 32px attributes and the portraits would overlap the next row. */
+  width: 100%;
+  height: var(--dex-thumb, 112px);
+  max-height: none;
+  object-fit: contain;
+  border-radius: var(--r-control);
+  background: var(--c-surface-3);
+  image-rendering: auto;
+}
+/* An entry without a portrait still keeps the card's picture well. */
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row:not(.cm-vs2-database__row--thumb)::before { content: "?"; display: grid; place-items: center; color: var(--c-text-disabled); font-size: 34px; font-weight: var(--fw-heavy); }
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row .cm-vs2-shop__name { justify-items: center; }
+
+.cm-vs2-database__sheet { position: fixed; inset: 0; z-index: var(--z-dialog); display: grid; place-items: center; padding: 16px; }
+.cm-vs2-database__sheet[hidden] { display: none; }
+.cm-vs2-database__sheet-scrim { position: absolute; inset: 0; background: var(--c-scrim); }
+.cm-vs2-database__sheet-panel {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: min(760px, 100%);
+  max-height: calc(100% - 16px);
+  min-height: 0;
+  padding: var(--sp-3);
+  border-radius: var(--r-sheet);
+  background: var(--c-surface-1);
+  box-shadow: var(--shadow-lift);
+}
+.cm-vs2-database__close { justify-self: end; min-width: 88px; }
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__sheet .cm-vs2-database__detail { grid-area: auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--sp-2); }
+
+@media (max-width: 600px) {
+  .cm-vs2-database__chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+  .cm-vs2-database__chip { flex: 0 0 auto; }
+  :root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database .cm-vs2-shop__list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; --dex-thumb: 88px; }
+  .cm-vs2-database__sheet { place-items: end stretch; padding: 0; }
+  .cm-vs2-database__sheet-panel { width: 100%; max-height: 90%; border-radius: var(--r-sheet) var(--r-sheet) 0 0; padding-bottom: max(var(--sp-3), var(--safe-bottom)); }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .cm-vs2-database__chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .cm-vs2-database__chip { flex: 0 0 auto; min-height: 34px; }
+  :root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database .cm-vs2-shop__list { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; --dex-thumb: 72px; }
+  .cm-vs2-database__sheet-panel { width: min(820px, 100%); max-height: calc(100% - 8px); }
+}
+
+/* ======================================================================== *
+ * Title: the rebuild's arcade front door. Logo centred and floating with its
+ * ARCADE EDITION tag, big arcade keys for start / new / continue, a dotted dusk
+ * over the key art, partners breathing at the foot (a tap makes them chirp).
+ * The key art, logos and partners are the existing approved title assets.
+ * ======================================================================== */
+:root body #cm-title .cm-title__panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(rgba(20, 20, 31, 0.32) 1.2px, transparent 1.6px) 0 0 / 6px 6px, linear-gradient(180deg, transparent 38%, rgba(20, 12, 40, 0.55));
+}
+:root body #cm-title .cm-title__art { z-index: 1; }
+:root body #cm-title > .cm-title__panel .cm-title__logo {
+  left: 50%;
+  width: min(560px, 86%);
+  translate: -50% 0;
+  filter: drop-shadow(0 8px 0 rgba(20, 20, 31, 0.6));
+  animation: cm-title-arrive 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) both, cm-title-logo-float 3.2s 0.85s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+}
+:root:not(:lang(zh)) body #cm-title > .cm-title__panel .cm-title__logo { left: 50%; width: min(560px, 86%); }
+:root body #cm-title > .cm-title__panel .cm-title__logo::after {
+  content: "ARCADE EDITION";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  translate: -50% 0;
+  rotate: -2deg;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #14141f;
+  color: #fff;
+  font: 900 11px/1 ui-monospace, "Consolas", monospace;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+@keyframes cm-title-logo-float { from { translate: -50% -6px; rotate: -1deg; } to { translate: -50% 8px; rotate: 1deg; } }
+
+/* Partners breathe at the foot and answer a tap. */
+:root body #cm-title .cm-title__partners { pointer-events: none; }
+:root body #cm-title .cm-title__partner {
+  pointer-events: auto;
+  cursor: pointer;
+  transform-origin: 50% 100%;
+  animation: cm-title-partner 0.7s 0.3s ease-out both, cm-title-breathe 1.5s 1s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+}
+:root body #cm-title .cm-title__partner--cloud { animation-delay: 0.5s, 1.3s; }
+@keyframes cm-title-breathe { to { scale: 1.04 0.96; } }
+
+/* Start / new / continue: the rebuild's XL arcade keys with an English sub-label. */
+:root body #cm-title :is(.cm-title__login, .cm-title__actions .cm-button) {
+  --key-face: #ffd23f;
+  --key-shade: #a98400;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 4px;
+  min-height: 64px;
+  padding: 10px 18px 12px;
+  border: 3px solid #14141f;
+  border-radius: 18px;
+  background: var(--key-face);
+  color: #14141f;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45), 0 6px 0 var(--key-shade);
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 220ms cubic-bezier(0.34, 1.56, 0.64, 1), filter 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: cm-title-menu-in 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+:root body #cm-title :is(.cm-title__login, .cm-title__actions .cm-button)::after {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  opacity: 0.8;
+}
+:root body #cm-title .cm-title__login::after { content: "PRESS START"; }
+:root body #cm-title .cm-title__actions #cm-new-game::after { content: "NEW GAME"; }
+:root body #cm-title .cm-title__actions #cm-continue::after { content: "CONTINUE"; }
+:root body #cm-title .cm-title__actions #cm-continue { --key-face: #3ddc84; --key-shade: #188a49; animation-delay: 90ms; }
+:root body #cm-title .cm-title__actions #cm-new-game:not(:only-child) { --key-face: #fffdf6; --key-shade: #b9ad8f; }
+@media (hover: hover) and (pointer: fine) {
+  :root body #cm-title :is(.cm-title__login, .cm-title__actions .cm-button):not(:disabled):hover {
+    translate: none;
+    transform: translateY(-3px) scale(1.03) rotate(-0.8deg);
+    box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45), 0 9px 0 var(--key-shade);
+    filter: saturate(1.12) brightness(1.04);
+  }
+}
+:root body #cm-title :is(.cm-title__login, .cm-title__actions .cm-button):not(:disabled):active {
+  transform: translateY(4px) scale(0.98);
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45), 0 2px 0 var(--key-shade);
+  transition-duration: 45ms;
+}
+:root body #cm-title :is(.cm-title__login, .cm-title__actions .cm-button):focus-visible { outline: none; box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45), 0 6px 0 var(--key-shade), 0 0 0 4px #fff, 0 0 0 7px #14141f; }
+@keyframes cm-title-menu-in { from { opacity: 0; transform: translateY(26px) scale(0.92); } }
+
+/* Status reads as the rebuild's hint pill. */
+:root body #cm-title .cm-title__boot-status p:not(:empty),
+:root body #cm-title .cm-title__note:not(:empty) {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 3px solid #14141f;
+  border-radius: 999px;
+  background: rgba(20, 20, 31, 0.82);
+  color: #fff;
+  font-weight: 900;
+}
+:root body #cm-title .cm-title__boot-status p:not(:empty)::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #3ddc84;
+  box-shadow: 0 0 0 3px #14141f;
+  animation: cm-title-dot 600ms cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+}
+@keyframes cm-title-dot { from { opacity: 0.35; } }
+
+/* Corner keys: replay the film and settings. */
+:root body #cm-title :is(.cm-title__film-watch, .cm-title__settings) {
+  border: 3px solid #14141f;
+  border-radius: 14px;
+  background: #fff8e7;
+  color: #14141f;
+  font-weight: 900;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45), 0 5px 0 #b9ad8f;
+}
+:root body #cm-title :is(.cm-title__film-watch, .cm-title__settings):active { transform: translateY(4px); box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45), 0 1px 0 #b9ad8f; }
+
+/* Landscape entry (desktop, phone landscape): the same column, centred like the rebuild. */
+:root body[data-landscape-entry] #cm-title {
+  --cm-entry-logo-width: clamp(260px, 40vw, 520px);
+  --cm-entry-left: calc(50vw - var(--cm-entry-logo-width) / 2);
+  --cm-entry-action-width: min(80vw, 360px);
+}
+:root body[data-landscape-entry] #cm-title > .cm-title__panel::before { background: none; }
+:root body[data-landscape-entry] #cm-title > .cm-title__panel > .cm-title__art > .cm-title__logo {
+  translate: 0 0;
+  animation: cm-title-arrive 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) both, cm-title-logo-bob 3.2s 0.85s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+}
+@keyframes cm-title-logo-bob { from { translate: 0 -6px; rotate: -1deg; } to { translate: 0 8px; rotate: 1deg; } }
+:root body[data-landscape-entry] #cm-title :is(.cm-title__boot-status, .cm-title__background-feedback, .cm-title__note) { width: fit-content; max-width: 100%; margin: 0 auto; padding: 0; background: transparent; text-align: center; }
+:root body[data-landscape-entry] #cm-title .cm-title__boot-status p:not(:empty) { padding: 8px 14px; background: rgba(20, 20, 31, 0.82); color: #fff; font-size: 13px; line-height: 1.2; }
+/* The partners flank the menu at the foot instead of standing behind it. */
+:root body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners {
+  inset: auto 0 max(8px, env(safe-area-inset-bottom)) 0;
+  width: 100%;
+  height: min(46dvh, 360px);
+  transform: none;
+}
+:root body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners::before,
+:root body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners::after { display: none; }
+:root body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner { inset: auto auto 0 auto; width: min(26vw, 340px); height: 100%; padding: 0; }
+:root body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--blaze { left: max(16px, 6vw); right: auto; height: 70%; }
+:root body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--cloud { right: max(16px, 6vw); left: auto; }
+/* The parade: partners stroll along the foot with their own walk animation. */
+:root body #cm-title .cm-title__parade { position: absolute; left: 0; right: 0; bottom: max(10px, env(safe-area-inset-bottom)); z-index: 2; height: 140px; pointer-events: none; }
+/* Once partners walk, the foot is theirs: the static key-art pair steps back. */
+:root body #cm-title:has(.cm-title__walker) .cm-title__partners { opacity: 0; transition: opacity 600ms cubic-bezier(0.2, 0.9, 0.3, 1); pointer-events: none; }
+:root body #cm-title:has(.cm-title__walker) .cm-title__partner { pointer-events: none; }
+:root body #cm-title .cm-title__walker {
+  position: absolute;
+  bottom: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  pointer-events: auto;
+  cursor: pointer;
+  transform-origin: 50% 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+:root body #cm-title .cm-title__walker::after { content: ""; position: absolute; left: 50%; bottom: 2px; width: 46px; height: 10px; margin-left: -23px; border-radius: 50%; background: rgba(20, 20, 31, 0.28); z-index: -1; }
+:root body #cm-title .cm-title__walker canvas { display: block; width: auto; height: 128px; image-rendering: auto; animation: cm-walker-in 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+:root body #cm-title .cm-title__walker[data-walking="true"] canvas { animation: cm-walker-in 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both, cm-walker-hop 260ms 520ms cubic-bezier(0.37, 0, 0.63, 1) infinite alternate; }
+@keyframes cm-walker-in { from { opacity: 0; translate: 0 18px; } }
+@keyframes cm-walker-hop { to { translate: 0 -4px; } }
+/* Portrait: the menu holds the foot, so the parade walks the ground line above it. */
+:root body:not([data-landscape-entry]) #cm-title .cm-title__parade { bottom: auto; top: 60%; z-index: 1; }
+:root body:not([data-landscape-entry]) #cm-title .cm-title__walker canvas { height: 112px; }
+@media (max-height: 500px) { :root body #cm-title .cm-title__walker canvas { height: 96px; } }
+:root[data-motion="reduced"] body #cm-title .cm-title__walker canvas { animation: none !important; }
+:root[data-motion="reduced"] body #cm-title :is(.cm-title__logo, .cm-title__partner, .cm-title__login, .cm-title__actions .cm-button) { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  :root body #cm-title :is(.cm-title__logo, .cm-title__partner, .cm-title__login, .cm-title__actions .cm-button) { animation: none !important; }
+}
+
+/* ======================================================================== *
+ * Ranch: the picked partner reads as the rebuild's inspector -- a panel on
+ * the right (desktop and landscape) or a card over the dock (portrait):
+ * avatar box, heavy name, stacked meters in ink troughs, arcade nav keys.
+ * Selection, camera and care stay the existing companion card's behaviour.
+ * ======================================================================== */
+:root body .int-rh2-root .int-rh2-companion {
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "portrait copy" "actions actions" "vitals vitals";
+  row-gap: 10px;
+  padding: 14px;
+}
+:root body .int-rh2-root .int-rh2-companion::before { display: none; }
+:root body .int-rh2-root .int-rh2-companion__portrait {
+  width: 84px;
+  height: 84px;
+  border-radius: 14px;
+}
+:root body .int-rh2-root .int-rh2-companion__portrait img { animation: cm-avatar-idle 1.3s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate; }
+@keyframes cm-avatar-idle { to { translate: 0 -3px; scale: 1.04; } }
+:root body .int-rh2-root .int-rh2-companion__name { font-size: 20px; font-weight: 900; line-height: 1.1; }
+:root body .int-rh2-root .int-rh2-companion__actions { display: flex; gap: 8px; justify-content: flex-start; }
+/* Meters stack one per row, label, trough, number -- the rebuild's inspector. */
+:root body .int-rh2-root .int-rh2-companion > .int-rh2-vitals {
+  grid-template-columns: 52px minmax(0, 1fr);
+  row-gap: 8px;
+}
+:root body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar { height: 16px; }
+:root body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar::before { transition: width 640ms cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 1; }
+:root body .int-rh2-root .int-rh2-companion[data-open="true"] { animation: cm-panel-in 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes cm-panel-in { from { opacity: 0; translate: 40px 0; rotate: 2deg; } }
+/* Desktop has the room: the meters stay open like the rebuild's inspector; the
+   disclosure stays for short landscape phones only. */
+@media (min-height: 501px) {
+  :root body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-companion[data-expanded="false"] > .int-rh2-vitals { display: grid; }
+  :root body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-companion__toggle { display: none; }
+}
+@media (max-width: 600px) {
+  :root body .int-rh2-root .int-rh2-companion { grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "portrait copy actions" "vitals vitals vitals"; padding: 10px; }
+  :root body .int-rh2-root .int-rh2-companion__portrait { width: 64px; height: 64px; }
+  :root body .int-rh2-root .int-rh2-companion > .int-rh2-vitals { grid-template-columns: 44px minmax(0, 1fr) 44px minmax(0, 1fr); column-gap: 8px; }
+  @keyframes cm-panel-in { from { opacity: 0; translate: 0 30px; } }
+}
+:root[data-motion="reduced"] body .int-rh2-root .int-rh2-companion,
+:root[data-motion="reduced"] body .int-rh2-root .int-rh2-companion__portrait img { animation: none !important; }
+
+/* Arcade skin for the inspector. */
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion {
+  border: 3px solid var(--ax-ink);
+  border-radius: 20px;
+  background: var(--ax-paper) repeating-linear-gradient(45deg, rgba(20, 20, 31, 0.05) 0 6px, transparent 6px 12px);
+  box-shadow: var(--ax-hl), 0 8px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__portrait { border: 3px solid var(--ax-ink); background: #e9f6ff; box-shadow: inset 0 -4px 0 rgba(20, 20, 31, 0.15); }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__copy { border-radius: 12px; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__species { display: inline-block; justify-self: start; padding: 3px 8px; border-radius: 6px; background: var(--ax-ink); color: #fff; font-size: 11px; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__place { border: 2px solid var(--ax-ink); border-radius: 999px; background: #fff; padding: 2px 10px; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close) {
+  min-width: 44px;
+  min-height: 44px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 12px;
+  background: var(--ax-white);
+  color: var(--ax-ink);
+  font-weight: 900;
+  box-shadow: var(--ax-hl), 0 4px 0 var(--ax-white-sh);
+  transition: transform 220ms var(--ax-spring), box-shadow 220ms var(--ax-spring);
+}
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close):active { transform: translateY(3px); box-shadow: var(--ax-hl), 0 1px 0 var(--ax-white-sh); transition-duration: 45ms; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__label { color: var(--ax-ink); font-weight: 900; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar {
+  border: 3px solid var(--ax-ink);
+  border-radius: 8px;
+  background: var(--ax-ink-2) var(--ax-dots-light);
+}
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar[data-stat="hp"] { --meter: #3ddc84; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar[data-stat="tp"] { --meter: #4d7cff; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar[data-stat="ap"] { --meter: #ffd23f; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar[data-stat="capacity"] { --meter: #a259ff; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar::before { background: linear-gradient(rgba(255, 255, 255, 0.45) 0 35%, var(--meter) 35%); }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__num { color: #fff; font-weight: 900; text-shadow: 0 1px 0 var(--ax-ink); }
+/* The full record sheet and the day dialogs wear paper and ink too. */
+:root[data-theme="arcade"] :is(.int-rh2-detail, .int-rh2-day-confirm, .int-rh2-letter, .int-rh2-evolution-choice, .int-rh2-calendar) {
+  border: 3px solid var(--ax-ink);
+  border-radius: 22px;
+  background: var(--ax-paper);
+  box-shadow: var(--ax-hl), 0 8px 0 var(--ax-ink);
+  color: var(--ax-ink);
+}
+:root[data-theme="arcade"] .int-rh2-detail::backdrop { background: rgba(20, 20, 31, 0.5) var(--ax-dots); }
+:root[data-theme="arcade"] .int-rh2-hint { border: 3px solid var(--ax-ink); border-radius: 999px; background: #e6fbff; color: var(--ax-ink); font-weight: 900; box-shadow: 0 4px 0 var(--ax-ink); }
+
+/* ======================================================================== *
+ * Battle and Hunt HUD: the rebuild's arena HUD language -- fighter cards with
+ * portrait boxes, ink troughs with spring fills, a chunky clock, a dark log
+ * ticker; Hunt tools as the rebuild's care row of coloured tiles.
+ * Battle simulation, timing and Hunt controller binding are unchanged.
+ * ======================================================================== */
+:root[data-theme="arcade"] .cm-vs5-fighter {
+  border: 3px solid var(--ax-ink);
+  border-radius: 16px;
+  background: var(--ax-paper);
+  color: var(--ax-ink);
+  box-shadow: var(--ax-hl), 0 5px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-vs5-roster--player .cm-vs5-fighter { background: #e6f0ff; }
+:root[data-theme="arcade"] .cm-vs5-roster--opponent .cm-vs5-fighter { background: #ffe8ea; }
+:root[data-theme="arcade"] .cm-vs5-fighter__portrait {
+  border: 3px solid var(--ax-ink);
+  border-radius: 12px;
+  background: #e9f6ff;
+  image-rendering: pixelated;
+}
+:root[data-theme="arcade"] .cm-vs5-fighter__name { font-weight: 900; }
+:root[data-theme="arcade"] :is(.cm-vs5-meter, .cm-vs5-fighter__hp) {
+  border: 3px solid var(--ax-ink);
+  border-radius: 8px;
+  background: var(--ax-ink-2) var(--ax-dots-light);
+  overflow: hidden;
+}
+:root[data-theme="arcade"] .cm-vs5-meter__fill {
+  background: linear-gradient(rgba(255, 255, 255, 0.45) 0 35%, var(--ax-green) 35%);
+  transition-timing-function: var(--ax-spring);
+}
+:root[data-theme="arcade"] .cm-vs5-meter--resource .cm-vs5-meter__fill { background: linear-gradient(rgba(255, 255, 255, 0.45) 0 35%, var(--ax-blue) 35%); }
+:root[data-theme="arcade"] .cm-vs5-meter__value { color: #fff; font-weight: 900; text-shadow: 0 1px 0 var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs5-clock {
+  border: 3px solid var(--ax-ink);
+  border-radius: 999px;
+  background: var(--ax-ink);
+  color: var(--ax-yellow);
+  font-weight: 900;
+  box-shadow: 0 4px 0 rgba(20, 20, 31, 0.5);
+}
+:root[data-theme="arcade"] .cm-vs5-clock__fill { background: var(--ax-yellow); }
+:root[data-theme="arcade"] .cm-vs5-log {
+  border: 3px solid var(--ax-ink);
+  border-radius: 14px;
+  background: rgba(20, 20, 31, 0.86) var(--ax-dots-light);
+  color: #fff;
+}
+:root[data-theme="arcade"] .cm-vs5-log__line { font-weight: 800; }
+:root[data-theme="arcade"] .cm-vs5-log__detail--fresh { color: var(--ax-yellow); animation: cm-log-tick 420ms var(--ax-spring); }
+@keyframes cm-log-tick { 35% { scale: 1.08; } }
+:root[data-theme="arcade"] .cm-vs5-match {
+  border: 3px solid var(--ax-ink);
+  border-radius: 16px;
+  background: var(--ax-paper);
+  box-shadow: var(--ax-hl), 0 5px 0 var(--ax-ink);
+}
+
+/* Hunt: tools are the rebuild's care row. */
+:root[data-theme="arcade"] :is(.cm-hunt-controls-panel, .cm-hunt-info) {
+  border: 3px solid var(--ax-ink);
+  border-radius: 18px;
+  background: var(--ax-paper);
+  box-shadow: var(--ax-hl), 0 6px 0 var(--ax-ink);
+  color: var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action {
+  --key-face: var(--ax-white);
+  --key-shade: var(--ax-white-sh);
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  border-radius: 14px;
+}
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action:nth-child(6n + 2) { --key-face: var(--ax-orange); --key-shade: var(--ax-orange-sh); }
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action:nth-child(6n + 3) { --key-face: var(--ax-cyan); --key-shade: var(--ax-cyan-sh); }
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action:nth-child(6n + 4) { --key-face: var(--ax-green); --key-shade: var(--ax-green-sh); }
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action:nth-child(6n + 5) { --key-face: var(--ax-pink); --key-shade: var(--ax-pink-sh); }
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action:nth-child(6n) { --key-face: var(--ax-yellow); --key-shade: var(--ax-yellow-sh); }
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action[aria-pressed="true"] {
+  transform: translateY(-4px);
+  box-shadow: var(--ax-hl), 0 9px 0 var(--key-shade), 0 0 0 4px var(--ax-yellow), 0 0 0 7px var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-hunt-tools__icon { image-rendering: pixelated; }
+:root[data-theme="arcade"] .cm-hunt-tools__label { font-weight: 900; }
+:root[data-theme="arcade"] .cm-hunt-radar { border: 3px solid var(--ax-ink); border-radius: 50%; background: rgba(20, 20, 31, 0.78) var(--ax-dots-light); }

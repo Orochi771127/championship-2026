@@ -259,6 +259,10 @@ test("one save key, one persistent writer, one Pixi bootstrap and no second tick
   assert.deepEqual(layoutFrames.map(({file})=>relative(file)),[
     'src/championship/app/huntLayoutResolver.js',
     'src/championship/app/main.js',
+    // Owner 2026-10-26 title parade: walk frames on the title only, stopped when it closes.
+    'src/championship/app/titleParade.js',
+    // Owner 2026-10-26 arcade juice: particles only, the loop stops when none are alive.
+    'src/championship/app/ui/arcadeFx.js',
     'src/championship/presentation/medals/medalThreePresentation.js'
   ]);
   const titleSource=layoutFrames.find(({file})=>relative(file).endsWith('/app/main.js')).text;
