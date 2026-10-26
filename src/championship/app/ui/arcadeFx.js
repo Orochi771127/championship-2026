@@ -407,6 +407,10 @@ export function installArcadeFx({ doc = globalThis.document, view = globalThis, 
         sound.play("unsnap");
         juice.burst(at.x, at.y, { count: 6, colors: ["#d8c39a", "#fff6c2"], speed: [80, 180], gravity: 380 });
         break;
+      case "damage":
+        // Battle plays its own hit sounds; the HUD only answers with the number and a flash.
+        if (text) juice.floatText(at.x, at.y - 10, text, { kind: "dmg", dir: Math.random() < 0.5 ? -1 : 1 });
+        break;
       case "open": sound.play("whoosh"); break;
       case "close": sound.play("back"); break;
       case "toggle": sound.play("toggle", true); break;

@@ -160,6 +160,9 @@ export async function createGateSelectView({ root, source, mountWorld }) {
     signal: String(initial.gateSelect.gates.length)
   });
   body.classList.add("cm-vs2-body--gate");
+  // Owner 2026-10-26: the arcade rebuild's arrangement -- the globe beside a card wall
+  // of destinations that is always there; the toggle only puts the globe away.
+  root.dataset.gateLayout = "ARCADE_SPLIT_R1";
 
   const worldPanel = element("section", "cm-vs2-gate3d");
   worldPanel.dataset.sceneAuthority = "ORIGINAL_CREATED_2026_GATE_WORLD";
@@ -232,7 +235,7 @@ export async function createGateSelectView({ root, source, mountWorld }) {
     worldPanel.dataset.view = fallbackVisible ? "fallback" : "world";
     worldHost.hidden = fallbackVisible;
     dragHint.hidden = fallbackVisible;
-    fallbackPanel.hidden = !fallbackVisible;
+    fallbackPanel.hidden = !fallbackVisible && root.dataset.gateLayout !== "ARCADE_SPLIT_R1";
     viewToggle.textContent = uiText(fallbackVisible ? "返回地球" : "場地列表");
     viewToggle.setAttribute("aria-pressed", String(fallbackVisible));
     root.dataset.gatePresentation = fallbackVisible
@@ -286,10 +289,22 @@ export async function createGateSelectView({ root, source, mountWorld }) {
         button.style.setProperty("--gate-phase", String((gate.ordinal - 1) % 8));
         const aperture = element("span", "cm-vs2-gate__aperture");
         aperture.setAttribute("aria-hidden", "true");
+        // The card shows the destination's own map, like the rebuild's art cards.
+        const thumbnail = gate.art?.thumbnail;
+        if (thumbnail?.src) {
+          const art = element("img", "cm-vs2-gate__art");
+          art.alt = "";
+          art.loading = "lazy";
+          art.decoding = "async";
+          art.src = thumbnail.src;
+          aperture.append(art);
+          button.dataset.hasArt = "true";
+        }
         button.append(
           aperture,
           element("span", "cm-vs2-gate__ordinal", String(gate.ordinal).padStart(2, "0")),
-          element("span", "cm-vs2-gate__name", gate.displayName)
+          element("span", "cm-vs2-gate__name", gate.displayName),
+          element("span", "cm-vs2-gate__fee")
         );
         button.addEventListener("click", () => source.intents.selectGate(gate.gateId));
         buttons.set(gate.gateId, button);
@@ -297,6 +312,8 @@ export async function createGateSelectView({ root, source, mountWorld }) {
       }
       button.setAttribute("aria-selected", String(gate.selected));
       button.dataset.selected = String(gate.selected);
+      const feeLabel = button.querySelector?.(".cm-vs2-gate__fee");
+      if (feeLabel) feeLabel.textContent = Number.isSafeInteger(gate.entranceFeeBits) ? uiText("{bits} 位元幣", { bits: gate.entranceFeeBits }) : "";
       button.dataset.availability = gate.state;
       if (gate.selected) {
         previewName.textContent = uiText(gate.displayName);
@@ -349,6 +366,7 @@ export async function createGateSelectView({ root, source, mountWorld }) {
       delete root.dataset.presentationMode;
       delete root.dataset.screen;
       delete root.dataset.gatePresentation;
+      delete root.dataset.gateLayout;
     }
   });
 }

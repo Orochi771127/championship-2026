@@ -597,3 +597,147 @@
 :root[data-theme="arcade"] .cm-hunt-tools__icon { image-rendering: pixelated; }
 :root[data-theme="arcade"] .cm-hunt-tools__label { font-weight: 900; }
 :root[data-theme="arcade"] .cm-hunt-radar { border: 3px solid var(--ax-ink); border-radius: 50%; background: rgba(20, 20, 31, 0.78) var(--ax-dots-light); }
+
+/* ======================================================================== *
+ * Hunt destination: the globe beside a card wall of destinations (each card
+ * its own map, ordinal, name, entrance fee), the chosen one on top.
+ * Weighted to tie the earlier body:is([data-landscape-menu],[data-desktop-menu])
+ * rules and win by load order.
+ * ======================================================================== */
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gates {
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: 12px;
+  padding: 4px 4px 14px;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate {
+  grid-template-rows: auto auto auto;
+  justify-items: stretch;
+  align-content: start;
+  gap: 4px;
+  min-height: 0;
+  padding: 7px 7px 9px;
+  text-align: left;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate__aperture {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--r-control);
+  background: var(--c-surface-3);
+  transform: none;
+  animation: none;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate__art { width: 100%; height: 100%; object-fit: cover; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate__ordinal { justify-self: start; font-size: var(--fs-caption); font-weight: var(--fw-heavy); letter-spacing: 0.08em; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate__name { font-size: var(--fs-body-sm); font-weight: var(--fw-heavy); line-height: 1.25; text-align: left; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate__fee { color: var(--c-gold-strong); font-size: var(--fs-caption); font-weight: var(--fw-strong); }
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate[data-availability="LOCKED"] { filter: grayscale(0.7); }
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate-fallback { overflow: visible; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate-fallback__heading { display: none; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate3d__host { min-height: 240px; }
+
+@media (min-width: 700px) {
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-body--gate {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    align-content: stretch;
+    overflow: hidden;
+  }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-body--gate > .cm-vs2-gate3d,
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-body--gate > .cm-vs2-gate3d[data-view="fallback"] { grid-column: 1; grid-row: 1 / span 2; align-self: stretch; min-height: 0; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-body--gate > .cm-vs2-preview { grid-column: 2; grid-row: 1; align-self: start; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-body--gate > .cm-vs2-gate-fallback { grid-column: 2; grid-row: 2; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gates { grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 8px; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate3d__host { min-height: 0; }
+}
+@media (max-width: 699px) {
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gates { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate3d:not([data-view="fallback"]) .cm-vs2-gate3d__host { min-height: 0; height: 36vh; }
+}
+
+/* Loadout: equipment and plugin choices as rebuild cards. */
+:root body .cm-vs2-root[data-screen="HUNT_LOADOUT"] .cm-vs2-loadout { gap: 10px; }
+:root[data-theme="arcade"] .cm-vs2-loadout__option {
+  border: var(--ax-border);
+  border-radius: var(--r-card);
+  background: var(--ax-paper);
+  color: var(--ax-ink);
+  box-shadow: var(--ax-hl), 0 5px 0 var(--ax-ink);
+  transition: transform var(--ax-t-hover) var(--ax-spring), box-shadow var(--ax-t-hover) var(--ax-spring);
+}
+:root[data-theme="arcade"] .cm-vs2-loadout__option:active:not(:disabled) { transform: translateY(3px); box-shadow: var(--ax-hl), 0 2px 0 var(--ax-ink); transition-duration: var(--ax-t-press); }
+:root[data-theme="arcade"] .cm-vs2-loadout__option:is([aria-pressed="true"], [aria-checked="true"], [data-selected="true"]) { background: var(--ax-yellow); box-shadow: var(--ax-hl), 0 5px 0 var(--ax-yellow-sh), 0 0 0 3px var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs2-gate[data-selected="true"] { background: var(--ax-yellow); box-shadow: var(--ax-hl), 0 5px 0 var(--ax-yellow-sh), 0 0 0 3px var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs2-gate__aperture { border: 2px solid var(--ax-ink); }
+:root[data-theme="arcade"] :is(.cm-vs2-preview, .cm-vs2-gate3d) { border: var(--ax-border); border-radius: var(--r-card); box-shadow: var(--ax-hl), 0 6px 0 var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs2-preview { background: var(--ax-paper); color: var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs2-preview__image { border: 3px solid var(--ax-ink); border-radius: 12px; }
+
+/* Hunt field: the chosen tool pulses like a primed rebuild care key. */
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action[aria-pressed="true"]::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 3px solid var(--ax-yellow);
+  border-radius: 18px;
+  pointer-events: none;
+  animation: cm-tool-pulse 900ms cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+@keyframes cm-tool-pulse { from { opacity: 1; scale: 1; } to { opacity: 0; scale: 1.18; } }
+:root[data-motion="reduced"] .cm-hunt-tools .cm-vs2-action[aria-pressed="true"]::before { animation: none; }
+
+/* ======================================================================== *
+ * Battle: mode keys in the rebuild's colours, practice partners as cards with
+ * blue A / red B keys, HP bars with the rebuild's lagging white ghost.
+ * ======================================================================== */
+.cm-vs5-meter { position: relative; }
+.cm-vs5-meter::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--ghost, 0%);
+  background: rgba(255, 255, 255, 0.6);
+  transition: width 600ms cubic-bezier(0.2, 0.9, 0.3, 1) 400ms;
+  pointer-events: none;
+}
+.cm-vs5-meter__fill { position: relative; z-index: 1; }
+:root[data-motion="reduced"] .cm-vs5-meter::before { transition: none; }
+.cm-vs5-practice-member { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 8px; padding: 10px 12px; }
+.cm-vs5-practice-member > .cm-vs5-match__fee { grid-column: 1 / -1; }
+@media (min-width: 900px) {
+  :root body .cm-vs5-root .cm-vs5-party:has(> .cm-vs5-practice-member) { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; align-content: start; }
+  :root body .cm-vs5-root .cm-vs5-party:has(> .cm-vs5-practice-member) > :not(.cm-vs5-practice-member) { grid-column: 1 / -1; grid-row: auto; }
+}
+:root[data-theme="arcade"] .cm-vs5-practice-member { border: var(--ax-border); border-radius: var(--r-card); background: var(--ax-paper); box-shadow: var(--ax-hl), 0 5px 0 var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs5-practice-member__name { font-weight: 900; }
+:root[data-theme="arcade"] .cm-vs5-practice-member > button:nth-last-of-type(2)[aria-pressed="true"] { --key-face: var(--ax-blue); --key-shade: var(--ax-blue-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
+:root[data-theme="arcade"] .cm-vs5-practice-member > button:last-of-type[aria-pressed="true"] { --key-face: var(--ax-red); --key-shade: var(--ax-red-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n + 1) { --key-face: var(--ax-yellow); --key-shade: var(--ax-yellow-sh); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n + 2) { --key-face: var(--ax-orange); --key-shade: var(--ax-orange-sh); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n + 3) { --key-face: var(--ax-green); --key-shade: var(--ax-green-sh); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n + 4) { --key-face: var(--ax-cyan); --key-shade: var(--ax-cyan-sh); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n + 5) { --key-face: var(--ax-purple); --key-shade: var(--ax-purple-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n) { --key-face: var(--ax-pink); --key-shade: var(--ax-pink-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:not([aria-pressed="true"]) { filter: saturate(0.6) brightness(1.06); }
+/* The globe sits on a dark dotted stage so its captions and pins read. */
+:root[data-theme="arcade"] .cm-vs2-gate3d { background: var(--ax-ink-2) var(--ax-dots-light); color: #fff; }
+/* The menus of Battle stand on the same dotted purple stage as every other screen
+   (the field keeps its arena). Words outside the paper cards read white on ink. */
+:root[data-theme="arcade"] .cm-vs5-root:not([data-screen="BATTLE_FIELD"]) { background: var(--ax-stage); color: #fff; }
+:root[data-theme="arcade"] .cm-vs5-root:not([data-screen="BATTLE_FIELD"]) .cm-vs5-shell { background: transparent; box-shadow: none; }
+:root[data-theme="arcade"] .cm-vs5-root:not([data-screen="BATTLE_FIELD"]) :is(.cm-vs5-arena-choice, .cm-vs5-entry-notice, .cm-vs5-cube__note, .cm-vs5-root > .cm-vs5-shell > p) {
+  color: #fff;
+  text-shadow: 0 2px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-vs5-root:not([data-screen="BATTLE_FIELD"]) :is(.cm-vs5-practice-member, .cm-vs5-match, .cm-vs5-fighter, .cm-vs5-result__body, .cm-vs5-team-preview, .cm-vs5-link, .cm-vs5-password-maker) :is(.cm-vs5-entry-notice, p, span) { text-shadow: none; }
+:root[data-theme="arcade"] .cm-vs5-arena-choice select { border: var(--ax-border); border-radius: var(--r-control); background: var(--ax-paper); color: var(--ax-ink); font-weight: 800; box-shadow: 0 4px 0 var(--ax-ink); }
+/* Numbers ride above both bars. */
+.cm-vs5-meter :is(.cm-vs5-meter__value, .cm-vs5-meter__number-part) { position: relative; z-index: 2; }
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-fighter__name { color: #fff; text-shadow: 0 2px 0 var(--ax-ink); }
+
