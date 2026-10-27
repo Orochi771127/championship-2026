@@ -9,7 +9,8 @@
 import * as THREE from "../../../../node_modules/three/build/three.module.js";
 
 const SHARD_CAP = 160;
-const COLOURS = Object.freeze([0xf4b740, 0xffd27a, 0x56e3c2, 0x86f2d8, 0xffffff]);
+// No pure white: under strong light a white cube reads as a blank square (Owner 2026-10-28).
+const COLOURS = Object.freeze([0xf4b740, 0xffd27a, 0x56e3c2, 0x86f2d8, 0xa259ff]);
 
 function rng(seed) {
   let state = seed >>> 0;

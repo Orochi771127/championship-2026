@@ -53,6 +53,7 @@ import { mountBattleAudioPresentation } from '../presentation/battleAudioPresent
 // The battle menu box. Its four faces are ROM_VERIFIED from launcher13.nsbmd;
 // the geometry is original-created, exactly as the Gate world sphere is.
 import { battleMenuLabels, speciesName, raisingDisplayName, starterName, titleEventText } from "../text/zhHant.js";
+import { databaseHeroPortrait } from "../presentation/databaseHeroPortraits.js";
 import { loadPixiCharacterRuntimeBundle, createPixiAssetScope, onPixiAssetSettled } from "../presentation/pixiCharacterRuntimeBundle.js";
 import { applyQaUnlock, qaUnlockRequested } from "./qaUnlock.js";
 import { listChampionshipGates } from "../gate/gateCatalog.js";
@@ -1395,7 +1396,8 @@ async function mountBattleSelect() {
       ?{candidates:await app.getBattlePartyCandidates(null),limit:app.getFreeBattleMatches().find(m=>m.id===recordIndex)?.slots??3}
       :{candidates:await app.getBattlePartyCandidates(recordIndex),limit:await app.getBattlePartyLimit(recordIndex)},
     getModeMatches:async mode=>mode==='TITLE_MATCH'?battleRuntime.listMatches():app.openFreeBattle().map(match=>({
-      ...match,recordIndex:match.id,title:uiText('{kind} — {species}',{kind:uiText(match.kind==='SINGLE'?'單隻對戰':'三隻對戰'),species:formatList(match.speciesIndices.map(index=>speciesName(index)))})})),
+      ...match,recordIndex:match.id,crest:databaseHeroPortrait(match.speciesIndices[0])?.thumbnail?.src??null,
+      title:uiText('{kind} — {species}',{kind:uiText(match.kind==='SINGLE'?'單隻對戰':'三隻對戰'),species:formatList(match.speciesIndices.map(index=>speciesName(index)))})})),
     menuCopy: battleMenuLabels(),
     onOpenChampionship() { app.openChampionship(); },
     onOpenDataArena: enterDataArena,
@@ -1555,7 +1557,7 @@ async function mountBattleField() {
           // Resolved with the art, so the scene still mounts in the same task as
           // the overlay: no frame may render between the two.
           const fxLookups = fxLookupsModule
-            ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),onFeed:line=>view.feed?.(line),
+            ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),onFeed:(line,cue)=>view.feed?.(line,cue),
               // Local acceptance shows stable skill IDs; players see approved names only.
               showIds:String(location.search??'').includes('battleFxDebug')&&['localhost','127.0.0.1','[::1]'].includes(location.hostname)}) : null;
           progress?.start('scene');
@@ -1748,9 +1750,12 @@ async function mountBattleResult() {
   // light can fall where they stand (resultHeroAnchor, same frame layout).
   let heroSlots=[];
   let characterHostNode = null;
+  // Owner 2026-10-28: the party stands centred on a podium; the classic theme
+  // keeps the native result positions.
+  const resultLayout = document.documentElement?.dataset?.theme === 'classic' ? 'native' : 'podium';
   const heroAnchor = () => {
     const box = characterHostNode?.getBoundingClientRect?.();
-    return box && heroSlots.length ? resultHeroAnchor({ width: box.width, height: box.height, slots: heroSlots }) : null;
+    return box && heroSlots.length ? resultHeroAnchor({ width: box.width, height: box.height, slots: heroSlots, layout: resultLayout }) : null;
   };
   const {createBattleResultView} = await import('./vs5Screens.js');
   const resultView=createBattleResultView({
@@ -1787,7 +1792,7 @@ async function mountBattleResult() {
   // The stage light fills in with optional art without rebuilding result panels.
   const updateStageLight=()=>{
     const box = characterHostNode.getBoundingClientRect?.();
-    const light = box && heroSlots.length ? resultStageLight({ width: box.width, height: box.height, slots: heroSlots }) : null;
+    const light = box && heroSlots.length ? resultStageLight({ width: box.width, height: box.height, slots: heroSlots, layout: resultLayout }) : null;
     const stageNode = characterHostNode.parentElement;
     if (light && stageNode?.style) {
       stageNode.style.setProperty("--result-light-x", `${(light.x * 100).toFixed(2)}%`);
@@ -1807,7 +1812,7 @@ async function mountBattleResult() {
     .finally(()=>hudLoad.stopTimer());
   void Promise.all([stageReady,hudReady]).then(async([stage,art])=>{
     if(disposed)return;
-    const characters=await mountBattleResultCharacters({stage,hudArt:art,participants,won:outcome.winningTeam===0,signal:artLoading.signal});
+    const characters=await mountBattleResultCharacters({stage,hudArt:art,participants,won:outcome.winningTeam===0,signal:artLoading.signal,layout:resultLayout});
     if(disposed)void characters.dispose();else resultCharacters=characters;
   }).catch(error=>{if(!disposed)console.warn('Battle result character reference unavailable',error);});
   return {...resultView,dispose(){

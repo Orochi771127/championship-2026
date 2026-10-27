@@ -212,6 +212,8 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     arena.classList.add('cm-vs5-data-arena');
     arenaLabels = [element('span', '', arenaText('entry'), false), element('span', 'cm-vs5-match__fee', arenaText('entry.description'), false)];
     arena.append(...arenaLabels);
+    // The LIVE badge is drawn from this attribute, so the label text stays as is.
+    arena.dataset.badge = arenaText('entry.badge');
     arena.addEventListener('click', () => { if (!entering) void onOpenDataArena(arena); });
     header.append(arena);
     matchOnlyNodes.push(arena);
@@ -579,8 +581,20 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       const item = element("li", "cm-vs5-match");
       item.dataset.recordIndex = String(match.recordIndex);
       // A match is a list choice, not the screen's primary action.
-      const button = actionButton(selectedMode==='FREE_BATTLE'?match.title:titleEventText(match.recordIndex, "name", match.title ?? `${menuCopy.match} ${match.recordIndex}`));
+      // The name is its own span, so the ticket layout can give it a full row.
+      const button = actionButton("");
+      button.append(element("span", "cm-vs5-match__title", selectedMode==='FREE_BATTLE'?match.title:titleEventText(match.recordIndex, "name", match.title ?? `${menuCopy.match} ${match.recordIndex}`)));
       button.classList.add("cm-vs5-match__enter");
+      // The opponent crest: the lead species' silhouette when the application
+      // knows it, otherwise the VS mark alone. Decoration only.
+      const crest = element("span", "cm-vs5-match__crest");
+      crest.setAttribute("aria-hidden", "true");
+      if (typeof match.crest === "string" && match.crest) {
+        const art = element("img", "cm-vs5-match__crest-art");
+        art.alt = ""; art.decoding = "async"; art.src = match.crest;
+        crest.append(art);
+      }
+      button.append(crest);
       button.append(element("span", "cm-vs5-match__fee",
         uiText("報名費 {bits} 位元幣", { bits: Number.isSafeInteger(match.entryFee) ? match.entryFee : "—" })));
       button.append(element("span", "cm-vs5-match__payout",
@@ -684,15 +698,19 @@ function eventLogBand(labels) {
   band.setAttribute("aria-label", uiText("Match record"));
   const line = element("p", "cm-vs5-log__line", "");
   const detail = element("p", "cm-vs5-log__detail", "");
+  detail.dataset.badge = `⚡ ${uiText("絕招！")}`;
   band.append(line, detail);
   // The dynamic presentation's running record: the latest move or knockout.
   let feed = "";
   return {
     band,
-    feed(text) {
+    feed(text, cue = null) {
       feed = String(text ?? "");
       if (band.dataset.ended !== "true") {
         detail.textContent = feed;
+        // A signature move cuts in: tier and side drive the ticker's banner.
+        detail.dataset.tier = cue?.tier ?? "";
+        detail.dataset.side = cue?.side ?? "";
         detail.classList.remove("cm-vs5-log__detail--fresh");
         void detail.offsetWidth;
         detail.classList.add("cm-vs5-log__detail--fresh");
@@ -706,6 +724,7 @@ function eventLogBand(labels) {
         return;
       }
       band.dataset.verdict = outcome.verdict;
+      detail.dataset.tier = "";
       line.textContent = uiText(VS5_VERDICT_LABELS[outcome.verdict] ?? outcome.verdict);
       detail.textContent = uiText(VS5_END_REASON_LABELS[outcome.reason] ?? outcome.reason);
     }
@@ -841,9 +860,27 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   loadingText.setAttribute('role','status');
   const progress=loadingProgress?.createView?.({steps:[{id:'engine',key:'LOAD_STEP_ENGINE'},{id:'arena',key:'LOAD_STEP_ARENA'},
     {id:'fighters',key:'LOAD_STEP_FIGHTERS'},{id:'effects',key:'LOAD_STEP_EFFECTS'},{id:'scene',key:'LOAD_STEP_SCENE'}]})??null;
-  loading.append(loadingText);if(progress)loading.append(progress.element);host.append(loading);
+  // While the arena loads, the card is a versus board: both sides' names and
+  // HP / TP from the frame, the arena badge, then the real progress below.
+  const board=element('div','cm-vs5-vsboard');board.setAttribute('aria-hidden','true');
+  const boardSide=(mine)=>{
+    const side=element('div',`cm-vs5-vsboard__side cm-vs5-vsboard__side--${mine?'player':'opponent'}`);
+    side.append(element('span','cm-vs5-vsboard__team',mine?'我方':'對手'));
+    for(const c of frame.combatants.filter(c=>c.present!==false&&(c.team===localTeamIndex)===mine)){
+      const member=element('div','cm-vs5-vsboard__member');
+      member.append(element('strong','cm-vs5-vsboard__name',c.displayName??uiText(`SLOT ${c.slot+1}`),false),
+        element('span','cm-vs5-vsboard__stats',`HP ${c.hp?.maximum??'—'} · TP ${c.resource?.maximum??'—'}`,false));
+      side.append(member);
+    }
+    return side;
+  };
+  const arenaBadge=element('span','cm-vs5-vsboard__arena',frame.arena.identifier.replace('BATTLE_',''));
+  arenaBadge.dataset.arena=frame.arena.identifier;
+  board.append(arenaBadge,boardSide(true),element('span','cm-vs5-vsboard__vs','VS',false),boardSide(false));
+  loading.append(board,loadingText);if(progress)loading.append(progress.element);host.append(loading);
   // Existing loading-overlay styling is a visible, classic/FX-failure fallback.
-  const openingOverlay=element('div','cm-vs5-field__loading');
+  // Its own class: the loading card is the one thing that must be gone at ready.
+  const openingOverlay=element('div','cm-vs5-field__opening');
   const openingText=element('p','cm-vs5-field__loading-text');
   openingText.setAttribute('aria-hidden','true');
   openingOverlay.append(openingText);openingOverlay.hidden=true;
@@ -921,7 +958,11 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
 
   return Object.freeze({
     /** A line for the record band from the dynamic presentation. */
-    feed(text) { if (!viewDisposed) log.feed(text); },
+    feed(text, cue = null) {
+      if (viewDisposed) return;
+      const team = cue ? frame.combatants.find((c) => c.slot === cue.slot)?.team : undefined;
+      log.feed(text, cue && { tier: cue.tier, side: team === undefined ? "" : team === localTeamIndex ? "player" : "opponent" });
+    },
     /** Called with each view the presentation source publishes. */
     render(view) {
       if(viewDisposed)return;

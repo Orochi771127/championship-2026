@@ -5,6 +5,22 @@
 
 Owner directs, without push or deployment: fix the new-game tutorial that showed an empty ranch after character creation; rebuild the prologue as a one-screen cinematic stage inside the iPhone safe area with a skip capsule; turn tamer naming into a licence terminal with a random-name key and a guest-pass badge; give the eight starter eggs element tags and a locked/wobble selection; name the egg in a hatching pod that shows the egg actually chosen; restyle the tutorial as a tactical guide with lesson counter, spotlight and arcade keys; and add local, dependency-free ports for guest identity and account binding, tamer card codes and friends, and story-mode chapters. Root cause of the tutorial fault: since the hex cage world the original board sits at a world offset, but the tutorial still placed its demonstration egg, food, waste and targets in original-board coordinates, off the placed cages and above the view. The prologue keeps its four texts, order and comic art; each card's original reading hold becomes its beat's auto-advance (OWNER_APPROVED_ADAPTATION of presentation only). Saves, gameplay rules and the original layout's tutorial bytes are unchanged. After reviewing the screenshots the Owner directs 「完成後，請你自我審查如果沒有問題就commit 跟push並整合到main並發佈」: a self-review, then commit, push, integration into main and publication of this batch through the existing PR, CI and Pages workflow, with its exact public-playtest input hashes.
 
+<!-- record-id: BATTLE_UI_DUAL_MODE_20261028 -->
+## 2026-10-28 — Dual-mode battle UI/HUD pass (presentation only)
+
+Owner directs a full UI/HUD pass over both battle modes — the battle menu, the multi-round cups, the Data Arena lobby and manual HUD, and the automatic battle's loading, HUD and victory screen — with the title page and the unrotated hex cages untouched. It also asks to fix the stray Data Arena labels and covered buttons, the menu's back key covering the fourth row, and the result partner falling outside the frame. Battle logic, timing, damage, saves and every test anchor (ids, classes, `data-*`, button text, bindings) are preserved. New motion is transform / opacity only, with no large `backdrop-filter` and no new WebGL context. Answers given before implementation:
+
+- the AI tactics (作戰方針) menu is not built in this batch and stays a separate, evidence-first task;
+- the relay swap key stays at the left above the movement stick;
+- commit to a local branch, with no push, merge or deployment. A later instruction in the same session superseded this: 「如果你做好以後，自我審查沒有問題，就請你commit跟push整合至main部署，然後發佈」. It authorizes this batch's commit, push, main integration and Pages publication after self-review, including the exact public-playtest input hashes of the changed files.
+
+Decisions recorded as OWNER_APPROVED_ADAPTATION of presentation:
+
+- the native READY / FIGHT timing is unchanged, and only the FIGHT word's scale curve and one speed-line burst are new;
+- the victory podium centres the party (`layout: "podium"`), and the native result anchors stay the default and the classic theme's.
+
+See the [report](../reports/battle-ui-dual-mode-2026-10-28/REPORT_ZH_TW.md).
+
 <!-- record-id: DATA_ARENA_BATTLE_ENTRY_RELEASE_20261020 -->
 ## 2026-10-20 — Publish Data Arena battle entry and action timing repair
 

@@ -2300,3 +2300,359 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
   :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close) { min-width: 36px; min-height: 36px; border-radius: 10px; }
 }
 :root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-control { padding: 0 8px; font-size: 14px; white-space: nowrap; }
+
+/* ==== Battle UI pass 2026-10-28: battle menu rows, every theme ====
+   The match name is its own span; the opponent crest is an arcade-only
+   decoration. The list ends with room for the sticky way back. */
+.cm-vs5-match__title { grid-area: name; }
+.cm-vs5-match__crest { display: none; }
+.cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-matches { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
+
+/* The native READY / FIGHT fallback overlay: the loading card's old look under
+   its own class, so "the loading card is gone" stays true once the arena is up. */
+.cm-vs5-field__opening {
+  position: absolute;
+  inset: 50% var(--sp-4) auto;
+  z-index: 5;
+  display: grid;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: var(--sp-3);
+  transform: translateY(-50%);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-card);
+  background: var(--c-surface-glass);
+  box-shadow: var(--shadow-float);
+  color: var(--c-text-1);
+  font-size: var(--fs-body-sm);
+  text-align: center;
+}
+.cm-vs5-field__opening .cm-vs5-field__loading-text { margin: 0; font-weight: var(--fw-strong); }
+
+/* Loading as a versus board: arena badge, our side | VS | their side. */
+.cm-vs5-vsboard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-areas: "arena arena arena" "player vs opponent";
+  align-items: center;
+  gap: 8px 6px;
+  margin-bottom: var(--sp-2);
+}
+.cm-vs5-vsboard__arena { grid-area: arena; justify-self: center; }
+.cm-vs5-vsboard__side { display: grid; gap: 4px; min-width: 0; }
+.cm-vs5-vsboard__side--player { grid-area: player; justify-items: start; text-align: left; }
+.cm-vs5-vsboard__side--opponent { grid-area: opponent; justify-items: end; text-align: right; }
+.cm-vs5-vsboard__vs { grid-area: vs; font-weight: 900; }
+.cm-vs5-vsboard__member { display: grid; min-width: 0; }
+.cm-vs5-vsboard__name { overflow-wrap: anywhere; }
+.cm-vs5-vsboard__stats { font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
+
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-field__loading {
+  padding: 14px 12px 12px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 8px 22px 8px 22px;
+  background:
+    linear-gradient(104deg, rgba(61, 220, 132, 0.30) 0 47%, transparent 47% 53%, rgba(255, 77, 94, 0.30) 53%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 4px),
+    #171630;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.12), 0 7px 0 var(--ax-ink);
+  color: #fff;
+}
+:root[data-theme="arcade"] .cm-vs5-vsboard__arena {
+  padding: 3px 12px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 999px;
+  background: var(--ax-yellow);
+  color: var(--ax-ink);
+  font-size: var(--fs-label);
+  font-weight: 900;
+  box-shadow: 0 3px 0 var(--ax-ink);
+}
+.cm-vs5-vsboard__arena::before { content: "\2694\FE0F "; }
+.cm-vs5-vsboard__arena:is([data-arena="BATTLE_VOLCANO"], [data-arena="BATTLE_HELL"])::before { content: "\1F30B "; }
+.cm-vs5-vsboard__arena:is([data-arena="BATTLE_SOUTHPOLE"])::before { content: "\2744\FE0F "; }
+.cm-vs5-vsboard__arena:is([data-arena="BATTLE_ISLAND"])::before { content: "\1F3DD\FE0F "; }
+.cm-vs5-vsboard__arena:is([data-arena="BATTLE_DESERT"])::before { content: "\1F3DC\FE0F "; }
+.cm-vs5-vsboard__arena:is([data-arena="BATTLE_STADIUM"], [data-arena="BATTLE_DOMESTADIUM"])::before { content: "\1F3DF\FE0F "; }
+.cm-vs5-vsboard__arena:is([data-arena="BATTLE_COLOSSEUM"])::before { content: "\1F3DB\FE0F "; }
+.cm-vs5-vsboard__arena:is([data-arena="BATTLE_GRASS"])::before { content: "\1F33F "; }
+.cm-vs5-vsboard__arena:is([data-arena="BATTLE_CYBERSPACE"])::before { content: "\1F4A0 "; }
+:root[data-theme="arcade"] .cm-vs5-vsboard__team {
+  padding: 1px 8px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+}
+:root[data-theme="arcade"] .cm-vs5-vsboard__side--player .cm-vs5-vsboard__team { background: var(--ax-green); color: var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs5-vsboard__side--opponent .cm-vs5-vsboard__team { background: var(--ax-red); color: #fff; }
+:root[data-theme="arcade"] .cm-vs5-vsboard__name { font-size: clamp(15px, 4.4vw, 19px); font-weight: 900; text-shadow: 0 2px 0 var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs5-vsboard__stats { color: rgba(255, 255, 255, 0.82); font-weight: 800; }
+:root[data-theme="arcade"] .cm-vs5-vsboard__vs {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 12px;
+  background: linear-gradient(160deg, #fff0a0, var(--ax-yellow) 55%, var(--ax-orange));
+  color: var(--ax-ink);
+  font-size: 22px;
+  font-style: italic;
+  transform: rotate(-8deg);
+  box-shadow: 0 4px 0 var(--ax-ink);
+  animation: cm-vs-throb 900ms var(--ax-spring) infinite alternate;
+}
+@keyframes cm-vs-throb { from { transform: rotate(-8deg) scale(0.94); } to { transform: rotate(-8deg) scale(1.06); } }
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-field__loading .cm-vs5-field__loading-text { color: #fff; text-shadow: 0 2px 0 var(--ax-ink); }
+/* The charging gauge: a tall segmented slot over the real progress fill. */
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-field__loading .cm-load-progress__bar {
+  height: 16px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 4px;
+  background: #0d0c1c;
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-field__loading .cm-load-progress__bar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: repeating-linear-gradient(90deg, transparent 0 calc(10% - 3px), #0d0c1c calc(10% - 3px) 10%);
+  pointer-events: none;
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-field__loading :is(.cm-load-progress__meta, .cm-load-progress__slow) { color: rgba(255, 255, 255, 0.82); }
+:root[data-motion="reduced"] .cm-vs5-vsboard__vs { animation: none; }
+@media (prefers-reduced-motion: reduce) { .cm-vs5-vsboard__vs { animation: none; } }
+
+/* ==== Battle UI pass 2026-10-28: automatic battle HUD and the victory podium ====
+   Floating HUD: each side's chips are armoured team plates (ours green / cyan,
+   theirs red / violet) on an opaque base, so their words never sit on the
+   arena's fences. The bands themselves stay transparent and pass input
+   through; only the chips, the record ticker and the exit key have a body. */
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-roster .cm-vs5-fighter {
+  --plate-a: #0d3a3a;
+  --plate-b: #082026;
+  --plate-edge: #3ddc84;
+  --plate-glow: #3ddcff;
+  position: relative;
+  border: 2px solid #050a10;
+  border-radius: 4px 14px 4px 14px;
+  background:
+    linear-gradient(118deg, rgba(255, 255, 255, 0.12) 0 14%, transparent 14%),
+    linear-gradient(160deg, var(--plate-a), var(--plate-b));
+  box-shadow: inset 0 0 0 2px var(--plate-edge), inset 0 0 0 3px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--plate-glow), 0 4px 0 #050a10;
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-roster--opponent .cm-vs5-fighter {
+  --plate-a: #3a0d1e;
+  --plate-b: #1c0718;
+  --plate-edge: #ff4d5e;
+  --plate-glow: #a259ff;
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-roster .cm-vs5-fighter__name {
+  padding-left: 8px;
+  color: #fff;
+  font-weight: 900;
+  text-shadow: 0 2px 0 #000;
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-roster .cm-vs5-fighter::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 7px;
+  left: 6px;
+  width: 4px;
+  height: 11px;
+  border-radius: 2px;
+  background: var(--plate-edge);
+  box-shadow: 0 0 6px var(--plate-edge);
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter {
+  border: 2px solid #000;
+  border-radius: 3px;
+  background: #05080d;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+/* The ghost: bright white, it holds the old value and shrinks 400ms after the hit. */
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter::before { background: rgba(255, 255, 255, 0.92); }
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--hp .cm-vs5-meter__fill {
+  opacity: 1;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0 34%, transparent 34%), linear-gradient(90deg, #1fa866, #5ff0a4);
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--resource .cm-vs5-meter__fill {
+  opacity: 1;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0 34%, transparent 34%), linear-gradient(90deg, #2f68e0, #6fb4ff);
+}
+
+/* The live record ticker: a slanted slab at the bottom, its accent on the
+   side that acted. A signature move cuts in with the gold badge. */
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-log__detail:not(:empty) {
+  position: relative;
+  justify-self: start;
+  max-width: 100%;
+  padding: 5px 12px 5px 14px;
+  border: 2px solid #050a10;
+  border-radius: 3px 12px 3px 12px;
+  background:
+    linear-gradient(90deg, var(--tick-edge, #6ff7ff) 0 5px, transparent 5px),
+    linear-gradient(180deg, rgba(14, 22, 38, 0.94), rgba(6, 10, 20, 0.94));
+  box-shadow: 0 3px 0 #050a10;
+  color: #fff;
+  font-weight: 900;
+  text-shadow: 0 1px 0 #000;
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-log__detail[data-side="player"] { --tick-edge: #3ddc84; }
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-log__detail[data-side="opponent"] { --tick-edge: #ff4d5e; }
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-log__detail[data-tier="ultimate"]:not(:empty) {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  overflow: hidden;
+  padding-block: 7px;
+  background:
+    linear-gradient(90deg, var(--tick-edge, #ffd23f) 0 5px, transparent 5px),
+    linear-gradient(100deg, #3a1460 0, #1c0f30 60%, #4a1a10 100%);
+  color: #ffe9a8;
+  box-shadow: inset 0 0 0 2px rgba(255, 210, 63, 0.75), 0 4px 0 #050a10;
+  font-size: calc(14px * var(--text-scale, 1));
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-log__detail[data-tier="ultimate"]::before {
+  content: attr(data-badge);
+  padding: 1px 7px;
+  border: 2px solid #050a10;
+  border-radius: 4px 10px 4px 10px;
+  background: linear-gradient(180deg, #ffe066, #ffb21e);
+  color: #241400;
+  font-size: calc(11px * var(--text-scale, 1));
+  text-shadow: none;
+  white-space: nowrap;
+}
+/* The cut-in: the slab springs in from its side, one light sweep follows. */
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-log__detail--fresh[data-tier="ultimate"] {
+  animation: cm-cutin 520ms var(--ax-spring) both;
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-log__detail--fresh[data-tier="ultimate"]::after {
+  content: "";
+  position: absolute;
+  inset: -20% auto -20% 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 244, 200, 0.75), transparent);
+  transform: translateX(-120%) skewX(-20deg);
+  animation: cm-cutin-sweep 700ms 140ms var(--ax-snap) both;
+  pointer-events: none;
+}
+@keyframes cm-cutin {
+  0% { opacity: 0; transform: translateX(-36px) scale(0.7); }
+  55% { opacity: 1; transform: translateX(4px) scale(1.12); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes cm-cutin-sweep { to { transform: translateX(320%) skewX(-20deg); } }
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-log__line { font-weight: 900; text-shadow: 0 2px 0 #000; }
+
+/* Leaving is a real tactical key: dark face, ink rim, hard slab. */
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-exit {
+  --key-face: #2a2a3d;
+  --key-shade: #050a10;
+  border: 3px solid #050a10;
+  border-radius: 6px 14px 6px 14px;
+  background: linear-gradient(180deg, #3a3a52, #2a2a3d);
+  color: #fff;
+  font-weight: 900;
+  text-shadow: 0 2px 0 #000;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.25), 0 5px 0 var(--key-shade);
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-exit:active {
+  transform: translateY(4px);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.25), 0 1px 0 var(--key-shade);
+}
+
+/* Victory podium. The party stands centred (battleResultCharacters.js
+   "podium" layout); the pixel shards and the light burst behind them, never
+   over a face: the characters sit above the highlight's back layer. */
+:root:not([data-theme="classic"]) .cm-vs5-result__characters { z-index: 2; }
+:root:not([data-theme="classic"]) .cm-vs5-result__stage .cm-highlight__stairs { left: calc(var(--hl-ax) + 96px); top: calc(var(--hl-ay) - 132px); }
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__stage::before {
+  top: calc(70cqh + 2cqw);
+  height: 17cqw;
+  background:
+    radial-gradient(closest-side, rgba(255, 226, 140, 0.6), rgba(255, 226, 140, 0.18) 52%, transparent 54%,
+      transparent 62%, rgba(111, 247, 255, 0.75) 63%, rgba(111, 247, 255, 0) 67%,
+      transparent 80%, rgba(111, 247, 255, 0.4) 81%, transparent 85%);
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__stage::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: calc(var(--result-light-x, 50%) - 26%);
+  width: 52%;
+  top: 0;
+  height: calc(70cqh + 11cqw);
+  background: linear-gradient(180deg, rgba(255, 244, 200, 0) 0, rgba(255, 244, 200, 0.16) 70%, rgba(255, 244, 200, 0.28) 100%);
+  clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
+  pointer-events: none;
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body {
+  border: 3px solid var(--ax-ink);
+  border-radius: 10px 26px 10px 26px;
+  background: linear-gradient(180deg, #fffdf2, var(--ax-paper));
+  box-shadow: var(--ax-hl), 0 7px 0 var(--ax-ink);
+  color: var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell[data-verdict="TEAM_ZERO_AHEAD"] .cm-vs5-result__body {
+  box-shadow: var(--ax-hl), inset 0 0 0 3px #ffd23f, inset 0 0 0 5px #fff, 0 7px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell[data-verdict="TEAM_ZERO_AHEAD"][data-panel="RESULT"] .cm-vs5-result__body .cm-vs5-title {
+  color: #ffd23f;
+  -webkit-text-stroke: 6px var(--ax-ink);
+  paint-order: stroke fill;
+  text-shadow: 0 3px 0 #a36a00, 0 6px 0 var(--ax-ink);
+  animation: cm-podium-title 620ms var(--ax-spring) both;
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell[data-verdict="TEAM_ZERO_AHEAD"][data-panel="RESULT"] .cm-vs5-result__body .cm-vs5-title::before {
+  content: "\1F3C6 ";
+  -webkit-text-stroke: 0;
+}
+@keyframes cm-podium-title {
+  0% { opacity: 0; transform: scale(0.55); }
+  60% { opacity: 1; transform: scale(1.14); }
+  100% { opacity: 1; transform: scale(1); }
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__settlement {
+  position: relative;
+  overflow: hidden;
+  padding: 7px 16px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 6px 16px 6px 16px;
+  background: linear-gradient(180deg, #fff0a0 0 30%, var(--ax-yellow) 30% 72%, #f0a51a 72%);
+  color: #3a2400;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.7), 0 4px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__settlement::before {
+  content: "";
+  position: absolute;
+  inset: -30% auto -30% 0;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent);
+  transform: translateX(-140%) skewX(-20deg);
+  animation: cm-cutin-sweep 900ms 260ms var(--ax-snap) both;
+  pointer-events: none;
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__amount {
+  display: inline-block;
+  color: #241400;
+  font-size: calc(30px * var(--text-scale, 1));
+  animation: cm-num-pop 520ms 200ms var(--ax-spring) both;
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__cap { color: #5a3a00; }
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell > .cm-vs5-action--primary {
+  min-height: 62px;
+  font-size: calc(20px * var(--text-scale, 1));
+  letter-spacing: 0.08em;
+}
+:root[data-motion="reduced"] .cm-vs5-root :is(.cm-vs5-log__detail, .cm-vs5-result__body .cm-vs5-title, .cm-vs5-result__amount),
+:root[data-motion="reduced"] .cm-vs5-root :is(.cm-vs5-log__detail, .cm-vs5-result__settlement)::after,
+:root[data-motion="reduced"] .cm-vs5-root .cm-vs5-result__settlement::before { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .cm-vs5-root :is(.cm-vs5-log__detail, .cm-vs5-result__body .cm-vs5-title, .cm-vs5-result__amount),
+  .cm-vs5-root .cm-vs5-log__detail::after, .cm-vs5-root .cm-vs5-result__settlement::before { animation: none !important; }
+}
