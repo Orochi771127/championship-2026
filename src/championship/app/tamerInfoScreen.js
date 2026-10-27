@@ -100,6 +100,9 @@ export const TAMER_INFO_UNSOURCED_FIELDS = deepFreeze(
 );
 export const TAMER_INFO_UNSOURCED_EVIDENCE = "UNKNOWN_REQUIRES_TRACE";
 
+const TAMER_FIELD_GROUPS = Object.freeze({ name: "card", rank: "card", license: "card", money: "card",
+  title: "progress", guid: "progress", map: "progress", battle: "stats", win: "stats", time: "stats", have: "stats", cage: "stats" });
+
 function element(tag, className, text) {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -188,7 +191,14 @@ export function createTamerInfoView({ root, walletBits = null, tamerRank = null,
         : "—");
       cell.title = uiText("The original draws this field; this build has no traced source for it");
     }
-    table.append(label, cell);
+    // Owner 2026-10-27: a licence card, three progress tiles and a stats
+    // matrix. One wrapper per field (display: contents outside the arcade skin).
+    const group = element("div", "cm-tamer-field");
+    group.dataset.fieldId = field.id;
+    group.dataset.group = TAMER_FIELD_GROUPS[field.id] ?? "stats";
+    if (["title", "guid"].includes(field.id) && Number.isFinite(Number(value))) group.style.setProperty("--fill", String(Math.max(0, Math.min(1, Number(value) / 100))));
+    group.append(label, cell);
+    table.append(group);
   }
 
   const note = element("p", "cm-tamer-note",
