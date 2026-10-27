@@ -1,5 +1,15 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: BATTLE_TACTICS_MENU_20261028 -->
+**2026-10-28 — 賽前作戰方針（ROM 確認）。**
+
+- **ROM 證據：** 隊伍設定選單把所選的「列號」存成方針，對應為 0＝スペシャルアタック（必殺技優先）、1＝ノーマルアタック（普通攻擊，預設）、2＝サポート（支援優先）；3（依性格）與 4（自由對戰預設對手）不在選單中。
+- **產品實作：** 自由對戰的參賽面板、練習對戰的每一列，都可以為每隻拍檔三選一。選擇存進 `progression.battleTactics`，舊存檔不需要遷移。
+- **生效範圍：** 只有這兩個模式讀取方針，頭銜賽、冠軍賽、密碼與通訊對戰不變。
+- **驗證：** 瀏覽器上確認練習對戰的兩隊分別得到 profile 0 與 2。
+
+[追蹤紀錄](reports/battle-tactics-policy-trace-2026-10-28/TRACE_ZH_TW.md)、[合約](contracts/championship/BATTLE_TACTICS_20261028.json)。
+
 <!-- record-id: BATTLE_UI_DUAL_MODE_20261028 -->
 **2026-10-28 — 雙模式對戰 UI/HUD 重構（呈現層）。** 範圍：選擇對戰、多輪賽事、數據競技場（大廳與接力扇形拇指技能輪）、AI 自動對戰（VS 載入看板、開戰重擊、陣營光環、絕招切入）與勝利頒獎台。修正：返回鍵遮擋、競技場幽靈文字與出戰鈕遮卡、結算角色偏出框與碎片蓋臉，以及競技場 HUD 因 `null.releasedAt` 停止更新的既有錯誤。戰鬥邏輯、計時、存檔與測試錨點都不變。`test:ci` 2,999／2,999 通過；既有失敗的閘門已在基準 main 上逐項比對確認。[報告](reports/battle-ui-dual-mode-2026-10-28/REPORT_ZH_TW.md)。
 

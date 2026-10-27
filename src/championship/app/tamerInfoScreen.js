@@ -3,6 +3,7 @@ import {generationName,tamerRankName} from '../text/zhHant.js';
 import {NATIVE_RAISING_LIFECYCLE_RULES} from '../raising/nativeRaisingLifecycle.js';
 import {slotCountForTamerRank} from '../cage/cageCatalog.js';
 import {nativeBattleWinPercent} from '../battle/nativeTitleProgression.js';
+import {onboardingText} from '../text/onboardingText.js';
 // Tamer Info -- the original's tamer_info_main_scene and tamer_info_sub_scene.
 //
 // THE FIELD LIST AND THE DIGIT WIDTHS ARE ROM_VERIFIED
@@ -136,7 +137,7 @@ export function tamerCompletionPercent(count,total){
  * @param {() => void} [options.onExit]
  */
 export function createTamerInfoView({ root, walletBits = null, tamerRank = null, trainerName=null,
-  titleCount=null,registeredCount=null,battleRecord=null,onExit } = {}) {
+  titleCount=null,registeredCount=null,battleRecord=null,tamerCard=null,onExit } = {}) {
   if (!root) throw new TypeError("Tamer Info requires a root element");
 
   root.replaceChildren();
@@ -160,6 +161,18 @@ export function createTamerInfoView({ root, walletBits = null, tamerRank = null,
 
   const shell = element("section", "cm-tamer-shell");
   shell.append(element("p", "cm-tamer-kicker", "管理"), element("h1", "cm-tamer-title", "TAMER INFO"));
+  // Owner 2026-10-28: the tamer card code (futureSystemsPort.js) beside the
+  // licence; product-authored, outside the ROM field table below.
+  if (tamerCard?.code) {
+    const words = onboardingText(), card = element("p", "cm-tamer-code");
+    card.dataset.tamerCode = tamerCard.code;
+    const label = document.createElement("span"), value = document.createElement("strong");
+    label.className = "cm-tamer-code__label"; label.textContent = words.tamerCode;
+    value.className = "cm-tamer-code__value"; value.textContent = tamerCard.code;
+    card.append(label, value);
+    if (tamerCard.mode === "GUEST") { const guest = document.createElement("span"); guest.className = "cm-tamer-code__guest"; guest.textContent = words.guestPass; card.append(guest); }
+    shell.append(card);
+  }
 
   const table = element("dl", "cm-tamer-fields");
   let sourced = 0;

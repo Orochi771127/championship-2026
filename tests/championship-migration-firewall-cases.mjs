@@ -258,6 +258,9 @@ test("one save key, one persistent writer, one Pixi bootstrap and no second tick
   const layoutFrames=sources.filter(({text})=>/requestAnimationFrame\s*\(/.test(text));
   assert.deepEqual(layoutFrames.map(({file})=>relative(file)),[
     'src/championship/app/huntLayoutResolver.js',
+    // Owner 2026-10-28 tactical guide: a bounded wait for Raising Home layout
+    // and a bounded spotlight-target retry; both stop on success or dispose.
+    'src/championship/app/interactiveTutorialPreview.js',
     'src/championship/app/main.js',
     // Owner 2026-10-26 title parade: walk frames on the title only, stopped when it closes.
     'src/championship/app/titleParade.js',

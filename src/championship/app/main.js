@@ -111,8 +111,10 @@ import {
   CHAMPIONSHIP_PREFERENCES_KEY,
   CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS,
   createChampionshipPreferencePort,
-  createChampionshipSessionCheckpointPort
+  createChampionshipSessionCheckpointPort,
+  createChampionshipGuestIdentityPort
 } from './ChampionshipPersistentSavePort.js';
+import { createAuthAndCloudSyncPort, createSocialFriendPort } from './futureSystemsPort.js';
 import { createPreferenceStore } from './settings/preferenceStore.js';
 import { consumeRaisingHintDuration } from './transientHint.js';
 import { createPreferenceEnvironment } from './settings/preferenceEnvironment.js';
@@ -1381,6 +1383,7 @@ async function mountBattleSelect() {
     matches: battleRuntime.listMatches(),
     arenaChoices:battleRuntime.listSelectableArenas(),
     getPracticeSelection:async()=>({candidates:await app.getBattlePartyCandidates(null)}),
+    setBattleTactic:(instanceId,tactic)=>app.setBattleTactic(instanceId,tactic),
     getPasswordSelection:async()=>({maxLength:PRODUCT_BATTLE_CODE_MAX_LENGTH,candidates:await app.getPasswordTeamCandidates(),
       createPassword:instanceIds=>app.createTeamPassword(instanceIds)}),
     getLinkSelection:async()=>({
@@ -1915,6 +1918,7 @@ async function mountCurrentScreen() {
         battleRecord:app.getTitleProgress().record??null,
         tamerRank: app.getTamerRank?.() ?? null,
         trainerName:app.getOpeningState()?.trainerName??null,
+        tamerCard:futureSystems().social.getTamerCard({trainerName:app.getOpeningState()?.trainerName??''}),
         onExit() { app.leaveScreen(); }
       });
     }
@@ -2363,6 +2367,19 @@ function installHomeEntries() {
   });
 }
 
+// Owner 2026-10-28: guest identity, tamer cards and story chapters answer
+// locally today (futureSystemsPort.js); an account backend replaces adapters.
+let futurePorts = null;
+function futureSystems() {
+  if (!futurePorts) {
+    let identityStore = null;
+    try { identityStore = createChampionshipGuestIdentityPort({ storage: window.localStorage }); } catch { identityStore = null; }
+    const auth = createAuthAndCloudSyncPort({ identityStore });
+    futurePorts = Object.freeze({ auth, social: createSocialFriendPort({ auth }) });
+  }
+  return futurePorts;
+}
+
 async function startNewGame(names={}) {
   newGameButton.disabled = true;
   continueButton.disabled = true;
@@ -2372,6 +2389,8 @@ async function startNewGame(names={}) {
     // page is next hidden there would be no save at all. Write the new game
     // once now, through the same port, so Continue always has something.
     try { app.save(); } catch (error) { console.warn(`CHAMPIONSHIP_NEW_GAME_SAVE: ${error.message}`); }
+    // The guest pass the licence terminal promised: issued with the first save.
+    try { futureSystems().auth.getSessionIdentity(); } catch (error) { console.warn(`CHAMPIONSHIP_GUEST_IDENTITY: ${error.message}`); }
     if(shouldOfferInteractiveTutorial(location))app.offerInteractiveTutorial();
     await openGameplay();
     return true;

@@ -3,6 +3,8 @@
   "boundary": "CI verifies repository-contained engineering tests; local reference/art acceptance remains required separately. npm test continues to run the full suite. New test files require explicit classification.",
   "portable": [
     "tests/championship-cm07-ambient-cases.mjs",
+    "tests/championship-onboarding-future-ports-cases.mjs",
+    "tests/championship-battle-tactics-cases.mjs",
     "tests/championship-database-swipe-cases.mjs",
     "tests/championship-gr08-dex-centering-cases.mjs",
     "tests/championship-gr26-recolor-cases.mjs",

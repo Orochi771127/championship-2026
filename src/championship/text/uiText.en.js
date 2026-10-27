@@ -1217,6 +1217,11 @@ export const TEXT_EN = Object.freeze({
   "畫面持續低於約 35 FPS，已自動改用省電（本次遊玩不會再改回）。": "Frames stayed below about 35 FPS, so Auto switched to Power saving (it won't switch back this session).",
   // Dynamic battle presentation (Owner 2026-10-12)
   "絕招！": "SPECIAL!",
+  // Battle plan (作戰方針), ROM team-setup menu rows (2026-10-28)
+  "作戰方針": "Battle plan",
+  "必殺技優先": "Special Attack",
+  "普通攻擊": "Normal Attack",
+  "支援優先": "Support",
   "對戰開始！": "FIGHT!",
   "會心一擊！": "CRITICAL!",
   "重擊！": "SMASH!",

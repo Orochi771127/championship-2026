@@ -1448,6 +1448,11 @@ export const TEXT_VI = Object.freeze({
   "畫面持續低於約 35 FPS，已自動改用省電（本次遊玩不會再改回）。": "Màn hình luôn ở mức dưới khoảng 35 FPS và đã được tự động chuyển sang chế độ tiết kiệm năng lượng (nó sẽ không được thay đổi trở lại đối với trò chơi này).",
   // Dynamic battle presentation (Owner 2026-10-12)
   "絕招！": "TUYỆT CHIÊU!",
+  // Battle plan (作戰方針), ROM team-setup menu rows (2026-10-28)
+  "作戰方針": "Chiến thuật",
+  "必殺技優先": "Ưu tiên tuyệt chiêu",
+  "普通攻擊": "Tấn công thường",
+  "支援優先": "Ưu tiên hỗ trợ",
   "對戰開始！": "BẮT ĐẦU!",
   "會心一擊！": "CHÍ MẠNG!",
   "重擊！": "ĐÒN MẠNH!",

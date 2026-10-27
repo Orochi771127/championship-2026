@@ -135,7 +135,7 @@ function shell(root, screen, label) {
  * Mode identity is now traced through OVL10 0210F88C's help-bank dispatch.
  * The application supplies each mode's entries; this view holds only selection.
  */
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, arenaChoices=[], tutorial=null }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -269,6 +269,20 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   entryNotice.hidden = true;
   const partyPanel=element('section','cm-vs5-party');partyPanel.hidden=true;
   let selectedMatch=null,selectedIds=[];
+  // The battle plan (作戰方針): the original team-setup menu's three rows in
+  // their order, so the stored value is the row (0 / 1 / 2, default 1).
+  const tactics=new Map();
+  function tacticPicker(entry,name){
+    if(typeof setBattleTactic!=='function')return null;
+    const label=element('label','cm-vs5-tactic'),select=element('select','cm-vs5-tactic__select');
+    select.setAttribute('aria-label',`${name} · ${uiText('作戰方針')}`);
+    ['必殺技優先','普通攻擊','支援優先'].forEach((text,value)=>{const option=element('option','',text);option.value=String(value);select.append(option);});
+    select.value=String(tactics.get(entry.instanceId)??entry.tactic??1);
+    select.addEventListener('change',()=>{const value=Number(select.value);
+      if(setBattleTactic(entry.instanceId,value)?.ok!==false)tactics.set(entry.instanceId,value);else select.value=String(tactics.get(entry.instanceId)??entry.tactic??1);});
+    label.append(element('span','cm-vs5-tactic__label','作戰方針'),select);
+    return label;
+  }
   function arenaSelector(){
     const label=element('label','cm-vs5-arena-choice','對戰場地'),select=element('select');
     select.setAttribute('aria-label',uiText('對戰場地'));select.append(element('option','','隨機場地'));select.children[0].value='';
@@ -299,6 +313,16 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     const arena=mode==='FREE_BATTLE'?arenaSelector():null;if(arena)partyPanel.append(arena.node);
     const controls=[];
     const confirm=actionButton('決定',{primary:true});confirm.disabled=true;
+    // One plan per chosen partner, below the roster.
+    const tacticsBox=element('div','cm-vs5-tactics');tacticsBox.hidden=true;
+    // Only Free Battle and Practice read the plan; a title match would not.
+    const renderTactics=()=>{
+      if(mode!=='FREE_BATTLE')return;
+      const rows=selectedIds.map(id=>candidates.find(c=>c.instanceId===id)).filter(Boolean)
+        .map(entry=>{const row=element('div','cm-vs5-tactics__row'),name=memberName(entry);const picker=tacticPicker(entry,name);
+          if(!picker)return null;row.append(element('span','cm-vs5-tactics__name',name,false),picker);return row;}).filter(Boolean);
+      tacticsBox.replaceChildren(...(rows.length?[element('h3','cm-vs5-tactics__title','作戰方針'),...rows]:[]));tacticsBox.hidden=rows.length===0;
+    };
     for(const entry of candidates){
       const button=actionButton(memberName(entry));
       button.dataset.instanceId=entry.instanceId;button.setAttribute('aria-pressed','false');
@@ -308,10 +332,11 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       button.addEventListener('click',()=>{
         selectedIds=selectedIds.includes(entry.instanceId)?selectedIds.filter(id=>id!==entry.instanceId):[...selectedIds,entry.instanceId];
         for(const [c,b] of controls){const picked=selectedIds.includes(c.instanceId);b.setAttribute('aria-pressed',String(picked));b.disabled=!c.admission.ok||(!picked&&selectedIds.length>=limit);}
-        confirm.disabled=selectedIds.length===0;
+        confirm.disabled=selectedIds.length===0;renderTactics();
       });
       controls.push([entry,button]);partyPanel.append(button);
     }
+    partyPanel.append(tacticsBox);
     if(!candidates.some(c=>c.admission.ok))partyPanel.append(element('p','cm-vs5-entry-notice','目前沒有符合這場比賽條件的拍檔。'));
     confirm.addEventListener('click',async()=>{if(confirm.disabled||entering)return;confirm.disabled=true;entering=true;back.disabled=true;
       try{showRefusal(await onEnter(match.recordIndex,[...selectedIds],mode,...(arena?[arena.value()]:[])),match);}
@@ -348,6 +373,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       for(const team of [0,1]){const button=actionButton(uiText('{team} 隊',{team:team===0?'A':'B'}));button.setAttribute('aria-label',uiText('{name} {team} 隊',{name,team:team===0?'A':'B'}));
         button.addEventListener('click',()=>{if(button.disabled)return;const ids=teams[team],at=ids.indexOf(entry.instanceId);if(at<0)ids.push(entry.instanceId);else ids.splice(at,1);refresh();});
         controls.push({button,entry,team});row.append(button);}
+      if(entry.admission.ok){const picker=tacticPicker(entry,name);if(picker)row.append(picker);}
       partyPanel.append(row);
     }
     if(candidates.filter(c=>c.admission.ok).length<2)partyPanel.append(element('p','cm-vs5-entry-notice','練習對戰需要至少兩隻可以參賽的拍檔。'));

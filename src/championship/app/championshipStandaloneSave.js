@@ -54,7 +54,7 @@ const ALLOWED_TOP_LEVEL_KEYS_V4 = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V3, "
 const ALLOWED_TOP_LEVEL_KEYS = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V4, "huntHistory"]);
 
 const ALLOWED_CREATURE_KEYS = Object.freeze(["creatureId", "speciesId", "displayName", "nativeProfile"]);
-const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun", "freeBattleMenu"]);
+const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun", "freeBattleMenu", "battleTactics"]);
 const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "cageOwned", "cageQuantities"]);
 // `expansion` exists only beside layoutVersion NATIVE_DECKS_V1 (2026-10-05):
 // the ranch expansion prototype versions its own slice, so a save that never
@@ -85,6 +85,24 @@ const FORENSIC_MARKER_KEYS = Object.freeze([
 ]);
 
 const FORENSIC_MARKER_SET = new Set(FORENSIC_MARKER_KEYS);
+
+
+/**
+ * Each partner's battle plan (作戰方針), keyed by instance id. The team-setup
+ * menu stores the chosen row: 0 スペシャルアタック, 1 ノーマルアタック (the
+ * team-init default, never stored), 2 サポート (ROM trace 2026-10-28,
+ * docs/reports/battle-tactics-policy-trace-2026-10-28). Anything else is
+ * dropped, so an unreadable entry falls back to the default.
+ */
+export const BATTLE_TACTIC_DEFAULT = 1;
+export function normalizeBattleTactics(value) {
+  const out = {};
+  if (!value || typeof value !== "object" || Array.isArray(value)) return out;
+  for (const [id, tactic] of Object.entries(value)) {
+    if (/^[\w:.-]{1,80}$/.test(id) && (tactic === 0 || tactic === 2)) out[id] = tactic;
+  }
+  return out;
+}
 
 export function saveError(message) {
   const error = new Error(message);
@@ -382,6 +400,7 @@ export function createChampionshipModernSave({
       : normalizeRaisingInstanceIdentityState(instanceIdentity, identitySources),
     progression: {
       ...(progression.freeBattleMenu!==undefined?{freeBattleMenu:normalizeFreeBattleMenu(progression.freeBattleMenu)}:{}),
+      ...(progression.battleTactics!==undefined?{battleTactics:normalizeBattleTactics(progression.battleTactics)}:{}),
       ...(progression.nativeTitles!==undefined?{nativeTitles:normalizeNativeTitleProgress(progression.nativeTitles)}:{}),
       // A tournament runs over several rounds, and a browser tab can close
       // between them, so the run is carried. Whether the original's own save
