@@ -1,5 +1,21 @@
 # Championship Owner Direction
 
+<!-- record-id: BATTLE_UI_DUAL_MODE_20261028 -->
+## 2026-10-28 — Dual-mode battle UI/HUD pass (presentation only)
+
+Owner directs a full UI/HUD pass over both battle modes — the battle menu, the multi-round cups, the Data Arena lobby and manual HUD, and the automatic battle's loading, HUD and victory screen — with the title page and the unrotated hex cages untouched. It also asks to fix the stray Data Arena labels and covered buttons, the menu's back key covering the fourth row, and the result partner falling outside the frame. Battle logic, timing, damage, saves and every test anchor (ids, classes, `data-*`, button text, bindings) are preserved. New motion is transform / opacity only, with no large `backdrop-filter` and no new WebGL context. Answers given before implementation:
+
+- the AI tactics (作戰方針) menu is not built in this batch and stays a separate, evidence-first task;
+- the relay swap key stays at the left above the movement stick;
+- commit to a local branch, with no push, merge or deployment. A later instruction in the same session superseded this: 「如果你做好以後，自我審查沒有問題，就請你commit跟push整合至main部署，然後發佈」. It authorizes this batch's commit, push, main integration and Pages publication after self-review, including the exact public-playtest input hashes of the changed files.
+
+Decisions recorded as OWNER_APPROVED_ADAPTATION of presentation:
+
+- the native READY / FIGHT timing is unchanged, and only the FIGHT word's scale curve and one speed-line burst are new;
+- the victory podium centres the party (`layout: "podium"`), and the native result anchors stay the default and the classic theme's.
+
+See the [report](../reports/battle-ui-dual-mode-2026-10-28/REPORT_ZH_TW.md).
+
 <!-- record-id: DATA_ARENA_BATTLE_ENTRY_RELEASE_20261020 -->
 ## 2026-10-20 — Publish Data Arena battle entry and action timing repair
 

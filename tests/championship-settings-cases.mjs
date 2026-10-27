@@ -26,7 +26,7 @@ import { createAudioBus, effectiveGain } from "../src/championship/presentation/
 import { createHighlightAudio } from "../src/championship/presentation/highlight/highlightAudio.js";
 import { HIGHLIGHT_COMPACT, highlightOverrides, resolveHighlightTiming } from "../src/championship/presentation/highlight/highlightTimeline.js";
 import { createHighlightSequence } from "../src/championship/presentation/highlight/createHighlightSequence.js";
-import { resultHeroAnchor, resultFrameLayout, RESULT_FRAME_DROP, mountBattleResultCharacters } from "../src/championship/presentation/battleResultCharacters.js";
+import { resultHeroAnchor, resultFrameLayout, RESULT_FRAME_DROP, mountBattleResultCharacters, resultAnchorFor, resultStageLight, RESULT_ANCHORS } from "../src/championship/presentation/battleResultCharacters.js";
 
 // ---- Fixtures -----------------------------------------------------------------
 function memoryStorage({ failWrites = false } = {}) {
@@ -545,6 +545,20 @@ test("the result characters stand low on the stage and the hero anchor follows t
   const team = resultHeroAnchor({ width: 390, height: 700, slots: [0, 1, 2] });
   assert.ok(Math.abs(team.x - 0.5) < 0.05, "three characters centre the light");
   assert.equal(resultHeroAnchor({ width: 390, height: 700, slots: [] }), null);
+});
+
+test("the victory podium centres the party; the native layout stays the default", () => {
+  for (const index of [0, 1, 2]) assert.deepEqual(resultAnchorFor(index, [0], "native"), RESULT_ANCHORS[index]);
+  const solo = resultHeroAnchor({ width: 390, height: 700, slots: [0], layout: "podium" });
+  assert.ok(Math.abs(solo.x - 0.5) < 0.01, "one winner stands in the middle");
+  assert.ok(solo.y > 0.55 && solo.y < 0.85, "on the same floor line as before");
+  const pair = resultHeroAnchor({ width: 390, height: 700, slots: [0, 2], layout: "podium" });
+  assert.ok(Math.abs(pair.x - 0.5) < 0.01, "two winners share the middle");
+  assert.ok(Math.abs(resultStageLight({ width: 390, height: 700, slots: [0], layout: "podium" }).x - 0.5) < 0.01);
+  // A wide body whose cells are not centred on its feet is centred by its bounds.
+  const bounds = { left: 90, top: 60, right: 250, bottom: 175 };
+  const { scale, left } = resultFrameLayout(390, 700, bounds, { centre: true });
+  assert.ok(Math.abs(left + (bounds.left + bounds.right) / 2 * scale - 195) < 0.01);
 });
 
 // ---- Presentation readers -------------------------------------------------------------------
