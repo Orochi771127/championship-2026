@@ -14,7 +14,6 @@
 // ground the ranch walks on (hexWorldPassages.js).
 import { PRODUCT_RANCH_COLUMNS, PRODUCT_RANCH_ROWS, PRODUCT_RANCH_SLOT_COUNT, productGridCell, productGridSlot, productPlacementCells } from '../cage/productRanchGrid.js';
 import { cageEditorArtCells, cageUiLidImage, cageUiName, cageUiSummary } from '../presentation/cageUiArt.js';
-import { getCageDefinitionByModuleId } from '../cage/cageCatalog.js';
 import { ranchEcologyType } from '../cage/ranchEcology.js';
 import { hexWorldPassageGain, hexWorldPassageView } from './hexWorldPassages.js';
 import { uiText } from '../text/uiText.js';
@@ -446,16 +445,22 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
       }
     }
     board.append(fragment);
-    for (const { slot, points } of badges.values()) {
+    // Owner 2026-10-27: the board shows names only (the suggested count lives on
+    // the cartridge), and a badge that would cover a neighbour's steps down a row.
+    const taken = [];
+    for (const { slot, points } of [...badges.values()].sort((a, b) => Math.min(...a.points.map(q => q.y)) - Math.min(...b.points.map(q => q.y)))) {
       const p = { x: points.reduce((s, q) => s + q.x, 0) / points.length, y: points.reduce((s, q) => s + q.y, 0) / points.length };
-      const capacity = getCageDefinitionByModuleId(slot.moduleId)?.training?.capacity;
-      const badge = el(doc, 'span', 'cm-hexworld__badge', capacity == null ? cageUiName(slot.moduleId, slot.displayName)
-        : `${cageUiName(slot.moduleId, slot.displayName)} · ${uiText('{count} 隻', { count: capacity })}`);
+      const badge = el(doc, 'span', 'cm-hexworld__badge', cageUiName(slot.moduleId, slot.displayName));
       badge.setAttribute('aria-hidden', 'true');
       if (slot.fixed) badge.dataset.fixed = 'true';
-      badge.style.left = `${p.x + HEX_W / 2}px`;
-      badge.style.top = `${p.y + HEX_H / 2 - 7}px`;
+      const x = p.x + HEX_W / 2;
+      let y = p.y + HEX_H / 2 - 7;
       board.append(badge);
+      const half = (badge.offsetWidth || 48) / 2, h = (badge.offsetHeight || 13) + 1;
+      while (taken.some(b => Math.abs(b.x - x) < b.half + half && Math.abs(b.y - y) < h)) y += h;
+      taken.push({ x, y, half });
+      badge.style.left = `${x}px`;
+      badge.style.top = `${y}px`;
     }
     if (overlay) { board.append(overlay); paintOverlay(); }
     if (snapInstance) animatedVerdict = cage.lastVerdict;

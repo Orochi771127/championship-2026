@@ -1261,6 +1261,7 @@ export const TEXT_VI = Object.freeze({
   "尚未開放": "Chưa mở",
   "取回 {cage}": "Truy xuất {cage}",
   "已持有的設施皆已放置。": "Tất cả các cơ sở hiện có đã được đặt.",
+  "這個格數的設施都已放置。": "Tất cả cơ sở cỡ này đã được đặt.",
   "選擇{cage}。{effect}": "Chọn {cage}. {effect}",
   "飼料": "thức ăn",
   "蛋白質": "chất đạm",
