@@ -86,10 +86,26 @@ export function currentQuality(doc) {
   return QUALITY_TIERS[currentQualityTier(doc)];
 }
 
-/** Device pixel ratio held to the tier's cap, never below 1. */
+export const MOBILE_STANDALONE_VRAM_PIXEL_RATIO_CAP = 1.75;
+
+/** Detect iOS / Android / coarse-pointer mobile or Standalone PWA WebView. */
+export function isMobileOrStandaloneEnvironment(win = globalThis.window) {
+  if (!win) return false;
+  try {
+    if (win.navigator?.standalone === true) return true;
+    if (win.matchMedia?.("(display-mode: standalone)")?.matches === true) return true;
+    if (win.matchMedia?.("(pointer: coarse)")?.matches === true) return true;
+    const ua = String(win.navigator?.userAgent ?? "");
+    if (/iPhone|iPad|iPod|Android|Mobile/i.test(ua)) return true;
+  } catch {}
+  return false;
+}
+
+/** Device pixel ratio held to the tier's cap (and <= 1.75 on mobile/standalone), never below 1. */
 export function cappedPixelRatio(cap, devicePixelRatio = globalThis.devicePixelRatio) {
   const ratio = Number(devicePixelRatio) || 1;
-  return Math.max(1, Math.min(cap, ratio));
+  const effectiveCap = isMobileOrStandaloneEnvironment() ? Math.min(cap, MOBILE_STANDALONE_VRAM_PIXEL_RATIO_CAP) : cap;
+  return Math.max(1, Math.min(effectiveCap, ratio));
 }
 
 /** Whether motion is reduced: the resolved preference, else the system setting. */

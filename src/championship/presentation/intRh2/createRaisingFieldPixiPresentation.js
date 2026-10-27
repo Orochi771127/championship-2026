@@ -1350,6 +1350,7 @@ export async function mountRaisingFieldPixiPresentation({
     &&!source.getLifecycleFrame?.()?.day&&!source.getLifecycleFrame?.()?.evolution
     &&!(source.getFrame().tutorial&&!source.getFrame().tutorial.finished);
   const zoomButton=globalThis.document?.createElement('button')??null;
+  if(zoomButton)zoomButton.type='button';
   const describeZoom=()=>{
     if(!zoomButton)return;
     zoomButton.textContent=zoom===1?'−':'+';

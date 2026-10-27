@@ -15,14 +15,28 @@
 // its own ticker callback, and removes all three when it is disposed.
 
 const MAX_DEVICE_RESOLUTION = 2;
+const MOBILE_STANDALONE_VRAM_RESOLUTION_CAP = 1.75;
+
+function isMobileOrStandaloneHost(win = globalThis.window) {
+  if (!win) return false;
+  try {
+    if (win.navigator?.standalone === true) return true;
+    if (win.matchMedia?.("(display-mode: standalone)")?.matches === true) return true;
+    if (win.matchMedia?.("(pointer: coarse)")?.matches === true) return true;
+    const ua = String(win.navigator?.userAgent ?? "");
+    if (/iPhone|iPad|iPod|Android|Mobile/i.test(ua)) return true;
+  } catch {}
+  return false;
+}
 
 function clamp(value, minimum, maximum) {
   return Math.max(minimum, Math.min(maximum, value));
 }
 
-/** Renderer resolution: the device pixel ratio, held between 1 and the cap. */
+/** Renderer resolution: the device pixel ratio, held between 1 and the cap (and <= 1.75 on mobile/standalone). */
 export function resolutionFor(cap = MAX_DEVICE_RESOLUTION, devicePixelRatio = globalThis.devicePixelRatio) {
-  const limit = Number.isFinite(cap) && cap >= 1 ? cap : MAX_DEVICE_RESOLUTION;
+  const baseLimit = Number.isFinite(cap) && cap >= 1 ? cap : MAX_DEVICE_RESOLUTION;
+  const limit = isMobileOrStandaloneHost() ? Math.min(baseLimit, MOBILE_STANDALONE_VRAM_RESOLUTION_CAP) : baseLimit;
   return clamp(Number(devicePixelRatio) || 1, 1, limit);
 }
 
@@ -120,9 +134,29 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost, resolution
     resumeAfterRestore = false;
   }
 
+  let pausedByHidden = false;
+  function handleVisibilityOrForeground() {
+    if (destroyed || contextLost) return;
+    if (globalThis.document?.hidden === true) {
+      if (app.ticker.started) {
+        pausedByHidden = true;
+        app.stop();
+      }
+      return;
+    }
+    applySize();
+    if (pausedByHidden && !app.ticker.started) {
+      pausedByHidden = false;
+      app.start();
+    }
+  }
+
   const resizeObserver = typeof ResizeObserver === "function" ? new ResizeObserver(() => applySize()) : null;
   if (resizeObserver) resizeObserver.observe(host);
   else globalThis.addEventListener?.("resize", applySize);
+  globalThis.document?.addEventListener?.("visibilitychange", handleVisibilityOrForeground);
+  globalThis.addEventListener?.("pageshow", handleVisibilityOrForeground);
+  globalThis.addEventListener?.("focus", handleVisibilityOrForeground);
   app.canvas.addEventListener("webglcontextlost", handleContextLost);
   app.canvas.addEventListener("webglcontextrestored", handleContextRestored);
   applySize();
@@ -238,6 +272,9 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost, resolution
       contextRestoredListeners.clear();
       resizeObserver?.disconnect();
       if (!resizeObserver) globalThis.removeEventListener?.("resize", applySize);
+      globalThis.document?.removeEventListener?.("visibilitychange", handleVisibilityOrForeground);
+      globalThis.removeEventListener?.("pageshow", handleVisibilityOrForeground);
+      globalThis.removeEventListener?.("focus", handleVisibilityOrForeground);
       app.canvas.removeEventListener("webglcontextlost", handleContextLost);
       app.canvas.removeEventListener("webglcontextrestored", handleContextRestored);
       app.destroy({ removeView: true, releaseGlobalResources: true }, { children: true });

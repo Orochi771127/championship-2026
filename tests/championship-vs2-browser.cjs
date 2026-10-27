@@ -185,8 +185,11 @@ async function walk(browser, viewport, { capture }) {
   await shot("6-returned");
 
   const keys = await page.evaluate(() => Object.keys(window.localStorage));
-  assert.deepEqual(keys.filter((key) => key !== "championshipModernSave:v1"), [],
-    `${name(viewport)}: a second storage key appeared`);
+  assert.deepEqual(
+    keys.filter((key) => key !== "championshipModernSave:v1" && key !== "championshipSessionCheckpoint:v1"),
+    [],
+    `${name(viewport)}: a second unexpected storage key appeared`
+  );
   assert.deepEqual(problems, [], `${name(viewport)}: console or page errors`);
   await context.close();
   return {

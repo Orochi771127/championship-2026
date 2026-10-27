@@ -252,6 +252,7 @@ export async function createGateSelectView({ root, source, mountWorld }) {
   const buttons = new Map();
   let worldPresentation = null;
   let worldFailure = null;
+  let disposed = false;
   let fallbackVisible = initial.gateSelect.tutorial || mode === VS2_PRESENTATION_MODES.DEVELOPER;
   if(initial.gateSelect.tutorial){worldPanel.hidden=true;back.hidden=true;confirm.textContent=uiText("開始狩獵");}
   try {
@@ -271,17 +272,23 @@ export async function createGateSelectView({ root, source, mountWorld }) {
   }
 
   async function ensureWorld() {
+    if (disposed) return false;
     if (worldPresentation) return true;
     if (typeof mountWorld !== "function") {
       worldFailure = new Error("CHAMPIONSHIP_GATE_3D_MOUNTER_UNAVAILABLE");
       return false;
     }
     try {
-      worldPresentation = await mountWorld({
+      const mounted = await mountWorld({
         host: worldHost,
         gates: source.getFrame().gateSelect.gates,
         onSelect: (gateId) => source.intents.selectGate(gateId)
       });
+      if (disposed) {
+        mounted?.dispose?.();
+        return false;
+      }
+      worldPresentation = mounted;
       worldFailure = null;
       worldPresentation.render(source.getFrame());
       return true;
@@ -420,7 +427,9 @@ export async function createGateSelectView({ root, source, mountWorld }) {
       });
     },
     dispose() {
+      disposed = true;
       worldPresentation?.dispose?.();
+      worldPresentation = null;
       buttons.clear();
       root.replaceChildren();
       root.className = "";

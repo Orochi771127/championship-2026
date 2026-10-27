@@ -318,14 +318,16 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       const mirror = -combatant.stand.facing;
       let center = trim.x + trim.width / 2 - texture.orig.width * sprite.anchor.x;
       let bottom = trim.y + trim.height - texture.orig.height * sprite.anchor.y;
-      if (motion) {
+      if (motion?.geometry) {
         const geometry=motion.geometry;
         sprite.anchor.x=geometry.origin[0]/geometry.sourceSize[0];
         sprite.anchor.y=geometry.origin[1]/geometry.sourceSize[1];
         // Retain one source origin across poses. Re-grounding each trimmed frame
         // would erase jumps and turn packing differences into visible jitter.
-        center=(motion.baseBounds[0]+motion.baseBounds[2])/2*packedScale/resolution;
-        bottom=motion.baseBounds[3]*packedScale/resolution;
+        if (Array.isArray(motion.baseBounds)) {
+          center=(motion.baseBounds[0]+motion.baseBounds[2])/2*packedScale/resolution;
+          bottom=motion.baseBounds[3]*packedScale/resolution;
+        }
       }
       const x = rect.x + combatant.stand.x * rect.width;
       const y = rect.y + combatant.stand.y * rect.height;
@@ -380,9 +382,10 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
           }
         }
         // Local-space box the camera frames and the layer dresses.
-        const top = motion ? motion.baseBounds[1] * packedScale / resolution : trim.y - texture.orig.height * sprite.anchor.y;
+        const hasBaseBounds = Array.isArray(motion?.baseBounds);
+        const top = hasBaseBounds ? motion.baseBounds[1] * packedScale / resolution : trim.y - texture.orig.height * sprite.anchor.y;
         const bodyHeight = Math.max(8, (bottom - top) * scale);
-        const bodyWidth = Math.max(8, (motion ? (motion.baseBounds[2] - motion.baseBounds[0]) * packedScale / resolution : trim.width) * scale);
+        const bodyWidth = Math.max(8, (hasBaseBounds ? (motion.baseBounds[2] - motion.baseBounds[0]) * packedScale / resolution : trim.width) * scale);
         // Camera framing follows the actually drawn animation cell, including
         // wide wings, facing, squash and rotation; VFX keep native body geometry.
         const angle=sprite.rotation??0,cos=Math.cos(angle),sin=Math.sin(angle);
@@ -574,7 +577,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     // original hit pause, when the battle frame itself holds still.
     pendingDtMs += Math.min(100, Math.max(0, ticker?.deltaMS ?? nativeFrameMs));
     lastTickerOpeningCue=view.opening?.cue ?? null;
-    redraw(view);
+    try { redraw(view); } catch (err) { console.warn('BATTLE_REDRAW_FAULT', err); }
   }
 
   let unobserveResize=()=>{};

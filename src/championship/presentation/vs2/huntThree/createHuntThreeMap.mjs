@@ -138,7 +138,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
     } finally {app.renderer.resetState();}
     // Export is already Y-up; never double-rotate or rescale.
     pass=installSharedPass({app,threeRenderer:renderer,onFailure:fail,draw(){
-      if(suspended||!view)return false;
+      if(suspended||!view||globalThis.document?.hidden)return false;
       const {center,halfWidth,halfHeight}=map.viewport(view,app.screen.width,app.screen.height);
       camera.left=-halfWidth;camera.right=halfWidth;camera.top=halfHeight;camera.bottom=-halfHeight;
       camera.position.set(...center.map((v,i)=>v+500*map.eye[i]));camera.up.set(...map.up);camera.lookAt(...center);camera.updateProjectionMatrix();

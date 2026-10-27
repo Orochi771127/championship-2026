@@ -11,11 +11,14 @@ import test from "node:test";
 import { createChampionshipStandaloneApp } from "../src/championship/app/championshipStandaloneApp.js";
 import {
   createChampionshipPersistentSavePort,
+  createChampionshipSessionCheckpointPort,
   guardChampionshipStorage
 } from "../src/championship/app/ChampionshipPersistentSavePort.js";
 import { CHAMPIONSHIP_MODERN_SAVE_KEY } from "../src/championship/app/championshipStandaloneSave.js";
 import {
+  ALLOWED_CHAMPIONSHIP_EPHEMERAL_KEYS,
   CHAMPIONSHIP_FORBIDDEN_STORAGE_KEY_ERROR,
+  CHAMPIONSHIP_SESSION_CHECKPOINT_STORAGE_KEY,
   FORBIDDEN_HISTORICAL_STORAGE_KEYS,
   assertAllowedChampionshipStorageKey,
   forbiddenStorageKeyReason,
@@ -142,4 +145,36 @@ test("historical data already present in Storage is never read by the product", 
     [...FORBIDDEN_HISTORICAL_STORAGE_KEYS].sort(),
     "the only non-product keys touched are the ones this test seeded itself"
   );
+});
+
+test("session checkpoint key is explicitly registered and survives sessionStorage wipe via dual localStorage backup", () => {
+  assert.equal(ALLOWED_CHAMPIONSHIP_EPHEMERAL_KEYS.includes(CHAMPIONSHIP_SESSION_CHECKPOINT_STORAGE_KEY), true);
+  assert.equal(isForbiddenChampionshipStorageKey(CHAMPIONSHIP_SESSION_CHECKPOINT_STORAGE_KEY), false);
+
+  const local = recordingStorage();
+  const session = recordingStorage();
+  const checkpointPort = createChampionshipSessionCheckpointPort({
+    storage: local,
+    sessionStorage: session
+  });
+
+  checkpointPort.write({
+    screen: "HUNT_FIELD",
+    substate: { gateId: "GATE_01" }
+  }, { force: true });
+  assert.deepEqual(local.keys(), [CHAMPIONSHIP_SESSION_CHECKPOINT_STORAGE_KEY]);
+  assert.deepEqual(session.keys(), [CHAMPIONSHIP_SESSION_CHECKPOINT_STORAGE_KEY]);
+
+  // Simulate iOS Jetsam process kill wiping sessionStorage while localStorage persists
+  session.removeItem(CHAMPIONSHIP_SESSION_CHECKPOINT_STORAGE_KEY);
+  assert.deepEqual(session.keys(), []);
+
+  const recovered = checkpointPort.read();
+  assert.equal(recovered?.screen, "HUNT_FIELD");
+  assert.equal(recovered?.substate?.gateId, "GATE_01");
+
+  // Explicit clear (e.g. returnToTitle) removes the key from both storages
+  checkpointPort.clear();
+  assert.deepEqual(local.keys(), []);
+  assert.deepEqual(session.keys(), []);
 });

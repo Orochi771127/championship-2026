@@ -35,6 +35,14 @@ export const FORBIDDEN_STORAGE_KEY_PATTERNS = Object.freeze([
 // positive rule as well as a negative one.
 export const CHAMPIONSHIP_STORAGE_KEY_PREFIX = "championshipModernSave";
 
+// Ephemeral active-session recovery key (iOS Standalone Web App Jetsam / silent
+// reload auto-resume). Explicitly registered in the storage policy and purged
+// on Save & Quit or TTL expiry.
+export const CHAMPIONSHIP_SESSION_CHECKPOINT_STORAGE_KEY = "championshipSessionCheckpoint:v1";
+export const ALLOWED_CHAMPIONSHIP_EPHEMERAL_KEYS = Object.freeze([
+  CHAMPIONSHIP_SESSION_CHECKPOINT_STORAGE_KEY
+]);
+
 export function forbiddenStorageKeyError(key, reason) {
   const error = new Error(`FORBIDDEN_STORAGE_KEY: ${key} (${reason})`);
   error.name = CHAMPIONSHIP_FORBIDDEN_STORAGE_KEY_ERROR;
