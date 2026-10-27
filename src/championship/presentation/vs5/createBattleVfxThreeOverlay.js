@@ -11,7 +11,7 @@ import {
   loadLicensedVfxRuntimeManifest
 } from "../vfx/licensedVfxRuntimeBundle.js";
 import { BATTLE_IMPACT_FAMILIES } from '../../battle/battleImpactEffects.js';
-import { currentQuality, flashScale } from '../presentationPreferences.js';
+import { cappedPixelRatio, currentQuality, flashScale } from '../presentationPreferences.js';
 
 const CAMERA_POLICY = "PRODUCT_AUTHORED_PREVIEW_FRAMING";
 
@@ -56,12 +56,18 @@ export async function mountBattleVfxThreeOverlay({
   // Antialiasing follows the quality tier when the overlay mounts (next battle).
   const renderer = new THREE.WebGLRenderer({ antialias: currentQuality().threeAntialias, alpha: true, powerPreference: "high-performance" });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.setPixelRatio(cappedPixelRatio(currentQuality().threePixelRatioCap));
   renderer.setClearColor(0x000000, 0);
   renderer.domElement.className = "cm-vs5-vfx-overlay";
   renderer.domElement.dataset.renderer = "THREE_BOUNDED_VFX_OVERLAY";
   renderer.domElement.dataset.camera = live ? 'MOBILE_FOCUS_PLACEMENT_ORIGINAL_ZOOM' : CAMERA_POLICY;
   renderer.domElement.setAttribute("aria-hidden", "true");
   host.appendChild(renderer.domElement);
+  function destroyRenderer() {
+    renderer.dispose();
+    renderer.forceContextLoss?.();
+    renderer.domElement.remove();
+  }
 
   const scene = new THREE.Scene();
   const camera = live ? new THREE.OrthographicCamera(-1,1,1,-1,.1,2000) : new THREE.PerspectiveCamera(32, 1, 0.1, 50);
@@ -73,11 +79,10 @@ export async function mountBattleVfxThreeOverlay({
   try {
     instance = await runtime.load(resolvedId, { loop: true, channel: live ? 'hyper-core' : "preview" });
   } catch (error) {
-    await runtime.unloadAll();renderer.dispose();renderer.domElement.remove();throw error;
+    await runtime.unloadAll();destroyRenderer();throw error;
   }
   if (!instance) {
-    renderer.dispose();
-    renderer.domElement.remove();
+    destroyRenderer();
     fail("LOAD_CANCELLED");
   }
   const group = new THREE.Group();
@@ -92,7 +97,7 @@ export async function mountBattleVfxThreeOverlay({
       group.add(ring.object3d);
     }
   } catch (error) {
-    await runtime.unloadAll();renderer.dispose();renderer.domElement.remove();throw error;
+    await runtime.unloadAll();destroyRenderer();throw error;
   }
   const model = new THREE.Group();model.add(group);
   if (!live) frameObject(group);
@@ -110,7 +115,7 @@ export async function mountBattleVfxThreeOverlay({
       })));
       const failure=loaded.find(result=>result.status==='rejected');if(failure)throw failure.reason;
     }
-  }catch(error){await runtime.unloadAll();renderer.dispose();renderer.domElement.remove();throw error;}
+  }catch(error){await runtime.unloadAll();destroyRenderer();throw error;}
 
   let disposed = false;
   // Nothing visible and already cleared: skip the Three render (it would walk
@@ -124,14 +129,22 @@ export async function mountBattleVfxThreeOverlay({
     const bounds = host.getBoundingClientRect();
     const width = Math.max(1, Math.round(bounds.width));
     const height = Math.max(1, Math.round(bounds.height));
+    renderer.setPixelRatio(cappedPixelRatio(currentQuality().threePixelRatioCap));
     renderer.setSize(width, height, false);
     if (live) {camera.left=-width/2;camera.right=width/2;camera.top=height/2;camera.bottom=-height/2;}
     else camera.aspect = width / height;
     camera.updateProjectionMatrix();
   }
 
+  let wasHidden = false;
   function advance(ticker) {
     if (disposed) return;
+    if (globalThis.document?.hidden) {
+      wasHidden = true;
+      return;
+    }
+    const effectiveDeltaMS = wasHidden ? 0 : Math.min(50, Math.max(0, ticker?.deltaMS ?? 0));
+    wasHidden = false;
     const view = live ? source.getView() : null;
     let visibleImpacts = 0;
     if (live) {
@@ -170,7 +183,7 @@ export async function mountBattleVfxThreeOverlay({
       setData('impacts', JSON.stringify({active:active.length,
         visible:visibleImpacts,
         instances:active.map(e=>({id:e.id,type:e.type,slot:e.slot,frame:e.frame,systemId:e.systemId}))}));
-    } else instance.update(ticker?.deltaMS ?? 0);
+    } else instance.update(effectiveDeltaMS);
     // Original one-frame hit flash, adapted to the unified phone battlefield.
     // Reduced motion suppresses presentation flashing without changing hits.
     // The flash-intensity preference makes it a translucent white instead.
@@ -182,6 +195,7 @@ export async function mountBattleVfxThreeOverlay({
   }
 
   resize();
+  try { renderer.compile?.(scene, camera); } catch {}
   const unobserveResize = stage.onResize(resize);
   // Field simulation/layout (default 0) precedes this overlay on the SAME tick.
   stage.app.ticker.add(advance, undefined, -10);
@@ -209,8 +223,7 @@ export async function mountBattleVfxThreeOverlay({
       scene.remove(model);
       await instance.dispose();
       await runtime.unloadAll();
-      renderer.dispose();
-      renderer.domElement.remove();
+      destroyRenderer();
     }
   });
 }

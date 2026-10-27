@@ -84,7 +84,9 @@ export function mountHighlightBurstThree({ host, count = 96, focus = () => ({ x:
     mesh.setMatrixAt(index, matrix);
   }
 
+  let wasHidden = false;
   function draw() {
+    if (disposed || host.ownerDocument?.hidden) return;
     const started = performance.now();
     mesh.instanceMatrix.needsUpdate = true;
     renderer.render(scene, camera);
@@ -119,7 +121,12 @@ export function mountHighlightBurstThree({ host, count = 96, focus = () => ({ x:
     },
     update(deltaMs) {
       if (disposed || mode === "IDLE" || mode === "DONE") return;
-      const dt = Math.min(0.05, Math.max(0, deltaMs / 1000));
+      if (host.ownerDocument?.hidden) {
+        wasHidden = true;
+        return;
+      }
+      const dt = wasHidden ? 0 : Math.min(0.05, Math.max(0, deltaMs / 1000));
+      wasHidden = false;
       clock += dt;
       if (mode === "CONVERGE") {
         const t = Math.min(1, clock / convergeSeconds), eased = t * t * t;

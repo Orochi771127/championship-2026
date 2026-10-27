@@ -27,6 +27,10 @@ html, body {
   line-height: var(--lh-body);
   font-weight: var(--fw-regular);
   overscroll-behavior: none;
+  overscroll-behavior-y: contain;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
@@ -55,6 +59,7 @@ body[data-web-app]:not([data-portrait-frame]) { min-height:var(--cm-app-viewport
 html.da-open:has(body[data-web-app]):not(:has(#cm-title:not([hidden]))) { background:#070b14; }
 
 button, input, select, textarea { font: inherit; color: inherit; letter-spacing: inherit; }
+input, textarea { -webkit-user-select: text; user-select: text; }
 button { cursor: pointer; }
 button:disabled { cursor: default; }
 img { max-width: 100%; }
@@ -85,7 +90,7 @@ img { max-width: 100%; }
 }
 
 /* The shared Pixi canvas keeps crisp pixels wherever it is mounted. */
-.cm-field-canvas { display: block; image-rendering: pixelated; }
+.cm-field-canvas, #cm-root canvas, .da-root canvas { display: block; image-rendering: pixelated; touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
 
 /* ======================================================================= *
  * 2. Portrait frame (Owner 2026-09-13): a sideways screen shows the portrait

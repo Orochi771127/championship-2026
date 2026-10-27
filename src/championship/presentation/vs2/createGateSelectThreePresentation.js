@@ -334,12 +334,16 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
   }
 
   function draw() {
-    if (disposed) return;
+    if (disposed || globalThis.document?.hidden) return;
     camera.updateMatrixWorld(true);
     worldRoot.updateMatrixWorld(true);
     positionNodeButtons();
     renderer.render(scene, camera);
   }
+  const onVisibilityChange = () => {
+    if (!disposed && !globalThis.document?.hidden) draw();
+  };
+  globalThis.document?.addEventListener?.("visibilitychange", onVisibilityChange);
 
   function selectFromCanvas(event) {
     const rect = renderer.domElement.getBoundingClientRect();
@@ -437,6 +441,7 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
       if (disposed) return;
       disposed = true;
       observer.disconnect();
+      globalThis.document?.removeEventListener?.("visibilitychange", onVisibilityChange);
       renderer.domElement.removeEventListener("pointerdown", onPointerDown);
       renderer.domElement.removeEventListener("pointermove", onPointerMove);
       renderer.domElement.removeEventListener("pointerup", onPointerUp);

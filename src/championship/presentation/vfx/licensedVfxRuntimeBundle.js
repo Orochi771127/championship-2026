@@ -150,6 +150,16 @@ export function createLicensedVfxRuntime({ manifest, loader = new GLTFLoader(), 
   const checked = validateLicensedVfxRuntimeManifest(manifest);
   const activeByChannel = new Map();
   const generationByChannel = new Map();
+  const sidecarCache = new Map();
+  const cachedLoadJson = (url) => {
+    if (!sidecarCache.has(url)) {
+      sidecarCache.set(url, Promise.resolve().then(() => loadJson(url)).catch((err) => {
+        sidecarCache.delete(url);
+        throw err;
+      }));
+    }
+    return sidecarCache.get(url);
+  };
 
   function checkedChannel(channel) {
     if (typeof channel !== "string" || !/^[a-z0-9][a-z0-9-]{0,31}$/.test(channel)) fail(`CHANNEL:${channel}`);
@@ -167,7 +177,7 @@ export function createLicensedVfxRuntime({ manifest, loader = new GLTFLoader(), 
     if (!record) fail(`UNKNOWN_SYSTEM:${systemId}`);
     const requestGeneration = (generationByChannel.get(runtimeChannel) ?? 0) + 1;
     generationByChannel.set(runtimeChannel, requestGeneration);
-    const [gltf, ...sidecars] = await Promise.all([loader.loadAsync(record.model), ...record.sidecars.map(loadJson)]);
+    const [gltf, ...sidecars] = await Promise.all([loader.loadAsync(record.model), ...record.sidecars.map(cachedLoadJson)]);
     const propertyAnimators = await createPropertyAnimators(gltf);
     if (requestGeneration !== generationByChannel.get(runtimeChannel)) {
       disposeObject(gltf.scene);

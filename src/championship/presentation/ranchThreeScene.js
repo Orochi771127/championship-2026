@@ -7,7 +7,7 @@ import * as THREE from '../../../node_modules/three/build/three.module.js';
 import { GLTFLoader } from '../../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from '../../../node_modules/three/examples/jsm/loaders/DRACOLoader.js';
 import { ranchNativeToWorld, ranchSurfaceHeight, ranchPickWalkSurface, ranchSpriteScreenQuad, ranchSpriteUvs, RANCH_ELEVATION } from './ranchThreeCoordinates.js';
-import { currentQualityTier, prefersReducedMotion } from './presentationPreferences.js';
+import { cappedPixelRatio, currentQualityTier, isMobileOrStandaloneEnvironment, prefersReducedMotion } from './presentationPreferences.js';
 import { ranchSharedBoundaries } from '../cage/ranchConnections.js';
 import { ranchBorderWithinSharedSegments } from './ranchBorderMembership.js';
 
@@ -52,7 +52,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   if (missing.length) throw Error(`RANCH_3D_MODELS_PENDING:${missing.join(',')}`);
   if (!field.productGrid || field.fold) throw Error('RANCH_3D_PRODUCT_GRID_REQUIRED');
   const renderer = new THREE.WebGLRenderer({ alpha:true, antialias:currentQualityTier()!=='saver', powerPreference:'high-performance' });
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, currentQualityTier()==='saver'?1:2));
+  renderer.setPixelRatio(cappedPixelRatio(currentQualityTier()==='saver'?1:2));
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.NeutralToneMapping;
   renderer.shadowMap.enabled=currentQualityTier()!=='saver';
@@ -65,7 +65,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   camera.up.copy(up);
   scene.add(new THREE.HemisphereLight(0xdbeeff,0x6b7650,2));
   const sun=new THREE.DirectionalLight(0xffeed5,2.6);sun.castShadow=renderer.shadowMap.enabled;
-  sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-35;sun.shadow.camera.right=35;
+  const shadowMapDim=(currentQualityTier()==='high'&&!isMobileOrStandaloneEnvironment())?2048:1024;
+  sun.shadow.mapSize.set(shadowMapDim,shadowMapDim);sun.shadow.camera.left=-35;sun.shadow.camera.right=35;
   sun.shadow.camera.top=35;sun.shadow.camera.bottom=-35;sun.shadow.camera.far=150;
   sun.shadow.bias=-.00015;sun.shadow.normalBias=.025;
   scene.add(sun,sun.target);
@@ -654,9 +655,12 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     sprite.renderable=false;
   }
 
+  let wasHidden=false;
   function render({bounds,actors,food,waste,covered=false,deltaMS=0}) {
     if(disposed||lost){groundShadows.reset();for(const item of sprites.values())if(!item.sprite.destroyed)item.sprite.renderable=true;canvas.style.visibility='hidden';return false;}
-    if(document.hidden)return true;
+    if(document.hidden){wasHidden=true;return true;}
+    const effectiveDeltaMS=wasHidden?0:deltaMS;
+    wasHidden=false;
     canvas.style.visibility='';
     const start=performance.now(),screen=stage.app.screen;
     if(width!==screen.width||height!==screen.height){width=screen.width;height=screen.height;renderer.setSize(width,height);}
@@ -669,9 +673,9 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     for(const {object,p,shift,mixer} of instances){
       const x=bounds.x+(p.x/field.nativePixelWorldScale+shift)*pixelScale,y=bounds.y+p.y/field.nativePixelWorldScale*pixelScale;
       object.visible=x+p.worldWidthPx*bounds.scale>-80&&x<width+80&&y+p.worldHeightPx*bounds.scale>-80&&y<height+180;
-      if(mixer&&object.visible&&!prefersReducedMotion())mixer.update(Math.min(50,Math.max(0,deltaMS))/1000);
+      if(mixer&&object.visible&&!prefersReducedMotion())mixer.update(Math.min(50,Math.max(0,effectiveDeltaMS))/1000);
     }
-    const deltaSec=Math.min(50,Math.max(0,deltaMS))/1000;
+    const deltaSec=Math.min(50,Math.max(0,effectiveDeltaMS))/1000;
     sceneClock+=deltaSec;
     if(!prefersReducedMotion()){
       for(const m of lavaMaterials){
@@ -730,8 +734,11 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     for(const {texture,material} of textures.values()){texture.dispose();material.dispose();}
     for(const {object,mixer} of instances)if(mixer){mixer.stopAllAction();mixer.uncacheRoot(object);}
     const geometries=new Set(),materials=new Set(),maps=new Set();
-    for(const gltf of models.values())gltf.scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of [].concat(o.material??[])){materials.add(m);for(const v of Object.values(m))if(v?.isTexture)maps.add(v);}});
+    const collect=root=>root.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of [].concat(o.material??[])){materials.add(m);for(const v of Object.values(m))if(v?.isTexture)maps.add(v);}});
+    collect(scene);
+    for(const gltf of models.values())collect(gltf.scene);
     for(const g of geometries)g.dispose();for(const m of materials)m.dispose();for(const t of maps)t.dispose();
+    sun.shadow.map?.dispose();
     for(const bitmap of modelBitmaps)bitmap.close();modelBitmaps.clear();
     draco.dispose();
     renderer.dispose();renderer.forceContextLoss();canvas.remove();Object.assign(pixi.style,previousStyle);

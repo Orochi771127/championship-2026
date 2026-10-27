@@ -114,6 +114,6 @@ export async function createBm03GroundShadows({PIXI,parent,fieldArt,href=globalT
     },
     end(){for(const [slot,a] of actors)if(a.sprites.every(s=>!s.visible)){for(const s of a.sprites)s.destroy();actors.delete(slot);}},
     getDiagnostics:()=>({candidate:true,approximate:true,disposed,bakedPoses:baked.size,cacheEntries:0,created,released,generationMs:0,maxGenerationMs:0,rotatedFallback:'EXISTING_CHEAP_BLOB',fallbacks:[...fallbacks],seenFrames:[...seen],actors:[...actors.values()].map(a=>({...a.sample})),receiver:data.receiverPolicy??'GROUND_ONLY_SAME_CAMERA_NO_COLLISION_AUTHORITY',fieldId:fieldArt.field.fieldId,assetRoot:root}),
-    async dispose(){if(disposed)return;disposed=true;for(const a of actors.values())for(const s of a.sprites)s.destroy();actors.clear();layer.mask=null;layer.destroy();mask.destroy();releaseViews();await unload();}
+    async dispose(){if(disposed)return;disposed=true;for(const a of actors.values())for(const s of a.sprites)s.destroy();actors.clear();const maskSource=mask?.texture?.source;layer.mask=null;layer.destroy();mask.destroy();releaseViews();maskSource?.removeAllListeners?.('change');await unload();}
   };
 }
