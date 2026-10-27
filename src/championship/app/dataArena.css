@@ -359,3 +359,172 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
   .da-root[data-mode="RELAY"][data-input="touch"] .da-hud__top { grid-template-columns:1fr 44px; }
   .da-root[data-mode="RELAY"][data-input="touch"] .da-hud__pause { grid-column:2; }
 }
+
+/* ==== Battle UI pass 2026-10-28 (OWNER_APPROVED_ADAPTATION, presentation only) ====
+   Layering: every button is its own stacking context, so a label's z-index
+   can never climb over the overlay panels again; the overlay sits above the
+   HUD, the touch controls and the toasts. Touch controls exist only in play. */
+.da-tbtn, .da-bar, .da-slot { isolation:isolate; }
+.da-overlay { z-index:5; }
+.da-root:not([data-state="PLAY"]) .da-touch { visibility:hidden; }
+
+/* ---- lobby: a scrolling body over a solid action bar -------------------- */
+.da-panel--select { display:flex; flex-direction:column; overflow:hidden; padding:0; max-height:calc(100dvh - 32px);
+  border:2px solid #2b6f86; box-shadow:0 8px 0 #03080f, 0 22px 60px rgba(0,0,0,.6), inset 0 0 0 1px rgba(111,247,255,.12); }
+.da-panel__body { flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; touch-action:pan-y;
+  padding:20px 20px calc(24px + env(safe-area-inset-bottom)); }
+.da-panel--select .da-actions { position:static; flex:0 0 auto; margin:0; padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  flex-wrap:nowrap; background:#0a1324; border-top:2px solid #1d4a5e;
+  background-image:radial-gradient(rgba(111,247,255,.08) 1px, transparent 1.2px); background-size:6px 6px; }
+.da-panel--select .da-actions .da-btn { flex:1 1 0; min-width:0; }
+.da-panel--select .da-title { text-shadow:0 3px 0 #02060c; }
+
+/* mode cards: compact tactical plates, amber + cyan double frame when picked */
+.da-panel--select .da-modes { gap:8px; }
+.da-mode { position:relative; padding:10px 12px 10px 16px; border-radius:6px 16px 6px 16px; border:2px solid #24364f;
+  background:linear-gradient(180deg,#14223a,#0e1829); box-shadow:0 4px 0 #050a13; }
+.da-mode::before { content:""; position:absolute; left:0; top:10px; bottom:10px; width:4px; border-radius:0 4px 4px 0; background:#2b4d6b; }
+.da-mode[aria-checked="true"] { border-color:var(--da-gold); background:linear-gradient(180deg,#1d2f4a,#132036);
+  box-shadow:0 0 0 2px #0a1120, 0 0 0 4px rgba(111,247,255,.75), 0 4px 0 4px #050a13; }
+.da-mode[aria-checked="true"]::before { background:linear-gradient(180deg,var(--da-gold),var(--da-accent)); }
+.da-mode[aria-checked="true"]::after { content:"\2713"; position:absolute; top:-2px; right:-2px; width:26px; height:22px; display:grid; place-items:center;
+  border-radius:0 14px 0 10px; background:var(--da-gold); color:#241800; font-size:13px; font-weight:900; }
+.da-mode__name { font-size:16px; letter-spacing:.5px; }
+
+/* partner cards: holo pedestal under the portrait, segmented neon meters, kit pills */
+.da-partner { position:relative; border-radius:8px 18px 8px 18px; border:2px solid #24364f; background:linear-gradient(180deg,#14223a,#0d1727); box-shadow:0 5px 0 #050a13; }
+.da-partner[aria-checked="true"] { border-color:var(--da-accent); box-shadow:0 0 0 3px rgba(111,247,255,.22), 0 0 22px rgba(111,247,255,.22), 0 5px 0 #050a13; }
+.da-partner > .da-partner__art {
+  background:radial-gradient(ellipse 46% 15% at 50% 88%, rgba(111,247,255,.5), rgba(111,247,255,.12) 60%, transparent 72%),
+             radial-gradient(ellipse 34% 9% at 50% 89%, rgba(255,255,255,.35), transparent 70%); }
+.da-meter__bar { height:8px; border-radius:2px; background:rgba(111,247,255,.08); box-shadow:inset 0 0 0 1px rgba(111,247,255,.18); }
+.da-meter__bar::after { background:linear-gradient(90deg,#2ad8ff,#6ff7ff 70%,#d6fdff); box-shadow:0 0 8px rgba(111,247,255,.6); }
+.da-meter__bar::before { content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:repeating-linear-gradient(90deg, transparent 0 calc(10% - 2px), #0d1727 calc(10% - 2px) 10%); }
+.da-partner__skills { display:flex; flex-wrap:wrap; gap:4px; width:100%; }
+.da-partner__skills:empty { display:none; }
+.da-pill { padding:2px 8px; border-radius:999px; border:1px solid rgba(255,211,77,.45); background:rgba(255,211,77,.08); color:#ffe9a8;
+  font-size:11px; font-weight:800; line-height:1.5; white-space:nowrap; }
+.da-pill--ult { border-color:rgba(255,122,217,.6); background:rgba(255,122,217,.12); color:#ffc6ef; }
+@media (max-width:640px), (max-height:520px) {
+  .da-panel__body { padding:16px 14px calc(20px + env(safe-area-inset-bottom)); }
+  .da-partner__skills { grid-column:1 / -1; }
+  .da-panel--select .da-actions { padding:10px 12px calc(10px + env(safe-area-inset-bottom)); gap:8px; }
+}
+
+/* ---- touch controls: arcade discs with a colour key ------------------------
+   basic = cyan, skills = the partner's element, ultimate = gold-violet,
+   dash = wind blue. Each disc has a top inner highlight and a hard base. */
+.da-root { --el:#ffb347; --el-deep:#7a2a10; }
+.da-root[data-element="fire"] { --el:#ff7a3c; --el-deep:#7a2410; }
+.da-root[data-element="frost"] { --el:#9fe8ff; --el-deep:#1d5a78; }
+.da-root[data-element="water"] { --el:#4ab4ff; --el-deep:#103e72; }
+.da-root[data-element="light"] { --el:#ffe27a; --el-deep:#7a5a10; }
+.da-root[data-element="earth"] { --el:#d9a066; --el-deep:#5a3412; }
+.da-root[data-element="storm"] { --el:#c3a2ff; --el-deep:#3f2a7a; }
+.da-root[data-element="nature"] { --el:#7fe89a; --el-deep:#1d5a2c; }
+.da-root[data-element="shadow"] { --el:#b48cff; --el-deep:#2e1a5a; }
+.da-root[data-element="physical"] { --el:#dfe7f0; --el-deep:#3a4656; }
+.da-tbtn { --ring:var(--da-edge); --base:#03101c; border:3px solid var(--ring); background:radial-gradient(circle at 50% 30%, #1d3b56, #0a1a2c 70%);
+  box-shadow:0 5px 0 var(--base), 0 0 0 1px rgba(0,0,0,.55); transition:transform 40ms cubic-bezier(.2,.8,.2,1), box-shadow 40ms cubic-bezier(.2,.8,.2,1); }
+.da-tbtn::before { content:""; position:absolute; inset:3px 8px auto; height:38%; border-radius:50% 50% 40% 40%; z-index:1; pointer-events:none;
+  background:linear-gradient(180deg, rgba(255,255,255,.32), rgba(255,255,255,0)); }
+.da-tbtn.is-pressed, .da-tbtn:active { transform:translateY(4px) scale(.96); box-shadow:0 1px 0 var(--base), 0 0 0 1px rgba(0,0,0,.55); }
+.da-tbtn--skill { --ring:var(--el); --base:var(--el-deep); color:#fff4e6; }
+.da-tbtn--skill.is-noenergy { --ring:#3a4a5e; --base:#0a121c; filter:saturate(.25) brightness(.62); }
+.da-tbtn--dash { --ring:#7fd8ff; --base:#0d3956; }
+.da-tbtn--ult { --ring:#d9a6ff; --base:#3a1460;
+  background:linear-gradient(0deg, rgba(255,198,90,.55) calc(var(--charge, 0) * 100%), transparent 0), radial-gradient(circle at 50% 30%, #4a2a6a, #1c0f30 70%); }
+.da-tbtn--ult.is-ready { --ring:#ffd34d; animation:none; }
+.da-tbtn--switch { --ring:#a3d9ff; --base:#123049; }
+.da-tbtn.is-cooling:not(.da-tbtn--dash) { filter:saturate(.55) brightness(.8); }
+/* ready: a breathing inner ring (pseudo element only; the button's own box
+   never moves, so input gates always see a stable target) */
+.da-tbtn::after { content:""; position:absolute; inset:2px; border-radius:50%; z-index:2; pointer-events:none; opacity:0;
+  border:2px solid rgba(255,255,255,.85); }
+.da-tbtn--skill.is-ready:not(.is-cooling):not(.is-noenergy)::after { opacity:.35; }
+.da-tbtn--ult.is-ready::after { border-color:#fff3b0; animation:da-ready-breathe 1.1s cubic-bezier(.4,0,.2,1) infinite; }
+.da-tbtn--ult.is-ready .da-tbtn__label { color:#fff3b0; }
+@keyframes da-ready-breathe { 0%,100% { opacity:.2; transform:scale(.92); } 50% { opacity:1; transform:scale(1); } }
+/* pie cooldown, transform-only: the left half-disc turns by --cool x 360deg;
+   under half a turn the mask is clipped to the right half, past it the right
+   half shows whole. */
+.da-tbtn__cooldown { inset:0; border-radius:50%; overflow:hidden; background:none; transform:none; opacity:0; z-index:0;
+  clip-path:inset(0 0 0 50%); }
+.da-tbtn.is-cooling .da-tbtn__cooldown { opacity:1; transform:none; }
+.da-tbtn.is-cool-late .da-tbtn__cooldown { clip-path:none; }
+.da-tbtn__cooldown::before, .da-tbtn__cooldown::after { content:""; position:absolute; top:0; bottom:0; width:50%; background:rgba(2,6,14,.72); }
+.da-tbtn__cooldown::before { left:0; transform-origin:100% 50%; transform:rotate(calc(var(--cool, 0) * 360deg)); }
+.da-tbtn__cooldown::after { right:0; opacity:0; }
+.da-tbtn.is-cool-late .da-tbtn__cooldown::after { opacity:1; }
+.da-tbtn:not(.is-cooling) .da-tbtn__cooldown { transform:none; opacity:0; }
+.da-tbtn--dash.is-cooling .da-tbtn__cooldown { transform:none; clip-path:none; background:rgba(2,6,14,.6); }
+.da-tbtn--dash.is-cooling .da-tbtn__cooldown::before { opacity:0; }
+.da-tbtn__label, .da-tbtn__meta { position:relative; z-index:3; }
+/* reserve partner gauge on the swap trigger */
+.da-tbtn__reserve { display:none; }
+.da-root[data-mode="RELAY"] .da-tbtn__reserve { display:block; position:absolute; left:10px; right:10px; bottom:5px; height:4px; z-index:3;
+  border-radius:2px; background:rgba(0,0,0,.55); overflow:hidden; }
+.da-root[data-mode="RELAY"] .da-tbtn__reserve::after { content:""; position:absolute; inset:0; transform-origin:left center;
+  transform:scaleX(var(--reserve-hp, 1)); background:linear-gradient(90deg,#39ff9e,#8dffb0); }
+
+/* ---- relay: the radial thumb wheel --------------------------------------
+   The basic attack (76px) sits in the corner. Inner ring r=106: s1 at 180deg,
+   s2 at 135deg, s3 at 90deg (58px). Outer ring r=182: dash at 160deg (54px),
+   ultimate at 112deg (62px). Offsets are the precomputed right/bottom of each
+   disc from the basic disc's corner: right = 38 - r*cos(a) - s/2,
+   bottom = 38 + r*sin(a) - s/2. Every pair of bounding boxes keeps at least
+   7px of air at 320, 390 and 430 wide and in 844x390 landscape. The swap
+   trigger stays on the left, above the movement stick (Owner 2026-10-28). */
+.da-root[data-mode="RELAY"] .da-tbtn--basic { --ring:#9ff6ff; --base:#0b4152; border-width:4px; box-shadow:0 6px 0 var(--base), 0 0 0 1px rgba(0,0,0,.55);
+  background:repeating-conic-gradient(from 0deg, rgba(159,246,255,0) 0 40deg, rgba(159,246,255,.12) 40deg 50deg),
+             radial-gradient(circle at 50% 50%, transparent 0 21px, rgba(159,246,255,.35) 21px 23px, transparent 23px),
+             radial-gradient(circle at 50% 30%, #2c7d96, #0f2c47 72%); }
+.da-root[data-mode="RELAY"] .da-tbtn--basic.is-pressed { box-shadow:0 1px 0 var(--base), 0 0 0 1px rgba(0,0,0,.55); }
+.da-root[data-mode="RELAY"] .da-tbtn--s1 { right:calc(var(--da-control-right) + 115px); bottom:calc(var(--da-control-bottom) + 9px); }
+.da-root[data-mode="RELAY"] .da-tbtn--s2 { right:calc(var(--da-control-right) + 84px); bottom:calc(var(--da-control-bottom) + 84px); }
+.da-root[data-mode="RELAY"] .da-tbtn--s3 { right:calc(var(--da-control-right) + 9px); bottom:calc(var(--da-control-bottom) + 115px); }
+.da-root[data-mode="RELAY"] .da-tbtn--dash { right:calc(var(--da-control-right) + 182px); bottom:calc(var(--da-control-bottom) + 73px); width:54px; height:54px; }
+.da-root[data-mode="RELAY"] .da-tbtn--ult { right:calc(var(--da-control-right) + 75px); bottom:calc(var(--da-control-bottom) + 176px); width:62px; height:62px; }
+.da-root[data-mode="RELAY"] .da-tbtn--switch { width:72px; height:52px; border-radius:14px 14px 22px 22px; padding-bottom:9px; }
+@media (orientation:landscape) and (max-height:520px) {
+  .da-root[data-mode="RELAY"] .da-tbtn--s2 { bottom:calc(var(--da-control-bottom) + 84px); }
+  .da-root[data-mode="RELAY"] .da-tbtn--s3 { bottom:calc(var(--da-control-bottom) + 115px); }
+  .da-root[data-mode="RELAY"] .da-tbtn--dash { bottom:calc(var(--da-control-bottom) + 73px); }
+  .da-root[data-mode="RELAY"] .da-tbtn--ult { bottom:calc(var(--da-control-bottom) + 176px); }
+}
+/* the resting movement dial: eight tactical ticks around a puck well */
+.da-root[data-mode="RELAY"] .da-move-hint { border:2px solid rgba(181,237,255,.34);
+  background:radial-gradient(circle, rgba(10,26,40,.5) 0 22px, rgba(181,237,255,.22) 22px 24px, rgba(10,26,40,.42) 24px 41px, transparent 41.5px),
+             repeating-conic-gradient(from -3deg, rgba(181,237,255,.42) 0 6deg, transparent 6deg 45deg),
+             rgba(10,26,40,.3); }
+.da-stick { border:2px solid rgba(111,247,255,.55);
+  background:radial-gradient(circle, rgba(8,20,34,.42) 0 45px, transparent 45.5px),
+             repeating-conic-gradient(from -3deg, rgba(111,247,255,.6) 0 6deg, transparent 6deg 45deg),
+             rgba(8,20,34,.3); }
+.da-stick__knob { background:radial-gradient(circle at 40% 32%, #e6fdff, #6ff7ff 45%, #1b8fd1 100%); border:3px solid #062033;
+  box-shadow:0 4px 0 #031420, 0 0 14px rgba(111,247,255,.55); }
+
+/* ---- vitals: slanted armour frames and a white ghost under each fill ----- */
+.da-bar__ghost { position:absolute; inset:0; transform-origin:left center; background:#f4fbff; opacity:.85; }
+.da-bar__fill { z-index:1; }
+.da-bar__flash { position:absolute; inset:0; z-index:2; background:#fff; opacity:0; pointer-events:none; }
+.da-bar__label, .da-bar__value { z-index:3; }
+.da-root[data-mode="RELAY"] :is(.da-bar--hp,.da-bar--energy) { border-radius:3px 10px 3px 10px; border:2px solid #0b1626;
+  box-shadow:0 0 0 1px rgba(111,247,255,.45), 0 3px 0 #02070d; }
+.da-bar--hp .da-bar__fill { transition:transform 60ms linear; }
+.da-relay-team { display:flex; gap:4px; flex-wrap:wrap; }
+.da-root[data-mode="RELAY"] .da-relay-team > div { padding:1px 8px; border-radius:999px; border:1px solid rgba(181,237,255,.35); background:rgba(6,14,26,.72); }
+.da-root[data-mode="RELAY"] .da-relay-team > div:first-child { border-color:rgba(141,255,176,.65); color:#d8ffe6; }
+/* rival / boss: dark armour, a threat chevron, hit flash and ghost */
+.da-boss { padding:4px 10px 6px; border-radius:4px 14px 4px 14px; background:linear-gradient(180deg, rgba(40,6,18,.86), rgba(16,4,10,.86));
+  border:2px solid #4a1020; box-shadow:0 0 0 1px rgba(255,90,120,.5), 0 4px 0 #0a0206; }
+.da-boss__name::before { content:"\25B2"; display:inline-block; margin-right:6px; padding:0 5px; border-radius:4px; background:#ff3b5c; color:#2a0008; font-size:10px; vertical-align:2px; }
+.da-bar--boss { border-radius:2px; border:1px solid #2a0610; }
+.da-boss__shield { position:absolute; top:3px; right:10px; margin:0; }
+/* Low quality keeps this one tiny HUD transition: a transformed span, not the canvas. */
+@media (prefers-reduced-motion:no-preference) {
+  .da-root:not([data-motion="reduced"]) .da-bar__ghost { transition:transform 320ms cubic-bezier(.2,.8,.2,1) 400ms !important; }
+}
+.da-root[data-motion="reduced"] .da-tbtn::after { animation:none !important; }
+@media (prefers-reduced-motion:reduce) { .da-tbtn::after { animation:none !important; } }

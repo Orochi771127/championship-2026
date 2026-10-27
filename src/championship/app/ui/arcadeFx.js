@@ -170,7 +170,7 @@ export const ARCADE_KEY_SELECTOR = [
   ".cm-vs2-gate", ".cm-vs5-cube__face", ".cm-vs5-match", ".cm-hunt-tools .cm-vs2-action", ".cm-ranch-zoom", ".cm-status-bar__matches", ".cm-arcade-key"
 ].join(",");
 // Cards deal, tilt and squash; their press is a card flick, not a key hit.
-export const ARCADE_CARD_SELECTOR = ".cm-vs2-shop__row, .cm-vs2-database__row, .cm-vs2-gate, .cm-vs5-match, .cm-toolbar__quick-entry";
+export const ARCADE_CARD_SELECTOR = ".cm-vs2-shop__row, .cm-vs2-database__row, .cm-vs2-gate, .cm-vs5-match, .cm-vs5-match__enter, .cm-toolbar__quick-entry";
 const TOGGLE_SELECTOR = ".cm-toolbar__cell, .cm-vs2-shop__tab, .cm-vs2-database__chip, .cm-vs5-cube__face, .cm-settings__category";
 const BACK_SELECTOR = ".cm-screen-back, .cm-vs2-shop__close, .cm-vs2-database__close, .cm-settings__close, .cm-settings__back, [data-sfx='back']";
 
@@ -410,6 +410,8 @@ export function installArcadeFx({ doc = globalThis.document, view = globalThis, 
       case "damage":
         // Battle plays its own hit sounds; the HUD only answers with the number and a flash.
         if (text) juice.floatText(at.x, at.y - 10, text, { kind: "dmg", dir: Math.random() < 0.5 ? -1 : 1 });
+        // The struck side's plate gives a small jolt (Owner 2026-10-28).
+        juice.shake(event.target?.closest?.(".cm-vs5-fighter") ?? event.target, 3, 200);
         break;
       case "open": sound.play("whoosh"); break;
       case "close": sound.play("back"); break;
