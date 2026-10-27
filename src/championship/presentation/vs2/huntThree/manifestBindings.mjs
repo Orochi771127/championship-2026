@@ -8,7 +8,7 @@ export const MAPS=Object.freeze({
     "directory": "assets/production/hunt/hm01-three-r1-20261022/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "c29c6b0335177093991f6bc13f6da061b72e9bd21fbdc3837f976b34b9e83fe0",
+      "sha256": "40ec0aed8ef8e58fb748075a9a3d7655deffb466f8167e3501fc5cacfece8c5f",
       "bytes": 3873
     },
     "fields": [
@@ -36,7 +36,7 @@ export const MAPS=Object.freeze({
     "directory": "assets/production/hunt/hm02-three-v5-20261023/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "27f6a977918b557b5195d2b64089df2d8288e8ed09ddf88eb20d2605b36d9a37",
+      "sha256": "bf80512c1af1ac484fadf7b70fed9749e66da2c1594a7e16ecb53bfccc72bbf3",
       "bytes": 1038
     },
     "fields": [
@@ -50,7 +50,7 @@ export const MAPS=Object.freeze({
     "directory": "assets/production/hunt/hm03-three-v6-review-20261023/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "6656e447c3162f1ad0cc64cee02bbfdf222e059c9b7e34cd91b2dad0e6f0eb39",
+      "sha256": "c228a402aefc5bcb743ce7fefc64538022d4ab1f51feb2cf0d6b151bcbb10243",
       "bytes": 728
     },
     "fields": [
@@ -64,7 +64,7 @@ export const MAPS=Object.freeze({
     "directory": "assets/production/hunt/hm04-three-v5-review-20261023/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "fec5aa4d6ac07ea016eebf371a61ebe59fba2c9f37c06ebc84729e2ef4e929a6",
+      "sha256": "4ad2c6c30e693e3dd247060684307f881575d1d7ff69ed8ba568c21808e87e4d",
       "bytes": 724
     },
     "fields": [
@@ -78,7 +78,7 @@ export const MAPS=Object.freeze({
     "directory": "assets/production/hunt/hm05-three-v7-20261023/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "8ade45d33b64c3fff4205176e315d230c742a150ae92f14a15211a644f585ddb",
+      "sha256": "2d6ee3874a6368c5c551d570a1436b2fadbfd83bb171039db547e42d92eb5be5",
       "bytes": 717
     },
     "fields": [
@@ -92,7 +92,7 @@ export const MAPS=Object.freeze({
     "directory": "assets/production/hunt/hm06-three-v4-20261023/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "84d78879e2c3ac4f01d5fc6bdb7a2df54a5990f0afa0057c7230ac44ac24748b",
+      "sha256": "a4efc464f173f9b4a7a3cb0839c5bf1aac4de3619cfbed2cfc57c00be8316331",
       "bytes": 714
     },
     "fields": [
@@ -106,7 +106,7 @@ export const MAPS=Object.freeze({
     "directory": "assets/production/hunt/hm09-three-v7-20261023/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "29a40a8d37bb81c6a2c9c1d68d7d7e15ae860cee15183fe8a91bb8a3ab483f96",
+      "sha256": "90c8dfe6c0ff63abd53feb1dc07bc47c7969fb8e9a653704ef180fb261e7b99c",
       "bytes": 405
     },
     "fields": [
@@ -119,7 +119,7 @@ export const MAPS=Object.freeze({
     "directory": "assets/production/hunt/hm16-three-v6-20261023/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "81b05510c45a1259dd4c82296bebe7a259593b9292a8e8fd786341a86542bdac",
+      "sha256": "15d7ac6ad41dd1c7b53c1adee5aa504a0cc51ff1cd0daa1b4f762ddb1759008b",
       "bytes": 768
     },
     "fields": [
@@ -161,7 +161,7 @@ export const MAPS=Object.freeze({
     "directory": "assets/production/hunt/hm17-three-v4-20261023/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "8b01e58d395cef1a7ad217eec7630b9f387a62d1d1560dd24c568fb00b062f43",
+      "sha256": "40f96a417b8233ee78abaf66570dceec664203adf06781d06db215b26126e2ea",
       "bytes": 768
     },
     "fields": [
