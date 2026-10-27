@@ -17,14 +17,33 @@ import * as H from '../src/championship/presentation/ranchContactHeight.js';impo
 const source=fs.readFileSync(new URL('../src/championship/presentation/ranchThreeScene.js',import.meta.url),'utf8'),contactBody=source.slice(source.indexOf('  function updateContactTriangles('),source.indexOf('  function legacyGroundHeight(')),pickBody=source.slice(source.indexOf('  function pickGroundNative('),source.indexOf('  return {render,dispose'));
 const supportFields=await S.loadSupportMetadata(fs.readFileSync(new URL('../assets/production/cage/three-20261021/physical-ground-tops.r2.json',import.meta.url),'utf8')),logicalBridges=await H.loadLogicalBridges(fs.readFileSync(new URL('../assets/production/cage/three-20261021/logical-stair-bridges.r1.json',import.meta.url),'utf8'),supportFields);
 const E=52*Math.PI/180,lift=16*Math.cos(E),direction={x:Math.cos(E)/Math.SQRT2,y:Math.sin(E),z:Math.cos(E)/Math.SQRT2},ranchNativeToWorld=(x,y,h=0)=>({x:(x+y/Math.sin(E))/(16*Math.SQRT2),y:h,z:(-x+y/Math.sin(E))/(16*Math.SQRT2)});
+// Hex cage world (2026-10-26): the captured evidence below is in the old 10×10 board frame
+// (960 px wrap). The ground is now composed in the hex world, where that board lands
+// 7 columns / 8 rows in; this adapter reads the real world ground and reports it in the
+// captured frame, so every height/pick assertion still runs against production ground.
+const LEGACY_OFFSET=[7*96,8*88],LEGACY_WRAP=960,legacySlotOf=new Map(Array.from({length:100},(_,i)=>[grid.legacyGrid100SlotToWorld(i),i]));
+const worldLayout=layout=>layout.map(p=>({...p,slotIndex:grid.legacyGrid100SlotToWorld(p.slotIndex)}));
+// A whole-tile window onto the world ground (offsets are tile multiples), so the captured
+// fractional points are classified by the same 8 px tile they were captured on.
+const LEGACY_TILE=[LEGACY_OFFSET[0]/8,LEGACY_OFFSET[1]/8];
+const legacyGroundView=ground=>{
+ const width=LEGACY_WRAP/8,height=110,component=new Int32Array(width*height);
+ for(let ty=0;ty<height;ty++)for(let tx=0;tx<width;tx++)component[ty*width+tx]=ground.navigation.component[(ty+LEGACY_TILE[1])*ground.width+tx+LEGACY_TILE[0]];
+ const cageAt=(x,y)=>{const cage=Number.isFinite(x)&&Number.isFinite(y)?ground.cageAt((Math.floor(x/8)+LEGACY_TILE[0])*8,(Math.floor(y/8)+LEGACY_TILE[1])*8):null;
+  return cage&&{...cage,slotIndex:legacySlotOf.get(cage.slotIndex)};};
+ return {layoutVersion:ground.layoutVersion,pixelWidth:LEGACY_WRAP,pixelHeight:height*8,width,height,navigation:{component},cageAt,
+  readTerrain:(tx,ty)=>ground.readTerrain(tx+LEGACY_TILE[0],ty+LEGACY_TILE[1]),
+  origin:id=>{const o=ground.origin(id);return o&&[o[0]-LEGACY_OFFSET[0],o[1]-LEGACY_OFFSET[1],...o.slice(2)];}};
+};
+const legacyAdmission=ground=>{const view=legacyGroundView(ground);return (x,y)=>readRaisingGroundSupport(view,x,y);};
 const plans=read('./fixtures/ranch-v4/wrap-plan.json'),assets=read('./fixtures/ranch-v4/layouts.json'),results=[];let checks=0;
 for(const c of plans.cases.filter(c=>c.id.startsWith('point-wrap'))){
- const q=c.expectedQuery,row=assets.rows.find(r=>r.fieldId===c.fieldId),ground=compose({placements:row.layout,unlockedSlots:Array.from({length:100},(_,i)=>i)}),spec=supportFields.get(c.fieldId);
+ const q=c.expectedQuery,row=assets.rows.find(r=>r.fieldId===c.fieldId),ground=compose({placements:worldLayout(row.layout),unlockedSlots:Array.from({length:100},(_,i)=>i)}),spec=supportFields.get(c.fieldId);
  const p={ownerIndex:q.rendererOwnerIndex,instanceId:q.stableSourcePlacement.instanceId,moduleId:q.stableSourcePlacement.moduleId,slotIndex:q.stableSourcePlacement.slotIndex,cageDefinitionIndex:q.stableSourcePlacement.definitionIndex,fieldId:c.fieldId,x:q.originNative[0],y:q.originNative[1]};
  const instances=[-960,0,960].map(shift=>{const o=ranchNativeToWorld(q.originNative[0]+shift,q.originNative[1]),object={visible:false},supportMesh={visible:true,parent:object,matrixWorld:{elements:[1,0,0,0,0,1,0,0,0,0,1,0,o.x,0,o.z,1]},updateWorldMatrix(){}};return {p,shift,object,supportMesh,supportTriangles:spec.primitives[0].triangles,contactSheets:spec.supportSheets};});
- const resolver=createRanchSupportOwnerResolver({placements:[p],instances,unit:1,wrapWidthNative:960}),env={...H,eligibleSupportOwner:S.eligibleSupportOwner,instances,logicalBridges,supportOwnerResolver:resolver,ranchNativeToWorld,direction,field:{nativePixelWorldScale:1},walkSurfaces:{},ranchPickWalkSurface:()=>({height:0})};
+ const resolver=createRanchSupportOwnerResolver({placements:[p],instances,unit:1,wrapWidthNative:960}),env={...H,eligibleSupportOwner:S.eligibleSupportOwner,instances,logicalBridges,supportOwnerResolver:resolver,ranchNativeToWorld,direction,view:{lift:16*Math.cos(E),cos:Math.cos(E),sin:Math.sin(E),groundScaleY:1},field:{nativePixelWorldScale:1},walkSurfaces:{},ranchPickWalkSurface:()=>({height:0})};
  const api=Function(...Object.keys(env),'let disposed=false;'+contactBody+pickBody+'return {contactHeight,pickGroundNative,dispose(){disposed=true;supportOwnerResolver.dispose();}};')(...Object.values(env));
- const admission=(x,y)=>readRaisingGroundSupport(ground,x,y),points=c.fieldId==='field_cm18_01'?[[254,160],[268,156],...read('./fixtures/ranch-v4/continuity.json').trajectory25.map(r=>r.pointLocalNative.map((v,i)=>v+q.originNative[i]))]:[[228,44]];
+ const admission=legacyAdmission(ground),points=c.fieldId==='field_cm18_01'?[[254,160],[268,156],...read('./fixtures/ranch-v4/continuity.json').trajectory25.map(r=>r.pointLocalNative.map((v,i)=>v+q.originNative[i]))]:[[228,44]];
  const rows=[];
  for(const base of points)for(const shift of [-960,0,960]){
   const x=base[0]+shift,y=base[1],a=admission(x,y),before=api.contactHeight(x,y,a);assert.ok(before.height!==null);checks++;

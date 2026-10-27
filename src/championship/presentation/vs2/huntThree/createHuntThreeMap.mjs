@@ -8,6 +8,7 @@ import {withSharedUnpackState} from './sharedGLState.mjs';
 import {installSharedPass} from './sharedPass.mjs';
 import {installFlatGroundDepthCandidate} from './supportDepth.mjs';
 import {loadAuthoredMapAssets,configureAuthoredLighting} from './authoredMapAssets.mjs';
+import {hd2dLook,applyHd2dLighting,createHd2dPost} from './hd2dLook.mjs';
 
 // Caller provides a hash-verified manifest and an explicit appearance approval,
 // authored actor support resolver and already-owned Pixi nodes. No gameplay API.
@@ -30,6 +31,8 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
   const sun=new THREE.DirectionalLight(0xffe3b0,2.2);sun.position.set(-30,65,40);
   scene.add(ambient,sun);
   if(authored)configureAuthoredLighting({manifest,scene,ambient,sun,night:fieldId.endsWith('_02')});
+  // HD-2D (Owner 2026-10-27): every map with a look in hd2dLook.mjs; baked maps take the post pass only.
+  const look=authored||baked?hd2dLook(manifest.map,fieldId):null;let hd2d=null;
   let active=true, view=null, pass=null, gltf=null, prototypeGltf=null, sizeKey='', restoreFallback=null, external=null, frameIndex=0, suspended=false;
   const controller=new AbortController(), resourceDisposer=createResourceDisposer(), batches=new Set(),cleanupErrors=[];
   const cleanup=(label,callback)=>{try{callback();}catch(error){cleanupErrors.push(`${label}: ${error?.message??error}`);}};
@@ -57,6 +60,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
     for(const batch of batches)resourceDisposer.once(batch);batches.clear();
     cleanup('scene',()=>resourceDisposer.gltf(gltf));cleanup('prototypes',()=>resourceDisposer.gltf(prototypeGltf));cleanup('external assets',releaseExternal);
     cleanup('authored shadow',()=>sun.shadow.dispose());
+    cleanup('hd2d post',()=>hd2d?.dispose());
     cleanup('renderer lease',()=>rendererLease?.release());
     // Notifications run after mandatory ownership cleanup, and cannot strand it.
     cleanup('fallback restore',()=>restoreFallback?.());
@@ -88,6 +92,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
       external=await (authored?loadAuthoredMapAssets:loadExternalMapAssets)({THREE,GLTFLoader,DRACOLoader,dracoDecoderPath,manifest,fieldId,baseUrl,signal:controller.signal,disposer:resourceDisposer});
       if(!active||controller.signal.aborted){releaseExternal();controller.signal.throwIfAborted();throw new Error('HUNT_DISPOSED_DURING_ASSET_HANDOFF');}
       gltf=external.gltf;resolveSupport=external.resolveSupport;scene.add(gltf.scene);
+      if(look&&authored)applyHd2dLighting({THREE,scene,root:gltf.scene,ambient,sun,look});
     }else{
     const manager=new THREE.LoadingManager();manager.setURLModifier(url=>{if(url.startsWith('blob:'))return url;throw new Error('HM02_EXTERNAL_GLTF_RESOURCE_FORBIDDEN');});
     async function parse(asset){
@@ -129,10 +134,11 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
       renderer.autoClear=true;renderer.setClearColor(external?.field.clearColor??0x0a222a,1);renderer.outputColorSpace=THREE.SRGBColorSpace;
       shaderGuard=shaderFailureGuard(renderer);
       if(external)withSharedUnpackState(app.renderer.gl,()=>{for(const texture of external.textures)renderer.initTexture(texture);});
+      if(look)hd2d=createHd2dPost({THREE,renderer,look});
     } finally {app.renderer.resetState();}
     // Export is already Y-up; never double-rotate or rescale.
     pass=installSharedPass({app,threeRenderer:renderer,onFailure:fail,draw(){
-      if(suspended||!view)return false;
+      if(suspended||!view||globalThis.document?.hidden)return false;
       const {center,halfWidth,halfHeight}=map.viewport(view,app.screen.width,app.screen.height);
       camera.left=-halfWidth;camera.right=halfWidth;camera.top=halfHeight;camera.bottom=-halfHeight;
       camera.position.set(...center.map((v,i)=>v+500*map.eye[i]));camera.up.set(...map.up);camera.lookAt(...center);camera.updateProjectionMatrix();
@@ -142,6 +148,11 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
       // same map intersection as the existing Pixi world mask.
       if(external){const phase=fieldArt?.getDiagnostics?.().frameIndex;external.selectPhase(phase);frameIndex=phase;}
       const clip=viewportClip(view,app.screen.width,app.screen.height);
+      // Pixi owns the GL clear colour between frames; set the map's own before clearing,
+      // or empty map areas (HM11 pits) clear to transparent and show the page through.
+      renderer.setClearColor(look?.clearColor??external?.field.clearColor??0x0a222a,1);
+      if(hd2d?.enabled()){shaderGuard.draw(()=>hd2d.render(scene,camera,clip));return;}
+      hd2d?.release();
       renderer.setScissorTest(false);renderer.clear();renderer.setScissor(clip.x,clip.y,clip.width,clip.height);
       renderer.setScissorTest(true);renderer.autoClear=false;
       try{shaderGuard.draw(()=>renderer.render(scene,camera));}finally{renderer.autoClear=true;}
@@ -201,7 +212,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
       if(!reviewHarness)throw new Error('HUNT_REVIEW_ONLY');suspended=Boolean(value);
       if(suspended){restore();restoreFallback?.();}
     },
-    getDiagnostics(){return {active,threeUsed:active&&!suspended&&view!==null,renderer:'THREE_SHARED_PIXI_WEBGL2_HUNT_UNIFIED',map:manifest.map??'hm02',fieldId,canvasCount:1,contextCount:1,actorCount:actors.size,actorTextureCount:textures.getDiagnostics().entries,actorTextures:textures.getDiagnostics(),assetVersion:manifest.assetVersion??null,treeSelection:manifest.treeSelection??null,horizontalRotationEnabled:false,projectionElevationDegrees:manifest.projection.elevationDegrees,residentFrameTextures:external?.textures.length??0,frameIndex,externalAssets:external?.stats??null,fallback2DRetained:true,fallback2DReleaseApproved:false,qaApproved:false,three:renderer?.info,measuredMobilePerformance:false,cleanupErrors:[...cleanupErrors,...resourceDisposer.getErrors()],sharedPass:pass?.getDiagnostics()??null};},
+    getDiagnostics(){return {active,threeUsed:active&&!suspended&&view!==null,renderer:'THREE_SHARED_PIXI_WEBGL2_HUNT_UNIFIED',map:manifest.map??'hm02',fieldId,canvasCount:1,contextCount:1,actorCount:actors.size,actorTextureCount:textures.getDiagnostics().entries,actorTextures:textures.getDiagnostics(),assetVersion:manifest.assetVersion??null,treeSelection:manifest.treeSelection??null,horizontalRotationEnabled:false,hd2d:hd2d?.getDiagnostics()??null,projectionElevationDegrees:manifest.projection.elevationDegrees,residentFrameTextures:external?.textures.length??0,frameIndex,externalAssets:external?.stats??null,fallback2DRetained:true,fallback2DReleaseApproved:false,qaApproved:false,three:renderer?.info,measuredMobilePerformance:false,cleanupErrors:[...cleanupErrors,...resourceDisposer.getErrors()],sharedPass:pass?.getDiagnostics()??null};},
     dispose
   });
 }

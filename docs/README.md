@@ -72,6 +72,7 @@ Do not infer current implementation state from one historical coordination file.
 
 | Need | Canonical entry |
 |---|---|
+| 大健檢、實測與重構提案：支援技能、Arena 資料轉接與雙人（2026-10-25，未發布） | [健檢與提案](planning/HEALTH_CHECK_AND_REFACTOR_PLAN_2026-10-25_ZH_TW.md) |
 | 遊戲數值接線盤點：哪些已讀原作資料、哪些還沒追到、追蹤順序（2026-10-05） | [數值盤點](reports/game-values-audit-2026-10-05/AUDIT_ZH_TW.md) |
 | 正式設定畫面：外觀主題、畫質、聲音、繁中／英文、操作輔助與資料（2026-09-29，合併於 `bfb1f28`） | [設定報告](reports/settings-2026-09-29/REPORT_ZH_TW.md) · [中英術語表](reports/settings-2026-09-29/GLOSSARY_ZH_TW.md) · [各畫質效能](reports/settings-2026-09-29/perf/perf-tiers.json) |
 | 全遊戲 UI／HUD 重設計、重要高光、本機自動保存與帳號方向（2026-09-29，合併於 `bfb1f28`） | [重設計報告](reports/ui-redesign-2026-09-29/REPORT_ZH_TW.md) · [設計規則](reports/ui-redesign-2026-09-29/DESIGN_ZH_TW.md) · [驗證回條](reports/ui-redesign-2026-09-29/validation.json) · [帳號與雲端存檔規劃](planning/ACCOUNT_CLOUD_SAVE_PLAN_2026-09-29_ZH_TW.md) |

@@ -274,8 +274,9 @@ export async function mountRaisingFieldPixiPresentation({
     // Native ranch startup keeps the existing resident interaction lanes in
     // Waiting Room. It does not infer training-module membership or collision.
     const room = fieldArt?.field?.residentViewport;
-    const bounds = room ? {x:fit.x+room.x*fit.scale, y:fit.y+room.y*fit.scale,
-      width:room.width*fit.scale,height:room.height*fit.scale} : fit;
+    const scaleY = fit.scaleY ?? fit.scale;
+    const bounds = room ? {x:fit.x+room.x*fit.scale, y:fit.y+room.y*scaleY,
+      width:room.width*fit.scale,height:room.height*scaleY} : fit;
     return raisingRegionBounds(cage.region, bounds);
   }
 
@@ -301,12 +302,12 @@ export async function mountRaisingFieldPixiPresentation({
   function expansionPreviewRect(bounds) {
     const preview = fieldArt?.field?.expansionPreview;
     if (!preview || !(bounds?.scale > 0)) return null;
-    const scale = bounds.scale, wrap = fieldArt.field.wrapWidthPx;
+    const scale = bounds.scale, scaleY = bounds.scaleY ?? scale, wrap = fieldArt.field.wrapWidthPx;
     let left = bounds.x;
     if (wrap > 0) left += Math.round((app.screen.width / 2 - (left + preview.widthPx * scale / 2)) / (wrap * scale)) * wrap * scale;
     const rect = { left, right: left + preview.widthPx * scale,
-      top: bounds.y + (preview.bandOffsetPx - preview.capPx) * scale,
-      bottom: bounds.y + (preview.bandOffsetPx + preview.contentHeightPx) * scale };
+      top: bounds.y + (preview.bandOffsetPx - preview.capPx) * scaleY,
+      bottom: bounds.y + (preview.bandOffsetPx + preview.contentHeightPx) * scaleY };
     const visible = { left: Math.max(0, rect.left), right: Math.min(app.screen.width, rect.right),
       top: Math.max(0, rect.top), bottom: Math.min(app.screen.height, rect.bottom) };
     // A band as long as the ring tiles seamlessly with its repeats: what shows
@@ -709,8 +710,15 @@ export async function mountRaisingFieldPixiPresentation({
       entry.shadow.ellipse(ellipse.x,ellipse.y,ellipse.radiusX,ellipse.radiusY);
     }
     entry.shadow.fill({color:0x02070a,alpha:.26});
-    entry.selection.clear().ellipse(center,bottom+1,visible.width/2+2,Math.max(2,visible.width*.16))
-      .fill({color:0x56e3c2,alpha:.12}).stroke({color:0x56e3c2,width:1,alpha:.95});
+    // Lock-on ring (Owner 2026-10-27): a soft glow, a teal ring with a white
+    // core and four bright marks, so the picked partner reads at a glance.
+    const rx=visible.width/2+2,ry=Math.max(2,visible.width*.16),cy=bottom+1;
+    entry.selection.clear()
+      .ellipse(center,cy,rx+6,ry+3).fill({color:0x56e3c2,alpha:.16})
+      .ellipse(center,cy,rx,ry).fill({color:0x56e3c2,alpha:.14}).stroke({color:0x2fd6b4,width:3,alpha:.95})
+      .ellipse(center,cy,rx,ry).stroke({color:0xffffff,width:1,alpha:.9});
+    for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]])
+      entry.selection.ellipse(center+dx*(rx+5),cy+dy*(ry+3),2.5,2.5).fill({color:0xffffff,alpha:.95}).stroke({color:0x2fd6b4,width:1.5,alpha:.95});
     entry.root.hitArea=new PIXI.Rectangle(hitArea.x,hitArea.y,hitArea.width,hitArea.height);
     entry.visibleGeometry=visible;
   }
@@ -1058,6 +1066,7 @@ export async function mountRaisingFieldPixiPresentation({
       // OVL18 02110FB0: native stars in the recovery cages, same effect bank as the icons.
       drawNativeFeedback(entry,native,covered,'recoveryStars');
       drawTreatment(entry,native?.treatment,covered);
+      drawPassageVisit(entry,native?.visitingPassage,covered);
       if(!covered&&native?.training?.phase===0&&native.positionQ12){
         const point=raisingNativeToScreen(native.positionQ12,fieldArt?.field,view,cameraX),scale=getRaisingNativePixelScale(fieldArt?.field,view);
         if(point)native.training.lanes.forEach((lane,index)=>{if(lane.stage>=2&&lane.command&&lane.command.outcome!=='BLOCKED')
@@ -1134,8 +1143,9 @@ export async function mountRaisingFieldPixiPresentation({
     sprite.anchor.set(cell.origin[0]/cell.width,cell.origin[1]/cell.height);
     const p=raisingNativeToScreen(feedback.positionQ12,fieldArt?.field,view,cameraX);
     const body=raisingNativeToScreen(native.positionQ12,fieldArt?.field,view,cameraX);
-    const scale=entry.restScale??1;
-    sprite.position.set((p.x-body.x)/scale,(p.y-body.y)/scale-feedback.positionQ12[2]/4096);
+    const scale=entry.restScale??1,groundY=fieldArt?.field?.view?.groundScaleY??1;
+    // Feedback rides upright with the body: undo the view pitch's ground scale.
+    sprite.position.set((p.x-body.x)/scale,(p.y-body.y)/groundY/scale-feedback.positionQ12[2]/4096);
   }
 
   function screenToNativeGround(point){
@@ -1150,7 +1160,7 @@ export async function mountRaisingFieldPixiPresentation({
     root.threeGroundContact=fieldArt.threeScene.groundContact?.(positionQ12[0]/4096,positionQ12[1]/4096,root.threeGroundAdmission)??null;
     const height=root.threeGroundContact?.height??fieldArt.threeScene.groundHeight(positionQ12[0]/4096,positionQ12[1]/4096,root.threeGroundAdmission);
     root.threeGroundScreen=point;root.threeGroundHeight=height;
-    root.y=point.y-height*16*Math.cos(52*Math.PI/180)*getRaisingNativePixelScale(fieldArt.field,view);
+    root.y=point.y-height*(fieldArt.field.view?.screenLift??16*Math.cos(52*Math.PI/180))*getRaisingNativePixelScale(fieldArt.field,view);
   }
 
   function drawWaste(){
@@ -1274,6 +1284,20 @@ export async function mountRaisingFieldPixiPresentation({
     } else {g.circle(-5+phase,y-2,5).fill({color:0xc4c9d0,alpha:0.8}).circle(3+phase,y+1,6).fill({color:0x7a8596,alpha:0.8});}
   }
 
+  // Owner 2026-10-27: a partner heading to look at a newly opened passage
+  // shows a small "!" bubble. Vector only, presentation only, no RNG.
+  function drawPassageVisit(entry,visiting,covered) {
+    if(!entry.visitGlyph){if(!visiting)return;entry.visitGlyph=new PIXI.Graphics();entry.visitGlyph.eventMode='none';entry.root.addChild(entry.visitGlyph);}
+    const g=entry.visitGlyph;g.clear();g.visible=Boolean(visiting)&&!covered;
+    if(!g.visible){entry.visitPhase=0;return;}
+    entry.visitPhase=(entry.visitPhase??0)+1;
+    const bob=reducedMotion?0:Math.round(Math.sin(entry.visitPhase/9)*2);
+    const y=-(entry.nativeSizing?.height??28)-20+bob;
+    g.roundRect(-8,y-9,16,18,5).fill(0xffffff).stroke({color:0x14141f,width:2});
+    g.poly([-3,y+9,3,y+9,0,y+13]).fill(0xffffff).stroke({color:0x14141f,width:2});
+    g.rect(-1.5,y-5,3,8).fill(0xff4d5e).circle(0,y+6,1.8).fill(0xff4d5e);
+  }
+
   function drawFood() {
     if(!careArt.size)return;
     const foods=source.getFoodFrame?.()??[],live=new Set(foods.map(f=>f.slot));
@@ -1333,6 +1357,7 @@ export async function mountRaisingFieldPixiPresentation({
     &&!source.getLifecycleFrame?.()?.day&&!source.getLifecycleFrame?.()?.evolution
     &&!(source.getFrame().tutorial&&!source.getFrame().tutorial.finished);
   const zoomButton=globalThis.document?.createElement('button')??null;
+  if(zoomButton)zoomButton.type='button';
   const describeZoom=()=>{
     if(!zoomButton)return;
     zoomButton.textContent=zoom===1?'−':'+';

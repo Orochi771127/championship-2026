@@ -20,11 +20,15 @@
 import { serializeRaisingHomeSaveR2 } from "../raising/raisingHomePersistenceR2.js";
 import {
   CHAMPIONSHIP_MODERN_SAVE_KEY,
+  CHAMPIONSHIP_MODERN_SAVE_MAX_BYTES,
   createChampionshipModernSave,
   deserializeChampionshipModernSave,
   serializeChampionshipModernSave
 } from "./championshipStandaloneSave.js";
-import { assertAllowedChampionshipStorageKey } from "./championshipStorageGuard.js";
+import {
+  CHAMPIONSHIP_SESSION_CHECKPOINT_STORAGE_KEY,
+  assertAllowedChampionshipStorageKey
+} from "./championshipStorageGuard.js";
 
 export const CHAMPIONSHIP_PERSISTENT_SAVE_PORT_KIND = "CHAMPIONSHIP_MODERN_PERSISTENT_SAVE_PORT";
 export const CHAMPIONSHIP_PERSISTENT_SAVE_PORT_POLICY = "STANDALONE_LOCAL_PERSISTENCE";
@@ -123,6 +127,87 @@ export function createChampionshipDataArenaPort({ storage } = {}) {
   });
 }
 
+// Active Session Checkpoint (iOS Standalone Web App Silent Reload Auto-Resume):
+// Lightweight throttled checkpoint of the active in-game screen and micro-state,
+// separate from the durable save so it never mutates or corrupts save progress.
+// Dual-backed across sessionStorage + localStorage (registered in
+// championshipStorageGuard.js) so it survives iOS Jetsam WebContent process kills,
+// and actively removes itself on Save & Quit or TTL expiry.
+export const CHAMPIONSHIP_SESSION_CHECKPOINT_KEY = CHAMPIONSHIP_SESSION_CHECKPOINT_STORAGE_KEY;
+export const CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS = 180_000;
+export function createChampionshipSessionCheckpointPort({ storage, sessionStorage = null } = {}) {
+  if (!storage || typeof storage.getItem !== "function" || typeof storage.setItem !== "function") {
+    throw new TypeError("Championship session checkpoint port requires a Storage-like object");
+  }
+  const key = assertAllowedChampionshipStorageKey(CHAMPIONSHIP_SESSION_CHECKPOINT_KEY);
+  const guarded = guardChampionshipStorage(storage);
+  const guardedSession = sessionStorage && typeof sessionStorage.getItem === "function" && typeof sessionStorage.setItem === "function"
+    ? guardChampionshipStorage(sessionStorage)
+    : null;
+  let lastWriteMs = 0;
+  let lastScreen = null;
+  function removeRaw(target, rawStorage) {
+    if (!target) return;
+    try {
+      if (typeof rawStorage?.removeItem === "function") target.removeItem(key);
+      else target.setItem(key, "");
+    } catch {}
+  }
+  function parseRaw(raw) {
+    if (!raw) return null;
+    try {
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object" || parsed.active !== true || typeof parsed.screen !== "string") return null;
+      if (Number.isFinite(parsed.updatedAtMs) && Date.now() - parsed.updatedAtMs > CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS) {
+        removeRaw(guarded, storage);
+        removeRaw(guardedSession, sessionStorage);
+        return null;
+      }
+      return Object.freeze(parsed);
+    } catch {
+      return null;
+    }
+  }
+  return Object.freeze({
+    storageKey: key,
+    read() {
+      const fromSession = guardedSession ? parseRaw( (() => { try { return guardedSession.getItem(key); } catch { return null; } })() ) : null;
+      if (fromSession) return fromSession;
+      return parseRaw( (() => { try { return guarded.getItem(key); } catch { return null; } })() );
+    },
+    write(snapshot, { force = false } = {}) {
+      try {
+        const nowMs = Date.now();
+        const screen = String(snapshot?.screen ?? "RAISING_HOME");
+        if (!force && screen === lastScreen && nowMs - lastWriteMs < 2000) {
+          return Object.freeze({ ok: true, throttled: true });
+        }
+        lastWriteMs = nowMs;
+        lastScreen = screen;
+        const payload = JSON.stringify({
+          schemaVersion: 1,
+          active: true,
+          screen,
+          substate: snapshot?.substate ?? null,
+          updatedAtMs: nowMs
+        });
+        guarded.setItem(key, payload);
+        try { guardedSession?.setItem(key, payload); } catch {}
+        return Object.freeze({ ok: true, throttled: false });
+      } catch (error) {
+        return Object.freeze({ ok: false, error: error?.message ?? String(error) });
+      }
+    },
+    clear() {
+      lastScreen = null;
+      lastWriteMs = 0;
+      removeRaw(guarded, storage);
+      removeRaw(guardedSession, sessionStorage);
+      return Object.freeze({ ok: true });
+    }
+  });
+}
+
 export function createChampionshipPersistentSavePort({
   storage,
   locks = globalThis.window?.navigator?.locks,
@@ -148,8 +233,12 @@ export function createChampionshipPersistentSavePort({
     revision: 0,
     savedAt: null,
     error: null,
-    committedWrites: 0
+    committedWrites: 0,
+    // Size of the stored text against the envelope budget, for an early warning.
+    bytes: null,
+    byteBudget: CHAMPIONSHIP_MODERN_SAVE_MAX_BYTES
   });
+  const byteLength = (text) => new TextEncoder().encode(text).byteLength;
   let lastRequest = null;
   let baseline;
   let pendingText=null;
@@ -276,7 +365,7 @@ export function createChampionshipPersistentSavePort({
       lastRequest = request;
       pendingText=null;
       try {
-        const { save: written } = commit(request);
+        const { save: written, text } = commit(request);
         return publish({
           phase: "SAVED",
           lastCode: "CHAMPIONSHIP_MODERN_SAVE_OK",
@@ -284,7 +373,8 @@ export function createChampionshipPersistentSavePort({
           revision: written.progression.revision,
           savedAt: written.updatedAt,
           error: null,
-          committedWrites: status.committedWrites + 1
+          committedWrites: status.committedWrites + 1,
+          bytes: byteLength(text)
         });
       } catch (error) {
         return publish({
@@ -334,7 +424,8 @@ export function createChampionshipPersistentSavePort({
           canRetry: false,
           revision: save.progression.revision,
           savedAt: save.updatedAt,
-          error: null
+          error: null,
+          bytes: byteLength(text)
         });
         return Object.freeze({ present: true, save, error: null });
       } catch (error) {
@@ -347,7 +438,7 @@ export function createChampionshipPersistentSavePort({
       guarded.removeItem(key);
       baseline=null;pendingText=null;
       lastRequest = null;
-      return publish({ phase: "DIRTY", lastCode: "CHAMPIONSHIP_MODERN_SAVE_UNSAVED", canRetry: false, revision: 0, savedAt: null, error: null });
+      return publish({ phase: "DIRTY", lastCode: "CHAMPIONSHIP_MODERN_SAVE_UNSAVED", canRetry: false, revision: 0, savedAt: null, error: null, bytes: null });
     }
   });
 }

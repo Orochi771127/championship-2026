@@ -27,7 +27,7 @@ import { normalizeNativeOpening } from './nativeOpeningState.js';
 import { RANCH_DECKS_LAYOUT, normalizeRanchExpansion } from "../cage/ranchExpansion.js";
 
 import {getCageDefinitionByModuleId} from "../cage/cageCatalog.js";
-import { PRODUCT_RANCH_GRID, LEGACY_PRODUCT_RANCH_GRID, normalizeProductRanchAccess, productUnlockedSlots, restoreFixedRanchPlacements } from '../cage/productRanchGrid.js';
+import { PRODUCT_RANCH_GRID, PRODUCT_RANCH_LAYOUTS, LEGACY_PRODUCT_RANCH_GRID, normalizeProductRanchAccess, migrateProductRanch, validateProductRanch } from '../cage/productRanchGrid.js';
 
 export const CHAMPIONSHIP_MODERN_SAVE_KEY = "championshipModernSave:v1";
 export const CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION = 5;
@@ -193,21 +193,30 @@ function normalizeCageEditSlice(cageEdit) {
     }
     if(entry.instanceId!==undefined)assertStableId(entry.instanceId,"cageEdit.placement.instanceId");
     if(entry.rotation!==undefined&&(!Number.isInteger(entry.rotation)||entry.rotation<0||entry.rotation>5
-      ||cageEdit.layoutVersion!==PRODUCT_RANCH_GRID))throw saveError('INVALID_CAGE_ROTATION');
+      ||!PRODUCT_RANCH_LAYOUTS.includes(cageEdit.layoutVersion)||cageEdit.layoutVersion===PRODUCT_RANCH_GRID))throw saveError('INVALID_CAGE_ROTATION');
     placements.push({ moduleId: entry.moduleId, slotIndex: entry.slotIndex, ...(entry.instanceId?{instanceId:entry.instanceId}:{}),
       ...(entry.rotation?{rotation:entry.rotation}:{}) });
   }
-  if (cageEdit.layoutVersion !== undefined && cageEdit.layoutVersion !== 'NATIVE_ANCHORS_V1' && cageEdit.layoutVersion !== RANCH_DECKS_LAYOUT && cageEdit.layoutVersion !== PRODUCT_RANCH_GRID && cageEdit.layoutVersion !== LEGACY_PRODUCT_RANCH_GRID) {
+  if (cageEdit.layoutVersion !== undefined && cageEdit.layoutVersion !== 'NATIVE_ANCHORS_V1' && cageEdit.layoutVersion !== RANCH_DECKS_LAYOUT && !PRODUCT_RANCH_LAYOUTS.includes(cageEdit.layoutVersion)) {
     throw saveError('INVALID_RANCH_LAYOUT_VERSION');
   }
-  if ([PRODUCT_RANCH_GRID,LEGACY_PRODUCT_RANCH_GRID].includes(cageEdit.layoutVersion)) {
-    if(cageEdit.layoutVersion===PRODUCT_RANCH_GRID && placements.some(p=>!p.instanceId))throw saveError("CAGE_INSTANCE_ID_REQUIRED");
+  if (PRODUCT_RANCH_LAYOUTS.includes(cageEdit.layoutVersion)) {
+    if(cageEdit.layoutVersion!==LEGACY_PRODUCT_RANCH_GRID && placements.some(p=>!p.instanceId))throw saveError("CAGE_INSTANCE_ID_REQUIRED");
     if(cageEdit.layoutVersion===LEGACY_PRODUCT_RANCH_GRID && placements.some(p=>p.slotIndex>=50||p.instanceId!==undefined))throw saveError("INVALID_LEGACY_PRODUCT_RANCH");
     if(cageEdit.nextInstanceSequence!==undefined&&(!Number.isSafeInteger(cageEdit.nextInstanceSequence)||cageEdit.nextInstanceSequence<1))throw saveError("INVALID_CAGE_INSTANCE_SEQUENCE");
     if (cageEdit.expansion !== undefined) throw saveError('INVALID_PRODUCT_RANCH');
     const gridAccess = normalizeProductRanchAccess(cageEdit.gridAccess);
-    const fixedPlacements = restoreFixedRanchPlacements(placements, productUnlockedSlots(gridAccess, 20));
-    return { layoutVersion:cageEdit.layoutVersion, gridAccess, placements:fixedPlacements, ...(cageEdit.nextInstanceSequence!==undefined?{nextInstanceSequence:cageEdit.nextInstanceSequence}:{}) };
+    // Hex cage world (2026-10-26): a 10×10 save is laid into the world once,
+    // keeping every instance id and footprint; cage-local resident positions
+    // need no change.
+    let world;
+    try {
+      world = migrateProductRanch({ layoutVersion:cageEdit.layoutVersion, gridAccess, placements,
+        ...(cageEdit.nextInstanceSequence!==undefined?{nextInstanceSequence:cageEdit.nextInstanceSequence}:{}) }, 20);
+    } catch { throw saveError('INVALID_PRODUCT_RANCH'); }
+    if (!validateProductRanch(world.placements)) throw saveError('INVALID_PRODUCT_RANCH');
+    return { layoutVersion:PRODUCT_RANCH_GRID, gridAccess:world.gridAccess, placements:world.placements,
+      ...(cageEdit.nextInstanceSequence!==undefined||world.nextInstanceSequence!==1?{nextInstanceSequence:world.nextInstanceSequence}:{}) };
   }
   if (cageEdit.gridAccess !== undefined) throw saveError('INVALID_PRODUCT_RANCH_ACCESS');
   let expansion = null;
@@ -234,7 +243,7 @@ function restoreFixedRanchContents(save, previousLayout) {
   const home = save.raising?.nativeHome;
   if (!rotated.size || !home) return;
   const layout = save.cageEdit;
-  const ground = composeProductRanchGround({...layout, unlockedSlots:productUnlockedSlots(layout.gridAccess, 20)});
+  const ground = composeProductRanchGround({...layout, landCapacity:100});
   const destination = id => ground.placement(id) ?? ground.placement(35);
   const profiles = [save.creature, ...(save.raising.collection ?? [])];
   for (const [id, owner] of Object.entries(home.cageAssignments ?? {})) {

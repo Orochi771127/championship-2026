@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {readRaisingGroundSupport} from '../src/championship/app/raisingGroundSupport.js';
+import {PRODUCT_RANCH_GRID} from '../src/championship/cage/productRanchGrid.js';
 import {resolveRanchSupportOwner,createRanchSupportOwnerResolver} from '../src/championship/presentation/ranchSupportOwner.js';
 let checks=0;const check=v=>{assert.ok(v);checks++;};
 const cage=Object.freeze({instanceId:'same-theme-b',moduleId:'module2',slotIndex:9,definitionIndex:1,ownerIndex:1});
-const component=new Int32Array(60*20).fill(3);let terrain=0;const ground=Object.freeze({layoutVersion:'PRODUCT_GRID100_INSTANCES_V1',pixelWidth:480,pixelHeight:160,width:60,height:20,navigation:Object.freeze({component}),cageAt:(x,y)=>cage,readTerrain:()=>terrain,origin:()=>Object.freeze([448,-24,0])});
+const component=new Int32Array(60*20).fill(3);let terrain=0;const ground=Object.freeze({layoutVersion:PRODUCT_RANCH_GRID,pixelWidth:480,pixelHeight:160,width:60,height:20,navigation:Object.freeze({component}),cageAt:(x,y)=>cage,readTerrain:()=>terrain,origin:()=>Object.freeze([448,-24,0])});
 const before=Array.from(component),admission=readRaisingGroundSupport(ground,2,24);
 check(admission.instanceId==='same-theme-b'&&admission.nativeOwnerIndex===1&&admission.localNative[0]===34);
 check(Object.isFrozen(admission)&&Object.isFrozen(admission.localNative));assert.deepEqual(Array.from(component),before);checks++;

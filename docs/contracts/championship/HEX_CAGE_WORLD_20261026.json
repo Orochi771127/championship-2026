@@ -1,0 +1,27 @@
+{
+  "id": "HEX_CAGE_WORLD_20261026",
+  "classification": "OWNER_APPROVED_ADAPTATION",
+  "supersedes": "docs/contracts/championship/CAGE100_PLAYTEST_20261019.json",
+  "layoutVersion": "PRODUCT_HEX_WORLD_V1",
+  "legacyLayouts": ["PRODUCT_GRID100_INSTANCES_V1", "PRODUCT_GRID50_V1", "NATIVE_ANCHORS_V1", "NATIVE_DECKS_V1"],
+  "latticeColumns": 24,
+  "latticeRows": 24,
+  "totalCellCap": 100,
+  "wraps": false,
+  "footprints": "ORIGINAL_MULTI_CELL_SHAPE_MASKS",
+  "legacyGrid100Offset": { "rows": 8, "columns": 7 },
+  "landCapacity": "Opened land rows of the old board count as placeable cells; never above 100.",
+  "ecologyGroups": "src/championship/cage/ranchEcology.js",
+  "adjacency": "Complete shared hex edge only; corner contact never connects.",
+  "passage": "Same ecology opens the whole shared edge (corner tips closed); owned obstacles unchanged; different ecologies keep their border.",
+  "residentRule": "A cage that is any partner's home cannot be removed until the partner is moved.",
+  "sourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "aaa72f6e08b150ac9bebb81fb2e6a8efefd532ab0ed7b7e24a7a0a9ae3d97f74"
+  },
+  "historicalSourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "db8d3cebd6cf597699e4f0595d266b7f52d5371645dac094970ee93eb26e6d05"
+  },
+  "authorization": "Owner requested the hexagonal cage world on 2026-10-26: free honeycomb placement up to 100 cells, same-type seams opening into continuous regions, partners walking across, edit mode with pan/zoom, saved layout. Owner chose to keep original multi-cell footprints and a free, non-wrapping world.",
+  "scope": "Existing app, cage runtime, SavePort and ground/navigation. No new artwork, no payment change; publication not authorized by this record.",
+  "physicalDeviceAccepted": false
+}

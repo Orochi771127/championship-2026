@@ -113,8 +113,8 @@ test("every preference has a category, a scope and a valid default", () => {
   assert.equal(PREFERENCE_DEFINITIONS.masterVolume.scope, "device");
   assert.equal(PREFERENCE_DEFINITIONS.theme.scope, "account");
   assert.equal(PREFERENCE_DEFINITIONS.locale.scope, "account");
-  // Defaults: the bright arena theme (Owner 2026-10-15), zh-Hant, full sound.
-  assert.equal(DEFAULT_PREFERENCES.theme, "arena");
+  // Defaults: the arcade theme (Owner 2026-10-26; arena was the default from 2026-10-15), zh-Hant, full sound.
+  assert.equal(DEFAULT_PREFERENCES.theme, "arcade");
   assert.equal(DEFAULT_PREFERENCES.locale, "zh-Hant");
   assert.equal(DEFAULT_PREFERENCES.masterVolume, 100);
   assert.equal(DEFAULT_PREFERENCES.quality, "auto");
@@ -127,7 +127,7 @@ test("every preference has a category, a scope and a valid default", () => {
 
 test("invalid values fall back to the default and numbers snap to the slider step", () => {
   const normalized = normalizePreferences({ theme: "neon", textScale: 120, masterVolume: 83, sfxVolume: -10, muted: "yes", unknown: 1 });
-  assert.equal(normalized.theme, "arena");
+  assert.equal(normalized.theme, "arcade");
   assert.equal(normalized.textScale, 100);
   assert.equal(normalized.masterVolume, 85);
   assert.equal(normalized.sfxVolume, 0);
@@ -156,14 +156,15 @@ test("reading: absent, current, older flat map, unreadable and newer versions", 
   assert.equal(parsePreferences("[]").status, "UNREADABLE");
   const newer = parsePreferences(JSON.stringify({ schemaVersion: 9, account: { theme: "warm" } }));
   assert.equal(newer.status, "NEWER");
-  assert.equal(newer.preferences.theme, "arena", "a newer document is not guessed at");
+  assert.equal(newer.preferences.theme, "arcade", "a newer document is not guessed at");
 });
 
 test("theme and motion resolution: the explicit choice wins, system follows the OS", () => {
   assert.equal(resolveTheme("system", { prefersDark: true }), "night");
   assert.equal(resolveTheme("system", { prefersDark: false }), "arena");
   assert.equal(resolveTheme("clear", { prefersDark: true }), "clear", "an explicit choice is kept");
-  assert.equal(resolveTheme("neon"), "arena", "an unknown theme shows the default");
+  assert.equal(resolveTheme("neon"), "arcade", "an unknown theme shows the default");
+  assert.equal(resolveTheme("arcade"), "arcade");
   assert.equal(resolveTheme("warm", { prefersDark: true }), "warm", "warm is only ever chosen by hand");
   assert.equal(resolveTheme("classic", { prefersDark: false }), "classic", "and so is the retro blue & gold");
   assert.equal(resolveReducedMotion("system", { systemReduced: true }), true);
@@ -277,7 +278,7 @@ test("the environment writes one resolved attribute per preference", () => {
   const quality = createQualityController({ doc, preference: "auto", signals: {} });
   const environment = createPreferenceEnvironment({ store, doc, matchMedia: media.matchMedia, quality });
   const root = doc.documentElement;
-  assert.deepEqual({ ...root.dataset }, { quality: "balanced", theme: "arena", themeChoice: "arena", textScale: "100", hud: "standard", motion: "reduced", flash: "standard", highlight: "full" });
+  assert.deepEqual({ ...root.dataset }, { quality: "balanced", theme: "arcade", themeChoice: "arcade", textScale: "100", hud: "standard", motion: "reduced", flash: "standard", highlight: "full" });
   assert.equal(root.lang, "zh-Hant");
   store.set("theme", "system");
   assert.equal(root.dataset.theme, "arena", "a light system reads as the arena palette");
@@ -581,6 +582,7 @@ test("every palette keeps text, status and readouts legible on its surfaces", ()
   const css = fs.readFileSync("src/championship/app/ui/tokens.css", "utf8");
   const palettes = {
     night: palette(css, ':root, [data-palette="night"]'),
+    arcade: palette(css, ':root[data-theme="arcade"], [data-palette="arcade"]'),
     arena: palette(css, ':root[data-theme="arena"], [data-palette="arena"]'),
     clear: palette(css, ':root[data-theme="clear"], [data-palette="clear"]'),
     warm: palette(css, ':root[data-theme="warm"], [data-palette="warm"]'),
@@ -610,7 +612,7 @@ test("a selected option and the current category stay legible on the accent tint
   // tone fell to 4.0-4.3:1 on the tinted selected card and current category.
   const css = fs.readFileSync("src/championship/app/ui/tokens.css", "utf8");
   const settings = fs.readFileSync("src/championship/app/ui/settings.css", "utf8");
-  const selectors = { night: ':root, [data-palette="night"]', arena: ':root[data-theme="arena"], [data-palette="arena"]', clear: ':root[data-theme="clear"], [data-palette="clear"]', warm: ':root[data-theme="warm"], [data-palette="warm"]', classic: ':root[data-theme="classic"], [data-palette="classic"]' };
+  const selectors = { night: ':root, [data-palette="night"]', arcade: ':root[data-theme="arcade"], [data-palette="arcade"]', arena: ':root[data-theme="arena"], [data-palette="arena"]', clear: ':root[data-theme="clear"], [data-palette="clear"]', warm: ':root[data-theme="warm"], [data-palette="warm"]', classic: ':root[data-theme="classic"], [data-palette="classic"]' };
   const hex = (n) => Math.round(n).toString(16).padStart(2, "0");
   for (const [name, selector] of Object.entries(selectors)) {
     const p = palette(css, selector);

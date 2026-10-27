@@ -413,7 +413,9 @@ test("Hunt exposes only the authorized native controls/readouts and no invented 
     Object.keys(frame.huntField.hud).sort(),
     // onCard (2026-10-15) is the memory card's own contents -- the entries the
     // Hunt result already lists -- projected read-only for the catch toast.
-    ["actorName", "capabilities", "exitAvailable", "gateName", "note", "onCard", "plugins", "target", "time"],
+    // biomeId (Owner 2026-10-27) is the confirmed gate's own biome, read only
+    // for the field's ambience colour; no rule reads it.
+    ["actorName", "biomeId", "capabilities", "exitAvailable", "gateName", "note", "onCard", "plugins", "target", "time"],
     "the Hunt HUD grew a field whose original semantics are unknown"
   );
 

@@ -1,0 +1,2302 @@
+/* Screen layout (Owner 2026-10-26): the arcade rebuild's arrangement on this game.
+ *
+ * Owner: 「把這個遊戲的 UI、HUD、圖鑑、商店還有狩獵對戰的整個介面配置都重新設計重新編排，
+ * 用重製版的那種編排跟配置樣式」. This sheet owns arrangement only -- grids, sheets,
+ * order, sizes -- in every palette; colours stay tokens and the arcade skin
+ * (ui/arcade.css) gives the arcade theme its ink and slabs. Three layouts:
+ * phone portrait (<= 600px wide), phone landscape (<= 500px tall), desktop.
+ */
+
+/* ======================================================================== *
+ * Shop: category tabs over a card grid; a card opens its detail sheet.
+ * Weighted like the dex below, over the earlier body[data-desktop-browse] rules.
+ * ======================================================================== */
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shell { position: relative; overflow: hidden; }
+/* The earlier wide layout named "detail / tabs / shelf" areas; this one has none. */
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] :is(.cm-vs2-shop__tabs, .cm-vs2-shop__shelf, .cm-vs2-shop__status, .cm-vs2-shop__detail) { grid-area: auto; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: none;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: var(--sp-3);
+  overflow: hidden;
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__tab { flex: 0 0 auto; min-width: 104px; padding: 0 18px; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__shelf {
+  display: block;
+  height: auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__arrow { display: none; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__list {
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  grid-auto-columns: unset;
+  gap: 16px;
+  height: auto;
+  padding: 6px 6px 18px;
+  overflow: visible;
+  scroll-snap-type: none;
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__row {
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: start;
+  gap: 8px;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  padding: 8px 8px 10px;
+  text-align: left;
+  scroll-snap-align: none;
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__card-art {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--r-control);
+  background: var(--c-surface-3);
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__card-art :is(img, .cm-facility-thumb) { width: 100%; height: 100%; object-fit: cover; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__card-art .cm-shop-goods-icon { width: 58%; height: 78%; background-size: contain; box-shadow: none; background-color: transparent; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__name { display: grid; gap: 2px; min-width: 0; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__name strong { font-size: var(--fs-body); font-weight: var(--fw-heavy); line-height: 1.2; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__meta { color: var(--c-gold-strong); font-size: var(--fs-label); font-weight: var(--fw-strong); white-space: normal; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop .cm-vs2-footer { grid-template-columns: auto; }
+
+/* The purchase line is a toast over the screen, not a row that pushes the grid. */
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__status {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  width: max-content;
+  z-index: var(--z-toast);
+  min-height: 0;
+  max-width: min(92vw, 520px);
+  padding: 8px 18px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__status:empty { display: none; }
+
+/* Detail sheet: centred card on desktop, bottom sheet on a phone. */
+.cm-vs2-shop__sheet { position: fixed; inset: 0; z-index: var(--z-dialog); display: grid; place-items: center; padding: 16px; }
+.cm-vs2-shop__sheet[hidden] { display: none; }
+.cm-vs2-shop__sheet-scrim { position: absolute; inset: 0; background: var(--c-scrim); }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+  gap: var(--sp-3);
+  width: min(520px, 100%);
+  height: auto;
+  min-height: 0;
+  align-self: center;
+  align-content: start;
+  max-height: calc(100% - 16px);
+  overflow-y: auto;
+  padding: var(--sp-4);
+  border-radius: var(--r-sheet);
+  background: var(--c-surface-1);
+  box-shadow: var(--shadow-lift);
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art { height: 200px; min-height: 0; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art .cm-vs2-shop__art-large { width: min(180px, 70%); height: min(180px, 90%); }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-description { max-height: none; }
+.cm-vs2-shop__detail-actions { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--sp-3); }
+.cm-vs2-shop__detail-actions .cm-vs2-action { min-height: 52px; }
+
+@media (max-width: 600px) {
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__tab { min-width: 0; padding: 0 4px; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .cm-vs2-shop__sheet { place-items: end stretch; padding: 0; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail { align-self: end; width: 100%; max-height: 86%; border-radius: var(--r-sheet) var(--r-sheet) 0 0; padding-bottom: max(var(--sp-4), var(--safe-bottom)); }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__list { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 10px; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__card-art { aspect-ratio: 2 / 1; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail { grid-template-columns: 200px minmax(0, 1fr); grid-template-rows: auto auto; width: min(680px, 100%); }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art { grid-row: 1 / span 2; height: auto; min-height: 160px; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-actions { grid-column: 2; }
+}
+
+/* ======================================================================== *
+ * Dex: stage chips over a portrait grid; an entry opens its detail sheet.
+ * Selectors are weighted to match the earlier desktop "list | detail" rules
+ * (body[data-desktop-browse] ... [data-mode]) and win by load order.
+ * ======================================================================== */
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-shop__body { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); grid-template-areas: none; overflow: hidden; }
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__catalog { grid-area: auto; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: var(--sp-3); min-height: 0; }
+/* The select remains the filter (keyboard, screen readers); the chips drive it. */
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__filter { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.cm-vs2-database__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.cm-vs2-database__chip {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--c-line-2);
+  border-radius: 999px;
+  background: var(--c-surface-1);
+  color: var(--c-text-1);
+  font: inherit;
+  font-weight: var(--fw-strong);
+  touch-action: manipulation;
+}
+.cm-vs2-database__chip[aria-pressed="true"] { background: var(--c-gold); color: var(--c-text-on-gold); border-color: var(--c-line-3); }
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database .cm-vs2-shop__list {
+  /* Rows are as tall as their cards; earlier list rules let them collapse to 22px. */
+  grid-auto-flow: row;
+  grid-template-rows: none;
+  grid-auto-rows: max-content;
+  grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+  gap: 14px;
+  padding: 6px 6px 18px;
+  min-height: 0;
+}
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database .cm-vs2-database__row {
+  display: grid;
+  height: auto;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-content: start;
+  justify-items: stretch;
+  gap: 6px;
+  min-height: 0;
+  padding: 7px 7px 9px;
+}
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row .cm-dex-list-thumb,
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row:not(.cm-vs2-database__row--thumb)::before {
+  display: block;
+  flex: none;
+  /* A fixed height: a percentage-wide square would let the grid size rows from the
+     image's 32px attributes and the portraits would overlap the next row. */
+  width: 100%;
+  height: var(--dex-thumb, 112px);
+  max-height: none;
+  object-fit: contain;
+  border-radius: var(--r-control);
+  background: var(--c-surface-3);
+  image-rendering: auto;
+}
+/* An entry without a portrait still keeps the card's picture well. */
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row:not(.cm-vs2-database__row--thumb)::before { content: "?"; display: grid; place-items: center; color: var(--c-text-disabled); font-size: 34px; font-weight: var(--fw-heavy); }
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row .cm-vs2-shop__name { justify-items: center; }
+
+.cm-vs2-database__sheet { position: fixed; inset: 0; z-index: var(--z-dialog); display: grid; place-items: center; padding: 16px; }
+.cm-vs2-database__sheet[hidden] { display: none; }
+.cm-vs2-database__sheet-scrim { position: absolute; inset: 0; background: var(--c-scrim); }
+.cm-vs2-database__sheet-panel {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: min(760px, 100%);
+  max-height: calc(100% - 16px);
+  min-height: 0;
+  padding: var(--sp-3);
+  border-radius: var(--r-sheet);
+  background: var(--c-surface-1);
+  box-shadow: var(--shadow-lift);
+}
+.cm-vs2-database__close { justify-self: end; min-width: 88px; }
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__sheet .cm-vs2-database__detail { grid-area: auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--sp-2); }
+
+@media (max-width: 600px) {
+  .cm-vs2-database__chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+  .cm-vs2-database__chip { flex: 0 0 auto; }
+  :root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database .cm-vs2-shop__list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; --dex-thumb: 88px; }
+  .cm-vs2-database__sheet { place-items: end stretch; padding: 0; }
+  .cm-vs2-database__sheet-panel { width: 100%; max-height: 90%; border-radius: var(--r-sheet) var(--r-sheet) 0 0; padding-bottom: max(var(--sp-3), var(--safe-bottom)); }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .cm-vs2-database__chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .cm-vs2-database__chip { flex: 0 0 auto; min-height: 34px; }
+  :root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database .cm-vs2-shop__list { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; --dex-thumb: 72px; }
+  .cm-vs2-database__sheet-panel { width: min(820px, 100%); max-height: calc(100% - 8px); }
+}
+
+/* ======================================================================== *
+ * Title: the rebuild's arcade front door. Logo centred and floating with its
+ * ARCADE EDITION tag, big arcade keys for start / new / continue, a dotted dusk
+ * over the key art, partners breathing at the foot (a tap makes them chirp).
+ * The key art, logos and partners are the existing approved title assets.
+ * ======================================================================== */
+:root body #cm-title .cm-title__panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(rgba(20, 20, 31, 0.32) 1.2px, transparent 1.6px) 0 0 / 6px 6px, linear-gradient(180deg, transparent 38%, rgba(20, 12, 40, 0.55));
+}
+:root body #cm-title .cm-title__art { z-index: 1; }
+:root body #cm-title > .cm-title__panel .cm-title__logo {
+  left: 50%;
+  width: min(560px, 86%);
+  translate: -50% 0;
+  filter: drop-shadow(0 8px 0 rgba(20, 20, 31, 0.6));
+  animation: cm-title-arrive 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) both, cm-title-logo-float 3.2s 0.85s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+}
+:root:not(:lang(zh)) body #cm-title > .cm-title__panel .cm-title__logo { left: 50%; width: min(560px, 86%); }
+:root body #cm-title > .cm-title__panel .cm-title__logo::after {
+  content: "ARCADE EDITION";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  translate: -50% 0;
+  rotate: -2deg;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #14141f;
+  color: #fff;
+  font: 900 11px/1 ui-monospace, "Consolas", monospace;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+@keyframes cm-title-logo-float { from { translate: -50% -6px; rotate: -1deg; } to { translate: -50% 8px; rotate: 1deg; } }
+
+/* Partners breathe at the foot and answer a tap. */
+:root body #cm-title .cm-title__partners { pointer-events: none; }
+:root body #cm-title .cm-title__partner {
+  pointer-events: auto;
+  cursor: pointer;
+  transform-origin: 50% 100%;
+  animation: cm-title-partner 0.7s 0.3s ease-out both, cm-title-breathe 1.5s 1s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+}
+:root body #cm-title .cm-title__partner--cloud { animation-delay: 0.5s, 1.3s; }
+@keyframes cm-title-breathe { to { scale: 1.04 0.96; } }
+
+/* Start / new / continue: the rebuild's XL arcade keys with an English sub-label. */
+:root body #cm-title :is(.cm-title__login, .cm-title__actions .cm-button) {
+  --key-face: #ffd23f;
+  --key-shade: #a98400;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 4px;
+  min-height: 64px;
+  padding: 10px 18px 12px;
+  border: 3px solid #14141f;
+  border-radius: 18px;
+  background: var(--key-face);
+  color: #14141f;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45), 0 6px 0 var(--key-shade);
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 220ms cubic-bezier(0.34, 1.56, 0.64, 1), filter 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: cm-title-menu-in 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+:root body #cm-title :is(.cm-title__login, .cm-title__actions .cm-button)::after {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  opacity: 0.8;
+}
+:root body #cm-title .cm-title__login::after { content: "PRESS START"; }
+:root body #cm-title .cm-title__actions #cm-new-game::after { content: "NEW GAME"; }
+:root body #cm-title .cm-title__actions #cm-continue::after { content: "CONTINUE"; }
+:root body #cm-title .cm-title__actions #cm-continue { --key-face: #3ddc84; --key-shade: #188a49; animation-delay: 90ms; }
+:root body #cm-title .cm-title__actions #cm-new-game:not(:only-child) { --key-face: #fffdf6; --key-shade: #b9ad8f; }
+@media (hover: hover) and (pointer: fine) {
+  :root body #cm-title :is(.cm-title__login, .cm-title__actions .cm-button):not(:disabled):hover {
+    translate: none;
+    transform: translateY(-3px) scale(1.03) rotate(-0.8deg);
+    box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45), 0 9px 0 var(--key-shade);
+    filter: saturate(1.12) brightness(1.04);
+  }
+}
+:root body #cm-title :is(.cm-title__login, .cm-title__actions .cm-button):not(:disabled):active {
+  transform: translateY(4px) scale(0.98);
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45), 0 2px 0 var(--key-shade);
+  transition-duration: 45ms;
+}
+:root body #cm-title :is(.cm-title__login, .cm-title__actions .cm-button):focus-visible { outline: none; box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45), 0 6px 0 var(--key-shade), 0 0 0 4px #fff, 0 0 0 7px #14141f; }
+@keyframes cm-title-menu-in { from { opacity: 0; transform: translateY(26px) scale(0.92); } }
+
+/* Status reads as the rebuild's hint pill. */
+:root body #cm-title .cm-title__boot-status p:not(:empty),
+:root body #cm-title .cm-title__note:not(:empty) {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 3px solid #14141f;
+  border-radius: 999px;
+  background: rgba(20, 20, 31, 0.82);
+  color: #fff;
+  font-weight: 900;
+}
+:root body #cm-title .cm-title__boot-status p:not(:empty)::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #3ddc84;
+  box-shadow: 0 0 0 3px #14141f;
+  animation: cm-title-dot 600ms cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+}
+@keyframes cm-title-dot { from { opacity: 0.35; } }
+
+/* Corner keys: replay the film and settings. */
+:root body #cm-title :is(.cm-title__film-watch, .cm-title__settings) {
+  border: 3px solid #14141f;
+  border-radius: 14px;
+  background: #fff8e7;
+  color: #14141f;
+  font-weight: 900;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45), 0 5px 0 #b9ad8f;
+}
+:root body #cm-title :is(.cm-title__film-watch, .cm-title__settings):active { transform: translateY(4px); box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45), 0 1px 0 #b9ad8f; }
+
+/* Landscape entry (desktop, phone landscape): the same column, centred like the rebuild. */
+:root body[data-landscape-entry] #cm-title {
+  --cm-entry-logo-width: clamp(260px, 40vw, 520px);
+  --cm-entry-left: calc(50vw - var(--cm-entry-logo-width) / 2);
+  --cm-entry-action-width: min(80vw, 360px);
+}
+:root body[data-landscape-entry] #cm-title > .cm-title__panel::before { background: none; }
+:root body[data-landscape-entry] #cm-title > .cm-title__panel > .cm-title__art > .cm-title__logo {
+  translate: 0 0;
+  animation: cm-title-arrive 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) both, cm-title-logo-bob 3.2s 0.85s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+}
+@keyframes cm-title-logo-bob { from { translate: 0 -6px; rotate: -1deg; } to { translate: 0 8px; rotate: 1deg; } }
+:root body[data-landscape-entry] #cm-title :is(.cm-title__boot-status, .cm-title__background-feedback, .cm-title__note) { width: fit-content; max-width: 100%; margin: 0 auto; padding: 0; background: transparent; text-align: center; }
+:root body[data-landscape-entry] #cm-title .cm-title__boot-status p:not(:empty) { padding: 8px 14px; background: rgba(20, 20, 31, 0.82); color: #fff; font-size: 13px; line-height: 1.2; }
+/* The partners flank the menu at the foot instead of standing behind it. */
+:root body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners {
+  inset: auto 0 max(8px, env(safe-area-inset-bottom)) 0;
+  width: 100%;
+  height: min(46dvh, 360px);
+  transform: none;
+}
+:root body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners::before,
+:root body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners::after { display: none; }
+:root body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner { inset: auto auto 0 auto; width: min(26vw, 340px); height: 100%; padding: 0; }
+:root body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--blaze { left: max(16px, 6vw); right: auto; height: 70%; }
+:root body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partner--cloud { right: max(16px, 6vw); left: auto; }
+/* The parade: partners stroll along the foot with their own walk animation. */
+:root body #cm-title .cm-title__parade { position: absolute; left: 0; right: 0; bottom: max(10px, env(safe-area-inset-bottom)); z-index: 2; height: 140px; pointer-events: none; }
+/* Once partners walk, the foot is theirs: the static key-art pair steps back. */
+:root body #cm-title:has(.cm-title__walker) .cm-title__partners { opacity: 0; transition: opacity 600ms cubic-bezier(0.2, 0.9, 0.3, 1); pointer-events: none; }
+:root body #cm-title:has(.cm-title__walker) .cm-title__partner { pointer-events: none; }
+:root body #cm-title .cm-title__walker {
+  position: absolute;
+  bottom: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  pointer-events: auto;
+  cursor: pointer;
+  transform-origin: 50% 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+:root body #cm-title .cm-title__walker::after { content: ""; position: absolute; left: 50%; bottom: 2px; width: 46px; height: 10px; margin-left: -23px; border-radius: 50%; background: rgba(20, 20, 31, 0.28); z-index: -1; }
+:root body #cm-title .cm-title__walker canvas { display: block; width: auto; height: 128px; image-rendering: auto; animation: cm-walker-in 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+:root body #cm-title .cm-title__walker[data-walking="true"] canvas { animation: cm-walker-in 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both, cm-walker-hop 260ms 520ms cubic-bezier(0.37, 0, 0.63, 1) infinite alternate; }
+@keyframes cm-walker-in { from { opacity: 0; translate: 0 18px; } }
+@keyframes cm-walker-hop { to { translate: 0 -4px; } }
+/* Portrait: the menu holds the foot, so the parade walks the ground line above it. */
+:root body:not([data-landscape-entry]) #cm-title .cm-title__parade { bottom: auto; top: 60%; z-index: 1; }
+:root body:not([data-landscape-entry]) #cm-title .cm-title__walker canvas { height: 112px; }
+@media (max-height: 500px) { :root body #cm-title .cm-title__walker canvas { height: 96px; } }
+:root[data-motion="reduced"] body #cm-title .cm-title__walker canvas { animation: none !important; }
+:root[data-motion="reduced"] body #cm-title :is(.cm-title__logo, .cm-title__partner, .cm-title__login, .cm-title__actions .cm-button) { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  :root body #cm-title :is(.cm-title__logo, .cm-title__partner, .cm-title__login, .cm-title__actions .cm-button) { animation: none !important; }
+}
+
+/* ======================================================================== *
+ * Ranch: the picked partner reads as the rebuild's inspector -- a panel on
+ * the right (desktop and landscape) or a card over the dock (portrait):
+ * avatar box, heavy name, stacked meters in ink troughs, arcade nav keys.
+ * Selection, camera and care stay the existing companion card's behaviour.
+ * ======================================================================== */
+:root body .int-rh2-root .int-rh2-companion {
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "portrait copy" "actions actions" "vitals vitals";
+  row-gap: 10px;
+  padding: 14px;
+}
+:root body .int-rh2-root .int-rh2-companion::before { display: none; }
+:root body .int-rh2-root .int-rh2-companion__portrait {
+  width: 84px;
+  height: 84px;
+  border-radius: 14px;
+}
+:root body .int-rh2-root .int-rh2-companion__portrait img { animation: cm-avatar-idle 1.3s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate; }
+@keyframes cm-avatar-idle { to { translate: 0 -3px; scale: 1.04; } }
+:root body .int-rh2-root .int-rh2-companion__name { font-size: 20px; font-weight: 900; line-height: 1.1; }
+:root body .int-rh2-root .int-rh2-companion__actions { display: flex; gap: 8px; justify-content: flex-start; }
+/* Meters stack one per row, label, trough, number -- the rebuild's inspector. */
+:root body .int-rh2-root .int-rh2-companion > .int-rh2-vitals {
+  grid-template-columns: 52px minmax(0, 1fr);
+  row-gap: 8px;
+}
+:root body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar { height: 16px; }
+:root body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar::before { transition: width 640ms cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 1; }
+:root body .int-rh2-root .int-rh2-companion[data-open="true"] { animation: cm-panel-in 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes cm-panel-in { from { opacity: 0; translate: 40px 0; rotate: 2deg; } }
+/* Desktop has the room: the meters stay open like the rebuild's inspector; the
+   disclosure stays for short landscape phones only. */
+@media (min-height: 501px) {
+  :root body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-companion[data-expanded="false"] > .int-rh2-vitals { display: grid; }
+  :root body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-companion__toggle { display: none; }
+}
+@media (max-width: 600px) {
+  :root body .int-rh2-root .int-rh2-companion { grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "portrait copy actions" "vitals vitals vitals"; padding: 10px; }
+  :root body .int-rh2-root .int-rh2-companion__portrait { width: 64px; height: 64px; }
+  :root body .int-rh2-root .int-rh2-companion > .int-rh2-vitals { grid-template-columns: 44px minmax(0, 1fr) 44px minmax(0, 1fr); column-gap: 8px; }
+  @keyframes cm-panel-in { from { opacity: 0; translate: 0 30px; } }
+}
+:root[data-motion="reduced"] body .int-rh2-root .int-rh2-companion,
+:root[data-motion="reduced"] body .int-rh2-root .int-rh2-companion__portrait img { animation: none !important; }
+
+/* Arcade skin for the inspector. */
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion {
+  border: 3px solid var(--ax-ink);
+  border-radius: 20px;
+  background: var(--ax-paper) repeating-linear-gradient(45deg, rgba(20, 20, 31, 0.05) 0 6px, transparent 6px 12px);
+  box-shadow: var(--ax-hl), 0 8px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__portrait { border: 3px solid var(--ax-ink); background: #e9f6ff; box-shadow: inset 0 -4px 0 rgba(20, 20, 31, 0.15); }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__copy { border-radius: 12px; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__species { display: inline-block; justify-self: start; padding: 3px 8px; border-radius: 6px; background: var(--ax-ink); color: #fff; font-size: 11px; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__place { border: 2px solid var(--ax-ink); border-radius: 999px; background: #fff; padding: 2px 10px; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close) {
+  min-width: 44px;
+  min-height: 44px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 12px;
+  background: var(--ax-white);
+  color: var(--ax-ink);
+  font-weight: 900;
+  box-shadow: var(--ax-hl), 0 4px 0 var(--ax-white-sh);
+  transition: transform 220ms var(--ax-spring), box-shadow 220ms var(--ax-spring);
+}
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close):active { transform: translateY(3px); box-shadow: var(--ax-hl), 0 1px 0 var(--ax-white-sh); transition-duration: 45ms; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__label { color: var(--ax-ink); font-weight: 900; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar {
+  border: 3px solid var(--ax-ink);
+  border-radius: 8px;
+  background: var(--ax-ink-2) var(--ax-dots-light);
+}
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar[data-stat="hp"] { --meter: #3ddc84; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar[data-stat="tp"] { --meter: #4d7cff; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar[data-stat="ap"] { --meter: #ffd23f; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar[data-stat="capacity"] { --meter: #a259ff; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar::before { background: linear-gradient(rgba(255, 255, 255, 0.45) 0 35%, var(--meter) 35%); }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__num { color: #fff; font-weight: 900; text-shadow: 0 1px 0 var(--ax-ink); }
+/* The full record sheet and the day dialogs wear paper and ink too. */
+:root[data-theme="arcade"] :is(.int-rh2-detail, .int-rh2-day-confirm, .int-rh2-letter, .int-rh2-evolution-choice, .int-rh2-calendar) {
+  border: 3px solid var(--ax-ink);
+  border-radius: 22px;
+  background: var(--ax-paper);
+  box-shadow: var(--ax-hl), 0 8px 0 var(--ax-ink);
+  color: var(--ax-ink);
+}
+:root[data-theme="arcade"] .int-rh2-detail::backdrop { background: rgba(20, 20, 31, 0.5) var(--ax-dots); }
+:root[data-theme="arcade"] .int-rh2-hint { border: 3px solid var(--ax-ink); border-radius: 999px; background: #e6fbff; color: var(--ax-ink); font-weight: 900; box-shadow: 0 4px 0 var(--ax-ink); }
+
+/* ======================================================================== *
+ * Battle and Hunt HUD: the rebuild's arena HUD language -- fighter cards with
+ * portrait boxes, ink troughs with spring fills, a chunky clock, a dark log
+ * ticker; Hunt tools as the rebuild's care row of coloured tiles.
+ * Battle simulation, timing and Hunt controller binding are unchanged.
+ * ======================================================================== */
+:root[data-theme="arcade"] .cm-vs5-fighter {
+  border: 3px solid var(--ax-ink);
+  border-radius: 16px;
+  background: var(--ax-paper);
+  color: var(--ax-ink);
+  box-shadow: var(--ax-hl), 0 5px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-vs5-roster--player .cm-vs5-fighter { background: #e6f0ff; }
+:root[data-theme="arcade"] .cm-vs5-roster--opponent .cm-vs5-fighter { background: #ffe8ea; }
+:root[data-theme="arcade"] .cm-vs5-fighter__portrait {
+  border: 3px solid var(--ax-ink);
+  border-radius: 12px;
+  background: #e9f6ff;
+  image-rendering: pixelated;
+}
+:root[data-theme="arcade"] .cm-vs5-fighter__name { font-weight: 900; }
+:root[data-theme="arcade"] :is(.cm-vs5-meter, .cm-vs5-fighter__hp) {
+  border: 3px solid var(--ax-ink);
+  border-radius: 8px;
+  background: var(--ax-ink-2) var(--ax-dots-light);
+  overflow: hidden;
+}
+:root[data-theme="arcade"] .cm-vs5-meter__fill {
+  background: linear-gradient(rgba(255, 255, 255, 0.45) 0 35%, var(--ax-green) 35%);
+  transition-timing-function: var(--ax-spring);
+}
+:root[data-theme="arcade"] .cm-vs5-meter--resource .cm-vs5-meter__fill { background: linear-gradient(rgba(255, 255, 255, 0.45) 0 35%, var(--ax-blue) 35%); }
+:root[data-theme="arcade"] .cm-vs5-meter__value { color: #fff; font-weight: 900; text-shadow: 0 1px 0 var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs5-clock {
+  border: 3px solid var(--ax-ink);
+  border-radius: 999px;
+  background: var(--ax-ink);
+  color: var(--ax-yellow);
+  font-weight: 900;
+  box-shadow: 0 4px 0 rgba(20, 20, 31, 0.5);
+}
+:root[data-theme="arcade"] .cm-vs5-clock__fill { background: var(--ax-yellow); }
+:root[data-theme="arcade"] .cm-vs5-log {
+  border: 3px solid var(--ax-ink);
+  border-radius: 14px;
+  background: rgba(20, 20, 31, 0.86) var(--ax-dots-light);
+  color: #fff;
+}
+:root[data-theme="arcade"] .cm-vs5-log__line { font-weight: 800; }
+:root[data-theme="arcade"] .cm-vs5-log__detail--fresh { color: var(--ax-yellow); animation: cm-log-tick 420ms var(--ax-spring); }
+@keyframes cm-log-tick { 35% { scale: 1.08; } }
+:root[data-theme="arcade"] .cm-vs5-match {
+  border: 3px solid var(--ax-ink);
+  border-radius: 16px;
+  background: var(--ax-paper);
+  box-shadow: var(--ax-hl), 0 5px 0 var(--ax-ink);
+}
+
+/* Hunt: tools are the rebuild's care row. */
+:root[data-theme="arcade"] :is(.cm-hunt-controls-panel, .cm-hunt-info) {
+  border: 3px solid var(--ax-ink);
+  border-radius: 18px;
+  background: var(--ax-paper);
+  box-shadow: var(--ax-hl), 0 6px 0 var(--ax-ink);
+  color: var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action {
+  --key-face: var(--ax-white);
+  --key-shade: var(--ax-white-sh);
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  border-radius: 14px;
+}
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action:nth-child(6n + 2) { --key-face: var(--ax-orange); --key-shade: var(--ax-orange-sh); }
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action:nth-child(6n + 3) { --key-face: var(--ax-cyan); --key-shade: var(--ax-cyan-sh); }
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action:nth-child(6n + 4) { --key-face: var(--ax-green); --key-shade: var(--ax-green-sh); }
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action:nth-child(6n + 5) { --key-face: var(--ax-pink); --key-shade: var(--ax-pink-sh); }
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action:nth-child(6n) { --key-face: var(--ax-yellow); --key-shade: var(--ax-yellow-sh); }
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action[aria-pressed="true"] {
+  transform: translateY(-4px);
+  box-shadow: var(--ax-hl), 0 9px 0 var(--key-shade), 0 0 0 4px var(--ax-yellow), 0 0 0 7px var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-hunt-tools__icon { image-rendering: pixelated; }
+:root[data-theme="arcade"] .cm-hunt-tools__label { font-weight: 900; }
+:root[data-theme="arcade"] .cm-hunt-radar { border: 3px solid var(--ax-ink); border-radius: 50%; background: rgba(20, 20, 31, 0.78) var(--ax-dots-light); }
+
+/* ======================================================================== *
+ * Hunt destination: the globe beside a card wall of destinations (each card
+ * its own map, ordinal, name, entrance fee), the chosen one on top.
+ * Weighted to tie the earlier body:is([data-landscape-menu],[data-desktop-menu])
+ * rules and win by load order.
+ * ======================================================================== */
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gates {
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: 12px;
+  padding: 4px 4px 14px;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate {
+  grid-template-rows: auto auto auto;
+  justify-items: stretch;
+  align-content: start;
+  gap: 4px;
+  min-height: 0;
+  padding: 7px 7px 9px;
+  text-align: left;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate__aperture {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--r-control);
+  background: var(--c-surface-3);
+  transform: none;
+  animation: none;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate__art { width: 100%; height: 100%; object-fit: cover; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate__ordinal { justify-self: start; font-size: var(--fs-caption); font-weight: var(--fw-heavy); letter-spacing: 0.08em; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate__name { font-size: var(--fs-body-sm); font-weight: var(--fw-heavy); line-height: 1.25; text-align: left; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate__fee { color: var(--c-gold-strong); font-size: var(--fs-caption); font-weight: var(--fw-strong); }
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate[data-availability="LOCKED"] { filter: grayscale(0.7); }
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate-fallback { overflow: visible; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate-fallback__heading { display: none; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate3d__host { min-height: 240px; }
+
+@media (min-width: 700px) {
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-body--gate {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    align-content: stretch;
+    overflow: hidden;
+  }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-body--gate > .cm-vs2-gate3d,
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-body--gate > .cm-vs2-gate3d[data-view="fallback"] { grid-column: 1; grid-row: 1 / span 2; align-self: stretch; min-height: 0; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-body--gate > .cm-vs2-preview { grid-column: 2; grid-row: 1; align-self: start; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-body--gate > .cm-vs2-gate-fallback { grid-column: 2; grid-row: 2; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gates { grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 8px; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate3d__host { min-height: 0; }
+}
+@media (max-width: 699px) {
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gates { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="ARCADE_SPLIT_R1"] .cm-vs2-gate3d:not([data-view="fallback"]) .cm-vs2-gate3d__host { min-height: 0; height: 36vh; }
+}
+
+/* Loadout: equipment and plugin choices as rebuild cards. */
+:root body .cm-vs2-root[data-screen="HUNT_LOADOUT"] .cm-vs2-loadout { gap: 10px; }
+:root[data-theme="arcade"] .cm-vs2-loadout__option {
+  border: var(--ax-border);
+  border-radius: var(--r-card);
+  background: var(--ax-paper);
+  color: var(--ax-ink);
+  box-shadow: var(--ax-hl), 0 5px 0 var(--ax-ink);
+  transition: transform var(--ax-t-hover) var(--ax-spring), box-shadow var(--ax-t-hover) var(--ax-spring);
+}
+:root[data-theme="arcade"] .cm-vs2-loadout__option:active:not(:disabled) { transform: translateY(3px); box-shadow: var(--ax-hl), 0 2px 0 var(--ax-ink); transition-duration: var(--ax-t-press); }
+:root[data-theme="arcade"] .cm-vs2-loadout__option:is([aria-pressed="true"], [aria-checked="true"], [data-selected="true"]) { background: var(--ax-yellow); box-shadow: var(--ax-hl), 0 5px 0 var(--ax-yellow-sh), 0 0 0 3px var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs2-gate[data-selected="true"] { background: var(--ax-yellow); box-shadow: var(--ax-hl), 0 5px 0 var(--ax-yellow-sh), 0 0 0 3px var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs2-gate__aperture { border: 2px solid var(--ax-ink); }
+:root[data-theme="arcade"] :is(.cm-vs2-preview, .cm-vs2-gate3d) { border: var(--ax-border); border-radius: var(--r-card); box-shadow: var(--ax-hl), 0 6px 0 var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs2-preview { background: var(--ax-paper); color: var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs2-preview__image { border: 3px solid var(--ax-ink); border-radius: 12px; }
+
+/* Hunt field: the chosen tool pulses like a primed rebuild care key. */
+:root[data-theme="arcade"] .cm-hunt-tools .cm-vs2-action[aria-pressed="true"]::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 3px solid var(--ax-yellow);
+  border-radius: 18px;
+  pointer-events: none;
+  animation: cm-tool-pulse 900ms cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+@keyframes cm-tool-pulse { from { opacity: 1; scale: 1; } to { opacity: 0; scale: 1.18; } }
+:root[data-motion="reduced"] .cm-hunt-tools .cm-vs2-action[aria-pressed="true"]::before { animation: none; }
+
+/* ======================================================================== *
+ * Battle: mode keys in the rebuild's colours, practice partners as cards with
+ * blue A / red B keys, HP bars with the rebuild's lagging white ghost.
+ * ======================================================================== */
+.cm-vs5-meter { position: relative; }
+.cm-vs5-meter::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--ghost, 0%);
+  background: rgba(255, 255, 255, 0.6);
+  transition: width 600ms cubic-bezier(0.2, 0.9, 0.3, 1) 400ms;
+  pointer-events: none;
+}
+.cm-vs5-meter__fill { position: relative; z-index: 1; }
+:root[data-motion="reduced"] .cm-vs5-meter::before { transition: none; }
+.cm-vs5-practice-member { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 8px; padding: 10px 12px; }
+.cm-vs5-practice-member > .cm-vs5-match__fee { grid-column: 1 / -1; }
+@media (min-width: 900px) {
+  :root body .cm-vs5-root .cm-vs5-party:has(> .cm-vs5-practice-member) { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; align-content: start; }
+  :root body .cm-vs5-root .cm-vs5-party:has(> .cm-vs5-practice-member) > :not(.cm-vs5-practice-member) { grid-column: 1 / -1; grid-row: auto; }
+}
+:root[data-theme="arcade"] .cm-vs5-practice-member { border: var(--ax-border); border-radius: var(--r-card); background: var(--ax-paper); box-shadow: var(--ax-hl), 0 5px 0 var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs5-practice-member__name { font-weight: 900; }
+:root[data-theme="arcade"] .cm-vs5-practice-member > button:nth-last-of-type(2)[aria-pressed="true"] { --key-face: var(--ax-blue); --key-shade: var(--ax-blue-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
+:root[data-theme="arcade"] .cm-vs5-practice-member > button:last-of-type[aria-pressed="true"] { --key-face: var(--ax-red); --key-shade: var(--ax-red-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n + 1) { --key-face: var(--ax-yellow); --key-shade: var(--ax-yellow-sh); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n + 2) { --key-face: var(--ax-orange); --key-shade: var(--ax-orange-sh); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n + 3) { --key-face: var(--ax-green); --key-shade: var(--ax-green-sh); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n + 4) { --key-face: var(--ax-cyan); --key-shade: var(--ax-cyan-sh); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n + 5) { --key-face: var(--ax-purple); --key-shade: var(--ax-purple-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n) { --key-face: var(--ax-pink); --key-shade: var(--ax-pink-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:not([aria-pressed="true"]) { filter: saturate(0.6) brightness(1.06); }
+/* The globe sits on a dark dotted stage so its captions and pins read. */
+:root[data-theme="arcade"] .cm-vs2-gate3d { background: var(--ax-ink-2) var(--ax-dots-light); color: #fff; }
+/* The menus of Battle stand on the same dotted purple stage as every other screen
+   (the field keeps its arena). Words outside the paper cards read white on ink. */
+:root[data-theme="arcade"] .cm-vs5-root:not([data-screen="BATTLE_FIELD"]) { background: var(--ax-stage); color: #fff; }
+:root[data-theme="arcade"] .cm-vs5-root:not([data-screen="BATTLE_FIELD"]) .cm-vs5-shell { background: transparent; box-shadow: none; }
+:root[data-theme="arcade"] .cm-vs5-root:not([data-screen="BATTLE_FIELD"]) :is(.cm-vs5-arena-choice, .cm-vs5-entry-notice, .cm-vs5-cube__note, .cm-vs5-root > .cm-vs5-shell > p) {
+  color: #fff;
+  text-shadow: 0 2px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-vs5-root:not([data-screen="BATTLE_FIELD"]) :is(.cm-vs5-practice-member, .cm-vs5-match, .cm-vs5-fighter, .cm-vs5-result__body, .cm-vs5-team-preview, .cm-vs5-link, .cm-vs5-password-maker) :is(.cm-vs5-entry-notice, p, span) { text-shadow: none; }
+:root[data-theme="arcade"] .cm-vs5-arena-choice select { border: var(--ax-border); border-radius: var(--r-control); background: var(--ax-paper); color: var(--ax-ink); font-weight: 800; box-shadow: 0 4px 0 var(--ax-ink); }
+/* Numbers ride above both bars. */
+.cm-vs5-meter :is(.cm-vs5-meter__value, .cm-vs5-meter__number-part) { position: relative; z-index: 2; }
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-fighter__name { color: #fff; text-shadow: 0 2px 0 var(--ax-ink); }
+/* Sheets open over the cards only (inside the body), never over the footer's way back. */
+:root body .cm-vs2-root[data-screen]:is([data-shop-layout="ARCADE_GRID_R1"], [data-database-layout="ARCADE_GRID_R1"]) .cm-vs2-shop__body { position: relative; }
+:root body .cm-vs2-root[data-screen] :is(.cm-vs2-shop__sheet, .cm-vs2-database__sheet) { position: absolute; inset: 0; z-index: 5; padding: 8px; }
+@media (max-width: 600px) {
+  :root body .cm-vs2-root[data-screen] :is(.cm-vs2-shop__sheet, .cm-vs2-database__sheet) { padding: 0; }
+}
+
+
+/* ======================================================================== *
+ * Raising HUD 2026-10-27 (Owner): nothing on the field overlaps.
+ * The journal badge sits under the status bar's wallet (ranchDiscoveryJournal
+ * measures it), the mail key stacks above the zoom key, meter numbers fit.
+ * ======================================================================== */
+:root body .int-rh2-root .int-rh2-discoveries {
+  top: var(--cm-journal-top, calc(60px + env(safe-area-inset-top)));
+  right: var(--cm-journal-right, 12px);
+}
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-discoveries {
+  min-height: 40px;
+  padding: 6px 14px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 999px;
+  background: var(--ax-paper);
+  color: var(--ax-ink);
+  font-weight: 900;
+  box-shadow: var(--ax-hl), 0 4px 0 var(--ax-ink);
+  transition: transform 220ms var(--ax-spring), box-shadow 220ms var(--ax-spring);
+}
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-discoveries:active { transform: translateY(3px); box-shadow: var(--ax-hl), 0 1px 0 var(--ax-ink); transition-duration: 45ms; }
+/* The zoom key is 44px tall at dock + gap + 12px; mail rides 12px above it. */
+:root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])):not([data-desktop-raising]) .int-rh2-mail-icon {
+  right: 12px;
+  bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 68px);
+}
+:root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])):not([data-desktop-raising]) .int-rh2-root:has(.int-rh2-mail-icon:not([hidden])) .int-rh2-notice {
+  bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 128px);
+}
+/* A 3px ink border inside a 16px trough left 10px for an 18px line of digits. */
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar:not([data-stat="capacity"]) { height: 22px; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar:not([data-stat="capacity"]) .int-rh2-vitals__num {
+  font-size: 12px;
+  line-height: 16px;
+  padding: 0 6px;
+}
+
+/* ---- Menus 2026-10-27: a titled sheet of tiles; the dock is never repeated ---- */
+:root body .cm-toolbar__menu-head { display: flex; align-items: center; margin: 0 0 6px; }
+:root body .cm-toolbar__menu-title { margin: 0; font-size: 18px; font-weight: 900; letter-spacing: 0.04em; }
+:root body .cm-toolbar__menu .cm-toolbar__group-entries {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+:root body .cm-toolbar__menu .cm-toolbar__group[data-prominent="true"] .cm-toolbar__group-entries,
+:root body .cm-toolbar__menu .cm-toolbar__group[data-separate="true"] .cm-toolbar__group-entries { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+:root body .cm-toolbar__menu .cm-toolbar__group-entries > .cm-toolbar__entry:only-child { grid-column: 1 / -1; }
+:root body .cm-toolbar__menu .cm-toolbar__entry {
+  position: relative;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 2px;
+  min-height: 64px;
+  margin: 0;
+  padding: 10px 12px;
+  text-align: start;
+}
+:root body .cm-toolbar__menu .cm-toolbar__entry .cm-toolbar__entry-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+:root body .cm-toolbar__menu .cm-toolbar__entry:has(.cm-toolbar__entry-icon) { padding-right: 40px; }
+:root body .cm-toolbar__menu .cm-toolbar__entry-label { font-weight: 900; }
+:root body .cm-toolbar__menu .cm-toolbar__entry-hint { font-size: 12px; line-height: 1.3; }
+:root body .cm-toolbar__menu .cm-toolbar__group[data-separate="true"] .cm-toolbar__entry { min-height: 52px; }
+:root body .cm-toolbar__menu .cm-toolbar__group[data-separate="true"] .cm-toolbar__entry-hint { display: none; }
+@media (max-width: 360px) {
+  :root body .cm-toolbar__menu .cm-toolbar__group[data-separate="true"] .cm-toolbar__group-entries { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* Arcade: each shelf has its own colour band; the day and session keys stay plain. */
+:root[data-theme="arcade"] .cm-toolbar__menu .cm-toolbar__group { --tile: var(--ax-cyan); }
+:root[data-theme="arcade"] .cm-toolbar__menu .cm-toolbar__group[data-group="items"] { --tile: var(--ax-yellow); }
+:root[data-theme="arcade"] .cm-toolbar__menu .cm-toolbar__group[data-group="residents"] { --tile: var(--ax-green); }
+:root[data-theme="arcade"] .cm-toolbar__menu .cm-toolbar__group[data-group="records"] { --tile: var(--ax-purple); }
+:root[data-theme="arcade"] .cm-toolbar__menu .cm-toolbar__group:not([data-prominent="true"], [data-separate="true"]) .cm-toolbar__entry {
+  box-shadow: inset 0 6px 0 var(--tile), 0 4px 0 var(--ax-white-sh);
+  padding-top: 14px;
+}
+:root[data-theme="arcade"] .cm-toolbar__menu .cm-toolbar__group[data-separate="true"] {
+  padding-top: 10px;
+  border-top: 2px dashed rgba(20, 20, 31, 0.2);
+}
+:root[data-theme="arcade"] .cm-toolbar__menu-title { color: var(--ax-ink); }
+
+/* ---- Bag 2026-10-27 ---- */
+.cm-backpack { display: grid; gap: 12px; max-height: 56dvh; overflow: auto; overscroll-behavior: contain; }
+.cm-backpack__wallet { margin: 0; font-weight: 900; }
+.cm-backpack__section h3 { margin: 0 0 6px; font-size: 14px; }
+.cm-backpack__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.cm-backpack__item { position: relative; display: grid; justify-items: center; gap: 4px; padding: 8px 6px 10px; border-radius: 12px; background: rgba(20, 20, 31, 0.05); text-align: center; }
+.cm-backpack__art { display: grid; place-items: center; width: 48px; height: 48px; }
+.cm-backpack__art img { max-width: 48px; max-height: 48px; image-rendering: pixelated; }
+.cm-backpack__art[data-placeholder="true"] { border-radius: 10px; background: rgba(20, 20, 31, 0.1); }
+.cm-backpack__name { font-size: 12px; font-weight: 800; line-height: 1.2; }
+.cm-backpack__count { position: absolute; top: 4px; right: 6px; font-size: 12px; font-weight: 900; font-variant-numeric: tabular-nums; }
+:root[data-theme="arcade"] .cm-backpack__item { border: 3px solid var(--ax-ink); background: var(--ax-white); box-shadow: 0 4px 0 var(--ax-white-sh); }
+:root[data-theme="arcade"] .cm-backpack__count { padding: 0 6px; border-radius: 999px; background: var(--ax-ink); color: var(--ax-yellow); }
+
+/* ---- Journal rows: the real item, its art and count ---- */
+.int-rh2-discovery-item { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: center; gap: 8px; }
+.int-rh2-discovery-item__art { display: grid; place-items: center; width: 36px; height: 36px; }
+.int-rh2-discovery-item__art img { max-width: 36px; max-height: 36px; image-rendering: pixelated; }
+.int-rh2-discovery-item__count { font-variant-numeric: tabular-nums; }
+.int-rh2-discovery-foot { font-size: 13px; opacity: 0.85; }
+
+/* ======================================================================== *
+ * Facility editor 2026-10-27 (Owner): one screen, three zones, no page scroll.
+ * Top: compact header + counter. Middle: the hex canvas with corner keys.
+ * Bottom: size filters, a sideways cartridge dock, the footer.
+ * ======================================================================== */
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-shell { width: min(100%, 1180px); }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-header {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: max(8px, env(safe-area-inset-top)) 14px 6px;
+}
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-kicker { display: none; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-title { margin: 0; font-size: 22px; line-height: 1.1; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-subtitle { display: none; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-shell[data-help-open="true"] .cm-vs2-subtitle {
+  display: block;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 14px;
+  right: 14px;
+  z-index: 8;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(20, 20, 31, 0.92);
+  color: #fff;
+  font-size: 13px;
+}
+.cm-cage-help { display: none; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-help {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  padding: 0;
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 18px;
+}
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-cage-edit__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto auto auto;
+  grid-template-areas: "board" "filters" "inventory" "status";
+  align-content: stretch;
+  gap: 8px;
+  padding: 0 14px 8px;
+  overflow: hidden;
+}
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-board-panel { grid-area: board; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filters { grid-area: filters; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-inventory-panel { grid-area: inventory; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-shop__status { grid-area: status; margin: 0; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-board-panel {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
+  overflow: visible;
+}
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-board-hint { display: none; }
+/* The counter and the land key float on the canvas corners: the canvas keeps the height. */
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-areas: "canvas";
+  height: 100%;
+  min-height: 0;
+}
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__toolbar { position: absolute; top: 10px; left: 10px; z-index: 3; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__land { position: absolute; left: 10px; bottom: 14px; z-index: 3; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__counter { font-size: 12px; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__count { font-size: 18px; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__land .cm-hexworld__buy-land { min-height: 40px; font-size: 13px; }
+/* While a cage is selected its panel takes the canvas foot; the land key steps aside. */
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld:has(.cm-hexworld__selection:not([hidden])) .cm-hexworld__land { display: none; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__viewport {
+  grid-area: canvas;
+  position: relative;
+  height: auto;
+  min-height: 0;
+  overflow: hidden;
+  touch-action: none;
+}
+/* The selection floats over the canvas foot instead of taking a row. */
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__selection:not([hidden]) {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  z-index: 4;
+}
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-shop__status:empty { display: none; }
+
+/* Corner keys and toast. */
+.cm-hexworld__keys { position: absolute; top: 8px; right: 8px; z-index: 3; display: flex; gap: 6px; }
+.cm-hexworld__keys > button { min-width: 40px; min-height: 40px; padding: 0 10px; border-radius: 10px; font-weight: 900; }
+.cm-hexworld__keys > button:disabled { opacity: 0.45; }
+/* Narrow canvases: the keys run down the right edge so the counter keeps the top. */
+@media (max-width: 600px) {
+  .cm-hexworld__keys { flex-direction: column; top: 10px; right: 10px; }
+  .cm-hexworld__keys > button { min-width: 44px; min-height: 40px; padding: 0 6px; font-size: 13px; }
+}
+.cm-hexworld__toast {
+  position: absolute; top: 8px; left: 50%; z-index: 4; margin: 0; padding: 6px 14px;
+  border-radius: 999px; background: rgba(20, 20, 31, 0.9); color: #fff; font-weight: 900; font-size: 13px;
+  transform: translateX(-50%); pointer-events: none; white-space: nowrap;
+}
+.cm-hexworld__toast[hidden] { display: none; }
+.cm-hexworld__toast[data-kind="connected"] { background: #0e8f74; animation: cm-hex-toast 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes cm-hex-toast { 0% { transform: translate(-50%, -8px) scale(0.6); opacity: 0; } 20% { transform: translate(-50%, 0) scale(1.1); opacity: 1; } 35%, 100% { transform: translate(-50%, 0) scale(1); } }
+
+/* Cell layers: socket (touches the land), open (quiet), lid (no land left). */
+.cm-hexworld__cell.cm-vs2-cage-slot[data-layer="open"] { background-color: rgba(255, 255, 255, 0.05); }
+.cm-hexworld__cell.cm-vs2-cage-slot[data-layer="socket"] {
+  background-color: rgba(77, 238, 214, 0.22);
+  background-image: radial-gradient(closest-side, rgba(20, 20, 31, 0.55) 62%, rgba(77, 238, 214, 0.65) 100%);
+  animation: cm-hex-socket 2.4s ease-in-out infinite;
+}
+@keyframes cm-hex-socket { 50% { background-color: rgba(77, 238, 214, 0.34); } }
+.cm-hexworld__cell.cm-vs2-cage-slot[data-layer="lid"] {
+  background-color: #233056;
+  background-size: 100% 100%;
+  background-position: center;
+  filter: brightness(0.82) saturate(0.8);
+}
+.cm-hexworld__cell[data-synergy="true"] { animation: cm-hex-synergy 1.2s ease-in-out infinite; }
+@keyframes cm-hex-synergy { 50% { filter: brightness(1.35) saturate(1.25); } }
+.cm-hexworld__cell[data-snap="true"] { animation: cm-hex-snap 460ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes cm-hex-snap { 0% { transform: scale(1.15, 0.85); } 55% { transform: scale(0.94, 1.06); } 100% { transform: scale(1, 1); } }
+
+/* Passage overlay: rims (closed borders), bridges (open passages), exits. */
+.cm-hexworld__overlay { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+.cm-hexworld__rim-shadow { stroke: #14141f; stroke-width: 5; stroke-linecap: round; }
+.cm-hexworld__rim { stroke: #8fa0dc; stroke-width: 2; stroke-linecap: round; }
+.cm-hexworld__rim--synergy { stroke: #3dffb0; stroke-width: 3; animation: cm-hex-pulse 1s ease-in-out infinite; }
+.cm-hexworld__bridge-glow { stroke: rgba(80, 255, 220, 0.35); stroke-width: 12; stroke-linecap: round; }
+.cm-hexworld__bridge { stroke: #7ff9e0; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 7 5; animation: cm-hex-flow 0.9s linear infinite; }
+.cm-hexworld__bridge--preview { stroke: #ffe066; stroke-width: 4; }
+.cm-hexworld__exit { fill: #ffd23f; stroke: #14141f; stroke-width: 1.5; }
+.cm-hexworld__exit--synergy { fill: #3dffb0; animation: cm-hex-pulse 1s ease-in-out infinite; }
+@keyframes cm-hex-flow { to { stroke-dashoffset: -12; } }
+@keyframes cm-hex-pulse { 50% { opacity: 0.35; } }
+
+/* Verdict pill and name badges ride the board's own transform. */
+.cm-hexworld__verdict {
+  position: absolute; z-index: 6; padding: 2px 8px; border-radius: 999px; border: 2px solid #14141f;
+  background: #3ddc84; color: #14141f; font-size: 11px; font-weight: 900; white-space: nowrap;
+  transform: translate(-50%, -100%); pointer-events: none;
+}
+.cm-hexworld__verdict[data-verdict="blocked"], .cm-hexworld__verdict[data-verdict="outside"] { background: #ff4d5e; color: #fff; }
+.cm-hexworld__verdict[data-verdict="full"] { background: #ff9f1c; }
+.cm-hexworld__badge {
+  position: absolute; z-index: 5; padding: 1px 6px; border-radius: 6px; background: rgba(20, 20, 31, 0.82);
+  color: #fff; font-size: 9px; font-weight: 800; white-space: nowrap; transform: translate(-50%, 0); pointer-events: none;
+}
+.cm-hexworld__badge[data-fixed="true"]::before { content: "\1F512  "; }
+.cm-hexworld__board[data-zoom="far"] .cm-hexworld__badge { display: none; }
+
+/* Filters and the cartridge dock. */
+.cm-cage-filters { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.cm-cage-filters[hidden] { display: none; }
+.cm-cage-filter { flex: 0 0 auto; min-height: 36px; padding: 0 12px; border-radius: 999px; font-weight: 900; font-size: 13px; }
+.cm-cage-filter { white-space: nowrap; }
+.cm-cage-filter[data-count]::after { content: attr(data-count); display: inline-block; min-width: 1.4em; margin-inline-start: 6px; padding: 0 5px; border-radius: 999px; background: #14141f; color: #ffd23f; font-size: 11px; line-height: 1.5; }
+.cm-cage-filter[data-count="0"]::after { background: rgba(20, 20, 31, 0.25); color: #14141f; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-inventory-panel {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  min-height: 0;
+  padding: 2px 2px 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-gutter: auto;
+  overscroll-behavior: contain;
+  scroll-snap-type: x proximity;
+}
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray, .cm-cage-facilities) {
+  display: flex;
+  gap: 10px;
+  grid-template-columns: none;
+}
+/* Each group keeps its full content width: WebKit sized a flex row's flex child
+   to one card, so the rest spilled over the next group (iPhone, Owner 2026-10-27). */
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray, .cm-cage-facilities) { flex: 0 0 auto; width: max-content; min-width: 0; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray, .cm-cage-facilities)[hidden] { display: none; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filter-empty { flex: 0 0 auto; align-self: center; margin: 0; padding: 0 8px; white-space: nowrap; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-cage-tray { order: 0; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-facilities { order: 1; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray__item, .cm-cage-facility) {
+  position: relative;
+  flex: 0 0 150px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 2px;
+  min-height: 112px;
+  padding: 30px 10px 10px;
+  text-align: start;
+  scroll-snap-align: start;
+}
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray__item, .cm-cage-facility)[hidden] { display: none; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray__item, .cm-cage-facility) .cm-facility-thumb {
+  position: absolute; top: 6px; right: 34px; width: 40px; height: 22px; object-fit: cover; border-radius: 4px;
+}
+.cm-hexfoot { position: absolute; top: 5px; left: 8px; display: block; line-height: 0; }
+.cm-hexfoot polygon { fill: #4deed6; stroke: #14141f; stroke-width: 4; }
+.cm-cage-cart__count { position: absolute; top: 6px; right: 6px; padding: 1px 7px; border-radius: 999px; background: #14141f; color: #ffd23f; font-size: 11px; font-weight: 900; }
+.cm-cage-cart__count--placed { color: #fff; background: #6b5bd6; }
+.cm-cage-cart__synergy { display: block; margin-top: 2px; color: #0b8f8f; font-size: 11px; font-weight: 800; line-height: 1.25; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-action--primary[data-dirty="true"]:not(:disabled) { animation: cm-confirm-breathe 1.6s ease-in-out infinite; }
+/* A glow, never a transform: the button's box stays still, so taps and checks land. */
+@keyframes cm-confirm-breathe { 50% { filter: brightness(1.12) drop-shadow(0 0 10px rgba(255, 210, 63, 0.9)); } }
+
+/* Short landscape phones: canvas left, dock right. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-cage-edit__body {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas: "board filters" "board inventory" "board status";
+  }
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filters { flex-wrap: wrap; }
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-inventory-panel { flex-direction: column; overflow-x: hidden; overflow-y: auto; }
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray, .cm-cage-facilities) { flex-wrap: wrap; width: auto; }
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray__item, .cm-cage-facility) { flex-basis: 136px; min-height: 100px; }
+}
+:root[data-motion="reduced"] :is(.cm-hexworld__cell, .cm-hexworld__bridge, .cm-hexworld__rim--synergy, .cm-hexworld__exit--synergy, .cm-hexworld__toast, .cm-vs2-action--primary) { animation: none !important; }
+
+/* Arcade skin for the builder. */
+:root[data-theme="arcade"] .cm-hexworld__keys > button { border: 3px solid var(--ax-ink); background: var(--ax-white); color: var(--ax-ink); box-shadow: var(--ax-hl), 0 4px 0 var(--ax-ink); }
+:root[data-theme="arcade"] .cm-hexworld__keys > button:active:not(:disabled) { transform: translateY(3px); box-shadow: var(--ax-hl), 0 1px 0 var(--ax-ink); }
+:root[data-theme="arcade"] .cm-hexworld__keys > .cm-hexworld__revert:not(:disabled) { background: var(--ax-orange); }
+:root[data-theme="arcade"] .cm-cage-filter { border: 3px solid var(--ax-ink); background: var(--ax-white); color: var(--ax-ink); box-shadow: 0 4px 0 var(--ax-ink); }
+:root[data-theme="arcade"] .cm-cage-filter[aria-selected="true"] { background: var(--ax-yellow); transform: translateY(2px); box-shadow: 0 2px 0 var(--ax-ink); }
+:root[data-theme="arcade"] .cm-cage-help { border: 3px solid var(--ax-ink); background: var(--ax-cyan); color: var(--ax-ink); box-shadow: 0 4px 0 var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray__item, .cm-cage-facility) {
+  border: 3px solid var(--ax-ink);
+  border-radius: 14px;
+  background: var(--ax-white);
+  color: var(--ax-ink);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.8), 0 5px 0 var(--ax-ink);
+  transition: transform 200ms var(--ax-spring), box-shadow 200ms var(--ax-spring);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-cage-tray__item[data-selected="true"] {
+  background: var(--ax-yellow);
+  transform: translateY(-4px) rotate(-1deg);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.8), 0 9px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray__item, .cm-cage-facility):active:not(:disabled) { transform: translateY(3px); box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.8), 0 2px 0 var(--ax-ink); }
+@media (hover: hover) and (pointer: fine) {
+  :root[data-theme="arcade"] body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray__item, .cm-cage-facility):hover:not(:disabled) { transform: translateY(-2px) rotate(-1deg); }
+}
+
+/* ======================================================================== *
+ * Hunt destination 2026-10-27 (Owner): holo planet navigator on one screen.
+ * The globe fills the upper area with the chosen destination's visor on its
+ * lower edge; a sideways cartridge carousel sits below; the footer keys stay.
+ * Globe and carousel follow each other (vs2Screens.js). The toggle shows every
+ * card at once as a compact grid.
+ * ======================================================================== */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header { padding-top: max(8px, env(safe-area-inset-top)); padding-bottom: 6px; align-items: center; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header .cm-vs2-kicker,
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header .cm-vs2-subtitle { display: none; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header .cm-vs2-title { margin: 0; font-size: 22px; line-height: 1.15; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-areas: "world" "carousel";
+  align-content: stretch;
+  gap: 10px;
+  padding-bottom: 4px;
+  overflow: hidden;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > * { flex-shrink: 1; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > .cm-vs2-gate3d {
+  grid-area: world;
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
+  align-self: stretch;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__bar {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  z-index: 5;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  pointer-events: none;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__bar > * { pointer-events: auto; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__bar-copy { padding: 4px 10px; border-radius: 999px; background: rgba(20, 20, 31, 0.7); font-size: 12px; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__toggle { min-width: 0; min-height: 40px; padding: 0 12px; font-size: 13px; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__host { min-height: 0; height: auto; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__hint { left: 50%; bottom: auto; top: 54px; max-width: none; transform: translateX(-50%); white-space: nowrap; font-size: 11px; opacity: 0.8; }
+
+/* The holo stage: atmosphere glow behind the canvas, a crosshair and two
+   graticule rings in front (pointer-events none). */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__host {
+  background:
+    radial-gradient(closest-side, rgba(82, 227, 255, 0.18), rgba(82, 227, 255, 0.05) 62%, transparent 76%),
+    radial-gradient(120% 90% at 50% 120%, rgba(255, 196, 90, 0.12), transparent 60%);
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__host::before,
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__host::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__host::before {
+  background:
+    linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(127, 249, 224, 0.22) 50%, transparent calc(50% + 0.5px)),
+    linear-gradient(0deg, transparent calc(50% - 0.5px), rgba(127, 249, 224, 0.22) 50%, transparent calc(50% + 0.5px));
+  mask-image: radial-gradient(closest-side, transparent 36%, #000 40%, #000 62%, transparent 70%);
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__host::after {
+  margin: auto;
+  width: auto;
+  height: 90%;
+  max-width: 90%;
+  aspect-ratio: 1;
+  border: 1px dashed rgba(127, 249, 224, 0.28);
+  border-radius: 50%;
+  box-shadow: 0 0 0 14px transparent, 0 0 0 15px rgba(255, 196, 90, 0.16);
+  animation: cm-holo-spin 60s linear infinite;
+}
+@keyframes cm-holo-spin { to { rotate: 360deg; } }
+
+/* Tactical beacon pins: a breathing ring; the chosen one a locked reticle with ripples. */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__node-index {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #14141f;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffffff, #bff7ff 45%, #4ec9dc);
+  color: #14141f;
+  box-shadow: 0 3px 0 #14141f, 0 0 0 3px rgba(82, 227, 255, 0.25);
+  animation: cm-pin-breathe 2.4s ease-in-out infinite;
+}
+@keyframes cm-pin-breathe { 50% { box-shadow: 0 3px 0 #14141f, 0 0 0 6px rgba(82, 227, 255, 0.12); } }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__node-hit[data-selected="true"] .cm-vs2-gate3d__node-index {
+  background: radial-gradient(circle at 35% 30%, #fffbe6, #ffd23f 55%, #ff9f1c);
+  transform: scale(1.18);
+  animation: none;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__node-hit[data-selected="true"]::before,
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__node-hit[data-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 2px solid #ffd23f;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: cm-pin-ripple 1.6s ease-out infinite;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__node-hit[data-selected="true"]::after { animation-delay: 0.8s; }
+@keyframes cm-pin-ripple { from { opacity: 0.9; transform: scale(0.8); } to { opacity: 0; transform: scale(2.1); } }
+
+/* The visor on the globe's lower edge. */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > .cm-vs2-preview {
+  grid-area: world;
+  align-self: end;
+  position: relative;
+  z-index: 6;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 10px;
+  margin: 0 10px 10px;
+  padding: 8px 12px 8px 16px;
+  overflow: hidden;
+  border: 3px solid #14141f;
+  border-radius: 16px;
+  background: rgba(20, 20, 31, 0.86) radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1.4px) 0 0 / 8px 8px;
+  color: #fff;
+  box-shadow: 0 5px 0 #14141f, inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > .cm-vs2-preview::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: hsl(calc(var(--gate-phase, 0) * 45 + 20) 90% 60%);
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview[data-ordinal]::after {
+  content: attr(data-ordinal);
+  position: absolute;
+  top: 6px;
+  left: 16px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: #14141f;
+  color: #ffd23f;
+  font-size: 10px;
+  font-weight: 900;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview[data-pop="true"] { animation: cm-visor-in 460ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes cm-visor-in { from { opacity: 0.4; transform: translateY(14px) scale(0.94); } }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__image { grid-column: 1; grid-row: 1; width: 64px; height: 44px; object-fit: cover; border: 2px solid #14141f; border-radius: 8px; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__copy { grid-column: 2; grid-row: 1; min-width: 0; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs { grid-column: 3; grid-row: 1; }
+/* Before any choice the flag is not set yet: the prompt takes the image's column too. */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview:not([data-selected="true"]) .cm-vs2-preview__copy { grid-column: 1 / 3; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__name { color: #fff; font-size: 16px; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__id { color: rgba(255, 255, 255, 0.6); font-size: 11px; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 2px 8px;
+  align-items: center;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 11px;
+  text-align: right;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs dd { margin: 0; color: #fff; font-weight: 900; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs dd:first-of-type { padding: 1px 8px; border-radius: 999px; background: #ffd23f; color: #14141f; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs dd[data-free="true"] { background: #3ddc84; }
+
+/* The cartridge carousel. */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > .cm-vs2-gate-fallback { grid-area: carousel; min-height: 0; overflow: visible; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate-fallback__heading { display: none; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gates {
+  display: flex;
+  grid-template-columns: none;
+  gap: 12px;
+  padding: 8px 6px 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gates[data-dragging="true"] { scroll-snap-type: none; cursor: grabbing; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate {
+  position: relative;
+  flex: 0 0 128px;
+  display: grid;
+  grid-template-rows: auto auto auto auto;
+  justify-items: stretch;
+  align-content: start;
+  gap: 2px;
+  min-height: 0;
+  padding: 7px 7px 9px;
+  overflow: hidden;
+  text-align: left;
+  scroll-snap-align: center;
+  transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate__aperture { position: relative; display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 8px; transform: none; animation: none; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate__aperture::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(20, 20, 31, 0.14) 0 1px, transparent 1px 3px);
+  box-shadow: inset 0 3px 6px rgba(20, 20, 31, 0.45);
+  pointer-events: none;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate__art { width: 100%; height: 100%; object-fit: cover; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate__ordinal { justify-self: start; font-size: 11px; font-weight: 900; letter-spacing: 0.08em; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate__name { font-size: 14px; font-weight: 900; line-height: 1.2; text-align: left; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate__fee { color: var(--c-gold-strong); font-size: 11px; font-weight: 800; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate[data-availability="LOCKED"] { filter: grayscale(0.7); }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate[data-selected="true"] { transform: translateY(-4px) scale(1.03); }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate[data-selected="true"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.55) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: cm-cart-shine 900ms ease-out 1 both;
+  pointer-events: none;
+}
+@keyframes cm-cart-shine { to { transform: translateX(120%); } }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate[data-pop="true"] { animation: cm-cart-jelly 480ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes cm-cart-jelly { 0% { transform: translateY(-4px) scale(1.12, 0.9); } 55% { transform: translateY(-4px) scale(0.98, 1.06); } 100% { transform: translateY(-4px) scale(1.03); } }
+
+/* The grid toggle: every card at once, the globe put away. */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"]:is([data-gate-presentation="ACCESSIBILITY_FALLBACK"], [data-gate-presentation="LOW_CAPABILITY_FALLBACK"]) .cm-vs2-body--gate {
+  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-areas: "world" "visor" "carousel";
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"]:is([data-gate-presentation="ACCESSIBILITY_FALLBACK"], [data-gate-presentation="LOW_CAPABILITY_FALLBACK"]) .cm-vs2-gate3d__bar { position: static; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"]:is([data-gate-presentation="ACCESSIBILITY_FALLBACK"], [data-gate-presentation="LOW_CAPABILITY_FALLBACK"]) .cm-vs2-body--gate > .cm-vs2-preview { grid-area: visor; margin: 0; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"]:is([data-gate-presentation="ACCESSIBILITY_FALLBACK"], [data-gate-presentation="LOW_CAPABILITY_FALLBACK"]) .cm-vs2-body--gate > .cm-vs2-gate-fallback { overflow-y: auto; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"]:is([data-gate-presentation="ACCESSIBILITY_FALLBACK"], [data-gate-presentation="LOW_CAPABILITY_FALLBACK"]) .cm-vs2-gates {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  overflow: visible;
+}
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"][data-gate-presentation$="FALLBACK"] .cm-vs2-gate3d[hidden] + .cm-vs2-gate-fallback { grid-row: 1 / -1; }
+
+/* Short landscape phones: globe left with its visor, cartridges on the right. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-areas: "world carousel";
+  }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > .cm-vs2-gate-fallback { overflow-y: auto; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gates { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); overflow: visible; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > .cm-vs2-preview { grid-template-columns: 48px minmax(0, 1fr) auto; padding: 6px 10px 6px 14px; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__image { width: 48px; height: 34px; }
+}
+:root[data-motion="reduced"] body .cm-vs2-root[data-gate-layout="HOLO_NAV_R1"] :is(.cm-vs2-gate3d__node-index, .cm-vs2-gate, .cm-vs2-preview) { animation: none !important; }
+:root[data-motion="reduced"] body .cm-vs2-root[data-gate-layout="HOLO_NAV_R1"] :is(.cm-vs2-gate, .cm-vs2-gate3d__node-hit)::before,
+:root[data-motion="reduced"] body .cm-vs2-root[data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__node-hit::after { animation: none !important; }
+:root[data-motion="reduced"] body .cm-vs2-root[data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__host::after { animation: none; }
+
+/* ======================================================================== *
+ * Gate entry 2026-10-27 (Owner): the loading screen is a compact dashboard
+ * (destination, time limit, a partner walking the bar); the orb is the portal
+ * core charged by the download (--portal-progress, 0..1, set by vs2Screens),
+ * and when the field is ready it splits open onto the live field
+ * ([data-breach]). Selectors outrank the ceremony's settle rule (0,3,0) so the
+ * charge keeps moving after the ceremony settles.
+ * ======================================================================== */
+@property --cm-iris { syntax: "<length>"; inherits: false; initial-value: 0px; }
+
+/* The dashboard. */
+:root body .cm-vs2-field__viewport .cm-vs2-field__loading {
+  z-index: calc(var(--z-lifecycle) + 1);
+  width: min(340px, calc(100% - 32px));
+  gap: 6px;
+  padding: 10px 14px 12px;
+  border: 3px solid #14141f;
+  border-radius: 16px;
+  background: rgba(20, 20, 31, 0.88) radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1.4px) 0 0 / 8px 8px;
+  color: #fff;
+  box-shadow: 0 5px 0 #14141f, inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+.cm-vs2-field__loading-title { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0; }
+.cm-vs2-field__loading-gate { font-size: 16px; font-weight: 900; }
+.cm-vs2-field__loading-limit { padding: 1px 8px; border-radius: 999px; background: #ffd23f; color: #14141f; font-size: 11px; font-weight: 900; }
+.cm-vs2-field__loading-limit:empty { display: none; }
+.cm-vs2-field__walk-lane { position: relative; display: block; height: 46px; margin: -2px 0 -4px; }
+.cm-load-walker { position: absolute; bottom: 0; left: 3%; display: block; height: 44px; transform: translateX(-50%); pointer-events: none; }
+.cm-load-walker canvas { display: block; height: 44px; width: auto; filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.35)); }
+:root body .cm-vs2-field__viewport .cm-vs2-field__loading-text { color: rgba(255, 255, 255, 0.85); font-size: 12px; }
+:root body .cm-vs2-field__viewport .cm-vs2-field__loading :is(.cm-vs2-field__loading-bytes, .cm-vs2-field__loading-note) { color: rgba(255, 255, 255, 0.65); font-size: 11px; }
+:root body .cm-vs2-field__viewport .cm-vs2-field__progress { height: 10px; border: 2px solid #14141f; border-radius: 999px; background: rgba(255, 255, 255, 0.12); }
+:root body .cm-vs2-field__viewport .cm-vs2-field__progress-fill { background: linear-gradient(90deg, #8a5cff, #4deed6 55%, #ffd23f); }
+/* The plate's words live in the dashboard now; the orb stands alone. */
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-cer-gate .cm-cer-plate { display: none; }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-cer-gate { margin-top: -18%; }
+/* While it loads, the way back stays in reach above the portal. */
+.cm-vs2-field:has(.cm-vs2-field__loading) .cm-vs2-hud { z-index: calc(var(--z-lifecycle) + 2); }
+
+/* The charge: two orbits that speed up and draw in, a core that brightens. */
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__orbit {
+  scale: calc(1.22 - 0.24 * var(--portal-progress, 0));
+  animation: cm-portal-orbit calc(3.2s - 2.6s * var(--portal-progress, 0)) linear infinite;
+}
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__orbit::after {
+  content: "";
+  position: absolute;
+  inset: -16px;
+  border: 2px dashed rgba(255, 210, 63, 0.55);
+  border-radius: 50%;
+  scale: calc(1.12 - 0.14 * var(--portal-progress, 0));
+  animation: cm-portal-orbit calc(4.2s - 3.2s * var(--portal-progress, 0)) linear infinite reverse;
+}
+@keyframes cm-portal-orbit { to { rotate: 360deg; } }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__core {
+  filter: brightness(calc(0.92 + 0.55 * var(--portal-progress, 0)));
+  animation: cm-portal-pulse calc(1.6s - 1.1s * var(--portal-progress, 0)) ease-in-out infinite;
+}
+@keyframes cm-portal-pulse { 50% { scale: 1.05; } }
+
+/* The breach (600 ms): draw in and crack (0-140), split and open the iris onto
+   the field (140-480), the field settles and the HUD lands (480-600). */
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] {
+  pointer-events: none;
+  -webkit-mask: radial-gradient(circle at 50% 41%, transparent var(--cm-iris), #000 calc(var(--cm-iris) + 2px));
+  mask: radial-gradient(circle at 50% 41%, transparent var(--cm-iris), #000 calc(var(--cm-iris) + 2px));
+  animation: cm-iris-open 900ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+@keyframes cm-iris-open { 0%, 30% { --cm-iris: 0px; opacity: 1; } 84% { --cm-iris: 110vmax; opacity: 1; } 100% { --cm-iris: 150vmax; opacity: 0; } }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__portal { animation: cm-orb-breach 900ms cubic-bezier(0.6, 0, 0.3, 1) forwards; }
+@keyframes cm-orb-breach { 0% { transform: scale(1); filter: brightness(1); } 12% { transform: scale(0.9) translateX(-3px); } 18% { transform: scale(0.82) translateX(3px); filter: brightness(1.6); } 26% { transform: scale(0.76); filter: brightness(2.2); } 32% { transform: scale(1.18); filter: brightness(2.6); } 84% { transform: scale(6); opacity: 0.9; } 100% { transform: scale(7); opacity: 0; } }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__core { background: transparent; box-shadow: none; animation: none; }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__core::before,
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__core::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, #ffffff 0%, #fff3bf 38%, #b98cff 100%);
+  opacity: 0;
+}
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__core::before { clip-path: inset(0 0 52% 0); animation: cm-orb-half-up 900ms cubic-bezier(0.6, 0, 0.3, 1) forwards; }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__core::after { clip-path: inset(52% 0 0 0); animation: cm-orb-half-down 900ms cubic-bezier(0.6, 0, 0.3, 1) forwards; }
+@keyframes cm-orb-half-up { 0%, 30% { opacity: 1; transform: none; } 84% { opacity: 0.6; transform: translateY(-46%); } 100% { opacity: 0; transform: translateY(-60%); } }
+@keyframes cm-orb-half-down { 0%, 30% { opacity: 1; transform: none; } 84% { opacity: 0.6; transform: translateY(46%); } 100% { opacity: 0; transform: translateY(60%); } }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__portal::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: calc(50% - 1.5px);
+  height: 3px;
+  border-radius: 2px;
+  background: #fffbe6;
+  box-shadow: 0 0 12px #fff3bf, 0 0 24px #ffd23f;
+  animation: cm-orb-crack 900ms ease-out forwards;
+}
+@keyframes cm-orb-crack { 0%, 12% { opacity: 0; transform: scaleX(0.2); } 28% { opacity: 1; transform: scaleX(1.25); } 60% { opacity: 0.8; } 100% { opacity: 0; } }
+.cm-vs2-field__viewport[data-entering="true"] .cm-vs2-field__canvas { animation: cm-field-land 900ms cubic-bezier(0.34, 1.3, 0.64, 1) both; }
+@keyframes cm-field-land { 0%, 30% { transform: scale(1.06); } 33% { transform: scale(1.06) translate(5px, -4px); } 36% { transform: scale(1.06) translate(-5px, 3px); } 39% { transform: scale(1.06) translate(3px, 2px); } 42%, 84% { transform: scale(1.06); } 100% { transform: scale(1); } }
+.cm-vs2-field:has(.cm-vs2-field__viewport[data-entering="true"]) .cm-vs2-hud { animation: cm-hud-drop 900ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.cm-vs2-field:has(.cm-vs2-field__viewport[data-entering="true"]) .cm-hunt-controls-panel { animation: cm-hud-rise 900ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes cm-hud-drop { 0%, 84% { opacity: 0; transform: translateY(-24px); } 100% { opacity: 1; transform: none; } }
+@keyframes cm-hud-rise { 0%, 84% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: none; } }
+:root[data-motion="reduced"] .cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage :is(.cm-cer-gate__orbit, .cm-cer-gate__core) { animation: none; }
+:root[data-motion="reduced"] .cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__orbit::after { animation: none; }
+
+/* ======================================================================== *
+ * Hunt visor 2026-10-27 (Owner): 85% of the field stays clear. An armoured
+ * gate-and-clock tag top left, the way back top right, a target capsule that
+ * opens into a card when something is picked, a caption-weight hint, and the
+ * hand / rope trigger dock. Rope primed frames the field like a scope; a
+ * collectable target makes the hand key pulse. Theme colour from the biome.
+ * ======================================================================== */
+.cm-vs2-field { --biome: #4deed6; }
+.cm-vs2-field:has(.cm-vs2-field__viewport:is([data-biome="Volcano"], [data-biome="Desert"], [data-biome="Canyon"])) { --biome: #ff6a2b; }
+.cm-vs2-field:has(.cm-vs2-field__viewport:is([data-biome="Forest"], [data-biome="Grass"], [data-biome="Jungle"], [data-biome="Savanna"], [data-biome="Damp"])) { --biome: #6ee36a; }
+.cm-vs2-field:has(.cm-vs2-field__viewport[data-biome="Ice"]) { --biome: #8fd0ff; }
+.cm-vs2-field:has(.cm-vs2-field__viewport:is([data-biome="Factory"], [data-biome="Sewer"], [data-biome="Mine"], [data-biome="Ruins"])) { --biome: #4deed6; }
+.cm-vs2-field:has(.cm-vs2-field__viewport:is([data-biome="Oasis"], [data-biome="Seaside"], [data-biome="Crag"])) { --biome: #ffd23f; }
+
+/* Armoured gate + clock tag. */
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud__copy {
+  gap: 0;
+  padding: 6px 16px 7px 14px;
+  border: 0;
+  border-left: 5px solid var(--biome);
+  border-radius: 0;
+  background: rgba(20, 20, 31, 0.86);
+  color: #fff;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  filter: drop-shadow(0 4px 0 rgba(20, 20, 31, 0.6));
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud__gate { color: #fff; font-size: 15px; font-weight: 900; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud__companion { color: #ffd23f; font-size: 13px; font-weight: 900; letter-spacing: 0.04em; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud[data-urgent="warning"] .cm-vs2-hud__copy { border-left-color: #ffb020; animation: cm-clock-beat 1.2s ease-in-out infinite; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud[data-urgent="critical"] .cm-vs2-hud__copy { border-left-color: #ff4d5e; animation: cm-clock-beat 0.6s ease-in-out infinite; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud[data-urgent="critical"] .cm-vs2-hud__companion { color: #ff8a95; }
+@keyframes cm-clock-beat { 50% { filter: drop-shadow(0 4px 0 rgba(20, 20, 31, 0.6)) drop-shadow(0 0 8px rgba(255, 77, 94, 0.75)); } }
+
+/* The target: a quiet capsule until something is picked. */
+:root[data-theme="arcade"] body:not([data-hunt-wide]) .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-info {
+  top: 70px;
+  justify-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target:not([data-selected="true"]) {
+  width: auto;
+  padding: 4px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(20, 20, 31, 0.6);
+  box-shadow: none;
+  opacity: 0.85;
+  pointer-events: none;
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target:not([data-selected="true"]) .cm-vs2-target__name { color: #fff; font-size: 12px; font-weight: 800; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target:not([data-selected="true"]) .cm-vs2-target__name::before { content: "\25CE  "; color: var(--biome); }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target[data-selected="true"] {
+  width: min(300px, 100%);
+  padding: 10px 14px;
+  border: 3px solid #14141f;
+  border-top: 5px solid var(--biome);
+  border-radius: 16px;
+  background: #fff8e6;
+  color: #14141f;
+  box-shadow: 0 5px 0 #14141f;
+  transform-origin: 50% 0;
+  animation: cm-target-open 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes cm-target-open { from { opacity: 0.4; transform: scale(0.6, 0.4); } }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target[data-selected="true"] .cm-vs2-target__name { color: #14141f; font-size: 16px; font-weight: 900; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target[data-selected="true"] .cm-vs2-target__stats { color: #5a5a6e; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target[data-selected="true"] .cm-vs2-target__stats dd { color: #14141f; }
+
+/* Caption-weight hint: no white pill, hard shadowed words. */
+:root[data-theme="arcade"] body:not([data-hunt-wide]) .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-field__hint {
+  bottom: calc(118px + max(0px, env(safe-area-inset-bottom)));
+  padding: 3px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(20, 20, 31, 0.42);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  text-shadow: 0 2px 0 #14141f, 0 0 6px rgba(0, 0, 0, 0.6);
+  box-shadow: none;
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-field__hint[data-kind="notice"] { background: rgba(255, 77, 94, 0.85); text-shadow: 0 2px 0 #14141f; }
+
+/* Trigger dock: big keys, 6 px slab, 45 ms press. */
+:root[data-theme="arcade"] body:not([data-hunt-wide]) .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools { gap: 14px; bottom: max(14px, env(safe-area-inset-bottom)); }
+:root[data-theme="arcade"] body:not([data-hunt-wide]) .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action { flex: 0 0 84px; min-height: 84px; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action {
+  border: 3px solid #14141f;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.7), 0 6px 0 var(--key-shade);
+  transition: transform 160ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 160ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action:active:not(:disabled) { transform: translateY(5px); box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.7), 0 1px 0 var(--key-shade); transition-duration: 45ms; }
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-pop="true"] { animation: cm-trigger-jelly 380ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes cm-trigger-jelly { 0% { scale: 1.12 0.88; } 55% { scale: 0.96 1.05; } 100% { scale: 1 1; } }
+/* Rope primed: locked down, a neon outline and a lit indicator. */
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="ROPE"][aria-pressed="true"] {
+  transform: translateY(3px);
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.7), 0 3px 0 var(--key-shade), 0 0 0 4px #ff9f1c, 0 0 18px rgba(255, 159, 28, 0.85);
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="ROPE"][aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border: 2px solid #14141f;
+  border-radius: 50%;
+  background: #ffd23f;
+  box-shadow: 0 0 8px #ffd23f;
+}
+/* A target can be collected: the hand key calls for it. */
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="HAND"][data-ready="true"]::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 3px solid #3ddc84;
+  border-radius: 18px;
+  pointer-events: none;
+  animation: cm-tool-pulse 800ms cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+
+/* Rope scope: four corner brackets over the field, never in the way. */
+.cm-vs2-field__viewport[data-tool="ROPE"]::after {
+  content: "";
+  position: absolute;
+  inset: 84px 14px 128px;
+  z-index: 3;
+  pointer-events: none;
+  --c: rgba(255, 210, 63, 0.9);
+  background:
+    linear-gradient(var(--c), var(--c)) top left / 34px 3px, linear-gradient(var(--c), var(--c)) top left / 3px 34px,
+    linear-gradient(var(--c), var(--c)) top right / 34px 3px, linear-gradient(var(--c), var(--c)) top right / 3px 34px,
+    linear-gradient(var(--c), var(--c)) bottom left / 34px 3px, linear-gradient(var(--c), var(--c)) bottom left / 3px 34px,
+    linear-gradient(var(--c), var(--c)) bottom right / 34px 3px, linear-gradient(var(--c), var(--c)) bottom right / 3px 34px;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 0 4px rgba(255, 159, 28, 0.8));
+  animation: cm-scope-in 260ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes cm-scope-in { from { opacity: 0; transform: scale(1.06); } }
+body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 84px 14px 18px; }
+/* A catch lands: the field jolts once. */
+.cm-vs2-field__viewport[data-shake="true"] .cm-vs2-field__canvas { animation: cm-field-shake 320ms cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+@keyframes cm-field-shake { 20% { translate: -4px 2px; } 40% { translate: 4px -2px; } 60% { translate: -3px 1px; } 80% { translate: 2px 0; } }
+:root[data-motion="reduced"] .cm-vs2-root[data-screen="HUNT_FIELD"] :is(.cm-vs2-hud__copy, .cm-vs2-target, .cm-hunt-tools .cm-vs2-action, .cm-vs2-field__canvas) { animation: none !important; }
+:root[data-motion="reduced"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action::before,
+:root[data-motion="reduced"] .cm-vs2-field__viewport::after { animation: none !important; }
+
+/* ======================================================================== *
+ * HD-2D ambience (ambienceLayer.js): diorama vignette, a light edge tinted by
+ * the biome, top and bottom miniature falloff, and the particle canvas.
+ * Gradients only (no blur), pointer-events none, under the HUD.
+ * ======================================================================== */
+.cm-ambience { position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; }
+.cm-ambience::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(14, 12, 28, 0.32), transparent 8%, transparent 92%, rgba(14, 12, 28, 0.36)),
+    radial-gradient(120% 95% at 50% 46%, transparent 58%, rgba(14, 12, 28, 0.42) 100%);
+}
+.cm-ambience::after { content: ""; position: absolute; inset: 0; mix-blend-mode: soft-light; }
+.cm-ambience[data-theme="ember"]::after { background: radial-gradient(90% 60% at 50% 110%, rgba(255, 96, 32, 0.55), transparent 70%), radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(255, 80, 30, 0.3)); }
+.cm-ambience[data-theme="motes"]::after { background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(80, 220, 110, 0.32)); }
+.cm-ambience[data-theme="snow"]::after { background: radial-gradient(120% 90% at 50% 50%, transparent 50%, rgba(120, 180, 255, 0.42)), linear-gradient(180deg, rgba(200, 230, 255, 0.25), transparent 30%); }
+.cm-ambience[data-theme="data"]::after { background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(60, 220, 255, 0.34)); }
+.cm-ambience[data-theme="sun"]::after { background: radial-gradient(80% 60% at 30% -10%, rgba(255, 220, 140, 0.45), transparent 70%), radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(255, 200, 120, 0.22)); }
+.cm-ambience__particles { position: absolute; inset: 0; width: 100%; height: 100%; }
+:root[data-quality="saver"] .cm-ambience__particles { display: none; }
+
+/* Ranch loading 2026-10-27 (Owner): a bar with a partner walking it, one line
+   of small words; the step list stays for assistive technology only. */
+.cm-load-progress__walk-lane { position: relative; display: block; order: -1; height: 46px; margin-bottom: -6px; }
+:root body .cm-load-progress__steps { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+:root[data-theme="arcade"] .cm-load-progress__bar { height: 10px; border: 2px solid #14141f; background: rgba(255, 255, 255, 0.5); }
+:root[data-theme="arcade"] .cm-load-progress__fill { background: linear-gradient(90deg, #8a5cff, #4deed6 55%, #ffd23f); }
+:root body .cm-load-progress__meta { margin: 0; font-size: 11px; }
+
+/* ======================================================================== *
+ * Ranch status bar 2026-10-27 (Owner): on a phone the wallet stays on the
+ * calendar's row. Chips size to their words; the text-size setting grows this
+ * row at most 1.1x so 130% never pushes the wallet onto a second line; the
+ * transient save key floats under the wallet instead of reserving row width.
+ * (body:has(#cm-root) matches the arcade wallet rule's weight.)
+ * ======================================================================== */
+@media (max-width: 600px) {
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] { --sb-scale: min(var(--text-scale, 1), 1.1); flex-wrap: nowrap; align-items: center; gap: 5px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__season, .cm-status-bar__day, .cm-status-bar__time) {
+    flex: 0 0 auto; padding: 3px 9px; font-size: calc(13px * var(--sb-scale)); line-height: 1.35; white-space: nowrap;
+  }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__day :is(.cm-status-bar__day-word, .cm-status-bar__day-number) { font-size: inherit; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__extras { flex: 0 1 auto; min-width: 0; margin-inline-start: auto; flex-wrap: nowrap; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__currencies { flex: 0 1 auto; width: auto; min-width: 0; gap: 6px; padding: 0 10px 0 4px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__bits, .cm-status-bar__diamond) { flex: 0 1 auto; width: auto; min-width: 0; min-height: 44px; gap: 3px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__compact-value { font-size: max(14px, calc(13px * var(--sb-scale))); }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__currency-icon { flex-basis: 18px; width: 18px; height: 18px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save-slot { position: absolute; right: max(10px, var(--safe-right)); top: calc(100% + 6px); width: 44px; }
+}
+@media (max-width: 400px) {
+  /* Narrow phones: "8 日" instead of "第 8 日", tighter chips and coins. */
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] { gap: 4px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__day .cm-status-bar__day-word:first-child { display: none; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__season, .cm-status-bar__day, .cm-status-bar__time) { padding: 3px 5px; font-size: calc(12.5px * var(--sb-scale)); }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__currencies { gap: 5px; padding: 0 8px 0 3px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__compact-value { font-size: 14px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__currency-icon { flex-basis: 16px; width: 16px; height: 16px; }
+}
+
+/* Fit pass 2026-10-27 (Owner): no HUD piece covers another at any text size.
+   The ranch hint keeps clear of the 44px zoom key on its right. */
+:root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-hint {
+  max-width: min(560px, calc(100% - 16px - 64px - var(--safe-left) - var(--safe-right)));
+}
+/* The globe's drag caption sat on the pins: it shows briefly, then gets out of the way. */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__hint { pointer-events: none; animation: cm-globe-hint 4s ease-out forwards; }
+@keyframes cm-globe-hint { 0%, 75% { opacity: 0.8; } 100% { opacity: 0; visibility: hidden; } }
+:root[data-motion="reduced"] body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__hint { display: none; }
+/* An open toolbar sheet owns that corner: the ranch's zoom key and hint step aside. */
+:root body:has(.cm-toolbar__menu:not([hidden])) :is(.cm-ranch-zoom, .int-rh2-hint) { visibility: hidden; }
+/* Narrow phones: the visor's name and costs shrink to one line each instead of
+   cutting to "請選…"; the four size tabs share one row. */
+@media (max-width: 400px) {
+  :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__name { font-size: 14px; white-space: nowrap; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs { gap: 1px 6px; font-size: 10px; }
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filters { gap: 4px; }
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filter { padding: 0 6px; font-size: 12px; }
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filter[data-count]::after { margin-inline-start: 4px; padding: 0 4px; font-size: 10px; }
+}
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filters { gap: 5px; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filter { flex: 1 1 auto; justify-content: center; min-width: max-content; padding: 0 8px; font-size: 12.5px; }
+
+/* Below the supported 360px phone row, preserve readable wallet controls. */
+@media (max-width: 359px) {
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] { flex-wrap: wrap; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__extras { flex: 0 0 100%; justify-content: flex-end; }
+}
+
+/* Letters and day changes (Owner 2026-10-27, iPhone): the lifecycle overlay lifts
+   the whole ranch root above the HUD (a fixed root is its own stacking context),
+   so the 3D ranch used to paint over half the dock. The dock and status bar,
+   which cannot be used under that modal anyway, fade out until it closes. */
+:root body:has(.int-rh2-lifecycle:not([hidden])) :is(.cm-toolbar, .cm-status-bar) { opacity: 0; visibility: hidden; transition: opacity 160ms ease-out, visibility 0s linear 160ms; }
+:root body :is(.cm-toolbar, .cm-status-bar) { transition: opacity 160ms ease-out; }
+
+/* Breach, made unmistakable (Owner 2026-10-27, iPhone): 900 ms — the orb charges
+   and squeezes, a white-gold flash and a shockwave ring burst from it with a
+   short shake, then the iris (glowing rim) opens onto the field. */
+.cm-vs2-field__viewport[data-entering="true"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: calc(var(--z-lifecycle) + 3);
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 41%, rgba(255, 255, 255, 0.98) 0%, rgba(255, 243, 191, 0.8) 16%, rgba(185, 140, 255, 0.4) 36%, transparent 62%);
+  animation: cm-breach-flash 900ms ease-out forwards;
+}
+@keyframes cm-breach-flash { 0%, 22% { opacity: 0; transform: scale(0.4); } 32% { opacity: 1; transform: scale(1); } 55% { opacity: 0.45; transform: scale(1.7); } 100% { opacity: 0; transform: scale(2.6); } }
+.cm-vs2-field:has(.cm-vs2-field__viewport[data-entering="true"])::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 41%;
+  z-index: calc(var(--z-lifecycle) + 4);
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  border: 5px solid #fff3bf;
+  border-radius: 50%;
+  box-shadow: 0 0 18px #ffd23f, inset 0 0 18px #b98cff;
+  pointer-events: none;
+  animation: cm-breach-ring 900ms cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+@keyframes cm-breach-ring { 0%, 28% { opacity: 0; transform: scale(0.3); } 34% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(18); border-width: 1px; } }
+:root[data-motion="reduced"] .cm-vs2-field__viewport[data-entering="true"]::before,
+:root[data-motion="reduced"] .cm-vs2-field:has(.cm-vs2-field__viewport[data-entering="true"])::after { display: none; }
+
+/* ======================================================================== *
+ * Management and encyclopedia pages 2026-10-27 (Owner): the roster, tamer
+ * info, schedule and encyclopedia stop reading like receipts. Every id, class,
+ * data-* hook and button text stays; the arcade skin regroups what is there.
+ * ======================================================================== */
+
+/* -- Page titles: bright on the dotted purple, never dark on dark. -- */
+:root[data-theme="arcade"] body :is(.cm-digimon-kicker, .cm-tamer-kicker, .cm-schedule-kicker, .cm-help-kicker, .cm-championship-kicker) {
+  color: var(--ax-yellow);
+  text-shadow: 0 2px 0 #0e101a;
+}
+:root[data-theme="arcade"] body :is(.cm-digimon-title, .cm-tamer-title, .cm-schedule-title, .cm-help-title, .cm-championship-title) {
+  color: #fff;
+  text-shadow: 0 2px 0 #0e101a, 0 0 16px rgba(255, 210, 63, 0.35);
+}
+:root[data-theme="arcade"] body .cm-screen-lede { color: #fff; text-shadow: 0 1px 0 #0e101a; }
+
+/* -- Bottom dock: the Back key sits on a solid bar, so no row slides under it. -- */
+:root[data-theme="arcade"] body .cm-screen-footer {
+  z-index: 5;
+  padding-top: 18px;
+  background: linear-gradient(180deg, rgba(14, 16, 26, 0) 0, rgba(14, 16, 26, 0.88) 14px, #16142a 30px);
+  border-top: 0;
+}
+:root[data-theme="arcade"] body :is(.cm-digimon-root, .cm-schedule-root, .cm-tamer-root, .cm-help-root, .cm-championship-root) { scroll-padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+
+/* -- 1) Ranch inspector: a compact handheld nameplate (portrait phones). -- */
+@media (max-width: 600px) {
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "portrait copy actions" "vitals vitals vitals";
+    row-gap: 6px;
+    column-gap: 8px;
+    padding: 8px 8px 9px;
+    border-radius: 16px;
+    background: var(--ax-paper) radial-gradient(rgba(20, 20, 31, 0.07) 1px, transparent 1.4px) 0 0 / 7px 7px;
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.85), 0 5px 0 var(--ax-ink);
+  }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__portrait { width: 52px; height: 52px; border-radius: 12px; box-shadow: inset 0 3px 6px rgba(20, 20, 31, 0.22); }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__name { font-size: 17px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__species { padding: 1px 6px; font-size: 10px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__place { padding: 1px 8px; font-size: 12px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__place::before { content: "\25C9"; margin-right: 4px; color: #ff6b4a; font-size: 10px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__actions { gap: 6px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close) {
+    min-width: 38px;
+    min-height: 38px;
+    border-radius: 10px;
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 4px 0 var(--ax-ink);
+  }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close):active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ax-ink); }
+  /* HP, TP and capacity share one row: the card is two rows tall. */
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion > .int-rh2-vitals {
+    grid-template-columns: max-content minmax(0, 1fr) max-content minmax(0, 1fr) max-content max-content;
+    column-gap: 6px;
+    row-gap: 5px;
+    align-items: center;
+  }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__label { font-size: 11px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__num { font-size: 11px; padding: 0 5px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar { height: 20px; border-width: 2px; border-radius: 999px; }
+}
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar::before {
+  background:
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.22) 0 4px, transparent 4px 9px),
+    linear-gradient(rgba(255, 255, 255, 0.5) 0 32%, var(--meter) 32%);
+  transition: width 640ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__num {
+  color: #fff;
+  -webkit-text-stroke: 3px #14141f;
+  paint-order: stroke fill;
+  font-weight: 900;
+}
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals > dd[data-stat="capacity"] .int-rh2-vitals__num { -webkit-text-stroke: 0; color: var(--ax-ink); }
+/* Switching partners: a small spring on the card. */
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion[data-open="true"] { animation: cm-nameplate-in 380ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes cm-nameplate-in { from { opacity: 0; transform: translateX(-50%) translateY(14px) scale(0.96); } }
+@media (min-width: 601px) { :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion[data-open="true"] { animation: cm-panel-in 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both; } }
+
+/* -- 2) Roster: a cartridge switcher and a bento of stats. -- */
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-item__button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 54px;
+  padding: 6px 10px 6px 6px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 14px;
+  background: var(--ax-paper);
+  color: var(--ax-ink);
+  text-align: start;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.85), 0 4px 0 var(--ax-ink);
+  transition: transform 200ms var(--ax-spring), box-shadow 200ms var(--ax-spring), background 120ms;
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-item__button:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-item__button[aria-pressed="true"] {
+  background: #fff3c4;
+  transform: translateY(-2px);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.85), 0 0 0 3px var(--ax-yellow), 0 0 16px rgba(255, 210, 63, 0.65), 0 6px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-item__thumb {
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 10px;
+  background: #e9f6ff radial-gradient(circle at 50% 70%, rgba(77, 238, 214, 0.35), transparent 70%);
+  object-fit: contain;
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-item__name { min-width: 0; overflow: hidden; font-size: 15px; font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
+
+.cm-digimon-stat { display: contents; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-detail {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 10px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 18px;
+  background: var(--ax-paper) radial-gradient(rgba(20, 20, 31, 0.06) 1px, transparent 1.4px) 0 0 / 8px 8px;
+  box-shadow: 0 5px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 6px 9px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 3px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat > :is(dt, dd) { margin: 0; padding: 0; border: 0; text-align: start; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat > dt { color: #6a6280; font-size: 11px; font-weight: 800; letter-spacing: 0.04em; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat > dd { color: var(--ax-ink); font-size: 15px; font-weight: 900; overflow-wrap: anywhere; }
+/* Identity badges first (three per row; name and species two per row). */
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="identity"] { grid-column: span 3; order: 0; background: #f1ecff; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat:is([data-row="nickname"], [data-row="species"]) { grid-column: span 6; background: #fff3c4; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat:is([data-row="nickname"], [data-row="species"]) > dd { font-size: 17px; }
+/* Vitals as glossy troughs. */
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="vital"] { grid-column: span 4; order: 1; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="vital"] > dd {
+  padding: 1px 8px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 999px;
+  color: #fff;
+  -webkit-text-stroke: 3px #14141f;
+  paint-order: stroke fill;
+  font-size: 13px;
+  text-align: right;
+  background: #2a2740;
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat:is([data-row="HP"], [data-row="TP"]) > dd {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.4) 0 34%, transparent 34%),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.18) 0 4px, transparent 4px 9px),
+    linear-gradient(90deg, var(--stat-fill) 0 calc(var(--fill, 1) * 100%), #2a2740 0);
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="HP"] { --stat-fill: #3ddc84; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="TP"] { --stat-fill: #4d7cff; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="size"] > dd { background: #a259ff; }
+/* Combat 2x2: a colour tab, the label, the number large on the right. */
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="combat"] {
+  grid-column: span 6;
+  order: 2;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-left-width: 8px;
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="combat"] > dd { font-size: 22px; line-height: 1; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="attack"] { border-left-color: #ff6b4a; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="def"] { border-left-color: #4dabff; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="wiz"] { border-left-color: #b98cff; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="spd"] { border-left-color: #3ddc84; }
+/* Skills side by side, then the record 1x3. */
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="skill"] { grid-column: span 6; order: 3; background: #e9fbff; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="record"] { grid-column: span 4; order: 4; align-items: center; text-align: center; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="record"] > :is(dt, dd) { text-align: center; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="record"] > dd { font-size: 18px; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-detail > :is(.cm-digimon-resistance, .cm-digimon-untraced, .cm-digimon-empty) { grid-column: 1 / -1; order: 5; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-resistance { padding: 8px 10px; border: 2px solid var(--ax-ink); border-radius: 12px; background: #fff; box-shadow: 0 3px 0 var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-resistance__bar { display: flex; gap: 3px; height: 14px; padding: 2px; border: 2px solid var(--ax-ink); border-radius: 999px; background: #2a2740; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-resistance__segment { border-radius: 999px; box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.45); }
+/* Actions: arcade keys; disabled ones are dark slots with readable text. */
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-controls { display: flex; gap: 8px; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-control {
+  flex: 1 1 0;
+  min-height: 46px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 12px;
+  background: var(--ax-white);
+  color: var(--ax-ink);
+  font-weight: 900;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.85), 0 4px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-control:disabled {
+  background: #2a2740;
+  color: #d9d3ee;
+  border-color: #0e101a;
+  box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.35);
+  opacity: 1;
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-controls-note {
+  align-self: flex-start;
+  margin: 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(14, 16, 26, 0.78);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* -- 3) Tamer info: a holo licence card, three progress tiles, a stats matrix. -- */
+.cm-tamer-field { display: contents; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-fields {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 10px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 18px;
+  background: var(--ax-paper) radial-gradient(rgba(20, 20, 31, 0.06) 1px, transparent 1.4px) 0 0 / 8px 8px;
+  box-shadow: 0 5px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 3px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field > :is(dt, dd) { margin: 0; padding: 0; border: 0; text-align: start; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field > dt { color: #6a6280; font-size: 11px; font-weight: 800; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field > dd { color: var(--ax-ink); font-size: 17px; font-weight: 900; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+/* The licence: name across the top on a holo face, rank / licence / bits below. */
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-group="card"] {
+  grid-column: span 2;
+  order: 0;
+  background: linear-gradient(135deg, #fff3c4 0%, #e6dcff 48%, #c9f6ff 100%);
+}
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-field-id="name"] { grid-column: 1 / -1; padding: 12px 14px; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-field-id="name"]::after {
+  content: "TAMER ID";
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--ax-ink);
+  color: var(--ax-yellow);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-field-id="name"] > dd { font-size: 26px; text-shadow: 0 2px 0 rgba(255, 255, 255, 0.8); }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-field-id="rank"] > dd { color: #6b3df0; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-field-id="money"] > dd { color: #8a5a00; font-size: clamp(13px, 3.8vw, 17px); white-space: nowrap; overflow-wrap: normal; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-field-id="money"] > dd::before { content: "\25CF"; margin-right: 3px; color: #ffb400; font-size: 0.8em; }
+/* Completion: three tiles with a mini meter. */
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-group="progress"] { grid-column: span 2; order: 1; align-items: center; text-align: center; padding-bottom: 14px; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-group="progress"] > :is(dt, dd) { text-align: center; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-group="progress"] > dd { font-size: 20px; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-group="progress"]::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 6px;
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4deed6 0 calc(var(--fill, 0) * 100%), #2a2740 0);
+}
+/* Record and size: a two-column matrix. */
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-group="stats"] { grid-column: span 3; order: 2; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-field-id="cage"] { grid-column: 1 / -1; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field > dd[data-state="UNSOURCED"] { color: #9a93b0; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-note { margin: 0; padding: 4px 12px; border-radius: 12px; background: rgba(14, 16, 26, 0.7); color: #fff; font-size: 12px; }
+
+/* -- 4) Schedule: day cards and three ticket states. -- */
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-day {
+  position: relative;
+  padding-top: 26px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 14px;
+  background: rgba(255, 248, 225, 0.92);
+  box-shadow: 0 4px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-day[data-today="true"] { background: #fff3c4; box-shadow: 0 0 0 3px var(--ax-yellow), 0 4px 0 var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-day__number {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  margin: 0;
+  padding: 2px 10px;
+  border-radius: 12px 0 10px 0;
+  background: var(--ax-ink);
+  color: var(--ax-yellow);
+  font-size: 13px;
+  font-weight: 900;
+}
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture {
+  border: 3px solid var(--ax-ink);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ax-ink);
+  font-weight: 900;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 4px 0 var(--ax-ink);
+  transition: transform 200ms var(--ax-spring), box-shadow 200ms var(--ax-spring);
+}
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ax-ink); }
+@media (hover: hover) and (pointer: fine) {
+  :root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture:not([data-locked="true"]):hover { transform: translateY(-2px) rotate(-1deg); }
+}
+/* Open to enter (or entered): warm, bright. */
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture[data-eligible-today="true"]:not([data-won="true"]) {
+  background: linear-gradient(#fff6c9, #ffe27a);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 0 0 3px rgba(255, 210, 63, 0.75), 0 4px 0 var(--ax-ink);
+}
+/* Won: honour green with a gold rim. */
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture[data-won="true"] {
+  border-color: #0f6b3c;
+  background: linear-gradient(#ebfff2, #c4f5d7);
+  color: #0b4f2c;
+  opacity: 1;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 0 0 2px #ffd23f, 0 4px 0 #0f6b3c;
+}
+/* Locked: a dim slot, clearly behind the playable ones. */
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture[data-locked="true"] {
+  border-color: rgba(20, 20, 31, 0.55);
+  background: rgba(42, 39, 64, 0.82);
+  color: #c9c3dd;
+  box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.35);
+}
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture[data-registered="true"]:not([data-won="true"]) { border-left-width: 8px; border-left-color: #ff9f1c; }
+
+/* -- 5) Encyclopedia: readable stage tabs, cartridge cards, a compact detail. -- */
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__chip {
+  border: 3px solid var(--ax-ink);
+  background: #2b3350;
+  color: #fff;
+  font-weight: 900;
+  box-shadow: 0 4px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__chip[aria-pressed="true"] { background: var(--ax-yellow); color: var(--ax-ink); }
+/* An open record no longer greys the tabs out: a light veil, no dot screen. */
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__sheet-scrim { background: rgba(14, 16, 26, 0.22); }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row {
+  position: relative;
+  overflow: hidden;
+  border: 3px solid var(--ax-ink);
+  border-radius: 16px;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 5px 0 var(--ax-ink);
+  transition: transform 220ms var(--ax-spring), box-shadow 220ms var(--ax-spring);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row::after {
+  content: "";
+  position: absolute;
+  inset: -40% auto -40% -60%;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: translateX(0) rotate(12deg);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  :root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row:hover { transform: translateY(-3px); }
+  :root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row:hover::after { animation: cm-card-sheen 700ms ease-out; }
+}
+@keyframes cm-card-sheen { 0% { opacity: 1; transform: translateX(0) rotate(12deg); } 100% { opacity: 0; transform: translateX(420%) rotate(12deg); } }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row .cm-vs2-shop__meta {
+  display: inline-block;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--ax-ink);
+  color: var(--ax-yellow);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+/* Detail: a portrait plinth beside the name, then story, traits and the evolution workbench in view. */
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail {
+  grid-template-columns: minmax(150px, 42%) minmax(0, 1fr);
+  align-content: start;
+  column-gap: 12px;
+  row-gap: 6px;
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail > :not(.cm-dex-hero) { grid-column: 1 / -1; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail > :is(.cm-vs2-database__detail-title, .cm-vs2-shop__meta) { grid-column: 2; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail > .cm-dex-hero {
+  /* The stage keeps its 24 px padding and border-free box (the portrait review
+     measures both); the frame is a box-shadow, which does not change the box. */
+  grid-column: 1;
+  grid-row: 1 / span 4;
+  width: 100%;
+  height: clamp(160px, 24vh, 210px);
+  margin: 0;
+  border-radius: 16px;
+  background: radial-gradient(ellipse 60% 16% at 50% 90%, rgba(255, 210, 63, 0.75), transparent 70%), radial-gradient(circle at 50% 40%, #fff 0%, #ffe9c2 70%);
+  box-shadow: 0 0 0 3px var(--ax-ink), inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 6px 0 var(--ax-ink);
+}
+
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail-title { align-self: end; margin: 0; font-size: 24px; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail > .cm-vs2-shop__meta {
+  justify-self: start;
+  margin: 0;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--ax-ink);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail > .cm-vs2-shop__meta + .cm-vs2-shop__meta { background: #3ddc84; color: var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] :is(.cm-dex-profile, .cm-dex-data) {
+  padding: 10px 12px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 3px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-trait-tag { padding: 3px 10px; border: 2px solid var(--ax-ink); border-radius: 999px; background: #e9fbff; font-weight: 800; }
+/* Evolution workbench: linked slots with a breathing arrow. */
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-routes {
+  padding: 10px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 16px;
+  background: #1f2140 radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.4px) 0 0 / 8px 8px;
+  box-shadow: 0 4px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-routes__heading { margin: 0 0 8px; color: var(--ax-yellow); text-shadow: 0 2px 0 #0e101a; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] :is(.cm-dex-routes__source, .cm-dex-routes__target) {
+  border: 2px solid var(--ax-ink);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 3px 0 #0e101a;
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-routes__source { position: relative; color: var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-routes__source::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -12px;
+  width: 10px;
+  height: 4px;
+  border-radius: 2px;
+  background: #4deed6;
+  box-shadow: 0 0 8px #4deed6;
+  animation: cm-route-breathe 1.4s ease-in-out infinite;
+}
+@keyframes cm-route-breathe { 50% { opacity: 0.35; transform: translateX(3px); } }
+/* The conditions key: an amber arcade button; its panel opens as a raised accordion. */
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 12px;
+  background: linear-gradient(#ffe27a, #ffb83d);
+  color: var(--ax-ink);
+  font-weight: 900;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.8), 0 4px 0 var(--ax-ink);
+  transition: transform 180ms var(--ax-spring), box-shadow 180ms var(--ax-spring);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__toggle::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-right: 3px solid var(--ax-ink);
+  border-bottom: 3px solid var(--ax-ink);
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 220ms var(--ax-spring);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__toggle[aria-expanded="true"] { transform: translateY(2px); box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.8), 0 2px 0 var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__toggle[aria-expanded="true"]::after { transform: translateY(2px) rotate(-135deg); }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__panel:not([hidden]) {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 14px;
+  background: #fff8e1 repeating-linear-gradient(45deg, rgba(20, 20, 31, 0.04) 0 6px, transparent 6px 12px);
+  color: var(--ax-ink);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 5px 0 var(--ax-ink);
+  transform-origin: top center;
+  animation: cm-accordion-open 300ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes cm-accordion-open { from { opacity: 0; transform: scaleY(0.6) translateY(-6px); } }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__list { display: grid; gap: 6px; margin: 6px 0; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__row > dt { font-weight: 900; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__row > dd { margin: 0; padding: 1px 10px; border-radius: 999px; background: var(--ax-ink); color: var(--ax-yellow); font-weight: 900; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__notice { margin: 4px 0; color: #5b5470; font-size: 12px; }
+:root[data-motion="reduced"] body :is(.cm-dex-conditions__panel, .int-rh2-companion) { animation: none !important; }
+:root[data-motion="reduced"] body .cm-dex-routes__source::after { animation: none !important; }
+/* Capacity on the nameplate is a value, not a meter: a purple pill with white text. */
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals > dd[data-stat="capacity"] .int-rh2-vitals__bar { background: #a259ff; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals > dd[data-stat="capacity"] .int-rh2-vitals__num { color: #fff; -webkit-text-stroke: 0; padding: 0 8px; }
+/* Short landscape phones: the side card keeps every key in view (no inner scroll). */
+@media (max-height: 500px) {
+  :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion { row-gap: 6px; padding: 8px; }
+  :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion__portrait { width: 48px; height: 48px; }
+  :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion__name { font-size: 15px; }
+  :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion__actions { gap: 5px; }
+  :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close) { min-width: 36px; min-height: 36px; border-radius: 10px; }
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-control { padding: 0 8px; font-size: 14px; white-space: nowrap; }

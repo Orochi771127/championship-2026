@@ -15,7 +15,7 @@ export function mountMedalThreePresentation({host,src,presentationProfile,onStat
   const runtime=createMedalFrameRuntime({
     requestFrame:fn=>win.requestAnimationFrame(fn),cancelFrame:id=>win.cancelAnimationFrame(id),
     draw(pose){
-      if(disposed||failed||!ready||!renderer||!host.isConnected)return;
+      if(disposed||failed||!ready||!renderer||!host.isConnected||doc.hidden)return;
       try {
         medal.group.rotation.set(pose.x,pose.y,0);renderer.render(scene,camera);renderCount++;
         if(renderer.domElement.hidden){renderer.domElement.hidden=false;onState('ready');}

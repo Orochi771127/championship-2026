@@ -9,6 +9,7 @@ import { cappedPixelRatio, currentQuality } from "../presentationPreferences.js"
 
 import * as THREE from "../../../../node_modules/three/build/three.module.js";
 import { GATE_WORLD_REGIONS, gateWorldPoint, gateWorldRegion, sampleGateWorld } from './gateWorldLayout.js';
+import { startGateFocusTween } from './gateFocusTween.js';
 
 export function createGateWorldGeometry({ night = false, detail = true } = {}) {
   const geometry = new THREE.SphereGeometry(2.08, detail ? 160 : 96, detail ? 96 : 64);
@@ -191,6 +192,18 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
   rimLight.position.set(-4.2, -1.4, 3.8);
   scene.add(rimLight);
 
+  // Owner 2026-10-27 holo navigator: a thin atmosphere glow around the globe,
+  // cyan at the limb warming to amber at the top. It stays with the camera.
+  const atmosphere = new THREE.Mesh(new THREE.SphereGeometry(2.46, 48, 32), new THREE.ShaderMaterial({
+    name: "PRODUCT_AUTHORED_ATMOSPHERE_GLOW",
+    transparent: true, depthWrite: false, side: THREE.BackSide, blending: THREE.AdditiveBlending,
+    uniforms: { limb: { value: new THREE.Color(0x52e3ff) }, crown: { value: new THREE.Color(0xffc45a) } },
+    vertexShader: "varying vec3 vNormal; void main(){ vNormal = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }",
+    fragmentShader: "uniform vec3 limb; uniform vec3 crown; varying vec3 vNormal; void main(){ float glow = pow(max(0.0, 0.74 - dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.6); vec3 tint = mix(limb, crown, smoothstep(-0.1, 0.9, vNormal.y)); gl_FragColor = vec4(tint * glow * 1.6, glow); }"
+  }));
+  atmosphere.name = "PRODUCT_AUTHORED_ATMOSPHERE";
+  scene.add(atmosphere);
+
   const worldRoot = new THREE.Group();
   worldRoot.name = "world_root";
   worldRoot.rotation.set(-0.16, 0.42, -0.04);
@@ -286,7 +299,7 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     overlay.append(button);
     // Wetland pools and the quarry entrance sit below their inland markers.
     const preferLabelAbove = ['wetland', 'quarry'].includes(region.landmark);
-    nodeRecords.push({ gateId: gate.gateId, parent, node, ring, button, nameLabel, preferLabelAbove });
+    nodeRecords.push({ gateId: gate.gateId, parent, node, ring, button, nameLabel, preferLabelAbove, direction: direction.clone().normalize() });
   });
 
   const raycaster = new THREE.Raycaster();
@@ -296,6 +309,31 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
   const worldPosition = new THREE.Vector3();
   const cameraDirection = new THREE.Vector3();
   let disposed = false;
+  let cancelFocus = null;
+  const xAxis = new THREE.Vector3(1, 0, 0), yAxis = new THREE.Vector3(0, 1, 0);
+
+  /** The world turn that brings a destination to the middle, a little above centre. */
+  function facingQuaternion(direction) {
+    const yaw = Math.atan2(direction.x, direction.z);
+    const pitch = Math.atan2(direction.y, Math.hypot(direction.x, direction.z)) - 0.18;
+    return new THREE.Quaternion().setFromAxisAngle(xAxis, pitch).multiply(new THREE.Quaternion().setFromAxisAngle(yAxis, -yaw));
+  }
+  // Spring-damped turn (gateFocusTween.js: 350 ms, a small overshoot).
+  function focus(gateId, { animate = true } = {}) {
+    const record = nodeRecords.find((entry) => entry.gateId === gateId);
+    if (!record || disposed) return false;
+    const from = worldRoot.quaternion.clone(), to = facingQuaternion(record.direction);
+    cancelFocus?.();
+    cancelFocus = null;
+    if (!animate) { worldRoot.quaternion.copy(to); draw(); return true; }
+    cancelFocus = startGateFocusTween((eased, done) => {
+      if (disposed) return;
+      worldRoot.quaternion.copy(from).slerp(to, eased);
+      draw();
+      if (done) cancelFocus = null;
+    });
+    return true;
+  }
 
   function resize() {
     if (disposed) return;
@@ -310,19 +348,37 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     draw();
   }
 
+  // Pin centres stay at least this far apart (px); the pin disc is about 30px.
+  const PIN_SPACING = 38;
   function positionNodeButtons() {
     cameraDirection.copy(camera.position).normalize();
     const width = Math.max(44, host.clientWidth);
     const height = Math.max(44, host.clientHeight);
+    const shown = [];
     for (const record of nodeRecords) {
       record.parent.getWorldPosition(worldPosition);
       const facing = worldPosition.clone().normalize().dot(cameraDirection);
       projected.copy(worldPosition).project(camera);
       const visible = facing > 0.24 && projected.z > -1 && projected.z < 1;
       record.button.hidden = !visible;
-      if (!visible) continue;
-      const x = THREE.MathUtils.clamp(((projected.x * 0.5) + 0.5) * width, 22, width - 22);
-      const y = THREE.MathUtils.clamp(((-projected.y * 0.5) + 0.5) * height, 22, height - 22);
+      if (visible) shown.push({ record, x: ((projected.x * 0.5) + 0.5) * width, y: ((-projected.y * 0.5) + 0.5) * height });
+    }
+    // Neighbouring places can project onto one spot (03 and 14): nudge the
+    // pins apart so each stays its own tap target, a step beside its place.
+    for (let pass = 0; pass < 3; pass += 1) {
+      for (let i = 0; i < shown.length; i += 1) for (let j = i + 1; j < shown.length; j += 1) {
+        const a = shown[i], b = shown[j];
+        let dx = b.x - a.x, dy = b.y - a.y;
+        const distance = Math.hypot(dx, dy);
+        if (distance >= PIN_SPACING) continue;
+        if (distance < 0.01) { dx = 1; dy = 0; }
+        const push = (PIN_SPACING - distance) / 2 / Math.max(distance, 1);
+        a.x -= dx * push; a.y -= dy * push; b.x += dx * push; b.y += dy * push;
+      }
+    }
+    for (const { record, x: px, y: py } of shown) {
+      const x = THREE.MathUtils.clamp(px, 22, width - 22);
+      const y = THREE.MathUtils.clamp(py, 22, height - 22);
       record.button.style.left = `${x}px`;
       record.button.style.top = `${y}px`;
       const halfLabel = Math.min(width - 8, record.nameLabel.offsetWidth) / 2;
@@ -334,12 +390,16 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
   }
 
   function draw() {
-    if (disposed) return;
+    if (disposed || globalThis.document?.hidden) return;
     camera.updateMatrixWorld(true);
     worldRoot.updateMatrixWorld(true);
     positionNodeButtons();
     renderer.render(scene, camera);
   }
+  const onVisibilityChange = () => {
+    if (!disposed && !globalThis.document?.hidden) draw();
+  };
+  globalThis.document?.addEventListener?.("visibilitychange", onVisibilityChange);
 
   function selectFromCanvas(event) {
     const rect = renderer.domElement.getBoundingClientRect();
@@ -352,6 +412,7 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
   }
 
   function onPointerDown(event) {
+    cancelFocus?.(); cancelFocus = null;
     pointerState.active = true;
     pointerState.id = event.pointerId;
     pointerState.x = event.clientX;
@@ -393,6 +454,7 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
   resize();
 
   return Object.freeze({
+    focus,
     render(frame) {
       const block = frame?.gateSelect;
       if (!block) return;
@@ -436,7 +498,9 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     dispose() {
       if (disposed) return;
       disposed = true;
+      cancelFocus?.();
       observer.disconnect();
+      globalThis.document?.removeEventListener?.("visibilitychange", onVisibilityChange);
       renderer.domElement.removeEventListener("pointerdown", onPointerDown);
       renderer.domElement.removeEventListener("pointermove", onPointerMove);
       renderer.domElement.removeEventListener("pointerup", onPointerUp);

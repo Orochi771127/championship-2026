@@ -71,12 +71,12 @@ test('database controlled DOM keeps live list, condition disclosure, draft nickn
  const catalog=q('.cm-vs2-database__catalog'),list=q('.cm-vs2-shop__list'),detail=q('.cm-vs2-database__detail'),input=q('input'),toggle=q('.cm-dex-conditions__toggle');
  assert.equal(catalog.hidden,false);assert.equal(list.hidden,false);toggle.click();input.value='Not saved';input.focus();list.scrollTop=92;detail.scrollTop=118;
  for(const [width,height] of [[932,430],[390,844],[720,320]]){
-  f.resize(width,height);assert.equal(q('input'),input);assert.equal(input.value,'Not saved');assert.equal(f.document.activeElement,input);assert.equal(q('.cm-dex-conditions__toggle'),toggle);assert.equal(toggle.getAttribute('aria-expanded'),'true');assert.equal(list.scrollTop,92);assert.equal(detail.scrollTop,118);assert.equal(catalog.hidden,width<720);
+  f.resize(width,height);assert.equal(q('input'),input);assert.equal(input.value,'Not saved');assert.equal(f.document.activeElement,input);assert.equal(q('.cm-dex-conditions__toggle'),toggle);assert.equal(toggle.getAttribute('aria-expanded'),'true');assert.equal(list.scrollTop,92);assert.equal(detail.scrollTop,118);assert.equal(catalog.hidden,false,'Owner 2026-10-26: the grid stays behind the detail sheet at every width');
  }
  assert.deepEqual(f.calls.rename,[]);f.assertUnchanged();f.dispose();assert.equal(f.listeners.get('resize').size,0);
 });
 test('database default resolver remains portrait and main injects the frame-owned layout without another flag parser',()=>{
- const f=makeView({width:844,height:390});assert.equal(f.root.querySelector('.cm-vs2-database__catalog').hidden,true);f.dispose();
+ const f=makeView({width:844,height:390});assert.equal(f.root.querySelector('.cm-vs2-database__catalog').hidden,false);f.dispose();
  const main=readFileSync(new URL('../src/championship/app/main.js',import.meta.url),'utf8');
  assert.match(main,/createDatabaseView\(\{ root, source: expeditionSource, isWideLayout: \(\) => portraitFrame\.isBrowseWide\('DATABASE'\) \}\)/);
 });

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {ranchNativeToWorld,ranchWorldToNative,RANCH_ELEVATION,ranchSurfaceHeight,ranchPickWalkSurface,ranchSpriteScreenQuad,ranchSpriteUvs} from '../src/championship/presentation/ranchThreeCoordinates.js';
 import {alignRanchRaisingPosition,composeProductRanchGround} from '../src/championship/raising/nativeRaisingRanchRing.js';
-import {PRODUCT_RANCH_GRID} from '../src/championship/cage/productRanchGrid.js';
+import {PRODUCT_RANCH_GRID,legacyGrid100SlotToWorld as W} from '../src/championship/cage/productRanchGrid.js';
 import {listCageDefinitions} from '../src/championship/cage/cageCatalog.js';
 test('fixed camera ground mapping preserves native navigation and wrapping coordinates',()=>{
   for(const x of [-960,0,48,240,960,1920])for(const y of [-24,0,112,880]){
@@ -13,8 +13,8 @@ test('fixed camera ground mapping preserves native navigation and wrapping coord
 test('saved eggs inside a moved prop recover inside the same cage; valid points stay identical',()=>{
   const defs=listCageDefinitions(),ground=composeProductRanchGround({layoutVersion:PRODUCT_RANCH_GRID,
     unlockedSlots:Array.from({length:100},(_,i)=>i),placements:[
-      {moduleId:defs[35].moduleId,slotIndex:0,instanceId:'cage:waiting'},
-      {moduleId:defs[6].moduleId,slotIndex:24,instanceId:'cage:test'}]});
+      {moduleId:defs[35].moduleId,slotIndex:W(0),instanceId:'cage:waiting'},
+      {moduleId:defs[6].moduleId,slotIndex:W(24),instanceId:'cage:test'}]});
   const blocked=Array.from(ground.terrain.keys()).find(i=>ground.owners[i]===1&&ground.terrain[i]===1);
   assert.ok(Number.isInteger(blocked));
   const original=[(blocked%ground.width*8+4)*4096,(Math.floor(blocked/ground.width)*8+4)*4096,0];

@@ -34,11 +34,20 @@ export function createAudioBus({
     if (context?.state === "suspended" || context?.state === "interrupted") void context.resume().catch(() => {});
   }
 
+  function resumeOnForeground() {
+    if (eventTarget?.hidden === true) return;
+    resume();
+  }
+
   function installUnlock() {
     if (unlockInstalled || !eventTarget?.addEventListener) return;
     unlockInstalled = true;
     eventTarget.addEventListener("pointerdown", resume, { passive: true, capture: true });
+    eventTarget.addEventListener("touchstart", resume, { passive: true, capture: true });
     eventTarget.addEventListener("keydown", resume, { capture: true });
+    eventTarget.addEventListener("visibilitychange", resumeOnForeground);
+    globalThis.addEventListener?.("pageshow", resumeOnForeground);
+    globalThis.addEventListener?.("focus", resumeOnForeground);
   }
 
   function ensure() {
@@ -165,7 +174,11 @@ export function createAudioBus({
     dispose() {
       if (unlockInstalled) {
         eventTarget.removeEventListener("pointerdown", resume, { capture: true });
+        eventTarget.removeEventListener("touchstart", resume, { capture: true });
         eventTarget.removeEventListener("keydown", resume, { capture: true });
+        eventTarget.removeEventListener("visibilitychange", resumeOnForeground);
+        globalThis.removeEventListener?.("pageshow", resumeOnForeground);
+        globalThis.removeEventListener?.("focus", resumeOnForeground);
       }
       unlockInstalled = false;
       categories.clear();

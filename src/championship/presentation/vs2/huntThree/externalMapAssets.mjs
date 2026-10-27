@@ -30,7 +30,11 @@ export function validateExternalManifest(manifest,fieldId){
   }
   for(const [id,field] of Object.entries(manifest.fields)){
     if(field.variant!==(id.endsWith('01')?'day':'night')||field.frames?.length!==phases)throw new Error('HUNT_THREE_PHASE_CONTRACT');
-    for(const frame of field.frames){validateIdentity(frame);if(frame.width!==size||frame.height!==size)throw new Error('HUNT_THREE_FRAME_SIZE');}
+    for(const frame of field.frames){
+      validateIdentity(frame);if(frame.width!==size||frame.height!==size)throw new Error('HUNT_THREE_FRAME_SIZE');
+      // Colour and coverage travel apart: no pixel depends on colour under alpha 0.
+      validateIdentity(frame.mask);
+    }
   }
   return manifest.fields[fieldId];
 }
@@ -78,14 +82,20 @@ export function createVerifiedGridSupport(manifest,heights){
       const region=manifest.map==='hm01'&&manifest.glb.sha256===proof.glbSHA256
         &&manifest.groundHeights.sha256===proof.heightGridSHA256&&wild.passage===proof.requiredNativePhase
         ?proof.regions.find(({bounds:b})=>wild.worldX>=b.left&&wild.worldX<b.right&&wild.worldY>=b.top&&wild.worldY<b.bottom):null;
-      return region?{groundHeight:region.flatSupportHeight,verifiedSourceId:`${region.id} GLB SHA256 ${proof.glbSHA256}`} : null;
+      // Owner 2026-10-27: a creature on an unmeasured cell (a cliff edge, a cave
+      // mouth) stands on the ground plane, which every measured cell sits within
+      // ±0.03 of. Returning null sent the whole map back to 2D.
+      return region?{groundHeight:region.flatSupportHeight,verifiedSourceId:`${region.id} GLB SHA256 ${proof.glbSHA256}`}
+        :{groundHeight:0,verifiedSourceId:`GROUND_PLANE_FALLBACK ${manifest.groundHeights.sha256}`};
     }
     return {groundHeight:0,verifiedSourceId:`${manifest.groundHeights.file} SHA256 ${manifest.groundHeights.sha256}`,sampleHeight:h};
   };
 }
 export function configureDraco({THREE,GLTFLoader,DRACOLoader,decoderPath,baseUrl}){
   const path=new URL(decoderPath),base=new URL(baseUrl);
-  if(path.origin!==base.origin||path.search||path.hash||!path.pathname.endsWith('/node_modules/three/examples/jsm/libs/draco/gltf/'))
+  // The loader hands every map the published decoder (libs/draco/); libs/draco/gltf/
+  // is not published, so requiring it alone sent hm01/hm08 to 2D on every load.
+  if(path.origin!==base.origin||path.search||path.hash||!/\/node_modules\/three\/examples\/jsm\/libs\/draco\/(gltf\/)?$/.test(path.pathname))
     throw new Error('HUNT_THREE_UNTRUSTED_DECODER_PATH');
   const allowed=new Set(['draco_wasm_wrapper.js','draco_decoder.wasm','draco_decoder.js'].map(name=>new URL(name,path).href));
   const manager=new THREE.LoadingManager();manager.setURLModifier(url=>{
@@ -108,20 +118,31 @@ export async function loadExternalMapAssets({THREE,GLTFLoader,DRACOLoader,dracoD
     signal?.throwIfAborted();
     const heights=JSON.parse(new TextDecoder().decode(await read(manifest.groundHeights)));
     const resolveSupport=createVerifiedGridSupport(manifest,heights);
-    for(const frame of field.frames){
-      const bytes=await read(frame);
+    // Owner 2026-10-27 (iPhone): each frame is an opaque colour image plus a
+    // separate coverage mask. The old single RGBA frame kept the ground's colour
+    // under alpha 0; WebKit premultiplies on decode whatever premultiplyAlpha
+    // says, so the whole ground turned black on Safari.
+    const decode=async(asset,colour)=>{
+      const bytes=await read(asset);
       const bitmap=await abortable(createImageBitmap(new Blob([bytes],{type:'image/webp'}),{premultiplyAlpha:'none',colorSpaceConversion:'none'}),signal,b=>b.close?.());
       if(signal?.aborted){bitmap.close?.();signal.throwIfAborted();}
-      if(bitmap.width!==frame.width||bitmap.height!==frame.height){bitmap.close?.();throw new Error('HUNT_THREE_FRAME_SIZE');}
+      if(bitmap.width!==field.frames[0].width||bitmap.height!==field.frames[0].height){bitmap.close?.();throw new Error('HUNT_THREE_FRAME_SIZE');}
       let texture;try{texture=new THREE.Texture(bitmap);}catch(error){bitmap.close?.();throw error;}
       textures.push(texture);texture.flipY=false;texture.premultiplyAlpha=false;texture.unpackAlignment=4;
-      texture.colorSpace=THREE.SRGBColorSpace;texture.generateMipmaps=false;
+      texture.colorSpace=colour?THREE.SRGBColorSpace:THREE.NoColorSpace;texture.generateMipmaps=false;
       texture.minFilter=THREE.LinearFilter;texture.magFilter=THREE.LinearFilter;texture.needsUpdate=true;
-      stats.decodedTextureBytes+=frame.width*frame.height*4;
+      stats.decodedTextureBytes+=bitmap.width*bitmap.height*4;
+      return texture;
+    };
+    const colours=[],masks=[],maskByFile=new Map();
+    for(const frame of field.frames){
+      colours.push(await decode(frame,true));
+      if(!maskByFile.has(frame.mask.file))maskByFile.set(frame.mask.file,await decode(frame.mask,false));
+      masks.push(maskByFile.get(frame.mask.file));
     }
-    const ground=new THREE.MeshBasicMaterial({map:textures[0]});
+    const ground=new THREE.MeshBasicMaterial({map:colours[0]});
     // Scenery coverage mask is NOT the native-actor alpha policy.
-    const foreground=new THREE.MeshBasicMaterial({map:textures[0],alphaTest:.5,side:THREE.DoubleSide});
+    const foreground=new THREE.MeshBasicMaterial({map:colours[0],alphaMap:masks[0],alphaTest:.5,side:THREE.DoubleSide});
     const materialOwners=[ground,foreground];
     try{
       let count=0;
@@ -136,7 +157,7 @@ export async function loadExternalMapAssets({THREE,GLTFLoader,DRACOLoader,dracoD
       if(count!==manifest.glb.meshes.length)throw new Error('HUNT_THREE_MESH_CONTRACT');
     }catch(error){for(const m of materialOwners)disposer.once(m);throw error;}
     return {gltf,textures,materialOwners,field,stats,resolveSupport,
-      selectPhase(index){if(!Number.isInteger(index)||!textures[index])throw new Error('HUNT_THREE_NATIVE_PHASE_OUT_OF_RANGE');ground.map=textures[index];foreground.map=textures[index];}};
+      selectPhase(index){if(!Number.isInteger(index)||!colours[index])throw new Error('HUNT_THREE_NATIVE_PHASE_OUT_OF_RANGE');ground.map=colours[index];foreground.map=colours[index];foreground.alphaMap=masks[index];}};
   }catch(error){disposer.gltf(gltf);for(const t of textures)disposer.texture(t);throw error;}
   finally{draco?.dispose();}
 }

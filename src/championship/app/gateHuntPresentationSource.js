@@ -97,7 +97,7 @@ function assertApplication(app) {
     "selectHuntEquipment", "fitHuntPlugin", "selectHuntMemoryCard",
     "beginHunt", "exitHunt", "leaveScreen", "buyShopItem", "subscribeShop",
     "selectDatabaseSpecies", "renameDatabaseInstance",
-    "selectCageModule", "placeCageAt", "removeCagePlacement", "confirmCageEdit",
+    "selectCageModule", "placeCageAt", "removeCagePlacement", "moveCagePlacement", "confirmCageEdit",
     "setTamerRank",
     "beginEnclosureStroke", "extendEnclosureStroke", "endEnclosureStroke", "confirmHuntResult",
     "setHuntResultName", "abortEnclosureStroke",
@@ -238,6 +238,8 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
         plugins:huntPluginReadout(runtime,app.getHuntLoadout()?.getHudCapabilities()),
         time:app.getHuntTimeState?.() ?? null,
         gateName: gate?.tutorial ? "教學關卡" : gate?.displayName ?? null,
+        // Presentation mood only (ambience colour, particles); never a rule.
+        biomeId: gate?.tutorial ? null : gate?.biomeId ?? null,
         actorName: runtime.getPlayer().displayName,
         // What the HUD may display is decided at loadout by the fitted plugins.
         // A readout with no plugin behind it stays dark - the recovered rule.
@@ -392,6 +394,10 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
       app.removeCagePlacement(moduleId);
       return commit();
     },
+    moveCagePlacement(instanceId, slotIndex) {
+      app.moveCagePlacement(instanceId, slotIndex);
+      return commit();
+    },
     buyRanchTestRow(row) {
       const result = app.buyRanchTestRow(row);
       publish();
@@ -400,6 +406,11 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
     confirmCageEdit() {
       app.confirmCageEdit();
       committed("cage-layout");
+      return commit();
+    },
+    // Owner 2026-10-27: the editor's 還原 key drops the unconfirmed draft (optional on the application).
+    revertCageEdit() {
+      app.revertCageEdit?.();
       return commit();
     },
     // Ranch expansion prototype (non-paid): optional on the application.

@@ -1,11 +1,13 @@
 import * as THREE from '../../../node_modules/three/build/three.module.js';
-import {ranchNativeToWorld,RANCH_ELEVATION} from './ranchThreeCoordinates.js';
+import {ranchNativeToWorld,RANCH_LAYOUT_VIEW} from './ranchThreeCoordinates.js';
 
+// Owner 2026-10-27 diorama look: contact shadows read stronger (was .26).
+export const RANCH_CONTACT_SHADOW_OPACITY=.36;
 // Preserve the existing authored screen ellipse, but put its fragments on the
 // contact plane in the SAME depth buffer as the alpha-cutout actors/terrain.
-export function ranchShadowWorldPoint(point,bounds,pixelScale,height){
+export function ranchShadowWorldPoint(point,bounds,pixelScale,height,view=RANCH_LAYOUT_VIEW){
   return ranchNativeToWorld((point.x-bounds.x)/pixelScale,
-    (point.y-bounds.y)/pixelScale+height*16*Math.cos(RANCH_ELEVATION),height);
+    (point.y-bounds.y)/(pixelScale*view.groundScaleY)+height*view.lift,height);
 }
 export function ranchShadowScreenEllipses(shadow,ellipses){
   return ellipses.map(e=>{
@@ -22,7 +24,7 @@ export function createRanchGroundShadows(scene){
     scene.remove(item.mesh);item.mesh.geometry.dispose();item.mesh.material.dispose();
   }
   function reset(){for(const item of items.values()){item.seen=false;item.mesh.visible=false;if(!item.shadow.destroyed)item.shadow.renderable=true;}}
-  function sync(key,entry,bounds,pixelScale,actorTransferred){
+  function sync(key,entry,bounds,pixelScale,actorTransferred,view=RANCH_LAYOUT_VIEW){
     const shadow=entry.shadow;
     if(!actorTransferred||!shadow?.visible||!entry.root.visible||!entry.groundShadowEllipses?.length)return;
     const ellipses=ranchShadowScreenEllipses(shadow,entry.groundShadowEllipses);
@@ -32,7 +34,7 @@ export function createRanchGroundShadows(scene){
     if(!item){
       const material=new THREE.ShaderMaterial({
         transparent:true,depthTest:true,depthWrite:false,side:THREE.DoubleSide,toneMapped:false,
-        uniforms:{ellipses:{value:ellipses.map(()=>new THREE.Vector4())},opacity:{value:.26},color:{value:new THREE.Color(0x02070a)}},
+        uniforms:{ellipses:{value:ellipses.map(()=>new THREE.Vector4())},opacity:{value:RANCH_CONTACT_SHADOW_OPACITY},color:{value:new THREE.Color(0x02070a)}},
         vertexShader:'varying vec2 vShadowUv; void main(){vShadowUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
         fragmentShader:`varying vec2 vShadowUv; uniform vec4 ellipses[${ellipses.length}]; uniform float opacity; uniform vec3 color;
           void main(){float coverage=0.0;
@@ -51,10 +53,10 @@ export function createRanchGroundShadows(scene){
     const height=(entry.root.threeGroundHeight??0)+.006;
     const positions=item.mesh.geometry.attributes.position;
     [{x:left,y:top},{x:right,y:top},{x:left,y:bottom},{x:right,y:bottom}].forEach((p,i)=>{
-      const w=ranchShadowWorldPoint(p,bounds,pixelScale,height);positions.setXYZ(i,w.x,w.y,w.z);
+      const w=ranchShadowWorldPoint(p,bounds,pixelScale,height,view);positions.setXYZ(i,w.x,w.y,w.z);
     });positions.needsUpdate=true;
     ellipses.forEach((e,i)=>item.mesh.material.uniforms.ellipses.value[i].set((e.x-left)/(right-left),1-(e.y-top)/(bottom-top),e.rx/(right-left),e.ry/(bottom-top)));
-    item.mesh.material.uniforms.opacity.value=.26*(shadow.worldAlpha??1);
+    item.mesh.material.uniforms.opacity.value=RANCH_CONTACT_SHADOW_OPACITY*(shadow.worldAlpha??1);
     item.mesh.visible=true;item.seen=true;shadow.renderable=false;
   }
   function prune(){for(const [key,item] of items)if(!item.seen){release(item);items.delete(key);}}

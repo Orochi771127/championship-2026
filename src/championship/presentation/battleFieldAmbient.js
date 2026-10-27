@@ -728,6 +728,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       root.destroy({ children: true });
       for (const layer of [flowLayer, waveLayer, gust]) layer?.destroy();
       await art.dispose();
+      for (const t of textures.values()) t?.source?.removeAllListeners?.("change");
       await Promise.allSettled(sources.map(src => PIXI.Assets.unload(src)));
     }
   });

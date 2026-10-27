@@ -86,9 +86,11 @@ export function createBattleCharacterAnimator({sprite,animations,textureResolver
       const texture=textureResolver(frame.texture);
       if (!texture || !placement) throw new Error('BATTLE_ANIMATION_FRAME_BINDING_MISSING');
       sprite.texture=texture;
+      const baseFrame=sequences.get(0)?.frames?.find(f=>Array.isArray(geometry.frames[f.texture]?.nativeBounds))??sequences.get(0)?.frames?.[0];
+      const baseBounds=(baseFrame?geometry.frames[baseFrame.texture]?.nativeBounds:null)??placement.nativeBounds??null;
       current=Object.freeze({...native,texture:frame.texture,cell:frame.cell,
         frameIndex:reducedMotion ? sequence.loopStartFrame??0 : native.frameIndex,
-        geometry:placement,baseBounds:geometry.frames[sequences.get(0).frames[0].texture].nativeBounds,
+        geometry:placement,baseBounds,
         reducedMotion,originalTimingParity:false});
       return current;
     },

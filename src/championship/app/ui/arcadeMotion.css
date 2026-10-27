@@ -1,0 +1,131 @@
+/* Arcade motion (Owner 2026-10-26): the arcade rebuild's card, sheet and result motion
+ * on this game. Effects layers belong to ui/arcadeFx.js. Only transform, scale,
+ * translate and opacity animate; reduced motion keeps colour and fades only.
+ */
+
+/* ---- Effects layers: above every screen, never in the way of input ---------------- */
+.cm-arcade-fx { position: fixed; inset: 0; z-index: 96; width: 100%; height: 100%; pointer-events: none; image-rendering: pixelated; }
+.cm-arcade-float { position: fixed; inset: 0; z-index: 97; pointer-events: none; overflow: hidden; }
+.cm-arcade-float__num {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #fff;
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+  -webkit-text-stroke: 6px #14141f;
+  paint-order: stroke fill;
+  text-shadow: 0 4px 0 #14141f;
+  will-change: transform, opacity;
+}
+.cm-arcade-float__num.is-crit { font-size: 52px; color: #ffe14d; -webkit-text-stroke-width: 8px; text-shadow: 0 6px 0 #14141f; }
+.cm-arcade-float__num:is(.is-heal, .is-stat) { color: #7dff9e; }
+.cm-arcade-float__num.is-info { font-size: 20px; color: #bfefff; }
+.cm-arcade-toasts {
+  position: fixed;
+  left: 50%;
+  top: calc(var(--cm-status-bar-height, 56px) + 12px);
+  z-index: 98;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.cm-arcade-toast {
+  padding: 10px 18px;
+  border: 3px solid #14141f;
+  border-radius: 999px;
+  background: #fff8e7;
+  color: #14141f;
+  font-weight: 900;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45), 0 5px 0 #14141f;
+  animation: cm-toast-in 380ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.cm-arcade-toast.is-warn { background: #ffe0b3; }
+.cm-arcade-toast.is-good { background: #c9ffd9; }
+.cm-arcade-toast.is-leaving { animation: cm-toast-out 220ms cubic-bezier(0.2, 0.9, 0.3, 1) both; }
+@keyframes cm-toast-in { from { opacity: 0; transform: translateY(-14px) scale(0.92); } }
+@keyframes cm-toast-out { to { opacity: 0; transform: translateY(-10px) scale(0.95); } }
+
+/* ---- Cards: deal in, tilt toward the pointer, glare, shine ------------------------- */
+:is(.cm-vs2-shop__row, .cm-vs2-database__row, .cm-vs2-gate, .cm-vs5-match) {
+  --rx: 0deg;
+  --ry: 0deg;
+  transform: perspective(700px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 160ms cubic-bezier(0.2, 0.9, 0.3, 1), translate 220ms cubic-bezier(0.34, 1.56, 0.64, 1), scale 220ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+:is(.cm-vs2-shop__row, .cm-vs2-database__row, .cm-vs2-gate, .cm-vs5-match)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 0%), rgba(255, 255, 255, 0.55), transparent 55%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+:is(.cm-vs2-shop__row, .cm-vs2-database__row, .cm-vs2-gate, .cm-vs5-match)[data-tilting="true"]::after { opacity: 1; }
+@media (hover: hover) and (pointer: fine) {
+  :is(.cm-vs2-shop__row, .cm-vs2-database__row, .cm-vs2-gate, .cm-vs5-match):hover:not(:disabled) { translate: 0 -3px; scale: 1.03; z-index: 2; }
+}
+:is(.cm-vs2-shop__row, .cm-vs2-database__row, .cm-vs2-gate, .cm-vs5-match):active:not(:disabled) { translate: 0 3px; scale: 0.98; transition-duration: 45ms; }
+
+/* The first cards of a grid deal in one after another. */
+:is(.cm-vs2-shop__list > .cm-vs2-shop__row, .cm-vs2-shop__list > .cm-vs2-database__row, .cm-vs2-gates > .cm-vs2-gate) {
+  animation: cm-deal 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes cm-deal { from { opacity: 0; translate: 0 24px; scale: 0.9; } }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(2) { animation-delay: 18ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(3) { animation-delay: 36ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(4) { animation-delay: 54ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(5) { animation-delay: 72ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(6) { animation-delay: 90ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(7) { animation-delay: 108ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(8) { animation-delay: 126ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(9) { animation-delay: 144ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(10) { animation-delay: 162ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(11) { animation-delay: 180ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(12) { animation-delay: 198ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(13) { animation-delay: 216ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(14) { animation-delay: 234ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(15) { animation-delay: 252ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(16) { animation-delay: 270ms; }
+:is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(n + 17) { animation-delay: 288ms; }
+
+/* ---- Sheets: dotted scrim fades, the panel pops with overshoot ---------------------- */
+:is(.cm-vs2-shop__sheet-scrim, .cm-vs2-database__sheet-scrim) { animation: cm-fade-in 180ms cubic-bezier(0.2, 0.9, 0.3, 1) both; }
+:is(.cm-vs2-shop__sheet .cm-vs2-shop__detail, .cm-vs2-database__sheet-panel) { animation: cm-sheet-pop 460ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes cm-fade-in { from { opacity: 0; } }
+@keyframes cm-sheet-pop { 0% { opacity: 0; scale: 0.85; } 60% { opacity: 1; scale: 1.03; } 100% { scale: 1; } }
+@media (max-width: 600px) {
+  :is(.cm-vs2-shop__sheet .cm-vs2-shop__detail, .cm-vs2-database__sheet-panel) { animation-name: cm-sheet-rise; }
+  @keyframes cm-sheet-rise { 0% { translate: 0 100%; } 70% { translate: 0 -2%; } 100% { translate: 0 0; } }
+}
+
+/* ---- Numbers that change pop; primary actions breathe when ready -------------------- */
+.cm-status-bar__currencies[data-change], .cm-vs2-shop__wallet[data-change] { animation: cm-num-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes cm-num-pop { 35% { scale: 1.14; rotate: -3deg; } }
+.cm-toolbar__quick-entry:not(:disabled) { animation: cm-dock-in 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.cm-toolbar__quick-entry:nth-child(2) { animation-delay: 60ms; }
+.cm-toolbar__quick-entry:nth-child(3) { animation-delay: 120ms; }
+.cm-toolbar__quick-entry:nth-child(4) { animation-delay: 180ms; }
+@keyframes cm-dock-in { from { opacity: 0; translate: 0 26px; scale: 0.92; } }
+
+/* ---- Reduced motion: colour and opacity stay, travel goes ---------------------------- */
+:root[data-motion="reduced"] :is(.cm-vs2-shop__row, .cm-vs2-database__row, .cm-vs2-gate, .cm-vs5-match, .cm-toolbar__quick-entry, .cm-vs2-shop__sheet .cm-vs2-shop__detail, .cm-vs2-database__sheet-panel, .cm-arcade-toast) {
+  animation: none !important;
+  transform: none !important;
+  translate: none !important;
+  scale: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.cm-vs2-shop__row, .cm-vs2-database__row, .cm-vs2-gate, .cm-vs5-match, .cm-toolbar__quick-entry, .cm-vs2-shop__sheet .cm-vs2-shop__detail, .cm-vs2-database__sheet-panel, .cm-arcade-toast) {
+    animation: none !important;
+    translate: none !important;
+    scale: none !important;
+  }
+}

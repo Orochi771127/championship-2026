@@ -259,7 +259,17 @@ test("one save key, one persistent writer, one Pixi bootstrap and no second tick
   assert.deepEqual(layoutFrames.map(({file})=>relative(file)),[
     'src/championship/app/huntLayoutResolver.js',
     'src/championship/app/main.js',
-    'src/championship/presentation/medals/medalThreePresentation.js'
+    // Owner 2026-10-26 title parade: walk frames on the title only, stopped when it closes.
+    'src/championship/app/titleParade.js',
+    // Owner 2026-10-27 HD-2D ambience: at most 35 pooled particles; stops when hidden, reduced or saver.
+    'src/championship/app/ui/ambienceLayer.js',
+    // Owner 2026-10-26 arcade juice: particles only, the loop stops when none are alive.
+    'src/championship/app/ui/arcadeFx.js',
+    // Owner 2026-10-27 loading walker: walk frames only while a loading bar is shown.
+    'src/championship/app/ui/loadingWalker.js',
+    'src/championship/presentation/medals/medalThreePresentation.js',
+    // Owner 2026-10-27 globe focus: one bounded 350 ms turn per choice; the globe keeps no loop.
+    'src/championship/presentation/vs2/gateFocusTween.js'
   ]);
   const titleSource=layoutFrames.find(({file})=>relative(file).endsWith('/app/main.js')).text;
   const titleSchedule=titleSource.slice(titleSource.indexOf('function scheduleRanchTitlePreload()'),titleSource.indexOf('const openingPresentation='));

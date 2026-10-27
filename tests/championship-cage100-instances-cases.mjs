@@ -7,7 +7,8 @@ import {CHAMPIONSHIP_MODERN_SAVE_KEY,deserializeChampionshipModernSave,serialize
 import {createShopRuntime} from '../src/championship/shop/shopRuntime.js';
 import {createCageEditRuntime} from '../src/championship/cage/cageEditRuntime.js';
 import {listCageDefinitions} from '../src/championship/cage/cageCatalog.js';
-import {PRODUCT_RANCH_GRID,LEGACY_PRODUCT_RANCH_GRID,productGridCell,productGridSlot,productPlacementCells,validateProductRanch} from '../src/championship/cage/productRanchGrid.js';
+import {PRODUCT_RANCH_GRID,LEGACY_PRODUCT_RANCH_GRID,productGridCell,productGridSlot,productPlacementCells,validateProductRanch,
+  productRanchProblem,legacyGrid100Cell,legacyGrid100Slot,legacyGrid100SlotToWorld as W} from '../src/championship/cage/productRanchGrid.js';
 import {createRanchRaisingGround,ranchRaisingSpawnPosition} from '../src/championship/raising/nativeRaisingRanchRing.js';
 import {findNativeRaisingFood,createNativeRaisingFood,reconcileNativeFoodReservations} from '../src/championship/raising/nativeRaisingFood.js';
 import {cageEditorArtCells} from '../src/championship/presentation/cageUiArt.js';
@@ -27,16 +28,18 @@ function fullEditor(){
   for(let row=2;row<10;row++)editor.applyTestRowPurchase(row,shop.toSave(),0);
   return {editor,shop};
 }
+// Hex cage world (2026-10-26): the 10×10 board is legacy geometry; saves migrate into the world.
 test('100 total cells, 10 per row; original first50 IDs/positions retained, slot100 rejected',()=>{
-  const seen=new Set();for(let i=0;i<100;i++){const c=productGridCell(i);assert.equal(productGridSlot(c.row,c.column),i);seen.add(`${c.row},${c.column}`);}
-  assert.equal(seen.size,100);assert.equal(productGridSlot(10,0),null);assert.throws(()=>productGridCell(100));
-  assert.deepEqual(productGridCell(49),{slotIndex:49,row:4,column:9,x:864,y:352});
-  assert.deepEqual(productGridCell(99),{slotIndex:99,row:9,column:9,x:912,y:792});
+  const seen=new Set();for(let i=0;i<100;i++){const c=legacyGrid100Cell(i);assert.equal(legacyGrid100Slot(c.row,c.column),i);seen.add(`${c.row},${c.column}`);}
+  assert.equal(seen.size,100);assert.equal(legacyGrid100Slot(10,0),null);assert.throws(()=>legacyGrid100Cell(100));
+  assert.deepEqual(legacyGrid100Cell(49),{slotIndex:49,row:4,column:9,x:864,y:352});
+  assert.deepEqual(legacyGrid100Cell(99),{slotIndex:99,row:9,column:9,x:912,y:792});
+  assert.throws(()=>productGridCell(576));
 });
 test('new public save has funds,20 open cells; buy8 rows once to100 with unchanged row price',async()=>{
   const h=harness(),a=h.create();try{
     await a.newGame();assert.equal(a.getShopFrame().bits,8000000);assert.equal(a.getCageEditFrame().testDiamonds,20000);
-    a.openCageEdit();assert.equal(a.getCageEditFrame().unlockedCount,20);assert.equal(a.getCageEditFrame().maxSlotCount,100);
+    a.openCageEdit();assert.equal(a.getCageEditFrame().unlockedCount,20);assert.equal(a.getCageEditFrame().productGrid.cellCap,100);
     for(let row=2;row<10;row++){assert.equal(a.buyRanchTestRow(row).ok,true);assert.equal(a.buyRanchTestRow(row).ok,false);}
     assert.equal(a.getCageEditFrame().unlockedCount,100);assert.equal(a.getCageEditFrame().testDiamonds,12000);
     assert.equal(a.buyRanchTestRow(10).ok,false);assert.equal(a.getShopFrame().bits,8000000);
@@ -71,27 +74,36 @@ test('durable purchase failure rolls back funds,stock and retry; no hidden later
 });
 test('copies have distinct placement IDs; overlap, locked land,unowned extra copy rejected',()=>{
   const {editor:e,shop}=fullEditor(),stock=shop.toSave();e.selectModule(moduleOf(0),stock,0);
-  let f=e.placeAt(10,stock,0);assert.equal(f.lastVerdict.reason,'PLACED');e.selectModule(moduleOf(0),stock,0);f=e.placeAt(99,stock,0);assert.equal(f.lastVerdict.reason,'PLACED');
+  let f=e.placeAt(W(10),stock,0);assert.equal(f.lastVerdict.reason,'PLACED');e.selectModule(moduleOf(0),stock,0);f=e.placeAt(W(99),stock,0);assert.equal(f.lastVerdict.reason,'PLACED');
   const copies=f.placements.filter(p=>p.moduleId===moduleOf(0));assert.equal(copies.length,3);assert.equal(new Set(copies.map(p=>p.instanceId)).size,3);
-  e.selectModule(moduleOf(0),stock,0);assert.equal(e.placeAt(10,stock,0).lastVerdict.reason,'FOOTPRINT_BLOCKED');
-  assert.equal(e.placeAt(100,stock,0).lastVerdict.reason,'OUT_OF_BOUNDS');
-  const locked=createCageEditRuntime({initializeOriginal:true,publicTestGrid:true});locked.selectModule(moduleOf(0),stock,0);assert.equal(locked.placeAt(99,stock,0).lastVerdict.reason,'SLOT_LOCKED');
+  e.selectModule(moduleOf(0),stock,0);assert.equal(e.placeAt(W(10),stock,0).lastVerdict.reason,'OCCUPIED');
+  assert.equal(e.placeAt(576,stock,0).lastVerdict.reason,'OUT_OF_BOUNDS');
+  const locked=createCageEditRuntime({initializeOriginal:true,publicTestGrid:true});locked.selectModule(moduleOf(0),stock,0);
+  // Land is a cell capacity: a layout that would exceed it is refused for land, never for position.
+  assert.equal(productRanchProblem([...locked.toSave().placements,{moduleId:moduleOf(0),slotIndex:W(99),instanceId:'cage:instance:extra'}],9),'LAND_CAPACITY');
   const original=locked.getFrame(stock,0).placements.find(p=>p.moduleId===moduleOf(15));locked.selectModule(moduleOf(15),stock,0);assert.equal(locked.placeAt(10,stock,0).lastVerdict.reason,'ALREADY_PLACED');assert.ok(original);
 });
 test('moving selected copy retains ID; withdrawing frees one stock; revert and reload do not duplicate',()=>{
-  const {editor:e,shop}=fullEditor(),stock=shop.toSave();e.selectModule(moduleOf(0),stock,0);e.placeAt(10,stock,0);e.confirm(stock,0);
-  const copy=e.getFrame(stock,0).placements.find(p=>p.slotIndex===10);e.removePlacement(copy.instanceId,stock,0);
-  assert.equal(e.placeAt(0,stock,0).lastVerdict.reason,'FOOTPRINT_BLOCKED');
-  assert.equal(e.placeAt(100,stock,0).lastVerdict.reason,'OUT_OF_BOUNDS');
-  const moved=e.placeAt(12,stock,0);
-  assert.equal(moved.placements.find(p=>p.slotIndex===12).instanceId,copy.instanceId);e.confirm(stock,0);
+  const {editor:e,shop}=fullEditor(),stock=shop.toSave();e.selectModule(moduleOf(0),stock,0);e.placeAt(W(10),stock,0);e.confirm(stock,0);
+  const copy=e.getFrame(stock,0).placements.find(p=>p.slotIndex===W(10));e.removePlacement(copy.instanceId,stock,0);
+  assert.equal(e.placeAt(W(0),stock,0).lastVerdict.reason,'OCCUPIED');
+  assert.equal(e.placeAt(576,stock,0).lastVerdict.reason,'OUT_OF_BOUNDS');
+  const moved=e.placeAt(W(12),stock,0);
+  assert.equal(moved.placements.find(p=>p.slotIndex===W(12)).instanceId,copy.instanceId);e.confirm(stock,0);
+  // The hex world also moves a placed copy directly, keeping its id.
+  assert.equal(e.movePlacement(copy.instanceId,W(14),stock,0).lastVerdict.reason,'MOVED');
+  assert.equal(e.getFrame(stock,0).placements.find(p=>p.instanceId===copy.instanceId).slotIndex,W(14));
+  assert.equal(e.movePlacement(copy.instanceId,W(0),stock,0).lastVerdict.reason,'OCCUPIED');
+  assert.equal(e.getFrame(stock,0).placements.find(p=>p.instanceId===copy.instanceId).slotIndex,W(14),'a refused move keeps the layout');
+  assert.equal(e.movePlacement(e.getFrame(stock,0).placements.find(p=>p.moduleId===moduleOf(35)).instanceId,W(30),stock,0).lastVerdict.reason,'FIXED_WAITING_ROOM');
+  e.movePlacement(copy.instanceId,W(12),stock,0);e.confirm(stock,0);
   e.removePlacement(copy.instanceId,stock,0);e.confirm(stock,0);assert.equal(e.getFrame(stock,0).tray.find(p=>p.moduleId===moduleOf(0)).availableCount,4);
   const restored=createCageEditRuntime({snapshot:e.toSave(),publicTestGrid:true});assert.deepEqual(restored.toSave(),e.toSave());
   const kept=e.getFrame(stock,0).placements.find(p=>p.moduleId===moduleOf(0));e.removePlacement(kept.instanceId,stock,0);e.revert(stock,0);e.selectModule(moduleOf(0),stock,0);
-  assert.equal(e.placeAt(12,stock,0).lastVerdict.reason,'PLACED');assert.equal(validateProductRanch(e.getFrame(stock,0).placements),true);
+  assert.equal(e.placeAt(W(12),stock,0).lastVerdict.reason,'PLACED');assert.equal(validateProductRanch(e.getFrame(stock,0).placements),true);
 });
 test('two copies own distinct terrain/spawn and editor image bounds',()=>{
-  const {editor:e,shop}=fullEditor(),stock=shop.toSave();e.selectModule(moduleOf(0),stock,0);e.placeAt(10,stock,0);e.confirm(stock,0);
+  const {editor:e,shop}=fullEditor(),stock=shop.toSave();e.selectModule(moduleOf(0),stock,0);e.placeAt(W(10),stock,0);e.confirm(stock,0);
   const frame=e.getFrame(stock,0),ground=createRanchRaisingGround({...e.toSave(),unlockedCount:20});const copies=ground.placements.filter(p=>p.definitionIndex===0);
   assert.equal(copies.length,2);for(const p of copies){const position=ranchRaisingSpawnPosition(ground,p.instanceId,{next:()=>50});assert.equal(ground.cageAt(position[0]/4096,position[1]/4096).instanceId,p.instanceId);}
   assert.notDeepEqual(ground.origin(copies[0].instanceId),ground.origin(copies[1].instanceId));
@@ -107,32 +119,41 @@ test('legacy50 save keeps wallet,rights,positions and one copy each; stable migr
   const h=harness();let a=h.create();try{
     await a.newGame();a.openCageEdit();a.buyRanchTestRow(2);a.save();const prior=JSON.parse(h.data.get(CHAMPIONSHIP_MODERN_SAVE_KEY));
     prior.schemaVersion=5;delete prior.shop.cageQuantities;prior.shop.bits=1234;prior.flags.friendsPlaytest.diamonds=3210;
-    prior.cageEdit.layoutVersion=LEGACY_PRODUCT_RANCH_GRID;delete prior.cageEdit.nextInstanceSequence;prior.cageEdit.placements=prior.cageEdit.placements.map(({instanceId,...p})=>p);
+    prior.cageEdit.layoutVersion=LEGACY_PRODUCT_RANCH_GRID;delete prior.cageEdit.nextInstanceSequence;
+    // Build the legacy fixture on the old board: world slot → 10×10 slot (inverse of the migration offset).
+    const toLegacy=s=>{const c=productGridCell(s);return legacyGrid100Slot(c.row-8,c.column-7);};
+    prior.cageEdit.placements=prior.cageEdit.placements.map(({instanceId,...p})=>({...p,slotIndex:toLegacy(p.slotIndex)}));
     const expected=structuredClone(prior);h.data.set(CHAMPIONSHIP_MODERN_SAVE_KEY,JSON.stringify(prior));await a.dispose();a=h.create();await a.continueGame();
     assert.equal(a.getShopFrame().bits,1234);assert.equal(a.getCageEditFrame().testDiamonds,3210);assert.equal(a.getCageEditFrame().layoutVersion,PRODUCT_RANCH_GRID);
-    assert.equal(a.getCageEditFrame().unlockedCount,30);assert.deepEqual(a.getCageEditFrame().placements.map(({instanceId,displayName,trainingSummary,capacity,channels,...p})=>p),expected.cageEdit.placements);
+    assert.equal(a.getCageEditFrame().unlockedCount,30);assert.deepEqual(a.getCageEditFrame().placements.map(({instanceId,displayName,trainingSummary,capacity,channels,...p})=>p),expected.cageEdit.placements.map(p=>({...p,slotIndex:W(p.slotIndex)})));
     a.save();const first=JSON.parse(h.data.get(CHAMPIONSHIP_MODERN_SAVE_KEY));await a.dispose();a=h.create();await a.continueGame();a.save();const second=JSON.parse(h.data.get(CHAMPIONSHIP_MODERN_SAVE_KEY));
     assert.deepEqual(second.cageEdit,first.cageEdit);assert.deepEqual(second.shop,first.shop);assert.equal(second.flags.friendsPlaytest.diamonds,3210);
   }finally{await a.dispose();}
 });
 test('v7 roundtrip retains copies; missing ID/colliding ID/stock corruption are refused',()=>{
   const source=deserializeChampionshipModernSave(JSON.stringify(read('qa/championship-full-qa-save.json'))),{editor:e,shop}=fullEditor(),stock=shop.toSave();
-  e.selectModule(moduleOf(0),stock,0);e.placeAt(10,stock,0);e.confirm(stock,0);
+  e.selectModule(moduleOf(0),stock,0);e.placeAt(W(10),stock,0);e.confirm(stock,0);
   const save={...source,schemaVersion:7,shop:stock,cageEdit:e.toSave()};const restored=deserializeChampionshipModernSave(serializeChampionshipModernSave(save));assert.deepEqual(restored.cageEdit,e.toSave());
   const bad=structuredClone(save);bad.cageEdit.placements.at(-1).instanceId=bad.cageEdit.placements[0].instanceId;assert.throws(()=>serializeChampionshipModernSave(bad));
   const no=structuredClone(save);delete no.cageEdit.placements.at(-1).instanceId;assert.throws(()=>serializeChampionshipModernSave(no));
   const insufficient=structuredClone(save);insufficient.shop.cageQuantities[83]=1;assert.throws(()=>serializeChampionshipModernSave(insufficient),/CAGE_INSTANCE_STOCK_MISMATCH/);
   const malformed=structuredClone(save);malformed.shop.cageQuantities[83]=101;assert.throws(()=>serializeChampionshipModernSave(malformed));
 });
-test('app moves one resident between copies, persists owner, then removal safely returns it to waiting',async()=>{
+test('app moves one resident between copies, persists owner; a home cage is kept until its resident moves',async()=>{
   const h=harness();let a=h.create();try{
     await a.newGame();a.openShop();a.buyShopItem(defs[0].shopRecordIndex,2);a.leaveScreen();a.openCageEdit();
-    for(const slot of [10,12]){a.selectCageModule(moduleOf(0));assert.equal(a.placeCageAt(slot).lastVerdict.reason,'PLACED');}
-    a.confirmCageEdit();const frame=a.getCageEditFrame(),ground=createRanchRaisingGround(frame),copies=frame.placements.filter(p=>[10,12].includes(p.slotIndex));a.leaveScreen();
+    for(const slot of [W(10),W(12)]){a.selectCageModule(moduleOf(0));assert.equal(a.placeCageAt(slot).lastVerdict.reason,'PLACED');}
+    a.confirmCageEdit();const frame=a.getCageEditFrame(),ground=createRanchRaisingGround(frame),copies=frame.placements.filter(p=>[W(10),W(12)].includes(p.slotIndex));a.leaveScreen();
     const id=a.getRaisingInstances()[0].instanceId;
     for(const copy of copies){const p=ranchRaisingSpawnPosition(ground,copy.instanceId,{next:()=>51});assert.equal(a.moveRaisingResidentToGround(id,{x:p[0]/4096,y:p[1]/4096}),true);assert.equal(a.getRaisingActorFrame(id).cageInstanceId,copy.instanceId);}
     a.save();await a.dispose();a=h.create();await a.continueGame();assert.equal(a.getRaisingActorFrame(id).cageInstanceId,copies[1].instanceId);
-    a.openCageEdit();a.removeCagePlacement(copies[1].instanceId);a.confirmCageEdit();assert.equal(a.getRaisingActorFrame(id).cageDefinitionIndex,35);
+    // Owner 2026-10-26 v1: removing a partner's home is refused, the layout stays, nobody falls off the map.
+    a.openCageEdit();assert.equal(a.removeCagePlacement(copies[1].instanceId).lastVerdict.reason,'RESIDENTS_PRESENT');
+    assert.ok(a.getCageEditFrame().placements.some(p=>p.instanceId===copies[1].instanceId));a.leaveScreen();
+    const back=ranchRaisingSpawnPosition(createRanchRaisingGround(a.getCageEditFrame()),copies[0].instanceId,{next:()=>51});
+    assert.equal(a.moveRaisingResidentToGround(id,{x:back[0]/4096,y:back[1]/4096}),true);
+    a.openCageEdit();assert.equal(a.removeCagePlacement(copies[1].instanceId).lastVerdict.reason,'REMOVED');a.confirmCageEdit();
+    assert.equal(a.getRaisingActorFrame(id).cageInstanceId,copies[0].instanceId);
     assert.ok(a.getCageEditFrame().placements.some(p=>p.instanceId===copies[0].instanceId));
   }finally{await a.dispose();}
 });
@@ -140,7 +161,8 @@ test('maximum100-cell placement and16-profile save stays within unchanged64KiB b
   const source=deserializeChampionshipModernSave(JSON.stringify(read('qa/championship-full-qa-save.json'))),{editor:e,shop}=fullEditor();
   shop.buy(defs[0].shopRecordIndex,95);const stock=shop.toSave();
   for(const p of e.getFrame(stock,0).placements)if(p.moduleId!==moduleOf(35))e.removePlacement(p.instanceId,stock,0);
-  for(let slot=0;slot<100;slot++)if(!e.getFrame(stock,0).slots[slot].moduleId){e.selectModule(moduleOf(0),stock,0);assert.equal(e.placeAt(slot,stock,0).lastVerdict.reason,'PLACED');}
+  for(let slot=0;e.getFrame(stock,0).occupiedCount<100;slot++)if(!e.getFrame(stock,0).slots[slot].moduleId){e.selectModule(moduleOf(0),stock,0);assert.equal(e.placeAt(slot,stock,0).lastVerdict.reason,'PLACED');}
+  e.selectModule(moduleOf(0),stock,0);assert.equal(e.placeAt(150,stock,0).lastVerdict.reason,'CELL_CAP','the 101st cell is refused');
   e.confirm(stock,0);assert.equal(e.getFrame(stock,0).occupiedCount,100);
   const next=structuredClone(source),base=next.raising.collection[0];
   while(next.raising.collection.length<15){const entry=structuredClone(base);entry.instanceId=`qa:capacity:${next.raising.collection.length}`;next.raising.collection.push(entry);next.raising.assignments[entry.instanceId]=next.raising.assignments[base.instanceId];}

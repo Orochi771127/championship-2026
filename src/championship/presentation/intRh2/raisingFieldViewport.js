@@ -98,7 +98,7 @@ function nativeBoardPlacement(field, viewport, padding, scale) {
   // A ranch without the expansion shows the same rows locked (2026-10-12), so
   // both lay out the same height and the board sits in the same place.
   const band = field.fold?.bandOffsetPx ?? field.expansionPreview?.bandOffsetPx ?? 0;
-  const height = (band > 0 ? band + field.worldHeightPx : field.worldHeightPx) * scale;
+  const height = (band > 0 ? band + field.worldHeightPx : field.worldHeightPx) * scale * groundScaleY(field);
   const headroom = RAISING_TOP_HEADROOM_NATIVE * field.nativePixelWorldScale * scale;
   const available = viewport.height - padding;
   if (headroom + height <= available) {
@@ -122,6 +122,13 @@ function nativeBoardPlacement(field, viewport, padding, scale) {
  * and normalized geometry; this does not assign residents to native modules.
  * Art, actor positions and drop targets share this fitted rectangle.
  */
+/** Vertical screen scale of the ground under a 3D view pitch (1 at the
+ * original 52 degrees). Bodies stand upright and keep `scale`. */
+function groundScaleY(field) {
+  const value = field?.fold ? 1 : field?.view?.groundScaleY;
+  return value > 0 ? value : 1;
+}
+
 export function raisingFieldViewport(field, viewport, padding = 12, cameraX = 0) {
   if (!(field?.worldWidthPx > 0 && field?.worldHeightPx > 0)) {
     return { x: 0, y: 0, width: viewport.width, height: viewport.height, scale: 1 };
@@ -136,14 +143,15 @@ export function raisingFieldViewport(field, viewport, padding = 12, cameraX = 0)
     ? raisingNativeScreenPixels(field, viewport, padding) * zoom / field.nativePixelWorldScale
     : Math.min(Math.max(1, viewport.width - padding * 2) / field.worldWidthPx, heightScale);
   const width = field.worldWidthPx * scale;
-  const height = field.worldHeightPx * scale;
+  const scaleY = scale * groundScaleY(field);
+  const height = field.worldHeightPx * scaleY;
   const maxCameraX = Math.max(0,field.worldWidthPx - (viewport.width-padding*2)/scale);
   const scroll=field.wrapWidthPx ? wrapRaisingCamera(cameraX,field.wrapWidthPx) : Math.min(maxCameraX,Math.max(0,cameraX));
   const x = nativeWindow ? padding - scroll*scale : (viewport.width-width)/2;
   if (!nativeWindow) return { x, y: (viewport.height - height) / 2, width, height, scale };
   // Whole screen pixels for the board's top edge, so rows do not shimmer.
   const { y, scrollMinY = 0, scrollMaxY, scrollY } = nativeBoardPlacement(field, viewport, padding, scale);
-  return { x, y, width, height, scale, scrollY, scrollMinY, scrollMaxY };
+  return { x, y, width, height, scale, scaleY, scrollY, scrollMinY, scrollMaxY };
 }
 
 /**
@@ -276,7 +284,7 @@ export function raisingNativeToScreen(positionQ12,field,viewport,cameraX=0) {
   if(field.wrapWidthPx){const camera=wrapRaisingCamera(cameraX,field.wrapWidthPx);
     const centre=camera+(viewport.width-24)/(2*fit.scale);
     x+=Math.round((centre-x)/field.wrapWidthPx)*field.wrapWidthPx;}
-  return {x:fit.x+x*fit.scale,y:fit.y+positionQ12[1]/4096*unit*fit.scale};
+  return {x:fit.x+x*fit.scale,y:fit.y+positionQ12[1]/4096*unit*(fit.scaleY??fit.scale)};
 }
 export function raisingScreenToNative(point,field,viewport,cameraX=0) {
   const fit=raisingFieldViewport(field,viewport,12,cameraX),unit=field?.nativePixelWorldScale;
@@ -287,7 +295,7 @@ export function raisingScreenToNative(point,field,viewport,cameraX=0) {
     return {x:second?fold.splitPx/unit+nx:nx,y:second?ny-fold.bandOffsetPx/unit:ny,band:second?1:0};
   }
   const x=(point.x-fit.x)/(unit*fit.scale);
-  return {x:field.wrapWidthPx?wrapRaisingCamera(x,field.wrapWidthPx/unit):x,y:(point.y-fit.y)/(unit*fit.scale)};
+  return {x:field.wrapWidthPx?wrapRaisingCamera(x,field.wrapWidthPx/unit):x,y:(point.y-fit.y)/(unit*(fit.scaleY??fit.scale))};
 }
 
 /** Recenter an existing native camera without discarding its current scroll.
@@ -297,6 +305,6 @@ export function centerRaisingNativeY(field, viewport, nativeY, cameraX = 0) {
   const fit = raisingFieldViewport(field, viewport, 12, cameraX);
   const current = fit.scrollY ?? 0;
   if (!Number.isFinite(nativeY) || !(field?.nativePixelWorldScale > 0)) return current;
-  const delta = Math.floor(viewport.height / 2) - fit.y - nativeY * field.nativePixelWorldScale * fit.scale;
+  const delta = Math.floor(viewport.height / 2) - fit.y - nativeY * field.nativePixelWorldScale * (fit.scaleY ?? fit.scale);
   return Math.min(fit.scrollMaxY ?? 0, Math.max(fit.scrollMinY ?? 0, Math.round(current + delta)));
 }

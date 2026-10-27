@@ -5,22 +5,19 @@ import {actorWorldBounds} from './actorBounds.mjs';
 import {projectionForManifest} from './projection.mjs';
 
 export function configureAuthoredLighting({manifest,scene,ambient,sun,night=false}){
-  // Diorama light shared with the ranch (2026-10-26): warm key, cool sky fill,
-  // green ground bounce, soft cool shadows. Intensities keep the hunt balance.
-  ambient.color.set(night?0xb8c8e6:0xc9ddf2);ambient.groundColor.set(0x5d6b45);ambient.intensity=night?.45:.8;
-  sun.color.set(night?0x9eb8ff:0xfff1d6);sun.intensity=night?.65:1.7;
+  ambient.color.set(0xdce9ff);ambient.groundColor.set(0x574f3e);ambient.intensity=night?.45:.8;
+  sun.color.set(night?0x9eb8ff:0xfff1db);sun.intensity=night?.65:1.7;
   const center=projectionForManifest(manifest).ground(1440,1440);
   sun.position.set(center[0]-30,65,center[2]+40);sun.target.position.set(...center);scene.add(sun.target);
   sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-80;sun.shadow.camera.right=80;sun.shadow.camera.top=80;sun.shadow.camera.bottom=-80;
   sun.shadow.camera.near=.1;sun.shadow.camera.far=250;sun.shadow.bias=-.001;sun.shadow.normalBias=.05;
-  sun.shadow.radius=3;sun.shadow.intensity=.82;
 }
 
 // Adapter for the self-contained material GLBs in the reviewed authoring batch.
 // Rendering and actor ownership remain in the existing shared Three/Pixi pass.
 export async function loadAuthoredMapAssets({THREE,GLTFLoader,DRACOLoader,dracoDecoderPath,manifest,fieldId,baseUrl,signal,disposer}){
   if(manifest.schema!=='HUNT_AUTHORED_MAP.v1'||!manifest.fields.includes(fieldId)
-    ||!['hm02','hm03','hm04','hm05','hm06','hm09','hm10','hm11','hm13','hm15','hm16','hm17','hm18'].includes(manifest.map))throw Error('HUNT_AUTHORED_FIELD_MISMATCH');
+    ||!['hm02','hm03','hm04','hm05','hm06','hm09','hm10','hm11','hm13','hm14','hm15','hm16','hm17','hm18'].includes(manifest.map))throw Error('HUNT_AUTHORED_FIELD_MISMATCH');
   validateIdentity(manifest.glb);
   const manager=new THREE.LoadingManager();
   manager.setURLModifier(url=>{if(url.startsWith('blob:')||url.startsWith('data:'))return url;throw Error('HUNT_AUTHORED_EXTERNAL_RESOURCE');});
@@ -68,9 +65,20 @@ export async function loadAuthoredMapAssets({THREE,GLTFLoader,DRACOLoader,dracoD
     const resolveSupport=({wild,node,view})=>{
       const box=actorWorldBounds(wild,node,32),visible=view.visibleMapRect??view.viewRect;
       if(visible&&(box.right<visible.left||box.left>visible.right||box.bottom<visible.top||box.top>visible.bottom))return {verifiedSourceId,groundHeight:0,offscreen:true};
-      if(manifest.flatSupport?.exclusions.some(r=>box.left<=r.right&&box.right>=r.left&&box.top<=r.bottom&&box.bottom>=r.top))return null;
-      const groundHeight=heights?heights.get(Math.floor(wild.worldY/16)*180+Math.floor(wild.worldX/16)):manifest.flatSupport.height;
-      return Number.isFinite(groundHeight)?{verifiedSourceId,groundHeight}:null;
+      // Owner 2026-10-27: one creature on an unmeasured cell (cliff, lava edge,
+      // an exclusion, just off the grid) used to send the whole map back to 2D.
+      // It now stands at the nearest measured height within 4 tiles, else the flat plane.
+      if(!heights)return {verifiedSourceId:manifest.flatSupport?.exclusions.some(r=>box.left<=r.right&&box.right>=r.left&&box.top<=r.bottom&&box.bottom>=r.top)
+        ?`FLAT_EXCLUSION_FALLBACK ${manifest.glb.sha256}`:verifiedSourceId,groundHeight:manifest.flatSupport.height};
+      const tx=Math.min(179,Math.max(0,Math.floor(wild.worldX/16))),ty=Math.min(179,Math.max(0,Math.floor(wild.worldY/16)));
+      const exact=heights.get(ty*180+tx);
+      if(Number.isFinite(exact))return {verifiedSourceId,groundHeight:exact};
+      for(let r=1;r<=4;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){
+        if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;
+        const near=heights.get(Math.min(179,Math.max(0,ty+dy))*180+Math.min(179,Math.max(0,tx+dx)));
+        if(Number.isFinite(near))return {verifiedSourceId:`NEAREST_HEIGHT_FALLBACK ${manifest.groundHeights.sha256}`,groundHeight:near};
+      }
+      return {verifiedSourceId:`GROUND_PLANE_FALLBACK ${manifest.groundHeights.sha256}`,groundHeight:0};
     };
     let selectPhase=()=>{};
     if(manifest.lavaPhase){

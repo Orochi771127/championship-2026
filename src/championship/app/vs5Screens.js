@@ -722,6 +722,13 @@ function meter(className, label) {
   return { wrap, fill };
 }
 
+// Result juice (ui/arcadeFx.js listens): one DOM event, never a dependency.
+function arcadeFx(target, kind, text) {
+  const Event = target?.ownerDocument?.defaultView?.CustomEvent ?? globalThis.CustomEvent;
+  if (!target?.dispatchEvent || typeof Event !== "function") return;
+  try { target.dispatchEvent(new Event("cm-fx", { bubbles: true, detail: { kind, text } })); } catch { /* no effects */ }
+}
+
 // Keep exact HP/TP current/max text, but allow only the slash/max fragment
 // to move to a second line when a narrow three-member card needs it.
 function floatingMeterNumerals(value, label) {
@@ -753,7 +760,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false) {
   card.append(name, hp.wrap);
   if (floatingHud) hp.wrap.append(hpValue); else card.append(hpValue);
   let resource = null;
-  let sequenceId=0,sequenceStart=0;
+  let sequenceId=0,sequenceStart=0,paintedHp=null;
   if (!compact || floatingHud) {
     resource = meter("cm-vs5-meter--resource", "Action resource");
     if (floatingHud) {
@@ -772,6 +779,11 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false) {
       portrait.hidden=floatingHud||!image;
       if(image){if(portrait.getAttribute('src')!==image.src)portrait.src=image.src;}
       hp.fill.style.width = `${Math.round(next.hp.ratio * 100)}%`;
+      // The arcade rebuild's hit feel: the bar drops at once and a white ghost
+      // (the meter's ::before, CSS-delayed) follows after a beat.
+      hp.wrap.style?.setProperty?.("--ghost", hp.fill.style.width);
+      if (Number.isFinite(paintedHp) && next.hp.current < paintedHp) arcadeFx(hp.wrap, "damage", `-${paintedHp - next.hp.current}`);
+      paintedHp = next.hp.current;
       if (updateHpNumerals) updateHpNumerals(next.hp);
       else hpValue.textContent = uiText("生命值 {hp} / {max}", { hp: next.hp.current, max: next.hp.maximum });
       hp.wrap.setAttribute('aria-label', floatingHud ? `${uiText('Health')} ${next.hp.current} / ${next.hp.maximum}` : uiText(hpValue.textContent));
@@ -781,6 +793,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false) {
       card.dataset.engaged = String(next.engaged);
       if (resource) {
         resource.fill.style.width = `${Math.round(next.resource.ratio * 100)}%`;
+        resource.wrap.style?.setProperty?.("--ghost", resource.fill.style.width);
         resource.wrap.setAttribute("aria-valuenow", String(next.resource.current));
         resource.wrap.setAttribute("aria-valuemax", String(next.resource.maximum));
         if (resource.updateNumerals) resource.updateNumerals(next.resource);

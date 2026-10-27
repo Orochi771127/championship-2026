@@ -1,6 +1,7 @@
 import { uiText } from "../text/uiText.js";
 import { formatList } from "../text/locale.js";
 import {generationName,personalityName,rosterFamilyName,specialSkillName} from '../text/zhHant.js';
+import { databaseHeroPortrait } from "../presentation/databaseHeroPortraits.js";
 // The Digimon roster -- the original's ui/digimon_list_* scenes.
 //
 // STRUCTURE COMES FROM THE ROM SCENES, NOT FROM TASTE
@@ -96,13 +97,32 @@ function element(tag, className, text, localize = true) {
  * Shared by this screen and the Raising Home detail sheet (2026-09-29), so
  * both read one source and show the same rows in the same order.
  */
+// Owner 2026-10-27: the roster reads as a bento of groups. Each label/value
+// pair sits in one wrapper (display: contents everywhere except the arcade
+// roster), so the shared detail sheet keeps its two-column list unchanged.
+const ROW_GROUPS = Object.freeze({
+  nickname: "identity", species: "identity", gen: "identity", mind: "identity", family: "identity", align_icon: "identity",
+  HP: "vital", TP: "vital", size: "vital",
+  attack: "combat", def: "combat", wiz: "combat", spd: "combat",
+  sp1: "skill", sp2: "skill",
+  num_battle: "record", win_rate: "record", digitama: "record"
+});
+
 export function appendCreatureDetail(detail, entry) {
   for (const row of TRACED_DETAIL_ROWS) {
     const value = row.read(entry);
     if (value === null || value === undefined) continue;
     const term = element("dt", "cm-digimon-detail__label", row.label);
     term.setAttribute("data-row", row.id);
-    detail.append(term, element("dd", "cm-digimon-detail__value", String(value), row.id !== "nickname"));
+    const cell = element("dd", "cm-digimon-detail__value", String(value), row.id !== "nickname");
+    const group = element("div", "cm-digimon-stat");
+    group.dataset.row = row.id;
+    group.dataset.group = ROW_GROUPS[row.id] ?? "identity";
+    // Vital bars read their fill from the same numbers the text shows.
+    const pair = row.id === "HP" ? [entry.stats?.currentHp, entry.stats?.maxHp] : row.id === "TP" ? [entry.stats?.currentTp, entry.stats?.maxTp] : null;
+    if (pair && Number.isFinite(pair[0]) && Number.isFinite(pair[1]) && pair[1] > 0) group.style.setProperty("--fill", String(Math.max(0, Math.min(1, pair[0] / pair[1]))));
+    group.append(term, cell);
+    detail.append(group);
   }
   const graphValues = entry.stats?.resistanceGraph;
   if (Array.isArray(graphValues) && graphValues.length === 5) {
@@ -171,7 +191,12 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
       button.type = "button";
       button.dataset.index = String(index);
       button.setAttribute("aria-pressed", String(index === selectedIndex));
-      button.append(element("span", "cm-digimon-item__name", entry.displayName, false));
+      // A thumbnail of the partner (the encyclopedia's own art) leads the name.
+      const art = databaseHeroPortrait(entry.identity?.recordIndex)?.thumbnail;
+      const thumb = element(art ? "img" : "span", "cm-digimon-item__thumb");
+      thumb.setAttribute("aria-hidden", "true");
+      if (art) { thumb.alt = ""; thumb.decoding = "async"; thumb.src = art.src; }
+      button.append(thumb, element("span", "cm-digimon-item__name", entry.displayName, false));
       button.addEventListener("click", () => {
         selectedIndex = index;
         closeEditor();

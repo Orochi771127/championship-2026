@@ -2,6 +2,8 @@ import { uiText } from "../text/uiText.js";
 import { shopGoodsPresentation, huntToolIconPresentation } from '../presentation/shopGoodsUiArt.js';
 import { getHuntCatalogItem } from '../hunt/loadout/huntEquipmentCatalog.js';
 import { playCeremony, ceremonyEnvironment, CEREMONY_TIMING } from '../presentation/ceremony/ceremonyRunner.js';
+import { mountLoadingWalker } from './ui/loadingWalker.js';
+import { mountAmbience, ambienceTheme } from './ui/ambienceLayer.js';
 import { buildGateEntry, buildCapture } from '../presentation/ceremony/ceremonyScenes.js';
 import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from './vs2PresentationAuthority.js';
 export { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from './vs2PresentationAuthority.js';
@@ -160,6 +162,11 @@ export async function createGateSelectView({ root, source, mountWorld }) {
     signal: String(initial.gateSelect.gates.length)
   });
   body.classList.add("cm-vs2-body--gate");
+  // Owner 2026-10-27 holo navigator: one screen, the globe on top with the chosen
+  // destination's visor on its lower edge, a sideways cartridge carousel below.
+  // Globe and carousel follow each other; the toggle shows every card at once.
+  const GATE_LAYOUT = "HOLO_NAV_R1";
+  root.dataset.gateLayout = GATE_LAYOUT;
 
   const worldPanel = element("section", "cm-vs2-gate3d");
   worldPanel.dataset.sceneAuthority = "ORIGINAL_CREATED_2026_GATE_WORLD";
@@ -207,6 +214,29 @@ export async function createGateSelectView({ root, source, mountWorld }) {
   const list = element("div", "cm-vs2-gates");
   list.setAttribute("role", "listbox");
   list.setAttribute("aria-label", uiText("Biome destinations"));
+  // The carousel scrolls sideways: a wheel turns it, a mouse can drag it.
+  list.addEventListener?.("wheel", (event) => {
+    if (root.dataset.gatePresentation !== "THREE_BOUNDED_WORLD_MODE" || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+    event.preventDefault();
+    list.scrollLeft += event.deltaY;
+  }, { passive: false });
+  let carouselDrag = null;
+  list.addEventListener?.("pointerdown", (event) => {
+    if (event.pointerType !== "mouse" || event.button !== 0) return;
+    carouselDrag = { x: event.clientX, left: list.scrollLeft, moved: false };
+  });
+  list.addEventListener?.("pointermove", (event) => {
+    if (!carouselDrag) return;
+    const dx = event.clientX - carouselDrag.x;
+    if (!carouselDrag.moved && Math.abs(dx) < 6) return;
+    carouselDrag.moved = true;
+    list.dataset.dragging = "true";
+    list.scrollLeft = carouselDrag.left - dx;
+  });
+  const endCarouselDrag = () => { setTimeout(() => { delete list.dataset.dragging; }, 0); carouselDrag = null; };
+  list.addEventListener?.("pointerup", endCarouselDrag);
+  list.addEventListener?.("pointerleave", endCarouselDrag);
+  list.addEventListener?.("click", (event) => { if (list.dataset.dragging === "true") { event.stopPropagation(); event.preventDefault(); } }, true);
   fallbackPanel.append(fallbackHeading, list);
   previewHeading.append(admissionStatus);
   body.append(preview, worldPanel, fallbackPanel);
@@ -222,6 +252,7 @@ export async function createGateSelectView({ root, source, mountWorld }) {
   const buttons = new Map();
   let worldPresentation = null;
   let worldFailure = null;
+  let disposed = false;
   let fallbackVisible = initial.gateSelect.tutorial || mode === VS2_PRESENTATION_MODES.DEVELOPER;
   if(initial.gateSelect.tutorial){worldPanel.hidden=true;back.hidden=true;confirm.textContent=uiText("開始狩獵");}
   try {
@@ -232,7 +263,7 @@ export async function createGateSelectView({ root, source, mountWorld }) {
     worldPanel.dataset.view = fallbackVisible ? "fallback" : "world";
     worldHost.hidden = fallbackVisible;
     dragHint.hidden = fallbackVisible;
-    fallbackPanel.hidden = !fallbackVisible;
+    fallbackPanel.hidden = !fallbackVisible && root.dataset.gateLayout !== GATE_LAYOUT;
     viewToggle.textContent = uiText(fallbackVisible ? "返回地球" : "場地列表");
     viewToggle.setAttribute("aria-pressed", String(fallbackVisible));
     root.dataset.gatePresentation = fallbackVisible
@@ -241,17 +272,23 @@ export async function createGateSelectView({ root, source, mountWorld }) {
   }
 
   async function ensureWorld() {
+    if (disposed) return false;
     if (worldPresentation) return true;
     if (typeof mountWorld !== "function") {
       worldFailure = new Error("CHAMPIONSHIP_GATE_3D_MOUNTER_UNAVAILABLE");
       return false;
     }
     try {
-      worldPresentation = await mountWorld({
+      const mounted = await mountWorld({
         host: worldHost,
         gates: source.getFrame().gateSelect.gates,
         onSelect: (gateId) => source.intents.selectGate(gateId)
       });
+      if (disposed) {
+        mounted?.dispose?.();
+        return false;
+      }
+      worldPresentation = mounted;
       worldFailure = null;
       worldPresentation.render(source.getFrame());
       return true;
@@ -273,6 +310,22 @@ export async function createGateSelectView({ root, source, mountWorld }) {
     })();
   });
 
+  let shownGateId = null;
+  const reducedMotion = () => globalThis.document?.documentElement?.dataset.motion === "reduced"
+    || Boolean(globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches);
+  // Bring a card to the middle of the carousel (or, where the cards stack, of the
+  // panel that scrolls them) without scrolling the page.
+  function centreCard(button) {
+    if (!button?.getBoundingClientRect || typeof list.scrollTo !== "function") return;
+    const behavior = reducedMotion() ? "auto" : "smooth", card = button.getBoundingClientRect();
+    if (list.scrollWidth > list.clientWidth + 1) {
+      const box = list.getBoundingClientRect();
+      list.scrollTo({ left: list.scrollLeft + card.left + card.width / 2 - (box.left + box.width / 2), behavior });
+    } else if (fallbackPanel.scrollHeight > fallbackPanel.clientHeight + 1) {
+      const box = fallbackPanel.getBoundingClientRect();
+      fallbackPanel.scrollTo({ top: fallbackPanel.scrollTop + card.top + card.height / 2 - (box.top + box.height / 2), behavior });
+    }
+  }
   function render(frame) {
     const block = frame.gateSelect;
     if (!block) return;
@@ -286,10 +339,22 @@ export async function createGateSelectView({ root, source, mountWorld }) {
         button.style.setProperty("--gate-phase", String((gate.ordinal - 1) % 8));
         const aperture = element("span", "cm-vs2-gate__aperture");
         aperture.setAttribute("aria-hidden", "true");
+        // The card shows the destination's own map, like the rebuild's art cards.
+        const thumbnail = gate.art?.thumbnail;
+        if (thumbnail?.src) {
+          const art = element("img", "cm-vs2-gate__art");
+          art.alt = "";
+          art.loading = "lazy";
+          art.decoding = "async";
+          art.src = thumbnail.src;
+          aperture.append(art);
+          button.dataset.hasArt = "true";
+        }
         button.append(
           aperture,
           element("span", "cm-vs2-gate__ordinal", String(gate.ordinal).padStart(2, "0")),
-          element("span", "cm-vs2-gate__name", gate.displayName)
+          element("span", "cm-vs2-gate__name", gate.displayName),
+          element("span", "cm-vs2-gate__fee")
         );
         button.addEventListener("click", () => source.intents.selectGate(gate.gateId));
         buttons.set(gate.gateId, button);
@@ -297,11 +362,16 @@ export async function createGateSelectView({ root, source, mountWorld }) {
       }
       button.setAttribute("aria-selected", String(gate.selected));
       button.dataset.selected = String(gate.selected);
+      const feeLabel = button.querySelector?.(".cm-vs2-gate__fee");
+      if (feeLabel) feeLabel.textContent = Number.isSafeInteger(gate.entranceFeeBits) ? uiText("{bits} 位元幣", { bits: gate.entranceFeeBits }) : "";
       button.dataset.availability = gate.state;
       if (gate.selected) {
         previewName.textContent = uiText(gate.displayName);
         previewId.textContent = uiText(gate.codeString ?? "");
         fee.textContent = Number.isSafeInteger(gate.entranceFeeBits) ? uiText("{bits} 位元幣", { bits: gate.entranceFeeBits }) : "—";
+        fee.dataset.free = String(gate.entranceFeeBits === 0);
+        preview.dataset.ordinal = String(gate.ordinal).padStart(2, "0");
+        preview.style.setProperty("--gate-phase", String((gate.ordinal - 1) % 8));
         const thumbnail = gate.art?.thumbnail;
         previewImage.hidden = !thumbnail;
         if (thumbnail) {
@@ -310,12 +380,28 @@ export async function createGateSelectView({ root, source, mountWorld }) {
         } else previewImage.removeAttribute('src');
       }
     }
+    // Globe and carousel follow each other: a new choice centres its card with a
+    // jelly pop, turns the globe to it, and springs the visor in.
+    const chosen = block.selection.gateId ?? null;
+    if (chosen !== shownGateId) {
+      const previous = shownGateId;
+      shownGateId = chosen;
+      preview.dataset.selected = String(Boolean(chosen));
+      if (chosen) {
+        const button = buttons.get(chosen);
+        centreCard(button);
+        if (button && previous !== null) { button.dataset.pop = "false"; void button.offsetWidth; button.dataset.pop = "true"; }
+        if (previous !== null) { preview.dataset.pop = "false"; void preview.offsetWidth; preview.dataset.pop = "true"; }
+        worldPresentation?.focus?.(chosen, { animate: previous !== null && !reducedMotion() });
+      }
+    }
     if (!block.selection.gateId) {
       previewName.textContent = uiText("請選擇目的地");
       previewId.textContent = uiText("");
       previewImage.hidden = true;
       previewImage.removeAttribute('src');
       fee.textContent = uiText("—");
+      delete fee.dataset.free;
     }
     wallet.textContent = Number.isSafeInteger(block.walletBits) ? uiText("{bits} 位元幣", { bits: block.walletBits }) : "—";
     confirm.disabled = !block.canConfirm;
@@ -341,7 +427,9 @@ export async function createGateSelectView({ root, source, mountWorld }) {
       });
     },
     dispose() {
+      disposed = true;
       worldPresentation?.dispose?.();
+      worldPresentation = null;
       buttons.clear();
       root.replaceChildren();
       root.className = "";
@@ -349,6 +437,7 @@ export async function createGateSelectView({ root, source, mountWorld }) {
       delete root.dataset.presentationMode;
       delete root.dataset.screen;
       delete root.dataset.gatePresentation;
+      delete root.dataset.gateLayout;
     }
   });
 }
@@ -567,6 +656,10 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   fieldHost.setAttribute("aria-busy", "true");
   fieldHost.setAttribute("aria-label", uiText("Exploration field. Drag empty ground to look around. Touch a creature to select it."));
   viewport.append(fieldHost);
+  // HD-2D ambience over the field (Owner 2026-10-27): a diorama vignette in the
+  // biome's light and a few drifting particles; it never takes input.
+  const ambience = mountAmbience(viewport, { theme: ambienceTheme(block.hud.biomeId) });
+  viewport.dataset.biome = block.hud.biomeId ?? '';
   // Loading reads as a sentence, a bar once the download size is known, and a
   // note if it is slow. The status role only speaks at whole tens of percent.
   const loading = element('div', 'cm-vs2-field__loading');
@@ -585,8 +678,17 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   loadingBytes.hidden = true;
   const loadingNote = element('p', 'cm-vs2-field__loading-note');
   loadingNote.hidden = true;
-  loading.append(loadingText, loadingBar, loadingBytes, loadingNote);
+  // Owner 2026-10-27: the loading screen is a compact dashboard -- where, how
+  // long, a partner walking the bar -- not a stack of panels.
+  const loadingTitle = element('p', 'cm-vs2-field__loading-title');
+  const loadingGate = element('strong', 'cm-vs2-field__loading-gate', block.hud.gateName ?? '');
+  const loadingLimit = element('span', 'cm-vs2-field__loading-limit');
+  loadingTitle.append(loadingGate, loadingLimit);
+  const walkLane = element('span', 'cm-vs2-field__walk-lane');
+  walkLane.setAttribute('aria-hidden', 'true');
+  loading.append(loadingTitle, walkLane, loadingText, loadingBar, loadingBytes, loadingNote);
   viewport.append(loading);
+  const walker = frame.tutorial ? null : mountLoadingWalker(walkLane);
   // Ceremony (2026-10-15): 傳送門連線 covers the download and opens onto the
   // live field. It decorates the entry the app has already made; the field
   // runs underneath from its first frame, and a tap settles it.
@@ -596,16 +698,38 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   const remainingText = (minutes) => minutes == null ? '' : uiText('限時 {time}', {
     time: `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}` });
   const entryGate = uiText(block.hud.gateName ?? '');
+  loadingGate.textContent = entryGate;
+  loadingLimit.textContent = remainingText(block.hud.time?.remainingMinutes);
   let entry = frame.tutorial ? null : playCeremony({ host: viewport, kind: 'gate-entry', cue: 'gate', autoDismiss: false,
     label: uiText('傳送門連線：{gate}', { gate: entryGate }),
     build: (stage, env) => buildGateEntry(stage, env, { kicker: uiText('傳送門連線'), gateName: entryGate,
       meta: remainingText(block.hud.time?.remainingMinutes), hint: uiText('輕觸略過') }) });
-  const closeEntry = () => { clearTimeout(entryTimer); entryTimer = null; entry?.dispose(); entry = null; };
+  const closeEntry = () => { clearTimeout(entryTimer); entryTimer = null; entry?.dispose(); entry = null; walker?.dispose(); };
+  const replay = (node, key) => { node.dataset[key] = 'false'; void node.offsetWidth; node.dataset[key] = 'true'; };
+  // The orb is the portal: the download charges it (its rings speed up and draw
+  // in), and when the field is ready it splits open onto the live field.
+  const portalCharge = (value) => viewport.style.setProperty('--portal-progress', String(Math.max(0, Math.min(1, value))));
+  portalCharge(0);
+  function breachEntry() {
+    const node = entry?.element;
+    if (!node || entryEnv.reduced) { entry?.dismiss(); walker?.dispose(); return; }
+    portalCharge(1);
+    node.dataset.breach = 'true';
+    viewport.dataset.entering = 'true';
+    const Event = viewport.ownerDocument?.defaultView?.CustomEvent ?? globalThis.CustomEvent;
+    try { viewport.dispatchEvent(new Event('cm-fx', { bubbles: true, detail: { kind: 'open' } })); } catch { /* optional */ }
+    entryTimer = setTimeout(() => {
+      entryTimer = null;
+      closeEntry();
+      setTimeout(() => { delete viewport.dataset.entering; }, 160);
+    }, 900); // the breach in screenLayout.css runs 900 ms (Owner 2026-10-27: make it unmistakable)
+  }
   // 捕獲成功: a toast over the live field when a catch lands on the card.
   const seenCaptures = new Set((block.hud.onCard ?? []).map((entry) => entry.wildId));
   let captureToast = null;
   function announceCapture(caught, total) {
     captureToast?.dispose();
+    replay(viewport, 'shake');
     captureToast = playCeremony({ host: viewport, kind: 'capture', cue: 'capture',
       build: (stage, env) => buildCapture(stage, env, { kicker: uiText('捕獲成功'), name: caught.name ?? '',
         chip: uiText('已收入記憶卡 · {count}', { count: total }) }),
@@ -642,7 +766,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     let checkpoint=null;
     button.addEventListener("pointerdown",()=>{checkpoint=source.getFrame().tutorial?.checkpoint??null;});
     button.addEventListener("keydown",()=>{checkpoint=source.getFrame().tutorial?.checkpoint??null;});
-    button.addEventListener("click",()=>source.intents.selectHuntTool(tool.id,checkpoint));
+    button.addEventListener("click",()=>{replay(button,"pop");source.intents.selectHuntTool(tool.id,checkpoint);});
     toolButtons.set(tool.id,button);tools.append(button);
   }
   const movementHint = element("p", "cm-vs2-field__hint", "拖曳地面移動視野 · 輕觸夥伴選取");
@@ -699,6 +823,8 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       loadingFill.style.width = `${percent}%`;
       loadingBar.setAttribute('aria-valuenow', String(percent));
       loadingBytes.textContent = `${sizeText(progress.loaded)} / ${sizeText(progress.total)}`;
+      walker?.setProgress(percent / 100);
+      portalCharge(percent / 100);
       step = `p${Math.floor(percent / 10)}`;
       text = uiText('正在下載狩獵場 {percent}%', { percent: Math.floor(percent / 10) * 10 });
     } else {
@@ -706,6 +832,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       loadingFill.style.removeProperty('width');
       loadingBar.removeAttribute('aria-valuenow');
       loadingBytes.textContent = uiText('已下載 {size}', { size: sizeText(progress.loaded) });
+      walker?.setProgress(null);
       step = 'bytes';
       text = uiText('正在下載狩獵場…');
     }
@@ -737,6 +864,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     }), cancelled]);
   } catch (error) {
     closeEntry();
+    ambience.dispose();
     throw error;
   } finally {
     watchdog.stop();
@@ -754,16 +882,18 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       loadingBytes.hidden = true;
       loadingNote.hidden = true;
     }
-    return Object.freeze({ isPlayable: false, render() {}, dispose() { closeEntry(); load.abort(); shell.remove(); } });
+    return Object.freeze({ isPlayable: false, render() {}, dispose() { closeEntry(); ambience.dispose(); load.abort(); shell.remove(); } });
   }
   if (!field || typeof field.render !== "function" || typeof field.dispose !== "function") {
     throw new TypeError("Published field presenter must expose render(frame) and dispose()");
   }
   fieldHost.setAttribute('aria-busy', 'false');
   loading.remove();
+  if (!entry) walker?.dispose();
   if (entry) {
     const hold = entryEnv.reduced ? 0 : Math.max(0, CEREMONY_TIMING['gate-entry'].minHold - (performance.now() - entryStarted));
-    entryTimer = setTimeout(() => { entryTimer = null; entry?.dismiss(); }, hold);
+    walker?.setProgress(1);
+    entryTimer = setTimeout(() => { entryTimer = null; breachEntry(); }, hold);
   }
 
   function render(nextFrame) {
@@ -774,6 +904,8 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     const remaining=next.hud.time?.remainingMinutes;
     companion.textContent = uiText(remaining == null ? next.hud.companionName ?? "" :
       uiText('剩餘 {time}', { time: `${String(Math.floor(remaining/60)).padStart(2,'0')}:${String(remaining%60).padStart(2,'0')}` }));
+    // The last hour of the field's clock beats amber, then red.
+    hud.dataset.urgent = remaining == null ? 'false' : remaining <= 15 ? 'critical' : remaining < 60 ? 'warning' : 'false';
     const onCard = next.hud.onCard ?? [];
     for (const caught of onCard) {
       if (seenCaptures.has(caught.wildId)) continue;
@@ -793,6 +925,10 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       for(const tool of next.toolState.tools){const button=toolButtons.get(tool.id);if(button){button.disabled=field.isPlayable===false||!tool.enabled;button.setAttribute("aria-pressed",String(next.toolState.activeTool===tool.id));
         const counter=plugins?.counters.find(c=>c.id===tool.id);renderHuntTool(button,tool,uiText(tool.label)+(counter?` ×${counter.quantity}`:''));}}
       const selectedTool=next.toolState.tools.find(t=>t.id===next.toolState.activeTool);
+      // Rope primed: the field's corners frame a scope. A target that can be
+      // collected makes the hand key pulse (the hand is what collects).
+      viewport.dataset.tool=selectedTool?.id??'';
+      const hand=toolButtons.get('HAND');if(hand)hand.dataset.ready=String(Boolean(nextFrame.huntField?.affordances?.canCollect));
       // A notice (the rope broke, the card is full) is feedback and always
       // shows; an instruction is a hint the compact HUD may leave out.
       const noticeKnown=Boolean(next.toolState.notice&&["OVER_CAPACITY","ROPE_BROKEN","ON_CARD","EMPTY","BLOCKED_TERRAIN","FOOD_POOL_FULL","TOOL_POOL_FULL"].includes(next.toolState.notice));
@@ -824,6 +960,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     dispose() {
       closeEntry();
       captureToast?.dispose();
+      ambience.dispose();
       load.abort();
       field.dispose();
       root.replaceChildren();

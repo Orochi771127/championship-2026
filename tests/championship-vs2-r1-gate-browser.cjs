@@ -94,7 +94,10 @@ async function runWorldFlow(browser, viewport) {
   await page.screenshot({ path: path.join(SCREENSHOTS, `gate-to-loadout-${name}.png`) });
 
   const keys = await page.evaluate(() => Object.keys(localStorage));
-  assert.deepEqual(keys.filter((key) => key !== "championshipModernSave:v1"), []);
+  assert.deepEqual(
+    keys.filter((key) => key !== "championshipModernSave:v1" && key !== "championshipSessionCheckpoint:v1"),
+    []
+  );
   assert.deepEqual(problems, []);
   await context.close();
   return { ...before, selectedGateId, threeRendererAfterTransition: 0, storageKeys: keys, verdict: "PASS" };

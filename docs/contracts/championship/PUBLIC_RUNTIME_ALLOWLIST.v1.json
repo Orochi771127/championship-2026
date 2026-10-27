@@ -114882,20 +114882,20 @@
       "sha256": "fbb93925c9d9292dcedb42e8a76103768d766c107275be851cde9335eb3dc087"
     },
     {
-      "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-00-7612568c0979.webp",
-      "sha256": "145e0741befce2fe8a540c12032681bfa2360e14726f20afc91d5c0452ceb5b9"
+      "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-00-rgb-050917d71fe9.webp",
+      "sha256": "050917d71fe9743c42c991fed22815055dc089864ca3e171f78b345a8a3ca089"
     },
     {
-      "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-01-eeb2ff08fdd4.webp",
-      "sha256": "c0528ddbe071e8ec1e378063d8c43a3354f3135fcc7ca8cf66562d975ade7e11"
+      "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-01-rgb-acc704c4fee6.webp",
+      "sha256": "acc704c4fee6e203ae3511a26a0edbe4d9abef48564c183c2fabb9a0d1f00bb1"
     },
     {
-      "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_02-frame-00-2ddf2c03c3e1.webp",
-      "sha256": "83d36ee15c08762b0c63661039848dcce16280e53aade1a9d7b00c8796506c0b"
+      "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_02-frame-00-rgb-189b41d68349.webp",
+      "sha256": "189b41d6834981dc47ef119d1770536cf791b2f83628183dfbe9c6b4875232ee"
     },
     {
-      "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_02-frame-01-4fb08e2d1d80.webp",
-      "sha256": "8921889eb5ce7437c3de4071bd3c8325475999c3e1dc08e39397c93b555ec8e0"
+      "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_02-frame-01-rgb-bf53f7b0f11c.webp",
+      "sha256": "bf53f7b0f11cad9ff6692c3137b69fc8e10ba33ed28008ddee56514932f1b3bf"
     },
     {
       "path": "assets/production/hunt/hm01-three-r1-20261022/hm01-ground-heights.json",
@@ -114915,12 +114915,16 @@
       ]
     },
     {
+      "path": "assets/production/hunt/hm01-three-r1-20261022/hm01-mask-3cb5e0973817.webp",
+      "sha256": "3cb5e097381788fab53fc489eba56e845f516c56c864da056b31d58092eeebb6"
+    },
+    {
       "path": "assets/production/hunt/hm01-three-r1-20261022/hm01-terrain-e90423e80e5e.glb",
       "sha256": "e90423e80e5ec917854cc406b77e32815ae6912d5629126a2f92e209537da5ee"
     },
     {
       "path": "assets/production/hunt/hm01-three-r1-20261022/manifest.json",
-      "sha256": "b9e867f2c35ee06fbb52bd8deaefd73bb631e2e237b236c774ef3767e5e65bac",
+      "sha256": "40ec0aed8ef8e58fb748075a9a3d7655deffb466f8167e3501fc5cacfece8c5f",
       "jsonFields": [
         "azimuthDegrees",
         "bytes",
@@ -114941,6 +114945,7 @@
         "height",
         "kind",
         "map",
+        "mask",
         "materials",
         "measured",
         "meshes",
@@ -115174,7 +115179,7 @@
     },
     {
       "path": "assets/production/hunt/hm05-three-v7-20261023/manifest.json",
-      "sha256": "85d62eedba37d943ae5b9073ffb5d18e76dc8fedcedc7bb706e91fa7827a3995",
+      "sha256": "2d6ee3874a6368c5c551d570a1436b2fadbfd83bb171039db547e42d92eb5be5",
       "jsonFields": [
         "assetVersion",
         "bytes",
@@ -115200,7 +115205,7 @@
     },
     {
       "path": "assets/production/hunt/hm05-three-v7-20261023/terrain-props.glb",
-      "sha256": "98d5e5a2d2ef59bda506001d73b6ba561d00ccc2a3734a1ddbd3caf90b47f1a9"
+      "sha256": "22af4eb5fc972e6c88eaed4d3a8a32c8b541d597e727c23fd7e2204beb5ba588"
     },
     {
       "path": "assets/production/hunt/hm05-three-v7-20261023/tree-instances.json",
@@ -115218,11 +115223,11 @@
     },
     {
       "path": "assets/production/hunt/hm05-three-v7-20261023/tree-prototypes.glb",
-      "sha256": "265e6cb29dd4819e486a1373b4a719e5c0209387b5f3c568402a55d058db23c2"
+      "sha256": "8d3de4ab3d429b7baede3518b406d7882c64eaebeb4322f04db152bf8488f98f"
     },
     {
       "path": "assets/production/hunt/hm06-three-v4-20261023/manifest.json",
-      "sha256": "16a722b02513c3f945118aa75ec2d977a2b5e1cb74a7434afc6bbb954a57d647",
+      "sha256": "a4efc464f173f9b4a7a3cb0839c5bf1aac4de3619cfbed2cfc57c00be8316331",
       "jsonFields": [
         "assetVersion",
         "bytes",
@@ -115248,7 +115253,7 @@
     },
     {
       "path": "assets/production/hunt/hm06-three-v4-20261023/terrain-props.glb",
-      "sha256": "5140608c3dfb917bec02eb8d31379d24493700e7bf6ca06e2e63ac61caeb9da0"
+      "sha256": "a9fca635b15b13e3d2ee9729896cffee6d4273d64630b66f5262f357f3a69150"
     },
     {
       "path": "assets/production/hunt/hm06-three-v4-20261023/tree-instances.json",
@@ -115266,15 +115271,15 @@
     },
     {
       "path": "assets/production/hunt/hm06-three-v4-20261023/tree-prototypes.glb",
-      "sha256": "9c3563559d23d8c45371b5517d425a3babd742896de9922f15031e2eea5bb74d"
+      "sha256": "02cc77aa345a6ba6f482c3ee5de8b549a6ebba6e7bc231e11eef16d3b1b8bd28"
     },
     {
-      "path": "assets/production/hunt/hm08-three-r1-20261022/field_hm08_01-frame-00-f785e7106327.webp",
-      "sha256": "f785e71063271186a2bcd28b48bb18fe54148912199a4a658e8e4ccaa22b8058"
+      "path": "assets/production/hunt/hm08-three-r1-20261022/field_hm08_01-frame-00-rgb-2d0d3d566367.webp",
+      "sha256": "2d0d3d566367511002dfa8b06e7e7c8c230ea2a28a3043ace1b1025d708d68b9"
     },
     {
-      "path": "assets/production/hunt/hm08-three-r1-20261022/field_hm08_02-frame-00-c796caf80af0.webp",
-      "sha256": "c796caf80af0ca5820bf24038005f3794313347049503fe49286f5d9ba23780f"
+      "path": "assets/production/hunt/hm08-three-r1-20261022/field_hm08_02-frame-00-rgb-83e53343c192.webp",
+      "sha256": "83e53343c1922df106f29749fc1cb5327c15ff8164a187ab8b8b29306c221656"
     },
     {
       "path": "assets/production/hunt/hm08-three-r1-20261022/hm08-ground-heights.json",
@@ -115294,12 +115299,16 @@
       ]
     },
     {
+      "path": "assets/production/hunt/hm08-three-r1-20261022/hm08-mask-5c54be079e8c.webp",
+      "sha256": "5c54be079e8c974deee8ebba85b993081ec8746e244f66443640a883c85fa3cd"
+    },
+    {
       "path": "assets/production/hunt/hm08-three-r1-20261022/hm08-terrain-ee412126d0e2.glb",
       "sha256": "ee412126d0e22f9986b9ac22e19b5bb8b203bc81a63862de9315dfa46440b328"
     },
     {
       "path": "assets/production/hunt/hm08-three-r1-20261022/manifest.json",
-      "sha256": "be78e84adcdd90fadefbaeb3c40f864d6d90b2e4f9ece2897ebb441b37a3d583",
+      "sha256": "662dade02517b516e3a690af86e5b4b4c93d43261838f3dac4efdf844c39ee8d",
       "jsonFields": [
         "azimuthDegrees",
         "bytes",
@@ -115321,6 +115330,7 @@
         "height",
         "kind",
         "map",
+        "mask",
         "materials",
         "measured",
         "meshes",
@@ -115370,6 +115380,128 @@
     {
       "path": "assets/production/hunt/hm09-three-v7-20261023/terrain-props.glb",
       "sha256": "838e62480132837176ea758169bc48d72cd5f942f06fd62e40f58138367a56f3"
+    },
+    {
+      "path": "assets/production/hunt/hm10-three-c1-20261026/manifest.json",
+      "sha256": "c6ad1daf906bfb46323e3890a9eb55dcbc8d26b738590a04238782f279f72955",
+      "jsonFields": [
+        "assetVersion",
+        "bytes",
+        "clearColor",
+        "elevationDegrees",
+        "exclusions",
+        "fields",
+        "file",
+        "flatSupport",
+        "glb",
+        "height",
+        "map",
+        "projection",
+        "schema",
+        "sha256",
+        "unitsPerWorldPixel",
+        "worldHeightPx",
+        "worldWidthPx"
+      ]
+    },
+    {
+      "path": "assets/production/hunt/hm10-three-c1-20261026/terrain-props.glb",
+      "sha256": "24efbb4d4b0fd64836af9c82043163ad135e6682e4caf8bea8b519976481b2e3"
+    },
+    {
+      "path": "assets/production/hunt/hm11-three-c1-20261026/manifest.json",
+      "sha256": "478e3443b28999d3efd5e3698f80638af3d638f79e1c32c3071c5f44c59135f1",
+      "jsonFields": [
+        "assetVersion",
+        "bytes",
+        "clearColor",
+        "elevationDegrees",
+        "exclusions",
+        "fields",
+        "file",
+        "flatSupport",
+        "glb",
+        "height",
+        "map",
+        "projection",
+        "schema",
+        "sha256",
+        "unitsPerWorldPixel",
+        "worldHeightPx",
+        "worldWidthPx"
+      ]
+    },
+    {
+      "path": "assets/production/hunt/hm11-three-c1-20261026/terrain-props.glb",
+      "sha256": "52cf08a76ecce3c7b8f4107a533b4e954aeb9ec1508300e8a1e79526095e1d95"
+    },
+    {
+      "path": "assets/production/hunt/hm13-three-c1-20261026/manifest.json",
+      "sha256": "3ad934e811ad7f76ed4688fa08b31abcc6ec27b85a1222cb27a1ad1b252aab01",
+      "jsonFields": [
+        "assetVersion",
+        "bytes",
+        "clearColor",
+        "elevationDegrees",
+        "exclusions",
+        "fields",
+        "file",
+        "flatSupport",
+        "glb",
+        "height",
+        "map",
+        "projection",
+        "schema",
+        "sha256",
+        "unitsPerWorldPixel",
+        "worldHeightPx",
+        "worldWidthPx"
+      ]
+    },
+    {
+      "path": "assets/production/hunt/hm13-three-c1-20261026/terrain-props.glb",
+      "sha256": "afc5ab5226649e9cc6d6b2a99890ee7bc40de4f76ed333ec9a596bf44252b941"
+    },
+    {
+      "path": "assets/production/hunt/hm14-three-c1-20261026/ground-heights.json",
+      "sha256": "3f66cec9506844def04a2468753e17fba33a3e22df8a27de162586a818ff478e",
+      "jsonFields": [
+        "height",
+        "heights",
+        "tileSize",
+        "width"
+      ]
+    },
+    {
+      "path": "assets/production/hunt/hm14-three-c1-20261026/manifest.json",
+      "sha256": "765b25dbc6c9d8f6d60fd5421d8b17f65691d69fc61d7bcb73a5ec6830121f29",
+      "jsonFields": [
+        "assetVersion",
+        "azimuthDegrees",
+        "bytes",
+        "cameraForwardGltf",
+        "cameraUpGltf",
+        "clearColor",
+        "elevationDegrees",
+        "fields",
+        "file",
+        "glb",
+        "groundHeights",
+        "kind",
+        "map",
+        "nativePxPerUnit",
+        "nativeSize",
+        "orthoScaleUnits",
+        "projection",
+        "schema",
+        "sha256",
+        "worldPxPerNativePx",
+        "worldSize"
+      ]
+    },
+    {
+      "path": "assets/production/hunt/hm14-three-c1-20261026/terrain-props.glb",
+      "sha256": "6fba46b15d2694211450cfb4afe280d39b5c2fae17d6834c8881b23d0be95830"
     },
     {
       "path": "assets/production/hunt/hm15-three-v6-20261023/ground-heights.json",
@@ -120024,7 +120156,7 @@
     },
     {
       "path": "championship.html",
-      "sha256": "19ead2f3377cd11948262e8fb4814726d9dbc4b89534bbea2ec004f3dd045de3"
+      "sha256": "273f7b90b30a238d00a91212a329ae5c0a4f1c79405a16a7d4e048ce1252d40c"
     },
     {
       "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -120404,7 +120536,7 @@
     },
     {
       "path": "src/championship/app/ChampionshipPersistentSavePort.js",
-      "sha256": "165912a541e507db570f7c630baefd4913fe20699eb150d9f5fe98ef7917b6e3"
+      "sha256": "a763cbe1df5d59accd43672f51cf460fad8c6261738c8d80bfd1c4882f638b4f"
     },
     {
       "path": "src/championship/app/championshipRaisingProduction.js",
@@ -120420,7 +120552,7 @@
     },
     {
       "path": "src/championship/app/championshipStandaloneApp.js",
-      "sha256": "4dd6ca1d708c78e779c0cb7e4041c87a647550f4dc3373d7996e4e75cbd01713"
+      "sha256": "ab29f403811b5ffc4c706a49253b3c9414bac201eaa3bbb028923c28a295a1a5"
     },
     {
       "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -120428,7 +120560,7 @@
     },
     {
       "path": "src/championship/app/championshipStandaloneSave.js",
-      "sha256": "db8d3cebd6cf597699e4f0595d266b7f52d5371645dac094970ee93eb26e6d05"
+      "sha256": "aaa72f6e08b150ac9bebb81fb2e6a8efefd532ab0ed7b7e24a7a0a9ae3d97f74"
     },
     {
       "path": "src/championship/app/championshipStatusBar.js",
@@ -120436,11 +120568,11 @@
     },
     {
       "path": "src/championship/app/championshipStorageGuard.js",
-      "sha256": "586e166c84057c855111740fe2b518842c918bd0c399da54146f7a47bc3fb8b8"
+      "sha256": "c152cfa8750f7b192c07387f58ac84a7e8f529c1ffda1f64beead8049e587936"
     },
     {
       "path": "src/championship/app/championshipToolbar.js",
-      "sha256": "cc7f2d88bf02af7cdc0367fdd23b3e55bc208fd9ecb7aa8b36c6220a74486157"
+      "sha256": "ceb821f4bfa57b67586b5598db4f47d9143c4caea4c2939d59663b92d42d4192"
     },
     {
       "path": "src/championship/app/codeClipboard.js",
@@ -120460,7 +120592,7 @@
     },
     {
       "path": "src/championship/app/digimonListScreen.js",
-      "sha256": "3508244150b052dd3460e851718e7673144ff83307ecc8bd2b91f514ddd14b45"
+      "sha256": "458efd11eaf925890f9bf51e2f4f81754e87e2031bc1249eee449968b5d92806"
     },
     {
       "path": "src/championship/app/downloadSaveBackup.js",
@@ -120476,11 +120608,19 @@
     },
     {
       "path": "src/championship/app/gateHuntPresentationSource.js",
-      "sha256": "a7f22235187a2bfe29294dfdc46f232827f35a0ee3f66580438610a498e8918a"
+      "sha256": "e2c585519d78313ff07bf917fa529ed966d91aac414dd7fb99fb322479006aae"
     },
     {
       "path": "src/championship/app/helpScreen.js",
       "sha256": "d212ef35b0d04ca0a1e94a2dfc6c9dc6e483d5bdf1a5c8c3821adfb77989de2c"
+    },
+    {
+      "path": "src/championship/app/hexWorldEditor.js",
+      "sha256": "de78506bf70372abf837b65081753e3451941ab26b723ea5b3aac6fd44cd23d5"
+    },
+    {
+      "path": "src/championship/app/hexWorldPassages.js",
+      "sha256": "08573fda3d1eda73015e2152f98e265961ba754a5222ad5b10ce57acb3bfa9cb"
     },
     {
       "path": "src/championship/app/huntLayoutResolver.js",
@@ -120520,7 +120660,7 @@
     },
     {
       "path": "src/championship/app/loadProgress.js",
-      "sha256": "3aea9ead59360e4f8983c8a643136d143481ef0f77085ff72eb660dcd2b7b1f2"
+      "sha256": "003840ac50691bbe06cf0d731ae5c6211e88c61fa3212885ef932cd3cd78646f"
     },
     {
       "path": "src/championship/app/loadStylesheet.js",
@@ -120532,7 +120672,7 @@
     },
     {
       "path": "src/championship/app/main.js",
-      "sha256": "14bd44d1f7a592c5878552d041db2ea1c135d7599be8d7879e354b2994bd782a"
+      "sha256": "254aa6471da8e8381f9dce230debe0561238da79069af6d6db8d3cb5e6fafa07"
     },
     {
       "path": "src/championship/app/medalCollection.css",
@@ -120608,7 +120748,7 @@
     },
     {
       "path": "src/championship/app/raisingGroundSupport.js",
-      "sha256": "ffd6a4e62213b1ee7b967fbf341d89f7a8f3e4c6da6a8ab76fd5bf73aff520c9"
+      "sha256": "966a1d6f1b07620979f018b541c5de37179258ba0432a7354d753e8dd824123f"
     },
     {
       "path": "src/championship/app/raisingHomeHud.css",
@@ -120623,8 +120763,12 @@
       "sha256": "9f5c0d23af6360e21682c0683c8424743907eb6fc384bdd0a7c8e56ad547d8a3"
     },
     {
+      "path": "src/championship/app/ranchBackpack.js",
+      "sha256": "8a6f66b69ce7c962b7c80a72f238bb51663ffa922e3e1bba9040d4008a0083a9"
+    },
+    {
       "path": "src/championship/app/ranchDiscoveryJournal.js",
-      "sha256": "6e168e426b5595a9e5620026843413ed2788ee2c10962ee1d1d9b1eaaccfa853"
+      "sha256": "7547a8b2556ef6ff33c2ce92e9f205c0337f210afcb4f7d4b4d1dcc1777b8044"
     },
     {
       "path": "src/championship/app/ranchExpansionPreview.js",
@@ -120632,7 +120776,7 @@
     },
     {
       "path": "src/championship/app/ranchRowPurchasePrompt.js",
-      "sha256": "cc9f3c1794aa978fd3caafe2d3c6611aa2130b924033581e2b0b90e2ec6edcd0"
+      "sha256": "53d94b0ba6b621d568212bc359c8553ce03a6428b1ac68bd18b5b302b0a39bed"
     },
     {
       "path": "src/championship/app/ranchTitlePreload.js",
@@ -120652,11 +120796,11 @@
     },
     {
       "path": "src/championship/app/settings/preferenceEnvironment.js",
-      "sha256": "a8668bf7d4d080e8c62f08fd62b1dbadf413afbf8aa4f1eeaa256b25657b6101"
+      "sha256": "1281bbd02759e38dbc7195b9e4e09f3f85f22f76123bfe53fb1b74c4b1312aee"
     },
     {
       "path": "src/championship/app/settings/preferenceSchema.js",
-      "sha256": "59c0975ac710a0c00efd3862d3bc028280c3f6e6dbb9d1028f97b4251e5364f5"
+      "sha256": "46758e20a1b2ab4e976f7ea2625176b25cb948f9717eb780c71b9731de8b8bb5"
     },
     {
       "path": "src/championship/app/settings/preferenceStore.js",
@@ -120668,19 +120812,27 @@
     },
     {
       "path": "src/championship/app/settings/settingsPanel.js",
-      "sha256": "1707f39a38a2edc3e002aa824f8182d5a90825064489b67aca7efdeee7dadfe0"
+      "sha256": "f3e064b63f65d45f844c9f71990bd40c900e568aae7baa0e5e571c3b56d18079"
     },
     {
       "path": "src/championship/app/shopOriginalVideo.css",
       "sha256": "c2f446fc535bc896500ff96a88ea27a95bc33f8918b25f50a1ea7474f501569e"
     },
     {
+      "path": "src/championship/app/storageDurability.js",
+      "sha256": "ddbe615d33e60c08219713a598808438b6ae18f8d75e99b339ce2146d703fdf0"
+    },
+    {
       "path": "src/championship/app/styles.css",
-      "sha256": "8aede440e073d46b9087f3beb5ac0de48e5f9d48361ec9fb32800a8417daba1f"
+      "sha256": "f3c37317b12303dc816b7b3c6f324173bc605def18442c4af37a3f595f00ba77"
     },
     {
       "path": "src/championship/app/tamerInfoScreen.js",
-      "sha256": "ff2bce90c96dfd1007d652d466218b43cc6ee2d671b811ad1e8a926945895b77"
+      "sha256": "c80f039c92429f0ec3d71b4c391381fb36a0396afed6c276c6812ccecd4a8f58"
+    },
+    {
+      "path": "src/championship/app/titleParade.js",
+      "sha256": "f782bf5b54af3ae6d7ccbb86a935910ab80d09d4f32cf37f249bfc375df0b101"
     },
     {
       "path": "src/championship/app/trainingLabels.css",
@@ -120691,12 +120843,36 @@
       "sha256": "e2ceecb8454734935cbae2f61327d05e95f9b1c70817714d8ef499514353ae04"
     },
     {
+      "path": "src/championship/app/ui/ambienceLayer.js",
+      "sha256": "83339188119eefd0cf32de890abf854566052b33d3dcbdce185e5bcaa27a7c68"
+    },
+    {
+      "path": "src/championship/app/ui/arcade.css",
+      "sha256": "f5cb4e9f7a4c871b9bd8e5b208fe487e0e347e677ff3b52600a97bc9d3993f70"
+    },
+    {
+      "path": "src/championship/app/ui/arcadeFx.js",
+      "sha256": "a89125b900fb216cb071f9a8f944ff100c3c14c36a05aa60ce608367f8ba150c"
+    },
+    {
+      "path": "src/championship/app/ui/arcadeMotion.css",
+      "sha256": "2be95d94b8e533d611c676dcdc8467980f82d7e36fe2536d9084da930503fcdc"
+    },
+    {
       "path": "src/championship/app/ui/ceremony.css",
       "sha256": "959d74f7cedcf50f11059d08c39242ba34ab9839a9874492ff86c9ba25e58428"
     },
     {
       "path": "src/championship/app/ui/highlight.css",
       "sha256": "bd6789df1558f5b8749d848f3e84410b0b07603cc71ec9774113141ca07c9069"
+    },
+    {
+      "path": "src/championship/app/ui/loadingWalker.js",
+      "sha256": "83447e30644a6227636f9e9845562a2c1bc1a21266da8c639ec5bb530e07b930"
+    },
+    {
+      "path": "src/championship/app/ui/screenLayout.css",
+      "sha256": "e43131771ea5145355e762406131a00f35345bcbac94fd82d37994fa755f22b5"
     },
     {
       "path": "src/championship/app/ui/settings.css",
@@ -120708,7 +120884,7 @@
     },
     {
       "path": "src/championship/app/ui/tokens.css",
-      "sha256": "d61277b04dabc2d81daa6fd59520dbc6f05b0d9a71ba37fcfe07a50d8dc4c4ef"
+      "sha256": "c8a58718d9b69377ed47c343bce326e8bac2b1f03e848894f6113f6cabb2b935"
     },
     {
       "path": "src/championship/app/uiDialog.js",
@@ -120720,11 +120896,11 @@
     },
     {
       "path": "src/championship/app/vs2Screens.js",
-      "sha256": "5093ed5dc59cfbef51a580e177fa0e7e1833cbc6e6fd44936f15983beef3eb01"
+      "sha256": "6da7c8b71c3f3a36f6648503b90c74d595a2b7f408ff8e1081143912d9e52ff3"
     },
     {
       "path": "src/championship/app/vs2Styles.css",
-      "sha256": "2e9faf60d5529d878fa81fc82b5908b9c85b6906e4a759e9cbc40a83537b441d"
+      "sha256": "5d8826cb8ba9f0ce689626c8e2b1b78f1b33335831f986d63d815978521c16e8"
     },
     {
       "path": "src/championship/app/vs3Screens.js",
@@ -120732,11 +120908,11 @@
     },
     {
       "path": "src/championship/app/vs4Screens.js",
-      "sha256": "cbf29a17d50f908b96b9199742a8c1484f2a3febf5f005282b969dc9cba75f76"
+      "sha256": "c14c17814657066b6ca7c186f03933ff520221303f176c3487b53b7dcfaa36d2"
     },
     {
       "path": "src/championship/app/vs5Screens.js",
-      "sha256": "b3ac7d890833c2b6056db8acd8601945699d01d9e34dd61426e849896f837191"
+      "sha256": "7bf3477b31ecc978b18d6678e3a84dddc2ec8547d8fccaec88678caacc747d0e"
     },
     {
       "path": "src/championship/app/vs5Styles.css",
@@ -120964,11 +121140,11 @@
     },
     {
       "path": "src/championship/cage/cageEditRuntime.js",
-      "sha256": "7dcac8d0d0c0e8957e75070c88a3977f132447e1bb5950c2a4ad4872105bbc41"
+      "sha256": "af01b5955c2061248d8dc8f72e9772d4db14e2ac276460f906e632819ec87402"
     },
     {
       "path": "src/championship/cage/cageEffects.js",
-      "sha256": "986d468dda7d4b039586ecbe8d68991d1ed1f706e513e957cc0451a8305eff24"
+      "sha256": "69115eaf23b0dbd6a228182647cc9d79349d0daad7f87e9bb8835ba0b5af3797"
     },
     {
       "path": "src/championship/cage/cageInventory.js",
@@ -120980,11 +121156,15 @@
     },
     {
       "path": "src/championship/cage/productRanchGrid.js",
-      "sha256": "3d8c546986919e916dc61c48b52525bf043da23f88ebde88fa60bcb9e86033c8"
+      "sha256": "606c46b4cb1824fe44f37e414034513f8cf4831bae3e4469ab08f3f847070b81"
     },
     {
       "path": "src/championship/cage/ranchConnections.js",
-      "sha256": "36c486ede6616407ffed30ad824789fc2159f9f68972808b2032f021cbee6242"
+      "sha256": "1ec4cba70110cdf44f81dd0a9210a237714e59a41f2767e14b3703b5414089d0"
+    },
+    {
+      "path": "src/championship/cage/ranchEcology.js",
+      "sha256": "dec0e39f785885a2ef0cc8abd491b4d49eaa72e5fa1fc700dfea31837f82da63"
     },
     {
       "path": "src/championship/cage/ranchExpansion.js",
@@ -121140,7 +121320,7 @@
     },
     {
       "path": "src/championship/hunt/capture/nativeHuntFieldControls.js",
-      "sha256": "9d9df0f49f15050ba89b001e67a596133d11507571784e2f8435910815455a02"
+      "sha256": "56d7ad1c8d71e73109d6d0bf57edc27ec74c2df0606e2db0d40c4eb29a0699ab"
     },
     {
       "path": "src/championship/hunt/capture/nativeHuntGateVariant.js",
@@ -121221,6 +121401,10 @@
     {
       "path": "src/championship/hunt/capture/nativeWildStatus.js",
       "sha256": "4c07cce4a48282a7972746e815b2ead77e788de8e7c0a91c10c4ec7bddb7e361"
+    },
+    {
+      "path": "src/championship/hunt/capture/ropeLassoGesture.js",
+      "sha256": "1d1a0fe5ea6e8465fa2c3a6d633bfce2551e6f37b8eceac3b9db33c5010fa6af"
     },
     {
       "path": "src/championship/hunt/capture/wildCaptureFlow.js",
@@ -121336,7 +121520,7 @@
     },
     {
       "path": "src/championship/presentation/audioBus.js",
-      "sha256": "c539e6f1234de28448b0d2c05dc9d8bd96dd53d98d52c0948f60fbc1ebba7073"
+      "sha256": "571c3339656772a0412af56295759b2601a3d154aec1d5153614d2eb5a6ecf93"
     },
     {
       "path": "src/championship/presentation/battleAudioPresentation.js",
@@ -121344,7 +121528,7 @@
     },
     {
       "path": "src/championship/presentation/battleCharacterAction.js",
-      "sha256": "b85602d6bd731d45fd3f17d2cccf110cd5e1b85077e89884bba12c0c2d129486"
+      "sha256": "1462cf9ded4b2ebac37f98645fff59a8b8b618330cdc24ae6162450655a5b2ea"
     },
     {
       "path": "src/championship/presentation/battleEffectArt.js",
@@ -121356,7 +121540,7 @@
     },
     {
       "path": "src/championship/presentation/battleFieldAmbient.js",
-      "sha256": "1ee3783072469273e6ca905f2bc98d05e23c3788404a5d3137984cdaf0b92a79"
+      "sha256": "f686eac0a64849e910bc3015d5ccf5fc6c3bc70474443495b0d73b77448bd1b2"
     },
     {
       "path": "src/championship/presentation/battleFocusViewport.js",
@@ -121384,7 +121568,7 @@
     },
     {
       "path": "src/championship/presentation/bm03GroundShadows.js",
-      "sha256": "f50cf01885872b2c8a5a1e3bc7bf0612999ba35c5f38ead66a58568a3ecd0193"
+      "sha256": "8abbdd084f51c14b0e12bfdb74867c97584c50be71282e221615c93c27ea12ff"
     },
     {
       "path": "src/championship/presentation/cageAmbient.js",
@@ -121416,7 +121600,7 @@
     },
     {
       "path": "src/championship/presentation/championshipPixiStage.js",
-      "sha256": "c08b7577798db993106f60f2c898854b59fdb26a7894f4ae455a42cdee7f3da6"
+      "sha256": "e05198052a997d35594123f2907faa1fd2928ce7a4e5066627119350c7fcb2ef"
     },
     {
       "path": "src/championship/presentation/characterAnimationTimeline.js",
@@ -121500,7 +121684,7 @@
     },
     {
       "path": "src/championship/presentation/highlight/createHighlightBurstThree.js",
-      "sha256": "a5afc33a52fc28c2376d85c5e1b45f291af00ae289cf55a2d795ccab7816efee"
+      "sha256": "7eb6bfe35da7b7923fd39ec907db591f86af3fd6f6b21abc95dcb936d22765f0"
     },
     {
       "path": "src/championship/presentation/highlight/createHighlightSequence.js",
@@ -121528,7 +121712,7 @@
     },
     {
       "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-      "sha256": "f4fc3d8aea3c55e0c0aa962b1c9886d6e2fef2004f35fd40630aad6d90766482"
+      "sha256": "8585bd007e44c0aa028b5b4450fd33c7a66d1fbcfb3ad85c86f3615853ff7fef"
     },
     {
       "path": "src/championship/presentation/intRh2/raisingContactShadow.js",
@@ -121536,7 +121720,7 @@
     },
     {
       "path": "src/championship/presentation/intRh2/raisingFieldViewport.js",
-      "sha256": "bea02ad6d7eb9245d23d5d7c7c6702c712ff039c67b056d47a311ab0e6bdfd7a"
+      "sha256": "8dde98a1ffb8abbec0c5eacc29f00aaf7f7d3b6299b99046237fb70def7e471e"
     },
     {
       "path": "src/championship/presentation/intRh2/raisingNativeSizing.js",
@@ -121572,7 +121756,7 @@
     },
     {
       "path": "src/championship/presentation/medals/medalThreePresentation.js",
-      "sha256": "18f715ed64e483b216eac8eb41d69fe9f85fccf74edbee91151293d607ee4b65"
+      "sha256": "9faadc9fe24061683eb2133b734b35cccf886080b52d782e70a9779fdb10f932"
     },
     {
       "path": "src/championship/presentation/medals/selectedMedalPresentation.js",
@@ -121624,7 +121808,7 @@
     },
     {
       "path": "src/championship/presentation/presentationPreferences.js",
-      "sha256": "97bcf7ea5edbe069a6c35af34ecdcbe4901605af592b4990bd2df4378f890efe"
+      "sha256": "42f437461e661651070ef856e11468188c61dcfeb1c0cc8a1de10f6552507c8c"
     },
     {
       "path": "src/championship/presentation/publicAlternateFormBindings.js",
@@ -121680,7 +121864,7 @@
     },
     {
       "path": "src/championship/presentation/raisingRanchArtPlan.js",
-      "sha256": "0914f2558b69cf6153c67005f64b624afa431bf4a2b9c00012424fc942bfb99a"
+      "sha256": "d15795b71eca38f05365ff2c26506902a291cb6e36560f946abc048ca90db262"
     },
     {
       "path": "src/championship/presentation/ranchBorderMembership.js",
@@ -121692,11 +121876,11 @@
     },
     {
       "path": "src/championship/presentation/ranchContactHeight.js",
-      "sha256": "a99ba31c03bc6955fa930a79026d68c39e7dec76d065128174556d1561adc195"
+      "sha256": "429dd49359e973feeaeb07113f9fcc0e71684380e138c68fe10ead229dfd6cd3"
     },
     {
       "path": "src/championship/presentation/ranchGroundShadows.js",
-      "sha256": "3cc1549d0aac4a2e417b1cbd332487652bf0b2be40f8a25e0f31c8e94c3e2375"
+      "sha256": "90bdc28c7f52bcd3c041b8d09e46987fec8456af869fae2659da3e94da2ddd54"
     },
     {
       "path": "src/championship/presentation/ranchPassages.js",
@@ -121707,20 +121891,24 @@
       "sha256": "d06ab2cd9a3b5036100bd73eeab2677328fa2da6a5cea0d340ab45f9f0d61f56"
     },
     {
+      "path": "src/championship/presentation/ranchPlinth.js",
+      "sha256": "bda7e2ffb82df62666d657d05ffcc43d104466b9ec38649d92585338e0fb2478"
+    },
+    {
       "path": "src/championship/presentation/ranchSupportOwner.js",
       "sha256": "10ee4a275e2e696366630e5476ac94e78984d6d0080685b93246910bd859cd81"
     },
     {
       "path": "src/championship/presentation/ranchThreeCoordinates.js",
-      "sha256": "69952f92e0ff2dfe1092df544837eecb946d32225a008fa7dec5e387bef02d97"
+      "sha256": "22eca2b4242d6f6940d39f557bacc72f198d036baca65fe22a0d8e736daf2dc0"
     },
     {
       "path": "src/championship/presentation/ranchThreeScene.js",
-      "sha256": "1420572c0665eb924a510cd0c1f77a86b4bb38d8f93b322ba51b960cae0b0b7d"
+      "sha256": "3fa6c041fef92115aab53a1291cf8a5e34d2caa83f63027a1047b6988d499b15"
     },
     {
       "path": "src/championship/presentation/runtimeMapArtBundle.js",
-      "sha256": "82247e471c995a5bb3d90fcc267e758d58aaa2404123771ef95640f5c83306a4"
+      "sha256": "fbe2b16f4e6a3d62f44a6a64f24f900cd7cebedb7ba9f5a10922b92b4a650ed3"
     },
     {
       "path": "src/championship/presentation/sceneMusicCatalog.js",
@@ -121748,7 +121936,7 @@
     },
     {
       "path": "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
-      "sha256": "2bbd97ac78ef1ffc3ff355a71748479625a194c99ad24e9136681b6055e06043"
+      "sha256": "e16aa1f34421037624bdcc116f674082d99057895234760f1fbbe264d75d7045"
     },
     {
       "path": "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
@@ -121760,11 +121948,15 @@
     },
     {
       "path": "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
-      "sha256": "4b3170f4189809fdeb596a64c8db42d16f92094a221881b35ac45e897d835e92"
+      "sha256": "777802da516900a19cff9086e39fe29aeb1647eb52d40b74526bf4f857805583"
     },
     {
       "path": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
-      "sha256": "ceef05ae30f6b3b7c6181b8c71daa9a769b7c22fef13dc8a08202fc92ec568b1"
+      "sha256": "068461b6717e08503c81005f6356180c0f62450c13d5c52608303788de803726"
+    },
+    {
+      "path": "src/championship/presentation/vs2/gateFocusTween.js",
+      "sha256": "ca1d9d1c38b01fad271642ae43ed14f16eb187d3964b0f2aab69ba1901071deb"
     },
     {
       "path": "src/championship/presentation/vs2/gateWorldLayout.js",
@@ -121800,11 +121992,11 @@
     },
     {
       "path": "src/championship/presentation/vs2/huntThree/authoredMapAssets.mjs",
-      "sha256": "aeffe81d41a1d16b130aefbb4ee6de48369cbc4f2406e6eed2b4f66b1a656f41"
+      "sha256": "2df9de39a4074c09ff1ff312ff6e39184723a6b8a2445b35e402c576e10adf65"
     },
     {
       "path": "src/championship/presentation/vs2/huntThree/createHuntThreeMap.mjs",
-      "sha256": "2078da272f86bd84cd8b6147d8d68a911fc36dd28b42d812beb8a3ff8eb96844"
+      "sha256": "e389ddd0828e3cafdc7d0d2a30511215349c83da784468c38fd3f966bdeb868f"
     },
     {
       "path": "src/championship/presentation/vs2/huntThree/dracoLifecycle.mjs",
@@ -121812,7 +122004,11 @@
     },
     {
       "path": "src/championship/presentation/vs2/huntThree/externalMapAssets.mjs",
-      "sha256": "c001df3460efcaeeeb83c5ac0e5f460fcf8b5d92a249a2c569c5a119a6e40f91"
+      "sha256": "45fba541b1f11d0a208bb3f62ac144d7f7bdf18d977c5fb91a25d62e64176c2f"
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntThree/hd2dLook.mjs",
+      "sha256": "db5af10eada1f1808b5d26d8de862289239da451bfa4ff351cc5ef1a6abfde92"
     },
     {
       "path": "src/championship/presentation/vs2/huntThree/hm01SupportCorridors.mjs",
@@ -121832,7 +122028,7 @@
     },
     {
       "path": "src/championship/presentation/vs2/huntThree/manifestBindings.mjs",
-      "sha256": "fc138ad3c96ee3274e73d222542fdd068c536792b5402786a44c9894f93f08d9"
+      "sha256": "3fe046b4c7049593dd17b70e7514e1174a8d77a403f26edf44b69c1b84789510"
     },
     {
       "path": "src/championship/presentation/vs2/huntThree/nativeActorAdapter.mjs",
@@ -121864,15 +122060,15 @@
     },
     {
       "path": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
-      "sha256": "accf6c3ef012c5511c6cfdd052bbc2c3bc30db2195dbee2ea335c16f96570ea2"
+      "sha256": "7772258f2c4052e9555283c578244472d422cc5741bf50fa9443f6c4e93281cb"
     },
     {
       "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
-      "sha256": "ecaf713641d3103683a1c1a452d5487b31a62a1c91b49c03d04743198aa7b63f"
+      "sha256": "f83faea4f9ae1ed0f3539d22aee2fb8251abd2f68fed0627870aea88d1a7e5d6"
     },
     {
       "path": "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
-      "sha256": "433478f1a7a087d1f5954b95550b0ec6476b4122971a11048763134157ce03db"
+      "sha256": "5d704a1f53357b1b6e755a30f2abfc9f56fd1e78539811839324b9b341ce998e"
     },
     {
       "path": "src/championship/presentation/vs5/prepareBattleVfxGpu.js",
@@ -121960,7 +122156,7 @@
     },
     {
       "path": "src/championship/raising/nativeRaisingRanchRing.js",
-      "sha256": "bf644add9ae14fb7a82f94530c2386459d121e66d69dfa7bf081cadab2a94f97"
+      "sha256": "e9799d0a8887a9b18147608adde6e17525e84c7ea910f9890865d52ffb9e50c5"
     },
     {
       "path": "src/championship/raising/nativeRaisingRecoveryStars.js",
@@ -122016,7 +122212,7 @@
     },
     {
       "path": "src/championship/raising/ranchExplorationWalk.js",
-      "sha256": "dd0ec33023c076db573ed58a180b3a4a2bef4c5af67824de03bb8471b1b5fe2a"
+      "sha256": "29c3c247331592b2fee31e188307c73ed46065dcbfb9833ce46e5875f1f26cb9"
     },
     {
       "path": "src/championship/raising/ranchLayoutPositions.js",
@@ -122048,23 +122244,23 @@
     },
     {
       "path": "src/championship/text/catalogs.en.js",
-      "sha256": "6ab2f09c5a50ed93d0299ee770234d4a5b10d318c535d396bdb63e742a29a5b9"
+      "sha256": "08b2738dcdef2804ce26a53fb047610f35c298e43462f97cacae3fac9d71fecc"
     },
     {
       "path": "src/championship/text/catalogs.ja.js",
-      "sha256": "1f175b3b817a18d78de0018a14c1baa15d6ad7ef3104165cb81c544686a2e37d"
+      "sha256": "e7c41ad25be8ce61002b5a63317a1f5bc01bda1de31d3db8066aadf9d58913e5"
     },
     {
       "path": "src/championship/text/catalogs.th.js",
-      "sha256": "12468431c3743a2b5ea034b184d33d6048931d85e0d34430c0158696561ea340"
+      "sha256": "b0afa4d0f8a570ea89bf9f3b857db38fa9e833aca870211ec9d95f9a80f607f9"
     },
     {
       "path": "src/championship/text/catalogs.vi.js",
-      "sha256": "e8837abb7de6da5175d3306b423851a535190ee73f46ff10912ab593f8f45083"
+      "sha256": "83d81535245b158b0231a2f2c9a0d4cab3c1d4628f1d9c8e5752350e6323718d"
     },
     {
       "path": "src/championship/text/catalogs.zhHant.js",
-      "sha256": "8ca5bf15df29dfd18e22576a5fa6c71000736c1159eb45ff06dbea031480c369"
+      "sha256": "c57e04b095fc4a7c42210d91bc118a287ed1ab2e977f08662cb754d92898f3c8"
     },
     {
       "path": "src/championship/text/dataArenaText.js",
@@ -122168,23 +122364,23 @@
     },
     {
       "path": "src/championship/text/uiText.en.js",
-      "sha256": "bad30c0df7ff28ce57e1c16e951d6b66d6e6119f6707052f47ca137d8b00464a"
+      "sha256": "9d63f80cd0e52e3d9cd633558cabe4ed7b4dc6abbb7f6a4d455659dffb42eafc"
     },
     {
       "path": "src/championship/text/uiText.ja.js",
-      "sha256": "b8ccb96cbd30c202d226ca7d9c631a0b684d377aa285202cfbb00a336b53201f"
+      "sha256": "57862ac51bd305a711eefddd7954bfddf04a7e5c032c3f55af8d0d0cfd349137"
     },
     {
       "path": "src/championship/text/uiText.js",
-      "sha256": "7d78fade5e69b80f10e6f76bdbba1acfeddb8655629cb80393843b93cf3200f3"
+      "sha256": "af20171e47f6b508179fda7b11ea28aea9a79ef7b838c91014305c5ab9a35829"
     },
     {
       "path": "src/championship/text/uiText.th.js",
-      "sha256": "82e825da337677f3269524c7c8030a4cf07a7ec2dfb8272a13307298490590bf"
+      "sha256": "282ec7d2f7756f27b0b407d8662327606af72934133306c54b5ed6e11d774d7c"
     },
     {
       "path": "src/championship/text/uiText.vi.js",
-      "sha256": "fcd6107561817464949e8a7204aaffdab0d7c118fea06afa70d24eef99955b98"
+      "sha256": "8b4e8b55cd0f69873c8f08951212e59b60012411a00cd921768ec6aacd6027fa"
     },
     {
       "path": "src/championship/text/zhHant.js",

@@ -148,14 +148,24 @@ export function evaluateCageOccupancy({ capacity = null, occupantCount = 0 } = {
   });
 }
 
-function training(channels, capacity) {
+// Owner 2026-10-27: the zoo's and the infirmary's printed counts (2 and 6)
+// disagree with the count the raising simulation uses (raising-lifecycle.r1.json
+// capacity 4 for both). The suggestion shown follows the simulation; the
+// simulation itself is unchanged.
+export const CAGE_DISPLAY_CAPACITY_OVERRIDES = Object.freeze({ 24: 4, 28: 4 });
+export const CAGE_DISPLAY_CAPACITY_OVERRIDE_EVIDENCE = "OWNER_APPROVED_ADAPTATION_20261027_MATCHES_SIMULATION";
+
+function training(channels, capacity, cageIndex = null) {
   const frozenChannels = Object.freeze(channels);
+  const override = CAGE_DISPLAY_CAPACITY_OVERRIDES[cageIndex];
+  if (override !== undefined) capacity = override;
   return Object.freeze({
     channels: frozenChannels,
     capacity,
     summary: summarize(frozenChannels, capacity),
     channelEvidence: channels.length > 0 ? CAGE_TRAINING_CHANNEL_EVIDENCE : "EMPTY_ORIGINAL_DESCRIPTION",
-    capacityEvidence: capacity == null ? "EMPTY_ORIGINAL_DESCRIPTION" : CAGE_TRAINING_CAPACITY_EVIDENCE,
+    capacityEvidence: override !== undefined ? CAGE_DISPLAY_CAPACITY_OVERRIDE_EVIDENCE
+      : capacity == null ? "EMPTY_ORIGINAL_DESCRIPTION" : CAGE_TRAINING_CAPACITY_EVIDENCE,
     magnitudeParity: CAGE_TRAINING_MAGNITUDE_PARITY,
     magnitudeScope: 'NATIVE_PROFILE_TRAINING_COMMANDS_ONLY'
   });
@@ -197,7 +207,7 @@ const CHANNEL_FOR_ROM_EFFECT = Object.freeze({
 
 const BY_DEFINITION_INDEX = Object.freeze(
   cageDefinitions.records.map((record) => {
-    if (record.effect.kind === "NONE") return training([], record.capacity ?? null);
+    if (record.effect.kind === "NONE") return training([], record.capacity ?? null, record.cageIndex);
     const key = `${record.effect.kind}:${record.effect.target}`;
     const channel = CHANNEL_FOR_ROM_EFFECT[key];
     if (!channel) throw new Error(`UNMAPPED_CAGE_EFFECT: ${key} on cage ${record.cageIndex}`);
@@ -206,7 +216,7 @@ const BY_DEFINITION_INDEX = Object.freeze(
       : channel === CAGE_TRAINING_CHANNELS.AUTO_CARE
         ? CAGE_TRAINING_MODES.AUTO_CARE
         : CAGE_TRAINING_MODES.UP;
-    return training([Object.freeze({ id: channel, mode })], record.capacity ?? null);
+    return training([Object.freeze({ id: channel, mode })], record.capacity ?? null, record.cageIndex);
   })
 );
 

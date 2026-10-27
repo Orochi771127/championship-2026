@@ -1,0 +1,46 @@
+{
+  "schema": "HUNT_AUTHORED_MAP.v1",
+  "map": "hm14",
+  "assetVersion": "c1-20261026",
+  "projection": {
+    "kind": "BLENDER_LOCKED_ORTHOGRAPHIC",
+    "elevationDegrees": 52,
+    "azimuthDegrees": 45,
+    "nativePxPerUnit": 16,
+    "worldPxPerNativePx": 2,
+    "cameraForwardGltf": [
+      -0.43533840411808733,
+      -0.788010753606722,
+      -0.43533840411808733
+    ],
+    "cameraUpGltf": [
+      -0.5572077475232349,
+      0.6156614753256583,
+      -0.5572077475232349
+    ],
+    "worldSize": [
+      2880,
+      2880
+    ],
+    "nativeSize": [
+      1440,
+      1440
+    ],
+    "orthoScaleUnits": 90
+  },
+  "fields": [
+    "field_hm14_01",
+    "field_hm14_02"
+  ],
+  "glb": {
+    "file": "terrain-props.glb",
+    "sha256": "6fba46b15d2694211450cfb4afe280d39b5c2fae17d6834c8881b23d0be95830",
+    "bytes": 5783196
+  },
+  "clearColor": 2437418,
+  "groundHeights": {
+    "file": "ground-heights.json",
+    "sha256": "3f66cec9506844def04a2468753e17fba33a3e22df8a27de162586a818ff478e",
+    "bytes": 428194
+  }
+}

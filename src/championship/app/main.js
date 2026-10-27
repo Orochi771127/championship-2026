@@ -45,7 +45,7 @@ import {loadRegisteredBattleEffectArt,isLocalBattleEffectPreview} from '../prese
 import {loadRegisteredRaisingFeedbackArt} from '../presentation/raisingFeedbackArt.js';
 import {loadPublicCharacterHudArt as loadRegisteredCharacterHudArt} from '../presentation/publicCharacterHudArt.js';
 import {createTitleImageLifecycle} from '../presentation/titleImageLifecycle.js';
-import {mountWebAppInstall} from './webAppInstall.js';
+import {mountWebAppInstall, isInstalledWebApp} from './webAppInstall.js';
 import {loadRegisteredHuntFeedbackArt} from '../presentation/huntFeedbackArt.js';
 import {mountBattleResultCharacters} from '../presentation/battleResultCharacters.js';
 import {nativeBattleWinPercent} from '../battle/nativeTitleProgression.js';
@@ -87,20 +87,31 @@ import { createLoadProgressView, observeLoadActivity } from './loadProgress.js';
 import { mountPortraitFrame } from './portraitFrame.js';
 import { createHuntLayoutResolver } from './huntLayoutResolver.js';
 import { showChoiceDialog, isChoiceDialogOpen } from './uiDialog.js';
+import { openRanchBackpack } from './ranchBackpack.js';
+import { RANCH_JOURNAL_OPEN_EVENT } from './ranchDiscoveryJournal.js';
+import { mountAmbience } from './ui/ambienceLayer.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, createAssetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
 import { createLoadWatchdog, createLoadAttempt, LOAD_MAX_MS } from './loadWatchdog.js';
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
 import { configureCeremonyAudio, playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
+import { installArcadeFx } from './ui/arcadeFx.js';
+import { installTitleParade } from './titleParade.js';
 import { buildMedal, buildVersus } from '../presentation/ceremony/ceremonyScenes.js';
 import { createHighlightAudio } from '../presentation/highlight/highlightAudio.js';
 import { downloadSaveBackup, downloadRuntimeDiagnostics } from './downloadSaveBackup.js';
+import { createStorageDurability, saveSizeLevel } from './storageDurability.js';
 import { createRuntimeRecoveryDiagnostics, observeBattleFirstRender } from './runtimeRecoveryDiagnostics.js';
 import { createAutosaveScheduler } from './autosaveScheduler.js';
 // Settings round (2026-09-29): player preferences, applied to the page, the
 // one Pixi stage, the audio graph and the highlight template.
-import { CHAMPIONSHIP_PREFERENCES_KEY, createChampionshipPreferencePort } from './ChampionshipPersistentSavePort.js';
+import {
+  CHAMPIONSHIP_PREFERENCES_KEY,
+  CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS,
+  createChampionshipPreferencePort,
+  createChampionshipSessionCheckpointPort
+} from './ChampionshipPersistentSavePort.js';
 import { createPreferenceStore } from './settings/preferenceStore.js';
 import { consumeRaisingHintDuration } from './transientHint.js';
 import { createPreferenceEnvironment } from './settings/preferenceEnvironment.js';
@@ -225,6 +236,8 @@ const loadHuntExpansionReview = HUNT_EXPANSION_REVIEW
   : null;
 const HUNT_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("huntArt");
 const CAGE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("cageArt");
+// Owner 2026-10-27 diorama review: ?ranchPitch=35|40|45 compares camera pitches.
+const RANCH_VIEW_PITCH = Number(new URLSearchParams(globalThis.location?.search ?? "").get("ranchPitch")) || undefined;
 const BATTLE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("battleArt");
 const VFX_ART_PREVIEW_SYSTEM = new URLSearchParams(globalThis.location?.search ?? "").get("vfxArt");
 // Owner 2026-10-18: arena hazards (BM04 lagoon, BM05 ice, BM03 lava) are a local
@@ -430,6 +443,11 @@ function bootSettings() {
 const settings = bootSettings();
 // Ceremonies (2026-10-15) play their synthesized cues through the same sfx bus.
 configureCeremonyAudio(() => settings.audio.output('sfx'));
+// Owner 2026-10-26: the arcade rebuild's motion and synthesized sounds on every key,
+// card, sheet and result, through the same sfx bus as the ceremonies.
+installArcadeFx({ getOutput: () => settings.audio.output('sfx') });
+// The rebuild's title parade, walking with each partner's own in-game walk animation.
+installTitleParade();
 // The Battle screens import display copy only; their two ceremonies are
 // handed in here, as the result highlight is.
 const battleCeremonies = Object.freeze({
@@ -485,6 +503,8 @@ function sceneIsSettled() {
 }
 
 let settingsPanel = null;
+// Asked once, after a save has succeeded, so a first visit never prompts.
+const storageDurability = createStorageDurability({ onChange: () => settingsPanel?.refreshSaveStatus?.() });
 function openSettings(from = null) {
   settingsPanel ??= createSettingsPanel({
     store: settings.store,
@@ -505,12 +525,27 @@ function saveStatusLine() {
   if (!status || !app?.getSession?.()) return { key: "目前沒有進行中的遊戲。" };
   const when = status.savedAt ? formatDateTime(status.savedAt) : null;
   const lastSaved = when ? { key: 'SAVE_LAST_SUCCESS', params: { time: when } } : { key: 'SAVE_NO_SUCCESS' };
+  const notes = saveDurabilityNotes(status);
   if (status.phase === "SAVE_FAILED") return { key: status.lastCode === 'CHAMPIONSHIP_MODERN_SAVE_CONFLICT'
     ? "另一個分頁已寫入較新的存檔，這個分頁不會覆蓋它。請關閉其他分頁後重新開啟遊戲。"
-    : "上次保存失敗；可在畫面上方的保存狀態重試。", lastSaved };
-  if ((autosave?.inspect().pending.length ?? 0) > 0) return { key: 'SAVE_PENDING', lastSaved };
-  if (status.phase === "SAVED" || status.phase === "RESTORED") return when ? { key: "已存到本機（{time}）。", params: { time: when } } : { key: "已存到本機。" };
-  return { key: "上次寫入後遊戲又有進展，重要操作或離開頁面時會保存。", lastSaved };
+    : "上次保存失敗；可在畫面上方的保存狀態重試。", lastSaved, notes };
+  if ((autosave?.inspect().pending.length ?? 0) > 0) return { key: 'SAVE_PENDING', lastSaved, notes };
+  if (status.phase === "SAVED" || status.phase === "RESTORED") return when ? { key: "已存到本機（{time}）。", params: { time: when }, notes } : { key: "已存到本機。", notes };
+  return { key: "上次寫入後遊戲又有進展，重要操作或離開頁面時會保存。", lastSaved, notes };
+}
+
+/** Size against the save budget and whether the browser keeps this site's data. */
+function saveDurabilityNotes(status) {
+  const notes = [];
+  const kb = (bytes) => String(Math.max(1, Math.ceil(bytes / 1024)));
+  if (Number.isSafeInteger(status.bytes)) {
+    notes.push({ key: 'SAVE_SIZE_USAGE', params: { used: kb(status.bytes), budget: kb(status.byteBudget) } });
+    if (saveSizeLevel(status.bytes, status.byteBudget) === 'HIGH') notes.push({ key: 'SAVE_SIZE_HIGH' });
+  }
+  const storage = storageDurability.getState();
+  if (storage === 'PERSISTED') notes.push({ key: 'STORAGE_PERSISTED' });
+  else if (storage === 'NOT_PERSISTED') notes.push({ key: 'STORAGE_NOT_PERSISTED' });
+  return notes;
 }
 
 function note(message) {
@@ -528,6 +563,7 @@ function loadPixiModule(){
 async function ensureSharedPixiStage(canvasHost, signal) {
   const PIXI = await loadPixiModule();
   signal?.throwIfAborted();
+  const reusedStage = Boolean(pixiStage);
   if (!pixiStage) {
     // The quality tier chooses the resolution cap (changeable later) and the
     // antialiasing (fixed for the Application's life: next launch).
@@ -542,6 +578,13 @@ async function ensureSharedPixiStage(canvasHost, signal) {
   // never reattach its canvas over a newer screen. All callers share one init.
   signal?.throwIfAborted();
   pixiStage.attach(canvasHost);
+  // Dispose-Before-Load: when reusing the shared stage across screen transitions,
+  // yield one animation frame after the previous scene's synchronous teardown so
+  // mobile / iOS WebKit GPUs reclaim freed textures before decoding the next scene.
+  if (reusedStage && typeof requestAnimationFrame === "function") {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    signal?.throwIfAborted();
+  }
   return pixiStage;
 }
 async function ensurePixiStage(canvasHost, signal) {
@@ -692,9 +735,9 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
       try {
         const [{createRanchThreeScene},{ranchThreeField}]=await Promise.all([
           import('../presentation/ranchThreeScene.js'),import('../presentation/ranchThreeCoordinates.js')]);
-        const field=ranchThreeField(manifest,plan);
+        const field=ranchThreeField(manifest,plan,{pitch:RANCH_VIEW_PITCH});
         const threeScene=await createRanchThreeScene({stage,placements:plan.placements,field,signal,
-          connections:app.getRanchExplorationFrame()?.connections??[],cagePlacements:cageFrame?.placements??[]});
+          connections:app.getRanchExplorationFrame()?.connections??null,cagePlacements:cageFrame?.placements??[]});
         const displayObject=new PIXI.Container({label:'3D ranch metadata bridge'});
         return {assetId:'art:cage:three-20261021',field,displayObject,threeScene,update(){},
           getDiagnostics:()=>({assetId:'art:cage:three-20261021',three:threeScene.getDiagnostics()}),
@@ -900,7 +943,7 @@ async function mountRaisingHome() {
       // on instead of one that is merely slow.
       const progress = createLoadProgressView({ steps: [
         { id: 'engine', key: 'LOAD_STEP_ENGINE' }, { id: 'facilities', key: 'LOAD_STEP_FACILITIES' },
-        { id: 'partners', key: 'LOAD_STEP_PARTNERS' }, { id: 'scene', key: 'LOAD_STEP_SCENE' }] });
+        { id: 'partners', key: 'LOAD_STEP_PARTNERS' }, { id: 'scene', key: 'LOAD_STEP_SCENE' }], walker: true });
       let tracking = null;
       const stopTracking = () => { tracking?.stop(); tracking = null; };
       status.append(message, progress.element, retry, cancel, leave, reloadGame); (recoveryHost??host).append(status);
@@ -921,6 +964,8 @@ async function mountRaisingHome() {
       };
       expansionCta.addEventListener('click', openExpansionSheet);
       host.append(expansionCta);
+      // HD-2D ambience over the ranch (Owner 2026-10-27): vignette and warm motes.
+      const ambience = mountAmbience(host, { theme: 'sun' });
       function placeExpansionCta(rect) {
         const frame = rect?.visible;
         // Too little of the rows on screen to point at: hide rather than float.
@@ -1079,7 +1124,7 @@ async function mountRaisingHome() {
         getDiagnostics() { return scene?.getDiagnostics?.() ?? { renderer: 'LOADING', state: phase }; },
         dispose() {
           if (closed) return; closed = true; residentNotice.dispose();
-          attempt?.cancel(); effects?.cancel(); stopTracking(); scene?.dispose(); scene = null; status.remove(); expansionCta.remove();
+          attempt?.cancel(); effects?.cancel(); stopTracking(); progress.dispose(); ambience.dispose(); scene?.dispose(); scene = null; status.remove(); expansionCta.remove();
         }
       });
     }
@@ -1596,6 +1641,9 @@ async function mountBattleField() {
   // moves on to the result once the battle has judged itself.
   activeRuntime.observe((observed) => {
     if (viewDisposed || battleRuntime !== activeRuntime || battleAttemptId !== activeAttemptId) return;
+    if (typeof recordSessionScreenMounted === "function" && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
+      recordSessionScreenMounted(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);
+    }
     view.render(observed);
     if (showPersonality) root.dataset.battlePersonality = battlePersonalityReadout(activeRuntime);
     if (observed.outcome.ended && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
@@ -1882,6 +1930,7 @@ async function mountCurrentScreen() {
     if (returningFromBrowse && target === CHAMPIONSHIP_SCREENS.RAISING_HOME && app.getScreen() === target) {
       document.querySelector('button[data-menu-id="SYSTEM"]')?.focus({preventScroll:true});
     }
+    if (typeof recordSessionScreenMounted === "function") recordSessionScreenMounted(target);
     recoveryDiagnostics.record('SCREEN');
   } catch (error) {
     recoveryDiagnostics.record('LOAD_FAILED', { area: 'screen', error });
@@ -1939,6 +1988,9 @@ async function openGameplay() {
   // One subscription repaints the mounted view; a screen change swaps it.
   unsubscribeExpedition = expeditionSource.subscribe((frame) => {
     refreshStatusBar();
+    if (frame.screen === CHAMPIONSHIP_SCREENS.HUNT_FIELD || frame.screen === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) {
+      recordSessionScreenMounted(frame.screen);
+    }
     if (frame.screen !== mountedScreen) return;
     if (frame.screen === CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
     view?.render?.(frame);
@@ -2048,6 +2100,9 @@ function runToolbarMenuEntry(entry,context={}) {
   // over the current screen and changes nothing in the session.
   // Focus returns to the Menu button: the menu item itself is gone by then.
   if (entry.action === "OPEN_SETTINGS") { openSettings(document.querySelector('.cm-toolbar__cell[data-menu-id="SYSTEM"]')); return; }
+  // Owner 2026-10-27: the bag and the discovery journal, from the System menu.
+  if (entry.action === "OPEN_BACKPACK") { void openRanchBackpack({ getShopFrame: () => app.getShopFrame() }); return; }
+  if (entry.action === "OPEN_RANCH_JOURNAL") { document.dispatchEvent(new CustomEvent(RANCH_JOURNAL_OPEN_EVENT)); return; }
   if (entry.action === "END_DAY") {
     app.requestRaisingDayEnd();
     clockDriver?.reset();
@@ -2174,6 +2229,7 @@ async function openSaveDetails() {
 /** Save & Quit returns to the title, which is where the original ends a session. */
 async function returnToTitle(source = 'save-and-quit') {
   recoveryDiagnostics.record('TITLE_RETURN',{source,phase:'start'});
+  sessionCheckpoint?.clear();
   systemBackgrounds.leave();
   console.info('CHAMPIONSHIP_TITLE_RETURN', { source, screen: app.getScreen(), stack: new Error().stack });
   tutorialPreview?.dispose();tutorialPreview=null;
@@ -2181,6 +2237,10 @@ async function returnToTitle(source = 'save-and-quit') {
   clockDriver?.setActive(false);
   autosave?.dispose();autosave=null;
   statusBar?.dispose();statusBar=null;
+  unsubscribeScreen?.();
+  unsubscribeScreen = null;
+  unsubscribeExpedition?.();
+  unsubscribeExpedition = null;
   unsubscribeCalendar?.();
   unsubscribeCalendar = null;
   unsubscribeHud?.();
@@ -2189,7 +2249,7 @@ async function returnToTitle(source = 'save-and-quit') {
   battleRuntime?.dispose();
   battleRuntime = null;
   battleAttemptId = null;
-  view?.dispose?.();
+  await Promise.resolve(view?.dispose?.()).catch(() => {});
   view = null;
   mountedScreen = null;
   await app.dispose();
@@ -2254,6 +2314,7 @@ function refreshStatusBar() {
     reading.todayMatches = Math.min(app.getAvailableBattleRecordIndices().length, BATTLE_MATCH_LIST_CAP);
     const status = app.savePort?.getStatus?.() ?? null;
     reading.save = status ? { ...status, autosavePending: (autosave?.inspect().pending.length ?? 0) > 0 } : null;
+    if (status?.phase === 'SAVED') storageDurability.requestOnce();
   }
   statusBar.render(reading);
   // A day may only be closed from the Training side, matching where the
@@ -2411,6 +2472,7 @@ async function enterDataArena(dataArenaButton) {
     root.inert = false;
     clockDriver?.setActive(true);
     dataArenaButton.disabled = false;
+    if (app) recordSessionScreenMounted(app.getScreen());
     syncMusic();
     dataArenaButton.focus({ preventScroll: true });
   };
@@ -2431,12 +2493,70 @@ async function enterDataArena(dataArenaButton) {
     });
     dataArenaSession = session;
     root.hidden = true;
+    sessionCheckpoint?.write({ screen: "DATA_ARENA", substate: null }, { force: true });
   } catch (error) {
     console.warn("DATA_ARENA_OPEN_FAILED", error);
     restoreBattle();
     await showChoiceDialog({ title: battleMenuLabels().menu, message: uiText('對戰準備失敗，請再試一次。'),
       actions: [{ id: 'close', label: uiText('返回') }], cancelId: 'close' });
   }
+}
+
+let sessionCheckpoint = null;
+try {
+  sessionCheckpoint = createChampionshipSessionCheckpointPort({
+    storage: window.localStorage,
+    sessionStorage: window.sessionStorage
+  });
+} catch { sessionCheckpoint = null; }
+
+function ensureSessionHistoryGuard() {
+  if (!titleScreen || !titleScreen.hidden) return;
+  try {
+    if (window.history.state?.championshipSessionGuard !== true && window.history.state?.championshipOverlay !== "settings") {
+      window.history.pushState({ ...(window.history.state ?? {}), championshipSessionGuard: true }, "");
+    }
+  } catch {}
+}
+
+function recordSessionScreenMounted(target) {
+  const activeScreen = dataArenaSession && dataArenaSession !== "OPENING" ? "DATA_ARENA" : target;
+  const gateId = activeScreen === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT || activeScreen === CHAMPIONSHIP_SCREENS.HUNT_FIELD
+    ? (expeditionSource?.getFrame?.()?.selectedGateId
+      ?? app?.getConfirmedGate?.()?.gateId
+      ?? app?.getHuntRuntime()?.world?.gateId
+      ?? app?.getSelectedGateId?.()
+      ?? null)
+    : null;
+  sessionCheckpoint?.write({
+    screen: activeScreen,
+    substate: gateId ? { gateId } : null
+  });
+  ensureSessionHistoryGuard();
+}
+
+function handleSessionPopState() {
+  if (!titleScreen || !titleScreen.hidden || !app) return;
+  if (document.querySelector("dialog.cm-settings[open]") || isChoiceDialogOpen()) return;
+  if (dataArenaSession && typeof dataArenaSession.close === "function") {
+    void dataArenaSession.close();
+    ensureSessionHistoryGuard();
+    return;
+  }
+  const screen = app.getScreen();
+  if (screen && screen !== CHAMPIONSHIP_SCREENS.RAISING_HOME
+    && screen !== CHAMPIONSHIP_SCREENS.HUNT_FIELD
+    && screen !== CHAMPIONSHIP_SCREENS.BATTLE_FIELD
+    && screen !== CHAMPIONSHIP_SCREENS.HUNT_RESULT
+    && screen !== CHAMPIONSHIP_SCREENS.BATTLE_RESULT) {
+    if ([CHAMPIONSHIP_SCREENS.SHOP, CHAMPIONSHIP_SCREENS.DATABASE, CHAMPIONSHIP_SCREENS.CAGE_EDIT,
+      CHAMPIONSHIP_SCREENS.GATE_SELECT, CHAMPIONSHIP_SCREENS.HUNT_LOADOUT].includes(screen)) {
+      expeditionSource?.intents?.leaveScreen?.();
+    } else {
+      app.leaveScreen?.();
+    }
+  }
+  ensureSessionHistoryGuard();
 }
 
 function boot() {
@@ -2508,13 +2628,79 @@ function boot() {
   window.dispatchEvent(new Event("championship:ready"));
   scheduleRanchTitlePreload();
   syncMusic();
+  window.addEventListener("popstate", handleSessionPopState);
   // Background/unload resets elapsed measurement, and now also writes the
   // session: the Raising Home SAVE button was removed on 2026-09-16, so leaving
   // the page is what commits it. Save & Quit still commits explicitly.
-  window.addEventListener("pagehide", () => { stopRanchTitlePreload();clockDriver?.reset(); autosaveOnHide(); });
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden") {stopRanchTitlePreload();autosaveOnHide();}
+  window.addEventListener("pagehide", () => {
+    stopRanchTitlePreload();
+    clockDriver?.reset();
+    if (app && titleScreen?.hidden) recordSessionScreenMounted(app.getScreen());
+    autosaveOnHide();
   });
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      stopRanchTitlePreload();
+      if (app && titleScreen?.hidden) recordSessionScreenMounted(app.getScreen());
+      autosaveOnHide();
+    }
+  });
+
+  // iOS Standalone Web App Silent Reload Auto-Resume:
+  // If the OS jetsam-reloaded the Web App while the player was in an active session
+  // (without Save & Quit), automatically restore the saved session and active screen
+  // (or safe fallback landing screen for mid-Hunt / mid-Battle / Data Arena).
+  const activeCheckpoint = isInstalledWebApp(window) ? sessionCheckpoint?.read() : null;
+  if (activeCheckpoint && Number.isFinite(activeCheckpoint.updatedAtMs)
+    && Date.now() - activeCheckpoint.updatedAtMs <= CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS
+    && app.canContinue().loadable) {
+    recoveryDiagnostics.record("LOAD", { area: "standalone-auto-resume", stage: activeCheckpoint.screen });
+    void (async () => {
+      try {
+        openingFilm?.stop?.();
+        await continueGame();
+        const resumeScreen = activeCheckpoint.screen;
+        if (resumeScreen === CHAMPIONSHIP_SCREENS.GATE_SELECT
+          || resumeScreen === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT
+          || resumeScreen === CHAMPIONSHIP_SCREENS.HUNT_FIELD) {
+          expeditionSource?.intents?.openGate?.();
+          if ((resumeScreen === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT || resumeScreen === CHAMPIONSHIP_SCREENS.HUNT_FIELD)
+            && activeCheckpoint.substate?.gateId) {
+            expeditionSource?.intents?.selectGate?.(activeCheckpoint.substate.gateId);
+            await expeditionSource?.intents?.confirmGate?.();
+          }
+        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.SHOP) {
+          expeditionSource?.intents?.openShop?.();
+        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.DATABASE) {
+          expeditionSource?.intents?.openDatabase?.();
+        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
+          expeditionSource?.intents?.openCageEdit?.();
+        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.BATTLE_SELECT
+          || resumeScreen === CHAMPIONSHIP_SCREENS.BATTLE_FIELD
+          || resumeScreen === CHAMPIONSHIP_SCREENS.BATTLE_RESULT
+          || resumeScreen === "DATA_ARENA") {
+          app.openBattle?.();
+        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.CHAMPIONSHIP) {
+          app.openBattle?.();
+          app.openChampionship?.();
+        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) {
+          app.openDigimonList?.();
+        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.SCHEDULE) {
+          app.openSchedule?.();
+        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.MEDALS) {
+          app.openMedals?.();
+        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.TAMER_INFO) {
+          app.openTamerInfo?.();
+        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.HELP) {
+          app.openHelp?.();
+        }
+        // Any other screen (including RAISING_HOME and HUNT_RESULT) safely remains
+        // on RAISING_HOME (opened by continueGame() above), never dropping to Title.
+      } catch (err) {
+        console.warn("CHAMPIONSHIP_STANDALONE_AUTO_RESUME_FALLBACK", err);
+      }
+    })();
+  }
 }
 
 // Polished cages (2026-10-19) carry walkability that matches their art; applied

@@ -4,18 +4,17 @@ import {createCm07Ambient} from './cm07Ambient.js';
 import {loadSupportMetadata,validateSupportGeometry,eligibleSupportOwner,encodeProjectedTriangle,projectedTriangleTouchesBox,SUPPORT_MAX_TRIANGLES} from './ranchPhysicalSupport.js';
 import {CONTACT_HEIGHT_FIELDS,transformContactTriangles,contactHeightAtPoint,loadLogicalBridges,logicalContactHeightAtPoint,projectedContactIntersections,canonicalContactNativeCoordinate} from './ranchContactHeight.js';
 import {createRanchSupportOwnerResolver} from './ranchSupportOwner.js';
+import {createRanchPlinth} from './ranchPlinth.js';
 import * as THREE from '../../../node_modules/three/build/three.module.js';
 import { GLTFLoader } from '../../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from '../../../node_modules/three/examples/jsm/loaders/DRACOLoader.js';
-import { ranchNativeToWorld, ranchSurfaceHeight, ranchPickWalkSurface, ranchSpriteScreenQuad, ranchSpriteUvs, RANCH_ELEVATION } from './ranchThreeCoordinates.js';
-import { currentQualityTier, prefersReducedMotion } from './presentationPreferences.js';
+import { ranchNativeToWorld, ranchSurfaceHeight, ranchPickWalkSurface, ranchSpriteScreenQuad, ranchSpriteUvs, RANCH_LAYOUT_VIEW } from './ranchThreeCoordinates.js';
+import { cappedPixelRatio, currentQualityTier, isMobileOrStandaloneEnvironment, prefersReducedMotion } from './presentationPreferences.js';
 import { ranchSharedBoundaries } from '../cage/ranchConnections.js';
 import { ranchBorderWithinSharedSegments } from './ranchBorderMembership.js';
 
 const MANIFEST = 'assets/production/cage/three-20261021/manifest.json';
 const right = new THREE.Vector3(Math.SQRT1_2, 0, -Math.SQRT1_2);
-const up = new THREE.Vector3(-Math.sin(RANCH_ELEVATION)*Math.SQRT1_2, Math.cos(RANCH_ELEVATION), -Math.sin(RANCH_ELEVATION)*Math.SQRT1_2);
-const direction = new THREE.Vector3(Math.cos(RANCH_ELEVATION)*Math.SQRT1_2, Math.sin(RANCH_ELEVATION), Math.cos(RANCH_ELEVATION)*Math.SQRT1_2);
 const rotY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 4);
 
 const WATER_FIELDS = new Set();
@@ -27,7 +26,7 @@ const INDUSTRIAL_FIELDS = new Set();
  * The native simulation, pointer targets, camera pan/zoom and save stay owned
  * by the existing presenter. No requestAnimationFrame or new game authority.
  */
-export async function createRanchThreeScene({ stage, placements, field, signal,connections=[],cagePlacements=[],supportAudit=null }) {
+export async function createRanchThreeScene({ stage, placements, field, signal,connections=null,cagePlacements=[],supportAudit=null }) {
   const supportFieldIds=new Set(['field_cm02_01','field_cm09_01','field_cm19_01','field_cm21_01','field_cm35_01','field_cm39_01','field_cm18_01','field_cm34_01']);
   if(!supportAudit&&placements.some(p=>supportFieldIds.has(p.fieldId))){
     const supportResponse=await fetch('assets/production/cage/three-20261021/physical-ground-tops.r2.json',{signal});
@@ -53,7 +52,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   if (missing.length) throw Error(`RANCH_3D_MODELS_PENDING:${missing.join(',')}`);
   if (!field.productGrid || field.fold) throw Error('RANCH_3D_PRODUCT_GRID_REQUIRED');
   const renderer = new THREE.WebGLRenderer({ alpha:true, antialias:currentQualityTier()!=='saver', powerPreference:'high-performance' });
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, currentQualityTier()==='saver'?1:2));
+  renderer.setPixelRatio(cappedPixelRatio(currentQualityTier()==='saver'?1:2));
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.NeutralToneMapping;
   renderer.shadowMap.enabled=currentQualityTier()!=='saver';
@@ -62,14 +61,17 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   canvas.className='cm-ranch-three-canvas';canvas.setAttribute('aria-hidden','true');
   Object.assign(canvas.style,{position:'absolute',inset:'0',pointerEvents:'none',zIndex:'0'});
   const pixi=stage.app.canvas, previousStyle={position:pixi.style.position,zIndex:pixi.style.zIndex};
+  // The camera pitch is the field's view; the world stays on the 52-degree layout.
+  const view=field.view??RANCH_LAYOUT_VIEW,groundY=view.groundScaleY;
+  const up=new THREE.Vector3(...view.up),direction=new THREE.Vector3(...view.direction);
   const scene=new THREE.Scene(), camera=new THREE.OrthographicCamera(-1,1,1,-1,.1,600);
   camera.up.copy(up);
-  // Diorama light (2026-10-25): cool sky fill with a green ground bounce, warm key,
-  // soft shadow edges and lifted shadow floor so shade reads cool rather than black.
-  // Contact occlusion is authored into the GLB atlases, not added here.
-  scene.add(new THREE.HemisphereLight(0xc9ddf2,0x5d6b45,2));
-  const sun=new THREE.DirectionalLight(0xfff1d6,2.7);sun.castShadow=renderer.shadowMap.enabled;
-  sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-35;sun.shadow.camera.right=35;
+  // Owner 2026-10-27 HD-2D: a warm key light and a cool blue-violet fill under
+  // it, so lit faces and shaded sides of rock, trees and buildings separate.
+  scene.add(new THREE.HemisphereLight(0xd8e8ff,0x3e4270,1.8));
+  const sun=new THREE.DirectionalLight(0xffe2b4,2.95);sun.castShadow=renderer.shadowMap.enabled;
+  const shadowMapDim=(currentQualityTier()==='high'&&!isMobileOrStandaloneEnvironment())?2048:1024;
+  sun.shadow.mapSize.set(shadowMapDim,shadowMapDim);sun.shadow.camera.left=-35;sun.shadow.camera.right=35;
   sun.shadow.camera.top=35;sun.shadow.camera.bottom=-35;sun.shadow.camera.far=150;
   sun.shadow.bias=-.00015;sun.shadow.normalBias=.025;sun.shadow.radius=3;sun.shadow.intensity=.82;
   scene.add(sun,sun.target);
@@ -78,7 +80,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   const modelBitmaps=new Set();
   const lavaMaterials=new Set(), dynamicShaders=new Set(), smokeNodes=[];
   const authoredDepthMaterials=new Set();
-  let cm07Ambient=null;
+  let cm07Ambient=null,plinth=null;
   const dynamicParticles=[], dynamicMachines=[], dynamicBeacons=[];
   let sceneClock=0;
   const textureCap=currentQualityTier()==='saver'?512:currentQualityTier()==='high'?2048:1024;
@@ -147,14 +149,22 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
         for(const m of [].concat(o.material)){m.transparent=false;m.alphaTest=.12;m.depthWrite=true;}
       }});
     }
-    const unit=field.nativePixelWorldScale, wrap=field.wrapWidthPx/unit;
+    // The hex cage world does not wrap: one copy of each cage (wrapWidthPx null).
+    const unit=field.nativePixelWorldScale, wrap=field.wrapWidthPx?field.wrapWidthPx/unit:null;
 
     // Detect compatible boundaries between same-theme adjacent placements to dissolve borders
     const taggedPlacements=placements.map((p,idx)=>({...p,ownerIndex:p.ownerIndex??idx}));
     supportPlacements.push(...taggedPlacements.filter(p=>p.fragmentOfSlot===undefined&&!p.foldCap));
-    let sharedEdges=[];
+    let sharedEdges=[],passageEdges={open:[],closed:[]};
+    // Owner 2026-10-27: border art opens only where the walk rule opened a
+    // passage (same ecology, same height, safe exits on both sides). Without
+    // a navigation frame (tutorial baseline) the compatible edges open as before.
+    const passageIds=Array.isArray(connections)?new Set(connections.map(c=>c.id)):null;
     try {
-      const boundaries=ranchSharedBoundaries(taggedPlacements).filter(b=>b.compatible);
+      const all=ranchSharedBoundaries(taggedPlacements);
+      const isOpen=b=>passageIds?passageIds.has(b.id):b.compatible;
+      passageEdges={open:all.filter(isOpen).map(b=>({a:b.a,b:b.b})),closed:all.filter(b=>!isOpen(b)).map(b=>({a:b.a,b:b.b}))};
+      const boundaries=all.filter(isOpen);
       sharedEdges=boundaries.map(b=>({
         left:b.left,right:b.right,
         a:ranchNativeToWorld(b.a[0],b.a[1]),
@@ -162,8 +172,10 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       }));
     } catch(_){/* fall back to distinct bounded cages */}
 
+    // Owner 2026-10-27 diorama plinth: below the walk plane, GLBs untouched.
+    if(!wrap){plinth=createRanchPlinth({placements:taggedPlacements,towardSun:[-15,35,8],passages:passageEdges});scene.add(plinth.group);}
     for(const p of taggedPlacements.filter(p=>p.fragmentOfSlot===undefined&&!p.foldCap)) {
-      for(const shift of [-wrap,0,wrap]) {
+      for(const shift of wrap?[-wrap,0,wrap]:[0]) {
         const object=models.get(p.fieldId).scene.clone(true);
         const point=ranchNativeToWorld(p.x/unit+shift,p.y/unit);
         object.position.set(point.x,point.y,point.z);scene.add(object);
@@ -580,7 +592,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       }
     }
       cm07Ambient=createCm07Ambient(instances.filter(i=>i.p.fieldId==='field_cm07_01').map(i=>i.object));
-      supportOwnerResolver=createRanchSupportOwnerResolver({placements:supportPlacements,instances,unit:field.nativePixelWorldScale,wrapWidthNative:field.wrapWidthPx/field.nativePixelWorldScale});
+      supportOwnerResolver=createRanchSupportOwnerResolver({placements:supportPlacements,instances,unit:field.nativePixelWorldScale,wrapWidthNative:(field.wrapWidthPx??field.worldWidthPx)/field.nativePixelWorldScale});
     // Owner direction: navigation connections are invisible; original bridges and floors remain model geometry.
     signal?.throwIfAborted();
     Object.assign(pixi.style,{position:'relative',zIndex:'1'});pixi.parentElement.insertBefore(canvas,pixi);
@@ -781,13 +793,13 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     const box=ranchSpriteScreenQuad(sprite);item.screenQuad={...box};
     const foot=root.threeGroundScreen??root;
     const groundHeight=root.threeGroundHeight??0;
-    const ground=ranchNativeToWorld((foot.x-bounds.x)/pixelScale,(foot.y-bounds.y)/pixelScale,groundHeight);
+    const ground=ranchNativeToWorld((foot.x-bounds.x)/pixelScale,(foot.y-bounds.y)/(pixelScale*groundY),groundHeight);
 
     const worldW=box.width/(16*pixelScale);
-    const worldH=(box.height/(16*pixelScale))/Math.cos(RANCH_ELEVATION);
+    const worldH=(box.height/(16*pixelScale))/view.cos;
     const dx=(box.x+box.width/2-root.x)/(16*pixelScale);
     // Align base of sprite with foot anchor; ensure it sits slightly above floor to prevent z-fighting
-    const y_bottom=groundHeight+0.015+(root.y-(box.y+box.height))/(16*pixelScale*Math.cos(RANCH_ELEVATION));
+    const y_bottom=groundHeight+0.015+(root.y-(box.y+box.height))/(16*pixelScale*view.cos);
 
     item.mesh.scale.set(worldW,worldH,1);
     item.mesh.position.set(ground.x+right.x*dx, y_bottom+worldH/2, ground.z+right.z*dx);
@@ -797,7 +809,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     const supportHeight=root.threeVerifiedSupportHeight??groundHeight;
     uniforms.uRanchFloor.value=supportHeight+.015;
     uniforms.uRanchViewProjection.value.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse);
-    item.envelopeNativeExtent=Math.max(0,(supportHeight+.015-y_bottom)*16*Math.cos(RANCH_ELEVATION));
+    item.envelopeNativeExtent=Math.max(0,(supportHeight+.015-y_bottom)*view.screenLift);
     // Real-presenter path never accepts an externally supplied diagnostic token.
     root.threeSupportOwner=supportOwnerResolver?.resolve(root.threeGroundAdmission,(foot.x-bounds.x)/pixelScale)??null;
     syncPhysicalSupport(item,root,box);
@@ -813,24 +825,27 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     sprite.renderable=false;
   }
 
+  let wasHidden=false;
   function render({bounds,actors,food,waste,covered=false,deltaMS=0}) {
     if(disposed||lost){groundShadows.reset();for(const item of sprites.values())if(!item.sprite.destroyed)item.sprite.renderable=true;canvas.style.visibility='hidden';return false;}
-    if(document.hidden)return true;
+    if(document.hidden){wasHidden=true;return true;}
+    const effectiveDeltaMS=wasHidden?0:deltaMS;
+    wasHidden=false;
     canvas.style.visibility='';
     const start=performance.now(),screen=stage.app.screen;
     if(width!==screen.width||height!==screen.height){width=screen.width;height=screen.height;renderer.setSize(width,height);}
     const pixelScale=bounds.scale*field.nativePixelWorldScale;
-    const center=ranchNativeToWorld((width/2-bounds.x)/pixelScale,(height/2-bounds.y)/pixelScale);
+    const center=ranchNativeToWorld((width/2-bounds.x)/pixelScale,(height/2-bounds.y)/(pixelScale*groundY));
     camera.left=-width/(32*pixelScale);camera.right=-camera.left;camera.top=height/(32*pixelScale);camera.bottom=-camera.top;
     camera.position.set(center.x,center.y,center.z).addScaledVector(direction,200);
     camera.lookAt(center.x,center.y,center.z);camera.updateProjectionMatrix();camera.updateMatrixWorld();
     sun.position.set(center.x-15,35,center.z+8);sun.target.position.set(center.x,0,center.z);
     for(const {object,p,shift,mixer} of instances){
-      const x=bounds.x+(p.x/field.nativePixelWorldScale+shift)*pixelScale,y=bounds.y+p.y/field.nativePixelWorldScale*pixelScale;
+      const x=bounds.x+(p.x/field.nativePixelWorldScale+shift)*pixelScale,y=bounds.y+p.y/field.nativePixelWorldScale*pixelScale*groundY;
       object.visible=x+p.worldWidthPx*bounds.scale>-80&&x<width+80&&y+p.worldHeightPx*bounds.scale>-80&&y<height+180;
-      if(mixer&&object.visible&&!prefersReducedMotion())mixer.update(Math.min(50,Math.max(0,deltaMS))/1000);
+      if(mixer&&object.visible&&!prefersReducedMotion())mixer.update(Math.min(50,Math.max(0,effectiveDeltaMS))/1000);
     }
-    const deltaSec=Math.min(50,Math.max(0,deltaMS))/1000;
+    const deltaSec=Math.min(50,Math.max(0,effectiveDeltaMS))/1000;
     sceneClock+=deltaSec;
     cm07Ambient?.update({elapsedSeconds:sceneClock,visible:!covered,reducedMotion:prefersReducedMotion()});
     if(!prefersReducedMotion()){
@@ -860,7 +875,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       // Evolution is a screen-space presentation owned by the existing scene.
       if(covered||entry.evolutionActive){if(entry.sprite)entry.sprite.renderable=true;continue;}
       syncSprite(id,entry.sprite,entry.root,bounds,pixelScale);
-      groundShadows.sync(id,entry,bounds,pixelScale,sprites.get(id)?.seen===true);
+      groundShadows.sync(id,entry,bounds,pixelScale,sprites.get(id)?.seen===true,view);
     }
     for(const [id,root] of food??[])syncSprite('food:'+id,root.children?.[1],root,bounds,pixelScale);
     for(const [id,sprite] of waste??[])syncSprite('waste:'+id,sprite,sprite,bounds,pixelScale);
@@ -878,11 +893,12 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     canvas.dataset.actorProjectionError=String(Math.max(0,...[...sprites.values()].filter(i=>i.mesh.visible||i.upperMesh.visible).map(i=>i.projectionError??0)));
     canvas.dataset.animatedInstances=String(instances.filter(i=>i.mixer&&i.object.visible).length);
     canvas.dataset.textureCount=String(renderer.info.memory.textures);
-    canvas.dataset.passageAppearance='invisible';canvas.dataset.navigationConnections=String(connections.length);
+    canvas.dataset.viewPitch=String(view.pitch);canvas.dataset.plinthEdges=String(plinth?.edges??0);
+    canvas.dataset.passageAppearance='invisible';canvas.dataset.navigationConnections=String(connections?.length??0);canvas.dataset.passageThresholds=String(plinth?.thresholds??0);
     return true;
   }
   function dispose(){
-    if(disposed)return;disposed=true;groundShadows.dispose();supportOwnerResolver?.dispose();supportOwnerResolver=null;
+    if(disposed)return;disposed=true;groundShadows.dispose();plinth?.dispose();plinth=null;supportOwnerResolver?.dispose();supportOwnerResolver=null;
     cm07Ambient?.dispose();cm07Ambient=null;
     lavaMaterials.clear();dynamicShaders.clear();smokeNodes.length=0;
     for(const material of authoredDepthMaterials)material.dispose();authoredDepthMaterials.clear();
@@ -893,8 +909,11 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     for(const {texture,material} of textures.values()){texture.dispose();material.dispose();}
     for(const {object,mixer} of instances)if(mixer){mixer.stopAllAction();mixer.uncacheRoot(object);}
     const geometries=new Set(),materials=new Set(),maps=new Set();
-    for(const gltf of models.values())gltf.scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of [].concat(o.material??[])){materials.add(m);for(const v of Object.values(m))if(v?.isTexture)maps.add(v);}});
+    const collect=root=>root.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of [].concat(o.material??[])){materials.add(m);for(const v of Object.values(m))if(v?.isTexture)maps.add(v);}});
+    collect(scene);
+    for(const gltf of models.values())collect(gltf.scene);
     for(const g of geometries)g.dispose();for(const m of materials)m.dispose();for(const t of maps)t.dispose();
+    sun.shadow.map?.dispose();
     for(const bitmap of modelBitmaps)bitmap.close();modelBitmaps.clear();
     draco.dispose();
     renderer.dispose();renderer.forceContextLoss();canvas.remove();Object.assign(pixi.style,previousStyle);
@@ -936,7 +955,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   function pickGroundNative(point,readAdmission=null){
     let best={...point,height:0};const unit=field.nativePixelWorldScale;
     for(const {p,shift} of instances){
-      const picked=ranchPickWalkSurface(point.x-p.x/unit-shift,point.y-p.y/unit,walkSurfaces[p.fieldId]);
+      const picked=ranchPickWalkSurface(point.x-p.x/unit-shift,point.y-p.y/unit,walkSurfaces[p.fieldId],view.lift);
       if(picked.height>best.height)best={...point,y:picked.y+p.y/unit,height:picked.height};
     }
     // Test candidate ray intersections before querying ownership. Querying the
@@ -946,7 +965,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       for(const instance of instances){
         if(!CONTACT_HEIGHT_FIELDS.has(instance.p.fieldId)||!instance.supportMesh)continue;
         updateContactTriangles(instance);
-        for(const hit of projectedContactIntersections([...instance.contactTriangles,...instance.logicalContactTriangles],point.x,point.y)){
+        for(const hit of projectedContactIntersections([...instance.contactTriangles,...instance.logicalContactTriangles],point.x,point.y,view)){
           // Native admission is discontinuous at exact 8px cell boundaries.
           // Canonicalize roundoff near representable Q12 points BEFORE admission,
           // never accept a denied cell by tolerance or change general pointer precision.
@@ -962,6 +981,6 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     }
     return {x:best.x,y:best.y};
   }
-  return {render,dispose,groundHeight,pickGroundNative,getDiagnostics:()=>({spriteDiagnostics:[...sprites].filter(([key,item])=>item.mesh.visible||item.upperMesh.visible).map(([key,item])=>({key,partition:item.partition,companionId:item.upperMesh.id,physicalSupport:item.physicalSupport,screenQuad:item.screenQuad,worldCenter:item.mesh.position.toArray(),worldScale:item.mesh.scale.toArray(),projectionError:item.projectionError,envelopeNativeExtent:item.envelopeNativeExtent??null,supportStatus:item.supportStatus??'NATIVE_ORIGIN',depthTest:item.mesh.material.depthTest,depthWrite:item.mesh.material.depthWrite})),mode:'TRUE_3D_FIXED_CAMERA_2D_ACTORS',passageAppearance:'invisible',navigationConnections:connections.length,frames,lastRenderMs,models:models.size,textureCap,animatedInstances:instances.filter(i=>i.mixer).length,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,memory:{...renderer.info.memory},lost}),groundContact,contactHeight};
+  return {render,dispose,groundHeight,pickGroundNative,getDiagnostics:()=>({spriteDiagnostics:[...sprites].filter(([key,item])=>item.mesh.visible||item.upperMesh.visible).map(([key,item])=>({key,partition:item.partition,companionId:item.upperMesh.id,physicalSupport:item.physicalSupport,screenQuad:item.screenQuad,worldCenter:item.mesh.position.toArray(),worldScale:item.mesh.scale.toArray(),projectionError:item.projectionError,envelopeNativeExtent:item.envelopeNativeExtent??null,supportStatus:item.supportStatus??'NATIVE_ORIGIN',depthTest:item.mesh.material.depthTest,depthWrite:item.mesh.material.depthWrite})),mode:'TRUE_3D_FIXED_CAMERA_2D_ACTORS',passageAppearance:'invisible',navigationConnections:connections?.length??0,frames,lastRenderMs,models:models.size,textureCap,animatedInstances:instances.filter(i=>i.mixer).length,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,memory:{...renderer.info.memory},lost}),groundContact,contactHeight};
 }
 
