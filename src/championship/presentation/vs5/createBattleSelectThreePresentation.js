@@ -237,9 +237,13 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
   // same way -- the box turns when the player turns it. No automatic motion,
   // inertia or easing in either full or reduced-motion mode.
   function draw() {
-    if (disposed) return;
+    if (disposed || globalThis.document?.hidden) return;
     renderer.render(scene, camera);
   }
+  const onVisibilityChange = () => {
+    if (!disposed && !globalThis.document?.hidden) draw();
+  };
+  globalThis.document?.addEventListener?.("visibilitychange", onVisibilityChange);
 
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
@@ -328,6 +332,7 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
       disposed = true;
       observer.disconnect();
       controls.dispose();
+      globalThis.document?.removeEventListener?.("visibilitychange", onVisibilityChange);
       renderer.domElement.removeEventListener("webglcontextrestored", restored);
       for (const texture of textures) texture.dispose();
       textures.clear();
