@@ -42,6 +42,7 @@
     "src/championship/app/digimonListScreen.js",
     "src/championship/app/downloadSaveBackup.js",
     "src/championship/app/friendsPlaytestPolicy.js",
+    "src/championship/app/futureSystemsPort.js",
     "src/championship/app/gateHuntPresentationSource.js",
     "src/championship/app/helpScreen.js",
     "src/championship/app/hexWorldEditor.js",
@@ -87,6 +88,7 @@
     "src/championship/app/settings/qualityController.js",
     "src/championship/app/settings/settingsPanel.js",
     "src/championship/app/storageDurability.js",
+    "src/championship/app/storyCutsceneStage.js",
     "src/championship/app/tamerInfoScreen.js",
     "src/championship/app/titleParade.js",
     "src/championship/app/transientHint.js",
@@ -446,6 +448,7 @@
     "src/championship/text/interactiveTutorialPreviewText.js",
     "src/championship/text/locale.js",
     "src/championship/text/medalDetailText.js",
+    "src/championship/text/onboardingText.js",
     "src/championship/text/openingEggText.js",
     "src/championship/text/openingFilmText.js",
     "src/championship/text/openingStoryText.js",
@@ -8643,6 +8646,7 @@
     "src/championship/app/downloadSaveBackup.js",
     "src/championship/app/facilityBattleMobile.css",
     "src/championship/app/friendsPlaytestPolicy.js",
+    "src/championship/app/futureSystemsPort.js",
     "src/championship/app/gateHuntPresentationSource.js",
     "src/championship/app/helpScreen.js",
     "src/championship/app/hexWorldEditor.js",
@@ -8670,6 +8674,7 @@
     "src/championship/app/nativeTutorialBattleEntry.js",
     "src/championship/app/nativeTutorialProgression.js",
     "src/championship/app/nativeUiSkin.css",
+    "src/championship/app/onboarding.css",
     "src/championship/app/opening.css",
     "src/championship/app/openingEggChoices.js",
     "src/championship/app/openingFilm.js",
@@ -8697,6 +8702,7 @@
     "src/championship/app/settings/settingsPanel.js",
     "src/championship/app/shopOriginalVideo.css",
     "src/championship/app/storageDurability.js",
+    "src/championship/app/storyCutsceneStage.js",
     "src/championship/app/styles.css",
     "src/championship/app/tamerInfoScreen.js",
     "src/championship/app/titleParade.js",
@@ -9068,6 +9074,7 @@
     "src/championship/text/interactiveTutorialPreviewText.js",
     "src/championship/text/locale.js",
     "src/championship/text/medalDetailText.js",
+    "src/championship/text/onboardingText.js",
     "src/championship/text/openingEggText.js",
     "src/championship/text/openingFilmText.js",
     "src/championship/text/openingStoryText.js",
@@ -41654,7 +41661,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "273f7b90b30a238d00a91212a329ae5c0a4f1c79405a16a7d4e048ce1252d40c"
+        "sha256": "7860da1986b2a97c04cb5084947f39c95e05ac12476862ed2c2a901583333be8"
       },
       {
         "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -41742,7 +41749,7 @@
       },
       {
         "path": "src/championship/app/ChampionshipPersistentSavePort.js",
-        "sha256": "a763cbe1df5d59accd43672f51cf460fad8c6261738c8d80bfd1c4882f638b4f"
+        "sha256": "c681db972b31a66213ff8f16c878495a869cf668a978cea3aed42414c74d63a1"
       },
       {
         "path": "src/championship/app/championshipRaisingProduction.js",
@@ -41758,7 +41765,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "ab29f403811b5ffc4c706a49253b3c9414bac201eaa3bbb028923c28a295a1a5"
+        "sha256": "483b19711578ad80692a3479d767a2188416fc7dbc95f80099d093c914294107"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -41813,6 +41820,10 @@
         "sha256": "38d5ffa5c1c6fd187f110d8801d2df305461f17c4eebecb39c8072af86873ce9"
       },
       {
+        "path": "src/championship/app/futureSystemsPort.js",
+        "sha256": "038041d96f4bd1fc58d2f1d80499cbd719873aab355296e0f3e40493af12b4f4"
+      },
+      {
         "path": "src/championship/app/gateHuntPresentationSource.js",
         "sha256": "e2c585519d78313ff07bf917fa529ed966d91aac414dd7fb99fb322479006aae"
       },
@@ -41854,7 +41865,7 @@
       },
       {
         "path": "src/championship/app/interactiveTutorialPreview.js",
-        "sha256": "4f151db4f1cff99102fa9a175fb6b95161183cf6e13a334cf2e0254174227ec1"
+        "sha256": "e21f0e5eaa5af58759d922403878e2cb1fb369703740c2d7bf44a6ffd2310023"
       },
       {
         "path": "src/championship/app/interactiveTutorialRaisingSteps.js",
@@ -41878,7 +41889,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "f44da8fcaf25d5dc26279502559041ff985f1e8ca4afc1ffd1174a0f01429648"
+        "sha256": "82a5d32150a8c2af56388f6716e98d857d02d85be730d2f5db8f12df3f83e00b"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -41921,12 +41932,16 @@
         "sha256": "8f05c2c63b71cb31908ffffb4e7385754509582c306f3dce54e2c91021c6344a"
       },
       {
+        "path": "src/championship/app/onboarding.css",
+        "sha256": "92bffa71fb6b7ddec13eca82481dd0d511e1c7ffd788996a32735c1469939076"
+      },
+      {
         "path": "src/championship/app/opening.css",
         "sha256": "1086f88bdb184ee5eab927446023251f96254e64867abab75113c8096a39940a"
       },
       {
         "path": "src/championship/app/openingEggChoices.js",
-        "sha256": "575681b5a7d4ab7e71cae60dcbc0bcb8c49aa7a680981b88c79eba8fdccbbc78"
+        "sha256": "3833ea058650a22d51e111c294731c2a8bb823c083bb3cfaf6e8150677895012"
       },
       {
         "path": "src/championship/app/openingFilm.js",
@@ -41934,11 +41949,11 @@
       },
       {
         "path": "src/championship/app/openingPresentation.js",
-        "sha256": "662ee2a124d2458b1e01fdd6570a0351f36723a5e887f8d712594c48c8651709"
+        "sha256": "b2377aeb423ef0ce2e9283971d7bdc228ab7ee3ef58acd7d19d82b447e395c82"
       },
       {
         "path": "src/championship/app/openingStoryPresentation.js",
-        "sha256": "c9f91d1b880c6fe788064ed165ac63f3eea502be83536c4216757a0317a55a40"
+        "sha256": "2d9bf98171d7f45556ea65a78edc3296ed83f18fe2be950602c0a5715a87be57"
       },
       {
         "path": "src/championship/app/phase1ProductCreatures.js",
@@ -42029,12 +42044,16 @@
         "sha256": "ddbe615d33e60c08219713a598808438b6ae18f8d75e99b339ce2146d703fdf0"
       },
       {
+        "path": "src/championship/app/storyCutsceneStage.js",
+        "sha256": "2592d7a194b449f28f9140916b7456af96a93d8b0c98abb7d2d0d12357dcc9a3"
+      },
+      {
         "path": "src/championship/app/styles.css",
         "sha256": "f3c37317b12303dc816b7b3c6f324173bc605def18442c4af37a3f595f00ba77"
       },
       {
         "path": "src/championship/app/tamerInfoScreen.js",
-        "sha256": "c80f039c92429f0ec3d71b4c391381fb36a0396afed6c276c6812ccecd4a8f58"
+        "sha256": "00c302b858f8a14bdf05888bebb337a6052ef1c89f847955252822979270d8a3"
       },
       {
         "path": "src/championship/app/titleParade.js",
@@ -42918,7 +42937,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "8585bd007e44c0aa028b5b4450fd33c7a66d1fbcfb3ad85c86f3615853ff7fef"
+        "sha256": "b7767c125fdf10bd2130b3a6584e72f25b06b38b385f9b3902571cb903046d44"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingContactShadow.js",
@@ -43390,7 +43409,7 @@
       },
       {
         "path": "src/championship/raising/nativeTutorialRaisingActor.js",
-        "sha256": "f3fd324bc42738a42bbd2e79ecd6c1893c0b6f609f793664c152aa9564afe90d"
+        "sha256": "8923fae75f156862c75e8c3fca0791ecc8e28f0939a3f8dcab2b8448aae3481e"
       },
       {
         "path": "src/championship/raising/raisingGroundReview.js",
@@ -43511,6 +43530,10 @@
       {
         "path": "src/championship/text/medalDetailText.js",
         "sha256": "1c50997142a89016903c2bc1fe1db8413587d8b3d47f270814544886c724fae5"
+      },
+      {
+        "path": "src/championship/text/onboardingText.js",
+        "sha256": "ab403f386ae13ad7e3077a67ff6eb5a6e4222c7a63828bc9a12e9640678e3e88"
       },
       {
         "path": "src/championship/text/openingEggText.js",

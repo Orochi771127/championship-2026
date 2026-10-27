@@ -3,7 +3,11 @@ import {isApprovedOriginalPublicLocation} from "../presentation/originalRuntimeL
 // Owner-confirmed original design-board names (OC225..232). These are species
 // labels, independent of the name the player gives their own companion.
 const FORMAL_NAMES=Object.freeze(['星絮蛋','焰脈蛋','潮環蛋','森芽蛋','雷紋蛋','月霧蛋','晶棘蛋','聖耀蛋']);
-const namedEgg=egg=>Object.freeze({...egg,formalName:FORMAL_NAMES[egg.speciesIndex]});
+// Owner 2026-10-28 incubator: an element tag and aura colour per egg, read
+// from each design's own palette. Presentation only; no gameplay attribute.
+export const OPENING_EGG_ELEMENTS=Object.freeze(['star','fire','water','forest','thunder','moon','crystal','holy'].map((key,i)=>Object.freeze({key,
+  icon:['🌟','🔥','🌊','🌿','⚡','🌙','💎','✨'][i],color:['#9fa8ff','#ff6a3d','#2ec4f1','#3ddc84','#ffd23f','#b38cff','#7d8cff','#ffe08a'][i]})));
+const namedEgg=egg=>Object.freeze({...egg,formalName:FORMAL_NAMES[egg.speciesIndex],element:OPENING_EGG_ELEMENTS[egg.speciesIndex]});
 export const OPENING_EGG_CHOICES=Object.freeze([
   {
     "speciesIndex": 0,
