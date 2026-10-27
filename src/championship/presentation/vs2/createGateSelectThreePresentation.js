@@ -348,19 +348,37 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     draw();
   }
 
+  // Pin centres stay at least this far apart (px); the pin disc is about 30px.
+  const PIN_SPACING = 38;
   function positionNodeButtons() {
     cameraDirection.copy(camera.position).normalize();
     const width = Math.max(44, host.clientWidth);
     const height = Math.max(44, host.clientHeight);
+    const shown = [];
     for (const record of nodeRecords) {
       record.parent.getWorldPosition(worldPosition);
       const facing = worldPosition.clone().normalize().dot(cameraDirection);
       projected.copy(worldPosition).project(camera);
       const visible = facing > 0.24 && projected.z > -1 && projected.z < 1;
       record.button.hidden = !visible;
-      if (!visible) continue;
-      const x = THREE.MathUtils.clamp(((projected.x * 0.5) + 0.5) * width, 22, width - 22);
-      const y = THREE.MathUtils.clamp(((-projected.y * 0.5) + 0.5) * height, 22, height - 22);
+      if (visible) shown.push({ record, x: ((projected.x * 0.5) + 0.5) * width, y: ((-projected.y * 0.5) + 0.5) * height });
+    }
+    // Neighbouring places can project onto one spot (03 and 14): nudge the
+    // pins apart so each stays its own tap target, a step beside its place.
+    for (let pass = 0; pass < 3; pass += 1) {
+      for (let i = 0; i < shown.length; i += 1) for (let j = i + 1; j < shown.length; j += 1) {
+        const a = shown[i], b = shown[j];
+        let dx = b.x - a.x, dy = b.y - a.y;
+        const distance = Math.hypot(dx, dy);
+        if (distance >= PIN_SPACING) continue;
+        if (distance < 0.01) { dx = 1; dy = 0; }
+        const push = (PIN_SPACING - distance) / 2 / Math.max(distance, 1);
+        a.x -= dx * push; a.y -= dy * push; b.x += dx * push; b.y += dy * push;
+      }
+    }
+    for (const { record, x: px, y: py } of shown) {
+      const x = THREE.MathUtils.clamp(px, 22, width - 22);
+      const y = THREE.MathUtils.clamp(py, 22, height - 22);
       record.button.style.left = `${x}px`;
       record.button.style.top = `${y}px`;
       const halfLabel = Math.min(width - 8, record.nameLabel.offsetWidth) / 2;

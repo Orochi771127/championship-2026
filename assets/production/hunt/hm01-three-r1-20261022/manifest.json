@@ -47,18 +47,28 @@
       "variant": "day",
       "frames": [
         {
-          "file": "field_hm01_01-frame-00-7612568c0979.webp",
-          "sha256": "7612568c0979787ca4b7e04cdced8aaa4396913427253fd3d61180b92385976d",
-          "bytes": 3169974,
+          "file": "field_hm01_01-frame-00-rgb-b75aadfb70b1.webp",
+          "sha256": "b75aadfb70b118b3e0478f0f12ae0c1578ba363d0a7c713e2c69e099f2b66236",
+          "bytes": 1999206,
           "width": 2880,
-          "height": 2880
+          "height": 2880,
+          "mask": {
+            "file": "hm01-mask-3cb5e0973817.webp",
+            "sha256": "3cb5e097381788fab53fc489eba56e845f516c56c864da056b31d58092eeebb6",
+            "bytes": 51136
+          }
         },
         {
-          "file": "field_hm01_01-frame-01-eeb2ff08fdd4.webp",
-          "sha256": "eeb2ff08fdd4fa0ebd31d471dc35d3cf1a76153e05362a1f51ec57dd7208b902",
-          "bytes": 3169610,
+          "file": "field_hm01_01-frame-01-rgb-da05e9b73670.webp",
+          "sha256": "da05e9b736709f2157c40b08e70ff88b2b0aa3929bf41a9a5efa5cd2c93d05ec",
+          "bytes": 2001680,
           "width": 2880,
-          "height": 2880
+          "height": 2880,
+          "mask": {
+            "file": "hm01-mask-3cb5e0973817.webp",
+            "sha256": "3cb5e097381788fab53fc489eba56e845f516c56c864da056b31d58092eeebb6",
+            "bytes": 51136
+          }
         }
       ]
     },
@@ -66,18 +76,28 @@
       "variant": "night",
       "frames": [
         {
-          "file": "field_hm01_02-frame-00-2ddf2c03c3e1.webp",
-          "sha256": "2ddf2c03c3e169bab40caadecf6b5ec0011446972080b9c6b3869ce320fb3e8f",
-          "bytes": 2196984,
+          "file": "field_hm01_02-frame-00-rgb-05335b3abd17.webp",
+          "sha256": "05335b3abd17613ddd6f3f354f90ee96b8deefcc8e4d8887c98078276032cd11",
+          "bytes": 1174080,
           "width": 2880,
-          "height": 2880
+          "height": 2880,
+          "mask": {
+            "file": "hm01-mask-3cb5e0973817.webp",
+            "sha256": "3cb5e097381788fab53fc489eba56e845f516c56c864da056b31d58092eeebb6",
+            "bytes": 51136
+          }
         },
         {
-          "file": "field_hm01_02-frame-01-4fb08e2d1d80.webp",
-          "sha256": "4fb08e2d1d8006a59a7e4c2eaeec7501dda9652bc5a23727dd3ac41d68b4230a",
-          "bytes": 2196742,
+          "file": "field_hm01_02-frame-01-rgb-45a01a69ed3f.webp",
+          "sha256": "45a01a69ed3f8be6a63e980428e8d850bf56b87d6c5366213bd04abf96c01582",
+          "bytes": 1178080,
           "width": 2880,
-          "height": 2880
+          "height": 2880,
+          "mask": {
+            "file": "hm01-mask-3cb5e0973817.webp",
+            "sha256": "3cb5e097381788fab53fc489eba56e845f516c56c864da056b31d58092eeebb6",
+            "bytes": 51136
+          }
         }
       ]
     }

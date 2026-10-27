@@ -1025,6 +1025,9 @@
 .cm-cage-filters { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
 .cm-cage-filters[hidden] { display: none; }
 .cm-cage-filter { flex: 0 0 auto; min-height: 36px; padding: 0 12px; border-radius: 999px; font-weight: 900; font-size: 13px; }
+.cm-cage-filter { white-space: nowrap; }
+.cm-cage-filter[data-count]::after { content: attr(data-count); display: inline-block; min-width: 1.4em; margin-inline-start: 6px; padding: 0 5px; border-radius: 999px; background: #14141f; color: #ffd23f; font-size: 11px; line-height: 1.5; }
+.cm-cage-filter[data-count="0"]::after { background: rgba(20, 20, 31, 0.25); color: #14141f; }
 :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-inventory-panel {
   display: flex;
   flex-direction: row;
@@ -1042,6 +1045,11 @@
   gap: 10px;
   grid-template-columns: none;
 }
+/* Each group keeps its full content width: WebKit sized a flex row's flex child
+   to one card, so the rest spilled over the next group (iPhone, Owner 2026-10-27). */
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray, .cm-cage-facilities) { flex: 0 0 auto; width: max-content; min-width: 0; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray, .cm-cage-facilities)[hidden] { display: none; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filter-empty { flex: 0 0 auto; align-self: center; margin: 0; padding: 0 8px; white-space: nowrap; }
 :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-cage-tray { order: 0; }
 :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-facilities { order: 1; }
 :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray__item, .cm-cage-facility) {
@@ -1078,7 +1086,7 @@
   }
   :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filters { flex-wrap: wrap; }
   :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-inventory-panel { flex-direction: column; overflow-x: hidden; overflow-y: auto; }
-  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray, .cm-cage-facilities) { flex-wrap: wrap; }
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray, .cm-cage-facilities) { flex-wrap: wrap; width: auto; }
   :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray__item, .cm-cage-facility) { flex-basis: 136px; min-height: 100px; }
 }
 :root[data-motion="reduced"] :is(.cm-hexworld__cell, .cm-hexworld__bridge, .cm-hexworld__rim--synergy, .cm-hexworld__exit--synergy, .cm-hexworld__toast, .cm-vs2-action--primary) { animation: none !important; }
@@ -1263,7 +1271,8 @@
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__image { grid-column: 1; grid-row: 1; width: 64px; height: 44px; object-fit: cover; border: 2px solid #14141f; border-radius: 8px; }
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__copy { grid-column: 2; grid-row: 1; min-width: 0; }
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs { grid-column: 3; grid-row: 1; }
-:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview[data-selected="false"] .cm-vs2-preview__copy { grid-column: 1 / 3; }
+/* Before any choice the flag is not set yet: the prompt takes the image's column too. */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview:not([data-selected="true"]) .cm-vs2-preview__copy { grid-column: 1 / 3; }
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__name { color: #fff; font-size: 16px; }
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__id { color: rgba(255, 255, 255, 0.6); font-size: 11px; }
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs {
@@ -1437,11 +1446,11 @@
   pointer-events: none;
   -webkit-mask: radial-gradient(circle at 50% 41%, transparent var(--cm-iris), #000 calc(var(--cm-iris) + 2px));
   mask: radial-gradient(circle at 50% 41%, transparent var(--cm-iris), #000 calc(var(--cm-iris) + 2px));
-  animation: cm-iris-open 600ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
+  animation: cm-iris-open 900ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
 }
-@keyframes cm-iris-open { 0%, 23% { --cm-iris: 0px; opacity: 1; } 80% { --cm-iris: 110vmax; opacity: 1; } 100% { --cm-iris: 150vmax; opacity: 0; } }
-.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__portal { animation: cm-orb-breach 600ms cubic-bezier(0.6, 0, 0.3, 1) forwards; }
-@keyframes cm-orb-breach { 0% { transform: scale(1); } 23% { transform: scale(0.84); } 80% { transform: scale(6); opacity: 0.9; } 100% { transform: scale(7); opacity: 0; } }
+@keyframes cm-iris-open { 0%, 30% { --cm-iris: 0px; opacity: 1; } 84% { --cm-iris: 110vmax; opacity: 1; } 100% { --cm-iris: 150vmax; opacity: 0; } }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__portal { animation: cm-orb-breach 900ms cubic-bezier(0.6, 0, 0.3, 1) forwards; }
+@keyframes cm-orb-breach { 0% { transform: scale(1); filter: brightness(1); } 12% { transform: scale(0.9) translateX(-3px); } 18% { transform: scale(0.82) translateX(3px); filter: brightness(1.6); } 26% { transform: scale(0.76); filter: brightness(2.2); } 32% { transform: scale(1.18); filter: brightness(2.6); } 84% { transform: scale(6); opacity: 0.9; } 100% { transform: scale(7); opacity: 0; } }
 .cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__core { background: transparent; box-shadow: none; animation: none; }
 .cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__core::before,
 .cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__core::after {
@@ -1452,10 +1461,10 @@
   background: radial-gradient(circle at 50% 42%, #ffffff 0%, #fff3bf 38%, #b98cff 100%);
   opacity: 0;
 }
-.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__core::before { clip-path: inset(0 0 52% 0); animation: cm-orb-half-up 600ms cubic-bezier(0.6, 0, 0.3, 1) forwards; }
-.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__core::after { clip-path: inset(52% 0 0 0); animation: cm-orb-half-down 600ms cubic-bezier(0.6, 0, 0.3, 1) forwards; }
-@keyframes cm-orb-half-up { 0%, 23% { opacity: 1; transform: none; } 80% { opacity: 0.6; transform: translateY(-46%); } 100% { opacity: 0; transform: translateY(-60%); } }
-@keyframes cm-orb-half-down { 0%, 23% { opacity: 1; transform: none; } 80% { opacity: 0.6; transform: translateY(46%); } 100% { opacity: 0; transform: translateY(60%); } }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__core::before { clip-path: inset(0 0 52% 0); animation: cm-orb-half-up 900ms cubic-bezier(0.6, 0, 0.3, 1) forwards; }
+.cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__core::after { clip-path: inset(52% 0 0 0); animation: cm-orb-half-down 900ms cubic-bezier(0.6, 0, 0.3, 1) forwards; }
+@keyframes cm-orb-half-up { 0%, 30% { opacity: 1; transform: none; } 84% { opacity: 0.6; transform: translateY(-46%); } 100% { opacity: 0; transform: translateY(-60%); } }
+@keyframes cm-orb-half-down { 0%, 30% { opacity: 1; transform: none; } 84% { opacity: 0.6; transform: translateY(46%); } 100% { opacity: 0; transform: translateY(60%); } }
 .cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"][data-breach="true"] .cm-ceremony__stage .cm-cer-gate__portal::after {
   content: "";
   position: absolute;
@@ -1466,15 +1475,15 @@
   border-radius: 2px;
   background: #fffbe6;
   box-shadow: 0 0 12px #fff3bf, 0 0 24px #ffd23f;
-  animation: cm-orb-crack 600ms ease-out forwards;
+  animation: cm-orb-crack 900ms ease-out forwards;
 }
-@keyframes cm-orb-crack { 0% { opacity: 0; transform: scaleX(0.2); } 20% { opacity: 1; transform: scaleX(1); } 60% { opacity: 0.8; } 100% { opacity: 0; } }
-.cm-vs2-field__viewport[data-entering="true"] .cm-vs2-field__canvas { animation: cm-field-land 600ms cubic-bezier(0.34, 1.3, 0.64, 1) both; }
-@keyframes cm-field-land { 0%, 80% { transform: scale(1.06); } 100% { transform: scale(1); } }
-.cm-vs2-field:has(.cm-vs2-field__viewport[data-entering="true"]) .cm-vs2-hud { animation: cm-hud-drop 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-.cm-vs2-field:has(.cm-vs2-field__viewport[data-entering="true"]) .cm-hunt-controls-panel { animation: cm-hud-rise 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-@keyframes cm-hud-drop { 0%, 80% { opacity: 0; transform: translateY(-24px); } 100% { opacity: 1; transform: none; } }
-@keyframes cm-hud-rise { 0%, 80% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: none; } }
+@keyframes cm-orb-crack { 0%, 12% { opacity: 0; transform: scaleX(0.2); } 28% { opacity: 1; transform: scaleX(1.25); } 60% { opacity: 0.8; } 100% { opacity: 0; } }
+.cm-vs2-field__viewport[data-entering="true"] .cm-vs2-field__canvas { animation: cm-field-land 900ms cubic-bezier(0.34, 1.3, 0.64, 1) both; }
+@keyframes cm-field-land { 0%, 30% { transform: scale(1.06); } 33% { transform: scale(1.06) translate(5px, -4px); } 36% { transform: scale(1.06) translate(-5px, 3px); } 39% { transform: scale(1.06) translate(3px, 2px); } 42%, 84% { transform: scale(1.06); } 100% { transform: scale(1); } }
+.cm-vs2-field:has(.cm-vs2-field__viewport[data-entering="true"]) .cm-vs2-hud { animation: cm-hud-drop 900ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.cm-vs2-field:has(.cm-vs2-field__viewport[data-entering="true"]) .cm-hunt-controls-panel { animation: cm-hud-rise 900ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes cm-hud-drop { 0%, 84% { opacity: 0; transform: translateY(-24px); } 100% { opacity: 1; transform: none; } }
+@keyframes cm-hud-rise { 0%, 84% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: none; } }
 :root[data-motion="reduced"] .cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage :is(.cm-cer-gate__orbit, .cm-cer-gate__core) { animation: none; }
 :root[data-motion="reduced"] .cm-vs2-field__viewport .cm-ceremony[data-kind="gate-entry"] .cm-ceremony__stage .cm-cer-gate__orbit::after { animation: none; }
 
@@ -1660,3 +1669,101 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
 :root[data-theme="arcade"] .cm-load-progress__bar { height: 10px; border: 2px solid #14141f; background: rgba(255, 255, 255, 0.5); }
 :root[data-theme="arcade"] .cm-load-progress__fill { background: linear-gradient(90deg, #8a5cff, #4deed6 55%, #ffd23f); }
 :root body .cm-load-progress__meta { margin: 0; font-size: 11px; }
+
+/* ======================================================================== *
+ * Ranch status bar 2026-10-27 (Owner): on a phone the wallet stays on the
+ * calendar's row. Chips size to their words; the text-size setting grows this
+ * row at most 1.1x so 130% never pushes the wallet onto a second line; the
+ * transient save key floats under the wallet instead of reserving row width.
+ * (body:has(#cm-root) matches the arcade wallet rule's weight.)
+ * ======================================================================== */
+@media (max-width: 600px) {
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] { --sb-scale: min(var(--text-scale, 1), 1.1); flex-wrap: nowrap; align-items: center; gap: 5px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__season, .cm-status-bar__day, .cm-status-bar__time) {
+    flex: 0 0 auto; padding: 3px 9px; font-size: calc(13px * var(--sb-scale)); line-height: 1.35; white-space: nowrap;
+  }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__day :is(.cm-status-bar__day-word, .cm-status-bar__day-number) { font-size: inherit; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__extras { flex: 0 1 auto; min-width: 0; margin-inline-start: auto; flex-wrap: nowrap; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__currencies { flex: 0 1 auto; width: auto; min-width: 0; gap: 6px; padding: 0 10px 0 4px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__bits, .cm-status-bar__diamond) { flex: 0 1 auto; width: auto; min-width: 0; min-height: 44px; gap: 3px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__compact-value { font-size: max(14px, calc(13px * var(--sb-scale))); }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__currency-icon { flex-basis: 18px; width: 18px; height: 18px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save-slot { position: absolute; right: max(10px, var(--safe-right)); top: calc(100% + 6px); width: 44px; }
+}
+@media (max-width: 400px) {
+  /* Narrow phones: "8 日" instead of "第 8 日", tighter chips and coins. */
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] { gap: 4px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__day .cm-status-bar__day-word:first-child { display: none; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__season, .cm-status-bar__day, .cm-status-bar__time) { padding: 3px 5px; font-size: calc(12.5px * var(--sb-scale)); }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__currencies { gap: 5px; padding: 0 8px 0 3px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__compact-value { font-size: 14px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__currency-icon { flex-basis: 16px; width: 16px; height: 16px; }
+}
+
+/* Fit pass 2026-10-27 (Owner): no HUD piece covers another at any text size.
+   The ranch hint keeps clear of the 44px zoom key on its right. */
+:root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-hint {
+  max-width: min(560px, calc(100% - 16px - 64px - var(--safe-left) - var(--safe-right)));
+}
+/* The globe's drag caption sat on the pins: it shows briefly, then gets out of the way. */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__hint { pointer-events: none; animation: cm-globe-hint 4s ease-out forwards; }
+@keyframes cm-globe-hint { 0%, 75% { opacity: 0.8; } 100% { opacity: 0; visibility: hidden; } }
+:root[data-motion="reduced"] body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-gate3d__hint { display: none; }
+/* An open toolbar sheet owns that corner: the ranch's zoom key and hint step aside. */
+:root body:has(.cm-toolbar__menu:not([hidden])) :is(.cm-ranch-zoom, .int-rh2-hint) { visibility: hidden; }
+/* Narrow phones: the visor's name and costs shrink to one line each instead of
+   cutting to "請選…"; the four size tabs share one row. */
+@media (max-width: 400px) {
+  :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__name { font-size: 14px; white-space: nowrap; }
+  :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs { gap: 1px 6px; font-size: 10px; }
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filters { gap: 4px; }
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filter { padding: 0 6px; font-size: 12px; }
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filter[data-count]::after { margin-inline-start: 4px; padding: 0 4px; font-size: 10px; }
+}
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filters { gap: 5px; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-filter { flex: 1 1 auto; justify-content: center; min-width: max-content; padding: 0 8px; font-size: 12.5px; }
+
+/* Below the supported 360px phone row, preserve readable wallet controls. */
+@media (max-width: 359px) {
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] { flex-wrap: wrap; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__extras { flex: 0 0 100%; justify-content: flex-end; }
+}
+
+/* Letters and day changes (Owner 2026-10-27, iPhone): the lifecycle overlay lifts
+   the whole ranch root above the HUD (a fixed root is its own stacking context),
+   so the 3D ranch used to paint over half the dock. The dock and status bar,
+   which cannot be used under that modal anyway, fade out until it closes. */
+:root body:has(.int-rh2-lifecycle:not([hidden])) :is(.cm-toolbar, .cm-status-bar) { opacity: 0; visibility: hidden; transition: opacity 160ms ease-out, visibility 0s linear 160ms; }
+:root body :is(.cm-toolbar, .cm-status-bar) { transition: opacity 160ms ease-out; }
+
+/* Breach, made unmistakable (Owner 2026-10-27, iPhone): 900 ms — the orb charges
+   and squeezes, a white-gold flash and a shockwave ring burst from it with a
+   short shake, then the iris (glowing rim) opens onto the field. */
+.cm-vs2-field__viewport[data-entering="true"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: calc(var(--z-lifecycle) + 3);
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 41%, rgba(255, 255, 255, 0.98) 0%, rgba(255, 243, 191, 0.8) 16%, rgba(185, 140, 255, 0.4) 36%, transparent 62%);
+  animation: cm-breach-flash 900ms ease-out forwards;
+}
+@keyframes cm-breach-flash { 0%, 22% { opacity: 0; transform: scale(0.4); } 32% { opacity: 1; transform: scale(1); } 55% { opacity: 0.45; transform: scale(1.7); } 100% { opacity: 0; transform: scale(2.6); } }
+.cm-vs2-field:has(.cm-vs2-field__viewport[data-entering="true"])::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 41%;
+  z-index: calc(var(--z-lifecycle) + 4);
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  border: 5px solid #fff3bf;
+  border-radius: 50%;
+  box-shadow: 0 0 18px #ffd23f, inset 0 0 18px #b98cff;
+  pointer-events: none;
+  animation: cm-breach-ring 900ms cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+@keyframes cm-breach-ring { 0%, 28% { opacity: 0; transform: scale(0.3); } 34% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(18); border-width: 1px; } }
+:root[data-motion="reduced"] .cm-vs2-field__viewport[data-entering="true"]::before,
+:root[data-motion="reduced"] .cm-vs2-field:has(.cm-vs2-field__viewport[data-entering="true"])::after { display: none; }

@@ -8,6 +8,7 @@ import { nativeWildRandom } from "./nativeCapturePhases.js";
 import { queryNativeHuntActors } from "./nativeWildSpatial.js";
 import { getHuntCatalogItem } from "../loadout/huntEquipmentCatalog.js";
 import {separateGroundFootpoints,canTraverseGroundStep} from '../../field/groundFootpointSeparation.js';
+import { createLassoTracker, lassoContains } from "./ropeLassoGesture.js";
 const Q12=4096;
 const FRAME_MS=1000*560190/33513982;
 export function nativeHuntGroundSpacingEligible(a){
@@ -31,6 +32,9 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   if (!rng?.next || !loadout?.getSelectedEquipment || typeof consumeItem!=="function") throw Error("NATIVE_HUNT_CONTROL_AUTHORITIES_REQUIRED");
   const actors=records.map((r,i)=>createNativeWildActor(r,wildIds[i]));
   let activeTool="HAND", pointer=null, stroke=null, closure=null, rope=null, selectedWildId=null;
+  // OWNER_APPROVED_ADAPTATION 2026-10-27: the drawn loop itself (ropeLassoGesture.js)
+  // decides who is caught; the native sampler still runs for its RNG and fallback.
+  const lasso=createLassoTracker();let closureSerial=0,lassoClosed=false;
   let accumulator=0, frame=0, notice=null;
   const ages=Array(20).fill(0);
   const nextChannel=channel=>rng.next(channel), wildRandom=max=>nativeWildRandom(max,nextChannel);
@@ -68,10 +72,13 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     const additions=stroke.count-before.count;
     for(let n=0;n<additions;n++)ages[(before.next+n)%20]=20;
   }
+  // A body (its hit box's middle) inside the drawn loop, or within its margin.
+  const lassoCaught=polygon=>actors.filter(a=>a.actorActive&&!a.hidden&&!a.passage&&!a.cardState&&lassoContains(polygon,
+    (a.positionQ12[0]>>12)+((a.bounds?.rect?.[0]??0)+(a.bounds?.rect?.[2]??0))/2,(a.positionQ12[1]>>12)+((a.bounds?.rect?.[1]??0)+(a.bounds?.rect?.[3]??0))/2));
   function submitStroke() {
     if(stroke) {
       const shape=recognizeNativeRopeStroke(stroke);
-      if(shape)closure={...shape,ticks:18};
+      if(shape)closure={...shape,ticks:18,serial:++closureSerial};
     }
     stroke=null;ages.fill(0);
   }
@@ -88,13 +95,25 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
       || pointer.kind==='ROPE_PULL' && !rope))pointer=null;
     if(closure) {
       if(closure.ticks===0) {
-        for(const a of queryNativeHuntActors(actors,closure.centerQ12,[-48,-48,48,48]))a.events.push({code:0x23});
+        // A lasso holds who was inside when it closed (a partner that walks on
+        // during the 18-tick cinch is still caught), plus whoever is inside now.
+        const held=new Set(closure.caught??[]);
+        const caught=closure.polygon?[...new Set([...actors.filter(a=>held.has(a.wildId)&&a.actorActive&&!a.hidden&&!a.cardState),...lassoCaught(closure.polygon)])]
+          :queryNativeHuntActors(actors,closure.centerQ12,[-48,-48,48,48]);
+        for(const a of caught)a.events.push({code:0x23});
         closure=null;
       } else closure.ticks--;
     }
     if(pointer?.kind==="ROPE_STROKE") {
       sample();
-      if(pointer.released){submitStroke();pointer=null;}
+      const loop=closure?null:lasso.add(pointer.pixels[0],pointer.pixels[1]);
+      if(loop){
+        closure={centerQ12:[Math.round(loop.centroid.x*Q12),Math.round(loop.centroid.y*Q12)],polygon:loop.polygon,ticks:18,
+          serial:++closureSerial,caught:lassoCaught(loop.polygon).map(a=>a.wildId)};
+        lasso.reset(loop.polygon.at(-1));lassoClosed=true;
+      }
+      // The native reading is the fallback for a stroke the lasso never closed.
+      if(pointer.released){if(!lassoClosed)submitStroke();else{stroke=null;ages.fill(0);}lasso.reset();lassoClosed=false;pointer=null;}
     }
     if(stroke) {
       const expired=[];
@@ -144,7 +163,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
         const item=equipped("ROPE");if(!item)return false;
         pointer={kind:a?.bound?"ROPE_PULL":"ROPE_STROKE",q12:p,pixels:p.slice(0,2).map(n=>n>>12),released:false};
         if(a?.bound)rope={actor:a,state:nativeRopeParameters(item.nativeItemIndex,a.speciesIndex,a.maxHp)};
-        else {stroke=createNativeRopeStroke();ages.fill(0);}
+        else {stroke=createNativeRopeStroke();ages.fill(0);lasso.reset({x:p[0]>>12,y:p[1]>>12});lassoClosed=false;}
         onChange();return true;
       }
       if(consumables.canUse(activeTool)) {
@@ -155,7 +174,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     },
     pointerMove(x,y){if(!pointer)return false;pointer.q12=[Math.floor(x/2)*Q12,Math.floor(y/2)*Q12,0];pointer.pixels=pointer.q12.slice(0,2).map(n=>n>>12);return true;},
     pointerUp(x,y){if(!pointer)return false;this.pointerMove(x,y);pointer.released=true;return true;},
-    cancel(){if(rope)rope.actor.events.push({code:0x12});consumables.cancel();pointer=null;stroke=null;rope=null;ages.fill(0);},
+    cancel(){if(rope)rope.actor.events.push({code:0x12});consumables.cancel();pointer=null;stroke=null;rope=null;ages.fill(0);lasso.reset();},
     getSelectedWildId:()=>selectedWildId,
     selectAt(x,y){const a=targetAt([Math.floor(x/2)*Q12,Math.floor(y/2)*Q12,0]);selectedWildId=a?.wildId??null;return !!a;},
     getActors:()=>actors.filter(a=>a.actorActive&&!a.hidden&&(!a.cardState||a.cardState==='HAND_ANIMATION')).map(a=>({wildId:a.wildId,speciesId:a.speciesId,
@@ -189,7 +208,9 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
       rope:rope?{wildId:rope.actor.wildId,from:[rope.actor.positionQ12[0]/2048,rope.actor.positionQ12[1]/2048-20],
         to:pointer.q12.slice(0,2).map(n=>n/2048),durability:rope.state.durability,capacity:rope.state.baseDurability,band:rope.state.band}:null,
       points:stroke?.slots.filter(Boolean).map(s=>({x:s.positionQ12[0]/2048,y:s.positionQ12[1]/2048}))??[],
-      closure:closure?{x:closure.centerQ12[0]/2048,y:closure.centerQ12[1]/2048,ticks:closure.ticks}:null,
+      closure:closure?{x:closure.centerQ12[0]/2048,y:closure.centerQ12[1]/2048,ticks:closure.ticks,serial:closure.serial,
+        polygon:closure.polygon?.map(p=>({x:p.x*2,y:p.y*2}))??null,caught:closure.caught?.length??null}:null,
+      lassoPath:pointer?.kind==="ROPE_STROKE"?lasso.points.map(p=>({x:p.x*2,y:p.y*2})):[],
       captureEffects:captureEffects(),
       usedG:usedG(),maxG:maxCardG}),
     getAvailability(){const a=actors.find(a=>a.wildId===selectedWildId);return {state:a?nativeWildCaptureSnapshot(a).state:"NO_TARGET",canCollect:a?.aiState===11||a?.aiState===16&&a.trapReady,targetWildId:selectedWildId,currentHp:a?.currentHp??null};}

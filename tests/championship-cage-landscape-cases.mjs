@@ -66,6 +66,17 @@ async function editorFixture(t,{choice='stay'}={}) {
  return {app,source,root,view,layout,store,asks:()=>asks,paint(){view.render(source.getFrame());}};
 }
 
+test('native cage inventory stays visible when size tabs are unavailable',async t=>{
+ const f=await editorFixture(t);
+ f.source.intents.removeCagePlacement('championship:2026:cage:0');f.paint();
+ assert.equal(f.root.querySelector('.cm-cage-filters').hidden,true);
+ assert.equal(f.root.querySelector('.cm-cage-facilities').hidden,false,'placed facilities remain reachable');
+ assert.equal(f.root.querySelector('.cm-vs2-cage-tray').hidden,false,'unplaced inventory remains reachable');
+ const cards=[...f.root.querySelectorAll('.cm-vs2-cage-tray__item'),...f.root.querySelectorAll('.cm-cage-facility')];
+ assert.ok(cards.length>0);
+ assert.ok(cards.every(node=>!node.hidden),'no invisible size filter applies to native layouts');
+});
+
 function cells(root){return root.querySelectorAll('.cm-vs2-cage-slot').map(n=>({slot:n.dataset.slotIndex,deck:n.dataset.deck,left:n.style.left,top:n.style.top,width:n.style.width}));}
 function boardNodes(root){return ['.cm-cage-board-panel','.cm-cage-inventory-panel','.cm-vs2-cage-board','.cm-cage-annex-board','.cm-cage-board-scroll'].map(selector=>root.querySelector(selector));}
 function verifyResizeKeepsDraft(f){

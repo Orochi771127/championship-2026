@@ -1062,6 +1062,7 @@ export const TEXT_EN = Object.freeze({
   "尚未開放": "Locked",
   "取回 {cage}": "Take back {cage}",
   "已持有的設施皆已放置。": "Every cage you own is placed.",
+  "這個格數的設施都已放置。": "Every cage of this size is placed.",
   "選擇{cage}。{effect}": "Select {cage}. {effect}",
   "飼料": "Feed", "蛋白質": "Protein", "傷藥": "Salve", "藥品": "Medicine",
 

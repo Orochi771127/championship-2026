@@ -722,7 +722,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       entryTimer = null;
       closeEntry();
       setTimeout(() => { delete viewport.dataset.entering; }, 160);
-    }, 600);
+    }, 900); // the breach in screenLayout.css runs 900 ms (Owner 2026-10-27: make it unmistakable)
   }
   // 捕獲成功: a toast over the live field when a catch lands on the card.
   const seenCaptures = new Set((block.hud.onCard ?? []).map((entry) => entry.wildId));

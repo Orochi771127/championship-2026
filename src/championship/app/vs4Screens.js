@@ -1182,13 +1182,14 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
   const inventoryPanel = element('div', 'cm-cage-inventory-panel');
   boardPanel.append(boardHint, boardScroll, expansionControls);
   inventoryPanel.append(facilities, tray);
-  // Size filters for the cartridge dock (hex world only). 全部 shows both the
-  // cages still in hand and the ones already on the board.
+  // Size filters for the cartridge dock (hex world only). Owner 2026-10-27: no
+  // 全部 tab; a size tab lists the cages still in hand, and a placed cage moves
+  // to 場上已放置, so the two groups never share one row.
   const filters = element('div', 'cm-cage-filters');
   filters.setAttribute('role', 'tablist');
   filters.setAttribute('aria-label', uiText('依格數篩選設施'));
-  let filter = 'all';
-  const FILTERS = [['all', '全部'], ['1', '1格'], ['2-3', '2~3格'], ['4-5', '4~5格'], ['placed', '場上已放置']];
+  let filter = null;
+  const FILTERS = [['1', '1格'], ['2-3', '2~3格'], ['4-5', '4~5格'], ['placed', '場上已放置']];
   for (const [id, label] of FILTERS) {
     const tab = element('button', 'cm-cage-filter', label);
     tab.type = 'button';
@@ -1437,10 +1438,15 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
 
     tray.replaceChildren();
     if (cage.tray.length === 0) {
-      tray.append(element("p", "cm-vs2-shop__empty", "已持有的設施皆已放置。"));
+      tray.append(element("p", "cm-vs2-shop__empty cm-cage-filter-empty", filters.hidden
+        ? "已持有的設施皆已放置。" : "這個格數的設施都已放置。"));
+      trayEmpty = null;
       applyFilter();
       return;
     }
+    // The empty note for a size tab whose cages are all placed (hex world only).
+    trayEmpty = element("p", "cm-vs2-shop__empty cm-cage-filter-empty", "這個格數的設施都已放置。");
+    trayEmpty.hidden = true;
     for (const item of cage.tray) {
       const row = element("button", "cm-vs2-cage-tray__item");
       row.type = "button";
@@ -1460,8 +1466,10 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       });
       tray.append(row);
     }
+    tray.append(trayEmpty);
     applyFilter();
   }
+  let trayEmpty = null;
 
   // Cartridge face (Owner 2026-10-27): footprint shape, count, and which cages it joins.
   function decorateCartridge(node, moduleId, { placed = false, count = null } = {}) {
@@ -1475,16 +1483,31 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     if (label) node.append(element('span', 'cm-cage-cart__synergy', label));
   }
   function applyFilter() {
-    for (const tab of filters.children) tab.setAttribute('aria-selected', String(tab.dataset.filter === filter));
-    const fits = (node) => {
+    const cards = [...tray.children, ...facilities.children].filter((node) => node.dataset?.cells !== undefined);
+    // Native layouts have no size tabs: preserve their complete inventory.
+    if (filters.hidden) {
+      for (const node of cards) node.hidden = false;
+      facilities.hidden = false;
+      tray.hidden = false;
+      if (trayEmpty) trayEmpty.hidden = true;
+      return;
+    }
+    const size = (node, id) => {
       const cells = Number(node.dataset.cells);
-      if (filter === 'placed') return node.dataset.placed === 'true';
-      if (filter === '1') return cells === 1;
-      if (filter === '2-3') return cells >= 2 && cells <= 3;
-      if (filter === '4-5') return cells >= 4;
-      return true;
+      return id === '1' ? cells === 1 : id === '2-3' ? cells >= 2 && cells <= 3 : cells >= 4;
     };
-    for (const node of [...tray.children, ...facilities.children]) if (node.dataset?.cells !== undefined) node.hidden = !fits(node);
+    const fits = (node, id) => id === 'placed' ? node.dataset.placed === 'true' : node.dataset.placed !== 'true' && size(node, id);
+    // First visit: the smallest size that still has a cage in hand, else the placed ones.
+    if (filter === null) filter = FILTERS.map(([id]) => id).find((id) => cards.some((node) => fits(node, id))) ?? 'placed';
+    for (const tab of filters.children) {
+      tab.setAttribute('aria-selected', String(tab.dataset.filter === filter));
+      tab.dataset.count = String(cards.filter((node) => fits(node, tab.dataset.filter)).length);
+    }
+    for (const node of cards) node.hidden = !fits(node, filter);
+    // Only the shown group takes room in the dock row.
+    facilities.hidden = filter !== 'placed';
+    tray.hidden = filter === 'placed';
+    if (trayEmpty) trayEmpty.hidden = filter === 'placed' || cards.some((node) => !node.hidden);
   }
 
   paint(frame);
