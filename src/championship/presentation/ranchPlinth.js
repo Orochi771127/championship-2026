@@ -12,12 +12,13 @@
 // merged edges stay open and a different-type border keeps the cage's own art.
 import * as THREE from '../../../node_modules/three/build/three.module.js';
 import { ranchNativeToWorld } from './ranchThreeCoordinates.js';
+import { createRanchSeamBridges } from './ranchSeamBridges.js';
 import { ranchSlotPolygon } from '../cage/ranchConnections.js';
 import { productPlacementCells } from '../cage/productRanchGrid.js';
 
 export const RANCH_PLINTH = Object.freeze({
-  bevel: .16, depth: .95, lidDepth: .42, thresholdWidth: .62, thresholdGuard: .14, ridgeHeight: .05, ridgeWidth: .09, shadowDrop: .2, shadowBlur: 1.1, shadowOpacity: .5,
-  colors: Object.freeze({ rim: 0x6c7bb0, rimDim: 0x46527c, lit: 0x2e3652, base: 0x1c2033, shadow: 0x090b18, threshold: 0x7ff9e0 })
+  bevel: .16, depth: .95, lidDepth: .42, ridgeHeight: .05, ridgeWidth: .09, shadowDrop: .2, shadowBlur: 1.1, shadowOpacity: .5,
+  colors: Object.freeze({ rim: 0x6c7bb0, rimDim: 0x46527c, lit: 0x2e3652, base: 0x1c2033, shadow: 0x090b18 })
 });
 
 const key = (p) => `${p[0]},${p[1]}`;
@@ -50,7 +51,7 @@ export function createRanchPlinth({ placements, towardSun, passages = { open: []
   const { cells, edges } = ranchPlinthOutline(placements);
   const group = new THREE.Group();
   group.name = 'ranch-plinth';
-  if (!edges.length) return { group, edges: 0, cells: 0, thresholds: 0, dispose() {} };
+  if (!edges.length) return { group, edges: 0, cells: 0, thresholds: 0, animate() {}, dispose() {} };
   const { bevel, depth, lidDepth, colors } = RANCH_PLINTH;
   const sun = new THREE.Vector3(...towardSun).normalize(), sunFlat = new THREE.Vector3(sun.x, 0, sun.z).normalize();
   const color = (hex) => new THREE.Color().setHex(hex);
@@ -95,37 +96,27 @@ export function createRanchPlinth({ placements, towardSun, passages = { open: []
   const seams = createSeams(passages, { rim, lit, base });
   if (seams) group.add(...seams.meshes);
   return {
-    group, edges: edges.length, cells: cells.length, thresholds: passages.open.length, rims: passages.closed.length,
+    group, edges: edges.length, cells: cells.length, thresholds: passages.open.length, rims: passages.closed.length, animate: (t) => seams?.animate(t),
     dispose() { geometry.dispose(); material.dispose(); shadow?.dispose(); seams?.dispose(); }
   };
 }
 
 function createSeams({ open = [], closed = [] }, { rim, lit, base }) {
   if (!open.length && !closed.length) return null;
-  const { thresholdWidth, thresholdGuard, ridgeHeight, ridgeWidth, colors } = RANCH_PLINTH;
+  const { ridgeHeight, ridgeWidth } = RANCH_PLINTH;
   const frame = (e) => {
     const a = world(e.a), b = world(e.b), along = b.clone().sub(a), length = along.length();
     along.normalize();
     return { a, b, along, across: new THREE.Vector3(along.z, 0, -along.x), length };
   };
   const meshes = [], disposables = [];
+  let animate = () => {};
   if (open.length) {
-    // A flat glow across each open edge, kept off the corner tips like the seam itself.
-    const positions = [];
-    for (const e of open) {
-      const { a, along, across, length } = frame(e), guard = Math.min(thresholdGuard * length, length / 3);
-      const p0 = a.clone().addScaledVector(along, guard), p1 = a.clone().addScaledVector(along, length - guard);
-      const corners = [p0.clone().addScaledVector(across, thresholdWidth / 2), p1.clone().addScaledVector(across, thresholdWidth / 2),
-        p1.clone().addScaledVector(across, -thresholdWidth / 2), p0.clone().addScaledVector(across, -thresholdWidth / 2)].map((v) => v.setY(.02));
-      for (const i of [0, 1, 2, 0, 2, 3]) positions.push(corners[i].x, corners[i].y, corners[i].z);
-    }
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    const material = new THREE.MeshBasicMaterial({ color: colors.threshold, transparent: true, opacity: .3, depthWrite: false,
-      blending: THREE.AdditiveBlending, side: THREE.DoubleSide, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -2 });
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.name = 'ranch-passage-thresholds';
-    meshes.push(mesh); disposables.push(geometry, material);
+    // Owner 2026-10-27: each open edge is paved with its series' own ground (ranchSeamBridges).
+    const bridges = createRanchSeamBridges(open);
+    for (const mesh of bridges.meshes) mesh.userData.passageThreshold = true;
+    meshes.push(...bridges.meshes); disposables.push(bridges);
+    animate = (seconds) => bridges.animate(seconds);
   }
   if (closed.length) {
     // A low ridge along each closed shared edge: lit top, darker sides.
@@ -149,7 +140,7 @@ function createSeams({ open = [], closed = [] }, { rim, lit, base }) {
     mesh.name = 'ranch-closed-rims';
     meshes.push(mesh); disposables.push(geometry, material);
   }
-  return { meshes, dispose() { for (const d of disposables) d.dispose(); } };
+  return { meshes, animate: (t) => animate(t), dispose() { for (const d of disposables) d.dispose(); } };
 }
 
 function createDropShadow(cells, edges, sun) {

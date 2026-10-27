@@ -12,6 +12,8 @@ import { ranchNativeToWorld, ranchSurfaceHeight, ranchPickWalkSurface, ranchSpri
 import { cappedPixelRatio, currentQualityTier, isMobileOrStandaloneEnvironment, prefersReducedMotion } from './presentationPreferences.js';
 import { ranchSharedBoundaries } from '../cage/ranchConnections.js';
 import { ranchBorderWithinSharedSegments } from './ranchBorderMembership.js';
+import { enhanceCageObject } from './cageHd2dEnhancer.js';
+import { getCageDefinitionByModuleId } from '../cage/cageCatalog.js';
 
 const MANIFEST = 'assets/production/cage/three-20261021/manifest.json';
 const right = new THREE.Vector3(Math.SQRT1_2, 0, -Math.SQRT1_2);
@@ -79,6 +81,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   const groundShadows=createRanchGroundShadows(scene);
   const modelBitmaps=new Set();
   const lavaMaterials=new Set(), dynamicShaders=new Set(), smokeNodes=[];
+  // HD-2D enhancer (Owner 2026-10-27): one shared clock for every themed cage material.
+  const hd2dTime={value:0}, hd2dPlaced=[];
   const authoredDepthMaterials=new Set();
   let cm07Ambient=null,plinth=null;
   const dynamicParticles=[], dynamicMachines=[], dynamicBeacons=[];
@@ -163,7 +167,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     try {
       const all=ranchSharedBoundaries(taggedPlacements);
       const isOpen=b=>passageIds?passageIds.has(b.id):b.compatible;
-      passageEdges={open:all.filter(isOpen).map(b=>({a:b.a,b:b.b})),closed:all.filter(b=>!isOpen(b)).map(b=>({a:b.a,b:b.b}))};
+      passageEdges={open:all.filter(isOpen).map(b=>({a:b.a,b:b.b,ecology:b.ecology})),closed:all.filter(b=>!isOpen(b)).map(b=>({a:b.a,b:b.b}))};
       const boundaries=all.filter(isOpen);
       sharedEdges=boundaries.map(b=>({
         left:b.left,right:b.right,
@@ -179,6 +183,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
         const object=models.get(p.fieldId).scene.clone(true);
         const point=ranchNativeToWorld(p.x/unit+shift,p.y/unit);
         object.position.set(point.x,point.y,point.z);scene.add(object);
+        hd2dPlaced.push({object,moduleId:p.moduleId});
 
         // Direction A: Hexagonal checkerboard layering for unplaced slots (field_cm29_01)
         const isLid=p.structuralRole==='LID'||p.fieldId==='field_cm29_01';
@@ -595,6 +600,11 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       supportOwnerResolver=createRanchSupportOwnerResolver({placements:supportPlacements,instances,unit:field.nativePixelWorldScale,wrapWidthNative:(field.wrapWidthPx??field.worldWidthPx)/field.nativePixelWorldScale});
     // Owner direction: navigation connections are invisible; original bridges and floors remain model geometry.
     signal?.throwIfAborted();
+    // After every authored hook is installed: themed glow, glints and sway (not in saver quality).
+    if(currentQualityTier()!=='saver')for(const {object,moduleId} of hd2dPlaced)enhanceCageObject(object,{
+      definitionIndex:getCageDefinitionByModuleId(moduleId)?.cageDefinitionIndex??null,time:hd2dTime,
+      authored:m=>lavaMaterials.has(m)||dynamicShaders.has(m)});
+    hd2dPlaced.length=0;
     Object.assign(pixi.style,{position:'relative',zIndex:'1'});pixi.parentElement.insertBefore(canvas,pixi);
   } catch(error) { dispose();throw error; }
   function contextLost(event){event.preventDefault();lost=true;}
@@ -847,6 +857,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     }
     const deltaSec=Math.min(50,Math.max(0,effectiveDeltaMS))/1000;
     sceneClock+=deltaSec;
+    hd2dTime.value=prefersReducedMotion()?0:sceneClock;plinth?.animate?.(hd2dTime.value);
     cm07Ambient?.update({elapsedSeconds:sceneClock,visible:!covered,reducedMotion:prefersReducedMotion()});
     if(!prefersReducedMotion()){
       for(const m of lavaMaterials){
