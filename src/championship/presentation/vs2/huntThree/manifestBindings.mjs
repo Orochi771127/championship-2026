@@ -8,8 +8,8 @@ export const MAPS=Object.freeze({
     "directory": "assets/production/hunt/hm01-three-r1-20261022/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "4404b66afeaf5ceeb270bb02a4a50106f7fcab24066e671340e3e9f22ff516e4",
-      "bytes": 3053
+      "sha256": "c29c6b0335177093991f6bc13f6da061b72e9bd21fbdc3837f976b34b9e83fe0",
+      "bytes": 3873
     },
     "fields": [
       "field_hm01_01",
@@ -22,8 +22,8 @@ export const MAPS=Object.freeze({
     "directory": "assets/production/hunt/hm08-three-r1-20261022/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "be78e84adcdd90fadefbaeb3c40f864d6d90b2e4f9ece2897ebb441b37a3d583",
-      "bytes": 2462
+      "sha256": "662dade02517b516e3a690af86e5b4b4c93d43261838f3dac4efdf844c39ee8d",
+      "bytes": 2872
     },
     "fields": [
       "field_hm08_01",
