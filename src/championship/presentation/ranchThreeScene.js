@@ -73,7 +73,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   const shadowMapDim=(currentQualityTier()==='high'&&!isMobileOrStandaloneEnvironment())?2048:1024;
   sun.shadow.mapSize.set(shadowMapDim,shadowMapDim);sun.shadow.camera.left=-35;sun.shadow.camera.right=35;
   sun.shadow.camera.top=35;sun.shadow.camera.bottom=-35;sun.shadow.camera.far=150;
-  sun.shadow.bias=-.00015;sun.shadow.normalBias=.025;
+  sun.shadow.bias=-.00015;sun.shadow.normalBias=.025;sun.shadow.radius=3;sun.shadow.intensity=.82;
   scene.add(sun,sun.target);
   const models=new Map(), instances=[], textures=new Map(), sprites=new Map();
   const groundShadows=createRanchGroundShadows(scene);

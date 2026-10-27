@@ -40,10 +40,10 @@ function registrationNoticeInvariant(save){
 // End test-only ordinary overlay helpers.
 // BEGIN FRIENDS PUBLIC THREE / MENU / ROUTE CONTRACTS (test-only)
 const FRIENDS_THREE_RESOURCES=Object.freeze([
- {"path":"assets/production/cage/three-20261021/manifest.json","bytes":8532,"sha256":"e7dbfade6e74a7f5f8ceb27a000b01397792adfa9f074cb9987e4cde77915ce5"},
- {"fieldId":"field_cm02_01","path":"assets/production/cage/three-20261021/field_cm02_01.glb","bytes":1282136,"sha256":"8b268f2740b440f592936881657d4d34cf5571e76fcecc7928bb2668246e950f"},
- {"fieldId":"field_cm18_01","path":"assets/production/cage/three-20261021/field_cm18_01.glb","bytes":1959304,"sha256":"56326469aa65e85bcccefc3959964b58986567b572fa8f71ebe1bbef63ac6260"},
- {"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":493252,"sha256":"04728cd3b20fe397d645a3c365aaffc799a64692f0b70fe58b36939dff4dc9dd"}
+ {"path":"assets/production/cage/three-20261021/manifest.json","bytes":8532,"sha256":"d97a823fa3259cfa23fd38c75243cfe506be0eddab3f99031ebecf2bdf6cdc2e"},
+ {"fieldId":"field_cm02_01","path":"assets/production/cage/three-20261021/field_cm02_01.glb","bytes":1269244,"sha256":"19c7add2891cd084e26be2b7e9f3363dc082a6c8e5d97c064a8e7b793c0e94c9"},
+ {"fieldId":"field_cm18_01","path":"assets/production/cage/three-20261021/field_cm18_01.glb","bytes":1922864,"sha256":"b1b033df28513eae232f43a4307894528583c62dd8c5e029189ea486ccad1f0d"},
+ {"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":491068,"sha256":"90b760b1ee831ce3b1fdd2f6f1086ac202582704bd9ebaa6fd715f0cd67031ea"}
 ]);
 async function friendsDrainReadbacks(reads){
  let count=-1;while(count!==reads.length){count=reads.length;await Promise.all(reads);}
