@@ -4,35 +4,40 @@ import fs from 'node:fs';
 import {createChampionshipStandaloneApp} from '../src/championship/app/championshipStandaloneApp.js';
 import {TUTORIAL_RAISING_STEPS} from '../src/championship/app/interactiveTutorialRaisingSteps.js';
 import {normalizeInteractiveTutorialCheckpoint} from '../src/championship/app/interactiveTutorialCheckpoint.js';
+import {FRIENDS_PLAYTEST_POLICY} from '../src/championship/app/friendsPlaytestPolicy.js';
+import {PRODUCT_RANCH_GRID,PRODUCT_WAITING_ROOM_SLOT,productGridCell} from '../src/championship/cage/productRanchGrid.js';
 const KEY='championshipModernSave:v1';
 const catalog=JSON.parse(fs.readFileSync('src/data/championship/catalogs/creature-species.r1.json'));
 const cages=JSON.parse(fs.readFileSync('docs/contracts/championship/raising-home-presentation.v1.json')).cages;
-function fixture(t,bytes=null){
+function fixture(t,bytes=null,{playtestPolicy=null}={}){
  const data=new Map(bytes?[[KEY,bytes]]:[]),storage={fail:false,getItem:k=>data.get(k)??null,setItem(k,v){if(this.fail)throw Error('TEST_SAVE_FAILURE');data.set(k,v);},removeItem:k=>data.delete(k)};
- const app=createChampionshipStandaloneApp({storage,locks:null,catalog,cages,now:()=> '2026-10-09T12:00:00Z',rngClock:()=>({hour:1,minute:2,second:3})});
+ const app=createChampionshipStandaloneApp({storage,locks:null,catalog,cages,playtestPolicy,now:()=> '2026-10-09T12:00:00Z',rngClock:()=>({hour:1,minute:2,second:3})});
  t.after(()=>app.dispose());return {app,storage};
 }
 const cp=a=>a.getInteractiveTutorial().checkpoint;
 const frame=a=>a.getRaisingActorFrame(a.getCreature().creatureId);
 const id=a=>a.getCreature().creatureId;
+// The hex world lays the original board at a fixed world offset; the
+// tutorial's scripted points move with it.
+const at=(a,x,y)=>{if(a.getCageEditFrame()?.layoutVersion!==PRODUCT_RANCH_GRID)return [x,y];const o=productGridCell(PRODUCT_WAITING_ROOM_SLOT);return [x+o.x,y+o.y];};
 const tick=(a,n)=>{while(n>0){const size=Math.min(120,n);a.advanceRaisingPresentation({frames:size});n-=size;}};
 function normal(bytes){const s=JSON.parse(bytes);delete s.updatedAt;delete s.progression.revision;delete s.progression.nativeOpening;s.raisingHome=JSON.parse(s.raisingHome);delete s.raisingHome.revision;return s;}
-async function start(t){const f=fixture(t);await f.app.newGame({trainerName:'玩家甲',eggName:'小蛋乙'});f.app.save();f.baseline=normal(f.storage.getItem(KEY));f.app.offerInteractiveTutorial();await f.app.chooseInteractiveTutorial(true);return f;}
+async function start(t,options={}){const f=fixture(t,null,options);await f.app.newGame({trainerName:'玩家甲',eggName:'小蛋乙'});f.app.save();f.baseline=normal(f.storage.getItem(KEY));f.app.offerInteractiveTutorial();await f.app.chooseInteractiveTutorial(true);return f;}
 function drag(a,x,y,{cancelled=false}={}){
  const checkpoint=cp(a),p=frame(a).positionQ12;
  assert.equal(a.beginRaisingHand(id(a),{x:p[0]/4096,y:p[1]/4096,checkpoint}),true);
  tick(a,12);assert.equal(frame(a).state,6);
- assert.equal(a.updateRaisingHand(id(a),{x,y,inside:true,checkpoint}),true);tick(a,30);
+ [x,y]=at(a,x,y);assert.equal(a.updateRaisingHand(id(a),{x,y,inside:true,checkpoint}),true);tick(a,30);
  assert.equal(a.endRaisingHand(id(a),{cancelled,checkpoint}),true);
 }
 function one(a,allowFailedSave=false){
  const t=a.getInteractiveTutorial(),checkpoint=cp(a),s=checkpoint.stage;
  if(t.dialogue){const result=a.acknowledgeInteractiveTutorial(checkpoint);assert.equal(result.ok,!(allowFailedSave&&a.getInteractiveTutorial().pendingSave));return;}
  if(t.action==='select'){assert.equal(a.selectInteractiveTutorialTool(t.tool,checkpoint),true);return;}
- if(s==='raising-feed-place'){assert.equal(a.placeRaisingFood({x:100,y:120,checkpoint}).ok,true);return;}
+ if(s==='raising-feed-place'){const [x,y]=at(a,100,120);assert.equal(a.placeRaisingFood({x,y,checkpoint}).ok,true);return;}
  if(s==='raising-clean'){
    const mask=checkpoint.message-1,index=[0,1,2].find(i=>!(mask&(1<<i)));
-   if(index!==undefined){const [x,y]=[[100,112],[160,92],[80,72]][index];assert.equal(a.cleanRaisingFood({x,y,checkpoint}),true);}
+   if(index!==undefined){const [x,y]=at(a,...[[100,112],[160,92],[80,72]][index]);assert.equal(a.cleanRaisingFood({x,y,checkpoint}),true);}
    tick(a,21);return;
  }
  if(s==='raising-illness-treat'||s==='raising-injury-treat'){assert.equal(a.treatRaisingResident(id(a),s.includes('illness')?1:0,checkpoint).ok,true);return;}
@@ -54,6 +59,21 @@ test('whole Raising uses real predicates, food/treatment/cage core, special slee
  for(const stage of Object.keys(TUTORIAL_RAISING_STEPS).filter(s=>s!=='raising-gate-ready'))assert.ok(seen.has(stage),stage);
  assert.equal(a.getCreature().displayName,'小蛋乙');assert.equal(a.getCreature().nativeProfile.fields['138'],0);assert.equal(a.getCreature().nativeProfile.fields['134'],0);
  await a.exitInteractiveTutorial(cp(a));a.save();assert.deepEqual(normal(storage.getItem(KEY)),baseline);assert.equal(frame(a).speciesIndex,0);
+});
+
+test('hex world new game runs the whole Raising lesson on its own placed cages, not in the void',async t=>{
+ const f=fixture(t,null,{playtestPolicy:FRIENDS_PLAYTEST_POLICY});await f.app.newGame({trainerName:'玩家甲',eggName:'小蛋乙'});f.app.save();
+ const a=f.app;assert.equal(a.getCageEditFrame().layoutVersion,PRODUCT_RANCH_GRID);
+ const before=frame(a).positionQ12;a.offerInteractiveTutorial();await a.chooseInteractiveTutorial(true);
+ // The demonstration egg stays where the player's egg was drawn.
+ assert.deepEqual(frame(a).positionQ12.slice(0,2),at(a,128,96).map(v=>v*4096));
+ assert.deepEqual(frame(a).positionQ12.slice(0,2),before.slice(0,2));
+ const seen=new Set();
+ for(let i=0;i<200&&cp(a).stage!=='raising-gate-ready';i++){
+   seen.add(cp(a).stage);one(a);
+ }
+ assert.equal(cp(a).stage,'raising-gate-ready');
+ for(const stage of Object.keys(TUTORIAL_RAISING_STEPS).filter(s=>s!=='raising-gate-ready'))assert.ok(seen.has(stage),stage);
 });
 
 test('wrong tool, wrong ground point, stale input, two cleaned targets, cancelled and wrong-cage drops cannot advance',async t=>{

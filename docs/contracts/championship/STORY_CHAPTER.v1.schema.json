@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "championship-2026/STORY_CHAPTER.v1",
+  "title": "Story chapter script v1 (Owner 2026-10-28)",
+  "description": "One chapter for StoryCutsceneStage. validateStoryChapter in src/championship/app/futureSystemsPort.js is the runtime authority and enforces these rules; the opening prologue (openingPrologueChapter) is the first chapter in this format. Externally authored chapters (for example Fable 5.1 drafts) load through createStoryCampaignPort().loadChapter with a same-origin relative URL.",
+  "type": "object",
+  "required": ["schemaVersion", "chapterId", "beats"],
+  "additionalProperties": true,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "chapterId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$" },
+    "title": { "type": "string" },
+    "unlockCondition": {
+      "description": "Defaults to always.",
+      "oneOf": [
+        { "type": "object", "required": ["kind"], "properties": { "kind": { "enum": ["always", "newGame", "tutorialCompleted"] } } },
+        { "type": "object", "required": ["kind", "min"], "properties": { "kind": { "const": "tamerRank" }, "min": { "type": "integer" } } },
+        { "type": "object", "required": ["kind", "chapterId"], "properties": { "kind": { "const": "chapterCleared" }, "chapterId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$" } } }
+      ]
+    },
+    "beats": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 200,
+      "items": {
+        "type": "object",
+        "required": ["text"],
+        "properties": {
+          "id": { "type": "string" },
+          "speaker": { "type": ["string", "null"], "description": "Display name; null or absent shows the narrator label." },
+          "text": { "type": "string", "minLength": 1, "description": "Line shown with the typewriter reveal; \\n breaks lines." },
+          "illustration": {
+            "description": "Zero to three panels. Same-origin relative paths only (no scheme, no //host).",
+            "oneOf": [
+              { "$ref": "#/$defs/art" },
+              { "type": "array", "maxItems": 3, "items": { "$ref": "#/$defs/art" } },
+              { "type": "null" }
+            ]
+          },
+          "cameraEffect": { "enum": ["none", "kenBurns", "pushIn", "shake", "flash"], "default": "kenBurns" },
+          "autoAdvanceMs": { "type": ["number", "null"], "minimum": 500, "description": "Hold after the line is revealed, then advance on its own." },
+          "choices": {
+            "type": "array",
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "required": ["id", "label"],
+              "properties": {
+                "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$" },
+                "label": { "type": "string", "minLength": 1 },
+                "next": { "type": ["integer", "null"], "description": "Index of a later beat; omitted continues with the next beat." }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "art": {
+      "oneOf": [
+        { "type": "string", "pattern": "^(?![a-zA-Z]+:)(?!//)" },
+        {
+          "type": "object",
+          "required": ["src"],
+          "properties": {
+            "src": { "type": "string", "pattern": "^(?![a-zA-Z]+:)(?!//)" },
+            "width": { "type": "integer" },
+            "height": { "type": "integer" },
+            "slot": { "type": "string" }
+          }
+        }
+      ]
+    }
+  }
+}

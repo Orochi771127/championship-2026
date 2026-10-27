@@ -69,6 +69,7 @@
     <link rel="stylesheet" href="./src/championship/app/medalCollection.css?v=source-outline-20261015">
     <link rel="stylesheet" href="./src/championship/app/vs5Styles.css?v=ui-polish-20261012">
     <link rel="stylesheet" href="./src/championship/app/opening.css?v=opening-naming-20261018">
+    <link rel="stylesheet" href="./src/championship/app/onboarding.css?v=onboarding-cinematic-20261028">
     <link rel="stylesheet" href="./src/championship/app/ui/highlight.css?v=settings-1">
     <link rel="stylesheet" href="./src/championship/app/ui/ceremony.css?v=ceremony-20261015">
     <link rel="stylesheet" href="./src/championship/app/ui/settings.css?v=settings-2">
@@ -116,6 +117,7 @@
     <link rel="modulepreload" href="./src/championship/battle/nativeTitleProgression.js">
     <link rel="modulepreload" href="./src/championship/presentation/battleAudioPresentation.js">
     <link rel="modulepreload" href="./src/championship/text/zhHant.js">
+    <link rel="modulepreload" href="./src/championship/presentation/databaseHeroPortraits.js">
     <link rel="modulepreload" href="./src/championship/presentation/pixiCharacterRuntimeBundle.js">
     <link rel="modulepreload" href="./src/championship/app/qaUnlock.js">
     <link rel="modulepreload" href="./src/championship/gate/gateCatalog.js">
@@ -162,6 +164,7 @@
     <link rel="modulepreload" href="./src/championship/app/runtimeRecoveryDiagnostics.js">
     <link rel="modulepreload" href="./src/championship/app/autosaveScheduler.js">
     <link rel="modulepreload" href="./src/championship/app/ChampionshipPersistentSavePort.js">
+    <link rel="modulepreload" href="./src/championship/app/futureSystemsPort.js">
     <link rel="modulepreload" href="./src/championship/app/settings/preferenceStore.js">
     <link rel="modulepreload" href="./src/championship/app/transientHint.js">
     <link rel="modulepreload" href="./src/championship/app/settings/preferenceEnvironment.js">
@@ -215,6 +218,7 @@
     <link rel="modulepreload" href="./src/championship/raising/nativeRaisingFood.js">
     <link rel="modulepreload" href="./src/championship/raising/nativeGroundSpacing.js">
     <link rel="modulepreload" href="./src/championship/raising/ranchConveyor.js">
+    <link rel="modulepreload" href="./src/championship/cage/productRanchGrid.js">
     <link rel="modulepreload" href="./src/championship/raising/nativeRaisingHomeState.js">
     <link rel="modulepreload" href="./src/championship/raising/nativeRaisingWaste.js">
     <link rel="modulepreload" href="./src/championship/raising/nativeRaisingCalendar.js">
@@ -262,6 +266,7 @@
     <link rel="modulepreload" href="./src/championship/text/catalogs.ja.js">
     <link rel="modulepreload" href="./src/championship/text/catalogs.th.js">
     <link rel="modulepreload" href="./src/championship/text/catalogs.vi.js">
+    <link rel="modulepreload" href="./src/data/championship/database-hero-portraits.public.v1.json" as="json">
     <link rel="modulepreload" href="./src/championship/presentation/pixiCharacterAnimationController.js">
     <link rel="modulepreload" href="./src/championship/presentation/nativeHuntCharacterAction.js">
     <link rel="modulepreload" href="./src/championship/presentation/battleCharacterAction.js">
@@ -278,12 +283,12 @@
     <link rel="modulepreload" href="./src/championship/presentation/medals/medalPresentationProfiles.js">
     <link rel="modulepreload" href="./src/championship/app/medalDetails.js">
     <link rel="modulepreload" href="./src/championship/raising/nativeRaisingLifecycle.js">
+    <link rel="modulepreload" href="./src/championship/text/onboardingText.js">
     <link rel="modulepreload" href="./src/championship/app/openingStoryPresentation.js">
     <link rel="modulepreload" href="./src/championship/app/openingEggChoices.js">
     <link rel="modulepreload" href="./src/championship/text/openingEggText.js">
     <link rel="modulepreload" href="./src/championship/text/openingStoryText.js">
     <link rel="modulepreload" href="./src/championship/text/openingFilmText.js">
-    <link rel="modulepreload" href="./src/championship/cage/productRanchGrid.js">
     <link rel="modulepreload" href="./src/championship/presentation/originalCageVisualBindings.js">
     <link rel="modulepreload" href="./src/championship/cage/ranchSlotGeometry.js">
     <link rel="modulepreload" href="./src/championship/presentation/raisingCageArtPlan.js">
@@ -339,6 +344,7 @@
     <link rel="modulepreload" href="./src/championship/cage/ranchConnections.js">
     <link rel="modulepreload" href="./src/championship/field/groundFootpointSeparation.js">
     <link rel="modulepreload" href="./src/data/championship/catalogs/ranch-conveyor.r1.json" as="json">
+    <link rel="modulepreload" href="./src/championship/cage/nativeRanchLayout.js">
     <link rel="modulepreload" href="./src/championship/hunt/loadout/huntLoadoutContract.js">
     <link rel="modulepreload" href="./src/data/championship/catalogs/shop.r1.json" as="json">
     <link rel="modulepreload" href="./src/data/championship/catalogs/hunt-tools.r1.json" as="json">
@@ -348,7 +354,6 @@
     <link rel="modulepreload" href="./src/data/championship/database-illustrations.r1.json" as="json">
     <link rel="modulepreload" href="./src/championship/cage/cageInventory.js">
     <link rel="modulepreload" href="./src/championship/cage/cageEffects.js">
-    <link rel="modulepreload" href="./src/championship/cage/nativeRanchLayout.js">
     <link rel="modulepreload" href="./src/data/championship/catalogs/championship-pools.r1.json" as="json">
     <link rel="modulepreload" href="./src/data/championship/catalogs/free-battle.r1.json" as="json">
     <link rel="modulepreload" href="./src/data/championship/catalogs/rng-channels.r1.json" as="json">
@@ -369,6 +374,7 @@
     <link rel="modulepreload" href="./src/championship/text/medalDetailText.js">
     <link rel="modulepreload" href="./src/data/championship/catalogs/creature-stat-curve.r1.json" as="json">
     <link rel="modulepreload" href="./src/championship/app/nativeOpeningStory.js">
+    <link rel="modulepreload" href="./src/championship/app/storyCutsceneStage.js">
     <link rel="modulepreload" href="./src/championship/presentation/vs2/huntContactShadow.js">
     <link rel="modulepreload" href="./src/championship/presentation/characterRosterCore.js">
     <link rel="modulepreload" href="./src/championship/presentation/publicCharacterRenderContract.js">

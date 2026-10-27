@@ -1046,7 +1046,15 @@ export async function mountRaisingFieldPixiPresentation({
         const center=tutorial.action==="carry"?(native?.positionQ12?.[0]/4096)+30:xs.length?(Math.min(...xs)+Math.max(...xs))/2:128;
         const viewNative=Math.max(0,center-(app.screen.width-24)/pixelScale/2);
         tutorialCameraOffset=viewNative-tutorial.cameraX;
-        cameraX=viewNative*fieldArt.field.nativePixelWorldScale;cameraFocus=null;layoutFieldArt();
+        cameraX=viewNative*fieldArt.field.nativePixelWorldScale;cameraFocus=null;
+        // The hex world is taller than one screen: frame the lesson's rows too,
+        // or its egg and targets sit above the view on an empty field.
+        if(fieldArt.field.productGrid){
+          const ys=[native?.positionQ12?.[1]/4096,...(tutorial.targets??[]).map(p=>p[1])].filter(Number.isFinite);
+          const fit=raisingFieldViewport(fieldArt.field,view,12,cameraX);
+          if(ys.length&&!(fit.scrollMinY<0))cameraY=centerRaisingNativeY(fieldArt.field,view,(Math.min(...ys)+Math.max(...ys))/2,cameraX);
+        }
+        layoutFieldArt();
       }
     }
     tutorialTargets.clear();

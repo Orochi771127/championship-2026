@@ -127,6 +127,29 @@ export function createChampionshipDataArenaPort({ storage } = {}) {
   });
 }
 
+// Guest identity (Owner 2026-10-28): the local guest id that a later account
+// binding upgrades. Beside the save and never inside it; text only, parsed by
+// futureSystemsPort.js.
+export const CHAMPIONSHIP_GUEST_IDENTITY_KEY = "championshipModernSave:guestIdentity:v1";
+export function createChampionshipGuestIdentityPort({ storage } = {}) {
+  if (!storage || typeof storage.getItem !== "function" || typeof storage.setItem !== "function") {
+    throw new TypeError("Championship guest identity port requires a Storage-like object");
+  }
+  const key = assertAllowedChampionshipStorageKey(CHAMPIONSHIP_GUEST_IDENTITY_KEY);
+  const guarded = guardChampionshipStorage(storage);
+  return Object.freeze({
+    storageKey: key,
+    read() {
+      try { return Object.freeze({ text: guarded.getItem(key), error: null }); }
+      catch (error) { return Object.freeze({ text: null, error: `STORAGE_UNAVAILABLE: ${error.message}` }); }
+    },
+    write(text) {
+      try { guarded.setItem(key, text); return Object.freeze({ ok: true, error: null }); }
+      catch (error) { return Object.freeze({ ok: false, error: error?.message ?? String(error) }); }
+    }
+  });
+}
+
 // Active Session Checkpoint (iOS Standalone Web App Silent Reload Auto-Resume):
 // Lightweight throttled checkpoint of the active in-game screen and micro-state,
 // separate from the durable save so it never mutates or corrupts save progress.

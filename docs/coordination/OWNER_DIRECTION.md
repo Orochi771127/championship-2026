@@ -1,5 +1,10 @@
 # Championship Owner Direction
 
+<!-- record-id: ONBOARDING_CINEMATIC_20261028 -->
+## 2026-10-28 — Tutorial visibility fix, cinematic onboarding and future-systems ports
+
+Owner directs, without push or deployment: fix the new-game tutorial that showed an empty ranch after character creation; rebuild the prologue as a one-screen cinematic stage inside the iPhone safe area with a skip capsule; turn tamer naming into a licence terminal with a random-name key and a guest-pass badge; give the eight starter eggs element tags and a locked/wobble selection; name the egg in a hatching pod that shows the egg actually chosen; restyle the tutorial as a tactical guide with lesson counter, spotlight and arcade keys; and add local, dependency-free ports for guest identity and account binding, tamer card codes and friends, and story-mode chapters. Root cause of the tutorial fault: since the hex cage world the original board sits at a world offset, but the tutorial still placed its demonstration egg, food, waste and targets in original-board coordinates, off the placed cages and above the view. The prologue keeps its four texts, order and comic art; each card's original reading hold becomes its beat's auto-advance (OWNER_APPROVED_ADAPTATION of presentation only). Saves, gameplay rules and the original layout's tutorial bytes are unchanged. After reviewing the screenshots the Owner directs 「完成後，請你自我審查如果沒有問題就commit 跟push並整合到main並發佈」: a self-review, then commit, push, integration into main and publication of this batch through the existing PR, CI and Pages workflow, with its exact public-playtest input hashes. Told that the parallel story/online session had a split note asking for placeholder-only account/friends/story code and no push, the Owner chose: "Push, merge to main and publish now, keeping futureSystemsPort, the guest id and the TM tamer code as built." The guest identity key `championshipModernSave:guestIdentity:v1` therefore ships with this batch.
+
 <!-- record-id: BATTLE_UI_DUAL_MODE_20261028 -->
 ## 2026-10-28 — Dual-mode battle UI/HUD pass (presentation only)
 
