@@ -86,7 +86,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   const authoredDepthMaterials=new Set();
   let cm07Ambient=null,plinth=null;
   const dynamicParticles=[], dynamicMachines=[], dynamicBeacons=[];
-  let sceneClock=0;
+  let sceneClock=0,hd2dClock=0;
   const textureCap=currentQualityTier()==='saver'?512:currentQualityTier()==='high'?2048:1024;
   let disposed=false, lost=false, width=0,height=0,frames=0, lastRenderMs=0;
   const loader=new GLTFLoader();
@@ -857,7 +857,9 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     }
     const deltaSec=Math.min(50,Math.max(0,effectiveDeltaMS))/1000;
     sceneClock+=deltaSec;
-    hd2dTime.value=prefersReducedMotion()?0:sceneClock;plinth?.animate?.(hd2dTime.value);
+    // HD-2D motion holds still while covered (overlay, letter) and under reduced motion.
+    if(!covered&&!prefersReducedMotion())hd2dClock+=deltaSec;
+    hd2dTime.value=prefersReducedMotion()?0:hd2dClock;plinth?.animate?.(hd2dTime.value);
     cm07Ambient?.update({elapsedSeconds:sceneClock,visible:!covered,reducedMotion:prefersReducedMotion()});
     if(!prefersReducedMotion()){
       for(const m of lavaMaterials){
