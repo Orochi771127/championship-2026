@@ -135,7 +135,7 @@ function shell(root, screen, label) {
  * Mode identity is now traced through OVL10 0210F88C's help-bank dispatch.
  * The application supplies each mode's entries; this view holds only selection.
  */
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, arenaChoices=[], tutorial=null }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -204,6 +204,10 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   let cubeDisposed = false;
   let cubeFailed = typeof mountCube !== "function";
   let selectedMode='TITLE_MATCH',modeRequest=0,partyRequest=0,entering=false;
+  // Owner 2026-10-28: online lobbies sit at the top of the password / link panels;
+  // one mount lives at a time and goes with the panel it was drawn in.
+  let lobbyMount=null;
+  const dropLobby=()=>{lobbyMount?.dispose?.();lobbyMount=null;};
   const matchOnlyNodes = [];
   let arenaLabels = null;
   if (typeof onOpenDataArena === 'function') {
@@ -285,7 +289,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   }
   async function chooseParty(match){
     const request=++partyRequest,mode=selectedMode;
-    selectedMatch=match;selectedIds=[];list.hidden=true;partyPanel.hidden=false;partyPanel.replaceChildren();entryNotice.hidden=true;
+    selectedMatch=match;selectedIds=[];list.hidden=true;partyPanel.hidden=false;dropLobby();partyPanel.replaceChildren();entryNotice.hidden=true;
     for (const node of matchOnlyNodes) node.hidden = true;
     let selection;
     try{selection=await getPartySelection(match.recordIndex,mode);}
@@ -323,7 +327,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
 
   async function choosePractice(){
     const request=++partyRequest;selectedMode='PRACTICE_BATTLE';section.dataset.battleMode=selectedMode;
-    list.hidden=true;partyPanel.hidden=false;partyPanel.replaceChildren();entryNotice.hidden=true;
+    list.hidden=true;partyPanel.hidden=false;dropLobby();partyPanel.replaceChildren();entryNotice.hidden=true;
     for(const node of matchOnlyNodes)node.hidden=true;
     const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{if(!entering)void selectMode('TITLE_MATCH');});
     partyPanel.append(element('h2','cm-vs5-title','練習對戰'),element('p','cm-vs5-entry-notice','將自己培育的拍檔分成兩隊，每隊最多 3 隻。'));
@@ -362,7 +366,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
 
   async function choosePassword(){
     const request=++partyRequest;selectedMode='PASSWORD_BATTLE';section.dataset.battleMode=selectedMode;
-    list.hidden=true;partyPanel.hidden=false;partyPanel.replaceChildren();entryNotice.hidden=true;
+    list.hidden=true;partyPanel.hidden=false;dropLobby();partyPanel.replaceChildren();entryNotice.hidden=true;
     for(const node of matchOnlyNodes)node.hidden=true;
     const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{if(!entering)void selectMode('TITLE_MATCH');});
     let setup;
@@ -449,11 +453,27 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       maker.append(preview,make,output,copy,status);sync();
     }
     refresh();if(maker)partyPanel.append(maker);setPanelFooter(back,confirm);
+    // Room-code connection (Owner 2026-10-28): the room carries the existing link
+    // invite / reply codes and starts the same deterministic LINK_BATTLE.
+    if(onlineLobby?.room){
+      const startLink=async prepared=>{
+        if(entering||!prepared?.ok||cubeDisposed||request!==partyRequest)return;
+        entering=true;refresh();entryNotice.hidden=true;
+        try{showRefusal(await onEnter(-1,prepared,'LINK_BATTLE'),{});}
+        catch(error){if(!cubeDisposed)showRefusal({ok:false,message:'通訊對戰準備失敗，請再交換一次通訊碼。'},{});}
+        finally{entering=false;if(!cubeDisposed)refresh();}
+      };
+      try{lobbyMount=onlineLobby.room(partyPanel,{start:startLink});}catch(error){console.warn(`ONLINE_ROOM_LOBBY: ${error.message}`);}
+    }
+    if(prefill?.codes&&prefill.mode==='PASSWORD_BATTLE'){
+      inputs[0].value=prefill.codes[0]??'';inputs[1].value=prefill.codes[1]??'';passwordRevision++;refresh();
+      if(prefill.autoStart&&!confirm.disabled){prefill=null;confirm.click();}
+    }
   }
 
   async function chooseLink(){
     const request=++partyRequest;selectedMode='LINK_BATTLE';section.dataset.battleMode=selectedMode;
-    list.hidden=true;partyPanel.hidden=false;partyPanel.replaceChildren();entryNotice.hidden=true;
+    list.hidden=true;partyPanel.hidden=false;dropLobby();partyPanel.replaceChildren();entryNotice.hidden=true;
     for(const node of matchOnlyNodes)node.hidden=true;
     const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{if(!entering)void selectMode('TITLE_MATCH');});
     let setup;
@@ -568,6 +588,18 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       rolePanel.append(versionNotice,opponent,notice,begin);refresh();
     };
     host.addEventListener('click',()=>renderRole(true));guest.addEventListener('click',()=>renderRole(false));renderRole(true);
+    // Quick match / ladder mirror (Owner 2026-10-28): another player's defense
+    // team code against the player's own, as the existing PASSWORD_BATTLE.
+    if(onlineLobby?.quick){
+      const startPassword=async codes=>{
+        if(entering||!Array.isArray(codes)||cubeDisposed||request!==partyRequest)return;
+        entering=true;host.disabled=true;guest.disabled=true;back.disabled=true;entryNotice.hidden=true;
+        try{showRefusal(await onEnter(-1,codes,'PASSWORD_BATTLE'),{});}
+        catch(error){if(!cubeDisposed)showRefusal({ok:false,message:'密碼對戰準備失敗，請再試一次。'},{});}
+        finally{entering=false;if(!cubeDisposed){host.disabled=false;guest.disabled=false;back.disabled=false;}}
+      };
+      try{lobbyMount=onlineLobby.quick(partyPanel,{start:startPassword});}catch(error){console.warn(`ONLINE_QUICK_LOBBY: ${error.message}`);}
+    }
   }
   function renderMatches(nextMatches) {
     if (!Array.isArray(nextMatches)) return;
@@ -636,6 +668,8 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   }
   setMenuFooter();
   section.append(footer);
+  // A friendly spar arrives with both team codes: open the password panel straight away.
+  if(prefill?.mode&&prefill.mode!=='TITLE_MATCH')void selectMode(prefill.mode);
 
   return Object.freeze({
     render(reading = {}) { if(selectedMode==='TITLE_MATCH')renderMatches(reading.matches); },
@@ -653,6 +687,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     },
     dispose() {
       cubeDisposed = true;
+      dropLobby();
       cube?.dispose?.();
       cube = null;
       root.replaceChildren();
