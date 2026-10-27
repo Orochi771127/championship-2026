@@ -500,3 +500,386 @@
 @media (prefers-reduced-motion: reduce) {
   :root[data-theme="arcade"] *, :root[data-theme="arcade"] *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* ==== Battle UI pass 2026-10-28 (OWNER_APPROVED_ADAPTATION, presentation only) ====
+ * Battle menu: a neon LIVE banner for the real-time arena, a spotlit cube with
+ * LED mode keys, VS ticket cards for the matches, and the multi-round cups as
+ * two championship cartridges. Every id, class, label and binding is kept. */
+
+/* -- Title: big white with an amber slab under it. -- */
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-title {
+  position: relative;
+  font-size: clamp(30px, 8.4vw, 42px);
+  line-height: 1.1;
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-title::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 7px;
+  margin-top: 6px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 2px 8px 2px 8px;
+  background: linear-gradient(90deg, var(--ax-yellow), var(--ax-orange));
+  box-shadow: 0 3px 0 var(--ax-ink);
+}
+
+/* -- Data Arena: the live-action banner. Slanted cyan / violet armour, a 3D
+ *    slab, a scan light sweeping across and the LIVE badge on the right. -- */
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-data-arena:not([hidden]) {
+  --key-face: #101a35;
+  --key-shade: #05070f;
+  --key-ink: #e9fbff;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 10px;
+  min-height: 64px;
+  padding: 9px 12px 11px 18px;
+  border-radius: 6px 22px 6px 22px;
+  background:
+    linear-gradient(112deg, rgba(42, 216, 255, 0.28) 0, transparent 46%),
+    linear-gradient(292deg, rgba(196, 92, 255, 0.38) 0, transparent 50%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 4px),
+    #101a35;
+  box-shadow: inset 0 0 0 2px #2ad8ff, inset 0 0 0 4px #0b0f1e, inset 0 0 0 5px rgba(196, 92, 255, 0.85), 0 6px 0 var(--key-shade);
+  text-align: left;
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-data-arena > span:first-child {
+  grid-column: 1;
+  grid-row: 1;
+  color: #fff;
+  font-size: clamp(19px, 5.2vw, 24px);
+  letter-spacing: 0.06em;
+  text-shadow: 0 2px 0 #05070f, 0 0 10px rgba(42, 216, 255, 0.55);
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-data-arena > .cm-vs5-match__fee {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  color: #8ff2ff;
+  font-size: var(--fs-label);
+  font-weight: 800;
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-data-arena[data-badge]::before {
+  content: attr(data-badge);
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  padding: 5px 9px;
+  border: 2px solid #05070f;
+  border-radius: 4px 12px 4px 12px;
+  background: linear-gradient(180deg, #ffe066, #ffb21e);
+  color: #241400;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  box-shadow: 0 3px 0 #05070f;
+}
+/* The scan light: the key's shimmer layer, swept slowly forever (a pseudo
+ * element, so the button's own box never moves under input gates). */
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-data-arena:not([hidden])::after {
+  opacity: 0.55;
+  background: linear-gradient(90deg, transparent 0, rgba(143, 242, 255, 0.55) 50%, transparent 100%);
+  animation: cm-arena-scan 3.4s var(--ax-snap) infinite;
+}
+@keyframes cm-arena-scan {
+  0% { transform: translateX(0) rotate(45deg); }
+  60%, 100% { transform: translateX(520%) rotate(45deg); }
+}
+/* A hidden action button stays hidden; its own display rules must not win. */
+.cm-vs5-root :is(.cm-vs5-action, .cm-vs5-data-arena)[hidden] { display: none !important; }
+
+/* -- The cube on a spotlit arena floor; the mode keys get LED indicators. -- */
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-cube:not([hidden]) { position: relative; isolation: isolate; }
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-cube::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -4% 0 auto;
+  height: 74%;
+  background:
+    radial-gradient(ellipse 52% 46% at 50% 46%, rgba(255, 226, 140, 0.34), rgba(255, 226, 140, 0) 70%),
+    radial-gradient(ellipse 40% 8% at 50% 96%, rgba(14, 16, 26, 0.55), rgba(14, 16, 26, 0) 72%);
+  pointer-events: none;
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-cube__face {
+  box-shadow: var(--ax-hl), 0 5px 0 var(--key-shade);
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-cube__face::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: 4px;
+  left: 50%;
+  width: 18px;
+  height: 4px;
+  margin-left: -9px;
+  border-radius: 2px;
+  background: rgba(20, 20, 31, 0.35);
+  pointer-events: none;
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-cube__face[aria-pressed="true"] {
+  transform: translateY(4px);
+  box-shadow: var(--ax-hl), 0 1px 0 var(--key-shade), 0 0 0 3px var(--ax-ink), 0 0 0 6px #6ff7ff;
+  filter: none;
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-cube__face[aria-pressed="true"]::before {
+  background: #eaffff;
+  box-shadow: 0 0 0 2px #2ad8ff, 0 0 8px 2px rgba(111, 247, 255, 0.9);
+}
+
+/* -- Matches: VS ticket cards. Crest | name over the entry-fee pill | gold
+ *    bounty | arrow. The list item drops its own paper so a row is one card. -- */
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match {
+  border: 0;
+  border-radius: 8px 20px 8px 20px;
+  background: none;
+  box-shadow: none;
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match > .cm-vs5-match__enter {
+  --key-face: var(--ax-paper);
+  --key-shade: var(--ax-ink);
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) auto 14px;
+  grid-template-rows: auto auto;
+  grid-template-areas: "crest name name arrow" "crest fee payout arrow";
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 4px;
+  width: 100%;
+  min-height: 78px;
+  padding: 8px 10px 8px 8px;
+  border-radius: 8px 20px 8px 20px;
+  background:
+    linear-gradient(90deg, transparent 0 73px, rgba(20, 20, 31, 0.28) 73px 74px, transparent 74px) 0 0 / 100% 7px repeat-y,
+    linear-gradient(180deg, #fffdf4, var(--ax-paper));
+  font-size: var(--fs-body);
+  text-align: left;
+  line-height: 1.25;
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match__crest {
+  grid-area: crest;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0) 60%),
+    linear-gradient(160deg, #8ff2ff, #a259ff);
+  box-shadow: 0 3px 0 var(--ax-ink);
+  overflow: hidden;
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match__crest::after {
+  content: "VS";
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  padding: 1px 4px 0;
+  border: 2px solid var(--ax-ink);
+  border-radius: 6px 0 10px 0;
+  background: var(--ax-red);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1.2;
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match__crest:not(:has(img))::after {
+  position: static;
+  padding: 2px 5px;
+  border-radius: 6px;
+  font-size: 17px;
+  transform: rotate(-8deg);
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match__crest-art {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: brightness(0);
+  opacity: 0.88;
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match__title { grid-area: name; font-size: var(--fs-body); font-weight: 900; line-height: 1.25; }
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match__enter > .cm-vs5-match__fee {
+  grid-area: fee;
+  justify-self: start;
+  padding: 1px 8px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 999px;
+  background: #e9f6ff;
+  color: var(--ax-ink);
+  font-size: var(--fs-label);
+  font-weight: 800;
+  white-space: nowrap;
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match__enter > .cm-vs5-match__payout {
+  grid-area: payout;
+  justify-self: end;
+  padding: 3px 9px;
+  white-space: nowrap;
+  border: 2px solid var(--ax-ink);
+  border-radius: 4px 12px 4px 12px;
+  background: linear-gradient(180deg, #fff0a0 0 30%, var(--ax-yellow) 30% 72%, #f0a51a 72%);
+  color: #3a2400;
+  font-size: var(--fs-label);
+  font-weight: 900;
+  line-height: 1.2;
+  text-align: center;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.7), 0 3px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match__enter::before {
+  content: "";
+  grid-area: arrow;
+  width: 10px;
+  height: 16px;
+  background: var(--ax-ink);
+  -webkit-mask: var(--icon-chevron-left) center / contain no-repeat;
+  mask: var(--icon-chevron-left) center / contain no-repeat;
+  transform: scaleX(-1);
+}
+/* The first tickets deal in one after another. */
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-matches > .cm-vs5-match { animation: cm-deal 420ms var(--ax-spring) both; }
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-matches > .cm-vs5-match:nth-child(2) { animation-delay: 40ms; }
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-matches > .cm-vs5-match:nth-child(3) { animation-delay: 80ms; }
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-matches > .cm-vs5-match:nth-child(4) { animation-delay: 120ms; }
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-matches > .cm-vs5-match:nth-child(n + 5) { animation-delay: 160ms; }
+
+/* -- The way back sits on a solid dotted bar, and the list ends above it. -- */
+:root[data-theme="arcade"] body .cm-vs5-root .cm-vs5-shell > .cm-vs5-footer {
+  z-index: 5;
+  padding-top: 14px;
+  background: linear-gradient(180deg, rgba(22, 20, 42, 0) 0, rgba(22, 20, 42, 0.92) 12px, #16142a 26px);
+  border-top: 0;
+}
+
+/* -- Multi-round cups: two championship cartridges. Platinum / emerald for the
+ *    Championship, black-gold / crimson for the World. The empty paper frame
+ *    around them goes; the cards fill the stage. -- */
+:root[data-theme="arcade"] body .cm-championship-board:has(> .cm-championship-entry) {
+  gap: 18px;
+  padding: 4px 2px 12px;
+  border: 0;
+  background: none;
+}
+:root[data-theme="arcade"] body .cm-championship-entry {
+  --cart-a: #e9fff6;
+  --cart-b: #9fe9c8;
+  --cart-edge: #1d8a5a;
+  --cart-ink: #0f2a1f;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  min-height: clamp(168px, 26vh, 236px);
+  padding: 18px 16px 18px 14px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 10px 28px 10px 28px;
+  background:
+    linear-gradient(118deg, rgba(255, 255, 255, 0.75) 0 18%, transparent 18% 22%, rgba(255, 255, 255, 0.35) 22% 26%, transparent 26%),
+    linear-gradient(160deg, var(--cart-a), var(--cart-b));
+  color: var(--cart-ink);
+  box-shadow: inset 0 0 0 3px var(--cart-edge), inset 0 0 0 5px rgba(255, 255, 255, 0.6), 0 7px 0 var(--ax-ink);
+  overflow: hidden;
+  transition: transform var(--ax-t-hover) var(--ax-spring), box-shadow var(--ax-t-hover) var(--ax-spring);
+}
+:root[data-theme="arcade"] body .cm-championship-entry[data-category="1"] {
+  --cart-a: #3a2a14;
+  --cart-b: #120c08;
+  --cart-edge: #e2a21f;
+  --cart-ink: #fff3d6;
+  background:
+    linear-gradient(118deg, rgba(255, 210, 63, 0.24) 0 18%, transparent 18% 22%, rgba(255, 77, 94, 0.22) 22% 26%, transparent 26%),
+    radial-gradient(ellipse 70% 60% at 85% 100%, rgba(255, 77, 94, 0.4), transparent 70%),
+    linear-gradient(160deg, var(--cart-a), var(--cart-b));
+  box-shadow: inset 0 0 0 3px var(--cart-edge), inset 0 0 0 5px #a3192a, 0 7px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-championship-entry:active:not(:disabled) {
+  transform: translateY(4px) scale(0.99);
+  box-shadow: inset 0 0 0 3px var(--cart-edge), inset 0 0 0 5px rgba(255, 255, 255, 0.6), 0 2px 0 var(--ax-ink);
+  transition-duration: var(--ax-t-press);
+}
+:root[data-theme="arcade"] body .cm-championship-cup {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 28%, #fffbe0 0 12%, rgba(255, 251, 224, 0) 30%),
+    conic-gradient(from 200deg, #fff2b0, #d9a11e, #fff6c8, #b98012, #ffe27a, #fff2b0);
+  box-shadow: inset 0 -6px 0 rgba(120, 70, 0, 0.35), 0 5px 0 var(--ax-ink);
+  font-size: 50px;
+  line-height: 1;
+}
+:root[data-theme="arcade"] body .cm-championship-cup::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: -12px;
+  height: 12px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 3px 3px 8px 8px;
+  background: linear-gradient(180deg, #c9d2dc, #7c8896);
+}
+:root[data-theme="arcade"] body .cm-championship-entry[data-category="1"] .cm-championship-cup::after { background: linear-gradient(180deg, #ffd23f, #a36a00); }
+:root[data-theme="arcade"] body .cm-championship-entry__copy { gap: 8px; }
+:root[data-theme="arcade"] body .cm-championship-entry__name {
+  font-size: clamp(24px, 6.6vw, 32px);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+:root[data-theme="arcade"] body .cm-championship-entry[data-category="1"] .cm-championship-entry__name { color: #ffe27a; text-shadow: 0 3px 0 #000; }
+:root[data-theme="arcade"] body .cm-championship-entry__rounds {
+  justify-self: start;
+  padding: 2px 10px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 999px;
+  background: var(--ax-ink);
+  color: #fff;
+  font-size: var(--fs-label);
+  font-weight: 900;
+}
+:root[data-theme="arcade"] body .cm-championship-prize {
+  justify-self: start;
+  margin: 0;
+  padding: 4px 12px 5px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 4px 14px 4px 14px;
+  background: linear-gradient(180deg, #fff0a0 0 30%, var(--ax-yellow) 30% 72%, #f0a51a 72%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.7), 0 4px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-championship-prize__digits { color: #3a2400; font-size: clamp(22px, 6vw, 28px); font-weight: 900; }
+:root[data-theme="arcade"] body .cm-championship-prize__bit { color: #5a3a00; font-weight: 900; }
+/* A closed cup: dimmed cartridge, a locked energy bar carries the reason. */
+:root[data-theme="arcade"] body .cm-championship-entry:disabled { filter: saturate(0.4) brightness(0.82); }
+:root[data-theme="arcade"] body .cm-championship-entry:disabled .cm-championship-cup { filter: grayscale(1); opacity: 0.7; }
+:root[data-theme="arcade"] body .cm-championship-entry__reason:not(:empty) {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 6px;
+  background: repeating-linear-gradient(-45deg, #2a2a3d 0 8px, #3a3a52 8px 16px);
+  color: #fff;
+  font-size: var(--fs-label);
+  font-weight: 800;
+}
+:root[data-theme="arcade"] body .cm-championship-entry__reason:not(:empty)::before { content: "\1F512"; font-size: 13px; }
+
+/* -- Reduced motion: no scan sweep, no deal-in travel. -- */
+:root[data-theme="arcade"][data-motion="reduced"] .cm-vs5-root .cm-vs5-data-arena::after,
+:root[data-theme="arcade"][data-motion="reduced"] .cm-vs5-root .cm-vs5-matches > .cm-vs5-match { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="arcade"] .cm-vs5-root .cm-vs5-data-arena::after,
+  :root[data-theme="arcade"] .cm-vs5-root .cm-vs5-matches > .cm-vs5-match { animation: none !important; }
+}

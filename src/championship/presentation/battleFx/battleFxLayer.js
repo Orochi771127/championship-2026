@@ -536,6 +536,25 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       const k = easeOut(r.age / r.life), radius = r.radius * (0.2 + k);
       groundGfx.ellipse(r.x, r.y, radius, radius * 0.34).stroke({width: r.width * (1 - k * 0.6), color: r.tint, alpha: r.alpha * (1 - k)});
     }
+    // Team rings at each fighter's feet (Owner 2026-10-28): green / cyan for the
+    // local side, red / orange for the other, so a clinch still reads as two
+    // teams. Drawn on the existing ground layer; a fallen fighter's ring fades.
+    for (const combatant of view.combatants ?? []) {
+      if (!combatant.present) continue;
+      const info = ctx.slotInfo?.(combatant.slot);
+      if (!info) continue;
+      const mine = combatant.team === ctx.localTeam, fade = combatant.down ? 0.3 : 1;
+      const rx = Math.max(14, info.width * 0.6), ry = rx * 0.3;
+      const core = mine ? 0x3ddc84 : 0xff3b5c, edge = mine ? 0x3ddcff : 0xff9a3c;
+      groundGfx.ellipse(info.x, info.groundY, rx, ry).fill({color: core, alpha: 0.14 * fade});
+      groundGfx.ellipse(info.x, info.groundY, rx, ry).stroke({width: 2.5, color: core, alpha: 0.9 * fade});
+      groundGfx.ellipse(info.x, info.groundY, rx * 1.24, ry * 1.24).stroke({width: 1.5, color: edge, alpha: 0.6 * fade});
+      for (const side of [-1, 1]) {
+        groundGfx.moveTo(info.x + side * rx * 1.12, info.groundY).lineTo(info.x + side * rx * 1.4, info.groundY);
+        groundGfx.moveTo(info.x, info.groundY + side * ry * 1.12).lineTo(info.x, info.groundY + side * ry * 1.4);
+      }
+      groundGfx.stroke({width: 2, color: edge, alpha: 0.75 * fade});
+    }
     for (let i = scorches.length - 1; i >= 0; i--) {
       const s = scorches[i];
       s.age += dtMs;
@@ -597,14 +616,20 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     if(cue){
       const copy=battleOpeningText(cue);
       if(!banner?.opening || banner.node.text!==copy){
-        showBanner(copy,{size:34,fill:0xffffff,life:Infinity});banner.opening=true;
+        // FIGHT slams in bigger and gold, with one burst of radial speed lines.
+        const fight=cue==='FIGHT';
+        showBanner(copy,{size:fight?46:34,fill:fight?0xffe36a:0xffffff,life:Infinity});banner.opening=true;banner.slam=fight;
+        if(fight&&!reducedMotion)speed=1;
       }
     }else if(banner?.opening){banner.node.destroy();banner=null;}
     if (banner) {
       banner.age += dtMs;
       if (banner.age >= banner.life) { banner.node.destroy(); banner = null; }
       else {
-        const k = banner.age / banner.life, pop = banner.age < 140 ? lerp(2.1, 1, easeOut(banner.age / 140)) : 1;
+        // The slam overshoots: 2.2 -> 0.9 -> 1 (a heavy metal hit); other banners pop 2.1 -> 1.
+        const k = banner.age / banner.life, pop = banner.slam
+          ? (banner.age < 150 ? lerp(2.2, 0.9, easeOut(banner.age / 150)) : banner.age < 330 ? lerp(0.9, 1, easeOut((banner.age - 150) / 180)) : 1)
+          : banner.age < 140 ? lerp(2.1, 1, easeOut(banner.age / 140)) : 1;
         if (responsiveLayout) {
           banner.node.style.wordWrap = true; banner.node.style.breakWords = true;
           banner.node.style.wordWrapWidth = Math.max(24, (viewport.width - 16) / (reducedMotion ? 1 : pop));

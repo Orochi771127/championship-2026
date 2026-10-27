@@ -88,7 +88,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const beams = new PIXI.Container({ label: "arena beams" });
   const particles = new PIXI.Container({ label: "arena particles" });
   const lights = new PIXI.Container({ label: "arena stand lights" });
-  world.addChild(groundChunks, water, cellFx, bridge, marks, objects, shotGlow, shots, beams, particles, lights);
+  // A faint tactical grid over the floor art (drawn once, after the bake).
+  const tactical = new PIXI.Graphics(); tactical.label = "arena tactical grid";
+  world.addChild(groundChunks, tactical, water, cellFx, bridge, marks, objects, shotGlow, shots, beams, particles, lights);
 
   const camera = createDataArenaCamera({ worldWidth, worldHeight, reducedMotion, shake, cover: Boolean(grid.map.battleFieldId), artBounds: environment?.manifest?.cameraArtBounds });
   let elapsed = 0;
@@ -123,6 +125,23 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   rollback.push(unsubscribeRestore);
   const environmentView = environment ? mountDataArenaEnvironment({ PIXI, environment, ground: groundChunks, objects, water, bridge, suppressedPropIds:new Set(grid.props.map(p=>p.id)) }) : null;
   const interactionView=mountDataArenaInteractionView({PIXI,grid,art:interactionArt,objects,ground:groundChunks,useHarborPatches:Boolean(environment&&MAP.stage&&!environment.manifest.cleanGround),floorOffset,propArt:environment?.propArt});
+  // Speed reference for footwork and dashes: a line every four cells and edge
+  // ticks every cell. The legacy harbor ground already bakes its own grid.
+  if (!legacyGround) {
+    const step = cell * 4;
+    for (let x = step; x < worldWidth; x += step) tactical.moveTo(x, 0).lineTo(x, worldHeight);
+    for (let y = step; y < worldHeight; y += step) tactical.moveTo(0, y).lineTo(worldWidth, y);
+    tactical.stroke({ width: 2, color: 0x9ff6ff, alpha: 0.07 });
+    for (let x = 0; x <= worldWidth; x += cell) {
+      const tick = Math.round(x / cell) % 4 === 0 ? 18 : 8;
+      tactical.moveTo(x, 0).lineTo(x, tick).moveTo(x, worldHeight).lineTo(x, worldHeight - tick);
+    }
+    for (let y = 0; y <= worldHeight; y += cell) {
+      const tick = Math.round(y / cell) % 4 === 0 ? 18 : 8;
+      tactical.moveTo(0, y).lineTo(tick, y).moveTo(worldWidth, y).lineTo(worldWidth - tick, y);
+    }
+    tactical.stroke({ width: 2, color: 0x9ff6ff, alpha: 0.3 });
+  }
   function drawGround() {
     const g = ground;
     g.rect(0, 0, worldWidth, worldHeight).fill({ color: 0x141c2b });
@@ -358,7 +377,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         if(currentPlacement){sprite.x+=(facing>0?-1:1)*currentPlacement.offset[0]*cellScale;sprite.y+=currentPlacement.offset[1]*cellScale;}
         if (motion && relayProfile && !reducedMotion) {
           const a = body.action;
-          const pulse = a?.releasedAt === null ? Math.min(1, (state.time - a.startedAt) / a.windup) : Math.max(0, 1 - (state.time - a.releasedAt) / a.recovery);
+          // No action in progress means no lunge; a null action used to throw here and stop the HUD.
+          const pulse = !a ? 0 : a.releasedAt === null ? Math.min(1, (state.time - a.startedAt) / a.windup) : Math.max(0, 1 - (state.time - a.releasedAt) / a.recovery);
           sprite.x += (facing > 0 ? 1 : -1) * relayProfile.thrust * pulse;
           sprite.y -= relayProfile.lift * pulse;
         }

@@ -55,7 +55,8 @@ export function createBattleFxLookups({getView, onFeed = null, showIds = false})
         const move = moveNameOf(event.moveId), ultimate = look.tier === 'ultimate';
         const template = move ? (ultimate ? '{name}發動絕招「{move}」！' : '{name}使出「{move}」！')
           : (ultimate ? '{name}發動絕招！' : '{name}使出技能！');
-        onFeed(uiText(template, {name: nameOfSlot(event.slot), move}));
+        // The cue tells the record band which line is a signature move, and whose.
+        onFeed(uiText(template, {name: nameOfSlot(event.slot), move}), {tier: look.tier, slot: event.slot});
       } else if (event.type === 'KO') {
         onFeed(uiText('{name}倒下了！', {name: nameOfSlot(event.slot)}));
       }
