@@ -1767,3 +1767,535 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
 @keyframes cm-breach-ring { 0%, 28% { opacity: 0; transform: scale(0.3); } 34% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(18); border-width: 1px; } }
 :root[data-motion="reduced"] .cm-vs2-field__viewport[data-entering="true"]::before,
 :root[data-motion="reduced"] .cm-vs2-field:has(.cm-vs2-field__viewport[data-entering="true"])::after { display: none; }
+
+/* ======================================================================== *
+ * Management and encyclopedia pages 2026-10-27 (Owner): the roster, tamer
+ * info, schedule and encyclopedia stop reading like receipts. Every id, class,
+ * data-* hook and button text stays; the arcade skin regroups what is there.
+ * ======================================================================== */
+
+/* -- Page titles: bright on the dotted purple, never dark on dark. -- */
+:root[data-theme="arcade"] body :is(.cm-digimon-kicker, .cm-tamer-kicker, .cm-schedule-kicker, .cm-help-kicker, .cm-championship-kicker) {
+  color: var(--ax-yellow);
+  text-shadow: 0 2px 0 #0e101a;
+}
+:root[data-theme="arcade"] body :is(.cm-digimon-title, .cm-tamer-title, .cm-schedule-title, .cm-help-title, .cm-championship-title) {
+  color: #fff;
+  text-shadow: 0 2px 0 #0e101a, 0 0 16px rgba(255, 210, 63, 0.35);
+}
+:root[data-theme="arcade"] body .cm-screen-lede { color: #fff; text-shadow: 0 1px 0 #0e101a; }
+
+/* -- Bottom dock: the Back key sits on a solid bar, so no row slides under it. -- */
+:root[data-theme="arcade"] body .cm-screen-footer {
+  z-index: 5;
+  padding-top: 18px;
+  background: linear-gradient(180deg, rgba(14, 16, 26, 0) 0, rgba(14, 16, 26, 0.88) 14px, #16142a 30px);
+  border-top: 0;
+}
+:root[data-theme="arcade"] body :is(.cm-digimon-root, .cm-schedule-root, .cm-tamer-root, .cm-help-root, .cm-championship-root) { scroll-padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+
+/* -- 1) Ranch inspector: a compact handheld nameplate (portrait phones). -- */
+@media (max-width: 600px) {
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "portrait copy actions" "vitals vitals vitals";
+    row-gap: 6px;
+    column-gap: 8px;
+    padding: 8px 8px 9px;
+    border-radius: 16px;
+    background: var(--ax-paper) radial-gradient(rgba(20, 20, 31, 0.07) 1px, transparent 1.4px) 0 0 / 7px 7px;
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.85), 0 5px 0 var(--ax-ink);
+  }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__portrait { width: 52px; height: 52px; border-radius: 12px; box-shadow: inset 0 3px 6px rgba(20, 20, 31, 0.22); }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__name { font-size: 17px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__species { padding: 1px 6px; font-size: 10px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__place { padding: 1px 8px; font-size: 12px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__place::before { content: "\25C9"; margin-right: 4px; color: #ff6b4a; font-size: 10px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__actions { gap: 6px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close) {
+    min-width: 38px;
+    min-height: 38px;
+    border-radius: 10px;
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 4px 0 var(--ax-ink);
+  }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close):active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ax-ink); }
+  /* HP, TP and capacity share one row: the card is two rows tall. */
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion > .int-rh2-vitals {
+    grid-template-columns: max-content minmax(0, 1fr) max-content minmax(0, 1fr) max-content max-content;
+    column-gap: 6px;
+    row-gap: 5px;
+    align-items: center;
+  }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__label { font-size: 11px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__num { font-size: 11px; padding: 0 5px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar { height: 20px; border-width: 2px; border-radius: 999px; }
+}
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar::before {
+  background:
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.22) 0 4px, transparent 4px 9px),
+    linear-gradient(rgba(255, 255, 255, 0.5) 0 32%, var(--meter) 32%);
+  transition: width 640ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__num {
+  color: #fff;
+  -webkit-text-stroke: 3px #14141f;
+  paint-order: stroke fill;
+  font-weight: 900;
+}
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals > dd[data-stat="capacity"] .int-rh2-vitals__num { -webkit-text-stroke: 0; color: var(--ax-ink); }
+/* Switching partners: a small spring on the card. */
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion[data-open="true"] { animation: cm-nameplate-in 380ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes cm-nameplate-in { from { opacity: 0; transform: translateX(-50%) translateY(14px) scale(0.96); } }
+@media (min-width: 601px) { :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion[data-open="true"] { animation: cm-panel-in 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both; } }
+
+/* -- 2) Roster: a cartridge switcher and a bento of stats. -- */
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-item__button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 54px;
+  padding: 6px 10px 6px 6px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 14px;
+  background: var(--ax-paper);
+  color: var(--ax-ink);
+  text-align: start;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.85), 0 4px 0 var(--ax-ink);
+  transition: transform 200ms var(--ax-spring), box-shadow 200ms var(--ax-spring), background 120ms;
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-item__button:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-item__button[aria-pressed="true"] {
+  background: #fff3c4;
+  transform: translateY(-2px);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.85), 0 0 0 3px var(--ax-yellow), 0 0 16px rgba(255, 210, 63, 0.65), 0 6px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-item__thumb {
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 10px;
+  background: #e9f6ff radial-gradient(circle at 50% 70%, rgba(77, 238, 214, 0.35), transparent 70%);
+  object-fit: contain;
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-item__name { min-width: 0; overflow: hidden; font-size: 15px; font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
+
+.cm-digimon-stat { display: contents; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-detail {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 10px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 18px;
+  background: var(--ax-paper) radial-gradient(rgba(20, 20, 31, 0.06) 1px, transparent 1.4px) 0 0 / 8px 8px;
+  box-shadow: 0 5px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 6px 9px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 3px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat > :is(dt, dd) { margin: 0; padding: 0; border: 0; text-align: start; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat > dt { color: #6a6280; font-size: 11px; font-weight: 800; letter-spacing: 0.04em; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat > dd { color: var(--ax-ink); font-size: 15px; font-weight: 900; overflow-wrap: anywhere; }
+/* Identity badges first (three per row; name and species two per row). */
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="identity"] { grid-column: span 3; order: 0; background: #f1ecff; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat:is([data-row="nickname"], [data-row="species"]) { grid-column: span 6; background: #fff3c4; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat:is([data-row="nickname"], [data-row="species"]) > dd { font-size: 17px; }
+/* Vitals as glossy troughs. */
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="vital"] { grid-column: span 4; order: 1; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="vital"] > dd {
+  padding: 1px 8px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 999px;
+  color: #fff;
+  -webkit-text-stroke: 3px #14141f;
+  paint-order: stroke fill;
+  font-size: 13px;
+  text-align: right;
+  background: #2a2740;
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat:is([data-row="HP"], [data-row="TP"]) > dd {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.4) 0 34%, transparent 34%),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.18) 0 4px, transparent 4px 9px),
+    linear-gradient(90deg, var(--stat-fill) 0 calc(var(--fill, 1) * 100%), #2a2740 0);
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="HP"] { --stat-fill: #3ddc84; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="TP"] { --stat-fill: #4d7cff; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="size"] > dd { background: #a259ff; }
+/* Combat 2x2: a colour tab, the label, the number large on the right. */
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="combat"] {
+  grid-column: span 6;
+  order: 2;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-left-width: 8px;
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="combat"] > dd { font-size: 22px; line-height: 1; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="attack"] { border-left-color: #ff6b4a; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="def"] { border-left-color: #4dabff; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="wiz"] { border-left-color: #b98cff; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="spd"] { border-left-color: #3ddc84; }
+/* Skills side by side, then the record 1x3. */
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="skill"] { grid-column: span 6; order: 3; background: #e9fbff; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="record"] { grid-column: span 4; order: 4; align-items: center; text-align: center; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="record"] > :is(dt, dd) { text-align: center; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="record"] > dd { font-size: 18px; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-detail > :is(.cm-digimon-resistance, .cm-digimon-untraced, .cm-digimon-empty) { grid-column: 1 / -1; order: 5; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-resistance { padding: 8px 10px; border: 2px solid var(--ax-ink); border-radius: 12px; background: #fff; box-shadow: 0 3px 0 var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-resistance__bar { display: flex; gap: 3px; height: 14px; padding: 2px; border: 2px solid var(--ax-ink); border-radius: 999px; background: #2a2740; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-resistance__segment { border-radius: 999px; box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.45); }
+/* Actions: arcade keys; disabled ones are dark slots with readable text. */
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-controls { display: flex; gap: 8px; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-control {
+  flex: 1 1 0;
+  min-height: 46px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 12px;
+  background: var(--ax-white);
+  color: var(--ax-ink);
+  font-weight: 900;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.85), 0 4px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-control:disabled {
+  background: #2a2740;
+  color: #d9d3ee;
+  border-color: #0e101a;
+  box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.35);
+  opacity: 1;
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-controls-note {
+  align-self: flex-start;
+  margin: 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(14, 16, 26, 0.78);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* -- 3) Tamer info: a holo licence card, three progress tiles, a stats matrix. -- */
+.cm-tamer-field { display: contents; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-fields {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 10px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 18px;
+  background: var(--ax-paper) radial-gradient(rgba(20, 20, 31, 0.06) 1px, transparent 1.4px) 0 0 / 8px 8px;
+  box-shadow: 0 5px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 3px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field > :is(dt, dd) { margin: 0; padding: 0; border: 0; text-align: start; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field > dt { color: #6a6280; font-size: 11px; font-weight: 800; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field > dd { color: var(--ax-ink); font-size: 17px; font-weight: 900; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+/* The licence: name across the top on a holo face, rank / licence / bits below. */
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-group="card"] {
+  grid-column: span 2;
+  order: 0;
+  background: linear-gradient(135deg, #fff3c4 0%, #e6dcff 48%, #c9f6ff 100%);
+}
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-field-id="name"] { grid-column: 1 / -1; padding: 12px 14px; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-field-id="name"]::after {
+  content: "TAMER ID";
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--ax-ink);
+  color: var(--ax-yellow);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-field-id="name"] > dd { font-size: 26px; text-shadow: 0 2px 0 rgba(255, 255, 255, 0.8); }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-field-id="rank"] > dd { color: #6b3df0; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-field-id="money"] > dd { color: #8a5a00; font-size: clamp(13px, 3.8vw, 17px); white-space: nowrap; overflow-wrap: normal; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-field-id="money"] > dd::before { content: "\25CF"; margin-right: 3px; color: #ffb400; font-size: 0.8em; }
+/* Completion: three tiles with a mini meter. */
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-group="progress"] { grid-column: span 2; order: 1; align-items: center; text-align: center; padding-bottom: 14px; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-group="progress"] > :is(dt, dd) { text-align: center; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-group="progress"] > dd { font-size: 20px; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-group="progress"]::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 6px;
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4deed6 0 calc(var(--fill, 0) * 100%), #2a2740 0);
+}
+/* Record and size: a two-column matrix. */
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-group="stats"] { grid-column: span 3; order: 2; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field[data-field-id="cage"] { grid-column: 1 / -1; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-field > dd[data-state="UNSOURCED"] { color: #9a93b0; }
+:root[data-theme="arcade"] body .cm-tamer-root .cm-tamer-note { margin: 0; padding: 4px 12px; border-radius: 12px; background: rgba(14, 16, 26, 0.7); color: #fff; font-size: 12px; }
+
+/* -- 4) Schedule: day cards and three ticket states. -- */
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-day {
+  position: relative;
+  padding-top: 26px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 14px;
+  background: rgba(255, 248, 225, 0.92);
+  box-shadow: 0 4px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-day[data-today="true"] { background: #fff3c4; box-shadow: 0 0 0 3px var(--ax-yellow), 0 4px 0 var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-day__number {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  margin: 0;
+  padding: 2px 10px;
+  border-radius: 12px 0 10px 0;
+  background: var(--ax-ink);
+  color: var(--ax-yellow);
+  font-size: 13px;
+  font-weight: 900;
+}
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture {
+  border: 3px solid var(--ax-ink);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ax-ink);
+  font-weight: 900;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 4px 0 var(--ax-ink);
+  transition: transform 200ms var(--ax-spring), box-shadow 200ms var(--ax-spring);
+}
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ax-ink); }
+@media (hover: hover) and (pointer: fine) {
+  :root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture:not([data-locked="true"]):hover { transform: translateY(-2px) rotate(-1deg); }
+}
+/* Open to enter (or entered): warm, bright. */
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture[data-eligible-today="true"]:not([data-won="true"]) {
+  background: linear-gradient(#fff6c9, #ffe27a);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 0 0 3px rgba(255, 210, 63, 0.75), 0 4px 0 var(--ax-ink);
+}
+/* Won: honour green with a gold rim. */
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture[data-won="true"] {
+  border-color: #0f6b3c;
+  background: linear-gradient(#ebfff2, #c4f5d7);
+  color: #0b4f2c;
+  opacity: 1;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 0 0 2px #ffd23f, 0 4px 0 #0f6b3c;
+}
+/* Locked: a dim slot, clearly behind the playable ones. */
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture[data-locked="true"] {
+  border-color: rgba(20, 20, 31, 0.55);
+  background: rgba(42, 39, 64, 0.82);
+  color: #c9c3dd;
+  box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.35);
+}
+:root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture[data-registered="true"]:not([data-won="true"]) { border-left-width: 8px; border-left-color: #ff9f1c; }
+
+/* -- 5) Encyclopedia: readable stage tabs, cartridge cards, a compact detail. -- */
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__chip {
+  border: 3px solid var(--ax-ink);
+  background: #2b3350;
+  color: #fff;
+  font-weight: 900;
+  box-shadow: 0 4px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__chip[aria-pressed="true"] { background: var(--ax-yellow); color: var(--ax-ink); }
+/* An open record no longer greys the tabs out: a light veil, no dot screen. */
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__sheet-scrim { background: rgba(14, 16, 26, 0.22); }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row {
+  position: relative;
+  overflow: hidden;
+  border: 3px solid var(--ax-ink);
+  border-radius: 16px;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 5px 0 var(--ax-ink);
+  transition: transform 220ms var(--ax-spring), box-shadow 220ms var(--ax-spring);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row::after {
+  content: "";
+  position: absolute;
+  inset: -40% auto -40% -60%;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: translateX(0) rotate(12deg);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  :root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row:hover { transform: translateY(-3px); }
+  :root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row:hover::after { animation: cm-card-sheen 700ms ease-out; }
+}
+@keyframes cm-card-sheen { 0% { opacity: 1; transform: translateX(0) rotate(12deg); } 100% { opacity: 0; transform: translateX(420%) rotate(12deg); } }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row .cm-vs2-shop__meta {
+  display: inline-block;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--ax-ink);
+  color: var(--ax-yellow);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+/* Detail: a portrait plinth beside the name, then story, traits and the evolution workbench in view. */
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail {
+  grid-template-columns: minmax(118px, 38%) minmax(0, 1fr);
+  align-content: start;
+  column-gap: 12px;
+  row-gap: 6px;
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail > :not(.cm-dex-hero) { grid-column: 1 / -1; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail > :is(.cm-vs2-database__detail-title, .cm-vs2-shop__meta) { grid-column: 2; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail > .cm-dex-hero {
+  grid-column: 1;
+  grid-row: 1 / span 4;
+  height: clamp(140px, 22vh, 200px);
+  margin: 0;
+  padding: 6px 6px 16px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 16px;
+  background: radial-gradient(ellipse 60% 18% at 50% 92%, rgba(255, 210, 63, 0.75), transparent 70%), radial-gradient(circle at 50% 40%, #fff 0%, #ffe9c2 70%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 4px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-hero__image { width: 100%; height: 100%; max-height: none; object-fit: contain; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail-title { align-self: end; margin: 0; font-size: 24px; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail > .cm-vs2-shop__meta {
+  justify-self: start;
+  margin: 0;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--ax-ink);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail > .cm-vs2-shop__meta + .cm-vs2-shop__meta { background: #3ddc84; color: var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] :is(.cm-dex-profile, .cm-dex-data) {
+  padding: 10px 12px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 3px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-trait-tag { padding: 3px 10px; border: 2px solid var(--ax-ink); border-radius: 999px; background: #e9fbff; font-weight: 800; }
+/* Evolution workbench: linked slots with a breathing arrow. */
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-routes {
+  padding: 10px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 16px;
+  background: #1f2140 radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.4px) 0 0 / 8px 8px;
+  box-shadow: 0 4px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-routes__heading { margin: 0 0 8px; color: var(--ax-yellow); text-shadow: 0 2px 0 #0e101a; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] :is(.cm-dex-routes__source, .cm-dex-routes__target) {
+  border: 2px solid var(--ax-ink);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 3px 0 #0e101a;
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-routes__source { position: relative; color: var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-routes__source::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -12px;
+  width: 10px;
+  height: 4px;
+  border-radius: 2px;
+  background: #4deed6;
+  box-shadow: 0 0 8px #4deed6;
+  animation: cm-route-breathe 1.4s ease-in-out infinite;
+}
+@keyframes cm-route-breathe { 50% { opacity: 0.35; transform: translateX(3px); } }
+/* The conditions key: an amber arcade button; its panel opens as a raised accordion. */
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 12px;
+  background: linear-gradient(#ffe27a, #ffb83d);
+  color: var(--ax-ink);
+  font-weight: 900;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.8), 0 4px 0 var(--ax-ink);
+  transition: transform 180ms var(--ax-spring), box-shadow 180ms var(--ax-spring);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__toggle::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-right: 3px solid var(--ax-ink);
+  border-bottom: 3px solid var(--ax-ink);
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 220ms var(--ax-spring);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__toggle[aria-expanded="true"] { transform: translateY(2px); box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.8), 0 2px 0 var(--ax-ink); }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__toggle[aria-expanded="true"]::after { transform: translateY(2px) rotate(-135deg); }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__panel:not([hidden]) {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 3px solid var(--ax-ink);
+  border-radius: 14px;
+  background: #fff8e1 repeating-linear-gradient(45deg, rgba(20, 20, 31, 0.04) 0 6px, transparent 6px 12px);
+  color: var(--ax-ink);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 5px 0 var(--ax-ink);
+  transform-origin: top center;
+  animation: cm-accordion-open 300ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes cm-accordion-open { from { opacity: 0; transform: scaleY(0.6) translateY(-6px); } }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__list { display: grid; gap: 6px; margin: 6px 0; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__row > dt { font-weight: 900; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__row > dd { margin: 0; padding: 1px 10px; border-radius: 999px; background: var(--ax-ink); color: var(--ax-yellow); font-weight: 900; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-conditions__notice { margin: 4px 0; color: #5b5470; font-size: 12px; }
+:root[data-motion="reduced"] body :is(.cm-dex-conditions__panel, .int-rh2-companion) { animation: none !important; }
+:root[data-motion="reduced"] body .cm-dex-routes__source::after { animation: none !important; }
+/* Capacity on the nameplate is a value, not a meter: a purple pill with white text. */
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals > dd[data-stat="capacity"] .int-rh2-vitals__bar { background: #a259ff; }
+:root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals > dd[data-stat="capacity"] .int-rh2-vitals__num { color: #fff; -webkit-text-stroke: 0; padding: 0 8px; }
+/* Short landscape phones: the side card keeps every key in view (no inner scroll). */
+@media (max-height: 500px) {
+  :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion { row-gap: 6px; padding: 8px; }
+  :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion__portrait { width: 48px; height: 48px; }
+  :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion__name { font-size: 15px; }
+  :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion__actions { gap: 5px; }
+  :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close) { min-width: 36px; min-height: 36px; border-radius: 10px; }
+}
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-control { padding: 0 8px; font-size: 14px; white-space: nowrap; }

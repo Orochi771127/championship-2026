@@ -710,8 +710,15 @@ export async function mountRaisingFieldPixiPresentation({
       entry.shadow.ellipse(ellipse.x,ellipse.y,ellipse.radiusX,ellipse.radiusY);
     }
     entry.shadow.fill({color:0x02070a,alpha:.26});
-    entry.selection.clear().ellipse(center,bottom+1,visible.width/2+2,Math.max(2,visible.width*.16))
-      .fill({color:0x56e3c2,alpha:.12}).stroke({color:0x56e3c2,width:1,alpha:.95});
+    // Lock-on ring (Owner 2026-10-27): a soft glow, a teal ring with a white
+    // core and four bright marks, so the picked partner reads at a glance.
+    const rx=visible.width/2+2,ry=Math.max(2,visible.width*.16),cy=bottom+1;
+    entry.selection.clear()
+      .ellipse(center,cy,rx+6,ry+3).fill({color:0x56e3c2,alpha:.16})
+      .ellipse(center,cy,rx,ry).fill({color:0x56e3c2,alpha:.14}).stroke({color:0x2fd6b4,width:3,alpha:.95})
+      .ellipse(center,cy,rx,ry).stroke({color:0xffffff,width:1,alpha:.9});
+    for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]])
+      entry.selection.ellipse(center+dx*(rx+5),cy+dy*(ry+3),2.5,2.5).fill({color:0xffffff,alpha:.95}).stroke({color:0x2fd6b4,width:1.5,alpha:.95});
     entry.root.hitArea=new PIXI.Rectangle(hitArea.x,hitArea.y,hitArea.width,hitArea.height);
     entry.visibleGeometry=visible;
   }
