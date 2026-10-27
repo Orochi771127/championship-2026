@@ -53,7 +53,7 @@ import {createNativeRaisingMessages,normalizeNativeRaisingMessages,selectNativeM
 import {normalizeNativeOpening} from './nativeOpeningState.js';
 import {deepFreeze} from '../contracts/championshipContracts.js';
 import {interactiveTutorialInProgress, sameInteractiveTutorialCheckpoint} from './interactiveTutorialCheckpoint.js';
-import {initializeNativeTutorialRaisingActor,requestNativeTutorialHatch,stepNativeTutorialRaisingActor,restoreNativeTutorialHatchedActor,tutorialRaisingIdle,tutorialRaisingPosition,tutorialRaisingCondition,tutorialRaisingSleep,tutorialRaisingFeed,tutorialRaisingTreat,tutorialRaisingCarry,tutorialRaisingRelease,tutorialRaisingTraining,tutorialRaisingStatus} from '../raising/nativeTutorialRaisingActor.js';
+import {initializeNativeTutorialRaisingActor,requestNativeTutorialHatch,stepNativeTutorialRaisingActor,restoreNativeTutorialHatchedActor,tutorialRaisingIdle,tutorialRaisingPosition as placeNativeTutorialRaisingActor,tutorialRaisingCondition,tutorialRaisingSleep,tutorialRaisingFeed,tutorialRaisingTreat,tutorialRaisingCarry,tutorialRaisingRelease,tutorialRaisingTraining,tutorialRaisingStatus} from '../raising/nativeTutorialRaisingActor.js';
 import {tutorialRaisingStep,TUTORIAL_RAISING_STEPS} from './interactiveTutorialRaisingSteps.js';
 import {TUTORIAL_STEP_COUNT,createTutorialCursor, tutorialFinished, tutorialStepAt, advanceTutorial as advanceTutorialStep,
   skipTutorial as skipTutorialCursor} from './nativeTutorialProgression.js';
@@ -70,6 +70,7 @@ import {createRanchRaisingGround as createNativeRaisingGround,ranchRaisingSpawnP
 import {createNativeRaisingFood,stepNativeRaisingFood,foodVisualQuarter,nativeRaisingFeast,reconcileNativeFoodReservations} from "../raising/nativeRaisingFood.js";
 import {separateNativeRaisingGroundActors} from '../raising/nativeGroundSpacing.js';
 import {stepRanchConveyor} from '../raising/ranchConveyor.js';
+import {PRODUCT_RANCH_GRID,PRODUCT_WAITING_ROOM_SLOT,productGridCell} from '../cage/productRanchGrid.js';
 import {normalizeNativeRaisingHome,nativeRaisingRebuiltListOrder} from "../raising/nativeRaisingHomeState.js";
 import {allocateNativeRaisingWaste} from '../raising/nativeRaisingWaste.js';
 import {projectNativeRaisingCalendar} from '../raising/nativeRaisingCalendar.js';
@@ -905,6 +906,17 @@ export function createChampionshipStandaloneApp({
     tutorialNext('hunt-intro');return screens.current();
   }
 
+  // The tutorial's points are original-board coordinates. A new game on the
+  // hex world lays that same board into the world at the legacy offset
+  // (grid100ToHexWorld), so every scripted point moves with it; the original
+  // layout keeps offset zero and its exact native bytes.
+  function tutorialBoardOffset(){
+    if(raisingGround?.layoutVersion!==PRODUCT_RANCH_GRID)return [0,0];
+    const origin=productGridCell(PRODUCT_WAITING_ROOM_SLOT);return [origin.x,origin.y];
+  }
+  function tutorialPointQ12(x,y){const [dx,dy]=tutorialBoardOffset();return [(x+dx)*4096,(y+dy)*4096,0];}
+  function tutorialRaisingPosition(actor,x,y,cage=35){const [dx,dy]=tutorialBoardOffset();placeNativeTutorialRaisingActor(actor,x+dx,y+dy,cage);}
+
   function restoreInteractiveTutorialActor() {
     const cp=nativeOpening?.checkpoint,stage=cp?.stage,step=tutorialRaisingStep(cp)??(tutorialStep(cp)?.screen==='RAISING_HOME'?tutorialStep(cp):null);
     if(!tutorialBaseline||tutorialTransitionActive||['declined','completed'].includes(tutorialPendingOpening?.checkpoint?.stage)||!step)return false;
@@ -919,7 +931,7 @@ export function createChampionshipStandaloneApp({
         writeRaisingNativeProfile(id,{...demo,name:creature.nativeProfile.name},{markDirty:false});
       }
       actor=createNativeRaisingActor(creature.nativeProfile,raisingPoolSlots[id]??0);
-      initializeNativeTutorialRaisingActor(actor);raisingActors.set(id,actor);
+      initializeNativeTutorialRaisingActor(actor);tutorialRaisingPosition(actor,128,96);raisingActors.set(id,actor);
       if(!["raising-intro","raising-hatch"].includes(stage)){
         const result=restoreNativeTutorialHatchedActor(actor,creature.nativeProfile,{next:nextGameplayRandom});
         writeRaisingNativeProfile(id,result.profile,{markDirty:false});
@@ -936,14 +948,14 @@ export function createChampionshipStandaloneApp({
     if(stage.startsWith("raising-clean")){
       if(rebuilding||stage==="raising-clean"||changed&&stage==="raising-clean-intro"){
         tutorialRaisingIdle(actor);tutorialRaisingPosition(actor,120,100);
-        raisingFoods=[createNativeRaisingFood({slot:0,cageDefinitionIndex:35,positionQ12:[100*4096,120*4096,0],freshness:6,restored:true}),
-          createNativeRaisingFood({slot:1,cageDefinitionIndex:35,positionQ12:[80*4096,80*4096,0],freshness:-1,restored:true})];
-        raisingWaste=[{slot:0,speciesIndex:17,present:true,cageDefinitionIndex:35,positionQ12:[160*4096,100*4096,0]}];
+        raisingFoods=[createNativeRaisingFood({slot:0,cageDefinitionIndex:35,positionQ12:tutorialPointQ12(100,120),freshness:6,restored:true}),
+          createNativeRaisingFood({slot:1,cageDefinitionIndex:35,positionQ12:tutorialPointQ12(80,80),freshness:-1,restored:true})];
+        raisingWaste=[{slot:0,speciesIndex:17,present:true,cageDefinitionIndex:35,positionQ12:tutorialPointQ12(160,100)}];
       }
       const mask=stage==="raising-clean"?Math.max(0,cp.message-1):stage==="raising-clean-wait"?7:0;
       if(mask&1)raisingFoods[0].present=false;if(mask&2)raisingWaste[0].present=false;if(mask&4)raisingFoods[1].present=false;
     }else if(stage==="raising-feed-eat"&&rebuilding){
-      raisingFoods=[createNativeRaisingFood({slot:0,cageDefinitionIndex:35,positionQ12:[100*4096,120*4096,0]})];
+      raisingFoods=[createNativeRaisingFood({slot:0,cageDefinitionIndex:35,positionQ12:tutorialPointQ12(100,120)})];
       tutorialRaisingFeed(actor,profile,raisingFoods);
     }else if(stage.startsWith("raising-illness")){
       if(rebuilding||changed&&stage==="raising-illness-intro"){raisingFoods=[];raisingWaste=[];tutorialRaisingIdle(actor);tutorialRaisingPosition(actor,100,100);}
@@ -985,7 +997,7 @@ export function createChampionshipStandaloneApp({
           const result=classifyNativeRaisingHand({held:true,elapsed:raisingHand.elapsed,origin:raisingHand.origin,pointer:raisingHand.pointer,
             inside:raisingHand.inside,admit:command=>command===0x80&&[1,15,16].includes(actor.state)});
           raisingHand.elapsed++;
-          if(result===3&&tutorialRaisingCarry(actor,raisingHand.pointer))raisingHand.mode=3;
+          if(result===3&&tutorialRaisingCarry(actor,raisingHand.pointer,raisingGround))raisingHand.mode=3;
           else if(result!==-1)raisingHand=null;
         }
         if(raisingHand?.mode===3)actor.carryPointer={...raisingHand.pointer};
@@ -1487,8 +1499,8 @@ export function createChampionshipStandaloneApp({
       if(tutorialBaseline){
         if(!tutorialInput(checkpoint,"clean","clean")||!Number.isFinite(x)||!Number.isFinite(y))return false;
         const actor=raisingActors.get(creature.creatureId),mask=Math.max(0,nativeOpening.checkpoint.message-1);
-        const targets=[[100,120,15,17],[160,100,6,10],[80,80,15,17]];
-        const hit=targets.findIndex(([px,py,l,r],i)=>!(mask&(1<<i))&&!actor.tutorialCleanPending[i]&&x>=px-l&&x<=px+r&&y>=py-19&&y<=py+5);
+        const targets=[[100,120,15,17],[160,100,6,10],[80,80,15,17]],[dx,dy]=tutorialBoardOffset();
+        const hit=targets.findIndex(([px,py,l,r],i)=>!(mask&(1<<i))&&!actor.tutorialCleanPending[i]&&x-dx>=px-l&&x-dx<=px+r&&y-dy>=py-19&&y-dy<=py+5);
         if(hit<0)return false;
         actor.tutorialCleanPending[hit]=1;
         [raisingFoods[0],raisingWaste[0],raisingFoods[1]][hit].present=false;publishRaising();return true;
@@ -1508,9 +1520,10 @@ export function createChampionshipStandaloneApp({
 
     placeRaisingFood({x,y,protein=false,checkpoint=null}={}) {
       if(tutorialBaseline){
-        if(protein||!tutorialInput(checkpoint,"feed","feed")||!Number.isFinite(x)||!Number.isFinite(y)||Math.abs(x-100)>12||Math.abs(y-120)>12)return {ok:false,reason:"TUTORIAL_TARGET_REQUIRED"};
+        const [dx,dy]=tutorialBoardOffset();
+        if(protein||!tutorialInput(checkpoint,"feed","feed")||!Number.isFinite(x)||!Number.isFinite(y)||Math.abs(x-dx-100)>12||Math.abs(y-dy-120)>12)return {ok:false,reason:"TUTORIAL_TARGET_REQUIRED"};
         const actor=raisingActors.get(creature.creatureId);
-        raisingFoods=[createNativeRaisingFood({slot:0,cageDefinitionIndex:35,positionQ12:[100*4096,120*4096,0]})];
+        raisingFoods=[createNativeRaisingFood({slot:0,cageDefinitionIndex:35,positionQ12:tutorialPointQ12(100,120)})];
         if(!tutorialRaisingFeed(actor,raisingNativeProfile(creature.creatureId),raisingFoods)){raisingFoods=[];return {ok:false,reason:"TUTORIAL_FOOD_TARGET_UNAVAILABLE"};}
         tutorialNext("raising-feed-eat");return {ok:true,slot:0};
       }
@@ -1633,7 +1646,9 @@ export function createChampionshipStandaloneApp({
       if(!opening)return null;
       const checkpoint=opening.checkpoint,step=tutorialStep(checkpoint),actor=raisingActors.get(creature?.creatureId);
       const mask=checkpoint.stage==="raising-clean"?Math.max(0,checkpoint.message-1):0;
-      const targets=step?.action==="feed"?[[100,120]]:step?.action==="clean"?[[100,112],[160,92],[80,72]].filter((_,i)=>!(mask&(1<<i))):step?.cage===1?[[280,100]]:step?.cage===15?[[380,132]]:[];
+      const [dx,dy]=tutorialBoardOffset();
+      const targets=(step?.action==="feed"?[[100,120]]:step?.action==="clean"?[[100,112],[160,92],[80,72]].filter((_,i)=>!(mask&(1<<i))):step?.cage===1?[[280,100]]:step?.cage===15?[[380,132]]:[])
+        .map(([x,y])=>[x+dx,y+dy]);
       return Object.freeze({checkpoint,finished:['declined','completed'].includes(checkpoint.stage),textId:step?.textId??null,
         dialogue:step?.dialogue??false,action:step?.action??null,waiting:Boolean(step?.wait)||checkpoint.stage==="raising-hatch",
         tool:step?.tool??"hand",menuEntry:step?.menuEntry??'hunt',selectTool:step?.action!=="select"&&step?.action!=="camera",

@@ -67,11 +67,12 @@ export function tutorialRaisingTreat(actor,profile,kind,rng){
   actor.treatment=createNativeTreatmentPresentation({...result,kind,previous});return result;
 }
 const height=actor=>{const box=BATTLE_CHARACTER_PROFILES[BATTLE_SPECIES_ENTITIES[17]].cells[actor.animator.getSnapshot().cell];return box[3]-box[1];};
-export function tutorialRaisingCarry(actor,pointer){
+// The ground bounds a carry on a taller product ranch, as in normal Raising.
+export function tutorialRaisingCarry(actor,pointer,ground=null){
   if(![1,15,16].includes(actor.state))return false;
   actor.previousCageDefinition=actor.cageDefinitionIndex;actor.detached=true;actor.state=6;
   actor.carryPointer={...pointer};actor.velocityQ12=[0,0,0];request(actor,11);
-  actor.positionQ12=nativeCarryPosition(pointer,height(actor));return true;
+  actor.positionQ12=nativeCarryPosition(pointer,height(actor),ground);return true;
 }
 export function tutorialRaisingRelease(actor){
   if(actor.state!==6)return false;
@@ -114,7 +115,7 @@ export function stepNativeTutorialRaisingActor(actor,profile,{rng,ground,foods=[
       if(result.leave){food.occupants[actor.station]=null;tutorialRaisingIdle(actor);if(result.reaction!==null)reaction(actor,result.reaction,ground);}
     }
   }else if(actor.state===6){
-    const position=nativeCarryPosition(actor.carryPointer,height(actor));
+    const position=nativeCarryPosition(actor.carryPointer,height(actor),ground);
     actor.velocityQ12=nativeCarryVelocity(actor.velocityQ12,actor.positionQ12,position);actor.positionQ12=position;
   }else if(actor.state===7){
     const flight=stepNativeRaisingFlight(actor,ground,{rng,poolSlot:actor.poolSlot,cameraX:actor.carryPointer.cameraX??0});Object.assign(actor,flight);
