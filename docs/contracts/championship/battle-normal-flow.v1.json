@@ -108,6 +108,7 @@
     "traced": {
       "personality": "stats +0x18. Owned individuals: native field 018. Free Battle presets: +0x3C passed by OVL10 0x02110618 to 0x02062900 (r3) inside builder 0x02110550, which 0x02111070 calls for mode 2.",
       "policy": "Team block +0x24 + member*4 (getter 0x020925DC, setter 0x02092568). Team init 0x020924A0 writes 1; the team-setup menu (0x020525A0 / 0x020525CC) changes it. Free Battle presets: +0x42 (4 for all 120) via 0x02110A1C. 0x0210CBB8..0x0210CBD8 copies it to combatant +0x18 (profile).",
+      "policyMenu": "Traced 2026-10-28 (docs/reports/battle-tactics-policy-trace-2026-10-28/TRACE_ZH_TW.md): the team-setup menu stores the chosen row index as the policy. Builder 0x0205096C adds rows with label frames 1/2/4 of battle_setting_obj_main (anim k = cell k); open 0x020515E4.. sets the cursor from getter 0x020925DC; confirm 0x020525A0/0x020525CC writes 0x0205A570 (row) through setter 0x02092568. Policy 0 = スペシャルアタック (必殺技優先), 1 = ノーマルアタック (普通攻擊, default), 2 = サポート (支援優先); 3 and 4 are never offered by the menu. 0x020523A0 resets a newly placed member to 1. Help text help_text_txt.dat #159.",
       "policyResolution": "OVL19 0x021143D8 at battle start: policy 3 -> profile = u32 table 0x0212FF0C [1,0,0,2,1,2,0,1] by personality, +0x9A bit0 cleared; any other policy is kept and sets +0x9A bit0.",
       "targetSelector": "0x021158E4..0x021158F8: u32 table 0x0212FEEC [0,12,8,12,1,5,2,8] indexed by PERSONALITY, handed to 02111F20. The baseline targetProfiles 0/12/8 are this table's first three words read by profile.",
       "temper": "0x0210D880 threshold [100,100,100,9999,50,9999,50,9999] by personality (already in battleFrameLoop); counter +0x22 rises +1 per normal hit taken, +10 per special hit taken, +20 to living allies when a teammate is downed.",
@@ -129,7 +130,6 @@
     ],
     "open": [
       "The original team-setup policy menu (作戰方針) is not built; owned members always run policy 1, so policy 3's personality profile is reachable only by data",
-      "Profile labels (必殺技優先 / 支援優先 / 普通攻擊) are not bound to profile numbers by a traced read",
       "ROM personality 8 with policy 3 would index past table 0x0212FF0C; it stays BASELINE"
     ]
   }

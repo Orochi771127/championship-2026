@@ -1,0 +1,45 @@
+{
+  "id": "BATTLE_TACTICS_20261028",
+  "classification": "ROM_VERIFIED structure (team-setup policy menu) with an OWNER_APPROVED_ADAPTATION of where the menu lives and which modes read it",
+  "supersedes": {
+    "contract": "docs/contracts/championship/HEX_CAGE_WORLD_20261026.json",
+    "sourceLock": "src/championship/app/championshipStandaloneSave.js"
+  },
+  "evidence": "docs/reports/battle-tactics-policy-trace-2026-10-28/TRACE_ZH_TW.md",
+  "policyRows": {
+    "0": "スペシャルアタック / 必殺技優先",
+    "1": "ノーマルアタック / 普通攻擊 (team-init default)",
+    "2": "サポート / 支援優先"
+  },
+  "notOffered": {
+    "3": "personality profile (data only)",
+    "4": "Free Battle preset opponents only"
+  },
+  "saveField": {
+    "path": "progression.battleTactics",
+    "shape": "object: raising instance id -> 0 or 2; an absent id means 1",
+    "normalizer": "normalizeBattleTactics in src/championship/app/championshipStandaloneSave.js drops any other value or malformed id",
+    "migration": "none needed: older saves have no field and every partner reads the default 1, exactly as before"
+  },
+  "readers": [
+    "Free Battle (mode 2)",
+    "Practice (mode 5)"
+  ],
+  "notChanged": [
+    "Title, championship, password and link battles keep BASELINE and ignore the plan",
+    "Damage, timing, AI tables, RNG and every other save slice"
+  ],
+  "sourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "3a72fce7d38151f473f343fb8b9f59349daef1beb7cb09b6a0547c628d07ac8e"
+  },
+  "historicalSourceLocks": {
+    "HEX_CAGE_WORLD_20261026": {
+      "src/championship/app/championshipStandaloneSave.js": "aaa72f6e08b150ac9bebb81fb2e6a8efefd532ab0ed7b7e24a7a0a9ae3d97f74"
+    }
+  },
+  "authorization": "Owner 2026-10-28: 「開始做賽前作戰方針選單：每隻參戰拍檔三選一（必殺技優先／普通攻擊／支援優先，預設普通攻擊），存進存檔，先在自由對戰與練習對戰生效（目前只有這兩個模式讀取方針），自審通過後 commit、push、整合到 main 並發佈。」",
+  "tests": [
+    "tests/championship-battle-tactics-cases.mjs"
+  ],
+  "physicalDeviceAccepted": false
+}

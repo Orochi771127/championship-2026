@@ -2656,3 +2656,33 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
   .cm-vs5-root :is(.cm-vs5-log__detail, .cm-vs5-result__body .cm-vs5-title, .cm-vs5-result__amount),
   .cm-vs5-root .cm-vs5-log__detail::after, .cm-vs5-root .cm-vs5-result__settlement::before { animation: none !important; }
 }
+
+/* ==== Battle plan (作戰方針), Owner 2026-10-28: one three-way choice per partner
+   in Free Battle (below the roster) and Practice (inside each row). ==== */
+.cm-vs5-tactics[hidden] { display: none; }
+.cm-vs5-tactics:not([hidden]) { display: grid; gap: 8px; margin-top: var(--sp-2); }
+.cm-vs5-tactics__title { margin: 0; font-size: var(--fs-body); font-weight: var(--fw-heavy); }
+.cm-vs5-tactics__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; }
+.cm-vs5-tactics__name { min-width: 0; overflow-wrap: anywhere; font-weight: var(--fw-strong); }
+.cm-vs5-tactic { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+.cm-vs5-tactic__label { font-size: var(--fs-label); font-weight: var(--fw-strong); white-space: nowrap; }
+.cm-vs5-tactic__select { min-height: var(--target); min-width: 0; max-width: 100%; padding: 0 8px; font: inherit; font-weight: var(--fw-strong); }
+.cm-vs5-practice-member > .cm-vs5-tactic { grid-column: 1 / -1; justify-content: space-between; }
+:root[data-theme="arcade"] .cm-vs5-tactics:not([hidden]) {
+  padding: 10px 12px;
+  border: var(--ax-border);
+  border-radius: 8px 18px 8px 18px;
+  background: var(--ax-paper);
+  color: var(--ax-ink);
+  box-shadow: var(--ax-hl), 0 5px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-tactics__title { color: var(--ax-ink); text-shadow: none; }
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-tactic__label { color: var(--ax-ink); text-shadow: none; }
+:root[data-theme="arcade"] .cm-vs5-tactic__select {
+  border: var(--ax-border);
+  border-radius: var(--r-control);
+  background: linear-gradient(180deg, #fff8d6, var(--ax-yellow));
+  color: var(--ax-ink);
+  box-shadow: 0 3px 0 var(--ax-ink);
+}
+.cm-vs5-tactics .cm-vs5-tactic__label { display: none; }
