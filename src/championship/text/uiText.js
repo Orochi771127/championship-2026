@@ -8,6 +8,12 @@ import { PATTERNS_VI, TEXT_VI, UI_COPY_VI } from "./uiText.vi.js";
 
 export const UI_COPY = Object.freeze({
   "RANCH_JOURNAL_TITLE": "探索手帳",
+  "STORY_BADGE": "📖 裂縫觀測",
+  "STORY_BADGE_LABEL": "開啟故事章節：裂縫觀測",
+  "STORY_MENU": "故事章節",
+  "STORY_MENU_HINT": "裂縫觀測與雜訊劇情",
+  "STORY_AUTO": "自動",
+  "STORY_SKIP": "⏭ 跳過劇情",
   "RANCH_JOURNAL_ABOUT": "搭檔會沿相通的步道散步。全牧場每 2 小時累積 1 份發現，最多保留 12 份；離線照樣累積，已找到的東西不會過期。地塊與搭檔數量不增加產出速度。",
   "RANCH_JOURNAL_EMPTY": "搭檔正在慢慢探索，等牠有發現再回來看看。",
   "RANCH_JOURNAL_NONE": "有孵化後的搭檔住進牧場後，就會開始累積發現。",

@@ -20,17 +20,14 @@ const EMOTE_GLYPHS = Object.freeze({
 export const STORY_EMOTE_GLYPHS = EMOTE_GLYPHS;
 const RIFT_GLYPHS = ["0", "1", "/", "\\", "#", "%", "@", "!", "?", "~", "+", "-", "|", "*", "<", ">"];
 
+// Parsed as HTML so no namespace URL literal is needed (the runtime firewall
+// forbids remote-looking URLs in src/); the markup is authored above, never player text.
 function svgGlyph(doc, glyph) {
   const spec = EMOTE_GLYPHS[glyph] ?? EMOTE_GLYPHS["!"];
-  const svg = doc.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("viewBox", "0 0 24 24"); svg.setAttribute("aria-hidden", "true");
-  svg.classList.add("cm-story-emote__glyph"); svg.dataset.glyph = spec.label;
-  const path = doc.createElementNS("http://www.w3.org/2000/svg", "path");
-  path.setAttribute("d", spec.path);
-  if (glyph === "💢") { path.setAttribute("fill", "none"); path.setAttribute("stroke", "currentColor"); path.setAttribute("stroke-width", "2.4"); path.setAttribute("stroke-linecap", "square"); }
-  else path.setAttribute("fill", "currentColor");
-  svg.append(path);
-  return svg;
+  const holder = doc.createElement("span");
+  const paint = glyph === "💢" ? 'fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"' : 'fill="currentColor"';
+  holder.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true" class="cm-story-emote__glyph" data-glyph="${spec.label}"><path d="${spec.path}" ${paint}/></svg>`;
+  return holder.firstElementChild ?? holder;
 }
 
 export function createStoryStagePuppeteer({

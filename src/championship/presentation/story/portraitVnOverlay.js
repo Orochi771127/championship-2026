@@ -65,7 +65,8 @@ export function createPortraitVnOverlay({ doc = globalThis.document, host = doc.
 
   function paintPortrait(side, portrait, motion, name, active) {
     const figure = portraits[side];
-    if (!portrait) { figure.hidden = true; return; }
+    // No picture, no box: a missing hero portrait never leaves a blank card over the stage.
+    if (!portrait || (portrait.kind !== "navi" && !portrait.src)) { figure.hidden = true; return; }
     figure.hidden = false; figure.dataset.kind = portrait.kind; figure.dataset.active = String(active);
     if (figure.dataset.key !== `${portrait.kind}:${portrait.src ?? ""}`) {
       figure.dataset.key = `${portrait.kind}:${portrait.src ?? ""}`; figure.replaceChildren();

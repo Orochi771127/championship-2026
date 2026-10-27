@@ -90,6 +90,11 @@ import { createHuntLayoutResolver } from './huntLayoutResolver.js';
 import { showChoiceDialog, isChoiceDialogOpen } from './uiDialog.js';
 import { openRanchBackpack } from './ranchBackpack.js';
 import { RANCH_JOURNAL_OPEN_EVENT } from './ranchDiscoveryJournal.js';
+// Story theater (Owner 2026-10-28): the rift chapters over the live ranch.
+import { STORY_CHAPTER_OPEN_EVENT, STORY_FIRST_CHAPTER_ID } from './ranchStoryBadge.js';
+import { createHybridStoryDirector } from '../presentation/story/HybridStoryDirector.js';
+import { createStoryStagePuppeteer } from '../presentation/story/storyStagePuppeteer.js';
+import { createPortraitVnOverlay } from '../presentation/story/portraitVnOverlay.js';
 import { mountAmbience } from './ui/ambienceLayer.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, createAssetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
@@ -127,7 +132,7 @@ import { resolveSceneMusic } from '../presentation/sceneMusicCatalog.js';
 import { ORIGINAL_MUSIC_CUES, selectOriginalMusic } from '../presentation/originalMusicCatalog.js';
 import { cappedPixelRatio, currentQuality, currentQualityTier, highlightMode, prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { resultHeroAnchor, resultStageLight } from '../presentation/battleResultCharacters.js';
-import { formatDateTime, formatList, onLocaleChange } from '../text/locale.js';
+import { formatDateTime, formatList, onLocaleChange, getLocale } from '../text/locale.js';
 import { retranslate, setLabel, setText, uiText } from '../text/uiText.js';
 
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
@@ -927,6 +932,7 @@ async function mountRaisingHome() {
     openRoster: () => runToolbarMenuEntry({ id: "digimon", screen: CHAMPIONSHIP_SCREENS.DIGIMON_LIST }),
     firstRunHint: true, // UI entry guidance; its first-use preference is not calendar/save state.
     nextHintDuration: () => consumeRaisingHintDuration(settings.store),
+    storySeen: () => settings.store.get().storyRiftChapter1Seen === true,
     mountField({ host, recoveryHost, source: fieldSource, onTrainingFrame }) {
       let closed = false, attempt = null, effects = null, scene = null, phase = 'loading';
       let residentStates = [], lastFrame = fieldSource.getFrame();
@@ -1124,6 +1130,8 @@ async function mountRaisingHome() {
         render(frame) { lastFrame = frame; scene?.render(frame); },
         actorScreenRect(id) { return scene?.actorScreenRect?.(id) ?? null; },
         focusResident(id, options) { return scene?.focusResident?.(id, options) ?? false; },
+        setStoryPuppet(id, options) { return scene?.setStoryPuppet?.(id, options) ?? false; },
+        clearStoryPuppet(id) { scene?.clearStoryPuppet?.(id); },
         getDiagnostics() { return scene?.getDiagnostics?.() ?? { renderer: 'LOADING', state: phase }; },
         dispose() {
           if (closed) return; closed = true; residentNotice.dispose();
@@ -1146,6 +1154,7 @@ async function mountRaisingHome() {
   return Object.freeze({
     render: p1r.render, inspect: p1r.inspect, relabel: p1r.relabel,
     get isPlayable() { return p1r.isPlayable; },
+    get storyStage() { return disposed ? null : p1r.storyStage; },
     dispose() { disposed = true; hudLoad?.cancel(); p1r.dispose(); }
   });
 }
@@ -2111,6 +2120,7 @@ function runToolbarMenuEntry(entry,context={}) {
   // Owner 2026-10-27: the bag and the discovery journal, from the System menu.
   if (entry.action === "OPEN_BACKPACK") { void openRanchBackpack({ getShopFrame: () => app.getShopFrame() }); return; }
   if (entry.action === "OPEN_RANCH_JOURNAL") { document.dispatchEvent(new CustomEvent(RANCH_JOURNAL_OPEN_EVENT)); return; }
+  if (entry.action === "OPEN_STORY") { void playStoryChapter(STORY_FIRST_CHAPTER_ID, { source: 'menu' }); return; }
   if (entry.action === "END_DAY") {
     app.requestRaisingDayEnd();
     clockDriver?.reset();
@@ -2365,6 +2375,54 @@ function installHomeEntries() {
     expeditionSource?.intents.openCageEdit();
   });
 }
+
+// Story theater (Owner 2026-10-28, OWNER_APPROVED_ADAPTATION of presentation):
+// a rift chapter plays over the live ranch with the partner's own sprite and a
+// portrait dialogue box. The clock pauses for its length; nothing is written
+// but the device-scope "seen" preference. Refused, never queued, while the
+// ranch is not ready, the tutorial runs or a dialog is open.
+let storyRun = null;
+function speciesIndexOf(speciesId) { const match = /species-([0-9]{3})$/.exec(speciesId ?? ''); return match ? Number(match[1]) : null; }
+async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = 'menu' } = {}) {
+  if (storyRun) return storyRun;
+  const stageView = view?.storyStage ?? null;
+  const tutorial = app.getInteractiveTutorial();
+  if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME || mountedScreen !== app.getScreen() || !stageView || view?.isPlayable === false) return Object.freeze({ outcome: 'refused', reason: 'STAGE_NOT_READY', chapterId });
+  if (tutorial && !tutorial.finished) return Object.freeze({ outcome: 'refused', reason: 'TUTORIAL_ACTIVE', chapterId });
+  if (isChoiceDialogOpen() || app.hasRaisingPresentation()) return Object.freeze({ outcome: 'refused', reason: 'SCREEN_BUSY', chapterId });
+  const frame = stageView.getFrame();
+  // The selected partner acts; otherwise the first hatched one (eggs are species 0-7 and cannot act).
+  const resident = frame.residents.find(r => r.creatureId === frame.selection?.creatureId)
+    ?? frame.residents.find(r => (speciesIndexOf(r.speciesId) ?? 0) >= 8) ?? frame.residents[0];
+  if (!resident) return Object.freeze({ outcome: 'refused', reason: 'NO_PARTNER', chapterId });
+  const reducedMotion = prefersReducedMotion(), quality = currentQualityTier();
+  const overlay = createPortraitVnOverlay({ reducedMotion });
+  const stage = createStoryStagePuppeteer({ host: stageView.host, field: stageView.field, partnerCreatureId: resident.creatureId, reducedMotion, quality });
+  const director = createHybridStoryDirector({ stage, overlay, locale: getLocale(), reducedMotion });
+  const speciesIndex = speciesIndexOf(resident.speciesId);
+  const params = { tamer: app.getOpeningState()?.trainerName ?? '', partner: resident.displayName ?? (speciesIndex !== null ? speciesName(speciesIndex) : ''), partnerPortrait: speciesIndex !== null ? databaseHeroPortrait(speciesIndex) : null };
+  recoveryDiagnostics.record('STORY', { chapterId, source, stage: 'start' });
+  clockDriver?.setActive(false);
+  root.dataset.storyPlaying = chapterId;
+  storyRun = (async () => {
+    try { return await director.play(chapterId, params); }
+    finally {
+      stage.dispose(); overlay.dispose();
+      delete root.dataset.storyPlaying;
+      clockDriver?.setActive(!root.hidden);
+    }
+  })();
+  try {
+    const result = await storyRun;
+    if (result.outcome === 'completed' || result.outcome === 'skipped') {
+      if (chapterId === STORY_FIRST_CHAPTER_ID) { try { settings.store.set('storyRiftChapter1Seen', true); } catch { /* read-only store */ } }
+      document.querySelector('.int-rh2-story')?.setAttribute('data-new', 'false');
+    }
+    recoveryDiagnostics.record('STORY', { chapterId, source, stage: result.outcome });
+    return result;
+  } finally { storyRun = null; }
+}
+document.addEventListener(STORY_CHAPTER_OPEN_EVENT, event => { void playStoryChapter(event.detail?.chapterId ?? STORY_FIRST_CHAPTER_ID, { source: event.detail?.source ?? 'badge' }); });
 
 // Owner 2026-10-28: guest identity, tamer cards and story chapters answer
 // locally today (futureSystemsPort.js); an account backend replaces adapters.

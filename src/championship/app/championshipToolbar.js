@@ -95,6 +95,8 @@ export const TOOLBAR_PRODUCT_ENTRIES = Object.freeze({
     // Owner 2026-10-27: the bag shows what the shop and the partners' walks put in it.
     Object.freeze({ id: "backpack", label: "背包", action: "OPEN_BACKPACK", hint: "道具、用品與探索發現", evidence: "OWNER_APPROVED_ADAPTATION_20261027" }),
     Object.freeze({ id: "journal", label: "探索手帳", action: "OPEN_RANCH_JOURNAL", hint: "夥伴散步找到的東西", evidence: "OWNER_APPROVED_ADAPTATION_20261027" }),
+    // Owner 2026-10-28: the story theater's rift chapters, from the System menu as well as the ranch badge.
+    Object.freeze({ id: "story", label: "STORY_MENU", action: "OPEN_STORY", hint: "STORY_MENU_HINT", evidence: "OWNER_APPROVED_ADAPTATION_20261028" }),
     Object.freeze({ id:"medals", label:"徽章收藏", screen:"MEDALS", hint:"61 場頭銜賽的勝利紀錄", originalRuntimeOnly:true, evidence:"OWNER_APPROVED_ADAPTATION_20261007" }),
     Object.freeze({ id: "settings", label: "Settings", action: "OPEN_SETTINGS", hint: "主題、畫質、聲音與語言", evidence: "PRODUCT_AUTHORED" })
   ])
@@ -125,7 +127,7 @@ export const TOOLBAR_MENU_GROUPS = Object.freeze({
   // hides the dock, still finds them here.
   SYSTEM: Object.freeze([
     Object.freeze({ id: "go", title: "出發", entries: Object.freeze(["hunt", "battle", "shop"]), prominent: true }),
-    Object.freeze({ id: "items", title: "背包與收藏", entries: Object.freeze(["backpack", "journal", "medals", "database"]) }),
+    Object.freeze({ id: "items", title: "背包與收藏", entries: Object.freeze(["backpack", "journal", "story", "medals", "database"]) }),
     Object.freeze({ id: "session", title: "系統", entries: Object.freeze(["help", "settings", "saveQuit"]), separate: true })
   ])
 });

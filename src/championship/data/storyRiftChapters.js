@@ -28,12 +28,12 @@ const freezeDeep = value => {
   return value;
 };
 
-/** Speaker display names per locale; the partner is the player's own partner. */
-export const STORY_RIFT_SPEAKERS = freezeDeep({"navi":{"zh-Hant":"大會導覽 NAVI","en":"Tournament Guide NAVI","ja":"大会ナビ NAVI","th":"ไกด์การแข่งขัน NAVI","vi":"Hướng dẫn giải đấu NAVI"},"partner":{"zh-Hant":"{partner}","en":"{partner}","ja":"{partner}","th":"{partner}","vi":"{partner}"},"echo":{"zh-Hant":"雜訊殘響","en":"Noise Echo","ja":"ノイズの残響","th":"เสียงสะท้อนแห่งนอยซ์","vi":"Dư âm Nhiễu"},"narrator":{"zh-Hant":"旁白","en":"Narrator","ja":"ナレーション","th":"ผู้บรรยาย","vi":"Người dẫn chuyện"}});
+/** Speakers by name key in STORY_RIFT_COPY; the partner is the player's own partner. */
+export const STORY_RIFT_SPEAKERS = freezeDeep({"navi":{"nameKey":"SPEAKER_NAVI"},"partner":{"nameKey":"SPEAKER_PARTNER"},"echo":{"nameKey":"SPEAKER_ECHO"},"narrator":{"nameKey":"SPEAKER_NARRATOR"}});
 
 export const STORY_RIFT_CHAPTERS = freezeDeep({
   "prologue": {
-    title: {"zh-Hant":"序章：網線之海","en":"Prologue: The Sea of Wires","ja":"序章：ネットワークの海","th":"บทนำ: ทะเลแห่งสายเน็ต","vi":"Mở đầu: Biển Dây Mạng"},
+    titleKey: "TITLE_PROLOGUE",
     beats: [
       {"type":"line","speaker":"narrator","motion":"idle-breathe","key":"PRO_T1_SEA"},
       {"type":"line","speaker":"narrator","motion":"idle-breathe","key":"PRO_T2_WORLD"},
@@ -43,7 +43,7 @@ export const STORY_RIFT_CHAPTERS = freezeDeep({
     ]
   },
   "first-resonance": {
-    title: {"zh-Hant":"第一次共鳴","en":"First Resonance","ja":"はじめての共鳴","th":"การสั่นพ้องครั้งแรก","vi":"Cộng hưởng đầu tiên"},
+    titleKey: "TITLE_FIRST_RESONANCE",
     beats: [
       {"type":"camera","target":"partner","zoom":1.2,"ms":700},
       {"type":"emote","who":"partner","glyph":"🎵"},
@@ -56,7 +56,7 @@ export const STORY_RIFT_CHAPTERS = freezeDeep({
     ]
   },
   "chapter1-first-rift": {
-    title: {"zh-Hant":"第一章：初遇裂縫","en":"Chapter 1: The First Rift","ja":"第一章：はじめての裂け目","th":"บทที่ 1: รอยแยกแรก","vi":"Chương 1: Khe nứt đầu tiên"},
+    titleKey: "TITLE_CHAPTER1",
     beats: [
       {"type":"line","speaker":"narrator","motion":"idle-breathe","key":"C1_NARR_OPEN"},
       {"type":"rift","state":"open","anchor":"edge-left"},
@@ -93,6 +93,13 @@ export const STORY_RIFT_CHAPTERS = freezeDeep({
 /** Scoped five-locale dictionary; scripts/check-locale-coverage.mjs registers it. */
 export const STORY_RIFT_COPY = freezeDeep({
   "zh-Hant": {
+    "SPEAKER_NAVI": "大會導覽 NAVI",
+    "SPEAKER_PARTNER": "{partner}",
+    "SPEAKER_ECHO": "雜訊殘響",
+    "SPEAKER_NARRATOR": "旁白",
+    "TITLE_PROLOGUE": "序章：網線之海",
+    "TITLE_FIRST_RESONANCE": "第一次共鳴",
+    "TITLE_CHAPTER1": "第一章：初遇裂縫",
     "PRO_T1_SEA": "人們在網路上留下的每一句話——爭吵、焦慮、期盼——日夜不停，匯成了一片看不見的海。",
     "PRO_T2_WORLD": "經過無數次演算，這片海在網線深處結晶，誕生了會呼吸的世界——網線拍檔的世界。",
     "PRO_T3_NOISE": "但失控的極端情緒凝結成惡意雜訊，撕開次元裂縫。每四年舉辦一次的拍檔錦標賽，再次召集馴獸師。",
@@ -122,6 +129,13 @@ export const STORY_RIFT_COPY = freezeDeep({
     "C1_NARR_CLOSE": "那天，第一道裂縫在你面前合上。而你知道，它一定會再次打開。"
   },
   "en": {
+    "SPEAKER_NAVI": "Tournament Guide NAVI",
+    "SPEAKER_PARTNER": "{partner}",
+    "SPEAKER_ECHO": "Noise Echo",
+    "SPEAKER_NARRATOR": "Narrator",
+    "TITLE_PROLOGUE": "Prologue: The Sea of Wires",
+    "TITLE_FIRST_RESONANCE": "First Resonance",
+    "TITLE_CHAPTER1": "Chapter 1: The First Rift",
     "PRO_T1_SEA": "Every word people leave online — every argument, every worry, every hope — flows night and day into an unseen sea.",
     "PRO_T2_WORLD": "Run through countless computations, that sea crystallized deep within the wires, and a living world was born: the world of cyber partners.",
     "PRO_T3_NOISE": "But runaway extreme emotion condensed into malicious Noise and tore open dimensional rifts. The Partner Tournament, held once every four years, calls its tamers once more.",
@@ -151,6 +165,13 @@ export const STORY_RIFT_COPY = freezeDeep({
     "C1_NARR_CLOSE": "That day, the first rift closed before your eyes. And you knew it would open again."
   },
   "ja": {
+    "SPEAKER_NAVI": "大会ナビ NAVI",
+    "SPEAKER_PARTNER": "{partner}",
+    "SPEAKER_ECHO": "ノイズの残響",
+    "SPEAKER_NARRATOR": "ナレーション",
+    "TITLE_PROLOGUE": "序章：ネットワークの海",
+    "TITLE_FIRST_RESONANCE": "はじめての共鳴",
+    "TITLE_CHAPTER1": "第一章：はじめての裂け目",
     "PRO_T1_SEA": "人々がネットに残した言葉——争い、不安、願い——は昼も夜も流れ続け、見えない海になった。",
     "PRO_T2_WORLD": "数えきれない演算を経て、その海はネットワークの奥で結晶し、呼吸する世界が生まれた。ネットワークパートナーの世界だ。",
     "PRO_T3_NOISE": "だが暴走した極端な感情は悪意のノイズとなり、次元の裂け目を引き裂いた。四年に一度のパートナー選手権が、再びテイマーを招集する。",
@@ -180,6 +201,13 @@ export const STORY_RIFT_COPY = freezeDeep({
     "C1_NARR_CLOSE": "その日、最初の裂け目は目の前で閉じた。そして君は知っていた——それは必ず、また開く。"
   },
   "th": {
+    "SPEAKER_NAVI": "ไกด์การแข่งขัน NAVI",
+    "SPEAKER_PARTNER": "{partner}",
+    "SPEAKER_ECHO": "เสียงสะท้อนแห่งนอยซ์",
+    "SPEAKER_NARRATOR": "ผู้บรรยาย",
+    "TITLE_PROLOGUE": "บทนำ: ทะเลแห่งสายเน็ต",
+    "TITLE_FIRST_RESONANCE": "การสั่นพ้องครั้งแรก",
+    "TITLE_CHAPTER1": "บทที่ 1: รอยแยกแรก",
     "PRO_T1_SEA": "ทุกถ้อยคำที่ผู้คนทิ้งไว้บนโลกออนไลน์ ทั้งการทะเลาะ ความกังวล และความหวัง ไหลรวมกันทั้งวันทั้งคืนเป็นทะเลที่มองไม่เห็น",
     "PRO_T2_WORLD": "ผ่านการคำนวณนับไม่ถ้วน ทะเลนั้นตกผลึกอยู่ลึกในสายเน็ต และโลกที่มีชีวิตก็ถือกำเนิดขึ้น นั่นคือโลกของไซเบอร์พาร์ตเนอร์",
     "PRO_T3_NOISE": "แต่อารมณ์สุดขั้วที่ควบคุมไม่ได้กลั่นตัวเป็นนอยซ์ร้าย ฉีกรอยแยกมิติให้เปิดออก การแข่งขันพาร์ตเนอร์ที่จัดขึ้นทุกสี่ปี เรียกเทมเมอร์กลับมาอีกครั้ง",
@@ -209,6 +237,13 @@ export const STORY_RIFT_COPY = freezeDeep({
     "C1_NARR_CLOSE": "วันนั้น รอยแยกแรกปิดลงต่อหน้าคุณ และคุณรู้ดีว่า มันจะเปิดขึ้นอีกครั้งแน่นอน"
   },
   "vi": {
+    "SPEAKER_NAVI": "Hướng dẫn giải đấu NAVI",
+    "SPEAKER_PARTNER": "{partner}",
+    "SPEAKER_ECHO": "Dư âm Nhiễu",
+    "SPEAKER_NARRATOR": "Người dẫn chuyện",
+    "TITLE_PROLOGUE": "Mở đầu: Biển Dây Mạng",
+    "TITLE_FIRST_RESONANCE": "Cộng hưởng đầu tiên",
+    "TITLE_CHAPTER1": "Chương 1: Khe nứt đầu tiên",
     "PRO_T1_SEA": "Mỗi lời người ta để lại trên mạng — mỗi cuộc cãi vã, mỗi nỗi lo, mỗi hy vọng — ngày đêm đổ về, hợp thành một đại dương vô hình.",
     "PRO_T2_WORLD": "Qua vô số lần tính toán, đại dương ấy kết tinh sâu trong lòng dây mạng, và một thế giới biết thở ra đời: thế giới của những Cộng sự Mạng.",
     "PRO_T3_NOISE": "Nhưng cảm xúc cực đoan mất kiểm soát đã ngưng tụ thành Nhiễu độc hại, xé toạc những khe nứt chiều không gian. Giải đấu Cộng sự tổ chức bốn năm một lần lại triệu tập các tamer.",
@@ -252,12 +287,12 @@ export function storyRiftText(key, locale = "zh-Hant", params = {}) {
 }
 
 export function storyRiftSpeakerName(speakerId, locale = "zh-Hant", params = {}) {
-  const names = STORY_RIFT_SPEAKERS[speakerId];
-  if (!names) return null;
-  return storyRiftTextValue(names[locale] ?? names["zh-Hant"], params);
+  const speaker = STORY_RIFT_SPEAKERS[speakerId];
+  return speaker ? storyRiftText(speaker.nameKey, locale, params) : null;
 }
-function storyRiftTextValue(text, params) {
-  return String(text ?? "").replace(/{(tamer|partner)}/g, (_, name) => String(params[name] ?? ""));
+export function storyRiftChapterTitle(chapterId, locale = "zh-Hant") {
+  const chapter = storyRiftChapter(chapterId);
+  return chapter ? storyRiftText(chapter.titleKey, locale) : null;
 }
 
 /** Structural check used by the unit tests and by the director before play. */

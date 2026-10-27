@@ -19,6 +19,12 @@ import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_EN = Object.freeze({
   "RANCH_JOURNAL_TITLE": "Discovery journal",
+  "STORY_BADGE": "📖 Rift watch",
+  "STORY_BADGE_LABEL": "Open story chapter: rift watch",
+  "STORY_MENU": "Story",
+  "STORY_MENU_HINT": "Rift watch and the Noise story",
+  "STORY_AUTO": "Auto",
+  "STORY_SKIP": "⏭ Skip",
   "RANCH_JOURNAL_ABOUT": "Partners wander along connected paths. The whole ranch finds one gift every 2 hours, up to 12 stored, including offline time. Gifts never expire. Extra land or partners do not increase the rate.",
   "RANCH_JOURNAL_EMPTY": "Your partners are exploring at their own pace. Visit again when they have something to share.",
   "RANCH_JOURNAL_NONE": "Discoveries start once a hatched partner lives on the ranch.",

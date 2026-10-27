@@ -1,6 +1,7 @@
 import { createTransientHint, consumeRaisingHintDuration } from './transientHint.js';
 import {getLocale} from '../text/locale.js';
 import {mountRanchDiscoveryJournal} from './ranchDiscoveryJournal.js';
+import {mountRanchStoryBadge} from './ranchStoryBadge.js';
 import {productFormText} from '../text/productFormText.js';
 const evolutionChoiceTitle=()=>productFormText('choose');
 import { downloadSaveBackup } from './downloadSaveBackup.js';
@@ -88,7 +89,7 @@ function cageName(frame, cageId) {
  * @param {() => void} [options.openRoster] opens the Digimon roster
  */
 export async function createRaisingHomeP1RView({ root, source, mountField, hudArt=null, getRosterEntry=null,
-  renderCreatureDetail=null, openRoster=null, firstRunHint=false, nextHintDuration=consumeRaisingHintDuration } = {}) {
+  renderCreatureDetail=null, openRoster=null, firstRunHint=false, nextHintDuration=consumeRaisingHintDuration, storySeen=null } = {}) {
   if (!root) throw new TypeError("INT-RH2 P1R view requires a root element");
   const presentation = assertPresentationSource(source);
   if (typeof mountField !== "function") {
@@ -270,6 +271,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   shell.append(fieldFrame, hint, companion, notice);
   root.append(shell, detail);
   const discoveryJournal=mountRanchDiscoveryJournal(root,presentation);
+  // Story theater entry (Owner 2026-10-28): the rift-watch badge under the journal.
+  const storyBadge=mountRanchStoryBadge(root,{isSeen:()=>storySeen?.()===true});
   // Only genuinely overflowing text becomes a bounded scroll/focus surface.
   // Ordinary short hints stay transparent to field gestures.
   const hintSizeObserver = typeof ResizeObserver === 'function' ? new ResizeObserver(syncHintOverflow) : null;
@@ -469,6 +472,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   function render(frame) {
     if (disposed || !frame) return;
     discoveryJournal.update(frame);
+    storyBadge.update(frame);
     updateEntryHint(frame);
     if (frame.revision === lastRevision) return;
     lastRevision = frame.revision;
@@ -608,6 +612,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   return Object.freeze({
     render,
     get isPlayable() { return field.isPlayable !== false; },
+    /** What the story theater needs: the field host, the field presenter and the live frame. */
+    get storyStage() { return disposed ? null : Object.freeze({ host: fieldHost, field, getFrame: () => presentation.getFrame() }); },
     setHudArt(next) {
       if (disposed) return;
       unsubscribeHud?.(); hudArt = next;
@@ -639,6 +645,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       if (disposed) return;
       disposed = true;
       discoveryJournal.dispose();
+      storyBadge.dispose();
       hintTimer.dispose();
       hintSizeObserver?.disconnect();
       root.ownerDocument?.defaultView?.removeEventListener?.('resize', syncHintOverflow);

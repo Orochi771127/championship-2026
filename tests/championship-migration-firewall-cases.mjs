@@ -102,7 +102,9 @@ test("only the authorized source families are present", () => {
     // `text` joined on 2026-09-05: product-authored display copy, layered on top
   // of the ROM catalogs and keyed by their record indices. It holds no ROM
   // evidence and never replaces a transcription.
-  const authorized = ["app", "battle", "cage", "contracts", "database", "field", "gate", "hunt", "kernel", "modes", "presentation", "r2", "raising", "shop", "text", "time"];
+  // `data` joined on 2026-10-28 (Owner, story theater): the rift chapter script
+  // and its five-locale copy. Pure frozen data; no imports, no ROM evidence.
+  const authorized = ["app", "battle", "cage", "contracts", "data", "database", "field", "gate", "hunt", "kernel", "modes", "presentation", "r2", "raising", "shop", "text", "time"];
   const actual = fs.readdirSync(path.join(root, "src/championship"), { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)

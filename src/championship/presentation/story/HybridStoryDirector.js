@@ -119,7 +119,7 @@ export function createHybridStoryDirector({
       const onAuto = value => { auto = Boolean(value); };
       playing = (async () => {
         try {
-          overlay.open?.({ title: chapter.title?.[locale] ?? chapter.title?.["zh-Hant"] ?? chapterId, onSkip, onAuto, auto, signal: controller.signal });
+          overlay.open?.({ title: storyRiftText(chapter.titleKey, locale) ?? chapterId, onSkip, onAuto, auto, signal: controller.signal });
           await stage?.begin?.(controller.signal);
           await runBeats(chapter, params, log);
         } catch (error) {
