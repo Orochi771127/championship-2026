@@ -115,7 +115,7 @@ Do not infer current implementation state from one historical coordination file.
 | Historical licensed-remake visual specification; new original batch follows the dated priority above | [Licensed Remake Style Bible](art/CHAMPIONSHIP_2026_LICENSED_REMAKE_STYLE_BIBLE.md) |
 | Art batch order and A1 work packet | [Art Production Batch Plan](art/ART_PRODUCTION_BATCH_PLAN.md) |
 | Reference-to-production mapping | [Art Production Crosswalk](art/ART_PRODUCTION_CROSSWALK.json) |
-| 3D map diorama look (texel AO + ground repaint, Draco-locked) | [Diorama texel pass pipeline](art/production/ART_PRODUCTION_DIORAMA_TEXEL_PASS_ZH_TW.md) · [Cage batch 2026-10-26](reports/cage-diorama-2026-10-26/README_ZH_TW.md) |
+| 3D map diorama look (texel AO + ground repaint, Draco-locked) | [Diorama texel pass pipeline](art/production/ART_PRODUCTION_DIORAMA_TEXEL_PASS_ZH_TW.md) · [Cage batch 2026-10-26](reports/cage-diorama-2026-10-26/README_ZH_TW.md) · [Hunt HM10/11/13/14 3D](reports/hunt-three-c1-2026-10-26/README_ZH_TW.md) · [Hunt texel pass](reports/hunt-diorama-2026-10-26/README_ZH_TW.md) |
 | Complete production direction | [Master Game Production Plan](planning/CHAMPIONSHIP_2026_MASTER_GAME_PRODUCTION_PLAN.md) |
 | Solo + AI execution order | [Solo AI Parity-First Plan](planning/CHAMPIONSHIP_2026_SOLO_AI_PARITY_FIRST_PLAN_ZH_TW.md) |
 | Modular Cage requirement | [Modular Cage System Spec](planning/CHAMPIONSHIP_2026_MODULAR_CAGE_SYSTEM_SPEC_ZH_TW.md) |
