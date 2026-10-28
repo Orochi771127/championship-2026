@@ -1,7 +1,9 @@
 // Owner-authored rules for RELAY only. No source-game IDs, PP, stats or code.
 // The existing creature binding and the canonical save remain authoritative.
 import { DATA_ARENA_PARTNERS, DATA_ARENA_MOVES, DATA_ARENA_KITS } from './dataArenaConfig.js';
-import { RELAY_ROSTER, RELAY_ELEMENT_KITS, relayPartner } from './dataArenaRelayRoster.js';
+import { RELAY_ROSTER, relayPartner } from './dataArenaRelayRoster.js';
+import { RELAY_POOL_MOVE_ELEMENT, relayOwnMove, relayOwnMoveInfo, relaySpeciesKit } from './dataArenaRelayKits.js';
+import { RELAY_PALETTE_ELEMENT } from './dataArenaRelayElements.js';
 
 export const DATA_ARENA_RELAY = Object.freeze({ seconds: 150, switchCooldown: 6, knockoutSeconds: 1.1,
   tpMax: 100, tpRegen: 16, tpDelay: 0.6, ultimateTp: 80, ultimateCooldown: 12, playerHpScale: 1.8, rivalHpScale: 0.55 });
@@ -45,16 +47,28 @@ const extraMoves = Object.freeze({
   radiantDash: { type:'LUNGE', energy:22, cooldown:4.5, windup:.2, distance:230, speed:1050, width:56, damage:27, invulnerable:true },
   haloPulse: { type:'NOVA', energy:28, cooldown:5, windup:.3, radius:155, damage:29, effect:'NONE' },
   frostFan: { type:'SPREAD', energy:22, cooldown:2.6, windup:.24, range:450, speed:650, radius:9, damage:11, count:4, spread:.65, onHit:{slow:.3,slowSeconds:1.2}, onTerrain:'FREEZE' },
-  glacierGuard: { type:'BARRIER', energy:20, cooldown:7, windup:.16, duration:1.4, radius:64, arc:2.2 }
+  glacierGuard: { type:'BARRIER', energy:20, cooldown:7, windup:.16, duration:1.4, radius:64, arc:2.2 },
+  // Same-element replacements for the guards and dashes pools used to borrow
+  // from other elements (2026-10-28): numbers copied from the borrowed move.
+  tideGuard: { type:'BARRIER', energy:20, cooldown:7, windup:.16, duration:1.4, radius:64, arc:2.2 },
+  rockGuard: { type:'BARRIER', energy:20, cooldown:7, windup:.16, duration:1.2, radius:60, arc:2.2 },
+  stormGuard: { type:'BARRIER', energy:20, cooldown:7, windup:.16, duration:1.4, radius:64, arc:2.2 },
+  barkGuard: { type:'BARRIER', energy:20, cooldown:7, windup:.16, duration:1.4, radius:64, arc:2.2 },
+  duskGuard: { type:'BARRIER', energy:20, cooldown:7, windup:.16, duration:1.2, radius:60, arc:2.2 },
+  ironGuard: { type:'BARRIER', energy:20, cooldown:7, windup:.16, duration:1.4, radius:64, arc:2.2 },
+  boltDash: { type:'LUNGE', energy:22, cooldown:4.5, windup:.2, distance:230, speed:1050, width:56, damage:27, invulnerable:true },
+  thornRush: { type:'LUNGE', energy:22, cooldown:6, windup:.55, distance:300, speed:950, width:56, damage:24 }
 });
+// A roster partner's five choices: its own moves first, then its element pool.
+const RELAY_SPECIES_KITS = Object.freeze(Object.fromEntries(RELAY_ROSTER.map(p=>[p.id,relaySpeciesKit(p.speciesIndex,p.element,id=>relayMove(id)?.type)])));
 export const RELAY_LOADOUTS = Object.freeze({
-  ...Object.fromEntries(RELAY_ROSTER.map(p=>[p.id,Object.freeze([...RELAY_ELEMENT_KITS[p.element].moves])])),
+  ...Object.fromEntries(RELAY_ROSTER.map(p=>[p.id,RELAY_SPECIES_KITS[p.id].moves])),
   'ember-lizard': Object.freeze(['emberBolt','fangRush','flameRing','cinderGuard','clawSweep']),
   'corona-cub': Object.freeze(['sunSpear','sunShield','scatterLight','radiantDash','haloPulse']),
   'frost-drake': Object.freeze(['iceShard','frostStep','iceCage','frostFan','glacierGuard'])
 });
 export function relayKit(partnerId, selection) {
-  const allowed = RELAY_LOADOUTS[partnerId], base = DATA_ARENA_KITS[partnerId] ?? RELAY_ELEMENT_KITS[relayPartner(partnerId)?.element];
+  const allowed = RELAY_LOADOUTS[partnerId], base = DATA_ARENA_KITS[partnerId] ?? RELAY_SPECIES_KITS[partnerId];
   if (!allowed || !base) throw new RangeError('RELAY_UNKNOWN_PARTNER');
   const moves = [...new Set((Array.isArray(selection) ? selection : []).filter(id => allowed.includes(id)))];
   for (const id of base.moves) if (!moves.includes(id)) moves.push(id);
@@ -76,9 +90,65 @@ const styles = Object.freeze({
   light: Object.freeze({tint:0xffe48e,texture:'relayLance',cue:'ray'}),
   frost: Object.freeze({tint:0x9fe8ff,texture:'relayCrystal',cue:'frost'}),
   claw: Object.freeze({tint:0xffba73,texture:'relaySlash',cue:'claw'}),
-  water: Object.freeze({tint:0x7cdace,texture:'wave',cue:'splash'})
+  water: Object.freeze({tint:0x7cdace,texture:'wave',cue:'splash'}),
+  toxic: Object.freeze({tint:0xb98ae6,texture:'relayCrystal',cue:'splash'})
 });
-export function relayEffectStyle(id) {
+// Stage two looks (2026-10-28): every move draws as one of the 23 approved VFX
+// styles. `impact` names the hit burst, `tether` draws a beam from the caster
+// to the shot. Presentation only: no rule reads this table.
+const STYLE_LOOKS = Object.freeze({
+  strike:{texture:'relaySlash',impact:'star'}, claw:{texture:'relaySlash',impact:'star'}, slash:{texture:'relaySlash',impact:'star'},
+  pierce:{texture:'relayLance',impact:'star'}, vine:{texture:'relayThorn',impact:'leaf'}, thorn:{texture:'relayThorn',impact:'leaf'},
+  leaf:{texture:'relayLeaf',impact:'leaf'}, seed:{texture:'relaySeed',impact:'leaf'}, spore:{texture:'relaySpore',impact:'puff'},
+  missile:{texture:'relayMissile',impact:'blast'}, gatling:{texture:'relayBullet',impact:'spark'}, shell:{texture:'relayCrystal',impact:'spark'},
+  fireball:{texture:'relayFlame',impact:'ember'}, flame:{texture:'relayFlame',impact:'ember'}, water:{texture:'relayDrop',impact:'drop'},
+  ice:{texture:'relayCrystal',impact:'shard'}, thunder:{texture:'relayBolt',impact:'spark',tether:true}, quake:{texture:'relayRock',impact:'rock'},
+  wind:{texture:'relayWind',impact:'puff'}, holy:{texture:'relayLance',impact:'star',tether:true}, dark:{texture:'relayOrb',impact:'puff'},
+  sound:{texture:'relayRing',impact:'ring'}, beam:{texture:'relayLance',impact:'star',tether:true}
+});
+const POOL_STYLE = Object.freeze({
+  emberBolt:'fireball', fangRush:'pierce', flameRing:'flame', cinderGuard:'shell', clawSweep:'claw', coreNova:'flame',
+  iceShard:'ice', frostStep:'ice', iceCage:'ice', frostFan:'ice', glacierGuard:'shell', whiteout:'ice',
+  sunSpear:'holy', sunShield:'shell', scatterLight:'holy', radiantDash:'pierce', haloPulse:'holy', dawnLance:'beam',
+  tideBolt:'water', tideWave:'water', foamZone:'water', surfRush:'strike', tideGuard:'shell', vortex:'water',
+  shardVolley:'ice', quakeSlam:'quake', brutalCharge:'strike', rockGuard:'shell', shardStorm:'ice',
+  arcBolt:'thunder', arcFan:'thunder', arcField:'thunder', boltDash:'pierce', stormGuard:'shell', arcStorm:'thunder',
+  seedBolt:'seed', vineSnare:'vine', leafFan:'leaf', thornRush:'thorn', barkGuard:'shell', grovePulse:'vine',
+  shadeBolt:'dark', shadeStep:'dark', shadeField:'dark', duskGuard:'shell', nightPulse:'dark',
+  impactShot:'missile', ironGuard:'shell', impactNova:'quake',
+  relaySlash:'slash', relayPunch:'strike', relaySweep:'claw', relayRam:'strike', relayClaw:'claw'
+});
+// Ranged basics are shared by many partners, so they take the caster's element.
+const ELEMENT_SHOT = Object.freeze({ fire:'fireball', frost:'ice', light:'holy', water:'water', earth:'quake', storm:'thunder', nature:'seed', shadow:'dark', physical:'gatling' });
+const ELEMENT_LOOK = Object.freeze({ fire:'fire', frost:'frost', light:'light', water:'water', earth:'earth', storm:'storm', nature:'nature', shadow:'shadow', physical:'claw' });
+const RANGED_BASICS = new Set(['relayShot','relayRay','relayBreath','relayGust']);
+const paletteStyle = Object.freeze({ fire:'fire', water:'water', ice:'frost', thunder:'storm', wind:'storm', light:'light', dark:'shadow',
+  nature:'nature', toxic:'toxic', earth:'earth', metal:'earth', neutral:'claw', psychic:'light' });
+const look = (base, style) => Object.freeze({ ...base, style, ...STYLE_LOOKS[style] });
+/**
+ * The element a hit carries against cover (stage three): an own move's colour,
+ * a pool move's element, ranged basics take the caster's; body moves are physical.
+ */
+export function relayMoveElement(id, casterElement = null) {
+  const own = relayOwnMoveInfo(id);
+  if(own)return RELAY_PALETTE_ELEMENT[own.palette] ?? 'physical';
+  const element = RELAY_POOL_MOVE_ELEMENT[id];
+  if(element)return element === 'neutral' ? 'physical' : element;
+  if(RANGED_BASICS.has(id))return casterElement ?? 'physical';
+  return basics[id] ? 'physical' : casterElement ?? 'physical';
+}
+/** Colour, texture, cue, style, impact and tether for a move; `element` is the caster's (for basics). */
+export function relayEffectStyle(id, element = null) {
+  const own = relayOwnMoveInfo(id);
+  if(own)return look(styles[paletteStyle[own.palette] ?? 'claw'], own.style);
+  if(element && styles[ELEMENT_LOOK[element]] && (RANGED_BASICS.has(id) || /^relay/.test(id)))
+    return look(styles[ELEMENT_LOOK[element]], RANGED_BASICS.has(id) ? (id === 'relayGust' && element === 'physical' ? 'wind' : ELEMENT_SHOT[element]) : POOL_STYLE[id]);
+  const legacy = relayLegacyStyle(id);
+  return POOL_STYLE[id] ? look(legacy, POOL_STYLE[id]) : legacy;
+}
+function relayLegacyStyle(id) {
+  const element = RELAY_POOL_MOVE_ELEMENT[id];
+  if(styles[element])return styles[element];
   if(/^arc/.test(id))return styles.storm;
   if(/seed|vine|leaf|grove/.test(id))return styles.nature;
   if(/shade|night/.test(id))return styles.shadow;
@@ -96,7 +166,7 @@ export function relayTeamIds(firstId, reserveId) {
   return [firstId,DATA_ARENA_PARTNERS[(first+1)%DATA_ARENA_PARTNERS.length].id];
 }
 export function relayMove(id, ultimate = false) {
-  const base = basics[id] ?? extraMoves[id] ?? DATA_ARENA_MOVES[id];
+  const base = basics[id] ?? extraMoves[id] ?? DATA_ARENA_MOVES[id] ?? relayOwnMove(id);
   if (!base) return null;
   return { ...base, ...(id==='iceCage'?{freezeWater:true}:{}), windup: Math.max(base.windup ?? 0, 0.14),
     recovery: base.recovery ?? (base.type === 'LUNGE' ? 0.32 : base.type === 'NOVA' ? 0.48 : 0.28),

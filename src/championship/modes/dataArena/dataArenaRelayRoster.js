@@ -27,14 +27,6 @@ export const RELAY_ROSTER = Object.freeze(roster.entries.map(row => {
 const byId=new Map(RELAY_ROSTER.map(p=>[p.id,p]));
 export function relayPartner(id) { return byId.get(id) ?? null; }
 
-export const RELAY_ELEMENT_KITS=Object.freeze({
- fire:{moves:['emberBolt','fangRush','flameRing','cinderGuard','clawSweep'],ultimate:'coreNova'},
- frost:{moves:['iceShard','frostStep','iceCage','frostFan','glacierGuard'],ultimate:'whiteout'},
- light:{moves:['sunSpear','sunShield','scatterLight','radiantDash','haloPulse'],ultimate:'dawnLance'},
- water:{moves:['tideBolt','tideWave','foamZone','surfRush','glacierGuard'],ultimate:'vortex'},
- earth:{moves:['shardVolley','quakeSlam','brutalCharge','cinderGuard','clawSweep'],ultimate:'shardStorm'},
- storm:{moves:['arcBolt','arcFan','arcField','radiantDash','sunShield'],ultimate:'arcStorm'},
- nature:{moves:['seedBolt','vineSnare','leafFan','surfRush','glacierGuard'],ultimate:'grovePulse'},
- shadow:{moves:['shadeBolt','shadeStep','shadeField','clawSweep','cinderGuard'],ultimate:'nightPulse'},
- physical:{moves:['impactShot','clawSweep','brutalCharge','sunShield','quakeSlam'],ultimate:'impactNova'}
-});
+// Element pools now hold only their own element's moves (2026-10-28); they
+// live with the per-partner kit rules.
+export { RELAY_ELEMENT_KITS } from './dataArenaRelayKits.js';

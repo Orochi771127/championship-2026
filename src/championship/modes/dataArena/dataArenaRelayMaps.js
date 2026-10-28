@@ -4,6 +4,7 @@
 // No collision is inferred from illustration alpha or decorative objects.
 import terrain from '../../../data/championship/data-arena-relay-maps.v1.json' with {type:'json'};
 import { DATA_ARENA_TERRAIN as T, DATA_ARENA_DUEL_MAP } from './dataArenaConfig.js';
+import { relayFieldLayout } from './dataArenaRelayArena.js';
 
 export const RELAY_MAP_IDS=Object.freeze(Array.from({length:11},(_,i)=>`field_bm${String(i+1).padStart(2,'0')}_01`));
 const terrainById=Object.fromEntries(terrain.fields.map(f=>[f.fieldId,f]));
@@ -34,10 +35,20 @@ export function relayBattleMap(fieldId,portrait=false) {
   const player=nearest([32,19],candidates),seen=new Set([player.join(',')]),queue=[player];
   for(let i=0;i<queue.length;i++)for(const [dc,dr] of [[1,0],[-1,0],[0,1],[0,-1]]) { const [c,r]=queue[i],p=[c+dc,r+dr],key=p.join(',');if(dry(...p)&&!seen.has(key)){seen.add(key);queue.push(p);} }
   const rival=nearest([19,19],candidates.filter(p=>seen.has(p.join(','))));
+  // Stage three (2026-10-28): destructible cover becomes SOLID rects over the
+  // walkable grid; natural ice under a block is removed so a broken block
+  // leaves plain ground. Zones are cell centres for the timed arena events.
+  const layout=relayFieldLayout(fieldId,cells,new Set(naturalIce.map(([c,r])=>`${c},${r}`)),player,rival);
+  const covered=new Set(layout.cover.flatMap(([c,r,w,h])=>Array.from({length:w*h},(_,i)=>`${c+i%w},${r+Math.floor(i/w)}`)));
+  const ice=naturalIce.filter(([c,r])=>!covered.has(`${c},${r}`));
+  const cover=layout.cover.map(block=>({rectIndex:rects.push([...block,T.SOLID])-1,block}));
   const point=p=>portrait?relayRotateCell(p):p;
+  const rect=r=>portrait?relayRotateRect(r):r;
   return {battleFieldId:fieldId,portrait,cell:32,cols:portrait?34:52,rows:portrait?52:34,
-    rects:portrait?rects.map(r=>relayRotateRect(r)):rects,
-    naturalIce:portrait?naturalIce.map(r=>relayRotateRect(r)):naturalIce,
+    rects:rects.map(rect),
+    naturalIce:ice.map(rect),
     stage:null,pylons:[],flammable:[],pods:[],beacons:[],fireCores:[],gates:[],
+    cover:cover.map(({rectIndex,block})=>({rectIndex,rect:rect(block)})),coverMaterial:layout.theme?.material??null,
+    arenaZones:layout.zones.map(point),
     playerSpawn:point(player),mateSpawn:point(player),rivalSpawn:point(rival),bossSpawn:point(rival)};
 }

@@ -1,5 +1,19 @@
 # Championship Owner Direction
 
+<!-- record-id: ARENA_RELAY_KITS_20261028 -->
+## 2026-10-28 — Data Arena RELAY kits that fit each partner's element and own moves
+
+Owner directs, after the Pokémon Arena 2D study, a staged build of real-time partner battles: 「可以分階段做，然後盤點我們的角色幫他們配招要配適合的屬性還有招式就像不可能草系會發飛彈 …除了幼年期I跟幼年期II…其他都會進去可以選擇。那你自己分階段去做自己切片。」
+
+- OWNER_APPROVED_ADAPTATION: a RELAY partner's element is derived from its own moves' evidence colours (`scripts/build-data-arena-relay-kits.mjs`); the three Tournament partners keep their designed kits. Its five choices open with its own special moves (mechanic from the approved VFX style, side effects from the colour, no stage scaling) and fill only from its own element's pool.
+- Eligibility stays Rookie through Mega (196 identities). Report: `docs/reports/data-arena-relay-kits-2026-10-28/`.
+- After stage one the Owner directs 「先commit並接著做第二階段，然後那些衝突的顏色可以另外做一個符合的效果嗎？或是你找一些skill可以做Vfx特效」: commit to the feature branch and continue with stage two (VFX). No push, merge or deployment is authorized.
+- OWNER_APPROVED_ADAPTATION for the conflicts: 16 moves whose approved name names their substance against the original bank colour take the name's style and colour (`NAME_OVERRIDES` in `scripts/build-move-vfx-themes.mjs`), in the Dex, battle and arena alike.
+- Stage two is presentation only: per-style projectile heads, element-following basics, impact families, 60–80 ms drawing-only hit-stop, windup charge orbs, beam tethers and status particles in RELAY.
+- Owner then directs 「Start stage three」 (same terms: commit on the branch, no push). OWNER_APPROVED_ADAPTATION: each relay field gets destructible cover in its own material (weak elements deal 1.4x to cover; wood burns; broken cover opens a route) and timed arena zones (warning 2.5 s, active 6 s, every 22 s; one 0.7 s claim per team per cycle; effect by field theme). Rules in `dataArenaRelayArena.js`; cover and zones are game data over the existing field grids.
+- Owner then directs 「Start stage four」 (same terms). OWNER_APPROVED_ADAPTATION, RELAY only: a landed hit staggers its target 0.10–0.20 s (walking stops and a windup's clock pauses, never cancels); a product-authored element wheel scales hits 1.25x / 0.8x (physical outside it; not a claim about the original's untraced element rules); opposing shots clash both ways (water/frost meets fire = steam, waves swallow shots, the heavier shot survives, equals trade); fire thaws a root and frost puts a burn out.
+- Owner then directs 「Push and open PR」: push `feat/arena-relay-kits-20261028` (main merged in to clear doc/contract conflicts) and open a PR against main.
+- On 2026-10-29 the Owner directs 「然後合併111」: merge PR #111 to main, which publishes it through the Pages workflow; verify the live build afterwards.
 <!-- record-id: CAGE_GROUND_STANDARD_20261028 -->
 ## 2026-10-28 — Cage ground standard v1, track cage CM02, gym floors and lockers
 
