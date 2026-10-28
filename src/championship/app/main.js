@@ -104,7 +104,7 @@ import { createHighlightSequence } from '../presentation/highlight/createHighlig
 import { configureCeremonyAudio, playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
 import { createSkillCutInLayer } from '../presentation/juicy/skillCutIn.js';
 import { juicyPortrait, juicyPresentationEnabled } from '../presentation/juicy/juicyArt.js';
-import { installArcadeFx } from './ui/arcadeFx.js';
+import { installArcadeFx, requestArcadeFx } from './ui/arcadeFx.js';
 import { installTitleParade } from './titleParade.js';
 import { buildMedal, buildVersus } from '../presentation/ceremony/ceremonyScenes.js';
 import { createHighlightAudio } from '../presentation/highlight/highlightAudio.js';
@@ -126,10 +126,20 @@ import {
 // local simulation until a Supabase project is configured.
 import { createChampionshipCloudService } from '../online/championshipCloudService.js';
 import { resolveOnlineServiceConfig } from '../online/onlineServiceConfig.js';
-import { createOnlineAccountPanel } from './onlineAccountPanel.js';
+import { createOnlineAccountPanel, createPassportStrip, bindProviderFlow } from './onlineAccountPanel.js';
 import { createFriendsDrawer } from './friendsDrawer.js';
 import { mountRoomLobby, mountQuickMatchLobby } from './onlineBattleLobby.js';
 import { createAuthAndCloudSyncPort, createSocialFriendPort } from './futureSystemsPort.js';
+// Social (Owner 2026-10-29): community dock, first-bind gift, brag card.
+import { createSocialLinkDock } from './socialLinkDock.js';
+import { showBindRewardPopup } from './bindRewardPopup.js';
+import { openBragCardPreview, publicPlayUrl } from './bragCardPreview.js';
+import { sha256Hex } from '../online/cloudSaveEnvelope.js';
+import { onlineText, onlineReasonText, ONLINE_PROVIDER_NAMES } from '../text/onlineText.js';
+import { socialText } from '../text/socialText.js';
+import { generationName } from '../text/zhHant.js';
+import { NATIVE_RAISING_LIFECYCLE_RULES } from '../raising/nativeRaisingLifecycle.js';
+import { tamerCompletionPercent } from './tamerInfoScreen.js';
 import { createPreferenceStore } from './settings/preferenceStore.js';
 import { consumeRaisingHintDuration } from './transientHint.js';
 import { createPreferenceEnvironment } from './settings/preferenceEnvironment.js';
@@ -1866,6 +1876,9 @@ async function mountBattleResult() {
     return box && heroSlots.length ? resultHeroAnchor({ width: box.width, height: box.height, slots: heroSlots, layout: resultLayout }) : null;
   };
   const {createBattleResultView} = await import('./vs5Screens.js');
+  const matchTitle = chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
+    :chosen?.championship?uiText('{event} 第 {round} 戰',{event:uiText(chosen.recordIndex===0?'冠軍大會':'世界大會'),round:chosen.cursor+1})
+    :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null;
   const resultView=createBattleResultView({
     ceremonies: battleCeremonies,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
@@ -1878,9 +1891,7 @@ async function mountBattleResult() {
     // waits for portraits. The DOM result and its skip/exit controls do not.
     highlight: (request) => playResultHighlight(request,
       () => Promise.all([stageReady,hudReady]).then(([stage])=>stage), heroAnchor),
-    matchTitle: chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
-      :chosen?.championship?uiText('{event} 第 {round} 戰',{event:uiText(chosen.recordIndex===0?'冠軍大會':'世界大會'),round:chosen.cursor+1})
-      :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null,
+    matchTitle,
     hudArt,
     // exitBattle returns to the tournament board while the run is still owed
     // a round; the verdict is already recorded when this result mounts.
@@ -1888,6 +1899,8 @@ async function mountBattleResult() {
     statistics:tutorial?null:{battles:record?.battles??null,winPercent:nativeBattleWinPercent(record),titleCount:app.getBattleBadges().length},
     unlocks:battleProgressBefore?app.getShopFrame().listings.filter(item=>!battleProgressBefore.shopIds.includes(item.shopRecordIndex)).map(item=>({name:uiText(item.displayName)})):[],
     progression,
+    // Owner 2026-10-29: 📸 brag card for a won battle, starring the winning partner.
+    brag: battleResultBrag({ participants, matchTitle }),
     onExit() {
       if(tutorial){app.endInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
       battleRuntime?.dispose();
@@ -2017,7 +2030,7 @@ async function mountCurrentScreen() {
     else if (target === CHAMPIONSHIP_SCREENS.TAMER_INFO) {
       // OVL4 0210BB9C reads rank capacity/slots and lifetime completion counters.
       const shopFrame = app.getShopFrame?.() ?? null;
-      view = createTamerInfoView({
+      const tamerView = createTamerInfoView({
         root,
         walletBits: Number.isInteger(shopFrame?.bits) ? shopFrame.bits : null,
         titleCount:app.getBattleBadges().filter(id=>id>=0&&id<61).length,
@@ -2025,10 +2038,13 @@ async function mountCurrentScreen() {
         battleRecord:app.getTitleProgress().record??null,
         tamerRank: app.getTamerRank?.() ?? null,
         trainerName:app.getOpeningState()?.trainerName??null,
-        tamerCard:futureSystems().social.getTamerCard({trainerName:app.getOpeningState()?.trainerName??''}),
+        // Owner 2026-10-29: once the passport is linked the licence no longer reads as a guest pass.
+        tamerCard:(card=>onlineService().state.identity?.isAnonymous===false?{...card,mode:'LINKED'}:card)(futureSystems().social.getTamerCard({trainerName:app.getOpeningState()?.trainerName??''})),
         renderOnline: renderTamerOnline,
         onExit() { app.leaveScreen(); }
       });
+      // The passport and dock subscribe to the cloud service; they leave with the screen.
+      view = Object.freeze({ ...tamerView, dispose() { disposeTamerOnline(); tamerView.dispose(); } });
     }
     else if (target === CHAMPIONSHIP_SCREENS.GATE_SELECT) view = await mountGateSelect();
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) view = await createHuntLoadoutView({ root, source: expeditionSource });
@@ -2172,7 +2188,9 @@ async function openGameplay() {
       getFoodStock:()=>{const rows=app.getShopFrame()?.listings??[];return {
         feed:rows.find(r=>r.shopRecordIndex===0)?.owned,protein:rows.find(r=>r.shopRecordIndex===1)?.owned,
         medicine:rows.find(r=>r.shopRecordIndex===2)?.owned,woundMedicine:rows.find(r=>r.shopRecordIndex===3)?.owned};},
-      subscribeInventory:listener=>app.subscribeShop(listener)
+      subscribeInventory:listener=>app.subscribeShop(listener),
+      // Owner 2026-10-29: the System menu ends with the passport strip and the community dock.
+      menuExtras: systemMenuExtras
     });
   }
   listenPartnerFinds();
@@ -2196,6 +2214,8 @@ async function openGameplay() {
   mountedScreen = null;
   await mountCurrentScreen();
   resumeTutorialPresentation();
+  // Back from Google / Facebook / Discord (cloud configured only): finish the link inside the open session.
+  takeOnlineAuthReturn();
 }
 
 /**
@@ -2564,11 +2584,173 @@ async function restoreSaveFromCloud(payload) {
   setTimeout(() => location.reload(), 700);
   return adopted;
 }
+const localSaveText = () => { try { return app.persistenceFacade().exportRecovery().text ?? null; } catch { return null; } };
+/** This device's own tamer code (futureSystemsPort): shown before any online action, and the code a cloud profile adopts. */
+const localTamerCode = () => { try { return futureSystems().social.getTamerCard({ trainerName: app.getOpeningState()?.trainerName ?? '' }).code; } catch { return null; } };
+/** The 數碼通行證 panel's wiring (Owner 2026-10-29); one instance per host (settings, Tamer Info). */
+function createPassportPanel() {
+  return createOnlineAccountPanel({ service: onlineService(), confirm: showChoiceDialog, oauthProviders: onlineConfig.oauthProviders,
+    standalone: isInstalledWebApp(), getSaveText: localSaveText, restoreSave: restoreSaveFromCloud, fallbackCode: localTamerCode,
+    onProviderBound: provider => runBindReward(provider), downloadBackup: downloadLocalBackup });
+}
 function accountPanel() {
-  cloudAccountPanel ??= createOnlineAccountPanel({ service: onlineService(), confirm: showChoiceDialog, googleSignIn: onlineConfig.googleSignIn,
-    getSaveText: () => { try { return app.persistenceFacade().exportRecovery().text ?? null; } catch { return null; } },
-    restoreSave: restoreSaveFromCloud });
+  cloudAccountPanel ??= createPassportPanel();
   return cloudAccountPanel;
+}
+/** 💾 The local save as a file, offered before a cloud copy replaces it. */
+function downloadLocalBackup() {
+  const text = localSaveText();
+  if (!text) throw new Error('NO_LOCAL_SAVE');
+  const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+  const link = document.createElement('a');
+  link.href = url; link.download = `championship-save-backup-${new Date().toISOString().slice(0, 10)}.json`; link.hidden = true;
+  document.body.append(link); link.click(); link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+// First-bind gift (Owner 2026-10-29): the cloud ledger decides, then the save is
+// paid once (Bits + the save's paid marker in one write). The local simulation
+// only previews the gift.
+let bindRewardRunning = false;
+async function runBindReward(provider) {
+  if (bindRewardRunning) return Object.freeze({ ok: false, reason: 'BUSY' });
+  bindRewardRunning = true;
+  try {
+    const name = ONLINE_PROVIDER_NAMES[provider] ?? provider;
+    if (app.getOnlineBindReward?.()) { await showChoiceDialog({ title: onlineText('rewardTitle'), message: onlineText('rewardAlready'), actions: [{ id: 'ok', label: onlineText('close'), tone: 'primary' }], cancelId: 'ok' }); return Object.freeze({ ok: false, reason: 'BIND_REWARD_ALREADY_CLAIMED' }); }
+    const sessionId = app.getSaveReference?.();
+    const out = await onlineService().claimBindReward({ saveRef: sessionId ? await sha256Hex(sessionId) : null });
+    if (!out?.ok) {
+      if (out?.reason === 'BIND_REWARD_ALREADY_CLAIMED') await showChoiceDialog({ title: onlineText('rewardTitle'), message: onlineText('rewardAlready'), actions: [{ id: 'ok', label: onlineText('close'), tone: 'primary' }], cancelId: 'ok' });
+      return out ?? Object.freeze({ ok: false });
+    }
+    if (out.preview) { await showBindRewardPopup({ showChoiceDialog, bits: out.rewardBits, provider: out.provider ?? provider, simulated: true, fx: requestArcadeFx }); return out; }
+    const paid = app.claimOnlineBindReward({ provider: out.provider ?? provider, rewardBits: out.rewardBits });
+    if (!paid?.ok) {
+      if (paid?.reason !== 'BIND_REWARD_ALREADY_CLAIMED') await showChoiceDialog({ title: onlineText('rewardTitle'), message: onlineText('rewardSaveFailed', { reason: onlineReasonText(paid?.reason) }), actions: [{ id: 'ok', label: onlineText('close'), tone: 'primary' }], cancelId: 'ok' });
+      return paid;
+    }
+    refreshStatusBar();
+    recoveryDiagnostics.record('BIND_REWARD', { provider: name, credited: paid.credited });
+    await showBindRewardPopup({ showChoiceDialog, bits: paid.credited, provider: out.provider ?? provider, simulated: false, fx: requestArcadeFx });
+    return paid;
+  } finally { bindRewardRunning = false; }
+}
+
+// OAuth return (Owner 2026-10-29): only with a configured cloud, and only when
+// the provider sent the player back here; offline play never reaches this.
+function readOnlineAuthReturn(locationLike = location) {
+  const params = new URLSearchParams(locationLike.search);
+  const hash = new URLSearchParams(String(locationLike.hash ?? '').replace(/^#/, ''));
+  const provider = ['google', 'facebook', 'discord'].includes(params.get('cm_link')) ? params.get('cm_link') : null;
+  const errorCode = params.get('error_code') ?? hash.get('error_code');
+  const error = params.get('error') ?? hash.get('error');
+  if (errorCode || error) return Object.freeze({ kind: 'error', provider, errorCode: errorCode ?? error, description: params.get('error_description') ?? hash.get('error_description') ?? '' });
+  if (params.has('code') || hash.has('access_token')) return Object.freeze({ kind: 'session', provider });
+  return null;
+}
+// Read once at start-up; handled after Continue / New Game opens the session the gift is paid into.
+let pendingOnlineAuthReturn = onlineConfig.configured ? readOnlineAuthReturn() : null;
+function takeOnlineAuthReturn() { const returned = pendingOnlineAuthReturn; pendingOnlineAuthReturn = null; if (returned) void handleOnlineAuthReturn(returned); }
+async function handleOnlineAuthReturn(returned) {
+  if (!returned || !onlineConfig.configured) return;
+  try {
+    const service = onlineService();
+    const identity = await service.refreshIdentity();
+    const clean = new URL(location.href);
+    for (const key of ['code', 'state', 'error', 'error_code', 'error_description', 'cm_link']) clean.searchParams.delete(key);
+    history.replaceState(history.state, '', `${clean.pathname}${clean.search}`);
+    if (returned.kind === 'error') {
+      const provider = returned.provider ?? 'google';
+      if (/identity.?already.?exists/i.test(`${returned.errorCode} ${returned.description}`)) {
+        const name = ONLINE_PROVIDER_NAMES[provider] ?? provider;
+        const choice = await showChoiceDialog({ title: onlineText('providerTakenTitle', { provider: name }), message: onlineText('providerTakenBody', { provider: name }),
+          actions: [{ id: 'cancel', label: onlineText('cancel'), tone: 'secondary' }, { id: 'signin', label: onlineText('providerSignIn', { provider: name }), tone: 'primary' }], cancelId: 'cancel' });
+        if (choice === 'signin') await service.signInWithProvider(provider);
+      }
+      return;
+    }
+    // A linked account: pay the first-bind gift once, then compare this device with the account's cloud copy.
+    if (identity && identity.isAnonymous === false && !identity.bindRewardClaimed) await runBindReward(returned.provider ?? identity.providers?.[0] ?? 'google');
+    if (identity && identity.isAnonymous === false) await accountPanel().reconcile();
+  } catch (error) { console.warn(`CHAMPIONSHIP_AUTH_RETURN: ${error?.message ?? error}`); }
+}
+/** A provider key from the menu strip or the panel: the passport's own flow, then the gift. */
+function startProviderBind(provider) {
+  return bindProviderFlow({ service: onlineService(), provider, confirm: showChoiceDialog, oauthProviders: onlineConfig.oauthProviders,
+    say: (text, tone) => { if (tone === 'error') requestArcadeFx(document.body, 'denied', text); }, onProviderBound: runBindReward });
+}
+
+// 📸 Brag card (Owner 2026-10-29): the tamer licence as a shareable poster.
+let bragRunning = false;
+function speciesIdentityOf(speciesId) { try { return lookupSpeciesIdentity(productEntities, speciesId); } catch { return null; } }
+function acePartnerForCard() {
+  // The most evolved partner that has Database art; the first partner otherwise.
+  const roster = projectRoster().map(entry => ({ entry, portrait: juicyPortrait(entry.identity?.recordIndex ?? null) }));
+  const ranked = [...roster].sort((a, b) => (Number(Boolean(b.portrait)) - Number(Boolean(a.portrait))) || ((b.entry.identity?.generationIndex ?? 0) - (a.entry.identity?.generationIndex ?? 0)));
+  const pick = ranked[0];
+  return pick ? { name: pick.entry.displayName ?? null, attributeIndex: pick.entry.identity?.attributeIndex ?? 0, portraitSrc: pick.portrait?.src ?? null, role: 'ace' } : null;
+}
+async function bragCardInput({ winner = null, victory = null } = {}) {
+  const record = app.getTitleProgress?.().record ?? null;
+  const rank = app.getTamerRank?.();
+  const rankRule = Number.isInteger(rank) ? NATIVE_RAISING_LIFECYCLE_RULES.ranks[rank] : null;
+  const shopFrame = app.getShopFrame?.() ?? null;
+  const trainerName = app.getOpeningState()?.trainerName ?? '';
+  let identity = null;
+  try { identity = await onlineService().getIdentitySummary(); } catch { identity = null; }
+  let tamerCode = identity?.tamerCode ?? null;
+  if (!tamerCode) { try { tamerCode = futureSystems().social.getTamerCard({ trainerName }).code; } catch { tamerCode = null; } }
+  return {
+    tamerName: trainerName, rankName: Number.isInteger(rank) ? tamerRankName(rank) : null, licenseName: rankRule ? generationName(rankRule.generation) : null,
+    winPercent: nativeBattleWinPercent(record), battles: record?.battles ?? null,
+    dexPercent: tamerCompletionPercent(app.getDatabaseFrame?.().registeredCount ?? null, 216), bits: Number.isInteger(shopFrame?.bits) ? shopFrame.bits : null,
+    tamerCode, roomCode: onlineService().state.activeRoom?.roomCode ?? null, playUrl: publicPlayUrl().display,
+    partner: winner ?? acePartnerForCard(), victory
+  };
+}
+async function openTamerBragCard({ trigger = null, winner = null, victory = null } = {}) {
+  if (bragRunning) return;
+  bragRunning = true;
+  try {
+    await openBragCardPreview({ trigger, showChoiceDialog, fx: requestArcadeFx, reducedMotion: prefersReducedMotion(), buildData: () => bragCardInput({ winner, victory }) });
+  } catch (error) { console.warn(`CHAMPIONSHIP_BRAG_CARD: ${error?.message ?? error}`); }
+  finally { bragRunning = false; }
+}
+/** The winning partner of the battle that just ended (the first of the player's team with art). */
+function bragWinnerFrom(participants) {
+  const roster = projectRoster();
+  for (const participant of participants ?? []) {
+    if (!participant?.speciesId) continue;
+    const identity = speciesIdentityOf(participant.speciesId);
+    const portrait = juicyPortrait(participant.speciesId);
+    const member = roster.find(entry => entry.instanceId === participant.instanceId);
+    if (portrait || identity) return { name: member?.displayName ?? identity?.speciesName ?? null, attributeIndex: identity?.attributeIndex ?? 0, portraitSrc: portrait?.src ?? null, role: 'winner' };
+  }
+  return null;
+}
+/** The victory screen's 📸 key: the winning partner on the card, the match as its ribbon. */
+function battleResultBrag({ participants, matchTitle }) {
+  return { label: socialText('bragButton'), onOpen: button => openTamerBragCard({ trigger: button, winner: bragWinnerFrom(participants), victory: { matchTitle } }) };
+}
+const bragButton = (onClick) => {
+  const button = document.createElement('button'); button.type = 'button';
+  button.className = 'cm-brag-cta cm-arcade-key'; button.dataset.onlineAction = 'brag-card'; button.textContent = socialText('bragButton');
+  button.addEventListener('click', () => { void onClick(button); });
+  return button;
+};
+
+/** The System menu's foot (Owner 2026-10-29): the passport strip and the community dock. */
+function systemMenuExtras(menuId, { close }) {
+  if (menuId !== 'SYSTEM') return null;
+  const block = document.createElement('section'); block.className = 'cm-toolbar__group cm-toolbar__community'; block.dataset.group = 'community';
+  block.setAttribute('role', 'group'); block.setAttribute('aria-label', socialText('dockTitle'));
+  const strip = createPassportStrip({ service: onlineService(), oauthProviders: onlineConfig.oauthProviders, role: 'menuitem', fallbackCode: localTamerCode,
+    onProvider: provider => { close(); void startProviderBind(provider); },
+    onMore: () => { close(); openSettings(document.querySelector('.cm-toolbar__cell[data-menu-id="SYSTEM"]'), 'data'); } });
+  const dock = createSocialLinkDock({ variant: 'menu', role: 'menuitem' });
+  block.append(strip.element, dock.element);
+  return { element: block, dispose() { strip.dispose(); dock.dispose(); block.remove(); } };
 }
 async function setOwnDefenseTeam() {
   const candidates = await app.getPasswordTeamCandidates();
@@ -2597,7 +2779,8 @@ function ensureFriendsDrawer() {
 }
 function onlineLobbies() {
   return Object.freeze({
-    room: (panel, { start }) => mountRoomLobby(panel, { service: onlineService(), codeLength: onlineConfig.roomCodeLength, start, game: {
+    room: (panel, { start }) => mountRoomLobby(panel, { service: onlineService(), codeLength: onlineConfig.roomCodeLength, start, onFriendSpar: startFriendSpar,
+      brag: { label: socialText('bragButton'), onOpen: button => openTamerBragCard({ trigger: button }) }, game: {
       candidates: () => app.getBattlePartyCandidates(null),
       createInvite: (ids, options) => app.createLinkBattleInvite(ids, options),
       prepareGuest: (inviteCode, ids) => app.prepareLinkBattle({ role: 'GUEST', inviteCode, instanceIds: ids }),
@@ -2607,7 +2790,20 @@ function onlineLobbies() {
       createPassword: ids => app.createTeamPassword(ids) } })
   });
 }
-function renderTamerOnline(shell) {
+// Tamer Info's product blocks (Owner 2026-10-28/29): above the ROM field table the
+// brag card and the friends / account keys; below it the passport and the dock.
+let tamerOnlineDisposers = [];
+function disposeTamerOnline() { for (const dispose of tamerOnlineDisposers.splice(0)) { try { dispose(); } catch { /* already gone */ } } }
+function renderTamerOnline(shell, slot = 'top') {
+  if (slot === 'bottom') {
+    // Showing Tamer Info never signs in to a configured cloud; a passport button does.
+    const panel = createPassportPanel(); panel.mount(shell, { eager: false });
+    const dock = createSocialLinkDock({ variant: 'full' }); shell.append(dock.element);
+    tamerOnlineDisposers.push(() => panel.dispose(), () => dock.dispose());
+    return;
+  }
+  disposeTamerOnline();
+  shell.append(bragButton(button => openTamerBragCard({ trigger: button })));
   const row = document.createElement('div'); row.className = 'cm-tamer-online';
   const friends = document.createElement('button'); friends.type = 'button'; friends.className = 'cm-online__button cm-online__button--primary'; friends.dataset.onlineAction = 'open-friends';
   setText(friends, 'TAMER_OPEN_FRIENDS'); friends.addEventListener('click', () => ensureFriendsDrawer().open());

@@ -1,5 +1,6 @@
 import {readRaisingGroundSupport} from './raisingGroundSupport.js';
 import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, purchaseTestRanchRow } from './friendsPlaytestPolicy.js';
+import { planOnlineBindReward } from './onlineBindRewardPolicy.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
@@ -261,6 +262,8 @@ export function createChampionshipStandaloneApp({
   let huntLoadout = null;
   let shop = null;
   let friendsPlaytest = null;
+  // Owner 2026-10-29: the save's record of a paid first-bind reward (onlineBindRewardPolicy.js).
+  let onlineBindReward = null;
   let lastShopReceipt = null;
   let selectedDatabaseSpeciesIndex = null;
   let cageEdit = null;
@@ -959,7 +962,7 @@ export function createChampionshipStandaloneApp({
   function liveSaveRequest(nextRevision=revision) {
     return {
       snapshot:requireSession().getRaisingHomeSnapshot(),creature,sessionId,revision:nextRevision,
-      interactionCount,friendsPlaytest,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
+      interactionCount,friendsPlaytest,onlineBindReward,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
       championshipRun,freeBattleMenu,battleTactics,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
       raising,shop:shop?shop.toSave():null,cageEdit:cageEdit?cageEdit.toSave():null,battleEconomy,
       instanceIdentity,gameplayRng:gameplayRngSnapshot(),huntHistory:projectNativeHuntPersistentSave(huntPersistentState)
@@ -968,7 +971,7 @@ export function createChampionshipStandaloneApp({
 
   function requestFromSavedGame(saved,candidate) {
     return {
-      ...saved.progression,friendsPlaytest:saved.flags.friendsPlaytest??null,snapshot:candidate.snapshot,creature:saved.creature,sessionId,
+      ...saved.progression,friendsPlaytest:saved.flags.friendsPlaytest??null,onlineBindReward:saved.flags.onlineBindReward??null,snapshot:candidate.snapshot,creature:saved.creature,sessionId,
       raising:candidate.production,shop:saved.shop,cageEdit:saved.cageEdit,battleEconomy:saved.battleEconomy,
       instanceIdentity:candidate.identity,gameplayRng:saved.gameplayRng,huntHistory:saved.huntHistory
     };
@@ -1228,6 +1231,7 @@ export function createChampionshipStandaloneApp({
     instanceIdentity = candidate.identity;
     selectedCreatureId = null;
     friendsPlaytest = saved.flags.friendsPlaytest ?? null;
+    onlineBindReward = saved.flags.onlineBindReward ?? null;
     openShopAndHunt({ shopSnapshot: saved.shop });
     cageEdit = createCageEditRuntime({ snapshot: saved.cageEdit, publicTestGrid: playtestPolicy?.enabled === true, initialTamerRank: tamerRankValue });
     freeBattleMenu=saved.progression.freeBattleMenu??null;
@@ -1377,6 +1381,7 @@ export function createChampionshipStandaloneApp({
       instanceIdentity = createRaisingInstanceIdentityState(instanceSources());
       selectedCreatureId = null;
       friendsPlaytest = null;
+      onlineBindReward = null;
       openShopAndHunt({newSave:true});
       cageEdit = createCageEditRuntime({ initializeOriginal: true, publicTestGrid: playtestPolicy?.enabled === true, initialTamerRank: tamerRankValue });
       rebuildFreeBattleMenu();
@@ -3554,7 +3559,7 @@ export function createChampionshipStandaloneApp({
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
-            revision: revision + 1, interactionCount, friendsPlaytest, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, raising: candidateRaising,
+            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: (bonusShop ?? shop) ? (bonusShop ?? shop).toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),
@@ -3703,6 +3708,33 @@ export function createChampionshipStandaloneApp({
       try { save = deserializeChampionshipModernSave(text); } catch (error) { return Object.freeze({ ok: false, reason: `SAVE_TEXT_INVALID: ${error.message}` }); }
       try { restoreCandidate(save); } catch (error) { return Object.freeze({ ok: false, reason: `SAVE_NOT_LOADABLE: ${error.message}` }); }
       return savePort.adoptExternalText(text);
+    },
+
+    /** Owner 2026-10-29: this save's paid first-bind gift, or null. */
+    getOnlineBindReward() { return onlineBindReward; },
+    /** The open save's own id; the online layer hashes it before it leaves the device (claim idempotency). */
+    getSaveReference() { return session ? sessionId : null; },
+    /**
+     * Pays the first-bind gift once the cloud ledger accepted the claim: the Bits
+     * and the save's paid marker are one durable write; a failed save changes neither.
+     */
+    claimOnlineBindReward({ provider, rewardBits } = {}) {
+      if (!session || tutorialBaseline || battleTransactionActive || huntCommitActive || battleEconomy.active) return Object.freeze({ ok: false, reason: "BIND_REWARD_UNAVAILABLE" });
+      const wallet = requireShop();
+      const plan = planOnlineBindReward({ bits: wallet.getBits(), cap: wallet.getFrame().bitsCap, current: onlineBindReward, provider, rewardBits, claimedAt: new Date(now()).toISOString() });
+      if (!plan.ok) return plan;
+      storeNativeRaisingPositions(); storeNativeRaisingHome();
+      const candidate = createShopRuntime({ snapshot: wallet.toSave(), allowRepeatedCages: playtestPolicy?.enabled === true,
+        allItemsVisible: playtestPolicy?.shopOpen === true, progression: progressionContext() });
+      if (plan.credited > 0) candidate.creditBits(plan.credited, { evidence: "OWNER_APPROVED_ADAPTATION" });
+      const status = savePort.save({ ...liveSaveRequest(revision + 1), onlineBindReward: plan.record, shop: candidate.toSave() });
+      if (status.phase !== "SAVED") { savePort.discardPendingWrite(); return Object.freeze({ ok: false, reason: "SAVE_FAILED" }); }
+      onlineBindReward = plan.record;
+      shop = createShopRuntime({ snapshot: candidate.toSave(), huntInventory, allowRepeatedCages: playtestPolicy?.enabled === true,
+        allItemsVisible: playtestPolicy?.shopOpen === true, progression: progressionContext() });
+      applyMappedHuntInventoryFromShop(shop, huntInventory); bindShopRuntime(); revision++;
+      publishScreens();
+      return Object.freeze({ ok: true, credited: plan.credited, bits: shop.getBits(), record: plan.record });
     },
 
     persistenceFacade() {

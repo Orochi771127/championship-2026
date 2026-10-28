@@ -1,4 +1,5 @@
 import { normalizeFriendsPlaytestState } from './friendsPlaytestPolicy.js';
+import { normalizeOnlineBindReward } from './onlineBindRewardPolicy.js';
 import {requiresProductSaveVersion} from '../contracts/productSpeciesData.js';
 // Championship Modern -- standalone player save envelope.
 //
@@ -421,7 +422,9 @@ export function createChampionshipModernSave({
         ? Math.min(progression.tamerRank, 65535)
         : 0
     },
-    flags: { newGameCompleted: flags.newGameCompleted === true, ...(flags.friendsPlaytest != null ? {friendsPlaytest:normalizeFriendsPlaytestState(flags.friendsPlaytest)} : {}) },
+    // onlineBindReward (Owner 2026-10-29) appears only once the first-bind gift is paid, so other saves keep their exact shape.
+    flags: { newGameCompleted: flags.newGameCompleted === true, ...(flags.friendsPlaytest != null ? {friendsPlaytest:normalizeFriendsPlaytestState(flags.friendsPlaytest)} : {}),
+      ...(flags.onlineBindReward != null ? {onlineBindReward:normalizeOnlineBindReward(flags.onlineBindReward)} : {}) },
     updatedAt
   };
 

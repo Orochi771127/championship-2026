@@ -24,7 +24,7 @@ export function createChampionshipCloudService({
 } = {}) {
   const listeners = new Set();
   let state = Object.freeze({ mode: LOCAL_SIMULATION_MODE, configured: config.configured, configReason: config.reason, online: nav?.onLine !== false,
-    identity: null, syncState: "LOCAL_ONLY", lastSync: null, conflict: null, libraryError: null });
+    identity: null, syncState: "LOCAL_ONLY", lastSync: null, conflict: null, libraryError: null, activeRoom: null });
   const local = createLocal({ ownDefenseCode: hooks.ownDefenseCode, simulateGuestReply: hooks.simulateGuestReply,
     rivalNames: [onlineText("simRivalA"), onlineText("simRivalB"), onlineText("simRivalC")], rivalRanks: [onlineText("simRankCoach"), onlineText("simRankRookie"), onlineText("simRankRookie")] });
   let supabase = null, supabaseLoading = null;
@@ -73,7 +73,8 @@ export function createChampionshipCloudService({
       try {
         const identity = await identityFor();
         return Object.freeze({ mode: state.mode, online: state.online, configured: config.configured, tamerCode: identity?.tamerCode ?? null, isAnonymous: identity?.isAnonymous !== false,
-          email: identity?.email ?? null, providers: identity?.providers ?? [], simulated: identity?.simulated === true, syncState: state.syncState, lastSync: state.lastSync });
+          email: identity?.email ?? null, providers: identity?.providers ?? [], simulated: identity?.simulated === true, syncState: state.syncState, lastSync: state.lastSync,
+          bindRewardClaimed: identity?.bindRewardClaimed === true });
       } catch (error) {
         return Object.freeze({ mode: state.mode, online: state.online, configured: config.configured, tamerCode: null, isAnonymous: true, email: null, providers: [], simulated: state.mode !== SUPABASE_MODE, syncState: state.syncState, lastSync: state.lastSync, error: error?.reason ?? error?.message ?? String(error) });
       }
@@ -81,7 +82,33 @@ export function createChampionshipCloudService({
     ensureGuest: ensureIdentity,
     async bindEmail(email) { const a = await adapter(); return a.bindEmail(email); },
     async verifyEmailOtp(email, token) { const a = await adapter(); const out = await a.verifyEmailOtp(email, token); if (out?.ok && out.identity) emit({ identity: out.identity }); return out; },
-    async bindGoogle() { const a = await adapter(); return a.bindGoogle(); },
+    async bindGoogle() { return this.bindProvider("google"); },
+    /**
+     * Owner 2026-10-29: link the guest pass to Google / Facebook / Discord. The
+     * cloud leaves the page for the provider (redirect: true); the simulation
+     * links in memory and answers with the new identity at once.
+     */
+    async bindProvider(provider) {
+      const a = await adapter(); await identityFor();
+      const out = await a.bindProvider(provider);
+      if (out?.ok && out.identity) emit({ identity: out.identity });
+      return out;
+    },
+    async signInWithProvider(provider) {
+      const a = await adapter();
+      const out = await a.signInWithProvider(provider);
+      if (out?.ok && out.identity) emit({ identity: out.identity, lastSync: null, conflict: null, syncState: "LOCAL_ONLY" });
+      return out;
+    },
+    /** First-bind gift. `saveRef` is the hashed save id the ledger keeps (claim_bind_reward). */
+    async claimBindReward({ saveRef = null } = {}) {
+      const a = await adapter(); await identityFor();
+      const out = await a.claimBindReward(saveRef);
+      if (out?.ok && !out.preview && state.identity) emit({ identity: Object.freeze({ ...state.identity, bindRewardClaimed: true }) });
+      return out ?? Object.freeze({ ok: false, reason: "BIND_REWARD_UNAVAILABLE" });
+    },
+    /** Signs in again after an OAuth return or a provider change, so the identity reflects the linked account. */
+    async refreshIdentity() { emit({ identity: null }); return ensureIdentity(); },
     async signInWithEmailOtp(email) { const a = await adapter(); return a.signInWithEmailOtp(email); },
     async verifyLoginOtp(email, token) { const a = await adapter(); const out = await a.verifyLoginOtp(email, token); if (out?.ok && out.identity) emit({ identity: out.identity }); return out; },
     async signOut() { const a = await adapter(); const out = await a.signOut(); emit({ identity: null, syncState: "LOCAL_ONLY", lastSync: null, conflict: null }); return out; },
@@ -115,6 +142,26 @@ export function createChampionshipCloudService({
       emit({ syncState: "SYNCED", conflict: null, lastSync: Object.freeze({ serverRevision: result.serverRevision, contentSha256: result.contentSha256, at: result.updatedAt ?? new Date().toISOString(), simulated: result.simulated === true }) });
       return result;
     },
+    /**
+     * The cloud copy for the side-by-side chooser, without adopting it: the sync
+     * baseline only moves once the player picked a side (adoptCloudBaseline / backupNow).
+     */
+    async peekCloudSave() {
+      const a = await adapter();
+      await identityFor();
+      const result = await a.downloadSave();
+      return result?.ok ? result : Object.freeze({ ok: false, reason: result?.reason ?? "NO_CLOUD_SAVE" });
+    },
+    /** The player kept the cloud copy: it is now the baseline future backups must match. */
+    adoptCloudBaseline(result) {
+      if (!Number.isInteger(result?.serverRevision)) return;
+      emit({ syncState: "SYNCED", conflict: null, lastSync: Object.freeze({ serverRevision: result.serverRevision, contentSha256: result.contentSha256, at: result.updatedAt ?? new Date().toISOString(), simulated: result.simulated === true }) });
+    },
+    /** The open room the lobby is waiting in (the brag card prints its code), or null. */
+    setActiveRoom(room) {
+      const next = room?.roomCode ? Object.freeze({ roomCode: String(room.roomCode), matchId: room.matchId ?? null }) : null;
+      if (next?.roomCode !== state.activeRoom?.roomCode) emit({ activeRoom: next });
+    },
     async createTransferCode() { const a = await adapter(); await identityFor(); return a.createTransferCode(); },
     async redeemTransferCode(code) { const a = await adapter(); await identityFor(); return a.redeemTransferCode(code); },
 
@@ -132,7 +179,7 @@ export function createChampionshipCloudService({
     /** Adapters for the existing future-systems ports (futureSystemsPort.js). */
     cloudAdapter() {
       return Object.freeze({
-        bindAccount: async ({ provider }) => provider === "google" ? this.bindGoogle() : Object.freeze({ ok: false, reason: "USE_EMAIL_OTP_FLOW", provider }),
+        bindAccount: async ({ provider }) => ["google", "facebook", "discord"].includes(provider) ? this.bindProvider(provider) : Object.freeze({ ok: false, reason: "USE_EMAIL_OTP_FLOW", provider }),
         mergeGuestSave: async ({ save }) => this.backupNow(typeof save === "string" ? save : JSON.stringify(save))
       });
     },

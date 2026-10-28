@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: SOCIAL_PASSPORT_BRAG_20261029 -->
+**2026-10-29 — 社群連結塢、數碼通行證、首次綁定禮包、存檔仲裁器與炫耀名片（本機分支，未 commit／未部署）。** 範圍：牧場選單與馴獸師資料的 Discord／Facebook／X・Threads／巴哈姆特連結塢（網址待 Owner 填入）；Google／Facebook／Discord 綁定（linkIdentity，遊客進度不洗）與 5,000 位元幣首次綁定禮包（伺服器帳本＋存檔 `flags.onlineBindReward`，模擬只預覽）；主畫面 App 的 6 碼引繼碼（15 分鐘）與 Email 驗證碼；本機 vs 雲端並排仲裁器；密碼對戰房間 Presence、房號複製與好友 AI 防守挑戰；2x Canvas 炫耀名片（勝利結算、馴獸師資料、開房中）與分享／下載／複製。驗證：test:ci 3,109 項全過、build/validate playtest 通過、手機視窗瀏覽器閘門 15 項全過。未驗證：真實 Supabase 與三家 OAuth、實機 iPhone。[報告](reports/social-brag-2026-10-29/REPORT_ZH_TW.md)。
+
 <!-- record-id: STORY_RIFT_ONLINE_20261028 -->
 **2026-10-28 — 雜訊裂縫故事劇場與線上系統（Supabase Ready；Owner 2026-10-28 授權發布，雲端設定檔仍為空）。** 範圍：牧場上的八方旅人式實機演出（拍檔本體 sprite、聚光、裂縫 VFX、情緒氣泡）＋立繪對話匣，第一章「初遇裂縫」由 📖 裂縫觀測 徽章與系統選單進入；帳號與雲端同步面板、好友與馴獸師名片抽屜、密碼對戰房號大廳、通訊對戰快速配對／天梯鏡像；`supabase/migrations/001_championship_online.sql` 與三分鐘設定指南。未填 Supabase 設定或離線時全部走本地模擬，離線遊玩只有既有儲存鍵。驗證：test:ci 3034 項（兩項既有釘值已更新）、build/validate playtest 通過、隔離埠 Playwright 手機視窗零錯誤。未驗證：真實 Supabase 專案、實機。[報告](reports/story-online-2026-10-28/REPORT_ZH_TW.md)。
 

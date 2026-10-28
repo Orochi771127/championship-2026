@@ -339,7 +339,7 @@ export function createChampionshipPersistentSavePort({
         revision: request.revision,
         tamerRank: request.tamerRank ?? 0
       },
-      flags: { newGameCompleted: true, friendsPlaytest: request.friendsPlaytest ?? null },
+      flags: { newGameCompleted: true, friendsPlaytest: request.friendsPlaytest ?? null, onlineBindReward: request.onlineBindReward ?? null },
       updatedAt: now()
     });
     const text = serializeChampionshipModernSave(save);

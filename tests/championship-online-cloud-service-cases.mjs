@@ -186,7 +186,8 @@ test("a room carries the invite and reply codes and hands both sides a prepared 
   await timers.tick(1600); await timers.tick(0);
   assert.equal(session.state.phase, "countdown"); assert.equal(session.state.prepared.reply, "REPLY:INV:a,b");
   await timers.tick(PVP_COUNTDOWN_MS);
-  assert.equal(session.state.phase, "playing"); assert.deepEqual(phases, ["idle", "creating", "waiting", "joined", "ready", "countdown", "playing"]);
+  // Presence (2026-10-29) also notifies, so the same phase can repeat; the phase order is what matters.
+  assert.equal(session.state.phase, "playing"); assert.deepEqual(phases.filter((phase, i) => phase !== phases[i - 1]), ["idle", "creating", "waiting", "joined", "ready", "countdown", "playing"]);
   const failed = createPvpRoomSession({ adapter: sim, game: { ...game, createInvite: async () => ({ ok: false, reason: "NO_TEAM" }) }, setTimer: timers.setTimer, clearTimer: timers.clearTimer });
   assert.equal((await failed.host({ instanceIds: [] })).reason, "NO_TEAM");
   session.dispose(); failed.dispose();

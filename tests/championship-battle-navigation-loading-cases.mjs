@@ -59,6 +59,8 @@ function ownerFixture(target,{hudLoad=async()=>hud([cell('result')]),stageLoad=n
       createBattleResultView(value){options=value;events.push('result-view');if(highlight)value.highlight({});return newView();}}),
     ensurePixiStage:async(_host,signal)=>{const stage=stageLoad?await stageLoad(signal):stageData.stage;signal?.throwIfAborted();return stage;},
     mountBattleResultCharacters,classifyBattleResultFeedback:()=>highlight?'highlight':null,nativeBattleWinPercent:()=>null,
+    // Owner 2026-10-29: the won battle's brag card key; navigation never waits on it.
+    battleResultBrag:()=>null,
     playResultHighlight(_request,getStage){highlightStages.push(getStage);},
     resultHeroAnchor(){},resultStageLight(){},uiText:text=>text,showChoiceDialog(){},createLoadProgressView(){},
     observeLoadActivity(){},onPixiAssetSettled(){},mountRaisingHome:async()=>{raisingMounts++;return newView();},

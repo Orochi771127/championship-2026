@@ -1,0 +1,43 @@
+{
+  "id": "ONLINE_BIND_REWARD_20261029",
+  "classification": "OWNER_APPROVED_ADAPTATION: a product-authored first-bind gift; no original behavior is claimed or changed",
+  "supersedes": {
+    "contract": "docs/contracts/championship/BATTLE_TACTICS_20261028.json",
+    "sourceLock": "src/championship/app/championshipStandaloneSave.js"
+  },
+  "saveField": {
+    "path": "flags.onlineBindReward",
+    "shape": "{ version: 1, provider: google | facebook | discord | email, bits: 0..5000, claimedAt: ISO time }",
+    "normalizer": "normalizeOnlineBindReward in src/championship/app/onlineBindRewardPolicy.js refuses a malformed record",
+    "migration": "none: the field is absent until a gift is paid, so every other save keeps its exact bytes and schemaVersion"
+  },
+  "writer": "claimOnlineBindReward in src/championship/app/championshipStandaloneApp.js credits the Bits and records the marker in one save; a failed save changes neither",
+  "authority": "the cloud ledger public.bind_reward_claims (claim_bind_reward in supabase/migrations/001_championship_online.sql) decides who may claim: one claim per account, the same answer again only for the same save; the local simulation previews the gift and never pays",
+  "amount": {
+    "bits": 5000,
+    "client": "ONLINE_BIND_REWARD_BITS in src/championship/app/onlineBindRewardPolicy.js caps whatever the server answers",
+    "server": "v_reward in claim_bind_reward"
+  },
+  "notChanged": [
+    "Every other save slice, the save key and schemaVersion",
+    "Battle, raising, shop prices and every existing reward"
+  ],
+  "sourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "0bd028ab24379c2eec1bc643db4fb9c2c76c2cc542a8e590225a7b14e272e41f"
+  },
+  "historicalSourceLocks": {
+    "BATTLE_TACTICS_20261028": {
+      "src/championship/app/championshipStandaloneSave.js": "3a72fce7d38151f473f343fb8b9f59349daef1beb7cb09b6a0547c628d07ac8e"
+    },
+    "HEX_CAGE_WORLD_20261026": {
+      "src/championship/app/championshipStandaloneSave.js": "aaa72f6e08b150ac9bebb81fb2e6a8efefd532ab0ed7b7e24a7a0a9ae3d97f74"
+    }
+  },
+  "authorization": "Owner brief pasted 2026-10-29, Phase 3.2: 首次完成帳號綁定時，觸發華麗的獎勵彈窗（如贈送位元幣／鑽石獎勵並寫入存檔，透過 bind_reward_claimed 確保每帳號限領一次）. The same brief asks for no push and no deployment.",
+  "tests": [
+    "tests/championship-social-brag-cases.mjs",
+    "tests/championship-storage-guard-cases.mjs",
+    "tests/championship-online-migration-sql-cases.mjs"
+  ],
+  "physicalDeviceAccepted": false
+}
