@@ -24,7 +24,7 @@ export const CYBER_MORPH_TIMING = Object.freeze({ stage1: 600, stage2: 1600, lan
 // Silhouette swaps in Stage 2: old, new, old, new, old, new, then the burst.
 export const CYBER_MORPH_SWAPS = Object.freeze([600, 900, 1130, 1310, 1460, 1540, 1600]);
 const SHARDS = Object.freeze({ full: 18, saver: 8, reduced: 0 });
-const RAIN = Object.freeze({ full: 14, saver: 6, reduced: 0 });
+const RAIN = Object.freeze({ full: 10, saver: 5, reduced: 0 });
 const GLYPHS = "01ABCDEF";
 
 const node = juicyNode;
@@ -174,8 +174,11 @@ export function playCyberMorphEvolution({ host, from, to, statsDiff = null, trai
 
   // Backdrop: hex tunnel, data rain, radial speed lines.
   const tunnel = node(doc, "div", "cm-morph__tunnel");
-  const hexRings = env.motion === "reduced" ? [] : [0, 1, 2, 3].map(i => {
-    const ring = node(doc, "i", "cm-morph__hexring");
+  // The lattice is a static background; only three small border rings travel,
+  // so the tunnel costs a few small layers rather than full-screen textures
+  // (mobile memory, and software-rendered browsers keep their frame rate).
+  const hexRings = env.motion === "reduced" ? [] : [0, 1, 2].map(i => {
+    const ring = node(doc, "i", "cm-morph__pulse");
     ring.style.setProperty("--i", String(i));
     tunnel.append(ring);
     return ring;
@@ -206,7 +209,7 @@ export function playCyberMorphEvolution({ host, from, to, statsDiff = null, trai
   const outbound = shardRing(doc, burst, SHARDS[env.motion], "cm-morph__shard cm-morph__shard--out");
   const motes = revert ? shardRing(doc, burst, SHARDS[env.motion] + 6, "cm-morph__mote") : [];
   figure.append(...[fromArt, fromSil, revert ? null : toSil, toArt, egg].filter(Boolean));
-  core.append(plinth, rings, converge, figure, flash, burst);
+  core.append(node(doc, "i", "cm-morph__aura"), plinth, rings, converge, figure, flash, burst);
 
   // Nameplate and panel.
   const plate = node(doc, "div", "cm-morph__plate");
@@ -273,20 +276,20 @@ export function playCyberMorphEvolution({ host, from, to, statsDiff = null, trai
   if (full) {
     animate(root, [{ opacity: 0 }, { opacity: 1 }], { duration: 180, easing: "ease-out" });
     hexRings.forEach((ring, i) => animate(ring, [
-      { opacity: 0, transform: "translate(-50%, -50%) scale(0.15)" },
-      { opacity: 0.85, offset: 0.35 },
-      { opacity: 0, transform: "translate(-50%, -50%) scale(2.6)" }
-    ], { duration: 1600, delay: i * 400, iterations: Infinity, easing: "cubic-bezier(.4,0,1,1)" }, true));
+      { opacity: 0, transform: "scale(0.15)" },
+      { opacity: 0.9, offset: 0.3 },
+      { opacity: 0, transform: "scale(2.4)" }
+    ], { duration: 1400, delay: i * 470, iterations: Infinity, easing: "cubic-bezier(.4,0,1,1)" }, true));
     for (const column of columns) {
       const duration = Number.parseInt(column.style.getPropertyValue("--d"), 10) || 1200;
       animate(column, [{ transform: "translateY(-55%)" }, { transform: "translateY(55%)" }], { duration, iterations: Infinity, easing: "linear" }, true);
     }
     animate(speed, [
-      { opacity: 0, transform: "scale(1.4) rotate(0deg)" },
-      { opacity: 1, offset: at(260), transform: "scale(1.1) rotate(4deg)" },
-      { opacity: 0.45, offset: at(1500), transform: "scale(1.02) rotate(9deg)" },
-      { opacity: 1, offset: at(1640), transform: "scale(1.2) rotate(11deg)" },
-      { opacity: 0.25, transform: "scale(1) rotate(14deg)" }
+      { opacity: 0, transform: "rotate(0deg)" },
+      { opacity: 1, offset: at(260), transform: "rotate(4deg)" },
+      { opacity: 0.45, offset: at(1500), transform: "rotate(9deg)" },
+      { opacity: 1, offset: at(1640), transform: "rotate(11deg)" },
+      { opacity: 0.25, transform: "rotate(14deg)" }
     ], { duration: length, easing: "linear" });
     animate(plinth, [{ opacity: 0, transform: "translateX(-50%) scaleX(0)" }, { opacity: 1, transform: "translateX(-50%) scaleX(1)" }],
       { duration: 360, delay: 80, easing: "cubic-bezier(.2,.9,.3,1.2)" });

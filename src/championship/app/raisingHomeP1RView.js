@@ -590,7 +590,11 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     // native sequence while it runs (the native phase clock still writes the
     // form), takes the real stat change when it lands and replaces the reveal.
     const evolving=lifecycle?.evolution&&!lifecycle.evolution.choicePending?lifecycle.evolution:null;
-    if(evolving&&!evolutionRun&&!cinematic&&cinematicDeclined!==evolving.instanceId&&evolutionCinematic?.enabled?.()){
+    // The runner starts once the native sequence is actually moving: while
+    // the target's art is still loading the clock waits, and so does the
+    // runner, leaving the ranch's own loading and retry panel in view.
+    const nativeMoving=(evolving?.totalFrames??1)>0;
+    if(evolving&&nativeMoving&&!evolutionRun&&!cinematic&&cinematicDeclined!==evolving.instanceId&&evolutionCinematic?.enabled?.()){
       const member=frame.residents.find(r=>r.creatureId===evolving.instanceId);
       evolutionRun=evolutionCinematic.start({host:root,instanceId:evolving.instanceId,
         fromSpecies:evolving.oldSpecies,toSpecies:evolving.target,fromName:member?.displayName??'',
