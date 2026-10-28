@@ -267,6 +267,7 @@
     "src/championship/presentation/bm03GroundShadows.js",
     "src/championship/presentation/cageAmbient.js",
     "src/championship/presentation/cageForeground.js",
+    "src/championship/presentation/cageHd2dEnhancer.js",
     "src/championship/presentation/cageSharedEdges.js",
     "src/championship/presentation/cageUiArt.js",
     "src/championship/presentation/ceremony/ceremonyAudio.js",
@@ -352,6 +353,7 @@
     "src/championship/presentation/ranchPassages.js",
     "src/championship/presentation/ranchPhysicalSupport.js",
     "src/championship/presentation/ranchPlinth.js",
+    "src/championship/presentation/ranchSeamBridges.js",
     "src/championship/presentation/ranchSupportOwner.js",
     "src/championship/presentation/ranchThreeCoordinates.js",
     "src/championship/presentation/ranchThreeScene.js",
@@ -8902,6 +8904,7 @@
     "src/championship/presentation/bm03GroundShadows.js",
     "src/championship/presentation/cageAmbient.js",
     "src/championship/presentation/cageForeground.js",
+    "src/championship/presentation/cageHd2dEnhancer.js",
     "src/championship/presentation/cageSharedEdges.js",
     "src/championship/presentation/cageUiArt.js",
     "src/championship/presentation/ceremony/ceremonyAudio.js",
@@ -8987,6 +8990,7 @@
     "src/championship/presentation/ranchPassages.js",
     "src/championship/presentation/ranchPhysicalSupport.js",
     "src/championship/presentation/ranchPlinth.js",
+    "src/championship/presentation/ranchSeamBridges.js",
     "src/championship/presentation/ranchSupportOwner.js",
     "src/championship/presentation/ranchThreeCoordinates.js",
     "src/championship/presentation/ranchThreeScene.js",
@@ -42118,7 +42122,7 @@
       },
       {
         "path": "src/championship/app/ui/screenLayout.css",
-        "sha256": "317835fa0c06a833ebac2c8037955d08a217577415b4963fdc9155cfcec737cd"
+        "sha256": "af6e9b9a671eea9a949e7beaa244a074a1e3fdadce1b8208baab2d23461cda9a"
       },
       {
         "path": "src/championship/app/ui/settings.css",
@@ -42154,7 +42158,7 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "cd9bfa2cdc6631a180f7445a497d1c06e699414bf793ec52567805da75537f4f"
+        "sha256": "363846d409218c4a7f08a790a21fb6526d87ca7051b9f2e512922164c54f611c"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
@@ -42410,7 +42414,7 @@
       },
       {
         "path": "src/championship/cage/ranchEcology.js",
-        "sha256": "dec0e39f785885a2ef0cc8abd491b4d49eaa72e5fa1fc700dfea31837f82da63"
+        "sha256": "21aed4b85046f978702a1074d1aea434c30a5fb184279728558479f030dcbba1"
       },
       {
         "path": "src/championship/cage/ranchExpansion.js",
@@ -42829,6 +42833,10 @@
         "sha256": "19e11ecf9d2fafe7f2638a32d19bc2b31abd0039472465566145d64993c64b7a"
       },
       {
+        "path": "src/championship/presentation/cageHd2dEnhancer.js",
+        "sha256": "0ebc9729920c81821ff7e23a99b8928a8ca2089886b5b2f1ee36c74b96d2c416"
+      },
+      {
         "path": "src/championship/presentation/cageSharedEdges.js",
         "sha256": "635a49521f2110fec851854a7db4ea195e3a921f3490eba871638d4011bcea51"
       },
@@ -43166,7 +43174,11 @@
       },
       {
         "path": "src/championship/presentation/ranchPlinth.js",
-        "sha256": "bda7e2ffb82df62666d657d05ffcc43d104466b9ec38649d92585338e0fb2478"
+        "sha256": "75e8c919bbbc1e710a14e5b4bb4e47c1ed93b63ab48b3c4524f656c9a94662c9"
+      },
+      {
+        "path": "src/championship/presentation/ranchSeamBridges.js",
+        "sha256": "cf550ccb819912223a7efce2d39f3ab506b927212e7b300a11a2217be69a3fcd"
       },
       {
         "path": "src/championship/presentation/ranchSupportOwner.js",
@@ -43178,7 +43190,7 @@
       },
       {
         "path": "src/championship/presentation/ranchThreeScene.js",
-        "sha256": "3fa6c041fef92115aab53a1291cf8a5e34d2caa83f63027a1047b6988d499b15"
+        "sha256": "6520e47436918432921da613ffa5afd1a50f3988c9fdb715a3500a5d1117c8f8"
       },
       {
         "path": "src/championship/presentation/runtimeMapArtBundle.js",
@@ -43646,11 +43658,11 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "9ef9a16c9bc66496f83c7bdcafea27d869228c1a97b3f9e08824cb14136f1db6"
+        "sha256": "a7b281746f31e32aac38b9f857538b8546c2e219bfee8c549edfe2bf9b308be0"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "3c7c15741db0e8540d314bf42732409ef95c640fdfe96d951b5d5cf280f6f91e"
+        "sha256": "7b35f86962d5b968fc7c2c44e05aca3649c4fa64dea055d4b306f5ca34b77d8d"
       },
       {
         "path": "src/championship/text/uiText.js",
@@ -43658,11 +43670,11 @@
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "003276ba9eab980423873526ff20aa68453400b484ca0fb938c2d5f189976465"
+        "sha256": "e92f54123ff2c2eb338c085c6f2454a9e9d61ea94f8657099d4337feeca45c1e"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "b1e0cfd804f141e403eebd30cf4e68268285d1abc13d85671e108f676cfc09fa"
+        "sha256": "42ad03e9da09d871df7e61bac265a35d70187e0f5f552f5d36027184430f5a97"
       },
       {
         "path": "src/championship/text/zhHant.js",
