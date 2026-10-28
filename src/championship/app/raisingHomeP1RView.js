@@ -2,6 +2,7 @@ import { createTransientHint, consumeRaisingHintDuration } from './transientHint
 import {getLocale} from '../text/locale.js';
 import {mountRanchDiscoveryJournal} from './ranchDiscoveryJournal.js';
 import {mountRanchStoryBadge} from './ranchStoryBadge.js';
+import {PARTNER_MOODS,PARTNER_HABITATS} from '../raising/ranchPartnerLife.js';
 import {productFormText} from '../text/productFormText.js';
 const evolutionChoiceTitle=()=>productFormText('choose');
 import { downloadSaveBackup } from './downloadSaveBackup.js';
@@ -171,6 +172,16 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   ranchIcon.alt = ''; ranchIcon.hidden = true;
   const placeChip = node('span', 'int-rh2-companion__place');
   placeChip.append(ranchIcon, companionLocation);
+  // Owner 2026-10-28: mood emote, habitat fit and affection hearts read from the
+  // partner's own fields (ranchPartnerLife.js); hidden while partner life is off.
+  const moodChip = node('span', 'int-rh2-companion__mood');
+  const moodEmoji = node('span', 'int-rh2-companion__mood-emoji');
+  const moodLabel = node('span', 'int-rh2-companion__mood-label');
+  const moodHearts = node('span', 'int-rh2-companion__hearts');
+  moodHearts.setAttribute('aria-hidden', 'true');
+  moodChip.append(moodEmoji, moodLabel, moodHearts); moodChip.hidden = true;
+  const placeRow = node('span', 'int-rh2-companion__place-row');
+  placeRow.append(placeChip, moodChip);
   const more = node("span", "int-rh2-companion__more", "詳細");
   more.setAttribute("aria-hidden", "true");
 
@@ -198,7 +209,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   const capacity = meter('capacity', '容量');
   setLabel(ap.bar, 'aria-label', 'AP');
   ap.text.hidden = true;
-  companionCopy.append(heading, placeChip, more);
+  companionCopy.append(heading, placeRow, more);
   const details = companionCopy;
 
   // The generic CARE button was removed on 2026-09-03 at the Owner's direction:
@@ -413,6 +424,18 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   }
 
   let lastRosterKey = null;
+  function paintPartnerMood(partner) {
+    moodChip.hidden = !partner;
+    if (!partner) return;
+    const mood = PARTNER_MOODS[partner.mood] ?? PARTNER_MOODS.calm, habitat = PARTNER_HABITATS[partner.habitat] ?? PARTNER_HABITATS.neutral;
+    moodChip.dataset.mood = partner.mood; moodChip.dataset.habitat = partner.habitat; moodChip.dataset.hearts = String(partner.hearts);
+    moodEmoji.textContent = partner.habitat === 'cozy' ? habitat.emoji + mood.emoji : mood.emoji;
+    moodLabel.textContent = uiText(partner.habitat === 'cozy' ? habitat.label : mood.label);
+    moodHearts.replaceChildren(...Array.from({ length: 5 }, (_, i) => node('i', i < partner.hearts ? 'is-full' : '')));
+    const description = uiText('{mood}・{habitat}・親密度 {affection}/100', { mood: uiText(mood.label), habitat: uiText(habitat.label), affection: partner.affection });
+    moodChip.title = description; moodChip.setAttribute('aria-label', description);
+  }
+
   function paintDetail(resident) {
     if (!detail.open || !resident) return;
     const entry = getRosterEntry?.(resident.creatureId) ?? null;
@@ -528,6 +551,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       : null;
     companionLocation.textContent = uiText(livesIn ?? "Touch a resident in the habitat.");
     placeChip.title = livesIn ? uiText(`Living in ${livesIn}`) : '';
+    paintPartnerMood(resident?.partner ?? null);
     placeCard(resident);
     if (!resident) closeDetail(); else paintDetail(resident);
 

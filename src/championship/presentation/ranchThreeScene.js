@@ -1,5 +1,6 @@
 // Fixed-camera terrain, actors and contact shadows share one depth buffer.
 import {createRanchGroundShadows} from './ranchGroundShadows.js';
+import {createRanchSelectionRing} from './ranchSelectionRing.js';
 import {createCm07Ambient} from './cm07Ambient.js';
 import {loadSupportMetadata,validateSupportGeometry,eligibleSupportOwner,encodeProjectedTriangle,projectedTriangleTouchesBox,SUPPORT_MAX_TRIANGLES} from './ranchPhysicalSupport.js';
 import {CONTACT_HEIGHT_FIELDS,transformContactTriangles,contactHeightAtPoint,loadLogicalBridges,logicalContactHeightAtPoint,projectedContactIntersections,canonicalContactNativeCoordinate} from './ranchContactHeight.js';
@@ -85,6 +86,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   scene.add(sun,sun.target);
   const models=new Map(), instances=[], textures=new Map(), sprites=new Map();
   const groundShadows=createRanchGroundShadows(scene);
+  const selectionRing=createRanchSelectionRing(scene,{view});
   const modelBitmaps=new Set();
   const lavaMaterials=new Set(), dynamicShaders=new Set(), smokeNodes=[];
   // HD-2D enhancer (Owner 2026-10-27): one shared clock for every themed cage material.
@@ -843,7 +845,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
 
   let wasHidden=false;
   function render({bounds,actors,food,waste,covered=false,deltaMS=0}) {
-    if(disposed||lost){groundShadows.reset();for(const item of sprites.values())if(!item.sprite.destroyed)item.sprite.renderable=true;canvas.style.visibility='hidden';return false;}
+    if(disposed||lost){groundShadows.reset();selectionRing.reset();for(const item of sprites.values())if(!item.sprite.destroyed)item.sprite.renderable=true;canvas.style.visibility='hidden';return false;}
     if(document.hidden){wasHidden=true;return true;}
     const effectiveDeltaMS=wasHidden?0:deltaMS;
     wasHidden=false;
@@ -888,13 +890,14 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
         s.node.rotation.y=(sceneClock*0.35+s.offset)%(Math.PI*2);
       }
     }
-    groundShadows.reset();
+    groundShadows.reset();selectionRing.reset();
     for(const item of sprites.values())item.seen=false;
     for(const [id,entry] of actors){
       // Evolution is a screen-space presentation owned by the existing scene.
       if(covered||entry.evolutionActive){if(entry.sprite)entry.sprite.renderable=true;continue;}
       syncSprite(id,entry.sprite,entry.root,bounds,pixelScale);
       groundShadows.sync(id,entry,bounds,pixelScale,sprites.get(id)?.seen===true,view);
+      selectionRing.sync(id,entry,bounds,pixelScale,sprites.get(id)?.seen===true,view);
     }
     for(const [id,root] of food??[])syncSprite('food:'+id,root.children?.[1],root,bounds,pixelScale);
     for(const [id,sprite] of waste??[])syncSprite('waste:'+id,sprite,sprite,bounds,pixelScale);
@@ -903,7 +906,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     for(const [source,entry] of textures)if(!usedMaps.has(entry.texture)){
       entry.texture.dispose();entry.material.dispose();textures.delete(source);
     }
-    groundShadows.prune();
+    selectionRing.prune();selectionRing.animate(effectiveDeltaMS,{still:covered||prefersReducedMotion()});groundShadows.prune();
     renderer.render(scene,camera);frames++;lastRenderMs=performance.now()-start;
     canvas.dataset.frames=String(frames);canvas.dataset.drawCalls=String(renderer.info.render.calls);
     canvas.dataset.triangles=String(renderer.info.render.triangles);canvas.dataset.actors=String([...sprites.values()].filter(i=>i.mesh.visible||i.upperMesh.visible).length);
@@ -917,7 +920,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     return true;
   }
   function dispose(){
-    if(disposed)return;disposed=true;groundShadows.dispose();plinth?.dispose();plinth=null;supportOwnerResolver?.dispose();supportOwnerResolver=null;
+    if(disposed)return;disposed=true;groundShadows.dispose();selectionRing.dispose();plinth?.dispose();plinth=null;supportOwnerResolver?.dispose();supportOwnerResolver=null;
     cm07Ambient?.dispose();cm07Ambient=null;
     lavaMaterials.clear();dynamicShaders.clear();smokeNodes.length=0;
     for(const material of authoredDepthMaterials)material.dispose();authoredDepthMaterials.clear();
@@ -1000,6 +1003,6 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     }
     return {x:best.x,y:best.y};
   }
-  return {render,dispose,groundHeight,pickGroundNative,getDiagnostics:()=>({spriteDiagnostics:[...sprites].filter(([key,item])=>item.mesh.visible||item.upperMesh.visible).map(([key,item])=>({key,partition:item.partition,companionId:item.upperMesh.id,physicalSupport:item.physicalSupport,screenQuad:item.screenQuad,worldCenter:item.mesh.position.toArray(),worldScale:item.mesh.scale.toArray(),projectionError:item.projectionError,envelopeNativeExtent:item.envelopeNativeExtent??null,supportStatus:item.supportStatus??'NATIVE_ORIGIN',depthTest:item.mesh.material.depthTest,depthWrite:item.mesh.material.depthWrite})),mode:'TRUE_3D_FIXED_CAMERA_2D_ACTORS',passageAppearance:'invisible',navigationConnections:connections?.length??0,frames,lastRenderMs,models:models.size,textureCap,animatedInstances:instances.filter(i=>i.mixer).length,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,memory:{...renderer.info.memory},lost}),groundContact,contactHeight};
+  return {render,dispose,groundHeight,pickGroundNative,getDiagnostics:()=>({selectionRings:selectionRing.diagnostics(),spriteDiagnostics:[...sprites].filter(([key,item])=>item.mesh.visible||item.upperMesh.visible).map(([key,item])=>({key,partition:item.partition,companionId:item.upperMesh.id,physicalSupport:item.physicalSupport,screenQuad:item.screenQuad,worldCenter:item.mesh.position.toArray(),worldScale:item.mesh.scale.toArray(),projectionError:item.projectionError,envelopeNativeExtent:item.envelopeNativeExtent??null,supportStatus:item.supportStatus??'NATIVE_ORIGIN',depthTest:item.mesh.material.depthTest,depthWrite:item.mesh.material.depthWrite})),mode:'TRUE_3D_FIXED_CAMERA_2D_ACTORS',passageAppearance:'invisible',navigationConnections:connections?.length??0,frames,lastRenderMs,models:models.size,textureCap,animatedInstances:instances.filter(i=>i.mixer).length,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,memory:{...renderer.info.memory},lost}),groundContact,contactHeight};
 }
 

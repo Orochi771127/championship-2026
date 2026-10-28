@@ -5,6 +5,10 @@ import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js'
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
 import {getProductExtension,requirePlayableProductExtension} from '../contracts/productSpeciesExtensions.js';
 import {settleRanchDiscoveries,removeCollectedDiscoveries,RANCH_DISCOVERY_REWARDS} from '../raising/ranchDiscoveries.js';
+import {PARTNER_LIFE_RULES,PARTNER_MOODS,STROLL_REWARDS,partnerHabitatFit,partnerMood,partnerAffectionHearts,partnerTypeBits,partnerPeerRelation,
+  strollFindChance,rollStrollFind,strollIntervalFrames,strollDayKey,appendStrollEntry,canStrollFind,canGreet,canTapAffection,recordTap,strollLogName,strollPairKey} from '../raising/ranchPartnerLife.js';
+import {holdNativeRaisingActorForGreeting} from '../raising/nativeRaisingActor.js';
+import {nativeRaisingPeerStopDistanceQ12} from '../raising/nativeRaisingMovement.js';
 import { panHuntPresentationCamera } from "../hunt/huntPresentationBinding.js";
 import {tutorialHuntStep,TUTORIAL_GATE} from './interactiveTutorialHuntSteps.js';
 import {tutorialBattleStep} from './interactiveTutorialBattleSteps.js';
@@ -166,7 +170,10 @@ export function createChampionshipStandaloneApp({
     return { hour: date.getHours(), minute: date.getMinutes(), second: date.getSeconds() };
   },
   now = () => new Date().toISOString(),
-  deviceBirthday = () => null
+  deviceBirthday = () => null,
+  // Owner 2026-10-28 partner life (moods, stroll finds, greetings). The product
+  // shell turns it on; harnesses keep the original frame-for-frame behaviour.
+  partnerLife = false
 } = {}) {
   if (!catalog) throw new TypeError("Championship standalone app requires a product entities catalog");
   const savePort = createChampionshipPersistentSavePort({ storage, now, locks });
@@ -538,6 +545,7 @@ export function createChampionshipStandaloneApp({
         localPositionQ12:w.positionQ12.map((n,i)=>n-origin[i]*4096)};});
     raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({version:1,poolSlots:raisingPoolSlots,foods,waste,
       ...(raising.nativeHome?.discoveries?{discoveries:raising.nativeHome.discoveries}:{}),
+      ...(raising.nativeHome?.strollLog?{strollLog:raising.nativeHome.strollLog}:{}),
       cageAssignments:Object.fromEntries([...raisingActors].filter(([,a])=>a.cageInstanceId).map(([id,a])=>[id,a.cageInstanceId])),
       evolutionBranches:raising.nativeHome?.evolutionBranches??[],
       ...(raising.nativeHome?.productEvolutionBranches?{productEvolutionBranches:raising.nativeHome.productEvolutionBranches}:{}),
@@ -556,6 +564,134 @@ export function createChampionshipStandaloneApp({
     if(JSON.stringify(previous)===JSON.stringify(discoveries))return;
     raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,discoveries})});
     savePort.markDirty();
+  }
+
+  // Partner life (OWNER_APPROVED_ADAPTATION 2026-10-28). A stroll now and then
+  // turns up an item, partners who meet in one connected area greet each other
+  // and find twice as much, and a tap reads the partner's mood from its own
+  // fields. Every reward is paid into the Shop inventory and written to
+  // nativeHome.strollLog in one save, exactly like collecting discoveries.
+  const partnerLifeState={strollFrames:new Map(),nextFindAt:new Map(),greetings:[],pairsSeen:new Map(),events:[],eventSeq:0,quietFrames:0};
+  const partnerLifeListeners=new Set();
+  // Product draws only: the native gameplay stream is never consumed here.
+  let partnerLifeSeed=(Date.now()^0x5bd1e995)>>>0;
+  function partnerLifeRandom(){
+    partnerLifeSeed=(partnerLifeSeed+0x6d2b79f5)>>>0;let t=partnerLifeSeed;
+    t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296;
+  }
+  function partnerName(id){
+    const entry=resolveRaisingInstance(instanceSources(),id);
+    return strollLogName(entry?.displayName??(entry?speciesDisplayName(entry.speciesId):null));
+  }
+  function partnerReading(id,actor=nativeRaisingActor(id)){
+    const profile=raisingNativeProfile(id);if(!actor||!profile||actor.speciesIndex<8)return null;
+    const fields=profile.fields,maxHp=Number(fields['058'])||0,home=actor.cageInstanceId??actor.cageDefinitionIndex;
+    const dirty=Boolean(actor.growthFields?.['408'])||raisingWaste.some(w=>w.present&&(w.cageInstanceId??w.cageDefinitionIndex)===home);
+    const habitat=partnerHabitatFit({speciesIndex:actor.speciesIndex,cageDefinitionIndex:actor.cageDefinitionIndex,dirty,
+      hpRatio:maxHp>0?(Number(fields['050'])||0)/maxHp:1});
+    const mood=partnerMood({fields,growth:actor.growthFields??{},state:actor.state,statusMusic:actor.statusMusic,habitat});
+    return Object.freeze({mood,emoji:PARTNER_MOODS[mood].emoji,habitat,hearts:partnerAffectionHearts(fields),
+      affection:Math.max(0,Math.min(100,Number(fields['020'])||0)),greeting:partnerLifeState.greetings.some(g=>g.a===id||g.b===id)});
+  }
+  function partnerRegion(actor){
+    const nav=raisingGround?.navigation,home=`cage:${actor.cageInstanceId??actor.cageDefinitionIndex}`;
+    if(!nav?.ownerAt||!actor.positionQ12)return home;
+    const owner=nav.ownerAt([actor.positionQ12[0]>>12,actor.positionQ12[1]>>12]);
+    const region=owner?nav.regionOf(owner.ownerIndex):null;
+    return region===null||region===undefined?home:`region:${region}`;
+  }
+  function emitPartnerLife(event){
+    const row=Object.freeze({...event,seq:++partnerLifeState.eventSeq,at:Date.now()});
+    partnerLifeState.events.push(row);if(partnerLifeState.events.length>24)partnerLifeState.events.splice(0,partnerLifeState.events.length-24);
+    for(const listener of [...partnerLifeListeners])try{listener(row);}catch{/* observers never change partner life */}
+    return row;
+  }
+  // One atomic grant: the Shop gift (or Bits) and the log entry are saved
+  // together; a failed save leaves both untouched.
+  function grantStrollDiscoveryReward({partnerId,partnerB=null,relation=null,reward,quantity=1,cage=null,calendar}){
+    if(!session||tutorialBaseline||!raising?.nativeHome||battleTransactionActive||huntCommitActive)return {ok:false,reason:'UNAVAILABLE'};
+    const spec=STROLL_REWARDS[reward];
+    if(!spec||!Number.isInteger(quantity)||quantity<1||quantity>2||!calendar)return {ok:false,reason:'INVALID_REWARD'};
+    storeNativeRaisingPositions();storeNativeRaisingHome();
+    const candidate=createShopRuntime({snapshot:requireShop().toSave(),allowRepeatedCages:playtestPolicy?.enabled===true,
+      allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
+    let granted;
+    if(spec.bits){const before=candidate.getBits();candidate.creditBits(spec.bits*quantity);granted=candidate.getBits()>before?quantity:0;}
+    else granted=candidate.receiveNativeGift(spec.record,quantity);
+    if(!granted)return {ok:false,reason:'INVENTORY_FULL'};
+    const at=Date.now(),dayKey=strollDayKey(calendar);
+    const strollLog=appendStrollEntry(raising.nativeHome.strollLog,{kind:partnerB?'greeting':'find',reward,quantity:granted,partnerId,
+      partnerName:partnerName(partnerId),cage:Number.isInteger(cage)?cage:null,season:calendar.season,day:calendar.day,minute:calendar.minute,
+      ...(partnerB?{partnerB,partnerBName:partnerName(partnerB),relation}:{})},{dayKey,at});
+    const nextRaising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,strollLog})});
+    const status=savePort.save({...liveSaveRequest(revision+1),raising:nextRaising,shop:candidate.toSave()});
+    if(status.phase!=='SAVED'){savePort.discardPendingWrite();return {ok:false,reason:'SAVE_FAILED'};}
+    raising=nextRaising;
+    shop=createShopRuntime({snapshot:candidate.toSave(),huntInventory,allowRepeatedCages:playtestPolicy?.enabled===true,
+      allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
+    applyMappedHuntInventoryFromShop(shop,huntInventory);bindShopRuntime();revision++;
+    const frame=shop.getFrame(),entry=strollLog.entries.at(-1);
+    const owned=spec.record===undefined?null:frame.listings?.find(row=>row.shopRecordIndex===spec.record)?.owned??null;
+    // The find event goes first, so a shell can hold the badge before the
+    // Shop observers repaint it.
+    emitPartnerLife({kind:'find',entry,tool:spec.tool,owned});
+    for(const listener of [...shopListeners])try{listener(frame);}catch{/* observers never break the shop */}
+    publishRaising();
+    return {ok:true,entry,tool:spec.tool,owned};
+  }
+  function partnerCanMeet(actor){
+    return actor.speciesIndex>=8&&!actor.detached&&Boolean(actor.positionQ12)&&!actor.evolution&&!(actor.greetingHold>0)
+      &&(actor.state===1||(actor.state===2&&actor.foodSlot===null&&actor.mode===0))&&!actor.explorationVisit;
+  }
+  function partnerSpecies(actor){
+    const species=nativeHuntSpeciesByIndex(actor.speciesIndex);
+    return {speciesIndex:actor.speciesIndex,typeBits:partnerTypeBits(actor.speciesIndex),attribute:species?.attribute};
+  }
+  function stepPartnerLife(before){
+    if(!partnerLife||tutorialBaseline||!raisingGround||!raising?.nativeHome||raisingHand||raisingDayTransition
+      ||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)return;
+    const calendar={season:before.season,day:before.dayOfSeason,minute:before.clockMinutes},dayKey=strollDayKey(calendar),at=Date.now();
+    // A greeting ends after its hold and pays the pair one doubled find.
+    for(const greeting of partnerLifeState.greetings)greeting.frames--;
+    const finished=partnerLifeState.greetings.filter(g=>g.frames<=0);
+    partnerLifeState.greetings=partnerLifeState.greetings.filter(g=>g.frames>0);
+    for(const greeting of finished){
+      const actor=nativeRaisingActor(greeting.a),find=rollStrollFind(partnerLifeRandom(),actor?.cageDefinitionIndex??null,{greeting:true});
+      grantStrollDiscoveryReward({partnerId:greeting.a,partnerB:greeting.b,relation:greeting.relation,reward:find.kind,quantity:find.quantity,
+        cage:actor?.cageDefinitionIndex??null,calendar});
+    }
+    const free=[...raisingActors].filter(([,actor])=>partnerCanMeet(actor));
+    partnerLifeState.quietFrames++;
+    if(partnerLifeState.quietFrames>=PARTNER_LIFE_RULES.greetingGapFrames)meet:for(let i=0;i<free.length;i++)for(let j=i+1;j<free.length;j++){
+      const [idA,a]=free[i],[idB,b]=free[j];
+      const radius=Math.max(nativeRaisingPeerStopDistanceQ12(a)??0,nativeRaisingPeerStopDistanceQ12(b)??0)/4096+8;
+      const dx=(a.positionQ12[0]-b.positionQ12[0])/4096,dy=(a.positionQ12[1]-b.positionQ12[1])/4096;
+      if(dx*dx+dy*dy>radius*radius||partnerRegion(a)!==partnerRegion(b))continue;
+      const key=strollPairKey(idA,idB),seen=partnerLifeState.pairsSeen.get(key);
+      if((seen!==undefined&&at-seen<PARTNER_LIFE_RULES.pairCooldownMs)||!canGreet(raising.nativeHome.strollLog,dayKey,idA,idB,at))continue;
+      partnerLifeState.pairsSeen.set(key,at);
+      if(!holdNativeRaisingActorForGreeting(a,b.positionQ12,PARTNER_LIFE_RULES.greetingFrames))continue;
+      if(!holdNativeRaisingActorForGreeting(b,a.positionQ12,PARTNER_LIFE_RULES.greetingFrames)){a.greetingHold=0;continue;}
+      const relation=partnerPeerRelation(partnerSpecies(a),partnerSpecies(b));
+      partnerLifeState.greetings.push({a:idA,b:idB,relation,frames:PARTNER_LIFE_RULES.greetingFrames});partnerLifeState.quietFrames=0;
+      emitPartnerLife({kind:'greeting',a:idA,b:idB,relation});
+      break meet;
+    }
+    // Solo strolls: each partner keeps its own interval of walking time.
+    for(const [id,actor] of free){
+      if(!(actor.state===1||actor.state===2)||actor.greetingHold>0)continue;
+      let next=partnerLifeState.nextFindAt.get(id);
+      if(next===undefined){next=strollIntervalFrames(partnerLifeRandom());partnerLifeState.nextFindAt.set(id,next);}
+      const walked=(partnerLifeState.strollFrames.get(id)??0)+1;
+      if(walked<next){partnerLifeState.strollFrames.set(id,walked);continue;}
+      partnerLifeState.strollFrames.set(id,0);partnerLifeState.nextFindAt.set(id,strollIntervalFrames(partnerLifeRandom()));
+      if(!canStrollFind(raising.nativeHome.strollLog,dayKey))continue;
+      const reading=partnerReading(id,actor);
+      if(!reading||partnerLifeRandom()>=strollFindChance(reading.habitat,reading.mood))continue;
+      const find=rollStrollFind(partnerLifeRandom(),actor.cageDefinitionIndex);
+      grantStrollDiscoveryReward({partnerId:id,reward:find.kind,quantity:find.quantity,cage:actor.cageDefinitionIndex,calendar});
+      break;
+    }
   }
 
   function storeNativeRaisingPositions() {
@@ -701,6 +837,7 @@ export function createChampionshipStandaloneApp({
       if(raisingGround)for(const actor of raisingActors.values())if(stepRanchConveyor(actor,raisingGround))changed=true;
       if(raisingGround&&separateNativeRaisingGroundActors(raisingActors.values(),raisingGround).changed)changed=true;
       raisingDirtySignals.clear();
+      stepPartnerLife(before);
     }
     if(raisingGround)storeNativeRaisingHome();
     if(changed)publishRaising();
@@ -1661,6 +1798,47 @@ export function createChampionshipStandaloneApp({
         allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
       applyMappedHuntInventoryFromShop(shop,huntInventory);bindShopRuntime();revision++;
       publishRaising();return {ok:true,collected:accepted.length,remaining:raising.nativeHome.discoveries.pending.length};
+    },
+
+    // Partner life (Owner 2026-10-28). Readers are pure; the two writers below
+    // use the same save path as the discoveries above.
+    isPartnerLifeEnabled(){return partnerLife===true;},
+    getPartnerReading(instanceId){return partnerLife?partnerReading(instanceId):null;},
+    getPartnerLifeFrame(){
+      if(!partnerLife)return null;
+      return Object.freeze({greetings:Object.freeze(partnerLifeState.greetings.map(g=>Object.freeze({a:g.a,b:g.b,relation:g.relation,frames:g.frames}))),
+        events:Object.freeze([...partnerLifeState.events]),log:raising?.nativeHome?.strollLog??null});
+    },
+    subscribePartnerLife(listener){
+      if(typeof listener!=='function')throw new TypeError('A partner life observer must be a function');
+      partnerLifeListeners.add(listener);return ()=>partnerLifeListeners.delete(listener);
+    },
+    /** A tap on a partner: its mood emote, and +1 affection (field 020) at most once per cooldown. */
+    touchRaisingPartner(instanceId){
+      if(!partnerLife||!session||tutorialBaseline||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)return null;
+      const actor=nativeRaisingActor(instanceId),profile=raisingNativeProfile(instanceId),reading=partnerReading(instanceId,actor);
+      if(!reading)return null;
+      const at=Date.now(),c=this.getCalendar(),dayKey=strollDayKey({season:c.season,day:c.dayOfSeason});
+      let gained=0;
+      if(raising?.nativeHome&&reading.affection<100&&canTapAffection(raising.nativeHome.strollLog,instanceId,at)){
+        const next=structuredClone(profile);next.fields['020']=Math.min(100,(next.fields['020']|0)+PARTNER_LIFE_RULES.tapAffection);
+        writeRaisingNativeProfile(instanceId,normalizeNativeIndividualProfile(next),{markDirty:false});gained=PARTNER_LIFE_RULES.tapAffection;
+        raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,strollLog:recordTap(raising.nativeHome.strollLog,instanceId,at,dayKey)})});
+        savePort.markDirty();
+      }
+      const after=partnerReading(instanceId,actor)??reading;
+      emitPartnerLife({kind:'tap',partnerId:instanceId,mood:after.mood,emoji:after.emoji,habitat:after.habitat,gained});
+      publishRaising();
+      return Object.freeze({...after,gained});
+    },
+    /** Pay one stroll find now (also the QA seam): reward kind and quantity 1 or 2. */
+    grantStrollDiscoveryReward({partnerId,reward,quantity=1,partnerB=null,relation=null}={}){
+      if(!partnerLife||!session||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)return {ok:false,reason:'UNAVAILABLE'};
+      const actor=nativeRaisingActor(partnerId);if(!actor||actor.speciesIndex<8)return {ok:false,reason:'NO_PARTNER'};
+      if(partnerB!==null&&!nativeRaisingActor(partnerB))return {ok:false,reason:'NO_PARTNER'};
+      const c=this.getCalendar();
+      return grantStrollDiscoveryReward({partnerId,partnerB,relation:partnerB?(relation==='rival'?'rival':'friendly'):null,reward,quantity,
+        cage:actor.cageDefinitionIndex,calendar:{season:c.season,day:c.dayOfSeason,minute:c.clockMinutes}});
     },
 
     resolveRaisingInstance(instanceId) {

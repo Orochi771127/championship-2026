@@ -212,6 +212,8 @@ export async function mountRaisingFieldPixiPresentation({
   const foodGraphics = new Map();
   const wasteGraphics = new Map();
   const evolutionGlow=new PIXI.Graphics();evolutionGlow.eventMode='none';fxLayer.addChild(evolutionGlow);
+  const emoteLayer=new PIXI.Container({label:'partner emotes'});emoteLayer.eventMode='none';fxLayer.addChild(emoteLayer);
+  let partnerEventSeq=null;
   const evolutionBackdrop=new PIXI.Graphics();evolutionBackdrop.eventMode='none';scene.addChildAt(evolutionBackdrop,4);
   const evolutionWriting=new PIXI.Container();evolutionWriting.eventMode='none';scene.addChildAt(evolutionWriting,5);
   const evolutionWords=EVOLUTION_TEXT_ROWS.map(({text,row})=>{
@@ -505,7 +507,8 @@ export async function mountRaisingFieldPixiPresentation({
     const completed = drag;
     drag = null;
     completed.entry.root.cursor = "grab";
-    if(!completed.moved&&event.type!=='pointercancel'&&event.type!=='pointerupoutside')revealResident(completed.creatureId);
+    if(!completed.moved&&event.type!=='pointercancel'&&event.type!=='pointerupoutside'){revealResident(completed.creatureId);
+      if(!completed.tool||completed.tool==='hand')source.intents.touchPartner?.(completed.creatureId);}
     if(completed.nativeHand){source.intents.endHand?.(completed.creatureId,{cancelled:event.type==='pointercancel'||event.type==='pointerupoutside',checkpoint:completed.tutorialCheckpoint});
       sync(source.getFrame(),{force:true});return;}
     if(completed.carried){source.intents.releaseCarry?.(completed.creatureId);sync(source.getFrame(),{force:true});return;}
@@ -760,15 +763,15 @@ export async function mountRaisingFieldPixiPresentation({
       entry.shadow.ellipse(ellipse.x,ellipse.y,ellipse.radiusX,ellipse.radiusY);
     }
     entry.shadow.fill({color:0x02070a,alpha:.26});
-    // Lock-on ring (Owner 2026-10-27): a soft glow, a teal ring with a white
-    // core and four bright marks, so the picked partner reads at a glance.
-    const rx=visible.width/2+2,ry=Math.max(2,visible.width*.16),cy=bottom+1;
+    // Lock-on ring (Owner 2026-10-28): a ground decal on the contact shadow's
+    // centre and perspective, under the body (shadow < ring < sprite). The 3D
+    // ranch draws it in its own depth buffer instead (ranchSelectionRing.js).
+    const rx=contact.radiusX*1.15,ry=Math.max(2,rx*contact.radiusY/Math.max(1,contact.radiusX));
     entry.selection.clear()
-      .ellipse(center,cy,rx+6,ry+3).fill({color:0x56e3c2,alpha:.16})
-      .ellipse(center,cy,rx,ry).fill({color:0x56e3c2,alpha:.14}).stroke({color:0x2fd6b4,width:3,alpha:.95})
-      .ellipse(center,cy,rx,ry).stroke({color:0xffffff,width:1,alpha:.9});
-    for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]])
-      entry.selection.ellipse(center+dx*(rx+5),cy+dy*(ry+3),2.5,2.5).fill({color:0xffffff,alpha:.95}).stroke({color:0x2fd6b4,width:1.5,alpha:.95});
+      .ellipse(contact.x,contact.y,rx+5,ry+2).fill({color:0x56e3c2,alpha:.14})
+      .ellipse(contact.x,contact.y,rx,ry).stroke({color:0x2fd6b4,width:3,alpha:.95})
+      .ellipse(contact.x,contact.y,rx,ry).stroke({color:0xffffff,width:1,alpha:.9})
+      .ellipse(contact.x,contact.y,rx*.72,ry*.72).stroke({color:0x56e3c2,width:1,alpha:.7});
     entry.root.hitArea=new PIXI.Rectangle(hitArea.x,hitArea.y,hitArea.width,hitArea.height);
     entry.visibleGeometry=visible;
   }
@@ -1117,6 +1120,7 @@ export async function mountRaisingFieldPixiPresentation({
     }
     for(const g of foodGraphics.values())g.visible=!covered;for(const g of wasteGraphics.values())g.visible=!covered;
     const trainingLabels=[];
+    readPartnerLife(covered);
     for (const [creatureId, entry] of actors) {
       entry.root.visible=!covered||creatureId===lifecycle?.instanceId;
       const native=actorFrameFor(creatureId);
@@ -1147,7 +1151,7 @@ export async function mountRaisingFieldPixiPresentation({
             if(entry.nativeScale!==null)applyNativeCharacterCellGeometry(entry.sprite,visualFrame);
             entry.visualLift=(frame.positionQ12?.[2]??0)/4096;
             const geometry=entry.nativeScale!==null?actorGeometry(entry,visualFrame?.geometry,Boolean(frame.flipBits&1)):null;
-            if(geometry){entry.sprite.scale.set(geometry.spriteScale);entry.sprite.x=geometry.offset.x;decorateActor(entry,geometry);}
+            if(geometry){entry.sprite.scale.set(geometry.spriteScale);entry.baseSpriteScale=geometry.spriteScale;entry.sprite.x=geometry.offset.x;decorateActor(entry,geometry);}
             if(entry.nativeScale!==null)entry.root.scale.x=Math.abs(entry.root.scale.x);
             entry.sprite.y=(geometry?.offset.y??0)-entry.visualLift;
             // Main is authored facing left; the original body bit mirrors it.
@@ -1163,6 +1167,7 @@ export async function mountRaisingFieldPixiPresentation({
         entry.sprite.update(ticker);
       }
       drawEvolution(entry,native);
+      drawPartnerEmote(entry,covered);
     }
     onTrainingFrame(trainingLabels);
     if(fieldArt?.threeScene){
@@ -1345,6 +1350,89 @@ export async function mountRaisingFieldPixiPresentation({
 
   // Owner 2026-10-27: a partner heading to look at a newly opened passage
   // shows a small "!" bubble. Vector only, presentation only, no RNG.
+  // Partner life (Owner 2026-10-28): a tapped partner squashes, hops and shows
+  // its mood; partners who meet show 🎵 (friends) or ⚡ (rivals) together; a
+  // find shows a gift. Pixel icons are drawn here, so no emoji font is needed.
+  const EMOTE_PALETTE={K:0x2a1e3f,R:0xff4d6d,P:0xff9fb0,W:0xffffff,Y:0xffd23f,O:0xff8c42,B:0x9b5a2e,N:0x7a5cff,C:0x37b8ff,G:0x46c463,T:0x2fd6b4};
+  const EMOTE_ICONS={
+    heart:['.KK...KK.','KRRK.KRRK','KRWRKRRRK','KRRRRRRRK','.KRRRRRK.','..KRRRK..','...KRK...','....K....'],
+    note:['....KKK..','....KNNK.','....KNKK.','....KN...','....KN...','.KKKKN...','KNNNKN...','KNNNNK...','.KKKK....'],
+    sparkle:['....K....','...KYK...','...KYK...','.KKYWYKK.','KYYWWWYYK','.KKYWYKK.','...KYK...','...KYK...','....K....'],
+    meat:['.....KK..','....KWWK.','..KKKWWK.','.KOOBKKK.','KOOOOBK..','KOPOOBK..','KOOOOBK..','.KOOBK...','..KKK....'],
+    zzz:['....NNNNN','.......N.','......N..','.....NNNN','NNNN.....','...N.....','..N......','.N.......','NNNN.....'],
+    anger:['.RR...RR.','R.R...R.R','RR.....RR','.........','.........','.........','RR.....RR','R.R...R.R','.RR...RR.'],
+    bolt:['....KKK.','...KYYK.','..KYYK..','.KYYKKK.','KYYYYYYK','.KKKYYK.','...KYK..','..KYK...','..KK....'],
+    gift:['..K...K..','.KRK.KRK.','..KRKRK..','KKKKKKKKK','KRRRYRRRK','KKKKYKKKK','.KRRYRRK.','.KRRYRRK.','.KKKKKKK.'],
+    smile:['..KKKKK..','.KYYYYYK.','KYYKYKYYK','KYYYYYYYK','KYKYYYKYK','KYYKKKYYK','.KYYYYYK.','..KKKKK..']
+  };
+  const MOOD_ICON={love:'heart',happy:'note',energetic:'sparkle',hungry:'meat',sleepy:'zzz',unwell:'anger',calm:'smile'};
+  function createEmote(icon,label=null){
+    const px=3,rows=EMOTE_ICONS[icon]??EMOTE_ICONS.smile,w=Math.max(...rows.map(r=>r.length))*px,h=rows.length*px,pad=6;
+    const bubble=new PIXI.Container({label:'partner emote '+icon});bubble.eventMode='none';
+    const box=new PIXI.Graphics(),bw=w+pad*2,bh=h+pad*2;
+    // Pixel-stepped corners and a two-pixel tail, the bubble's anchor at the tail tip.
+    box.rect(-bw/2+2,-bh-6,bw-4,bh).rect(-bw/2,-bh-4,bw,bh-4).fill({color:0x2a1e3f})
+      .rect(-bw/2+4,-bh-4,bw-8,bh-4).rect(-bw/2+2,-bh-2,bw-4,bh-8).fill({color:0xffffff})
+      .rect(-4,-6,8,2).rect(-2,-4,4,2).rect(-1,-2,2,2).fill({color:0x2a1e3f}).rect(-2,-6,4,2).fill({color:0xffffff});
+    const art=new PIXI.Graphics();
+    rows.forEach((row,y)=>[...row].forEach((ch,x)=>{const c=EMOTE_PALETTE[ch];if(c!==undefined)art.rect(x*px,y*px,px,px).fill({color:c});}));
+    art.position.set(-w/2,-bh-6+pad);bubble.addChild(box,art);
+    if(label){const text=new PIXI.Text({text:label,style:{fontFamily:'Tahoma, "Noto Sans TC", sans-serif',fontSize:13,fontWeight:'bold',fill:0xff4d6d,stroke:{color:0xffffff,width:3}}});
+      text.anchor.set(0,1);text.position.set(bw/2-2,-bh+2);bubble.addChild(text);}
+    return bubble;
+  }
+  function showPartnerEmote(entry,icon,{ms=1700,label=null}={}){
+    if(!entry)return;
+    entry.emote?.destroy({children:true});
+    entry.emote=createEmote(icon,label);entry.emoteStart=performance.now();entry.emoteMs=ms;emoteLayer.addChild(entry.emote);
+  }
+  function readPartnerLife(covered){
+    const life=source.getPartnerLife?.();if(!life)return;
+    const events=life.events??[];
+    if(partnerEventSeq===null){partnerEventSeq=events.at(-1)?.seq??0;return;}
+    for(const event of events){
+      if(event.seq<=partnerEventSeq)continue;
+      partnerEventSeq=event.seq;if(covered)continue;
+      if(event.kind==='tap'){const entry=actors.get(event.partnerId);if(!entry)continue;
+        if(!reducedMotion&&!prefersReducedMotion())entry.hopStart=performance.now();
+        showPartnerEmote(entry,MOOD_ICON[event.mood]??'smile',{label:event.gained?'+'+event.gained:null});}
+      else if(event.kind==='greeting'){const icon=event.relation==='rival'?'bolt':'note';
+        for(const id of [event.a,event.b])showPartnerEmote(actors.get(id),icon,{ms:1800});}
+      else if(event.kind==='find'){
+        for(const id of [event.entry?.partnerId,event.entry?.partnerB].filter(Boolean))showPartnerEmote(actors.get(id),'gift',{ms:1500,label:'×'+(event.entry?.quantity??1)});
+        announcePartnerFind(event);}
+      if(event.kind==='tap')app.canvas?.dispatchEvent(new CustomEvent('cm-fx',{bubbles:true,detail:{kind:'toggle'}}));
+    }
+  }
+  // The DOM shell flies the item from here to its tool key (main.js).
+  function announcePartnerFind(event){
+    const canvas=app.canvas;if(!canvas?.isConnected)return;
+    const entry=actors.get(event.entry?.partnerId),visible=entry?.visibleGeometry,rect=canvas.getBoundingClientRect();
+    const head=entry?entry.root.toGlobal({x:visible?visible.x+visible.width/2:0,y:visible?visible.y:-60}):{x:app.screen.width/2,y:app.screen.height*.6};
+    const sx=rect.width/Math.max(1,app.screen.width),sy=rect.height/Math.max(1,app.screen.height);
+    canvas.dispatchEvent(new CustomEvent('cm-partner-find',{bubbles:true,detail:{x:rect.left+head.x*sx,y:rect.top+head.y*sy,find:event}}));
+  }
+  function drawPartnerEmote(entry,covered){
+    const now=performance.now();
+    // Squash-and-stretch hop on the native sprite (the 3D billboard follows it).
+    if(entry.hopStart&&entry.sprite&&entry.baseSpriteScale){
+      const t=(now-entry.hopStart)/420;
+      if(t>=1||covered)entry.hopStart=null;
+      else{const wave=Math.sin(t*Math.PI*2)*(1-t),sign=Math.sign(entry.sprite.scale.x)||1;
+        entry.sprite.scale.set(entry.baseSpriteScale*(1+.16*wave)*sign,entry.baseSpriteScale*(1-.14*wave));
+        entry.sprite.y-=Math.sin(Math.min(1,t*1.25)*Math.PI)*10;}
+    }
+    const bubble=entry.emote;if(!bubble)return;
+    const age=now-entry.emoteStart;
+    if(covered||!entry.root.visible||age>entry.emoteMs||bubble.destroyed){bubble.destroy({children:true});entry.emote=null;return;}
+    const visible=entry.visibleGeometry;
+    const head=entry.root.toGlobal({x:visible?visible.x+visible.width/2:0,y:visible?visible.y:-90});
+    const local=emoteLayer.toLocal(head);bubble.position.set(local.x,local.y-4);
+    // Spring pop with a small overshoot, then a fade over the last 300 ms.
+    const k=Math.min(1,age/260),back=1.70158;
+    bubble.scale.set(Math.max(.01,1+(back+1)*(k-1)**3+back*(k-1)**2));
+    bubble.alpha=Math.max(0,Math.min(1,(entry.emoteMs-age)/300));
+  }
   function drawPassageVisit(entry,visiting,covered) {
     if(!entry.visitGlyph){if(!visiting)return;entry.visitGlyph=new PIXI.Graphics();entry.visitGlyph.eventMode='none';entry.root.addChild(entry.visitGlyph);}
     const g=entry.visitGlyph;g.clear();g.visible=Boolean(visiting)&&!covered;
