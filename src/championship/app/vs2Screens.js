@@ -727,13 +727,19 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   // 捕獲成功: a toast over the live field when a catch lands on the card.
   const seenCaptures = new Set((block.hud.onCard ?? []).map((entry) => entry.wildId));
   let captureToast = null;
+  // A lure -> disable -> rope chain (OWNER_APPROVED_ADAPTATION 2026-10-28)
+  // crowns the catch; its bonus bits are credited by the Home commit.
+  const COMBO_KICKERS = { PERFECT: '完美連攜捕獲！', GOOD: '連攜捕獲！' };
   function announceCapture(caught, total) {
     captureToast?.dispose();
     replay(viewport, 'shake');
+    const combo = caught.combo;
+    const kicker = COMBO_KICKERS[combo?.rank] ?? (combo?.imprint ? '數據拓印成功！' : '捕獲成功');
+    const chip = combo?.bits ? uiText('連攜獎勵 +{bits} 位元幣 · 回牧場時入帳', { bits: combo.bits }) : uiText('已收入記憶卡 · {count}', { count: total });
+    if (combo?.rank) viewport.dataset.combo = combo.rank; else delete viewport.dataset.combo;
     captureToast = playCeremony({ host: viewport, kind: 'capture', cue: 'capture',
-      build: (stage, env) => buildCapture(stage, env, { kicker: uiText('捕獲成功'), name: caught.name ?? '',
-        chip: uiText('已收入記憶卡 · {count}', { count: total }) }),
-      onDone: () => { captureToast = null; } });
+      build: (stage, env) => buildCapture(stage, env, { kicker: uiText(kicker), name: caught.name ?? '', chip }),
+      onDone: () => { captureToast = null; delete viewport.dataset.combo; } });
   }
   const target = element("section", "cm-vs2-target");
   target.setAttribute('aria-label', uiText('狩獵目標資訊'));
@@ -769,6 +775,15 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     button.addEventListener("click",()=>{replay(button,"pop");source.intents.selectHuntTool(tool.id,checkpoint);});
     toolButtons.set(tool.id,button);tools.append(button);
   }
+  // Spare ropes (OWNER_APPROVED_ADAPTATION 2026-10-28): a broken rope overheats
+  // for this hunt, so a second owned rope can be swapped in on the spot.
+  const ROPE_ROLE_MARK = { SWIFT: '🔵', TOUGH: '🟢', CLONE: '🟡', ULTIMATE: '🔴' };
+  const ropeSwap = actionButton('⇄');
+  ropeSwap.classList.add('cm-hunt-rope-swap');
+  ropeSwap.hidden = true;
+  ropeSwap.setAttribute('aria-label', uiText('切換繩索'));
+  ropeSwap.addEventListener('click', () => { replay(ropeSwap, 'pop'); source.intents.cycleHuntRope?.(); });
+  if (block.toolState) tools.append(ropeSwap);
   const movementHint = element("p", "cm-vs2-field__hint", "拖曳地面移動視野 · 輕觸夥伴選取");
   const info = element('div', 'cm-hunt-info');
   info.append(target, pluginHud);
@@ -923,7 +938,14 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     for(const marker of plugins?.radar??[]){const dot=element('i');dot.style.left=`${marker.x*100}%`;dot.style.top=`${marker.y*100}%`;radar.append(dot);}
     if(next.toolState){
       for(const tool of next.toolState.tools){const button=toolButtons.get(tool.id);if(button){button.disabled=field.isPlayable===false||!tool.enabled;button.setAttribute("aria-pressed",String(next.toolState.activeTool===tool.id));
-        const counter=plugins?.counters.find(c=>c.id===tool.id);renderHuntTool(button,tool,uiText(tool.label)+(counter?` ×${counter.quantity}`:''));}}
+        const counter=plugins?.counters.find(c=>c.id===tool.id);
+        const cooling=tool.id==='ROPE'&&tool.overheatSeconds>0?` · ${uiText('冷卻 {seconds} 秒',{seconds:tool.overheatSeconds})}`:'';
+        renderHuntTool(button,tool,uiText(tool.label)+(counter?` ×${counter.quantity}`:'')+cooling);
+        if(tool.id==='ROPE'){button.dataset.ropeRole=tool.role??'';button.dataset.overheat=String(tool.overheatSeconds??0);}}}
+      const ropeTool=next.toolState.tools.find(t=>t.id==='ROPE');
+      ropeSwap.hidden=!(ropeTool?.spares>0);
+      ropeSwap.disabled=field.isPlayable===false||!ropeTool;
+      if(ropeTool)ropeSwap.textContent=`${ROPE_ROLE_MARK[ropeTool.role]??''} ${ropeTool.ropeLabel??''} ⇄`.trim();
       const selectedTool=next.toolState.tools.find(t=>t.id===next.toolState.activeTool);
       // Rope primed: the field's corners frame a scope. A target that can be
       // collected makes the hand key pulse (the hand is what collects).
@@ -931,10 +953,17 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       const hand=toolButtons.get('HAND');if(hand)hand.dataset.ready=String(Boolean(nextFrame.huntField?.affordances?.canCollect));
       // A notice (the rope broke, the card is full) is feedback and always
       // shows; an instruction is a hint the compact HUD may leave out.
-      const noticeKnown=Boolean(next.toolState.notice&&["OVER_CAPACITY","ROPE_BROKEN","ON_CARD","EMPTY","BLOCKED_TERRAIN","FOOD_POOL_FULL","TOOL_POOL_FULL"].includes(next.toolState.notice));
+      const notices={OVER_CAPACITY:"記憶卡容量不足",ROPE_BROKEN:"繩索斷了",ON_CARD:"已收入記憶卡",EMPTY:"道具已用完",
+        BLOCKED_TERRAIN:"無法放在這個位置",FOOD_POOL_FULL:"場上的肉餌已滿",TOOL_POOL_FULL:"場上的道具已滿",
+        // Rope roles, combos and overheat (2026-10-28).
+        ROPE_TOO_HEAVY:"繩索出力過大，請換用輕型捕捉繩！",ROPE_TOO_WEAK:"這條繩索拉不動這個階段，請換用更高階的繩索",
+        ROPE_FRAGILE:"克隆繩：清醒的夥伴容易掙斷，先用陷阱、睡眠彈或肉餌",RAGE_GUARD:"狂暴警戒中：先用連發槍、肉餌或陷阱破防",
+        GUARD_BROKEN:"狂暴警戒已解除！",ROPE_OVERHEATED:"繩索纏繞冷卻中 · 切換備用繩索或稍候",PERFECT_COMBO:"完美連攜捕獲！",
+        GOOD_COMBO:"連攜捕獲！",DATA_IMPRINT:"數據拓印成功！",ROPE_SWITCHED:"已切換繩索"};
+      const noticeKnown=Boolean(next.toolState.notice&&Object.hasOwn(notices,next.toolState.notice));
       movementHint.dataset.kind=noticeKnown?"notice":"instruction";
-      movementHint.textContent=uiText(({OVER_CAPACITY:"記憶卡容量不足",ROPE_BROKEN:"繩索斷了",ON_CARD:"已收入記憶卡",EMPTY:"道具已用完",
-        BLOCKED_TERRAIN:"無法放在這個位置",FOOD_POOL_FULL:"場上的肉餌已滿",TOOL_POOL_FULL:"場上的道具已滿"})[next.toolState.notice]
+      if(noticeKnown)movementHint.dataset.notice=next.toolState.notice;else delete movementHint.dataset.notice;
+      movementHint.textContent=uiText(notices[next.toolState.notice]
         ?? ({ROPE:"快速畫圈綑綁 · 按住目標拉動繩索 · 放鬆可恢復耐久",SHOT:"按住目標射擊",WIRE:"拖曳拉出鋼索 · 放手完成",
           MEAT:"輕觸地面放置肉餌",DECOY:"輕觸放置玩具 · 再輕觸指定移動方向",LIGHT:"輕觸放置誘引燈 · 夜間吸引目標",
           CAPTURE_TRAP:"輕觸放置陷阱 · 困住目標後切換手掌收取",BOMB:"輕觸放置炸彈",MINE:"輕觸放置地雷 · 目標經過時引爆"})[selectedTool?.subtype??selectedTool?.id]

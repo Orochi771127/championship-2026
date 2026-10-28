@@ -1,5 +1,17 @@
 # Championship Owner Direction
 
+<!-- record-id: MOVE_VFX_THEMES_HUNT_ROPE_TACTICS_20261028 -->
+## 2026-10-28 — Dex move names and per-move preview VFX; Hunt rope roles, combos and overheat
+
+Owner directs two fixes: (1) the Dex 「能力與招式」 move names read blank, the 「預覽必殺技」 banner showed 【 ？？？？ 】 and every partner's preview fired the same blue-white beam; restore the effects made earlier (「找一下，原本我們做好的Vfx招式」) and bind each partner's moves to effects by family × attribute × stage, insect/plant never firing a laser and machines firing missiles, with beams limited to true energy cannons (under 15 %); (2) the Hunt ropes, rifles, traps and meat lose all purpose once the 究極繩 γ catches everything; give the four rope families distinct roles, reward a lure → disable → rope chain, and let a broken rope overheat for the rest of the hunt while ownership (持有 1/1) and the shop UI stay unchanged.
+
+- Names: the 565 approved names were intact in all five locales; `.cm-dex-move-card__name` was a fixed white on the arcade theme's white panel. It now takes the panel colour. An encrypted special preview names its move; an undiscovered caster's name stays hidden.
+- Effects: each move's theme comes from `scripts/build-move-vfx-themes.mjs` (`move-vfx-themes.r1.json`): its original effect banks first (rose00 → vine, missile01 → missile, kikanzyu00 → gatling), else its approved name, else the family × attribute × stage rule. Beams stay on 8 of 206 signature moves (3.9 %). The Dex sandbox draws 23 DOM styles and plays the battle's own effect cells (the public battle-effects atlas with the Owner's remade shared VFX over the sequences it covers) wherever the battle may load them. Display only: no move value, battle timing or bank changes; no canvas or WebGL context.
+- OWNER_APPROVED_ADAPTATION of Hunt rules around the unchanged native rope writer (`huntRopeTactics.js`): 捕捉繩 +30 % pull damage, a 14-tick cinch (native 18) and a 21 px catch margin, reaching 成長期; 強力繩 half terrain wear (a blocked pull or a rope line over blocked ground) and no snap while its loop holds two or more partners, reaching 成熟期; 克隆繩 35 % tolerance on an awake partner and a doubled bonus (data imprint); 究極繩 the only rope for 完全體 / 究極體, throwing off 幼年期 / 成長期 and facing a rage guard on 完全體 / 究極體 that doubles wear until shots (rapid shots most), meat, a trap, sleep, a stun or a blast break it. A lure → disable → rope catch pays 150 bits × generation (50 for a partial chain), credited in the same Home save as the catch. A rope that breaks overheats for 15 s of hunt time; a spare owned rope can be swapped in from the hunt HUD. The tutorial hunt never overheats.
+- Not done: the data imprint pays bits rather than raising an individual's potential, because a per-individual bonus needs a save-schema change and its own Owner gate.
+
+The first instruction set no commit, push or deployment. After the review the Owner directs 「好，請自我審查一次，沒問題的話就commit 並push，然後合併發佈」, which authorizes this batch's self-review, commit, push, merge to main and publication.
+
 <!-- record-id: RANCH_PARTNER_LIFE_20261028 -->
 ## 2026-10-28 — Ground selection ring, partner moods, stroll finds and greetings
 

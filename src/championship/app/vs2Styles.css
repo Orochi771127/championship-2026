@@ -1369,7 +1369,9 @@ body[data-desktop-menu] .cm-vs2-root[data-screen="MEDALS"] .cm-medals__grid { gr
 .cm-dex-moves-list { display: flex; flex-direction: column; gap: var(--sp-2); }
 .cm-dex-move-card { display: flex; flex-direction: column; gap: 2px; padding: 6px 10px; background: rgba(255, 255, 255, 0.05); border-left: 3px solid var(--accent, #4fa3e3); border-radius: 2px; }
 .cm-dex-move-card__header { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: var(--fs-body, 14px); }
-.cm-dex-move-card__name { color: var(--fg-primary, #ffffff); }
+/* The name takes the panel's own text colour: a fixed white vanished on the
+   arcade theme's white panel (2026-10-28, names read as blank). */
+.cm-dex-move-card__name { color: inherit; font-weight: 800; overflow-wrap: anywhere; }
 .cm-dex-move-card__type { font-size: var(--fs-caption, 11px); opacity: 0.8; }
 .cm-dex-move-card__meta { font-size: var(--fs-caption, 12px); opacity: 0.75; }
 
