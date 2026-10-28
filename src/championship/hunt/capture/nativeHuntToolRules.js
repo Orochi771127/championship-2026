@@ -26,6 +26,9 @@ export function nativeToolEffectiveness(speciesIndex, selector, { distracted = 0
 }
 const responseColumn = value => Math.max(value - 1, 0);
 
+/** One native rope row (durability byte and per-generation coefficients). */
+export function nativeRopeRow(ropeIndex) { return item(source.ropes, ropeIndex); }
+
 // 02115838..02115980; unsupported generations leave the rate at zero. A zero
 // divisor produces zero after Nitro's rounded 64-bit divider result (-1).
 export function nativeRopeParameters(ropeIndex, speciesIndex, maxHp) {

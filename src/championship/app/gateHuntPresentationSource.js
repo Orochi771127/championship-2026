@@ -22,7 +22,7 @@ import presentation from "../../../docs/contracts/championship/raising-home-pres
 import toolbarContract from "../../../docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json" with { type: "json" };
 import { CHAMPIONSHIP_SCREENS } from "./championshipScreenStack.js";
 import { huntGateThumbnail, huntTargetReadout, huntPluginReadout } from "../presentation/huntMobileReadouts.js";
-import { raisingDisplayName, speciesNameForId } from "../text/zhHant.js";
+import { raisingDisplayName, shopItemName, speciesNameForId } from "../text/zhHant.js";
 import { getHuntCatalogItem } from "../hunt/loadout/huntEquipmentCatalog.js";
 
 export const GATE_HUNT_PRESENTATION_CONTRACT_VERSION = "VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT/v1";
@@ -249,7 +249,8 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
         // catch the moment it lands there (ceremony layer, 2026-10-15).
         onCard: (runtime.getOnCardEntries?.() ?? []).map((entry) => ({
           wildId: entry.wildId, speciesId: entry.speciesId,
-          name: entry.displayName ?? speciesNameForId(entry.speciesId)
+          name: entry.displayName ?? speciesNameForId(entry.speciesId),
+          combo: entry.combo ?? null
         })),
         note: "Deliberately minimal. hunt_sub_scene carries map_marker0..23 and remain_icon0..3 as structural evidence only; their semantics are unknown, so none are rendered."
       },
@@ -266,7 +267,10 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
         note: "Native tool/actor ports share the normal encounter RNG. Full AI and every-tool live ROM parity remain separate acceptance requirements."
       },
       toolbar: HUNT_TOOLBAR_FRAME,
-      toolState:(()=>{const state=runtime.getToolState?.()??null,t=tutorial();return state&&t?{...state,tools:state.tools.map(tool=>({...tool,enabled:tool.enabled&&!t.pendingSave&&!t.dialogue&&t.action==='select'&&tool.id===t.tool}))}:state;})()
+      toolState:(()=>{const raw=runtime.getToolState?.()??null,t=tutorial();
+        // The rope key names the equipped rope in the display language (shop name).
+        const state=raw&&{...raw,tools:raw.tools.map(tool=>tool.id==='ROPE'&&Number.isInteger(tool.shopRecordIndex)?{...tool,ropeLabel:shopItemName(tool.shopRecordIndex,tool.ropeName)}:tool)};
+        return state&&t?{...state,tools:state.tools.map(tool=>({...tool,enabled:tool.enabled&&!t.pendingSave&&!t.dialogue&&t.action==='select'&&tool.id===t.tool}))}:state;})()
     };
   }
 
@@ -488,6 +492,7 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
       return selected;
     },
     abortEnclosureStroke() { return app.abortEnclosureStroke(); },
+    cycleHuntRope() { const accepted=tutorial()?false:app.getHuntRuntime()?.cycleRope?.()??false; publish(); return accepted; },
     selectHuntTool(kind,checkpoint=tutorial()?.checkpoint) { const accepted=tutorial()?app.interactiveHuntInput('select',[kind],checkpoint):app.getHuntRuntime()?.selectTool(kind)??false; publish(); return accepted; },
     toolPointerDown(x,y) { tutorialGesture=tutorial()?.checkpoint??null;const accepted=tutorial()?app.interactiveHuntInput('down',[x,y],tutorialGesture):app.getHuntRuntime()?.toolPointerDown(x,y)??false; publish(); return accepted; },
     toolPointerMove(x,y) { return tutorial()?app.interactiveHuntInput('move',[x,y],tutorialGesture):app.getHuntRuntime()?.toolPointerMove(x,y)??false; },
