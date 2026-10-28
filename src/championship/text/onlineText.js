@@ -5,6 +5,7 @@ import { getLocale } from "./locale.js";
 
 export const ONLINE_COPY = Object.freeze({
   "zh-Hant": Object.freeze({
+    simRivalA: "鏡像拍檔師 A", simRivalB: "鏡像拍檔師 B", simRivalC: "鏡像拍檔師 C", simRankCoach: "鏡像教官", simRankRookie: "新人",
     accountTitle: "☁️ 帳號與雲端同步", accountHint: "本機存檔永遠是主角；雲端只是你按下去才會動的備份。",
     guestPass: "🟢 遊客通行證", linkedAccount: "🔗 正式帳號", tamerId: "ID", copy: "複製", copied: "已複製",
     modeLocal: "本地模擬（尚未設定雲端）", modeCloud: "雲端已連線", modeOffline: "離線", modeLoading: "連線中…",
@@ -38,6 +39,7 @@ export const ONLINE_COPY = Object.freeze({
     searching: "配對中…", opponentFound: "找到對手：{name}", matchFailed: "配對失敗：{reason}"
   }),
   en: Object.freeze({
+    simRivalA: "Mirror Tamer A", simRivalB: "Mirror Tamer B", simRivalC: "Mirror Tamer C", simRankCoach: "Mirror coach", simRankRookie: "Rookie",
     accountTitle: "☁️ Account & cloud sync", accountHint: "Your local save stays in charge; the cloud is a backup that only moves when you press it.",
     guestPass: "🟢 Guest pass", linkedAccount: "🔗 Linked account", tamerId: "ID", copy: "Copy", copied: "Copied",
     modeLocal: "Local simulation (no cloud configured)", modeCloud: "Cloud connected", modeOffline: "Offline", modeLoading: "Connecting…",
@@ -71,6 +73,7 @@ export const ONLINE_COPY = Object.freeze({
     searching: "Matching…", opponentFound: "Opponent found: {name}", matchFailed: "Match failed: {reason}"
   }),
   ja: Object.freeze({
+    simRivalA: "ミラーテイマー A", simRivalB: "ミラーテイマー B", simRivalC: "ミラーテイマー C", simRankCoach: "ミラー教官", simRankRookie: "新人",
     accountTitle: "☁️ アカウントとクラウド同期", accountHint: "本体はいつでもこの端末のセーブ。クラウドは押したときだけ動くバックアップです。",
     guestPass: "🟢 ゲストパス", linkedAccount: "🔗 連携済みアカウント", tamerId: "ID", copy: "コピー", copied: "コピーしました",
     modeLocal: "ローカルシミュレーション（クラウド未設定）", modeCloud: "クラウド接続中", modeOffline: "オフライン", modeLoading: "接続中…",
@@ -104,6 +107,7 @@ export const ONLINE_COPY = Object.freeze({
     searching: "マッチング中…", opponentFound: "対戦相手：{name}", matchFailed: "マッチ失敗：{reason}"
   }),
   th: Object.freeze({
+    simRivalA: "เทมเมอร์กระจก A", simRivalB: "เทมเมอร์กระจก B", simRivalC: "เทมเมอร์กระจก C", simRankCoach: "ครูฝึกกระจก", simRankRookie: "มือใหม่",
     accountTitle: "☁️ บัญชีและซิงค์คลาวด์", accountHint: "เซฟในเครื่องคือตัวจริงเสมอ คลาวด์เป็นเพียงสำรองที่ทำงานเมื่อคุณกดเท่านั้น",
     guestPass: "🟢 บัตรผ่านผู้เยี่ยมชม", linkedAccount: "🔗 บัญชีที่เชื่อมแล้ว", tamerId: "ID", copy: "คัดลอก", copied: "คัดลอกแล้ว",
     modeLocal: "จำลองในเครื่อง (ยังไม่ตั้งค่าคลาวด์)", modeCloud: "เชื่อมต่อคลาวด์แล้ว", modeOffline: "ออฟไลน์", modeLoading: "กำลังเชื่อมต่อ…",
@@ -137,6 +141,7 @@ export const ONLINE_COPY = Object.freeze({
     searching: "กำลังจับคู่…", opponentFound: "พบคู่ต่อสู้: {name}", matchFailed: "จับคู่ล้มเหลว: {reason}"
   }),
   vi: Object.freeze({
+    simRivalA: "Tamer gương A", simRivalB: "Tamer gương B", simRivalC: "Tamer gương C", simRankCoach: "Huấn luyện viên gương", simRankRookie: "Tân binh",
     accountTitle: "☁️ Tài khoản & đồng bộ đám mây", accountHint: "Bản lưu trên máy luôn là chính; đám mây chỉ là bản sao lưu chạy khi bạn bấm.",
     guestPass: "🟢 Thẻ khách", linkedAccount: "🔗 Tài khoản đã liên kết", tamerId: "ID", copy: "Sao chép", copied: "Đã sao chép",
     modeLocal: "Mô phỏng cục bộ (chưa cấu hình đám mây)", modeCloud: "Đã kết nối đám mây", modeOffline: "Ngoại tuyến", modeLoading: "Đang kết nối…",

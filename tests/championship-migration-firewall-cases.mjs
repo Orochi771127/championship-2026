@@ -53,6 +53,18 @@ test("runtime has no external repository, CDN, or research import", () => {
       assert.match(text,/'http:\/\/localhost\/'/);
       return EXTERNAL_DEPENDENCY.test(text.replaceAll("'http://localhost/'","''"));
     }
+    if (relative(file) === 'src/data/championship/online-service.v1.json') {
+      // Owner 2026-10-28: the one place a Supabase project URL may live. It is
+      // empty in Git (offline first); when filled it must be that host shape and
+      // nothing else in the file may carry a URL. The key is checked at runtime
+      // (onlineServiceConfig refuses sb_secret_ / service_role).
+      const config = JSON.parse(text);
+      assert.equal(config.schemaVersion, 1);
+      assert.ok(config.supabaseUrl === '' || /^https:\/\/[a-z0-9]{20}\.supabase\.co$/i.test(config.supabaseUrl), 'supabaseUrl must be empty or a Supabase project host');
+      assert.doesNotMatch(String(config.supabaseAnonKey ?? ''), /^sb_secret_/i, 'secret keys never enter the repository');
+      const { supabaseUrl, ...rest } = config;
+      return EXTERNAL_DEPENDENCY.test(JSON.stringify(rest));
+    }
     if (relative(file) === 'src/data/championship/public-playtest.r1.json') {
       // These two exact policy values identify the Owner's destination; they
       // are not remote imports. All remaining policy text is still checked.
@@ -104,7 +116,10 @@ test("only the authorized source families are present", () => {
   // evidence and never replaces a transcription.
   // `data` joined on 2026-10-28 (Owner, story theater): the rift chapter script
   // and its five-locale copy. Pure frozen data; no imports, no ROM evidence.
-  const authorized = ["app", "battle", "cage", "contracts", "data", "database", "field", "gate", "hunt", "kernel", "modes", "presentation", "r2", "raising", "shop", "text", "time"];
+  // `online` joined on 2026-10-28 (Owner): the cloud service facade, its local
+  // simulation and Supabase adapters. No storage writes (the session port stays
+  // in ChampionshipPersistentSavePort), no URL literals, no battle logic.
+  const authorized = ["app", "battle", "cage", "contracts", "data", "database", "field", "gate", "hunt", "kernel", "modes", "online", "presentation", "r2", "raising", "shop", "text", "time"];
   const actual = fs.readdirSync(path.join(root, "src/championship"), { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)

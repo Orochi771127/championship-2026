@@ -18,12 +18,14 @@ function code(random, prefix, groups = 2) {
 export function createLocalSimulationAdapter({
   random = Math.random, now = () => new Date().toISOString(), setTimer = globalThis.setTimeout, clearTimer = globalThis.clearTimeout,
   /** Hooks from the game: a password code for the player's own team, and a guest's reply to an invite. */
-  ownDefenseCode = async () => null, simulateGuestReply = async () => null, rivalNames = ["鏡像拍檔師 A", "鏡像拍檔師 B", "鏡像拍檔師 C"]
+  ownDefenseCode = async () => null, simulateGuestReply = async () => null,
+  /** Display names and ranks for the simulated rivals come from the caller's locale table. */
+  rivalNames = ["Mirror A", "Mirror B", "Mirror C"], rivalRanks = ["", "", ""]
 } = {}) {
   const userId = `local-${code(random, "", 2).replace("-", "")}`.toLowerCase();
   let identity = null, defenseTeam = null, cloud = null, transfer = null;
   const friends = new Map(), matches = new Map(), listeners = new Map();
-  const rivals = rivalNames.map((name, index) => ({ userId: `sim-${index + 1}`, tamerCode: code(random, "TM-"), tamerName: name, rankTitle: index ? "新人" : "鏡像教官",
+  const rivals = rivalNames.map((name, index) => ({ userId: `sim-${index + 1}`, tamerCode: code(random, "TM-"), tamerName: name, rankTitle: rivalRanks[index] ?? "",
     acePartner: {}, lastSeenAt: now(), hasDefenseTeam: true, simulated: true }));
   const notify = matchId => { const match = matches.get(matchId); for (const fn of listeners.get(matchId) ?? []) { try { fn(match); } catch { /* listener error */ } } };
   const result = (ok, extra = {}) => Object.freeze({ ok, ...extra });

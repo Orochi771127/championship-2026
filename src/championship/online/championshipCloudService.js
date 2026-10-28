@@ -13,6 +13,7 @@ import { createLocalSimulationAdapter, LOCAL_SIMULATION_MODE } from "./localSimu
 import { buildCloudSaveEnvelope, confirmsSync } from "./cloudSaveEnvelope.js";
 import { loadSupabaseLibrary } from "./supabaseLoader.js";
 import { createSupabaseAdapter, SUPABASE_MODE } from "./supabaseMode.js";
+import { onlineText } from "../text/onlineText.js";
 
 export const CLOUD_SYNC_STATES = Object.freeze(["LOCAL_ONLY", "SYNCING", "SYNCED", "OFFLINE", "FAILED", "CHOICE"]);
 
@@ -24,7 +25,8 @@ export function createChampionshipCloudService({
   const listeners = new Set();
   let state = Object.freeze({ mode: LOCAL_SIMULATION_MODE, configured: config.configured, configReason: config.reason, online: nav?.onLine !== false,
     identity: null, syncState: "LOCAL_ONLY", lastSync: null, conflict: null, libraryError: null });
-  const local = createLocal({ ownDefenseCode: hooks.ownDefenseCode, simulateGuestReply: hooks.simulateGuestReply });
+  const local = createLocal({ ownDefenseCode: hooks.ownDefenseCode, simulateGuestReply: hooks.simulateGuestReply,
+    rivalNames: [onlineText("simRivalA"), onlineText("simRivalB"), onlineText("simRivalC")], rivalRanks: [onlineText("simRankCoach"), onlineText("simRankRookie"), onlineText("simRankRookie")] });
   let supabase = null, supabaseLoading = null;
   const emit = patch => { state = Object.freeze({ ...state, ...patch }); for (const fn of listeners) { try { fn(state); } catch { /* listener */ } } };
   const onOnline = () => emit({ online: true, syncState: state.syncState === "OFFLINE" ? "LOCAL_ONLY" : state.syncState });

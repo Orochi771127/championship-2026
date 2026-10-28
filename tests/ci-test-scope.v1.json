@@ -401,7 +401,9 @@
     "tests/championship-ranch-shadow-depth-cases.mjs",
     "tests/championship-resident-notice-cases.mjs",
     "tests/championship-data-arena-relay-cases.mjs",
-    "tests/championship-story-rift-cases.mjs"
+    "tests/championship-story-rift-cases.mjs",
+    "tests/championship-online-cloud-service-cases.mjs",
+    "tests/championship-online-migration-sql-cases.mjs"
   ],
   "localReference": {
     "tests/championship-scene-music-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Scene music actual-browser workflow with native media decoding, production Settings/transport, and controlled normal-game Raising/Battle/Data Arena flows.",

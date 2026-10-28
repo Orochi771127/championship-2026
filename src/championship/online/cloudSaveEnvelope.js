@@ -8,13 +8,9 @@ export const CLOUD_SAVE_MAX_BYTES = 262144;
 
 export async function sha256Hex(text) {
   const bytes = new TextEncoder().encode(String(text));
-  const subtle = globalThis.crypto?.subtle;
-  if (subtle?.digest) {
-    const digest = await subtle.digest("SHA-256", bytes);
-    return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("");
-  }
-  const { createHash } = await import("node:crypto");
-  return createHash("sha256").update(bytes).digest("hex");
+  // Web Crypto is present in every supported browser and in Node 20+ (the test runner); no fallback import, so the browser bundle stays closed.
+  const digest = await globalThis.crypto.subtle.digest("SHA-256", bytes);
+  return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
 /** A small, display-only reading of the save text for the sync and conflict screens. */
