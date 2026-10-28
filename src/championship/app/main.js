@@ -402,6 +402,77 @@ let statusBar = null;
 // The contextual toolbar. Shared like the status bar: ui/toolbar.nxr is
 // attached by the ARM9 main binary, not by any mode overlay.
 let toolbar = null;
+// Stroll finds (Owner 2026-10-28). The ranch announces where a partner found
+// something; the item flies on an arc into its toolbar key, whose badge counts
+// up only as it lands (the inventory was already saved). Bits fly to the coin pill.
+let partnerFindListening = false;
+const STROLL_ITEM_LABELS = Object.freeze({feed:'食物',protein:'蛋白質',medicine:'藥品',woundMedicine:'傷藥',bits:'位元幣'});
+function strollFindText(entry) {
+  const item = uiText('【{item} ×{n}】', { item: uiText(STROLL_ITEM_LABELS[entry.reward] ?? entry.reward), n: entry.quantity });
+  return entry.kind === 'greeting'
+    ? uiText(entry.relation === 'rival' ? '⚡ {a} 和 {b} 互相打了招呼，一起找到了{item}！' : '🎵 {a} 和 {b} 互相打了招呼，一起找到了{item}！', { a: entry.partnerName, b: entry.partnerBName, item })
+    : uiText('✨ {name} 散步時找到了{item}！', { name: entry.partnerName, item });
+}
+function showStrollToast(entry) {
+  let toast = document.querySelector('.cm-stroll-toast');
+  if (!toast) { toast = document.createElement('div'); toast.className = 'cm-stroll-toast'; toast.setAttribute('role', 'status'); document.body.append(toast); }
+  toast.textContent = strollFindText(entry);
+  toast.classList.remove('is-shown'); void toast.offsetWidth; toast.classList.add('is-shown');
+  clearTimeout(showStrollToast.timer);
+  showStrollToast.timer = setTimeout(() => toast.classList.remove('is-shown'), 2800);
+}
+function flyStrollFind(from, target, icon, onLand) {
+  const box = target.getBoundingClientRect(), to = { x: box.left + box.width / 2, y: box.top + box.height * 0.42 };
+  const token = document.createElement('span');
+  token.className = 'cm-stroll-flight'; token.setAttribute('aria-hidden', 'true');
+  if (icon) token.style.setProperty('--stroll-icon', icon); else token.dataset.coin = 'true';
+  token.style.left = `${from.x}px`; token.style.top = `${from.y}px`;
+  document.body.append(token);
+  token.dispatchEvent(new CustomEvent('cm-fx', { bubbles: true, detail: { kind: 'sparkle' } }));
+  const reduced = document.documentElement.dataset.motion === 'reduced' || matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const dx = to.x - from.x, dy = to.y - from.y, lift = Math.min(160, 60 + Math.abs(dx) * 0.35);
+  // A parabola sampled into keyframes: up first, then down into the key.
+  const frames = Array.from({ length: 9 }, (_, i) => { const t = i / 8;
+    return { transform: `translate(${dx * t}px, ${dy * t - 4 * lift * t * (1 - t)}px) scale(${1.25 - 0.55 * t})`, opacity: t > 0.92 ? 0.6 : 1 }; });
+  const done = () => { token.remove(); onLand(); };
+  if (reduced || !token.animate) { done(); return; }
+  token.animate(frames, { duration: 820, easing: 'cubic-bezier(.45,0,.55,1)', fill: 'forwards' }).finished.then(done, done);
+}
+// The app reports a find before its Shop observers repaint, so the badge is held
+// at once; the ranch then announces where the item starts. With no ranch to
+// fly from (covered, another screen) the badge simply counts up after a moment.
+const strollFlightsPending = new Map();
+function releaseStrollHold(id) {
+  const pending = strollFlightsPending.get(id);
+  if (!pending) return null;
+  clearTimeout(pending.timer); strollFlightsPending.delete(id);
+  return pending;
+}
+function listenPartnerFinds() {
+  if (partnerFindListening) return;
+  partnerFindListening = true;
+  app.subscribePartnerLife?.((event) => {
+    if (event.kind !== 'find' || !event.tool || !toolbar || app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
+    toolbar.holdToolStock(event.tool);
+    const id = event.entry.id, gained = event.entry.quantity;
+    strollFlightsPending.set(id, { tool: event.tool, timer: setTimeout(() => { if (releaseStrollHold(id)) toolbar.landToolStock(event.tool, { gained }); }, 1500) });
+  });
+  document.addEventListener('cm-partner-find', (event) => {
+    const { x, y, find } = event.detail ?? {}, entry = find?.entry;
+    if (!entry || !Number.isFinite(x) || !Number.isFinite(y)) return;
+    showStrollToast(entry);
+    const tool = find.tool;
+    const target = tool ? toolbar?.getToolButton(tool) : document.querySelector('.cm-status-bar__bits');
+    const held = releaseStrollHold(entry.id);
+    if (!target) { if (held) toolbar.landToolStock(tool, { gained: entry.quantity }); return; }
+    if (tool && !held) toolbar.holdToolStock(tool);
+    const icon = tool ? getComputedStyle(target).getPropertyValue('--original-intake-icon').trim() || null : null;
+    flyStrollFind({ x, y }, target, icon, () => {
+      if (tool) toolbar.landToolStock(tool, { gained: entry.quantity });
+      target.dispatchEvent(new CustomEvent('cm-fx', { bubbles: true, detail: { kind: 'purchase' } }));
+    });
+  });
+}
 
 // Bounded local technical evidence survives a new document. It never reads the
 // save, captures player text, uploads data or controls recovery/navigation.
@@ -2083,6 +2154,12 @@ async function openGameplay() {
       subscribeInventory:listener=>app.subscribeShop(listener)
     });
   }
+  listenPartnerFinds();
+  // Loopback review only (?partnerLifeQa): pay one stroll find for the selected
+  // partner so the flight to the toolbar can be checked. Public hosts never bind it.
+  if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("partnerLifeQa"))
+    globalThis.__championshipPartnerLifeQa = { grant: (reward, partnerB = null) => app.grantStrollDiscoveryReward({ partnerId: app.getSelectedCreatureId(), reward, partnerB, quantity: partnerB ? 2 : 1 }),
+      frame: () => app.getPartnerLifeFrame(), reading: () => app.getPartnerReading(app.getSelectedCreatureId()) };
   refreshStatusBar();
   refreshToolbarMode();
 
@@ -2619,6 +2696,8 @@ function boot() {
     app = createChampionshipStandaloneApp({
       playtestPolicy: FRIENDS_PLAYTEST_POLICY,
       storage: window.localStorage,
+      // Owner 2026-10-28: moods, stroll finds and greetings on the ranch.
+      partnerLife: true,
       huntExpansionLoader: loadHuntExpansionReview,
       catalog: productEntities,
       cages: RAISING_CAGES

@@ -229,6 +229,8 @@ export function createRaisingPresentationSource(app) {
         intent: member.creatureId === reactionCreatureId ? "care-reaction" : member.intent,
         selected: member.creatureId === selectedCreatureId,
         stats: member.stats ?? null,
+        // Owner 2026-10-28: mood, habitat fit and affection read from the partner's own fields.
+        partner: app.getPartnerReading?.(member.creatureId) ?? null,
         displayCapacityG: /^championship:creature:species-\d{3}$/.test(member.speciesId)
           ? nativeHuntToolSpecies(Number(member.speciesId.slice(-3))).displayCapacityG : null,
         nativeCageDefinition: app.getRaisingActorFrame?.(member.creatureId)?.cageDefinitionIndex ?? null,
@@ -343,6 +345,7 @@ export function createRaisingPresentationSource(app) {
     panTutorial(input){return app.panInteractiveTutorial?.(input)??false;},
     cleanFood(input) {const result=app.cleanRaisingFood?.(input)??false;publish();return result;},
     placeFood(input) {const result=app.placeRaisingFood?.(input)??{ok:false,reason:"UNAVAILABLE"};publish();return result;},
+    touchPartner(creatureId){return app.touchRaisingPartner?.(creatureId)??null;},
     touchEgg(creatureId,checkpoint=null) { return app.touchRaisingEgg?.(creatureId,checkpoint) ?? false; },
     treatResident(creatureId,kind,checkpoint=null){const result=app.treatRaisingResident?.(creatureId,kind,checkpoint)??{ok:false};publish();return result;},
     selectCreature(creatureId) {
@@ -380,6 +383,7 @@ export function createRaisingPresentationSource(app) {
     getFoodFrame() { return app.getRaisingFoodFrame?.() ?? []; },
     getWasteFrame(){return app.getRaisingWasteFrame?.()??[];},
     getLifecycleFrame(){return app.getRaisingLifecycleFrame?.()??null;},
+    getPartnerLife(){return app.getPartnerLifeFrame?.()??null;},
     getFrame() {
       return currentFrame;
     },

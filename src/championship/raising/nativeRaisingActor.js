@@ -59,6 +59,22 @@ export function projectNativeRaisingActor(actor) {
       targetFrame:actor.evolution.targetActor?projectNativeRaisingActor(actor.evolution.targetActor):null}):null});
 }
 
+/**
+ * Greeting (OWNER_APPROVED_ADAPTATION 2026-10-28): an idle or wandering partner
+ * stops where it stands and faces its peer for `frames` native frames. A
+ * partner bound for food, a passage visit or any reaction is left alone. No
+ * RNG is drawn, so the original idle counter resumes unchanged afterwards.
+ */
+export function holdNativeRaisingActorForGreeting(actor,peerPositionQ12,frames) {
+  if(!actor||actor.speciesIndex<8||actor.detached||!actor.positionQ12||!peerPositionQ12||!Number.isInteger(frames)||frames<1)return false;
+  if(!(actor.state===1||(actor.state===2&&actor.foodSlot===null&&actor.mode===0))||actor.explorationVisit||actor.greetingHold>0)return false;
+  actor.state=1;actor.mode=0;actor.peer=null;actor.idleElapsed=0;actor.destinationQ12=[...actor.positionQ12];
+  // The original rival face-off uses the same mirror rule (Main faces left).
+  actor.flipBits=actor.positionQ12[0]<peerPositionQ12[0]?1:0;
+  request(actor,actor.slow?1:0);actor.greetingHold=frames;
+  return true;
+}
+
 export function touchNativeRaisingEgg(actor) {
   if(actor.speciesIndex>=8 || actor.eggPhase!==0)return false;
   actor.pendingTouch=true;return true;
@@ -75,6 +91,9 @@ export function stepNativeRaisingActor(actor,profile,{ageDelta,rng,feeding=null,
   if(actor.tap)actor.tap.elapsed=Math.min(60,actor.tap.elapsed+1);
   stepNativeRaisingStatusFeedback(actor,profile);
   stepNativeRaisingRecoveryStars(actor); // OVL18 02110FB0 follows the status selector
+  // Greeting hold (OWNER_APPROVED_ADAPTATION 2026-10-28): the idle pose plays on,
+  // movement and needs wait. A frame that ages the partner is never skipped.
+  if(actor.greetingHold>0&&actor.speciesIndex>=8){actor.greetingHold--;if(!ageDelta)return {profile,changed:false,hatched:false};}
   if(actor.speciesIndex>=8)return lifecycle&&feeding?stepLifecycle(actor,profile,ageDelta,rng,feeding,lifecycle)
     :feeding ? stepFeeding(actor,profile,ageDelta,rng,feeding) : {profile,changed:false,hatched:false};
   if(actor.eggPhase===1) {
