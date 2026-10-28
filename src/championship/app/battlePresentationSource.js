@@ -175,7 +175,7 @@ function requireSession(session) {
  */
 export function createBattlePresentationSource({ session, step, arenaIndex = 0, getSpecialPrelude = () => null,
   getOpening = () => null, getNativeActor = () => null, getNativeLifecycle = () => null, getImpactEffects = () => [],
-  getArenaHazards = () => null } = {}) {
+  getArenaHazards = () => null, getBloodline = () => null } = {}) {
   requireSession(session);
   if (typeof step !== "function") {
     throw sourceError("REQUIRES_A_STEP_FUNCTION");
@@ -211,7 +211,11 @@ export function createBattlePresentationSource({ session, step, arenaIndex = 0, 
       sequenceStartFrame:focus.startFrame+focus.sequenceStart,nativeRequest:true,timingEvidence:focus.timingEvidence} : null;
     // Only an explicit caller supplies this graph projection. The default
     // session has no original world positions and keeps its labeled stand-in.
+    // Cyber Gachapon (2026-10-29): present only when this owned partner has one.
+    let bloodline=null;
+    try{bloodline=combatant?.instanceId?getBloodline(combatant.instanceId):null;}catch{bloodline=null;}
     return deepFreeze({...projected,
+      ...(bloodline ? {bloodline:{family:bloodline.family,title:bloodline.title,color:bloodline.color}} : {}),
       ...(native ? {stand:native.stand,nativeMotion:native.motion,nativeAnimation:native.nativeAnimation} : {}),
       animationRequest:focusRequest ?? native?.animationRequest ?? {...projected.animationRequest,
         sequenceStartFrame:animationStarts.get(slot)?.frame??null}});

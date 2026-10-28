@@ -329,6 +329,7 @@ export function createChampionshipPersistentSavePort({
       progression: {
         ...(request.freeBattleMenu!==undefined?{freeBattleMenu:request.freeBattleMenu}:{}),
         ...(request.battleTactics!==undefined?{battleTactics:request.battleTactics}:{}),
+        ...(request.cyberGacha!=null?{cyberGacha:request.cyberGacha}:{}),
         ...(request.nativeTitles!==undefined?{nativeTitles:request.nativeTitles}:{}),
         ...(request.championshipRun!==undefined?{championshipRun:request.championshipRun}:{}),
         ...(request.nativeMessages!==undefined?{nativeMessages:request.nativeMessages}:{}),

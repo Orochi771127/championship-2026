@@ -87,7 +87,7 @@ function ensureStylesheet() {
  * Pixi stage attached to `host`; `audioBus`/`music` are the product's.
  */
 export async function openDataArena({ ensureStage, audioBus = null, music = null, storage = null, reducedMotion = false,
-  resolutionCap = 2, onExit = () => {}, href = globalThis.location?.href, qa = false, seed = null }) {
+  resolutionCap = 2, onExit = () => {}, onVictory = null, href = globalThis.location?.href, qa = false, seed = null }) {
   await ensureStylesheet();
   const lifetime = new AbortController();
   const { signal } = lifetime;
@@ -1085,6 +1085,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     releaseInputs();
     audio?.suspend();
     const { newBest, saved } = records.recordResult(result);
+    // Cyber Gachapon: the host pays a manual-battle win in tickets (1-3; a cup 3-10).
+    let gachaTickets = 0;
+    if (result.outcome === "VICTORY" && typeof onVictory === "function") {
+      try { gachaTickets = onVictory({ tournament: Boolean(result.tournament) })?.granted ?? 0; } catch { gachaTickets = 0; }
+    }
     const best = records.get().modes[result.mode]?.bestScore ?? records.get().bestScore;
     music?.setScene(result.outcome === "VICTORY" ? "victory" : "defeat", `arena-result:${matchId}`);
     const panel = el("div", `da-panel da-panel--result da-result--${result.outcome.toLowerCase()}`);
@@ -1106,6 +1111,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         el("p", "da-result__line", [t("result.time", { time: formatTime(result.timeSeconds) }), t("result.kills", { count: result.kills }), t("result.level", { level: result.level })].join("　")),
         el("p", "da-result__line", t("result.breakdown", result.breakdown)),
         el("p", "da-result__line", t("result.stats", { perfect: result.stats.perfectDodges, chains: result.stats.chains, rescues: result.stats.rescues, cheers: result.cheers })));
+    }
+    if (gachaTickets > 0) {
+      const drop = el("p", "da-result__line da-result__gacha", `🎫 +${gachaTickets}`);
+      drop.dataset.gachaTickets = String(gachaTickets);
+      panel.append(drop);
     }
     const actions = el("div", "da-actions");
     const retry = button("da-btn da-btn--primary", t("result.retry"), () => void startMatch(), signal);

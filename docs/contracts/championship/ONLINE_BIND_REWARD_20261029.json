@@ -2,7 +2,7 @@
   "id": "ONLINE_BIND_REWARD_20261029",
   "classification": "OWNER_APPROVED_ADAPTATION: a product-authored first-bind gift; no original behavior is claimed or changed",
   "supersedes": {
-    "contract": "docs/contracts/championship/BATTLE_TACTICS_20261028.json",
+    "contract": "docs/contracts/championship/CYBER_GACHA_20261029.json",
     "sourceLock": "src/championship/app/championshipStandaloneSave.js"
   },
   "saveField": {
@@ -23,9 +23,12 @@
     "Battle, raising, shop prices and every existing reward"
   ],
   "sourceLocks": {
-    "src/championship/app/championshipStandaloneSave.js": "0bd028ab24379c2eec1bc643db4fb9c2c76c2cc542a8e590225a7b14e272e41f"
+    "src/championship/app/championshipStandaloneSave.js": "1c7abccc2403e3428e4754c87981a940db378dc4b1c17995363df6049ceeb680"
   },
   "historicalSourceLocks": {
+    "CYBER_GACHA_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c4e7336e17e35099758cea84ff533e81c60c08bacbafef356afdbf55953b135"
+    },
     "BATTLE_TACTICS_20261028": {
       "src/championship/app/championshipStandaloneSave.js": "3a72fce7d38151f473f343fb8b9f59349daef1beb7cb09b6a0547c628d07ac8e"
     },

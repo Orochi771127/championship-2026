@@ -132,9 +132,11 @@ test("only the authorized source families are present", () => {
   // `online` joined on 2026-10-28 (Owner): the cloud service facade, its local
   // simulation and Supabase adapters. No storage writes (the session port stays
   // in ChampionshipPersistentSavePort), no URL literals, no battle logic.
+  // `gacha` joined on 2026-10-29 (Owner, Cyber Gachapon): pure state-in/state-out
+  // pull, synthesis and item rules over the one save; no storage, no renderer.
   // `config` joined on 2026-10-29 (Owner): the community link list the Owner
   // edits by hand. Pure data and its validation; its URLs are checked above.
-  const authorized = ["app", "battle", "cage", "config", "contracts", "data", "database", "field", "gate", "hunt", "kernel", "modes", "online", "presentation", "r2", "raising", "shop", "text", "time"];
+  const authorized = ["app", "battle", "cage", "config", "contracts", "data", "database", "field", "gacha", "gate", "hunt", "kernel", "modes", "online", "presentation", "r2", "raising", "shop", "text", "time"];
   const actual = fs.readdirSync(path.join(root, "src/championship"), { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
