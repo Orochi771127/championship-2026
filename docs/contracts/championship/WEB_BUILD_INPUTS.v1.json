@@ -52,6 +52,7 @@
     "src/championship/app/hexWorldEditor.js",
     "src/championship/app/hexWorldPassages.js",
     "src/championship/app/huntLayoutResolver.js",
+    "src/championship/app/huntTacticalDock.js",
     "src/championship/app/interactiveTutorialBattleSteps.js",
     "src/championship/app/interactiveTutorialCheckpoint.js",
     "src/championship/app/interactiveTutorialHuntSteps.js",
@@ -98,6 +99,7 @@
     "src/championship/app/settings/settingsPanel.js",
     "src/championship/app/socialLinkDock.js",
     "src/championship/app/storageDurability.js",
+    "src/championship/app/storyChapterMap.js",
     "src/championship/app/storyCutsceneStage.js",
     "src/championship/app/tamerInfoScreen.js",
     "src/championship/app/titleParade.js",
@@ -105,6 +107,7 @@
     "src/championship/app/ui/ambienceLayer.js",
     "src/championship/app/ui/arcadeFx.js",
     "src/championship/app/ui/loadingWalker.js",
+    "src/championship/app/ui/menuEntryGlyphs.js",
     "src/championship/app/uiDialog.js",
     "src/championship/app/vs2PresentationAuthority.js",
     "src/championship/app/vs2Screens.js",
@@ -186,6 +189,7 @@
     "src/championship/contracts/productSpeciesData.js",
     "src/championship/contracts/productSpeciesExtensions.js",
     "src/championship/data/storyRiftChapters.js",
+    "src/championship/data/storyRiftMap.js",
     "src/championship/database/databaseCatalog.js",
     "src/championship/database/databaseDisplayCatalog.js",
     "src/championship/database/databaseEvolutionConditions.js",
@@ -8741,6 +8745,7 @@
     "src/championship/app/hexWorldPassages.js",
     "src/championship/app/huntLayoutResolver.js",
     "src/championship/app/huntMobile.css",
+    "src/championship/app/huntTacticalDock.js",
     "src/championship/app/interactiveTutorial.css",
     "src/championship/app/interactiveTutorialBattleSteps.js",
     "src/championship/app/interactiveTutorialCheckpoint.js",
@@ -8796,6 +8801,7 @@
     "src/championship/app/shopOriginalVideo.css",
     "src/championship/app/socialLinkDock.js",
     "src/championship/app/storageDurability.js",
+    "src/championship/app/storyChapterMap.js",
     "src/championship/app/storyCutsceneStage.js",
     "src/championship/app/styles.css",
     "src/championship/app/tamerInfoScreen.js",
@@ -8810,6 +8816,7 @@
     "src/championship/app/ui/highlight.css",
     "src/championship/app/ui/juicyShowcase.css",
     "src/championship/app/ui/loadingWalker.js",
+    "src/championship/app/ui/menuEntryGlyphs.js",
     "src/championship/app/ui/online.css",
     "src/championship/app/ui/screenLayout.css",
     "src/championship/app/ui/settings.css",
@@ -8900,6 +8907,7 @@
     "src/championship/contracts/productSpeciesData.js",
     "src/championship/contracts/productSpeciesExtensions.js",
     "src/championship/data/storyRiftChapters.js",
+    "src/championship/data/storyRiftMap.js",
     "src/championship/database/databaseCatalog.js",
     "src/championship/database/databaseDisplayCatalog.js",
     "src/championship/database/databaseEvolutionConditions.js",
@@ -9290,11 +9298,7 @@
     "src/data/championship/public-playtest-runtime.v1.json",
     "src/data/championship/public-ui-selection.v1.json",
     "src/data/championship/r2/fields/fieldInventoryR2.js",
-    "src/data/championship/ranch-render-selection.v1.json",
-    "src/championship/app/huntTacticalDock.js",
-    "src/championship/app/storyChapterMap.js",
-    "src/championship/app/ui/menuEntryGlyphs.js",
-    "src/championship/data/storyRiftMap.js"
+    "src/data/championship/ranch-render-selection.v1.json"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -42157,6 +42161,10 @@
         "sha256": "5475fd905537cddb001fe2bfd91a20f36baa7a23d8def934c41af30858730413"
       },
       {
+        "path": "src/championship/app/huntTacticalDock.js",
+        "sha256": "f37753d1ef79e77027db7168c27ee02d4768e0e7b75479bc4d670fbdcbf493a5"
+      },
+      {
         "path": "src/championship/app/interactiveTutorial.css",
         "sha256": "213a6871cf9929d462a03706c50d101e9c21b5e59efcfca91d1cd9a8aeefe22f"
       },
@@ -42377,6 +42385,10 @@
         "sha256": "ddbe615d33e60c08219713a598808438b6ae18f8d75e99b339ce2146d703fdf0"
       },
       {
+        "path": "src/championship/app/storyChapterMap.js",
+        "sha256": "d84c2f94214827078b9df302b7a85e4e0888b9aa44d7acd4c025799e11d5b0a2"
+      },
+      {
         "path": "src/championship/app/storyCutsceneStage.js",
         "sha256": "2592d7a194b449f28f9140916b7456af96a93d8b0c98abb7d2d0d12357dcc9a3"
       },
@@ -42431,6 +42443,10 @@
       {
         "path": "src/championship/app/ui/loadingWalker.js",
         "sha256": "83447e30644a6227636f9e9845562a2c1bc1a21266da8c639ec5bb530e07b930"
+      },
+      {
+        "path": "src/championship/app/ui/menuEntryGlyphs.js",
+        "sha256": "31521e2c00ff5f6b1abb2985f803050ab18bb083cca6ace80bfc1a3930f08754"
       },
       {
         "path": "src/championship/app/ui/online.css",
@@ -42791,6 +42807,10 @@
       {
         "path": "src/championship/data/storyRiftChapters.js",
         "sha256": "c72c1a8a4c0fba6d59d6714ce2274198840bfa1b3295f63bcb69d53b7c741930"
+      },
+      {
+        "path": "src/championship/data/storyRiftMap.js",
+        "sha256": "b8aa8227daa6ab25ac887142dd3134b1d6188602c63a4dfa7f463fca1b1f9a53"
       },
       {
         "path": "src/championship/database/databaseCatalog.js",
@@ -44355,22 +44375,6 @@
       {
         "path": "src/data/championship/ranch-render-selection.v1.json",
         "sha256": "ddd5d6a367c5f0b7e7d80203db5114924c93d6992691571d2fee55ea3eae7f41"
-      },
-      {
-        "path": "src/championship/app/huntTacticalDock.js",
-        "sha256": "f37753d1ef79e77027db7168c27ee02d4768e0e7b75479bc4d670fbdcbf493a5"
-      },
-      {
-        "path": "src/championship/app/storyChapterMap.js",
-        "sha256": "d84c2f94214827078b9df302b7a85e4e0888b9aa44d7acd4c025799e11d5b0a2"
-      },
-      {
-        "path": "src/championship/app/ui/menuEntryGlyphs.js",
-        "sha256": "31521e2c00ff5f6b1abb2985f803050ab18bb083cca6ace80bfc1a3930f08754"
-      },
-      {
-        "path": "src/championship/data/storyRiftMap.js",
-        "sha256": "b8aa8227daa6ab25ac887142dd3134b1d6188602c63a4dfa7f463fca1b1f9a53"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",
