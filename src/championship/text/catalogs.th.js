@@ -573,7 +573,7 @@ export const HELP_TH = Object.freeze(HELP_ROWS.map(([title, body], entryIndex) =
 const EVENT_ROWS = [
   [
     "Access Striker",
-    "A head-to-head, one-on-one duel with the Child-stage 鐵玩暴龍!\nการต่อสู้แบบ 1 ต่อ 1"
+    "A head-to-head, one-on-one duel with the Child-stage 發條龍!\nการต่อสู้แบบ 1 ต่อ 1"
   ],
   [
     "Legion Captain",
@@ -585,11 +585,11 @@ const EVENT_ROWS = [
   ],
   [
     "Vector Sector",
-    "Holding back the moves of the team captain, 光綾狐, is the key to winning!\nการต่อสู้แบบ 3 ต่อ 3"
+    "Holding back the moves of the team captain, 小仙狐, is the key to winning!\nการต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Bit Agent",
-    "Watch out for 角絨仔's power and they're not a hard team to beat!\nการต่อสู้แบบ 3 ต่อ 3"
+    "Watch out for 摔跤絨's power and they're not a hard team to beat!\nการต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Tough Digitizer",
@@ -597,7 +597,7 @@ const EVENT_ROWS = [
   ],
   [
     "Core Crusher",
-    "The Ultimate 冥砂法皇 enters the ring! A one-on-one showdown that every tamer is watching!\nการต่อสู้แบบ 1 ต่อ 1"
+    "The Ultimate 法老王 enters the ring! A one-on-one showdown that every tamer is watching!\nการต่อสู้แบบ 1 ต่อ 1"
   ],
   [
     "Silver Freeze",
@@ -609,11 +609,11 @@ const EVENT_ROWS = [
   ],
   [
     "Summer Phantom",
-    "A special three-on-one match! Can three พาร์ตเนอร์ work together to beat 潮冠巨鯨 and rule the height of summer?\nจำกัดวัยเจริญเต็มที่, การต่อสู้แบบ 3 ต่อ 1"
+    "A special three-on-one match! Can three พาร์ตเนอร์ work together to beat 海島鯨 and rule the height of summer?\nจำกัดวัยเจริญเต็มที่, การต่อสู้แบบ 3 ต่อ 1"
   ],
   [
     "Autumn Survivor",
-    `The title holder is one calm ${AWAKENED_FORM_NAMES.th}, 界根樹王! Fighting alone, balance attack with recovery!\nการต่อสู้แบบ 1 ต่อ 1`
+    `The title holder is one calm ${AWAKENED_FORM_NAMES.th}, 千年樹! Fighting alone, balance attack with recovery!\nการต่อสู้แบบ 1 ต่อ 1`
   ],
   [
     "Winter General",
@@ -633,7 +633,7 @@ const EVENT_ROWS = [
   ],
   [
     "Aqua Centurion",
-    "The stage is a water arena! Take on the team built around 雪晶龍將軍!\nสนามแข่งขันทางน้ำ, การต่อสู้แบบ 3 ต่อ 3"
+    "The stage is a water arena! Take on the team built around 堆雪龍將軍!\nสนามแข่งขันทางน้ำ, การต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Wing Master",
@@ -641,7 +641,7 @@ const EVENT_ROWS = [
   ],
   [
     "King of Nature",
-    "หลายทีมพ่ายแพ้ต่อการโจมตีของหัวหน้าทีม 花刺皇后!\nจำกัดวัยเจริญเต็มที่ การต่อสู้แบบ 3 ต่อ 3"
+    "หลายทีมพ่ายแพ้ต่อการโจมตีของหัวหน้าทีม 刺拳花!\nจำกัดวัยเจริญเต็มที่ การต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Sanctuary Warrior",
@@ -673,15 +673,15 @@ const EVENT_ROWS = [
   ],
   [
     "Small Challenger",
-    "The title holder 沼牙蜥 has powerful claws, but find its weak point and you might win easily!\nการต่อสู้แบบ 1 ต่อ 1"
+    "The title holder 嚇人蜥 has powerful claws, but find its weak point and you might win easily!\nการต่อสู้แบบ 1 ต่อ 1"
   ],
   [
     "Big Fighter",
-    "A special three-on-one match! Break the unbelievable power of 潮鑄海將 with teamwork!\nจำกัดวัยเจริญเต็มที่, การต่อสู้แบบ 3 ต่อ 1"
+    "A special three-on-one match! Break the unbelievable power of 划槳將 with teamwork!\nจำกัดวัยเจริญเต็มที่, การต่อสู้แบบ 3 ต่อ 1"
   ],
   [
     "Giant Extreme",
-    `A special three-on-one match! Can you withstand 蝕夜丑皇's attacks and beat it with teamwork?\nจำกัดขั้น${AWAKENED_FORM_NAMES.th}, การต่อสู้แบบ 3 ต่อ 1`
+    `A special three-on-one match! Can you withstand 老千皇's attacks and beat it with teamwork?\nจำกัดขั้น${AWAKENED_FORM_NAMES.th}, การต่อสู้แบบ 3 ต่อ 1`
   ],
   [
     "Perfect Fighter",
@@ -717,7 +717,7 @@ const EVENT_ROWS = [
   ],
   [
     "Blizzard Field",
-    "The stage is a snowy mountain! Beware 霜獄魔翼's icy claws and 雪印零偶's punches!\nสนามแข่งขันหิมะ, การต่อสู้แบบ 3 ต่อ 3"
+    "The stage is a snowy mountain! Beware 冰魔人's icy claws and 雪人偶's punches!\nสนามแข่งขันหิมะ, การต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Volcano Striker",
@@ -741,7 +741,7 @@ const EVENT_ROWS = [
   ],
   [
     "Dancing Puppet",
-    "A special one-on-three match! Deftly beat the three 星環齒靈 that come at you!\nจำกัดวัยเจริญเต็มที่, การต่อสู้แบบ 1 ต่อ 3"
+    "A special one-on-three match! Deftly beat the three 齒輪仔 that come at you!\nจำกัดวัยเจริญเต็มที่, การต่อสู้แบบ 1 ต่อ 3"
   ],
   [
     "Emerald Seed",
@@ -749,7 +749,7 @@ const EVENT_ROWS = [
   ],
   [
     "Bean World",
-    "การแข่งขันเฉพาะ 巨核裝豆, 鋼豆核 และ 星冠豆爵 ใช้จุดแข็งของแต่ละตัวเพื่อคว้าชัย!\nเฉพาะสามสายพันธุ์นี้ การต่อสู้แบบ 3 ต่อ 3"
+    "การแข่งขันเฉพาะ 鐵球豆, 小鋼豆 และ 土豪豆 ใช้จุดแข็งของแต่ละตัวเพื่อคว้าชัย!\nเฉพาะสามสายพันธุ์นี้ การต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Steel Doom",
@@ -797,7 +797,7 @@ const EVENT_ROWS = [
   ],
   [
     "Rainbow Flyer",
-    "Colorful พาร์ตเนอร์ such as 緋尾妖狐 and 幻紋獸 take the stage!\nการต่อสู้แบบ 3 ต่อ 3"
+    "Colorful พาร์ตเนอร์ such as 紅妖狐 and 花紋狗 take the stage!\nการต่อสู้แบบ 3 ต่อ 3"
   ],
   [
     "Lunar Evolution",

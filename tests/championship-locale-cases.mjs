@@ -319,7 +319,8 @@ test('Dex named dictionaries validate every locale and keep stray literals outsi
 import { speciesNameForId as ageRenameSpeciesNameForId } from '../src/championship/text/zhHant.js';
 import { SPECIAL_SPECIES_NAMES_ZH as ageRenameSpecialNames } from '../src/championship/text/catalogs.zhHant.js';
 import { listProductExtensions as ageRenameExtensions } from '../src/championship/contracts/productSpeciesExtensions.js';
-const AGE_NAME_RENAMES = Object.freeze([{"speciesIndex": 31, "old": "焰角幼龍", "new": "焰角龍"}, {"speciesIndex": 40, "old": "霜裘幼龍", "new": "霜裘龍"}, {"speciesIndex": 44, "old": "葉角幼蟲", "new": "葉角蟲"}, {"speciesIndex": 54, "old": "花藤幼姬", "new": "花藤姬"}, {"speciesIndex": 58, "old": "聖鈴幼犬", "new": "聖鈴犬"}, {"speciesIndex": 61, "old": "雪晶幼龍", "new": "雪晶龍"}, {"speciesIndex": 63, "old": "翠冠幼龍", "new": "翠冠龍"}, {"speciesIndex": 64, "old": "曦冕幼獅", "new": "曦冕獅"}, {"speciesIndex": 66, "old": "灰燼幼龍", "new": "灰燼龍"}, {"speciesIndex": 67, "old": "幻紋幼獸", "new": "幻紋獸"}, {"speciesIndex": 70, "old": "星角幼龍", "new": "星角龍"}, {"speciesIndex": 71, "old": "裂焰幼龍", "new": "裂焰龍"}]);
+const AGE_NAME_RENAMES = Object.freeze([{"speciesIndex":31,"old":"焰角幼龍","new":"噴火仔"},{"speciesIndex":40,"old":"霜裘幼龍","new":"毛皮龍"},{"speciesIndex":44,"old":"葉角幼蟲","new":"菜蟲仔"},{"speciesIndex":54,"old":"花藤幼姬","new":"阿花仔"},{"speciesIndex":58,"old":"聖鈴幼犬","new":"鈴鐺狗"},{"speciesIndex":61,"old":"雪晶幼龍","new":"堆雪龍"},{"speciesIndex":63,"old":"翠冠幼龍","new":"綠冠龍"},{"speciesIndex":64,"old":"曦冕幼獅","new":"火鬃獅"},{"speciesIndex":66,"old":"灰燼幼龍","new":"黑炭龍"},{"speciesIndex":67,"old":"幻紋幼獸","new":"花紋狗"},{"speciesIndex":70,"old":"星角幼龍","new":"樂天龍"},{"speciesIndex":71,"old":"裂焰幼龍","new":"大嘴龍"}]);
+
 
 test('canonical character names omit age descriptor without changing species identity in five locales', t => {
   t.after(() => setLocale('zh-Hant'));
@@ -349,8 +350,8 @@ test('title-event references use renamed proper names in every locale without re
   for (const locale of LOCALES) {
     setLocale(locale);
     const descriptions = Array.from({length:80}, (_,i) => titleEventText(i, 'description')).filter(Boolean).join('\n');
-    assert.ok(descriptions.includes('雪晶龍'));
-    assert.ok(descriptions.includes('幻紋獸'));
+    assert.ok(descriptions.includes('堆雪龍'));
+    assert.ok(descriptions.includes('花紋狗'));
     for (const {old} of AGE_NAME_RENAMES) assert.equal(descriptions.includes(old), false);
   }
   setLocale('zh-Hant');

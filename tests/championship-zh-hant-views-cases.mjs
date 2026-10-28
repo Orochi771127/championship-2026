@@ -168,7 +168,7 @@ test("Database translates every registered species without revealing unregistere
   assert.equal(rows.at(-1).dataset.displayCode,'UL39');
   for (const row of rows) row.click();
   assert.deepEqual(selected,playableDisplay.map(row=>row.numberingStageIndex===0?null:row.speciesIndex));
-  assert.doesNotMatch(visibleCopy(root).replace(/\b(?:EG|B1|B2|GR|MA|AW|UL|ART)\d{2,}\b/g,''), /[a-zA-Z\p{Script=Katakana}\p{Script=Hiragana}]/u);
+  assert.doesNotMatch(visibleCopy(root).replace(/\b(?:EG|B1|B2|GR|MA|AW|UL|ART)\d{2,}\b/g,'').replaceAll('K歌蚪','').replaceAll('Q彈丸',''), /[a-zA-Z\p{Script=Katakana}\p{Script=Hiragana}]/u);
   view.render({ ...frame, database: { ...frame.database, entries: [{ ...entries[0], state: "UNDISCOVERED" }] } });
   assert.doesNotMatch(visibleCopy(root), /黏液獸|M_8/);
 });
@@ -219,7 +219,7 @@ test("Hunt Result translates failure/release UI without committing a displayed d
   const root = useDocument(t);
   const block = {
     title: "HUNT RESULT", outcomeLabel: "ON MEMORY CARD", speciesId: "species-034",
-    speciesLabel: "SPECIES 034", displayName: "鎧焰蜥", commitError: "SAVE_FAILED",
+    speciesLabel: "SPECIES 034", displayName: "火甲龍", commitError: "SAVE_FAILED",
     rows: [{ kind: "CARD", key: "card:wild-3", displayName: "HUNT", canRelease: true }]
   };
   const names = [], releases = []; let home = 0;
@@ -227,7 +227,7 @@ test("Hunt Result translates failure/release UI without committing a displayed d
     setHuntResultName: name => names.push(name), confirmHuntResult: () => home++, requestHuntResultRelease: key => releases.push(key)
   } };
   const view = createHuntResultView({ root, source });
-  assert.equal(root.querySelector(".cm-vs2-result__species").textContent, "鎧焰蜥");
+  assert.equal(root.querySelector(".cm-vs2-result__species").textContent, "火甲龍");
   assert.match(visibleCopy(root), /儲存失敗/);
   buttonWithText(root, "返回牧場").click();
   assert.equal(home, 1); assert.deepEqual(names, []);
@@ -276,7 +276,7 @@ test("Hunt result projection distinguishes an unnamed card entry from a user nam
     getHuntResult: () => raw, getHuntRuntime: () => ({ getOnCardEntries: () => cards }), getRaisingInstances: () => []
   });
   const frame = source.getFrame().huntResult;
-  assert.equal(frame.displayName, "鎧焰蜥");
-  assert.deepEqual(frame.rows.map(row => row.displayName), ["鎧焰蜥", "HUNT"]);
+  assert.equal(frame.displayName, "火甲龍");
+  assert.deepEqual(frame.rows.map(row => row.displayName), ["火甲龍", "HUNT"]);
   assert.equal(JSON.stringify({ raw, cards }), before);
 });
