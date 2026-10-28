@@ -10,6 +10,7 @@
 import fileConfig from "../../data/championship/online-service.v1.json" with { type: "json" };
 
 export const ONLINE_CONFIG_SCHEMA_VERSION = 1;
+export const ONLINE_OAUTH_PROVIDERS = Object.freeze(["google", "facebook", "discord"]);
 export const ONLINE_RUNTIME_CONFIG_KEY = "__CHAMPIONSHIP_SUPABASE_CONFIG__";
 // The runtime firewall forbids remote-URL literals in src/; the host pattern is
 // assembled from parts so the rule stays intact and only one shape can pass.
@@ -55,13 +56,17 @@ export function resolveOnlineServiceConfig({ file = fileConfig, runtime = global
   const urlReason = refuseOnlineUrlReason(url);
   const keyReason = refuseOnlineKeyReason(anonKey);
   const roomCodeLength = Number.isInteger(source.roomCodeLength) ? Math.min(6, Math.max(4, source.roomCodeLength)) : 4;
+  // Owner 2026-10-29: the OAuth providers switched on in Supabase Auth (googleSignIn is the older Google-only flag).
+  const oauthProviders = [...new Set([...(source.googleSignIn === true ? ["google"] : []), ...(Array.isArray(source.oauthProviders) ? source.oauthProviders : [])])]
+    .filter(provider => ONLINE_OAUTH_PROVIDERS.includes(provider));
   return Object.freeze({
     schemaVersion: ONLINE_CONFIG_SCHEMA_VERSION,
     configured: urlReason === null && keyReason === null,
     reason: urlReason ?? keyReason ?? null,
     url: urlReason === null ? url : "",
     anonKey: urlReason === null && keyReason === null ? anonKey : "",
-    googleSignIn: source.googleSignIn === true,
+    googleSignIn: oauthProviders.includes("google"),
+    oauthProviders: Object.freeze(oauthProviders),
     roomCodeLength,
     source: runtime ? "runtime" : "file"
   });

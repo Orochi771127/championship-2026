@@ -3,6 +3,7 @@
   "supabaseUrl": "",
   "supabaseAnonKey": "",
   "googleSignIn": false,
+  "oauthProviders": [],
   "roomCodeLength": 4,
-  "note": "Owner: paste the Supabase Project URL on line 3 and the publishable (sb_publishable_) or legacy anon key on line 4. Leave both empty for offline/local-simulation play. Never paste sb_secret_ or service_role keys. See docs/SUPABASE_3MIN_SETUP_ZH_TW.md."
+  "note": "Owner: paste the Supabase Project URL on line 3 and the publishable (sb_publishable_) or legacy anon key on line 4. Leave both empty for offline/local-simulation play. Never paste sb_secret_ or service_role keys. List the OAuth providers you switched on in Supabase Auth on line 6, e.g. [\"google\", \"facebook\", \"discord\"]. See docs/SOCIAL_AND_MULTIPLAYER_SETUP_ZH_TW.md."
 }
