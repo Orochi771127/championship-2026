@@ -92,14 +92,48 @@ const styles = Object.freeze({
   water: Object.freeze({tint:0x7cdace,texture:'wave',cue:'splash'}),
   toxic: Object.freeze({tint:0xb98ae6,texture:'relayCrystal',cue:'splash'})
 });
-// Own moves: colour from the move's approved palette, texture from its style.
+// Stage two looks (2026-10-28): every move draws as one of the 23 approved VFX
+// styles. `impact` names the hit burst, `tether` draws a beam from the caster
+// to the shot. Presentation only: no rule reads this table.
+const STYLE_LOOKS = Object.freeze({
+  strike:{texture:'relaySlash',impact:'star'}, claw:{texture:'relaySlash',impact:'star'}, slash:{texture:'relaySlash',impact:'star'},
+  pierce:{texture:'relayLance',impact:'star'}, vine:{texture:'relayThorn',impact:'leaf'}, thorn:{texture:'relayThorn',impact:'leaf'},
+  leaf:{texture:'relayLeaf',impact:'leaf'}, seed:{texture:'relaySeed',impact:'leaf'}, spore:{texture:'relaySpore',impact:'puff'},
+  missile:{texture:'relayMissile',impact:'blast'}, gatling:{texture:'relayBullet',impact:'spark'}, shell:{texture:'relayCrystal',impact:'spark'},
+  fireball:{texture:'relayFlame',impact:'ember'}, flame:{texture:'relayFlame',impact:'ember'}, water:{texture:'relayDrop',impact:'drop'},
+  ice:{texture:'relayCrystal',impact:'shard'}, thunder:{texture:'relayBolt',impact:'spark',tether:true}, quake:{texture:'relayRock',impact:'rock'},
+  wind:{texture:'relayWind',impact:'puff'}, holy:{texture:'relayLance',impact:'star',tether:true}, dark:{texture:'relayOrb',impact:'puff'},
+  sound:{texture:'relayRing',impact:'ring'}, beam:{texture:'relayLance',impact:'star',tether:true}
+});
+const POOL_STYLE = Object.freeze({
+  emberBolt:'fireball', fangRush:'pierce', flameRing:'flame', cinderGuard:'shell', clawSweep:'claw', coreNova:'flame',
+  iceShard:'ice', frostStep:'ice', iceCage:'ice', frostFan:'ice', glacierGuard:'shell', whiteout:'ice',
+  sunSpear:'holy', sunShield:'shell', scatterLight:'holy', radiantDash:'pierce', haloPulse:'holy', dawnLance:'beam',
+  tideBolt:'water', tideWave:'water', foamZone:'water', surfRush:'strike', tideGuard:'shell', vortex:'water',
+  shardVolley:'ice', quakeSlam:'quake', brutalCharge:'strike', rockGuard:'shell', shardStorm:'ice',
+  arcBolt:'thunder', arcFan:'thunder', arcField:'thunder', boltDash:'pierce', stormGuard:'shell', arcStorm:'thunder',
+  seedBolt:'seed', vineSnare:'vine', leafFan:'leaf', thornRush:'thorn', barkGuard:'shell', grovePulse:'vine',
+  shadeBolt:'dark', shadeStep:'dark', shadeField:'dark', duskGuard:'shell', nightPulse:'dark',
+  impactShot:'missile', ironGuard:'shell', impactNova:'quake',
+  relaySlash:'slash', relayPunch:'strike', relaySweep:'claw', relayRam:'strike', relayClaw:'claw'
+});
+// Ranged basics are shared by many partners, so they take the caster's element.
+const ELEMENT_SHOT = Object.freeze({ fire:'fireball', frost:'ice', light:'holy', water:'water', earth:'quake', storm:'thunder', nature:'seed', shadow:'dark', physical:'gatling' });
+const ELEMENT_LOOK = Object.freeze({ fire:'fire', frost:'frost', light:'light', water:'water', earth:'earth', storm:'storm', nature:'nature', shadow:'shadow', physical:'claw' });
+const RANGED_BASICS = new Set(['relayShot','relayRay','relayBreath','relayGust']);
 const paletteStyle = Object.freeze({ fire:'fire', water:'water', ice:'frost', thunder:'storm', wind:'storm', light:'light', dark:'shadow',
   nature:'nature', toxic:'toxic', earth:'earth', metal:'earth', neutral:'claw', psychic:'light' });
-const styleTexture = (style) => ['strike','claw','slash'].includes(style) ? 'relaySlash' : ['pierce','beam','holy','thunder'].includes(style) ? 'relayLance'
-  : ['fireball','flame'].includes(style) ? 'relayFlame' : style === 'water' ? 'wave' : 'relayCrystal';
-export function relayEffectStyle(id) {
+const look = (base, style) => Object.freeze({ ...base, style, ...STYLE_LOOKS[style] });
+/** Colour, texture, cue, style, impact and tether for a move; `element` is the caster's (for basics). */
+export function relayEffectStyle(id, element = null) {
   const own = relayOwnMoveInfo(id);
-  if(own)return Object.freeze({...styles[paletteStyle[own.palette] ?? 'claw'],texture:styleTexture(own.style)});
+  if(own)return look(styles[paletteStyle[own.palette] ?? 'claw'], own.style);
+  if(element && styles[ELEMENT_LOOK[element]] && (RANGED_BASICS.has(id) || /^relay/.test(id)))
+    return look(styles[ELEMENT_LOOK[element]], RANGED_BASICS.has(id) ? (id === 'relayGust' && element === 'physical' ? 'wind' : ELEMENT_SHOT[element]) : POOL_STYLE[id]);
+  const legacy = relayLegacyStyle(id);
+  return POOL_STYLE[id] ? look(legacy, POOL_STYLE[id]) : legacy;
+}
+function relayLegacyStyle(id) {
   const element = RELAY_POOL_MOVE_ELEMENT[id];
   if(styles[element])return styles[element];
   if(/^arc/.test(id))return styles.storm;

@@ -174,8 +174,34 @@ export function classifyMove(move, speciesRecord, rosterEntry, speciesMoves) {
   }
   if (PLANT.has(style) && element === 'neutral') element = 'nature';
   const tier = Math.min(4, stageTier(generation) + (battleFxMoveTier(move, speciesMoves) === 'ultimate' ? 1 : 0));
+  const named = NAME_OVERRIDES[move.recordIndex];
+  if (named) return {style: named[0], element: named[1], tier, source: 'NAME'};
   return {style, element, tier, source};
 }
+
+// Owner 2026-10-28 (ARENA_RELAY_KITS_20261028): 「那些衝突的顏色可以另外做一個符合的
+// 效果」. Where the approved name names the substance and the original bank's
+// colour contradicts it, the name wins (雪晶吐息 is an ice breath, not fire).
+// Names whose element word only modifies another noun keep the bank (淵棘掠爪,
+// 棘龍海嘯, 冥骨旋輪, 裂潮雙月刃, 墓焰崩地).
+const NAME_OVERRIDES = Object.freeze({
+  122: ['sound', 'light'],   // 聖鈴清音  holy bell chime
+  128: ['ice', 'ice'],       // 雪晶吐息  snow-crystal breath
+  140: ['flame', 'fire'],    // 灰燼焚霧  burning ash mist
+  144: ['flame', 'fire'],    // 幻紋焰流  flame stream
+  240: ['thorn', 'earth'],   // 背岩投射  thrown back-rocks
+  291: ['holy', 'water'],    // 月影水箭  water arrow
+  317: ['thunder', 'thunder'], // 曜脈雷霆爪 thunder claw
+  350: ['flame', 'dark'],    // 墓焰黑霧  grave flame, black mist
+  408: ['spore', 'ice'],     // 霜牙寒霧  frost mist
+  441: ['flame', 'dark'],    // 夜詠黑焰  black flame
+  475: ['flame', 'dark'],    // 蒼焰鬼火陣 ghost-fire ring
+  530: ['dark', 'dark'],     // 闇鎧墨核  dark ink core
+  534: ['flame', 'dark'],    // 星冠紫焰  purple flame
+  558: ['beam', 'ice'],      // 零度射線  zero-degree ray
+  585: ['holy', 'fire'],     // 日輪焰矢  flame arrow
+  588: ['holy', 'water']     // 夜月水矢  water arrow
+});
 
 // The relay kit builder passes its re-derived roster so both files agree.
 export function buildMoveVfxThemes(rosterEntries = roster.entries) {

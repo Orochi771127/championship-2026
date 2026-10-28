@@ -23,7 +23,7 @@ import { mountDataArenaInteractionView } from "./dataArenaInteractionView.js";
 
 import { createDataArenaRelayEffects } from './dataArenaRelayEffects.js';
 import { RELAY_ACTION_PROFILES, relaySequence, relayEffectStyle } from '../../modes/dataArena/dataArenaRelay.js';
-import { RELAY_ROSTER } from '../../modes/dataArena/dataArenaRelayRoster.js';
+import { RELAY_ROSTER, relayPartner } from '../../modes/dataArena/dataArenaRelayRoster.js';
 
 const T = DATA_ARENA_TERRAIN;
 const TAU = Math.PI * 2;
@@ -354,6 +354,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       update(dtMs, { x, y, facing, flash = 0, alpha = 1, lift = 0, seq = DATA_ARENA_SEQUENCES.STAND, sink = 0 }) {
         container.position.set(x, y - floorOffset(x,y));
         container.zIndex = y;
+        // Relay hit-stop: hold the drawn frame and pose; the simulation keeps stepping.
+        if (hitStop > 0 && state.gameMode === 'RELAY') { sprite.tint = flash > 0 ? 0xff7a7a : 0xffffff; return; }
         const event = actionEvents.get(body.id);
         if (body.hp <= 0) { action.clear(); actionEvents.delete(body.id); }
         else if (event && (event.type === 'CAST_RELEASE' || body.cast?.actionId === event.actionId)) action.observe(event);
@@ -464,8 +466,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const shadow = new PIXI.Sprite(textures.shadow); shadow.anchor.set(0.5); shadow.scale.set(0.35, 0.3);
       entry = { sprite, glow, shadow };
     }
-    const relayStyle = state.gameMode === 'RELAY' && projectile.moveId ? relayEffectStyle(projectile.moveId) : null;
-    entry.sprite.texture = textures[relayStyle?.texture ?? SHOT_TEXTURE[projectile.kind] ?? "tide"];
+    const relayStyle = state.gameMode === 'RELAY' && projectile.moveId ? relayLook(projectile.moveId, projectile.owner) : null;
+    // A broad water move keeps the harbour wave; a water shot is a droplet.
+    const relayTexture = relayStyle?.style === 'water' && projectile.radius >= 28 ? 'wave' : relayStyle?.texture;
+    entry.sprite.texture = textures[relayTexture ?? SHOT_TEXTURE[projectile.kind] ?? "tide"] ?? textures.relayCrystal;
     // The texture's core is drawn at the collision radius (wave: its half height).
     const coreRadius = relayStyle ? 18 : projectile.kind === "SHARD" ? 13 : projectile.kind === "ORB" ? 10 : projectile.kind === "WAVE" ? 22 : 9;
     entry.sprite.scale.set(projectile.radius / coreRadius);
@@ -560,13 +564,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     particlePeak = Math.max(particlePeak, live.length);
     return live[live.length - 1];
   }
-  function burst(x, y, { count = 8, speed = 220, tint = 0xffffff, life = 0.45, texture = textures.spark, scale = 1.4, gravity = 0, spread = TAU, angle = 0 } = {}) {
+  function burst(x, y, { count = 8, speed = 220, tint = 0xffffff, life = 0.45, texture = textures.spark, scale = 1.4, gravity = 0, spread = TAU, angle = 0, spin = 0 } = {}) {
     const n = rich ? count : Math.ceil(count / 2);
     for (let i = 0; i < n; i++) {
       const a = angle - spread / 2 + spread * ((i + 0.5) / n) + Math.sin(i * 12.9898 + elapsed) * 0.25;
       const v = speed * (0.55 + 0.45 * Math.abs(Math.sin(i * 78.233 + elapsed * 3)));
       spawn({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: life * (0.7 + 0.3 * ((i * 0.37) % 1)), texture, tint, scale, scaleTo: scale * 0.2,
-        gravity, drag: 2.2, align: texture === textures.spark });
+        gravity, drag: 2.2, align: texture === textures.spark, spin: spin * (i % 2 ? 1 : -1) });
     }
   }
   function ring(x, y, radius, tint, life = 0.4, alpha = 0.9) {
@@ -643,6 +647,32 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     ghosts.push({ sprite, life: 0.28, age: 0 });
   }
 
+  // ------------------------------------------------------------------ relay looks (stage two, 2026-10-28)
+  // Drawing only: hit-stop holds the fighters' drawn frames while the
+  // simulation keeps stepping; tethers, charge orbs and impact bursts read events.
+  const relayMode = state.gameMode === 'RELAY';
+  const relayElementOf = (team) => team === 'player' ? relayPartner(state.player.partnerId)?.element ?? null
+    : RELAY_ROSTER.find(p => p.speciesId === (state.rivals.find(r => r.active && r.hp > 0) ?? state.rivals[0])?.speciesId)?.element ?? null;
+  const relayLook = (moveId, team) => relayEffectStyle(moveId, relayElementOf(team === 'player' ? 'player' : 'rival'));
+  const IMPACTS = {
+    star: { count: 7, speed: 240, texture: 'spark' }, leaf: { count: 6, speed: 200, texture: 'relayLeaf', scale: 0.32, spin: 6 },
+    puff: { count: 6, speed: 120, texture: 'glow', scale: 0.4 }, blast: { count: 12, speed: 320, texture: 'spark', ring: 54 },
+    spark: { count: 8, speed: 300, texture: 'spark' }, ember: { count: 8, speed: 200, texture: 'spark', gravity: -160 },
+    drop: { count: 8, speed: 220, texture: 'dot', gravity: 520 }, shard: { count: 7, speed: 260, texture: 'shard', gravity: 380 },
+    rock: { count: 7, speed: 230, texture: 'relayRock', scale: 0.22, gravity: 560, spin: 5 }, ring: { count: 0, ring: 44 }
+  };
+  function relayImpact(x, y, fx) {
+    const recipe = IMPACTS[fx.impact] ?? IMPACTS.star;
+    if (recipe.count) burst(x, y, { count: recipe.count, speed: recipe.speed, tint: fx.tint, spin: recipe.spin ?? 0,
+      texture: textures[recipe.texture] ?? textures.spark, scale: recipe.scale ?? 1.4, gravity: recipe.gravity ?? 0, life: 0.4 });
+    if (recipe.ring) ring(x, y, recipe.ring, fx.tint, 0.3);
+  }
+  const tethers = new Map();
+  const tetherGfx = new PIXI.Graphics(); tetherGfx.blendMode = "add";
+  let hitStop = 0, statusTick = 0;
+  shotGlow.addChild(tetherGfx);
+  const heavyHit = (amount) => { if (relayMode && !reducedMotion && amount >= 22) hitStop = Math.max(hitStop, amount >= 40 ? 0.08 : 0.06); };
+
   // ------------------------------------------------------------------ events -> presentation
   const elementTint = { BURN: 0xff7a2a, DROWN: 0x4fc3ff, STEAM: 0xeef7ff, FROST: 0xb8f0ff, CRYO_BRIDGE: 0xb8f0ff };
   function handleEvents(events) {
@@ -660,7 +690,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           ring(event.x, event.y, 46, tint, 0.3);
           break;
         }
-        case "PLAYER_HIT": camera.addTrauma(0.38); burst(event.x, event.y - 30, { count: 8, speed: 200, tint: 0xff4a4a }); damageNumber(event.x, event.y - 56, event.amount, 0xffb0a8); break;
+        case "PLAYER_HIT": camera.addTrauma(0.38); burst(event.x, event.y - 30, { count: 8, speed: 200, tint: 0xff4a4a }); damageNumber(event.x, event.y - 56, event.amount, 0xffb0a8); heavyHit(event.amount); break;
         case "MATE_HIT": burst(event.x, event.y - 40, { count: 4, speed: 160, tint: 0x9fe8ff }); break;
         case "PERFECT_DODGE": ring(event.x, event.y - 20, 70, 0x7fe9ff, 0.35); burst(event.x, event.y - 20, { count: 10, speed: 320, tint: 0x7fe9ff }); break;
         case "DASH": afterimage(event.x, event.y, event.dirX); puff(event.x, event.y, 0xa89580, 3, 0.9); break;
@@ -712,29 +742,35 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "MOUNTED": ring(event.x, event.y, 70, 0x7fe9ff, 0.35); break;
         case "OVERHEAT": puff(state.player.x, state.player.y - 40, 0xdddddd, 6, 1.2); break;
         case "BRIDGE_LIFTED": bridgeLift = 0; camera.addTrauma(0.25); break;
-        case "CAST": if(state.gameMode==='RELAY'){const fx=relayEffectStyle(event.moveId);spawn({x:event.x,y:event.y-BEAM_ELEVATION,texture:textures.ring,tint:fx.tint,scale:.7,scaleTo:.12,life:event.windup,alpha:.65});}break;
+        case "CAST": if(state.gameMode==='RELAY'){const fx=relayLook(event.moveId,event.team);spawn({x:event.x,y:event.y-BEAM_ELEVATION,texture:textures.ring,tint:fx.tint,scale:.7,scaleTo:.12,life:event.windup,alpha:.65});
+            // Charge orb at the hand: grows through the windup, so the release reads before it lands.
+            if(event.moveType!=='LUNGE')spawn({x:event.x+Math.cos(event.angle)*26,y:event.y-BEAM_ELEVATION+Math.sin(event.angle)*26,texture:textures.glow,tint:fx.tint,scale:.12,scaleTo:.5,life:Math.max(.12,event.windup),alpha:.9});}break;
         case "CAST_RELEASE": {
           if(state.gameMode==='RELAY') {
-            const fx=relayEffectStyle(event.moveId),x=event.x+Math.cos(event.angle)*26,y=event.y-BEAM_ELEVATION+Math.sin(event.angle)*26;
+            const fx=relayLook(event.moveId,event.team),x=event.x+Math.cos(event.angle)*26,y=event.y-BEAM_ELEVATION+Math.sin(event.angle)*26;
             spawn({x,y,texture:event.moveType==='LUNGE'?textures.relaySlash:textures.glow,tint:fx.tint,scale:event.moveType==='LUNGE'?.7:.6,scaleTo:.15,life:.19,rotation:event.angle});
             burst(x,y,{count:5,speed:150,angle:event.angle,spread:1.2,tint:fx.tint,texture:fx.texture==='relayCrystal'?textures.shard:textures.spark,life:.22});
+            if(fx.tether&&!reducedMotion)tethers.set(event.actionId,{x,y,born:elapsed,tint:fx.tint});
           } else if(event.team==='player')spawn({x:event.x+Math.cos(event.angle)*26,y:event.y-BEAM_ELEVATION+Math.sin(event.angle)*26,texture:textures.glow,tint:0x6ff7ff,scale:.45,scaleTo:.1,life:.14});break;
         }
         case "ULT_CAST": ring(event.x, event.y, 160, event.team === "player" ? 0xffe066 : 0xff3b5c, 0.5); camera.addTrauma(0.25); crowdReact("CHEER", event.x, 1.2);
           // The caster's charge ring closes in on its feet as the cut-in plays (2026-10-28).
           spawn({ x: event.x, y: event.y, texture: textures.ring, tint: event.team === "player" ? 0x5ff3ff : 0xb18cff, scale: 1.6, scaleTo: 0.15, life: 0.42, alpha: 0.9 });
           break;
-        case "NOVA": for (let i = 0; i < 3; i++) ring(event.x, event.y, event.radius * (0.6 + i * 0.25), state.gameMode==='RELAY'?relayEffectStyle(event.moveId).tint:event.effect === "ROOT" ? 0xc8f4ff : event.effect === "SLOW" ? 0x5fd8c8 : 0xff8a3c, 0.4 + i * 0.12);
-          burst(event.x, event.y - 20, { count: 24, speed: 380, tint: state.gameMode==='RELAY'?relayEffectStyle(event.moveId).tint:event.effect === "ROOT" ? 0xd8f6ff : 0xffb070, texture: textures.shard, scale: 1.8, gravity: 200, life: 0.7 }); camera.addTrauma(0.5); break;
+        case "NOVA": for (let i = 0; i < 3; i++) ring(event.x, event.y, event.radius * (0.6 + i * 0.25), state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xc8f4ff : event.effect === "SLOW" ? 0x5fd8c8 : 0xff8a3c, 0.4 + i * 0.12);
+          burst(event.x, event.y - 20, { count: 24, speed: 380, tint: state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xd8f6ff : 0xffb070, texture: textures.shard, scale: 1.8, gravity: 200, life: 0.7 }); camera.addTrauma(0.5);
+          if (state.gameMode === 'RELAY') relayImpact(event.x, event.y - 20, relayLook(event.moveId, event.team)); break;
         case "ZONE_BURST": ring(event.x, event.y, event.radius, event.team === "player" ? 0x6ff7ff : 0xff5a3c, 0.35);
-          burst(event.x, event.y, { count: 12, speed: 260, tint: state.gameMode==='RELAY'?relayEffectStyle(event.moveId).tint:event.effect === "ROOT" ? 0xd8f6ff : event.effect === "IGNITE" ? 0xff9a3c : 0xbff4ff, gravity: 260, life: 0.5 }); camera.addTrauma(0.18); break;
+          burst(event.x, event.y, { count: 12, speed: 260, tint: state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xd8f6ff : event.effect === "IGNITE" ? 0xff9a3c : 0xbff4ff, gravity: 260, life: 0.5 }); camera.addTrauma(0.18);
+          if (state.gameMode === 'RELAY') relayImpact(event.x, event.y, relayLook(event.moveId, event.team)); break;
         case "BARRIER_UP": ring(event.x, event.y - 16, 70, 0xffe066, 0.3); break;
         case "BLINK": afterimage(event.fromX, event.fromY, event.x - event.fromX); burst(event.x, event.y - 20, { count: 10, speed: 200, tint: 0xd8f6ff, texture: textures.shard }); break;
         case "RIVAL_HIT": if (event.cause !== "LASER") { burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); contact(event.x, event.y - 30, 0xffb070); }
-          damageNumber(event.x, event.y - 56, event.amount, 0xffffff); break;
+          damageNumber(event.x, event.y - 56, event.amount, 0xffffff); heavyHit(event.amount); break;
         case "RIVAL_DODGE": puff(event.x, event.y, 0xa89580, 3, 0.9); break;
         case "RIVAL_SPLASH": ring(event.x, event.y, 50, 0x9fe8ff, 0.4); break;
-        case "SKILL_HIT": spawn({ x: event.x, y: event.y - 14, texture: textures.glow, tint: state.gameMode==='RELAY'?relayEffectStyle(event.moveId).tint:MOVE_TINT[event.moveId] ?? 0xffffff, scale: 0.6, scaleTo: 0.15, life: 0.14 }); break;
+        case "SKILL_HIT": spawn({ x: event.x, y: event.y - 14, texture: textures.glow, tint: state.gameMode==='RELAY'?relayLook(event.moveId,'player').tint:MOVE_TINT[event.moveId] ?? 0xffffff, scale: 0.6, scaleTo: 0.15, life: 0.14 });
+          if (state.gameMode === 'RELAY') { relayImpact(event.x, event.y - 14, relayLook(event.moveId, 'player')); tethers.delete(event.actionId); } break;
         case "STATUS": burst(event.x, event.y - 30, { count: 4, speed: 120, tint: event.status === "ROOT" ? 0xd8f6ff : event.status === "SLOW" ? 0x7fc8ff : 0xff9a3c, life: 0.35 }); break;
         case "ROUND_WON": crowdReact("VICTORY", event.x ?? worldWidth / 2, 1.4); confetti(); camera.addTrauma(0.3); break;
         case "ROUND_LOST": crowdReact("DEFEAT", worldWidth / 2, 1); break;
@@ -773,6 +809,16 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     elapsed += dt; frameCount++;
     if (!ambientPaused) ambientElapsed += dt;
     if(!ambientPaused)fpsWindow.push(observedFrameMs); if (fpsWindow.length > 120) fpsWindow.shift();
+    if (hitStop > 0) hitStop = Math.max(0, hitStop - Math.min(0.1, observedFrameMs / 1000));
+    if (relayMode && dt > 0 && (statusTick += dt) >= 0.14) {
+      statusTick = 0;
+      // Status reads on the body: burn embers rise, a root rings the feet, slow trails mist.
+      for (const body of [state.player, ...state.rivals.filter(r => r.active && r.hp > 0)]) {
+        if (body.burn > 0) spawn({ x: body.x + (Math.random() - 0.5) * 22, y: body.y - 24, vy: -70, texture: textures.spark, tint: 0xff8a3c, scale: 1.2, scaleTo: 0.4, life: 0.4 });
+        if (body.root > 0) ring(body.x, body.y, 28, 0xc8f4ff, 0.22, 0.6);
+        else if (body.slow > 0) spawn({ x: body.x + (Math.random() - 0.5) * 26, y: body.y - 8, texture: textures.glow, tint: 0x7fc8ff, scale: 0.22, scaleTo: 0.08, life: 0.35, alpha: 0.6 });
+      }
+    }
     const viewport = { width: stage.screen.width, height: stage.screen.height };
     const player = state.player, mate = state.mate, boss = state.boss;
     const riding = player.state === "RIDING" || player.state === "MOUNTING";
@@ -948,6 +994,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
 
     // Shots.
     const liveShots = new Set();
+    tetherGfx.clear();
     for (const projectile of state.projectiles) {
       liveShots.add(projectile.id);
       const entry = shotView(projectile);
@@ -962,7 +1009,20 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       else entry.sprite.alpha = 1;
       if (projectile.kind !== "ORB") entry.sprite.rotation = Math.atan2(projectile.vy, projectile.vx);
       else entry.sprite.rotation = elapsed * 4;
+      const tether = tethers.get(projectile.actionId);
+      if (tether && elapsed - tether.born < 0.45) {
+        // Beam styles stay joined to the caster's hand for a moment, rippling as they fade.
+        const fade = 1 - (elapsed - tether.born) / 0.45, dx = projectile.x - tether.x, dy = projectile.y - lift - tether.y;
+        const len = Math.hypot(dx, dy) || 1, nx = -dy / len, ny = dx / len;
+        const points = Array.from({ length: 9 }, (_, i) => { const t = i / 8, wave = Math.sin(i * 1.9 + elapsed * 40) * 3 * Math.sin(t * Math.PI);
+          return [tether.x + dx * t + nx * wave, tether.y + dy * t + ny * wave]; });
+        for (const [width, color, alpha] of [[9, tether.tint, 0.45 * fade], [3, 0xffffff, 0.8 * fade]]) {
+          tetherGfx.moveTo(...points[0]); for (const point of points.slice(1)) tetherGfx.lineTo(...point);
+          tetherGfx.stroke({ width, color, alpha, cap: 'round', join: 'round' });
+        }
+      }
     }
+    for (const [id, tether] of tethers) if (elapsed - tether.born >= 0.45) tethers.delete(id);
     for (const [id, entry] of shotViews) {
       if (liveShots.has(id)) continue;
       entry.sprite.visible = entry.glow.visible = entry.shadow.visible = false;

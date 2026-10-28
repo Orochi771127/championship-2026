@@ -9,7 +9,9 @@ import { spawnSync } from 'node:child_process';
 import kits from '../src/data/championship/data-arena-relay-kits.v1.json' with { type: 'json' };
 import moves from '../src/data/championship/catalogs/battle-moves.r1.json' with { type: 'json' };
 import { RELAY_ROSTER } from '../src/championship/modes/dataArena/dataArenaRelayRoster.js';
-import { RELAY_LOADOUTS, relayKit, relayMove, relayEffectStyle } from '../src/championship/modes/dataArena/dataArenaRelay.js';
+import { RELAY_LOADOUTS, RELAY_ACTION_PROFILES, relayKit, relayMove, relayEffectStyle } from '../src/championship/modes/dataArena/dataArenaRelay.js';
+import { RELAY_EFFECT_TEXTURES } from '../src/championship/presentation/dataArena/dataArenaRelayEffects.js';
+import themes from '../src/data/championship/move-vfx-themes.r1.json' with { type: 'json' };
 import { RELAY_ELEMENT_KITS, RELAY_POOL_MOVE_ELEMENT, RELAY_STYLE_RULES, relayOwnMoveInfo } from '../src/championship/modes/dataArena/dataArenaRelayKits.js';
 import { DATA_ARENA_PARTNERS } from '../src/championship/modes/dataArena/dataArenaConfig.js';
 import { createDataArenaSimulation } from '../src/championship/modes/dataArena/dataArenaSimulation.js';
@@ -83,6 +85,26 @@ test('own moves take their mechanic from the style and side effects from the col
     assert.ok(relayEffectStyle(`own-${record}`).tint > 0);
   }
   assert.ok(byStyle.size >= 18, `only ${byStyle.size} styles in use`);
+});
+
+test('stage two looks: every kit move draws as an approved style with a real texture; basics follow the caster', () => {
+  const styles = new Set(themes.styles);
+  for (const partner of RELAY_ROSTER) {
+    const ids = [RELAY_ACTION_PROFILES[partner.id].basic, ...RELAY_LOADOUTS[partner.id], relayKit(partner.id).ultimate];
+    for (const id of ids) {
+      const look = relayEffectStyle(id, partner.element);
+      assert.ok(styles.has(look.style), `${partner.id} ${id} style ${look.style}`);
+      assert.ok(RELAY_EFFECT_TEXTURES.includes(look.texture), `${partner.id} ${id} texture ${look.texture}`);
+    }
+    // A fire jaw breathes fire and a plant one seeds; only frost partners breathe frost.
+    const basic = relayEffectStyle(RELAY_ACTION_PROFILES[partner.id].basic, partner.element);
+    if (['relayBreath', 'relayShot', 'relayRay'].includes(RELAY_ACTION_PROFILES[partner.id].basic) && partner.element !== 'frost') assert.notEqual(basic.style, 'ice', partner.id);
+  }
+  // Name wins where the original bank contradicts it (Owner 2026-10-28).
+  const theme = new Map(themes.moves.map(row => [row[0], row]));
+  assert.deepEqual(theme.get(128).slice(1, 3), ['ice', 'ice']);
+  assert.deepEqual(theme.get(558).slice(1, 3), ['beam', 'ice']);
+  assert.deepEqual(theme.get(585).slice(1, 3), ['holy', 'fire']);
 });
 
 test('a partner casts each of its own moves in a real relay match', () => {
