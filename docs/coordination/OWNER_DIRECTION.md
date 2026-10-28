@@ -1,5 +1,14 @@
 # Championship Owner Direction
 
+<!-- record-id: ARENA_RELAY_KITS_20261028 -->
+## 2026-10-28 — Data Arena RELAY kits that fit each partner's element and own moves
+
+Owner directs, after the Pokémon Arena 2D study, a staged build of real-time partner battles: 「可以分階段做，然後盤點我們的角色幫他們配招要配適合的屬性還有招式就像不可能草系會發飛彈 …除了幼年期I跟幼年期II…其他都會進去可以選擇。那你自己分階段去做自己切片。」
+
+- OWNER_APPROVED_ADAPTATION: a RELAY partner's element is derived from its own moves' evidence colours (`scripts/build-data-arena-relay-kits.mjs`); the three Tournament partners keep their designed kits. Its five choices open with its own special moves (mechanic from the approved VFX style, side effects from the colour, no stage scaling) and fill only from its own element's pool.
+- Eligibility stays Rookie through Mega (196 identities). Report: `docs/reports/data-arena-relay-kits-2026-10-28/`.
+- After stage one the Owner directs 「先commit並接著做第二階段，然後那些衝突的顏色可以另外做一個符合的效果嗎？或是你找一些skill可以做Vfx特效」: commit to the feature branch and continue with stage two (VFX). No push, merge or deployment is authorized.
+
 <!-- record-id: MOVE_VFX_THEMES_HUNT_ROPE_TACTICS_20261028 -->
 ## 2026-10-28 — Dex move names and per-move preview VFX; Hunt rope roles, combos and overheat
 

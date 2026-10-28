@@ -177,9 +177,10 @@ export function classifyMove(move, speciesRecord, rosterEntry, speciesMoves) {
   return {style, element, tier, source};
 }
 
-export function buildMoveVfxThemes() {
+// The relay kit builder passes its re-derived roster so both files agree.
+export function buildMoveVfxThemes(rosterEntries = roster.entries) {
   const speciesByIndex = new Map(species.records.map(r => [r.recordIndex, r]));
-  const rosterByIndex = new Map(roster.entries.map(r => [r.speciesIndex, r]));
+  const rosterByIndex = new Map(rosterEntries.map(r => [r.speciesIndex, r]));
   const bySpecies = new Map();
   for (const move of moves.records) {
     if (!bySpecies.has(move.speciesId)) bySpecies.set(move.speciesId, []);
@@ -203,14 +204,14 @@ export function buildMoveVfxThemes() {
   };
 }
 
-function serialize(table) {
+export function serializeMoveVfxThemes(table) {
   const head = JSON.stringify({...table, moves: undefined}, null, 2).replace(/\n}$/, '');
   const rows = table.moves.map(row => `    ${JSON.stringify(row)}`).join(',\n');
   return `${head},\n  "moves": [\n${rows}\n  ]\n}\n`;
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const text = serialize(buildMoveVfxThemes());
+  const text = serializeMoveVfxThemes(buildMoveVfxThemes());
   const target = path.join(root, OUT);
   if (process.argv.includes('--check')) {
     const current = fs.existsSync(target) ? fs.readFileSync(target, 'utf8') : '';

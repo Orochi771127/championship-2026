@@ -31,6 +31,8 @@ import { juicyPortrait, juicyPresentationEnabled } from "../presentation/juicy/j
 import { RELAY_ROSTER, relayPartner } from '../modes/dataArena/dataArenaRelayRoster.js';
 import { RELAY_MAP_IDS } from '../modes/dataArena/dataArenaRelayMaps.js';
 import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, RELAY_LOADOUTS, relayKit, relayMove, relayEffectStyle } from '../modes/dataArena/dataArenaRelay.js';
+import { relayOwnMoveInfo, relayBasicRecord } from '../modes/dataArena/dataArenaRelayKits.js';
+import { battleMoveName } from '../text/battleMoveNames.js';
 
 const STEP_MS = DATA_ARENA_STEP_SECONDS * 1000;
 const MOVE_KEYS = Object.freeze({ KeyW: [0, -1], ArrowUp: [0, -1], KeyS: [0, 1], ArrowDown: [0, 1], KeyA: [-1, 0], ArrowLeft: [-1, 0], KeyD: [1, 0], ArrowRight: [1, 0] });
@@ -41,8 +43,12 @@ const SKILL_KEYS = Object.freeze({ Digit2: 0, KeyK: 0, Digit3: 1, KeyL: 1, KeyQ:
 const BEAM_KEYS = new Set(["Digit1", "KeyJ"]);
 const SLOT_KEYS = Object.freeze(["RMB·2", "Q·3", "E·4"]);
 const MODES = Object.freeze(["TOURNAMENT", "HARBOR", "RELAY"]);
-const moveName = (id) => t(`move.${id}`).split(/\s*[｜|]\s*/)[0];
-const moveEffect = (id) => t(`move.${id}`).split(/\s*[｜|]\s*/)[1] ?? "";
+// A partner's own move keeps its approved battle name; the arena line says what it does here.
+const ownMoveText = (id) => { const own = relayOwnMoveInfo(id); return own && `${battleMoveName(own.record) ?? id}｜${t(`relay.style.${own.style}`)}${t(`relay.palette.${own.palette}`)}`; };
+const moveText = (id) => ownMoveText(id) ?? t(`move.${id}`);
+const moveName = (id) => moveText(id).split(/\s*[｜|]\s*/)[0];
+const moveEffect = (id) => moveText(id).split(/\s*[｜|]\s*/)[1] ?? "";
+const basicName = (partnerId) => { const record = relayBasicRecord(relayPartner(partnerId)?.speciesIndex); return (record !== null && battleMoveName(record)) || t(`move.${RELAY_ACTION_PROFILES[partnerId].basic}`); };
 // Skill-button colour key only: relay partners carry their roster element.
 const LEGACY_ELEMENTS = Object.freeze({ "ember-lizard": "fire", "corona-cub": "light", "frost-drake": "frost" });
 const partnerElement = (id) => relayPartner(id)?.element ?? LEGACY_ELEMENTS[id] ?? "physical";
@@ -884,7 +890,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           ...(own?.ultimate ? [el("span", "da-pill da-pill--ult", moveName(own.ultimate))] : []));
       }
       const kit = gameMode === "RELAY" ? relayKit(partnerId,relayLoadouts[partnerId]) : DATA_ARENA_KITS[partnerId];
-      const rows = [["LMB·1", gameMode === "RELAY" ? t(`move.${RELAY_ACTION_PROFILES[partnerId].basic}`) : t(`move.beam.${partnerId}`), gameMode === "RELAY" ? t("relay.basic") : t("kit.beam")],
+      const rows = [["LMB·1", gameMode === "RELAY" ? basicName(partnerId) : t(`move.beam.${partnerId}`), gameMode === "RELAY" ? t("relay.basic") : t("kit.beam")],
         ...kit.moves.map((id, slot) => [SLOT_KEYS[slot], moveName(id), moveEffect(id)]), ["R", moveName(kit.ultimate), moveEffect(kit.ultimate)]];
       kitPreview.replaceChildren(el("h3", "da-subtitle", t("kit.heading")));
       for (const [key, name, effect] of rows) {
