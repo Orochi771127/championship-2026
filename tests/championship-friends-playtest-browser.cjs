@@ -40,10 +40,10 @@ function registrationNoticeInvariant(save){
 // End test-only ordinary overlay helpers.
 // BEGIN FRIENDS PUBLIC THREE / MENU / ROUTE CONTRACTS (test-only)
 const FRIENDS_THREE_RESOURCES=Object.freeze([
- {"path":"assets/production/cage/three-20261021/manifest.json","bytes":8532,"sha256":"d97a823fa3259cfa23fd38c75243cfe506be0eddab3f99031ebecf2bdf6cdc2e"},
- {"fieldId":"field_cm02_01","path":"assets/production/cage/three-20261021/field_cm02_01.glb","bytes":1269244,"sha256":"19c7add2891cd084e26be2b7e9f3363dc082a6c8e5d97c064a8e7b793c0e94c9"},
- {"fieldId":"field_cm18_01","path":"assets/production/cage/three-20261021/field_cm18_01.glb","bytes":1922864,"sha256":"b1b033df28513eae232f43a4307894528583c62dd8c5e029189ea486ccad1f0d"},
- {"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":491068,"sha256":"90b760b1ee831ce3b1fdd2f6f1086ac202582704bd9ebaa6fd715f0cd67031ea"}
+ {"path":"assets/production/cage/three-20261021/manifest.json","bytes":8530,"sha256":"91b1661d3f593646231731a346c1c04c8ecf7806d6289f90dcd4ee062897818c"},
+ {"fieldId":"field_cm02_01","path":"assets/production/cage/three-20261021/field_cm02_01.glb","bytes":900856,"sha256":"80efcd18ff4d9e2ee94fa64843b7e14ba5abd2705e64339be531762356684307"},
+ {"fieldId":"field_cm18_01","path":"assets/production/cage/three-20261021/field_cm18_01.glb","bytes":1853276,"sha256":"6657497289f9f10ac376f5d31d2ff50b0cb1629da65f64c49bade3788cbc6e41"},
+ {"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":464392,"sha256":"8f5b978941215411e6911719359b23baf800eeb66b251a07090854db3ed1a482"}
 ]);
 async function friendsDrainReadbacks(reads){
  let count=-1;while(count!==reads.length){count=reads.length;await Promise.all(reads);}
