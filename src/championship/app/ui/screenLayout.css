@@ -967,7 +967,7 @@
 :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__land { position: absolute; left: 10px; bottom: 14px; z-index: 3; }
 :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__counter { font-size: 12px; }
 :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__count { font-size: 18px; }
-:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__land .cm-hexworld__buy-land { min-height: 40px; font-size: 13px; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__land .cm-hexworld__buy-land { min-height: 44px; font-size: 13px; }
 /* While a cage is selected its panel takes the canvas foot; the land key steps aside. */
 :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld:has(.cm-hexworld__selection:not([hidden])) .cm-hexworld__land { display: none; }
 :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__viewport {

@@ -184,7 +184,7 @@ async function alternateAwaitReady(api){
   await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="saveQuit"]').click();await page.locator('#cm-login').waitFor({state:'visible'});
   const saved=await page.evaluate(key=>JSON.parse(sessionStorage.getItem(key)),qaKey);
   assert.equal(saved.schemaVersion,7);
-  assert.equal(saved.cageEdit?.layoutVersion,'PRODUCT_GRID100_INSTANCES_V1');
+  assert.equal(saved.cageEdit?.layoutVersion,'PRODUCT_HEX_WORLD_V1');
   assert.deepEqual(saved.shop?.cageQuantities,Object.fromEntries(fixture.shop.cageOwned.map(index=>[index,1])));
   for(const [suffix,species]of [['0005','species-229'],['0006','species-230']])assert.equal(saved.raising.collection.find(i=>i.instanceId.endsWith(':'+suffix)).speciesId,species);
   await page.reload({waitUntil:'domcontentloaded'});await boot();
