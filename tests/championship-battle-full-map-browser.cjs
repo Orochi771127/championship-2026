@@ -41,7 +41,8 @@ try{
  await page.locator('.cm-vs5-arena-choice select').waitFor();
  const selects=await page.locator('select').evaluateAll(es=>es.map(e=>({class:e.className,options:[...e.options].map(o=>[o.value,o.textContent])})));console.log(JSON.stringify({selects}));
  const arena=page.locator('.cm-vs5-arena-select select, select.cm-vs5-arena-select');
- const allSelects=page.locator('select');if(await allSelects.count())await allSelects.last().selectOption('3');
+ // Battle plan selects (作戰方針) follow the arena select, so pick the arena by its label.
+ await page.locator('.cm-vs5-arena-choice select').selectOption('3');
  // Exercise a real six-actor practice battle through the existing team UI.
  assert.ok(await page.locator('.cm-vs5-practice-member button:nth-of-type(1):enabled').count()>=6,'QA seed must admit six actual actors; do not substitute cloned HUDs for the live battle');
  for(const team of [1,2])for(let n=0;n<3;n++)await page.locator(`.cm-vs5-practice-member button:nth-of-type(${team}):enabled[aria-pressed="false"]`).first().click();

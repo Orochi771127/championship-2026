@@ -187,6 +187,8 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
 // END FRIENDS PUBLIC THREE / MENU / ROUTE CONTRACTS
 
 (async()=>{
+ // The 40° ranch view (2026-10-27) squeezes the ground vertically; bodies keep the horizontal scale.
+ const {groundScaleY}=(await import(require('node:url').pathToFileURL(path.join(__dirname,'../src/championship/presentation/ranchThreeCoordinates.js')).href)).ranchViewProjection();
  const build=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json')));evidence.buildId=build.buildId;assert.equal(build.target,'GITHUB_PAGES_OWNER_PLAYTEST');assert.equal(build.publicPlaytest?.ownerApproved,true);
  assert.ok(resolveAsset(root,'/championship.html'));
  assert.equal(resolveAsset(root,'/full-qa-save.html'),null,'Private QA installer must stay outside the public build');
@@ -273,6 +275,8 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   });
   evidence.activeMenu=null;write();
  }
+ // Owner 2026-10-27: while the dock shows Hunt, Battle, Shop and Database, the System menu does not repeat them.
+ async function dock(entry){const key=page.locator(`button[data-quick-id="${entry}"]`);if(!await key.isVisible())return menu('SYSTEM',entry);await clearCalendar();await key.click();}
  async function saveQuit(){await menu('SYSTEM','saveQuit');await page.locator('#cm-login').waitFor({state:'visible'});}
  async function continueSaved(){await login();await page.locator('#cm-continue').click();await home();}
  async function noOverflow(){assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Mobile document must not overflow');}
@@ -293,8 +297,8 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
     state=await read();assert.ok(state.positions[0].scrollY>previous,'Normal blank-field drag must reveal upper headroom');
    }
    const first=state.positions[0];assert.ok(first.scrollMaxY-first.scrollY<=1,'Camera reached upper presentation bound');
-   assert.ok(first.boardTop-24*first.nativeScreenPixels>=0,'Entire restored hex cap is inside viewport');
-   for(const p of state.positions){if(p.groundScreen&&Number.isFinite(p.nativeY))assert.ok(Math.abs(p.groundScreen.y-(p.boardTop+p.nativeY*p.nativeScreenPixels))<1,'Actor ground and native grid retain the same transform');}
+   assert.ok(first.boardTop-24*first.nativeScreenPixels*groundScaleY>=0,'Entire restored hex cap is inside viewport');
+   for(const p of state.positions){if(p.groundScreen&&Number.isFinite(p.nativeY))assert.ok(Math.abs(p.groundScreen.y-(p.boardTop+p.nativeY*p.nativeScreenPixels*groundScaleY))<1,'Actor ground and native grid retain the same transform');}
    evidence.assertions.push({topContour:label,viewport,state});write();await shot(label+'-top-contour-'+viewport.width);
   }
   const after=await saved();assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements,'Camera gestures cannot move slot anchors');assert.deepEqual(after.shop,before.shop,'Camera gestures cannot alter economy or inventory');
@@ -415,11 +419,15 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
    if(selected.scenario==='adjacent'&&scenario.name==='wrap')break;
    evidence.sourceCornerStage=scenario.name+':editor';write();
    await boundary('viewport:editor',()=>page.setViewportSize({width:1280,height:800}));await boundary('clearCalendar',()=>clearCalendar());await boundary('menu:cageEdit',()=>menu('MANAGEMENT','cageEdit'));await boundary('screen:CAGE_EDIT',()=>screen('CAGE_EDIT'));
-   while(await page.locator('.cm-cage-facility:not([disabled])').count())await boundary('editor:withdraw',()=>page.locator('.cm-cage-facility:not([disabled])').first().click());
+   // One-screen editor (2026-10-27): placed cages list under the 場上已放置 tab, cages in hand under their size tab.
+   const placedTab=page.locator('.cm-cage-filter[data-filter="placed"]');if(await placedTab.isVisible())await boundary('editor:filter:placed',()=>placedTab.click());
+   while(await page.locator('.cm-cage-facility:not([disabled]):not([hidden])').count())await boundary('editor:withdraw',()=>page.locator('.cm-cage-facility:not([disabled]):not([hidden])').first().click());
    const specs=[{id:'02',definition:1},{id:'18',definition:17},{id:'39',definition:33}];
    for(const [i,spec] of specs.entries()){
     const row=page.locator('.cm-vs2-cage-tray__item').filter({has:page.locator(`img[src*="field_cm${spec.id}_01"]`)});
-    assert.equal(await row.count(),1,'Exact field image identifies one owned facility');await boundary('editor:tray:'+spec.id,()=>row.click());
+    assert.equal(await row.count(),1,'Exact field image identifies one owned facility');
+    for(const tab of await page.locator('.cm-cage-filter:not([data-filter="placed"])').all()){if(await row.isVisible())break;if(await tab.isVisible())await boundary('editor:filter:'+spec.id,()=>tab.click());}
+    await boundary('editor:tray:'+spec.id,()=>row.click());
     const slot=page.locator(`.cm-vs2-cage-slot[data-slot-index="${scenario.slots[i]}"]`);
     assert.equal(await slot.getAttribute('data-unlocked'),'true');assert.equal(await slot.getAttribute('data-filled'),'false');await boundary('editor:slot:'+scenario.slots[i],()=>slot.click());
    }
@@ -561,7 +569,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   await page.reload({waitUntil:'domcontentloaded'});await continueSaved();await wallet(12000);
   await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');assert.match(await page.locator('.cm-hexworld__land-note').innerText(),/全部土地已開放/,'Reload must restore all purchased land');assert.equal(await page.locator('[data-locked-test-row]').count(),0);await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();
   const afterRows=await saved();assert.equal(afterRows.shop.bits,8000000);assert.deepEqual(afterRows.flags.friendsPlaytest.purchases,[2,3,4,5,6,7,8,9]);assert.equal(afterRows.flags.friendsPlaytest.diamonds,12000);
-  await menu('SYSTEM','shop');await screen('SHOP');
+  await dock('shop');await screen('SHOP');
   let purchase;
   for(const tab of await page.locator('.cm-vs2-shop__tab').all()){
    await tab.click();
@@ -575,11 +583,11 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   assert.equal(digits(await page.locator('.cm-vs2-shop__wallet').innerText()),8000000-purchase.price);
   await shot('05-shop-purchased');await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();
   const afterShop=await saved();assert.equal(afterShop.shop.bits,8000000-purchase.price);assert.notDeepEqual({quantities:afterShop.shop.quantities,cageOwned:afterShop.shop.cageOwned,cageQuantities:afterShop.shop.cageQuantities},{quantities:afterRows.shop.quantities,cageOwned:afterRows.shop.cageOwned,cageQuantities:afterRows.shop.cageQuantities},'Persisted inventory, not just wallet, must change');assert.equal(afterShop.flags.friendsPlaytest.diamonds,12000);
-  await menu('SYSTEM','shop');await screen('SHOP');await page.locator(`.cm-vs2-shop__tab[data-category="${purchase.category}"]`).click();await page.locator('.cm-vs2-shop__row').nth(purchase.cardIndex).click();
+  await dock('shop');await screen('SHOP');await page.locator(`.cm-vs2-shop__tab[data-category="${purchase.category}"]`).click();await page.locator('.cm-vs2-shop__row').nth(purchase.cardIndex).click();
   assert.equal(await page.locator('.cm-vs2-shop__detail-name').innerText(),purchase.itemName);
   const restoredItem=(await page.locator('.cm-vs2-shop__detail-meta').innerText()).replaceAll(',','').match(/\d+/g).map(Number);assert.equal(restoredItem[1],purchase.owned+1,'Purchased item ownership survives reload');
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();
-  await menu('SYSTEM','hunt');await screen('GATE_SELECT');
+  await dock('hunt');await screen('GATE_SELECT');
   const listToggle=page.locator('.cm-vs2-gate3d__toggle');if((await listToggle.innerText()).includes('場地列表'))await listToggle.click();
   let fee=0;
   for(const gate of await page.locator('[data-gate-id]').all()){
