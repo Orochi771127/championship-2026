@@ -107,3 +107,60 @@ export function createRanchSelectionRing(scene,{color=0x2fd6b4,view=RANCH_LAYOUT
     center:item.placement.center,screen:item.placement.screen,renderOrder:item.ring.renderOrder,depthTest:ringMaterial.depthTest,depthWrite:ringMaterial.depthWrite}));}
   return {reset,sync,animate,prune,dispose,diagnostics};
 }
+
+// Cyber Gachapon metal bloodline (OWNER_APPROVED_ADAPTATION 2026-10-29): a
+// partner inscribed with a metal keeps a ground halo in that metal's colour
+// whether or not it is selected -- a wider band with a light that flows round it.
+const BLOODLINE_FRAGMENT=`varying vec2 vRingUv; uniform float uTime; uniform vec3 uColor;
+  float band(float r,float at,float width){float e=max(fwidth(r),0.0008);return 1.0-smoothstep(width-e,width+e,abs(r-at));}
+  void main(){
+    vec2 p=(vRingUv-0.5)*2.0;float r=length(p);if(r>1.0)discard;
+    float a=atan(p.y,p.x)/6.2831853+0.5;
+    float sweep=pow(0.5+0.5*cos((a-uTime*0.32)*6.2831853),10.0);
+    float outer=band(r,0.88,0.075),core=band(r,0.88,0.018),glow=0.28*(1.0-smoothstep(0.62,1.0,r))*smoothstep(0.45,0.85,r);
+    float alpha=max(glow,outer*(0.7+0.3*sweep));alpha=max(alpha,core);if(alpha<=0.004)discard;
+    vec3 color=mix(uColor*0.82,mix(uColor,vec3(1.0),0.35),core*0.6+sweep*outer*0.8);
+    gl_FragColor=vec4(color,alpha);
+    #include <colorspace_fragment>
+  }`;
+export const RANCH_BLOODLINE_RING=Object.freeze({radiusScale:1.32,lift:.008,renderOrder:2});
+
+export function createRanchBloodlineRings(scene,{getBloodline=()=>null,view=RANCH_LAYOUT_VIEW}={}){
+  const geometry=new THREE.PlaneGeometry(2,2).rotateX(-Math.PI/2);
+  const materials=new Map(),items=new Map();let time=0;
+  const material=color=>{
+    let entry=materials.get(color);
+    // Normal blending keeps the metal's colour on a pale floor (additive washed it to white).
+    if(!entry){entry=new THREE.ShaderMaterial({transparent:true,depthTest:true,depthWrite:false,side:THREE.DoubleSide,toneMapped:false,
+      uniforms:{uTime:{value:0},uColor:{value:new THREE.Color(color)}},vertexShader:RING_VERTEX,fragmentShader:BLOODLINE_FRAGMENT});
+      materials.set(color,entry);}
+    return entry;
+  };
+  function reset(){for(const item of items.values()){item.seen=false;item.mesh.visible=false;}}
+  function sync(key,entry,bounds,pixelScale,actorTransferred,syncView=view){
+    let bloodline=null;try{bloodline=getBloodline(key);}catch{bloodline=null;}
+    if(!bloodline||!Number.isInteger(bloodline.ring)||!actorTransferred||!entry?.root?.visible)return null;
+    const placement=ranchSelectionRingPlacement(entry,bounds,pixelScale,syncView);
+    if(!placement)return null;
+    let item=items.get(key);
+    if(item&&item.color!==bloodline.ring){scene.remove(item.mesh);items.delete(key);item=null;}
+    if(!item){
+      const mesh=new THREE.Mesh(geometry,material(bloodline.ring));
+      mesh.frustumCulled=false;mesh.renderOrder=RANCH_BLOODLINE_RING.renderOrder;mesh.name='ranch-bloodline-ring';
+      scene.add(mesh);item={mesh,color:bloodline.ring,family:bloodline.family};items.set(key,item);
+    }
+    const radius=placement.radius*RANCH_BLOODLINE_RING.radiusScale/RANCH_SELECTION_RING.radiusScale;
+    item.mesh.position.set(placement.center.x,placement.center.y-RANCH_SELECTION_RING.lift+RANCH_BLOODLINE_RING.lift,placement.center.z);
+    item.mesh.scale.set(radius,1,radius);item.mesh.visible=true;item.seen=true;item.placement=placement;
+    return placement;
+  }
+  function animate(deltaMS,{still=false}={}){
+    if(still)return;
+    time+=Math.min(50,Math.max(0,deltaMS))/1000;for(const m of materials.values())m.uniforms.uTime.value=time;
+  }
+  function prune(){for(const [key,item] of items)if(!item.seen){scene.remove(item.mesh);items.delete(key);}}
+  function dispose(){for(const item of items.values())scene.remove(item.mesh);items.clear();geometry.dispose();for(const m of materials.values())m.dispose();materials.clear();}
+  function diagnostics(){return [...items].filter(([,item])=>item.seen).map(([key,item])=>({key,family:item.family,color:item.color,radius:item.mesh.scale.x}));}
+  const count=()=>{let n=0;for(const item of items.values())if(item.seen)n++;return n;};
+  return {reset,sync,animate,prune,dispose,diagnostics,count};
+}
