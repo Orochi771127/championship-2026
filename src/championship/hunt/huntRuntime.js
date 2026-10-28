@@ -381,6 +381,8 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null, capture
     getTutorialHuntProgress:()=>tutorialScript?{ready:tutorialScript.ready(),...tutorialScript.view()}:null,
     getToolState: () => controls?.getState() ?? null,
     selectTool: kind => controls?.selectTool(kind) ?? false,
+    // OWNER_APPROVED_ADAPTATION 2026-10-28: swap to a spare owned rope mid-hunt.
+    cycleRope: () => (tutorialScript ? false : controls?.cycleRope() ?? false),
     toolPointerDown: (x,y) => controls?.pointerDown(x,y) ?? false,
     toolPointerMove: (x,y) => controls?.pointerMove(x,y) ?? false,
     toolPointerUp: (x,y) => controls?.pointerUp(x,y) ?? false,

@@ -2236,6 +2236,7 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
   box-shadow: 0 3px 0 var(--ax-ink);
 }
 :root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-trait-tag { padding: 3px 10px; border: 2px solid var(--ax-ink); border-radius: 999px; background: #e9fbff; font-weight: 800; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-move-card { background: #f2fbff; border-left-color: #3ddc84; color: var(--ax-ink); }
 /* Evolution workbench: linked slots with a breathing arrow. */
 :root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-routes {
   padding: 10px;
@@ -2781,3 +2782,11 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
   margin: 4px 0 0; padding: 6px 10px; border: 2px solid #14141f; border-radius: 10px;
   background: #fff3c4; color: #14141f; font-size: 13px; font-weight: 700; line-height: 1.35;
 }
+
+/* Hunt rope tactics (Owner 2026-10-28): the spare-rope key, an overheated rope
+   and a combo catch. Every theme; skins keep their own key art. */
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-hunt-rope-swap[hidden] { display: none !important; }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-hunt-rope-swap { min-width: 0; padding-inline: 10px; white-space: nowrap; font-size: 12px; font-weight: 800; }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="ROPE"]:not([data-overheat="0"]):not([data-overheat=""]) { filter: saturate(0.4) sepia(0.6) hue-rotate(-30deg); }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-field__hint[data-notice="PERFECT_COMBO"], .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-field__hint[data-notice="GOOD_COMBO"] { color: #ffd23f; font-weight: 900; }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-field__hint:is([data-notice="ROPE_TOO_HEAVY"], [data-notice="ROPE_OVERHEATED"], [data-notice="RAGE_GUARD"], [data-notice="ROPE_FRAGILE"]) { color: #ff8a5c; font-weight: 800; }

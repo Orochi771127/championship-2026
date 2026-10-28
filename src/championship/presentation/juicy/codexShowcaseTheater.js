@@ -4,14 +4,18 @@
 //  * Portrait <-> in-game motion toggle on the hero frame, with turn and
 //    action (idle / walk / attack / cheer) controls.
 //  * "Preview special": the species' signature move against a training dummy:
-//    wind-up squash, 35 % spotlight and the cut-in strip, the move's VFX by
-//    form, a 60 ms hit-stop, the dummy's element-tinted flash and knockback,
-//    and the move's real power as an arcing number.
+//    wind-up squash, 35 % spotlight and the cut-in strip, the move's own
+//    effect (its theme's vines, missiles, lightning... with the battle's real
+//    effect cells on top, 2026-10-28 fix), a 60 ms hit-stop, the dummy's
+//    element-tinted flash and knockback, and the move's real power as an
+//    arcing number.
 //  * "Preview evolution": the shared CyberMorphEvolutionRunner from this form
 //    to a route's target.
 //  * Unregistered species and routes without a completion record play in
-//    "encrypted signal" mode: the motion and the energy are shown, the body
-//    stays a cyan cipher silhouette and the names stay hidden.
+//    "encrypted signal" mode: the motion and the energy are shown and the body
+//    stays a cyan cipher silhouette. Owner 2026-10-28: the move's name is
+//    always shown (a special preview never reads 【 ？？？？ 】); an
+//    undiscovered caster keeps its name hidden.
 //
 // The sandbox is ONE overlay node per Dex screen, created on first use and
 // reused for every preview. It is DOM + Web Animations only (no canvas, no
@@ -19,21 +23,32 @@
 // change. Closing a preview or leaving the detail cancels every animation and
 // timer it started and drops the images it set.
 import movesCatalog from "../../../data/championship/catalogs/battle-moves.r1.json" with { type: "json" };
-import { describeBattleFxMove } from "../battleFx/battleFxRecipes.js";
+import { battleFxMoveBanks, describeBattleFxMove, BATTLE_FX_PALETTES } from "../battleFx/battleFxRecipes.js";
+import { moveVfxTheme } from "../battleFx/moveVfxThemes.js";
 import { ceremonyEnvironment, playCeremonySound } from "../ceremony/ceremonyRunner.js";
 import { juicyText } from "../../text/juicyShowcaseText.js";
 import { applyJuicyPalette, juicyNode, juicyPortrait } from "./juicyArt.js";
 import { playCyberMorphEvolution } from "./cyberMorphEvolutionRunner.js";
 import { createSkillCutInLayer } from "./skillCutIn.js";
+import { createShowcaseBankCells } from "./showcaseBankCells.js";
+import { SHOWCASE_CARRIER_STYLES, playShowcaseStyle, showcaseStyleIsMelee } from "./showcaseMoveVfx.js";
 import { SHOWCASE_ACTIONS, createSpriteMotion, loadShowcaseMotion, showcaseMotionAvailable } from "./spriteMotionPlayer.js";
 
 const moveRecords = new Map((movesCatalog.records ?? []).map(record => [record.recordIndex, record]));
 
-/** A move's battle look (form + palette) from its catalog record. */
+/**
+ * A move's preview look: its theme (style, element, stage tier; see
+ * moveVfxThemes.js), the palette that element names, the battle form, and the
+ * effect banks the battle plays for it.
+ */
 export function showcaseMoveLook(recordIndex) {
   const record = moveRecords.get(recordIndex);
   const look = record ? describeBattleFxMove(record) : null;
-  return Object.freeze({ form: look?.form ?? "projectile", palette: look?.palette ?? "neutral" });
+  const theme = moveVfxTheme(recordIndex);
+  const palette = theme && BATTLE_FX_PALETTES[theme.element] ? theme.element : look?.palette ?? "neutral";
+  return Object.freeze({ form: look?.form ?? "projectile", palette, style: theme?.style ?? (look?.form === "melee" ? "strike" : "holy"),
+    element: theme?.element ?? palette, tier: theme?.tier ?? 2, themeSource: theme?.source ?? null,
+    banks: record ? battleFxMoveBanks(record) : Object.freeze([]) });
 }
 
 /** The special demo's beats in ms (wind-up, cut-in, travel, contact, end). */
@@ -51,6 +66,8 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
   const heroes = new Set();
   let theater = null;
   let disposed = false;
+  // The battle's effect cells, requested on the first special preview.
+  let bankCells = null;
   let opens = 0, specials = 0, evolutions = 0;
 
   // ------------------------------------------------------------ hero viewer
@@ -280,6 +297,7 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     stage.dataset.mode = "special";
     const arena = node(doc, "div", "cm-showcase__arena");
     arena.dataset.form = payload.look.form;
+    arena.dataset.style = payload.look.style;
     applyJuicyPalette(arena, payload.look.palette);
     arena.append(node(doc, "i", "cm-showcase__grid"));
     const caster = figure("cm-showcase__fighter--caster");
@@ -359,15 +377,37 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     later(T.cutIn, () => {
       const at = casterPoint();
       theater.cutIn?.play({ team: "ally", portrait: payload.portrait, silhouette: payload.encrypted, palette: payload.look.palette,
-        moveName: payload.encrypted ? "？？？？" : payload.move?.name ?? "", casterName: payload.encrypted ? "？？？？" : payload.name, focus: at });
+        moveName: payload.move?.name ?? "", casterName: payload.name || "？？？？", focus: at });
       theater.sprite?.play(7);
     });
-    // 3) The move travels by form.
+    // The theme's effect: the move's own vines, missiles, bolts... (showcaseMoveVfx.js),
+    // with the battle's effect cells riding on them once the atlas is in.
+    const cells = bankCells;
+    const cellScale = () => Math.max(2, Math.min(4, (stage.getBoundingClientRect?.().width ?? 300) / 120));
+    const bank = role => payload.look.banks.find(entry => entry.role === role) ?? null;
+    const playCell = (role, x, y, host = null) => {
+      const entry = bank(role);
+      if (!cells || !entry || !cells.has(entry.bankId, entry.sequence)) return null;
+      const anchor = host ?? spawn("cm-showcase__cell-anchor", x, y);
+      const cell = cells.play(entry.bankId, entry.sequence, anchor, { nativeScale: cellScale() });
+      if (!cell) { if (!host) anchor.remove(); return null; }
+      later(Math.min(1400, Number(cell.dataset.lifetime) || 600), () => { if (host) cell.remove(); else anchor.remove(); });
+      return cell;
+    };
+    const styleContext = () => {
+      const from = casterPoint(), to = dummyPoint();
+      const foot = point(dummy.body, 1), casterFoot = point(caster.body, 1);
+      return { doc, spawn, animate, later, full, from, to, tier: payload.look.tier,
+        ground: { x: foot.x, y: foot.top + foot.h - 4 }, casterGround: { x: casterFoot.x, y: casterFoot.top + casterFoot.h - 4 },
+        carry: (element, first) => { if (first && SHOWCASE_CARRIER_STYLES.includes(payload.look.style)) playCell("body", 0, 0, element); } };
+    };
+    // 3) The move travels by style.
     later(T.travel, () => {
       const from = casterPoint(), to = dummyPoint();
-      const dx = to.x - from.x, dy = to.y - from.y, distance = Math.hypot(dx, dy), angle = Math.atan2(dy, dx);
-      const form = payload.look.form;
-      if (form === "melee") {
+      const dx = to.x - from.x;
+      const style = payload.look.style;
+      playCell("launch", from.x, from.y) ?? playCell("prepare", from.x, from.y);
+      if (showcaseStyleIsMelee(style)) {
         const reach = dx - to.w * 0.55;
         animate(caster.element, [{ transform: "translateX(0)" }, { transform: `translateX(${reach}px)`, offset: 0.4 },
           { transform: `translateX(${reach}px)`, offset: 0.7 }, { transform: "translateX(0)" }], { duration: 760, easing: "ease-in-out" });
@@ -381,29 +421,7 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
             animate(holder, [{ opacity: 0.55 }, { opacity: 0 }], { duration: 300, easing: "ease-out" });
           });
         }
-      } else if (form === "beam" || form === "stream") {
-        const beam = spawn("cm-showcase__beam", from.x, from.y);
-        beam.style.width = `${Math.round(distance)}px`;
-        beam.style.setProperty("--angle", `${angle}rad`);
-        animate(beam, [{ opacity: 0, transform: `rotate(${angle}rad) scaleX(0)` }, { opacity: 1, offset: 0.35, transform: `rotate(${angle}rad) scaleX(1)` },
-          { opacity: 1, offset: 0.8, transform: `rotate(${angle}rad) scaleX(1) scaleY(0.8)` }, { opacity: 0, transform: `rotate(${angle}rad) scaleX(1) scaleY(0.1)` }],
-          { duration: 520, easing: "ease-out" });
-      } else if (form === "area") {
-        const pillar = spawn("cm-showcase__pillar", to.x, to.top + to.h);
-        animate(pillar, [{ opacity: 0, transform: "translateX(-50%) scaleY(0)" }, { opacity: 1, offset: 0.4, transform: "translateX(-50%) scaleY(1)" },
-          { opacity: 0, transform: "translateX(-50%) scaleY(1.1) scaleX(0.4)" }], { duration: 520, easing: "ease-out" });
-      } else {
-        const trail = spawn("cm-showcase__trail", from.x, from.y);
-        trail.style.width = `${Math.round(distance)}px`;
-        const orb = spawn("cm-showcase__orb", from.x, from.y);
-        animate(trail, [{ opacity: 0.9, transform: `rotate(${angle}rad) scaleX(0)` }, { opacity: 0.9, offset: 0.85, transform: `rotate(${angle}rad) scaleX(1)` },
-          { opacity: 0, transform: `rotate(${angle}rad) scaleX(1)` }], { duration: 340, easing: "cubic-bezier(.4,0,.9,.6)" });
-        animate(orb, [{ transform: `translate(-50%, -50%) rotate(${angle}rad) scale(0.6)` },
-          { offset: 0.2, transform: `translate(calc(-50% + ${dx * 0.2}px), calc(-50% + ${dy * 0.2}px)) rotate(${angle}rad) scale(1.7, 0.85)` },
-          { offset: 1, transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${angle}rad) scale(1.7, 0.85)` }],
-          { duration: 300, easing: "cubic-bezier(.4,0,.9,.6)" });
-        later(300, () => orb.remove());
-      }
+      } else playShowcaseStyle("travel", style, styleContext());
     });
     // 4) Contact: 60 ms hit-stop, then flash, knockback, sparks and the number.
     later(T.contact, () => {
@@ -431,18 +449,13 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
       const core = spawn("cm-showcase__impact", to.x, to.y);
       animate(core, [{ opacity: 1, transform: "translate(-50%, -50%) scale(0.3)" }, { opacity: 0.9, offset: 0.3, transform: "translate(-50%, -50%) scale(1)" },
         { opacity: 0, transform: "translate(-50%, -50%) scale(1.6)" }], { duration: 300, easing: "ease-out" });
-      if (payload.look.form === "melee") {
-        for (let i = 0; i < 3; i++) {
-          const slash = spawn("cm-showcase__slash", to.x, to.y);
-          const tilt = -35 + i * 28;
-          animate(slash, [{ opacity: 0, transform: `translate(-50%, -50%) rotate(${tilt}deg) scaleX(0)` },
-            { opacity: 1, offset: 0.3, transform: `translate(-50%, -50%) rotate(${tilt}deg) scaleX(1)` },
-            { opacity: 0, transform: `translate(-50%, -50%) rotate(${tilt}deg) scaleX(1.1) scaleY(0.2)` }], { duration: 260, delay: i * 40 });
-        }
-      }
-      for (let i = 0; i < (full ? 12 : 0); i++) {
+      playShowcaseStyle("impact", payload.look.style, styleContext());
+      if (!SHOWCASE_CARRIER_STYLES.includes(payload.look.style)) playCell("body", to.x, to.y);
+      playCell("hit", to.x, to.y);
+      later(90, () => playCell("extra", to.x, to.y));
+      for (let i = 0; i < (full ? 6 : 0); i++) {
         const spark = spawn("cm-showcase__spark", to.x, to.y);
-        const angle = (Math.PI * 2 * i) / 12 + (i % 2) * 0.2, reach = 46 + (i % 3) * 16;
+        const angle = (Math.PI * 2 * i) / 6 + (i % 2) * 0.2, reach = 46 + (i % 3) * 16;
         animate(spark, [{ opacity: 1, transform: `translate(-50%, -50%) rotate(${angle}rad) translateX(0) scaleX(1)` },
           { opacity: 0, transform: `translate(-50%, -50%) rotate(${angle}rad) translateX(${reach}px) scaleX(0.3)` }],
           { duration: 360, easing: "cubic-bezier(.1,.7,.3,1)" });
@@ -482,7 +495,8 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     element.dataset.showcase = "special";
     element.dataset.encrypted = String(Boolean(encrypted));
     element.addEventListener("click", () => {
-      start("special", { title: encrypted ? `${juicyText("encrypted")} · ${juicyText("preview.special")}` : `${name} · ${move.name}`,
+      bankCells ??= createShowcaseBankCells({ doc, fetchImpl });
+      start("special", { title: encrypted ? `${juicyText("encrypted")} · ${move.name}` : `${name} · ${move.name}`,
         speciesIndex, speciesId, name, move, look: showcaseMoveLook(move.recordIndex), encrypted,
         portrait: encrypted && !silhouette ? null : juicyPortrait(speciesIndex), lockedNote: encrypted ? juicyText("locked.species") : null });
       theater.opener = element;
@@ -523,6 +537,8 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
       for (const entry of heroes) entry.dispose();
       heroes.clear();
       if (theater) { clearStage(); theater.root.remove(); theater = null; }
+      bankCells?.dispose();
+      bankCells = null;
       disposed = true;
     }
   });
