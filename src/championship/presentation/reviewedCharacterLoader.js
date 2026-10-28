@@ -7,8 +7,11 @@ const selected=new Map(selection.characters.map(c=>[c.speciesId,c]));
 export function reviewedCharacterSelection(speciesId,href=globalThis.location?.href){
   const entry=selected.get(speciesId?.replace(/^championship:creature:/,''))??null;
   // Owner 2026-10-28: artwork that replaces the original is the only artwork its
-  // species has, so it is used everywhere; other reviewed sets stay loopback-only.
-  return entry?.replacesOriginal===true||isOriginalLoopbackLocation(href)?entry:null;
+  // species has, so it is used everywhere. Owner 2026-10-29 approved publishing the
+  // selection, so every playable selected set is public; illustration-only identities
+  // (no playable entity, pages not shipped) stay loopback-only.
+  return entry&&(isOriginalLoopbackLocation(href)||entry.playableIdentity!==false
+    &&(entry.replacesOriginal===true||selection.publicReleasePermitted===true))?entry:null;
 }
 // The original atlas pages of these species are retired; only timing/geometry remain.
 export const reviewedReplacesOriginal=(speciesId,href)=>reviewedCharacterSelection(speciesId,href)?.replacesOriginal===true;
@@ -32,8 +35,10 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
     const text=await response.text();
     if(await digest(new TextEncoder().encode(text))!==entry.sha256)throw Error('REVIEWED_ANIMATION_HASH');
     document=JSON.parse(text);
+    // The public manifest lists frames as [{id,...}]; the runtime reads them by id.
+    if(Array.isArray(document.frames))document={...document,frames:Object.fromEntries(document.frames.map(({id,...f})=>[id,f]))};
     if(document.schemaVersion!==1||document.speciesId!==entry.speciesId||document.displayCode!==entry.displayCode
-      ||document.kind!=='REVIEWED_CHARACTER_ANIMATION_LOCAL')throw Error('REVIEWED_ANIMATION_IDENTITY');
+      ||!['REVIEWED_CHARACTER_ANIMATION_LOCAL','REVIEWED_CHARACTER_ANIMATION_PUBLIC'].includes(document.kind))throw Error('REVIEWED_ANIMATION_IDENTITY');
   }catch(error){await bundle.dispose();throw error;}
   if(requiredNumeric&&!reviewedNumericClip(document,requiredNumeric.side,requiredNumeric.id))return bundle;
   const scope=createPixiAssetScope(PIXI,baseUrl,{signal});

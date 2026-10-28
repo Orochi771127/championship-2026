@@ -14,7 +14,7 @@ import {getProductExtension} from '../src/championship/contracts/productSpeciesE
 import {isKnownSpeciesIndex} from '../src/championship/contracts/productSpeciesData.js';
 const root=path.resolve(import.meta.dirname,'..');
 const selection=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/reviewed-animation-selection.v1.json'),'utf8'));
-const read=code=>JSON.parse(fs.readFileSync(path.join(root,selection.characters.find(c=>c.displayCode===code).path),'utf8'));
+const read=code=>JSON.parse(fs.readFileSync(path.join(root,(e=>e.authoringPath??e.path)(selection.characters.find(c=>c.displayCode===code))),'utf8'));
 // v1 storage superseded by web-v2 moved to a local archive with repo-relative layout; provenance checks read it there.
 const v1Archive=process.env.CHAMPIONSHIP_REVIEWED107_V1_ARCHIVE??path.resolve(root,'..','reviewed107-v1-repo-archive-20261028');
 const provenance=rel=>fs.existsSync(path.join(root,rel))?path.join(root,rel):path.join(v1Archive,rel);
@@ -113,7 +113,7 @@ test('Owner 2026-10-28 replacement: 103 fully covered roles retire the original 
   for(const [side,n] of [['main',40],['sub',13]])for(let id=0;id<n;id++)assert.ok(reviewedNumericClip(d,side,id),code+' '+side+id);}
  // a replaced selection is used on any origin; other reviewed sets stay loopback-only
  assert.equal(reviewedCharacterSelection(selection.characters.find(c=>c.displayCode==='MA04').speciesId,'https://example.test/')?.displayCode,'MA04');
- assert.equal(reviewedCharacterSelection(selection.characters.find(c=>c.displayCode==='GR01').speciesId,'https://example.test/'),null);
+ assert.equal(reviewedCharacterSelection(selection.characters.find(c=>c.displayCode==='GR01').speciesId,'https://example.test/')?.displayCode,'GR01');
  const aw25=read('AW25');assert.equal(reviewedArenaKoClip(aw25),null);
  assert.equal(createReviewedArenaPlayback(aw25).sample({...sampleState,hp:0}).fallbackSequenceId,15);
  const hold=createReviewedArenaPlayback(aw25,{nativeFallback:false});hold.sample({...sampleState,time:0,vx:-80});
@@ -194,11 +194,16 @@ test('GR24/26/29 loader data consumes all 24 exact hurt-to-neutral overrides; KO
  assert.equal(count,24);
 });
 
-test('selection cannot activate on file URLs or public hosts',()=>{
- const species=selection.characters[0].speciesId;
- assert.ok(reviewedCharacterSelection(species,'http://127.0.0.1:8768/championship.html'));
- assert.equal(reviewedCharacterSelection(species,'file:///R:/championship.html'),null);
- assert.equal(reviewedCharacterSelection(species,'https://example.com/championship.html'),null);
+test('Owner 2026-10-29 publication: every playable selected set is active on loopback and public hosts and ships its public manifest',()=>{
+ assert.equal(selection.publicReleasePermitted,true);assert.equal(selection.scope,'PUBLIC_PLAYTEST_OWNER_APPROVED_20261029');
+ for(const entry of selection.characters){
+  assert.deepEqual(reviewedCharacterSelection(entry.speciesId,'http://127.0.0.1:8768/championship.html'),entry);
+  assert.deepEqual(reviewedCharacterSelection(entry.speciesId,'https://example.com/championship.html'),entry.playableIdentity===false?null:entry);
+  assert.match(entry.path,/animation\.public-v1\.json$/);assert.notEqual(entry.authoringPath,entry.path);
+  const pub=JSON.parse(fs.readFileSync(path.join(root,entry.path),'utf8')),full=read(entry.displayCode);
+  assert.equal(pub.kind,'REVIEWED_CHARACTER_ANIMATION_PUBLIC');assert.equal(pub.frames.length,Object.keys(full.frames).length);
+  assert.ok(!/[A-Za-z]:[\/]|approvalSha256|provenance/.test(JSON.stringify(pub)),entry.displayCode);
+ }
 });
 
 test('canonical MA50/MA62 consume the opposite archived labels without swapping species or original names',()=>{
@@ -292,7 +297,7 @@ test('formal scene usage loads only its approved mode and re-entry releases all 
   const bundle=await attachReviewedCharacterAnimation({bundle:base,PIXI:mock.PIXI,speciesId:entry.speciesId,usage,
     baseUrl:'http://127.0.0.1:8768/championship.html',fetchImpl:fileFetch});
   // web-v2 stores each mode on its own pages; a mode must load exactly those pages.
-  const manifest=JSON.parse(fs.readFileSync(path.join(root,entry.path),'utf8'));
+  const manifest=JSON.parse(fs.readFileSync(path.join(root,entry.authoringPath??entry.path),'utf8'));
   const expectedImages=manifest.webDelivery.pages.filter(p=>p.mode===usage).length;
   assert.ok(expectedImages>=1);
   assert.equal(bundle.getDiagnostics().reviewedAnimation.usage,usage);assert.equal(mock.loads.length,expectedImages);

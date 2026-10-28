@@ -75,10 +75,11 @@ export function reviewedArenaClip(document, action, direction) {
 }
 
 export function reviewedArenaKoClip(document){
- const approval=document.rootArenaContextApproval;
- if(approval?.scope!=='Arena_KO_STATIC_UNBOUND_ONLY'||!approval.approvalSha256)return null;
+ // Public manifests carry the same binding hash as bindingSha256.
+ const approval=document.rootArenaContextApproval,binding=approval?.approvalSha256??approval?.bindingSha256;
+ if(approval?.scope!=='Arena_KO_STATIC_UNBOUND_ONLY'||!binding)return null;
  return document.clips.find(c=>c.id==='arena:ko'&&c.mode==='arena'&&c.action==='ko'
-  &&c.source?.authorizedContext===approval.scope&&c.source.approvalSha256===approval.approvalSha256)??null;
+  &&c.source?.authorizedContext===approval.scope&&(c.source.approvalSha256??c.source.bindingSha256)===binding)??null;
 }
 
 // Inventory only: a numeric reviewed Main15 contract may have no action label.
