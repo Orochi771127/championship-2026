@@ -5,6 +5,26 @@
 
 Owner brief (pasted 2026-10-28): a Digimon-01/03-toned 「網路雜訊裂縫」 story performed Octopath-style on the live ranch with a portrait dialogue layer, and an offline-first online system (guest pass, account binding, cloud backup, friends by tamer code, AI-mirror sparring, room-code and quick-match PvP) that a Supabase URL and publishable key switch on. Decisions recorded in the Owner's session: the running onboarding session kept Phase 3 (tutorial fix, opening/naming/egg rebuild, shipped as PR #103 with its guest-id key and TM code); 密碼對戰 hosts the live 4-digit room and 通訊對戰 hosts quick match / ladder mirror, both reusing the existing deterministic link / password engines; one additional product key `championshipModernSave:onlineSession:v1` holds the cloud auth session and appears only once a cloud is configured and used; the first pass was local commits only; the Owner then asked 「現在能commit跟push整合至main發佈嗎」, which authorizes this exact batch (its recorded public-playtest input hashes) to be pushed, merged to main through a PR and published by the existing Pages workflow. It does not publish a later batch, create a Supabase project, or put a project URL or key in the repository. OWNER_APPROVED_ADAPTATION of presentation and product features: no gameplay value, save format, battle core or reward change. New folders `src/championship/data` and `src/championship/online`, new dev dependency `@supabase/supabase-js@2.117.3` vendored as a public-program source, SQL and setup guide under `supabase/` and `docs/`. See [report](../reports/story-online-2026-10-28/REPORT_ZH_TW.md).
 
+<!-- record-id: JUICY_EVOLUTION_CUTIN_SHOWCASE_20261028 -->
+## 2026-10-28 — Arcade evolution, special cut-in, impact quartet and Dex holo showcase
+
+Owner directs a presentation upgrade over the existing modules:
+
+- a reusable evolution / back-to-egg runner of about 2.2–2.8 s with tap to speed or skip;
+- a non-blocking special-move cut-in strip with a 35 % field dim, and a small capsule for ordinary skills;
+- an "impact quartet" on moves: wind-up, additive contact flash, 60 ms hit-stop, and element-tinted knockback with damage numbers;
+- in the Dex detail, an in-game motion viewer plus special and evolution previews in a sandbox, encrypted for partners and routes not yet completed.
+
+The iOS budget must hold: no new WebGL context, and nothing written to the save.
+
+Recorded as OWNER_APPROVED_ADAPTATION of presentation, for every theme except `classic` (which keeps the original sequence, callout and dim):
+
+- the native evolution keeps its 272-frame phase clock and single RNG draw, and only its wall-clock playback is 2x (6x on a tap);
+- the battle and the arenas never pause, and the cut-in and hit-stop are drawing only;
+- the Dex previews are labelled simulations that read catalogs and call no intent.
+
+The first instruction kept the batch unpushed and undeployed. After review, the Owner directs 「做完後請你自我審查一次,如果沒有問題，就請你commit 跟push並整合至main後發佈」. This authorizes the batch's commit, push, main integration and Pages publication. See the [report](../reports/juicy-showcase-2026-10-28/REPORT_ZH_TW.md).
+
 <!-- record-id: BATTLE_TACTICS_MENU_20261028 -->
 ## 2026-10-28 — Pre-battle plan (作戰方針) menu, ROM-confirmed
 

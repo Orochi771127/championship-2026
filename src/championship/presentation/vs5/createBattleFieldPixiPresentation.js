@@ -192,7 +192,7 @@ function drawField(graphic, rect, frame, view, renderedSlots) {
  */
 export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt = null, characterRoster = null, effectArt = null, autoAdvance = true,
   onView = null, dynamicFx = false, fx = null, localTeam = 0, responsiveLayout = false,
-  reducedMotion = prefersReducedMotion() }) {
+  reducedMotion = prefersReducedMotion(), juicy = false }) {
   assertDependencies(stage, source);
   responsiveLayout = responsiveLayout && dynamicFx;
   if (fieldArt !== null && (!fieldArt.displayObject || typeof fieldArt.update !== "function"
@@ -226,7 +226,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   const effectSprites = effectArt ? createBattleEffectSprites({PIXI:stage.PIXI, parent:actorLayer, art:effectArt}) : null;
   const fxLayer = dynamicFx ? createBattleFxLayer({PIXI:stage.PIXI, worldBack:fxBack, worldFront:fxFront, screen:fxScreen,
     quality:currentQualityTier(), reducedMotion, responsiveLayout, flashScale:currentFlashScale(),
-    describeMove:fx?.describeMove, nameOfSlot:fx?.nameOfSlot, moveNameOf:fx?.moveNameOf, text:fx?.text}) : null;
+    describeMove:fx?.describeMove, nameOfSlot:fx?.nameOfSlot, moveNameOf:fx?.moveNameOf, text:fx?.text, juicy}) : null;
   // A failed FX probe starts from contain-fit art coordinates; the final
   // unconditional map clamp below still cover-fits even without a director.
   responsiveLayout = responsiveLayout && Boolean(fxLayer);
@@ -348,6 +348,13 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       const sinkDrop=sink*sink*10*nativeScale;
       sprite.position.set(x - center * scale * mirror * (dress?.squashX ?? 1) + (dress?.offsetX ?? 0),
         y - bottom * scale * (dress?.squashY ?? 1) - lift + sinkDrop);
+      // Juicy hit-stop: both fighters keep the frame they had at contact for
+      // 60 ms. Only the drawing holds; the stand the battle owns moved on.
+      const held = fxLayer?.holdFor?.(combatant.slot) && entry.lastSprite ? (entry.frozen ??= entry.lastSprite) : (entry.frozen = null);
+      if (held) {
+        sprite.texture = held.texture; sprite.anchor.set(held.anchorX, held.anchorY);
+        sprite.scale.set(held.scaleX, held.scaleY); sprite.position.set(held.x, held.y); sprite.rotation = held.rotation;
+      }
       sprite.zIndex = y;
       // Down remains a session fact; original effect/return-to-idle timing is separate.
       sprite.alpha = combatant.nativeMotion?.alpha ?? (combatant.down ? 0.35 : 1);
@@ -377,7 +384,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
             overlay.position.copyFrom(sprite.position);
             overlay.rotation = sprite.rotation;
             overlay.zIndex = sprite.zIndex + 0.01;
-            overlay.tint = 0xffffff;
+            // Juicy: white at the peak, then the move's element on the way out.
+            overlay.tint = glow > 0.55 ? 0xffffff : (dress?.flashTint ?? 0xffffff);
             overlay.alpha = Math.min(1, glow) * sprite.alpha;
           }
         }
@@ -417,14 +425,14 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
             entry.stepMs = 0;
             motionEvents.push({type:'STEP', slot:combatant.slot, direction:Math.sign(dx)});
           }
-          if (previousSprite && speed > 3 && entry.ghostMs > 45) {
+          if (previousSprite && speed > 3 && entry.ghostMs > 45 && !held) {
             entry.ghostMs = 0;
-            fxLayer.ghost({...previousSprite, tint:combatant.team === localTeam ? 0x7cc8ff : 0xffa070});
+            fxLayer.ghost({...previousSprite, tint:fxLayer.ghostTint?.(combatant.slot) ?? (combatant.team === localTeam ? 0x7cc8ff : 0xffa070)});
           }
         }
         entry.lastStand = stand;
         entry.lastLift = liftNative;
-        entry.lastSprite = {texture:sprite.texture, anchorX:sprite.anchor.x, anchorY:sprite.anchor.y,
+        if (!held) entry.lastSprite = {texture:sprite.texture, anchorX:sprite.anchor.x, anchorY:sprite.anchor.y,
           scaleX:sprite.scale.x, scaleY:sprite.scale.y, x:sprite.x, y:sprite.y, rotation:sprite.rotation};
       }
       // Baked casts are keyed by the drawn horizontal scale sign (+1 = authored
@@ -508,7 +516,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       fxLayer.update(view, fxContext, dtMs, events);
       for (const event of events) fx?.onEvent?.(event);
     }
-    effectSprites?.update(view.nativeLifecycle?.effectActors ?? [], artRect,
+    // During a juicy hit-stop the move's own effect cells hold their frame too.
+    if (!fxLayer?.hitStopActive?.()) effectSprites?.update(view.nativeLifecycle?.effectActors ?? [], artRect,
       nativeScale, view.specialPrelude?.brightnessQ12 ?? 4096);
     const focus=view.specialPrelude;
     const actor=focus ? view.combatants[focus.slot] : null;

@@ -63,7 +63,9 @@ export function createChampionshipClockDriver({
     const numerator = frameRemainder + delta * NATIVE_CLOCK_CADENCE.busClockHz;
     const frames = Math.floor(numerator / FRAME_DENOMINATOR);
     frameRemainder = numerator % FRAME_DENOMINATOR;
-    if (frames > 0){if(app.hasRaisingPresentation?.())app.advanceRaisingPresentation({frames});else app.advanceNaturalClock({ frames });}
+    // An arcade evolution may play its native phase counts faster (rate 1..8);
+    // the natural clock never takes the rate.
+    if (frames > 0){if(app.hasRaisingPresentation?.())app.advanceRaisingPresentation({frames:Math.min(120,frames*(app.raisingPresentationRate?.()??1))});else app.advanceNaturalClock({ frames });}
   }
 
   ticker.add(tick);

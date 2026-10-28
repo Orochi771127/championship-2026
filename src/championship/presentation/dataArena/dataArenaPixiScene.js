@@ -90,7 +90,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const lights = new PIXI.Container({ label: "arena stand lights" });
   // A faint tactical grid over the floor art (drawn once, after the bake).
   const tactical = new PIXI.Graphics(); tactical.label = "arena tactical grid";
-  world.addChild(groundChunks, tactical, water, cellFx, bridge, marks, objects, shotGlow, shots, beams, particles, lights);
+  // Arcade damage numbers (2026-10-28): pooled, arcing, thick outline; drawn
+  // in the world so they ride the camera. No hit-stop here: the arena is
+  // steered by hand and never holds a frame.
+  const numberLayer = new PIXI.Container({ label: "arena damage numbers" });
+  world.addChild(groundChunks, tactical, water, cellFx, bridge, marks, objects, shotGlow, shots, beams, particles, lights, numberLayer);
 
   const camera = createDataArenaCamera({ worldWidth, worldHeight, reducedMotion, shake, cover: Boolean(grid.map.battleFieldId), artBounds: environment?.manifest?.cameraArtBounds });
   let elapsed = 0;
@@ -568,6 +572,39 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   function ring(x, y, radius, tint, life = 0.4, alpha = 0.9) {
     spawn({ x, y, texture: textures.ring, tint, scale: 0.1, scaleTo: radius / 58, life, alpha, add: true });
   }
+  const numbers = [], numberPool = [];
+  function damageNumber(x, y, amount, tint) {
+    if (!(amount >= 1)) return;
+    if (numbers.length >= 8) { const old = numbers.shift(); old.text.visible = false; numberPool.push(old.text); }
+    let text = numberPool.pop();
+    if (!text) {
+      text = new PIXI.Text({ text: "", style: { fontFamily: '"Noto Sans TC","Arial Black",system-ui,sans-serif', fontSize: 26, fontWeight: "900",
+        fill: 0xffffff, stroke: { color: 0x05060d, width: 6, join: "round" } } });
+      text.anchor.set(0.5);
+      numberLayer.addChild(text);
+    }
+    text.text = String(Math.round(amount)); text.style.fill = tint; text.visible = true; text.alpha = 1;
+    const side = numbers.length % 2 ? 1 : -1;
+    numbers.push({ text, x, y, vx: reducedMotion ? 0 : side * 46, vy: reducedMotion ? -30 : -270, age: 0, life: 0.8 });
+  }
+  function updateNumbers(dt) {
+    for (let i = numbers.length - 1; i >= 0; i--) {
+      const n = numbers[i];
+      n.age += dt;
+      if (n.age >= n.life) { n.text.visible = false; numberPool.push(n.text); numbers.splice(i, 1); continue; }
+      if (!reducedMotion) n.vy += 720 * dt;
+      n.x += n.vx * dt; n.y += n.vy * dt;
+      const t = n.age / n.life;
+      n.text.position.set(n.x, n.y);
+      n.text.scale.set(reducedMotion ? 1 : n.age < 0.1 ? 1.7 - 7 * n.age : 1);
+      n.text.alpha = t > 0.7 ? (1 - t) / 0.3 : 1;
+    }
+  }
+  /** A contact: a saturated halo under a white-hot core (additive). */
+  function contact(x, y, tint) {
+    spawn({ x, y, texture: textures.glow, tint, scale: 0.9, scaleTo: 0.25, life: 0.16, alpha: 0.8 });
+    spawn({ x, y, texture: textures.glow, tint: 0xffffff, scale: 0.4, scaleTo: 0.1, life: 0.12 });
+  }
   function puff(x, y, tint, count = 4, size = 1.2) {
     for (let i = 0; i < (rich ? count : 2); i++) {
       spawn({ x: x + (i - count / 2) * 6, y, vx: (i - count / 2) * 18, vy: -50 - i * 10, texture: textures.soft, tint, scale: size * 0.5, scaleTo: size,
@@ -623,7 +660,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           ring(event.x, event.y, 46, tint, 0.3);
           break;
         }
-        case "PLAYER_HIT": camera.addTrauma(0.38); burst(event.x, event.y - 30, { count: 8, speed: 200, tint: 0xff4a4a }); break;
+        case "PLAYER_HIT": camera.addTrauma(0.38); burst(event.x, event.y - 30, { count: 8, speed: 200, tint: 0xff4a4a }); damageNumber(event.x, event.y - 56, event.amount, 0xffb0a8); break;
         case "MATE_HIT": burst(event.x, event.y - 40, { count: 4, speed: 160, tint: 0x9fe8ff }); break;
         case "PERFECT_DODGE": ring(event.x, event.y - 20, 70, 0x7fe9ff, 0.35); burst(event.x, event.y - 20, { count: 10, speed: 320, tint: 0x7fe9ff }); break;
         case "DASH": afterimage(event.x, event.y, event.dirX); puff(event.x, event.y, 0xa89580, 3, 0.9); break;
@@ -683,14 +720,18 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             burst(x,y,{count:5,speed:150,angle:event.angle,spread:1.2,tint:fx.tint,texture:fx.texture==='relayCrystal'?textures.shard:textures.spark,life:.22});
           } else if(event.team==='player')spawn({x:event.x+Math.cos(event.angle)*26,y:event.y-BEAM_ELEVATION+Math.sin(event.angle)*26,texture:textures.glow,tint:0x6ff7ff,scale:.45,scaleTo:.1,life:.14});break;
         }
-        case "ULT_CAST": ring(event.x, event.y, 160, event.team === "player" ? 0xffe066 : 0xff3b5c, 0.5); camera.addTrauma(0.25); crowdReact("CHEER", event.x, 1.2); break;
+        case "ULT_CAST": ring(event.x, event.y, 160, event.team === "player" ? 0xffe066 : 0xff3b5c, 0.5); camera.addTrauma(0.25); crowdReact("CHEER", event.x, 1.2);
+          // The caster's charge ring closes in on its feet as the cut-in plays (2026-10-28).
+          spawn({ x: event.x, y: event.y, texture: textures.ring, tint: event.team === "player" ? 0x5ff3ff : 0xb18cff, scale: 1.6, scaleTo: 0.15, life: 0.42, alpha: 0.9 });
+          break;
         case "NOVA": for (let i = 0; i < 3; i++) ring(event.x, event.y, event.radius * (0.6 + i * 0.25), state.gameMode==='RELAY'?relayEffectStyle(event.moveId).tint:event.effect === "ROOT" ? 0xc8f4ff : event.effect === "SLOW" ? 0x5fd8c8 : 0xff8a3c, 0.4 + i * 0.12);
           burst(event.x, event.y - 20, { count: 24, speed: 380, tint: state.gameMode==='RELAY'?relayEffectStyle(event.moveId).tint:event.effect === "ROOT" ? 0xd8f6ff : 0xffb070, texture: textures.shard, scale: 1.8, gravity: 200, life: 0.7 }); camera.addTrauma(0.5); break;
         case "ZONE_BURST": ring(event.x, event.y, event.radius, event.team === "player" ? 0x6ff7ff : 0xff5a3c, 0.35);
           burst(event.x, event.y, { count: 12, speed: 260, tint: state.gameMode==='RELAY'?relayEffectStyle(event.moveId).tint:event.effect === "ROOT" ? 0xd8f6ff : event.effect === "IGNITE" ? 0xff9a3c : 0xbff4ff, gravity: 260, life: 0.5 }); camera.addTrauma(0.18); break;
         case "BARRIER_UP": ring(event.x, event.y - 16, 70, 0xffe066, 0.3); break;
         case "BLINK": afterimage(event.fromX, event.fromY, event.x - event.fromX); burst(event.x, event.y - 20, { count: 10, speed: 200, tint: 0xd8f6ff, texture: textures.shard }); break;
-        case "RIVAL_HIT": if (event.cause !== "LASER") burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); break;
+        case "RIVAL_HIT": if (event.cause !== "LASER") { burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); contact(event.x, event.y - 30, 0xffb070); }
+          damageNumber(event.x, event.y - 56, event.amount, 0xffffff); break;
         case "RIVAL_DODGE": puff(event.x, event.y, 0xa89580, 3, 0.9); break;
         case "RIVAL_SPLASH": ring(event.x, event.y, 50, 0x9fe8ff, 0.4); break;
         case "SKILL_HIT": spawn({ x: event.x, y: event.y - 14, texture: textures.glow, tint: state.gameMode==='RELAY'?relayEffectStyle(event.moveId).tint:MOVE_TINT[event.moveId] ?? 0xffffff, scale: 0.6, scaleTo: 0.15, life: 0.14 }); break;
@@ -932,6 +973,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     drawBeams();
     drawMarks();
     updateParticles(dt);
+    updateNumbers(dt);
     for (let i = ghosts.length - 1; i >= 0; i--) {
       const ghost = ghosts[i];
       ghost.age += dt; ghost.sprite.alpha = 0.5 * (1 - ghost.age / ghost.life);
