@@ -619,6 +619,8 @@ test('arenaGroundFromWalk sets put the walking feet of each direction on the piv
   const bundle=await attachReviewedCharacterAnimation({bundle:baseline(),PIXI:mock.PIXI,speciesId:entry.speciesId,usage:'arena',baseUrl:'http://127.0.0.1:8768/championship.html',fetchImpl:fileFetch});
   const s=bundle.createActor({animation:0}).reviewedArena.sample({...sampleState,vy:1}),feet=s.geometry.nativeBounds[3];
   if(entry.arenaGroundFromWalk)assert.ok(Math.abs(feet)<3&&s.geometry.groundShift>4,code);else assert.equal(s.geometry.groundShift,undefined,code);
+  if(entry.arenaGroundFromWalk){const actor=bundle.createActor({animation:0}),ko=actor.reviewedArena.sample({...sampleState,hp:0});
+   if(ko.geometry)assert.ok(Math.abs(ko.geometry.nativeBounds[3])<0.01,code+' KO contact on the ground line');}
   await bundle.dispose();
  }
 });

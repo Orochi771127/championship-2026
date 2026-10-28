@@ -1,21 +1,10 @@
-import selection from '../../data/championship/reviewed-animation-selection.v1.json' with {type:'json'};
-import {isOriginalLoopbackLocation} from './originalRuntimeLocation.js';
 import {createPixiAssetScope} from './pixiCharacterRuntimeBundle.js';
 import {reviewedNumericClip,sampleReviewedCharacterClip,createReviewedArenaPlayback} from './reviewedCharacterAnimation.js';
+import {reviewedCharacterSelection,reviewedCharacterSelections} from './reviewedSelection.js';
 
-const selected=new Map(selection.characters.map(c=>[c.speciesId,c]));
-export function reviewedCharacterSelection(speciesId,href=globalThis.location?.href){
-  const entry=selected.get(speciesId?.replace(/^championship:creature:/,''))??null;
-  // Owner 2026-10-28: artwork that replaces the original is the only artwork its
-  // species has, so it is used everywhere. Owner 2026-10-29 approved publishing the
-  // selection, so every playable selected set is public; illustration-only identities
-  // (no playable entity, pages not shipped) stay loopback-only.
-  return entry&&(isOriginalLoopbackLocation(href)||entry.playableIdentity!==false
-    &&(entry.replacesOriginal===true||selection.publicReleasePermitted===true))?entry:null;
-}
+export {reviewedCharacterSelection,reviewedCharacterSelections};
 // The original atlas pages of these species are retired; only timing/geometry remain.
 export const reviewedReplacesOriginal=(speciesId,href)=>reviewedCharacterSelection(speciesId,href)?.replacesOriginal===true;
-export const reviewedCharacterSelections=()=>selection.characters;
 export function reviewedSpeciesForEntity(config,bindings,baseUrl){
   const ids=[...new Set(bindings.filter(b=>b.entityId===config.entityId)
     .map(b=>reviewedCharacterSelection(b.speciesId,baseUrl)?.speciesId).filter(Boolean))];
@@ -111,7 +100,10 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
       if(entry.arenaGroundFromWalk===true){
         const moved=new Set();
         for(const dir of new Set(document.clips.filter(c=>c.mode==='arena').map(c=>c.direction))){
-          const feet=(document.clips.find(c=>c.mode==='arena'&&c.direction===dir&&['move','walk'].includes(c.action))?.frames??[])
+          // A clip without a heading (the static KO) grounds its own contact instead of a walk's.
+          const reference=dir==null?document.clips.find(c=>c.mode==='arena'&&c.direction==null)
+            :document.clips.find(c=>c.mode==='arena'&&c.direction===dir&&['move','walk'].includes(c.action));
+          const feet=(reference?.frames??[])
             .map(f=>geometry.get(f.assetId)?.nativeBounds?.[3]).filter(Number.isFinite).sort((a,b)=>a-b);
           const shift=feet.length?feet[feet.length>>1]:0;
           if(!(shift>0))continue;
