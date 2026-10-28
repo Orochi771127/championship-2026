@@ -1384,9 +1384,11 @@ body[data-desktop-menu] .cm-vs2-root[data-screen="MEDALS"] .cm-medals__grid { gr
  * carries the box measured per image (alpha > 32) as --bx/--by/--bw/--bh on the
  * --iw x --ih canvas. The box fills the stage height or its width up to 8 px from the
  * frame, centred, and stands on the floor --dex-floor above the bottom edge. The
- * 24 px stage padding stays; the artwork is never cropped or resampled. */
+ * 24 px stage padding stays; the artwork is never cropped or resampled. The drawn box
+ * always lies inside the stage, so clipping there only trims transparent canvas, which
+ * would otherwise cover (and take taps from) the controls around the stage. */
 @supports (width: 1cqw) {
-  .cm-dex-hero[data-fit="silhouette"] { position: relative; container-type: size; }
+  .cm-dex-hero[data-fit="silhouette"] { position: relative; container-type: size; overflow: clip; }
   .cm-dex-hero[data-fit="silhouette"] > .cm-dex-hero__image {
     --dex-fit: min((100cqw + 32px) / var(--bw), (100cqh + 24px - var(--dex-floor, 24px)) / var(--bh));
     position: absolute; max-width: none; max-height: none;

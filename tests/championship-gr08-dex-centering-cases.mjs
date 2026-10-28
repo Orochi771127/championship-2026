@@ -31,6 +31,8 @@ test('Dex detail exposes correct identity; navigation preserves image and state'
 test('every Dex hero fits its drawn silhouette: GR08 centred, all inside the frame on the floor, sizes even',()=>{
  // The GR08-only shift is subsumed: its silhouette (alpha >32 spans x287..821) is centred like every other.
  assert.doesNotMatch(css,/species-040/);
+ // The scaled canvas reaches past the stage; clipping keeps its transparent margin off neighbouring controls.
+ assert.match(css,/\.cm-dex-hero\[data-fit="silhouette"\] \{ position: relative; container-type: size; overflow: clip; \}/);
  const rule=css.match(/\.cm-dex-hero\[data-fit="silhouette"\] > \.cm-dex-hero__image \{([^}]+)\}/)[1];
  assert.match(rule,/--dex-fit: min\(\(100cqw \+ 32px\) \/ var\(--bw\), \(100cqh \+ 24px - var\(--dex-floor, 24px\)\) \/ var\(--bh\)\)/);
  assert.match(rule,/left: calc\(24px \+ 50cqw - var\(--dex-fit\) \* \(var\(--bx\) \+ var\(--bw\) \/ 2\)\)/);
