@@ -381,6 +381,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         sprite.y = -lift + sink * 30;
         sprite.x = 0;
         if(currentPlacement){sprite.x+=(facing>0?-1:1)*currentPlacement.offset[0]*cellScale;sprite.y+=currentPlacement.offset[1]*cellScale;}
+        // Stage four: a staggered fighter shudders for its hitstun.
+        if (body.hitstun > 0 && !reducedMotion) sprite.x += Math.sin(elapsed * 90) * 2.5;
         if (motion && relayProfile && !reducedMotion) {
           const a = body.action;
           // No action in progress means no lunge; a null action used to throw here and stop the HUD.
@@ -743,6 +745,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "SURGE_SPLASH": ring(event.x, event.y, event.radius, 0x7fe9ff, 0.5); burst(event.x, event.y, { count: 14, speed: 260, tint: 0xbff4ff, gravity: 420, life: 0.6 }); break;
         case "POD_BURST": ring(event.x, event.y, 120, 0xd8f6ff, 0.45); burst(event.x, event.y - 20, { count: 16, speed: 300, tint: 0xd8f6ff, texture: textures.shard, scale: 1.8 }); camera.addTrauma(0.15); break;
         case "CANCEL": {
+          // Stage four clashes: steam where water or frost meets fire, sparks where shots meet.
+          if (event.rule === 'STEAM_CLASH') { puff(event.x, event.y - 12, 0xeef7ff, 5, 1.4); ring(event.x, event.y - 12, 34, 0xeef7ff, 0.3); break; }
+          if (['WAVE_SWALLOWS_SHOT', 'HEAVY_SHOT_WINS', 'SHOTS_TRADE'].includes(event.rule)) {
+            burst(event.x, event.y - 12, { count: event.rule === 'SHOTS_TRADE' ? 10 : 6, speed: 260, tint: 0xffffff, life: 0.3 });
+            ring(event.x, event.y - 12, 26, 0xffffff, 0.2); camera.addTrauma(0.08); break;
+          }
           const tint = event.rule === "WATER_QUENCHES_EMBER" ? 0xeef7ff : event.rule === "LASER_BREAKS_SHARD" ? 0xc9a8ff : 0xff9be8;
           if (event.rule === "WATER_QUENCHES_EMBER") puff(event.x, event.y - 12, tint, 3, 0.9);
           else burst(event.x, event.y - 12, { count: event.rule === "LASER_BREAKS_SHARD" ? 10 : 5, speed: 200, tint, texture: textures.shard });
@@ -804,6 +812,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "ARENA_CLAIM": ring(event.x, event.y, 80, ZONE_TINT[event.kind] ?? 0xffffff, 0.4); burst(event.x, event.y - 20, { count: 14, speed: 240, tint: ZONE_TINT[event.kind] ?? 0xffffff, life: 0.55 });
           if (event.team === 0) crowdReact("CHEER", event.x, 0.8); break;
         case "ARENA_PRESSURE": camera.addTrauma(0.3); break;
+        case "EFFECTIVE": ring(event.x, event.y - 30, event.mult > 1 ? 52 : 40, event.mult > 1 ? 0xffd34d : 0x9aa4b0, 0.32);
+          if (event.mult > 1) burst(event.x, event.y - 34, { count: 6, speed: 200, tint: 0xffd34d, life: 0.35 }); break;
+        case "STATUS_CLEARED": burst(event.x, event.y - 24, { count: 8, speed: 180, tint: 0xd8f6ff, texture: textures.shard, gravity: 300, life: 0.45 }); puff(event.x, event.y - 10, 0xeef7ff, 3, 1); break;
         case "BLINK": afterimage(event.fromX, event.fromY, event.x - event.fromX); burst(event.x, event.y - 20, { count: 10, speed: 200, tint: 0xd8f6ff, texture: textures.shard }); break;
         case "RIVAL_HIT": if (event.cause !== "LASER") { burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); contact(event.x, event.y - 30, 0xffb070); }
           damageNumber(event.x, event.y - 56, event.amount, 0xffffff); heavyHit(event.amount); break;

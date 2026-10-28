@@ -33,6 +33,7 @@ import { RELAY_MAP_IDS } from '../modes/dataArena/dataArenaRelayMaps.js';
 import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, RELAY_LOADOUTS, relayKit, relayMove, relayEffectStyle } from '../modes/dataArena/dataArenaRelay.js';
 import { relayOwnMoveInfo, relayBasicRecord } from '../modes/dataArena/dataArenaRelayKits.js';
 import { battleMoveName } from '../text/battleMoveNames.js';
+import { RELAY_ELEMENT_STRONG, relayElementWeakTo } from '../modes/dataArena/dataArenaRelayElements.js';
 
 const STEP_MS = DATA_ARENA_STEP_SECONDS * 1000;
 const MOVE_KEYS = Object.freeze({ KeyW: [0, -1], ArrowUp: [0, -1], KeyS: [0, 1], ArrowDown: [0, 1], KeyA: [-1, 0], ArrowLeft: [-1, 0], KeyD: [1, 0], ArrowRight: [1, 0] });
@@ -568,6 +569,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         case 'ARENA_WARNING': audio?.play('warn'); banner(t(`arena.${event.kind}.warn`), 'warn', 2400); break;
         case 'ARENA_ACTIVE': banner(t(`arena.${event.kind}.active`), 'good', 2200); break;
         case 'ARENA_CLAIM': audio?.play('pickup'); toast(t(`arena.${event.kind}.claim`, { amount: event.amount }), { x: event.x, y: event.y, tone: event.team === 0 ? 'good' : 'warn', key: `arena-claim-${event.team}` }); break;
+        case 'EFFECTIVE': toast(t(`relay.${event.mult > 1 ? 'effective' : 'resisted'}.${event.target}`), { x: event.x, y: event.y,
+          tone: (event.target === 'rival') === (event.mult > 1) ? 'good' : 'warn', key: `effective-${event.target}-${event.mult > 1}`, gap: 700 }); break;
         case 'ARENA_PRESSURE': toast(t('arena.VENT.pressure'), { tone: 'warn', key: 'arena-pressure' }); break;
         case 'PROP_DESTROYED': if (gameMode === 'RELAY') toast(t('arena.coverBroken'), { x: event.x, y: event.y, tone: 'warn', key: `cover-${event.id}` }); break;
         case 'RELAY_END': releaseInputs(); break;
@@ -921,6 +924,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         for(const id of relayTeamIds(partnerId,relayReserveId)) {
           const member=cast.partners.find(p=>p.partnerId===id), selected=relayKit(id,relayLoadouts[id]);
           const group=el('fieldset','da-loadout');group.append(el('legend','',member.name));
+          // Stage four: the partner's place on the element wheel.
+          const element=partnerElement(id),names=list=>list.length?list.map(e=>t(`relay.element.${e}`)).join('、'):t('relay.element.none');
+          group.append(el('p','da-note da-matchup',t('relay.matchup',{element:t(`relay.element.${element}`),strong:names(RELAY_ELEMENT_STRONG[element]??[]),weak:names(relayElementWeakTo(element))})));
           for(let slot=0;slot<3;slot++) {
             const label=el('label','',`${slot+2} `),select=el('select','da-loadout__select');select.setAttribute('aria-label',`${member.name} ${t('kit.heading')} ${slot+2}`);
             select.dataset.partner=id;select.dataset.slot=String(slot);
