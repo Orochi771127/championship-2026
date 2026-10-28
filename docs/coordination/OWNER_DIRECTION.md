@@ -12,7 +12,8 @@ Owner directs, after the Pokémon Arena 2D study, a staged build of real-time pa
 - Stage two is presentation only: per-style projectile heads, element-following basics, impact families, 60–80 ms drawing-only hit-stop, windup charge orbs, beam tethers and status particles in RELAY.
 - Owner then directs 「Start stage three」 (same terms: commit on the branch, no push). OWNER_APPROVED_ADAPTATION: each relay field gets destructible cover in its own material (weak elements deal 1.4x to cover; wood burns; broken cover opens a route) and timed arena zones (warning 2.5 s, active 6 s, every 22 s; one 0.7 s claim per team per cycle; effect by field theme). Rules in `dataArenaRelayArena.js`; cover and zones are game data over the existing field grids.
 - Owner then directs 「Start stage four」 (same terms). OWNER_APPROVED_ADAPTATION, RELAY only: a landed hit staggers its target 0.10–0.20 s (walking stops and a windup's clock pauses, never cancels); a product-authored element wheel scales hits 1.25x / 0.8x (physical outside it; not a claim about the original's untraced element rules); opposing shots clash both ways (water/frost meets fire = steam, waves swallow shots, the heavier shot survives, equals trade); fire thaws a root and frost puts a burn out.
-- Owner then directs 「Push and open PR」: push `feat/arena-relay-kits-20261028` (main merged in to clear doc/contract conflicts) and open a PR against main. No merge to main or deployment is authorized.
+- Owner then directs 「Push and open PR」: push `feat/arena-relay-kits-20261028` (main merged in to clear doc/contract conflicts) and open a PR against main.
+- On 2026-10-29 the Owner directs 「然後合併111」: merge PR #111 to main, which publishes it through the Pages workflow; verify the live build afterwards.
 <!-- record-id: CAGE_GROUND_STANDARD_20261028 -->
 ## 2026-10-28 — Cage ground standard v1, track cage CM02, gym floors and lockers
 
