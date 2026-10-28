@@ -25,6 +25,8 @@
     "src/championship/app/battlePresentationSource.js",
     "src/championship/app/battleRosterSource.js",
     "src/championship/app/battleRuntime.js",
+    "src/championship/app/bindRewardPopup.js",
+    "src/championship/app/bragCardPreview.js",
     "src/championship/app/cageRoster.js",
     "src/championship/app/championshipClockDriver.js",
     "src/championship/app/ChampionshipPersistentSavePort.js",
@@ -38,6 +40,7 @@
     "src/championship/app/championshipStorageGuard.js",
     "src/championship/app/championshipToolbar.js",
     "src/championship/app/codeClipboard.js",
+    "src/championship/app/cyberGachaView.js",
     "src/championship/app/dataArenaScreen.js",
     "src/championship/app/digimonListScreen.js",
     "src/championship/app/downloadSaveBackup.js",
@@ -67,6 +70,7 @@
     "src/championship/app/nativeTutorialProgression.js",
     "src/championship/app/onlineAccountPanel.js",
     "src/championship/app/onlineBattleLobby.js",
+    "src/championship/app/onlineBindRewardPolicy.js",
     "src/championship/app/openingEggChoices.js",
     "src/championship/app/openingFilm.js",
     "src/championship/app/openingPresentation.js",
@@ -85,12 +89,14 @@
     "src/championship/app/ranchTitlePreload.js",
     "src/championship/app/residentAssetNotice.js",
     "src/championship/app/runtimeRecoveryDiagnostics.js",
+    "src/championship/app/saveConflictArbiter.js",
     "src/championship/app/scheduleScreen.js",
     "src/championship/app/settings/preferenceEnvironment.js",
     "src/championship/app/settings/preferenceSchema.js",
     "src/championship/app/settings/preferenceStore.js",
     "src/championship/app/settings/qualityController.js",
     "src/championship/app/settings/settingsPanel.js",
+    "src/championship/app/socialLinkDock.js",
     "src/championship/app/storageDurability.js",
     "src/championship/app/storyCutsceneStage.js",
     "src/championship/app/tamerInfoScreen.js",
@@ -169,6 +175,7 @@
     "src/championship/cage/ranchEcology.js",
     "src/championship/cage/ranchExpansion.js",
     "src/championship/cage/ranchSlotGeometry.js",
+    "src/championship/config/socialLinksConfig.js",
     "src/championship/contracts/championshipContracts.js",
     "src/championship/contracts/evidenceAdapter.js",
     "src/championship/contracts/evidenceIngest.js",
@@ -193,6 +200,7 @@
     "src/championship/field/fieldDefinition.js",
     "src/championship/field/groundFootpointSeparation.js",
     "src/championship/field/index.js",
+    "src/championship/gacha/cyberGacha.js",
     "src/championship/gate/gateAdmission.js",
     "src/championship/gate/gateCatalog.js",
     "src/championship/gate/originalHuntFieldBindings.js",
@@ -251,6 +259,9 @@
     "src/championship/modes/dataArena/dataArenaNav.js",
     "src/championship/modes/dataArena/dataArenaProps.js",
     "src/championship/modes/dataArena/dataArenaRelay.js",
+    "src/championship/modes/dataArena/dataArenaRelayArena.js",
+    "src/championship/modes/dataArena/dataArenaRelayElements.js",
+    "src/championship/modes/dataArena/dataArenaRelayKits.js",
     "src/championship/modes/dataArena/dataArenaRelayMaps.js",
     "src/championship/modes/dataArena/dataArenaRelayRoster.js",
     "src/championship/modes/dataArena/dataArenaSave.js",
@@ -382,6 +393,7 @@
     "src/championship/presentation/story/portraitVnOverlay.js",
     "src/championship/presentation/story/storyStagePuppeteer.js",
     "src/championship/presentation/systemBackgrounds.js",
+    "src/championship/presentation/tamerBragCardGenerator.js",
     "src/championship/presentation/titleAssetVariant.js",
     "src/championship/presentation/titleImageLifecycle.js",
     "src/championship/presentation/vfx/captureStorageVfx.js",
@@ -491,6 +503,7 @@
     "src/championship/text/raisingMessages.th.js",
     "src/championship/text/raisingMessages.vi.js",
     "src/championship/text/raisingMessages.zhHant.js",
+    "src/championship/text/socialText.js",
     "src/championship/text/tutorialMessages.en.js",
     "src/championship/text/tutorialMessages.ja.js",
     "src/championship/text/tutorialMessages.th.js",
@@ -7713,39 +7726,39 @@
     "assets/production/evolution-glyphs-v1/CP-G02-memory-128.png",
     "assets/production/evolution-glyphs-v1/CP-G03-growth-128.png",
     "assets/production/evolution-glyphs-v1/CP-G04-evolution-128.png",
-    "assets/production/hunt/accepted-20261010/images/000d023258a1a7d066e5dd2cc64304e1a43a35ccb9807e5f2dc43ad75207930c.webp",
-    "assets/production/hunt/accepted-20261010/images/182fefd2842d2f616df02ba1370dc79490c577ef831365e8a7270cc71bd04093.webp",
-    "assets/production/hunt/accepted-20261010/images/1833f1c2ce6eb5e6e3943696d1a48725e5cf3afd730f7d18433d581b7b354263.webp",
-    "assets/production/hunt/accepted-20261010/images/1c70c0331f6a124138f18c1e0d8a423b2c17cb34889c129e6df70f4c3ed19aaf.webp",
-    "assets/production/hunt/accepted-20261010/images/294a804aa9190ff752519466892b563c0763c72ab3ed197bb6e0fabccb0809a7.webp",
-    "assets/production/hunt/accepted-20261010/images/3ff78bd79851d6aa46f53eaa9f03b3b143a3eec6aa3f33f87e4edf1f627583ef.webp",
-    "assets/production/hunt/accepted-20261010/images/513682a68e8ef5c90e3d938244058771f65230f565219e29964715ec0045d30f.webp",
-    "assets/production/hunt/accepted-20261010/images/63212fbf55baeb3be4f94d103a20da279ca7b19eb8423e4a748609fdb3f726e3.webp",
-    "assets/production/hunt/accepted-20261010/images/65826785834c9aedf81ff9bcf053e79e7c6ca4f495ad0ebb98e247b029e70827.webp",
-    "assets/production/hunt/accepted-20261010/images/77ecc2d7f801add78b7dc191700979d455a872bbbaefb43505fa086cc9efb253.webp",
-    "assets/production/hunt/accepted-20261010/images/79e65d73137fe9cf6a265b3203cfe4e708d9066618fc273b43f65a5616d02fcb.webp",
-    "assets/production/hunt/accepted-20261010/images/818232e99c196b4626bb9b8e02c17201cc55f38c1c979cfad0c2788f900429d5.webp",
-    "assets/production/hunt/accepted-20261010/images/8a05e2abe88fc822c2bda2edbd728dfa9aa638181b302d8a60953e4321d1a71d.webp",
-    "assets/production/hunt/accepted-20261010/images/965154abada1869a418deef9830d32699dd4ff351bb3f012c5906b133cebcc8d.webp",
-    "assets/production/hunt/accepted-20261010/images/9cc9027277c1a2d4eb39b92f3f260478e185813a6db7881e29d76b66138c6654.webp",
-    "assets/production/hunt/accepted-20261010/images/a0cc3dbb4f9dc8b2adbd24d60a3b1abd5eb108eb4e0deaf0894f358f63861efc.webp",
-    "assets/production/hunt/accepted-20261010/images/a3978124db98523a12ffc6a138f32836e308bb92b1f0506c82c6fbc6a69f2031.webp",
-    "assets/production/hunt/accepted-20261010/images/a3bfe75b875c790dcd0462cd9072bfa164cc08d4dcd6377c63cef444b71e3bb5.webp",
-    "assets/production/hunt/accepted-20261010/images/a7168e87659de75a9001a2d3e51edfa189e810a7724f1c02733b3fbdb2129bee.webp",
-    "assets/production/hunt/accepted-20261010/images/aa1249f8e6881643254d8b73e0e5d6b08fd5b824853703a7e6c39dba93d00818.webp",
-    "assets/production/hunt/accepted-20261010/images/ad7422054c46843e2a43d048496c9253398bcf7c6dfd3e71b73ad2d03b4698d1.webp",
-    "assets/production/hunt/accepted-20261010/images/b1753ee1db999c33e2482a9654770075baefbfc4383bfbbf359cfafcc2632399.webp",
-    "assets/production/hunt/accepted-20261010/images/bbbdc30cc63a5cf30bc052e952010022e19eb83b05481170238492876d05b36d.webp",
     "assets/production/hunt/accepted-20261010/images/bc3e1d5ccef83e320178e9508688353c18fc532f1e3bd9ff059cb996b6b922a9.webp",
-    "assets/production/hunt/accepted-20261010/images/d1c085753830b7ca67ffc5df680fc390438b676021773a22a63f2d8c57511fb6.webp",
-    "assets/production/hunt/accepted-20261010/images/d266c7c42d56092d1515d37ef8d0ce532025b2193ece94398ecb4aeb6c88ed0c.webp",
-    "assets/production/hunt/accepted-20261010/images/dce58f0d55f7e29e492cac2ffa0f96fcf83a86bb81e46fc5abf683c5d9c9d7cd.webp",
-    "assets/production/hunt/accepted-20261010/images/e4e02745243972800b1bf6a475dbcda4e79b6d85c87cd49811eba3df00149710.webp",
-    "assets/production/hunt/accepted-20261010/images/e8a5ec0f9dbab05c05513eb95dd37e24bd90dc796343943e41094cbb0f897bf9.webp",
-    "assets/production/hunt/accepted-20261010/images/e9948bd0dab2b69d2a2f406bfc9248f5ac2b977e1611aa0219e2fba2168ddd39.webp",
-    "assets/production/hunt/accepted-20261010/images/f3368635453ac174c5d0a036a57480bf2d22fc4a748529ed1396f33781d61fcc.webp",
-    "assets/production/hunt/accepted-20261010/images/f615a1d2f2ad3c098d5e2d1769db7e3ad44df3809e9e64b4486c28a646f6c5d1.webp",
-    "assets/production/hunt/accepted-20261010/images/fbb93925c9d9292dcedb42e8a76103768d766c107275be851cde9335eb3dc087.webp",
+    "assets/production/hunt/accepted-web-20261029/images/0380ac617a8f89d3886dc28bdf00ff4c3a3b91437d3135ca24d189bb7027f139.webp",
+    "assets/production/hunt/accepted-web-20261029/images/0ee3f314381c234b9ca33d7f4c8bef4c0c5ef7a3fffdf329ed9ccd702d16a3bb.webp",
+    "assets/production/hunt/accepted-web-20261029/images/212ecb64cee1aa5e98b2be7dc729bd5e36c225c32ce7e89447aceb1da8c17fc7.webp",
+    "assets/production/hunt/accepted-web-20261029/images/241406ef94346231fee168c0795c635da0ed41e901681c2d8fd8061802101f9e.webp",
+    "assets/production/hunt/accepted-web-20261029/images/25b06c232f6cd4e52670b87c44e482f30e8d0747143ac0687642243e1b45497f.webp",
+    "assets/production/hunt/accepted-web-20261029/images/278d0c162015e415cb005ff59e566d36a007149630e2916a28b3b66063e69d49.webp",
+    "assets/production/hunt/accepted-web-20261029/images/2883ce5b57c505a2dce9c18eff76d94aec793d82b76949c773b32030cb52b8ad.webp",
+    "assets/production/hunt/accepted-web-20261029/images/28e2a1d012aedf85ffd7ac076f9f7e804000f4e7aca403ac37ad486c7a8c11b3.webp",
+    "assets/production/hunt/accepted-web-20261029/images/3a8a8230f264917b9bbc61e26cf577b0e486088417adddae3b65316fedd58858.webp",
+    "assets/production/hunt/accepted-web-20261029/images/41d618f3b467f14cfbde5382c61c8da4c4bd2c5644f16bb5409aaa08cbebfe43.webp",
+    "assets/production/hunt/accepted-web-20261029/images/45646fbdb6ba3baaf24b4cfcbcd4c36be5ad46f9cc4f048ce3b60fe8a875033a.webp",
+    "assets/production/hunt/accepted-web-20261029/images/46d4d9f243625c09c2aa9e1d8397ed4cc83a3bf4cecb04d68f4ce3056cf0c252.webp",
+    "assets/production/hunt/accepted-web-20261029/images/5a3c8ad358c039de06cdc4e80eb6f34b8c695d6316c7cc8455167131c6fa5812.webp",
+    "assets/production/hunt/accepted-web-20261029/images/5f4c2b8a376bcbefcd34393507a3850525f5751c187a02655324e1387c937db8.webp",
+    "assets/production/hunt/accepted-web-20261029/images/63eaade26035479d9338ba301db7ce6c759a1f97c55bc6290c361d1d38080102.webp",
+    "assets/production/hunt/accepted-web-20261029/images/6f507889413d3dfda47f9c48b65fbe5dc655ce44fe6fc179ab8631a81128c55f.webp",
+    "assets/production/hunt/accepted-web-20261029/images/718c809d5b9491d76ed16de75c2dc1ce1e0f65c3f87513153e53728b523c20f6.webp",
+    "assets/production/hunt/accepted-web-20261029/images/73d409220e18eaece28e0788383532d039b4f715e1e92362b12328a81c7680bd.webp",
+    "assets/production/hunt/accepted-web-20261029/images/763fa0134fa16f582e7decc7b2760da064acee014c2f84bf842df6fd27eece72.webp",
+    "assets/production/hunt/accepted-web-20261029/images/7eb1e0114434eddb20fdcb0e154d8033f768d7aa8328a77e29bc06082bf12bcd.webp",
+    "assets/production/hunt/accepted-web-20261029/images/7efd1cc08916289ec3611421c177bb3c6a1c2b6d3d620b8a75e50a47fbd00a32.webp",
+    "assets/production/hunt/accepted-web-20261029/images/8c69ad36003ca6ae1ab1dbaaade59debc97e22fed30d1c83986d267ec8386699.webp",
+    "assets/production/hunt/accepted-web-20261029/images/a5dfe3b1bf18395b52b8b5fea7e18a3b3733b5cee1f6ca65aa76c087df5b363d.webp",
+    "assets/production/hunt/accepted-web-20261029/images/ab431c074ba227acae167ebd095bb11e87b7d571df90fcc9eb69929d2588eb7b.webp",
+    "assets/production/hunt/accepted-web-20261029/images/b66920bacb4a7598a8316fac07a0f741ffb87e823d4f6cc7cf370a9f8a80a940.webp",
+    "assets/production/hunt/accepted-web-20261029/images/c6af86fb206d8b0958bfff41f2b6650ed4b11f2e0b7632078c70f3cf8ef09455.webp",
+    "assets/production/hunt/accepted-web-20261029/images/cbb3a4d892907c60c215716708f3fdb53443908a1315f368a045132bf3291c84.webp",
+    "assets/production/hunt/accepted-web-20261029/images/dfde0e417914564351f44e10b584e9d1a1c979837a2d22be490502acb6a35755.webp",
+    "assets/production/hunt/accepted-web-20261029/images/e4f34cdf8a2e053ef8891927facf9738138c744b6b68188249f7eea0fc00ffef.webp",
+    "assets/production/hunt/accepted-web-20261029/images/f320eea4508bfb0007377d2386644587b66b608e85266c22d3bb7f82b0a57d6f.webp",
+    "assets/production/hunt/accepted-web-20261029/images/f5ddf4783e731cedc6b48ec598b7d3707eb41203aba965de0e3db8cf8fa04ec4.webp",
+    "assets/production/hunt/accepted-web-20261029/images/fb06b57e6e2aaa008b5b39b5b08cf01fc298f43cc4abb2e1b6059acd90e44670.webp",
     "assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-00-rgb-050917d71fe9.webp",
     "assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-01-rgb-acc704c4fee6.webp",
     "assets/production/hunt/hm01-three-r1-20261022/field_hm01_02-frame-00-rgb-189b41d68349.webp",
@@ -8192,6 +8205,30 @@
     "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-152.png",
     "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-153.png",
     "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-154.png",
+    "assets/production/items/digital-metals-r1/attract_light_160.webp",
+    "assets/production/items/digital-metals-r1/beta_ore_160.webp",
+    "assets/production/items/digital-metals-r1/beta_shard_160.webp",
+    "assets/production/items/digital-metals-r1/chrono_alloy_160.webp",
+    "assets/production/items/digital-metals-r1/chrono_alloy_shard_160.webp",
+    "assets/production/items/digital-metals-r1/chrono_metal_160.webp",
+    "assets/production/items/digital-metals-r1/chrono_metal_shard_160.webp",
+    "assets/production/items/digital-metals-r1/chrono_ore_160.webp",
+    "assets/production/items/digital-metals-r1/chrono_ore_shard_160.webp",
+    "assets/production/items/digital-metals-r1/decoy_doll_160.webp",
+    "assets/production/items/digital-metals-r1/emma_metal_160.webp",
+    "assets/production/items/digital-metals-r1/emma_shard_160.webp",
+    "assets/production/items/digital-metals-r1/hunt_ammo_160.webp",
+    "assets/production/items/digital-metals-r1/hunt_meat_bait_160.webp",
+    "assets/production/items/digital-metals-r1/magnetic_wire_160.webp",
+    "assets/production/items/digital-metals-r1/medicine_capsule_160.webp",
+    "assets/production/items/digital-metals-r1/paralysis_dart_160.webp",
+    "assets/production/items/digital-metals-r1/protein_booster_160.webp",
+    "assets/production/items/digital-metals-r1/proximity_mine_160.webp",
+    "assets/production/items/digital-metals-r1/supernova_metal_160.webp",
+    "assets/production/items/digital-metals-r1/supernova_shard_160.webp",
+    "assets/production/items/digital-metals-r1/tactical_bomb_160.webp",
+    "assets/production/items/digital-metals-r1/training_meat_160.webp",
+    "assets/production/items/digital-metals-r1/wound_medicine_160.webp",
     "assets/production/medal-name-corrections-20261014/medals/title-03-vector-partition-grid.png",
     "assets/production/medal-name-corrections-20261014/medals/title-03-vector-partition.png",
     "assets/production/medal-name-corrections-20261014/medals/title-07-silver-freeze-grid.png",
@@ -8575,6 +8612,18 @@
     "assets/production/ui/capture-frame-a-v1/default.23d67f8d950520a9.svg",
     "assets/production/ui/capture-frame-a-v1/release-confirm.a5e9b94ce74c8825.svg",
     "assets/production/ui/capture-frame-a-v1/selected.2e83f9041d0f0dd4.svg",
+    "assets/production/ui/cyber-gacha-r1/capsule_r_bottom.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_r_top.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_sr_bottom.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_sr_top.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_ssr_bottom.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_ssr_top.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_ur_bottom.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_ur_top.webp",
+    "assets/production/ui/cyber-gacha-r1/crank_handle.webp",
+    "assets/production/ui/cyber-gacha-r1/gacha_ticket.webp",
+    "assets/production/ui/cyber-gacha-r1/machine_body.webp",
+    "assets/production/ui/cyber-gacha-r1/synth_furnace.webp",
     "assets/production/ui/tooling-pilot-r1/raising-header-material.webp",
     "assets/production/ui/tooling-pilot-r1/tool-icons.webp",
     "assets/production/vfx/licensed-runtime-v1/battle/atkup/atkup.glb",
@@ -8660,6 +8709,8 @@
     "src/championship/app/battlePresentationSource.js",
     "src/championship/app/battleRosterSource.js",
     "src/championship/app/battleRuntime.js",
+    "src/championship/app/bindRewardPopup.js",
+    "src/championship/app/bragCardPreview.js",
     "src/championship/app/cageRoster.js",
     "src/championship/app/championshipClockDriver.js",
     "src/championship/app/ChampionshipPersistentSavePort.js",
@@ -8673,6 +8724,8 @@
     "src/championship/app/championshipStorageGuard.js",
     "src/championship/app/championshipToolbar.js",
     "src/championship/app/codeClipboard.js",
+    "src/championship/app/cyberGacha.css",
+    "src/championship/app/cyberGachaView.js",
     "src/championship/app/dataArena.css",
     "src/championship/app/dataArenaScreen.js",
     "src/championship/app/daylightSkin.css",
@@ -8712,6 +8765,7 @@
     "src/championship/app/onboarding.css",
     "src/championship/app/onlineAccountPanel.js",
     "src/championship/app/onlineBattleLobby.js",
+    "src/championship/app/onlineBindRewardPolicy.js",
     "src/championship/app/opening.css",
     "src/championship/app/openingEggChoices.js",
     "src/championship/app/openingFilm.js",
@@ -8732,6 +8786,7 @@
     "src/championship/app/ranchTitlePreload.js",
     "src/championship/app/residentAssetNotice.js",
     "src/championship/app/runtimeRecoveryDiagnostics.js",
+    "src/championship/app/saveConflictArbiter.js",
     "src/championship/app/scheduleScreen.js",
     "src/championship/app/settings/preferenceEnvironment.js",
     "src/championship/app/settings/preferenceSchema.js",
@@ -8739,6 +8794,7 @@
     "src/championship/app/settings/qualityController.js",
     "src/championship/app/settings/settingsPanel.js",
     "src/championship/app/shopOriginalVideo.css",
+    "src/championship/app/socialLinkDock.js",
     "src/championship/app/storageDurability.js",
     "src/championship/app/storyCutsceneStage.js",
     "src/championship/app/styles.css",
@@ -8757,6 +8813,7 @@
     "src/championship/app/ui/online.css",
     "src/championship/app/ui/screenLayout.css",
     "src/championship/app/ui/settings.css",
+    "src/championship/app/ui/social.css",
     "src/championship/app/ui/storyTheater.css",
     "src/championship/app/ui/systemBackgrounds.css",
     "src/championship/app/ui/tokens.css",
@@ -8832,6 +8889,7 @@
     "src/championship/cage/ranchEcology.js",
     "src/championship/cage/ranchExpansion.js",
     "src/championship/cage/ranchSlotGeometry.js",
+    "src/championship/config/socialLinksConfig.js",
     "src/championship/contracts/championshipContracts.js",
     "src/championship/contracts/evidenceAdapter.js",
     "src/championship/contracts/evidenceIngest.js",
@@ -8856,6 +8914,7 @@
     "src/championship/field/fieldDefinition.js",
     "src/championship/field/groundFootpointSeparation.js",
     "src/championship/field/index.js",
+    "src/championship/gacha/cyberGacha.js",
     "src/championship/gate/gateAdmission.js",
     "src/championship/gate/gateCatalog.js",
     "src/championship/gate/originalHuntFieldBindings.js",
@@ -8914,6 +8973,9 @@
     "src/championship/modes/dataArena/dataArenaNav.js",
     "src/championship/modes/dataArena/dataArenaProps.js",
     "src/championship/modes/dataArena/dataArenaRelay.js",
+    "src/championship/modes/dataArena/dataArenaRelayArena.js",
+    "src/championship/modes/dataArena/dataArenaRelayElements.js",
+    "src/championship/modes/dataArena/dataArenaRelayKits.js",
     "src/championship/modes/dataArena/dataArenaRelayMaps.js",
     "src/championship/modes/dataArena/dataArenaRelayRoster.js",
     "src/championship/modes/dataArena/dataArenaSave.js",
@@ -9045,6 +9107,7 @@
     "src/championship/presentation/story/portraitVnOverlay.js",
     "src/championship/presentation/story/storyStagePuppeteer.js",
     "src/championship/presentation/systemBackgrounds.js",
+    "src/championship/presentation/tamerBragCardGenerator.js",
     "src/championship/presentation/titleAssetVariant.js",
     "src/championship/presentation/titleImageLifecycle.js",
     "src/championship/presentation/vfx/captureStorageVfx.js",
@@ -9154,6 +9217,7 @@
     "src/championship/text/raisingMessages.th.js",
     "src/championship/text/raisingMessages.vi.js",
     "src/championship/text/raisingMessages.zhHant.js",
+    "src/championship/text/socialText.js",
     "src/championship/text/tutorialMessages.en.js",
     "src/championship/text/tutorialMessages.ja.js",
     "src/championship/text/tutorialMessages.th.js",
@@ -9210,6 +9274,7 @@
     "src/data/championship/catalogs/species-names.r1.json",
     "src/data/championship/catalogs/tutorial-hunt-scene.r1.json",
     "src/data/championship/catalogs/tutorial-steps.r1.json",
+    "src/data/championship/data-arena-relay-kits.v1.json",
     "src/data/championship/data-arena-relay-maps.v1.json",
     "src/data/championship/data-arena-relay-roster.v1.json",
     "src/data/championship/database-display.r1.json",
@@ -9225,59 +9290,7 @@
     "src/data/championship/public-playtest-runtime.v1.json",
     "src/data/championship/public-ui-selection.v1.json",
     "src/data/championship/r2/fields/fieldInventoryR2.js",
-    "src/data/championship/ranch-render-selection.v1.json",
-    "src/championship/modes/dataArena/dataArenaRelayKits.js",
-    "src/data/championship/data-arena-relay-kits.v1.json",
-    "src/championship/modes/dataArena/dataArenaRelayArena.js",
-    "src/championship/modes/dataArena/dataArenaRelayElements.js",
-    "assets/production/items/digital-metals-r1/attract_light_160.webp",
-    "assets/production/items/digital-metals-r1/beta_ore_160.webp",
-    "assets/production/items/digital-metals-r1/beta_shard_160.webp",
-    "assets/production/items/digital-metals-r1/chrono_alloy_160.webp",
-    "assets/production/items/digital-metals-r1/chrono_alloy_shard_160.webp",
-    "assets/production/items/digital-metals-r1/chrono_metal_160.webp",
-    "assets/production/items/digital-metals-r1/chrono_metal_shard_160.webp",
-    "assets/production/items/digital-metals-r1/chrono_ore_160.webp",
-    "assets/production/items/digital-metals-r1/chrono_ore_shard_160.webp",
-    "assets/production/items/digital-metals-r1/decoy_doll_160.webp",
-    "assets/production/items/digital-metals-r1/emma_metal_160.webp",
-    "assets/production/items/digital-metals-r1/emma_shard_160.webp",
-    "assets/production/items/digital-metals-r1/hunt_ammo_160.webp",
-    "assets/production/items/digital-metals-r1/hunt_meat_bait_160.webp",
-    "assets/production/items/digital-metals-r1/magnetic_wire_160.webp",
-    "assets/production/items/digital-metals-r1/medicine_capsule_160.webp",
-    "assets/production/items/digital-metals-r1/paralysis_dart_160.webp",
-    "assets/production/items/digital-metals-r1/protein_booster_160.webp",
-    "assets/production/items/digital-metals-r1/proximity_mine_160.webp",
-    "assets/production/items/digital-metals-r1/supernova_metal_160.webp",
-    "assets/production/items/digital-metals-r1/supernova_shard_160.webp",
-    "assets/production/items/digital-metals-r1/tactical_bomb_160.webp",
-    "assets/production/items/digital-metals-r1/training_meat_160.webp",
-    "assets/production/items/digital-metals-r1/wound_medicine_160.webp",
-    "assets/production/ui/cyber-gacha-r1/capsule_r_bottom.webp",
-    "assets/production/ui/cyber-gacha-r1/capsule_r_top.webp",
-    "assets/production/ui/cyber-gacha-r1/capsule_sr_bottom.webp",
-    "assets/production/ui/cyber-gacha-r1/capsule_sr_top.webp",
-    "assets/production/ui/cyber-gacha-r1/capsule_ssr_bottom.webp",
-    "assets/production/ui/cyber-gacha-r1/capsule_ssr_top.webp",
-    "assets/production/ui/cyber-gacha-r1/capsule_ur_bottom.webp",
-    "assets/production/ui/cyber-gacha-r1/capsule_ur_top.webp",
-    "assets/production/ui/cyber-gacha-r1/crank_handle.webp",
-    "assets/production/ui/cyber-gacha-r1/gacha_ticket.webp",
-    "assets/production/ui/cyber-gacha-r1/machine_body.webp",
-    "assets/production/ui/cyber-gacha-r1/synth_furnace.webp",
-    "src/championship/app/cyberGacha.css",
-    "src/championship/app/cyberGachaView.js",
-    "src/championship/gacha/cyberGacha.js",
-    "src/championship/app/bindRewardPopup.js",
-    "src/championship/app/bragCardPreview.js",
-    "src/championship/app/onlineBindRewardPolicy.js",
-    "src/championship/app/saveConflictArbiter.js",
-    "src/championship/app/socialLinkDock.js",
-    "src/championship/app/ui/social.css",
-    "src/championship/config/socialLinksConfig.js",
-    "src/championship/presentation/tamerBragCardGenerator.js",
-    "src/championship/text/socialText.js"
+    "src/data/championship/ranch-render-selection.v1.json"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -38080,136 +38093,136 @@
         "sha256": "1ddb2de43e5ef7fbc89c9773debf01d4e6b10f90a81bb23e52ae87ac2aacf106"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/000d023258a1a7d066e5dd2cc64304e1a43a35ccb9807e5f2dc43ad75207930c.webp",
-        "sha256": "000d023258a1a7d066e5dd2cc64304e1a43a35ccb9807e5f2dc43ad75207930c"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/182fefd2842d2f616df02ba1370dc79490c577ef831365e8a7270cc71bd04093.webp",
-        "sha256": "182fefd2842d2f616df02ba1370dc79490c577ef831365e8a7270cc71bd04093"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/1833f1c2ce6eb5e6e3943696d1a48725e5cf3afd730f7d18433d581b7b354263.webp",
-        "sha256": "1833f1c2ce6eb5e6e3943696d1a48725e5cf3afd730f7d18433d581b7b354263"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/1c70c0331f6a124138f18c1e0d8a423b2c17cb34889c129e6df70f4c3ed19aaf.webp",
-        "sha256": "1c70c0331f6a124138f18c1e0d8a423b2c17cb34889c129e6df70f4c3ed19aaf"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/294a804aa9190ff752519466892b563c0763c72ab3ed197bb6e0fabccb0809a7.webp",
-        "sha256": "294a804aa9190ff752519466892b563c0763c72ab3ed197bb6e0fabccb0809a7"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/3ff78bd79851d6aa46f53eaa9f03b3b143a3eec6aa3f33f87e4edf1f627583ef.webp",
-        "sha256": "3ff78bd79851d6aa46f53eaa9f03b3b143a3eec6aa3f33f87e4edf1f627583ef"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/513682a68e8ef5c90e3d938244058771f65230f565219e29964715ec0045d30f.webp",
-        "sha256": "513682a68e8ef5c90e3d938244058771f65230f565219e29964715ec0045d30f"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/63212fbf55baeb3be4f94d103a20da279ca7b19eb8423e4a748609fdb3f726e3.webp",
-        "sha256": "63212fbf55baeb3be4f94d103a20da279ca7b19eb8423e4a748609fdb3f726e3"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/65826785834c9aedf81ff9bcf053e79e7c6ca4f495ad0ebb98e247b029e70827.webp",
-        "sha256": "65826785834c9aedf81ff9bcf053e79e7c6ca4f495ad0ebb98e247b029e70827"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/77ecc2d7f801add78b7dc191700979d455a872bbbaefb43505fa086cc9efb253.webp",
-        "sha256": "77ecc2d7f801add78b7dc191700979d455a872bbbaefb43505fa086cc9efb253"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/79e65d73137fe9cf6a265b3203cfe4e708d9066618fc273b43f65a5616d02fcb.webp",
-        "sha256": "79e65d73137fe9cf6a265b3203cfe4e708d9066618fc273b43f65a5616d02fcb"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/818232e99c196b4626bb9b8e02c17201cc55f38c1c979cfad0c2788f900429d5.webp",
-        "sha256": "818232e99c196b4626bb9b8e02c17201cc55f38c1c979cfad0c2788f900429d5"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/8a05e2abe88fc822c2bda2edbd728dfa9aa638181b302d8a60953e4321d1a71d.webp",
-        "sha256": "8a05e2abe88fc822c2bda2edbd728dfa9aa638181b302d8a60953e4321d1a71d"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/965154abada1869a418deef9830d32699dd4ff351bb3f012c5906b133cebcc8d.webp",
-        "sha256": "965154abada1869a418deef9830d32699dd4ff351bb3f012c5906b133cebcc8d"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/9cc9027277c1a2d4eb39b92f3f260478e185813a6db7881e29d76b66138c6654.webp",
-        "sha256": "9cc9027277c1a2d4eb39b92f3f260478e185813a6db7881e29d76b66138c6654"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/a0cc3dbb4f9dc8b2adbd24d60a3b1abd5eb108eb4e0deaf0894f358f63861efc.webp",
-        "sha256": "a0cc3dbb4f9dc8b2adbd24d60a3b1abd5eb108eb4e0deaf0894f358f63861efc"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/a3978124db98523a12ffc6a138f32836e308bb92b1f0506c82c6fbc6a69f2031.webp",
-        "sha256": "a3978124db98523a12ffc6a138f32836e308bb92b1f0506c82c6fbc6a69f2031"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/a3bfe75b875c790dcd0462cd9072bfa164cc08d4dcd6377c63cef444b71e3bb5.webp",
-        "sha256": "a3bfe75b875c790dcd0462cd9072bfa164cc08d4dcd6377c63cef444b71e3bb5"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/a7168e87659de75a9001a2d3e51edfa189e810a7724f1c02733b3fbdb2129bee.webp",
-        "sha256": "a7168e87659de75a9001a2d3e51edfa189e810a7724f1c02733b3fbdb2129bee"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/aa1249f8e6881643254d8b73e0e5d6b08fd5b824853703a7e6c39dba93d00818.webp",
-        "sha256": "aa1249f8e6881643254d8b73e0e5d6b08fd5b824853703a7e6c39dba93d00818"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/ad7422054c46843e2a43d048496c9253398bcf7c6dfd3e71b73ad2d03b4698d1.webp",
-        "sha256": "ad7422054c46843e2a43d048496c9253398bcf7c6dfd3e71b73ad2d03b4698d1"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/b1753ee1db999c33e2482a9654770075baefbfc4383bfbbf359cfafcc2632399.webp",
-        "sha256": "b1753ee1db999c33e2482a9654770075baefbfc4383bfbbf359cfafcc2632399"
-      },
-      {
-        "path": "assets/production/hunt/accepted-20261010/images/bbbdc30cc63a5cf30bc052e952010022e19eb83b05481170238492876d05b36d.webp",
-        "sha256": "bbbdc30cc63a5cf30bc052e952010022e19eb83b05481170238492876d05b36d"
-      },
-      {
         "path": "assets/production/hunt/accepted-20261010/images/bc3e1d5ccef83e320178e9508688353c18fc532f1e3bd9ff059cb996b6b922a9.webp",
         "sha256": "bc3e1d5ccef83e320178e9508688353c18fc532f1e3bd9ff059cb996b6b922a9"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/d1c085753830b7ca67ffc5df680fc390438b676021773a22a63f2d8c57511fb6.webp",
-        "sha256": "d1c085753830b7ca67ffc5df680fc390438b676021773a22a63f2d8c57511fb6"
+        "path": "assets/production/hunt/accepted-web-20261029/images/0380ac617a8f89d3886dc28bdf00ff4c3a3b91437d3135ca24d189bb7027f139.webp",
+        "sha256": "0380ac617a8f89d3886dc28bdf00ff4c3a3b91437d3135ca24d189bb7027f139"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/d266c7c42d56092d1515d37ef8d0ce532025b2193ece94398ecb4aeb6c88ed0c.webp",
-        "sha256": "d266c7c42d56092d1515d37ef8d0ce532025b2193ece94398ecb4aeb6c88ed0c"
+        "path": "assets/production/hunt/accepted-web-20261029/images/0ee3f314381c234b9ca33d7f4c8bef4c0c5ef7a3fffdf329ed9ccd702d16a3bb.webp",
+        "sha256": "0ee3f314381c234b9ca33d7f4c8bef4c0c5ef7a3fffdf329ed9ccd702d16a3bb"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/dce58f0d55f7e29e492cac2ffa0f96fcf83a86bb81e46fc5abf683c5d9c9d7cd.webp",
-        "sha256": "dce58f0d55f7e29e492cac2ffa0f96fcf83a86bb81e46fc5abf683c5d9c9d7cd"
+        "path": "assets/production/hunt/accepted-web-20261029/images/212ecb64cee1aa5e98b2be7dc729bd5e36c225c32ce7e89447aceb1da8c17fc7.webp",
+        "sha256": "212ecb64cee1aa5e98b2be7dc729bd5e36c225c32ce7e89447aceb1da8c17fc7"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/e4e02745243972800b1bf6a475dbcda4e79b6d85c87cd49811eba3df00149710.webp",
-        "sha256": "e4e02745243972800b1bf6a475dbcda4e79b6d85c87cd49811eba3df00149710"
+        "path": "assets/production/hunt/accepted-web-20261029/images/241406ef94346231fee168c0795c635da0ed41e901681c2d8fd8061802101f9e.webp",
+        "sha256": "241406ef94346231fee168c0795c635da0ed41e901681c2d8fd8061802101f9e"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/e8a5ec0f9dbab05c05513eb95dd37e24bd90dc796343943e41094cbb0f897bf9.webp",
-        "sha256": "e8a5ec0f9dbab05c05513eb95dd37e24bd90dc796343943e41094cbb0f897bf9"
+        "path": "assets/production/hunt/accepted-web-20261029/images/25b06c232f6cd4e52670b87c44e482f30e8d0747143ac0687642243e1b45497f.webp",
+        "sha256": "25b06c232f6cd4e52670b87c44e482f30e8d0747143ac0687642243e1b45497f"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/e9948bd0dab2b69d2a2f406bfc9248f5ac2b977e1611aa0219e2fba2168ddd39.webp",
-        "sha256": "e9948bd0dab2b69d2a2f406bfc9248f5ac2b977e1611aa0219e2fba2168ddd39"
+        "path": "assets/production/hunt/accepted-web-20261029/images/278d0c162015e415cb005ff59e566d36a007149630e2916a28b3b66063e69d49.webp",
+        "sha256": "278d0c162015e415cb005ff59e566d36a007149630e2916a28b3b66063e69d49"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/f3368635453ac174c5d0a036a57480bf2d22fc4a748529ed1396f33781d61fcc.webp",
-        "sha256": "f3368635453ac174c5d0a036a57480bf2d22fc4a748529ed1396f33781d61fcc"
+        "path": "assets/production/hunt/accepted-web-20261029/images/2883ce5b57c505a2dce9c18eff76d94aec793d82b76949c773b32030cb52b8ad.webp",
+        "sha256": "2883ce5b57c505a2dce9c18eff76d94aec793d82b76949c773b32030cb52b8ad"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/f615a1d2f2ad3c098d5e2d1769db7e3ad44df3809e9e64b4486c28a646f6c5d1.webp",
-        "sha256": "f615a1d2f2ad3c098d5e2d1769db7e3ad44df3809e9e64b4486c28a646f6c5d1"
+        "path": "assets/production/hunt/accepted-web-20261029/images/28e2a1d012aedf85ffd7ac076f9f7e804000f4e7aca403ac37ad486c7a8c11b3.webp",
+        "sha256": "28e2a1d012aedf85ffd7ac076f9f7e804000f4e7aca403ac37ad486c7a8c11b3"
       },
       {
-        "path": "assets/production/hunt/accepted-20261010/images/fbb93925c9d9292dcedb42e8a76103768d766c107275be851cde9335eb3dc087.webp",
-        "sha256": "fbb93925c9d9292dcedb42e8a76103768d766c107275be851cde9335eb3dc087"
+        "path": "assets/production/hunt/accepted-web-20261029/images/3a8a8230f264917b9bbc61e26cf577b0e486088417adddae3b65316fedd58858.webp",
+        "sha256": "3a8a8230f264917b9bbc61e26cf577b0e486088417adddae3b65316fedd58858"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/41d618f3b467f14cfbde5382c61c8da4c4bd2c5644f16bb5409aaa08cbebfe43.webp",
+        "sha256": "41d618f3b467f14cfbde5382c61c8da4c4bd2c5644f16bb5409aaa08cbebfe43"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/45646fbdb6ba3baaf24b4cfcbcd4c36be5ad46f9cc4f048ce3b60fe8a875033a.webp",
+        "sha256": "45646fbdb6ba3baaf24b4cfcbcd4c36be5ad46f9cc4f048ce3b60fe8a875033a"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/46d4d9f243625c09c2aa9e1d8397ed4cc83a3bf4cecb04d68f4ce3056cf0c252.webp",
+        "sha256": "46d4d9f243625c09c2aa9e1d8397ed4cc83a3bf4cecb04d68f4ce3056cf0c252"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/5a3c8ad358c039de06cdc4e80eb6f34b8c695d6316c7cc8455167131c6fa5812.webp",
+        "sha256": "5a3c8ad358c039de06cdc4e80eb6f34b8c695d6316c7cc8455167131c6fa5812"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/5f4c2b8a376bcbefcd34393507a3850525f5751c187a02655324e1387c937db8.webp",
+        "sha256": "5f4c2b8a376bcbefcd34393507a3850525f5751c187a02655324e1387c937db8"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/63eaade26035479d9338ba301db7ce6c759a1f97c55bc6290c361d1d38080102.webp",
+        "sha256": "63eaade26035479d9338ba301db7ce6c759a1f97c55bc6290c361d1d38080102"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/6f507889413d3dfda47f9c48b65fbe5dc655ce44fe6fc179ab8631a81128c55f.webp",
+        "sha256": "6f507889413d3dfda47f9c48b65fbe5dc655ce44fe6fc179ab8631a81128c55f"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/718c809d5b9491d76ed16de75c2dc1ce1e0f65c3f87513153e53728b523c20f6.webp",
+        "sha256": "718c809d5b9491d76ed16de75c2dc1ce1e0f65c3f87513153e53728b523c20f6"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/73d409220e18eaece28e0788383532d039b4f715e1e92362b12328a81c7680bd.webp",
+        "sha256": "73d409220e18eaece28e0788383532d039b4f715e1e92362b12328a81c7680bd"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/763fa0134fa16f582e7decc7b2760da064acee014c2f84bf842df6fd27eece72.webp",
+        "sha256": "763fa0134fa16f582e7decc7b2760da064acee014c2f84bf842df6fd27eece72"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/7eb1e0114434eddb20fdcb0e154d8033f768d7aa8328a77e29bc06082bf12bcd.webp",
+        "sha256": "7eb1e0114434eddb20fdcb0e154d8033f768d7aa8328a77e29bc06082bf12bcd"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/7efd1cc08916289ec3611421c177bb3c6a1c2b6d3d620b8a75e50a47fbd00a32.webp",
+        "sha256": "7efd1cc08916289ec3611421c177bb3c6a1c2b6d3d620b8a75e50a47fbd00a32"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/8c69ad36003ca6ae1ab1dbaaade59debc97e22fed30d1c83986d267ec8386699.webp",
+        "sha256": "8c69ad36003ca6ae1ab1dbaaade59debc97e22fed30d1c83986d267ec8386699"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/a5dfe3b1bf18395b52b8b5fea7e18a3b3733b5cee1f6ca65aa76c087df5b363d.webp",
+        "sha256": "a5dfe3b1bf18395b52b8b5fea7e18a3b3733b5cee1f6ca65aa76c087df5b363d"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/ab431c074ba227acae167ebd095bb11e87b7d571df90fcc9eb69929d2588eb7b.webp",
+        "sha256": "ab431c074ba227acae167ebd095bb11e87b7d571df90fcc9eb69929d2588eb7b"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/b66920bacb4a7598a8316fac07a0f741ffb87e823d4f6cc7cf370a9f8a80a940.webp",
+        "sha256": "b66920bacb4a7598a8316fac07a0f741ffb87e823d4f6cc7cf370a9f8a80a940"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/c6af86fb206d8b0958bfff41f2b6650ed4b11f2e0b7632078c70f3cf8ef09455.webp",
+        "sha256": "c6af86fb206d8b0958bfff41f2b6650ed4b11f2e0b7632078c70f3cf8ef09455"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/cbb3a4d892907c60c215716708f3fdb53443908a1315f368a045132bf3291c84.webp",
+        "sha256": "cbb3a4d892907c60c215716708f3fdb53443908a1315f368a045132bf3291c84"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/dfde0e417914564351f44e10b584e9d1a1c979837a2d22be490502acb6a35755.webp",
+        "sha256": "dfde0e417914564351f44e10b584e9d1a1c979837a2d22be490502acb6a35755"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/e4f34cdf8a2e053ef8891927facf9738138c744b6b68188249f7eea0fc00ffef.webp",
+        "sha256": "e4f34cdf8a2e053ef8891927facf9738138c744b6b68188249f7eea0fc00ffef"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/f320eea4508bfb0007377d2386644587b66b608e85266c22d3bb7f82b0a57d6f.webp",
+        "sha256": "f320eea4508bfb0007377d2386644587b66b608e85266c22d3bb7f82b0a57d6f"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/f5ddf4783e731cedc6b48ec598b7d3707eb41203aba965de0e3db8cf8fa04ec4.webp",
+        "sha256": "f5ddf4783e731cedc6b48ec598b7d3707eb41203aba965de0e3db8cf8fa04ec4"
+      },
+      {
+        "path": "assets/production/hunt/accepted-web-20261029/images/fb06b57e6e2aaa008b5b39b5b08cf01fc298f43cc4abb2e1b6059acd90e44670.webp",
+        "sha256": "fb06b57e6e2aaa008b5b39b5b08cf01fc298f43cc4abb2e1b6059acd90e44670"
       },
       {
         "path": "assets/production/hunt/hm01-three-r1-20261022/field_hm01_01-frame-00-rgb-050917d71fe9.webp",
@@ -39996,6 +40009,102 @@
         "sha256": "85a1f16f330fc08564bef192f2f596594055ff8ed8a7b7dfefd8a6d8f784ac11"
       },
       {
+        "path": "assets/production/items/digital-metals-r1/attract_light_160.webp",
+        "sha256": "b7af3d45daf62d553c6721144979cd5ce38acf251063dbe134415814a5716a12"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/beta_ore_160.webp",
+        "sha256": "d8785e51d528badd4e4c7f91272c3a4f5580ffcd8ccad7ac45cfbb232e922999"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/beta_shard_160.webp",
+        "sha256": "153938609476111f2efc914f11ab9652259931e934d2ff33ef4403530d3bb99a"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/chrono_alloy_160.webp",
+        "sha256": "541b093deb8e07bc23db6c1cc8e776d7a19531b3c5a023c7e194e19b5c040def"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/chrono_alloy_shard_160.webp",
+        "sha256": "a0634d32b1295eb53bfae6bcd09515f19ef0c26234de5a50c4d45722337cf6c0"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/chrono_metal_160.webp",
+        "sha256": "d9d7fb909aa767797b0c15b64851f8cf80c402c675f72cf05ba529baa3d4baac"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/chrono_metal_shard_160.webp",
+        "sha256": "7529587bd664c90e1bc55dfc4cdc14b792f073d9749833aa09fc62e0766b0534"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/chrono_ore_160.webp",
+        "sha256": "7113335f44978be952c03abe25083ce76e83f2ce0a5db8b2d53a283312e236ed"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/chrono_ore_shard_160.webp",
+        "sha256": "f07f909fd756a51a22a7886936b11451097538e3a4e3f624e193b6f88fad0092"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/decoy_doll_160.webp",
+        "sha256": "ad7154a261f15676938fe18cc1a80eb9e3347e00084f2fe4dddc4c6ab5c62290"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/emma_metal_160.webp",
+        "sha256": "e2c48d3d0cd0258c8f80f1b656dd594b6323a677c590b10b1d7851f4df414c63"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/emma_shard_160.webp",
+        "sha256": "ee278e57dc5f17772d6bb06f1289862d161ba3c93b9b01b4ea9a391899251ed0"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/hunt_ammo_160.webp",
+        "sha256": "03558c0817eb1751d9e9f52151c4665cbbe71e60daa9a07b56dab71af3450e09"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/hunt_meat_bait_160.webp",
+        "sha256": "d7e43eee502634d9170dc6891973a9f6fe0041a9f262d4a9463cfdb50b27ca5e"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/magnetic_wire_160.webp",
+        "sha256": "a48a23254399442779728c60a747b9973544928d512cb0dde8fcac8e1805c5da"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/medicine_capsule_160.webp",
+        "sha256": "7a20da96c07978b72d5ff90609285eacdfb4bcc2ff528ed55acd89c55bb2dd0e"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/paralysis_dart_160.webp",
+        "sha256": "6afcaee8553566b865abfe5fbf50e98d29680dc2c270830fbb92f16cd5c0d7ad"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/protein_booster_160.webp",
+        "sha256": "057ec423687b0698cadc371976148c19a71164da047f08e1b0816d458275ba10"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/proximity_mine_160.webp",
+        "sha256": "752cc8e58d138f31c738cd082a7d207d923dce2b7a2d82678a997b3da454752f"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/supernova_metal_160.webp",
+        "sha256": "49b8c7d8da31e87764b02b87472eac18496a379f6e70fe22bb8ff0d0779de463"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/supernova_shard_160.webp",
+        "sha256": "0468bff2c85b8c7267daa2de6d37f5b80ce4f8d0f4ebadf73e5c2154edb72c0c"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/tactical_bomb_160.webp",
+        "sha256": "3b41e7b2f91b625b7638c2befc135cfe25ba75cfe37f752db3ed407773df364f"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/training_meat_160.webp",
+        "sha256": "0915f29c5665c1c0fbce58f38e5d24d0c6f043336b0a53c6e0e79c63d9ab2fd8"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/wound_medicine_160.webp",
+        "sha256": "77d52393d5fece2f08f1376a2e5527d3c2790b5488e274751d9308e03327d6e7"
+      },
+      {
         "path": "assets/production/medal-name-corrections-20261014/medals/title-03-vector-partition-grid.png",
         "sha256": "9d401cc5cdd6e5440bea8b5344b2095687443027130ccb17c485cfb9bcc7f3cc"
       },
@@ -40949,7 +41058,7 @@
       },
       {
         "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
-        "sha256": "4d12a4423904f7c074c605a40259d81d43f0a050b982f01e0c6cd8e4f2666674"
+        "sha256": "4f011de2cef0e94855d02351197f163236d5e2eabab6e61050a42a21f682f1e3"
       },
       {
         "path": "assets/production/public-media-clean-20261017/currency-hud-r1/bits-24.png",
@@ -41001,7 +41110,7 @@
       },
       {
         "path": "assets/production/public-runtime/hunt-accepted.map.v1.json",
-        "sha256": "ffd95469902f942e6edeee01aaf5472cea06cf816c5864665e68be79f86a3a63"
+        "sha256": "b251ecd74cdf9012147f146d79646c4fa46c1c0628224631b0e5a08be61f6719"
       },
       {
         "path": "assets/production/public-runtime/hunt-feedback.render.v1.json",
@@ -41013,7 +41122,7 @@
       },
       {
         "path": "assets/production/public-runtime/hunt-night.map.v1.json",
-        "sha256": "378866ffeee3c1686fadd47eaba57aaf4d296eb039d892fe3bb9f7f0f67ff454"
+        "sha256": "6b0b5304039044a17a9817ea0675715fb158729e1bf05224be74658999ca882b"
       },
       {
         "path": "assets/production/public-runtime/hunt-three-fallback.map.v1.json",
@@ -41528,6 +41637,54 @@
         "sha256": "2e83f9041d0f0dd461b689c5c3fd954b30e510216850b5c686956af862377148"
       },
       {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_r_bottom.webp",
+        "sha256": "fc0fe52f0398aedaa967458d116507d9bc374510455c2bdbc363e7165dd8935b"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_r_top.webp",
+        "sha256": "75d456b0b13149b5ec7e23b202274dca243b4f6e9f1c07e0278f94a990043b8f"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_sr_bottom.webp",
+        "sha256": "67eb221be2da8366d5b07135676f99dd8f0a66be4738cf058f429a4090fa4b17"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_sr_top.webp",
+        "sha256": "25bf601c3ac56bf4d04bba46c7a072a577825c4fe7a2fd28b66e6a3e05fd0a34"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_ssr_bottom.webp",
+        "sha256": "90b73289adf235a7940cd1c813f16574515b8a7251e01ca0392ca77128059e15"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_ssr_top.webp",
+        "sha256": "14e61379834651eca1b9e77366462968b1ec276f91f4333ef90c1ed19b24c6e7"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_ur_bottom.webp",
+        "sha256": "1f0b8da49daac9f6e41e41fe3521d72634dde49d4b0f8235fa71e4cce55966fd"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_ur_top.webp",
+        "sha256": "23c2709442c311ecd67b857fc390aa17b1e54fcf067dfe9d30d914322112cbda"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/crank_handle.webp",
+        "sha256": "a2275499e9b3a5620c26ac1beca2d9dbb47d17994923365b41ab25fa7a06b93d"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/gacha_ticket.webp",
+        "sha256": "d818244171a00503151bb24c72524b19558e30b06ef2032e3f4e64d1dff3c9c3"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/machine_body.webp",
+        "sha256": "0f5f588582a76915045845941f67d8bbff122c62036c9b9de99bd871bda4b6fe"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/synth_furnace.webp",
+        "sha256": "637a91bfb59df00cf78dd5092101aee69196a42aeceffbc1b93744d0bddca737"
+      },
+      {
         "path": "assets/production/ui/tooling-pilot-r1/raising-header-material.webp",
         "sha256": "efc7a4a07cf138b8eecdf4a4ed75b658da20d7c3ba2f45041fedc81f229046c7"
       },
@@ -41868,6 +42025,14 @@
         "sha256": "a7deaac994f4a416ab453d22597e36f83677e18366fca51d67aae37ca2558336"
       },
       {
+        "path": "src/championship/app/bindRewardPopup.js",
+        "sha256": "5a676e6b04a84898aab915aaf18af91bae27ae4c60f7e348c02032c130427e2b"
+      },
+      {
+        "path": "src/championship/app/bragCardPreview.js",
+        "sha256": "7e49c07331a9a327b7395f2b7e0d1efb2ed933062cbd98246384496427444879"
+      },
+      {
         "path": "src/championship/app/cageRoster.js",
         "sha256": "b69c5dc2cb41074f9aa2ac821b554b73b6a1160282899ca3365b6181ae02f1dd"
       },
@@ -41918,6 +42083,14 @@
       {
         "path": "src/championship/app/codeClipboard.js",
         "sha256": "f318836f6d8f9babbf88be083c9818b112c41c621f9afb107851264dfe877609"
+      },
+      {
+        "path": "src/championship/app/cyberGacha.css",
+        "sha256": "f7b727bb5043a27bac412ca7ea2857b2d12bb7fefee69f239f3811c3b9ab6c14"
+      },
+      {
+        "path": "src/championship/app/cyberGachaView.js",
+        "sha256": "1ebd9b5e476787f9b3207b23317205612a037353752489384b3adce00a733b56"
       },
       {
         "path": "src/championship/app/dataArena.css",
@@ -42076,6 +42249,10 @@
         "sha256": "34aac2946dc32cee1d6c8f732ab6714933dec434001b2c1ffbd248f40665fdae"
       },
       {
+        "path": "src/championship/app/onlineBindRewardPolicy.js",
+        "sha256": "d09e5ba33edb41c49f038d2fbadc647651a98689f5a045b196c98d9ff28035f7"
+      },
+      {
         "path": "src/championship/app/opening.css",
         "sha256": "1086f88bdb184ee5eab927446023251f96254e64867abab75113c8096a39940a"
       },
@@ -42156,6 +42333,10 @@
         "sha256": "0df4d7a8152bf8c22d3129ccacf3db49d172b97f171c4a32e0462cf1fa91fb96"
       },
       {
+        "path": "src/championship/app/saveConflictArbiter.js",
+        "sha256": "a838e68da5700013b083da370189a5ebfb347393bb7496fe94d5dadff2289e3c"
+      },
+      {
         "path": "src/championship/app/scheduleScreen.js",
         "sha256": "0bf69abbc2d195c1c0870f55d560c971577e66f55ce27a9aabf661f838e52df7"
       },
@@ -42182,6 +42363,10 @@
       {
         "path": "src/championship/app/shopOriginalVideo.css",
         "sha256": "c2f446fc535bc896500ff96a88ea27a95bc33f8918b25f50a1ea7474f501569e"
+      },
+      {
+        "path": "src/championship/app/socialLinkDock.js",
+        "sha256": "e302288dc844c91e7e5bce65557daff26c2b27b99cbc6b8e567fce2b21920a93"
       },
       {
         "path": "src/championship/app/storageDurability.js",
@@ -42254,6 +42439,10 @@
       {
         "path": "src/championship/app/ui/settings.css",
         "sha256": "a67a169f6593d6cf3678f17ffbef2090d4d575c73dbe3248a268e5818ce0d834"
+      },
+      {
+        "path": "src/championship/app/ui/social.css",
+        "sha256": "e870d2973ea8873cbeab2a8642dc178c70c210fba9a065faffd52d991a5cd54b"
       },
       {
         "path": "src/championship/app/ui/storyTheater.css",
@@ -42556,6 +42745,10 @@
         "sha256": "5507c4a39b0711f9662a911f817919dfef4c15e89838f9f63dbd4bc31248a6dd"
       },
       {
+        "path": "src/championship/config/socialLinksConfig.js",
+        "sha256": "b45fc4f2fd5a8a0903098e1c479827f5d4b127e3792dce2251c0158737aeff8e"
+      },
+      {
         "path": "src/championship/contracts/championshipContracts.js",
         "sha256": "ebf6ba8b5e2ca69246af7e050c1ce218e8505ca76fa7155262f09c42680f68e4"
       },
@@ -42650,6 +42843,10 @@
       {
         "path": "src/championship/field/index.js",
         "sha256": "712af1029ddd8ab494c1e0ae8b9d0cf0fe99e30299e72d27ef6a9e0f579cf7e5"
+      },
+      {
+        "path": "src/championship/gacha/cyberGacha.js",
+        "sha256": "f90924ef54fcf42388a0f8f16178ae4b6fc80447679aeb2a7bce44be02093bfc"
       },
       {
         "path": "src/championship/gate/gateAdmission.js",
@@ -42882,6 +43079,18 @@
       {
         "path": "src/championship/modes/dataArena/dataArenaRelay.js",
         "sha256": "a1244d8766ffccfe453c0dba6523043fdf00661692fbc040fdc68eb0fc58fbe9"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaRelayArena.js",
+        "sha256": "f56c60fd5cc24c3c8e0345dff8c3265d47700aa9dc56789aceb65c535e8143c5"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaRelayElements.js",
+        "sha256": "4d8b103306b65e4c353add01b400754dc4ac8fbd95e9d8edecb23ea3f8e8e46d"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaRelayKits.js",
+        "sha256": "e3e3855beef47ac853e5194f0d3d0794f08f98885cfd92a55f750b2e6efc3d67"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaRelayMaps.js",
@@ -43408,6 +43617,10 @@
         "sha256": "5b34b475298ee2005e7fcc33911bf05701817295bd8e7bcad5be6d6ca6a511dc"
       },
       {
+        "path": "src/championship/presentation/tamerBragCardGenerator.js",
+        "sha256": "56447910ed758dccf433db60e57450f5ee1cb80da74a1b7d1ed9943d1f547647"
+      },
+      {
         "path": "src/championship/presentation/titleAssetVariant.js",
         "sha256": "75d90d857efdce5558111a717e6badb88677038990689de24fd2f8468ccb72e0"
       },
@@ -43844,6 +44057,10 @@
         "sha256": "42731e1135be79ea8fed1ab60607d75454640b2fc12d3edb52b3d0eda96d1bd4"
       },
       {
+        "path": "src/championship/text/socialText.js",
+        "sha256": "2fe9a63b1b1d7bb099f3df08801f1b3db0c048d0b0fde59cfa03b54fb901ace8"
+      },
+      {
         "path": "src/championship/text/tutorialMessages.en.js",
         "sha256": "b3272ba0318f64e228bca9ded5d84afe6392e396b69dbc82137377b838de0e30"
       },
@@ -44068,6 +44285,10 @@
         "sha256": "06a1e1d42720a28d5462bd0641af774a2327289c69fc58b6b54196a7b69f993e"
       },
       {
+        "path": "src/data/championship/data-arena-relay-kits.v1.json",
+        "sha256": "b9123f5c413fbdc20e51514bad9e9b222a1fb6cf1ba47e4ead477214fd44250a"
+      },
+      {
         "path": "src/data/championship/data-arena-relay-maps.v1.json",
         "sha256": "cff0ae34e60cb9406bef8a15fbbf813a309d7071f04ee94c21f6870c9b1123a3"
       },
@@ -44130,214 +44351,6 @@
       {
         "path": "src/data/championship/ranch-render-selection.v1.json",
         "sha256": "ddd5d6a367c5f0b7e7d80203db5114924c93d6992691571d2fee55ea3eae7f41"
-      },
-      {
-        "path": "src/championship/modes/dataArena/dataArenaRelayKits.js",
-        "sha256": "e3e3855beef47ac853e5194f0d3d0794f08f98885cfd92a55f750b2e6efc3d67"
-      },
-      {
-        "path": "src/data/championship/data-arena-relay-kits.v1.json",
-        "sha256": "b9123f5c413fbdc20e51514bad9e9b222a1fb6cf1ba47e4ead477214fd44250a"
-      },
-      {
-        "path": "src/championship/modes/dataArena/dataArenaRelayArena.js",
-        "sha256": "f56c60fd5cc24c3c8e0345dff8c3265d47700aa9dc56789aceb65c535e8143c5"
-      },
-      {
-        "path": "src/championship/modes/dataArena/dataArenaRelayElements.js",
-        "sha256": "4d8b103306b65e4c353add01b400754dc4ac8fbd95e9d8edecb23ea3f8e8e46d"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/attract_light_160.webp",
-        "sha256": "b7af3d45daf62d553c6721144979cd5ce38acf251063dbe134415814a5716a12"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/beta_ore_160.webp",
-        "sha256": "d8785e51d528badd4e4c7f91272c3a4f5580ffcd8ccad7ac45cfbb232e922999"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/beta_shard_160.webp",
-        "sha256": "153938609476111f2efc914f11ab9652259931e934d2ff33ef4403530d3bb99a"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/chrono_alloy_160.webp",
-        "sha256": "541b093deb8e07bc23db6c1cc8e776d7a19531b3c5a023c7e194e19b5c040def"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/chrono_alloy_shard_160.webp",
-        "sha256": "a0634d32b1295eb53bfae6bcd09515f19ef0c26234de5a50c4d45722337cf6c0"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/chrono_metal_160.webp",
-        "sha256": "d9d7fb909aa767797b0c15b64851f8cf80c402c675f72cf05ba529baa3d4baac"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/chrono_metal_shard_160.webp",
-        "sha256": "7529587bd664c90e1bc55dfc4cdc14b792f073d9749833aa09fc62e0766b0534"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/chrono_ore_160.webp",
-        "sha256": "7113335f44978be952c03abe25083ce76e83f2ce0a5db8b2d53a283312e236ed"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/chrono_ore_shard_160.webp",
-        "sha256": "f07f909fd756a51a22a7886936b11451097538e3a4e3f624e193b6f88fad0092"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/decoy_doll_160.webp",
-        "sha256": "ad7154a261f15676938fe18cc1a80eb9e3347e00084f2fe4dddc4c6ab5c62290"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/emma_metal_160.webp",
-        "sha256": "e2c48d3d0cd0258c8f80f1b656dd594b6323a677c590b10b1d7851f4df414c63"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/emma_shard_160.webp",
-        "sha256": "ee278e57dc5f17772d6bb06f1289862d161ba3c93b9b01b4ea9a391899251ed0"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/hunt_ammo_160.webp",
-        "sha256": "03558c0817eb1751d9e9f52151c4665cbbe71e60daa9a07b56dab71af3450e09"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/hunt_meat_bait_160.webp",
-        "sha256": "d7e43eee502634d9170dc6891973a9f6fe0041a9f262d4a9463cfdb50b27ca5e"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/magnetic_wire_160.webp",
-        "sha256": "a48a23254399442779728c60a747b9973544928d512cb0dde8fcac8e1805c5da"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/medicine_capsule_160.webp",
-        "sha256": "7a20da96c07978b72d5ff90609285eacdfb4bcc2ff528ed55acd89c55bb2dd0e"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/paralysis_dart_160.webp",
-        "sha256": "6afcaee8553566b865abfe5fbf50e98d29680dc2c270830fbb92f16cd5c0d7ad"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/protein_booster_160.webp",
-        "sha256": "057ec423687b0698cadc371976148c19a71164da047f08e1b0816d458275ba10"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/proximity_mine_160.webp",
-        "sha256": "752cc8e58d138f31c738cd082a7d207d923dce2b7a2d82678a997b3da454752f"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/supernova_metal_160.webp",
-        "sha256": "49b8c7d8da31e87764b02b87472eac18496a379f6e70fe22bb8ff0d0779de463"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/supernova_shard_160.webp",
-        "sha256": "0468bff2c85b8c7267daa2de6d37f5b80ce4f8d0f4ebadf73e5c2154edb72c0c"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/tactical_bomb_160.webp",
-        "sha256": "3b41e7b2f91b625b7638c2befc135cfe25ba75cfe37f752db3ed407773df364f"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/training_meat_160.webp",
-        "sha256": "0915f29c5665c1c0fbce58f38e5d24d0c6f043336b0a53c6e0e79c63d9ab2fd8"
-      },
-      {
-        "path": "assets/production/items/digital-metals-r1/wound_medicine_160.webp",
-        "sha256": "77d52393d5fece2f08f1376a2e5527d3c2790b5488e274751d9308e03327d6e7"
-      },
-      {
-        "path": "assets/production/ui/cyber-gacha-r1/capsule_r_bottom.webp",
-        "sha256": "fc0fe52f0398aedaa967458d116507d9bc374510455c2bdbc363e7165dd8935b"
-      },
-      {
-        "path": "assets/production/ui/cyber-gacha-r1/capsule_r_top.webp",
-        "sha256": "75d456b0b13149b5ec7e23b202274dca243b4f6e9f1c07e0278f94a990043b8f"
-      },
-      {
-        "path": "assets/production/ui/cyber-gacha-r1/capsule_sr_bottom.webp",
-        "sha256": "67eb221be2da8366d5b07135676f99dd8f0a66be4738cf058f429a4090fa4b17"
-      },
-      {
-        "path": "assets/production/ui/cyber-gacha-r1/capsule_sr_top.webp",
-        "sha256": "25bf601c3ac56bf4d04bba46c7a072a577825c4fe7a2fd28b66e6a3e05fd0a34"
-      },
-      {
-        "path": "assets/production/ui/cyber-gacha-r1/capsule_ssr_bottom.webp",
-        "sha256": "90b73289adf235a7940cd1c813f16574515b8a7251e01ca0392ca77128059e15"
-      },
-      {
-        "path": "assets/production/ui/cyber-gacha-r1/capsule_ssr_top.webp",
-        "sha256": "14e61379834651eca1b9e77366462968b1ec276f91f4333ef90c1ed19b24c6e7"
-      },
-      {
-        "path": "assets/production/ui/cyber-gacha-r1/capsule_ur_bottom.webp",
-        "sha256": "1f0b8da49daac9f6e41e41fe3521d72634dde49d4b0f8235fa71e4cce55966fd"
-      },
-      {
-        "path": "assets/production/ui/cyber-gacha-r1/capsule_ur_top.webp",
-        "sha256": "23c2709442c311ecd67b857fc390aa17b1e54fcf067dfe9d30d914322112cbda"
-      },
-      {
-        "path": "assets/production/ui/cyber-gacha-r1/crank_handle.webp",
-        "sha256": "a2275499e9b3a5620c26ac1beca2d9dbb47d17994923365b41ab25fa7a06b93d"
-      },
-      {
-        "path": "assets/production/ui/cyber-gacha-r1/gacha_ticket.webp",
-        "sha256": "d818244171a00503151bb24c72524b19558e30b06ef2032e3f4e64d1dff3c9c3"
-      },
-      {
-        "path": "assets/production/ui/cyber-gacha-r1/machine_body.webp",
-        "sha256": "0f5f588582a76915045845941f67d8bbff122c62036c9b9de99bd871bda4b6fe"
-      },
-      {
-        "path": "assets/production/ui/cyber-gacha-r1/synth_furnace.webp",
-        "sha256": "637a91bfb59df00cf78dd5092101aee69196a42aeceffbc1b93744d0bddca737"
-      },
-      {
-        "path": "src/championship/app/cyberGacha.css",
-        "sha256": "f7b727bb5043a27bac412ca7ea2857b2d12bb7fefee69f239f3811c3b9ab6c14"
-      },
-      {
-        "path": "src/championship/app/cyberGachaView.js",
-        "sha256": "1ebd9b5e476787f9b3207b23317205612a037353752489384b3adce00a733b56"
-      },
-      {
-        "path": "src/championship/gacha/cyberGacha.js",
-        "sha256": "f90924ef54fcf42388a0f8f16178ae4b6fc80447679aeb2a7bce44be02093bfc"
-      },
-      {
-        "path": "src/championship/app/bindRewardPopup.js",
-        "sha256": "5a676e6b04a84898aab915aaf18af91bae27ae4c60f7e348c02032c130427e2b"
-      },
-      {
-        "path": "src/championship/app/bragCardPreview.js",
-        "sha256": "7e49c07331a9a327b7395f2b7e0d1efb2ed933062cbd98246384496427444879"
-      },
-      {
-        "path": "src/championship/app/onlineBindRewardPolicy.js",
-        "sha256": "d09e5ba33edb41c49f038d2fbadc647651a98689f5a045b196c98d9ff28035f7"
-      },
-      {
-        "path": "src/championship/app/saveConflictArbiter.js",
-        "sha256": "a838e68da5700013b083da370189a5ebfb347393bb7496fe94d5dadff2289e3c"
-      },
-      {
-        "path": "src/championship/app/socialLinkDock.js",
-        "sha256": "e302288dc844c91e7e5bce65557daff26c2b27b99cbc6b8e567fce2b21920a93"
-      },
-      {
-        "path": "src/championship/app/ui/social.css",
-        "sha256": "e870d2973ea8873cbeab2a8642dc178c70c210fba9a065faffd52d991a5cd54b"
-      },
-      {
-        "path": "src/championship/config/socialLinksConfig.js",
-        "sha256": "b45fc4f2fd5a8a0903098e1c479827f5d4b127e3792dce2251c0158737aeff8e"
-      },
-      {
-        "path": "src/championship/presentation/tamerBragCardGenerator.js",
-        "sha256": "56447910ed758dccf433db60e57450f5ee1cb80da74a1b7d1ed9943d1f547647"
-      },
-      {
-        "path": "src/championship/text/socialText.js",
-        "sha256": "2fe9a63b1b1d7bb099f3df08801f1b3db0c048d0b0fde59cfa03b54fb901ace8"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",
