@@ -21,7 +21,7 @@ async function serveBuild(root){
 function assertEvolved(assert,report,saved){
  assert.equal(report.qaOnly,true);assert.equal(report.namespace,'championshipAlternateFormsQA:r1:');assert.equal(report.saveSchema,7);
  assert.equal(saved?.schemaVersion,7,'Reloaded storage must retain canonical schema7');
- assert.equal(saved?.cageEdit?.layoutVersion,'PRODUCT_GRID100_INSTANCES_V1','Reloaded storage must retain product grid');
+ assert.equal(saved?.cageEdit?.layoutVersion,'PRODUCT_HEX_WORLD_V1','Reloaded storage must retain product grid');
  assert.match(report.storage,/sessionStorage/);assert.deepEqual(report.errors,[]);
  const identity={211:['m528_metaletemon','m528_metaletemon'],222:['m540_imperialdramon_fm','m506_griffomon'],229:['oc_crownbrass_mandrill','m528_metaletemon'],230:['oc_celestyrant_battle_r10','m540_imperialdramon_fm']};
  for(const [suffix,id]of [['0001',211],['0002',222],['0005',229],['0006',230]]){
