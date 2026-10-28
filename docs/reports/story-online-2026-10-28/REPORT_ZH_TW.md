@@ -1,6 +1,6 @@
 # 雜訊裂縫故事劇場 × Supabase 線上系統 交付報告（2026-10-28）
 
-> 分支 `feat/story-rift-online-20261028`（基底 `origin/main` 1fc403c9），只有本機 commit，**未 push、未部署**。
+> 分支 `feat/story-rift-online-20261028`（基底 `origin/main` 1fc403c9），初版只有本機 commit；Owner 隨後授權 push、經 PR 合併至 main 並由既有 Pages 流程發布（雲端設定檔 `online-service.v1.json` 仍為空，線上功能維持本地模擬直到 Owner 填入 Supabase URL 與 key）。
 > 分類：OWNER_APPROVED_ADAPTATION（呈現層與產品功能）。遊戲邏輯、存檔格式、戰鬥核心、獎勵結算全部不變。
 > 分工：Phase 3（新手教學 Bug、開場／取名／選蛋重構）由另一個 session 以 PR #103 完成並已上 main；本批次在它之上。
 
