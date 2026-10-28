@@ -146,8 +146,10 @@ export async function buildLocaleCoverage() {
   const { STORY_RIFT_COPY } = await import('../src/championship/data/storyRiftChapters.js');
   const { STORY_RIFT_MAP_COPY } = await import('../src/championship/data/storyRiftMap.js');
   const { ONLINE_COPY } = await import('../src/championship/text/onlineText.js');
+  const { SOCIAL_COPY } = await import('../src/championship/text/socialText.js');
   const scopedCopy = [
     inspectScopedLocaleCopy('src/championship/text/onlineText.js', ONLINE_COPY),
+    inspectScopedLocaleCopy('src/championship/text/socialText.js', SOCIAL_COPY),
     inspectScopedLocaleCopy('src/championship/data/storyRiftChapters.js', STORY_RIFT_COPY),
     inspectScopedLocaleCopy('src/championship/data/storyRiftMap.js', STORY_RIFT_MAP_COPY),
     inspectScopedLocaleCopy('src/championship/database/databaseIllustrations.js', DATABASE_ILLUSTRATION_COPY),

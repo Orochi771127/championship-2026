@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
+import { SOCIAL_LINKS, refuseSocialLinkReason } from "../src/championship/config/socialLinksConfig.js";
 
 const root = process.cwd();
 
@@ -65,6 +66,18 @@ test("runtime has no external repository, CDN, or research import", () => {
       const { supabaseUrl, ...rest } = config;
       return EXTERNAL_DEPENDENCY.test(JSON.stringify(rest));
     }
+    if (relative(file) === 'src/championship/config/socialLinksConfig.js') {
+      // Owner 2026-10-29: the one place community links live. Each configured
+      // url must be https on its own channel's host list; once those exact
+      // values are set aside, nothing else in the file may carry a URL.
+      let rest = text;
+      for (const link of SOCIAL_LINKS) {
+        if (!link.url) continue;
+        assert.equal(refuseSocialLinkReason(link.id, link.url), null, `${link.id} link must be https on its channel's own host`);
+        rest = rest.replaceAll(JSON.stringify(link.url), '""').replaceAll(`'${link.url}'`, "''");
+      }
+      return EXTERNAL_DEPENDENCY.test(rest);
+    }
     if (relative(file) === 'src/data/championship/public-playtest.r1.json') {
       // These two exact policy values identify the Owner's destination; they
       // are not remote imports. All remaining policy text is still checked.
@@ -121,7 +134,9 @@ test("only the authorized source families are present", () => {
   // in ChampionshipPersistentSavePort), no URL literals, no battle logic.
   // `gacha` joined on 2026-10-29 (Owner, Cyber Gachapon): pure state-in/state-out
   // pull, synthesis and item rules over the one save; no storage, no renderer.
-  const authorized = ["app", "battle", "cage", "contracts", "data", "database", "field", "gacha", "gate", "hunt", "kernel", "modes", "online", "presentation", "r2", "raising", "shop", "text", "time"];
+  // `config` joined on 2026-10-29 (Owner): the community link list the Owner
+  // edits by hand. Pure data and its validation; its URLs are checked above.
+  const authorized = ["app", "battle", "cage", "config", "contracts", "data", "database", "field", "gacha", "gate", "hunt", "kernel", "modes", "online", "presentation", "r2", "raising", "shop", "text", "time"];
   const actual = fs.readdirSync(path.join(root, "src/championship"), { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)

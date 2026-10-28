@@ -1095,7 +1095,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
  * Panels advance one at a time, which is how the original presents them; the
  * last one returns home.
  */
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
   let disposed=false;
 
@@ -1264,6 +1264,14 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
   });
 
   section.append(resultStage, advance, exit);
+  // Owner 2026-10-29: a won battle can be shared as a brag card (product-authored; not a result scene).
+  if (!tutorial && outcome.winningTeam === 0 && typeof brag?.onOpen === "function") {
+    const share = document.createElement("button");
+    share.type = "button"; share.className = "cm-brag-cta cm-brag-cta--result cm-arcade-key"; share.dataset.onlineAction = "brag-card";
+    share.textContent = brag.label ?? "";
+    share.addEventListener("click", () => { brag.onOpen(share); });
+    section.insertBefore(share, advance);
+  }
   paint();
 
   if (tier === "highlight") {

@@ -178,3 +178,45 @@ test("session checkpoint key is explicitly registered and survives sessionStorag
   assert.deepEqual(local.keys(), []);
   assert.deepEqual(session.keys(), []);
 });
+
+// Owner 2026-10-29 social batch: passport binding, the first-bind gift, the
+// save chooser and the brag card add no storage key of their own.
+test("an offline social cycle (provider rehearsal, gift preview, save chooser, brag card) touches only the product save key", async () => {
+  const { createChampionshipCloudService } = await import("../src/championship/online/championshipCloudService.js");
+  const { resolveOnlineServiceConfig } = await import("../src/championship/online/onlineServiceConfig.js");
+  const { createChampionshipOnlineSessionPort } = await import("../src/championship/app/ChampionshipPersistentSavePort.js");
+  const { describeSaveSides } = await import("../src/championship/app/saveConflictArbiter.js");
+  const { summarizeSaveText } = await import("../src/championship/online/cloudSaveEnvelope.js");
+  const { renderTamerBragCard, exportTamerBragCard } = await import("../src/championship/presentation/tamerBragCardGenerator.js");
+  const local = recordingStorage(), session = recordingStorage();
+  const app = createChampionshipStandaloneApp({ storage: local, catalog, cages: presentation.cages, now: () => "2026-10-29T12:00:00.000Z", locks: null });
+  await app.newGame(); app.save();
+  // The online session port exists but stays unused: no cloud is configured.
+  const service = createChampionshipCloudService({ config: resolveOnlineServiceConfig({ file: { supabaseUrl: "", supabaseAnonKey: "" }, runtime: null }),
+    sessionStorage: createChampionshipOnlineSessionPort({ storage: local }), win: { addEventListener() {}, removeEventListener() {} }, nav: { onLine: true } });
+  assert.equal((await service.bindProvider("google")).simulated, true);
+  assert.equal((await service.claimBindReward({ saveRef: "0".repeat(64) })).preview, true, "a simulation never pays");
+  assert.equal(app.getOnlineBindReward(), null);
+  const text = app.persistenceFacade().exportRecovery().text;
+  assert.equal((await service.backupNow(text)).ok, true);
+  assert.equal(describeSaveSides({ local: summarizeSaveText(text), remote: summarizeSaveText(text) }).length, 6);
+  const context = { save() {}, restore() {}, setTransform() {}, clearRect() {}, translate() {}, rotate() {}, scale() {}, beginPath() {}, closePath() {}, moveTo() {}, lineTo() {}, arc() {}, fill() {}, stroke() {}, fillRect() {},
+    setLineDash() {}, createLinearGradient: () => ({ addColorStop() {} }), createRadialGradient: () => ({ addColorStop() {} }), measureText: value => ({ width: String(value).length * 10 }), fillText() {}, strokeText() {}, drawImage() {}, getImageData: () => ({}) };
+  const png = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+  const card = await renderTamerBragCard({ tamerName: "阿光", tamerCode: "TM-AAAA-BBBB" }, { createCanvas: (w, h) => ({ width: w, height: h, getContext: () => context,
+    toDataURL: () => png, toBlob: done => done(new Blob([Buffer.from(png.split(",")[1], "base64")], { type: "image/png" })) }), loadImage: async () => null });
+  assert.match((await exportTamerBragCard(card.canvas)).dataUrl, /^data:image\/png;base64,/);
+  await app.dispose(); service.dispose();
+  assert.deepEqual(local.touchedKeys(), [CHAMPIONSHIP_MODERN_SAVE_KEY]);
+  assert.deepEqual(session.touchedKeys(), [], "sessionStorage is not used at all");
+});
+
+test("paying the first-bind gift writes through the save port's one key and nothing else", async () => {
+  const storage = recordingStorage();
+  const app = createChampionshipStandaloneApp({ storage, catalog, cages: presentation.cages, now: () => "2026-10-29T12:00:00.000Z", locks: null });
+  await app.newGame(); app.save();
+  assert.equal(app.claimOnlineBindReward({ provider: "email", rewardBits: 5000 }).ok, true);
+  await app.dispose();
+  assert.deepEqual(storage.touchedKeys(), [CHAMPIONSHIP_MODERN_SAVE_KEY]);
+  assert.match(storage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY), /"onlineBindReward":\{"version":1,"provider":"email"/);
+});

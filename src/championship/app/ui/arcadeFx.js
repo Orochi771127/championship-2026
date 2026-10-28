@@ -13,7 +13,7 @@
 //
 // Screens ask for a result effect with one DOM event, so no game module imports this:
 //   target.dispatchEvent(new CustomEvent("cm-fx", { bubbles: true, detail: { kind, text } }))
-// kinds: purchase · denied · snap · unsnap · open · close · toggle · sparkle · levelup
+// kinds: purchase · denied · snap · unsnap · open · close · toggle · sparkle · levelup · shutter
 
 const INK = "#14141f";
 
@@ -156,6 +156,15 @@ export const ARCADE_CUES = Object.freeze({
   denied: (s, o) => {
     s.tone(o, { type: "square", f0: 200, dur: 0.08, gain: 0.12 });
     s.tone(o, { type: "square", f0: 150, dur: 0.1, gain: 0.12, delay: 0.09 });
+  },
+  // Owner 2026-10-29: the brag card's camera shutter: a bright click, the
+  // mirror's slap and a short film-advance whirr.
+  shutter: (s, o) => {
+    s.noise(o, { dur: 0.025, gain: 0.32, filter: "highpass", f0: 4200 });
+    s.tone(o, { type: "square", f0: 1900, f1: 900, dur: 0.03, gain: 0.08 });
+    s.noise(o, { dur: 0.06, gain: 0.22, filter: "bandpass", f0: 1400, f1: 600, q: 1.8, delay: 0.045 });
+    s.tone(o, { type: "triangle", f0: 240, f1: 110, dur: 0.07, gain: 0.18, delay: 0.05 });
+    s.noise(o, { dur: 0.12, gain: 0.08, filter: "bandpass", f0: 2600, f1: 3400, q: 4, delay: 0.12 });
   }
 });
 
@@ -413,6 +422,8 @@ export function installArcadeFx({ doc = globalThis.document, view = globalThis, 
         // The struck side's plate gives a small jolt (Owner 2026-10-28).
         juice.shake(event.target?.closest?.(".cm-vs5-fighter") ?? event.target, 3, 200);
         break;
+      // The brag card's photo (Owner 2026-10-29); the flash itself is the card module's.
+      case "shutter": sound.play("shutter"); break;
       case "open": sound.play("whoosh"); break;
       case "close": sound.play("back"); break;
       case "toggle": sound.play("toggle", true); break;

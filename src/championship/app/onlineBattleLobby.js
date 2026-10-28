@@ -9,6 +9,11 @@
 //
 // Both are DOM sections prepended to the mode panel; the manual code exchange
 // below them is unchanged. No battle logic lives here.
+//
+// 2026-10-29: both lobbies show the same passport identity (one account for
+// binding, friends and rooms); the room lobby shows the opponent's Presence,
+// copies the room code (which the brag card prints while the room is open)
+// and lists friends whose AI defense team can be challenged right here.
 
 import { onlineText, onlineReasonText } from "../text/onlineText.js";
 import { createPvpRoomSession } from "../online/pvpRoomSession.js";
@@ -17,6 +22,19 @@ function helpers(doc) {
   const el = (tag, className, text) => { const node = doc.createElement(tag); if (className) node.className = className; if (text !== undefined) node.textContent = text; return node; };
   const button = (key, extra = "", text = onlineText(key)) => { const b = el("button", `cm-online__button ${extra}`.trim(), text); b.type = "button"; b.dataset.onlineAction = key; return b; };
   return { el, button };
+}
+
+/** One account across binding, friends and rooms: the passport line both lobbies open with. */
+function identityStrip(doc, service, modeTag) {
+  const { el } = helpers(doc);
+  const line = el("p", "cm-online__identity"); line.dataset.passport = "guest";
+  void service.getIdentitySummary().then(id => {
+    const guest = id.isAnonymous !== false;
+    line.dataset.passport = guest ? "guest" : "linked"; line.dataset.tamerCode = id.tamerCode ?? "";
+    line.textContent = onlineText("lobbyIdentity", { pass: onlineText(guest ? "guestPass" : "linkedAccount"), code: id.tamerCode ?? onlineText("unknown") });
+    modeTag.textContent = id.simulated ? onlineText("modeLocal") : id.online ? onlineText("modeCloud") : onlineText("modeOffline"); modeTag.dataset.mode = id.mode;
+  }).catch(() => {});
+  return line;
 }
 
 /** A compact 1–3 partner picker over the battle candidates the app supplies. */
@@ -37,13 +55,18 @@ function teamPicker(doc, candidates, onChange) {
   return { element: wrap, get selected() { return [...selected]; }, lock(value) { for (const b of buttons) { b.dataset.locked = value ? "1" : ""; b.disabled = value || b.disabled; } if (!value) paint(); } };
 }
 
-export function mountRoomLobby(panel, { service, game, codeLength = 4, start, doc = globalThis.document, setTimer = globalThis.setTimeout, clearTimer = globalThis.clearTimeout } = {}) {
+export function mountRoomLobby(panel, { service, game, codeLength = 4, start, onFriendSpar = null, brag = null, doc = globalThis.document, setTimer = globalThis.setTimeout, clearTimer = globalThis.clearTimeout,
+  clipboard = globalThis.navigator?.clipboard ?? null } = {}) {
   const { el, button } = helpers(doc);
   const root = el("section", "cm-online cm-online--lobby"); root.dataset.onlinePanel = "room";
-  root.append(el("h3", "cm-online__title", onlineText("roomTitle")), el("p", "cm-online__hint", onlineText("roomHint")));
-  const modeTag = el("p", "cm-online__mode"); root.append(modeTag);
+  const modeTag = el("p", "cm-online__mode");
+  root.append(el("h3", "cm-online__title", onlineText("roomTitle")), identityStrip(doc, service, modeTag), el("p", "cm-online__hint", onlineText("roomHint")), modeTag);
   const status = el("p", "cm-online__status"); status.setAttribute("role", "status"); status.setAttribute("aria-live", "polite"); status.hidden = true;
   const codeBox = el("p", "cm-online__roomcode"); codeBox.hidden = true;
+  const copyRoom = button("copyRoom", "cm-online__button--ghost"); copyRoom.hidden = true;
+  const codeRow = el("div", "cm-online__coderow"); codeRow.append(codeBox, copyRoom);
+  const presence = el("p", "cm-online__presence"); presence.hidden = true;
+  const onCard = el("p", "cm-online__oncard", onlineText("roomOnCard")); onCard.hidden = true;
   const row = el("div", "cm-online__row");
   const create = button("createRoom", "cm-online__button--primary"), join = button("joinRoom");
   const input = el("input", "cm-online__input cm-online__input--code"); input.inputMode = "numeric"; input.placeholder = onlineText("roomPlaceholder"); input.maxLength = 6; input.setAttribute("aria-label", onlineText("roomPlaceholder"));
@@ -51,16 +74,53 @@ export function mountRoomLobby(panel, { service, game, codeLength = 4, start, do
   row.append(create, input, join, cancel);
   let picker = null, session = null, countdownTimer = null, reported = false;
   const say = (text, tone = "info") => { status.hidden = !text; status.textContent = text ?? ""; status.dataset.tone = tone; };
-  root.append(row, codeBox, status);
+  // While the host waits, the brag card carries the room code to the friend who will type it in.
+  const bragKey = typeof brag?.onOpen === "function" ? el("button", "cm-brag-cta cm-arcade-key", brag.label ?? "") : null;
+  if (bragKey) { bragKey.type = "button"; bragKey.dataset.onlineAction = "brag-card"; bragKey.hidden = true; bragKey.addEventListener("click", () => { brag.onOpen(bragKey); }); }
+  root.append(row, codeRow, presence, onCard, ...(bragKey ? [bragKey] : []), status);
+  // A friend's saved defense team, played by the AI against the player's own team code.
+  if (typeof onFriendSpar === "function") {
+    const friendsBox = el("section", "cm-online__friendspar");
+    const list = el("ul", "cm-online__list"); list.dataset.list = "friend-defense";
+    friendsBox.append(el("h4", "cm-online__section", onlineText("friendDefenseTitle")), el("p", "cm-online__hint", onlineText("friendDefenseHint")), list);
+    root.append(friendsBox);
+    void service.listFriends().then(friends => {
+      const ready = friends.filter(friend => friend.status === "accepted" && (friend.hasDefenseTeam || friend.simulated));
+      if (!ready.length) { list.replaceChildren(el("li", "cm-online__empty", onlineText("friendDefenseEmpty"))); return; }
+      list.replaceChildren(...ready.map(friend => {
+        const item = el("li", "cm-online__friend"); item.dataset.userId = friend.userId ?? "";
+        const main = el("div", "cm-online__friend-main");
+        const name = el("p", "cm-online__friend-name", friend.tamerName || friend.tamerCode); if (friend.simulated) name.append(" ", el("span", "cm-online__tag", onlineText("simulatedTag")));
+        main.append(name, el("p", "cm-online__friend-meta", `${friend.tamerCode} · ${onlineText("rank")} ${friend.rankTitle || onlineText("unknown")}`));
+        const challenge = button("spar", "cm-online__button--spar");
+        challenge.addEventListener("click", async () => {
+          challenge.disabled = true; say(onlineText("sparStart", { name: friend.tamerName || friend.tamerCode }));
+          try {
+            const team = await service.getFriendDefenseTeam(friend.userId);
+            if (!team?.defenseTeam?.passwordCode) { say(onlineText("sparFailed", { reason: onlineText("noDefense") }), "error"); return; }
+            const started = await onFriendSpar({ friend, defense: team.defenseTeam });
+            if (started?.ok === false) say(onlineText("sparFailed", { reason: onlineReasonText(started.reason) }), "error");
+          } finally { challenge.disabled = false; }
+        });
+        item.append(main, challenge); return item;
+      }));
+    }).catch(() => { list.replaceChildren(el("li", "cm-online__empty", onlineText("friendDefenseEmpty"))); });
+  }
   panel.prepend(root);
-  void service.getIdentitySummary().then(id => { modeTag.textContent = id.simulated ? onlineText("modeLocal") : id.online ? onlineText("modeCloud") : onlineText("modeOffline"); modeTag.dataset.mode = id.mode; });
   void Promise.resolve(game.candidates?.()).then(list => { if (Array.isArray(list) && list.length) { picker = teamPicker(doc, list); root.insertBefore(picker.element, row); } });
+  copyRoom.addEventListener("click", async () => { try { await clipboard?.writeText?.(codeBox.dataset.roomCode ?? ""); say(onlineText("roomCopied"), "ok"); } catch { say(onlineText("roomCode", { code: codeBox.dataset.roomCode ?? "" })); } });
 
   function paint(state) {
     root.dataset.phase = state.phase;
     create.hidden = join.hidden = input.hidden = !["idle", "failed", "cancelled"].includes(state.phase);
     cancel.hidden = ["idle", "failed", "cancelled", "playing"].includes(state.phase);
     codeBox.hidden = !state.roomCode; if (state.roomCode) codeBox.textContent = onlineText("roomCode", { code: state.roomCode }); codeBox.dataset.roomCode = state.roomCode ?? "";
+    const open = ["waiting", "joined", "ready", "countdown"].includes(state.phase);
+    copyRoom.hidden = !(open && state.roomCode); onCard.hidden = !(open && state.roomCode && state.role === "host");
+    if (bragKey) bragKey.hidden = onCard.hidden;
+    presence.hidden = !open || state.peerOnline === null; presence.textContent = onlineText(state.peerOnline ? "presenceOnline" : "presenceWaiting"); presence.dataset.online = String(Boolean(state.peerOnline));
+    // While a room is open the brag card can print its code for the friend to type in.
+    service.setActiveRoom?.(open && state.role === "host" ? { roomCode: state.roomCode, matchId: state.matchId } : null);
     picker?.lock(!["idle", "failed", "cancelled"].includes(state.phase));
     clearTimer(countdownTimer);
     switch (state.phase) {
@@ -96,14 +156,14 @@ export function mountRoomLobby(panel, { service, game, codeLength = 4, start, do
   create.addEventListener("click", () => { void begin("host"); });
   join.addEventListener("click", () => { if (!/^[0-9]{4,6}$/.test(input.value.trim())) { say(onlineReasonText("INVALID"), "error"); return; } void begin("guest"); });
   cancel.addEventListener("click", () => { void session?.cancel(); });
-  return Object.freeze({ element: root, get session() { return session; }, dispose() { clearTimer(countdownTimer); session?.dispose(); root.remove(); } });
+  return Object.freeze({ element: root, get session() { return session; }, dispose() { clearTimer(countdownTimer); session?.dispose(); service.setActiveRoom?.(null); root.remove(); } });
 }
 
 export function mountQuickMatchLobby(panel, { service, game, start, doc = globalThis.document } = {}) {
   const { el, button } = helpers(doc);
   const root = el("section", "cm-online cm-online--lobby"); root.dataset.onlinePanel = "quick";
-  root.append(el("h3", "cm-online__title", onlineText("quickTitle")), el("p", "cm-online__hint", onlineText("quickHint")));
-  const modeTag = el("p", "cm-online__mode"); root.append(modeTag);
+  const modeTag = el("p", "cm-online__mode");
+  root.append(el("h3", "cm-online__title", onlineText("quickTitle")), identityStrip(doc, service, modeTag), el("p", "cm-online__hint", onlineText("quickHint")), modeTag);
   const status = el("p", "cm-online__status"); status.setAttribute("role", "status"); status.setAttribute("aria-live", "polite"); status.hidden = true;
   const row = el("div", "cm-online__row"); const quick = button("quickMatch", "cm-online__button--primary"), ladder = button("ladder"); row.append(quick, ladder);
   const list = el("ul", "cm-online__list"); list.dataset.list = "opponents";
@@ -111,7 +171,6 @@ export function mountQuickMatchLobby(panel, { service, game, start, doc = global
   const say = (text, tone = "info") => { status.hidden = !text; status.textContent = text ?? ""; status.dataset.tone = tone; };
   root.append(row, status, list);
   panel.prepend(root);
-  void service.getIdentitySummary().then(id => { modeTag.textContent = id.simulated ? onlineText("modeLocal") : id.online ? onlineText("modeCloud") : onlineText("modeOffline"); modeTag.dataset.mode = id.mode; });
   void Promise.resolve(game.candidates?.()).then(entries => { if (Array.isArray(entries) && entries.length) { picker = teamPicker(doc, entries); root.insertBefore(picker.element, row); } });
 
   async function search(limit) {

@@ -159,7 +159,7 @@ function element(tag, className, text) {
  * @param {(entry: object) => void} options.onMenuEntry
  * @param {(toolId: string|null) => void} [options.onToolChange]
  */
-export function createChampionshipToolbar({ responsiveLayout = false, root, onMenuEntry, onToolChange, getFoodStock=()=>null, subscribeInventory=null, getTutorialCheckpoint=()=>null } = {}) {
+export function createChampionshipToolbar({ responsiveLayout = false, root, onMenuEntry, onToolChange, getFoodStock=()=>null, subscribeInventory=null, getTutorialCheckpoint=()=>null, menuExtras = null } = {}) {
   if (!root) throw new TypeError("The toolbar requires a root element");
   if (typeof onMenuEntry !== "function") throw new TypeError("The toolbar requires an onMenuEntry handler");
 
@@ -197,9 +197,13 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
   let tutorialAutoSelect=true,tutorialKey=null,tutorialMenuEntry="hunt";
   let toolBeforeTutorial = null;
   let openMenuId = null;
+  // Owner 2026-10-29: product extras at the foot of a submenu ({ element, dispose }), e.g. the
+  // System menu's passport strip and community dock. Never during a tutorial.
+  let menuExtrasHandle = null;
 
   function closeMenu() {
     openMenuId = null;
+    menuExtrasHandle?.dispose?.(); menuExtrasHandle = null;
     menuPanel.hidden = true;
     menuPanel.replaceChildren();
     for (const cell of rail.querySelectorAll("[data-menu-id]")) cell.setAttribute("aria-expanded", "false");
@@ -274,6 +278,11 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
       menuPanel.append(block);
     }
     for (const entry of byId.values()) if (!placed.has(entry.id)) menuPanel.append(entryButton(entry));
+    menuExtrasHandle?.dispose?.(); menuExtrasHandle = null;
+    if (typeof menuExtras === "function" && tutorialTool === null) {
+      try { menuExtrasHandle = menuExtras(menu.id, { close: closeMenu }) ?? null; } catch (error) { console.warn(`TOOLBAR_MENU_EXTRAS: ${error.message}`); menuExtrasHandle = null; }
+      if (menuExtrasHandle?.element) menuPanel.append(menuExtrasHandle.element);
+    }
     menuPanel.hidden = false;
     for (const cell of rail.querySelectorAll("[data-menu-id]")) {
       cell.setAttribute("aria-expanded", String(cell.dataset.menuId === menu.id));
