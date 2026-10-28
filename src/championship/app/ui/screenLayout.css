@@ -2686,3 +2686,66 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
   box-shadow: 0 3px 0 var(--ax-ink);
 }
 .cm-vs5-tactics .cm-vs5-tactic__label { display: none; }
+
+/* Partner life (Owner 2026-10-28): mood chip, stroll finds, walk log.
+   The badge waits for its flying item (championshipToolbar landToolStock). */
+.int-rh2-root .int-rh2-companion__place-row { grid-area: place; display: flex; flex-wrap: wrap; align-items: center; gap: 3px 6px; min-width: 0; }
+/* The place keeps its words; the mood chip is the emote and hearts (its words
+   are the chip's title and accessible name). */
+.int-rh2-root .int-rh2-companion__place-row > .int-rh2-companion__place { flex: 0 0 auto; }
+.int-rh2-root .int-rh2-companion__mood:not([hidden]) {
+  position: relative; display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto;
+  padding: 1px 8px; border: 2px solid var(--ax-ink, #14141f); border-radius: 999px;
+  background: #fff4fa; color: var(--ax-ink, #14141f); font-size: 12px; font-weight: 800; white-space: nowrap;
+}
+.int-rh2-root .int-rh2-companion__mood[data-habitat="cozy"] { background: #e9fff6; }
+.int-rh2-root .int-rh2-companion__mood[data-mood="unwell"],
+.int-rh2-root .int-rh2-companion__mood[data-habitat="poor"] { background: #fff0ec; }
+.int-rh2-root .int-rh2-companion__mood-emoji { font-size: 13px; line-height: 1; }
+.int-rh2-root .int-rh2-companion__mood-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.int-rh2-root .int-rh2-companion__hearts { display: inline-flex; gap: 1px; }
+.int-rh2-root .int-rh2-companion__hearts i {
+  width: 8px; height: 8px; background: #f1c9d8;
+  clip-path: polygon(50% 100%, 0 40%, 0 15%, 20% 0, 50% 20%, 80% 0, 100% 15%, 100% 40%);
+}
+.int-rh2-root .int-rh2-companion__hearts i.is-full { background: #ff4d6d; }
+
+.cm-stroll-toast {
+  position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 236px); z-index: 60;
+  max-width: min(92vw, 420px); padding: 8px 14px; border: 3px solid #14141f; border-radius: 14px;
+  background: #fffbe6; color: #14141f; font-weight: 800; font-size: 14px; line-height: 1.35; text-align: center;
+  box-shadow: 0 4px 0 #14141f; pointer-events: none; opacity: 0; transform: translate(-50%, -8px) scale(.94);
+  transition: opacity .18s ease, transform .22s cubic-bezier(.34,1.56,.64,1);
+}
+.cm-stroll-toast.is-shown { opacity: 1; transform: translate(-50%, 0) scale(1); }
+.cm-stroll-flight {
+  position: fixed; z-index: 70; width: 34px; height: 34px; margin: -17px 0 0 -17px; pointer-events: none;
+  border: 3px solid #14141f; border-radius: 50%; background: #fff var(--stroll-icon, none) center / 78% no-repeat;
+  box-shadow: 0 0 0 3px #ffd23f, 0 6px 14px rgba(20,20,31,.35); image-rendering: pixelated;
+}
+.cm-stroll-flight[data-coin="true"] { background: radial-gradient(circle at 38% 34%, #fff6c2 0 18%, #ffd23f 19% 62%, #a98400 63%); }
+.cm-toolbar__cell.is-stock-landed { animation: cm-stock-landed .42s cubic-bezier(.34,1.56,.64,1); }
+@keyframes cm-stock-landed { 0% { transform: scale(1); } 35% { transform: scale(1.18); } 100% { transform: scale(1); } }
+.cm-toolbar__stock-gain {
+  position: absolute; right: -6px; top: -34px; z-index: 2; pointer-events: none;
+  color: #1fd67a; font-weight: 900; font-size: 15px; -webkit-text-stroke: 2px #fff; paint-order: stroke;
+  animation: cm-stock-gain 1.1s ease-out forwards;
+}
+@keyframes cm-stock-gain { 0% { opacity: 0; transform: translateY(6px) scale(.8); } 20% { opacity: 1; transform: translateY(0) scale(1.1); } 100% { opacity: 0; transform: translateY(-22px) scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .cm-toolbar__cell.is-stock-landed, .cm-toolbar__stock-gain { animation-duration: .01ms; }
+  .cm-stroll-toast { transition: none; }
+}
+:root[data-motion="reduced"] .cm-toolbar__cell.is-stock-landed { animation: none; }
+
+.int-rh2-stroll-log { margin-top: 10px; padding-top: 8px; border-top: 2px dashed rgba(20,20,31,.2); }
+.int-rh2-stroll-log__title { margin: 0 0 6px; font-size: 15px; }
+.int-rh2-stroll-log__list { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; max-height: 38vh; overflow-y: auto; }
+.int-rh2-stroll-log__list li { padding: 6px 8px; border-radius: 10px; background: rgba(46,214,180,.12); font-size: 13px; line-height: 1.4; }
+.int-rh2-stroll-log__list li[data-kind="greeting"] { background: rgba(255,111,181,.14); }
+.int-rh2-stroll-log__empty { margin: 0; font-size: 13px; opacity: .75; }
+
+.cm-name-slot__same:not([hidden]) {
+  margin: 4px 0 0; padding: 6px 10px; border: 2px solid #14141f; border-radius: 10px;
+  background: #fff3c4; color: #14141f; font-size: 13px; font-weight: 700; line-height: 1.35;
+}

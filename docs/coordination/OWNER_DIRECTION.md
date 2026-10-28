@@ -1,5 +1,16 @@
 # Championship Owner Direction
 
+<!-- record-id: RANCH_PARTNER_LIFE_20261028 -->
+## 2026-10-28 — Ground selection ring, partner moods, stroll finds and greetings
+
+Owner directs, without push or deployment: draw the ranch lock-on ring as a ground decal under the partner (never over its body, centred on the foot, sized to the body, no marker dots); check why a partner card can show the tamer's name; give partners tap reactions with mood emotes, a mood/habitat/affection badge on the card, habitat suitability across the cages, stroll finds that add +1 to the bag and the matching tool badge (with a flight into the toolbar and a 逛街手札 log), and greetings where two partners in one connected area face each other for 1.5 seconds with 🎵 or ⚡ and find a doubled reward.
+
+- The ring renders in the 3D depth buffer after the opaque actor billboards (`ranchSelectionRing.js`); the Pixi fallback ring keeps its place under the sprite.
+- No code writes the tamer name into a partner. The card shows the egg name typed at the incubator; that step now asks once when it equals the tamer name.
+- Mood, habitat and affection READ the original individual fields (wound 134, illness 138, stress growth 404, hunger growth 418, sleep 00c/178/13c, stroke music, affection 020) and the original cage like/dislike masks (`raising-activity.r1.json`). No second hunger, affection or timer.
+- OWNER_APPROVED_ADAPTATION: a tap adds +1 to the original affection (020) at most once per 10 real minutes; stroll finds (at most 8 per in-game day) and greetings (at most 4 per in-game day, 5 minutes per pair, 30 seconds ranch-wide) pay through the Shop's existing gift path and `raising.nativeHome.strollLog` in one save; a greeting holds two idle or wandering partners in place without drawing native RNG.
+- The product shell turns partner life on; harnesses that build the app directly keep the original frame-for-frame behaviour.
+
 <!-- record-id: BATTLE_TACTICS_MENU_20261028 -->
 ## 2026-10-28 — Pre-battle plan (作戰方針) menu, ROM-confirmed
 

@@ -4,6 +4,10 @@ import {formatNumber} from '../text/locale.js';
 import {shopItemName} from '../text/zhHant.js';
 import {shopGoodsPresentation} from '../presentation/shopGoodsUiArt.js';
 import {RANCH_DISCOVERY_REWARDS} from '../raising/ranchDiscoveries.js';
+import {STROLL_REWARDS} from '../raising/ranchPartnerLife.js';
+import {getCageDefinition} from '../cage/cageCatalog.js';
+import {cageName} from '../text/zhHant.js';
+import {formatWorldClockTime} from '../time/championshipWorldClock.js';
 const copy=()=>Object.fromEntries(["title", "about", "empty", "none", "full", "collect", "close", "food", "herb", "bits", "rare", "partner", "path", "blocked", "saved", "failed"].map(key=>[key,uiText(`RANCH_JOURNAL_${key.toUpperCase()}`)]));
 const BITS_ICON=new URL('../../../assets/production/public-media-clean-20261017/currency-hud-r1/bits-48.png',import.meta.url).href;
 // Opens the journal from the System menu as well as from its badge.
@@ -34,6 +38,31 @@ function rewardRow(doc,reward,label){
   const text=doc.createElement('span');text.className='int-rh2-discovery-item__text';text.textContent=label;
   const count=doc.createElement('strong');count.className='int-rh2-discovery-item__count';count.textContent=`×${formatNumber(reward.quantity)}`;
   row.append(art,text,count);return row;
+}
+
+// 逛街手札 (Owner 2026-10-28): what partners found on their strolls and who met
+// whom, newest first, read from the saved stroll log.
+const STROLL_SEASONS=['春季','夏季','秋季','冬季'];
+const STROLL_TOOL_SLOTS={feed:'餵食',protein:'蛋白質',medicine:'藥品',woundMedicine:'傷藥'};
+export function strollLogLine(entry){
+  const when=uiText('{season} 第{day}日 {time}',{season:uiText(STROLL_SEASONS[entry.season]??''),day:entry.day+1,time:formatWorldClockTime(entry.minute)});
+  const place=Number.isInteger(entry.cage)?cageName(entry.cage,getCageDefinition(entry.cage)?.displayName??null):null;
+  const item=uiText('【{item} ×{n}】',{item:uiText(STROLL_REWARDS[entry.reward]?.label??entry.reward),n:entry.quantity});
+  const slot=STROLL_TOOL_SLOTS[entry.reward];
+  const stored=slot?uiText('（已放入{slot}欄）',{slot:uiText(slot)}):uiText('（已存入錢包）');
+  const what=entry.kind==='greeting'
+    ?uiText(place?'{a} 和 {b} 在{place}相遇打招呼，一起找到了{item}':'{a} 和 {b} 相遇打招呼，一起找到了{item}',{a:entry.partnerName,b:entry.partnerBName,place:uiText(place??''),item})
+    :uiText(place?'{name}在{place}散步，找到了{item}':'{name}散步時找到了{item}',{name:entry.partnerName,place:uiText(place??''),item});
+  return `${when} — ${what}${stored}`;
+}
+function strollSection(doc,log){
+  const section=doc.createElement('section');section.className='int-rh2-stroll-log';
+  const head=doc.createElement('h3');head.className='int-rh2-stroll-log__title';head.textContent=uiText('逛街手札');section.append(head);
+  const entries=[...(log?.entries??[])].reverse().slice(0,12);
+  if(!entries.length){const empty=doc.createElement('p');empty.className='int-rh2-stroll-log__empty';empty.textContent=uiText('拍檔散步時找到的東西會記在這裡。');section.append(empty);return section;}
+  const list=doc.createElement('ol');list.className='int-rh2-stroll-log__list';
+  for(const entry of entries){const row=doc.createElement('li');row.dataset.kind=entry.kind;row.dataset.reward=entry.reward;row.textContent=strollLogLine(entry);list.append(row);}
+  section.append(list);return section;
 }
 
 export function mountRanchDiscoveryJournal(root,source){
@@ -79,6 +108,7 @@ export function mountRanchDiscoveryJournal(root,source){
         const reward=ranchDiscoveryReward(item.kind);if(!reward)continue;
         body.append(rewardRow(doc,reward,`${item.name??c.partner} · ${uiText(reward.name)}`));
       }
+      if(source.getPartnerLife?.())body.append(strollSection(doc,source.getPartnerLife().log));
       const foot=doc.createElement('p');foot.className='int-rh2-discovery-foot';foot.textContent=`${uiText('收下的發現會放進背包，飼料、蛋白質、傷藥也會加到育成工具的數量。')} ${c.full}`;body.append(foot);
       const action=await showChoiceDialog({title:c.title,message:c.about,content:body,variant:'ranch-discoveries',signal:life.signal,
         actions:[{id:'close',label:c.close},{id:'collect',label:c.collect,tone:'primary',disabled:!data.pending.length}],cancelId:'close',doc});

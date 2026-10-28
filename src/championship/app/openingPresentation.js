@@ -110,8 +110,14 @@ export function createOpeningPresentation({host,onStart,onCancel=()=>{},allowEgg
       n.append(raw('p','cm-pod__kicker',copy.podKicker),pod,caption,label,slot,count,b);
     }
     if(kind==='egg'&&allowEggChoice){const back=el('button','cm-opening__back',openingEggText().back);back.type='button';back.dataset.eggBack='true';back.addEventListener('click',()=>{eggName=input.value.trim();chooseEgg();});n.append(back);}
+    // The partner's title on the ranch is this egg name. A partner named after
+    // the trainer reads like a mix-up, so the same name asks once (Owner 2026-10-28).
+    let sameNameAsked=null;const sameHint=raw('p','cm-name-slot__same',uiText('這是馴獸師的名字喔！想換一個拍檔名字嗎？再按一次「決定」就用這個名字。'));
+    sameHint.hidden=true;sameHint.setAttribute('role','status');if(kind==='egg')count.after(sameHint);
     n.addEventListener('submit',e=>{e.preventDefault();const value=input.value.trim();if(!value||value.length>NAME_MAX||/[\p{Cc}\p{Cf}]/u.test(value)){input.setCustomValidity(uiText('請輸入一至五個字。'));input.reportValidity();return;}
-      input.setCustomValidity('');if(kind==='trainer')trainerName=value;else eggName=value;next();});input.addEventListener('input',()=>input.setCustomValidity(''));
+      if(kind==='egg'&&value===trainerName&&sameNameAsked!==value){sameNameAsked=value;sameHint.hidden=false;input.focus({preventScroll:true});return;}
+      input.setCustomValidity('');if(kind==='trainer')trainerName=value;else eggName=value;next();});
+    input.addEventListener('input',()=>{input.setCustomValidity('');sameHint.hidden=true;});
     // iOS raises the keyboard over the lower half: the host already follows
     // the visible viewport, and once it has settled a card taller than that
     // scrolls itself (never the page) to bring the slot to its middle.

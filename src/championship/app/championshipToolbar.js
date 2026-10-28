@@ -398,12 +398,17 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
   }
   ownerDocument?.addEventListener?.("keydown", onMenuKey);
   ownerDocument?.addEventListener?.("pointerdown", onOutsidePress, true);
+  // A stroll find flies to its tool (Owner 2026-10-28): the badge keeps the old
+  // number until the item lands, then counts up with a +1. The inventory itself
+  // was already saved; only the display waits.
+  const stockFlights=new Map();
   function refreshFoodStock() {
     const stock=getFoodStock();
     for(const id of ['feed','protein','medicine','woundMedicine']) {
       const button=rail.querySelector(`[data-tool-id="${id}"]`);if(!button)continue;
       let amount=button.querySelector('.cm-toolbar__stock');
       if(!amount){amount=element('span','cm-toolbar__stock');button.append(amount);}
+      if(stockFlights.has(id))continue;
       amount.hidden=currentMode!==TOOLBAR_MODES.TRAINING||!Number.isInteger(stock?.[id]);
       amount.textContent=uiText(Number.isInteger(stock?.[id])?String(stock[id]):'');
       button.dataset.owned=amount.textContent;
@@ -471,6 +476,26 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
 
     getSelectedTool() {
       return selectedTool;
+    },
+
+    /** The tool button a stroll find flies to, or null when it is not shown. */
+    getToolButton(toolId) {
+      const button=rail.querySelector(`[data-tool-id="${toolId}"]`);
+      return button&&!bar.hidden?button:null;
+    },
+    holdToolStock(toolId) {
+      stockFlights.set(toolId,(stockFlights.get(toolId)??0)+1);
+    },
+    /** Release the held badge: count up, bounce the key and float the gain. */
+    landToolStock(toolId,{gained=1}={}) {
+      const left=(stockFlights.get(toolId)??1)-1;
+      if(left>0)stockFlights.set(toolId,left);else stockFlights.delete(toolId);
+      refreshFoodStock();
+      const button=rail.querySelector(`[data-tool-id="${toolId}"]`);if(!button||disposed)return;
+      button.classList.remove('is-stock-landed');void button.offsetWidth;button.classList.add('is-stock-landed');
+      const plus=element('span','cm-toolbar__stock-gain',`+${gained}`);plus.setAttribute('aria-hidden','true');button.append(plus);
+      plus.addEventListener('animationend',()=>plus.remove(),{once:true});setTimeout(()=>plus.remove(),1600);
+      button.addEventListener('animationend',event=>{if(event.target===button)button.classList.remove('is-stock-landed');},{once:true});
     },
 
     // Display/input constraint for an app-owned tutorial step; no gameplay

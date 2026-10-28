@@ -196,7 +196,21 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
  const fixtures=await createInstallerFixtures(path.resolve(__dirname,'..'));
  // Explicit historical wallet, not a grant from the game or a change to the QA seed.
  const historicalWalletSeed={...fixtures.seed,flags:{...fixtures.seed.flags,friendsPlaytest:{version:1,grants:[],diamonds:10000,purchases:[]}}};
- const expectedShop=shop=>({...shop,cageQuantities:shop.cageQuantities??Object.fromEntries(shop.cageOwned.map(id=>[id,1]))});
+ // Partner life (Owner 2026-10-28): partners may find items while the ranch is
+ // open. Only finds the later save's stroll log records may change the bag.
+ const STROLL_RECORDS={feed:0,protein:1,medicine:2,woundMedicine:3};
+ const expectedShop=(shop,later=null,baseline=null)=>{
+  const base={...shop,cageQuantities:shop.cageQuantities??Object.fromEntries(shop.cageOwned.map(id=>[id,1]))};
+  const since=baseline?.raising?.nativeHome?.strollLog?.sequence??0,entries=(later?.raising?.nativeHome?.strollLog?.entries??[]).filter(e=>e.id>since);
+  if(!entries.length)return base;
+  const quantities=[...base.quantities];let bits=base.bits;
+  for(const e of entries){if(e.reward in STROLL_RECORDS)quantities[STROLL_RECORDS[e.reward]]+=e.quantity;else if(e.reward==='bits')bits=Math.min(9999999,bits+30*e.quantity);}
+  return {...base,quantities,bits};
+ };
+ // Bits a later save's stroll log adds after a log sequence and/or a wall-clock time.
+ const strollBits=(later,{since=0,after=0}={})=>(later?.raising?.nativeHome?.strollLog?.entries??[])
+  .filter(e=>e.id>since&&e.at>after&&e.reward==='bits').reduce((sum,e)=>sum+30*e.quantity,0);
+ const strollSequence=save=>save?.raising?.nativeHome?.strollLog?.sequence??0;
  // Hex cage world (Owner 2026-10-26): loading a 10x10 save moves it 8 rows / 7 columns into the
  // 24-wide world (productRanchGrid.legacyGrid100SlotToWorld), so a legacy anchor keeps its layout.
  const legacyToWorld=s=>{const row=s<40?Math.floor(s/20)*2+s%2:4+Math.floor((s-40)/10),column=s<40?Math.floor((s%20)/2):(s-40)%10;return (row+8)*24+column+7;};
@@ -437,8 +451,8 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
    assert.deepEqual(placed.cageEdit.placements.map(p=>({moduleId:p.moduleId,slotIndex:p.slotIndex})).sort((a,b)=>a.moduleId.localeCompare(b.moduleId)),[
     {moduleId:'championship:2026:cage:waiting-room',slotIndex:199},...specs.map((s,i)=>({moduleId:`championship:2026:cage:${s.definition}`,slotIndex:scenario.slots[i]}))
    ].sort((a,b)=>a.moduleId.localeCompare(b.moduleId)));
-   assert.deepEqual(placed.shop,expectedShop(installed.shop),'Editor-only inspection must preserve entire wallet and inventory');await boundary('continueSaved',()=>continueSaved());
-   const reloadedPlacement=await boundary('saved:read-only',()=>saved());assert.deepEqual(reloadedPlacement.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(reloadedPlacement.shop,expectedShop(installed.shop));
+   assert.deepEqual(placed.shop,expectedShop(installed.shop,placed,installed),'Editor-only inspection must preserve entire wallet and inventory');await boundary('continueSaved',()=>continueSaved());
+   const reloadedPlacement=await boundary('saved:read-only',()=>saved());assert.deepEqual(reloadedPlacement.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(reloadedPlacement.shop,expectedShop(installed.shop,reloadedPlacement,installed));
    assert.equal(reloadedPlacement.schemaVersion,7);assert.equal(reloadedPlacement.cageEdit.layoutVersion,'PRODUCT_HEX_WORLD_V1');
    coverage.setup.push({schemaVersion:reloadedPlacement.schemaVersion,layoutVersion:reloadedPlacement.cageEdit.layoutVersion,scenario:scenario.name,slots:scenario.slots,placements:placed.cageEdit.placements.map(({moduleId,slotIndex})=>({moduleId,slotIndex})).sort((a,b)=>a.moduleId.localeCompare(b.moduleId)),shop:placed.shop,reloaded:true});write();
    if(scenario.name!==selected.scenario)continue;
@@ -468,7 +482,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
    await boundary('Three:response-readbacks',()=>Promise.all(threeResponseReads));friendsThreeIdentity(threeResponses);const threeAfter=await boundary('readThree:after',()=>readThree());friendsThreeProgress(threeBefore,threeAfter);coverage.three=true;write();
    evidence.assertions.push({sourceThreeAuthority:scenario.name,resourceIdentity,threeBefore,threeAfter,actualResponseBytesVerified:true});write();
    evidence.sourceCornerStage=scenario.name+':persistence';write();
-   await boundary('clearCalendar',()=>clearCalendar());await boundary('saveQuit',()=>saveQuit());const after=await boundary('saved:read-only',()=>saved());assert.deepEqual(after.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(after.shop,expectedShop(installed.shop));await boundary('continueSaved',()=>continueSaved());
+   await boundary('clearCalendar',()=>clearCalendar());await boundary('saveQuit',()=>saveQuit());const after=await boundary('saved:read-only',()=>saved());assert.deepEqual(after.cageEdit.placements,placed.cageEdit.placements);assert.deepEqual(after.shop,expectedShop(installed.shop,after,installed));await boundary('continueSaved',()=>continueSaved());
    coverage.persistence=true;write();
    evidence.assertions.push({sourceCorners:scenario.name,slots:scenario.slots,oldSaveProfile:false,normalInstaller:true,normalUiPlacement:true,phaseSamplingMs:170,visualReviewRequired:true,checks:['adjacent sidewall joins','lower tips','left/right wrap','top headroom','three unchanged source-art styles']});write();
   }
@@ -568,8 +582,8 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await wallet(12000);await saveQuit();
   await page.reload({waitUntil:'domcontentloaded'});await continueSaved();await wallet(12000);
   await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');assert.match(await page.locator('.cm-hexworld__land-note').innerText(),/全部土地已開放/,'Reload must restore all purchased land');assert.equal(await page.locator('[data-locked-test-row]').count(),0);await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();
-  const afterRows=await saved();assert.equal(afterRows.shop.bits,8000000);assert.deepEqual(afterRows.flags.friendsPlaytest.purchases,[2,3,4,5,6,7,8,9]);assert.equal(afterRows.flags.friendsPlaytest.diamonds,12000);
-  await dock('shop');await screen('SHOP');
+  const afterRows=await saved();assert.equal(afterRows.shop.bits,8000000+strollBits(afterRows,{since:strollSequence(initial)}));assert.deepEqual(afterRows.flags.friendsPlaytest.purchases,[2,3,4,5,6,7,8,9]);assert.equal(afterRows.flags.friendsPlaytest.diamonds,12000);
+  await dock('shop');await screen('SHOP');const walletAtShop=digits(await page.locator('.cm-vs2-shop__wallet').innerText());
   let purchase;
   for(const tab of await page.locator('.cm-vs2-shop__tab').all()){
    await tab.click();
@@ -578,11 +592,11 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
     if(await buy.isEnabled()&&values?.[0]>0){purchase={price:values[0],owned:values[1],category:await tab.getAttribute('data-category'),cardIndex,itemName:await page.locator('.cm-vs2-shop__detail-name').innerText()};await buy.click();break;}
    }if(purchase)break;
   }
-  assert.ok(purchase,'A normally paid, not fully owned item must be purchasable');
+  assert.ok(purchase,'A normally paid, not fully owned item must be purchasable');const purchasedAt=Date.now();
   const purchasedMeta=(await page.locator('.cm-vs2-shop__detail-meta').innerText()).replaceAll(',','').match(/\d+/g).map(Number);assert.equal(purchasedMeta[1],purchase.owned+1,'Paid purchase must increase actual displayed ownership');
-  assert.equal(digits(await page.locator('.cm-vs2-shop__wallet').innerText()),8000000-purchase.price);
+  assert.equal(digits(await page.locator('.cm-vs2-shop__wallet').innerText()),walletAtShop-purchase.price);
   await shot('05-shop-purchased');await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();
-  const afterShop=await saved();assert.equal(afterShop.shop.bits,8000000-purchase.price);assert.notDeepEqual({quantities:afterShop.shop.quantities,cageOwned:afterShop.shop.cageOwned,cageQuantities:afterShop.shop.cageQuantities},{quantities:afterRows.shop.quantities,cageOwned:afterRows.shop.cageOwned,cageQuantities:afterRows.shop.cageQuantities},'Persisted inventory, not just wallet, must change');assert.equal(afterShop.flags.friendsPlaytest.diamonds,12000);
+  const afterShop=await saved();assert.equal(afterShop.shop.bits,walletAtShop-purchase.price+strollBits(afterShop,{after:purchasedAt}));assert.notDeepEqual({quantities:afterShop.shop.quantities,cageOwned:afterShop.shop.cageOwned,cageQuantities:afterShop.shop.cageQuantities},{quantities:afterRows.shop.quantities,cageOwned:afterRows.shop.cageOwned,cageQuantities:afterRows.shop.cageQuantities},'Persisted inventory, not just wallet, must change');assert.equal(afterShop.flags.friendsPlaytest.diamonds,12000);
   await dock('shop');await screen('SHOP');await page.locator(`.cm-vs2-shop__tab[data-category="${purchase.category}"]`).click();await page.locator('.cm-vs2-shop__row').nth(purchase.cardIndex).click();
   assert.equal(await page.locator('.cm-vs2-shop__detail-name').innerText(),purchase.itemName);
   const restoredItem=(await page.locator('.cm-vs2-shop__detail-meta').innerText()).replaceAll(',','').match(/\d+/g).map(Number);assert.equal(restoredItem[1],purchase.owned+1,'Purchased item ownership survives reload');
@@ -604,7 +618,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   const huntCanvas=page.locator('.cm-vs2-field__canvas canvas').first();await huntCanvas.waitFor({state:'visible'});
   const huntBox=await huntCanvas.boundingBox();assert.ok(huntBox&&huntBox.width>0&&huntBox.height>0,'Normal Pixi hunt canvas must be visible');await shot('06-paid-hunt');
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
-  const afterHunt=await saved();assert.equal(afterHunt.shop.bits,afterShop.shop.bits-fee);assert.equal(afterHunt.flags.friendsPlaytest.diamonds,12000);
+  const afterHunt=await saved();assert.equal(afterHunt.shop.bits,afterShop.shop.bits-fee+strollBits(afterHunt,{since:strollSequence(afterShop)}));assert.equal(afterHunt.flags.friendsPlaytest.diamonds,12000);
   evidence.assertions.push({freshUi:true,rowBalances:[20000,19000,18000,17000,16000,15000,14000,13000,12000],shopPrice:purchase.price,huntFee:fee,finalBits:afterHunt.shop.bits});write();
   evidence.partition.completed.push('fresh-economy');write();
   }
@@ -615,7 +629,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   assert.deepEqual((await saved()).shop,fixtures.seed.shop);assert.deepEqual((await saved()).cageEdit.placements,fixtures.seed.cageEdit.placements);
   await continueSaved();await wallet(0);await saveQuit();await continueSaved();await wallet(0);await saveQuit();
   const noTopup=await saved();assert.equal(noTopup.flags.friendsPlaytest.version,2);assert.equal(noTopup.flags.friendsPlaytest.diamonds,0);assert.deepEqual(noTopup.flags.friendsPlaytest.purchases,[]);
-  assert.deepEqual(noTopup.shop,expectedShop(fixtures.seed.shop));assert.deepEqual(noTopup.cageEdit.placements,expectedPlacements(fixtures.seed.cageEdit.placements));
+  assert.deepEqual(noTopup.shop,expectedShop(fixtures.seed.shop,noTopup,fixtures.seed));assert.deepEqual(noTopup.cageEdit.placements,expectedPlacements(fixtures.seed.cageEdit.placements));
   assert.deepEqual(noTopup.progression.battleBadges,fixtures.seed.progression.battleBadges);assert.equal(noTopup.progression.tamerRank,fixtures.seed.progression.tamerRank);
   evidence.assertions.push({legacyNoTopup:true,diamonds:0,saveReloadPreserved:true});write();
   // Separate historical-wallet fixture preserves purchase/reload coverage without a grant.
@@ -626,7 +640,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   const legacyLand=async()=>digits(await page.locator('.cm-hexworld__land-note').innerText());
   assert.equal(await legacyLand(),40);assert.equal(await page.locator('[data-locked-test-row]').count(),1);await shot('07-legacy-land-control');
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
-  const migrated=await saved();assert.deepEqual(migrated.shop,expectedShop(old.shop),'Continue/save must preserve entire old wallet, quantities, visibility and ownership');assert.deepEqual(migrated.cageEdit.placements,expectedPlacements(old.cageEdit.placements));assert.equal(migrated.flags.friendsPlaytest?.diamonds,10000);assert.equal(migrated.flags.friendsPlaytest.version,2);
+  const migrated=await saved();assert.deepEqual(migrated.shop,expectedShop(old.shop,migrated,old),'Continue/save must preserve entire old wallet, quantities, visibility and ownership');assert.deepEqual(migrated.cageEdit.placements,expectedPlacements(old.cageEdit.placements));assert.equal(migrated.flags.friendsPlaytest?.diamonds,10000);assert.equal(migrated.flags.friendsPlaytest.version,2);
   await continueSaved();await wallet(10000);await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');
   assert.equal(await legacyLand(),40);
   await page.locator('button[data-locked-test-row="4"]').click();
@@ -634,7 +648,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   await page.waitForFunction(key=>JSON.parse(localStorage.getItem(key)).flags.friendsPlaytest.diamonds===9000,saveKey);
   assert.equal(await legacyLand(),50);
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();await wallet(9000);
-  const legacyAfterPurchase=await saved();assert.deepEqual(legacyAfterPurchase.shop,expectedShop(old.shop));assert.deepEqual(legacyAfterPurchase.cageEdit.placements,expectedPlacements(old.cageEdit.placements));
+  const legacyAfterPurchase=await saved();assert.deepEqual(legacyAfterPurchase.shop,expectedShop(old.shop,legacyAfterPurchase,old));assert.deepEqual(legacyAfterPurchase.cageEdit.placements,expectedPlacements(old.cageEdit.placements));
   evidence.assertions.push({historicalWalletPreserved:10000,legacyGrant:0,afterPurchaseAndReload:9000});
   evidence.assertions.push({oldQaPreserved:true,oldBits:old.shop.bits,oldPlacements:old.cageEdit.placements});await shot('07-old-save-preserved');await legacyTopContour('07-old-save');
   evidence.partition.completed.push('legacy-persistence');write();
