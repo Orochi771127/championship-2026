@@ -362,3 +362,46 @@ test("the evolution reveal plays once, after the native sequence ends and nothin
   view.dispose();
   assert.equal(ceremonies[0].disposed, true, "leaving Home releases the reveal");
 });
+
+test("the arcade evolution takes only its own stats, never the previous message, and replaces the reveal", async () => {
+  const document = { createElement: (tag) => new Element(tag, document) };
+  const ceremonies = [];
+  const context = vm.createContext({mountRanchDiscoveryJournal,originalCageLocationArt:()=>null,createTransientHint, consumeRaisingHintDuration, TOOL_HINT_MS, document, Date, console, setTimeout, clearTimeout, productFormText, getLocale, getProductExtension,
+    setText: (node, text) => { node.textContent = text; }, setLabel: (node, key, text) => node.setAttribute(key, text), uiText: (s, p = {}) => Object.entries(p).reduce((t, [k, v]) => t.replace(`{${k}}`, v), String(s)), retranslate: () => {},
+    isNativeRanchLayout: () => true, assembledHudArt: () => null, prefersReducedMotion: () => false, speciesName, raisingMessageText: () => "", raisingMessageSender: () => "", downloadSaveBackup: () => ({ key: "ok" }),
+    playCeremony: (options) => { const run = { options, disposed: false, dispose() { this.disposed = true; } }; ceremonies.push(run); return run; },
+    buildEvolve: () => {} });
+  vm.runInContext(fs.readFileSync("src/championship/app/raisingHomeP1RView.js", "utf8").replace(/^import .*;$/gm, "").replace(/export async function /, "async function ") + "\nthis.mount=createRaisingHomeP1RView;", context);
+  const root = new Element("div", document);
+  let frame = { revision: 1, residents: [{ creatureId: "a", displayName: "Partner A", speciesId: "species-034", stats: { currentHp: 8, maxHp: 10, maxTp: 4 }, displayCapacityG: 3 }], selection: { creatureId: null }, ranch: { layoutVersion: 1 }, save: { phase: "CLEAN" } };
+  let listener;
+  const rates = [], starts = [], delivered = [];
+  const source = { getFrame: () => frame, subscribe: (fn) => { listener = fn; return () => { listener = null; }; },
+    intents: { selectCreature() {}, relocateCreature() {}, careForCreature() {}, requestSave() {}, setEvolutionPlayback: (rate) => rates.push(rate) } };
+  const handles = [];
+  const evolutionCinematic = { enabled: () => true, start(options) {
+    starts.push(options);
+    const handle = { instanceId: options.instanceId, setStats: (stats) => delivered.push(stats), dispose() { this.disposed = true; } };
+    handles.push(handle); return handle; } };
+  const view = await context.mount({ root, source, evolutionCinematic, hudArt: { getPortrait: () => null },
+    mountField: async () => ({ render() {}, dispose() {}, focusResident() {} }) });
+  const render = (changes) => { frame = { ...frame, ...changes, revision: frame.revision + 1 }; listener(frame); };
+  // The previous evolution's message is still riding along when the next one starts.
+  const stale = { kind: "EVOLVED", instanceId: "a", target: 34, stats: [{ key: "hp", before: 1, after: 2 }] };
+  render({ lifecycle: { evolution: { instanceId: "a", oldSpecies: 34, target: 35, choicePending: true, choices: [35] }, message: stale } });
+  assert.equal(starts.length, 0, "a pending choice is not an evolution yet");
+  render({ lifecycle: { evolution: { instanceId: "a", oldSpecies: 34, target: 35, phase: 0 }, message: stale } });
+  assert.equal(starts.length, 1);
+  assert.deepEqual([starts[0].fromSpecies, starts[0].toSpecies], [34, 35]);
+  assert.deepEqual(rates, [2], "the native clock plays at 2x under the runner");
+  render({ lifecycle: { evolution: { instanceId: "a", oldSpecies: 34, target: 35, phase: 6 }, message: stale } });
+  assert.equal(starts.length, 1, "one run per evolution");
+  assert.equal(delivered.length, 0, "the earlier evolution's stats are not this run's");
+  const fresh = { kind: "EVOLVED", instanceId: "a", target: 35, stats: [{ key: "hp", before: 630, after: 680 }] };
+  render({ lifecycle: { evolution: null, message: fresh } });
+  render({ lifecycle: { evolution: null, message: fresh } });
+  assert.deepEqual(delivered, [fresh.stats], "the form write's own stats arrive once");
+  assert.equal(ceremonies.length, 0, "the runner was the reveal");
+  view.dispose();
+  assert.equal(handles[0].disposed, true, "leaving Home releases the runner");
+});

@@ -53,6 +53,12 @@ export function configureCeremonyAudio(getOutput) {
   audioOutput = typeof getOutput === "function" ? getOutput : () => null;
 }
 
+/** One cue on the configured bus for pieces that run outside playCeremony. */
+export function playCeremonySound(cue, doc = globalThis.document) {
+  if (!cue || doc?.hidden || prefersReducedMotion(doc)) return null;
+  try { return playCeremonyCue(cue, audioOutput()); } catch { return null; }
+}
+
 /** The resolved settings a run starts with (read once, at start). */
 export function ceremonyEnvironment(doc = globalThis.document) {
   const reduced = prefersReducedMotion(doc);

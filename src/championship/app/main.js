@@ -97,6 +97,8 @@ import { createLoadWatchdog, createLoadAttempt, LOAD_MAX_MS } from './loadWatchd
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
 import { configureCeremonyAudio, playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
+import { createSkillCutInLayer } from '../presentation/juicy/skillCutIn.js';
+import { juicyPortrait, juicyPresentationEnabled } from '../presentation/juicy/juicyArt.js';
 import { installArcadeFx } from './ui/arcadeFx.js';
 import { installTitleParade } from './titleParade.js';
 import { buildMedal, buildVersus } from '../presentation/ceremony/ceremonyScenes.js';
@@ -145,6 +147,9 @@ const mountHighlightBurstThree = async (options) =>
 // TITLE does not mount field/screen presenters. Fetch them through the same
 // serialized foreground mounts; native module caching retains their owners.
 const createRaisingHomeP1RView = async options => (await import('./raisingHomeP1RView.js')).createRaisingHomeP1RView(options);
+const loadRaisingEvolutionCinematic = () => import('../presentation/juicy/raisingEvolutionCinematic.js')
+  .then(module => module.createRaisingEvolutionCinematic({ doc: document }))
+  .catch(error => { console.warn('Arcade evolution unavailable', error); return null; });
 const createGateSelectView = async options => (await import('./vs2Screens.js')).createGateSelectView(options);
 const createHuntLoadoutView = async options => (await import('./vs2Screens.js')).createHuntLoadoutView(options);
 const createHuntFieldView = async options => (await import('./vs2Screens.js')).createHuntFieldView(options);
@@ -922,6 +927,8 @@ async function mountRaisingHome() {
   void loadPixiModule().catch(() => {});
   const p1r = await createRaisingHomeP1RView({
     root, hudArt: null, source,
+    // Arcade evolution (Owner 2026-10-28); null keeps the original sequence.
+    evolutionCinematic: await loadRaisingEvolutionCinematic(),
     getRosterEntry: creatureId => projectRoster().find(entry => entry.instanceId === creatureId) ?? null,
     renderCreatureDetail: appendCreatureDetail,
     openRoster: () => runToolbarMenuEntry({ id: "digimon", screen: CHAMPIONSHIP_SCREENS.DIGIMON_LIST }),
@@ -1504,6 +1511,10 @@ async function mountBattleField() {
       let scene = null;
       let vfxOverlay = null;
       let battleAudio = null;
+      // Arcade theme (Owner 2026-10-28): the special-move cut-in strip over the
+      // field. DOM only; it never pauses or steps the battle.
+      const juicy = BATTLE_DYNAMIC_FX && juicyPresentationEnabled(document);
+      let cutIn = null;
       let stopFirstRender=()=>{};
       const audioLoading = new AbortController();
       const released = new Map();
@@ -1559,6 +1570,8 @@ async function mountBattleField() {
           // the overlay: no frame may render between the two.
           const fxLookups = fxLookupsModule
             ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),onFeed:(line,cue)=>view.feed?.(line,cue),
+              onCutIn:juicy?cue=>cutIn?.play({team:cue.team===activeRuntime.localTeamIndex()?'ally':'enemy',portrait:juicyPortrait(cue.speciesId),
+                moveName:cue.moveName,casterName:cue.casterName,palette:cue.palette}):null,
               // Local acceptance shows stable skill IDs; players see approved names only.
               showIds:String(location.search??'').includes('battleFxDebug')&&['localhost','127.0.0.1','[::1]'].includes(location.hostname)}) : null;
           progress?.start('scene');
@@ -1577,11 +1590,12 @@ async function mountBattleField() {
           // rejection returns cleanup to the catch below, late success to scene.
           for(const resource of [fieldArt,characterRoster,effectArt])loadingArt.delete(resource);
           scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster, effectArt,onView:frame=>view.render(frame),
-            dynamicFx:BATTLE_DYNAMIC_FX, responsiveLayout:RESPONSIVE_BATTLE_CANDIDATE, fx:fxLookups, localTeam:activeRuntime.localTeamIndex() });
+            dynamicFx:BATTLE_DYNAMIC_FX, responsiveLayout:RESPONSIVE_BATTLE_CANDIDATE, fx:fxLookups, localTeam:activeRuntime.localTeamIndex(), juicy });
           if (disposed) {
             await Promise.all([release(vfxOverlay),release(scene)]);
             return;
           }
+          if (juicy) cutIn = createSkillCutInLayer({ host });
           stopFirstRender=observeBattleFirstRender({renderer:stage.app.renderer,
             record:recoveryDiagnostics.record,isActive:()=>!disposed});
           progress?.done('scene');
@@ -1599,6 +1613,7 @@ async function mountBattleField() {
           stopFirstRender();
           audioLoading.abort();
           releaseLoadingArt();
+          cutIn?.dispose(); cutIn = null;
           if(scene)void release(scene);
           else {void release(fieldArt);void release(characterRoster);void release(effectArt);}
           void release(vfxOverlay);
@@ -1620,6 +1635,7 @@ async function mountBattleField() {
           characters.abort();
           audioLoading.abort();
           releaseLoadingArt();
+          cutIn?.dispose(); cutIn = null;
           void release(vfxOverlay);
           void release(battleAudio);
           void release(scene);
