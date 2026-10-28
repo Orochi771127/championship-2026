@@ -445,6 +445,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         const tx = input.moveX * speed, ty = input.moveY * speed;
         const k = Math.min(1, DT * 14);
         player.vx += (tx - player.vx) * k; player.vy += (ty - player.vy) * k;
+        if (player.hitstun > 0) player.vx = player.vy = 0; // staggered: no walking drift; knockback is separate
         moveBody(player, player.vx * DT, player.vy * DT, movementKind(player));
         if (input.ride) { if (tryMount()) break; }
         if (input.dash && player.dashCharges > 0 && player.root <= 0) {
@@ -1255,8 +1256,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if (projectile.pierce <= 0) { projectile.dead = true; terrainEffect(projectile); return; }
       projectile.pierce--;
     }
-    // Player skillshots erase static orbs and chip shards on contact.
-    for (const other of state.projectiles) {
+    // Player skillshots erase static orbs and chip shards on contact. RELAY
+    // resolves every shot pair in relayClash() instead, the same both ways.
+    if (!relayMode) for (const other of state.projectiles) {
       if (other.dead || other === projectile || (other.kind !== "ORB" && other.kind !== "SHARD")) continue;
       if (distance(other.x, other.y, projectile.x, projectile.y) > other.radius + projectile.radius) continue;
       if (other.kind === "ORB") { other.dead = true; emit({ type: "CANCEL", rule: "SKILL_ERASES_ORB", x: other.x, y: other.y }); }
@@ -1319,7 +1321,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         const before = events.length;
         if (grid.applyWater(projectile.x, projectile.y, 0.8, events) > 0) chain("STEAM", projectile.x, projectile.y);
         for (let k = before; k < events.length; k++) events[k].t = state.time;
-        for (const other of state.projectiles) {
+        // RELAY waves meet shots in relayClash() (steam against fire, both ways).
+        if (!relayMode) for (const other of state.projectiles) {
           if (!other.dead && other.owner === "player" && distance(other.x, other.y, projectile.x, projectile.y) <= other.radius + projectile.radius) {
             other.dead = true; emit({ type: "CANCEL", rule: "WAVE_SWALLOWS_SHOT", x: other.x, y: other.y });
           }
@@ -1966,6 +1969,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const speed = rival.speed * moveScale(rival);
     const k = Math.min(1, DT * 7);
     rival.vx += (ax * speed - rival.vx) * k; rival.vy += (ay * speed - rival.vy) * k;
+    if (rival.hitstun > 0) rival.vx = rival.vy = 0; // staggered: no walking drift; knockback is separate
     moveBody(rival, rival.vx * DT, rival.vy * DT, movementKind(rival));
     stepKnock(rival);
     if (!rival.canSwim && grid.surfaceAt(rival.x, rival.y) === "WATER") {

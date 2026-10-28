@@ -70,6 +70,24 @@ test('opposing shots clash: steam, waves swallow, heavy wins, equals trade', () 
   assert.deepEqual(clash({}, {}).left, []);
   const pierce = clash({ radius: 14, pierce: 2 }, {});
   assert.deepEqual(pierce.left, ['player']);
+  // A real rival wave (kind WAVE) meeting the player's fire shot: steam, not a one-way swallow.
+  const realWave = clash({ arenaElement: 'fire' }, { kind: 'WAVE', moveType: 'WAVE', radius: 34, arenaElement: 'water' });
+  assert.deepEqual(realWave.left, []);
+  assert.ok(realWave.events.some(e => e.rule === 'STEAM_CLASH') && !realWave.events.some(e => e.rule === 'WAVE_SWALLOWS_SHOT'));
+  // Equal waves trade from either side; a heavier wave wins from either side.
+  assert.deepEqual(clash({ moveType: 'WAVE', radius: 34 }, { kind: 'WAVE', moveType: 'WAVE', radius: 34 }).left, []);
+  assert.deepEqual(clash({ moveType: 'WAVE', radius: 40 }, { kind: 'WAVE', moveType: 'WAVE', radius: 34 }).left, ['player']);
+  assert.deepEqual(clash({ moveType: 'WAVE', radius: 34 }, { kind: 'WAVE', moveType: 'WAVE', radius: 40 }).left, ['rival']);
+});
+
+test('a fighter staggered mid-walk stops at once (no walking drift)', () => {
+  const sim = fight('corona-cub'), state = sim.getState();
+  run(sim, 0.5, { moveX: 1 });
+  assert.ok(Math.abs(state.player.vx) > 50, 'walking speed built up');
+  state.player.hitstun = 0.15;
+  const x = state.player.x, y = state.player.y;
+  for (let i = 0; i < 6; i++) sim.step({ moveX: 1 });
+  assert.ok(Math.hypot(state.player.x - x, state.player.y - y) < 0.5, `drifted ${Math.hypot(state.player.x - x, state.player.y - y)} px`);
 });
 
 test('frost puts a burn out (steam) and fire thaws a root', () => {
