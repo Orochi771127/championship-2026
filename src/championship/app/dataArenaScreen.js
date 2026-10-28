@@ -25,6 +25,8 @@ import { createDataArenaAudio } from "../presentation/dataArena/dataArenaAudio.j
 import { selectDataArenaMusic } from "../presentation/originalMusicCatalog.js";
 import { createPixiAssetScope, loadPixiCharacterRuntimeBundle } from "../presentation/pixiCharacterRuntimeBundle.js";
 import { arenaText as t } from "../text/dataArenaText.js";
+import { createSkillCutInLayer } from "../presentation/juicy/skillCutIn.js";
+import { juicyPortrait, juicyPresentationEnabled } from "../presentation/juicy/juicyArt.js";
 
 import { RELAY_ROSTER, relayPartner } from '../modes/dataArena/dataArenaRelayRoster.js';
 import { RELAY_MAP_IDS } from '../modes/dataArena/dataArenaRelayMaps.js';
@@ -105,6 +107,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   root.setAttribute("role", "application");
   root.setAttribute("aria-label", t("mode.title"));
   const field = el("div", "da-field");
+  // Arcade theme (Owner 2026-10-28): a power skill's cut-in strip with a 35 %
+  // spotlight on the caster. DOM only; the arena keeps stepping underneath.
+  const cutIn = juicyPresentationEnabled(document) ? createSkillCutInLayer({ host: field, spotlight: true }) : null;
   const hud = el("div", "da-hud");
   const overlay = el("div", "da-overlay");
   const toastLayer = el("div", "da-toasts");
@@ -621,7 +626,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           break;
         case "ULT_READY": audio?.play("level"); toast(t("hud.ultReady"), { tone: "good", key: "ult-ready", gap: 3000 }); break;
         case "CAST_RELEASE": if (event.team === "player") audio?.play(gameMode === 'RELAY' ? relayEffectStyle(event.moveId).cue : event.moveType === 'LUNGE' ? 'dash' : 'burst'); break;
-        case "ULT_CAST": audio?.play("roar"); break;
+        case "ULT_CAST": audio?.play("roar"); ultCutIn(event); break;
         case "NOVA": case "ZONE_BURST": audio?.play("burst"); break;
         case "CANCEL": if (event.rule === "BARRIER_BLOCKS_SHOT") { audio?.play("block"); toast(t("toast.blocked"), { x: event.x, y: event.y, tone: "good", key: "blocked", gap: 1200 }); } break;
         case "RIVAL_HIT": case "SKILL_HIT": audio?.play("hit"); break;
@@ -631,6 +636,19 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         default: break;
       }
     }
+  }
+  function ultCutIn(event) {
+    if (!cutIn || !sim) return;
+    const state = sim.getState();
+    const mine = event.team === "player";
+    // Rival casters are matched by id, else by position; the cast names them
+    // by their definition id.
+    const rival = mine ? null : state.rivals.find((r) => r.id === event.casterId) ?? state.rivals.filter((r) => r.hp > 0)
+      .sort((a, b) => Math.hypot(a.x - event.x, a.y - event.y) - Math.hypot(b.x - event.x, b.y - event.y))[0];
+    const speciesId = mine ? state.player.speciesId : rival?.speciesId;
+    const focus = scene?.worldToScreen(event.x, event.y - 30);
+    cutIn.play({ team: mine ? "ally" : "enemy", portrait: juicyPortrait(speciesId), moveName: moveName(event.moveId),
+      casterName: mine ? cast.partners.find((p) => p.speciesId === speciesId)?.name ?? "" : rivalName(rival?.definitionId ?? rival?.id), palette: mine ? "light" : "dark", focus });
   }
   let vignetteTimer = null;
   function flashVignette() {
@@ -1089,6 +1107,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     tickerCallback = null;
     lifetime.abort();
     clearTimeout(bannerTimer); clearTimeout(vignetteTimer);
+    cutIn?.dispose();
     audio?.dispose(); audio = null;
     scene?.dispose(); scene = null;
     sim = null;

@@ -331,6 +331,7 @@ export function createRaisingPresentationSource(app) {
       acknowledgeMail(){return app.acknowledgeRaisingMail?.()??false;},
       acknowledgeCalendar(){return app.acknowledgeRaisingCalendar?.()??false;},
     selectEvolutionChoice(instanceId,target){return app.selectRaisingEvolutionChoice?.(instanceId,target)??false;},
+    setEvolutionPlayback(rate){return app.setRaisingEvolutionPlayback?.(rate)??false;},
     confirmDayEnd(accepted){return app.confirmRaisingDayEnd?.(accepted)??false;},
     relocateToGround(creatureId,input) {const result=app.moveRaisingResidentToGround?.(creatureId,input)??false;publish();return result;},
     beginHand(creatureId,input){return app.beginRaisingHand?.(creatureId,input)??false;},

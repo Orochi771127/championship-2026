@@ -64,6 +64,37 @@ export const CEREMONY_CUES = Object.freeze({
     [0, "noise", 300, 120, 0.3, 0.3],
     [0, "square", 130.81, 98, 0.32, 0.12],
     [0.18, "sawtooth", N.G5, N.D6, 0.26, 0.1]
+  ]),
+  // Arcade evolution (2026-10-28): a rising arpeggio that quickens with the
+  // silhouette swaps (0.6 s .. 1.5 s), then the shell breaks on a bright chord.
+  morph: Object.freeze([
+    [0.6, "triangle", N.C5, null, 0.26, 0.2],
+    [0.9, "triangle", N.E5, null, 0.22, 0.2],
+    [1.13, "triangle", N.G5, null, 0.18, 0.2],
+    [1.31, "triangle", N.C6, null, 0.16, 0.22],
+    [1.46, "triangle", N.E6, null, 0.14, 0.22],
+    [1.6, "noise", 2400, 9000, 0.4, 0.14],
+    [1.6, "sine", N.C6, null, 1.1, 0.2],
+    [1.6, "triangle", N.G6, null, 1.1, 0.14]
+  ]),
+  // Back to an egg: soft falling bells over a shimmer.
+  revert: Object.freeze([
+    [0, "noise", 5200, 7600, 1.2, 0.04],
+    [0.1, "sine", N.G6, null, 0.8, 0.12],
+    [0.45, "sine", N.E6, null, 0.8, 0.12],
+    [0.8, "sine", N.C6, null, 1.0, 0.14],
+    [1.2, "triangle", N.G5, null, 1.4, 0.16]
+  ]),
+  // A special's cut-in strip: an air whoosh and a metal hit.
+  cutin: Object.freeze([
+    [0, "noise", 800, 5200, 0.24, 0.18],
+    [0.12, "square", 196, 147, 0.16, 0.1],
+    [0.12, "triangle", N.G5, null, 0.3, 0.14]
+  ]),
+  // A showcase hit on the training dummy.
+  impact: Object.freeze([
+    [0, "noise", 900, 180, 0.22, 0.32],
+    [0, "square", 110, 70, 0.18, 0.14]
   ])
 });
 

@@ -14,6 +14,8 @@ import {databaseIllustrationText} from '../database/databaseIllustrations.js';
 import {openingEggChoices} from './openingEggChoices.js';
 import {openingEggText} from '../text/openingEggText.js';
 import {loadAcceptedDatabasePortrait} from '../presentation/acceptedDatabasePortraits.js';
+import {createCodexShowcase} from '../presentation/juicy/codexShowcaseTheater.js';
+import {juicyPortrait, juicyPresentationEnabled, juicySignatureMove} from '../presentation/juicy/juicyArt.js';
 // VS4 -- Shop presentation.
 //
 // Consumes only the injected Gate/Hunt presentation source. The Shop runtime
@@ -637,6 +639,17 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     portraitImages = [];
   }
   const eggs = new Map(openingEggChoices().map(egg=>[egg.speciesIndex,egg]));
+  // Owner 2026-10-28: the holo showcase (motion viewer, special and evolution
+  // previews). One sandbox per screen; it reads catalogs and calls no intent.
+  // The classic theme keeps the original static detail.
+  // Optional: controlled DOM harnesses load this screen without its imports.
+  const showcase = typeof createCodexShowcase === 'function' ? createCodexShowcase({doc: document, overlayHost: root}) : null;
+  const showcaseOn = () => Boolean(showcase) && juicyPresentationEnabled(document);
+  const conditionTrait = condition => {
+    const unitKey = {PERCENT:'DEX_CONDITIONS_PERCENT', BATTLES:'DEX_CONDITIONS_BATTLES', TIMES:'DEX_CONDITIONS_TIMES'}[condition.unit];
+    const value = unitKey ? uiText(unitKey, {value:condition.value, count:condition.value}) : uiText('{value}', {value:condition.value});
+    return `${uiText(`DEX_CONDITION_${condition.id}`)} ${uiText(condition.operator === 'LTE' ? 'DEX_CONDITIONS_LTE' : 'DEX_CONDITIONS_GTE', {value})}`;
+  };
   back.addEventListener("click", () => {
     const current = source.getFrame().database;
     if (selectedEgg) { selectedEgg = null; paint(source.getFrame()); }
@@ -718,7 +731,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       if (list.hidden && focusWasInList) detail.querySelector('h2')?.focus({preventScroll:true});
     } else {
       detailSwipe.reset();
-      if (paintedDetail !== null) releasePortraits();
+      if (paintedDetail !== null) { releasePortraits(); showcase?.resetDetail(); }
       clearConditionState();
       detail.replaceChildren();
       paintedDetail = null;
@@ -780,6 +793,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     }
     conditionControls.clear();
     releasePortraits();
+    showcase?.resetDetail();
     portraitAbort = new AbortController();
     detail.replaceChildren();
     const egg = selected.kind === 'EGG' ? eggs.get(selected.speciesIndex) : null;
@@ -806,7 +820,15 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     if (mode === VS2_PRESENTATION_MODES.DEVELOPER) {
       detail.append(element("p", "cm-vs2-evidence", `${selected.speciesId} · ${book.unlockEvidence}`));
     }
-    if (!selected.viewable && selected.state !== "REGISTERED") return;
+    if (!selected.viewable && selected.state !== "REGISTERED") {
+      // An unregistered partner previews as an encrypted signal: the move's
+      // energy and colour, never its body, name or move name.
+      const signature = showcaseOn() && selected.kind !== 'ILLUSTRATION' ? juicySignatureMove(databaseVerifiedData(selected.speciesIndex)?.moves) : null;
+      const locked = signature ? showcase.specialButton({speciesIndex: selected.speciesIndex, speciesId: selected.speciesId,
+        name: '????', move: signature, encrypted: true}) : null;
+      if (locked) { const section = element('section', 'cm-dex-locked-showcase'); section.append(locked); detail.append(section); }
+      return;
+    }
     const hero = databaseHeroPortrait(selected.speciesIndex);
     if (hero) {
       const holder = element('div','cm-dex-hero');
@@ -830,6 +852,8 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       portraitImages.push(image);
       holder.append(image,placeholder); detail.append(holder);
       image.src = hero.src;
+      // In-game motion is for partners the player has registered (collected).
+      if (showcaseOn() && selected.kind !== 'ILLUSTRATION' && selected.state === 'REGISTERED') showcase.attachHero(holder, {speciesId: hero.speciesId});
     }
     const story = databaseStory(selected.speciesIndex);
     if (story) {
@@ -853,6 +877,11 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       const dataTitle = element('h3', 'cm-dex-profile__heading');
       dataTitle.textContent = dataHeading;
       dataSection.append(dataTitle);
+      const signature = showcaseOn() ? juicySignatureMove(verifiedData.moves) : null;
+      // A viewable but unregistered partner previews as an encrypted signal.
+      const specialPreview = signature ? showcase.specialButton({speciesIndex: selected.speciesIndex, speciesId: selected.speciesId,
+        name: speciesName(selected.speciesIndex, selected.displayName), move: signature, encrypted: selected.state !== 'REGISTERED', silhouette: true}) : null;
+      if (specialPreview) dataSection.append(specialPreview);
 
       const traitsGrid = element('div', 'cm-dex-traits-grid');
       traitsGrid.append(
@@ -967,12 +996,32 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
           detail.querySelector('h2')?.focus({preventScroll:true});
         });
         row.append(button);
+        if (showcaseOn()) row.append(evolutionPreviewButton(selected, route, mapping, name));
         appendEvolutionConditions(row, route);
         targets.append(row);
       }
       graph.append(targets);
     }
     section.append(graph); detail.append(section);
+  }
+
+  // A registered partner's completed route plays in full colour; any other
+  // (unregistered partner, no completion record) plays as an encrypted signal.
+  // Traits are the route's real conditions, only where the conditions panel
+  // would show them.
+  function evolutionPreviewButton(selected, route, mapping, name) {
+    const full = selected.state === 'REGISTERED' && route.revealed && route.historyState === 'RECORDED';
+    const conditionsVisible = route.revealed && route.conditions && (route.displayPreview || (route.historyState === 'RECORDED' && route.targetRegistered));
+    const targetData = route.revealed ? databaseVerifiedData(route.targetSpeciesIndex) : null;
+    const traits = conditionsVisible && route.conditions.conditions?.length ? route.conditions.conditions.map(conditionTrait)
+      : targetData ? [`${targetData.labels.attribute}: ${targetData.attributeName}`, `${targetData.labels.family}: ${targetData.familyName}`] : null;
+    const special = juicySignatureMove(targetData?.moves);
+    return showcase.evolutionButton({
+      from: {name: speciesName(selected.speciesIndex, selected.displayName), portrait: juicyPortrait(selected.speciesIndex)},
+      to: {name, stageLabel: route.revealed && mapping.numberingStageIndex !== null ? generationName(mapping.numberingStageIndex) : '',
+        portrait: route.revealed ? juicyPortrait(route.targetSpeciesIndex) : null},
+      encrypted: !full, traits, special: special ? {name: special.name} : null
+    });
   }
 
   function paintConditionPanel(control, expanded) {
@@ -1036,6 +1085,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       detailSwipe.dispose();
       clearConditionState();
       releasePortraits();
+      showcase?.dispose();
       stopBackKeys();
       globalThis.removeEventListener?.('resize', resize);
       root.replaceChildren();
