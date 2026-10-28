@@ -75,6 +75,34 @@
 :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__name strong { font-size: var(--fs-body); font-weight: var(--fw-heavy); line-height: 1.2; }
 :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__meta { color: var(--c-gold-strong); font-size: var(--fs-label); font-weight: var(--fw-strong); white-space: normal; }
 :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop .cm-vs2-footer { grid-template-columns: auto; }
+/* Owner 2026-10-27 cage cards: footprint badge on the art, series tag and an
+   effect capsule under the price. The grid keeps a bottom gutter so the
+   返回牧場 footer never sits on the last row. */
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__list { padding-bottom: calc(28px + var(--safe-bottom, 0px)); }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__row[data-cage-card="true"] .cm-vs2-shop__card-art { position: relative; }
+.cm-vs2-shop__cells {
+  position: absolute; top: 6px; left: 6px; display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px 2px 4px; border-radius: 999px; background: rgba(20, 20, 31, 0.86); color: #ffd23f;
+  font-size: 12px; font-weight: 900; line-height: 1.4; pointer-events: none;
+}
+.cm-vs2-shop__cells .cm-hexfoot { position: static; flex: 0 0 auto; }
+.cm-vs2-shop__cells svg { width: 20px; height: 20px; }
+.cm-vs2-shop__row[data-cells="1"] .cm-vs2-shop__cells { color: #7ff9e0; }
+.cm-vs2-shop__row[data-cells="2"] .cm-vs2-shop__cells, .cm-vs2-shop__row[data-cells="3"] .cm-vs2-shop__cells { color: #ffd23f; }
+.cm-vs2-shop__row[data-cells="4"] .cm-vs2-shop__cells, .cm-vs2-shop__row[data-cells="5"] .cm-vs2-shop__cells { color: #ff8fb1; }
+.cm-vs2-shop__series {
+  justify-self: start; margin-top: 2px; padding: 1px 8px; border-radius: 999px;
+  background: #5b3fd1; color: #fff; font-size: 12px; font-weight: 900; line-height: 1.5; white-space: nowrap;
+}
+.cm-vs2-shop__effect {
+  justify-self: stretch; margin-top: 2px; padding: 3px 8px; border-radius: 10px;
+  background: rgba(77, 238, 214, 0.18); color: #0f5a50; font-size: 12px; font-weight: 800; line-height: 1.35;
+}
+.cm-vs2-shop__effect > span { display: inline-block; white-space: nowrap; margin-inline-end: .35em; }
+:root[data-theme="arcade"] .cm-vs2-shop__row[data-cage-card="true"] { border-width: 3px; background-image: linear-gradient(180deg, #fffaf0 0%, #fff3d6 100%); }
+:root[data-theme="arcade"] .cm-vs2-shop__row[data-cage-card="true"] .cm-vs2-shop__series { border: 2px solid var(--ax-ink, #14141f); }
+:root[data-theme="arcade"] .cm-vs2-shop__row[data-cage-card="true"] .cm-vs2-shop__effect { border: 2px solid var(--ax-ink, #14141f); background: #c9fff3; }
+:root[data-theme="arcade"] .cm-vs2-shop__row[data-cage-card="true"][aria-selected="true"] .cm-vs2-shop__effect { background: #fff; }
 
 /* The purchase line is a toast over the screen, not a row that pushes the grid. */
 :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__status {
@@ -129,6 +157,10 @@
 @media (max-height: 500px) and (orientation: landscape) {
   :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__list { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 10px; }
   :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__card-art { aspect-ratio: 2 / 1; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__row[data-cage-card="true"] .cm-vs2-shop__card-art { aspect-ratio: 5 / 2; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__row[data-cage-card="true"] { gap: 4px; padding: 6px 6px 8px; }
+  .cm-vs2-shop__series, .cm-vs2-shop__effect { font-size: 11px; padding-block: 1px; margin-top: 1px; }
+  .cm-vs2-shop__cells { top: 3px; left: 3px; font-size: 11px; }
   :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail { grid-template-columns: 200px minmax(0, 1fr); grid-template-rows: auto auto; width: min(680px, 100%); }
   :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art { grid-row: 1 / span 2; height: auto; min-height: 160px; }
   :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-actions { grid-column: 2; }

@@ -57,7 +57,8 @@ test('synergy labels come from the ranch ecology groups', () => {
     assert.equal(partners.sameTypeOnly, ids.length < 2);
   }
   assert.equal(ranchSynergyPartners(WR).type, null);
-  assert.equal(ranchSynergyPartners(cage(12)).sameTypeOnly, true, 'an ungrouped cage joins its own kind');
+  // Owner 2026-10-27: 神殿 joined the garden series; 墓地 stays its own kind.
+  assert.equal(ranchSynergyPartners(cage(13)).sameTypeOnly, true, 'an ungrouped cage joins its own kind');
 });
 
 test('cell layers: sockets touch the land, the Lid only when no land is left', () => {

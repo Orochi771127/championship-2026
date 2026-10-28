@@ -185,9 +185,11 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
      mark('native-evolution-completed');
      evidence.after=await snapshot();assert.deepEqual(evidence.after.residents,evidence.before.residents.map(r=>r.id===ownedId?{...r,speciesId:r.speciesId.replace(/species-\d+$/, 'species-035')}:r),'Same owned resident, no duplication/reset');assert.equal(evidence.after.life.message?.target,35);assert.equal(evidence.after.life.message?.kind,'EVOLVED');
      // Evolution completion starts ordinary idle streaming and a 2.8-second
-     // auto-dismiss ceremony. Either may finish between protocol round-trips.
-     // Do not require permanent readiness or force the overlay off.
-     const ceremony=page.locator('.cm-ceremony[data-kind="evolve"]');
+     // auto-dismiss ceremony -- or, in the arcade themes (2026-10-28), the
+     // evolution runner's own auto-dismissing panel in its place. Either may
+     // finish between protocol round-trips. Do not require permanent readiness
+     // or force the overlay off.
+     const ceremony=page.locator('.cm-ceremony[data-kind="evolve"], .cm-morph').first();
      evidence.ceremonyObserved=await ceremony.isVisible();
      // Let the production auto-dismiss timer finish; no synthetic dismissal.
      await ceremony.waitFor({state:'detached'});

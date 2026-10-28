@@ -49,7 +49,7 @@ import { gateAdmission, isGateUnlocked } from "../gate/gateAdmission.js";
 import { createHuntWorld } from "../hunt/huntWorld.js";
 import { applyNativeHuntReturn } from "../hunt/capture/nativeHuntHistory.js";
 import { nativeHuntCatalogForBiome, nativeHuntSpeciesByIndex } from "../hunt/capture/nativeHuntSources.js";
-import { nativeIndividualProfile } from "../raising/nativeIndividualProfile.js";
+import { nativeIndividualProfile, projectNativeIndividualStats } from "../raising/nativeIndividualProfile.js";
 import { createNativeRaisingStarter } from "../raising/nativeRaisingStarter.js";
 import {createNativeHuntIndividual} from '../hunt/capture/nativeHuntIndividual.js';
 import {createNativeRaisingMessages,normalizeNativeRaisingMessages,selectNativeMorningMessages,enqueueNativeRaisingMessage,
@@ -140,6 +140,15 @@ export const STANDALONE_SAVE_PHASE_COPY = Object.freeze({
 });
 export const STANDALONE_SAVE_UNAVAILABLE_COPY = "Save status is unavailable.";
 
+/** The six persistent stats an evolution panel rolls, before -> after (display only). */
+export function evolutionStatChange(before, after) {
+  try {
+    const a = projectNativeIndividualStats(before), b = projectNativeIndividualStats(after);
+    return Object.freeze([['hp', 'maxHp'], ['tp', 'maxTp'], ['attack', 'attack'], ['defense', 'defense'], ['wisdom', 'wisdom'], ['speed', 'speed']]
+      .map(([key, field]) => Object.freeze({key, before: a[field] | 0, after: b[field] | 0})));
+  } catch { return null; }
+}
+
 export function createChampionshipStandaloneApp({
   storage,
   playtestPolicy = null,
@@ -186,6 +195,7 @@ export function createChampionshipStandaloneApp({
   let raisingDayTransition=null;
   let raisingDayConfirmation=false;
   let raisingLifecycleMessage=null;
+  let raisingEvolutionRate=1;
   const raisingDirtySignals=new Map();
   let raisingPoolSlots={};
   const raisingListeners = new Set();
@@ -1480,6 +1490,20 @@ export function createChampionshipStandaloneApp({
         mailbox:nativeMessages,message:raisingLifecycleMessage});
     },
     hasRaisingPresentation(){return tutorialBaseline!==null||raisingDayConfirmation||raisingDayTransition!==null||nativeMessages.activeId!==null||[...raisingActors.values()].some(a=>a.evolution);},
+    // Arcade evolution (Owner 2026-10-28): the clock driver multiplies the frames
+    // it hands advanceRaisingPresentation by this rate. Only a running evolution
+    // with nothing else on screen is sped; its phase counts, its single RNG draw
+    // and the frozen ranch around it are unchanged -- only wall time shrinks.
+    raisingPresentationRate(){
+      const evolving=tutorialBaseline===null&&!raisingDayTransition&&nativeMessages.activeId===null
+        &&[...raisingActors.values()].some(a=>a.evolution&&!a.evolution.choicePending);
+      if(!evolving)raisingEvolutionRate=1;
+      return raisingEvolutionRate;
+    },
+    setRaisingEvolutionPlayback(rate){
+      if(!Number.isFinite(rate))return false;
+      raisingEvolutionRate=Math.min(8,Math.max(1,Math.round(rate)));return true;
+    },
     requestRaisingDayEnd(){
       if(this.hasRaisingPresentation()||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)return false;
       raisingDayConfirmation=true;publishRaising();return true;
@@ -1513,7 +1537,9 @@ export function createChampionshipStandaloneApp({
       const entry=[...raisingActors].find(([,actor])=>actor.evolution);if(!entry)return false;
       const [id,actor]=entry;
       for(let i=0;i<frames&&actor.evolution;i++){
-        const result=stepNativeRaisingEvolution(actor,raisingNativeProfile(id),{next:nextGameplayRandom});
+        const profileBefore=raisingNativeProfile(id);
+        const result=stepNativeRaisingEvolution(actor,profileBefore,{next:nextGameplayRandom});
+        if(!actor.evolution)raisingEvolutionRate=1;
         if(result.changed)writeRaisingNativeProfile(id,result.profile);
         if(result.disappeared){
           const prior=requireSession().getRaisingHomeSnapshot();
@@ -1522,7 +1548,9 @@ export function createChampionshipStandaloneApp({
           if(selectedCreatureId===id)selectedCreatureId=null;
           raisingLifecycleMessage={kind:'DISAPPEARED',instanceId:id};storeNativeRaisingHome();savePort.markDirty();break;
         }
-        if(result.evolved){const event=result.event;raisingLifecycleMessage={kind:event.target<8?'REBORN':'EVOLVED',instanceId:id,target:event.target};
+        if(result.evolved){const event=result.event;raisingLifecycleMessage={kind:event.target<8?'REBORN':'EVOLVED',instanceId:id,target:event.target,
+            // Display only: the persistent stats before and after the form write.
+            oldSpecies:event.oldSpecies,stats:evolutionStatChange(profileBefore,result.profile)};
           if(event.productRouteId){const productEvolutionBranches=[...new Set([...(raising.nativeHome?.productEvolutionBranches??[]),event.productRouteId])];
             raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,productEvolutionBranches})});}
           else if(event.target>=8&&!event.inherited){const branches=[...new Set([...(raising.nativeHome?.evolutionBranches??[]),(event.oldSpecies-8)*5+event.index])];

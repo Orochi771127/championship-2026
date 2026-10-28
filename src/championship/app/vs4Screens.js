@@ -1,6 +1,7 @@
 import { createRanchRowPurchasePrompt } from './ranchRowPurchasePrompt.js';
 import { createHexWorldBoard, hexFootprintIcon } from './hexWorldEditor.js';
 import { ranchSynergyPartners } from './hexWorldPassages.js';
+import { ranchEcologyType } from '../cage/ranchEcology.js';
 import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
 import { productPlacementCells, productGridSlot } from '../cage/productRanchGrid.js';
 import { PRODUCT_RANCH_GRID } from '../cage/productRanchGrid.js';
@@ -13,6 +14,8 @@ import {databaseIllustrationText} from '../database/databaseIllustrations.js';
 import {openingEggChoices} from './openingEggChoices.js';
 import {openingEggText} from '../text/openingEggText.js';
 import {loadAcceptedDatabasePortrait} from '../presentation/acceptedDatabasePortraits.js';
+import {createCodexShowcase} from '../presentation/juicy/codexShowcaseTheater.js';
+import {juicyPortrait, juicyPresentationEnabled, juicySignatureMove} from '../presentation/juicy/juicyArt.js';
 // VS4 -- Shop presentation.
 //
 // Consumes only the injected Gate/Hunt presentation source. The Shop runtime
@@ -375,6 +378,7 @@ export function createShopView({ root, source }) {
     previous.disabled = selectedIndex <= 0;
     next.disabled = selectedIndex >= rows.length - 1;
     let selectedCard = null;
+    const cageByShopRecord = new Map(listCageDefinitions().map((entry) => [entry.shopRecordIndex, entry]));
     for (const row of rows) {
       const displayName = productName(row);
       const item = element("button", "cm-vs2-shop__row");
@@ -395,6 +399,8 @@ export function createShopView({ root, source }) {
         uiText("{bits} 位元幣 · 持有 {owned}/{max}", { bits: row.unitPriceBits, owned: row.owned, max: row.maxOwned })
       );
       name.append(meta);
+      const cage = row.category === "CAGES" ? cageByShopRecord.get(row.shopRecordIndex) : null;
+      if (cage) decorateShopCageCard(item, art, name, cage.moduleId);
       item.addEventListener("click", () => {
         selectedByCategory.set(activeCategory, row.shopRecordIndex);
         paint(source.getFrame());
@@ -405,7 +411,17 @@ export function createShopView({ root, source }) {
     }
     if (revealSelectedCard) {
       // The grid scrolls vertically only; centring inline would scroll the whole screen sideways.
-      selectedCard?.scrollIntoView({ block: "nearest", inline: "nearest" });
+      // A card taller than the shelf (cage cards in landscape) keeps its top in
+      // view. Layout offsets, not the box: the cards are still sliding in.
+      const taller = selectedCard && shelf.clientHeight > 0 && selectedCard.offsetHeight > shelf.clientHeight;
+      if (taller) {
+        let top = 0;
+        for (let node = selectedCard; node && node !== shelf; node = node.offsetParent) {
+          top += node.offsetTop;
+          if (node.offsetParent === shelf.offsetParent) { top -= shelf.offsetTop; break; }
+        }
+        shelf.scrollTop = Math.max(0, top - 6);
+      } else selectedCard?.scrollIntoView({ block: "nearest", inline: "nearest" });
       revealSelectedCard = false;
     }
     if (restoreCardFocus) selectedCard?.focus({ preventScroll: true });
@@ -623,6 +639,17 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     portraitImages = [];
   }
   const eggs = new Map(openingEggChoices().map(egg=>[egg.speciesIndex,egg]));
+  // Owner 2026-10-28: the holo showcase (motion viewer, special and evolution
+  // previews). One sandbox per screen; it reads catalogs and calls no intent.
+  // The classic theme keeps the original static detail.
+  // Optional: controlled DOM harnesses load this screen without its imports.
+  const showcase = typeof createCodexShowcase === 'function' ? createCodexShowcase({doc: document, overlayHost: root}) : null;
+  const showcaseOn = () => Boolean(showcase) && juicyPresentationEnabled(document);
+  const conditionTrait = condition => {
+    const unitKey = {PERCENT:'DEX_CONDITIONS_PERCENT', BATTLES:'DEX_CONDITIONS_BATTLES', TIMES:'DEX_CONDITIONS_TIMES'}[condition.unit];
+    const value = unitKey ? uiText(unitKey, {value:condition.value, count:condition.value}) : uiText('{value}', {value:condition.value});
+    return `${uiText(`DEX_CONDITION_${condition.id}`)} ${uiText(condition.operator === 'LTE' ? 'DEX_CONDITIONS_LTE' : 'DEX_CONDITIONS_GTE', {value})}`;
+  };
   back.addEventListener("click", () => {
     const current = source.getFrame().database;
     if (selectedEgg) { selectedEgg = null; paint(source.getFrame()); }
@@ -704,7 +731,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       if (list.hidden && focusWasInList) detail.querySelector('h2')?.focus({preventScroll:true});
     } else {
       detailSwipe.reset();
-      if (paintedDetail !== null) releasePortraits();
+      if (paintedDetail !== null) { releasePortraits(); showcase?.resetDetail(); }
       clearConditionState();
       detail.replaceChildren();
       paintedDetail = null;
@@ -766,6 +793,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     }
     conditionControls.clear();
     releasePortraits();
+    showcase?.resetDetail();
     portraitAbort = new AbortController();
     detail.replaceChildren();
     const egg = selected.kind === 'EGG' ? eggs.get(selected.speciesIndex) : null;
@@ -792,7 +820,15 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     if (mode === VS2_PRESENTATION_MODES.DEVELOPER) {
       detail.append(element("p", "cm-vs2-evidence", `${selected.speciesId} · ${book.unlockEvidence}`));
     }
-    if (!selected.viewable && selected.state !== "REGISTERED") return;
+    if (!selected.viewable && selected.state !== "REGISTERED") {
+      // An unregistered partner previews as an encrypted signal: the move's
+      // energy and colour, never its body, name or move name.
+      const signature = showcaseOn() && selected.kind !== 'ILLUSTRATION' ? juicySignatureMove(databaseVerifiedData(selected.speciesIndex)?.moves) : null;
+      const locked = signature ? showcase.specialButton({speciesIndex: selected.speciesIndex, speciesId: selected.speciesId,
+        name: '????', move: signature, encrypted: true}) : null;
+      if (locked) { const section = element('section', 'cm-dex-locked-showcase'); section.append(locked); detail.append(section); }
+      return;
+    }
     const hero = databaseHeroPortrait(selected.speciesIndex);
     if (hero) {
       const holder = element('div','cm-dex-hero');
@@ -816,6 +852,8 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       portraitImages.push(image);
       holder.append(image,placeholder); detail.append(holder);
       image.src = hero.src;
+      // In-game motion is for partners the player has registered (collected).
+      if (showcaseOn() && selected.kind !== 'ILLUSTRATION' && selected.state === 'REGISTERED') showcase.attachHero(holder, {speciesId: hero.speciesId});
     }
     const story = databaseStory(selected.speciesIndex);
     if (story) {
@@ -839,6 +877,11 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       const dataTitle = element('h3', 'cm-dex-profile__heading');
       dataTitle.textContent = dataHeading;
       dataSection.append(dataTitle);
+      const signature = showcaseOn() ? juicySignatureMove(verifiedData.moves) : null;
+      // A viewable but unregistered partner previews as an encrypted signal.
+      const specialPreview = signature ? showcase.specialButton({speciesIndex: selected.speciesIndex, speciesId: selected.speciesId,
+        name: speciesName(selected.speciesIndex, selected.displayName), move: signature, encrypted: selected.state !== 'REGISTERED', silhouette: true}) : null;
+      if (specialPreview) dataSection.append(specialPreview);
 
       const traitsGrid = element('div', 'cm-dex-traits-grid');
       traitsGrid.append(
@@ -953,12 +996,32 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
           detail.querySelector('h2')?.focus({preventScroll:true});
         });
         row.append(button);
+        if (showcaseOn()) row.append(evolutionPreviewButton(selected, route, mapping, name));
         appendEvolutionConditions(row, route);
         targets.append(row);
       }
       graph.append(targets);
     }
     section.append(graph); detail.append(section);
+  }
+
+  // A registered partner's completed route plays in full colour; any other
+  // (unregistered partner, no completion record) plays as an encrypted signal.
+  // Traits are the route's real conditions, only where the conditions panel
+  // would show them.
+  function evolutionPreviewButton(selected, route, mapping, name) {
+    const full = selected.state === 'REGISTERED' && route.revealed && route.historyState === 'RECORDED';
+    const conditionsVisible = route.revealed && route.conditions && (route.displayPreview || (route.historyState === 'RECORDED' && route.targetRegistered));
+    const targetData = route.revealed ? databaseVerifiedData(route.targetSpeciesIndex) : null;
+    const traits = conditionsVisible && route.conditions.conditions?.length ? route.conditions.conditions.map(conditionTrait)
+      : targetData ? [`${targetData.labels.attribute}: ${targetData.attributeName}`, `${targetData.labels.family}: ${targetData.familyName}`] : null;
+    const special = juicySignatureMove(targetData?.moves);
+    return showcase.evolutionButton({
+      from: {name: speciesName(selected.speciesIndex, selected.displayName), portrait: juicyPortrait(selected.speciesIndex)},
+      to: {name, stageLabel: route.revealed && mapping.numberingStageIndex !== null ? generationName(mapping.numberingStageIndex) : '',
+        portrait: route.revealed ? juicyPortrait(route.targetSpeciesIndex) : null},
+      encrypted: !full, traits, special: special ? {name: special.name} : null
+    });
   }
 
   function paintConditionPanel(control, expanded) {
@@ -1022,6 +1085,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       detailSwipe.dispose();
       clearConditionState();
       releasePortraits();
+      showcase?.dispose();
       stopBackKeys();
       globalThis.removeEventListener?.('resize', resize);
       root.replaceChildren();
@@ -1101,6 +1165,36 @@ function expansionPreviewBays(doc = globalThis.document) {
     if (EXPANSION_PREVIEW_LOCKED_BAYS.includes(slot)) bay.dataset.lock = 'true';
     return bay;
   });
+}
+
+// Shop cage card (Owner 2026-10-27): footprint badge, series tag and an
+// effect capsule, read from the same catalog the facility editor uses.
+const CAGE_SERIES_LABELS = Object.freeze({
+  sports: '🔗 運動系', gym: '🔗 健身系', infirmary: '🔗 保健系', garden: '🔗 花園系', volcano: '🔗 火山系', beach: '🔗 海灘系',
+  mountain: '🔗 高山系', grassland: '🔗 草原系', forest: '🔗 森林系', desert: '🔗 沙漠系', snowfield: '🔗 冰原系'
+});
+export function cageSeriesLabel(moduleId) {
+  const label = CAGE_SERIES_LABELS[ranchEcologyType(moduleId)];
+  return label ? uiText(label) : '';
+}
+function decorateShopCageCard(item, art, name, moduleId) {
+  const cells = productPlacementCells({ moduleId, slotIndex: productGridSlot(10, 10) })?.length ?? 0;
+  item.dataset.cageCard = 'true';
+  item.dataset.cells = String(cells);
+  const badge = element('span', 'cm-vs2-shop__cells');
+  badge.append(hexFootprintIcon(item.ownerDocument, moduleId, 22), element('span', '', uiText('{n} 格', { n: cells })));
+  badge.setAttribute('aria-label', uiText('{n} 格', { n: cells }));
+  art.append(badge);
+  const series = cageSeriesLabel(moduleId);
+  if (series) name.append(element('span', 'cm-vs2-shop__series', series));
+  const effect = cageUiSummary(moduleId);
+  if (effect) {
+    // Each part stays whole on a narrow card; the separator ends the line before a break.
+    const capsule = element('span', 'cm-vs2-shop__effect');
+    const parts = effect.split(' · ');
+    parts.forEach((part, i) => capsule.append(element('span', '', i < parts.length - 1 ? `${part} ·` : part)));
+    name.append(capsule);
+  }
 }
 
 /** 「🔗 可連通：…」 from the ranch's own ecology pairs (Owner 2026-10-27). */

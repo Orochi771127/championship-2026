@@ -67,6 +67,38 @@ real game state (`lifecycle.evolution`, battle snapshots, capture results).
 No fake damage, no fake evolution buttons, no third-party characters or emoji
 in place of game art. Battle rules and AI are unchanged.
 
+## Evolution, cut-in, impact and Dex showcase (Owner 2026-10-28)
+
+| Piece | File |
+|---|---|
+| Evolution / back-to-egg runner (live + preview) | `src/championship/presentation/juicy/cyberMorphEvolutionRunner.js` |
+| Raising hookup (2x native playback, real stat change) | `presentation/juicy/raisingEvolutionCinematic.js`, `app/raisingHomeP1RView.js` |
+| Special cut-in strip + skill capsule (DOM) | `presentation/juicy/skillCutIn.js` |
+| Impact quartet (Pixi, `juicy` option) | `presentation/battleFx/battleFxLayer.js` |
+| Dex motion viewer + preview sandbox | `presentation/juicy/codexShowcaseTheater.js`, `spriteMotionPlayer.js` |
+| Copy (five locales) / styles | `text/juicyShowcaseText.js`, `app/ui/juicyShowcase.css` |
+
+- Every theme except `classic` gets these pieces (`juicyPresentationEnabled`);
+  `classic` keeps the original sequence, callout and dim.
+- **Zero WebGL.** The runner, the cut-in and the Dex sandbox are DOM + Web
+  Animations only: no canvas, no renderer, no `requestAnimationFrame`. The
+  sandbox is one node per Dex screen, reused; closing cancels its beats and
+  animations and drops its images.
+- **Native clock owns evolution.** The arcade runner only lays over it; the app
+  plays the 272 native frames at 2x (`raisingPresentationRate`), a tap asks for
+  6x. Phase counts and the single RNG draw are unchanged. The stat panel shows
+  the real before/after from the `EVOLVED` message, never a guess.
+- **Cut-ins never block.** `pointer-events: none`, 650 ms, the battle keeps
+  stepping. A special's title moves from the Pixi callout to the strip.
+- **Hit-stop is drawing only.** 60 ms on heavy hits: the two fighters hold their
+  drawn frame and the dressing freezes while `source.tick()` continues.
+- **Dex previews are labelled simulations** (`模擬展演`), the one exception to
+  "real events only": they read catalogs, never call an intent and never write
+  the save. A partner that is not REGISTERED, or a route without a completion
+  record, plays as an encrypted signal (cyan outline, hidden names, 🔒 tip).
+- Gate: `tests/championship-codex-showcase-browser.cjs` (10 rounds, context
+  count, storage unchanged) plus `tests/championship-juicy-showcase-cases.mjs`.
+
 ## Ranch camera
 
 The world stays on the 52° layout; the Owner locked the camera at 40°

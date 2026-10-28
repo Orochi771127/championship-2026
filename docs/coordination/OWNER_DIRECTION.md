@@ -11,6 +11,26 @@ Owner directs, without push or deployment: draw the ranch lock-on ring as a grou
 - OWNER_APPROVED_ADAPTATION: a tap adds +1 to the original affection (020) at most once per 10 real minutes; stroll finds (at most 8 per in-game day) and greetings (at most 4 per in-game day, 5 minutes per pair, 30 seconds ranch-wide) pay through the Shop's existing gift path and `raising.nativeHome.strollLog` in one save; a greeting holds two idle or wandering partners in place without drawing native RNG.
 - The product shell turns partner life on; harnesses that build the app directly keep the original frame-for-frame behaviour.
 
+<!-- record-id: JUICY_EVOLUTION_CUTIN_SHOWCASE_20261028 -->
+## 2026-10-28 — Arcade evolution, special cut-in, impact quartet and Dex holo showcase
+
+Owner directs a presentation upgrade over the existing modules:
+
+- a reusable evolution / back-to-egg runner of about 2.2–2.8 s with tap to speed or skip;
+- a non-blocking special-move cut-in strip with a 35 % field dim, and a small capsule for ordinary skills;
+- an "impact quartet" on moves: wind-up, additive contact flash, 60 ms hit-stop, and element-tinted knockback with damage numbers;
+- in the Dex detail, an in-game motion viewer plus special and evolution previews in a sandbox, encrypted for partners and routes not yet completed.
+
+The iOS budget must hold: no new WebGL context, and nothing written to the save.
+
+Recorded as OWNER_APPROVED_ADAPTATION of presentation, for every theme except `classic` (which keeps the original sequence, callout and dim):
+
+- the native evolution keeps its 272-frame phase clock and single RNG draw, and only its wall-clock playback is 2x (6x on a tap);
+- the battle and the arenas never pause, and the cut-in and hit-stop are drawing only;
+- the Dex previews are labelled simulations that read catalogs and call no intent.
+
+The first instruction kept the batch unpushed and undeployed. After review, the Owner directs 「做完後請你自我審查一次,如果沒有問題，就請你commit 跟push並整合至main後發佈」. This authorizes the batch's commit, push, main integration and Pages publication. See the [report](../reports/juicy-showcase-2026-10-28/REPORT_ZH_TW.md).
+
 <!-- record-id: BATTLE_TACTICS_MENU_20261028 -->
 ## 2026-10-28 — Pre-battle plan (作戰方針) menu, ROM-confirmed
 

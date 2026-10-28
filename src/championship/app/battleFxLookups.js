@@ -21,7 +21,7 @@ export function battleFxApprovedMoveName(moveId) {
   return battleMoveName(moveId);
 }
 
-export function createBattleFxLookups({getView, onFeed = null, showIds = false}) {
+export function createBattleFxLookups({getView, onFeed = null, onCutIn = null, showIds = false}) {
   const looks = new Map();
   function describeMove(slot, moveId) {
     if (!Number.isSafeInteger(moveId)) return null;
@@ -57,6 +57,12 @@ export function createBattleFxLookups({getView, onFeed = null, showIds = false})
           : (ultimate ? '{name}發動絕招！' : '{name}使出技能！');
         // The cue tells the record band which line is a signature move, and whose.
         onFeed(uiText(template, {name: nameOfSlot(event.slot), move}), {tier: look.tier, slot: event.slot});
+        // Arcade cut-in (2026-10-28): a signature move's strip, decoration only.
+        if (ultimate && typeof onCutIn === 'function') {
+          const combatant = getView()?.combatants?.[event.slot];
+          onCutIn({slot: event.slot, team: combatant?.team ?? null, speciesId: combatant?.speciesId ?? null,
+            casterName: nameOfSlot(event.slot), moveName: move, palette: look.palette});
+        }
       } else if (event.type === 'KO') {
         onFeed(uiText('{name}倒下了！', {name: nameOfSlot(event.slot)}));
       }
