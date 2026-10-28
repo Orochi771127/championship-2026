@@ -63,3 +63,15 @@ test("the setup guide tells the Owner the exact file and lines for the URL and k
   assert.match(guide, /sb_secret_/);
   assert.match(guide, /001_championship_online\.sql/);
 });
+
+test("review findings: friendships cannot be rewritten, rooms are RPC-only, saves need a known revision, playing rooms expire", () => {
+  assert.doesNotMatch(sql, /create policy "friendships: addressee accepts"/);
+  assert.match(sql, /revoke update on public\.friendships from authenticated;/);
+  assert.doesNotMatch(sql, /create policy "pvp_matches: host insert"/);
+  assert.match(sql, /revoke insert, update, delete on public\.pvp_matches from authenticated;/);
+  assert.match(sql, /p_force boolean default false/);
+  assert.match(sql, /not coalesce\(p_force, false\) and \(p_expected_revision is null or v_row\.server_revision <> p_expected_revision\)/);
+  assert.match(sql, /status in \('open', 'joined', 'ready', 'playing'\) and expires_at < now\(\)/);
+  assert.match(sql, /now\(\) \+ interval '30 minutes'/);
+  assert.match(sql, /public\.upload_cloud_save\(text, text, int, jsonb, text, int, boolean\)/);
+});

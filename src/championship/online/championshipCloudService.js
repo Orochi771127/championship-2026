@@ -54,6 +54,16 @@ export function createChampionshipCloudService({
     return identity;
   }
 
+  /** The identity for the adapter in use. A simulated identity never stands in for a cloud one (and the other way round):
+   * when connectivity or configuration switches the adapter, sign in again and drop the old sync baseline. */
+  async function identityFor() {
+    const a = await adapter();
+    const wantSimulated = a.mode !== SUPABASE_MODE;
+    if (state.identity && (state.identity.simulated === true) === wantSimulated) return state.identity;
+    if (state.identity) emit({ identity: null, lastSync: null, conflict: null, syncState: "LOCAL_ONLY" });
+    return ensureIdentity();
+  }
+
   return Object.freeze({
     get state() { return state; },
     subscribe(fn) { listeners.add(fn); fn(state); return () => listeners.delete(fn); },
@@ -61,7 +71,7 @@ export function createChampionshipCloudService({
     /** The licence badge and the panels read this: never throws. */
     async getIdentitySummary() {
       try {
-        const identity = state.identity ?? await ensureIdentity();
+        const identity = await identityFor();
         return Object.freeze({ mode: state.mode, online: state.online, configured: config.configured, tamerCode: identity?.tamerCode ?? null, isAnonymous: identity?.isAnonymous !== false,
           email: identity?.email ?? null, providers: identity?.providers ?? [], simulated: identity?.simulated === true, syncState: state.syncState, lastSync: state.lastSync });
       } catch (error) {
@@ -79,12 +89,19 @@ export function createChampionshipCloudService({
     /** Uploads the serialized save; a revision mismatch becomes a CHOICE, never an overwrite. */
     async backupNow(saveText, { force = false } = {}) {
       const a = await adapter();
-      if (!state.identity) await ensureIdentity();
+      await identityFor();
       emit({ syncState: "SYNCING" });
       let envelope;
       try { envelope = await buildCloudSaveEnvelope(saveText); } catch (error) { emit({ syncState: "FAILED" }); return Object.freeze({ ok: false, reason: error?.message ?? "ENVELOPE_FAILED" }); }
-      const result = await a.uploadSave(envelope, force ? null : state.lastSync?.serverRevision ?? null);
-      if (result?.ok === false && result.reason === "CONFLICT") { emit({ syncState: "CHOICE", conflict: result }); return result; }
+      const result = await a.uploadSave(envelope, force ? null : state.lastSync?.serverRevision ?? null, { force });
+      if (result?.ok === false && result.reason === "CONFLICT") {
+        // Identical content on both sides is not a conflict: adopt the cloud revision as the baseline.
+        if (result.contentSha256 === envelope.contentSha256) {
+          emit({ syncState: "SYNCED", conflict: null, lastSync: Object.freeze({ serverRevision: result.serverRevision, contentSha256: result.contentSha256, at: result.updatedAt ?? new Date().toISOString(), simulated: state.mode !== SUPABASE_MODE }) });
+          return Object.freeze({ ok: true, serverRevision: result.serverRevision, contentSha256: result.contentSha256, updatedAt: result.updatedAt });
+        }
+        emit({ syncState: "CHOICE", conflict: result }); return result;
+      }
       if (!confirmsSync(result, envelope)) { emit({ syncState: state.online ? "FAILED" : "OFFLINE" }); return Object.freeze({ ok: false, reason: result?.reason ?? "SYNC_UNCONFIRMED", message: result?.message ?? null }); }
       emit({ syncState: "SYNCED", conflict: null, lastSync: Object.freeze({ serverRevision: result.serverRevision, contentSha256: result.contentSha256, at: result.updatedAt ?? new Date().toISOString(), simulated: result.simulated === true }) });
       return result;
@@ -92,24 +109,24 @@ export function createChampionshipCloudService({
     /** Returns the cloud envelope (payload text); the caller validates and writes it through the save port. */
     async restoreFromCloud() {
       const a = await adapter();
-      if (!state.identity) await ensureIdentity();
+      await identityFor();
       const result = await a.downloadSave();
       if (!result?.ok) return Object.freeze({ ok: false, reason: result?.reason ?? "NO_CLOUD_SAVE" });
       emit({ syncState: "SYNCED", conflict: null, lastSync: Object.freeze({ serverRevision: result.serverRevision, contentSha256: result.contentSha256, at: result.updatedAt ?? new Date().toISOString(), simulated: result.simulated === true }) });
       return result;
     },
-    async createTransferCode() { const a = await adapter(); if (!state.identity) await ensureIdentity(); return a.createTransferCode(); },
-    async redeemTransferCode(code) { const a = await adapter(); if (!state.identity) await ensureIdentity(); return a.redeemTransferCode(code); },
+    async createTransferCode() { const a = await adapter(); await identityFor(); return a.createTransferCode(); },
+    async redeemTransferCode(code) { const a = await adapter(); await identityFor(); return a.redeemTransferCode(code); },
 
     async findTamer(code) { const a = await adapter(); return a.findTamer(code); },
-    async listFriends() { const a = await adapter(); if (!state.identity) await ensureIdentity(); return a.listFriends(); },
-    async addFriend(code) { const a = await adapter(); if (!state.identity) await ensureIdentity(); return a.sendFriendRequest(code); },
+    async listFriends() { const a = await adapter(); await identityFor(); return a.listFriends(); },
+    async addFriend(code) { const a = await adapter(); await identityFor(); return a.sendFriendRequest(code); },
     async respondFriendRequest(id, accept) { const a = await adapter(); return a.respondFriendRequest(id, accept); },
     async removeFriend(id) { const a = await adapter(); return a.removeFriend(id); },
-    async setDefenseTeam(team) { const a = await adapter(); if (!state.identity) await ensureIdentity(); return a.setDefenseTeam(team); },
+    async setDefenseTeam(team) { const a = await adapter(); await identityFor(); return a.setDefenseTeam(team); },
     async getFriendDefenseTeam(userId) { const a = await adapter(); return a.getFriendDefenseTeam(userId); },
-    async ladderOpponents(limit = 3) { const a = await adapter(); if (!state.identity) await ensureIdentity(); return a.pickLadderOpponents(limit); },
-    async roomAdapter() { const a = await adapter(); if (!state.identity) await ensureIdentity(); return a; },
+    async ladderOpponents(limit = 3) { const a = await adapter(); await identityFor(); return a.pickLadderOpponents(limit); },
+    async roomAdapter() { const a = await adapter(); await identityFor(); return a; },
     async deleteMyData() { const a = await adapter(); const out = await a.deleteMyData(); emit({ identity: null, syncState: "LOCAL_ONLY", lastSync: null, conflict: null }); return out; },
 
     /** Adapters for the existing future-systems ports (futureSystemsPort.js). */

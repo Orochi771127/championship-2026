@@ -196,9 +196,9 @@ create policy "friendships: participants select" on public.friendships
 drop policy if exists "friendships: requester insert" on public.friendships;
 create policy "friendships: requester insert" on public.friendships
   for insert to authenticated with check ((select auth.uid()) = requester_id and status = 'pending');
+-- Accepting goes through respond_friend_request only. A direct UPDATE policy would let an
+-- addressee rewrite requester_id and forge a friendship with someone who never asked.
 drop policy if exists "friendships: addressee accepts" on public.friendships;
-create policy "friendships: addressee accepts" on public.friendships
-  for update to authenticated using ((select auth.uid()) = addressee_id) with check ((select auth.uid()) = addressee_id);
 drop policy if exists "friendships: participants delete" on public.friendships;
 create policy "friendships: participants delete" on public.friendships
   for delete to authenticated using ((select auth.uid()) in (requester_id, addressee_id));
@@ -207,14 +207,16 @@ create policy "friendships: participants delete" on public.friendships
 drop policy if exists "pvp_matches: participants select" on public.pvp_matches;
 create policy "pvp_matches: participants select" on public.pvp_matches
   for select to authenticated using ((select auth.uid()) in (host_id, guest_id));
+-- Rooms are created and changed only through the RPCs below (no direct INSERT/UPDATE).
 drop policy if exists "pvp_matches: host insert" on public.pvp_matches;
-create policy "pvp_matches: host insert" on public.pvp_matches
-  for insert to authenticated with check ((select auth.uid()) = host_id);
 
 -- Data API 曝光（2026-04-28 起新表不再自動曝光）：讓登入玩家能走 RLS 讀自己的列。
 grant usage on schema public to authenticated;
-grant select, insert, update, delete on public.tamer_profiles, public.tamer_cloud_saves, public.friendships to authenticated;
-grant select, insert on public.pvp_matches to authenticated;
+grant select, insert, update, delete on public.tamer_profiles, public.tamer_cloud_saves to authenticated;
+grant select, insert, delete on public.friendships to authenticated;
+revoke update on public.friendships from authenticated;
+grant select on public.pvp_matches to authenticated;
+revoke insert, update, delete on public.pvp_matches from authenticated;
 revoke all on public.tamer_profiles, public.tamer_cloud_saves, public.friendships, public.pvp_matches from anon;
 
 -- ---------------------------------------------------------------------------
@@ -462,7 +464,7 @@ begin
   if v_uid is null then raise exception 'AUTH_REQUIRED' using errcode = '42501'; end if;
   if p_invite_code is null or octet_length(p_invite_code) > 50000 then return jsonb_build_object('ok', false, 'reason', 'INVITE_CODE_REQUIRED'); end if;
   -- 過期房自動收掉；每人最多 3 個活房
-  update public.pvp_matches set status = 'expired' where host_id = v_uid and status in ('open', 'joined', 'ready') and expires_at < now();
+  update public.pvp_matches set status = 'expired' where host_id = v_uid and status in ('open', 'joined', 'ready', 'playing') and expires_at < now();
   if (select count(*) from public.pvp_matches where host_id = v_uid and status in ('open', 'joined', 'ready', 'playing')) >= 3 then
     return jsonb_build_object('ok', false, 'reason', 'TOO_MANY_OPEN_ROOMS');
   end if;
@@ -537,7 +539,9 @@ begin
   if v_row.reply_code is null then return jsonb_build_object('ok', false, 'reason', 'REPLY_PENDING'); end if;
   if v_row.host_id = v_uid then v_row.host_ready := true; else v_row.guest_ready := true; end if;
   update public.pvp_matches set host_ready = v_row.host_ready, guest_ready = v_row.guest_ready,
-    status = case when v_row.host_ready and v_row.guest_ready then 'playing' else 'ready' end
+    status = case when v_row.host_ready and v_row.guest_ready then 'playing' else 'ready' end,
+    -- A running match holds its slot for at most 30 minutes; both sides report results, but a lost client must not lock the host out.
+    expires_at = case when v_row.host_ready and v_row.guest_ready then now() + interval '30 minutes' else expires_at end
     where id = v_row.id returning * into v_row;
   return jsonb_build_object('ok', true, 'status', v_row.status, 'hostReady', v_row.host_ready, 'guestReady', v_row.guest_ready);
 end;
@@ -604,8 +608,9 @@ end;
 $$;
 
 -- 6h. 雲端存檔：If-Match 式修訂號；修訂不符回 CONFLICT 並附上雲端摘要，前端走「並列選擇」畫面，不自動合併。
+drop function if exists public.upload_cloud_save(text, text, int, jsonb, text, int);
 create or replace function public.upload_cloud_save(
-  p_payload text, p_content_sha256 text, p_game_revision int, p_summary jsonb, p_device_label text, p_expected_revision int
+  p_payload text, p_content_sha256 text, p_game_revision int, p_summary jsonb, p_device_label text, p_expected_revision int, p_force boolean default false
 )
 returns jsonb
 language plpgsql
@@ -619,7 +624,9 @@ begin
   if p_content_sha256 is null or p_content_sha256 !~ '^[0-9a-f]{64}$' then return jsonb_build_object('ok', false, 'reason', 'SHA256_REQUIRED'); end if;
   if encode(extensions.digest(p_payload, 'sha256'), 'hex') <> p_content_sha256 then return jsonb_build_object('ok', false, 'reason', 'SHA256_MISMATCH'); end if;
   select * into v_row from public.tamer_cloud_saves where user_id = v_uid for update;
-  if found and p_expected_revision is not null and v_row.server_revision <> p_expected_revision then
+  -- An existing cloud save is only replaced when the caller knows its revision (If-Match) or says so
+  -- explicitly (p_force). An unknown baseline (new device, reload) is a conflict, never a silent overwrite.
+  if found and not coalesce(p_force, false) and (p_expected_revision is null or v_row.server_revision <> p_expected_revision) then
     return jsonb_build_object('ok', false, 'reason', 'CONFLICT', 'serverRevision', v_row.server_revision, 'contentSha256', v_row.content_sha256,
       'summary', v_row.summary_json, 'deviceLabel', v_row.device_label, 'updatedAt', v_row.updated_at);
   end if;
@@ -734,7 +741,7 @@ begin
     'public.set_defense_team(jsonb)', 'public.get_friend_defense_team(uuid)', 'public.pick_ladder_opponents(int)',
     'public.create_pvp_room(text, int, text)', 'public.join_pvp_room(text)', 'public.submit_pvp_reply(uuid, text)', 'public.set_pvp_ready(uuid)',
     'public.get_pvp_match(uuid)', 'public.report_pvp_result(uuid, jsonb)', 'public.cancel_pvp_room(uuid)',
-    'public.upload_cloud_save(text, text, int, jsonb, text, int)', 'public.download_cloud_save()',
+    'public.upload_cloud_save(text, text, int, jsonb, text, int, boolean)', 'public.download_cloud_save()',
     'public.create_transfer_code()', 'public.redeem_transfer_code(text)', 'public.delete_my_online_data()'
   ] loop
     execute format('revoke all on function %s from public, anon', fn);
@@ -775,7 +782,7 @@ do $$
 begin
   if exists (select 1 from pg_extension where extname = 'pg_cron') then
     perform cron.schedule('championship-expire-rooms', '*/10 * * * *',
-      $job$ update public.pvp_matches set status = 'expired' where status in ('open','joined','ready') and expires_at < now() $job$);
+      $job$ update public.pvp_matches set status = 'expired' where status in ('open','joined','ready','playing') and expires_at < now() $job$);
   end if;
 exception when others then
   raise notice 'pg_cron schedule skipped (%).', sqlerrm;

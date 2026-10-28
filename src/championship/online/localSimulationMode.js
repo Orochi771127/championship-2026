@@ -44,8 +44,9 @@ export function createLocalSimulationAdapter({
     async signInWithEmailOtp() { return result(false, { reason: "CLOUD_NOT_CONFIGURED" }); },
     async signOut() { identity = null; return result(true); },
 
-    async uploadSave(envelope, expectedRevision = null) {
-      if (cloud && expectedRevision !== null && cloud.serverRevision !== expectedRevision)
+    async uploadSave(envelope, expectedRevision = null, { force = false } = {}) {
+      // Same rule as the server: an existing copy is replaced only with its known revision or an explicit force.
+      if (cloud && !force && (expectedRevision === null || cloud.serverRevision !== expectedRevision))
         return result(false, { reason: "CONFLICT", serverRevision: cloud.serverRevision, contentSha256: cloud.contentSha256, summary: cloud.summary, deviceLabel: cloud.deviceLabel, updatedAt: cloud.updatedAt });
       cloud = { ...envelope, serverRevision: (cloud?.serverRevision ?? 0) + 1, updatedAt: now() };
       return result(true, { serverRevision: cloud.serverRevision, contentSha256: cloud.contentSha256, updatedAt: cloud.updatedAt, simulated: true });

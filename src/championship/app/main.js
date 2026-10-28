@@ -2464,7 +2464,7 @@ function onlineService() {
 }
 /** A cloud or transfer-code save replaces the stored text through the save port, then the page reloads to adopt it. */
 async function restoreSaveFromCloud(payload) {
-  const adopted = app.savePort?.adoptExternalText?.(payload) ?? Object.freeze({ ok: false, reason: 'RESTORE_UNAVAILABLE' });
+  const adopted = app.adoptExternalSaveText?.(payload) ?? Object.freeze({ ok: false, reason: 'RESTORE_UNAVAILABLE' });
   if (!adopted.ok) return adopted;
   cloudRestorePending = true;
   recoveryDiagnostics.record('CLOUD_RESTORE', { revision: adopted.revision });

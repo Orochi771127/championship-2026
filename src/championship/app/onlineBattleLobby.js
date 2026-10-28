@@ -49,7 +49,7 @@ export function mountRoomLobby(panel, { service, game, codeLength = 4, start, do
   const input = el("input", "cm-online__input cm-online__input--code"); input.inputMode = "numeric"; input.placeholder = onlineText("roomPlaceholder"); input.maxLength = 6; input.setAttribute("aria-label", onlineText("roomPlaceholder"));
   const cancel = button("leaveRoom", "cm-online__button--ghost"); cancel.hidden = true;
   row.append(create, input, join, cancel);
-  let picker = null, session = null, countdownTimer = null;
+  let picker = null, session = null, countdownTimer = null, reported = false;
   const say = (text, tone = "info") => { status.hidden = !text; status.textContent = text ?? ""; status.dataset.tone = tone; };
   root.append(row, codeBox, status);
   panel.prepend(root);
@@ -72,7 +72,12 @@ export function mountRoomLobby(panel, { service, game, codeLength = 4, start, do
         const tick = () => { const left = Math.max(0, Math.ceil((state.countdownEndsAt - Date.now()) / 1000)); say(left ? onlineText("countdown", { n: left }) : onlineText("starting"), "ok"); if (left) countdownTimer = setTimer(tick, 250); };
         tick(); break;
       }
-      case "playing": say(onlineText("starting"), "ok"); void start(state.prepared); break;
+      case "playing":
+        say(onlineText("starting"), "ok");
+        // The battle result is not tracked yet: settle the room as started-but-unreported so a finished match never keeps its slot
+        // (both sides report the same empty winner, which the server records as finished). Dropping the lobby afterwards is then safe.
+        if (!reported) { reported = true; void session?.report({ winnerId: null, outcome: "UNREPORTED" }); }
+        void start(state.prepared); break;
       case "failed": say(onlineText("roomFailed", { reason: onlineReasonText(state.reason) }), "error"); break;
       case "cancelled": say(onlineText("roomCancelled")); break;
       default: say("");
@@ -82,7 +87,7 @@ export function mountRoomLobby(panel, { service, game, codeLength = 4, start, do
     const ids = picker?.selected ?? [];
     if (!ids.length) { say(onlineText("ownTeamNeeded"), "error"); return; }
     const adapter = await service.roomAdapter();
-    session?.dispose();
+    session?.dispose(); reported = false;
     session = createPvpRoomSession({ adapter, game, codeLength, setTimer, clearTimer });
     session.subscribe(paint);
     if (role === "host") await session.host({ instanceIds: ids });

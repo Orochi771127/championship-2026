@@ -97,9 +97,9 @@ export function createSupabaseAdapter({ library, url, anonKey, sessionStorage = 
     },
     async signOut() { const { error } = await client.auth.signOut(); identity = null; return error ? failure(error) : Object.freeze({ ok: true }); },
 
-    async uploadSave(envelope, expectedRevision = null) {
+    async uploadSave(envelope, expectedRevision = null, { force = false } = {}) {
       return rpc("upload_cloud_save", { p_payload: envelope.payload, p_content_sha256: envelope.contentSha256, p_game_revision: envelope.gameRevision,
-        p_summary: envelope.summary, p_device_label: envelope.deviceLabel, p_expected_revision: expectedRevision });
+        p_summary: envelope.summary, p_device_label: envelope.deviceLabel, p_expected_revision: expectedRevision, p_force: Boolean(force) });
     },
     async downloadSave() { return rpc("download_cloud_save"); },
     async createTransferCode() { return rpc("create_transfer_code"); },

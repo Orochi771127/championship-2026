@@ -80,6 +80,8 @@ test("the local simulation answers every panel in memory: identity, friends, def
   const envelope = await buildCloudSaveEnvelope(JSON.stringify({ schemaVersion: 5, progression: { revision: 1 } }), { deviceLabel: "t" });
   const up = await sim.uploadSave(envelope, null); assert.equal(up.serverRevision, 1);
   assert.equal((await sim.uploadSave(envelope, 0)).reason, "CONFLICT");
+  assert.equal((await sim.uploadSave(envelope, null)).reason, "CONFLICT", "an unknown baseline never overwrites an existing cloud copy");
+  assert.equal((await sim.uploadSave(envelope, null, { force: true })).serverRevision, 2, "only an explicit force replaces it");
   const code = await sim.createTransferCode(); assert.equal(code.ok, true);
   assert.equal((await sim.redeemTransferCode(code.transferCode.toLowerCase())).payload, envelope.payload);
   assert.equal((await sim.redeemTransferCode(code.transferCode)).reason, "TRANSFER_CODE_INVALID");
@@ -195,4 +197,48 @@ test("online copy is complete in five locales and the System menu lists friends 
   for (const locale of ["en", "ja", "th", "vi"]) assert.deepEqual(Object.keys(ONLINE_COPY[locale]).sort(), [...keys].sort(), locale);
   for (const id of ["friends", "account"]) assert.ok(TOOLBAR_PRODUCT_ENTRIES.SYSTEM.some(e => e.id === id && e.action), id);
   assert.ok(TOOLBAR_MENU_GROUPS.SYSTEM.some(group => group.entries.includes("friends") && group.entries.includes("account")));
+});
+
+test("a first backup on a device that has never synced stops at the conflict chooser instead of overwriting", async () => {
+  const sim = createLocalSimulationAdapter({ random: () => 0.5 });
+  const configured = resolveOnlineServiceConfig({ file: { supabaseUrl: PROJECT, supabaseAnonKey: "sb_publishable_x" }, runtime: null });
+  const older = JSON.stringify({ schemaVersion: 5, progression: { revision: 2 } }), newer = JSON.stringify({ schemaVersion: 5, progression: { revision: 90 } });
+  const make = () => createChampionshipCloudService({ config: configured, win: noWin, nav: { onLine: true }, createLocal: () => sim, loadLibrary: async () => { throw new Error("offline"); } });
+  const phone = make(); assert.equal((await phone.backupNow(newer)).ok, true);
+  const laptop = make(); // reload / other device: no lastSync baseline
+  const blocked = await laptop.backupNow(older);
+  assert.equal(blocked.reason, "CONFLICT"); assert.equal(laptop.state.syncState, "CHOICE");
+  assert.equal((await sim.downloadSave()).payload, newer, "the newer cloud save is still there");
+  const same = await make().backupNow(newer); assert.equal(same.ok, true, "identical content adopts the cloud revision");
+  assert.equal((await laptop.backupNow(older, { force: true })).ok, true); assert.equal((await sim.downloadSave()).payload, older);
+});
+
+test("a simulated identity is replaced by a cloud identity when connectivity returns", async () => {
+  const log = [], handlers = {};
+  const win = { addEventListener(type, fn) { handlers[type] = fn; }, removeEventListener() {} }, nav = { onLine: false };
+  const configured = resolveOnlineServiceConfig({ file: { supabaseUrl: PROJECT, supabaseAnonKey: "sb_publishable_x" }, runtime: null });
+  const service = createChampionshipCloudService({ config: configured, win, nav, sessionStorage: createChampionshipOnlineSessionPort({ storage: memoryStorage() }), loadLibrary: async () => fakeLibrary(log) });
+  const offline = await service.getIdentitySummary();
+  assert.equal(offline.simulated, true); assert.equal(offline.mode, "LOCAL_SIMULATION");
+  nav.onLine = true; handlers.online();
+  const online = await service.getIdentitySummary();
+  assert.equal(online.mode, "SUPABASE"); assert.equal(online.simulated, false); assert.ok(log.some(e => e[0] === "anon"), "the cloud session was established");
+  assert.equal((await service.backupNow(JSON.stringify({ schemaVersion: 5, progression: { revision: 1 } }))).ok, true);
+});
+
+test("an imported save must pass Continue's complete validation before it replaces the stored save", async () => {
+  const storage = memoryStorage();
+  const app = createChampionshipStandaloneApp({ storage, catalog, cages: presentation.cages, now: () => "2026-08-28T12:00:00.000Z" });
+  await app.newGame(); app.save();
+  const text = app.persistenceFacade().exportRecovery().text;
+  const broken = JSON.parse(text), inner = JSON.parse(broken.raisingHome);
+  inner.payload.residents = [];
+  broken.raisingHome = JSON.stringify(inner);
+  const before = storage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY);
+  const refused = app.adoptExternalSaveText(JSON.stringify(broken));
+  assert.equal(refused.ok, false); assert.match(refused.reason, /SAVE_NOT_LOADABLE|SAVE_TEXT_INVALID/);
+  assert.equal(storage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY), before, "a refused import leaves the stored save untouched");
+  assert.equal(app.adoptExternalSaveText("not json").ok, false);
+  assert.equal(app.adoptExternalSaveText(text).ok, true);
+  await app.dispose();
 });
