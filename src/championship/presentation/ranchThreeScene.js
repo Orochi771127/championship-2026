@@ -54,6 +54,12 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   if (missing.length) throw Error(`RANCH_3D_MODELS_PENDING:${missing.join(',')}`);
   if (!field.productGrid || field.fold) throw Error('RANCH_3D_PRODUCT_GRID_REQUIRED');
   const renderer = new THREE.WebGLRenderer({ alpha:true, antialias:currentQualityTier()!=='saver', powerPreference:'high-performance' });
+  // Software GL (SwiftShader, llvmpipe) shades every pixel on the CPU: the HD-2D
+  // shader hooks would cost more frame time than they show, so it keeps the
+  // saver look (Owner 2026-10-27 mobile budget). GPUs are unaffected.
+  const softwareRenderer=(()=>{try{const gl=renderer.getContext(),info=gl.getExtension('WEBGL_debug_renderer_info');
+    return /swiftshader|llvmpipe|softpipe|software/i.test(String(gl.getParameter(info?info.UNMASKED_RENDERER_WEBGL:gl.RENDERER)));}catch{return false;}})();
+  renderer.domElement.dataset.softwareRenderer=String(softwareRenderer);
   renderer.setPixelRatio(cappedPixelRatio(currentQualityTier()==='saver'?1:2));
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.NeutralToneMapping;
@@ -601,7 +607,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     // Owner direction: navigation connections are invisible; original bridges and floors remain model geometry.
     signal?.throwIfAborted();
     // After every authored hook is installed: themed glow, glints and sway (not in saver quality).
-    if(currentQualityTier()!=='saver')for(const {object,moduleId} of hd2dPlaced)enhanceCageObject(object,{
+    if(currentQualityTier()!=='saver'&&!softwareRenderer)for(const {object,moduleId} of hd2dPlaced)enhanceCageObject(object,{
       definitionIndex:getCageDefinitionByModuleId(moduleId)?.cageDefinitionIndex??null,time:hd2dTime,
       authored:m=>lavaMaterials.has(m)||dynamicShaders.has(m)});
     hd2dPlaced.length=0;

@@ -35,7 +35,8 @@ menu and opening stay exactly as live main shipped them.
 - Hooks the scene already installed run first. Materials the scene animates
   itself (authored lava, water, wind) take only the static themes (sports,
   spotlight, fog), so motion is never doubled.
-- Saver quality skips the enhancer; reduced motion holds time at 0 (colour and
+- Saver quality and software GL (SwiftShader, llvmpipe: `canvas[data-software-renderer]`)
+  skip the enhancer; reduced motion holds time at 0 (colour and
   glow stay, motion stops). The render loop already pauses while
   `document.hidden`.
 - A string with a newline inside shader text must use `\n`, never a raw line
