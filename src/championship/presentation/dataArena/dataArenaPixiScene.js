@@ -22,6 +22,7 @@ import { mountDataArenaEnvironment, dataArenaEnvironmentFloorOffset } from "./da
 import { mountDataArenaInteractionView } from "./dataArenaInteractionView.js";
 
 import { createDataArenaRelayEffects } from './dataArenaRelayEffects.js';
+import { reviewedReleasePoint, releaseOffset, reviewedIdleBreath, reviewedWinHop, reviewedMoveRate } from './dataArenaReviewedMotion.js';
 import { RELAY_ACTION_PROFILES, relaySequence, relayEffectStyle } from '../../modes/dataArena/dataArenaRelay.js';
 import { RELAY_ROSTER, relayPartner } from '../../modes/dataArena/dataArenaRelayRoster.js';
 
@@ -357,6 +358,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     return {
       role, container, sprite, shadow, ringGfx, scale, controller, hasArt: Boolean(bundle),
       resetAction(){action.clear();reviewedArena?.reset();actionRequest=null;},
+      // Where this body's move is drawn leaving it; null keeps the default hand offset.
+      releasePoint(angle){
+        if(!reviewedArena)return null;
+        const g=motion?.geometry;
+        return reviewedReleasePoint({x:container.position.x+sprite.x,y:container.position.y+sprite.y,angle,roleHeight:ROLE_HEIGHT[role],
+          release:motion?.release,scaleX:sprite.scale.x,scaleY:sprite.scale.y,groundShift:g?.groundShift??0,density:g?.scale??1});
+      },
       setSequence(id, request = null) {
         if (!controller || (sequence === id && actionRequest === request)) return;
         try { controller.setAnimation(id); sequence = id; actionRequest = request; actionElapsed = 0; } catch { /* a missing raw sequence keeps the current pose */ }
@@ -378,11 +386,15 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         this.setSequence(motion?.sequenceId ?? seq, motion?.id ?? null);
         if(reviewedArena){
           if(event)reviewedArena.observe(event);
+          const vx=body.vx??0,vy=body.vy??0;
           const sample=reviewedArena.sample({time:state.time,hp:seq===DATA_ARENA_SEQUENCES.DOWN?0:body.hp,
-            vx:body.vx??0,vy:body.vy??0,facing,hit:seq===DATA_ARENA_SEQUENCES.HIT,
-            attack:seq===DATA_ARENA_SEQUENCES.ATTACK,castId:body.cast?.actionId??null,angle:body.cast?.angle??null});
+            vx,vy,facing,hit:seq===DATA_ARENA_SEQUENCES.HIT,
+            attack:seq===DATA_ARENA_SEQUENCES.ATTACK,castId:body.cast?.actionId??null,angle:body.cast?.angle??null,
+            moveRate:reviewedMoveRate(vx,vy),victory:seq===DATA_ARENA_SEQUENCES.WIN});
           motion=sample;
             scale=applyReviewedArenaPoseScale(sprite,sample,ROLE_HEIGHT[role],sink);
+          // A standing body breathes on its held first walk frame (phase spread per body).
+          if(!reducedMotion&&sample?.action==='move'&&Math.hypot(vx,vy)<2)sprite.scale.y*=reviewedIdleBreath(elapsed,(body.id??0)*0.37);
         } else if (controller && motion) {
           const deltaMS = Math.max(0, motion.elapsedMs - actionElapsed);
           if (deltaMS > 0) controller.update({ deltaMS });
@@ -398,6 +410,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         if(!reviewedArena)sprite.scale.set(cellScale * (facing > 0 ? -1 : 1), cellScale * (1 - sink * 0.5));
         sprite.y = -lift + sink * 30;
         sprite.x = 0;
+        if(reviewedArena&&seq===DATA_ARENA_SEQUENCES.WIN&&!reducedMotion)sprite.y-=reviewedWinHop(elapsed);
         if(currentPlacement){sprite.x+=(facing>0?-1:1)*currentPlacement.offset[0]*cellScale;sprite.y+=currentPlacement.offset[1]*cellScale;}
         // Stage four: a staggered fighter shudders for its hitstun.
         if (body.hitstun > 0 && !reducedMotion) sprite.x += Math.sin(elapsed * 90) * 2.5;
@@ -419,6 +432,19 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   }
   const playerMember = cast.partners.find((member) => member.partnerId === partnerId) ?? cast.partners[0];
   let playerView = createActorView("PLAYER", playerMember, state.player);
+  function casterView(id) {
+    if (id === state.player.id) return playerView;
+    if (id === state.mate?.id) return mateView;
+    if (bossView && id === state.boss?.id) return bossView;
+    return rivalViews.get(id) ?? null;
+  }
+  // Release point of a cast: a reviewed body's mouth or hand, else the default hand offset.
+  const releaseOrigins = new Map();
+  function releaseAt(event) {
+    const point = casterView(event.casterId)?.releasePoint(event.angle);
+    return point ? { ...point, reviewed: true }
+      : { x: event.x + Math.cos(event.angle) * 26, y: event.y - BEAM_ELEVATION + Math.sin(event.angle) * 26, reviewed: false };
+  }
   const playerViews = new Map([[playerMember.partnerId, playerView]]);
   const mateView = createActorView("MATE", cast.mate, state.mate);
   let bossView = null;
@@ -502,6 +528,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     entry.sprite.visible = entry.glow.visible = true;
     entry.glow.visible = rich;
     shots.addChild(entry.sprite); shotGlow.addChild(entry.glow); shotGlow.addChildAt(entry.shadow, 0);
+    entry.origin = releaseOrigins.get(projectile.actionId) ?? null; entry.from = null;
     shotViews.set(projectile.id, entry);
     return entry;
   }
@@ -806,10 +833,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "BRIDGE_LIFTED": bridgeLift = 0; camera.addTrauma(0.25); break;
         case "CAST": if(state.gameMode==='RELAY'){const fx=relayLook(event.moveId,event.team);spawn({x:event.x,y:event.y-BEAM_ELEVATION,texture:textures.ring,tint:fx.tint,scale:.7,scaleTo:.12,life:event.windup,alpha:.65});
             // Charge orb at the hand: grows through the windup, so the release reads before it lands.
-            if(event.moveType!=='LUNGE')spawn({x:event.x+Math.cos(event.angle)*26,y:event.y-BEAM_ELEVATION+Math.sin(event.angle)*26,texture:textures.glow,tint:fx.tint,scale:.12,scaleTo:.5,life:Math.max(.12,event.windup),alpha:.9});}break;
+            if(event.moveType!=='LUNGE'){const at=releaseAt(event);spawn({x:at.x,y:at.y,texture:textures.glow,tint:fx.tint,scale:.12,scaleTo:.5,life:Math.max(.12,event.windup),alpha:.9});}}break;
         case "CAST_RELEASE": {
           if(state.gameMode==='RELAY') {
-            const fx=relayLook(event.moveId,event.team),x=event.x+Math.cos(event.angle)*26,y=event.y-BEAM_ELEVATION+Math.sin(event.angle)*26;
+            const fx=relayLook(event.moveId,event.team),{x,y,reviewed}=releaseAt(event);
+            // Shots of a reviewed body are drawn leaving its mouth or hand, then settle on their path.
+            if(reviewed)releaseOrigins.set(event.actionId,{x,y,born:elapsed});
             spawn({x,y,texture:event.moveType==='LUNGE'?textures.relaySlash:textures.glow,tint:fx.tint,scale:event.moveType==='LUNGE'?.7:.6,scaleTo:.15,life:.19,rotation:event.angle});
             burst(x,y,{count:5,speed:150,angle:event.angle,spread:1.2,tint:fx.tint,texture:fx.texture==='relayCrystal'?textures.shard:textures.spark,life:.22});
             if(fx.tether&&!reducedMotion)tethers.set(event.actionId,{x,y,born:elapsed,tint:fx.tint});
@@ -953,10 +982,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       playerView = playerViews.get(partnerId); playerView.container.visible = true;
       actionEvents.delete(state.player.id);
     }
-    // Actors.
+    // Actors. A relay ends on a short KO pause, not the victory pose: the side
+    // still standing celebrates through it.
+    const relayWinner = state.gameMode === 'RELAY' && state.tournament?.status === 'KO' ? state.tournament.winner : null;
     const playerSeq = player.state === "DOWNED" || player.state === "DEFEATED" ? DATA_ARENA_SEQUENCES.DOWN
       : player.hitFlash > 0 ? DATA_ARENA_SEQUENCES.HIT
-      : state.mode === "VICTORY_POSE" || state.result?.outcome === "VICTORY" ? DATA_ARENA_SEQUENCES.WIN
+      : state.mode === "VICTORY_POSE" || state.result?.outcome === "VICTORY" || relayWinner === 'player' ? DATA_ARENA_SEQUENCES.WIN
       : state.laser.firing || player.cast || player.lunge || player.recovery > 0 ? DATA_ARENA_SEQUENCES.ATTACK
       : Math.hypot(player.vx, player.vy) > 30 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
     const blink = !reducedMotion && player.invulnerable > 0 && player.state !== "DASH" && Math.floor(elapsed * 14) % 2 === 0;
@@ -1003,6 +1034,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         rivalViews.set(rival.id, actorView);
       }
       const seq = rival.hp <= 0 ? DATA_ARENA_SEQUENCES.DOWN : rival.hitFlash > 0 ? DATA_ARENA_SEQUENCES.HIT
+        : relayWinner === 'rival' ? DATA_ARENA_SEQUENCES.WIN
         : rival.cast || rival.lunge || rival.recovery > 0 ? DATA_ARENA_SEQUENCES.ATTACK : Math.hypot(rival.vx, rival.vy) > 30 || rival.dashTimer > 0 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
       actorView.update(dtMs, { x: rival.x, y: rival.y, facing: rival.facing, flash: rival.hitFlash, alpha: rival.invulnerable > 0 ? 0.55 : 1, seq });
       actorView.sprite.tint = statusTint(rival, rival.hitFlash > 0 ? 0xff9a9a : 0xffffff);
@@ -1073,9 +1105,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       entry.sprite.visible = visible; entry.glow.visible = visible && rich; entry.shadow.visible = visible;
       if (!visible) continue;
       const lift = projectile.kind === "TIDE" ? 18 : 12;
-      entry.sprite.position.set(projectile.x, projectile.y - lift);
-      entry.glow.position.set(projectile.x, projectile.y - lift);
-      entry.shadow.position.set(projectile.x, projectile.y);
+      if (entry.origin) { entry.from = [entry.origin.x - projectile.x, entry.origin.y - (projectile.y - lift)]; entry.fromBorn = entry.origin.born; entry.origin = null; }
+      const [ox, oy] = releaseOffset(entry.from, elapsed - entry.fromBorn);
+      entry.sprite.position.set(projectile.x + ox, projectile.y - lift + oy);
+      entry.glow.position.set(projectile.x + ox, projectile.y - lift + oy);
+      entry.shadow.position.set(projectile.x + ox, projectile.y);
       if (projectile.kind === "SHARD") entry.sprite.alpha = 0.55 + 0.45 * clamp(projectile.hp / 26, 0, 1);
       else entry.sprite.alpha = 1;
       if (projectile.kind !== "ORB") entry.sprite.rotation = Math.atan2(projectile.vy, projectile.vx);
@@ -1094,6 +1128,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       }
     }
     for (const [id, tether] of tethers) if (elapsed - tether.born >= 0.45) tethers.delete(id);
+    for (const [id, origin] of releaseOrigins) if (elapsed - origin.born >= 0.5) releaseOrigins.delete(id);
     for (const [id, entry] of shotViews) {
       if (liveShots.has(id)) continue;
       entry.sprite.visible = entry.glow.visible = entry.shadow.visible = false;
