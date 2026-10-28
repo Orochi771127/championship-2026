@@ -1,5 +1,10 @@
 # Championship Owner Direction
 
+<!-- record-id: STORY_RIFT_ONLINE_20261028 -->
+## 2026-10-28 — Noise-rift story theater and Supabase-ready online play (not published)
+
+Owner brief (pasted 2026-10-28): a Digimon-01/03-toned 「網路雜訊裂縫」 story performed Octopath-style on the live ranch with a portrait dialogue layer, and an offline-first online system (guest pass, account binding, cloud backup, friends by tamer code, AI-mirror sparring, room-code and quick-match PvP) that a Supabase URL and publishable key switch on. Decisions recorded in the Owner's session: the running onboarding session kept Phase 3 (tutorial fix, opening/naming/egg rebuild, shipped as PR #103 with its guest-id key and TM code); 密碼對戰 hosts the live 4-digit room and 通訊對戰 hosts quick match / ladder mirror, both reusing the existing deterministic link / password engines; one additional product key `championshipModernSave:onlineSession:v1` holds the cloud auth session and appears only once a cloud is configured and used; local commits only, no push, merge or deploy. OWNER_APPROVED_ADAPTATION of presentation and product features: no gameplay value, save format, battle core or reward change. New folders `src/championship/data` and `src/championship/online`, new dev dependency `@supabase/supabase-js@2.117.3` vendored as a public-program source, SQL and setup guide under `supabase/` and `docs/`. See [report](../reports/story-online-2026-10-28/REPORT_ZH_TW.md).
+
 <!-- record-id: BATTLE_TACTICS_MENU_20261028 -->
 ## 2026-10-28 — Pre-battle plan (作戰方針) menu, ROM-confirmed
 

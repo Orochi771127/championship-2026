@@ -11,7 +11,7 @@ import { formatDateTime } from "../text/locale.js";
 
 export const FRIENDS_DRAWER_OPEN_EVENT = "cm-open-friends-drawer";
 
-export function createFriendsDrawer({ service, doc = globalThis.document, onSpar = null, onSetDefense = null, clipboard = globalThis.navigator?.clipboard ?? null, history = globalThis.history } = {}) {
+export function createFriendsDrawer({ service, doc = globalThis.document, onSpar = null, onSetDefense = null, clipboard = globalThis.navigator?.clipboard ?? null } = {}) {
   if (!service) throw new TypeError("ONLINE_SERVICE_REQUIRED");
   const el = (tag, className, text) => { const node = doc.createElement(tag); if (className) node.className = className; if (text !== undefined) node.textContent = text; return node; };
   const button = (key, extra = "", text = onlineText(key)) => { const b = el("button", `cm-online__button ${extra}`.trim(), text); b.type = "button"; b.dataset.onlineAction = key; return b; };
@@ -36,7 +36,7 @@ export function createFriendsDrawer({ service, doc = globalThis.document, onSpar
   dialog.append(panel);
   doc.body.append(dialog);
 
-  let busy = false, opened = false, historyEntry = false;
+  let busy = false, opened = false;
   const say = (text, tone = "info") => { status.hidden = !text; status.textContent = text ?? ""; status.dataset.tone = tone; };
   const setBusy = value => { busy = value; dialog.dataset.busy = String(value); for (const b of panel.querySelectorAll("button")) if (b !== close) b.disabled = value; };
 
@@ -90,18 +90,16 @@ export function createFriendsDrawer({ service, doc = globalThis.document, onSpar
   close.addEventListener("click", () => closeDrawer());
   dialog.addEventListener("cancel", event => { event.preventDefault(); closeDrawer(); });
   dialog.addEventListener("click", event => { if (event.target === dialog) closeDrawer(); });
-  const onPop = () => { if (opened) { historyEntry = false; closeDrawer(); } };
+  // No history entry of its own: the app's session history guard owns back/popstate,
+  // and a drawer that popped its own entry would step the screen stack back as well.
   function openDrawer() {
     if (opened) return; opened = true; say("");
     if (typeof dialog.showModal === "function") dialog.showModal(); else dialog.setAttribute("open", "");
-    try { history?.pushState?.({ cmFriends: true }, ""); historyEntry = true; globalThis.addEventListener?.("popstate", onPop); } catch { historyEntry = false; }
     void act(async () => {});
   }
   function closeDrawer() {
     if (!opened) return; opened = false;
-    globalThis.removeEventListener?.("popstate", onPop);
     try { if (dialog.open) dialog.close(); } catch { /* closed */ }
-    if (historyEntry) { historyEntry = false; try { history?.back?.(); } catch { /* fine */ } }
   }
   doc.addEventListener(FRIENDS_DRAWER_OPEN_EVENT, openDrawer);
 

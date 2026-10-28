@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: STORY_RIFT_ONLINE_20261028 -->
+**2026-10-28 — 雜訊裂縫故事劇場與線上系統（Supabase Ready，未發布）。** 範圍：牧場上的八方旅人式實機演出（拍檔本體 sprite、聚光、裂縫 VFX、情緒氣泡）＋立繪對話匣，第一章「初遇裂縫」由 📖 裂縫觀測 徽章與系統選單進入；帳號與雲端同步面板、好友與馴獸師名片抽屜、密碼對戰房號大廳、通訊對戰快速配對／天梯鏡像；`supabase/migrations/001_championship_online.sql` 與三分鐘設定指南。未填 Supabase 設定或離線時全部走本地模擬，離線遊玩只有既有儲存鍵。驗證：test:ci 3034 項（兩項既有釘值已更新）、build/validate playtest 通過、隔離埠 Playwright 手機視窗零錯誤。未驗證：真實 Supabase 專案、實機。[報告](reports/story-online-2026-10-28/REPORT_ZH_TW.md)。
+
 <!-- record-id: BATTLE_TACTICS_MENU_20261028 -->
 **2026-10-28 — 賽前作戰方針（ROM 確認）。**
 
