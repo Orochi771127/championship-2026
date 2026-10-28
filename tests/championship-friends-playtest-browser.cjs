@@ -220,6 +220,10 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   if(context){await context.tracing.stop({path:path.join(output,evidence.context+'-trace.zip')});await context.close();}
   evidence.context=label;
   context=await browser.newContext({viewport:{width:390,height:844},locale:'zh-TW',acceptDownloads:true,serviceWorkers:'block'});
+  // Partner life (2026-10-28) pays random stroll finds into the shop inventory on a
+  // wall-clock schedule; this gate asserts byte-exact shop state across swipes and
+  // reloads, so it runs the product with that layer off (the switch main.js honours).
+  await context.addInitScript(()=>{globalThis.__CHAMPIONSHIP_PARTNER_LIFE__=false;});
   await context.tracing.start({screenshots:true,snapshots:true,sources:true});
   await context.route('**/*',async route=>friendsGuardedRoute(async()=>{
    const url=route.request().url();

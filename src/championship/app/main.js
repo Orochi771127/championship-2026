@@ -2852,8 +2852,11 @@ function boot() {
     app = createChampionshipStandaloneApp({
       playtestPolicy: FRIENDS_PLAYTEST_POLICY,
       storage: window.localStorage,
-      // Owner 2026-10-28: moods, stroll finds and greetings on the ranch.
-      partnerLife: true,
+      // Owner 2026-10-28: moods, stroll finds and greetings on the ranch. A QA
+      // harness that must observe an unchanged inventory (the friends playtest
+      // gate's swipe check) sets globalThis.__CHAMPIONSHIP_PARTNER_LIFE__ = false
+      // before this script runs; players never see that switch.
+      partnerLife: globalThis.__CHAMPIONSHIP_PARTNER_LIFE__ !== false,
       huntExpansionLoader: loadHuntExpansionReview,
       catalog: productEntities,
       cages: RAISING_CAGES
