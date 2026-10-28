@@ -275,6 +275,8 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   });
   evidence.activeMenu=null;write();
  }
+ // Owner 2026-10-27: while the dock shows Hunt, Battle, Shop and Database, the System menu does not repeat them.
+ async function dock(entry){const key=page.locator(`button[data-quick-id="${entry}"]`);if(!await key.isVisible())return menu('SYSTEM',entry);await clearCalendar();await key.click();}
  async function saveQuit(){await menu('SYSTEM','saveQuit');await page.locator('#cm-login').waitFor({state:'visible'});}
  async function continueSaved(){await login();await page.locator('#cm-continue').click();await home();}
  async function noOverflow(){assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Mobile document must not overflow');}
@@ -567,7 +569,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   await page.reload({waitUntil:'domcontentloaded'});await continueSaved();await wallet(12000);
   await menu('MANAGEMENT','cageEdit');await screen('CAGE_EDIT');assert.match(await page.locator('.cm-hexworld__land-note').innerText(),/全部土地已開放/,'Reload must restore all purchased land');assert.equal(await page.locator('[data-locked-test-row]').count(),0);await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();
   const afterRows=await saved();assert.equal(afterRows.shop.bits,8000000);assert.deepEqual(afterRows.flags.friendsPlaytest.purchases,[2,3,4,5,6,7,8,9]);assert.equal(afterRows.flags.friendsPlaytest.diamonds,12000);
-  await menu('SYSTEM','shop');await screen('SHOP');
+  await dock('shop');await screen('SHOP');
   let purchase;
   for(const tab of await page.locator('.cm-vs2-shop__tab').all()){
    await tab.click();
@@ -581,11 +583,11 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   assert.equal(digits(await page.locator('.cm-vs2-shop__wallet').innerText()),8000000-purchase.price);
   await shot('05-shop-purchased');await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();
   const afterShop=await saved();assert.equal(afterShop.shop.bits,8000000-purchase.price);assert.notDeepEqual({quantities:afterShop.shop.quantities,cageOwned:afterShop.shop.cageOwned,cageQuantities:afterShop.shop.cageQuantities},{quantities:afterRows.shop.quantities,cageOwned:afterRows.shop.cageOwned,cageQuantities:afterRows.shop.cageQuantities},'Persisted inventory, not just wallet, must change');assert.equal(afterShop.flags.friendsPlaytest.diamonds,12000);
-  await menu('SYSTEM','shop');await screen('SHOP');await page.locator(`.cm-vs2-shop__tab[data-category="${purchase.category}"]`).click();await page.locator('.cm-vs2-shop__row').nth(purchase.cardIndex).click();
+  await dock('shop');await screen('SHOP');await page.locator(`.cm-vs2-shop__tab[data-category="${purchase.category}"]`).click();await page.locator('.cm-vs2-shop__row').nth(purchase.cardIndex).click();
   assert.equal(await page.locator('.cm-vs2-shop__detail-name').innerText(),purchase.itemName);
   const restoredItem=(await page.locator('.cm-vs2-shop__detail-meta').innerText()).replaceAll(',','').match(/\d+/g).map(Number);assert.equal(restoredItem[1],purchase.owned+1,'Purchased item ownership survives reload');
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();
-  await menu('SYSTEM','hunt');await screen('GATE_SELECT');
+  await dock('hunt');await screen('GATE_SELECT');
   const listToggle=page.locator('.cm-vs2-gate3d__toggle');if((await listToggle.innerText()).includes('場地列表'))await listToggle.click();
   let fee=0;
   for(const gate of await page.locator('[data-gate-id]').all()){
