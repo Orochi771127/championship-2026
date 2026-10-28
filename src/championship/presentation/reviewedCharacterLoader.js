@@ -181,7 +181,8 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
       },getSnapshot:()=>current}:null;
       return Object.freeze({...actor,controller,
         nativeFramePresenter:actor.nativeFramePresenter?{...actor.nativeFramePresenter,apply:nativeApply,getSnapshot:()=>current}:null,
-        battleAnimator,reviewedArena:{observe:event=>arenaPlayback.observe(event),reset:()=>arenaPlayback.reset(),sample(state){
+        battleAnimator,reviewedArena:{referenceHeight:[...geometry.values()][0]?.referenceHeight??null,
+          observe:event=>arenaPlayback.observe(event),reset:()=>arenaPlayback.reset(),sample(state){
           const sample=arenaPlayback.sample(state);if(sample.fallbackSequenceId!==undefined){
             current=null;actor.controller?.setAnimation(sample.fallbackSequenceId);restoreBaselineAnchor();return sample;
           }

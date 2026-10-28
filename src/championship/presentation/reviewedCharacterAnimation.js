@@ -144,6 +144,11 @@ export function createReviewedArenaPlayback(document,{reducedMotion=false,native
     return {...hurt.frames[last],frameIndex:last,clipId:hurt.id,complete:true,terminal:true,action:'ko',phase:'KO_HURT_HOLD_NO_APPROVED_KO',direction,actionId:null};
   };
   let cast=null,lastId=-1,direction='D',stateKey=null,start=0,ko=false,hurtStarted=null,hurtDirection='D',wasHurt=false;
+  // Walking advances on an accumulated phase so a cadence (moveRate) change never jumps frames.
+  let movePhaseMs=0,lastTime=null;
+  // An authored release key reports its emitter point only while that key is on screen.
+  const withRelease=(clip,sample)=>({...sample,release:clip.release&&sample.frameIndex===clip.release.frameIndex
+    ?{frameIndex:clip.release.frameIndex,point:clip.release.point}:null});
   return Object.freeze({
     observe(event) {
       if (!['CAST','ULT_CAST','CAST_RELEASE'].includes(event?.type)||!Number.isSafeInteger(event.actionId)||!Number.isFinite(event.t)) return;
@@ -151,13 +156,23 @@ export function createReviewedArenaPlayback(document,{reducedMotion=false,native
       if(event.actionId>lastId) {lastId=event.actionId;cast={id:lastId,startedAt:event.t,releasedAt:null,angle:event.angle,moveId:event.moveId,moveType:event.moveType};}
       if(event.type==='CAST_RELEASE'&&cast?.releasedAt===null) cast.releasedAt=event.t;
     },
-    reset() {cast=null;lastId=-1;stateKey=null;ko=false;hurtStarted=null;wasHurt=false;},
-    sample({time,hp,vx=0,vy=0,facing=1,hit=false,attack=false,castId=null,angle=null}) {
+    reset() {cast=null;lastId=-1;stateKey=null;ko=false;hurtStarted=null;wasHurt=false;movePhaseMs=0;lastTime=null;},
+    sample({time,hp,vx=0,vy=0,facing=1,hit=false,attack=false,castId=null,angle=null,moveRate=1,victory=false}) {
       if(!Number.isFinite(time))throw Error('REVIEWED_ARENA_TIME');
+      const dt=lastTime===null?0:Math.max(0,time-lastTime);lastTime=time;
       if(hp<=0){ko=true;cast=null;}
       else if(ko){ko=false;stateKey=null;} // only actual simulation liveness clears KO
       if(ko)return terminalClip?{...sampleReviewedClip(terminalClip,0,{terminal:true}),terminal:true,action:'ko',phase:'KO_STATIC_HOLD',direction,
         authoredHeading:terminalClip.direction,actionId:null}:hurtHold(direction)??{fallbackSequenceId:15,terminal:true,direction,actionId:null};
+      // Victory faces the camera and plays a 'win' clip once (else the ranged clip), holding its last key.
+      if(victory){
+        cast=null;direction='D';
+        const action=reviewedArenaClip(document,'win','D')?'win':'ranged',clip=reviewedArenaClip(document,action,'D');
+        if(stateKey!=='WIN'){stateKey='WIN';start=time;}
+        if(!clip)return {fallbackSequenceId:33,direction,action:'win',phase:'WIN',actionId:null,release:null};
+        const sample=sampleReviewedClip({...clip,loop:false,neutralReturn:null},reducedMotion?Infinity:(time-start)*1000);
+        return {...withRelease(clip,sample),direction,action,actionId:null,phase:'WIN'};
+      }
       const aim=cast && Number.isFinite(cast.angle)?cast.angle:angle;
       direction=Number.isFinite(aim)&&cast?reviewedDirection(Math.cos(aim),Math.sin(aim),direction)
         :reviewedDirection(vx,vy,Math.abs(vx)+Math.abs(vy)<0.001?direction:facing>0?'R':'L');
@@ -181,12 +196,14 @@ export function createReviewedArenaPlayback(document,{reducedMotion=false,native
       } else if(attack) {action='ranged';holdFirst=false;}
       if(!cast&&action!=='hurt'&&!attack){action='move';}
       const key=action+'/'+direction;
-      if(stateKey!==key){stateKey=key;start=time;}
+      if(stateKey!==key){stateKey=key;start=time;movePhaseMs=0;}
+      else if(action==='move')movePhaseMs+=dt*1000*(Number.isFinite(moveRate)&&moveRate>0?moveRate:1);
       const clip=reviewedArenaClip(document,action,direction);
       if(!clip)return {missing:`arena/${direction}/${action}`,direction,actionId:cast?.id??null};
-      if(action==='move'||(!cast&&attack))elapsed=(time-start)*1000;
+      if(action==='move')elapsed=movePhaseMs;
+      else if(!cast&&attack)elapsed=(time-start)*1000;
       const sample=sampleReviewedClip(clip,reducedMotion?0:Math.max(0,elapsed),{holdFirst});
-      return {...sample,direction,action,actionId:cast?.id??null,phase:cast?(cast.releasedAt===null?'WINDUP':'RELEASE'):action.toUpperCase()};
+      return {...withRelease(clip,sample),direction,action,actionId:cast?.id??null,phase:cast?(cast.releasedAt===null?'WINDUP':'RELEASE'):action.toUpperCase()};
     }
   });
 }

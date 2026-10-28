@@ -622,3 +622,29 @@ test('arenaGroundFromWalk sets put the walking feet of each direction on the piv
   await bundle.dispose();
  }
 });
+
+test('Arena playback extensions for the Data Arena scene: cadence phase, victory hold, release emitter and reference height',async()=>{
+ const d=read('MA05'),walk=reviewedArenaClip(d,'move','D'),ranged=reviewedArenaClip(d,'ranged','D');
+ // moveRate advances an accumulated phase: rate 1 equals elapsed time, a later rate change never jumps back.
+ const p=createReviewedArenaPlayback(d,{nativeFallback:false}),at=(t,rate)=>p.sample({...sampleState,time:t,vy:80,moveRate:rate});
+ at(0,1);assert.equal(at(0.1,1).assetId,sampleReviewedClip(walk,100).assetId);
+ assert.equal(at(0.2,2).assetId,sampleReviewedClip(walk,300).assetId);
+ assert.equal(at(0.3,0.5).assetId,sampleReviewedClip(walk,350).assetId);
+ // Victory: faces D, plays the ranged clip once (no win clip authored) and holds its last key.
+ const v=p.sample({...sampleState,time:1,victory:true}),late=p.sample({...sampleState,time:60,victory:true});
+ assert.deepEqual([v.direction,v.action,v.phase],['D','ranged','WIN']);assert.equal(late.frameIndex,ranged.frames.length-1);
+ assert.equal(p.sample({...sampleState,time:61,hp:0,victory:true}).phase.startsWith('KO'),true);
+ // Release metadata passes through only while its key is on screen; none is authored yet.
+ assert.equal(at(70,1).release,null);
+ const withRelease={...d,clips:d.clips.map(c=>c===ranged?{...c,release:{frameIndex:0,point:[12,-40]}}:c)};
+ const q=createReviewedArenaPlayback(withRelease,{nativeFallback:false});
+ q.observe(cast(1,0));q.observe(cast(1,0.05,'CAST_RELEASE'));
+ const r=q.sample({...sampleState,time:0.05,castId:1,angle:Math.PI/2});
+ assert.equal(r.action,'ranged');assert.deepEqual(r.release,r.frameIndex===0?{frameIndex:0,point:[12,-40]}:null);
+ // The actor exposes the body reference height used by applyReviewedArenaPoseScale.
+ const entry=selection.characters.find(c=>c.displayCode==='MA05'),mock=mockPixi();
+ const bundle=await attachReviewedCharacterAnimation({bundle:baseline(),PIXI:mock.PIXI,speciesId:entry.speciesId,usage:'arena',baseUrl:'http://127.0.0.1:8768/championship.html',fetchImpl:fileFetch});
+ const actor=bundle.createActor({animation:0});assert.ok(actor.reviewedArena.referenceHeight>20&&actor.reviewedArena.referenceHeight<64);
+ assert.equal(actor.reviewedArena.sample({...sampleState,vy:1}).geometry.referenceHeight,actor.reviewedArena.referenceHeight);
+ await bundle.dispose();
+});
