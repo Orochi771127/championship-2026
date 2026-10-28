@@ -538,6 +538,15 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     if (resident) companionCopy.setAttribute("aria-label", uiText("{name}，查看詳細資料", { name: resident.displayName }));
     else companionCopy.removeAttribute("aria-label");
     const entry = resident ? getRosterEntry?.(resident.creatureId) ?? null : null;
+    // Cyber Gachapon metal bloodline: `[時輪] 名字` on the ranch card.
+    if (entry?.bloodline) {
+      const badge = document.createElement("span");
+      badge.className = "cm-gacha-badge";
+      badge.textContent = `[${entry.bloodline.title}]`;
+      badge.style.setProperty("--bloodline", entry.bloodline.color);
+      companionName.prepend(badge, " ");
+      companion.dataset.bloodline = entry.bloodline.family;
+    } else delete companion.dataset.bloodline;
     const species = entry?.identity?.speciesName ?? null;
     companionSpecies.textContent = uiText(species && species !== resident?.displayName ? species : "");
     companionSpecies.hidden = !companionSpecies.textContent;

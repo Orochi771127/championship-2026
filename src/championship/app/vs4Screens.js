@@ -35,6 +35,7 @@ import { getHuntCatalogItem } from '../hunt/loadout/huntEquipmentCatalog.js';
 import { showChoiceDialog } from './uiDialog.js';
 import { prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { isDesktopBrowseLayout } from './portraitFrame.js';
+import { createCyberGachaPanel } from './cyberGachaView.js';
 
 const CATEGORY_LABELS = Object.freeze({
   TRAINING_GOODS: "養成用品",
@@ -202,8 +203,13 @@ export function createShopView({ root, source }) {
   const selectedByCategory = new Map();
   const tabButtons = new Map();
 
+  // OWNER_APPROVED_ADAPTATION 2026-10-29: with the app's gacha frame, the
+  // third tab (still data-category PLUGINS) is the Cyber Gachapon centre.
+  const gachaEnabled = Boolean(block.gacha);
+  let gachaPanel = null;
   for (const category of categories) {
-    const tab = element("button", "cm-vs2-shop__tab", CATEGORY_LABELS[category]);
+    const label = gachaEnabled && category === "PLUGINS" ? "🎰 轉蛋" : CATEGORY_LABELS[category];
+    const tab = element("button", "cm-vs2-shop__tab", label);
     tab.type = "button";
     tab.dataset.category = category;
     tab.setAttribute("role", "tab");
@@ -338,6 +344,26 @@ export function createShopView({ root, source }) {
       tab.dataset.active = category === activeCategory ? "true" : "false";
       tab.setAttribute("aria-selected", category === activeCategory ? "true" : "false");
     }
+    const gachaActive = gachaEnabled && activeCategory === "PLUGINS" && shop.gacha;
+    if (gachaEnabled) {
+      const gachaTab = tabButtons.get("PLUGINS"), tickets = shop.gacha?.tickets ?? 0;
+      gachaTab.dataset.gachaTickets = String(tickets);
+      let badge = gachaTab.querySelector(".cm-gacha-dock-badge");
+      if (!badge) { badge = element("span", "cm-gacha-dock-badge"); badge.setAttribute("aria-hidden", "true"); gachaTab.append(badge); }
+      badge.textContent = `🎫 ${tickets}`;
+      badge.hidden = tickets === 0;
+      shelf.hidden = Boolean(gachaActive);
+      status.hidden = Boolean(gachaActive);
+      root.dataset.gacha = gachaActive ? "open" : "closed";
+      if (gachaActive) {
+        gachaPanel ??= createCyberGachaPanel({ host: body, intents: source.intents });
+        gachaPanel.root.hidden = false;
+        gachaPanel.update(shop.gacha);
+        selectedRow = null;
+        return;
+      }
+      if (gachaPanel) gachaPanel.root.hidden = true;
+    }
 
     const rows = shop.listings.filter((row) => row.category === activeCategory);
     const restoreCardFocus = list.contains(document.activeElement);
@@ -433,6 +459,7 @@ export function createShopView({ root, source }) {
     render: paint,
     dispose() {
       stopBackKeys();
+      gachaPanel?.dispose();
       root.removeEventListener("keydown", onSheetKey, true);
       delete root.dataset.sheet;
       root.replaceChildren();
