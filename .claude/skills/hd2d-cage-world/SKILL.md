@@ -5,16 +5,20 @@ description: HD-2D look for the 36 ranch cage GLBs, series connectivity and seam
 
 # HD-2D cage world
 
-Owner direction 2026-10-27. Cages keep their shipped GLB files; every
-enhancement happens at load time in Three.js memory. The title, logo, main
-menu and opening stay exactly as live main shipped them.
+Owner direction 2026-10-27. Look enhancements happen at load time in Three.js
+memory. Since 2026-10-28 the ground of a cage follows the
+[cage ground standard](../../../docs/art/production/ART_PRODUCTION_CAGE_GROUND_STANDARD_ZH_TW.md):
+GLBs change only through its archived pipeline, never by hand. The title,
+logo, main menu and opening stay exactly as live main shipped them.
 
 ## Where things live
 
 | Concern | File |
 |---|---|
-| Cage GLBs (baked atlas, Draco) | `assets/production/cage/three-20261021/field_cmXX_01.glb` — never rewrite in place |
+| Cage GLBs (baked atlas, Draco, ground map) | `assets/production/cage/three-20261021/field_cmXX_01.glb` — rewrite only through the ground pipeline |
 | Blender pass that produced them | `R:\Projects\Championship2026\cage-diorama-20261025\` (texel AO + ground repaint, 2026-10-26) |
+| Ground pipeline (2026-10-28) | `R:\Projects\Championship2026\cage-ground-20261028\scripts\` (`ground_scan`, `ground_map`, `ground_pack`, `finalize_install.sh`) |
+| Ground map at runtime | `src/championship/presentation/cageGroundMap.js` |
 | Runtime shader enhancer | `src/championship/presentation/cageHd2dEnhancer.js` |
 | Scene wiring, lights, shadows | `src/championship/presentation/ranchThreeScene.js` |
 | Series groups (which cages join) | `src/championship/cage/ranchEcology.js` → `RANCH_ECOLOGY_GROUPS` |
@@ -42,6 +46,17 @@ menu and opening stay exactly as live main shipped them.
 - A string with a newline inside shader text must use `\n`, never a raw line
   break: a syntax error drops the whole ranch to the 2D fallback
   (`CHAMPIONSHIP_RANCH_3D_FALLBACK`). Run `node --check` on the file.
+
+## Ground rules (new or changed cages)
+
+- One plate; zones live in the ground map, never in sheets stacked on the plate.
+  Markings are their own geometry and never occlude the ground's contact shadow.
+- Raised ground (stage, podium, pool rim) has walls, curbs or slopes.
+- The ground map hook runs in every quality tier, after every authored hook and
+  before the enhancer; `getDiagnostics().groundMapsHooked` must equal the cages
+  that declare one.
+- A geometry edit keeps kept vertices bit-exact and remaps support triangles
+  and `tests/fixtures/ranch-v4/*-triangle-remap.json` by exact position.
 
 ## Series and bridges
 
