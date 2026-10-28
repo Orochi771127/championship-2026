@@ -177,8 +177,10 @@ async function alternateAwaitReady(api){
     evidence.assertions.push({choice:target,viewport,boxes});await shot(`choice-${target}-${viewport.width}`);
    }
    await button.focus();assert.equal(await button.evaluate(n=>n===document.activeElement),true);await button.press('Enter');
-   const ceremony=page.locator('.cm-ceremony[data-kind="evolve"]');
-   await ceremony.waitFor({state:'visible',timeout:120000});await ceremony.waitFor({state:'hidden',timeout:10000});
+   // The reveal: the classic ceremony, or the arcade evolution runner that
+   // replaces it (2026-10-28) and plays over the native sequence itself.
+   const ceremony=page.locator('.cm-ceremony[data-kind="evolve"], .cm-morph').first();
+   await ceremony.waitFor({state:'visible',timeout:120000});await ceremony.waitFor({state:'hidden',timeout:20000});
   }
   await page.setViewportSize({width:844,height:390});
   await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="saveQuit"]').click();await page.locator('#cm-login').waitFor({state:'visible'});

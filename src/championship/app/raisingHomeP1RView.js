@@ -466,7 +466,21 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
 
   let lastRevision = -1;
   let lastEventKey = null;
-  let pendingEvolution = null, evolutionCeremony = null, evolutionRun = null, cinematic = null;
+  let pendingEvolution = null, evolutionCeremony = null, evolutionRun = null, cinematic = null, cinematicDeclined = null;
+  // A field load problem (the recovery panel offers retry) belongs to the
+  // player: the arcade runner steps aside so the panel is reachable, and this
+  // evolution finishes with the original sequence and reveal at 1x.
+  function yieldEvolutionCinematic() {
+    if (!evolutionRun) return;
+    const retry = root.querySelector?.('.int-rh2-resident-assets [data-load-action="retry"]');
+    if (!retry || retry.hidden || retry.closest?.('[hidden]')) return;
+    cinematicDeclined = cinematic?.instanceId ?? null;
+    cinematic = null;
+    const run = evolutionRun;
+    evolutionRun = null;
+    run.dispose();
+    presentation.intents.setEvolutionPlayback?.(1);
+  }
   function render(frame) {
     if (disposed || !frame) return;
     discoveryJournal.update(frame);
@@ -576,7 +590,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     // native sequence while it runs (the native phase clock still writes the
     // form), takes the real stat change when it lands and replaces the reveal.
     const evolving=lifecycle?.evolution&&!lifecycle.evolution.choicePending?lifecycle.evolution:null;
-    if(evolving&&!evolutionRun&&!cinematic&&evolutionCinematic?.enabled?.()){
+    if(evolving&&!evolutionRun&&!cinematic&&cinematicDeclined!==evolving.instanceId&&evolutionCinematic?.enabled?.()){
       const member=frame.residents.find(r=>r.creatureId===evolving.instanceId);
       evolutionRun=evolutionCinematic.start({host:root,instanceId:evolving.instanceId,
         fromSpecies:evolving.oldSpecies,toSpecies:evolving.target,fromName:member?.displayName??'',
@@ -584,7 +598,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
         onDone:()=>{evolutionRun=null;}});
       // The last lifecycle message rides along until the next one, so only a
       // message newer than this start belongs to this run.
-      if(evolutionRun){cinematic={instanceId:evolving.instanceId,startKey:eventKey};presentation.intents.setEvolutionPlayback?.(2);}
+      if(evolutionRun){cinematic={instanceId:evolving.instanceId,startKey:eventKey};presentation.intents.setEvolutionPlayback?.(2);yieldEvolutionCinematic();}
     }
     if(cinematic&&event&&(event.kind==='EVOLVED'||event.kind==='REBORN')&&event.instanceId===cinematic.instanceId&&eventKey!==cinematic.startKey){
       evolutionRun?.setStats(event.stats??null);
@@ -593,6 +607,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       cinematic=null;
     }
     if(cinematic&&!lifecycle?.evolution&&!evolutionRun)cinematic=null;
+    if(!lifecycle?.evolution)cinematicDeclined=null;
     // Ceremony (2026-10-15): the new form is revealed once the native
     // evolution sequence has finished and nothing else owns the screen. The
     // native sequence itself (ROM timing, ring/burst cells, writing) is untouched.
@@ -617,6 +632,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   // Loading and tutorial suppression can finish without a new game
   // revision. Observe only their presentation flags, never poll or add a ticker.
   const reconsiderHint = () => updateEntryHint(presentation.getFrame());
+  const loadTroubleObserver = typeof MutationObserver === 'function' ? new MutationObserver(yieldEvolutionCinematic) : null;
+  loadTroubleObserver?.observe(root, { subtree: true, attributes: true, attributeFilter: ['hidden'] });
   const hintObserver = typeof MutationObserver === 'function' ? new MutationObserver(reconsiderHint) : null;
   hintObserver?.observe(fieldHost, { attributes: true, attributeFilter: ['aria-busy', 'data-load-state'] });
   if (root.ownerDocument?.body) hintObserver?.observe(root.ownerDocument.body, { attributes: true, attributeFilter: ['data-tutorial-guide'] });
@@ -668,6 +685,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       root.ownerDocument?.removeEventListener?.('visibilitychange', reconsiderHint);
       evolutionCeremony?.dispose();
       evolutionCeremony = null;
+      loadTroubleObserver?.disconnect();
       evolutionRun?.dispose();
       evolutionRun = null;
       unsubscribe?.();
