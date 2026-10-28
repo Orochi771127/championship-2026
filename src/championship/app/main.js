@@ -2587,6 +2587,9 @@ async function restoreSaveFromCloud(payload) {
 const localSaveText = () => { try { return app.persistenceFacade().exportRecovery().text ?? null; } catch { return null; } };
 /** This device's own tamer code (futureSystemsPort): shown before any online action, and the code a cloud profile adopts. */
 const localTamerCode = () => { try { return futureSystems().social.getTamerCard({ trainerName: app.getOpeningState()?.trainerName ?? '' }).code; } catch { return null; } };
+// The System menu opens often: show the code only once the guest pass exists, so
+// opening it never issues one (no new storage key).
+const issuedTamerCode = () => { try { return typeof createChampionshipGuestIdentityPort({ storage: window.localStorage }).read().text === 'string' ? localTamerCode() : null; } catch { return null; } };
 /** The 數碼通行證 panel's wiring (Owner 2026-10-29); one instance per host (settings, Tamer Info). */
 function createPassportPanel() {
   return createOnlineAccountPanel({ service: onlineService(), confirm: showChoiceDialog, oauthProviders: onlineConfig.oauthProviders,
@@ -2745,7 +2748,7 @@ function systemMenuExtras(menuId, { close }) {
   if (menuId !== 'SYSTEM') return null;
   const block = document.createElement('section'); block.className = 'cm-toolbar__group cm-toolbar__community'; block.dataset.group = 'community';
   block.setAttribute('role', 'group'); block.setAttribute('aria-label', socialText('dockTitle'));
-  const strip = createPassportStrip({ service: onlineService(), oauthProviders: onlineConfig.oauthProviders, role: 'menuitem', fallbackCode: localTamerCode,
+  const strip = createPassportStrip({ service: onlineService(), oauthProviders: onlineConfig.oauthProviders, role: 'menuitem', fallbackCode: issuedTamerCode,
     onProvider: provider => { close(); void startProviderBind(provider); },
     onMore: () => { close(); openSettings(document.querySelector('.cm-toolbar__cell[data-menu-id="SYSTEM"]'), 'data'); } });
   const dock = createSocialLinkDock({ variant: 'menu', role: 'menuitem' });

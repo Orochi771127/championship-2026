@@ -364,6 +364,14 @@ test("showing the passport on Tamer Info or in the System menu never signs in: i
   panel.dispose(); strip.dispose();
 });
 
+test("opening the System menu never issues a guest pass: the strip only reads a code that already exists", () => {
+  const main = fs.readFileSync("src/championship/app/main.js", "utf8");
+  const extras = main.slice(main.indexOf("function systemMenuExtras"), main.indexOf("async function setOwnDefenseTeam"));
+  assert.match(extras, /fallbackCode: issuedTamerCode/);
+  assert.doesNotMatch(extras, /localTamerCode|futureSystems\(\)/);
+  assert.match(main, /const issuedTamerCode = \(\) => \{ try \{ return typeof createChampionshipGuestIdentityPort\(\{ storage: window\.localStorage \}\)\.read\(\)\.text === 'string' \? localTamerCode\(\) : null;/);
+});
+
 test("the passport panel shows the three provider keys and puts the in-app routes first in a Home Screen app", async () => {
   const doc = fakeDocument();
   const service = createChampionshipCloudService({ config: resolveOnlineServiceConfig({ file: {}, runtime: null }), win: noWin, nav: { onLine: true } });
