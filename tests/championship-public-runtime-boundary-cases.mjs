@@ -101,7 +101,8 @@ test('clean PNG derivations retain every pixel-bearing and color chunk byte-for-
 
 test('pinned gameplay data retains all values; derived vendor module has identical executable code',async()=>{
  const recipe=JSON.parse(fs.readFileSync(path.join(root,'docs/contracts/championship/PUBLIC_PROGRAM_SOURCES.v1.json')));
- const descriptors=publicProgramData({root});assert.equal(descriptors.length,45);
+ // 46 since 2026-10-28: the vendored supabase-js UMD build joined pixi as a VENDOR_DOCUMENTATION row.
+ const descriptors=publicProgramData({root});assert.equal(descriptors.length,46);
  for(const row of descriptors)assert.doesNotThrow(()=>assertPublicBytes(row.path,row.bytes,{jsonFields:row.jsonFields}));
  for(const row of recipe.sources.filter(row=>['NATIVE_GAMEPLAY','PRESENTATION_CONTRACT'].includes(row.kind))){
   const selected=descriptors.find(item=>item.path===row.path);assert.deepEqual(selected.bytes,fs.readFileSync(path.join(root,row.path)));

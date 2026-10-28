@@ -137,7 +137,7 @@ export function tamerCompletionPercent(count,total){
  * @param {() => void} [options.onExit]
  */
 export function createTamerInfoView({ root, walletBits = null, tamerRank = null, trainerName=null,
-  titleCount=null,registeredCount=null,battleRecord=null,tamerCard=null,onExit } = {}) {
+  titleCount=null,registeredCount=null,battleRecord=null,tamerCard=null,renderOnline=null,onExit } = {}) {
   if (!root) throw new TypeError("Tamer Info requires a root element");
 
   root.replaceChildren();
@@ -173,6 +173,8 @@ export function createTamerInfoView({ root, walletBits = null, tamerRank = null,
     if (tamerCard.mode === "GUEST") { const guest = document.createElement("span"); guest.className = "cm-tamer-code__guest"; guest.textContent = words.guestPass; card.append(guest); }
     shell.append(card);
   }
+  // Owner 2026-10-28: friends and the account panel open from the licence; the ROM field table below stays as it is.
+  if (typeof renderOnline === "function") renderOnline(shell);
 
   const table = element("dl", "cm-tamer-fields");
   let sourced = 0;

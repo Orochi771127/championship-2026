@@ -43,6 +43,13 @@ export const ALLOWED_CHAMPIONSHIP_EPHEMERAL_KEYS = Object.freeze([
   CHAMPIONSHIP_SESSION_CHECKPOINT_STORAGE_KEY
 ]);
 
+// Online session (Owner 2026-10-28): the auth session of a configured cloud
+// (Supabase) so a guest pass survives a reload. Written only by the online
+// session port in ChampionshipPersistentSavePort, and only once a cloud is
+// configured and the player opens an online feature; offline play never
+// creates it. It holds tokens, never progress.
+export const CHAMPIONSHIP_ONLINE_SESSION_STORAGE_KEY = "championshipModernSave:onlineSession:v1";
+
 export function forbiddenStorageKeyError(key, reason) {
   const error = new Error(`FORBIDDEN_STORAGE_KEY: ${key} (${reason})`);
   error.name = CHAMPIONSHIP_FORBIDDEN_STORAGE_KEY_ERROR;

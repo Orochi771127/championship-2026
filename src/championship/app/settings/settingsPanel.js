@@ -108,6 +108,8 @@ export function createSettingsPanel({
   getSaveStatus = () => null,
   exportBackup = null,
   exportDiagnostics = null,
+  // Owner 2026-10-28: the account & cloud sync panel renders into the 帳號 block.
+  renderAccount = null,
   confirm,
   history = globalThis.history,
   win = globalThis.window
@@ -445,7 +447,8 @@ export function createSettingsPanel({
         viewport.append(summary,values);diagnostics.append(viewport);
       }
       const account = block("帳號");
-      account.append(node("p", "cm-settings__text", "尚未提供帳號登入與雲端同步，這台裝置的資料不會上傳。"));
+      if (typeof renderAccount === "function") renderAccount(account);
+      else account.append(node("p", "cm-settings__text", "尚未提供帳號登入與雲端同步，這台裝置的資料不會上傳。"));
       account.append(node("p", "cm-settings__text", "標示為「帳號偏好」的設定將來可隨帳號同步；目前與「此裝置」設定一樣只保存在本機。"));
       const prefs = block("偏好設定");
       const status = store.status();

@@ -3544,16 +3544,27 @@ export function createChampionshipStandaloneApp({
             nativeProfile: entry.nativeProfile });
         }
         const candidateBook = retainOwnedBookSpecies(registeredSpeciesValue, creature, candidateRaising.collection);
+        // OWNER_APPROVED_ADAPTATION 2026-10-28: a lure -> disable -> rope chain
+        // (and a Clone Rope imprint) pays bonus bits in this same Home save.
+        const comboBits = entries.reduce((sum, entry) => sum + (Number.isSafeInteger(entry.combo?.bits) ? entry.combo.bits : 0), 0);
+        const bonusShop = comboBits > 0 && shop ? createShopRuntime({ snapshot: shop.toSave(), allowRepeatedCages: playtestPolicy?.enabled === true,
+          allItemsVisible: playtestPolicy?.shopOpen === true, progression: progressionContext() }) : null;
+        bonusShop?.creditBits(comboBits, { evidence: 'OWNER_APPROVED_ADAPTATION' }); // capped at the wallet limit
         huntCommitActive = true;
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
             revision: revision + 1, interactionCount, friendsPlaytest, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, raising: candidateRaising,
             registeredSpecies: candidateBook,
-            shop: shop ? shop.toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
+            shop: (bonusShop ?? shop) ? (bonusShop ?? shop).toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),
             huntHistory: projectNativeHuntPersistentSave(huntPersistentState) });
           if (status.phase === "SAVED") {
+            if (bonusShop) {
+              shop = createShopRuntime({ snapshot: bonusShop.toSave(), huntInventory, allowRepeatedCages: playtestPolicy?.enabled === true,
+                allItemsVisible: playtestPolicy?.shopOpen === true, progression: progressionContext() });
+              applyMappedHuntInventoryFromShop(shop, huntInventory); bindShopRuntime();
+            }
             raising = candidateRaising; instanceIdentity = candidateIdentity; revision += 1;
             registeredSpeciesValue = candidateBook;
             if (releasedHomeIds.includes(selectedCreatureId)) selectedCreatureId = null;
@@ -3683,6 +3694,15 @@ export function createChampionshipStandaloneApp({
         dispatch: (command) => app.dispatch(command),
         subscribe: active.subscribeRaisingHome
       });
+    },
+
+    /** Cloud / transfer-code restore (Owner 2026-10-28): the imported text must pass the same complete candidate
+     * validation Continue uses (not only the envelope deserializer) before it may replace the stored save. */
+    adoptExternalSaveText(text) {
+      let save;
+      try { save = deserializeChampionshipModernSave(text); } catch (error) { return Object.freeze({ ok: false, reason: `SAVE_TEXT_INVALID: ${error.message}` }); }
+      try { restoreCandidate(save); } catch (error) { return Object.freeze({ ok: false, reason: `SAVE_NOT_LOADABLE: ${error.message}` }); }
+      return savePort.adoptExternalText(text);
     },
 
     persistenceFacade() {
