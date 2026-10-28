@@ -151,14 +151,17 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
     if (prop.charred) return "BURNT";
     return prop.hp < prop.maxHp*.7 ? "DAMAGED" : "INTACT";
   }
-  function damageProp(prop, amount, events, cause="IMPACT") {
+  function damageProp(prop, amount, events, cause="IMPACT", element=null) {
     if (!prop || prop.destroyed || !(amount>0)) return false;
+    // RELAY cover (2026-10-28): its material's weak elements break it faster.
+    const weak=Boolean(element&&prop.weak?.includes(element));
+    if (weak) amount*=prop.weakScale??1;
     const beforeHp=prop.hp;prop.hp=Math.max(0,prop.hp-amount);prop.hits++;
     if (cause==="FIRE") prop.charred=true;
     const x=(prop.col+prop.width/2)*cell,y=(prop.row+prop.height/2)*cell;
     // Bound impact notifications; continuous beams must not spawn 60 bursts/s.
     const crossedDamageStep=Math.ceil(beforeHp/prop.maxHp*8)!==Math.ceil(prop.hp/prop.maxHp*8);
-    if (prop.hits===1 || crossedDamageStep || prop.hp===0) events?.push({type:"PROP_HIT",id:prop.id,x,y,hp:prop.hp,cause});
+    if (prop.hits===1 || crossedDamageStep || prop.hp===0 || weak) events?.push({type:"PROP_HIT",id:prop.id,x,y,hp:prop.hp,maxHp:prop.maxHp,cause,material:prop.material,weak});
     if (prop.hp===0) {
       prop.destroyed=true;
       for(const i of prop.cells) {terrain[i]=T.GROUND;if(prop.charred)scorch[i]=255;}
@@ -167,13 +170,13 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
     }
     return true;
   }
-  function damagePropsInRadius(x,y,radius,amount,events,cause="IMPACT") {
+  function damagePropsInRadius(x,y,radius,amount,events,cause="IMPACT",element=null) {
     let hit=0;
     for(const prop of props) {
       if(prop.destroyed)continue;
       const nx=Math.max(prop.col*cell,Math.min(x,(prop.col+prop.width)*cell));
       const ny=Math.max(prop.row*cell,Math.min(y,(prop.row+prop.height)*cell));
-      if(Math.hypot(nx-x,ny-y)<=radius && damageProp(prop,amount,events,cause))hit++;
+      if(Math.hypot(nx-x,ny-y)<=radius && damageProp(prop,amount,events,cause,element))hit++;
     }
     return hit;
   }
