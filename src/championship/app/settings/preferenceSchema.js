@@ -69,6 +69,8 @@ const DEFINITIONS = {
   // Presentation-only first-use guidance. No visible settings control; reset
   // accessibility/all preferences also restores the longer first reading.
   raisingHintSeen: { category: "access", scope: "device", type: "boolean", default: false },
+  // Story theater (Owner 2026-10-28): the ranch badge stops pulsing once the first rift chapter was watched or skipped.
+  storyRiftChapter1Seen: { category: "access", scope: "device", type: "boolean", default: false },
   reducedMotion: { category: "access", scope: "device", type: "enum", values: ["system", "on", "off"], default: "system" },
   flashIntensity: { category: "access", scope: "account", type: "enum", values: ["standard", "soft"], default: "standard" },
   highlightMode: { category: "access", scope: "account", type: "enum", values: ["full", "compact"], default: "full" }

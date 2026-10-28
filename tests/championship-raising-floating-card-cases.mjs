@@ -1,4 +1,5 @@
 import {mountRanchDiscoveryJournal} from '../src/championship/app/ranchDiscoveryJournal.js';
+import {mountRanchStoryBadge} from '../src/championship/app/ranchStoryBadge.js';
 import { createTransientHint, consumeRaisingHintDuration, TOOL_HINT_MS } from '../src/championship/app/transientHint.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -61,7 +62,7 @@ class Element extends EventTarget {
 const find=(root,cls)=>root.children.flatMap(n=>[...(n.className?.split(' ').includes(cls)?[n]:[]),...find(n,cls)]);
 async function fixture() {
   const document={createElement:tag=>new Element(tag,document)};
-  const context=vm.createContext({mountRanchDiscoveryJournal,originalCageLocationArt:()=>null,createTransientHint, consumeRaisingHintDuration, TOOL_HINT_MS,document,Date,console,setTimeout,clearTimeout,productFormText,getLocale,getProductExtension,
+  const context=vm.createContext({mountRanchDiscoveryJournal,mountRanchStoryBadge,originalCageLocationArt:()=>null,createTransientHint, consumeRaisingHintDuration, TOOL_HINT_MS,document,Date,console,setTimeout,clearTimeout,productFormText,getLocale,getProductExtension,
     setText:(node,text)=>node.textContent=text,setLabel:(node,key,text)=>node.setAttribute(key,text),uiText:s=>String(s),retranslate:()=>{},
     isNativeRanchLayout:()=>true,assembledHudArt:()=>null,prefersReducedMotion:()=>false,speciesName,raisingMessageText:()=>'',raisingMessageSender:()=>'',downloadSaveBackup:()=>({key:'ok'})});
   vm.runInContext(read('app/raisingHomeP1RView.js').replace(/^import .*;$/gm,'').replace(/export async function /,'async function ')+'\nthis.mount=createRaisingHomeP1RView;',context);

@@ -7,6 +7,18 @@ import { STARTER_NAMES_ZH } from "./zhHant.js";
 
 export const UI_COPY_VI = Object.freeze({
   "RANCH_JOURNAL_TITLE": "Nhật ký khám phá",
+  "STORY_BADGE": "📖 Quan sát khe nứt",
+  "STORY_BADGE_LABEL": "Mở chương truyện: quan sát khe nứt",
+  "STORY_MENU": "Cốt truyện",
+  "STORY_MENU_HINT": "Quan sát khe nứt và câu chuyện Nhiễu",
+  "STORY_AUTO": "Tự động",
+  "STORY_SKIP": "⏭ Bỏ qua",
+  "FRIENDS_MENU": "Bạn bè & thẻ",
+  "FRIENDS_MENU_HINT": "Mã tamer, lời mời kết bạn và giao hữu",
+  "ACCOUNT_MENU": "Tài khoản & đám mây",
+  "ACCOUNT_MENU_HINT": "Thẻ khách, liên kết tài khoản và sao lưu đám mây",
+  "TAMER_OPEN_FRIENDS": "👥 Bạn bè & thẻ tamer",
+  "TAMER_OPEN_ACCOUNT": "☁️ Tài khoản & đồng bộ đám mây",
   "RANCH_JOURNAL_ABOUT": "Bạn đồng hành đi dạo trên các lối nối liền. Cả trang trại tìm được một món quà mỗi 2 giờ, giữ tối đa 12 món, kể cả khi ngoại tuyến. Quà không hết hạn. Thêm đất hoặc bạn đồng hành không làm tăng tốc độ.",
   "RANCH_JOURNAL_EMPTY": "Bạn đồng hành đang thong thả khám phá. Hãy quay lại khi có điều muốn chia sẻ.",
   "RANCH_JOURNAL_NONE": "Bắt đầu tích lũy khám phá khi có bạn đồng hành đã nở sống tại trang trại.",
