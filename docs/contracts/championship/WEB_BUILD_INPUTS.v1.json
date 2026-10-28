@@ -304,6 +304,7 @@
     "src/championship/presentation/intRh2/raisingFieldViewport.js",
     "src/championship/presentation/intRh2/raisingNativeSizing.js",
     "src/championship/presentation/intRh2/raisingZoomInput.js",
+    "src/championship/presentation/juicy/raisingEvolutionCinematic.js",
     "src/championship/presentation/medals/medalFaceTexture.js",
     "src/championship/presentation/medals/medalFrameRuntime.js",
     "src/championship/presentation/medals/medalGeometry.js",
@@ -8714,6 +8715,7 @@
     "src/championship/app/ui/arcadeMotion.css",
     "src/championship/app/ui/ceremony.css",
     "src/championship/app/ui/highlight.css",
+    "src/championship/app/ui/juicyShowcase.css",
     "src/championship/app/ui/loadingWalker.js",
     "src/championship/app/ui/screenLayout.css",
     "src/championship/app/ui/settings.css",
@@ -8887,6 +8889,7 @@
     "src/championship/presentation/battleFx/battleFxCamera.js",
     "src/championship/presentation/battleFx/battleFxEvents.js",
     "src/championship/presentation/battleFx/battleFxLayer.js",
+    "src/championship/presentation/battleFx/battleFxPalettes.js",
     "src/championship/presentation/battleFx/battleFxRecipes.js",
     "src/championship/presentation/battleResultCharacters.js",
     "src/championship/presentation/bm03GroundShadows.js",
@@ -8930,6 +8933,12 @@
     "src/championship/presentation/intRh2/raisingFieldViewport.js",
     "src/championship/presentation/intRh2/raisingNativeSizing.js",
     "src/championship/presentation/intRh2/raisingZoomInput.js",
+    "src/championship/presentation/juicy/codexShowcaseTheater.js",
+    "src/championship/presentation/juicy/cyberMorphEvolutionRunner.js",
+    "src/championship/presentation/juicy/juicyArt.js",
+    "src/championship/presentation/juicy/raisingEvolutionCinematic.js",
+    "src/championship/presentation/juicy/skillCutIn.js",
+    "src/championship/presentation/juicy/spriteMotionPlayer.js",
     "src/championship/presentation/medals/medalFaceTexture.js",
     "src/championship/presentation/medals/medalFrameRuntime.js",
     "src/championship/presentation/medals/medalGeometry.js",
@@ -9072,6 +9081,7 @@
     "src/championship/text/growthStageTerms.js",
     "src/championship/text/interactiveTutorialBattleText.js",
     "src/championship/text/interactiveTutorialPreviewText.js",
+    "src/championship/text/juicyShowcaseText.js",
     "src/championship/text/locale.js",
     "src/championship/text/medalDetailText.js",
     "src/championship/text/onboardingText.js",
@@ -42092,6 +42102,10 @@
         "sha256": "bd6789df1558f5b8749d848f3e84410b0b07603cc71ec9774113141ca07c9069"
       },
       {
+        "path": "src/championship/app/ui/juicyShowcase.css",
+        "sha256": "477f95854af96b05b07c0e4263a43e3cabddd8bc0b5335f53c3a3e0b07a84bea"
+      },
+      {
         "path": "src/championship/app/ui/loadingWalker.js",
         "sha256": "83447e30644a6227636f9e9845562a2c1bc1a21266da8c639ec5bb530e07b930"
       },
@@ -42784,6 +42798,10 @@
         "sha256": "6e89ff8aa431fc6031b7ea8b87229761620a1d3887d98e8cfd2e4ba0e4030316"
       },
       {
+        "path": "src/championship/presentation/battleFx/battleFxPalettes.js",
+        "sha256": "60368c365b8eba411627299a6f648ed7958d5fdaa72b23d0f789410bb30f0e96"
+      },
+      {
         "path": "src/championship/presentation/battleFx/battleFxRecipes.js",
         "sha256": "e018379c4ad2504ae693329f2d7fc4eb682ea223bcc9d3d8f2b1d2795e10fed1"
       },
@@ -42954,6 +42972,30 @@
       {
         "path": "src/championship/presentation/intRh2/raisingZoomInput.js",
         "sha256": "ed564907fee53887838421ab43a00e26d1f86edd6eb8482b69cd356636de8085"
+      },
+      {
+        "path": "src/championship/presentation/juicy/codexShowcaseTheater.js",
+        "sha256": "8805d1085eaedb822eecfb11f235435108102e8cc15d13b1171841bc35165148"
+      },
+      {
+        "path": "src/championship/presentation/juicy/cyberMorphEvolutionRunner.js",
+        "sha256": "262a64a44e16e0833b5429e34eae9597960cd91ae0c838696a75cfe4d17e9b28"
+      },
+      {
+        "path": "src/championship/presentation/juicy/juicyArt.js",
+        "sha256": "042cc8ac19d81931e08f8003f96984ae65c90168d9a4e6cbb0ded84cce34a8e8"
+      },
+      {
+        "path": "src/championship/presentation/juicy/raisingEvolutionCinematic.js",
+        "sha256": "8920b6bb17a3a13b0e912ff13e946d0b9ee4bd411c5716694473a9fcd6600f44"
+      },
+      {
+        "path": "src/championship/presentation/juicy/skillCutIn.js",
+        "sha256": "e1f70ce2520b3a19d803cc59ce77b55f556f5ef09deac1adedcd979359d94da0"
+      },
+      {
+        "path": "src/championship/presentation/juicy/spriteMotionPlayer.js",
+        "sha256": "cc5517e0ade35f9f2467e96e9652aabc4cf59dd82445ed43b53469f28032ed33"
       },
       {
         "path": "src/championship/presentation/medals/medalFaceTexture.js",
@@ -43522,6 +43564,10 @@
       {
         "path": "src/championship/text/interactiveTutorialPreviewText.js",
         "sha256": "c808054b93ee1b94b2c37ae79207de753f4d584b19f0b7dca3b06e08a4e207fa"
+      },
+      {
+        "path": "src/championship/text/juicyShowcaseText.js",
+        "sha256": "51da395bde7d5243ef41fe934204d88deeda0006a1f0aa2b63fa5ac7da590a0a"
       },
       {
         "path": "src/championship/text/locale.js",

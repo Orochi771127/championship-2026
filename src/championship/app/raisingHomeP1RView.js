@@ -88,7 +88,8 @@ function cageName(frame, cageId) {
  * @param {() => void} [options.openRoster] opens the Digimon roster
  */
 export async function createRaisingHomeP1RView({ root, source, mountField, hudArt=null, getRosterEntry=null,
-  renderCreatureDetail=null, openRoster=null, firstRunHint=false, nextHintDuration=consumeRaisingHintDuration } = {}) {
+  renderCreatureDetail=null, openRoster=null, firstRunHint=false, nextHintDuration=consumeRaisingHintDuration,
+  evolutionCinematic=null } = {}) {
   if (!root) throw new TypeError("INT-RH2 P1R view requires a root element");
   const presentation = assertPresentationSource(source);
   if (typeof mountField !== "function") {
@@ -465,7 +466,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
 
   let lastRevision = -1;
   let lastEventKey = null;
-  let pendingEvolution = null, evolutionCeremony = null;
+  let pendingEvolution = null, evolutionCeremony = null, evolutionRun = null, cinematic = null;
   function render(frame) {
     if (disposed || !frame) return;
     discoveryJournal.update(frame);
@@ -571,6 +572,27 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       if(event.kind==='DISAPPEARED')showNotice(uiText('夥伴消失了。'));
     }
     lastEventKey=eventKey;
+    // Arcade evolution (Owner 2026-10-28): the cinematic runner lays over the
+    // native sequence while it runs (the native phase clock still writes the
+    // form), takes the real stat change when it lands and replaces the reveal.
+    const evolving=lifecycle?.evolution&&!lifecycle.evolution.choicePending?lifecycle.evolution:null;
+    if(evolving&&!evolutionRun&&!cinematic&&evolutionCinematic?.enabled?.()){
+      const member=frame.residents.find(r=>r.creatureId===evolving.instanceId);
+      evolutionRun=evolutionCinematic.start({host:root,instanceId:evolving.instanceId,
+        fromSpecies:evolving.oldSpecies,toSpecies:evolving.target,fromName:member?.displayName??'',
+        onSpeed:rate=>presentation.intents.setEvolutionPlayback?.(rate),
+        onDone:()=>{evolutionRun=null;}});
+      // The last lifecycle message rides along until the next one, so only a
+      // message newer than this start belongs to this run.
+      if(evolutionRun){cinematic={instanceId:evolving.instanceId,startKey:eventKey};presentation.intents.setEvolutionPlayback?.(2);}
+    }
+    if(cinematic&&event&&(event.kind==='EVOLVED'||event.kind==='REBORN')&&event.instanceId===cinematic.instanceId&&eventKey!==cinematic.startKey){
+      evolutionRun?.setStats(event.stats??null);
+      // The runner was this form's reveal; the later ceremony would repeat it.
+      if(event.kind==='EVOLVED'&&pendingEvolution?.instanceId===event.instanceId)pendingEvolution=null;
+      cinematic=null;
+    }
+    if(cinematic&&!lifecycle?.evolution&&!evolutionRun)cinematic=null;
     // Ceremony (2026-10-15): the new form is revealed once the native
     // evolution sequence has finished and nothing else owns the screen. The
     // native sequence itself (ROM timing, ring/burst cells, writing) is untouched.
@@ -646,6 +668,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       root.ownerDocument?.removeEventListener?.('visibilitychange', reconsiderHint);
       evolutionCeremony?.dispose();
       evolutionCeremony = null;
+      evolutionRun?.dispose();
+      evolutionRun = null;
       unsubscribe?.();
       unsubscribeHud?.();
       clearTimeout(noticeTimer);

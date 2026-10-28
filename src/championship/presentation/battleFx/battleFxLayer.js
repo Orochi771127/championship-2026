@@ -128,8 +128,21 @@ const DEBRIS = [0x8f8070, 0x6f6152, 0xb0a08c];
 const MOVING_FORMS = new Set(['projectile', 'stream', 'beam', 'area']);
 const FOLLOW_FORMS = new Set(['projectile', 'stream', 'beam']);
 
+/**
+ * The arcade impact quartet (Owner direction 2026-10-28), layered on the
+ * dynamic presentation when `juicy` is on: a 140 ms wind-up squash and glint,
+ * an additive white-core / element-halo contact flash, a 60 ms presentation
+ * hit-stop on heavy hits (the battle keeps stepping; only drawing holds), an
+ * element-tinted hit flash with an 8-12 px knockback, and pooled arcing damage
+ * numbers (critical: 1.4x with an amber star). Specials hand their title to
+ * the DOM cut-in strip, dim the field 35 % for about half a second and close
+ * a charge ring on the caster; ordinary skills get a slanted name capsule.
+ */
+export const BATTLE_FX_JUICY = Object.freeze({windupMs: 140, hitStopMs: 60, capsuleMs: 550, dimStrength: 0.35, dimMs: 520,
+  knockPx: Object.freeze({light: 8, medium: 10, heavy: 12}), numberMs: 820, criticalScale: 1.4, numberPool: 6});
+
 export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, quality = 'balanced', reducedMotion = false, responsiveLayout = false,
-  flashScale = 1, describeMove = () => null, nameOfSlot = () => '', moveNameOf = () => '', text = value => value, seed = 0x51ed}) {
+  flashScale = 1, describeMove = () => null, nameOfSlot = () => '', moveNameOf = () => '', text = value => value, seed = 0x51ed, juicy = false}) {
   const textures = createTextures(PIXI);
   if (!textures) return null;
   const random = battleFxRandom(seed);
@@ -148,8 +161,9 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   const barGfx = new PIXI.Graphics(); barGfx.label = 'battle fx overhead bars';
   const wordLayer = new PIXI.Container({label: 'battle fx words'});
   const calloutLayer = new PIXI.Container({label: 'battle fx callout'});
+  const numberLayer = new PIXI.Container({label: 'battle fx damage numbers'});
   const flashGfx = new PIXI.Graphics(); flashGfx.label = 'battle fx screen flash';
-  screen.addChild(speedGfx, barGfx, wordLayer, calloutLayer, flashGfx);
+  screen.addChild(speedGfx, barGfx, wordLayer, numberLayer, calloutLayer, flashGfx);
 
   const particles = [], particlePool = [];
   const flashes = [], flashPool = [];
@@ -165,6 +179,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   let freshImpacts = [], endings = [];
   let callout = null, dim = null, speed = 0, screenFlash = 0, banner = null;
   let elapsed = 0, created = 0, peak = 0, eventsHandled = 0;
+  // Arcade quartet state (juicy only).
+  const numbers = [], numberPool = [];
+  const capsules = [];
+  let hitStop = null;
+  const quartet = {windups: 0, hitStops: 0, numbers: 0, criticals: 0, capsules: 0, implodes: 0, pillars: 0};
   const anchors = {NATIVE_IMPACT: 0, PROJECTILE_END: 0, BODY_SIDE: 0};
   let lastCtx = null;
 
@@ -189,8 +208,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     flashes.push({sprite, size, life, age: 0});
   }
   /** A ground shock ring: an ellipse on the arena's floor plane. */
-  function spawnRing({x, groundY, radius, tint, life = 340, width = 2.5, alpha = 0.95, delay = 0}) {
-    rings.push({x, y: groundY, radius, tint, life, age: -delay, width, alpha});
+  function spawnRing({x, groundY, radius, tint, life = 340, width = 2.5, alpha = 0.95, delay = 0, implode = false}) {
+    rings.push({x, y: groundY, radius, tint, life, age: -delay, width, alpha, implode});
   }
   /** A short-lived scorch on the ground. */
   function spawnScorch({x, groundY, size, life = 2600}) {
@@ -233,8 +252,65 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   }
   function fxFor(slot) {
     let fx = actorFx.get(slot);
-    if (!fx) { fx = {flash: 0, squash: 0, knock: 0, knockDir: 0}; actorFx.set(slot, fx); }
+    if (!fx) { fx = {flash: 0, squash: 0, knock: 0, knockDir: 0, knockPx: 3, charge: 0, flashTint: 0xffffff, dashTint: null, dashMs: 0}; actorFx.set(slot, fx); }
     return fx;
+  }
+  /** A pooled damage number that arcs away from the hit (juicy). */
+  function spawnNumber({x, y, value, critical = false, dir = 1, tint = 0xffffff}) {
+    if (!Number.isFinite(value) || value <= 0) return;
+    if (numbers.length >= BATTLE_FX_JUICY.numberPool) { const old = numbers.shift(); old.node.visible = false; numberPool.push(old.node); }
+    let node = numberPool.pop();
+    if (!node) {
+      node = new PIXI.Container({label: 'battle fx damage number'});
+      const star = new PIXI.Graphics();
+      const points = [];
+      for (let i = 0; i < 10; i++) { const r = i % 2 ? 9 : 22, a = -Math.PI / 2 + i * Math.PI / 5; points.push(Math.cos(a) * r, Math.sin(a) * r); }
+      star.poly(points).fill({color: 0xffb83d}).stroke({width: 2, color: 0x2a1600});
+      const label = makeText('0', {size: 22, fill: 0xffffff, stroke: 0x05060d, letterSpacing: 0});
+      label.style.stroke = {color: 0x05060d, width: 6, join: 'round'};
+      label.anchor.set(0.5);
+      node.addChild(star, label);
+      node.star = star; node.label = label;
+      numberLayer.addChild(node);
+    }
+    node.visible = true;
+    node.label.text = String(Math.round(value));
+    node.label.style.fill = critical ? 0xffd23f : tint;
+    node.star.visible = critical;
+    node.position.set(x, y);
+    numbers.push({node, x, y, vx: dir * (34 + random() * 22), vy: -230 - random() * 40, age: 0, life: BATTLE_FX_JUICY.numberMs,
+      base: critical ? BATTLE_FX_JUICY.criticalScale : 1});
+    quartet.numbers++;
+    if (critical) quartet.criticals++;
+  }
+  /** The 550 ms slanted move-name capsule over an ordinary skill's caster. */
+  function spawnCapsule({slot, content, palette}) {
+    if (!content) return;
+    if (capsules.length >= 3) { const old = capsules.shift(); old.node.destroy({children: true}); }
+    const node = new PIXI.Container({label: 'battle fx skill capsule'});
+    const bg = new PIXI.Graphics();
+    const label = makeText(content, {size: 13, fill: 0x05060d, stroke: palette.core, letterSpacing: 0});
+    label.style.stroke = {color: 0xffffff, width: 2, join: 'round'};
+    label.anchor.set(0.5);
+    const w = label.width + 22, h = label.height + 6, skew = 6;
+    bg.poly([-w / 2 + skew, -h / 2, w / 2 + skew, -h / 2, w / 2 - skew, h / 2, -w / 2 - skew, h / 2]).fill({color: palette.main}).stroke({width: 2, color: 0x05060d});
+    node.addChild(bg, label);
+    calloutLayer.addChild(node);
+    capsules.push({node, slot, age: 0, life: BATTLE_FX_JUICY.capsuleMs});
+    quartet.capsules++;
+  }
+  /** Support/heal: a vertical light pillar and rising geometric motes (juicy). */
+  function pillar({x, groundY, height, palette}) {
+    const sprite = flashPool.pop() ?? new PIXI.Sprite(textures.flash);
+    sprite.texture = textures.flash; sprite.anchor.set(0.5, 1); sprite.blendMode = 'add'; sprite.tint = palette.main; sprite.visible = true;
+    sprite.position.set(x, groundY);
+    if (!sprite.parent) flashLayer.addChild(sprite);
+    flashes.push({sprite, size: 1, life: 520, age: 0, pillar: {w: 26 / 64, h: height / 64}});
+    for (let i = 0; i < (rich ? 10 : 5); i++) {
+      spawnParticle({x: x + (random() - 0.5) * 22, y: groundY - random() * 8, vx: (random() - 0.5) * 10, vy: -60 - random() * 70, life: 700 + random() * 300,
+        texture: i % 2 ? textures.spark : textures.dot, tint: i % 3 ? palette.main : palette.core, scale: 1.4, scaleTo: 0.4, gravity: -40, drag: 0.6, rotation: Math.PI / 2});
+    }
+    quartet.pillars++;
   }
 
   function makeText(content, {size, fill = 0xffffff, stroke = 0x101418, weight = '900', letterSpacing = 1}) {
@@ -361,13 +437,28 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         // Power gathered at the attacker's feet: a ground ring and kicked-up dust.
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.75, tint: palette.main, life: 420});
         dust({x: info.x, groundY: info.groundY, count: rich ? 5 : 3, spread: info.width * 0.4});
-        showCallout({team: info.team, name: nameOfSlot(event.slot), move: moveNameOf(event.moveId, look), tier: look.tier, palette});
+        if (juicy) {
+          // Wind-up: squash and a glint on the caster; melee dashes leave
+          // afterimages in the move's colour. Specials hand their title to the
+          // DOM cut-in strip; ordinary skills get the capsule over the head.
+          const caster = fxFor(event.slot);
+          caster.charge = 1;
+          caster.flash = Math.max(caster.flash, 0.35); caster.flashTint = palette.core;
+          if (look.form === 'melee') { caster.dashTint = palette.main; caster.dashMs = 700; }
+          spawnFlash({x: info.x, y: info.top + info.height * 0.4, tint: palette.core, size: info.width * 0.9, life: 160});
+          quartet.windups++;
+          if (look.tier === 'ultimate') {
+            spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 1.2, tint: palette.core, life: 420, width: 3.5, implode: true});
+            quartet.implodes++;
+          } else spawnCapsule({slot: event.slot, content: moveNameOf(event.moveId, look) || text('技能'), palette});
+        } else showCallout({team: info.team, name: nameOfSlot(event.slot), move: moveNameOf(event.moveId, look), tier: look.tier, palette});
         const director = ctx.camera?.director;
         if (look.tier === 'ultimate') {
           spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 1.3, tint: palette.core, life: 560, delay: 140});
           spawnScorch({x: info.x, groundY: info.groundY, size: info.width * 0.9, life: 2200});
           debris({x: info.x, y: info.groundY, groundY: info.groundY, count: rich ? 6 : 3, palette, power: 0.6});
-          dim = {focus: new Set([event.slot]), age: 0, life: 1150, strength: 0.45};
+          dim = juicy ? {focus: new Set([event.slot]), age: 0, life: BATTLE_FX_JUICY.dimMs, strength: BATTLE_FX_JUICY.dimStrength}
+            : {focus: new Set([event.slot]), age: 0, life: 1150, strength: 0.45};
           speed = reducedMotion ? 0 : 1;
           // Push in on the attacker, then pull out to show the whole path.
           director?.sequence([{slots: [event.slot], durationMs: 650, boost: 0.38}, {slots: [event.slot, ...ctx.opponentsOf(event.slot)], durationMs: 1100, boost: -0.05}]);
@@ -393,6 +484,19 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const fx = fxFor(event.slot);
         fx.flash = 1; fx.squash = tier === 'heavy' ? 1 : tier === 'medium' ? 0.7 : 0.4;
         fx.knock = tier === 'heavy' ? 1 : 0.6; fx.knockDir = attacker ? Math.sign(target.x - attacker.x) || -target.facing : -target.facing;
+        if (juicy) {
+          // White first, then the move's element on the rim; the knock follows the hit.
+          fx.flashTint = palette.main; fx.knock = 1; fx.knockPx = BATTLE_FX_JUICY.knockPx[tier];
+          // Contact: a saturated halo under a white-hot core (additive), readable on dark and pale floors.
+          spawnFlash({x: hit.x, y: hit.y, tint: palette.main, size: (tier === 'heavy' ? 46 : 30) * 1.9, life: tier === 'heavy' ? 210 : 150});
+          if (tier === 'heavy' && !reducedMotion) {
+            hitStop = {ms: BATTLE_FX_JUICY.hitStopMs, slots: new Set([event.slot, event.attackerSlot].filter(s => s !== null && s !== undefined))};
+            quartet.hitStops++;
+          }
+          const p = toScreen(ctx, hit.x, target.top);
+          spawnNumber({x: p.x, y: p.y, value: event.damage, critical, dir: fx.knockDir || 1,
+            tint: target.team === ctx.localTeam ? 0xffd0c8 : 0xffffff});
+        }
         // At the contact point: a flash and sparks that fall to the target's ground.
         spawnFlash({x: hit.x, y: hit.y, tint: palette.core, size: tier === 'heavy' ? 46 : 30, life: tier === 'heavy' ? 170 : 120});
         sparks({x: hit.x, y: hit.y, count: tier === 'heavy' ? (rich ? 22 : 10) : tier === 'medium' ? (rich ? 12 : 6) : 6, palette,
@@ -425,9 +529,13 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const palette = event.type === 'HEAL' ? BATTLE_FX_PALETTES.nature : BATTLE_FX_PALETTES.light;
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.9, tint: palette.main, life: 560});
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.6, tint: palette.core, life: 480, delay: 120});
+        if (juicy) pillar({x: info.x, groundY: info.groundY, height: info.height * 1.6 + 24, palette});
         if (event.type === 'HEAL') {
           const p = toScreen(ctx, info.x, info.top);
-          word({screenX: p.x, screenY: p.y - 6, content: text('回復'), size: 15, fill: 0x9cff7a, life: 800});
+          word({screenX: p.x, screenY: p.y - 6, content: juicy ? `▲ ${text('回復')}` : text('回復'), size: 15, fill: 0x9cff7a, life: 800});
+        } else if (juicy) {
+          const p = toScreen(ctx, info.x, info.top);
+          word({screenX: p.x, screenY: p.y - 6, content: '▲', size: 18, fill: palette.main, life: 700});
         }
         continue;
       }
@@ -479,6 +587,14 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       const pts = entry.points;
       for (let i = 1; i < pts.length; i++) {
         const t = i / (pts.length - 1);
+        if (juicy) {
+          // A saturated glow under a white core: the trail reads on any floor.
+          trailGfx.moveTo(pts[i - 1].x, pts[i - 1].y).lineTo(pts[i].x, pts[i].y);
+          trailGfx.stroke({width: Math.max(1.5, 8 * t), color: entry.palette.main, alpha: 0.28 * t, cap: 'round'});
+          trailGfx.moveTo(pts[i - 1].x, pts[i - 1].y).lineTo(pts[i].x, pts[i].y);
+          trailGfx.stroke({width: Math.max(0.5, 2 * t), color: 0xffffff, alpha: 0.55 * t, cap: 'round'});
+          continue;
+        }
         trailGfx.moveTo(pts[i - 1].x, pts[i - 1].y).lineTo(pts[i].x, pts[i].y);
         trailGfx.stroke({width: Math.max(0.6, 3 * t), color: entry.palette.main, alpha: 0.35 * t, cap: 'round'});
       }
@@ -494,6 +610,10 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     handle(events, ctx);
     settleEndings();
     drawStreaks();
+    // Hit-stop (juicy): the dressing holds for 60 ms; the battle keeps stepping
+    // underneath and the scene holds the two fighters' drawn frames.
+    const realMs = dtMs;
+    if (hitStop) dtMs = 0;
     const dt = dtMs / 1000;
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];
@@ -518,6 +638,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       f.age += dtMs;
       if (f.age >= f.life) { f.sprite.visible = false; flashPool.push(f.sprite); flashes.splice(i, 1); continue; }
       const k = f.age / f.life;
+      if (f.pillar) {
+        f.sprite.scale.set(f.pillar.w * (1 - 0.5 * k), f.pillar.h * easeOut(Math.min(1, k * 2.5)));
+        f.sprite.alpha = 0.85 * (1 - k * k);
+        continue;
+      }
       f.sprite.scale.set(f.size * (0.7 + 0.5 * easeOut(k)) / 64);
       f.sprite.alpha = 1 - k;
     }
@@ -533,8 +658,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       r.age += dtMs;
       if (r.age >= r.life) { rings.splice(i, 1); continue; }
       if (r.age < 0) continue;
-      const k = easeOut(r.age / r.life), radius = r.radius * (0.2 + k);
-      groundGfx.ellipse(r.x, r.y, radius, radius * 0.34).stroke({width: r.width * (1 - k * 0.6), color: r.tint, alpha: r.alpha * (1 - k)});
+      const k = easeOut(r.age / r.life), radius = r.implode ? r.radius * (1.7 - 1.45 * k) : r.radius * (0.2 + k);
+      groundGfx.ellipse(r.x, r.y, radius, radius * 0.34).stroke({width: r.width * (1 - k * 0.6), color: r.tint, alpha: r.alpha * (r.implode ? 0.4 + 0.6 * (1 - k) : 1 - k)});
     }
     // Team rings at each fighter's feet (Owner 2026-10-28): green / cyan for the
     // local side, red / orange for the other, so a clinch still reads as two
@@ -565,15 +690,44 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       fx.flash = Math.max(0, fx.flash - dtMs / 120);
       fx.squash = Math.max(0, fx.squash - dtMs / 180);
       fx.knock = Math.max(0, fx.knock - dtMs / 220);
+      fx.charge = Math.max(0, fx.charge - dtMs / BATTLE_FX_JUICY.windupMs);
+      fx.dashMs = Math.max(0, fx.dashMs - dtMs);
+      if (fx.flash === 0) fx.flashTint = 0xffffff;
     }
     if (dim) { dim.age += dtMs; if (dim.age >= dim.life) dim = null; }
     speed = Math.max(0, speed - dtMs / 700);
     screenFlash = Math.max(0, screenFlash - dtMs / 160);
+    if (hitStop) { hitStop.ms -= realMs; if (hitStop.ms <= 0) hitStop = null; }
   }
 
   /** Screen-space dressing after the camera is known. */
   function updateScreen({viewport, view, ctx, dtMs}) {
     lastCtx = ctx;
+    if (juicy) {
+      const stepMs = hitStop ? 0 : dtMs, dt = stepMs / 1000;
+      for (let i = numbers.length - 1; i >= 0; i--) {
+        const n = numbers[i];
+        n.age += stepMs;
+        if (n.age >= n.life) { n.node.visible = false; numberPool.push(n.node); numbers.splice(i, 1); continue; }
+        n.vy += 640 * dt; n.x += n.vx * dt; n.y += n.vy * dt;
+        const k = n.age / n.life, pop = reducedMotion ? 1 : n.age < 110 ? lerp(1.7, 1, n.age / 110) : 1;
+        n.node.position.set(clamp(n.x, 18, viewport.width - 18), clamp(reducedMotion ? n.y - n.age * 0.03 : n.y, 18, viewport.height - 12));
+        n.node.scale.set(n.base * pop);
+        n.node.alpha = k > 0.7 ? (1 - k) / 0.3 : 1;
+        if (n.node.star.visible) n.node.star.rotation += dt * 2.4;
+      }
+      for (let i = capsules.length - 1; i >= 0; i--) {
+        const c = capsules[i];
+        c.age += stepMs;
+        const info = ctx.slotInfo?.(c.slot);
+        if (c.age >= c.life || !info) { c.node.destroy({children: true}); capsules.splice(i, 1); continue; }
+        const p = toScreen(ctx, info.x, info.top), k = c.age / c.life;
+        const halfW = c.node.width / 2 + 4;
+        c.node.position.set(clamp(p.x, halfW, Math.max(halfW, viewport.width - halfW)), Math.max(16, p.y - 16 - (reducedMotion ? 0 : 10 * easeOut(k))));
+        c.node.scale.set(reducedMotion ? 1 : c.age < 90 ? lerp(0.6, 1.08, c.age / 90) : c.age < 140 ? lerp(1.08, 1, (c.age - 90) / 50) : 1);
+        c.node.alpha = k > 0.8 ? (1 - k) / 0.2 : 1;
+      }
+    }
     barGfx.clear();
     for (const combatant of view.combatants) {
       if (!combatant.present) continue;
@@ -712,9 +866,23 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       const fx = actorFx.get(slot);
       if (!fx) return null;
       const wave = Math.sin(elapsed / 28);
+      if (juicy) {
+        // Wind-up squash (1.12 x 0.88 at its peak) eases out over 140 ms; the
+        // knock is an eased 8-12 px push along the hit with a small shiver.
+        const windup = reducedMotion ? 0 : Math.sin(Math.min(1, 1 - fx.charge) * Math.PI) * (fx.charge > 0 ? 1 : 0);
+        const push = easeOut(fx.knock);
+        return {flash: fx.flash, flashTint: fx.flashTint,
+          squashX: 1 + fx.squash * 0.1 + windup * 0.12, squashY: 1 - fx.squash * 0.08 - windup * 0.12,
+          offsetX: reducedMotion ? 0 : push * fx.knockDir * fx.knockPx + fx.knock * wave * 1.2};
+      }
       return {flash: fx.flash, squashX: 1 + fx.squash * 0.1, squashY: 1 - fx.squash * 0.08,
         offsetX: reducedMotion ? 0 : fx.knock * fx.knockDir * 3 + fx.knock * wave * 1.2};
     },
+    /** Juicy hit-stop: whether this slot's drawn frame should hold this frame. */
+    holdFor(slot) { return Boolean(hitStop?.slots.has(slot)); },
+    hitStopActive: () => Boolean(hitStop),
+    /** Afterimage colour while a melee move's dash is live (juicy), else null. */
+    ghostTint(slot) { const fx = actorFx.get(slot); return juicy && fx?.dashMs > 0 ? fx.dashTint : null; },
     /** Brightness 0..1 the scene multiplies into a slot (null: background). */
     brightnessFor(slot) {
       if (!dim) return 1;
@@ -723,12 +891,15 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     },
     getDiagnostics: () => Object.freeze({particles: particles.length, peakParticles: peak, created, cap, flashes: flashes.length,
       rings: rings.length, scorches: scorches.length, words: words.length, ghosts: ghosts.length, tracked: tracked.size, eventsHandled,
-      hitAnchors: {...anchors}, callout: callout ? {tier: callout.tier, age: callout.age} : null, banner: banner ? banner.node.text : null, dim: Boolean(dim)}),
+      hitAnchors: {...anchors}, callout: callout ? {tier: callout.tier, age: callout.age} : null, banner: banner ? banner.node.text : null, dim: Boolean(dim),
+      dimStrength: dim?.strength ?? null, juicy, quartet: {...quartet, numbersLive: numbers.length, capsulesLive: capsules.length, hitStop: Boolean(hitStop)}}),
     dispose() {
-      for (const node of [scorchLayer, groundGfx, ghostLayer, trailGfx, particleLayer, flashLayer, speedGfx, barGfx, wordLayer, calloutLayer, flashGfx]) {
+      for (const node of [scorchLayer, groundGfx, ghostLayer, trailGfx, particleLayer, flashLayer, speedGfx, barGfx, wordLayer, numberLayer, calloutLayer, flashGfx]) {
         node.parent?.removeChild(node);
         node.destroy({children: true});
       }
+      numbers.length = capsules.length = numberPool.length = 0;
+      hitStop = null;
       for (const sprite of [...particlePool, ...flashPool, ...ghostPool]) if (!sprite.destroyed) sprite.destroy();
       for (const texture of [textures.flash, textures.dust, textures.spark, textures.dot, textures.scorch, ...textures.debris]) texture.destroy(true);
       particles.length = flashes.length = ghosts.length = scorches.length = rings.length = words.length = 0;
