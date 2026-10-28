@@ -1,0 +1,1002 @@
+{
+  "schemaVersion": 1,
+  "tool": "scripts/encode-web-art.py",
+  "tiers": [
+    92,
+    95,
+    98
+  ],
+  "gate": {
+    "measuredOver": "mid grey composite",
+    "minPsnrDb": 34.0,
+    "minLumaSsim": 0.99,
+    "alpha": "exact"
+  },
+  "files": [
+    {
+      "source": "assets/production/database-display-20261018/species-008.display.c7e821ac38dbdfe5.webp",
+      "sourceSha256": "c7e821ac38dbdfe5cd61c53b0621a71298fa5bf83ff02a724bbbaa8a87a7e515",
+      "sourceBytes": 433784,
+      "output": "assets/production/database-display-web-20261029/species-008.display.1b8b25930a43b59c.webp",
+      "sha256": "1b8b25930a43b59ca1ab14b47f7a4d3d1bd1dc3ff6ec54681ae82d2363569a0d",
+      "bytes": 152680,
+      "quality": 92,
+      "psnr": 38.2,
+      "ssim": 0.996
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-009.display.c44505ca55df7bfc.webp",
+      "sourceSha256": "c44505ca55df7bfc7748de14b8580d036713310434ecf8275c699da0f8f6c9d9",
+      "sourceBytes": 541932,
+      "output": "assets/production/database-display-web-20261029/species-009.display.e9e51b185e7e1235.webp",
+      "sha256": "e9e51b185e7e1235f5b1335d65349170a9127858ec983c1e132d0975831023c7",
+      "bytes": 162748,
+      "quality": 92,
+      "psnr": 39.7,
+      "ssim": 0.9941
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-010.display.e0ef8326a7a259fd.webp",
+      "sourceSha256": "e0ef8326a7a259fd87c1400302bce0262348ef27ac3d7b406309d7a5f3a2cf0a",
+      "sourceBytes": 428828,
+      "output": "assets/production/database-display-web-20261029/species-010.display.efb8c0740a5097ee.webp",
+      "sha256": "efb8c0740a5097eeff3c0a6092c94b256a593036a46f0272e8ef693bd121140e",
+      "bytes": 117626,
+      "quality": 92,
+      "psnr": 40.72,
+      "ssim": 0.9926
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-015.display.d709951c669e4734.webp",
+      "sourceSha256": "d709951c669e473451da0bc245052aa1de0347a99bc31046840d4a5e41de340e",
+      "sourceBytes": 370412,
+      "output": "assets/production/database-display-web-20261029/species-015.display.d68d81e66c75401d.webp",
+      "sha256": "d68d81e66c75401ded7a9a2b59c9cdfc488cd640cb2faa8b7582aab43522ae80",
+      "bytes": 125586,
+      "quality": 92,
+      "psnr": 39.75,
+      "ssim": 0.9954
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-028.display.18bcbbb101e7d7fd.webp",
+      "sourceSha256": "18bcbbb101e7d7fd2ace8fe7a924812b0c9cb01b60927bf7e56834c15adaab92",
+      "sourceBytes": 333636,
+      "output": "assets/production/database-display-web-20261029/species-028.display.3264dffb16dd730a.webp",
+      "sha256": "3264dffb16dd730ab2459b1602579970ad64ff8325ac21ffc2a33a8438ff734d",
+      "bytes": 107648,
+      "quality": 92,
+      "psnr": 39.92,
+      "ssim": 0.9963
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-029.display.19b03c81bacf84ca.webp",
+      "sourceSha256": "19b03c81bacf84ca536526a4adf96377433914cda5cc48eb499b1e4d4bb47d0f",
+      "sourceBytes": 373546,
+      "output": "assets/production/database-display-web-20261029/species-029.display.b9554992958aed3f.webp",
+      "sha256": "b9554992958aed3fbc04c198ad554ddf966b198c085ded5d3b3be4e5f8d40aba",
+      "bytes": 111206,
+      "quality": 92,
+      "psnr": 40.31,
+      "ssim": 0.9951
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-033.display.061034b20f30de8b.webp",
+      "sourceSha256": "061034b20f30de8b4361e90116add705e19efad5d19144ee808fa332dce390a2",
+      "sourceBytes": 466316,
+      "output": "assets/production/database-display-web-20261029/species-033.display.741f6bc232a5f68c.webp",
+      "sha256": "741f6bc232a5f68c6eedc6156718d02e17996216d2cf7594173b9c4be52b0197",
+      "bytes": 160862,
+      "quality": 92,
+      "psnr": 41.3,
+      "ssim": 0.9952
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-034.display.4a7218eab0ba71b1.webp",
+      "sourceSha256": "4a7218eab0ba71b1ad10f16823753dc6b578a57f86803a078c4f59b3b34d2408",
+      "sourceBytes": 778716,
+      "output": "assets/production/database-display-web-20261029/species-034.display.3b81f155b850bc3f.webp",
+      "sha256": "3b81f155b850bc3f50172be7b63661804b1581dd0c72686e68c03d4c4f9aaaeb",
+      "bytes": 254800,
+      "quality": 92,
+      "psnr": 35.16,
+      "ssim": 0.9947
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-035.display.a3861a99aec9ba3b.webp",
+      "sourceSha256": "a3861a99aec9ba3bd1ca5cdc17b89f114f84d5eef665d055ca508b43cd78ef67",
+      "sourceBytes": 463604,
+      "output": "assets/production/database-display-web-20261029/species-035.display.24d63ea21e234912.webp",
+      "sha256": "24d63ea21e234912dcda228b1a7858c66542a77beb5289f69da83ee576a01939",
+      "bytes": 150928,
+      "quality": 92,
+      "psnr": 38.27,
+      "ssim": 0.9947
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-036.display.0f21b301236848d8.webp",
+      "sourceSha256": "0f21b301236848d850bf0b64b6dcd7c0fe97c3dd4736b0228a501ecb4bcc5699",
+      "sourceBytes": 585862,
+      "output": "assets/production/database-display-web-20261029/species-036.display.34a38095c529aef9.webp",
+      "sha256": "34a38095c529aef96b19074d4850bfd3606a6e4487dbd5c3ce1d9fd0b9ebb4e1",
+      "bytes": 197880,
+      "quality": 92,
+      "psnr": 35.2,
+      "ssim": 0.9946
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-037.display.02ea268543ebefda.webp",
+      "sourceSha256": "02ea268543ebefda55c744e27c28539a49bf6c57be6f59f018e98a626a7de8ed",
+      "sourceBytes": 589534,
+      "output": "assets/production/database-display-web-20261029/species-037.display.799f610987ad2b0b.webp",
+      "sha256": "799f610987ad2b0bc0b5760876a9b1d77a9d8fd34e4e78b14ca7d6cbe6f15e80",
+      "bytes": 204398,
+      "quality": 92,
+      "psnr": 37.78,
+      "ssim": 0.9965
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-039.display.69bf45ae13181406.webp",
+      "sourceSha256": "69bf45ae13181406a93ac7bbbccf13e1a952a782cc1f4f293a8b5d640dc81278",
+      "sourceBytes": 743198,
+      "output": "assets/production/database-display-web-20261029/species-039.display.8dd1f9123ddd83d7.webp",
+      "sha256": "8dd1f9123ddd83d7662a7ce62286aab8c87656293e70faa10f224bdf1c169076",
+      "bytes": 259958,
+      "quality": 92,
+      "psnr": 37.23,
+      "ssim": 0.9968
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-040.display.8e094df53a21ebf9.webp",
+      "sourceSha256": "8e094df53a21ebf95f8f4f476637676db3f9428287685b3bf73017afecbdbda1",
+      "sourceBytes": 437596,
+      "output": "assets/production/database-display-web-20261029/species-040.display.f162438564d5fe6e.webp",
+      "sha256": "f162438564d5fe6e7be5951f4fed9700ea153655a74b21df93d29de304651824",
+      "bytes": 147108,
+      "quality": 92,
+      "psnr": 44.23,
+      "ssim": 0.9974
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-041.display.a87468e715fe2c08.webp",
+      "sourceSha256": "a87468e715fe2c083165d54f053513857b6452c41087fd3f632a3b11d9b9d52d",
+      "sourceBytes": 504228,
+      "output": "assets/production/database-display-web-20261029/species-041.display.93d7b76130d18117.webp",
+      "sha256": "93d7b76130d181172a2b759d35aad367edc5681758aff4880b86f8361f9fdebf",
+      "bytes": 147068,
+      "quality": 92,
+      "psnr": 39.61,
+      "ssim": 0.9968
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-042.display.239c2135cebb2b58.webp",
+      "sourceSha256": "239c2135cebb2b586c63dd4167c730c5f022c14b9e96b4252c5340213b77461c",
+      "sourceBytes": 559286,
+      "output": "assets/production/database-display-web-20261029/species-042.display.e6df8b87867a9d31.webp",
+      "sha256": "e6df8b87867a9d3100f0f6cf2fb26f0ab60a2a009ba0c6113edff7cb377138ed",
+      "bytes": 187222,
+      "quality": 92,
+      "psnr": 39.29,
+      "ssim": 0.9974
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-043.display.031208b03158be4a.webp",
+      "sourceSha256": "031208b03158be4a4677a0db9601c4b34fdb84f8a1de3ec97161fa82bd497ac4",
+      "sourceBytes": 408146,
+      "output": "assets/production/database-display-web-20261029/species-043.display.634dfdd3886bde78.webp",
+      "sha256": "634dfdd3886bde78840c13c062954b0d8debc5c1b6806217fc583f170d52e759",
+      "bytes": 133900,
+      "quality": 92,
+      "psnr": 39.29,
+      "ssim": 0.9976
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-044.display.913ff18dd3a876e3.webp",
+      "sourceSha256": "913ff18dd3a876e341dd5cd2d2a8fde7a6ef2d9347c56e76aa6616f7afdb17ae",
+      "sourceBytes": 452070,
+      "output": "assets/production/database-display-web-20261029/species-044.display.58d9abaa6116cd0b.webp",
+      "sha256": "58d9abaa6116cd0b88b1088bbdc0bfe0371b21585064c367e195405f56694bbd",
+      "bytes": 136894,
+      "quality": 92,
+      "psnr": 41.01,
+      "ssim": 0.9973
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-045.display.b0bde207d3b3dc9e.webp",
+      "sourceSha256": "b0bde207d3b3dc9ebcefa00d3825052da1c8cb21aea8f02863f37c3da8e82525",
+      "sourceBytes": 722990,
+      "output": "assets/production/database-display-web-20261029/species-045.display.72f81bf111797f2c.webp",
+      "sha256": "72f81bf111797f2ca415c145372d4f2a8410f72adaee42d1da8bdeb0154a3a90",
+      "bytes": 215190,
+      "quality": 92,
+      "psnr": 36.43,
+      "ssim": 0.996
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-046.display.8f0a7c84fea9c3cf.webp",
+      "sourceSha256": "8f0a7c84fea9c3cf7c1a4126c38e884324e6186f63cf94dd1ef06184c3665106",
+      "sourceBytes": 476018,
+      "output": "assets/production/database-display-web-20261029/species-046.display.5bd3b5618d01b546.webp",
+      "sha256": "5bd3b5618d01b5461fb0eac008830729344b815163c5f2d7fce970127caea983",
+      "bytes": 161196,
+      "quality": 92,
+      "psnr": 41.79,
+      "ssim": 0.9974
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-047.display.f9de112bc8c27e1e.webp",
+      "sourceSha256": "f9de112bc8c27e1e4f3621e004a800277af7660c1e2f02001bcb2f86dd892b9b",
+      "sourceBytes": 524264,
+      "output": "assets/production/database-display-web-20261029/species-047.display.fcd45118ee5fdad9.webp",
+      "sha256": "fcd45118ee5fdad9089d2d61462f29134a80ef5c3e906a4a008ebc685bcb0676",
+      "bytes": 166136,
+      "quality": 92,
+      "psnr": 39.88,
+      "ssim": 0.9967
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-050.display.a561e591033f3e36.webp",
+      "sourceSha256": "a561e591033f3e361061cf615f0b9d088444a4aa59a555d83b51b6a576b2cd73",
+      "sourceBytes": 627412,
+      "output": "assets/production/database-display-web-20261029/species-050.display.7debf7917f27ccd8.webp",
+      "sha256": "7debf7917f27ccd8fe99677fb9e1a3a16ed2b7596be9a2bb56360a0b3dbe5e98",
+      "bytes": 203184,
+      "quality": 92,
+      "psnr": 38.3,
+      "ssim": 0.9972
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-051.display.82ea8172a32e6960.webp",
+      "sourceSha256": "82ea8172a32e6960c8736692811b18e065826be0827d3fc8e8df5e0b28eb97bc",
+      "sourceBytes": 623378,
+      "output": "assets/production/database-display-web-20261029/species-051.display.9d3bf53b02db9ca2.webp",
+      "sha256": "9d3bf53b02db9ca2221da60c74ef18c5b4b0b2a08b1d99b2afdb9ed058071bd8",
+      "bytes": 182314,
+      "quality": 92,
+      "psnr": 38.33,
+      "ssim": 0.9951
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-053.display.ca1665092133b656.webp",
+      "sourceSha256": "ca1665092133b656c02555d9a5c97a5eb5b6d73bbd532bcc0b9a768a4aa8c7ba",
+      "sourceBytes": 492204,
+      "output": "assets/production/database-display-web-20261029/species-053.display.8e5ca4441559f6cb.webp",
+      "sha256": "8e5ca4441559f6cb8d8d1494737196cf94dd763e435247941ed3d70946cea6df",
+      "bytes": 167686,
+      "quality": 92,
+      "psnr": 39.22,
+      "ssim": 0.9974
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-054.display.862dd05e6371806b.webp",
+      "sourceSha256": "862dd05e6371806b06f360e832d08a3b8e92ffa90e6ecdd9902806c7d22dcdcc",
+      "sourceBytes": 203208,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-055.display.7a93adbff7520315.webp",
+      "sourceSha256": "7a93adbff75203159e545797dd8f4b5538e9da1b4499dd9fcf882c7131e08aa0",
+      "sourceBytes": 428200,
+      "output": "assets/production/database-display-web-20261029/species-055.display.e127a34adc18b68d.webp",
+      "sha256": "e127a34adc18b68db197d240a478e0f42528851a70cf738a095e0357e4a9efe1",
+      "bytes": 155846,
+      "quality": 92,
+      "psnr": 40.18,
+      "ssim": 0.9975
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-056.display.579443e67826792e.webp",
+      "sourceSha256": "579443e67826792e42afb001d359c6142eb7b9912108d6357809e547653cb359",
+      "sourceBytes": 572174,
+      "output": "assets/production/database-display-web-20261029/species-056.display.6e8ae1884530dc56.webp",
+      "sha256": "6e8ae1884530dc5686549cb8c76ef00886e5ad0300de55efa0ef61a7d8c6ff9b",
+      "bytes": 184836,
+      "quality": 92,
+      "psnr": 39.03,
+      "ssim": 0.9953
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-057.display.9729da468ab74d78.webp",
+      "sourceSha256": "9729da468ab74d78d47d072a64cc15fa30abd80a805398699a75a5117da3efae",
+      "sourceBytes": 587116,
+      "output": "assets/production/database-display-web-20261029/species-057.display.e37cf0227a7c46e7.webp",
+      "sha256": "e37cf0227a7c46e793ea0b1476cdba78052c5dabe11290296af67b7dba2b99ad",
+      "bytes": 211230,
+      "quality": 92,
+      "psnr": 39.38,
+      "ssim": 0.9965
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-058.display.2d959f003e034cbf.webp",
+      "sourceSha256": "2d959f003e034cbf585dac536977ab6bf0673a5f02dc423c51a8e6d7a1954774",
+      "sourceBytes": 699580,
+      "output": "assets/production/database-display-web-20261029/species-058.display.f840a3af0f2e7425.webp",
+      "sha256": "f840a3af0f2e742590e44e4e7cbca5cf35b6b839ffd0e574f5cebd811f4e01ac",
+      "bytes": 237720,
+      "quality": 92,
+      "psnr": 35.57,
+      "ssim": 0.9957
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-059.display.d65af3374e14305c.webp",
+      "sourceSha256": "d65af3374e14305c5fff2de0cb93aeb711d8d4c018454ce034d205582eded1bd",
+      "sourceBytes": 207868,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-060.display.0208b3462e180c0c.webp",
+      "sourceSha256": "0208b3462e180c0ce3a3eb14e67e71c7237c22da6acf980c2f60bb0681247d00",
+      "sourceBytes": 775346,
+      "output": "assets/production/database-display-web-20261029/species-060.display.37f6c20945322ded.webp",
+      "sha256": "37f6c20945322ded278f627804ce484df4052dd4db27362f848dae6d3468c4db",
+      "bytes": 242630,
+      "quality": 92,
+      "psnr": 38.51,
+      "ssim": 0.9961
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-061.display.2caced2eb140706d.webp",
+      "sourceSha256": "2caced2eb140706d2815b83b31cab56d7bd7252c856753dbb025883eb19f1fe7",
+      "sourceBytes": 716456,
+      "output": "assets/production/database-display-web-20261029/species-061.display.93122610fb34ce39.webp",
+      "sha256": "93122610fb34ce398389ebd0713aac0377ae69b6899c3a1c7af3cb709f97d1a7",
+      "bytes": 249928,
+      "quality": 92,
+      "psnr": 36.27,
+      "ssim": 0.9965
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-062.display.63a4e809d6e2d5f6.webp",
+      "sourceSha256": "63a4e809d6e2d5f698a288e116714c1672da15bd5899cd39d6a86dbe39915768",
+      "sourceBytes": 488274,
+      "output": "assets/production/database-display-web-20261029/species-062.display.3709ecfabf03352f.webp",
+      "sha256": "3709ecfabf03352fac2adc5dc28047b6d67500892ad0a91b5260b03de94a52cf",
+      "bytes": 163704,
+      "quality": 92,
+      "psnr": 39.25,
+      "ssim": 0.9963
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-063.display.eb63438fab6eeb38.webp",
+      "sourceSha256": "eb63438fab6eeb38568dc303285024614851668bab06514850c4b0a2a0ab13ef",
+      "sourceBytes": 676066,
+      "output": "assets/production/database-display-web-20261029/species-063.display.7c5a1dd2fdfac17b.webp",
+      "sha256": "7c5a1dd2fdfac17b0e7c0577a37be053764509a440dc1ef26144dc75ac93db72",
+      "bytes": 218846,
+      "quality": 92,
+      "psnr": 35.62,
+      "ssim": 0.9965
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-064.display.02f30a079b2693b1.webp",
+      "sourceSha256": "02f30a079b2693b15120ea2a5fdcf3bdb7ad2d7e4005a4cf27248ee58acce606",
+      "sourceBytes": 650634,
+      "output": "assets/production/database-display-web-20261029/species-064.display.409fd3a2d6ab5778.webp",
+      "sha256": "409fd3a2d6ab57787af95f29d6e00e149b6915498359217354fc7fef3d2506e9",
+      "bytes": 228604,
+      "quality": 92,
+      "psnr": 37.27,
+      "ssim": 0.9962
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-065.display.d3b9aef0350b60ad.webp",
+      "sourceSha256": "d3b9aef0350b60add88fd411d98b8623f435773e060886f26e81d4f7872b1162",
+      "sourceBytes": 638484,
+      "output": "assets/production/database-display-web-20261029/species-065.display.1ee38e38c0f9bc2d.webp",
+      "sha256": "1ee38e38c0f9bc2df60dafd7a164b7db473407c293b05492aac108f27a2d30c7",
+      "bytes": 222256,
+      "quality": 92,
+      "psnr": 39.56,
+      "ssim": 0.9965
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-066.display.98d983aec03d81df.webp",
+      "sourceSha256": "98d983aec03d81df582ced8343476850159474df72cf5057ec332486164ff91e",
+      "sourceBytes": 766582,
+      "output": "assets/production/database-display-web-20261029/species-066.display.92b932afb0efdd49.webp",
+      "sha256": "92b932afb0efdd49f9e6c4f325b7a1da2000740eea266b6bb076e1139c1bc708",
+      "bytes": 275422,
+      "quality": 92,
+      "psnr": 35.74,
+      "ssim": 0.9957
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-067.display.a315ac490b6899f7.webp",
+      "sourceSha256": "a315ac490b6899f77ed7b29bcb6745a65b98b95f42e9b3aa55fd43da8d84c9fd",
+      "sourceBytes": 686378,
+      "output": "assets/production/database-display-web-20261029/species-067.display.27ca9dd4ce8d80b3.webp",
+      "sha256": "27ca9dd4ce8d80b346b79451ac9a0947bddddaecad7ab6f0102ab48e5889e015",
+      "bytes": 230512,
+      "quality": 92,
+      "psnr": 38.28,
+      "ssim": 0.9966
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-068.display.ea4215dd114f9749.webp",
+      "sourceSha256": "ea4215dd114f9749fc90fbebe38ae10671fe8150c0f7a15f1e67ee98de2b61b3",
+      "sourceBytes": 521156,
+      "output": "assets/production/database-display-web-20261029/species-068.display.2149fe2da97bb489.webp",
+      "sha256": "2149fe2da97bb4899c2a64f94234b006b8b52efbbc0e818d88f42ea388261508",
+      "bytes": 192194,
+      "quality": 92,
+      "psnr": 39.88,
+      "ssim": 0.9977
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-069.display.e270fea3d3828c79.webp",
+      "sourceSha256": "e270fea3d3828c79e05797e9ebf46bcb597da1e0436e77b8a1eb46b33e6311df",
+      "sourceBytes": 506064,
+      "output": "assets/production/database-display-web-20261029/species-069.display.98bc304e709775d1.webp",
+      "sha256": "98bc304e709775d148dda4717ac1199e738a7924bedcb791544165a6e2f37338",
+      "bytes": 160974,
+      "quality": 92,
+      "psnr": 41.13,
+      "ssim": 0.996
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-070.display.a887b70a71112eb8.webp",
+      "sourceSha256": "a887b70a71112eb8fcc5d89f76d3fb9842168d0f43e2a5ba6107546155e1d21e",
+      "sourceBytes": 632880,
+      "output": "assets/production/database-display-web-20261029/species-070.display.da18b1e429431958.webp",
+      "sha256": "da18b1e4294319586e685b3f75c007d52a681ebcddd1f1c4c75c96be1f9641d7",
+      "bytes": 198692,
+      "quality": 92,
+      "psnr": 34.97,
+      "ssim": 0.997
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-071.display.a31dec2f2122fa41.webp",
+      "sourceSha256": "a31dec2f2122fa41772b2b0ed587ddcbad66e6f408afb783d3e83f0108914536",
+      "sourceBytes": 643932,
+      "output": "assets/production/database-display-web-20261029/species-071.display.d9c5a13d69e37db9.webp",
+      "sha256": "d9c5a13d69e37db9537f37256d9fb59fd95355d0c9b635c22939615a280c1a8f",
+      "bytes": 215198,
+      "quality": 92,
+      "psnr": 37.62,
+      "ssim": 0.9958
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-072.display.4e0a5dac3cf38b07.webp",
+      "sourceSha256": "4e0a5dac3cf38b07335a876befb8ec0d64361d70ec28a0deb397de251431375e",
+      "sourceBytes": 616940,
+      "output": "assets/production/database-display-web-20261029/species-072.display.791357d0c534ab89.webp",
+      "sha256": "791357d0c534ab89d1903f12b46026e3e424b9ed5d704708d14b3897baad7216",
+      "bytes": 175724,
+      "quality": 92,
+      "psnr": 41.11,
+      "ssim": 0.9941
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-073.display.0b8159a9185d4fd8.webp",
+      "sourceSha256": "0b8159a9185d4fd84f9d338a0a5672c385c99093899ffb73660aacf2344beced",
+      "sourceBytes": 437304,
+      "output": "assets/production/database-display-web-20261029/species-073.display.d10b01e3f1af7cff.webp",
+      "sha256": "d10b01e3f1af7cff254451a0bb6358e2c165d3776d977fbf4ebf89291b99a08b",
+      "bytes": 136940,
+      "quality": 92,
+      "psnr": 39.01,
+      "ssim": 0.9961
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-075.display.a092f90d5fa3cb1a.webp",
+      "sourceSha256": "a092f90d5fa3cb1a9f3449bb69a624c368c565473711c3256755c3f018b06bc2",
+      "sourceBytes": 748200,
+      "output": "assets/production/database-display-web-20261029/species-075.display.361e4ee5e0fa9cd2.webp",
+      "sha256": "361e4ee5e0fa9cd25e02ca4a63b4e2b0a8159ea14bc0fd39786329164a637b67",
+      "bytes": 271778,
+      "quality": 92,
+      "psnr": 38.77,
+      "ssim": 0.9963
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-076.display.497651e900ea2b9a.webp",
+      "sourceSha256": "497651e900ea2b9a3933a8a7b4944ca0dc4d5daed97c2c6a91a3793bcff8ad6c",
+      "sourceBytes": 585446,
+      "output": "assets/production/database-display-web-20261029/species-076.display.29ac3821783bebae.webp",
+      "sha256": "29ac3821783bebae1ac5114e24a103498a697d89e47498959462078d975fa693",
+      "bytes": 221268,
+      "quality": 92,
+      "psnr": 35.39,
+      "ssim": 0.9969
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-077.display.b22d44c25ba58013.webp",
+      "sourceSha256": "b22d44c25ba58013a24034c269017e8b8ee916e3fc1078ae0b31d28be825edee",
+      "sourceBytes": 546718,
+      "output": "assets/production/database-display-web-20261029/species-077.display.2f48c647bda5004d.webp",
+      "sha256": "2f48c647bda5004d0f1d9f6a2c4d1e0f76be560a0c2aab1bed6b3fdbc61ea45e",
+      "bytes": 202132,
+      "quality": 92,
+      "psnr": 40.13,
+      "ssim": 0.9976
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-078.display.8da9267ea395a596.webp",
+      "sourceSha256": "8da9267ea395a59677c4d2760924e94eb91a42f517c6be426530f5bc9c296fb3",
+      "sourceBytes": 806438,
+      "output": "assets/production/database-display-web-20261029/species-078.display.6e4ad68158e1b09b.webp",
+      "sha256": "6e4ad68158e1b09b4f3c149780cbf859c81a410151973f59aaf43e05b6d1da23",
+      "bytes": 273408,
+      "quality": 92,
+      "psnr": 38.69,
+      "ssim": 0.9958
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-079.display.014f11f488f2a093.webp",
+      "sourceSha256": "014f11f488f2a09355db3d6df19b3da2aa1d1c00a339692a8d27c14ea343e0d8",
+      "sourceBytes": 512068,
+      "output": "assets/production/database-display-web-20261029/species-079.display.78098266737bdd12.webp",
+      "sha256": "78098266737bdd12e2ca24386ad5a75918d2060ff0bd9c28300e79ed10f6143b",
+      "bytes": 182558,
+      "quality": 92,
+      "psnr": 38.51,
+      "ssim": 0.9968
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-081.display.b4ff20b1f6fb4832.webp",
+      "sourceSha256": "b4ff20b1f6fb4832b1073e678448f91b576a83f6b13b7c35ae54e81a756c4edf",
+      "sourceBytes": 329000,
+      "output": "assets/production/database-display-web-20261029/species-081.display.027d45b2c40862ca.webp",
+      "sha256": "027d45b2c40862caf91083217286ee52704f701f9f08dff4e3ddee145984c5ac",
+      "bytes": 117108,
+      "quality": 92,
+      "psnr": 37.81,
+      "ssim": 0.9977
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-083.display.8f72aa2659b4fbd9.webp",
+      "sourceSha256": "8f72aa2659b4fbd979bdc021f17b7b871839816a754eb07c20acea8186921c4e",
+      "sourceBytes": 465210,
+      "output": "assets/production/database-display-web-20261029/species-083.display.11123e2767940277.webp",
+      "sha256": "11123e27679402777145d88ad19be0e097b89481148db9dd5dde54fd4bd3d888",
+      "bytes": 189596,
+      "quality": 92,
+      "psnr": 35.39,
+      "ssim": 0.9937
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-084.display.bc780abeb670ee4d.webp",
+      "sourceSha256": "bc780abeb670ee4d7f8d145bfc9a4c84c106983212c577fb6b67f6191b0342a5",
+      "sourceBytes": 797414,
+      "output": "assets/production/database-display-web-20261029/species-084.display.0f93da1143d8fd2f.webp",
+      "sha256": "0f93da1143d8fd2f8bd7710edab9bd5fd1da1ca3795e62ec1304c5725fc96e97",
+      "bytes": 237538,
+      "quality": 92,
+      "psnr": 35.47,
+      "ssim": 0.9967
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-089.display.d6543eddbf437e80.webp",
+      "sourceSha256": "d6543eddbf437e805728f59ae2dabd7e8ca46e5d9fa23d211be425d44c5d66b4",
+      "sourceBytes": 424368,
+      "output": "assets/production/database-display-web-20261029/species-089.display.b35b36c51b532452.webp",
+      "sha256": "b35b36c51b5324523b5ce3b7e3c6f775269d9b06db30baaa6ed8325950457687",
+      "bytes": 161974,
+      "quality": 92,
+      "psnr": 36.76,
+      "ssim": 0.9973
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-090.display.597de0bffc4adb9f.webp",
+      "sourceSha256": "597de0bffc4adb9f416789afb6b5807e5c1dc422014bae257a72970eed164c20",
+      "sourceBytes": 450358,
+      "output": "assets/production/database-display-web-20261029/species-090.display.6ff7dfb86c49f076.webp",
+      "sha256": "6ff7dfb86c49f07649783fef8c40c7da1068b5bebc5788764d94d9f9e532d08b",
+      "bytes": 144390,
+      "quality": 92,
+      "psnr": 35.79,
+      "ssim": 0.9964
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-091.display.f9b5656f8be28bde.webp",
+      "sourceSha256": "f9b5656f8be28bde9664d1c346667829bbdd0bf371e69fc2a3e2cde6506d4644",
+      "sourceBytes": 533106,
+      "output": "assets/production/database-display-web-20261029/species-091.display.0d27faec802011f3.webp",
+      "sha256": "0d27faec802011f3b8b5fc8143afc9ade8af64b9a16b8d38e7ce7687ac07e445",
+      "bytes": 223768,
+      "quality": 92,
+      "psnr": 36.35,
+      "ssim": 0.9977
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-092.display.bb9a0fe73156fecc.webp",
+      "sourceSha256": "bb9a0fe73156feccb65cfbb0d02d865dad0a85e8e103b4cf50d95ae0292ebb4c",
+      "sourceBytes": 569688,
+      "output": "assets/production/database-display-web-20261029/species-092.display.2d85a497479b38c3.webp",
+      "sha256": "2d85a497479b38c38275fde8a65efc19bb0fe258623b45e78bcee2d3ac54ff55",
+      "bytes": 219690,
+      "quality": 92,
+      "psnr": 40.67,
+      "ssim": 0.9964
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-093.display.ac40084b2648c2c2.webp",
+      "sourceSha256": "ac40084b2648c2c2e933bc4cebb0520329d9a0063f295ce822bc80f92a888cae",
+      "sourceBytes": 404542,
+      "output": "assets/production/database-display-web-20261029/species-093.display.d21346e5a3428908.webp",
+      "sha256": "d21346e5a3428908dc64cd6b68198a965b3d3b8575d99106b587d9aa28b7d685",
+      "bytes": 152680,
+      "quality": 92,
+      "psnr": 35.81,
+      "ssim": 0.9937
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-097.display.33cab3d9e0d10f5b.webp",
+      "sourceSha256": "33cab3d9e0d10f5bc27f785a0dc68c8caf30fc0ce9fa5dd02a15926a0f5642c5",
+      "sourceBytes": 538390,
+      "output": "assets/production/database-display-web-20261029/species-097.display.bab17539fc6a4524.webp",
+      "sha256": "bab17539fc6a45241d4405a32a0609cffd53e3b687575e9d8a8ec70a8bb35a11",
+      "bytes": 205748,
+      "quality": 92,
+      "psnr": 39.1,
+      "ssim": 0.9975
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-098.display.985dd28c93e189a6.webp",
+      "sourceSha256": "985dd28c93e189a658b8564d5d3f66b9a27151b29af59579274f08347275ece7",
+      "sourceBytes": 549924,
+      "output": "assets/production/database-display-web-20261029/species-098.display.766d087b5da577b5.webp",
+      "sha256": "766d087b5da577b5534333b76b020fb0a7573fe66c60b3d3dc85239050f70312",
+      "bytes": 180810,
+      "quality": 92,
+      "psnr": 37.07,
+      "ssim": 0.9955
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-099.display.549b7b517107f196.webp",
+      "sourceSha256": "549b7b517107f196adaf1df64bb0b451187c712f7689e64ebe1477fdf52f16c7",
+      "sourceBytes": 325712,
+      "output": "assets/production/database-display-web-20261029/species-099.display.97e8c887412290b2.webp",
+      "sha256": "97e8c887412290b26b8face71e9f6c7f337451d9dd4aebf277f5fb8cea4be67b",
+      "bytes": 105214,
+      "quality": 92,
+      "psnr": 37.3,
+      "ssim": 0.9979
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-100.display.1793bf90a602b8a7.webp",
+      "sourceSha256": "1793bf90a602b8a7075a9b1e2656abfbb52404ab9714a85ac7fbe1ba5a694e7c",
+      "sourceBytes": 634464,
+      "output": "assets/production/database-display-web-20261029/species-100.display.bcf5b9838e655188.webp",
+      "sha256": "bcf5b9838e6551881d3320ac4176e035625c0470a6744a83c1ee6c3fc28be076",
+      "bytes": 229478,
+      "quality": 92,
+      "psnr": 36.17,
+      "ssim": 0.997
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-101.display.9fefc2be426095d7.webp",
+      "sourceSha256": "9fefc2be426095d7bddaed4b8689ad254d6998594b9b5c5a35962f1d07f0f036",
+      "sourceBytes": 426120,
+      "output": "assets/production/database-display-web-20261029/species-101.display.316761f6b4c5f8a0.webp",
+      "sha256": "316761f6b4c5f8a0f5ef6818d27c452cb9fa6dc11d99e5da5904a783a52ec2e7",
+      "bytes": 142290,
+      "quality": 92,
+      "psnr": 36.9,
+      "ssim": 0.9948
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-102.display.c0489e351bbca0df.webp",
+      "sourceSha256": "c0489e351bbca0df84cff62b8fe72d09933ec36cc918e58fcbcceafd05473ea5",
+      "sourceBytes": 501666,
+      "output": "assets/production/database-display-web-20261029/species-102.display.2f34daade0c82f1a.webp",
+      "sha256": "2f34daade0c82f1aaaeb95c42fefcfb7fd40866c964ebfcb993ae247e2c3fd28",
+      "bytes": 172148,
+      "quality": 92,
+      "psnr": 34.89,
+      "ssim": 0.9942
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-104.display.08b4ad0b69e66c9e.webp",
+      "sourceSha256": "08b4ad0b69e66c9e9c252782f89bce348eabfded5cc38de5497e9973215aeb56",
+      "sourceBytes": 525042,
+      "output": "assets/production/database-display-web-20261029/species-104.display.689f973565b436db.webp",
+      "sha256": "689f973565b436db1d46abfaf3834913223cf38b682cde68a4aebededd45aac8",
+      "bytes": 181778,
+      "quality": 92,
+      "psnr": 34.14,
+      "ssim": 0.9931
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-106.display.df81ba8beb783173.webp",
+      "sourceSha256": "df81ba8beb783173dd18cf59f04f4e6c24663bf8fcc91123a8b4ce376884271e",
+      "sourceBytes": 467316,
+      "output": "assets/production/database-display-web-20261029/species-106.display.ac35247429b33eb8.webp",
+      "sha256": "ac35247429b33eb8a024148d45c11d0986b810f1cde6db91f43d83c125dc011b",
+      "bytes": 167298,
+      "quality": 92,
+      "psnr": 37.51,
+      "ssim": 0.9971
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-107.display.db16a67040b636b8.webp",
+      "sourceSha256": "db16a67040b636b8e9d85d429b66a342b58c49f34489fd90b940d07beb3c6887",
+      "sourceBytes": 536190,
+      "output": "assets/production/database-display-web-20261029/species-107.display.672b1423693cb9fd.webp",
+      "sha256": "672b1423693cb9fd65ab26eb7af2ce342b6663cedd85b459deda0670e1acbed6",
+      "bytes": 163390,
+      "quality": 92,
+      "psnr": 38.41,
+      "ssim": 0.9966
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-108.display.514e78e173086227.webp",
+      "sourceSha256": "514e78e173086227a8a202c575041c888473915d6a48ce81e94bdd416b596bd4",
+      "sourceBytes": 410654,
+      "output": "assets/production/database-display-web-20261029/species-108.display.2c19386cf6f25869.webp",
+      "sha256": "2c19386cf6f25869ee9abaa87d7f3ecb23cce1670453287e8b076d5efe8a39c0",
+      "bytes": 132436,
+      "quality": 92,
+      "psnr": 38.83,
+      "ssim": 0.9971
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-109.display.f61c29e1953a1786.webp",
+      "sourceSha256": "f61c29e1953a1786d7717a3cbba45053af5bb5707daa5d8a5b0a240d12fc982c",
+      "sourceBytes": 390360,
+      "output": "assets/production/database-display-web-20261029/species-109.display.24e5ff8d52f8b071.webp",
+      "sha256": "24e5ff8d52f8b0712a8c484a7cb33015cb187e77457868d9a6b8fcb9e5ee5d72",
+      "bytes": 132980,
+      "quality": 92,
+      "psnr": 40.1,
+      "ssim": 0.9966
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-110.display.51394d7eaa39391c.webp",
+      "sourceSha256": "51394d7eaa39391c87e985dc4f9412d08960c3f71c2f9bd8fec80a0223e85767",
+      "sourceBytes": 419034,
+      "output": "assets/production/database-display-web-20261029/species-110.display.53fbdb0bf62b422b.webp",
+      "sha256": "53fbdb0bf62b422bc7db25e20c77dc71182567fec3a87e726a171ca9afef0055",
+      "bytes": 166786,
+      "quality": 92,
+      "psnr": 37.88,
+      "ssim": 0.9963
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-111.display.59e1d6159db46e3d.webp",
+      "sourceSha256": "59e1d6159db46e3d9b63564cfaf5cd8ae101c6563a40214ed8b16b276ddac922",
+      "sourceBytes": 649168,
+      "output": "assets/production/database-display-web-20261029/species-111.display.00a98a1099f567c6.webp",
+      "sha256": "00a98a1099f567c66e1575300fdcebbf64b76f303ffe133db68a4af154744c00",
+      "bytes": 214432,
+      "quality": 92,
+      "psnr": 38.32,
+      "ssim": 0.997
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-112.display.85ea6212120cf792.webp",
+      "sourceSha256": "85ea6212120cf7922af716ae399c0329383f655a4aca32e0c384ddaa4ac6aa45",
+      "sourceBytes": 443972,
+      "output": "assets/production/database-display-web-20261029/species-112.display.c14298314d08a711.webp",
+      "sha256": "c14298314d08a71132170f1d2027bef392fae333999ba18bb96c6b1ac243fb3a",
+      "bytes": 162490,
+      "quality": 92,
+      "psnr": 36.4,
+      "ssim": 0.9966
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-113.display.e19b07ad7ab2b9eb.webp",
+      "sourceSha256": "e19b07ad7ab2b9ebc8d5b5b5c6dd341b9ce1d5eda210225d0c4c18f871091678",
+      "sourceBytes": 415420,
+      "output": "assets/production/database-display-web-20261029/species-113.display.6e096d50fd0ee80c.webp",
+      "sha256": "6e096d50fd0ee80c456d68d98e110fe67b13f5f30ac55d1e092f472df281da79",
+      "bytes": 153770,
+      "quality": 92,
+      "psnr": 36.6,
+      "ssim": 0.9958
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-114.display.f2720a31694e7044.webp",
+      "sourceSha256": "f2720a31694e7044120e51b5b8330008b459469f9d58f3350592b2db152c7b53",
+      "sourceBytes": 694414,
+      "output": "assets/production/database-display-web-20261029/species-114.display.ef93afdf8b4cbf56.webp",
+      "sha256": "ef93afdf8b4cbf56909861bbfc05994f75f963deeb187c594eecddbf7000353b",
+      "bytes": 208684,
+      "quality": 92,
+      "psnr": 38.7,
+      "ssim": 0.9961
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-115.display.7c5e5db2781ba34d.webp",
+      "sourceSha256": "7c5e5db2781ba34d95f15dc32300c0dfc65d5ddf0a8a79e2ee31b9ab699c76e6",
+      "sourceBytes": 538266,
+      "output": "assets/production/database-display-web-20261029/species-115.display.30252fa8d04cd35b.webp",
+      "sha256": "30252fa8d04cd35b318bc2ba4c422f60962e92475144aaec5eaa44d47a9f79c1",
+      "bytes": 187946,
+      "quality": 92,
+      "psnr": 37.76,
+      "ssim": 0.9966
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-116.display.9a9bb4fd6df86046.webp",
+      "sourceSha256": "9a9bb4fd6df86046af843f86e6953f7557130eb3752664dabf14985d1c7dbd3e",
+      "sourceBytes": 401380,
+      "output": "assets/production/database-display-web-20261029/species-116.display.fab2735a26b1433b.webp",
+      "sha256": "fab2735a26b1433b2afe0145f745503186029da5da9a79ab0c20efb5dfaec769",
+      "bytes": 123286,
+      "quality": 92,
+      "psnr": 38.38,
+      "ssim": 0.9966
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-117.display.69df977fcc64774e.webp",
+      "sourceSha256": "69df977fcc64774ea948a53e04fa7e5b288051f5b1cdecf6767327c67fc703ce",
+      "sourceBytes": 569260,
+      "output": "assets/production/database-display-web-20261029/species-117.display.6767ea8514814294.webp",
+      "sha256": "6767ea85148142945bead1be0459c35e8029407b1bfccefeb128fca95e0ad2d1",
+      "bytes": 198916,
+      "quality": 92,
+      "psnr": 39.41,
+      "ssim": 0.9951
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-118.display.2777c0a2cb15b186.webp",
+      "sourceSha256": "2777c0a2cb15b186325c0860d3190085c44ddb120b15ee63aa2a907d2e93002e",
+      "sourceBytes": 496070,
+      "output": "assets/production/database-display-web-20261029/species-118.display.7d10395a4bb8b242.webp",
+      "sha256": "7d10395a4bb8b242e4d1cdc1ca2733e67499090a3f2716e67e190b720ea27253",
+      "bytes": 166042,
+      "quality": 92,
+      "psnr": 35.14,
+      "ssim": 0.9921
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-125.display.4df0fbfa24913b69.webp",
+      "sourceSha256": "4df0fbfa24913b69e5b48e2e3d030a55f93e74ca524711a7c159dd2f16406ce1",
+      "sourceBytes": 546492,
+      "output": "assets/production/database-display-web-20261029/species-125.display.f493638a7061d433.webp",
+      "sha256": "f493638a7061d433c8c0f9c3fa7f62ea7a48465efddfa57d3458fe048f84bd11",
+      "bytes": 185820,
+      "quality": 92,
+      "psnr": 35.17,
+      "ssim": 0.9966
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-189.display.801b6ebae9252073.webp",
+      "sourceSha256": "801b6ebae9252073b15aa9ca3dfd426d20c0651482cec323a61e71cc19debea7",
+      "sourceBytes": 571938,
+      "output": "assets/production/database-display-web-20261029/species-189.display.aabbeddd3e60630c.webp",
+      "sha256": "aabbeddd3e60630ca2d647bf9e86fb9523483b31dcd1f18dbdf120bcfaf6b205",
+      "bytes": 183266,
+      "quality": 92,
+      "psnr": 36.44,
+      "ssim": 0.9954
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-206.display.08a4d0cfea842d7b.webp",
+      "sourceSha256": "08a4d0cfea842d7bf91f3304f933d2bf7ff54f3ffe73f068ebb85e90008071c9",
+      "sourceBytes": 153938,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-207.display.c58a022ba5c009c0.webp",
+      "sourceSha256": "c58a022ba5c009c0b2d6fc389c9018b50c7e2206ea4c673a6e7720f133c78d91",
+      "sourceBytes": 130428,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-208.display.37a7c2836136cd96.webp",
+      "sourceSha256": "37a7c2836136cd96c9bb9e5f58d131263b18d1e7602a5d91fef7858076f53d9a",
+      "sourceBytes": 99392,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-209.display.75f8e1f19f95d161.webp",
+      "sourceSha256": "75f8e1f19f95d1615b335be2be0feabcaa06216e35612f96e6d8043482055e67",
+      "sourceBytes": 127686,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-210.display.e3eb624541031d79.webp",
+      "sourceSha256": "e3eb624541031d799749b8a951cbf559fe570260115116025406335284d26dde",
+      "sourceBytes": 116354,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-211.display.e669c90a86a67c70.webp",
+      "sourceSha256": "e669c90a86a67c7053564e7977a2b99d72458c34c2628786b815e33c90b6a725",
+      "sourceBytes": 847108,
+      "output": "assets/production/database-display-web-20261029/species-211.display.4909be3215a60c4e.webp",
+      "sha256": "4909be3215a60c4eea5fde0950445bc36a5be0338814f8607642c6dacb4bc414",
+      "bytes": 291524,
+      "quality": 92,
+      "psnr": 34.51,
+      "ssim": 0.9976
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-212.display.3d8b44c8d1135b9f.webp",
+      "sourceSha256": "3d8b44c8d1135b9fae435c761ff0cb99edeabfc2e5b42e8b4b2b5b15bdaf241a",
+      "sourceBytes": 121228,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-213.display.50c57f149312986b.webp",
+      "sourceSha256": "50c57f149312986bbbdb6c2b821ac571bb933b668caa45248bb54df71b210a81",
+      "sourceBytes": 101814,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-214.display.9d0ad4251a75eca4.webp",
+      "sourceSha256": "9d0ad4251a75eca4467dda372dd5520438039d24143e0c1071592d72ae43ae6e",
+      "sourceBytes": 133878,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-215.display.8cf984cef9c5a3f4.webp",
+      "sourceSha256": "8cf984cef9c5a3f402f022b8c2aa17751ca3e2613b1b5b4aa992c5c5a420ce4f",
+      "sourceBytes": 166608,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-216.display.25e50fe4d6f6367d.webp",
+      "sourceSha256": "25e50fe4d6f6367df0145323618747bc257196b16868380c9956b9366e4585ff",
+      "sourceBytes": 146912,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-217.display.b8013deb58b3b4b8.webp",
+      "sourceSha256": "b8013deb58b3b4b85b5a5b9123c79addedb581bc35d2ed1e74edbe70ec40cb2f",
+      "sourceBytes": 159906,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-218.display.5227fdf8f59e640a.webp",
+      "sourceSha256": "5227fdf8f59e640ad65c27d4e316d45b600114186b62ecafda7e6416ac0c1dd4",
+      "sourceBytes": 156162,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-219.display.3d4e6979ac206f44.webp",
+      "sourceSha256": "3d4e6979ac206f4423949d54eccc4b84f33db41a269884c5b8f339568fb20ee3",
+      "sourceBytes": 138026,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-220.display.f9dd48c2215b2221.webp",
+      "sourceSha256": "f9dd48c2215b22211b1ad683fa043b3d8f7334737f5e6f7e72ead90ed2e75acc",
+      "sourceBytes": 143782,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-221.display.067d872c8c8e4493.webp",
+      "sourceSha256": "067d872c8c8e4493cde782ecf6e9ad79ee97d313501919538840ba51ee8e125a",
+      "sourceBytes": 126058,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-222.display.a05cfd23e6344551.webp",
+      "sourceSha256": "a05cfd23e6344551fc82de18d85a84a922966eff1cb6a1c124523004a13c6f33",
+      "sourceBytes": 563370,
+      "output": "assets/production/database-display-web-20261029/species-222.display.7544f1b15773af36.webp",
+      "sha256": "7544f1b15773af3622b20c878d6941ef6b80f64403818dd935e6795e8157a58c",
+      "bytes": 193972,
+      "quality": 92,
+      "psnr": 39.12,
+      "ssim": 0.9975
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-223.display.cb48ee8d8d939913.webp",
+      "sourceSha256": "cb48ee8d8d939913cd789b8ae25cd830408d35df77149ccf1fb3be8305b22a55",
+      "sourceBytes": 163708,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-229.display.10e56e970dc275ec.webp",
+      "sourceSha256": "10e56e970dc275ec8e5691de3379f200bde41fe2d207efc14f53af5042aca55f",
+      "sourceBytes": 846686,
+      "kept": "NO_TIER_PASSED"
+    },
+    {
+      "source": "assets/production/database-display-20261018/species-230.display.e729e08f354c47b5.webp",
+      "sourceSha256": "e729e08f354c47b537596bb0ff1782044ec45b327a23c074224a78dd1029fb8f",
+      "sourceBytes": 474812,
+      "output": "assets/production/database-display-web-20261029/species-230.display.b22391015d4325eb.webp",
+      "sha256": "b22391015d4325eb684acebe24b557cc8622fa1521c70039f4e03920fdc8d23e",
+      "bytes": 171580,
+      "quality": 92,
+      "psnr": 40.05,
+      "ssim": 0.9979
+    }
+  ],
+  "sourceBytes": 46533266,
+  "outputBytes": 18019088
+}
