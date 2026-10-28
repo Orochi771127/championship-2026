@@ -1378,14 +1378,22 @@ body[data-desktop-menu] .cm-vs2-root[data-screen="MEDALS"] .cm-medals__grid { gr
 .cm-dex-hero { width: min(100%, 320px); height: 320px; max-height: 42dvh; justify-self: center; padding: 24px; box-sizing: border-box; }
 .cm-dex-hero[hidden] { display: none; }
 .cm-dex-hero__image { display: block; width: 100%; height: 100%; object-fit: contain; }
-/* GR08 only: visible alpha >32 spans x287..821 on the unchanged 864px
- * square display rendition. Center that silhouette, not the transparent canvas.
- * Keep the image box at its contained size so the percentage stays correct
- * in narrow portrait and height-limited landscape; never scale the artwork. */
-.cm-dex-hero[data-species-id="species-040"]:not([hidden]) { display: flex; align-items: center; justify-content: center; }
-.cm-dex-hero[data-species-id="species-040"] > .cm-dex-hero__image {
-  flex: none; width: auto; height: auto; max-width: 100%; max-height: 100%;
-  transform: translateX(-14.1203703704%);
+/* Fit the drawn silhouette, not the canvas: display canvases differ in aspect and
+ * transparent margin between batches, so containing the canvas drew some partners at
+ * half the size of others (and needed a one-off shift for GR08). data-fit="silhouette"
+ * carries the box measured per image (alpha > 32) as --bx/--by/--bw/--bh on the
+ * --iw x --ih canvas. The box fills the stage height or its width up to 8 px from the
+ * frame, centred, and stands on the floor --dex-floor above the bottom edge. The
+ * 24 px stage padding stays; the artwork is never cropped or resampled. */
+@supports (width: 1cqw) {
+  .cm-dex-hero[data-fit="silhouette"] { position: relative; container-type: size; }
+  .cm-dex-hero[data-fit="silhouette"] > .cm-dex-hero__image {
+    --dex-fit: min((100cqw + 32px) / var(--bw), (100cqh + 24px - var(--dex-floor, 24px)) / var(--bh));
+    position: absolute; max-width: none; max-height: none;
+    width: calc(var(--dex-fit) * var(--iw)); height: calc(var(--dex-fit) * var(--ih));
+    left: calc(24px + 50cqw - var(--dex-fit) * (var(--bx) + var(--bw) / 2));
+    top: calc(48px + 100cqh - var(--dex-floor, 24px) - var(--dex-fit) * (var(--by) + var(--bh)));
+  }
 }
 .cm-vs2-database .cm-vs2-database__row.cm-vs2-database__row--thumb { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 96px; height: auto; gap: 6px; }
 body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__row--thumb { min-height: 96px; }

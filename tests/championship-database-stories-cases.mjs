@@ -26,7 +26,8 @@ const gapApprovedIds=new Set([...approvedGap.entries,...approvedRepair.entries,.
 import replacement215 from '../docs/art/production/characters/approved-dex-215-20261018/manifest.json' with {type:'json'};
 import replacementFlowers from '../docs/art/production/characters/approved-dex-054-059-20261018/manifest.json' with {type:'json'};
 // Preserve historical approvals by comparing their superseded rows; latest bindings have independent tests.
-const historicalPublicRows=entries=>entries.map(e=>[...replacement215.supersededEntries,...replacementFlowers.supersededEntries].find(old=>old.speciesIndex===e.speciesIndex)??e);
+const historicalPublicRows=entries=>entries.map(e=>[...replacement215.supersededEntries,...replacementFlowers.supersededEntries].find(old=>old.speciesIndex===e.speciesIndex)??beforeWebRendition(e));
+import {beforeWebRendition} from './helpers/dex-web-renditions.cjs';
 import previousHeroRows from './fixtures/authoring-heroes-a0944833.json' with {type:'json'};
 const historicalEntries=(file,entries)=>previousHeroRows[file]?previousHeroRows[file].map(old=>entries.find(row=>row.speciesIndex===old.speciesIndex)):entries;
 import previousLionProfiles from './fixtures/database-lion-profiles-before-20261017.json' with {type:'json'};
@@ -155,7 +156,7 @@ test('unsupported heading lookup cannot return inherited object properties',()=>
 test('230 selected display-size hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
  const {DATABASE_HERO_PORTRAITS:art,databaseHeroPortrait:get}=await import('../src/championship/presentation/databaseHeroPortraits.js');
  const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,230);
- for(const e of art.entries){const id=(e.src.includes('database-combined24-20261022')||e.src.includes('database-remaining16-20261022')||e.src.includes('database-repair-20261019')||e.speciesIndex>=231||[189,206,207,208,209,210,212,213,214,215,216,217,218,219,220,221,223].includes(e.speciesIndex))?getDatabaseDisplayEntry(e.speciesIndex):originalOrProductIdentity(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/database-(?:(?:display(?:-gap)?|illustrations)-20261018|(?:closeout|repair)-20261019|first10-20261022|second10-20261022|remaining16-20261022|combined24-20261022|next-portraits-20261022)\/(?:species-\d{3}|(?:ma|aw|ul)\d{2})\.display\.[a-f0-9]{16}\.webp$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
+ for(const e of art.entries){const id=(e.src.includes('database-combined24-20261022')||e.src.includes('database-remaining16-20261022')||e.src.includes('database-repair-20261019')||e.speciesIndex>=231||[189,206,207,208,209,210,212,213,214,215,216,217,218,219,220,221,223].includes(e.speciesIndex))?getDatabaseDisplayEntry(e.speciesIndex):originalOrProductIdentity(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/database-(?:(?:display(?:-gap)?|illustrations)-20261018|display-web-20261029|(?:closeout|repair)-20261019|first10-20261022|second10-20261022|remaining16-20261022|combined24-20261022|next-portraits-20261022)\/(?:species-\d{3}|(?:ma|aw|ul)\d{2})\.display\.[a-f0-9]{16}\.webp$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
  for(const id of [0,'8',NaN])assert.equal(get(id),null);for(const id of [96,187])assert.deepEqual(get(id),approved20Contract.APPROVED10.find(e=>e.speciesIndex===id));
 });
 
