@@ -849,28 +849,26 @@
 }
 :root body .cm-toolbar__menu .cm-toolbar__entry:has(.cm-toolbar__entry-icon) { padding-right: 40px; }
 /* Drawn icons (Owner 2026-10-28, menuEntryGlyphs.js): cards carry a picture in
- * the medal board's corner; the session keys get a leading mark and one line. */
+ * the medal board's corner; the session keys get a leading mark. Neither may
+ * make the sheet taller: on a phone the field must still show above it. */
 :root body .cm-toolbar__menu .cm-toolbar__entry-glyph { display: block; flex: none; pointer-events: none; }
 :root body .cm-toolbar__menu .cm-toolbar__entry-glyph svg { display: block; width: 100%; height: 100%; overflow: visible; }
 :root body .cm-toolbar__menu .cm-toolbar__entry-glyph[data-placement="badge"] {
   position: absolute;
-  top: 7px;
-  right: 7px;
-  width: 32px;
-  height: 32px;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
   filter: drop-shadow(0 2px 0 rgba(20, 20, 31, 0.18));
 }
-:root body .cm-toolbar__menu .cm-toolbar__entry[data-glyph="badge"] { padding-right: 46px; }
+/* Only the title line runs beside the badge; the hint keeps the full width. */
+:root body .cm-toolbar__menu .cm-toolbar__entry[data-glyph="badge"] .cm-toolbar__entry-label { padding-right: 32px; }
 :root body .cm-toolbar__menu .cm-toolbar__entry[data-glyph="prefix"] {
-  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-columns: 18px minmax(0, 1fr);
   align-items: center;
-  column-gap: 9px;
+  column-gap: 6px;
 }
-:root body .cm-toolbar__menu .cm-toolbar__entry[data-glyph="prefix"] .cm-toolbar__entry-glyph { grid-row: 1 / span 2; width: 22px; height: 22px; color: var(--glyph-tint, currentColor); }
-:root body .cm-toolbar__menu .cm-toolbar__entry[data-glyph="prefix"] .cm-toolbar__entry-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-:root body .cm-toolbar__menu .cm-toolbar__group[data-separate="true"]:has(.cm-toolbar__entry[data-glyph="prefix"]) .cm-toolbar__group-entries {
-  grid-template-columns: repeat(auto-fill, minmax(136px, 1fr));
-}
+:root body .cm-toolbar__menu .cm-toolbar__entry[data-glyph="prefix"] .cm-toolbar__entry-glyph { grid-row: 1 / span 2; width: 18px; height: 18px; color: var(--glyph-tint, currentColor); }
 :root[data-theme="arcade"] .cm-toolbar__menu .cm-toolbar__entry[data-glyph="prefix"] { --glyph-tint: #6a3df0; }
 :root[data-theme="arcade"] .cm-toolbar__menu .cm-toolbar__entry[data-glyph="prefix"]:is([data-entry-id="saveQuit"]) { --glyph-tint: #e0364a; }
 :root[data-theme="arcade"] .cm-toolbar__menu .cm-toolbar__entry[data-glyph="prefix"]:is([data-entry-id="account"], [data-entry-id="friends"]) { --glyph-tint: #1f8fd6; }

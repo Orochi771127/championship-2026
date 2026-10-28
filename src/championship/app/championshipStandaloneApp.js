@@ -1,5 +1,10 @@
 import {readRaisingGroundSupport} from './raisingGroundSupport.js';
-import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, purchaseTestRanchRow } from './friendsPlaytestPolicy.js';
+import {GACHA_CHIPS,GACHA_METALS,GACHA_GOODS,GACHA_PITY_MAX,GACHA_MACHINES,GACHA_BLOODLINES,getGachaChip,getGachaMetal,getGachaGoods,gachaRarityRank,
+  grantGachaWelcome,grantGachaTickets,pullCyberGacha,claimGachaPity,autoFillSynthesizer,synthesizeGachaMetal,applyGachaBoost,metalBoostEffect,
+  inscribesBloodline,catalystRarityForGeneration,spendGachaItem,settleGachaBattleWin,takeArmedHuntChips,gachaBloodlineOf,claimGachaReward} from '../gacha/cyberGacha.js';
+import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, normalizeFriendsPlaytestState, purchaseTestRanchRow } from './friendsPlaytestPolicy.js';
+import {beginNativeRaisingEvolution} from '../raising/nativeRaisingActor.js';
+import {NATIVE_RAISING_LIFECYCLE_RULES} from '../raising/nativeRaisingLifecycle.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
@@ -174,7 +179,9 @@ export function createChampionshipStandaloneApp({
   deviceBirthday = () => null,
   // Owner 2026-10-28 partner life (moods, stroll finds, greetings). The product
   // shell turns it on; harnesses keep the original frame-for-frame behaviour.
-  partnerLife = false
+  partnerLife = false,
+  // Cyber Gachapon draws (product randomness, not the ROM channel sequence).
+  gachaRandom = Math.random
 } = {}) {
   if (!catalog) throw new TypeError("Championship standalone app requires a product entities catalog");
   const savePort = createChampionshipPersistentSavePort({ storage, now, locks });
@@ -263,6 +270,10 @@ export function createChampionshipStandaloneApp({
   let shop = null;
   let friendsPlaytest = null;
   let lastShopReceipt = null;
+  let lastGachaResult = null;
+  let lastBattleGachaDrop = null;
+  let lastHuntGachaBoosts = Object.freeze([]);
+  let gachaSerial = 0;
   let selectedDatabaseSpeciesIndex = null;
   let cageEdit = null;
   // Original PlayerData +0xAE8. Title matches write it; until battle exists this
@@ -276,6 +287,8 @@ export function createChampionshipStandaloneApp({
   let freeBattleMenu=null;
   // Each partner's battle plan (作戰方針): instance id -> 0 or 2; absent = 1.
   let battleTactics={};
+  // OWNER_APPROVED_ADAPTATION 2026-10-29: Cyber Gachapon (tickets, chips, metals, bloodlines).
+  let cyberGacha=null;
   let nativeMessages=createNativeRaisingMessages();
   let nativeOpening=null;
   // Immutable rollback data, never another live session/store or storage key.
@@ -958,11 +971,43 @@ export function createChampionshipStandaloneApp({
     return {...party,individuals:party.individuals.map(individual=>({...individual,tactic:battleTactics[individual.instanceId]??BATTLE_TACTIC_DEFAULT}))};
   }
 
+
+  // ---- Cyber Gachapon (OWNER_APPROVED_ADAPTATION 2026-10-29) --------------
+  // Every pull, synthesis or item use is one durable save before it is shown,
+  // the same rule as a playtest cage purchase: no prize exists until it is saved.
+  function gachaState(){return cyberGacha??(cyberGacha=grantGachaWelcome(null).state);}
+  function gachaProfile(instanceId){return instanceId===creature?.creatureId?creature.nativeProfile??null:raisingNativeProfile(instanceId);}
+  function gachaShopCandidate(){
+    return createShopRuntime({snapshot:requireShop().toSave(),allowRepeatedCages:playtestPolicy?.enabled===true,
+      allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
+  }
+  function commitGacha({state,friends=friendsPlaytest,shopCandidate=null}){
+    const status=savePort.save({...liveSaveRequest(revision+1),cyberGacha:state,friendsPlaytest:friends,
+      shop:(shopCandidate??shop)?(shopCandidate??shop).toSave():null});
+    if(status.phase!=='SAVED'){savePort.discardPendingWrite();return false;}
+    cyberGacha=state;friendsPlaytest=friends;revision+=1;
+    if(shopCandidate){
+      shop=createShopRuntime({snapshot:shopCandidate.toSave(),huntInventory,allowRepeatedCages:playtestPolicy?.enabled===true,
+        allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
+      applyMappedHuntInventoryFromShop(shop,huntInventory);bindShopRuntime();
+    }
+    return true;
+  }
+  function gachaPrizeView(prize){
+    const entry=prize.kind==='CHIP'?getGachaChip(prize.id):prize.kind==='METAL'?getGachaMetal(prize.id):getGachaGoods(prize.id);
+    return Object.freeze({...prize,name:entry?.name??prize.id,art:entry?.art??null,
+      shopRecordIndex:entry?.shopRecordIndex??null,family:entry?.family??null});
+  }
+  function gachaReceipt(result){
+    lastGachaResult=Object.freeze({...result,serial:++gachaSerial});publishScreens();return lastGachaResult;
+  }
+  function gachaRefusal(reason){return gachaReceipt({ok:false,reason});}
+
   function liveSaveRequest(nextRevision=revision) {
     return {
       snapshot:requireSession().getRaisingHomeSnapshot(),creature,sessionId,revision:nextRevision,
       interactionCount,friendsPlaytest,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
-      championshipRun,freeBattleMenu,battleTactics,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
+      championshipRun,freeBattleMenu,battleTactics,cyberGacha,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
       raising,shop:shop?shop.toSave():null,cageEdit:cageEdit?cageEdit.toSave():null,battleEconomy,
       instanceIdentity,gameplayRng:gameplayRngSnapshot(),huntHistory:projectNativeHuntPersistentSave(huntPersistentState)
     };
@@ -1242,6 +1287,8 @@ export function createChampionshipStandaloneApp({
     cageEdit = createCageEditRuntime({ snapshot: saved.cageEdit, publicTestGrid: playtestPolicy?.enabled === true, initialTamerRank: tamerRankValue });
     freeBattleMenu=saved.progression.freeBattleMenu??null;
     battleTactics=normalizeBattleTactics(saved.progression.battleTactics);
+    // The welcome tickets ride the next save; an unsaved grant is simply granted again.
+    cyberGacha=grantGachaWelcome(saved.progression.cyberGacha??null).state;
     initializeNativeRaisingHome({tutorialBoundary});
     selectedDatabaseSpeciesIndex = null;
     resetExpedition();
@@ -1261,6 +1308,7 @@ export function createChampionshipStandaloneApp({
     const beforeRng=gameplayRng;
     const beforeBadges = battleBadgesValue;
     const beforeRank=tamerRankValue,beforeTitles=nativeTitles,beforeMessages=nativeMessages,beforeRun=championshipRun;
+    const beforeGacha=cyberGacha,beforeGachaDrop=lastBattleGachaDrop;
     const expectedBits = requireShop().getBits();
     // One rollback for both ways this can fail. The wallet is committed last, so
     // until it succeeds every one of these is still the pre-transaction value.
@@ -1270,6 +1318,7 @@ export function createChampionshipStandaloneApp({
       gameplayRng=beforeRng;
       battleBadgesValue = beforeBadges;
       tamerRankValue=beforeRank;nativeTitles=beforeTitles;nativeMessages=beforeMessages;championshipRun=beforeRun;
+      cyberGacha=beforeGacha;lastBattleGachaDrop=beforeGachaDrop;
     };
     battleTransactionActive = true;
     try {
@@ -1292,7 +1341,15 @@ export function createChampionshipStandaloneApp({
         if(r.rankNotice!==null)nativeMessages=enqueueNativeRaisingMessage(nativeMessages,r.rankNotice);
         }
       }
-      const committed = requireShop().applyBitsTransaction({ expectedBits, bits: result.wallet });
+      // Cyber Gachapon: a won settled match drops tickets, and an armed bounty
+      // beacon multiplies this match's purse (OWNER_APPROVED_ADAPTATION 2026-10-29).
+      let wallet=result.wallet;
+      if(result.receipt?.status==="SETTLED"&&result.receipt.won){
+        const drop=settleGachaBattleWin(gachaState(),{bits:Math.max(0,result.wallet-expectedBits),random:gachaRandom});
+        cyberGacha=drop.state;wallet=Math.min(BITS_WALLET_CAP,result.wallet+drop.bonusBits);
+        lastBattleGachaDrop=Object.freeze({attemptId:result.receipt.attemptId??null,tickets:drop.tickets,bonusBits:wallet-result.wallet,beacon:drop.beacon});
+      }
+      const committed = requireShop().applyBitsTransaction({ expectedBits, bits: wallet });
       if (!committed.ok) {
         rollback();
         return Object.freeze({ ok: false, reason: committed.reason });
@@ -1375,6 +1432,7 @@ export function createChampionshipStandaloneApp({
       championshipRun=null;
       nativeMessages=createNativeRaisingMessages();
       nativeOpening=opening;
+      cyberGacha=grantGachaWelcome(null).state;
       tutorialBaseline=null;tutorialPendingOpening=null;tutorialOfferEligible=opening!==null;
       registeredSpeciesValue = Object.freeze([]);
       battleEconomy = createBattleEconomyState();
@@ -1801,13 +1859,18 @@ export function createChampionshipStandaloneApp({
       if(!accepted.length)return {ok:false,reason:'INVENTORY_FULL'};
       const nextRaising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({
         ...raising.nativeHome,discoveries:removeCollectedDiscoveries(state,accepted)})});
-      const status=savePort.save({...liveSaveRequest(revision+1),raising:nextRaising,shop:candidate.toSave()});
+      // Cyber Gachapon: every fifth journal find is a milestone worth 3 tickets, once.
+      let nextGacha=gachaState(),journalTickets=0;
+      for(let mark=Math.floor((state.collected??0)/5)+1;mark<=Math.floor((nextRaising.nativeHome.discoveries.collected??0)/5);mark++){
+        const claim=claimGachaReward(nextGacha,`journal:${mark*5}`,3);nextGacha=claim.state;journalTickets+=claim.granted;
+      }
+      const status=savePort.save({...liveSaveRequest(revision+1),raising:nextRaising,shop:candidate.toSave(),cyberGacha:nextGacha});
       if(status.phase!=='SAVED'){savePort.discardPendingWrite();return {ok:false,reason:'SAVE_FAILED'};}
-      raising=nextRaising;
+      raising=nextRaising;cyberGacha=nextGacha;
       shop=createShopRuntime({snapshot:candidate.toSave(),huntInventory,allowRepeatedCages:playtestPolicy?.enabled===true,
         allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
       applyMappedHuntInventoryFromShop(shop,huntInventory);bindShopRuntime();revision++;
-      publishRaising();return {ok:true,collected:accepted.length,remaining:raising.nativeHome.discoveries.pending.length};
+      publishRaising();return {ok:true,collected:accepted.length,remaining:raising.nativeHome.discoveries.pending.length,gachaTickets:journalTickets};
     },
 
     // Partner life (Owner 2026-10-28). Readers are pure; the two writers below
@@ -2483,6 +2546,7 @@ export function createChampionshipStandaloneApp({
       requireShop();
       if (screens.current() === CHAMPIONSHIP_SCREENS.SHOP) return screens.current();
       lastShopReceipt = null;
+      lastGachaResult = null;
       // OVL18 exit and OVL17 entry both call the shared clock stop routine.
       if (screens.current() === CHAMPIONSHIP_SCREENS.RAISING_HOME) this.advanceClock({ units: 0, clearElapsed: true });
       screens.enter(CHAMPIONSHIP_SCREENS.SHOP);
@@ -2793,6 +2857,145 @@ export function createChampionshipStandaloneApp({
 
     getBattleEconomyState() {
       return battleEconomy;
+    },
+
+
+    getCyberGachaFrame(){
+      requireSession();
+      const state=gachaState();
+      const partners=this.getRaisingInstances().map(entry=>{
+        const profile=gachaProfile(entry.instanceId),index=profile?.fields['000']??null;
+        const species=Number.isInteger(index)?nativeHuntSpeciesByIndex(index):null;
+        return Object.freeze({instanceId:entry.instanceId,name:profile?.name||entry.displayName,speciesIndex:index,
+          generation:species?.generation??null,inRanch:raisingActors.has(entry.instanceId),
+          stats:profile?projectNativeIndividualStats(profile):null,bloodline:gachaBloodlineOf(state,entry.instanceId)});
+      });
+      return deepFreeze({tickets:state.tickets,diamonds:friendsPlaytest?.diamonds??null,bits:shop?.getBits()??0,
+        pity:state.pity,pityMax:GACHA_PITY_MAX,pulls:state.pulls,machines:GACHA_MACHINES,
+        chips:GACHA_CHIPS.map(chip=>({...chip,owned:state.chips[chip.id]??0,
+          armed:state.armed.hunt?.includes(chip.id)===true||state.armed.bounty===chip.id})),
+        metals:GACHA_METALS.map(metal=>({...metal,owned:state.metals[metal.id]??0})),
+        goods:GACHA_GOODS,bloodlines:GACHA_BLOODLINES,autoFill:autoFillSynthesizer(state),
+        armed:state.armed,partners,lastResult:lastGachaResult});
+    },
+
+    /** The bloodline inscribed on one partner, or null (name badges, rings, cards). */
+    getPartnerBloodline(instanceId){return gachaBloodlineOf(cyberGacha,instanceId);},
+
+    /** Tickets (and beacon bonus) the last won match dropped, for the result podium. */
+    getLastBattleGachaDrop(){return lastBattleGachaDrop;},
+    getGachaTickets(){return session?gachaState().tickets:0;},
+    /** Cartridges this hunt started with (the field readout names them). */
+    getHuntGachaBoosts(){return screens.current()===CHAMPIONSHIP_SCREENS.HUNT_FIELD?lastHuntGachaBoosts:Object.freeze([]);},
+
+    gachaPull(machine,count=1){
+      if(screens.current()!==CHAMPIONSHIP_SCREENS.SHOP)throw new Error('CHAMPIONSHIP_SHOP_NOT_ACTIVE');
+      const result=pullCyberGacha(gachaState(),{machine,count,diamonds:friendsPlaytest?.diamonds??null,
+        bits:requireShop().getBits(),random:gachaRandom});
+      if(!result.ok)return gachaRefusal(result.reason);
+      const friends=result.charge.diamonds?normalizeFriendsPlaytestState({...friendsPlaytest,
+        diamonds:friendsPlaytest.diamonds-result.charge.diamonds}):friendsPlaytest;
+      const goods=result.prizes.filter(prize=>prize.kind==='GOODS');
+      let candidate=null;
+      if(result.charge.bits||goods.length){
+        candidate=gachaShopCandidate();
+        if(result.charge.bits){const bits=candidate.getBits();
+          if(!candidate.applyBitsTransaction({expectedBits:bits,bits:bits-result.charge.bits}).ok)return gachaRefusal('WALLET_CHANGED');}
+        for(const prize of goods)candidate.receiveNativeGift(prize.shopRecordIndex,prize.quantity);
+      }
+      if(!commitGacha({state:result.state,friends,shopCandidate:candidate}))return gachaRefusal('SAVE_FAILED');
+      return gachaReceipt({ok:true,kind:'PULL',machine,count,charge:result.charge,prizes:result.prizes.map(gachaPrizeView)});
+    },
+
+    gachaClaimPity(metalId){
+      if(screens.current()!==CHAMPIONSHIP_SCREENS.SHOP)throw new Error('CHAMPIONSHIP_SHOP_NOT_ACTIVE');
+      const result=claimGachaPity(gachaState(),metalId);
+      if(!result.ok)return gachaRefusal(result.reason);
+      if(!commitGacha({state:result.state}))return gachaRefusal('SAVE_FAILED');
+      return gachaReceipt({ok:true,kind:'PITY',prizes:[gachaPrizeView(result.prize)]});
+    },
+
+    /** Five chips in, one metal out. `null` takes the one-tap fill (spare R chips). */
+    gachaSynthesize(chipIds=null){
+      if(screens.current()!==CHAMPIONSHIP_SCREENS.SHOP)throw new Error('CHAMPIONSHIP_SHOP_NOT_ACTIVE');
+      const ids=chipIds??autoFillSynthesizer(gachaState());
+      const result=synthesizeGachaMetal(gachaState(),ids,{random:gachaRandom});
+      if(!result.ok)return gachaRefusal(result.reason);
+      if(!commitGacha({state:result.state}))return gachaRefusal('SAVE_FAILED');
+      return gachaReceipt({ok:true,kind:'SYNTH',critical:result.critical,consumed:result.consumed,prizes:[gachaPrizeView(result.prize)]});
+    },
+
+    /**
+     * Use one chip or metal. Growth chips and metals (mode ENHANCE) write the
+     * partner's persistent words; mode CATALYST forces the partner's next
+     * evolution in the ranch. Hunt and bounty chips are armed for the next
+     * hunt / win. SSR+ metals inscribe the partner's bloodline.
+     */
+    gachaUseItem(itemId,instanceId=null,{mode='ENHANCE'}={}){
+      requireSession();
+      const chip=getGachaChip(itemId),metal=getGachaMetal(itemId),state=gachaState();
+      if(!chip&&!metal)return gachaRefusal('UNKNOWN_ITEM');
+      if(((chip?state.chips:state.metals)[itemId]??0)<1)return gachaRefusal('NOT_OWNED');
+      if(chip&&chip.kind!=='GROWTH'){
+        const spent=spendGachaItem(state,itemId);
+        if(!spent.ok)return gachaRefusal(spent.reason);
+        if(!commitGacha({state:spent.state}))return gachaRefusal('SAVE_FAILED');
+        return gachaReceipt({ok:true,kind:'ARMED',itemId});
+      }
+      const profile=instanceId?gachaProfile(instanceId):null;
+      if(!profile)return gachaRefusal('UNKNOWN_INDIVIDUAL');
+      const speciesId=this.resolveRaisingInstance(instanceId).speciesId;
+      const bloodline=metal&&inscribesBloodline(metal)?metal.family:null;
+      if(metal&&mode==='CATALYST'){
+        const actor=raisingActors.get(instanceId),index=profile.fields['000'];
+        if(!actor)return gachaRefusal('PARTNER_NOT_IN_RANCH');
+        if([...raisingActors.values()].some(a=>a.evolution))return gachaRefusal('EVOLUTION_RUNNING');
+        const species=nativeHuntSpeciesByIndex(index),rules=NATIVE_RAISING_LIFECYCLE_RULES.rules[index-8]??[];
+        const choices=rules.map((rule,ruleIndex)=>({rule,ruleIndex})).filter(({rule})=>rule.kind!==1);
+        if(species.generation===0||species.generation===6||!choices.length)return gachaRefusal('NO_EVOLUTION_ROUTE');
+        if(gachaRarityRank(metal.rarity)<gachaRarityRank(catalystRarityForGeneration(species.generation)))return gachaRefusal('METAL_TOO_WEAK');
+        const spent=spendGachaItem(state,itemId,{instanceId,bloodline});
+        if(!spent.ok)return gachaRefusal(spent.reason);
+        if(!commitGacha({state:spent.state}))return gachaRefusal('SAVE_FAILED');
+        // The ranch plays it: the same native evolution its predicates would have started.
+        const {rule,ruleIndex}=choices[0];
+        beginNativeRaisingEvolution(actor,{target:rule.target,actor:{'1f4':ruleIndex,'1f0':Number(ruleIndex===rules.length-1),'464':0}},
+          {next:nextGameplayRandom},raisingFoods);
+        publishRaising();
+        return gachaReceipt({ok:true,kind:'CATALYST',itemId,instanceId,target:rule.target,bloodline});
+      }
+      const effect=chip?chip.effect:metalBoostEffect(metal);
+      const nextProfile=normalizeNativeIndividualProfile(applyGachaBoost(profile,effect),speciesId);
+      const spent=spendGachaItem(state,itemId,{instanceId,bloodline});
+      if(!spent.ok)return gachaRefusal(spent.reason);
+      const before={creature,raising,registered:registeredSpeciesValue};
+      writeRaisingNativeProfile(instanceId,nextProfile,{markDirty:false});
+      if(!commitGacha({state:spent.state})){
+        creature=before.creature;raising=before.raising;registeredSpeciesValue=before.registered;return gachaRefusal('SAVE_FAILED');
+      }
+      publishRaising();
+      return gachaReceipt({ok:true,kind:'ENHANCE',itemId,instanceId,bloodline,
+        before:projectNativeIndividualStats(profile),after:projectNativeIndividualStats(nextProfile)});
+    },
+
+    /** Once-only reward (a story chapter): tickets the first time its key is claimed. */
+    claimGachaReward(key,amount){
+      requireSession();
+      const result=claimGachaReward(gachaState(),key,amount);
+      if(!result.granted)return Object.freeze({ok:true,granted:0,key});
+      if(!commitGacha({state:result.state}))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
+      publishScreens();
+      return Object.freeze({ok:true,granted:result.granted,tickets:result.state.tickets,key});
+    },
+
+    /** Arena wins: tickets straight into the save. */
+    grantGachaTickets(amount,reason='REWARD'){
+      requireSession();
+      const result=grantGachaTickets(gachaState(),amount);
+      if(!result.granted)return Object.freeze({ok:true,granted:0,reason});
+      if(!commitGacha({state:result.state}))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
+      publishScreens();
+      return Object.freeze({ok:true,granted:result.granted,tickets:result.state.tickets,reason});
     },
 
     getFreeBattleMatches(){return listNativeFreeBattleMatches(freeBattleMenu);},
@@ -3130,8 +3333,11 @@ export function createChampionshipStandaloneApp({
       }
       championshipRun=null;
       if(battleBadgesValue!==beforeBadges)applyProgression();
+      // A paid tournament is a title won: 3-10 gacha tickets beside the prize.
+      let championTickets=0;
+      if(payable){const grant=grantGachaTickets(gachaState(),3+Math.floor(gachaRandom()*8));cyberGacha=grant.state;championTickets=grant.granted;}
       savePort.markDirty();
-      return Object.freeze({ok:true,payable,prize:payable?run.prize:0,bits:wallet,
+      return Object.freeze({ok:true,payable,prize:payable?run.prize:0,bits:wallet,gachaTickets:championTickets,
         flags:Object.freeze([...run.flags]),rank:tamerRankValue,
         championship:nativeTitles.championship});
     },
@@ -3388,15 +3594,24 @@ export function createChampionshipStandaloneApp({
         // up, which is several taps before anyone can reach this.
         const { prepareNativeHuntEntry } = await import("../hunt/capture/nativeHuntEntryTransaction.js");
         const expansion = huntCaptureReplay === null && typeof huntExpansionLoader === 'function' ? await huntExpansionLoader(gate) : null;
-        const entry = huntCaptureReplay === null ? prepareNativeHuntEntry({ biomeId:gate.biomeId, expansion,
+        // Cyber Gachapon cartridges armed for this hunt (OWNER_APPROVED_ADAPTATION 2026-10-29).
+        const armed = takeArmedHuntChips(gachaState());
+        const boosts = Object.assign({}, ...armed.chips.map(id => getGachaChip(id).effect));
+        // The rare lure lifts this hunt's appearance decay; the saved decay itself is kept.
+        const lurePersistent = boosts.rareLure ? { ...huntPersistentState,
+          modifiers: huntPersistentState.modifiers.map(row => row.map(() => 0)) } : huntPersistentState;
+        const lured = huntCaptureReplay === null ? prepareNativeHuntEntry({ biomeId:gate.biomeId, expansion,
           clock:requireSession().getRaisingHomeSnapshot(),
-          rngSnapshot:gameplayRngSnapshot(), persistentState:huntPersistentState }) : null;
+          rngSnapshot:gameplayRngSnapshot(), persistentState:lurePersistent }) : null;
+        const entry = lured && boosts.rareLure ? { ...lured, persistentState:{ ...lured.persistentState,
+          modifiers:structuredClone(huntPersistentState.modifiers) } } : lured;
         const world = createHuntWorld(gate, entry);
         const factory = huntRuntimeFactory
           ?? (await import("../hunt/huntRuntime.js")).createHuntRuntime;
         const candidateRuntime = factory({ world, nativeEntry:entry,
           captureReplay:huntCaptureReplay, maxCardG:maxGFromInventory(huntInventory),
-          nativeControls:entry ? {loadout:requireLoadout(),consumeItem:(id,n=1)=>requireShop().consumeHuntItem(id,n),onChange:publishScreens} : null,
+          nativeControls:entry ? {loadout:requireLoadout(),consumeItem:(id,n=1)=>requireShop().consumeHuntItem(id,n),onChange:publishScreens,
+            ...(armed.chips.length ? {boosts} : {})} : null,
           fieldActor:{ actorId:"championship:2026:actor:tamer", displayName:"Tamer" } });
         if (!candidateRuntime || candidateRuntime.world !== world) throw Error("HUNT_ENTRY_RUNTIME_INVALID");
         if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_LOADOUT || confirmedGateId !== gate.gateId) {
@@ -3406,7 +3621,8 @@ export function createChampionshipStandaloneApp({
         screens.enter(CHAMPIONSHIP_SCREENS.HUNT_FIELD);
         if (entry) { gameplayRng = entry.rng; huntPersistentState = entry.persistentState; }
         huntRuntime = candidateRuntime;
-        huntDeadlineMinute = entry ? Math.min(requireSession().getRaisingHomeSnapshot().clockMinutes + 480, DAY_END_MINUTES) : null;
+        huntDeadlineMinute = entry ? Math.min(requireSession().getRaisingHomeSnapshot().clockMinutes + 480 + (boosts.extraSeconds ?? 0), DAY_END_MINUTES) : null;
+        if (armed.chips.length) { cyberGacha = armed.state; lastHuntGachaBoosts = Object.freeze([...armed.chips]); }
         // Hunt resume discards the prior scene's raw sub-minute remainder.
         if (entry) requireSession().advanceRaisingClock({ units: 0, divisor: 400, clearElapsed: true,
           expectedClockRevision: requireSession().getRaisingHomeSnapshot().clockRevision });
@@ -3418,7 +3634,7 @@ export function createChampionshipStandaloneApp({
           if (!paid.ok) throw Error("HUNT_ENTRY_WALLET_CHANGED");
         }
         // Save observers see a fully committed screen/runtime/RNG/history set.
-        if (entry || admission.chargeBits > 0) savePort.markDirty();
+        if (entry || admission.chargeBits > 0 || armed.chips.length) savePort.markDirty();
       } catch (error) {
         huntEntryError = error instanceof Error ? error.message : "HUNT_ENTRY_FAILED";
         publishScreens();
@@ -3564,7 +3780,7 @@ export function createChampionshipStandaloneApp({
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
-            revision: revision + 1, interactionCount, friendsPlaytest, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, raising: candidateRaising,
+            revision: revision + 1, interactionCount, friendsPlaytest, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: (bonusShop ?? shop) ? (bonusShop ?? shop).toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),

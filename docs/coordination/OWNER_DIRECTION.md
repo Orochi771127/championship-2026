@@ -12,6 +12,32 @@ Owner brief (pasted 2026-10-28, four tasks, presentation only, no Blender or tex
 
 The brief set no commit, push or deployment. After the report the Owner directs 「好，那就合併吧，把它推送上去整合併發佈」, which authorizes this batch's commit, merging current main into it, push, merge to main and publication.
 
+On 2026-10-29 the Owner directs 「合併發佈」 after PR #113's checks finished. Main is merged in again (#111, #117). The Friends playtest gate showed that the drawn icons had made the phone System sheet about 67 px taller, covering the ranch field at the gate's right-edge probe, so the session keys return to three columns and the corner badges to the 28 px art size; the sheet is back to its old height.
+
+<!-- record-id: CYBER_GACHA_20261029 -->
+## 2026-10-29 — Cyber Gachapon replaces the Shop's plugin tab
+
+Owner brief (pasted 2026-10-29, six phases): turn the Shop's third tab 「外掛」 into 「🎰 數碼轉蛋機」 with a 5-in-1 chip synthesizer, find the evolution-metal art made earlier with Antigravity before drawing anything, have Codex make the missing PNG parts, turn the 18 plugin chips into stackable consumables, give evolution metals a catalyst use and a 金屬血統 title with a coloured ground halo, and drop 🎫 tickets from the welcome grant, wins, championships, story chapters and the journal. Mid-batch the Owner added: 「還有其他的道具的圖片也可以加進去，轉蛋雞得獎品裡」 (the other Antigravity item icons join the prize pool), 「這些圖請用適合網頁遊戲的檔案或格式來製作或接入」 (WebP), and 「要有一個專屬介面，是讓玩家自己去轉那個手把」 (a crank stage the player turns by hand; nothing is charged until one full turn). After review the Owner directs 「Commit跟push 然後整合至main發佈」, which authorizes this batch's commit, push, main integration through a PR and Pages publication.
+
+- OWNER_APPROVED_ADAPTATION: the 118 shop rows are unchanged; plugin rows 53–70 become the chips' identity and art, and owned plugins still fit the hunt loadout. New save field `progression.cyberGacha` (schema version and storage key unchanged), contract `docs/contracts/championship/CYBER_GACHA_20261029.json`.
+- Diamonds are the friends-playtest test diamonds; no real currency, payment or entitlement.
+- Hunt cartridges adjust inputs and outputs around the unchanged native writers (stun ticks ×2, half wild speed, a rope that does not wear, +120 hunt-clock minutes, this hunt's appearance decay lifted for the rare bait). The bounty beacon multiplies one won purse.
+- Art: Antigravity digital metals and item icons (found in the Antigravity brain folder and untracked in the main checkout), Codex-made machine, crank, capsules, ticket, furnace and supernova metal; all shipped as WebP.
+
+<!-- record-id: ARENA_RELAY_KITS_20261028 -->
+## 2026-10-28 — Data Arena RELAY kits that fit each partner's element and own moves
+
+Owner directs, after the Pokémon Arena 2D study, a staged build of real-time partner battles: 「可以分階段做，然後盤點我們的角色幫他們配招要配適合的屬性還有招式就像不可能草系會發飛彈 …除了幼年期I跟幼年期II…其他都會進去可以選擇。那你自己分階段去做自己切片。」
+
+- OWNER_APPROVED_ADAPTATION: a RELAY partner's element is derived from its own moves' evidence colours (`scripts/build-data-arena-relay-kits.mjs`); the three Tournament partners keep their designed kits. Its five choices open with its own special moves (mechanic from the approved VFX style, side effects from the colour, no stage scaling) and fill only from its own element's pool.
+- Eligibility stays Rookie through Mega (196 identities). Report: `docs/reports/data-arena-relay-kits-2026-10-28/`.
+- After stage one the Owner directs 「先commit並接著做第二階段，然後那些衝突的顏色可以另外做一個符合的效果嗎？或是你找一些skill可以做Vfx特效」: commit to the feature branch and continue with stage two (VFX). No push, merge or deployment is authorized.
+- OWNER_APPROVED_ADAPTATION for the conflicts: 16 moves whose approved name names their substance against the original bank colour take the name's style and colour (`NAME_OVERRIDES` in `scripts/build-move-vfx-themes.mjs`), in the Dex, battle and arena alike.
+- Stage two is presentation only: per-style projectile heads, element-following basics, impact families, 60–80 ms drawing-only hit-stop, windup charge orbs, beam tethers and status particles in RELAY.
+- Owner then directs 「Start stage three」 (same terms: commit on the branch, no push). OWNER_APPROVED_ADAPTATION: each relay field gets destructible cover in its own material (weak elements deal 1.4x to cover; wood burns; broken cover opens a route) and timed arena zones (warning 2.5 s, active 6 s, every 22 s; one 0.7 s claim per team per cycle; effect by field theme). Rules in `dataArenaRelayArena.js`; cover and zones are game data over the existing field grids.
+- Owner then directs 「Start stage four」 (same terms). OWNER_APPROVED_ADAPTATION, RELAY only: a landed hit staggers its target 0.10–0.20 s (walking stops and a windup's clock pauses, never cancels); a product-authored element wheel scales hits 1.25x / 0.8x (physical outside it; not a claim about the original's untraced element rules); opposing shots clash both ways (water/frost meets fire = steam, waves swallow shots, the heavier shot survives, equals trade); fire thaws a root and frost puts a burn out.
+- Owner then directs 「Push and open PR」: push `feat/arena-relay-kits-20261028` (main merged in to clear doc/contract conflicts) and open a PR against main.
+- On 2026-10-29 the Owner directs 「然後合併111」: merge PR #111 to main, which publishes it through the Pages workflow; verify the live build afterwards.
 <!-- record-id: CAGE_GROUND_STANDARD_20261028 -->
 ## 2026-10-28 — Cage ground standard v1, track cage CM02, gym floors and lockers
 

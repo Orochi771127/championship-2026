@@ -31,6 +31,9 @@ import { juicyPortrait, juicyPresentationEnabled } from "../presentation/juicy/j
 import { RELAY_ROSTER, relayPartner } from '../modes/dataArena/dataArenaRelayRoster.js';
 import { RELAY_MAP_IDS } from '../modes/dataArena/dataArenaRelayMaps.js';
 import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, RELAY_LOADOUTS, relayKit, relayMove, relayEffectStyle } from '../modes/dataArena/dataArenaRelay.js';
+import { relayOwnMoveInfo, relayBasicRecord } from '../modes/dataArena/dataArenaRelayKits.js';
+import { battleMoveName } from '../text/battleMoveNames.js';
+import { RELAY_ELEMENT_STRONG, relayElementWeakTo } from '../modes/dataArena/dataArenaRelayElements.js';
 
 const STEP_MS = DATA_ARENA_STEP_SECONDS * 1000;
 const MOVE_KEYS = Object.freeze({ KeyW: [0, -1], ArrowUp: [0, -1], KeyS: [0, 1], ArrowDown: [0, 1], KeyA: [-1, 0], ArrowLeft: [-1, 0], KeyD: [1, 0], ArrowRight: [1, 0] });
@@ -41,8 +44,12 @@ const SKILL_KEYS = Object.freeze({ Digit2: 0, KeyK: 0, Digit3: 1, KeyL: 1, KeyQ:
 const BEAM_KEYS = new Set(["Digit1", "KeyJ"]);
 const SLOT_KEYS = Object.freeze(["RMB·2", "Q·3", "E·4"]);
 const MODES = Object.freeze(["TOURNAMENT", "HARBOR", "RELAY"]);
-const moveName = (id) => t(`move.${id}`).split(/\s*[｜|]\s*/)[0];
-const moveEffect = (id) => t(`move.${id}`).split(/\s*[｜|]\s*/)[1] ?? "";
+// A partner's own move keeps its approved battle name; the arena line says what it does here.
+const ownMoveText = (id) => { const own = relayOwnMoveInfo(id); return own && `${battleMoveName(own.record) ?? id}｜${t(`relay.style.${own.style}`)}${t(`relay.palette.${own.palette}`)}`; };
+const moveText = (id) => ownMoveText(id) ?? t(`move.${id}`);
+const moveName = (id) => moveText(id).split(/\s*[｜|]\s*/)[0];
+const moveEffect = (id) => moveText(id).split(/\s*[｜|]\s*/)[1] ?? "";
+const basicName = (partnerId) => { const record = relayBasicRecord(relayPartner(partnerId)?.speciesIndex); return (record !== null && battleMoveName(record)) || t(`move.${RELAY_ACTION_PROFILES[partnerId].basic}`); };
 // Skill-button colour key only: relay partners carry their roster element.
 const LEGACY_ELEMENTS = Object.freeze({ "ember-lizard": "fire", "corona-cub": "light", "frost-drake": "frost" });
 const partnerElement = (id) => relayPartner(id)?.element ?? LEGACY_ELEMENTS[id] ?? "physical";
@@ -80,7 +87,7 @@ function ensureStylesheet() {
  * Pixi stage attached to `host`; `audioBus`/`music` are the product's.
  */
 export async function openDataArena({ ensureStage, audioBus = null, music = null, storage = null, reducedMotion = false,
-  resolutionCap = 2, onExit = () => {}, href = globalThis.location?.href, qa = false, seed = null }) {
+  resolutionCap = 2, onExit = () => {}, onVictory = null, href = globalThis.location?.href, qa = false, seed = null }) {
   await ensureStylesheet();
   const lifetime = new AbortController();
   const { signal } = lifetime;
@@ -558,6 +565,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         case 'RELAY_SWITCH': releaseInputs(); buildHud(); audio?.play('capture'); toast(t('relay.switched')); break;
         case 'RELAY_INTRO': banner(t('relay.ready'), 'phase', 2000); break;
         case 'RELAY_RIVAL': audio?.play('warn'); banner(t('relay.rival'), 'warn', 1500); break;
+        // Stage three arena zones and cover (2026-10-28).
+        case 'ARENA_WARNING': audio?.play('warn'); banner(t(`arena.${event.kind}.warn`), 'warn', 2400); break;
+        case 'ARENA_ACTIVE': banner(t(`arena.${event.kind}.active`), 'good', 2200); break;
+        case 'ARENA_CLAIM': audio?.play('pickup'); toast(t(`arena.${event.kind}.claim`, { amount: event.amount }), { x: event.x, y: event.y, tone: event.team === 0 ? 'good' : 'warn', key: `arena-claim-${event.team}` }); break;
+        case 'EFFECTIVE': toast(t(`relay.${event.mult > 1 ? 'effective' : 'resisted'}.${event.target}`), { x: event.x, y: event.y,
+          tone: (event.target === 'rival') === (event.mult > 1) ? 'good' : 'warn', key: `effective-${event.target}-${event.mult > 1}`, gap: 700 }); break;
+        case 'ARENA_PRESSURE': toast(t('arena.VENT.pressure'), { tone: 'warn', key: 'arena-pressure' }); break;
+        case 'PROP_DESTROYED': if (gameMode === 'RELAY') toast(t('arena.coverBroken'), { x: event.x, y: event.y, tone: 'warn', key: `cover-${event.id}` }); break;
         case 'RELAY_END': releaseInputs(); break;
         case "LASER_HIT": audio?.play("hit"); break;
         case "ENEMY_KILLED": audio?.play("kill"); break;
@@ -625,7 +640,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           else if (event.reason === "COOLDOWN") toast(t("toast.cooldown"), { tone: "info", key: "cooldown", gap: 900 });
           break;
         case "ULT_READY": audio?.play("level"); toast(t("hud.ultReady"), { tone: "good", key: "ult-ready", gap: 3000 }); break;
-        case "CAST_RELEASE": if (event.team === "player") audio?.play(gameMode === 'RELAY' ? relayEffectStyle(event.moveId).cue : event.moveType === 'LUNGE' ? 'dash' : 'burst'); break;
+        case "CAST_RELEASE": if (event.team === "player") audio?.play(gameMode === 'RELAY' ? relayEffectStyle(event.moveId, relayPartner(sim.getState().player.partnerId)?.element).cue : event.moveType === 'LUNGE' ? 'dash' : 'burst'); break;
         case "ULT_CAST": audio?.play("roar"); ultCutIn(event); break;
         case "NOVA": case "ZONE_BURST": audio?.play("burst"); break;
         case "CANCEL": if (event.rule === "BARRIER_BLOCKS_SHOT") { audio?.play("block"); toast(t("toast.blocked"), { x: event.x, y: event.y, tone: "good", key: "blocked", gap: 1200 }); } break;
@@ -884,7 +899,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           ...(own?.ultimate ? [el("span", "da-pill da-pill--ult", moveName(own.ultimate))] : []));
       }
       const kit = gameMode === "RELAY" ? relayKit(partnerId,relayLoadouts[partnerId]) : DATA_ARENA_KITS[partnerId];
-      const rows = [["LMB·1", gameMode === "RELAY" ? t(`move.${RELAY_ACTION_PROFILES[partnerId].basic}`) : t(`move.beam.${partnerId}`), gameMode === "RELAY" ? t("relay.basic") : t("kit.beam")],
+      const rows = [["LMB·1", gameMode === "RELAY" ? basicName(partnerId) : t(`move.beam.${partnerId}`), gameMode === "RELAY" ? t("relay.basic") : t("kit.beam")],
         ...kit.moves.map((id, slot) => [SLOT_KEYS[slot], moveName(id), moveEffect(id)]), ["R", moveName(kit.ultimate), moveEffect(kit.ultimate)]];
       kitPreview.replaceChildren(el("h3", "da-subtitle", t("kit.heading")));
       for (const [key, name, effect] of rows) {
@@ -909,6 +924,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         for(const id of relayTeamIds(partnerId,relayReserveId)) {
           const member=cast.partners.find(p=>p.partnerId===id), selected=relayKit(id,relayLoadouts[id]);
           const group=el('fieldset','da-loadout');group.append(el('legend','',member.name));
+          // Stage four: the partner's place on the element wheel.
+          const element=partnerElement(id),names=list=>list.length?list.map(e=>t(`relay.element.${e}`)).join('、'):t('relay.element.none');
+          group.append(el('p','da-note da-matchup',t('relay.matchup',{element:t(`relay.element.${element}`),strong:names(RELAY_ELEMENT_STRONG[element]??[]),weak:names(relayElementWeakTo(element))})));
           for(let slot=0;slot<3;slot++) {
             const label=el('label','',`${slot+2} `),select=el('select','da-loadout__select');select.setAttribute('aria-label',`${member.name} ${t('kit.heading')} ${slot+2}`);
             select.dataset.partner=id;select.dataset.slot=String(slot);
@@ -1067,6 +1085,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     releaseInputs();
     audio?.suspend();
     const { newBest, saved } = records.recordResult(result);
+    // Cyber Gachapon: the host pays a manual-battle win in tickets (1-3; a cup 3-10).
+    let gachaTickets = 0;
+    if (result.outcome === "VICTORY" && typeof onVictory === "function") {
+      try { gachaTickets = onVictory({ tournament: Boolean(result.tournament) })?.granted ?? 0; } catch { gachaTickets = 0; }
+    }
     const best = records.get().modes[result.mode]?.bestScore ?? records.get().bestScore;
     music?.setScene(result.outcome === "VICTORY" ? "victory" : "defeat", `arena-result:${matchId}`);
     const panel = el("div", `da-panel da-panel--result da-result--${result.outcome.toLowerCase()}`);
@@ -1088,6 +1111,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         el("p", "da-result__line", [t("result.time", { time: formatTime(result.timeSeconds) }), t("result.kills", { count: result.kills }), t("result.level", { level: result.level })].join("　")),
         el("p", "da-result__line", t("result.breakdown", result.breakdown)),
         el("p", "da-result__line", t("result.stats", { perfect: result.stats.perfectDodges, chains: result.stats.chains, rescues: result.stats.rescues, cheers: result.cheers })));
+    }
+    if (gachaTickets > 0) {
+      const drop = el("p", "da-result__line da-result__gacha", `🎫 +${gachaTickets}`);
+      drop.dataset.gachaTickets = String(gachaTickets);
+      panel.append(drop);
     }
     const actions = el("div", "da-actions");
     const retry = button("da-btn da-btn--primary", t("result.retry"), () => void startMatch(), signal);

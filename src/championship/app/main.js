@@ -190,7 +190,8 @@ const BATTLE_AI_POLICY =
   new URLSearchParams(globalThis.location?.search ?? "").get("battleAi") === "original" ? "ORIGINAL" : "IMPROVED_V1";
 const loadBattleRuntime = async () => {
   const create = (await import("./battleRuntime.js")).createBattleRuntime;
-  return options => create({ aiPolicy: BATTLE_AI_POLICY, ...options });
+  // Cyber Gachapon: an owned partner's metal bloodline badge rides its battle plate.
+  return options => create({ aiPolicy: BATTLE_AI_POLICY, getBloodline: id => app?.getPartnerBloodline?.(id) ?? null, ...options });
 };
 
 // Screen modules and art load through their existing foreground owners.
@@ -831,7 +832,8 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
           import('../presentation/ranchThreeScene.js'),import('../presentation/ranchThreeCoordinates.js')]);
         const field=ranchThreeField(manifest,plan,{pitch:RANCH_VIEW_PITCH});
         const threeScene=await createRanchThreeScene({stage,placements:plan.placements,field,signal,
-          connections:app.getRanchExplorationFrame()?.connections??null,cagePlacements:cageFrame?.placements??[]});
+          connections:app.getRanchExplorationFrame()?.connections??null,cagePlacements:cageFrame?.placements??[],
+          getBloodline:id=>app.getPartnerBloodline?.(id)??null});
         const displayObject=new PIXI.Container({label:'3D ranch metadata bridge'});
         return {assetId:'art:cage:three-20261021',field,displayObject,threeScene,update(){},
           getDiagnostics:()=>({assetId:'art:cage:three-20261021',three:threeScene.getDiagnostics()}),
@@ -1889,6 +1891,7 @@ async function mountBattleResult() {
     statistics:tutorial?null:{battles:record?.battles??null,winPercent:nativeBattleWinPercent(record),titleCount:app.getBattleBadges().length},
     unlocks:battleProgressBefore?app.getShopFrame().listings.filter(item=>!battleProgressBefore.shopIds.includes(item.shopRecordIndex)).map(item=>({name:uiText(item.displayName)})):[],
     progression,
+    gachaDrop:tutorial?null:(drop=>drop&&receipt&&drop.attemptId===(receipt.attemptId??null)?drop:null)(app.getLastBattleGachaDrop?.()),
     onExit() {
       if(tutorial){app.endInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
       battleRuntime?.dispose();
@@ -2411,6 +2414,7 @@ function projectRoster() {
       displayName: raisingDisplayName({ displayName, speciesId, source }),
       instanceId,
       // The starter's name is set by the opening; collected ones can be renamed.
+      bloodline: app.getPartnerBloodline?.(instanceId) ?? null,
       renameable: source?.kind !== "STARTER"
         && Boolean(app.getRaisingState()?.collection?.some((entry) => entry.instanceId === instanceId)),
       stats: profile,
@@ -2428,6 +2432,17 @@ function projectRoster() {
 /** Repaint the four info_bar fields from the R2 snapshot and the current screen. */
 function refreshStatusBar() {
   settingsPanel?.refreshSaveStatus?.();
+  // Cyber Gachapon: unspent tickets glow on the Shop button (🎫 10 after the welcome grant).
+  try {
+    const tickets = String(app?.getGachaTickets?.() ?? 0);
+    for (const button of document.querySelectorAll('[data-quick-id="shop"], [data-entry-id="shop"]')) {
+      button.dataset.gachaTickets = tickets;
+      let badge = button.querySelector(':scope > .cm-gacha-dock-badge');
+      if (!badge) { badge = document.createElement('span'); badge.className = 'cm-gacha-dock-badge'; badge.setAttribute('aria-hidden', 'true'); button.append(badge); }
+      badge.textContent = `🎫 ${tickets}`;
+      badge.hidden = tickets === '0';
+    }
+  } catch { /* the badge is decoration only */ }
   if (!statusBar) return;
   const screen = app.getScreen();
   const snapshot = app.getSession()?.getRaisingHomeSnapshot?.() ?? null;
@@ -2545,6 +2560,13 @@ async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = '
     if (result.outcome === 'completed' || result.outcome === 'skipped') {
       if (chapterId === STORY_FIRST_CHAPTER_ID) { try { settings.store.set('storyRiftChapter1Seen', true); } catch { /* read-only store */ } }
       document.querySelector('.int-rh2-story')?.setAttribute('data-new', 'false');
+      // Cyber Gachapon: a chapter sealed for the first time pays 3-5 tickets into the save.
+      if (result.outcome === 'completed') {
+        try {
+          const reward = app.claimGachaReward?.(`story:${chapterId}`, 3 + Math.floor(Math.random() * 3));
+          if (reward?.granted) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: `🎫 +${reward.granted}` } }));
+        } catch { /* a reward never breaks the story */ }
+      }
     }
     recoveryDiagnostics.record('STORY', { chapterId, source, stage: result.outcome });
     return result;
@@ -2803,7 +2825,9 @@ async function enterDataArena(dataArenaButton) {
       resolutionCap: currentQuality().pixiResolutionCap,
       qa: arenaParams.get("arenaQa") === "1",
       seed: /^\d{1,10}$/.test(seedParam) ? Number(seedParam) >>> 0 : null,
-      onExit: restoreBattle
+      onExit: restoreBattle,
+      // Cyber Gachapon: a manual-battle win pays 1-3 tickets, a cup 3-10, into the one save.
+      onVictory: ({ tournament }) => app?.grantGachaTickets?.(tournament ? 3 + Math.floor(Math.random() * 8) : 1 + Math.floor(Math.random() * 3), 'DATA_ARENA')
     });
     dataArenaSession = session;
     root.hidden = true;

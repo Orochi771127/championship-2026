@@ -25,7 +25,7 @@ const savedOffsets=pathIds.flatMap(id=>(lifecycle.rules[id-8]??[]).map((_,i)=>(i
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 
 test('MA50 and MA62 resolve to the approved stable identities, with unique sorted codes in every filter and locale',()=>{
-  const expected=[[121,'species-121','MA50','焰鋼獅'],[125,'species-125','MA62','日焰獅']];
+  const expected=[[121,'species-121','MA50','鋼鐵獅'],[125,'species-125','MA62','太陽獅']];
   const book=projectDatabase({registeredSpecies:pathIds});
   assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.displayCode)).size,DATABASE_DISPLAY_CATALOG.entries.length);
   const native=JSON.parse(fs.readFileSync('src/data/championship/database-display.r1.json','utf8'));
@@ -76,7 +76,7 @@ test('both five-language profiles describe lions without invented swords, and so
 });
 
 test('normal Database component selects corrected codes, navigates both routes and leaves state untouched in five languages',()=>{
-  try {for(const locale of locales)for(const [source,target,code,name] of [[64,125,'MA62','日焰獅'],[62,121,'MA50','焰鋼獅']]){
+  try {for(const locale of locales)for(const [source,target,code,name] of [[64,125,'MA62','太陽獅'],[62,121,'MA50','鋼鐵獅']]){
     const f=makeView({locale,selectedSpeciesIndex:source,registeredSpecies:pathIds,evolutionBranches:savedOffsets,collection:[]});
     try {
       const buttons=f.root.querySelectorAll('.cm-dex-routes__target');
@@ -91,8 +91,9 @@ test('normal Database component selects corrected codes, navigates both routes a
 
 test('native data stays pinned, separately authorized savev7 is reviewed, the original95 heroes stay intact and only the approved MA62 hero is added',()=>{
   // The later Owner-authorized100-cell save extension, then the hex cage world
-  // (2026-10-26), then the battle plan (2026-10-28), supersede this one source pin only.
-  const followup=JSON.parse(fs.readFileSync("docs/contracts/championship/BATTLE_TACTICS_20261028.json","utf8"));
+  // (2026-10-26), then the battle plan (2026-10-28), then the Cyber Gachapon save field
+  // (2026-10-29), supersede this one source pin only.
+  const followup=JSON.parse(fs.readFileSync("docs/contracts/championship/CYBER_GACHA_20261029.json","utf8"));
   assert.deepEqual(Object.keys(followup.sourceLocks),["src/championship/app/championshipStandaloneSave.js"]);
   // Owner-authorized MA05 replacement preserves the deployed AW40/GR01 trial and all other221 selections;
   // all unrelated native/gameplay pins remain exact. This pins the entire reviewed new file.

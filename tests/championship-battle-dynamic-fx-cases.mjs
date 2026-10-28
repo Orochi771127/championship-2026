@@ -51,7 +51,7 @@ test('every move resolves to a known form and palette from existing bank names a
     assert.ok(BATTLE_FX_FORMS.includes(look.form) && look.form !== 'common', `${move.recordIndex} form ${look.form}`);
     for (const bank of battleFxMoveBanks(move)) assert.ok(look.bankIds.includes(bank.bankId));
   }
-  // 鎧焰蜥 (species 34): basic strike, fire shot, fire beam signature.
+  // 火甲龍 (species 34): basic strike, fire shot, fire beam signature.
   const agumon = listMoveRecordsForSpecies(34);
   assert.deepEqual(agumon.map(m => {const l = describeBattleFxMove(m, agumon); return [m.recordIndex, l.tier, l.form, l.palette];}),
     [[59, 'basic', 'melee', 'neutral'], [60, 'skill', 'projectile', 'fire'], [61, 'ultimate', 'beam', 'fire']]);
@@ -67,14 +67,14 @@ test('only approved move names are shown; local acceptance shows stable skill ID
   assert.equal(battleFxApprovedMoveName(61), '烈鎧焰砲');
   assert.equal(battleFxApprovedMoveName(0), null);
   assert.equal(battleFxApprovedMoveName(9999), null);
-  const view = {combatants: [{displayName: '鎧焰蜥'}]};
+  const view = {combatants: [{displayName: '火甲龍'}]};
   const lines = [];
   const player = createBattleFxLookups({getView: () => view, onFeed: line => lines.push(line)});
   assert.equal(player.moveNameOf(61), '烈鎧焰砲');
   player.onEvent({type: 'LAUNCH', slot: 0, moveId: 61});
   player.onEvent({type: 'LAUNCH', slot: 0, moveId: 60});
   player.onEvent({type: 'LAUNCH', slot: 0, moveId: 59});
-  assert.deepEqual(lines, ['鎧焰蜥發動絕招「烈鎧焰砲」！', '鎧焰蜥使出「焰鱗彈」！'], 'a basic attack writes no line');
+  assert.deepEqual(lines, ['火甲龍發動絕招「烈鎧焰砲」！', '火甲龍使出「焰鱗彈」！'], 'a basic attack writes no line');
   const review = createBattleFxLookups({getView: () => view, showIds: true});
   assert.equal(review.moveNameOf(61), '烈鎧焰砲 #61');
   assert.equal(review.moveNameOf(5), '全體治癒 α #5');
@@ -102,9 +102,9 @@ test('every species move has one unique approved name in each shipped language (
 });
 
 test('in-game species names are original (Owner 2026-10-12 rename)', () => {
-  assert.equal(SPECIES_NAMES_ZH[181], '地嘯暴龍');
-  assert.equal(SPECIES_NAMES_ZH[211], '黃銅王猿');
-  assert.equal(SPECIES_NAMES_ZH[222], '天穹帝龍');
+  assert.equal(SPECIES_NAMES_ZH[181], '鑽地龍');
+  assert.equal(SPECIES_NAMES_ZH[211], '蹦迪猿');
+  assert.equal(SPECIES_NAMES_ZH[222], '天帝龍');
   for (const retired of ['地龍獸', '鋼鐵猿猴獸', '帝皇龍甲獸']) assert.ok(!Object.values(SPECIES_NAMES_ZH).includes(retired), retired);
 });
 

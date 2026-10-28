@@ -756,6 +756,7 @@ export function createBattleRuntime(options = {}) {
           else if(tally){const reason=scriptStateFor(action).guard?.reason??'NO_ACTOR';tally.refused+=1;tally.refusedBy[reason]=(tally.refusedBy[reason]??0)+1;}
           return ok;}});
       source = createBattlePresentationSource({ session, step: stepMatch, getOpening:opening.snapshot, arenaIndex, getSpecialPrelude,
+        ...(typeof options.getBloodline === 'function' ? {getBloodline:options.getBloodline} : {}),
         getArenaHazards:()=>arenaHazards?.snapshot()??null,
         getNativeActor:slot=>nativeActors.project(slot),getImpactEffects:()=>impactEffects.snapshot({
           exclusiveOwner:session.slots.find(c=>c?.field94)?.field94??0}),getNativeLifecycle:()=>({

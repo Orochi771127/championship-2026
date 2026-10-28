@@ -9226,6 +9226,49 @@
     "src/data/championship/public-ui-selection.v1.json",
     "src/data/championship/r2/fields/fieldInventoryR2.js",
     "src/data/championship/ranch-render-selection.v1.json",
+    "src/championship/modes/dataArena/dataArenaRelayKits.js",
+    "src/data/championship/data-arena-relay-kits.v1.json",
+    "src/championship/modes/dataArena/dataArenaRelayArena.js",
+    "src/championship/modes/dataArena/dataArenaRelayElements.js",
+    "assets/production/items/digital-metals-r1/attract_light_160.webp",
+    "assets/production/items/digital-metals-r1/beta_ore_160.webp",
+    "assets/production/items/digital-metals-r1/beta_shard_160.webp",
+    "assets/production/items/digital-metals-r1/chrono_alloy_160.webp",
+    "assets/production/items/digital-metals-r1/chrono_alloy_shard_160.webp",
+    "assets/production/items/digital-metals-r1/chrono_metal_160.webp",
+    "assets/production/items/digital-metals-r1/chrono_metal_shard_160.webp",
+    "assets/production/items/digital-metals-r1/chrono_ore_160.webp",
+    "assets/production/items/digital-metals-r1/chrono_ore_shard_160.webp",
+    "assets/production/items/digital-metals-r1/decoy_doll_160.webp",
+    "assets/production/items/digital-metals-r1/emma_metal_160.webp",
+    "assets/production/items/digital-metals-r1/emma_shard_160.webp",
+    "assets/production/items/digital-metals-r1/hunt_ammo_160.webp",
+    "assets/production/items/digital-metals-r1/hunt_meat_bait_160.webp",
+    "assets/production/items/digital-metals-r1/magnetic_wire_160.webp",
+    "assets/production/items/digital-metals-r1/medicine_capsule_160.webp",
+    "assets/production/items/digital-metals-r1/paralysis_dart_160.webp",
+    "assets/production/items/digital-metals-r1/protein_booster_160.webp",
+    "assets/production/items/digital-metals-r1/proximity_mine_160.webp",
+    "assets/production/items/digital-metals-r1/supernova_metal_160.webp",
+    "assets/production/items/digital-metals-r1/supernova_shard_160.webp",
+    "assets/production/items/digital-metals-r1/tactical_bomb_160.webp",
+    "assets/production/items/digital-metals-r1/training_meat_160.webp",
+    "assets/production/items/digital-metals-r1/wound_medicine_160.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_r_bottom.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_r_top.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_sr_bottom.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_sr_top.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_ssr_bottom.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_ssr_top.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_ur_bottom.webp",
+    "assets/production/ui/cyber-gacha-r1/capsule_ur_top.webp",
+    "assets/production/ui/cyber-gacha-r1/crank_handle.webp",
+    "assets/production/ui/cyber-gacha-r1/gacha_ticket.webp",
+    "assets/production/ui/cyber-gacha-r1/machine_body.webp",
+    "assets/production/ui/cyber-gacha-r1/synth_furnace.webp",
+    "src/championship/app/cyberGacha.css",
+    "src/championship/app/cyberGachaView.js",
+    "src/championship/gacha/cyberGacha.js",
     "src/championship/app/huntTacticalDock.js",
     "src/championship/app/storyChapterMap.js",
     "src/championship/app/ui/menuEntryGlyphs.js",
@@ -41741,7 +41784,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "2091bd9c28107b1ff701aab2d072cb95f2a702a1d58b2754122c975cb924b2df"
+        "sha256": "6eebc8d5cd87e1b0d4034a65b5432ead938c50a701715255ce1f183f360e11f5"
       },
       {
         "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -41809,7 +41852,7 @@
       },
       {
         "path": "src/championship/app/battlePresentationSource.js",
-        "sha256": "929e4260775b47f1f9ba4ff441ffd828f556327cb4ee939f3b8a11faaf5e216b"
+        "sha256": "1079f56b8ea5b15f1ae3b368c86b53edce4984d20b37a5265b2b439646e32de1"
       },
       {
         "path": "src/championship/app/battleRosterSource.js",
@@ -41817,7 +41860,7 @@
       },
       {
         "path": "src/championship/app/battleRuntime.js",
-        "sha256": "c6d104a62a559dc93fe8cbe0b79abee88907d00be0c2144f159a6f9a8016bcb5"
+        "sha256": "a7deaac994f4a416ab453d22597e36f83677e18366fca51d67aae37ca2558336"
       },
       {
         "path": "src/championship/app/cageRoster.js",
@@ -41829,7 +41872,7 @@
       },
       {
         "path": "src/championship/app/ChampionshipPersistentSavePort.js",
-        "sha256": "672599453b3df5d0bf932fb994621eecefff96027a2daa7d077202a662bc3d80"
+        "sha256": "5a3409c852685c47c7e4f5dce4fd6243a4707d8ea62a27ac432a155f5d869c81"
       },
       {
         "path": "src/championship/app/championshipRaisingProduction.js",
@@ -41845,7 +41888,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "d4d2837859fe9de7f77493891c05f9ac8e129dce3e78bbb142b1960ef38861ce"
+        "sha256": "048a14315d906df16a5f3fdefdacab9bae2626d51ff2932458199723c46cb772"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -41853,7 +41896,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneSave.js",
-        "sha256": "3a72fce7d38151f473f343fb8b9f59349daef1beb7cb09b6a0547c628d07ac8e"
+        "sha256": "1c4e7336e17e35099758cea84ff533e81c60c08bacbafef356afdbf55953b135"
       },
       {
         "path": "src/championship/app/championshipStatusBar.js",
@@ -41877,7 +41920,7 @@
       },
       {
         "path": "src/championship/app/dataArenaScreen.js",
-        "sha256": "12ac65989ce19ccdde19f0e603c86a5c65fd69e637b1c5ecd39ed803ecac88a4"
+        "sha256": "2bfae772990e10de441fd4cfaa74ae41deaf84740207f99bfb1e87978cf62cda"
       },
       {
         "path": "src/championship/app/daylightSkin.css",
@@ -41885,7 +41928,7 @@
       },
       {
         "path": "src/championship/app/digimonListScreen.js",
-        "sha256": "458efd11eaf925890f9bf51e2f4f81754e87e2031bc1249eee449968b5d92806"
+        "sha256": "e0b475c3751d33d23136c304d41bfe37a0e665f6f716a72f68265dbb1eaa8f37"
       },
       {
         "path": "src/championship/app/downloadSaveBackup.js",
@@ -41909,7 +41952,7 @@
       },
       {
         "path": "src/championship/app/gateHuntPresentationSource.js",
-        "sha256": "577e62d728c1f8de2f11d4b84337043b0a712fc3a669f9aefdaf6e206c876a26"
+        "sha256": "ed87162d67cce0e8abd02fb3fc5693ef1a42556fa6bb83cd0a896dd844fcaa39"
       },
       {
         "path": "src/championship/app/helpScreen.js",
@@ -41973,7 +42016,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "bd5dc39deb8a3827f981e024c9deef1401153a073f4ddc43e26a1f045652bfc6"
+        "sha256": "22f5cbcde1ce474973f8917faf86059ea441c59064918b84c3f5c22e0e47a1d9"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -42069,7 +42112,7 @@
       },
       {
         "path": "src/championship/app/raisingHomeP1RView.js",
-        "sha256": "f73d3b37c7137483cc85ca293444cede5f28cac3ad1d8cb4e26debb26d70c0df"
+        "sha256": "1acb1c20d0c2f1c44739066f9629e35464bc36974e0ba64585e8611410e9c356"
       },
       {
         "path": "src/championship/app/raisingPresentationSource.js",
@@ -42201,7 +42244,7 @@
       },
       {
         "path": "src/championship/app/ui/screenLayout.css",
-        "sha256": "b6afa8d735803722913bb0762daa33a3f67432f10c38059c05724977d2e44d23"
+        "sha256": "7d6a0a3967ac9d662c039a388eaf18a24797559618f7da9f569adde1c8fac478"
       },
       {
         "path": "src/championship/app/ui/settings.css",
@@ -42241,11 +42284,11 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "363846d409218c4a7f08a790a21fb6526d87ca7051b9f2e512922164c54f611c"
+        "sha256": "5d02d9de952a8bdcba5357a6e138dd07f670ea4c61a47e183e6d57612ac44d2a"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
-        "sha256": "ba34ea5fe22c8733fd24a4c23435fdb3d5d3100b12147ea02d47b0e218e8e43d"
+        "sha256": "92c003fc9e2669d3a6738ceb45bebd9bf19b4a823b58f1a5390396d2a54383b9"
       },
       {
         "path": "src/championship/app/vs5Styles.css",
@@ -42661,7 +42704,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntFieldControls.js",
-        "sha256": "f6eb9818a4c62af398f9690dd96e7cf51bf65b844a22cfa9ad6b480364537303"
+        "sha256": "2ff09f43a973e6b905484e1f3077367ae4e3dc14986fe976de5090d10e1b436a"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntGateVariant.js",
@@ -42821,7 +42864,7 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaGrid.js",
-        "sha256": "1cee48b1df3a685c8d1980d4ec7b7ca5c5dc501bcc70db87b868c3695c56d94a"
+        "sha256": "b15aee4905122d059c21899d73d837580dac22bf163be1ffd64b5d0fd2849ad3"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaNav.js",
@@ -42829,19 +42872,19 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaProps.js",
-        "sha256": "8b1834d0afa3b1c4f19cba31915097c23e9bdea39f7582e3d38dec00d2b2a3a5"
+        "sha256": "3188c98c521f119fd6b821f299bb45e3a1e68c5c5455167e215c1e5d9a9be581"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaRelay.js",
-        "sha256": "64500614189bec79bbba2206a2128a3694a56365f21f5668b797ae7500cf5001"
+        "sha256": "a1244d8766ffccfe453c0dba6523043fdf00661692fbc040fdc68eb0fc58fbe9"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaRelayMaps.js",
-        "sha256": "84debc707bddeb30c176d9d3c3305ae46ae1e280eb67d8168d68cf9cf298e580"
+        "sha256": "2b30b5c1b141249541b13fc644d756411805b4c479c07efb91a41fdb33754558"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaRelayRoster.js",
-        "sha256": "c318a48426e1a3d2f1e50074effbc58399db083727602a7b0d29aafa053ea33e"
+        "sha256": "e38934dc2ada212024e90c9042b5dc8f69074271bee9f747ead2d1711dffea2b"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaSave.js",
@@ -42849,7 +42892,7 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaSimulation.js",
-        "sha256": "eea5cc8d49b1731ec585ea0438143cc124dd55f3274686d5531aaf4769edbd2b"
+        "sha256": "405262e23bbba8c909fb47230a5dafd33195993cb5dcb785e79e91b9fde598aa"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaUpgrades.js",
@@ -43029,15 +43072,15 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaInteractionView.js",
-        "sha256": "7f7a02d15640977bacc224eb78cc3ec7664209fbaf2ef93843a9aaafa7c2eb8d"
+        "sha256": "5fd4de74edbf9aa3778cacbf9e574c9ea995d15a35020f4c0ef00b3e95231a87"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-        "sha256": "42cf647506a31775818c19d16df6d6e2be88f4279a6e84c8b6b069d48a22b2ec"
+        "sha256": "d0015a5bada6182f5a9dadea64a82517aac238522694317c0ead1ca429331f42"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
-        "sha256": "59690e1073f30d557647b9ed8641bd356b91ac1c22e0663c95d3dfad3918a05c"
+        "sha256": "0df93a8f5ffb3bc4d1a7d8c575faf407edf0fc393b277bc2f278dfccebf313d1"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRelayMapArt.js",
@@ -43317,7 +43360,7 @@
       },
       {
         "path": "src/championship/presentation/ranchSelectionRing.js",
-        "sha256": "70bd2381c150ed7d797a6f2f5cdf44384e67696455fb63492998ad94befd83a4"
+        "sha256": "6e5a2c8de947a390de4091f3ff6798c20379c092e089426bc1ce6f9695aaaefe"
       },
       {
         "path": "src/championship/presentation/ranchSupportOwner.js",
@@ -43329,7 +43372,7 @@
       },
       {
         "path": "src/championship/presentation/ranchThreeScene.js",
-        "sha256": "a3fe031ce78f7373849ee063659a0a70355ca3faca4af774da6316d3e9473622"
+        "sha256": "98729a95358eb3e734bcc0c257336c4c58b2f2df7f6bb3f1ff2c1c0ca900aa7a"
       },
       {
         "path": "src/championship/presentation/runtimeMapArtBundle.js",
@@ -43685,27 +43728,27 @@
       },
       {
         "path": "src/championship/text/catalogs.en.js",
-        "sha256": "08b2738dcdef2804ce26a53fb047610f35c298e43462f97cacae3fac9d71fecc"
+        "sha256": "186a6fe3924efe09d8b62b87bf46ace22f130dff621882aea33900dff3e5bcc7"
       },
       {
         "path": "src/championship/text/catalogs.ja.js",
-        "sha256": "e7c41ad25be8ce61002b5a63317a1f5bc01bda1de31d3db8066aadf9d58913e5"
+        "sha256": "5047bd738c5139e35c224cf79e11255d6389b26f9260fd2584f983280d2a334e"
       },
       {
         "path": "src/championship/text/catalogs.th.js",
-        "sha256": "b0afa4d0f8a570ea89bf9f3b857db38fa9e833aca870211ec9d95f9a80f607f9"
+        "sha256": "a73706ff62d7832efa414d6111e637adae953a8294499514b1be9d4153c7fec8"
       },
       {
         "path": "src/championship/text/catalogs.vi.js",
-        "sha256": "83d81535245b158b0231a2f2c9a0d4cab3c1d4628f1d9c8e5752350e6323718d"
+        "sha256": "b88b9d022d863608150933552cfeebd28e06839b4328a4d5ac253cc0afe18f89"
       },
       {
         "path": "src/championship/text/catalogs.zhHant.js",
-        "sha256": "c57e04b095fc4a7c42210d91bc118a287ed1ab2e977f08662cb754d92898f3c8"
+        "sha256": "afa136f4d9b0cee06ebf96ce644929531003e93afbb0715eebeba4d0de2da8e3"
       },
       {
         "path": "src/championship/text/dataArenaText.js",
-        "sha256": "fcc3e2c3b410f6e1c8e87a5cbc28f4df91908c9d8e2964acfe003beca5e24325"
+        "sha256": "385de262182d32bcbfa5ff6d3742cceb62400c2116a34eeb8985a73df91de11e"
       },
       {
         "path": "src/championship/text/evolutionPresentationText.js",
@@ -43817,11 +43860,11 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "a2d3ab7916e5c4322d64878b7fe390cf0c5c2bf7b3b5579af4ffafd86ec9bbe0"
+        "sha256": "de2738b197210c664bdf3f4c408389bcbdc7125eacc2d2b4e0fd981beda43498"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "e05bc7dd22c99efd482bd7775f1965ea6db118c771b714de5f7240b9ce1d4b9c"
+        "sha256": "542b39ad070df2323fddd6970bfa16952413a981c9aa331c11be30317bc89639"
       },
       {
         "path": "src/championship/text/uiText.js",
@@ -43829,11 +43872,11 @@
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "524057878f29e66b95f2cf81f372fa67da8ff02c18577833f58b9143c00bdfd0"
+        "sha256": "b47ccfa314885499c65bcb9925efeb15fface7afe4d2fdbb23b355562bada6d2"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "8764ac42bf27cc4419866c00057f06c1087ca499c917b006e552e98aab615e21"
+        "sha256": "baf6f247a70105f548d203bebd68684e902eb73401c5585c3bf118906333c60a"
       },
       {
         "path": "src/championship/text/zhHant.js",
@@ -44025,7 +44068,7 @@
       },
       {
         "path": "src/data/championship/data-arena-relay-roster.v1.json",
-        "sha256": "f87451978b44498a13d03a0fae0828ac1a3ed3546f8148b4284a56764dafdb79"
+        "sha256": "47dfb3bd8731c852f4089bf65ef770438657e4d53b3dcfa42d4c8a7579e5da03"
       },
       {
         "path": "src/data/championship/database-display.r1.json",
@@ -44045,7 +44088,7 @@
       },
       {
         "path": "src/data/championship/move-vfx-themes.r1.json",
-        "sha256": "26ae9ff174cf4af1811b6bc4665d71fdd868856fbf8ccc9574c53a4cc5feab82"
+        "sha256": "9290833974033730a9da674a63f00224d34c040384af38ec012ebf3b3408ef68"
       },
       {
         "path": "src/data/championship/nativeBookSpecies.js",
@@ -44082,6 +44125,178 @@
       {
         "path": "src/data/championship/ranch-render-selection.v1.json",
         "sha256": "ddd5d6a367c5f0b7e7d80203db5114924c93d6992691571d2fee55ea3eae7f41"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaRelayKits.js",
+        "sha256": "e3e3855beef47ac853e5194f0d3d0794f08f98885cfd92a55f750b2e6efc3d67"
+      },
+      {
+        "path": "src/data/championship/data-arena-relay-kits.v1.json",
+        "sha256": "b9123f5c413fbdc20e51514bad9e9b222a1fb6cf1ba47e4ead477214fd44250a"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaRelayArena.js",
+        "sha256": "f56c60fd5cc24c3c8e0345dff8c3265d47700aa9dc56789aceb65c535e8143c5"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaRelayElements.js",
+        "sha256": "4d8b103306b65e4c353add01b400754dc4ac8fbd95e9d8edecb23ea3f8e8e46d"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/attract_light_160.webp",
+        "sha256": "b7af3d45daf62d553c6721144979cd5ce38acf251063dbe134415814a5716a12"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/beta_ore_160.webp",
+        "sha256": "d8785e51d528badd4e4c7f91272c3a4f5580ffcd8ccad7ac45cfbb232e922999"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/beta_shard_160.webp",
+        "sha256": "153938609476111f2efc914f11ab9652259931e934d2ff33ef4403530d3bb99a"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/chrono_alloy_160.webp",
+        "sha256": "541b093deb8e07bc23db6c1cc8e776d7a19531b3c5a023c7e194e19b5c040def"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/chrono_alloy_shard_160.webp",
+        "sha256": "a0634d32b1295eb53bfae6bcd09515f19ef0c26234de5a50c4d45722337cf6c0"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/chrono_metal_160.webp",
+        "sha256": "d9d7fb909aa767797b0c15b64851f8cf80c402c675f72cf05ba529baa3d4baac"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/chrono_metal_shard_160.webp",
+        "sha256": "7529587bd664c90e1bc55dfc4cdc14b792f073d9749833aa09fc62e0766b0534"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/chrono_ore_160.webp",
+        "sha256": "7113335f44978be952c03abe25083ce76e83f2ce0a5db8b2d53a283312e236ed"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/chrono_ore_shard_160.webp",
+        "sha256": "f07f909fd756a51a22a7886936b11451097538e3a4e3f624e193b6f88fad0092"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/decoy_doll_160.webp",
+        "sha256": "ad7154a261f15676938fe18cc1a80eb9e3347e00084f2fe4dddc4c6ab5c62290"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/emma_metal_160.webp",
+        "sha256": "e2c48d3d0cd0258c8f80f1b656dd594b6323a677c590b10b1d7851f4df414c63"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/emma_shard_160.webp",
+        "sha256": "ee278e57dc5f17772d6bb06f1289862d161ba3c93b9b01b4ea9a391899251ed0"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/hunt_ammo_160.webp",
+        "sha256": "03558c0817eb1751d9e9f52151c4665cbbe71e60daa9a07b56dab71af3450e09"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/hunt_meat_bait_160.webp",
+        "sha256": "d7e43eee502634d9170dc6891973a9f6fe0041a9f262d4a9463cfdb50b27ca5e"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/magnetic_wire_160.webp",
+        "sha256": "a48a23254399442779728c60a747b9973544928d512cb0dde8fcac8e1805c5da"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/medicine_capsule_160.webp",
+        "sha256": "7a20da96c07978b72d5ff90609285eacdfb4bcc2ff528ed55acd89c55bb2dd0e"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/paralysis_dart_160.webp",
+        "sha256": "6afcaee8553566b865abfe5fbf50e98d29680dc2c270830fbb92f16cd5c0d7ad"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/protein_booster_160.webp",
+        "sha256": "057ec423687b0698cadc371976148c19a71164da047f08e1b0816d458275ba10"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/proximity_mine_160.webp",
+        "sha256": "752cc8e58d138f31c738cd082a7d207d923dce2b7a2d82678a997b3da454752f"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/supernova_metal_160.webp",
+        "sha256": "49b8c7d8da31e87764b02b87472eac18496a379f6e70fe22bb8ff0d0779de463"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/supernova_shard_160.webp",
+        "sha256": "0468bff2c85b8c7267daa2de6d37f5b80ce4f8d0f4ebadf73e5c2154edb72c0c"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/tactical_bomb_160.webp",
+        "sha256": "3b41e7b2f91b625b7638c2befc135cfe25ba75cfe37f752db3ed407773df364f"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/training_meat_160.webp",
+        "sha256": "0915f29c5665c1c0fbce58f38e5d24d0c6f043336b0a53c6e0e79c63d9ab2fd8"
+      },
+      {
+        "path": "assets/production/items/digital-metals-r1/wound_medicine_160.webp",
+        "sha256": "77d52393d5fece2f08f1376a2e5527d3c2790b5488e274751d9308e03327d6e7"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_r_bottom.webp",
+        "sha256": "fc0fe52f0398aedaa967458d116507d9bc374510455c2bdbc363e7165dd8935b"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_r_top.webp",
+        "sha256": "75d456b0b13149b5ec7e23b202274dca243b4f6e9f1c07e0278f94a990043b8f"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_sr_bottom.webp",
+        "sha256": "67eb221be2da8366d5b07135676f99dd8f0a66be4738cf058f429a4090fa4b17"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_sr_top.webp",
+        "sha256": "25bf601c3ac56bf4d04bba46c7a072a577825c4fe7a2fd28b66e6a3e05fd0a34"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_ssr_bottom.webp",
+        "sha256": "90b73289adf235a7940cd1c813f16574515b8a7251e01ca0392ca77128059e15"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_ssr_top.webp",
+        "sha256": "14e61379834651eca1b9e77366462968b1ec276f91f4333ef90c1ed19b24c6e7"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_ur_bottom.webp",
+        "sha256": "1f0b8da49daac9f6e41e41fe3521d72634dde49d4b0f8235fa71e4cce55966fd"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/capsule_ur_top.webp",
+        "sha256": "23c2709442c311ecd67b857fc390aa17b1e54fcf067dfe9d30d914322112cbda"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/crank_handle.webp",
+        "sha256": "a2275499e9b3a5620c26ac1beca2d9dbb47d17994923365b41ab25fa7a06b93d"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/gacha_ticket.webp",
+        "sha256": "d818244171a00503151bb24c72524b19558e30b06ef2032e3f4e64d1dff3c9c3"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/machine_body.webp",
+        "sha256": "0f5f588582a76915045845941f67d8bbff122c62036c9b9de99bd871bda4b6fe"
+      },
+      {
+        "path": "assets/production/ui/cyber-gacha-r1/synth_furnace.webp",
+        "sha256": "637a91bfb59df00cf78dd5092101aee69196a42aeceffbc1b93744d0bddca737"
+      },
+      {
+        "path": "src/championship/app/cyberGacha.css",
+        "sha256": "f7b727bb5043a27bac412ca7ea2857b2d12bb7fefee69f239f3811c3b9ab6c14"
+      },
+      {
+        "path": "src/championship/app/cyberGachaView.js",
+        "sha256": "1ebd9b5e476787f9b3207b23317205612a037353752489384b3adce00a733b56"
+      },
+      {
+        "path": "src/championship/gacha/cyberGacha.js",
+        "sha256": "f90924ef54fcf42388a0f8f16178ae4b6fc80447679aeb2a7bce44be02093bfc"
       },
       {
         "path": "src/championship/app/huntTacticalDock.js",
