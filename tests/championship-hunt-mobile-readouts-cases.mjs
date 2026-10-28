@@ -16,7 +16,7 @@ test('each of the 30 fitted plugins reaches the matching display without changin
     const caps=loadout.getHudCapabilities(),hud=huntPluginReadout(runtime,caps),target=huntTargetReadout(runtime,caps);
     if(plugin.pluginKind==='ANALYZER'){
       for(const key of ['GENERATION','FAMILY','ALIGNMENT','HP','PERSONALITY','CAPACITY'])assert.equal(target[key.toLowerCase()]!=='???',plugin.capability.analyzerFields.includes(key),plugin.itemId+key);
-      assert.equal(target.name,'鎧焰蜥');
+      assert.equal(target.name,'火甲龍');
     }else assert.equal(target.name,'???');
     assert.equal(hud.memory!==null,plugin.pluginKind==='MEMORY_CHECKER');
     assert.equal(hud.radar!==null,plugin.pluginKind==='RADAR_SEARCH');

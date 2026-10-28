@@ -1,6 +1,6 @@
 # 社群連結塢 × 數碼通行證 × 首次綁定禮包 × 炫耀名片 交付報告（2026-10-29）
 
-> 分支 `feat/social-brag-online-20261029`（基底 `origin/main` 7442e126）。依 Owner 指令 **未 commit、未 push、未部署**。
+> 分支 `feat/social-brag-online-20261029`（基底 `origin/main` 7442e126，之後併入 0f4d3a58）。Owner 先指示「可以先commit跟push」，再授權「可以的話就合併部署」：經 PR 合併至 main，由既有 Pages 流程發布。
 > 分類：OWNER_APPROVED_ADAPTATION（呈現層與產品功能）。戰鬥、育成、商店價格與首頁不變。
 > 做法：在 2026-10-28 已上線的線上系統上「原地升級」（同一個 `championshipCloudService`、同一個面板、同一份存檔），沒有第二套服務或第二個 Supabase client。
 

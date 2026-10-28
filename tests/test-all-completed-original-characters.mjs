@@ -129,32 +129,32 @@ test("all registered species have original custom names in SPECIES_NAMES_ZH", ()
     assert.ok(zhName, `Species ${specIndex} (${c.entityId}) must have localized name`);
     assert.notEqual(zhName, "未知數碼獸");
     // Verify it's not the old ROM name for key ones
-    if (c.entityId === "m301_ankylomon") assert.equal(zhName, "晶鏈甲龍");
-    if (c.entityId === "m303_ikkakumon") assert.equal(zhName, "極潮角獸");
-    if (c.entityId === "m304_wizarmon") assert.equal(zhName, "影紋術士");
-    if (c.entityId === "m305_woodmon") assert.equal(zhName, "森核樹靈");
-    if (c.entityId === "m402_anomalocarimon") assert.equal(zhName, "裂潮異蝦");
-    if (c.entityId === "m201_agumon") assert.equal(zhName, "鎧焰蜥");
-    if (c.entityId === "m214_kunemon") assert.equal(zhName, "葉角幼蟲");
-    if (c.entityId === "m237_renamon") assert.equal(zhName, "光綾狐");
+    if (c.entityId === "m301_ankylomon") assert.equal(zhName, "錘尾龍");
+    if (c.entityId === "m303_ikkakumon") assert.equal(zhName, "破冰獸");
+    if (c.entityId === "m304_wizarmon") assert.equal(zhName, "符文師");
+    if (c.entityId === "m305_woodmon") assert.equal(zhName, "枯木爺");
+    if (c.entityId === "m402_anomalocarimon") assert.equal(zhName, "大螯蝦");
+    if (c.entityId === "m201_agumon") assert.equal(zhName, "火甲龍");
+    if (c.entityId === "m214_kunemon") assert.equal(zhName, "菜蟲仔");
+    if (c.entityId === "m237_renamon") assert.equal(zhName, "小仙狐");
     if (c.entityId === "m001_zurumon") assert.equal(zhName, "星滴靈");
-    if (c.entityId === "m501_vikemon") assert.equal(zhName, "霜灣戰牙");
-    if (c.entityId === "m502_valkyrimon") assert.equal(zhName, "曜羽武姬");
-    if (c.entityId === "m503_warglaymon") assert.equal(zhName, "日冕戰暴龍");
-    if (c.entityId === "m541_dukemon") assert.equal(zhName, "赤曜槍皇");
+    if (c.entityId === "m501_vikemon") assert.equal(zhName, "拋錨王");
+    if (c.entityId === "m502_valkyrimon") assert.equal(zhName, "金武神");
+    if (c.entityId === "m503_warglaymon") assert.equal(zhName, "戰暴龍");
+    if (c.entityId === "m541_dukemon") assert.equal(zhName, "白槍皇");
   }
 
   // Verify mirror species and aliases
-  assert.equal(SPECIES_NAMES_ZH[96], "地炎暴牙");
-  assert.equal(SPECIES_NAMES_ZH[97], "蒼潮海龍");
-  assert.equal(SPECIAL_SPECIES_NAMES_ZH[224], "鎧焰蜥");
-  assert.equal(SPECIAL_SPECIES_NAMES_ZH[225], "曜極星龍");
-  assert.equal(SPECIAL_SPECIES_NAMES_ZH[226], "地炎暴牙");
-  assert.equal(SPECIAL_SPECIES_NAMES_ZH[227], "蒼潮海龍");
-  assert.equal(speciesName(224), "鎧焰蜥");
-  assert.equal(speciesName(225), "曜極星龍");
-  assert.equal(speciesName(226), "地炎暴牙");
-  assert.equal(speciesName(227), "蒼潮海龍");
+  assert.equal(SPECIES_NAMES_ZH[96], "熔岩龍");
+  assert.equal(SPECIES_NAMES_ZH[97], "海蛟龍");
+  assert.equal(SPECIAL_SPECIES_NAMES_ZH[224], "火甲龍");
+  assert.equal(SPECIAL_SPECIES_NAMES_ZH[225], "太陽龍");
+  assert.equal(SPECIAL_SPECIES_NAMES_ZH[226], "熔岩龍");
+  assert.equal(SPECIAL_SPECIES_NAMES_ZH[227], "海蛟龍");
+  assert.equal(speciesName(224), "火甲龍");
+  assert.equal(speciesName(225), "太陽龍");
+  assert.equal(speciesName(226), "熔岩龍");
+  assert.equal(speciesName(227), "海蛟龍");
 });
 
 test("baby I and II (26 species) authoritative entityId->speciesId bindings, HUD, ZH name, and stage progression match without arithmetic guessing", () => {
