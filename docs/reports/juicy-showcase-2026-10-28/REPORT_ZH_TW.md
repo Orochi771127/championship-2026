@@ -1,7 +1,7 @@
 # 進化演出、必殺技 Cut-in、打擊感四拍子與圖鑑全息鑑賞室（2026-10-28）
 
 - 分支：`feat/juicy-showcase-20261028`，工作樹 `R:\Projects\Championship2026\juicy-showcase-20261028`，基底 `origin/main` 1fc403c9。
-- 第一次指示不 push、不部署；之後 Owner 指示「自我審查沒問題後 commit、push、整合至 main 並發佈」。發佈結果見文末「發佈」。
+- 第一次指示不 push、不部署；之後 Owner 指示「自我審查沒問題後 commit、push、整合至 main 並發佈」。整合與發佈經由 PR #108（Orochi771127/championship-2026），線上驗證結果記錄於該 PR。
 - 決策紀錄：`docs/coordination/OWNER_DIRECTION.md`，記錄編號 `JUICY_EVOLUTION_CUTIN_SHOWCASE_20261028`。
 
 ## 共通原則
@@ -136,8 +136,10 @@
 
 **單元測試**
 
-- `npm run test:ci`：3,024／3,024 通過。
-- 新增 `tests/championship-juicy-showcase-cases.mjs`，13 項：
+- `npm run test:ci`：3,027／3,027 通過（含合併 main 之後）。
+- 新增 `tests/championship-juicy-showcase-cases.mjs`，15 項，另在 `championship-ceremony-cases` 新增舊訊息回歸測試：
+  - 空的或遲到的能力值回報仍可關閉；稍後到達的階段名與必殺技會更新面板；
+  - 消失不播放演出，招式表延遲載入；
   - 五語系文案完整；
   - 演出時長在 2.2–2.8 秒內，交替越來越快；
   - 預覽、真實進化、加密、退化流程；
@@ -173,6 +175,15 @@
 - AI 對戰絕招 Cut-in 與命中傷害數字。
 - 數據競技場強力技 Cut-in。
 - 圖鑑全部按鈕與加密模式。
+
+## 發佈前的建置與成品驗證
+
+- `build:playtest`／`validate:playtest`：8,295 個檔案，build `086914d4`。
+- 本批的新檔案已列入 `WEB_BUILD_INPUTS`（files、publicPlaytest.files、moduleEntries）與 `PUBLIC_RUNTIME_ALLOWLIST`。
+- 只刷新本批改動的已發佈檔案雜湊；另外校正 `database-original-profiles.r1.json` 的雜湊（a4814f96 誤記為 CRLF 工作副本的雜湊，導致 main 的 Pages 建置失敗）。
+- 對建置成品（`dist/github-playtest`）實測：
+  - 圖鑑鑑賞台閘門通過；
+  - 真實 AI 對戰的絕招 Cut-in 正常觸發，沒有 pageerror。
 
 ## 截圖
 
