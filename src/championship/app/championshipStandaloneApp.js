@@ -35,7 +35,7 @@ import {
   normalizeProductGivenName,
   renameEnclosedCreature
 } from "./championshipRaisingProduction.js";
-import { deserializeChampionshipModernSave } from "./championshipStandaloneSave.js";
+import { deserializeChampionshipModernSave, normalizeBattleTactics, BATTLE_TACTIC_DEFAULT } from "./championshipStandaloneSave.js";
 import { createChampionshipPersistentSavePort } from "./ChampionshipPersistentSavePort.js";
 import {normalizeNativeIndividualProfile} from '../raising/nativeIndividualProfile.js';
 import { selectPhase1FirstCreature } from "./phase1ProductCreatures.js";
@@ -256,6 +256,8 @@ export function createChampionshipStandaloneApp({
   // boundary is not a place the player can lose a run by closing the tab.
   let championshipRun=null;
   let freeBattleMenu=null;
+  // Each partner's battle plan (作戰方針): instance id -> 0 or 2; absent = 1.
+  let battleTactics={};
   let nativeMessages=createNativeRaisingMessages();
   let nativeOpening=null;
   // Immutable rollback data, never another live session/store or storage key.
@@ -800,11 +802,18 @@ export function createChampionshipStandaloneApp({
     return { snapshot, identity, production, rng, huntHistory };
   }
 
+  // Free Battle and Practice read the plan (they run the original personality
+  // wiring); the individuals carry it to buildOwnedBattleCreature.
+  function withBattleTactics(party) {
+    if (!party?.ok) return party;
+    return {...party,individuals:party.individuals.map(individual=>({...individual,tactic:battleTactics[individual.instanceId]??BATTLE_TACTIC_DEFAULT}))};
+  }
+
   function liveSaveRequest(nextRevision=revision) {
     return {
       snapshot:requireSession().getRaisingHomeSnapshot(),creature,sessionId,revision:nextRevision,
       interactionCount,friendsPlaytest,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
-      championshipRun,freeBattleMenu,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
+      championshipRun,freeBattleMenu,battleTactics,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
       raising,shop:shop?shop.toSave():null,cageEdit:cageEdit?cageEdit.toSave():null,battleEconomy,
       instanceIdentity,gameplayRng:gameplayRngSnapshot(),huntHistory:projectNativeHuntPersistentSave(huntPersistentState)
     };
@@ -1075,6 +1084,7 @@ export function createChampionshipStandaloneApp({
     openShopAndHunt({ shopSnapshot: saved.shop });
     cageEdit = createCageEditRuntime({ snapshot: saved.cageEdit, publicTestGrid: playtestPolicy?.enabled === true, initialTamerRank: tamerRankValue });
     freeBattleMenu=saved.progression.freeBattleMenu??null;
+    battleTactics=normalizeBattleTactics(saved.progression.battleTactics);
     initializeNativeRaisingHome({tutorialBoundary});
     selectedDatabaseSpeciesIndex = null;
     resetExpedition();
@@ -2571,6 +2581,19 @@ export function createChampionshipStandaloneApp({
 
     getFreeBattleMatches(){return listNativeFreeBattleMatches(freeBattleMenu);},
 
+    /** The partner's battle plan: 0 必殺技優先, 1 普通攻擊 (default), 2 支援優先. */
+    getBattleTactic(instanceId){return battleTactics[instanceId]??BATTLE_TACTIC_DEFAULT;},
+
+    setBattleTactic(instanceId,tactic){
+      requireSession();
+      if(![0,1,2].includes(tactic))return Object.freeze({ok:false,reason:'TACTIC_INVALID'});
+      if(!this.getRaisingInstances().some(entry=>entry.instanceId===instanceId))return Object.freeze({ok:false,reason:'UNKNOWN_INDIVIDUAL'});
+      const next={...battleTactics};
+      if(tactic===BATTLE_TACTIC_DEFAULT)delete next[instanceId];else next[instanceId]=tactic;
+      battleTactics=normalizeBattleTactics(next);savePort.markDirty();
+      return Object.freeze({ok:true,instanceId,tactic});
+    },
+
     openFreeBattle(){
       requireSession();if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return [];
       // Old saves contain no daily menu. Resolve the missing slice only on an
@@ -2581,7 +2604,7 @@ export function createChampionshipStandaloneApp({
     async prepareFreeBattle(matchId,instanceIds,selectedArena=null){
       const match=this.getFreeBattleMatches().find(row=>row.id===matchId);
       if(!match)return {ok:false,reason:'MATCH_NOT_AVAILABLE'};
-      const party=await this.prepareBattleParty(null,instanceIds);
+      const party=withBattleTactics(await this.prepareBattleParty(null,instanceIds));
       if(!party.ok)return party;
       if(instanceIds.length>match.slots)return {ok:false,reason:'PARTY_SIZE',message:uiText('這場對戰最多 {count} 隻。',{count:match.slots})};
       const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
@@ -2596,7 +2619,7 @@ export function createChampionshipStandaloneApp({
       if(!Array.isArray(teams)||teams.length!==2||teams.some(ids=>!Array.isArray(ids)||ids.length<1||ids.length>3))return {ok:false,reason:'TWO_PARTIES_REQUIRED'};
       const ids=teams.flat();if(new Set(ids).size!==ids.length)return {ok:false,reason:'DUPLICATE_PARTICIPANT',message:'同一隻拍檔只能加入一隊。'};
       const parties=[];
-      for(const team of teams){const party=await this.prepareBattleParty(null,team);if(!party.ok)return party;parties.push(party.individuals);}
+      for(const team of teams){const party=withBattleTactics(await this.prepareBattleParty(null,team));if(!party.ok)return party;parties.push(party.individuals);}
       if(selectedArena!==null&&!FREE_BATTLE_ARENAS.includes(selectedArena))return {ok:false,reason:'ARENA_UNAVAILABLE'};
       const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
       const drawnArena=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
@@ -2732,7 +2755,7 @@ export function createChampionshipStandaloneApp({
       const {battlePartyAdmission}=await loadBattleParty();
       return this.getRaisingInstances().map(entry=>{
         const nativeProfile=entry.instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(entry.instanceId);
-        return Object.freeze({...entry,admission:battlePartyAdmission(nativeProfile,recordIndex)});
+        return Object.freeze({...entry,tactic:this.getBattleTactic(entry.instanceId),admission:battlePartyAdmission(nativeProfile,recordIndex)});
       });
     },
 
@@ -3319,7 +3342,7 @@ export function createChampionshipStandaloneApp({
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
-            revision: revision + 1, interactionCount, friendsPlaytest, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, raising: candidateRaising,
+            revision: revision + 1, interactionCount, friendsPlaytest, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: shop ? shop.toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),

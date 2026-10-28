@@ -104,11 +104,16 @@ const INSET = { top: 47, bottom: 34 };
     const residents = await page.evaluate(() => JSON.parse(document.querySelector('.int-rh2-field-host').dataset.residentScreenPositions || '[]'));
     assert.ok(residents[0] && residents[0].x > 0 && residents[0].x < 390 && residents[0].y > 0 && residents[0].y < 844, JSON.stringify(residents[0]));
     for (let i = 0; i < 3; i++) await page.locator('dialog.cm-dialog[open] [data-action="next"]').click();
-    await page.waitForFunction(() => document.querySelector('.cm-tutorial-guidance')?.dataset.stage === 'raising-hatch');
-    await page.locator('.cm-guide-spotlight:not([hidden])').waitFor();
-    const spot = await box('.cm-guide-spotlight__frame');
+    // The egg hatches on its own after 180 frames, which ends the step; read
+    // the spotlight in the same task that sees the hatch step, not after it.
+    const spot = await (await page.waitForFunction(() => {
+      const light = document.querySelector('.cm-guide-spotlight'), banner = document.querySelector('.cm-tutorial-guidance');
+      if (!light || light.hidden || banner?.dataset.stage !== 'raising-hatch') return null;
+      const r = light.querySelector('.cm-guide-spotlight__frame').getBoundingClientRect();
+      return { top: r.top, bottom: r.bottom, left: r.left, right: r.right, step: banner.querySelector('.cm-guide-step')?.textContent };
+    })).jsonValue();
     assert.ok(spot.top > 0 && spot.bottom < 844 && spot.left >= 0 && spot.right <= 390, `spotlight on screen ${JSON.stringify(spot)}`);
-    assert.match(await page.locator('.cm-tutorial-guidance .cm-guide-step').textContent(), /STEP 1 \/ 10/);
+    assert.match(spot.step, /STEP 1 \/ 10/);
     assert.deepEqual(errors, []);
     console.log('ONBOARDING_CINEMATIC_PASS');
   } finally {

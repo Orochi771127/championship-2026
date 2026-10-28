@@ -1,5 +1,19 @@
 # Championship Owner Direction
 
+<!-- record-id: BATTLE_TACTICS_MENU_20261028 -->
+## 2026-10-28 — Pre-battle plan (作戰方針) menu, ROM-confirmed
+
+Owner first directs 「要做AI戰術方針請你從ROM確認」, then 「開始做賽前作戰方針選單：每隻參戰拍檔三選一（必殺技優先／普通攻擊／支援優先，預設普通攻擊），存進存檔，先在自由對戰與練習對戰生效（目前只有這兩個模式讀取方針），自審通過後 commit、push、整合到 main 並發佈。」
+
+The ROM trace shows the team-setup menu stores the chosen row as the policy:
+
+- 0 = スペシャルアタック;
+- 1 = ノーマルアタック, the team-init default;
+- 2 = サポート.
+
+Policies 3 and 4 are never offered. The partner picker gains this three-way choice per partner in Free Battle and Practice, saved as `progression.battleTactics`. Only those two modes read it; every other mode stays on BASELINE.
+
+The menu's place in the product picker is an OWNER_APPROVED_ADAPTATION; the values and their meaning are ROM_VERIFIED. This authorizes the batch's commit, push, main integration and Pages publication after self-review. See the [trace](../reports/battle-tactics-policy-trace-2026-10-28/TRACE_ZH_TW.md) and [contract](../contracts/championship/BATTLE_TACTICS_20261028.json).
 <!-- record-id: ONBOARDING_CINEMATIC_20261028 -->
 ## 2026-10-28 — Tutorial visibility fix, cinematic onboarding and future-systems ports
 
