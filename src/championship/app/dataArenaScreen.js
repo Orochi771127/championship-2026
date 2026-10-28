@@ -564,6 +564,12 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         case 'RELAY_SWITCH': releaseInputs(); buildHud(); audio?.play('capture'); toast(t('relay.switched')); break;
         case 'RELAY_INTRO': banner(t('relay.ready'), 'phase', 2000); break;
         case 'RELAY_RIVAL': audio?.play('warn'); banner(t('relay.rival'), 'warn', 1500); break;
+        // Stage three arena zones and cover (2026-10-28).
+        case 'ARENA_WARNING': audio?.play('warn'); banner(t(`arena.${event.kind}.warn`), 'warn', 2400); break;
+        case 'ARENA_ACTIVE': banner(t(`arena.${event.kind}.active`), 'good', 2200); break;
+        case 'ARENA_CLAIM': audio?.play('pickup'); toast(t(`arena.${event.kind}.claim`, { amount: event.amount }), { x: event.x, y: event.y, tone: event.team === 0 ? 'good' : 'warn', key: `arena-claim-${event.team}` }); break;
+        case 'ARENA_PRESSURE': toast(t('arena.VENT.pressure'), { tone: 'warn', key: 'arena-pressure' }); break;
+        case 'PROP_DESTROYED': if (gameMode === 'RELAY') toast(t('arena.coverBroken'), { x: event.x, y: event.y, tone: 'warn', key: `cover-${event.id}` }); break;
         case 'RELAY_END': releaseInputs(); break;
         case "LASER_HIT": audio?.play("hit"); break;
         case "ENEMY_KILLED": audio?.play("kill"); break;

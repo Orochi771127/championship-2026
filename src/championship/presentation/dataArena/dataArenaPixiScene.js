@@ -667,6 +667,39 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       texture: textures[recipe.texture] ?? textures.spark, scale: recipe.scale ?? 1.4, gravity: recipe.gravity ?? 0, life: 0.4 });
     if (recipe.ring) ring(x, y, recipe.ring, fx.tint, 0.3);
   }
+  // Stage three: cover debris in the block's material and the timed arena zones.
+  const COVER_CHIP = { STONE: 0xb7bec2, WOOD: 0xb07b48, BASALT: 0x5a4a4f, CORAL: 0xf2c7b8, ICE: 0xd6f3fb, SANDSTONE: 0xe0c08a, CRYSTAL: 0x8ff3ff, METAL: 0x9aa8b6 };
+  const ZONE_TINT = { ECHO: 0xc79bff, BLOOM: 0x8be37a, VENT: 0xff8a3c, TIDE: 0x6fd8ff, UPDRAFT: 0xd8f0ff, RECHARGE: 0xffe066 };
+  function relayCoverHit(event, broken) {
+    const tint = COVER_CHIP[event.material] ?? 0xffffff;
+    burst(event.x, event.y - 22, { count: broken ? 16 : event.weak ? 8 : 4, speed: broken ? 240 : 140, tint, texture: textures.relayRock ?? textures.shard,
+      scale: broken ? 0.3 : 0.2, gravity: 520, life: broken ? 0.8 : 0.45, spin: 6 });
+    if (event.weak) ring(event.x, event.y - 20, 40, 0xffe066, 0.25);
+    if (broken) { puff(event.x, event.y - 10, tint, 4, 1.4); camera.addTrauma(0.32); }
+    else camera.addTrauma(event.weak ? 0.12 : 0.05);
+  }
+  const zoneGfx = new PIXI.Graphics(); zoneGfx.label = "arena relay zones";
+  cellFx.addChild(zoneGfx);
+  function drawArenaZones() {
+    const arena = state.relay?.arena;
+    zoneGfx.clear();
+    if (!arena?.kind || arena.phase === 'DORMANT') return;
+    const tint = ZONE_TINT[arena.kind] ?? 0xffffff, active = arena.phase === 'ACTIVE';
+    const pulse = reducedMotion ? 0.7 : 0.55 + 0.35 * Math.sin(elapsed * (active ? 5 : 9));
+    for (const zone of arena.zones) {
+      if (active) zoneGfx.circle(zone.x, zone.y, zone.radius).fill({ color: tint, alpha: 0.16 + 0.08 * pulse });
+      zoneGfx.circle(zone.x, zone.y, zone.radius).stroke({ color: tint, width: active ? 4 : 2, alpha: active ? 0.85 : pulse });
+      if (!active) zoneGfx.circle(zone.x, zone.y, zone.radius * (1 - (arena.remaining % 1))).stroke({ color: tint, width: 1.5, alpha: 0.5 });
+    }
+    // The player's claim fills an arc around the zone it stands in.
+    const channel = arena.channel?.[0] ?? 0;
+    if (active && channel > 0) {
+      const zone = arena.zones.find(z => Math.hypot(state.player.x - z.x, state.player.y - z.y) <= z.radius);
+      if (zone) zoneGfx.arc(zone.x, zone.y, zone.radius + 8, -Math.PI / 2, -Math.PI / 2 + TAU * channel / 0.7).stroke({ color: 0xffffff, width: 4, alpha: 0.9 });
+    }
+    if (active && !reducedMotion && rich && Math.floor(elapsed * 8) !== Math.floor((elapsed - 1 / 60) * 8))
+      for (const zone of arena.zones) spawn({ x: zone.x + (Math.random() - 0.5) * zone.radius, y: zone.y + (Math.random() - 0.3) * zone.radius * 0.6, vy: -50, texture: textures.glow, tint, scale: 0.18, scaleTo: 0.05, life: 0.6, alpha: 0.7 });
+  }
   const tethers = new Map();
   const tetherGfx = new PIXI.Graphics(); tetherGfx.blendMode = "add";
   let hitStop = 0, statusTick = 0;
@@ -700,8 +733,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "ICE_CRACK_WARN": burst(event.x, event.y, { count: 2, speed: 80, tint: 0xffffff, texture: textures.shard, life: 0.3 }); break;
         case "ICE_MELT": ring(event.x, event.y, 30, 0x7fd8ff, 0.4, 0.6);spawn({x:event.x,y:event.y,texture:textures.iceMelt,scale:1,scaleTo:.8,life:.35,alpha:.7,add:false});break;
         case "ICE_MELT_HIT": puff(event.x,event.y,0xc6edf5,2,.6);break;
-        case "PROP_HIT": burst(event.x,event.y-22,{count:3,speed:100,tint:event.cause==="FIRE"?0x8b6948:0xffffff,texture:textures.timberChip,life:.35,gravity:180});break;
-        case "PROP_DESTROYED": burst(event.x,event.y-20,{count:rich?14:7,speed:180,tint:event.charred?0x504033:0xffffff,texture:textures.timberChip,life:.7,gravity:220});puff(event.x,event.y-15,event.charred?0x6a645d:0xa88c64,3,.9);break;
+        case "PROP_HIT": if (relayMode && event.material !== 'TIMBER') { relayCoverHit(event, false); break; }
+          burst(event.x,event.y-22,{count:3,speed:100,tint:event.cause==="FIRE"?0x8b6948:0xffffff,texture:textures.timberChip,life:.35,gravity:180});break;
+        case "PROP_DESTROYED": if (relayMode && event.material !== 'TIMBER') { relayCoverHit(event, true); break; }
+          burst(event.x,event.y-20,{count:rich?14:7,speed:180,tint:event.charred?0x504033:0xffffff,texture:textures.timberChip,life:.7,gravity:220});puff(event.x,event.y-15,event.charred?0x6a645d:0xa88c64,3,.9);break;
         case "FELL_IN_WATER": ring(event.x, event.y, 60, 0x9fe8ff, 0.5); burst(event.x, event.y, { count: 12, speed: 220, tint: 0xbff4ff, gravity: 500, life: 0.55 }); camera.addTrauma(0.2); break;
         case "RECOVERED": ring(event.x, event.y, 50, 0x7fffd4, 0.4); burst(event.x, event.y - 30, { count: 10, speed: 160, tint: 0x7fffd4, gravity: -100 }); break;
         case "SURGE": waves.push({ age: 0 }); break;
@@ -764,6 +799,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           burst(event.x, event.y, { count: 12, speed: 260, tint: state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xd8f6ff : event.effect === "IGNITE" ? 0xff9a3c : 0xbff4ff, gravity: 260, life: 0.5 }); camera.addTrauma(0.18);
           if (state.gameMode === 'RELAY') relayImpact(event.x, event.y, relayLook(event.moveId, event.team)); break;
         case "BARRIER_UP": ring(event.x, event.y - 16, 70, 0xffe066, 0.3); break;
+        case "ARENA_WARNING": for (const zone of event.zones) ring(zone.x, zone.y, zone.radius, ZONE_TINT[event.kind] ?? 0xffffff, 0.5); break;
+        case "ARENA_ACTIVE": for (const zone of state.relay?.arena?.zones ?? []) { ring(zone.x, zone.y, zone.radius * 1.3, ZONE_TINT[event.kind] ?? 0xffffff, 0.45); burst(zone.x, zone.y, { count: 10, speed: 160, tint: ZONE_TINT[event.kind] ?? 0xffffff, life: 0.5 }); } break;
+        case "ARENA_CLAIM": ring(event.x, event.y, 80, ZONE_TINT[event.kind] ?? 0xffffff, 0.4); burst(event.x, event.y - 20, { count: 14, speed: 240, tint: ZONE_TINT[event.kind] ?? 0xffffff, life: 0.55 });
+          if (event.team === 0) crowdReact("CHEER", event.x, 0.8); break;
+        case "ARENA_PRESSURE": camera.addTrauma(0.3); break;
         case "BLINK": afterimage(event.fromX, event.fromY, event.x - event.fromX); burst(event.x, event.y - 20, { count: 10, speed: 200, tint: 0xd8f6ff, texture: textures.shard }); break;
         case "RIVAL_HIT": if (event.cause !== "LASER") { burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); contact(event.x, event.y - 30, 0xffb070); }
           damageNumber(event.x, event.y - 56, event.amount, 0xffffff); heavyHit(event.amount); break;
@@ -840,7 +880,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       strip.tilePosition.y = reducedMotion ? 0 : Math.sin(elapsed * 0.8) * 6;
     }
     environmentView?.update({ elapsed: ambientElapsed, reducedMotion, left, right, top, bottom, low: !rich, focus,reaction:crowd });
-    interactionView.update({left,right,top,bottom});
+    interactionView.update({left,right,top,bottom,elapsed});
+    if (relayMode) drawArenaZones();
     if (bridgeLift >= 0) {
       bridgeLift += dt;
       bridge.alpha = Math.max(0, 1 - bridgeLift / 1.2);

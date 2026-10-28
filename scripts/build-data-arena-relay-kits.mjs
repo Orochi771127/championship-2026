@@ -27,13 +27,8 @@ import species from '../src/data/championship/catalogs/creature-species.r1.json'
 import roster from '../src/data/championship/data-arena-relay-roster.v1.json' with {type: 'json'};
 import extensions from '../src/data/championship/product-species-extensions.r1.json' with {type: 'json'};
 import {DATA_ARENA_PARTNERS, DATA_ARENA_KITS} from '../src/championship/modes/dataArena/dataArenaConfig.js';
+import {RELAY_PALETTE_ELEMENT, RELAY_NEUTRAL_PALETTES} from '../src/championship/modes/dataArena/dataArenaRelayElements.js';
 import {classifyMove, buildMoveVfxThemes, serializeMoveVfxThemes} from './build-move-vfx-themes.mjs';
-
-// Arena element for an approved VFX palette. Metal, neutral and psychic name no
-// element of their own, so they only decide a partner with no coloured move.
-export const RELAY_PALETTE_ELEMENT = Object.freeze({fire: 'fire', water: 'water', ice: 'frost', thunder: 'storm', wind: 'storm', light: 'light',
-  dark: 'shadow', nature: 'nature', toxic: 'nature', earth: 'earth', metal: 'physical', neutral: 'physical', psychic: 'physical'});
-const RELAY_NEUTRAL_PALETTES = ['metal', 'neutral', 'psychic'];
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = {

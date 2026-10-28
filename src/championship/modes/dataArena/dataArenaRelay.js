@@ -3,6 +3,7 @@
 import { DATA_ARENA_PARTNERS, DATA_ARENA_MOVES, DATA_ARENA_KITS } from './dataArenaConfig.js';
 import { RELAY_ROSTER, relayPartner } from './dataArenaRelayRoster.js';
 import { RELAY_POOL_MOVE_ELEMENT, relayOwnMove, relayOwnMoveInfo, relaySpeciesKit } from './dataArenaRelayKits.js';
+import { RELAY_PALETTE_ELEMENT } from './dataArenaRelayElements.js';
 
 export const DATA_ARENA_RELAY = Object.freeze({ seconds: 150, switchCooldown: 6, knockoutSeconds: 1.1,
   tpMax: 100, tpRegen: 16, tpDelay: 0.6, ultimateTp: 80, ultimateCooldown: 12, playerHpScale: 1.8, rivalHpScale: 0.55 });
@@ -124,6 +125,18 @@ const RANGED_BASICS = new Set(['relayShot','relayRay','relayBreath','relayGust']
 const paletteStyle = Object.freeze({ fire:'fire', water:'water', ice:'frost', thunder:'storm', wind:'storm', light:'light', dark:'shadow',
   nature:'nature', toxic:'toxic', earth:'earth', metal:'earth', neutral:'claw', psychic:'light' });
 const look = (base, style) => Object.freeze({ ...base, style, ...STYLE_LOOKS[style] });
+/**
+ * The element a hit carries against cover (stage three): an own move's colour,
+ * a pool move's element, ranged basics take the caster's; body moves are physical.
+ */
+export function relayMoveElement(id, casterElement = null) {
+  const own = relayOwnMoveInfo(id);
+  if(own)return RELAY_PALETTE_ELEMENT[own.palette] ?? 'physical';
+  const element = RELAY_POOL_MOVE_ELEMENT[id];
+  if(element)return element === 'neutral' ? 'physical' : element;
+  if(RANGED_BASICS.has(id))return casterElement ?? 'physical';
+  return basics[id] ? 'physical' : casterElement ?? 'physical';
+}
 /** Colour, texture, cue, style, impact and tether for a move; `element` is the caster's (for basics). */
 export function relayEffectStyle(id, element = null) {
   const own = relayOwnMoveInfo(id);

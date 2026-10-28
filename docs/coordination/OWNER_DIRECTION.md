@@ -10,6 +10,7 @@ Owner directs, after the Pokémon Arena 2D study, a staged build of real-time pa
 - After stage one the Owner directs 「先commit並接著做第二階段，然後那些衝突的顏色可以另外做一個符合的效果嗎？或是你找一些skill可以做Vfx特效」: commit to the feature branch and continue with stage two (VFX). No push, merge or deployment is authorized.
 - OWNER_APPROVED_ADAPTATION for the conflicts: 16 moves whose approved name names their substance against the original bank colour take the name's style and colour (`NAME_OVERRIDES` in `scripts/build-move-vfx-themes.mjs`), in the Dex, battle and arena alike.
 - Stage two is presentation only: per-style projectile heads, element-following basics, impact families, 60–80 ms drawing-only hit-stop, windup charge orbs, beam tethers and status particles in RELAY.
+- Owner then directs 「Start stage three」 (same terms: commit on the branch, no push). OWNER_APPROVED_ADAPTATION: each relay field gets destructible cover in its own material (weak elements deal 1.4x to cover; wood burns; broken cover opens a route) and timed arena zones (warning 2.5 s, active 6 s, every 22 s; one 0.7 s claim per team per cycle; effect by field theme). Rules in `dataArenaRelayArena.js`; cover and zones are game data over the existing field grids.
 
 <!-- record-id: MOVE_VFX_THEMES_HUNT_ROPE_TACTICS_20261028 -->
 ## 2026-10-28 — Dex move names and per-move preview VFX; Hunt rope roles, combos and overheat

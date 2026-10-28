@@ -10,8 +10,7 @@
 // scripts/build-data-arena-relay-kits.mjs. Stage never changes a number: a
 // style rule is the same for every generation, matching the RELAY roster rule.
 import kitData from '../../../data/championship/data-arena-relay-kits.v1.json' with { type: 'json' };
-
-export const RELAY_ELEMENTS = Object.freeze(['fire', 'frost', 'light', 'water', 'earth', 'storm', 'nature', 'shadow', 'physical']);
+export { RELAY_ELEMENTS } from './dataArenaRelayElements.js';
 
 // Pool moves: five per element, ultimate last. `neutral` marks body moves any
 // element may carry (tinted by the partner); every other entry is that element.

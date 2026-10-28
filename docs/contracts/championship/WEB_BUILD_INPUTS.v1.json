@@ -9185,7 +9185,9 @@
     "src/championship/presentation/juicy/showcaseMoveVfx.js",
     "src/championship/hunt/capture/huntRopeTactics.js",
     "src/championship/modes/dataArena/dataArenaRelayKits.js",
-    "src/data/championship/data-arena-relay-kits.v1.json"
+    "src/data/championship/data-arena-relay-kits.v1.json",
+    "src/championship/modes/dataArena/dataArenaRelayArena.js",
+    "src/championship/modes/dataArena/dataArenaRelayElements.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -43957,11 +43959,19 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaRelayKits.js",
-        "sha256": "23d3cc1d76d07210a9d3cc872a5642eca8b38312e1fbfa20e5f0b5c10fe3623f"
+        "sha256": "e3e3855beef47ac853e5194f0d3d0794f08f98885cfd92a55f750b2e6efc3d67"
       },
       {
         "path": "src/data/championship/data-arena-relay-kits.v1.json",
         "sha256": "b9123f5c413fbdc20e51514bad9e9b222a1fb6cf1ba47e4ead477214fd44250a"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaRelayArena.js",
+        "sha256": "f56c60fd5cc24c3c8e0345dff8c3265d47700aa9dc56789aceb65c535e8143c5"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaRelayElements.js",
+        "sha256": "a1d2c8f6cddc941cae0e78ffbf60881d2c925808150edaa9284f2c8b0ba91386"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",
