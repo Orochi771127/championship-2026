@@ -174,7 +174,8 @@ export function createTamerInfoView({ root, walletBits = null, tamerRank = null,
     shell.append(card);
   }
   // Owner 2026-10-28: friends and the account panel open from the licence; the ROM field table below stays as it is.
-  if (typeof renderOnline === "function") renderOnline(shell);
+  // Owner 2026-10-29: the brag card joins them on top; the passport and community dock follow the table ("bottom").
+  if (typeof renderOnline === "function") renderOnline(shell, "top");
 
   const table = element("dl", "cm-tamer-fields");
   let sourced = 0;
@@ -227,7 +228,9 @@ export function createTamerInfoView({ root, walletBits = null, tamerRank = null,
   back.addEventListener("click", () => { onExit?.(); });
   footer.append(back);
 
-  shell.append(table, note, footer);
+  shell.append(table, note);
+  if (typeof renderOnline === "function") renderOnline(shell, "bottom");
+  shell.append(footer);
   root.append(shell);
 
   return Object.freeze({
