@@ -18,6 +18,8 @@ import { getRaisingNativePixelScale, getRaisingNativeActorGeometry, raisingOrigi
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import {loadEvolutionGlyphArt, createEvolutionGlyphBand} from '../evolutionGlyphArt.js';
 import {EVOLUTION_TEXT_ROWS, EVOLUTION_WRITING_COLOR, evolutionWritingY} from '../../text/evolutionPresentationText.js';
+import { BATTLE_CHARACTER_PROFILES } from "../../../data/championship/battleCharacterProfiles.js";
+import { createNativeCharacterAnimationTimeline } from "../characterAnimationTimeline.js";
 import { prefersReducedMotion } from '../presentationPreferences.js';
 import { uiText } from '../../text/uiText.js';
 import {bindRaisingZoomInput,RAISING_OVERVIEW_ZOOM} from './raisingZoomInput.js';
@@ -159,6 +161,54 @@ export async function mountRaisingFieldPixiPresentation({
   backgroundLayer.addChild(backdrop);
   const cageGraphics = new Map();
   const actors = new Map();
+  // Story theater (OWNER_APPROVED_ADAPTATION 2026-10-28): presentation-only
+  // puppets over the native actor frame. A puppet overrides the drawn sequence,
+  // facing and a position offset while a cutscene plays; the simulation frame
+  // underneath is untouched and the clock is paused by the caller.
+  const storyPuppets = new Map();
+  const STORY_PUPPET_SEQUENCES = Object.freeze({ idle: 0, walk: 2, attack: 7, hit: 26, hop: 0, face: 0 });
+  const NATIVE_TICK_MS = 560190 / 33513982 * 1000;
+  function actorFrameFor(creatureId) {
+    const native = source.getActorFrame?.(creatureId);
+    const puppet = storyPuppets.get(creatureId);
+    if (!puppet || !native) return native;
+    const snap = puppet.timeline?.getSnapshot() ?? null;
+    const offset = puppet.offsetQ12;
+    return {
+      ...native,
+      ...(snap ? { sequenceId: snap.sequenceId, frameIndex: snap.frameIndex, cell: snap.cell, texture: snap.texture, elapsedQ12: snap.elapsedQ12, active: snap.active, playMode: snap.playMode, nativeFrame: snap.frameIndex } : {}),
+      flipBits: puppet.flipBits ?? native.flipBits,
+      positionQ12: native.positionQ12 ? [native.positionQ12[0] + offset[0], native.positionQ12[1] + offset[1], (native.positionQ12[2] ?? 0) + offset[2]] : native.positionQ12,
+      state: 1, feedback: null, statusFeedback: null, recoveryStars: null, treatment: null, training: null, visitingPassage: null
+    };
+  }
+  function stepStoryPuppets(deltaMS) {
+    if (!storyPuppets.size) return;
+    const ticks = Math.max(0, Math.min(8, deltaMS / NATIVE_TICK_MS));
+    for (const puppet of storyPuppets.values()) {
+      puppet.elapsed += deltaMS;
+      if (puppet.timeline && !reducedMotion) puppet.timeline.advanceNative(Math.round(ticks * 4096));
+      if (puppet.move) {
+        const t = puppet.move.duration > 0 ? Math.min(1, puppet.elapsed / puppet.move.duration) : 1;
+        const ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+        puppet.offsetQ12[0] = Math.round(puppet.move.fromX + (puppet.move.toX - puppet.move.fromX) * ease);
+        if (t >= 1) { puppet.move = null; if (puppet.after) { puppet.after(); } }
+      }
+      if (puppet.hop) {
+        const t = Math.min(1, puppet.elapsed / puppet.hop.duration);
+        puppet.offsetQ12[2] = reducedMotion ? 0 : Math.round(Math.sin(Math.PI * Math.min(1, (t * puppet.hop.count) % 1)) * puppet.hop.height * 4096);
+        if (t >= 1) { puppet.hop = null; puppet.offsetQ12[2] = 0; }
+      }
+    }
+  }
+  function puppetTimeline(entry, action) {
+    const profile = BATTLE_CHARACTER_PROFILES[entry.entityId];
+    const wanted = STORY_PUPPET_SEQUENCES[action] ?? 0;
+    const sequence = profile?.sequences.find(s => s.id === wanted) ?? profile?.sequences.find(s => s.id === 0) ?? null;
+    if (!sequence) return null;
+    try { return createNativeCharacterAnimationTimeline({ ...sequence, frames: sequence.frames.map(f => ({ ...f, texture: `cell:${f.cell}` })) }); }
+    catch { return null; }
+  }
   const foodGraphics = new Map();
   const wasteGraphics = new Map();
   const evolutionGlow=new PIXI.Graphics();evolutionGlow.eventMode='none';fxLayer.addChild(evolutionGlow);
@@ -414,7 +464,7 @@ export async function mountRaisingFieldPixiPresentation({
   }
 
   function actorPoint(resident) {
-    const native=source.getActorFrame?.(resident.creatureId);
+    const native=actorFrameFor(resident.creatureId);
     if(native?.positionQ12&&isNativeRanchLayout(latestFrame?.ranch?.layoutVersion)) {
       const point=raisingNativeToScreen(native.positionQ12,fieldArt?.field,view,cameraX);if(point)return point;
     }
@@ -789,7 +839,7 @@ export async function mountRaisingFieldPixiPresentation({
         entry.root.position.set(point.x, point.y);
       }
       const nativeScale = getRaisingNativePixelScale(fieldArt?.field, view);
-      const actorFrame=source.getActorFrame?.(resident.creatureId);
+      const actorFrame=actorFrameFor(resident.creatureId);
       if(entry.nativeFramePresenter&&actorFrame&&entry.speciesId===`championship:creature:species-${String(actorFrame.speciesIndex).padStart(3,'0')}`
         &&residentFrameReady(entry,actorFrame)){
         applyNativeCharacterCellGeometry(entry.sprite,entry.nativeFramePresenter.apply(actorFrame));
@@ -1018,6 +1068,7 @@ export async function mountRaisingFieldPixiPresentation({
       }
     }
     stepCameraFocus(ticker.deltaMS);
+    stepStoryPuppets(ticker.deltaMS);
     if(drag?.nativeHand)drag.carried=source.getActorFrame?.(drag.creatureId)?.state===6;
     if(drag?.carried&&fieldArt?.field?.presentationMode==='NATIVE_RANCH'){
       const fit=raisingFieldViewport(fieldArt.field,view,12,cameraX);
@@ -1072,7 +1123,7 @@ export async function mountRaisingFieldPixiPresentation({
     readPartnerLife(covered);
     for (const [creatureId, entry] of actors) {
       entry.root.visible=!covered||creatureId===lifecycle?.instanceId;
-      const native=source.getActorFrame?.(creatureId);
+      const native=actorFrameFor(creatureId);
       drawNativeFeedback(entry,native,covered,'feedback');
       drawNativeFeedback(entry,native,covered,'statusFeedback');
       // OVL18 02110FB0: native stars in the recovery cages, same effect bank as the icons.
@@ -1092,7 +1143,7 @@ export async function mountRaisingFieldPixiPresentation({
         entry.shadow?.scale.set(native.state===6?3277/4096:1);
       }
       if (entry.nativeFramePresenter) {
-        const frame=source.getActorFrame?.(creatureId);
+        const frame=actorFrameFor(creatureId);
         // Profile changes may precede asynchronous texture loading. Never
         // apply one species' frame index to another species' atlas.
         if (frame && `championship:creature:species-${String(frame.speciesIndex).padStart(3,"0")}`===entry.speciesId&&residentFrameReady(entry,frame))
@@ -1562,6 +1613,32 @@ export async function mountRaisingFieldPixiPresentation({
         }
       }
       return true;
+    },
+
+    /** Story theater puppet (presentation only). `action` picks a native
+     * sequence by role; `facing` flips the body; `moveX` walks the drawn body
+     * that many native pixels over `moveMs`; `hop` bounces it. Returns false
+     * when the resident is not drawn. clearStoryPuppet() restores the frame. */
+    setStoryPuppet(creatureId, { action = 'idle', facing = null, moveX = 0, moveMs = 0, hop = null, onArrive = null } = {}) {
+      const entry = actors.get(creatureId);
+      if (disposed || !entry || entry.root.destroyed) return false;
+      const previous = storyPuppets.get(creatureId);
+      const native = source.getActorFrame?.(creatureId);
+      const puppet = {
+        offsetQ12: previous ? [...previous.offsetQ12] : [0, 0, 0], elapsed: 0,
+        timeline: puppetTimeline(entry, action),
+        flipBits: facing === null ? (previous?.flipBits ?? native?.flipBits ?? 0) : (facing === 'right' ? 1 : 0),
+        move: moveX ? { fromX: previous?.offsetQ12[0] ?? 0, toX: (previous?.offsetQ12[0] ?? 0) + Math.round(moveX * 4096), duration: Math.max(1, moveMs) } : null,
+        hop: hop ? { duration: Math.max(1, hop.ms ?? 600), count: hop.count ?? 1, height: hop.height ?? 10 } : null,
+        after: typeof onArrive === 'function' ? onArrive : null
+      };
+      storyPuppets.set(creatureId, puppet);
+      sync(source.getFrame(), { force: true });
+      return true;
+    },
+    clearStoryPuppet(creatureId = null) {
+      if (creatureId === null) storyPuppets.clear(); else storyPuppets.delete(creatureId);
+      if (!disposed) sync(source.getFrame(), { force: true });
     },
 
     /** A resident's on-screen box, relative to the field host, so interface

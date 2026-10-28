@@ -26,6 +26,7 @@ import {
   serializeChampionshipModernSave
 } from "./championshipStandaloneSave.js";
 import {
+  CHAMPIONSHIP_ONLINE_SESSION_STORAGE_KEY,
   CHAMPIONSHIP_SESSION_CHECKPOINT_STORAGE_KEY,
   assertAllowedChampionshipStorageKey
 } from "./championshipStorageGuard.js";
@@ -156,6 +157,37 @@ export function createChampionshipGuestIdentityPort({ storage } = {}) {
 // Dual-backed across sessionStorage + localStorage (registered in
 // championshipStorageGuard.js) so it survives iOS Jetsam WebContent process kills,
 // and actively removes itself on Save & Quit or TTL expiry.
+// Online session (Owner 2026-10-28): one product key holds the JSON map of the
+// sub-keys supabase-js asks its storage adapter for (the session and the PKCE
+// verifier). The adapter is handed to createClient as `auth.storage`, so the
+// library never reaches localStorage itself. Created lazily on the first write
+// and removed on sign-out, so offline play keeps exactly the save key.
+export const CHAMPIONSHIP_ONLINE_SESSION_KEY = CHAMPIONSHIP_ONLINE_SESSION_STORAGE_KEY;
+export function createChampionshipOnlineSessionPort({ storage } = {}) {
+  if (!storage || typeof storage.getItem !== "function" || typeof storage.setItem !== "function") {
+    throw new TypeError("Championship online session port requires a Storage-like object");
+  }
+  const key = assertAllowedChampionshipStorageKey(CHAMPIONSHIP_ONLINE_SESSION_KEY);
+  const guarded = guardChampionshipStorage(storage);
+  function readMap() {
+    try { const parsed = JSON.parse(guarded.getItem(key) ?? "null"); return parsed && typeof parsed === "object" && parsed.version === 1 ? parsed.entries ?? {} : {}; }
+    catch { return {}; }
+  }
+  function writeMap(entries) {
+    try {
+      if (!Object.keys(entries).length) { if (typeof storage.removeItem === "function") guarded.removeItem(key); else guarded.setItem(key, ""); }
+      else guarded.setItem(key, JSON.stringify({ version: 1, entries }));
+    } catch { /* blocked storage: the session lives in memory for this page */ }
+  }
+  return Object.freeze({
+    storageKey: key,
+    getItem(name) { const entries = readMap(); return Object.hasOwn(entries, name) ? entries[name] : null; },
+    setItem(name, value) { const entries = readMap(); entries[String(name)] = String(value); writeMap(entries); },
+    removeItem(name) { const entries = readMap(); delete entries[String(name)]; writeMap(entries); },
+    clear() { writeMap({}); }
+  });
+}
+
 export const CHAMPIONSHIP_SESSION_CHECKPOINT_KEY = CHAMPIONSHIP_SESSION_CHECKPOINT_STORAGE_KEY;
 export const CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS = 180_000;
 export function createChampionshipSessionCheckpointPort({ storage, sessionStorage = null } = {}) {
@@ -455,6 +487,21 @@ export function createChampionshipPersistentSavePort({
       } catch (error) {
         return Object.freeze({ present: false, save: null, error: error.message });
       }
+    },
+
+    /** Owner 2026-10-28: adopt a complete save text from the cloud or a transfer
+     * code. Validated with the same deserializer Continue uses, written through
+     * this one boundary, and published as RESTORED; the app reloads afterwards. */
+    adoptExternalText(text) {
+      let save;
+      try { save = deserializeChampionshipModernSave(text); } catch (error) { return Object.freeze({ ok: false, reason: `SAVE_TEXT_INVALID: ${error.message}` }); }
+      try {
+        assertCurrent();
+        guarded.setItem(key, text);
+        baseline = text; pendingText = null; lastRequest = null;
+        publish({ phase: "RESTORED", lastCode: "CHAMPIONSHIP_MODERN_SAVE_RESTORED", canRetry: false, revision: save.progression.revision, savedAt: save.updatedAt, error: null, bytes: byteLength(text) });
+        return Object.freeze({ ok: true, revision: save.progression.revision, savedAt: save.updatedAt });
+      } catch (error) { return Object.freeze({ ok: false, reason: error.message }); }
     },
 
     clear() {

@@ -3696,6 +3696,15 @@ export function createChampionshipStandaloneApp({
       });
     },
 
+    /** Cloud / transfer-code restore (Owner 2026-10-28): the imported text must pass the same complete candidate
+     * validation Continue uses (not only the envelope deserializer) before it may replace the stored save. */
+    adoptExternalSaveText(text) {
+      let save;
+      try { save = deserializeChampionshipModernSave(text); } catch (error) { return Object.freeze({ ok: false, reason: `SAVE_TEXT_INVALID: ${error.message}` }); }
+      try { restoreCandidate(save); } catch (error) { return Object.freeze({ ok: false, reason: `SAVE_NOT_LOADABLE: ${error.message}` }); }
+      return savePort.adoptExternalText(text);
+    },
+
     persistenceFacade() {
       const app = this;
       return Object.freeze({
