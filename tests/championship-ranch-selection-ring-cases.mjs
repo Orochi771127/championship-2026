@@ -57,7 +57,28 @@ test('the 3D scene syncs the ring with each actor; the Pixi fallback ring stays 
 test('ring shaders avoid GLSL ES 3.0 reserved words (a reserved name fails the compile on device)',()=>{
   const text=source('src/championship/presentation/ranchSelectionRing.js');
   const shaders=[...text.matchAll(/const [A-Z_]+_(?:VERTEX|FRAGMENT)=(`[\s\S]*?`|'[^']*');/g)].map(m=>m[1]);
-  assert.equal(shaders.length,4);
+  // Four selection-ring programs plus the Cyber Gachapon bloodline halo (2026-10-29).
+  assert.equal(shaders.length,5);
   const reserved=/\b(half|fixed|input|output|sample|filter|sizeof|cast|namespace|using|common|partition|active|union|template|goto|inline|noinline|volatile|public|static|extern|external|interface|long|short|double|unsigned|superp|resource)\b/;
   for(const shader of shaders)assert.doesNotMatch(shader,reserved);
+});
+
+test('a metal bloodline keeps its own tinted halo, selected or not, and leaves the selection ring alone (2026-10-29)',async()=>{
+  const {createRanchBloodlineRings,RANCH_BLOODLINE_RING}=await import('../src/championship/presentation/ranchSelectionRing.js');
+  const lines={a:{family:'supernova',ring:0xffb52e},b:null};
+  const scene=new THREE.Scene(),rings=createRanchBloodlineRings(scene,{getBloodline:id=>lines[id]??null});
+  const entry=fakeEntry({visible:false});
+  rings.reset();assert.ok(rings.sync('a',entry,bounds,pixelScale,true));assert.equal(rings.sync('b',fakeEntry(),bounds,pixelScale,true),null);rings.prune();
+  const rows=rings.diagnostics();assert.deepEqual(rows.map(r=>[r.key,r.family,r.color]),[['a','supernova',0xffb52e]]);
+  const select=ranchSelectionRingPlacement(entry,bounds,pixelScale);
+  assert.ok(Math.abs(rows[0].radius-select.radius*RANCH_BLOODLINE_RING.radiusScale/RANCH_SELECTION_RING.radiusScale)<1e-9,'wider than the lock-on ring');
+  const mesh=scene.children.find(o=>o.name==='ranch-bloodline-ring');
+  assert.ok(mesh.material.depthTest&&!mesh.material.depthWrite&&mesh.material.transparent);
+  assert.equal(mesh.material.uniforms.uColor.value.getHex(),0xffb52e);
+  assert.equal(entry.selection.renderable,true,'the bloodline halo never hides the Pixi selection ring');
+  lines.a={family:'emma',ring:0xb9a6ff};rings.reset();rings.sync('a',entry,bounds,pixelScale,true);rings.prune();
+  assert.equal(scene.children.filter(o=>o.name==='ranch-bloodline-ring').length,1,'a new metal recolours, never stacks');
+  lines.a=null;rings.reset();rings.sync('a',entry,bounds,pixelScale,true);rings.prune();
+  assert.equal(scene.children.filter(o=>o.name==='ranch-bloodline-ring').length,0);
+  rings.dispose();
 });

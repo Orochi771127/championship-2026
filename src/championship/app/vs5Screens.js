@@ -832,6 +832,13 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false) {
   }
   card.dataset.present = "true";
   const name = element("span", "cm-vs5-fighter__name", combatant.displayName ?? uiText(`SLOT ${combatant.slot + 1}`), false);
+  if (combatant.bloodline) {
+    // Cyber Gachapon metal bloodline: `[時輪] 名字` on the HP plate.
+    const badge = element("span", "cm-gacha-badge", `[${combatant.bloodline.title}]`, false);
+    badge.style.setProperty("--bloodline", combatant.bloodline.color);
+    name.prepend(badge, " ");
+    card.dataset.bloodline = combatant.bloodline.family;
+  }
   const hp = meter("cm-vs5-meter--hp", "Health");
   const hpValue = element('span', 'cm-vs5-fighter__hp');
   const updateHpNumerals = floatingHud ? floatingMeterNumerals(hpValue, 'HP') : null;
@@ -1088,7 +1095,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
  * Panels advance one at a time, which is how the original presents them; the
  * last one returns home.
  */
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
   let disposed=false;
 
@@ -1168,6 +1175,15 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         frag.append(element("p", "cm-vs5-result__detail", "本場沒有獲得獎金。"));
       }
       if (matchTitle) frag.append(element("p", "cm-vs5-result__detail", matchTitle));
+      // Cyber Gachapon drop (OWNER_APPROVED_ADAPTATION 2026-10-29): only this match's own win.
+      if (gachaDrop?.tickets > 0) {
+        const drop = element("p", "cm-vs5-result__detail cm-vs5-result__gacha",
+          uiText("🎫 數碼轉蛋券 ×{n}", { n: gachaDrop.tickets }));
+        drop.dataset.gachaTickets = String(gachaDrop.tickets);
+        frag.append(drop);
+        if (gachaDrop.bonusBits > 0) frag.append(element("p", "cm-vs5-result__detail cm-vs5-result__gacha",
+          uiText("📡 賞金信標加成 +{bits} 位元幣", { bits: gachaDrop.bonusBits })));
+      }
       return frag;
     }
   });

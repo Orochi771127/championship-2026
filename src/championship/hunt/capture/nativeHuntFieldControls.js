@@ -29,7 +29,7 @@ export function separateNativeHuntGroundActors(actors,environment){
   return result;
 }
 
-export function createNativeHuntFieldControls({ records,wildIds,environment,rng,loadout,consumeItem,maxCardG,night=false,onChange=()=>{} }) {
+export function createNativeHuntFieldControls({ records,wildIds,environment,rng,loadout,consumeItem,maxCardG,night=false,onChange=()=>{},boosts=null }) {
   if (!rng?.next || !loadout?.getSelectedEquipment || typeof consumeItem!=="function") throw Error("NATIVE_HUNT_CONTROL_AUTHORITIES_REQUIRED");
   const actors=records.map((r,i)=>createNativeWildActor(r,wildIds[i]));
   let activeTool="HAND", pointer=null, stroke=null, closure=null, rope=null, selectedWildId=null;
@@ -40,6 +40,11 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   // (huntRopeTactics.js) around the unchanged native rope writer.
   const tactics=createHuntRopeTactics({generationOf:index=>nativeHuntToolSpecies(index).generation});
   let accumulator=0, frame=0, notice=null;
+  // OWNER_APPROVED_ADAPTATION 2026-10-29: Cyber Gachapon hunt cartridges armed
+  // for this hunt only -- stun x2, wilds at half speed, a rope that never wears.
+  const stunRate=Number.isFinite(boosts?.stunRate)&&boosts.stunRate>1?boosts.stunRate:1;
+  const slow=Number.isFinite(boosts?.slow)&&boosts.slow>0&&boosts.slow<1?boosts.slow:0;
+  const sureCapture=boosts?.sureCapture===true;
   const ages=Array(20).fill(0);
   const nextChannel=channel=>rng.next(channel), wildRandom=max=>nativeWildRandom(max,nextChannel);
   const emit=value=>{notice=value;onChange();};
@@ -123,7 +128,12 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   function step() {
     frame++;
     // Actor requests from the previous tool update precede the next tool tick.
-    for(const a of actors)stepNativeWildActor(a,host);
+    for(const a of actors){
+      const stun=a.shotShakeTicks,at=slow&&!a.bound&&a.positionQ12?[...a.positionQ12]:null;
+      stepNativeWildActor(a,host);
+      if(stunRate>1&&a.shotShakeTicks>stun)a.shotShakeTicks=Math.min(900,stun+Math.round((a.shotShakeTicks-stun)*stunRate));
+      if(at&&a.positionQ12&&!a.bound)for(const i of [0,1])a.positionQ12[i]=at[i]+Math.trunc((a.positionQ12[i]-at[i])*(1-slow));
+    }
     // One Q12 position owner, before consumable and rope readers. Proposals
     // read terrain only: queryControllers has damage/capture side effects.
     separateNativeHuntGroundActors(actors,environment);
@@ -176,7 +186,8 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
       const before=rope.state;
       rope.state=huntRopeWear(before,next.rope,{movementBlocked:!!a.movementRestricted,overstretched,groupHold:tactics.groupHold(a,actors),
         terrainCrossed:next.rope.band!=="SLACK"&&huntRopeCrossesBlocked(anchor,pointer.q12,blockedPixel)});
-      a.currentHp=next.currentHp;tactics.syncHp(a);
+      if(sureCapture&&rope.state.controllerState!==6)rope.state=Object.freeze({...rope.state,durability:before.durability});
+      a.currentHp=sureCapture?Math.max(0,a.currentHp-2*Math.max(0,a.currentHp-next.currentHp)):next.currentHp;tactics.syncHp(a);
       if(a.currentHp<=0)tactics.ropeDowned(a,before.role);
       if(next.events.includes(0x11))a.destinationQ12=[...nativeStrongPullDestination(a.positionQ12,pointer.q12)];
       for(const code of next.events)a.events.push({code});
