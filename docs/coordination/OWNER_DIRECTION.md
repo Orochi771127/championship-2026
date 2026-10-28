@@ -1,5 +1,10 @@
 # Championship Owner Direction
 
+<!-- record-id: CAGE_GROUND_STANDARD_20261028 -->
+## 2026-10-28 — Cage ground standard v1, track cage CM02, gym floors and lockers
+
+Owner brief (2026-10-28, with an in-game screenshot): the cage grounds show a dark seam where a ground sheet is stacked on the plate, zones washed into one colour, and a hard-edged speckled patch under trees; check all 37 masters for stacked sheets. The Owner then narrowed CM02 to 「只要動跑道跟中央綠色的就好」 with a reference image (terracotta track, green infield, sand around), approved the geometry version from the master and asked for the long-term approach that suits a web game, since new cage maps will follow; added the gyms (CM05, CM34): black and orange rubber-tile floor and lockers in the colours of a reference photo; and directed 「做完完成之後請你自我審查，沒有問題就請你commit 跟push然後合併並發佈。37個籠子都要請你檢查跟製作都要確認沒有問題。」 This authorizes this batch's commit, push, main integration and Pages publication. Presentation only (OWNER_APPROVED_ADAPTATION of cage art): no gameplay, save, walkability or navigation change; CM02 and CM34 support triangles are the same faces remapped by exact position. Landform cages CM07/CM21/CM35 stay untouched per the earlier Owner direction. See the [standard](../art/production/ART_PRODUCTION_CAGE_GROUND_STANDARD_ZH_TW.md) and the [37-cage report](../reports/cage-ground-2026-10-28/README_ZH_TW.md).
+
 <!-- record-id: STORY_RIFT_ONLINE_20261028 -->
 ## 2026-10-28 — Noise-rift story theater and Supabase-ready online play
 

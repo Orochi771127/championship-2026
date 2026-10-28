@@ -14,6 +14,7 @@ import { cappedPixelRatio, currentQualityTier, isMobileOrStandaloneEnvironment, 
 import { ranchSharedBoundaries } from '../cage/ranchConnections.js';
 import { ranchBorderWithinSharedSegments } from './ranchBorderMembership.js';
 import { enhanceCageObject } from './cageHd2dEnhancer.js';
+import { loadCageGroundMaps, installCageGroundMap } from './cageGroundMap.js';
 import { getCageDefinitionByModuleId } from '../cage/cageCatalog.js';
 
 const MANIFEST = 'assets/production/cage/three-20261021/manifest.json';
@@ -91,6 +92,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   const lavaMaterials=new Set(), dynamicShaders=new Set(), smokeNodes=[];
   // HD-2D enhancer (Owner 2026-10-27): one shared clock for every themed cage material.
   const hd2dTime={value:0}, hd2dPlaced=[];
+  // Cage ground maps (Owner 2026-10-28 ground standard), keyed by GLB material name.
+  const groundMaps=new Map();let groundMapsHooked=0;
   const authoredDepthMaterials=new Set();
   let cm07Ambient=null,plinth=null;
   const dynamicParticles=[], dynamicMachines=[], dynamicBeacons=[];
@@ -139,6 +142,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       const hash=[...new Uint8Array(digest)].map(value=>value.toString(16).padStart(2,'0')).join('');
       if(hash!==spec.sha256)throw Error(`RANCH_3D_MODEL_HASH_MISMATCH:${id}`);
       const gltf=await loader.parseAsync(bytes,new URL('.',new URL(url,location.href)).href);
+      const ownGroundMaps=await loadCageGroundMaps(gltf,THREE);
+      for(const [name,entry] of ownGroundMaps)groundMaps.set(name,entry);
       if(supportFields.has(id)){
         const meshes=[];gltf.scene.traverse(o=>{if(o.isMesh)meshes.push(o);});
         verifiedSupport.set(id,await validateSupportGeometry(supportFields.get(id),hash,meshes));
@@ -147,6 +152,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       // Keep full-resolution authoring exports on disk. Bound resident GPU
       // texture memory for the selected device tier before first upload.
       const maps=new Set();gltf.scene.traverse(o=>{for(const m of [].concat(o.material??[]))for(const v of Object.values(m))if(v?.isTexture&&v.image)maps.add(v);});
+      for(const {texture} of ownGroundMaps.values())if(texture.image)maps.add(texture);
       const resized=new Map();
       for(const t of maps){
         const original=t.image;
@@ -608,7 +614,9 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       supportOwnerResolver=createRanchSupportOwnerResolver({placements:supportPlacements,instances,unit:field.nativePixelWorldScale,wrapWidthNative:(field.wrapWidthPx??field.worldWidthPx)/field.nativePixelWorldScale});
     // Owner direction: navigation connections are invisible; original bridges and floors remain model geometry.
     signal?.throwIfAborted();
-    // After every authored hook is installed: themed glow, glints and sway (not in saver quality).
+    // After every authored hook is installed: the ground maps (every quality tier), then
+    // themed glow, glints and sway (not in saver quality).
+    for(const {object} of hd2dPlaced)groundMapsHooked+=installCageGroundMap(object,groundMaps);
     if(currentQualityTier()!=='saver'&&!softwareRenderer)for(const {object,moduleId} of hd2dPlaced)enhanceCageObject(object,{
       definitionIndex:getCageDefinitionByModuleId(moduleId)?.cageDefinitionIndex??null,time:hd2dTime,
       authored:m=>lavaMaterials.has(m)||dynamicShaders.has(m)});
@@ -935,6 +943,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     collect(scene);
     for(const gltf of models.values())collect(gltf.scene);
     for(const g of geometries)g.dispose();for(const m of materials)m.dispose();for(const t of maps)t.dispose();
+    for(const {texture} of groundMaps.values())texture.dispose();groundMaps.clear();
     sun.shadow.map?.dispose();
     for(const bitmap of modelBitmaps)bitmap.close();modelBitmaps.clear();
     draco.dispose();
@@ -1003,6 +1012,6 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     }
     return {x:best.x,y:best.y};
   }
-  return {render,dispose,groundHeight,pickGroundNative,getDiagnostics:()=>({selectionRings:selectionRing.diagnostics(),spriteDiagnostics:[...sprites].filter(([key,item])=>item.mesh.visible||item.upperMesh.visible).map(([key,item])=>({key,partition:item.partition,companionId:item.upperMesh.id,physicalSupport:item.physicalSupport,screenQuad:item.screenQuad,worldCenter:item.mesh.position.toArray(),worldScale:item.mesh.scale.toArray(),projectionError:item.projectionError,envelopeNativeExtent:item.envelopeNativeExtent??null,supportStatus:item.supportStatus??'NATIVE_ORIGIN',depthTest:item.mesh.material.depthTest,depthWrite:item.mesh.material.depthWrite})),mode:'TRUE_3D_FIXED_CAMERA_2D_ACTORS',passageAppearance:'invisible',navigationConnections:connections?.length??0,frames,lastRenderMs,models:models.size,textureCap,animatedInstances:instances.filter(i=>i.mixer).length,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,memory:{...renderer.info.memory},lost}),groundContact,contactHeight};
+  return {render,dispose,groundHeight,pickGroundNative,getDiagnostics:()=>({selectionRings:selectionRing.diagnostics(),spriteDiagnostics:[...sprites].filter(([key,item])=>item.mesh.visible||item.upperMesh.visible).map(([key,item])=>({key,partition:item.partition,companionId:item.upperMesh.id,physicalSupport:item.physicalSupport,screenQuad:item.screenQuad,worldCenter:item.mesh.position.toArray(),worldScale:item.mesh.scale.toArray(),projectionError:item.projectionError,envelopeNativeExtent:item.envelopeNativeExtent??null,supportStatus:item.supportStatus??'NATIVE_ORIGIN',depthTest:item.mesh.material.depthTest,depthWrite:item.mesh.material.depthWrite})),mode:'TRUE_3D_FIXED_CAMERA_2D_ACTORS',passageAppearance:'invisible',navigationConnections:connections?.length??0,frames,lastRenderMs,models:models.size,groundMaps:groundMaps.size,groundMapsHooked,textureCap,animatedInstances:instances.filter(i=>i.mixer).length,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,memory:{...renderer.info.memory},lost}),groundContact,contactHeight};
 }
 
