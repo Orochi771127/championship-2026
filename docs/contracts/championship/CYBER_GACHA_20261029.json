@@ -1,0 +1,33 @@
+{
+  "id": "CYBER_GACHA_20261029",
+  "classification": "OWNER_APPROVED_ADAPTATION: the Shop's third tab (the 30 one-per-save plugins) becomes the Cyber Gachapon centre",
+  "supersedes": {
+    "contract": "docs/contracts/championship/BATTLE_TACTICS_20261028.json",
+    "sourceLock": "src/championship/app/championshipStandaloneSave.js"
+  },
+  "saveField": {
+    "path": "progression.cyberGacha",
+    "shape": "{ version: 1, tickets, pity (0..50), pulls, welcome, chips: {chipId: n}, metals: {metalId: n}, bloodlines: {instanceId: family}, armed: {hunt?: chipId[], bounty?: chipId}, claimed: rewardKey[] }",
+    "normalizer": "normalizeCyberGacha in src/championship/gacha/cyberGacha.js refuses unknown keys, unknown item ids and malformed instance ids",
+    "migration": "older saves have no field; the first load grants the ten welcome tickets once and writes welcome:true with the next save"
+  },
+  "shopRows": "The 118 shop rows are unchanged. Eighteen plugin rows (53..70) are the chips' identities and art; owned plugins keep fitting the hunt loadout.",
+  "currencies": "Tickets in the save; diamonds are the friends-playtest test diamonds (flags.friendsPlaytest.diamonds); Bits through the existing shop wallet.",
+  "notChanged": [
+    "Storage key, schema version 5 and every other save slice",
+    "ROM battle, hunt and raising writers; gacha effects adjust their inputs or outputs only"
+  ],
+  "sourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "1c4e7336e17e35099758cea84ff533e81c60c08bacbafef356afdbf55953b135"
+  },
+  "historicalSourceLocks": {
+    "BATTLE_TACTICS_20261028": {
+      "src/championship/app/championshipStandaloneSave.js": "3a72fce7d38151f473f343fb8b9f59349daef1beb7cb09b6a0547c628d07ac8e"
+    }
+  },
+  "authorization": "Owner 2026-10-29: 商店「外掛」分頁改版為「🎰 數碼轉蛋機」、5 合 1 晶片合成爐、金屬血統頭銜與轉蛋券掉落（6 Phase 指令）。",
+  "tests": [
+    "tests/championship-cyber-gacha-cases.mjs"
+  ],
+  "physicalDeviceAccepted": false
+}

@@ -1,5 +1,15 @@
 # Championship Owner Direction
 
+<!-- record-id: CYBER_GACHA_20261029 -->
+## 2026-10-29 — Cyber Gachapon replaces the Shop's plugin tab
+
+Owner brief (pasted 2026-10-29, six phases): turn the Shop's third tab 「外掛」 into 「🎰 數碼轉蛋機」 with a 5-in-1 chip synthesizer, find the evolution-metal art made earlier with Antigravity before drawing anything, have Codex make the missing PNG parts, turn the 18 plugin chips into stackable consumables, give evolution metals a catalyst use and a 金屬血統 title with a coloured ground halo, and drop 🎫 tickets from the welcome grant, wins, championships, story chapters and the journal. Mid-batch the Owner added: 「還有其他的道具的圖片也可以加進去，轉蛋雞得獎品裡」 (the other Antigravity item icons join the prize pool), 「這些圖請用適合網頁遊戲的檔案或格式來製作或接入」 (WebP), and 「要有一個專屬介面，是讓玩家自己去轉那個手把」 (a crank stage the player turns by hand; nothing is charged until one full turn). After review the Owner directs 「Commit跟push 然後整合至main發佈」, which authorizes this batch's commit, push, main integration through a PR and Pages publication.
+
+- OWNER_APPROVED_ADAPTATION: the 118 shop rows are unchanged; plugin rows 53–70 become the chips' identity and art, and owned plugins still fit the hunt loadout. New save field `progression.cyberGacha` (schema version and storage key unchanged), contract `docs/contracts/championship/CYBER_GACHA_20261029.json`.
+- Diamonds are the friends-playtest test diamonds; no real currency, payment or entitlement.
+- Hunt cartridges adjust inputs and outputs around the unchanged native writers (stun ticks ×2, half wild speed, a rope that does not wear, +120 hunt-clock minutes, this hunt's appearance decay lifted for the rare bait). The bounty beacon multiplies one won purse.
+- Art: Antigravity digital metals and item icons (found in the Antigravity brain folder and untracked in the main checkout), Codex-made machine, crank, capsules, ticket, furnace and supernova metal; all shipped as WebP.
+
 <!-- record-id: ARENA_RELAY_KITS_20261028 -->
 ## 2026-10-28 — Data Arena RELAY kits that fit each partner's element and own moves
 
