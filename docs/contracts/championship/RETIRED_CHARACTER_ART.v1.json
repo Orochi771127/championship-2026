@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "contract": "RETIRED_CHARACTER_ART",
   "decision": "Owner 2026-10-28: roles whose reviewed artwork replaces the original show only the reviewed artwork; their original atlas pixels are retired from the repository",
-  "archive": "R:/Projects/Championship2026/retired-character-art-20261028-v1 (repo-relative layout, ARCHIVE_MANIFEST.json, INDEPENDENT_READBACK.json)",
+  "archive": "retired-character-art-20261028-v1 (repo-relative layout, ARCHIVE_MANIFEST.json, INDEPENDENT_READBACK.json)",
   "kept": "runtime.render.json, page metadata JSON, runtime.review.json, main.json/sub.json and hud-r01 stay for timing, geometry, provenance and HUD",
   "selection": "src/data/championship/reviewed-animation-selection.v1.json entries with replacesOriginal:true",
   "files": [

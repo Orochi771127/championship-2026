@@ -1,9 +1,15 @@
 import selection from '../../data/championship/ranch-render-selection.v1.json' with {type:'json'};
+import reviewed from '../../data/championship/reviewed-animation-selection.v1.json' with {type:'json'};
+
+// Species drawn with reviewed artwork no longer have original atlas pages
+// (retired 2026-10-28), so there is nothing of theirs to prefetch here.
+const REVIEWED_SPECIES=new Set(reviewed.characters.filter(c=>c.replacesOriginal===true
+  ||reviewed.publicReleasePermitted===true&&c.playableIdentity!==false).map(c=>c.speciesId));
 
 // Download only. Pixi decoding, GPU ownership and the native clock remain with
 // the foreground scene. Completed blobs are handed to its existing loader.
 export function createRanchTitlePreloader({baseUrl,characters=selection.characters,
-  createPrefetcher,fetchImpl=(...args)=>globalThis.fetch(...args),onProgress=()=>{},maxResidents=6,maxImageBytes=12*1024*1024}={}){
+  createPrefetcher,fetchImpl=(...args)=>globalThis.fetch(...args),onProgress=()=>{},maxResidents=6,maxImageBytes=12*1024*1024,reviewedSpecies=REVIEWED_SPECIES}={}){
   // The entry already owns this factory. Inject it so the lazy plan does not
   // extract another shared chunk into the title's critical module graph.
   const downloads=createPrefetcher({fetchImpl:(url,options)=>fetchImpl(url,{...options,priority:'low'})});
@@ -21,7 +27,7 @@ export function createRanchTitlePreloader({baseUrl,characters=selection.characte
       try{
         const assigned=new Set(Object.keys(save?.raising?.assignments??{}));
         const residents=[save?.creature,...(save?.raising?.collection??[])].filter(c=>c&&assigned.has(c.creatureId??c.instanceId));
-        const species=[...new Set(residents.map(c=>c.speciesId?.match(/species-\d{3}$/)?.[0]).filter(Boolean))].slice(0,maxResidents);
+        const species=[...new Set(residents.map(c=>c.speciesId?.match(/species-\d{3}$/)?.[0]).filter(id=>id&&!reviewedSpecies.has(id)))].slice(0,maxResidents);
         const selected=species.map(id=>characters.find(c=>c.speciesId===id)).filter(Boolean);owner.residents=selected.length;report();
         const groups=[];
         for(const c of selected){

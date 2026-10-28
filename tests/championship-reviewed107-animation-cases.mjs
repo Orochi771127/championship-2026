@@ -612,7 +612,7 @@ test('stage body size: Arena bodies reach the role height from one per-role refe
 });
 
 test('arenaGroundFromWalk sets put the walking feet of each direction on the pivot with one shift per direction',async()=>{
- // Audit 2026-10-29 (batch6/fullcanvas): these Arena pivots sit inside the body (median feet 6-19 native px below).
+ // Audit 2026-10-29 (batch6/fullcanvas): these Arena pivots sit inside the body; per-direction walk trim bottoms are 2.75-24.5 native px below the pivot (trim-based, not foot detection).
  assert.deepEqual(selection.characters.filter(c=>c.arenaGroundFromWalk===true).map(c=>c.displayCode).sort(),['GR10','GR17','GR22','GR37','GR39','GR40','GR41']);
  for(const code of ['GR37','GR10','MA05']){
   const entry=selection.characters.find(c=>c.displayCode===code),mock=mockPixi();
