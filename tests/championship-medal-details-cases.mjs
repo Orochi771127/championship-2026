@@ -61,7 +61,7 @@ test('specific restrictions reflect individual qualification, with OR family cho
     assert.ok(fact(describeMedalDetails(id), 'arena'));
   }
   assert.equal(fact(describeMedalDetails(43), 'participation'), '限定植物類型');
-  assert.equal(fact(describeMedalDetails(44), 'participation'), `限定以下種類：${formatList(['巨核裝豆','鋼豆核','星冠豆爵'])}`);
+  assert.equal(fact(describeMedalDetails(44), 'participation'), `限定以下種類：${formatList(['鐵球豆','小鋼豆','土豪豆'])}`);
   assert.match(fact(describeMedalDetails(48), 'participation'), /限定起源組：/);
   assert.match(fact(describeMedalDetails(49), 'participation'), /限定擺錘組：/);
   for (const [id, count] of [[50, 3], [51, 5], [52, 10]]) assert.match(fact(describeMedalDetails(id), 'participation'), new RegExp(`每隻隊員至少轉生為蛋 ${count} 次`));

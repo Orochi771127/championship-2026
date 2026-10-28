@@ -9,7 +9,7 @@ import {projectDatabaseEvolutionRoutes} from '../src/championship/database/datab
 
 test('explicit display catalog maps B201 to species020 and B102 to species009',()=>{
   const catalog=JSON.parse(fs.readFileSync('src/data/championship/database-display.r1.json','utf8'));
-  for(const [code,index,id,name] of [['B201',20,'species-020','鋼鈴芽'],['B102',9,'species-009','鐵鈴芽']]){
+  for(const [code,index,id,name] of [['B201',20,'species-020','天線豆'],['B102',9,'species-009','叮噹豆']]){
     const entry=catalog.entries.find(row=>row.displayCode===code);
     assert.equal(entry.speciesIndex,index);assert.equal(entry.speciesId,id);
     assert.equal(getDatabaseDisplayEntry(index).displayCode,code);assert.equal(speciesName(index),name);
@@ -19,11 +19,11 @@ test('explicit display catalog maps B201 to species020 and B102 to species009',(
 
 test('approved proper names propagate in all five locales without invented translations',()=>{
   try {for(const locale of LOCALES){setLocale(locale);
-    assert.equal(speciesName(20),'鋼鈴芽');assert.equal(speciesNameForId('species-020'),'鋼鈴芽');
-    assert.equal(speciesNameForId('championship:creature:species-020'),'鋼鈴芽');
-    assert.equal(speciesName(9),'鐵鈴芽');
+    assert.equal(speciesName(20),'天線豆');assert.equal(speciesNameForId('species-020'),'天線豆');
+    assert.equal(speciesNameForId('championship:creature:species-020'),'天線豆');
+    assert.equal(speciesName(9),'叮噹豆');
   }}finally{setLocale('zh-Hant');}
-  assert.equal(Object.entries(SPECIES_NAMES_ZH).filter(([,name])=>name==='鐵鈴芽').length,1);
+  assert.equal(Object.entries(SPECIES_NAMES_ZH).filter(([,name])=>name==='叮噹豆').length,1);
 });
 
 test('recorded evolution target keeps stable identity and resolves the new canonical name',()=>{
@@ -32,17 +32,17 @@ test('recorded evolution target keeps stable identity and resolves the new canon
   const route=projectDatabaseEvolutionRoutes(8,save).find(row=>row.targetSpeciesIndex===20);
   assert.equal(route.targetSpeciesId,'species-020');assert.equal(route.revealed,true);
   assert.equal(getDatabaseDisplayEntry(route.targetSpeciesIndex).displayCode,'B201');
-  assert.equal(speciesName(route.targetSpeciesIndex),'鋼鈴芽');assert.equal(JSON.stringify(save),before);
+  assert.equal(speciesName(route.targetSpeciesIndex),'天線豆');assert.equal(JSON.stringify(save),before);
 });
 
 test('player names, including the old canonical spelling, are never rewritten',()=>{
-  for(const displayName of ['鐵鈴芽','我的鋼鈴','B201','鋼鈴芽']){
+  for(const displayName of ['叮噹豆','我的鋼鈴','B201','天線豆']){
     const instance={speciesId:'species-020',displayName,source:{kind:'CAPTURE'}};
     const before=JSON.stringify(instance);assert.equal(raisingDisplayName(instance),displayName);
     assert.equal(JSON.stringify(instance),before);
   }
-  assert.equal(raisingDisplayName({speciesId:'species-020'}),'鋼鈴芽');
-  assert.equal(raisingDisplayName({speciesId:'species-009'}),'鐵鈴芽');
+  assert.equal(raisingDisplayName({speciesId:'species-020'}),'天線豆');
+  assert.equal(raisingDisplayName({speciesId:'species-009'}),'叮噹豆');
 });
 
 test('Dex list/details, evolution preview and raising confirmation use canonical identity lookup',()=>{
