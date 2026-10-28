@@ -1,6 +1,7 @@
 import { createRanchRowPurchasePrompt } from './ranchRowPurchasePrompt.js';
 import { createHexWorldBoard, hexFootprintIcon } from './hexWorldEditor.js';
 import { ranchSynergyPartners } from './hexWorldPassages.js';
+import { ranchEcologyType } from '../cage/ranchEcology.js';
 import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
 import { productPlacementCells, productGridSlot } from '../cage/productRanchGrid.js';
 import { PRODUCT_RANCH_GRID } from '../cage/productRanchGrid.js';
@@ -377,6 +378,7 @@ export function createShopView({ root, source }) {
     previous.disabled = selectedIndex <= 0;
     next.disabled = selectedIndex >= rows.length - 1;
     let selectedCard = null;
+    const cageByShopRecord = new Map(listCageDefinitions().map((entry) => [entry.shopRecordIndex, entry]));
     for (const row of rows) {
       const displayName = productName(row);
       const item = element("button", "cm-vs2-shop__row");
@@ -397,6 +399,8 @@ export function createShopView({ root, source }) {
         uiText("{bits} 位元幣 · 持有 {owned}/{max}", { bits: row.unitPriceBits, owned: row.owned, max: row.maxOwned })
       );
       name.append(meta);
+      const cage = row.category === "CAGES" ? cageByShopRecord.get(row.shopRecordIndex) : null;
+      if (cage) decorateShopCageCard(item, art, name, cage.moduleId);
       item.addEventListener("click", () => {
         selectedByCategory.set(activeCategory, row.shopRecordIndex);
         paint(source.getFrame());
@@ -407,7 +411,17 @@ export function createShopView({ root, source }) {
     }
     if (revealSelectedCard) {
       // The grid scrolls vertically only; centring inline would scroll the whole screen sideways.
-      selectedCard?.scrollIntoView({ block: "nearest", inline: "nearest" });
+      // A card taller than the shelf (cage cards in landscape) keeps its top in
+      // view. Layout offsets, not the box: the cards are still sliding in.
+      const taller = selectedCard && shelf.clientHeight > 0 && selectedCard.offsetHeight > shelf.clientHeight;
+      if (taller) {
+        let top = 0;
+        for (let node = selectedCard; node && node !== shelf; node = node.offsetParent) {
+          top += node.offsetTop;
+          if (node.offsetParent === shelf.offsetParent) { top -= shelf.offsetTop; break; }
+        }
+        shelf.scrollTop = Math.max(0, top - 6);
+      } else selectedCard?.scrollIntoView({ block: "nearest", inline: "nearest" });
       revealSelectedCard = false;
     }
     if (restoreCardFocus) selectedCard?.focus({ preventScroll: true });
@@ -1151,6 +1165,36 @@ function expansionPreviewBays(doc = globalThis.document) {
     if (EXPANSION_PREVIEW_LOCKED_BAYS.includes(slot)) bay.dataset.lock = 'true';
     return bay;
   });
+}
+
+// Shop cage card (Owner 2026-10-27): footprint badge, series tag and an
+// effect capsule, read from the same catalog the facility editor uses.
+const CAGE_SERIES_LABELS = Object.freeze({
+  sports: '🔗 運動系', gym: '🔗 健身系', infirmary: '🔗 保健系', garden: '🔗 花園系', volcano: '🔗 火山系', beach: '🔗 海灘系',
+  mountain: '🔗 高山系', grassland: '🔗 草原系', forest: '🔗 森林系', desert: '🔗 沙漠系', snowfield: '🔗 冰原系'
+});
+export function cageSeriesLabel(moduleId) {
+  const label = CAGE_SERIES_LABELS[ranchEcologyType(moduleId)];
+  return label ? uiText(label) : '';
+}
+function decorateShopCageCard(item, art, name, moduleId) {
+  const cells = productPlacementCells({ moduleId, slotIndex: productGridSlot(10, 10) })?.length ?? 0;
+  item.dataset.cageCard = 'true';
+  item.dataset.cells = String(cells);
+  const badge = element('span', 'cm-vs2-shop__cells');
+  badge.append(hexFootprintIcon(item.ownerDocument, moduleId, 22), element('span', '', uiText('{n} 格', { n: cells })));
+  badge.setAttribute('aria-label', uiText('{n} 格', { n: cells }));
+  art.append(badge);
+  const series = cageSeriesLabel(moduleId);
+  if (series) name.append(element('span', 'cm-vs2-shop__series', series));
+  const effect = cageUiSummary(moduleId);
+  if (effect) {
+    // Each part stays whole on a narrow card; the separator ends the line before a break.
+    const capsule = element('span', 'cm-vs2-shop__effect');
+    const parts = effect.split(' · ');
+    parts.forEach((part, i) => capsule.append(element('span', '', i < parts.length - 1 ? `${part} ·` : part)));
+    name.append(capsule);
+  }
 }
 
 /** 「🔗 可連通：…」 from the ranch's own ecology pairs (Owner 2026-10-27). */
