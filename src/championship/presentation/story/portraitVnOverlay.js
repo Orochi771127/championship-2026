@@ -7,6 +7,11 @@
 //
 // DOM only, transform/opacity motion, one typewriter timer; the director owns
 // the abort signal. It writes nothing and reads only what it is handed.
+//
+// Dedicated stage (Owner 2026-10-28): cinema bars top and bottom, the rift's
+// violet air with drifting data motes, the chapter capsule and the Auto / Skip
+// / Log keys riding the dialogue box's top edge, and an observation log of the
+// lines seen so far. The app hides the ranch HUD while the overlay is open.
 
 import { uiText, setText } from "../../text/uiText.js";
 
@@ -30,8 +35,9 @@ export function createPortraitVnOverlay({ doc = globalThis.document, host = doc.
   const controls = doc.createElement("div"); controls.className = "cm-story-vn__controls";
   const autoButton = doc.createElement("button"); autoButton.type = "button"; autoButton.className = "cm-story-vn__control"; autoButton.dataset.storyAction = "auto"; autoButton.setAttribute("aria-pressed", "false");
   const skipButton = doc.createElement("button"); skipButton.type = "button"; skipButton.className = "cm-story-vn__control cm-story-vn__control--skip"; skipButton.dataset.storyAction = "skip";
-  setText(autoButton, "STORY_AUTO"); setText(skipButton, "STORY_SKIP");
-  controls.append(autoButton, skipButton); head.append(title, controls);
+  const logButton = doc.createElement("button"); logButton.type = "button"; logButton.className = "cm-story-vn__control cm-story-vn__control--log"; logButton.dataset.storyAction = "log"; logButton.setAttribute("aria-pressed", "false");
+  setText(autoButton, "STORY_AUTO"); setText(skipButton, "STORY_SKIP"); setText(logButton, "STORY_LOG");
+  controls.append(logButton, autoButton, skipButton); head.append(title, controls);
   const box = doc.createElement("div"); box.className = "cm-story-vn__box"; box.dataset.storyAction = "advance";
   const nameplate = doc.createElement("p"); nameplate.className = "cm-story-vn__name";
   const line = doc.createElement("p"); line.className = "cm-story-vn__line";
@@ -40,25 +46,52 @@ export function createPortraitVnOverlay({ doc = globalThis.document, host = doc.
   box.append(nameplate, line, cue);
   const choices = doc.createElement("div"); choices.className = "cm-story-vn__choices"; choices.hidden = true;
   const prompt = doc.createElement("p"); prompt.className = "cm-story-vn__prompt"; choices.append(prompt);
-  panel.append(head, box, choices, srLine);
-  root.append(scrim, stageArea, panel);
+  const log = doc.createElement("div"); log.className = "cm-story-vn__log"; log.hidden = true; log.setAttribute("role", "log"); log.dataset.storyAction = "log-panel";
+  const logTitle = doc.createElement("p"); logTitle.className = "cm-story-vn__log-title"; setText(logTitle, "STORY_LOG");
+  const logList = doc.createElement("ol"); logList.className = "cm-story-vn__log-list";
+  log.append(logTitle, logList);
+  panel.append(head, box, choices, srLine, log);
+  // Cinema bars and the rift's air sit behind the panel and never take a tap.
+  const aura = doc.createElement("div"); aura.className = "cm-story-vn__aura"; aura.setAttribute("aria-hidden", "true");
+  for (let i = 0; i < (reducedMotion ? 0 : 14); i++) { const mote = doc.createElement("span"); mote.className = "cm-story-vn__mote"; mote.style.setProperty("--i", String(i)); aura.append(mote); }
+  const bars = ["top", "bottom"].map(edge => { const bar = doc.createElement("div"); bar.className = "cm-story-vn__bar"; bar.dataset.edge = edge; bar.setAttribute("aria-hidden", "true"); return bar; });
+  root.append(scrim, stageArea, panel, aura, ...bars);
   host.append(root);
 
   let auto = false, typer = null, autoTimer = null, pending = null, onSkip = null, onAuto = null, previousFocus = null, disposed = false, lastSpeaker = null;
+  // What this chapter has said so far, for the observation log.
+  const history = [];
+  function remember(entry) { history.push(entry); if (history.length > 80) history.shift(); if (!log.hidden) paintLog(); }
+  function paintLog() {
+    logList.replaceChildren(...history.map(entry => {
+      const row = doc.createElement("li"); row.className = "cm-story-vn__log-row"; row.dataset.speaker = entry.speaker;
+      if (entry.name) { const who = doc.createElement("span"); who.className = "cm-story-vn__log-name"; who.textContent = entry.name; row.append(who); }
+      const said = doc.createElement("span"); said.className = "cm-story-vn__log-text"; said.textContent = entry.text; row.append(said);
+      return row;
+    }));
+  }
+  function showLog(open) {
+    log.hidden = !open; logButton.setAttribute("aria-pressed", String(open)); root.dataset.log = String(open);
+    if (open) { clearTimer(autoTimer); autoTimer = null; paintLog(); }
+    else if (auto && pending?.phase === "done") armAuto(pending.text);
+  }
   const sideFor = speaker => speaker === "partner" ? "right" : "left";
 
   function stopTimers() { clearTimer(typer); clearTimer(autoTimer); typer = null; autoTimer = null; }
   function settle() { if (pending?.phase === "typing") { pending.phase = "done"; line.textContent = pending.text; box.dataset.phase = "done"; if (auto) armAuto(pending.text); } }
-  function armAuto(text) { clearTimer(autoTimer); autoTimer = setTimer(() => { if (pending?.phase === "done") advance(); }, VN_AUTO_BASE_MS + VN_AUTO_PER_CHAR_MS * Math.min(80, text.length)); }
-  function advance() { if (!pending) return; if (pending.phase === "typing") { settle(); return; } const done = pending; pending = null; stopTimers(); done.resolve(); }
+  function armAuto(text) { clearTimer(autoTimer); autoTimer = null; if (!log.hidden) return; autoTimer = setTimer(() => { if (pending?.phase === "done" && log.hidden) advance(); }, VN_AUTO_BASE_MS + VN_AUTO_PER_CHAR_MS * Math.min(80, text.length)); }
+  // A tap while the log is open closes the log; it never skips a line unread.
+  function advance() { if (!log.hidden) { showLog(false); return; } if (!pending) return; if (pending.phase === "typing") { settle(); return; } const done = pending; pending = null; stopTimers(); done.resolve(); }
   function onKey(event) {
     if (root.hidden) return;
-    if (event.key === "Escape") { event.preventDefault(); onSkip?.(); return; }
+    if (event.key === "Escape") { event.preventDefault(); if (!log.hidden) showLog(false); else onSkip?.(); return; }
     if (event.key === "Enter" || event.key === " ") { if (!choices.hidden) return; event.preventDefault(); advance(); }
   }
   box.addEventListener("click", advance);
   scrim.addEventListener("click", advance);
   skipButton.addEventListener("click", () => onSkip?.());
+  logButton.addEventListener("click", () => showLog(log.hidden));
+  log.addEventListener("click", () => showLog(false));
   autoButton.addEventListener("click", () => { setAuto(!auto); onAuto?.(auto); if (auto && pending?.phase === "done") armAuto(pending.text); });
   doc.addEventListener("keydown", onKey);
   function setAuto(value) { auto = Boolean(value); autoButton.setAttribute("aria-pressed", String(auto)); root.dataset.auto = String(auto); }
@@ -84,13 +117,14 @@ export function createPortraitVnOverlay({ doc = globalThis.document, host = doc.
     get isOpen() { return !root.hidden; },
     open({ title: chapterTitle = "", onSkip: skip = null, onAuto: autoChange = null, auto: startAuto = false } = {}) {
       onSkip = skip; onAuto = autoChange; setAuto(startAuto); title.textContent = chapterTitle; lastSpeaker = null;
+      history.length = 0; showLog(false);
       for (const figure of Object.values(portraits)) { figure.hidden = true; delete figure.dataset.key; figure.replaceChildren(); }
       previousFocus = doc.activeElement; root.hidden = false; root.dataset.phase = "open";
       try { skipButton.focus({ preventScroll: true }); } catch { /* not focusable yet */ }
     },
     close() {
       stopTimers(); if (pending) { const done = pending; pending = null; done.resolve(); }
-      root.hidden = true; choices.hidden = true; box.hidden = false; root.dataset.phase = "closed";
+      root.hidden = true; choices.hidden = true; box.hidden = false; root.dataset.phase = "closed"; log.hidden = true;
       try { previousFocus?.focus?.({ preventScroll: true }); } catch { /* gone */ }
     },
     setAuto,
@@ -111,6 +145,7 @@ export function createPortraitVnOverlay({ doc = globalThis.document, host = doc.
         if (lastSpeaker !== speaker) { box.classList.remove("is-new"); void box.offsetWidth; box.classList.add("is-new"); }
         lastSpeaker = speaker;
         srLine.textContent = `${speaker === "narrator" ? "" : name + "："}${text}`;
+        remember({ speaker, name: speaker === "narrator" ? "" : name ?? "", text });
         pending = { phase: "typing", text, resolve };
         box.dataset.phase = "typing"; line.textContent = "";
         signal?.addEventListener?.("abort", () => { if (pending?.resolve === resolve) { pending = null; stopTimers(); resolve(); } }, { once: true });
@@ -133,7 +168,9 @@ export function createPortraitVnOverlay({ doc = globalThis.document, host = doc.
         stopTimers(); pending = null;
         prompt.textContent = promptText ?? ""; choices.replaceChildren(prompt); choices.hidden = false; box.hidden = true; root.dataset.phase = "choice";
         let settled = false;
-        const finish = index => { if (settled) return; settled = true; choices.hidden = true; box.hidden = false; root.dataset.phase = "open"; resolve(index); };
+        const finish = index => { if (settled) return; settled = true; choices.hidden = true; box.hidden = false; root.dataset.phase = "open";
+          if (options[index] !== undefined) remember({ speaker: "choice", name: "", text: "\u25b6 " + options[index] });
+          resolve(index); };
         options.forEach((label, index) => {
           const button = doc.createElement("button"); button.type = "button"; button.className = "cm-story-vn__choice"; button.dataset.storyChoice = String(index);
           button.textContent = label; button.style.setProperty("--i", String(index));
@@ -148,5 +185,5 @@ export function createPortraitVnOverlay({ doc = globalThis.document, host = doc.
   });
 }
 
-export const STORY_VN_TEXT_KEYS = Object.freeze(["STORY_AUTO", "STORY_SKIP"]);
+export const STORY_VN_TEXT_KEYS = Object.freeze(["STORY_AUTO", "STORY_SKIP", "STORY_LOG"]);
 export function storyVnLabel(key) { return uiText(key); }

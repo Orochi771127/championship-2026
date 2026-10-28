@@ -14,6 +14,7 @@ export const UI_COPY = Object.freeze({
   "STORY_MENU_HINT": "裂縫觀測與雜訊劇情",
   "STORY_AUTO": "自動",
   "STORY_SKIP": "⏭ 跳過劇情",
+  "STORY_LOG": "📜 觀測紀錄",
   "FRIENDS_MENU": "好友與名片",
   "FRIENDS_MENU_HINT": "馴獸師代碼、好友申請與友誼切磋",
   "ACCOUNT_MENU": "帳號與雲端",

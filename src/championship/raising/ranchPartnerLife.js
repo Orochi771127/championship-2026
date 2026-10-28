@@ -218,3 +218,12 @@ export function strollLogName(name,fallback='拍檔'){
   const text=typeof name==='string'?name.replace(/[\p{Cc}\p{Cf}]/gu,'').trim():'';
   return [...(text||fallback)].slice(0,PARTNER_LIFE_RULES.nameMax).join('');
 }
+
+/** The log with every saved partner name passed through `rename`; the same object when no name changes. */
+export function renameStrollLogPartners(log,rename){
+  if(!log?.entries?.length)return log;
+  let changed=false;
+  const fix=name=>{const next=strollLogName(rename(name),name);if(next!==name)changed=true;return next;};
+  const entries=log.entries.map(e=>({...e,partnerName:fix(e.partnerName),...(e.kind==='greeting'?{partnerBName:fix(e.partnerBName)}:{})}));
+  return changed?normalizeStrollLog({...log,entries}):log;
+}

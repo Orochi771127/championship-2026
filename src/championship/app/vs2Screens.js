@@ -6,6 +6,7 @@ import { mountLoadingWalker } from './ui/loadingWalker.js';
 import { mountAmbience, ambienceTheme } from './ui/ambienceLayer.js';
 import { buildGateEntry, buildCapture } from '../presentation/ceremony/ceremonyScenes.js';
 import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from './vs2PresentationAuthority.js';
+import { mountHuntTacticalDock, huntDockDeployable, HUNT_DOCK_TOOL_TAGS } from './huntTacticalDock.js';
 export { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from './vs2PresentationAuthority.js';
 // VS2-P -- Championship Modern P1R presentation for Gate Select, Hunt Loadout
 // and the Hunt HUD.
@@ -31,13 +32,23 @@ function appendEquipmentIcon(button, itemId) {
   button.dataset.hasArt = 'true';
 }
 
-function renderHuntTool(button, tool, label = uiText(tool.label)) {
+// The label reads "name ×count · cooling" as one line; the arcade dock lifts the
+// count and the cooling out of the line into the slot's corner and its mask.
+function labelPart(copy, part, text) {
+  let node = copy.querySelector(`.cm-hunt-tools__${part}`);
+  if (!text) { node?.remove(); return; }
+  if (!node) { node = element('span', `cm-hunt-tools__${part}`); copy.append(node); }
+  if (node.textContent !== text) node.textContent = text;
+}
+function renderHuntTool(button, tool, { label = uiText(tool.label), count = '', cooling = '' } = {}) {
   let copy = button.querySelector('.cm-hunt-tools__label');
   if (!copy) {
     copy = element('span', 'cm-hunt-tools__label');
     button.replaceChildren(copy);
   }
-  copy.textContent = label;
+  labelPart(copy, 'name', label);
+  labelPart(copy, 'count', count);
+  labelPart(copy, 'cool', cooling);
   const art = huntToolIconPresentation(tool);
   let image = button.querySelector('.cm-hunt-tools__icon');
   if (!art?.src) {
@@ -757,8 +768,15 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   const radar=element('div','cm-hunt-radar');radar.hidden=true;radar.setAttribute('role','img');radar.setAttribute('aria-label',uiText('狩獵雷達'));
   pluginHud.append(memory,radar);
   const toolbar = toolbarShell(block.toolbar, mode);
+  // Tactical dock (Owner 2026-10-28): hand and rope stay put, the other tools
+  // ride a belt that scrolls sideways (huntTacticalDock.js). Outside the arcade
+  // skin the belt has no box, so every theme keeps one row in the same order.
   const tools = element("nav","cm-hunt-tools");
   tools.setAttribute("aria-label",uiText("狩獵工具"));
+  tools.dataset.dock = "tactical";
+  const belt = element("div","cm-hunt-dock__belt");
+  belt.setAttribute("role","group");
+  belt.setAttribute("aria-label",uiText("戰術道具"));
   const toolButtons = new Map();
   for (const tool of block.toolState?.tools ?? []) {
     const button = actionButton(tool.label);
@@ -767,21 +785,32 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     // uses, not as words. `data-tool` names which glyph; the skin paints it and
     // the label stays in the DOM for assistive technology.
     button.dataset.tool = tool.id;
+    const fixed = tool.id === "HAND" || tool.id === "ROPE";
+    button.dataset.slot = tool.id === "ROPE" ? "primary" : tool.id === "HAND" ? "hand" : "belt";
+    if (huntDockDeployable(tool.id)) button.dataset.deploy = "drag";
     renderHuntTool(button, tool);
+    const tag = element("span", "cm-hunt-dock__tag", HUNT_DOCK_TOOL_TAGS[tool.id] ?? "道具");
+    tag.setAttribute("aria-hidden", "true");
+    button.append(tag);
     button.setAttribute("aria-pressed",String(block.toolState.activeTool===tool.id));
     let checkpoint=null;
     button.addEventListener("pointerdown",()=>{checkpoint=source.getFrame().tutorial?.checkpoint??null;});
     button.addEventListener("keydown",()=>{checkpoint=source.getFrame().tutorial?.checkpoint??null;});
     button.addEventListener("click",()=>{replay(button,"pop");source.intents.selectHuntTool(tool.id,checkpoint);});
-    toolButtons.set(tool.id,button);tools.append(button);
+    toolButtons.set(tool.id,button);
+    if (fixed) tools.append(button);
+    else { if (belt.parentNode !== tools) tools.append(belt); belt.append(button); }
   }
   // Spare ropes (OWNER_APPROVED_ADAPTATION 2026-10-28): a broken rope overheats
-  // for this hunt, so a second owned rope can be swapped in on the spot.
+  // for this hunt, so a second owned rope can be swapped in on the spot. The
+  // arcade dock wears it as the rope slot's corner tag.
   const ROPE_ROLE_MARK = { SWIFT: '🔵', TOUGH: '🟢', CLONE: '🟡', ULTIMATE: '🔴' };
   const ropeSwap = actionButton('⇄');
   ropeSwap.classList.add('cm-hunt-rope-swap');
   ropeSwap.hidden = true;
   ropeSwap.setAttribute('aria-label', uiText('切換繩索'));
+  const swapRole = element('span', 'cm-hunt-rope-swap__role'), swapName = element('span', 'cm-hunt-rope-swap__name'), swapMark = element('span', 'cm-hunt-rope-swap__mark', '⇄');
+  ropeSwap.replaceChildren(swapRole, swapName, swapMark);
   ropeSwap.addEventListener('click', () => { replay(ropeSwap, 'pop'); source.intents.cycleHuntRope?.(); });
   if (block.toolState) tools.append(ropeSwap);
   const movementHint = element("p", "cm-vs2-field__hint", "拖曳地面移動視野 · 輕觸夥伴選取");
@@ -794,6 +823,43 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   shell.append(viewport, hud, controlsPanel);
   if (mode === VS2_PRESENTATION_MODES.DEVELOPER) shell.append(toolbar);
   root.append(shell);
+
+  // Drag-to-deploy: a lure or trap dragged up off the belt lands where the
+  // finger lifts, through the field's own tap path. Not during the tutorial,
+  // whose gestures are scripted.
+  let field = null, deployHint = null, latestFrame = frame;
+  const fieldIsLive = () => Boolean(field && field.isPlayable !== false && typeof field.deployAt === 'function');
+  const overField = (x, y) => {
+    const hit = root.ownerDocument?.elementFromPoint?.(x, y);
+    return Boolean(hit && fieldHost.contains(hit) && !tools.contains(hit));
+  };
+  const deployName = (toolId) => {
+    const tool = latestFrame?.huntField?.toolState?.tools?.find((t) => t.id === toolId);
+    return tool ? uiText(tool.label) : '';
+  };
+  const dock = block.toolState ? mountHuntTacticalDock({ dock: tools, belt, layer: shell,
+    isWide: () => Boolean(root.ownerDocument?.body?.hasAttribute('data-hunt-wide')),
+    enabled: () => fieldIsLive() && !source.getFrame().tutorial,
+    canDeployAt: (x, y) => fieldIsLive() && overField(x, y) && field.canDeployAt(x, y),
+    onDeployStart: ({ tool }) => {
+      const state = source.getFrame().huntField?.toolState;
+      if (state?.activeTool !== tool) source.intents.selectHuntTool(tool, source.getFrame().tutorial?.checkpoint ?? null);
+      viewport.dataset.deploying = 'true';
+    },
+    onDeployMove: ({ tool, valid }) => {
+      deployHint = { text: uiText(valid ? '放開手指部署：{item}' : '這裡無法部署 · 拖到地面上', { item: deployName(tool) }), valid };
+      paintHint(latestFrame);
+    },
+    onDeploy: ({ clientX, clientY }) => fieldIsLive() && field.deployAt(clientX, clientY),
+    onDeployEnd: ({ placed, dropped }) => {
+      delete viewport.dataset.deploying; deployHint = null;
+      if (dropped) fx(placed ? 'snap' : 'denied');
+      paintHint(latestFrame);
+    } }) : null;
+  function fx(kind) {
+    const Event = viewport.ownerDocument?.defaultView?.CustomEvent ?? globalThis.CustomEvent;
+    try { viewport.dispatchEvent(new Event('cm-fx', { bubbles: true, detail: { kind } })); } catch { /* optional */ }
+  }
 
   const load = new AbortController();
   let expired = null;
@@ -864,7 +930,6 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     loadingNote.textContent = uiText('網路較慢，仍在下載中；也可以先返回牧場。');
     loadingNote.hidden = false;
   }, slowNoticeMs);
-  let field;
   try {
     const pending = Promise.resolve().then(() => mountField({ host: fieldHost, source, signal: load.signal,
     onProgress: showProgress,
@@ -880,6 +945,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   } catch (error) {
     closeEntry();
     ambience.dispose();
+    dock?.dispose();
     throw error;
   } finally {
     watchdog.stop();
@@ -897,7 +963,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       loadingBytes.hidden = true;
       loadingNote.hidden = true;
     }
-    return Object.freeze({ isPlayable: false, render() {}, dispose() { closeEntry(); ambience.dispose(); load.abort(); shell.remove(); } });
+    return Object.freeze({ isPlayable: false, render() {}, dispose() { closeEntry(); ambience.dispose(); dock?.dispose(); load.abort(); shell.remove(); } });
   }
   if (!field || typeof field.render !== "function" || typeof field.dispose !== "function") {
     throw new TypeError("Published field presenter must expose render(frame) and dispose()");
@@ -909,6 +975,38 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     const hold = entryEnv.reduced ? 0 : Math.max(0, CEREMONY_TIMING['gate-entry'].minHold - (performance.now() - entryStarted));
     walker?.setProgress(1);
     entryTimer = setTimeout(() => { entryTimer = null; breachEntry(); }, hold);
+  }
+
+  // A notice (the rope broke, the card is full) is feedback and always shows;
+  // an instruction names the tool in hand and is a hint the compact HUD may
+  // leave out. A lift off the dock speaks for itself while it lasts.
+  const NOTICES={OVER_CAPACITY:"記憶卡容量不足",ROPE_BROKEN:"繩索斷了",ON_CARD:"已收入記憶卡",EMPTY:"道具已用完",
+    BLOCKED_TERRAIN:"無法放在這個位置",FOOD_POOL_FULL:"場上的肉餌已滿",TOOL_POOL_FULL:"場上的道具已滿",
+    // Rope roles, combos and overheat (2026-10-28).
+    ROPE_TOO_HEAVY:"繩索出力過大，請換用輕型捕捉繩！",ROPE_TOO_WEAK:"這條繩索拉不動這個階段，請換用更高階的繩索",
+    ROPE_FRAGILE:"克隆繩：清醒的夥伴容易掙斷，先用陷阱、睡眠彈或肉餌",RAGE_GUARD:"狂暴警戒中：先用連發槍、肉餌或陷阱破防",
+    GUARD_BROKEN:"狂暴警戒已解除！",ROPE_OVERHEATED:"繩索纏繞冷卻中 · 切換備用繩索或稍候",PERFECT_COMBO:"完美連攜捕獲！",
+    GOOD_COMBO:"連攜捕獲！",DATA_IMPRINT:"數據拓印成功！",ROPE_SWITCHED:"已切換繩索"};
+  const INSTRUCTIONS={ROPE:"快速畫圈綑綁：{item} · 按住目標拉動繩索",SHOT:"按住目標射擊：{item}",WIRE:"拖曳拉出鋼索：{item} · 放手完成",
+    MEAT:"點擊地面部署：{item}",DECOY:"點擊地面部署：{item} · 再輕觸指定移動方向",LIGHT:"點擊地面部署：{item} · 夜間吸引目標",
+    CAPTURE_TRAP:"點擊地面部署：{item} · 困住後切換手掌收取",BOMB:"點擊地面部署：{item}",MINE:"點擊地面部署：{item} · 目標經過時引爆"};
+  function paintHint(nextFrame) {
+    const state = nextFrame?.huntField?.toolState;
+    if (!state) return;
+    const notice = state.notice && Object.hasOwn(NOTICES, state.notice) ? state.notice : null;
+    const selectedTool = state.tools.find(t => t.id === state.activeTool);
+    let kind = notice ? "notice" : "instruction", text;
+    if (deployHint) { kind = deployHint.valid ? "deploy" : "notice"; text = deployHint.text; }
+    else if (notice) text = uiText(NOTICES[notice]);
+    else {
+      const template = INSTRUCTIONS[selectedTool?.subtype ?? selectedTool?.id];
+      const item = uiText(selectedTool?.id === 'ROPE' ? selectedTool.ropeLabel ?? selectedTool.label : selectedTool?.label ?? '');
+      text = template ? uiText(template, { item }) : uiText("拖曳地面移動視野 · 目標倒地後輕觸抓取");
+    }
+    movementHint.dataset.kind = kind;
+    if (notice && !deployHint) movementHint.dataset.notice = notice; else delete movementHint.dataset.notice;
+    if (selectedTool) movementHint.dataset.hintTool = selectedTool.id; else delete movementHint.dataset.hintTool;
+    if (movementHint.textContent !== text) movementHint.textContent = text;
   }
 
   function render(nextFrame) {
@@ -940,35 +1038,23 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       for(const tool of next.toolState.tools){const button=toolButtons.get(tool.id);if(button){button.disabled=field.isPlayable===false||!tool.enabled;button.setAttribute("aria-pressed",String(next.toolState.activeTool===tool.id));
         const counter=plugins?.counters.find(c=>c.id===tool.id);
         const cooling=tool.id==='ROPE'&&tool.overheatSeconds>0?` · ${uiText('冷卻 {seconds} 秒',{seconds:tool.overheatSeconds})}`:'';
-        renderHuntTool(button,tool,uiText(tool.label)+(counter?` ×${counter.quantity}`:'')+cooling);
+        renderHuntTool(button,tool,{label:uiText(tool.label),count:counter?` ×${counter.quantity}`:'',cooling});
+        if(counter)button.dataset.quantity=String(counter.quantity);else delete button.dataset.quantity;
         if(tool.id==='ROPE'){button.dataset.ropeRole=tool.role??'';button.dataset.overheat=String(tool.overheatSeconds??0);}}}
       const ropeTool=next.toolState.tools.find(t=>t.id==='ROPE');
       ropeSwap.hidden=!(ropeTool?.spares>0);
       ropeSwap.disabled=field.isPlayable===false||!ropeTool;
-      if(ropeTool)ropeSwap.textContent=`${ROPE_ROLE_MARK[ropeTool.role]??''} ${ropeTool.ropeLabel??''} ⇄`.trim();
+      if(ropeTool){const mark=ROPE_ROLE_MARK[ropeTool.role]??'',name=ropeTool.ropeLabel??'';
+        swapRole.textContent=mark?`${mark} `:'';swapName.textContent=name?`${name} `:'';ropeSwap.dataset.ropeRole=ropeTool.role??'';}
       const selectedTool=next.toolState.tools.find(t=>t.id===next.toolState.activeTool);
       // Rope primed: the field's corners frame a scope. A target that can be
       // collected makes the hand key pulse (the hand is what collects).
       viewport.dataset.tool=selectedTool?.id??'';
       const hand=toolButtons.get('HAND');if(hand)hand.dataset.ready=String(Boolean(nextFrame.huntField?.affordances?.canCollect));
-      // A notice (the rope broke, the card is full) is feedback and always
-      // shows; an instruction is a hint the compact HUD may leave out.
-      const notices={OVER_CAPACITY:"記憶卡容量不足",ROPE_BROKEN:"繩索斷了",ON_CARD:"已收入記憶卡",EMPTY:"道具已用完",
-        BLOCKED_TERRAIN:"無法放在這個位置",FOOD_POOL_FULL:"場上的肉餌已滿",TOOL_POOL_FULL:"場上的道具已滿",
-        // Rope roles, combos and overheat (2026-10-28).
-        ROPE_TOO_HEAVY:"繩索出力過大，請換用輕型捕捉繩！",ROPE_TOO_WEAK:"這條繩索拉不動這個階段，請換用更高階的繩索",
-        ROPE_FRAGILE:"克隆繩：清醒的夥伴容易掙斷，先用陷阱、睡眠彈或肉餌",RAGE_GUARD:"狂暴警戒中：先用連發槍、肉餌或陷阱破防",
-        GUARD_BROKEN:"狂暴警戒已解除！",ROPE_OVERHEATED:"繩索纏繞冷卻中 · 切換備用繩索或稍候",PERFECT_COMBO:"完美連攜捕獲！",
-        GOOD_COMBO:"連攜捕獲！",DATA_IMPRINT:"數據拓印成功！",ROPE_SWITCHED:"已切換繩索"};
-      const noticeKnown=Boolean(next.toolState.notice&&Object.hasOwn(notices,next.toolState.notice));
-      movementHint.dataset.kind=noticeKnown?"notice":"instruction";
-      if(noticeKnown)movementHint.dataset.notice=next.toolState.notice;else delete movementHint.dataset.notice;
-      movementHint.textContent=uiText(notices[next.toolState.notice]
-        ?? ({ROPE:"快速畫圈綑綁 · 按住目標拉動繩索 · 放鬆可恢復耐久",SHOT:"按住目標射擊",WIRE:"拖曳拉出鋼索 · 放手完成",
-          MEAT:"輕觸地面放置肉餌",DECOY:"輕觸放置玩具 · 再輕觸指定移動方向",LIGHT:"輕觸放置誘引燈 · 夜間吸引目標",
-          CAPTURE_TRAP:"輕觸放置陷阱 · 困住目標後切換手掌收取",BOMB:"輕觸放置炸彈",MINE:"輕觸放置地雷 · 目標經過時引爆"})[selectedTool?.subtype??selectedTool?.id]
-        ?? "拖曳地面移動視野 · 目標倒地後輕觸抓取");
+      dock?.refresh();
     }
+    latestFrame=nextFrame;
+    paintHint(nextFrame);
     field.render(nextFrame);
     // Developer Mode already exists to publish field evidence the player never
     // sees (the RAW_SLOT rail, the gate evidence lines). Live actor positions
@@ -990,6 +1076,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       closeEntry();
       captureToast?.dispose();
       ambience.dispose();
+      dock?.dispose();
       load.abort();
       field.dispose();
       root.replaceChildren();

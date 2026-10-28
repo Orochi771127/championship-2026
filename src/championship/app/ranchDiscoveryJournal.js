@@ -6,7 +6,7 @@ import {shopGoodsPresentation} from '../presentation/shopGoodsUiArt.js';
 import {RANCH_DISCOVERY_REWARDS} from '../raising/ranchDiscoveries.js';
 import {STROLL_REWARDS} from '../raising/ranchPartnerLife.js';
 import {getCageDefinition} from '../cage/cageCatalog.js';
-import {cageName} from '../text/zhHant.js';
+import {cageName,localizeSpeciesCodes} from '../text/zhHant.js';
 import {formatWorldClockTime} from '../time/championshipWorldClock.js';
 const copy=()=>Object.fromEntries(["title", "about", "empty", "none", "full", "collect", "close", "food", "herb", "bits", "rare", "partner", "path", "blocked", "saved", "failed"].map(key=>[key,uiText(`RANCH_JOURNAL_${key.toUpperCase()}`)]));
 const BITS_ICON=new URL('../../../assets/production/public-media-clean-20261017/currency-hud-r1/bits-48.png',import.meta.url).href;
@@ -41,19 +41,50 @@ function rewardRow(doc,reward,label){
 }
 
 // 逛街手札 (Owner 2026-10-28): what partners found on their strolls and who met
-// whom, newest first, read from the saved stroll log.
+// whom, newest first, read from the saved stroll log. A name saved by an older
+// build as an internal code ("SPECIES 084") reads as its catalog name.
 const STROLL_SEASONS=['春季','夏季','秋季','冬季'];
 const STROLL_TOOL_SLOTS={feed:'餵食',protein:'蛋白質',medicine:'藥品',woundMedicine:'傷藥'};
-export function strollLogLine(entry){
+const strollName=name=>localizeSpeciesCodes(name)??'';
+// Stand-ins for the names while the sentence is localized, so each name can be
+// drawn as its own chip wherever the language puts it.
+const NAME_MARKS={a:'⁣A⁣',b:'⁣B⁣'};
+function strollLogParts(entry,names){
   const when=uiText('{season} 第{day}日 {time}',{season:uiText(STROLL_SEASONS[entry.season]??''),day:entry.day+1,time:formatWorldClockTime(entry.minute)});
   const place=Number.isInteger(entry.cage)?cageName(entry.cage,getCageDefinition(entry.cage)?.displayName??null):null;
   const item=uiText('【{item} ×{n}】',{item:uiText(STROLL_REWARDS[entry.reward]?.label??entry.reward),n:entry.quantity});
   const slot=STROLL_TOOL_SLOTS[entry.reward];
   const stored=slot?uiText('（已放入{slot}欄）',{slot:uiText(slot)}):uiText('（已存入錢包）');
   const what=entry.kind==='greeting'
-    ?uiText(place?'{a} 和 {b} 在{place}相遇打招呼，一起找到了{item}':'{a} 和 {b} 相遇打招呼，一起找到了{item}',{a:entry.partnerName,b:entry.partnerBName,place:uiText(place??''),item})
-    :uiText(place?'{name}在{place}散步，找到了{item}':'{name}散步時找到了{item}',{name:entry.partnerName,place:uiText(place??''),item});
+    ?uiText(place?'{a} 和 {b} 在{place}相遇打招呼，一起找到了{item}':'{a} 和 {b} 相遇打招呼，一起找到了{item}',{a:names.a,b:names.b,place:uiText(place??''),item})
+    :uiText(place?'{name}在{place}散步，找到了{item}':'{name}散步時找到了{item}',{name:names.a,place:uiText(place??''),item});
+  return {when,what,stored,item};
+}
+export function strollLogLine(entry){
+  const {when,what,stored}=strollLogParts(entry,{a:strollName(entry.partnerName),b:strollName(entry.partnerBName)});
   return `${when} — ${what}${stored}`;
+}
+function strollLogRow(doc,entry){
+  const row=doc.createElement('li');row.dataset.kind=entry.kind;row.dataset.reward=entry.reward;
+  if(entry.relation)row.dataset.relation=entry.relation;
+  const {when,what,stored,item}=strollLogParts(entry,NAME_MARKS);
+  const time=doc.createElement('span');time.className='int-rh2-stroll-log__when';time.textContent=when;
+  const text=doc.createElement('span');text.className='int-rh2-stroll-log__text';
+  const names={[NAME_MARKS.a]:strollName(entry.partnerName),[NAME_MARKS.b]:strollName(entry.partnerBName)};
+  for(const piece of `${what}${stored}`.split(/(⁣[AB]⁣)/u)){
+    if(!piece)continue;
+    if(Object.hasOwn(names,piece)){
+      const chip=doc.createElement('span');chip.className='int-rh2-stroll-log__name';chip.dataset.role=piece===NAME_MARKS.a?'a':'b';
+      chip.textContent=names[piece];text.append(chip);continue;
+    }
+    const at=piece.indexOf(item);
+    if(at<0){text.append(doc.createTextNode(piece));continue;}
+    if(at>0)text.append(doc.createTextNode(piece.slice(0,at)));
+    const pill=doc.createElement('span');pill.className='int-rh2-stroll-log__item';pill.textContent=item;text.append(pill);
+    if(at+item.length<piece.length)text.append(doc.createTextNode(piece.slice(at+item.length)));
+  }
+  row.setAttribute('aria-label',strollLogLine(entry));
+  row.append(time,text);return row;
 }
 function strollSection(doc,log){
   const section=doc.createElement('section');section.className='int-rh2-stroll-log';
@@ -61,7 +92,7 @@ function strollSection(doc,log){
   const entries=[...(log?.entries??[])].reverse().slice(0,12);
   if(!entries.length){const empty=doc.createElement('p');empty.className='int-rh2-stroll-log__empty';empty.textContent=uiText('拍檔散步時找到的東西會記在這裡。');section.append(empty);return section;}
   const list=doc.createElement('ol');list.className='int-rh2-stroll-log__list';
-  for(const entry of entries){const row=doc.createElement('li');row.dataset.kind=entry.kind;row.dataset.reward=entry.reward;row.textContent=strollLogLine(entry);list.append(row);}
+  for(const entry of entries)list.append(strollLogRow(doc,entry));
   section.append(list);return section;
 }
 
@@ -102,7 +133,11 @@ export function mountRanchDiscoveryJournal(root,source){
       const c=copy(),body=doc.createElement('div');body.className='int-rh2-discovery-list';
       const p=doc.createElement('p'),closed=data.boundaries.filter(b=>b.reason==='NO_SAFE_EXIT').length;
       p.className='int-rh2-discovery-paths';
-      p.textContent=`${data.connections.length} ${c.path}${closed?` · ${closed} ${c.blocked}`:''}`;body.append(p);
+      p.textContent=`${data.connections.length} ${c.path}${closed?` · ${closed} ${c.blocked}`:''}`;
+      p.dataset.connections=String(data.connections.length);
+      // Passages join areas; partners who share one area meet without one (the greeting rule).
+      if(!data.connections.length){const note=doc.createElement('span');note.className='int-rh2-discovery-paths__note';note.textContent=uiText('同一區域內的拍檔仍會相遇');p.append(' · ',note);}
+      body.append(p);
       if(!data.pending.length){const empty=doc.createElement('p');empty.textContent=data.active?c.empty:c.none;body.append(empty);}
       for(const item of data.pending){
         const reward=ranchDiscoveryReward(item.kind);if(!reward)continue;

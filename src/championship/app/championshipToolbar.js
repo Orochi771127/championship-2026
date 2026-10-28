@@ -2,6 +2,7 @@ import { createTransientHint, TOOL_HINT_MS } from './transientHint.js';
 import {isOriginalUiIntakeLocal,originalToolbarArt,originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
 import {isOriginalRuntimeLocation} from "../presentation/originalRuntimeLocation.js";
 import { uiText } from "../text/uiText.js";
+import { menuEntryGlyph, menuEntryGlyphPlacement } from "./ui/menuEntryGlyphs.js";
 // The contextual toolbar -- the original's ui/toolbar.nxr.
 //
 // WHAT IS ROM_VERIFIED HERE
@@ -210,6 +211,9 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
     const button = element("button", className);
     const art=originalDatabaseIcon(entry.screen);
     if(art){const icon=element("img","cm-toolbar__entry-icon");icon.src=art.src;icon.alt="";button.append(icon);}
+    // Menu cards without original art carry a drawn icon (Owner 2026-10-28).
+    const glyph=!art&&className==="cm-toolbar__entry"?menuEntryGlyph(document,entry.id):null;
+    if(glyph){button.append(glyph);button.setAttribute("data-glyph",menuEntryGlyphPlacement(entry.id));}
     button.append(element("span", "cm-toolbar__entry-label", entry.label));
     if (entry.hint) button.append(element("span", "cm-toolbar__entry-hint", entry.hint));
     button.setAttribute("aria-label", uiText(entry.label));

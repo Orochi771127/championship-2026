@@ -95,6 +95,7 @@ import { STORY_CHAPTER_OPEN_EVENT, STORY_FIRST_CHAPTER_ID } from './ranchStoryBa
 import { createHybridStoryDirector } from '../presentation/story/HybridStoryDirector.js';
 import { createStoryStagePuppeteer } from '../presentation/story/storyStagePuppeteer.js';
 import { createPortraitVnOverlay } from '../presentation/story/portraitVnOverlay.js';
+import { createStoryChapterMap } from './storyChapterMap.js';
 import { mountAmbience } from './ui/ambienceLayer.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, createAssetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
@@ -2129,6 +2130,7 @@ async function openGameplay() {
     }
   }
   unsubscribeScreen = app.subscribeScreen(() => {
+    if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) closeStoryMap();
     syncMusic(); refreshStatusBar(); refreshToolbarMode(); void refreshCalendarViews(); void mountCurrentScreen();
   });
   let calendarSession=null,stopCalendarSession=null;
@@ -2226,7 +2228,7 @@ function runToolbarMenuEntry(entry,context={}) {
   // Owner 2026-10-27: the bag and the discovery journal, from the System menu.
   if (entry.action === "OPEN_BACKPACK") { void openRanchBackpack({ getShopFrame: () => app.getShopFrame() }); return; }
   if (entry.action === "OPEN_RANCH_JOURNAL") { document.dispatchEvent(new CustomEvent(RANCH_JOURNAL_OPEN_EVENT)); return; }
-  if (entry.action === "OPEN_STORY") { void playStoryChapter(STORY_FIRST_CHAPTER_ID, { source: 'menu' }); return; }
+  if (entry.action === "OPEN_STORY") { openStoryMap({ source: 'menu' }); return; }
   if (entry.action === "OPEN_FRIENDS") { ensureFriendsDrawer().open(); return; }
   if (entry.action === "OPEN_ACCOUNT") { openSettings(document.querySelector('.cm-toolbar__cell[data-menu-id="SYSTEM"]'), 'data'); return; }
   if (entry.action === "END_DAY") {
@@ -2359,6 +2361,7 @@ async function returnToTitle(source = 'save-and-quit') {
   sessionCheckpoint?.clear();
   systemBackgrounds.leave();
   console.info('CHAMPIONSHIP_TITLE_RETURN', { source, screen: app.getScreen(), stack: new Error().stack });
+  closeStoryMap();
   tutorialPreview?.dispose();tutorialPreview=null;
   unsubscribeTutorialTools?.();unsubscribeTutorialTools=null;toolbar?.setTutorialTool(null);
   clockDriver?.setActive(false);
@@ -2492,32 +2495,48 @@ function installHomeEntries() {
 // ranch is not ready, the tutorial runs or a dialog is open.
 let storyRun = null;
 function speciesIndexOf(speciesId) { const match = /species-([0-9]{3})$/.exec(speciesId ?? ''); return match ? Number(match[1]) : null; }
+// Whether the ranch can hand its stage to a chapter right now; null when it can.
+function storyStageRefusal() {
+  const tutorial = app.getInteractiveTutorial();
+  if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME || mountedScreen !== app.getScreen() || !view?.storyStage || view?.isPlayable === false) return 'STAGE_NOT_READY';
+  if (tutorial && !tutorial.finished) return 'TUTORIAL_ACTIVE';
+  if (isChoiceDialogOpen() || app.hasRaisingPresentation()) return 'SCREEN_BUSY';
+  return null;
+}
+// The selected partner acts; otherwise the first hatched one (eggs are species 0-7 and cannot act).
+function storyPartner(frame) {
+  const resident = frame?.residents.find(r => r.creatureId === frame.selection?.creatureId)
+    ?? frame?.residents.find(r => (speciesIndexOf(r.speciesId) ?? 0) >= 8) ?? frame?.residents[0] ?? null;
+  if (!resident) return null;
+  const speciesIndex = speciesIndexOf(resident.speciesId);
+  return { resident, name: resident.displayName ?? (speciesIndex !== null ? speciesName(speciesIndex) : ''), portrait: speciesIndex !== null ? databaseHeroPortrait(speciesIndex) : null };
+}
 async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = 'menu' } = {}) {
   if (storyRun) return storyRun;
   const stageView = view?.storyStage ?? null;
-  const tutorial = app.getInteractiveTutorial();
-  if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME || mountedScreen !== app.getScreen() || !stageView || view?.isPlayable === false) return Object.freeze({ outcome: 'refused', reason: 'STAGE_NOT_READY', chapterId });
-  if (tutorial && !tutorial.finished) return Object.freeze({ outcome: 'refused', reason: 'TUTORIAL_ACTIVE', chapterId });
-  if (isChoiceDialogOpen() || app.hasRaisingPresentation()) return Object.freeze({ outcome: 'refused', reason: 'SCREEN_BUSY', chapterId });
-  const frame = stageView.getFrame();
-  // The selected partner acts; otherwise the first hatched one (eggs are species 0-7 and cannot act).
-  const resident = frame.residents.find(r => r.creatureId === frame.selection?.creatureId)
-    ?? frame.residents.find(r => (speciesIndexOf(r.speciesId) ?? 0) >= 8) ?? frame.residents[0];
-  if (!resident) return Object.freeze({ outcome: 'refused', reason: 'NO_PARTNER', chapterId });
+  const refusal = storyStageRefusal();
+  if (refusal) return Object.freeze({ outcome: 'refused', reason: refusal, chapterId });
+  const partner = storyPartner(stageView.getFrame());
+  if (!partner) return Object.freeze({ outcome: 'refused', reason: 'NO_PARTNER', chapterId });
+  const { resident } = partner;
   const reducedMotion = prefersReducedMotion(), quality = currentQualityTier();
   const overlay = createPortraitVnOverlay({ reducedMotion });
   const stage = createStoryStagePuppeteer({ host: stageView.host, field: stageView.field, partnerCreatureId: resident.creatureId, reducedMotion, quality });
   const director = createHybridStoryDirector({ stage, overlay, locale: getLocale(), reducedMotion });
-  const speciesIndex = speciesIndexOf(resident.speciesId);
-  const params = { tamer: app.getOpeningState()?.trainerName ?? '', partner: resident.displayName ?? (speciesIndex !== null ? speciesName(speciesIndex) : ''), partnerPortrait: speciesIndex !== null ? databaseHeroPortrait(speciesIndex) : null };
+  const params = { tamer: app.getOpeningState()?.trainerName ?? '', partner: partner.name, partnerPortrait: partner.portrait };
   recoveryDiagnostics.record('STORY', { chapterId, source, stage: 'start' });
   clockDriver?.setActive(false);
   root.dataset.storyPlaying = chapterId;
+  // Dedicated stage (Owner 2026-10-28): while a chapter plays, the ranch HUD --
+  // status bar, dock, menu, badges, hints -- steps away so nothing shows through
+  // the dialogue; the field stays as the stage under the rift's air.
+  document.body.dataset.storyStage = 'playing';
   storyRun = (async () => {
     try { return await director.play(chapterId, params); }
     finally {
       stage.dispose(); overlay.dispose();
       delete root.dataset.storyPlaying;
+      delete document.body.dataset.storyStage;
       clockDriver?.setActive(!root.hidden);
     }
   })();
@@ -2531,7 +2550,29 @@ async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = '
     return result;
   } finally { storyRun = null; }
 }
-document.addEventListener(STORY_CHAPTER_OPEN_EVENT, event => { void playStoryChapter(event.detail?.chapterId ?? STORY_FIRST_CHAPTER_ID, { source: event.detail?.source ?? 'badge' }); });
+// The rift observation chart (Owner 2026-10-28): the badge and the System menu
+// open the chapter map; a chapter starts from its node and the chart returns
+// afterwards with the node's sigil lit. Refused while the ranch cannot lend its stage.
+let storyMap = null;
+function storyNodeSeen(node) {
+  if (node.seenWith === 'opening') return true;
+  return Boolean(node.seenKey) && settings.store.get()[node.seenKey] === true;
+}
+function openStoryMap({ chapterId = null, source = 'menu' } = {}) {
+  if (storyRun || storyMap?.isBusy) return false;
+  const refusal = storyStageRefusal();
+  if (refusal) { recoveryDiagnostics.record('STORY', { source, stage: 'map-refused', reason: refusal }); return false; }
+  const partner = storyPartner(view.storyStage.getFrame());
+  storyMap?.dispose();
+  storyMap = createStoryChapterMap({ locale: getLocale(), reducedMotion: prefersReducedMotion(), isSeen: storyNodeSeen,
+    partner: { name: partner?.name ?? '', portrait: partner?.portrait ?? null },
+    onPlay: next => playStoryChapter(next, { source: 'map' }),
+    onClose: () => { recoveryDiagnostics.record('STORY', { source, stage: 'map-closed' }); } });
+  recoveryDiagnostics.record('STORY', { source, stage: 'map' });
+  return storyMap.open({ chapterId });
+}
+function closeStoryMap() { storyMap?.dispose(); storyMap = null; }
+document.addEventListener(STORY_CHAPTER_OPEN_EVENT, event => { openStoryMap({ chapterId: event.detail?.chapterId ?? STORY_FIRST_CHAPTER_ID, source: event.detail?.source ?? 'badge' }); });
 
 // Online service (Owner 2026-10-28). One facade for the account panel, the
 // friends drawer and the PvP lobbies. Offline first: without a configured cloud
