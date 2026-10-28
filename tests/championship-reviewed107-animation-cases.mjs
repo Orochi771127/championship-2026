@@ -343,7 +343,8 @@ test('all 107 loaders validate actual PNG/WebP bounds, crop/trim geometry and di
 });
 
 const rootApprovalFile=path.join(root,'tests/fixtures/reviewed107-root-art-approval.v1.json');
-const rootCandidateFile=path.join(root,'tests/fixtures/reviewed107-root-candidate-map.v1.json');
+// The candidate map carries local absolute paths, so it lives in the local archive, not the public repo.
+const rootCandidateFile=provenance('tests/fixtures/reviewed107-root-candidate-map.v1.json');
 const rootApproval=JSON.parse(fs.readFileSync(rootApprovalFile,'utf8'));
 const rootCandidate=JSON.parse(fs.readFileSync(rootCandidateFile,'utf8'));
 test('pinned root approval consumes precisely the 76 authorized context holds, preserving original clip/frame/source identity and geometry',()=>{
