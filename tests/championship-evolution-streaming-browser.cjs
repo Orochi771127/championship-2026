@@ -9,6 +9,7 @@ const base=process.argv[2]||'http://127.0.0.1:8765/';
 const engine=process.argv[3]||'chromium';
 const out=process.argv[4]||'.tmp/browser-qa/evolution';
 const baseline=process.argv.includes('--baseline');
+const TARGET=36,TARGET_ID=`species-${String(TARGET).padStart(3,'0')}`;
 assert.ok(['localhost','127.0.0.1','[::1]'].includes(new URL(base).hostname));
 const exactReplace=(s,a,b)=>{assert.equal(s.split(a).length,2,`Unique test seam: ${a}`);return s.replace(a,b);};
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
@@ -56,7 +57,12 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
 (async()=>{
  await fs.mkdir(out,{recursive:true});await writeSummary('RUNNING');
  const catalog=JSON.parse(await fs.readFile('src/data/championship/public-character-catalog.v1.json','utf8'));
- const binding=catalog.speciesBindings.find(x=>x.speciesId==='species-035');
+ // The target must still draw its original streamed atlas: species drawn with reviewed art
+ // (reviewed-animation-selection.v1.json, #114) retire their original pages, so they have no
+ // late sequence-39 page to withhold. species-035 moved to reviewed art; GR04 (036) has none yet.
+ const selection=JSON.parse(await fs.readFile('src/data/championship/reviewed-animation-selection.v1.json','utf8'));
+ assert.ok(!selection.characters.some(x=>x.speciesId===TARGET_ID),`${TARGET_ID} is drawn with reviewed art; pick a native streamed target`);
+ const binding=catalog.speciesBindings.find(x=>x.speciesId===TARGET_ID);
  const config=catalog.characters.find(x=>x.entityId===binding.entityId);
  const runtime=JSON.parse(await fs.readFile(config.runtimePath,'utf8'));
  const sequence=runtime.sides.main.animations.find(x=>x.id===39);
@@ -70,7 +76,7 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
   for(const mode of baseline?['baseline']:['delay','reject']){
    const context=await browser.newContext({viewport:engine==='webkit'?{width:390,height:844}:{width:320,height:712},deviceScaleFactor:engine==='webkit'?3:1,isMobile:true,hasTouch:true,locale:'zh-TW'});
    const page=await context.newPage();page.setDefaultTimeout(120000);
-   const evidence={mode,engine,target:35,targetEntity:config.entityId,targetPaths:[...targetPaths],errors:[],console:[],network:[],httpFailures:[],requestFailures:[],writes:[]};
+   const evidence={mode,engine,target:TARGET,targetEntity:config.entityId,targetPaths:[...targetPaths],errors:[],console:[],network:[],httpFailures:[],requestFailures:[],writes:[]};
    let release,blocked=0,allow=false,baselinePresenterRequests=0;const injectedRequests=new WeakSet();
    const barrier=new Promise(r=>release=r);
    page.on('pageerror',e=>evidence.errors.push(e.message));
@@ -83,8 +89,8 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
    // cannot reproduce the cached-streaming missing39 incident.
    await page.route(url=>url.origin===new URL(base).origin&&url.pathname==='/tests/fixtures/championship-owned-party.html',async route=>{
     const response=await route.fetch();let text=await response.text();
-    text=exactReplace(text,"speciesId:'species-034',displayName:'乙隊驗收'","speciesId:'species-035',displayName:'乙隊驗收'");
-    text=exactReplace(text,'nativeHuntSpeciesByIndex(34),rng:{next:()=>11}','nativeHuntSpeciesByIndex(35),rng:{next:()=>11}');
+    text=exactReplace(text,"speciesId:'species-034',displayName:'乙隊驗收'",`speciesId:'${TARGET_ID}',displayName:'乙隊驗收'`);
+    text=exactReplace(text,'nativeHuntSpeciesByIndex(34),rng:{next:()=>11}',`nativeHuntSpeciesByIndex(${TARGET}),rng:{next:()=>11}`);
     await route.fulfill({response,body:text});
    });
    await page.route('**/src/championship/app/championshipStandaloneApp.js' ,async route=>{
@@ -135,18 +141,19 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
     const ownedId=evidence.before.residents[0].id;assert.equal(evidence.before.residents.length,2);
     assert.ok(evidence.before.residents[0].speciesId.endsWith('species-034'));
     assert.equal(new Set(evidence.before.residents.map(r=>r.id)).size,2,'Distinct owned residents');
-    assert.ok(evidence.before.residents.some(r=>r.speciesId.endsWith('species-035')),'Target is an already-streamed resident');
+    assert.ok(evidence.before.residents.some(r=>r.speciesId.endsWith(TARGET_ID)),'Target is an already-streamed resident');
     assert.equal(blocked,0,'Target39 page has not been requested before evolution');
     assert.deepEqual(evidence.network,[],'No target39 response before evolution');
     const loadedPages=evidence.before.scene.characterArt.textureMemory.atlasPages;
     assert.ok(loadedPages.some(p=>p.entityId===config.entityId),'Target initial atlas is actually resident');
-    assert.ok(!loadedPages.some(p=>targetPaths.has(new URL(p.imageUrl).pathname)),'Target39 page absent from real loaded atlas diagnostics');
+    // Reviewed-art pages (side 'reviewed') carry no imageUrl and are never target pages.
+    assert.ok(!loadedPages.some(p=>p.imageUrl&&targetPaths.has(new URL(p.imageUrl).pathname)),'Target39 page absent from real loaded atlas diagnostics');
     if(baseline)assert.ok(baselinePresenterRequests>0,'Baseline presenter response actually installed');
     assert.deepEqual(evidence.errors,[],'No startup page error');
     evidence.preparation={console:evidence.console,httpFailures:evidence.httpFailures,requestFailures:evidence.requestFailures};
     evidence.console=[];evidence.httpFailures=[];evidence.requestFailures=[];
-    mark('begin-native-evolution-target35-sequence39');
-    evidence.storageBoundary=await page.evaluate(()=>{globalThis.__freezeEvolutionBoundary=globalThis.__freezeStorageQA.begin();__freezeApp.__testBeginEvolution(35);return globalThis.__freezeEvolutionBoundary;});
+    mark(`begin-native-evolution-target${TARGET}-sequence39`);
+    evidence.storageBoundary=await page.evaluate(target=>{globalThis.__freezeEvolutionBoundary=globalThis.__freezeStorageQA.begin();__freezeApp.__testBeginEvolution(target);return globalThis.__freezeEvolutionBoundary;},TARGET);
     const storageBefore=evidence.storageBoundary.keys;
     if(baseline){
      await page.waitForFunction(()=>globalThis.__freezeApp.getRaisingLifecycleFrame().evolution!==null);
@@ -183,7 +190,7 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
      }else{allow=true;release();}
      await page.waitForFunction(()=>!__freezeApp.getRaisingLifecycleFrame().evolution&&__freezeScene.isPlayable===true);
      mark('native-evolution-completed');
-     evidence.after=await snapshot();assert.deepEqual(evidence.after.residents,evidence.before.residents.map(r=>r.id===ownedId?{...r,speciesId:r.speciesId.replace(/species-\d+$/, 'species-035')}:r),'Same owned resident, no duplication/reset');assert.equal(evidence.after.life.message?.target,35);assert.equal(evidence.after.life.message?.kind,'EVOLVED');
+     evidence.after=await snapshot();assert.deepEqual(evidence.after.residents,evidence.before.residents.map(r=>r.id===ownedId?{...r,speciesId:r.speciesId.replace(/species-\d+$/, TARGET_ID)}:r),'Same owned resident, no duplication/reset');assert.equal(evidence.after.life.message?.target,TARGET);assert.equal(evidence.after.life.message?.kind,'EVOLVED');
      // Evolution completion starts ordinary idle streaming and a 2.8-second
      // auto-dismiss ceremony -- or, in the arcade themes (2026-10-28), the
      // evolution runner's own auto-dismissing panel in its place. Either may
@@ -222,11 +229,14 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
      assert.deepEqual(evidence.errors,[],'No page error through recovery interactions');
      const controlled=url=>mode==='reject'&&url&&targetPaths.has(new URL(url,base).pathname);
      assert.deepEqual(evidence.httpFailures.filter(x=>!(x.injected&&controlled(x.url)&&x.status===503&&x.method==='GET')),[],'No unrelated HTTP failure');
-     assert.deepEqual(evidence.requestFailures.filter(x=>!(x.injected&&controlled(x.url)&&x.method==='GET')),[],'No unrelated request failure');
+     // The browser cancels a still-loading background-music fetch when the screen changes its
+     // track (net::ERR_ABORTED / cancelled). It is not a loader failure; any other failure counts.
+     const cancelledMusic=x=>x.method==='GET'&&/ABORTED|cancel/i.test(x.failure??'')&&new URL(x.url,base).pathname.startsWith('/assets/production/original-music-r1/');
+     assert.deepEqual(evidence.requestFailures.filter(x=>!(x.injected&&controlled(x.url)&&x.method==='GET')&&!cancelledMusic(x)),[],'No unrelated request failure');
      assert.ok(evidence.httpFailures.length<=8*targetPaths.size,'Bounded controlled loader retries');
      assert.ok(evidence.requestFailures.length<=8*targetPaths.size,'Bounded controlled request failures');
      const expectedWarning=x=>mode==='reject'&&(
-       x.text.startsWith('CHAMPIONSHIP_EVOLUTION_ART_FAILED 35:')&&[...targetPaths].some(p=>x.text.includes(p))||
+       x.text.startsWith(`CHAMPIONSHIP_EVOLUTION_ART_FAILED ${TARGET}:`)&&[...targetPaths].some(p=>x.text.includes(p))||
        controlled(x.location?.url)&&/^Failed to load resource:.*503/.test(x.text));
      assert.deepEqual(evidence.console.filter(x=>!expectedWarning(x)),[],'No unrelated console warning/error');
      assert.ok(evidence.console.length<=10*targetPaths.size,'Bounded expected warnings');

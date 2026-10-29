@@ -72,6 +72,53 @@ export function productPlacementCells(entry) {
   return footprint(entry, productGridCell, productGridSlot, slotInRange);
 }
 
+const neighbourSlots = (slot) => {
+  const { row, column } = productGridCell(slot), odd = row % 2;
+  return [[row, column - 1], [row, column + 1], [row - 1, column - 1 + odd], [row - 1, column + odd], [row + 1, column - 1 + odd], [row + 1, column + odd]]
+    .map(([r, c]) => productGridSlot(r, c)).filter((s) => s !== null);
+};
+
+/**
+ * Where a cage lands when the player taps one hex (Owner 2026-10-29). Eight
+ * original shapes (健身房, 研究所, 森林, 醫院, 花園, 冰原, 牧場, 擂台) leave their
+ * anchor hex empty, so using the tapped hex as the anchor put the cage one hex
+ * right of the tap. Every footprint cell is tried on the tapped hex instead,
+ * computed on the lattice itself so odd and even rows keep the same shape. The
+ * top-left cell wins when it fits; otherwise the free fit that touches the most
+ * neighbouring cage edges. Adjacency is never refused. `ignoreInstanceId` is
+ * the cage being moved (its own cells count as free).
+ * Returns { ok, slotIndex (the anchor), cells, conflicts, contact } or, when no
+ * cell of the shape can sit on the tapped hex inside the world, null.
+ */
+export function productFitPlacement(placements, moduleId, targetSlot, { ignoreInstanceId = null } = {}) {
+  if (!slotInRange(targetSlot) || !getCageDefinitionByModuleId(moduleId)) return null;
+  const owner = new Map();
+  for (const p of placements ?? []) {
+    if (ignoreInstanceId !== null && p.instanceId === ignoreInstanceId) continue;
+    for (const slot of productPlacementCells(p) ?? []) owner.set(slot, p.instanceId ?? p.moduleId);
+  }
+  const target = productGridCell(targetSlot), fits = [];
+  // A shape spans two rows and at most four columns, so its anchor is near.
+  for (let row = target.row - 1; row <= target.row; row++) for (let column = target.column - 4; column <= target.column; column++) {
+    const anchor = productGridSlot(row, column);
+    const cells = anchor === null ? null : productPlacementCells({ moduleId, slotIndex: anchor });
+    if (!cells?.includes(targetSlot)) continue;
+    const order = cells.map(productGridCell).sort((a, b) => a.y - b.y || a.x - b.x).findIndex((c) => c.slotIndex === targetSlot);
+    const conflicts = cells.filter((slot) => owner.has(slot));
+    let contact = 0;
+    for (const slot of cells) for (const n of neighbourSlots(slot)) if (owner.has(n) && !cells.includes(n)) contact++;
+    fits.push({ ok: conflicts.length === 0, slotIndex: anchor, cells, conflicts, contact, order });
+  }
+  if (!fits.length) return null;
+  fits.sort((a, b) => a.order - b.order);
+  const free = fits.filter((f) => f.ok);
+  const best = free[0]?.order === 0 ? free[0]
+    : free.length ? free.reduce((a, b) => (b.contact > a.contact ? b : a))
+      : fits.reduce((a, b) => (b.conflicts.length < a.conflicts.length ? b : a));
+  const { order, ...fit } = best;
+  return fit;
+}
+
 /**
  * Why a layout is invalid, or null. `capacity` is the player's land (cells);
  * the world never holds more than PRODUCT_RANCH_CELL_CAP cells.

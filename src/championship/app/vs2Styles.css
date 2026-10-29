@@ -1556,6 +1556,7 @@ body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database_
 .cm-hexworld__cell[data-preview="ok"] { background-color: color-mix(in srgb, var(--c-success) 55%, transparent); }
 .cm-hexworld__cell[data-preview="blocked"] { background-color: color-mix(in srgb, var(--c-danger) 60%, transparent); }
 .cm-hexworld__cell[data-preview="full"] { background-color: color-mix(in srgb, var(--c-warning) 60%, transparent); }
+.cm-hexworld__cell[data-preview="conflict"] { background-color: color-mix(in srgb, var(--c-danger) 60%, transparent); filter: saturate(1.4); }
 .cm-hexworld__selection { display: grid; gap: var(--sp-1); padding: var(--sp-2) var(--sp-3); border: 1px solid var(--c-accent-line); border-radius: var(--r-control); background: var(--c-accent-soft); }
 .cm-hexworld__selection[hidden] { display: none; }
 .cm-hexworld__selected, .cm-hexworld__note { margin: 0; font-size: var(--fs-body-sm); color: var(--c-text-1); }
