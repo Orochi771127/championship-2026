@@ -83,7 +83,7 @@ async function reviewedParadeWalker(speciesId, reviewed, { signal, loadImage }) 
   for (const step of steps) {
     if (!images.has(step.url)) images.set(step.url, await loadImage(step.url, signal));
     const [x, y, w, h] = step.rect;
-    frames.push({ image: images.get(step.url), rect: { x, y, w, h }, ticks: step.ticks, place: { x: step.place[0] - left, y: step.place[1] - top } });
+    frames.push({ image: images.get(step.url), rect: { x, y, w, h }, ticks: step.ticks, place: { x: step.place[0] - left, y: step.place[1] - top }, mirror: step.mirror === true });
   }
   return { speciesId, name: speciesNameForId(speciesId), frames, canvas: { w: width, h: height }, facesRight: reviewed.facesRight,
     anchor: { x: -left / width, y: -top / height } };
@@ -165,7 +165,12 @@ export function installTitleParade({ doc = globalThis.document, view = globalThi
     walker.drawn = walker.frameIndex;
     const { ctx, canvas } = walker;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (current.place) ctx.drawImage(current.image, current.rect.x, current.rect.y, current.rect.w, current.rect.h, current.place.x, current.place.y, current.rect.w, current.rect.h);
+    // A frame drawn facing opposite to its set is flipped into its (already mirrored) place.
+    if (current.place && current.mirror) {
+      ctx.save(); ctx.translate(current.place.x + current.rect.w, current.place.y); ctx.scale(-1, 1);
+      ctx.drawImage(current.image, current.rect.x, current.rect.y, current.rect.w, current.rect.h, 0, 0, current.rect.w, current.rect.h);
+      ctx.restore();
+    } else if (current.place) ctx.drawImage(current.image, current.rect.x, current.rect.y, current.rect.w, current.rect.h, current.place.x, current.place.y, current.rect.w, current.rect.h);
     else ctx.drawImage(current.image, current.rect.x, current.rect.y, current.rect.w, current.rect.h, 0, 0, canvas.width, canvas.height);
   }
 

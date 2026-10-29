@@ -155,7 +155,7 @@ function reviewedShowcaseMotion(speciesId, reviewed) {
       const [x, y, w, h] = step.rect, [ox, oy] = step.place;
       bounds.left = Math.min(bounds.left, ox); bounds.top = Math.min(bounds.top, oy);
       bounds.right = Math.max(bounds.right, ox + w); bounds.bottom = Math.max(bounds.bottom, oy + h);
-      return Object.freeze({ url: step.url, x, y, w, h, ox, oy, pageWidth: null, pageHeight: null, ticks: Math.max(1, step.ticks | 0) });
+      return Object.freeze({ url: step.url, x, y, w, h, ox, oy, pageWidth: null, pageHeight: null, ticks: Math.max(1, step.ticks | 0), mirror: step.mirror === true });
     });
     if (list.length) resolved.set(id, Object.freeze(list));
   }
@@ -263,7 +263,11 @@ export function createSpriteMotion({ doc = globalThis.document, motion, scale = 
   }) : ({
     width: `${frame.w}px`,
     height: `${frame.h}px`,
-    transform: `translate(${px(frame.ox - b.left)}, ${px(frame.oy + lift(frame) - b.top)}) scale(${scale})`,
+    // A reviewed crop drawn facing opposite to its set (mirror) is flipped into its
+    // place, which reviewedSelection already mirrored about the pivot.
+    transform: frame.mirror
+      ? `translate(${px(frame.ox + frame.w - b.left)}, ${px(frame.oy + lift(frame) - b.top)}) scale(${-scale}, ${scale})`
+      : `translate(${px(frame.ox - b.left)}, ${px(frame.oy + lift(frame) - b.top)}) scale(${scale})`,
     backgroundImage: `url("${frame.url}")`,
     backgroundSize: "auto",
     backgroundPosition: `${-frame.x}px ${-frame.y}px`
