@@ -548,6 +548,37 @@
 }
 .cm-hunt-tools__icon[hidden] { display: none; }
 .cm-hunt-tools__label { position: relative; z-index: 1; }
+/* Tactical dock parts (2026-10-28): outside the arcade skin the belt has no box
+ * and the corner tags stay hidden, so the row reads exactly as before. */
+.cm-hunt-dock__belt { display: contents; }
+.cm-hunt-dock__tag { display: none; }
+/* Drag-to-deploy: a ground ring where the item will land (squashed to sit on
+ * the field) and the lifted item just above the finger. Never hit-testable. */
+.cm-hunt-deploy-ring {
+  position: absolute; left: 0; top: 0; z-index: 7; width: 72px; height: 72px; margin: -36px 0 0 -36px;
+  border: 3px solid #3ddc84; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(61, 220, 132, 0.34) 0 22%, rgba(61, 220, 132, 0.1) 48%, transparent 70%);
+  box-shadow: 0 0 0 2px rgba(10, 40, 24, 0.55), 0 0 22px rgba(61, 220, 132, 0.75), inset 0 0 14px rgba(61, 220, 132, 0.6);
+  transform: translate(var(--x, -200px), var(--y, -200px)) scaleY(0.55);
+  animation: cm-deploy-ring 900ms ease-in-out infinite;
+}
+.cm-hunt-deploy-ring[data-valid="false"] {
+  border-color: #ff4d5e; animation: none;
+  background: radial-gradient(circle, rgba(255, 77, 94, 0.22) 0 30%, transparent 70%);
+  box-shadow: 0 0 0 2px rgba(40, 10, 16, 0.55), 0 0 16px rgba(255, 77, 94, 0.6);
+}
+.cm-hunt-deploy-ghost {
+  position: absolute; left: 0; top: 0; z-index: 9; display: grid; place-items: center; width: 54px; height: 54px; margin: -82px 0 0 -27px;
+  border: 2px solid #ffd166; border-radius: 16px; pointer-events: none;
+  background: linear-gradient(180deg, rgba(64, 50, 132, 0.86), rgba(24, 18, 58, 0.9));
+  box-shadow: 0 10px 22px rgba(8, 6, 26, 0.5), 0 0 18px rgba(255, 209, 102, 0.45);
+  color: #fff8e7; font-size: 13px; font-weight: 900;
+  transform: translate(var(--x, -200px), var(--y, -200px)) rotate(-6deg);
+}
+.cm-hunt-deploy-ghost[data-valid="false"] { border-color: #ff4d5e; filter: saturate(0.6); }
+.cm-hunt-deploy-ghost img { width: 38px; height: 38px; object-fit: contain; image-rendering: pixelated; pointer-events: none; }
+@keyframes cm-deploy-ring { 50% { box-shadow: 0 0 0 2px rgba(10, 40, 24, 0.55), 0 0 30px rgba(61, 220, 132, 0.95), inset 0 0 20px rgba(61, 220, 132, 0.8); } }
+:root[data-motion="reduced"] .cm-hunt-deploy-ring { animation: none; }
 .cm-hunt-tools .cm-vs2-action[aria-pressed="true"] { border-color: var(--c-accent); background: color-mix(in srgb, var(--c-accent) 18%, transparent); color: var(--c-accent-strong); box-shadow: var(--glow-accent); }
 .cm-hunt-tools .cm-vs2-action:disabled { opacity: 0.5; }
 

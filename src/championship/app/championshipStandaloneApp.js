@@ -12,7 +12,8 @@ import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.
 import {getProductExtension,requirePlayableProductExtension} from '../contracts/productSpeciesExtensions.js';
 import {settleRanchDiscoveries,removeCollectedDiscoveries,RANCH_DISCOVERY_REWARDS} from '../raising/ranchDiscoveries.js';
 import {PARTNER_LIFE_RULES,PARTNER_MOODS,STROLL_REWARDS,partnerHabitatFit,partnerMood,partnerAffectionHearts,partnerTypeBits,partnerPeerRelation,
-  strollFindChance,rollStrollFind,strollIntervalFrames,strollDayKey,appendStrollEntry,canStrollFind,canGreet,canTapAffection,recordTap,strollLogName,strollPairKey} from '../raising/ranchPartnerLife.js';
+  strollFindChance,rollStrollFind,strollIntervalFrames,strollDayKey,appendStrollEntry,canStrollFind,canGreet,canTapAffection,recordTap,strollLogName,strollPairKey,renameStrollLogPartners} from '../raising/ranchPartnerLife.js';
+import {localizeSpeciesCodes,speciesNameForId} from '../text/zhHant.js';
 import {holdNativeRaisingActorForGreeting} from '../raising/nativeRaisingActor.js';
 import {nativeRaisingPeerStopDistanceQ12} from '../raising/nativeRaisingMovement.js';
 import { panHuntPresentationCamera } from "../hunt/huntPresentationBinding.js";
@@ -595,9 +596,10 @@ export function createChampionshipStandaloneApp({
     partnerLifeSeed=(partnerLifeSeed+0x6d2b79f5)>>>0;let t=partnerLifeSeed;
     t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296;
   }
+  // The player's nickname, else the catalog name; never the internal species code.
   function partnerName(id){
     const entry=resolveRaisingInstance(instanceSources(),id);
-    return strollLogName(entry?.displayName??(entry?speciesDisplayName(entry.speciesId):null));
+    return strollLogName(localizeSpeciesCodes(entry?.displayName??'')||(entry?speciesNameForId(entry.speciesId):null));
   }
   function partnerReading(id,actor=nativeRaisingActor(id)){
     const profile=raisingNativeProfile(id);if(!actor||!profile||actor.speciesIndex<8)return null;
@@ -1256,6 +1258,14 @@ export function createChampionshipStandaloneApp({
     return status;
   }
 
+  // Stroll logs saved before 2026-10-28 kept "SPECIES 084" as a partner name;
+  // the loaded log carries the catalog name, written back on the next save.
+  function repairStrollLogNames(state){
+    const log=state?.nativeHome?.strollLog;
+    const repaired=log?renameStrollLogPartners(log,localizeSpeciesCodes):log;
+    return repaired===log?state:Object.freeze({...state,nativeHome:normalizeNativeRaisingHome({...state.nativeHome,strollLog:repaired})});
+  }
+
   function applySavedGameData(saved,candidate,{tutorialBoundary=false}={}) {
     creature = Object.freeze({ ...saved.creature });
     revision = saved.progression.revision ?? 0;
@@ -1271,7 +1281,7 @@ export function createChampionshipStandaloneApp({
     battleEconomy = normalizeBattleEconomyState(saved.battleEconomy);
     gameplayRng = candidate.rng;
     huntPersistentState = candidate.huntHistory;
-    raising = candidate.production;
+    raising = repairStrollLogNames(candidate.production);
     raisingHand=null;raisingActors.clear();raisingAgeRemainder=0;
     instanceIdentity = candidate.identity;
     selectedCreatureId = null;

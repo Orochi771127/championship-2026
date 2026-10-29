@@ -750,6 +750,16 @@ export async function mountHuntFieldPixiPresentation({
     getView: () => source.field.getView({ viewportWidth: app.screen.width, viewportHeight: app.screen.height }),
     intents: source.intents
   });
+  // A page point in this canvas's own pixels, as a world point on the visible map.
+  function deployPoint(clientX, clientY) {
+    if (disposed || !Number.isFinite(clientX) || !Number.isFinite(clientY)) return null;
+    const global = new PIXI.Point();
+    app.renderer.events.mapPositionToPoint(global, clientX, clientY);
+    const view = source.field.getView({ viewportWidth: app.screen.width, viewportHeight: app.screen.height });
+    if (!view || global.x < 0 || global.y < 0 || global.x > app.screen.width || global.y > app.screen.height) return null;
+    if (view.containsViewportPoint && !view.containsViewportPoint(global)) return null;
+    return view.toWorldPoint(global);
+  }
   const onPointerDown = (event) => pointer.down(event);
   const onPointerMove = (event) => pointer.move(event);
   const onPointerUp = (event) => pointer.up(event);
@@ -788,6 +798,19 @@ export async function mountHuntFieldPixiPresentation({
       // The DOM shell may ask for a repaint after its own update. The ticker is
       // authoritative; this is an idempotent sync.
       render();
+    },
+
+    // Drag-to-deploy from the HUD dock (Owner 2026-10-28): a page point lands on
+    // the field exactly as a tap there would -- the canvas rect mapping Pixi
+    // uses, the visible map only, and the tool's own down/up intents.
+    canDeployAt(clientX, clientY) { return deployPoint(clientX, clientY) !== null; },
+    deployAt(clientX, clientY) {
+      if (pointer.getOwner() !== null) return false;
+      const point = deployPoint(clientX, clientY);
+      if (!point) return false;
+      const accepted = source.intents.toolPointerDown?.(point.x, point.y) ?? false;
+      if (accepted) source.intents.toolPointerUp?.(point.x, point.y);
+      return Boolean(accepted);
     },
 
     getDiagnostics() {
