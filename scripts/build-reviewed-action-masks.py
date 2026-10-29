@@ -84,8 +84,7 @@ def build():
     selection = json.loads(SELECTION.read_text('utf-8'))
     pages, roles = {}, {}
     for entry in selection['characters']:
-        if entry.get('playableIdentity') is False:
-            continue
+        # Illustration-only identities are reviewed too (Owner 2026-10-29), so they open already checked.
         roles[entry['displayCode']] = {'speciesId': entry['speciesId'], 'manifest': entry['path'],
                                        'manifestSha256': entry['sha256'], **role_masks(entry, pages)}
     payload = json.dumps(roles, sort_keys=True, separators=(',', ':')).encode()

@@ -12,7 +12,8 @@ import { decodeFacingMasks, facingOutliers } from '../scripts/lib/reviewed-actio
 
 const root = path.resolve(import.meta.dirname, '..');
 const read = (p) => JSON.parse(fs.readFileSync(path.join(root, p), 'utf8'));
-const selection = read('src/data/championship/reviewed-animation-selection.v1.json').characters.filter((e) => e.playableIdentity !== false);
+// Every selected set, playable or illustration-only (GR39-41, MA65-69 reviewed 2026-10-29).
+const selection = read('src/data/championship/reviewed-animation-selection.v1.json').characters;
 const maskDoc = read('docs/contracts/championship/REVIEWED_ACTION_FACING_MASKS.v1.json');
 const exceptions = read('docs/contracts/championship/REVIEWED_ACTION_FACING_EXCEPTIONS.v1.json').entries;
 const masks = decodeFacingMasks(maskDoc);
