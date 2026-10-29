@@ -2,6 +2,7 @@ import { createTransientHint, consumeRaisingHintDuration } from './transientHint
 import {getLocale} from '../text/locale.js';
 import {mountRanchDiscoveryJournal} from './ranchDiscoveryJournal.js';
 import {mountRanchStoryBadge} from './ranchStoryBadge.js';
+import {mountRanchDataAreaBadge} from './ranchDataAreaBadge.js';
 import {PARTNER_MOODS,PARTNER_HABITATS} from '../raising/ranchPartnerLife.js';
 import {productFormText} from '../text/productFormText.js';
 const evolutionChoiceTitle=()=>productFormText('choose');
@@ -90,7 +91,7 @@ function cageName(frame, cageId) {
  * @param {() => void} [options.openRoster] opens the Digimon roster
  */
 export async function createRaisingHomeP1RView({ root, source, mountField, hudArt=null, getRosterEntry=null,
-  renderCreatureDetail=null, openRoster=null, firstRunHint=false, nextHintDuration=consumeRaisingHintDuration, storySeen=null,
+  renderCreatureDetail=null, openRoster=null, firstRunHint=false, nextHintDuration=consumeRaisingHintDuration, storySeen=null, dataAreaProgress=null,
   evolutionCinematic=null } = {}) {
   if (!root) throw new TypeError("INT-RH2 P1R view requires a root element");
   const presentation = assertPresentationSource(source);
@@ -285,6 +286,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   const discoveryJournal=mountRanchDiscoveryJournal(root,presentation);
   // Story theater entry (Owner 2026-10-28): the rift-watch badge under the journal.
   const storyBadge=mountRanchStoryBadge(root,{isSeen:()=>storySeen?.()===true});
+  // Data Area story mode (Owner 2026-10-29): the globe badge under the rift watch.
+  const dataAreaBadge=mountRanchDataAreaBadge(root,{progress:()=>dataAreaProgress?.()??null});
   // Only genuinely overflowing text becomes a bounded scroll/focus surface.
   // Ordinary short hints stay transparent to field gestures.
   const hintSizeObserver = typeof ResizeObserver === 'function' ? new ResizeObserver(syncHintOverflow) : null;
@@ -511,6 +514,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     if (disposed || !frame) return;
     discoveryJournal.update(frame);
     storyBadge.update(frame);
+    dataAreaBadge.update(frame);
     updateEntryHint(frame);
     if (frame.revision === lastRevision) return;
     lastRevision = frame.revision;
@@ -722,6 +726,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       disposed = true;
       discoveryJournal.dispose();
       storyBadge.dispose();
+      dataAreaBadge.dispose();
       hintTimer.dispose();
       hintSizeObserver?.disconnect();
       root.ownerDocument?.defaultView?.removeEventListener?.('resize', syncHintOverflow);

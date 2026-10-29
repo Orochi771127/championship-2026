@@ -98,6 +98,8 @@ export const TOOLBAR_PRODUCT_ENTRIES = Object.freeze({
     Object.freeze({ id: "journal", label: "探索手帳", action: "OPEN_RANCH_JOURNAL", hint: "夥伴散步找到的東西", evidence: "OWNER_APPROVED_ADAPTATION_20261027" }),
     // Owner 2026-10-28: the story theater's rift chapters, from the System menu as well as the ranch badge.
     Object.freeze({ id: "story", label: "STORY_MENU", action: "OPEN_STORY", hint: "STORY_MENU_HINT", evidence: "OWNER_APPROVED_ADAPTATION_20261028" }),
+    // Owner 2026-10-29: the Data Area story mode, part one "Unheard Echoes".
+    Object.freeze({ id: "data-area-story", label: "DATA_AREA_MENU", action: "OPEN_DATA_AREA_STORY", hint: "DATA_AREA_MENU_HINT", evidence: "OWNER_APPROVED_ADAPTATION_20261029" }),
     // Owner 2026-10-28: friends & tamer card, and account & cloud sync (championshipCloudService; local simulation until a cloud is configured).
     Object.freeze({ id: "friends", label: "FRIENDS_MENU", action: "OPEN_FRIENDS", hint: "FRIENDS_MENU_HINT", evidence: "OWNER_APPROVED_ADAPTATION_20261028" }),
     Object.freeze({ id: "account", label: "ACCOUNT_MENU", action: "OPEN_ACCOUNT", hint: "ACCOUNT_MENU_HINT", evidence: "OWNER_APPROVED_ADAPTATION_20261028" }),

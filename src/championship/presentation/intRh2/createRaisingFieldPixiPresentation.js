@@ -1033,6 +1033,9 @@ export async function mountRaisingFieldPixiPresentation({
   }
 
   function updateAnimations(ticker) {
+    // A Data Area story field (Owner 2026-10-29) covers the whole screen and shares
+    // this ticker; the hidden ranch skips its frame (the clock is paused meanwhile).
+    if (globalThis.document?.body?.dataset?.storyField === "active") return;
     samplePortraitReference();
     if(zoomButton&&zoomButton.disabled===canZoom())describeZoom();
     const tutorial=source.getFrame().tutorial;

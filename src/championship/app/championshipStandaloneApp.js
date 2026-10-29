@@ -109,7 +109,7 @@ import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from ".
 import { NATIVE_CHAMPIONSHIP_CATEGORIES, CHAMPIONSHIP_ARENA_INDEX, createNativeChampionshipRun,
   normalizeNativeChampionshipRun, recordNativeChampionshipRound, nativeChampionshipContinues,
   nativeChampionshipFinalRound, nativeChampionshipPayable, selectNativeChampionshipOpponent } from "../battle/nativeChampionshipRounds.js";
-import {generateNativeFreeBattleMenu,listNativeFreeBattleMatches,FREE_BATTLE_ARENAS} from '../battle/nativeFreeBattle.js';
+import {generateNativeFreeBattleMenu,listNativeFreeBattleMatches,FREE_BATTLE_ARENAS,freeBattlePreset} from '../battle/nativeFreeBattle.js';
 import { DAY_END_MINUTES, projectWorldClockDisplay } from "../time/championshipWorldClock.js";
 import { NATIVE_CLOCK_CADENCE } from "./championshipClockDriver.js";
 import { createClockChannelRng, restoreChannelRng } from "../battle/battleRngChannel.js";
@@ -2983,15 +2983,18 @@ export function createChampionshipStandaloneApp({
         before:projectNativeIndividualStats(profile),after:projectNativeIndividualStats(nextProfile)});
     },
 
-    /** Once-only reward (a story chapter): tickets the first time its key is claimed. */
-    claimGachaReward(key,amount){
+    /** Once-only reward (a story chapter): tickets (and optional metals) the first time its key is claimed. */
+    claimGachaReward(key,amount,{metals=null}={}){
       requireSession();
-      const result=claimGachaReward(gachaState(),key,amount);
-      if(!result.granted)return Object.freeze({ok:true,granted:0,key});
+      const claimedBefore=gachaState().claimed.includes(key);
+      const result=claimGachaReward(gachaState(),key,amount,{metals});
+      if(claimedBefore)return Object.freeze({ok:true,granted:0,metals:Object.freeze({}),key});
       if(!commitGacha({state:result.state}))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
       publishScreens();
-      return Object.freeze({ok:true,granted:result.granted,tickets:result.state.tickets,key});
+      return Object.freeze({ok:true,granted:result.granted,metals:Object.freeze({...result.metals}),tickets:result.state.tickets,key});
     },
+    /** The once-only reward keys already claimed (read only; story progress reads its own prefix). */
+    getGachaClaimedRewards(){requireSession();return Object.freeze([...gachaState().claimed]);},
 
     /** Arena wins: tickets straight into the save. */
     grantGachaTickets(amount,reason='REWARD'){
@@ -3036,6 +3039,24 @@ export function createChampionshipStandaloneApp({
       const drawnArena=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
       if(selectedArena!==null&&!FREE_BATTLE_ARENAS.includes(selectedArena))return {ok:false,reason:'ARENA_UNAVAILABLE'};
       const arenaIndex=selectedArena??drawnArena;
+      return {ok:true,match,arenaIndex,individuals:party.individuals,rngPreparation};
+    },
+
+    /**
+     * Data Area story battle (OWNER_APPROVED_ADAPTATION 2026-10-29): an ordinary
+     * free battle against fixed native presets (the story's opponent), no entry
+     * fee and no payout -- the chapter pays its own first-clear reward.
+     */
+    async prepareStoryBattle(presetIndices,instanceIds){
+      if(!Array.isArray(presetIndices)||!presetIndices.length||presetIndices.length>3)return {ok:false,reason:'STORY_PRESETS_REQUIRED'};
+      try{for(const id of presetIndices)freeBattlePreset(id);}catch{return {ok:false,reason:'STORY_PRESET_UNKNOWN'};}
+      const party=withBattleTactics(await this.prepareBattleParty(null,instanceIds));
+      if(!party.ok)return party;
+      const match=Object.freeze({id:'story',kind:presetIndices.length>1?'TEAM':'SINGLE',presetIndices:[...presetIndices],slots:3,entryFee:0,payout:0,
+        speciesIndices:presetIndices.map(id=>freeBattlePreset(id).field00)});
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      prepared.localMode=2;prepared.freeMatch=match;prepared.freeMenu=freeBattleMenu;prepared.individuals=party.individuals;
+      const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
       return {ok:true,match,arenaIndex,individuals:party.individuals,rngPreparation};
     },
 

@@ -145,6 +145,7 @@ export async function buildLocaleCoverage() {
   const { DATABASE_ILLUSTRATION_COPY } = await import('../src/championship/database/databaseIllustrations.js');
   const { STORY_RIFT_COPY } = await import('../src/championship/data/storyRiftChapters.js');
   const { STORY_RIFT_MAP_COPY } = await import('../src/championship/data/storyRiftMap.js');
+  const { DATA_AREA_STORY_COPY } = await import('../src/championship/text/dataAreaStoryText.js');
   const { ONLINE_COPY } = await import('../src/championship/text/onlineText.js');
   const { SOCIAL_COPY } = await import('../src/championship/text/socialText.js');
   const scopedCopy = [
@@ -152,6 +153,7 @@ export async function buildLocaleCoverage() {
     inspectScopedLocaleCopy('src/championship/text/socialText.js', SOCIAL_COPY),
     inspectScopedLocaleCopy('src/championship/data/storyRiftChapters.js', STORY_RIFT_COPY),
     inspectScopedLocaleCopy('src/championship/data/storyRiftMap.js', STORY_RIFT_MAP_COPY),
+    inspectScopedLocaleCopy('src/championship/text/dataAreaStoryText.js', DATA_AREA_STORY_COPY),
     inspectScopedLocaleCopy('src/championship/database/databaseIllustrations.js', DATABASE_ILLUSTRATION_COPY),
     inspectScopedLocaleCopy('src/championship/app/webAppInstall.js', WEB_APP_INSTALL_COPY),
     inspectSceneMusicLocaleCopy(SCENE_MUSIC_TRACKS),

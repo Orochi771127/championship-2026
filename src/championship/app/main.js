@@ -96,6 +96,10 @@ import { createHybridStoryDirector } from '../presentation/story/HybridStoryDire
 import { createStoryStagePuppeteer } from '../presentation/story/storyStagePuppeteer.js';
 import { createPortraitVnOverlay } from '../presentation/story/portraitVnOverlay.js';
 import { createStoryChapterMap } from './storyChapterMap.js';
+import { createDataAreaStoryScreen } from './dataAreaStoryScreen.js';
+import { DATA_AREA_STORY_OPEN_EVENT } from './ranchDataAreaBadge.js';
+import { dataAreaChapterStates } from '../data/dataAreaStoryCampaign.js';
+import { projectDatabaseEvolutionRoutes } from '../database/databaseEvolutionRoutes.js';
 import { mountAmbience } from './ui/ambienceLayer.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, createAssetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
@@ -1034,6 +1038,7 @@ async function mountRaisingHome() {
     firstRunHint: true, // UI entry guidance; its first-use preference is not calendar/save state.
     nextHintDuration: () => consumeRaisingHintDuration(settings.store),
     storySeen: () => settings.store.get().storyRiftChapter1Seen === true,
+    dataAreaProgress: () => dataAreaProgress(),
     mountField({ host, recoveryHost, source: fieldSource, onTrainingFrame }) {
       let closed = false, attempt = null, effects = null, scene = null, phase = 'loading';
       let residentStates = [], lastFrame = fieldSource.getFrame();
@@ -1514,6 +1519,7 @@ async function mountBattleSelect() {
     prefill: (() => { const spar = pendingSpar; pendingSpar = null; return spar; })(),
     onOpenChampionship() { app.openChampionship(); },
     onOpenDataArena: enterDataArena,
+    onOpenDataAreaStory: () => { void openDataAreaStory({ source: 'battle' }); },
     async onEnter(recordIndex,playerInstanceIds,mode,selectedArena=null) {
       // Battle simulation uses this existing Application's ticker. Do not
       // charge for a session that cannot start advancing on the shared stage.
@@ -2151,6 +2157,7 @@ async function openGameplay() {
   }
   unsubscribeScreen = app.subscribeScreen(() => {
     if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) closeStoryMap();
+    followStoryBattle();
     syncMusic(); refreshStatusBar(); refreshToolbarMode(); void refreshCalendarViews(); void mountCurrentScreen();
   });
   let calendarSession=null,stopCalendarSession=null;
@@ -2257,6 +2264,7 @@ function runToolbarMenuEntry(entry,context={}) {
   if (entry.action === "OPEN_BACKPACK") { void openRanchBackpack({ getShopFrame: () => app.getShopFrame() }); return; }
   if (entry.action === "OPEN_RANCH_JOURNAL") { document.dispatchEvent(new CustomEvent(RANCH_JOURNAL_OPEN_EVENT)); return; }
   if (entry.action === "OPEN_STORY") { openStoryMap({ source: 'menu' }); return; }
+  if (entry.action === "OPEN_DATA_AREA_STORY") { void openDataAreaStory({ source: 'menu' }); return; }
   if (entry.action === "OPEN_FRIENDS") { ensureFriendsDrawer().open(); return; }
   if (entry.action === "OPEN_ACCOUNT") { openSettings(document.querySelector('.cm-toolbar__cell[data-menu-id="SYSTEM"]'), 'data'); return; }
   if (entry.action === "END_DAY") {
@@ -2619,6 +2627,163 @@ function openStoryMap({ chapterId = null, source = 'menu' } = {}) {
 }
 function closeStoryMap() { storyMap?.dispose(); storyMap = null; }
 document.addEventListener(STORY_CHAPTER_OPEN_EVENT, event => { openStoryMap({ chapterId: event.detail?.chapterId ?? STORY_FIRST_CHAPTER_ID, source: event.detail?.source ?? 'badge' }); });
+
+// Data Area story mode (Owner 2026-10-29, OWNER_APPROVED_ADAPTATION of
+// presentation): part one "Unheard Echoes" on the grid theater. It needs a
+// hatched partner and a quiet screen; the clock pauses while it is open.
+// Progress and first-clear rewards live in the Cyber Gachapon once-only
+// ledger (story:da1:cN), so the canonical save carries them.
+let dataAreaStory = null;
+function dataAreaClaimed() { try { return app.getGachaClaimedRewards?.() ?? []; } catch { return []; } }
+function dataAreaProgress() { try { return app.getSnapshot?.() ? dataAreaChapterStates(dataAreaClaimed()) : null; } catch { return null; } }
+// The selected ranch partner acts; otherwise the first hatched one. Its awakened
+// form is its first evolution route (itself when it has none).
+function dataAreaPartnerInfo() {
+  let index = null, name = '';
+  try { const ranch = view?.storyStage ? storyPartner(view.storyStage.getFrame()) : null; if (ranch) { index = speciesIndexOf(ranch.resident.speciesId); name = ranch.name; } } catch { index = null; }
+  if (!Number.isInteger(index) || index < 8) {
+    let partners = [];
+    try { partners = app.getCyberGachaFrame?.().partners ?? []; } catch { partners = []; }
+    const pick = partners.find(partner => Number.isInteger(partner.speciesIndex) && partner.speciesIndex >= 8);
+    if (!pick) return null;
+    index = pick.speciesIndex; name = pick.name || speciesName(index);
+  }
+  let awake = null;
+  try { awake = projectDatabaseEvolutionRoutes(index, { fullView: true })[0]?.targetSpeciesIndex ?? null; } catch { awake = null; }
+  let instanceId = null;
+  try { instanceId = view?.storyStage ? storyPartner(view.storyStage.getFrame())?.resident?.creatureId ?? null : null; } catch { instanceId = null; }
+  return Object.freeze({ name: name || speciesName(index), species: index, awakeSpecies: Number.isInteger(awake) && awake >= 8 ? awake : index, instanceId });
+}
+function dataAreaRefusal() {
+  if (!app.getSnapshot?.()) return 'NO_SESSION';
+  const tutorial = app.getInteractiveTutorial();
+  if (tutorial && !tutorial.finished) return 'TUTORIAL_ACTIVE';
+  if (storyRun || storyMap?.isBusy || isChoiceDialogOpen() || app.hasRaisingPresentation()) return 'SCREEN_BUSY';
+  if (dataAreaStory?.isOpen) return 'ALREADY_OPEN';
+  return null;
+}
+async function openDataAreaStory({ source = 'menu', chapterId = null } = {}) {
+  const refusal = dataAreaRefusal();
+  const partner = refusal ? null : dataAreaPartnerInfo();
+  if (refusal || !partner) { recoveryDiagnostics.record('STORY', { source, stage: 'data-area-refused', reason: refusal ?? 'NO_PARTNER' }); return false; }
+  dataAreaStory?.dispose();
+  closeStoryMap();
+  clockDriver?.setActive(false);
+  document.body.dataset.storyStage = 'playing';
+  const screen = createDataAreaStoryScreen({
+    locale: getLocale(), reducedMotion: prefersReducedMotion(), quality: currentQualityTier(), partner, tamer: app.getOpeningState()?.trainerName ?? '',
+    getClaimed: dataAreaClaimed,
+    claimReward: (key, tickets, metals) => { const result = app.claimGachaReward(key, tickets, { metals }); refreshStatusBar(); return result; },
+    onLink: link => { void followDataAreaLink(link); },
+    // Story fields (3-D locations) draw from the shared Pixi ticker; no second loop.
+    ticker: () => (pixiStage && !pixiStage.contextLost ? pixiStage.app.ticker : null),
+    // While a 3-D story field covers the screen the shared Pixi stage draws nothing
+    // and the ranch presenter skips its frame.
+    runBattle: request => runStoryBattle({ ...request, partnerInstanceId: partner.instanceId ?? null }),
+    onFieldActive: on => {
+      if (on) document.body.dataset.storyField = 'active'; else delete document.body.dataset.storyField;
+      if (pixiStage?.app?.stage) pixiStage.app.stage.renderable = !on;
+    },
+    onClose: () => {
+      delete document.body.dataset.storyStage;
+      clockDriver?.setActive(!root.hidden);
+      recoveryDiagnostics.record('STORY', { source, stage: 'data-area-closed' });
+      setTimeout(() => { if (dataAreaStory === screen) { screen.dispose(); dataAreaStory = null; } }, 0);
+      refreshStatusBar();
+    }
+  });
+  dataAreaStory = screen;
+  recoveryDiagnostics.record('STORY', { source, stage: 'data-area' });
+  await screen.open({ chapterId });
+  return true;
+}
+// A chapter's "play next" link: the battle menu (free battle, the tournament),
+// the Data Arena entry beside it, or the hunt gate.
+async function followDataAreaLink(link) {
+  try {
+    if (link === 'HUNT') { if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen(); expeditionSource?.intents.openGate(); return; }
+    pendingSpar = link === 'FREE_BATTLE' ? Object.freeze({ mode: 'FREE_BATTLE' }) : link === 'CHAMPIONSHIP' ? Object.freeze({ mode: 'CHAMPIONSHIP' }) : null;
+    if (app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_SELECT) await mountCurrentScreen();
+    else { if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen(); app.openBattle(); }
+    if (link === 'DATA_ARENA') {
+      for (let attempt = 0; attempt < 40; attempt++) {
+        const entry = document.getElementById('cm-data-arena');
+        if (entry && !entry.disabled && entry.isConnected) { entry.click(); break; }
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    }
+  } catch (error) { pendingSpar = null; console.warn(`DATA_AREA_LINK: ${error?.message ?? error}`); }
+}
+// A story battle (Owner 2026-10-29): the story's opponent as fixed native free-battle
+// presets, the player's partner, the ordinary battle screens. The story waits for the
+// result screen, then gets {ok, won} once the player leaves it.
+let storyBattle = null;
+async function waitForScreen(target, timeoutMs = 15000) {
+  const started = Date.now();
+  while (Date.now() - started < timeoutMs) {
+    if (app.getScreen() === target && mountedScreen === target) return true;
+    await new Promise(resolve => setTimeout(resolve, 120));
+  }
+  return false;
+}
+async function runStoryBattle({ presetIndices, partnerInstanceId = null, signal = null }) {
+  if (storyBattle) return { ok: false, reason: 'BATTLE_BUSY' };
+  if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started) return { ok: false, reason: 'BATTLE_NOT_READY' };
+  const previousStage = document.body.dataset.storyStage;
+  delete document.body.dataset.storyStage;
+  clockDriver?.setActive(false);
+  try {
+    if (app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) { if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen(); app.openBattle(); }
+    if (!(await waitForScreen(CHAMPIONSHIP_SCREENS.BATTLE_SELECT))) return { ok: false, reason: 'BATTLE_SELECT_NOT_READY' };
+    const candidates = (await app.getBattlePartyCandidates(null)).filter(c => !c.admission || c.admission.ok);
+    const lead = candidates.find(c => c.instanceId === partnerInstanceId) ?? candidates[0];
+    if (!lead) return { ok: false, reason: 'TEAM_REQUIRED' };
+    const party = await app.prepareStoryBattle(presetIndices, [lead.instanceId]);
+    if (!party.ok) return party;
+    const prepared = (await loadBattleRuntime())({ mode: 2, battleType: 0, playerIndividuals: party.individuals, rng: party.rngPreparation.rng,
+      personalityPolicy: FREE_PRACTICE_PERSONALITY_POLICY, arenaHazards: await loadArenaHazards() });
+    const finished = new Promise(resolve => { storyBattle = { resolve, outcome: null, seenResult: false }; });
+    try { prepared.chooseFreeBattle({ presetIndices: party.match.presetIndices, arenaIndex: party.arenaIndex }); prepared.startMatch(); }
+    catch (error) { prepared.dispose(); storyBattle = null; return { ok: false, reason: error?.message ?? 'BATTLE_NOT_READY' }; }
+    const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
+    const entered = await enterPreparedBattle(prepared, attemptId, () => app.enterFreeBattle({ attemptId, playerInstanceIds: [lead.instanceId], rngPreparation: party.rngPreparation }));
+    if (!entered?.ok) { storyBattle = null; return { ok: false, reason: entered?.reason ?? 'BATTLE_NOT_READY' }; }
+    signal?.addEventListener?.('abort', () => storyBattle?.resolve({ ok: false, reason: 'STORY_ABORTED' }), { once: true });
+    return await finished;
+  } finally {
+    storyBattle = null;
+    if (app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_SELECT) app.leaveScreen();
+    await waitForScreen(CHAMPIONSHIP_SCREENS.RAISING_HOME, 8000);
+    if (previousStage) document.body.dataset.storyStage = previousStage;
+  }
+}
+// Follows the battle screens for a running story battle: the result screen sets the
+// outcome; leaving it (back to the battle menu or home) settles the battle.
+function followStoryBattle() {
+  if (!storyBattle) return;
+  const screen = app.getScreen();
+  if (screen === CHAMPIONSHIP_SCREENS.BATTLE_RESULT && !storyBattle.seenResult) {
+    storyBattle.seenResult = true;
+    try { storyBattle.outcome = battleRuntime?.outcome?.() ?? null; } catch { storyBattle.outcome = null; }
+  } else if (storyBattle.seenResult && screen !== CHAMPIONSHIP_SCREENS.BATTLE_RESULT && screen !== CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
+    const outcome = storyBattle.outcome;
+    storyBattle.resolve({ ok: true, won: outcome?.winningTeam === 0, outcome });
+  }
+}
+document.addEventListener(DATA_AREA_STORY_OPEN_EVENT, event => { void openDataAreaStory({ source: event.detail?.source ?? 'badge', chapterId: event.detail?.chapterId ?? null }); });
+// Loopback review only (?dataAreaQa): open the hall, start a chapter (auto, or
+// fast-forwarded to a beat label) and read its state. Public hosts never bind it.
+if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("dataAreaQa"))
+  globalThis.__championshipDataAreaQa = {
+    open: (options = {}) => openDataAreaStory({ source: 'qa', ...options }),
+    play: (chapterId, options = {}) => dataAreaStory?.play(chapterId, options) ?? null,
+    tab: name => dataAreaStory?.selectTab(name),
+    state: () => dataAreaStory?.state() ?? null,
+    stop: () => dataAreaStory?.stop(),
+    fieldPoint: target => dataAreaStory?.field?.screenOf(target) ?? null,
+    claim: chapterNumbers => chapterNumbers.map(n => app.claimGachaReward(`story:da1:c${n}`, 0)),
+    close: () => dataAreaStory?.close()
+  };
 
 // Online service (Owner 2026-10-28). One facade for the account panel, the
 // friends drawer and the PvP lobbies. Offline first: without a configured cloud

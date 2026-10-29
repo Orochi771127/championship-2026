@@ -188,15 +188,26 @@ export function grantGachaTickets(state, amount) {
   return { state: normalizeCyberGacha(next), granted: next.tickets - current.tickets };
 }
 
-/** A once-only reward (a story chapter, a journal milestone): tickets the first time `key` is claimed. */
-export function claimGachaReward(state, key, amount) {
+/**
+ * A once-only reward (a story chapter, a journal milestone): tickets the first
+ * time `key` is claimed, and optionally metals ({ "metal:emma-shard": 1 }).
+ */
+export function claimGachaReward(state, key, amount, { metals = null } = {}) {
   const current = normalizeCyberGacha(state);
   if (typeof key !== "string" || !/^[\w:.-]{1,60}$/.test(key)) throw gachaError("INVALID_REWARD_KEY");
-  if (current.claimed.includes(key)) return { state: current, granted: 0 };
+  const metalGrants = Object.entries(metals ?? {});
+  if (metalGrants.some(([id, quantity]) => !getGachaMetal(id) || !Number.isSafeInteger(quantity) || quantity < 1)) throw gachaError("INVALID_REWARD_METAL");
+  if (current.claimed.includes(key)) return { state: current, granted: 0, metals: {} };
   const next = plain(current);
   next.claimed.push(key);
   next.tickets = Math.min(GACHA_TICKET_CAP, next.tickets + Math.max(0, amount | 0));
-  return { state: normalizeCyberGacha(next), granted: next.tickets - current.tickets };
+  const grantedMetals = {};
+  for (const [id, quantity] of metalGrants) {
+    const before = next.metals[id] ?? 0;
+    next.metals[id] = Math.min(GACHA_STACK_CAP, before + quantity);
+    if (next.metals[id] > before) grantedMetals[id] = next.metals[id] - before;
+  }
+  return { state: normalizeCyberGacha(next), granted: next.tickets - current.tickets, metals: grantedMetals };
 }
 
 const pick = (list, random) => list[Math.min(list.length - 1, Math.floor(random() * list.length))];

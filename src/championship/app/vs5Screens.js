@@ -135,7 +135,7 @@ function shell(root, screen, label) {
  * Mode identity is now traced through OVL10 0210F88C's help-bank dispatch.
  * The application supplies each mode's entries; this view holds only selection.
  */
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, onOpenDataAreaStory=null, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -221,6 +221,16 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     arena.addEventListener('click', () => { if (!entering) void onOpenDataArena(arena); });
     header.append(arena);
     matchOnlyNodes.push(arena);
+  }
+  // Owner 2026-10-29: the Data Area story mode beside the Data Arena entry.
+  if (typeof onOpenDataAreaStory === 'function') {
+    const story = actionButton('');
+    story.id = 'cm-data-area-story';
+    story.classList.add('cm-vs5-data-arena', 'cm-vs5-data-area-story');
+    story.append(element('span', '', uiText('DATA_AREA_MENU'), false), element('span', 'cm-vs5-match__fee', uiText('DATA_AREA_BATTLE_HINT'), false));
+    story.addEventListener('click', () => { if (!entering) onOpenDataAreaStory(story); });
+    header.append(story);
+    matchOnlyNodes.push(story);
   }
   async function selectMode(id){
     if(cubeDisposed||entering)return;

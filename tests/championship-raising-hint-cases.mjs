@@ -1,5 +1,6 @@
 import {mountRanchDiscoveryJournal} from '../src/championship/app/ranchDiscoveryJournal.js';
 import {mountRanchStoryBadge} from '../src/championship/app/ranchStoryBadge.js';
+import {mountRanchDataAreaBadge} from '../src/championship/app/ranchDataAreaBadge.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -97,7 +98,7 @@ test('isolated presentation fallback is memory-only and does not acquire a secon
 });
 const read=name=>fs.readFileSync(new URL(`../src/championship/app/${name}`,import.meta.url),'utf8');
 function context(document,clock,extras={}){
-  return vm.createContext({mountRanchDiscoveryJournal,mountRanchStoryBadge,originalCageLocationArt:()=>null,document,Date,console,setTimeout:clock.setTimer,clearTimeout:clock.clearTimer,
+  return vm.createContext({mountRanchDiscoveryJournal,mountRanchStoryBadge,mountRanchDataAreaBadge,originalCageLocationArt:()=>null,document,Date,console,setTimeout:clock.setTimer,clearTimeout:clock.clearTimer,
     createTransientHint:(n,o={})=>createTransientHint(n,{...clock,...o}),TOOL_HINT_MS,
     uiText:s=>String(s),setText:(n,t)=>n.textContent=t,setLabel:(n,k,t)=>n.setAttribute(k,t),retranslate:()=>{},
     isOriginalUiIntakeLocal:()=>false,isOriginalRuntimeLocation:()=>false,originalToolbarArt:()=>null,originalDatabaseIcon:()=>null,
