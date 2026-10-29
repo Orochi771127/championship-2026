@@ -9,10 +9,18 @@
   hard-coded value. The Pixi stage never exceeds `MAX_DEVICE_RESOLUTION = 2`
   (`championshipPixiStage.js`).
 - Ranch 3D: `cappedPixelRatio <= 1.75`, mobile shadow map 1024 (hd2d-cage-world).
-- Leaving a Three view: `renderer.dispose()` and `renderer.forceContextLoss()`,
-  remove the canvas, drop textures. The WebGL context count must not grow when
-  a view is opened and closed repeatedly; showcase and juicy pieces use zero
-  WebGL (juicy-monster-ui).
+- Leaving a Three view depends on who owns the context:
+  - **Its own canvas and renderer** (ranch, gate globe, medals, highlight
+    burst): `renderer.dispose()`, `renderer.forceContextLoss()`, remove the
+    canvas, drop textures.
+  - **Hunt shares the Pixi Application's canvas and GL context** through
+    `leaseHuntRenderer()` (`presentation/vs2/huntThree/lifecycle.mjs`). Leaving
+    Hunt releases the lease and disposes only Hunt's own scene resources
+    (`createHuntThreeMap.mjs`). Never call `forceContextLoss()` or remove that
+    canvas: it would destroy the one Pixi Application.
+  - Either way, the WebGL context count must not grow when a view is opened
+    and closed repeatedly. Showcase and juicy pieces use zero WebGL
+    (juicy-monster-ui).
 - Render loops pause while `document.hidden`; the save flushes on
   `visibilitychange` to hidden (`app/main.js`).
 - Saves: one modern save key (`championshipModernSave:v1`) plus the session

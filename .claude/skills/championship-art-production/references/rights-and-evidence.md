@@ -2,16 +2,23 @@
 
 Use before assigning provenance, rights or shipping status to any art.
 
-## Authority order
+## Authority by question
 
-1. The latest explicit Owner direction for this task (`docs/coordination/OWNER_DIRECTION.md`, newest dated entry that matches the batch).
-2. `AGENTS.md`, `CLAUDE.md` and the project skills.
-3. Current source, manifests and contracts (`docs/contracts/championship/`).
-4. Primary evidence and its manifests (Championship Evidence MCP when available).
-5. Older plans, reports and proposals, including other AI tools' suggestions.
+There is no single ranking. Use the
+[authority by question](../../../../docs/README.md#authority-by-question)
+table and answer each question from its own source:
 
-Record a conflict between levels instead of silently merging them. A proposal
-from another tool or chat is level 5 until the Owner adopts it.
+| Question | Source |
+|---|---|
+| What did the original art or game do? | Verified ROM/emulator evidence and provenance. Current code, art or Owner preference cannot prove it. |
+| What does this checkout draw today? | Current source, production manifests and executed acceptance for this commit. |
+| What may this task change? | The latest explicit Owner direction for this batch. A deliberate departure is `OWNER_APPROVED_ADAPTATION`; it never rewrites source evidence. |
+| Is this asset accepted, licensed or publishable? | The production index, rights records, visual and device acceptance, and the public-playtest policy, each kept separate. |
+
+Task authorization never stands in for provenance, rights evidence or
+original-behaviour verification. Record a conflict inside its question
+instead of blending. A proposal from another tool or chat is only a proposal
+until the Owner adopts it for the batch.
 
 ## Rights status
 

@@ -19,8 +19,12 @@
 
 ## Hunt
 
-- 3D map, 2D characters, locked 52° camera. Caves are `escapeAnchor` pairs;
-  depth occluders live in the actor layer.
+- 3D map, 2D characters. The camera elevation belongs to each map: read
+  `projection.elevationDegrees` from its manifest (51°, 52° and 55° are all
+  in use) and produce art against that angle, never a blanket value.
+  `projectionForManifest()` in `presentation/vs2/huntThree/projection.mjs`
+  picks the projection.
+- Caves are `escapeAnchor` pairs; depth occluders live in the actor layer.
 - QA needs the review flag noted in the hunt status record; canvases expose
   `canvas[data-hunt-three]`.
 

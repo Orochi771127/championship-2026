@@ -38,7 +38,7 @@
 | Scene | Camera | Source |
 |---|---|---|
 | Ranch | World laid out at 52° (`RANCH_ELEVATION`); view locked at 40° (`RANCH_DEFAULT_VIEW_PITCH`, Owner 2026-10-27) | `presentation/ranchThreeCoordinates.js` |
-| Hunt | 3D maps, 2D characters, locked 52° | hunt presentation |
+| Hunt | 3D map, 2D characters; elevation is per map, from the manifest's `projection.elevationDegrees` (currently 51°, 52° or 55°) | `presentation/vs2/huntThree/projection.mjs` (`projectionForManifest`); 55° maps use `hm02Projection.mjs`, which rejects any other angle |
 
 - Changing the ranch pitch only changes the view: ground scales vertically by
   `sin(pitch) / sin(52°)`, heights by `cos(pitch)`, sprites stay upright.
