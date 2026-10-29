@@ -14,7 +14,9 @@ import {getProductExtension} from '../src/championship/contracts/productSpeciesE
 import {isKnownSpeciesIndex} from '../src/championship/contracts/productSpeciesData.js';
 const root=path.resolve(import.meta.dirname,'..');
 const selection=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/reviewed-animation-selection.v1.json'),'utf8'));
-const read=code=>JSON.parse(fs.readFileSync(path.join(root,(e=>e.authoringPath??e.path)(selection.characters.find(c=>c.displayCode===code))),'utf8'));
+// A set shipped only as its public manifest (no authoring manifest) lists frames as [{id,...}]; read it keyed by id, as the loader does.
+const read=code=>{const d=JSON.parse(fs.readFileSync(path.join(root,(e=>e.authoringPath??e.path)(selection.characters.find(c=>c.displayCode===code))),'utf8'));
+ return Array.isArray(d.frames)?{...d,frames:Object.fromEntries(d.frames.map(({id,...f})=>[id,f]))}:d;};
 // v1 storage superseded by web-v2 moved to a local archive with repo-relative layout; provenance checks read it there.
 const v1Archive=process.env.CHAMPIONSHIP_REVIEWED107_V1_ARCHIVE??path.resolve(root,'..','reviewed107-v1-repo-archive-20261028');
 const provenance=rel=>fs.existsSync(path.join(root,rel))?path.join(root,rel):path.join(v1Archive,rel);
@@ -23,12 +25,13 @@ const cast=(id,t,type='CAST',angle=0)=>({type,actionId:id,t,angle,moveId:'pulse'
 
 test('107 canonical growth/mature selections plus Owner-directed awakened pilots; excluded growth codes keep legal fallback',()=>{
  // Owner 2026-10-29: MA28 keeps its original action art until dot's approved repair set (option B).
- assert.equal(selection.characters.length,113);assert.equal(selection.errors.length,0);
+ // Owner 2026-10-30: UL42 Arena set added display-only (option A, not playable).
+ assert.equal(selection.characters.length,114);assert.equal(selection.errors.length,0);
  assert.equal(selection.characters.filter(c=>c.displayCode.startsWith('GR')).length,38);
  assert.equal(selection.characters.filter(c=>c.displayCode.startsWith('MA')).length,68);
  assert.deepEqual(selection.characters.filter(c=>c.displayCode.startsWith('AW')).map(c=>c.displayCode),['AW29','AW25','AW28','AW32','AW26','AW27','AW31']);
  assert.deepEqual(selection.excluded,['GR04','GR13','GR32','MA28']);
- assert.equal(new Set(selection.characters.map(c=>c.speciesId)).size,113);
+ assert.equal(new Set(selection.characters.map(c=>c.speciesId)).size,114);
  for(const entry of selection.characters){assert.ok(!selection.excluded.includes(entry.displayCode));
   assert.equal(read(entry.displayCode).speciesId,entry.speciesId);}
 });
