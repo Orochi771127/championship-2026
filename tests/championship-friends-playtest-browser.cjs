@@ -433,7 +433,9 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   // Hex cage world (Owner 2026-10-26): the former 10x10 slots 4 / 8 / 7 / 19 sit at world
   // slots 201 / 203 / 226 / 232 (same relative layout); the world no longer wraps, so the
   // 'wrap' case is now a set of apart cages, still rendered and persisted the same way.
-  for(const scenario of [{name:'adjacent',slots:[201,203,226]},{name:'wrap',slots:[201,203,232]}]){
+  // A tap lands on one of the cage's own hexes (2026-10-29): 花園 has no hex on its
+  // anchor 203, so the gate taps its top-left hex 204 and still saves anchor 203.
+  for(const scenario of [{name:'adjacent',slots:[201,203,226],taps:[201,204,226]},{name:'wrap',slots:[201,203,232],taps:[201,204,232]}]){
    if(selected.scenario==='adjacent'&&scenario.name==='wrap')break;
    evidence.sourceCornerStage=scenario.name+':editor';write();
    await boundary('viewport:editor',()=>page.setViewportSize({width:1280,height:800}));await boundary('clearCalendar',()=>clearCalendar());await boundary('menu:cageEdit',()=>menu('MANAGEMENT','cageEdit'));await boundary('screen:CAGE_EDIT',()=>screen('CAGE_EDIT'));
@@ -446,8 +448,8 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
     assert.equal(await row.count(),1,'Exact field image identifies one owned facility');
     for(const tab of await page.locator('.cm-cage-filter:not([data-filter="placed"])').all()){if(await row.isVisible())break;if(await tab.isVisible())await boundary('editor:filter:'+spec.id,()=>tab.click());}
     await boundary('editor:tray:'+spec.id,()=>row.click());
-    const slot=page.locator(`.cm-vs2-cage-slot[data-slot-index="${scenario.slots[i]}"]`);
-    assert.equal(await slot.getAttribute('data-unlocked'),'true');assert.equal(await slot.getAttribute('data-filled'),'false');await boundary('editor:slot:'+scenario.slots[i],()=>slot.click());
+    const slot=page.locator(`.cm-vs2-cage-slot[data-slot-index="${scenario.taps[i]}"]`);
+    assert.equal(await slot.getAttribute('data-unlocked'),'true');assert.equal(await slot.getAttribute('data-filled'),'false');await boundary('editor:slot:'+scenario.taps[i],()=>slot.click());
    }
    await boundary('editor:confirm',()=>page.locator('#cm-root[data-active-screen="CAGE_EDIT"] .cm-vs2-footer button.cm-vs2-action--primary').click());
    await boundary('editor:return-home',()=>page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click());await boundary('home',()=>home());await boundary('saveQuit',()=>saveQuit());
