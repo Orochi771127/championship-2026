@@ -858,20 +858,6 @@
       "authoringSha256": "0ea5ccb52412b57cc9ccb57516b83b237ebf55ba3c181568fb65641e5658f7cb"
     },
     {
-      "displayCode": "MA28",
-      "speciesId": "species-123",
-      "displayName": "天鋒核龍",
-      "path": "assets/production/characters/reviewed107-20261026/MA28/animation.public-v1.json",
-      "sha256": "9da9517a6f28984c365a3e1be9674d5acde0f95546a99dc7ac140b7dc64acc37",
-      "frameCount": 128,
-      "clipCount": 61,
-      "playableIdentity": true,
-      "replacesOriginal": true,
-      "generalMirror": true,
-      "authoringPath": "assets/production/characters/reviewed107-20261026/MA28/animation.web-v2-20261028.json",
-      "authoringSha256": "de784ba19bc73f1505ed9dc6999fc7b22c9c24fc4da2597f2773b253519e54c4"
-    },
-    {
       "displayCode": "MA29",
       "speciesId": "species-124",
       "displayName": "深淵核龍",
@@ -1504,7 +1490,8 @@
   "excluded": [
     "GR04",
     "GR13",
-    "GR32"
+    "GR32",
+    "MA28"
   ],
   "errors": [],
   "publicReleasePermitted": true
