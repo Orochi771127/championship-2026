@@ -7,8 +7,8 @@
   "motionErrors": [],
   "art": {
    "atlas": 113,
-   "reviewed": 93,
-   "reviewed-right": 12
+   "reviewed": 66,
+   "reviewed-right": 39
   },
   "maxCellAspect": 1.95,
   "multiCellPages": 218,
@@ -2603,7 +2603,7 @@
    "speciesId": "species-068",
    "motion": {
     "entityId": "m242_alraumon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -39,
@@ -2666,9 +2666,9 @@
      "visualHeight": 87
     },
     "muzzleSocket": {
-     "x": -30,
-     "y": -69,
-     "heightRatio": 0.84,
+     "x": 38,
+     "y": -65,
+     "heightRatio": 0.79,
      "releaseIndex": 2,
      "releaseMs": 283
     }
@@ -3339,7 +3339,7 @@
    "speciesId": "species-043",
    "motion": {
     "entityId": "m211_candmon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -42,
@@ -3402,11 +3402,11 @@
      "visualHeight": 94
     },
     "muzzleSocket": {
-     "x": -28,
-     "y": -46,
-     "heightRatio": 0.57,
-     "releaseIndex": 1,
-     "releaseMs": 167
+     "x": 36,
+     "y": -63,
+     "heightRatio": 0.77,
+     "releaseIndex": 2,
+     "releaseMs": 333
     }
    },
    "cutinHeadFrame": {
@@ -4167,7 +4167,7 @@
    "speciesId": "species-069",
    "motion": {
     "entityId": "m243_tsukaimon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -38,
@@ -4230,9 +4230,9 @@
      "visualHeight": 63
     },
     "muzzleSocket": {
-     "x": -36,
-     "y": -56,
-     "heightRatio": 0.86,
+     "x": 45,
+     "y": -36,
+     "heightRatio": 0.55,
      "releaseIndex": 1,
      "releaseMs": 183
     }
@@ -5882,7 +5882,7 @@
      "y": 0,
      "stance": "grounded",
      "lowestPixel": 7,
-     "lowestPixelX": 3.3,
+     "lowestPixelX": -3.2,
      "visualHeight": 73
     },
     "muzzleSocket": {
@@ -6099,7 +6099,7 @@
    "speciesId": "species-131",
    "motion": {
     "entityId": "m375_akatorimon",
-    "art": "reviewed-right",
+    "art": "reviewed",
     "density": 4,
     "bounds": {
      "left": -99,
@@ -6162,11 +6162,11 @@
      "visualHeight": 157
     },
     "muzzleSocket": {
-     "x": 61,
-     "y": -100,
-     "heightRatio": 0.65,
-     "releaseIndex": 3,
-     "releaseMs": 500
+     "x": -72,
+     "y": -101,
+     "heightRatio": 0.7,
+     "releaseIndex": 1,
+     "releaseMs": 167
     }
    },
    "cutinHeadFrame": {
@@ -6375,7 +6375,7 @@
    "speciesId": "species-074",
    "motion": {
     "entityId": "m304_wizarmon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -81,
@@ -6438,9 +6438,9 @@
      "visualHeight": 136
     },
     "muzzleSocket": {
-     "x": -42,
-     "y": -105,
-     "heightRatio": 0.86,
+     "x": 94,
+     "y": -100,
+     "heightRatio": 0.82,
      "releaseIndex": 1,
      "releaseMs": 167
     }
@@ -6467,7 +6467,7 @@
    "speciesId": "species-075",
    "motion": {
     "entityId": "m305_woodmon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -84,
@@ -6530,9 +6530,9 @@
      "visualHeight": 145
     },
     "muzzleSocket": {
-     "x": -43,
-     "y": -108,
-     "heightRatio": 0.8,
+     "x": 84,
+     "y": -103,
+     "heightRatio": 0.76,
      "releaseIndex": 1,
      "releaseMs": 167
     }
@@ -6559,7 +6559,7 @@
    "speciesId": "species-076",
    "motion": {
     "entityId": "m306_airdramon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -115,
@@ -6622,9 +6622,9 @@
      "visualHeight": 184
     },
     "muzzleSocket": {
-     "x": -82,
-     "y": -150,
-     "heightRatio": 0.82,
+     "x": 88,
+     "y": -127,
+     "heightRatio": 0.7,
      "releaseIndex": 3,
      "releaseMs": 500
     }
@@ -6651,7 +6651,7 @@
    "speciesId": "species-077",
    "motion": {
     "entityId": "m308_angemon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -99,
@@ -6714,9 +6714,9 @@
      "visualHeight": 191
     },
     "muzzleSocket": {
-     "x": -74,
-     "y": -132,
-     "heightRatio": 0.86,
+     "x": 93,
+     "y": -125,
+     "heightRatio": 0.82,
      "releaseIndex": 1,
      "releaseMs": 167
     }
@@ -6743,7 +6743,7 @@
    "speciesId": "species-078",
    "motion": {
     "entityId": "m310_orgemon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -90,
@@ -6806,11 +6806,11 @@
      "visualHeight": 149
     },
     "muzzleSocket": {
-     "x": -49,
-     "y": -109,
-     "heightRatio": 0.79,
-     "releaseIndex": 0,
-     "releaseMs": 0
+     "x": 98,
+     "y": -108,
+     "heightRatio": 0.76,
+     "releaseIndex": 1,
+     "releaseMs": 167
     }
    },
    "cutinHeadFrame": {
@@ -7019,7 +7019,7 @@
    "speciesId": "species-084",
    "motion": {
     "entityId": "m316_guardromon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -101,
@@ -7082,9 +7082,9 @@
      "visualHeight": 150
     },
     "muzzleSocket": {
-     "x": -79,
-     "y": -114,
-     "heightRatio": 0.68,
+     "x": 104,
+     "y": -130,
+     "heightRatio": 0.77,
      "releaseIndex": 1,
      "releaseMs": 167
     }
@@ -7111,7 +7111,7 @@
    "speciesId": "species-081",
    "motion": {
     "entityId": "m313_gargomon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -94,
@@ -7174,11 +7174,11 @@
      "visualHeight": 198
     },
     "muzzleSocket": {
-     "x": -38,
-     "y": -170,
-     "heightRatio": 0.88,
-     "releaseIndex": 0,
-     "releaseMs": 0
+     "x": 85,
+     "y": -139,
+     "heightRatio": 0.77,
+     "releaseIndex": 2,
+     "releaseMs": 333
     }
    },
    "cutinHeadFrame": {
@@ -7571,7 +7571,7 @@
    "speciesId": "species-135",
    "motion": {
     "entityId": "m379_growmon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -100,
@@ -7634,11 +7634,11 @@
      "visualHeight": 148
     },
     "muzzleSocket": {
-     "x": -82,
-     "y": -84,
-     "heightRatio": 0.55,
-     "releaseIndex": 0,
-     "releaseMs": 0
+     "x": 142,
+     "y": -129,
+     "heightRatio": 0.85,
+     "releaseIndex": 1,
+     "releaseMs": 167
     }
    },
    "cutinHeadFrame": {
@@ -7663,7 +7663,7 @@
    "speciesId": "species-128",
    "motion": {
     "entityId": "m371_grurumon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -94,
@@ -7726,11 +7726,11 @@
      "visualHeight": 171
     },
     "muzzleSocket": {
-     "x": -43,
-     "y": -96,
-     "heightRatio": 0.63,
-     "releaseIndex": 2,
-     "releaseMs": 333
+     "x": 126,
+     "y": -112,
+     "heightRatio": 0.7,
+     "releaseIndex": 1,
+     "releaseMs": 167
     }
    },
    "cutinHeadFrame": {
@@ -7755,7 +7755,7 @@
    "speciesId": "species-087",
    "motion": {
     "entityId": "m320_graymon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -98,
@@ -7818,11 +7818,11 @@
      "visualHeight": 191
     },
     "muzzleSocket": {
-     "x": -76,
-     "y": -97,
-     "heightRatio": 0.5,
-     "releaseIndex": 0,
-     "releaseMs": 0
+     "x": 140,
+     "y": -135,
+     "heightRatio": 0.69,
+     "releaseIndex": 1,
+     "releaseMs": 167
     }
    },
    "cutinHeadFrame": {
@@ -7847,7 +7847,7 @@
    "speciesId": "species-088",
    "motion": {
     "entityId": "m321_clockmon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -113,
@@ -7910,11 +7910,11 @@
      "visualHeight": 206
     },
     "muzzleSocket": {
-     "x": -84,
-     "y": -128,
-     "heightRatio": 0.63,
-     "releaseIndex": 3,
-     "releaseMs": 500
+     "x": 120,
+     "y": -151,
+     "heightRatio": 0.82,
+     "releaseIndex": 1,
+     "releaseMs": 167
     }
    },
    "cutinHeadFrame": {
@@ -8123,7 +8123,7 @@
    "speciesId": "species-091",
    "motion": {
     "entityId": "m324_gesomon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -100,
@@ -8186,9 +8186,9 @@
      "visualHeight": 150
     },
     "muzzleSocket": {
-     "x": -98,
-     "y": -114,
-     "heightRatio": 0.81,
+     "x": 81,
+     "y": -110,
+     "heightRatio": 0.79,
      "releaseIndex": 1,
      "releaseMs": 167
     }
@@ -8215,7 +8215,7 @@
    "speciesId": "species-129",
    "motion": {
     "entityId": "m372_geremon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -84,
@@ -8278,9 +8278,9 @@
      "visualHeight": 132
     },
     "muzzleSocket": {
-     "x": -66,
-     "y": -79,
-     "heightRatio": 0.65,
+     "x": 78,
+     "y": -104,
+     "heightRatio": 0.85,
      "releaseIndex": 0,
      "releaseMs": 0
     }
@@ -8491,7 +8491,7 @@
    "speciesId": "species-124",
    "motion": {
     "entityId": "m367_coredramon_ti",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -86,
@@ -8554,9 +8554,9 @@
      "visualHeight": 148
     },
     "muzzleSocket": {
-     "x": -65,
-     "y": -105,
-     "heightRatio": 0.81,
+     "x": 85,
+     "y": -90,
+     "heightRatio": 0.69,
      "releaseIndex": 0,
      "releaseMs": 0
     }
@@ -9503,7 +9503,7 @@
    "speciesId": "species-100",
    "motion": {
     "entityId": "m337_darcmon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -94,
@@ -9566,9 +9566,9 @@
      "visualHeight": 101
     },
     "muzzleSocket": {
-     "x": -67,
-     "y": -91,
-     "heightRatio": 0.82,
+     "x": 128,
+     "y": -79,
+     "heightRatio": 0.71,
      "releaseIndex": 1,
      "releaseMs": 167
     }
@@ -9779,7 +9779,7 @@
    "speciesId": "species-104",
    "motion": {
     "entityId": "m341_devidramon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -103,
@@ -9842,11 +9842,11 @@
      "visualHeight": 138
     },
     "muzzleSocket": {
-     "x": -74,
-     "y": -104,
-     "heightRatio": 0.8,
-     "releaseIndex": 2,
-     "releaseMs": 333
+     "x": 80,
+     "y": -114,
+     "heightRatio": 0.83,
+     "releaseIndex": 0,
+     "releaseMs": 0
     }
    },
    "cutinHeadFrame": {
@@ -10791,7 +10791,7 @@
    "speciesId": "species-113",
    "motion": {
     "entityId": "m353_meramon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -82,
@@ -10854,11 +10854,11 @@
      "visualHeight": 190
     },
     "muzzleSocket": {
-     "x": -55,
-     "y": -88,
-     "heightRatio": 0.54,
-     "releaseIndex": 2,
-     "releaseMs": 333
+     "x": 84,
+     "y": -97,
+     "heightRatio": 0.59,
+     "releaseIndex": 0,
+     "releaseMs": 0
     }
    },
    "cutinHeadFrame": {
@@ -10883,7 +10883,7 @@
    "speciesId": "species-114",
    "motion": {
     "entityId": "m354_mojyamon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -80,
@@ -10946,9 +10946,9 @@
      "visualHeight": 151
     },
     "muzzleSocket": {
-     "x": -44,
-     "y": -113,
-     "heightRatio": 0.75,
+     "x": 56,
+     "y": -118,
+     "heightRatio": 0.78,
      "releaseIndex": 0,
      "releaseMs": 0
     }
@@ -11527,7 +11527,7 @@
    "speciesId": "species-121",
    "motion": {
     "entityId": "m363_leomon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -93,
@@ -11590,11 +11590,11 @@
      "visualHeight": 169
     },
     "muzzleSocket": {
-     "x": -16,
-     "y": -121,
-     "heightRatio": 0.78,
-     "releaseIndex": 2,
-     "releaseMs": 333
+     "x": 96,
+     "y": -130,
+     "heightRatio": 0.85,
+     "releaseIndex": 1,
+     "releaseMs": 167
     }
    },
    "cutinHeadFrame": {
@@ -11619,7 +11619,7 @@
    "speciesId": "species-126",
    "motion": {
     "entityId": "m369_lekismon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4,
     "bounds": {
      "left": -69,
@@ -11682,9 +11682,9 @@
      "visualHeight": 183
     },
     "muzzleSocket": {
-     "x": -30,
-     "y": -145,
-     "heightRatio": 0.87,
+     "x": 103,
+     "y": -100,
+     "heightRatio": 0.6,
      "releaseIndex": 1,
      "releaseMs": 167
     }
@@ -14011,7 +14011,7 @@
    "speciesId": "species-156",
    "motion": {
     "entityId": "m424_pandamon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 7.142857142857142,
     "bounds": {
      "left": -226,
@@ -14074,11 +14074,11 @@
      "visualHeight": 350
     },
     "muzzleSocket": {
-     "x": -222,
-     "y": -300,
+     "x": 144,
+     "y": -333,
      "heightRatio": 0.88,
-     "releaseIndex": 1,
-     "releaseMs": 250
+     "releaseIndex": 0,
+     "releaseMs": 0
     }
    },
    "cutinHeadFrame": {
@@ -14195,7 +14195,7 @@
    "speciesId": "species-158",
    "motion": {
     "entityId": "m427_picklemon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 7.142857142857142,
     "bounds": {
      "left": -176,
@@ -14258,11 +14258,11 @@
      "visualHeight": 387
     },
     "muzzleSocket": {
-     "x": -170,
-     "y": -280,
+     "x": 204,
+     "y": -286,
      "heightRatio": 0.76,
-     "releaseIndex": 0,
-     "releaseMs": 0
+     "releaseIndex": 1,
+     "releaseMs": 250
     }
    },
    "cutinHeadFrame": {
@@ -14287,7 +14287,7 @@
    "speciesId": "species-159",
    "motion": {
     "entityId": "m428_fantomon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 7.142857142857142,
     "bounds": {
      "left": -219,
@@ -14350,11 +14350,11 @@
      "visualHeight": 424
     },
     "muzzleSocket": {
-     "x": -165,
-     "y": -227,
-     "heightRatio": 0.53,
-     "releaseIndex": 1,
-     "releaseMs": 250
+     "x": 109,
+     "y": -319,
+     "heightRatio": 0.76,
+     "releaseIndex": 0,
+     "releaseMs": 0
     }
    },
    "cutinHeadFrame": {
@@ -14379,7 +14379,7 @@
    "speciesId": "species-185",
    "motion": {
     "entityId": "m458_blackrapidmon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 7.142857142857142,
     "bounds": {
      "left": -168,
@@ -14442,11 +14442,11 @@
      "visualHeight": 280
     },
     "muzzleSocket": {
-     "x": -144,
-     "y": -235,
-     "heightRatio": 0.86,
-     "releaseIndex": 1,
-     "releaseMs": 250
+     "x": 148,
+     "y": -152,
+     "heightRatio": 0.6,
+     "releaseIndex": 0,
+     "releaseMs": 0
     }
    },
    "cutinHeadFrame": {
@@ -14655,7 +14655,7 @@
    "speciesId": "species-160",
    "motion": {
     "entityId": "m430_vademon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 7.142857142857142,
     "bounds": {
      "left": -178,
@@ -14718,9 +14718,9 @@
      "visualHeight": 353
     },
     "muzzleSocket": {
-     "x": -95,
-     "y": -258,
-     "heightRatio": 0.78,
+     "x": 189,
+     "y": -230,
+     "heightRatio": 0.7,
      "releaseIndex": 0,
      "releaseMs": 0
     }
