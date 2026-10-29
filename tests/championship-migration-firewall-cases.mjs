@@ -204,6 +204,9 @@ test("only the authorized source families are present", () => {
       "battleStateMachine.js",
       "battleStatus.js",
       "battleSupport.js",
+      // Owner 2026-10-29: element matchups and faction resonance as an opt-in battle adaptation
+      // policy (ORIGINAL by default), like battleAiAdaptation.js. It owns no screen, session or RNG.
+      "battleTaxonomyAdaptation.js",
       "battleTurnStates.js",
       // Joined on 2026-09-10 with the multi-round tournament structure decoded
       // from the OVL10 round-count writers and the 02110A90 opponent draw: round

@@ -4,6 +4,7 @@
 // second hunger, affection or timer. Stroll finds and greetings are product
 // rewards, paid through the existing Shop inventory and logged in one optional
 // child of the canonical Raising save (`strollLog`).
+import {TAXONOMY_HABITAT_BONUS} from '../contracts/speciesTaxonomy.js';
 import data from '../../data/championship/catalogs/raising-activity.r1.json' with {type:'json'};
 import {productBaseSpeciesIndex} from '../contracts/productSpeciesData.js';
 import {ranchEcologyType} from '../cage/ranchEcology.js';
@@ -98,10 +99,12 @@ export function partnerMood({fields,growth={},state=1,statusMusic=0,habitat='neu
 }
 
 /** Chance that one stroll interval ends with a find. */
-export function strollFindChance(habitat,mood){
+export function strollFindChance(habitat,mood,{raceHabitat=false}={}){
   let chance=PARTNER_LIFE_RULES.findChance[habitat]??PARTNER_LIFE_RULES.findChance.neutral;
   if(mood==='unwell'||mood==='sleepy')chance*=.5;
   else if(mood==='happy'||mood==='love')chance=Math.min(.95,chance*1.1);
+  // Race habitat (Owner 2026-10-29): finds +25%, under the same 95% ceiling.
+  if(raceHabitat)chance=Math.min(.95,chance*TAXONOMY_HABITAT_BONUS.findPercent/100);
   return chance;
 }
 

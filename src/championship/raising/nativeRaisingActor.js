@@ -20,6 +20,7 @@ import {applyNativeRaisingGrowth} from './nativeRaisingGrowth.js';
 import {nativeCageConditionEffects} from './nativeRaisingOvernight.js';
 import {NATIVE_RAISING_LIFECYCLE_RULES as lifecycleRules,evaluateNativeEvolution,evaluateNativeRebirth} from './nativeRaisingLifecycle.js';
 import {enterNativeRaisingSleep,exitNativeRaisingSleep,enterNativeRaisingMorning} from './nativeRaisingSleep.js';
+import {habitatMatch,TAXONOMY_HABITAT_BONUS} from '../contracts/speciesTaxonomy.js';
 import {enterNativeRaisingTraining,applyNativeCageEntryConditions,createNativeTrainingTimeline,stepNativeTrainingTimeline} from './nativeRaisingTraining.js';
 import {nativeCarryPosition,nativeCarryVelocity,nativeReleaseVelocity,stepNativeRaisingFlight,nativeLandingReaction} from './nativeRaisingCarry.js';
 import {findRanchRaisingOpenTile as findNativeRaisingOpenTile} from './nativeRaisingRanchRing.js';
@@ -578,7 +579,8 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
   } else {result=stepFeeding(actor,next,ageDelta,rng,{...feeding,fullGrowth:true});next=result.profile;}
   if(actor.state===1&&actor.trainingPending){
     actor.trainingPending=false;actor.state=11;
-    const trained=enterNativeRaisingTraining(next,{definition:actor.cageDefinitionIndex,season:context.season,level:context.cageLevel??0,stressed:a['404']===1},rng);
+    const growthPercent=habitatMatch(next.fields['000'],actor.cageDefinitionIndex)?TAXONOMY_HABITAT_BONUS.growthPercent:100;
+    const trained=enterNativeRaisingTraining(next,{definition:actor.cageDefinitionIndex,season:context.season,level:context.cageLevel??0,stressed:a['404']===1,growthPercent},rng);
     next=trained.profile;result.changed=true;actor.training=createNativeTrainingTimeline(trained.commands);if(trained.commands?.length)request(actor,30);
   }
   const grown=applyNativeRaisingGrowth(next,a,{state:actor.state,phase:actor.stroke?.phase??0,ageDelta,baseUnit:60,generation:s.generation,mode:context.season,minute:context.minute,

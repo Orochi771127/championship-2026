@@ -167,7 +167,10 @@ export function resolveBattleDamage(input) {
     const rng = requireRng(input.rng);
     if (applyCritical) {
       const tier = clampCritTier(input.critTier === undefined ? 0 : input.critTier);
-      const threshold = BATTLE_CRIT_THRESHOLDS[tier];
+      // critBonus is a product adaptation seam (battleTaxonomyAdaptation); 0 keeps the original threshold.
+      const critBonus = input.critBonus === undefined ? 0 : requireSafeInteger(input.critBonus, "critBonus");
+      if (critBonus < 0) throw resolverError("critBonus must be >= 0");
+      const threshold = BATTLE_CRIT_THRESHOLDS[tier] + critBonus;
       const roll = readChannel216(rng);
       if (roll < threshold) {
         damage = truncMulDiv(damage, 3, 2);

@@ -73,8 +73,8 @@ test("beams stay rare; insect/plant never fire one and machines fire ordnance", 
   assert.ok(new Set(styles).size >= 18, "the specials spread over many looks");
   for (const { data, move } of signatures) {
     const style = moveVfxTheme(move.recordIndex).style;
-    if (data.familyName === "昆蟲植物") assert.ok(["vine", "thorn", "leaf", "seed", "spore", "slash"].includes(style), `${data.speciesIndex} ${style}`);
-    if (data.familyName === "機械") assert.notEqual(style, "beam", `${data.speciesIndex}`);
+    if (data.familyName === "森羅族") assert.ok(["vine", "thorn", "leaf", "seed", "spore", "slash"].includes(style), `${data.speciesIndex} ${style}`);
+    if (data.familyName === "機巧族") assert.notEqual(style, "beam", `${data.speciesIndex}`);
   }
   // Original effect banks win: the rose vine, the missile rain, the machine gun.
   assert.equal(moveVfxTheme(565).style, "vine");

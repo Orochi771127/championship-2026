@@ -1,6 +1,10 @@
 import { uiText } from "../text/uiText.js";
 import { formatList } from "../text/locale.js";
-import {generationName,personalityName,rosterFamilyName,specialSkillName} from '../text/zhHant.js';
+import {generationName,personalityName,specialSkillName} from '../text/zhHant.js';
+import {speciesTaxonomy,TAXONOMY_RESISTANCE_AXES} from '../contracts/speciesTaxonomy.js';
+import {taxonomyText} from '../text/taxonomyText.js';
+import {taxonomyBadgeRow} from '../presentation/taxonomyBadgeArt.js';
+import {elementChartButton} from './elementChartModal.js';
 import { databaseHeroPortrait } from "../presentation/databaseHeroPortraits.js";
 // The Digimon roster -- the original's ui/digimon_list_* scenes.
 //
@@ -55,19 +59,8 @@ const TRACED_DETAIL_ROWS = Object.freeze([
   { id: "digitama", label: "退化次數", read: (entry) => entry.stats?.rebirthCount ?? null },
   { id: "gen", label: "GEN.", read: (entry) => generationName(entry.identity?.generationIndex) },
   { id: "mind", label: "性格", read: (entry) => entry.identity?.generationIndex===0?'？？？':personalityName(entry.stats?.personalityIndex) },
-  // A raw index, not a name: the species record stores 0..4 and no name table for
-  // it has been traced, so the label says index rather than implying a named
-  // attribute. Index 0 is a real value -- 38 species carry it -- not an absence.
-  { id: "align_icon", label: "ATTR. INDEX", read: (entry) => entry.identity?.attributeIndex ?? null },
-  // familyBits 0 means no family bit is set, which is a real answer and a
-  // different thing from untraced. It is drawn as an explicit none so that an
-  // ABSENT row keeps its single meaning: this build has no source.
-  {
-    id: "family",
-    label: "FAMILY",
-    read: (entry) =>
-      entry.identity?.familyBits === 0 ? "無" : rosterFamilyName(entry.identity?.familyOrdinal)
-  }
+  // Owner 2026-10-29: the raw attribute index and family give way to the three-axis taxonomy
+  // (faction renames the attribute, race renames the family), drawn as emblems by appendCreatureDetail.
 ]);
 
 /** Rows the original shows that this build has no traced source for. */
@@ -124,6 +117,18 @@ export function appendCreatureDetail(detail, entry) {
     group.append(term, cell);
     detail.append(group);
   }
+  const taxonomy = speciesTaxonomy(entry.identity?.recordIndex);
+  if (taxonomy) {
+    const group = element("div", "cm-digimon-stat cm-digimon-stat--taxonomy");
+    group.dataset.row = "taxonomy";
+    group.dataset.group = "identity";
+    const term = element("dt", "cm-digimon-detail__label", taxonomyText('label.element'), false);
+    term.setAttribute("data-row", "taxonomy");
+    const cell = element("dd", "cm-digimon-detail__value cm-taxonomy-detail");
+    cell.append(taxonomyBadgeRow(taxonomy), elementChartButton(taxonomy.element));
+    group.append(term, cell);
+    detail.append(group);
+  }
   const graphValues = entry.stats?.resistanceGraph;
   if (Array.isArray(graphValues) && graphValues.length === 5) {
     const graph = element('div', 'cm-digimon-resistance');
@@ -138,6 +143,14 @@ export function appendCreatureDetail(detail, entry) {
       bar.append(segment);
     }
     graph.append(bar);
+    // Each bar keeps its original meaning and also covers one new element (Owner 2026-10-29).
+    const axes = element('span', 'cm-digimon-resistance__axes');
+    for (const [axis, pair] of Object.entries(TAXONOMY_RESISTANCE_AXES)) {
+      const item = element('span', '', `${taxonomyText(`axis.${axis}`)}＝${pair.map(el => taxonomyText(`element.${el}`)).join('／')}`, false);
+      item.dataset.axis = axis;
+      axes.append(item);
+    }
+    graph.append(axes);
     detail.append(graph);
   }
 }

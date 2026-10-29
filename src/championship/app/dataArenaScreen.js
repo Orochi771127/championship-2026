@@ -34,7 +34,10 @@ import { RELAY_MAP_IDS } from '../modes/dataArena/dataArenaRelayMaps.js';
 import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, RELAY_LOADOUTS, relayKit, relayMove, relayEffectStyle } from '../modes/dataArena/dataArenaRelay.js';
 import { relayOwnMoveInfo, relayBasicRecord } from '../modes/dataArena/dataArenaRelayKits.js';
 import { battleMoveName } from '../text/battleMoveNames.js';
-import { RELAY_ELEMENT_STRONG, relayElementWeakTo } from '../modes/dataArena/dataArenaRelayElements.js';
+import { speciesTaxonomyForId, elementMatchup, factionResonance } from '../contracts/speciesTaxonomy.js';
+import { taxonomyText } from '../text/taxonomyText.js';
+import { taxonomyBadgeRow, resonanceStrip } from '../presentation/taxonomyBadgeArt.js';
+import { elementChartButton } from './elementChartModal.js';
 
 const STEP_MS = DATA_ARENA_STEP_SECONDS * 1000;
 const MOVE_KEYS = Object.freeze({ KeyW: [0, -1], ArrowUp: [0, -1], KeyS: [0, 1], ArrowDown: [0, 1], KeyA: [-1, 0], ArrowLeft: [-1, 0], KeyD: [1, 0], ArrowRight: [1, 0] });
@@ -400,9 +403,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     hudRefs.ride = el("div", "da-chip da-chip--harbor", t("hud.ride"));
     hudRefs.switch = button('da-relay-switch', t('relay.switch'), () => { if (root.dataset.state === 'PLAY') latch.switchPartner = true; }, signal);
     hudRefs.team = el('div', 'da-relay-team');
+    // The faction resonance this relay pair carries into the fight.
+    const resonance = sim?.getState().relay?.resonance ?? [];
+    if (resonance.length) { hudRefs.resonance = resonanceStrip(resonance, {hint: false}); hudRefs.resonance.classList.add('da-hud__resonance'); }
     hudRefs.teamRows = [el('div'), el('div')];
     hudRefs.team.append(...hudRefs.teamRows);
     left.appendChild(hudRefs.team);
+    // Floats on the field's left edge below the rival banner, which spans the top bar's width.
+    if (hudRefs.resonance) hud.appendChild(hudRefs.resonance);
     bottom.append(hudRefs.switch, gauges, kit, hudRefs.dash, hudRefs.surge, hudRefs.ride);
     hudRefs.banner = el("div", "da-banner");
     hudRefs.banner.hidden = true;
@@ -920,14 +928,17 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         pick('relay.first',partnerId,choices,id=>{partnerId=id;});
         pick('relay.reserve',team[1],choices.filter(p=>p.id!==partnerId),id=>{relayReserveId=id;});
         pick('relay.map',relayArenaId,RELAY_MAP_IDS.map((id,i)=>({id,name:t('relay.map.'+(i+1))})),id=>{relayArenaId=id;});
+        // Faction resonance the chosen pair lights before the match starts.
+        relayOptions.append(resonanceStrip(factionResonance(relayTeamIds(partnerId,relayReserveId).map(id=>speciesTaxonomyForId(relayPartner(id).speciesId)?.faction))));
         relayOptions.append(el('p','da-note',t('relay.portrait')),el('p','da-note',t(team.every(id=>relayPartner(id).motionStatus==='REVIEWED_EXISTING_CLIPS')?'relay.motionReviewed':'relay.motionPending')));
         kitPreview.appendChild(el('p','da-note',t('relay.loadout')));
         for(const id of relayTeamIds(partnerId,relayReserveId)) {
           const member=cast.partners.find(p=>p.partnerId===id), selected=relayKit(id,relayLoadouts[id]);
           const group=el('fieldset','da-loadout');group.append(el('legend','',member.name));
-          // Stage four: the partner's place on the element wheel.
-          const element=partnerElement(id),names=list=>list.length?list.map(e=>t(`relay.element.${e}`)).join('、'):t('relay.element.none');
-          group.append(el('p','da-note da-matchup',t('relay.matchup',{element:t(`relay.element.${element}`),strong:names(RELAY_ELEMENT_STRONG[element]??[]),weak:names(relayElementWeakTo(element))})));
+          // Owner 2026-10-29: faction, race and element emblems, the dual-ring matchup and the chart.
+          const taxonomy=speciesTaxonomyForId(relayPartner(id).speciesId),matchup=taxonomy?elementMatchup(taxonomy.element):null;
+          const tags=el('div','da-taxonomy');tags.append(taxonomyBadgeRow(taxonomy),elementChartButton(taxonomy?.element??null));group.append(tags);
+          if(matchup)group.append(el('p','da-note da-matchup',taxonomyText('chart.focus',{element:taxonomyText(`element.${taxonomy.element}`),beats:taxonomyText(`element.${matchup.beats}`),beatenBy:taxonomyText(`element.${matchup.beatenBy}`)})));
           for(let slot=0;slot<3;slot++) {
             const label=el('label','',`${slot+2} `),select=el('select','da-loadout__select');select.setAttribute('aria-label',`${member.name} ${t('kit.heading')} ${slot+2}`);
             select.dataset.partner=id;select.dataset.slot=String(slot);

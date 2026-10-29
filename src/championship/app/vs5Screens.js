@@ -894,7 +894,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false) {
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
   if(![0,1].includes(localTeamIndex))throw new TypeError('The Battle field view requires a local team');
@@ -934,6 +934,8 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   const boardSide=(mine)=>{
     const side=element('div',`cm-vs5-vsboard__side cm-vs5-vsboard__side--${mine?'player':'opponent'}`);
     side.append(element('span','cm-vs5-vsboard__team',mine?'我方':'對手'));
+    // Faction resonance each side carries into the match (Owner 2026-10-29); the caller supplies the renderer.
+    const lit=resonance?.[mine?'player':'opponent']??[];if(lit.length&&resonance.render)side.append(resonance.render(lit));
     for(const c of frame.combatants.filter(c=>c.present!==false&&(c.team===localTeamIndex)===mine)){
       const member=element('div','cm-vs5-vsboard__member');
       member.append(element('strong','cm-vs5-vsboard__name',c.displayName??uiText(`SLOT ${c.slot+1}`),false),
@@ -972,6 +974,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   caption.append(element("span", "cm-vs5-evidence",
     VS5_EVIDENCE_LABELS[frame.rosterEvidence] ?? VS5_EVIDENCE_LABELS.PRODUCT_AUTHORED));
   clock.band.prepend(caption);
+  if(resonance?.player?.length&&resonance.render){const strip=resonance.render(resonance.player);strip.classList.add('cm-vs5-resonance');caption.append(strip);}
   const log = eventLogBand({ running: "對戰進行中" });
   const localOutcome=outcome=>localTeamIndex===0?outcome:{...outcome,
     verdict:outcome.verdict==='TEAM_ZERO_AHEAD'?'TEAM_ONE_AHEAD':outcome.verdict==='TEAM_ONE_AHEAD'?'TEAM_ZERO_AHEAD':outcome.verdict,

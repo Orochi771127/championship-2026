@@ -4,7 +4,7 @@ import {NATIVE_RAISING_LIFECYCLE_RULES as rules} from './nativeRaisingLifecycle.
 import {normalizeNativeIndividualProfile} from './nativeIndividualProfile.js';
 import {nativeHuntSpeciesByIndex} from '../hunt/capture/nativeHuntSources.js';
 const key=n=>n.toString(16).padStart(3,'0'),clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n|0))>>>0;
-export function applyNativeTrainingCommand(profile,{kind,delta,season,level=0,filter=-1},rng) {
+export function applyNativeTrainingCommand(profile,{kind,delta,season,level=0,filter=-1,growthPercent=100},rng) {
   if(!Number.isInteger(kind)||kind<0||kind>27)throw new TypeError('INVALID_NATIVE_TRAINING_COMMAND');
   const p=structuredClone(profile),f=p.fields,m=rules.trainingModifiers;
   if(season===1){delta+=m.summer[kind];if(kind<22&&delta===0)delta=-1;}
@@ -12,6 +12,8 @@ export function applyNativeTrainingCommand(profile,{kind,delta,season,level=0,fi
   if(level===1||level===2)delta=Math.imul(delta,m[`level${level}`][kind]);
   const spread=m.spread[kind],noise=Math.trunc((2*spread-1)*rng.next(0x96+kind)/102)-spread;
   if(noise&&(kind>=22||(delta+noise)!==0))delta=(delta+noise)|0;
+  // Race habitat (Owner 2026-10-29): stat gains (kinds 11-21) grow by growthPercent; points and losses stay original.
+  if(growthPercent!==100&&kind>=11&&kind<22&&delta>0)delta=Math.trunc(delta*growthPercent/100);
   let outcome='APPLIED';
   if(kind<11){const k=key(0x100+kind*4);f[k]=(f[k]+delta)>>>0;}
   else if(kind<22){
@@ -32,12 +34,12 @@ export function applyNativeCageEntryConditions(profile,{definition,season,level=
   let p=profile;for(const [kind,delta] of rules.cages[definition].commands)if(kind!==6)p=applyNativeTrainingCommand(p,{kind:22+kind,delta,season,level},rng).profile;
   return p;
 }
-export function enterNativeRaisingTraining(profile,{definition,season,level=0,stressed=false},rng){
+export function enterNativeRaisingTraining(profile,{definition,season,level=0,stressed=false,growthPercent=100},rng){
   let roll=rng.next(definition+3)%100,program=null;
   for(const candidate of rules.cages[definition].programs){if(roll<candidate.weight){program=candidate;break;}roll-=candidate.weight;}
   if(!program)return {profile,commands:null};
   let p=profile;const commands=[];
-  for(const [kind,delta] of program.commands){const result=applyNativeTrainingCommand(p,{kind,delta,season,level},rng);p=result.profile;commands.push({kind,delta:result.delta,outcome:result.outcome});}
+  for(const [kind,delta] of program.commands){const result=applyNativeTrainingCommand(p,{kind,delta,season,level,growthPercent},rng);p=result.profile;commands.push({kind,delta:result.delta,outcome:result.outcome});}
   p=applyNativeCageEntryConditions(p,{definition,season,level},rng);
   if(commands.length){p=structuredClone(p);if((p.fields['008']|0)<=0)p.fields['040']=Math.min(100,p.fields['040']+3);if(stressed)p.fields['040']=Math.min(100,p.fields['040']+3);p=normalizeNativeIndividualProfile(p);}
   return {profile:p,commands};
