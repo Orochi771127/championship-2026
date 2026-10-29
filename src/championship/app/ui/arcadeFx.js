@@ -13,7 +13,10 @@
 //
 // Screens ask for a result effect with one DOM event, so no game module imports this:
 //   target.dispatchEvent(new CustomEvent("cm-fx", { bubbles: true, detail: { kind, text } }))
-// kinds: purchase · denied · snap · unsnap · open · close · toggle · sparkle · levelup
+// kinds: purchase · denied · snap · unsnap · open · close · toggle · sparkle · levelup · shutter
+// Cyber Gachapon kinds (a real pull, smelt or item use behind each): gacha-crank (detail.ticks),
+// gacha-tumble · gacha-drop (detail.ticks) · gacha-rattle · gacha-crack (detail.rarity) ·
+// gacha-card (detail.rarity) · gacha-smelt · gacha-slot · gacha-use
 
 const INK = "#14141f";
 
@@ -56,6 +59,23 @@ export class ArcadeSound {
     osc.connect(g).connect(o.destination);
     osc.start(t);
     osc.stop(t + dur + 0.03);
+  }
+  /** A tone through a low-pass filter with a soft attack and an exponential tail (no raw square buzz). */
+  softTone(o, { type = "triangle", f0, f1 = f0, dur, gain = 0.15, delay = 0, attack = 0.015, cutoff = 2400, q = 0.7 }) {
+    const ctx = o.context, t = ctx.currentTime + delay;
+    const osc = ctx.createOscillator(), filter = ctx.createBiquadFilter(), g = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(f0, t);
+    if (f1 !== f0) osc.frequency.exponentialRampToValueAtTime(Math.max(1, f1), t + attack + dur);
+    filter.type = "lowpass";
+    filter.Q.value = q;
+    filter.frequency.setValueAtTime(cutoff, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(gain, t + attack);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + attack + dur);
+    osc.connect(filter).connect(g).connect(o.destination);
+    osc.start(t);
+    osc.stop(t + attack + dur + 0.03);
   }
   noise(o, { dur, gain = 0.2, delay = 0, filter = "bandpass", f0 = 1200, f1 = f0, q = 1 }) {
     const ctx = o.context, t = ctx.currentTime + delay;
@@ -156,7 +176,82 @@ export const ARCADE_CUES = Object.freeze({
   denied: (s, o) => {
     s.tone(o, { type: "square", f0: 200, dur: 0.08, gain: 0.12 });
     s.tone(o, { type: "square", f0: 150, dur: 0.1, gain: 0.12, delay: 0.09 });
-  }
+  },
+  // Owner 2026-10-29: the brag card's camera shutter: a bright click, the
+  // mirror's slap and a short film-advance whirr.
+  shutter: (s, o) => {
+    s.noise(o, { dur: 0.025, gain: 0.32, filter: "highpass", f0: 4200 });
+    s.tone(o, { type: "square", f0: 1900, f1: 900, dur: 0.03, gain: 0.08 });
+    s.noise(o, { dur: 0.06, gain: 0.22, filter: "bandpass", f0: 1400, f1: 600, q: 1.8, delay: 0.045 });
+    s.tone(o, { type: "triangle", f0: 240, f1: 110, dur: 0.07, gain: 0.18, delay: 0.05 });
+    s.noise(o, { dur: 0.12, gain: 0.08, filter: "bandpass", f0: 2600, f1: 3400, q: 4, delay: 0.12 });
+  },
+  // Cyber Gachapon (Owner 2026-10-29): warm and mechanical. Every voice is band- or
+  // low-passed; there is no unfiltered square or saw anywhere in the machine.
+  // One 18 ms ratchet tooth: a woody band-passed knock with a tiny falling tick.
+  gachaRatchet: (s, o, delay = 0) => {
+    const pitch = 0.94 + Math.random() * 0.12;
+    s.noise(o, { dur: 0.018, gain: 0.34, filter: "bandpass", f0: 1050 * pitch, f1: 640 * pitch, q: 4.5, delay });
+    s.softTone(o, { type: "triangle", f0: 1180 * pitch, f1: 560 * pitch, dur: 0.018, gain: 0.07, attack: 0.001, cutoff: 3000, delay });
+  },
+  // Plastic shells knocking around the dome over the air jet's low rumble.
+  gachaTumble: (s, o) => {
+    s.noise(o, { dur: 0.62, gain: 0.07, filter: "lowpass", f0: 420, f1: 160 });
+    for (let i = 0; i < 9; i += 1) {
+      const pitch = 0.85 + Math.random() * 0.35;
+      s.softTone(o, { type: "triangle", f0: 280 * pitch, f1: 110 * pitch, dur: 0.065, gain: 0.07 + Math.random() * 0.06,
+        attack: 0.002, cutoff: 900, delay: 0.04 + i * 0.065 + Math.random() * 0.03 });
+    }
+  },
+  // The capsule landing in the tray: a round, damped thud.
+  gachaDrop: (s, o, { delay = 0, gain = 1 } = {}) => {
+    s.softTone(o, { type: "sine", f0: 190, f1: 70, dur: 0.12, gain: 0.32 * gain, attack: 0.002, cutoff: 700, delay });
+    s.softTone(o, { type: "triangle", f0: 300, f1: 120, dur: 0.065, gain: 0.12 * gain, attack: 0.002, cutoff: 1000, delay });
+    s.noise(o, { dur: 0.05, gain: 0.1 * gain, filter: "lowpass", f0: 600, f1: 200, delay });
+  },
+  gachaRattle: (s, o, count = 1) => {
+    for (let i = 0; i < 4 * count; i += 1) {
+      s.softTone(o, { type: "triangle", f0: 360 + (i % 2) * 60, f1: 180, dur: 0.05, gain: 0.07, attack: 0.002, cutoff: 1100, delay: i * 0.095 });
+    }
+  },
+  gachaCrack: (s, o) => {
+    s.noise(o, { dur: 0.03, gain: 0.3, filter: "highpass", f0: 2600 });
+    s.noise(o, { dur: 0.16, gain: 0.18, filter: "bandpass", f0: 2400, f1: 900, q: 1.2, delay: 0.01 });
+    s.softTone(o, { type: "sine", f0: 620, f1: 180, dur: 0.09, gain: 0.22, attack: 0.002, cutoff: 1800 });
+  },
+  // The reveal: a plucked major-seventh arpeggio (C5 E5 G5 B5 C6, 45 ms apart), 15 ms attack,
+  // 350 ms tail, low-passed at 2.4 kHz. Rarer capsules ring longer, add a sub boom and sparkle.
+  gachaReveal: (s, o, rarity = "R") => {
+    const rank = { R: 0, SR: 1, SSR: 2, UR: 3 }[rarity] ?? 0;
+    [523.25, 659.25, 783.99, 987.77, 1046.5].slice(0, 3 + Math.min(2, rank)).forEach((f, i) => {
+      s.softTone(o, { type: "triangle", f0: f, dur: 0.35 + rank * 0.08, gain: 0.11, attack: 0.015, cutoff: 2400, delay: 0.06 + i * 0.045 });
+      s.softTone(o, { type: "sine", f0: f / 2, dur: 0.3, gain: 0.05, attack: 0.015, cutoff: 1200, delay: 0.06 + i * 0.045 });
+    });
+    if (rank >= 2) {
+      s.softTone(o, { type: "sine", f0: 110, f1: 55, dur: 0.5, gain: 0.3, attack: 0.01, cutoff: 600 });
+      [1318.5, 1568, 2093].forEach((f, i) => s.softTone(o, { type: "sine", f0: f, dur: 0.4, gain: 0.04, attack: 0.02, cutoff: 3200, delay: 0.32 + i * 0.06 }));
+    }
+    if (rank >= 3) [2637, 3136].forEach((f, i) => s.softTone(o, { type: "sine", f0: f, dur: 0.6, gain: 0.03, attack: 0.03, cutoff: 3600, delay: 0.5 + i * 0.07 }));
+  },
+  // A card slapping onto the table; SSR and UR add a bright chime.
+  gachaCard: (s, o, rarity = "R") => {
+    s.noise(o, { dur: 0.04, gain: 0.12, filter: "lowpass", f0: 900, f1: 300 });
+    s.softTone(o, { type: "sine", f0: 230, f1: 120, dur: 0.05, gain: 0.12, attack: 0.002, cutoff: 900 });
+    if (rarity === "SSR" || rarity === "UR") {
+      [1568, 2093].forEach((f, i) => s.softTone(o, { type: "triangle", f0: f, dur: 0.28, gain: 0.06, attack: 0.008, cutoff: 3000, delay: i * 0.04 }));
+    }
+  },
+  // The furnace: a low whoomph that opens up as the chips melt.
+  gachaSmelt: (s, o) => {
+    s.noise(o, { dur: 0.6, gain: 0.16, filter: "lowpass", f0: 220, f1: 1400 });
+    s.softTone(o, { type: "sine", f0: 70, f1: 110, dur: 0.55, gain: 0.26, attack: 0.04, cutoff: 500 });
+  },
+  gachaSlot: (s, o) => {
+    s.softTone(o, { type: "triangle", f0: 520, f1: 360, dur: 0.04, gain: 0.14, attack: 0.002, cutoff: 1600 });
+    s.noise(o, { dur: 0.02, gain: 0.12, filter: "bandpass", f0: 1500, q: 3 });
+  },
+  gachaUse: (s, o) => [659.25, 783.99, 1046.5].forEach((f, i) =>
+    s.softTone(o, { type: "triangle", f0: f, dur: 0.3, gain: 0.1, attack: 0.012, cutoff: 2400, delay: i * 0.05 }))
 });
 
 // ---------------------------------------------------------------- what each press sounds like
@@ -413,12 +508,28 @@ export function installArcadeFx({ doc = globalThis.document, view = globalThis, 
         // The struck side's plate gives a small jolt (Owner 2026-10-28).
         juice.shake(event.target?.closest?.(".cm-vs5-fighter") ?? event.target, 3, 200);
         break;
+      // The brag card's photo (Owner 2026-10-29); the flash itself is the card module's.
+      case "shutter": sound.play("shutter"); break;
       case "open": sound.play("whoosh"); break;
       case "close": sound.play("back"); break;
       case "toggle": sound.play("toggle", true); break;
       case "sparkle":
         sound.play("sparkle");
         juice.burst(at.x, at.y, { count: 8, colors: ["#ffffff", "#7fe9ff", "#ffd23f"], shape: "star", gravity: 120 });
+        break;
+      // Cyber Gachapon: the machine's own filtered voices, timed by the view.
+      case "gacha-crank": for (const ms of event.detail?.ticks ?? []) sound.play("gachaRatchet", ms / 1000); break;
+      case "gacha-tumble": sound.play("gachaTumble"); break;
+      case "gacha-drop": (event.detail?.ticks ?? [0]).forEach((ms, i) => sound.play("gachaDrop", { delay: ms / 1000, gain: 1 / (1 + i * 0.8) })); break;
+      case "gacha-rattle": sound.play("gachaRattle", event.detail?.count ?? 1); break;
+      case "gacha-crack": sound.play("gachaCrack"); sound.play("gachaReveal", event.detail?.rarity); break;
+      case "gacha-card": sound.play("gachaCard", event.detail?.rarity); break;
+      case "gacha-smelt": sound.play("gachaSmelt"); break;
+      case "gacha-slot": sound.play("gachaSlot"); juice.jelly(event.target); break;
+      case "gacha-use":
+        sound.play("gachaUse");
+        juice.burst(at.x, at.y, { count: 12, colors: ["#2fd8ff", "#ffd23f", "#ffffff"], speed: [140, 300], shape: "star", gravity: 160 });
+        if (text) juice.floatText(at.x, at.y - 24, text, { kind: "heal" });
         break;
       case "levelup":
         sound.play("levelup");

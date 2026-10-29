@@ -22,12 +22,13 @@ const sampleState={time:0,hp:100,vx:0,vy:0,facing:1};
 const cast=(id,t,type='CAST',angle=0)=>({type,actionId:id,t,angle,moveId:'pulse',moveType:'PROJECTILE'});
 
 test('107 canonical growth/mature selections plus Owner-directed awakened pilots; excluded growth codes keep legal fallback',()=>{
- assert.equal(selection.characters.length,114);assert.equal(selection.errors.length,0);
+ // Owner 2026-10-29: MA28 keeps its original action art until dot's approved repair set (option B).
+ assert.equal(selection.characters.length,113);assert.equal(selection.errors.length,0);
  assert.equal(selection.characters.filter(c=>c.displayCode.startsWith('GR')).length,38);
- assert.equal(selection.characters.filter(c=>c.displayCode.startsWith('MA')).length,69);
+ assert.equal(selection.characters.filter(c=>c.displayCode.startsWith('MA')).length,68);
  assert.deepEqual(selection.characters.filter(c=>c.displayCode.startsWith('AW')).map(c=>c.displayCode),['AW29','AW25','AW28','AW32','AW26','AW27','AW31']);
- assert.deepEqual(selection.excluded,['GR04','GR13','GR32']);
- assert.equal(new Set(selection.characters.map(c=>c.speciesId)).size,114);
+ assert.deepEqual(selection.excluded,['GR04','GR13','GR32','MA28']);
+ assert.equal(new Set(selection.characters.map(c=>c.speciesId)).size,113);
  for(const entry of selection.characters){assert.ok(!selection.excluded.includes(entry.displayCode));
   assert.equal(read(entry.displayCode).speciesId,entry.speciesId);}
 });
@@ -105,9 +106,9 @@ test('actions listed as nativeFallback keep the original route: no clip, no alia
  }
 });
 
-test('Owner 2026-10-28 replacement: 103 fully covered roles retire the original atlas; KO without approval holds the hurt key',async()=>{
+test('Owner 2026-10-28 replacement: 102 fully covered roles retire the original atlas; KO without approval holds the hurt key',async()=>{
  const flagged=selection.characters.filter(c=>c.replacesOriginal===true).map(c=>c.displayCode);
- assert.equal(flagged.length,103);
+ assert.equal(flagged.length,102);
  for(const code of ['GR01','MA33','MA34','GR39','MA65'])assert.ok(!flagged.includes(code),code);
  for(const code of flagged){const d=read(code);assert.equal(d.nativeFallback,undefined,code);
   for(const [side,n] of [['main',40],['sub',13]])for(let id=0;id<n;id++)assert.ok(reviewedNumericClip(d,side,id),code+' '+side+id);}
@@ -347,13 +348,15 @@ const rootApprovalFile=path.join(root,'tests/fixtures/reviewed107-root-art-appro
 const rootCandidateFile=provenance('tests/fixtures/reviewed107-root-candidate-map.v1.json');
 const rootApproval=JSON.parse(fs.readFileSync(rootApprovalFile,'utf8'));
 const rootCandidate=JSON.parse(fs.readFileSync(rootCandidateFile,'utf8'));
-test('pinned root approval consumes precisely the 76 authorized context holds, preserving original clip/frame/source identity and geometry',()=>{
+test('pinned root approval consumes precisely the 73 authorized context holds of selected roles, preserving original clip/frame/source identity and geometry',()=>{
  assert.equal(createHash('sha256').update(fs.readFileSync(rootApprovalFile)).digest('hex'),'98dd5a0ab968b2c0e1a374a84f5b97486486b3d4b0514d5178e7f17f2ca36d16');
  assert.equal(createHash('sha256').update(fs.readFileSync(rootCandidateFile)).digest('hex'),rootApproval.sourceCandidateMapSha256);
  assert.equal(rootApproval.sourceDecisionListSha256,'c4460e99366cc8fb6709b5f5994e5d41c9dd8a021dfbe5d1f71e1dd3843347ea');
  let contexts=0;const codes=new Set();
  for(const approval of rootApproval.approvals){
-  const code=approval.decisionId.split(':')[0],d=read(code),expected=approval.exactAssetIdOrFrameIndex.assetId;
+  // MA28's three contexts belong to its reviewed set, which left the selection (Owner 2026-10-29).
+  const code=approval.decisionId.split(':')[0];if(selection.excluded.includes(code))continue;
+  const d=read(code),expected=approval.exactAssetIdOrFrameIndex.assetId;
   const targets=approval.permittedContextMain15Main25Sub5ArenaOrMainFlip.flatMap(c=>c==='Main15'?[['main',15]]:c.startsWith('Sub5_')?[['sub',5]]:c==='Main25_BOUND_ONLY'?[['main',25]]:c==='Main1_weak_idle'?[['main',1]]:[]);
   assert.ok(targets.length);codes.add(code);
   for(const [side,id] of targets){
@@ -369,7 +372,7 @@ test('pinned root approval consumes precisely the 76 authorized context holds, p
    assert.equal(b.clip.source.ArenaKoApproved,false);assert.equal(b.clip.source.MainFlipApproved,false);contexts++;
   }
  }
- assert.equal(contexts,76);assert.equal(codes.size,25);assert.ok(!codes.has('MA31'));
+ assert.equal(contexts,73);assert.equal(codes.size,24);assert.ok(!codes.has('MA31'));
  for(const code of codes){
   const d=read(code),oldPath=provenance(d.rootArtContextApproval.previousManifestPath),old=JSON.parse(fs.readFileSync(oldPath,'utf8'));
   assert.equal(createHash('sha256').update(fs.readFileSync(oldPath)).digest('hex'),d.rootArtContextApproval.previousManifestSha256);
@@ -431,7 +434,7 @@ test('GR01 inventory resolves the reviewed numeric Main15 contract even with nul
  assert.equal(reviewedArenaKoClip(d).frames[0].assetId,'GR01_MAIN_pose_023');
 });
 
-test('all 99 registered actors consume separately approved static Arena KO; eight unregistered identities stay blocked',async()=>{
+test('all 98 registered GR/MA actors consume separately approved static Arena KO; eight unregistered identities stay blocked',async()=>{
  let count=0;
  for(const entry of selection.characters){
   const d=read(entry.displayCode),ko=reviewedArenaKoClip(d);
@@ -453,7 +456,7 @@ test('all 99 registered actors consume separately approved static Arena KO; eigh
   assert.equal(actor.reviewedArena.sample({...sampleState,time:5e6+1,hp:100,vx:40}).action,'move');
   await bundle.dispose();assert.equal(mock.loads.length,mock.unloads.length);if(!entry.displayCode.startsWith('AW'))count++;
  }
- assert.equal(count,99);
+ assert.equal(count,98);
  assert.deepEqual(selection.characters.filter(e=>e.displayCode.startsWith('AW')&&reviewedArenaKoClip(read(e.displayCode))).map(e=>e.displayCode),['AW29','AW32','AW26']);
 });
 
@@ -578,7 +581,7 @@ test('Main15 final-pose policy is limited to three approved identities; other104
 test('generalMirror roles load General frames mirrored about the pivot; Arena loads and other roles stay as stored',async()=>{
  // By-eye review 2026-10-29 (audit batch6/facing): these General sets are drawn facing away from the native cells.
  const flagged=selection.characters.filter(c=>c.generalMirror===true).map(c=>c.displayCode).sort();
- assert.deepEqual(flagged,['GR23','MA03','MA04','MA05','MA11','MA12','MA18','MA28','MA33','MA42','MA58','MA59','MA60']);
+ assert.deepEqual(flagged,['GR23','MA03','MA04','MA05','MA11','MA12','MA18','MA33','MA42','MA58','MA59','MA60']);
  for(const code of [...flagged,'GR10','MA16']){
   const entry=selection.characters.find(c=>c.displayCode===code),d=read(code),mirrored=entry.generalMirror===true;
   for(const usage of ['general','arena']){

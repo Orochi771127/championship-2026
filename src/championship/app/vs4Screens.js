@@ -5,7 +5,7 @@ import { ranchEcologyType } from '../cage/ranchEcology.js';
 import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
 import { productPlacementCells, productGridSlot } from '../cage/productRanchGrid.js';
 import { PRODUCT_RANCH_GRID } from '../cage/productRanchGrid.js';
-import {databaseHeroPortrait} from '../presentation/databaseHeroPortraits.js';
+import {databaseHeroPortrait, databaseHeroSilhouette} from '../presentation/databaseHeroPortraits.js';
 import {databaseStory, databaseStoryHeading, databaseVerifiedData, databaseVerifiedHeading} from '../database/databaseStories.js';
 import {originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
 import { speciesName, generationName, shopItemDescription as shopDescriptionText, shopItemName } from "../text/zhHant.js";
@@ -35,6 +35,8 @@ import { getHuntCatalogItem } from '../hunt/loadout/huntEquipmentCatalog.js';
 import { showChoiceDialog } from './uiDialog.js';
 import { prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { isDesktopBrowseLayout } from './portraitFrame.js';
+import { createCyberGachaPanel } from './cyberGachaView.js';
+import { gachaIcon, paintGachaTicketBadge } from './cyberGachaIcons.js';
 
 const CATEGORY_LABELS = Object.freeze({
   TRAINING_GOODS: "養成用品",
@@ -202,8 +204,15 @@ export function createShopView({ root, source }) {
   const selectedByCategory = new Map();
   const tabButtons = new Map();
 
+  // OWNER_APPROVED_ADAPTATION 2026-10-29: with the app's gacha frame, the
+  // third tab (still data-category PLUGINS) is the Cyber Gachapon centre.
+  const gachaEnabled = Boolean(block.gacha);
+  let gachaPanel = null;
+  if (gachaEnabled) tabs.dataset.gacha = "true";
   for (const category of categories) {
-    const tab = element("button", "cm-vs2-shop__tab", CATEGORY_LABELS[category]);
+    const gachaTab = gachaEnabled && category === "PLUGINS";
+    const tab = element("button", "cm-vs2-shop__tab", gachaTab ? undefined : CATEGORY_LABELS[category]);
+    if (gachaTab) tab.append(gachaIcon("machine", "cm-gacha-tab-icon"), element("span", "cm-gacha-tab-label", "轉蛋"));
     tab.type = "button";
     tab.dataset.category = category;
     tab.setAttribute("role", "tab");
@@ -338,6 +347,25 @@ export function createShopView({ root, source }) {
       tab.dataset.active = category === activeCategory ? "true" : "false";
       tab.setAttribute("aria-selected", category === activeCategory ? "true" : "false");
     }
+    const gachaActive = gachaEnabled && activeCategory === "PLUGINS" && shop.gacha;
+    if (gachaEnabled) {
+      const gachaTab = tabButtons.get("PLUGINS"), tickets = shop.gacha?.tickets ?? 0;
+      gachaTab.dataset.gachaTickets = String(tickets);
+      let badge = gachaTab.querySelector(".cm-gacha-dock-badge");
+      if (!badge) { badge = element("span", "cm-gacha-dock-badge"); badge.setAttribute("aria-hidden", "true"); gachaTab.append(badge); }
+      paintGachaTicketBadge(badge, tickets);
+      shelf.hidden = Boolean(gachaActive);
+      status.hidden = Boolean(gachaActive);
+      root.dataset.gacha = gachaActive ? "open" : "closed";
+      if (gachaActive) {
+        gachaPanel ??= createCyberGachaPanel({ host: body, intents: source.intents });
+        gachaPanel.root.hidden = false;
+        gachaPanel.update(shop.gacha);
+        selectedRow = null;
+        return;
+      }
+      if (gachaPanel) gachaPanel.root.hidden = true;
+    }
 
     const rows = shop.listings.filter((row) => row.category === activeCategory);
     const restoreCardFocus = list.contains(document.activeElement);
@@ -433,6 +461,7 @@ export function createShopView({ root, source }) {
     render: paint,
     dispose() {
       stopBackKeys();
+      gachaPanel?.dispose();
       root.removeEventListener("keydown", onSheetKey, true);
       delete root.dataset.sheet;
       root.replaceChildren();
@@ -840,6 +869,13 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       image.hidden = true;
       image.alt = ''; image.decoding = 'async';
       image.width = hero.width; image.height = hero.height;
+      // The stage fits the drawn silhouette, so partners read at one size (vs2Styles.css).
+      const silhouette = databaseHeroSilhouette(hero);
+      if (silhouette) {
+        holder.dataset.fit = 'silhouette';
+        for (const [name, value] of [['--iw', hero.width], ['--ih', hero.height], ['--bx', silhouette[0]],
+          ['--by', silhouette[1]], ['--bw', silhouette[2]], ['--bh', silhouette[3]]]) image.style.setProperty(name, String(value));
+      }
       const generation = detailGeneration;
       const current = () => alive && generation === detailGeneration;
       image.onload = () => {

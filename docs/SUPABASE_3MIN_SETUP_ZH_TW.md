@@ -1,5 +1,7 @@
 # Supabase 三分鐘開通指南（遊客／帳號、雲端備份、好友、連線對戰）
 
+> **2026-10-29 更新**：Google／Facebook／Discord 綁定、首次綁定禮包、6 碼引繼碼、社群連結與炫耀名片的完整步驟，請看新版 [`SOCIAL_AND_MULTIPLAYER_SETUP_ZH_TW.md`](SOCIAL_AND_MULTIPLAYER_SETUP_ZH_TW.md)。本頁保留給只想開通雲端備份的人。
+>
 > 對象：不熟後端的 Owner。照著做，不需要寫任何程式。
 > 遊戲永遠「離線優先」：這份設定沒填之前、或玩家斷網時，所有線上面板都以 **本地模擬模式** 運作，遊戲本體與存檔完全不受影響。
 
@@ -13,6 +15,7 @@
   "supabaseUrl": "",          ← 第 3 行：貼 Project URL（https://xxxxxxxxxxxxxxxxxxxx.supabase.co）
   "supabaseAnonKey": "",      ← 第 4 行：貼 publishable key（sb_publishable_…）或舊版 anon key（eyJ…）
   "googleSignIn": false,
+  "oauthProviders": [],       ← 第 6 行：開啟的登入方式，例如 ["google", "facebook", "discord"]
   "roomCodeLength": 4
 }
 ```
@@ -33,13 +36,13 @@
 2. 把整份 [`supabase/migrations/001_championship_online.sql`](../supabase/migrations/001_championship_online.sql) 複製貼上 → **Run**。
 3. 看到 `Success. No rows returned` 就完成。可以重複執行，不會壞。
 
-它建立了 4 張表（`tamer_profiles`、`tamer_cloud_saves`、`friendships`、`pvp_matches`）、每張表的 RLS 安全鎖（只有本人能改自己的列），以及遊戲會呼叫的 RPC 函式。
+它建立了 5 張表（`tamer_profiles`、`tamer_cloud_saves`、`friendships`、`pvp_matches`、首次綁定帳本 `bind_reward_claims`）、每張表的 RLS 安全鎖（只有本人能改自己的列），以及遊戲會呼叫的 RPC 函式。
 
 ### 3. 開啟登入方式（約 30 秒）
 左側 **Authentication → Sign In / Providers**：
 - **Anonymous sign-ins**：開啟（遊客通行證需要）。
 - **Email**：開啟。建議同時開 **Confirm email**。遊戲用「6 位數驗證碼」綁定 Email，不需要密碼。
-- **Google**（選用）：需要先在 Google Cloud 建 OAuth client；沒做就把 json 的 `googleSignIn` 留 `false`，按鈕會自動隱藏。
+- **Google／Facebook／Discord**（選用）：需要先在各自的開發者網站建 OAuth client（步驟見新版指南）；開好之後把名稱列進 json 第 6 行 `oauthProviders`，沒列到的按鈕會提示「尚未開通」。
 - **Allow manual linking**（在 Authentication → Settings 底下）：開啟，遊客才能「無痛升級」成正式帳號而不洗掉進度。
 
 建議（防濫用）：Authentication → **Attack Protection** 開啟 Captcha（Turnstile）後，遊戲會在 json 多一個 `captcha` 欄位時使用；沒開也能玩。
@@ -57,7 +60,7 @@
 ### 6. 驗證
 1. 本機開遊戲 → 選單 → **☁️ 帳號與雲端同步**：應顯示「🟢 遊客通行證（ID: TM-XXXX-XXXX）· 雲端已連線」。
 2. 按 **立即雲端備份**：Supabase → Table Editor → `tamer_cloud_saves` 會多一列。
-3. 第二支手機／瀏覽器：**跨裝置引繼碼** 貼上第一台產生的 8 碼，存檔就複製過去。
+3. 第二支手機／瀏覽器：**輸入引繼碼** 貼上第一台產生的 6 碼（15 分鐘內、一次有效），兩邊進度不同時會先跳出並排卡片讓你選。
 4. **👥 好友**：互相輸入 TM 碼 → 對方在申請列表按接受 → 卡片右側出現 **⚔️ 友誼切磋**。
 5. **對戰 → 密碼對戰**：一台「建立房間」拿到 4 位房號，另一台「輸入房號加入」，倒數後兩邊各自開打同一場。
 

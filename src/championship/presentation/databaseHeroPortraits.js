@@ -1,4 +1,5 @@
 import manifest from '../../data/championship/database-hero-portraits.public.v1.json' with {type:'json'};
+import silhouettes from '../../data/championship/database-hero-silhouettes.v1.json' with {type:'json'};
 import {deepFreeze} from '../contracts/championshipContracts.js';
 import {publicRuntimeAsset} from './publicRuntimeAssets.js';
 import {getDatabaseIllustration} from '../database/databaseIllustrations.js';
@@ -21,4 +22,12 @@ const entries = new Map(mappedEntries.map(entry=>{
 }));
 export function databaseHeroPortrait(speciesIndex) {
   return Number.isSafeInteger(speciesIndex) ? entries.get(speciesIndex) ?? null : null;
+}
+// Drawn silhouette [x, y, w, h] of each published image (alpha > 32, measured by
+// scripts/measure-dex-hero-silhouettes.py) and keyed by its bytes. The Dex detail fits this
+// box rather than the canvas, whose aspect and transparent margin differ between batches.
+const silhouetteBoxes = new Map(silhouettes.entries.map(row=>[row.sha256,Object.freeze([...row.box])]));
+export function databaseHeroSilhouette(hero) {
+  const box = hero ? silhouetteBoxes.get(hero.sha256) : null;
+  return box && box[0]>=0 && box[1]>=0 && box[2]>0 && box[3]>0 && box[0]+box[2]<=hero.width && box[1]+box[3]<=hero.height ? box : null;
 }

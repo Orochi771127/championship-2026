@@ -95,6 +95,7 @@ import { STORY_CHAPTER_OPEN_EVENT, STORY_FIRST_CHAPTER_ID } from './ranchStoryBa
 import { createHybridStoryDirector } from '../presentation/story/HybridStoryDirector.js';
 import { createStoryStagePuppeteer } from '../presentation/story/storyStagePuppeteer.js';
 import { createPortraitVnOverlay } from '../presentation/story/portraitVnOverlay.js';
+import { createStoryChapterMap } from './storyChapterMap.js';
 import { mountAmbience } from './ui/ambienceLayer.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, createAssetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
@@ -104,7 +105,7 @@ import { createHighlightSequence } from '../presentation/highlight/createHighlig
 import { configureCeremonyAudio, playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
 import { createSkillCutInLayer } from '../presentation/juicy/skillCutIn.js';
 import { juicyPortrait, juicyPresentationEnabled } from '../presentation/juicy/juicyArt.js';
-import { installArcadeFx } from './ui/arcadeFx.js';
+import { installArcadeFx, requestArcadeFx } from './ui/arcadeFx.js';
 import { installTitleParade } from './titleParade.js';
 import { buildMedal, buildVersus } from '../presentation/ceremony/ceremonyScenes.js';
 import { createHighlightAudio } from '../presentation/highlight/highlightAudio.js';
@@ -126,10 +127,20 @@ import {
 // local simulation until a Supabase project is configured.
 import { createChampionshipCloudService } from '../online/championshipCloudService.js';
 import { resolveOnlineServiceConfig } from '../online/onlineServiceConfig.js';
-import { createOnlineAccountPanel } from './onlineAccountPanel.js';
+import { createOnlineAccountPanel, createPassportStrip, bindProviderFlow } from './onlineAccountPanel.js';
 import { createFriendsDrawer } from './friendsDrawer.js';
 import { mountRoomLobby, mountQuickMatchLobby } from './onlineBattleLobby.js';
 import { createAuthAndCloudSyncPort, createSocialFriendPort } from './futureSystemsPort.js';
+// Social (Owner 2026-10-29): community dock, first-bind gift, brag card.
+import { createSocialLinkDock } from './socialLinkDock.js';
+import { showBindRewardPopup } from './bindRewardPopup.js';
+import { openBragCardPreview, publicPlayUrl } from './bragCardPreview.js';
+import { sha256Hex } from '../online/cloudSaveEnvelope.js';
+import { onlineText, onlineReasonText, ONLINE_PROVIDER_NAMES } from '../text/onlineText.js';
+import { socialText } from '../text/socialText.js';
+import { generationName } from '../text/zhHant.js';
+import { NATIVE_RAISING_LIFECYCLE_RULES } from '../raising/nativeRaisingLifecycle.js';
+import { tamerCompletionPercent } from './tamerInfoScreen.js';
 import { createPreferenceStore } from './settings/preferenceStore.js';
 import { consumeRaisingHintDuration } from './transientHint.js';
 import { createPreferenceEnvironment } from './settings/preferenceEnvironment.js';
@@ -144,6 +155,7 @@ import { cappedPixelRatio, currentQuality, currentQualityTier, highlightMode, pr
 import { resultHeroAnchor, resultStageLight } from '../presentation/battleResultCharacters.js';
 import { formatDateTime, formatList, onLocaleChange, getLocale } from '../text/locale.js';
 import { retranslate, setLabel, setText, uiText } from '../text/uiText.js';
+import { paintGachaTicketBadge } from './cyberGachaIcons.js';
 
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
 // fetched the first time that view asks for one. The wrappers keep the same
@@ -189,7 +201,8 @@ const BATTLE_AI_POLICY =
   new URLSearchParams(globalThis.location?.search ?? "").get("battleAi") === "original" ? "ORIGINAL" : "IMPROVED_V1";
 const loadBattleRuntime = async () => {
   const create = (await import("./battleRuntime.js")).createBattleRuntime;
-  return options => create({ aiPolicy: BATTLE_AI_POLICY, ...options });
+  // Cyber Gachapon: an owned partner's metal bloodline badge rides its battle plate.
+  return options => create({ aiPolicy: BATTLE_AI_POLICY, getBloodline: id => app?.getPartnerBloodline?.(id) ?? null, ...options });
 };
 
 // Screen modules and art load through their existing foreground owners.
@@ -830,7 +843,8 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
           import('../presentation/ranchThreeScene.js'),import('../presentation/ranchThreeCoordinates.js')]);
         const field=ranchThreeField(manifest,plan,{pitch:RANCH_VIEW_PITCH});
         const threeScene=await createRanchThreeScene({stage,placements:plan.placements,field,signal,
-          connections:app.getRanchExplorationFrame()?.connections??null,cagePlacements:cageFrame?.placements??[]});
+          connections:app.getRanchExplorationFrame()?.connections??null,cagePlacements:cageFrame?.placements??[],
+          getBloodline:id=>app.getPartnerBloodline?.(id)??null});
         const displayObject=new PIXI.Container({label:'3D ranch metadata bridge'});
         return {assetId:'art:cage:three-20261021',field,displayObject,threeScene,update(){},
           getDiagnostics:()=>({assetId:'art:cage:three-20261021',three:threeScene.getDiagnostics()}),
@@ -1866,6 +1880,9 @@ async function mountBattleResult() {
     return box && heroSlots.length ? resultHeroAnchor({ width: box.width, height: box.height, slots: heroSlots, layout: resultLayout }) : null;
   };
   const {createBattleResultView} = await import('./vs5Screens.js');
+  const matchTitle = chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
+    :chosen?.championship?uiText('{event} 第 {round} 戰',{event:uiText(chosen.recordIndex===0?'冠軍大會':'世界大會'),round:chosen.cursor+1})
+    :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null;
   const resultView=createBattleResultView({
     ceremonies: battleCeremonies,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
@@ -1878,9 +1895,7 @@ async function mountBattleResult() {
     // waits for portraits. The DOM result and its skip/exit controls do not.
     highlight: (request) => playResultHighlight(request,
       () => Promise.all([stageReady,hudReady]).then(([stage])=>stage), heroAnchor),
-    matchTitle: chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
-      :chosen?.championship?uiText('{event} 第 {round} 戰',{event:uiText(chosen.recordIndex===0?'冠軍大會':'世界大會'),round:chosen.cursor+1})
-      :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null,
+    matchTitle,
     hudArt,
     // exitBattle returns to the tournament board while the run is still owed
     // a round; the verdict is already recorded when this result mounts.
@@ -1888,6 +1903,9 @@ async function mountBattleResult() {
     statistics:tutorial?null:{battles:record?.battles??null,winPercent:nativeBattleWinPercent(record),titleCount:app.getBattleBadges().length},
     unlocks:battleProgressBefore?app.getShopFrame().listings.filter(item=>!battleProgressBefore.shopIds.includes(item.shopRecordIndex)).map(item=>({name:uiText(item.displayName)})):[],
     progression,
+    // Owner 2026-10-29: 📸 brag card for a won battle, starring the winning partner.
+    brag: battleResultBrag({ participants, matchTitle }),
+    gachaDrop:tutorial?null:(drop=>drop&&receipt&&drop.attemptId===(receipt.attemptId??null)?drop:null)(app.getLastBattleGachaDrop?.()),
     onExit() {
       if(tutorial){app.endInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
       battleRuntime?.dispose();
@@ -2017,7 +2035,7 @@ async function mountCurrentScreen() {
     else if (target === CHAMPIONSHIP_SCREENS.TAMER_INFO) {
       // OVL4 0210BB9C reads rank capacity/slots and lifetime completion counters.
       const shopFrame = app.getShopFrame?.() ?? null;
-      view = createTamerInfoView({
+      const tamerView = createTamerInfoView({
         root,
         walletBits: Number.isInteger(shopFrame?.bits) ? shopFrame.bits : null,
         titleCount:app.getBattleBadges().filter(id=>id>=0&&id<61).length,
@@ -2025,10 +2043,13 @@ async function mountCurrentScreen() {
         battleRecord:app.getTitleProgress().record??null,
         tamerRank: app.getTamerRank?.() ?? null,
         trainerName:app.getOpeningState()?.trainerName??null,
-        tamerCard:futureSystems().social.getTamerCard({trainerName:app.getOpeningState()?.trainerName??''}),
+        // Owner 2026-10-29: once the passport is linked the licence no longer reads as a guest pass.
+        tamerCard:(card=>onlineService().state.identity?.isAnonymous===false?{...card,mode:'LINKED'}:card)(futureSystems().social.getTamerCard({trainerName:app.getOpeningState()?.trainerName??''})),
         renderOnline: renderTamerOnline,
         onExit() { app.leaveScreen(); }
       });
+      // The passport and dock subscribe to the cloud service; they leave with the screen.
+      view = Object.freeze({ ...tamerView, dispose() { disposeTamerOnline(); tamerView.dispose(); } });
     }
     else if (target === CHAMPIONSHIP_SCREENS.GATE_SELECT) view = await mountGateSelect();
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) view = await createHuntLoadoutView({ root, source: expeditionSource });
@@ -2129,6 +2150,7 @@ async function openGameplay() {
     }
   }
   unsubscribeScreen = app.subscribeScreen(() => {
+    if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) closeStoryMap();
     syncMusic(); refreshStatusBar(); refreshToolbarMode(); void refreshCalendarViews(); void mountCurrentScreen();
   });
   let calendarSession=null,stopCalendarSession=null;
@@ -2172,7 +2194,9 @@ async function openGameplay() {
       getFoodStock:()=>{const rows=app.getShopFrame()?.listings??[];return {
         feed:rows.find(r=>r.shopRecordIndex===0)?.owned,protein:rows.find(r=>r.shopRecordIndex===1)?.owned,
         medicine:rows.find(r=>r.shopRecordIndex===2)?.owned,woundMedicine:rows.find(r=>r.shopRecordIndex===3)?.owned};},
-      subscribeInventory:listener=>app.subscribeShop(listener)
+      subscribeInventory:listener=>app.subscribeShop(listener),
+      // Owner 2026-10-29: the System menu ends with the passport strip and the community dock.
+      menuExtras: systemMenuExtras
     });
   }
   listenPartnerFinds();
@@ -2181,6 +2205,10 @@ async function openGameplay() {
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("partnerLifeQa"))
     globalThis.__championshipPartnerLifeQa = { grant: (reward, partnerB = null) => app.grantStrollDiscoveryReward({ partnerId: app.getSelectedCreatureId(), reward, partnerB, quantity: partnerB ? 2 : 1 }),
       frame: () => app.getPartnerLifeFrame(), reading: () => app.getPartnerReading(app.getSelectedCreatureId()) };
+  // Loopback review only (?gachaQa): top up gacha tickets so the machine, the ten-pull
+  // stage and the synthesizer can be checked on an isolated QA save. Public hosts never bind it.
+  if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("gachaQa"))
+    globalThis.__championshipGachaQa = { grantTickets: (amount) => app.grantGachaTickets(amount, 'QA'), frame: () => app.getCyberGachaFrame() };
   refreshStatusBar();
   refreshToolbarMode();
 
@@ -2196,6 +2224,8 @@ async function openGameplay() {
   mountedScreen = null;
   await mountCurrentScreen();
   resumeTutorialPresentation();
+  // Back from Google / Facebook / Discord (cloud configured only): finish the link inside the open session.
+  takeOnlineAuthReturn();
 }
 
 /**
@@ -2226,7 +2256,7 @@ function runToolbarMenuEntry(entry,context={}) {
   // Owner 2026-10-27: the bag and the discovery journal, from the System menu.
   if (entry.action === "OPEN_BACKPACK") { void openRanchBackpack({ getShopFrame: () => app.getShopFrame() }); return; }
   if (entry.action === "OPEN_RANCH_JOURNAL") { document.dispatchEvent(new CustomEvent(RANCH_JOURNAL_OPEN_EVENT)); return; }
-  if (entry.action === "OPEN_STORY") { void playStoryChapter(STORY_FIRST_CHAPTER_ID, { source: 'menu' }); return; }
+  if (entry.action === "OPEN_STORY") { openStoryMap({ source: 'menu' }); return; }
   if (entry.action === "OPEN_FRIENDS") { ensureFriendsDrawer().open(); return; }
   if (entry.action === "OPEN_ACCOUNT") { openSettings(document.querySelector('.cm-toolbar__cell[data-menu-id="SYSTEM"]'), 'data'); return; }
   if (entry.action === "END_DAY") {
@@ -2359,6 +2389,7 @@ async function returnToTitle(source = 'save-and-quit') {
   sessionCheckpoint?.clear();
   systemBackgrounds.leave();
   console.info('CHAMPIONSHIP_TITLE_RETURN', { source, screen: app.getScreen(), stack: new Error().stack });
+  closeStoryMap();
   tutorialPreview?.dispose();tutorialPreview=null;
   unsubscribeTutorialTools?.();unsubscribeTutorialTools=null;toolbar?.setTutorialTool(null);
   clockDriver?.setActive(false);
@@ -2408,6 +2439,7 @@ function projectRoster() {
       displayName: raisingDisplayName({ displayName, speciesId, source }),
       instanceId,
       // The starter's name is set by the opening; collected ones can be renamed.
+      bloodline: app.getPartnerBloodline?.(instanceId) ?? null,
       renameable: source?.kind !== "STARTER"
         && Boolean(app.getRaisingState()?.collection?.some((entry) => entry.instanceId === instanceId)),
       stats: profile,
@@ -2425,6 +2457,16 @@ function projectRoster() {
 /** Repaint the four info_bar fields from the R2 snapshot and the current screen. */
 function refreshStatusBar() {
   settingsPanel?.refreshSaveStatus?.();
+  // Cyber Gachapon: unspent tickets glow on the Shop button (10 after the welcome grant).
+  try {
+    const tickets = String(app?.getGachaTickets?.() ?? 0);
+    for (const button of document.querySelectorAll('[data-quick-id="shop"], [data-entry-id="shop"]')) {
+      button.dataset.gachaTickets = tickets;
+      let badge = button.querySelector(':scope > .cm-gacha-dock-badge');
+      if (!badge) { badge = document.createElement('span'); badge.className = 'cm-gacha-dock-badge'; badge.setAttribute('aria-hidden', 'true'); button.append(badge); }
+      paintGachaTicketBadge(badge, tickets);
+    }
+  } catch { /* the badge is decoration only */ }
   if (!statusBar) return;
   const screen = app.getScreen();
   const snapshot = app.getSession()?.getRaisingHomeSnapshot?.() ?? null;
@@ -2492,32 +2534,48 @@ function installHomeEntries() {
 // ranch is not ready, the tutorial runs or a dialog is open.
 let storyRun = null;
 function speciesIndexOf(speciesId) { const match = /species-([0-9]{3})$/.exec(speciesId ?? ''); return match ? Number(match[1]) : null; }
+// Whether the ranch can hand its stage to a chapter right now; null when it can.
+function storyStageRefusal() {
+  const tutorial = app.getInteractiveTutorial();
+  if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME || mountedScreen !== app.getScreen() || !view?.storyStage || view?.isPlayable === false) return 'STAGE_NOT_READY';
+  if (tutorial && !tutorial.finished) return 'TUTORIAL_ACTIVE';
+  if (isChoiceDialogOpen() || app.hasRaisingPresentation()) return 'SCREEN_BUSY';
+  return null;
+}
+// The selected partner acts; otherwise the first hatched one (eggs are species 0-7 and cannot act).
+function storyPartner(frame) {
+  const resident = frame?.residents.find(r => r.creatureId === frame.selection?.creatureId)
+    ?? frame?.residents.find(r => (speciesIndexOf(r.speciesId) ?? 0) >= 8) ?? frame?.residents[0] ?? null;
+  if (!resident) return null;
+  const speciesIndex = speciesIndexOf(resident.speciesId);
+  return { resident, name: resident.displayName ?? (speciesIndex !== null ? speciesName(speciesIndex) : ''), portrait: speciesIndex !== null ? databaseHeroPortrait(speciesIndex) : null };
+}
 async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = 'menu' } = {}) {
   if (storyRun) return storyRun;
   const stageView = view?.storyStage ?? null;
-  const tutorial = app.getInteractiveTutorial();
-  if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME || mountedScreen !== app.getScreen() || !stageView || view?.isPlayable === false) return Object.freeze({ outcome: 'refused', reason: 'STAGE_NOT_READY', chapterId });
-  if (tutorial && !tutorial.finished) return Object.freeze({ outcome: 'refused', reason: 'TUTORIAL_ACTIVE', chapterId });
-  if (isChoiceDialogOpen() || app.hasRaisingPresentation()) return Object.freeze({ outcome: 'refused', reason: 'SCREEN_BUSY', chapterId });
-  const frame = stageView.getFrame();
-  // The selected partner acts; otherwise the first hatched one (eggs are species 0-7 and cannot act).
-  const resident = frame.residents.find(r => r.creatureId === frame.selection?.creatureId)
-    ?? frame.residents.find(r => (speciesIndexOf(r.speciesId) ?? 0) >= 8) ?? frame.residents[0];
-  if (!resident) return Object.freeze({ outcome: 'refused', reason: 'NO_PARTNER', chapterId });
+  const refusal = storyStageRefusal();
+  if (refusal) return Object.freeze({ outcome: 'refused', reason: refusal, chapterId });
+  const partner = storyPartner(stageView.getFrame());
+  if (!partner) return Object.freeze({ outcome: 'refused', reason: 'NO_PARTNER', chapterId });
+  const { resident } = partner;
   const reducedMotion = prefersReducedMotion(), quality = currentQualityTier();
   const overlay = createPortraitVnOverlay({ reducedMotion });
   const stage = createStoryStagePuppeteer({ host: stageView.host, field: stageView.field, partnerCreatureId: resident.creatureId, reducedMotion, quality });
   const director = createHybridStoryDirector({ stage, overlay, locale: getLocale(), reducedMotion });
-  const speciesIndex = speciesIndexOf(resident.speciesId);
-  const params = { tamer: app.getOpeningState()?.trainerName ?? '', partner: resident.displayName ?? (speciesIndex !== null ? speciesName(speciesIndex) : ''), partnerPortrait: speciesIndex !== null ? databaseHeroPortrait(speciesIndex) : null };
+  const params = { tamer: app.getOpeningState()?.trainerName ?? '', partner: partner.name, partnerPortrait: partner.portrait };
   recoveryDiagnostics.record('STORY', { chapterId, source, stage: 'start' });
   clockDriver?.setActive(false);
   root.dataset.storyPlaying = chapterId;
+  // Dedicated stage (Owner 2026-10-28): while a chapter plays, the ranch HUD --
+  // status bar, dock, menu, badges, hints -- steps away so nothing shows through
+  // the dialogue; the field stays as the stage under the rift's air.
+  document.body.dataset.storyStage = 'playing';
   storyRun = (async () => {
     try { return await director.play(chapterId, params); }
     finally {
       stage.dispose(); overlay.dispose();
       delete root.dataset.storyPlaying;
+      delete document.body.dataset.storyStage;
       clockDriver?.setActive(!root.hidden);
     }
   })();
@@ -2526,12 +2584,41 @@ async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = '
     if (result.outcome === 'completed' || result.outcome === 'skipped') {
       if (chapterId === STORY_FIRST_CHAPTER_ID) { try { settings.store.set('storyRiftChapter1Seen', true); } catch { /* read-only store */ } }
       document.querySelector('.int-rh2-story')?.setAttribute('data-new', 'false');
+      // Cyber Gachapon: a chapter sealed for the first time pays 3-5 tickets into the save.
+      if (result.outcome === 'completed') {
+        try {
+          const reward = app.claimGachaReward?.(`story:${chapterId}`, 3 + Math.floor(Math.random() * 3));
+          if (reward?.granted) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: uiText('轉蛋券 +{n}', { n: reward.granted }) } }));
+        } catch { /* a reward never breaks the story */ }
+      }
     }
     recoveryDiagnostics.record('STORY', { chapterId, source, stage: result.outcome });
     return result;
   } finally { storyRun = null; }
 }
-document.addEventListener(STORY_CHAPTER_OPEN_EVENT, event => { void playStoryChapter(event.detail?.chapterId ?? STORY_FIRST_CHAPTER_ID, { source: event.detail?.source ?? 'badge' }); });
+// The rift observation chart (Owner 2026-10-28): the badge and the System menu
+// open the chapter map; a chapter starts from its node and the chart returns
+// afterwards with the node's sigil lit. Refused while the ranch cannot lend its stage.
+let storyMap = null;
+function storyNodeSeen(node) {
+  if (node.seenWith === 'opening') return true;
+  return Boolean(node.seenKey) && settings.store.get()[node.seenKey] === true;
+}
+function openStoryMap({ chapterId = null, source = 'menu' } = {}) {
+  if (storyRun || storyMap?.isBusy) return false;
+  const refusal = storyStageRefusal();
+  if (refusal) { recoveryDiagnostics.record('STORY', { source, stage: 'map-refused', reason: refusal }); return false; }
+  const partner = storyPartner(view.storyStage.getFrame());
+  storyMap?.dispose();
+  storyMap = createStoryChapterMap({ locale: getLocale(), reducedMotion: prefersReducedMotion(), isSeen: storyNodeSeen,
+    partner: { name: partner?.name ?? '', portrait: partner?.portrait ?? null },
+    onPlay: next => playStoryChapter(next, { source: 'map' }),
+    onClose: () => { recoveryDiagnostics.record('STORY', { source, stage: 'map-closed' }); } });
+  recoveryDiagnostics.record('STORY', { source, stage: 'map' });
+  return storyMap.open({ chapterId });
+}
+function closeStoryMap() { storyMap?.dispose(); storyMap = null; }
+document.addEventListener(STORY_CHAPTER_OPEN_EVENT, event => { openStoryMap({ chapterId: event.detail?.chapterId ?? STORY_FIRST_CHAPTER_ID, source: event.detail?.source ?? 'badge' }); });
 
 // Online service (Owner 2026-10-28). One facade for the account panel, the
 // friends drawer and the PvP lobbies. Offline first: without a configured cloud
@@ -2564,11 +2651,176 @@ async function restoreSaveFromCloud(payload) {
   setTimeout(() => location.reload(), 700);
   return adopted;
 }
+const localSaveText = () => { try { return app.persistenceFacade().exportRecovery().text ?? null; } catch { return null; } };
+/** This device's own tamer code (futureSystemsPort): shown before any online action, and the code a cloud profile adopts. */
+const localTamerCode = () => { try { return futureSystems().social.getTamerCard({ trainerName: app.getOpeningState()?.trainerName ?? '' }).code; } catch { return null; } };
+// The System menu opens often: show the code only once the guest pass exists, so
+// opening it never issues one (no new storage key).
+const issuedTamerCode = () => { try { return typeof createChampionshipGuestIdentityPort({ storage: window.localStorage }).read().text === 'string' ? localTamerCode() : null; } catch { return null; } };
+/** The 數碼通行證 panel's wiring (Owner 2026-10-29); one instance per host (settings, Tamer Info). */
+function createPassportPanel() {
+  return createOnlineAccountPanel({ service: onlineService(), confirm: showChoiceDialog, oauthProviders: onlineConfig.oauthProviders,
+    standalone: isInstalledWebApp(), getSaveText: localSaveText, restoreSave: restoreSaveFromCloud, fallbackCode: localTamerCode,
+    onProviderBound: provider => runBindReward(provider), downloadBackup: downloadLocalBackup });
+}
 function accountPanel() {
-  cloudAccountPanel ??= createOnlineAccountPanel({ service: onlineService(), confirm: showChoiceDialog, googleSignIn: onlineConfig.googleSignIn,
-    getSaveText: () => { try { return app.persistenceFacade().exportRecovery().text ?? null; } catch { return null; } },
-    restoreSave: restoreSaveFromCloud });
+  cloudAccountPanel ??= createPassportPanel();
   return cloudAccountPanel;
+}
+/** 💾 The local save as a file, offered before a cloud copy replaces it. */
+function downloadLocalBackup() {
+  const text = localSaveText();
+  if (!text) throw new Error('NO_LOCAL_SAVE');
+  const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+  const link = document.createElement('a');
+  link.href = url; link.download = `championship-save-backup-${new Date().toISOString().slice(0, 10)}.json`; link.hidden = true;
+  document.body.append(link); link.click(); link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+// First-bind gift (Owner 2026-10-29): the cloud ledger decides, then the save is
+// paid once (Bits + the save's paid marker in one write). The local simulation
+// only previews the gift.
+let bindRewardRunning = false;
+async function runBindReward(provider) {
+  if (bindRewardRunning) return Object.freeze({ ok: false, reason: 'BUSY' });
+  bindRewardRunning = true;
+  try {
+    const name = ONLINE_PROVIDER_NAMES[provider] ?? provider;
+    if (app.getOnlineBindReward?.()) { await showChoiceDialog({ title: onlineText('rewardTitle'), message: onlineText('rewardAlready'), actions: [{ id: 'ok', label: onlineText('close'), tone: 'primary' }], cancelId: 'ok' }); return Object.freeze({ ok: false, reason: 'BIND_REWARD_ALREADY_CLAIMED' }); }
+    const sessionId = app.getSaveReference?.();
+    const out = await onlineService().claimBindReward({ saveRef: sessionId ? await sha256Hex(sessionId) : null });
+    if (!out?.ok) {
+      if (out?.reason === 'BIND_REWARD_ALREADY_CLAIMED') await showChoiceDialog({ title: onlineText('rewardTitle'), message: onlineText('rewardAlready'), actions: [{ id: 'ok', label: onlineText('close'), tone: 'primary' }], cancelId: 'ok' });
+      return out ?? Object.freeze({ ok: false });
+    }
+    if (out.preview) { await showBindRewardPopup({ showChoiceDialog, bits: out.rewardBits, provider: out.provider ?? provider, simulated: true, fx: requestArcadeFx }); return out; }
+    const paid = app.claimOnlineBindReward({ provider: out.provider ?? provider, rewardBits: out.rewardBits });
+    if (!paid?.ok) {
+      if (paid?.reason !== 'BIND_REWARD_ALREADY_CLAIMED') await showChoiceDialog({ title: onlineText('rewardTitle'), message: onlineText('rewardSaveFailed', { reason: onlineReasonText(paid?.reason) }), actions: [{ id: 'ok', label: onlineText('close'), tone: 'primary' }], cancelId: 'ok' });
+      return paid;
+    }
+    refreshStatusBar();
+    recoveryDiagnostics.record('BIND_REWARD', { provider: name, credited: paid.credited });
+    await showBindRewardPopup({ showChoiceDialog, bits: paid.credited, provider: out.provider ?? provider, simulated: false, fx: requestArcadeFx });
+    return paid;
+  } finally { bindRewardRunning = false; }
+}
+
+// OAuth return (Owner 2026-10-29): only with a configured cloud, and only when
+// the provider sent the player back here; offline play never reaches this.
+function readOnlineAuthReturn(locationLike = location) {
+  const params = new URLSearchParams(locationLike.search);
+  const hash = new URLSearchParams(String(locationLike.hash ?? '').replace(/^#/, ''));
+  const provider = ['google', 'facebook', 'discord'].includes(params.get('cm_link')) ? params.get('cm_link') : null;
+  const errorCode = params.get('error_code') ?? hash.get('error_code');
+  const error = params.get('error') ?? hash.get('error');
+  if (errorCode || error) return Object.freeze({ kind: 'error', provider, errorCode: errorCode ?? error, description: params.get('error_description') ?? hash.get('error_description') ?? '' });
+  if (params.has('code') || hash.has('access_token')) return Object.freeze({ kind: 'session', provider });
+  return null;
+}
+// Read once at start-up; handled after Continue / New Game opens the session the gift is paid into.
+let pendingOnlineAuthReturn = onlineConfig.configured ? readOnlineAuthReturn() : null;
+function takeOnlineAuthReturn() { const returned = pendingOnlineAuthReturn; pendingOnlineAuthReturn = null; if (returned) void handleOnlineAuthReturn(returned); }
+async function handleOnlineAuthReturn(returned) {
+  if (!returned || !onlineConfig.configured) return;
+  try {
+    const service = onlineService();
+    const identity = await service.refreshIdentity();
+    const clean = new URL(location.href);
+    for (const key of ['code', 'state', 'error', 'error_code', 'error_description', 'cm_link']) clean.searchParams.delete(key);
+    history.replaceState(history.state, '', `${clean.pathname}${clean.search}`);
+    if (returned.kind === 'error') {
+      const provider = returned.provider ?? 'google';
+      if (/identity.?already.?exists/i.test(`${returned.errorCode} ${returned.description}`)) {
+        const name = ONLINE_PROVIDER_NAMES[provider] ?? provider;
+        const choice = await showChoiceDialog({ title: onlineText('providerTakenTitle', { provider: name }), message: onlineText('providerTakenBody', { provider: name }),
+          actions: [{ id: 'cancel', label: onlineText('cancel'), tone: 'secondary' }, { id: 'signin', label: onlineText('providerSignIn', { provider: name }), tone: 'primary' }], cancelId: 'cancel' });
+        if (choice === 'signin') await service.signInWithProvider(provider);
+      }
+      return;
+    }
+    // A linked account: pay the first-bind gift once, then compare this device with the account's cloud copy.
+    if (identity && identity.isAnonymous === false && !identity.bindRewardClaimed) await runBindReward(returned.provider ?? identity.providers?.[0] ?? 'google');
+    if (identity && identity.isAnonymous === false) await accountPanel().reconcile();
+  } catch (error) { console.warn(`CHAMPIONSHIP_AUTH_RETURN: ${error?.message ?? error}`); }
+}
+/** A provider key from the menu strip or the panel: the passport's own flow, then the gift. */
+function startProviderBind(provider) {
+  return bindProviderFlow({ service: onlineService(), provider, confirm: showChoiceDialog, oauthProviders: onlineConfig.oauthProviders,
+    say: (text, tone) => { if (tone === 'error') requestArcadeFx(document.body, 'denied', text); }, onProviderBound: runBindReward });
+}
+
+// 📸 Brag card (Owner 2026-10-29): the tamer licence as a shareable poster.
+let bragRunning = false;
+function speciesIdentityOf(speciesId) { try { return lookupSpeciesIdentity(productEntities, speciesId); } catch { return null; } }
+function acePartnerForCard() {
+  // The most evolved partner that has Database art; the first partner otherwise.
+  const roster = projectRoster().map(entry => ({ entry, portrait: juicyPortrait(entry.identity?.recordIndex ?? null) }));
+  const ranked = [...roster].sort((a, b) => (Number(Boolean(b.portrait)) - Number(Boolean(a.portrait))) || ((b.entry.identity?.generationIndex ?? 0) - (a.entry.identity?.generationIndex ?? 0)));
+  const pick = ranked[0];
+  return pick ? { name: pick.entry.displayName ?? null, attributeIndex: pick.entry.identity?.attributeIndex ?? 0, portraitSrc: pick.portrait?.src ?? null, role: 'ace' } : null;
+}
+async function bragCardInput({ winner = null, victory = null } = {}) {
+  const record = app.getTitleProgress?.().record ?? null;
+  const rank = app.getTamerRank?.();
+  const rankRule = Number.isInteger(rank) ? NATIVE_RAISING_LIFECYCLE_RULES.ranks[rank] : null;
+  const shopFrame = app.getShopFrame?.() ?? null;
+  const trainerName = app.getOpeningState()?.trainerName ?? '';
+  let identity = null;
+  try { identity = await onlineService().getIdentitySummary(); } catch { identity = null; }
+  let tamerCode = identity?.tamerCode ?? null;
+  if (!tamerCode) { try { tamerCode = futureSystems().social.getTamerCard({ trainerName }).code; } catch { tamerCode = null; } }
+  return {
+    tamerName: trainerName, rankName: Number.isInteger(rank) ? tamerRankName(rank) : null, licenseName: rankRule ? generationName(rankRule.generation) : null,
+    winPercent: nativeBattleWinPercent(record), battles: record?.battles ?? null,
+    dexPercent: tamerCompletionPercent(app.getDatabaseFrame?.().registeredCount ?? null, 216), bits: Number.isInteger(shopFrame?.bits) ? shopFrame.bits : null,
+    tamerCode, roomCode: onlineService().state.activeRoom?.roomCode ?? null, playUrl: publicPlayUrl().display,
+    partner: winner ?? acePartnerForCard(), victory
+  };
+}
+async function openTamerBragCard({ trigger = null, winner = null, victory = null } = {}) {
+  if (bragRunning) return;
+  bragRunning = true;
+  try {
+    await openBragCardPreview({ trigger, showChoiceDialog, fx: requestArcadeFx, reducedMotion: prefersReducedMotion(), buildData: () => bragCardInput({ winner, victory }) });
+  } catch (error) { console.warn(`CHAMPIONSHIP_BRAG_CARD: ${error?.message ?? error}`); }
+  finally { bragRunning = false; }
+}
+/** The winning partner of the battle that just ended (the first of the player's team with art). */
+function bragWinnerFrom(participants) {
+  const roster = projectRoster();
+  for (const participant of participants ?? []) {
+    if (!participant?.speciesId) continue;
+    const identity = speciesIdentityOf(participant.speciesId);
+    const portrait = juicyPortrait(participant.speciesId);
+    const member = roster.find(entry => entry.instanceId === participant.instanceId);
+    if (portrait || identity) return { name: member?.displayName ?? identity?.speciesName ?? null, attributeIndex: identity?.attributeIndex ?? 0, portraitSrc: portrait?.src ?? null, role: 'winner' };
+  }
+  return null;
+}
+/** The victory screen's 📸 key: the winning partner on the card, the match as its ribbon. */
+function battleResultBrag({ participants, matchTitle }) {
+  return { label: socialText('bragButton'), onOpen: button => openTamerBragCard({ trigger: button, winner: bragWinnerFrom(participants), victory: { matchTitle } }) };
+}
+const bragButton = (onClick) => {
+  const button = document.createElement('button'); button.type = 'button';
+  button.className = 'cm-brag-cta cm-arcade-key'; button.dataset.onlineAction = 'brag-card'; button.textContent = socialText('bragButton');
+  button.addEventListener('click', () => { void onClick(button); });
+  return button;
+};
+
+/** The System menu's foot (Owner 2026-10-29): the passport strip and the community dock. */
+function systemMenuExtras(menuId, { close }) {
+  if (menuId !== 'SYSTEM') return null;
+  const block = document.createElement('section'); block.className = 'cm-toolbar__group cm-toolbar__community'; block.dataset.group = 'community';
+  block.setAttribute('role', 'group'); block.setAttribute('aria-label', socialText('dockTitle'));
+  const strip = createPassportStrip({ service: onlineService(), oauthProviders: onlineConfig.oauthProviders, role: 'menuitem', fallbackCode: issuedTamerCode,
+    onProvider: provider => { close(); void startProviderBind(provider); },
+    onMore: () => { close(); openSettings(document.querySelector('.cm-toolbar__cell[data-menu-id="SYSTEM"]'), 'data'); } });
+  const dock = createSocialLinkDock({ variant: 'menu', role: 'menuitem' });
+  block.append(strip.element, dock.element);
+  return { element: block, dispose() { strip.dispose(); dock.dispose(); block.remove(); } };
 }
 async function setOwnDefenseTeam() {
   const candidates = await app.getPasswordTeamCandidates();
@@ -2597,7 +2849,8 @@ function ensureFriendsDrawer() {
 }
 function onlineLobbies() {
   return Object.freeze({
-    room: (panel, { start }) => mountRoomLobby(panel, { service: onlineService(), codeLength: onlineConfig.roomCodeLength, start, game: {
+    room: (panel, { start }) => mountRoomLobby(panel, { service: onlineService(), codeLength: onlineConfig.roomCodeLength, start, onFriendSpar: startFriendSpar,
+      brag: { label: socialText('bragButton'), onOpen: button => openTamerBragCard({ trigger: button }) }, game: {
       candidates: () => app.getBattlePartyCandidates(null),
       createInvite: (ids, options) => app.createLinkBattleInvite(ids, options),
       prepareGuest: (inviteCode, ids) => app.prepareLinkBattle({ role: 'GUEST', inviteCode, instanceIds: ids }),
@@ -2607,7 +2860,20 @@ function onlineLobbies() {
       createPassword: ids => app.createTeamPassword(ids) } })
   });
 }
-function renderTamerOnline(shell) {
+// Tamer Info's product blocks (Owner 2026-10-28/29): above the ROM field table the
+// brag card and the friends / account keys; below it the passport and the dock.
+let tamerOnlineDisposers = [];
+function disposeTamerOnline() { for (const dispose of tamerOnlineDisposers.splice(0)) { try { dispose(); } catch { /* already gone */ } } }
+function renderTamerOnline(shell, slot = 'top') {
+  if (slot === 'bottom') {
+    // Showing Tamer Info never signs in to a configured cloud; a passport button does.
+    const panel = createPassportPanel(); panel.mount(shell, { eager: false });
+    const dock = createSocialLinkDock({ variant: 'full' }); shell.append(dock.element);
+    tamerOnlineDisposers.push(() => panel.dispose(), () => dock.dispose());
+    return;
+  }
+  disposeTamerOnline();
+  shell.append(bragButton(button => openTamerBragCard({ trigger: button })));
   const row = document.createElement('div'); row.className = 'cm-tamer-online';
   const friends = document.createElement('button'); friends.type = 'button'; friends.className = 'cm-online__button cm-online__button--primary'; friends.dataset.onlineAction = 'open-friends';
   setText(friends, 'TAMER_OPEN_FRIENDS'); friends.addEventListener('click', () => ensureFriendsDrawer().open());
@@ -2762,7 +3028,9 @@ async function enterDataArena(dataArenaButton) {
       resolutionCap: currentQuality().pixiResolutionCap,
       qa: arenaParams.get("arenaQa") === "1",
       seed: /^\d{1,10}$/.test(seedParam) ? Number(seedParam) >>> 0 : null,
-      onExit: restoreBattle
+      onExit: restoreBattle,
+      // Cyber Gachapon: a manual-battle win pays 1-3 tickets, a cup 3-10, into the one save.
+      onVictory: ({ tournament }) => app?.grantGachaTickets?.(tournament ? 3 + Math.floor(Math.random() * 8) : 1 + Math.floor(Math.random() * 3), 'DATA_ARENA')
     });
     dataArenaSession = session;
     root.hidden = true;

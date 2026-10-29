@@ -7,7 +7,20 @@
 
 export const SUPABASE_MODE = "SUPABASE";
 export const ONLINE_SESSION_STORAGE_KEY = "championship-online";
+// Owner 2026-10-29: the OAuth providers a guest pass can be linked to (Supabase manual linking).
+export const OAUTH_PROVIDERS = Object.freeze(["google", "facebook", "discord"]);
 const POLL_MS = 3000;
+
+/**
+ * Where an OAuth round trip returns: this page without its query or hash, plus
+ * `cm_link=<provider>` so an error return still names the provider (the
+ * Redirect URLs allow-list entry ends in `**`, see the setup guide).
+ */
+export function oauthReturnUrl(win = globalThis, provider = null) {
+  const location = win?.location;
+  if (!location?.origin || !location.pathname) return undefined;
+  return `${location.origin}${location.pathname}${provider ? `?cm_link=${encodeURIComponent(provider)}` : ""}`;
+}
 
 function failure(error) {
   const code = error?.code ?? error?.status ?? null;
@@ -43,7 +56,8 @@ export function createSupabaseAdapter({ library, url, anonKey, sessionStorage = 
     return Object.freeze({
       userId: user?.id ?? profile?.userId ?? null, tamerCode: profile?.tamerCode ?? null, tamerName: profile?.tamerName ?? "", rankTitle: profile?.rankTitle ?? "",
       acePartner: profile?.acePartner ?? {}, isAnonymous: user?.is_anonymous === true || (!user?.email && providers.length === 0),
-      email: user?.email ?? null, providers: Object.freeze(providers), hasDefenseTeam: profile?.hasDefenseTeam === true, simulated: false
+      email: user?.email ?? null, providers: Object.freeze(providers), hasDefenseTeam: profile?.hasDefenseTeam === true,
+      bindRewardClaimed: profile?.bindRewardClaimed === true, simulated: false
     });
   }
   async function currentUser() {
@@ -79,10 +93,22 @@ export function createSupabaseAdapter({ library, url, anonKey, sessionStorage = 
       identity = userToIdentity(data?.user ?? await currentUser(), profile?.ok === false ? null : profile);
       return Object.freeze({ ok: true, identity });
     },
-    async bindGoogle({ redirectTo = win?.location?.href ?? undefined } = {}) {
-      const { error } = await client.auth.linkIdentity({ provider: "google", options: { redirectTo } });
-      return error ? failure(error) : Object.freeze({ ok: true, redirect: true });
+    /** Guest → Google / Facebook / Discord. The uid is kept; the browser leaves for the provider and comes back here. */
+    async bindProvider(provider, { redirectTo = oauthReturnUrl(win, provider) } = {}) {
+      if (!OAUTH_PROVIDERS.includes(provider)) return Object.freeze({ ok: false, reason: "PROVIDER_UNSUPPORTED" });
+      const { error } = await client.auth.linkIdentity({ provider, options: { redirectTo } });
+      return error ? failure(error) : Object.freeze({ ok: true, redirect: true, provider });
     },
+    /** A provider account that already owns a tamer: sign in to it (this device's save stays until the player chooses). */
+    async signInWithProvider(provider, { redirectTo = oauthReturnUrl(win, provider) } = {}) {
+      if (!OAUTH_PROVIDERS.includes(provider)) return Object.freeze({ ok: false, reason: "PROVIDER_UNSUPPORTED" });
+      const { error } = await client.auth.signInWithOAuth({ provider, options: { redirectTo } });
+      return error ? failure(error) : Object.freeze({ ok: true, redirect: true, provider });
+    },
+    async bindGoogle(options = {}) { return this.bindProvider("google", options); },
+    /** First-bind gift: the server ledger answers once per account (and again only for the same save). */
+    async claimBindReward(saveRef) { return rpc("claim_bind_reward", { p_save_ref: saveRef }); },
+    async bindRewardStatus() { const data = await rpc("get_bind_reward_status"); return data?.ok === false ? null : data; },
     /** New device: sign in to an existing email account (guest progress on this device stays local). */
     async signInWithEmailOtp(email) {
       const { error } = await client.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
@@ -125,15 +151,27 @@ export function createSupabaseAdapter({ library, url, anonKey, sessionStorage = 
     async announce(matchId) {
       try { const channel = client.channel(`pvp:${matchId}`, { config: { private: true } }); await channel.httpSend?.("state", { at: Date.now() }); client.removeChannel(channel); } catch { /* polling covers it */ }
     },
-    subscribeMatch(matchId, listener) {
+    /**
+     * Room updates: a Broadcast nudge re-reads the row (a slow poll covers a lost
+     * socket). With `presence` the same private channel also tracks who is in the
+     * room and reports the roles present through `onPresence(roles)`.
+     */
+    subscribeMatch(matchId, listener, { presence = null, onPresence = null } = {}) {
       let last = null, disposed = false;
       const push = match => { if (disposed || !match) return; const key = JSON.stringify([match.status, match.hostReady, match.guestReady, Boolean(match.replyCode), match.winnerId]); if (key !== last) { last = key; listener(match); } };
       const refresh = async () => { try { push(await this.getMatch(matchId)); } catch { /* next tick */ } };
       let channel = null;
       try {
-        channel = client.channel(`pvp:${matchId}`, { config: { private: true, broadcast: { self: false } } });
+        channel = client.channel(`pvp:${matchId}`, { config: { private: true, broadcast: { self: false }, ...(presence ? { presence: { key: presence.role ?? "player" } } : {}) } });
         channel.on("broadcast", { event: "state" }, () => { void refresh(); });
-        void client.realtime?.setAuth?.().then?.(() => channel.subscribe()).catch?.(() => channel.subscribe());
+        if (presence && typeof onPresence === "function") channel.on("presence", { event: "sync" }, () => {
+          if (disposed) return;
+          try { onPresence(Object.keys(channel.presenceState?.() ?? {})); } catch { /* presence is advisory */ }
+        });
+        const join = () => channel.subscribe(status => { if (status === "SUBSCRIBED" && presence && !disposed) void channel.track?.({ role: presence.role ?? "player", at: Date.now() }); });
+        // A private channel needs the session's JWT first; join either way so a missing setAuth never leaves the room unsubscribed.
+        const auth = client.realtime?.setAuth?.();
+        if (typeof auth?.then === "function") auth.then(join, join); else join();
       } catch { channel = null; }
       const poll = setIntervalFn(refresh, POLL_MS);
       void refresh();

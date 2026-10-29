@@ -35,17 +35,17 @@ fs.mkdirSync(OUTPUT,{recursive:true});
    }));
    for(const m of metrics){assert.equal(m.width,34);assert.equal(m.height,34);assert.equal(m.sampling,'auto');assert.equal(m.fit,'contain');}
    assert.deepEqual(metrics.map(m=>m.naturalWidth),[64,160,128,160]);
-   if(theme==='modern')assert.equal(await page.locator('.cm-hunt-tools .cm-vs2-action').evaluateAll(buttons=>buttons.every(button=>
+   if(theme==='modern')assert.equal(await page.locator('.cm-hunt-tools .cm-vs2-action[data-tool]').evaluateAll(buttons=>buttons.every(button=>
     button.querySelector('.cm-hunt-tools__icon').getBoundingClientRect().bottom<=button.querySelector('.cm-hunt-tools__label').getBoundingClientRect().top+1)),true,'wrapped counter overlaps its item image');
-   await page.locator('[data-tool="ROPE"]').click();
-   assert.equal(await page.locator('[data-tool="ROPE"]').getAttribute('aria-pressed'),'true');
+   await page.locator('.cm-hunt-tools [data-tool="ROPE"]').click();
+   assert.equal(await page.locator('.cm-hunt-tools [data-tool="ROPE"]').getAttribute('aria-pressed'),'true');
    await page.evaluate(()=>window.huntReview.refresh());
    assert.equal(await page.locator('.cm-hunt-tools__icon').count(),4,'quantity render removed the icons');
    await page.screenshot({path:path.join(OUTPUT,`${theme}-dpr${dpr}.png`)});
    await page.evaluate(()=>window.huntReview.setQuantity('SHOT',0));
-   assert.equal(await page.locator('[data-tool="SHOT"]').isDisabled(),true);
-   assert.match(await page.locator('[data-tool="SHOT"]').textContent(),/×0/);
-   assert.equal(await page.locator('[data-tool="SHOT"] .cm-hunt-tools__icon').isVisible(),true);
+   assert.equal(await page.locator('.cm-hunt-tools [data-tool="SHOT"]').isDisabled(),true);
+   assert.match(await page.locator('.cm-hunt-tools [data-tool="SHOT"]').textContent(),/×0/);
+   assert.equal(await page.locator('.cm-hunt-tools [data-tool="SHOT"] .cm-hunt-tools__icon').isVisible(),true);
    assert.deepEqual(errors,[]);results.states.push({theme,dpr,metrics,selected:true,disabled:true,counterPreservesArt:true});
    await context.close();
   }
@@ -53,10 +53,10 @@ fs.mkdirSync(OUTPUT,{recursive:true});
    const context=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:3});const page=await context.newPage();
    await page.route('**/items/hunt49/ui--itemiconL_main--000.png',route=>route.fulfill({status:404,body:'missing'}));
    await page.goto(`${BASE}/tests/fixtures/championship-hunt-tool-art-review.html?normal=1&theme=${theme}`);
-   await page.waitForFunction(()=>document.querySelector('[data-tool="ROPE"]')?.dataset.hasToolArt==='false');
-   assert.equal(await page.locator('[data-tool="ROPE"] .cm-hunt-tools__icon').isVisible(),false);
-   const text=page.locator('[data-tool="ROPE"] .cm-hunt-tools__label');assert.equal(await text.isVisible(),true);
-   await page.locator('[data-tool="ROPE"]').click();assert.equal(await page.locator('[data-tool="ROPE"]').getAttribute('aria-pressed'),'true');
+   await page.waitForFunction(()=>document.querySelector('.cm-hunt-tools [data-tool="ROPE"]')?.dataset.hasToolArt==='false');
+   assert.equal(await page.locator('.cm-hunt-tools [data-tool="ROPE"] .cm-hunt-tools__icon').isVisible(),false);
+   const text=page.locator('.cm-hunt-tools [data-tool="ROPE"] .cm-hunt-tools__label');assert.equal(await text.isVisible(),true);
+   await page.locator('.cm-hunt-tools [data-tool="ROPE"]').click();assert.equal(await page.locator('.cm-hunt-tools [data-tool="ROPE"]').getAttribute('aria-pressed'),'true');
    await page.screenshot({path:path.join(OUTPUT,`${theme}-missing-art.png`)});
    results.fallbacks.push({theme,labelVisible:true,selection:true});await context.close();
   }

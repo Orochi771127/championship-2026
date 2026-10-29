@@ -196,7 +196,15 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
       const thumb = element(art ? "img" : "span", "cm-digimon-item__thumb");
       thumb.setAttribute("aria-hidden", "true");
       if (art) { thumb.alt = ""; thumb.decoding = "async"; thumb.src = art.src; }
-      button.append(thumb, element("span", "cm-digimon-item__name", entry.displayName, false));
+      const nameNode = element("span", "cm-digimon-item__name", entry.displayName, false);
+      if (entry.bloodline) {
+        // Cyber Gachapon metal bloodline badge before the name.
+        const badge = element("span", "cm-gacha-badge", `[${entry.bloodline.title}]`, false);
+        badge.style.setProperty("--bloodline", entry.bloodline.color);
+        nameNode.prepend(badge, " ");
+        button.dataset.bloodline = entry.bloodline.family;
+      }
+      button.append(thumb, nameNode);
       button.addEventListener("click", () => {
         selectedIndex = index;
         closeEditor();

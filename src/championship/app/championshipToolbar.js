@@ -2,6 +2,7 @@ import { createTransientHint, TOOL_HINT_MS } from './transientHint.js';
 import {isOriginalUiIntakeLocal,originalToolbarArt,originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
 import {isOriginalRuntimeLocation} from "../presentation/originalRuntimeLocation.js";
 import { uiText } from "../text/uiText.js";
+import { menuEntryGlyph, menuEntryGlyphPlacement } from "./ui/menuEntryGlyphs.js";
 // The contextual toolbar -- the original's ui/toolbar.nxr.
 //
 // WHAT IS ROM_VERIFIED HERE
@@ -158,7 +159,7 @@ function element(tag, className, text) {
  * @param {(entry: object) => void} options.onMenuEntry
  * @param {(toolId: string|null) => void} [options.onToolChange]
  */
-export function createChampionshipToolbar({ responsiveLayout = false, root, onMenuEntry, onToolChange, getFoodStock=()=>null, subscribeInventory=null, getTutorialCheckpoint=()=>null } = {}) {
+export function createChampionshipToolbar({ responsiveLayout = false, root, onMenuEntry, onToolChange, getFoodStock=()=>null, subscribeInventory=null, getTutorialCheckpoint=()=>null, menuExtras = null } = {}) {
   if (!root) throw new TypeError("The toolbar requires a root element");
   if (typeof onMenuEntry !== "function") throw new TypeError("The toolbar requires an onMenuEntry handler");
 
@@ -196,9 +197,13 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
   let tutorialAutoSelect=true,tutorialKey=null,tutorialMenuEntry="hunt";
   let toolBeforeTutorial = null;
   let openMenuId = null;
+  // Owner 2026-10-29: product extras at the foot of a submenu ({ element, dispose }), e.g. the
+  // System menu's passport strip and community dock. Never during a tutorial.
+  let menuExtrasHandle = null;
 
   function closeMenu() {
     openMenuId = null;
+    menuExtrasHandle?.dispose?.(); menuExtrasHandle = null;
     menuPanel.hidden = true;
     menuPanel.replaceChildren();
     for (const cell of rail.querySelectorAll("[data-menu-id]")) cell.setAttribute("aria-expanded", "false");
@@ -210,6 +215,9 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
     const button = element("button", className);
     const art=originalDatabaseIcon(entry.screen);
     if(art){const icon=element("img","cm-toolbar__entry-icon");icon.src=art.src;icon.alt="";button.append(icon);}
+    // Menu cards without original art carry a drawn icon (Owner 2026-10-28).
+    const glyph=!art&&className==="cm-toolbar__entry"?menuEntryGlyph(document,entry.id):null;
+    if(glyph){button.append(glyph);button.setAttribute("data-glyph",menuEntryGlyphPlacement(entry.id));}
     button.append(element("span", "cm-toolbar__entry-label", entry.label));
     if (entry.hint) button.append(element("span", "cm-toolbar__entry-hint", entry.hint));
     button.setAttribute("aria-label", uiText(entry.label));
@@ -270,6 +278,11 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
       menuPanel.append(block);
     }
     for (const entry of byId.values()) if (!placed.has(entry.id)) menuPanel.append(entryButton(entry));
+    menuExtrasHandle?.dispose?.(); menuExtrasHandle = null;
+    if (typeof menuExtras === "function" && tutorialTool === null) {
+      try { menuExtrasHandle = menuExtras(menu.id, { close: closeMenu }) ?? null; } catch (error) { console.warn(`TOOLBAR_MENU_EXTRAS: ${error.message}`); menuExtrasHandle = null; }
+      if (menuExtrasHandle?.element) menuPanel.append(menuExtrasHandle.element);
+    }
     menuPanel.hidden = false;
     for (const cell of rail.querySelectorAll("[data-menu-id]")) {
       cell.setAttribute("aria-expanded", String(cell.dataset.menuId === menu.id));

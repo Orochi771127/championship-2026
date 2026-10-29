@@ -318,7 +318,7 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
         const shop = app.getShopFrame();
         return { ...shop, listings: shop.listings.map(row => ({
           ...row, displayName: getHuntCatalogItem(row.productItemId)?.displayName ?? row.displayName
-        })) };
+        })), ...(typeof app.getCyberGachaFrame === "function" ? { gacha: app.getCyberGachaFrame() } : {}) };
       })() : null,
       database: screen === CHAMPIONSHIP_SCREENS.DATABASE ? app.getDatabaseFrame() : null,
       cageEdit: screen === CHAMPIONSHIP_SCREENS.CAGE_EDIT ? app.getCageEditFrame() : null,
@@ -444,6 +444,24 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
     buyShopItem(shopRecordIndex, quantity = 1) {
       const receipt = app.buyShopItem(shopRecordIndex, quantity);
       if (receipt?.ok) committed("purchase");
+      return commit();
+    },
+    // Cyber Gachapon (OWNER_APPROVED_ADAPTATION 2026-10-29): each returns the
+    // next frame; its shop.gacha.lastResult is the saved receipt.
+    gachaPull(machine, count = 1) {
+      if (app.gachaPull?.(machine, count)?.ok) committed("purchase");
+      return commit();
+    },
+    gachaClaimPity(metalId) {
+      if (app.gachaClaimPity?.(metalId)?.ok) committed("purchase");
+      return commit();
+    },
+    gachaSynthesize(chipIds = null) {
+      if (app.gachaSynthesize?.(chipIds)?.ok) committed("purchase");
+      return commit();
+    },
+    gachaUseItem(itemId, instanceId = null, options = {}) {
+      if (app.gachaUseItem?.(itemId, instanceId, options)?.ok) committed("purchase");
       return commit();
     },
     selectGate(gateId) {

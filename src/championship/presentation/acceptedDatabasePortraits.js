@@ -18,11 +18,12 @@ export function validateAcceptedDatabasePortrait(manifest,config){
  return Object.freeze({...portrait});
 }
 // Static encyclopedia previews never promote animation selection or borrow a donor image.
+// 211/222/230 ship their 10-29 web encodings; 229 keeps the original (no web tier passed).
 const ILLUSTRATION_PREVIEW_HASHES = Object.freeze({
-  211: 'e669c90a86a67c7053564e7977a2b99d72458c34c2628786b815e33c90b6a725',
-  222: 'a05cfd23e6344551fc82de18d85a84a922966eff1cb6a1c124523004a13c6f33',
-  229: '10e56e970dc275ec8e5691de3379f200bde41fe2d207efc14f53af5042aca55f',
-  230: 'e729e08f354c47b537596bb0ff1782044ec45b327a23c074224a78dd1029fb8f'
+  211: 'database-display-web-20261029/4909be3215a60c4eea5fde0950445bc36a5be0338814f8607642c6dacb4bc414',
+  222: 'database-display-web-20261029/7544f1b15773af3622b20c878d6941ef6b80f64403818dd935e6795e8157a58c',
+  229: 'database-display-20261018/10e56e970dc275ec8e5691de3379f200bde41fe2d207efc14f53af5042aca55f',
+  230: 'database-display-web-20261029/b22391015d4325eb684acebe24b557cc8622fa1521c70039f4e03920fdc8d23e'
 });
 export function acceptedDatabaseIllustrationPreview(speciesIndex) {
   if (![211,222,229,230].includes(speciesIndex)) return null;
@@ -32,9 +33,10 @@ export function acceptedDatabaseIllustrationPreview(speciesIndex) {
       || !publicHudCharacterConfig(`species-${speciesIndex}`)) return null;
   }
   const art = databaseHeroPortrait(speciesIndex);
+  const [folder, sha256] = ILLUSTRATION_PREVIEW_HASHES[speciesIndex].split('/');
   if (art?.speciesIndex !== speciesIndex || art.speciesId !== `species-${speciesIndex}`
-    || art.src !== `assets/production/database-display-20261018/species-${String(speciesIndex).padStart(3,'0')}.display.${ILLUSTRATION_PREVIEW_HASHES[speciesIndex].slice(0,16)}.webp`
-    || art.sha256 !== ILLUSTRATION_PREVIEW_HASHES[speciesIndex]
+    || art.src !== `assets/production/${folder}/species-${String(speciesIndex).padStart(3,'0')}.display.${sha256.slice(0,16)}.webp`
+    || art.sha256 !== sha256
     || ![art.width,art.height].every(value=>Number.isInteger(value)&&value>0)) return null;
   return Object.freeze({...art,derivation:'SELECTED_PUBLIC_DATABASE_ILLUSTRATION_PREVIEW'});
 }
