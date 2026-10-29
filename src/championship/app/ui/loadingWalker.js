@@ -9,7 +9,7 @@
 // Presentation only: it never touches loading, simulation, input or the Pixi ticker.
 
 import { publicCharacterConfigs } from "../../presentation/publicCharacterCatalog.js";
-import { loadParadeWalker, pickParadeSpecies } from "../titleParade.js";
+import { drawParadeFrame, loadParadeWalker, pickParadeSpecies } from "../titleParade.js";
 
 const TICK_HZ = 60;
 
@@ -54,9 +54,7 @@ export function mountLoadingWalker(track, { doc = globalThis.document, view = gl
   function draw() {
     if (!art || drawn === index) return;
     drawn = index;
-    const current = art.frames[index];
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(current.image, current.rect.x, current.rect.y, current.rect.w, current.rect.h, 0, 0, canvas.width, canvas.height);
+    drawParadeFrame(ctx, canvas, art.frames[index]);
   }
   function step(now) {
     const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
@@ -78,8 +76,8 @@ export function mountLoadingWalker(track, { doc = globalThis.document, view = gl
     } else index = 0;
     draw();
     holder.style.left = `${(x * 100).toFixed(2)}%`;
-    // Art faces left; mirror while walking right.
-    holder.style.transform = `translateX(-50%) scaleX(${dir > 0 ? -1 : 1})`;
+    // Art faces left (reviewed sets drawn facing right say so); mirror while walking the other way.
+    holder.style.transform = `translateX(-50%) scaleX(${(dir > 0) !== Boolean(art.facesRight) ? -1 : 1})`;
     frame = view.requestAnimationFrame(step);
   }
 
@@ -92,8 +90,9 @@ export function mountLoadingWalker(track, { doc = globalThis.document, view = gl
       if (!loaded || controller.signal.aborted) return;
       art = loaded;
       canvas = doc.createElement("canvas");
-      canvas.width = art.frames[0].rect.w;
-      canvas.height = art.frames[0].rect.h;
+      // Reviewed crops share one pivot-placed canvas (art.canvas), as in the title parade.
+      canvas.width = art.canvas?.w ?? art.frames[0].rect.w;
+      canvas.height = art.canvas?.h ?? art.frames[0].rect.h;
       ctx = canvas.getContext("2d");
       holder.append(canvas);
       holder.dataset.ready = "true";

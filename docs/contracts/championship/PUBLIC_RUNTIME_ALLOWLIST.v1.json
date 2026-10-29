@@ -116395,6 +116395,22 @@
       "sha256": "d68a259cf4bd453bc8a58784be217c75eeeedf79480a05c6714677c9be757414"
     },
     {
+      "path": "assets/production/database-rexmon-v8-20261029/species-243.display.63fd2942a48c61f1.webp",
+      "sha256": "63fd2942a48c61f17619a9598bc3f67a8414782916bcbd9581f06bdc43322c8f"
+    },
+    {
+      "path": "assets/production/database-rexmon-v8-20261029/species-243.thumbnail.554e28b24f6732ef.webp",
+      "sha256": "554e28b24f6732ef7bf77eeb9a31986599efd73274b5d5969789e03a2cae071e"
+    },
+    {
+      "path": "assets/production/database-rexmon-v8-20261029/species-244.display.8b55866897d5da0a.webp",
+      "sha256": "8b55866897d5da0a647109c9b1d63db0dbae0289da3ca637301518d4bea02882"
+    },
+    {
+      "path": "assets/production/database-rexmon-v8-20261029/species-244.thumbnail.868e0c630b501f56.webp",
+      "sha256": "868e0c630b501f562aa8811ef7fa1904417c817662b63c0cdeeaa918edc61158"
+    },
+    {
       "path": "assets/production/database-second10-20261022/species-030.display.52b9940dee31e64e.webp",
       "sha256": "52b9940dee31e64ea9e3fa7490bee9976f2999091fd7907157ba972f2ba5c166"
     },
@@ -122793,7 +122809,7 @@
     },
     {
       "path": "src/championship/app/titleParade.js",
-      "sha256": "ba51bf46ed093cad268661f0b84dada2b98e290149fa97051000058b18cf401d"
+      "sha256": "3749827c48d7d4c68367c1a8966b3214a7622073c686264ed0ed9f0d7afc8a7d"
     },
     {
       "path": "src/championship/app/trainingLabels.css",
@@ -122833,7 +122849,7 @@
     },
     {
       "path": "src/championship/app/ui/loadingWalker.js",
-      "sha256": "83447e30644a6227636f9e9845562a2c1bc1a21266da8c639ec5bb530e07b930"
+      "sha256": "99580c37d51df9ed32763a3017aed63c5fae0895e3fbb208b3529361707691cf"
     },
     {
       "path": "src/championship/app/ui/menuEntryGlyphs.js",
@@ -123182,6 +123198,10 @@
     {
       "path": "src/championship/contracts/productBattleTransport.js",
       "sha256": "3310edd2e349f98e0b58cbe3fad8b309e00105573639232cc1785b359a4d0d31"
+    },
+    {
+      "path": "src/championship/contracts/productOriginalSpecies.js",
+      "sha256": "d6bdef5831fdb2fe8aa7e58fdfcf1e43767e71c557240ba1d40e1338d5084afa"
     },
     {
       "path": "src/championship/contracts/productPasswordTransport.js",
@@ -126001,9 +126021,9 @@
         "numberingStageIndex",
         "serial",
         "displayName",
-        "form",
-        "characterKey",
         "formKey",
+        "characterKey",
+        "form",
         "profileByLocale",
         "zh-Hant",
         "en",
@@ -126088,6 +126108,52 @@
         "speciesIndex",
         "th",
         "vi",
+        "zh-Hant"
+      ]
+    },
+    {
+      "path": "src/data/championship/product-species-originals.r1.json",
+      "sha256": "d703c7ff07cf97390df39ed2bd9d805b21b7a8714b249ffb1107b29bd628b782",
+      "jsonFields": [
+        "actionCost",
+        "attributeIndex",
+        "authority",
+        "battleMoveRecord",
+        "capacity",
+        "displayCode",
+        "elementSelect",
+        "entityId",
+        "entries",
+        "evolution",
+        "evolutionReady",
+        "family",
+        "familyBits",
+        "generationIndex",
+        "generationScaledByte",
+        "huntClassByte",
+        "kind",
+        "life",
+        "lifecycle",
+        "moveKey",
+        "moves",
+        "nameByLocale",
+        "nativeInserts",
+        "note",
+        "position",
+        "power",
+        "proposal",
+        "revision",
+        "runtimeReady",
+        "sleepMax",
+        "sleepMin",
+        "source",
+        "speciesId",
+        "speciesIndex",
+        "statCurveIndex",
+        "statusCode",
+        "target",
+        "targetMode",
+        "thresholds",
         "zh-Hant"
       ]
     },
@@ -126215,7 +126281,7 @@
     },
     {
       "path": "src/data/championship/reviewed-animation-selection.v1.json",
-      "sha256": "b1524efdb27c8329aa101819163264b17b6a8336d3af3a111ce9d12b4cf9e81b",
+      "sha256": "4488d1e0323bbfd99d7e9b8bfe9570d875b8e7630c9bdcf8568814fbc873a775",
       "jsonFields": [
         "arenaGroundFromWalk",
         "authoringPath",
@@ -126238,72 +126304,6 @@
         "scope",
         "sha256",
         "speciesId"
-      ]
-    },
-    {
-      "path": "assets/production/database-rexmon-v8-20261029/species-243.display.63fd2942a48c61f1.webp",
-      "sha256": "63fd2942a48c61f17619a9598bc3f67a8414782916bcbd9581f06bdc43322c8f"
-    },
-    {
-      "path": "assets/production/database-rexmon-v8-20261029/species-243.thumbnail.554e28b24f6732ef.webp",
-      "sha256": "554e28b24f6732ef7bf77eeb9a31986599efd73274b5d5969789e03a2cae071e"
-    },
-    {
-      "path": "assets/production/database-rexmon-v8-20261029/species-244.display.8b55866897d5da0a.webp",
-      "sha256": "8b55866897d5da0a647109c9b1d63db0dbae0289da3ca637301518d4bea02882"
-    },
-    {
-      "path": "assets/production/database-rexmon-v8-20261029/species-244.thumbnail.868e0c630b501f56.webp",
-      "sha256": "868e0c630b501f562aa8811ef7fa1904417c817662b63c0cdeeaa918edc61158"
-    },
-    {
-      "path": "src/championship/contracts/productOriginalSpecies.js",
-      "sha256": "d6bdef5831fdb2fe8aa7e58fdfcf1e43767e71c557240ba1d40e1338d5084afa"
-    },
-    {
-      "path": "src/data/championship/product-species-originals.r1.json",
-      "sha256": "d703c7ff07cf97390df39ed2bd9d805b21b7a8714b249ffb1107b29bd628b782",
-      "jsonFields": [
-        "actionCost",
-        "attributeIndex",
-        "authority",
-        "battleMoveRecord",
-        "capacity",
-        "displayCode",
-        "elementSelect",
-        "entityId",
-        "entries",
-        "evolution",
-        "evolutionReady",
-        "family",
-        "familyBits",
-        "generationIndex",
-        "generationScaledByte",
-        "huntClassByte",
-        "kind",
-        "life",
-        "lifecycle",
-        "moveKey",
-        "moves",
-        "nameByLocale",
-        "nativeInserts",
-        "note",
-        "position",
-        "power",
-        "proposal",
-        "revision",
-        "runtimeReady",
-        "sleepMax",
-        "sleepMin",
-        "source",
-        "speciesId",
-        "speciesIndex",
-        "statCurveIndex",
-        "statusCode",
-        "target",
-        "targetMode",
-        "thresholds",
-        "zh-Hant"
       ]
     }
   ],
