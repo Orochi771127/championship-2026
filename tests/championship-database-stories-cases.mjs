@@ -132,8 +132,10 @@ test('registered trait panels keep attribute, family and exact move TP costs wit
   const traits=f.root.querySelectorAll('.cm-dex-trait-tag');
   assert.deepEqual(Array.from(traits,t=>t.textContent),[
    `${data.labels.attribute}: ${data.attributeName}`,
-   `${data.labels.family}: ${data.familyName}`
+   `${data.labels.family}: ${data.familyName}`,
+   `${data.labels.element}: ${data.elementName}`
   ]);
+  assert.equal(f.root.querySelector('.cm-element-chart-button')?.dataset.focus,data.element);
   const cards=f.root.querySelectorAll('.cm-dex-move-card__meta');
   if(sp===8)assert.equal(cards.length,0);
   else {

@@ -74,7 +74,7 @@ export class ControlledNode {
 }
 
 export function createControlledDocument(locale='zh-Hant') {
-  const document = {activeElement:null,createElement(tag){return new ControlledNode(tag,this);},createTextNode(data){return {nodeType:3,data,parentNode:null,get textContent(){return this.data;},set textContent(value){this.data=String(value);},remove(){if(this.parentNode){const list=this.parentNode.childNodes;list.splice(list.indexOf(this),1);this.parentNode=null;}}};}};
+  const document = {activeElement:null,createElement(tag){return new ControlledNode(tag,this);},createElementNS(ns,tag){return new ControlledNode(tag,this);},createTextNode(data){return {nodeType:3,data,parentNode:null,get textContent(){return this.data;},set textContent(value){this.data=String(value);},remove(){if(this.parentNode){const list=this.parentNode.childNodes;list.splice(list.indexOf(this),1);this.parentNode=null;}}};}};
   document.documentElement=document.createElement('html');document.documentElement.lang=locale;
   document.body=document.createElement('body');document.documentElement.append(document.body);document.activeElement=document.body;
   document.querySelectorAll=selector=>document.documentElement.querySelectorAll(selector);

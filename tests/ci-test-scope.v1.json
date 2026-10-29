@@ -422,7 +422,8 @@
     "tests/championship-reviewed-action-facing-cases.mjs",
     "tests/championship-title-parade-size-cases.mjs",
     "tests/championship-rexmon-two-forms-cases.mjs",
-    "tests/championship-product-original-species-cases.mjs"
+    "tests/championship-product-original-species-cases.mjs",
+    "tests/championship-three-axis-taxonomy-cases.mjs"
   ],
   "localReference": {
     "tests/championship-scene-music-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Scene music actual-browser workflow with native media decoding, production Settings/transport, and controlled normal-game Raising/Battle/Data Arena flows.",

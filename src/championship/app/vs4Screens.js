@@ -21,6 +21,10 @@ import {juicyPortrait, juicyPresentationEnabled, juicySignatureMove} from '../pr
 // Consumes only the injected Gate/Hunt presentation source. The Shop runtime
 // owns Bits, visibility and quantities; this view lists what is already
 // visible and sends buy/leave through intents.
+import {taxonomyBadge} from '../presentation/taxonomyBadgeArt.js';
+import {cageHabitat} from '../contracts/speciesTaxonomy.js';
+import {taxonomyText} from '../text/taxonomyText.js';
+import {elementChartButton} from './elementChartModal.js';
 
 import { PRODUCT_GIVEN_NAME_MAX_LENGTH } from "./championshipRaisingProduction.js";
 import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from "./vs2Screens.js";
@@ -920,10 +924,17 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       if (specialPreview) dataSection.append(specialPreview);
 
       const traitsGrid = element('div', 'cm-dex-traits-grid');
-      traitsGrid.append(
-        element('span', 'cm-dex-trait-tag', `${verifiedData.labels.attribute}: ${verifiedData.attributeName}`),
-        element('span', 'cm-dex-trait-tag', `${verifiedData.labels.family}: ${verifiedData.familyName}`)
-      );
+      // Faction, race and element as emblems (Owner 2026-10-29); each tag still reads "label: value".
+      const taxonomy = verifiedData.taxonomy;
+      const trait = (label, axis, key, fallback) => {
+        const tag = element('span', 'cm-dex-trait-tag');
+        tag.append(element('span', 'cm-dex-trait-tag__label', `${label}: `));
+        if (taxonomy) tag.append(taxonomyBadge(axis, key)); else tag.append(fallback);
+        return tag;
+      };
+      traitsGrid.append(trait(verifiedData.labels.attribute, 'faction', taxonomy?.faction, verifiedData.attributeName),
+        trait(verifiedData.labels.family, 'race', taxonomy?.race, verifiedData.familyName));
+      if (taxonomy) traitsGrid.append(trait(verifiedData.labels.element, 'element', taxonomy.element, verifiedData.elementName), elementChartButton(taxonomy.element));
       dataSection.append(traitsGrid);
 
       if (verifiedData.moves && verifiedData.moves.length > 0) {
@@ -1590,6 +1601,15 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
         element("span", "cm-vs2-cage-tray__name", `${cageUiName(item.moduleId, item.displayName)} ×${item.availableCount??1}`),
         element("span", "cm-vs2-cage-tray__effect", cageUiSummary(item.moduleId, item.trainingSummary))
       );
+      // Owner 2026-10-29: the races at home here, or the shared care label.
+      const habitat = cageHabitat(getCageDefinitionByModuleId(item.moduleId)?.cageDefinitionIndex);
+      if (habitat.races.length || habitat.sharedCare) {
+        const fit = element("span", "cm-cage-habitat");
+        if (habitat.races.length) fit.append(...habitat.races.map(race => taxonomyBadge('race', race)));
+        else { const care = document.createElement('span'); care.className = 'cm-cage-habitat__care'; care.textContent = taxonomyText('habitat.common'); fit.append(care); }
+        fit.title = taxonomyText('habitat.desc');
+        row.append(fit);
+      }
       decorateCartridge(row, item.moduleId, { count: item.availableCount ?? 1 });
       row.addEventListener("click", () => {
         source.intents.selectCageModule(item.selected ? null : item.moduleId);

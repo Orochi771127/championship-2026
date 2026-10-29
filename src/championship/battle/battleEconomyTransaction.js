@@ -145,14 +145,17 @@ function activeFor(state, attemptId, wallet) {
 export function settleBattleAttempt(value, result, wallet) {
   const state = normalizeBattleEconomyState(value);
   walletValue(wallet);
-  keys(result, ["attemptId", "outcomeEntries"], "BATTLE_SETTLEMENT");
+  keys(result, ["attemptId", "outcomeEntries", "rewardPercent"], "BATTLE_SETTLEMENT");
+  // Tri-core resonance (OWNER_APPROVED_ADAPTATION 2026-10-29) may raise a won payout by up to 100%.
+  const rewardPercent = result.rewardPercent === undefined ? 100 : integer(result.rewardPercent, "BATTLE_REWARD_PERCENT", 100, 200);
   const previous = activeFor(state, result.attemptId, wallet);
   if (previous) return previous;
   if (!Array.isArray(result.outcomeEntries) || result.outcomeEntries.length !== state.active.expectedRounds) {
     return reply(state, wallet, { reason: "BATTLE_RESULT_INCOMPLETE" });
   }
   for (const flag of result.outcomeEntries) integer(flag, "BATTLE_OUTCOME_FLAG", 0, 1);
-  const reward = resolveBattleReward({ ...state.active, outcomeEntries: result.outcomeEntries });
+  const native = resolveBattleReward({ ...state.active, outcomeEntries: result.outcomeEntries });
+  const reward = { ...native, pending: Math.trunc(native.pending * rewardPercent / 100) };
   const credit = creditBattleReward({ wallet, pending: reward.pending });
   const { expectedRounds, ...attempt } = state.active;
   const receipt = normalizeReceipt({ ...attempt, status: "SETTLED", outcome: reward.outcome, won: reward.won,

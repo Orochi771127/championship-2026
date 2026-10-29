@@ -1,4 +1,5 @@
 import {readRaisingGroundSupport} from './raisingGroundSupport.js';
+import {habitatMatch} from '../contracts/speciesTaxonomy.js';
 import {GACHA_CHIPS,GACHA_METALS,GACHA_GOODS,GACHA_PITY_MAX,GACHA_MACHINES,GACHA_BLOODLINES,getGachaChip,getGachaMetal,getGachaGoods,gachaRarityRank,
   grantGachaWelcome,grantGachaTickets,pullCyberGacha,claimGachaPity,autoFillSynthesizer,synthesizeGachaMetal,applyGachaBoost,metalBoostEffect,
   inscribesBloodline,catalystRarityForGeneration,spendGachaItem,settleGachaBattleWin,takeArmedHuntChips,gachaBloodlineOf,claimGachaReward} from '../gacha/cyberGacha.js';
@@ -605,10 +606,13 @@ export function createChampionshipStandaloneApp({
     const profile=raisingNativeProfile(id);if(!actor||!profile||actor.speciesIndex<8)return null;
     const fields=profile.fields,maxHp=Number(fields['058'])||0,home=actor.cageInstanceId??actor.cageDefinitionIndex;
     const dirty=Boolean(actor.growthFields?.['408'])||raisingWaste.some(w=>w.present&&(w.cageInstanceId??w.cageDefinitionIndex)===home);
-    const habitat=partnerHabitatFit({speciesIndex:actor.speciesIndex,cageDefinitionIndex:actor.cageDefinitionIndex,dirty,
+    // A clean race habitat (Owner 2026-10-29) is a cozy home: the partner's mood lifts and its finds grow.
+    const raceHabitat=habitatMatch(actor.speciesIndex,actor.cageDefinitionIndex);
+    const native=partnerHabitatFit({speciesIndex:actor.speciesIndex,cageDefinitionIndex:actor.cageDefinitionIndex,dirty,
       hpRatio:maxHp>0?(Number(fields['050'])||0)/maxHp:1});
+    const habitat=raceHabitat&&!dirty?'cozy':native;
     const mood=partnerMood({fields,growth:actor.growthFields??{},state:actor.state,statusMusic:actor.statusMusic,habitat});
-    return Object.freeze({mood,emoji:PARTNER_MOODS[mood].emoji,habitat,hearts:partnerAffectionHearts(fields),
+    return Object.freeze({mood,emoji:PARTNER_MOODS[mood].emoji,habitat,raceHabitat,hearts:partnerAffectionHearts(fields),
       affection:Math.max(0,Math.min(100,Number(fields['020'])||0)),greeting:partnerLifeState.greetings.some(g=>g.a===id||g.b===id)});
   }
   function partnerRegion(actor){
@@ -705,7 +709,7 @@ export function createChampionshipStandaloneApp({
       partnerLifeState.strollFrames.set(id,0);partnerLifeState.nextFindAt.set(id,strollIntervalFrames(partnerLifeRandom()));
       if(!canStrollFind(raising.nativeHome.strollLog,dayKey))continue;
       const reading=partnerReading(id,actor);
-      if(!reading||partnerLifeRandom()>=strollFindChance(reading.habitat,reading.mood))continue;
+      if(!reading||partnerLifeRandom()>=strollFindChance(reading.habitat,reading.mood,{raceHabitat:Boolean(reading.raceHabitat)}))continue;
       const find=rollStrollFind(partnerLifeRandom(),actor.cageDefinitionIndex);
       grantStrollDiscoveryReward({partnerId:id,reward:find.kind,quantity:find.quantity,cage:actor.cageDefinitionIndex,calendar});
       break;
@@ -3420,7 +3424,7 @@ export function createChampionshipStandaloneApp({
     },
 
     /** The battle judges itself; nothing else may push the result screen. */
-    finishMatch({ attemptId, ended, mode, battleType, matchIndex, outcomeEntries, individualResults=[] } = {}) {
+    finishMatch({ attemptId, ended, mode, battleType, matchIndex, outcomeEntries, individualResults=[], rewardPercent } = {}) {
       requireSession();
       if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
       if (battleTransactionActive) return Object.freeze({ ok: false, reason: "TRANSACTION_ACTIVE" });
@@ -3451,7 +3455,7 @@ export function createChampionshipStandaloneApp({
         updates=individualResults.map(entry=>({instanceId:entry.instanceId,nativeProfile:normalizeNativeIndividualProfile(
           entry.nativeProfile,this.resolveRaisingInstance(entry.instanceId).speciesId)}));
       }
-      const result = applyBattleTransaction(settleBattleAttempt(battleEconomy, { attemptId, outcomeEntries }, requireShop().getBits()),updates);
+      const result = applyBattleTransaction(settleBattleAttempt(battleEconomy, { attemptId, outcomeEntries, ...(rewardPercent===undefined?{}:{rewardPercent}) }, requireShop().getBits()),updates);
       if (!result.ok || result.duplicate) return result;
       for(const entry of updates)raisingActors.delete(entry.instanceId);
       battlePartyIds=null;

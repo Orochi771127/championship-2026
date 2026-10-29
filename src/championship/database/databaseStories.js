@@ -7,6 +7,8 @@ import battleMovesCatalog from '../../data/championship/catalogs/battle-moves.r1
 import {BATTLE_MOVE_NAMES} from '../text/battleMoveNames.js';
 import {deepFreeze} from '../contracts/championshipContracts.js';
 import {getLocale} from '../text/locale.js';
+import {speciesTaxonomy} from '../contracts/speciesTaxonomy.js';
+import {taxonomyText} from '../text/taxonomyText.js';
 
 export const DATABASE_ORIGINAL_PROFILES = deepFreeze(catalog);
 const bySpecies = new Map(catalog.entries.map(entry=>[entry.speciesIndex,entry]));
@@ -31,11 +33,11 @@ const verifiedHeadings = Object.freeze({
 });
 
 const FIELD_LABELS = Object.freeze({
-  'zh-Hant': Object.freeze({ attribute: '屬性', family: '種族', baseStats: '基礎能力', hp: '生命值', tp: '技力', moves: '習得招式', power: '威力', cost: '消耗' }),
-  en: Object.freeze({ attribute: 'Attribute', family: 'Family', baseStats: 'Base Stats', hp: 'HP', tp: 'TP', moves: 'Learned Moves', power: 'Power', cost: 'Cost' }),
-  ja: Object.freeze({ attribute: '属性', family: '種族', baseStats: '基本能力', hp: 'HP', tp: 'TP', moves: '習得技', power: '威力', cost: '消費' }),
-  th: Object.freeze({ attribute: 'คุณสมบัติ', family: 'เผ่า', baseStats: 'ค่าพลังพื้นฐาน', hp: 'HP', tp: 'TP', moves: 'ท่าต่อสู้ที่เรียนรู้', power: 'พลัง', cost: 'ใช้' }),
-  vi: Object.freeze({ attribute: 'Thuộc tính', family: 'Tộc', baseStats: 'Chỉ số cơ bản', hp: 'HP', tp: 'TP', moves: 'Kỹ năng đã học', power: 'Uy lực', cost: 'Tiêu hao' })
+  'zh-Hant': Object.freeze({ attribute: '陣營', element: '屬性', family: '種族', baseStats: '基礎能力', hp: '生命值', tp: '技力', moves: '習得招式', power: '威力', cost: '消耗' }),
+  en: Object.freeze({ attribute: 'Faction', element: 'Element', family: 'Race', baseStats: 'Base Stats', hp: 'HP', tp: 'TP', moves: 'Learned Moves', power: 'Power', cost: 'Cost' }),
+  ja: Object.freeze({ attribute: '陣営', element: '属性', family: '種族', baseStats: '基本能力', hp: 'HP', tp: 'TP', moves: '習得技', power: '威力', cost: '消費' }),
+  th: Object.freeze({ attribute: 'ฝ่าย', element: 'ธาตุ', family: 'เผ่า', baseStats: 'ค่าพลังพื้นฐาน', hp: 'HP', tp: 'TP', moves: 'ท่าต่อสู้ที่เรียนรู้', power: 'พลัง', cost: 'ใช้' }),
+  vi: Object.freeze({ attribute: 'Phe', element: 'Thuộc tính', family: 'Chủng tộc', baseStats: 'Chỉ số cơ bản', hp: 'HP', tp: 'TP', moves: 'Kỹ năng đã học', power: 'Uy lực', cost: 'Tiêu hao' })
 });
 
 const FAMILIES_BY_LOCALE = Object.freeze({
@@ -95,8 +97,11 @@ export function databaseVerifiedData(speciesIndex, locale = getLocale()) {
   const col = LOCALE_COLUMN[locale];
   const labels = FIELD_LABELS[locale];
   const familyOrdinal = sp.familyBits === 0 ? 0 : 32 - Math.clz32((sp.familyBits & -sp.familyBits) >>> 0);
-  const familyName = FAMILIES_BY_LOCALE[locale][familyOrdinal] ?? '????';
-  const attributeName = ATTRIBUTES_BY_LOCALE[locale][sp.attributeIndex] ?? '????';
+  // The three-axis taxonomy names the faction (ROM attribute), race (ROM family) and element.
+  const taxonomy = speciesTaxonomy(speciesIndex);
+  const familyName = taxonomy ? taxonomyText(`race.${taxonomy.race ?? 'NONE'}`, {}, locale) : FAMILIES_BY_LOCALE[locale][familyOrdinal] ?? '????';
+  const attributeName = taxonomy ? taxonomyText(`faction.${taxonomy.faction ?? 'NONE'}`, {}, locale) : ATTRIBUTES_BY_LOCALE[locale][sp.attributeIndex] ?? '????';
+  const elementName = taxonomy ? taxonomyText(`element.${taxonomy.element}`, {}, locale) : null;
 
   // Species traits do not establish an individual partner's battle stat rungs.
   // Keep the Dex independent of instance stats; move actionCost remains TP.
@@ -118,6 +123,9 @@ export function databaseVerifiedData(speciesIndex, locale = getLocale()) {
     labels,
     attributeName,
     familyName,
+    element: taxonomy?.element ?? null,
+    elementName,
+    taxonomy,
     moves: Object.freeze(moves)
   });
 }

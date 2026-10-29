@@ -1,4 +1,5 @@
 import {createResidentAssetNotice,collectRaisingInitialSequences} from './residentAssetNotice.js';
+import { resonanceStrip } from '../presentation/taxonomyBadgeArt.js';
 import {huntThreeProductionRequest} from '../presentation/vs2/huntThree/manifestBindings.mjs';
 import { FRIENDS_PLAYTEST_POLICY } from './friendsPlaytestPolicy.js';
 import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../contracts/productBattleTransport.js';
@@ -199,10 +200,14 @@ const mountBattleFieldPixiPresentation = async options => (await import('../pres
 // tutorial battle builds its own runtime and stays on the original rule.
 const BATTLE_AI_POLICY =
   new URLSearchParams(globalThis.location?.search ?? "").get("battleAi") === "original" ? "ORIGINAL" : "IMPROVED_V1";
+// Owner 2026-10-29: menu battles apply element matchups and faction resonance (TAXONOMY_V1, both
+// teams alike); ?battleTaxonomy=original keeps the original damage rules. The tutorial stays original.
+const BATTLE_TAXONOMY_POLICY =
+  new URLSearchParams(globalThis.location?.search ?? "").get("battleTaxonomy") === "original" ? "ORIGINAL" : "TAXONOMY_V1";
 const loadBattleRuntime = async () => {
   const create = (await import("./battleRuntime.js")).createBattleRuntime;
   // Cyber Gachapon: an owned partner's metal bloodline badge rides its battle plate.
-  return options => create({ aiPolicy: BATTLE_AI_POLICY, getBloodline: id => app?.getPartnerBloodline?.(id) ?? null, ...options });
+  return options => create({ aiPolicy: BATTLE_AI_POLICY, taxonomyPolicy: BATTLE_TAXONOMY_POLICY, getBloodline: id => app?.getPartnerBloodline?.(id) ?? null, ...options });
 };
 
 // Screen modules and art load through their existing foreground owners.
@@ -1605,6 +1610,7 @@ async function mountBattleField() {
     frame: { ...source.getFrame(), rosterEvidence: activeRuntime.rosterEvidence() },
     localTeamIndex:activeRuntime.localTeamIndex(),
     hudArt:hudProxy,
+    resonance: (()=>{const t=activeRuntime.taxonomy?.(),local=activeRuntime.localTeamIndex();return t?{player:t.resonance[local],opponent:t.resonance[1-local],render:keys=>resonanceStrip(keys,{hint:false})}:null;})(),
     dynamicFx: BATTLE_DYNAMIC_FX,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
     askToLeave: showChoiceDialog,

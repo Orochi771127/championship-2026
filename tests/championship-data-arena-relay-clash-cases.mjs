@@ -6,6 +6,7 @@ import assert from 'node:assert/strict';
 import { createDataArenaSimulation } from '../src/championship/modes/dataArena/dataArenaSimulation.js';
 import { RELAY_ELEMENT_STRONG, RELAY_ELEMENTS, relayEffectiveness, relayElementWeakTo } from '../src/championship/modes/dataArena/dataArenaRelayElements.js';
 import { RELAY_ROSTER } from '../src/championship/modes/dataArena/dataArenaRelayRoster.js';
+import { speciesTaxonomyForId, elementMultiplierPercent } from '../src/championship/contracts/speciesTaxonomy.js';
 import { relayBattleMap } from '../src/championship/modes/dataArena/dataArenaRelayMaps.js';
 
 const run = (sim, seconds, input = {}) => { for (let i = 0; i < Math.ceil(seconds * 60); i++) sim.step(input); };
@@ -28,16 +29,20 @@ test('the element wheel is consistent: every element but physical beats and fear
     if (!['light', 'shadow'].includes(a) || a === b) assert.ok(!(RELAY_ELEMENT_STRONG[a].includes(b) && RELAY_ELEMENT_STRONG[b].includes(a)), `${a}/${b}`);
 });
 
-test('a skill hit is scaled by the matchup and announced', () => {
-  const sim = fight('ember-lizard');
-  const rival = sim.getState().rivals[0], mult = relayEffectiveness('fire', elementOf(rival.speciesId));
+// Owner 2026-10-29: hits are scaled by the casters' taxonomy elements on the dual ring (x1.5 / x0.75),
+// not the stage-four wheel; the player's relay pair may also carry faction resonance.
+test('a skill hit is scaled by the dual-ring matchup and announced', () => {
+  const sim = fight('ember-lizard'), state = sim.getState();
+  const rival = state.rivals[0], mult = elementMultiplierPercent(speciesTaxonomyForId(state.player.speciesId).element, speciesTaxonomyForId(rival.speciesId).element) / 100;
+  const dealt = state.relay.resonance.includes('TRI') ? 1.08 : 1;
   const events = [];
   for (let tries = 0; tries < 8 && !events.some(e => e.type === 'RIVAL_HIT' && e.cause === 'SKILL'); tries++) {
     sim.step({ cast: 0, autoAim: true }); for (let i = 0; i < 70; i++) { sim.step({}); events.push(...sim.drainEvents()); }
   }
   const hit = events.find(e => e.type === 'RIVAL_HIT' && e.cause === 'SKILL');
   assert.ok(hit, 'the ember bolt lands');
-  assert.ok(Math.abs(hit.amount - 20 * mult) < 1e-6, `${hit.amount} vs ${20 * mult}`);
+  const expected = [20 * mult * dealt, 20 * mult * dealt * 1.5].filter((_, i) => i === 0 || state.relay.resonance.includes('RIFT'));
+  assert.ok(expected.some(v => Math.abs(hit.amount - v) < 1e-6), `${hit.amount} vs ${expected}`);
   if (mult !== 1) assert.ok(events.some(e => e.type === 'EFFECTIVE' && e.mult === mult && e.target === 'rival'));
 });
 
