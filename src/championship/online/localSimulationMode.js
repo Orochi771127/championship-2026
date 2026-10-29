@@ -7,12 +7,20 @@
 // player's own partners by the hooks the service injects.
 
 export const LOCAL_SIMULATION_MODE = "LOCAL_SIMULATION";
+export const SIMULATED_OAUTH_PROVIDERS = Object.freeze(["google", "facebook", "discord"]);
+// Owner 2026-10-29: the same 6-character, 15-minute, single-use code shape as the cloud.
+export const TRANSFER_CODE_TTL_MS = 15 * 60 * 1000;
 const CROCKFORD = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+const SIM_REWARD_BITS = 5000;
 
-function code(random, prefix, groups = 2) {
+function code(random, prefix, groups = 2, size = 4) {
   let out = prefix;
-  for (let g = 0; g < groups; g++) { out += (g ? "-" : "") + Array.from({ length: 4 }, () => CROCKFORD[Math.floor(random() * 32)]).join(""); }
+  for (let g = 0; g < groups; g++) { out += (g ? "-" : "") + Array.from({ length: size }, () => CROCKFORD[Math.floor(random() * 32)]).join(""); }
   return out;
+}
+/** XXX-XXX (any case, spaces, O→0, I/L→1) into the six code characters. */
+export function cleanTransferCode(input) {
+  return String(input ?? "").toUpperCase().replace(/[^0-9A-Z]/g, "").replace(/O/g, "0").replace(/[IL]/g, "1");
 }
 
 export function createLocalSimulationAdapter({
@@ -23,8 +31,8 @@ export function createLocalSimulationAdapter({
   rivalNames = ["Mirror A", "Mirror B", "Mirror C"], rivalRanks = ["", "", ""]
 } = {}) {
   const userId = `local-${code(random, "", 2).replace("-", "")}`.toLowerCase();
-  let identity = null, defenseTeam = null, cloud = null, transfer = null;
-  const friends = new Map(), matches = new Map(), listeners = new Map();
+  let identity = null, defenseTeam = null, cloud = null, transfer = null, rewardPreviewed = false;
+  const friends = new Map(), matches = new Map(), listeners = new Map(), presence = new Map();
   const rivals = rivalNames.map((name, index) => ({ userId: `sim-${index + 1}`, tamerCode: code(random, "TM-"), tamerName: name, rankTitle: rivalRanks[index] ?? "",
     acePartner: {}, lastSeenAt: now(), hasDefenseTeam: true, simulated: true }));
   const notify = matchId => { const match = matches.get(matchId); for (const fn of listeners.get(matchId) ?? []) { try { fn(match); } catch { /* listener error */ } } };
@@ -33,16 +41,35 @@ export function createLocalSimulationAdapter({
   return Object.freeze({
     mode: LOCAL_SIMULATION_MODE,
     async ensureIdentity({ preferredCode = null, tamerName = "", rankTitle = "", acePartner = null } = {}) {
+      // A simulated link survives a refresh of the card within this page (it is never stored).
       identity = Object.freeze({ userId, tamerCode: preferredCode ?? identity?.tamerCode ?? code(random, "TM-"), tamerName, rankTitle, acePartner: acePartner ?? {},
-        isAnonymous: true, email: null, providers: Object.freeze([]), simulated: true });
+        isAnonymous: identity?.isAnonymous ?? true, email: null, providers: identity?.providers ?? Object.freeze([]), simulated: true });
       return identity;
     },
     async currentIdentity() { return identity; },
     async bindEmail() { return result(false, { reason: "CLOUD_NOT_CONFIGURED" }); },
     async verifyEmailOtp() { return result(false, { reason: "CLOUD_NOT_CONFIGURED" }); },
-    async bindGoogle() { return result(false, { reason: "CLOUD_NOT_CONFIGURED" }); },
+    /**
+     * Owner 2026-10-29: a rehearsal of the Google / Facebook / Discord link. The
+     * guest becomes a "linked" identity for this page only; nothing is sent or stored.
+     */
+    async bindProvider(provider) {
+      if (!SIMULATED_OAUTH_PROVIDERS.includes(provider)) return result(false, { reason: "PROVIDER_UNSUPPORTED" });
+      const base = identity ?? await this.ensureIdentity({});
+      identity = Object.freeze({ ...base, isAnonymous: false, providers: Object.freeze([...new Set([...(base.providers ?? []), provider])]) });
+      return result(true, { linked: true, provider, identity, simulated: true });
+    },
+    async signInWithProvider(provider) { return this.bindProvider(provider); },
+    async bindGoogle() { return this.bindProvider("google"); },
     async signInWithEmailOtp() { return result(false, { reason: "CLOUD_NOT_CONFIGURED" }); },
     async signOut() { identity = null; return result(true); },
+    /** The gift is only previewed here: the save is never paid by a simulation. */
+    async claimBindReward() {
+      if (!identity || identity.isAnonymous !== false) return result(false, { reason: "ACCOUNT_NOT_LINKED", simulated: true });
+      if (rewardPreviewed) return result(false, { reason: "BIND_REWARD_ALREADY_CLAIMED", simulated: true });
+      rewardPreviewed = true;
+      return result(true, { preview: true, simulated: true, rewardBits: SIM_REWARD_BITS, provider: identity.providers[0] ?? null, claimedAt: now() });
+    },
 
     async uploadSave(envelope, expectedRevision = null, { force = false } = {}) {
       // Same rule as the server: an existing copy is replaced only with its known revision or an explicit force.
@@ -54,12 +81,12 @@ export function createLocalSimulationAdapter({
     async downloadSave() { return cloud ? result(true, { ...cloud, simulated: true }) : null; },
     async createTransferCode() {
       if (!cloud) return result(false, { reason: "BACKUP_REQUIRED" });
-      transfer = { code: code(random, "", 2), expiresAt: new Date(Date.now() + 86400000).toISOString() };
+      transfer = { code: code(random, "", 2, 3), expiresAt: new Date(Date.now() + TRANSFER_CODE_TTL_MS).toISOString() };
       return result(true, { transferCode: transfer.code, expiresAt: transfer.expiresAt, simulated: true });
     },
     async redeemTransferCode(input) {
-      const clean = String(input ?? "").toUpperCase().replace(/[^0-9A-Z]/g, "");
-      if (!transfer || transfer.code.replace("-", "") !== clean) return result(false, { reason: "TRANSFER_CODE_INVALID" });
+      const clean = cleanTransferCode(input);
+      if (!transfer || Date.parse(transfer.expiresAt) <= Date.now() || transfer.code.replace("-", "") !== clean) return result(false, { reason: "TRANSFER_CODE_INVALID" });
       transfer = null; return result(true, { ...cloud, simulated: true });
     },
 
@@ -117,6 +144,7 @@ export function createLocalSimulationAdapter({
       setTimer(async () => {
         const live = matches.get(matchId); if (!live || live.status !== "open") return;
         live.guestId = "sim-1"; live.status = "joined"; notify(matchId);
+        presence.get(matchId)?.(["host", "guest"]);
         const reply = await simulateGuestReply(inviteCode);
         const again = matches.get(matchId); if (!again || again.status !== "joined") return;
         if (reply) { again.replyCode = reply; again.guestReady = true; again.status = "ready"; }
@@ -144,11 +172,17 @@ export function createLocalSimulationAdapter({
       return result(true, { status: "finished", winnerId: m.winnerId });
     },
     async cancelRoom(matchId) { const m = matches.get(matchId); if (!m) return result(false); m.status = "cancelled"; notify(matchId); return result(true); },
-    subscribeMatch(matchId, listener) {
+    /** `onPresence(roles)` mirrors the cloud's Presence channel: the host alone until the challenger joins. */
+    subscribeMatch(matchId, listener, { presence: own = null, onPresence = null } = {}) {
       const set = listeners.get(matchId) ?? new Set(); set.add(listener); listeners.set(matchId, set);
-      return () => { set.delete(listener); };
+      if (own && typeof onPresence === "function") {
+        presence.set(matchId, onPresence);
+        const match = matches.get(matchId);
+        onPresence(match?.guestId ? ["host", "guest"] : [own.role ?? "host"]);
+      }
+      return () => { set.delete(listener); if (presence.get(matchId) === onPresence) presence.delete(matchId); };
     },
     async deleteMyData() { identity = null; cloud = null; friends.clear(); matches.clear(); return result(true); },
-    dispose() { listeners.clear(); }
+    dispose() { listeners.clear(); presence.clear(); }
   });
 }

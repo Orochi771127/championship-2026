@@ -4,7 +4,17 @@
 // serialize / deserialize stay the only authorities on the text; this module
 // never writes storage.
 
+import { WORLD_CLOCK_CASCADE, DAYS_PER_YEAR } from "../time/championshipWorldClock.js";
+
 export const CLOUD_SAVE_MAX_BYTES = 262144;
+
+/** Calendar days lived in this save (day 1 = the first morning), or null when the year is not recorded. */
+function playedDays(save) {
+  let clock = null;
+  try { clock = typeof save.raisingHome === "string" ? JSON.parse(save.raisingHome)?.payload ?? null : null; } catch { return null; }
+  if (!clock || !Number.isInteger(clock.year) || !Number.isInteger(clock.season) || !Number.isInteger(clock.dayOfSeason)) return null;
+  return clock.year * DAYS_PER_YEAR + clock.season * WORLD_CLOCK_CASCADE.daysPerSeason + clock.dayOfSeason + 1;
+}
 
 export async function sha256Hex(text) {
   const bytes = new TextEncoder().encode(String(text));
@@ -18,7 +28,10 @@ export function summarizeSaveText(text) {
   let save = null;
   try { save = JSON.parse(text); } catch { return Object.freeze({ valid: false }); }
   if (!save || typeof save !== "object") return Object.freeze({ valid: false });
-  const instances = Array.isArray(save.creature?.instances) ? save.creature.instances.length : Array.isArray(save.raising?.instances) ? save.raising.instances.length : null;
+  // Partners: the starter plus the Raising collection (the production save); older test shapes keep their instance lists.
+  const collection = Array.isArray(save.raising?.collection) ? save.raising.collection.length : null;
+  const instances = Array.isArray(save.creature?.instances) ? save.creature.instances.length : Array.isArray(save.raising?.instances) ? save.raising.instances.length
+    : collection === null ? null : collection + (save.creature?.creatureId ? 1 : 0);
   return Object.freeze({
     valid: true,
     schemaVersion: Number.isInteger(save.schemaVersion) ? save.schemaVersion : null,
@@ -26,7 +39,9 @@ export function summarizeSaveText(text) {
     trainerName: typeof save.progression?.nativeOpening?.trainerName === "string" ? save.progression.nativeOpening.trainerName : null,
     bits: Number.isInteger(save.shop?.bits) ? save.shop.bits : null,
     roster: instances,
-    titles: Array.isArray(save.progression?.badges) ? save.progression.badges.length : null,
+    rank: Number.isInteger(save.progression?.tamerRank) ? save.progression.tamerRank : null,
+    days: playedDays(save),
+    titles: Array.isArray(save.progression?.battleBadges) ? save.progression.battleBadges.length : Array.isArray(save.progression?.badges) ? save.progression.badges.length : null,
     updatedAt: typeof save.updatedAt === "string" ? save.updatedAt : null
   });
 }

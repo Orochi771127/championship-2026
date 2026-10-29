@@ -6,6 +6,7 @@ const {createHash}=require('node:crypto');
 const {resolveAsset,assertEvolved,assertBattleLoaders}=require('./alternate-form-browser-support.cjs');
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest');
 const {validatedPair,assertCurrentPublicBattleLoaders}=require('./alternate-form-compiled-support.cjs');
+const {webRenditions}=require('./helpers/dex-web-renditions.cjs');
 const qaRoot=path.resolve(process.env.CHAMPIONSHIP_ALTERNATE_QA_ARTIFACT||'.tmp/alternate-form-compiled-qa');
 const output=require('./browser-qa-output.cjs')('alternate-forms');fs.mkdirSync(output,{recursive:true});
 const publicBase='https://orochi771127.github.io/championship-2026/';
@@ -98,12 +99,15 @@ async function alternateAwaitReady(api){
    const previewExpected=await require('./dex-preview-contract.cjs').previewExpectations(root,registry);
    const expected=new Map([...codes].map(([id,code])=>{
     const art=registry.entries.find(e=>e.speciesIndex===id);assert.ok(art);
-    assert.equal(art.src,`assets/production/database-display-20261018/species-${id}.display.${art.sha256.slice(0,16)}.webp`);
+    // Owner-approved web renditions (2026-10-29) supersede the lossless 10-18 display renditions.
+    const web=webRenditions.get(art.src),lossless=web?web.supersedes:art;
+    assert.equal(lossless.src,`assets/production/database-display-20261018/species-${id}.display.${lossless.sha256.slice(0,16)}.webp`);
     const master=masters.entries.find(e=>e.speciesIndex===id),derived=derivations.rows.find(e=>e.speciesIndex===id);
     assert.equal(master.src,`assets/production/database-handpainted-r1-20261015/species-${id}.png`);
     assert.equal(master.sha256,approvedHashes[id]);assert.equal(createHash('sha256').update(fs.readFileSync(master.src)).digest('hex'),approvedHashes[id]);
     for(const key of ['src','sha256','width','height'])assert.equal(derived.source[key],master[key]);
-    assert.equal(derived.display.sha256,art.sha256);assert.equal(derived.display.rgbaExactlyMatchesResizedSource,true);
+    assert.equal(derived.display.sha256,art.sha256);assert.equal(derived.display.rgbaExactlyMatchesResizedSource,!web);
+    if(web)assert.equal(derived.display.alphaExactlyMatchesResizedSource,true);
     const bytes=fs.readFileSync(pair.resolve('/'+art.src));assert.equal(createHash('sha256').update(bytes).digest('hex'),art.sha256);
     return [id,{...art,code,url:new URL(art.src,publicBase).href}];
    }));

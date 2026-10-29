@@ -883,3 +883,20 @@
   :root[data-theme="arcade"] .cm-vs5-root .cm-vs5-data-arena::after,
   :root[data-theme="arcade"] .cm-vs5-root .cm-vs5-matches > .cm-vs5-match { animation: none !important; }
 }
+
+/* -- Medal collection (Owner 2026-10-28): an earned tile is a dark purple card,
+ *    so its title reads in bright cream (#FFF8E7) and its subtitle in soft gold
+ *    (#FFD166). The card takes a solid base so the contrast holds over any part
+ *    of the page gradient; the metal still tints its edge and glow. -- */
+:root[data-theme="arcade"] .cm-medals__summary { color: rgba(255, 248, 231, 0.86); text-shadow: 0 1px 0 rgba(20, 20, 31, 0.6); }
+:root[data-theme="arcade"] .cm-medals__tile[data-acquired="true"] {
+  border: 2px solid color-mix(in srgb, var(--medal-metal, #d8b04e) 70%, #fff8e7);
+  background:
+    radial-gradient(ellipse at 50% 30%, color-mix(in srgb, var(--medal-metal, #d8b04e) 30%, transparent), transparent 70%),
+    linear-gradient(180deg, #34205f, #1f1340);
+  box-shadow: inset 0 1px 0 rgba(255, 248, 231, 0.18), 0 4px 0 rgba(10, 6, 24, 0.55);
+}
+:root[data-theme="arcade"] .cm-medals__tile[data-acquired="true"] .cm-medals__name { color: #fff8e7; text-shadow: 0 1px 0 rgba(10, 6, 24, 0.7); }
+:root[data-theme="arcade"] .cm-medals__tile[data-acquired="true"] .cm-medals__status { color: #ffd166; font-weight: 800; }
+:root[data-theme="arcade"] .cm-medals__tile[data-acquired="true"] .cm-medals__number { color: rgba(255, 209, 102, 0.78); font-weight: 800; }
+:root[data-theme="arcade"] .cm-medals__tile[data-acquired="true"]:active { background: linear-gradient(180deg, #2a1a4d, #170e30); }

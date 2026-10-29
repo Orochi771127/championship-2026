@@ -14,12 +14,15 @@ export function createPvpRoomSession({ adapter, game, codeLength = 4, setTimer =
   if (!adapter?.createRoom || !adapter.joinRoom) throw new TypeError("PVP_ADAPTER_REQUIRED");
   if (!game?.createInvite || !game.prepareGuest || !game.prepareHost) throw new TypeError("PVP_GAME_HOOKS_REQUIRED");
   const listeners = new Set();
-  let state = Object.freeze({ phase: "idle", role: null, matchId: null, roomCode: null, seed: null, reason: null, prepared: null, opponent: null, countdownEndsAt: null });
+  // peerOnline (Owner 2026-10-29): the other player's Presence in the room channel; null until known.
+  let state = Object.freeze({ phase: "idle", role: null, matchId: null, roomCode: null, seed: null, reason: null, prepared: null, opponent: null, countdownEndsAt: null, peerOnline: null });
   let unsubscribe = null, countdown = null, invite = null, prepared = null, started = false, disposed = false;
 
   const emit = patch => { state = Object.freeze({ ...state, ...patch }); for (const fn of listeners) { try { fn(state); } catch { /* listener */ } } };
   const fail = (reason, extra = {}) => { cleanup(); emit({ phase: "failed", reason, ...extra }); return state; };
   function cleanup() { unsubscribe?.(); unsubscribe = null; clearTimer(countdown); countdown = null; }
+  const watch = matchId => adapter.subscribeMatch(matchId, match => { void onMatch(match); }, {
+    presence: { role: state.role }, onPresence: roles => { if (!disposed) emit({ peerOnline: roles.includes(state.role === "host" ? "guest" : "host") }); } });
   function startCountdown() {
     if (started || state.phase === "countdown") return;
     emit({ phase: "countdown", countdownEndsAt: Date.now() + PVP_COUNTDOWN_MS });
@@ -52,7 +55,7 @@ export function createPvpRoomSession({ adapter, game, codeLength = 4, setTimer =
       const room = await adapter.createRoom(invite.inviteCode, codeLength, "room");
       if (!room?.ok) return fail(room?.reason ?? "ROOM_CREATE_FAILED", { message: room?.message ?? null });
       emit({ phase: "waiting", matchId: room.matchId, roomCode: room.roomCode, seed: room.seed ?? null });
-      unsubscribe = adapter.subscribeMatch(room.matchId, match => { void onMatch(match); });
+      unsubscribe = watch(room.matchId);
       return state;
     },
     /** Guest: join by room code, answer the invite, and wait for the host. */
@@ -68,7 +71,7 @@ export function createPvpRoomSession({ adapter, game, codeLength = 4, setTimer =
       const sent = await adapter.submitReply(room.matchId, result.replyCode);
       if (!sent?.ok) return fail(sent?.reason ?? "REPLY_FAILED");
       emit({ phase: "ready", prepared });
-      unsubscribe = adapter.subscribeMatch(room.matchId, match => { void onMatch(match); });
+      unsubscribe = watch(room.matchId);
       const ready = await adapter.setReady(room.matchId);
       if (ready?.status === "playing") startCountdown();
       return state;

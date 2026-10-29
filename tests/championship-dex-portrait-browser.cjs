@@ -11,6 +11,8 @@ const { pathToFileURL } = require('node:url');
 const PUBLIC_BASE = 'https://orochi771127.github.io/championship-2026/';
 const HERO = '.cm-vs2-root[data-screen="DATABASE"] .cm-dex-hero';
 const {APPROVED20:OLD20,APPROVED10,APPROVED_GR_FIXES,assertApproved20Registry} = require('./approved20-20261022-contract.cjs');
+const {beforeWebRendition,webRenditions} = require('./helpers/dex-web-renditions.cjs');
+const SILHOUETTES = new Map(require('../src/data/championship/database-hero-silhouettes.v1.json').entries.map(row=>[row.sha256,row.box]));
 const APPROVED44=Object.freeze([...OLD20,...APPROVED10].sort((a,b)=>a.speciesIndex-b.speciesIndex));
 const APPROVED44_IDS=Object.freeze(APPROVED44.map(e=>e.speciesIndex));
 const EXPECTED_REGISTRY_COUNT = 230;
@@ -58,7 +60,9 @@ function assertOriginalApprovalLineage() {
     assert.ok(original);assertAsset(original,fs.readFileSync(master.src),master);
     const derived=displayRecipe.rows.find(row=>row.speciesIndex===master.speciesIndex);
     for(const key of ['src','sha256','width','height'])assert.equal(derived.source[key],original[key]);
-    assert.equal(derived.display.rgbaExactlyMatchesResizedSource,true);
+    // Owner-approved web renditions (2026-10-29) keep exact alpha; their lossless predecessor is recorded in supersedes.
+    assert.equal(derived.display.rgbaExactlyMatchesResizedSource,!derived.display.supersedes);
+    if(derived.display.supersedes)assert.equal(derived.display.alphaExactlyMatchesResizedSource,true);
     assert.equal(EXPECTED[master.speciesIndex].sha256,derived.display.sha256);
   }
 }
@@ -71,14 +75,14 @@ function assertAsset(entry, bytes, expected) {
     assert.equal(bytes.readUInt32BE(16), expected.width ?? 1254); assert.equal(bytes.readUInt32BE(20), expected.height ?? 1254);
   } else {
     assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');
-    if(!expected.ownerCompressed)assert.ok(bytes.includes(Buffer.from('VP8L')),'Existing display images use lossless WebP');
+    if(!expected.ownerCompressed)assert.ok(bytes.includes(Buffer.from(webRenditions.has(expected.src)?'VP8 ':'VP8L')),'Display images are lossless WebP or an Owner-approved web rendition');
   }
 }
 function assertRegistry(sourceBytes, builtBytes) {
   assert.equal(sha256(builtBytes), sha256(sourceBytes), 'Built hero registry must equal this exact candidate source');
   const catalog = JSON.parse(builtBytes);
   assertApproved20Registry(catalog);
-  for(const pinned of SCOPED_GR_ENTRIES)assert.deepEqual(catalog.entries.find(e=>e.speciesIndex===pinned.speciesIndex),pinned,"Exact scoped GR portrait binding");
+  for(const pinned of SCOPED_GR_ENTRIES)assert.deepEqual(beforeWebRendition(catalog.entries.find(e=>e.speciesIndex===pinned.speciesIndex)),pinned,"Exact scoped GR portrait binding");
   assert.ok(Array.isArray(catalog.entries));
   assert.equal(new Set(catalog.entries.map(entry => entry.speciesIndex)).size, catalog.entries.length, 'No duplicate hero identities');
   for (const id of Object.keys(EXPECTED).map(Number)) assert.ok(catalog.entries.some(entry => entry.speciesIndex === id), `Missing selected hero ${id}`);
@@ -103,41 +107,48 @@ function assertMeasured(snapshot, species, size = null) {
   assert.ok(snapshot.imageRect.width > 0 && snapshot.imageRect.height > 0);
   if (size !== null) {
     const plan = sizePlan(size, snapshot.padding);
-    for (const dim of ['width', 'height']) {
-      assert.ok(Math.abs(snapshot.imageRect[dim] - size) <= 0.75, `Actual image ${dim} is not ${size} CSS px`);
-      assert.ok(Math.abs(snapshot.holderRect[dim] - plan[dim]) <= 0.75, `Actual holder ${dim} differs from preserved-padding plan`);
-    }
+    for (const dim of ['width', 'height']) assert.ok(Math.abs(snapshot.holderRect[dim] - plan[dim]) <= 0.75, `Actual holder ${dim} differs from preserved-padding plan`);
   }
+  assertSilhouetteFit(snapshot);
 }
 
-// Pinned alpha>32 foreground bounds for unchanged GR08 864px source, not a
-// weakened viewport test: translated transparent canvas is allowed outside its holder.
-function visibleHeroRect(snapshot,species){
-  const r=snapshot.imageRect;if(species!==40)return r;
-  return {x:r.x+r.width*287/864,right:r.x+r.width*821/864,y:r.y+r.height*7/864,bottom:r.y+r.height*860/864};
+// Owner 2026-10-29: the stage fits each image's drawn box (alpha > 32, measured per image in
+// database-hero-silhouettes.v1.json), not its canvas. The box fills the content height, or the
+// content width plus 16 px of each side's padding, centred and standing --dex-floor above the
+// stage's bottom edge. Transparent canvas outside the stage is clipped, not shifted per species.
+function silhouetteBox(snapshot){
+  const box=SILHOUETTES.get(EXPECTED[snapshot.speciesIndex]?.sha256);assert.ok(box,'Missing measured silhouette');return box;
+}
+function visibleHeroRect(snapshot){
+  const r=snapshot.imageRect,[iw,ih]=snapshot.natural,[x,y,w,h]=silhouetteBox(snapshot);
+  return {x:r.x+r.width*x/iw,right:r.x+r.width*(x+w)/iw,y:r.y+r.height*y/ih,bottom:r.y+r.height*(y+h)/ih};
+}
+function assertSilhouetteFit(snapshot){
+  assert.equal(snapshot.fit,'silhouette');assert.equal(snapshot.imageTransform,'none','No per-species shift');
+  assert.equal(snapshot.holderOverflow,'clip','Transparent canvas must not cover neighbouring controls');
+  const stage=snapshot.holderRect,[bt,br,bb,bl]=snapshot.border,[,,w,h]=silhouetteBox(snapshot),[iw,ih]=snapshot.natural;
+  const cw=stage.width-bl-br-48,ch=stage.height-bt-bb-48,scale=Math.min((cw+32)/w,(ch+24-snapshot.floor)/h);
+  const r=snapshot.imageRect,v=visibleHeroRect(snapshot);
+  assert.ok(Math.abs(r.width-scale*iw)<.75&&Math.abs(r.height-scale*ih)<.75,'Drawn box fills the stage');
+  assert.ok(Math.abs((v.x+v.right)/2-(stage.x+bl+(stage.width-bl-br)/2))<.75,'Drawn box centred on the stage');
+  assert.ok(Math.abs(v.bottom-(stage.bottom-bb-snapshot.floor))<.75,'Drawn box stands on the floor');
+  assert.ok(v.x>=stage.x+bl+8-.75&&v.right<=stage.right-br-8+.75&&v.y>=stage.y+bt+24-.75,'Drawn box inside the stage');
+}
+// Pure silhouette-fit geometry for a border-free stage whose cw x ch content box starts at (64, 44).
+function silhouetteFixture(species, cw, ch, floor = 24) {
+  const e = EXPECTED[species], [iw, ih] = [e.width ?? 1254, e.height ?? 1254], [x, y, w, h] = SILHOUETTES.get(e.sha256);
+  const scale = Math.min((cw + 32) / w, (ch + 24 - floor) / h), left = 64 + cw / 2 - scale * (x + w / 2), top = 68 + ch - floor - scale * (y + h);
+  return { holderRect: { x: 40, y: 20, width: cw + 48, height: ch + 48, right: 88 + cw, bottom: 68 + ch }, contentSize: [cw, ch], border: [0, 0, 0, 0],
+    imageRect: { x: left, y: top, width: scale * iw, height: scale * ih, right: left + scale * iw, bottom: top + scale * ih },
+    fit: 'silhouette', floor, holderOverflow: 'clip', imageTransform: 'none' };
 }
 function assertScopedGRGeometry(snapshot,species){
   assertMeasured(snapshot,species);
   assert.equal(snapshot.placeholderHidden,true,'Ready image hides missing/loading placeholder');assert.equal(snapshot.holderHidden,false);assert.notEqual(snapshot.holderDisplay,'none');
   assert.equal(snapshot.holderSpeciesId,`species-${String(species).padStart(3,'0')}`);
-  const r=snapshot.imageRect,h=snapshot.holderRect,n=snapshot.natural,c=snapshot.contentSize;
-  const expectedScale=Math.min(c[0]/n[0],c[1]/n[1]),actualScale=Math.min(r.width/n[0],r.height/n[1]);
-  assert.ok(Math.abs(actualScale-expectedScale)<.002,'Unchanged object-fit contain scale');
   assert.equal(snapshot.holderStyle,null,'Normal scoped review must not inject holder sizing');
-  if(species===40){
-    assert.ok(Math.abs(r.width-r.height)<.75,'GR08 image box remains intrinsic square');
-    const match=snapshot.imageTransform.match(/^matrix\(([^)]+)\)$/);assert.ok(match,'GR08 translation is active');
-    const matrix=match[1].split(',').map(Number);
-    assert.deepEqual(matrix.slice(0,4),[1,0,0,1],'GR08 transform cannot scale, rotate or skew');assert.equal(matrix[5],0);
-    assert.ok(Math.abs(matrix[4]+r.width*122/864)<.75,'Exact horizontal silhouette correction');
-    const visible=visibleHeroRect(snapshot,species),center=(visible.x+visible.right)/2;
-    assert.ok(Math.abs(center-(h.x+h.width/2))<.75,'GR08 visible silhouette centered on holder');
-    assert.ok(visible.x>=h.x-.75&&visible.right<=h.right+.75,'Foreground remains inside holder');
-    assert.ok(visible.x>=-1&&visible.right<=snapshot.viewport.width+1&&visible.y>=-1&&visible.bottom<=snapshot.viewport.height+1,'Visible GR08 foreground fully in viewport');
-  }else{
-    assert.equal(snapshot.imageTransform,'none','Adjacent GR07/GR09 and GR06/GR21/GR22/GR26 must not inherit GR08 transform');
-    assert.ok(r.x>=-1&&r.right<=snapshot.viewport.width+1&&r.y>=-1&&r.bottom<=snapshot.viewport.height+1,'Adjacent and four approved GR image box visible after normal scrolling');
-  }
+  const visible=visibleHeroRect(snapshot);
+  assert.ok(visible.x>=-1&&visible.right<=snapshot.viewport.width+1&&visible.y>=-1&&visible.bottom<=snapshot.viewport.height+1,'Drawn GR silhouette fully in viewport after normal scrolling');
 }
 function assertScopedGRCoverage(rows){
   assert.equal(rows.length,24);
@@ -201,6 +212,8 @@ function mountedSnapshot() {
     complete: image.complete, hidden: image.hidden, natural: [image.naturalWidth, image.naturalHeight],
     holderRect: rect(holder), imageRect: rect(image), padding: [hs.paddingTop, hs.paddingRight, hs.paddingBottom, hs.paddingLeft].map(Number.parseFloat),
     placeholderHidden: holder.querySelector('.cm-dex-hero__placeholder')?.hidden, holderHidden:holder.hidden, holderDisplay:hs.display,
+    fit: holder.dataset.fit ?? null, floor: Number.parseFloat(hs.getPropertyValue('--dex-floor')) || 24, holderOverflow: hs.overflowX,
+    border: [hs.borderTopWidth, hs.borderRightWidth, hs.borderBottomWidth, hs.borderLeftWidth].map(Number.parseFloat),
     holderSpeciesId: holder.dataset.speciesId, imageTransform: is.transform, contentSize: [holder.clientWidth-parseFloat(hs.paddingLeft)-parseFloat(hs.paddingRight),holder.clientHeight-parseFloat(hs.paddingTop)-parseFloat(hs.paddingBottom)],
     holderStyle: holder.getAttribute('style'), cssHolderSize: [hs.width, hs.height], cssImageSize: [is.width, is.height],
     boxSizing: hs.boxSizing, objectFit: is.objectFit, imageRendering: is.imageRendering, imageOpacity: is.opacity, imageFilter: is.filter,
@@ -248,7 +261,7 @@ async function main() {
   fs.mkdirSync(output, { recursive: true });
   const evidence = { status: 'RUNNING', visualReview: 'PENDING_ROOT_SCREENSHOT_REVIEW',
     commit: process.env.GITHUB_SHA || null, candidateHeadCommit: process.env.DEX_QA_HEAD_SHA || null, baseCommit: process.env.DEX_QA_BASE_SHA || null,
-    scope: 'Adds GR08 visible-silhouette centering/unchanged contain-scale, GR07/GR09 adjacency and approved GR06/GR21/GR22/GR26 at320/390portrait and844x320landscape. Includes all approved44 list thumbnails plus unmodified desktop/mobile heroes; preserves original194 metadata. Normal fresh public-playtest UI: approved Dex040/189 with preserved063/070 with unchanged117/055/071/072 comparisons at normal desktop/mobile and128/256 light/dark contain; four existing promoted forms retain normal hero/source/target preview coverage. Only mounted matrix-holder size/backdrop CSS is temporarily overridden.',
+    scope: 'Adds silhouette-fit sizing (each drawn box fills, centres and floors on the stage; GR08 needs no shift), GR07/GR09 adjacency and approved GR06/GR21/GR22/GR26 at320/390portrait and844x320landscape. Includes all approved44 list thumbnails plus unmodified desktop/mobile heroes; preserves original194 metadata. Normal fresh public-playtest UI: approved Dex040/189 with preserved063/070 with unchanged117/055/071/072 comparisons at normal desktop/mobile and128/256 light/dark contain; four existing promoted forms retain normal hero/source/target preview coverage. Only mounted matrix-holder size/backdrop CSS is temporarily overridden.',
     exclusions: ['No visual/anatomy/alpha PASS from automation', 'No runtime-action replacement', 'No physical-device acceptance', 'No public deployment claim'],
     captures: [], assetChecks: [], console: [], pageErrors: [], networkErrors: [], cleanupErrors: [] };
   const write = () => fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify(evidence, null, 2) + '\n');
@@ -417,7 +430,7 @@ async function main() {
       await page.locator(HERO).scrollIntoViewIfNeeded();
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       const snapshot = await page.evaluate(mountedSnapshot); assertMeasured(snapshot, species, size);
-      const visible=visibleHeroRect(snapshot,species);
+      const visible=visibleHeroRect(snapshot);
       assert.ok(visible.x >= -1 && visible.y >= -1 && visible.right <= snapshot.viewport.width + 1 && visible.bottom <= snapshot.viewport.height + 1, 'Whole visible hero must be visible after normal scrolling');
       if(!isApproved44)await shot(name);
       await timedScreenshot(page.locator(HERO),{ path: path.join(output, name + '-hero.png') });
@@ -610,16 +623,19 @@ async function selfTest() {
   assert.deepEqual(sizePlan(128, [24, 24, 24, 24]), { size: 128, width: 176, height: 176 });
   assert.deepEqual(sizePlan(256, [24, 24, 24, 24]), { size: 256, width: 304, height: 304 });
   assert.throws(() => sizePlan(80, [24, 24, 24, 24])); assert.throws(() => sizePlan(128, [0, 0, 0, 0]));
+  const fitFixture = silhouetteFixture;
   const valid = { speciesIndex: 117, displayCode: 'MA58', rowState: 'UNDISCOVERED', title: '曙刃天駒', src: new URL(EXPECTED[117].src, PUBLIC_BASE).href,
     art: 'ready', complete: true, hidden: false, natural: [EXPECTED[117].width, EXPECTED[117].height], objectFit: 'contain', padding: [24, 24, 24, 24], documentOverflow: false,
-    imageRect: { width: 128, height: 128 }, holderRect: { width: 176, height: 176 } };
+    ...fitFixture(117, 128, 128) };
   assertMeasured(valid, 117, 128);
-  for (const changed of [{ rowState: 'REGISTERED' }, { src: 'wrong.png' }, { objectFit: 'cover' }, { imageRect: { width: 80, height: 80 } }]) assert.throws(() => assertMeasured({ ...valid, ...changed }, 117, 128));
+  for (const changed of [{ rowState: 'REGISTERED' }, { src: 'wrong.png' }, { objectFit: 'cover' }, { imageRect: { ...valid.imageRect, width: 80, height: 80 } },
+    { fit: null }, { floor: 48 }, { holderOverflow: 'visible' }, { imageTransform: 'matrix(1, 0, 0, 1, -30, 0)' }]) assert.throws(() => assertMeasured({ ...valid, ...changed }, 117, 128));
   for (const species of [9,10,40,189,63,70,35,62,36]) {
     const expected=EXPECTED[species];
-    const snapshot={...valid,speciesIndex:species,displayCode:expected.displayCode,title:expected.name,natural:[expected.width ?? 1254,expected.height ?? 1254],src:new URL(expected.src,PUBLIC_BASE).href};
+    const snapshot={...valid,speciesIndex:species,displayCode:expected.displayCode,title:expected.name,natural:[expected.width ?? 1254,expected.height ?? 1254],src:new URL(expected.src,PUBLIC_BASE).href,...fitFixture(species,128,128)};
     assertMeasured(snapshot,species,128);
-    assertMeasured({...snapshot,imageRect:{width:256,height:256},holderRect:{width:304,height:304}},species,256);
+    assertMeasured({...snapshot,...fitFixture(species,256,256)},species,256);
+    assertMeasured({...snapshot,...fitFixture(species,128,128,48)},species,128);
     for(const changed of [{natural:[1,1]},{src:new URL('assets/production/database-handpainted-r1-20261015/species-'+String(species).padStart(3,'0')+'.png',PUBLIC_BASE).href},{objectFit:'cover'},{padding:[0,0,0,0]},{hidden:true},{complete:false},{documentOverflow:true}]) assert.throws(()=>assertMeasured({...snapshot,...changed},species,128));
     if([9,10,189,35,36].includes(species))assert.throws(()=>assertMeasured({...snapshot,natural:[1254,1254]},species,128));
   }
@@ -633,7 +649,7 @@ async function selfTest() {
     assert.equal(expected.name, name);
     const snapshot = {...valid, speciesIndex:species, displayCode:expected.displayCode,
       title:name, natural:[expected.width ?? 1254, expected.height ?? 1254],
-      src:new URL(expected.src, PUBLIC_BASE).href};
+      src:new URL(expected.src, PUBLIC_BASE).href, ...fitFixture(species, 128, 128)};
     assertMeasured(snapshot, species, 128);
     assert.throws(() => assertMeasured({...snapshot, title:staleName}, species, 128), /Exact species name binding/);
   }
@@ -660,13 +676,12 @@ async function selfTest() {
   assert.throws(()=>assertScopedGRThumbnailCoverage(scopedThumbFixtures.map((x,i)=>i===0?{...x,screenshot:null}:x)));
   assert.throws(()=>assertScopedGRThumbnailCoverage(scopedThumbFixtures.map((x,i)=>i===8?{...x,screenshot:'unexpected.png'}:x)));
   // Pure geometry fixtures exercise the scoped browser assertions without launching a browser.
-  for(const [cw,ch]of [[242,272],[272,272],[272,86.4]]){
-    const side=Math.min(cw,ch),dx=-side*122/864,h={x:40,y:20,width:cw+48,height:ch+48,right:40+cw+48,bottom:20+ch+48};
-    const e=EXPECTED[40],fixture={...valid,speciesIndex:40,displayCode:e.displayCode,title:e.name,src:new URL(e.src,PUBLIC_BASE).href,natural:[864,864],holderRect:h,
-      imageRect:{x:h.x+24+(cw-side)/2+dx,y:h.y+24+(ch-side)/2,width:side,height:side,right:h.x+24+(cw-side)/2+dx+side,bottom:h.y+24+(ch-side)/2+side},
-      holderSpeciesId:'species-040',imageTransform:`matrix(1, 0, 0, 1, ${dx}, 0)`,contentSize:[cw,ch],holderStyle:null,placeholderHidden:true,holderHidden:false,holderDisplay:'flex',viewport:{width:500,height:500}};
-    assertScopedGRGeometry(fixture,40);
-    for(const changed of [{imageTransform:'none'},{imageTransform:'matrix(2, 0, 0, 2, 0, 0)'},{holderSpeciesId:'species-041'},{placeholderHidden:false},{contentSize:[cw*2,ch*2]},{imageRect:{...fixture.imageRect,x:fixture.imageRect.x+10,right:fixture.imageRect.right+10}}])assert.throws(()=>assertScopedGRGeometry({...fixture,...changed},40));
+  for(const [cw,ch]of [[242,272],[272,272],[272,86.4]])for(const species of [40,39,41,38,48,49,52]){
+    const e=EXPECTED[species],fixture={...valid,speciesIndex:species,displayCode:e.displayCode,title:e.name,src:new URL(e.src,PUBLIC_BASE).href,natural:[e.width ?? 1254,e.height ?? 1254],
+      ...fitFixture(species,cw,ch),holderSpeciesId:`species-${String(species).padStart(3,'0')}`,holderStyle:null,placeholderHidden:true,holderHidden:false,holderDisplay:'flex',viewport:{width:500,height:500}};
+    assertScopedGRGeometry(fixture,species);
+    for(const changed of [{imageTransform:'matrix(1, 0, 0, 1, -30, 0)'},{holderSpeciesId:'species-001'},{placeholderHidden:false},{fit:null},{holderStyle:'width: 10px'},
+      {imageRect:{...fixture.imageRect,x:fixture.imageRect.x+10,right:fixture.imageRect.right+10}},{viewport:{width:100,height:100}}])assert.throws(()=>assertScopedGRGeometry({...fixture,...changed},species));
   }
   assert.equal(Object.keys(EXPECTED).length,85);
   assert.deepEqual(APPROVED_GR_FIXES.map(e=>e.speciesIndex).sort((a,b)=>a-b),[38,48,49,52]);
@@ -678,9 +693,9 @@ async function selfTest() {
   const duplicated=Buffer.from(JSON.stringify({entries:[{speciesIndex:117},{speciesIndex:55},{speciesIndex:117}]}));
   assert.throws(()=>assertRegistry(duplicated,duplicated));
   const missing=Buffer.from(JSON.stringify({entries:[{speciesIndex:55}]}));assert.throws(()=>assertRegistry(missing,missing));
-  console.log('DEX_PORTRAIT_SELF_TEST_PASS: sizing, identity, registration, contain, measured geometry and bounded onboarding-race guards; no browser launched.');
+  console.log('DEX_PORTRAIT_SELF_TEST_PASS: sizing, identity, registration, silhouette fit, measured geometry and bounded onboarding-race guards; no browser launched.');
 }
-module.exports = { assertScopedGRThumbnailMeasured,assertScopedGRThumbnailCoverage, SCOPED_GR_ENTRIES,visibleHeroRect,assertScopedGRGeometry,assertScopedGRCoverage, APPROVED44,APPROVED44_IDS,assertApproved44Coverage,assertThumbnailMeasured, EXPECTED, assertRegistry, sizePlan, assertAsset, assertMeasured, mountedSnapshot, checkPolicy, clickOptionalComicControl, selfTestOptionalComicClick };
+module.exports = { assertScopedGRThumbnailMeasured,assertScopedGRThumbnailCoverage, SCOPED_GR_ENTRIES,visibleHeroRect,assertScopedGRGeometry,assertScopedGRCoverage, APPROVED44,APPROVED44_IDS,assertApproved44Coverage,assertThumbnailMeasured, EXPECTED, assertRegistry, sizePlan, assertAsset, assertMeasured, silhouetteFixture, mountedSnapshot, checkPolicy, clickOptionalComicControl, selfTestOptionalComicClick };
 if (require.main === module) {
   if (process.argv.includes('--self-test')) selfTest().catch(error => { console.error(error); process.exitCode = 1; });
   else main().catch(error => { console.error(error); process.exitCode = 1; });

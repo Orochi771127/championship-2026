@@ -285,6 +285,17 @@ export function speciesNameForId(speciesId, fallback = undefined) {
   return match ? speciesName(Number(match[1]), unknown) : unknown;
 }
 
+/**
+ * Internal species codes ("SPECIES 084", "species_099") replaced by the catalog
+ * name in the display language. Saves from before 2026-10-28 kept such codes as
+ * partner names in the stroll log; an unknown number keeps its code.
+ */
+export const SPECIES_CODE_PATTERN = /\bSPECIES[\s_-]*(\d{1,3})\b/gi;
+export function localizeSpeciesCodes(text) {
+  if (typeof text !== "string" || !text) return text;
+  return text.replace(SPECIES_CODE_PATTERN, (code, digits) => speciesName(Number(digits), code));
+}
+
 /** A Shop item's name and description in the display language. */
 export function shopItemName(recordIndex, fallback = null) {
   const loc = getLocale();
