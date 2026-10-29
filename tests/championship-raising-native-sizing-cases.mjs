@@ -6,6 +6,7 @@ import { BATTLE_CHARACTER_GEOMETRY } from "../src/data/championship/battleCharac
 import { getCharacterStaticNativeSizing } from "../src/championship/presentation/licensedCharacterRoster.js";
 import {spawnSync} from 'node:child_process';
 import {ACTIVE_ALTERNATE_FORM_ASSETS, rekeyAlternateDonorRuntime, bindAlternateFormManifest} from '../src/championship/presentation/alternateFormAssetContracts.js';
+import {getRaisingFootprintShadow} from '../src/championship/presentation/intRh2/raisingFootprintShadow.js';
 
 // The shipping imports above are intentionally unhooked. Only a separate child
 // process disables the alternate assets to retain the original native oracles.
@@ -236,8 +237,12 @@ test("real Raising scene shares native scale on resize/flip and keeps padded tap
   const root=scene.children.find(item=>item.label==="actors").children[0];
   assert.ok(scene.children.find(item=>item.label==="terrain").children.every(item=>item.visible===false),
     "legacy region outlines are hidden when real cage artwork is loaded");
-  assert.deepEqual(root.children[0].lastEllipse,[0,1,14*.42,14*.13],
-    'native baseline egg retains its pre-existing shadow; only accepted original eggs opt in');
+  // A native baseline egg takes the measured footprint (shadow audit 2026-10-30); only accepted
+  // original eggs keep their shell contact. The last pass drawn is the soft core (k = .62).
+  const {trim,orig}=sprite.texture,drawn={x:(trim.x-orig.width*sprite.anchor.x)/12,y:(trim.y-orig.height*sprite.anchor.y)/12,width:trim.width/12,height:trim.height/12};
+  const foot=getRaisingFootprintShadow('species-000',undefined,drawn,false);
+  assert.deepEqual(root.children[0].lastEllipse.map(v=>+v.toFixed(9)),[foot.x,foot.y,foot.radiusX*.62,foot.radiusY*.62].map(v=>+v.toFixed(9)),
+    'native baseline egg takes the measured footprint; only accepted original eggs opt in');
   assert.equal(sprite.scale.x,1/12);
   assert.equal(root.scale.x,-getRaisingNativePixelScale(cm01,stage.app.screen));
   assert.equal(root.x,195,"lane projection is preserved");

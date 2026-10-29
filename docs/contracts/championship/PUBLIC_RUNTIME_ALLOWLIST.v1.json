@@ -122528,6 +122528,10 @@
       "sha256": "ac2af017f5f83adbda239a8b4a4390b39fbc8936cb30686859a9541f83e941a4"
     },
     {
+      "path": "src/championship/app/elementChartModal.js",
+      "sha256": "261c694a27e037f7fad7cb0f6daaf48da41561238596780d5c907ff544e063df"
+    },
+    {
       "path": "src/championship/app/facilityBattleMobile.css",
       "sha256": "5208017a7a19b0b77cd1cbe30ca52678ba3eaeeef9225146451bdeb5b05df67d"
     },
@@ -122880,6 +122884,10 @@
       "sha256": "1605f36aa53927a17b03c8cf65166d3deda326efac406dc72d16b11b2fa9f1eb"
     },
     {
+      "path": "src/championship/app/ui/taxonomy.css",
+      "sha256": "27e04f8999a5dec0c25e398071c684212aab08291164d1b66f68aa89fce15e2c"
+    },
+    {
       "path": "src/championship/app/ui/tokens.css",
       "sha256": "c8a58718d9b69377ed47c343bce326e8bac2b1f03e848894f6113f6cabb2b935"
     },
@@ -123104,6 +123112,10 @@
       "sha256": "1b491b39a330b73845a3d3f83c8803fb9f70cf40625ea01ccdee16b7a3f5862d"
     },
     {
+      "path": "src/championship/battle/battleTaxonomyAdaptation.js",
+      "sha256": "ed88730fb28549ae6b57d240bf900a0c160c534d9c2e9afbaee72ca26d1a28bf"
+    },
+    {
       "path": "src/championship/battle/battleTurnStates.js",
       "sha256": "16ae01419b7bac022832cd797100c8cff594edda2b52c060ad9d6d2ee5cbb021"
     },
@@ -123214,6 +123226,10 @@
     {
       "path": "src/championship/contracts/productSpeciesExtensions.js",
       "sha256": "5ab01be7f5da08854eaa2eea683700e02ce419f1f2b5340b06debc627b5e6be7"
+    },
+    {
+      "path": "src/championship/contracts/speciesTaxonomy.js",
+      "sha256": "1dccfcd6f9b72db6b1874351c9a418cbc783d1ccea5f597d1c4f5170c3d0a99f"
     },
     {
       "path": "src/championship/data/monsterVisualAnchors218.js",
@@ -123797,7 +123813,7 @@
     },
     {
       "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-      "sha256": "f9b5b0f09c25b1f3c152b9e255f8ec4deb4ec8fc35a40dbfab7088a745519f8e"
+      "sha256": "cb3258ead9ed3adedac4f78f86a54022c0f5f274129211fde41ad5df8d11b54c"
     },
     {
       "path": "src/championship/presentation/intRh2/raisingContactShadow.js",
@@ -123806,6 +123822,10 @@
     {
       "path": "src/championship/presentation/intRh2/raisingFieldViewport.js",
       "sha256": "8dde98a1ffb8abbec0c5eacc29f00aaf7f7d3b6299b99046237fb70def7e471e"
+    },
+    {
+      "path": "src/championship/presentation/intRh2/raisingFootprintShadow.js",
+      "sha256": "177ab0aa80ab351705eae3bf1f8aeb26a3362aeaba49fdabae8a1b2d6aeb3f6a"
     },
     {
       "path": "src/championship/presentation/intRh2/raisingNativeSizing.js",
@@ -123997,7 +124017,7 @@
     },
     {
       "path": "src/championship/presentation/ranchGroundShadows.js",
-      "sha256": "90bdc28c7f52bcd3c041b8d09e46987fec8456af869fae2659da3e94da2ddd54"
+      "sha256": "0882f6a3859b7d7cd50e1cdefc63c6a567d361a320db8370df1f12e227056e6b"
     },
     {
       "path": "src/championship/presentation/ranchPassages.js",
@@ -124074,6 +124094,10 @@
     {
       "path": "src/championship/presentation/tamerBragCardGenerator.js",
       "sha256": "56447910ed758dccf433db60e57450f5ee1cb80da74a1b7d1ed9943d1f547647"
+    },
+    {
+      "path": "src/championship/presentation/taxonomyBadgeArt.js",
+      "sha256": "45a17e135d67143d9309d15d86762bd79b976cfd073eda40d9f6785d7fd2d1e1"
     },
     {
       "path": "src/championship/presentation/titleAssetVariant.js",
@@ -124514,6 +124538,10 @@
     {
       "path": "src/championship/text/socialText.js",
       "sha256": "2fe9a63b1b1d7bb099f3df08801f1b3db0c048d0b0fde59cfa03b54fb901ace8"
+    },
+    {
+      "path": "src/championship/text/taxonomyText.js",
+      "sha256": "80a106b0078f5c902d3dfd3ef94827526766bf413267b513ed95bd2ec8ac19df"
     },
     {
       "path": "src/championship/text/tutorialMessages.en.js",
@@ -126266,6 +126294,22 @@
       "sha256": "1de79c4ae259a11f19d83dc1e3405875ba7cadce4d1372f376820fa30f10d187"
     },
     {
+      "path": "src/data/championship/raising-contact-footprints.v1.json",
+      "sha256": "9bd579cd0d96886848a4de95dbec6e28c66cadf2f9be1cc903fdb9c0171c4c1a",
+      "jsonFields": [
+        "schemaVersion",
+        "kind",
+        "method",
+        "frames",
+        "default",
+        "depth",
+        "front",
+        "depthPerHeight",
+        "minDepth",
+        "rows"
+      ]
+    },
+    {
       "path": "src/data/championship/ranch-render-selection.v1.json",
       "sha256": "ddd5d6a367c5f0b7e7d80203db5114924c93d6992691571d2fee55ea3eae7f41",
       "jsonFields": [
@@ -126281,7 +126325,7 @@
     },
     {
       "path": "src/data/championship/reviewed-animation-selection.v1.json",
-      "sha256": "18ae49eb7573ecd54c2eb362dcb432c6a9bf60c527458628e4de6d663dc5f6b3",
+      "sha256": "06277121e6e73fafdd6c370e119e12b139c5b972fe0d2dc369f044ef7743d4c2",
       "jsonFields": [
         "arenaGroundFromWalk",
         "authoringPath",
@@ -126305,30 +126349,6 @@
         "sha256",
         "speciesId"
       ]
-    },
-    {
-      "path": "src/championship/contracts/speciesTaxonomy.js",
-      "sha256": "1dccfcd6f9b72db6b1874351c9a418cbc783d1ccea5f597d1c4f5170c3d0a99f"
-    },
-    {
-      "path": "src/championship/text/taxonomyText.js",
-      "sha256": "80a106b0078f5c902d3dfd3ef94827526766bf413267b513ed95bd2ec8ac19df"
-    },
-    {
-      "path": "src/championship/presentation/taxonomyBadgeArt.js",
-      "sha256": "45a17e135d67143d9309d15d86762bd79b976cfd073eda40d9f6785d7fd2d1e1"
-    },
-    {
-      "path": "src/championship/app/elementChartModal.js",
-      "sha256": "261c694a27e037f7fad7cb0f6daaf48da41561238596780d5c907ff544e063df"
-    },
-    {
-      "path": "src/championship/battle/battleTaxonomyAdaptation.js",
-      "sha256": "ed88730fb28549ae6b57d240bf900a0c160c534d9c2e9afbaee72ca26d1a28bf"
-    },
-    {
-      "path": "src/championship/app/ui/taxonomy.css",
-      "sha256": "27e04f8999a5dec0c25e398071c684212aab08291164d1b66f68aa89fce15e2c"
     },
     {
       "path": "src/data/championship/species-taxonomy.v1.json",
