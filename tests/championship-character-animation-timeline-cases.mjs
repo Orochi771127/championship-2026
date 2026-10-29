@@ -171,6 +171,7 @@ test("Pixi runtime bundle loads all review atlases and releases them without own
     textureCount: 83,
     sheetCount: 2,
     streaming: null,
+    nativePixels: true,
     reviewOnly: true,
     runtimeEligible: false,
     ticker: "SCENE_OWNED_APPLICATION_TICKER_REQUIRED"

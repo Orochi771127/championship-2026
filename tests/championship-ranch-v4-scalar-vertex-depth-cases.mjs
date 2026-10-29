@@ -1,5 +1,5 @@
 import fs from'node:fs';import vm from'node:vm';import assert from'node:assert/strict';
-const source=fs.readFileSync(new URL('../src/championship/presentation/ranchThreeScene.js',import.meta.url),'utf8'),baseline=fs.readFileSync(new URL('./fixtures/ranch-v4/historical-v3-snippets.txt',import.meta.url),'utf8');
+const source=fs.readFileSync(new URL('../src/championship/presentation/ranchThreeScene.js',import.meta.url),'utf8').replaceAll('\r\n','\n'),baseline=fs.readFileSync(new URL('./fixtures/ranch-v4/historical-v3-snippets.txt',import.meta.url),'utf8').replaceAll('\r\n','\n');
 let checks=0;const eq=(a,b)=>{assert.equal(a,b);checks++},ok=a=>{assert.ok(a);checks++};
 class Texture{constructor(data){this.image={data};this.disposals=0}dispose(){this.disposals++}}
 class Vec{constructor(x=0,y=0,z=0){Object.assign(this,{x,y,z})}}

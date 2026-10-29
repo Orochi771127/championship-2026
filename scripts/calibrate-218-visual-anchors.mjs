@@ -97,9 +97,12 @@ async function motionAnchors(speciesId) {
     const frames = motion.sequences.get(action.sequence) ?? [];
     if (!frames.length) { actions[action.id] = null; continue; }
     const cellW = Math.max(...frames.map(f => f.w)), cellH = Math.max(...frames.map(f => f.h));
+    // Reviewed pages do not state their size; the decoded image does.
+    let pageWidth = frames[0].pageWidth, pageHeight = frames[0].pageHeight;
+    if (!pageWidth || !pageHeight) ({ width: pageWidth, height: pageHeight } = (await scanRects(fileOf(frames[0].url), [{ x: 0, y: 0, w: 1, h: 1 }]))[0]);
     actions[action.id] = { sequence: action.sequence, frameCount: frames.length, frameWidth: cellW, frameHeight: cellH,
-      cellAspect: round(cellW / cellH), pageWidth: frames[0].pageWidth, pageHeight: frames[0].pageHeight,
-      cellsPerPage: round((frames[0].pageWidth * frames[0].pageHeight) / (cellW * cellH), 1),
+      cellAspect: round(cellW / cellH), pageWidth, pageHeight,
+      cellsPerPage: round((pageWidth * pageHeight) / (cellW * cellH), 1),
       durationMs: Math.round(frames.reduce((sum, f) => sum + f.ticks, 0) * 1000 / 60) };
   }
   // Feet: the lowest opaque row of the idle cells, and the opaque centre on it.
@@ -131,22 +134,28 @@ async function motionAnchors(speciesId) {
     // the chest furthest ahead, so the head is the HIGHEST stretch of that
     // front within a small tolerance of the forward-most point; the mouth sits
     // a little under its top.
+    // Native art faces left (its front is the left edge); a reviewed set drawn
+    // facing right has its front on the right edge. `behind` is small ahead.
+    const facesRight = motion.facesRight === true;
+    const behind = x => (facesRight ? -x : x);
     const front = [];
     scan.rows.forEach((run, row) => {
       if (!run) return;
       const y = frame.oy + row, up = -y / height;
-      if (up >= MUZZLE_BAND[0] && up <= MUZZLE_BAND[1]) front.push({ x: frame.ox + run[0], y });
+      if (up >= MUZZLE_BAND[0] && up <= MUZZLE_BAND[1]) front.push({ x: frame.ox + (facesRight ? run[1] : run[0]), y });
     });
     if (front.length) {
-      const ahead = Math.min(...front.map(point => point.x));
-      const near = front.filter(point => point.x <= ahead + frame.w * MUZZLE_TOLERANCE);
+      const ahead = Math.min(...front.map(point => behind(point.x)));
+      const near = front.filter(point => behind(point.x) <= ahead + frame.w * MUZZLE_TOLERANCE);
       const top = near.reduce((best, point) => (point.y < best.y ? point : best));
       const y = Math.min(Math.round(top.y + height * 0.04), Math.round(-height * MUZZLE_BAND[0]));
-      const x = Math.min(...front.filter(point => Math.abs(point.y - y) <= 2).map(point => point.x), top.x) + 1;
+      const row = front.filter(point => Math.abs(point.y - y) <= 2).map(point => point.x).concat(top.x);
+      const x = facesRight ? Math.max(...row) - 1 : Math.min(...row) + 1;
       muzzle = { x, y, heightRatio: round(-y / height), releaseIndex: release.index, releaseMs: release.atMs };
     }
   }
-  return { entityId: config.entityId, density: motion.density, bounds: { ...motion.bounds }, actions,
+  return { entityId: config.entityId, art: motion.reviewed ? (motion.facesRight ? "reviewed-right" : "reviewed") : "atlas",
+    density: motion.density, bounds: { ...motion.bounds }, actions,
     footAnchor: { x: 0, y: 0, stance, lowestPixel: footY, lowestPixelX: round(footXs.reduce((a, b) => a + b, 0) / Math.max(1, footXs.length), 1), visualHeight },
     muzzleSocket: muzzle };
 }
@@ -182,6 +191,7 @@ const summary = {
   withMotion: withMotion.length,
   withHead: rows.filter(row => row.cutinHeadFrame).length,
   motionErrors: rows.filter(row => row.motionError).map(row => `${row.speciesId}: ${row.motionError}`),
+  art: rows.filter(row => row.motion).reduce((counts, row) => ({ ...counts, [row.motion.art]: (counts[row.motion.art] ?? 0) + 1 }), {}),
   maxCellAspect: Math.max(...withMotion.flatMap(row => Object.values(row.motion.actions).filter(Boolean).map(a => a.cellAspect))),
   multiCellPages: withMotion.filter(row => Object.values(row.motion.actions).some(a => a && a.cellsPerPage > 1.4)).length,
   muzzleInUpperBody: withMotion.filter(row => row.motion.muzzleSocket && row.motion.muzzleSocket.heightRatio >= 0.5).length,
@@ -200,7 +210,7 @@ const compactRow = row => {
     m ? [m.entityId, m.density, [m.bounds.left, m.bounds.top, m.bounds.right, m.bounds.bottom],
       ACTION_IDS.map(id => m.actions[id] ? [m.actions[id].frameCount, m.actions[id].frameWidth, m.actions[id].frameHeight, m.actions[id].cellsPerPage] : null),
       [m.footAnchor.stance, m.footAnchor.lowestPixel, m.footAnchor.visualHeight],
-      m.muzzleSocket ? [m.muzzleSocket.x, m.muzzleSocket.y, m.muzzleSocket.heightRatio, m.muzzleSocket.releaseIndex, m.muzzleSocket.releaseMs] : null] : null,
+      m.muzzleSocket ? [m.muzzleSocket.x, m.muzzleSocket.y, m.muzzleSocket.heightRatio, m.muzzleSocket.releaseIndex, m.muzzleSocket.releaseMs] : null, m.art] : null,
     h ? [h.headFocusX, h.headFocusY, h.headSafeScale, h.opaqueInHead] : null
   ];
 };
@@ -211,12 +221,13 @@ const source = [
   "// Offline visual anchors for every Dex partner (Owner 2026-10-29): single-cell",
   "// motion specs, the feet, the muzzle on the attack's release cell, and the",
   "// cut-in head square. Motion values are packed atlas pixels from the geometry's",
-  "// foot origin, facing left (x < 0 is ahead); head values are fractions of the Dex",
+  "// foot origin in the art's own direction (native art faces left: x < 0 is ahead); head values are fractions of the Dex",
   "// illustration. Rerun the script whenever character art or a Dex illustration",
   "// changes; the runtime never scans pixels.",
   "//",
   "// Row: [motion, head]",
-  "//   motion  [entityId, density, [left, top, right, bottom], actions, foot, muzzle]",
+  "//   motion  [entityId, density, [left, top, right, bottom], actions, foot, muzzle, art]",
+  '//   art     "atlas" (native cells) | "reviewed" | "reviewed-right" (reviewed art drawn facing right; x > 0 is ahead)',
   `//   actions per ${ACTION_IDS.join(" / ")}: [frameCount, frameWidth, frameHeight, cellsPerPage]`,
   '//   foot    [stance ("grounded" | "tail-below" | "hovering"), lowestPixel, visualHeight]',
   "//   muzzle  [x, y, heightRatio, releaseIndex, releaseMs]",

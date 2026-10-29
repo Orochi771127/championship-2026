@@ -15,6 +15,7 @@ import { publicCharacterConfigs, publicCharacterConfig } from "../presentation/p
 import { validatePublicCharacterRender } from "../presentation/publicCharacterRoster.js";
 import { isOriginalRuntimeLocation } from "../presentation/originalRuntimeLocation.js";
 import { speciesNameForId } from "../text/zhHant.js";
+import { loadReviewedDomFrames } from "../presentation/reviewedSelection.js";
 
 /** The in-game walk request (Data Arena and Battle sequence id 2). */
 export const TITLE_PARADE_WALK_SEQUENCE = 2;
@@ -40,6 +41,9 @@ async function sha256(text) {
 export async function loadParadeWalker(speciesId, { href, fetchImpl = globalThis.fetch, signal, loadImage } = {}) {
   const config = publicCharacterConfig(speciesId);
   if (!config || !href || !isOriginalRuntimeLocation(href)) return null;
+  // Species drawn with reviewed artwork walk with it (their original pages are retired).
+  const reviewed = await loadReviewedDomFrames(speciesId, { href, fetchImpl, signal, sequences: [TITLE_PARADE_WALK_SEQUENCE] });
+  if (reviewed) return reviewedParadeWalker(speciesId, reviewed, { signal, loadImage });
   const runtimeUrl = new URL(config.runtimePath, href);
   const response = await fetchImpl(runtimeUrl.href, { signal });
   if (!response.ok) return null;
@@ -67,6 +71,22 @@ export async function loadParadeWalker(speciesId, { href, fetchImpl = globalThis
     frames.push({ image: page.image, rect, ticks: Math.max(1, frame.ticks ?? 8) });
   }
   return { speciesId, name: speciesNameForId(speciesId), frames, anchor: runtime.artProfile?.anchor ?? { x: 0.5, y: 0.9 } };
+}
+
+/** Reviewed frames are trimmed crops: place each on one shared canvas by its pivot. */
+async function reviewedParadeWalker(speciesId, reviewed, { signal, loadImage }) {
+  const steps = reviewed.sequences.get(TITLE_PARADE_WALK_SEQUENCE);
+  const left = Math.min(...steps.map((s) => s.place[0])), top = Math.min(...steps.map((s) => s.place[1]));
+  const width = Math.max(...steps.map((s) => s.place[0] + s.rect[2])) - left, height = Math.max(...steps.map((s) => s.place[1] + s.rect[3])) - top;
+  const images = new Map();
+  const frames = [];
+  for (const step of steps) {
+    if (!images.has(step.url)) images.set(step.url, await loadImage(step.url, signal));
+    const [x, y, w, h] = step.rect;
+    frames.push({ image: images.get(step.url), rect: { x, y, w, h }, ticks: step.ticks, place: { x: step.place[0] - left, y: step.place[1] - top } });
+  }
+  return { speciesId, name: speciesNameForId(speciesId), frames, canvas: { w: width, h: height }, facesRight: reviewed.facesRight,
+    anchor: { x: -left / width, y: -top / height } };
 }
 
 function loadImageElement(doc) {
@@ -127,8 +147,8 @@ export function installTitleParade({ doc = globalThis.document, view = globalThi
     button.tabIndex = -1;
     const canvas = doc.createElement("canvas");
     // Drawn 1:1 from the 4x atlas; CSS scales it down smoothly (nearest downscaling shimmers).
-    const height = art.frames[0].rect.h, scale = 1;
-    canvas.width = Math.round(art.frames[0].rect.w * scale);
+    const height = art.canvas?.h ?? art.frames[0].rect.h, scale = 1;
+    canvas.width = Math.round((art.canvas?.w ?? art.frames[0].rect.w) * scale);
     canvas.height = height;
     button.append(canvas);
     host.append(button);
@@ -145,7 +165,8 @@ export function installTitleParade({ doc = globalThis.document, view = globalThi
     walker.drawn = walker.frameIndex;
     const { ctx, canvas } = walker;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(current.image, current.rect.x, current.rect.y, current.rect.w, current.rect.h, 0, 0, canvas.width, canvas.height);
+    if (current.place) ctx.drawImage(current.image, current.rect.x, current.rect.y, current.rect.w, current.rect.h, current.place.x, current.place.y, current.rect.w, current.rect.h);
+    else ctx.drawImage(current.image, current.rect.x, current.rect.y, current.rect.w, current.rect.h, 0, 0, canvas.width, canvas.height);
   }
 
   function step(now) {
@@ -165,8 +186,8 @@ export function installTitleParade({ doc = globalThis.document, view = globalThi
         while (walker.tick >= frames[walker.frameIndex].ticks) { walker.tick -= frames[walker.frameIndex].ticks; walker.frameIndex = (walker.frameIndex + 1) % frames.length; }
       }
       draw(walker);
-      // Art faces left; mirror while walking right.
-      walker.button.style.transform = `translateX(-50%) scaleX(${walker.dir > 0 ? -1 : 1})`;
+      // Art faces left (reviewed sets drawn facing right say so); mirror while walking the other way.
+      walker.button.style.transform = `translateX(-50%) scaleX(${(walker.dir > 0) !== Boolean(walker.art.facesRight) ? -1 : 1})`;
       walker.button.style.left = `${(walker.x * 100).toFixed(3)}%`;
       walker.button.dataset.walking = walker.pause > 0 ? "false" : "true";
     }

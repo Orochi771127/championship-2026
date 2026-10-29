@@ -13,6 +13,7 @@
 import { publicCharacterConfig } from "../publicCharacterCatalog.js";
 import { isOriginalRuntimeLocation } from "../originalRuntimeLocation.js";
 import { monsterVisualAnchor } from "../../data/monsterVisualAnchors218.js";
+import { loadReviewedDomFrames } from "../reviewedSelection.js";
 
 /** Showcase actions -> native sequences (the Data Arena's audited ids). */
 export const SHOWCASE_ACTIONS = Object.freeze([
@@ -79,6 +80,9 @@ export async function loadShowcaseMotion(speciesId, { signal = null, baseUrl = g
   fetchImpl = (...args) => globalThis.fetch(...args), sequences = SHOWCASE_ACTIONS.map(action => action.sequence) } = {}) {
   const config = publicCharacterConfig(speciesId);
   if (!config || !baseUrl || !isOriginalRuntimeLocation(baseUrl)) throw new Error("SHOWCASE_MOTION_UNAVAILABLE");
+  // Species drawn with reviewed artwork show it (their original pages are retired).
+  const reviewed = await loadReviewedDomFrames(speciesId, { href: baseUrl, fetchImpl, signal, sequences });
+  if (reviewed) return reviewedShowcaseMotion(speciesId, reviewed);
   const runtimeUrl = new URL(config.runtimePath, baseUrl).href;
   const response = await fetchImpl(runtimeUrl, { signal });
   if (!response.ok) throw new Error(`SHOWCASE_MOTION_HTTP_${response.status}`);
@@ -137,6 +141,33 @@ export async function loadShowcaseMotion(speciesId, { signal = null, baseUrl = g
     muzzle: calibratedMuzzle(speciesId) ?? showcaseMuzzle(resolved.get(SHOWCASE_ATTACK_SEQUENCE) ?? resolved.get(0), release.get(SHOWCASE_ATTACK_SEQUENCE)) });
 }
 
+/**
+ * Reviewed artwork (reviewedSelection.js): each frame is a trimmed crop on a
+ * shared page, placed from the pivot -- the same cell model as the atlas, with
+ * the page size unknown (the body then draws the crop 1:1 and scales it). A set
+ * drawn facing right (facesRight) has its forward edge on the right.
+ */
+function reviewedShowcaseMotion(speciesId, reviewed) {
+  const bounds = { left: Infinity, top: Infinity, right: -Infinity, bottom: -Infinity };
+  const resolved = new Map();
+  for (const [id, steps] of reviewed.sequences) {
+    const list = steps.map(step => {
+      const [x, y, w, h] = step.rect, [ox, oy] = step.place;
+      bounds.left = Math.min(bounds.left, ox); bounds.top = Math.min(bounds.top, oy);
+      bounds.right = Math.max(bounds.right, ox + w); bounds.bottom = Math.max(bounds.bottom, oy + h);
+      return Object.freeze({ url: step.url, x, y, w, h, ox, oy, pageWidth: null, pageHeight: null, ticks: Math.max(1, step.ticks | 0) });
+    });
+    if (list.length) resolved.set(id, Object.freeze(list));
+  }
+  if (!resolved.size) throw new Error("SHOWCASE_MOTION_EMPTY");
+  bounds.bottom = Math.max(bounds.bottom, 0);
+  const facesRight = reviewed.facesRight === true;
+  const release = new Map([...resolved].map(([id, frames]) => [id, showcaseReleaseFrame(frames, facesRight)]));
+  return Object.freeze({ speciesId, density: reviewed.density, anchor: { x: 0.5, y: 1 }, bounds: Object.freeze(bounds), reviewed: true, facesRight,
+    frameWidth: bounds.right - bounds.left, frameHeight: bounds.bottom - bounds.top, sequences: resolved, release,
+    muzzle: calibratedMuzzle(speciesId) ?? showcaseMuzzle(resolved.get(SHOWCASE_ATTACK_SEQUENCE) ?? resolved.get(0), release.get(SHOWCASE_ATTACK_SEQUENCE), facesRight) });
+}
+
 /** The offline-calibrated muzzle (scripts/calibrate-218-visual-anchors.mjs: the release cell's pixels), when known. */
 function calibratedMuzzle(speciesId) {
   const socket = monsterVisualAnchor(speciesId)?.motion?.muzzleSocket;
@@ -147,27 +178,29 @@ export const SHOWCASE_ATTACK_SEQUENCE = 7;
 
 /**
  * The beat a move leaves the body: the cell that reaches furthest forward
- * (characters are authored facing left, so the smallest left edge), the later
- * one on a tie. { index, atMs } -- atMs is when that cell starts.
+ * (characters are authored facing left, so the smallest left edge; a set drawn
+ * facing right, the largest right edge), the later one on a tie.
+ * { index, atMs } -- atMs is when that cell starts.
  */
-export function showcaseReleaseFrame(frames) {
+export function showcaseReleaseFrame(frames, facesRight = false) {
   if (!frames?.length) return Object.freeze({ index: 0, atMs: 0 });
+  const behind = frame => (facesRight ? -(frame.ox + frame.w) : frame.ox);
   let index = 0;
-  frames.forEach((frame, i) => { if (frame.ox <= frames[index].ox) index = i; });
+  frames.forEach((frame, i) => { if (behind(frame) <= behind(frames[index])) index = i; });
   const atMs = frames.slice(0, index).reduce((sum, frame) => sum + frame.ticks, 0) * TICK_MS;
   return Object.freeze({ index, atMs: Math.round(atMs) });
 }
 
 /**
  * Where a breath, beam or bubble leaves the body, from the foot origin in
- * source px, facing left: the head of the release cell -- a quarter of its
- * width ahead of its centre and two thirds of its height up.
+ * source px in the art's own direction: the head of the release cell -- a
+ * quarter of its width ahead of its centre and two thirds of its height up.
  */
-export function showcaseMuzzle(frames, release) {
+export function showcaseMuzzle(frames, release, facesRight = false) {
   const frame = frames?.[release?.index ?? 0] ?? frames?.[0];
   if (!frame) return null;
   const height = Math.max(1, -frame.oy);
-  return Object.freeze({ x: frame.ox + frame.w * 0.24, y: -height * 0.66 });
+  return Object.freeze({ x: frame.ox + frame.w * (facesRight ? 0.76 : 0.24), y: -height * 0.66 });
 }
 
 /**
@@ -217,13 +250,23 @@ export function createSpriteMotion({ doc = globalThis.document, motion, scale = 
   let animation = null, flip = null, facing = -1, current = null, once = null;
   // A cell's drawn bottom is its packed rectangle's bottom (cells are trimmed to their pixels).
   const lift = frame => (grounded ? Math.max(0, -(frame.oy + frame.h)) : 0);
-  const style = frame => ({
+  // Atlas cells (known page size) are drawn at scale; reviewed crops (page size
+  // unknown) are drawn 1:1 and scaled by the transform, from the body's corner.
+  body.style.transformOrigin = "0 0";
+  const style = frame => frame.pageWidth ? ({
     width: px(frame.w),
     height: px(frame.h),
     transform: `translate(${px(frame.ox - b.left)}, ${px(frame.oy + lift(frame) - b.top)})`,
     backgroundImage: `url("${frame.url}")`,
     backgroundSize: `${px(frame.pageWidth)} ${px(frame.pageHeight)}`,
     backgroundPosition: `${px(-frame.x)} ${px(-frame.y)}`
+  }) : ({
+    width: `${frame.w}px`,
+    height: `${frame.h}px`,
+    transform: `translate(${px(frame.ox - b.left)}, ${px(frame.oy + lift(frame) - b.top)}) scale(${scale})`,
+    backgroundImage: `url("${frame.url}")`,
+    backgroundSize: "auto",
+    backgroundPosition: `${-frame.x}px ${-frame.y}px`
   });
   const framesOf = sequenceId => motion.sequences.get(sequenceId) ?? motion.sequences.get(0) ?? motion.sequences.values().next().value;
   /** Loop a sequence, or with { loop: false } play it once and hold its last cell (onEnd then). */
@@ -252,14 +295,17 @@ export function createSpriteMotion({ doc = globalThis.document, motion, scale = 
     }
     return true;
   }
+  // Art faces left; a reviewed set drawn facing right (motion.facesRight) flips the baseline.
+  const mirrorFor = value => (value > 0) !== Boolean(motion.facesRight);
+  if (motion.facesRight) element.style.transform = "scaleX(-1)";
   function setFacing(next) {
     const value = next >= 0 ? 1 : -1;
     if (value === facing) return facing;
     facing = value;
     flip?.cancel();
-    const to = facing > 0 ? "scaleX(-1)" : "scaleX(1)";
+    const to = mirrorFor(facing) ? "scaleX(-1)" : "scaleX(1)";
     if (!reducedMotion && typeof element.animate === "function") {
-      flip = element.animate([{ transform: facing > 0 ? "scaleX(1)" : "scaleX(-1)" }, { transform: "scaleX(0.05)", offset: 0.5 }, { transform: to }],
+      flip = element.animate([{ transform: mirrorFor(facing) ? "scaleX(1)" : "scaleX(-1)" }, { transform: "scaleX(0.05)", offset: 0.5 }, { transform: to }],
         { duration: 240, easing: "ease-in-out", fill: "forwards" });
     }
     element.style.transform = to;
@@ -278,7 +324,7 @@ export function createSpriteMotion({ doc = globalThis.document, motion, scale = 
       if (!m) return null;
       const attack = motion.sequences.get(SHOWCASE_ATTACK_SEQUENCE);
       const cell = attack?.[motion.release?.get(SHOWCASE_ATTACK_SEQUENCE)?.index ?? 0];
-      return { dx: m.x * scale * (facing > 0 ? -1 : 1), dy: (m.y + (cell ? lift(cell) : 0)) * scale };
+      return { dx: m.x * scale * (mirrorFor(facing) ? -1 : 1), dy: (m.y + (cell ? lift(cell) : 0)) * scale };
     },
     /** The drawn body's height above the feet in CSS px. */
     bodyHeight: () => -b.top * scale,
@@ -297,7 +343,7 @@ export function createSpriteMotion({ doc = globalThis.document, motion, scale = 
       const still = doc.createElement("div");
       still.className = "cm-sprite__body";
       const computed = globalThis.getComputedStyle?.(body);
-      for (const key of ["width", "height", "transform", "backgroundImage", "backgroundSize", "backgroundPosition"]) still.style[key] = computed?.[key] || body.style[key];
+      for (const key of ["width", "height", "transform", "transformOrigin", "backgroundImage", "backgroundSize", "backgroundPosition"]) still.style[key] = computed?.[key] || body.style[key];
       copy.append(still);
       return copy;
     },

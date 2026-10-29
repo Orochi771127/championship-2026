@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import test from 'node:test';
-const base=new URL('../',import.meta.url),source=readFileSync(new URL('src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js',base),'utf8');
+const base=new URL('../',import.meta.url),source=readFileSync(new URL('src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js',base),'utf8').replaceAll('\r\n','\n');
 const helpers=source.slice(source.indexOf('  function evolutionLoadFailed('),source.indexOf('  function drawEvolution('));
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b});return {promise,resolve,reject};};
 const settle=()=>new Promise(r=>setImmediate(r));
@@ -60,7 +60,7 @@ test('later missing sequence guarded, one request, explicit retry after reject',
  assert.equal(f.entry.evolutionAssetState,'ready');assert.equal(f.context.evolutionFrameReady(f.entry,frame),true);
 });
 test('resident source readiness implementation unchanged and candidate gates evolution loading/error',()=>{
- const old=readFileSync(new URL('tests/fixtures/evolution-texture-baseline-source-ready.txt',base),'utf8');
+ const old=readFileSync(new URL('tests/fixtures/evolution-texture-baseline-source-ready.txt',base),'utf8').replaceAll('\r\n','\n');
  const extract=s=>s.slice(s.indexOf('  function residentFrameReady('),s.indexOf('  // The canvas CSS rect'));
  assert.equal(extract(source),old);assert.match(source,/entry\.assetState === 'ready' && !\['loading','error'\]\.includes\(entry\.evolutionAssetState\)/);
 });

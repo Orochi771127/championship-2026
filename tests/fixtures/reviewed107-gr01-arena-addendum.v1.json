@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "kind": "ROOT_DOT_GR01_ARENA_KO_EXPLICIT_APPROVAL_ADDENDUM",
+  "status": "FINAL_ART_REVIEW_ADDENDUM_NOT_RUNTIME_CHANGE",
+  "reviewer": "root dot",
+  "reviewerStatement": "Root personally viewed exact existing main_15.png and approved static Main-camera Arena KO reuse of current canonical prone fiery armored reptile pose023; not a rest substitution.",
+  "signatureType": "Recorded explicit root review decision, not cryptographic personal signature",
+  "bindsOriginal": {
+    "path": "animation-completion-20261026/integration-art-decisions/dot-arena-review/root-arena99-art-approvals-final.json",
+    "sha256": "0c9f08a0d8c072dd714d4efd95024724267188a842bcd064414b38d41888bd32",
+    "originalRemainsUnmodified": true
+  },
+  "supersession": {
+    "onlyDecisionId": "GR01:ARENA_KO_STYLE_REUSE",
+    "replaces": "GR01 missing-candidate HOLD only",
+    "combinedApprovedArenaCharacters": 96,
+    "remainingHolds": [
+      "MA31",
+      "MA49",
+      "MA51"
+    ],
+    "allOtherOriginalDecisionsUnchanged": true
+  },
+  "discoveryCorrection": {
+    "reason": "Existing accepted numeric main:15 contract explicitly names prone incapacitated down_ko and shares Sub5, but action metadata is null; the reduced handoff candidate query omitted this label/numeric-contract selection. This was a discovery/mapping gap, not missing artwork.",
+    "queryImplementationCaveat": "Exact query implementation was not inspected; null-action metadata and explicit numeric contract evidence establish the omission, not a proved query algorithm."
+  },
+  "approval": {
+    "decisionId": "GR01:ARENA_KO_STYLE_REUSE",
+    "approvedOrRejected": "APPROVED_BY_ROOT_DOT",
+    "exactClipRef": "RESOLVE_REVIEWED_GR01_ANIMATION_CLIP_BY_NUMERIC_MAIN15_AND_ASSET_ID",
+    "exactContractRef": "main:15",
+    "exactAssetIdOrFrameIndex": {
+      "assetId": "GR01_MAIN_pose_023",
+      "zeroBasedVisualFrameIndex": 0,
+      "sourceAlias": "MAIN_COMBAT16_original-camera:12",
+      "sourceSlot": 0
+    },
+    "reviewedClipResolutionGate": "Codex must resolve exact numeric reviewed clip pointer by selected asset and existing main:15 contract; do not guess by label. Canonical contract and artwork identity below are exact.",
+    "permittedContextMain15Main25Sub5ArenaOrMainFlip": "Arena_KO_STATIC_UNBOUND_ONLY",
+    "permittedFlipAxisOrAuthoredHeading": "NONE_USE_AUTHORED_ORIGINAL_MAIN_LOW_CAMERA",
+    "keepNativeGeometry": true,
+    "terminalHoldStartFrameIfApplicable": 0,
+    "sourceGeometry": {
+      "frameRect": [
+        225,
+        365,
+        102,
+        49
+      ],
+      "trim": [
+        47,
+        120,
+        102,
+        49
+      ],
+      "sourceSize": [
+        256,
+        256
+      ],
+      "origin": [
+        112,
+        164
+      ],
+      "ground": [
+        112,
+        168
+      ],
+      "density": 4,
+      "offset": [
+        0,
+        0
+      ],
+      "rotated": false,
+      "camera": "ORIGINAL_MAIN_LOW"
+    }
+  },
+  "sourceIdentity": {
+    "selectionManifest": "growth-handdrawn-density4-20261025/GR01/WEB_ART_ASSETS/WEB_ART_ASSETS.json",
+    "selectionManifestSha256": "10cc777dd9e3f912af1451256ba297f9e269a6b1d7cab4793b49966c9a676a41",
+    "matchesOfficialHandoffArchiveSelectionSha256": true,
+    "portableManifest": "growth-handdrawn-density4-20261025/GR01/final-art-ab-v1/GR01_ART_AB_PORTABLE.json",
+    "portableManifestSha256": "699edbc542f82ab40ea0be54c6dbf5c938dc6f19c342e4a74863c4a5cba7a75b",
+    "atlasPath": "growth-handdrawn-density4-20261025/GR01/WEB_ART_ASSETS/a_main_sub_00.webp",
+    "atlasSha256": "fdbebfd7ab0a4774f09f7fbe05257504434354ab2da031593670dec0f781d185",
+    "nativeViewPath": "growth-handdrawn-density4-20261025/GR01/final-art-ab-v1/A_MAIN_SUB/playbacks/main_15.png",
+    "nativeViewSha256": "f0c9d5827d94d7108de501286a5c23c77c42a8d974569744f97d8ccb17cdb8b4",
+    "nativeViewAlphaCropRGBAExactlyMatchesAtlasCrop": true,
+    "sourceRgbaSha256FromSelectedMetadata": "c05e206dbbee82644f3fb3c66dbf1f01ecfefb4013f1ecd386bc670692290ee7",
+    "acceptedContractEvidence": {
+      "key": "main:15",
+      "selectionStatus": "ART_READY_ROOT_VISUAL_ACCEPTED",
+      "legacyMappingNote": "Prone incapacitated pose; do not automatically play recovery while actor remains KO. Shared with Sub5.",
+      "sourceTicks": [
+        31
+      ]
+    }
+  },
+  "rules": {
+    "artMappingOnly": true,
+    "runtimeIntegrationPaused": true,
+    "preserveExistingSimulationMechanicsAndTiming": true,
+    "entry": "Display exact approved static terminal artwork immediately on existing authoritative Arena KO entry.",
+    "hold": "No active walking, automatic neutral, or recovery-frame advance while authoritative HP<=0 or down remains active.",
+    "exit": "Only existing authoritative revive/recovery/despawn/scene-change may clear hold. No independent gameplay state inference.",
+    "geometryGate": "Codex validates atlas crop, trim, pivot/origin,density,offset and native camera/scale in actual renderer before integration.",
+    "eightDirectionKO": "NOT_REQUIRED_NOT_AUTHORED_BY_THIS_APPROVAL",
+    "MainFlip": "NOT_APPROVED",
+    "syntheticHeadingFlip": "NOT_APPROVED",
+    "boundPose": "NOT_APPROVED_FOR_ARENA",
+    "noGameHomepageStatsChanges": true,
+    "noDeploymentOrLibraryRWrite": true
+  }
+}

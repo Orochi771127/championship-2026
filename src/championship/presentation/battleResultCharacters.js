@@ -60,12 +60,13 @@ export async function mountBattleResultCharacters({stage,hudArt,participants,won
   const PIXI=createPixiAssetScope(stage.PIXI,globalThis.location?.href,{signal:loadSignal});
   const presentSlots=participants.slice(0,3).map((p,i)=>p?i:-1).filter(i=>i>=0);
   const anchors=RESULT_ANCHORS.map((_,index)=>resultAnchorFor(index,presentSlots,arrangement));
-  const sequence=won?9:5,actors=[],loaded=new Map(),sources=new Set();
+  const sequence=won?9:5,actors=[],loaded=new Map(),sources=new Set(),reviewedBundles=new Set();
   let bounds=null,frameScale=1,scene=null,resize=null,ticking=false,disposed=false;
   let accumulator=0,elapsed=0;
   function dispose(){
     if(disposed)return;disposed=true;
     controller.abort();signal?.removeEventListener('abort',abort);
+    for(const bundle of reviewedBundles)void bundle.dispose();reviewedBundles.clear();
     resize?.();if(ticking)stage.app.ticker.remove(update);ticking=false;
     scene?.destroy({children:true});scene=null;actors.length=0;loaded.clear();
     // Scoped ownership releases settled pixels now and late pixels when their
@@ -107,8 +108,19 @@ export async function mountBattleResultCharacters({stage,hudArt,participants,won
         bounds=bounds?{left:Math.min(bounds.left,box.left),top:Math.min(bounds.top,box.top),right:Math.max(bounds.right,box.right),bottom:Math.max(bounds.bottom,box.bottom)}:box;
       }
       const sprite=new stage.PIXI.Sprite();scene.addChild(sprite);actors.push({sprite,speciesId:p.speciesId,anchor:anchors[i]});}
+    const {loadReviewedResultSub}=actors.length?await import('./reviewedCharacterLoader.js'):{loadReviewedResultSub:null};
+    await wait(Promise.all(actors.map(async actor=>{
+      const bundle=await loadReviewedResultSub({PIXI,sprite:actor.sprite,speciesId:actor.speciesId,sequenceId:sequence,signal:loadSignal});
+      if(!bundle)return;
+      if(disposed){await bundle.dispose();return;}
+      actor.reviewed=bundle;reviewedBundles.add(bundle);
+      const box={left:actor.anchor[0]+bundle.bounds.left,top:actor.anchor[1]+bundle.bounds.top,right:actor.anchor[0]+bundle.bounds.right,bottom:actor.anchor[1]+bundle.bounds.bottom};
+      bounds=bounds?{left:Math.min(bounds.left,box.left),top:Math.min(bounds.top,box.top),right:Math.max(bounds.right,box.right),bottom:Math.max(bounds.bottom,box.bottom)}:box;
+    })));
   }catch(error){dispose();throw error;}
-  function apply(){for(const actor of actors){const cell=hudArt.getBattleFrame(actor.speciesId,sequence,elapsed);if(!cell)continue;
+  function apply(){for(const actor of actors){
+    if(actor.reviewed){const frame=actor.reviewed.sample(elapsed);if(frame?.geometry){actor.sprite.scale.set(frameScale/frame.geometry.scale);continue;}}
+    const cell=hudArt.getBattleFrame(actor.speciesId,sequence,elapsed);if(!cell)continue;
     const texture=loaded.get(cell.src);actor.sprite.texture=texture;
     actor.sprite.anchor.set(cell.origin[0]/cell.width,cell.origin[1]/cell.height);
     // Use logical cell size for both HD and legacy 1x textures.

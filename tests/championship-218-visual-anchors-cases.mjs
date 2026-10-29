@@ -20,6 +20,7 @@ const localFetch = async url => {
 const BASE = "http://127.0.0.1:8811/championship.html";
 
 test("218/218 Dex partners have anchors, with no gap and no stray id", () => {
+  assert.ok((MONSTER_VISUAL_ANCHORS_SUMMARY.art.reviewed ?? 0) + (MONSTER_VISUAL_ANCHORS_SUMMARY.art["reviewed-right"] ?? 0) >= 100, "the reviewed artwork is calibrated");
   assert.equal(slots.length, 218);
   assert.deepEqual([...MONSTER_VISUAL_ANCHOR_IDS].sort(), slots.map(slot => slot.speciesId).sort());
   assert.equal(MONSTER_VISUAL_ANCHORS_SUMMARY.species, 218);
@@ -35,7 +36,7 @@ test("218/218 Dex partners have anchors, with no gap and no stray id", () => {
   assert.equal(monsterVisualAnchor("species-999"), null);
 });
 
-test("every action of every partner is one body: a trimmed cell on a page that holds many", () => {
+test("every action of every partner is one body: a trimmed cell, never a page strip", () => {
   for (const id of MONSTER_VISUAL_ANCHOR_IDS) {
     const { motion } = monsterVisualAnchor(id);
     // species-222 ships only its cheer sequence; the player falls back to the first one present.
@@ -45,7 +46,8 @@ test("every action of every partner is one body: a trimmed cell on a page that h
       const aspect = spec.frameWidth / spec.frameHeight;
       assert.ok(spec.frameCount >= 1, `${id} ${action}`);
       assert.ok(aspect > 0.25 && aspect < 3, `${id} ${action}: a single body, never a 4:1 strip (aspect ${aspect.toFixed(2)})`);
-      assert.ok(spec.cellsPerPage > 1.4, `${id} ${action}: the page holds several bodies, so only the cell may show`);
+      // Most pages hold many bodies (so only the cell may show); a few reviewed pages hold just one.
+      assert.ok(spec.cellsPerPage >= 1, `${id} ${action}: the cell fits on its page`);
     }
   }
 });
@@ -86,11 +88,15 @@ test("every cut-in head frame focuses on drawn pixels and fits the strip", () =>
 });
 
 test("the runtime reads the table: one cell per frame and the calibrated muzzle", async () => {
-  const sample = ["species-021", "species-034", "species-022", "species-222", ...MONSTER_VISUAL_ANCHOR_IDS.filter((_, i) => i % 23 === 0)];
+  const rightFacing = MONSTER_VISUAL_ANCHOR_IDS.filter(id => monsterVisualAnchor(id).motion.art === "reviewed-right").slice(0, 3);
+  const sample = ["species-021", "species-034", "species-022", "species-054", "species-222", ...rightFacing, ...MONSTER_VISUAL_ANCHOR_IDS.filter((_, i) => i % 23 === 0)];
   for (const id of new Set(sample)) {
     const motion = await loadShowcaseMotion(id, { baseUrl: BASE, fetchImpl: localFetch });
     const anchor = monsterVisualAnchor(id).motion;
     assert.deepEqual({ ...motion.muzzle }, { x: anchor.muzzleSocket.x, y: anchor.muzzleSocket.y }, `${id}: muzzle from the table`);
+    // The new reviewed artwork (#114) is what both the table and the player use.
+    assert.equal(Boolean(motion.reviewed), anchor.art !== "atlas", `${id}: art source`);
+    assert.equal(Boolean(motion.facesRight), anchor.art === "reviewed-right", `${id}: drawn facing`);
     for (const action of SHOWCASE_ACTIONS) {
       const frames = motion.sequences.get(action.sequence), spec = anchor.actions[action.id];
       if (!spec) { assert.ok(!frames, `${id} ${action.id}`); continue; }
