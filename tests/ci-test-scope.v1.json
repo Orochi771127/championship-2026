@@ -465,7 +465,8 @@
     "tests/create-character-save.mjs": "Local fixture-generation CLI, not a portable test; reads the private m301 review save template.",
     "tests/test-all-completed-original-characters.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression.",
     "tests/test-completed-original-m301.mjs": "Requires local original/review art manifests or ignored reference bundles; run explicitly in the local intake regression.",
-    "tests/championship-ma05-renderer-review.mjs": "Requires Playwright Chromium and a same-job HTTP server; runs explicitly in the MA05 motion v7 actual renderer review workflow, covering all 77 cells and 53 sequences plus controlled normal Raising and Battle.",
-    "tests/championship-cm07-renderer-review.mjs": "Requires Playwright Chromium and HTTP server; explicit CM07 candidate renderer workflow. Isolated terrain renderer, not normal game or physical mobile acceptance."
+    "tests/championship-ma05-renderer-review.mjs": "Requires Playwright Chromium and a same-job HTTP server. The MA05 motion v7 pixels it reviews were retired with the original art of replaced roles (Owner 2026-10-28, RETIRED_CHARACTER_ART.v1.json), so its workflow was removed; run it explicitly against the retired-art archive overlay.",
+    "tests/championship-cm07-renderer-review.mjs": "Requires Playwright Chromium and HTTP server; explicit CM07 candidate renderer workflow. Isolated terrain renderer, not normal game or physical mobile acceptance.",
+    "tests/championship-reviewed107-animation-cases.mjs": "Reads v1 provenance (superseded manifests, repaired KO pixels) from the local reviewed107 v1 archive kept outside the repository; run explicitly in the local animation integration lane."
   }
 }

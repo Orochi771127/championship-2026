@@ -41,7 +41,10 @@ export async function loadPixiCharacterRuntimeBundle({
   runtimeDocument = null,
   initialSequenceIds = null,
   signal = null,
-  fetchImpl = (...args) => globalThis.fetch(...args)
+  fetchImpl = (...args) => globalThis.fetch(...args),
+  // false: timing/geometry only. A species whose reviewed artwork replaces the
+  // original never downloads or decodes the original atlas pages.
+  pixels = true
 }) {
   if (!PIXI?.Assets || typeof PIXI.Assets.load !== "function"
     || typeof PIXI.Spritesheet !== "function" || typeof PIXI.Sprite !== "function") {
@@ -64,8 +67,10 @@ export async function loadPixiCharacterRuntimeBundle({
   let disposed = false;
   let disposal = null;
   const pagePending = new Map(), readyPages = new Set();
-  const streamed = initialSequenceIds !== null && runtime.streaming?.schemaVersion === 1
+  const streamed = pixels && initialSequenceIds !== null && runtime.streaming?.schemaVersion === 1
     && sides.length === 1 && sides[0] === 'main' && replacementGuard === null;
+  const blank = pixels ? null : (PIXI.Texture?.EMPTY ?? Object.freeze({ blank: true }));
+  const resolveTexture = (key) => textures.get(key) ?? blank ?? undefined;
   function sequenceTextures(id){
     const sequence=runtime.sides.main.animations.find(a=>a.id===id);
     if(!sequence)throw new RangeError(`Unknown character animation: ${id}`);
@@ -169,7 +174,7 @@ export async function loadPixiCharacterRuntimeBundle({
       }
       replacementGuard.validateComplete();
     }
-    for (const sideName of streamed ? [] : sides) {
+    for (const sideName of streamed || !pixels ? [] : sides) {
       const side = requireRecord(runtime.sides[sideName], `character runtime.sides.${sideName}`);
       if (!Array.isArray(side.atlases) || !Array.isArray(side.animations)) {
         throw new TypeError(`Character side ${sideName} requires atlases and animations`);
@@ -211,7 +216,7 @@ export async function loadPixiCharacterRuntimeBundle({
         }
       }
     }
-    for (const sideName of streamed ? [] : sides) {
+    for (const sideName of streamed || !pixels ? [] : sides) {
       for (const animation of runtime.sides[sideName].animations) {
         for (const frame of animation.frames) {
           if (!textures.has(frame.texture)) throw new RangeError(`Character runtime texture is missing: ${frame.texture}`);
@@ -245,20 +250,20 @@ export async function loadPixiCharacterRuntimeBundle({
         entry.id === animation || entry.name === animation || entry.semanticAlias === animation
       ));
       if (!firstAnimation) throw new RangeError(`Unknown character animation: ${animation}`);
-      const firstTexture = textures.get(firstAnimation.frames[0].texture);
+      const firstTexture = resolveTexture(firstAnimation.frames[0].texture);
       const sprite = new PIXI.Sprite({ texture: firstTexture });
       const anchor = runtime.artProfile?.anchor ?? { x: 0.5, y: 1 };
       sprite.anchor?.set?.(anchor.x, anchor.y);
       const controller = createPixiCharacterAnimationController({
         sprite,
         animations: sideRuntime.animations,
-        textureResolver: (key) => textures.get(key),
+        textureResolver: resolveTexture,
         initialAnimation: animation,
         tickRateHz,
         reducedMotion
       });
       const presenter = nativeFramePresentation ? createNativeHuntCharacterFramePresenter({
-        sprite, animations: sideRuntime.animations, textureResolver: (key) => textures.get(key),
+        sprite, animations: sideRuntime.animations, textureResolver: resolveTexture,
         entityId: runtime.entityId, reducedMotion, geometry: nativeGeometry
       }) : null;
       const nativeFramePresenter = presenter && streamed ? Object.freeze({...presenter,
@@ -266,10 +271,10 @@ export async function loadPixiCharacterRuntimeBundle({
         ensureFrame(frame){return ensureSequence(frame.sequenceId);}
       }) : presenter;
       const battleAnimator = battleGeometry ? createBattleCharacterAnimator({sprite,
-        animations:sideRuntime.animations,textureResolver:key=>textures.get(key),geometry:battleGeometry,reducedMotion}) : null;
+        animations:sideRuntime.animations,textureResolver:resolveTexture,geometry:battleGeometry,reducedMotion}) : null;
       const timeline=nativeSequence?createNativeCharacterAnimationTimeline(firstAnimation):null;
       const sequencePlayer=timeline?{getSnapshot:()=>timeline.getSnapshot(),advanceNative(delta){
-        const frame=timeline.advanceNative(delta);sprite.texture=textures.get(frame.texture);return frame;
+        const frame=timeline.advanceNative(delta);sprite.texture=resolveTexture(frame.texture);return frame;
       }}:null;
       return Object.freeze({ sprite, controller, side, nativeFramePresenter, battleAnimator,sequencePlayer });
     },
@@ -281,6 +286,7 @@ export async function loadPixiCharacterRuntimeBundle({
         sheetCount: sheets.length,
         textureMemory: characterTextureMemory(atlasPages),
         streaming: streamed ? {readyPages:readyPages.size,totalPages:runtime.sides.main.atlases.length,pendingPages:pagePending.size} : null,
+        nativePixels: pixels,
         reviewOnly: runtime.artProfile?.reviewOnly === true,
         runtimeEligible: runtime.artProfile?.runtimeEligible === true,
         ticker: "SCENE_OWNED_APPLICATION_TICKER_REQUIRED"

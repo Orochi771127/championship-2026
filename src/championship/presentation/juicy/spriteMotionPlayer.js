@@ -12,6 +12,7 @@
 // right only -- there are no extra turn-around angles to show.
 import { publicCharacterConfig } from "../publicCharacterCatalog.js";
 import { isOriginalRuntimeLocation } from "../originalRuntimeLocation.js";
+import { loadReviewedDomFrames } from "../reviewedSelection.js";
 
 /** Showcase actions -> native sequences (the Data Arena's audited ids). */
 export const SHOWCASE_ACTIONS = Object.freeze([
@@ -43,6 +44,9 @@ export async function loadShowcaseMotion(speciesId, { signal = null, baseUrl = g
   fetchImpl = (...args) => globalThis.fetch(...args), sequences = SHOWCASE_ACTIONS.map(action => action.sequence) } = {}) {
   const config = publicCharacterConfig(speciesId);
   if (!config || !baseUrl || !isOriginalRuntimeLocation(baseUrl)) throw new Error("SHOWCASE_MOTION_UNAVAILABLE");
+  // Species drawn with reviewed artwork show it (their original pages are retired).
+  const reviewed = await loadReviewedDomFrames(speciesId, { href: baseUrl, fetchImpl, signal, sequences });
+  if (reviewed) return reviewedShowcaseMotion(speciesId, reviewed);
   const runtimeUrl = new URL(config.runtimePath, baseUrl).href;
   const response = await fetchImpl(runtimeUrl, { signal });
   if (!response.ok) throw new Error(`SHOWCASE_MOTION_HTTP_${response.status}`);
@@ -91,6 +95,17 @@ export async function loadShowcaseMotion(speciesId, { signal = null, baseUrl = g
     frameWidth, frameHeight, sequences: resolved });
 }
 
+/** Reviewed frames are trimmed crops on shared pages: each shows only its own rect, placed by its pivot. */
+function reviewedShowcaseMotion(speciesId, reviewed) {
+  const all = [...reviewed.sequences.values()].flat();
+  const left = Math.min(...all.map(s => s.place[0])), top = Math.min(...all.map(s => s.place[1]));
+  const frameWidth = Math.max(...all.map(s => s.place[0] + s.rect[2])) - left, frameHeight = Math.max(...all.map(s => s.place[1] + s.rect[3])) - top;
+  const sequences = new Map([...reviewed.sequences].map(([id, steps]) => [id, Object.freeze(steps.map(s => Object.freeze({ url: s.url, x: s.rect[0], y: s.rect[1],
+    pageWidth: null, pageHeight: null, ticks: s.ticks, clip: Object.freeze({ x: s.place[0] - left, y: s.place[1] - top, w: s.rect[2], h: s.rect[3] }) })))]));
+  return Object.freeze({ speciesId, density: reviewed.density, anchor: { x: -left / frameWidth, y: -top / frameHeight }, frameWidth, frameHeight,
+    sequences, facesRight: reviewed.facesRight });
+}
+
 /**
  * One animated sprite element. `scale` maps packed atlas pixels to CSS px.
  * play(sequenceId) loops that sequence; setFacing(+1|-1) mirrors with a flip.
@@ -107,7 +122,16 @@ export function createSpriteMotion({ doc = globalThis.document, motion, scale = 
   body.style.width = `${width}px`;
   body.style.height = `${height}px`;
   let animation = null, flip = null, facing = -1, current = null;
-  const style = frame => ({
+  // A clipped (reviewed) frame sizes and places the body to its own crop at 1:1,
+  // so a packed page never shows its neighbours; the body's transform applies the scale.
+  const clipped = [...motion.sequences.values()].some(frames => frames.some(frame => frame.clip));
+  if (clipped) Object.assign(body.style, { position: "absolute", transform: `scale(${scale})`, transformOrigin: "0 0" });
+  const style = frame => frame.clip ? ({
+    backgroundImage: `url("${frame.url}")`, backgroundSize: "auto", backgroundRepeat: "no-repeat",
+    width: `${frame.clip.w}px`, height: `${frame.clip.h}px`,
+    left: `${frame.clip.x * scale}px`, top: `${frame.clip.y * scale}px`,
+    backgroundPosition: `${-frame.x}px ${-frame.y}px`
+  }) : ({
     backgroundImage: `url("${frame.url}")`,
     backgroundSize: `${Math.round(frame.pageWidth * scale)}px ${Math.round(frame.pageHeight * scale)}px`,
     backgroundPosition: `${-Math.round(frame.x * scale)}px ${-Math.round(frame.y * scale)}px`
@@ -131,14 +155,17 @@ export function createSpriteMotion({ doc = globalThis.document, motion, scale = 
     animation = body.animate(keyframes, { duration: total * TICK_MS, iterations: Infinity });
     return true;
   }
+  // Art faces left; a reviewed set drawn facing right (motion.facesRight) flips the baseline.
+  const mirrorFor = value => (value > 0) !== Boolean(motion.facesRight);
+  if (motion.facesRight) element.style.transform = "scaleX(-1)";
   function setFacing(next) {
     const value = next >= 0 ? 1 : -1;
     if (value === facing) return facing;
     facing = value;
     flip?.cancel();
-    const to = facing > 0 ? "scaleX(-1)" : "scaleX(1)";
+    const to = mirrorFor(facing) ? "scaleX(-1)" : "scaleX(1)";
     if (!reducedMotion && typeof element.animate === "function") {
-      flip = element.animate([{ transform: facing > 0 ? "scaleX(1)" : "scaleX(-1)" }, { transform: "scaleX(0.05)", offset: 0.5 }, { transform: to }],
+      flip = element.animate([{ transform: mirrorFor(facing) ? "scaleX(1)" : "scaleX(-1)" }, { transform: "scaleX(0.05)", offset: 0.5 }, { transform: to }],
         { duration: 240, easing: "ease-in-out", fill: "forwards" });
     }
     element.style.transform = to;
@@ -163,7 +190,7 @@ export function createSpriteMotion({ doc = globalThis.document, motion, scale = 
       const still = doc.createElement("div");
       still.className = "cm-sprite__body";
       const computed = globalThis.getComputedStyle?.(body);
-      for (const key of ["width", "height", "backgroundImage", "backgroundSize", "backgroundPosition"]) still.style[key] = computed?.[key] || body.style[key];
+      for (const key of ["width", "height", "backgroundImage", "backgroundSize", "backgroundPosition", "backgroundRepeat", "position", "left", "top", "transform", "transformOrigin"]) still.style[key] = computed?.[key] || body.style[key];
       copy.append(still);
       return copy;
     },

@@ -21,7 +21,8 @@ function fixture({tamper=null}={}){
 }
 const forbidden=path=>path==='src/data/championship/public-character-catalog.v1.json'||path.includes('ART_PRODUCTION_INDEX')||path.includes('/internal-')||path.endsWith('runtime.review.json')||path.endsWith('/manifest.json');
 test('public character loading renders native frames with no private index, source manifest or synthesized review registration',async()=>{
- const configs=['e000_digitama','m201_agumon','m503_warglaymon','m529_metalgarurumon_va','m541_dukemon'].map(id=>catalog.characters.find(c=>c.entityId===id));
+ // m201 (GR01) uses the published reviewed animation since Owner 2026-10-29; a native-only Baby stands in.
+ const configs=['e000_digitama','m102_koromon','m503_warglaymon','m529_metalgarurumon_va','m541_dukemon'].map(id=>catalog.characters.find(c=>c.entityId===id));
  const f=fixture(),roster=await loadPublicCharacterRoster({...f,speciesIds:configs.map(c=>c.speciesId),initialSequences:Object.fromEntries(configs.map(c=>[c.speciesId,[0]]))},base);
  assert.deepEqual(roster.getDiagnostics().failures,[]);
  for(const c of configs){const actor=roster.createActor({speciesId:c.speciesId,presentation:'raising'}),runtime=read(c.runtimePath),seq=runtime.sides.main.animations[0];assert.ok(actor?.nativeFramePresenter);

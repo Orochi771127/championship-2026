@@ -2,13 +2,19 @@ import fs from 'node:fs';import path from 'node:path';import {createHash} from '
 import {BATTLE_PAGE_ENTITIES,readBattlePagePolicy,applyBattlePagePolicy} from './public-battle-page-policy.mjs';
 export const PUBLIC_CHARACTER_CATALOG='src/data/championship/public-character-catalog.v1.json';
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+// Owner 2026-10-28: atlas images of species replaced by reviewed artwork are retired
+// (archived with their hashes); their runtimes load with pixels:false and never request them.
+export const RETIRED_CHARACTER_ART='docs/contracts/championship/RETIRED_CHARACTER_ART.v1.json';
+const retiredImages=root=>{const file=path.join(root,RETIRED_CHARACTER_ART);
+ return new Set(fs.existsSync(file)?JSON.parse(fs.readFileSync(file,'utf8')).files.map(f=>f.path):[]);};
 export function publicCharacterRequiredFiles(root){
- const catalog=JSON.parse(fs.readFileSync(path.join(root,PUBLIC_CHARACTER_CATALOG),'utf8')),files=new Set();
+ const catalog=JSON.parse(fs.readFileSync(path.join(root,PUBLIC_CHARACTER_CATALOG),'utf8')),files=new Set(),retired=retiredImages(root);
  const add=file=>{if(!file.startsWith('assets/production/characters/')||file.includes('..')||file.includes('\\'))throw Error('PUBLIC_CHARACTER_REQUIRED_PATH');files.add(file);};
  for(const character of catalog.characters){
   for(const file of [character.runtimePath,...(character.battleRuntimePath?[character.battleRuntimePath]:[])]){
    add(file);const runtime=JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
-   for(const atlas of runtime.sides.main.atlases)for(const key of ['data','image'])add(path.posix.normalize(path.posix.join(path.posix.dirname(file),atlas[key])));
+   for(const atlas of runtime.sides.main.atlases)for(const key of ['data','image']){const target=path.posix.normalize(path.posix.join(path.posix.dirname(file),atlas[key]));
+    if(key==='image'&&retired.has(target)&&!fs.existsSync(path.join(root,target)))continue;add(target);}
   }
   add(character.hudPath);const hud=JSON.parse(fs.readFileSync(path.join(root,character.hudPath),'utf8'));
   for(const cell of [hud.portrait,...hud.battle.cells])add(cell.src);
@@ -17,7 +23,7 @@ export function publicCharacterRequiredFiles(root){
 }
 export function assertPublicCharacterSelection({root,files,allowlist,assertBytes}){
  if(!files.includes(PUBLIC_CHARACTER_CATALOG))return {required:false};
- const selected=new Map(allowlist.files.map(row=>[row.path,row])),available=new Set(files);
+ const selected=new Map(allowlist.files.map(row=>[row.path,row])),available=new Set(files),retired=retiredImages(root);
  const catalog=JSON.parse(fs.readFileSync(path.join(root,PUBLIC_CHARACTER_CATALOG),'utf8'));
  if(catalog.schemaVersion!==1||catalog.assetId!=='art:public:characters:v1'||!Array.isArray(catalog.characters))throw Error('PUBLIC_CHARACTER_SELECTION_SCHEMA');
  if(catalog.characters.some(row=>BATTLE_PAGE_ENTITIES.includes(row.entityId))
@@ -33,6 +39,7 @@ export function assertPublicCharacterSelection({root,files,allowlist,assertBytes
    for(const atlas of runtime.sides.main.atlases)for(const field of ['data','image']){
     if(typeof atlas[field]!=='string'||atlas[field].startsWith('/')||atlas[field].includes('\\')||atlas[field].includes('://'))throw Error('PUBLIC_CHARACTER_ATLAS_PATH');
     const target=path.posix.normalize(path.posix.join(path.posix.dirname(file),atlas[field]));
+    if(field==='image'&&retired.has(target)&&!available.has(target))continue;
     if(!available.has(target)||!selected.has(target)||!target.startsWith('assets/production/characters/'))throw Error('PUBLIC_CHARACTER_ATLAS_NOT_SELECTED: '+target);
    }
   }
