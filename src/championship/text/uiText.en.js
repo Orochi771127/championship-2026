@@ -1108,6 +1108,7 @@ export const TEXT_EN = Object.freeze({
   "放大": "Zoom in",
   "顯示全部設施": "Show every facility",
   "移動「{cage}」：點選新的位置": "Moving {cage}: tap its new place",
+  "會壓到「{cage}」：換一格試試": "That would cover {cage}: try another hex",
   "等候室固定在牧場入口。": "The Waiting Room stays at the ranch entrance.",
   "移動": "Move",
   "收回": "Take back",

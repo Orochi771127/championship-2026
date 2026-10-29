@@ -12,7 +12,7 @@
 // other empty cell is open but quiet; once the land is used up, empty cells
 // wear the Lid. Passages, closed borders and safe exits come from the same
 // ground the ranch walks on (hexWorldPassages.js).
-import { PRODUCT_RANCH_COLUMNS, PRODUCT_RANCH_ROWS, PRODUCT_RANCH_SLOT_COUNT, productGridCell, productGridSlot, productPlacementCells } from '../cage/productRanchGrid.js';
+import { PRODUCT_RANCH_COLUMNS, PRODUCT_RANCH_ROWS, PRODUCT_RANCH_SLOT_COUNT, productFitPlacement, productGridCell, productGridSlot, productPlacementCells } from '../cage/productRanchGrid.js';
 import { cageEditorArtCells, cageUiLidImage, cageUiName, cageUiSummary } from '../presentation/cageUiArt.js';
 import { ranchEcologyType } from '../cage/ranchEcology.js';
 import { hexWorldPassageGain, hexWorldPassageView } from './hexWorldPassages.js';
@@ -234,9 +234,11 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
   // ---------------------------------------------------------------- preview
   const draftPlacements = () => (cage?.placements ?? []).map(p => ({ moduleId: p.moduleId, slotIndex: p.slotIndex, instanceId: p.instanceId }));
   const pickedModule = () => (moving && selected) ? selected.moduleId : cage?.tray?.find(t => t.selected)?.moduleId ?? null;
-  function footprintFor(slotIndex) {
+  // The tapped hex is always one of the cage's own cells (productFitPlacement):
+  // the cage is never pushed a hex away from where the player tapped.
+  function fitAt(slotIndex) {
     const moduleId = pickedModule();
-    return moduleId ? productPlacementCells({ moduleId, slotIndex }) : null;
+    return moduleId ? productFitPlacement(draftPlacements(), moduleId, slotIndex, { ignoreInstanceId: moving && selected ? selected.instanceId : null }) : null;
   }
   function previewAt(slotIndex) {
     hoverSlot = slotIndex;
@@ -245,22 +247,29 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
     if (slotIndex === null) return;
     const moduleId = pickedModule();
     if (!moduleId) return;
-    const cells = footprintFor(slotIndex);
-    const own = moving && selected ? new Set(cage.slots.filter(s => s.instanceId === selected.instanceId).map(s => s.slotIndex)) : new Set();
-    const blocked = !cells || cells.some(slot => { const s = cage.slots[slot]; return s?.moduleId && !own.has(slot); });
+    const fit = fitAt(slotIndex), cells = fit?.cells ?? null;
     const used = (cage.productGrid?.usedCells ?? 0) + (moving ? 0 : cells?.length ?? 0);
     const tooMany = !moving && used > Math.min(cage.productGrid?.cellCap ?? 100, cage.landCapacity ?? 100);
-    const verdict = !cells ? 'outside' : blocked ? 'blocked' : tooMany ? 'full' : 'ok';
+    const verdict = !fit ? 'outside' : !fit.ok ? 'blocked' : tooMany ? 'full' : 'ok';
+    const conflicts = new Set(fit?.conflicts ?? []);
     for (const slot of cells ?? [slotIndex]) {
       const node = cellNodes.get(slot);
-      if (node) node.dataset.preview = verdict === 'outside' ? 'blocked' : verdict;
+      if (node) node.dataset.preview = conflicts.has(slot) ? 'conflict' : verdict === 'outside' ? 'blocked' : verdict;
     }
     let gain = [];
     if (verdict === 'ok') {
       const rest = draftPlacements().filter(p => !(moving && selected && p.instanceId === selected.instanceId));
-      gain = hexWorldPassageGain(rest, { moduleId, slotIndex, instanceId: moving && selected ? selected.instanceId : 'cage:instance:preview' }) ?? [];
+      gain = hexWorldPassageGain(rest, { moduleId, slotIndex: fit.slotIndex, instanceId: moving && selected ? selected.instanceId : 'cage:instance:preview' }) ?? [];
     }
-    paintGhostOverlay({ slotIndex, verdict, gain });
+    paintGhostOverlay({ slotIndex, verdict, gain, cells: cells ?? [], conflicts });
+  }
+  // A tap whose fit overlaps another cage stays in place: the ghost shows the
+  // hexes it would hit, and nothing is sent.
+  function refuseFit(slotIndex, fit) {
+    const hit = fit ? cage.slots[fit.conflicts[0]] : null;
+    fx(cellNodes.get(slotIndex), 'denied');
+    say(hit?.moduleId ? uiText('會壓到「{cage}」：換一格試試', { cage: cageUiName(hit.moduleId, hit.displayName) }) : uiText(VERDICT_COPY.outside), 'blocked');
+    previewAt(slotIndex);
   }
 
   // ---------------------------------------------------------------- selection actions
@@ -303,10 +312,13 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
 
   function onCell(slot) {
     if (moving && selected) {
+      const fit = fitAt(slot.slotIndex);
+      if (!fit?.ok) { refuseFit(slot.slotIndex, fit); return; }
       const id = selected.instanceId;
       moving = false;
-      selected = { ...selected, slotIndex: slot.slotIndex };
-      source.intents.moveCagePlacement(id, slot.slotIndex);
+      selected = { ...selected, slotIndex: fit.slotIndex };
+      hoverSlot = null;
+      source.intents.moveCagePlacement(id, fit.slotIndex);
       return;
     }
     if (slot.moduleId) { select(slot); return; }
@@ -317,7 +329,10 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
         say(uiText('🔒 可用土地已用完：開放土地或提升階級，就能放更多設施'), 'locked');
         return;
       }
-      source.intents.placeCageAt(slot.slotIndex);
+      const fit = fitAt(slot.slotIndex);
+      if (!fit?.ok) { refuseFit(slot.slotIndex, fit); return; }
+      hoverSlot = null;
+      source.intents.placeCageAt(fit.slotIndex);
       return;
     }
     select(null);
@@ -390,7 +405,16 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
     pill.style.left = `${p.x + HEX_W / 2}px`;
     pill.style.top = `${p.y - 8}px`;
     board.append(pill);
-    if (ghostLayer) for (const c of state.gain) line(ghostLayer, c.a, c.b, 'cm-hexworld__bridge cm-hexworld__bridge--preview');
+    if (!ghostLayer) return;
+    // Ghost footprint: every hex the cage would cover, the colliding ones marked.
+    for (const slot of state.cells) {
+      const q = hexWorldEditorPoint(slot), hex = doc.createElementNS(SVG, 'polygon');
+      hex.setAttribute('points', [[24, 0], [48, 12], [48, 44], [24, 56], [0, 44], [0, 12]].map(([a, b]) => `${q.x + a},${q.y + b}`).join(' '));
+      hex.setAttribute('class', `cm-hexworld__ghost-hex cm-hexworld__ghost-hex--${state.conflicts.has(slot) ? 'conflict' : state.verdict}`);
+      hex.dataset.slotIndex = String(slot);
+      ghostLayer.append(hex);
+    }
+    for (const c of state.gain) line(ghostLayer, c.a, c.b, 'cm-hexworld__bridge cm-hexworld__bridge--preview');
   }
 
   // ---------------------------------------------------------------- paint

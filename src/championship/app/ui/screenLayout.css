@@ -1057,6 +1057,11 @@
 .cm-hexworld__bridge-glow { stroke: rgba(80, 255, 220, 0.35); stroke-width: 12; stroke-linecap: round; }
 .cm-hexworld__bridge { stroke: #7ff9e0; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 7 5; animation: cm-hex-flow 0.9s linear infinite; }
 .cm-hexworld__bridge--preview { stroke: #ffe066; stroke-width: 4; }
+/* Ghost footprint of the cage being placed or moved (Owner 2026-10-29). */
+.cm-hexworld__ghost-hex { fill: rgba(61, 220, 132, 0.22); stroke: #3ddc84; stroke-width: 3; stroke-linejoin: round; }
+.cm-hexworld__ghost-hex--blocked, .cm-hexworld__ghost-hex--outside { fill: rgba(255, 77, 94, 0.16); stroke: #ff8a95; }
+.cm-hexworld__ghost-hex--full { fill: rgba(255, 159, 28, 0.2); stroke: #ff9f1c; }
+.cm-hexworld__ghost-hex--conflict { fill: rgba(255, 77, 94, 0.5); stroke: #ff1f3d; stroke-width: 4; stroke-dasharray: 6 4; }
 .cm-hexworld__exit { fill: #ffd23f; stroke: #14141f; stroke-width: 1.5; }
 .cm-hexworld__exit--synergy { fill: #3dffb0; animation: cm-hex-pulse 1s ease-in-out infinite; }
 @keyframes cm-hex-flow { to { stroke-dashoffset: -12; } }

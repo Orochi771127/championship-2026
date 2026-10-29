@@ -1321,6 +1321,7 @@ export const TEXT_VI = Object.freeze({
   "放大": "Phóng to",
   "顯示全部設施": "Hiển thị mọi cơ sở",
   "移動「{cage}」：點選新的位置": "Di chuyển {cage}: chạm vào vị trí mới",
+  "會壓到「{cage}」：換一格試試": "Sẽ đè lên {cage}: thử ô khác",
   "等候室固定在牧場入口。": "Phòng chờ luôn ở lối vào trang trại.",
   "移動": "Di chuyển",
   "收回": "Thu hồi",
