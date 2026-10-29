@@ -122045,7 +122045,7 @@
     },
     {
       "path": "championship.html",
-      "sha256": "01e3197e4ea686a1121a79412d2bc5d7e56c63475ce4d765a8ce93577a122447"
+      "sha256": "0362d2befce69769e606adef04ab6b4eed513f50c6a17829097c3e454a390863"
     },
     {
       "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -122829,7 +122829,7 @@
     },
     {
       "path": "src/championship/app/ui/juicyShowcase.css",
-      "sha256": "0af82119d5d7ae20788278d74c2a40da616cf16613070e4e33074f8c5337f1fc"
+      "sha256": "a04ec119c6c06eed83e85894ca9a33d2083aac266a79215a29c50e7dd13696a1"
     },
     {
       "path": "src/championship/app/ui/loadingWalker.js",
@@ -122889,7 +122889,7 @@
     },
     {
       "path": "src/championship/app/vs4Screens.js",
-      "sha256": "b030e92fa6d9edf6c5b0e8b95d0e92857bd16a25c18b6d9e1790e0a8dce713aa"
+      "sha256": "011dce55ea3afcefba5fc61314915587ed68ec65df946d1157e34ce440bbf037"
     },
     {
       "path": "src/championship/app/vs5Screens.js",
@@ -123194,6 +123194,10 @@
     {
       "path": "src/championship/contracts/productSpeciesExtensions.js",
       "sha256": "5ab01be7f5da08854eaa2eea683700e02ce419f1f2b5340b06debc627b5e6be7"
+    },
+    {
+      "path": "src/championship/data/monsterVisualAnchors218.js",
+      "sha256": "cc8522725ccd90638f639c792c198b56da39a6b57cedbdc3f5f18e0c1ba4cd16"
     },
     {
       "path": "src/championship/data/storyRiftChapters.js",
@@ -123733,7 +123737,7 @@
     },
     {
       "path": "src/championship/presentation/databaseHeroPortraits.js",
-      "sha256": "63fb74f171a3b9aa4d978ca2cc1ed56eb89b5903a11284b90eb8268e8359e379"
+      "sha256": "6b6d26e92d8821752ac6b0a4d880318e9f4d82128f885d122850831d276bc157"
     },
     {
       "path": "src/championship/presentation/evolutionGlyphArt.js",
@@ -123793,19 +123797,19 @@
     },
     {
       "path": "src/championship/presentation/juicy/codexShowcaseTheater.js",
-      "sha256": "0782286ddb8d00892861a10400e4030a60a7bd6b0577d4719ad8a5a40ec91df4"
+      "sha256": "876ad02cb9eb3b858aaefcf656fc8e6787c6c83480ab257d03033bf44d390e31"
     },
     {
       "path": "src/championship/presentation/juicy/cyberMorphEvolutionRunner.js",
-      "sha256": "ea1adeaa2ebf06742c42f475df71a0b838f2f5c69911938315c65ed27041ef3c"
+      "sha256": "131a2052f25df21132dc32a3c06628c4f945d19e27830c53bb030ca6b608fea3"
     },
     {
       "path": "src/championship/presentation/juicy/juicyArt.js",
-      "sha256": "042cc8ac19d81931e08f8003f96984ae65c90168d9a4e6cbb0ded84cce34a8e8"
+      "sha256": "89a9c2d68a6098b95e5d3faa2e0c77749936c92627422a64c9555e03a867a76c"
     },
     {
       "path": "src/championship/presentation/juicy/raisingEvolutionCinematic.js",
-      "sha256": "564e65579e6ce9f921993e4f74fdf8ca74dbd1cee9d8dd293bb98f8f2330a760"
+      "sha256": "9aeb88118d4d1023dcacf02c016b22acb4c037ab055e87e6bd4529ff32358da8"
     },
     {
       "path": "src/championship/presentation/juicy/showcaseBankCells.js",
@@ -123817,11 +123821,11 @@
     },
     {
       "path": "src/championship/presentation/juicy/skillCutIn.js",
-      "sha256": "e1f70ce2520b3a19d803cc59ce77b55f556f5ef09deac1adedcd979359d94da0"
+      "sha256": "c4b782b0417cc4c7b49a704549ec902bd724d1f25b05eb416a8b06a69b672b72"
     },
     {
       "path": "src/championship/presentation/juicy/spriteMotionPlayer.js",
-      "sha256": "23ccdeb7a465026610fcfd7f84c44f60a38ec200077dcef32c5c18cf862c4512"
+      "sha256": "49449672bfb4c02224b3719f1439c2e788e9b586a4adeca2d85ec40b358468c4"
     },
     {
       "path": "src/championship/presentation/medals/medalFaceTexture.js",
@@ -124401,7 +124405,7 @@
     },
     {
       "path": "src/championship/text/evolutionPresentationText.js",
-      "sha256": "18847ea401f1bd9fa7159ca299fce68a6d60242d04837337de509ee10199cb83"
+      "sha256": "d1e7f311d37ddc30287b5c5dcc18cd925fe210ab68fe4808bd79b6b6e884527d"
     },
     {
       "path": "src/championship/text/gameText.en.js",
@@ -125942,6 +125946,19 @@
         "speciesId",
         "speciesIndex",
         "stagePrefixes"
+      ]
+    },
+    {
+      "path": "src/data/championship/database-hero-faces.v1.json",
+      "sha256": "b3a4bcd46af00e8f08223c2f17b15f8ddd63a0e82cdf708c2ad127ddf904928c",
+      "jsonFields": [
+        "alphaThreshold",
+        "entries",
+        "face",
+        "method",
+        "schemaVersion",
+        "sha256",
+        "speciesIndex"
       ]
     },
     {

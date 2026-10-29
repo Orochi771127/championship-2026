@@ -1053,9 +1053,9 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       : targetData ? [`${targetData.labels.attribute}: ${targetData.attributeName}`, `${targetData.labels.family}: ${targetData.familyName}`] : null;
     const special = juicySignatureMove(targetData?.moves);
     return showcase.evolutionButton({
-      from: {name: speciesName(selected.speciesIndex, selected.displayName), portrait: juicyPortrait(selected.speciesIndex)},
+      from: {name: speciesName(selected.speciesIndex, selected.displayName), portrait: juicyPortrait(selected.speciesIndex), speciesIndex: selected.speciesIndex},
       to: {name, stageLabel: route.revealed && mapping.numberingStageIndex !== null ? generationName(mapping.numberingStageIndex) : '',
-        portrait: route.revealed ? juicyPortrait(route.targetSpeciesIndex) : null},
+        portrait: route.revealed ? juicyPortrait(route.targetSpeciesIndex) : null, speciesIndex: route.revealed ? route.targetSpeciesIndex : null},
       encrypted: !full, traits, special: special ? {name: special.name} : null
     });
   }

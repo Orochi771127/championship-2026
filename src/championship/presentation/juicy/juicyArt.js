@@ -6,8 +6,9 @@
 // writes nothing, owns no clock and creates no renderer. The pieces that use
 // it are DOM + CSS / Web Animations only, so none of them can add a WebGL
 // context (the iOS standalone budget is the existing Pixi stage alone).
-import { databaseHeroPortrait } from "../databaseHeroPortraits.js";
+import { databaseHeroFace, databaseHeroPortrait } from "../databaseHeroPortraits.js";
 import { BATTLE_FX_PALETTES, battleFxMoveTier } from "../battleFx/battleFxPalettes.js";
+import { monsterVisualAnchor } from "../../data/monsterVisualAnchors218.js";
 
 /** `species-012`, `championship:creature:species-012` or 12 -> 12. */
 export function juicySpeciesIndex(ref) {
@@ -16,11 +17,20 @@ export function juicySpeciesIndex(ref) {
   return match ? Number(match[1]) : null;
 }
 
-/** The Database hero portrait for a species, or null (eggs and gaps). */
+/**
+ * The Database hero portrait for a species, or null (eggs and gaps). `face` is
+ * its head square [cx, cy, size] in image pixels: the 218-partner calibration
+ * table's cutinHeadFrame (src/championship/data/monsterVisualAnchors218.js),
+ * else the measured face of a portrait outside the Dex.
+ */
 export function juicyPortrait(ref) {
   const index = juicySpeciesIndex(ref);
   const hero = index === null ? null : databaseHeroPortrait(index);
-  return hero ? Object.freeze({ src: hero.src, width: hero.width, height: hero.height, speciesIndex: index }) : null;
+  if (!hero) return null;
+  const head = monsterVisualAnchor(index)?.cutinHeadFrame;
+  const face = head ? Object.freeze([Math.round(head.headFocusX * hero.width), Math.round(head.headFocusY * hero.height),
+    Math.round(head.headSafeScale * Math.max(hero.width, hero.height))]) : databaseHeroFace(hero);
+  return Object.freeze({ src: hero.src, width: hero.width, height: hero.height, speciesIndex: index, face });
 }
 
 const hex = value => `#${(value >>> 0).toString(16).padStart(6, "0").slice(-6)}`;

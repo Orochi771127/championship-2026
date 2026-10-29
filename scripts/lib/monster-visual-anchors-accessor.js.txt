@@ -1,0 +1,24 @@
+export const MONSTER_VISUAL_ANCHOR_IDS = Object.freeze(Object.keys(ROWS));
+const expanded = new Map();
+function expand(speciesId, [motion, head]) {
+  const [entityId, density, bounds, actions, foot, muzzle, art] = motion ?? [];
+  return Object.freeze({
+    speciesId,
+    motion: motion ? Object.freeze({
+      entityId, density, art,
+      bounds: Object.freeze({ left: bounds[0], top: bounds[1], right: bounds[2], bottom: bounds[3] }),
+      actions: Object.freeze(Object.fromEntries(ACTION_IDS.map((id, i) => [id, actions[i] ? Object.freeze({
+        frameCount: actions[i][0], frameWidth: actions[i][1], frameHeight: actions[i][2], cellsPerPage: actions[i][3] }) : null]))),
+      footAnchor: Object.freeze({ x: 0, y: 0, stance: foot[0], lowestPixel: foot[1], visualHeight: foot[2] }),
+      muzzleSocket: muzzle ? Object.freeze({ x: muzzle[0], y: muzzle[1], heightRatio: muzzle[2], releaseIndex: muzzle[3], releaseMs: muzzle[4] }) : null
+    }) : null,
+    cutinHeadFrame: head ? Object.freeze({ headFocusX: head[0], headFocusY: head[1], headSafeScale: head[2], opaqueInHead: head[3] }) : null
+  });
+}
+/** The anchors of one species ("species-021", "championship:creature:species-021" or 21), or null. */
+export function monsterVisualAnchor(ref) {
+  const id = Number.isSafeInteger(ref) ? `species-${String(ref).padStart(3, "0")}` : String(ref ?? "").replace(/^championship:creature:/, "");
+  if (!Object.hasOwn(ROWS, id)) return null;
+  if (!expanded.has(id)) expanded.set(id, expand(id, ROWS[id]));
+  return expanded.get(id);
+}

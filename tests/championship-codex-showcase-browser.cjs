@@ -70,13 +70,32 @@ function countContexts() {
       await page.locator(`.cm-showcase-motion__action[data-action=${action}]`).click();
       assert.equal(await page.locator(`.cm-showcase-motion__action[data-action=${action}]`).getAttribute("aria-pressed"), "true");
     }
+    // One packed cell on the pad -- never the page strip ("four in a row"), never floating (2026-10-29).
+    const cell = await page.evaluate(() => {
+      const sprite = document.querySelector(".cm-showcase-motion .cm-sprite"), body = sprite.querySelector(".cm-sprite__body");
+      const pad = document.querySelector(".cm-showcase-motion__pad").getBoundingClientRect(), box = body.getBoundingClientRect();
+      const s = sprite.getBoundingClientRect(), below = parseFloat(sprite.style.getPropertyValue("--cm-sprite-below")) || 0;
+      return { sprites: document.querySelectorAll(".cm-showcase-motion .cm-sprite").length, cellW: box.width, spriteW: s.width,
+        footY: s.bottom - below, padY: pad.top + pad.height / 2, label: document.querySelector(".cm-showcase-toggle__option[data-view=motion]").textContent };
+    });
+    assert.equal(cell.sprites, 1, "one partner in the viewer");
+    assert.ok(cell.cellW <= cell.spriteW + 1, "the body shows one packed cell, inside the drawn bounds");
+    assert.ok(Math.abs(cell.footY - cell.padY) <= 3, `the feet stand on the pad's centre (${cell.footY} vs ${cell.padY})`);
+    assert.doesNotMatch(cell.label, /\p{Extended_Pictographic}|[.,]/u, "the motion toggle has no emoji or stray punctuation");
     await page.screenshot({ path: path.join(output, "motion.png") });
 
     // Special: wind-up, cut-in strip, contact and the number, then replay.
     await special.click();
     await page.locator(".cm-showcase .cm-cutin").waitFor({ timeout: 5000 });
+    // The strip lives 650 ms: read its framing before anything slower.
+    const framing = await page.evaluate(() => document.querySelector(".cm-showcase .cm-cutin__face")?.dataset.framing ?? null);
     await page.screenshot({ path: path.join(output, "special-cutin.png") });
+    assert.equal(framing, "face", "the cut-in frames the measured head");
     await page.locator(".cm-showcase__damage").waitFor({ timeout: 5000 });
+    const launch = await page.evaluate(() => { const fx = document.querySelector(".cm-showcase__fx").dataset;
+      return { spawnY: Number(fx.spawnY), footY: Number(fx.footY), bodyH: Number(fx.bodyH), sprites: document.querySelectorAll(".cm-showcase__arena .cm-sprite").length }; });
+    assert.ok(launch.sprites <= 1, "one caster on the stage");
+    assert.ok(launch.spawnY < launch.footY - launch.bodyH * 0.5, `the move leaves the upper body (${JSON.stringify(launch)})`);
     await page.locator(".cm-showcase__replay:not([hidden])").waitFor({ timeout: 5000 });
     await page.locator(".cm-showcase__close").click();
     assert.equal(await page.locator(".cm-showcase").isHidden(), true);
@@ -85,6 +104,14 @@ function countContexts() {
     await evolution.click();
     await page.locator(".cm-showcase .cm-morph").waitFor({ timeout: 5000 });
     await page.waitForTimeout(1200);
+    const morph = await page.evaluate(() => ({ words: [...document.querySelectorAll(".cm-morph__word")].map(word => word.textContent),
+      glyphs: new Set([...document.querySelectorAll(".cm-morph__glyph")].map(glyph => glyph.dataset.glyph)).size,
+      rings: [document.querySelectorAll(".cm-morph__ring3d--back").length, document.querySelectorAll(".cm-morph__ring3d--front").length],
+      art: document.querySelector(".cm-morph").dataset.fromArt }));
+    assert.ok(morph.words.includes("進化") && morph.words.includes("EVOLUTION") && !morph.words.some(word => /^[0-9A-F]{4,}$/.test(word)), "multilingual words, no hex");
+    assert.equal(morph.glyphs, 4, "the Owner's four evolution glyphs");
+    assert.ok(morph.rings[0] >= 2 && morph.rings[0] === morph.rings[1], "every ring has a far and a near half");
+    assert.equal(morph.art, "sprite", "the partner is its real idle motion");
     await page.screenshot({ path: path.join(output, "evolution.png") });
     await page.locator(".cm-morph").click();
     await page.locator(".cm-morph").click();

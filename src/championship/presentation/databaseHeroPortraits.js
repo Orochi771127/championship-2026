@@ -1,5 +1,6 @@
 import manifest from '../../data/championship/database-hero-portraits.public.v1.json' with {type:'json'};
 import silhouettes from '../../data/championship/database-hero-silhouettes.v1.json' with {type:'json'};
+import faces from '../../data/championship/database-hero-faces.v1.json' with {type:'json'};
 import {deepFreeze} from '../contracts/championshipContracts.js';
 import {publicRuntimeAsset} from './publicRuntimeAssets.js';
 import {getDatabaseIllustration} from '../database/databaseIllustrations.js';
@@ -30,4 +31,12 @@ const silhouetteBoxes = new Map(silhouettes.entries.map(row=>[row.sha256,Object.
 export function databaseHeroSilhouette(hero) {
   const box = hero ? silhouetteBoxes.get(hero.sha256) : null;
   return box && box[0]>=0 && box[1]>=0 && box[2]>0 && box[3]>0 && box[0]+box[2]<=hero.width && box[1]+box[3]<=hero.height ? box : null;
+}
+// Head of each published image [cx, cy, size] in image pixels (scripts/measure-dex-hero-faces.py:
+// catchlight eyes, else the upper body, plus reviewed corrections), keyed by its bytes. The special
+// cut-in frames this square so the whole head and face sit in the strip, never the belly or a claw.
+const faceBoxes = new Map(faces.entries.map(row=>[row.sha256,Object.freeze([...row.face])]));
+export function databaseHeroFace(hero) {
+  const face = hero ? faceBoxes.get(hero.sha256) : null;
+  return face && face[2]>0 && face[0]>=0 && face[1]>=0 && face[0]<=hero.width && face[1]<=hero.height ? face : null;
 }
