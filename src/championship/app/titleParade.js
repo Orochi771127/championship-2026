@@ -16,6 +16,7 @@ import { validatePublicCharacterRender } from "../presentation/publicCharacterRo
 import { isOriginalRuntimeLocation } from "../presentation/originalRuntimeLocation.js";
 import { speciesNameForId } from "../text/zhHant.js";
 import { loadReviewedDomFrames } from "../presentation/reviewedSelection.js";
+import { raisingNativeScreenPixels, initialRaisingReferenceViewport } from "../presentation/intRh2/raisingFieldViewport.js";
 
 /** The in-game walk request (Data Arena and Battle sequence id 2). */
 export const TITLE_PARADE_WALK_SEQUENCE = 2;
@@ -23,6 +24,30 @@ export const TITLE_PARADE_SIZE = 4;
 /** The rebuild's six strollers where the screen is wide enough. */
 export const TITLE_PARADE_WIDE_SIZE = 6;
 const TICK_HZ = 60;
+// The ranch board as raisingNativeScreenPixels sizes it (raisingRanchArtPlan productGrid).
+const RANCH_SIZING_FIELD = Object.freeze({ nativePixelWorldScale: 4, productGrid: Object.freeze({ sizingHeightNative: 192 }) });
+
+/**
+ * CSS px per native px the ranch draws partners at on this screen (Owner 2026-10-29:
+ * the parade shows partners at their in-game size, never enlarged). Same whole-pixel
+ * rule as the ranch: 3 on a typical phone, 2 on desktop and short screens.
+ */
+export function paradeNativeScreenPixels(view = globalThis) {
+  const width = Number(view?.innerWidth), height = Number(view?.innerHeight);
+  const reference = initialRaisingReferenceViewport({ width, height: height + 169 });
+  return raisingNativeScreenPixels(RANCH_SIZING_FIELD, { width: reference.width, height: reference.height, referenceViewport: reference });
+}
+
+/** Draws one walk frame onto its walker canvas (reviewed crops by pivot; a mirrored crop flipped into its place). */
+export function drawParadeFrame(ctx, canvas, current) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (current.place && current.mirror) {
+    ctx.save(); ctx.translate(current.place.x + current.rect.w, current.place.y); ctx.scale(-1, 1);
+    ctx.drawImage(current.image, current.rect.x, current.rect.y, current.rect.w, current.rect.h, 0, 0, current.rect.w, current.rect.h);
+    ctx.restore();
+  } else if (current.place) ctx.drawImage(current.image, current.rect.x, current.rect.y, current.rect.w, current.rect.h, current.place.x, current.place.y, current.rect.w, current.rect.h);
+  else ctx.drawImage(current.image, current.rect.x, current.rect.y, current.rect.w, current.rect.h, 0, 0, canvas.width, canvas.height);
+}
 
 /** Pick `count` distinct catalog species, the walk sequence permitting. */
 export function pickParadeSpecies(configs, count = TITLE_PARADE_SIZE, random = Math.random) {
@@ -70,7 +95,7 @@ export async function loadParadeWalker(speciesId, { href, fetchImpl = globalThis
     if (!rect) return null;
     frames.push({ image: page.image, rect, ticks: Math.max(1, frame.ticks ?? 8) });
   }
-  return { speciesId, name: speciesNameForId(speciesId), frames, anchor: runtime.artProfile?.anchor ?? { x: 0.5, y: 0.9 } };
+  return { speciesId, name: speciesNameForId(speciesId), frames, density: runtime.artProfile?.scale ?? 4, anchor: runtime.artProfile?.anchor ?? { x: 0.5, y: 0.9 } };
 }
 
 /** Reviewed frames are trimmed crops: place each on one shared canvas by its pivot. */
@@ -85,7 +110,7 @@ async function reviewedParadeWalker(speciesId, reviewed, { signal, loadImage }) 
     const [x, y, w, h] = step.rect;
     frames.push({ image: images.get(step.url), rect: { x, y, w, h }, ticks: step.ticks, place: { x: step.place[0] - left, y: step.place[1] - top }, mirror: step.mirror === true });
   }
-  return { speciesId, name: speciesNameForId(speciesId), frames, canvas: { w: width, h: height }, facesRight: reviewed.facesRight,
+  return { speciesId, name: speciesNameForId(speciesId), frames, canvas: { w: width, h: height }, facesRight: reviewed.facesRight, density: reviewed.density,
     anchor: { x: -left / width, y: -top / height } };
 }
 
@@ -150,6 +175,8 @@ export function installTitleParade({ doc = globalThis.document, view = globalThi
     const height = art.canvas?.h ?? art.frames[0].rect.h, scale = 1;
     canvas.width = Math.round((art.canvas?.w ?? art.frames[0].rect.w) * scale);
     canvas.height = height;
+    // In-game size: packed px -> native px -> the ranch's CSS px per native px.
+    if (art.density > 0) canvas.style.height = `${Math.round(height * paradeNativeScreenPixels(view) / art.density)}px`;
     button.append(canvas);
     host.append(button);
     const walker = { art, button, canvas, ctx: canvas.getContext("2d"), scale, x: 0.08 + random() * 0.84, dir: random() < 0.5 ? -1 : 1,
@@ -163,15 +190,7 @@ export function installTitleParade({ doc = globalThis.document, view = globalThi
     const current = walker.art.frames[walker.frameIndex];
     if (walker.drawn === walker.frameIndex || !walker.ctx) return;
     walker.drawn = walker.frameIndex;
-    const { ctx, canvas } = walker;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // A frame drawn facing opposite to its set is flipped into its (already mirrored) place.
-    if (current.place && current.mirror) {
-      ctx.save(); ctx.translate(current.place.x + current.rect.w, current.place.y); ctx.scale(-1, 1);
-      ctx.drawImage(current.image, current.rect.x, current.rect.y, current.rect.w, current.rect.h, 0, 0, current.rect.w, current.rect.h);
-      ctx.restore();
-    } else if (current.place) ctx.drawImage(current.image, current.rect.x, current.rect.y, current.rect.w, current.rect.h, current.place.x, current.place.y, current.rect.w, current.rect.h);
-    else ctx.drawImage(current.image, current.rect.x, current.rect.y, current.rect.w, current.rect.h, 0, 0, canvas.width, canvas.height);
+    drawParadeFrame(walker.ctx, walker.canvas, current);
   }
 
   function step(now) {
