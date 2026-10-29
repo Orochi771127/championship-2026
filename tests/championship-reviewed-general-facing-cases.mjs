@@ -36,8 +36,10 @@ function baseline(){let disposals=0;return {get disposals(){return disposals;},r
 
 test('generalMirrorFrames: single frames drawn facing opposite to their set are mirrored relative to it, in Pixi and DOM; Arena unchanged',async()=>{
  // In-game re-review 2026-10-29: these frames face the other way from the rest of their set.
+ // Clip-by-clip re-check the same day: GR38 blink/exhale (MA_02/03) added; BD_06/07 and MB_10 already
+ // faced like their clips; MA50/MA63 sleep cells were right as stored; MA53 pleased cell_13 added.
  assert.deepEqual(Object.fromEntries(selection.characters.filter(c=>c.generalMirrorFrames).map(c=>[c.displayCode,c.generalMirrorFrames.length])),
-  {GR05:2,GR38:9,MA03:1,MA20:2,MA43:1,MA50:1,MA54:1,MA63:1,MA64:4,AW28:1,AW27:2});
+  {GR05:2,GR38:8,MA03:1,MA20:2,MA43:1,MA53:1,MA54:1,MA64:4,AW28:1,AW27:2});
  for(const entry of selection.characters.filter(c=>c.generalMirrorFrames)){const d=read(entry.displayCode);
   for(const id of entry.generalMirrorFrames)assert.ok(d.frames[id],entry.displayCode+' '+id);}
  // [code, Main sequence whose first frame is listed, Main sequence whose first frame is not]

@@ -1,0 +1,287 @@
+{
+ "schemaVersion": 1,
+ "purpose": "Facing-gate outliers reviewed by eye (2026-10-29). NOT_A_FACING_ERROR: front, back or near-symmetric views and pose changes the silhouette test cannot read. ART_ISSUE_REPORTED: a real facing problem in the delivered art, reported to the art owner and drawn as delivered until it is redrawn. Any other outlier fails tests/championship-reviewed-action-facing-cases.mjs.",
+ "reviewedOn": "2026-10-29",
+ "entries": [
+  {
+   "displayCode": "AW32",
+   "usage": "general",
+   "clip": "main:21",
+   "frame": "general/body/G35",
+   "verdict": "ART_ISSUE_REPORTED",
+   "note": "G39 and G35 struggle keys face each other. Reported to the art owner; left as drawn."
+  },
+  {
+   "displayCode": "AW32",
+   "usage": "general",
+   "clip": "main:21",
+   "frame": "general/body/G39",
+   "verdict": "ART_ISSUE_REPORTED",
+   "note": "G39 and G35 struggle keys face each other. Reported to the art owner; left as drawn."
+  },
+  {
+   "displayCode": "GR06",
+   "usage": "general",
+   "clip": "main:bound_recover",
+   "frame": "GR06_MAIN_BOUND_14",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Knocked-down and bound keys lying on the back or seen front-on; facing is not readable."
+  },
+  {
+   "displayCode": "GR06",
+   "usage": "general",
+   "clip": "main:bound_recover",
+   "frame": "GR06_MAIN_BOUND_15",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Knocked-down and bound keys lying on the back or seen front-on; facing is not readable."
+  },
+  {
+   "displayCode": "GR06",
+   "usage": "general",
+   "clip": "main:down",
+   "frame": "GR06_MAIN_COMBAT_12",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Knocked-down and bound keys lying on the back or seen front-on; facing is not readable."
+  },
+  {
+   "displayCode": "GR06",
+   "usage": "general",
+   "clip": "main:down",
+   "frame": "GR06_MAIN_COMBAT_13",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Knocked-down and bound keys lying on the back or seen front-on; facing is not readable."
+  },
+  {
+   "displayCode": "GR06",
+   "usage": "general",
+   "clip": "main:knockback",
+   "frame": "GR06_MAIN_COMBAT_12",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Knocked-down and bound keys lying on the back or seen front-on; facing is not readable."
+  },
+  {
+   "displayCode": "GR06",
+   "usage": "general",
+   "clip": "main:knockback",
+   "frame": "GR06_MAIN_COMBAT_13",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Knocked-down and bound keys lying on the back or seen front-on; facing is not readable."
+  },
+  {
+   "displayCode": "GR21",
+   "usage": "arena",
+   "clip": "Arena/SW/move",
+   "frame": "REFLECTED/SW/opposite_contact",
+   "verdict": "ART_ISSUE_REPORTED",
+   "note": "DR/DL walk: keys 08/09 and the opposite_contact key differ in head turn on a near-front 3/4 pose. Not a confirmed error; reported to the art owner (dot) and drawn as delivered."
+  },
+  {
+   "displayCode": "GR21",
+   "usage": "general",
+   "clip": "Main/bound_down",
+   "frame": "MAIN_BOUND_16/12",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front-facing eat, carried sway and bound keys; the sway mirrors on purpose."
+  },
+  {
+   "displayCode": "GR21",
+   "usage": "general",
+   "clip": "Main/bound_down",
+   "frame": "MAIN_BOUND_16/13",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front-facing eat, carried sway and bound keys; the sway mirrors on purpose."
+  },
+  {
+   "displayCode": "GR21",
+   "usage": "general",
+   "clip": "Main/carried",
+   "frame": "MAIN_B_16/10",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front-facing eat, carried sway and bound keys; the sway mirrors on purpose."
+  },
+  {
+   "displayCode": "GR21",
+   "usage": "general",
+   "clip": "Main/carried",
+   "frame": "MAIN_B_16/11",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front-facing eat, carried sway and bound keys; the sway mirrors on purpose."
+  },
+  {
+   "displayCode": "GR21",
+   "usage": "general",
+   "clip": "Main/eat",
+   "frame": "MAIN_A_16/11",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front-facing eat, carried sway and bound keys; the sway mirrors on purpose."
+  },
+  {
+   "displayCode": "GR22",
+   "usage": "general",
+   "clip": "gr22.main.release_fall_land",
+   "frame": "MAIN_B_16__10",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Release-fall-land moves from a tilted fall to a front-on landing."
+  },
+  {
+   "displayCode": "GR28",
+   "usage": "arena",
+   "clip": "Arena/R/melee",
+   "frame": "A02_04",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front-on vine attack: the windup and the whip reach to opposite sides."
+  },
+  {
+   "displayCode": "GR28",
+   "usage": "arena",
+   "clip": "Arena/R/melee",
+   "frame": "A02_05",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front-on vine attack: the windup and the whip reach to opposite sides."
+  },
+  {
+   "displayCode": "GR36",
+   "usage": "arena",
+   "clip": "gr36.arena.DL.attack",
+   "frame": "arena-attack-west__13",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front three-quarter lunge; the body turns, the face stays to camera."
+  },
+  {
+   "displayCode": "GR36",
+   "usage": "arena",
+   "clip": "gr36.arena.DR.attack",
+   "frame": "arena-attack-east-authored-mirror__05",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front three-quarter lunge; the body turns, the face stays to camera."
+  },
+  {
+   "displayCode": "MA02",
+   "usage": "arena",
+   "clip": "arena/ARENA_R_UR16/UR/melee",
+   "frame": "ARENA_R_UR16/cell_11",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Back view (UR); near-symmetric."
+  },
+  {
+   "displayCode": "MA06",
+   "usage": "arena",
+   "clip": "arena/ARENA_R_UR16/R/ranged",
+   "frame": "ARENA_R_UR16/cell_00",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front three-quarter keys of the R sheet; facing is not readable."
+  },
+  {
+   "displayCode": "MA06",
+   "usage": "arena",
+   "clip": "arena/ARENA_R_UR16/R/walk",
+   "frame": "ARENA_R_UR16/cell_00",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front three-quarter keys of the R sheet; facing is not readable."
+  },
+  {
+   "displayCode": "MA09",
+   "usage": "general",
+   "clip": "general/MAIN_CARE16/R/eat",
+   "frame": "MAIN_A16/cell_00",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Eat clip opens on the front-on standing key before the side-view care keys."
+  },
+  {
+   "displayCode": "MA10",
+   "usage": "arena",
+   "clip": "arena/ARENA_L_DL16/L/melee",
+   "frame": "ARENA_L_DL16/cell_03",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front-on swing windup with both arms out."
+  },
+  {
+   "displayCode": "MA10",
+   "usage": "arena",
+   "clip": "arena/ARENA_L_DL16/L/melee",
+   "frame": "ARENA_L_DL16/cell_04",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front-on swing windup with both arms out."
+  },
+  {
+   "displayCode": "MA21",
+   "usage": "arena",
+   "clip": "arena/ARENA_L_DL16_v1/L/melee",
+   "frame": "ARENA_L_DL16_v1/cell_00",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Attack key changes silhouette sharply; it still faces left."
+  },
+  {
+   "displayCode": "MA25",
+   "usage": "general",
+   "clip": "action_08",
+   "frame": "assets/MAIN_B16/cell_05.png",
+   "verdict": "ART_ISSUE_REPORTED",
+   "note": "cell_05 reads opposite to cells 03-04 of the same shot. Reported to the art owner; left as drawn."
+  },
+  {
+   "displayCode": "MA40",
+   "usage": "arena",
+   "clip": "action_30",
+   "frame": "assets/ARENA_U_UL16/cell_11.png",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Back view (UL); near-symmetric."
+  },
+  {
+   "displayCode": "MA44",
+   "usage": "arena",
+   "clip": "action_50",
+   "frame": "assets/ARENA_R_UR16/cell_03.png",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front-on windup before the lunge."
+  },
+  {
+   "displayCode": "MA46",
+   "usage": "arena",
+   "clip": "action_42",
+   "frame": "assets/ARENA_L_DL16/cell_03.png",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front-on windup before the strike."
+  },
+  {
+   "displayCode": "MA51",
+   "usage": "arena",
+   "clip": "action_38",
+   "frame": "assets/ARENA_U_UL16/cell_11.png",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Back view (UL); near-symmetric."
+  },
+  {
+   "displayCode": "MA58",
+   "usage": "arena",
+   "clip": "action_27",
+   "frame": "assets/ARENA_L_DL16/cell_05.png",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Rearing ranged keys; all keys face left (checked at full size)."
+  },
+  {
+   "displayCode": "MA58",
+   "usage": "arena",
+   "clip": "action_27",
+   "frame": "assets/ARENA_L_DL16/cell_06.png",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Rearing ranged keys; all keys face left (checked at full size)."
+  },
+  {
+   "displayCode": "MA63",
+   "usage": "arena",
+   "clip": "action_38",
+   "frame": "assets/ARENA_U_UL16/cell_08.png",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Back view (UL); near-symmetric."
+  },
+  {
+   "displayCode": "MA64",
+   "usage": "arena",
+   "clip": "action_51",
+   "frame": "assets/ARENA_R_UR16/cell_00.png",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Front-on neutral key closing the shot."
+  }
+ ]
+}
