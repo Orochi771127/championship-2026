@@ -582,10 +582,11 @@ test('generalMirror roles load General frames mirrored about the pivot; Arena lo
  // By-eye review 2026-10-29 (audit batch6/facing): these General sets are drawn facing away from the native cells.
  // In-game re-review the same day (every reachable Main clip at flipBits 0, which the ranch draws moving left):
  // 28 more sets walked or flew backwards, and MA03's set was already drawn facing left.
+ // Illustration-only review the same day: MA65 and MA67 General sets face right too.
  const flagged=selection.characters.filter(c=>c.generalMirror===true).map(c=>c.displayCode).sort();
  assert.deepEqual(flagged,['AW25','AW27','AW28','AW29','AW32','GR03','GR11','GR20','GR23','MA04','MA05','MA06','MA07','MA08','MA09','MA10',
   'MA11','MA12','MA13','MA14','MA18','MA19','MA20','MA21','MA22','MA25','MA26','MA29','MA33','MA40','MA42','MA43','MA50','MA54','MA55',
-  'MA58','MA59','MA60','MA63']);
+  'MA58','MA59','MA60','MA63','MA65','MA67']);
  for(const code of [...flagged,'GR10','MA16']){
   const entry=selection.characters.find(c=>c.displayCode===code),d=read(code),mirrored=entry.generalMirror===true;
   for(const usage of ['general','arena']){
