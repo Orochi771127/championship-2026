@@ -339,6 +339,7 @@
     "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
     "src/championship/presentation/intRh2/raisingContactShadow.js",
     "src/championship/presentation/intRh2/raisingFieldViewport.js",
+    "src/championship/presentation/intRh2/raisingFootprintShadow.js",
     "src/championship/presentation/intRh2/raisingNativeSizing.js",
     "src/championship/presentation/intRh2/raisingZoomInput.js",
     "src/championship/presentation/juicy/codexShowcaseTheater.js",
@@ -8533,6 +8534,7 @@
     "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
     "src/championship/presentation/intRh2/raisingContactShadow.js",
     "src/championship/presentation/intRh2/raisingFieldViewport.js",
+    "src/championship/presentation/intRh2/raisingFootprintShadow.js",
     "src/championship/presentation/intRh2/raisingNativeSizing.js",
     "src/championship/presentation/intRh2/raisingZoomInput.js",
     "src/championship/presentation/juicy/codexShowcaseTheater.js",
@@ -8785,6 +8787,7 @@
     "src/data/championship/public-playtest-runtime.v1.json",
     "src/data/championship/public-ui-selection.v1.json",
     "src/data/championship/r2/fields/fieldInventoryR2.js",
+    "src/data/championship/raising-contact-footprints.v1.json",
     "src/data/championship/ranch-render-selection.v1.json",
     "src/data/championship/reviewed-animation-selection.v1.json"
   ],
@@ -40758,7 +40761,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "f9b5b0f09c25b1f3c152b9e255f8ec4deb4ec8fc35a40dbfab7088a745519f8e"
+        "sha256": "cb3258ead9ed3adedac4f78f86a54022c0f5f274129211fde41ad5df8d11b54c"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingContactShadow.js",
@@ -40767,6 +40770,10 @@
       {
         "path": "src/championship/presentation/intRh2/raisingFieldViewport.js",
         "sha256": "8dde98a1ffb8abbec0c5eacc29f00aaf7f7d3b6299b99046237fb70def7e471e"
+      },
+      {
+        "path": "src/championship/presentation/intRh2/raisingFootprintShadow.js",
+        "sha256": "177ab0aa80ab351705eae3bf1f8aeb26a3362aeaba49fdabae8a1b2d6aeb3f6a"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingNativeSizing.js",
@@ -40958,7 +40965,7 @@
       },
       {
         "path": "src/championship/presentation/ranchGroundShadows.js",
-        "sha256": "90bdc28c7f52bcd3c041b8d09e46987fec8456af869fae2659da3e94da2ddd54"
+        "sha256": "0882f6a3859b7d7cd50e1cdefc63c6a567d361a320db8370df1f12e227056e6b"
       },
       {
         "path": "src/championship/presentation/ranchPassages.js",
@@ -41775,6 +41782,10 @@
       {
         "path": "src/data/championship/r2/fields/fieldInventoryR2.js",
         "sha256": "1de79c4ae259a11f19d83dc1e3405875ba7cadce4d1372f376820fa30f10d187"
+      },
+      {
+        "path": "src/data/championship/raising-contact-footprints.v1.json",
+        "sha256": "9bd579cd0d96886848a4de95dbec6e28c66cadf2f9be1cc903fdb9c0171c4c1a"
       },
       {
         "path": "src/data/championship/ranch-render-selection.v1.json",

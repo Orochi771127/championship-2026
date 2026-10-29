@@ -2,7 +2,10 @@ import * as THREE from '../../../node_modules/three/build/three.module.js';
 import {ranchNativeToWorld,RANCH_LAYOUT_VIEW} from './ranchThreeCoordinates.js';
 
 // Owner 2026-10-27 diorama look: contact shadows read stronger (was .26).
-export const RANCH_CONTACT_SHADOW_OPACITY=.36;
+// Shadow audit 2026-10-30: the core is darker and the rim fades from SOFT_CORE outwards,
+// so the ellipse reads as a soft contact under the body instead of a flat disc.
+export const RANCH_CONTACT_SHADOW_OPACITY=.46;
+export const RANCH_CONTACT_SHADOW_SOFT_CORE=.55;
 // Preserve the existing authored screen ellipse, but put its fragments on the
 // contact plane in the SAME depth buffer as the alpha-cutout actors/terrain.
 export function ranchShadowWorldPoint(point,bounds,pixelScale,height,view=RANCH_LAYOUT_VIEW){
@@ -38,7 +41,7 @@ export function createRanchGroundShadows(scene){
         vertexShader:'varying vec2 vShadowUv; void main(){vShadowUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
         fragmentShader:`varying vec2 vShadowUv; uniform vec4 ellipses[${ellipses.length}]; uniform float opacity; uniform vec3 color;
           void main(){float coverage=0.0;
-            for(int i=0;i<${ellipses.length};i++){vec4 e=ellipses[i];float d=length((vShadowUv-e.xy)/e.zw);float edge=max(fwidth(d),0.00001);coverage=max(coverage,1.0-smoothstep(1.0-edge,1.0+edge,d));}
+            for(int i=0;i<${ellipses.length};i++){vec4 e=ellipses[i];float d=length((vShadowUv-e.xy)/e.zw);float edge=max(fwidth(d),0.00001);coverage=max(coverage,1.0-smoothstep(${RANCH_CONTACT_SHADOW_SOFT_CORE.toFixed(2)},1.0+edge,d));}
             if(coverage<=0.0)discard;gl_FragColor=vec4(color,opacity*coverage);
             #include <colorspace_fragment>
           }`
@@ -56,7 +59,8 @@ export function createRanchGroundShadows(scene){
       const w=ranchShadowWorldPoint(p,bounds,pixelScale,height,view);positions.setXYZ(i,w.x,w.y,w.z);
     });positions.needsUpdate=true;
     ellipses.forEach((e,i)=>item.mesh.material.uniforms.ellipses.value[i].set((e.x-left)/(right-left),1-(e.y-top)/(bottom-top),e.rx/(right-left),e.ry/(bottom-top)));
-    item.mesh.material.uniforms.opacity.value=RANCH_CONTACT_SHADOW_OPACITY*(shadow.worldAlpha??1);
+    // A hovering frame's footprint is lighter (raisingFootprintShadow.js alpha).
+    item.mesh.material.uniforms.opacity.value=RANCH_CONTACT_SHADOW_OPACITY*(shadow.worldAlpha??1)*(entry.groundShadowEllipses[0].alpha??1);
     item.mesh.visible=true;item.seen=true;shadow.renderable=false;
   }
   function prune(){for(const [key,item] of items)if(!item.seen){release(item);items.delete(key);}}
