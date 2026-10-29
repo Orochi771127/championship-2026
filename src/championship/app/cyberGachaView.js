@@ -1,19 +1,27 @@
 // Cyber Gachapon centre -- the Shop's third tab (OWNER_APPROVED_ADAPTATION 2026-10-29).
 //
-// DOM only. Reads `frame.shop.gacha` (the app's getCyberGachaFrame) and sends
-// pulls, synthesis and item use through the Shop source intents; the app saves
-// every result before this view shows it. The machine is layered: capsules
-// tumble behind a transparent dome, the crank is its own image and turns 360°.
+// DOM + Web Animations only: no canvas, no requestAnimationFrame. Reads
+// `frame.shop.gacha` (the app's getCyberGachaFrame) and sends pulls, synthesis
+// and item use through the Shop source intents; the app saves every result
+// before this view shows it.
+//
+// Owner 2026-10-29, second pass: one tap turns the crank. Sixteen capsules
+// tumble in the dome (cyberGachaPhysics.js, played as Web Animations), one
+// drops out of the chute, flies to the camera and cracks, and every prize gets
+// its own card on a dark stage. No system emoji anywhere: the status bar's
+// currency art, the one gacha ticket picture and the inline SVG icons.
 
 import { uiText } from "../text/uiText.js";
 import { prefersReducedMotion } from "../presentation/presentationPreferences.js";
 import { shopGoodsPresentation } from "../presentation/shopGoodsUiArt.js";
+import { GACHA_TICKET_ART, gachaCurrencyImage, gachaIcon, gachaKindIconName, gachaTicketImage } from "./cyberGachaIcons.js";
+import { GACHA_CAPSULE_RADIUS, crankTurn, settleCapsules, simulateTumble } from "./cyberGachaPhysics.js";
 
 const UI_ART = "assets/production/ui/cyber-gacha-r1/";
 export const CYBER_GACHA_ART = Object.freeze({
   machine: `${UI_ART}machine_body.webp`,
   crank: `${UI_ART}crank_handle.webp`,
-  ticket: `${UI_ART}gacha_ticket.webp`,
+  ticket: GACHA_TICKET_ART,
   furnace: `${UI_ART}synth_furnace.webp`,
   capsule: Object.freeze(Object.fromEntries(["R", "SR", "SSR", "UR"].map((rarity) => [rarity, Object.freeze({
     top: `${UI_ART}capsule_${rarity.toLowerCase()}_top.webp`,
@@ -21,6 +29,11 @@ export const CYBER_GACHA_ART = Object.freeze({
   })])))
 });
 const RARITY_ORDER = Object.freeze({ R: 0, SR: 1, SSR: 2, UR: 3 });
+// The dome's sixteen capsules: blue R, purple SR, gold SSR and one rainbow UR.
+const DOME_CAPSULES = Object.freeze(["R", "SR", "R", "SSR", "R", "SR", "UR", "R", "SR", "R", "SSR", "SR", "R", "SR", "R", "SSR"]);
+const CAPSULE_SIZE = GACHA_CAPSULE_RADIUS * 2;
+const CHIP_FAMILIES = new Set(["GROWTH", "HUNT", "BOUNTY"]);
+const KIND_LABEL = Object.freeze({ GROWTH: "育成超頻晶片", HUNT: "狩獵戰術卡匣", BOUNTY: "深網強敵信標" });
 const REFUSALS = Object.freeze({
   NO_TICKETS: "轉蛋券不足，也沒有可用的鑽石。",
   INSUFFICIENT_FUNDS: "持有的票券或貨幣不足。",
@@ -38,6 +51,29 @@ const REFUSALS = Object.freeze({
   SAVE_FAILED: "存檔失敗，這次沒有扣除任何東西。",
   WALLET_CHANGED: "錢包已變更，請再試一次。"
 });
+
+// The machine squashes and rattles while the crank turns (origin: its feet).
+const MACHINE_RATTLE = [0, 0.07, 0.14, 0.22, 0.3, 0.38, 0.46, 0.54, 0.62, 0.72, 0.84, 1].map((offset, index, list) => {
+  const swell = index === 0 || index === list.length - 1 ? 0 : Math.sin(Math.PI * offset);
+  const squash = (index % 2 ? 1 : -1) * 0.024 * swell;
+  return { offset, transform: `translateX(${((index % 3) - 1) * 1.2 * swell}px) scale(${1 + squash}, ${1 - squash})` };
+});
+// The prize capsule out of the chute: it pops, lands, bounces twice (origin: its bottom).
+const CHUTE_DROP = [
+  { offset: 0, transform: "translate(-50%, -150%) scale(.6)", opacity: 0 },
+  { offset: 0.14, transform: "translate(-50%, -125%) scale(.85)", opacity: 1, easing: "cubic-bezier(.5,0,.9,.5)" },
+  { offset: 0.32, transform: "translate(-50%, -100%) scale(1.12, .86)" },
+  { offset: 0.48, transform: "translate(-50%, -128%) scale(.96, 1.05)", easing: "cubic-bezier(.5,0,.9,.5)" },
+  { offset: 0.62, transform: "translate(-50%, -100%) scale(1.07, .93)" },
+  { offset: 0.74, transform: "translate(-50%, -110%) scale(1)", easing: "cubic-bezier(.5,0,.9,.5)" },
+  { offset: 0.84, transform: "translate(-50%, -100%) scale(1.03, .97)" },
+  { offset: 1, transform: "translate(-50%, -100%) scale(1)" }
+];
+const CHUTE_LANDINGS = [180, 347, 470];
+const SHUDDER = [{ transform: "rotate(0)" }, { transform: "rotate(-10deg) scale(1.03)" }, { transform: "rotate(9deg) scale(1.05)" },
+  { transform: "rotate(-6deg) scale(1.04)" }, { transform: "rotate(0) scale(1)" }];
+const QUAKE = [{ transform: "none" }, { transform: "translate(-5px, 3px)" }, { transform: "translate(4px, -4px)" },
+  { transform: "translate(-3px, -2px)" }, { transform: "translate(2px, 2px)" }, { transform: "none" }];
 
 function element(tag, className, text) {
   const node = document.createElement(tag);
@@ -58,14 +94,18 @@ function image(src, className, alt = "") {
   node.draggable = false;
   return node;
 }
-function fx(target, kind, text) {
-  try { target?.dispatchEvent(new CustomEvent("cm-fx", { bubbles: true, detail: { kind, text } })); } catch { /* optional */ }
+/** An arcade armour key: icon (SVG or picture) and label. */
+function key(className, label, icon) {
+  const node = button(`cm-gacha-key ${className}`);
+  if (icon) node.append(icon);
+  if (label !== undefined) node.append(element("span", "cm-gacha-key__label", label));
+  return node;
 }
-const wait = (ms, signal) => new Promise((resolve) => {
-  const timer = setTimeout(resolve, ms);
-  signal?.addEventListener("abort", () => { clearTimeout(timer); resolve(); }, { once: true });
-});
+function fx(target, kind, text, extra = {}) {
+  try { target?.dispatchEvent(new CustomEvent("cm-fx", { bubbles: true, detail: { kind, text, ...extra } })); } catch { /* optional */ }
+}
 const fmt = (n) => Number(n ?? 0).toLocaleString("en-US");
+const bestRarity = (prizes) => prizes.reduce((top, prize) => (RARITY_ORDER[prize.rarity] > RARITY_ORDER[top] ? prize.rarity : top), "R");
 
 let stylesheet = null;
 function ensureStylesheet(doc) {
@@ -86,14 +126,41 @@ export function gachaItemArt(item) {
   return null;
 }
 
+/**
+ * The cards a result deals: one per prize, in pull order. A ten-pull always
+ * deals ten cards, even when the same item comes up twice -- the bag stacks
+ * them, the stage never does.
+ */
+export function gachaRevealCards(result) {
+  return (result?.prizes ?? []).map((prize, index) => Object.freeze({ ...prize, index }));
+}
+
 function itemIcon(item, className = "cm-gacha-icon") {
   const host = element("span", className);
   host.dataset.rarity = item.rarity ?? "R";
+  const family = CHIP_FAMILIES.has(item.kind) ? item.kind : item.chipKind;
   const art = gachaItemArt(item);
+  if (family) host.dataset.family = family;
   if (art) host.append(image(art.src, "cm-gacha-icon__img"));
-  else host.append(element("span", "cm-gacha-icon__glyph", item.kind === "BOUNTY" ? "📡" : "💾"));
+  if (family) host.append(gachaIcon(gachaKindIconName(family), art ? "cm-gacha-icon__kind" : "cm-gacha-icon__glyph"));
   return host;
 }
+
+function capsuleShell(className, rarity) {
+  const node = element("span", className);
+  const top = image(CYBER_GACHA_ART.capsule[rarity].top, "cm-gacha__half cm-gacha__half--top");
+  const bottom = image(CYBER_GACHA_ART.capsule[rarity].bottom, "cm-gacha__half cm-gacha__half--bottom");
+  node.dataset.rarity = rarity;
+  node.append(top, bottom);
+  return { node, top, bottom };
+}
+function paintCapsule(shell, rarity) {
+  shell.node.dataset.rarity = rarity;
+  shell.top.src = CYBER_GACHA_ART.capsule[rarity].top;
+  shell.bottom.src = CYBER_GACHA_ART.capsule[rarity].bottom;
+}
+const capsuleTransform = ({ x, y, a }) =>
+  `translate(${(((x - GACHA_CAPSULE_RADIUS) / CAPSULE_SIZE) * 100).toFixed(2)}%, ${(((y - GACHA_CAPSULE_RADIUS) / CAPSULE_SIZE) * 100).toFixed(2)}%) rotate(${a.toFixed(1)}deg)`;
 
 export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   ensureStylesheet(host.ownerDocument);
@@ -102,21 +169,46 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   root.dataset.mode = "MACHINE";
   root.dataset.machine = "PREMIUM";
 
-  // Currencies stay on top in every mode.
+  // ---- Animation bookkeeping: every timed beat is a Web Animation, so a
+  // paused page freezes the show and a tap on the stage can skip it.
+  const clock = element("span", "cm-gacha__clock");
+  clock.setAttribute("aria-hidden", "true");
+  const running = new Set();
+  let skipping = false;
+  function play(node, keyframes, options) {
+    if (!node?.animate) return null;
+    const animation = node.animate(keyframes, options);
+    running.add(animation);
+    const forget = () => running.delete(animation);
+    animation.finished.then(forget, forget);
+    if (skipping) { try { animation.finish(); } catch { /* nothing to finish */ } }
+    return animation;
+  }
+  const settled = (animation) => (animation ? animation.finished.then(() => {}, () => {}) : Promise.resolve());
+  const beat = (ms) => settled(play(clock, [{ opacity: 0 }, { opacity: 0 }], { duration: Math.max(0, ms) }));
+  function skip() {
+    skipping = true;
+    for (const animation of [...running]) { try { animation.finish(); } catch { /* cancelled */ } }
+  }
+
+  // ---- Currencies stay on top in every mode --------------------------------
   const wallet = element("div", "cm-gacha__wallet");
-  const ticketChip = element("span", "cm-gacha__coin cm-gacha__coin--ticket");
-  ticketChip.append(image(CYBER_GACHA_ART.ticket, "cm-gacha__coin-icon"), element("strong"));
-  const diamondChip = element("span", "cm-gacha__coin cm-gacha__coin--diamond");
-  diamondChip.append(element("span", "cm-gacha__coin-glyph", "💎"), element("strong"));
-  const bitsChip = element("span", "cm-gacha__coin cm-gacha__coin--bits");
-  bitsChip.append(element("span", "cm-gacha__coin-glyph", "🪙"), element("strong"));
+  const purse = (className, icon, label) => {
+    const chip = element("span", `cm-gacha__coin ${className}`);
+    chip.setAttribute("title", label);
+    chip.append(icon, element("strong"));
+    return chip;
+  };
+  const ticketChip = purse("cm-gacha__coin--ticket", gachaTicketImage("cm-gacha__coin-icon cm-gacha__coin-icon--ticket"), uiText("數碼轉蛋券"));
+  const diamondChip = purse("cm-gacha__coin--diamond", gachaCurrencyImage("diamond", "cm-gacha__coin-icon"), uiText("鑽石"));
+  const bitsChip = purse("cm-gacha__coin--bits", gachaCurrencyImage("bits", "cm-gacha__coin-icon"), uiText("位元幣"));
   wallet.append(ticketChip, diamondChip, bitsChip);
 
   const modes = element("div", "cm-gacha__modes");
   modes.setAttribute("role", "tablist");
   const modeButtons = new Map();
-  for (const [id, label] of [["MACHINE", "🎰 轉蛋機"], ["SYNTH", "♻️ 合成爐"], ["BAG", "🎒 晶片背包"]]) {
-    const tab = button("cm-gacha__mode", uiText(label));
+  for (const [id, label, icon] of [["MACHINE", "轉蛋機", "machine"], ["SYNTH", "合成爐", "furnace"], ["BAG", "晶片背包", "bag"]]) {
+    const tab = key("cm-gacha__mode", uiText(label), gachaIcon(icon, "cm-gacha-key__icon"));
     tab.dataset.mode = id;
     tab.setAttribute("role", "tab");
     tab.addEventListener("click", () => { root.dataset.mode = id; fx(tab, "toggle"); paint(lastFrame); });
@@ -127,298 +219,379 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   // ---- Machine ------------------------------------------------------------
   const machinePane = element("div", "cm-gacha__pane cm-gacha__pane--machine");
   const machineSwitch = element("div", "cm-gacha__machines");
-  const premiumTab = button("cm-gacha__machine-tab", uiText("🌌 王牌超頻＆進化金屬"));
+  const premiumTab = key("cm-gacha__machine-tab", uiText("王牌超頻＆進化金屬"), gachaIcon("galaxy", "cm-gacha-key__icon"));
   premiumTab.dataset.machine = "PREMIUM";
-  const bitsTab = button("cm-gacha__machine-tab", uiText("🪙 位元幣日常補給"));
+  const bitsTab = key("cm-gacha__machine-tab", uiText("位元幣日常補給"), gachaCurrencyImage("bits", "cm-gacha-key__icon"));
   bitsTab.dataset.machine = "BITS";
   for (const tab of [premiumTab, bitsTab]) {
     tab.addEventListener("click", () => { root.dataset.machine = tab.dataset.machine; fx(tab, "toggle"); paint(lastFrame); });
   }
   machineSwitch.append(premiumTab, bitsTab);
 
+  // Layers, back to front: aura, dark dome wall, sixteen capsules, machine art
+  // (its dome is clear glass), glass glints, the crank and the chute capsule.
   const stage = element("div", "cm-gacha__stage");
+  stage.dataset.state = "idle";
+  const machine = element("div", "cm-gacha__machine");
+  const aura = element("span", "cm-gacha__aura");
+  const domeWall = element("span", "cm-gacha__dome-wall");
   const dome = element("div", "cm-gacha__dome");
-  const tumbleBalls = [];
-  for (let i = 0; i < 9; i += 1) {
-    const rarity = ["R", "SR", "R", "SSR", "R", "SR", "UR", "R", "SR"][i];
+  const capsules = DOME_CAPSULES.map((rarity, index) => {
     const ball = element("span", "cm-gacha__ball");
     ball.dataset.rarity = rarity;
-    ball.style.setProperty("--i", String(i));
-    ball.append(image(CYBER_GACHA_ART.capsule[rarity].top, "cm-gacha__ball-top"),
-      image(CYBER_GACHA_ART.capsule[rarity].bottom, "cm-gacha__ball-bottom"));
+    ball.style.width = `${CAPSULE_SIZE * 100}%`;
+    const shell = capsuleShell("cm-gacha__ball-shell", rarity).node;
+    shell.style.setProperty("--bob-delay", `${(-index * 0.37).toFixed(2)}s`);
+    shell.style.setProperty("--bob-time", `${(2.3 + (index % 5) * 0.28).toFixed(2)}s`);
+    ball.append(shell);
     dome.append(ball);
-    tumbleBalls.push(ball);
-  }
+    return ball;
+  });
+  let pile = settleCapsules(capsules.length);
+  const placeCapsules = () => capsules.forEach((ball, index) => { ball.style.transform = capsuleTransform(pile[index]); ball.style.opacity = ""; });
+  placeCapsules();
   const body = image(CYBER_GACHA_ART.machine, "cm-gacha__body", uiText("賽博轉蛋機"));
+  const glass = element("span", "cm-gacha__glass");
   const crank = button("cm-gacha__crank");
   crank.setAttribute("aria-label", uiText("轉動把手單抽"));
-  crank.append(image(CYBER_GACHA_ART.crank, "cm-gacha__crank-img"));
-  stage.append(dome, body, crank);
+  const crankImg = image(CYBER_GACHA_ART.crank, "cm-gacha__crank-img");
+  crank.append(crankImg);
+  const chute = capsuleShell("cm-gacha__chute", "R");
+  chute.node.hidden = true;
+  machine.append(aura, domeWall, dome, body, glass, crank, chute.node);
+  stage.append(machine);
 
+  // Cabinet side panels: the core-heat gauge on the left, the two machines on the right.
   const pity = element("div", "cm-gacha__pity");
-  const pityLabel = element("span", "cm-gacha__pity-label");
+  pity.setAttribute("role", "meter");
+  pity.setAttribute("aria-valuemin", "0");
+  const pityLabel = element("span", "cm-gacha__pity-value");
   const pityBar = element("span", "cm-gacha__pity-bar");
   const pityFill = element("span", "cm-gacha__pity-fill");
   pityBar.append(pityFill);
-  const pityClaim = button("cm-gacha__pity-claim", uiText("領取自選箱"));
-  pity.append(pityLabel, pityBar, pityClaim);
+  const pityClaim = key("cm-gacha__pity-claim", uiText("領取自選箱"));
+  pity.append(gachaIcon("flame", "cm-gacha__pity-icon"), element("span", "cm-gacha__pity-title", uiText("核心熔煉值")), pityBar, pityLabel, pityClaim);
+  const deck = element("div", "cm-gacha__deck");
 
   const pulls = element("div", "cm-gacha__pulls");
-  const single = button("cm-gacha__pull");
-  const ten = button("cm-gacha__pull cm-gacha__pull--ten");
+  const single = button("cm-gacha-key cm-gacha__pull cm-gacha__pull--one");
+  const ten = button("cm-gacha-key cm-gacha__pull cm-gacha__pull--ten");
   pulls.append(single, ten);
-  const rates = element("p", "cm-gacha__rates");
-  machinePane.append(machineSwitch, stage, pity, pulls, rates);
+  const rates = element("p", "cm-gacha__plate cm-gacha__rates");
+  deck.append(pity, stage, machineSwitch);
+  machinePane.append(deck, pulls, rates);
 
   // ---- Synthesizer ----------------------------------------------------------
   const synthPane = element("div", "cm-gacha__pane cm-gacha__pane--synth");
   const furnace = element("div", "cm-gacha__furnace");
-  furnace.append(image(CYBER_GACHA_ART.furnace, "cm-gacha__furnace-img", uiText("合金合成爐")));
+  const furnaceImg = image(CYBER_GACHA_ART.furnace, "cm-gacha__furnace-img", uiText("合金合成爐"));
+  furnace.append(furnaceImg);
   const slots = element("div", "cm-gacha__slots");
-  const synthNote = element("p", "cm-gacha__note", uiText("投入任意 5 個晶片，100% 熔煉出 1 塊進化金屬；高階晶片越多，越容易暴擊出 SSR／UR。"));
-  const synthActions = element("div", "cm-gacha__synth-actions");
-  const autoFill = button("cm-gacha__action", uiText("⚡ 一鍵填入多餘低階晶片"));
-  const smelt = button("cm-gacha__action cm-gacha__action--primary", uiText("♻️ 熔煉合成"));
+  const synthNote = element("p", "cm-gacha__plate cm-gacha__note", uiText("投入任意 5 個晶片，100% 熔煉出 1 塊進化金屬；高階晶片越多，越容易暴擊出 SSR／UR。"));
+  const synthActions = element("div", "cm-gacha__actions");
+  const autoFill = key("cm-gacha__action", uiText("自動填入低階晶片"), gachaIcon("bolt", "cm-gacha-key__icon"));
+  const smelt = key("cm-gacha__action cm-gacha__action--primary", uiText("開始熔煉合成"), gachaIcon("furnace", "cm-gacha-key__icon"));
   synthActions.append(autoFill, smelt);
   const synthList = element("div", "cm-gacha__chip-grid");
-  synthPane.append(furnace, slots, synthNote, synthActions, synthList);
+  const synthHead = element("div", "cm-gacha__synth-head");
+  synthHead.append(furnace, synthNote);
+  synthPane.append(synthHead, slots, synthActions, synthList);
   let synthSlots = [];
 
   // ---- Bag ----------------------------------------------------------------
   const bagPane = element("div", "cm-gacha__pane cm-gacha__pane--bag");
   const bagGrid = element("div", "cm-gacha__chip-grid cm-gacha__chip-grid--bag");
   const usePanel = element("div", "cm-gacha__use");
-  bagPane.append(bagGrid, usePanel);
+  bagPane.append(usePanel, bagGrid);
   let bagSelection = null;
   let partnerSelection = null;
 
-  // ---- Result overlay ----------------------------------------------------------
-  const overlay = element("div", "cm-gacha__overlay");
-  overlay.hidden = true;
-  overlay.setAttribute("role", "dialog");
-  overlay.setAttribute("aria-modal", "true");
-  const overlayDrop = element("div", "cm-gacha__drop");
-  const overlayCards = element("div", "cm-gacha__cards");
-  const overlayTitle = element("h2", "cm-gacha__overlay-title");
-  const overlayClose = button("cm-gacha__action cm-gacha__action--primary", uiText("確定"));
-  overlay.append(overlayTitle, overlayDrop, overlayCards, overlayClose);
-  overlayClose.addEventListener("click", () => { overlay.hidden = true; delete root.dataset.revealing; fx(overlayClose, "close"); });
+  // ---- Reveal stage: deep space, light rays, the capsule, then the cards -------
+  const revealStage = element("div", "cm-gacha__reveal");
+  revealStage.hidden = true;
+  revealStage.setAttribute("role", "dialog");
+  revealStage.setAttribute("aria-modal", "true");
+  const rays = element("span", "cm-gacha__rays");
+  const motes = element("span", "cm-gacha__motes");
+  for (let i = 0; i < 14; i += 1) {
+    const mote = element("span");
+    mote.style.setProperty("--x", `${(i * 37) % 100}%`);
+    mote.style.setProperty("--d", `${(-i * 0.61).toFixed(2)}s`);
+    mote.style.setProperty("--t", `${(5 + (i % 4) * 1.3).toFixed(1)}s`);
+    motes.append(mote);
+  }
+  const flash = element("span", "cm-gacha__flash");
+  const revealInner = element("div", "cm-gacha__reveal-inner");
+  const revealTitle = element("h2", "cm-gacha__reveal-title");
+  const revealTitleText = element("span");
+  revealTitle.append(gachaIcon("machine", "cm-gacha__reveal-icon"), revealTitleText);
+  const cardsGrid = element("div", "cm-gacha__cards");
+  const revealActions = element("div", "cm-gacha__actions cm-gacha__reveal-actions");
+  const revealConfirm = key("cm-gacha__action cm-gacha__action--primary", uiText("確定收下"));
+  const revealAgain = key("cm-gacha__action cm-gacha__action--again", uiText("再轉十次"), gachaIcon("machine", "cm-gacha-key__icon"));
+  revealActions.append(revealConfirm, revealAgain);
+  revealInner.append(revealTitle, cardsGrid, revealActions);
+  const capsuleLayer = element("div", "cm-gacha__capsule-layer");
+  const glow = element("span", "cm-gacha__capsule-glow");
+  const burst = element("span", "cm-gacha__burst");
+  const bigCapsule = capsuleShell("cm-gacha__capsule", "R");
+  capsuleLayer.append(glow, burst, bigCapsule.node);
+  const sparks = element("div", "cm-gacha__sparks");
+  revealStage.append(rays, motes, revealInner, capsuleLayer, flash, sparks);
 
-  const pityPicker = element("div", "cm-gacha__overlay cm-gacha__picker");
+  const pityPicker = element("div", "cm-gacha__reveal cm-gacha__picker");
   pityPicker.hidden = true;
-  root.append(wallet, modes, machinePane, synthPane, bagPane, overlay, pityPicker);
+  pityPicker.setAttribute("role", "dialog");
+  pityPicker.setAttribute("aria-modal", "true");
+  root.append(wallet, modes, machinePane, synthPane, bagPane, revealStage, pityPicker, clock);
   host.append(root);
 
   let lastFrame = null;
   let shownSerial = null;
   let busy = false;
+  let revealing = false;
+  let again = null;
+  let returnFocus = null;
   const life = new AbortController();
 
-  // ---- Dedicated crank stage (Owner 2026-10-29: the player turns the handle) ----
-  // Nothing is charged until the handle has gone one full turn clockwise;
-  // turning back is a ratchet (it never counts down) and Cancel is free.
-  const crankStage = element("div", "cm-gacha__overlay cm-gacha__crank-stage");
-  crankStage.hidden = true;
-  crankStage.setAttribute("role", "dialog");
-  crankStage.setAttribute("aria-modal", "true");
-  const crankTitle = element("h2", "cm-gacha__overlay-title", uiText("轉動把手！"));
-  const crankCost = element("p", "cm-gacha__crank-cost");
-  const bigStage = element("div", "cm-gacha__stage cm-gacha__stage--big");
-  const bigDome = element("div", "cm-gacha__dome");
-  const bigBalls = tumbleBalls.map((ball) => { const copy = ball.cloneNode(true); bigDome.append(copy); return copy; });
-  const dial = element("div", "cm-gacha__dial");
-  dial.tabIndex = 0;
-  dial.setAttribute("role", "slider");
-  dial.setAttribute("aria-label", uiText("轉蛋機把手"));
-  dial.setAttribute("aria-valuemin", "0");
-  dial.setAttribute("aria-valuemax", "360");
-  const dialProgress = element("span", "cm-gacha__dial-progress");
-  const dialCrank = image(CYBER_GACHA_ART.crank, "cm-gacha__dial-crank");
-  const dialArrow = element("span", "cm-gacha__dial-arrow", "↻");
-  dial.append(dialProgress, dialCrank, dialArrow);
-  bigStage.append(bigDome, image(CYBER_GACHA_ART.machine, "cm-gacha__body"), dial);
-  const crankHint = element("p", "cm-gacha__note cm-gacha__crank-hint", uiText("按住把手，順時針轉一整圈"));
-  const crankActions = element("div", "cm-gacha__synth-actions");
-  const crankAuto = button("cm-gacha__action", uiText("快速轉完"));
-  const crankCancel = button("cm-gacha__action", uiText("取消"));
-  crankActions.append(crankCancel, crankAuto);
-  crankStage.append(crankTitle, crankCost, bigStage, crankHint, crankActions);
-  root.append(crankStage);
+  // ---- The machine: one tap turns the crank ------------------------------------
+  async function turnMachine(best) {
+    if (prefersReducedMotion()) return;
+    stage.dataset.state = "turning";
+    const turn = crankTurn({ degrees: 720, ms: 650 });
+    fx(crank, "gacha-crank", undefined, { ticks: turn.ticks });
+    const spin = play(crankImg, turn.frames.map((deg) => ({ transform: `rotate(${deg.toFixed(1)}deg)` })), { duration: turn.ms, easing: "linear" });
+    play(machine, MACHINE_RATTLE, { duration: turn.ms, easing: "linear" });
+    const tumble = simulateTumble(pile);
+    const moves = capsules.map((ball, index) => play(ball, tumble.frames.map((frame) => ({
+      transform: capsuleTransform(frame[index]), opacity: frame[index].o
+    })), { duration: tumble.ms, easing: "linear", fill: "forwards" }));
+    fx(dome, "gacha-tumble");
+    pile = tumble.final;
+    void Promise.all(moves.map(settled)).then(() => { placeCapsules(); for (const move of moves) move?.cancel(); });
+    // The sunk capsule comes out of the chute while the pile is still flying.
+    await beat(470);
+    paintCapsule(chute, best);
+    chute.node.hidden = false;
+    stage.dataset.state = "dispense";
+    const drop = play(chute.node, CHUTE_DROP, { duration: 560, easing: "linear", fill: "forwards" });
+    fx(chute.node, "gacha-drop", undefined, { ticks: CHUTE_LANDINGS });
+    await settled(spin);
+    await settled(drop);
+  }
 
-  let crankJob = null;
-  function setCrank(angle) {
-    if (!crankJob || crankJob.done) return;
-    const before = crankJob.turned;
-    crankJob.turned = Math.max(before, Math.min(360, angle));
-    const turned = crankJob.turned;
-    dialCrank.style.transform = `rotate(${turned}deg)`;
-    dial.style.setProperty("--p", String(turned / 360));
-    dial.setAttribute("aria-valuenow", String(Math.round(turned)));
-    // A gear click every eighth of a turn; the capsules rattle as it turns.
-    if (Math.floor(turned / 45) > Math.floor(before / 45)) {
-      fx(dial, "toggle");
-      if (!prefersReducedMotion()) for (const ball of bigBalls) ball.animate?.([{ transform: "translate(0,0)" },
-        { transform: `translate(${(Math.random() - 0.5) * 10}px,${-4 - Math.random() * 8}px) rotate(${(Math.random() - 0.5) * 40}deg)` },
-        { transform: "translate(0,0)" }], { duration: 180 });
-    }
-    if (turned >= 360) void finishCrank(true);
+  async function smeltFurnace() {
+    if (prefersReducedMotion()) return;
+    fx(furnace, "gacha-smelt");
+    await settled(play(furnaceImg, [{ transform: "none", filter: "brightness(1)" }, { transform: "scale(1.1, .9)", filter: "brightness(1.6)", offset: 0.35 },
+      { transform: "scale(.94, 1.08)", filter: "brightness(1.3)", offset: 0.6 }, { transform: "none", filter: "brightness(1)" }], { duration: 620, easing: "ease-in-out" }));
   }
-  async function finishCrank(turnedFully) {
-    const job = crankJob;
-    if (!job || job.done) return;
-    job.done = true;
-    if (turnedFully) {
-      crankStage.dataset.state = "dispense";
-      fx(dial, "snap");
-      if (!prefersReducedMotion()) {
-        for (const ball of bigBalls) {
-          const dx = (Math.random() - 0.5) * 70, dy = -20 - Math.random() * 50, r = (Math.random() - 0.5) * 540;
-          ball.animate?.([{ transform: "translate(0,0) rotate(0deg)" }, { transform: `translate(${dx}px,${dy}px) rotate(${r / 2}deg)` },
-            { transform: `translate(${-dx / 2}px,${dy / 3}px) rotate(${r}deg)` }, { transform: "translate(0,0) rotate(0deg)" }],
-          { duration: 550, easing: "ease-in-out" });
-        }
-        await wait(560, life.signal);
-      }
-    }
-    crankStage.hidden = true;
-    delete crankStage.dataset.state;
-    crankJob = null;
-    job.resolve(turnedFully);
-  }
-  function openCrank(count, cost) {
-    return new Promise((resolve) => {
-      crankJob = { count, resolve, turned: 0, last: null, done: false };
-      crankTitle.textContent = uiText(count === 10 ? "十連狂轉" : "單抽");
-      crankCost.textContent = cost;
-      dialCrank.style.transform = "rotate(0deg)";
-      dial.style.setProperty("--p", "0");
-      dial.setAttribute("aria-valuenow", "0");
-      crankStage.hidden = false;
-      fx(crankStage, "open");
-      dial.focus?.({ preventScroll: true });
-    });
-  }
-  const angleAt = (event) => {
-    const box = dial.getBoundingClientRect();
-    return Math.atan2(event.clientY - (box.top + box.height / 2), event.clientX - (box.left + box.width / 2)) * 180 / Math.PI;
-  };
-  dial.addEventListener("pointerdown", (event) => {
-    if (!crankJob || crankJob.done) return;
-    event.preventDefault();
-    try { dial.setPointerCapture?.(event.pointerId); } catch { /* a synthetic pointer has no capture */ }
-    crankJob.last = angleAt(event);
-    dial.dataset.grabbed = "true";
-  });
-  dial.addEventListener("pointermove", (event) => {
-    if (!crankJob || crankJob.last === null) return;
-    const at = angleAt(event);
-    let delta = at - crankJob.last;
-    if (delta > 180) delta -= 360;
-    if (delta < -180) delta += 360;
-    crankJob.last = at;
-    // Screen y grows downward, so a clockwise drag is a growing angle.
-    if (delta > 0 && delta < 90) setCrank(crankJob.turned + delta);
-  });
-  const release = () => { if (crankJob) crankJob.last = null; delete dial.dataset.grabbed; };
-  dial.addEventListener("pointerup", release);
-  dial.addEventListener("pointercancel", release);
-  dial.addEventListener("keydown", (event) => {
-    if (!crankJob) return;
-    if (["ArrowRight", "ArrowDown", " ", "Enter"].includes(event.key)) { event.preventDefault(); setCrank(crankJob.turned + 45); }
-    if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); void finishCrank(false); }
-  });
-  crankCancel.addEventListener("click", () => { fx(crankCancel, "close"); void finishCrank(false); });
-  crankAuto.addEventListener("click", async () => {
-    // The same turn, played for the player (and the reduced-motion path).
-    const job = crankJob;
-    if (!job) return;
-    if (prefersReducedMotion()) { setCrank(360); return; }
-    const from = job.turned, started = performance.now();
-    while (crankJob === job && !job.done) {
-      const t = Math.min(1, (performance.now() - started) / 700);
-      setCrank(from + (360 - from) * (1 - (1 - t) ** 3));
-      if (t >= 1) break;
-      await wait(16, life.signal);
-    }
-  });
 
-  async function reveal(result) {
-    const prizes = result.prizes ?? [];
-    const best = prizes.reduce((top, prize) => (RARITY_ORDER[prize.rarity] > RARITY_ORDER[top] ? prize.rarity : top), "R");
-    root.dataset.revealing = "true";
-    overlay.dataset.rarity = best;
-    overlayTitle.textContent = uiText(result.kind === "SYNTH" ? (result.critical ? "♻️ 熔煉暴擊！" : "♻️ 熔煉完成")
-      : result.kind === "PITY" ? "🔥 自選箱開啟" : result.count === 10 ? "🎰 十連狂轉結果" : "🎰 開獎結果");
-    overlayCards.replaceChildren();
-    overlayDrop.replaceChildren();
-    const capsule = element("div", "cm-gacha__capsule");
-    capsule.dataset.rarity = best;
-    const top = image(CYBER_GACHA_ART.capsule[best].top, "cm-gacha__capsule-top");
-    const bottom = image(CYBER_GACHA_ART.capsule[best].bottom, "cm-gacha__capsule-bottom");
-    const burst = element("span", "cm-gacha__burst");
-    capsule.append(burst, bottom, top);
-    overlayDrop.append(capsule);
-    overlay.hidden = false;
-    overlayClose.disabled = true;
+  function resetReveal() {
+    for (const node of [bigCapsule.node, bigCapsule.top, bigCapsule.bottom, glow, burst, flash, revealInner, revealStage]) {
+      for (const animation of node.getAnimations?.() ?? []) animation.cancel();
+    }
+    cardsGrid.replaceChildren();
+    sparks.replaceChildren();
+  }
+
+  function impact(card, prize) {
+    const rank = RARITY_ORDER[prize.rarity] ?? 0;
+    fx(card, "gacha-card", undefined, { rarity: prize.rarity });
+    if (rank < 2 || prefersReducedMotion()) return;
+    play(revealInner, QUAKE, { duration: 220 });
+    const box = card.getBoundingClientRect(), frame = sparks.getBoundingClientRect();
+    const x = box.left + box.width / 2 - frame.left, y = box.top + box.height / 2 - frame.top;
+    for (let i = 0; i < 10; i += 1) {
+      const star = element("span", "cm-gacha__star");
+      star.dataset.rarity = prize.rarity;
+      star.style.left = `${x}px`;
+      star.style.top = `${y}px`;
+      sparks.append(star);
+      const angle = (i / 10) * Math.PI * 2 + Math.random() * 0.4, reach = 44 + Math.random() * 40;
+      void settled(play(star, [{ transform: "translate(-50%, -50%) scale(.4) rotate(0deg)", opacity: 1 },
+        { transform: `translate(calc(-50% + ${(Math.cos(angle) * reach).toFixed(1)}px), calc(-50% + ${(Math.sin(angle) * reach).toFixed(1)}px)) scale(1) rotate(170deg)`, opacity: 0 }],
+      { duration: 660, easing: "cubic-bezier(.2,.9,.3,1)" })).then(() => star.remove());
+    }
+  }
+
+  function revealCard(prize) {
+    const card = element("article", "cm-gacha__card");
+    card.dataset.rarity = prize.rarity;
+    card.dataset.kind = prize.kind;
+    const art = element("div", "cm-gacha__card-art");
+    art.append(itemIcon(prize, "cm-gacha-icon cm-gacha-icon--card"));
+    const info = element("div", "cm-gacha__card-info");
+    info.append(element("strong", "cm-gacha__card-name", uiText(prize.name)),
+      element("span", "cm-gacha__card-kind", prize.quantity > 1 ? `×${prize.quantity}`
+        : prize.kind === "METAL" ? uiText("進化金屬") : prize.kind === "CHIP" ? uiText("晶片") : ""));
+    card.append(art, element("span", "cm-gacha__card-rarity", prize.rarity), info);
+    if (prize.guaranteed) card.append(element("span", "cm-gacha__card-guarantee", uiText("保底")));
+    return card;
+  }
+
+  async function reveal(result, { fromChute = false } = {}) {
+    const chipKinds = new Map((lastFrame?.chips ?? []).map((chip) => [chip.id, chip.kind]));
+    const cards = gachaRevealCards(result).map((prize) => (prize.kind === "CHIP" ? { ...prize, chipKind: chipKinds.get(prize.id) } : prize));
+    const best = bestRarity(cards);
+    const high = RARITY_ORDER[best] >= 2;
     const reduced = prefersReducedMotion();
+    resetReveal();
+    skipping = false;
+    revealing = true;
+    revealStage.dataset.rarity = best;
+    revealStage.dataset.phase = "capsule";
+    cardsGrid.dataset.count = String(cards.length);
+    revealTitleText.textContent = uiText(result.kind === "SYNTH" ? (result.critical ? "熔煉暴擊！" : "熔煉完成")
+      : result.kind === "PITY" ? "自選箱開啟" : result.count === 10 ? "十連狂轉結果" : "開獎結果");
+    revealStage.setAttribute("aria-label", revealTitleText.textContent);
+    revealTitle.firstElementChild.replaceWith(gachaIcon(result.kind === "SYNTH" ? "furnace" : result.kind === "PITY" ? "flame" : "machine", "cm-gacha__reveal-icon"));
+    revealActions.hidden = true;
+    revealAgain.hidden = !again;
+    revealAgain.querySelector(".cm-gacha-key__label").textContent = uiText(again?.count === 10 ? "再轉十次" : "再抽一次");
+    paintCapsule(bigCapsule, best);
+    bigCapsule.node.dataset.open = "false";
+    capsuleLayer.hidden = false;
+    revealStage.hidden = false;
+    root.dataset.revealing = "true";
+
     if (!reduced) {
-      capsule.animate?.([{ transform: "translateY(-160px) scale(.6)", opacity: 0 }, { transform: "translateY(0) scale(1)", opacity: 1, offset: 0.55 },
-        { transform: "translateY(-14px) scale(1.04)", offset: 0.75 }, { transform: "translateY(0) scale(1)" }], { duration: 520, easing: "cubic-bezier(.3,1.4,.6,1)" });
-      fx(capsule, "snap");
-      await wait(560, life.signal);
-      capsule.animate?.([{ transform: "rotate(0)" }, { transform: "rotate(-9deg)" }, { transform: "rotate(9deg)" }, { transform: "rotate(-6deg)" }, { transform: "rotate(0)" }],
-        { duration: 360, iterations: RARITY_ORDER[best] >= 2 ? 2 : 1 });
-      await wait(RARITY_ORDER[best] >= 2 ? 720 : 360, life.signal);
+      play(revealStage, [{ opacity: 0 }, { opacity: 1 }], { duration: 240, easing: "ease-out" });
+      let fly;
+      if (fromChute && !chute.node.hidden) {
+        // The capsule leaves the chute and flies at the camera.
+        const from = chute.node.getBoundingClientRect(), to = bigCapsule.node.getBoundingClientRect();
+        const dx = from.left + from.width / 2 - (to.left + to.width / 2), dy = from.top + from.height / 2 - (to.top + to.height / 2);
+        fly = play(bigCapsule.node, [{ transform: `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${(from.width / Math.max(1, to.width)).toFixed(3)})` },
+          { transform: "translate(0, -20px) scale(1.14)", offset: 0.72 }, { transform: "none" }], { duration: 460, easing: "cubic-bezier(.2,.9,.3,1)" });
+      } else {
+        fly = play(bigCapsule.node, [{ transform: "translateY(-60vh) scale(.6)", opacity: 0 }, { transform: "translateY(0) scale(1.08, .92)", opacity: 1, offset: 0.62 },
+          { transform: "translateY(-14px) scale(.98, 1.02)", offset: 0.8 }, { transform: "none" }], { duration: 560, easing: "cubic-bezier(.3,0,.6,1)" });
+        fx(bigCapsule.node, "gacha-drop", undefined, { ticks: [350] });
+      }
+      chute.node.hidden = true;
+      stage.dataset.state = "idle";
+      await settled(fly);
+      // Anticipation: the shell shudders; rare capsules twice, with light building behind.
+      fx(bigCapsule.node, "gacha-rattle", undefined, { count: high ? 2 : 1 });
+      const shudder = play(bigCapsule.node, SHUDDER, { duration: 380, iterations: high ? 2 : 1, easing: "ease-in-out" });
+      if (high) play(glow, [{ opacity: 0, transform: "scale(.6)" }, { opacity: 0.95, transform: "scale(1.2)" }], { duration: 760, easing: "ease-in", fill: "forwards" });
+      await settled(shudder);
     }
-    capsule.dataset.open = "true";
-    fx(capsule, RARITY_ORDER[best] >= 2 ? "levelup" : "sparkle");
-    await wait(reduced ? 0 : 260, life.signal);
-    prizes.forEach((prize, index) => {
-      const card = element("article", "cm-gacha__card");
-      card.dataset.rarity = prize.rarity;
-      card.dataset.kind = prize.kind;
-      if (prize.guaranteed) card.dataset.guaranteed = "true";
-      card.style.setProperty("--n", String(index));
-      card.append(element("span", "cm-gacha__card-rarity", prize.rarity), itemIcon(prize, "cm-gacha-icon cm-gacha-icon--card"),
-        element("strong", "cm-gacha__card-name", uiText(prize.name)),
-        element("span", "cm-gacha__card-qty", prize.quantity > 1 ? `×${prize.quantity}` : prize.kind === "METAL" ? uiText("進化金屬") : prize.kind === "CHIP" ? uiText("晶片") : ""));
-      overlayCards.append(card);
-      if (!reduced) card.animate?.([{ transform: "scale(.2) translateY(40px)", opacity: 0 }, { transform: "scale(1.18)", opacity: 1, offset: 0.6 },
-        { transform: "scale(.94)", offset: 0.8 }, { transform: "scale(1)" }], { duration: 480, delay: 70 * index, easing: "cubic-bezier(.34,1.56,.64,1)", fill: "backwards" });
+    chute.node.hidden = true;
+    stage.dataset.state = "idle";
+    // Crack.
+    bigCapsule.node.dataset.open = "true";
+    revealStage.dataset.phase = "cards";
+    fx(bigCapsule.node, "gacha-crack", undefined, { rarity: best });
+    if (!reduced) {
+      const fling = { duration: 520, easing: "cubic-bezier(.2,.9,.3,1)", fill: "forwards" };
+      play(bigCapsule.top, [{ transform: "none", opacity: 1 }, { transform: "translate(-40%, -160%) rotate(-44deg)", opacity: 0 }], fling);
+      play(bigCapsule.bottom, [{ transform: "none", opacity: 1 }, { transform: "translate(36%, 130%) rotate(34deg)", opacity: 0 }], fling);
+      play(burst, [{ opacity: 1, transform: "scale(.3) rotate(0deg)" }, { opacity: 0, transform: "scale(2.6) rotate(40deg)" }], { duration: 900, easing: "ease-out" });
+      play(glow, [{ opacity: high ? 0.95 : 0.6 }, { opacity: 0 }], { duration: 700, easing: "ease-out", fill: "forwards" });
+      play(flash, [{ opacity: 0 }, { opacity: high ? 0.9 : 0.45, offset: 0.15 }, { opacity: 0 }], { duration: high ? 640 : 380, easing: "ease-out" });
+      if (high) play(revealInner, QUAKE, { duration: 260 });
+      await beat(180);
+    }
+    // Every prize slams onto the table, 55 ms apart.
+    const landings = cards.map((prize, index) => {
+      const card = revealCard(prize);
+      cardsGrid.append(card);
+      if (reduced) return Promise.resolve();
+      const delay = 55 * index;
+      const slam = play(card, [{ opacity: 0, transform: "translateY(44px) scale(.55) rotate(-5deg)" }, { opacity: 1, transform: "none" }],
+        { duration: 420, delay, easing: "cubic-bezier(.34,1.56,.64,1)", fill: "backwards" });
+      return beat(delay + 230).then(() => { if (revealing && !life.signal.aborted) impact(card, prize); return settled(slam); });
     });
-    await wait(reduced ? 0 : 70 * prizes.length + 300, life.signal);
-    overlayClose.disabled = false;
-    overlayClose.focus?.({ preventScroll: true });
+    await Promise.all(landings);
+    if (life.signal.aborted) return;
+    capsuleLayer.hidden = true;
+    revealStage.dataset.phase = "done";
+    paintAgain();
+    revealActions.hidden = false;
+    if (!reduced) play(revealActions, [{ opacity: 0, transform: "translateY(12px)" }, { opacity: 1, transform: "none" }], { duration: 220, easing: "cubic-bezier(.2,.9,.3,1)" });
+    revealConfirm.focus?.({ preventScroll: true });
+  }
+
+  function closeReveal() {
+    if (revealStage.hidden) return;
+    revealing = false;
+    skip();
+    revealStage.hidden = true;
+    delete revealStage.dataset.phase;
+    delete root.dataset.revealing;
+    resetReveal();
+    returnFocus?.focus?.({ preventScroll: true });
+  }
+  // A tap on the stage while the show runs skips straight to the cards.
+  revealStage.addEventListener("pointerdown", (event) => {
+    if (revealing && revealActions.hidden && !event.target.closest?.("button")) skip();
+  });
+  revealStage.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (revealActions.hidden) skip(); else { fx(revealConfirm, "close"); closeReveal(); }
+  });
+  revealConfirm.addEventListener("click", () => { fx(revealConfirm, "close"); closeReveal(); });
+  revealAgain.addEventListener("click", () => {
+    const next = again;
+    closeReveal();
+    if (next) { root.dataset.machine = next.machine; paint(lastFrame); pull(next.count, next.trigger); }
+  });
+
+  const priceOf = (spec, count) => spec[count === 10 ? "ten" : "single"];
+  function affordable(frame, machineId, count) {
+    const spec = frame?.machines?.[machineId];
+    if (!spec) return false;
+    const price = spec[count === 10 ? "ten" : "single"];
+    return machineId === "PREMIUM" ? frame.tickets >= price.tickets || (frame.diamonds ?? -1) >= price.diamonds : frame.bits >= price.bits;
+  }
+  function paintAgain() {
+    if (!again) return;
+    revealAgain.disabled = !affordable(lastFrame, again.machine, again.count);
   }
 
   async function run(action) {
     if (busy) return;
     busy = true;
+    skipping = false;
+    root.dataset.busy = "true";
     try {
-      const machine = root.dataset.machine;
-      if (action.crank && !(await openCrank(action.crank, action.cost))) return;
+      const machineId = root.dataset.machine;
       const receipt = action.call();
       const result = receipt?.shop?.gacha?.lastResult ?? null;
       if (result && result.serial !== shownSerial) {
         shownSerial = result.serial;
         if (!result.ok) { fx(root, "denied", uiText(REFUSALS[result.reason] ?? "無法完成。")); onRefusal(result.reason); }
-        else if (result.prizes?.length) await reveal(result);
-        else fx(root, "levelup", uiText(result.kind === "ARMED" ? "已裝填" : "已使用"));
+        else if (result.prizes?.length) {
+          again = action.pull ? { ...action.pull, machine: machineId } : null;
+          returnFocus = action.pull?.trigger ?? null;
+          if (action.pull) await turnMachine(bestRarity(result.prizes));
+          else if (result.kind === "SYNTH") await smeltFurnace();
+          if (!life.signal.aborted) await reveal(result, { fromChute: Boolean(action.pull) });
+        } else fx(root, "gacha-use", uiText(result.kind === "ARMED" ? "已裝填" : "已使用"));
       }
-      root.dataset.machine = machine;
-    } finally { busy = false; paint(lastFrame); }
+      root.dataset.machine = machineId;
+    } finally {
+      busy = false;
+      delete root.dataset.busy;
+      paint(lastFrame);
+    }
   }
 
-  const pull = (count) => run({ crank: count, cost: (count === 10 ? ten : single).lastElementChild?.textContent ?? "",
-    call: () => intents.gachaPull(root.dataset.machine, count) });
-  single.addEventListener("click", () => pull(1));
-  crank.addEventListener("click", () => { if (!single.disabled) pull(1); });
-  ten.addEventListener("click", () => pull(10));
+  function pull(count, trigger = count === 10 ? ten : single) {
+    return run({ pull: { count, trigger }, call: () => intents.gachaPull(root.dataset.machine, count) });
+  }
+  single.addEventListener("click", () => pull(1, single));
+  crank.addEventListener("click", () => { if (!single.disabled) pull(1, single); else fx(crank, "denied"); });
+  ten.addEventListener("click", () => pull(10, ten));
   pityClaim.addEventListener("click", () => openPityPicker());
   autoFill.addEventListener("click", () => {
     synthSlots = [...(lastFrame?.autoFill ?? [])];
     if (!synthSlots.length) fx(autoFill, "denied", uiText("沒有足夠的多餘 R 級晶片（每種保留 1 個）。"));
-    else fx(autoFill, "snap");
+    else fx(slots, "gacha-slot", undefined, { count: synthSlots.length });
     paint(lastFrame);
   });
   smelt.addEventListener("click", () => run({ call: () => intents.gachaSynthesize([...synthSlots]) }).then(() => { synthSlots = []; paint(lastFrame); }));
@@ -426,26 +599,38 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     const slot = event.target.closest?.("[data-slot]");
     if (!slot || !synthSlots[Number(slot.dataset.slot)]) return;
     synthSlots.splice(Number(slot.dataset.slot), 1);
+    fx(slots, "unsnap");
     paint(lastFrame);
   });
 
   function openPityPicker() {
     const frame = lastFrame;
     if (!frame || frame.pity < frame.pityMax) return;
-    pityPicker.replaceChildren(element("h2", "cm-gacha__overlay-title", uiText("🔥 高階進化金屬自選箱")));
-    const grid = element("div", "cm-gacha__cards");
+    const inner = element("div", "cm-gacha__reveal-inner");
+    const title = element("h2", "cm-gacha__reveal-title");
+    title.append(gachaIcon("flame", "cm-gacha__reveal-icon"), element("span", "", uiText("高階進化金屬自選箱")));
+    const grid = element("div", "cm-gacha__cards cm-gacha__cards--picker");
     for (const metal of frame.metals.filter((m) => RARITY_ORDER[m.rarity] >= 2)) {
-      const card = button("cm-gacha__card");
+      const card = button("cm-gacha__card cm-gacha__card--pick");
       card.dataset.rarity = metal.rarity;
-      card.append(element("span", "cm-gacha__card-rarity", metal.rarity), itemIcon(metal, "cm-gacha-icon cm-gacha-icon--card"),
-        element("strong", "cm-gacha__card-name", uiText(metal.name)));
-      card.addEventListener("click", () => { pityPicker.hidden = true; run({ call: () => intents.gachaClaimPity(metal.id) }); });
+      card.dataset.kind = "METAL";
+      const art = element("span", "cm-gacha__card-art");
+      art.append(itemIcon(metal, "cm-gacha-icon cm-gacha-icon--card"));
+      const info = element("span", "cm-gacha__card-info");
+      info.append(element("strong", "cm-gacha__card-name", uiText(metal.name)), element("span", "cm-gacha__card-kind", uiText("進化金屬")));
+      card.append(art, element("span", "cm-gacha__card-rarity", metal.rarity), info);
+      card.addEventListener("click", () => { pityPicker.hidden = true; returnFocus = pityClaim; again = null; run({ call: () => intents.gachaClaimPity(metal.id) }); });
       grid.append(card);
     }
-    const cancel = button("cm-gacha__action", uiText("稍後再選"));
-    cancel.addEventListener("click", () => { pityPicker.hidden = true; });
-    pityPicker.append(grid, cancel);
+    const cancel = key("cm-gacha__action", uiText("稍後再選"));
+    cancel.addEventListener("click", () => { pityPicker.hidden = true; fx(cancel, "close"); pityClaim.focus?.({ preventScroll: true }); });
+    const actions = element("div", "cm-gacha__actions cm-gacha__reveal-actions");
+    actions.append(cancel);
+    inner.append(title, grid, actions);
+    pityPicker.replaceChildren(element("span", "cm-gacha__rays"), inner);
+    pityPicker.dataset.rarity = "SSR";
     pityPicker.hidden = false;
+    fx(pityPicker, "open");
   }
 
   function chipTile(item, { count = item.owned, onClick, selected = false, locked = false } = {}) {
@@ -455,10 +640,11 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     if (selected) tile.dataset.selected = "true";
     if (locked) tile.dataset.locked = "true";
     tile.disabled = count < 1;
-    const name = element("span", "cm-gacha__tile-name", uiText(item.name));
-    tile.append(itemIcon(item), name, element("span", "cm-gacha__tile-count", uiText("持有 {n} 個", { n: count })));
+    tile.append(element("span", "cm-gacha__tile-rarity", item.rarity), itemIcon(item),
+      element("span", "cm-gacha__tile-name", uiText(item.name)),
+      element("span", "cm-gacha__tile-count", uiText("持有 {n} 個", { n: count })));
     if (item.armed) tile.append(element("span", "cm-gacha__tile-flag", uiText("已裝填")));
-    if (locked) tile.append(element("span", "cm-gacha__tile-flag", "🔒"));
+    if (locked) tile.append(gachaIcon("lock", "cm-gacha__tile-lock"));
     tile.addEventListener("click", onClick);
     return tile;
   }
@@ -472,24 +658,26 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
       const slot = button("cm-gacha__slot");
       slot.dataset.slot = String(i);
       const chip = id ? frame.chips.find((c) => c.id === id) : null;
-      if (chip) { slot.dataset.rarity = chip.rarity; slot.append(itemIcon(chip)); slot.setAttribute("aria-label", uiText("移出{item}", { item: chip.name })); }
+      if (chip) { slot.dataset.rarity = chip.rarity; slot.append(itemIcon(chip)); slot.setAttribute("aria-label", uiText("移出{item}", { item: uiText(chip.name) })); }
       else slot.append(element("span", "cm-gacha__slot-empty", "+"));
       slots.append(slot);
     }
     smelt.disabled = synthSlots.length !== 5;
     synthList.replaceChildren();
-    for (const chip of frame.chips) {
-      const left = chip.owned - (used[chip.id] ?? 0);
-      synthList.append(chipTile(chip, { count: left, locked: chip.locked === true, onClick: () => {
-        if (synthSlots.length >= 5 || left < 1) return;
+    // Chips still in hand first; spent and locked ones wait at the end.
+    const left = (chip) => chip.owned - (used[chip.id] ?? 0);
+    const ready = (chip) => left(chip) > 0 && chip.locked !== true;
+    for (const chip of [...frame.chips.filter(ready), ...frame.chips.filter((chip) => !ready(chip))]) {
+      const count = left(chip);
+      synthList.append(chipTile(chip, { count, locked: chip.locked === true, onClick: () => {
+        if (synthSlots.length >= 5 || count < 1) return;
         synthSlots.push(chip.id);
-        fx(slots, "snap");
+        fx(slots, "gacha-slot", undefined, { count: 1 });
         paint(lastFrame);
       } }));
     }
   }
 
-  const KIND_LABEL = Object.freeze({ GROWTH: "育成超頻晶片", HUNT: "狩獵戰術卡匣", BOUNTY: "深網強敵信標" });
   function paintBag(frame) {
     bagGrid.replaceChildren();
     const items = [...frame.metals.map((m) => ({ ...m, kind: "METAL" })), ...frame.chips];
@@ -497,7 +685,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
       if (item.owned < 1 && !item.armed) continue;
       bagGrid.append(chipTile(item, { selected: bagSelection === item.id, onClick: () => { bagSelection = item.id; fx(bagGrid, "toggle"); paint(lastFrame); } }));
     }
-    if (!bagGrid.childElementCount) bagGrid.append(element("p", "cm-gacha__note", uiText("背包還是空的。去轉蛋機轉一次吧！")));
+    if (!bagGrid.childElementCount) bagGrid.append(element("p", "cm-gacha__plate cm-gacha__note", uiText("背包還是空的。去轉蛋機轉一次吧！")));
     usePanel.replaceChildren();
     const item = items.find((entry) => entry.id === bagSelection && entry.owned > 0);
     if (!item) return;
@@ -506,8 +694,8 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     const describe = metal
       ? uiText(RARITY_ORDER[item.rarity] >= 2 ? "強化：全能力 +{n}。SSR 以上會為拍檔銘刻「[{title}]」金屬血統與腳底流光。催化：無視不足條件，強制突破進化。"
         : "強化：全能力 +{n}。催化：無視不足條件，強制突破進化。", { n: item.boost, title: frame.bloodlines[item.family]?.title ?? "" })
-      : uiText("{kind}・原「{origin}」", { kind: KIND_LABEL[item.kind] ?? "", origin: item.origin });
-    usePanel.append(element("p", "cm-gacha__note", describe));
+      : uiText("{kind}・原「{origin}」", { kind: uiText(KIND_LABEL[item.kind] ?? ""), origin: uiText(item.origin) });
+    usePanel.append(element("p", "cm-gacha__use-note", describe));
     const needsPartner = metal || item.kind === "GROWTH";
     if (needsPartner) {
       const roster = element("div", "cm-gacha__partners");
@@ -516,22 +704,31 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
         pick.dataset.instanceId = partner.instanceId;
         if (partnerSelection === partner.instanceId) pick.dataset.selected = "true";
         pick.append(partnerNameplate(partner));
-        pick.addEventListener("click", () => { partnerSelection = partner.instanceId; paint(lastFrame); });
+        pick.addEventListener("click", () => { partnerSelection = partner.instanceId; fx(pick, "toggle"); paint(lastFrame); });
         roster.append(pick);
       }
       usePanel.append(roster);
     }
-    const actions = element("div", "cm-gacha__synth-actions");
-    const use = (mode, label) => {
-      const action = button(`cm-gacha__action${mode === "ENHANCE" || !metal ? " cm-gacha__action--primary" : ""}`, uiText(label));
+    const actions = element("div", "cm-gacha__actions");
+    const use = (mode, label, icon) => {
+      const action = key(`cm-gacha__action${mode === "ENHANCE" || !metal ? " cm-gacha__action--primary" : ""}`, uiText(label), icon ? gachaIcon(icon, "cm-gacha-key__icon") : undefined);
       action.disabled = needsPartner && !partnerSelection;
       action.dataset.useMode = mode;
-      action.addEventListener("click", () => run({ call: () => intents.gachaUseItem(item.id, needsPartner ? partnerSelection : null, { mode }) }));
+      action.addEventListener("click", () => { returnFocus = action; again = null; run({ call: () => intents.gachaUseItem(item.id, needsPartner ? partnerSelection : null, { mode }) }); });
       actions.append(action);
     };
-    if (metal) { use("ENHANCE", "✨ 強化銘刻"); use("CATALYST", "🧬 催化進化"); }
+    if (metal) { use("ENHANCE", "強化銘刻", "spark"); use("CATALYST", "催化進化", "evolve"); }
     else use("USE", item.kind === "GROWTH" ? "使用" : "裝填");
     usePanel.append(actions);
+  }
+
+  function pricePlate(premium, frame, price, count) {
+    const plate = element("span", "cm-gacha__price");
+    if (!premium) plate.append(gachaCurrencyImage("bits", "cm-gacha__price-icon"), element("span", "", fmt(price.bits)));
+    else if (frame.tickets >= price.tickets) plate.append(gachaTicketImage("cm-gacha__price-icon cm-gacha__price-icon--ticket"), element("span", "", `×${price.tickets}`));
+    else plate.append(gachaCurrencyImage("diamond", "cm-gacha__price-icon"), element("span", "", fmt(price.diamonds)));
+    plate.dataset.count = String(count);
+    return plate;
   }
 
   function paint(frame) {
@@ -542,33 +739,39 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     bitsChip.lastElementChild.textContent = fmt(frame.bits);
     for (const [id, tab] of modeButtons) tab.setAttribute("aria-selected", String(root.dataset.mode === id));
     for (const tab of [premiumTab, bitsTab]) tab.setAttribute("aria-pressed", String(root.dataset.machine === tab.dataset.machine));
-    const premium = root.dataset.machine === "PREMIUM";
-    const spec = frame.machines[root.dataset.machine];
-    const priceLabel = (price, count) => premium
-      ? (frame.tickets >= price.tickets ? uiText("🎫 ×{n}", { n: price.tickets }) : uiText("💎 {n}", { n: fmt(price.diamonds) }))
-      : uiText("🪙 {n}", { n: fmt(price.bits) });
-    single.replaceChildren(element("strong", "", uiText("單抽")), element("span", "", priceLabel(spec.single, 1)));
-    ten.replaceChildren(element("strong", "", uiText("十連狂轉")), element("span", "", priceLabel(spec.ten, 10)));
-    const affordable = (price) => premium ? frame.tickets >= price.tickets || (frame.diamonds ?? -1) >= price.diamonds : frame.bits >= price.bits;
-    single.disabled = busy || !affordable(spec.single);
-    ten.disabled = busy || !affordable(spec.ten);
-    crank.disabled = single.disabled;
+    const machineId = root.dataset.machine;
+    const premium = machineId === "PREMIUM";
+    const spec = frame.machines[machineId];
+    single.replaceChildren(element("strong", "cm-gacha__pull-label", uiText("單抽")), pricePlate(premium, frame, priceOf(spec, 1), 1));
+    ten.replaceChildren(element("strong", "cm-gacha__pull-label", uiText("十連狂轉")), pricePlate(premium, frame, priceOf(spec, 10), 10));
+    single.disabled = !affordable(frame, machineId, 1);
+    ten.disabled = !affordable(frame, machineId, 10);
+    crank.dataset.ready = String(!single.disabled);
     rates.textContent = uiText(premium
       ? "機率 R 60%・SR 28%・SSR 10%・UR 2%｜十連必出 SR 以上進化金屬或 Ω 晶片"
       : "培育補給與狩獵道具 66%・R 晶片 27%・基礎進化金屬 7%");
-    pityLabel.textContent = uiText("🔥 核心熔煉值：{n} / {max}", { n: frame.pity, max: frame.pityMax });
-    pityFill.style.width = `${Math.round((frame.pity / frame.pityMax) * 100)}%`;
+    pityLabel.textContent = `${fmt(frame.pity)} / ${fmt(frame.pityMax)}`;
+    pity.setAttribute("aria-label", uiText("核心熔煉值：{n} / {max}", { n: frame.pity, max: frame.pityMax }));
+    pity.setAttribute("aria-valuemax", String(frame.pityMax));
+    pity.setAttribute("aria-valuenow", String(frame.pity));
+    pityFill.style.height = `${Math.round(Math.min(1, frame.pity / frame.pityMax) * 100)}%`;
     pity.dataset.ready = String(frame.pity >= frame.pityMax);
     pityClaim.hidden = frame.pity < frame.pityMax;
     synthSlots = synthSlots.filter((id) => (frame.chips.find((c) => c.id === id)?.owned ?? 0) > 0);
     if (root.dataset.mode === "SYNTH") paintSynth(frame);
     if (root.dataset.mode === "BAG") paintBag(frame);
+    if (!revealActions.hidden) paintAgain();
   }
 
   return Object.freeze({
     root,
     update(frame) { paint(frame); },
-    dispose() { life.abort(); root.remove(); }
+    dispose() {
+      life.abort();
+      revealing = false;
+      for (const animation of [...running]) animation.cancel();
+      root.remove();
+    }
   });
 }
 

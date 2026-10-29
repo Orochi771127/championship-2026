@@ -97,7 +97,7 @@ def main():
                         'alpha': 'exact'}, 'files': rows,
                'sourceBytes': sum(r['sourceBytes'] for r in rows),
                'outputBytes': sum(r.get('bytes', r['sourceBytes']) for r in rows)}
-    pathlib.Path(args.receipt).write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
+    pathlib.Path(args.receipt).write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8', newline='\n')
     print(f"total {receipt['sourceBytes']/1e6:.1f} MB -> {receipt['outputBytes']/1e6:.1f} MB", flush=True)
 
 

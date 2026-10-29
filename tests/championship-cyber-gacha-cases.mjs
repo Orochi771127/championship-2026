@@ -168,3 +168,122 @@ test('the app saves each pull, metal use and bloodline before showing it, and re
     assert.ok(frame.partners.some(p => p.bloodline));
   } finally { await again.dispose(); }
 });
+
+// ---- Second pass (Owner 2026-10-29): no system emoji, one-tap physics machine,
+// ten cards for ten pulls, warm filtered sounds, arcade armour keys. ----
+const EMOJI = /\p{Extended_Pictographic}/u;
+const source = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
+
+test('the gacha has no system emoji: views, icons, styles, item names, drops and every locale', async () => {
+  for (const path of ['src/championship/app/cyberGachaView.js', 'src/championship/app/cyberGachaIcons.js',
+    'src/championship/app/cyberGachaPhysics.js', 'src/championship/app/cyberGacha.css', 'src/championship/gacha/cyberGacha.js']) {
+    const hits = source(path).split('\n').filter(line => EMOJI.test(line));
+    assert.deepEqual(hits, [], path);
+  }
+  for (const entry of [...GACHA_CHIPS, ...GACHA_METALS, ...GACHA_GOODS]) assert.doesNotMatch(entry.name, EMOJI, entry.id);
+  // The shop tab, the toolbar badge, the story reward and the battle / Data Arena drop lines.
+  for (const [path, pattern] of [['src/championship/app/vs4Screens.js', /轉蛋|gacha/i], ['src/championship/app/main.js', /gacha|轉蛋/i],
+    ['src/championship/app/vs5Screens.js', /gacha|轉蛋|賞金信標/i], ['src/championship/app/dataArenaScreen.js', /gacha/i]]) {
+    const hits = source(path).split('\n').filter(line => pattern.test(line) && EMOJI.test(line));
+    assert.deepEqual(hits, [], path);
+  }
+  for (const locale of ['en', 'ja', 'th', 'vi']) {
+    const TEXT = (await import(`../src/championship/text/uiText.${locale}.js`))[`TEXT_${locale.toUpperCase()}`];
+    const keys = ['轉蛋', '轉蛋機', '合成爐', '晶片背包', '王牌超頻＆進化金屬', '位元幣日常補給', '自動填入低階晶片', '開始熔煉合成',
+      '十連狂轉結果', '確定收下', '再轉十次', '再抽一次', '數碼轉蛋券 ×{n}', '賞金信標加成 +{bits} 位元幣', '轉蛋券 +{n}', '保底',
+      ...GACHA_CHIPS.map(chip => chip.name)];
+    for (const key of keys) {
+      assert.equal(typeof TEXT[key], 'string', `${locale}: ${key}`);
+      assert.doesNotMatch(TEXT[key], EMOJI, `${locale}: ${key}`);
+    }
+    for (const key of Object.keys(TEXT)) if (/轉蛋|熔煉|晶片|把手/.test(key)) assert.doesNotMatch(key, EMOJI, `${locale} key ${key}`);
+  }
+});
+
+test('a ten-pull deals ten cards in pull order, duplicates included', async () => {
+  const {gachaRevealCards} = await import('../src/championship/app/cyberGachaView.js');
+  const state = normalizeCyberGacha({version: 1, tickets: 10});
+  const result = pullCyberGacha(state, {machine: 'PREMIUM', count: 10, random: seq([0.5, 0.01, 0.5, 0.01, 0.5, 0.01, 0.5, 0.01])});
+  assert.equal(result.ok, true);
+  assert.equal(result.prizes.length, 10);
+  const cards = gachaRevealCards(result);
+  assert.equal(cards.length, 10, 'never merged into fewer cards');
+  assert.deepEqual(cards.map(card => card.index), [...Array(10).keys()]);
+  assert.deepEqual(cards.map(card => card.id), result.prizes.map(prize => prize.id));
+  const repeated = gachaRevealCards({prizes: Array.from({length: 10}, () => ({kind: 'METAL', id: 'metal:beta-shard', rarity: 'R', quantity: 1}))});
+  assert.equal(repeated.length, 10, 'ten of the same metal are still ten cards');
+  assert.equal(gachaRevealCards(null).length, 0);
+});
+
+test('the dome physics keeps sixteen capsules inside the glass, tumbles them and settles them again', async () => {
+  const {GACHA_DOME, GACHA_CAPSULE_RADIUS: r, settleCapsules, simulateTumble, crankTurn} = await import('../src/championship/app/cyberGachaPhysics.js');
+  const random = seq([0.13, 0.71, 0.42, 0.97, 0.05, 0.58, 0.33, 0.86, 0.21, 0.64]);
+  const inside = ball => Math.hypot(ball.x - GACHA_DOME.cx, ball.y - GACHA_DOME.cy) <= GACHA_DOME.r - r + 1e-3
+    && ball.y <= GACHA_DOME.floor - r + 1e-3 && ball.y >= GACHA_DOME.cap + r - 1e-3;
+  const pile = settleCapsules(16, {random});
+  assert.equal(pile.length, 16);
+  assert.ok(pile.every(inside), 'the resting pile sits inside the dome');
+  for (let i = 0; i < 16; i += 1) for (let j = i + 1; j < 16; j += 1) {
+    assert.ok(Math.hypot(pile[i].x - pile[j].x, pile[i].y - pile[j].y) > 2 * r - 0.02, 'capsules do not sink into each other');
+  }
+  const tumble = simulateTumble(pile, {random});
+  assert.equal(tumble.frames.length, Math.round(1.3 * 60) + 1, 'one frame per 1/60 s for 1.3 s');
+  assert.ok(tumble.sinkIndex >= 0, 'one capsule sinks through the chute');
+  for (const frame of tumble.frames) for (const [index, ball] of frame.entries()) if (ball.o > 0 && index !== tumble.sinkIndex) assert.ok(inside(ball));
+  const highest = Math.min(...tumble.frames.flat().map(ball => ball.y));
+  assert.ok(highest < Math.min(...pile.map(ball => ball.y)) - 0.05, 'the air jet throws the pile up into the dome');
+  assert.ok(tumble.final.every(inside), 'and it settles back inside');
+  const turn = crankTurn({degrees: 720, ms: 650});
+  assert.equal(turn.frames.at(-1), 720);
+  assert.equal(turn.ticks.length, 16, 'a ratchet click for every 45°');
+  assert.deepEqual([...turn.ticks].sort((a, b) => a - b), turn.ticks);
+});
+
+test('every gacha sound is filtered: no raw square or saw, ratchet clicks land on the crank', async () => {
+  const {ArcadeSound, ARCADE_CUES} = await import('../src/championship/app/ui/arcadeFx.js');
+  const made = [];
+  const param = () => ({value: 0, setValueAtTime() {}, linearRampToValueAtTime() {}, exponentialRampToValueAtTime() {}});
+  const node = kind => {
+    const entry = {kind, type: '', targets: [], frequency: param(), gain: param(), Q: param(),
+      connect(target) { entry.targets.push(target); return target; }, start() {}, stop() {}};
+    made.push(entry);
+    return entry;
+  };
+  const context = {state: 'running', currentTime: 0, sampleRate: 8000, createOscillator: () => node('osc'), createGain: () => node('gain'),
+    createBiquadFilter: () => node('filter'), createBufferSource: () => node('noise'),
+    createBuffer: (channels, length) => { const data = new Float32Array(length); return {getChannelData: () => data}; }};
+  const sound = new ArcadeSound(() => ({context, destination: {}}));
+  const cues = ['gachaRatchet', 'gachaTumble', 'gachaDrop', 'gachaRattle', 'gachaCrack', 'gachaReveal', 'gachaCard', 'gachaSmelt', 'gachaSlot', 'gachaUse'];
+  for (const cue of cues) {
+    assert.equal(typeof ARCADE_CUES[cue], 'function', cue);
+    made.length = 0;
+    assert.equal(sound.play(cue, cue === 'gachaReveal' || cue === 'gachaCard' ? 'UR' : undefined), true, cue);
+    const voices = made.filter(entry => entry.kind === 'osc' || entry.kind === 'noise');
+    assert.ok(voices.length > 0, cue);
+    for (const voice of voices) {
+      assert.equal(voice.targets[0]?.kind, 'filter', `${cue}: every voice runs through a filter`);
+      if (voice.kind === 'osc') assert.ok(['sine', 'triangle'].includes(voice.type), `${cue}: ${voice.type}`);
+    }
+  }
+  const fx = source('src/championship/app/ui/arcadeFx.js');
+  assert.match(fx, /case "gacha-crank": for \(const ms of event\.detail\?\.ticks/);
+  assert.match(fx, /\[523\.25, 659\.25, 783\.99, 987\.77, 1046\.5\]/, 'the reveal is the C major-seventh arpeggio');
+});
+
+test('arcade armour keys, a whole tab badge and plates that read on any skin', () => {
+  const css = source('src/championship/app/cyberGacha.css');
+  assert.match(css, /\.cm-gacha-key \{[^}]*border: 3px solid var\(--g-ink\)[^}]*box-shadow: inset 0 3px 0 var\(--gk-hl\), 0 5px 0 var\(--g-ink\)/s);
+  assert.match(css, /\.cm-gacha-key:active:not\(:disabled\) \{ transform: translateY\(3px\)/);
+  assert.match(css, /transition: transform 40ms ease-out/);
+  assert.match(css, /\.cm-gacha-key \{[^}]*white-space: nowrap/s, 'key labels never wrap into an orphan glyph');
+  assert.match(css, /\.cm-vs2-shop__tab\[data-gacha-tickets\] \{ overflow: visible/);
+  assert.match(css, /\.cm-vs2-shop__tabs\[data-gacha\] \{ padding-top: 10px; overflow: visible/);
+  assert.match(css, /\.cm-gacha__plate \{[^}]*background: var\(--g-slate\); color: #dbeeff/s);
+  assert.match(css, /\.cm-gacha__reveal \{[^}]*background: radial-gradient\(circle at 50% 35%, #1e2942 0%, #0b0e17 100%\)/s);
+  assert.match(css, /padding-bottom: 88px/, 'lists scroll clear of the footer');
+  const view = source('src/championship/app/cyberGachaView.js');
+  assert.doesNotMatch(view, /requestAnimationFrame\(|getContext\(|new Application/, 'DOM and Web Animations only');
+  assert.match(view, /duration: 420, delay, easing: "cubic-bezier\(\.34,1\.56,\.64,1\)"/);
+  assert.match(view, /const delay = 55 \* index;/);
+  assert.doesNotMatch(view, /crank-stage|順時針轉一整圈/, 'the drag-the-handle stage is gone: one tap turns the crank');
+});

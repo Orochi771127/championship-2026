@@ -155,6 +155,7 @@ import { cappedPixelRatio, currentQuality, currentQualityTier, highlightMode, pr
 import { resultHeroAnchor, resultStageLight } from '../presentation/battleResultCharacters.js';
 import { formatDateTime, formatList, onLocaleChange, getLocale } from '../text/locale.js';
 import { retranslate, setLabel, setText, uiText } from '../text/uiText.js';
+import { paintGachaTicketBadge } from './cyberGachaIcons.js';
 
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
 // fetched the first time that view asks for one. The wrappers keep the same
@@ -2204,6 +2205,10 @@ async function openGameplay() {
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("partnerLifeQa"))
     globalThis.__championshipPartnerLifeQa = { grant: (reward, partnerB = null) => app.grantStrollDiscoveryReward({ partnerId: app.getSelectedCreatureId(), reward, partnerB, quantity: partnerB ? 2 : 1 }),
       frame: () => app.getPartnerLifeFrame(), reading: () => app.getPartnerReading(app.getSelectedCreatureId()) };
+  // Loopback review only (?gachaQa): top up gacha tickets so the machine, the ten-pull
+  // stage and the synthesizer can be checked on an isolated QA save. Public hosts never bind it.
+  if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("gachaQa"))
+    globalThis.__championshipGachaQa = { grantTickets: (amount) => app.grantGachaTickets(amount, 'QA'), frame: () => app.getCyberGachaFrame() };
   refreshStatusBar();
   refreshToolbarMode();
 
@@ -2452,15 +2457,14 @@ function projectRoster() {
 /** Repaint the four info_bar fields from the R2 snapshot and the current screen. */
 function refreshStatusBar() {
   settingsPanel?.refreshSaveStatus?.();
-  // Cyber Gachapon: unspent tickets glow on the Shop button (🎫 10 after the welcome grant).
+  // Cyber Gachapon: unspent tickets glow on the Shop button (10 after the welcome grant).
   try {
     const tickets = String(app?.getGachaTickets?.() ?? 0);
     for (const button of document.querySelectorAll('[data-quick-id="shop"], [data-entry-id="shop"]')) {
       button.dataset.gachaTickets = tickets;
       let badge = button.querySelector(':scope > .cm-gacha-dock-badge');
       if (!badge) { badge = document.createElement('span'); badge.className = 'cm-gacha-dock-badge'; badge.setAttribute('aria-hidden', 'true'); button.append(badge); }
-      badge.textContent = `🎫 ${tickets}`;
-      badge.hidden = tickets === '0';
+      paintGachaTicketBadge(badge, tickets);
     }
   } catch { /* the badge is decoration only */ }
   if (!statusBar) return;
@@ -2584,7 +2588,7 @@ async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = '
       if (result.outcome === 'completed') {
         try {
           const reward = app.claimGachaReward?.(`story:${chapterId}`, 3 + Math.floor(Math.random() * 3));
-          if (reward?.granted) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: `🎫 +${reward.granted}` } }));
+          if (reward?.granted) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: uiText('轉蛋券 +{n}', { n: reward.granted }) } }));
         } catch { /* a reward never breaks the story */ }
       }
     }
