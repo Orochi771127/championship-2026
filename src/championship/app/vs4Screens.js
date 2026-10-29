@@ -5,7 +5,7 @@ import { ranchEcologyType } from '../cage/ranchEcology.js';
 import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
 import { productPlacementCells, productGridSlot } from '../cage/productRanchGrid.js';
 import { PRODUCT_RANCH_GRID } from '../cage/productRanchGrid.js';
-import {databaseHeroPortrait} from '../presentation/databaseHeroPortraits.js';
+import {databaseHeroPortrait, databaseHeroSilhouette} from '../presentation/databaseHeroPortraits.js';
 import {databaseStory, databaseStoryHeading, databaseVerifiedData, databaseVerifiedHeading} from '../database/databaseStories.js';
 import {originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
 import { speciesName, generationName, shopItemDescription as shopDescriptionText, shopItemName } from "../text/zhHant.js";
@@ -869,6 +869,13 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       image.hidden = true;
       image.alt = ''; image.decoding = 'async';
       image.width = hero.width; image.height = hero.height;
+      // The stage fits the drawn silhouette, so partners read at one size (vs2Styles.css).
+      const silhouette = databaseHeroSilhouette(hero);
+      if (silhouette) {
+        holder.dataset.fit = 'silhouette';
+        for (const [name, value] of [['--iw', hero.width], ['--ih', hero.height], ['--bx', silhouette[0]],
+          ['--by', silhouette[1]], ['--bw', silhouette[2]], ['--bh', silhouette[3]]]) image.style.setProperty(name, String(value));
+      }
       const generation = detailGeneration;
       const current = () => alive && generation === detailGeneration;
       image.onload = () => {

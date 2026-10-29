@@ -2,6 +2,7 @@
 // No source masters, private approval records, or runtime imports.
 const assert = require('node:assert/strict');
 const {createHash} = require('node:crypto');
+const {beforeWebRendition} = require('./helpers/dex-web-renditions.cjs');
 const APPROVED20 = Object.freeze([
   {
     "speciesIndex": 20,
@@ -804,7 +805,7 @@ function assertApproved20Registry(catalog) {
   for(const expected of APPROVED10) assert.deepEqual(catalog.entries.find(e=>e.speciesIndex===expected.speciesIndex),expected,'Approved10 identity or asset drift');
   const actual206=catalog.entries.filter(e=>!APPROVED10_IDS.includes(e.speciesIndex));
   assert.equal(actual206.length,206);
-  const prior214=[...actual206.map(e=>SUPERSEDED_GR_FIXES.find(x=>x.speciesIndex===e.speciesIndex)??e),...SUPERSEDED8].sort((a,b)=>a.speciesIndex-b.speciesIndex);
+  const prior214=[...actual206.map(e=>SUPERSEDED_GR_FIXES.find(x=>x.speciesIndex===e.speciesIndex)??beforeWebRendition(e)),...SUPERSEDED8].sort((a,b)=>a.speciesIndex-b.speciesIndex);
   assert.equal(createHash('sha256').update(JSON.stringify(prior214)).digest('hex'),PRIOR214_SHA256,'All206 unaffected records and exact superseded8 baseline retain original214 hash');
   assert.equal(new Set(catalog.entries.map(e=>e.speciesIndex)).size,230,'No duplicate species');
   assert.deepEqual(APPROVED20.map(e=>e.speciesIndex),APPROVED20_IDS);
