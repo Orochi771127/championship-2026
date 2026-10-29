@@ -15,6 +15,7 @@ import { DATA_ARENA_KITS, DATA_ARENA_MATE, DATA_ARENA_MAX_STEPS_PER_FRAME, DATA_
   DATA_ARENA_TOURNAMENT } from "../modes/dataArena/dataArenaConfig.js";
 import { dataArenaUpgrade, previewDataArenaUpgrade } from "../modes/dataArena/dataArenaUpgrades.js";
 import { loadStylesheet } from './loadStylesheet.js';
+import { gachaTicketImage } from "./cyberGachaIcons.js";
 import { createDataArenaRecordStore } from "../modes/dataArena/dataArenaSave.js";
 import { createChampionshipDataArenaPort } from "./ChampionshipPersistentSavePort.js";
 import { dataArenaCast, loadDataArenaCharacter } from "../presentation/dataArena/dataArenaRoster.js";
@@ -1113,7 +1114,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         el("p", "da-result__line", t("result.stats", { perfect: result.stats.perfectDodges, chains: result.stats.chains, rescues: result.stats.rescues, cheers: result.cheers })));
     }
     if (gachaTickets > 0) {
-      const drop = el("p", "da-result__line da-result__gacha", `🎫 +${gachaTickets}`);
+      const drop = el("p", "da-result__line da-result__gacha", `+${gachaTickets}`);
+      drop.prepend(gachaTicketImage("cm-gacha-drop-ticket"));
       drop.dataset.gachaTickets = String(gachaTickets);
       panel.append(drop);
     }

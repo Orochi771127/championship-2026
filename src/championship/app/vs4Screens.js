@@ -36,6 +36,7 @@ import { showChoiceDialog } from './uiDialog.js';
 import { prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { isDesktopBrowseLayout } from './portraitFrame.js';
 import { createCyberGachaPanel } from './cyberGachaView.js';
+import { gachaIcon, paintGachaTicketBadge } from './cyberGachaIcons.js';
 
 const CATEGORY_LABELS = Object.freeze({
   TRAINING_GOODS: "養成用品",
@@ -207,9 +208,11 @@ export function createShopView({ root, source }) {
   // third tab (still data-category PLUGINS) is the Cyber Gachapon centre.
   const gachaEnabled = Boolean(block.gacha);
   let gachaPanel = null;
+  if (gachaEnabled) tabs.dataset.gacha = "true";
   for (const category of categories) {
-    const label = gachaEnabled && category === "PLUGINS" ? "🎰 轉蛋" : CATEGORY_LABELS[category];
-    const tab = element("button", "cm-vs2-shop__tab", label);
+    const gachaTab = gachaEnabled && category === "PLUGINS";
+    const tab = element("button", "cm-vs2-shop__tab", gachaTab ? undefined : CATEGORY_LABELS[category]);
+    if (gachaTab) tab.append(gachaIcon("machine", "cm-gacha-tab-icon"), element("span", "cm-gacha-tab-label", "轉蛋"));
     tab.type = "button";
     tab.dataset.category = category;
     tab.setAttribute("role", "tab");
@@ -350,8 +353,7 @@ export function createShopView({ root, source }) {
       gachaTab.dataset.gachaTickets = String(tickets);
       let badge = gachaTab.querySelector(".cm-gacha-dock-badge");
       if (!badge) { badge = element("span", "cm-gacha-dock-badge"); badge.setAttribute("aria-hidden", "true"); gachaTab.append(badge); }
-      badge.textContent = `🎫 ${tickets}`;
-      badge.hidden = tickets === 0;
+      paintGachaTicketBadge(badge, tickets);
       shelf.hidden = Boolean(gachaActive);
       status.hidden = Boolean(gachaActive);
       root.dataset.gacha = gachaActive ? "open" : "closed";

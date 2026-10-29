@@ -1178,11 +1178,16 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
       // Cyber Gachapon drop (OWNER_APPROVED_ADAPTATION 2026-10-29): only this match's own win.
       if (gachaDrop?.tickets > 0) {
         const drop = element("p", "cm-vs5-result__detail cm-vs5-result__gacha",
-          uiText("🎫 數碼轉蛋券 ×{n}", { n: gachaDrop.tickets }));
+          uiText("數碼轉蛋券 ×{n}", { n: gachaDrop.tickets }));
+        // The one gacha ticket picture (cyberGachaIcons.js), built here so this view imports display copy only.
+        const ticket = document.createElement("img");
+        Object.assign(ticket, { className: "cm-gacha-drop-ticket", src: "assets/production/ui/cyber-gacha-r1/gacha_ticket.webp", alt: "", decoding: "async" });
+        ticket.setAttribute("aria-hidden", "true");
+        drop.prepend(ticket);
         drop.dataset.gachaTickets = String(gachaDrop.tickets);
         frag.append(drop);
         if (gachaDrop.bonusBits > 0) frag.append(element("p", "cm-vs5-result__detail cm-vs5-result__gacha",
-          uiText("📡 賞金信標加成 +{bits} 位元幣", { bits: gachaDrop.bonusBits })));
+          uiText("賞金信標加成 +{bits} 位元幣", { bits: gachaDrop.bonusBits })));
       }
       return frag;
     }
