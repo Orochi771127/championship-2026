@@ -30,3 +30,9 @@ test('stop aborts active transfer and drops queued downloads; failed speculation
  const f=fixture({block:true}),l=createRanchTitlePreloader({...f,baseUrl:base});const pending=l.start(save);while(!f.calls.some(c=>c.url.endsWith('.webp')))await new Promise(r=>setTimeout(r,0));l.stop();await pending;assert.equal(f.calls.filter(c=>c.url.endsWith('.webp')).length,1);assert.equal(l.blobOf(f.calls.at(-1).url),null);
  const failure=fixture({fail:true}),other=createRanchTitlePreloader({...failure,baseUrl:base});await other.start(save);const first=failure.calls.find(c=>c.url.endsWith('.webp'));assert.equal(other.blobOf(first.url),null);assert.equal(other.blobOf(failure.calls.at(-1).url).size,100);
 });
+test('species drawn with reviewed artwork are not prefetched: their original atlas pages are retired',async()=>{
+ const f=fixture(),l=createRanchTitlePreloader({...f,baseUrl:base,reviewedSpecies:new Set(['species-001'])});await l.start(save);
+ const runtimes=f.calls.filter(c=>c.url.endsWith('.json')).map(c=>c.url);
+ assert.ok(!runtimes.some(u=>u.includes('entity1/')));assert.ok(runtimes.some(u=>u.includes('entity0/')));
+ assert.ok(f.calls.filter(c=>c.url.endsWith('.webp')).length>0);
+});

@@ -30,8 +30,13 @@ test('all 5422 actual packaged runtime, atlas and HUD files match the frozen can
  assert.equal(root,'assets/production/characters/accepted-20261010/');
  assert.equal(packaged.files.length,5422);
  assert.equal(new Set(packaged.files.map(f=>f.path)).size,5422);
+ // Owner 2026-10-28: atlas pixels of roles replaced by reviewed artwork are retired
+ // (archived with their hashes); a retired file must still carry its frozen hash.
+ const retired=new Map(JSON.parse(fs.readFileSync('docs/contracts/championship/RETIRED_CHARACTER_ART.v1.json','utf8')).files.map(f=>[f.path,f]));
  for(const file of packaged.files){
   assert.ok(!file.path.startsWith('/')&&!file.path.includes('..')&&!file.path.includes('\\'));
+  const gone=retired.get(root+file.path);
+  if(gone&&!fs.existsSync(root+file.path)){assert.equal(gone.sha256,file.sha256,file.path);assert.equal(gone.bytes,file.bytes,file.path);continue;}
   const bytes=fs.readFileSync(root+file.path);
   assert.equal(bytes.length,file.bytes,file.path);
   assert.equal(createHash('sha256').update(bytes).digest('hex'),file.sha256,file.path);

@@ -1,0 +1,130 @@
+{
+  "reviewer": "dot primary",
+  "reviewedUTC": "2026-10-26T16:31:45.669309+00:00",
+  "status": "KO_PATCH_ART_READY_ROOT_VISUALLY_APPROVED",
+  "personallyViewed": "All3 actual main+threeview references, all4 raw gray-composited groups and selected normalization scale/pivot comparison; prior bound reference seen.",
+  "selected": [
+    {
+      "character": "MA31",
+      "selectedPath": "animation-completion-20261026/mature-ko-repair-v1/MA31-selected-256.png",
+      "sha256": "1843b4d7eefbe4a8259fb1a646ad8ee9b728ba97072c349e7d1d073b0b5ad41a",
+      "rawPath": "generated_images/exec-2cc4f4e2-53d0-4dd0-a43b-884176d76236.png",
+      "rawSHA256": "676dc2aea25b64551a1d5a47271bc859da9e7511e9751a667ad442d4d4c13366",
+      "selectedCellIndex": 2,
+      "canvas": [
+        256,
+        256
+      ],
+      "pivot": [
+        128,
+        220
+      ],
+      "scale": 0.31,
+      "permittedContexts": [
+        "Main15",
+        "Sub5_if_same_down_state",
+        "Arena_static_Main_camera_KO"
+      ],
+      "scope": "Terminal static KO only; preserve simulator state, no automatic recovery/neutral, no mirroring."
+    },
+    {
+      "character": "MA31-bound",
+      "selectedPath": "animation-completion-20261026/mature-ko-repair-v1/MA31-bound-selected-256.png",
+      "sha256": "c610d100e562da358143a40a7932953e4cd55b0b6352086f5c4959c91a893509",
+      "rawPath": "generated_images/exec-f8d8197e-3c61-4179-9b14-5fe02e6ed57c.png",
+      "rawSHA256": "2312aed9ebe01fa928bba1dcb18efb10c3947fa8d6771957ea6a9d56349fee46",
+      "selectedCellIndex": 2,
+      "canvas": [
+        256,
+        256
+      ],
+      "pivot": [
+        128,
+        220
+      ],
+      "scale": 0.31,
+      "permittedContexts": [
+        "Main25"
+      ],
+      "scope": "Terminal static KO only; preserve simulator state, no automatic recovery/neutral, no mirroring."
+    },
+    {
+      "character": "MA49",
+      "selectedPath": "animation-completion-20261026/mature-ko-repair-v1/MA49-selected-256.png",
+      "sha256": "ced1ac0a50aff717cb8676c1803b2457aa00d602ee87996aac0184a8f1020aa4",
+      "rawPath": "generated_images/exec-59fd610f-00c5-445d-8fee-1a34077ac7a8.png",
+      "rawSHA256": "a1d6084c1e75fc773c91df3f093dce0f29c408393441232ac3cba96828a75ff2",
+      "selectedCellIndex": 2,
+      "canvas": [
+        256,
+        256
+      ],
+      "pivot": [
+        128,
+        224
+      ],
+      "scale": 0.22,
+      "permittedContexts": [
+        "Main15",
+        "Sub5_if_same_down_state",
+        "Arena_static_Main_camera_KO"
+      ],
+      "scope": "Terminal static KO only; preserve simulator state, no automatic recovery/neutral, no mirroring."
+    },
+    {
+      "character": "MA51",
+      "selectedPath": "animation-completion-20261026/mature-ko-repair-v1/MA51-selected-256.png",
+      "sha256": "92d9a89f4ed55367ba8bfbfd38a8fbc259055fa0a3e475058a5a0317281fa510",
+      "rawPath": "generated_images/exec-5ee87e3d-3c8e-4f92-990c-3a2ff874dbd7.png",
+      "rawSHA256": "b1466de3f2b38c6a7e95bce11a76af9a7183fec13878440f18e40448b0cf8219",
+      "selectedCellIndex": 3,
+      "canvas": [
+        256,
+        266
+      ],
+      "pivot": [
+        128,
+        224
+      ],
+      "scale": 0.27,
+      "permittedContexts": [
+        "Main15",
+        "Sub5_if_same_down_state",
+        "Arena_static_Main_camera_KO"
+      ],
+      "scope": "Terminal static KO only; preserve simulator state, no automatic recovery/neutral, no mirroring."
+    }
+  ],
+  "viewEvidence": [
+    {
+      "path": "animation-completion-20261026/mature-ko-repair-v1/MA31-gray-qa.jpg",
+      "sha256": "27d93910b142d6c7f9ef3b9e6c13a0218a76a026b753b8cce1b0ae7ef23128fc"
+    },
+    {
+      "path": "animation-completion-20261026/mature-ko-repair-v1/MA49-gray-qa.jpg",
+      "sha256": "b9bdf2c1d82f03ca11b51e0f59171ae202afc1b623b98974b3b800c6cfc90bb0"
+    },
+    {
+      "path": "animation-completion-20261026/mature-ko-repair-v1/MA51-gray-qa.jpg",
+      "sha256": "4cd8ea43748b6383c54d140423cc81ee5103483b8090ec4612a0c625f844867e"
+    },
+    {
+      "path": "animation-completion-20261026/mature-ko-repair-v1/MA31-bound-gray-qa.jpg",
+      "sha256": "d63bac7b9eecfaa1067788739a168f14da50ca783f3ee219c8b006f75477f18e"
+    },
+    {
+      "path": "animation-completion-20261026/mature-ko-repair-v1/selected-scale-pivot-qa.jpg",
+      "sha256": "08ab4b327a66ecc349fcc63a068b408cfe718feb2e74cd838957dd41aa63f236"
+    }
+  ],
+  "findings": [
+    "MA31 central sphere and three satellites settled, dim core and low rings visibly differentiate defeat; bound variant retains distinct brown capture cord/knot.",
+    "MA49 horizontally collapsed hood/body with both hands and single lantern preserved. Lamp glow does not negate collapsed pose.",
+    "MA51 bipedal winged dragon retains two legs/two wings/one tail; selected index3 head and belly rest, eyes closed, no invented forelegs.",
+    "MA31 shared0.31 body density; MA49 mask-based0.22 and MA51 head-based0.27 preserve native feature scale. Expanded MA51 canvas256x266 keeps full tail with pivot128,224; do not force256 crop."
+  ],
+  "R_ARCHIVE": "NOT_DONE",
+  "GAME_INTEGRATION": "NOT_DONE",
+  "liveGameplayObserved": false,
+  "olderApprovedSetsUntouched": true
+}

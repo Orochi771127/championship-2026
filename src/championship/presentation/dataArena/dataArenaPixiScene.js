@@ -22,6 +22,7 @@ import { mountDataArenaEnvironment, dataArenaEnvironmentFloorOffset } from "./da
 import { mountDataArenaInteractionView } from "./dataArenaInteractionView.js";
 
 import { createDataArenaRelayEffects } from './dataArenaRelayEffects.js';
+import { reviewedReleasePoint, releaseOffset, reviewedIdleBreath, reviewedWinHop, reviewedMoveRate } from './dataArenaReviewedMotion.js';
 import { RELAY_ACTION_PROFILES, relaySequence, relayEffectStyle } from '../../modes/dataArena/dataArenaRelay.js';
 import { RELAY_ROSTER, relayPartner } from '../../modes/dataArena/dataArenaRelayRoster.js';
 
@@ -37,6 +38,14 @@ const BEAM_ELEVATION = 22;
 const PARTNER_BEAM = Object.freeze({ "ember-lizard": 0x6ff7ff, "corona-cub": 0xffe066, "frost-drake": 0xa8f0ff });
 const CROWD_TINT = Object.freeze({ PERFECT_DODGE: 0x7fe9ff, ELEMENT_CHAIN: 0xff9a3c, RESCUE: 0x8dffb0, BEACON: 0xffe066,
   CORE_OUT: 0x7fd0ff, MULTI_KILL: 0xff6ad5, BOSS_DOWN: 0xffffff, CHEER: 0xffd34d, VICTORY: 0xfff2a8, DEFEAT: 0x4a5a80 });
+
+// One scale per body keeps authored canvas/pivot intact across poses and KO; the
+// loader's per-role reference height (its down-facing walk) maps the body to roleHeight.
+export function applyReviewedArenaPoseScale(sprite,sample,roleHeight,sink=0){
+ const scale=roleHeight/(sample?.geometry?.referenceHeight??64)/(sample?.geometry?.scale??4);
+ sprite.scale.set(scale*(sample?.mirrorX?-1:1),scale*(1-sink*.5));
+ return scale;
+}
 
 export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), quality = "high", reducedMotion = false, shake = true, partnerId, environment = null, interactionArt = null }) {
   // Construction is transactional: even a renderer failure before a scene is
@@ -318,12 +327,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const shadow = new PIXI.Sprite(textures.shadow);
     shadow.anchor.set(0.5); shadow.alpha = 0.8;
     const bundle = member?.art ? bundles.get(member.speciesId) : null;
-    let sprite, controller = null, scale = 1, sequence = null;
+    let sprite, controller = null, scale = 1, sequence = null, reviewedArena=null;
     if (bundle) {
       const actor = bundle.createActor({ side: "main", animation: DATA_ARENA_SEQUENCES.STAND, reducedMotion: false });
       sprite = actor.sprite; controller = actor.controller;
+      reviewedArena=actor.reviewedArena??null;
       const height = sprite.texture.frame?.height || sprite.texture.height || 64;
-      scale = ROLE_HEIGHT[role] / height;
+      scale = reviewedArena ? ROLE_HEIGHT[role]/64/4 : ROLE_HEIGHT[role] / height;
       sequence = DATA_ARENA_SEQUENCES.STAND;
     } else {
       sprite = new PIXI.Sprite(textures.fallback[role]);
@@ -347,6 +357,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (ringGfx) container.addChildAt(ringGfx, 1);
     return {
       role, container, sprite, shadow, ringGfx, scale, controller, hasArt: Boolean(bundle),
+      resetAction(){action.clear();reviewedArena?.reset();actionRequest=null;},
+      // Where this body's move is drawn leaving it; null keeps the default hand offset.
+      releasePoint(angle){
+        if(!reviewedArena)return null;
+        const g=motion?.geometry;
+        return reviewedReleasePoint({x:container.position.x+sprite.x,y:container.position.y+sprite.y,angle,roleHeight:ROLE_HEIGHT[role],
+          release:motion?.release,scaleX:sprite.scale.x,scaleY:sprite.scale.y,groundShift:g?.groundShift??0,density:g?.scale??1});
+      },
       setSequence(id, request = null) {
         if (!controller || (sequence === id && actionRequest === request)) return;
         try { controller.setAnimation(id); sequence = id; actionRequest = request; actionElapsed = 0; } catch { /* a missing raw sequence keeps the current pose */ }
@@ -366,7 +384,18 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           : state.gameMode === 'RELAY' ? sampleDataArenaRelayAction({ animation: attackAnimation, action: body.action, time: state.time,
               tickRateHz: bundle?.runtime.timing?.tickRateHz ?? 60, releaseSlot: relayProfile?.releaseSlot ?? 1, reducedMotion }) : action.sample(state.time);
         this.setSequence(motion?.sequenceId ?? seq, motion?.id ?? null);
-        if (controller && motion) {
+        if(reviewedArena){
+          if(event)reviewedArena.observe(event);
+          const vx=body.vx??0,vy=body.vy??0;
+          const sample=reviewedArena.sample({time:state.time,hp:seq===DATA_ARENA_SEQUENCES.DOWN?0:body.hp,
+            vx,vy,facing,hit:seq===DATA_ARENA_SEQUENCES.HIT,
+            attack:seq===DATA_ARENA_SEQUENCES.ATTACK,castId:body.cast?.actionId??null,angle:body.cast?.angle??null,
+            moveRate:reviewedMoveRate(vx,vy),victory:seq===DATA_ARENA_SEQUENCES.WIN});
+          motion=sample;
+            scale=applyReviewedArenaPoseScale(sprite,sample,ROLE_HEIGHT[role],sink);
+          // A standing body breathes on its held first walk frame (phase spread per body).
+          if(!reducedMotion&&sample?.action==='move'&&Math.hypot(vx,vy)<2)sprite.scale.y*=reviewedIdleBreath(elapsed,(body.id??0)*0.37);
+        } else if (controller && motion) {
           const deltaMS = Math.max(0, motion.elapsedMs - actionElapsed);
           if (deltaMS > 0) controller.update({ deltaMS });
           actionElapsed = motion.elapsedMs;
@@ -374,12 +403,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         // Art faces left; mirror for rightward facing.
         const snapshot=controller?.getSnapshot();
         const frame=bundle?.runtime.sides.main.animations.find(a=>a.id===sequence)?.frames[snapshot?.sourceFrameIndex ?? 0];
-        currentPlacement=state.gameMode==='RELAY'&&bundle ? dataArenaRelaySlotPlacement(frame,bundle.runtime.geometry,bundle.runtime.artProfile) : null;
+        // Reviewed artwork keeps its own canvas and pivot; relay slot packing applies to native cells only.
+        currentPlacement=!reviewedArena&&state.gameMode==='RELAY'&&bundle ? dataArenaRelaySlotPlacement(frame,bundle.runtime.geometry,bundle.runtime.artProfile) : null;
         if(currentPlacement)sprite.anchor.set(currentPlacement.anchor.x,currentPlacement.anchor.y);
         const cellScale=currentPlacement ? scale*(bundle.runtime.artProfile?.scale??1)/currentPlacement.packingScale : scale;
-        sprite.scale.set(cellScale * (facing > 0 ? -1 : 1), cellScale * (1 - sink * 0.5));
+        if(!reviewedArena)sprite.scale.set(cellScale * (facing > 0 ? -1 : 1), cellScale * (1 - sink * 0.5));
         sprite.y = -lift + sink * 30;
         sprite.x = 0;
+        if(reviewedArena&&seq===DATA_ARENA_SEQUENCES.WIN&&!reducedMotion)sprite.y-=reviewedWinHop(elapsed);
         if(currentPlacement){sprite.x+=(facing>0?-1:1)*currentPlacement.offset[0]*cellScale;sprite.y+=currentPlacement.offset[1]*cellScale;}
         // Stage four: a staggered fighter shudders for its hitstun.
         if (body.hitstun > 0 && !reducedMotion) sprite.x += Math.sin(elapsed * 90) * 2.5;
@@ -395,11 +426,25 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         shadow.alpha = (0.75 - sink * 0.6) * (lift > 0 ? 0.6 : 1);
       },
       diagnostics: () => ({ sequenceId: sequence, frameIndex: controller?.getSnapshot().sourceFrameIndex ?? null,
-        speciesId: member?.speciesId, facing8: body.facing8 ?? null, slotPreserved: Boolean(currentPlacement), anchor: currentPlacement?.anchor ?? null, actionId: motion?.id ?? null, phase: motion?.phase ?? null, moveId: motion?.moveId ?? null })
+        speciesId: member?.speciesId, facing8: body.facing8 ?? null, slotPreserved: Boolean(currentPlacement), anchor: currentPlacement?.anchor ?? null, actionId: motion?.actionId??motion?.id ?? null, phase: motion?.phase ?? null, moveId: motion?.moveId ?? null,
+        reviewed:reviewedArena?{clipId:motion?.clipId,direction:motion?.direction,assetId:motion?.assetId,terminal:motion?.terminal??false,missing:motion?.missing??null}:null })
     };
   }
   const playerMember = cast.partners.find((member) => member.partnerId === partnerId) ?? cast.partners[0];
   let playerView = createActorView("PLAYER", playerMember, state.player);
+  function casterView(id) {
+    if (id === state.player.id) return playerView;
+    if (id === state.mate?.id) return mateView;
+    if (bossView && id === state.boss?.id) return bossView;
+    return rivalViews.get(id) ?? null;
+  }
+  // Release point of a cast: a reviewed body's mouth or hand, else the default hand offset.
+  const releaseOrigins = new Map();
+  function releaseAt(event) {
+    const point = casterView(event.casterId)?.releasePoint(event.angle);
+    return point ? { ...point, reviewed: true }
+      : { x: event.x + Math.cos(event.angle) * 26, y: event.y - BEAM_ELEVATION + Math.sin(event.angle) * 26, reviewed: false };
+  }
   const playerViews = new Map([[playerMember.partnerId, playerView]]);
   const mateView = createActorView("MATE", cast.mate, state.mate);
   let bossView = null;
@@ -483,6 +528,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     entry.sprite.visible = entry.glow.visible = true;
     entry.glow.visible = rich;
     shots.addChild(entry.sprite); shotGlow.addChild(entry.glow); shotGlow.addChildAt(entry.shadow, 0);
+    entry.origin = releaseOrigins.get(projectile.actionId) ?? null; entry.from = null;
     shotViews.set(projectile.id, entry);
     return entry;
   }
@@ -643,7 +689,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (!rich || ghosts.length > 8) return;
     const sprite = new PIXI.Sprite(playerView.sprite.texture);
     sprite.anchor.copyFrom(playerView.sprite.anchor);
-    sprite.scale.set(playerView.scale * (facing > 0 ? -1 : 1), playerView.scale);
+      sprite.scale.copyFrom(playerView.sprite.scale);
     sprite.position.set(x, y); sprite.tint = 0x6ff7ff; sprite.alpha = 0.5; sprite.blendMode = "add";
     particles.addChild(sprite);
     ghosts.push({ sprite, life: 0.28, age: 0 });
@@ -712,7 +758,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const elementTint = { BURN: 0xff7a2a, DROWN: 0x4fc3ff, STEAM: 0xeef7ff, FROST: 0xb8f0ff, CRYO_BRIDGE: 0xb8f0ff };
   function handleEvents(events) {
     for (const event of events) {
-      if (event.type === 'ROUND_INTRO') actionEvents.clear();
+        if (event.type === 'ROUND_INTRO') {actionEvents.clear();playerView.resetAction();mateView.resetAction();bossView?.resetAction();for(const view of rivalViews.values())view.resetAction();}
       else if (['PLAYER_DOWN', 'PLAYER_RESPAWN'].includes(event.type)) actionEvents.delete(state.player.id);
       else if (['CAST', 'ULT_CAST', 'CAST_RELEASE'].includes(event.type)) actionEvents.set(event.casterId, event);
     }
@@ -787,10 +833,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "BRIDGE_LIFTED": bridgeLift = 0; camera.addTrauma(0.25); break;
         case "CAST": if(state.gameMode==='RELAY'){const fx=relayLook(event.moveId,event.team);spawn({x:event.x,y:event.y-BEAM_ELEVATION,texture:textures.ring,tint:fx.tint,scale:.7,scaleTo:.12,life:event.windup,alpha:.65});
             // Charge orb at the hand: grows through the windup, so the release reads before it lands.
-            if(event.moveType!=='LUNGE')spawn({x:event.x+Math.cos(event.angle)*26,y:event.y-BEAM_ELEVATION+Math.sin(event.angle)*26,texture:textures.glow,tint:fx.tint,scale:.12,scaleTo:.5,life:Math.max(.12,event.windup),alpha:.9});}break;
+            if(event.moveType!=='LUNGE'){const at=releaseAt(event);spawn({x:at.x,y:at.y,texture:textures.glow,tint:fx.tint,scale:.12,scaleTo:.5,life:Math.max(.12,event.windup),alpha:.9});}}break;
         case "CAST_RELEASE": {
           if(state.gameMode==='RELAY') {
-            const fx=relayLook(event.moveId,event.team),x=event.x+Math.cos(event.angle)*26,y=event.y-BEAM_ELEVATION+Math.sin(event.angle)*26;
+            const fx=relayLook(event.moveId,event.team),{x,y,reviewed}=releaseAt(event);
+            // Shots of a reviewed body are drawn leaving its mouth or hand, then settle on their path.
+            if(reviewed)releaseOrigins.set(event.actionId,{x,y,born:elapsed});
             spawn({x,y,texture:event.moveType==='LUNGE'?textures.relaySlash:textures.glow,tint:fx.tint,scale:event.moveType==='LUNGE'?.7:.6,scaleTo:.15,life:.19,rotation:event.angle});
             burst(x,y,{count:5,speed:150,angle:event.angle,spread:1.2,tint:fx.tint,texture:fx.texture==='relayCrystal'?textures.shard:textures.spark,life:.22});
             if(fx.tether&&!reducedMotion)tethers.set(event.actionId,{x,y,born:elapsed,tint:fx.tint});
@@ -934,10 +982,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       playerView = playerViews.get(partnerId); playerView.container.visible = true;
       actionEvents.delete(state.player.id);
     }
-    // Actors.
+    // Actors. A relay ends on a short KO pause, not the victory pose: the side
+    // still standing celebrates through it.
+    const relayWinner = state.gameMode === 'RELAY' && state.tournament?.status === 'KO' ? state.tournament.winner : null;
     const playerSeq = player.state === "DOWNED" || player.state === "DEFEATED" ? DATA_ARENA_SEQUENCES.DOWN
       : player.hitFlash > 0 ? DATA_ARENA_SEQUENCES.HIT
-      : state.mode === "VICTORY_POSE" || state.result?.outcome === "VICTORY" ? DATA_ARENA_SEQUENCES.WIN
+      : state.mode === "VICTORY_POSE" || state.result?.outcome === "VICTORY" || relayWinner === 'player' ? DATA_ARENA_SEQUENCES.WIN
       : state.laser.firing || player.cast || player.lunge || player.recovery > 0 ? DATA_ARENA_SEQUENCES.ATTACK
       : Math.hypot(player.vx, player.vy) > 30 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
     const blink = !reducedMotion && player.invulnerable > 0 && player.state !== "DASH" && Math.floor(elapsed * 14) % 2 === 0;
@@ -984,6 +1034,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         rivalViews.set(rival.id, actorView);
       }
       const seq = rival.hp <= 0 ? DATA_ARENA_SEQUENCES.DOWN : rival.hitFlash > 0 ? DATA_ARENA_SEQUENCES.HIT
+        : relayWinner === 'rival' ? DATA_ARENA_SEQUENCES.WIN
         : rival.cast || rival.lunge || rival.recovery > 0 ? DATA_ARENA_SEQUENCES.ATTACK : Math.hypot(rival.vx, rival.vy) > 30 || rival.dashTimer > 0 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
       actorView.update(dtMs, { x: rival.x, y: rival.y, facing: rival.facing, flash: rival.hitFlash, alpha: rival.invulnerable > 0 ? 0.55 : 1, seq });
       actorView.sprite.tint = statusTint(rival, rival.hitFlash > 0 ? 0xff9a9a : 0xffffff);
@@ -1054,9 +1105,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       entry.sprite.visible = visible; entry.glow.visible = visible && rich; entry.shadow.visible = visible;
       if (!visible) continue;
       const lift = projectile.kind === "TIDE" ? 18 : 12;
-      entry.sprite.position.set(projectile.x, projectile.y - lift);
-      entry.glow.position.set(projectile.x, projectile.y - lift);
-      entry.shadow.position.set(projectile.x, projectile.y);
+      if (entry.origin) { entry.from = [entry.origin.x - projectile.x, entry.origin.y - (projectile.y - lift)]; entry.fromBorn = entry.origin.born; entry.origin = null; }
+      const [ox, oy] = releaseOffset(entry.from, elapsed - entry.fromBorn);
+      entry.sprite.position.set(projectile.x + ox, projectile.y - lift + oy);
+      entry.glow.position.set(projectile.x + ox, projectile.y - lift + oy);
+      entry.shadow.position.set(projectile.x + ox, projectile.y);
       if (projectile.kind === "SHARD") entry.sprite.alpha = 0.55 + 0.45 * clamp(projectile.hp / 26, 0, 1);
       else entry.sprite.alpha = 1;
       if (projectile.kind !== "ORB") entry.sprite.rotation = Math.atan2(projectile.vy, projectile.vx);
@@ -1075,6 +1128,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       }
     }
     for (const [id, tether] of tethers) if (elapsed - tether.born >= 0.45) tethers.delete(id);
+    for (const [id, origin] of releaseOrigins) if (elapsed - origin.born >= 0.5) releaseOrigins.delete(id);
     for (const [id, entry] of shotViews) {
       if (liveShots.has(id)) continue;
       entry.sprite.visible = entry.glow.visible = entry.shadow.visible = false;

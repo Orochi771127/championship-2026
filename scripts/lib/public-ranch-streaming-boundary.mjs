@@ -11,6 +11,11 @@ export function assertPublicRanchStreaming({root,files,allowlist,assertBytes}){
  const selection=JSON.parse(fs.readFileSync(path.join(root,RANCH_STREAMING_SELECTION),'utf8'));
  if(selection?.schemaVersion!==1||!Array.isArray(selection.characters))throw Error('PUBLIC_RANCH_SELECTION_SCHEMA');
  const rows=new Map(allowlist.files.map(row=>[row.path,row])),ids=new Set(),available=new Set(files);
+ // Owner 2026-10-28: atlas pixels of species whose reviewed artwork replaces the
+ // original are retired (archived with their hashes) and never requested: those
+ // runtimes load with pixels:false and keep only their timing/geometry JSON.
+ const retiredFile=path.join(root,'docs/contracts/championship/RETIRED_CHARACTER_ART.v1.json');
+ const retired=new Map(fs.existsSync(retiredFile)?JSON.parse(fs.readFileSync(retiredFile,'utf8')).files.map(f=>[f.path,f.sha256]):[]);
  for(const character of selection.characters){
   const file=character.runtimePath,row=rows.get(file);
   if(typeof character.entityId!=='string'||ids.has(character.entityId)||typeof file!=='string'
@@ -31,6 +36,7 @@ export function assertPublicRanchStreaming({root,files,allowlist,assertBytes}){
     if(!new RegExp('^main-[a-f0-9]{16}\\.'+extension+'$').test(page[field])||runtime.sides.main.atlases[i][field]!==page[field])
       throw Error('PUBLIC_RANCH_PAGE_PATH: '+character.entityId);
     const target=path.posix.join(path.posix.dirname(file),page[field]);
+    if(field==='image'&&!available.has(target)&&retired.get(target)===page[hashField])continue;
     if(!available.has(target)||rows.get(target)?.sha256!==page[hashField])throw Error('PUBLIC_RANCH_PAGE_NOT_SELECTED: '+target);
   }
  }

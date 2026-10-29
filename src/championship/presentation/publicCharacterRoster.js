@@ -4,6 +4,8 @@ export {publicCharacterConfig,publicCharacterConfigs} from './publicCharacterCat
 import {loadCharacterRosterCore} from './characterRosterCore.js';
 import {loadPixiCharacterRuntimeBundle} from './pixiCharacterRuntimeBundle.js';
 import {PUBLIC_CHARACTER_RENDER_KIND,canonicalRenderValue} from './publicCharacterRenderContract.js';
+import {attachReviewedCharacterAnimation,reviewedSpeciesForEntity,reviewedReplacesOriginal} from './reviewedCharacterLoader.js';
+import {isOriginalLoopbackLocation} from './originalRuntimeLocation.js';
 
 const configs=new Map(catalog.characters.map(c=>[c.entityId,c]));
 const hash=async value=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))),b=>b.toString(16).padStart(2,'0')).join('');
@@ -23,7 +25,7 @@ export async function validatePublicCharacterRender(runtime,config){
 // sources and actor presentation. No private registration is synthesized.
 export async function loadPublicCharacterRoster({PIXI,speciesIds,sides=['main'],signal=null,initialSequences=null,battleAtlas=false,
  fetchImpl=(...args)=>globalThis.fetch(...args)},baseUrl){
- if(catalog.schemaVersion!==1||catalog.assetId!=='art:public:characters:v1'||sides.length!==1||sides[0]!=='main')throw Error('PUBLIC_CHARACTER_CATALOG_SCHEMA');
+ if(catalog.schemaVersion!==1||catalog.assetId!=='art:public:characters:v1'||(!isOriginalLoopbackLocation(baseUrl)&&(sides.length!==1||sides[0]!=='main')))throw Error('PUBLIC_CHARACTER_CATALOG_SCHEMA');
  const manifestUrl=new URL(PUBLIC_CHARACTER_CATALOG,baseUrl).href;
  const records=catalog.characters.map(c=>({entityId:c.entityId,runtime:'../../../'+c.runtimePath}));
  const fromUrl=new Map(records.map(record=>[new URL(record.runtime,manifestUrl).href,configs.get(record.entityId)]));
@@ -41,7 +43,11 @@ export async function loadPublicCharacterRoster({PIXI,speciesIds,sides=['main'],
    if(!response.ok)throw Error('PUBLIC_CHARACTER_HTTP_'+response.status);
    const text=await response.text();if(await hash(text)!==expected)throw Error('PUBLIC_CHARACTER_RUNTIME_HASH');
    const runtime=JSON.parse(text);await validatePublicCharacterRender(runtime,config);
-   const bundle=await loadPixiCharacterRuntimeBundle({...args,runtimeUrl,runtimeDocument:runtime,fetchImpl,cachePrefix:'public:'+config.entityId+':'+expected+':' });
+   const reviewedSpecies=reviewedSpeciesForEntity(config,catalog.speciesBindings,baseUrl);
+   // A replaced original keeps only its timing/geometry; its atlas pages are never fetched.
+   const baseline=await loadPixiCharacterRuntimeBundle({...args,runtimeUrl,runtimeDocument:runtime,fetchImpl,cachePrefix:'public:'+config.entityId+':'+expected+':',
+    pixels:!reviewedReplacesOriginal(reviewedSpecies,baseUrl)});
+   const bundle=await attachReviewedCharacterAnimation({bundle:baseline,PIXI,speciesId:reviewedSpecies,baseUrl,signal,usage:'general',fetchImpl});
    loaded.add(config.entityId);loadedRuntimeHashes.set(config.entityId,expected);
    return {...bundle,createActor:options=>bundle.createActor({...options,
     nativeGeometry:options.nativeFramePresentation?runtime.geometry:null,

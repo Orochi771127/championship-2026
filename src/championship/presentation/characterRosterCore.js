@@ -128,7 +128,7 @@ export async function loadCharacterRosterCore({
       if(side==='sub'&&['result-win','result-loss'].includes(presentation)){
         const animation=presentation==='result-win'?9:5;
         if(!bundle.runtime.sides.sub.animations.some(a=>a.id===animation))return null;
-        const actor=bundle.createActor({side,animation,nativeSequence:true,reducedMotion:true});
+        const actor=bundle.createActor({speciesId:canonicalSpeciesId(speciesId),side,animation,nativeSequence:true,reducedMotion:true});
         return Object.freeze({sprite:actor.sprite,sequencePlayer:actor.sequencePlayer,entityId,
           packedPixelsPerNativePixel:bundle.runtime.artProfile.scale,presentationState:'OVL8_NATIVE_RESULT_SUB_SEQUENCE'});
       }
@@ -138,7 +138,7 @@ export async function loadCharacterRosterCore({
       const record = records.get(entityId);
       const verifiedGeometry=geometryResolver({entityId,record,runtime:bundle.runtime,side,appearance:appearances.get(entityId)});
       const battleGeometry = presentation === 'battle' ? verifiedGeometry : null;
-      const actor = bundle.createActor({ side, animation: 0,
+      const actor = bundle.createActor({ speciesId:canonicalSpeciesId(speciesId),side, animation: 0,
         reducedMotion: nativeFramePresentation || battleGeometry ? reducedMotion : true, nativeFramePresentation, battleGeometry,
         nativeGeometry: nativeFramePresentation ? verifiedGeometry : null });
       // The first source frame is identity art. No unverified idle/happy/walk
