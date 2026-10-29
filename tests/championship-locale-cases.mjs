@@ -291,7 +291,7 @@ test("coverage: every display string in the source and catalog record is transla
 test('Dex named dictionaries validate every locale and keep stray literals outside the coverage exemption',async()=>{
   const file='src/championship/database/databaseStories.js';
   const checked=inspectScopedLocaleCopy(file,DATABASE_STORY_COPY);
-  assert.equal(checked.keys.length,26);assert.deepEqual(checked.gaps,[]);
+  assert.equal(checked.keys.length,27);assert.deepEqual(checked.gaps,[]); // +field.element (2026-10-29 taxonomy)
   for(const locale of LOCALES){
     assert.ok(Object.isFrozen(DATABASE_STORY_COPY[locale]));
     for(const text of Object.values(DATABASE_STORY_COPY[locale]))assert.equal(checked.covers({file,text}),true);
@@ -310,7 +310,7 @@ test('Dex named dictionaries validate every locale and keep stray literals outsi
     assert.deepEqual(inspectScopedLocaleCopy(profileFile,missing).gaps,[`${locale}:SCOPED_COPY[${profileFile}:species-008]`]);
   }
   const report=await buildLocaleCoverage();
-  assert.deepEqual(report.scopedCopy.find(row=>row.file===file),{file,keyCount:26,gaps:[]});
+  assert.deepEqual(report.scopedCopy.find(row=>row.file===file),{file,keyCount:27,gaps:[]});
   assert.deepEqual(report.scopedCopy.find(row=>row.file===profileFile),{file:profileFile,keyCount:216,gaps:[]});
   assert.equal(report.counts.missing,0);assert.equal(report.counts.catalogGaps,0);
 });

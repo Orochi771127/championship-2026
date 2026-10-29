@@ -73,9 +73,9 @@ export function buildOwnedBattleCreature({instanceId,nativeProfile,tactic=BATTLE
   return deepFreeze(creature);
 }
 
-export function settleOwnedBattleIndividual(profile,{currentHp,metricLimit,verdict,mode,event=-1,cursor=1,totalRounds=1,teamIndex=0}) {
+export function settleOwnedBattleIndividual(profile,{currentHp,metricLimit,verdict,mode,event=-1,cursor=1,totalRounds=1,teamIndex=0,rewardPercent=100}) {
   if(![0,1,2,5].includes(mode)||![3,4,5].includes(verdict)||!Number.isInteger(currentHp)||!Number.isInteger(metricLimit)
-    ||![0,1].includes(teamIndex)||(teamIndex===1&&mode!==5))
+    ||![0,1].includes(teamIndex)||(teamIndex===1&&mode!==5)||!Number.isInteger(rewardPercent)||rewardPercent<100||rewardPercent>200)
     throw new Error('BATTLE_PARTY_UNTRACED_RESULT_CONTEXT');
   const next=structuredClone(profile),f=next.fields;
   f['050']=currentHp;f['054']=metricLimit;f['014']=35;
@@ -91,7 +91,8 @@ export function settleOwnedBattleIndividual(profile,{currentHp,metricLimit,verdi
   // win, including the draw code. Preserve the CPU-observed writer literally.
   if(teamIndex===0?verdict===4:verdict!==4){
     if((f['028']|0)<999)f['028']=(f['028']+1)>>>0;
-    const gain=mode===5?0:mode===2?1:mode===1||event===0?3:event===1?10:0;
+    // rewardPercent is the tri-core resonance bonus (battleTaxonomyAdaptation); 100 keeps the original gain.
+    const gain=Math.trunc((mode===5?0:mode===2?1:mode===1||event===0?3:event===1?10:0)*rewardPercent/100);
     f['020']=Math.min(100,(f['020']|0)+gain);
   }else f['040']=Math.min(100,(f['040']|0)+10);
   return deepFreeze(next);

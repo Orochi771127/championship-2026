@@ -14,6 +14,8 @@ import { originalCageLocationArt } from '../presentation/originalCageLocationArt
 import { prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
 import { buildEvolve } from '../presentation/ceremony/ceremonyScenes.js';
+import { taxonomyGlyph, TAXONOMY_COLORS } from '../presentation/taxonomyBadgeArt.js';
+import { taxonomyText } from '../text/taxonomyText.js';
 // INT-RH2 — Codex-owned P1R DOM presentation.
 //
 // This module consumes only the published Raising presentation seam. It never
@@ -180,8 +182,10 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   const moodHearts = node('span', 'int-rh2-companion__hearts');
   moodHearts.setAttribute('aria-hidden', 'true');
   moodChip.append(moodEmoji, moodLabel, moodHearts); moodChip.hidden = true;
+  // Owner 2026-10-29: a race habitat lights its chip beside the place label.
+  const habitatChip = node('span', 'cm-habitat-chip int-rh2-companion__habitat'); habitatChip.hidden = true;
   const placeRow = node('span', 'int-rh2-companion__place-row');
-  placeRow.append(placeChip, moodChip);
+  placeRow.append(placeChip, moodChip, habitatChip);
   const more = node("span", "int-rh2-companion__more", "詳細");
   more.setAttribute("aria-hidden", "true");
 
@@ -426,6 +430,14 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   let lastRosterKey = null;
   function paintPartnerMood(partner) {
     moodChip.hidden = !partner;
+    habitatChip.hidden = !partner?.raceHabitat;
+    if (partner?.raceHabitat && habitatChip.dataset.race !== partner.raceHabitat) {
+      habitatChip.dataset.race = partner.raceHabitat;
+      const glyph = taxonomyGlyph(`race.${partner.raceHabitat}`, 16); glyph.style.setProperty('--tax-color', TAXONOMY_COLORS[`race.${partner.raceHabitat}`]);
+      const label = document.createElement('span'); label.textContent = taxonomyText('habitat.badge', { race: taxonomyText(`race.${partner.raceHabitat}`) });
+      habitatChip.replaceChildren(glyph, label);
+      habitatChip.title = taxonomyText('habitat.desc');
+    }
     if (!partner) return;
     const mood = PARTNER_MOODS[partner.mood] ?? PARTNER_MOODS.calm, habitat = PARTNER_HABITATS[partner.habitat] ?? PARTNER_HABITATS.neutral;
     moodChip.dataset.mood = partner.mood; moodChip.dataset.habitat = partner.habitat; moodChip.dataset.hearts = String(partner.hearts);

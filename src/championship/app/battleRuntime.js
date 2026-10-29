@@ -17,6 +17,7 @@
 
 import {createBattleOpeningPhase} from '../battle/battleOpeningPhase.js';
 import {BATTLE_AI_ORIGINAL,BATTLE_AI_POLICIES} from '../battle/battleAiAdaptation.js';
+import {BATTLE_TAXONOMY_ORIGINAL,createBattleTaxonomyAdaptation} from '../battle/battleTaxonomyAdaptation.js';
 import { deepFreeze } from "../contracts/championshipContracts.js";
 import {
   BATTLE_MATCH_LIST_CAP,
@@ -119,6 +120,8 @@ export function createBattleRuntime(options = {}) {
   // Owner-approved improved AI (2026-10-13) is opt-in; the runtime default is
   // the original rule so parity fixtures and replays keep their behaviour.
   const aiPolicy=options.aiPolicy??BATTLE_AI_ORIGINAL;
+  const taxonomyPolicy=options.taxonomyPolicy??BATTLE_TAXONOMY_ORIGINAL;
+  let taxonomy=createBattleTaxonomyAdaptation({policy:taxonomyPolicy});
   // Owner-approved arena hazards (2026-10-18) are opt-in per battle. Off keeps
   // every parity fixture and replay byte-for-byte on the original rules.
   // Arena hazards are injected (createBattleArenaHazards), never imported here,
@@ -392,7 +395,9 @@ export function createBattleRuntime(options = {}) {
         action: { power: move.power ?? 0, elementSelector: move.elementSelect ?? 0 }
       });
       if (!inputs) continue;
-      const resolved = resolveBattleDamage({ ...inputs, rng });
+      const resolvedNative = resolveBattleDamage({ ...inputs, rng, critBonus: taxonomy.critBonus(slot) });
+      const resolved = {...resolvedNative, damage: taxonomy.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
+        elementSelector: move.elementSelect ?? 0, damage: resolvedNative.damage, signature: signatureMoves[slot] === move.recordIndex})};
       const result=hitRuntime.apply(targetSlot,{move,damage:resolved.damage,critical:resolved.critical,nativeKind,
         sourcePoint:parameters?effectActors.position(parameters):nativeActors.position(slot),statusInputs:{attackerIndex:inputs.statusAttackerIndex,
           selectedDefenseIndex:inputs.statusDefenderIndex,
@@ -415,6 +420,8 @@ export function createBattleRuntime(options = {}) {
   }
 
   let builtRoster = null;
+  // Per slot: the record index of its costliest move, the taxonomy adaptation's signature move.
+  let signatureMoves = [];
   let chosen = null;
   let source = null;
   let roster = null;
@@ -475,6 +482,7 @@ export function createBattleRuntime(options = {}) {
     const result = stepBattleSession(liveSession);
     nativeActors?.advance();
     effectActors?.advance();
+    if(!liveSession.ended&&taxonomy.regen(liveSession.frame,liveSession.slots).length)nativeActors?.syncCombatants();
     if(arenaHazards&&!liveSession.ended){
       // After the native step, outside AI dispatch: read positions, write HP only.
       const changed=arenaHazards.step({slots:liveSession.slots,positionOf:s=>nativeActors.position(s),
@@ -631,8 +639,10 @@ export function createBattleRuntime(options = {}) {
         outcomeEntries: completedRound ? [...(mode===3?recordRoundOutcome({verdict:localVerdict(session.verdict),battleType,flags:[],cursor:0}).flags:completedRound.flags)] : [],
         ...(playerIndividuals&&session.ended&&![3,4].includes(mode)?{individualResults:roster.slice(0,chosen.practice?6:3).flatMap((creature,i)=>creature?[{
           instanceId:creature.instanceId,nativeProfile:settleOwnedBattleIndividual(creature.nativeProfile,{
-            currentHp:session.slots[i].currentHp,metricLimit:session.slots[i].metricLimit,
-            verdict:session.verdict,mode,teamIndex:Math.floor(i/3),...(chosen.championship?{event:chosen.recordIndex,cursor:chosen.cursor+1,totalRounds:chosen.totalRounds}:{})})}]:[])}:{})
+            // Black Iron's opening TP may exceed the maximum during the match; the saved TP never does.
+            currentHp:session.slots[i].currentHp,metricLimit:Math.min(session.slots[i].metricLimit,session.slots[i].metricBase),
+            verdict:session.verdict,mode,teamIndex:Math.floor(i/3),rewardPercent:taxonomy.rewardPercent(Math.floor(i/3)),...(chosen.championship?{event:chosen.recordIndex,cursor:chosen.cursor+1,totalRounds:chosen.totalRounds}:{})})}]:[])}:{}),
+        ...(taxonomy.rewardPercent(localTeamIndex)!==100?{rewardPercent:taxonomy.rewardPercent(localTeamIndex)}:{})
       });
     },
 
@@ -730,6 +740,10 @@ export function createBattleRuntime(options = {}) {
           return run?.started && !run.active && !run.error ? {hits:[],terminal:true} : null;
         }
       });
+      // Taxonomy adaptation (Owner 2026-10-29): both teams, before the actors copy the opening stats.
+      taxonomy=createBattleTaxonomyAdaptation({policy:taxonomyPolicy,speciesBySlot:session.slots.map(c=>c?.speciesId??null),teamOf:battleTeamOfSlot});
+      signatureMoves=session.slots.map(c=>{if(!c)return null;const costliest=listMoveRecordsForCombatant(c).filter(m=>m.actionCost>0).sort((x,y)=>y.actionCost-x.actionCost)[0];return costliest?.recordIndex??null;});
+      taxonomy.applyStart(session.slots);
       nativeActors=createBattleNativeActors({slots:session.slots,creatures:roster,stands:normalBattleStands(session.slots)});
       soundEvents.attach(nativeActors.memory);
       // Use the same species move list as current normal selection. Appended
@@ -788,6 +802,7 @@ export function createBattleRuntime(options = {}) {
 
     personalityPolicy(){return personalityPolicy;},
     aiPolicy(){return aiPolicy;},
+    taxonomy(){return {policy:taxonomyPolicy,resonance:[taxonomy.resonance(0),taxonomy.resonance(1)],rewardPercent:[taxonomy.rewardPercent(0),taxonomy.rewardPercent(1)]};},
 
     /**
      * Diagnostic read of the personality wiring: what each slot received, what

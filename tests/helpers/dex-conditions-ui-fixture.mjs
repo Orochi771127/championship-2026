@@ -11,8 +11,11 @@ import {speciesName,generationName} from '../../src/championship/text/zhHant.js'
 import {setLabel,setText,uiText} from '../../src/championship/text/uiText.js';
 import {setLocale} from '../../src/championship/text/locale.js';
 import {isDesktopBrowseLayout} from '../../src/championship/app/portraitFrame.js';
+import {taxonomyBadge} from '../../src/championship/presentation/taxonomyBadgeArt.js';
+import {elementChartButton} from '../../src/championship/app/elementChartModal.js';
 import {ControlledEvent,createControlledDocument} from './controlled-database-dom.mjs';
 const candidateScreen=new URL('../../src/championship/app/vs4Screens.js',import.meta.url);
+const inDocument=(doc,fn)=>(...args)=>{const previous=globalThis.document;globalThis.document=doc;try{return fn(...args);}finally{globalThis.document=previous;}};
 const fixtureCollection=()=>[{speciesId:'species-008',instanceId:'fixture-individual-8',displayName:'Unsubmitted name',originGateId:'fixture-gate'}];
 
 export function makeView({locale='zh-Hant',selectedSpeciesIndex=8,registeredSpecies=[8,20],evolutionBranches=[0],collection=fixtureCollection(),screenUrl=candidateScreen,projection=projectDatabase,width=390,height=844,wideLayout=null}={}) {
@@ -42,6 +45,8 @@ export function makeView({locale='zh-Hant',selectedSpeciesIndex=8,registeredSpec
     addEventListener(type,fn){if(!listeners.has(type))listeners.set(type,new Set());listeners.get(type).add(fn);},
     removeEventListener(type,fn){listeners.get(type)?.delete(fn);},
     databaseHeroPortrait,databaseHeroSilhouette,databaseStory,databaseStoryHeading,databaseVerifiedData,databaseVerifiedHeading,databaseDisplayRows,getDatabaseDisplayEntry,databaseIllustrationText,speciesName,generationName,setLabel,setText,uiText,isDesktopBrowseLayout,
+    // Emblem helpers draw into this fixture's document.
+    taxonomyBadge:inDocument(document,taxonomyBadge),elementChartButton:inDocument(document,elementChartButton),
     originalDatabaseIcon:()=>null,
     openingEggChoices:()=>Array.from({length:8},(_,speciesIndex)=>({speciesIndex,formalName:`Fixture egg ${speciesIndex}`,src:''})),
     openingEggText:()=>({nameNote:''}),
