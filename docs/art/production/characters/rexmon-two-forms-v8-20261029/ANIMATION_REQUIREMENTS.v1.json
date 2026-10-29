@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-29",
+  "status": "NOT_DELIVERED_DESIGN_ONLY",
+  "character": "rexmon",
+  "stage": "ultimate",
+  "statement": "The v8 pack holds design main images, turnarounds and references only. No animation frame of either form exists. Neither form may play in General or Data Arena until its own frames are delivered, reviewed by dot and accepted in game.",
+  "roles": {
+    "dot": "Draws every frame and reviews it personally.",
+    "claudeCode": "Data, runtime binding, geometry/timing integration and in-game acceptance.",
+    "codex": "Archive and file/hash verification only; no inventory, design or image generation."
+  },
+  "forms": [
+    {
+      "speciesIndex": 243,
+      "formKey": "dragon",
+      "displayName": "雷克斯獸",
+      "displayCode": "UL41",
+      "designBasis": {
+        "main": {"file": "雷克斯獸-主圖-v7.png", "sha256": "989c4b8054b3822931cfa14019affa0c3c1a8e27343e11296086f264ab334d9b", "note": "Selected by the v8 manifest (dragon unchanged since v7); the file name keeps v7."},
+        "turnaround": {"file": "dragon-threeview-v6.png", "sha256": "abb20ebf88014e118f334e98991619118d2cbef15f21d30ad449ae7aa0512c41", "order": "front / left profile (facing left) / rear", "note": "Selected by the v8 manifest; the file name keeps v6."}
+      },
+      "anatomy": "Mechanical tyrannosaur. Two digits on each front hand, three front toes per foot (per the turnaround). True head eyes have sclera, amber iris and black pupil. Twin back rail cannons and segmented tail with gold-amber tip.",
+      "mirroring": "Only where dot approves the mirrored direction after review; the design reads near-symmetric but highlights and linework are not guaranteed symmetric."
+    },
+    {
+      "speciesIndex": 244,
+      "formKey": "battle",
+      "displayName": "雷克斯獸·戰鬥型態",
+      "displayCode": "UL42",
+      "designBasis": {
+        "main": {"file": "雷克斯獸·戰鬥型態-主圖-v8.png", "sha256": "b0655ca5a2c5bfe2413e4340df69e8bdf7fb38e5c6eaa0ace654a75ae4709039"},
+        "turnaround": {"file": "雷克斯獸·戰鬥型態-三視圖-v8.png", "sha256": "2a08062def998dbf3508de290bba67546dcae67e4d15dac71f77b8fd1e15de4a", "order": "front / right profile (facing right) / rear"},
+        "cannonAxis": {"file": "cannon-axis-model-v8.json", "sha256": "e16d6cafc9721f18b1c23f3ebbb762beae5513274aa43ff71059082185400142"}
+      },
+      "anatomy": "Humanoid. Character's own right arm is the twin-rail railgun; left hand is a two-finger claw. Feet follow the turnaround (three front toes), not two digits. Head eyes have sclera, iris and pupil; the chest dragon head's two eyes are amber gem armour with no sclera or pupil.",
+      "backCannons": "Fixed, rigid installation with no rotation. Muzzle openings and glowing orange channels face rearward and are visible only from behind; the front shows the closed ivory/teal casing; the right profile shows only a narrow rearward rim. Never draw the same muzzle on front and back. v7 humanoid cannon direction is superseded and must not be used.",
+      "mirroring": "FORBIDDEN as a whole-body L/R swap: mirroring moves the railgun to the left arm. Every left-facing direction needs its own drawing (or a reviewed partial composite that keeps the railgun on the character's right arm)."
+    }
+  ],
+  "modes": {
+    "general": {
+      "scope": "Ordinary game: ranch raising, capture, battle result and other General presentation.",
+      "runtime": "src/championship/presentation/reviewedCharacterAnimation.js reviewedNumericClip: Main 0-39 and Sub 0-12 sequence slots resolve to authored clips, explicit numeric selection first, then reviewed same-character semantic aliases.",
+      "mainSlots": ["0 idle", "1 weak_idle", "2 move", "3 run", "4 capture_bounce", "5 release_fall_land", "6 hurt", "7 melee", "8 melee", "9 ranged|melee", "10 ranged", "11 picked_up", "12 weak_move", "13 sleep", "14 eat", "15 down", "16 bound_idle", "17 bound_weak_idle", "18 bound_walk", "19 bound_fast_move", "20 bound_bounce", "21 bound_struggle", "22 bound_weak_walk", "23 bound_sleep", "24 bound_eat", "25 bound_down", "26 knockback", "27 guard", "28 petted_satisfied", "29 adverse_reaction", "30 training", "31 displeased_refusal", "32 startled", "33 victory", "34 hurt", "35 ranged|melee", "36 hurt", "37 hurt", "38 hurt", "39 guard"],
+      "subSlots": ["0 neutral", "1 weak", "2 attack", "3 hurt", "4 sleep", "5 down", "6 neutral", "7 satisfied", "8 unhappy", "9 victory", "10 rest", "11 weak", "12 refusal"],
+      "coverageRule": "All 53 slots must resolve. A slot may reuse another reviewed clip of the same form only through an explicit, reviewed alias; this is not a claim of 53 distinct drawings (UL02 closed 79 native slots with 33 authored poses).",
+      "timing": "Each sequence keeps a numeric mode (1 stop on last frame / 2 loop to loopStartFrame) and per-frame ticks. Current ultimates take these from an assigned motion donor; no donor is assigned for either Rexmon form (decision D5).",
+      "knownQualityBars": ["weak_move needs at least two alternating tired contact poses (the MA weak-walk repair standard)", "down (Main15) may keep an authored falling transition before its approved final hold, recorded as a main15Terminal policy"]
+    },
+    "dataArena": {
+      "scope": "Data Arena (Tournament and Harbor), 8-direction real-time play.",
+      "runtime": "src/championship/presentation/reviewedCharacterAnimation.js createReviewedArenaPlayback; directions D, DR, R, UR, U, UL, L, DL from movement or cast aim.",
+      "requiredClips": {
+        "move": "8 directions, loop. Advanced on an accumulated phase scaled by moveRate; first frame held when speed < 2.",
+        "melee": "8 directions, one-shot. Used when the cast moveType is LUNGE or MELEE. Frame 0 is the wind-up pose held until CAST_RELEASE; the remaining frames play after release, then the cast ends.",
+        "ranged": "8 directions, one-shot. Every other cast moveType. Same wind-up hold and release rule; the release key records release.frameIndex and the emitter point so launch effects start there.",
+        "hurt": "8 directions, one-shot in the direction faced when hit; hurt and KO take priority over casts. Optional neutralReturn (the required return pose when a hit is held)."
+      },
+      "conditionalClips": {
+        "ko": "One static KO clip (id arena:ko) bound under rootArenaContextApproval scope Arena_KO_STATIC_UNBOUND_ONLY with its approval/binding SHA. Without it the actor holds the last hurt key of its heading (no approved fall).",
+        "win": "Optional, direction D only, played once and held. Without it the ranged D clip stands in."
+      },
+      "minimum": "32 directional clips per form (4 actions x 8 directions) plus the KO decision; the reviewed arena sets delivered so far run about 64 frames.",
+      "noSubstitution": "Never fill eight directions from General artwork, from the design main image (repeated, mirrored or scaled), or from another character's accepted frames."
+    }
+  },
+  "delivery": {
+    "spec": "R:\\Projects\\Championship2026\\character-animation-audit-20261028-v1\\web-assets\\WEB_ANIMATION_DELIVERY_SPEC_ZH_TW.md",
+    "summary": "Masters stay on R only. Web pages split by mode (General / Arena), each page <= 2048x2048, WebP q90 sharp-YUV with exact alpha (lossless page if any frame < 28 dB), <= 1.5 MB download and <= 12 MB decoded per form per mode, with page and frame hashes, frame/trim/origin/sourceSize and durationMs/loop/neutral return.",
+    "canvas": "Canvas size and density for these two ultimate forms are not fixed yet (decision D6); the General and Arena sets of one form must share one canvas, anchor and density."
+  },
+  "gaps": [
+    {"form": "dragon", "mode": "general", "missing": "All 53 Main/Sub slots", "blocking": true},
+    {"form": "dragon", "mode": "dataArena", "missing": "move/melee/ranged/hurt x 8 directions, KO decision, optional win", "blocking": true},
+    {"form": "battle", "mode": "general", "missing": "All 53 Main/Sub slots", "blocking": true},
+    {"form": "battle", "mode": "dataArena", "missing": "move/melee/ranged/hurt x 8 directions (left-facing directions drawn, not mirrored), KO decision, optional win", "blocking": true},
+    {"form": "both", "mode": "both", "missing": "Which body part performs melee and ranged per form, and their release points (railgun vs back cannons vs jaw/claws) - design decision, not to be guessed", "blocking": true},
+    {"form": "both", "mode": "both", "missing": "Transformation animation between the forms - only if the Owner defines a transformation (decision D4)", "blocking": false}
+  ]
+}

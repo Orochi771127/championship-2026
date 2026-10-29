@@ -1,0 +1,1674 @@
+{
+  "revision": 1,
+  "authority": "OWNER_APPROVED_PROVISIONAL_ORIGINAL_DATA_20261029",
+  "note": "Owner 2026-10-29: connect these numbers now; attribute (vaccine/virus/data/free) and other fine settings will be revised for every character later. Inert until an entry is runtimeReady and evolutionReady.",
+  "proposal": "docs/planning/roster14-stats-skills-evolution-20261029/PROPOSAL.v1.json",
+  "elementSelect": "0 physical 1 heat 2 cold 3 light 4 dark 5 thunder (inferred from defender resistance order)",
+  "entries": [
+    {
+      "speciesIndex": 231,
+      "speciesId": "species-231",
+      "entityId": "oc_star_boar_growth",
+      "displayCode": "GR39",
+      "generationIndex": 3,
+      "statCurveIndex": 5,
+      "attributeIndex": 3,
+      "familyBits": 1,
+      "huntClassByte": 2,
+      "generationScaledByte": 10,
+      "lifecycle": {
+        "sleepMin": 60,
+        "sleepMax": 120,
+        "life": 11520,
+        "capacity": 14,
+        "family": 1
+      },
+      "moves": [
+        {
+          "moveKey": "oc_star_boar_growth_1",
+          "kind": "MELEE",
+          "power": 100,
+          "actionCost": 0,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "星角突進"
+          }
+        },
+        {
+          "moveKey": "oc_star_boar_growth_2",
+          "kind": "RANGED",
+          "power": 400,
+          "actionCost": 6,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "星塵衝撞"
+          }
+        }
+      ],
+      "evolution": [
+        {
+          "target": 232,
+          "kind": 1,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "runtimeReady": false,
+      "evolutionReady": false
+    },
+    {
+      "speciesIndex": 232,
+      "speciesId": "species-232",
+      "entityId": "oc_star_boar_mature",
+      "displayCode": "MA65",
+      "generationIndex": 4,
+      "statCurveIndex": 9,
+      "attributeIndex": 3,
+      "familyBits": 1,
+      "huntClassByte": 2,
+      "generationScaledByte": 14,
+      "lifecycle": {
+        "sleepMin": 60,
+        "sleepMax": 180,
+        "life": 17280,
+        "capacity": 16,
+        "family": 1
+      },
+      "moves": [
+        {
+          "moveKey": "oc_star_boar_mature_1",
+          "kind": "MELEE",
+          "power": 100,
+          "actionCost": 0,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "星岩衝撞"
+          }
+        },
+        {
+          "moveKey": "oc_star_boar_mature_2",
+          "kind": "RANGED",
+          "power": 400,
+          "actionCost": 12,
+          "elementSelect": 3,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "彗星光軌"
+          }
+        },
+        {
+          "moveKey": "oc_star_boar_mature_3",
+          "kind": "RANGED",
+          "power": 450,
+          "actionCost": 18,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "重力碎牆"
+          }
+        }
+      ],
+      "evolution": [
+        {
+          "target": 233,
+          "kind": 0,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            40,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "target": 165,
+          "kind": 1,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "runtimeReady": false,
+      "evolutionReady": false
+    },
+    {
+      "speciesIndex": 233,
+      "speciesId": "species-233",
+      "entityId": "oc_star_boar_awakened",
+      "displayCode": "AW52",
+      "generationIndex": 5,
+      "statCurveIndex": 13,
+      "attributeIndex": 3,
+      "familyBits": 1,
+      "huntClassByte": 3,
+      "generationScaledByte": 18,
+      "lifecycle": {
+        "sleepMin": 60,
+        "sleepMax": 180,
+        "life": 24480,
+        "capacity": 18,
+        "family": 1
+      },
+      "moves": [
+        {
+          "moveKey": "oc_star_boar_awakened_1",
+          "kind": "MELEE",
+          "power": 100,
+          "actionCost": 0,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "金甲拳"
+          }
+        },
+        {
+          "moveKey": "oc_star_boar_awakened_2",
+          "kind": "RANGED",
+          "power": 300,
+          "actionCost": 25,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "引力衝擊波"
+          }
+        },
+        {
+          "moveKey": "oc_star_boar_awakened_3",
+          "kind": "RANGED",
+          "power": 420,
+          "actionCost": 35,
+          "elementSelect": 3,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "星爆威壓"
+          }
+        }
+      ],
+      "evolution": [],
+      "runtimeReady": false,
+      "evolutionReady": false
+    },
+    {
+      "speciesIndex": 234,
+      "speciesId": "species-234",
+      "entityId": "oc_astral_jelly",
+      "displayCode": "MA66",
+      "generationIndex": 4,
+      "statCurveIndex": 7,
+      "attributeIndex": 3,
+      "familyBits": 32,
+      "huntClassByte": 2,
+      "generationScaledByte": 14,
+      "lifecycle": {
+        "sleepMin": 60,
+        "sleepMax": 180,
+        "life": 17280,
+        "capacity": 16,
+        "family": 32
+      },
+      "moves": [
+        {
+          "moveKey": "oc_astral_jelly_1",
+          "kind": "MELEE",
+          "power": 100,
+          "actionCost": 0,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "觸手輕撫"
+          }
+        },
+        {
+          "moveKey": "oc_astral_jelly_2",
+          "kind": "RANGED",
+          "power": 300,
+          "actionCost": 12,
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "電離光粉"
+          }
+        },
+        {
+          "moveKey": "oc_astral_jelly_3",
+          "kind": "RANGED",
+          "power": 400,
+          "actionCost": 18,
+          "elementSelect": 3,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "星雲淨化"
+          }
+        }
+      ],
+      "evolution": [
+        {
+          "target": 166,
+          "kind": 0,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            40,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            8,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "target": 161,
+          "kind": 1,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "runtimeReady": false,
+      "evolutionReady": false
+    },
+    {
+      "speciesIndex": 235,
+      "speciesId": "species-235",
+      "entityId": "oc_aurora_shark",
+      "displayCode": "MA67",
+      "generationIndex": 4,
+      "statCurveIndex": 9,
+      "attributeIndex": 2,
+      "familyBits": 32,
+      "huntClassByte": 2,
+      "generationScaledByte": 14,
+      "lifecycle": {
+        "sleepMin": 60,
+        "sleepMax": 180,
+        "life": 17280,
+        "capacity": 16,
+        "family": 32
+      },
+      "moves": [
+        {
+          "moveKey": "oc_aurora_shark_1",
+          "kind": "MELEE",
+          "power": 100,
+          "actionCost": 0,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "破冰背鰭"
+          }
+        },
+        {
+          "moveKey": "oc_aurora_shark_2",
+          "kind": "RANGED",
+          "power": 400,
+          "actionCost": 12,
+          "elementSelect": 2,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "極光衝刺"
+          }
+        },
+        {
+          "moveKey": "oc_aurora_shark_3",
+          "kind": "RANGED",
+          "power": 450,
+          "actionCost": 18,
+          "elementSelect": 3,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "極光斷訊"
+          }
+        }
+      ],
+      "evolution": [
+        {
+          "target": 148,
+          "kind": 0,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            40,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "target": 155,
+          "kind": 1,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "runtimeReady": false,
+      "evolutionReady": false
+    },
+    {
+      "speciesIndex": 236,
+      "speciesId": "species-236",
+      "entityId": "oc_celestial_mantis",
+      "displayCode": "MA68",
+      "generationIndex": 4,
+      "statCurveIndex": 8,
+      "attributeIndex": 1,
+      "familyBits": 4,
+      "huntClassByte": 2,
+      "generationScaledByte": 14,
+      "lifecycle": {
+        "sleepMin": 60,
+        "sleepMax": 180,
+        "life": 17280,
+        "capacity": 16,
+        "family": 4
+      },
+      "moves": [
+        {
+          "moveKey": "oc_celestial_mantis_1",
+          "kind": "MELEE",
+          "power": 100,
+          "actionCost": 0,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "翡翠鐮"
+          }
+        },
+        {
+          "moveKey": "oc_celestial_mantis_2",
+          "kind": "RANGED",
+          "power": 400,
+          "actionCost": 12,
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "電磁鐮刃"
+          }
+        },
+        {
+          "moveKey": "oc_celestial_mantis_3",
+          "kind": "RANGED",
+          "power": 450,
+          "actionCost": 18,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "青光一閃"
+          }
+        }
+      ],
+      "evolution": [
+        {
+          "target": 136,
+          "kind": 0,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            40,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "target": 175,
+          "kind": 1,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "runtimeReady": false,
+      "evolutionReady": false
+    },
+    {
+      "speciesIndex": 237,
+      "speciesId": "species-237",
+      "entityId": "oc_star_core_bean",
+      "displayCode": "GR40",
+      "generationIndex": 3,
+      "statCurveIndex": 4,
+      "attributeIndex": 3,
+      "familyBits": 2,
+      "huntClassByte": 2,
+      "generationScaledByte": 10,
+      "lifecycle": {
+        "sleepMin": 60,
+        "sleepMax": 120,
+        "life": 11520,
+        "capacity": 14,
+        "family": 2
+      },
+      "moves": [
+        {
+          "moveKey": "oc_star_core_bean_1",
+          "kind": "MELEE",
+          "power": 100,
+          "actionCost": 0,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "豆豆彈跳"
+          }
+        },
+        {
+          "moveKey": "oc_star_core_bean_2",
+          "kind": "RANGED",
+          "power": 400,
+          "actionCost": 6,
+          "elementSelect": 3,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "星能壓縮彈"
+          }
+        }
+      ],
+      "evolution": [
+        {
+          "target": 94,
+          "kind": 0,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            20,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            6,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "target": 88,
+          "kind": 1,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "runtimeReady": false,
+      "evolutionReady": false
+    },
+    {
+      "speciesIndex": 238,
+      "speciesId": "species-238",
+      "entityId": "oc_thunder_pup",
+      "displayCode": "B215",
+      "generationIndex": 2,
+      "statCurveIndex": 2,
+      "attributeIndex": 0,
+      "familyBits": 1,
+      "huntClassByte": 2,
+      "generationScaledByte": 8,
+      "lifecycle": {
+        "sleepMin": 30,
+        "sleepMax": 60,
+        "life": 5760,
+        "capacity": 12,
+        "family": 1
+      },
+      "moves": [
+        {
+          "moveKey": "oc_thunder_pup_1",
+          "kind": "MELEE",
+          "power": 100,
+          "actionCost": 0,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "靜電撲咬"
+          }
+        },
+        {
+          "moveKey": "oc_thunder_pup_2",
+          "kind": "RANGED",
+          "power": 400,
+          "actionCost": 4,
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "劈啪電團"
+          }
+        }
+      ],
+      "evolution": [
+        {
+          "target": 239,
+          "kind": 1,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "runtimeReady": false,
+      "evolutionReady": false
+    },
+    {
+      "speciesIndex": 239,
+      "speciesId": "species-239",
+      "entityId": "oc_thunder_catwolf",
+      "displayCode": "GR41",
+      "generationIndex": 3,
+      "statCurveIndex": 5,
+      "attributeIndex": 1,
+      "familyBits": 1,
+      "huntClassByte": 2,
+      "generationScaledByte": 10,
+      "lifecycle": {
+        "sleepMin": 60,
+        "sleepMax": 120,
+        "life": 11520,
+        "capacity": 14,
+        "family": 1
+      },
+      "moves": [
+        {
+          "moveKey": "oc_thunder_catwolf_1",
+          "kind": "MELEE",
+          "power": 100,
+          "actionCost": 0,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "電爪撲擊"
+          }
+        },
+        {
+          "moveKey": "oc_thunder_catwolf_2",
+          "kind": "RANGED",
+          "power": 300,
+          "actionCost": 6,
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "金光迅雷"
+          }
+        },
+        {
+          "moveKey": "oc_thunder_catwolf_3",
+          "kind": "RANGED",
+          "power": 400,
+          "actionCost": 10,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "蓄電突進"
+          }
+        }
+      ],
+      "evolution": [
+        {
+          "target": 240,
+          "kind": 1,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "runtimeReady": false,
+      "evolutionReady": false
+    },
+    {
+      "speciesIndex": 240,
+      "speciesId": "species-240",
+      "entityId": "oc_thunder_warwolf",
+      "displayCode": "MA69",
+      "generationIndex": 4,
+      "statCurveIndex": 9,
+      "attributeIndex": 1,
+      "familyBits": 1,
+      "huntClassByte": 2,
+      "generationScaledByte": 14,
+      "lifecycle": {
+        "sleepMin": 60,
+        "sleepMax": 180,
+        "life": 17280,
+        "capacity": 16,
+        "family": 1
+      },
+      "moves": [
+        {
+          "moveKey": "oc_thunder_warwolf_1",
+          "kind": "MELEE",
+          "power": 100,
+          "actionCost": 0,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "雷牙咬"
+          }
+        },
+        {
+          "moveKey": "oc_thunder_warwolf_2",
+          "kind": "RANGED",
+          "power": 400,
+          "actionCost": 12,
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "雷速突擊"
+          }
+        },
+        {
+          "moveKey": "oc_thunder_warwolf_3",
+          "kind": "RANGED",
+          "power": 450,
+          "actionCost": 18,
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "狼群雷陣"
+          }
+        }
+      ],
+      "evolution": [
+        {
+          "target": 241,
+          "kind": 0,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            40,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "target": 178,
+          "kind": 1,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "runtimeReady": false,
+      "evolutionReady": false
+    },
+    {
+      "speciesIndex": 241,
+      "speciesId": "species-241",
+      "entityId": "oc_thunder_warwolf_awakened",
+      "displayCode": "AW53",
+      "generationIndex": 5,
+      "statCurveIndex": 14,
+      "attributeIndex": 1,
+      "familyBits": 1,
+      "huntClassByte": 3,
+      "generationScaledByte": 18,
+      "lifecycle": {
+        "sleepMin": 60,
+        "sleepMax": 180,
+        "life": 24480,
+        "capacity": 18,
+        "family": 1
+      },
+      "moves": [
+        {
+          "moveKey": "oc_thunder_warwolf_awakened_1",
+          "kind": "MELEE",
+          "power": 100,
+          "actionCost": 0,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "雷刃拳"
+          }
+        },
+        {
+          "moveKey": "oc_thunder_warwolf_awakened_2",
+          "kind": "RANGED",
+          "power": 300,
+          "actionCost": 25,
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "狂雷裂空"
+          }
+        },
+        {
+          "moveKey": "oc_thunder_warwolf_awakened_3",
+          "kind": "RANGED",
+          "power": 420,
+          "actionCost": 35,
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "萬伏雷刃"
+          }
+        }
+      ],
+      "evolution": [
+        {
+          "target": 242,
+          "kind": 0,
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            60,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            16,
+            50,
+            0,
+            0
+          ]
+        }
+      ],
+      "runtimeReady": false,
+      "evolutionReady": false
+    },
+    {
+      "speciesIndex": 242,
+      "speciesId": "species-242",
+      "entityId": "oc_thunder_overlord_wolf",
+      "displayCode": "UL40",
+      "generationIndex": 6,
+      "statCurveIndex": 21,
+      "attributeIndex": 1,
+      "familyBits": 1,
+      "huntClassByte": 0,
+      "generationScaledByte": 24,
+      "lifecycle": {
+        "sleepMin": 60,
+        "sleepMax": 180,
+        "life": 30240,
+        "capacity": 24,
+        "family": 1
+      },
+      "moves": [
+        {
+          "moveKey": "oc_thunder_overlord_wolf_1",
+          "kind": "MELEE",
+          "power": 100,
+          "actionCost": 0,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "霸狼撲"
+          }
+        },
+        {
+          "moveKey": "oc_thunder_overlord_wolf_2",
+          "kind": "RANGED",
+          "power": 280,
+          "actionCost": 35,
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "神雷風暴"
+          }
+        },
+        {
+          "moveKey": "oc_thunder_overlord_wolf_3",
+          "kind": "RANGED",
+          "power": 380,
+          "actionCost": 45,
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "雷光翼斬"
+          }
+        },
+        {
+          "moveKey": "oc_thunder_overlord_wolf_4",
+          "kind": "RANGED",
+          "power": 150,
+          "actionCost": 65,
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "天雷審判"
+          }
+        }
+      ],
+      "evolution": [],
+      "runtimeReady": false,
+      "evolutionReady": false
+    },
+    {
+      "speciesIndex": 243,
+      "speciesId": "species-243",
+      "entityId": "oc_rexmon_dragon",
+      "displayCode": "UL41",
+      "generationIndex": 6,
+      "statCurveIndex": 20,
+      "attributeIndex": 3,
+      "familyBits": 16,
+      "huntClassByte": 0,
+      "generationScaledByte": 24,
+      "lifecycle": {
+        "sleepMin": 60,
+        "sleepMax": 180,
+        "life": 30240,
+        "capacity": 24,
+        "family": 16
+      },
+      "moves": [
+        {
+          "moveKey": "oc_rexmon_dragon_1",
+          "kind": "MELEE",
+          "power": 100,
+          "actionCost": 0,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "機甲龍顎"
+          }
+        },
+        {
+          "moveKey": "oc_rexmon_dragon_2",
+          "kind": "RANGED",
+          "power": 300,
+          "actionCost": 35,
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "雙背軌道砲"
+          }
+        },
+        {
+          "moveKey": "oc_rexmon_dragon_3",
+          "kind": "RANGED",
+          "power": 380,
+          "actionCost": 45,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "分節尾刃"
+          }
+        }
+      ],
+      "evolution": [],
+      "runtimeReady": false,
+      "evolutionReady": false
+    },
+    {
+      "speciesIndex": 244,
+      "speciesId": "species-244",
+      "entityId": "oc_rexmon_battle",
+      "displayCode": "UL42",
+      "generationIndex": 6,
+      "statCurveIndex": 20,
+      "attributeIndex": 3,
+      "familyBits": 2,
+      "huntClassByte": 0,
+      "generationScaledByte": 24,
+      "lifecycle": {
+        "sleepMin": 60,
+        "sleepMax": 180,
+        "life": 30240,
+        "capacity": 24,
+        "family": 2
+      },
+      "moves": [
+        {
+          "moveKey": "oc_rexmon_battle_1",
+          "kind": "MELEE",
+          "power": 100,
+          "actionCost": 0,
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "兩指龍爪"
+          }
+        },
+        {
+          "moveKey": "oc_rexmon_battle_2",
+          "kind": "RANGED",
+          "power": 280,
+          "actionCost": 35,
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "右臂磁軌砲"
+          }
+        },
+        {
+          "moveKey": "oc_rexmon_battle_3",
+          "kind": "RANGED",
+          "power": 380,
+          "actionCost": 45,
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "雙背軌道砲齊射"
+          }
+        },
+        {
+          "moveKey": "oc_rexmon_battle_4",
+          "kind": "RANGED",
+          "power": 150,
+          "actionCost": 65,
+          "elementSelect": 3,
+          "statusCode": 0,
+          "targetMode": 1,
+          "battleMoveRecord": null,
+          "nameByLocale": {
+            "zh-Hant": "胸甲琥珀光"
+          }
+        }
+      ],
+      "evolution": [],
+      "runtimeReady": false,
+      "evolutionReady": false
+    }
+  ],
+  "nativeInserts": [
+    {
+      "source": 18,
+      "position": 3,
+      "target": 238,
+      "kind": 0,
+      "thresholds": [
+        0,
+        0,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": 23,
+      "position": 1,
+      "target": 231,
+      "kind": 0,
+      "thresholds": [
+        0,
+        0,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": 30,
+      "position": 3,
+      "target": 237,
+      "kind": 0,
+      "thresholds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": 37,
+      "position": 1,
+      "target": 234,
+      "kind": 0,
+      "thresholds": [
+        0,
+        20,
+        0,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": 42,
+      "position": 1,
+      "target": 235,
+      "kind": 0,
+      "thresholds": [
+        0,
+        0,
+        20,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": 49,
+      "position": 1,
+      "target": 236,
+      "kind": 0,
+      "thresholds": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "source": 173,
+      "position": 3,
+      "target": 243,
+      "kind": 0,
+      "thresholds": [
+        0,
+        0,
+        0,
+        60,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        18,
+        50,
+        0,
+        0
+      ]
+    },
+    {
+      "source": 173,
+      "position": 4,
+      "target": 244,
+      "kind": 0,
+      "thresholds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        60,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        18,
+        50,
+        0,
+        0
+      ]
+    }
+  ]
+}
