@@ -121,7 +121,7 @@ test('pinned gameplay data retains all values; derived vendor module has identic
 test('selected public hero mappings retain exact ID, image hash, dimensions and per-role resolution; authoring versions remain intact',()=>{
   const heroes=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json'),'utf8'));
   const authoring=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.r1.json'),'utf8'));
-  assert.equal(authoring.entries.length,96);assert.equal(heroes.entries.length,230);
+  assert.equal(authoring.entries.length,96);assert.equal(heroes.entries.length,232);
   for(const hero of heroes.entries)assert.deepEqual(publicRuntimeAsset(`${hero.speciesId}:database-hero`),{id:`${hero.speciesId}:database-hero`,src:hero.src,sha256:hero.sha256,width:hero.width,height:hero.height});
   assert.equal(publicRuntimeAsset('species-188:database-hero').sha256,APPROVED10.find(e=>e.speciesIndex===188).sha256);
   assert.throws(()=>validatePublicRuntimeAssets({schemaVersion:1,assets:[{...publicRuntimeAsset('species-116:database-hero'),approvalMessage:'private'}]}),/PUBLIC_RUNTIME_ASSET_INVALID/);

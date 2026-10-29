@@ -65,7 +65,10 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
     // the way the native cells do. A set drawn facing the other way is selected with
     // generalMirror: its General frames load mirrored about the pivot (texture UVs,
     // trim, origin and bounds), leaving the reviewed pixels and manifest unchanged.
-    const mirrorGeneral=usage==='general'&&entry.generalMirror===true;
+    // generalMirrorFrames lists single frames drawn facing opposite to the rest of
+    // their set (by-eye review 2026-10-29); each is mirrored relative to the set.
+    const mirrorFrames=new Set(usage==='general'?entry.generalMirrorFrames??[]:[]);
+    const mirrorOf=key=>usage==='general'&&(entry.generalMirror===true)!==mirrorFrames.has(key);
     // Stage body size on General screens: generalDisplayScale (selection) draws a set
     // larger or smaller in native units by changing its effective density only.
     const displayScale=usage==='general'&&entry.generalDisplayScale>0?entry.generalDisplayScale:1;
@@ -73,7 +76,7 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
       const image=images.get(new URL(f.image,url).href),size=f.sourceSize;
       if(!size?.every(v=>Number.isFinite(v)&&v>0)||!f.origin?.every(Number.isFinite)||!(f.density>0))throw Error('REVIEWED_FRAME_GEOMETRY');
       const density=f.density/displayScale;
-      const crop=f.frame??[0,0,...size],stored=f.trim??[0,0,...size];
+      const crop=f.frame??[0,0,...size],stored=f.trim??[0,0,...size],mirrorGeneral=mirrorOf(key);
       const trim=mirrorGeneral?[size[0]-stored[0]-stored[2],stored[1],stored[2],stored[3]]:stored;
       const origin=mirrorGeneral?[size[0]-f.origin[0],f.origin[1]]:f.origin;
       const source=image.source;
@@ -209,7 +212,7 @@ export async function loadReviewedResultSub({PIXI,sprite,speciesId,sequenceId,ba
     const frame=bundle.reviewedAnimation.frames[f.assetId],trim=frame.trim??[0,0,...frame.sourceSize],offset=f.offset??[0,0],d=frame.density/display;
     const box={left:(trim[0]-frame.origin[0]+offset[0])/d,top:(trim[1]-frame.origin[1]+offset[1])/d,
       right:(trim[0]+trim[2]-frame.origin[0]+offset[0])/d,bottom:(trim[1]+trim[3]-frame.origin[1]+offset[1])/d};
-    return entry?.generalMirror===true?{...box,left:-box.right,right:-box.left}:box;
+    return (entry?.generalMirror===true)!==(entry?.generalMirrorFrames?.includes(f.assetId)===true)?{...box,left:-box.right,right:-box.left}:box;
   });
   let lastTick=0;
   return {bounds:{left:Math.min(...boxes.map(b=>b.left)),top:Math.min(...boxes.map(b=>b.top)),right:Math.max(...boxes.map(b=>b.right)),bottom:Math.max(...boxes.map(b=>b.bottom))},

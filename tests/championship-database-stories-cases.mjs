@@ -153,10 +153,10 @@ test('unsupported heading lookup cannot return inherited object properties',()=>
  for(const locale of ['fr','constructor','__proto__','toString'])assert.equal(databaseStoryHeading(locale),null);
 });
 
-test('230 selected display-size hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
+test('232 selected display-size hero assets join stable IDs and selected file hashes, with no animation/HUD replacement',async()=>{
  const {DATABASE_HERO_PORTRAITS:art,databaseHeroPortrait:get}=await import('../src/championship/presentation/databaseHeroPortraits.js');
- const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,230);
- for(const e of art.entries){const id=(e.src.includes('database-combined24-20261022')||e.src.includes('database-remaining16-20261022')||e.src.includes('database-repair-20261019')||e.speciesIndex>=231||[189,206,207,208,209,210,212,213,214,215,216,217,218,219,220,221,223].includes(e.speciesIndex))?getDatabaseDisplayEntry(e.speciesIndex):originalOrProductIdentity(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/database-(?:(?:display(?:-gap)?|illustrations)-20261018|display-web-20261029|(?:closeout|repair)-20261019|first10-20261022|second10-20261022|remaining16-20261022|combined24-20261022|next-portraits-20261022)\/(?:species-\d{3}|(?:ma|aw|ul)\d{2})\.display\.[a-f0-9]{16}\.webp$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
+ const fs=await import('node:fs'),{createHash}=await import('node:crypto');assert.equal(art.entries.length,232);
+ for(const e of art.entries){const id=(e.src.includes('database-combined24-20261022')||e.src.includes('database-remaining16-20261022')||e.src.includes('database-repair-20261019')||e.speciesIndex>=231||[189,206,207,208,209,210,212,213,214,215,216,217,218,219,220,221,223].includes(e.speciesIndex))?getDatabaseDisplayEntry(e.speciesIndex):originalOrProductIdentity(e.speciesIndex);assert.equal(e.speciesId,id.speciesId);assert.equal(e.displayCode,id.displayCode);assert.ok(Object.isFrozen(e));assert.match(e.src,/^assets\/production\/database-(?:(?:display(?:-gap)?|illustrations)-20261018|display-web-20261029|(?:closeout|repair)-20261019|first10-20261022|second10-20261022|remaining16-20261022|combined24-20261022|next-portraits-20261022|rexmon-v8-20261029)\/(?:species-\d{3}|(?:ma|aw|ul)\d{2})\.display\.[a-f0-9]{16}\.webp$/);assert.equal(createHash('sha256').update(fs.readFileSync(e.src)).digest('hex'),e.sha256);assert.ok(e.width>0&&e.height>0);}
  for(const id of [0,'8',NaN])assert.equal(get(id),null);for(const id of [96,187])assert.deepEqual(get(id),approved20Contract.APPROVED10.find(e=>e.speciesIndex===id));
 });
 
@@ -234,7 +234,7 @@ test('confirmed ultimate heroes are present with exact PNG bytes and selected so
  const {DATABASE_HERO_PORTRAITS:art}=await import('../src/championship/presentation/databaseHeroPortraits.js');
  const fs=await import('node:fs'),{createHash}=await import('node:crypto');
  const manifest=JSON.parse(fs.readFileSync('assets/production/database-handpainted-r1-20261015/manifest.json','utf8'));
- assert.equal(art.entries.length,230);assert.equal(manifest.count,44);
+ assert.equal(art.entries.length,232);assert.equal(manifest.count,44);
  for(const [sp,version,form] of [[211,'v1','OWNER_CONFIRMED_BRASS_CROWN_MANDRILL'],[222,'v2','R10_QUADRUPED_LEFT_PANEL']]){
   const entry=approvedHeroPortrait(sp),metadata=manifest.entries.find(e=>e.speciesIndex===sp);assert.ok(entry);assert.equal(metadata.selectedGenerationVersion,version);assert.equal(metadata.selectedSourceForm,form);assert.equal(createHash('sha256').update(fs.readFileSync(entry.src)).digest('hex'),entry.sha256);assert.equal(metadata.sha256,entry.sha256);assert.equal(metadata.review.rootReview,'PASSED');
  }

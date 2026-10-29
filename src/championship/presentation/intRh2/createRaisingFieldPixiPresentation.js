@@ -1,5 +1,6 @@
 import {createCareImageTextureScope} from './careImageTextureScope.js';
 import { getReviewedRaisingContactShadow } from './raisingContactShadow.js';
+import { getRaisingFootprintShadow } from './raisingFootprintShadow.js';
 import {createPixiAssetScope} from '../pixiCharacterRuntimeBundle.js';
 import {isOriginalRuntimeLocation} from '../originalRuntimeLocation.js';
 import publicCare from '../../../../assets/production/public-runtime/raising-care.v1.json' with {type:'json'};
@@ -750,19 +751,23 @@ export async function mountRaisingFieldPixiPresentation({
       geometry.contactShadow=getRaisingEggContactShadow(entry.entityId,entry.nativeSizing,flipX);
       geometry.reviewedContactShadow=getReviewedRaisingContactShadow(entry.speciesId,
         entry.nativeFramePresenter?.getSnapshot(),entry.contactShadowArt,entry.visualLift??0,flipX);
+      geometry.footprintShadow=getRaisingFootprintShadow(entry.speciesId,
+        entry.nativeFramePresenter?.getSnapshot()?.sequenceId,geometry.visible,flipX);
     }
     return geometry;
   }
 
   function decorateActor(entry,geometry){
     const {visible,hitArea}=geometry,center=visible.x+visible.width/2,bottom=visible.y+visible.height;
-    const contact=geometry.contactShadow??{x:center,y:bottom+1,radiusX:visible.width*.42,radiusY:Math.max(1,visible.width*.13)};
+    const contact=geometry.contactShadow??geometry.footprintShadow??{x:center,y:bottom+1,radiusX:visible.width*.42,radiusY:Math.max(1,visible.width*.13)};
     entry.groundShadowEllipses=geometry.reviewedContactShadow??[contact];
     entry.shadow.clear();
-    for(const ellipse of entry.groundShadowEllipses){
-      entry.shadow.ellipse(ellipse.x,ellipse.y,ellipse.radiusX,ellipse.radiusY);
+    // Soft contact (shadow audit 2026-10-30): nested passes darken the core and fade the rim,
+    // the flat-Pixi match of the 3D shader's falloff (ranchGroundShadows.js).
+    for(const k of [1,.8,.62]){
+      for(const ellipse of entry.groundShadowEllipses)entry.shadow.ellipse(ellipse.x,ellipse.y,ellipse.radiusX*k,ellipse.radiusY*k);
+      entry.shadow.fill({color:0x02070a,alpha:.11*(entry.groundShadowEllipses[0].alpha??1)});
     }
-    entry.shadow.fill({color:0x02070a,alpha:.26});
     // Lock-on ring (Owner 2026-10-28): a ground decal on the contact shadow's
     // centre and perspective, under the body (shadow < ring < sprite). The 3D
     // ranch draws it in its own depth buffer instead (ranchSelectionRing.js).

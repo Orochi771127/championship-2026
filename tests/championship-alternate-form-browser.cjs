@@ -220,8 +220,8 @@ async function alternateAwaitReady(api){
   const qaCatalog=JSON.parse(fs.readFileSync(pair.resolve('/qa/alternate-form-product-catalog.json')));
   const extensionName=id=>{const entry=qaCatalog.entries.find(e=>e.speciesIndex===id);return entry.displayNameByLocale?.['zh-Hant']??entry.displayNameZh;};
   evidence.hudTeams=await page.locator('.cm-vs5-fighter[data-present="true"]').evaluateAll(nodes=>nodes.map(n=>({team:Number(n.dataset.team),name:n.querySelector('.cm-vs5-fighter__name').textContent})));
-  assert.deepEqual(evidence.hudTeams.filter(n=>n.team===0).map(n=>n.name).sort(),['黃銅王猿',extensionName(229)].sort());
-  assert.deepEqual(evidence.hudTeams.filter(n=>n.team===1).map(n=>n.name).sort(),['天穹帝龍',extensionName(230)].sort());await diagnostics('four-actors-battle-running');
+  assert.deepEqual(evidence.hudTeams.filter(n=>n.team===0).map(n=>n.name).sort(),['蹦迪猿',extensionName(229)].sort());
+  assert.deepEqual(evidence.hudTeams.filter(n=>n.team===1).map(n=>n.name).sort(),['天帝龍',extensionName(230)].sort());await diagnostics('four-actors-battle-running');
   // Natural game clock only. Timeout is failure, never a synthetic victory.
   await page.locator('#cm-root[data-active-screen="BATTLE_RESULT"]').waitFor({state:'visible',timeout:600000});await shot('battle-result');
   evidence.result=await page.locator('#cm-root[data-active-screen="BATTLE_RESULT"] .cm-vs5-shell').evaluate(n=>({verdict:n.dataset.verdict,reason:n.dataset.endReason,text:n.innerText}));

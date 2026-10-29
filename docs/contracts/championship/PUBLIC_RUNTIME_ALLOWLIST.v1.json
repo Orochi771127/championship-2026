@@ -116395,6 +116395,22 @@
       "sha256": "d68a259cf4bd453bc8a58784be217c75eeeedf79480a05c6714677c9be757414"
     },
     {
+      "path": "assets/production/database-rexmon-v8-20261029/species-243.display.63fd2942a48c61f1.webp",
+      "sha256": "63fd2942a48c61f17619a9598bc3f67a8414782916bcbd9581f06bdc43322c8f"
+    },
+    {
+      "path": "assets/production/database-rexmon-v8-20261029/species-243.thumbnail.554e28b24f6732ef.webp",
+      "sha256": "554e28b24f6732ef7bf77eeb9a31986599efd73274b5d5969789e03a2cae071e"
+    },
+    {
+      "path": "assets/production/database-rexmon-v8-20261029/species-244.display.8b55866897d5da0a.webp",
+      "sha256": "8b55866897d5da0a647109c9b1d63db0dbae0289da3ca637301518d4bea02882"
+    },
+    {
+      "path": "assets/production/database-rexmon-v8-20261029/species-244.thumbnail.868e0c630b501f56.webp",
+      "sha256": "868e0c630b501f562aa8811ef7fa1904417c817662b63c0cdeeaa918edc61158"
+    },
+    {
       "path": "assets/production/database-second10-20261022/species-030.display.52b9940dee31e64e.webp",
       "sha256": "52b9940dee31e64ea9e3fa7490bee9976f2999091fd7907157ba972f2ba5c166"
     },
@@ -119962,7 +119978,7 @@
     },
     {
       "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
-      "sha256": "e2b3a00a36537e1a607a097f38622bffa6a285042efe6e2ff102c752952f3b82"
+      "sha256": "b3a46ae4977d608d2a3fdf5d14b0299ecb799714e6979516a29169211954752e"
     },
     {
       "path": "assets/production/public-media-clean-20261017/currency-hud-r1/bits-24.png",
@@ -122045,7 +122061,7 @@
     },
     {
       "path": "championship.html",
-      "sha256": "01e3197e4ea686a1121a79412d2bc5d7e56c63475ce4d765a8ce93577a122447"
+      "sha256": "0362d2befce69769e606adef04ab6b4eed513f50c6a17829097c3e454a390863"
     },
     {
       "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -122793,7 +122809,7 @@
     },
     {
       "path": "src/championship/app/titleParade.js",
-      "sha256": "cb5ccfe75a25ff54f36dd6f13034572bc483d126f0ed86aea879a5ab67c1b8e9"
+      "sha256": "3749827c48d7d4c68367c1a8966b3214a7622073c686264ed0ed9f0d7afc8a7d"
     },
     {
       "path": "src/championship/app/trainingLabels.css",
@@ -122829,11 +122845,11 @@
     },
     {
       "path": "src/championship/app/ui/juicyShowcase.css",
-      "sha256": "0af82119d5d7ae20788278d74c2a40da616cf16613070e4e33074f8c5337f1fc"
+      "sha256": "a04ec119c6c06eed83e85894ca9a33d2083aac266a79215a29c50e7dd13696a1"
     },
     {
       "path": "src/championship/app/ui/loadingWalker.js",
-      "sha256": "83447e30644a6227636f9e9845562a2c1bc1a21266da8c639ec5bb530e07b930"
+      "sha256": "99580c37d51df9ed32763a3017aed63c5fae0895e3fbb208b3529361707691cf"
     },
     {
       "path": "src/championship/app/ui/menuEntryGlyphs.js",
@@ -122889,7 +122905,7 @@
     },
     {
       "path": "src/championship/app/vs4Screens.js",
-      "sha256": "b030e92fa6d9edf6c5b0e8b95d0e92857bd16a25c18b6d9e1790e0a8dce713aa"
+      "sha256": "011dce55ea3afcefba5fc61314915587ed68ec65df946d1157e34ce440bbf037"
     },
     {
       "path": "src/championship/app/vs5Screens.js",
@@ -123184,16 +123200,24 @@
       "sha256": "3310edd2e349f98e0b58cbe3fad8b309e00105573639232cc1785b359a4d0d31"
     },
     {
+      "path": "src/championship/contracts/productOriginalSpecies.js",
+      "sha256": "d6bdef5831fdb2fe8aa7e58fdfcf1e43767e71c557240ba1d40e1338d5084afa"
+    },
+    {
       "path": "src/championship/contracts/productPasswordTransport.js",
       "sha256": "4e9c5a542f4337b2fbf9c837bb77b93803440dd859316e1e29af27d49bc8fd96"
     },
     {
       "path": "src/championship/contracts/productSpeciesData.js",
-      "sha256": "3b7a8140165b3f01a6083d7f3656934f38790431198f7806ba45745d6ebddfaa"
+      "sha256": "35343f2368802344eb75b362c0a1ee64033e1995817d24b6f043f165cbfc6c4c"
     },
     {
       "path": "src/championship/contracts/productSpeciesExtensions.js",
       "sha256": "5ab01be7f5da08854eaa2eea683700e02ce419f1f2b5340b06debc627b5e6be7"
+    },
+    {
+      "path": "src/championship/data/monsterVisualAnchors218.js",
+      "sha256": "1448e4b110453b2c9ab78b046ae101faf50967a6c85ae4085c53db16d5be7c25"
     },
     {
       "path": "src/championship/data/storyRiftChapters.js",
@@ -123221,7 +123245,7 @@
     },
     {
       "path": "src/championship/database/databaseIllustrations.js",
-      "sha256": "8379b65eff394a290902349c4ee4d6af3d29feadd9f854d3f6e3b511120a9a6a"
+      "sha256": "c8cf8513ecd1044af46278bc8f7bbe534f0e3aa3e548a4becc474f1e2b843bb2"
     },
     {
       "path": "src/championship/database/databaseRuntime.js",
@@ -123733,7 +123757,7 @@
     },
     {
       "path": "src/championship/presentation/databaseHeroPortraits.js",
-      "sha256": "63fb74f171a3b9aa4d978ca2cc1ed56eb89b5903a11284b90eb8268e8359e379"
+      "sha256": "6b6d26e92d8821752ac6b0a4d880318e9f4d82128f885d122850831d276bc157"
     },
     {
       "path": "src/championship/presentation/evolutionGlyphArt.js",
@@ -123773,7 +123797,7 @@
     },
     {
       "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-      "sha256": "f9b5b0f09c25b1f3c152b9e255f8ec4deb4ec8fc35a40dbfab7088a745519f8e"
+      "sha256": "cb3258ead9ed3adedac4f78f86a54022c0f5f274129211fde41ad5df8d11b54c"
     },
     {
       "path": "src/championship/presentation/intRh2/raisingContactShadow.js",
@@ -123782,6 +123806,10 @@
     {
       "path": "src/championship/presentation/intRh2/raisingFieldViewport.js",
       "sha256": "8dde98a1ffb8abbec0c5eacc29f00aaf7f7d3b6299b99046237fb70def7e471e"
+    },
+    {
+      "path": "src/championship/presentation/intRh2/raisingFootprintShadow.js",
+      "sha256": "177ab0aa80ab351705eae3bf1f8aeb26a3362aeaba49fdabae8a1b2d6aeb3f6a"
     },
     {
       "path": "src/championship/presentation/intRh2/raisingNativeSizing.js",
@@ -123793,19 +123821,19 @@
     },
     {
       "path": "src/championship/presentation/juicy/codexShowcaseTheater.js",
-      "sha256": "0782286ddb8d00892861a10400e4030a60a7bd6b0577d4719ad8a5a40ec91df4"
+      "sha256": "876ad02cb9eb3b858aaefcf656fc8e6787c6c83480ab257d03033bf44d390e31"
     },
     {
       "path": "src/championship/presentation/juicy/cyberMorphEvolutionRunner.js",
-      "sha256": "ea1adeaa2ebf06742c42f475df71a0b838f2f5c69911938315c65ed27041ef3c"
+      "sha256": "131a2052f25df21132dc32a3c06628c4f945d19e27830c53bb030ca6b608fea3"
     },
     {
       "path": "src/championship/presentation/juicy/juicyArt.js",
-      "sha256": "042cc8ac19d81931e08f8003f96984ae65c90168d9a4e6cbb0ded84cce34a8e8"
+      "sha256": "89a9c2d68a6098b95e5d3faa2e0c77749936c92627422a64c9555e03a867a76c"
     },
     {
       "path": "src/championship/presentation/juicy/raisingEvolutionCinematic.js",
-      "sha256": "564e65579e6ce9f921993e4f74fdf8ca74dbd1cee9d8dd293bb98f8f2330a760"
+      "sha256": "9aeb88118d4d1023dcacf02c016b22acb4c037ab055e87e6bd4529ff32358da8"
     },
     {
       "path": "src/championship/presentation/juicy/showcaseBankCells.js",
@@ -123817,11 +123845,11 @@
     },
     {
       "path": "src/championship/presentation/juicy/skillCutIn.js",
-      "sha256": "e1f70ce2520b3a19d803cc59ce77b55f556f5ef09deac1adedcd979359d94da0"
+      "sha256": "c4b782b0417cc4c7b49a704549ec902bd724d1f25b05eb416a8b06a69b672b72"
     },
     {
       "path": "src/championship/presentation/juicy/spriteMotionPlayer.js",
-      "sha256": "23ccdeb7a465026610fcfd7f84c44f60a38ec200077dcef32c5c18cf862c4512"
+      "sha256": "923c4b894db2f2ff8433dc6b240728f0d3e5d57ddd37a084dd8e7bf38ab35a28"
     },
     {
       "path": "src/championship/presentation/medals/medalFaceTexture.js",
@@ -123973,7 +124001,7 @@
     },
     {
       "path": "src/championship/presentation/ranchGroundShadows.js",
-      "sha256": "90bdc28c7f52bcd3c041b8d09e46987fec8456af869fae2659da3e94da2ddd54"
+      "sha256": "0882f6a3859b7d7cd50e1cdefc63c6a567d361a320db8370df1f12e227056e6b"
     },
     {
       "path": "src/championship/presentation/ranchPassages.js",
@@ -124013,11 +124041,11 @@
     },
     {
       "path": "src/championship/presentation/reviewedCharacterLoader.js",
-      "sha256": "4b47fd898552fed22bdcc48f97ebf165a01890f01e2ac581fa3b9448238e17ab"
+      "sha256": "3546ea0ca9bc7b1c03065deaa39d828b1975dcfd8c45e4d9aaeecc71687f77c0"
     },
     {
       "path": "src/championship/presentation/reviewedSelection.js",
-      "sha256": "6e97e32b403aa85b152e16d7fcb4e0e18abc5e3dd79e4c1a037a67e0c4ef5b55"
+      "sha256": "6a714e066ebe409961dc5f1e86d869b9ae106607f5454c6f68553c17f8e7bd2b"
     },
     {
       "path": "src/championship/presentation/runtimeMapArtBundle.js",
@@ -124401,7 +124429,7 @@
     },
     {
       "path": "src/championship/text/evolutionPresentationText.js",
-      "sha256": "18847ea401f1bd9fa7159ca299fce68a6d60242d04837337de509ee10199cb83"
+      "sha256": "d1e7f311d37ddc30287b5c5dcc18cd925fe210ab68fe4808bd79b6b6e884527d"
     },
     {
       "path": "src/championship/text/gameText.en.js",
@@ -125945,8 +125973,21 @@
       ]
     },
     {
+      "path": "src/data/championship/database-hero-faces.v1.json",
+      "sha256": "f7360b476ee3fbcbdea65427ecdd65bce362cc6ef1593d216e6966da7991778a",
+      "jsonFields": [
+        "alphaThreshold",
+        "entries",
+        "face",
+        "method",
+        "schemaVersion",
+        "sha256",
+        "speciesIndex"
+      ]
+    },
+    {
       "path": "src/data/championship/database-hero-portraits.public.v1.json",
-      "sha256": "fd3ba70e9641add48f6bb730bd8ff62f74296c9f792ad80eb055576c0207533e",
+      "sha256": "9b0ed63eb2e0d684d834a6e9adb175a2249f951d93b797c1d98e35700b918f83",
       "jsonFields": [
         "schemaVersion",
         "entries",
@@ -125962,7 +126003,7 @@
     },
     {
       "path": "src/data/championship/database-hero-silhouettes.v1.json",
-      "sha256": "3b823a0b5609d265e30caf46e0791b06884fa56e691bda37a86af53cf17c1076",
+      "sha256": "35e62df9a3a8e55b553ce9be15dd52906949a417283e81fa164e37a40e4761d1",
       "jsonFields": [
         "alphaThreshold",
         "box",
@@ -125974,7 +126015,7 @@
     },
     {
       "path": "src/data/championship/database-illustrations.r1.json",
-      "sha256": "cef9afc881f0c50aa33ea558c6ceb3c5a76cf549d35369e35ab863ac1b1bc3a8",
+      "sha256": "85dc0d4d66f01c60dd7cf4c7041d8bd9709ace1a6ea50a4b072a50ea80e4fa03",
       "jsonFields": [
         "schemaVersion",
         "entries",
@@ -125984,6 +126025,9 @@
         "numberingStageIndex",
         "serial",
         "displayName",
+        "formKey",
+        "characterKey",
+        "form",
         "profileByLocale",
         "zh-Hant",
         "en",
@@ -126068,6 +126112,52 @@
         "speciesIndex",
         "th",
         "vi",
+        "zh-Hant"
+      ]
+    },
+    {
+      "path": "src/data/championship/product-species-originals.r1.json",
+      "sha256": "d703c7ff07cf97390df39ed2bd9d805b21b7a8714b249ffb1107b29bd628b782",
+      "jsonFields": [
+        "actionCost",
+        "attributeIndex",
+        "authority",
+        "battleMoveRecord",
+        "capacity",
+        "displayCode",
+        "elementSelect",
+        "entityId",
+        "entries",
+        "evolution",
+        "evolutionReady",
+        "family",
+        "familyBits",
+        "generationIndex",
+        "generationScaledByte",
+        "huntClassByte",
+        "kind",
+        "life",
+        "lifecycle",
+        "moveKey",
+        "moves",
+        "nameByLocale",
+        "nativeInserts",
+        "note",
+        "position",
+        "power",
+        "proposal",
+        "revision",
+        "runtimeReady",
+        "sleepMax",
+        "sleepMin",
+        "source",
+        "speciesId",
+        "speciesIndex",
+        "statCurveIndex",
+        "statusCode",
+        "target",
+        "targetMode",
+        "thresholds",
         "zh-Hant"
       ]
     },
@@ -126180,6 +126270,22 @@
       "sha256": "1de79c4ae259a11f19d83dc1e3405875ba7cadce4d1372f376820fa30f10d187"
     },
     {
+      "path": "src/data/championship/raising-contact-footprints.v1.json",
+      "sha256": "9bd579cd0d96886848a4de95dbec6e28c66cadf2f9be1cc903fdb9c0171c4c1a",
+      "jsonFields": [
+        "schemaVersion",
+        "kind",
+        "method",
+        "frames",
+        "default",
+        "depth",
+        "front",
+        "depthPerHeight",
+        "minDepth",
+        "rows"
+      ]
+    },
+    {
       "path": "src/data/championship/ranch-render-selection.v1.json",
       "sha256": "ddd5d6a367c5f0b7e7d80203db5114924c93d6992691571d2fee55ea3eae7f41",
       "jsonFields": [
@@ -126195,7 +126301,7 @@
     },
     {
       "path": "src/data/championship/reviewed-animation-selection.v1.json",
-      "sha256": "1d59ab76ba4b534847112eb39b44775c10fde07a6ce792f62966c743e8805e1a",
+      "sha256": "06277121e6e73fafdd6c370e119e12b139c5b972fe0d2dc369f044ef7743d4c2",
       "jsonFields": [
         "arenaGroundFromWalk",
         "authoringPath",
@@ -126209,6 +126315,7 @@
         "frameCount",
         "generalDisplayScale",
         "generalMirror",
+        "generalMirrorFrames",
         "path",
         "playableIdentity",
         "publicReleasePermitted",
@@ -129974,6 +130081,34 @@
       "width": 80,
       "height": 96,
       "sha256": "7000b1ea76955dbf3476c426d1ae7ab57a002264a8b8dec70e552eed9a329d6a"
+    },
+    {
+      "id": "species-243:database-hero",
+      "src": "assets/production/database-rexmon-v8-20261029/species-243.display.63fd2942a48c61f1.webp",
+      "sha256": "63fd2942a48c61f17619a9598bc3f67a8414782916bcbd9581f06bdc43322c8f",
+      "width": 768,
+      "height": 584
+    },
+    {
+      "id": "species-243:database-thumbnail",
+      "src": "assets/production/database-rexmon-v8-20261029/species-243.thumbnail.554e28b24f6732ef.webp",
+      "sha256": "554e28b24f6732ef7bf77eeb9a31986599efd73274b5d5969789e03a2cae071e",
+      "width": 96,
+      "height": 73
+    },
+    {
+      "id": "species-244:database-hero",
+      "src": "assets/production/database-rexmon-v8-20261029/species-244.display.8b55866897d5da0a.webp",
+      "sha256": "8b55866897d5da0a647109c9b1d63db0dbae0289da3ca637301518d4bea02882",
+      "width": 652,
+      "height": 768
+    },
+    {
+      "id": "species-244:database-thumbnail",
+      "src": "assets/production/database-rexmon-v8-20261029/species-244.thumbnail.868e0c630b501f56.webp",
+      "sha256": "868e0c630b501f562aa8811ef7fa1904417c817662b63c0cdeeaa918edc61158",
+      "width": 81,
+      "height": 96
     }
   ]
 }

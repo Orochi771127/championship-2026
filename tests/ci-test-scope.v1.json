@@ -19,6 +19,7 @@
     "tests/alternate-form-build-boundary-cases.mjs",
     "tests/alternate-form-portraits-cases.mjs",
     "tests/alternate-form-qa-bootstrap-cases.mjs",
+    "tests/championship-218-visual-anchors-cases.mjs",
     "tests/championship-alternate-form-assets-cases.mjs",
     "tests/championship-alternate-form-browser-contract-cases.mjs",
     "tests/championship-approved-140171172-cases.mjs",
@@ -409,6 +410,7 @@
     "tests/championship-raising-reviewed-contact-identity-cases.mjs",
     "tests/championship-ranch-ground-support-owner-cases.mjs",
     "tests/championship-ranch-shadow-depth-cases.mjs",
+    "tests/championship-raising-footprint-shadow-cases.mjs",
     "tests/championship-resident-notice-cases.mjs",
     "tests/championship-data-arena-relay-cases.mjs",
     "tests/championship-data-arena-relay-arena-cases.mjs",
@@ -417,7 +419,12 @@
     "tests/championship-story-rift-cases.mjs",
     "tests/championship-online-cloud-service-cases.mjs",
     "tests/championship-online-migration-sql-cases.mjs",
-    "tests/championship-cage-ground-map-cases.mjs"
+    "tests/championship-cage-ground-map-cases.mjs",
+    "tests/championship-reviewed-general-facing-cases.mjs",
+    "tests/championship-reviewed-action-facing-cases.mjs",
+    "tests/championship-title-parade-size-cases.mjs",
+    "tests/championship-rexmon-two-forms-cases.mjs",
+    "tests/championship-product-original-species-cases.mjs"
   ],
   "localReference": {
     "tests/championship-scene-music-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Scene music actual-browser workflow with native media decoding, production Settings/transport, and controlled normal-game Raising/Battle/Data Arena flows.",

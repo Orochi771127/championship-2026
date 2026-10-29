@@ -32,7 +32,8 @@ import { playCyberMorphEvolution } from "./cyberMorphEvolutionRunner.js";
 import { createSkillCutInLayer } from "./skillCutIn.js";
 import { createShowcaseBankCells } from "./showcaseBankCells.js";
 import { SHOWCASE_CARRIER_STYLES, playShowcaseStyle, showcaseStyleIsMelee } from "./showcaseMoveVfx.js";
-import { SHOWCASE_ACTIONS, createSpriteMotion, loadShowcaseMotion, showcaseMotionAvailable } from "./spriteMotionPlayer.js";
+import { SHOWCASE_ACTIONS, SHOWCASE_ATTACK_SEQUENCE, createSpriteMotion, loadShowcaseMotionShared, showcaseFitScale,
+  showcaseMotionAvailable } from "./spriteMotionPlayer.js";
 
 const moveRecords = new Map((movesCatalog.records ?? []).map(record => [record.recordIndex, record]));
 
@@ -79,8 +80,10 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     const toggle = node(doc, "div", "cm-showcase-toggle");
     toggle.setAttribute("role", "group");
     toggle.setAttribute("aria-label", juicyText("view.label"));
-    const portraitButton = button(doc, "cm-showcase-toggle__option", `🖼️ ${juicyText("view.portrait")}`);
-    const motionButton = button(doc, "cm-showcase-toggle__option", `🏃 ${juicyText("view.motion")}`);
+    // Drawn CSS icons, never emoji: a colour-emoji fallback font rendered the
+    // runner as stray punctuation on some phones (Owner 2026-10-29).
+    const portraitButton = button(doc, "cm-showcase-toggle__option", juicyText("view.portrait"));
+    const motionButton = button(doc, "cm-showcase-toggle__option", juicyText("view.motion"));
     portraitButton.dataset.view = "portrait";
     motionButton.dataset.view = "motion";
     toggle.append(portraitButton, motionButton);
@@ -95,7 +98,7 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     const turn = button(doc, "cm-showcase-motion__turn", `↻ ${juicyText("turn")}`);
     const actions = node(doc, "div", "cm-showcase-motion__actions");
     actions.setAttribute("role", "group");
-    actions.setAttribute("aria-label", `💥 ${juicyText("action")}`);
+    actions.setAttribute("aria-label", juicyText("action"));
     const actionButtons = SHOWCASE_ACTIONS.map(action => {
       const element = button(doc, "cm-showcase-motion__action", juicyText(`action.${action.id}`));
       element.dataset.action = action.id;
@@ -128,11 +131,12 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     }
     function ensureSprite() {
       if (sprite || loading) return;
-      loading = loadShowcaseMotion(speciesId, { signal: abort.signal, fetchImpl }).then(motion => {
+      loading = loadShowcaseMotionShared(speciesId, { fetchImpl }).then(motion => {
         if (abort.signal.aborted || disposed) return;
+        // The feet stand on the pad's centre (--foot-y in the stylesheet: 40 px + 6 %).
         const box = spriteHost.getBoundingClientRect?.() ?? { width: 0, height: 0 };
-        const fit = box.width > 0 && box.height > 0 ? Math.min(box.width / motion.frameWidth, box.height / motion.frameHeight) : 220 / Math.max(motion.frameWidth, 1);
-        sprite = createSpriteMotion({ doc, motion, scale: Math.min(0.62, fit), reducedMotion: reduced() });
+        const room = box.width > 0 && box.height > 0 ? { width: box.width * 0.92, height: box.height * 0.94 - 40 - 10 } : { width: 140, height: 140 };
+        sprite = createSpriteMotion({ doc, motion, scale: showcaseFitScale(motion, room), reducedMotion: reduced() });
         spriteHost.append(sprite.element);
         sprite.setFacing(1);
         status.hidden = true;
@@ -332,27 +336,45 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     }
     if (visual) caster.body.append(visual);
     if (!payload.encrypted && showcaseMotionAvailable(payload.speciesId)) {
-      void loadShowcaseMotion(payload.speciesId, { fetchImpl }).then(motion => {
+      void loadShowcaseMotionShared(payload.speciesId, { fetchImpl }).then(motion => {
         if (!theater || theater.runId !== runId || theater.sprite) return;
-        // Fill the caster's slot: the packed frame carries empty margin round the body.
+        // One cell of the real motion, its feet on the pad's centre (.cm-showcase__body --foot-y).
         const box = caster.body.getBoundingClientRect?.() ?? { width: 0, height: 0 };
-        const fit = box.width > 0 ? Math.min(box.width * 1.6 / motion.frameWidth, box.height * 1.35 / motion.frameHeight) : 0.5;
-        const sprite = createSpriteMotion({ doc, motion, scale: Math.min(1, fit), reducedMotion: !full });
+        const room = box.width > 0 ? { width: box.width * 1.05, height: box.height * 0.92 } : { width: 120, height: 120 };
+        // A ranged special is cast standing on the pad; a melee one keeps its leap.
+        const sprite = createSpriteMotion({ doc, motion, scale: showcaseFitScale(motion, room), reducedMotion: !full,
+          grounded: !showcaseStyleIsMelee(payload.look.style) });
         sprite.setFacing(1);
-        sprite.play(0);
+        sprite.play(theater.attacking ? SHOWCASE_ATTACK_SEQUENCE : 0, { loop: !theater.attacking });
         visual?.remove();
         caster.body.append(sprite.element);
         theater.sprite = sprite;
       }).catch(() => {});
     }
+    theater.attacking = false;
 
     const animate = (element, keyframes, options) => element?.animate?.(keyframes, { fill: "both", ...options }) ?? null;
     const point = (element, at = 0.45) => {
       const box = element.getBoundingClientRect(), base = stage.getBoundingClientRect();
       return { x: box.left - base.left + box.width / 2, y: box.top - base.top + box.height * at, top: box.top - base.top, w: box.width, h: box.height };
     };
-    // Aim from the drawn body (its chest, roughly) at the dummy's face.
-    const casterPoint = () => point(caster.body.querySelector(".cm-sprite") ?? visual ?? caster.body, theater.sprite ? 0.62 : 0.45);
+    // The caster's feet: the pad's centre, 1 % above the slot's bottom edge (the stylesheet's --foot-y).
+    const casterFoot = () => {
+      const box = caster.body.getBoundingClientRect(), base = stage.getBoundingClientRect();
+      return { x: box.left - base.left + box.width / 2, y: box.bottom - base.top - box.height * 0.01 };
+    };
+    // Breaths, beams and bubbles leave the head (the muzzle of the release
+    // cell); without the motion, the same rule on the drawn portrait.
+    const casterPoint = () => {
+      const foot = casterFoot();
+      const muzzle = theater.sprite?.muzzle();
+      if (muzzle) {
+        const h = theater.sprite.bodyHeight();
+        return { x: foot.x + muzzle.dx, y: foot.y + muzzle.dy, top: foot.y - h, w: theater.sprite.width, h, foot };
+      }
+      const body = point(visual ?? caster.body, 0);
+      return { x: body.x + body.w * 0.26, y: body.top + body.h * 0.34, top: body.top, w: body.w, h: body.h, foot };
+    };
     const dummyPoint = () => point(target.querySelector(".cm-showcase__dummy-face") ?? dummy.body, 0.5);
     const spawn = (className, x, y) => {
       const element = node(doc, "i", className);
@@ -373,12 +395,18 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
           { duration: 460, easing: "cubic-bezier(.5,0,.9,.6)" });
       }
     });
-    // 2) The cut-in strip with the 35 % spotlight on the caster.
+    // 2) The cut-in strip with the 35 % spotlight on the caster's head, and the
+    // attack motion once through. The move leaves on its release cell (the
+    // forward-most frame: the open mouth or the swing), not on a fixed clock.
     later(T.cutIn, () => {
       const at = casterPoint();
       theater.cutIn?.play({ team: "ally", portrait: payload.portrait, silhouette: payload.encrypted, palette: payload.look.palette,
         moveName: payload.move?.name ?? "", casterName: payload.name || "？？？？", focus: at });
-      theater.sprite?.play(7);
+      theater.attacking = true;
+      theater.sprite?.play(SHOWCASE_ATTACK_SEQUENCE, { loop: false });
+      const release = theater.sprite ? Math.min(520, Math.max(120, theater.sprite.releaseMs(SHOWCASE_ATTACK_SEQUENCE) + 40)) : T.travel - T.cutIn;
+      theater.root.dataset.release = String(release);
+      later(release, travel);
     });
     // The theme's effect: the move's own vines, missiles, bolts... (showcaseMoveVfx.js),
     // with the battle's effect cells riding on them once the atlas is in.
@@ -396,14 +424,18 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     };
     const styleContext = () => {
       const from = casterPoint(), to = dummyPoint();
-      const foot = point(dummy.body, 1), casterFoot = point(caster.body, 1);
+      const foot = point(dummy.body, 1);
       return { doc, spawn, animate, later, full, from, to, tier: payload.look.tier,
-        ground: { x: foot.x, y: foot.top + foot.h - 4 }, casterGround: { x: casterFoot.x, y: casterFoot.top + casterFoot.h - 4 },
+        ground: { x: foot.x, y: foot.top + foot.h - 4 }, casterGround: from.foot,
         carry: (element, first) => { if (first && SHOWCASE_CARRIER_STYLES.includes(payload.look.style)) playCell("body", 0, 0, element); } };
     };
-    // 3) The move travels by style.
-    later(T.travel, () => {
+    // 3) The move travels by style, from the muzzle; contact follows the flight.
+    function travel() {
+      later(T.contact - T.travel, contact);
       const from = casterPoint(), to = dummyPoint();
+      fx.dataset.spawnY = String(Math.round(from.y));
+      fx.dataset.footY = String(Math.round(from.foot.y));
+      fx.dataset.bodyH = String(Math.round(from.h));
       const dx = to.x - from.x;
       const style = payload.look.style;
       playCell("launch", from.x, from.y) ?? playCell("prepare", from.x, from.y);
@@ -422,9 +454,10 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
           });
         }
       } else playShowcaseStyle("travel", style, styleContext());
-    });
+    }
     // 4) Contact: 60 ms hit-stop, then flash, knockback, sparks and the number.
-    later(T.contact, () => {
+    function contact() {
+      later(T.end - T.contact, () => { theater.sprite?.play(33); finishRun(); });
       // Everything on the stage and every pending beat holds for 60 ms.
       const paused = [];
       for (const animation of [...(stage.getAnimations?.({ subtree: true }) ?? []), ...theater.timers]) {
@@ -442,7 +475,7 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
         theater.timers.add(hold);
         hold.finished.then(() => { theater?.timers.delete(hold); resume(); }, () => theater?.timers.delete(hold));
       } else later(T.hitStop, resume);
-    });
+    }
     function impact() {
       const to = dummyPoint();
       playCeremonySound("impact", doc);
@@ -484,7 +517,6 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
         animate(number, full ? arc : [{ opacity: 1 }, { opacity: 1, offset: 0.8 }, { opacity: 0 }], { duration: 900, easing: "linear" });
       }
     }
-    later(T.end, () => { theater.sprite?.play(33); finishRun(); });
   }
 
   // --------------------------------------------------------------- buttons

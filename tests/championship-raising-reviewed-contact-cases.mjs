@@ -67,7 +67,9 @@ test('actual Raising decorator draws all reviewed contacts while preserving UI b
  const {frame,art}=fixture('species-023');const ellipses=contact('species-023',frame,art);
  const geometry={visible:{x:-10,y:-15,width:20,height:15},hitArea:{x:-12,y:-17,width:24,height:19},reviewedContactShadow:ellipses};
  ctx.decorate(entry,geometry);
- assert.deepEqual(calls,ellipses.map(e=>[e.x,e.y,e.radiusX,e.radiusY]));
+ // Soft contact (2026-10-30): the outer pass is every reviewed ellipse unchanged; two smaller
+ // passes on the same centres darken the core.
+ assert.deepEqual(calls,[1,.8,.62].flatMap(k=>ellipses.map(e=>[e.x,e.y,e.radiusX*k,e.radiusY*k])));
  assert.deepEqual({...entry.root.hitArea},geometry.hitArea);
 });
 test('sync and async art paths forward the guard and current lift precedes contact sampling',()=>{

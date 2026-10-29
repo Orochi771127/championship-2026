@@ -17,6 +17,30 @@ import { applyJuicyPalette, juicyMoveTitle, juicyNode } from "./juicyArt.js";
 
 export const SKILL_CUT_IN_TIMING = Object.freeze({ length: 650, enter: 170, leave: 520, dimHold: 450, dimEnd: 560, capsule: 550, dimStrength: 0.35 });
 
+// The head square fills this share of the face box: its clear middle (the
+// box's sides fade out over 22 % each) and nearly all of its height, with a
+// margin round the square so ears, horns and the chin stay inside.
+export const SKILL_CUT_IN_FACE_FIT = Object.freeze({ width: 0.62, height: 0.9, margin: 1.12 });
+
+/**
+ * How the portrait sits in the strip's face box: the measured head square
+ * (juicyPortrait().face, see scripts/measure-dex-hero-faces.py) centred and
+ * scaled to fit -- never the canvas centre, which is the belly or the claws.
+ * Without a measurement the upper part of the canvas is used. The numbers go
+ * to CSS as custom properties; the face box is a size container, so the fit
+ * follows the strip at any screen size (juicyShowcase.css .cm-cutin__face).
+ */
+export function skillCutInFaceFrame(portrait) {
+  const width = Number(portrait?.width), height = Number(portrait?.height);
+  if (!(width > 0) || !(height > 0)) return null;
+  const measured = Array.isArray(portrait.face) && portrait.face.length === 3 && portrait.face[2] > 0;
+  const [cx, cy, size] = measured ? portrait.face : [width / 2, height * 0.3, Math.max(width, height) * 0.5];
+  const head = size * SKILL_CUT_IN_FACE_FIT.margin;
+  return Object.freeze({ source: measured ? "face" : "upper", cx, cy, size,
+    vars: Object.freeze({ "--cutin-iw": String(width), "--cutin-ih": String(height), "--cutin-cx": String(Math.round(cx)),
+      "--cutin-cy": String(Math.round(cy)), "--cutin-head": String(Math.round(head)) }) });
+}
+
 /**
  * @param {object} options
  * @param {HTMLElement} options.host  positioned element over the field
@@ -66,6 +90,11 @@ export function createSkillCutInLayer({ host, doc = host?.ownerDocument ?? globa
     const band = juicyNode(doc, "div", "cm-cutin__band");
     const lines = juicyNode(doc, "i", "cm-cutin__lines");
     const face = juicyNode(doc, "div", "cm-cutin__face");
+    const frame = skillCutInFaceFrame(portrait);
+    if (frame) {
+      for (const [key, value] of Object.entries(frame.vars)) face.style.setProperty(key, value);
+      face.dataset.framing = frame.source;
+    }
     let image = null;
     if (portrait?.src && silhouette) {
       // Encrypted signal: the caster's outline only, never its colours.
@@ -102,7 +131,10 @@ export function createSkillCutInLayer({ host, doc = host?.ownerDocument ?? globa
         { opacity: 0.9, transform: `translateX(${-112 * side}%) rotate(-8deg)` }
       ], { duration: T.length, easing: "linear" });
       animate(lines, [{ transform: "translateX(0)" }, { transform: `translateX(${25 * side}%)` }], { duration: T.length, easing: "linear" });
-      if (image) animate(image, [{ transform: "scale(1.9)" }, { transform: "scale(1.7)" }], { duration: T.length, easing: "ease-out" });
+      // A gentle push-in round the head (the frame already holds the whole face).
+      const mirror = node.dataset.team === "enemy" ? " scaleX(-1)" : "";
+      const art = image ?? face.querySelector(".cm-cutin__face-sil");
+      if (art) animate(art, [{ transform: `scale(1.1)${mirror}` }, { transform: `scale(1)${mirror}` }], { duration: T.length, easing: "ease-out" });
       animate(words.lastChild, [
         { opacity: 0, transform: "scale(1.7)" }, { opacity: 0, offset: 110 / T.length, transform: "scale(1.7)" },
         { opacity: 1, offset: 240 / T.length, transform: "scale(0.96)" }, { opacity: 1, offset: 300 / T.length, transform: "scale(1)" },

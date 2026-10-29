@@ -11,6 +11,12 @@ export const EVOLUTION_TEXT_ROWS = Object.freeze([
   { language: 'th', row: 5, text: 'วิวัฒนาการ' }
 ].map(Object.freeze));
 
+// The arcade evolution's backdrop streams "evolution" in many languages at once
+// (Owner 2026-10-29): these rows plus further languages, shown regardless of UI locale.
+export const EVOLUTION_STREAM_WORDS = Object.freeze([...new Set([
+  '進化', 'EVOLUTION', '진화', 'ÉVOLUTION', 'EVOLUCIÓN', 'EVOLUZIONE', '進化する', ...EVOLUTION_TEXT_ROWS.map(row => row.text)
+])]);
+
 export function evolutionWritingY(row, height) {
   return (row + 0.5) * height / EVOLUTION_WRITING_ROWS;
 }

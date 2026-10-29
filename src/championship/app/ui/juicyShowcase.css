@@ -62,15 +62,21 @@
   transform: scale(2.4);
 }
 .cm-morph[data-kind="revert"] .cm-morph__pulse { border-color: rgba(255, 224, 138, 0.75); }
-.cm-morph__rain { position: absolute; inset: 0; pointer-events: none; overflow: hidden; opacity: 0.55; }
-.cm-morph__rain-col {
-  position: absolute;
-  top: 0;
-  white-space: pre;
-  font: 700 13px/1.05 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  color: var(--morph-a);
-  transform: translateY(55%);
-}
+/* Word lanes (cyberMorphEvolutionRunner.js CYBER_MORPH_LANES): multilingual "evolution" and the
+   Owner-selected glyphs CP-G01..G04, far/mid/near. Each lane is a thin strip; only its track moves. */
+.cm-morph__lanes { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.cm-morph__lane { position: absolute; white-space: nowrap; font: 900 var(--size, 12px)/1 var(--font-ui, system-ui, sans-serif); letter-spacing: 0.08em; color: var(--morph-a); }
+.cm-morph__lane--x { left: -30%; right: -30%; top: var(--at); transform: translateY(-50%) rotate(var(--tilt, 0deg)); }
+.cm-morph__lane--y { top: -10%; bottom: -10%; left: var(--at); writing-mode: vertical-rl; transform: translateX(-50%); }
+.cm-morph__lane--far { opacity: 0.3; }
+.cm-morph__lane--mid { opacity: 0.5; color: #bff9ff; }
+/* Near words are big outlines: a soft foreground without a blur filter. */
+.cm-morph__lane--near { opacity: 0.2; color: transparent; -webkit-text-stroke: 1.5px #bff9ff; }
+.cm-morph__lane-track { display: inline-flex; }
+.cm-morph__lane-run { display: inline-flex; align-items: center; gap: 0.7em; padding-inline-end: 0.7em; }
+.cm-morph__glyph { flex: none; display: inline-block; width: 1.1em; height: 1.1em; background: currentColor;
+  -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; }
+.cm-morph__lane--near .cm-morph__glyph { background: #bff9ff; }
 .cm-morph__speed {
   position: absolute;
   inset: 0;
@@ -81,7 +87,10 @@
     radial-gradient(circle at 50% 46%, #091738 0 22%, rgba(9, 23, 56, 0) 46%),
     repeating-conic-gradient(from 0deg at 50% 46%, transparent 0deg 6deg, rgba(190, 248, 255, 0.28) 6deg 7deg, transparent 7deg 13deg);
 }
-.cm-morph__core { position: relative; grid-row: 2; width: min(86vw, 420px); height: 100%; min-height: 220px; }
+/* The 3-D stage. --foot is the partner's ground (the plinth's centre); the core is a size
+   container so ring and orbit radii follow its width (cqw). Back to front: plinth, column, far
+   ring halves (z 1), motes (z 1 behind / 4 in front, animated), partner (z 2), near halves (z 3). */
+.cm-morph__core { position: relative; grid-row: 2; width: min(86vw, 420px); height: 100%; min-height: 220px; container-type: size; isolation: isolate; --foot: 18%; }
 .cm-morph__plinth {
   position: absolute;
   left: 50%;
@@ -93,17 +102,35 @@
   background: radial-gradient(ellipse at center, rgba(95, 243, 255, 0.55) 0%, rgba(95, 243, 255, 0.12) 55%, transparent 70%);
   box-shadow: 0 0 0 2px rgba(95, 243, 255, 0.55), 0 0 26px rgba(95, 243, 255, 0.55), inset 0 0 18px rgba(255, 255, 255, 0.35);
 }
-.cm-morph__rings { position: absolute; left: 50%; bottom: 12%; width: 62%; aspect-ratio: 1; transform: translate(-50%, -10%); transform-style: preserve-3d; perspective: 500px; pointer-events: none; }
-.cm-morph__ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 3px dashed var(--morph-a);
-  box-shadow: 0 0 14px var(--morph-a);
-  transform: rotateX(72deg);
-}
-.cm-morph__ring--b { border: 2px dotted var(--morph-b); box-shadow: 0 0 14px var(--morph-b); transform: rotateX(72deg) scale(1.18); }
-.cm-morph__converge, .cm-morph__burst { position: absolute; left: 50%; top: 48%; width: 0; height: 0; pointer-events: none; }
+.cm-morph__pillar { position: absolute; z-index: 1; left: 50%; bottom: var(--foot); width: 44%; height: 76%; opacity: 0.3; transform: translateX(-50%); transform-origin: 50% 100%;
+  border-radius: 50% / 9%; pointer-events: none;
+  background: linear-gradient(0deg, rgba(95, 243, 255, 0.6) 0%, rgba(95, 243, 255, 0.2) 45%, rgba(95, 243, 255, 0) 100%); }
+.cm-morph__pillar::after { content: ""; position: absolute; left: 36%; right: 36%; top: 8%; bottom: 0; border-radius: 50% / 6%;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(191, 249, 255, 0.25) 60%, rgba(191, 249, 255, 0)); }
+/* A ring is a square laid back 74 degrees round the feet; clip-path keeps its far half (behind
+   the partner) or its near half (in front). The band inside turns, so its ticks travel. */
+.cm-morph__ring3d { position: absolute; left: 50%; bottom: var(--foot); width: 78%; aspect-ratio: 1; margin: 0 0 -39% -39%; pointer-events: none;
+  transform: perspective(900px) rotateX(74deg); opacity: 0.45; scale: 1.06; }
+.cm-morph__ring3d--back { z-index: 1; clip-path: inset(0 0 50% 0); }
+.cm-morph__ring3d--front { z-index: 3; clip-path: inset(50% 0 0 0); }
+.cm-morph__ring3d--outer { width: 96%; margin: 0 0 -48% -48%; }
+.cm-morph__ring3d--riser { width: 62%; margin: 0 0 -31% -31%; opacity: 0; scale: 1; }
+.cm-morph__ring3d-band { position: absolute; inset: 0; border-radius: 50%; }
+.cm-morph__ring3d-band::before { content: ""; position: absolute; inset: -9px; border-radius: 50%;
+  -webkit-mask-image: radial-gradient(closest-side, transparent calc(100% - 9px), #000 calc(100% - 8px)); mask-image: radial-gradient(closest-side, transparent calc(100% - 9px), #000 calc(100% - 8px)); }
+.cm-morph__ring3d--back .cm-morph__ring3d-band { border: 2px solid rgba(95, 243, 255, 0.85); box-shadow: 0 0 14px rgba(95, 243, 255, 0.7), inset 0 0 10px rgba(95, 243, 255, 0.35); }
+.cm-morph__ring3d--back .cm-morph__ring3d-band::before { background: repeating-conic-gradient(from 0deg, rgba(95, 243, 255, 0.7) 0 2deg, transparent 2deg 15deg); }
+.cm-morph__ring3d--front .cm-morph__ring3d-band { border: 5px solid #f2feff; box-shadow: 0 0 0 2px var(--morph-a), 0 0 18px var(--morph-a), inset 0 0 12px rgba(95, 243, 255, 0.6); }
+.cm-morph__ring3d--front .cm-morph__ring3d-band::before { inset: -13px; background: repeating-conic-gradient(from 0deg, #ffffff 0 5deg, transparent 5deg 30deg);
+  -webkit-mask-image: radial-gradient(closest-side, transparent calc(100% - 11px), #000 calc(100% - 10px)); mask-image: radial-gradient(closest-side, transparent calc(100% - 11px), #000 calc(100% - 10px)); }
+.cm-morph__ring3d--outer .cm-morph__ring3d-band { border-width: 2px; border-style: dashed; border-color: var(--morph-b); box-shadow: 0 0 12px var(--morph-b); }
+.cm-morph__ring3d--outer .cm-morph__ring3d-band::before { display: none; }
+.cm-morph__ring3d--riser .cm-morph__ring3d-band { border: 2px solid #bff9ff; box-shadow: 0 0 10px var(--morph-a); }
+.cm-morph__ring3d--riser .cm-morph__ring3d-band::before { display: none; }
+.cm-morph__orbit { position: absolute; inset: 0; pointer-events: none; --orbit-rx: 34cqw; --orbit-ry: 9.4cqw; }
+.cm-morph__orbit-mote { position: absolute; z-index: 1; left: 50%; bottom: calc(var(--foot) + var(--lift, 10%)); width: 8px; height: 8px; margin: 0 0 -4px -4px; border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0 35%, var(--morph-a) 70%); box-shadow: 0 0 8px var(--morph-a); opacity: 0; }
+.cm-morph__converge, .cm-morph__burst { position: absolute; z-index: 5; left: 50%; top: 48%; width: 0; height: 0; pointer-events: none; }
 .cm-morph__shard, .cm-morph__mote {
   position: absolute;
   left: -7px;
@@ -117,51 +144,46 @@
 }
 .cm-morph__shard--out { background: linear-gradient(160deg, #ffffff, var(--morph-b)); }
 .cm-morph__mote { width: 8px; height: 8px; left: -4px; top: -4px; clip-path: none; border-radius: 50%; background: radial-gradient(circle, #fff, var(--morph-a)); }
-.cm-morph__figure { position: absolute; left: 6%; right: 6%; top: 4%; bottom: 14%; }
-.cm-morph__figure > * { position: absolute; inset: 0; width: 100%; height: 100%; }
-.cm-morph__art { object-fit: contain; opacity: 0; }
-.cm-morph__art--to, .cm-morph__egg-art { opacity: 1; }
+/* The partner: its real idle motion stands its feet on --foot (spriteMotionPlayer.js .cm-sprite--footed);
+   a portrait stands its bottom edge there. Final state: the new form in colour, the old one gone. */
+.cm-morph__figure { position: absolute; inset: 0; z-index: 2; }
+.cm-morph__form { position: absolute; inset: 0; --foot-y: var(--foot); transform-origin: 50% calc(100% - var(--foot)); }
+.cm-morph__form > img.cm-morph__art { position: absolute; left: 8%; bottom: var(--foot); width: 84%; height: calc(100% - var(--foot) - 6%); object-fit: contain; object-position: 50% 100%; }
+.cm-morph__form--from > .cm-morph__art { opacity: 0; }
+.cm-morph__form--to > .cm-morph__art { opacity: 1; }
+.cm-morph[data-encrypted="true"] .cm-morph__form--to > .cm-morph__art {
+  filter: brightness(0) invert(1) drop-shadow(0 0 3px rgba(191, 249, 255, 0.95)) drop-shadow(0 0 12px rgba(95, 243, 255, 0.9)); }
 /* A static glow behind the figure in place of per-frame filters. */
 .cm-morph__aura { position: absolute; left: 50%; top: 44%; width: 86%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none;
   background: radial-gradient(circle, rgba(95, 243, 255, 0.34) 0%, rgba(95, 243, 255, 0.12) 42%, transparent 68%); }
 .cm-morph[data-kind="revert"] .cm-morph__aura { background: radial-gradient(circle, rgba(255, 224, 138, 0.32) 0%, rgba(255, 224, 138, 0.1) 42%, transparent 68%); }
-.cm-morph__sil { opacity: 0; }
-.cm-morph__sil-body {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(180deg, #ffffff 0%, #bff9ff 38%, var(--morph-a) 70%, #2fa6ff 100%);
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-}
-/* An encrypted form is a generic data body, never the real outline. */
+/* A form without art is a generic data body, never the real outline. */
 .cm-morph__sil-body--cipher {
-  margin: auto;
-  width: 64%;
-  height: 78%;
-  margin-top: 8%;
+  position: absolute;
+  left: 50%;
+  bottom: var(--foot);
+  width: 34%;
+  height: 54%;
+  translate: -50% 0;
   border-radius: 46% 46% 40% 40% / 52% 52% 38% 38%;
   background:
     repeating-linear-gradient(0deg, rgba(4, 9, 26, 0.35) 0 2px, transparent 2px 6px),
     linear-gradient(180deg, #ffffff 0%, #bff9ff 38%, var(--morph-a) 70%, #2fa6ff 100%);
 }
-.cm-morph[data-encrypted="true"] .cm-morph__sil--to { opacity: 1; }
 .cm-morph__egg {
-  left: 30%;
-  right: 30%;
-  top: 22%;
-  bottom: 6%;
-  width: auto;
-  height: auto;
+  position: absolute;
+  left: 50%;
+  bottom: var(--foot);
+  width: 30%;
+  aspect-ratio: 0.78;
+  translate: -50% 0;
   border-radius: 50% 50% 46% 46% / 60% 60% 40% 40%;
   background: radial-gradient(circle at 38% 30%, #ffffff 0%, #fff4c2 22%, #ffd36a 52%, #d98a2a 100%);
   box-shadow: 0 0 30px rgba(255, 224, 138, 0.8), inset -8px -10px 0 rgba(160, 90, 20, 0.35);
 }
 .cm-morph__flash {
   position: absolute;
+  z-index: 5;
   left: 50%;
   top: 46%;
   width: 70%;
@@ -224,9 +246,12 @@
 .cm-morph__inherit { margin: 0; font-size: 15px; font-weight: 900; color: #ffe08a; text-align: center; text-shadow: 0 0 10px rgba(255, 224, 138, 0.6); }
 .cm-morph__saving { margin: 0; font-size: 13px; font-weight: 700; color: #9fc8e8; text-align: center; }
 .cm-morph__locked { margin: 0; font-size: 13px; font-weight: 800; color: #ffe27a; line-height: 1.45; }
-.cm-morph__hint { grid-row: 4; margin-top: 8px; font-size: 12px; font-weight: 700; color: rgba(233, 251, 255, 0.72); }
-.cm-morph[data-motion="saver"] :is(.cm-morph__rain, .cm-morph__pulse, .cm-morph__mote) { display: none; }
-.cm-morph[data-motion="reduced"] :is(.cm-morph__rain, .cm-morph__tunnel, .cm-morph__speed, .cm-morph__converge, .cm-morph__burst, .cm-morph__flash, .cm-morph__rings) { display: none; }
+.cm-morph__hint { grid-row: 4; margin-top: 8px; padding: 3px 12px; border-radius: 999px; background: rgba(2, 6, 18, 0.78); font-size: 12px; font-weight: 700; color: rgba(233, 251, 255, 0.85); }
+/* The word lanes are positioned layers; everything read above them stands on top. */
+:is(.cm-morph__plate, .cm-morph__panel, .cm-morph__hint) { position: relative; z-index: 2; }
+.cm-morph__core { z-index: 1; }
+.cm-morph[data-motion="saver"] :is(.cm-morph__pulse, .cm-morph__mote) { display: none; }
+.cm-morph[data-motion="reduced"] :is(.cm-morph__tunnel, .cm-morph__speed, .cm-morph__converge, .cm-morph__burst, .cm-morph__flash, .cm-morph__ring3d--outer) { display: none; }
 
 /* ---- Skill cut-in -------------------------------------------------------- */
 .cm-cutin-layer { position: absolute; inset: 0; z-index: var(--z-toast, 70); overflow: hidden; pointer-events: none; contain: layout paint; }
@@ -261,24 +286,35 @@
   background: repeating-linear-gradient(90deg, transparent 0 22px, rgba(255, 255, 255, 0.22) 22px 24px, transparent 24px 60px, color-mix(in srgb, var(--jc-core, #fff) 60%, transparent) 60px 61px);
   mix-blend-mode: screen;
 }
-.cm-cutin__face { position: relative; flex: 0 0 36%; height: 100%; overflow: hidden; margin-left: 8%; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 22%, #000 78%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 22%, #000 78%, transparent 100%); }
+/* The face box is a size container: --cutin-k (screen px per portrait px) fits the measured head
+   square (skillCutIn.js skillCutInFaceFrame, SKILL_CUT_IN_FACE_FIT) into its clear middle, and the
+   portrait is placed so the head's centre is the box's centre. */
+.cm-cutin__face { position: relative; flex: 0 0 36%; height: 100%; overflow: hidden; margin-left: 8%; container-type: size;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 22%, #000 78%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 22%, #000 78%, transparent 100%); }
 .cm-cutin[data-team="enemy"] .cm-cutin__face { margin-left: 0; margin-right: 8%; }
-.cm-cutin__face-art { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 26%; transform: scale(1.7); transform-origin: 50% 22%; filter: drop-shadow(0 0 0 #000) saturate(1.15) contrast(1.05); }
-.cm-cutin[data-team="enemy"] .cm-cutin__face-art { transform: scale(1.7) scaleX(-1); }
+.cm-cutin__face-art { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; filter: saturate(1.15) contrast(1.05); }
+.cm-cutin__face[data-framing] > :is(.cm-cutin__face-art, .cm-cutin__face-sil) {
+  --cutin-k: min(calc(62cqw / var(--cutin-head)), calc(90cqh / var(--cutin-head)));
+  inset: auto;
+  left: calc(50% - var(--cutin-cx) * var(--cutin-k));
+  top: calc(50% - var(--cutin-cy) * var(--cutin-k));
+  width: calc(var(--cutin-iw) * var(--cutin-k));
+  height: calc(var(--cutin-ih) * var(--cutin-k));
+  max-width: none;
+  object-fit: fill;
+  transform-origin: calc(var(--cutin-cx) * var(--cutin-k)) calc(var(--cutin-cy) * var(--cutin-k));
+}
+.cm-cutin[data-team="enemy"] :is(.cm-cutin__face-art, .cm-cutin__face-sil) { transform: scaleX(-1); }
 .cm-cutin__words { position: relative; flex: 1 1 auto; display: grid; gap: 2px; padding: 0 9% 0 3%; min-width: 0; text-align: center; container-type: inline-size; }
 .cm-cutin[data-team="enemy"] .cm-cutin__words { padding: 0 3% 0 9%; }
 .cm-cutin__face-sil {
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, #ffffff 0%, #bff9ff 40%, #5ff3ff 72%, #2fa6ff 100%);
-  -webkit-mask-size: cover;
-  mask-size: cover;
-  -webkit-mask-position: 50% 26%;
-  mask-position: 50% 26%;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-  transform: scale(1.7);
-  transform-origin: 50% 22%;
 }
 .cm-cutin__kicker { font-size: clamp(11px, 3vw, 14px); font-weight: 900; letter-spacing: 0.08em; color: var(--team-b); text-shadow: 0 2px 0 #000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cm-cutin__name {
@@ -349,6 +385,11 @@
   cursor: pointer;
 }
 .cm-showcase-toggle__option[aria-pressed="true"] { background: linear-gradient(#5ff3ff, #2fc7ff); }
+/* Drawn icons in place of emoji (a picture frame, a play mark). */
+.cm-showcase-toggle__option::before { content: ""; display: inline-block; vertical-align: -1px; margin-right: 4px; }
+.cm-showcase-toggle__option[data-view="portrait"]::before { width: 9px; height: 7px; border: 2px solid currentColor; border-radius: 2px;
+  background: linear-gradient(135deg, transparent 52%, currentColor 52% 70%, transparent 70%); }
+.cm-showcase-toggle__option[data-view="motion"]::before { width: 0; height: 0; border-style: solid; border-width: 6px 0 6px 9px; border-color: transparent transparent transparent currentColor; }
 .cm-dex-hero[data-view="motion"] > .cm-dex-hero__image,
 .cm-dex-hero[data-view="motion"] > .cm-dex-hero__placeholder { visibility: hidden; }
 .cm-showcase-motion { position: absolute; inset: 0; border-radius: inherit; overflow: hidden;
@@ -356,8 +397,8 @@
 .cm-showcase-motion[hidden] { display: none; }
 .cm-showcase-motion__pad { position: absolute; left: 50%; bottom: 40px; width: 70%; height: 12%; transform: translateX(-50%); border-radius: 50%;
   box-shadow: 0 0 0 2px rgba(95, 243, 255, 0.8), 0 0 18px rgba(95, 243, 255, 0.6); }
-.cm-showcase-motion__sprite { position: absolute; left: 0; right: 0; top: 4px; bottom: 44px; display: grid; place-items: end center; overflow: hidden; }
-.cm-showcase-motion__sprite > .cm-sprite { max-height: 100%; }
+/* The sprite's feet stand on the pad's centre: 40 px + half its 12 % height. */
+.cm-showcase-motion__sprite { position: absolute; inset: 0; overflow: hidden; --foot-y: calc(40px + 6%); }
 .cm-showcase-motion__status { position: absolute; inset: auto 8px 46% 8px; margin: 0; color: #e9fbff; font-size: 12px; font-weight: 700; text-align: center; }
 .cm-showcase-motion__status[hidden] { display: none; }
 .cm-showcase-motion__controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; padding: 8px; border: 2px solid var(--ax-ink, #14152a); border-radius: 14px;
@@ -377,8 +418,11 @@
 .cm-showcase-motion__turn { background: linear-gradient(#ffe27a, #ffb83d); }
 .cm-showcase-motion__actions { display: flex; gap: 4px; }
 .cm-showcase-motion__action[aria-pressed="true"] { background: linear-gradient(#5ff3ff, #2fc7ff); transform: translateY(2px); box-shadow: 0 0 0 #05060d; }
-.cm-sprite { position: relative; flex: none; transform-origin: 50% 100%; }
-.cm-sprite__body { image-rendering: pixelated; background-repeat: no-repeat; }
+/* One packed cell at a time (spriteMotionPlayer.js sizes and offsets the body per
+   frame); a footed sprite stands its foot origin on (--foot-x, --foot-y) of its host. */
+.cm-sprite { position: relative; flex: none; }
+.cm-sprite--footed { position: absolute; left: calc(var(--foot-x, 50%) - var(--cm-sprite-ax, 0px)); bottom: calc(var(--foot-y, 0px) - var(--cm-sprite-below, 0px)); }
+.cm-sprite__body { position: absolute; left: 0; top: 0; image-rendering: pixelated; background-repeat: no-repeat; }
 
 /* ---- Dex showcase: preview buttons --------------------------------------- */
 .cm-showcase-cta {
@@ -451,7 +495,8 @@
 .cm-showcase__pad { position: absolute; left: 50%; bottom: -6%; width: 78%; height: 14%; transform: translateX(-50%); border-radius: 50%;
   box-shadow: 0 0 0 2px rgba(95, 243, 255, 0.7), 0 0 16px rgba(95, 243, 255, 0.55); background: radial-gradient(ellipse, rgba(95, 243, 255, 0.3), transparent 70%); }
 .cm-showcase__fighter--dummy .cm-showcase__pad { box-shadow: 0 0 0 2px rgba(255, 138, 92, 0.75), 0 0 16px rgba(255, 138, 92, 0.5); background: radial-gradient(ellipse, rgba(255, 138, 92, 0.25), transparent 70%); }
-.cm-showcase__body { position: relative; display: grid; place-items: end center; width: 100%; height: 100%; transform-origin: 50% 100%; }
+/* --foot-y: the pad's centre (bottom -6 %, height 14 %) is 1 % above the slot's bottom. */
+.cm-showcase__body { position: relative; display: grid; place-items: end center; width: 100%; height: 100%; transform-origin: 50% 100%; --foot-y: 1%; }
 .cm-showcase__portrait { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.4)); }
 .cm-showcase__cipher {
   display: grid;

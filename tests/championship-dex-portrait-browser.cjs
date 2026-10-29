@@ -15,22 +15,23 @@ const {beforeWebRendition,webRenditions} = require('./helpers/dex-web-renditions
 const SILHOUETTES = new Map(require('../src/data/championship/database-hero-silhouettes.v1.json').entries.map(row=>[row.sha256,row.box]));
 const APPROVED44=Object.freeze([...OLD20,...APPROVED10].sort((a,b)=>a.speciesIndex-b.speciesIndex));
 const APPROVED44_IDS=Object.freeze(APPROVED44.map(e=>e.speciesIndex));
-const EXPECTED_REGISTRY_COUNT = 230;
+// 194 preserved + approved20 heroes (230), plus the two art-only Rexmon forms 243/244 (2026-10-29).
+const EXPECTED_REGISTRY_COUNT = 232;
 const MATRIX_TARGETS = Object.freeze([117,55,40,189,63,70,71,72,9,10,35,62,36]);
 const EXPECTED_MASTERS = Object.freeze({
-  36: Object.freeze({"speciesIndex": 36, "speciesId": "species-036", "displayCode": "GR04", "src": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png", "width": 1415, "height": 1111, "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d", "styleBatch": "HANDPAINTED_R1_20261015", "name": "雷鬃獾"}),
-  35: Object.freeze({"speciesIndex": 35, "speciesId": "species-035", "displayCode": "GR02", "src": "assets/production/database-handpainted-r1-20261015/species-035.291db6a498c8bdbd.png", "width": 1536, "height": 1024, "sha256": "291db6a498c8bdbd5e5b2196c8f9a629ec44a1ba55674e103dc596e6827fe6d4", "styleBatch": "HANDPAINTED_R1_20261015", "name": "岩甲穿獸"}),
-  62: Object.freeze({"speciesIndex": 62, "speciesId": "species-062", "displayCode": "GR38", "src": "assets/production/database-handpainted-r1-20261015/species-062.ad0745c733532dc2.png", "width": 1254, "height": 1254, "sha256": "ad0745c733532dc288c5143194e9020e35cd071e74347e7a3851911db136e52d", "styleBatch": "HANDPAINTED_R1_20261015", "name": "光綾狐"}),
+  36: Object.freeze({"speciesIndex": 36, "speciesId": "species-036", "displayCode": "GR04", "src": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png", "width": 1415, "height": 1111, "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d", "styleBatch": "HANDPAINTED_R1_20261015", "name": "霹靂獾"}),
+  35: Object.freeze({"speciesIndex": 35, "speciesId": "species-035", "displayCode": "GR02", "src": "assets/production/database-handpainted-r1-20261015/species-035.291db6a498c8bdbd.png", "width": 1536, "height": 1024, "sha256": "291db6a498c8bdbd5e5b2196c8f9a629ec44a1ba55674e103dc596e6827fe6d4", "styleBatch": "HANDPAINTED_R1_20261015", "name": "穿山甲"}),
+  62: Object.freeze({"speciesIndex": 62, "speciesId": "species-062", "displayCode": "GR38", "src": "assets/production/database-handpainted-r1-20261015/species-062.ad0745c733532dc2.png", "width": 1254, "height": 1254, "sha256": "ad0745c733532dc288c5143194e9020e35cd071e74347e7a3851911db136e52d", "styleBatch": "HANDPAINTED_R1_20261015", "name": "小仙狐"}),
 
-  189: Object.freeze({"speciesIndex": 189, "speciesId": "species-189", "displayCode": "UL06", "src": "assets/production/database-handpainted-r1-20261015/species-189.8c9cac7746647500.png", "width": 1324, "height": 1188, "sha256": "8c9cac7746647500066880fbd869e188d1f3c83fb1ea3069c5e1d3ba8798ee64", "styleBatch": "HANDPAINTED_R1_20261015", "name": "日冕戰暴龍"}),
-  9: Object.freeze({"speciesIndex":9,"speciesId":"species-009","displayCode":"B102","src":"assets/production/database-portraits-b1-20261014/B102.eb7c0e50feb53dc2.png","width":1323,"height":1189,"sha256":"eb7c0e50feb53dc2eb16a12f0457de8911318011aea08526fea2a184472a7f72","name":"鐵鈴芽"}),
-  10: Object.freeze({"speciesIndex":10,"speciesId":"species-010","displayCode":"B103","src":"assets/production/database-portraits-b1-20261014/B103.db66d79eb40c3768.png","width":1312,"height":1199,"sha256":"db66d79eb40c3768b2addfa247c82d7ca2d749f5ba52d9c96778a5787cc53824","name":"星芽獸"}),
+  189: Object.freeze({"speciesIndex": 189, "speciesId": "species-189", "displayCode": "UL06", "src": "assets/production/database-handpainted-r1-20261015/species-189.8c9cac7746647500.png", "width": 1324, "height": 1188, "sha256": "8c9cac7746647500066880fbd869e188d1f3c83fb1ea3069c5e1d3ba8798ee64", "styleBatch": "HANDPAINTED_R1_20261015", "name": "戰暴龍"}),
+  9: Object.freeze({"speciesIndex":9,"speciesId":"species-009","displayCode":"B102","src":"assets/production/database-portraits-b1-20261014/B102.eb7c0e50feb53dc2.png","width":1323,"height":1189,"sha256":"eb7c0e50feb53dc2eb16a12f0457de8911318011aea08526fea2a184472a7f72","name":"叮噹豆"}),
+  10: Object.freeze({"speciesIndex":10,"speciesId":"species-010","displayCode":"B103","src":"assets/production/database-portraits-b1-20261014/B103.db66d79eb40c3768.png","width":1312,"height":1199,"sha256":"db66d79eb40c3768b2addfa247c82d7ca2d749f5ba52d9c96778a5787cc53824","name":"星豆芽"}),
 
-  40: Object.freeze({"speciesIndex":40,"speciesId":"species-040","displayCode":"GR08","src":"assets/production/database-handpainted-r1-20261015/species-040.a5d0d48e737f81e0.png","sha256":"a5d0d48e737f81e0c955286a94923fe3b70d6483813ee233aedb80a8d89bc3ae","width":1254,"height":1254,"name":"霜裘龍"}),
-  63: Object.freeze({"speciesIndex":63,"speciesId":"species-063","displayCode":"GR24","src":"assets/production/database-handpainted-r1-20261015/species-063.e403a93ec4f2d7ec.png","sha256":"e403a93ec4f2d7ec24273c2f2f3d861feeec11848d55450989230b2c93283f8a","width":1254,"height":1254,"name":"翠冠龍"}),
-  70: Object.freeze({"speciesIndex": 70, "speciesId": "species-070", "displayCode": "GR32", "src": "assets/production/database-handpainted-r1-20261015/species-070.2dc33277d80cdfb4.png", "sha256": "2dc33277d80cdfb4577bee1d369adb59545b4ccc735a4f90fff342087a1ba738", "name": "星角龍"}),
-  71: Object.freeze({"speciesIndex": 71, "speciesId": "species-071", "displayCode": "GR12", "src": "assets/production/database-handpainted-r1-20261015/species-071.cd9ee93854a452cc.png", "sha256": "cd9ee93854a452cc2b5a253ee35d5d57651d5474292ae8af7422331f0379e913", "name": "裂焰龍"}),
-  72: Object.freeze({"speciesIndex": 72, "speciesId": "species-072", "displayCode": "MA04", "src": "assets/production/database-handpainted-r1-20261015/species-072.4ca0e10b98584a76.png", "sha256": "4ca0e10b98584a76aec0c283b6c5628d34122bd7d60aa63411c7cc2156bfca43", "name": "晶鏈甲龍"}),
+  40: Object.freeze({"speciesIndex":40,"speciesId":"species-040","displayCode":"GR08","src":"assets/production/database-handpainted-r1-20261015/species-040.a5d0d48e737f81e0.png","sha256":"a5d0d48e737f81e0c955286a94923fe3b70d6483813ee233aedb80a8d89bc3ae","width":1254,"height":1254,"name":"毛皮龍"}),
+  63: Object.freeze({"speciesIndex":63,"speciesId":"species-063","displayCode":"GR24","src":"assets/production/database-handpainted-r1-20261015/species-063.e403a93ec4f2d7ec.png","sha256":"e403a93ec4f2d7ec24273c2f2f3d861feeec11848d55450989230b2c93283f8a","width":1254,"height":1254,"name":"綠冠龍"}),
+  70: Object.freeze({"speciesIndex": 70, "speciesId": "species-070", "displayCode": "GR32", "src": "assets/production/database-handpainted-r1-20261015/species-070.2dc33277d80cdfb4.png", "sha256": "2dc33277d80cdfb4577bee1d369adb59545b4ccc735a4f90fff342087a1ba738", "name": "樂天龍"}),
+  71: Object.freeze({"speciesIndex": 71, "speciesId": "species-071", "displayCode": "GR12", "src": "assets/production/database-handpainted-r1-20261015/species-071.cd9ee93854a452cc.png", "sha256": "cd9ee93854a452cc2b5a253ee35d5d57651d5474292ae8af7422331f0379e913", "name": "大嘴龍"}),
+  72: Object.freeze({"speciesIndex": 72, "speciesId": "species-072", "displayCode": "MA04", "src": "assets/production/database-handpainted-r1-20261015/species-072.4ca0e10b98584a76.png", "sha256": "4ca0e10b98584a76aec0c283b6c5628d34122bd7d60aa63411c7cc2156bfca43", "name": "錘尾龍"}),
   222: Object.freeze({"speciesIndex": 222, "speciesId": "species-222", "displayCode": "UL02", "src": "assets/production/database-handpainted-r1-20261015/species-222.png", "sha256": "4d1dae7fb4470338818dd8a4213ee77dba8cc59234bbcfe4f29f8cabda13a7c3"}),
   230: Object.freeze({"speciesIndex": 230, "speciesId": "species-230", "displayCode": "UL03", "src": "assets/production/database-handpainted-r1-20261015/species-230.png", "sha256": "09ebff7fb323886eae495e557158cdd204a04dc2d18aa686ad0060ac250e2e39"}),
   211: Object.freeze({"speciesIndex": 211, "speciesId": "species-211", "displayCode": "UL33", "src": "assets/production/database-handpainted-r1-20261015/species-211.png", "sha256": "20c03ae43a26d960c9a947a9ff8dc03fe8d5cbeed4ba528e39e2f36dd5865634"}),
@@ -101,7 +102,7 @@ function assertMeasured(snapshot, species, size = null) {
   assert.equal(snapshot.art, 'ready'); assert.equal(snapshot.complete, true); assert.equal(snapshot.hidden, false);
   assert.deepEqual(snapshot.natural, [expected.width ?? 1254, expected.height ?? 1254]); assert.equal(snapshot.objectFit, 'contain');
   assert.deepEqual(snapshot.padding, [24, 24, 24, 24]);
-  if (species === 117) assert.equal(snapshot.title, '曙刃天駒');
+  if (species === 117) assert.equal(snapshot.title, '天馬獸');
   if (expected.name) assert.equal(snapshot.title,expected.name,'Exact species name binding');
   assert.equal(snapshot.documentOverflow, false, 'Document-level horizontal overflow');
   assert.ok(snapshot.imageRect.width > 0 && snapshot.imageRect.height > 0);
@@ -198,6 +199,19 @@ function assertApproved44Coverage(evidence){
 }
 
 // DOM observation only. No application/session objects or private APIs are read.
+// The detail panel's entrance scale inflates getBoundingClientRect (about 0.5 %,
+// enough to fail one fit check at species 186): measure only once every finite
+// animation on the hero, its ancestors or its children has finished.
+function settleHeroAnimations(selector) {
+  const hero = document.querySelector(selector);
+  if (!hero) return null;
+  const running = document.getAnimations().filter(animation => {
+    const target = animation.effect?.target;
+    return target && (target === hero || target.contains(hero) || hero.contains(target))
+      && Number.isFinite(animation.effect.getComputedTiming().endTime);
+  });
+  return Promise.all(running.map(animation => animation.finished.catch(() => null))).then(() => running.length);
+}
 function mountedSnapshot() {
   const root = document.querySelector('.cm-vs2-root[data-screen="DATABASE"]');
   const row = root?.querySelector('.cm-vs2-database__row[data-selected="true"]');
@@ -289,7 +303,7 @@ async function main() {
     assertOriginalApprovalLineage();
     const registryPath = 'src/data/championship/database-hero-portraits.public.v1.json';
     const catalog = assertRegistry(fs.readFileSync(path.join(process.cwd(), registryPath)), compiledCatalogs.read(registryPath));
-    assert.equal(catalog.entries.length,EXPECTED_REGISTRY_COUNT,'194 preserved heroes plus exact approved20');
+    assert.equal(catalog.entries.length,EXPECTED_REGISTRY_COUNT,'194 preserved heroes, exact approved20 and the Rexmon forms');
     evidence.registry = { count: catalog.entries.length, sourceAndCompiledInputSha256: sha256(compiledCatalogs.read(registryPath)) };
     const productPath='src/data/championship/product-species-extensions.r1.json',assetPath='src/data/championship/alternate-form-assets.r1.json',bindingPath='src/data/championship/public-alternate-form-bindings.v1.json';
     evidence.productionCatalogs=[];
@@ -320,7 +334,7 @@ async function main() {
       const bytes=fs.readFileSync(file);assert.equal(sha256(bytes),media.sha256);
       evidence.all230ArtifactAssets.push({speciesIndex:entry.speciesIndex,role,sha256:sha256(bytes),bytes:bytes.length});
     }
-    assert.equal(evidence.all230ArtifactAssets.length,460);
+    assert.equal(evidence.all230ArtifactAssets.length,EXPECTED_REGISTRY_COUNT*2);
     for(const entry of [...APPROVED44,...APPROVED_GR_FIXES]){
       const thumb=entry.thumbnail,asset=resolveAsset(root,'/'+thumb.src);assert.ok(asset,'Approved20 thumbnail missing from build');
       const bytes=fs.readFileSync(asset);assert.equal(sha256(bytes),thumb.sha256);assert.ok(bytes.includes(Buffer.from('VP8L')));
@@ -421,7 +435,7 @@ async function main() {
       }
       await page.locator(HERO + '[data-art="ready"] .cm-dex-hero__image').waitFor({ state: 'visible', timeout: 30000 });
       await page.waitForFunction(([width,height]) => { const image = document.querySelector('.cm-dex-hero__image'); return image?.complete && image.naturalWidth === width && image.naturalHeight === height; }, [EXPECTED[species].width ?? 1254, EXPECTED[species].height ?? 1254]);
-      const snapshot = await page.evaluate(mountedSnapshot); assertMeasured(snapshot, species);
+      await page.evaluate(settleHeroAnimations, HERO); const snapshot = await page.evaluate(mountedSnapshot); assertMeasured(snapshot, species);
       (evidence.navigationTimings??=[]).push({speciesIndex:species,viewport:snapshot.viewport,durationMs:Date.now()-started});
       return snapshot;
     }
@@ -429,7 +443,7 @@ async function main() {
       const started=Date.now(),isApproved44=APPROVED44_IDS.includes(species);
       await page.locator(HERO).scrollIntoViewIfNeeded();
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-      const snapshot = await page.evaluate(mountedSnapshot); assertMeasured(snapshot, species, size);
+      await page.evaluate(settleHeroAnimations, HERO); const snapshot = await page.evaluate(mountedSnapshot); assertMeasured(snapshot, species, size);
       const visible=visibleHeroRect(snapshot);
       assert.ok(visible.x >= -1 && visible.y >= -1 && visible.right <= snapshot.viewport.width + 1 && visible.bottom <= snapshot.viewport.height + 1, 'Whole visible hero must be visible after normal scrolling');
       if(!isApproved44)await shot(name);
@@ -519,7 +533,7 @@ async function main() {
       for(const [step,species]of [40,39,41,40,38,48,49,52].entries()){
         await openSpecies(species,true);await page.locator(HERO).scrollIntoViewIfNeeded();
         await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-        const snapshot=await page.evaluate(mountedSnapshot);assertScopedGRGeometry(snapshot,species);
+        await page.evaluate(settleHeroAnimations,HERO);const snapshot=await page.evaluate(mountedSnapshot);assertScopedGRGeometry(snapshot,species);
         const heroScreenshot=`scoped-gr-${species}-${viewport.width}x${viewport.height}-${step}.png`;
         await timedScreenshot(page.locator(HERO),{path:path.join(output,heroScreenshot)});
         evidence.scopedGRCaptures.push({...snapshot,heroScreenshot,sizeTarget:'NORMAL_UNMODIFIED'});write();
@@ -624,7 +638,7 @@ async function selfTest() {
   assert.deepEqual(sizePlan(256, [24, 24, 24, 24]), { size: 256, width: 304, height: 304 });
   assert.throws(() => sizePlan(80, [24, 24, 24, 24])); assert.throws(() => sizePlan(128, [0, 0, 0, 0]));
   const fitFixture = silhouetteFixture;
-  const valid = { speciesIndex: 117, displayCode: 'MA58', rowState: 'UNDISCOVERED', title: '曙刃天駒', src: new URL(EXPECTED[117].src, PUBLIC_BASE).href,
+  const valid = { speciesIndex: 117, displayCode: 'MA58', rowState: 'UNDISCOVERED', title: '天馬獸', src: new URL(EXPECTED[117].src, PUBLIC_BASE).href,
     art: 'ready', complete: true, hidden: false, natural: [EXPECTED[117].width, EXPECTED[117].height], objectFit: 'contain', padding: [24, 24, 24, 24], documentOverflow: false,
     ...fitFixture(117, 128, 128) };
   assertMeasured(valid, 117, 128);
@@ -642,8 +656,8 @@ async function selfTest() {
   // Approved canonical name cleanup: bind independently to the requested names.
   // Keep strict title equality; reject stale names rather than weakening the assertion.
   for (const [species, name, staleName] of [
-    [40, '霜裘龍', '霜裘幼龍'], [63, '翠冠龍', '翠冠幼龍'],
-    [70, '星角龍', '星角幼龍'], [71, '裂焰龍', '裂焰幼龍']
+    [40, '毛皮龍', '霜裘幼龍'], [63, '綠冠龍', '翠冠幼龍'],
+    [70, '樂天龍', '星角幼龍'], [71, '大嘴龍', '裂焰幼龍']
   ]) {
     const expected = EXPECTED[species];
     assert.equal(expected.name, name);
@@ -687,7 +701,7 @@ async function selfTest() {
   assert.deepEqual(APPROVED_GR_FIXES.map(e=>e.speciesIndex).sort((a,b)=>a-b),[38,48,49,52]);
   for(const e of APPROVED_GR_FIXES)assert.equal(EXPECTED[e.speciesIndex].sha256,e.sha256,'Latest approved GR fixes override historical expectations');
   const sourceRegistry = Buffer.from(JSON.stringify(publicHeroes));
-  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,230);
+  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,EXPECTED_REGISTRY_COUNT);
   assert.throws(()=>assertRegistry(sourceRegistry,Buffer.from('{}')));
   for(const species of [9,10,...APPROVED44_IDS]){const missingBaby=Buffer.from(JSON.stringify({entries:JSON.parse(sourceRegistry).entries.filter(e=>e.speciesIndex!==species)}));assert.throws(()=>assertRegistry(missingBaby,missingBaby));}
   const duplicated=Buffer.from(JSON.stringify({entries:[{speciesIndex:117},{speciesIndex:55},{speciesIndex:117}]}));

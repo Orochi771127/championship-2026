@@ -38,7 +38,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/GR03/animation.web-v2-20261028.json",
-      "authoringSha256": "aa645ccf0fcc9af2819f3cdf7b96a12c212d1182bc1899032270c4b01d469178"
+      "authoringSha256": "aa645ccf0fcc9af2819f3cdf7b96a12c212d1182bc1899032270c4b01d469178",
+      "generalMirror": true
     },
     {
       "displayCode": "GR05",
@@ -51,7 +52,11 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/GR05/animation.web-v2-20261028.json",
-      "authoringSha256": "2ae3f7ef6ef92cd6d2085c8d5d6dd6378c4771cdd9ccbf609493b69263d9604c"
+      "authoringSha256": "2ae3f7ef6ef92cd6d2085c8d5d6dd6378c4771cdd9ccbf609493b69263d9604c",
+      "generalMirrorFrames": [
+        "GR05_MAIN_melee_00",
+        "GR05_MAIN_melee_01"
+      ]
     },
     {
       "displayCode": "GR06",
@@ -130,7 +135,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/GR11/animation.web-v2-20261028.json",
-      "authoringSha256": "b85384aeb4e9d26abb3414fc5b3e746825a46483d19c7721e96c924453c17095"
+      "authoringSha256": "b85384aeb4e9d26abb3414fc5b3e746825a46483d19c7721e96c924453c17095",
+      "generalMirror": true
     },
     {
       "displayCode": "GR12",
@@ -235,7 +241,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/GR20/animation.web-v2-20261028.json",
-      "authoringSha256": "4965f7f6e86eed50f24e240551dc34af6d44ded17193bf0f7c14ee4e880f87a8"
+      "authoringSha256": "4965f7f6e86eed50f24e240551dc34af6d44ded17193bf0f7c14ee4e880f87a8",
+      "generalMirror": true
     },
     {
       "displayCode": "GR21",
@@ -459,7 +466,17 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/GR38/animation.web-v2-20261028.json",
-      "authoringSha256": "e26441c668916a6db1cbfd753eb75f6b8b1df638c108863533a649b0b9bc8af0"
+      "authoringSha256": "e26441c668916a6db1cbfd753eb75f6b8b1df638c108863533a649b0b9bc8af0",
+      "generalMirrorFrames": [
+        "GR38_MA_00",
+        "GR38_MA_01",
+        "GR38_MA_02",
+        "GR38_MA_03",
+        "GR38_MC_08",
+        "GR38_MC_09",
+        "GR38_MC_10",
+        "GR38_BD_05"
+      ]
     },
     {
       "displayCode": "GR39",
@@ -536,9 +553,11 @@
       "clipCount": 58,
       "playableIdentity": true,
       "replacesOriginal": true,
-      "generalMirror": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA03/animation.web-v2-20261028.json",
-      "authoringSha256": "1add353503fd1df1a1e3fce61b390a8fd4bd126dee9f222478dabbed3bf3f41e"
+      "authoringSha256": "1add353503fd1df1a1e3fce61b390a8fd4bd126dee9f222478dabbed3bf3f41e",
+      "generalMirrorFrames": [
+        "MAIN_A16/cell_15"
+      ]
     },
     {
       "displayCode": "MA04",
@@ -579,7 +598,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA06/animation.web-v2-20261028.json",
-      "authoringSha256": "f3d0d0006471b584e721be45eeec8100283273bc0025d25d1c1af7d9baf127ad"
+      "authoringSha256": "f3d0d0006471b584e721be45eeec8100283273bc0025d25d1c1af7d9baf127ad",
+      "generalMirror": true
     },
     {
       "displayCode": "MA07",
@@ -592,7 +612,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA07/animation.web-v2-20261028.json",
-      "authoringSha256": "6f7b902301d70de744e79b85ce915929a89269669a3b202b60b3943c45f8f76e"
+      "authoringSha256": "6f7b902301d70de744e79b85ce915929a89269669a3b202b60b3943c45f8f76e",
+      "generalMirror": true
     },
     {
       "displayCode": "MA08",
@@ -605,7 +626,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA08/animation.web-v2-20261028.json",
-      "authoringSha256": "7dbc2184b19dbd887e8ed2eff8c16e84d15a8afe4b764549c992b66864fb15b4"
+      "authoringSha256": "7dbc2184b19dbd887e8ed2eff8c16e84d15a8afe4b764549c992b66864fb15b4",
+      "generalMirror": true
     },
     {
       "displayCode": "MA09",
@@ -618,7 +640,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA09/animation.web-v2-20261028.json",
-      "authoringSha256": "483a7adda6aedd54f02548b801cb0a9567b5e57cbbcb9c864f84f6bf7da993d9"
+      "authoringSha256": "483a7adda6aedd54f02548b801cb0a9567b5e57cbbcb9c864f84f6bf7da993d9",
+      "generalMirror": true
     },
     {
       "displayCode": "MA10",
@@ -631,7 +654,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA10/animation.web-v2-20261028.json",
-      "authoringSha256": "0d531ead9b9049453cc7caa1303f1f420a7db246914eed580deb2e64a65e06ab"
+      "authoringSha256": "0d531ead9b9049453cc7caa1303f1f420a7db246914eed580deb2e64a65e06ab",
+      "generalMirror": true
     },
     {
       "displayCode": "MA11",
@@ -672,7 +696,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA13/animation.web-v2-20261028.json",
-      "authoringSha256": "ab0db42e175a71601c8ba127612eb63f848fded702d201f6266ec805a252784b"
+      "authoringSha256": "ab0db42e175a71601c8ba127612eb63f848fded702d201f6266ec805a252784b",
+      "generalMirror": true
     },
     {
       "displayCode": "MA14",
@@ -685,7 +710,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA14/animation.web-v2-20261028.json",
-      "authoringSha256": "9a8abfe9cc9fd9ede31d3648b9beb681a72365419745feb070cd48eec68d75b4"
+      "authoringSha256": "9a8abfe9cc9fd9ede31d3648b9beb681a72365419745feb070cd48eec68d75b4",
+      "generalMirror": true
     },
     {
       "displayCode": "MA15",
@@ -751,7 +777,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA19/animation.web-v2-20261028.json",
-      "authoringSha256": "407bd93cc8b779c92dc6d4b6b57e94283963e5d69178164ef8accc135bd057eb"
+      "authoringSha256": "407bd93cc8b779c92dc6d4b6b57e94283963e5d69178164ef8accc135bd057eb",
+      "generalMirror": true
     },
     {
       "displayCode": "MA20",
@@ -764,7 +791,12 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA20/animation.web-v2-20261028.json",
-      "authoringSha256": "f564b6493de5fee5475995f761d61d0251cc7c7f93bd802e822f82036272059e"
+      "authoringSha256": "f564b6493de5fee5475995f761d61d0251cc7c7f93bd802e822f82036272059e",
+      "generalMirror": true,
+      "generalMirrorFrames": [
+        "MAIN_B16_v2/cell_08",
+        "MAIN_B16_v2/cell_09"
+      ]
     },
     {
       "displayCode": "MA21",
@@ -777,7 +809,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA21/animation.web-v2-20261028.json",
-      "authoringSha256": "8c45b7fc17a90bc367c354960f4d2480c084f7de580fdb33af5a32972a1c8785"
+      "authoringSha256": "8c45b7fc17a90bc367c354960f4d2480c084f7de580fdb33af5a32972a1c8785",
+      "generalMirror": true
     },
     {
       "displayCode": "MA22",
@@ -790,7 +823,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA22/animation.web-v2-20261028.json",
-      "authoringSha256": "0439904207a7bb65b00b18c997e060138213b34d8df962fdba9823034b360a1d"
+      "authoringSha256": "0439904207a7bb65b00b18c997e060138213b34d8df962fdba9823034b360a1d",
+      "generalMirror": true
     },
     {
       "displayCode": "MA23",
@@ -829,7 +863,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA25/animation.web-v2-20261028.json",
-      "authoringSha256": "feae62d883b21207552d9838eb0a8eb5f23fd2fe792d29b83abe2cf12d6ec00b"
+      "authoringSha256": "feae62d883b21207552d9838eb0a8eb5f23fd2fe792d29b83abe2cf12d6ec00b",
+      "generalMirror": true
     },
     {
       "displayCode": "MA26",
@@ -842,7 +877,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA26/animation.web-v2-20261028.json",
-      "authoringSha256": "9d662f954c8a7e5b59e8e1c18e149616de3f3bb11a599cb79f00ecc40358bc0c"
+      "authoringSha256": "9d662f954c8a7e5b59e8e1c18e149616de3f3bb11a599cb79f00ecc40358bc0c",
+      "generalMirror": true
     },
     {
       "displayCode": "MA27",
@@ -868,7 +904,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA29/animation.web-v2-20261028.json",
-      "authoringSha256": "ae6743c313d69f41537271e0ef117ba35aea2c3151f977cbac00acd42d0de5ef"
+      "authoringSha256": "ae6743c313d69f41537271e0ef117ba35aea2c3151f977cbac00acd42d0de5ef",
+      "generalMirror": true
     },
     {
       "displayCode": "MA30",
@@ -1010,7 +1047,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA40/animation.web-v2-20261028.json",
-      "authoringSha256": "f4b64e34c632a48ee2bece9810bebddd488d7989c75cff6d03056e795d867a28"
+      "authoringSha256": "f4b64e34c632a48ee2bece9810bebddd488d7989c75cff6d03056e795d867a28",
+      "generalMirror": true
     },
     {
       "displayCode": "MA41",
@@ -1050,7 +1088,11 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA43/animation.web-v2-20261028.json",
-      "authoringSha256": "f9ad69d7f81edd35e2d0a14a1a585efcabce8ad2ee842a1d8379b04aa8074b99"
+      "authoringSha256": "f9ad69d7f81edd35e2d0a14a1a585efcabce8ad2ee842a1d8379b04aa8074b99",
+      "generalMirror": true,
+      "generalMirrorFrames": [
+        "assets/MAIN_A16/cell_13.png"
+      ]
     },
     {
       "displayCode": "MA44",
@@ -1141,7 +1183,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA50/animation.web-v2-20261028.json",
-      "authoringSha256": "69e0a0adca69dbc3753b8d8fffa2dfc62bc337ddc79d204e41d2125f70e5e32f"
+      "authoringSha256": "69e0a0adca69dbc3753b8d8fffa2dfc62bc337ddc79d204e41d2125f70e5e32f",
+      "generalMirror": true
     },
     {
       "displayCode": "MA51",
@@ -1180,7 +1223,11 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA53/animation.web-v2-20261028.json",
-      "authoringSha256": "d37b264e784216f48e58b80de49be16e76a51282c72954cf6b048a9c1bc62778"
+      "authoringSha256": "d37b264e784216f48e58b80de49be16e76a51282c72954cf6b048a9c1bc62778",
+      "generalMirrorFrames": [
+        "assets/MAIN_B16/cell_12.png",
+        "assets/MAIN_B16/cell_13.png"
+      ]
     },
     {
       "displayCode": "MA54",
@@ -1193,7 +1240,11 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA54/animation.web-v2-20261028.json",
-      "authoringSha256": "e1a956b92297c8f97da24464177675c64f462eaba91897fb2ddfd6cdf166c5ee"
+      "authoringSha256": "e1a956b92297c8f97da24464177675c64f462eaba91897fb2ddfd6cdf166c5ee",
+      "generalMirror": true,
+      "generalMirrorFrames": [
+        "assets/MAIN_A16/cell_15.png"
+      ]
     },
     {
       "displayCode": "MA55",
@@ -1206,7 +1257,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA55/animation.web-v2-20261028.json",
-      "authoringSha256": "98ddb84f3f5861b8764d7025d13bc39aa9212bbadd671848238f53862b1dab48"
+      "authoringSha256": "98ddb84f3f5861b8764d7025d13bc39aa9212bbadd671848238f53862b1dab48",
+      "generalMirror": true
     },
     {
       "displayCode": "MA56",
@@ -1313,7 +1365,8 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA63/animation.web-v2-20261028.json",
-      "authoringSha256": "c05f6f0bcd8082b7168d6e32e7af485b3b932c44b0a05b50d140293da3b96c70"
+      "authoringSha256": "c05f6f0bcd8082b7168d6e32e7af485b3b932c44b0a05b50d140293da3b96c70",
+      "generalMirror": true
     },
     {
       "displayCode": "MA64",
@@ -1326,7 +1379,13 @@
       "playableIdentity": true,
       "replacesOriginal": true,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA64/animation.web-v2-20261028.json",
-      "authoringSha256": "d312ca63e64f71f10a0444184adec10433cf1ecfb8aef367f01781b537bb2349"
+      "authoringSha256": "d312ca63e64f71f10a0444184adec10433cf1ecfb8aef367f01781b537bb2349",
+      "generalMirrorFrames": [
+        "assets/MAIN_A16/cell_08.png",
+        "assets/MAIN_A16/cell_09.png",
+        "assets/MAIN_A16/cell_10.png",
+        "assets/MAIN_A16/cell_11.png"
+      ]
     },
     {
       "displayCode": "MA65",
@@ -1338,7 +1397,8 @@
       "clipCount": 57,
       "playableIdentity": false,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA65/animation.web-v2-20261028.json",
-      "authoringSha256": "c96be1c8e75ba8c7fc9d9de4e16764118be7b229849fffc42dd8d91940cbf0db"
+      "authoringSha256": "c96be1c8e75ba8c7fc9d9de4e16764118be7b229849fffc42dd8d91940cbf0db",
+      "generalMirror": true
     },
     {
       "displayCode": "MA66",
@@ -1362,7 +1422,8 @@
       "clipCount": 57,
       "playableIdentity": false,
       "authoringPath": "assets/production/characters/reviewed107-20261026/MA67/animation.web-v2-20261028.json",
-      "authoringSha256": "27774b43dd86f9954c04cd863093cf6abd876dd6a38c2439e1e3da601c6d8464"
+      "authoringSha256": "27774b43dd86f9954c04cd863093cf6abd876dd6a38c2439e1e3da601c6d8464",
+      "generalMirror": true
     },
     {
       "displayCode": "MA68",
@@ -1400,7 +1461,8 @@
       "replacesOriginal": true,
       "generalDisplayScale": 0.56,
       "authoringPath": "assets/production/characters/reviewed-awakened-20261028/AW29/animation.aw29-selected76-main33v2-ko-web-20261028.json",
-      "authoringSha256": "e8122c98ae4b195f3d8108f98e5c8b1e02eed5eb2b46ec198638ca254ad40d30"
+      "authoringSha256": "e8122c98ae4b195f3d8108f98e5c8b1e02eed5eb2b46ec198638ca254ad40d30",
+      "generalMirror": true
     },
     {
       "displayCode": "AW25",
@@ -1414,7 +1476,8 @@
       "replacesOriginal": true,
       "generalDisplayScale": 0.56,
       "authoringPath": "assets/production/characters/reviewed-awakened-20261028/AW25/animation.aw25-batch2-web-20261028.json",
-      "authoringSha256": "24d6ae35bd4350bb0dcf8a51532cf37b1c45baedd43af3c3e848bc77b8a1208a"
+      "authoringSha256": "24d6ae35bd4350bb0dcf8a51532cf37b1c45baedd43af3c3e848bc77b8a1208a",
+      "generalMirror": true
     },
     {
       "displayCode": "AW28",
@@ -1428,7 +1491,11 @@
       "replacesOriginal": true,
       "generalDisplayScale": 0.56,
       "authoringPath": "assets/production/characters/reviewed-awakened-20261028/AW28/animation.aw28-e06w06-pivotfix-web-20261028.json",
-      "authoringSha256": "2dbad115435abc3e4b582f75b29dd08b31d76af807a7010462fa2b74f4f3db43"
+      "authoringSha256": "2dbad115435abc3e4b582f75b29dd08b31d76af807a7010462fa2b74f4f3db43",
+      "generalMirror": true,
+      "generalMirrorFrames": [
+        "approved-individuals-delta8-b8-v1/frames/07@mirrorX"
+      ]
     },
     {
       "displayCode": "AW32",
@@ -1442,7 +1509,8 @@
       "replacesOriginal": true,
       "generalDisplayScale": 0.56,
       "authoringPath": "assets/production/characters/reviewed-awakened-20261028/AW32/animation.aw32-batch2-web-20261028.json",
-      "authoringSha256": "48262973d2126a4a9ad06fa25255a4631077af86b454944857f3b5d8f03eac14"
+      "authoringSha256": "48262973d2126a4a9ad06fa25255a4631077af86b454944857f3b5d8f03eac14",
+      "generalMirror": true
     },
     {
       "displayCode": "AW26",
@@ -1470,7 +1538,12 @@
       "replacesOriginal": true,
       "generalDisplayScale": 0.56,
       "authoringPath": "assets/production/characters/reviewed-awakened-20261028/AW27/animation.aw27-selected110-fx-web-20261028.json",
-      "authoringSha256": "4223328da843266b9cc9194e35104becf817418df38e55ee1271c66b07ec58d6"
+      "authoringSha256": "4223328da843266b9cc9194e35104becf817418df38e55ee1271c66b07ec58d6",
+      "generalMirror": true,
+      "generalMirrorFrames": [
+        "GENERAL_NATIVE20/00",
+        "GENERAL_BOUND/11"
+      ]
     },
     {
       "displayCode": "AW31",
@@ -1485,6 +1558,16 @@
       "generalDisplayScale": 0.56,
       "authoringPath": "assets/production/characters/reviewed-awakened-20261028/AW31/animation.aw31-current89-web-20261028.json",
       "authoringSha256": "5b66720ce8215c5fdbd0f30cdccf9bb7661eaa7bb042ab94078ad132dbdd3eec"
+    },
+    {
+      "displayCode": "UL42",
+      "speciesId": "species-244",
+      "displayName": "雷克斯獸・戰鬥型態",
+      "path": "assets/production/characters/reviewed-ultimate-20261030/UL42/animation.public-v1.json",
+      "sha256": "cbf7967d4a06d763dab41fcc1797a189ad518702668757686333bfc347be9a1a",
+      "frameCount": 51,
+      "clipCount": 32,
+      "playableIdentity": false
     }
   ],
   "excluded": [
