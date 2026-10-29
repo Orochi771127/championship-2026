@@ -52,6 +52,9 @@ FACE_OVERRIDES = {
     # Second review (2026-10-29), from the calibrator's alpha check (scripts/calibrate-218-visual-anchors.mjs).
     83: (0.30, 0.22, 0.35), 110: (0.58, 0.26, 0.30), 120: (0.42, 0.32, 0.35), 146: (0.83, 0.25, 0.30),
     184: (0.42, 0.32, 0.40), 214: (0.15, 0.27, 0.30),
+    # Rexmon (2026-10-29): the dragon's open jaw faces left of a long body; the battle form's chest
+    # dragon head has gem eyes, not a face, so the head is the small crested helmet above it.
+    243: (0.13, 0.31, 0.28), 244: (0.57, 0.18, 0.20),
 }
 
 

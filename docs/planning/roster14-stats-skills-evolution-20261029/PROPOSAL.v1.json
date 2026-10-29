@@ -1,0 +1,1762 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-29",
+  "status": "PROPOSAL_FOR_OWNER_REVIEW_NOT_LOADED",
+  "scope": "Stats, skills and evolution for the 14 art-only Dex identities 231-244. Not imported by the game; animation, Data Arena kits, move VFX and 4-locale names remain separate.",
+  "elementMapping": "elementSelect 0 physical(defense) 1 heat 2 cold 3 light 4 dark 5 thunder - inferred from the defender resistance order in battleDamageInputs.js (HEAT..THUNDER); statusCode left 0 because status meanings are not traced.",
+  "species": [
+    {
+      "speciesIndex": 238,
+      "code": "B215",
+      "name": "雷霆幼狼",
+      "stage": "幼年期2",
+      "generationIndex": 2,
+      "attribute": "無",
+      "family": "獸",
+      "statCurveIndex": 2,
+      "baseHp": 360,
+      "baseStat": 18,
+      "hidden": {
+        "huntClass": 2,
+        "generationScaled": 8,
+        "life": 5760,
+        "sleep": [
+          30,
+          60
+        ],
+        "capacity": 12
+      },
+      "moves": [
+        {
+          "name": "靜電撲咬",
+          "kind": "近戰",
+          "power": 100,
+          "tp": 0,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "劈啪電團",
+          "kind": "射擊",
+          "power": 400,
+          "tp": 4,
+          "element": "雷",
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1
+        }
+      ],
+      "evolvesFrom": [
+        {
+          "source": 18,
+          "via": "INSERTED_INTO_NATIVE",
+          "position": 3
+        }
+      ],
+      "evolvesTo": [
+        {
+          "branch": 1,
+          "target": 239,
+          "kind": "LIFETIME_FALLBACK",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "conditions": "（無門檻）"
+        }
+      ],
+      "rationale": "幼年期2 常態 curve 2；耳尾靜電 → 雷屬射擊"
+    },
+    {
+      "speciesIndex": 239,
+      "code": "GR41",
+      "name": "雷霆貓狼",
+      "stage": "成長期",
+      "generationIndex": 3,
+      "attribute": "疫苗",
+      "family": "獸",
+      "statCurveIndex": 5,
+      "baseHp": 600,
+      "baseStat": 30,
+      "hidden": {
+        "huntClass": 2,
+        "generationScaled": 10,
+        "life": 11520,
+        "sleep": [
+          60,
+          120
+        ],
+        "capacity": 14
+      },
+      "moves": [
+        {
+          "name": "電爪撲擊",
+          "kind": "近戰",
+          "power": 100,
+          "tp": 0,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "金光迅雷",
+          "kind": "射擊",
+          "power": 300,
+          "tp": 6,
+          "element": "雷",
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "蓄電突進",
+          "kind": "射擊",
+          "power": 400,
+          "tp": 10,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        }
+      ],
+      "evolvesFrom": [
+        {
+          "source": 238,
+          "via": "NEW_RULE"
+        }
+      ],
+      "evolvesTo": [
+        {
+          "branch": 1,
+          "target": 240,
+          "kind": "LIFETIME_FALLBACK",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "conditions": "（無門檻）"
+        }
+      ],
+      "rationale": "成長期中位 curve 5；肉墊蓄電、奔跑金色電光"
+    },
+    {
+      "speciesIndex": 240,
+      "code": "MA69",
+      "name": "雷霆戰狼",
+      "stage": "成熟期",
+      "generationIndex": 4,
+      "attribute": "疫苗",
+      "family": "獸",
+      "statCurveIndex": 9,
+      "baseHp": 1320,
+      "baseStat": 66,
+      "hidden": {
+        "huntClass": 2,
+        "generationScaled": 14,
+        "life": 17280,
+        "sleep": [
+          60,
+          180
+        ],
+        "capacity": 16
+      },
+      "moves": [
+        {
+          "name": "雷牙咬",
+          "kind": "近戰",
+          "power": 100,
+          "tp": 0,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "雷速突擊",
+          "kind": "射擊",
+          "power": 400,
+          "tp": 12,
+          "element": "雷",
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "狼群雷陣",
+          "kind": "射擊",
+          "power": 450,
+          "tp": 18,
+          "element": "雷",
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1
+        }
+      ],
+      "evolvesFrom": [
+        {
+          "source": 239,
+          "via": "NEW_RULE"
+        }
+      ],
+      "evolvesTo": [
+        {
+          "branch": 1,
+          "target": 241,
+          "kind": "ORDINARY",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            40,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0
+          ],
+          "conditions": "獸點40 戰鬥數10"
+        },
+        {
+          "branch": 2,
+          "target": 178,
+          "kind": "LIFETIME_FALLBACK",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "conditions": "（無門檻）"
+        }
+      ],
+      "rationale": "成熟期偏上 curve 9；巡邏領袖、雷速突擊"
+    },
+    {
+      "speciesIndex": 241,
+      "code": "AW53",
+      "name": "雷霆戰狼（覺醒體）",
+      "stage": "覺醒體",
+      "generationIndex": 5,
+      "attribute": "疫苗",
+      "family": "獸",
+      "statCurveIndex": 14,
+      "baseHp": 2640,
+      "baseStat": 132,
+      "hidden": {
+        "huntClass": 3,
+        "generationScaled": 18,
+        "life": 24480,
+        "sleep": [
+          60,
+          180
+        ],
+        "capacity": 18
+      },
+      "moves": [
+        {
+          "name": "雷刃拳",
+          "kind": "近戰",
+          "power": 100,
+          "tp": 0,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "狂雷裂空",
+          "kind": "射擊",
+          "power": 300,
+          "tp": 25,
+          "element": "雷",
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "萬伏雷刃",
+          "kind": "射擊",
+          "power": 420,
+          "tp": 35,
+          "element": "雷",
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1
+        }
+      ],
+      "evolvesFrom": [
+        {
+          "source": 240,
+          "via": "NEW_RULE"
+        }
+      ],
+      "evolvesTo": [
+        {
+          "branch": 1,
+          "target": 242,
+          "kind": "ORDINARY",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            60,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            16,
+            50,
+            0,
+            0
+          ],
+          "conditions": "獸點60 戰鬥數16 勝率50"
+        }
+      ],
+      "rationale": "覺醒體偏上 curve 14；神速雷刃拳甲"
+    },
+    {
+      "speciesIndex": 242,
+      "code": "UL40",
+      "name": "雷霆霸狼",
+      "stage": "究極體",
+      "generationIndex": 6,
+      "attribute": "疫苗",
+      "family": "獸",
+      "statCurveIndex": 21,
+      "baseHp": 5040,
+      "baseStat": 252,
+      "hidden": {
+        "huntClass": 0,
+        "generationScaled": 24,
+        "life": 30240,
+        "sleep": [
+          60,
+          180
+        ],
+        "capacity": 24
+      },
+      "moves": [
+        {
+          "name": "霸狼撲",
+          "kind": "近戰",
+          "power": 100,
+          "tp": 0,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "神雷風暴",
+          "kind": "射擊",
+          "power": 280,
+          "tp": 35,
+          "element": "雷",
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "雷光翼斬",
+          "kind": "射擊",
+          "power": 380,
+          "tp": 45,
+          "element": "雷",
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "天雷審判",
+          "kind": "射擊",
+          "power": 150,
+          "tp": 65,
+          "element": "雷",
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1
+        }
+      ],
+      "evolvesFrom": [
+        {
+          "source": 241,
+          "via": "NEW_RULE"
+        }
+      ],
+      "evolvesTo": [],
+      "rationale": "究極體偏上 curve 21；守護秩序（疫苗）、四招同 UL01 結構"
+    },
+    {
+      "speciesIndex": 231,
+      "code": "GR39",
+      "name": "星河山豬・成長期",
+      "stage": "成長期",
+      "generationIndex": 3,
+      "attribute": "資料",
+      "family": "獸",
+      "statCurveIndex": 5,
+      "baseHp": 600,
+      "baseStat": 30,
+      "hidden": {
+        "huntClass": 2,
+        "generationScaled": 10,
+        "life": 11520,
+        "sleep": [
+          60,
+          120
+        ],
+        "capacity": 14
+      },
+      "moves": [
+        {
+          "name": "星角突進",
+          "kind": "近戰",
+          "power": 100,
+          "tp": 0,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "星塵衝撞",
+          "kind": "射擊",
+          "power": 400,
+          "tp": 6,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        }
+      ],
+      "evolvesFrom": [
+        {
+          "source": 23,
+          "via": "INSERTED_INTO_NATIVE",
+          "position": 1
+        }
+      ],
+      "evolvesTo": [
+        {
+          "branch": 1,
+          "target": 232,
+          "kind": "LIFETIME_FALLBACK",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "conditions": "（無門檻）"
+        }
+      ],
+      "rationale": "成長期中位 curve 5；尋找數據殘片（資料）、雙角突進"
+    },
+    {
+      "speciesIndex": 232,
+      "code": "MA65",
+      "name": "星河山豬・成熟期",
+      "stage": "成熟期",
+      "generationIndex": 4,
+      "attribute": "資料",
+      "family": "獸",
+      "statCurveIndex": 9,
+      "baseHp": 1320,
+      "baseStat": 66,
+      "hidden": {
+        "huntClass": 2,
+        "generationScaled": 14,
+        "life": 17280,
+        "sleep": [
+          60,
+          180
+        ],
+        "capacity": 16
+      },
+      "moves": [
+        {
+          "name": "星岩衝撞",
+          "kind": "近戰",
+          "power": 100,
+          "tp": 0,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "彗星光軌",
+          "kind": "射擊",
+          "power": 400,
+          "tp": 12,
+          "element": "光",
+          "elementSelect": 3,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "重力碎牆",
+          "kind": "射擊",
+          "power": 450,
+          "tp": 18,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        }
+      ],
+      "evolvesFrom": [
+        {
+          "source": 231,
+          "via": "NEW_RULE"
+        }
+      ],
+      "evolvesTo": [
+        {
+          "branch": 1,
+          "target": 233,
+          "kind": "ORDINARY",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            40,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0
+          ],
+          "conditions": "獸點40 戰鬥數10"
+        },
+        {
+          "branch": 2,
+          "target": 165,
+          "kind": "LIFETIME_FALLBACK",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "conditions": "（無門檻）"
+        }
+      ],
+      "rationale": "重裝巨獸 curve 9；彗星光軌（光）與撞碎防火牆（物理）"
+    },
+    {
+      "speciesIndex": 233,
+      "code": "AW52",
+      "name": "星河山豬・覺醒體",
+      "stage": "覺醒體",
+      "generationIndex": 5,
+      "attribute": "資料",
+      "family": "獸",
+      "statCurveIndex": 13,
+      "baseHp": 2340,
+      "baseStat": 117,
+      "hidden": {
+        "huntClass": 3,
+        "generationScaled": 18,
+        "life": 24480,
+        "sleep": [
+          60,
+          180
+        ],
+        "capacity": 18
+      },
+      "moves": [
+        {
+          "name": "金甲拳",
+          "kind": "近戰",
+          "power": 100,
+          "tp": 0,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "引力衝擊波",
+          "kind": "射擊",
+          "power": 300,
+          "tp": 25,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "星爆威壓",
+          "kind": "射擊",
+          "power": 420,
+          "tp": 35,
+          "element": "光",
+          "elementSelect": 3,
+          "statusCode": 0,
+          "targetMode": 1
+        }
+      ],
+      "evolvesFrom": [
+        {
+          "source": 232,
+          "via": "NEW_RULE"
+        }
+      ],
+      "evolvesTo": [],
+      "rationale": "覺醒體中位 curve 13；引力衝擊波、星爆"
+    },
+    {
+      "speciesIndex": 234,
+      "code": "MA66",
+      "name": "星海母",
+      "stage": "成熟期",
+      "generationIndex": 4,
+      "attribute": "資料",
+      "family": "水",
+      "statCurveIndex": 7,
+      "baseHp": 920,
+      "baseStat": 46,
+      "hidden": {
+        "huntClass": 2,
+        "generationScaled": 14,
+        "life": 17280,
+        "sleep": [
+          60,
+          180
+        ],
+        "capacity": 16
+      },
+      "moves": [
+        {
+          "name": "觸手輕撫",
+          "kind": "近戰",
+          "power": 100,
+          "tp": 0,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "電離光粉",
+          "kind": "射擊",
+          "power": 300,
+          "tp": 12,
+          "element": "雷",
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "星雲淨化",
+          "kind": "射擊",
+          "power": 400,
+          "tp": 18,
+          "element": "光",
+          "elementSelect": 3,
+          "statusCode": 0,
+          "targetMode": 1
+        }
+      ],
+      "evolvesFrom": [
+        {
+          "source": 37,
+          "via": "INSERTED_INTO_NATIVE",
+          "position": 1
+        }
+      ],
+      "evolvesTo": [
+        {
+          "branch": 1,
+          "target": 166,
+          "kind": "ORDINARY",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            40,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            8,
+            0,
+            0,
+            0
+          ],
+          "conditions": "水點40 戰鬥數8"
+        },
+        {
+          "branch": 2,
+          "target": 161,
+          "kind": "LIFETIME_FALLBACK",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "conditions": "（無門檻）"
+        }
+      ],
+      "rationale": "溫和水母 curve 7（偏低）；純化數據流（資料）、電離光粉麻痺（雷）"
+    },
+    {
+      "speciesIndex": 235,
+      "code": "MA67",
+      "name": "極光鯊",
+      "stage": "成熟期",
+      "generationIndex": 4,
+      "attribute": "病毒",
+      "family": "水",
+      "statCurveIndex": 9,
+      "baseHp": 1320,
+      "baseStat": 66,
+      "hidden": {
+        "huntClass": 2,
+        "generationScaled": 14,
+        "life": 17280,
+        "sleep": [
+          60,
+          180
+        ],
+        "capacity": 16
+      },
+      "moves": [
+        {
+          "name": "破冰背鰭",
+          "kind": "近戰",
+          "power": 100,
+          "tp": 0,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "極光衝刺",
+          "kind": "射擊",
+          "power": 400,
+          "tp": 12,
+          "element": "冷",
+          "elementSelect": 2,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "極光斷訊",
+          "kind": "射擊",
+          "power": 450,
+          "tp": 18,
+          "element": "光",
+          "elementSelect": 3,
+          "statusCode": 0,
+          "targetMode": 1
+        }
+      ],
+      "evolvesFrom": [
+        {
+          "source": 42,
+          "via": "INSERTED_INTO_NATIVE",
+          "position": 1
+        }
+      ],
+      "evolvesTo": [
+        {
+          "branch": 1,
+          "target": 148,
+          "kind": "ORDINARY",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            40,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0
+          ],
+          "conditions": "水點40 戰鬥數10"
+        },
+        {
+          "branch": 2,
+          "target": 155,
+          "kind": "LIFETIME_FALLBACK",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "conditions": "（無門檻）"
+        }
+      ],
+      "rationale": "超音速掠食者 curve 9；極地冰冷（冷）＋極光（光）"
+    },
+    {
+      "speciesIndex": 236,
+      "code": "MA68",
+      "name": "天穹螳",
+      "stage": "成熟期",
+      "generationIndex": 4,
+      "attribute": "疫苗",
+      "family": "昆蟲植物",
+      "statCurveIndex": 8,
+      "baseHp": 1080,
+      "baseStat": 54,
+      "hidden": {
+        "huntClass": 2,
+        "generationScaled": 14,
+        "life": 17280,
+        "sleep": [
+          60,
+          180
+        ],
+        "capacity": 16
+      },
+      "moves": [
+        {
+          "name": "翡翠鐮",
+          "kind": "近戰",
+          "power": 100,
+          "tp": 0,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "電磁鐮刃",
+          "kind": "射擊",
+          "power": 400,
+          "tp": 12,
+          "element": "雷",
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "青光一閃",
+          "kind": "射擊",
+          "power": 450,
+          "tp": 18,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        }
+      ],
+      "evolvesFrom": [
+        {
+          "source": 49,
+          "via": "INSERTED_INTO_NATIVE",
+          "position": 1
+        }
+      ],
+      "evolvesTo": [
+        {
+          "branch": 1,
+          "target": 136,
+          "kind": "ORDINARY",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            40,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0
+          ],
+          "conditions": "昆植點40 戰鬥數10"
+        },
+        {
+          "branch": 2,
+          "target": 175,
+          "kind": "LIFETIME_FALLBACK",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "conditions": "（無門檻）"
+        }
+      ],
+      "rationale": "成熟期中位 curve 8；斬斷惡意程序（疫苗）、電磁鐮刀"
+    },
+    {
+      "speciesIndex": 237,
+      "code": "GR40",
+      "name": "星核豆獸（豆豆）",
+      "stage": "成長期",
+      "generationIndex": 3,
+      "attribute": "資料",
+      "family": "機械",
+      "statCurveIndex": 4,
+      "baseHp": 520,
+      "baseStat": 26,
+      "hidden": {
+        "huntClass": 2,
+        "generationScaled": 10,
+        "life": 11520,
+        "sleep": [
+          60,
+          120
+        ],
+        "capacity": 14
+      },
+      "moves": [
+        {
+          "name": "豆豆彈跳",
+          "kind": "近戰",
+          "power": 100,
+          "tp": 0,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "星能壓縮彈",
+          "kind": "射擊",
+          "power": 400,
+          "tp": 6,
+          "element": "光",
+          "elementSelect": 3,
+          "statusCode": 0,
+          "targetMode": 1
+        }
+      ],
+      "evolvesFrom": [
+        {
+          "source": 30,
+          "via": "INSERTED_INTO_NATIVE",
+          "position": 3
+        }
+      ],
+      "evolvesTo": [
+        {
+          "branch": 1,
+          "target": 94,
+          "kind": "ORDINARY",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            20,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            6,
+            0,
+            0,
+            0
+          ],
+          "conditions": "機械點20 戰鬥數6"
+        },
+        {
+          "branch": 2,
+          "target": 88,
+          "kind": "LIFETIME_FALLBACK",
+          "thresholds": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "conditions": "（無門檻）"
+        }
+      ],
+      "rationale": "小型 curve 4（同鐵殼龜／K歌蚪）；豆族沿用 資料／機械"
+    },
+    {
+      "speciesIndex": 243,
+      "code": "UL41",
+      "name": "雷克斯獸",
+      "stage": "究極體",
+      "generationIndex": 6,
+      "attribute": "資料",
+      "family": "龍",
+      "statCurveIndex": 20,
+      "baseHp": 4680,
+      "baseStat": 234,
+      "hidden": {
+        "huntClass": 0,
+        "generationScaled": 24,
+        "life": 30240,
+        "sleep": [
+          60,
+          180
+        ],
+        "capacity": 24
+      },
+      "moves": [
+        {
+          "name": "機甲龍顎",
+          "kind": "近戰",
+          "power": 100,
+          "tp": 0,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "雙背軌道砲",
+          "kind": "射擊",
+          "power": 300,
+          "tp": 35,
+          "element": "雷",
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "分節尾刃",
+          "kind": "射擊",
+          "power": 380,
+          "tp": 45,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        }
+      ],
+      "evolvesFrom": [
+        {
+          "source": 173,
+          "via": "INSERTED_INTO_NATIVE",
+          "position": 3
+        }
+      ],
+      "evolvesTo": [],
+      "rationale": "究極體中位 curve 20；龍形以龍顎與背炮為主"
+    },
+    {
+      "speciesIndex": 244,
+      "code": "UL42",
+      "name": "雷克斯獸·戰鬥型態",
+      "stage": "究極體",
+      "generationIndex": 6,
+      "attribute": "資料",
+      "family": "機械",
+      "statCurveIndex": 20,
+      "baseHp": 4680,
+      "baseStat": 234,
+      "hidden": {
+        "huntClass": 0,
+        "generationScaled": 24,
+        "life": 30240,
+        "sleep": [
+          60,
+          180
+        ],
+        "capacity": 24
+      },
+      "moves": [
+        {
+          "name": "兩指龍爪",
+          "kind": "近戰",
+          "power": 100,
+          "tp": 0,
+          "element": "物理",
+          "elementSelect": 0,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "右臂磁軌砲",
+          "kind": "射擊",
+          "power": 280,
+          "tp": 35,
+          "element": "雷",
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "雙背軌道砲齊射",
+          "kind": "射擊",
+          "power": 380,
+          "tp": 45,
+          "element": "雷",
+          "elementSelect": 5,
+          "statusCode": 0,
+          "targetMode": 1
+        },
+        {
+          "name": "胸甲琥珀光",
+          "kind": "射擊",
+          "power": 150,
+          "tp": 65,
+          "element": "光",
+          "elementSelect": 3,
+          "statusCode": 0,
+          "targetMode": 1
+        }
+      ],
+      "evolvesFrom": [
+        {
+          "source": 173,
+          "via": "INSERTED_INTO_NATIVE",
+          "position": 4
+        }
+      ],
+      "evolvesTo": [],
+      "rationale": "同角色同 curve 20；人形以右臂磁軌砲與背炮齊射為主"
+    }
+  ],
+  "nativeInserts": [
+    {
+      "source": 18,
+      "position": 3,
+      "target": 238,
+      "kind": 0,
+      "why": "毛草球 現有 機械20／龍20 之後、保底之前；獸點未被使用",
+      "displaces": [],
+      "sourceName": "毛草球",
+      "sourceCode": "B112",
+      "targetName": "雷霆幼狼",
+      "thresholds": [
+        0,
+        0,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "conditions": "獸點20",
+      "existingBranches": "1.小火芯 2.紅頭丸 3.泥螺仔"
+    },
+    {
+      "source": 23,
+      "position": 1,
+      "target": 231,
+      "kind": 0,
+      "why": "摔跤絨 首條是 戰鬥數3，任何新條件放後面都會被搶；放第一並用 獸＋聖 雙門檻，只影響同時達標者",
+      "displaces": [],
+      "sourceName": "摔跤絨",
+      "sourceCode": "B205",
+      "targetName": "星河山豬・成長期",
+      "thresholds": [
+        0,
+        0,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "conditions": "獸點20 聖點20",
+      "existingBranches": "1.拳擊狼 2.毛皮龍 3.花紋狗 4.霹靂獾"
+    },
+    {
+      "source": 30,
+      "position": 3,
+      "target": 237,
+      "kind": 0,
+      "why": "Q彈丸（彈跳、機械）現有 水20／昆植20 之後、保底之前；機械點未被使用",
+      "displaces": [],
+      "sourceName": "Q彈丸",
+      "sourceCode": "B214",
+      "targetName": "星核豆獸（豆豆）",
+      "thresholds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "conditions": "機械點20",
+      "existingBranches": "1.鐵殼龜 2.講理蟲 3.菜蟲仔"
+    },
+    {
+      "source": 37,
+      "position": 1,
+      "target": 234,
+      "kind": 0,
+      "why": "K歌蚪 首條 戰鬥數4；放第一並用 水＋資料 雙門檻",
+      "displaces": [],
+      "sourceName": "K歌蚪",
+      "sourceCode": "GR05",
+      "targetName": "星海母",
+      "thresholds": [
+        0,
+        20,
+        0,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "conditions": "水點20 資料點20",
+      "existingBranches": "1.深海魷 2.動次蛙 3.廢泥怪"
+    },
+    {
+      "source": 42,
+      "position": 1,
+      "target": 235,
+      "kind": 0,
+      "why": "嚇人蜥 首條 戰鬥數6；放第一並加 水＋病毒",
+      "displaces": [],
+      "sourceName": "嚇人蜥",
+      "sourceCode": "GR10",
+      "targetName": "極光鯊",
+      "thresholds": [
+        0,
+        0,
+        20,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "conditions": "水點20 病毒點20 戰鬥數6",
+      "existingBranches": "1.四眼龍 2.海蛟龍 3.大螺王 4.深海魷"
+    },
+    {
+      "source": 49,
+      "position": 1,
+      "target": 236,
+      "kind": 0,
+      "why": "講理蟲 首條 戰鬥數6；放第一並加 昆植＋疫苗",
+      "displaces": [],
+      "sourceName": "講理蟲",
+      "sourceCode": "GR22",
+      "targetName": "天穹螳",
+      "thresholds": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "conditions": "昆植點20 疫苗點20 戰鬥數6",
+      "existingBranches": "1.電鍬蟲 2.大剪蟲 3.枯木爺 4.刺拳花"
+    },
+    {
+      "source": 173,
+      "position": 3,
+      "target": 243,
+      "kind": 0,
+      "why": "雙砲龍（雙背砲）現有兩條都要轉生，放其後：未轉生者可進雷克斯獸",
+      "displaces": [],
+      "sourceName": "雙砲龍",
+      "sourceCode": "AW45",
+      "targetName": "雷克斯獸",
+      "thresholds": [
+        0,
+        0,
+        0,
+        60,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        18,
+        50,
+        0,
+        0
+      ],
+      "conditions": "龍點60 戰鬥數18 勝率50",
+      "existingBranches": "1.太陽龍 2.炎刃龍"
+    },
+    {
+      "source": 173,
+      "position": 4,
+      "target": 244,
+      "kind": 0,
+      "why": "同一來源的人形分支；真正的同個體變形需新機制（決策 D4）",
+      "displaces": [],
+      "sourceName": "雙砲龍",
+      "sourceCode": "AW45",
+      "targetName": "雷克斯獸·戰鬥型態",
+      "thresholds": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        60,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        18,
+        50,
+        0,
+        0
+      ],
+      "conditions": "機械點60 戰鬥數18 勝率50",
+      "existingBranches": "1.太陽龍 2.炎刃龍"
+    }
+  ],
+  "checks": {
+    "problems": []
+  }
+}

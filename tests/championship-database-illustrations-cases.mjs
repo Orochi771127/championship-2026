@@ -18,6 +18,7 @@ import {setLocale} from '../src/championship/text/locale.js';
 const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const ids=[231,232,233,234,235,236,237,238,239,240,241,242];
+const rexmon=[243,244]; // art only, no authored story yet (tests/championship-rexmon-two-forms-cases.mjs)
 const manifest=read('docs/art/production/characters/approved-six-illustrations-20261018/manifest.json');
 
 test('gallery locale coverage recognizes only the exact complete five-language dictionary',()=>{
@@ -53,16 +54,16 @@ test('all 134 prior published hero selections remain exact',()=>{
   assert.equal(sha(Buffer.from(JSON.stringify(preserved,null,2)+'\n')),'5c6491b57edad00bb1caba25398aca1a5da432be7dba25aa463ee07fe41d705b');
 });
 
-test('twelve encyclopedia identities are classified into confirmed stages with sequential display codes and stories',()=>{
-  assert.deepEqual(listDatabaseIllustrations().map(e=>e.speciesIndex),ids);
-  const codes=ids.map(id=>getDatabaseIllustration(id).displayCode);
-  const expectedCodes=['GR39','MA65','AW52','MA66','MA67','MA68','GR40','B215','GR41','MA69','AW53','UL40'];
+test('twelve storied encyclopedia identities, then the two Rexmon forms, are classified into confirmed stages with sequential display codes',()=>{
+  assert.deepEqual(listDatabaseIllustrations().map(e=>e.speciesIndex),[...ids,...rexmon]);
+  const codes=[...ids,...rexmon].map(id=>getDatabaseIllustration(id).displayCode);
+  const expectedCodes=['GR39','MA65','AW52','MA66','MA67','MA68','GR40','B215','GR41','MA69','AW53','UL40','UL41','UL42'];
   assert.deepEqual(codes,expectedCodes);
-  assert.equal(DATABASE_DISPLAY_CATALOG.entries.length,238);
-  assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.speciesIndex)).size,238);
-  assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.displayCode)).size,238);
+  assert.equal(DATABASE_DISPLAY_CATALOG.entries.length,240);
+  assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.speciesIndex)).size,240);
+  assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.displayCode)).size,240);
   const book=projectDatabase(),rows=databaseDisplayRows(book,'ART');
-  assert.deepEqual(rows.map(e=>e.speciesIndex),[238, 231, 237, 239, 232, 234, 235, 236, 240, 233, 241, 242]);
+  assert.deepEqual(rows.map(e=>e.speciesIndex),[238, 231, 237, 239, 232, 234, 235, 236, 240, 233, 241, 242, 243, 244]);
   for(const row of rows){
     assert.equal(row.kind,'ILLUSTRATION');assert.equal(row.state,'NOT_TRACKED');assert.equal(row.viewable,true);
     assert.equal(typeof row.numberingStageIndex,'number');assert.equal(row.legacyBookOrdinal,null);assert.equal(row.instanceCount,0);
@@ -74,7 +75,7 @@ test('twelve encyclopedia identities are classified into confirmed stages with s
     [231,237,239],
     [232,234,235,236,240],
     [233,241],
-    [242]
+    [242,243,244]
   ];
   for(let stage=0;stage<7;stage++){
     const stageRows=databaseDisplayRows(book,stage);
@@ -90,17 +91,17 @@ test('twelve encyclopedia identities are classified into confirmed stages with s
 
 test('art-only browsing cannot register, instantiate or invent gameplay/evolution data',()=>{
   assert.equal(listDatabaseSlots().length,218);
-  for(const id of ids){
+  for(const id of [...ids,...rexmon]){
     assert.throws(()=>getDatabaseSlot(id),/UNKNOWN_DATABASE_SLOT/);
     assert.throws(()=>normalizeRegisteredSpecies([id]));
     assert.equal(getProductExtension(id),null);assert.throws(()=>requirePlayableProductExtension(id));
-    assert.ok(databaseStory(id));assert.equal(databaseVerifiedData(id),null);
+    assert.equal(Boolean(databaseStory(id)),ids.includes(id));assert.equal(databaseVerifiedData(id),null);
     const book=projectDatabase({selectedSpeciesIndex:id,registeredSpecies:[id],starterSpeciesId:`species-${id}`,collection:[{speciesId:`species-${id}`,instanceId:'invalid-art-instance'}]});
     assert.equal(book.slotCount,218);assert.equal(book.regularCount,218);assert.equal(book.registeredCount,0);
     assert.equal(book.entries.length,218);assert.equal(book.selected.state,'NOT_TRACKED');assert.equal(book.selected.source,null);
     assert.deepEqual(book.selected.instances,[]);assert.deepEqual(book.selected.evolutionRoutes,[]);
   }
-  assert.throws(()=>projectDatabase({selectedSpeciesIndex:243}),/UNKNOWN_DATABASE_SLOT/);
+  assert.throws(()=>projectDatabase({selectedSpeciesIndex:245}),/UNKNOWN_DATABASE_SLOT/);
 });
 
 test('approved new boar revisions and all six hero/thumbnail pairs match public selected bytes',()=>{
