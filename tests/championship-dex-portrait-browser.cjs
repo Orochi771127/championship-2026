@@ -15,7 +15,8 @@ const {beforeWebRendition,webRenditions} = require('./helpers/dex-web-renditions
 const SILHOUETTES = new Map(require('../src/data/championship/database-hero-silhouettes.v1.json').entries.map(row=>[row.sha256,row.box]));
 const APPROVED44=Object.freeze([...OLD20,...APPROVED10].sort((a,b)=>a.speciesIndex-b.speciesIndex));
 const APPROVED44_IDS=Object.freeze(APPROVED44.map(e=>e.speciesIndex));
-const EXPECTED_REGISTRY_COUNT = 230;
+// 194 preserved + approved20 heroes (230), plus the two art-only Rexmon forms 243/244 (2026-10-29).
+const EXPECTED_REGISTRY_COUNT = 232;
 const MATRIX_TARGETS = Object.freeze([117,55,40,189,63,70,71,72,9,10,35,62,36]);
 const EXPECTED_MASTERS = Object.freeze({
   36: Object.freeze({"speciesIndex": 36, "speciesId": "species-036", "displayCode": "GR04", "src": "assets/production/database-handpainted-r1-20261015/species-036.1a921cc1752c9c9c.png", "width": 1415, "height": 1111, "sha256": "1a921cc1752c9c9c99b2085a51ccf6a3efe77cb849b77b0e006062a90334aa5d", "styleBatch": "HANDPAINTED_R1_20261015", "name": "霹靂獾"}),
@@ -302,7 +303,7 @@ async function main() {
     assertOriginalApprovalLineage();
     const registryPath = 'src/data/championship/database-hero-portraits.public.v1.json';
     const catalog = assertRegistry(fs.readFileSync(path.join(process.cwd(), registryPath)), compiledCatalogs.read(registryPath));
-    assert.equal(catalog.entries.length,EXPECTED_REGISTRY_COUNT,'194 preserved heroes plus exact approved20');
+    assert.equal(catalog.entries.length,EXPECTED_REGISTRY_COUNT,'194 preserved heroes, exact approved20 and the Rexmon forms');
     evidence.registry = { count: catalog.entries.length, sourceAndCompiledInputSha256: sha256(compiledCatalogs.read(registryPath)) };
     const productPath='src/data/championship/product-species-extensions.r1.json',assetPath='src/data/championship/alternate-form-assets.r1.json',bindingPath='src/data/championship/public-alternate-form-bindings.v1.json';
     evidence.productionCatalogs=[];
@@ -333,7 +334,7 @@ async function main() {
       const bytes=fs.readFileSync(file);assert.equal(sha256(bytes),media.sha256);
       evidence.all230ArtifactAssets.push({speciesIndex:entry.speciesIndex,role,sha256:sha256(bytes),bytes:bytes.length});
     }
-    assert.equal(evidence.all230ArtifactAssets.length,460);
+    assert.equal(evidence.all230ArtifactAssets.length,EXPECTED_REGISTRY_COUNT*2);
     for(const entry of [...APPROVED44,...APPROVED_GR_FIXES]){
       const thumb=entry.thumbnail,asset=resolveAsset(root,'/'+thumb.src);assert.ok(asset,'Approved20 thumbnail missing from build');
       const bytes=fs.readFileSync(asset);assert.equal(sha256(bytes),thumb.sha256);assert.ok(bytes.includes(Buffer.from('VP8L')));
@@ -700,7 +701,7 @@ async function selfTest() {
   assert.deepEqual(APPROVED_GR_FIXES.map(e=>e.speciesIndex).sort((a,b)=>a-b),[38,48,49,52]);
   for(const e of APPROVED_GR_FIXES)assert.equal(EXPECTED[e.speciesIndex].sha256,e.sha256,'Latest approved GR fixes override historical expectations');
   const sourceRegistry = Buffer.from(JSON.stringify(publicHeroes));
-  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,230);
+  assert.equal(assertRegistry(sourceRegistry,sourceRegistry).entries.length,EXPECTED_REGISTRY_COUNT);
   assert.throws(()=>assertRegistry(sourceRegistry,Buffer.from('{}')));
   for(const species of [9,10,...APPROVED44_IDS]){const missingBaby=Buffer.from(JSON.stringify({entries:JSON.parse(sourceRegistry).entries.filter(e=>e.speciesIndex!==species)}));assert.throws(()=>assertRegistry(missingBaby,missingBaby));}
   const duplicated=Buffer.from(JSON.stringify({entries:[{speciesIndex:117},{speciesIndex:55},{speciesIndex:117}]}));
