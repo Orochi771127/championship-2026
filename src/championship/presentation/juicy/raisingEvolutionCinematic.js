@@ -29,7 +29,7 @@ export function createRaisingEvolutionCinematic({ doc = globalThis.document, loa
       const egg = revert ? openingEggChoices().find(choice => choice.speciesIndex === toSpecies) : null;
       // The moment takes the whole screen (HUD included), as the original did.
       const run = playCyberMorphEvolution({ host: doc.body ?? host, doc, mode: "live", fullscreen: true, revert, onSpeed, onDone,
-        from: { name: fromName || speciesName(fromSpecies), portrait: juicyPortrait(fromSpecies) },
+        from: { name: fromName || speciesName(fromSpecies), portrait: juicyPortrait(fromSpecies), speciesIndex: fromSpecies },
         to: { name: revert ? (egg?.formalName ?? speciesName(toSpecies)) : speciesName(toSpecies), stageLabel: "",
           portrait: revert ? (egg ? { src: egg.src } : null) : juicyPortrait(toSpecies) } });
       if (!revert) {
