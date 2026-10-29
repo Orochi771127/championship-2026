@@ -1,6 +1,13 @@
 # 進化演出、必殺技斜條、圖鑑實機動作與招式發射位置修正（2026-10-29）
 
-分支 `feat/evo-cutin-dex-motion-20261029`（worktree `R:\Projects\Championship2026\evo-cutin-dex-motion-20261029`，自 `origin/main` 8768259d）。未 commit、未 push、未部署。
+分支 `feat/evo-cutin-dex-motion-20261029`（worktree `R:\Projects\Championship2026\evo-cutin-dex-motion-20261029`，自 `origin/main` 8768259d，之後合併 `main` a9f65f3c）。Owner 2026-10-29 授權自審後 commit、push、整合發佈。
+
+## 新角色動作美術（#114）
+
+- 已合併 `main` 的 #114（56c222dd，成長期／成熟期／覺醒體的審核後兩套動作美術，舊美術退役）與 #116。
+- 展演播放器同時支援兩種來源：原生圖集格子，以及新審核美術（`reviewedSelection.js`）的裁切格。新美術依樞軸定位、1:1 繪製後縮放；朝右繪製的 12 套會翻轉出招幀、口部點與預設朝向。
+- 218 隻校準已依新美術重跑：105 隻使用新審核美術（其中 12 套朝右繪製），113 隻沿用原圖集。新測試逐隻核對：播放器載入的美術來源與校準表一致。
+- 瀏覽器實測：火甲龍（34）、花藤幼姬（54）、發條龍（50，朝右）的實機動作，以及火甲龍必殺技、芽螺寶進化，全部都是新美術。
 
 ## 找到的「專屬進化數位文字」
 
@@ -31,7 +38,7 @@
 
 - `scripts/calibrate-218-visual-anchors.mjs`：沿用 runtime 自己的載入器讀格子資料；用 Playwright 內建的無頭 Chromium 解碼圖集與立繪、掃描 alpha 像素（不新增影像套件）。約 20 秒。支援 `--check`。
 - 輸出 `src/championship/data/monsterVisualAnchors218.js`（約 44 KB），詳細報告 `visual-anchors-218.report.json`。
-- 結果：218/218 都有動作規格、腳底、口部點與斜條頭框；動作格最大寬高比 2.51（單隻身體，無橫條）；218/218 的口部點位於身體 50%～92% 高度；腳底姿態：貼地 137、尾巴垂到腳下 77、懸浮 4（腳底一律用遊戲幾何原點，與牧場、對戰一致）；215/218 頭框中心落在不透明像素上，218/218 頭框內不透明比例 ≥ 25%。
+- 結果（新美術）：218/218 都有動作規格、腳底、口部點與斜條頭框；動作格最大寬高比 1.95（單隻身體，無橫條）；218/218 的口部點位於身體 50%～92% 高度；腳底姿態：貼地 162、尾巴垂到腳下 49、懸浮 7（腳底一律用遊戲幾何原點，與牧場、對戰一致）；215/218 頭框中心落在不透明像素上，218/218 頭框內不透明比例 ≥ 25%。
 - 立繪頭框來自 `scripts/measure-dex-hero-faces.py`（眼睛高光 → 上半身 → 人工複核 72 筆修正）。
 - 例外：species-222 的 runtime 只有歡呼動作，播放器會退回第一個可用動作。
 - 有些持武器的拍檔，口部點落在武器或伸出的前肢尖端。這符合「口部或武器尖端」的規格。
@@ -48,5 +55,5 @@
 
 - 「轉向」：角色美術只有左右兩向（沒有八方向格子），轉向是左右翻轉。
 - 對戰場上的 Pixi 招式發射點未改；本批修正的是斜條（對戰共用）與圖鑑展演。
-- 發布：新增的 `monsterVisualAnchors218.js`、`database-hero-faces.v1.json` 尚未登記到 `WEB_BUILD_INPUTS` 與 `PUBLIC_RUNTIME_ALLOWLIST`。部署前要補登記並刷新雜湊。
+- 發布：新增的 `monsterVisualAnchors218.js`、`database-hero-faces.v1.json` 已登記到 `WEB_BUILD_INPUTS` 與 `PUBLIC_RUNTIME_ALLOWLIST`，本批變更檔的雜湊已刷新。
 - 實體手機驗收尚未進行。
