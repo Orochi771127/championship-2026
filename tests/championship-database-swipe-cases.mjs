@@ -138,7 +138,8 @@ test('locked identity remains redacted; explicit viewable uses the same existing
     const f=makeFixture({locked:true,viewable});f.open(10);f.swipe();assert.equal(f.current(),8);
     assert.equal(f.detail.textContent.includes('SECRET-8'),viewable);
     assert.equal(f.detail.textContent.includes('story-8'),viewable);
-    assert.equal(f.calls.hero.includes(8),viewable);assert.equal(f.calls.art.includes(8),viewable);
+    // Owner 2026-10-30: route cards draw the Dex illustration, so no HUD portrait is requested.
+    assert.equal(f.calls.hero.includes(8),viewable);assert.equal(f.calls.art.includes(8),false);
     assert.equal(f.calls.story.includes(8),viewable);f.checkUnchanged();f.dispose();
   }
 });
@@ -278,27 +279,27 @@ test('changing the filter mid-gesture cancels even when the selected detail is u
   f.dispatch('touchend',{changedTouches:[f.touch(120)]});assert.equal(f.current(),10);f.dispose();
 });
 
-test('late hero callbacks and accepted portrait promises cannot repaint the new detail; errors stay local',async()=>{
+test('late hero and route-card callbacks cannot repaint the new detail; errors stay local',async()=>{
   const f=makeFixture();f.open(10);
   const oldHero=f.q('.cm-dex-hero__image'),oldHolder=f.q('.cm-dex-hero'),oldLoad=oldHero.onload,oldError=oldHero.onerror;
-  const oldPending=f.pending[0];assert.equal(oldPending.id,10);
+  const oldCard=f.q('.cm-dex-portrait__image'),oldCardHolder=f.q('.cm-dex-portrait'),oldCardLoad=oldCard.onload,oldCardError=oldCard.onerror;
+  assert.equal(oldCard.src,'hero-10.webp');assert.equal(oldCardHolder.dataset.source,'illustration');
   f.swipe();f.swipe();assert.equal(f.current(),20);
-  assert.equal(oldPending.signal.aborted,true);assert.equal(oldHero.onload,null);assert.equal(oldHero.onerror,null);assert.equal(oldHero.src,undefined);
+  assert.equal(oldHero.onload,null);assert.equal(oldHero.onerror,null);assert.equal(oldHero.src,undefined);
   oldHero.naturalWidth=100;oldHero.naturalHeight=120;oldLoad();oldError();assert.equal(oldHolder.dataset.art,'loading');
-  oldPending.resolve({src:'stale-10.webp'});f.pending[1].reject(new Error('late transport failure'));
-  const currentPending=f.pending[2];currentPending.resolve({src:'current-20.webp'});
-  await Promise.resolve();await Promise.resolve();
-  const portrait=f.q('.cm-dex-portrait__image');assert.equal(portrait.src,'current-20.webp');
+  oldCardLoad();oldCardError();assert.equal(oldCardHolder.dataset.art,'loading','a stale route card never repaints');
+  const portrait=f.q('.cm-dex-portrait__image');assert.equal(portrait.src,'hero-20.webp');
+  portrait.onload();assert.equal(f.q('.cm-dex-portrait').dataset.art,'ready');
   portrait.onerror();assert.equal(f.q('.cm-dex-portrait').dataset.art,'missing');assert.equal(f.current(),20);
   const hero=f.q('.cm-dex-hero__image');hero.onerror();assert.equal(f.q('.cm-dex-hero').dataset.art,'missing');
-  assert.deepEqual(f.calls.art,[10,8,20]);f.checkUnchanged();f.dispose();
+  assert.deepEqual(f.calls.art,[],'route cards use the illustration, not the HUD portrait');f.checkUnchanged();f.dispose();
 });
 
-test('disposed view releases gesture listeners and rejects pending portrait completion',async()=>{
+test('disposed view releases gesture listeners and ignores a late route-card load',async()=>{
   const f=makeFixture();f.open(10);f.dispatch('touchstart',{touches:[f.touch()]});
-  const pending=f.pending[0];f.dispose();assert.equal(pending.signal.aborted,true);
+  const card=f.q('.cm-dex-portrait__image'),cardHolder=f.q('.cm-dex-portrait'),cardLoad=card.onload;f.dispose();
   f.dispatch('touchmove',{touches:[f.touch(120)]});f.dispatch('touchend',{changedTouches:[f.touch(120)]});
-  pending.resolve({src:'late.webp'});await Promise.resolve();
+  cardLoad();assert.equal(cardHolder.dataset.art,'loading','no repaint after dispose');await Promise.resolve();
   assert.deepEqual(f.calls.select,[10]);assert.equal(f.root.childElementCount,0);
   for(const listeners of f.detail.listeners.values())assert.equal(listeners.size,0);
   for(const listeners of f.document.documentElement.listeners.values())assert.equal(listeners.size,0);

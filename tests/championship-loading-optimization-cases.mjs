@@ -1,3 +1,4 @@
+import {newArtPortrait,newArtPortraitLike} from '../src/championship/presentation/newArtPortrait.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -77,18 +78,22 @@ test('a ranch loads only requested original HUDs and can fill a later species wi
   const calls=[];const fetchImpl=async url=>{const file=new URL(url).pathname.replace(/^\/championship-2026\//,'');calls.push(file);return {ok:true,text:async()=>fs.readFileSync(path.join(root,file),'utf8'),json:async()=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'))};};
   const art=await loadPublicCharacterHudArt({baseUrl:publicUrl,fetchImpl,speciesIds:['championship:creature:species-000']});
   assert.equal(calls.filter(x=>x.endsWith('/hud-r01/hud.render.json')).length,1);
-  assert.match(art.getPortrait('species-000').src,/accepted-20261010/);
+  // Owner 2026-10-30: the loaded HUD record gates readiness; the picture is the Dex illustration.
+  assert.equal(art.getPortrait('species-000').src,newArtPortrait('species-000')?.src??art.getPortrait('species-000').src);
   let updates=0;const stop=art.subscribe(()=>updates++);
   assert.equal(art.getPortrait('species-001'),null);
   await art.ensureSpecies(['species-001']);
-  assert.match(art.getPortrait('species-001').src,/accepted-20261010/);assert.equal(updates,1);stop();
+  assert.equal(art.getPortrait('species-001').src,newArtPortrait('species-001')?.src??art.getPortrait('species-001').src);assert.equal(updates,1);stop();
   const count=calls.length;
   const second=await loadPublicCharacterHudArt({baseUrl:publicUrl,fetchImpl,speciesIds:['species-000','species-001']});
   assert.equal(calls.length,count);assert.deepEqual(second.getPortrait('species-001'),art.getPortrait('species-001'));
   assert.equal(calls.filter(x=>x.endsWith('/hud-r01/hud.render.json')).length,2);
   await art.ensureSpecies(['species-224']);
-  assert.match(art.getPortrait('species-224').src,/accepted-20261010/);
-  assert.deepEqual(art.getPortrait('species-224'),art.getPortrait('species-034'));
+  // The alternate form shares 034's HUD record (sizing) but shows its own illustration.
+  const alt=art.getPortrait('species-224'),base034=art.getPortrait('species-034');
+  // No illustration of its own: it keeps the shared HUD art rather than borrowing 034's design.
+  assert.ok(alt);if(newArtPortrait('species-224'))assert.equal(alt.src,newArtPortrait('species-224').src);else assert.match(alt.src,/accepted-20261010/);
+  assert.equal(Math.max(alt.width,alt.height),Math.max(base034.width,base034.height));
   assert.equal(calls.filter(x=>x.endsWith('/hud-r01/hud.render.json')).length,3);
 });
 

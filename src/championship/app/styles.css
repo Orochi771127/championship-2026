@@ -1348,3 +1348,7 @@ dialog.cm-dialog[data-variant="expansion"] .cm-dialog__panel { max-height: calc(
 /* Module rollover needs a new document, not another request for the old URL. */
 .int-rh2-resident-assets[data-module-load-failed="true"] button[data-load-action="reload"] { border-color: transparent; background: var(--c-accent); color: var(--c-text-on-accent); }
 .int-rh2-resident-assets[data-load-owner="screen"] { position: fixed; }
+
+/* Owner 2026-10-30: portraits now show the painted Dex illustration (newArtPortrait.js);
+   scale it smoothly where a slot was set up for nearest-neighbour pixel cells. */
+img[src*="/production/database-"][src] { image-rendering: auto; }
