@@ -16,6 +16,7 @@ import { validatePublicCharacterRender } from "../presentation/publicCharacterRo
 import { isOriginalRuntimeLocation } from "../presentation/originalRuntimeLocation.js";
 import { speciesNameForId } from "../text/zhHant.js";
 import { loadReviewedDomFrames } from "../presentation/reviewedSelection.js";
+import { stageBodyScale } from "../presentation/stageBodySize.js";
 import { raisingNativeScreenPixels, initialRaisingReferenceViewport } from "../presentation/intRh2/raisingFieldViewport.js";
 
 /** The in-game walk request (Data Arena and Battle sequence id 2). */
@@ -95,7 +96,8 @@ export async function loadParadeWalker(speciesId, { href, fetchImpl = globalThis
     if (!rect) return null;
     frames.push({ image: page.image, rect, ticks: Math.max(1, frame.ticks ?? 8) });
   }
-  return { speciesId, name: speciesNameForId(speciesId), frames, density: runtime.artProfile?.scale ?? 4, anchor: runtime.artProfile?.anchor ?? { x: 0.5, y: 0.9 } };
+  // The stage body size (stageBodySize.js) applies here as in the ranch: a larger density draws smaller.
+  return { speciesId, name: speciesNameForId(speciesId), frames, density: (runtime.artProfile?.scale ?? 4) / stageBodyScale(speciesId), anchor: runtime.artProfile?.anchor ?? { x: 0.5, y: 0.9 } };
 }
 
 /** Reviewed frames are trimmed crops: place each on one shared canvas by its pivot. */

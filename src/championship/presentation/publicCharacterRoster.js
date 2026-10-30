@@ -6,6 +6,7 @@ import {loadPixiCharacterRuntimeBundle} from './pixiCharacterRuntimeBundle.js';
 import {PUBLIC_CHARACTER_RENDER_KIND,canonicalRenderValue} from './publicCharacterRenderContract.js';
 import {attachReviewedCharacterAnimation,reviewedSpeciesForEntity,reviewedReplacesOriginal} from './reviewedCharacterLoader.js';
 import {isOriginalLoopbackLocation} from './originalRuntimeLocation.js';
+import {stageBodyScale,scaleNativeGeometry} from './stageBodySize.js';
 
 const configs=new Map(catalog.characters.map(c=>[c.entityId,c]));
 const hash=async value=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))),b=>b.toString(16).padStart(2,'0')).join('');
@@ -49,9 +50,12 @@ export async function loadPublicCharacterRoster({PIXI,speciesIds,sides=['main'],
     pixels:!reviewedReplacesOriginal(reviewedSpecies,baseUrl)});
    const bundle=await attachReviewedCharacterAnimation({bundle:baseline,PIXI,speciesId:reviewedSpecies,baseUrl,signal,usage:'general',fetchImpl});
    loaded.add(config.entityId);loadedRuntimeHashes.set(config.entityId,expected);
+   // Stage body size (stageBodySize.js): reviewed art carries it in its display scale; drawn
+   // original art takes it through its cell geometry.
+   const geometry=reviewedReplacesOriginal(reviewedSpecies,baseUrl)?runtime.geometry:scaleNativeGeometry(runtime.geometry,stageBodyScale(config.speciesId));
    return {...bundle,createActor:options=>bundle.createActor({...options,
-    nativeGeometry:options.nativeFramePresentation?runtime.geometry:null,
-    battleGeometry:options.battleGeometry?runtime.geometry:null})};
+    nativeGeometry:options.nativeFramePresentation?geometry:null,
+    battleGeometry:options.battleGeometry?geometry:null})};
   }});
  return Object.freeze({...roster,
   createActor(options){

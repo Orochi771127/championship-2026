@@ -1,4 +1,5 @@
 import {databaseHeroPortrait,databaseHeroSilhouette} from '../../src/championship/presentation/databaseHeroPortraits.js';
+import {databaseBodyStats,formatBodyHeight,formatDataWeight} from '../../src/championship/database/databaseBodyStats.js';
 import {databaseStory,databaseStoryHeading,databaseVerifiedData,databaseVerifiedHeading} from '../../src/championship/database/databaseStories.js';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
@@ -44,7 +45,7 @@ export function makeView({locale='zh-Hant',selectedSpeciesIndex=8,registeredSpec
     setTimeout:forbidden('TIMER'),setInterval:forbidden('TIMER'),requestAnimationFrame:forbidden('RAF'),
     addEventListener(type,fn){if(!listeners.has(type))listeners.set(type,new Set());listeners.get(type).add(fn);},
     removeEventListener(type,fn){listeners.get(type)?.delete(fn);},
-    databaseHeroPortrait,databaseHeroSilhouette,databaseStory,databaseStoryHeading,databaseVerifiedData,databaseVerifiedHeading,databaseDisplayRows,getDatabaseDisplayEntry,databaseIllustrationText,speciesName,generationName,setLabel,setText,uiText,isDesktopBrowseLayout,
+    databaseHeroPortrait,databaseHeroSilhouette,databaseBodyStats,formatBodyHeight,formatDataWeight,databaseStory,databaseStoryHeading,databaseVerifiedData,databaseVerifiedHeading,databaseDisplayRows,getDatabaseDisplayEntry,databaseIllustrationText,speciesName,generationName,setLabel,setText,uiText,isDesktopBrowseLayout,
     // Emblem helpers draw into this fixture's document.
     taxonomyBadge:inDocument(document,taxonomyBadge),elementChartButton:inDocument(document,elementChartButton),
     originalDatabaseIcon:()=>null,

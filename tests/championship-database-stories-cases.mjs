@@ -1,3 +1,4 @@
+import {databaseBodyStats,formatBodyHeight,formatDataWeight} from '../src/championship/database/databaseBodyStats.js';
 import approved20Contract from './approved20-20261022-contract.cjs';
 import approved20Browser from './championship-dex-portrait-browser.cjs';
 import approvedMasters from '../src/data/championship/database-hero-portraits.r1.json' with {type:'json'};
@@ -133,7 +134,10 @@ test('registered trait panels keep attribute, family and exact move TP costs wit
   assert.deepEqual(Array.from(traits,t=>t.textContent),[
    `${data.labels.attribute}: ${data.attributeName}`,
    `${data.labels.family}: ${data.familyName}`,
-   `${data.labels.element}: ${data.elementName}`
+   `${data.labels.element}: ${data.elementName}`,
+   // Owner 2026-10-30: height and data-size weight follow the traits.
+   `${data.labels.height}: ${formatBodyHeight(databaseBodyStats(sp).heightCm)}`,
+   `${data.labels.weight}: ${formatDataWeight(databaseBodyStats(sp).weightKb)}`
   ]);
   assert.equal(f.root.querySelector('.cm-element-chart-button')?.dataset.focus,data.element);
   const cards=f.root.querySelectorAll('.cm-dex-move-card__meta');

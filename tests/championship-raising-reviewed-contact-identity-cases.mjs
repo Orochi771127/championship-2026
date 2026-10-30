@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import {attachReviewedCharacterAnimation,reviewedSpeciesForEntity,reviewedReplacesOriginal} from '../src/championship/presentation/reviewedCharacterLoader.js';
 import {isOriginalLoopbackLocation} from '../src/championship/presentation/originalRuntimeLocation.js';
+import {stageBodyScale,scaleNativeGeometry} from '../src/championship/presentation/stageBodySize.js';
 // Expected identities below are the three existing, already-public measured
 // profiles in huntContactShadow.js. No private authoring receipt is read here.
 const root=new URL('../',import.meta.url),read=p=>fs.readFileSync(new URL(p,root),'utf8');
@@ -37,11 +38,11 @@ const approved=catalog.characters.filter(c=>contact.getPublicReviewedRaisingCont
 // Exercise actual public loader validation and actual new wrapper, mocking only
 // GPU bundle/core dependencies. No hash validation or helper is replaced.
 let source=read('src/championship/presentation/publicCharacterRoster.js').replace(/^import .*;\n/gm,'').replace(/^export \{.*;\n/gm,'');
-source=`const {catalog,PUBLIC_CHARACTER_CATALOG,loadCharacterRosterCore,loadPixiCharacterRuntimeBundle,PUBLIC_CHARACTER_RENDER_KIND,canonicalRenderValue,getPublicReviewedRaisingContactArt,attachReviewedCharacterAnimation,reviewedSpeciesForEntity,reviewedReplacesOriginal,isOriginalLoopbackLocation}=globalThis.__publicContactTest;\n`+source;
+source=`const {catalog,PUBLIC_CHARACTER_CATALOG,loadCharacterRosterCore,loadPixiCharacterRuntimeBundle,PUBLIC_CHARACTER_RENDER_KIND,canonicalRenderValue,getPublicReviewedRaisingContactArt,attachReviewedCharacterAnimation,reviewedSpeciesForEntity,reviewedReplacesOriginal,isOriginalLoopbackLocation,stageBodyScale,scaleNativeGeometry}=globalThis.__publicContactTest;\n`+source;
 const canonical=v=>Array.isArray(v)?v.map(canonical):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,canonical(v[k])])):v;
 for(const config of approved){
  const raw=read(config.runtimePath),runtime=JSON.parse(raw);let activeBundle;
- globalThis.__publicContactTest={catalog,PUBLIC_CHARACTER_CATALOG:'src/data/championship/public-character-catalog.v1.json',PUBLIC_CHARACTER_RENDER_KIND:runtime.kind,canonicalRenderValue:canonical,getPublicReviewedRaisingContactArt:contact.getPublicReviewedRaisingContactArt,attachReviewedCharacterAnimation,reviewedSpeciesForEntity,reviewedReplacesOriginal,isOriginalLoopbackLocation,
+ globalThis.__publicContactTest={catalog,PUBLIC_CHARACTER_CATALOG:'src/data/championship/public-character-catalog.v1.json',PUBLIC_CHARACTER_RENDER_KIND:runtime.kind,canonicalRenderValue:canonical,getPublicReviewedRaisingContactArt:contact.getPublicReviewedRaisingContactArt,attachReviewedCharacterAnimation,reviewedSpeciesForEntity,reviewedReplacesOriginal,isOriginalLoopbackLocation,stageBodyScale,scaleNativeGeometry,
   loadPixiCharacterRuntimeBundle:async args=>({runtime:args.runtimeDocument,createActor:()=>({entityId:config.entityId,sprite:{unchanged:true}})}),
   loadCharacterRosterCore:async options=>{const record=options.manifest.records.find(r=>r.entityId===config.entityId);activeBundle=await options.loadBundle({runtimeUrl:new URL(record.runtime,options.manifestUrl).href});return {createActor:o=>activeBundle.createActor(o),getDiagnostics:()=>({})};}};
  const mod=await import('data:text/javascript;base64,'+Buffer.from(source+'\n//'+config.entityId).toString('base64'));

@@ -197,6 +197,7 @@
     "src/championship/data/monsterVisualAnchors218.js",
     "src/championship/data/storyRiftChapters.js",
     "src/championship/data/storyRiftMap.js",
+    "src/championship/database/databaseBodyStats.js",
     "src/championship/database/databaseCatalog.js",
     "src/championship/database/databaseDisplayCatalog.js",
     "src/championship/database/databaseEvolutionConditions.js",
@@ -406,6 +407,7 @@
     "src/championship/presentation/runtimeMapArtBundle.js",
     "src/championship/presentation/sceneMusicCatalog.js",
     "src/championship/presentation/shopGoodsUiArt.js",
+    "src/championship/presentation/stageBodySize.js",
     "src/championship/presentation/story/HybridStoryDirector.js",
     "src/championship/presentation/story/portraitVnOverlay.js",
     "src/championship/presentation/story/storyStagePuppeteer.js",
@@ -8399,6 +8401,7 @@
     "src/championship/data/monsterVisualAnchors218.js",
     "src/championship/data/storyRiftChapters.js",
     "src/championship/data/storyRiftMap.js",
+    "src/championship/database/databaseBodyStats.js",
     "src/championship/database/databaseCatalog.js",
     "src/championship/database/databaseDisplayCatalog.js",
     "src/championship/database/databaseEvolutionConditions.js",
@@ -8608,6 +8611,7 @@
     "src/championship/presentation/runtimeMapArtBundle.js",
     "src/championship/presentation/sceneMusicCatalog.js",
     "src/championship/presentation/shopGoodsUiArt.js",
+    "src/championship/presentation/stageBodySize.js",
     "src/championship/presentation/story/HybridStoryDirector.js",
     "src/championship/presentation/story/portraitVnOverlay.js",
     "src/championship/presentation/story/storyStagePuppeteer.js",
@@ -8784,6 +8788,7 @@
     "src/data/championship/data-arena-relay-kits.v1.json",
     "src/data/championship/data-arena-relay-maps.v1.json",
     "src/data/championship/data-arena-relay-roster.v1.json",
+    "src/data/championship/database-body-stats.v1.json",
     "src/data/championship/database-display.r1.json",
     "src/data/championship/database-hero-faces.v1.json",
     "src/data/championship/database-hero-portraits.public.v1.json",
@@ -8803,7 +8808,8 @@
     "src/data/championship/raising-contact-footprints.v1.json",
     "src/data/championship/ranch-render-selection.v1.json",
     "src/data/championship/reviewed-animation-selection.v1.json",
-    "src/data/championship/species-taxonomy.v1.json"
+    "src/data/championship/species-taxonomy.v1.json",
+    "src/data/championship/stage-body-size.v1.json"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -39791,7 +39797,7 @@
       },
       {
         "path": "src/championship/app/titleParade.js",
-        "sha256": "3749827c48d7d4c68367c1a8966b3214a7622073c686264ed0ed9f0d7afc8a7d"
+        "sha256": "0023457ca68617e5caa76690907ac89425fc878cc4b54e2f5642d3a147c7e140"
       },
       {
         "path": "src/championship/app/trainingLabels.css",
@@ -39891,7 +39897,7 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "4302d8ec32ba63b2b9177b440207c379f2ce53bcddc59ede3f0fd23a3f3667b5"
+        "sha256": "87d0c05d4e741dd0ec183ce0257b681d5f1c140ab0d3284c35d0a6409c21855a"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
@@ -40222,6 +40228,10 @@
         "sha256": "b8aa8227daa6ab25ac887142dd3134b1d6188602c63a4dfa7f463fca1b1f9a53"
       },
       {
+        "path": "src/championship/database/databaseBodyStats.js",
+        "sha256": "b8ad41209c1c5e3b6f4a7549e8c82a22f63c5ae47110652e9c7796967f63d157"
+      },
+      {
         "path": "src/championship/database/databaseCatalog.js",
         "sha256": "753432956ada62823310262c9129ae13fa3dcf3c87c5eba56ef676742b57a6f6"
       },
@@ -40247,7 +40257,7 @@
       },
       {
         "path": "src/championship/database/databaseStories.js",
-        "sha256": "b40e984c393b202078323e601f7d4f18cb34427539b9fa39d6c469fc7337a780"
+        "sha256": "cc34ae8a40c72588e38a8b2ed60bf79cf03361b9c4b2ac581279ccbc69108bfd"
       },
       {
         "path": "src/championship/database/nativeBookRegistration.js",
@@ -40947,7 +40957,7 @@
       },
       {
         "path": "src/championship/presentation/publicCharacterRoster.js",
-        "sha256": "81621e9849a1285d90291a83d324a950ecc07d486f57817b29be1f6f0f1b31c5"
+        "sha256": "7e02db5d0cea5cffc9bc933c0411611a38b26e02df1c1492a1decaabca5011c7"
       },
       {
         "path": "src/championship/presentation/publicHudManifestCache.js",
@@ -41039,11 +41049,11 @@
       },
       {
         "path": "src/championship/presentation/reviewedCharacterLoader.js",
-        "sha256": "3546ea0ca9bc7b1c03065deaa39d828b1975dcfd8c45e4d9aaeecc71687f77c0"
+        "sha256": "8336b59efad6945322313321dcd74c1438b3ef49bd4cdb9e10b4c896b919528c"
       },
       {
         "path": "src/championship/presentation/reviewedSelection.js",
-        "sha256": "6a714e066ebe409961dc5f1e86d869b9ae106607f5454c6f68553c17f8e7bd2b"
+        "sha256": "868f60903d00169e3776a31559f9842dd59d287fea26f640037a5ff2d8e5760e"
       },
       {
         "path": "src/championship/presentation/runtimeMapArtBundle.js",
@@ -41056,6 +41066,10 @@
       {
         "path": "src/championship/presentation/shopGoodsUiArt.js",
         "sha256": "d97f8a7b1d6190604e696a1d7485bd0554297d2833eaa160b490b89f04674292"
+      },
+      {
+        "path": "src/championship/presentation/stageBodySize.js",
+        "sha256": "90b6960307accb4b25f380b0d5d8f70b68c9f90ce2f12b2a720f4a06d3aedeff"
       },
       {
         "path": "src/championship/presentation/story/HybridStoryDirector.js",
@@ -41762,6 +41776,10 @@
         "sha256": "47dfb3bd8731c852f4089bf65ef770438657e4d53b3dcfa42d4c8a7579e5da03"
       },
       {
+        "path": "src/data/championship/database-body-stats.v1.json",
+        "sha256": "193480417347ee88109deab30d82699683c1bfdc3183bfef1bf83ca405278332"
+      },
+      {
         "path": "src/data/championship/database-display.r1.json",
         "sha256": "a0b5b54308962928e1cebf6a488765a594bd644c35b8bab15baf0199bf8975c6"
       },
@@ -41840,6 +41858,10 @@
       {
         "path": "src/data/championship/species-taxonomy.v1.json",
         "sha256": "d0121d8f9a0571acea6c2e02f6a9821bbfc0fbafa2c962c5c493467931cf2892"
+      },
+      {
+        "path": "src/data/championship/stage-body-size.v1.json",
+        "sha256": "54a1468de6dfaf43f90e015286fd301492fa9ae97714756c4483386429798867"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",
