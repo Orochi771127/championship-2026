@@ -755,7 +755,7 @@
 :root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n + 3) { --key-face: var(--ax-green); --key-shade: var(--ax-green-sh); }
 :root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n + 4) { --key-face: var(--ax-cyan); --key-shade: var(--ax-cyan-sh); }
 :root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n + 5) { --key-face: var(--ax-purple); --key-shade: var(--ax-purple-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
-:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n) { --key-face: var(--ax-pink); --key-shade: var(--ax-pink-sh); --key-ink: #fff; text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); }
+:root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:nth-child(6n) { --key-face: var(--ax-pink); --key-shade: var(--ax-pink-sh); }
 :root[data-theme="arcade"] .cm-vs5-cube__faces > .cm-vs5-cube__face:not([aria-pressed="true"]) { filter: saturate(0.6) brightness(1.06); }
 /* The globe sits on a dark dotted stage so its captions and pins read. */
 :root[data-theme="arcade"] .cm-vs2-gate3d { background: var(--ax-ink-2) var(--ax-dots-light); color: #fff; }

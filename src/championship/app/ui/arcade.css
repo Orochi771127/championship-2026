@@ -260,7 +260,6 @@
 :root[data-theme="arcade"] .cm-toolbar__cell[data-menu-id="MANAGEMENT"]::after { display: none; }
 :root[data-theme="arcade"] .cm-toolbar__cell[data-menu-id="MANAGEMENT"] { margin-left: 8px; }
 :root[data-theme="arcade"] .cm-toolbar__cell-label { color: var(--ax-ink); font-weight: var(--fw-heavy); }
-:root[data-theme="arcade"] .cm-toolbar__cell[data-icon="woundMedicine"] .cm-toolbar__cell-label { color: #fff; text-shadow: 0 1px 0 var(--ax-ink); }
 @media (hover: hover) and (pointer: fine) {
   :root[data-theme="arcade"] .cm-toolbar__cell:hover:not(:disabled) {
     background: var(--tile);

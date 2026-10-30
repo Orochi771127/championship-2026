@@ -36,7 +36,7 @@ Confirm Git root, branch, HEAD and status at the start, and re-read files before
 | Original behavior or gameplay changes | Existing ROM/reverse/decoded evidence, provenance and the relevant runtime/presentation contract |
 | Architecture, save, navigation or cross-module changes | [Current architecture](docs/architecture/CHAMPIONSHIP_2026_ARCHITECTURE.md), relevant contracts and dependencies |
 | Current implementation or acceptance claims | [Current Product Status](docs/CURRENT_PRODUCT_STATUS.md), then source, manifests and acceptance evidence for the relevant commit |
-| Art inventory, production or integration | The available `championship-art-production` skill, selecting the requested mode and only the relevant registry records |
+| Art inventory, production or integration | The [`championship-art-production`](.claude/skills/championship-art-production/SKILL.md) skill, selecting the requested mode and only the relevant registry records |
 | Cross-agent handoff or shared status changes | [Shared-file update protocol](docs/coordination/SHARED_FILE_UPDATE_PROTOCOL.md), affected owned status/deltas, dependency and blocker records |
 | Public build or deployment | Applicable Owner authorization, `src/data/championship/public-playtest.r1.json`, the build-input contract and current workflow |
 
