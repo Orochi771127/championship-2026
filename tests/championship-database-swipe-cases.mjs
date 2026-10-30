@@ -39,7 +39,7 @@ function makeFixture({locked = false, viewable = false, selected = null, wide = 
     databaseDisplayRows:(book, stage) => book.entries.filter(e => stage === null || (stage === 'ART' ? e.kind === 'ILLUSTRATION' : e.numberingStageIndex === stage)),
     getDatabaseDisplayEntry:id => entries.find(e=>e.speciesIndex===id) ?? null,
     databaseHeroPortrait(id) { calls.hero.push(id); return {src:`hero-${id}.webp`, width:100, height:120}; },
-    databaseHeroSilhouette:()=>null,
+    databaseHeroSilhouette:()=>null,databaseBodyStats:()=>null,formatBodyHeight:String,formatDataWeight:String,
     databaseStory(id) { calls.story.push(id); return `story-${id}`; },
     databaseStoryHeading:()=>'Story', databaseVerifiedData:()=>null, databaseVerifiedHeading:()=>'Data',
     databaseIllustrationText:key=>key, speciesName:(id,name)=>name ?? `name-${id}`, generationName:id=>`stage-${id}`,

@@ -33,11 +33,11 @@ const verifiedHeadings = Object.freeze({
 });
 
 const FIELD_LABELS = Object.freeze({
-  'zh-Hant': Object.freeze({ attribute: '陣營', element: '屬性', family: '種族', baseStats: '基礎能力', hp: '生命值', tp: '技力', moves: '習得招式', power: '威力', cost: '消耗' }),
-  en: Object.freeze({ attribute: 'Faction', element: 'Element', family: 'Race', baseStats: 'Base Stats', hp: 'HP', tp: 'TP', moves: 'Learned Moves', power: 'Power', cost: 'Cost' }),
-  ja: Object.freeze({ attribute: '陣営', element: '属性', family: '種族', baseStats: '基本能力', hp: 'HP', tp: 'TP', moves: '習得技', power: '威力', cost: '消費' }),
-  th: Object.freeze({ attribute: 'ฝ่าย', element: 'ธาตุ', family: 'เผ่า', baseStats: 'ค่าพลังพื้นฐาน', hp: 'HP', tp: 'TP', moves: 'ท่าต่อสู้ที่เรียนรู้', power: 'พลัง', cost: 'ใช้' }),
-  vi: Object.freeze({ attribute: 'Phe', element: 'Thuộc tính', family: 'Chủng tộc', baseStats: 'Chỉ số cơ bản', hp: 'HP', tp: 'TP', moves: 'Kỹ năng đã học', power: 'Uy lực', cost: 'Tiêu hao' })
+  'zh-Hant': Object.freeze({ attribute: '陣營', element: '屬性', family: '種族', baseStats: '基礎能力', hp: '生命值', tp: '技力', moves: '習得招式', power: '威力', cost: '消耗', height: '身高', weight: '體重' }),
+  en: Object.freeze({ attribute: 'Faction', element: 'Element', family: 'Race', baseStats: 'Base Stats', hp: 'HP', tp: 'TP', moves: 'Learned Moves', power: 'Power', cost: 'Cost', height: 'Height', weight: 'Weight' }),
+  ja: Object.freeze({ attribute: '陣営', element: '属性', family: '種族', baseStats: '基本能力', hp: 'HP', tp: 'TP', moves: '習得技', power: '威力', cost: '消費', height: '身長', weight: '体重' }),
+  th: Object.freeze({ attribute: 'ฝ่าย', element: 'ธาตุ', family: 'เผ่า', baseStats: 'ค่าพลังพื้นฐาน', hp: 'HP', tp: 'TP', moves: 'ท่าต่อสู้ที่เรียนรู้', power: 'พลัง', cost: 'ใช้', height: 'ส่วนสูง', weight: 'น้ำหนัก' }),
+  vi: Object.freeze({ attribute: 'Phe', element: 'Thuộc tính', family: 'Chủng tộc', baseStats: 'Chỉ số cơ bản', hp: 'HP', tp: 'TP', moves: 'Kỹ năng đã học', power: 'Uy lực', cost: 'Tiêu hao', height: 'Chiều cao', weight: 'Cân nặng' })
 });
 
 const FAMILIES_BY_LOCALE = Object.freeze({

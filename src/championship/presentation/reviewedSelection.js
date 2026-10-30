@@ -4,6 +4,7 @@
 import selection from '../../data/championship/reviewed-animation-selection.v1.json' with {type:'json'};
 import {isOriginalLoopbackLocation} from './originalRuntimeLocation.js';
 import {reviewedNumericClip} from './reviewedCharacterAnimation.js';
+import {stageBodyScale} from './stageBodySize.js';
 
 const selected=new Map(selection.characters.map(c=>[c.speciesId,c]));
 export function reviewedCharacterSelection(speciesId,href=globalThis.location?.href){
@@ -16,6 +17,8 @@ export function reviewedCharacterSelection(speciesId,href=globalThis.location?.h
     &&(entry.replacesOriginal===true||selection.publicReleasePermitted===true))?entry:null;
 }
 export const reviewedCharacterSelections=()=>selection.characters;
+// General-screen size of a reviewed set: its selected display scale times the stage body size.
+export const reviewedGeneralDisplayScale=entry=>(entry?.generalDisplayScale>0?entry.generalDisplayScale:1)*stageBodyScale(entry?.speciesId);
 
 const sha256=async text=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
 
@@ -50,6 +53,6 @@ export async function loadReviewedDomFrames(speciesId,{href=globalThis.location?
     }));
   }
   if(!out.size)return null;
-  return Object.freeze({speciesId:entry.speciesId,sequences:out,density:(density??4)/(entry.generalDisplayScale>0?entry.generalDisplayScale:1),
+  return Object.freeze({speciesId:entry.speciesId,sequences:out,density:(density??4)/reviewedGeneralDisplayScale(entry),
     facesRight:entry.generalMirror===true});
 }

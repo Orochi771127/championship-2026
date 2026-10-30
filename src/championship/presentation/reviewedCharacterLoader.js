@@ -1,6 +1,6 @@
 import {createPixiAssetScope} from './pixiCharacterRuntimeBundle.js';
 import {reviewedNumericClip,sampleReviewedCharacterClip,createReviewedArenaPlayback} from './reviewedCharacterAnimation.js';
-import {reviewedCharacterSelection,reviewedCharacterSelections} from './reviewedSelection.js';
+import {reviewedCharacterSelection,reviewedCharacterSelections,reviewedGeneralDisplayScale} from './reviewedSelection.js';
 
 export {reviewedCharacterSelection,reviewedCharacterSelections};
 // The original atlas pages of these species are retired; only timing/geometry remain.
@@ -71,7 +71,7 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
     const mirrorOf=key=>usage==='general'&&(entry.generalMirror===true)!==mirrorFrames.has(key);
     // Stage body size on General screens: generalDisplayScale (selection) draws a set
     // larger or smaller in native units by changing its effective density only.
-    const displayScale=usage==='general'&&entry.generalDisplayScale>0?entry.generalDisplayScale:1;
+    const displayScale=usage==='general'?reviewedGeneralDisplayScale(entry):1;
     for(const [key,f] of frameEntries){
       const image=images.get(new URL(f.image,url).href),size=f.sourceSize;
       if(!size?.every(v=>Number.isFinite(v)&&v>0)||!f.origin?.every(Number.isFinite)||!(f.density>0))throw Error('REVIEWED_FRAME_GEOMETRY');
@@ -207,7 +207,7 @@ export async function loadReviewedResultSub({PIXI,sprite,speciesId,sequenceId,ba
   if(!bundle.reviewedAnimation){await bundle.dispose();return null;}
   const binding=reviewedNumericClip(bundle.reviewedAnimation,'sub',sequenceId);
   const actor=bundle.createActor({side:'sub',animation:sequenceId});
-  const entry=reviewedCharacterSelection(speciesId,baseUrl),display=entry?.generalDisplayScale>0?entry.generalDisplayScale:1;
+  const entry=reviewedCharacterSelection(speciesId,baseUrl),display=reviewedGeneralDisplayScale(entry);
   const boxes=binding.clip.frames.map(f=>{
     const frame=bundle.reviewedAnimation.frames[f.assetId],trim=frame.trim??[0,0,...frame.sourceSize],offset=f.offset??[0,0],d=frame.density/display;
     const box={left:(trim[0]-frame.origin[0]+offset[0])/d,top:(trim[1]-frame.origin[1]+offset[1])/d,

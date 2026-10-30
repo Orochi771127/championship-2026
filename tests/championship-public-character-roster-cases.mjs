@@ -1,3 +1,4 @@
+import {stageBodyScale,scaleNativeGeometry} from '../src/championship/presentation/stageBodySize.js';
 import {newArtPortrait,newArtPortraitLike} from '../src/championship/presentation/newArtPortrait.js';
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
 import * as PIXI from '../node_modules/pixi.js/dist/pixi.mjs';
@@ -27,7 +28,8 @@ test('public character loading renders native frames with no private index, sour
  const f=fixture(),roster=await loadPublicCharacterRoster({...f,speciesIds:configs.map(c=>c.speciesId),initialSequences:Object.fromEntries(configs.map(c=>[c.speciesId,[0]]))},base);
  assert.deepEqual(roster.getDiagnostics().failures,[]);
  for(const c of configs){const actor=roster.createActor({speciesId:c.speciesId,presentation:'raising'}),runtime=read(c.runtimePath),seq=runtime.sides.main.animations[0];assert.ok(actor?.nativeFramePresenter);
-  const applied=actor.nativeFramePresenter.apply({contract:'HUNT_CHARACTER_PRESENTATION.v1',sequenceId:seq.id,frameIndex:0,flipBits:0});assert.equal(applied.cell,seq.frames[0].cell);assert.deepEqual(applied.geometry,runtime.geometry.frames[seq.frames[0].texture]);
+  const applied=actor.nativeFramePresenter.apply({contract:'HUNT_CHARACTER_PRESENTATION.v1',sequenceId:seq.id,frameIndex:0,flipBits:0});assert.equal(applied.cell,seq.frames[0].cell);// Owner 2026-10-30: Awakened/Ultimate cells carry the stage body size (stageBodySize.js).
+  assert.deepEqual(applied.geometry,scaleNativeGeometry(runtime.geometry,stageBodyScale(c.speciesId)).frames[seq.frames[0].texture]);
   if(c.nativeSizing)assert.equal(actor.nativeSizing.packedPixelsPerNativePixel,c.density);actor.sprite.destroy();}
  assert.ok(!f.calls.some(forbidden));await roster.dispose();assert.equal(f.cache.size,0);assert.ok(f.sources.every(source=>source.destroyed));
 });

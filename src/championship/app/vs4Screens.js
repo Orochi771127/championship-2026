@@ -6,6 +6,7 @@ import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCa
 import { productPlacementCells, productGridSlot } from '../cage/productRanchGrid.js';
 import { PRODUCT_RANCH_GRID } from '../cage/productRanchGrid.js';
 import {databaseHeroPortrait, databaseHeroSilhouette} from '../presentation/databaseHeroPortraits.js';
+import {databaseBodyStats, formatBodyHeight, formatDataWeight} from '../database/databaseBodyStats.js';
 import {databaseStory, databaseStoryHeading, databaseVerifiedData, databaseVerifiedHeading} from '../database/databaseStories.js';
 import {originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
 import { speciesName, generationName, shopItemDescription as shopDescriptionText, shopItemName } from "../text/zhHant.js";
@@ -935,6 +936,13 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       traitsGrid.append(trait(verifiedData.labels.attribute, 'faction', taxonomy?.faction, verifiedData.attributeName),
         trait(verifiedData.labels.family, 'race', taxonomy?.race, verifiedData.familyName));
       if (taxonomy) traitsGrid.append(trait(verifiedData.labels.element, 'element', taxonomy.element, verifiedData.elementName), elementChartButton(taxonomy.element));
+      // Owner 2026-10-30: height in metres and weight as a data size (flavour only).
+      const body = databaseBodyStats(selected.speciesIndex);
+      if (body && verifiedData.labels.height) for (const [key, text] of [['height', formatBodyHeight(body.heightCm)], ['weight', formatDataWeight(body.weightKb)]]) {
+        const tag = element('span', 'cm-dex-trait-tag cm-dex-trait-tag--body');tag.dataset.body = key;
+        tag.append(element('span', 'cm-dex-trait-tag__label', `${verifiedData.labels[key]}: `), element('span', 'cm-dex-trait-tag__value', text));
+        traitsGrid.append(tag);
+      }
       dataSection.append(traitsGrid);
 
       if (verifiedData.moves && verifiedData.moves.length > 0) {
