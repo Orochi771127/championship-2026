@@ -1,13 +1,18 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {createHash}=require('node:crypto');const {pathToFileURL}=require('node:url');
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-// Preview contracts follow the existing accepted HUD route. A large encyclopedia
-// painting is only the established fallback when that route has no config.
+// Owner 2026-10-30: route previews show the published Dex illustration (newArtPortrait.js);
+// the accepted HUD route remains only for a species without one.
 async function previewExpectations(root, verifiedHeroes){
  const {publicHudCharacterConfig}=await import(pathToFileURL(path.resolve('src/championship/presentation/publicCharacterCatalog.js')).href);
+ const {databaseHeroPortrait}=await import(pathToFileURL(path.resolve('src/championship/presentation/databaseHeroPortraits.js')).href);
  const heroes=(verifiedHeroes ?? JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/database-hero-portraits.public.v1.json')))).entries;
  const result=new Map();
  for(const id of [211,222,229,230]){
+  const shown=databaseHeroPortrait(id);
+  if(shown){const image=fs.readFileSync(path.join(root,shown.src));assert.equal(sha(image),shown.sha256);
+   result.set(id,{speciesIndex:id,speciesId:`species-${id}`,src:shown.src,sha256:shown.sha256,width:shown.width,height:shown.height,
+    url:new URL(shown.src,'https://orochi771127.github.io/championship-2026/').href,route:'SELECTED_ILLUSTRATION'});continue;}
   const config=publicHudCharacterConfig(`species-${id}`);
   if(!config){const hero=heroes.find(row=>row.speciesIndex===id);assert.ok(hero);result.set(id,{...hero,url:new URL(hero.src,'https://orochi771127.github.io/championship-2026/').href,route:'SELECTED_ILLUSTRATION_FALLBACK'});continue;}
   const bytes=fs.readFileSync(path.join(root,config.hudPath));assert.equal(sha(bytes),config.hudSha256);

@@ -998,6 +998,16 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     const generation = detailGeneration, signal = portraitAbort.signal;
     const current = () => alive && generation === detailGeneration && !signal.aborted;
     const missing = () => { if (!current()) return; holder.dataset.art = 'missing'; image.hidden = true; placeholder.hidden = false; };
+    // Owner 2026-10-30: route cards show the current design (the Dex illustration), not
+    // the original HUD cell; species without one keep the accepted HUD portrait.
+    const hero = databaseHeroPortrait(speciesIndex);
+    if (hero) {
+      holder.dataset.source = 'illustration';
+      image.onload = () => { if (!current()) return; holder.dataset.art = 'ready'; image.hidden = false; placeholder.hidden = true; };
+      image.onerror = missing;
+      image.src = hero.src;
+      return holder;
+    }
     void loadAcceptedDatabasePortrait(speciesIndex,{signal,revealed}).then(art=>{
       if (!current()) return;
       if (!art) { missing(); return; }

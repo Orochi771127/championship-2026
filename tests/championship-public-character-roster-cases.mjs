@@ -1,3 +1,4 @@
+import {newArtPortrait,newArtPortraitLike} from '../src/championship/presentation/newArtPortrait.js';
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
 import * as PIXI from '../node_modules/pixi.js/dist/pixi.mjs';
 import catalog from '../src/data/championship/public-character-catalog.v1.json' with {type:'json'};
@@ -40,7 +41,7 @@ test('public render hash/motion/geometry failures cannot load pixels or fall bac
 test('HUD loads only requested entities with bounded metadata work and preserves native result sequences and medal identities',async()=>{
  const f=fixture(),configs=catalog.characters.slice(0,16),hud=await loadPublicCharacterHudArt({baseUrl:base,fetchImpl:f.fetchImpl,speciesIds:configs.map(c=>c.speciesId)});
  assert.equal(f.calls.length,16);assert.ok(f.peak<=6);assert.ok(!f.calls.some(forbidden));
- for(const c of configs){const data=read(c.hudPath);assert.deepEqual(hud.getPortrait(c.speciesId),data.portrait);for(const seq of data.battle.sequences)assert.deepEqual(hud.getBattleCells(c.speciesId,seq.id).map(cell=>cell.cell),[...new Set(seq.frames.map(frame=>frame.cell))]);}
+ for(const c of configs){const data=read(c.hudPath);assert.deepEqual(hud.getPortrait(c.speciesId),newArtPortraitLike(c.speciesId,data.portrait));for(const seq of data.battle.sequences)assert.deepEqual(hud.getBattleCells(c.speciesId,seq.id).map(cell=>cell.cell),[...new Set(seq.frames.map(frame=>frame.cell))]);}
  for(let id=0;id<61;id++)assert.equal(hud.getMedal(id).titleId,id);
  const c=configs[0],before=f.calls.length;await hud.ensureSpecies([c.speciesId,c.speciesId]);assert.equal(f.calls.length,before);
 });

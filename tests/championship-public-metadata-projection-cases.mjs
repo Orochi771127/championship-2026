@@ -1,3 +1,4 @@
+import {newArtPortrait,newArtPortraitLike} from '../src/championship/presentation/newArtPortrait.js';
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {createHash} from 'node:crypto';
 import {projectPublicMetadata,METADATA_RECIPE} from '../scripts/lib/public-metadata-projection.mjs';
 import {validatePublicMetadata,loadPublicMetadata} from '../src/championship/presentation/publicMetadata.js';
@@ -18,7 +19,8 @@ test('arena cast uses exact public character and HUD bindings; changed bytes fai
   const selected=publicCharacterConfig(member.speciesId),hud=read(selected.hudPath);
   assert.equal(member.art.runtimeUrl,new URL(selected.runtimePath,base).href);
   assert.equal(member.art.runtimeSha256,selected.runtimeSha256);
-  assert.equal(member.art.portraitUrl,new URL(hud.portrait.src,base).href);
+  // Owner 2026-10-30: the select card shows the Dex illustration when one is published.
+  assert.equal(member.art.portraitUrl,new URL(newArtPortrait(member.speciesId)?.src??hud.portrait.src,base).href);
   assert.equal(member.art.entityId,selected.entityId);assert.equal(member.art.sourceBankSha256,undefined);
   await assert.rejects(loadDataArenaCharacter({art:member.art,PIXI:{},fetchImpl:async()=>new Response('{}')}),/DATA_ARENA_ART_HASH/);
  }
