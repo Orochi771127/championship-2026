@@ -1,3 +1,4 @@
+import {databaseHeroPortrait} from '../src/championship/presentation/databaseHeroPortraits.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -126,7 +127,11 @@ test('all-zero source8 branch2 keeps lifetime-only and no-numeric copy; no profi
 test('initial artwork requests match source plus each existing target; toggles preserve serialized route controls and add no art loads',()=>{
   const candidate=makeView({registeredSpecies:allRegistered,evolutionBranches:[0,1,2]});
   const selected=candidate.frame().database.selected;
-  assert.deepEqual(candidate.calls.art.map(x=>x.speciesIndex),[selected.speciesIndex,...selected.evolutionRoutes.map(r=>r.targetSpeciesIndex)]);
+  // Owner 2026-10-30: route cards draw the published Dex illustration; only a species without
+  // one would still request its accepted HUD portrait.
+  const shown=[selected.speciesIndex,...selected.evolutionRoutes.map(r=>r.targetSpeciesIndex)];
+  assert.deepEqual(candidate.calls.art.map(x=>x.speciesIndex),shown.filter(i=>!databaseHeroPortrait(i)));
+  assert.deepEqual(qa(candidate,'.cm-dex-routes .cm-dex-portrait__image').map(img=>img.src),shown.filter(i=>databaseHeroPortrait(i)).map(i=>databaseHeroPortrait(i).src));
   const routeNodes=qa(candidate,'.cm-dex-routes__target');const controls=routeNodes.map(serializeControlledNode);
   const initial=candidate.calls.art.length;
   for(const button of qa(candidate,'.cm-dex-conditions__toggle')){button.click();button.click();}
