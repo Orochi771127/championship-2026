@@ -29,4 +29,12 @@ export async function reviewedDocumentRef(entry, href = globalThis.location?.hre
   const alt = (await loadRegistry(href, fetchImpl)).find(e => e.speciesId === entry.speciesId && e.basePath === entry.path && e.baseSha256 === entry.sha256);
   return alt?.path && alt?.sha256 ? {path: alt.path, sha256: alt.sha256, handoff: true, scopes: alt.scopes ?? []} : current;
 }
+// A species with no reviewed selection entry may have a QA-only Arena set covering a few
+// accepted directions (basePath null, partialArena). It loads only behind the switch, and
+// the Data Arena draws the native art for every action/direction the set does not cover.
+export async function handoffOnlyArenaEntry(speciesId, href = globalThis.location?.href, fetchImpl = (...a) => globalThis.fetch(...a)) {
+  if (!animationHandoffEnabled(href)) return null;
+  const alt = (await loadRegistry(href, fetchImpl)).find(e => e.speciesId === speciesId && e.basePath === null && e.partialArena === true);
+  return alt?.path && alt?.sha256 ? {speciesId, displayCode: alt.displayCode, path: alt.path, sha256: alt.sha256, partialArena: true, playableIdentity: true} : null;
+}
 export function resetAnimationHandoffRegistry() { registry = null; }

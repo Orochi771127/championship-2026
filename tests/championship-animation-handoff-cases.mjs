@@ -1,14 +1,15 @@
 // Animation handoff (Owner 2026-11-01). Exact owner-accepted scopes without a style hold
 // (GR16 seated sleep, GR18 Bound8) are in the default reviewed selection; scopes whose
 // style is not confirmed (GR02/06/08 Walk8) load only from a loopback QA registry behind
-// ?animHandoff=1, off by default, never on public hosts and never shipped. The painted
+// ?animHandoff=1, off by default, never on public hosts and never shipped; so do the
+// accepted UL11/UL12 N Walk, partial Arena sets of roles with no reviewed selection. The painted
 // art is stored at up to 2x density and drawn with mipmapped linear sampling.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import {ANIMATION_HANDOFF_REGISTRY,animationHandoffEnabled,resetAnimationHandoffRegistry,reviewedDocumentRef} from '../src/championship/presentation/animationHandoff.js';
+import {ANIMATION_HANDOFF_REGISTRY,animationHandoffEnabled,resetAnimationHandoffRegistry,reviewedDocumentRef,handoffOnlyArenaEntry} from '../src/championship/presentation/animationHandoff.js';
 import {attachReviewedCharacterAnimation} from '../src/championship/presentation/reviewedCharacterLoader.js';
 const root=path.resolve(import.meta.dirname,'..');
 const readJson=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
@@ -33,9 +34,14 @@ test('the registry is QA-only, never a build input, and each alternative is buil
  const inputs=fs.readFileSync(path.join(root,'docs/contracts/championship/WEB_BUILD_INPUTS.v1.json'),'utf8');
  const allow=fs.readFileSync(path.join(root,'docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json'),'utf8');
  assert.ok(!inputs.includes(ANIMATION_HANDOFF_REGISTRY)&&!allow.includes(ANIMATION_HANDOFF_REGISTRY));
- assert.deepEqual(registry.entries.map(e=>e.displayCode),['GR02','GR06','GR08']);
+ assert.deepEqual(registry.entries.map(e=>e.displayCode),['GR02','GR06','GR08','UL11','UL12']);
  for(const e of registry.entries){
   const current=selection.characters.find(c=>c.speciesId===e.speciesId);
+  if(e.partialArena){   // a QA-only partial set of a role drawn natively everywhere else
+   assert.equal(current,undefined,e.displayCode);assert.equal(e.basePath,null);assert.equal(e.baseSha256,null);
+   assert.equal(sha(e.path),e.sha256,e.displayCode);assert.equal(e.runtimeApproved,false);assert.deepEqual(e.scopes,['Walk:N']);
+   assert.ok(!inputs.includes(e.path)&&!allow.includes(e.path),e.displayCode+' never ships');continue;
+  }
   assert.equal(e.basePath,current.path,e.displayCode);assert.equal(e.baseSha256,current.sha256,e.displayCode+' stale base');
   assert.equal(sha(e.path),e.sha256,e.displayCode);assert.equal(e.runtimeApproved,false);assert.equal(e.status,'OWNER_APPROVED_SCOPED_QA_ONLY');
   assert.ok(!inputs.includes(e.path)&&!allow.includes(e.path),e.displayCode+' handoff manifest never ships');
@@ -57,7 +63,16 @@ test('handoff clips keep native ticks and leave hit frames, launch points and en
     // painted art: smooth sampling, stored at least at the density-4 game grid
     assert.equal(frames[s.assetId].sampling,'smooth',c.id);assert.ok(frames[s.assetId].density>=4,c.id);}
   }
-  if(e.displayCode==='GR16'){
+  if(['UL11','UL12'].includes(e.displayCode)){
+   // the accepted N Walk only: heading U, source event order and ticks, the repeated neutral event kept
+   const want=e.displayCode==='UL11'?{assets:['A','B','A','C'],ticks:[10,12,10,12],mirror:[false,false,false,true]}:{assets:['0','1','0','2'],ticks:[12,14,12,14],mirror:[false,false,false,false]};
+   assert.deepEqual(clips.map(c=>[c.id,c.mode,c.action,c.direction]),[['handoff:arena:U:walk','arena','move','U']]);
+   assert.deepEqual(clips[0].source.events.map(x=>x.assetId),want.assets);
+   assert.deepEqual(clips[0].frames.map(s=>Math.round(s.durationMs*60/1000)),want.ticks);
+   assert.deepEqual(clips[0].frames.map(s=>frames[s.assetId].mirrorX===true),want.mirror,e.displayCode+' only the delivered C flip');
+   assert.equal(clips[0].frames[0].assetId,clips[0].frames[2].assetId,'repeated neutral event');
+   assert.equal(d.clips.length,1,e.displayCode+' nothing beyond the accepted scope');
+  }else if(e.displayCode==='GR16'){
    assert.deepEqual(clips.map(c=>[c.id,c.facingLocked,c.frames.map(f=>Math.round(f.durationMs))]),[['main:13',true,[500,583]]]);
   }else{
    assert.deepEqual(clips.map(c=>c.direction),['D','DR','R','UR','U','UL','L','DL'],e.displayCode);
@@ -132,6 +147,33 @@ test('GR16 seated sleep plays as ranch main 13 whatever the switch, never mirror
   const pub=readJson(gr16.path),art=pub.frames.find(f=>f.id===s.assetId),pixel=pub.frames.find(f=>!f.sampling);
   assert.equal(page(art).scaleMode,'linear');assert.equal(page(art).autoGenerateMipmaps,true);
   assert.equal(page(pixel).scaleMode,'nearest','pixel art keeps hard texels');
+ }
+ resetAnimationHandoffRegistry();
+});
+
+test('UL11/UL12 N Walk: a QA-only partial Arena set, loaded only behind the switch and only for the Data Arena',async()=>{
+ const fixtures=[['species-194','UL11'],['species-195','UL12']];
+ const PIXI={Rectangle:class{constructor(x,y,width,height){Object.assign(this,{x,y,width,height});}},Texture:class{constructor(o){Object.assign(this,o);}destroy(){}},
+  Assets:{async load(){return {source:{pixelWidth:4096,pixelHeight:4096,resolution:1}};},async unload(){}}};
+ const baseline={runtime:{sides:{main:{animations:[{id:0,frames:[{ticks:60}]}]},sub:{animations:[]}}},getDiagnostics:()=>({}),async dispose(){},
+  createActor(){return {sprite:{texture:{},anchor:{set(x,y){this.x=x;this.y=y;}}},controller:{setAnimation(){},update(){},getSnapshot:()=>null}};}};
+ for(const [speciesId,code] of fixtures){
+  resetAnimationHandoffRegistry();
+  assert.equal(await handoffOnlyArenaEntry(speciesId,LOOP,fileFetch),null,'off by default');
+  assert.equal(await handoffOnlyArenaEntry(speciesId,'https://example.github.io/championship.html?animHandoff=1',fileFetch),null,'never on public hosts');
+  const entry=await handoffOnlyArenaEntry(speciesId,LOOP+'?animHandoff=1',fileFetch);
+  assert.equal(entry.displayCode,code);assert.equal(entry.partialArena,true);
+  const arena=await attachReviewedCharacterAnimation({bundle:baseline,PIXI,speciesId,usage:'arena',baseUrl:LOOP+'?animHandoff=1',fetchImpl:fileFetch});
+  const actor=arena.createActor({animation:0});
+  assert.equal(actor.reviewedArena.partial,true);assert.equal(typeof actor.controller.resumeNative,'function');
+  // heading U draws the accepted walk; any other heading reports it missing, so the scene keeps the native body
+  const north=actor.reviewedArena.sample({time:0.1,hp:1,vx:0,vy:-200,facing:1,hit:false,attack:false,castId:null,angle:null,moveRate:1,victory:false});
+  assert.equal(north.clipId,'handoff:arena:U:walk');assert.ok(north.geometry);
+  const east=actor.reviewedArena.sample({time:0.2,hp:1,vx:200,vy:0,facing:-1,hit:false,attack:false,castId:null,angle:null,moveRate:1,victory:false});
+  assert.ok(!east?.geometry,code+' other headings stay native');
+  await arena.dispose();
+  const general=await attachReviewedCharacterAnimation({bundle:baseline,PIXI,speciesId,usage:'general',baseUrl:LOOP+'?animHandoff=1',fetchImpl:fileFetch});
+  assert.equal(general,baseline,code+' General is not part of the accepted scope');
  }
  resetAnimationHandoffRegistry();
 });

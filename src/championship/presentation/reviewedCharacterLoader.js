@@ -1,7 +1,7 @@
 import {createPixiAssetScope} from './pixiCharacterRuntimeBundle.js';
 import {reviewedNumericClip,sampleReviewedCharacterClip,createReviewedArenaPlayback} from './reviewedCharacterAnimation.js';
 import {reviewedCharacterSelection,reviewedCharacterSelections,reviewedGeneralDisplayScale} from './reviewedSelection.js';
-import {reviewedDocumentRef} from './animationHandoff.js';
+import {reviewedDocumentRef,handoffOnlyArenaEntry} from './animationHandoff.js';
 
 export {reviewedCharacterSelection,reviewedCharacterSelections};
 // The original atlas pages of these species are retired; only timing/geometry remain.
@@ -15,7 +15,7 @@ export function reviewedSpeciesForEntity(config,bindings,baseUrl){
 const digest=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
 
 export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,baseUrl,signal,usage='all',requiredNumeric=null,fetchImpl=globalThis.fetch}) {
-  const entry=reviewedCharacterSelection(speciesId,baseUrl);
+  const entry=reviewedCharacterSelection(speciesId,baseUrl)??(usage==='arena'?await handoffOnlyArenaEntry(speciesId,baseUrl,fetchImpl):null);
   if(!entry)return bundle;
   // The QA handoff switch (animationHandoff.js) may pick the entry's alternative manifest.
   const ref=await reviewedDocumentRef(entry,baseUrl,fetchImpl),url=new URL(ref.path,baseUrl).href;
@@ -169,7 +169,10 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
         const sample=apply(sampleReviewedCharacterClip(document,side,id,binding.clip,options.reducedMotion?0:elapsed,{holdFirst:options.reducedMotion,terminal:side==='sub'?id===5:[15,25].includes(id)}));
         if(!sample)return fallback(deltaMS);
         fallbackId=null;return sample;
-      },getSnapshot:()=>current??actor.controller?.getSnapshot()};
+      },
+      // A partial Arena set hands a body back to its native art: the next setAnimation restarts the native sequence.
+      resumeNative(){current=null;fallbackId=null;restoreBaselineAnchor();},
+      getSnapshot:()=>current??actor.controller?.getSnapshot()};
       if(usage!=='arena')controller.update({deltaMS:0});
       const arenaPlayback=createReviewedArenaPlayback(document,{...options,nativeFallback:bundle.getDiagnostics?.().nativePixels!==false});
       const battleAnimator=actor.battleAnimator?{...actor.battleAnimator,apply(request){
@@ -184,7 +187,7 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
       },getSnapshot:()=>current}:null;
       return Object.freeze({...actor,controller,
         nativeFramePresenter:actor.nativeFramePresenter?{...actor.nativeFramePresenter,apply:nativeApply,getSnapshot:()=>current}:null,
-        battleAnimator,reviewedArena:{referenceHeight:[...geometry.values()][0]?.referenceHeight??null,
+        battleAnimator,reviewedArena:{referenceHeight:[...geometry.values()][0]?.referenceHeight??null,partial:entry.partialArena===true,
           observe:event=>arenaPlayback.observe(event),reset:()=>arenaPlayback.reset(),sample(state){
           const sample=arenaPlayback.sample(state);if(sample.fallbackSequenceId!==undefined){
             current=null;actor.controller?.setAnimation(sample.fallbackSequenceId);restoreBaselineAnchor();return sample;
