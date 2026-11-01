@@ -76,14 +76,10 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
     "trimEnd": 1.9305,
     "crossfade": 0.8
   },
+  // Owner 2026-11-02: Clash at the Concrete Edge replaces the retired 32-second normal-field cue.
   "battle_normal": {
-    "path": "./assets/production/original-music-r1/championship_battle_normal_r1.ogg",
-    "loop": true,
-    "gainDb": -8.5,
-    "trimStart": 0,
-    "trimEnd": 0,
-    "crossfade": 0,
-    "fallbackPath": "./assets/production/original-music-r1/championship_battle_normal_r1.m4a"
+    "path": "./assets/production/scene-music-r1/battle/clash_at_the_concrete_edge.mp3",
+    "loop": true, "gainDb": -11.2, "trimStart": 0, "trimEnd": 0, "crossfade": 0.8
   },
   "battle_final": {
     "path": "./assets/production/original-music-r1/championship_battle_final_r1.ogg",

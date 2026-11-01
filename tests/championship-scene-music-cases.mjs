@@ -130,7 +130,7 @@ test('settings use native radio groups and literal localized titles without rela
 });
 test('new original MP3 bytes and scene assignments match the verified import manifest',()=>{
  const manifest=JSON.parse(fs.readFileSync(new URL('../assets/production/scene-music-r1/manifest.json',import.meta.url)));
- assert.equal(manifest.files.length,10);assert.equal(SCENE_MUSIC_TRACKS.length,24);
+ assert.equal(manifest.files.length,11);assert.equal(SCENE_MUSIC_TRACKS.length,24);
  for(const file of manifest.files){
   const data=fs.readFileSync(new URL(`../assets/production/scene-music-r1/${file.path}`,import.meta.url));
   assert.equal(data.length,file.bytes);assert.equal(createHash('sha256').update(data).digest('hex'),file.sha256);

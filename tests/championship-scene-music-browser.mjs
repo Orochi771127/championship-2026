@@ -15,7 +15,7 @@ const SAVE = 'championshipModernSave:v1';
 const TRACKS = JSON.parse(await fs.readFile('assets/production/scene-music-r1/manifest.json','utf8')).files.map(f=>({...f,scene:f.category,path:'assets/production/scene-music-r1/'+f.path,zh:f.titles.zh,en:f.titles.en}));
 const NAMES = {
  moon:['空靈月湖畔','Ethereal Moon Lakefront'],lofi:['林卡拉慢拍','Linkara Lo-fi'],
- battle_normal:['錦標賽對戰','Championship Battle'],battle_final:['錦標賽決戰','Championship Final'],
+ battle_normal:['石緣交鋒','Clash at the Concrete Edge'],battle_final:['錦標賽決戰','Championship Final'],
  ...Object.fromEntries(TRACKS.map(t=>[t.id,[t.zh,t.en]]))
 };
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
