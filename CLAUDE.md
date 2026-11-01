@@ -14,3 +14,9 @@ Repository rules live in [AGENTS.md](AGENTS.md); read it first.
 - [hd2d-cage-world](.claude/skills/hd2d-cage-world/SKILL.md): HD-2D look of
   the cage GLBs, series connectivity and seam bridges between cages, and the
   shop cage cards. GLB files are never rewritten; the title stays untouched.
+- Upstream sprite skills, background for the sprite foundry
+  (`championship-art-production` → references/sprite-foundry.md wins on any
+  conflict): [sprite-pipeline](.claude/skills/sprite-pipeline/SKILL.md)
+  (openai/plugins), [character-sprite-maker](.claude/skills/character-sprite-maker/SKILL.md)
+  (Clad3815), [character-animation](.claude/skills/character-animation/SKILL.md)
+  (karem505; its Gemini generation scripts are paid and unused here).

@@ -28,6 +28,10 @@ rewards.
 Area references:
 
 - Characters, anchors, facing, shadows, cameras: [characters-and-cameras.md](references/characters-and-cameras.md)
+- Character motion from generated keys (native reference → ChatGPT A/B keys or
+  4×4 eight-direction sheet → label crop, white-safe matte, ROOT HOLD, 60 fps
+  events, hit-reaction props): [sprite-foundry.md](references/sprite-foundry.md)
+  and `scripts/championship-sprite-foundry/`
 - Cage, hunt and battle scenes (Blender, GLB, walkability): [scenes.md](references/scenes.md), and the [hd2d-cage-world](../hd2d-cage-world/SKILL.md) skill for the ranch's 3D look
 - UI art surfaces, themes, icons: [visual-language.md](references/visual-language.md), and the [juicy-monster-ui](../juicy-monster-ui/SKILL.md) skill for in-game HUD layout and motion
 
