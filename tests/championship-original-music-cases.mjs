@@ -84,3 +84,16 @@ test('initial stream buffering ends at canplaythrough, releases on mute/error, a
   assert.equal(f.music.inspect().initialBuffering,false);assert.equal(active.oncanplaythrough,null);
   f.music.dispose();
 });
+
+test('shop plays Lucky Draw Counter; its 0-8 s intro plays once and every loop pass resumes on the 8 s downbeat',async()=>{
+  assert.equal(selectOriginalMusic({screen:'SHOP'}).id,'lucky_draw_counter');
+  const cue=ORIGINAL_MUSIC_CUES.lucky_draw_counter;assert.equal(cue.loopStart,8);assert.equal(57-cue.trimEnd-cue.crossfade,56,'loop hands off at 56.0 s, exactly 24 bars at 120 BPM after 8.0 s');
+  const f=fixture();f.music.setScene('lucky_draw_counter');f.doc.emit('pointerdown');await settle();
+  const a=f.media[0];assert.match(a.src,/original-music-r1\/bgm_lucky_draw_counter\.mp3$/);assert.equal(a.loop,false);a.onloadedmetadata();assert.equal(a.currentTime,0,'first entry plays the intro');
+  // A seek past the hand-off restarts without a prepared slot.
+  a.duration=57;a.currentTime=56.2;a.ontimeupdate();await settle();const b=f.media[1];b.onloadedmetadata();assert.equal(b.currentTime,8);assert.equal(f.music.inspect().starts,2);
+  // The normal path prepares the next pass ahead of the hand-off.
+  f.finishFades();b.duration=57;b.readyState=1;b.currentTime=54;b.ontimeupdate();a.onloadedmetadata();assert.equal(a.currentTime,8);a.readyState=1;a.currentTime=3;
+  b.currentTime=56;b.ontimeupdate();await settle();assert.equal(f.music.inspect().starts,3);assert.equal(a.currentTime,8);assert.equal(f.media.length,2);
+  f.music.dispose();f.bus.dispose();
+});

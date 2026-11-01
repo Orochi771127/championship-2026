@@ -757,9 +757,37 @@
       "runtimeGainDb": -11.2,
       "projectedLufs": -24.08,
       "projectedTruePeakDbtp": -12.06
+    },
+    {
+      "path": "assets/production/original-music-r1/bgm_lucky_draw_counter.mp3",
+      "sha256": "486bd721565788aac5dab0e720a497dea9551214d8806691515a9b44b6b0b43c",
+      "bytes": 913283,
+      "sampleRate": 44100,
+      "channels": 2,
+      "seconds": 57.000249,
+      "lufs": -15.03,
+      "truePeakDbtp": -1.14,
+      "lra": 11.9,
+      "threshold": -25.33,
+      "monoDecodePeak": 1.0751736164093018,
+      "spectralEnergyShare": {
+        "low": 0.744608,
+        "mid": 0.180372,
+        "presence": 0.039306,
+        "high": 0.031765
+      },
+      "spectralCentroidHz": 553.5,
+      "edgePeakFirst20ms": 0.0,
+      "edgePeakLast20ms": 0.022028297185897827,
+      "decodeErrors": null,
+      "listeningCompleted": false,
+      "runtimeGainDb": -9,
+      "projectedLufs": -24.03,
+      "projectedTruePeakDbtp": -10.14
     }
   ],
   "listeningCompleted": false,
   "physicalIphoneAccepted": false,
-  "note20261102": "Retired championship_battle_normal_r1 ogg/m4a rows removed; the Concrete Edge row measures the shipped web encode, not the Owner's original bytes."
+  "note20261102": "Retired championship_battle_normal_r1 ogg/m4a rows removed; the Concrete Edge row measures the shipped web encode, not the Owner's original bytes.",
+  "note20261102shop": "Lucky Draw Counter (Owner 2026-11-02, SHOP cue) row measures the web encode; spectral fields use the same 22,050 Hz mono, 4096-point Hann method as the battle_normal row."
 }

@@ -1,9 +1,9 @@
 {
   "id": "CHAMPIONSHIP_ORIGINAL_MUSIC_R1_20261010",
-  "scope": "Nine explicitly approved existing original tracks plus five Owner-delivered original combat/result cues; no Nexus code or save integration",
+  "scope": "Nine explicitly approved existing original tracks plus five Owner-delivered original combat/result cues; no Nexus code or save integration; plus Owner-supplied Lucky Draw Counter (2026-11-02) as the SHOP cue",
   "loudness": "Runtime gain targets approximately -24 LUFS, true peak <= -3 dBTP, maximum boost +12 dB. Four formerly capped quiet cues updated 2026-10-18; source bytes unchanged.",
   "acceptance": "Technical playback/transport testing; human listening acceptance pending",
-  "loopNotes": "MP3 measured edge trim and 0.8s crossfade are a technical treatment, not seamless-listening acceptance. Combat OGG native duration 32 seconds, 0..1536000 samples at 48 kHz; results do not loop.",
+  "loopNotes": "MP3 measured edge trim and 0.8s crossfade are a technical treatment, not seamless-listening acceptance. Combat OGG native duration 32 seconds, 0..1536000 samples at 48 kHz; results do not loop. Lucky Draw Counter (120 BPM): the 0-8 s intro plays once; each loop pass hands off at 56.0 s to 8.0 s (24 bars) with a 0.05 s crossfade inside a near-silent break.",
   "files": [
     {
       "path": "bgm_central_radiant_core.mp3",
@@ -95,6 +95,28 @@
       "bytes": 24944,
       "seconds": 3.8,
       "sourcePackageSha256": "505f985a39fe55403adec64611ab3b29523188db945ba0f74a554b35e4292648"
+    },
+    {
+      "path": "bgm_lucky_draw_counter.mp3",
+      "sha256": "486bd721565788aac5dab0e720a497dea9551214d8806691515a9b44b6b0b43c",
+      "bytes": 913283,
+      "seconds": 57.000249,
+      "source": "Owner supplied Downloads file lucky_draw_counter.mp3 (192 kbps, 63.060 s), assigned to the SHOP screen on 2026-11-02",
+      "sourceSha256": "c17462fe7badd8eeda81f3ab9cfb92c63a9a85d495b6c6de34a25c6ab1900a39",
+      "sourceBytes": 1519556,
+      "webEncoding": "Cut at 57.0 s (beyond the 56.0 s loop cut; trailing repeat and silence removed), 0.5 s safety fade-out, -2.5 dB pre-gain (source peaks +1.3 dBFS), LAME MP3 128 kbps CBR 44.1 kHz stereo, metadata stripped",
+      "loop": {
+        "bpm": 120,
+        "introSeconds": [
+          0,
+          8
+        ],
+        "loopSeconds": [
+          8,
+          56
+        ],
+        "evidence": "Measured beat interval 0.5004 s; waveform correlation peak at lag 48.000 s between 8.0 s and 56.0 s; 56.00-56.05 s is a -46 dB break before the 56.075 s downbeat"
+      }
     }
   ],
   "cues": {
@@ -169,6 +191,15 @@
       "trimStart": 0,
       "trimEnd": 1.9305,
       "crossfade": 0.8
+    },
+    "lucky_draw_counter": {
+      "path": "./assets/production/original-music-r1/bgm_lucky_draw_counter.mp3",
+      "loop": true,
+      "gainDb": -9,
+      "trimStart": 0,
+      "trimEnd": 0.95,
+      "crossfade": 0.05,
+      "loopStart": 8
     },
     "battle_final": {
       "path": "./assets/production/original-music-r1/championship_battle_final_r1.ogg",
