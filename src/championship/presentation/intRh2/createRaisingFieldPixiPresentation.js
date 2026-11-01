@@ -167,7 +167,7 @@ export async function mountRaisingFieldPixiPresentation({
   // facing and a position offset while a cutscene plays; the simulation frame
   // underneath is untouched and the clock is paused by the caller.
   const storyPuppets = new Map();
-  const STORY_PUPPET_SEQUENCES = Object.freeze({ idle: 0, walk: 2, attack: 7, hit: 26, hop: 0, face: 0 });
+  const STORY_PUPPET_SEQUENCES = Object.freeze({ idle: 0, walk: 2, attack: 7, hit: 26, hop: 0, face: 0, sleep: 13 });
   const NATIVE_TICK_MS = 560190 / 33513982 * 1000;
   function actorFrameFor(creatureId) {
     const native = source.getActorFrame?.(creatureId);
@@ -849,7 +849,8 @@ export async function mountRaisingFieldPixiPresentation({
         &&residentFrameReady(entry,actorFrame)){
         applyNativeCharacterCellGeometry(entry.sprite,entry.nativeFramePresenter.apply(actorFrame));
       }
-      const flipX=Boolean(entry.nativeFramePresenter&&actorFrame?.flipBits&1);
+      // A facing-locked clip (front-facing handoff art) is never mirrored by facing.
+      const flipX=Boolean(entry.nativeFramePresenter&&actorFrame?.flipBits&1)&&!entry.nativeFramePresenter?.getSnapshot()?.facingLocked;
       const geometry = actorGeometry(entry,undefined,flipX);
       const scale = geometry ? nativeScale : clamp(Math.min(app.screen.width / 390, app.screen.height / 620), 0.78, 1.18);
       const facing = resident.facing === "left" ? -1 : 1;
@@ -1155,12 +1156,13 @@ export async function mountRaisingFieldPixiPresentation({
           {const visualFrame=entry.nativeFramePresenter.apply(frame);if(entry.sprite){
             if(entry.nativeScale!==null)applyNativeCharacterCellGeometry(entry.sprite,visualFrame);
             entry.visualLift=(frame.positionQ12?.[2]??0)/4096;
-            const geometry=entry.nativeScale!==null?actorGeometry(entry,visualFrame?.geometry,Boolean(frame.flipBits&1)):null;
+            const flip=Boolean(frame.flipBits&1)&&!visualFrame?.facingLocked;
+            const geometry=entry.nativeScale!==null?actorGeometry(entry,visualFrame?.geometry,flip):null;
             if(geometry){entry.sprite.scale.set(geometry.spriteScale);entry.baseSpriteScale=geometry.spriteScale;entry.sprite.x=geometry.offset.x;decorateActor(entry,geometry);}
             if(entry.nativeScale!==null)entry.root.scale.x=Math.abs(entry.root.scale.x);
             entry.sprite.y=(geometry?.offset.y??0)-entry.visualLift;
             // Main is authored facing left; the original body bit mirrors it.
-            entry.sprite.scale.x=Math.abs(entry.sprite.scale.x)*(frame.flipBits&1?-1:1);
+            entry.sprite.scale.x=Math.abs(entry.sprite.scale.x)*(flip?-1:1);
           }}
       } else if (entry.characterController) {
         const snapshot = entry.characterController.update(ticker);

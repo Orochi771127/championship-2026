@@ -20,6 +20,7 @@ import { DATA_ARENA_BOSS, DATA_ARENA_MATE, DATA_ARENA_PARTNERS, DATA_ARENA_RIVAL
 import { speciesNameForId } from "../../text/zhHant.js";
 import { isOriginalRuntimeLocation } from "../originalRuntimeLocation.js";
 import {newArtPortrait} from '../newArtPortrait.js';
+import {animationHandoffEnabled} from '../animationHandoff.js';
 
 export const DATA_ARENA_SEQUENCES = Object.freeze({ STAND: 0, WALK: 2, ATTACK: 7, HIT: 6, DOWN: 15, WIN: 33 });
 
@@ -56,7 +57,8 @@ export async function loadDataArenaCharacter({art,PIXI,signal,fetchImpl=globalTh
 function qaCastSpecies(href) {
   try {
     const url = new URL(href);
-    if (!["127.0.0.1", "localhost"].includes(url.hostname) || !["8761", "8762"].includes(url.port) || url.searchParams.get("arenaQa") !== "1") return null;
+    // The handoff QA switch (loopback-only) also opens the QA cast on its own port (2026-11-01).
+    if (!["127.0.0.1", "localhost"].includes(url.hostname) || !(["8761", "8762"].includes(url.port) || animationHandoffEnabled(href)) || url.searchParams.get("arenaQa") !== "1") return null;
     const list = (url.searchParams.get("arenaQaCast") ?? "").split(",").filter((id) => /^species-\d{3}$/.test(id));
     return list.length ? list : null;
   } catch { return null; }
