@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {isCompactLandscapeMenuLayout,mountPortraitFrame} from '../src/championship/app/portraitFrame.js';
 import {makeView} from './helpers/dex-conditions-ui-fixture.mjs';
 const screens=['SHOP','DATABASE','BATTLE_SELECT','CHAMPIONSHIP','DIGIMON_LIST','SCHEDULE','TAMER_INFO','HELP','GATE_SELECT','HUNT_LOADOUT','HUNT_RESULT','MEDALS'];
-const sizes=[[720,320],[844,390],[932,430],[1023,420],[1024,419],[1366,320]];
+const sizes=[[640,320],[667,375],[720,320],[844,390],[932,430],[1023,420],[1024,419],[1366,320]];
 function compactLandscapeRules(css) {
  return (css.replace(/\/\*[\s\S]*?\*\//g,'').match(/body\[data-landscape-menu\][^{]*\{[^}]*\}/g)??[]).join('\n');
 }
@@ -25,7 +25,7 @@ test('compact DOM gate covers only exact visible allowlist and finite bounded la
   assert.ok(isCompactLandscapeMenuLayout({width,height,activeScreen}),`${activeScreen} ${width}x${height}`);
   assert.equal(isCompactLandscapeMenuLayout({width,height,activeScreen,hidden:true}),false);
  }
- for(const [width,height] of [[568,320],[719,320],[844,319],[390,844],[720,561],[1366,480],[1024,420],[NaN,390],[844,Infinity]])
+ for(const [width,height] of [[568,320],[639,320],[844,319],[390,844],[720,561],[1366,480],[1024,420],[NaN,390],[844,Infinity]])
   assert.equal(isCompactLandscapeMenuLayout({width,height,activeScreen:'SHOP'}),false,`${width}x${height}`);
  for(const activeScreen of ['TITLE','LOGIN','CAGE_EDIT','HUNT_FIELD','RAISING_HOME','BATTLE_FIELD','BATTLE_RESULT','SETTINGS','UNKNOWN',undefined])
   assert.equal(isCompactLandscapeMenuLayout({width:844,height:390,activeScreen}),false,String(activeScreen));

@@ -21,15 +21,18 @@ export function isDesktopMenuLayout({width,height,activeScreen,hidden=false}) {
 }
 // Fill only the short-landscape gap. Existing desktop and portrait layouts
 // keep their own contracts. Other scenes retain their existing 720px landscape threshold.
+// Viewport health check 2026-11-01: from 640px, so a 667x375 phone (iPhone SE) gets the
+// native-size landscape menus instead of the portrait frame scaled to about 54%.
+export const COMPACT_LANDSCAPE_MIN_WIDTH = 640;
 export function isCompactLandscapeMenuLayout({width,height,activeScreen,hidden=false}) {
-  return Number.isFinite(width)&&Number.isFinite(height)&&width>=720&&height>=320
+  return Number.isFinite(width)&&Number.isFinite(height)&&width>=COMPACT_LANDSCAPE_MIN_WIDTH&&height>=320
     &&width>=height+160&&(width<1024||height<420)&&!hidden
     &&[...DESKTOP_MENU_SCREENS,'SHOP','DATABASE'].includes(activeScreen);
 }
 // The editor is DOM, not a Pixi coordinate scene. Its candidate owns a
 // two-pane layout while retaining the native 508px board and scrollable cells.
 export function isCageLandscapeLayout({width,height,activeScreen,hidden=false}) {
-  return Number.isFinite(width)&&Number.isFinite(height)&&width>=720&&height>=320
+  return Number.isFinite(width)&&Number.isFinite(height)&&width>=COMPACT_LANDSCAPE_MIN_WIDTH&&height>=320
     &&width>=height+160&&activeScreen==='CAGE_EDIT'&&!hidden;
 }
 // Entry owns a dedicated art-and-controls composition, not a stretched scene.

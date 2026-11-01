@@ -166,6 +166,23 @@
   :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-actions { grid-column: 2; }
 }
 
+/* Viewport health check 2026-11-01: the detail's 關閉 / 購買 sat under the footer's way back
+   (375x667) or below a scrolled card (844x390). The phone sheet now ends above the footer,
+   the keys stay pinned to the card's lower edge while its copy scrolls, and a short phone
+   gets a shorter picture. */
+@media (max-width: 600px) {
+  .cm-vs2-shop__sheet { padding-bottom: calc(56px + max(10px, env(safe-area-inset-bottom))); }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail { padding-bottom: var(--sp-4); }
+}
+@media (max-width: 600px) and (max-height: 700px) {
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art { height: 140px; }
+}
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-actions {
+  position: sticky; bottom: calc(-1 * var(--sp-4)); z-index: 1;
+  margin-bottom: calc(-1 * var(--sp-4)); padding: var(--sp-2) 0 var(--sp-4);
+  background: inherit;
+}
+
 /* ======================================================================== *
  * Dex: stage chips over a portrait grid; an entry opens its detail sheet.
  * Selectors are weighted to match the earlier desktop "list | detail" rules
@@ -257,6 +274,53 @@
   .cm-vs2-database__chip { flex: 0 0 auto; min-height: 34px; }
   :root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database .cm-vs2-shop__list { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; --dex-thumb: 72px; }
   .cm-vs2-database__sheet-panel { width: min(820px, 100%); max-height: calc(100% - 8px); }
+}
+
+/* Dex detail on a short landscape phone (viewport health check 2026-11-01): the sheet was a
+   190px strip and the motion keys sat below it on 844x390. It now spans from the status bar to
+   the footer; the visual (portrait or motion viewer, with its keys) holds the left column while
+   the record scrolls on the right. The visual is positioned against the panel, so it stays put
+   while the detail scrolls. The sheet is pinned to the screen shell, which sits under the status
+   bar: the shell's entrance animation already leaves it a transform (so it is the sheet's
+   containing block); it keeps one so reduced motion lays out the same. The record's selectors
+   carry the layout attribute to outrank the later two-column arcade detail rules. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root body .cm-vs2-root[data-screen="DATABASE"][data-database-layout="ARCADE_GRID_R1"] > .cm-vs2-shell { transform: translate(0, 0); }
+  /* The open sheet covers the screen's own header (title and 已登錄 count): it steps aside. */
+  :root body .cm-vs2-root[data-screen="DATABASE"][data-database-layout="ARCADE_GRID_R1"]:has(.cm-vs2-database__sheet:not([hidden])) > .cm-vs2-shell > .cm-vs2-header { visibility: hidden; }
+  :root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__sheet {
+    position: fixed; top: 0; bottom: calc(58px + max(6px, env(safe-area-inset-bottom))); left: 0; right: 0;
+    padding: 4px max(8px, env(safe-area-inset-right)) 4px max(8px, env(safe-area-inset-left));
+  }
+  :root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__sheet-panel {
+    /* A length, not a percentage: the visual (positioned) and the record's inset (a grid item)
+       resolve percentages against different boxes, which left the record touching the visual. */
+    --dex-visual: clamp(244px, calc((100vw - var(--safe-left) - var(--safe-right)) * 0.36), 300px);
+    width: 100%; height: 100%; max-height: 100%; grid-template-rows: minmax(0, 1fr);
+  }
+  :root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__close { position: absolute; top: 8px; right: 8px; z-index: 3; min-height: 40px; }
+  :root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__sheet .cm-vs2-database__detail {
+    position: static; display: grid; grid-template-columns: minmax(0, 1fr); align-content: start;
+    /* The visual sits a step in from the panel edge; the record starts a step clear of it. */
+    padding: 4px 4px 12px calc(var(--dex-visual) + 2 * var(--sp-3));
+  }
+  :root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__sheet .cm-vs2-database__detail > * { grid-column: 1; grid-row: auto; }
+  :root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__sheet .cm-vs2-database__detail-title { padding-right: 100px; }
+  :root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__sheet .cm-vs2-database__detail > .cm-dex-hero {
+    position: absolute; left: var(--sp-3); top: var(--sp-3);
+    width: var(--dex-visual); height: calc(100% - 2 * var(--sp-3));
+  }
+  :root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__sheet .cm-vs2-database__detail:has(> .cm-showcase-motion__controls:not([hidden])) > .cm-dex-hero {
+    height: calc(100% - 2 * var(--sp-3) - 64px);
+  }
+  :root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__sheet .cm-vs2-database__detail > .cm-showcase-motion__controls {
+    position: absolute; left: var(--sp-3); bottom: var(--sp-3); width: var(--dex-visual);
+    flex-wrap: nowrap; gap: 4px; padding: 6px;
+  }
+  .cm-vs2-database__sheet .cm-showcase-motion__controls .cm-showcase-motion__turn,
+  .cm-vs2-database__sheet .cm-showcase-motion__controls .cm-showcase-motion__action { padding: 2px 5px; white-space: nowrap; }
+  .cm-vs2-database__sheet .cm-showcase-motion__controls .cm-showcase-motion__actions { flex: 1 1 auto; gap: 3px; }
+  .cm-vs2-database__sheet .cm-showcase-motion__controls .cm-showcase-motion__action { flex: 1 1 0; min-width: 0; }
 }
 
 /* ======================================================================== *
@@ -1010,6 +1074,11 @@
   bottom: 8px;
   z-index: 4;
 }
+/* Where the corner keys run down the right edge, the selection stops left of them
+   (it covered 全覽 and 還原 on 375x667). */
+@media (max-width: 600px), (max-height: 500px) and (orientation: landscape) {
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__selection:not([hidden]) { right: 62px; }
+}
 :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-shop__status:empty { display: none; }
 
 /* Corner keys and toast. */
@@ -1085,7 +1154,7 @@
 /* Filters and the cartridge dock. */
 .cm-cage-filters { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
 .cm-cage-filters[hidden] { display: none; }
-.cm-cage-filter { flex: 0 0 auto; min-height: 36px; padding: 0 12px; border-radius: 999px; font-weight: 900; font-size: 13px; }
+.cm-cage-filter { flex: 0 0 auto; min-height: 40px; padding: 0 12px; border-radius: 999px; font-weight: 900; font-size: 13px; }
 .cm-cage-filter { white-space: nowrap; }
 .cm-cage-filter[data-count]::after { content: attr(data-count); display: inline-block; min-width: 1.4em; margin-inline-start: 6px; padding: 0 5px; border-radius: 999px; background: #14141f; color: #ffd23f; font-size: 11px; line-height: 1.5; }
 .cm-cage-filter[data-count="0"]::after { background: rgba(20, 20, 31, 0.25); color: #14141f; }
@@ -1138,10 +1207,18 @@
 /* A glow, never a transform: the button's box stays still, so taps and checks land. */
 @keyframes cm-confirm-breathe { 50% { filter: brightness(1.12) drop-shadow(0 0 10px rgba(255, 210, 63, 0.9)); } }
 
-/* Short landscape phones: canvas left, dock right. */
+/* Sideways iPhones carry the notch on a side: the builder's header and body keep their 14px
+   gutter or the inset, whichever is larger (the footer already does). */
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-header, .cm-vs2-cage-edit__body) {
+  padding-left: max(14px, var(--safe-left));
+  padding-right: max(14px, var(--safe-right));
+}
+/* Short landscape phones: canvas left, dock right. The dock narrows with the screen so a
+   667px phone keeps half its width for the board, and the corner keys run down the board's
+   right edge (as on a phone held upright) so the land counter keeps the top row. */
 @media (max-height: 500px) and (orientation: landscape) {
   :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-cage-edit__body {
-    grid-template-columns: minmax(0, 1fr) 300px;
+    grid-template-columns: minmax(0, 1fr) clamp(220px, 34vw, 300px);
     grid-template-rows: auto minmax(0, 1fr) auto;
     grid-template-areas: "board filters" "board inventory" "board status";
   }
@@ -1149,6 +1226,8 @@
   :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-cage-inventory-panel { flex-direction: column; overflow-x: hidden; overflow-y: auto; }
   :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray, .cm-cage-facilities) { flex-wrap: wrap; width: auto; }
   :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] :is(.cm-vs2-cage-tray__item, .cm-cage-facility) { flex-basis: 136px; min-height: 100px; }
+  .cm-hexworld__keys { flex-direction: column; top: 10px; right: 10px; }
+  .cm-hexworld__keys > button { min-width: 44px; min-height: 40px; padding: 0 6px; font-size: 13px; }
 }
 :root[data-motion="reduced"] :is(.cm-hexworld__cell, .cm-hexworld__bridge, .cm-hexworld__rim--synergy, .cm-hexworld__exit--synergy, .cm-hexworld__toast, .cm-vs2-action--primary) { animation: none !important; }
 
@@ -1874,8 +1953,8 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
   :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__place::before { content: "\25C9"; margin-right: 4px; color: #ff6b4a; font-size: 10px; }
   :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__actions { gap: 6px; }
   :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close) {
-    min-width: 38px;
-    min-height: 38px;
+    min-width: 40px;
+    min-height: 40px;
     border-radius: 10px;
     box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 4px 0 var(--ax-ink);
   }
@@ -2300,7 +2379,7 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-height: 38px;
+  min-height: 40px;
   padding: 0 14px;
   border: 3px solid var(--ax-ink);
   border-radius: 12px;
@@ -2359,7 +2438,7 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
   :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion__portrait { width: 48px; height: 48px; }
   :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion__name { font-size: 15px; }
   :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion__actions { gap: 5px; }
-  :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close) { min-width: 36px; min-height: 36px; border-radius: 10px; }
+  :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close) { min-width: 40px; min-height: 40px; border-radius: 10px; }
 }
 :root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-control { padding: 0 8px; font-size: 14px; white-space: nowrap; }
 
@@ -3163,3 +3242,155 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
 :root[data-theme="arcade"] body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-panel .cm-hunt-tools[data-dock="tactical"] > .cm-vs2-action[data-slot="hand"] { order: 2; }
 :root[data-theme="arcade"] body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-panel .cm-hunt-tools[data-dock="tactical"] > .cm-vs2-action.cm-hunt-rope-swap { top: -10px; left: auto; right: 14px; width: auto; max-width: none; }
 :root[data-theme="arcade"][data-motion="reduced"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools[data-dock="tactical"] .cm-vs2-action[data-tool] { transition: none; animation: none; }
+
+/* ==== Viewport health check 2026-11-01 (scripts/qa/run-full-viewport-health-check.cjs) ====
+   Each block names the collision the six-viewport scan measured and how it is cleared. */
+
+/* Ranch, wide screens: the side partner card sat on the journal key under the wallet.
+   It now starts below the journal (ranchDiscoveryJournal publishes --cm-journal-clear). */
+:root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden]))[data-desktop-raising] .int-rh2-root .int-rh2-companion {
+  top: max(calc(var(--cm-status-bar-height, var(--hud-height)) + var(--cm-match-notice-offset, 0px) + 8px), var(--cm-journal-clear, 0px));
+  max-height: calc(100% - max(calc(var(--cm-status-bar-height, var(--hud-height)) + var(--cm-match-notice-offset, 0px) + 8px), var(--cm-journal-clear, 0px)) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 16px);
+}
+/* Short landscape phones: the right column holds the wallet, the journal and the two rows of
+   quick keys, too short for the card at 375px, so the card takes the free left column under
+   the season pills (raisingHomeP1RView drops the click a tap on the habitat leaves behind on
+   it) and the first-run hint steps aside. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden]))[data-desktop-raising] .int-rh2-root .int-rh2-companion {
+    top: calc(var(--cm-status-bar-height, var(--hud-height)) + 6px);
+    left: calc(8px + var(--safe-left)); right: auto;
+    /* Narrow enough to keep the stage at least 55% visible with the meters open. */
+    width: min(236px, 38vw);
+    /* Clear the one-row rail (about 64px with its lip); the quick keys stand on the right. */
+    max-height: calc(100% - var(--cm-status-bar-height, var(--hud-height)) - 64px - var(--safe-bottom) - 18px);
+  }
+  body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-root:has(.int-rh2-companion[data-open="true"]) .int-rh2-hint { visibility: hidden; }
+  /* Opened meters run two to a row, as on the portrait nameplate, and take the place row's
+     room (place, mood, habitat return when the meters close), so the card keeps the stage
+     at least 55% visible on 667x375. Their digits drop a size to fit the shorter trough. */
+  :root body[data-desktop-raising] .int-rh2-root .int-rh2-companion > .int-rh2-vitals {
+    grid-template-columns: max-content minmax(0, 1fr) max-content minmax(0, 1fr);
+    column-gap: 6px; row-gap: 4px; align-items: center;
+  }
+  :root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden]))[data-desktop-raising] .int-rh2-root .int-rh2-companion[data-expanded="true"] .int-rh2-companion__place-row { display: none; }
+  :root[data-theme="arcade"] body[data-desktop-raising] .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar:not([data-stat="capacity"]) .int-rh2-vitals__num {
+    font-size: 10px; padding: 0 3px; letter-spacing: -0.03em;
+  }
+}
+/* A 667px phone held sideways: the eight tool keys keep their captions at 56px each in a
+   centred rail instead of spreading over the whole width (the stage fell to 54%). */
+@media (max-height: 500px) and (orientation: landscape) and (max-width: 700px) {
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden]))[data-desktop-raising] .cm-toolbar[data-mode="1"] .cm-toolbar__rail {
+    width: min(100%, 488px); align-self: center;
+  }
+}
+
+/* Ranch, wide screens: a seven-character name (黑暗戰鬥暴龍獸) broke over two lines and squeezed
+   its three-character species to 「黑…」. The species keeps its width and drops under the
+   name when the row is full. (Phones and short landscape already stack them.) */
+:root body[data-desktop-raising] .int-rh2-root .int-rh2-companion__head { flex-wrap: wrap; row-gap: 4px; }
+:root body[data-desktop-raising] .int-rh2-root .int-rh2-companion__species { flex: none; }
+
+/* Ranch: the resident-art strip (ready phase) slid under the status pills, its recovery keys
+   covered by the wallet. It now sits in the notice lane below the pills, away from the thumb
+   zone where partners are tapped (its keys save and leave): full width under the pills on a
+   phone or a tablet held upright, in the free right column under the journal on a short
+   landscape phone, centred between the season pills and the side partner card on a wide
+   screen. */
+body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-resident-assets[data-phase="ready"] {
+  top: calc(var(--cm-status-bar-height, var(--hud-height)) + var(--cm-match-notice-offset, 0px) + 8px);
+  right: auto; bottom: auto;
+  left: calc(8px + var(--safe-left));
+  width: calc(100% - 16px - var(--safe-left) - var(--safe-right));
+  max-height: 40%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+@media (min-height: 501px), (orientation: portrait) {
+  body[data-desktop-raising]:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-resident-assets[data-phase="ready"] {
+    left: 50%; translate: -50% 0;
+    width: min(440px, calc(100% - 2 * var(--cm-raising-card, 300px) - 48px));
+  }
+}
+/* A nameplate raised to the top (so it does not hide its partner) keeps the top lane. */
+body:not([data-desktop-raising]):has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])):has(.int-rh2-companion[data-open="true"][data-placement="top"]) .int-rh2-resident-assets[data-phase="ready"] {
+  top: auto; bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 8px);
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-resident-assets[data-phase="ready"] {
+    top: max(calc(var(--cm-status-bar-height, var(--hud-height)) + 8px), var(--cm-journal-clear, 0px));
+    left: auto; right: calc(8px + var(--safe-right)); translate: none;
+    width: min(320px, 48%);
+    max-height: calc(100% - max(calc(var(--cm-status-bar-height, var(--hud-height)) + 8px), var(--cm-journal-clear, 0px)) - 92px - var(--safe-bottom) - 14px);
+    padding: 6px 8px; gap: 6px;
+  }
+  body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-resident-assets[data-phase="ready"] button { min-height: 40px; padding: 4px 10px; }
+}
+
+/* Ranch menus on short landscape phones: the sheet rose above the quick keys and was about
+   100px tall at 844x390 (home indicator included). It now stands on the one-row rail, left of
+   the quick keys, and lays its tiles four across. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] .cm-toolbar__menu {
+    left: max(8px, var(--safe-left));
+    right: calc(max(8px, var(--safe-right)) + 176px);
+    bottom: calc(70px + var(--safe-bottom));
+    max-width: none;
+    margin: 0;
+    max-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-status-bar-height, var(--hud-height)) - 70px - var(--safe-bottom) - 14px);
+  }
+  :root body .cm-toolbar__menu .cm-toolbar__group-entries,
+  :root body .cm-toolbar__menu .cm-toolbar__group[data-prominent="true"] .cm-toolbar__group-entries,
+  :root body .cm-toolbar__menu .cm-toolbar__group[data-separate="true"] .cm-toolbar__group-entries { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* Battle selection on a short portrait phone (375x667): the cube took the room of the
+   first match, which sat under the back key. A smaller cube keeps it in view. */
+@media (orientation: portrait) and (max-height: 700px) {
+  body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__canvas { max-width: 168px; margin-inline: auto; }
+}
+
+/* Battle selection on short landscape phones (844x390, 667x375): the title block and the
+   Data Arena banner took 184px, so the cube sat below the fold and one match showed. The
+   title and the banner share one row and the cube draws smaller; the mode keys stay full size. */
+@media (orientation: landscape) and (max-height: 520px) {
+  :root[data-theme="arcade"] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 16px; align-items: center;
+  }
+  :root[data-theme="arcade"] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-kicker { grid-column: 1; grid-row: 1; justify-self: start; }
+  :root[data-theme="arcade"] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-title { grid-column: 1; grid-row: 2; font-size: 26px; }
+  :root[data-theme="arcade"] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-title::after { display: none; }
+  :root[data-theme="arcade"] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-data-arena:not([hidden]) {
+    grid-column: 2; grid-row: 1 / span 2; margin-top: 0; min-height: 52px; padding: 6px 12px 7px 16px;
+  }
+  :root[data-theme="arcade"] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-data-arena > span:first-child { font-size: 19px; }
+  body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__canvas { max-width: 120px; margin-inline: auto; }
+}
+
+/* Dialogs in the game: on a short screen the answer keys scrolled out of reach (探索手帳 on
+   844x390). The keys stay pinned to the dialog's lower edge while its body scrolls, and a
+   short landscape screen gets a wider dialog so the copy needs fewer lines. Margins and
+   padding stay as each skin set them, and the bar takes the panel's plain surface (a glowing
+   panel has faded to it by its foot), so a dialog that fits looks exactly as before. Chrome
+   sticks the bar to the panel's content edge; the arcade bar's ::after covers the panel's
+   lower padding beneath it, so scrolled copy never shows under the keys. The tutorial guide
+   keeps its own night panel, and the title screen's dialogs stay as main shipped them.
+   :where() keeps each selector's weight, so variant rules still win. */
+:where(body:has(#cm-root:not([hidden]))) dialog.cm-dialog .cm-dialog__actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+}
+:root[data-theme="arcade"] :where(body:has(#cm-root:not([hidden]))) dialog.cm-dialog:not([data-variant="tutorial-guide"]) .cm-dialog__actions { background: var(--c-surface-1); }
+:root[data-theme="arcade"] :where(body:has(#cm-root:not([hidden]))) dialog.cm-dialog:not([data-variant="tutorial-guide"]) .cm-dialog__actions::after {
+  content: "";
+  position: absolute;
+  inset: 100% 0 auto;
+  height: var(--sp-5);
+  background: inherit;
+  pointer-events: none;
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  :where(body:has(#cm-root:not([hidden]))) dialog.cm-dialog { width: min(560px, calc(100vw - 32px - var(--safe-left) - var(--safe-right))); }
+}

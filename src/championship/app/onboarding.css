@@ -1009,3 +1009,42 @@ dialog.cm-dialog[data-variant="tutorial-guide"][open] { animation: ob-holo-in 42
     transition-duration: 1ms !important;
   }
 }
+
+/* ---- Short landscape phones (viewport health check 2026-11-01) ------------------
+   On 844x390 and 667x375 the tamer licence and the egg incubator ran past the screen
+   and their confirm keys sat below it. Here they lay out side by side; only the
+   onboarding forms inside #cm-opening change, never the title or its menu. */
+@media (max-height: 500px) and (orientation: landscape) {
+  #cm-opening .cm-opening__name.cm-license:not(.cm-license--stamp) {
+    width: min(100%, 720px);
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    column-gap: 18px;
+    align-items: start;
+  }
+  #cm-opening .cm-license:not(.cm-license--stamp) > .cm-license__top { grid-column: 1; grid-row: 1; margin-bottom: 8px; }
+  #cm-opening .cm-license:not(.cm-license--stamp) > .cm-license__body { grid-column: 1; grid-row: 2; }
+  #cm-opening .cm-license:not(.cm-license--stamp) > .cm-guest-badge { grid-column: 2; grid-row: 1; align-self: center; margin: 0; }
+  #cm-opening .cm-license:not(.cm-license--stamp) > .cm-onboard-cta { grid-column: 2; grid-row: 2; align-self: end; margin-top: 0; }
+  /* The incubator shows all eight eggs in two rows of four, as on wider landscape screens. */
+  #cm-opening .cm-incubator { width: min(100%, 780px); padding: 10px 14px 12px; }
+  #cm-opening .cm-incubator__hint { margin-bottom: 6px; }
+  #cm-opening .cm-opening__egg-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding: 4px 2px 6px; }
+  #cm-opening .cm-opening__egg-option { min-height: 68px; }
+  #cm-opening .cm-opening__egg-actions { display: flex; flex-direction: row; gap: 10px; margin-top: 6px; }
+  #cm-opening .cm-opening__egg-actions > * { flex: 1; min-width: 0; }
+  /* The egg's name: the incubator pod on the left, the name and its keys on the right. */
+  #cm-opening .cm-opening__name.cm-pod {
+    width: min(100%, 720px);
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    grid-auto-flow: row dense;
+    column-gap: 18px;
+    align-items: center;
+  }
+  #cm-opening .cm-pod > :is(.cm-pod__kicker, .cm-pod__stage, .cm-pod__caption) { grid-column: 1; }
+  #cm-opening .cm-pod > :not(.cm-pod__kicker, .cm-pod__stage, .cm-pod__caption) { grid-column: 2; }
+  #cm-opening .cm-pod__stage { height: 132px; }
+  #cm-opening .cm-pod__egg { height: 92px; }
+}
+
