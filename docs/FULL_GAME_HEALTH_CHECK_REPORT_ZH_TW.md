@@ -2,7 +2,7 @@
 
 日期：2026-11-01（自我審查與發佈 2026-11-02）　分支：`feat/full-viewport-health-check-20261101`（起點 `82fa48e2`，當時的 main；發佈前已合併 main `b692ad5b`）
 
-> 狀態：2026-11-02 Owner 指示「請你自我審查一次，沒問題就請你commit跟push並整合至main後發佈建置」。自我審查的發現與修正見第 5.1 節；修正後在合併 main 的版本上重跑完整健檢。
+> 狀態：2026-11-02 Owner 指示「請你自我審查一次，沒問題就請你commit跟push並整合至main後發佈建置」。自我審查的發現與修正見第 5.1 節；修正後在合併 main 的版本上重跑完整健檢，經 PR #140 合併發佈。之後 Owner 對唯一剩下的一項（開場序章跳過鍵伸進瀏海）回覆「修」，修正後 844×390 重跑為 0 項，經後續 PR 發佈。
 > 修改前的數據來自 main 起點 `82fa48e2` 的乾淨工作樹（`health-check-baseline-20261101`，埠 8822）；修改後來自本工作樹（埠 8821）。兩邊用同一支腳本、同一份 QA 存檔、同樣的 GPU 繪製設定。
 
 ## 1. 結論
@@ -14,18 +14,18 @@
 | G2 裁切 | 122 | 0 |
 | G3 橫向適配 | 1 | 0 |
 | G4 連線 | 50 | 0 |
-| G5 溢出／觸控 | 696 | 1 |
-| **合計** | **946** | **1** |
+| G5 溢出／觸控 | 696 | 0 |
+| **合計** | **946** | **0** |
 
 | 切片 | 修改前 | 修改後 |
 |---|---:|---:|
-| S1 牧場中樞 | 374 | 1 |
+| S1 牧場中樞 | 374 | 0 |
 | S2 商店／轉蛋 | 95 | 0 |
 | S3 圖鑑 | 228 | 0 |
 | S4 狩獵／對戰／Data Arena | 145 | 0 |
 | S5 故事／執照／社群 | 104 | 0 |
 
-修改後的 1 項是開場序章的「⏭ 跳過序章」伸進右側瀏海（844×390）：序章不在簡報點名的範圍，依規則維持 main 原樣、只回報（第 6 節）。修改後的數字來自合併 main `b692ad5b` 後的完整重跑（2026-11-02）。
+修改後的數字來自合併 main `b692ad5b` 後的完整重跑（2026-11-02）。那一輪唯一剩下的是開場序章的「⏭ 跳過序章」伸進右側瀏海（844×390）：序章不在原簡報點名的範圍，先維持 main 原樣、只回報；Owner 回覆「修」之後改正，844×390 的 S1 重跑（29 個畫面）為 0 項，取代該格。
 
 修改後畫面狀態較多，是因為修改前有些畫面到不了（例如 844×390 的隊伍編成點不到成員，之後的對戰、結算都無法檢查）。
 
@@ -87,6 +87,7 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 | 問題 | 視口 | 修法 | 檔案 |
 |---|---|---|---|
 | 創角執照、八蛋孵化器、蛋命名在矮橫向超出畫面，確認鍵在畫面下方 | 844、667 | 矮橫向改左右兩欄（執照：資料｜通行證章＋確認；孵化器：四蛋兩列；命名：孵化艙｜名字＋按鍵） | `onboarding.css` |
+| 開場序章的「⏭ 跳過序章」與頁點伸進側邊瀏海（Owner 2026-11-02 回覆「修」後處理） | 844 | 左右內距取 16px 與安全區的較大者，平面螢幕不變 | `onboarding.css` |
 | 8 鍵工具列在直向手機按鍵偏窄、「蛋白質」折成兩行（844 時還撞到庫存數字） | 390、375、844 | 間距 3px、側邊 4px、說明文字不折行 | `ui/arcade.css` |
 | 橫向工具列被瀏海壓窄，說明文字撞到庫存徽章；快捷鍵 34px 高 | 844、667 | 圖示在上、單行說明在下；快捷鍵 80×40px | `ui/arcade.css` |
 | 夥伴資訊卡壓在「探索手帳」（逛街手札）鍵上 | 1920、1366 | 卡片從手帳鍵下方起算（手帳發布 `--cm-journal-clear`） | `ui/screenLayout.css`、`ranchDiscoveryJournal.js` |
@@ -176,13 +177,13 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 | 項目 | 結果 |
 |---|---|
 | 六視口健檢（修改前 main，埠 8822） | 536 個畫面狀態、946 項問題 |
-| 六視口健檢（本批，合併 main `b692ad5b` 後，埠 8821） | 554 個畫面狀態、**1 項**（開場序章跳過鍵伸進瀏海，只回報，第 6 節）；另一分支《回聲》的 9 類只回報 |
+| 六視口健檢（本批，合併 main `b692ad5b` 後，埠 8821） | 554 個畫面狀態、**0 項**（序章跳過鍵經 Owner 同意修正後，844×390 的 S1 重跑 29 個畫面 0 項；main 同一格為 1 項）；另一分支《回聲》的 9 類只回報 |
 | `npm run test:ci`（合併 main 後） | **3,267 / 3,267 通過**（本批新增 19 項規則單元測試，main 的 #138 另加 11 項）。桌機 Node 24 以模擬 CI Node 22 的 `navigator.locks` 關閉方式執行 |
 | `tests/championship-viewport-health-rules-cases.mjs` | 19 / 19 通過 |
 | `npm run build:playtest`、`validate:playtest` | 通過：7,821 個檔案；同一提交在本機與 CI 建出相同的 buildId（證明產物逐位元組一致） |
 | 牧場提示瀏覽器閘門 `championship-raising-hints-browser.mjs`（合併後，對 8821） | 通過：120 個幾何狀態、6 個計時案例 |
 | 圖鑑立繪瀏覽器閘門 `championship-dex-portrait-browser.cjs`（對本機公開產物，含 844×320） | 擷取全部通過（237 張；這支閘門的「視覺審查待辦」是固定狀態） |
-| 標題零差異 `scripts/qa/title-zero-diff.cjs`（main `b692ad5b` 對本批；1366×768、390×844、844×390，手機套用瀏海與 Home 條安全區） | 標題、主選單、開場序章、信件 **0 差異**；簡報點名的開場表單（執照、八蛋、蛋命名）在桌機與直向 0 差異，只在 844×390 有差異——那是本批的矮橫向雙欄 |
+| 標題零差異 `scripts/qa/title-zero-diff.cjs`（main `b692ad5b` 對本批；1366×768、390×844、844×390，手機套用瀏海與 Home 條安全區） | 標題、主選單、信件 **0 差異**；簡報點名的開場表單（執照、八蛋、蛋命名）在桌機與直向 0 差異，只在 844×390 有差異——那是本批的矮橫向雙欄。序章在 Owner 同意修正後（main `8906af18` 對修正版）桌機與直向 0 差異，844×390 只有左右內距 16→47px 與因此移動的跳過鍵和頁點 |
 | `championship-data-arena-browser.cjs` | 在 main 與本批都於同一個存檔斷言失敗（既有紅燈，與本批無關） |
 | `championship-responsive-layout-browser.cjs` | 在 main 與本批都於同一個斷言失敗（既有紅燈，與本批無關） |
 
@@ -196,7 +197,7 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 
 | 發現 | 影響 | 處理 |
 |---|---|---|
-| 開場序章「⏭ 跳過序章」的瀏海內距改動 | 序章屬於開場，簡報點名的是創角、選蛋、取名，序章沒有點名 | 還原為 main 原樣，改列第 6 節只回報 |
+| 開場序章「⏭ 跳過序章」的瀏海內距改動 | 序章屬於開場，簡報點名的是創角、選蛋、取名，序章沒有點名 | 先還原為 main 原樣、只回報；Owner 回覆「修」後重新套用（第 3 節 S1） |
 | 標題零差異比對沒有模擬瀏海 | 只讀 `env(safe-area-inset-*)` 的規則在平面螢幕上看不出差異，序章那條就是這樣漏掉的 | 直向與橫向套用與健檢相同的安全區，信件也列入保護 |
 | `playStoryChapter` 在新加的「等待牧場就緒」期間可被呼叫兩次 | 兩個章節會同時播放（目前只有星圖會呼叫，且星圖有忙碌旗標，屬防禦性修正） | 等待結束後再檢查一次是否已有章節在播 |
 | 角色素材提示條的寬度公式 `100% − 2×卡片 − 48px` | 只適合桌機版牧場；601–1023px 寬的直向平板（不在六個視口內）會被壓到 120–170px | 預設全寬；只有桌機版牧場（非矮橫向）才置中縮窄。實測 820×1180 為 804px、1366×768 置中 440px、844×390 在右欄 320px |
@@ -232,12 +233,11 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
    - friends-playtest 的 fresh-economy、legacy-persistence、source-adjacent-mobile 與彙總：失敗位置與 #138 逐行相同。
    - friends-playtest 的 source-wrap-mobile：#138 在存檔退出時逾時；本批走得更遠，在第 9 次相位捕捉時剛好有一隻夥伴在串流下一段動畫（`aria-busy=true`、一隻 `loading`；前 8 次都就緒）而未通過「捕捉時牧場必須完全就緒」。這是既有的動畫串流時序，本批沒有改動美術載入。
 4. **刻意放行的重疊**：相剋表是瀏覽器頂層 dialog，本來就會蓋在狀態列之上（帶遮罩），所以「相剋表 ⟂ 狀態列」不算 HUD 重疊；展演沙盒不是頂層，已改成從狀態列下方開始。
-5. **需要 Owner 知道的行為變更**：橫向門檻 720→640px 之後，640–719px 寬的橫向裝置（例如 iPhone SE、部分 Android 小手機）的選單、設施配置與狩獵場改用橫向版型，而不是過去整體縮小的直向框。標題、主選單、開場序章與信件不受影響（零差異比對見第 5 節，含瀏海模擬）。
-6. **開場序章的「⏭ 跳過序章」伸進右側瀏海（844×390）**：序章屬於開場，但簡報點名的是「創角／選蛋／取名開場流程」，序章沒有點名，依專案規則（標題、主選單與開場維持 main 原樣）不修改。若要修，建議把 `#cm-opening .cm-cutscene` 的左右內距改為 `max(16px, env(safe-area-inset-*))`（只在有側邊瀏海時生效），需 Owner 點名同意。
+5. **需要 Owner 知道的行為變更**：橫向門檻 720→640px 之後，640–719px 寬的橫向裝置（例如 iPhone SE、部分 Android 小手機）的選單、設施配置與狩獵場改用橫向版型，而不是過去整體縮小的直向框。標題、主選單與信件不受影響；序章只在有側邊瀏海的橫向手機多出左右內距（零差異比對見第 5 節，含瀏海模擬）。
 
 ## 7. 對照截圖（修改前｜修改後）
 
-每張圖左半是修改前（main `82fa48e2`，同一份 QA 存檔），右半是修改後（合併 main 後的最終版本）；圖檔在 `docs/reports/full-viewport-health-2026-11-01/compare/`（WebP，共 101 張、約 4.4 MB）。844×390 與 390×844 模擬 iPhone 的瀏海與 Home 條安全區。
+每張圖左半是修改前（main `82fa48e2`，同一份 QA 存檔），右半是修改後（合併 main 後的最終版本）；圖檔在 `docs/reports/full-viewport-health-2026-11-01/compare/`（WebP，共 102 張、約 4.4 MB）。844×390 與 390×844 模擬 iPhone 的瀏海與 Home 條安全區。
 
 ### 含夥伴資訊卡的牧場
 
@@ -316,6 +316,10 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 ![觀測紀錄（390×844）](reports/full-viewport-health-2026-11-01/compare/story-log--portrait-pro.webp)
 
 ![故事星圖（844×390）](reports/full-viewport-health-2026-11-01/compare/story-map--landscape-pro.webp)
+
+### 開場序章（Owner 2026-11-02 點名）
+
+![開場序章與跳過鍵（844×390，左右瀏海 47px）](reports/full-viewport-health-2026-11-01/compare/opening-story--landscape-pro.webp)
 
 ### 修改前到不了或最嚴重的畫面
 
@@ -427,7 +431,7 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 | menu-system-closed | G2 裁切 | LABEL_WRAP | 844、667 | 「商店」被擠成 2 行 | 已清除 |
 | menu-system-closed | G1 重疊 | TEXT_OVERLAP | 844 | 文字互相重疊：span.cm-toolbar__cell-label「蛋白質」 ⟂ span.cm-toolbar__stock「90」 | 已清除 |
 | opening-egg-choice | G4 連線 | UNREACHABLE | 667 | button.cm-onboard-cta「選這顆蛋」 不在畫面內 | 已清除 |
-| opening-story | G5 溢出／觸控 | SAFE_AREA | 844 | button.cm-cutscene__skip「⏭ 跳過序章」 伸進右側瀏海安全區 | 仍在（844） |
+| opening-story | G5 溢出／觸控 | SAFE_AREA | 844 | button.cm-cutscene__skip「⏭ 跳過序章」 伸進右側瀏海安全區 | 已清除 |
 | opening-tamer-name | G4 連線 | UNREACHABLE | 844、667 | button.cm-onboard-cta「決定」 不在畫面內 | 已清除 |
 | ranch-card | G1 重疊 | COVERED | 1920、1366 | button.int-rh2-discoveries[data-action="ranch-discoveries"]「探索手帳 · 3/12」 被 span.int-rh2-companion__name 蓋住 | 已清除 |
 | ranch-card | G1 重疊 | HUD_OVERLAP | 1920、1366、844、667 | journal（button.int-rh2-discoveries[data-action="ranch-discoveries"]「探索手帳 · 3/12」）⟂ card（section.int-rh2-compan | 已清除 |
@@ -751,11 +755,9 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 | tamer | G5 溢出／觸控 | TARGET_SMALL | 667 | button.cm-online__button[data-online-action="restoreCloud"]「從雲端還原」 56×24px < 40px | 已清除 |
 | tamer-brag-card | G4 連線 | NO_EXIT | 1366、844、667 | button.cm-dialog__action.cm-dialog__action--primary[data-action="done"]「完成」 不在畫面內 | 已清除 |
 
-#### 修改後仍存在的項目（1 類）
+#### 修改後仍存在的項目（0 類）
 
-| 切片 | 畫面狀態 | 代碼 | 視口 | 內容 |
-|---|---|---|---|---|
-| 1 | opening-story | SAFE_AREA | 844 | button.cm-cutscene__skip「⏭ 跳過序章」 伸進右側瀏海安全區 |
+（無）
 
 #### 《未被聽見的回聲》分支（只讀掃描，9 類）
 
@@ -785,7 +787,7 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 | `src/championship/app/ui/screenLayout.css` | 商店詳情、圖鑑矮橫向雙欄、設施配置、夥伴卡與通知列、牧場選單、對話框黏底按鍵、對戰選單（直向與矮橫向）等 |
 | `src/championship/app/ui/arcade.css` | 8 鍵工具列（直向／橫向）、快捷鍵 40px、窄賽事卡分行 |
 | `src/championship/app/cyberGacha.css` | 商店徽章、轉蛋機、10 連抽、合成爐、晶片背包的矮橫向與窄螢幕版面 |
-| `src/championship/app/onboarding.css` | 執照、孵化器、蛋命名的矮橫向雙欄（序章與信件不變） |
+| `src/championship/app/onboarding.css` | 執照、孵化器、蛋命名的矮橫向雙欄；序章左右內距取 16px 與瀏海安全區的較大者（Owner 2026-11-02「修」）；信件不變 |
 | `src/championship/app/vs2Styles.css` | 橫向隊伍編成名單保留內容高度 |
 | `src/championship/app/vs5Styles.css` | 640px 起的橫向手機就用雙欄對戰選單 |
 | `src/championship/app/dataArena.css` | 矮橫向暫停面板兩兩一列 |
@@ -801,7 +803,7 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 | 檔案 | 內容 |
 |---|---|
 | `scripts/qa/run-full-viewport-health-check.cjs`、`viewport-health-rules.cjs`、`viewport-health-probe.cjs`、`viewport-health-slices.cjs` | 新的六視口健檢腳本 |
-| `scripts/qa/title-zero-diff.cjs` | 標題／主選單／開場序章／信件的計算樣式零差異比對；直向與橫向手機套用與健檢相同的瀏海與 Home 條安全區 |
+| `scripts/qa/title-zero-diff.cjs` | 標題／主選單／信件的計算樣式零差異比對（序章與開場表單為 Owner 點名，分開列出）；直向與橫向手機套用與健檢相同的瀏海與 Home 條安全區 |
 | `docs/contracts/championship/WEB_BUILD_INPUTS.v1.json`、`PUBLIC_RUNTIME_ALLOWLIST.v1.json` | 本批 18 個已發佈檔案的 sha256 改為新位元組（不增減檔案） |
 | `docs/coordination/OWNER_DIRECTION.md` | 本批的 Owner 指示紀錄 `FULL_VIEWPORT_HEALTH_CHECK_20261101` |
 | `tests/championship-viewport-health-rules-cases.mjs` | 新單元測試（19 項），已登記於 `tests/ci-test-scope.v1.json` |

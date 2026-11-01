@@ -8,7 +8,9 @@
 //
 // The New Game onboarding forms (tamer licence, egg chooser, egg name) are compared
 // too but reported apart: the 2026-11-01 brief names them, so a difference there is
-// a decision to review, not a breach. The prologue and its letter are not named.
+// a decision to review, not a breach. On 2026-11-02 the Owner also named the
+// prologue's side padding (its skip key sat in the side notch), so the prologue is
+// reported apart as well. The letter is not named.
 //
 // The phones carry the health check's notch and home-indicator insets: a rule that
 // only reads env(safe-area-inset-*) changes nothing on a flat screen.
@@ -27,7 +29,7 @@ const VIEWPORTS = [
   { id: 'portrait', width: 390, height: 844, mobile: true, safeArea: safeAreaOf('portrait-pro') },
   { id: 'landscape', width: 844, height: 390, mobile: true, safeArea: safeAreaOf('landscape-pro') }
 ];
-const PROTECTED = new Set(['title', 'menu', 'story', 'letter']);
+const PROTECTED = new Set(['title', 'menu', 'letter']);
 const PROPS = ['display', 'position', 'top', 'right', 'bottom', 'left', 'margin', 'padding', 'font-size', 'font-weight',
   'line-height', 'letter-spacing', 'color', 'background-color', 'background-image', 'border-width', 'border-color', 'border-radius',
   'box-shadow', 'opacity', 'transform', 'z-index', 'grid-template-columns', 'grid-template-rows', 'flex-direction',
@@ -145,7 +147,7 @@ async function main() {
         const diffs = after[state] ? compare(before[state], after[state]) : [{ key: state, prop: 'state', before: 'reached', after: 'missing' }];
         const guarded = PROTECTED.has(state);
         if (guarded) breaches += diffs.length;
-        console.log(`${diffs.length ? (guarded ? '✗' : '△') : '✓'} ${viewport.id} ${state}: ${diffs.length} diff${guarded ? '' : '（Owner 點名的開場表單）'}`);
+        console.log(`${diffs.length ? (guarded ? '✗' : '△') : '✓'} ${viewport.id} ${state}: ${diffs.length} diff${guarded ? '' : '（Owner 點名）'}`);
         for (const d of diffs.slice(0, 12)) console.log(`    ${d.key.split(' > ').slice(-2).join(' > ')} ${d.prop}: ${d.before} → ${d.after}`);
         if (diffs.length > 12) console.log(`    … ${diffs.length - 12} more`);
       }
@@ -153,7 +155,7 @@ async function main() {
   } finally {
     await browser.close();
   }
-  console.log(breaches ? `TITLE ZERO-DIFF FAILED: ${breaches} difference(s) on title/menu/story/letter` : 'TITLE ZERO-DIFF: 0 difference on title, menu, opening story and letter');
+  console.log(breaches ? `TITLE ZERO-DIFF FAILED: ${breaches} difference(s) on title/menu/letter` : 'TITLE ZERO-DIFF: 0 difference on title, menu and letter');
   process.exit(breaches ? 1 : 0);
 }
 

@@ -19,7 +19,9 @@ Owner brief (pasted 2026-11-01): a commercial-grade health check in six viewport
 - The brief names the creation / egg / naming opening, so the tamer licence, egg chooser and egg name take a short-landscape two-column layout. The title, logo, main menu, opening prologue and letter stay as main shipped them (`scripts/qa/title-zero-diff.cjs`, notch insets emulated). The prologue's skip key reaching into the side notch at 844×390 is reported, not changed.
 - The story branch `feat/story-unheard-echoes-20261029` (another session's uncommitted work) is scanned read-only and reported. The paper-doll editor named in the brief exists on no branch (NOT_IMPLEMENTED).
 
-After the report the Owner directs (2026-11-02) 「請你自我審查一次，沒問題就請你commit跟push並整合至main後發佈建置」, which authorizes this batch's self-review, commit, push, merge to main and publication.
+After the report the Owner directs (2026-11-02) 「請你自我審查一次，沒問題就請你commit跟push並整合至main後發佈建置」, which authorizes this batch's self-review, commit, push, merge to main and publication. PR #140 merged as `fa33b2cc` and published.
+
+Asked afterwards whether to fix the one finding left, the prologue's skip key reaching into the side notch at 844×390, after being told it would change only the prologue's side padding and be reviewed, committed, merged and published the same way, the Owner answers 「修」 (2026-11-02). This names the prologue's side padding only: `#cm-opening .cm-cutscene` takes `max(16px, env(safe-area-inset-left/right))`, which changes nothing on a screen without side insets. The title, logo, main menu and letter stay as main shipped them.
 
 <!-- record-id: VFX_FIVE_LAYER_20261101 -->
 ## 2026-11-01 — Five-layer VFX: one element authority, Dex and Data Arena on the effect cells, idle 3D systems, remake r2
