@@ -121,6 +121,8 @@ function shakeNoise(t, seed) {
 export function createBattleFxCamera({reducedMotion = false, responsiveLayout = false, fullArena = false, boundedMap = false, wideCover = false} = {}) {
   let zoom = null, cx = 0, cy = 0, over = {left: 0, right: 0, top: 0, bottom: 0};
   let punch = 0, trauma = 0, time = 0;
+  // Signature-hit lens (VFX_FIVE_LAYER_20261101): a short push toward the hit point.
+  let lens = null;
   let lastImpact = -Infinity, lastImpactStrength = 0;
   let previousViewport = null;
   let stages = []; // [{slots:Set|null, boost, includeDown, endMs, priority}]
@@ -150,6 +152,16 @@ export function createBattleFxCamera({reducedMotion = false, responsiveLayout = 
     punch(amount) { if (!fullArena && !reducedMotion) punch = Math.min(0.14, punch + amount); },
     /** Trauma in 0..1; displacement grows with its square. */
     shake(amount) { if (!fullArena && !reducedMotion) trauma = Math.min(1, trauma + amount); },
+    /**
+     * Signature hit: push in by `amount` (0.18..0.25 -> 1.18x..1.25x) toward a
+     * local point for `ms`, easing in fast and back out. Reduced motion and the
+     * full-arena view keep their steady shot.
+     */
+    lens({x, y, amount = 0.22, ms = 260}) {
+      if (fullArena || reducedMotion || !Number.isFinite(x) || !Number.isFinite(y)) return false;
+      lens = {x, y, amount: Math.min(0.25, Math.max(0, amount)), age: 0, life: Math.max(60, ms)};
+      return true;
+    },
     /** A burst of ordinary hits gets one camera response; a heavy hit can override it. */
     impact(tier) {
       const strength = tier === 'heavy' ? 2 : tier === 'medium' ? 1 : 0;
@@ -228,20 +240,31 @@ export function createBattleFxCamera({reducedMotion = false, responsiveLayout = 
       punch *= 1 - battleFxApproach(dtMs, 140);
       trauma = Math.max(0, trauma - dtMs / 1000 * 1.9);
       if (boundedMap) zoom = Math.max(shot.cover, zoom);
-      const total = zoom * (1 + punch);
+      let lensK = 0;
+      if (lens) {
+        lens.age += Math.max(0, dtMs);
+        const k = lens.age / lens.life;
+        lensK = k >= 1 ? 0 : k < 0.3 ? Math.sin(k / 0.3 * Math.PI / 2) : Math.cos((k - 0.3) / 0.7 * Math.PI / 2);
+        if (k >= 1) lens = null;
+      }
+      const total = zoom * (1 + punch) * (1 + (lens ? lens.amount * lensK : 0));
+      // The lens biases this frame's centre only; the tweened centre is untouched.
+      const lx = lensK > 0 ? cx + (lens.x - cx) * 0.4 * lensK : cx, ly = lensK > 0 ? cy + (lens.y - cy) * 0.4 * lensK : cy;
       // Re-clamp after the punch so a punched frame looks no further past an
       // arena edge than the shot needed.
       const halfW = viewport.width / (2 * total), halfH = viewport.height / (2 * total);
       const limit = {left: Math.min(over.left, halfW), right: Math.min(over.right, halfW),
         top: Math.min(over.top, halfH), bottom: Math.min(over.bottom, halfH)};
-      const {x: px, y: py} = battleFxClampCentre({cx, cy, halfW, halfH, art, over: limit});
+      const {x: px, y: py} = battleFxClampCentre({cx: lx, cy: ly, halfW, halfH, art, over: limit});
       const amplitude = Math.min(viewport.width, viewport.height) * 0.022 * trauma * trauma;
       const sx = amplitude * shakeNoise(time, 1.7), sy = amplitude * shakeNoise(time, 5.3);
       const result = {zoom: total, x: viewport.width / 2 - total * px + sx, y: viewport.height / 2 - total * py + sy,
-        centerX: px, centerY: py, punch, trauma, focused, framedSlots:framing.map(s=>s.slot),framingBox:battleFxUnionBox(framing)};
+        centerX: px, centerY: py, punch, trauma, focused, framedSlots:framing.map(s=>s.slot),
+        // While the lens pushes in, frame the hit point so the map clamp lets the zoom through.
+        framingBox:lensK > 0 ? {left: lens.x - 24, right: lens.x + 24, top: lens.y - 40, bottom: lens.y + 24} : battleFxUnionBox(framing), lens: lensK};
       return boundedMap ? clampBattleCameraToMap({viewport,art,transform:result,box:result.framingBox}) : Object.freeze(result);
     },
-    getState: () => Object.freeze({zoom, cx, cy, punch, trauma,
+    getState: () => Object.freeze({zoom, cx, cy, punch, trauma, lens: lens ? {amount: lens.amount, age: lens.age, life: lens.life} : null,
       stages: stages.map(s => ({slots: s.slots ? [...s.slots] : null, boost: s.boost, endMs: s.endMs}))})
   });
 }

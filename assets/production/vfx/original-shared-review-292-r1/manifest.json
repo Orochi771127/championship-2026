@@ -1,0 +1,10358 @@
+{
+ "schemaVersion": 1,
+ "assetId": "art:vfx:original-shared:review:292-r1",
+ "reviewOnly": true,
+ "runtimeEligible": true,
+ "localOnly": true,
+ "runtimeScope": "LOOPBACK_REVIEW_ONLY",
+ "publicReleasePermitted": false,
+ "shippingReady": false,
+ "humanApproved": false,
+ "rightsStatus": "ORIGINAL_CREATED",
+ "productionStatus": "ORIGINAL_REVIEW_CANDIDATE",
+ "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+ "timing": "NATIVE_SEQUENCES_UNCHANGED",
+ "finishProfile": "banded",
+ "blend": "NORMAL_ALPHA",
+ "pixelsPerNativePixel": 4,
+ "image": {
+  "src": "assets/production/vfx/original-shared-review-292-r1/effects.png",
+  "width": 2048,
+  "height": 2048,
+  "sha256": "d87adcb062fbb47bdcc3d622443d06c2474a0a22a892ae1fdcf0a9f062581de6",
+  "scaleMode": "nearest",
+  "bytes": 1869730
+ },
+ "webp": {
+  "src": "assets/production/vfx/original-shared-review-292-r1/effects.webp",
+  "sha256": "76398ad8a222902d8980f9f9d1a38b3a9640db2962c9d1968cd59b9f113a597f",
+  "bytes": 1072574,
+  "encoding": "lossless-exact",
+  "pixelsEqualPng": true
+ },
+ "packing": {
+  "algorithm": "MaxRects best short side",
+  "marginPx": 2,
+  "alphaBleedPx": 4,
+  "fill": 0.5024,
+  "why2048": "278+14 cells with 2 px margins need 98 % of 1024x2048; MaxRects placed 203 of 272 drawn cells there (Owner chose one 2048x2048 texture)"
+ },
+ "nativeTimingSource": {
+  "file": "src/data/championship/battleEffectProfiles.json",
+  "policy": "Sequences, ticks, play modes and boxes are read from this file at runtime; the bundle carries none."
+ },
+ "banks": [
+  {
+   "bankId": 81,
+   "family": "e003_H_Knuckle",
+   "effectId": "hit_knuckle_prism",
+   "category": "hit",
+   "title": "稜光衝擊（一般打擊命中）",
+   "sequences": [
+    0
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "nativeBindingSha256": "1695b08ec47a0b5e2b4946085bf4382391fd275851cb654746d94e45a15bc919",
+   "designSha256": "5597c8b845a52404792b93118905eabe659f5ccaa0783f9d8a5dff1780f98334"
+  },
+  {
+   "bankId": 79,
+   "family": "e003_H_claw",
+   "effectId": "hit_claw_rend",
+   "category": "hit",
+   "title": "三痕裂爪（爪擊命中）",
+   "sequences": [
+    0
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "nativeBindingSha256": "962741889e5cca58ac064428101e9dd841afec01bd4d3c18959812616d636905",
+   "designSha256": "35ce74167f361067835188f0a22935e807e5321f356ecd9c3c209e8650023a68"
+  },
+  {
+   "bankId": 80,
+   "family": "e003_H_Slashtop",
+   "effectId": "hit_slash_steel",
+   "category": "hit",
+   "title": "鋼月斬（斬擊命中）",
+   "sequences": [
+    0
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "nativeBindingSha256": "4e77b4517e774a092a6134513c6c3af7e60b8aabc27c23b68cb6ba3c79f7efad",
+   "designSha256": "cd9047f3e49b4f8c1ba3257b91265b51d5abd38d517d51dee15b7ceea246b79b"
+  },
+  {
+   "bankId": 82,
+   "family": "e003_H_piercing",
+   "effectId": "hit_pierce_lance",
+   "category": "hit",
+   "title": "貫槍突刺（穿刺命中）",
+   "sequences": [
+    0
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "nativeBindingSha256": "0301616f60c042b02d210d343b69ba3df6393b8b977f8b525a162b8a40832601",
+   "designSha256": "fdd80afbd64957a6e6a868c1f5f710277603e0111c30f3ad426f6b01e30ac5d5"
+  },
+  {
+   "bankId": 1,
+   "family": "e003_battle",
+   "effectId": "fire_ember_bloom",
+   "category": "fire",
+   "title": "燼花燃燒（燃燒附加）",
+   "sequences": [
+    30
+   ],
+   "cells": [
+    86,
+    87,
+    88,
+    89,
+    90,
+    91
+   ],
+   "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+   "designSha256": "8127ca9b1a4545a49d8f3ba2f4460eb94cd6a3cb9d8bd7999014bded3209e953"
+  },
+  {
+   "bankId": 1,
+   "family": "e003_battle",
+   "effectId": "fire_flame_swipe",
+   "category": "fire",
+   "title": "焰爪掠擊（火焰命中）",
+   "sequences": [
+    36
+   ],
+   "cells": [
+    118
+   ],
+   "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+   "designSha256": "b57c936b832a7c2a3bc6e95f7b29358ffdfd2e0aaceb8bbd4066a7258d049ab3"
+  },
+  {
+   "bankId": 149,
+   "family": "e003_explo",
+   "effectId": "fire_billow_blast",
+   "category": "fire",
+   "title": "翻騰爆炎（爆炸）",
+   "sequences": [
+    0,
+    1
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ],
+   "nativeBindingSha256": "25df18577f7b74bd6a8247866489192bc7458bdcda44cbae87b0581c1562838b",
+   "designSha256": "f3a09d288bf4ef999f2b411fff7aab965b72710183286d6e3a3ebd6f9a3b290e"
+  },
+  {
+   "bankId": 7,
+   "family": "e003_fireball00",
+   "effectId": "proj_fire_comet",
+   "category": "projectile",
+   "title": "彗燼火球（投射物）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "nativeBindingSha256": "f8d29d0aa1bb86f7a0170629518ffe4a08651f94831fdc20a38fd4d2b507be61",
+   "designSha256": "784ac4b178d1c4e85cf0b6c059401b0570e9bdc18de545477e03e7c6b7e52968"
+  },
+  {
+   "bankId": 16,
+   "family": "e003_blacksmoke00",
+   "effectId": "smoke_soot_bloom",
+   "category": "smoke",
+   "title": "煤煙綻（黑煙）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "nativeBindingSha256": "0bc9eb6265e6d928898f14f9c7fbfc6d76ae45752dff00ae44cde3cc1fb2b8ea",
+   "designSha256": "a9967945366709dd588036030e6d4d48b27b8d9a8ac282876315fa597694fee1"
+  },
+  {
+   "bankId": 64,
+   "family": "e003_etc_hiteffect",
+   "effectId": "smoke_dust_kick",
+   "category": "smoke",
+   "title": "踏塵（落地沙塵命中）",
+   "sequences": [
+    0
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "nativeBindingSha256": "c6e9ba82dbf454b32c17c80a26b64a6838ad4fef9625340835c117c5c937d87e",
+   "designSha256": "37332f104c3683b5378c33cfa697f77e6a3b71c83055d6639752854ca07a5f31"
+  },
+  {
+   "bankId": 1,
+   "family": "e003_battle",
+   "effectId": "flash_prism_twinkle",
+   "category": "flash",
+   "title": "稜星閃（星芒閃光）",
+   "sequences": [
+    33
+   ],
+   "cells": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106
+   ],
+   "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+   "designSha256": "c4f56622daaa8b11f6bd93b4048b2ad2c48c98bfc69ffbbc3e5d989e72afe5f1"
+  },
+  {
+   "bankId": 1,
+   "family": "e003_battle",
+   "effectId": "flash_wisp_glimmer",
+   "category": "flash",
+   "title": "微光閃爍（光點）",
+   "sequences": [
+    40
+   ],
+   "cells": [
+    125,
+    126,
+    127,
+    128,
+    129,
+    130,
+    131,
+    132
+   ],
+   "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+   "designSha256": "74cb61b984004c39761b9d81a83104d31f1bb07d22daa9d38b17c99f0b97c023"
+  },
+  {
+   "bankId": 1,
+   "family": "e003_battle",
+   "effectId": "energy_arc_spark",
+   "category": "energy",
+   "title": "弧電迸裂（電擊）",
+   "sequences": [
+    32
+   ],
+   "cells": [
+    97,
+    98,
+    99,
+    100
+   ],
+   "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+   "designSha256": "4cdc2f04ca072c6e363816c43a02e01d785fbdbec348395dc992b1fd91530315"
+  },
+  {
+   "bankId": 9,
+   "family": "e003_lightball00",
+   "effectId": "proj_aether_orb",
+   "category": "projectile",
+   "title": "以太光球（能量投射物）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "nativeBindingSha256": "4a97008b84d975ad9e78c07f815ad1466b644a8c6bb9c5a2cb06febbe7d96ba4",
+   "designSha256": "287dbf95b95406789d3a77a7b15681634a9757c88e3cb9133537a3e77b6eb58d"
+  },
+  {
+   "bankId": 1,
+   "family": "e003_battle",
+   "effectId": "energy_frost_rend",
+   "category": "energy",
+   "title": "霜裂斬（冰屬命中）",
+   "sequences": [
+    37
+   ],
+   "cells": [
+    119
+   ],
+   "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+   "designSha256": "41c565355957f20867e961984c8cd944c6cdb662e6c6cd802870771b96f6a779"
+  },
+  {
+   "bankId": 1,
+   "family": "e003_battle",
+   "effectId": "proj_tracer_streak",
+   "category": "projectile",
+   "title": "曳光彈（一般投射物）",
+   "sequences": [
+    41
+   ],
+   "cells": [
+    133
+   ],
+   "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+   "designSha256": "8eb4e8baa55137d86c64e45378da3fbf4b7e396976438e4f775295f6daf3c99a"
+  },
+  {
+   "bankId": 12,
+   "family": "e003_beam00",
+   "effectId": "beam_prism_lance",
+   "category": "energy",
+   "title": "稜光射線（能量光束）",
+   "sequences": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "nativeBindingSha256": "102b6f65df71b27b176d3ca7168afcb7eb89882362a726c6d0bfd720ba971c48",
+   "designSha256": "1b37864807f4e2799ba6dc9171bda097d0de304120915fc30a3e2421efe7b354"
+  },
+  {
+   "bankId": 138,
+   "family": "e003_beam04",
+   "effectId": "beam_flare_lance",
+   "category": "fire",
+   "title": "熾焰射線（火焰光束）",
+   "sequences": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "nativeBindingSha256": "1ff0040253d838e0072a24543dbe4897d91de7ffa7d20f66c037eb0b6e2c6249",
+   "designSha256": "8e7e1a00b577b1d5625457547880369c074e7cb9933e9dbc5f409a383c8fb9e1"
+  },
+  {
+   "bankId": 51,
+   "family": "e003_magmaball01",
+   "effectId": "proj_molten_comet",
+   "category": "projectile",
+   "title": "熔岩彗核（熔岩投射物）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "nativeBindingSha256": "9bcfa461bf0a60b9893a10ddba44217b0851e3ebd50fa784e7a406c17dd466fe",
+   "designSha256": "5e2880190ad02c1ea1f6c0038a16e1a415ece5af84a887ff06be24cec02a99e0"
+  },
+  {
+   "bankId": 28,
+   "family": "e003_thunderball00",
+   "effectId": "proj_storm_orb",
+   "category": "projectile",
+   "title": "雷暴球（雷電投射物）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "nativeBindingSha256": "d217ba8138c08123738e4f1dbec479f95a94a9f7b7479dd2464ee3cd2bbd7f4f",
+   "designSha256": "a23368070aff60e2756a0d6d0b754945a0277a5da0853b326ddec2529e2fd7f0"
+  },
+  {
+   "bankId": 1,
+   "family": "e003_battle",
+   "effectId": "ice_rime_shard",
+   "category": "energy",
+   "title": "霜晶碎（冰晶）",
+   "sequences": [
+    31
+   ],
+   "cells": [
+    92,
+    93,
+    94,
+    95,
+    96
+   ],
+   "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+   "designSha256": "929ebebf6da0773f020e075e3af65e8241e4d5c3751a30595f721f528ccdef7c"
+  },
+  {
+   "bankId": 1,
+   "family": "e003_battle",
+   "effectId": "hit_fang_crush",
+   "category": "hit",
+   "title": "碎牙咬合（咬擊命中）",
+   "sequences": [
+    42
+   ],
+   "cells": [
+    134
+   ],
+   "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+   "designSha256": "8323fa8c0227a0a70dc729c688a2ff4aed821e24d6641f9e9cfbc7af9a89b264"
+  },
+  {
+   "bankId": 1,
+   "family": "e003_battle",
+   "effectId": "hit_thorn_lash",
+   "category": "hit",
+   "title": "棘藤鞭（藤蔓命中）",
+   "sequences": [
+    44
+   ],
+   "cells": [
+    136
+   ],
+   "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+   "designSha256": "7fd3fda1b6f2550d2691a32bc3d1503d248b07629fb0f91081f6ec2aff24040d"
+  },
+  {
+   "bankId": 139,
+   "family": "e003_crescemon",
+   "effectId": "char_crescemon_moonblade",
+   "category": "character",
+   "title": "月鎌獸形象特效（重用原創 Main 圖格）",
+   "sequences": [
+    0,
+    1
+   ],
+   "cells": [
+    0,
+    1,
+    2
+   ],
+   "nativeBindingSha256": "86676a6a27531dfeb597aede09eac4cf70cab365f0c637039af67250b9977af4",
+   "designSha256": "038851b7f6d01dbca50b7c5394848c53dc4d3ff8df3b139f7fc3313fe1ce3644"
+  },
+  {
+   "bankId": 92,
+   "family": "e003_oukuwamon",
+   "effectId": "char_oukuwamon_scissor",
+   "category": "character",
+   "title": "巨鍬形蟲獸形象特效（重用原創 Main 圖格）",
+   "sequences": [
+    0,
+    1
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "nativeBindingSha256": "0da4e54e3f1fc26e5fa64a4bb89b9435b9cf31026a21101d12ade867c856bd65",
+   "designSha256": "e145a735e8a19f4194cf891f0ab1f6262c7eba6d9f811ba98a3e06334d4f4330"
+  },
+  {
+   "bankId": 148,
+   "family": "e003_brakedramon",
+   "effectId": "char_brakedramon_body",
+   "category": "character",
+   "title": "剎車龍獸形象特效（重用原創候選 Main 圖格＋原創揮擊弧）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "nativeBindingSha256": "f0e4c6cf87e3ab20650b34a4cf668b58a1bb9721e1317a0511f61e699a6f41e5",
+   "designSha256": "8109f15834d768e10d18624d15b6ba80a828f1ca9db46579670f94826a1640ba"
+  },
+  {
+   "bankId": 1,
+   "family": "e003_battle",
+   "effectId": "impact_gold_large_r1",
+   "category": "hit",
+   "title": "金稜命中閃（大型角色追加衝擊）",
+   "sequences": [
+    35
+   ],
+   "cells": [
+    117
+   ],
+   "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+   "designSha256": "9ad797a6fb2721dd6bd4c63ebfbe06d344af86f0eea96885d285ea8d73142707"
+  },
+  {
+   "bankId": 1,
+   "family": "e003_battle",
+   "effectId": "impact_gold_small_r1",
+   "category": "hit",
+   "title": "金芒命中閃（一般角色追加衝擊）",
+   "sequences": [
+    43
+   ],
+   "cells": [
+    135
+   ],
+   "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+   "designSha256": "f60e1675eba4530d3831615776545c6a11e24f2abc05188ec9fca5e748a61f16"
+  },
+  {
+   "bankId": 1,
+   "family": "e003_battle",
+   "effectId": "impact_gold_result_r1",
+   "category": "hit",
+   "title": "散環命中餘光（結果附加）",
+   "sequences": [
+    45
+   ],
+   "cells": [
+    137,
+    138,
+    139,
+    140,
+    141
+   ],
+   "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+   "designSha256": "11fbb70c69e44e1fa178276222b86fb0aa238913d15f9dbc0299d294bb7f4061"
+  },
+  {
+   "bankId": 4,
+   "family": "e003_suport_eff",
+   "effectId": "support_aura_ring",
+   "category": "support",
+   "title": "援護光環（支援技能前導）",
+   "sequences": [
+    0
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "nativeBindingSha256": "8238c0c8137affbceb6a073e2db01d6798ecf2c78a1d72e4f9ce0645c228d0b1",
+   "designSha256": "d7e25189f6a5838cce39c2edd65c68961696a4396810fafff5c91a0e45445844"
+  },
+  {
+   "bankId": 132,
+   "family": "e003_leomonhed00",
+   "effectId": "lion_head_fireball",
+   "category": "projectile",
+   "title": "炎獅頭彈（共用投射＋命中）",
+   "sequences": [
+    0,
+    1
+   ],
+   "cells": [
+    0,
+    1,
+    2
+   ],
+   "nativeBindingSha256": "9caa80935c56868823550b252c500d30dde3d0cd372d68f4ad6a83a705992792",
+   "designSha256": "785fb04e864102fb669463b813c5d63810a0fdf02272df78dee784ad606750e0"
+  },
+  {
+   "bankId": 39,
+   "family": "e003_missile01",
+   "effectId": "missile_twin_volley",
+   "category": "projectile",
+   "title": "雙發飛彈（發射→飛行→爆炸）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "nativeBindingSha256": "bccdbe1f617a73ef7b6d062b043151753bfaff447a96382b7bc9897789a2da72",
+   "designSha256": "55b33ea8035e49b5f5a746abf382e3e19cf6ce63b6ac935a795966dd81e9a198"
+  },
+  {
+   "bankId": 1,
+   "family": "e003_battle",
+   "effectId": "miasma_burst",
+   "category": "hit",
+   "title": "緋紅瘴爆（瘴氣命中）",
+   "sequences": [
+    34
+   ],
+   "cells": [
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116
+   ],
+   "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+   "designSha256": "db6127e66837c4529ab1feba0978ed24da9eed4cc75f2f18f632a7b6b4fd0416"
+  },
+  {
+   "bankId": 3,
+   "family": "e003_mind_eff",
+   "effectId": "mind_mist_prelude",
+   "category": "support",
+   "title": "心念霧光（支援技能前導・無文字）",
+   "sequences": [
+    0
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "nativeBindingSha256": "4adf8e793219eb8dcf5403dda88b14825813e5e8bdc7a118b1afcd3b6e5da537",
+   "designSha256": "ad18aea84cd1161bb7b7e1e63b3146de52a4cca5635cba41e72860eb6fb2b0b3"
+  },
+  {
+   "bankId": 91,
+   "family": "e003_tsunami",
+   "effectId": "tidal_wave",
+   "category": "water",
+   "title": "怒濤巨浪（水波）",
+   "sequences": [
+    0
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "nativeBindingSha256": "06b7473221df271f208cf291a83d75c95d6fc2284287f6f021265b1f2192ef8d",
+   "designSha256": "673de8175c90751e477ccc8bc70640d29fb78d41377056a820615b34cb9b6da3"
+  },
+  {
+   "bankId": 104,
+   "family": "e003_risingdestroyer00",
+   "effectId": "plasma_beam_pieces",
+   "category": "energy",
+   "title": "電漿射束（光束本體／前端／槍口焰／命中）",
+   "sequences": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "nativeBindingSha256": "0a56405881266d270b5b60ff3173b034cf103735a8ce504c986dd1df9953137f",
+   "designSha256": "3bd12e2eb2e728c612d01556a5572aa356ac29741cece6a098f58442f7aa8d25"
+  },
+  {
+   "bankId": 44,
+   "family": "e003_crescentmoon00",
+   "effectId": "golden_twin_crescents",
+   "category": "projectile",
+   "title": "金月雙刃（發射／飛行／命中）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "nativeBindingSha256": "d69cafac50f08c00a8a192a3441279d2e8a15575eb94a04b2966ad53e7ee9c05",
+   "designSha256": "4d72e8e54b816f75f58b83754a107924845aa498dd35b5648c2c92b2ba000869"
+  },
+  {
+   "bankId": 134,
+   "family": "e003_missile03",
+   "effectId": "brass_cannon_shell",
+   "category": "projectile",
+   "title": "黃銅砲彈（發射／飛行／爆炸）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "nativeBindingSha256": "b350354fef697acffa79d48e3c9527b4aead6826ba44f76af8c9d113bb0557f6",
+   "designSha256": "f8e9e55f1281d2e19617cf01831303ed2673fc8bb23046087896e7b081729e80"
+  },
+  {
+   "bankId": 19,
+   "family": "e003_kikanzyu00",
+   "effectId": "rapid_fire_volley",
+   "category": "projectile",
+   "title": "連射彈幕（槍口焰／彈幕／命中）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "nativeBindingSha256": "63717785a8b6168363f7c59bdd5c9de375f406967b9627b4edf4bbc7ac3118df",
+   "designSha256": "77aee088fecc0ad2e21586c05aa656bc56a28cab8c0313417a37c18efc45fab8"
+  },
+  {
+   "bankId": 6,
+   "family": "e003_bubble00",
+   "effectId": "proj_crystal_bubble",
+   "category": "water",
+   "title": "晶鑽能量泡（泡泡投射物）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 32,
+   "family": "e003_walaser00",
+   "effectId": "proj_spiral_tide_lance",
+   "category": "water",
+   "title": "螺旋潮線水槍（水雷射）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 8,
+   "family": "e003_unchi00",
+   "effectId": "proj_miasma_core",
+   "category": "projectile",
+   "title": "紫綠瘴毒核（毒核）",
+   "sequences": [
+    0,
+    1
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 78,
+   "family": "e003_lightball02",
+   "effectId": "proj_corona_sun",
+   "category": "projectile",
+   "title": "聖耀日冕光球（大型光球）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 53,
+   "family": "e003_toge00",
+   "effectId": "proj_amber_spike",
+   "category": "projectile",
+   "title": "琥珀晶刺（尖刺投射物；土系底色，木/水名稱由轉色呈現）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 100,
+   "family": "e003_dark01",
+   "effectId": "dark_void_crescent",
+   "category": "energy",
+   "title": "黑洞弦月裂紋（暗影衝擊）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 10,
+   "family": "e003_onpu00",
+   "effectId": "sound_neon_crest",
+   "category": "energy",
+   "title": "霓虹音波紋章（音波）",
+   "sequences": [
+    0,
+    1
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 33,
+   "family": "e003_tatumaki00",
+   "effectId": "wind_twin_helix",
+   "category": "energy",
+   "title": "青嵐雙螺旋龍捲（龍捲風）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 24,
+   "family": "e003_rock00",
+   "effectId": "proj_amber_vein_rock",
+   "category": "projectile",
+   "title": "琥珀地脈巨岩（岩石）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2
+   ],
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 25,
+   "family": "e003_seed00",
+   "effectId": "proj_jade_seed",
+   "category": "projectile",
+   "title": "翡翠能量種子（種子）",
+   "sequences": [
+    0,
+    1
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 26,
+   "family": "e003_snowcrystal00",
+   "effectId": "ice_hex_crystal",
+   "category": "energy",
+   "title": "六稜冰晶雪花（雪晶）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 13,
+   "family": "e003_beam01",
+   "effectId": "beam_ember_lance",
+   "category": "fire",
+   "title": "焰芯射線（火焰光束段）",
+   "sequences": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 121,
+   "family": "e003_blacksmoke04",
+   "effectId": "smoke_umbral_plume",
+   "category": "smoke",
+   "title": "暗影煙柱（黑煙）",
+   "sequences": [
+    0,
+    1,
+    2
+   ],
+   "cells": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "remake": "web-atlas-292-r1"
+  }
+ ],
+ "cells": [
+  {
+   "bankId": 1,
+   "cell": 86,
+   "effectId": "fire_ember_bloom",
+   "frame": [
+    1739,
+    868,
+    29,
+    30
+   ],
+   "origin": [
+    15,
+    16
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "63f52e5013a28988e01791799ff28ca2a5365facaf8134a55b590ff31516bc86",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    11,
+    9
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 87,
+   "effectId": "fire_ember_bloom",
+   "frame": [
+    797,
+    970,
+    45,
+    34
+   ],
+   "origin": [
+    18,
+    19
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "9fed14b86d5394c0c86e07d24c78cc317f52a27c5c838be4af8dbe61c9e68ef8",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    11,
+    9
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 88,
+   "effectId": "fire_ember_bloom",
+   "frame": [
+    1337,
+    565,
+    48,
+    62
+   ],
+   "origin": [
+    20,
+    46
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "590a5cd069853b144430a4024eeef4523d1fe6172c2d26c4047575329777c107",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    11,
+    9
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 89,
+   "effectId": "fire_ember_bloom",
+   "frame": [
+    1251,
+    729,
+    47,
+    70
+   ],
+   "origin": [
+    20,
+    53
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "f5852992998c551cbc6b2ea723612903be13ce23dc0b4ca890c1862c46729c63",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    11,
+    17
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 90,
+   "effectId": "fire_ember_bloom",
+   "frame": [
+    2003,
+    916,
+    39,
+    56
+   ],
+   "origin": [
+    16,
+    42
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "cb9e24c4d89de5d462a3e701f4512b5803e70d1c1212b2cd3cf6fc7aa3417b91",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    11,
+    9
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 91,
+   "effectId": "fire_ember_bloom",
+   "frame": [
+    655,
+    928,
+    15,
+    37
+   ],
+   "origin": [
+    1,
+    30
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "8a33f28db897fe633fe1b0c86090bf256656ae3a892d672fbdbc4096eed03c4f",
+   "nativeSize": [
+    8,
+    16
+   ],
+   "nativeOrigin": [
+    3,
+    9
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 92,
+   "effectId": "ice_rime_shard",
+   "frame": [
+    1132,
+    876,
+    65,
+    43
+   ],
+   "origin": [
+    31,
+    19
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "a5ffb968ef6d45de8e9a0b60c17ee8429f9acabf3c9e11249f907f695331f874",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    11,
+    12
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 93,
+   "effectId": "ice_rime_shard",
+   "frame": [
+    1470,
+    796,
+    67,
+    59
+   ],
+   "origin": [
+    32,
+    35
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "00f565fa16af688284761a08c8d7a31fe6728a7afed55ef1054774efa1424009",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    11,
+    12
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 94,
+   "effectId": "ice_rime_shard",
+   "frame": [
+    1374,
+    837,
+    67,
+    58
+   ],
+   "origin": [
+    32,
+    34
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "0042f8c55938a7322c42f5d96d2ebc909fe83ef01429504283ddafb7ea7efa8a",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    11,
+    12
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 95,
+   "effectId": "ice_rime_shard",
+   "frame": [
+    628,
+    726,
+    84,
+    78
+   ],
+   "origin": [
+    41,
+    38
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "639262f9c22b4c3823cf6c69ef27753a1cb709d0104b3216a516332f5404437f",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    11,
+    12
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 96,
+   "effectId": "ice_rime_shard",
+   "frame": [
+    1643,
+    378,
+    65,
+    45
+   ],
+   "origin": [
+    34,
+    29
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "fdf0ae2878f3b58ae434efe84e71528f17e124d13c30dcb2686ee320eba4c65f",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    11,
+    12
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 97,
+   "effectId": "energy_arc_spark",
+   "frame": [
+    1249,
+    950,
+    55,
+    54
+   ],
+   "origin": [
+    25,
+    26
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "0a2b34af57471a9548b0c7e7332bf5a49a83e9f763b881fe5ce557731f823ef0",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    12,
+    12
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 98,
+   "effectId": "energy_arc_spark",
+   "frame": [
+    516,
+    795,
+    79,
+    81
+   ],
+   "origin": [
+    37,
+    41
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "3d78835f5864ab73d8d6cf57419261f602a5d16a5e3a5bba34e06615d746a2b6",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    12,
+    12
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 99,
+   "effectId": "energy_arc_spark",
+   "frame": [
+    1303,
+    728,
+    80,
+    85
+   ],
+   "origin": [
+    37,
+    42
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "57deaed1b69cb96a1718e969f5e76739010f423c1e58a62faf3c1c5bc6e57e4d",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    12,
+    12
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 100,
+   "effectId": "energy_arc_spark",
+   "frame": [
+    878,
+    831,
+    71,
+    71
+   ],
+   "origin": [
+    33,
+    32
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "e28da0bbe3075dea60c339f0614ec111a91d3824a9a9211beb1079b5d5592255",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    12,
+    12
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 101,
+   "effectId": "flash_prism_twinkle",
+   "frame": [
+    196,
+    1029,
+    72,
+    70
+   ],
+   "origin": [
+    31,
+    35
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "a726f8a5a4a48eb93dfa4f2451400491049daf55790580f55ea7ea3b7ab4d8a4",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 102,
+   "effectId": "flash_prism_twinkle",
+   "frame": [
+    681,
+    838,
+    76,
+    74
+   ],
+   "origin": [
+    33,
+    37
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "49553580872fdec5b61cfc8e87c49312bdbc915958d41038926f89e4f67eaef8",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 103,
+   "effectId": "flash_prism_twinkle",
+   "frame": [
+    1850,
+    361,
+    96,
+    96
+   ],
+   "origin": [
+    45,
+    48
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "71be285b5856cec716377fff111de91afeb2b7753bedced68198db9c94243d64",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 104,
+   "effectId": "flash_prism_twinkle",
+   "frame": [
+    1771,
+    599,
+    106,
+    105
+   ],
+   "origin": [
+    49,
+    53
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "8408eac7a9c707752f2a75e1ac5f165efd6b90b809c111e6a1167aa344d17f84",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 105,
+   "effectId": "flash_prism_twinkle",
+   "frame": [
+    1663,
+    485,
+    104,
+    111
+   ],
+   "origin": [
+    48,
+    56
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "c2979e7d81d16eeb42719c465190203a4583bd5c25dc3c4263fbbfd5ae30c9c4",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 106,
+   "effectId": "flash_prism_twinkle",
+   "frame": [
+    368,
+    1031,
+    24,
+    24
+   ],
+   "origin": [
+    8,
+    12
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "e4585f8b03d8a9f2391e22fc556f9f18514bc5fd438c87ca70911607fa1f0d12",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 107,
+   "effectId": "miasma_burst",
+   "frame": [
+    1390,
+    511,
+    30,
+    30
+   ],
+   "origin": [
+    16,
+    14
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "c90e3dd2c04c31505f551e4e89d1235ed2d9a2558d157607f9fd4af07b9e38a5",
+   "nativeSize": [
+    8,
+    16
+   ],
+   "nativeOrigin": [
+    4,
+    9
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 108,
+   "effectId": "miasma_burst",
+   "frame": [
+    2009,
+    976,
+    37,
+    35
+   ],
+   "origin": [
+    22,
+    18
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "bb96b2131f442b8e068b78e0229b3973842e31b57df8512354d83003cab8b38b",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    12,
+    9
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 109,
+   "effectId": "miasma_burst",
+   "frame": [
+    1947,
+    736,
+    36,
+    49
+   ],
+   "origin": [
+    20,
+    29
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "1d57cb8c243ebdb43f81ae34db57e6ecfb75bdaa99881f41ff476497779033f7",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    12,
+    9
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 110,
+   "effectId": "miasma_burst",
+   "frame": [
+    2008,
+    852,
+    35,
+    60
+   ],
+   "origin": [
+    20,
+    40
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "04d0246e3458c0a35d251aa3ecf7a19d5b882dba8384f278128f8ca3b8a2a720",
+   "nativeSize": [
+    16,
+    24
+   ],
+   "nativeOrigin": [
+    12,
+    17
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 111,
+   "effectId": "miasma_burst",
+   "frame": [
+    319,
+    885,
+    34,
+    68
+   ],
+   "origin": [
+    19,
+    48
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "789068e077be9f659a5f58e4a8d7685ef9d35d7c6a86f668604874841c6fb6f2",
+   "nativeSize": [
+    16,
+    24
+   ],
+   "nativeOrigin": [
+    12,
+    17
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 112,
+   "effectId": "miasma_burst",
+   "frame": [
+    1030,
+    791,
+    29,
+    78
+   ],
+   "origin": [
+    15,
+    60
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "022c2d8f0c48589f5d92188ff004c7d0baa7ba6bee61fb0e2bdfafde56b0e015",
+   "nativeSize": [
+    8,
+    24
+   ],
+   "nativeOrigin": [
+    4,
+    17
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 113,
+   "effectId": "miasma_burst",
+   "frame": [
+    761,
+    910,
+    32,
+    57
+   ],
+   "origin": [
+    14,
+    51
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "f4f5840f52596a7435d628834dbc287d382a8abbf868afa08419c764aa9b5588",
+   "nativeSize": [
+    16,
+    24
+   ],
+   "nativeOrigin": [
+    4,
+    17
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 114,
+   "effectId": "miasma_burst",
+   "frame": [
+    1113,
+    1032,
+    46,
+    48
+   ],
+   "origin": [
+    23,
+    44
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "ed188feed5fc84992b90581892939a73c8311843c2c6ddc6db34ee5c7b7004dd",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    12,
+    17
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 115,
+   "effectId": "miasma_burst",
+   "frame": [
+    655,
+    977,
+    44,
+    43
+   ],
+   "origin": [
+    22,
+    49
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "b2560d6e7b1988a16e7c95f580bc5562c4d5db524b62d3d870a2967b2d3fd532",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    12,
+    17
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 116,
+   "effectId": "miasma_burst",
+   "frame": [
+    637,
+    512,
+    32,
+    23
+   ],
+   "origin": [
+    16,
+    56
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "ce0225f622faa2ae5c7270c5c6a0b71a1e55cb2899fd921ccf9c3e77ad1f2664",
+   "nativeSize": [
+    8,
+    16
+   ],
+   "nativeOrigin": [
+    4,
+    17
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 117,
+   "effectId": "impact_gold_large_r1",
+   "frame": [
+    1308,
+    964,
+    54,
+    50
+   ],
+   "origin": [
+    22,
+    23
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "fdb6ba008e46a2b8b5f348bbc09830beeb7fc272215cba3347b727c602fdf7fd",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 118,
+   "effectId": "fire_flame_swipe",
+   "frame": [
+    2,
+    1069,
+    69,
+    71
+   ],
+   "origin": [
+    33,
+    32
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "f0923bb8832d7de6ba34370768ae1468014383b463cfc27e2c05a0016e13f1b3",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 119,
+   "effectId": "energy_frost_rend",
+   "frame": [
+    1723,
+    738,
+    69,
+    62
+   ],
+   "origin": [
+    52,
+    36
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "16870133c3d356a737c10fed0378d64820c77e8f4ba8b9c1f2adefd285e8414c",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    12,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 125,
+   "effectId": "flash_wisp_glimmer",
+   "frame": [
+    1579,
+    884,
+    28,
+    28
+   ],
+   "origin": [
+    12,
+    12
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "1c78069d690845e13136360ed5505f3218b1c601da1e605e1f24d84ce0416df6",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 126,
+   "effectId": "flash_wisp_glimmer",
+   "frame": [
+    1865,
+    921,
+    26,
+    24
+   ],
+   "origin": [
+    11,
+    10
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "6abba84f682a70e7e8ea7c37c3c112fbed9803fd80b7edbe09e996246cd285b4",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 127,
+   "effectId": "flash_wisp_glimmer",
+   "frame": [
+    749,
+    1019,
+    28,
+    28
+   ],
+   "origin": [
+    12,
+    12
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "2a7ba7f98930c89a784a50155228b5bf0cb82f520fb46e5ceaf516c419584625",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 128,
+   "effectId": "flash_wisp_glimmer",
+   "frame": [
+    733,
+    916,
+    24,
+    24
+   ],
+   "origin": [
+    10,
+    10
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "5061f708538b5030a2c2441c2cac83cf4f984f3122a9e54ee2675aeb7c2b900c",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 129,
+   "effectId": "flash_wisp_glimmer",
+   "frame": [
+    272,
+    1097,
+    32,
+    32
+   ],
+   "origin": [
+    14,
+    14
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "6f3c046ee6a44e58a63e40ce47275a31ccec04e328c24efbfe99cc5a3e1dbda5",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 130,
+   "effectId": "flash_wisp_glimmer",
+   "frame": [
+    733,
+    971,
+    44,
+    44
+   ],
+   "origin": [
+    20,
+    20
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "2b8feb77cfb2404a7e842f333f585b01a0ade4defe3b4d4375ee43eadcd39412",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 131,
+   "effectId": "flash_wisp_glimmer",
+   "frame": [
+    595,
+    928,
+    56,
+    56
+   ],
+   "origin": [
+    26,
+    26
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "41b8a7c5ad5b36801ed27e4b9355cb6fd4d6e8ec69c065f12ab2670feb18a73c",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 132,
+   "effectId": "flash_wisp_glimmer",
+   "frame": [
+    531,
+    236,
+    60,
+    66
+   ],
+   "origin": [
+    27,
+    29
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "1cc4054c23754a71d0bd52571cccfcf015c391803b5fe1425a2a8eb28e9193bb",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 133,
+   "effectId": "proj_tracer_streak",
+   "frame": [
+    1700,
+    708,
+    96,
+    26
+   ],
+   "origin": [
+    30,
+    11
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "0f38572724953e948ebffcc15549314816ba7231ebc66e14dcce3818f92f1647",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 134,
+   "effectId": "hit_fang_crush",
+   "frame": [
+    118,
+    982,
+    74,
+    57
+   ],
+   "origin": [
+    34,
+    26
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "2186f8669ab702ec3051561583b24ba5d0f37cd15d7b5b4ca315f147174018cf",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 135,
+   "effectId": "impact_gold_small_r1",
+   "frame": [
+    673,
+    512,
+    28,
+    24
+   ],
+   "origin": [
+    10,
+    12
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "88307eb38d3f8e7ba7ccfb2f7e58c5a28f452d1a4944aad88da02ff1e61dc05d",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    3,
+    4
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 136,
+   "effectId": "hit_thorn_lash",
+   "frame": [
+    1500,
+    647,
+    96,
+    61
+   ],
+   "origin": [
+    56,
+    25
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "9973185ee65ff1d3c85472f60773dbfea344ccaad69bf89a3ae82afa2f95188b",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    12,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 137,
+   "effectId": "impact_gold_result_r1",
+   "frame": [
+    1643,
+    918,
+    10,
+    10
+   ],
+   "origin": [
+    3,
+    3
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "9b2b916d001e697c159ef2dda37358f83b01ec1471e6abee80ab4bf9bbc75a1a",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 138,
+   "effectId": "impact_gold_result_r1",
+   "frame": [
+    927,
+    801,
+    16,
+    16
+   ],
+   "origin": [
+    6,
+    6
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "3674b9d1f4eb056fb323660c91ba24a0bfe86d761a9bb218c2d94e96f91b0120",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 139,
+   "effectId": "impact_gold_result_r1",
+   "frame": [
+    703,
+    977,
+    26,
+    26
+   ],
+   "origin": [
+    11,
+    11
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "c16bd3f77fe3c1a4b106fbb807fb2c0ffede8d6dcd313eaa0b82db0323a57f66",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 140,
+   "effectId": "impact_gold_result_r1",
+   "frame": [
+    947,
+    750,
+    30,
+    30
+   ],
+   "origin": [
+    13,
+    13
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "417fe6f80dec41850b66ca1eeb0e7f9334411e609ba32fd293614c0bb197728d",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 1,
+   "cell": 141,
+   "effectId": "impact_gold_result_r1",
+   "frame": [
+    901,
+    962,
+    32,
+    32
+   ],
+   "origin": [
+    14,
+    14
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "344d2e721faea6d08d3ae1ebc99af16b96adf82a12422e178641a88e8aa69865",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 3,
+   "cell": 0,
+   "effectId": "mind_mist_prelude",
+   "frame": [
+    412,
+    1085,
+    40,
+    35
+   ],
+   "origin": [
+    25,
+    19
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "48918673057878e1be62db6d9054847f979c2aeef34021c48c96118ffdc51e37",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 3,
+   "cell": 1,
+   "effectId": "mind_mist_prelude",
+   "frame": [
+    1216,
+    875,
+    65,
+    47
+   ],
+   "origin": [
+    34,
+    28
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "89c07312971d61aba1b7c3313f8ca12d834c24f6f784ed478fffcd3bcfd43fa2",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    16,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 3,
+   "cell": 2,
+   "effectId": "mind_mist_prelude",
+   "frame": [
+    296,
+    606,
+    62,
+    79
+   ],
+   "origin": [
+    31,
+    57
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "5851153e12c0b335b028ef52ead63de18777900433a64e8f3a76fcbe8e451e88",
+   "nativeSize": [
+    32,
+    24
+   ],
+   "nativeOrigin": [
+    16,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 3,
+   "cell": 3,
+   "effectId": "mind_mist_prelude",
+   "frame": [
+    1146,
+    812,
+    66,
+    60
+   ],
+   "origin": [
+    35,
+    50
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "5c093222df5b0c7c6c1ee1f9e685cf7ef8c15ce16dc95363757dc08e0c51410d",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    16,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 3,
+   "cell": 4,
+   "effectId": "mind_mist_prelude",
+   "frame": [
+    1898,
+    916,
+    45,
+    60
+   ],
+   "origin": [
+    9,
+    65
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "e6c2f4284e299211629dbd5c7e21326acf8e1541375b906b0b4147e4ea51bc1f",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    8,
+    24
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 3,
+   "cell": 5,
+   "effectId": "mind_mist_prelude",
+   "frame": [
+    1445,
+    837,
+    20,
+    18
+   ],
+   "origin": [
+    -11,
+    48
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "a75394dd4abc7a553d00783b81205176ee941a999e9ae7c2f9749a8e3cf8d2db",
+   "nativeSize": [
+    8,
+    16
+   ],
+   "nativeOrigin": [
+    0,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 4,
+   "cell": 0,
+   "effectId": "support_aura_ring",
+   "frame": [
+    319,
+    961,
+    73,
+    66
+   ],
+   "origin": [
+    32,
+    33
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "337403b5a9bcc6d2f699058dcf5ccce74348698c253fd0b5fd28b5b17ee33abb",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 4,
+   "cell": 1,
+   "effectId": "support_aura_ring",
+   "frame": [
+    1102,
+    579,
+    102,
+    102
+   ],
+   "origin": [
+    47,
+    51
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "fec2cf269b9b8313d388938064c43315ec51956af691cd5225ccee4590feaf02",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 4,
+   "cell": 2,
+   "effectId": "support_aura_ring",
+   "frame": [
+    357,
+    769,
+    111,
+    110
+   ],
+   "origin": [
+    51,
+    55
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "bb1abd0b58aca4d2af488b1f2ba47253748b0898c1d97ead311d897571e7f41e",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 4,
+   "cell": 3,
+   "effectId": "support_aura_ring",
+   "frame": [
+    1544,
+    427,
+    115,
+    116
+   ],
+   "origin": [
+    54,
+    58
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "3fb35fe5692769538a644438d11f1976304e9518eeb53016fb30aa673bc62d93",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 4,
+   "cell": 4,
+   "effectId": "support_aura_ring",
+   "frame": [
+    790,
+    546,
+    120,
+    118
+   ],
+   "origin": [
+    54,
+    58
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "1756bcb609b5dc4c795fe4e14f8465bdb5194c45cce888642136ede3c9a15501",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 6,
+   "cell": 0,
+   "effectId": "proj_crystal_bubble",
+   "frame": [
+    781,
+    971,
+    12,
+    12
+   ],
+   "origin": [
+    10,
+    6
+   ],
+   "blank": false,
+   "rgbaSha256": "648d0a32403fec27fb5f1f0df5b4fa692b4f6d521f066892165f8be2208c9741",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    5,
+    5
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 6,
+   "cell": 1,
+   "effectId": "proj_crystal_bubble",
+   "frame": [
+    1515,
+    859,
+    22,
+    18
+   ],
+   "origin": [
+    12,
+    10
+   ],
+   "blank": false,
+   "rgbaSha256": "e131aee2681a20e9547fad3e02d7e64250b6f0ae691acf869a5939a0039ebd5f",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    5,
+    5
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 6,
+   "cell": 2,
+   "effectId": "proj_crystal_bubble",
+   "frame": [
+    1169,
+    685,
+    34,
+    26
+   ],
+   "origin": [
+    16,
+    14
+   ],
+   "blank": false,
+   "rgbaSha256": "e8c1216e57cd4222ac1cb2e95fcc5ca75fe3707c2244e91ea69c9421e8d6a8d0",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    5,
+    5
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 6,
+   "cell": 3,
+   "effectId": "proj_crystal_bubble",
+   "frame": [
+    308,
+    1115,
+    32,
+    28
+   ],
+   "origin": [
+    14,
+    14
+   ],
+   "blank": false,
+   "rgbaSha256": "5a1de144129586ff141e57527df5ca823cbaaaeb6eb75c0346135a0b4b3ed4b1",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    5,
+    5
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 6,
+   "cell": 4,
+   "effectId": "proj_crystal_bubble",
+   "frame": [
+    1127,
+    180,
+    36,
+    24
+   ],
+   "origin": [
+    16,
+    12
+   ],
+   "blank": false,
+   "rgbaSha256": "eb6c1cb63d321f6362af399b147584f33f244c6271a03d2883192cf04063cedb",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    5,
+    5
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 6,
+   "cell": 5,
+   "effectId": "proj_crystal_bubble",
+   "frame": [
+    749,
+    1051,
+    28,
+    28
+   ],
+   "origin": [
+    14,
+    16
+   ],
+   "blank": false,
+   "rgbaSha256": "76cbd94df99e2a6c3fd2f2413b219b62f68474dd5137808f075b49f60b7c7ede",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    3,
+    5
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 6,
+   "cell": 6,
+   "effectId": "proj_crystal_bubble",
+   "frame": [
+    1611,
+    854,
+    60,
+    60
+   ],
+   "origin": [
+    30,
+    30
+   ],
+   "blank": false,
+   "rgbaSha256": "3821b82bd893bfd39170c5a769084e61e7adfd8a9fd7a01d04fb7c0c7f78100a",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    8
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 6,
+   "cell": 7,
+   "effectId": "proj_crystal_bubble",
+   "frame": [
+    1613,
+    982,
+    26,
+    26
+   ],
+   "origin": [
+    14,
+    14
+   ],
+   "blank": false,
+   "rgbaSha256": "92877dea337b514ae11e9d53464ecea8dace571cf0dc4e8c1edfc8ce520f4fbf",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    5,
+    5
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 7,
+   "cell": 0,
+   "effectId": "proj_fire_comet",
+   "frame": [
+    1850,
+    461,
+    23,
+    20
+   ],
+   "origin": [
+    7,
+    8
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "5dea943b8cd69e518d612383752fe964b049925697ca9cd1d1ee1469e10b0227",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    5,
+    4
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 7,
+   "cell": 1,
+   "effectId": "proj_fire_comet",
+   "frame": [
+    1220,
+    1016,
+    23,
+    21
+   ],
+   "origin": [
+    9,
+    10
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "959cc587895ac7f913783a7b53d2c5e24ae918d0b4739705a8f7e11062fc9dce",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    5,
+    4
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 7,
+   "cell": 2,
+   "effectId": "proj_fire_comet",
+   "frame": [
+    1366,
+    990,
+    54,
+    31
+   ],
+   "origin": [
+    7,
+    13
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "1f3b610b5bfef3b88bb556da2476edd00bf3f37fd90b32b43c5105dd9f0741f6",
+   "nativeSize": [
+    16,
+    8
+   ],
+   "nativeOrigin": [
+    4,
+    4
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 7,
+   "cell": 3,
+   "effectId": "proj_fire_comet",
+   "frame": [
+    1663,
+    427,
+    53,
+    29
+   ],
+   "origin": [
+    7,
+    13
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "99ce93747b310c38f9f5a1a5cde9afe37ecb0086cf946f36611d8138d10998e7",
+   "nativeSize": [
+    16,
+    8
+   ],
+   "nativeOrigin": [
+    4,
+    4
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 7,
+   "cell": 4,
+   "effectId": "proj_fire_comet",
+   "frame": [
+    1988,
+    722,
+    56,
+    63
+   ],
+   "origin": [
+    28,
+    29
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "1a3e1215e88c6a36a9ee9ff8898c943825587400ff78ad43ebf409a5c513ce72",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 7,
+   "cell": 5,
+   "effectId": "proj_fire_comet",
+   "frame": [
+    1541,
+    815,
+    66,
+    65
+   ],
+   "origin": [
+    32,
+    29
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "871e425d91c2d5cbc6a8502dd6819d169ccb21638ed60f55645d26a065c40dc8",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 7,
+   "cell": 6,
+   "effectId": "proj_fire_comet",
+   "frame": [
+    241,
+    885,
+    74,
+    68
+   ],
+   "origin": [
+    36,
+    30
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "e560fbf26ae833b9f47d50eb47efd9580f92743394406c90e440d43d329d972e",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 8,
+   "cell": 0,
+   "effectId": "proj_miasma_core",
+   "frame": [
+    1220,
+    1054,
+    48,
+    44
+   ],
+   "origin": [
+    26,
+    22
+   ],
+   "blank": false,
+   "rgbaSha256": "2ae0897f3c0a7eda232e7cfb7a56095492d50434c26f62e71de6f8f1bcabb844",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 8,
+   "cell": 1,
+   "effectId": "proj_miasma_core",
+   "frame": [
+    595,
+    988,
+    44,
+    42
+   ],
+   "origin": [
+    22,
+    20
+   ],
+   "blank": false,
+   "rgbaSha256": "101b75f8e1daec9147894d85ace4a96b01725668c315f3972a3111d9aaf58562",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 8,
+   "cell": 2,
+   "effectId": "proj_miasma_core",
+   "frame": [
+    1417,
+    1046,
+    52,
+    36
+   ],
+   "origin": [
+    26,
+    22
+   ],
+   "blank": false,
+   "rgbaSha256": "7ee4384641af27ffe0aee0db0eed583cdbab67eeb0cfa1f2ff05d3c1e1a98ef5",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 8,
+   "cell": 3,
+   "effectId": "proj_miasma_core",
+   "frame": [
+    1882,
+    461,
+    64,
+    46
+   ],
+   "origin": [
+    32,
+    28
+   ],
+   "blank": false,
+   "rgbaSha256": "26959636df5e015ca67162a1e37556a7d754b4556082ecaefd6a45b9d5df3adf",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 9,
+   "cell": 0,
+   "effectId": "proj_aether_orb",
+   "frame": [
+    1879,
+    736,
+    64,
+    54
+   ],
+   "origin": [
+    32,
+    23
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "48bf9ececc6fc2dde463ae6e1726e85ef1f68db814e4973c27a97497faa4c02b",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 9,
+   "cell": 1,
+   "effectId": "proj_aether_orb",
+   "frame": [
+    537,
+    912,
+    54,
+    64
+   ],
+   "origin": [
+    27,
+    28
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "e15c316b8c522f8fce681f45eb160a6318f8f178adf5c52221a45a47d3580edf",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 9,
+   "cell": 2,
+   "effectId": "proj_aether_orb",
+   "frame": [
+    1216,
+    812,
+    31,
+    33
+   ],
+   "origin": [
+    13,
+    14
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "c7fef45645972ecd0ad4b5909facf9ee2e9d2b4c810b40dbc716c71ff1f825bf",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 9,
+   "cell": 3,
+   "effectId": "proj_aether_orb",
+   "frame": [
+    1303,
+    632,
+    80,
+    92
+   ],
+   "origin": [
+    40,
+    46
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "1d0fc157896c4494a92977e213ed2fe0ea7af974f7d49d0d4e4d236014713c31",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    12,
+    12
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 9,
+   "cell": 4,
+   "effectId": "proj_aether_orb",
+   "frame": [
+    1009,
+    954,
+    50,
+    50
+   ],
+   "origin": [
+    25,
+    25
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "6ebb70fc0775639dd7c05d7117ad484b080c3358a9bf1bc814a3a87856066406",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    9,
+    9
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 9,
+   "cell": 5,
+   "effectId": "proj_aether_orb",
+   "frame": [
+    1739,
+    902,
+    14,
+    14
+   ],
+   "origin": [
+    5,
+    5
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "9eea0851551c30b386838f82f1462dab8c99c88d65ad02ad51ddc04b19d0ac64",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 9,
+   "cell": 6,
+   "effectId": "proj_aether_orb",
+   "frame": [
+    1485,
+    926,
+    18,
+    18
+   ],
+   "origin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "26eac65d6cf40edd998c6aa91d4ba368d2fb0994df910cde01d49d0aaa4456ff",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 10,
+   "cell": 0,
+   "effectId": "sound_neon_crest",
+   "frame": [
+    1129,
+    923,
+    56,
+    56
+   ],
+   "origin": [
+    20,
+    48
+   ],
+   "blank": false,
+   "rgbaSha256": "653c2c80b72bc5a6d28710852445c850abdc16be862465ee7b46cd4256de17ce",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    6,
+    12
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 10,
+   "cell": 1,
+   "effectId": "sound_neon_crest",
+   "frame": [
+    2009,
+    1015,
+    36,
+    36
+   ],
+   "origin": [
+    18,
+    18
+   ],
+   "blank": false,
+   "rgbaSha256": "6e011c08a568443805e1579bdddfcd87d3660df0a60d7099aa44a95a588b78e0",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    8
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 10,
+   "cell": 2,
+   "effectId": "sound_neon_crest",
+   "frame": [
+    1739,
+    920,
+    60,
+    56
+   ],
+   "origin": [
+    30,
+    28
+   ],
+   "blank": false,
+   "rgbaSha256": "66a73e8edd3ebfdb22671873cec688a4ce0929a0d466f94dee8a0b3313f928ff",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    8
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 10,
+   "cell": 3,
+   "effectId": "sound_neon_crest",
+   "frame": [
+    1477,
+    712,
+    84,
+    80
+   ],
+   "origin": [
+    42,
+    40
+   ],
+   "blank": false,
+   "rgbaSha256": "025510c815c09db1c4f93c2df987c50c2b4de41474e86797deb893a149472148",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    8
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 10,
+   "cell": 4,
+   "effectId": "sound_neon_crest",
+   "frame": [
+    1882,
+    518,
+    108,
+    104
+   ],
+   "origin": [
+    54,
+    52
+   ],
+   "blank": false,
+   "rgbaSha256": "83c962da0657e582a2a5a1da56dcba70c4fe9088bcfa36a1d416190eb41b04f0",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    8
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 12,
+   "cell": 0,
+   "effectId": "beam_prism_lance",
+   "frame": [
+    151,
+    1043,
+    32,
+    64
+   ],
+   "origin": [
+    0,
+    32
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "e77c9bf635854792968f65ea2be6ada657cc9801bc6d8a1e2484174cd86e543e",
+   "nativeSize": [
+    8,
+    16
+   ],
+   "nativeOrigin": [
+    0,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 12,
+   "cell": 1,
+   "effectId": "beam_prism_lance",
+   "frame": [
+    272,
+    1029,
+    32,
+    64
+   ],
+   "origin": [
+    0,
+    32
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "f6db8e5e700117e4449c9e0b24330179c9497979a23b80cfb0f8b1cee1cc153b",
+   "nativeSize": [
+    8,
+    16
+   ],
+   "nativeOrigin": [
+    0,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 12,
+   "cell": 2,
+   "effectId": "beam_prism_lance",
+   "frame": [
+    152,
+    513,
+    40,
+    86
+   ],
+   "origin": [
+    14,
+    43
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "d3eea9e272c933b70fa5fdb3c62ca27ab7233e6a617acddc4d0d3f9207ba2bd3",
+   "nativeSize": [
+    8,
+    32
+   ],
+   "nativeOrigin": [
+    0,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 12,
+   "cell": 3,
+   "effectId": "beam_prism_lance",
+   "frame": [
+    2,
+    992,
+    69,
+    73
+   ],
+   "origin": [
+    34,
+    35
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "c46e91140f0a1b7404715625dbc9ece25c0d48e76ce8ea4e84325b512a145464",
+   "nativeSize": [
+    16,
+    32
+   ],
+   "nativeOrigin": [
+    8,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 13,
+   "cell": 0,
+   "effectId": "beam_ember_lance",
+   "frame": [
+    901,
+    998,
+    32,
+    32
+   ],
+   "origin": [
+    0,
+    16
+   ],
+   "blank": false,
+   "rgbaSha256": "fc8d6d64dee7e55b999779dde9e1a787e2f4eb9d8eb293cf16506d1520801e8d",
+   "nativeSize": [
+    8,
+    16
+   ],
+   "nativeOrigin": [
+    0,
+    8
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 13,
+   "cell": 1,
+   "effectId": "beam_ember_lance",
+   "frame": [
+    716,
+    726,
+    32,
+    32
+   ],
+   "origin": [
+    0,
+    16
+   ],
+   "blank": false,
+   "rgbaSha256": "a2588c176c9ffd1fa2fb18e3994062f65109d8a21031d164970eb37ead2720ab",
+   "nativeSize": [
+    8,
+    16
+   ],
+   "nativeOrigin": [
+    0,
+    8
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 13,
+   "cell": 2,
+   "effectId": "beam_ember_lance",
+   "frame": [
+    761,
+    838,
+    32,
+    68
+   ],
+   "origin": [
+    0,
+    34
+   ],
+   "blank": false,
+   "rgbaSha256": "0599342a8113416ed11f1a1cbc9affa2c4a1fee03912387224fb16e22246f26a",
+   "nativeSize": [
+    8,
+    32
+   ],
+   "nativeOrigin": [
+    0,
+    16
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 13,
+   "cell": 3,
+   "effectId": "beam_ember_lance",
+   "frame": [
+    1836,
+    857,
+    58,
+    60
+   ],
+   "origin": [
+    30,
+    30
+   ],
+   "blank": false,
+   "rgbaSha256": "a5fc3f972798c7dc2b8bc95925463d35817c94fc9d118f2015347ffd31376c41",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    8
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 16,
+   "cell": 0,
+   "effectId": "smoke_soot_bloom",
+   "frame": [
+    1865,
+    949,
+    26,
+    24
+   ],
+   "origin": [
+    10,
+    10
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "62c950d6e5b1fee4de37687ad856259d563c7640594ded5d2b9a872474264283",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 16,
+   "cell": 1,
+   "effectId": "smoke_soot_bloom",
+   "frame": [
+    595,
+    1034,
+    44,
+    40
+   ],
+   "origin": [
+    20,
+    18
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "69a1d688051504e568eb4e35f8e48c892af5ec380f7a45be59867b25aa1d367f",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 16,
+   "cell": 2,
+   "effectId": "smoke_soot_bloom",
+   "frame": [
+    531,
+    306,
+    60,
+    56
+   ],
+   "origin": [
+    27,
+    25
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "f65a17151a90862083520f7f4eb23196d7ce9f575be490251769f25765c027ed",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 16,
+   "cell": 3,
+   "effectId": "smoke_soot_bloom",
+   "frame": [
+    1700,
+    600,
+    67,
+    64
+   ],
+   "origin": [
+    29,
+    29
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "620f426c19d537f79034354e2aba7be7e9429fb6a958eb03b8054485248b53b1",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 16,
+   "cell": 4,
+   "effectId": "smoke_soot_bloom",
+   "frame": [
+    1637,
+    788,
+    67,
+    62
+   ],
+   "origin": [
+    31,
+    26
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "8972dd818664b11a06ff7ffd4c0a4b103e7dd918ae6d216b4107f5d6bbb45b01",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 16,
+   "cell": 5,
+   "effectId": "smoke_soot_bloom",
+   "frame": [
+    1303,
+    817,
+    67,
+    63
+   ],
+   "origin": [
+    32,
+    28
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "b5f04a42ea3dad521d903aac016a98556984c683bb66b78a18be5085209d1642",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 16,
+   "cell": 6,
+   "effectId": "smoke_soot_bloom",
+   "frame": [
+    1445,
+    859,
+    66,
+    63
+   ],
+   "origin": [
+    31,
+    29
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "287bcab99bd635c3ab338393f510deadbf315f6c09dbd36f1986b4f006cfd023",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 16,
+   "cell": 7,
+   "effectId": "smoke_soot_bloom",
+   "frame": [
+    1353,
+    899,
+    64,
+    61
+   ],
+   "origin": [
+    30,
+    30
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "6815b61fabeff4564624aa4779e9d6e7226af6118678daa82f8a8d3660f9c24a",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 16,
+   "cell": 8,
+   "effectId": "smoke_soot_bloom",
+   "frame": [
+    1947,
+    789,
+    61,
+    59
+   ],
+   "origin": [
+    28,
+    31
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "7fd5f22a001f4e7f1beeb4fd43bd3841360c80dcb34c691b247dff57f3998b34",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 16,
+   "cell": 9,
+   "effectId": "smoke_soot_bloom",
+   "frame": [
+    1879,
+    794,
+    61,
+    59
+   ],
+   "origin": [
+    29,
+    33
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "384ec815c7bfa2a555cd9fa9c3924b42b301148c45f0b0b46d86b8b79cac7a96",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 19,
+   "cell": 0,
+   "effectId": "rapid_fire_volley",
+   "frame": [
+    1216,
+    849,
+    30,
+    22
+   ],
+   "origin": [
+    12,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "7b9fcde5e64e686648ce71ea1388412d2b903cceebcf1c82c1682b0598633c66",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 19,
+   "cell": 1,
+   "effectId": "rapid_fire_volley",
+   "frame": [
+    1063,
+    954,
+    50,
+    47
+   ],
+   "origin": [
+    26,
+    24
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "71ee4024036bd829cf44eee465d0b8e2a8a2a52c7a5000cf9e22cfbe5a941f3d",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 19,
+   "cell": 2,
+   "effectId": "rapid_fire_volley",
+   "frame": [
+    1163,
+    1069,
+    46,
+    46
+   ],
+   "origin": [
+    19,
+    19
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "cdb2b9ade7339203b059da2dda4f6f2c37cfe547f8e36cedd14f68ae387e08a3",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 19,
+   "cell": 3,
+   "effectId": "rapid_fire_volley",
+   "frame": [
+    1643,
+    932,
+    60,
+    55
+   ],
+   "origin": [
+    28,
+    23
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "07bf7bbfa603ae93d5d20fb0dc62eac6ec70177929effde1987948309c42e0d2",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 24,
+   "cell": 0,
+   "effectId": "proj_amber_vein_rock",
+   "frame": [
+    520,
+    1040,
+    44,
+    40
+   ],
+   "origin": [
+    22,
+    20
+   ],
+   "blank": false,
+   "rgbaSha256": "af805da22ce777b8f6ed7adc58a5478223aeecbc00381cb5397d2bf011774fcd",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 24,
+   "cell": 1,
+   "effectId": "proj_amber_vein_rock",
+   "frame": [
+    456,
+    1049,
+    44,
+    40
+   ],
+   "origin": [
+    22,
+    20
+   ],
+   "blank": false,
+   "rgbaSha256": "da56d812ebece04e2d04b80645515beb41e34cfc3cad40e204389dd4af615f03",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 24,
+   "cell": 2,
+   "effectId": "proj_amber_vein_rock",
+   "frame": [
+    1285,
+    884,
+    64,
+    62
+   ],
+   "origin": [
+    34,
+    34
+   ],
+   "blank": false,
+   "rgbaSha256": "dc1331755b6adc382f5bd052ef4655f32e7ca7f942fc691b3b0bb28c1624ad58",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 25,
+   "cell": 0,
+   "effectId": "proj_jade_seed",
+   "frame": [
+    196,
+    982,
+    32,
+    30
+   ],
+   "origin": [
+    16,
+    12
+   ],
+   "blank": false,
+   "rgbaSha256": "100f6fcd53b960b73447ddfa9e1a643155867af07019e664417060cdd83bdf58",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 25,
+   "cell": 1,
+   "effectId": "proj_jade_seed",
+   "frame": [
+    368,
+    1085,
+    40,
+    44
+   ],
+   "origin": [
+    20,
+    26
+   ],
+   "blank": false,
+   "rgbaSha256": "79ecaeb3ab1d06f334fb79f6340692167a7a4927ffd33889f2f3e8885b7cee7b",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 25,
+   "cell": 2,
+   "effectId": "proj_jade_seed",
+   "frame": [
+    1898,
+    857,
+    40,
+    50
+   ],
+   "origin": [
+    20,
+    32
+   ],
+   "blank": false,
+   "rgbaSha256": "7f252285e45f3caa19bb26bd4c1d8d52399cb8c4aa9202932967bc24a525c5b7",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 25,
+   "cell": 3,
+   "effectId": "proj_jade_seed",
+   "frame": [
+    1361,
+    1018,
+    1,
+    1
+   ],
+   "origin": [
+    0,
+    0
+   ],
+   "blank": true,
+   "rgbaSha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    -1,
+    -1
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 26,
+   "cell": 0,
+   "effectId": "ice_hex_crystal",
+   "frame": [
+    1707,
+    964,
+    28,
+    28
+   ],
+   "origin": [
+    14,
+    14
+   ],
+   "blank": false,
+   "rgbaSha256": "275b2cef7e3749792cd3f0b9a3dcf8b3aff28d40091aa712ba3bdc8dcf92c4ba",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 26,
+   "cell": 1,
+   "effectId": "ice_hex_crystal",
+   "frame": [
+    1322,
+    1081,
+    44,
+    40
+   ],
+   "origin": [
+    22,
+    20
+   ],
+   "blank": false,
+   "rgbaSha256": "2a7ff45754e34606e910ae42b8449107138fb4bc4dab11bffd447ba83a6c37b3",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 26,
+   "cell": 2,
+   "effectId": "ice_hex_crystal",
+   "frame": [
+    1579,
+    918,
+    60,
+    60
+   ],
+   "origin": [
+    30,
+    30
+   ],
+   "blank": false,
+   "rgbaSha256": "a804e98f9d0d0b90b9836075f8dde694651235959da147d006533dd33070b952",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 26,
+   "cell": 3,
+   "effectId": "ice_hex_crystal",
+   "frame": [
+    781,
+    1008,
+    44,
+    44
+   ],
+   "origin": [
+    22,
+    22
+   ],
+   "blank": false,
+   "rgbaSha256": "a3245a15a060a3803c33cd5be3f767bfc96fde47243a9a7cfb95041424d53322",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 26,
+   "cell": 4,
+   "effectId": "ice_hex_crystal",
+   "frame": [
+    1485,
+    948,
+    60,
+    60
+   ],
+   "origin": [
+    30,
+    30
+   ],
+   "blank": false,
+   "rgbaSha256": "aa0f5337ad1f4f60aca1bc15f3afffb7d15b034d61107bc111795760edaf8c9b",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 26,
+   "cell": 5,
+   "effectId": "ice_hex_crystal",
+   "frame": [
+    552,
+    880,
+    42,
+    16
+   ],
+   "origin": [
+    20,
+    -8
+   ],
+   "blank": false,
+   "rgbaSha256": "3430827b0ce070fb858c2945825f549d58497ce5b3e87bcd7f0070146fe856ac",
+   "nativeSize": [
+    16,
+    8
+   ],
+   "nativeOrigin": [
+    7,
+    -1
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 28,
+   "cell": 0,
+   "effectId": "proj_storm_orb",
+   "frame": [
+    798,
+    828,
+    76,
+    76
+   ],
+   "origin": [
+    36,
+    36
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "c5629e20bd8b537a5aa9320775cd24ca53bcef74b104aeb637c93cde9d32ef06",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 28,
+   "cell": 1,
+   "effectId": "proj_storm_orb",
+   "frame": [
+    1708,
+    804,
+    60,
+    60
+   ],
+   "origin": [
+    28,
+    28
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "3ddb14bbe69ba30eb7bd2b39a8d0471fc69055a35013dfd1df09b2bbc81f2f0c",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 28,
+   "cell": 2,
+   "effectId": "proj_storm_orb",
+   "frame": [
+    1272,
+    1074,
+    46,
+    46
+   ],
+   "origin": [
+    21,
+    21
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "bfe163e101a9089ede1315cc2bd0358d70c3b9a815c07a0f7699ec052006756e",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 28,
+   "cell": 3,
+   "effectId": "proj_storm_orb",
+   "frame": [
+    761,
+    625,
+    24,
+    24
+   ],
+   "origin": [
+    10,
+    10
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "8c5346ecdf29ab4e606559d951235dda72720bc68ac6b6af70e3859e0a5f686d",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 28,
+   "cell": 4,
+   "effectId": "proj_storm_orb",
+   "frame": [
+    940,
+    956,
+    50,
+    45
+   ],
+   "origin": [
+    24,
+    27
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "437505ca233dd1542651d5a765993280b107344f57ec7f8795efffb0f857eb1e",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 28,
+   "cell": 5,
+   "effectId": "proj_storm_orb",
+   "frame": [
+    1063,
+    1005,
+    46,
+    49
+   ],
+   "origin": [
+    15,
+    24
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "bf4bf4cb428bc37648fac56f95f9ba70cf2127524fe22502cc11d2e769cec4ca",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 28,
+   "cell": 6,
+   "effectId": "proj_storm_orb",
+   "frame": [
+    1117,
+    983,
+    50,
+    45
+   ],
+   "origin": [
+    22,
+    15
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "f2724397e4a556cb4255b3eed0da78e0c428d75329b92ba271446055ffd350b1",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 28,
+   "cell": 7,
+   "effectId": "proj_storm_orb",
+   "frame": [
+    1171,
+    1016,
+    45,
+    49
+   ],
+   "origin": [
+    26,
+    21
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "a8f3f3d3eaa609b058393860f06b6a76fb71e874336bacacc57d50b42e74a3e6",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 28,
+   "cell": 8,
+   "effectId": "proj_storm_orb",
+   "frame": [
+    1213,
+    1102,
+    46,
+    46
+   ],
+   "origin": [
+    18,
+    21
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "d7a4e96ac2f0435a628515a673ea2a49501cfe2b0a68aee5782b0ec85606fbce",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 28,
+   "cell": 9,
+   "effectId": "proj_storm_orb",
+   "frame": [
+    1063,
+    825,
+    65,
+    65
+   ],
+   "origin": [
+    29,
+    31
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "c771f00e225e584c0ae454364c84b1cf0e3a3c6787647af334dd110545988bdc",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 28,
+   "cell": 10,
+   "effectId": "proj_storm_orb",
+   "frame": [
+    1387,
+    749,
+    79,
+    84
+   ],
+   "origin": [
+    37,
+    40
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "e39704c458158fd846bd6924ec1b4e6b2ebcca541080474fb8b6ecfe6ec5c5d5",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 32,
+   "cell": 0,
+   "effectId": "proj_spiral_tide_lance",
+   "frame": [
+    1549,
+    948,
+    24,
+    30
+   ],
+   "origin": [
+    16,
+    14
+   ],
+   "blank": false,
+   "rgbaSha256": "c618ae5e253dc9c4651932535c86ff7eced38b854121e6747a6cc070110abf04",
+   "nativeSize": [
+    8,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 32,
+   "cell": 1,
+   "effectId": "proj_spiral_tide_lance",
+   "frame": [
+    1251,
+    803,
+    48,
+    68
+   ],
+   "origin": [
+    24,
+    34
+   ],
+   "blank": false,
+   "rgbaSha256": "430f2a9edc2b4ea1f330831d820a6ecea88057d258a22c7269bc8272cb1b5144",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 32,
+   "cell": 2,
+   "effectId": "proj_spiral_tide_lance",
+   "frame": [
+    1600,
+    547,
+    58,
+    32
+   ],
+   "origin": [
+    36,
+    16
+   ],
+   "blank": false,
+   "rgbaSha256": "57c0a582332174af91c2bd2a190f71477582435b3b382b02d6b326d8dbc929b1",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 32,
+   "cell": 3,
+   "effectId": "proj_spiral_tide_lance",
+   "frame": [
+    1700,
+    668,
+    58,
+    32
+   ],
+   "origin": [
+    36,
+    16
+   ],
+   "blank": false,
+   "rgbaSha256": "389440f5fd6bb0a5f3a16f0f1f667d72957d27c452cee5bde0f9fc3254e33e7c",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 32,
+   "cell": 4,
+   "effectId": "proj_spiral_tide_lance",
+   "frame": [
+    1263,
+    1124,
+    44,
+    30
+   ],
+   "origin": [
+    22,
+    20
+   ],
+   "blank": false,
+   "rgbaSha256": "4ffc3ba3a4fdc526cd6d6e4fd851e908269f419f28fc1d3dda1605a7c148c2a3",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 32,
+   "cell": 5,
+   "effectId": "proj_spiral_tide_lance",
+   "frame": [
+    308,
+    1031,
+    56,
+    40
+   ],
+   "origin": [
+    28,
+    28
+   ],
+   "blank": false,
+   "rgbaSha256": "9fca40a9e7be236bc733e30c9162888cb231c16ca1c31684993a6facffbdbfe2",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 32,
+   "cell": 6,
+   "effectId": "proj_spiral_tide_lance",
+   "frame": [
+    1565,
+    759,
+    68,
+    52
+   ],
+   "origin": [
+    34,
+    36
+   ],
+   "blank": false,
+   "rgbaSha256": "9aff8094397101d7b23361e48eaeb2c46ab77eb36db768e315204286e9064a11",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 32,
+   "cell": 7,
+   "effectId": "proj_spiral_tide_lance",
+   "frame": [
+    1361,
+    1018,
+    1,
+    1
+   ],
+   "origin": [
+    0,
+    0
+   ],
+   "blank": true,
+   "rgbaSha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    -1,
+    -1
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 33,
+   "cell": 0,
+   "effectId": "wind_twin_helix",
+   "frame": [
+    230,
+    414,
+    46,
+    12
+   ],
+   "origin": [
+    24,
+    12
+   ],
+   "blank": false,
+   "rgbaSha256": "a590f96256a63a18aa5c4a8f31a8a3535a77edd032cac244efd734f68046b82d",
+   "nativeSize": [
+    16,
+    8
+   ],
+   "nativeOrigin": [
+    7,
+    6
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 33,
+   "cell": 1,
+   "effectId": "wind_twin_helix",
+   "frame": [
+    798,
+    770,
+    56,
+    20
+   ],
+   "origin": [
+    28,
+    18
+   ],
+   "blank": false,
+   "rgbaSha256": "706c44f3336888f2b3f6ec47cd95301cb1806084702c4f155e4d860bec95dddd",
+   "nativeSize": [
+    16,
+    8
+   ],
+   "nativeOrigin": [
+    7,
+    6
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 33,
+   "cell": 2,
+   "effectId": "wind_twin_helix",
+   "frame": [
+    472,
+    880,
+    76,
+    28
+   ],
+   "origin": [
+    38,
+    26
+   ],
+   "blank": false,
+   "rgbaSha256": "62df3c66cbff8b092e2e584a39ccc186b7d22c8afbc75eb845e6f371967168f7",
+   "nativeSize": [
+    16,
+    8
+   ],
+   "nativeOrigin": [
+    7,
+    6
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 33,
+   "cell": 3,
+   "effectId": "wind_twin_helix",
+   "frame": [
+    1421,
+    926,
+    60,
+    60
+   ],
+   "origin": [
+    32,
+    60
+   ],
+   "blank": false,
+   "rgbaSha256": "f26dd410e1b542f9eacd7180cd193264374e609fb77d061aacf36151cbecc91d",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    14
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 33,
+   "cell": 4,
+   "effectId": "wind_twin_helix",
+   "frame": [
+    1944,
+    852,
+    60,
+    60
+   ],
+   "origin": [
+    28,
+    60
+   ],
+   "blank": false,
+   "rgbaSha256": "67c1d48c09768de79abcfaad357ad6a055daf7a49e0ab37e74363767398fce50",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    14
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 33,
+   "cell": 5,
+   "effectId": "wind_twin_helix",
+   "frame": [
+    1772,
+    856,
+    60,
+    60
+   ],
+   "origin": [
+    28,
+    60
+   ],
+   "blank": false,
+   "rgbaSha256": "7fc5fc73f5fa2578ac4bad627789872ac014ece69f9622030aa18d7669ae1fe0",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    14
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 33,
+   "cell": 6,
+   "effectId": "wind_twin_helix",
+   "frame": [
+    1675,
+    868,
+    60,
+    60
+   ],
+   "origin": [
+    32,
+    60
+   ],
+   "blank": false,
+   "rgbaSha256": "abd0328d05bfd635ef047a0328107d929d30743056d13ceb8968e2d89150d0f9",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    14
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 33,
+   "cell": 7,
+   "effectId": "wind_twin_helix",
+   "frame": [
+    716,
+    770,
+    78,
+    64
+   ],
+   "origin": [
+    42,
+    64
+   ],
+   "blank": false,
+   "rgbaSha256": "32b2e5882ea56b605eb5d5df938737a75d127b1f807a5816cd1e6399f9a63ce2",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    14
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 33,
+   "cell": 8,
+   "effectId": "wind_twin_helix",
+   "frame": [
+    1600,
+    600,
+    96,
+    66
+   ],
+   "origin": [
+    46,
+    66
+   ],
+   "blank": false,
+   "rgbaSha256": "ebc7bfd47f7ca317be42a57fbe767bc9187b4ff26565fb891b6328cccad99034",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    14
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 33,
+   "cell": 9,
+   "effectId": "wind_twin_helix",
+   "frame": [
+    296,
+    693,
+    114,
+    72
+   ],
+   "origin": [
+    54,
+    70
+   ],
+   "blank": false,
+   "rgbaSha256": "80e925af88fa2834272680fd7056cf0f553b4b124a3cc40afb15197022549339",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    14
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 33,
+   "cell": 10,
+   "effectId": "wind_twin_helix",
+   "frame": [
+    1361,
+    1018,
+    1,
+    1
+   ],
+   "origin": [
+    0,
+    0
+   ],
+   "blank": true,
+   "rgbaSha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    -1,
+    6
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 39,
+   "cell": 0,
+   "effectId": "missile_twin_volley",
+   "frame": [
+    1708,
+    788,
+    10,
+    12
+   ],
+   "origin": [
+    -1,
+    4
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "1dd771cb304c725ccc126a4e2c7ed1a7f752ac73c6444324ea42a57822136a76",
+   "nativeSize": [
+    8,
+    16
+   ],
+   "nativeOrigin": [
+    0,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 39,
+   "cell": 1,
+   "effectId": "missile_twin_volley",
+   "frame": [
+    681,
+    808,
+    31,
+    23
+   ],
+   "origin": [
+    3,
+    9
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "28375906667ab4d16c2e4b574bb3a8ee0dcb48f5502ca2654f5c2233c5b48ca0",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 39,
+   "cell": 2,
+   "effectId": "missile_twin_volley",
+   "frame": [
+    1772,
+    804,
+    20,
+    40
+   ],
+   "origin": [
+    -8,
+    16
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "3ce04ce75bcea37befd2bc50982a0866e12da224e73fca62b5e82394022c6340",
+   "nativeSize": [
+    8,
+    16
+   ],
+   "nativeOrigin": [
+    0,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 39,
+   "cell": 3,
+   "effectId": "missile_twin_volley",
+   "frame": [
+    1227,
+    565,
+    106,
+    63
+   ],
+   "origin": [
+    17,
+    31
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "e3919b151e02aee0bd07f408188953bc20aed071499b087c082fca7bd624ee47",
+   "nativeSize": [
+    32,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 39,
+   "cell": 4,
+   "effectId": "missile_twin_volley",
+   "frame": [
+    971,
+    634,
+    100,
+    57
+   ],
+   "origin": [
+    17,
+    28
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "ad5fd54e0f0f0cc57f5aa6472420cfe1b784a8a81c9d36a4a9a69d34594e4131",
+   "nativeSize": [
+    32,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 39,
+   "cell": 5,
+   "effectId": "missile_twin_volley",
+   "frame": [
+    1247,
+    1008,
+    54,
+    42
+   ],
+   "origin": [
+    24,
+    14
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "31ba7f27d60660a6f9bed492a850114f6f532d03ba1d57c4a41c8eac4f3d204f",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 39,
+   "cell": 6,
+   "effectId": "missile_twin_volley",
+   "frame": [
+    674,
+    916,
+    55,
+    57
+   ],
+   "origin": [
+    28,
+    31
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "e3e9d10ba348b1bae05cb92185c1c28133bf2637b877f10e6a24c0fc0e18a831",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 44,
+   "cell": 0,
+   "effectId": "golden_twin_crescents",
+   "frame": [
+    1171,
+    983,
+    14,
+    12
+   ],
+   "origin": [
+    5,
+    4
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "b9fd18a7c6733fff3cf83ede7d80411886dfdf1238ff8d26d91075f54d009058",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 44,
+   "cell": 1,
+   "effectId": "golden_twin_crescents",
+   "frame": [
+    2012,
+    789,
+    34,
+    46
+   ],
+   "origin": [
+    13,
+    21
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "41785657b05c3f6715a9b356deffc6d71db3ba2c474c09bcadb1cd08a27f9629",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 44,
+   "cell": 2,
+   "effectId": "golden_twin_crescents",
+   "frame": [
+    1189,
+    958,
+    54,
+    54
+   ],
+   "origin": [
+    25,
+    25
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "6b5ac4aaf267d9d330ac9f848ea0cbf1756a2e04727a2ca1bb7c3fbc116b9d95",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 44,
+   "cell": 3,
+   "effectId": "golden_twin_crescents",
+   "frame": [
+    1361,
+    1018,
+    1,
+    1
+   ],
+   "origin": [
+    0,
+    0
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": true,
+   "rgbaSha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    -1,
+    -1
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 44,
+   "cell": 4,
+   "effectId": "golden_twin_crescents",
+   "frame": [
+    1102,
+    481,
+    121,
+    94
+   ],
+   "origin": [
+    58,
+    40
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "d93544cebb79a12a80d73bf90d5c3eba0bb1a1dc4a43368944ae393481af68fb",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    15
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 44,
+   "cell": 5,
+   "effectId": "golden_twin_crescents",
+   "frame": [
+    1040,
+    210,
+    126,
+    95
+   ],
+   "origin": [
+    58,
+    41
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "9e98d00fc63bc656624ac60867abea0f17e025a9270fac92ffad64bb933e3794",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    15
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 44,
+   "cell": 6,
+   "effectId": "golden_twin_crescents",
+   "frame": [
+    637,
+    625,
+    120,
+    97
+   ],
+   "origin": [
+    57,
+    43
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "e51625c76de24721433c063e0de43051d8411485ceb74ba486ac74c5ce0e87cf",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    15
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 44,
+   "cell": 7,
+   "effectId": "golden_twin_crescents",
+   "frame": [
+    974,
+    481,
+    124,
+    98
+   ],
+   "origin": [
+    56,
+    44
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "d08a6c2d87859300e333a72e170b1e989fedfd990e9db0de8e00e816ffb877c4",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    15
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 44,
+   "cell": 8,
+   "effectId": "golden_twin_crescents",
+   "frame": [
+    1500,
+    547,
+    96,
+    96
+   ],
+   "origin": [
+    44,
+    44
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "86974148a4834583c55562ad0ddb37a8c1c056b2fcb7a2c055fba3f4954fbce1",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    15
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 44,
+   "cell": 9,
+   "effectId": "golden_twin_crescents",
+   "frame": [
+    1881,
+    626,
+    103,
+    106
+   ],
+   "origin": [
+    45,
+    46
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "5725e996c536c16b849368001735cbeae9541df313423118543efa55763e8489",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    15
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 44,
+   "cell": 10,
+   "effectId": "golden_twin_crescents",
+   "frame": [
+    1361,
+    1018,
+    1,
+    1
+   ],
+   "origin": [
+    0,
+    0
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": true,
+   "rgbaSha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    -1,
+    -1
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 51,
+   "cell": 0,
+   "effectId": "proj_molten_comet",
+   "frame": [
+    835,
+    187,
+    17,
+    19
+   ],
+   "origin": [
+    7,
+    8
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "927e40e1aef27470716fcd296b6f9f1c648563994946b91ac0a7d4983f0dcd8b",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 51,
+   "cell": 1,
+   "effectId": "proj_molten_comet",
+   "frame": [
+    733,
+    944,
+    24,
+    23
+   ],
+   "origin": [
+    9,
+    10
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "760b9fef0bb61728e1629b9733e93cb11020783e129dc6796102426d6a859999",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 51,
+   "cell": 2,
+   "effectId": "proj_molten_comet",
+   "frame": [
+    947,
+    791,
+    79,
+    36
+   ],
+   "origin": [
+    11,
+    15
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "d3f4515627ca369dee25b0b00baa9912ad969ce10c9a9d002166b55008233f88",
+   "nativeSize": [
+    32,
+    16
+   ],
+   "nativeOrigin": [
+    10,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 51,
+   "cell": 3,
+   "effectId": "proj_molten_comet",
+   "frame": [
+    599,
+    808,
+    78,
+    36
+   ],
+   "origin": [
+    11,
+    15
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "e910ee7d1e62bb01dcead37b31671895c863e6295e6e4c548685589b8048e58d",
+   "nativeSize": [
+    32,
+    16
+   ],
+   "nativeOrigin": [
+    10,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 51,
+   "cell": 4,
+   "effectId": "proj_molten_comet",
+   "frame": [
+    1565,
+    719,
+    79,
+    36
+   ],
+   "origin": [
+    11,
+    15
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "5ac45db91d4c65ae4f1cd69918959537e5fa8b24df05141a12a1a880c6b26f4d",
+   "nativeSize": [
+    32,
+    16
+   ],
+   "nativeOrigin": [
+    10,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 51,
+   "cell": 5,
+   "effectId": "proj_molten_comet",
+   "frame": [
+    1063,
+    782,
+    79,
+    39
+   ],
+   "origin": [
+    11,
+    18
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "5921ce88dc0a31c6a7365cf2ccad3d34bee87c9b5a3de85ed644b3961d1d3b80",
+   "nativeSize": [
+    32,
+    16
+   ],
+   "nativeOrigin": [
+    10,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 51,
+   "cell": 6,
+   "effectId": "proj_molten_comet",
+   "frame": [
+    851,
+    962,
+    46,
+    45
+   ],
+   "origin": [
+    20,
+    19
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "5d010e34bf82aa190e7cb582e4be498abfc33c90bee1725658e3d501660de301",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 51,
+   "cell": 7,
+   "effectId": "proj_molten_comet",
+   "frame": [
+    599,
+    848,
+    71,
+    76
+   ],
+   "origin": [
+    32,
+    35
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "03f5b796afcea875128f0453a60fe029cde080bc5f7027c68d74e106eb7173a5",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 51,
+   "cell": 8,
+   "effectId": "proj_molten_comet",
+   "frame": [
+    953,
+    831,
+    71,
+    59
+   ],
+   "origin": [
+    31,
+    28
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "528de9a9d8f80c30b284f2f6dd470d69d605a4dcd0f2ab2c70429710de168163",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 53,
+   "cell": 0,
+   "effectId": "proj_amber_spike",
+   "frame": [
+    75,
+    992,
+    38,
+    30
+   ],
+   "origin": [
+    18,
+    12
+   ],
+   "blank": false,
+   "rgbaSha256": "995eca04aa7302542b3e7e89351c9a20bfa17e36d0b78b6871b6ccd7d88f83e5",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 53,
+   "cell": 1,
+   "effectId": "proj_amber_spike",
+   "frame": [
+    1189,
+    926,
+    56,
+    28
+   ],
+   "origin": [
+    26,
+    14
+   ],
+   "blank": false,
+   "rgbaSha256": "fbc62809d8a0fcd846f813bdb8fce35468f8a4780fc8d600d6a47f2e7d9d0c47",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 53,
+   "cell": 2,
+   "effectId": "proj_amber_spike",
+   "frame": [
+    703,
+    1019,
+    42,
+    44
+   ],
+   "origin": [
+    22,
+    22
+   ],
+   "blank": false,
+   "rgbaSha256": "77ef94d86b93d538920bc6baca24df7b68f2052203ecde2e154680c9509af3eb",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 53,
+   "cell": 3,
+   "effectId": "proj_amber_spike",
+   "frame": [
+    1069,
+    894,
+    56,
+    56
+   ],
+   "origin": [
+    28,
+    28
+   ],
+   "blank": false,
+   "rgbaSha256": "ed323a52f80f567cb025a11fe7bebd0bc73fddae05a7f6d8ab850013beab01f5",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 53,
+   "cell": 4,
+   "effectId": "proj_amber_spike",
+   "frame": [
+    241,
+    957,
+    74,
+    68
+   ],
+   "origin": [
+    34,
+    34
+   ],
+   "blank": false,
+   "rgbaSha256": "db07aa3855ff9a522299e35422bb8fbb4c45c84396e8e913046d7092e2dba4b6",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 64,
+   "cell": 0,
+   "effectId": "smoke_dust_kick",
+   "frame": [
+    1803,
+    921,
+    58,
+    55
+   ],
+   "origin": [
+    25,
+    16
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "41d030b675a8e09add734472edfb43766d7b9fcb00e9828154aad978669c8a23",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    6
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 64,
+   "cell": 1,
+   "effectId": "smoke_dust_kick",
+   "frame": [
+    357,
+    883,
+    74,
+    74
+   ],
+   "origin": [
+    31,
+    29
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "ba412c66cc6be9721d4803da8b175e8719cd61bcb551078a2e0a6f94242239b9",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    13,
+    6
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 64,
+   "cell": 2,
+   "effectId": "smoke_dust_kick",
+   "frame": [
+    1075,
+    685,
+    90,
+    93
+   ],
+   "origin": [
+    41,
+    45
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "3d83d1dd5c420c17736641e682991f06aefdd6817646417c86599813aba740a4",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    12,
+    13
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 64,
+   "cell": 3,
+   "effectId": "smoke_dust_kick",
+   "frame": [
+    981,
+    695,
+    78,
+    92
+   ],
+   "origin": [
+    36,
+    47
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "6edf761659b0e5d95489413299bef75537a0c3561c1cbc51c1203a046bccccff",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    12,
+    14
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 64,
+   "cell": 4,
+   "effectId": "smoke_dust_kick",
+   "frame": [
+    1800,
+    708,
+    75,
+    85
+   ],
+   "origin": [
+    35,
+    40
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "f5fc736156b7ceed142185bddda2532f726aee27844a1fe72f3daad0cba3c581",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    12,
+    6
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 64,
+   "cell": 5,
+   "effectId": "smoke_dust_kick",
+   "frame": [
+    308,
+    1075,
+    56,
+    36
+   ],
+   "origin": [
+    23,
+    -9
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "2f5834cc2b32d50093c044da0b5a0e2eae7a1bc8d788a000152e5ff6461506d7",
+   "nativeSize": [
+    24,
+    8
+   ],
+   "nativeOrigin": [
+    12,
+    -2
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 78,
+   "cell": 0,
+   "effectId": "proj_corona_sun",
+   "frame": [
+    1424,
+    990,
+    52,
+    52
+   ],
+   "origin": [
+    26,
+    26
+   ],
+   "blank": false,
+   "rgbaSha256": "c0e1ee66b8cfb331d06728e2824e16badf238f8668f3f4d5f207b4c503ac2938",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 78,
+   "cell": 1,
+   "effectId": "proj_corona_sun",
+   "frame": [
+    1707,
+    932,
+    28,
+    28
+   ],
+   "origin": [
+    14,
+    14
+   ],
+   "blank": false,
+   "rgbaSha256": "13bc66264e78903e34879a65bdc7a7c440b64acdaca5793ca3325eb5c4f81277",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    4,
+    4
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 78,
+   "cell": 2,
+   "effectId": "proj_corona_sun",
+   "frame": [
+    1515,
+    884,
+    60,
+    60
+   ],
+   "origin": [
+    30,
+    30
+   ],
+   "blank": false,
+   "rgbaSha256": "eba37ae741d9664011a33a0d6f45717a2a66ffff04bfa472c08da6a8290f4c79",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    8
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 78,
+   "cell": 3,
+   "effectId": "proj_corona_sun",
+   "frame": [
+    125,
+    750,
+    112,
+    112
+   ],
+   "origin": [
+    56,
+    56
+   ],
+   "blank": false,
+   "rgbaSha256": "a4867946b8029fc0dbaa47be7da948a7f0c1706e3c402daee8be6d5f4ec5cb4c",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    15
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 78,
+   "cell": 4,
+   "effectId": "proj_corona_sun",
+   "frame": [
+    241,
+    769,
+    112,
+    112
+   ],
+   "origin": [
+    56,
+    56
+   ],
+   "blank": false,
+   "rgbaSha256": "174d020a5ee6511c3f2aa0f00ae6007995ecfbf8b2b99bf22470718a9ed7747c",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    15
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 78,
+   "cell": 5,
+   "effectId": "proj_corona_sun",
+   "frame": [
+    125,
+    866,
+    112,
+    112
+   ],
+   "origin": [
+    56,
+    56
+   ],
+   "blank": false,
+   "rgbaSha256": "886223e962c3da89a03af795b03a00db2a91ac527bfe2b25db2a30e4d254f365",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    15
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 78,
+   "cell": 6,
+   "effectId": "proj_corona_sun",
+   "frame": [
+    2,
+    876,
+    112,
+    112
+   ],
+   "origin": [
+    56,
+    56
+   ],
+   "blank": false,
+   "rgbaSha256": "5b27970a9367e628a8912de7c623ece329586f62aa3653fba7927238d5a19acf",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    15
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 78,
+   "cell": 7,
+   "effectId": "proj_corona_sun",
+   "frame": [
+    152,
+    606,
+    140,
+    140
+   ],
+   "origin": [
+    70,
+    70
+   ],
+   "blank": false,
+   "rgbaSha256": "376c4c5e59f0cc14ecf8b3a53ef4ee878d500648e69b4718d5c2a0ba92227b6d",
+   "nativeSize": [
+    40,
+    40
+   ],
+   "nativeOrigin": [
+    20,
+    20
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 78,
+   "cell": 8,
+   "effectId": "proj_corona_sun",
+   "frame": [
+    1424,
+    427,
+    116,
+    116
+   ],
+   "origin": [
+    58,
+    58
+   ],
+   "blank": false,
+   "rgbaSha256": "8ff9606088c03cb26e3bdd3e768462b54d7fac72214cbf1b71d1e6199907dc4c",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    16,
+    16
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 79,
+   "cell": 0,
+   "effectId": "hit_claw_rend",
+   "frame": [
+    1549,
+    982,
+    60,
+    48
+   ],
+   "origin": [
+    3,
+    62
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "b23b0a72c4d572abf3393802863baef8d1bacbe36322316951f156313a5e6ab8",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 79,
+   "cell": 1,
+   "effectId": "hit_claw_rend",
+   "frame": [
+    1390,
+    547,
+    106,
+    103
+   ],
+   "origin": [
+    59,
+    62
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "ef4a58d25687f1a672b4b091e2a0b927aeb4f72d6ab4e07e6bd8945c96ffed9f",
+   "nativeSize": [
+    24,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 79,
+   "cell": 2,
+   "effectId": "hit_claw_rend",
+   "frame": [
+    1771,
+    485,
+    107,
+    110
+   ],
+   "origin": [
+    59,
+    41
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "14ca3930bcb176cfc7b6a5b5dd28e9a0d0d551b2bf4ee024d33790c0425be5ec",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    15,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 79,
+   "cell": 3,
+   "effectId": "hit_claw_rend",
+   "frame": [
+    1600,
+    670,
+    96,
+    45
+   ],
+   "origin": [
+    28,
+    -24
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "8627bba12bb7a23fe7af695bebcf71e97af90a56e7b1da9f2e142e87158d2753",
+   "nativeSize": [
+    32,
+    16
+   ],
+   "nativeOrigin": [
+    15,
+    0
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 80,
+   "cell": 0,
+   "effectId": "hit_slash_steel",
+   "frame": [
+    196,
+    513,
+    23,
+    77
+   ],
+   "origin": [
+    21,
+    54
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "4f5faa127f85ffce8bcfb3f77d1e23d6c12eb7b6fa3d8f3403f09af13839d9a6",
+   "nativeSize": [
+    16,
+    24
+   ],
+   "nativeOrigin": [
+    16,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 80,
+   "cell": 1,
+   "effectId": "hit_slash_steel",
+   "frame": [
+    1643,
+    208,
+    73,
+    166
+   ],
+   "origin": [
+    25,
+    98
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "035713ad7f06cd72f0126c41df86b345a01e8ff6bfffac6fa2ec8c5884473da1",
+   "nativeSize": [
+    32,
+    48
+   ],
+   "nativeOrigin": [
+    16,
+    24
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 80,
+   "cell": 2,
+   "effectId": "hit_slash_steel",
+   "frame": [
+    1950,
+    353,
+    90,
+    161
+   ],
+   "origin": [
+    22,
+    92
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "1ee98bb3c912022c589d1f05e2b41ae6d486aefaf25723d56afb6f3291219cd7",
+   "nativeSize": [
+    32,
+    48
+   ],
+   "nativeOrigin": [
+    16,
+    24
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 80,
+   "cell": 3,
+   "effectId": "hit_slash_steel",
+   "frame": [
+    472,
+    834,
+    40,
+    42
+   ],
+   "origin": [
+    12,
+    -34
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "b3699624035c14e0dc8e15d03340bfda6c598c22e3b2310b78c3f60f21781e68",
+   "nativeSize": [
+    8,
+    24
+   ],
+   "nativeOrigin": [
+    8,
+    0
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 81,
+   "cell": 0,
+   "effectId": "hit_knuckle_prism",
+   "frame": [
+    1648,
+    738,
+    71,
+    46
+   ],
+   "origin": [
+    20,
+    23
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "8b35ced8a29ad5811f10a112f5f7ab44cf18d364aa8c337bed1b024258b3bad0",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    4,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 81,
+   "cell": 1,
+   "effectId": "hit_knuckle_prism",
+   "frame": [
+    1951,
+    2,
+    94,
+    84
+   ],
+   "origin": [
+    21,
+    42
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "2bc072e18cda2e9d79aec4bc693f057953065ed425e2adbeedcc77069ebe232e",
+   "nativeSize": [
+    24,
+    32
+   ],
+   "nativeOrigin": [
+    4,
+    15
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 81,
+   "cell": 2,
+   "effectId": "hit_knuckle_prism",
+   "frame": [
+    524,
+    512,
+    109,
+    161
+   ],
+   "origin": [
+    1,
+    80
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "b5db0867fe2595e75c7459a47f9ce1d7c96260f1d3ee999464ffa60971611761",
+   "nativeSize": [
+    32,
+    48
+   ],
+   "nativeOrigin": [
+    4,
+    23
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 81,
+   "cell": 3,
+   "effectId": "hit_knuckle_prism",
+   "frame": [
+    1950,
+    142,
+    96,
+    207
+   ],
+   "origin": [
+    -29,
+    105
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "5ea7987b68bf42f73afae017374f2f942fb87c38a60141cdcb668abf8abde434",
+   "nativeSize": [
+    32,
+    48
+   ],
+   "nativeOrigin": [
+    4,
+    23
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 82,
+   "cell": 0,
+   "effectId": "hit_pierce_lance",
+   "frame": [
+    798,
+    801,
+    77,
+    23
+   ],
+   "origin": [
+    -79,
+    10
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "9a0dff03890585326f72d02426accc637db098a3f3bc69577e94f014930c9a50",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    -16,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 82,
+   "cell": 1,
+   "effectId": "hit_pierce_lance",
+   "frame": [
+    1237,
+    330,
+    182,
+    47
+   ],
+   "origin": [
+    28,
+    22
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "eeb96c37ee2dd48f6d1b4bcd705973c6ec505e79c52806d06f48db5b20042da0",
+   "nativeSize": [
+    48,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 82,
+   "cell": 2,
+   "effectId": "hit_pierce_lance",
+   "frame": [
+    523,
+    677,
+    101,
+    114
+   ],
+   "origin": [
+    11,
+    54
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "d4665430ace806dad5dfb1cfa1ef866fa65d20e3970a78f9fe31494fe81e8822",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    8,
+    15
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 82,
+   "cell": 3,
+   "effectId": "hit_pierce_lance",
+   "frame": [
+    914,
+    546,
+    53,
+    120
+   ],
+   "origin": [
+    26,
+    56
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "731bda4a220ccf309163e9834c35ba033125b19b215bfa49958246ac1e19f1a9",
+   "nativeSize": [
+    16,
+    32
+   ],
+   "nativeOrigin": [
+    8,
+    15
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 91,
+   "cell": 0,
+   "effectId": "tidal_wave",
+   "frame": [
+    835,
+    308,
+    199,
+    25
+   ],
+   "origin": [
+    76,
+    22
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "b5b6423144cb297a6feac94cd316c44d7c5449319910747a53b8551d5fc9025a",
+   "nativeSize": [
+    56,
+    8
+   ],
+   "nativeOrigin": [
+    24,
+    6
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 91,
+   "cell": 1,
+   "effectId": "tidal_wave",
+   "frame": [
+    884,
+    180,
+    239,
+    26
+   ],
+   "origin": [
+    120,
+    23
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "4e57f289f4e8b23588b4f7c8e18215d764a6793604bb7fb1d17504c2a8a37d45",
+   "nativeSize": [
+    64,
+    8
+   ],
+   "nativeOrigin": [
+    32,
+    6
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 91,
+   "cell": 2,
+   "effectId": "tidal_wave",
+   "frame": [
+    1731,
+    95,
+    216,
+    43
+   ],
+   "origin": [
+    96,
+    40
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "e9149b8b18ec113fb5e4fce39cbf7eebd4f8a0671be6ef226f1b563c68275812",
+   "nativeSize": [
+    56,
+    16
+   ],
+   "nativeOrigin": [
+    24,
+    14
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 91,
+   "cell": 3,
+   "effectId": "tidal_wave",
+   "frame": [
+    291,
+    355,
+    232,
+    71
+   ],
+   "origin": [
+    108,
+    68
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "bc0b6dfd480b5063285c1ca532950f14bf55cb3efa4d28527d990b0b9cb160b8",
+   "nativeSize": [
+    64,
+    24
+   ],
+   "nativeOrigin": [
+    32,
+    22
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 91,
+   "cell": 4,
+   "effectId": "tidal_wave",
+   "frame": [
+    291,
+    236,
+    236,
+    115
+   ],
+   "origin": [
+    116,
+    112
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "731e953c0dfbc5141f22d77dac09cfee82946ef87b8075f9c162a25cd3395651",
+   "nativeSize": [
+    64,
+    32
+   ],
+   "nativeOrigin": [
+    32,
+    30
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 91,
+   "cell": 5,
+   "effectId": "tidal_wave",
+   "frame": [
+    2,
+    414,
+    224,
+    95
+   ],
+   "origin": [
+    112,
+    92
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "b665093abc0f25d6dfe28a911540bb261c36c379c8f6fd8bc2728cce68320053",
+   "nativeSize": [
+    64,
+    32
+   ],
+   "nativeOrigin": [
+    32,
+    30
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 91,
+   "cell": 6,
+   "effectId": "tidal_wave",
+   "frame": [
+    1731,
+    2,
+    216,
+    89
+   ],
+   "origin": [
+    120,
+    86
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "2dd6f6199d8329760417cc300a56d8707ac007c9147c40ab91892668d1bec002",
+   "nativeSize": [
+    56,
+    32
+   ],
+   "nativeOrigin": [
+    32,
+    30
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 91,
+   "cell": 7,
+   "effectId": "tidal_wave",
+   "frame": [
+    2,
+    700,
+    139,
+    38
+   ],
+   "origin": [
+    116,
+    35
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "9ea4825098eab518d74bad332122bfd85f22ac7ed9359de3caf0e0c2dfe06c35",
+   "nativeSize": [
+    40,
+    16
+   ],
+   "nativeOrigin": [
+    32,
+    14
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 92,
+   "cell": 0,
+   "effectId": "char_oukuwamon_scissor",
+   "frame": [
+    2,
+    610,
+    139,
+    86
+   ],
+   "origin": [
+    76,
+    50
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "d784756d121bbe8b435877e34d9125a9cb79d3555378360a72108a969cca4ba3",
+   "nativeSize": [
+    40,
+    32
+   ],
+   "nativeOrigin": [
+    20,
+    27
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 92,
+   "cell": 1,
+   "effectId": "char_oukuwamon_scissor",
+   "frame": [
+    376,
+    604,
+    143,
+    85
+   ],
+   "origin": [
+    199,
+    72
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "a10d3b7923bf71f9bc5fa0480f75674bc18e0ac2d9e8069041a755f9aacbc957",
+   "nativeSize": [
+    48,
+    32
+   ],
+   "nativeOrigin": [
+    36,
+    27
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 92,
+   "cell": 2,
+   "effectId": "char_oukuwamon_scissor",
+   "frame": [
+    1720,
+    361,
+    126,
+    120
+   ],
+   "origin": [
+    35,
+    83
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "3c1b1c38e555656565e707b37daa1b035ad288fb49ff09380fc39771002a5693",
+   "nativeSize": [
+    40,
+    40
+   ],
+   "nativeOrigin": [
+    20,
+    35
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 92,
+   "cell": 3,
+   "effectId": "char_oukuwamon_scissor",
+   "frame": [
+    835,
+    210,
+    201,
+    94
+   ],
+   "origin": [
+    210,
+    58
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "42f11c541889ac6f46c1984c0b1dc76f066fb51310c9180e0ff74322a74de503",
+   "nativeSize": [
+    64,
+    40
+   ],
+   "nativeOrigin": [
+    44,
+    35
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 100,
+   "cell": 0,
+   "effectId": "dark_void_crescent",
+   "frame": [
+    396,
+    961,
+    64,
+    64
+   ],
+   "origin": [
+    32,
+    32
+   ],
+   "blank": false,
+   "rgbaSha256": "d55576f14de6912efe450d31296551602bb04fcccd83e2da231dcc8ca51250e7",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 100,
+   "cell": 1,
+   "effectId": "dark_void_crescent",
+   "frame": [
+    1947,
+    916,
+    52,
+    58
+   ],
+   "origin": [
+    24,
+    30
+   ],
+   "blank": false,
+   "rgbaSha256": "ac36343763c1a69a9f7cbe97b452bfb8c80d087f8014f83e2309a79a0a6c7f71",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 100,
+   "cell": 2,
+   "effectId": "dark_void_crescent",
+   "frame": [
+    1947,
+    978,
+    58,
+    52
+   ],
+   "origin": [
+    28,
+    24
+   ],
+   "blank": false,
+   "rgbaSha256": "0906a1facfac1eb0933adb52fc3e7372a57b0569ddbd29dbaa2f7dcb4c3d7a59",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 100,
+   "cell": 3,
+   "effectId": "dark_void_crescent",
+   "frame": [
+    953,
+    894,
+    52,
+    58
+   ],
+   "origin": [
+    28,
+    28
+   ],
+   "blank": false,
+   "rgbaSha256": "0e5294a8456fd589b714d190fdcb0a893d979ebe9567cd55aa6e7ebd105bd5b5",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 100,
+   "cell": 4,
+   "effectId": "dark_void_crescent",
+   "frame": [
+    878,
+    906,
+    58,
+    52
+   ],
+   "origin": [
+    30,
+    28
+   ],
+   "blank": false,
+   "rgbaSha256": "a0483f1bb3c0cfad7c6334a5403eb95840294101404226f20b00303831805ae3",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 104,
+   "cell": 0,
+   "effectId": "plasma_beam_pieces",
+   "frame": [
+    1994,
+    518,
+    32,
+    64
+   ],
+   "origin": [
+    0,
+    32
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "fd822f72bfd6f6e64f4a2483fac239665897c0881aea2727441fbca484d7813e",
+   "nativeSize": [
+    8,
+    16
+   ],
+   "nativeOrigin": [
+    0,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 104,
+   "cell": 1,
+   "effectId": "plasma_beam_pieces",
+   "frame": [
+    435,
+    883,
+    25,
+    74
+   ],
+   "origin": [
+    -1,
+    35
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "ce88af86bef9a6c524f5af7c949def9fae5feb70cf723396ffa0b93cbda3ffbb",
+   "nativeSize": [
+    8,
+    32
+   ],
+   "nativeOrigin": [
+    0,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 104,
+   "cell": 2,
+   "effectId": "plasma_beam_pieces",
+   "frame": [
+    1390,
+    381,
+    30,
+    126
+   ],
+   "origin": [
+    -1,
+    63
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "cb6a5b34e16c6289171592d7bfbe71159aeca0853d9198a2545713aaf7d21b33",
+   "nativeSize": [
+    8,
+    32
+   ],
+   "nativeOrigin": [
+    0,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 104,
+   "cell": 3,
+   "effectId": "plasma_beam_pieces",
+   "frame": [
+    1305,
+    1018,
+    52,
+    52
+   ],
+   "origin": [
+    24,
+    24
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "21eec56206ed5ff99501f12e04bcfb72ca0ecc67a183e241693f556c007be013",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 121,
+   "cell": 0,
+   "effectId": "smoke_umbral_plume",
+   "frame": [
+    1421,
+    899,
+    20,
+    20
+   ],
+   "origin": [
+    12,
+    12
+   ],
+   "blank": false,
+   "rgbaSha256": "919979269dd91dceb583416016db10d0884d7dbbe2be58305680b4049f98f9e2",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 121,
+   "cell": 1,
+   "effectId": "smoke_umbral_plume",
+   "frame": [
+    1370,
+    1081,
+    42,
+    40
+   ],
+   "origin": [
+    22,
+    20
+   ],
+   "blank": false,
+   "rgbaSha256": "711805bb3e6547fd4064afbe83433091f3149f0812dc69d81b504d3bb6ddfe30",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 121,
+   "cell": 2,
+   "effectId": "smoke_umbral_plume",
+   "frame": [
+    1480,
+    1012,
+    52,
+    46
+   ],
+   "origin": [
+    26,
+    22
+   ],
+   "blank": false,
+   "rgbaSha256": "c18d6dd224d7018f7e329c726fe7847609ca9b12fa26ffe016b920ecaf318b86",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 121,
+   "cell": 3,
+   "effectId": "smoke_umbral_plume",
+   "frame": [
+    464,
+    989,
+    52,
+    56
+   ],
+   "origin": [
+    24,
+    28
+   ],
+   "blank": false,
+   "rgbaSha256": "c35bfc007f5ec72d129e71735e26587997dc64a67f6ad5e844cf4b7693cc615c",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 121,
+   "cell": 4,
+   "effectId": "smoke_umbral_plume",
+   "frame": [
+    1361,
+    1025,
+    52,
+    52
+   ],
+   "origin": [
+    24,
+    26
+   ],
+   "blank": false,
+   "rgbaSha256": "fb20c342294e4c509d9ae0b09ebf6f1bb1835db42606b59a0ab9ad478cb4f9cf",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 121,
+   "cell": 5,
+   "effectId": "smoke_umbral_plume",
+   "frame": [
+    797,
+    908,
+    50,
+    58
+   ],
+   "origin": [
+    24,
+    30
+   ],
+   "blank": false,
+   "rgbaSha256": "3f7ab0b59d51a9962eb857de44832756169c148ea2d62c7277ab85b70f86e8ae",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 121,
+   "cell": 6,
+   "effectId": "smoke_umbral_plume",
+   "frame": [
+    396,
+    1029,
+    56,
+    52
+   ],
+   "origin": [
+    30,
+    30
+   ],
+   "blank": false,
+   "rgbaSha256": "33165777d90d21ea0466add6a5489133bb691f8ac3661d0a8c9250d35f88d731",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 121,
+   "cell": 7,
+   "effectId": "smoke_umbral_plume",
+   "frame": [
+    643,
+    1024,
+    44,
+    42
+   ],
+   "origin": [
+    24,
+    22
+   ],
+   "blank": false,
+   "rgbaSha256": "86a0882fb77ae75d8d0c778660bf130c7c51ed2eb20863706437b5c26bdcc8b3",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 121,
+   "cell": 8,
+   "effectId": "smoke_umbral_plume",
+   "frame": [
+    537,
+    980,
+    54,
+    56
+   ],
+   "origin": [
+    30,
+    36
+   ],
+   "blank": false,
+   "rgbaSha256": "82ce3e596a12566995ae4fceefffab63d6c0730db866fd0026c2ed4dae1909df",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 121,
+   "cell": 9,
+   "effectId": "smoke_umbral_plume",
+   "frame": [
+    75,
+    1043,
+    72,
+    70
+   ],
+   "origin": [
+    32,
+    44
+   ],
+   "blank": false,
+   "rgbaSha256": "c9b8a9a613f73a7c05e9a774628052c1883a44b1ab49ff6ca1711506a4d2e4e5",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "pixelsPerNativePixel": 4,
+   "remake": "web-atlas-292-r1"
+  },
+  {
+   "bankId": 132,
+   "cell": 0,
+   "effectId": "lion_head_fireball",
+   "frame": [
+    637,
+    543,
+    149,
+    78
+   ],
+   "origin": [
+    27,
+    30
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "4eacc2a801a934eca1e058957114908c93f93bda9fc26f4c442a3f092be25531",
+   "nativeSize": [
+    40,
+    24
+   ],
+   "nativeOrigin": [
+    7,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 132,
+   "cell": 1,
+   "effectId": "lion_head_fireball",
+   "frame": [
+    814,
+    462,
+    156,
+    80
+   ],
+   "origin": [
+    27,
+    32
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "c9faa5249f4c60e079a5445f18f8165bfe00a36dd4db3461ae5f386c9e893b34",
+   "nativeSize": [
+    40,
+    24
+   ],
+   "nativeOrigin": [
+    7,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 132,
+   "cell": 2,
+   "effectId": "lion_head_fireball",
+   "frame": [
+    1009,
+    894,
+    56,
+    56
+   ],
+   "origin": [
+    28,
+    28
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "fdfbb68d5e40ae31770009c5f468dd626513f0a260cc680f6d10b5395a70d351",
+   "nativeSize": [
+    16,
+    16
+   ],
+   "nativeOrigin": [
+    8,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 134,
+   "cell": 0,
+   "effectId": "brass_cannon_shell",
+   "frame": [
+    858,
+    750,
+    85,
+    47
+   ],
+   "origin": [
+    25,
+    21
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "465538ad846c0c01ea2622c82395ceb9f37b6af318ae8b244360d3b3b0d7a886",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 134,
+   "cell": 1,
+   "effectId": "brass_cannon_shell",
+   "frame": [
+    1951,
+    90,
+    93,
+    47
+   ],
+   "origin": [
+    25,
+    21
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "ce4d0f3c7328752cd343ae2498e7ba109d18e98563f401597c37c66ba1b2c085",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 134,
+   "cell": 2,
+   "effectId": "brass_cannon_shell",
+   "frame": [
+    971,
+    583,
+    102,
+    47
+   ],
+   "origin": [
+    25,
+    21
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "c294bae706d86d743b8799954ac4df932fb2042ae3fc90ac1dbcefdc0ed44079",
+   "nativeSize": [
+    32,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 134,
+   "cell": 3,
+   "effectId": "brass_cannon_shell",
+   "frame": [
+    761,
+    719,
+    93,
+    47
+   ],
+   "origin": [
+    25,
+    21
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "6d2733c95f9c3f8ab00f116a601363065dba7ff24d5d6d2c3b3c5016345723c2",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 134,
+   "cell": 4,
+   "effectId": "brass_cannon_shell",
+   "frame": [
+    761,
+    668,
+    119,
+    47
+   ],
+   "origin": [
+    25,
+    21
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "03cb84f8fe752be3204a387256d828831c2ca48ffffbe3bf72e2c7ab2bf5d1c0",
+   "nativeSize": [
+    32,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 134,
+   "cell": 5,
+   "effectId": "brass_cannon_shell",
+   "frame": [
+    414,
+    693,
+    104,
+    47
+   ],
+   "origin": [
+    25,
+    21
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "9d1bf109c9ec1c8be62dedbdaa0f542333ee35beb180afc7074f881ea5bf97ff",
+   "nativeSize": [
+    32,
+    16
+   ],
+   "nativeOrigin": [
+    7,
+    7
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 134,
+   "cell": 6,
+   "effectId": "brass_cannon_shell",
+   "frame": [
+    1796,
+    797,
+    61,
+    55
+   ],
+   "origin": [
+    27,
+    23
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "97d062df064dbeaa275d2f2bb07a5d9ee15a4d7437840a983401bdfc710cca73",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    11,
+    11
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 134,
+   "cell": 7,
+   "effectId": "brass_cannon_shell",
+   "frame": [
+    1208,
+    632,
+    91,
+    93
+   ],
+   "origin": [
+    39,
+    44
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "ee50b03cce80c9e197568ae6be40bcbe6b915ba5db33e02a9e2b14b51b916f96",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    11,
+    11
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 134,
+   "cell": 8,
+   "effectId": "brass_cannon_shell",
+   "frame": [
+    1169,
+    729,
+    78,
+    79
+   ],
+   "origin": [
+    32,
+    38
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "3c37ad77114b596cf493ff7f8f7fce20569909a2d086f3bcefa351cd3af829d4",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    11,
+    11
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 134,
+   "cell": 9,
+   "effectId": "brass_cannon_shell",
+   "frame": [
+    1361,
+    1018,
+    1,
+    1
+   ],
+   "origin": [
+    0,
+    0
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": true,
+   "rgbaSha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+   "nativeSize": [
+    8,
+    8
+   ],
+   "nativeOrigin": [
+    0,
+    0
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 138,
+   "cell": 0,
+   "effectId": "beam_flare_lance",
+   "frame": [
+    1994,
+    586,
+    32,
+    64
+   ],
+   "origin": [
+    0,
+    32
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "da28eb69540b4808e42f7660f955f9e050c0b291c574cceeed649e362fd77b8f",
+   "nativeSize": [
+    8,
+    16
+   ],
+   "nativeOrigin": [
+    0,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 138,
+   "cell": 1,
+   "effectId": "beam_flare_lance",
+   "frame": [
+    1988,
+    654,
+    32,
+    64
+   ],
+   "origin": [
+    0,
+    32
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "83fc8c2712db676ff5b4a56aba2fbbc19b90e4d416b64a706ad93dc9cf7993fb",
+   "nativeSize": [
+    8,
+    16
+   ],
+   "nativeOrigin": [
+    0,
+    8
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 138,
+   "cell": 2,
+   "effectId": "beam_flare_lance",
+   "frame": [
+    472,
+    744,
+    40,
+    86
+   ],
+   "origin": [
+    14,
+    43
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "dc0ecdd000467ae34afb37b3d19064dec46327f87e641a39f57305a07603e11e",
+   "nativeSize": [
+    8,
+    32
+   ],
+   "nativeOrigin": [
+    0,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 138,
+   "cell": 3,
+   "effectId": "beam_flare_lance",
+   "frame": [
+    464,
+    912,
+    69,
+    73
+   ],
+   "origin": [
+    34,
+    35
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "f2f6c10dbcbb90aa9170c74107962e2ea02dd3d49c992ed08e1f978cb99fd2f5",
+   "nativeSize": [
+    16,
+    32
+   ],
+   "nativeOrigin": [
+    8,
+    16
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 139,
+   "cell": 0,
+   "effectId": "char_crescemon_moonblade",
+   "frame": [
+    705,
+    369,
+    105,
+    170
+   ],
+   "origin": [
+    3,
+    157
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "f972607fd28e31ad4bf522e3f5f0895025d459a613ba742b5eb7850618d4910b",
+   "nativeSize": [
+    32,
+    48
+   ],
+   "nativeOrigin": [
+    7,
+    46
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 139,
+   "cell": 1,
+   "effectId": "char_crescemon_moonblade",
+   "frame": [
+    527,
+    369,
+    174,
+    139
+   ],
+   "origin": [
+    127,
+    126
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "186873d0b07c49d23150b2f86be98f98bcb32953c7da0965ad6408d2f17d5860",
+   "nativeSize": [
+    48,
+    48
+   ],
+   "nativeOrigin": [
+    31,
+    46
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 139,
+   "cell": 2,
+   "effectId": "char_crescemon_moonblade",
+   "frame": [
+    230,
+    430,
+    142,
+    172
+   ],
+   "origin": [
+    44,
+    159
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "87259ceb3163ffe4d738e418cec6b96a4f0648e6f152f4e3ed9c7d123de2cafb",
+   "nativeSize": [
+    32,
+    40
+   ],
+   "nativeOrigin": [
+    15,
+    38
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 148,
+   "cell": 0,
+   "effectId": "char_brakedramon_body",
+   "frame": [
+    1731,
+    142,
+    215,
+    215
+   ],
+   "origin": [
+    93,
+    173
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "751251418166060cf05959fdd0a022be807feab8abe3feeb1ddbb866d3e1d367",
+   "nativeSize": [
+    64,
+    56
+   ],
+   "nativeOrigin": [
+    38,
+    54
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 148,
+   "cell": 1,
+   "effectId": "char_brakedramon_body",
+   "frame": [
+    300,
+    2,
+    291,
+    230
+   ],
+   "origin": [
+    179,
+    195
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "025979efab000fb91aedc71f966b6789e164c127746c608b76b3f3b5530edaa5",
+   "nativeSize": [
+    64,
+    48
+   ],
+   "nativeOrigin": [
+    38,
+    46
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 148,
+   "cell": 2,
+   "effectId": "char_brakedramon_body",
+   "frame": [
+    1424,
+    208,
+    215,
+    215
+   ],
+   "origin": [
+    93,
+    173
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "751251418166060cf05959fdd0a022be807feab8abe3feeb1ddbb866d3e1d367",
+   "nativeSize": [
+    64,
+    56
+   ],
+   "nativeOrigin": [
+    38,
+    54
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 148,
+   "cell": 3,
+   "effectId": "char_brakedramon_body",
+   "frame": [
+    2,
+    195,
+    285,
+    215
+   ],
+   "origin": [
+    163,
+    173
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "47f26cbe8bea75f816fea105122da2182d23f0f85527cb0f8844df3c1f11d648",
+   "nativeSize": [
+    64,
+    56
+   ],
+   "nativeOrigin": [
+    38,
+    54
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 148,
+   "cell": 4,
+   "effectId": "char_brakedramon_body",
+   "frame": [
+    1171,
+    166,
+    249,
+    160
+   ],
+   "origin": [
+    158,
+    133
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "f0856f3ca6731437d778db7b178fa4972cdaf8436cb11ac6eea6e292120993c4",
+   "nativeSize": [
+    64,
+    56
+   ],
+   "nativeOrigin": [
+    38,
+    54
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 148,
+   "cell": 5,
+   "effectId": "char_brakedramon_body",
+   "frame": [
+    2,
+    2,
+    294,
+    189
+   ],
+   "origin": [
+    163,
+    141
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "cc6da8eea27a575b585bc45f4b36fe3dd6768483e9d0291dd3a635cc8d24b267",
+   "nativeSize": [
+    64,
+    56
+   ],
+   "nativeOrigin": [
+    38,
+    54
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 148,
+   "cell": 6,
+   "effectId": "char_brakedramon_body",
+   "frame": [
+    884,
+    2,
+    283,
+    174
+   ],
+   "origin": [
+    181,
+    148
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "ba7ad510a4f0d9b0ca7c948a7fb6f12ca764422d9a5e89ae085c9e6a7a1ee212",
+   "nativeSize": [
+    64,
+    48
+   ],
+   "nativeOrigin": [
+    38,
+    46
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 148,
+   "cell": 7,
+   "effectId": "char_brakedramon_body",
+   "frame": [
+    1171,
+    2,
+    283,
+    160
+   ],
+   "origin": [
+    251,
+    134
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "95af031b0dd0d283f9a9156633b595e73f46b42e15127c0ceaa34453611588ed",
+   "nativeSize": [
+    64,
+    56
+   ],
+   "nativeOrigin": [
+    54,
+    54
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 149,
+   "cell": 0,
+   "effectId": "fire_billow_blast",
+   "frame": [
+    2,
+    513,
+    146,
+    93
+   ],
+   "origin": [
+    81,
+    40
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "e011dc1ade8e97ae2a892109121daef20fda35245f6a9980621f3096897840b6",
+   "nativeSize": [
+    48,
+    48
+   ],
+   "nativeOrigin": [
+    31,
+    24
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 149,
+   "cell": 1,
+   "effectId": "fire_billow_blast",
+   "frame": [
+    1038,
+    330,
+    195,
+    147
+   ],
+   "origin": [
+    104,
+    79
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "89b12e9d53bf55d5c5425e7bff381a0c0a4e7b45d6bfdfded63ebf9fe33c236a",
+   "nativeSize": [
+    56,
+    56
+   ],
+   "nativeOrigin": [
+    33,
+    24
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 149,
+   "cell": 2,
+   "effectId": "fire_billow_blast",
+   "frame": [
+    595,
+    187,
+    236,
+    178
+   ],
+   "origin": [
+    124,
+    97
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "a029e34fd0ec86ecf10efeb5e5858e69278f76133791a8003761ad862a930811",
+   "nativeSize": [
+    64,
+    64
+   ],
+   "nativeOrigin": [
+    31,
+    32
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 149,
+   "cell": 3,
+   "effectId": "fire_billow_blast",
+   "frame": [
+    1458,
+    2,
+    269,
+    202
+   ],
+   "origin": [
+    139,
+    111
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "2cc544a499e36b306cabac4356d4d63e88c42106b8eadd30bb600cd67b111706",
+   "nativeSize": [
+    72,
+    64
+   ],
+   "nativeOrigin": [
+    39,
+    32
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 149,
+   "cell": 4,
+   "effectId": "fire_billow_blast",
+   "frame": [
+    595,
+    2,
+    285,
+    181
+   ],
+   "origin": [
+    146,
+    84
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "32d13efa66a5892199859649bc27173906455c48637ff889df49ad889661d9eb",
+   "nativeSize": [
+    72,
+    56
+   ],
+   "nativeOrigin": [
+    39,
+    24
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 149,
+   "cell": 5,
+   "effectId": "fire_billow_blast",
+   "frame": [
+    835,
+    337,
+    178,
+    121
+   ],
+   "origin": [
+    43,
+    80
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "8df0503f77265a9ea9b4f883037af248eabcb190b928161c5f16507e4b5e57c5",
+   "nativeSize": [
+    56,
+    48
+   ],
+   "nativeOrigin": [
+    29,
+    25
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 149,
+   "cell": 6,
+   "effectId": "fire_billow_blast",
+   "frame": [
+    1387,
+    654,
+    86,
+    91
+   ],
+   "origin": [
+    30,
+    34
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "83adc05d0abecac0d97e4fcbb596db5ae5f093ae4e4bfadaf19591fd462d5a55",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    15,
+    14
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 149,
+   "cell": 7,
+   "effectId": "fire_billow_blast",
+   "frame": [
+    2,
+    742,
+    119,
+    130
+   ],
+   "origin": [
+    44,
+    54
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "7f6634ca512f0768bb6f2f376bc21503862c36aaa8f1878afce3215218e48a2b",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    13,
+    14
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 149,
+   "cell": 8,
+   "effectId": "fire_billow_blast",
+   "frame": [
+    376,
+    430,
+    144,
+    170
+   ],
+   "origin": [
+    52,
+    75
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "87645960836b63915690453764a78337697e449a602fabc59ea3b2e61412038e",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    12,
+    13
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 149,
+   "cell": 9,
+   "effectId": "fire_billow_blast",
+   "frame": [
+    1237,
+    381,
+    149,
+    180
+   ],
+   "origin": [
+    50,
+    78
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "1cb72d98e441db37e0a86bda9fb8102f8074f13ac61fd4451d72a126be52ba01",
+   "nativeSize": [
+    32,
+    32
+   ],
+   "nativeOrigin": [
+    12,
+    14
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 149,
+   "cell": 10,
+   "effectId": "fire_billow_blast",
+   "frame": [
+    884,
+    695,
+    93,
+    51
+   ],
+   "origin": [
+    34,
+    14
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "d6623b10bd95ef6108bb8ef2512c1d2782f28ee4a77565a9f8a3db7fd160cd0e",
+   "nativeSize": [
+    24,
+    24
+   ],
+   "nativeOrigin": [
+    12,
+    14
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  },
+  {
+   "bankId": 149,
+   "cell": 11,
+   "effectId": "fire_billow_blast",
+   "frame": [
+    879,
+    801,
+    44,
+    23
+   ],
+   "origin": [
+    1,
+    -9
+   ],
+   "pixelsPerNativePixel": 4,
+   "blank": false,
+   "rgbaSha256": "cb6e37622be49fe9adfe82ceae38a5a9f9ab12a0c1c7382ea27faaccc7a3c338",
+   "nativeSize": [
+    24,
+    16
+   ],
+   "nativeOrigin": [
+    12,
+    6
+   ],
+   "remake": "original-shared-review-210-seamfix-r1"
+  }
+ ],
+ "localizedText": {
+  "schema": "LOCALIZED_TEXT_CELLS_V1",
+  "bankId": 1,
+  "sequences": [
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   46
+  ],
+  "cells": [
+   44,
+   45,
+   46,
+   47,
+   48,
+   49,
+   50,
+   51,
+   52,
+   53,
+   54,
+   142
+  ],
+  "selection": {
+   "source": "GAME_SETTING_LOCALE",
+   "rules": [
+    {
+     "prefix": "zh",
+     "set": "zh-Hant"
+    },
+    {
+     "prefix": "ja",
+     "set": "ja"
+    }
+   ],
+   "fallback": "en"
+  },
+  "timing": "NATIVE_SEQUENCES_UNCHANGED",
+  "font": {
+   "family": "Noto Sans TC",
+   "file": "NotoSansTC-VF.ttf (Windows Fonts)",
+   "sha256": "c6481c5d93420aeac11087367dae56ae7492eb1989ce42f4ca5d5aa5e2db3116",
+   "version": "Version 2.04;241114210131;non-release",
+   "license": "SIL Open Font License 1.1 (embedded name table ID 13/14)",
+   "weight": 900
+  },
+  "render": {
+   "rasterPxPerNativePx": 4,
+   "supersample": 4,
+   "outlineNative": 1.0,
+   "shadowNative": [
+    0.0,
+    1.0
+   ],
+   "maxInkHeightNative": 12.0
+  },
+  "nativeBindingSha256": "7a340cd0fdf0899ec892b9a54599ef45c4be5b759e800f5edb1dcea4face78a5",
+  "sets": {
+   "zh-Hant": {
+    "image": {
+     "src": "assets/production/vfx/original-shared-review-v1/text-zh-Hant.png",
+     "width": 256,
+     "height": 1024,
+     "sha256": "6ef0d9aaf695ef300ae2f11e2b984aa91866aad35e07303b518737259da9f884",
+     "scaleMode": "nearest"
+    },
+    "fontSizeNative": {
+     "all": 12.4
+    },
+    "cells": [
+     {
+      "bankId": 1,
+      "cell": 44,
+      "sequence": 10,
+      "text": "HP回復",
+      "frame": [
+       2,
+       128,
+       174,
+       60
+      ],
+      "origin": [
+       81,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "8b6c08c7a06fd1a092bcf992d304d9d0af1b868adbcfc7f0735d99b75af8eb88",
+      "nativeSize": [
+       56,
+       16
+      ],
+      "nativeOrigin": [
+       27,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -20.25,
+       -14.25,
+       23.25,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 45,
+      "sequence": 11,
+      "text": "狀態回復",
+      "frame": [
+       2,
+       190,
+       206,
+       60
+      ],
+      "origin": [
+       105,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "bb99757d048f2bf9a63b9f89d4b09d1067ec0ce1986ccaa019f95bd0c0321d1b",
+      "nativeSize": [
+       88,
+       16
+      ],
+      "nativeOrigin": [
+       44,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -26.25,
+       -14.25,
+       25.25,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 46,
+      "sequence": 12,
+      "text": "熱耐性UP",
+      "frame": [
+       2,
+       252,
+       226,
+       60
+      ],
+      "origin": [
+       113,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "34b0ab4c1ef4e04dbb975b3c7858902f589fd2a3bd18e795c885dbbeb7827856",
+      "nativeSize": [
+       80,
+       16
+      ],
+      "nativeOrigin": [
+       40,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -28.25,
+       -14.25,
+       28.25,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 47,
+      "sequence": 13,
+      "text": "冷耐性UP",
+      "frame": [
+       2,
+       2,
+       225,
+       61
+      ],
+      "origin": [
+       108,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "95ce7eea5a7b7c81bf51e75c9b4d152e1d0bb1411498d0eb1b9ba29e222f00a3",
+      "nativeSize": [
+       88,
+       16
+      ],
+      "nativeOrigin": [
+       43,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -27.0,
+       -14.25,
+       29.25,
+       1.0
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 48,
+      "sequence": 14,
+      "text": "雷耐性UP",
+      "frame": [
+       2,
+       314,
+       224,
+       60
+      ],
+      "origin": [
+       94,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "979019afbfb6db0282b4e8e6d49adcafd0faf97501498ff0f1f0bf230afdd180",
+      "nativeSize": [
+       104,
+       16
+      ],
+      "nativeOrigin": [
+       48,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -23.5,
+       -14.25,
+       32.5,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 49,
+      "sequence": 15,
+      "text": "暗耐性UP",
+      "frame": [
+       2,
+       376,
+       224,
+       60
+      ],
+      "origin": [
+       112,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "135ce73bdf6bbbdd6952afb8b5ce467cad97d25b7218f9dd72c895da19317f06",
+      "nativeSize": [
+       80,
+       16
+      ],
+      "nativeOrigin": [
+       40,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -28.0,
+       -14.25,
+       28.0,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 50,
+      "sequence": 16,
+      "text": "光耐性UP",
+      "frame": [
+       2,
+       438,
+       226,
+       60
+      ],
+      "origin": [
+       113,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "aa0912a10ad3651323de11d1883a174d20608dd5530877f505a3d51374d54d72",
+      "nativeSize": [
+       88,
+       16
+      ],
+      "nativeOrigin": [
+       44,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -28.25,
+       -14.25,
+       28.25,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 51,
+      "sequence": 17,
+      "text": "攻擊UP",
+      "frame": [
+       2,
+       500,
+       176,
+       60
+      ],
+      "origin": [
+       86,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "d91b9b1e19f25d5959377b81a715803886adaf945083c239aedc19dbd2fd833e",
+      "nativeSize": [
+       80,
+       16
+      ],
+      "nativeOrigin": [
+       40,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -21.5,
+       -14.25,
+       22.5,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 52,
+      "sequence": 18,
+      "text": "防禦UP",
+      "frame": [
+       2,
+       562,
+       174,
+       60
+      ],
+      "origin": [
+       83,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "5394ec5cd7a7a905136479e1e5b985447d0336e8fb8fa5b8ebf7a793e64daaf0",
+      "nativeSize": [
+       72,
+       16
+      ],
+      "nativeOrigin": [
+       35,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -20.75,
+       -14.25,
+       22.75,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 53,
+      "sequence": 19,
+      "text": "速度UP",
+      "frame": [
+       2,
+       624,
+       176,
+       60
+      ],
+      "origin": [
+       86,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "826d768846678e16803cbdabbd31350a83b73ed1e2ac88fe0a9bd936e7de6cde",
+      "nativeSize": [
+       80,
+       16
+      ],
+      "nativeOrigin": [
+       40,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -21.5,
+       -14.25,
+       22.5,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 54,
+      "sequence": 20,
+      "text": "命中UP",
+      "frame": [
+       2,
+       65,
+       177,
+       61
+      ],
+      "origin": [
+       88,
+       58
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "50ade5411d98e553b2fec2a69195dd0178a128d808973216fcd7f3739d00ec06",
+      "nativeSize": [
+       88,
+       16
+      ],
+      "nativeOrigin": [
+       44,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -22.0,
+       -14.5,
+       22.25,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 142,
+      "sequence": 46,
+      "text": "暴擊UP",
+      "frame": [
+       2,
+       686,
+       176,
+       60
+      ],
+      "origin": [
+       86,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "8055d9239dc6a227bae328b17e5b224d527a93b25cf4adacadd73703e0b911ab",
+      "nativeSize": [
+       96,
+       16
+      ],
+      "nativeOrigin": [
+       48,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -21.5,
+       -14.25,
+       22.5,
+       0.75
+      ],
+      "sizeGroup": "all"
+     }
+    ]
+   },
+   "ja": {
+    "image": {
+     "src": "assets/production/vfx/original-shared-review-v1/text-ja.png",
+     "width": 1024,
+     "height": 256,
+     "sha256": "b507a807759c972c8164d6c2c05836e09d7bb58142f56b46461f2347dcd09c8f",
+     "scaleMode": "nearest"
+    },
+    "fontSizeNative": {
+     "all": 12.4
+    },
+    "cells": [
+     {
+      "bankId": 1,
+      "cell": 44,
+      "sequence": 10,
+      "text": "HP回復",
+      "frame": [
+       490,
+       2,
+       174,
+       60
+      ],
+      "origin": [
+       81,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "8ded286ee1c7c56597f508cfeeccbd13cf34666749cc41707376e47692f684ea",
+      "nativeSize": [
+       56,
+       16
+      ],
+      "nativeOrigin": [
+       27,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -20.25,
+       -14.25,
+       23.25,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 45,
+      "sequence": 11,
+      "text": "じょうたい回復",
+      "frame": [
+       666,
+       2,
+       307,
+       60
+      ],
+      "origin": [
+       156,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "47259c7ae25be88e58405d63716c498895b5b07378f246a03670fcb347bac97c",
+      "nativeSize": [
+       88,
+       16
+      ],
+      "nativeOrigin": [
+       44,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -39.0,
+       -14.25,
+       37.75,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 46,
+      "sequence": 12,
+      "text": "ねつ耐性UP",
+      "frame": [
+       2,
+       65,
+       274,
+       60
+      ],
+      "origin": [
+       137,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "0d515707c1b09e6adccdc1574f508aabac62f718e27fe76fb63c85ad022cd44a",
+      "nativeSize": [
+       80,
+       16
+      ],
+      "nativeOrigin": [
+       40,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -34.25,
+       -14.25,
+       34.25,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 47,
+      "sequence": 13,
+      "text": "さむさ耐性UP",
+      "frame": [
+       278,
+       65,
+       302,
+       60
+      ],
+      "origin": [
+       147,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "3e36e366b3f36159c311ba7b808062b71d744963cf0e835f75f3a107fae1c1b2",
+      "nativeSize": [
+       88,
+       16
+      ],
+      "nativeOrigin": [
+       43,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -36.75,
+       -14.25,
+       38.75,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 48,
+      "sequence": 14,
+      "text": "かみなり耐性UP",
+      "frame": [
+       582,
+       65,
+       358,
+       60
+      ],
+      "origin": [
+       161,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "e09cb7b1de6dd5d87e7cfe871efc6a45ca62db8d56a21d8ab7f70068355b5ed5",
+      "nativeSize": [
+       104,
+       16
+      ],
+      "nativeOrigin": [
+       48,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -40.25,
+       -14.25,
+       49.25,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 49,
+      "sequence": 15,
+      "text": "やみ耐性UP",
+      "frame": [
+       2,
+       127,
+       272,
+       60
+      ],
+      "origin": [
+       136,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "f7efd0964e5d50c797c1befb736a9fc4966cd0ae12c878b5094dec61853fdf62",
+      "nativeSize": [
+       80,
+       16
+      ],
+      "nativeOrigin": [
+       40,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -34.0,
+       -14.25,
+       34.0,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 50,
+      "sequence": 16,
+      "text": "ひかり耐性UP",
+      "frame": [
+       276,
+       127,
+       308,
+       60
+      ],
+      "origin": [
+       154,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "640f866bcde8d950b68dadb66c996532a6f6fa83cd71b829c57c8cc781b284e7",
+      "nativeSize": [
+       88,
+       16
+      ],
+      "nativeOrigin": [
+       44,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -38.5,
+       -14.25,
+       38.5,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 51,
+      "sequence": 17,
+      "text": "こうげきUP",
+      "frame": [
+       2,
+       2,
+       240,
+       61
+      ],
+      "origin": [
+       118,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "5977e36374d66c5d166539830e6f06db1477b1a94feec1d99105919ea3794398",
+      "nativeSize": [
+       80,
+       16
+      ],
+      "nativeOrigin": [
+       40,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -29.5,
+       -14.25,
+       30.5,
+       1.0
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 52,
+      "sequence": 18,
+      "text": "ぼうぎょUP",
+      "frame": [
+       244,
+       2,
+       244,
+       61
+      ],
+      "origin": [
+       118,
+       58
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "ac4569795ca33d833083e940bf80441bc8a2604ec90cd76ff4953572239b0847",
+      "nativeSize": [
+       72,
+       16
+      ],
+      "nativeOrigin": [
+       35,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -29.5,
+       -14.5,
+       31.5,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 53,
+      "sequence": 19,
+      "text": "すばやさUP",
+      "frame": [
+       586,
+       127,
+       258,
+       60
+      ],
+      "origin": [
+       127,
+       57
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "ff309c939d9e03d11219a41cbcd8f0852f223f47f1d2e8520f9cc1a1b2a3149d",
+      "nativeSize": [
+       80,
+       16
+      ],
+      "nativeOrigin": [
+       40,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -31.75,
+       -14.25,
+       32.75,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 54,
+      "sequence": 20,
+      "text": "めいちゅうUP",
+      "frame": [
+       338,
+       189,
+       286,
+       58
+      ],
+      "origin": [
+       143,
+       55
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "ab4e02910f15cb1024f8406fb04afd77708b6cf8e5a8eba3febf0d9682446f3c",
+      "nativeSize": [
+       88,
+       16
+      ],
+      "nativeOrigin": [
+       44,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -35.75,
+       -13.75,
+       35.75,
+       0.75
+      ],
+      "sizeGroup": "all"
+     },
+     {
+      "bankId": 1,
+      "cell": 142,
+      "sequence": 46,
+      "text": "クリティカルUP",
+      "frame": [
+       2,
+       189,
+       334,
+       59
+      ],
+      "origin": [
+       165,
+       56
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "b52049749019ea164a64cba76705a926b55d67aa393512606c46a324890f7a3c",
+      "nativeSize": [
+       96,
+       16
+      ],
+      "nativeOrigin": [
+       48,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -41.25,
+       -14.0,
+       42.25,
+       0.75
+      ],
+      "sizeGroup": "all"
+     }
+    ]
+   },
+   "en": {
+    "image": {
+     "src": "assets/production/vfx/original-shared-review-v1/text-en.png",
+     "width": 512,
+     "height": 512,
+     "sha256": "c73848c392baa1d61a920fb7b2db4ce01056550c8829416e6c01e7280a3da436",
+     "scaleMode": "nearest"
+    },
+    "fontSizeNative": {
+     "resist": 11.4,
+     "short": 12.4
+    },
+    "cells": [
+     {
+      "bankId": 1,
+      "cell": 44,
+      "sequence": 10,
+      "text": "HEAL",
+      "frame": [
+       2,
+       161,
+       134,
+       50
+      ],
+      "origin": [
+       61,
+       51
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "88f9d5d0caba07a00b5f3b8bfa05563c494e7c05c72518d0b68f921785324c4f",
+      "nativeSize": [
+       56,
+       16
+      ],
+      "nativeOrigin": [
+       27,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -15.25,
+       -12.75,
+       18.25,
+       -0.25
+      ],
+      "sizeGroup": "short"
+     },
+     {
+      "bankId": 1,
+      "cell": 45,
+      "sequence": 11,
+      "text": "CURE",
+      "frame": [
+       2,
+       2,
+       140,
+       51
+      ],
+      "origin": [
+       72,
+       51
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "714bae85e1acbbe95098906af3495dc697ed712074d0472652adc2d62a11c8cf",
+      "nativeSize": [
+       88,
+       16
+      ],
+      "nativeOrigin": [
+       44,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -18.0,
+       -12.75,
+       17.0,
+       0.0
+      ],
+      "sizeGroup": "short"
+     },
+     {
+      "bankId": 1,
+      "cell": 46,
+      "sequence": 12,
+      "text": "HEAT RES UP",
+      "frame": [
+       138,
+       161,
+       304,
+       48
+      ],
+      "origin": [
+       152,
+       50
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "4c21e0530a480ed024a2aef91d141c6c8d72e516808dfd63b2e1b856085e24cb",
+      "nativeSize": [
+       80,
+       16
+      ],
+      "nativeOrigin": [
+       40,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -38.0,
+       -12.5,
+       38.0,
+       -0.5
+      ],
+      "sizeGroup": "resist"
+     },
+     {
+      "bankId": 1,
+      "cell": 47,
+      "sequence": 13,
+      "text": "COLD RES UP",
+      "frame": [
+       2,
+       213,
+       308,
+       48
+      ],
+      "origin": [
+       150,
+       50
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "69e58f6e4791ff1c3a6488b490162c24ff6ed2a21af0ca1bcf817ded18629f1a",
+      "nativeSize": [
+       88,
+       16
+      ],
+      "nativeOrigin": [
+       43,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -37.5,
+       -12.5,
+       39.5,
+       -0.5
+      ],
+      "sizeGroup": "resist"
+     },
+     {
+      "bankId": 1,
+      "cell": 48,
+      "sequence": 14,
+      "text": "THUNDER RES UP",
+      "frame": [
+       2,
+       263,
+       412,
+       48
+      ],
+      "origin": [
+       188,
+       50
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "bdcc1d403f6da09d3df50f4946b02a9c57a6dfad56ae800b8810fb35939735e6",
+      "nativeSize": [
+       104,
+       16
+      ],
+      "nativeOrigin": [
+       48,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -47.0,
+       -12.5,
+       56.0,
+       -0.5
+      ],
+      "sizeGroup": "resist"
+     },
+     {
+      "bankId": 1,
+      "cell": 49,
+      "sequence": 15,
+      "text": "DARK RES UP",
+      "frame": [
+       2,
+       313,
+       308,
+       48
+      ],
+      "origin": [
+       154,
+       50
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "cc2c1e0b6c2db84230a124cb09614c48a375a5c5c4b04f192f7fb407a8916723",
+      "nativeSize": [
+       80,
+       16
+      ],
+      "nativeOrigin": [
+       40,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -38.5,
+       -12.5,
+       38.5,
+       -0.5
+      ],
+      "sizeGroup": "resist"
+     },
+     {
+      "bankId": 1,
+      "cell": 50,
+      "sequence": 16,
+      "text": "LIGHT RES UP",
+      "frame": [
+       2,
+       363,
+       322,
+       48
+      ],
+      "origin": [
+       161,
+       50
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "2614f09f4aafda58c6aa0ec2b6e75047e4de2f289b3279976d7323a1803da6ec",
+      "nativeSize": [
+       88,
+       16
+      ],
+      "nativeOrigin": [
+       44,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -40.25,
+       -12.5,
+       40.25,
+       -0.5
+      ],
+      "sizeGroup": "resist"
+     },
+     {
+      "bankId": 1,
+      "cell": 51,
+      "sequence": 17,
+      "text": "ATK UP",
+      "frame": [
+       144,
+       2,
+       190,
+       51
+      ],
+      "origin": [
+       93,
+       51
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "e480a527a73cdef79d538eb5ac98d90beccd6d79c4228af03d9f326656f0efea",
+      "nativeSize": [
+       80,
+       16
+      ],
+      "nativeOrigin": [
+       40,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -23.25,
+       -12.75,
+       24.25,
+       0.0
+      ],
+      "sizeGroup": "short"
+     },
+     {
+      "bankId": 1,
+      "cell": 52,
+      "sequence": 18,
+      "text": "DEF UP",
+      "frame": [
+       2,
+       55,
+       182,
+       51
+      ],
+      "origin": [
+       87,
+       51
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "2d9b80affef3059b0d3650ce019788655b1fd26eedf652fb3d3e25677fe58a20",
+      "nativeSize": [
+       72,
+       16
+      ],
+      "nativeOrigin": [
+       35,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -21.75,
+       -12.75,
+       23.75,
+       0.0
+      ],
+      "sizeGroup": "short"
+     },
+     {
+      "bankId": 1,
+      "cell": 53,
+      "sequence": 19,
+      "text": "SPD UP",
+      "frame": [
+       186,
+       55,
+       190,
+       51
+      ],
+      "origin": [
+       93,
+       51
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "9a7d2a35732df44abf433371148957114b2a931056365a0aef4a83ed53470bfe",
+      "nativeSize": [
+       80,
+       16
+      ],
+      "nativeOrigin": [
+       40,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -23.25,
+       -12.75,
+       24.25,
+       0.0
+      ],
+      "sizeGroup": "short"
+     },
+     {
+      "bankId": 1,
+      "cell": 54,
+      "sequence": 20,
+      "text": "ACC UP",
+      "frame": [
+       2,
+       108,
+       189,
+       51
+      ],
+      "origin": [
+       94,
+       51
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "adba8d0c8484c338d290b1b8a613019ea1134719a4803ae1a986ed1153c1854c",
+      "nativeSize": [
+       88,
+       16
+      ],
+      "nativeOrigin": [
+       44,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -23.5,
+       -12.75,
+       23.75,
+       0.0
+      ],
+      "sizeGroup": "short"
+     },
+     {
+      "bankId": 1,
+      "cell": 142,
+      "sequence": 46,
+      "text": "CRIT UP",
+      "frame": [
+       193,
+       108,
+       204,
+       51
+      ],
+      "origin": [
+       100,
+       51
+      ],
+      "pixelsPerNativePixel": 4,
+      "blank": false,
+      "rgbaSha256": "fe00394a52ba744fd4af50c5176cfbd5f5e289966368855fa14ea51322cb2db7",
+      "nativeSize": [
+       96,
+       16
+      ],
+      "nativeOrigin": [
+       48,
+       15
+      ],
+      "extentNativeRelAnchor": [
+       -25.0,
+       -12.75,
+       26.0,
+       0.0
+      ],
+      "sizeGroup": "short"
+     }
+    ]
+   }
+  }
+ },
+ "selfCheck": {
+  "cells": 292,
+  "drawn": 286,
+  "newCells": 82,
+  "banks": 39,
+  "effects": 52,
+  "sequences": 109,
+  "atlas": "2048x2048",
+  "fill": 0.5024,
+  "pngBytes": 1869730,
+  "webpBytes": 1072574,
+  "clipped": [],
+  "pivotOutside": [],
+  "maxRatio": 1.781,
+  "bleedGapPixels": 0
+ },
+ "provenance": {
+  "ownerDirection": "docs/coordination/OWNER_DIRECTION.md#VFX_FIVE_LAYER_20261101",
+  "pipeline": "scripts/vfx/build_shared_vfx_web_atlas.py",
+  "earlierCells": "assets/production/vfx/original-shared-review-210-seamfix-r1 (210 cells copied pixel for pixel; visible-pixel hashes verified)",
+  "newCells": "numpy shape fields + banded five-tone palette + 2 px step finish; no image input, no AI image model",
+  "originalPixelsUsed": false,
+  "numericInputs": [
+   "assets/production/public-runtime/battle-effects.render.v1.json (cell size, anchor, blank state)",
+   "src/data/championship/battleEffectProfiles.json (sequence cells and ticks)"
+  ]
+ }
+}

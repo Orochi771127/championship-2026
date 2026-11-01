@@ -25,6 +25,49 @@ export const ORIGINAL_SHARED_LOCAL_MANIFEST = 'assets/production/vfx/original-sh
 export const ORIGINAL_SHARED_PUBLIC_SELECTION_ID = 'ACCEPTED_ORIGINAL_SHARED_VFX_20261012';
 export function originalSharedVfxPublicSelected(href){return Boolean(publicRuntimeAsset('art:public:shared-vfx:v1'))&&isApprovedOriginalPublicLocation(href);}
 export function originalSharedVfxManifestFor(){return publicRuntimeAsset('art:public:shared-vfx:v1')?.src??null;}
+// Web atlas round (VFX_FIVE_LAYER_20261101): the 210 cells plus 82 new original
+// cells (eleven more banks; beam01 and blacksmoke04 redrawn) in ONE 2048x2048
+// texture from scripts/vfx/build_shared_vfx_web_atlas.py. 2 px clear margins
+// and alpha colour bleeding around every cell; the same pixels ship as lossless
+// effects.webp and optimised effects.png, and loaders try the webp first.
+// LOOPBACK review only (humanApproved false): the public playtest keeps the
+// 210-cell selection until the Owner approves this revision. ?vfxShared=210
+// keeps the 210 cells on loopback too.
+export const ORIGINAL_SHARED_WEB_ATLAS_ID = 'art:vfx:original-shared:review:292-r1';
+export const ORIGINAL_SHARED_WEB_ATLAS_RENDER = 'assets/production/vfx/original-shared-review-292-r1/render.v1.json';
+const WEB_ATLAS_PNG = ORIGINAL_SHARED_WEB_ATLAS_RENDER.replace('render.v1.json', 'effects.png');
+export function originalSharedWebAtlasAllowed(href = globalThis.location?.href) {
+  try {
+    const url = new URL(href);
+    return ['http:', 'https:'].includes(url.protocol) && loopback(url.hostname) && url.searchParams.get('vfxShared') !== '210';
+  } catch { return false; }
+}
+/** Files to try for an atlas, best first: the web atlas offers its lossless webp before the png. */
+export function sharedVfxAtlasSources(src) {
+  const path = String(src ?? '');
+  return path.endsWith(WEB_ATLAS_PNG) ? [path.replace(/\.png$/, '.webp'), path] : [path];
+}
+/** PIXI texture of an atlas, webp first: {texture, src}. */
+export async function loadSharedVfxAtlasTexture(PIXI, src) {
+  let failure = null;
+  for (const candidate of sharedVfxAtlasSources(src)) {
+    try { return {texture: await PIXI.Assets.load(candidate), src: candidate}; } catch (error) { failure = error; }
+  }
+  throw failure ?? new Error('ORIGINAL_SHARED_VFX_IMAGE_UNAVAILABLE');
+}
+/** The validated shared-vfx descriptor: the web atlas on loopback, else the public 210-cell selection. */
+export async function loadOriginalSharedVfxDescriptor({href = globalThis.location?.href, baseUrl = globalThis.document?.baseURI ?? href,
+  fetchImpl = globalThis.fetch} = {}) {
+  if (originalSharedWebAtlasAllowed(href) && typeof fetchImpl === 'function') {
+    try {
+      const response = await fetchImpl(new URL(ORIGINAL_SHARED_WEB_ATLAS_RENDER, baseUrl).href);
+      if (!response.ok) throw new Error(`ORIGINAL_SHARED_WEB_ATLAS_HTTP_${response.status}`);
+      return {descriptor: validateOriginalSharedVfx(await response.json()), revision: 'WEB_ATLAS_292', manifestPath: ORIGINAL_SHARED_WEB_ATLAS_RENDER};
+    } catch (error) { console.warn('Shared VFX web atlas unavailable', error); }
+  }
+  return {descriptor: validateOriginalSharedVfx(await loadPublicRenderDescriptor('shared-vfx', {baseUrl, fetchImpl})),
+    revision: 'PUBLIC_RENDER_V1', manifestPath: originalSharedVfxManifestFor()};
+}
 
 export const ORIGINAL_SHARED_TEXT_SETS = Object.freeze(['zh-Hant', 'ja', 'en']);
 const DENSITY = 4;
@@ -108,10 +151,10 @@ export function originalSharedVfxReviewRequested(href) {
 
 export function validateOriginalSharedVfx(manifest){
   validatePublicRenderDescriptor(manifest,'shared-vfx');
-  const manifestPath=ORIGINAL_SHARED_LOCAL_MANIFEST;
+  const atlases=[ORIGINAL_SHARED_LOCAL_MANIFEST.replace('manifest.json','effects.png'),WEB_ATLAS_PNG];
   if(manifest.timing!=='NATIVE_SEQUENCES_UNCHANGED'||manifest.blend!=='NORMAL_ALPHA'||manifest.pixelsPerNativePixel!==DENSITY)throw Error('PUBLIC_SHARED_VFX_RENDER_CONTRACT');
   const image = manifest.image;
-  if (image?.src !== manifestPath.replace('manifest.json', 'effects.png') || image.scaleMode !== 'nearest'
+  if (!atlases.includes(image?.src) || image.scaleMode !== 'nearest'
     || !/^[a-f0-9]{64}$/.test(image.sha256) || ![image.width, image.height].every(v => Number.isInteger(v) && v > 0)) {
     throw new Error('ORIGINAL_SHARED_VFX_IMAGE_INVALID');
   }
@@ -156,14 +199,14 @@ export async function loadOriginalSharedVfxReview({PIXI, baseArt, href = globalT
   baseUrl = globalThis.document?.baseURI ?? href, fetchImpl = globalThis.fetch, onFirstUse = null,
   getLocale = settingLocale, onLocaleChange = onSettingLocaleChange, deferRelease = afterTwoFrames, onTextSet = null}) {
   if (!baseArt || !originalSharedVfxReviewRequested(href)) return baseArt;
-  const checked=validateOriginalSharedVfx(await loadPublicRenderDescriptor('shared-vfx',{baseUrl,fetchImpl}));
+  const {descriptor:checked,revision,manifestPath}=await loadOriginalSharedVfxDescriptor({href,baseUrl,fetchImpl});
   const text = checked.localizedText ?? null;
   for (const cell of [...checked.cells, ...(text ? text.cells.map(id => ({bankId:text.bankId, cell:id, blank:false})) : [])]) {
     // The native blank state is the visibility truth; a remake never fills or empties a cell.
     const reference = baseArt.getCell(cell.bankId, cell.cell);
     if (!reference || reference.blank !== cell.blank) throw new Error(`ORIGINAL_SHARED_VFX_BLANK_DRIFT:${cell.bankId}:${cell.cell}`);
   }
-  const texture = await PIXI.Assets.load(checked.image.src);
+  const {texture, src:atlasSrc} = await loadSharedVfxAtlasTexture(PIXI, checked.image.src);
   const cells = new Map(), seen = new Set();
   try {
     if (texture.width !== checked.image.width || texture.height !== checked.image.height) {
@@ -176,7 +219,7 @@ export async function loadOriginalSharedVfxReview({PIXI, baseArt, href = globalT
     }
   } catch (error) {
     for (const cell of cells.values()) cell.texture.destroy(false);
-    await PIXI.Assets.unload(checked.image.src);
+    await PIXI.Assets.unload(atlasSrc);
     throw error;
   }
   let disposal;
@@ -228,7 +271,7 @@ export async function loadOriginalSharedVfxReview({PIXI, baseArt, href = globalT
       await useTextSet(originalTextSetFor(getLocale()));
     } catch (error) {
       for (const cell of cells.values()) cell.texture.destroy(false);
-      await PIXI.Assets.unload(checked.image.src);
+      await PIXI.Assets.unload(atlasSrc);
       throw error;
     }
     unsubscribe = onLocaleChange(locale => {
@@ -237,7 +280,7 @@ export async function loadOriginalSharedVfxReview({PIXI, baseArt, href = globalT
   }
   return {
     assetId:baseArt.assetId,
-    reviewAssetId:ORIGINAL_SHARED_VFX_ID,
+    reviewAssetId:revision==='WEB_ATLAS_292'?ORIGINAL_SHARED_WEB_ATLAS_ID:ORIGINAL_SHARED_VFX_ID,
     getCell(bankId, cell) {
       if (text && bankId === text.bankId && textActive?.cells.has(cell)) {
         const key = `${bankId}:${cell}@${textActive.name}`;
@@ -250,7 +293,7 @@ export async function loadOriginalSharedVfxReview({PIXI, baseArt, href = globalT
       return own;
     },
     getReviewDiagnostics:() => ({reviewAssetId:ORIGINAL_SHARED_VFX_ID, banks:checked.banks.map(bank => bank.bankId),
-      cells:cells.size, seenCells:[...seen], manifestPath:originalSharedVfxManifestFor(href), revision:'PUBLIC_RENDER_V1', candidate:null,
+      cells:cells.size, seenCells:[...seen], manifestPath, revision, atlasSrc, candidate:null,
       text:text ? {source:'GAME_SETTING_LOCALE', set:textActive?.name ?? null, requested:textRequested, src:textActive?.src ?? null,
         sha256:textActive?.sha256 ?? null, activations:textActivations, retiring:[...textRetiring.keys()], cells:text.cells.length} : null}),
     dispose() {
@@ -258,7 +301,7 @@ export async function loadOriginalSharedVfxReview({PIXI, baseArt, href = globalT
       unsubscribe?.();
       for (const cell of cells.values()) cell.texture.destroy(false);
       cells.clear();
-      const releases = [PIXI.Assets.unload(checked.image.src)];
+      const releases = [PIXI.Assets.unload(atlasSrc)];
       for (const {entry, cancel} of textRetiring.values()) { cancel(); releases.push(releaseTextSet(entry)); }
       textRetiring.clear();
       if (textActive) { releases.push(releaseTextSet(textActive)); textActive = null; }

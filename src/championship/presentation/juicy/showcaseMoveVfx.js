@@ -11,7 +11,14 @@
 // fx layer and is cleared with it.
 
 /** Styles whose travelling element can carry the move's body cell. */
-export const SHOWCASE_CARRIER_STYLES = Object.freeze(['missile', 'gatling', 'shell', 'fireball', 'seed', 'ice', 'dark', 'leaf', 'spore']);
+export const SHOWCASE_CARRIER_STYLES = Object.freeze(['missile', 'gatling', 'shell', 'fireball', 'seed', 'ice', 'dark', 'leaf', 'spore', 'water', 'wind']);
+/**
+ * Styles with no single travelling element: the theater lays the move's own
+ * cells along their path instead (Owner 2026-11-01, VFX_FIVE_LAYER_20261101):
+ * a line from the muzzle, a fall from above, or a run along the ground.
+ */
+export const SHOWCASE_STREAM_STYLES = Object.freeze({flame: 'line', beam: 'line', sound: 'line', thunder: 'sky', holy: 'sky',
+  vine: 'ground', thorn: 'ground', quake: 'ground'});
 const MELEE = new Set(['strike', 'claw', 'slash', 'pierce']);
 export const showcaseStyleIsMelee = style => MELEE.has(style);
 
@@ -314,14 +321,17 @@ const STYLES = {
   },
   flame: {
     travel(ctx, k) {
-      const cone = ctx.spawn('cm-vfx cm-vfx--flame', ctx.from.x, ctx.from.y);
-      const length = Math.hypot(ctx.to.x - ctx.from.x, ctx.to.y - ctx.from.y) + 30;
-      cone.style.width = `${Math.round(length)}px`;
-      const angle = Math.atan2(ctx.to.y - ctx.from.y, ctx.to.x - ctx.from.x);
-      ctx.animate(cone, [{opacity: 0, transform: `rotate(${angle}rad) scaleX(0) scaleY(0.4)`}, {opacity: 1, offset: 0.35, transform: `rotate(${angle}rad) scaleX(1) scaleY(1)`},
-        {opacity: 1, offset: 0.55, transform: `rotate(${angle}rad) scaleX(1) scaleY(0.82)`}, {opacity: 1, offset: 0.75, transform: `rotate(${angle}rad) scaleX(1) scaleY(1.1)`},
-        {opacity: 0, transform: `rotate(${angle}rad) scaleX(1.04) scaleY(0.5)`}], {duration: 720, easing: 'linear'});
-      k.drop(cone, 760);
+      // Rolling flame tongues that grow along the stream (no flat cone): the
+      // move's own beam/flame cells are laid along the same path by the theater.
+      const count = ctx.full ? 9 : 4;
+      for (let i = 0; i < count; i++) {
+        const t = (i + 1) / (count + 1), wobble = Math.sin(i * 2.1) * 9;
+        const tongue = ctx.spawn('cm-vfx cm-vfx--flametongue', ctx.from.x, ctx.from.y);
+        const x = (ctx.to.x - ctx.from.x) * t, y = (ctx.to.y - ctx.from.y) * t + wobble;
+        ctx.animate(tongue, [{opacity: 0, transform: 'translate(0, 0) scale(0.3)'}, {opacity: 1, offset: 0.25, transform: `translate(${(x * 0.6).toFixed(1)}px, ${(y * 0.6).toFixed(1)}px) scale(${(0.7 + t * 0.6).toFixed(2)})`},
+          {opacity: 0, transform: `translate(${x.toFixed(1)}px, ${(y - 10).toFixed(1)}px) scale(${(0.9 + t).toFixed(2)})`}], {duration: 520, delay: i * 26, easing: 'ease-out'});
+        k.drop(tongue, 560 + i * 26);
+      }
       for (let i = 0; i < 8; i++) {
         const t = (i + 1) / 9;
         k.puff('cm-vfx--ember', ctx.from.x + (ctx.to.x - ctx.from.x) * t, ctx.from.y + (ctx.to.y - ctx.from.y) * t, {rise: 22, grow: 0.5, duration: 420, delay: 120 + i * 30});

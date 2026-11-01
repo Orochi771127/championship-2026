@@ -226,7 +226,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   const effectSprites = effectArt ? createBattleEffectSprites({PIXI:stage.PIXI, parent:actorLayer, art:effectArt}) : null;
   const fxLayer = dynamicFx ? createBattleFxLayer({PIXI:stage.PIXI, worldBack:fxBack, worldFront:fxFront, screen:fxScreen,
     quality:currentQualityTier(), reducedMotion, responsiveLayout, flashScale:currentFlashScale(),
-    describeMove:fx?.describeMove, nameOfSlot:fx?.nameOfSlot, moveNameOf:fx?.moveNameOf, text:fx?.text, juicy}) : null;
+    describeMove:fx?.describeMove, nameOfSlot:fx?.nameOfSlot, moveNameOf:fx?.moveNameOf, text:fx?.text, juicy,
+    resolveMove:fx?.resolveMove, effectArt}) : null;
   // A failed FX probe starts from contain-fit art coordinates; the final
   // unconditional map clamp below still cover-fits even without a director.
   responsiveLayout = responsiveLayout && Boolean(fxLayer);
@@ -258,6 +259,21 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   const actors = new Map();
   let focusPlacement = null;
   let fieldPlacement = null;
+
+  // Banks of live launches whose move name states another element: recolour
+  // their cells (unifiedMoveVfxResolver cellHue / cellTint). Display only.
+  function effectLooks(view) {
+    if (!fx?.resolveMove) return null;
+    let looks = null;
+    for (const launch of view.nativeLifecycle?.active ?? []) {
+      if (!Number.isInteger(launch?.ownerSlot) || !Number.isInteger(launch?.moveId)) continue;
+      const vfx = fx.resolveMove(launch.ownerSlot, launch.moveId);
+      if (!vfx || (!vfx.cellHue && vfx.cellTint === 0xffffff)) continue;
+      looks ??= new Map();
+      for (const cell of vfx.cells) if (cell.source === 'RECORD') looks.set(cell.bankId, {hue: vfx.cellHue, tint: vfx.cellTint});
+    }
+    return looks;
+  }
 
   function layoutCharacters(rect, view) {
     const rendered = new Set();
@@ -518,7 +534,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     }
     // During a juicy hit-stop the move's own effect cells hold their frame too.
     if (!fxLayer?.hitStopActive?.()) effectSprites?.update(view.nativeLifecycle?.effectActors ?? [], artRect,
-      nativeScale, view.specialPrelude?.brightnessQ12 ?? 4096);
+      nativeScale, view.specialPrelude?.brightnessQ12 ?? 4096, effectLooks(view));
     const focus=view.specialPrelude;
     const actor=focus ? view.combatants[focus.slot] : null;
     // The original prelude zoom composes over the camera in screen space.
@@ -619,6 +635,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     advance,
     getFocusPlacement:()=>focusPlacement ? Object.freeze({...focusPlacement}) : null,
     getFieldPlacement:()=>fieldPlacement ? Object.freeze({...fieldPlacement,artRect:{...fieldPlacement.artRect}}) : null,
+    /** Bounded 3D cues from the dynamic layer since the last call (VFX_FIVE_LAYER_20261101). */
+    consumeVfxCues:()=>fxLayer?.consumeCues?.() ?? [],
 
     getDiagnostics() {
       return Object.freeze({

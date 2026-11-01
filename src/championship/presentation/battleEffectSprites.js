@@ -16,8 +16,19 @@ export function projectBattleEffectSprite(effect, cell, rect, nativeScale, brigh
   };
 }
 
+const multiply = (a, b) => [16, 8, 0].reduce((out, shift) => out | (Math.round(((a >> shift) & 255) * ((b >> shift) & 255) / 255) << shift), 0);
+
 export function createBattleEffectSprites({PIXI, parent, art}) {
   const actors = new Map(), missing = new Set(), seenCells = new Set();
+  // Element recolour of a bank whose move's name states another element
+  // (VFX_FIVE_LAYER_20261101): one shared hue filter per angle, or a multiply tint.
+  const hueFilters = new Map();
+  const hueFilter = hue => {
+    if (!hue || typeof PIXI.ColorMatrixFilter !== 'function') return null;
+    if (!hueFilters.has(hue)) { const f = new PIXI.ColorMatrixFilter(); f.hue(hue, false); hueFilters.set(hue, [f]); }
+    return hueFilters.get(hue);
+  };
+  let recoloured = 0;
   let created = 0, released = 0, disposed = false;
   function remove(id) {
     const entry = actors.get(id);
@@ -26,9 +37,10 @@ export function createBattleEffectSprites({PIXI, parent, art}) {
     actors.delete(id); released++;
   }
   return {
-    update(effects, rect, nativeScale, brightnessQ12 = 4096) {
+    update(effects, rect, nativeScale, brightnessQ12 = 4096, looks = null) {
       if (disposed) return;
       const live = new Set();
+      recoloured = 0;
       for (const effect of effects) {
         const key = `${effect.bankId}:${effect.cell}`;
         const cell = art.getCell(effect.bankId, effect.cell);
@@ -44,7 +56,11 @@ export function createBattleEffectSprites({PIXI, parent, art}) {
         const p = projectBattleEffectSprite(effect, cell, rect, nativeScale, brightnessQ12);
         sprite.anchor.set(p.anchorX, p.anchorY);
         sprite.position.set(p.x, p.y); sprite.scale.set(p.scaleX, p.scaleY);
-        sprite.rotation = p.rotation; sprite.alpha = p.alpha; sprite.tint = p.tint;
+        const look = looks?.get(effect.bankId) ?? null;
+        sprite.rotation = p.rotation; sprite.alpha = p.alpha; sprite.tint = look?.tint && look.tint !== 0xffffff ? multiply(p.tint, look.tint) : p.tint;
+        const filters = hueFilter(look?.hue ?? 0);
+        if (sprite.filters !== filters) sprite.filters = filters;
+        if (look) recoloured++;
         sprite.zIndex = p.depth;
         sprite.visible = !cell.blank && p.alpha > 0 && p.scaleX !== 0 && p.scaleY !== 0;
         // A finished once animation can remain visible while its owning VM
@@ -53,7 +69,7 @@ export function createBattleEffectSprites({PIXI, parent, art}) {
       }
       for (const id of actors.keys()) if (!live.has(id)) remove(id);
     },
-    getDiagnostics:() => ({assetId:art.assetId, active:actors.size, created, released,
+    getDiagnostics:() => ({assetId:art.assetId, active:actors.size, created, released, recoloured,
       visible:[...actors.values()].filter(e=>e.sprite.visible).length,
       missingCells:[...missing], seenCells:[...seenCells], sprites:[...actors.values()].map(e => ({...e.sample}))}),
     dispose() {
