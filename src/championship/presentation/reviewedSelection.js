@@ -5,6 +5,7 @@ import selection from '../../data/championship/reviewed-animation-selection.v1.j
 import {isOriginalLoopbackLocation} from './originalRuntimeLocation.js';
 import {reviewedNumericClip} from './reviewedCharacterAnimation.js';
 import {stageBodyScale} from './stageBodySize.js';
+import {reviewedDocumentRef} from './animationHandoff.js';
 
 const selected=new Map(selection.characters.map(c=>[c.speciesId,c]));
 export function reviewedCharacterSelection(speciesId,href=globalThis.location?.href){
@@ -34,11 +35,11 @@ const sha256=async text=>Array.from(new Uint8Array(await crypto.subtle.digest('S
 export async function loadReviewedDomFrames(speciesId,{href=globalThis.location?.href,fetchImpl=(...a)=>globalThis.fetch(...a),signal,sequences}){
   const entry=href?reviewedCharacterSelection(speciesId,href):null;
   if(!entry)return null;
-  const url=new URL(entry.path,href);
+  const ref=await reviewedDocumentRef(entry,href,fetchImpl),url=new URL(ref.path,href);
   const response=await fetchImpl(url.href,{signal});
   if(!response.ok)throw Error('REVIEWED_DOM_HTTP_'+response.status);
   const text=await response.text();
-  if(await sha256(text)!==entry.sha256)throw Error('REVIEWED_DOM_HASH');
+  if(await sha256(text)!==ref.sha256)throw Error('REVIEWED_DOM_HASH');
   let document=JSON.parse(text);
   if(Array.isArray(document.frames))document={...document,frames:Object.fromEntries(document.frames.map(({id,...f})=>[id,f]))};
   const out=new Map(),mirrorFrames=new Set(entry.generalMirrorFrames??[]);let density=null;
