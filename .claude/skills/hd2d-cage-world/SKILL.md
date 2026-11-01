@@ -1,6 +1,6 @@
 ---
 name: hd2d-cage-world
-description: HD-2D look for the 36 ranch cage GLBs, series connectivity and seam bridges between cages, and the shop cage cards. Use when changing how a cage looks or moves in the 3D ranch, which cages join into one area, what is drawn on a shared edge, or the shop's 籠子設施 cards. Never applies to the title, logo, main menu or opening.
+description: HD-2D look for the 36 ranch cage GLBs, series connectivity between cages, and the shop cage cards. Use when changing how a cage looks or moves in the 3D ranch, which cages join into one area, what is drawn on a shared edge, or the shop's 籠子設施 cards. Never applies to the title, logo, main menu or opening.
 ---
 
 # HD-2D cage world
@@ -24,7 +24,6 @@ logo, main menu and opening stay exactly as live main shipped them.
 | Series groups (which cages join) | `src/championship/cage/ranchEcology.js` → `RANCH_ECOLOGY_GROUPS` |
 | Shared edges and passages | `src/championship/cage/ranchConnections.js` (`ranchSharedBoundaries`) |
 | Plinth, closed rims, open seams | `src/championship/presentation/ranchPlinth.js` |
-| Themed seam bridges | `src/championship/presentation/ranchSeamBridges.js` |
 | Shop cage cards | `src/championship/app/vs4Screens.js` (`decorateShopCageCard`, `cageSeriesLabel`), `ui/screenLayout.css` |
 
 ## Enhancer rules
@@ -68,14 +67,11 @@ logo, main menu and opening stay exactly as live main shipped them.
   walking, the editor's ✨ preview and the shop tag together; update
   `tests/championship-hex-builder-cases.mjs` when you do.
 - A passage opens only where the walk rule opened it (same series, same
-  height, safe exits on both sides). Never draw a bridge the walk rule did
-  not open.
-- On an open edge the authored rim and fence strip already dissolve; the plinth
-  paves it with the series' ground (`ranchSeamBridges.js`): red clay with
-  white lanes, a glowing lava vein, sand and shallows, moss, flagstones with
-  flowers, gravel, snow, or an indoor mat with a lit guide line. One mesh and
-  one 128×64 canvas texture per theme, feathered edges, `depthWrite: false`,
-  just above the walk plane. It changes no walk surface, support or picking.
+  height, safe exits on both sides).
+- On an open edge the authored rim and fence strip dissolve and nothing else is
+  drawn: the two cages' own floors meet. Owner 2026-11-01 removed the painted
+  seam-bridge strips (they read as a plaster stuck on the floor); do not add a
+  strip, patch or threshold back on open edges.
 - `canvas.dataset.passageThresholds` counts open edges;
   `navigationConnections` counts the walk rule's passages. They must agree.
 

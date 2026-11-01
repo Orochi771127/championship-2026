@@ -5,14 +5,14 @@
 // - chassis: a bevelled wall under it, deep for cages, thin for the
 //   placeholder (lid) tiles;
 // - one soft drop shadow under the land;
-// - on shared edges (2026-10-27): a glowing threshold where the walk rule
-//   opened a passage, a low rim where it did not (different ecology, height,
-//   or no safe exit), so what you see is what partners can cross.
+// - on shared edges: a low rim where the walk rule kept a border (different
+//   ecology, height, or no safe exit). Where it opened a passage nothing is
+//   drawn (Owner 2026-11-01: the painted bridge strip read as a plaster on
+//   the floor); the two cages' own floors meet and partners still cross.
 // Edges two cells share are inside the land and get nothing, so same-type
 // merged edges stay open and a different-type border keeps the cage's own art.
 import * as THREE from '../../../node_modules/three/build/three.module.js';
 import { ranchNativeToWorld } from './ranchThreeCoordinates.js';
-import { createRanchSeamBridges } from './ranchSeamBridges.js';
 import { ranchSlotPolygon } from '../cage/ranchConnections.js';
 import { productPlacementCells } from '../cage/productRanchGrid.js';
 
@@ -101,8 +101,8 @@ export function createRanchPlinth({ placements, towardSun, passages = { open: []
   };
 }
 
-function createSeams({ open = [], closed = [] }, { rim, lit, base }) {
-  if (!open.length && !closed.length) return null;
+function createSeams({ closed = [] }, { rim, lit, base }) {
+  if (!closed.length) return null;
   const { ridgeHeight, ridgeWidth } = RANCH_PLINTH;
   const frame = (e) => {
     const a = world(e.a), b = world(e.b), along = b.clone().sub(a), length = along.length();
@@ -110,14 +110,6 @@ function createSeams({ open = [], closed = [] }, { rim, lit, base }) {
     return { a, b, along, across: new THREE.Vector3(along.z, 0, -along.x), length };
   };
   const meshes = [], disposables = [];
-  let animate = () => {};
-  if (open.length) {
-    // Owner 2026-10-27: each open edge is paved with its series' own ground (ranchSeamBridges).
-    const bridges = createRanchSeamBridges(open);
-    for (const mesh of bridges.meshes) mesh.userData.passageThreshold = true;
-    meshes.push(...bridges.meshes); disposables.push(bridges);
-    animate = (seconds) => bridges.animate(seconds);
-  }
   if (closed.length) {
     // A low ridge along each closed shared edge: lit top, darker sides.
     const positions = [], colorsOut = [];
@@ -140,7 +132,7 @@ function createSeams({ open = [], closed = [] }, { rim, lit, base }) {
     mesh.name = 'ranch-closed-rims';
     meshes.push(mesh); disposables.push(geometry, material);
   }
-  return { meshes, animate: (t) => animate(t), dispose() { for (const d of disposables) d.dispose(); } };
+  return { meshes, animate() {}, dispose() { for (const d of disposables) d.dispose(); } };
 }
 
 function createDropShadow(cells, edges, sun) {

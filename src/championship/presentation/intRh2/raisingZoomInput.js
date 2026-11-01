@@ -1,17 +1,28 @@
 // Raising-only presentation input. No save, gameplay clock or actor state.
-export const RAISING_OVERVIEW_ZOOM = 0.7;
-export const RAISING_PINCH_THRESHOLD = 0.18;
+// Owner 2026-11-01: no on-screen button. The ranch zooms smoothly with two
+// fingers (phone) or the mouse wheel (desktop), from 100% out to 50% so more
+// of the ranch fits on screen.
+import {RAISING_ZOOM_MIN, RAISING_ZOOM_MAX, clampRaisingZoom} from './raisingFieldViewport.js';
+export {RAISING_ZOOM_MIN, RAISING_ZOOM_MAX, clampRaisingZoom};
+// Fingers must move this much (as a distance ratio) before a pinch starts
+// zooming, so a two-finger tap does not jitter the board.
+export const RAISING_PINCH_DEAD_ZONE = 0.04;
+// Wheel: zoom factor per pixel of wheel delta (100 px is about 14%).
+const WHEEL_RATE = 0.0015;
 
-export function pinchZoomLevel(level, ratio) {
-  if (!Number.isFinite(ratio) || ratio <= 0) return level;
-  if (level === 1 && ratio <= 1 - RAISING_PINCH_THRESHOLD) return RAISING_OVERVIEW_ZOOM;
-  if (level === RAISING_OVERVIEW_ZOOM && ratio >= 1 + RAISING_PINCH_THRESHOLD) return 1;
-  return level;
+/** Continuous pinch: the board follows the finger distance from where the pinch started. */
+export function pinchZoomLevel(startLevel, ratio) {
+  if (!Number.isFinite(ratio) || ratio <= 0) return startLevel;
+  return clampRaisingZoom(startLevel * ratio);
+}
+
+export function wheelZoomLevel(level, deltaPx) {
+  return clampRaisingZoom(level * Math.exp(-deltaPx * WHEEL_RATE));
 }
 
 export function bindRaisingZoomInput({canvas, window: win = globalThis, getViewport, getLevel, setLevel, cancelGesture, enabled}) {
   const points = new Map();
-  let pinch = null, swallowing = false, wheelAt = -Infinity, wheelSum = 0, wheelUsed = false;
+  let pinch = null, swallowing = false;
   const local = e => {
     const rect = canvas.getBoundingClientRect();
     const size=getViewport?.();
@@ -29,7 +40,7 @@ export function bindRaisingZoomInput({canvas, window: win = globalThis, getViewp
     if (points.size >= 2) {
       if (!swallowing) {
         cancelGesture();
-        pinch = {...pair(),level:getLevel(),used:false};
+        pinch = {...pair(),level:getLevel(),started:false};
       }
       swallowing = true; stop(e);
     }
@@ -39,9 +50,12 @@ export function bindRaisingZoomInput({canvas, window: win = globalThis, getViewp
     points.set(e.pointerId,local(e));
     if (!swallowing) return;
     stop(e);
-    if (points.size !== 2 || !pinch || pinch.used || !enabled()) return;
-    const current=pair(), level=pinchZoomLevel(pinch.level,current.distance/Math.max(1,pinch.distance));
-    if (level !== pinch.level) {pinch.used=true;setLevel(level,current.point);}
+    if (points.size !== 2 || !pinch || !enabled()) return;
+    const current=pair(), ratio=current.distance/Math.max(1,pinch.distance);
+    if (!pinch.started && Math.abs(ratio-1) < RAISING_PINCH_DEAD_ZONE) return;
+    pinch.started=true;
+    const level=pinchZoomLevel(pinch.level,ratio);
+    if (Math.abs(level-getLevel())>1e-4) setLevel(level,current.point);
   };
   const up = e => {
     if (!points.has(e.pointerId)) return;
@@ -51,17 +65,11 @@ export function bindRaisingZoomInput({canvas, window: win = globalThis, getViewp
   };
   const wheel = e => {
     if (!enabled() || swallowing || e.ctrlKey || e.metaKey) return;
-    // Leave browser page zoom alone. One deliberate wheel burst changes one
-    // level, including high-resolution trackpads; jitter has a dead zone.
+    // Leave browser page zoom (ctrl/meta + wheel) alone.
     e.preventDefault();
-    if (e.timeStamp-wheelAt>220) {wheelSum=0;wheelUsed=false;}
-    wheelAt=e.timeStamp;
     const delta=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?canvas.clientHeight:1);
-    if (Math.sign(delta)!==Math.sign(wheelSum)) wheelSum=0;
-    wheelSum+=delta;
-    if (!wheelUsed&&Math.abs(wheelSum)>=40) {
-      wheelUsed=true;cancelGesture();setLevel(wheelSum>0?RAISING_OVERVIEW_ZOOM:1,local(e));
-    }
+    const level=wheelZoomLevel(getLevel(),delta);
+    if (Math.abs(level-getLevel())>1e-4) {cancelGesture();setLevel(level,local(e));}
   };
   const clear = () => {points.clear();pinch=null;swallowing=false;};
   const opts={capture:true,passive:false};

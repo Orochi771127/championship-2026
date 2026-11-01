@@ -19,7 +19,8 @@ export function mountRanchStoryBadge(root, { isSeen = () => false, chapterId = S
     button.style.setProperty('--cm-story-offset', journal ? `${Math.round(journal.height + 8)}px` : '0px');
   }
   function update(frame) {
-    button.hidden = !!frame?.tutorial && !frame.tutorial.finished;
+    // Owner 2026-11-01: the ranch shows no badge; the story opens from the System menu's story mode.
+    button.hidden = true;
     button.dataset.new = String(!isSeen());
     place();
   }
