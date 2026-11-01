@@ -15,6 +15,9 @@
  * @param {{container:string,item:string,covers?:string[]}[]} [spec.lists] scrolled lists to inspect at their end
  * @param {{hud:string[], bounds?:string}} [spec.stage] HUD pieces subtracted from the stage
  * @param {{baseLayers?:string[]}} [spec.residue] inspect for leftovers after a close
+ * @param {string[]} [spec.ignore] selectors whose findings the rules waive (each match is reported with the element)
+ * @param {{selector:string, minRatio?:number, minHeightRatio?:number, minHeightPx?:number, maxHeightRatio?:number}[]} [spec.areas] work areas and their size bounds
+ * @param {string[]} [spec.centered] overlays that must sit centred and wholly on screen
  */
 function healthProbe(spec) {
   const vw = window.innerWidth, vh = window.innerHeight;
