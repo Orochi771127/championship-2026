@@ -1,3 +1,11 @@
+// Owner 2026-11-01: the ranch zooms continuously from 100% out to 50%.
+// Kept here (no imports) because tests load this module on its own.
+export const RAISING_ZOOM_MIN = 0.5;
+export const RAISING_ZOOM_MAX = 1;
+export function clampRaisingZoom(level) {
+  return Number.isFinite(level) ? Math.min(RAISING_ZOOM_MAX, Math.max(RAISING_ZOOM_MIN, level)) : RAISING_ZOOM_MAX;
+}
+
 /** The whole number of screen pixels one original native pixel may take on
  * the ranch. Whole numbers keep every native pixel the same size on screen,
  * which is what keeps pixel art crisp while it pans. */
@@ -138,7 +146,7 @@ export function raisingFieldViewport(field, viewport, padding = 12, cameraX = 0)
   // readout: cards float over the margin and never move the board.
   const nativeWindow = field.presentationMode === 'NATIVE_RANCH' && field.nativePixelWorldScale > 0;
   const heightScale = Math.max(1, viewport.height - padding * 2) / field.worldHeightPx;
-  const zoom = viewport.zoom === 0.7 ? 0.7 : 1;
+  const zoom = viewport.zoom === undefined ? 1 : clampRaisingZoom(viewport.zoom);
   const scale = nativeWindow
     ? raisingNativeScreenPixels(field, viewport, padding) * zoom / field.nativePixelWorldScale
     : Math.min(Math.max(1, viewport.width - padding * 2) / field.worldWidthPx, heightScale);

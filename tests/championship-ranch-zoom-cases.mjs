@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {raisingFieldViewport,zoomRaisingCamera,resizeRaisingCamera,raisingNativeToScreen,
   raisingScreenToNative,raisingEdgeScroll} from '../src/championship/presentation/intRh2/raisingFieldViewport.js';
-import {pinchZoomLevel,bindRaisingZoomInput} from '../src/championship/presentation/intRh2/raisingZoomInput.js';
+import {pinchZoomLevel,wheelZoomLevel,bindRaisingZoomInput,RAISING_ZOOM_MIN} from '../src/championship/presentation/intRh2/raisingZoomInput.js';
 const field={presentationMode:'NATIVE_RANCH',worldWidthPx:3840,worldHeightPx:3616,
   nativePixelWorldScale:4,wrapWidthPx:3840,productGrid:{sizingHeightNative:192}};
 const referenceViewport={width:390,height:675};
@@ -27,10 +27,17 @@ test('two levels retain cursor focus, drop coordinates, native scale and bounds 
     assert.ok(Number.isFinite(resized.cameraX)&&resized.cameraY>=0);
   }
 });
-test('pinch jitter does not change size; intentional 18 percent changes it once',()=>{
-  for(const ratio of [.83,.99,1,1.1,1.17])assert.equal(pinchZoomLevel(1,ratio),1);
-  assert.equal(pinchZoomLevel(1,.8),.7);
-  assert.equal(pinchZoomLevel(.7,1.2),1);
+test('zoom is continuous between 50 and 100 percent (Owner 2026-11-01)',()=>{
+  assert.ok(Math.abs(pinchZoomLevel(1,.83)-.83)<1e-9);
+  assert.ok(Math.abs(pinchZoomLevel(.6,1.25)-.75)<1e-9);
+  assert.equal(pinchZoomLevel(.6,.5),RAISING_ZOOM_MIN,'never past 50 percent');
+  assert.equal(pinchZoomLevel(.9,2),1,'never past 100 percent');
+  assert.ok(wheelZoomLevel(1,100)<1&&wheelZoomLevel(1,100)>.8,'one wheel notch is a small step');
+  assert.equal(wheelZoomLevel(1,-100),1);
+  for(const zoom of [.5,.63,.8,1]){
+    const fit=raisingFieldViewport(field,{width:390,height:844,referenceViewport,zoom});
+    assert.ok(Math.abs(fit.scale/raisingFieldViewport(field,{width:390,height:844,referenceViewport,zoom:1}).scale-zoom)<1e-9);
+  }
 });
 test('carried edge scrolling advances equally at 30/60/120 Hz and is 20 percent faster',()=>{
   for(const hz of [30,60,120]){
@@ -48,17 +55,19 @@ test('pinch owns both fingers through release, wheel burst is bounded and dispos
   let level=1,cancelled=0;
   const input=bindRaisingZoomInput({canvas,window:win,getLevel:()=>level,setLevel:n=>{level=n;changes.push(n);},
     cancelGesture:()=>cancelled++,enabled:()=>true});
-  const fire=(target,type,props)=>{const e=new Event(type,{cancelable:true});Object.assign(e,props);target.dispatchEvent(e);return e;};
+  const fire=(target,type,props)=>{const e=new Event(type,{cancelable:true});for(const [k,v] of Object.entries(props))Object.defineProperty(e,k,{value:v});target.dispatchEvent(e);return e;};
   const p=(id,x)=>({pointerType:'touch',pointerId:id,clientX:x,clientY:100});
   fire(canvas,'pointerdown',p(1,100));fire(canvas,'pointerdown',p(2,300));
   assert.equal(cancelled,1);assert.equal(input.isActive(),true);
-  fire(win,'pointermove',p(2,250));assert.deepEqual(changes,[.7]);
-  fire(win,'pointermove',p(2,400));assert.deepEqual(changes,[.7],'one switch per gesture');
+  fire(win,'pointermove',p(2,296));assert.deepEqual(changes,[],'a small finger wobble does not start a pinch');
+  fire(win,'pointermove',p(2,250));assert.ok(Math.abs(changes.at(-1)-.75)<1e-9,'the board follows the finger distance');
+  fire(win,'pointermove',p(2,200));assert.ok(Math.abs(changes.at(-1)-.5)<1e-9);
+  fire(win,'pointermove',p(2,150));assert.equal(changes.at(-1),.5,'clamped at 50 percent');
   assert.equal(fire(win,'pointerup',p(1,100)).defaultPrevented,true);
   assert.equal(fire(win,'pointerup',p(2,400)).defaultPrevented,true);
   assert.equal(input.isActive(),false);
   assert.equal(fire(canvas,'wheel',{deltaY:-120,ctrlKey:true}).defaultPrevented,false);
-  fire(canvas,'wheel',{deltaY:-120,deltaMode:0});assert.equal(level,1);
-  input.dispose();fire(canvas,'wheel',{deltaY:120,deltaMode:0});assert.equal(level,1);
-  assert.equal(cancelled,2);
+  const before=level;fire(canvas,'wheel',{deltaY:-120,deltaMode:0});assert.ok(level>before&&level<=1,'wheel up zooms in a little');
+  for(let i=0;i<20;i++)fire(canvas,'wheel',{deltaY:120,deltaMode:0});assert.equal(level,RAISING_ZOOM_MIN,'wheel down stops at 50 percent');
+  input.dispose();fire(canvas,'wheel',{deltaY:-120,deltaMode:0});assert.equal(level,RAISING_ZOOM_MIN);
 });

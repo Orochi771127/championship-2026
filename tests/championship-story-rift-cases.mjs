@@ -233,12 +233,12 @@ test("the puppeteer drives the field puppet, the rift and the emote, and clears 
   stage.dispose();
 });
 
-test("the ranch badge hides during the tutorial, pulses until seen, and the System menu lists the story entry", () => {
+test("the ranch shows no story badge (Owner 2026-11-01); the System menu's story mode opens the chapter", () => {
   const doc = docDouble(), root = doc.createElement("div"); root.ownerDocument = doc;
   let seen = false;
   const badge = mountRanchStoryBadge(root, { isSeen: () => seen });
   badge.update({ tutorial: { finished: false } }); assert.equal(badge.element.hidden, true);
-  badge.update({ tutorial: null }); assert.equal(badge.element.hidden, false); assert.equal(badge.element.dataset.new, "true");
+  badge.update({ tutorial: null }); assert.equal(badge.element.hidden, true); assert.equal(badge.element.dataset.new, "true");
   seen = true; badge.update({}); assert.equal(badge.element.dataset.new, "false");
   badge.element.listeners.get("click")();
   assert.equal(doc.dispatched.type, STORY_CHAPTER_OPEN_EVENT); assert.equal(doc.dispatched.detail.chapterId, STORY_FIRST_CHAPTER_ID);

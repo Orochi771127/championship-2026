@@ -23,7 +23,7 @@ import { BATTLE_CHARACTER_PROFILES } from "../../../data/championship/battleChar
 import { createNativeCharacterAnimationTimeline } from "../characterAnimationTimeline.js";
 import { prefersReducedMotion } from '../presentationPreferences.js';
 import { uiText } from '../../text/uiText.js';
-import {bindRaisingZoomInput,RAISING_OVERVIEW_ZOOM} from './raisingZoomInput.js';
+import {bindRaisingZoomInput} from './raisingZoomInput.js';
 import {zoomRaisingCamera} from './raisingFieldViewport.js';
 import { initialRaisingReferenceViewport, sampleRaisingReferenceViewport, desktopRaisingViewportWidth, centerRaisingNativeY, raisingFieldViewport, resizeRaisingCamera, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingCarryEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
 
@@ -1040,7 +1040,6 @@ export async function mountRaisingFieldPixiPresentation({
 
   function updateAnimations(ticker) {
     samplePortraitReference();
-    if(zoomButton&&zoomButton.disabled===canZoom())describeZoom();
     const tutorial=source.getFrame().tutorial;
     const viewKey=tutorial&&!tutorial.finished?tutorial.checkpoint.stage+":"+tutorial.checkpoint.message+":"+tutorial.viewRevision:null;
     if(viewKey!==tutorialViewKey){
@@ -1510,15 +1509,7 @@ export async function mountRaisingFieldPixiPresentation({
   const canZoom=()=>!disposed&&fieldArt?.field?.presentationMode==='NATIVE_RANCH'
     &&!source.getLifecycleFrame?.()?.day&&!source.getLifecycleFrame?.()?.evolution
     &&!(source.getFrame().tutorial&&!source.getFrame().tutorial.finished);
-  const zoomButton=globalThis.document?.createElement('button')??null;
-  if(zoomButton)zoomButton.type='button';
-  const describeZoom=()=>{
-    if(!zoomButton)return;
-    zoomButton.textContent=zoom===1?'−':'+';
-    zoomButton.setAttribute('aria-label',uiText(zoom===1?'Zoom out ranch (overview)':'Zoom in ranch (detail)'));
-    zoomButton.title=uiText('Pinch or scroll over the ranch to zoom');
-    zoomButton.disabled=!canZoom();
-  };
+  // Owner 2026-11-01: no on-screen zoom button; pinch on phones, the wheel on desktop.
   const setZoom=(next,point)=>{
     if(!canZoom()||zoom===next)return;
     const camera=zoomRaisingCamera(fieldArt.field,view,next,point,{cameraX,cameraY});
@@ -1526,16 +1517,11 @@ export async function mountRaisingFieldPixiPresentation({
     zoom=next;cameraX=camera.cameraX;cameraY=camera.cameraY;cameraFocus=null;
     tutorialCameraOffset+=(cameraX-beforeX)/fieldArt.field.nativePixelWorldScale;
     if(cameraViewport)cameraViewport={...cameraViewport,zoom};
-    describeZoom();sync(source.getFrame(),{force:true});
+    sync(source.getFrame(),{force:true});
   };
   const zoomInput=fieldArt?.field?.presentationMode==='NATIVE_RANCH'
     ?bindRaisingZoomInput({canvas:app.canvas,getViewport:()=>app.screen,getLevel:()=>zoom,setLevel:setZoom,
       cancelGesture:()=>cancelInput('viewport-resize'),enabled:canZoom}):null;
-  if(zoomButton&&zoomInput){
-    zoomButton.type='button';zoomButton.className='cm-ranch-zoom';
-    zoomButton.addEventListener('click',()=>{cancelInput('viewport-resize');setZoom(zoom===1?RAISING_OVERVIEW_ZOOM:1);});
-    app.canvas.parentElement?.append(zoomButton);describeZoom();
-  }
   function cancelInput(reason = null){
     if (!responsiveLayout) {
     const options={cancelled:true,checkpoint:drag?.tutorialCheckpoint,
@@ -1726,7 +1712,7 @@ export async function mountRaisingFieldPixiPresentation({
       disposed = true;
       lifetime.abort(); signal?.removeEventListener('abort', abort);
       cancelInput();
-      zoomInput?.dispose();zoomButton?.remove();
+      zoomInput?.dispose();
       globalThis.removeEventListener?.('blur',cancelInput);
       globalThis.document?.removeEventListener('visibilitychange',cancelHiddenInput);
       cameraDrag = null;

@@ -48,6 +48,6 @@ test('integration preserves genuine readiness/errors and zoom interactions, remo
  assert.match(main,/scene.isPlayable !== false/); // actual simulation clock gate unchanged
  assert.match(scene,/if\(frame&&entry.nativeFramePresenter\?\.isFrameReady/);
  assert.match(scene,/hasVisibleSprite:Boolean\(e.sprite\)/);assert.match(scene,/loadKind:/);
- assert.match(scene,/zoomButton.textContent=zoom===1\?'−':'\+'/);assert.doesNotMatch(scene,/− 100%|\+ 70%/);
- assert.match(scene,/zoomButton.addEventListener\('click'/);assert.match(scene,/bindRaisingZoomInput/);
+ // Owner 2026-11-01: no zoom button; pinch and the wheel zoom the ranch.
+ assert.doesNotMatch(scene,/zoomButton|cm-ranch-zoom|− 100%|\+ 70%/);assert.match(scene,/bindRaisingZoomInput/);
 });

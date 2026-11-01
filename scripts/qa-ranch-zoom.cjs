@@ -36,8 +36,9 @@ const sample=page=>page.evaluate(()=>{
   const cdp=await context.newCDPSession(page);
   for(const [width,height] of [[390,844],[844,390],[1280,720]]){
    await page.setViewportSize({width,height});await page.waitForTimeout(500);
-   const button=page.locator('.cm-ranch-zoom');
-   if((await sample(page)).zoom!==1)await button.click();
+   // Owner 2026-11-01: no zoom button; wheel back in to 100%.
+   const box=await page.locator('canvas.cm-raising-pixi-canvas').boundingBox();
+   if((await sample(page)).zoom!==1){await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.wheel(0,-2000);}
    await page.waitForTimeout(150);
    report.views.push(await sample(page));
    await page.screenshot({path:path.join(out,`${width}x${height}-detail.png`)});
@@ -48,11 +49,13 @@ const sample=page=>page.evaluate(()=>{
     await touch('touchStart',80);await touch('touchMove',76);
     assert.equal((await sample(page)).zoom,1,'tiny pinch ignored');
     await touch('touchMove',50);await touch('touchEnd');await page.waitForTimeout(180);
-    assert.equal((await sample(page)).zoom,.7,'two fingers zoom out');
+    const pinched=(await sample(page)).zoom;
+    assert.ok(pinched<1&&pinched>=.5,'two fingers zoom out smoothly');
     report.gestures.push({viewport:[width,height],pinch:true,jitterIgnored:true});
    }else{
     await page.mouse.move(x,y);await page.mouse.wheel(0,120);await page.waitForTimeout(200);
-    assert.equal((await sample(page)).zoom,.7,'wheel zoom out');
+    const wheeled=(await sample(page)).zoom;
+    assert.ok(wheeled<1&&wheeled>=.5,'wheel zoom out smoothly');
     report.gestures.push({viewport:[width,height],wheel:true});
    }
    const overview=await sample(page);report.views.push(overview);
