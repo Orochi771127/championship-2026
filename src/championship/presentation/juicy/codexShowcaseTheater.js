@@ -23,15 +23,16 @@
 // change. Closing a preview or leaving the detail cancels every animation and
 // timer it started and drops the images it set.
 import movesCatalog from "../../../data/championship/catalogs/battle-moves.r1.json" with { type: "json" };
-import { battleFxMoveBanks, describeBattleFxMove, BATTLE_FX_PALETTES } from "../battleFx/battleFxRecipes.js";
+import { battleFxFamilyName, battleFxMoveBanks, describeBattleFxMove, BATTLE_FX_PALETTES } from "../battleFx/battleFxRecipes.js";
 import { moveVfxTheme } from "../battleFx/moveVfxThemes.js";
+import { resolveMoveVfx } from "../vfx/unifiedMoveVfxResolver.js";
 import { ceremonyEnvironment, playCeremonySound } from "../ceremony/ceremonyRunner.js";
 import { juicyText } from "../../text/juicyShowcaseText.js";
 import { applyJuicyPalette, juicyNode, juicyPortrait } from "./juicyArt.js";
 import { playCyberMorphEvolution } from "./cyberMorphEvolutionRunner.js";
 import { createSkillCutInLayer } from "./skillCutIn.js";
 import { createShowcaseBankCells } from "./showcaseBankCells.js";
-import { SHOWCASE_CARRIER_STYLES, playShowcaseStyle, showcaseStyleIsMelee } from "./showcaseMoveVfx.js";
+import { SHOWCASE_CARRIER_STYLES, SHOWCASE_STREAM_STYLES, playShowcaseStyle, showcaseStyleIsMelee } from "./showcaseMoveVfx.js";
 import { SHOWCASE_ACTIONS, SHOWCASE_ATTACK_SEQUENCE, createSpriteMotion, loadShowcaseMotionShared, showcaseFitScale,
   showcaseMotionAvailable } from "./spriteMotionPlayer.js";
 
@@ -46,11 +47,21 @@ export function showcaseMoveLook(recordIndex) {
   const record = moveRecords.get(recordIndex);
   const look = record ? describeBattleFxMove(record) : null;
   const theme = moveVfxTheme(recordIndex);
-  const palette = theme && BATTLE_FX_PALETTES[theme.element] ? theme.element : look?.palette ?? "neutral";
+  // One element authority for every view (VFX_FIVE_LAYER_20261101): the name,
+  // the record, its bank, then the caster's taxonomy element.
+  const vfx = record ? resolveMoveVfx(record) : null;
+  const palette = vfx?.paletteKey ?? (theme && BATTLE_FX_PALETTES[theme.element] ? theme.element : look?.palette ?? "neutral");
+  const recordBanks = record ? battleFxMoveBanks(record) : [];
+  // A record that names no bank plays the presentation's original fallback cells.
+  const banks = recordBanks.length ? recordBanks : Object.freeze((vfx?.cells ?? []).map(cell => Object.freeze({ role: cell.role, bankId: cell.bankId,
+    sequence: cell.sequence, family: battleFxFamilyName(cell.bankId), fallback: true })));
   return Object.freeze({ form: look?.form ?? "projectile", palette, style: theme?.style ?? (look?.form === "melee" ? "strike" : "holy"),
-    element: theme?.element ?? palette, tier: theme?.tier ?? 2, themeSource: theme?.source ?? null,
-    banks: record ? battleFxMoveBanks(record) : Object.freeze([]) });
+    element: vfx?.element ?? "NEUTRAL", elementSource: vfx?.elementSource ?? "NONE", tier: theme?.tier ?? 2, themeSource: theme?.source ?? null,
+    banks, cellHue: vfx?.cellHue ?? 0, cellTint: vfx?.cellTint ?? 0xffffff, accent: vfx?.accent ?? null, overlay: vfx?.overlay ?? null, decal: vfx?.decal ?? "crack", storm: vfx?.storm ?? "burst" });
 }
+
+/** How long a special preview waits for the effect atlas before it plays without it (ms). */
+export const SHOWCASE_CELL_WAIT_MS = 2500;
 
 /** The special demo's beats in ms (wind-up, cut-in, travel, contact, end). */
 export const SHOWCASE_SPECIAL_TIMING = Object.freeze({ windup: 240, squash: 140, cutIn: 390, travel: 700, contact: 1000, hitStop: 60, end: 1950 });
@@ -67,8 +78,17 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
   const heroes = new Set();
   let theater = null;
   let disposed = false;
-  // The battle's effect cells, requested on the first special preview.
-  let bankCells = null;
+  // The battle's effect cells, requested when the Dex detail shows its first
+  // "preview special" button (VFX_FIVE_LAYER_20261101: no first-play miss).
+  let bankCells = null, cellsReady = false;
+  const ensureBankCells = () => {
+    if (!bankCells) {
+      bankCells = createShowcaseBankCells({ doc, fetchImpl });
+      const own = bankCells;
+      own.ready.then(() => { if (bankCells === own) cellsReady = true; }, () => { if (bankCells === own) cellsReady = true; });
+    }
+    return bankCells;
+  };
   let opens = 0, specials = 0, evolutions = 0;
 
   // ------------------------------------------------------------ hero viewer
@@ -304,6 +324,9 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     arena.dataset.style = payload.look.style;
     applyJuicyPalette(arena, payload.look.palette);
     arena.append(node(doc, "i", "cm-showcase__grid"));
+    // Signature backdrop and ground marks sit behind the fighters (VFX_FIVE_LAYER_20261101).
+    const backdrop = node(doc, "div", "cm-showcase__backdrop");
+    arena.append(backdrop);
     const caster = figure("cm-showcase__fighter--caster");
     const dummy = figure("cm-showcase__fighter--dummy");
     const charge = node(doc, "i", "cm-showcase__charge");
@@ -384,6 +407,22 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
       return element;
     };
 
+    // 0) The effect atlas is requested when the button appears; a first play
+    // waits for it (up to SHOWCASE_CELL_WAIT_MS) so it never misses the cells.
+    let begun = false;
+    const begin = () => {
+      if (begun || !theater || theater.runId !== runId) return;
+      begun = true;
+      delete stage.dataset.cells;
+      sequence();
+    };
+    if (bankCells && !cellsReady) {
+      // The give-up beat is a sandbox timer, so closing the preview cancels the wait too.
+      stage.dataset.cells = "loading";
+      later(SHOWCASE_CELL_WAIT_MS, begin);
+      bankCells.ready.then(begin, begin);
+    } else begin();
+    function sequence() {
     // 1) Wind-up: squash 1.12 x 0.88 for 140 ms, a glint, a ring closing in.
     later(T.windup, () => {
       if (full) {
@@ -393,12 +432,32 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
           { opacity: 0, transform: "translate(-50%, -50%) scale(1.4)" }], { duration: 320 });
         animate(charge, [{ opacity: 0.95, transform: "translateX(-50%) scale(1.9)" }, { opacity: 0, transform: "translateX(-50%) scale(0.25)" }],
           { duration: 460, easing: "cubic-bezier(.5,0,.9,.6)" });
+        // The element orb swells at the muzzle while four glints spiral into it.
+        const at = casterPoint();
+        const orb = spawn("cm-vfx cm-vfx--orb", at.x, at.y);
+        animate(orb, [{ opacity: 0, transform: "scale(0.3)" }, { opacity: 1, offset: 0.6, transform: "scale(1.15)" }, { opacity: 0.9, transform: "scale(0.85)" }],
+          { duration: 520, easing: "ease-out" });
+        later(560, () => orb.remove());
+        for (let i = 0; i < 4; i++) {
+          const glintNode = spawn("cm-vfx cm-vfx--orbglint", at.x, at.y), a = i * Math.PI / 2;
+          animate(glintNode, [{ opacity: 0, transform: `rotate(${a}rad) translateX(34px) scale(1.2)` }, { opacity: 1, offset: 0.3 },
+            { opacity: 0.2, transform: `rotate(${a + Math.PI * 1.6}rad) translateX(0) scale(0.4)` }], { duration: 480, easing: "ease-in" });
+          later(500, () => glintNode.remove());
+        }
       }
     });
     // 2) The cut-in strip with the 35 % spotlight on the caster's head, and the
     // attack motion once through. The move leaves on its release cell (the
     // forward-most frame: the open mouth or the swing), not on a fixed clock.
     later(T.cutIn, () => {
+      // A ~0.53 s element storm behind the fighters, stepped at 15 fps and faded by weights.
+      const storm = node(doc, "i", "cm-showcase__storm");
+      storm.dataset.storm = payload.look.storm;
+      backdrop.append(storm);
+      const weights = [0.38, 0.72, 0.86, 0.86, 0.82, 0.74, 0.62, 0.48, 0.32, 0];
+      animate(storm, weights.map((opacity, i) => ({ opacity, offset: i / (weights.length - 1),
+        transform: full ? `rotate(${(i * 4).toFixed(0)}deg) scale(${(1 + i * 0.012).toFixed(3)})` : "none", easing: "step-end" })), { duration: full ? 530 : 360 });
+      later(full ? 560 : 380, () => storm.remove());
       const at = casterPoint();
       theater.cutIn?.play({ team: "ally", portrait: payload.portrait, silhouette: payload.encrypted, palette: payload.look.palette,
         moveName: payload.move?.name ?? "", casterName: payload.name || "？？？？", focus: at });
@@ -408,26 +467,50 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
       theater.root.dataset.release = String(release);
       later(release, travel);
     });
+    }
     // The theme's effect: the move's own vines, missiles, bolts... (showcaseMoveVfx.js),
     // with the battle's effect cells riding on them once the atlas is in.
     const cells = bankCells;
-    const cellScale = () => Math.max(2, Math.min(4, (stage.getBoundingClientRect?.().width ?? 300) / 120));
+    // 3.2x..4.2x native: the cells read at phone size (VFX_FIVE_LAYER_20261101).
+    const cellScale = () => Math.max(3.2, Math.min(4.2, (stage.getBoundingClientRect?.().width ?? 300) / 90));
     const bank = role => payload.look.banks.find(entry => entry.role === role) ?? null;
-    const playCell = (role, x, y, host = null) => {
-      const entry = bank(role);
+    const playCell = (role, x, y, host = null, options = {}) => {
+      const entry = typeof role === "string" ? bank(role) : role;
       if (!cells || !entry || !cells.has(entry.bankId, entry.sequence)) return null;
       const anchor = host ?? spawn("cm-showcase__cell-anchor", x, y);
-      const cell = cells.play(entry.bankId, entry.sequence, anchor, { nativeScale: cellScale() });
+      if (!host && options.angle) anchor.style.transform = `rotate(${options.angle}rad)`;
+      const cell = cells.play(entry.bankId, entry.sequence, anchor, { nativeScale: options.scale ?? cellScale(),
+        hue: options.hue ?? payload.look.cellHue, tint: options.hue === 0 ? 0xffffff : payload.look.cellTint, duration: options.duration ?? null, flip: options.flip ?? false });
       if (!cell) { if (!host) anchor.remove(); return null; }
       later(Math.min(1400, Number(cell.dataset.lifetime) || 600), () => { if (host) cell.remove(); else anchor.remove(); });
       return cell;
     };
+    // The move's own cells laid along a stream style's path: a line from the
+    // muzzle (flame, beam, sound), a fall from above (thunder, holy) or a run
+    // along the ground (vine, thorn, quake).
+    function streamCells(mode, from, to, ground) {
+      const role = bank("body") ? "body" : bank("launch") ? "launch" : null;
+      if (!role || !cells) return 0;
+      const step = Math.max(18, 8 * cellScale());
+      const start = mode === "sky" ? { x: to.x, y: Math.max(0, to.y - 150) } : mode === "ground" ? { x: from.foot.x + 24, y: from.foot.y - 4 } : from;
+      const end = mode === "ground" ? { x: ground.x, y: ground.y - 4 } : to;
+      const dx = end.x - start.x, dy = end.y - start.y, length = Math.hypot(dx, dy), angle = Math.atan2(dy, dx);
+      // Butt the cells end to end: never spread them wider than one cell apart.
+      const count = Math.max(2, Math.min(full ? 24 : 6, Math.ceil(length / step) + 1));
+      for (let i = 0; i < count; i++) {
+        later(i * (mode === "sky" ? 20 : 30), () => {
+          const t = count > 1 ? i / (count - 1) : 1;
+          playCell(role, start.x + dx * t, start.y + dy * t, null, { angle: mode === "line" ? angle : 0, duration: 380 });
+        });
+      }
+      return count;
+    }
     const styleContext = () => {
       const from = casterPoint(), to = dummyPoint();
       const foot = point(dummy.body, 1);
       return { doc, spawn, animate, later, full, from, to, tier: payload.look.tier,
         ground: { x: foot.x, y: foot.top + foot.h - 4 }, casterGround: from.foot,
-        carry: (element, first) => { if (first && SHOWCASE_CARRIER_STYLES.includes(payload.look.style)) playCell("body", 0, 0, element); } };
+        carry: (element, first) => { if (first && SHOWCASE_CARRIER_STYLES.includes(payload.look.style)) playCell(bank("body") ? "body" : "launch", 0, 0, element); } };
     };
     // 3) The move travels by style, from the muzzle; contact follows the flight.
     function travel() {
@@ -439,6 +522,19 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
       const dx = to.x - from.x;
       const style = payload.look.style;
       playCell("launch", from.x, from.y) ?? playCell("prepare", from.x, from.y);
+      // Release: a shock ring across the shot and seven recoil sparks at the muzzle.
+      if (!showcaseStyleIsMelee(style) && full) {
+        const aim = Math.atan2(to.y - from.y, to.x - from.x);
+        const ringNode = spawn("cm-vfx cm-vfx--muzzlering", from.x, from.y);
+        animate(ringNode, [{ opacity: 1, transform: `rotate(${aim}rad) scale(0.3, 0.5)` }, { opacity: 0, transform: `rotate(${aim}rad) scale(0.9, 1.6)` }], { duration: 200, easing: "ease-out" });
+        later(220, () => ringNode.remove());
+        for (let i = 0; i < 7; i++) {
+          const spark = spawn("cm-showcase__spark", from.x, from.y), a = aim + Math.PI + (i - 3) * 0.3;
+          animate(spark, [{ opacity: 1, transform: `translate(-50%, -50%) rotate(${a}rad) translateX(0) scaleX(0.8)` },
+            { opacity: 0, transform: `translate(-50%, -50%) rotate(${a}rad) translateX(${26 + (i % 3) * 8}px) scaleX(0.3)` }], { duration: 240, easing: "ease-out" });
+          later(260, () => spark.remove());
+        }
+      }
       if (showcaseStyleIsMelee(style)) {
         const reach = dx - to.w * 0.55;
         animate(caster.element, [{ transform: "translateX(0)" }, { transform: `translateX(${reach}px)`, offset: 0.4 },
@@ -453,7 +549,11 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
             animate(holder, [{ opacity: 0.55 }, { opacity: 0 }], { duration: 300, easing: "ease-out" });
           });
         }
-      } else playShowcaseStyle("travel", style, styleContext());
+      } else {
+        const context = styleContext();
+        playShowcaseStyle("travel", style, context);
+        if (SHOWCASE_STREAM_STYLES[style]) streamCells(SHOWCASE_STREAM_STYLES[style], context.from, context.to, context.ground);
+      }
     }
     // 4) Contact: 60 ms hit-stop, then flash, knockback, sparks and the number.
     function contact() {
@@ -483,9 +583,21 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
       animate(core, [{ opacity: 1, transform: "translate(-50%, -50%) scale(0.3)" }, { opacity: 0.9, offset: 0.3, transform: "translate(-50%, -50%) scale(1)" },
         { opacity: 0, transform: "translate(-50%, -50%) scale(1.6)" }], { duration: 300, easing: "ease-out" });
       playShowcaseStyle("impact", payload.look.style, styleContext());
-      if (!SHOWCASE_CARRIER_STYLES.includes(payload.look.style)) playCell("body", to.x, to.y);
+      const carried = SHOWCASE_CARRIER_STYLES.includes(payload.look.style) || SHOWCASE_STREAM_STYLES[payload.look.style];
+      if (!carried) playCell("body", to.x, to.y);
       playCell("hit", to.x, to.y);
-      later(90, () => playCell("extra", to.x, to.y));
+      later(90, () => playCell("extra", to.x, to.y, null, { scale: cellScale() * 1.1 }));
+      if (payload.look.accent) playCell(payload.look.accent, to.x, to.y, null, { hue: 0 });
+      // The struck body keeps the element a moment: embers, rime, sparks, bubbles.
+      if (payload.look.overlay) for (let i = 0; i < 2; i++) later(i * 300, () => playCell(payload.look.overlay, to.x + (i ? 10 : -8), to.y - 6, null, { hue: 0, duration: 420, scale: cellScale() * 0.8 }));
+      // A four-second ground mark under the dummy.
+      const groundAt = point(dummy.body, 1);
+      const mark = node(doc, "i", "cm-showcase__decal");
+      mark.dataset.decal = payload.look.decal;
+      mark.style.left = `${Math.round(groundAt.x)}px`;
+      mark.style.top = `${Math.round(groundAt.top + groundAt.h - 6)}px`;
+      backdrop.append(mark);
+      animate(mark, [{ opacity: 0 }, { opacity: 1, offset: 0.03 }, { opacity: 1, offset: 0.7 }, { opacity: 0 }], { duration: 4000, easing: "linear" });
       for (let i = 0; i < (full ? 6 : 0); i++) {
         const spark = spawn("cm-showcase__spark", to.x, to.y);
         const angle = (Math.PI * 2 * i) / 6 + (i % 2) * 0.2, reach = 46 + (i % 3) * 16;
@@ -499,8 +611,11 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
       if (full) {
         animate(dummy.body, [{ transform: "translateX(0)" }, { transform: "translateX(11px) rotate(4deg)", offset: 0.25 }, { transform: "translateX(0) rotate(0)" }],
           { duration: 300, easing: "cubic-bezier(.2,.8,.3,1)" });
-        animate(arena, [{ transform: "translate(0,0)" }, { transform: "translate(3px,-2px)", offset: 0.2 }, { transform: "translate(-2px,2px)", offset: 0.45 },
-          { transform: "translate(1px,-1px)", offset: 0.7 }, { transform: "translate(0,0)" }], { duration: 240 });
+        // The signature lens: 1.22x toward the hit for 260 ms, with the shake folded in.
+        arena.style.transformOrigin = `${Math.round(to.x)}px ${Math.round(to.y)}px`;
+        animate(arena, [{ transform: "translate(0,0) scale(1)" }, { transform: "translate(3px,-2px) scale(1.18)", offset: 0.2 },
+          { transform: "translate(-2px,2px) scale(1.22)", offset: 0.4 }, { transform: "translate(1px,-1px) scale(1.12)", offset: 0.7 },
+          { transform: "translate(0,0) scale(1)" }], { duration: 260, easing: "ease-out" });
       }
       // The move's catalog power, popped as a critical-style number on a parabola.
       const value = payload.encrypted ? "???" : String(payload.move?.power ?? "");
@@ -526,8 +641,9 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     const element = button(doc, "cm-showcase-cta cm-showcase-cta--special", `🎬 ${juicyText("preview.special")}`);
     element.dataset.showcase = "special";
     element.dataset.encrypted = String(Boolean(encrypted));
+    ensureBankCells();
     element.addEventListener("click", () => {
-      bankCells ??= createShowcaseBankCells({ doc, fetchImpl });
+      ensureBankCells();
       start("special", { title: encrypted ? `${juicyText("encrypted")} · ${move.name}` : `${name} · ${move.name}`,
         speciesIndex, speciesId, name, move, look: showcaseMoveLook(move.recordIndex), encrypted,
         portrait: encrypted && !silhouette ? null : juicyPortrait(speciesIndex), lockedNote: encrypted ? juicyText("locked.species") : null });
@@ -571,6 +687,7 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
       if (theater) { clearStage(); theater.root.remove(); theater = null; }
       bankCells?.dispose();
       bankCells = null;
+      cellsReady = false;
       disposed = true;
     }
   });

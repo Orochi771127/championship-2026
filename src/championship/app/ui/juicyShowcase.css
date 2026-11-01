@@ -568,7 +568,7 @@ body[data-status-bar="on"] .cm-showcase { padding-top: max(12px, env(safe-area-i
    battle's own effect cells ride on top (showcaseBankCells.js). */
 .cm-showcase__fx > .cm-vfx { translate: -50% -50%; pointer-events: none; }
 .cm-showcase__fx > :is(.cm-vfx--vine, .cm-vfx--thorn, .cm-vfx--icespike, .cm-vfx--rockspike, .cm-vfx--lightpillar, .cm-vfx--tornado) { translate: -50% -100%; transform-origin: 50% 100%; }
-.cm-showcase__fx > :is(.cm-vfx--whip, .cm-vfx--flame, .cm-vfx--jet, .cm-vfx--fissure, .cm-vfx--thrust) { translate: 0 -50%; transform-origin: 0 50%; }
+.cm-showcase__fx > :is(.cm-vfx--whip, .cm-vfx--jet, .cm-vfx--fissure, .cm-vfx--thrust) { translate: 0 -50%; transform-origin: 0 50%; }
 .cm-showcase__fx > :is(.cm-vfx--bolt, .cm-vfx--lightarrow) { translate: -50% 0; transform-origin: 50% 0; }
 .cm-showcase__cell-anchor { width: 0; height: 0; }
 .cm-showcase__cell { position: absolute; left: 50%; top: 50%; width: 0; height: 0; pointer-events: none; }
@@ -614,8 +614,8 @@ body[data-status-bar="on"] .cm-showcase { padding-top: max(12px, env(safe-area-i
 .cm-vfx--fireball { width: 30px; height: 30px; border-radius: 50%; background: radial-gradient(circle, var(--jc-core, #fff4c2) 0 22%, var(--jc-main, #ff8a1c) 48%, var(--jc-edge, #d8360f) 66%, transparent 74%); box-shadow: 0 0 16px var(--jc-main, #ff8a1c); }
 .cm-vfx--ember { width: 6px; height: 6px; border-radius: 50%; background: #ffd27a; box-shadow: 0 0 6px #ff8a1c; }
 .cm-vfx--flamelet { width: 18px; height: 30px; border-radius: 50% 50% 50% 50% / 64% 64% 36% 36%; background: linear-gradient(0deg, var(--jc-edge, #d8360f), var(--jc-main, #ff8a1c) 50%, var(--jc-core, #fff4c2)); }
-.cm-vfx--flame { height: 50px; clip-path: polygon(0 42%, 100% 0, 100% 100%, 0 58%);
-  background: linear-gradient(90deg, var(--jc-core, #fff4c2), var(--jc-main, #ff8a1c) 38%, var(--jc-edge, #d8360f) 82%, transparent); }
+.cm-vfx--flametongue { width: 34px; height: 26px; border-radius: 60% 40% 50% 50% / 55% 55% 45% 45%;
+  background: radial-gradient(ellipse at 35% 45%, var(--jc-core, #fff4c2) 0 22%, var(--jc-main, #ff8a1c) 48%, color-mix(in srgb, var(--jc-edge, #d8360f) 80%, transparent) 66%, transparent 74%); }
 .cm-vfx--droplet { width: 10px; height: 14px; border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; background: radial-gradient(circle at 40% 35%, #ffffff 0 15%, var(--jc-main, #3fb8ff) 55%, var(--jc-edge, #1f5fd6)); }
 .cm-vfx--jet { height: 14px; border-radius: 999px; background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0 6px, transparent 6px 16px), linear-gradient(180deg, var(--jc-edge, #1f5fd6), var(--jc-main, #3fb8ff) 50%, var(--jc-edge, #1f5fd6)); }
 .cm-vfx--ripple, .cm-vfx--halo { width: 84px; height: 84px; border-radius: 50%; border: 3px solid var(--jc-main, #3fb8ff); }
@@ -646,3 +646,44 @@ body[data-status-bar="on"] .cm-showcase { padding-top: max(12px, env(safe-area-i
 .cm-vfx--note::before { content: "\266A"; font: 900 18px/1 var(--font-ui, system-ui); color: var(--jc-main, #ff7ad8); text-shadow: 0 0 6px var(--jc-edge, #a83cc8); }
 :root[data-motion="reduced"] .cm-vfx--tornado > i { animation: none; }
 @media (prefers-reduced-motion: reduce) { .cm-vfx--tornado > i { animation: none; } }
+
+/* Five-layer preview (Owner 2026-11-01, VFX_FIVE_LAYER_20261101): element orb and
+   glints at the muzzle, a muzzle shock ring, a stepped signature backdrop and a
+   four-second ground mark. Small layers with normal blending only (no full-screen
+   blend or filter), so software-rendered CI keeps its animation frames. */
+.cm-showcase__backdrop { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.cm-vfx--orb { width: 34px; height: 34px; border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0 22%, var(--jc-core, #fff) 34%, var(--jc-main, #5ff3ff) 56%, transparent 72%); box-shadow: 0 0 16px var(--jc-main, #5ff3ff); }
+.cm-vfx--orbglint { width: 7px; height: 7px; border-radius: 50%; background: var(--jc-core, #fff); box-shadow: 0 0 6px var(--jc-main, #5ff3ff); }
+.cm-vfx--muzzlering { width: 26px; height: 48px; border-radius: 50%; border: 3px solid var(--jc-main, #5ff3ff); box-shadow: 0 0 8px var(--jc-core, #fff); }
+.cm-showcase__storm { position: absolute; left: 50%; top: 46%; width: 150%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; opacity: 0; }
+.cm-showcase__storm[data-storm="vortex"] { background: repeating-conic-gradient(from 10deg, color-mix(in srgb, var(--jc-main) 70%, transparent) 0 9deg, transparent 9deg 30deg),
+  radial-gradient(circle, var(--jc-core) 0 10%, color-mix(in srgb, var(--jc-edge) 55%, transparent) 38%, transparent 66%); }
+.cm-showcase__storm[data-storm="lattice"] { background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--jc-core) 85%, transparent) 0 2deg, transparent 2deg 24deg),
+  repeating-radial-gradient(circle, transparent 0 34px, color-mix(in srgb, var(--jc-main) 60%, transparent) 34px 37px), radial-gradient(circle, var(--jc-core) 0 8%, transparent 60%); }
+.cm-showcase__storm[data-storm="aurora"] { border-radius: 0; aspect-ratio: auto; height: 100%; background: repeating-linear-gradient(170deg, transparent 0 18px,
+  color-mix(in srgb, var(--jc-main) 55%, transparent) 18px 30px, color-mix(in srgb, var(--jc-core) 45%, transparent) 30px 34px, transparent 34px 52px); }
+.cm-showcase__storm[data-storm="gears"] { background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--jc-edge) 80%, transparent) 0 6deg, transparent 6deg 15deg),
+  repeating-radial-gradient(circle, transparent 0 40px, color-mix(in srgb, var(--jc-main) 55%, transparent) 40px 46px); }
+.cm-showcase__storm[data-storm="gale"] { border-radius: 0; aspect-ratio: auto; height: 100%; background: repeating-linear-gradient(-14deg, transparent 0 22px,
+  color-mix(in srgb, var(--jc-main) 60%, transparent) 22px 26px, transparent 26px 44px, color-mix(in srgb, var(--jc-core) 50%, transparent) 44px 46px); }
+.cm-showcase__storm[data-storm="eclipse"] { background: radial-gradient(circle, #0a0712 0 16%, var(--jc-core) 17% 19%, color-mix(in srgb, var(--jc-main) 60%, transparent) 26%, transparent 60%); }
+.cm-showcase__storm[data-storm="quake"] { background: repeating-conic-gradient(from 5deg, color-mix(in srgb, var(--jc-edge) 85%, transparent) 0 3deg, transparent 3deg 36deg),
+  radial-gradient(circle, color-mix(in srgb, var(--jc-main) 60%, transparent) 0 20%, transparent 64%); }
+.cm-showcase__storm[data-storm="burst"] { background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--jc-core) 70%, transparent) 0 4deg, transparent 4deg 22deg); }
+.cm-showcase__decal { position: absolute; width: 118px; height: 34px; translate: -50% -50%; border-radius: 50%; opacity: 0; }
+.cm-showcase__decal[data-decal="scorch"] { background: radial-gradient(ellipse, rgba(18, 10, 6, 0.85) 0 40%, color-mix(in srgb, var(--jc-edge) 35%, transparent) 62%, transparent 72%); }
+.cm-showcase__decal[data-decal="puddle"] { background: radial-gradient(ellipse, color-mix(in srgb, var(--jc-main) 30%, transparent) 0 40%, transparent 41% 48%,
+  color-mix(in srgb, var(--jc-core) 70%, transparent) 49% 52%, transparent 53% 62%, color-mix(in srgb, var(--jc-core) 55%, transparent) 63% 66%, transparent 68%); }
+.cm-showcase__decal[data-decal="frost"] { background: repeating-conic-gradient(from 15deg, color-mix(in srgb, var(--jc-core) 90%, transparent) 0 3deg, transparent 3deg 60deg),
+  radial-gradient(ellipse, color-mix(in srgb, var(--jc-main) 40%, transparent) 0 55%, transparent 70%); }
+.cm-showcase__decal[data-decal="static"] { background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--jc-main) 90%, transparent) 0 2deg, transparent 2deg 40deg),
+  radial-gradient(ellipse, rgba(20, 16, 10, 0.8) 0 45%, transparent 70%); }
+.cm-showcase__decal[data-decal="crack"] { background: repeating-conic-gradient(from 8deg, rgba(30, 20, 12, 0.9) 0 4deg, transparent 4deg 55deg), radial-gradient(ellipse, rgba(90, 70, 50, 0.4) 0 50%, transparent 70%); }
+.cm-showcase__decal[data-decal="roots"] { background: repeating-conic-gradient(from 20deg, color-mix(in srgb, var(--jc-edge) 90%, transparent) 0 5deg, transparent 5deg 72deg),
+  radial-gradient(ellipse, color-mix(in srgb, var(--jc-main) 35%, transparent) 0 40%, transparent 70%); }
+.cm-showcase__decal[data-decal="swirl"] { background: repeating-radial-gradient(ellipse, transparent 0 8px, color-mix(in srgb, var(--jc-main) 55%, transparent) 8px 10px); }
+.cm-showcase__decal[data-decal="sunburst"] { background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--jc-edge) 85%, transparent) 0 3deg, transparent 3deg 30deg),
+  radial-gradient(ellipse, color-mix(in srgb, var(--jc-core) 70%, transparent) 0 30%, transparent 70%); }
+.cm-showcase__decal[data-decal="shade"] { background: radial-gradient(ellipse, color-mix(in srgb, var(--jc-edge) 75%, transparent) 0 45%, transparent 72%); }
+@media (prefers-reduced-motion: reduce) { .cm-showcase__storm { display: none; } }

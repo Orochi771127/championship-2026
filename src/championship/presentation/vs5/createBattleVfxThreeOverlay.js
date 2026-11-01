@@ -41,7 +41,8 @@ export async function mountBattleVfxThreeOverlay({
   getFieldPlacement = () => null,
   fetchImpl = globalThis.fetch,
   recordDiagnostic = () => {},
-  isActive = () => true
+  isActive = () => true,
+  getCues = () => []
 }) {
   if (!host || typeof host.appendChild !== "function") fail("HOST_REQUIRED");
   if (!stage?.app?.ticker || typeof stage.onResize !== "function") fail("PIXI_STAGE_TICKER_REQUIRED");
@@ -120,13 +121,59 @@ export async function mountBattleVfxThreeOverlay({
     }
   }catch(error){await runtime.unloadAll();destroyRenderer();throw error;}
 
+  // Cue systems (VFX_FIVE_LAYER_20261101): support buffs, critical hits and
+  // signature-move weather, loaded on first use and reused. Presentation only:
+  // a cue comes from the dynamic layer's events, never from damage guesses.
+  const cueSystems = new Map(); // systemId -> {fx, container, until, loop, span, ready}
+  const CUE_COMPANION = Object.freeze({'common-snowstome': 'common-snow', 'common-rain': 'common-mist'});
+  const WEATHER_MS = 1500, BUFF_MS = 1100;
+  function cueSystem(systemId) {
+    if (!runtime.resolveSystemId(systemId)) return null;
+    let entry = cueSystems.get(systemId);
+    if (entry) return entry;
+    const weather = systemId.startsWith('common-');
+    entry = {fx: null, container: new THREE.Group(), until: 0, age: 0, loop: weather, span: 1, ready: false, point: null, weather};
+    entry.container.visible = false;
+    scene.add(entry.container);
+    cueSystems.set(systemId, entry);
+    runtime.load(systemId, {loop: weather, channel: `cue-${systemId.replace(/[^a-z0-9-]/g, '-')}`.slice(0, 32)}).then(fx => {
+      if (!fx || disposed) return;
+      entry.fx = fx;
+      // Weather spans the whole field: its small source textures read as haze
+      // with linear filtering instead of magnified blocks.
+      if (weather) fx.object3d.traverse(node => {
+        for (const material of [node.material].flat().filter(Boolean)) {
+          if (!material.map) continue;
+          material.map.magFilter = THREE.LinearFilter; material.map.minFilter = THREE.LinearFilter; material.map.needsUpdate = true;
+        }
+      });
+      entry.container.add(fx.object3d);
+      const box = new THREE.Box3().setFromObject(fx.object3d), size = box.getSize(new THREE.Vector3());
+      entry.span = Math.max(size.x, size.y, 0.001);
+      entry.ready = true;
+    }).catch(error => { entry.failed = String(error?.message ?? error); });
+    return entry;
+  }
+  function playCue(cue) {
+    const systems = [cue.system, CUE_COMPANION[cue.system]].filter(Boolean);
+    for (const systemId of systems) {
+      const entry = cueSystem(systemId);
+      if (!entry) continue;
+      entry.until = entry.weather ? WEATHER_MS : BUFF_MS;
+      entry.age = 0;
+      entry.point = {x: cue.x, y: cue.y};
+      entry.cue = cue.type;
+      if (entry.fx) entry.fx.sampleNativeFrame(0);
+    }
+  }
+
   let disposed = false;
   // Nothing visible and already cleared: skip the Three render (it would walk
   // every pooled impact group and clear the canvas again each frame).
   let cleared = false;
   let firstVisibleRender=false;
   const recordFirstRender=(phase,error)=>{try{recordDiagnostic('LOAD',{area:'battle',stage:'first-vfx-render',phase,...(error?{error}:{})});}catch{}};
-  const lastData = { focus: null, impacts: null };
+  const lastData = { focus: null, impacts: null, cues: null };
   const setData = (key, value) => { if (lastData[key] !== value) { lastData[key] = value; renderer.domElement.dataset[key] = value; } };
 
   function resize() {
@@ -185,6 +232,25 @@ export async function mountBattleVfxThreeOverlay({
           field.height/2-(y*field.zoom+field.y),effect.nativeCopy?effect.depthQ12/4096:1);
         item.container.scale.setScalar(field.nativeScale*field.zoom);
       }
+      for (const cue of getCues() ?? []) playCue(cue);
+      for (const [systemId, entry] of cueSystems) {
+        entry.age += effectiveDeltaMS;
+        const live = Boolean(entry.ready && field && entry.age < entry.until && !field.reducedMotion);
+        entry.container.visible = live;
+        if (!live) continue;
+        visibleImpacts++;
+        entry.fx.update(effectiveDeltaMS);
+        if (entry.weather) {
+          // Weather covers the field: centred on the arena, sized to its width.
+          const cx = field.artRect.x + field.artRect.width / 2, cy = field.artRect.y + field.artRect.height * 0.45;
+          entry.container.position.set(cx * field.zoom + field.x - field.width / 2, field.height / 2 - (cy * field.zoom + field.y), 2);
+          entry.container.scale.setScalar(field.artRect.width * field.zoom * 1.15 / entry.span);
+        } else {
+          entry.container.position.set(entry.point.x * field.zoom + field.x - field.width / 2, field.height / 2 - (entry.point.y * field.zoom + field.y), 2);
+          entry.container.scale.setScalar(field.nativeScale * field.zoom);
+        }
+      }
+      setData('cues', JSON.stringify([...cueSystems].map(([id, e]) => ({id, ready: e.ready, visible: e.container.visible, cue: e.cue ?? null}))));
       setData('impacts', JSON.stringify({active:active.length,
         visible:visibleImpacts,
         instances:active.map(e=>({id:e.id,type:e.type,slot:e.slot,frame:e.frame,systemId:e.systemId}))}));
@@ -231,6 +297,7 @@ export async function mountBattleVfxThreeOverlay({
         systemId: resolvedId,
         requestedSystemId: systemId,
         impacts:{capacity:impacts.length,visible:impacts.filter(e=>e.container.visible).length},
+        cues:[...cueSystems].map(([id,e])=>({id,ready:e.ready,visible:e.container.visible,failed:e.failed??null})),
         vfx: instance.getDiagnostics()
       });
     },
