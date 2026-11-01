@@ -44,7 +44,8 @@ test('idle breathing, victory hops and walk cadence stay small and bounded',()=>
 test('the arena scene wires reviewed motion into sampling, release effects and shots',()=>{
   const scene=readFileSync(new URL('../src/championship/presentation/dataArena/dataArenaPixiScene.js',import.meta.url),'utf8');
   assert.match(scene,/moveRate:reviewedMoveRate\(vx,vy\),victory:seq===DATA_ARENA_SEQUENCES\.WIN/);
-  assert.match(scene,/releasePoint\(angle\)\{\s*if\(!reviewedArena\)return null;/);
+  // A partial QA set drawing its native body keeps the native hand offset too (2026-11-01).
+  assert.match(scene,/releasePoint\(angle\)\{\s*if\(!reviewedArena\|\|\(partial&&!onReviewed\)\)return null;/);
   assert.match(scene,/const fx=relayLook\(event\.moveId,event\.team\),\{x,y,reviewed\}=releaseAt\(event\);/);
   assert.match(scene,/entry\.origin = releaseOrigins\.get\(projectile\.actionId\) \?\? null;/);
   // A relay ends on its KO pause, so the side still standing takes the WIN sequence there.

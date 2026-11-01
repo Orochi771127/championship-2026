@@ -1,6 +1,7 @@
 import {createPixiAssetScope} from './pixiCharacterRuntimeBundle.js';
 import {reviewedNumericClip,sampleReviewedCharacterClip,createReviewedArenaPlayback} from './reviewedCharacterAnimation.js';
 import {reviewedCharacterSelection,reviewedCharacterSelections,reviewedGeneralDisplayScale} from './reviewedSelection.js';
+import {reviewedDocumentRef,handoffOnlyArenaEntry} from './animationHandoff.js';
 
 export {reviewedCharacterSelection,reviewedCharacterSelections};
 // The original atlas pages of these species are retired; only timing/geometry remain.
@@ -14,15 +15,16 @@ export function reviewedSpeciesForEntity(config,bindings,baseUrl){
 const digest=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
 
 export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,baseUrl,signal,usage='all',requiredNumeric=null,fetchImpl=globalThis.fetch}) {
-  const entry=reviewedCharacterSelection(speciesId,baseUrl);
+  const entry=reviewedCharacterSelection(speciesId,baseUrl)??(usage==='arena'?await handoffOnlyArenaEntry(speciesId,baseUrl,fetchImpl):null);
   if(!entry)return bundle;
-  const url=new URL(entry.path,baseUrl).href;
+  // The QA handoff switch (animationHandoff.js) may pick the entry's alternative manifest.
+  const ref=await reviewedDocumentRef(entry,baseUrl,fetchImpl),url=new URL(ref.path,baseUrl).href;
   let document;
   try{
     const response=await fetchImpl(url,{signal});
     if(!response.ok)throw Error('REVIEWED_ANIMATION_HTTP_'+response.status);
     const text=await response.text();
-    if(await digest(new TextEncoder().encode(text))!==entry.sha256)throw Error('REVIEWED_ANIMATION_HASH');
+    if(await digest(new TextEncoder().encode(text))!==ref.sha256)throw Error('REVIEWED_ANIMATION_HASH');
     document=JSON.parse(text);
     // The public manifest lists frames as [{id,...}]; the runtime reads them by id.
     if(Array.isArray(document.frames))document={...document,frames:Object.fromEntries(document.frames.map(({id,...f})=>[id,f]))};
@@ -81,7 +83,10 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
       const origin=mirrorGeneral?[size[0]-f.origin[0],f.origin[1]]:f.origin;
       const source=image.source;
       if(crop[0]<0||crop[1]<0||crop[0]+crop[2]>source.pixelWidth||crop[1]+crop[3]>source.pixelHeight)throw Error('REVIEWED_FRAME_OUTSIDE_IMAGE');
-      source.scaleMode='nearest';
+      // Pixel art keeps hard texels. Painted handoff art (sampling 'smooth', 2026-11-01) is drawn smaller than
+      // its texels on low-resolution renderers; nearest dropped texels there, so it is filtered through mipmaps.
+      if(f.sampling==='smooth'){source.scaleMode='linear';source.autoGenerateMipmaps=true;}
+      else if(!source.autoGenerateMipmaps)source.scaleMode='nearest';
       const texture=new PIXI.Texture({source,frame:new PIXI.Rectangle(...crop),orig:new PIXI.Rectangle(0,0,...size),
         trim:f.trim||mirrorGeneral?new PIXI.Rectangle(...trim):undefined,...(mirrorGeneral?{rotate:12}:{})});// 12 = groupD8.MIRROR_HORIZONTAL
       textures.set(key,texture);
@@ -145,8 +150,11 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
         // presenter mirrors the sprite from flipBits) instead of showing the original.
         if(!frame||!sequence||!binding){current=null;return native;}
         const ticks=sequence.frames.slice(0,frame.frameIndex).reduce((n,f)=>n+f.ticks,0)+(frame.elapsedQ12??0)/4096;
-        return {...native,...apply(sampleReviewedCharacterClip(document,side,frame.sequenceId,binding.clip,ticks*1000/60,{holdFirst:options.reducedMotion,nativeActive:frame.active,
-          terminal:[15,25].includes(frame.sequenceId)&&['down','down_ko','bound_down'].includes(binding.clip.action)}))};
+        const sampled=apply(sampleReviewedCharacterClip(document,side,frame.sequenceId,binding.clip,ticks*1000/60,{holdFirst:options.reducedMotion,nativeActive:frame.active,
+          terminal:[15,25].includes(frame.sequenceId)&&['down','down_ko','bound_down'].includes(binding.clip.action)}));
+        // A front-facing clip (handoff facingLocked) is drawn as authored, never mirrored by facing.
+        if(sampled&&binding.clip.facingLocked===true)sampled.facingLocked=true;
+        return {...native,...sampled};
       };
       let id=options.animation??0,elapsed=0,fallbackId=null;
       const fallback=(deltaMS=0)=>{
@@ -161,7 +169,10 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
         const sample=apply(sampleReviewedCharacterClip(document,side,id,binding.clip,options.reducedMotion?0:elapsed,{holdFirst:options.reducedMotion,terminal:side==='sub'?id===5:[15,25].includes(id)}));
         if(!sample)return fallback(deltaMS);
         fallbackId=null;return sample;
-      },getSnapshot:()=>current??actor.controller?.getSnapshot()};
+      },
+      // A partial Arena set hands a body back to its native art: the next setAnimation restarts the native sequence.
+      resumeNative(){current=null;fallbackId=null;restoreBaselineAnchor();},
+      getSnapshot:()=>current??actor.controller?.getSnapshot()};
       if(usage!=='arena')controller.update({deltaMS:0});
       const arenaPlayback=createReviewedArenaPlayback(document,{...options,nativeFallback:bundle.getDiagnostics?.().nativePixels!==false});
       const battleAnimator=actor.battleAnimator?{...actor.battleAnimator,apply(request){
@@ -176,7 +187,7 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
       },getSnapshot:()=>current}:null;
       return Object.freeze({...actor,controller,
         nativeFramePresenter:actor.nativeFramePresenter?{...actor.nativeFramePresenter,apply:nativeApply,getSnapshot:()=>current}:null,
-        battleAnimator,reviewedArena:{referenceHeight:[...geometry.values()][0]?.referenceHeight??null,
+        battleAnimator,reviewedArena:{referenceHeight:[...geometry.values()][0]?.referenceHeight??null,partial:entry.partialArena===true,
           observe:event=>arenaPlayback.observe(event),reset:()=>arenaPlayback.reset(),sample(state){
           const sample=arenaPlayback.sample(state);if(sample.fallbackSequenceId!==undefined){
             current=null;actor.controller?.setAnimation(sample.fallbackSequenceId);restoreBaselineAnchor();return sample;

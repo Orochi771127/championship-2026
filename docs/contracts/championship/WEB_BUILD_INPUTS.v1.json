@@ -287,6 +287,7 @@
     "src/championship/online/supabaseLoader.js",
     "src/championship/online/supabaseMode.js",
     "src/championship/presentation/acceptedDatabasePortraits.js",
+    "src/championship/presentation/animationHandoff.js",
     "src/championship/presentation/audioBus.js",
     "src/championship/presentation/battleAudioPresentation.js",
     "src/championship/presentation/battleCharacterAction.js",
@@ -6044,11 +6045,13 @@
     "assets/production/characters/reviewed107-20261026/GR15/web-atlas-v2/f058556644c61400d38b88fba5bb506392bbaca27faa082915062ef7dcae07c4.webp",
     "assets/production/characters/reviewed107-20261026/GR16/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/GR16/web-atlas-v2/6d403397ccdc34d7b5d5c5030395ca94195719339a825e8297e06f25659b5dd0.webp",
+    "assets/production/characters/reviewed107-20261026/GR16/web-atlas-v2/6f6af9b17c3e06788d4a81a0b3bcda6a91b40075e59aff96f8346623a91c8dec.webp",
     "assets/production/characters/reviewed107-20261026/GR16/web-atlas-v2/87616b4fc91f6a400448496962886784759e9e03f46f1d4ab6e61479968b4137.webp",
     "assets/production/characters/reviewed107-20261026/GR17/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/GR17/web-atlas-v2/7587bd5c4f5c02bcd5c73f402b352e7b7fcdae0f5d59dec6238b3bd09b17a7ed.webp",
     "assets/production/characters/reviewed107-20261026/GR17/web-atlas-v2/eaf453b77c20ef047dc16555f1736eded16a2b7778cb26dff225ce87df31777a.webp",
     "assets/production/characters/reviewed107-20261026/GR18/animation.public-v1.json",
+    "assets/production/characters/reviewed107-20261026/GR18/web-atlas-v2/22d07157576aeb745823280ccef5233a45929a20ae63f8b49d2f91af91597c6c.webp",
     "assets/production/characters/reviewed107-20261026/GR18/web-atlas-v2/828ff2ed8ea097b9711c44d1ca9a0baa1b1d0c05622a2889762f407c8c47f2a5.webp",
     "assets/production/characters/reviewed107-20261026/GR18/web-atlas-v2/8efd6f666dc22eca14ae7c20675e6fa63809b7611cd248cde2854ca8cf1ff443.webp",
     "assets/production/characters/reviewed107-20261026/GR19/animation.public-v1.json",
@@ -8490,6 +8493,7 @@
     "src/championship/online/supabaseLoader.js",
     "src/championship/online/supabaseMode.js",
     "src/championship/presentation/acceptedDatabasePortraits.js",
+    "src/championship/presentation/animationHandoff.js",
     "src/championship/presentation/audioBus.js",
     "src/championship/presentation/battleAudioPresentation.js",
     "src/championship/presentation/battleCharacterAction.js",
@@ -30800,11 +30804,15 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/GR16/animation.public-v1.json",
-        "sha256": "4950e9635777b68d7a399f134e4b17c6f45e2e42d3ae4a26658de808226d8646"
+        "sha256": "ed44b208fb7f2445eec535e1d4e9cadc32915be4899f103a86fd91cc6aefb5bb"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/GR16/web-atlas-v2/6d403397ccdc34d7b5d5c5030395ca94195719339a825e8297e06f25659b5dd0.webp",
         "sha256": "6d403397ccdc34d7b5d5c5030395ca94195719339a825e8297e06f25659b5dd0"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/GR16/web-atlas-v2/6f6af9b17c3e06788d4a81a0b3bcda6a91b40075e59aff96f8346623a91c8dec.webp",
+        "sha256": "6f6af9b17c3e06788d4a81a0b3bcda6a91b40075e59aff96f8346623a91c8dec"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/GR16/web-atlas-v2/87616b4fc91f6a400448496962886784759e9e03f46f1d4ab6e61479968b4137.webp",
@@ -30824,7 +30832,11 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/GR18/animation.public-v1.json",
-        "sha256": "56ad7888354aa00bbea0d3be3e317b49f62e03ac0cc5da5234e5d1a129091be4"
+        "sha256": "b59522c23e5690c2d3cf78ab183d196e8353af3c510b475f328a7805f03d4e9a"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/GR18/web-atlas-v2/22d07157576aeb745823280ccef5233a45929a20ae63f8b49d2f91af91597c6c.webp",
+        "sha256": "22d07157576aeb745823280ccef5233a45929a20ae63f8b49d2f91af91597c6c"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/GR18/web-atlas-v2/828ff2ed8ea097b9711c44d1ca9a0baa1b1d0c05622a2889762f407c8c47f2a5.webp",
@@ -40591,6 +40603,10 @@
         "sha256": "19189cd561ea21abb6fed5022593c98c8c9c969de837d825177cd98e2354aea0"
       },
       {
+        "path": "src/championship/presentation/animationHandoff.js",
+        "sha256": "fadf407389c3c511b36e10b5f1889bb2c6a1058db5e4731799b79536dea81f49"
+      },
+      {
         "path": "src/championship/presentation/audioBus.js",
         "sha256": "571c3339656772a0412af56295759b2601a3d154aec1d5153614d2eb5a6ecf93"
       },
@@ -40736,7 +40752,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-        "sha256": "a27f4c1f68851bef4a77d74bb91e5ac89904df16d87d315e021ebd1e32afee87"
+        "sha256": "e16776a78bd68818eec209fe41fc29ed2fc36cd29d012fa7ec7805db01d3472c"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
@@ -40752,7 +40768,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRoster.js",
-        "sha256": "191143bd5705ee9efa7140902b39f0a2f990e1b508d137dae37efa4dd75a0c76"
+        "sha256": "f79196c1a69c6fc596c5b109f78f2100948e1c28e7f159a5d07f1335dddfaed3"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaTextures.js",
@@ -40804,7 +40820,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "df8593a76a5d31346e390091b8fce89fe809f208a3f0be3746000df20e3d58cb"
+        "sha256": "498d85dd516089f929def608ea01a53286634e1cbc25ab2b30ebbbbe5a154c33"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingContactShadow.js",
@@ -41048,11 +41064,11 @@
       },
       {
         "path": "src/championship/presentation/reviewedCharacterLoader.js",
-        "sha256": "8336b59efad6945322313321dcd74c1438b3ef49bd4cdb9e10b4c896b919528c"
+        "sha256": "68d02e4c7b1851271c519cb86be9f9b0ec69378e566fdc0ac87058bf7857e47d"
       },
       {
         "path": "src/championship/presentation/reviewedSelection.js",
-        "sha256": "868f60903d00169e3776a31559f9842dd59d287fea26f640037a5ff2d8e5760e"
+        "sha256": "31188ea207bb35131873accfd36f139590c03e325c5fe29f259773b540194b46"
       },
       {
         "path": "src/championship/presentation/runtimeMapArtBundle.js",
@@ -41852,7 +41868,7 @@
       },
       {
         "path": "src/data/championship/reviewed-animation-selection.v1.json",
-        "sha256": "06277121e6e73fafdd6c370e119e12b139c5b972fe0d2dc369f044ef7743d4c2"
+        "sha256": "e56e4577ea405e0348345e1722fcae3e572f81fd1a6d0d26dd5222147f5fa086"
       },
       {
         "path": "src/data/championship/species-taxonomy.v1.json",

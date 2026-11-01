@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "ANIMATION_HANDOFF_QA_REGISTRY",
+  "version": "20261101",
+  "loopbackOnly": true,
+  "note": "QA alternative manifests for owner-accepted scopes; never shipped, never used on public hosts.",
+  "entries": [
+    {
+      "displayCode": "GR02",
+      "speciesId": "species-035",
+      "basePath": "assets/production/characters/reviewed107-20261026/GR02/animation.public-v1.json",
+      "baseSha256": "eadd56d5daaa150c3b600f3935f8675de6aba497a6c43965c060e76e7039db6d",
+      "path": "assets/production/characters/reviewed107-20261026/GR02/animation.handoff-20261101.json",
+      "sha256": "f8458a663039a367226b84dd536d781935af9ea7a43c1d678e418b77085bbc29",
+      "status": "OWNER_APPROVED_SCOPED_QA_ONLY",
+      "runtimeApproved": false,
+      "scopes": [
+        "Walk:Down,DownRight,Right,UpRight,Up,UpLeft,Left,DownLeft"
+      ]
+    },
+    {
+      "displayCode": "GR06",
+      "speciesId": "species-038",
+      "basePath": "assets/production/characters/reviewed107-20261026/GR06/animation.public-v1.json",
+      "baseSha256": "ca8d9f3b04547102a46dc3983e3758b7b2914d619c58bf7acefdefbbab73edb1",
+      "path": "assets/production/characters/reviewed107-20261026/GR06/animation.handoff-20261101.json",
+      "sha256": "fd5973436f9ec879bcf6caf8db742c5b51556ce780e6e339231c46fcacb5918e",
+      "status": "OWNER_APPROVED_SCOPED_QA_ONLY",
+      "runtimeApproved": false,
+      "scopes": [
+        "Walk:Down,DownRight,Right,UpRight,Up,UpLeft,Left,DownLeft"
+      ]
+    },
+    {
+      "displayCode": "GR08",
+      "speciesId": "species-040",
+      "basePath": "assets/production/characters/reviewed107-20261026/GR08/animation.public-v1.json",
+      "baseSha256": "6ca0316b100ed728890e49a91e57523bb892e7dc8fcedaabd35426ccbfcb03af",
+      "path": "assets/production/characters/reviewed107-20261026/GR08/animation.handoff-20261101.json",
+      "sha256": "95d86acb754c984dde36664d6dae1ea0f5129f282b9db29485231080491ae165",
+      "status": "OWNER_APPROVED_SCOPED_QA_ONLY",
+      "runtimeApproved": false,
+      "scopes": [
+        "Walk:Down,DownRight,Right,UpRight,Up,UpLeft,Left,DownLeft"
+      ]
+    },
+    {
+      "displayCode": "UL11",
+      "speciesId": "species-194",
+      "basePath": null,
+      "baseSha256": null,
+      "partialArena": true,
+      "path": "assets/production/characters/handoff-qa-20261101/UL11/animation.handoff-20261101.json",
+      "sha256": "c64b8377b83479028ea913c5b0a848b1c9972c08446480e685b97be507c2cd8f",
+      "status": "OWNER_ACCEPTED_EXACT_N_WALK_QA_ONLY_PARTIAL",
+      "runtimeApproved": false,
+      "scopes": [
+        "Walk:N"
+      ]
+    },
+    {
+      "displayCode": "UL12",
+      "speciesId": "species-195",
+      "basePath": null,
+      "baseSha256": null,
+      "partialArena": true,
+      "path": "assets/production/characters/handoff-qa-20261101/UL12/animation.handoff-20261101.json",
+      "sha256": "3f14f363efcf0dc949bf5416f561066f2217ce70f4e41e821aa289d8ff063345",
+      "status": "OWNER_ACCEPTED_EXACT_N_WALK_QA_ONLY_PARTIAL",
+      "runtimeApproved": false,
+      "scopes": [
+        "Walk:N"
+      ]
+    }
+  ]
+}

@@ -331,13 +331,17 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const shadow = new PIXI.Sprite(textures.shadow);
     shadow.anchor.set(0.5); shadow.alpha = 0.8;
     const bundle = member?.art ? bundles.get(member.speciesId) : null;
-    let sprite, controller = null, scale = 1, sequence = null, reviewedArena=null;
+    let sprite, controller = null, scale = 1, sequence = null, reviewedArena=null, nativeScale = 1, partial = false, onReviewed = false, reviewedSample = null;
     if (bundle) {
       const actor = bundle.createActor({ side: "main", animation: DATA_ARENA_SEQUENCES.STAND, reducedMotion: false });
       sprite = actor.sprite; controller = actor.controller;
       reviewedArena=actor.reviewedArena??null;
+      // A partial reviewed Arena set (QA handoff of a few accepted directions) keeps the native
+      // body for everything it does not cover, and draws its own frames at the native world size.
+      partial = reviewedArena?.partial === true;
       const height = sprite.texture.frame?.height || sprite.texture.height || 64;
-      scale = reviewedArena ? ROLE_HEIGHT[role]/64/4 : ROLE_HEIGHT[role] / height;
+      nativeScale = ROLE_HEIGHT[role] / height;
+      scale = reviewedArena && !partial ? ROLE_HEIGHT[role]/64/4 : nativeScale;
       sequence = DATA_ARENA_SEQUENCES.STAND;
     } else {
       sprite = new PIXI.Sprite(textures.fallback[role]);
@@ -364,7 +368,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       resetAction(){action.clear();reviewedArena?.reset();actionRequest=null;},
       // Where this body's move is drawn leaving it; null keeps the default hand offset.
       releasePoint(angle){
-        if(!reviewedArena)return null;
+        if(!reviewedArena||(partial&&!onReviewed))return null;
         const g=motion?.geometry;
         return reviewedReleasePoint({x:container.position.x+sprite.x,y:container.position.y+sprite.y,angle,roleHeight:ROLE_HEIGHT[role],
           release:motion?.release,scaleX:sprite.scale.x,scaleY:sprite.scale.y,groundShift:g?.groundShift??0,density:g?.scale??1});
@@ -388,6 +392,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           : state.gameMode === 'RELAY' ? sampleDataArenaRelayAction({ animation: attackAnimation, action: body.action, time: state.time,
               tickRateHz: bundle?.runtime.timing?.tickRateHz ?? 60, releaseSlot: relayProfile?.releaseSlot ?? 1, reducedMotion }) : action.sample(state.time);
         this.setSequence(motion?.sequenceId ?? seq, motion?.id ?? null);
+        let nativeDraw = !reviewedArena;
         if(reviewedArena){
           if(event)reviewedArena.observe(event);
           const vx=body.vx??0,vy=body.vy??0;
@@ -395,26 +400,39 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             vx,vy,facing,hit:seq===DATA_ARENA_SEQUENCES.HIT,
             attack:seq===DATA_ARENA_SEQUENCES.ATTACK,castId:body.cast?.actionId??null,angle:body.cast?.angle??null,
             moveRate:reviewedMoveRate(vx,vy),victory:seq===DATA_ARENA_SEQUENCES.WIN});
+          reviewedSample=sample;
+          if(partial&&!sample?.geometry){
+            // Not covered by the partial set (missing clip or a native fallback): the native sequence, restarted cleanly.
+            nativeDraw=true; scale=nativeScale;
+            if(onReviewed){onReviewed=false;controller.resumeNative?.();sequence=null;this.setSequence(motion?.sequenceId ?? seq, motion?.id ?? null);}
+          } else if(partial){
+            // Covered: the reviewed frame at the native world size (native cells are density 4).
+            onReviewed=true; motion=sample;
+            scale=nativeScale*4/(sample.geometry?.scale??4);
+            sprite.scale.set(scale*(sample.mirrorX?-1:1),scale*(1-sink*.5));
+          } else {
           motion=sample;
             scale=applyReviewedArenaPoseScale(sprite,sample,ROLE_HEIGHT[role],sink);
           // A standing body breathes on its held first walk frame (phase spread per body).
           if(!reducedMotion&&sample?.action==='move'&&Math.hypot(vx,vy)<2)sprite.scale.y*=reviewedIdleBreath(elapsed,(body.id??0)*0.37);
-        } else if (controller && motion) {
+          }
+        }
+        if (nativeDraw && controller && motion) {
           const deltaMS = Math.max(0, motion.elapsedMs - actionElapsed);
           if (deltaMS > 0) controller.update({ deltaMS });
           actionElapsed = motion.elapsedMs;
-        } else if (controller && dtMs > 0) controller.update({ deltaMS: dtMs });
+        } else if (nativeDraw && controller && dtMs > 0) controller.update({ deltaMS: dtMs });
         // Art faces left; mirror for rightward facing.
         const snapshot=controller?.getSnapshot();
         const frame=bundle?.runtime.sides.main.animations.find(a=>a.id===sequence)?.frames[snapshot?.sourceFrameIndex ?? 0];
         // Reviewed artwork keeps its own canvas and pivot; relay slot packing applies to native cells only.
-        currentPlacement=!reviewedArena&&state.gameMode==='RELAY'&&bundle ? dataArenaRelaySlotPlacement(frame,bundle.runtime.geometry,bundle.runtime.artProfile) : null;
+        currentPlacement=nativeDraw&&state.gameMode==='RELAY'&&bundle ? dataArenaRelaySlotPlacement(frame,bundle.runtime.geometry,bundle.runtime.artProfile) : null;
         if(currentPlacement)sprite.anchor.set(currentPlacement.anchor.x,currentPlacement.anchor.y);
         const cellScale=currentPlacement ? scale*(bundle.runtime.artProfile?.scale??1)/currentPlacement.packingScale : scale;
-        if(!reviewedArena)sprite.scale.set(cellScale * (facing > 0 ? -1 : 1), cellScale * (1 - sink * 0.5));
+        if(nativeDraw)sprite.scale.set(cellScale * (facing > 0 ? -1 : 1), cellScale * (1 - sink * 0.5));
         sprite.y = -lift + sink * 30;
         sprite.x = 0;
-        if(reviewedArena&&seq===DATA_ARENA_SEQUENCES.WIN&&!reducedMotion)sprite.y-=reviewedWinHop(elapsed);
+        if(!nativeDraw&&seq===DATA_ARENA_SEQUENCES.WIN&&!reducedMotion)sprite.y-=reviewedWinHop(elapsed);
         if(currentPlacement){sprite.x+=(facing>0?-1:1)*currentPlacement.offset[0]*cellScale;sprite.y+=currentPlacement.offset[1]*cellScale;}
         // Stage four: a staggered fighter shudders for its hitstun.
         if (body.hitstun > 0 && !reducedMotion) sprite.x += Math.sin(elapsed * 90) * 2.5;
@@ -431,7 +449,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       },
       diagnostics: () => ({ sequenceId: sequence, frameIndex: controller?.getSnapshot().sourceFrameIndex ?? null,
         speciesId: member?.speciesId, facing8: body.facing8 ?? null, slotPreserved: Boolean(currentPlacement), anchor: currentPlacement?.anchor ?? null, actionId: motion?.actionId??motion?.id ?? null, phase: motion?.phase ?? null, moveId: motion?.moveId ?? null,
-        reviewed:reviewedArena?{clipId:motion?.clipId,direction:motion?.direction,assetId:motion?.assetId,terminal:motion?.terminal??false,missing:motion?.missing??null}:null })
+        reviewed:reviewedArena?{clipId:reviewedSample?.clipId??motion?.clipId,direction:reviewedSample?.direction??motion?.direction,assetId:reviewedSample?.assetId??motion?.assetId,terminal:(reviewedSample??motion)?.terminal??false,missing:reviewedSample?.missing??null,partial,native:partial&&!onReviewed}:null })
     };
   }
   const playerMember = cast.partners.find((member) => member.partnerId === partnerId) ?? cast.partners[0];
