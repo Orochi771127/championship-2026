@@ -97,6 +97,7 @@ import { createHybridStoryDirector } from '../presentation/story/HybridStoryDire
 import { createStoryStagePuppeteer } from '../presentation/story/storyStagePuppeteer.js';
 import { createPortraitVnOverlay } from '../presentation/story/portraitVnOverlay.js';
 import { createStoryChapterMap } from './storyChapterMap.js';
+import { storyRiftMapText } from '../data/storyRiftMap.js';
 import { mountAmbience } from './ui/ambienceLayer.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, createAssetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
@@ -2549,6 +2550,20 @@ function storyStageRefusal() {
   if (isChoiceDialogOpen() || app.hasRaisingPresentation()) return 'SCREEN_BUSY';
   return null;
 }
+// A partner whose next animation is still streaming marks the field not playable for a
+// moment (createRaisingFieldPixiPresentation isPlayable). The story entry and its play key
+// wait that out instead of refusing: on the menu it looked like a key that did nothing
+// (viewport health check 2026-11-01). Any other refusal still answers at once.
+async function storyStageReady(timeoutMs = 4000) {
+  const started = performance.now();
+  let refusal = storyStageRefusal();
+  while (refusal === 'STAGE_NOT_READY' && view?.storyStage && view?.isPlayable === false
+    && app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME && performance.now() - started < timeoutMs) {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    refusal = storyStageRefusal();
+  }
+  return refusal;
+}
 // The selected partner acts; otherwise the first hatched one (eggs are species 0-7 and cannot act).
 function storyPartner(frame) {
   const resident = frame?.residents.find(r => r.creatureId === frame.selection?.creatureId)
@@ -2559,8 +2574,10 @@ function storyPartner(frame) {
 }
 async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = 'menu' } = {}) {
   if (storyRun) return storyRun;
+  const refusal = await storyStageReady();
+  // A second call that waited alongside joins the run the first one started.
+  if (storyRun) return storyRun;
   const stageView = view?.storyStage ?? null;
-  const refusal = storyStageRefusal();
   if (refusal) return Object.freeze({ outcome: 'refused', reason: refusal, chapterId });
   const partner = storyPartner(stageView.getFrame());
   if (!partner) return Object.freeze({ outcome: 'refused', reason: 'NO_PARTNER', chapterId });
@@ -2611,10 +2628,16 @@ function storyNodeSeen(node) {
   if (node.seenWith === 'opening') return true;
   return Boolean(node.seenKey) && settings.store.get()[node.seenKey] === true;
 }
-function openStoryMap({ chapterId = null, source = 'menu' } = {}) {
+async function openStoryMap({ chapterId = null, source = 'menu' } = {}) {
   if (storyRun || storyMap?.isBusy) return false;
-  const refusal = storyStageRefusal();
-  if (refusal) { recoveryDiagnostics.record('STORY', { source, stage: 'map-refused', reason: refusal }); return false; }
+  const refusal = await storyStageReady();
+  if (refusal) {
+    recoveryDiagnostics.record('STORY', { source, stage: 'map-refused', reason: refusal });
+    // Say why nothing opened: the menu entry used to answer a refusal with silence.
+    requestArcadeFx(document.body, 'denied', storyRiftMapText('MAP_REFUSED', getLocale()));
+    return false;
+  }
+  if (storyRun || storyMap?.isBusy) return false;
   const partner = storyPartner(view.storyStage.getFrame());
   storyMap?.dispose();
   storyMap = createStoryChapterMap({ locale: getLocale(), reducedMotion: prefersReducedMotion(), isSeen: storyNodeSeen,

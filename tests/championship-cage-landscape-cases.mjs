@@ -10,8 +10,8 @@ import {createControlledDocument} from './helpers/controlled-database-dom.mjs';
 
 const catalog=JSON.parse(readFileSync('src/data/championship/catalogs/creature-species.r1.json','utf8'));
 const {cages}=JSON.parse(readFileSync('docs/contracts/championship/raising-home-presentation.v1.json','utf8'));
-const wideSizes=[[720,320],[844,390],[932,430],[1024,420],[1366,480],[1366,768],[1920,1080]];
-const legacySizes=[[568,320],[719,320],[720,319],[720,561],[390,844],[820,1180],[1024,1366]];
+const wideSizes=[[640,320],[667,375],[720,320],[844,390],[932,430],[1024,420],[1366,480],[1366,768],[1920,1080]];
+const legacySizes=[[568,320],[639,320],[720,319],[720,561],[390,844],[820,1180],[1024,1366]];
 
 function layoutFixture({candidate=true,width=844,height=390,root,doc}={}) {
  const attrs=new Set(),styles=new Map();let notify,disconnected=false;

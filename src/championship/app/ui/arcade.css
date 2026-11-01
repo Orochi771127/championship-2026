@@ -462,10 +462,14 @@
 
 /* ---- Phone portrait ---------------------------------------------------------------- */
 @media (max-width: 600px) {
-  :root[data-theme="arcade"] .cm-toolbar__rail { gap: 4px; width: calc(100% - 8px); padding: 6px 6px 10px; border-radius: 16px; }
-  :root[data-theme="arcade"] .cm-toolbar__cell { min-height: 54px; border-radius: 11px; border-width: 2px; }
+  /* Eight keys of at least 40 px across a 375 px phone: a 3 px gap and 4 px sides. */
+  :root[data-theme="arcade"] .cm-toolbar__rail { gap: 3px; width: calc(100% - 8px); padding: 6px 4px 10px; border-radius: 16px; }
+  :root[data-theme="arcade"] .cm-toolbar__cell { min-height: 54px; padding-inline: 0; border-radius: 11px; border-width: 2px; }
   :root[data-theme="arcade"] .cm-toolbar__cell::before { width: 28px; height: 28px; }
-  :root[data-theme="arcade"] .cm-toolbar__cell[data-menu-id="MANAGEMENT"] { margin-left: 2px; }
+  /* The paper tiles already set the two menus apart; a margin would make 管理 narrower than its neighbours. */
+  :root[data-theme="arcade"] .cm-toolbar__cell[data-menu-id="MANAGEMENT"] { margin-left: 0; }
+  /* Three-character captions (蛋白質) stay on one line across the narrower key. */
+  :root[data-theme="arcade"]:lang(zh) .cm-toolbar__cell-label { white-space: nowrap; letter-spacing: -0.04em; }
   :root[data-theme="arcade"] .cm-toolbar__quick:not([hidden]) { gap: 6px; width: calc(100% - 8px); margin-bottom: 8px; }
   :root[data-theme="arcade"] .cm-toolbar__quick-entry { min-height: 48px; padding: 4px 2px 6px; border-radius: 13px; }
   :root[data-theme="arcade"] .cm-toolbar__quick-entry .cm-toolbar__entry-label { font-size: var(--fs-body-sm); }
@@ -478,8 +482,13 @@
   :root[data-theme="arcade"] .cm-toolbar__cell { min-height: 46px; padding: 2px; }
   :root[data-theme="arcade"] .cm-toolbar__cell::before { width: 24px; height: 24px; }
   :root[data-theme="arcade"] .cm-toolbar__cell-label { font-size: 10px; }
-  :root[data-theme="arcade"] .cm-toolbar__quick:not([hidden]) { order: -1; flex: 0 0 auto; width: auto; grid-template-columns: repeat(2, 72px); gap: 6px; margin: 0 0 calc(6px + var(--safe-bottom)); }
-  :root[data-theme="arcade"] .cm-toolbar__quick-entry { min-height: 34px; padding: 2px 4px 4px; grid-auto-flow: column; gap: 4px; }
+  /* Notch insets narrow the keys: the icon sits above a one-line caption, which then has the
+     key's whole width and stays clear of the stock badge (outranks intRh2Styles.css). */
+  :root[data-theme="arcade"] body .cm-toolbar[data-mode] .cm-toolbar__cell { flex-direction: column; gap: 1px; padding-inline: 1px; }
+  :root[data-theme="arcade"] body .cm-toolbar[data-mode] .cm-toolbar__cell::before { width: 22px; height: 22px; }
+  :root[data-theme="arcade"]:lang(zh) body .cm-toolbar[data-mode] .cm-toolbar__cell-label { white-space: nowrap; letter-spacing: -0.04em; font-size: 10px; }
+  :root[data-theme="arcade"] .cm-toolbar__quick:not([hidden]) { order: -1; flex: 0 0 auto; width: auto; grid-template-columns: repeat(2, 80px); gap: 6px; margin: 0 0 calc(6px + var(--safe-bottom)); }
+  :root[data-theme="arcade"] .cm-toolbar__quick-entry { min-height: 40px; padding: 2px 4px 4px; grid-auto-flow: column; gap: 4px; }
     :root[data-theme="arcade"] .cm-toolbar__quick-entry .cm-toolbar__entry-label { font-size: var(--fs-label); }
 }
 
@@ -740,6 +749,16 @@
   -webkit-mask: var(--icon-chevron-left) center / contain no-repeat;
   mask: var(--icon-chevron-left) center / contain no-repeat;
   transform: scaleX(-1);
+}
+/* Narrow phones (viewport health check 2026-11-01): a 5,100 fee and a 200,000 prize no longer fit
+   side by side, and the prize pill covered the fee. Each takes its own line. The same holds for
+   the ~330px match column of a 667x375 phone held sideways. */
+@media (max-width: 440px), (orientation: landscape) and (max-height: 520px) and (max-width: 760px) {
+  :root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match > .cm-vs5-match__enter {
+    grid-template-columns: 58px minmax(0, 1fr) 14px;
+    grid-template-areas: "crest name arrow" "crest fee arrow" "crest payout arrow";
+  }
+  :root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match__enter > .cm-vs5-match__payout { justify-self: start; }
 }
 /* The first tickets deal in one after another. */
 :root[data-theme="arcade"] .cm-vs5-root .cm-vs5-matches > .cm-vs5-match { animation: cm-deal 420ms var(--ax-spring) both; }

@@ -1,5 +1,16 @@
 # Championship Owner Direction
 
+<!-- record-id: FULL_VIEWPORT_HEALTH_CHECK_20261101 -->
+## 2026-11-01 — Six-viewport UI/UX and wiring health check over five slices
+
+Owner brief (pasted 2026-11-01): a commercial-grade health check in six viewports (1920×1080, 1366×768, 390×844, 375×667, 844×390, 667×375) over five vertical slices — the ranch hub with the creation / egg / naming opening and the cage editor; shop, gacha, furnace and chip bag; Dex, motion viewer, showcases and the element chart; 3D hunt, AI battle and Data Arena; the 《未被聽見的回聲》 story, tamer licence, paper doll, brag card, social dock and passport. Five gates: no overlap; no clipping (badges, list ends against the way back); short landscape (`max-height: 520px`) docks the HUD at the sides with dialogs in two columns and the stage at least 55% visible, desktop centred; every system reachable from the main screen through buttons, without URL parameters, with a visible way back and no leftover scrim or timer; no horizontal overflow and primary keys at least 40px. Deliverables: a repeatable Playwright script `scripts/qa/run-full-viewport-health-check.cjs`, direct fixes, the report `docs/FULL_GAME_HEALTH_CHECK_REPORT_ZH_TW.md`, `npm run test:ci` and the new script green, before/after screenshots in 1366×768, 390×844 and 844×390. The brief kept push and deployment off.
+
+- OWNER_APPROVED_ADAPTATION, layout only: no gameplay, save, timing, reward or art change. The compact landscape threshold drops from 720 to 640px (`COMPACT_LANDSCAPE_MIN_WIDTH` in `portraitFrame.js`; the hunt wide layout follows), so 640–719px landscape phones get the landscape menus, cage editor and side-docked hunt instead of the portrait frame scaled to about half.
+- The brief names the creation / egg / naming opening, so the tamer licence, egg chooser and egg name take a short-landscape two-column layout. The title, logo, main menu, opening prologue and letter stay as main shipped them (`scripts/qa/title-zero-diff.cjs`, notch insets emulated). The prologue's skip key reaching into the side notch at 844×390 is reported, not changed.
+- The story branch `feat/story-unheard-echoes-20261029` (another session's uncommitted work) is scanned read-only and reported. The paper-doll editor named in the brief exists on no branch (NOT_IMPLEMENTED).
+
+After the report the Owner directs (2026-11-02) 「請你自我審查一次，沒問題就請你commit跟push並整合至main後發佈建置」, which authorizes this batch's self-review, commit, push, merge to main and publication.
+
 <!-- record-id: VFX_FIVE_LAYER_20261101 -->
 ## 2026-11-01 — Five-layer VFX: one element authority, Dex and Data Arena on the effect cells, idle 3D systems, remake r2
 

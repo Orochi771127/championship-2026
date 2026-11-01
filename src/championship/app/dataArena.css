@@ -528,3 +528,11 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 }
 .da-root[data-motion="reduced"] .da-tbtn::after { animation:none !important; }
 @media (prefers-reduced-motion:reduce) { .da-tbtn::after { animation:none !important; } }
+/* Pause on a short landscape phone (viewport health check 2026-11-01): five stacked keys ran
+   past 375px and 離開競技場 sat below the sheet. Resume spans the top, the rest pair up. */
+@media (orientation:landscape) and (max-height:520px) {
+  .da-panel--pause { width:min(520px, 100%); padding:14px 18px; }
+  .da-panel--pause .da-title { margin:0 0 6px; font-size:22px; }
+  .da-panel--pause .da-actions--column { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; margin-top:8px; }
+  .da-panel--pause .da-actions--column > .da-btn--primary { grid-column:1 / -1; }
+}

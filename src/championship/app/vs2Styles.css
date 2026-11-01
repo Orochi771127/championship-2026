@@ -1367,7 +1367,10 @@ body[data-landscape-menu]:not([data-portrait-frame]) .cm-medal-dialog > .cm-vs2-
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-shell { grid-template-rows: auto auto auto auto; align-content: start; overflow-y: auto; overflow-x: hidden; column-gap: 12px; padding-left: var(--cm-menu-gutter-left); padding-right: var(--cm-menu-gutter-right); scroll-padding-bottom: 96px; }
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header { padding-block: 6px; }
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube { max-width: 220px; }
-body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] :is(.cm-vs5-matches, .cm-vs5-party, .cm-vs5-entry-notice) { overflow: visible; min-width: 0; }
+/* min-height: auto (viewport health check 2026-11-01): the inherited min-height: 0 let the
+   auto rows shrink to the shell, so the party overflowed under the sticky footer and
+   scrolling carried the footer up to mid-screen on 844x390. */
+body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] :is(.cm-vs5-matches, .cm-vs5-party, .cm-vs5-entry-notice) { overflow: visible; min-width: 0; min-height: auto; }
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer { position: sticky; bottom: 0; margin-left: calc(-1 * var(--cm-menu-gutter-left)); margin-right: calc(-1 * var(--cm-menu-gutter-right)); padding: 6px var(--cm-menu-gutter-right) max(6px, env(safe-area-inset-bottom)) var(--cm-menu-gutter-left); }
 body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__face { min-height: 44px; overflow-wrap: anywhere; }
 

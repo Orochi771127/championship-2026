@@ -484,6 +484,8 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
   border-top: 1px solid var(--c-line-1);
 }
 .int-rh2-detail__footer > .cm-screen-primary { flex: 0 1 200px; }
+/* The way back keeps its one-line label when the roster key takes the rest (收合 split at 667x375). */
+.int-rh2-detail__footer > .cm-screen-back { flex: 0 0 auto; white-space: nowrap; }
 
 @media (min-width: 768px) {
   body:not([data-portrait-frame]) .int-rh2-detail {
