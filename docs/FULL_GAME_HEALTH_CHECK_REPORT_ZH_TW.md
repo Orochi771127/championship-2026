@@ -9,21 +9,23 @@
 
 | 項目 | 修改前（main） | 修改後（本批） |
 |---|---:|---:|
-| 檢查的畫面狀態（6 視口合計） | 536 | 552 |
+| 檢查的畫面狀態（6 視口合計） | 536 | 554 |
 | G1 重疊 | 77 | 0 |
 | G2 裁切 | 122 | 0 |
 | G3 橫向適配 | 1 | 0 |
 | G4 連線 | 50 | 0 |
-| G5 溢出／觸控 | 696 | 0 |
-| **合計** | **946** | **0** |
+| G5 溢出／觸控 | 696 | 1 |
+| **合計** | **946** | **1** |
 
 | 切片 | 修改前 | 修改後 |
 |---|---:|---:|
-| S1 牧場中樞 | 374 | 0 |
+| S1 牧場中樞 | 374 | 1 |
 | S2 商店／轉蛋 | 95 | 0 |
 | S3 圖鑑 | 228 | 0 |
 | S4 狩獵／對戰／Data Arena | 145 | 0 |
 | S5 故事／執照／社群 | 104 | 0 |
+
+修改後的 1 項是開場序章的「⏭ 跳過序章」伸進右側瀏海（844×390）：序章不在簡報點名的範圍，依規則維持 main 原樣、只回報（第 6 節）。修改後的數字來自合併 main `b692ad5b` 後的完整重跑（2026-11-02）。
 
 修改後畫面狀態較多，是因為修改前有些畫面到不了（例如 844×390 的隊伍編成點不到成員，之後的對戰、結算都無法檢查）。
 
@@ -115,7 +117,7 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 
 | 問題 | 視口 | 修法 | 檔案 |
 |---|---|---|---|
-| 圖鑑詳情在矮橫向只剩 190px 高，動作鍵在畫面外 | 844、667 | 狀態列到底欄的全高面板（以畫面外殼為定位參考，減少動態時位置相同；開啟時隱藏被蓋住的標題列）；左欄立繪／動作檢視＋動作鍵（不隨內容捲動），右欄資料捲動；左欄最小 244px，667 寬時四個動作鍵仍各 ≥40px | `ui/screenLayout.css` |
+| 圖鑑詳情在矮橫向只剩 190px 高，動作鍵在畫面外 | 844、667 | 狀態列到底欄的全高面板（以畫面外殼為定位參考，減少動態時位置相同；開啟時隱藏被蓋住的標題列）；左欄立繪／動作檢視＋動作鍵（不隨內容捲動），右欄資料捲動；左欄寬為「視口寬扣除安全區 × 36%」（244–300px），右欄與立繪相隔 15px，667 寬時四個動作鍵仍各 ≥40px | `ui/screenLayout.css` |
 | 雙五角環相剋表在 667×375 的「土」節點被切掉 87%、「關閉」在畫面外；展演沙盒的 ✕ 只有 24×24px | 667 | 橫向門檻 640px；相剋表高度扣除安全區，窄螢幕與矮橫向重算環的尺寸 | `ui/taxonomy.css`、`portraitFrame.js` |
 | 【❓ 屬性相剋表】、展演切換鍵、【進化預覽】、【條件】鍵 <40px | 全部 | 改 40px | `ui/taxonomy.css`、`ui/juicyShowcase.css`、`ui/screenLayout.css` |
 | 必殺／進化展演框的頂端被狀態列膠囊壓住 | 375、844、667 | 狀態列顯示時，展演層的上內距取狀態列高度 +6px | `ui/juicyShowcase.css` |
@@ -174,17 +176,33 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 | 項目 | 結果 |
 |---|---|
 | 六視口健檢（修改前 main，埠 8822） | 536 個畫面狀態、946 項問題 |
-| 六視口健檢（本批，埠 8821） | 552 個畫面狀態、**0 項**（另一分支《回聲》的 9 類只回報） |
-| `npm run test:ci` | **3,256 / 3,256 通過**（429 個可攜模組；修改前為 3,237，多出的 19 項是新的規則單元測試）。桌機 Node 24 以模擬 CI Node 22 的 `navigator.locks` 關閉方式執行 |
+| 六視口健檢（本批，合併 main `b692ad5b` 後，埠 8821） | 554 個畫面狀態、**1 項**（開場序章跳過鍵伸進瀏海，只回報，第 6 節）；另一分支《回聲》的 9 類只回報 |
+| `npm run test:ci`（合併 main 後） | **3,267 / 3,267 通過**（本批新增 19 項規則單元測試，main 的 #138 另加 11 項）。桌機 Node 24 以模擬 CI Node 22 的 `navigator.locks` 關閉方式執行 |
 | `tests/championship-viewport-health-rules-cases.mjs` | 19 / 19 通過 |
-| 牧場提示瀏覽器閘門 `championship-raising-hints-browser.mjs`（對 8821） | 通過：120 個幾何狀態、6 個計時案例 |
-| 標題零差異 `scripts/qa/title-zero-diff.cjs`（main 對本批，1366×768／390×844／844×390） | 標題、主選單、開場故事 **0 差異**；開場表單（信件、執照、八蛋、蛋命名）在桌機與直向 0 差異，只在 844×390 有差異——那是本批依簡報點名所做的矮橫向雙欄 |
+| `npm run build:playtest`、`validate:playtest` | 通過：7,821 個檔案；同一提交在本機與 CI 建出相同的 buildId（證明產物逐位元組一致） |
+| 牧場提示瀏覽器閘門 `championship-raising-hints-browser.mjs`（合併後，對 8821） | 通過：120 個幾何狀態、6 個計時案例 |
+| 圖鑑立繪瀏覽器閘門 `championship-dex-portrait-browser.cjs`（對本機公開產物，含 844×320） | 擷取全部通過（237 張；這支閘門的「視覺審查待辦」是固定狀態） |
+| 標題零差異 `scripts/qa/title-zero-diff.cjs`（main `b692ad5b` 對本批；1366×768、390×844、844×390，手機套用瀏海與 Home 條安全區） | 標題、主選單、開場序章、信件 **0 差異**；簡報點名的開場表單（執照、八蛋、蛋命名）在桌機與直向 0 差異，只在 844×390 有差異——那是本批的矮橫向雙欄 |
 | `championship-data-arena-browser.cjs` | 在 main 與本批都於同一個存檔斷言失敗（既有紅燈，與本批無關） |
 | `championship-responsive-layout-browser.cjs` | 在 main 與本批都於同一個斷言失敗（既有紅燈，與本批無關） |
 
-重跑說明：修改後那輪的 1920×1080 Slice 1 剛好跨過午夜，遊戲偵測到現實日期改變而跳出「確認新日期」日曆儀式擋住畫面，所以這一格單獨重跑；Slice 1／3／5 在修改前、修改後兩邊都用最終版腳本重跑過一次，報表以最後一次結果為準。
+重跑說明：修改前的數字是 main `82fa48e2` 的三次執行合併（完整一輪、S1／3／5 用最終版腳本重跑、S5 兩個橫向視口重跑），同一視口與切片以最後一次為準。修改後的數字是 2026-11-02 合併 main `b692ad5b`、完成自我審查修正後的一次完整重跑；圖鑑欄距的修正是在那輪途中做的，所以兩個橫向視口的 S3 再單獨跑一次（30 個畫面、0 項）並取代該格。
 
 標題零差異比對排除了兩種本來就每次不同的東西：標題遊行角色（每次隨機出場）與 `blob:` 圖片網址；開場故事的逐字打字透明度依時間而變，也不列入。
+
+### 5.1 自我審查（2026-11-02）
+
+發佈前重新逐檔審查全部差異，找到並處理下列問題（第 1 節的數字是處理後、合併 main `b692ad5b` 後重跑的結果）：
+
+| 發現 | 影響 | 處理 |
+|---|---|---|
+| 開場序章「⏭ 跳過序章」的瀏海內距改動 | 序章屬於開場，簡報點名的是創角、選蛋、取名，序章沒有點名 | 還原為 main 原樣，改列第 6 節只回報 |
+| 標題零差異比對沒有模擬瀏海 | 只讀 `env(safe-area-inset-*)` 的規則在平面螢幕上看不出差異，序章那條就是這樣漏掉的 | 直向與橫向套用與健檢相同的安全區，信件也列入保護 |
+| `playStoryChapter` 在新加的「等待牧場就緒」期間可被呼叫兩次 | 兩個章節會同時播放（目前只有星圖會呼叫，且星圖有忙碌旗標，屬防禦性修正） | 等待結束後再檢查一次是否已有章節在播 |
+| 角色素材提示條的寬度公式 `100% − 2×卡片 − 48px` | 只適合桌機版牧場；601–1023px 寬的直向平板（不在六個視口內）會被壓到 120–170px | 預設全寬；只有桌機版牧場（非矮橫向）才置中縮窄。實測 820×1180 為 804px、1366×768 置中 440px、844×390 在右欄 320px |
+| 對話框按鍵列 `background: inherit` | 獎勵、炫耀名片面板的放射光暈與教學導覽的夜色漸層，會在按鍵列的框內重畫一次而形成色帶 | 改用面板本身的純色 `--c-surface-1`，教學導覽不加底；整組規則只在遊戲內生效（`:where()` 保留原本的選擇器權重，炫耀名片等變體的寬度不受影響），標題畫面的對話框維持原樣。實測各變體按鍵列底色與面板相同 |
+| 圖鑑矮橫向雙欄的欄寬 `clamp(244px, 36%, 300px)` | 立繪（絕對定位）與右欄內距用不同的框解析 36%，740–844px 寬時右欄離立繪只有 0.7px，看起來貼在一起 | 改為「視口寬扣除左右安全區 × 36%」的長度，右欄從立繪右側隔一個間距開始：667、740、844（含瀏海）都是 15px |
+| 好友表單同一條規則宣告兩次 | 無功能影響 | 合併為一條 |
 
 ### 必殺切入條（圖鑑【預覽必殺技】，定格在 300ms 停穩的那一格）
 
@@ -208,14 +226,18 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
    - 1366×768 時「拍檔的小日常」標籤壓在獎勵文字「艾瑪金屬碎片 ×2」上。
    建議修法：對話列加入與主線故事相同的略過鍵；章節頁把「潛入」鍵做成黏底按鍵列；左右內距取 `max(16px, env(safe-area-inset-*))`；小日常列用兩欄格線讓標籤與獎勵各自一欄。
 2. **紙娃娃編輯器**：簡報提到的馴獸師紙娃娃（髮型／臉型／服裝）編輯器，在 main 與所有分支都沒有程式碼，無從健檢；故事對話框的立繪（`portraitVnOverlay`）存在且已檢查。
-3. **既有紅燈的瀏覽器閘門**：`tests/championship-responsive-layout-browser.cjs` 在乾淨的 main 樹上以同樣的斷言失敗（它驗證的「關閉響應式牧場」模式產品已不提供），與本批無關；本批只把其中狩獵門檻的算式同步為 640px。
+3. **既有紅燈的瀏覽器閘門**：`tests/championship-responsive-layout-browser.cjs` 在乾淨的 main 樹上以同樣的斷言失敗（它驗證的「關閉響應式牧場」模式產品已不提供），與本批無關；本批只把其中狩獵門檻的算式同步為 640px。PR #140 的 CI 紅燈與 main 上一批（#138）相同：
+   - evolution-streaming（chromium、webkit）：在 baseline 模式準備夾具時就 120 秒逾時，還沒測到本批。
+   - currency-layout：期待起始位元幣 100,000，好友試玩模式給 8,000,000（自 10-26 起每個 PR 都一樣）。
+   - friends-playtest 的 fresh-economy、legacy-persistence、source-adjacent-mobile 與彙總：失敗位置與 #138 逐行相同。
+   - friends-playtest 的 source-wrap-mobile：#138 在存檔退出時逾時；本批走得更遠，在第 9 次相位捕捉時剛好有一隻夥伴在串流下一段動畫（`aria-busy=true`、一隻 `loading`；前 8 次都就緒）而未通過「捕捉時牧場必須完全就緒」。這是既有的動畫串流時序，本批沒有改動美術載入。
 4. **刻意放行的重疊**：相剋表是瀏覽器頂層 dialog，本來就會蓋在狀態列之上（帶遮罩），所以「相剋表 ⟂ 狀態列」不算 HUD 重疊；展演沙盒不是頂層，已改成從狀態列下方開始。
 5. **需要 Owner 知道的行為變更**：橫向門檻 720→640px 之後，640–719px 寬的橫向裝置（例如 iPhone SE、部分 Android 小手機）的選單、設施配置與狩獵場改用橫向版型，而不是過去整體縮小的直向框。標題、主選單、開場序章與信件不受影響（零差異比對見第 5 節，含瀏海模擬）。
 6. **開場序章的「⏭ 跳過序章」伸進右側瀏海（844×390）**：序章屬於開場，但簡報點名的是「創角／選蛋／取名開場流程」，序章沒有點名，依專案規則（標題、主選單與開場維持 main 原樣）不修改。若要修，建議把 `#cm-opening .cm-cutscene` 的左右內距改為 `max(16px, env(safe-area-inset-*))`（只在有側邊瀏海時生效），需 Owner 點名同意。
 
 ## 7. 對照截圖（修改前｜修改後）
 
-每張圖左半是修改前（main，同一份 QA 存檔），右半是修改後；圖檔在 `docs/reports/full-viewport-health-2026-11-01/compare/`（WebP，共 101 張、約 4.3 MB）。844×390 與 390×844 模擬 iPhone 的瀏海與 Home 條安全區。
+每張圖左半是修改前（main `82fa48e2`，同一份 QA 存檔），右半是修改後（合併 main 後的最終版本）；圖檔在 `docs/reports/full-viewport-health-2026-11-01/compare/`（WebP，共 101 張、約 4.4 MB）。844×390 與 390×844 模擬 iPhone 的瀏海與 Home 條安全區。
 
 ### 含夥伴資訊卡的牧場
 
@@ -405,7 +427,7 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 | menu-system-closed | G2 裁切 | LABEL_WRAP | 844、667 | 「商店」被擠成 2 行 | 已清除 |
 | menu-system-closed | G1 重疊 | TEXT_OVERLAP | 844 | 文字互相重疊：span.cm-toolbar__cell-label「蛋白質」 ⟂ span.cm-toolbar__stock「90」 | 已清除 |
 | opening-egg-choice | G4 連線 | UNREACHABLE | 667 | button.cm-onboard-cta「選這顆蛋」 不在畫面內 | 已清除 |
-| opening-story | G5 溢出／觸控 | SAFE_AREA | 844 | button.cm-cutscene__skip「⏭ 跳過序章」 伸進右側瀏海安全區 | 已清除 |
+| opening-story | G5 溢出／觸控 | SAFE_AREA | 844 | button.cm-cutscene__skip「⏭ 跳過序章」 伸進右側瀏海安全區 | 仍在（844） |
 | opening-tamer-name | G4 連線 | UNREACHABLE | 844、667 | button.cm-onboard-cta「決定」 不在畫面內 | 已清除 |
 | ranch-card | G1 重疊 | COVERED | 1920、1366 | button.int-rh2-discoveries[data-action="ranch-discoveries"]「探索手帳 · 3/12」 被 span.int-rh2-companion__name 蓋住 | 已清除 |
 | ranch-card | G1 重疊 | HUD_OVERLAP | 1920、1366、844、667 | journal（button.int-rh2-discoveries[data-action="ranch-discoveries"]「探索手帳 · 3/12」）⟂ card（section.int-rh2-compan | 已清除 |
@@ -729,9 +751,11 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 | tamer | G5 溢出／觸控 | TARGET_SMALL | 667 | button.cm-online__button[data-online-action="restoreCloud"]「從雲端還原」 56×24px < 40px | 已清除 |
 | tamer-brag-card | G4 連線 | NO_EXIT | 1366、844、667 | button.cm-dialog__action.cm-dialog__action--primary[data-action="done"]「完成」 不在畫面內 | 已清除 |
 
-#### 修改後仍存在的項目（0 類）
+#### 修改後仍存在的項目（1 類）
 
-（無）
+| 切片 | 畫面狀態 | 代碼 | 視口 | 內容 |
+|---|---|---|---|---|
+| 1 | opening-story | SAFE_AREA | 844 | button.cm-cutscene__skip「⏭ 跳過序章」 伸進右側瀏海安全區 |
 
 #### 《未被聽見的回聲》分支（只讀掃描，9 類）
 
