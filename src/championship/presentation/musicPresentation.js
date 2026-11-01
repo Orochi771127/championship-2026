@@ -62,7 +62,7 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     if (!next) return;
     prepared = next; next.id = slot.id; next.key = slot.key;
     stableRate(next.media); next.media.preload = 'auto'; next.media.loop = false;
-    next.media.onloadedmetadata = () => { if (prepared === next) next.media.currentTime = cue.trimStart ?? 0; };
+    next.media.onloadedmetadata = () => { if (prepared === next) next.media.currentTime = cue.loopStart ?? cue.trimStart ?? 0; };
     next.media.onerror = () => { if (prepared === next) release(next); };
     next.media.src = new URL(pathFor(next, cue), baseUrl).href; next.media.load();
   }
@@ -130,6 +130,8 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     const cue = cues[desired.id];
     if (!cue.loop && playedResults.has(desired.attemptId)) return;
     const ready = current?.key === desired.key && prepared?.key === desired.key ? prepared : null;
+    // A loop pass resumes after a once-only intro when the cue names a loopStart.
+    const head = cue.loop && current?.key === desired.key ? cue.loopStart ?? cue.trimStart ?? 0 : cue.trimStart ?? 0;
     retireOther(ready);
     const slot = availableSlot();
     if (!slot) { error = 'MUSIC_OUTPUT_UNAVAILABLE'; emit(); return; }
@@ -145,7 +147,7 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
       release(slot); emit();
     };
     slot.media.loop = Boolean(cue.loop && !cue.crossfade);
-    slot.media.onloadedmetadata = () => { if (valid()) slot.media.currentTime = cue.trimStart ?? 0; };
+    slot.media.onloadedmetadata = () => { if (valid()) slot.media.currentTime = head; };
     const buffered = () => {
       if(!valid()||slot.startupReady)return;
       const ranges=slot.media.buffered;
@@ -170,7 +172,7 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
     // Vorbis support. Capability selection happens before a network request.
     if (slot === ready) {
       prepared = null;
-      if (slot.media.readyState >= 1) slot.media.currentTime = cue.trimStart ?? 0;
+      if (slot.media.readyState >= 1) slot.media.currentTime = head;
     } else {
       slot.media.preload = 'auto'; slot.media.src = new URL(pathFor(slot, cue), baseUrl).href; slot.media.load();
     }

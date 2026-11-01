@@ -15,6 +15,7 @@ const entries = [
   ['tidal', '西南潮汐邊境', 'Southwest Tidal Frontier', ['exploration']],
   ['battle_normal', '石緣交鋒', 'Clash at the Concrete Edge', ['battle']],
   ['battle_final', '錦標賽決戰', 'Championship Final', ['battle']],
+  ['lucky_draw_counter', '幸運抽獎櫃檯', 'Lucky Draw Counter', ['system']],
   ['victory', '勝利之聲', 'Victory', ['result']],
   ['defeat', '敗北之聲', 'Defeat', ['result']],
   ['draw', '平手之聲', 'Draw', ['result']],

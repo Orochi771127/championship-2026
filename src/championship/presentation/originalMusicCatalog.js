@@ -81,6 +81,11 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
     "path": "./assets/production/scene-music-r1/battle/clash_at_the_concrete_edge.mp3",
     "loop": true, "gainDb": -11.2, "trimStart": 0, "trimEnd": 0, "crossfade": 0.8
   },
+  // Owner 2026-11-02: shop BGM, 120 BPM. The 0-8 s intro plays once; loops cut 56.0 -> 8.0 (exactly 24 bars).
+  "lucky_draw_counter": {
+    "path": "./assets/production/original-music-r1/bgm_lucky_draw_counter.mp3",
+    "loop": true, "gainDb": -9, "trimStart": 0, "trimEnd": 0.95, "crossfade": 0.05, "loopStart": 8
+  },
   "battle_final": {
     "path": "./assets/production/original-music-r1/championship_battle_final_r1.ogg",
     "loop": true,
@@ -179,7 +184,7 @@ const BIOMES = Object.freeze({grass:'plains',savanna:'plains',forest:'plains',ju
   factory:'forge',mine:'forge',sewer:'forge',volcano:'forge',seaside:'harbor',ice:'moon',
   damp:'tidal',oasis:'tidal',canyon:'mystic',crag:'mystic',desert:'mystic',ruins:'mystic'});
 const SCREENS = Object.freeze({RAISING_HOME:'moon',CAGE_EDIT:'podium_geometry',DATABASE:'moon',DIGIMON_LIST:'moon',
-  HELP:'moon',TAMER_INFO:'moon',SHOP:'harbor',GATE_SELECT:'harbor',HUNT_LOADOUT:'harbor',
+  HELP:'moon',TAMER_INFO:'moon',SHOP:'lucky_draw_counter',GATE_SELECT:'harbor',HUNT_LOADOUT:'harbor',
   MEDALS:'core',SCHEDULE:'core',BATTLE_SELECT:'core',CHAMPIONSHIP:'core'});
 // Owner-specified field assignments; unassigned fields retain the prior normal/final cues.
 export const BATTLE_FIELD_MUSIC = Object.freeze({
