@@ -1,9 +1,9 @@
 # 《網線拍檔：錦標賽》全遊戲 UI/UX 與連線健檢報告
 
-日期：2026-11-01　分支：`feat/full-viewport-health-check-20261101`（起點 `82fa48e2`，當時的 main）
+日期：2026-11-01（自我審查與發佈 2026-11-02）　分支：`feat/full-viewport-health-check-20261101`（起點 `82fa48e2`，當時的 main；發佈前已合併 main `b692ad5b`）
 
-> 狀態：本批修正只在工作樹 `health-check-20261101`，**未提交、未推送、未部署**。
-> 修改前的數據來自同一個 main 起點的乾淨工作樹（`health-check-baseline-20261101`，埠 8822）；修改後來自本工作樹（埠 8821）。兩邊用同一支腳本、同一份 QA 存檔、同樣的 GPU 繪製設定。
+> 狀態：2026-11-02 Owner 指示「請你自我審查一次，沒問題就請你commit跟push並整合至main後發佈建置」。自我審查的發現與修正見第 5.1 節；修正後在合併 main 的版本上重跑完整健檢。
+> 修改前的數據來自 main 起點 `82fa48e2` 的乾淨工作樹（`health-check-baseline-20261101`，埠 8822）；修改後來自本工作樹（埠 8821）。兩邊用同一支腳本、同一份 QA 存檔、同樣的 GPU 繪製設定。
 
 ## 1. 結論
 
@@ -85,7 +85,6 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 | 問題 | 視口 | 修法 | 檔案 |
 |---|---|---|---|
 | 創角執照、八蛋孵化器、蛋命名在矮橫向超出畫面，確認鍵在畫面下方 | 844、667 | 矮橫向改左右兩欄（執照：資料｜通行證章＋確認；孵化器：四蛋兩列；命名：孵化艙｜名字＋按鍵） | `onboarding.css` |
-| 開場故事的「略過」與頁點伸進側邊瀏海 | 844 | 左右內距取 16px 與安全區較大者 | `onboarding.css` |
 | 8 鍵工具列在直向手機按鍵偏窄、「蛋白質」折成兩行（844 時還撞到庫存數字） | 390、375、844 | 間距 3px、側邊 4px、說明文字不折行 | `ui/arcade.css` |
 | 橫向工具列被瀏海壓窄，說明文字撞到庫存徽章；快捷鍵 34px 高 | 844、667 | 圖示在上、單行說明在下；快捷鍵 80×40px | `ui/arcade.css` |
 | 夥伴資訊卡壓在「探索手帳」（逛街手札）鍵上 | 1920、1366 | 卡片從手帳鍵下方起算（手帳發布 `--cm-journal-clear`） | `ui/screenLayout.css`、`ranchDiscoveryJournal.js` |
@@ -93,9 +92,9 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 | 667×375 開著夥伴卡時舞台可視只剩 54%（展開量表 50%） | 667 | 矮橫向 ≤700px 寬時 8 鍵工具列改為置中 488px（每鍵 56px、保留文字）；展開量表時暫時收起地點／心情列；兩欄量表的數字改 10px，「5200 / 5200」不再被截 | `ui/screenLayout.css` |
 | 桌機夥伴卡遇到七字長名（黑暗戰鬥暴龍獸）時名字折兩行、種族標籤被壓成「黑…」 | 1920、1366 | 名字列可換行、種族標籤不縮，放不下就換到名字下方 | `ui/screenLayout.css` |
 | 點牧場上的夥伴時，剛出現的資訊卡吃到同一次觸控留下的 click，直接開了詳情 | 844 | 卡片出現後 350ms 內，攔下「卡片本身沒有被按下」的那一次真實 click | `raisingHomeP1RView.js` |
-| 角色素材下載提示滑到季節膠囊下、重試鍵被錢包蓋住（素材串流較慢的早期回合量到；最終兩輪用 GPU，素材很快就緒、提示未停留，所以不在第 8 節） | 全部 | 改到狀態列下方的通知列（手機全寬、矮橫向在右欄手帳鍵下、桌機置中） | `ui/screenLayout.css` |
+| 角色素材下載提示滑到季節膠囊下、重試鍵被錢包蓋住（素材串流較慢的早期回合量到；最終兩輪用 GPU，素材很快就緒、提示未停留，所以不在第 8 節） | 全部 | 改到狀態列下方的通知列（手機與直向平板全寬、矮橫向在右欄手帳鍵下、桌機版牧場置中並讓出兩側卡片） | `ui/screenLayout.css` |
 | 矮橫向的牧場選單只剩約 100px 高 | 844、667 | 選單站在一列工具列上、快捷鍵左側，四欄排列 | `ui/screenLayout.css` |
-| 對話框按鍵捲出畫面：探索手帳「繼續散步」（844、667）、炫耀名片「完成」（1366、667）、好友抽屜「關閉」（375、844、667） | 844、667、1366、375 | 對話框按鍵列黏在面板底邊（不改原本間距）、矮橫向對話框加寬 | `ui/screenLayout.css` |
+| 對話框按鍵捲出畫面：探索手帳「繼續散步」（844、667）、炫耀名片「完成」（1366、667）、好友抽屜「關閉」（375、844、667） | 844、667、1366、375 | 遊戲內的對話框按鍵列黏在面板底邊（不改原本間距，底色用面板本身的純色；教學導覽的夜色面板不加底）、矮橫向對話框加寬；標題畫面的對話框維持原樣 | `ui/screenLayout.css` |
 | 夥伴詳情底部「收合」鍵折行 | 667 | 不折行、不縮 | `intRh2Styles.css` |
 | 設施配置：選取面板蓋住「全覽／還原」；篩選鍵 36px；側邊瀏海；矮橫向棋盤不到一半 | 375、844、667 | 選取面板讓出角落鍵；篩選 40px；標頭與內容留安全區；側欄 `clamp(220px,34vw,300px)`、角落鍵改直排 | `ui/screenLayout.css` |
 | 667×375 的選單、商店、圖鑑、設施配置落回直向縮放框（約 54%） | 667 | 橫向門檻 720→640px | `portraitFrame.js` |
@@ -211,7 +210,8 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 2. **紙娃娃編輯器**：簡報提到的馴獸師紙娃娃（髮型／臉型／服裝）編輯器，在 main 與所有分支都沒有程式碼，無從健檢；故事對話框的立繪（`portraitVnOverlay`）存在且已檢查。
 3. **既有紅燈的瀏覽器閘門**：`tests/championship-responsive-layout-browser.cjs` 在乾淨的 main 樹上以同樣的斷言失敗（它驗證的「關閉響應式牧場」模式產品已不提供），與本批無關；本批只把其中狩獵門檻的算式同步為 640px。
 4. **刻意放行的重疊**：相剋表是瀏覽器頂層 dialog，本來就會蓋在狀態列之上（帶遮罩），所以「相剋表 ⟂ 狀態列」不算 HUD 重疊；展演沙盒不是頂層，已改成從狀態列下方開始。
-5. **需要 Owner 知道的行為變更**：橫向門檻 720→640px 之後，640–719px 寬的橫向裝置（例如 iPhone SE、部分 Android 小手機）的選單、設施配置與狩獵場改用橫向版型，而不是過去整體縮小的直向框。標題、主選單與開場故事不受影響（零差異比對見第 5 節）。
+5. **需要 Owner 知道的行為變更**：橫向門檻 720→640px 之後，640–719px 寬的橫向裝置（例如 iPhone SE、部分 Android 小手機）的選單、設施配置與狩獵場改用橫向版型，而不是過去整體縮小的直向框。標題、主選單、開場序章與信件不受影響（零差異比對見第 5 節，含瀏海模擬）。
+6. **開場序章的「⏭ 跳過序章」伸進右側瀏海（844×390）**：序章屬於開場，但簡報點名的是「創角／選蛋／取名開場流程」，序章沒有點名，依專案規則（標題、主選單與開場維持 main 原樣）不修改。若要修，建議把 `#cm-opening .cm-cutscene` 的左右內距改為 `max(16px, env(safe-area-inset-*))`（只在有側邊瀏海時生效），需 Owner 點名同意。
 
 ## 7. 對照截圖（修改前｜修改後）
 
@@ -757,11 +757,11 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 | `src/championship/app/huntLayoutResolver.js` | 狩獵橫向版型沿用同一個 640px 門檻 |
 | `src/championship/app/raisingHomeP1RView.js` | 夥伴卡出現時，攔下「卡片本身沒被按下」的那一次觸控殘留 click（不使用計時器） |
 | `src/championship/app/ranchDiscoveryJournal.js` | 發布 `--cm-journal-clear`，讓桌機夥伴卡從手帳鍵下方起算 |
-| `src/championship/app/main.js` | 故事入口與「開始觀測」等待牧場就緒最多 4 秒；仍被拒時顯示提示（不再靜默） |
+| `src/championship/app/main.js` | 故事入口與「開始觀測」等待牧場就緒最多 4 秒；仍被拒時顯示提示（不再靜默）；等待後再檢查一次，兩次呼叫不會同時開兩個章節 |
 | `src/championship/app/ui/screenLayout.css` | 商店詳情、圖鑑矮橫向雙欄、設施配置、夥伴卡與通知列、牧場選單、對話框黏底按鍵、對戰選單（直向與矮橫向）等 |
 | `src/championship/app/ui/arcade.css` | 8 鍵工具列（直向／橫向）、快捷鍵 40px、窄賽事卡分行 |
 | `src/championship/app/cyberGacha.css` | 商店徽章、轉蛋機、10 連抽、合成爐、晶片背包的矮橫向與窄螢幕版面 |
-| `src/championship/app/onboarding.css` | 開場故事瀏海內距；執照、孵化器、蛋命名的矮橫向雙欄 |
+| `src/championship/app/onboarding.css` | 執照、孵化器、蛋命名的矮橫向雙欄（序章與信件不變） |
 | `src/championship/app/vs2Styles.css` | 橫向隊伍編成名單保留內容高度 |
 | `src/championship/app/vs5Styles.css` | 640px 起的橫向手機就用雙欄對戰選單 |
 | `src/championship/app/dataArena.css` | 矮橫向暫停面板兩兩一列 |
@@ -777,7 +777,9 @@ node scripts/qa/run-full-viewport-health-check.cjs --gpu --origin http://127.0.0
 | 檔案 | 內容 |
 |---|---|
 | `scripts/qa/run-full-viewport-health-check.cjs`、`viewport-health-rules.cjs`、`viewport-health-probe.cjs`、`viewport-health-slices.cjs` | 新的六視口健檢腳本 |
-| `scripts/qa/title-zero-diff.cjs` | 標題／主選單／開場計算樣式零差異比對 |
+| `scripts/qa/title-zero-diff.cjs` | 標題／主選單／開場序章／信件的計算樣式零差異比對；直向與橫向手機套用與健檢相同的瀏海與 Home 條安全區 |
+| `docs/contracts/championship/WEB_BUILD_INPUTS.v1.json`、`PUBLIC_RUNTIME_ALLOWLIST.v1.json` | 本批 18 個已發佈檔案的 sha256 改為新位元組（不增減檔案） |
+| `docs/coordination/OWNER_DIRECTION.md` | 本批的 Owner 指示紀錄 `FULL_VIEWPORT_HEALTH_CHECK_20261101` |
 | `tests/championship-viewport-health-rules-cases.mjs` | 新單元測試（19 項），已登記於 `tests/ci-test-scope.v1.json` |
 | `tests/championship-compact-landscape-menu-cases.mjs`、`championship-cage-landscape-cases.mjs`、`championship-desktop-raising-cases.mjs` | 新門檻的邊界案例（640×320、667×375 為橫向；639×320 仍為直向框） |
 | `tests/championship-responsive-layout-browser.cjs` | 狩獵橫向門檻算式同步為 640px |
