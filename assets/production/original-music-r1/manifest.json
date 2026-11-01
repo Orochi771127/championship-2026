@@ -69,13 +69,6 @@
       "sourceCommit": "bde3f2bf82380445a738222c5ef00cad01600204"
     },
     {
-      "path": "championship_battle_normal_r1.ogg",
-      "sha256": "67cb80063acf1cbb50b3ff8834348674c1fb00909b879ae30e5a27fad898d907",
-      "bytes": 459255,
-      "seconds": 32,
-      "sourcePackageSha256": "505f985a39fe55403adec64611ab3b29523188db945ba0f74a554b35e4292648"
-    },
-    {
       "path": "championship_battle_final_r1.ogg",
       "sha256": "d8d22a02aca6740d55cd80f0f8fd2f3c82692f5c5d77b79bee68da908c697805",
       "bytes": 463758,
@@ -177,15 +170,6 @@
       "trimEnd": 1.9305,
       "crossfade": 0.8
     },
-    "battle_normal": {
-      "path": "./assets/production/original-music-r1/championship_battle_normal_r1.ogg",
-      "loop": true,
-      "gainDb": -8.5,
-      "trimStart": 0,
-      "trimEnd": 0,
-      "crossfade": 0,
-      "fallbackPath": "./assets/production/original-music-r1/championship_battle_normal_r1.m4a"
-    },
     "battle_final": {
       "path": "./assets/production/original-music-r1/championship_battle_final_r1.ogg",
       "loop": true,
@@ -234,15 +218,6 @@
       "derivation": "AAC LC 160k, 48kHz, same cue, selected only when browser cannot play OGG; technical format validation, human listening pending"
     },
     {
-      "file": "championship_battle_normal_r1.m4a",
-      "sourceFile": "championship_battle_normal_r1.ogg",
-      "sourceSha256": "67cb80063acf1cbb50b3ff8834348674c1fb00909b879ae30e5a27fad898d907",
-      "sha256": "156f1168a491ec321fec3750ce9cde295e8ac58f7f0d42f11e2785d917b04cf9",
-      "bytes": 654166,
-      "seconds": 32,
-      "derivation": "AAC LC 160k, 48kHz, same cue, selected only when browser cannot play OGG; technical format validation, human listening pending"
-    },
-    {
       "file": "championship_defeat_r1.m4a",
       "sourceFile": "championship_defeat_r1.ogg",
       "sourceSha256": "cc31141eb0ebd1ab1c6152a028a34cba8803cd8cdf64410be298a8039751fcf0",
@@ -268,6 +243,17 @@
       "bytes": 62728,
       "seconds": 4.4,
       "derivation": "AAC LC 160k, 48kHz, same cue, selected only when browser cannot play OGG; technical format validation, human listening pending"
+    }
+  ],
+  "retired": [
+    {
+      "files": [
+        "championship_battle_normal_r1.ogg",
+        "championship_battle_normal_r1.m4a"
+      ],
+      "cue": "battle_normal",
+      "date": "2026-11-02",
+      "reason": "Owner retired the normal-field cue; battle_normal now plays scene-music-r1/battle/clash_at_the_concrete_edge.mp3"
     }
   ]
 }

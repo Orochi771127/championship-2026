@@ -1,6 +1,6 @@
 {
   "id": "CHAMPIONSHIP_SCENE_MUSIC_R1_20261016",
-  "scope": "Nine previously delivered scene MP3s retained unchanged, plus Owner-supplied Podium Geometry for CAGE_EDIT field/facility setup. Nine-track historical ledger remains a separate closed cohort.",
+  "scope": "Nine previously delivered scene MP3s retained unchanged, plus Owner-supplied Podium Geometry for CAGE_EDIT field/facility setup. Nine-track historical ledger remains a separate closed cohort. Owner-supplied Clash at the Concrete Edge (2026-11-02) is the battle_normal cue and replaces the retired 32-second normal-field cue.",
   "processing": "Measured runtime gain only, approximately -24 LUFS and <= -3 dBTP; no speed/pitch changes, no low-pass or transcoding. 0.8 second loop crossfade. Listening pending.",
   "acceptance": "Podium: technical decode/measurement only; browser and human listening pending. No BPM or 8-56 second loop assumed. Prior nine retain their recorded verification.",
   "files": [
@@ -213,6 +213,29 @@
       "measuredIntegratedLufs": -12.16,
       "measuredTruePeakDbtp": 0.6,
       "playbackGainDb": -11.9
+    },
+    {
+      "id": "battle_normal",
+      "path": "battle/clash_at_the_concrete_edge.mp3",
+      "sha256": "10661091627767447e4c68551d2fec73fbe6ed3f52bdf7aeed63ee16bf06fe81",
+      "bytes": 2881453,
+      "seconds": 180.010862,
+      "sampleRate": 44100,
+      "channels": 2,
+      "source": "Owner supplied Downloads file clash_at_the_concrete_edge.mp3 (192 kbps, 182.857 s), assigned to the normal battle field on 2026-11-02",
+      "sourceSha256": "e23b61234004a5ec9c34e4e28b40c2d8f17b69d03893e923d9b9f754e1a38d30",
+      "sourceBytes": 4394697,
+      "originalUnchanged": false,
+      "webEncoding": "Leading 0.1 s and trailing 2.75 s silence trimmed, -1 dB pre-gain for lossy headroom, LAME MP3 128 kbps CBR 44.1 kHz stereo, metadata stripped",
+      "category": "battle",
+      "titles": {
+        "zh": "\u77f3\u7de3\u4ea4\u92d2",
+        "en": "Clash at the Concrete Edge"
+      },
+      "titleStatus": "Product display translation, not embedded artist metadata",
+      "measuredIntegratedLufs": -12.88,
+      "measuredTruePeakDbtp": -0.86,
+      "playbackGainDb": -11.2
     }
   ],
   "cues": {
@@ -292,6 +315,14 @@
       "path": "./assets/production/scene-music-r1/system/podium_geometry.mp3",
       "loop": true,
       "gainDb": -11.9,
+      "trimStart": 0,
+      "trimEnd": 0,
+      "crossfade": 0.8
+    },
+    "battle_normal": {
+      "path": "./assets/production/scene-music-r1/battle/clash_at_the_concrete_edge.mp3",
+      "loop": true,
+      "gainDb": -11.2,
       "trimStart": 0,
       "trimEnd": 0,
       "crossfade": 0.8

@@ -13,7 +13,7 @@ const entries = [
   ['forge', '東南熔爐丘陵', 'Southeast Forge Hills', ['exploration']],
   ['harbor', '南方港灣樞紐', 'Southern Harbor Nexus', ['exploration', 'system']],
   ['tidal', '西南潮汐邊境', 'Southwest Tidal Frontier', ['exploration']],
-  ['battle_normal', '錦標賽對戰', 'Championship Battle', ['battle']],
+  ['battle_normal', '石緣交鋒', 'Clash at the Concrete Edge', ['battle']],
   ['battle_final', '錦標賽決戰', 'Championship Final', ['battle']],
   ['victory', '勝利之聲', 'Victory', ['result']],
   ['defeat', '敗北之聲', 'Defeat', ['result']],

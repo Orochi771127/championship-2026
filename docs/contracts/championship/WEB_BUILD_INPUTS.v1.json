@@ -7791,8 +7791,6 @@
     "assets/production/original-music-r1/bgm_southwest_tidal_frontier.mp3",
     "assets/production/original-music-r1/championship_battle_final_r1.m4a",
     "assets/production/original-music-r1/championship_battle_final_r1.ogg",
-    "assets/production/original-music-r1/championship_battle_normal_r1.m4a",
-    "assets/production/original-music-r1/championship_battle_normal_r1.ogg",
     "assets/production/original-music-r1/championship_defeat_r1.m4a",
     "assets/production/original-music-r1/championship_defeat_r1.ogg",
     "assets/production/original-music-r1/championship_draw_r1.m4a",
@@ -8056,6 +8054,7 @@
     "assets/production/raising-care/licensed-runtime-v1/protein-rot-1.png",
     "assets/production/raising-care/licensed-runtime-v1/waste-0.png",
     "assets/production/raising-care/licensed-runtime-v1/waste-1.png",
+    "assets/production/scene-music-r1/battle/clash_at_the_concrete_edge.mp3",
     "assets/production/scene-music-r1/battle/clash_at_the_emerald_edge.mp3",
     "assets/production/scene-music-r1/battle/federation_siege.mp3",
     "assets/production/scene-music-r1/battle/inferno_overdrive.mp3",
@@ -37781,14 +37780,6 @@
         "sha256": "d8d22a02aca6740d55cd80f0f8fd2f3c82692f5c5d77b79bee68da908c697805"
       },
       {
-        "path": "assets/production/original-music-r1/championship_battle_normal_r1.m4a",
-        "sha256": "156f1168a491ec321fec3750ce9cde295e8ac58f7f0d42f11e2785d917b04cf9"
-      },
-      {
-        "path": "assets/production/original-music-r1/championship_battle_normal_r1.ogg",
-        "sha256": "67cb80063acf1cbb50b3ff8834348674c1fb00909b879ae30e5a27fad898d907"
-      },
-      {
         "path": "assets/production/original-music-r1/championship_defeat_r1.m4a",
         "sha256": "8ce39e6e4f183d18f62da5daaf7fa074f5b5dcc8d5460c39e9a0d3fd66c20b9a"
       },
@@ -38839,6 +38830,10 @@
       {
         "path": "assets/production/raising-care/licensed-runtime-v1/waste-1.png",
         "sha256": "a256b27825a9e15db0f3490368b205b95535eaca6e22c0ae1fa93b176c1817c9"
+      },
+      {
+        "path": "assets/production/scene-music-r1/battle/clash_at_the_concrete_edge.mp3",
+        "sha256": "10661091627767447e4c68551d2fec73fbe6ed3f52bdf7aeed63ee16bf06fe81"
       },
       {
         "path": "assets/production/scene-music-r1/battle/clash_at_the_emerald_edge.mp3",
@@ -40946,7 +40941,7 @@
       },
       {
         "path": "src/championship/presentation/originalMusicCatalog.js",
-        "sha256": "d204cc4dda90fe462725653c21ad8dd9412ba3379a4daa045803c8318341a15d"
+        "sha256": "c7759e57700d028a423bfc52958a6e28c716d5a22e3ed5bf1d0d8580a1795fe3"
       },
       {
         "path": "src/championship/presentation/originalRuntimeLocation.js",
@@ -41090,7 +41085,7 @@
       },
       {
         "path": "src/championship/presentation/sceneMusicCatalog.js",
-        "sha256": "ca864ea42d70f5aeb5b12ccd4dca0f692e605e88cf50c62954d4e6a8cc7aa698"
+        "sha256": "9516735085adfd07184819032cbe883dda617db97ebc1f73ede7053ecc59b841"
       },
       {
         "path": "src/championship/presentation/shopGoodsUiArt.js",

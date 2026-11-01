@@ -45,7 +45,7 @@ test('background and mute pause at the existing position; loop crossfade still w
 });
 
 test('saved mute prevents first audio fetch; result cue plays once per actual attempt and never loops',async()=>{
-  const f=fixture({muted:true});f.music.setScene('battle_normal');f.doc.emit('pointerdown');await settle();assert.equal(f.media.length,0);
+  const f=fixture({muted:true});f.music.setScene('battle_final');f.doc.emit('pointerdown');await settle();assert.equal(f.media.length,0);
   f.bus.setLevels({muted:false});f.music.preferencesChanged();await settle();assert.equal(f.media[0].loop,true);
   f.music.setScene('victory','battle:42');await settle();const result=f.media.find(m=>m.src.includes('victory'));assert.equal(result.loop,false);f.finishFades();result.onended();assert.equal(f.music.inspect().playing,null);
   const starts=f.music.inspect().starts;f.music.setScene('victory','battle:42');f.music.setScene('core');await settle();f.music.setScene('victory','battle:42');await settle();assert.equal(f.music.inspect().starts,starts+1);assert.equal(f.music.inspect().playing,null);
