@@ -24,6 +24,11 @@ const KIT_ELEMENT = [[/flame|ember|inferno|cinder/, 'fire'], [/tide|surf|foam|vo
 // Original cells to fall back on when a style's first choice has no original cell on this host.
 const ALTERNATE = Object.freeze({water: {hit: [91, 0]}, ice: {hit: [1, 31]}, seed: {hit: [1, 44]}, vine: {hit: [1, 44]}, leaf: {hit: [1, 44]},
   thorn: {hit: [1, 44]}, spore: {hit: [1, 34]}, quake: {hit: [64, 0]}, wind: {hit: [1, 40]}, dark: {hit: [16, 2]}});
+// Element cells for a skill whose own style has none (web atlas round): wood
+// seed00, ice snowcrystal00, earth rock00, wind tatumaki00, moon dark01.
+const ELEMENT_STYLE = Object.freeze({WOOD: 'seed', ICE: 'ice', EARTH: 'quake', WIND: 'wind', MOON: 'dark', WATER: 'water', FIRE: 'fireball',
+  THUNDER: 'thunder', SUN: 'holy'});
+const MELEE = new Set(['strike', 'claw', 'slash', 'pierce']);
 
 export function dataArenaMoveElement(moveId, casterSpeciesId = null) {
   const own = relayOwnMoveInfo(moveId);
@@ -52,8 +57,9 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
   const look = (moveId, speciesId) => {
     const element = dataArenaMoveElement(moveId, speciesId);
     const arena = Object.entries(ARENA_ELEMENT).find(([, e]) => e === element)?.[0] ?? null;
-    return {...elementVfx(element), style: dataArenaMoveStyle(moveId, arena) ?? 'strike'};
+    return {...elementVfx(element), element, style: dataArenaMoveStyle(moveId, arena) ?? 'strike'};
   };
+  const cellFor = (v, role) => pick(v.style, role) ?? (MELEE.has(v.style) ? null : pick(ELEMENT_STYLE[v.element], role));
   let stats = {casts: 0, releases: 0, hits: 0, ults: 0};
   return Object.freeze({
     look,
@@ -68,15 +74,18 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     release({x, y, angle = 0, moveId, speciesId, melee = false}) {
       const v = look(moveId, speciesId);
       layer.muzzle({x, y, angle, palette: v.palette, size: melee ? 30 : 24});
-      const cell = pick(v.style, 'launch');
+      const cell = cellFor(v, 'launch');
       if (cell) layer.cell({...cell, x, y, scale: SCALE, flip: Math.cos(angle) < 0});
       stats.releases++;
     },
     /** A landed move: the style's original hit cell, the element mark and body overlay. */
     hit({x, y, groundY = y, moveId, speciesId, heavy = false, follow = null}) {
       const v = look(moveId, speciesId);
-      const cell = pick(v.style, 'hit');
+      const cell = cellFor(v, 'hit');
       if (cell) layer.cell({...cell, x, y, scale: SCALE});
+      // A melee hit also carries its element's original accent cell, as in the AI battle.
+      if (MELEE.has(v.style) && v.accent && art?.has?.(v.accent[0], v.accent[1]))
+        layer.cell({bankId: v.accent[0], sequence: v.accent[1], x, y: y - 6, scale: SCALE * 0.8});
       // Every landed move marks the ground for four seconds; heavy ones mark wider.
       layer.decal({x, y: groundY, kind: v.decal, palette: v.palette, paletteKey: v.paletteKey, size: heavy ? 110 : 70});
       if (heavy && v.overlay && art?.has?.(v.overlay[0], v.overlay[1]) && follow)

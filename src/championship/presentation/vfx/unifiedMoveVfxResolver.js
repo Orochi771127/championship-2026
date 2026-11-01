@@ -43,7 +43,7 @@ export const ELEMENT_VFX = Object.freeze({
   EARTH:   Object.freeze({palette: 'earth',   decal: 'crack',    storm: 'quake',   overlay: null,    accent: [24, 2], weather: 'common-sandstome'}),
   WIND:    Object.freeze({palette: 'wind',    decal: 'swirl',    storm: 'gale',    overlay: null,    accent: [33, 2], weather: 'common-wind'}),
   SUN:     Object.freeze({palette: 'light',   decal: 'sunburst', storm: 'eclipse', overlay: null,    accent: [1, 33], weather: 'common-lightup'}),
-  MOON:    Object.freeze({palette: 'dark',    decal: 'shade',    storm: 'eclipse', overlay: null,    accent: [121, 2], weather: 'common-mist'}),
+  MOON:    Object.freeze({palette: 'dark',    decal: 'shade',    storm: 'eclipse', overlay: null,    accent: [100, 2], weather: 'common-mist'}),
   NEUTRAL: Object.freeze({palette: 'neutral', decal: 'crack',    storm: 'burst',   overlay: null,    accent: null,    weather: null})
 });
 
@@ -57,14 +57,15 @@ const SELECTOR_ELEMENT = Object.freeze([null, 'FIRE', 'WATER', 'SUN', 'MOON', 'T
  * Fallback cells by theme style for a record that names no effect bank. Every
  * entry is a sequence of the shared atlas that has an original remade cell set
  * (or one of the three banks no record names: seed00 25, snowcrystal00 26,
- * blacksmoke04 121).
+ * blacksmoke04 121). Web atlas round: dark plays dark01 (100, the black-hole
+ * crescent) and sound plays onpu00 (10, the neon crest).
  */
 export const STYLE_FALLBACK_CELLS = Object.freeze({
   strike: {hit: [81, 0]}, claw: {hit: [79, 0]}, slash: {hit: [80, 0]}, pierce: {hit: [82, 0]},
   fireball: {launch: [7, 0], body: [7, 1], hit: [7, 2]}, flame: {launch: [7, 0], body: [7, 1], hit: [149, 0]},
   water: {launch: [6, 0], body: [6, 1], hit: [6, 2]}, ice: {launch: [26, 0], body: [26, 1], hit: [26, 2]},
   thunder: {launch: [28, 0], body: [28, 1], hit: [28, 2]}, holy: {launch: [9, 0], body: [9, 1], hit: [9, 2]},
-  dark: {body: [121, 1], hit: [121, 2]}, sound: {hit: [3, 0]}, beam: {launch: [12, 0], body: [12, 1], hit: [12, 3]},
+  dark: {launch: [100, 0], body: [100, 1], hit: [100, 2]}, sound: {launch: [10, 0], hit: [10, 1]}, beam: {launch: [12, 0], body: [12, 1], hit: [12, 3]},
   vine: {body: [25, 0], hit: [25, 1]}, thorn: {body: [53, 1], hit: [53, 2]}, leaf: {body: [25, 0], hit: [25, 1]},
   seed: {body: [25, 0], hit: [25, 1]}, spore: {body: [8, 0], hit: [8, 1]},
   quake: {launch: [24, 0], body: [24, 1], hit: [24, 2]}, wind: {launch: [33, 0], body: [33, 1], hit: [33, 2]},

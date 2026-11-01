@@ -1,4 +1,4 @@
-// VFX_FIVE_LAYER_20261101: one effect-element authority, original remake r2,
+// VFX_FIVE_LAYER_20261101: one effect-element authority, the 292-cell web atlas,
 // fallback cells, the Dex wait, the battle lens and the shared element layer.
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -10,7 +10,7 @@ import {
   ELEMENT_VFX, STYLE_FALLBACK_CELLS, VFX_ELEMENTS, CRITICAL_VFX_SYSTEM, elementVfx, resolveMoveVfx, supportVfxSystem
 } from "../src/championship/presentation/vfx/unifiedMoveVfxResolver.js";
 import { moveNameElement } from "../src/championship/text/moveNameElements.js";
-import { SHARED_VFX_REMAKE_R2_MANIFEST, sharedVfxRemakeAllowed, validateSharedVfxRemake } from "../src/championship/presentation/vfx/sharedVfxRemakeR2.js";
+import { ORIGINAL_SHARED_WEB_ATLAS_RENDER, originalSharedWebAtlasAllowed, sharedVfxAtlasSources, validateOriginalSharedVfx } from "../src/championship/presentation/originalSharedVfxReview.js";
 import { originalVfxCellArtAllowed } from "../src/championship/presentation/vfx/originalVfxCellArt.js";
 import { ELEMENT_DECAL_MS, ELEMENT_STORM_MS, createElementVfxLayer } from "../src/championship/presentation/vfx/elementVfxLayer.js";
 import { createBattleFxCamera } from "../src/championship/presentation/battleFx/battleFxCamera.js";
@@ -62,31 +62,56 @@ test("no signature move and no named move plays without effect cells", () => {
 });
 
 test("original cells cover at least 85% of the 565 named moves", () => {
-  const owner = JSON.parse(fs.readFileSync("assets/production/vfx/original-shared-review-210-seamfix-r1/manifest.json", "utf8"));
-  const remake = JSON.parse(fs.readFileSync(SHARED_VFX_REMAKE_R2_MANIFEST, "utf8"));
-  const original = new Set([...owner.banks, ...remake.banks].flatMap(bank => bank.sequences.map(id => `${bank.bankId}:${id}`)));
+  const atlas = JSON.parse(fs.readFileSync(ORIGINAL_SHARED_WEB_ATLAS_RENDER, "utf8"));
+  const original = new Set(atlas.banks.flatMap(bank => bank.sequences.map(id => `${bank.bankId}:${id}`)));
   let any = 0;
   for (const record of named) if (look(record.recordIndex).cells.some(cell => original.has(`${cell.bankId}:${cell.sequence}`))) any++;
   assert.ok(any / named.length >= 0.85, `original coverage ${(any / named.length * 100).toFixed(1)}%`);
 });
 
-test("remake r2 is original, whole-sequence and hash-bound", () => {
-  const manifest = JSON.parse(fs.readFileSync(SHARED_VFX_REMAKE_R2_MANIFEST, "utf8"));
-  const checked = validateSharedVfxRemake(manifest);
-  assert.deepEqual(checked.banks.map(bank => bank.bankId).sort((a, b) => a - b), [6, 8, 13, 24, 25, 26, 32, 33, 53, 78, 121]);
-  assert.equal(checked.rightsStatus, "ORIGINAL_CREATED");
-  assert.equal(checked.provenance.originalPixelsUsed, false);
-  assert.match(checked.provenance.imageGeneration, /^NONE/);
-  const png = fs.readFileSync(checked.image.src);
-  assert.equal(crypto.createHash("sha256").update(png).digest("hex"), checked.image.sha256);
+test("the web atlas packs 292 original cells in one 2048 texture with clear margins, bleed and a lossless webp", () => {
+  const dir = ORIGINAL_SHARED_WEB_ATLAS_RENDER.replace("render.v1.json", "");
+  const render = validateOriginalSharedVfx(JSON.parse(fs.readFileSync(ORIGINAL_SHARED_WEB_ATLAS_RENDER, "utf8")));
+  const manifest = JSON.parse(fs.readFileSync(`${dir}manifest.json`, "utf8"));
+  assert.equal(render.cells.length, 292);
+  assert.deepEqual([render.image.width, render.image.height], [2048, 2048]);
+  const banks = new Set(render.banks.map(bank => bank.bankId));
+  for (const id of [6, 8, 10, 13, 24, 25, 26, 32, 33, 53, 78, 100, 121]) assert.ok(banks.has(id), `bank ${id}`);
+  assert.equal(manifest.rightsStatus, "ORIGINAL_CREATED");
+  assert.equal(manifest.provenance.originalPixelsUsed, false);
+  assert.equal(manifest.packing.marginPx >= 2, true);
+  assert.deepEqual(manifest.selfCheck.clipped, []);
+  assert.equal(manifest.selfCheck.bleedGapPixels, 0);
+  const sha = file => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+  assert.equal(sha(render.image.src), render.image.sha256);
+  assert.equal(sha(manifest.webp.src), manifest.webp.sha256);
+  assert.ok(manifest.webp.bytes < manifest.image.bytes, "the webp is the smaller download");
+  // Every drawn cell keeps 2 px clear of every other drawn cell.
+  const drawn = render.cells.filter(cell => !cell.blank).map(cell => cell.frame);
+  for (let i = 0; i < drawn.length; i++) for (let j = i + 1; j < drawn.length; j++) {
+    const [ax, ay, aw, ah] = drawn[i], [bx, by, bw, bh] = drawn[j];
+    assert.ok(ax + aw + 4 <= bx || bx + bw + 4 <= ax || ay + ah + 4 <= by || by + bh + 4 <= ay, `cells ${i} and ${j} keep their margins`);
+  }
+  assert.deepEqual(sharedVfxAtlasSources(render.image.src), [`${dir}effects.webp`, render.image.src], "webp first, png fallback");
+  assert.deepEqual(sharedVfxAtlasSources("assets/production/vfx/original-shared-review-210-seamfix-r1/effects.png").length, 1);
   const index = JSON.parse(fs.readFileSync("assets/production/ART_PRODUCTION_INDEX.json", "utf8"));
-  const entry = index.entries.find(row => row.assetId === "art:vfx:original-shared:remake-r2:v1");
+  const entry = index.entries.find(row => row.assetId === "art:vfx:original-shared:review:292-r1");
   assert.equal(entry?.rightsStatus, "ORIGINAL_CREATED");
   assert.equal(entry.publicReleasePermitted, false, "publication waits for the Owner");
-  assert.equal(sharedVfxRemakeAllowed("http://127.0.0.1:8761/championship.html"), true);
-  assert.equal(sharedVfxRemakeAllowed("https://orochi771127.github.io/championship-2026/championship.html"), false, "loopback review only");
-  assert.equal(sharedVfxRemakeAllowed("http://127.0.0.1:8761/championship.html?vfxRemake=off"), false);
+  assert.equal(originalSharedWebAtlasAllowed("http://127.0.0.1:8761/championship.html"), true);
+  assert.equal(originalSharedWebAtlasAllowed("https://orochi771127.github.io/championship-2026/championship.html"), false, "loopback review only");
+  assert.equal(originalSharedWebAtlasAllowed("http://127.0.0.1:8761/championship.html?vfxShared=210"), false);
   assert.equal(originalVfxCellArtAllowed("https://example.invalid/championship.html"), false);
+});
+
+test("dark plays dark01 and sound plays onpu00; wood, ice, earth and wind carry seed, snow crystal, rock and tornado cells", () => {
+  assert.deepEqual(STYLE_FALLBACK_CELLS.dark, { launch: [100, 0], body: [100, 1], hit: [100, 2] });
+  assert.deepEqual(STYLE_FALLBACK_CELLS.sound, { launch: [10, 0], hit: [10, 1] });
+  assert.deepEqual(elementVfx("MOON").accent, [100, 2]);
+  assert.equal(elementVfx("WOOD").accent[0], 25);
+  assert.equal(elementVfx("ICE").accent[0], 26);
+  assert.equal(elementVfx("EARTH").accent[0], 24);
+  assert.equal(elementVfx("WIND").accent[0], 33);
 });
 
 test("support, critical and signature weather name real bounded 3D systems", () => {
