@@ -1,5 +1,15 @@
 # Championship Owner Direction
 
+<!-- record-id: VFX_SHARED_292_PUBLIC_20261102 -->
+## 2026-11-02 — The 292-cell shared VFX web atlas becomes the public selection
+
+On 2026-11-01 the Owner directs 「你先自我審查一下，這批特效跟Pokémon Arena 2D還有我們原作的特效，在美術在動態上，是適合的嗎？若有通過美術審核就將這批 commit 並 push 到 PR #138,並合併部署。」 The art self-review (`docs/reports/vfx-five-layer-2026-11-01/web-atlas/REPORT_ZH_TW.md` §3b) compared every remade bank's native sequences against the ROM cells frame by frame (research only, never committed), fixed onpu00's hit to grow outward like the native sequence, and passed every bank a move or fallback plays; blacksmoke04 fails against the native look but nothing plays it. PR #138 merged as b692ad5b with the atlas still loopback-only. Asked whether the atlas should replace the public 210-cell selection, the Owner answers 「Make 292 public」 (2026-11-02).
+
+- `src/data/championship/public-playtest.r1.json` `acceptedOriginalSharedVfx` is now `ACCEPTED_ORIGINAL_SHARED_VFX_20261102` for `original-shared-review-292-r1` (supersedes `ACCEPTED_ORIGINAL_SHARED_VFX_20261012`). The 210 cells are inside the atlas pixel for pixel; the 210-cell atlas file is no longer published.
+- Published files: `effects.webp` (lossless, loaded first) and `effects.png` (fallback), plus the same three localized battle-text atlases. The manifest and `render.v1.json` stay private; the public descriptor `assets/production/public-runtime/shared-vfx.render.v1.json` is projected from the manifest.
+- As for the 210 cells, the review flags inside the manifest and its ART_PRODUCTION_INDEX entry stay as provenance and the playtest policy record is the approval.
+- Presentation only: no move value, timing, collision, damage or save change.
+
 <!-- record-id: VFX_FIVE_LAYER_20261101 -->
 ## 2026-11-01 — Five-layer VFX: one element authority, Dex and Data Arena on the effect cells, idle 3D systems, remake r2
 

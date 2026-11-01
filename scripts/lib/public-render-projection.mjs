@@ -41,7 +41,7 @@ export function projectPublicRenderSources({root,input,index}){
   if(role==='shared-vfx'){
    const approval=policy.acceptedOriginalSharedVfx;
    const selected=recipe.sources.find(row=>row.role===role);
-   if(approval?.status!=='OWNER_AUTHORIZED_PUBLIC_PLAYTEST'||approval.selectionId!=='ACCEPTED_ORIGINAL_SHARED_VFX_20261012'
+   if(approval?.status!=='OWNER_AUTHORIZED_PUBLIC_PLAYTEST'||approval.selectionId!=='ACCEPTED_ORIGINAL_SHARED_VFX_20261102'
     ||approval.manifestPath!==selected.path)throw Error('PUBLIC_RENDER_SHARED_SELECTION');
    validateOriginalSharedVfx(source,index,{manifestPath:selected.path});
   }else validators[role](source,index);
@@ -69,6 +69,8 @@ export function projectPublicRenderSources({root,input,index}){
    value.localizedText={...take(text,['schema','bankId','sequences','cells','timing']),selection:{source:'GAME_SETTING_LOCALE'},
     sets:Object.fromEntries(['zh-Hant','ja','en'].map(name=>[name,{image:image(text.sets[name].image),cells:text.sets[name].cells.map(cell)}]))};
    mediaImage(value.image);Object.values(value.localizedText.sets).forEach(set=>mediaImage(set.image));
+   // The web atlas ships the same pixels as lossless webp beside the png; the loader tries it first.
+   if(source.webp)mediaImage({src:source.webp.src,sha256:source.webp.sha256});
   }
   validatePublicRenderDescriptor(value,role);
   const file=`assets/production/public-runtime/${role}.render.v1.json`,bytes=Buffer.from(JSON.stringify(value,null,2)+'\n');

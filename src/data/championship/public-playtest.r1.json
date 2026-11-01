@@ -33,25 +33,29 @@
     "commercialReleaseAccepted": false
   },
   "acceptedOriginalSharedVfx": {
-    "selectionId": "ACCEPTED_ORIGINAL_SHARED_VFX_20261012",
+    "selectionId": "ACCEPTED_ORIGINAL_SHARED_VFX_20261102",
     "status": "OWNER_AUTHORIZED_PUBLIC_PLAYTEST",
-    "authorizationRecordedOn": "2026-10-12",
-    "ownerReply": "那包當然可以發佈啊，都已經重做了。你幫我審查一下吧若沒問題就是接入遊戲使用然後發佈啊",
-    "scope": "Remade original shared battle VFX, revision original-shared-review-210-seamfix-r1 (210 cells over 26 banks; bank 110 excluded) and its three localized battle-text atlases. Pixels, timing, collision and damage unchanged; exact approved origin/basePath and hash-selected files only.",
-    "manifestPath": "assets/production/vfx/original-shared-review-210-seamfix-r1/manifest.json",
+    "authorizationRecordedOn": "2026-11-02",
+    "ownerReply": "若有通過美術審核就將這批 commit 並 push 到 PR #138,並合併部署。 / Make 292 public",
+    "scope": "Original shared battle VFX web atlas, revision original-shared-review-292-r1: the 210 accepted cells copied pixel for pixel plus 82 new procedurally drawn original cells (bubble00, walaser00, unchi00, lightball02, toge00, dark01, onpu00, tatumaki00, rock00, seed00, snowcrystal00; beam01 and blacksmoke04 carried over), one 2048x2048 atlas served as lossless webp with a png fallback, and the same three localized battle-text atlases. Pixels of the 210 cells, timing, collision and damage unchanged; exact approved origin/basePath and hash-selected files only.",
+    "manifestPath": "assets/production/vfx/original-shared-review-292-r1/manifest.json",
     "files": [
-      "assets/production/vfx/original-shared-review-210-seamfix-r1/manifest.json",
-      "assets/production/vfx/original-shared-review-210-seamfix-r1/effects.png",
+      "assets/production/vfx/original-shared-review-292-r1/manifest.json",
+      "assets/production/vfx/original-shared-review-292-r1/effects.png",
+      "assets/production/vfx/original-shared-review-292-r1/effects.webp",
       "assets/production/vfx/original-shared-review-v1/text-zh-Hant.png",
       "assets/production/vfx/original-shared-review-v1/text-ja.png",
       "assets/production/vfx/original-shared-review-v1/text-en.png"
     ],
     "excluded": [
       "bank 110 (withdrawn; assigned to dot)",
+      "the earlier 210-cell selection (superseded; its cells are inside this atlas)",
       "unselected review revisions and candidates",
       "research and source masters"
     ],
-    "provenance": "Owner VFX delivery VFX_共用特效_原創交付_20261006 outside the repository (Blender procedural, originalPixelsUsed=false; text rendered with Noto Sans TC, SIL OFL 1.1, font file not distributed); recorded in the manifest provenance.",
+    "supersedes": "ACCEPTED_ORIGINAL_SHARED_VFX_20261012",
+    "artReview": "docs/reports/vfx-five-layer-2026-11-01/web-atlas/REPORT_ZH_TW.md#3b",
+    "provenance": "210 cells: Owner VFX delivery VFX_共用特效_原創交付_20261006 (Blender procedural, originalPixelsUsed=false). 82 new cells: scripts/vfx/build_shared_vfx_web_atlas.py (numpy shape fields, no image input, no AI image model); only native cell sizes, anchors and sequence ticks are read. Recorded in the manifest provenance.",
     "sourceReviewFlagsRemainProvenance": true,
     "rightsDocumentVerified": false,
     "fullOriginalParityAccepted": false,

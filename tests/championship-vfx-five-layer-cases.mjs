@@ -10,7 +10,7 @@ import {
   ELEMENT_VFX, STYLE_FALLBACK_CELLS, VFX_ELEMENTS, CRITICAL_VFX_SYSTEM, elementVfx, resolveMoveVfx, supportVfxSystem
 } from "../src/championship/presentation/vfx/unifiedMoveVfxResolver.js";
 import { moveNameElement } from "../src/championship/text/moveNameElements.js";
-import { ORIGINAL_SHARED_WEB_ATLAS_RENDER, originalSharedWebAtlasAllowed, sharedVfxAtlasSources, validateOriginalSharedVfx } from "../src/championship/presentation/originalSharedVfxReview.js";
+import { ORIGINAL_SHARED_WEB_ATLAS_RENDER, sharedVfxAtlasSources, validateOriginalSharedVfx } from "../src/championship/presentation/originalSharedVfxReview.js";
 import { originalVfxCellArtAllowed } from "../src/championship/presentation/vfx/originalVfxCellArt.js";
 import { ELEMENT_DECAL_MS, ELEMENT_STORM_MS, createElementVfxLayer } from "../src/championship/presentation/vfx/elementVfxLayer.js";
 import { createBattleFxCamera } from "../src/championship/presentation/battleFx/battleFxCamera.js";
@@ -97,10 +97,11 @@ test("the web atlas packs 292 original cells in one 2048 texture with clear marg
   const index = JSON.parse(fs.readFileSync("assets/production/ART_PRODUCTION_INDEX.json", "utf8"));
   const entry = index.entries.find(row => row.assetId === "art:vfx:original-shared:review:292-r1");
   assert.equal(entry?.rightsStatus, "ORIGINAL_CREATED");
-  assert.equal(entry.publicReleasePermitted, false, "publication waits for the Owner");
-  assert.equal(originalSharedWebAtlasAllowed("http://127.0.0.1:8761/championship.html"), true);
-  assert.equal(originalSharedWebAtlasAllowed("https://orochi771127.github.io/championship-2026/championship.html"), false, "loopback review only");
-  assert.equal(originalSharedWebAtlasAllowed("http://127.0.0.1:8761/championship.html?vfxShared=210"), false);
+  // Owner 2026-11-02 made it the public selection; as for the 210 cells, the
+  // review flags stay as provenance and the playtest policy record is the approval.
+  assert.equal(entry.publicReleasePermitted, false);
+  const publicRender = JSON.parse(fs.readFileSync("assets/production/public-runtime/shared-vfx.render.v1.json", "utf8"));
+  assert.deepEqual(publicRender, JSON.parse(fs.readFileSync(ORIGINAL_SHARED_WEB_ATLAS_RENDER, "utf8")), "the public descriptor is the web atlas");
   assert.equal(originalVfxCellArtAllowed("https://example.invalid/championship.html"), false);
 });
 
