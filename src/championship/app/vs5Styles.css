@@ -580,7 +580,9 @@
 }
 
 /* ---------------- Tablets: the menu becomes two columns ---------------- */
-@media (min-width: 700px) {
+/* Short landscape phones from 640px (667x375) too: one column there left the first match
+   under the back key and squeezed the mode keys to two lines (viewport health check 2026-11-01). */
+@media (min-width: 700px), (orientation: landscape) and (min-width: 640px) {
   body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-shell {
     display: grid;
     width: min(100%, 980px);
@@ -597,6 +599,8 @@
   body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] :is(.cm-vs5-matches, .cm-vs5-party, .cm-vs5-entry-notice) { grid-column: 2; grid-row: 2 / span 2; min-height: 0; overflow-y: auto; padding-inline: 0; }
   body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-shell[data-battle-mode]:has(.cm-vs5-cube[hidden]) :is(.cm-vs5-party, .cm-vs5-entry-notice) { grid-column: 1 / -1; }
   body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer { grid-area: footer; margin-inline: calc(-1 * var(--sp-8)); padding-inline: var(--sp-8); }
+}
+@media (min-width: 700px) {
   body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell { width: min(100%, 720px); }
   body:not([data-portrait-frame]) .cm-vs5-result__body { inset-inline: 12%; }
   body:not([data-portrait-frame]) .cm-vs5-roster--player .cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) { grid-template-columns: 56px minmax(0, 1fr) auto; }

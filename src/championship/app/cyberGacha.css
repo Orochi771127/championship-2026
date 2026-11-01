@@ -301,6 +301,12 @@
 /* Toolbar keys clip their shimmer, so the badge rides inside on the right and the label steps left. */
 :root:root :is(.cm-toolbar__quick-entry, .cm-toolbar__entry)[data-entry-id="shop"][data-gacha-tickets]:not([data-gacha-tickets="0"]) { padding-right: 46px; }
 :is([data-quick-id="shop"], [data-entry-id="shop"]) > .cm-gacha-dock-badge { top: 50%; right: 3px; translate: 0 -50%; }
+/* Short landscape phones: the quick key is 80 px wide, so the badge drops its ticket art and keeps the count. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root:root .cm-toolbar__quick-entry[data-entry-id="shop"][data-gacha-tickets]:not([data-gacha-tickets="0"]) { padding-right: 30px; }
+  .cm-toolbar__quick-entry > .cm-gacha-dock-badge { padding: 0 5px; }
+  .cm-toolbar__quick-entry > .cm-gacha-dock-badge .cm-gacha-dock-badge__icon { display: none; }
+}
 /* The centre needs the height: the shop subtitle steps aside while it is open. */
 .cm-vs2-root[data-gacha="open"] .cm-vs2-subtitle { display: none; }
 .cm-vs2-root[data-gacha="open"] .cm-vs2-shop__body { display: flex; flex-direction: column; min-height: 0; }
@@ -308,6 +314,59 @@
 .int-rh2-companion__name .cm-gacha-badge, .cm-vs5-fighter__name .cm-gacha-badge { font-size: .62em; letter-spacing: 0; padding: 0 3px; vertical-align: .15em; }
 /* Ticket drops on the battle and Data Arena results. */
 .cm-gacha-drop-ticket { width: 1.6em; height: 1.6em; margin: -.3em .25em -.3em 0; vertical-align: middle; object-fit: contain; }
+
+/* ---- Short landscape phones (viewport health check 2026-11-01) --------------------------------
+   On 844x390 the shop header, tabs, wallet and mode keys left the machine about 90 px: the pull
+   keys, the furnace's smelt key and the ten-card reveal ran off the screen. Here the shop header
+   steps aside (the centre has its own wallet), wallet and modes share one row, the machine and
+   furnace panes go side by side, and a ten-pull deals its cards in one row of ten. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .cm-vs2-root[data-gacha="open"] .cm-vs2-header { display: none; }
+  /* With the header gone the shell has two rows: the centre takes the height, the footer its own
+     (outranks the landscape menu's three-row shell in vs2Styles.css). */
+  body .cm-vs2-root[data-screen][data-gacha="open"] .cm-vs2-shell,
+  body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen][data-gacha="open"] .cm-vs2-shell { grid-template-rows: minmax(0, 1fr) auto; }
+  .cm-gacha { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); column-gap: 10px; row-gap: 6px; }
+  .cm-gacha__wallet { grid-column: 1; grid-row: 1; flex-wrap: nowrap; align-items: center; }
+  .cm-gacha__modes { grid-column: 2; grid-row: 1; padding-bottom: 5px; }
+  .cm-gacha__pane { grid-column: 1 / -1; grid-row: 2; }
+  .cm-gacha__coin { height: 30px; padding-right: 10px; font-size: 14px; }
+  /* Machine: the cabinet on the left, the two pull keys stacked on the right. */
+  .cm-gacha[data-mode="MACHINE"] .cm-gacha__pane--machine { display: grid; grid-template-columns: minmax(0, 1fr) clamp(150px, 26vw, 220px); grid-template-rows: minmax(0, 1fr) auto; gap: 8px; padding-bottom: 4px; }
+  .cm-gacha__pane--machine > .cm-gacha__deck { grid-column: 1; grid-row: 1 / span 2; height: 100%; min-height: 0; }
+  .cm-gacha__pane--machine > .cm-gacha__pulls { grid-column: 2; grid-row: 1; grid-template-columns: minmax(0, 1fr); align-content: start; gap: 8px; padding-bottom: 0; }
+  /* Label and price side by side: two 44px pull keys and the odds plate fit 140px. */
+  .cm-gacha__pane--machine .cm-gacha__pull { flex-direction: row; gap: 8px; min-height: 44px; }
+  .cm-gacha__pane--machine > .cm-gacha__rates { grid-column: 2; grid-row: 2; margin: 0; padding: 3px 6px; font-size: 10px; line-height: 1.3; }
+  /* Furnace: the five slots and the two keys on the left; the rule and the chip list on the
+     right. The furnace picture steps aside here (the mode key carries the furnace). */
+  .cm-gacha[data-mode="SYNTH"] .cm-gacha__pane--synth { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); grid-template-rows: auto auto minmax(0, 1fr);
+    gap: 8px 12px; overflow: hidden; padding-bottom: 6px; -webkit-mask-image: none; mask-image: none; }
+  .cm-gacha__pane--synth > .cm-gacha__synth-head { display: contents; }
+  .cm-gacha__pane--synth .cm-gacha__furnace { display: none; }
+  .cm-gacha__pane--synth .cm-gacha__synth-head .cm-gacha__note { grid-column: 2; grid-row: 1; margin: 0; padding: 4px 8px; font-size: 11px; line-height: 1.35; }
+  /* Five 46px slots (a square slot follows the column width otherwise, 66px at 844). */
+  .cm-gacha__pane--synth > .cm-gacha__slots { grid-column: 1; grid-row: 1; grid-template-columns: repeat(5, 46px); justify-content: start; gap: 6px; padding-bottom: 0; }
+  .cm-gacha__pane--synth > .cm-gacha__actions { grid-column: 1; grid-row: 2; align-self: start; padding-bottom: 4px; }
+  .cm-gacha__pane--synth > .cm-gacha__actions .cm-gacha-key { min-height: 40px; padding: 0 8px; gap: 4px; font-size: 13px; }
+  .cm-gacha__pane--synth > .cm-gacha__actions .cm-gacha-key__icon { display: none; }
+  .cm-gacha__pane--synth > .cm-gacha__chip-grid { grid-column: 2; grid-row: 2 / -1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 2px 2px 12px; }
+  /* Reveal: the whole result and its keys on one screen. */
+  .cm-gacha__reveal-inner { width: min(100% - 32px - env(safe-area-inset-left) - env(safe-area-inset-right), 780px); gap: 10px;
+    padding: max(10px, env(safe-area-inset-top)) 0 max(10px, env(safe-area-inset-bottom)); }
+  .cm-gacha__reveal-title { font-size: 18px; }
+  .cm-gacha__cards:not([data-count="1"]):not(.cm-gacha__cards--picker) { grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 6px 5px; }
+  .cm-gacha__cards[data-count="1"] { grid-template-columns: minmax(0, 132px); }
+  .cm-gacha__reveal-actions { display: flex; gap: 10px; width: min(100%, 460px); }
+  .cm-gacha__reveal-actions > * { flex: 1 1 0; }
+}
+/* Narrow phones: the three mode keys and the furnace keys keep their whole labels. */
+@media (max-width: 380px) {
+  .cm-gacha__modes { gap: 6px; }
+  .cm-gacha__mode { padding: 0 6px; gap: 4px; font-size: 13px; }
+  .cm-gacha__mode .cm-gacha-key__icon { width: 18px; height: 18px; }
+  .cm-gacha__pane--synth .cm-gacha__actions .cm-gacha-key { padding: 0 8px; gap: 4px; font-size: 13px; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .cm-gacha__ball-shell, .cm-gacha__glass::after, .cm-gacha__aura, .cm-gacha__crank::before, .cm-gacha__rays,

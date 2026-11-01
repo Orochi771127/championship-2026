@@ -106,6 +106,7 @@ export function mountRanchDiscoveryJournal(root,source){
   const rectOf=selector=>{const node=doc.querySelector?.(selector);return node?.getClientRects?.().length?node.getBoundingClientRect():null;};
   function place(){
     const wallet=rectOf('.cm-status-bar__currencies'),host=root.getBoundingClientRect?.();
+    if(button.hidden)root.style?.removeProperty?.('--cm-journal-clear');
     if(!wallet||!host||button.hidden)return;
     const width=button.getBoundingClientRect?.().width??0,left=wallet.right-width;
     let top=wallet.bottom+10;
@@ -115,6 +116,8 @@ export function mountRanchDiscoveryJournal(root,source){
     }
     button.style.setProperty('--cm-journal-top',`${Math.round(top-host.top)}px`);
     button.style.setProperty('--cm-journal-right',`${Math.max(8,Math.round(host.right-wallet.right))}px`);
+    // The side partner card shares this corner on wide screens: it starts below the journal.
+    root.style?.setProperty?.('--cm-journal-clear',`${Math.round(top-host.top+(button.getBoundingClientRect?.().height??44)+8)}px`);
   }
   const view=doc.defaultView;
   view?.addEventListener?.('resize',place,{signal:life.signal});

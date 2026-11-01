@@ -397,6 +397,17 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   // and the resident being touched with the hand is never under its own card.
   const PLACE_DWELL_MS = 1500;
   let placedFor = null, placedAt = 0;
+  // A card that appears under the finger must not take the click the touch on the
+  // habitat leaves behind (it opened the detail sheet on 844x390). That click has no
+  // press on the card itself; a real tap on the card always does.
+  const ARM_MS = 350;
+  let openedAt = 0, pressedSinceOpen = false;
+  companion.addEventListener("pointerdown", () => { pressedSinceOpen = true; }, true);
+  companion.addEventListener("click", (event) => {
+    if (!event.isTrusted || pressedSinceOpen || Date.now() - openedAt >= ARM_MS) return;
+    event.stopPropagation();
+    event.preventDefault();
+  }, true);
   function covers(rect, placement, hostHeight, cardHeight) {
     return placement === "bottom"
       ? rect.y + rect.height > hostHeight - cardHeight - 20
@@ -541,6 +552,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     // an empty square beside the name. No picture, no well.
     portraitSlot.hidden=!image;
     if(image&&portrait.getAttribute('src')!==image.src)portrait.src=image.src;
+    if (resident && companion.dataset.open !== "true") { openedAt = Date.now(); pressedSinceOpen = false; }
     companion.dataset.open = resident ? "true" : "false";
     companion.setAttribute("aria-hidden", resident ? "false" : "true");
     companion.inert = !resident;

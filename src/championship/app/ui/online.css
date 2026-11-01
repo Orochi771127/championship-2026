@@ -35,7 +35,11 @@
 :root body .cm-online__button.cm-online__button--spar:active { box-shadow: 0 1px 0 #6b0f17; }
 :root body .cm-online__button.cm-online__button[hidden] { display: none; }
 .cm-online__form { display: grid; gap: 8px; }
-.cm-online__form--inline { grid-template-columns: 1fr auto; }
+/* The code field may shrink, the key may not: on 375px the key was squeezed to one
+   character a line (新/增/好/友) and stretched the field to 116px. */
+.cm-online__form--inline { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+.cm-online__form--inline > :is(button, .cm-online__button) { white-space: nowrap; }
+.cm-online__form--inline > .cm-online__input { min-width: 0; width: 100%; }
 :root body .cm-online__input.cm-online__input { min-height: 44px; padding: 0 12px; border-radius: 12px; border: 2px solid var(--c-line-3); background: var(--c-ground); color: var(--c-text-1); font-size: 16px; font-weight: 700; }
 .cm-online__input::placeholder { color: var(--c-text-3); }
 :root body .cm-online__input.cm-online__input--code { width: 7.5em; font-family: ui-monospace, monospace; letter-spacing: 0.2em; text-align: center; }
@@ -58,6 +62,11 @@
 :root body .cm-online .cm-online__member:disabled { opacity: 0.45; cursor: default; }
 /* Drawer */
 .cm-online-drawer .cm-dialog__panel { max-height: calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); overflow: auto; }
+/* The drawer is a theme dialog, not the dark panel above: there the ghost keys (複製, 婉拒,
+   設定我的防守隊伍) and the muted copy were near-white on cream, about 1.1:1 (viewport health
+   check 2026-11-01). Inside the drawer they take the theme's own surface and ink. */
+:root body .cm-online-drawer .cm-online__button.cm-online__button--ghost { background: var(--c-surface-1); border-color: var(--c-line-3); color: var(--c-text-1); }
+.cm-online-drawer :is(.cm-online__hint, .cm-online__label, .cm-online__empty, .cm-online__pending) { color: var(--c-text-3); }
 .cm-online-drawer__panel { display: grid; gap: 10px; }
 /* Settings page placement */
 .cm-settings__block .cm-online { box-shadow: none; border-width: 2px; }

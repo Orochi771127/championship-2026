@@ -154,7 +154,7 @@ dialog.cm-dialog[data-variant="arbiter"] .cm-dialog__actions { grid-template-col
   box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.55), 0 5px 0 #7a3d00, 0 0 22px rgba(255, 183, 3, 0.35); font-size: 16px; font-weight: 900; letter-spacing: 0.02em; cursor: pointer; }
 :root .cm-brag-cta.cm-arcade-key { --key-face: #ffc23d; --key-shade: #8a4a00; --key-ink: #2a1300; --ax-depth: 5px; --ax-t-press: 40ms;
   background: linear-gradient(180deg, #ffe066, #ffb703 60%, #fb8500); }
-.cm-brag-cta--result { width: auto; min-width: min(100%, 320px); justify-self: center; margin: 4px auto; }
+.cm-brag-cta--result { width: auto; min-width: min(100%, 320px); justify-self: center; margin: 4px auto 16px; }
 .cm-brag-cta[hidden] { display: none; }
 
 dialog.cm-dialog[data-variant="brag"] { width: min(720px, calc(100vw - 16px)); }

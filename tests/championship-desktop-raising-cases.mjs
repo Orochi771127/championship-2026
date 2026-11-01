@@ -72,7 +72,7 @@ test('candidate DOM battle menu reaches existing desktop grid independently of c
   for(const [width,height] of [[1366,768],[1920,1080],[1366,480],[1024,420]]){
    f.resize(width,height);assert.equal(f.attrs.has('data-portrait-frame'),false,`${width}x${height}`);assert.equal(f.styles.size,0);
   }
-  for(const [width,height,framed] of [[390,844,false],[844,390,false],[1023,420,false],[1024,419,false],[719,320,true],[844,319,true]]){
+  for(const [width,height,framed] of [[390,844,false],[844,390,false],[1023,420,false],[1024,419,false],[667,375,false],[639,320,true],[844,319,true]]){
    f.resize(width,height);assert.equal(f.attrs.has('data-portrait-frame'),framed,`${width}x${height}`);
    assert.equal(f.styles.size,framed?4:isCompactLandscapeMenuLayout({width,height,activeScreen:'BATTLE_SELECT'})?2:0);
   }

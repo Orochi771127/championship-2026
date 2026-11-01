@@ -1,7 +1,11 @@
+import { COMPACT_LANDSCAPE_MIN_WIDTH } from './portraitFrame.js';
+
 // One existing Hunt DOM, one existing runtime, one immutable legacy viewport.
 // Measurement is a prerequisite to widening, never a guessed HUD subtraction.
+// Viewport health check 2026-11-01: from 640px, like the menus, so a 667x375 phone docks
+// the tools beside the field instead of shrinking the portrait frame to about 44%.
 export function isHuntWideLayout({ width, height }) {
-  return Number.isFinite(width) && Number.isFinite(height) && width >= 720 && height >= 320
+  return Number.isFinite(width) && Number.isFinite(height) && width >= COMPACT_LANDSCAPE_MIN_WIDTH && height >= 320
     && width >= height + 160;
 }
 
