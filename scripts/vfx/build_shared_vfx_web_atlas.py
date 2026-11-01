@@ -726,7 +726,7 @@ def main():
               'maxRatio': max(k['ratio'] for k in checks), 'bleedGapPixels': gaps}
     manifest = {
         'schemaVersion': 1, 'assetId': 'art:vfx:original-shared:review:292-r1',
-        'reviewOnly': True, 'runtimeEligible': True, 'localOnly': True, 'runtimeScope': 'LOOPBACK_REVIEW_ONLY',
+        'reviewOnly': True, 'runtimeEligible': False, 'localOnly': True, 'runtimeScope': 'LOOPBACK_REVIEW_ONLY',
         'publicReleasePermitted': False, 'shippingReady': False, 'humanApproved': False,
         'rightsStatus': 'ORIGINAL_CREATED', 'productionStatus': 'ORIGINAL_REVIEW_CANDIDATE', 'gameplayBinding': 'EXTERNAL_EXISTING_RUNTIME',
         'timing': 'NATIVE_SEQUENCES_UNCHANGED', 'finishProfile': 'banded', 'blend': 'NORMAL_ALPHA', 'pixelsPerNativePixel': DENSITY,

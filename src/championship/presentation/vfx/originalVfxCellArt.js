@@ -2,12 +2,11 @@
 // (OWNER_APPROVED_ADAPTATION 2026-11-01, VFX_FIVE_LAYER_20261101).
 //
 // The AI battle wraps the ROM reference atlas with the remade cells. This
-// loader takes the remade cells ONLY: the public 210-cell selection
-// (shared-vfx render descriptor) or, on loopback review, the 292-cell web
-// atlas (one texture, webp first). No ROM
+// loader takes the remade cells ONLY: the public shared-vfx selection, the
+// 292-cell web atlas since Owner 2026-11-02 (one texture, webp first). No ROM
 // pixel is loaded, so a sequence plays here only when every cell of it is
-// original. Destinations follow the 210-cell selection's own approval:
-// loopback and the approved public playtest URL.
+// original. Destinations follow the selection's own approval: loopback and
+// the approved public playtest URL.
 import {isApprovedOriginalPublicLocation} from '../originalRuntimeLocation.js';
 import {loadOriginalSharedVfxDescriptor, loadSharedVfxAtlasTexture} from '../originalSharedVfxReview.js';
 import profiles from '../../../data/championship/battleEffectProfiles.json' with {type: 'json'};

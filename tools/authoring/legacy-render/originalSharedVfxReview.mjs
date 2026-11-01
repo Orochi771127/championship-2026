@@ -17,22 +17,26 @@ export const ORIGINAL_SHARED_VFX_QUERY = ['vfxOriginal', 'shared-v1'];
 export const ORIGINAL_SHARED_BEAM_MANIFEST = 'assets/production/vfx/original-shared-beam-seamfix-r1/manifest.json';
 export const ORIGINAL_SHARED_157_MANIFEST = 'assets/production/vfx/original-shared-review-157-seamfix-r1/manifest.json';
 export const ORIGINAL_SHARED_LOCAL_MANIFEST = 'assets/production/vfx/original-shared-review-210-seamfix-r1/manifest.json';
-// Owner 2026-10-12 ("那包當然可以發佈"): the public playtest URL plays the
-// remade shared effects. Only the selected 210-cell revision is published; the
-// review flags inside its manifest stay as provenance, as for the accepted
-// original characters, and the playtest policy record is the approval.
-export const ORIGINAL_SHARED_PUBLIC_SELECTION_ID = 'ACCEPTED_ORIGINAL_SHARED_VFX_20261012';
+export const ORIGINAL_SHARED_WEB_ATLAS_ID = 'art:vfx:original-shared:review:292-r1';
+export const ORIGINAL_SHARED_WEB_ATLAS_MANIFEST = 'assets/production/vfx/original-shared-review-292-r1/manifest.json';
+// Owner 2026-10-12 ("那包當然可以發佈") published the 210-cell revision; Owner
+// 2026-11-02 ("Make 292 public") replaced it with the 292-cell web atlas (the
+// 210 cells pixel for pixel plus 82 new original cells). The review flags
+// inside its manifest stay as provenance, as for the accepted original
+// characters, and the playtest policy record is the approval.
+export const ORIGINAL_SHARED_PUBLIC_SELECTION_ID = 'ACCEPTED_ORIGINAL_SHARED_VFX_20261102';
+export const ORIGINAL_SHARED_PUBLIC_MANIFEST = ORIGINAL_SHARED_WEB_ATLAS_MANIFEST;
 export function originalSharedVfxPublicSelected(href) {
   const selection = playtestPolicy.acceptedOriginalSharedVfx;
   return selection?.status === 'OWNER_AUTHORIZED_PUBLIC_PLAYTEST'
     && selection.selectionId === ORIGINAL_SHARED_PUBLIC_SELECTION_ID
-    && selection.manifestPath === ORIGINAL_SHARED_LOCAL_MANIFEST
+    && selection.manifestPath === ORIGINAL_SHARED_PUBLIC_MANIFEST
     && isApprovedOriginalPublicLocation(href);
 }
 export function originalSharedVfxManifestFor(href) {
   const url = new URL(href), query = url.searchParams;
   // Review revisions are loopback choices; the public URL always plays the selection.
-  if (!loopback(url.hostname)) return ORIGINAL_SHARED_LOCAL_MANIFEST;
+  if (!loopback(url.hostname)) return ORIGINAL_SHARED_PUBLIC_MANIFEST;
   if (query.get('vfxCandidate') === 'beam-body-seamfix-r1') return ORIGINAL_SHARED_BEAM_MANIFEST;
   if (query.get('vfxRevision') === '157-seamfix') return ORIGINAL_SHARED_157_MANIFEST;
   return query.get('vfxRevision') === '157-baseline' ? ORIGINAL_SHARED_VFX_MANIFEST : ORIGINAL_SHARED_LOCAL_MANIFEST;
@@ -118,10 +122,14 @@ export function originalSharedVfxReviewRequested(href) {
 }
 
 export function validateOriginalSharedVfx(manifest, productionIndex, {manifestPath = ORIGINAL_SHARED_VFX_MANIFEST} = {}) {
-  if (![ORIGINAL_SHARED_VFX_MANIFEST, ORIGINAL_SHARED_BEAM_MANIFEST, ORIGINAL_SHARED_157_MANIFEST, ORIGINAL_SHARED_LOCAL_MANIFEST].includes(manifestPath)) throw new Error('ORIGINAL_SHARED_VFX_PATH_INVALID');
-  const entry = productionIndex?.entries?.find(item => item.assetId === ORIGINAL_SHARED_VFX_ID);
-  if (manifest?.schemaVersion !== 1 || manifest.assetId !== ORIGINAL_SHARED_VFX_ID
-    || entry?.manifestPath !== ORIGINAL_SHARED_VFX_MANIFEST || entry.rightsStatus !== 'ORIGINAL_CREATED'
+  if (![ORIGINAL_SHARED_VFX_MANIFEST, ORIGINAL_SHARED_BEAM_MANIFEST, ORIGINAL_SHARED_157_MANIFEST, ORIGINAL_SHARED_LOCAL_MANIFEST,
+    ORIGINAL_SHARED_WEB_ATLAS_MANIFEST].includes(manifestPath)) throw new Error('ORIGINAL_SHARED_VFX_PATH_INVALID');
+  // The web atlas has its own index entry; the earlier revisions share the review entry.
+  const [assetId, entryPath] = manifestPath === ORIGINAL_SHARED_WEB_ATLAS_MANIFEST
+    ? [ORIGINAL_SHARED_WEB_ATLAS_ID, ORIGINAL_SHARED_WEB_ATLAS_MANIFEST] : [ORIGINAL_SHARED_VFX_ID, ORIGINAL_SHARED_VFX_MANIFEST];
+  const entry = productionIndex?.entries?.find(item => item.assetId === assetId);
+  if (manifest?.schemaVersion !== 1 || manifest.assetId !== assetId
+    || entry?.manifestPath !== entryPath || entry.rightsStatus !== 'ORIGINAL_CREATED'
     || manifest.rightsStatus !== 'ORIGINAL_CREATED' || manifest.gameplayBinding !== 'EXTERNAL_EXISTING_RUNTIME'
     || manifest.timing !== 'NATIVE_SEQUENCES_UNCHANGED' || manifest.blend !== 'NORMAL_ALPHA'
     || manifest.pixelsPerNativePixel !== DENSITY

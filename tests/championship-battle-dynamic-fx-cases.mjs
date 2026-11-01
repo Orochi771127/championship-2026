@@ -264,21 +264,25 @@ test('reading every view for the presentation never changes the battle', () => {
   for (const type of ['START', 'LAUNCH', 'HIT', 'KO', 'END']) assert.ok(dressed.events.includes(type), type);
 });
 
-test('the approved public playtest URL plays the selected remade shared effects only (Owner 2026-10-12)', async () => {
-  const {ORIGINAL_SHARED_LOCAL_MANIFEST, originalSharedVfxManifestFor, originalSharedVfxPublicSelected, originalSharedVfxReviewRequested} =
+test('the approved public playtest URL plays the selected remade shared effects only (Owner 2026-10-12, 292 atlas 2026-11-02)', async () => {
+  const {ORIGINAL_SHARED_WEB_ATLAS_RENDER, originalSharedVfxManifestFor, originalSharedVfxPublicSelected, originalSharedVfxReviewRequested} =
     await import('../src/championship/presentation/originalSharedVfxReview.js');
+  const ORIGINAL_SHARED_PUBLIC_MANIFEST = ORIGINAL_SHARED_WEB_ATLAS_RENDER.replace('render.v1.json', 'manifest.json');
   const policy = JSON.parse(fs.readFileSync('src/data/championship/public-playtest.r1.json', 'utf8'));
   const selection = policy.acceptedOriginalSharedVfx;
-  assert.equal(selection.manifestPath, ORIGINAL_SHARED_LOCAL_MANIFEST);
+  assert.equal(selection.selectionId, 'ACCEPTED_ORIGINAL_SHARED_VFX_20261102');
+  assert.equal(selection.supersedes, 'ACCEPTED_ORIGINAL_SHARED_VFX_20261012');
+  assert.equal(selection.manifestPath, ORIGINAL_SHARED_PUBLIC_MANIFEST);
   const inputs = JSON.parse(fs.readFileSync('docs/contracts/championship/WEB_BUILD_INPUTS.v1.json', 'utf8'));
   for (const file of selection.files) {
     if(file.endsWith('.json'))assert.ok(!inputs.files.includes(file),file);else assert.ok(inputs.files.includes(file),file);
     assert.ok(fs.existsSync(file), file);
   }
-  const manifest = JSON.parse(fs.readFileSync(ORIGINAL_SHARED_LOCAL_MANIFEST, 'utf8'));
+  const manifest = JSON.parse(fs.readFileSync(ORIGINAL_SHARED_PUBLIC_MANIFEST, 'utf8'));
   assert.ok(!manifest.banks.some(bank => bank.bankId === 110), 'the withdrawn bank 110 stays out');
-  assert.deepEqual([manifest.image.src, ...Object.values(manifest.localizedText.sets).map(set => set.image.src)].sort(),
-    selection.files.filter(file => file.endsWith('.png')).sort());
+  assert.deepEqual([manifest.image.src, manifest.webp.src, ...Object.values(manifest.localizedText.sets).map(set => set.image.src)].sort(),
+    selection.files.filter(file => !file.endsWith('.json')).sort());
+  assert.ok(!inputs.files.includes('assets/production/vfx/original-shared-review-210-seamfix-r1/effects.png'), 'the superseded 210 atlas is no longer published');
   const publicUrl = 'https://orochi771127.github.io/championship-2026/championship.html';
   assert.equal(originalSharedVfxPublicSelected(publicUrl), true);
   assert.equal(originalSharedVfxReviewRequested(publicUrl + '?vfxOriginal=shared-v1'), true);

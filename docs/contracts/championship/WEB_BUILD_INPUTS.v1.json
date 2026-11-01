@@ -321,6 +321,7 @@
     "src/championship/presentation/dataArena/dataArenaAudio.js",
     "src/championship/presentation/dataArena/dataArenaCamera.js",
     "src/championship/presentation/dataArena/dataArenaCharacterAction.js",
+    "src/championship/presentation/dataArena/dataArenaElementFx.js",
     "src/championship/presentation/dataArena/dataArenaEnvironment.js",
     "src/championship/presentation/dataArena/dataArenaInteractionArt.js",
     "src/championship/presentation/dataArena/dataArenaInteractionView.js",
@@ -417,9 +418,12 @@
     "src/championship/presentation/titleAssetVariant.js",
     "src/championship/presentation/titleImageLifecycle.js",
     "src/championship/presentation/vfx/captureStorageVfx.js",
+    "src/championship/presentation/vfx/elementVfxLayer.js",
     "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
     "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
+    "src/championship/presentation/vfx/originalVfxCellArt.js",
     "src/championship/presentation/vfx/originalVfxSystemBindings.js",
+    "src/championship/presentation/vfx/unifiedMoveVfxResolver.js",
     "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
     "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
     "src/championship/presentation/vs2/gateFocusTween.js",
@@ -512,6 +516,7 @@
     "src/championship/text/juicyShowcaseText.js",
     "src/championship/text/locale.js",
     "src/championship/text/medalDetailText.js",
+    "src/championship/text/moveNameElements.js",
     "src/championship/text/onboardingText.js",
     "src/championship/text/onlineText.js",
     "src/championship/text/openingEggText.js",
@@ -8173,7 +8178,8 @@
     "assets/production/vfx/licensed-runtime-v1/common/wind/wind_eff.png",
     "assets/production/vfx/licensed-runtime-v1/common/wind/wind.glb",
     "assets/production/vfx/original-battle-2d-v1/effects.png",
-    "assets/production/vfx/original-shared-review-210-seamfix-r1/effects.png",
+    "assets/production/vfx/original-shared-review-292-r1/effects.png",
+    "assets/production/vfx/original-shared-review-292-r1/effects.webp",
     "assets/production/vfx/original-shared-review-v1/text-en.png",
     "assets/production/vfx/original-shared-review-v1/text-ja.png",
     "assets/production/vfx/original-shared-review-v1/text-zh-Hant.png",
@@ -8527,6 +8533,7 @@
     "src/championship/presentation/dataArena/dataArenaAudio.js",
     "src/championship/presentation/dataArena/dataArenaCamera.js",
     "src/championship/presentation/dataArena/dataArenaCharacterAction.js",
+    "src/championship/presentation/dataArena/dataArenaElementFx.js",
     "src/championship/presentation/dataArena/dataArenaEnvironment.js",
     "src/championship/presentation/dataArena/dataArenaInteractionArt.js",
     "src/championship/presentation/dataArena/dataArenaInteractionView.js",
@@ -8623,9 +8630,12 @@
     "src/championship/presentation/titleAssetVariant.js",
     "src/championship/presentation/titleImageLifecycle.js",
     "src/championship/presentation/vfx/captureStorageVfx.js",
+    "src/championship/presentation/vfx/elementVfxLayer.js",
     "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
     "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
+    "src/championship/presentation/vfx/originalVfxCellArt.js",
     "src/championship/presentation/vfx/originalVfxSystemBindings.js",
+    "src/championship/presentation/vfx/unifiedMoveVfxResolver.js",
     "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
     "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
     "src/championship/presentation/vs2/gateFocusTween.js",
@@ -8718,6 +8728,7 @@
     "src/championship/text/juicyShowcaseText.js",
     "src/championship/text/locale.js",
     "src/championship/text/medalDetailText.js",
+    "src/championship/text/moveNameElements.js",
     "src/championship/text/onboardingText.js",
     "src/championship/text/onlineText.js",
     "src/championship/text/openingEggText.js",
@@ -8811,12 +8822,7 @@
     "src/data/championship/ranch-render-selection.v1.json",
     "src/data/championship/reviewed-animation-selection.v1.json",
     "src/data/championship/species-taxonomy.v1.json",
-    "src/data/championship/stage-body-size.v1.json",
-    "src/championship/text/moveNameElements.js",
-    "src/championship/presentation/vfx/unifiedMoveVfxResolver.js",
-    "src/championship/presentation/vfx/elementVfxLayer.js",
-    "src/championship/presentation/vfx/originalVfxCellArt.js",
-    "src/championship/presentation/dataArena/dataArenaElementFx.js"
+    "src/data/championship/stage-body-size.v1.json"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -38464,7 +38470,7 @@
       },
       {
         "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
-        "sha256": "b3a46ae4977d608d2a3fdf5d14b0299ecb799714e6979516a29169211954752e"
+        "sha256": "6daa21f57d7524c540954315bb347d1fa70bb80b41c74373826226439f6f46a3"
       },
       {
         "path": "assets/production/public-media-clean-20261017/currency-hud-r1/bits-24.png",
@@ -38684,7 +38690,7 @@
       },
       {
         "path": "assets/production/public-runtime/shared-vfx.render.v1.json",
-        "sha256": "2ad6378d344c320c04d14a6070583f136febd9134f64b84923f79f5e1519c4ba"
+        "sha256": "6fb4c5c36e3c59a478e11376b062a78cf35884b4017287882c702ef494dd84fa"
       },
       {
         "path": "assets/production/public-runtime/shop-cage-thumbnails.v1.json",
@@ -39323,8 +39329,12 @@
         "sha256": "e10febf69e9a2ccadf20f670594a11ccccfd2d3a3510555b8162abc8360c649c"
       },
       {
-        "path": "assets/production/vfx/original-shared-review-210-seamfix-r1/effects.png",
-        "sha256": "992850bf24b0594b727ba2a45e2d484d8277e3c31e8bf48ae6af67b7f5f985a0"
+        "path": "assets/production/vfx/original-shared-review-292-r1/effects.png",
+        "sha256": "d87adcb062fbb47bdcc3d622443d06c2474a0a22a892ae1fdcf0a9f062581de6"
+      },
+      {
+        "path": "assets/production/vfx/original-shared-review-292-r1/effects.webp",
+        "sha256": "76398ad8a222902d8980f9f9d1a38b3a9640db2962c9d1968cd59b9f113a597f"
       },
       {
         "path": "assets/production/vfx/original-shared-review-v1/text-en.png",
@@ -40739,6 +40749,10 @@
         "sha256": "0571853089e343867f9e57168507e0b860367e9e4c2be8df3f252a306ee5dabf"
       },
       {
+        "path": "src/championship/presentation/dataArena/dataArenaElementFx.js",
+        "sha256": "b0ac358978dc018863a443860c7d5a66cc88f17ab70874adb729a329626551fa"
+      },
+      {
         "path": "src/championship/presentation/dataArena/dataArenaEnvironment.js",
         "sha256": "35f6d325a9113cd6530cc601a5675778a5ff2c47170f59c26cfc2a55586bb1cd"
       },
@@ -40940,7 +40954,7 @@
       },
       {
         "path": "src/championship/presentation/originalSharedVfxReview.js",
-        "sha256": "b60d7117a27d92ea704460a147061ae7e536de5153dfe7151d9c78d109597d10"
+        "sha256": "01580f7af0a48fcad6bc2f583d464a59586e8db8a3da0037ee1ea6f41f26b4e3"
       },
       {
         "path": "src/championship/presentation/originalShopCageArt.js",
@@ -41123,6 +41137,10 @@
         "sha256": "19c1d25f5019b5cf30c649def632af23484f6292fa02f6e534118f85b6be8026"
       },
       {
+        "path": "src/championship/presentation/vfx/elementVfxLayer.js",
+        "sha256": "7792818229dd23294fa5a41605f38c9d661c92dae99a092ed373299ec16124bf"
+      },
+      {
         "path": "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
         "sha256": "e16aa1f34421037624bdcc116f674082d99057895234760f1fbbe264d75d7045"
       },
@@ -41131,8 +41149,16 @@
         "sha256": "c5e96402c50a96f067a3f0d03132f8e8dcfb77e00e33950d58caa758085d2fb7"
       },
       {
+        "path": "src/championship/presentation/vfx/originalVfxCellArt.js",
+        "sha256": "ebb6b6786ea2f7f34c2bd976940da5e5cd96d6568fe4b48c33a298ff9520150d"
+      },
+      {
         "path": "src/championship/presentation/vfx/originalVfxSystemBindings.js",
         "sha256": "060c6b86488faed804ad643f24582ce64cfb579d5d3f57ff36924a4dacbf499b"
+      },
+      {
+        "path": "src/championship/presentation/vfx/unifiedMoveVfxResolver.js",
+        "sha256": "ef8c99ac53812ed97553b2bcb885c2f06e00c19f74aaea81e63555436754194c"
       },
       {
         "path": "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
@@ -41501,6 +41527,10 @@
       {
         "path": "src/championship/text/medalDetailText.js",
         "sha256": "1c50997142a89016903c2bc1fe1db8413587d8b3d47f270814544886c724fae5"
+      },
+      {
+        "path": "src/championship/text/moveNameElements.js",
+        "sha256": "f1a5ecb38b1296b43df3f62aff636b1d46b846b1f363858b1fa2f1521e6f866c"
       },
       {
         "path": "src/championship/text/onboardingText.js",
@@ -41877,26 +41907,6 @@
       {
         "path": "src/data/championship/stage-body-size.v1.json",
         "sha256": "54a1468de6dfaf43f90e015286fd301492fa9ae97714756c4483386429798867"
-      },
-      {
-        "path": "src/championship/text/moveNameElements.js",
-        "sha256": "f1a5ecb38b1296b43df3f62aff636b1d46b846b1f363858b1fa2f1521e6f866c"
-      },
-      {
-        "path": "src/championship/presentation/vfx/unifiedMoveVfxResolver.js",
-        "sha256": "ef8c99ac53812ed97553b2bcb885c2f06e00c19f74aaea81e63555436754194c"
-      },
-      {
-        "path": "src/championship/presentation/vfx/elementVfxLayer.js",
-        "sha256": "7792818229dd23294fa5a41605f38c9d661c92dae99a092ed373299ec16124bf"
-      },
-      {
-        "path": "src/championship/presentation/vfx/originalVfxCellArt.js",
-        "sha256": "a5748059d57b02c1e49b1e11cf144abbac25b5d8527cf7213fe88e53c9e2e9a7"
-      },
-      {
-        "path": "src/championship/presentation/dataArena/dataArenaElementFx.js",
-        "sha256": "b0ac358978dc018863a443860c7d5a66cc88f17ab70874adb729a329626551fa"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",

@@ -33,7 +33,8 @@ test('v2 permanently excludes authoring index and policy from public file select
 });
 
 test('all five render descriptions re-export byte-for-byte without production, source or rights metadata',()=>{
- assert.equal(projection.descriptors.length,5);assert.equal(projection.media.size,361);
+ // 362: the shared web atlas ships its lossless webp beside the png (Owner 2026-11-02).
+ assert.equal(projection.descriptors.length,5);assert.equal(projection.media.size,362);
  const prohibited=/"(?:localOnly|reviewOnly|runtimeEligible|publicReleasePermitted|shippingReady|humanApproved|rightsStatus|provenance|romSha256|sourceBankSha256|sourceHashes|sourceSha256|sourceRgbaSha256|pcmSha256)"|libfile_|Sentinel_/;
  for(const row of projection.descriptors){assert.ok(fs.readFileSync(row.path).equals(row.bytes));assert.equal(sha(row.bytes),row.sha256);assert.doesNotMatch(row.bytes.toString(),prohibited);}
 });
@@ -87,11 +88,12 @@ test('Hunt lazily loads only carried kinds and uses the same approved care-meat 
 test('shared effects preserve native blank state, full sequence coverage and locale atlas selection using only public rendering data',async()=>{
  const data=byRole.get('shared-vfx').value,base=byRole.get('battle-effects').value,calls=[];
  const native=new Map(base.cells.map(row=>[`${row.bankId}:${row.cell}`,row]));
- const images=[data.image,...Object.values(data.localizedText.sets).map(set=>set.image)],PIXI=pixi(new Map(images.map(row=>[row.src,row])));
+ const webp={...data.image,src:data.image.src.replace(/\.png$/,'.webp')};
+ const images=[webp,...Object.values(data.localizedText.sets).map(set=>set.image)],PIXI=pixi(new Map(images.map(row=>[row.src,row])));
  let baseDisposals=0;
  const art=await loadOriginalSharedVfxReview({PIXI,baseArt:{getCell:(bank,cell)=>native.get(`${bank}:${cell}`),dispose:async()=>{baseDisposals++;}},
   href:baseUrl+'?vfxOriginal=shared-v1',baseUrl,fetchImpl:transport(calls),getLocale:()=> 'zh-Hant',onLocaleChange:()=>()=>{},deferRelease:callback=>callback()});
- assert.equal(calls.length,1);assert.equal(PIXI.loads.length,2);assert.ok(PIXI.loads.includes(data.localizedText.sets['zh-Hant'].image.src));
+ assert.equal(calls.length,1);assert.deepEqual(PIXI.loads,[webp.src,data.localizedText.sets['zh-Hant'].image.src],'the atlas loads as webp; the png is only a fallback');
  for(const row of data.cells)assert.deepEqual(art.getCell(row.bankId,row.cell).origin,row.origin);
  await art.dispose();assert.equal(baseDisposals,1);
 });

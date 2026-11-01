@@ -30,18 +30,11 @@ export function originalSharedVfxManifestFor(){return publicRuntimeAsset('art:pu
 // texture from scripts/vfx/build_shared_vfx_web_atlas.py. 2 px clear margins
 // and alpha colour bleeding around every cell; the same pixels ship as lossless
 // effects.webp and optimised effects.png, and loaders try the webp first.
-// LOOPBACK review only (humanApproved false): the public playtest keeps the
-// 210-cell selection until the Owner approves this revision. ?vfxShared=210
-// keeps the 210 cells on loopback too.
+// Owner 2026-11-02 ("Make 292 public") made it the public selection: every
+// origin reads it through the public shared-vfx descriptor.
 export const ORIGINAL_SHARED_WEB_ATLAS_ID = 'art:vfx:original-shared:review:292-r1';
 export const ORIGINAL_SHARED_WEB_ATLAS_RENDER = 'assets/production/vfx/original-shared-review-292-r1/render.v1.json';
 const WEB_ATLAS_PNG = ORIGINAL_SHARED_WEB_ATLAS_RENDER.replace('render.v1.json', 'effects.png');
-export function originalSharedWebAtlasAllowed(href = globalThis.location?.href) {
-  try {
-    const url = new URL(href);
-    return ['http:', 'https:'].includes(url.protocol) && loopback(url.hostname) && url.searchParams.get('vfxShared') !== '210';
-  } catch { return false; }
-}
 /** Files to try for an atlas, best first: the web atlas offers its lossless webp before the png. */
 export function sharedVfxAtlasSources(src) {
   const path = String(src ?? '');
@@ -55,18 +48,12 @@ export async function loadSharedVfxAtlasTexture(PIXI, src) {
   }
   throw failure ?? new Error('ORIGINAL_SHARED_VFX_IMAGE_UNAVAILABLE');
 }
-/** The validated shared-vfx descriptor: the web atlas on loopback, else the public 210-cell selection. */
+/** The validated public shared-vfx descriptor and its revision (WEB_ATLAS_292 for the web atlas). */
 export async function loadOriginalSharedVfxDescriptor({href = globalThis.location?.href, baseUrl = globalThis.document?.baseURI ?? href,
   fetchImpl = globalThis.fetch} = {}) {
-  if (originalSharedWebAtlasAllowed(href) && typeof fetchImpl === 'function') {
-    try {
-      const response = await fetchImpl(new URL(ORIGINAL_SHARED_WEB_ATLAS_RENDER, baseUrl).href);
-      if (!response.ok) throw new Error(`ORIGINAL_SHARED_WEB_ATLAS_HTTP_${response.status}`);
-      return {descriptor: validateOriginalSharedVfx(await response.json()), revision: 'WEB_ATLAS_292', manifestPath: ORIGINAL_SHARED_WEB_ATLAS_RENDER};
-    } catch (error) { console.warn('Shared VFX web atlas unavailable', error); }
-  }
-  return {descriptor: validateOriginalSharedVfx(await loadPublicRenderDescriptor('shared-vfx', {baseUrl, fetchImpl})),
-    revision: 'PUBLIC_RENDER_V1', manifestPath: originalSharedVfxManifestFor()};
+  const descriptor = validateOriginalSharedVfx(await loadPublicRenderDescriptor('shared-vfx', {baseUrl, fetchImpl}));
+  return {descriptor, revision: descriptor.image.src === WEB_ATLAS_PNG ? 'WEB_ATLAS_292' : 'PUBLIC_RENDER_V1',
+    manifestPath: originalSharedVfxManifestFor()};
 }
 
 export const ORIGINAL_SHARED_TEXT_SETS = Object.freeze(['zh-Hant', 'ja', 'en']);
