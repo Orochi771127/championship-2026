@@ -11,6 +11,7 @@
 // name. Local acceptance (?battleFxDebug on loopback) appends the stable ID.
 import {getBattleCatalogRecord, listMoveRecordsForSpecies} from '../battle/battleCatalogs.js';
 import {describeBattleFxMove} from '../presentation/battleFx/battleFxRecipes.js';
+import {resolveMoveVfx} from '../presentation/vfx/unifiedMoveVfxResolver.js';
 import {battleMoveName} from '../text/battleMoveNames.js';
 import {specialSkillName} from '../text/zhHant.js';
 import {uiText} from '../text/uiText.js';
@@ -35,6 +36,21 @@ export function createBattleFxLookups({getView, onFeed = null, onCutIn = null, s
     }
     return looks.get(moveId);
   }
+  // The one effect-element authority (VFX_FIVE_LAYER_20261101): name, record,
+  // bank, then the caster's taxonomy element.
+  const resolved = new Map();
+  function resolveMove(slot, moveId) {
+    if (!Number.isSafeInteger(moveId)) return null;
+    if (!resolved.has(moveId)) {
+      let vfx = null;
+      try {
+        const move = getBattleCatalogRecord('moves', moveId);
+        vfx = resolveMoveVfx(move, {speciesMoves: listMoveRecordsForSpecies(move.speciesId)});
+      } catch { vfx = null; }
+      resolved.set(moveId, vfx);
+    }
+    return resolved.get(moveId);
+  }
   const nameOfSlot = slot => getView()?.combatants?.[slot]?.displayName ?? '';
   /** Callout title: the approved name, the skill ID in local acceptance, else ''. */
   function moveNameOf(moveId) {
@@ -44,6 +60,7 @@ export function createBattleFxLookups({getView, onFeed = null, onCutIn = null, s
   }
   return Object.freeze({
     describeMove,
+    resolveMove,
     nameOfSlot,
     moveNameOf,
     text: value => uiText(value),

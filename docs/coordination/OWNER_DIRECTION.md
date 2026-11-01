@@ -1,5 +1,17 @@
 # Championship Owner Direction
 
+<!-- record-id: VFX_FIVE_LAYER_20261101 -->
+## 2026-11-01 — Five-layer VFX: one element authority, Dex and Data Arena on the effect cells, idle 3D systems, remake r2
+
+Owner brief (pasted 2026-11-01, after the read-only audit `docs/VFX_FULL_AUDIT_REPORT_ZH_TW.md`): keep the native effect VM timing (plan A) and add, as presentation only, (1) one effect-element resolver that every view reads, priority approved name → record element / bank → the caster's ten-element taxonomy (焰角泡泡 must read fire, never blue water); (2) a Dex special preview that preloads and awaits the effect atlas, carries the move's own cells on every travel style at 3.2–4.2x and drops the CSS flame cone; (3) a charge orb with four glints and a muzzle ring, a ~0.53 s full-field storm for signature moves (Moonlight bgeff timing), four-second ground marks, short body overlays (embers, rime, sparks, bubbles, miasma) and a 1.18–1.25x lens on signature hits in the AI battle, the Dex and the Data Arena; (4) the Data Arena on the remade cells with a 55 ms drawing hit-stop; (5) the idle licensed 3D systems on support codes, critical hits and signature weather, the three bank-less banks (seed00, snowcrystal00, blacksmoke04) and fallback cells for the 151 records that name no bank; (6) tests and phone screenshots. Mid-task the Owner added: remake the most used shared banks not yet in the 210-cell pack to raise original coverage.
+
+- OWNER_APPROVED_ADAPTATION, presentation only: no move value, element rule, timing, RNG draw, native effect pool, collision or save changes. The battle keeps drawing each record's own banks through the native VM; fallback cells, accents and overlays are drawn by the dynamic layer.
+- Remake r2 (`assets/production/vfx/original-shared-remake-r2-20261101`, `scripts/build-shared-vfx-remake-r2.py`): 72 cells over 11 banks (bubble00, walaser00, unchi00, lightball02, toge00, tatumaki00, rock00, seed00, snowcrystal00, beam01, blacksmoke04), procedural code with no image input, native sizes, anchors and ticks unchanged. Loopback review only (ART_PRODUCTION_INDEX `art:vfx:original-shared:remake-r2:v1`, humanApproved false); the public playtest keeps the 210-cell selection until the Owner approves this revision.
+- The Data Arena loads original cells only (the 210-cell selection, plus remake r2 on loopback), never the ROM reference atlas.
+- The idle `test_buff`, `test_eff` and `time_pl` systems stay unused: they are converter test assets and a timer prop, not move effects. Support code 24's stat is UNKNOWN_REQUIRES_TRACE; its `hitup` binding is a presentation choice.
+
+The brief sets no commit, push or deployment. After the report the Owner directs 「要請你自我審查，審查後沒問題就先commit感恩push並整合至main發佈」, which authorizes this batch's self-review, commit, push, merge to main and publication. Remake r2 stays a loopback review: publishing this batch does not approve its 72 new cells for the public playtest, which keeps the approved 210-cell selection until the Owner reviews them.
+
 <!-- record-id: HUNT_DOCK_STORY_CHART_JOURNAL_MENU_20261028 -->
 ## 2026-10-28 — Hunt tactical dock, rift observation chart and story stage, stroll-note names, menu icons
 

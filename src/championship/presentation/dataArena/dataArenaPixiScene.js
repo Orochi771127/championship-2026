@@ -22,6 +22,7 @@ import { mountDataArenaEnvironment, dataArenaEnvironmentFloorOffset } from "./da
 import { mountDataArenaInteractionView } from "./dataArenaInteractionView.js";
 
 import { createDataArenaRelayEffects } from './dataArenaRelayEffects.js';
+import { createDataArenaElementFx } from './dataArenaElementFx.js';
 import { reviewedReleasePoint, releaseOffset, reviewedIdleBreath, reviewedWinHop, reviewedMoveRate } from './dataArenaReviewedMotion.js';
 import { RELAY_ACTION_PROFILES, relaySequence, relayEffectStyle } from '../../modes/dataArena/dataArenaRelay.js';
 import { RELAY_ROSTER, relayPartner } from '../../modes/dataArena/dataArenaRelayRoster.js';
@@ -47,7 +48,7 @@ export function applyReviewedArenaPoseScale(sprite,sample,roleHeight,sink=0){
  return scale;
 }
 
-export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), quality = "high", reducedMotion = false, shake = true, partnerId, environment = null, interactionArt = null }) {
+export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), quality = "high", reducedMotion = false, shake = true, partnerId, environment = null, interactionArt = null, effectArt = null }) {
   // Construction is transactional: even a renderer failure before a scene is
   // returned must release this scene's resources, not the shared Application.
   const rollback = [];
@@ -100,10 +101,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   // A faint tactical grid over the floor art (drawn once, after the bake).
   const tactical = new PIXI.Graphics(); tactical.label = "arena tactical grid";
   // Arcade damage numbers (2026-10-28): pooled, arcing, thick outline; drawn
-  // in the world so they ride the camera. No hit-stop here: the arena is
-  // steered by hand and never holds a frame.
+  // in the world so they ride the camera. Since 2026-11-01 heavy hits hold the
+  // drawn fighters 55 ms (drawing only; the simulation and input keep running).
   const numberLayer = new PIXI.Container({ label: "arena damage numbers" });
   world.addChild(groundChunks, tactical, water, cellFx, bridge, marks, objects, shotGlow, shots, beams, particles, lights, numberLayer);
+  // Five-layer element dressing and original effect cells (VFX_FIVE_LAYER_20261101).
+  const elementFx = typeof createDataArenaElementFx === 'function' ? createDataArenaElementFx({ PIXI, ground: cellFx, front: particles, art: effectArt, quality, reducedMotion }) : null;
+  if (elementFx) rollback.push(() => elementFx.dispose());
 
   const camera = createDataArenaCamera({ worldWidth, worldHeight, reducedMotion, shake, cover: Boolean(grid.map.battleFieldId), artBounds: environment?.manifest?.cameraArtBounds });
   let elapsed = 0;
@@ -373,7 +377,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         container.position.set(x, y - floorOffset(x,y));
         container.zIndex = y;
         // Relay hit-stop: hold the drawn frame and pose; the simulation keeps stepping.
-        if (hitStop > 0 && state.gameMode === 'RELAY') { sprite.tint = flash > 0 ? 0xff7a7a : 0xffffff; return; }
+        if (hitStop > 0) { sprite.tint = flash > 0 ? 0xff7a7a : 0xffffff; return; }
         const event = actionEvents.get(body.id);
         if (body.hp <= 0) { action.clear(); actionEvents.delete(body.id); }
         else if (event && (event.type === 'CAST_RELEASE' || body.cast?.actionId === event.actionId)) action.observe(event);
@@ -752,7 +756,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const tetherGfx = new PIXI.Graphics(); tetherGfx.blendMode = "add";
   let hitStop = 0, statusTick = 0;
   shotGlow.addChild(tetherGfx);
-  const heavyHit = (amount) => { if (relayMode && !reducedMotion && amount >= 22) hitStop = Math.max(hitStop, amount >= 40 ? 0.08 : 0.06); };
+  // Heavy hits hold the drawn fighters 55 ms in every mode (Owner 2026-11-01); the simulation keeps stepping.
+  const heavyHit = (amount) => { if (!reducedMotion && amount >= 22) hitStop = Math.max(hitStop, relayMode && amount >= 40 ? 0.08 : 0.055); };
+  const casterSpecies = (event) => event.team === 'player' || event.casterId === state.player.id ? state.player.speciesId
+    : (state.rivals ?? []).find(r => r.id === event.casterId)?.speciesId ?? null;
+  const lastRelease = { player: null, rival: null };
+  const bodyCenter = (target) => () => target && target.hp > 0 ? { x: target.x, y: target.y - 30 } : null;
 
   // ------------------------------------------------------------------ events -> presentation
   const elementTint = { BURN: 0xff7a2a, DROWN: 0x4fc3ff, STEAM: 0xeef7ff, FROST: 0xb8f0ff, CRYO_BRIDGE: 0xb8f0ff };
@@ -763,6 +772,25 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       else if (['CAST', 'ULT_CAST', 'CAST_RELEASE'].includes(event.type)) actionEvents.set(event.casterId, event);
     }
     for (const event of events) {
+      if (elementFx) {
+        if (event.type === 'CAST' && event.moveType !== 'LUNGE') { const at = releaseAt(event); elementFx.cast({ x: at.x, y: at.y, moveId: event.moveId, speciesId: casterSpecies(event), windup: event.windup }); }
+        else if (event.type === 'ULT_CAST') {
+          const rect = view ? { x: view.centerX - view.halfW, y: view.centerY - view.halfH, width: view.halfW * 2, height: view.halfH * 2 } : { x: 0, y: 0, width: worldWidth, height: worldHeight };
+          elementFx.ult({ moveId: event.moveId, speciesId: casterSpecies(event), rect, center: { x: event.x, y: event.y - 30 } });
+          hitStop = Math.max(hitStop, reducedMotion ? 0 : 0.055);
+        } else if (event.type === 'CAST_RELEASE') {
+          const at = releaseAt(event);
+          elementFx.release({ x: at.x, y: at.y, angle: event.angle ?? 0, moveId: event.moveId, speciesId: casterSpecies(event), melee: event.moveType === 'LUNGE' });
+          lastRelease[event.team === 'player' ? 'player' : 'rival'] = { moveId: event.moveId, speciesId: casterSpecies(event) };
+        } else if (event.type === 'SKILL_HIT') {
+          elementFx.hit({ x: event.x, y: event.y - 14, groundY: event.y, moveId: event.moveId, speciesId: state.player.speciesId });
+        } else if (event.type === 'RIVAL_HIT' && event.cause !== 'LASER' && lastRelease.player) {
+          const rival = (state.rivals ?? []).find(r => Math.hypot(r.x - event.x, r.y - event.y) < 2);
+          elementFx.hit({ x: event.x, y: event.y - 30, groundY: event.y, ...lastRelease.player, heavy: event.amount >= 22, follow: bodyCenter(rival) });
+        } else if (event.type === 'PLAYER_HIT' && lastRelease.rival) {
+          elementFx.hit({ x: event.x, y: event.y - 30, groundY: event.y, ...lastRelease.rival, heavy: event.amount >= 22, follow: bodyCenter(state.player) });
+        }
+      }
       switch (event.type) {
         case "LASER_HIT": spawn({ x: event.x, y: event.y - BEAM_ELEVATION, texture: textures.glow, tint: 0xffffff, scale: 0.5, scaleTo: 0.2, life: 0.1 }); burst(event.x, event.y - BEAM_ELEVATION, { count: 3, speed: 260, tint: PARTNER_BEAM[partnerId] ?? 0x6ff7ff, life: 0.22 }); break;
         case "ENEMY_KILLED": {
@@ -833,7 +861,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "BRIDGE_LIFTED": bridgeLift = 0; camera.addTrauma(0.25); break;
         case "CAST": if(state.gameMode==='RELAY'){const fx=relayLook(event.moveId,event.team);spawn({x:event.x,y:event.y-BEAM_ELEVATION,texture:textures.ring,tint:fx.tint,scale:.7,scaleTo:.12,life:event.windup,alpha:.65});
             // Charge orb at the hand: grows through the windup, so the release reads before it lands.
-            if(event.moveType!=='LUNGE'){const at=releaseAt(event);spawn({x:at.x,y:at.y,texture:textures.glow,tint:fx.tint,scale:.12,scaleTo:.5,life:Math.max(.12,event.windup),alpha:.9});}}break;
+            if(event.moveType!=='LUNGE'&&!elementFx){const at=releaseAt(event);spawn({x:at.x,y:at.y,texture:textures.glow,tint:fx.tint,scale:.12,scaleTo:.5,life:Math.max(.12,event.windup),alpha:.9});}}break;
         case "CAST_RELEASE": {
           if(state.gameMode==='RELAY') {
             const fx=relayLook(event.moveId,event.team),{x,y,reviewed}=releaseAt(event);
@@ -909,6 +937,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (!ambientPaused) ambientElapsed += dt;
     if(!ambientPaused)fpsWindow.push(observedFrameMs); if (fpsWindow.length > 120) fpsWindow.shift();
     if (hitStop > 0) hitStop = Math.max(0, hitStop - Math.min(0.1, observedFrameMs / 1000));
+    elementFx?.update(dt * 1000);
     if (relayMode && dt > 0 && (statusTick += dt) >= 0.14) {
       statusTick = 0;
       // Status reads on the body: burn embers rise, a root rings the feet, slow trails mist.
@@ -1334,7 +1363,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       return {
         renderer: "CHAMPIONSHIP_SINGLE_PIXI_STAGE", scene: "DATA_ARENA", quality, reducedMotion, hasCreatureArt: playerView.hasArt,
         environment: environmentView?.diagnostics() ?? null,
-        interactions:interactionView.diagnostics(),effectsElapsed:elapsed, playerAnimation: playerView.diagnostics(),
+        interactions:interactionView.diagnostics(),elementFx:elementFx?.getDiagnostics() ?? null,hitStop,effectsElapsed:elapsed, playerAnimation: playerView.diagnostics(),
         rivalAnimations: [...rivalViews.values()].map(view => view.diagnostics()),
         particleAgeTotal:live.reduce((n,p)=>n+p.age,0),scorchSprites:[...decalSprites.values()].filter(d=>d.kind!=="wet").length,
         fireMotion:[...fireSprites].slice(0,8).map(([cell,s])=>({cell,x:s.scale.x,y:s.scale.y,frame:textures.flame.indexOf(s.texture)})),

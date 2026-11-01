@@ -745,6 +745,19 @@ async function loadOptionalOriginalVfxReview(stage, effectArt) {
   }
 }
 
+// Loopback review of the remake r2 cells (VFX_FIVE_LAYER_20261101): eleven more
+// shared banks drawn without image input. ?vfxRemake=off keeps the loaded art.
+async function loadOptionalSharedVfxRemake(stage, effectArt) {
+  if(!effectArt||!['localhost','127.0.0.1','[::1]'].includes(location.hostname))return effectArt;
+  try {
+    const {loadSharedVfxRemakeR2}=await import('../presentation/vfx/sharedVfxRemakeR2.js');
+    return await loadSharedVfxRemakeR2({PIXI:stage.PIXI,baseArt:effectArt,href:location.href});
+  } catch (error) {
+    console.warn('Shared VFX remake unavailable',error);
+    return effectArt;
+  }
+}
+
 async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'], { signal, battleAtlas=false, ranchStreaming=false, initialSequences=null } = {}) {
   if(!isOriginalRuntimeLocation(location.href))return null;
   const scopedPIXI=createPixiAssetScope(stage.PIXI,location.href,{signal});
@@ -946,14 +959,14 @@ async function loadOptionalBattleFieldArt(stage, source) {
  * retains the explicit independent asset preview. Unknown hit/weather bindings
  * are not inferred from HP changes.
  */
-async function loadOptionalBattleVfxOverlay(host, stage, source, getFocusPlacement, getFieldPlacement, isActive = () => true) {
+async function loadOptionalBattleVfxOverlay(host, stage, source, getFocusPlacement, getFieldPlacement, isActive = () => true, getCues = () => []) {
   try {
     return await mountBattleVfxThreeOverlay({
       host,
       stage,
       systemId: VFX_ART_PREVIEW_SYSTEM,
       source: VFX_ART_PREVIEW_SYSTEM ? null : source,
-      getFocusPlacement,getFieldPlacement,
+      getFocusPlacement,getFieldPlacement,getCues,
       recordDiagnostic: recoveryDiagnostics.record,isActive
     });
   } catch (error) {
@@ -1667,7 +1680,8 @@ async function mountBattleField() {
           const loaded=await Promise.allSettled([
             step('arena',ownArt(loadOptionalBattleFieldArt(stage,source))),
             step('fighters',ownArt(loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId),['main'],{signal:characters.signal,battleAtlas:true}))),
-            step('effects',ownArt(loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href}).then(art=>loadOptionalOriginalVfxReview(stage,art))))
+            step('effects',ownArt(loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href}).then(art=>loadOptionalOriginalVfxReview(stage,art))
+              .then(art=>typeof loadOptionalSharedVfxRemake==='function'?loadOptionalSharedVfxRemake(stage,art):art)))
           ]);
           [fieldArt,characterRoster,effectArt]=loaded.map(result=>result.status==='fulfilled'?result.value:null);
           const fxLookupsModule=fxLookupsLoading?await fxLookupsLoading.catch(error=>{console.warn('Battle dynamic presentation unavailable',error);return null;}):null;
@@ -1690,7 +1704,8 @@ async function mountBattleField() {
           delete root.dataset.fieldFallback;
           // The existing overlay owns Hyper, five impact families and hit flash.
           // Keep its readiness gate: no safe replacement for these cues is proven.
-          vfxOverlay = await loadOptionalBattleVfxOverlay(host, stage, source, () => scene?.getFocusPlacement(), () => scene?.getFieldPlacement(), () => !disposed);
+          vfxOverlay = await loadOptionalBattleVfxOverlay(host, stage, source, () => scene?.getFocusPlacement(), () => scene?.getFieldPlacement(), () => !disposed,
+            () => scene?.consumeVfxCues?.() ?? []);
           if (disposed) {
             await Promise.all([release(vfxOverlay),release(effectArt),release(fieldArt),release(characterRoster)]);return;
           }

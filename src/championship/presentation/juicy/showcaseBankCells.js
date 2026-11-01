@@ -13,6 +13,7 @@ import profiles from '../../../data/championship/battleEffectProfiles.json' with
 import {loadPublicRenderDescriptor} from '../publicRenderDescriptors.js';
 import {isLocalBattleEffectPreview} from '../battleEffectArt.js';
 import {isApprovedOriginalPublicLocation} from '../originalRuntimeLocation.js';
+import {loadSharedVfxRemakeAtlas} from '../vfx/sharedVfxRemakeR2.js';
 
 const TICK_MS = 1000 / 60;
 const loopback = href => { try { return ['localhost', '127.0.0.1', '[::1]'].includes(new URL(href).hostname); } catch { return false; } };
@@ -30,7 +31,7 @@ function loadImage(doc, src) {
  * anchored at the host's (0, 0) like the battle anchors its sprite.
  */
 export function createShowcaseBankCells({doc = globalThis.document, href = globalThis.location?.href, fetchImpl = globalThis.fetch} = {}) {
-  let disposed = false, base = null, shared = null;
+  let disposed = false, base = null, shared = null, remake = null;
   const baseUrl = doc?.baseURI ?? href;
   const allowed = Boolean(doc && href && typeof fetchImpl === 'function' && isLocalBattleEffectPreview(href));
   const sharedAllowed = allowed && new URL(href).searchParams.get('vfxOriginal') !== 'off' && (loopback(href) || isApprovedOriginalPublicLocation(href));
@@ -44,6 +45,11 @@ export function createShowcaseBankCells({doc = globalThis.document, href = globa
     try {
       base = await atlas('battle-effects');
       if (sharedAllowed) shared = await atlas('shared-vfx').catch(() => null);
+      // Remake r2 (VFX_FIVE_LAYER_20261101): loopback review only.
+      if (sharedAllowed) {
+        remake = await loadSharedVfxRemakeAtlas({href, baseUrl, fetchImpl}).catch(() => null);
+        if (remake) await loadImage(doc, remake.url).catch(() => { remake = null; });
+      }
       return !disposed;
     } catch { base = null; return false; }
   })();
@@ -52,13 +58,14 @@ export function createShowcaseBankCells({doc = globalThis.document, href = globa
   function frames(bankId, sequenceId) {
     const sequence = profiles.banks[(bankId | 0) - 1]?.sequences?.[sequenceId];
     if (!sequence || !base) return null;
-    // The remake replaces whole sequences, so one sequence reads one atlas.
-    const source = shared && sequence.frames.every(f => shared.cells.has(`${bankId}:${f.cell}`)) ? shared : base;
+    // The remakes replace whole sequences, so one sequence reads one atlas.
+    const covers = sheet => sheet && sequence.frames.every(f => sheet.cells.has(`${bankId}:${f.cell}`));
+    const source = covers(remake) ? remake : covers(shared) ? shared : base;
     const list = sequence.frames.map(f => ({cell: source.cells.get(`${bankId}:${f.cell}`), ticks: Math.max(1, f.ticks)}));
     return list.every(f => f.cell) ? {source, list, loop: sequence.playbackMode === 2} : null;
   }
 
-  function play(bankId, sequenceId, host, {nativeScale = 3, duration = null, flip = false} = {}) {
+  function play(bankId, sequenceId, host, {nativeScale = 3, duration = null, flip = false, hue = 0, tint = 0xffffff} = {}) {
     if (disposed || !host) return null;
     const run = frames(bankId, sequenceId);
     if (!run) return null;
@@ -66,8 +73,12 @@ export function createShowcaseBankCells({doc = globalThis.document, href = globa
     const holder = doc.createElement('i');
     holder.className = 'cm-showcase__cell';
     holder.dataset.bank = String(bankId);
-    holder.dataset.art = source === shared ? 'original-shared' : 'battle-effects';
+    holder.dataset.art = source === remake ? 'original-remake-r2' : source === shared ? 'original-shared' : 'battle-effects';
     if (flip) holder.style.transform = 'scaleX(-1)';
+    // A name that contradicts the bank's colour turns its cells (unifiedMoveVfxResolver cellHue).
+    if (hue) holder.style.filter = `hue-rotate(${Math.round(hue)}deg) saturate(1.15)`;
+    // A bright bank on a moon move is pulled to violet (the battle multiplies its tint).
+    else if (tint !== 0xffffff) holder.style.filter = 'sepia(1) saturate(2.2) hue-rotate(225deg) brightness(0.85)';
     const sprite = doc.createElement('i');
     holder.append(sprite);
     const total = list.reduce((sum, f) => sum + f.ticks, 0);
@@ -97,7 +108,7 @@ export function createShowcaseBankCells({doc = globalThis.document, href = globa
     play,
     /** True once the atlases are in and the sequence resolves to cells. */
     has: (bankId, sequenceId) => Boolean(frames(bankId, sequenceId)),
-    getDiagnostics: () => Object.freeze({allowed, base: Boolean(base), shared: Boolean(shared)}),
-    dispose() { disposed = true; base = null; shared = null; }
+    getDiagnostics: () => Object.freeze({allowed, base: Boolean(base), shared: Boolean(shared), remake: Boolean(remake)}),
+    dispose() { disposed = true; base = null; shared = null; remake = null; }
   });
 }

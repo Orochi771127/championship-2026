@@ -38,6 +38,7 @@ import { speciesTaxonomyForId, elementMatchup, factionResonance } from '../contr
 import { taxonomyText } from '../text/taxonomyText.js';
 import { taxonomyBadgeRow, resonanceStrip } from '../presentation/taxonomyBadgeArt.js';
 import { elementChartButton } from './elementChartModal.js';
+import { loadOriginalVfxCellArt } from '../presentation/vfx/originalVfxCellArt.js';
 
 const STEP_MS = DATA_ARENA_STEP_SECONDS * 1000;
 const MOVE_KEYS = Object.freeze({ KeyW: [0, -1], ArrowUp: [0, -1], KeyS: [0, 1], ArrowDown: [0, 1], KeyA: [-1, 0], ArrowLeft: [-1, 0], KeyD: [1, 0], ArrowRight: [1, 0] });
@@ -743,12 +744,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
 
   function mountScene() {
     scene?.dispose();
-    scene = mountDataArenaScene({ stage, sim, cast, bundles, quality, reducedMotion, shake, partnerId, environment, interactionArt });
+    scene = mountDataArenaScene({ stage, sim, cast, bundles, quality, reducedMotion, shake, partnerId, environment, interactionArt, effectArt });
     root.dataset.quality = quality;
     stage.setResolutionCap(quality === "low" ? 1 : Math.min(2, resolutionCap));
   }
 
   let startingMatch = false;
+  // Original remade effect cells (VFX_FIVE_LAYER_20261101), loaded once per screen and kept across matches.
+  let effectArt = null, effectArtLoading = null;
   async function startMatch() {
     if (startingMatch || qualityReloading || signal.aborted) return;
     startingMatch = true;
@@ -816,6 +819,12 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     try{interactionArt=await loadDataArenaInteractionArt({PIXI:stage.PIXI,map:sim.grid.map,quality,href,signal});}
     catch(error){if(!signal.aborted)console.warn("DATA_ARENA_INTERACTION_ART_FALLBACK",error?.message);}
     if (signal.aborted) { await environment?.dispose(); environment = null;await interactionArt?.dispose();interactionArt=null; return; }
+    // Controlled harnesses load this screen without its imports: no original cells there.
+    effectArtLoading ??= typeof loadOriginalVfxCellArt === "function"
+      ? loadOriginalVfxCellArt({ PIXI: stage.PIXI, href }).catch(error => { console.warn("DATA_ARENA_ORIGINAL_VFX_FALLBACK", error?.message); return null; })
+      : Promise.resolve(null);
+    effectArt ??= await effectArtLoading;
+    if (signal.aborted) return;
     root.dataset.seed = String(matchSeed);
     root.dataset.mode = gameMode;
     audio ??= createDataArenaAudio({ bus: audioBus });
@@ -1154,6 +1163,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     sim = null;
     await environment?.dispose(); environment = null;
     await interactionArt?.dispose();interactionArt=null;qaRecentEvents.length=0;
+    await (effectArtLoading ?? Promise.resolve(null)).then(art => art?.dispose()); effectArt = null; effectArtLoading = null;
     stage?.setResolutionCap(resolutionCap);
     await Promise.allSettled([...bundles.values()].map((bundle) => bundle.dispose()));
     bundles.clear();
