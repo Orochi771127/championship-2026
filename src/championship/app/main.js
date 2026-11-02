@@ -212,7 +212,8 @@ const BATTLE_BURST_POLICY =
   new URLSearchParams(globalThis.location?.search ?? "").get("battleBurst") === "off" ? "OFF" : "BURST_V1";
 const loadBattleRuntime = async () => {
   const create = (await import("./battleRuntime.js")).createBattleRuntime;
-  const planOf = entry => entry?.instanceId ? app?.getBattleBurstPlan?.(entry.instanceId) ?? null : null;
+  // A 覺醒體/究極體 match fixes the form that admitted the partner; otherwise its chosen form.
+  const planOf = entry => entry?.burst ?? (entry?.instanceId ? app?.getBattleBurstPlan?.(entry.instanceId) ?? null : null);
   const team = list => { const plans = (list ?? []).map(planOf); while (plans.length < 3) plans.push(null); return plans; };
   // Cyber Gachapon: an owned partner's metal bloodline badge rides its battle plate.
   return options => create({ aiPolicy: BATTLE_AI_POLICY, taxonomyPolicy: BATTLE_TAXONOMY_POLICY, getBloodline: id => app?.getPartnerBloodline?.(id) ?? null,

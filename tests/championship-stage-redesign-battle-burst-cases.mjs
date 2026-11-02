@@ -92,3 +92,23 @@ test('a real match holds the battle during the wrap, shows the burst form and re
     assert.deepEqual(result.bursts, [form.form]);
   } finally { runtime.dispose(); }
 });
+
+test('覺醒體/究極體 title matches admit a 成熟期 that can burst into a fitting form, and only then', async () => {
+  const {battlePartyAdmission,battlePartyCondition,burstFormFitting,nativeBattleQualification} = await import('../src/championship/battle/battleParty.js');
+  const {getMatchRecord} = await import('../src/championship/battle/battleMatchSelection.js');
+  const base = burstBasesFor(211)[0], forms = burstFormsFor(base), tier1 = forms.find(f => f.tier === 1).form, tier2 = forms.find(f => f.tier === 2).form;
+  const profile = nativeIndividualProfile(createNativeHuntIndividual({species: nativeHuntSpeciesByIndex(base), rng: {next: () => 50}}));
+  assert.equal(battlePartyAdmission(profile, 28).reason, 'MATCH_CONDITION', 'no burst form: no 究極體 match');
+  assert.equal(battlePartyAdmission(profile, 28, {burstForms: [tier1]}).reason, 'MATCH_CONDITION', 'a tier-1 form is not a 究極體');
+  assert.equal(battlePartyAdmission(profile, 28, {burstForms: [tier1, tier2]}).ok, true);
+  assert.equal(battlePartyAdmission(profile, 27, {burstForms: [tier1]}).ok, true);
+  const condition = battlePartyCondition(getMatchRecord(28).field0C);
+  assert.equal(nativeBattleQualification(profile, condition), false, 'the original rule alone is unchanged');
+  assert.equal(burstFormFitting(profile, condition, [tier1, tier2]), tier2);
+  // Attribute-restricted 究極體 matches read the burst form's own attribute.
+  for (const event of [32, 33, 34]) {
+    const c = battlePartyCondition(getMatchRecord(event).field0C);
+    const fit = burstFormFitting(profile, c, [tier2]);
+    assert.equal(fit === tier2, nativeBattleQualification({...profile, fields: {...profile.fields, '000': tier2}}, c));
+  }
+});

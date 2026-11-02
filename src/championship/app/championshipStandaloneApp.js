@@ -1064,6 +1064,11 @@ export function createChampionshipStandaloneApp({
         alternatesUnlocked:Object.freeze(alternates.filter(a=>unlocked.has(a))),unlocked:unlocked.has(form.form),
         planned:plan&&[form.form,...alternates].includes(plan.form)?plan.form:null,met:check.met,rows:check.rows});}));
   }
+  /** Unlocked forms (alternates included) whose tier the tamer rank allows: what a match may see it burst into. */
+  function partnerBurstForms(instanceId){
+    const maxTier=burstTierForRank(tamerRankValue);
+    return burstUnlocksOf(burstState(),instanceId).filter(form=>(burstFormTier(form)??9)<=maxTier);
+  }
   /** The form this partner bursts into in battle now (tamer rank gates the tier), or null. */
   function partnerBurstPlan(instanceId){
     const profile=partnerProfile(instanceId);if(!profile)return null;
@@ -3314,7 +3319,8 @@ export function createChampionshipStandaloneApp({
       const {battlePartyAdmission}=await loadBattleParty();
       return this.getRaisingInstances().map(entry=>{
         const nativeProfile=entry.instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(entry.instanceId);
-        return Object.freeze({...entry,tactic:this.getBattleTactic(entry.instanceId),admission:battlePartyAdmission(nativeProfile,recordIndex)});
+        return Object.freeze({...entry,tactic:this.getBattleTactic(entry.instanceId),
+          admission:battlePartyAdmission(nativeProfile,recordIndex,{burstForms:partnerBurstForms(entry.instanceId)})});
       });
     },
 
@@ -3505,7 +3511,8 @@ export function createChampionshipStandaloneApp({
     },
 
     async prepareBattleParty(recordIndex,instanceIds) {
-      const {battlePartyCondition,buildOwnedBattleCreature}=await loadBattleParty();
+      const {battlePartyCondition,buildOwnedBattleCreature,nativeBattleQualification,burstFormFitting}=await loadBattleParty();
+      const condition=battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C);
       const limit=battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C).slots;
       if(!Array.isArray(instanceIds)||!instanceIds.length||instanceIds.length>limit||new Set(instanceIds).size!==instanceIds.length)
         return {ok:false,reason:'PARTY_SIZE',message:uiText('請選擇 1 至 {limit} 隻符合條件的拍檔。',{limit})};
@@ -3516,7 +3523,10 @@ export function createChampionshipStandaloneApp({
         if(!entry.admission.ok)return entry.admission;
         const nativeProfile=instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(instanceId);
         buildOwnedBattleCreature({instanceId,nativeProfile});
-        individuals.push({instanceId,nativeProfile:structuredClone(nativeProfile)});
+        // A 成熟期 admitted to a 覺醒體/究極體 match bursts into the form that admitted it.
+        const fitting=nativeBattleQualification(nativeProfile,condition)?null:burstFormFitting(nativeProfile,condition,partnerBurstForms(instanceId));
+        individuals.push({instanceId,nativeProfile:structuredClone(nativeProfile),
+          ...(fitting!==null?{burst:Object.freeze({form:fitting,tier:burstFormTier(fitting)})}:{})});
       }
       return {ok:true,individuals};
     },
