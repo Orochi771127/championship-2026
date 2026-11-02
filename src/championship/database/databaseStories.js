@@ -1,5 +1,6 @@
 import {productSpeciesRecord,productBaseSpeciesIndex} from '../contracts/productSpeciesData.js';
 import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
+import {getProductOriginal,isPlayableProductOriginal,listProductOriginalMoveRecords} from '../contracts/productOriginalSpecies.js';
 import {getDatabaseIllustrationStory} from './databaseIllustrations.js';
 import catalog from '../../data/championship/database-original-profiles.r1.json' with {type:'json'};
 import speciesCatalog from '../../data/championship/catalogs/creature-species.r1.json' with {type:'json'};
@@ -90,7 +91,7 @@ export function databaseVerifiedHeading(locale = getLocale()) {
 
 export function databaseVerifiedData(speciesIndex, locale = getLocale()) {
   if (!Number.isSafeInteger(speciesIndex) || !Object.hasOwn(verifiedHeadings, locale)) return null;
-  if (!bySpecies.has(speciesIndex)&&!getProductExtension(speciesIndex)) return null;
+  if (!bySpecies.has(speciesIndex)&&!getProductExtension(speciesIndex)&&!isPlayableProductOriginal(speciesIndex)) return null;
   const sp = productSpeciesRecord(speciesIndex);
   if (!sp) return null;
 
@@ -105,7 +106,9 @@ export function databaseVerifiedData(speciesIndex, locale = getLocale()) {
 
   // Species traits do not establish an individual partner's battle stat rungs.
   // Keep the Dex independent of instance stats; move actionCost remains TP.
-  const rawMoves = movesBySpecies.get(productBaseSpeciesIndex(speciesIndex)) ?? [];
+  // An original character has its own moves; an alternate form shares its base form's.
+  const rawMoves = getProductOriginal(speciesIndex) ? listProductOriginalMoveRecords().filter(m => m.speciesId === speciesIndex)
+    : movesBySpecies.get(productBaseSpeciesIndex(speciesIndex)) ?? [];
   const moves = rawMoves.map(m => {
     const kindIdx = (m.kind === 0 || m.kind === 1) ? m.kind : 0;
     return Object.freeze({

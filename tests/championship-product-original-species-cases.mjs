@@ -1,5 +1,5 @@
-// Owner 2026-10-29: provisional stats, moves and evolution for the 14 art-only identities 231-244.
-// The data rides the species authority but stays inert until an entry is ready and wired.
+// Owner 2026-10-29: provisional stats, moves and evolution for the 14 original identities 231-244.
+// Owner 2026-11-03: the eight with motion art are playable; the other six stay art-only and inert.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -16,12 +16,23 @@ const catalog=read('src/data/championship/product-species-originals.r1.json');
 const proposal=read('docs/planning/roster14-stats-skills-evolution-20261029/PROPOSAL.v1.json');
 const lifecycle=read('src/data/championship/catalogs/raising-lifecycle.r1.json');
 const ids=[231,232,233,234,235,236,237,238,239,240,241,242,243,244];
+const PLAYABLE=[231,232,234,235,236,237,239,240],ART_ONLY=ids.filter(id=>!PLAYABLE.includes(id));
+// Owner 2026-11-03 dropped the 豆豆 nickname from GR40, its first move included.
+const RENAMED_MOVES={'豆豆彈跳':'星豆彈跳'};
 const ATTR=['無','疫苗','病毒','資料','自由'],FAM=['無','獸','機械','昆蟲植物','鳥','龍','水','聖','暗黑'];
 const clone=value=>structuredClone(value);
-// A test-only ready copy: moves bound to placeholder battle records and named in every locale.
-const ready=(source,which)=>{const c=clone(source);for(const e of c.entries)if(which.includes(e.speciesIndex)){
-  e.runtimeReady=e.evolutionReady=true;
-  e.moves.forEach((m,i)=>{m.battleMoveRecord=600+i;for(const k of ['en','ja','th','vi'])m.nameByLocale[k]=m.nameByLocale['zh-Hant'];});
+// A test-only copy where exactly `which` is ready: unbound moves borrow native record 1's kind-matching
+// neighbour, missing names repeat the zh-Hant name, and a missing behavior donor is a same-stage, same-race native.
+const species=read('src/data/championship/catalogs/creature-species.r1.json').records;
+const moves=read('src/data/championship/catalogs/battle-moves.r1.json').records;
+const ready=(source,which)=>{const c=clone(source);for(const e of c.entries){
+  e.runtimeReady=e.evolutionReady=which.includes(e.speciesIndex);
+  if(!e.runtimeReady)continue;
+  e.behaviorDonor??=species.findIndex((s,i)=>i>=8&&i<224&&s.generationIndex===e.generationIndex&&s.familyBits===e.familyBits);
+  for(const m of e.moves){
+    m.donorMoveRecord??=moves.find(r=>r.recordIndex>0&&r.kind===(m.kind==='MELEE'?0:1)).recordIndex;
+    for(const k of ['en','ja','th','vi'])m.nameByLocale[k]??=m.nameByLocale['zh-Hant'];
+  }
 }return c;};
 
 test('the 14 art-only identities carry exactly the reviewed proposal numbers, moves and branches',()=>{
@@ -31,7 +42,7 @@ test('the 14 art-only identities carry exactly the reviewed proposal numbers, mo
     const e=getProductOriginal(s.speciesIndex),art=getDatabaseIllustration(s.speciesIndex);
     assert.equal(e.displayCode,art.displayCode);assert.equal(e.generationIndex,art.numberingStageIndex,'stage matches the Dex identity');
     assert.deepEqual([e.statCurveIndex,ATTR[e.attributeIndex],FAM[Math.log2(e.familyBits)+1]],[s.statCurveIndex,s.attribute,s.family]);
-    assert.deepEqual(e.moves.map(m=>[m.nameByLocale['zh-Hant'],m.kind==='MELEE'?'近戰':'射擊',m.power,m.actionCost,m.elementSelect]),s.moves.map(m=>[m.name,m.kind,m.power,m.tp,m.elementSelect]));
+    assert.deepEqual(e.moves.map(m=>[m.nameByLocale['zh-Hant'],m.kind==='MELEE'?'近戰':'射擊',m.power,m.actionCost,m.elementSelect]),s.moves.map(m=>[RENAMED_MOVES[m.name]??m.name,m.kind,m.power,m.tp,m.elementSelect]));
     assert.deepEqual(e.evolution.map(r=>[r.target,r.kind,r.thresholds]),s.evolvesTo.map(r=>[r.target,r.kind==='LIFETIME_FALLBACK'?1:0,r.thresholds]));
     assert.deepEqual(productOriginalMoves(s.speciesIndex),e.moves);
   }
@@ -39,22 +50,32 @@ test('the 14 art-only identities carry exactly the reviewed proposal numbers, mo
   assert.equal(listDatabaseIllustrations().length,ids.length);
 });
 
-test('the species authority answers each original with its own record, but none is known, registrable or playable',()=>{
-  assert.equal(listDatabaseSlots().length,218);
+test('the eight with motion art are known, registrable and playable; the six without stay art-only and inert',()=>{
+  assert.deepEqual(ids.filter(isPlayableProductOriginal),PLAYABLE);
+  assert.equal(listDatabaseSlots().length,218+PLAYABLE.length);
   for(const id of ids){
-    const record=productSpeciesRecord(id),e=getProductOriginal(id);
+    const record=productSpeciesRecord(id),e=getProductOriginal(id),playable=PLAYABLE.includes(id);
     assert.equal(record.recordIndex,id);assert.equal(record.lookupKey,e.entityId);assert.equal(record.statCurveIndex,e.statCurveIndex);
-    assert.equal(record.sourceEvidence,'PRODUCT_ORIGINAL_PROVISIONAL');
-    assert.equal(isPlayableProductOriginal(id),false);assert.equal(isKnownSpeciesIndex(id),false);assert.equal(getProductExtension(id),null);
-    assert.throws(()=>getDatabaseSlot(id),/UNKNOWN_DATABASE_SLOT/);assert.throws(()=>normalizeRegisteredSpecies([id]));
-    assert.equal(databaseVerifiedData(id),null,'the Dex keeps showing art only');
-    assert.equal(requiresProductSaveVersion({speciesIndex:id}),false);
+    assert.equal(record.sourceEvidence,'PRODUCT_ORIGINAL_PROVISIONAL');assert.equal(getProductExtension(id),null);
+    assert.equal(isKnownSpeciesIndex(id),playable);assert.equal(requiresProductSaveVersion({speciesIndex:id}),playable);
+    if(playable){
+      assert.equal(getDatabaseSlot(id).speciesIndex,id);assert.deepEqual(normalizeRegisteredSpecies([id]),[id]);
+      assert.deepEqual(databaseVerifiedData(id).moves.map(m=>m.name),e.moves.map(m=>m.nameByLocale['zh-Hant']));
+      assert.deepEqual(PRODUCT_RAISING_LIFECYCLE_RULES.species[id],{...e.lifecycle});
+    }else{
+      assert.throws(()=>getDatabaseSlot(id),/UNKNOWN_DATABASE_SLOT/);assert.throws(()=>normalizeRegisteredSpecies([id]));
+      assert.equal(PRODUCT_RAISING_LIFECYCLE_RULES.species[id],undefined);
+    }
   }
-  // Native evolution, species parameters and product choices are byte-identical while nothing is ready.
-  assert.deepEqual(PRODUCT_RAISING_LIFECYCLE_RULES.rules,lifecycle.rules);
-  for(const id of ids)assert.equal(PRODUCT_RAISING_LIFECYCLE_RULES.species[id],undefined);
-  for(const x of catalog.nativeInserts)assert.deepEqual(productEvolutionOptions(x.source),[x.source]);
-  assert.equal(withReadyProductOriginals(lifecycle),lifecycle);
+  // Native lists change only where a playable original is inserted; branches to an art-only target are left out.
+  const inserted=new Set(catalog.nativeInserts.filter(x=>PLAYABLE.includes(x.target)).map(x=>x.source));
+  lifecycle.rules.forEach((list,i)=>{if(!inserted.has(i+8))assert.deepEqual(PRODUCT_RAISING_LIFECYCLE_RULES.rules[i],list);});
+  for(const x of catalog.nativeInserts){
+    const targets=PRODUCT_RAISING_LIFECYCLE_RULES.rules[x.source-8].map(r=>r.target);
+    assert.equal(targets.includes(x.target),PLAYABLE.includes(x.target));
+  }
+  for(const id of PLAYABLE)assert.ok(PRODUCT_RAISING_LIFECYCLE_RULES.rules[id-8].every(r=>!ART_ONLY.includes(r.target)));
+  assert.deepEqual(PRODUCT_RAISING_LIFECYCLE_RULES.rules[232-8].map(r=>r.target),[165],'MA65 waits for AW52 art');
 });
 
 test('readiness merges an original and its inserted branches at their exact positions, nothing else',()=>{
@@ -74,6 +95,8 @@ test('readiness merges an original and its inserted branches at their exact posi
   const battleOnly=withReadyProductOriginals(lifecycle,ready(catalog,[244]));
   assert.deepEqual(battleOnly.rules[173-8].map(r=>r.target),[...lifecycle.rules[165].map(r=>r.target),244]);
   // First-position inserts (star boar into B205) come before every existing branch.
+  const none=ready(catalog,[]);
+  assert.equal(withReadyProductOriginals(lifecycle,none).rules.every((list,i)=>JSON.stringify(list)===JSON.stringify(lifecycle.rules[i])),true,'nothing ready changes nothing');
   const boar=withReadyProductOriginals(lifecycle,ready(catalog,[231]));
   assert.deepEqual(boar.rules[23-8].map(r=>r.target),[231,...lifecycle.rules[15].map(r=>r.target)]);
   assert.deepEqual(boar.rules[231-8].map(r=>r.target),[],'GR39 to MA65 waits until MA65 is ready too');
@@ -92,7 +115,13 @@ test('the catalog refuses identities, numbers or branches the engine cannot carr
   assert.throws(bad(c=>{c.entries[0].evolution[0].thresholds.pop();}),/PRODUCT_ORIGINAL_EVOLUTION/);
   assert.throws(bad(c=>{c.nativeInserts[0].position=9;}),/PRODUCT_ORIGINAL_INSERT/);
   assert.throws(bad(c=>{c.nativeInserts.push({...c.nativeInserts[6],position:5},{...c.nativeInserts[6],position:1,target:244});}),/PRODUCT_ORIGINAL_INSERT/);
-  assert.throws(bad(c=>{c.entries[0].evolutionReady=true;}),/PRODUCT_ORIGINAL_READINESS/);
-  assert.throws(bad(c=>{c.entries[0].runtimeReady=true;}),/PRODUCT_ORIGINAL_NOT_BOUND/,'ready needs bound battle moves and five-locale names');
+  const art=c=>c.entries.find(e=>e.speciesIndex===238);
+  assert.throws(bad(c=>{art(c).evolutionReady=true;}),/PRODUCT_ORIGINAL_READINESS/);
+  assert.throws(bad(c=>{art(c).runtimeReady=true;}),/PRODUCT_ORIGINAL_NOT_BOUND/,'ready needs donor-bound battle moves and five-locale names');
+  assert.throws(bad(c=>{c.entries[0].moves[1].battleMoveRecord=c.entries[0].moves[0].battleMoveRecord;}),/PRODUCT_ORIGINAL_MOVE_RECORD/,'move ids are unique');
+  assert.throws(bad(c=>{c.entries[0].moves[1].battleMoveRecord=595;}),/PRODUCT_ORIGINAL_MOVE_RECORD/,'move ids continue after the native table');
+  assert.throws(bad(c=>{c.entries[0].moves[0].donorMoveRecord=c.entries[0].moves[1].donorMoveRecord;}),/PRODUCT_ORIGINAL_NOT_BOUND/,'a donor move has the same kind');
+  assert.throws(bad(c=>{c.entries[0].behaviorDonor=37;}),/PRODUCT_ORIGINAL_BEHAVIOR_DONOR/,'a behavior donor shares stage and race');
+  assert.throws(bad(c=>{c.entries[0].behaviorDonor=null;}),/PRODUCT_ORIGINAL_BEHAVIOR_DONOR/);
   assert.doesNotThrow(()=>assertProductOriginalCatalog(ready(catalog,ids)));
 });

@@ -8,6 +8,11 @@ import {isApprovedOriginalPublicLocation} from '../presentation/originalRuntimeL
 // Raising Home and its toolbar have mounted and laid out; a spotlight target
 // that is not there yet is retried for a bounded number of frames and then
 // dropped, so a missing anchor can never hide the guide.
+//
+// Owner 2026-11-02: the guide is Ai-chan (愛醬 / アイちゃん / Ai-chan), in the form
+// the player chose in the story (cat or catgirl, switchable in Settings). Her
+// face replaces the AI badge in the strip and the dialogs; lessons, steps,
+// actions, spotlight and checkpoints are unchanged and identical in both forms.
 import {showChoiceDialog} from "./uiDialog.js";
 import {INTERACTIVE_TUTORIAL_NORMAL_ONBOARDING_ELIGIBLE,sameInteractiveTutorialCheckpoint} from "./interactiveTutorialCheckpoint.js";
 import {tutorialLine} from "../text/tutorialMessages.zhHant.js";
@@ -15,6 +20,8 @@ import {tutorialPreviewText} from "../text/interactiveTutorialPreviewText.js";
 import {onboardingText} from "../text/onboardingText.js";
 import {getLocale,onLocaleChange} from "../text/locale.js";
 import {getActiveGameTitle} from "../text/brandTerms.js";
+import {createAiChanPortrait,getGuideAppearance,onGuideAppearanceChange} from "../presentation/aiChanGuide.js";
+import {aiChanStoryText,fillAiChanText} from "../text/aiChanStoryText.js";
 
 export function isInteractiveTutorialPreviewLocation(location) {
   return ["localhost","127.0.0.1","[::1]"].includes(location.hostname)
@@ -45,19 +52,23 @@ export function mountInteractiveTutorialPreview({app,doc=globalThis.document,sho
   const frame=callback=>typeof win.requestAnimationFrame==="function"?win.requestAnimationFrame(callback):win.setTimeout(callback,16);
   const cancelFrame=id=>typeof win.cancelAnimationFrame==="function"?win.cancelAnimationFrame(id):win.clearTimeout(id);
   const banner=doc.createElement("aside"),label=doc.createElement("span"),exit=doc.createElement("button"),resume=doc.createElement("button");
-  const badge=doc.createElement("span"),meta=doc.createElement("span"),step=doc.createElement("span"),lesson=doc.createElement("span"),line=doc.createElement("span");
+  const meta=doc.createElement("span"),step=doc.createElement("span"),lesson=doc.createElement("span"),line=doc.createElement("span");
   banner.className=preview?"cm-tutorial-preview":"cm-tutorial-guidance";banner.dataset.preview=String(preview);
   banner.setAttribute("aria-live","polite");
   // Preview chrome only; no modification to toolbar text/clamp/touch styles.
   if(preview)banner.style.cssText="position:fixed;top:8px;left:8px;right:8px;z-index:150;display:flex;align-items:center;gap:8px;padding:8px 12px;background:#10242a;color:#e9fff8;border:1px solid #65dbc4;border-radius:10px;font-size:13px;line-height:1.4";
-  badge.className="cm-guide-badge";badge.setAttribute("aria-hidden","true");badge.append(Object.assign(doc.createElement("span"),{textContent:"AI"}));
+  // Every Ai-chan face the guide shows follows the stored form.
+  const faces=new Set();
+  const face=(label=null)=>{const portrait=createAiChanPortrait({doc,mode:"avatar",appearance:getGuideAppearance(),label});portrait.root.classList.add("cm-guide-badge");faces.add(portrait);return portrait;};
+  const stripFace=face();
+  const stopAppearance=onGuideAppearanceChange(form=>{for(const portrait of faces)if(portrait.root.isConnected||portrait===stripFace)portrait.setAppearance(form);else faces.delete(portrait);});
   label.className="cm-guide-copy";meta.className="cm-guide-meta";step.className="cm-guide-step";lesson.className="cm-guide-lesson-name";line.className="cm-guide-line";
   meta.append(step,lesson);label.append(meta,line);
   label.style.cssText="flex:1;min-width:0;overflow-wrap:anywhere";
   exit.type="button";exit.dataset.tutorialAction="exit";
   resume.type="button";resume.dataset.tutorialAction="resume";
   if(preview){exit.style.cssText="min-height:44px;max-width:42%;padding:8px;border-radius:8px;border:1px solid #65dbc4;background:#163b3a;color:inherit;font:inherit;white-space:normal";resume.style.cssText=exit.style.cssText;}
-  banner.append(badge,label,resume,exit);doc.body.append(banner);
+  banner.append(stripFace.root,label,resume,exit);doc.body.append(banner);
   // The spotlight frames a control; it never takes input itself.
   const spotlight=doc.createElement("div"),spotFrame=doc.createElement("span"),spotArrow=doc.createElement("span");
   spotlight.className="cm-guide-spotlight";spotlight.hidden=true;spotlight.setAttribute("aria-hidden","true");
@@ -150,7 +161,7 @@ export function mountInteractiveTutorialPreview({app,doc=globalThis.document,sho
     banner.dataset.stage=t.checkpoint.stage;
     const steps=stepLabel(t);banner.dataset.lesson=String(steps.index);
     banner.setAttribute("aria-label",getActiveGameTitle(getLocale())+" — "+copy.title);
-    step.textContent=steps.step;lesson.textContent=`${words.guideName} · ${steps.name}`;
+    step.textContent=steps.step;lesson.textContent=steps.index>=0?`${words.guideName} · ${steps.name}`:words.guideName;
     line.textContent=t.pendingSave?copy.failed:t.waiting?copy.waiting:t.textId?tutorialLine(t.textId):copy.next;
     exit.textContent=copy.exit;exit.disabled=busy||t.restoring||t.pendingSave;
     resume.textContent=t.pendingSave?copy.retry:copy.next;resume.hidden=!t.pendingSave&&!t.dialogue&&!t.boundary&&t.checkpoint.stage!=="invitation";resume.disabled=busy||t.restoring;
@@ -161,7 +172,8 @@ export function mountInteractiveTutorialPreview({app,doc=globalThis.document,sho
   }
   function guideHead(t){
     const words=onboardingText(),steps=stepLabel(t),head=doc.createElement("div"),who=doc.createElement("div");
-    const icon=badge.cloneNode(true),name=doc.createElement("p"),lessonLine=doc.createElement("p"),chip=doc.createElement("span"),progress=doc.createElement("span");
+    const ai=aiChanStoryText(),icon=face(form=>fillAiChanText(ai.portraitLabel,{form:ai.forms[form]})).root;
+    const name=doc.createElement("p"),lessonLine=doc.createElement("p"),chip=doc.createElement("span"),progress=doc.createElement("span");
     head.className="cm-guide-head";head.style.order="-1";who.className="cm-guide-who";
     name.className="cm-guide-name";name.textContent=words.guideName;
     lessonLine.className="cm-guide-lesson";chip.className="cm-guide-step";chip.textContent=steps.step;
@@ -213,7 +225,7 @@ export function mountInteractiveTutorialPreview({app,doc=globalThis.document,sho
   const stop=app.subscribeRaising(render);
   const stopLocale=onLocaleChange(()=>{lastShown=null;dialogAbort?.abort();render();});
   render();
-  return Object.freeze({dispose(){if(disposed)return;disposed=true;dialogAbort?.abort();stop();stopLocale();resize?.disconnect();win.removeEventListener?.("resize",reposition);
+  return Object.freeze({dispose(){if(disposed)return;disposed=true;dialogAbort?.abort();stop();stopLocale();stopAppearance();faces.clear();resize?.disconnect();win.removeEventListener?.("resize",reposition);
     if(layoutFrame!==null)cancelFrame(layoutFrame);if(spotFrameId!==null)cancelFrame(spotFrameId);
     if(!preview){doc.body.removeAttribute("data-tutorial-guide");doc.body.style.removeProperty("--cm-tutorial-guide-height");}banner.remove();spotlight.remove();}});
 }

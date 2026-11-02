@@ -1,7 +1,8 @@
 // Display-only descriptions of an already-revealed, exact evolution branch.
 // This is not an eligibility checker. No individual, actor, resolver, RNG or
 // save authority is accepted. Unknown branches return no condition payload.
-import lifecycle from '../../data/championship/catalogs/raising-lifecycle.r1.json' with {type:'json'};
+import {PRODUCT_GROWTH_RULES as lifecycle} from '../contracts/productGrowthRules.js';
+import {isPlayableProductOriginal} from '../contracts/productOriginalSpecies.js';
 import {deepFreeze} from '../contracts/championshipContracts.js';
 import {nativeEvolutionRequirements} from '../raising/nativeRaisingLifecycle.js';
 import {projectDatabaseEvolutionRoutes} from './databaseEvolutionRoutes.js';
@@ -51,7 +52,7 @@ const caveatIds = deepFreeze([
  */
 export function projectDatabaseEvolutionConditions(sourceSpeciesIndex, branchIndex, options = {}) {
   if (!options || (!options.fullView && options.sourceRegistered !== true)
-    || !Number.isInteger(sourceSpeciesIndex) || sourceSpeciesIndex < 8 || sourceSpeciesIndex > 223
+    || !Number.isInteger(sourceSpeciesIndex) || sourceSpeciesIndex < 8 || (sourceSpeciesIndex > 223 && !isPlayableProductOriginal(sourceSpeciesIndex))
     || !Number.isInteger(branchIndex) || branchIndex < 0 || branchIndex > 4
     || !Array.isArray(options.registeredSpecies) || !Array.isArray(options.evolutionBranches)) return null;
   const route = projectDatabaseEvolutionRoutes(sourceSpeciesIndex, options).find(r=>r.branchIndex===branchIndex&&(r.productRouteId??null)===(options.productRouteId??null));

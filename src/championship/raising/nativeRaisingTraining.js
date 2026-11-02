@@ -4,7 +4,7 @@ import {NATIVE_RAISING_LIFECYCLE_RULES as rules} from './nativeRaisingLifecycle.
 import {normalizeNativeIndividualProfile} from './nativeIndividualProfile.js';
 import {nativeHuntSpeciesByIndex} from '../hunt/capture/nativeHuntSources.js';
 const key=n=>n.toString(16).padStart(3,'0'),clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n|0))>>>0;
-export function applyNativeTrainingCommand(profile,{kind,delta,season,level=0,filter=-1,growthPercent=100},rng) {
+export function applyNativeTrainingCommand(profile,{kind,delta,season,level=0,filter=-1,growthPercent=100,pointScale=null},rng) {
   if(!Number.isInteger(kind)||kind<0||kind>27)throw new TypeError('INVALID_NATIVE_TRAINING_COMMAND');
   const p=structuredClone(profile),f=p.fields,m=rules.trainingModifiers;
   if(season===1){delta+=m.summer[kind];if(kind<22&&delta===0)delta=-1;}
@@ -15,7 +15,8 @@ export function applyNativeTrainingCommand(profile,{kind,delta,season,level=0,fi
   // Race habitat (Owner 2026-10-29): stat gains (kinds 11-21) grow by growthPercent; points and losses stay original.
   if(growthPercent!==100&&kind>=11&&kind<22&&delta>0)delta=Math.trunc(delta*growthPercent/100);
   let outcome='APPLIED';
-  if(kind<11){const k=key(0x100+kind*4);f[k]=(f[k]+delta)>>>0;}
+  // Real-time ranch (OWNER_APPROVED_ADAPTATION 2026-11-02, productTrainingPolicy.js): point gains are levelled.
+  if(kind<11){const k=key(0x100+kind*4);if(pointScale&&delta>0)delta=Math.max(1,Math.round(delta*pointScale[kind]));f[k]=(f[k]+delta)>>>0;}
   else if(kind<22){
     const offset=[0x70,0x74,0x80,0x7c,0x78,0x58,0x5c,0x60,0x64,0x68,0x6c][kind-11];
     const k=key(offset),upper=f[key(0xa8+(offset-0x58)*2)]|0,lower=f[key(0xac+(offset-0x58)*2)]|0;
@@ -34,12 +35,13 @@ export function applyNativeCageEntryConditions(profile,{definition,season,level=
   let p=profile;for(const [kind,delta] of rules.cages[definition].commands)if(kind!==6)p=applyNativeTrainingCommand(p,{kind:22+kind,delta,season,level},rng).profile;
   return p;
 }
-export function enterNativeRaisingTraining(profile,{definition,season,level=0,stressed=false,growthPercent=100},rng){
+export function enterNativeRaisingTraining(profile,{definition,season,level=0,stressed=false,growthPercent=100,pointScale=null,programs=null},rng){
   let roll=rng.next(definition+3)%100,program=null;
-  for(const candidate of rules.cages[definition].programs){if(roll<candidate.weight){program=candidate;break;}roll-=candidate.weight;}
+  // `programs` is the real-time ranch's product overlay (productTrainingPolicy.js); native play passes none.
+  for(const candidate of programs??rules.cages[definition].programs){if(roll<candidate.weight){program=candidate;break;}roll-=candidate.weight;}
   if(!program)return {profile,commands:null};
   let p=profile;const commands=[];
-  for(const [kind,delta] of program.commands){const result=applyNativeTrainingCommand(p,{kind,delta,season,level,growthPercent},rng);p=result.profile;commands.push({kind,delta:result.delta,outcome:result.outcome});}
+  for(const [kind,delta] of program.commands){const result=applyNativeTrainingCommand(p,{kind,delta,season,level,growthPercent,pointScale},rng);p=result.profile;commands.push({kind,delta:result.delta,outcome:result.outcome});}
   p=applyNativeCageEntryConditions(p,{definition,season,level},rng);
   if(commands.length){p=structuredClone(p);if((p.fields['008']|0)<=0)p.fields['040']=Math.min(100,p.fields['040']+3);if(stressed)p.fields['040']=Math.min(100,p.fields['040']+3);p=normalizeNativeIndividualProfile(p);}
   return {profile:p,commands};

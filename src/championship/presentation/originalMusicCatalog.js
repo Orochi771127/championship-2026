@@ -92,6 +92,15 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
     "path": "./assets/production/original-music-r1/bgm_sweetest_level_up.mp3",
     "loop": true, "gainDb": -8.9, "trimStart": 0, "trimEnd": 0.7, "crossfade": 0.1, "loopStart": 68.8
   },
+  // Owner 2026-11-02: the New Game story and the whole interactive tutorial. Web copy
+  // 128 kb/s, 127.45 s, -18.50 LUFS with 0.5 s fade-in and 2 s fade-out (archive
+  // onboarding-ai-chan-owner-approved-20261103). Gain brings it to the scene-music
+  // level (about -24 LUFS). The loop restarts inside the fade-out on the standard
+  // 0.8 s crossfade; it is not a seamless musical loop.
+  "hexagon_cradles": {
+    "path": "./assets/production/scene-music-r1/opening/hexagon_cradles.mp3",
+    "loop": true, "gainDb": -5.5, "trimStart": 0, "trimEnd": 1.2, "crossfade": 0.8
+  },
   "battle_final": {
     "path": "./assets/production/original-music-r1/championship_battle_final_r1.ogg",
     "loop": true,
@@ -202,9 +211,14 @@ export const BATTLE_FIELD_MUSIC = Object.freeze({
 // This is a gameplay/title-informed choice, not a listening acceptance claim.
 export const DATA_ARENA_MUSIC = Object.freeze({HARBOR:'unison_under_fire',TOURNAMENT:'federation_siege'});
 export function selectDataArenaMusic(mode) { return DATA_ARENA_MUSIC[mode] ?? 'battle_normal'; }
+/** The New Game story and every tutorial screen share one cue, so the hand-over never restarts it. */
+export const ONBOARDING_MUSIC = 'hexagon_cradles';
 export function selectOriginalMusic({titleVisible=false,openingVisible=false,screen=null,tutorial=false,
   biome=null,chosen=null,outcome=null,attemptId=null}={}) {
-  if (titleVisible) return {id:openingVisible?'lofi':'login'};
+  if (titleVisible) return {id:openingVisible?ONBOARDING_MUSIC:'login'};
+  // Owner 2026-11-02: the tutorial uses the story's music on every screen. A
+  // tutorial battle's result keeps its one-shot outcome sting.
+  if (tutorial && screen && screen!=='BATTLE_RESULT') return {id:ONBOARDING_MUSIC};
   if (screen==='BATTLE_FIELD') {
     // Championship presentation uses arena 10 regardless of the match record.
     const arenaIndex = chosen?.championship ? 10 : chosen?.arenaIndex;
@@ -212,7 +226,6 @@ export function selectOriginalMusic({titleVisible=false,openingVisible=false,scr
   }
   if (screen==='BATTLE_RESULT') return outcome?.ended && attemptId!=null
     ? {id:outcome.winningTeam===0?'victory':outcome.winningTeam===1?'defeat':'draw',attemptId}: {id:null};
-  if (screen==='HUNT_FIELD'||screen==='HUNT_RESULT') return {id:tutorial?'plains':BIOMES[String(biome).toLowerCase()]??'plains'};
-  if (screen==='RAISING_HOME' && tutorial) return {id:'lofi'};
+  if (screen==='HUNT_FIELD'||screen==='HUNT_RESULT') return {id:BIOMES[String(biome).toLowerCase()]??'plains'};
   return {id:SCREENS[screen]??null};
 }

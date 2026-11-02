@@ -4,6 +4,7 @@
 // QA seed stays unchanged; one explicitly historical-wallet derivative is test-only.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require('playwright');
+const {playStory}=require('./championship-browser-opening.cjs'); // the one shared New Game story driver
 const {resolveAsset,serveBuild}=require('./alternate-form-browser-support.cjs');
 const {createInstallerFixtures}=require('./friends-installer-fixture-support.cjs');
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest');
@@ -40,10 +41,10 @@ function registrationNoticeInvariant(save){
 // End test-only ordinary overlay helpers.
 // BEGIN FRIENDS PUBLIC THREE / MENU / ROUTE CONTRACTS (test-only)
 const FRIENDS_THREE_RESOURCES=Object.freeze([
- {"path":"assets/production/cage/three-20261021/manifest.json","bytes":8530,"sha256":"91b1661d3f593646231731a346c1c04c8ecf7806d6289f90dcd4ee062897818c"},
+ {"path":"assets/production/cage/three-20261021/manifest.json","bytes":8530,"sha256":"8d3aa3efd3f9dbef4dcf4785ee493f7d8867ab860c10e3e3790348c95c6525a7"},
  {"fieldId":"field_cm02_01","path":"assets/production/cage/three-20261021/field_cm02_01.glb","bytes":900856,"sha256":"80efcd18ff4d9e2ee94fa64843b7e14ba5abd2705e64339be531762356684307"},
  {"fieldId":"field_cm18_01","path":"assets/production/cage/three-20261021/field_cm18_01.glb","bytes":1853276,"sha256":"6657497289f9f10ac376f5d31d2ff50b0cb1629da65f64c49bade3788cbc6e41"},
- {"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":464392,"sha256":"8f5b978941215411e6911719359b23baf800eeb66b251a07090854db3ed1a482"}
+ {"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":281140,"sha256":"075d4d932b1fd5b7f5c6e4467fe636a3e4905eb08d715b717892a2003718b6f2"}
 ]);
 async function friendsDrainReadbacks(reads){
  let count=-1;while(count!==reads.length){count=reads.length;await Promise.all(reads);}
@@ -520,12 +521,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
    }
   }
   const until=Date.now()+120000;
-  while(await story.count()){
-   if(Date.now()>until)throw Error('Normal opening comic did not finish');
-   const text=page.locator('[data-story-action="text"]');if(await text.isVisible())await clickStoryAffordance(text);
-   if(await story.isVisible())await clickStoryAffordance(story,{position:{x:10,y:10}});
-   await page.waitForTimeout(1200);
-  }
+  await playStory(page); // shared normal-UI driver for the Ai-chan New Game story
   await page.locator('.cm-opening__envelope').click();await page.locator('.cm-opening__letter button').click();
   await page.locator('#cm-opening-name').fill('朋友測試');await page.locator('.cm-opening__name button[type="submit"]').click();
   await page.locator('.cm-opening__choices button').first().click();

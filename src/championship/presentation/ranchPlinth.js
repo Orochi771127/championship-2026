@@ -5,16 +5,19 @@
 // - chassis: a bevelled wall under it, deep for cages, thin for the
 //   placeholder (lid) tiles;
 // - one soft drop shadow under the land;
-// - on shared edges: a low rim where the walk rule kept a border (different
-//   ecology, height, or no safe exit). Where it opened a passage nothing is
-//   drawn (Owner 2026-11-01: the painted bridge strip read as a plaster on
-//   the floor); the two cages' own floors meet and partners still cross.
+// - on shared edges: a low rim only between different types or heights (Owner
+//   2026-11-02: one type at one height is one map). Elsewhere nothing is drawn
+//   (Owner 2026-11-01: the painted bridge strip read as a plaster on the
+//   floor); the two cages' own floors meet.
 // Edges two cells share are inside the land and get nothing, so same-type
 // merged edges stay open and a different-type border keeps the cage's own art.
+// Owner 2026-11-02: where a cage's own water, lava or sand reaches a free outer edge,
+// it pours over the rim and down the cliff into the data sea below (ranchWaterfalls.js).
 import * as THREE from '../../../node_modules/three/build/three.module.js';
 import { ranchNativeToWorld } from './ranchThreeCoordinates.js';
 import { ranchSlotPolygon } from '../cage/ranchConnections.js';
 import { productPlacementCells } from '../cage/productRanchGrid.js';
+import { ranchWaterfallSpans, createRanchWaterfalls } from './ranchWaterfalls.js';
 
 export const RANCH_PLINTH = Object.freeze({
   bevel: .16, depth: .95, lidDepth: .42, ridgeHeight: .05, ridgeWidth: .09, shadowDrop: .2, shadowBlur: 1.1, shadowOpacity: .5,
@@ -46,12 +49,14 @@ export function ranchPlinthOutline(placements) {
 
 const world = (p) => { const w = ranchNativeToWorld(p[0], p[1]); return new THREE.Vector3(w.x, 0, w.z); };
 
-/** `towardSun`: world vector from the ground toward the sun. */
-export function createRanchPlinth({ placements, towardSun, passages = { open: [], closed: [] } }) {
+/** `towardSun`: world vector from the ground toward the sun. `water`: world spans
+ * ({a, b} with x, z, and a kind) of the cages' own water, lava or sand at their outer edges; `facing`: world
+ * vector toward the fixed camera (falls on edges facing away are never drawn). */
+export function createRanchPlinth({ placements, towardSun, passages = { open: [], closed: [] }, water = [], facing = null }) {
   const { cells, edges } = ranchPlinthOutline(placements);
   const group = new THREE.Group();
   group.name = 'ranch-plinth';
-  if (!edges.length) return { group, edges: 0, cells: 0, thresholds: 0, animate() {}, dispose() {} };
+  if (!edges.length) return { group, edges: 0, cells: 0, thresholds: 0, waterfalls: 0, animate() {}, dispose() {} };
   const { bevel, depth, lidDepth, colors } = RANCH_PLINTH;
   const sun = new THREE.Vector3(...towardSun).normalize(), sunFlat = new THREE.Vector3(sun.x, 0, sun.z).normalize();
   const color = (hex) => new THREE.Color().setHex(hex);
@@ -95,9 +100,13 @@ export function createRanchPlinth({ placements, towardSun, passages = { open: []
   if (shadow) group.add(shadow.mesh);
   const seams = createSeams(passages, { rim, lit, base });
   if (seams) group.add(...seams.meshes);
+  const outer = edges.map((e) => ({ ...e.world, depth: e.lid ? lidDepth : depth }));
+  const falls = water.length ? createRanchWaterfalls(ranchWaterfallSpans(outer, water, { facing }), { bevel }) : null;
+  if (falls) group.add(falls.mesh);
   return {
-    group, edges: edges.length, cells: cells.length, thresholds: passages.open.length, rims: passages.closed.length, animate: (t) => seams?.animate(t),
-    dispose() { geometry.dispose(); material.dispose(); shadow?.dispose(); seams?.dispose(); }
+    group, edges: edges.length, cells: cells.length, thresholds: passages.open.length, rims: passages.closed.length, waterfalls: falls?.spans ?? 0,
+    animate: (t) => { seams?.animate(t); falls?.animate(t); },
+    dispose() { geometry.dispose(); material.dispose(); shadow?.dispose(); seams?.dispose(); falls?.dispose(); }
   };
 }
 

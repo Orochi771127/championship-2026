@@ -80,9 +80,7 @@ import {
   validateRuntimeMapArtBundle
 } from "../presentation/runtimeMapArtBundle.js";
 import { createRanchCageArtPlan as createRaisingCageArtPlan, ranchExpansionPreviewPlan } from "../presentation/raisingRanchArtPlan.js";
-import { withCageForeground } from "../presentation/cageForeground.js";
 import { withRanchPassages } from "../presentation/ranchPassages.js";
-import {selectRanchCageArt,ranchCageLayerGroups} from "../presentation/ranchCageArtSelection.js";
 import { withRanchExpansionPreview } from "../presentation/raisingExpansionPreview.js";
 import { openRanchExpansionPreview } from './ranchExpansionPreview.js';
 import { createLoadProgressView, observeLoadActivity } from './loadProgress.js';
@@ -153,11 +151,13 @@ import { createAudioBus } from '../presentation/audioBus.js';
 import { createMusicPresentation } from '../presentation/musicPresentation.js';
 import { resolveSceneMusic } from '../presentation/sceneMusicCatalog.js';
 import { ORIGINAL_MUSIC_CUES, selectOriginalMusic } from '../presentation/originalMusicCatalog.js';
+import { setGuideAppearance } from '../presentation/aiChanGuide.js';
 import { cappedPixelRatio, currentQuality, currentQualityTier, highlightMode, prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { resultHeroAnchor, resultStageLight } from '../presentation/battleResultCharacters.js';
 import { formatDateTime, formatList, onLocaleChange, getLocale } from '../text/locale.js';
 import { retranslate, setLabel, setText, uiText } from '../text/uiText.js';
 import { paintGachaTicketBadge } from './cyberGachaIcons.js';
+import { gachaChipEffectLines, getGachaMetal } from '../gacha/cyberGacha.js';
 
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
 // fetched the first time that view asks for one. The wrappers keep the same
@@ -205,10 +205,22 @@ const BATTLE_AI_POLICY =
 // teams alike); ?battleTaxonomy=original keeps the original damage rules. The tutorial stays original.
 const BATTLE_TAXONOMY_POLICY =
   new URLSearchParams(globalThis.location?.search ?? "").get("battleTaxonomy") === "original" ? "ORIGINAL" : "TAXONOMY_V1";
+// Owner 2026-11-02 (STAGE_REDESIGN_BURST_20261102): menu battles let a 成熟期 burst into its unlocked form and
+// former 覺醒體/究極體 opponents start as their 成熟期 (BURST_V1); ?battleBurst=off keeps the original rules.
+// Link battles stay off: their codes carry no burst plan, and both sides must simulate alike.
+const BATTLE_BURST_POLICY =
+  new URLSearchParams(globalThis.location?.search ?? "").get("battleBurst") === "off" ? "OFF" : "BURST_V1";
 const loadBattleRuntime = async () => {
   const create = (await import("./battleRuntime.js")).createBattleRuntime;
+  // A 覺醒體/究極體 match fixes the form that admitted the partner; otherwise its chosen form.
+  const planOf = entry => entry?.burst ?? (entry?.instanceId ? app?.getBattleBurstPlan?.(entry.instanceId) ?? null : null);
+  const team = list => { const plans = (list ?? []).map(planOf); while (plans.length < 3) plans.push(null); return plans; };
   // Cyber Gachapon: an owned partner's metal bloodline badge rides its battle plate.
-  return options => create({ aiPolicy: BATTLE_AI_POLICY, taxonomyPolicy: BATTLE_TAXONOMY_POLICY, getBloodline: id => app?.getPartnerBloodline?.(id) ?? null, ...options });
+  return options => create({ aiPolicy: BATTLE_AI_POLICY, taxonomyPolicy: BATTLE_TAXONOMY_POLICY, getBloodline: id => app?.getPartnerBloodline?.(id) ?? null,
+    burstPolicy: options.mode === 3 ? "OFF" : BATTLE_BURST_POLICY,
+    // Awakening raising (2026-11-02): the player calls a partner's burst (with a six-second automatic fallback).
+    burstManual: true,
+    burstPlans: [...team(options.playerIndividuals), ...team(options.opponentIndividuals)], ...options });
 };
 
 // Screen modules and art load through their existing foreground owners.
@@ -233,13 +245,9 @@ const HUNT_DAY_NIGHT_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("huntReview") ==
   ? "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/manifest.json" : null;
 const HUNT_DAY_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("huntReview") === "hm234-20261007"
   ? "assets/production/hunt/hm234-day-review-20261007/manifest.json" : null;
-// Owner 2026-10-09: final 37 cage fields in normal local play; existing geometry and clocks.
-const CAGE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
-  ? publicMapManifestPath('cage-final')
-  : publicMapManifestPath('cage-ui');
-// Local review (2026-10-19): the re-lit cage polish, loopback ?cageReview only.
-const CAGE_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("cageReview") === "polish-20261019"
-  ? "assets/production/cage/polish-review-20261019/manifest.json" : null;
+// Owner 2026-11-02: the 2D ranch, kept for when the 3D one cannot start, draws the
+// same renders of the 3D cages as the shop and the facility editor.
+const CAGE_ART_MANIFEST_URL = publicMapManifestPath('cage-ui');
 // Owner 2026-10-07: completed original arenas in normal local play; publication remains gated.
 const LICENSED_BATTLE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
   ? (LOCAL_MAP_REVIEW.get("battleReview") === "stage-20261007"
@@ -403,7 +411,12 @@ function scheduleRanchTitlePreload(){
     }catch{ranchTitlePreloadProgress=null;ranchTitlePreloadStatus.hidden=true;titleNoteMessage.hidden=false;}
   },500)));
 }
+// Ai-chan's form and the story bookmark live in the preference document (never
+// the game save). The bookmark is cleared once a New Game has really started.
 const openingPresentation=createOpeningPresentation({host:document.getElementById('cm-opening'),onStart:startNewGame,
+  guide:{appearance:()=>settings.store.get().guideAppearance,choose:form=>settings.store.set('guideAppearance',form),
+    resume:()=>settings.store.get().openingStoryResume,progress:id=>settings.store.set('openingStoryResume',id),
+    started:()=>settings.store.set('openingStoryResume','')},
   allowEggChoice:shouldOfferInteractiveTutorial(location),onCancel(){
     titleActions.hidden=false;if(titleSettingsButton)titleSettingsButton.hidden=false;refreshContinue();newGameButton.focus({preventScroll:true});
   }});
@@ -485,10 +498,55 @@ function releaseStrollHold(id) {
   clearTimeout(pending.timer); strollFlightsPending.delete(id);
   return pending;
 }
+// Awakening raising (OWNER_APPROVED_ADAPTATION 2026-11-02): a partner ready to learn a form says so on the ranch,
+// in the stroll toast; the player taps its crest to play the ceremony.
+function showBurstUnlockToast() {
+  if (app?.getScreen?.() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
+  const latest = (app.takeBurstUnlockNotices?.() ?? []).at(-1);
+  if (!latest?.forms?.length) return;
+  const entry = app.getRaisingInstances().find((e) => e.instanceId === latest.instanceId);
+  let toast = document.querySelector('.cm-stroll-toast');
+  if (!toast) { toast = document.createElement('div'); toast.className = 'cm-stroll-toast'; toast.setAttribute('role', 'status'); document.body.append(toast); }
+  toast.textContent = uiText(latest.ready ? 'AWAKENING_READY_TOAST' : 'BURST_UNLOCK_TOAST', { name: entry ? raisingDisplayName(entry) : '', form: speciesName(latest.forms[0]) });
+  toast.classList.remove('is-shown'); void toast.offsetWidth; toast.classList.add('is-shown');
+  clearTimeout(showStrollToast.timer);
+  showStrollToast.timer = setTimeout(() => toast.classList.remove('is-shown'), 3200);
+}
+// The ranch's first awakening ends with this card: the form, its stage, what it does now and its bloodline's perk.
+function showAwakeningCard(detail) {
+  if (!detail?.form) return;
+  document.querySelector('.cm-awakening-card')?.remove();
+  const card = document.createElement('div');
+  card.className = 'cm-awakening-card'; card.setAttribute('role', 'status'); card.dataset.tier = String(detail.tier ?? 1);
+  if (detail.bloodline?.color) card.style.setProperty('--bloodline', detail.bloodline.color);
+  const line = (className, text) => { const node = document.createElement(className === 'cm-awakening-card__tier' ? 'span' : 'p'); node.className = className; node.textContent = text; return node; };
+  const name = line('cm-awakening-card__name', speciesName(detail.form));
+  name.prepend(line('cm-awakening-card__tier', uiText(detail.tier === 2 ? 'AWAKENING_TIER_2' : 'AWAKENING_TIER_1')));
+  card.append(line('cm-awakening-card__title', uiText('AWAKENING_LEARNED_TITLE')), name, line('cm-awakening-card__note', uiText('AWAKENING_LEARNED_NOTE')));
+  if (detail.bloodline?.family) card.append(line('cm-awakening-card__perk', uiText(`BLOODLINE_PERK_${detail.bloodline.family}`)));
+  const close = () => card.remove();
+  card.addEventListener('click', close);
+  document.body.append(card);
+  setTimeout(close, 4800);
+}
 function listenPartnerFinds() {
   if (partnerFindListening) return;
   partnerFindListening = true;
+  setInterval(showBurstUnlockToast, 2000);
+  // The card follows a moment after the form stands, so the player sees the form first.
+  document.addEventListener('cm-awakening', (event) => setTimeout(() => showAwakeningCard(event.detail), 650));
   app.subscribePartnerLife?.((event) => {
+    // Night disturbance (2026-11-02): say who was woken and that it counts as 育成妨礙.
+    if (event.kind === 'disturbed' && app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) {
+      const entry = app.getRaisingInstances().find((e) => e.instanceId === event.partnerId);
+      let toast = document.querySelector('.cm-stroll-toast');
+      if (!toast) { toast = document.createElement('div'); toast.className = 'cm-stroll-toast'; toast.setAttribute('role', 'status'); document.body.append(toast); }
+      toast.textContent = uiText('NIGHT_DISTURBED_TOAST', { name: entry ? raisingDisplayName(entry) : '' });
+      toast.classList.remove('is-shown'); void toast.offsetWidth; toast.classList.add('is-shown');
+      clearTimeout(showStrollToast.timer);
+      showStrollToast.timer = setTimeout(() => toast.classList.remove('is-shown'), 3200);
+      return;
+    }
     if (event.kind !== 'find' || !event.tool || !toolbar || app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
     toolbar.holdToolStock(event.tool);
     const id = event.entry.id, gained = event.entry.quantity;
@@ -590,6 +648,9 @@ const music = createMusicPresentation({bus:settings.audio,cues:ORIGINAL_MUSIC_CU
     syncTitleArt();
   }});
 settings.store.subscribe((values,changed)=>{if(changed.some(id=>['muted','masterVolume','sfxVolume','musicVolume','raisingMusic','battleMusic'].includes(id)))music.preferencesChanged();});
+// The tutorial guide and the story follow the stored form; "" (not chosen yet) shows the cat.
+setGuideAppearance(settings.store.get().guideAppearance);
+settings.store.subscribe((values,changed)=>{if(changed.includes('guideAppearance'))setGuideAppearance(values.guideAppearance);});
 const tutorialMusicAttempts=new WeakMap();let tutorialMusicSequence=0;
 function syncMusic(){
   if(dataArenaSession)return; // the arena picks its own cues on the shared music presentation
@@ -598,10 +659,12 @@ function syncMusic(){
   const screen=app?.getScreen(),tutorialBattle=app?.getInteractiveTutorialBattle?.(),runtime=tutorialBattle?.runtime??battleRuntime;
   let attemptId=battleAttemptId;
   if(tutorialBattle?.runtime){if(!tutorialMusicAttempts.has(runtime))tutorialMusicAttempts.set(runtime,`tutorial:${++tutorialMusicSequence}`);attemptId=tutorialMusicAttempts.get(runtime);}
-  const cue=selectOriginalMusic({screen,tutorial:app?.getInteractiveTutorial?.()?.finished===false,
+  const tutorialActive=app?.getInteractiveTutorial?.()?.finished===false;
+  const cue=selectOriginalMusic({screen,tutorial:tutorialActive,
     biome:app?.getConfirmedGate?.()?.biomeId,chosen:runtime?.getChosenMatch?.(),
     outcome:screen===CHAMPIONSHIP_SCREENS.BATTLE_RESULT?(tutorialBattle?.outcome??runtime?.outcome?.()):null,attemptId});
-  music.setScene(cue.id,cue.attemptId,['RAISING_HOME','CAGE_EDIT'].includes(screen)?'raising':null);
+  // The tutorial keeps its own approved cue: the ranch's music preference applies after it.
+  music.setScene(cue.id,cue.attemptId,!tutorialActive&&['RAISING_HOME','CAGE_EDIT'].includes(screen)?'raising':null);
 }
 // Resolve the new cue before art reads its buffering state on title return.
 const musicOverlayObserver=new MutationObserver(()=>{syncMusic();syncTitleArt();openingFilm?.sync();});
@@ -835,9 +898,9 @@ async function loadOptionalHuntFieldArt(stage, { signal = null, onProgress = nul
 async function loadOptionalCageFieldArt(stage, { signal } = {}) {
   const PIXI = createPixiAssetScope(stage.PIXI, location.href, { signal });
   try {
-    const response = await fetchRuntimeMapResponse(CAGE_REVIEW_MANIFEST_URL ?? CAGE_ART_MANIFEST_URL, globalThis.location.href, { signal });
+    const response = await fetchRuntimeMapResponse(CAGE_ART_MANIFEST_URL, globalThis.location.href, { signal });
     if (!response.ok) throw new Error(`CAGE_ART_MANIFEST_HTTP_${response.status}`);
-    const manifest = validateRuntimeMapArtBundle(selectRanchCageArt(await response.json()));
+    const manifest = validateRuntimeMapArtBundle(await response.json());
     const cageFrame = app.getCageEditFrame();
     const plan = createRaisingCageArtPlan({ manifest,
       placements: cageFrame?.placements ?? [],
@@ -875,27 +938,7 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
       presentationMode: plan.mode,
       productGrid: plan.productGrid ?? null
     });
-    let art=fieldArt;
-    const layerGroups=ranchCageLayerGroups(manifest,plan.placements);
-    try{for(const group of layerGroups)art=await withCageForeground({PIXI,art,...group,fetchImpl:(url,options)=>fetch(url,{...options,signal})});}
-    catch(error){await fieldArt.dispose();throw error;}
-    art=await withRanchPassages({art,connections:app.getRanchExplorationFrame()?.connections??[]});
-    // Hide a shared rim only where navigation actually permits crossing.
-    if(isOriginalRuntimeLocation()) {
-    try{
-      const { withCageSharedEdges } = await import('../presentation/cageSharedEdges.js');
-      art=await withCageSharedEdges({PIXI,art,manifest,connections:app.getRanchExplorationFrame()?.connections??[],
-        fetchImpl:(url,options)=>fetch(url,{...options,signal})});
-    }catch(error){console.warn(`CHAMPIONSHIP_CAGE_SHARED_EDGES_FALLBACK: ${error.message}`);}
-    // Polish (2026-10-19): generated cage motion (wind, glow, water,
-    // particles); any failure keeps the static ranch.
-    try{
-      const { withCageAmbient } = await import('../presentation/cageAmbient.js');
-      for(const group of layerGroups)art=await withCageAmbient({PIXI,art,...group,renderer:stage.app?.renderer??null,
-        quality:currentQualityTier()==='saver'?'low':'high',reducedMotion:prefersReducedMotion(),
-        fetchImpl:(url,options)=>fetch(url,{...options,signal})});
-    }catch(error){console.warn(`CHAMPIONSHIP_CAGE_AMBIENT_FALLBACK: ${error.message}`);}
-    }
+    const art=await withRanchPassages({art:fieldArt,connections:app.getRanchExplorationFrame()?.connections??[]});
     // A ranch without the expansion shows its locked rows below the board
     // (2026-10-12). Decoration only, so a failure keeps the ranch as it was.
     const preview = app.getInteractiveTutorial()?.finished === false ? null
@@ -1045,7 +1088,7 @@ async function mountRaisingHome() {
     firstRunHint: true, // UI entry guidance; its first-use preference is not calendar/save state.
     nextHintDuration: () => consumeRaisingHintDuration(settings.store),
     storySeen: () => settings.store.get().storyRiftChapter1Seen === true,
-    mountField({ host, recoveryHost, source: fieldSource, onTrainingFrame }) {
+    mountField({ host, recoveryHost, source: fieldSource, onTrainingFrame, onCageBadgeFrame }) {
       let closed = false, attempt = null, effects = null, scene = null, phase = 'loading';
       let residentStates = [], lastFrame = fieldSource.getFrame();
       const residentNotice = createResidentAssetNotice({onChange(){ if (!closed && phase === 'ready') show('ready'); }});
@@ -1086,7 +1129,7 @@ async function mountRaisingHome() {
       expansionCta.addEventListener('click', openExpansionSheet);
       host.append(expansionCta);
       // HD-2D ambience over the ranch (Owner 2026-10-27): vignette and warm motes.
-      const ambience = mountAmbience(host, { theme: 'sun' });
+      const ambience = mountAmbience(host, { theme: 'datasea' });
       function placeExpansionCta(rect) {
         const frame = rect?.visible;
         // Too little of the rows on screen to point at: hide rather than float.
@@ -1161,7 +1204,7 @@ async function mountRaisingHome() {
               stage, source: fieldSource, fieldArt, characterBundle, signal: owner.signal,
               responsiveLayout: RESPONSIVE_LAYOUT_CANDIDATE,
               getLayoutSample: readRaisingLayoutSample,
-              getSelectedTool: () => toolbar?.getSelectedTool() ?? null, onTrainingFrame,
+              getSelectedTool: () => toolbar?.getSelectedTool() ?? null, onTrainingFrame, onCageBadgeFrame,
               onResidentAssetState(states) {
                 if (!active(owner)) return;
                 const failed=states.find(s=>s.state==='error');
@@ -1179,6 +1222,11 @@ async function mountRaisingHome() {
             }).then(value => { owner.transfer(fieldArt); owner.transfer(characterBundle); return value; });
             const next = await owner.own(pending);
             owner.signal.throwIfAborted(); owner.transfer(next); scene = next; owner.stopTimer();
+            // Loopback review only (?awakeningQa): read the awakening signs and find a crest or a partner to tap. Public hosts never bind it.
+            if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("awakeningQa"))
+              globalThis.__championshipAwakeningQa = { signs: () => app.getAwakeningSigns(), view: (id) => app.getPartnerAwakening(id),
+                focus: (id) => next.focusResident?.(id, { reducedMotion: true }) ?? false, crest: (id) => next.awakeningCrestPoint?.(id) ?? null,
+                rect: (id) => next.actorScreenRect?.(id) ?? null };
             progress.done('scene'); stopTracking();
             delete root.dataset.fieldFallback; show('ready'); scene.render(lastFrame);
             resumeTutorialPresentation();
@@ -1499,8 +1547,16 @@ async function mountBattleSelect() {
   battleRuntime = (await loadBattleRuntime())({ schedule: app.getBattleSchedule(), mode:1, battleType:0 });
   battleAttemptId = null;
   battleProgressBefore = null;
+  const { shopGoodsPresentation } = await import('../presentation/shopGoodsUiArt.js');
   return createBattleSelectView({
     root,
+    // Cyber Gachapon bounty beacons, display-ready (Owner 2026-11-02).
+    gachaBeacons:{
+      read:()=>(app.getGachaTacticalSlots?.('BOUNTY')??[]).map(slot=>({...slot,art:shopGoodsPresentation(slot.shopRecordIndex)?.src??null,
+        effectText:gachaChipEffectLines(slot).map(line=>uiText(line.text,line.params)).join('・')})),
+      arm:id=>app.gachaUseItem(id),
+      disarm:id=>app.gachaDisarmItem(id)
+    },
     matches: battleRuntime.listMatches(),
     arenaChoices:battleRuntime.listSelectableArenas(),
     getPracticeSelection:async()=>({candidates:await app.getBattlePartyCandidates(null)}),
@@ -1616,6 +1672,7 @@ async function mountBattleField() {
     frame: { ...source.getFrame(), rosterEvidence: activeRuntime.rosterEvidence() },
     localTeamIndex:activeRuntime.localTeamIndex(),
     hudArt:hudProxy,
+    onBurst: slot => activeRuntime.requestBurst?.(slot) ?? false,
     resonance: (()=>{const t=activeRuntime.taxonomy?.(),local=activeRuntime.localTeamIndex();return t?{player:t.resonance[local],opponent:t.resonance[1-local],render:keys=>resonanceStrip(keys,{hint:false})}:null;})(),
     dynamicFx: BATTLE_DYNAMIC_FX,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
@@ -1672,7 +1729,10 @@ async function mountBattleField() {
           const fxLookupsLoading=BATTLE_DYNAMIC_FX?import('./battleFxLookups.js'):null;
           const loaded=await Promise.allSettled([
             step('arena',ownArt(loadOptionalBattleFieldArt(stage,source))),
-            step('fighters',ownArt(loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId),['main'],{signal:characters.signal,battleAtlas:true}))),
+            // Burst evolution (2026-11-02): a combatant's burst form is drawn mid-match, so its art loads up front too.
+            step('fighters',ownArt(loadOptionalCharacterReview(stage,[...new Set(source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId)
+              .flatMap(entry=>[entry.speciesId,...(entry.burst?[entry.burst.form,...(Number.isInteger(entry.burst.via)?[entry.burst.via]:[])]
+                .map(form=>`species-${String(form).padStart(3,'0')}`):[])]))],['main'],{signal:characters.signal,battleAtlas:true}))),
             step('effects',ownArt(loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href}).then(art=>loadOptionalOriginalVfxReview(stage,art))))
           ]);
           [fieldArt,characterRoster,effectArt]=loaded.map(result=>result.status==='fulfilled'?result.value:null);
@@ -1918,7 +1978,8 @@ async function mountBattleResult() {
     progression,
     // Owner 2026-10-29: 📸 brag card for a won battle, starring the winning partner.
     brag: battleResultBrag({ participants, matchTitle }),
-    gachaDrop:tutorial?null:(drop=>drop&&receipt&&drop.attemptId===(receipt.attemptId??null)?drop:null)(app.getLastBattleGachaDrop?.()),
+    gachaDrop:tutorial?null:(drop=>drop&&receipt&&drop.attemptId===(receipt.attemptId??null)
+      ?{...drop,metalNames:(drop.metals??[]).map(id=>getGachaMetal(id)?.name??id)}:null)(app.getLastBattleGachaDrop?.()),
     onExit() {
       if(tutorial){app.endInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
       battleRuntime?.dispose();
@@ -2010,6 +2071,26 @@ async function mountCurrentScreen() {
         const result = app.renameRosterInstance(instanceId, name);
         if (result.ok) autosave?.request('rename');
         return result.ok ? { ...result, entries: projectRoster() } : result;
+      },
+      onRebirth(instanceId) {
+        const result = app.rebirthRaisingPartner(instanceId);
+        if (result.ok) autosave?.request('rebirth');
+        return result.ok ? { ...result, entries: projectRoster() } : result;
+      },
+      onBurstForm(instanceId, form) {
+        const result = app.setPartnerBurstForm(instanceId, form);
+        if (result.ok) autosave?.request('burst-form');
+        return result.ok ? { ...result, entries: projectRoster() } : result;
+      },
+      // Awakening raising (2026-11-02): goal, energy items, core transcendence, battle form and ranch look.
+      onAwakening(action, instanceId, value) {
+        const result = action === 'target' ? app.setAwakeningTarget(instanceId, value)
+          : action === 'feed' ? app.feedAwakening(instanceId, value)
+          : action === 'transcend' ? app.transcendPartner(instanceId, value)
+          : action === 'battle' ? app.setPartnerBurstForm(instanceId, value)
+          : action === 'look' ? app.setPartnerAppearance(instanceId, value) : { ok: false, reason: 'UNKNOWN_ACTION' };
+        if (result?.ok) autosave?.request(`awakening-${action}`);
+        return { ...result, entries: projectRoster() };
       },
       onExit() { app.leaveScreen(); }
     });
@@ -2202,6 +2283,8 @@ async function openGameplay() {
       responsiveLayout: RESPONSIVE_LAYOUT_CANDIDATE,
       root: document.body,
       onMenuEntry: runToolbarMenuEntry,
+      relabelEntry: entry => entry.id === "endDay" && app.getClockPolicy?.() === "REALTIME_V1"
+        ? { ...entry, label: "讓拍檔休息", hint: "讓牧場的拍檔躺下休息" } : null,
       getTutorialCheckpoint:()=>app.getInteractiveTutorial()?.checkpoint??null,
       onToolChange:(tool,context)=>{if(context?.userInitiated)app.selectInteractiveTutorialTool(tool,context.checkpoint);},
       getFoodStock:()=>{const rows=app.getShopFrame()?.listings??[];return {
@@ -2222,6 +2305,11 @@ async function openGameplay() {
   // stage and the synthesizer can be checked on an isolated QA save. Public hosts never bind it.
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("gachaQa"))
     globalThis.__championshipGachaQa = { grantTickets: (amount) => app.grantGachaTickets(amount, 'QA'), frame: () => app.getCyberGachaFrame() };
+  // Loopback review only (?diamondQa): automation items into the bag, and the land / badge readouts.
+  if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("diamondQa"))
+    globalThis.__championshipDiamondQa = { grant: (id, n = 1) => app.grantAutomationItem(id, n, 'QA'), cage: () => app.getCageEditFrame(),
+      badges: () => app.getCageAutomationFrame(), events: () => app.getAutomationEvents(), rewards: () => app.getDiamondRewards(),
+      saveStatus: () => app.savePort.getStatus() };
   refreshStatusBar();
   refreshToolbarMode();
 
@@ -2453,6 +2541,9 @@ function projectRoster() {
       instanceId,
       // The starter's name is set by the opening; collected ones can be renamed.
       bloodline: app.getPartnerBloodline?.(instanceId) ?? null,
+      // OWNER_APPROVED_ADAPTATION 2026-11-02: the 成熟期 partner's burst forms and their progress.
+      burst: app.getPartnerBurst?.(instanceId) ?? null,
+      awakening: app.getPartnerAwakening?.(instanceId) ?? null,
       renameable: source?.kind !== "STARTER"
         && Boolean(app.getRaisingState()?.collection?.some((entry) => entry.instanceId === instanceId)),
       stats: profile,
@@ -2468,7 +2559,16 @@ function projectRoster() {
 }
 
 /** Repaint the four info_bar fields from the R2 snapshot and the current screen. */
+// Real-time ranch light: morning, day, dusk or night over the field (styles.css), refreshed with the status bar.
+function syncDayPeriod() {
+  let day = null;
+  try { day = app?.getDayPeriod?.() ?? null; } catch { day = null; }
+  if (day) { document.body.dataset.dayPeriod = day.period; document.body.dataset.nightNap = String(day.nightNap); }
+  else { delete document.body.dataset.dayPeriod; delete document.body.dataset.nightNap; }
+}
+
 function refreshStatusBar() {
+  syncDayPeriod();
   settingsPanel?.refreshSaveStatus?.();
   // Cyber Gachapon: unspent tickets glow on the Shop button (10 after the welcome grant).
   try {
@@ -2618,6 +2718,8 @@ async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = '
         try {
           const reward = app.claimGachaReward?.(`story:${chapterId}`, 3 + Math.floor(Math.random() * 3));
           if (reward?.granted) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: uiText('轉蛋券 +{n}', { n: reward.granted }) } }));
+          // DIAMOND_ECONOMY_20261102: a chapter's first clear also pays diamonds.
+          if (reward?.diamonds) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: uiText('鑽石 +{n}', { n: reward.diamonds }) } }));
         } catch { /* a reward never breaks the story */ }
       }
     }
@@ -3063,6 +3165,10 @@ async function enterDataArena(dataArenaButton) {
       resolutionCap: currentQuality().pixiResolutionCap,
       qa: arenaParams.get("arenaQa") === "1",
       seed: /^\d{1,10}$/.test(seedParam) ? Number(seedParam) >>> 0 : null,
+      // Only partners raised or lit in the Dex may enter (Owner 2026-11-02).
+      progress: app.getDataArenaProgress?.() ?? null,
+      // Awakening raising (2026-11-02): a relay entry from the ranch bursts into the form its partner learned.
+      burstPlanOf: (instanceId) => app.getBattleBurstPlan?.(instanceId) ?? null,
       onExit: restoreBattle,
       // Cyber Gachapon: a manual-battle win pays 1-3 tickets, a cup 3-10, into the one save.
       onVictory: ({ tournament }) => app?.grantGachaTickets?.(tournament ? 3 + Math.floor(Math.random() * 8) : 1 + Math.floor(Math.random() * 3), 'DATA_ARENA')
@@ -3162,8 +3268,13 @@ function boot() {
       partnerLife: globalThis.__CHAMPIONSHIP_PARTNER_LIFE__ !== false,
       huntExpansionLoader: loadHuntExpansionReview,
       catalog: productEntities,
-      cages: RAISING_CAGES
+      cages: RAISING_CAGES,
+      // Owner 2026-11-02: the ranch runs on the device's local time (no fast-forward, a night nap 22:00-07:00,
+      // up to twelve hours of growth while closed); ?clock=native keeps the original fast clock.
+      clockPolicy: new URLSearchParams(location.search).get("clock") === "native" ? "NATIVE" : "REALTIME_V1"
     });
+    setInterval(syncDayPeriod, 15000);
+    document.addEventListener("visibilitychange", syncDayPeriod);
   } catch (error) {
     console.warn(error);
     note(`Championship 2026 could not start: ${error.message}`);
@@ -3285,8 +3396,8 @@ function boot() {
 }
 
 // Polished cages (2026-10-19) carry walkability that matches their art; applied
-// before the ranch is built, on the public playtest and the loopback cage review.
-if (CAGE_REVIEW_MANIFEST_URL || MAP_POLISH_PUBLIC) {
+// before the ranch is built, on the public playtest.
+if (MAP_POLISH_PUBLIC) {
   try {
     const [{ applyRaisingGroundReview }, review] = await Promise.all([import("../raising/raisingGroundReview.js"),
       import("../../data/championship/catalogs/raising-ground.review-20261019.json", { with: { type: "json" } })]);

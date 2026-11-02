@@ -2,7 +2,6 @@ import {newArtPortrait,newArtPortraitLike} from '../src/championship/presentatio
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {createHash} from 'node:crypto';
 import {projectPublicMetadata,METADATA_RECIPE} from '../scripts/lib/public-metadata-projection.mjs';
 import {validatePublicMetadata,loadPublicMetadata} from '../src/championship/presentation/publicMetadata.js';
-import {cageForegroundPlan} from '../src/championship/presentation/cageForeground.js';
 import {sampleNitroVisibility,sampleNitroMaterialAnimation} from '../src/championship/presentation/vfx/nitroVfxAnimationSidecar.js';
 import {validateRuntimeMapArtBundle} from '../src/championship/presentation/runtimeMapArtBundle.js';
 import {mountDataArenaEnvironment} from '../src/championship/presentation/dataArena/dataArenaEnvironment.js';
@@ -25,8 +24,9 @@ test('arena cast uses exact public character and HUD bindings; changed bytes fai
   await assert.rejects(loadDataArenaCharacter({art:member.art,PIXI:{},fetchImpl:async()=>new Response('{}')}),/DATA_ARENA_ART_HASH/);
  }
 });
-test('54 source descriptions remain byte-identical; only 35 required runtime descriptions are selected',()=>{
- assert.equal(recipe.sources.length,54);assert.equal(projection.descriptors.length,35);
+// 2026-11-02 (Owner): the CM03/CM24 cage foreground and its source-bounds provenance were deleted with the old 2D cages.
+test('52 source descriptions remain byte-identical; only 33 required runtime descriptions are selected',()=>{
+ assert.equal(recipe.sources.length,52);assert.equal(projection.descriptors.length,33);
  for(const r of recipe.sources){assert.equal(sha(fs.readFileSync(r.path)),r.sha256);assert.ok(!input.files.includes(r.path));}
  for(const r of projection.descriptors){assert.ok(input.files.includes(r.path));assert.ok(fs.readFileSync(r.path).equals(r.bytes));validatePublicMetadata(r.value);}
 });
@@ -43,9 +43,6 @@ test('all 25 Hunt occlusion piece arrays remain exactly equal, with no collision
 });
 test('battle projections retain every field/frame/duration/native coordinate',()=>{
  for(const role of ['battle-original','battle-baseline']){const r=row(role),a=validateRuntimeMapArtBundle(source(r)),b=validateRuntimeMapArtBundle(r.value);assert.equal(a.fields.length,b.fields.length);assert.equal(a.memoryPolicy,b.memoryPolicy);for(let i=0;i<a.fields.length;i++){assert.equal(a.fields[i].fieldId,b.fields[i].fieldId);assert.equal(a.fields[i].worldWidthPx,b.fields[i].worldWidthPx);assert.equal(a.fields[i].worldHeightPx,b.fields[i].worldHeightPx);assert.deepEqual(a.fields[i].frames.map(f=>[f.src,f.sha256.toLowerCase(),f.durationMs]),b.fields[i].frames.map(f=>[f.src,f.sha256,f.durationMs]));}}
-});
-test('CM03/CM24 public foreground produces exactly the same masks and depth plan as its authoring source',()=>{
- for(const role of ['cage-foreground-cm03','cage-foreground-cm24']){const r=row(role),s=source(r),placements=[{fieldId:s.fieldId,x:400,y:96,slotIndex:2}];const actual=cageForegroundPlan(r.value,placements);assert.deepEqual(actual,cageForegroundPlan(s,placements));assert.ok(actual.length);assert.ok(actual.every(p=>[p.x,p.y,p.width,p.height,p.depth].every(Number.isFinite)));}
 });
 test('arena mounted sprites, depth, animation and reduced-motion sampling equal the original renderer inputs',()=>{
  class Display{constructor(texture){Object.assign(this,{texture: texture?.texture??texture,x:0,y:0,alpha:1,rotation:0,visible:true,children:[],tilePosition:{x:0,y:0},position:{set:(x,y)=>{this.x=x;this.y=y;}},tileScale:{set:(x,y=x)=>{this.tileScale.x=x;this.tileScale.y=y;}},anchor:{set(){}}});if(texture?.texture)Object.assign(this,{width:texture.width,height:texture.height});}addChild(...nodes){this.children.push(...nodes);return nodes.at(-1);}addChildAt(node,i){this.children.splice(i,0,node);}removeChildren(){return this.children.splice(0);}clear(){}circle(){return this;}fill(){return this;}destroy(){}}

@@ -6,7 +6,6 @@ const text=fs.readFileSync(new URL('../src/championship/raising/nativeRaisingRan
 import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
 import {getCageDefinition} from '../src/championship/cage/cageCatalog.js';
 import {createProductGridArtPlan} from '../src/championship/presentation/raisingRanchArtPlan.js';
-import {selectRanchCageArt} from '../src/championship/presentation/ranchCageArtSelection.js';
 import {readRaisingGroundSupport} from '../src/championship/app/raisingGroundSupport.js';
 import {resolveRanchSupportOwner} from '../src/championship/presentation/ranchSupportOwner.js';
 

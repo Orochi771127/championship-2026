@@ -270,7 +270,8 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     const afterCast = await qa(page, () => ({ kit: window.__dataArenaQA.snapshot().kit, cooling: document.querySelector('.da-kit .da-slot')?.classList.contains('is-cooling') }));
     check('the 2 key casts skill 1 (energy spent, slot cooling)', afterCast.kit.energy < energyBefore && afterCast.kit.moves[0].cooldown > 0 && afterCast.cooling, { energyBefore, afterCast });
     await page.keyboard.press('Digit2');
-    const refusal = page.locator('.da-toast.is-showing', { hasText: /冷卻中|cooling/i });
+    // Track two (2026-11-02): the refusal flags the skill's own button, not a box over the field.
+    const refusal = page.locator('.da-flag.is-showing', { hasText: /冷卻中|cooling/i });
     await refusal.first().waitFor({ timeout: 3000 }).catch(() => {});
     check('casting again while cooling is refused with feedback', await refusal.count() >= 1);
     await page.waitForFunction(() => window.__arenaMotionSamples.some(s => !s.laser && s.sequenceId === 7 && s.phase === 'RELEASE' && s.frameIndex === 1), null, { timeout: 4000 }).catch(async error => {

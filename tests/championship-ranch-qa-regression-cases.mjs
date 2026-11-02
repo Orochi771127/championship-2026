@@ -7,7 +7,7 @@ import {createRanchCageArtPlan} from '../src/championship/presentation/raisingRa
 import {loadRuntimeMapArtTileSet,validateRuntimeMapArtBundle} from '../src/championship/presentation/runtimeMapArtBundle.js';
 import {prototypeRanchExpansion} from '../src/championship/cage/ranchExpansion.js';
 import {createRanchRaisingGround} from '../src/championship/raising/nativeRaisingRanchRing.js';
-const manifest=validateRuntimeMapArtBundle(JSON.parse(fs.readFileSync(new URL('../assets/production/cage/final-intake-20261008/manifest.json',import.meta.url))));
+const manifest=validateRuntimeMapArtBundle(JSON.parse(fs.readFileSync(new URL('./fixtures/cage-padded-intake-20261008.manifest.json',import.meta.url))));
 class Container{constructor(o={}){Object.assign(this,o);this.children=[];this.position={set:(x,y)=>{this.x=x;this.y=y;}};this.scale={set(){}};}addChild(...c){this.children.push(...c);return c[0];}destroy(){this.destroyed=true;}}
 class Sprite extends Container{constructor(texture){super();this.texture=texture;} }
 class AnimatedSprite extends Sprite{constructor({textures}){super(textures[0]);this.textures=textures;}gotoAndStop(n){this.texture=this.textures[n];}stop(){}}

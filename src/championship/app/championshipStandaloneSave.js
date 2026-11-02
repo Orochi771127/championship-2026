@@ -26,6 +26,8 @@ import { normalizeFreeBattleMenu } from "../battle/nativeFreeBattle.js";
 import { normalizeNativeRaisingMessages } from "../raising/nativeRaisingMessages.js";
 import { normalizeNativeOpening } from './nativeOpeningState.js';
 import { normalizeCyberGacha } from '../gacha/cyberGacha.js';
+import { royalCopiesByDefinition } from '../gacha/ranchAutomation.js';
+import { normalizeBurstEvolution } from '../contracts/productBurstEvolution.js';
 import { RANCH_DECKS_LAYOUT, normalizeRanchExpansion } from "../cage/ranchExpansion.js";
 
 import {getCageDefinitionByModuleId} from "../cage/cageCatalog.js";
@@ -56,7 +58,7 @@ const ALLOWED_TOP_LEVEL_KEYS_V4 = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V3, "
 const ALLOWED_TOP_LEVEL_KEYS = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V4, "huntHistory"]);
 
 const ALLOWED_CREATURE_KEYS = Object.freeze(["creatureId", "speciesId", "displayName", "nativeProfile"]);
-const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun", "freeBattleMenu", "battleTactics", "cyberGacha"]);
+const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun", "freeBattleMenu", "battleTactics", "cyberGacha", "burstEvolution"]);
 const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "cageOwned", "cageQuantities"]);
 // `expansion` exists only beside layoutVersion NATIVE_DECKS_V1 (2026-10-05):
 // the ranch expansion prototype versions its own slice, so a save that never
@@ -405,6 +407,8 @@ export function createChampionshipModernSave({
       ...(progression.battleTactics!==undefined?{battleTactics:normalizeBattleTactics(progression.battleTactics)}:{}),
       // OWNER_APPROVED_ADAPTATION 2026-10-29: Cyber Gachapon tickets, chips, metals and bloodlines.
       ...(progression.cyberGacha!==undefined?{cyberGacha:normalizeCyberGacha(progression.cyberGacha)}:{}),
+      // OWNER_APPROVED_ADAPTATION 2026-11-02: burst evolution unlocks per partner.
+      ...(progression.burstEvolution!==undefined?{burstEvolution:normalizeBurstEvolution(progression.burstEvolution)}:{}),
       ...(progression.nativeTitles!==undefined?{nativeTitles:normalizeNativeTitleProgress(progression.nativeTitles)}:{}),
       // A tournament runs over several rounds, and a browser tab can close
       // between them, so the run is carried. Whether the original's own save
@@ -433,11 +437,14 @@ export function createChampionshipModernSave({
 
   if(save.cageEdit?.layoutVersion===PRODUCT_RANCH_GRID){
     const placedCounts=new Map();
+    // DIAMOND_ECONOMY_20261102: a gachapon royal cage (bag or placed) is one more copy of its base cage.
+    const royal=royalCopiesByDefinition(save.progression.cyberGacha);
     for(const placement of cageEdit.placements){
       const definition=getCageDefinitionByModuleId(placement.moduleId);
       if(definition.alwaysOwned)continue;
       const count=(placedCounts.get(placement.moduleId)??0)+1;
-      const stock=save.shop?.cageQuantities?.[definition.shopRecordIndex]??(save.shop?.cageOwned.includes(definition.shopRecordIndex)?1:0);
+      const stock=(save.shop?.cageQuantities?.[definition.shopRecordIndex]??(save.shop?.cageOwned.includes(definition.shopRecordIndex)?1:0))
+        +(royal.get(definition.cageDefinitionIndex)??0);
       if(count>stock)throw saveError('CAGE_INSTANCE_STOCK_MISMATCH');
       placedCounts.set(placement.moduleId,count);
     }

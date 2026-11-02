@@ -13,6 +13,8 @@ import { nativeHuntSpeciesByIndex } from "../../src/championship/hunt/capture/na
 import { nativeIndividualProfile } from "../../src/championship/raising/nativeIndividualProfile.js";
 import { allocateRaisingInstanceIdentity } from "../../src/championship/raising/raisingInstanceIdentity.js";
 import { recordEnclosedCreature } from "../../src/championship/app/championshipRaisingProduction.js";
+import { burstBasesFor, burstFormsFor } from "../../src/championship/contracts/productBurstEvolution.js";
+import { speciesName } from "../../src/championship/text/zhHant.js";
 import {
   BITS_WALLET_CAP,
   SHOP_PURCHASE_DOMAIN,
@@ -28,6 +30,15 @@ export const FULL_QA_ULTIMATES = Object.freeze([
   Object.freeze({ speciesIndex: 212, displayName: "鋼鐵加魯魯獸", nativeName: "鋼狼QA" }),
   Object.freeze({ speciesIndex: 223, displayName: "公爵獸", nativeName: "公爵QA" })
 ]);
+// OWNER_APPROVED_ADAPTATION 2026-11-02 (STAGE_REDESIGN_BURST_20261102): 覺醒體/究極體 are battle burst forms, so
+// the five showcase 究極體 are held as the 成熟期 that bursts into each, with that form (and the tier-1 form it
+// comes through) already unlocked.
+export const FULL_QA_PARTNERS = Object.freeze(FULL_QA_ULTIMATES.map((entry) => {
+  const baseSpeciesIndex = burstBasesFor(entry.speciesIndex)[0];
+  const form = burstFormsFor(baseSpeciesIndex).find((f) => f.form === entry.speciesIndex);
+  return Object.freeze({ ...entry, baseSpeciesIndex, displayName: speciesName(baseSpeciesIndex),
+    unlocks: Object.freeze([...new Set([form.via, form.form, ...(form.alternates ?? [])])].sort((a, b) => a - b)) });
+}));
 
 function fixtureRng(seed) {
   let state = seed >>> 0;
@@ -99,12 +110,13 @@ export function createFullQaSave(baseSave, { cageIds } = {}) {
   let raising = baseSave.raising;
   let identity = baseSave.instanceIdentity;
 
-  for (const [index, requested] of FULL_QA_ULTIMATES.entries()) {
-    const species = nativeHuntSpeciesByIndex(requested.speciesIndex);
-    if (species.generation !== 6) throw new Error(`FULL_QA_SPECIES_NOT_ULTIMATE: ${requested.speciesIndex}`);
+  const unlocks = {};
+  for (const [index, requested] of FULL_QA_PARTNERS.entries()) {
+    const species = nativeHuntSpeciesByIndex(requested.baseSpeciesIndex);
+    if (species.generation !== 4) throw new Error(`FULL_QA_SPECIES_NOT_MATURE: ${requested.baseSpeciesIndex}`);
     const sources = identitySources(baseSave, raising);
     const allocated = allocateRaisingInstanceIdentity(identity, sources);
-    const speciesId = `species-${String(requested.speciesIndex).padStart(3, "0")}`;
+    const speciesId = `species-${String(requested.baseSpeciesIndex).padStart(3, "0")}`;
     const profile = nativeIndividualProfile(createNativeHuntIndividual({
       species,
       rng: fixtureRng(0x20260913 + requested.speciesIndex),
@@ -119,6 +131,7 @@ export function createFullQaSave(baseSave, { cageIds } = {}) {
       cageId: cageIds[index % cageIds.length]
     });
     raising = attachUltimateProfile(raising, allocated.instanceId, profile);
+    unlocks[allocated.instanceId] = [...requested.unlocks];
     identity = allocated.state;
   }
 
@@ -143,6 +156,7 @@ export function createFullQaSave(baseSave, { cageIds } = {}) {
       registeredSpecies: [...NATIVE_REGULAR_BOOK_SPECIES],
       nativeTitles: fullTitleProgress(),
       championshipRun: null,
+      burstEvolution: { version: 1, unlocks, migrated: true },
       revision: (baseSave.progression?.revision ?? 0) + 1
     },
     flags: { newGameCompleted: true },

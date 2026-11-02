@@ -5,6 +5,9 @@ import {createHash} from 'node:crypto';
 import {DATABASE_DISPLAY_CATALOG as dex,databaseDisplayRows,getDatabaseDisplayEntry} from '../src/championship/database/databaseDisplayCatalog.js';
 import {listDatabaseSlots,getDatabaseSlot} from '../src/championship/database/databaseCatalog.js';
 import {projectDatabase} from '../src/championship/database/databaseRuntime.js';
+import {productSpeciesRecord} from '../src/championship/contracts/productSpeciesData.js';
+// Playable original characters (Owner 2026-11-03): regular book entries after the two product forms.
+const PLAYABLE=[231,232,234,235,236,237,239,240];
 import {openingEggChoices} from '../src/championship/app/openingEggChoices.js';
 import {setLocale} from '../src/championship/text/locale.js';
 import {generationName} from '../src/championship/text/zhHant.js';
@@ -23,16 +26,17 @@ test('production display joins 216 native rows, eight eggs and two explicit prod
   assert.deepEqual(dex.stagePrefixes.map((_,s)=>dex.entries.filter(e=>e.numberingStageIndex===s).length),[8,12,15,41,69,53,42]);
   for(const entry of dex.entries.filter(e=>e.kind!=='ILLUSTRATION')){
     assert.equal(entry.speciesId,`species-${String(entry.speciesIndex).padStart(3,'0')}`);
-    const definition=resolveProductSpeciesDefinition(entry.speciesIndex,species.records);
+    const definition=PLAYABLE.includes(entry.speciesIndex)?productSpeciesRecord(entry.speciesIndex):resolveProductSpeciesDefinition(entry.speciesIndex,species.records);
     assert.equal(entry.numberingStageIndex,definition.generationIndex);
     assert.equal(entry.displayCode,dex.stagePrefixes[entry.numberingStageIndex]+String(entry.serial).padStart(2,'0'));
     const native=nativeEntries.get(entry.speciesIndex);
-    assert.equal(entry.firstPublishedRevision,native?1:2);assert.equal(entry.contentStatus,'PUBLISHED');
+    assert.equal(entry.firstPublishedRevision,native?1:PLAYABLE.includes(entry.speciesIndex)?3:2);assert.equal(entry.contentStatus,'PUBLISHED');
     assert.equal(entry.legacyBookOrdinal,native?.legacyBookOrdinal??null);
     if(native){
       for(const field of ['entryKey','speciesId','numberingStageIndex','legacyBookOrdinal'])assert.equal(entry[field],native[field],`${entry.speciesIndex}:${field}`);
       if([121,125].includes(entry.speciesIndex)){const expected=entry.speciesIndex===121?50:62;assert.equal(entry.serial,expected);assert.equal(entry.displayCode,`MA${expected}`);}else if(entry.numberingStageIndex!==6){assert.equal(entry.serial,native.serial);assert.equal(entry.displayCode,native.displayCode);}
-    }else{assert.ok([229,230].includes(entry.speciesIndex));assert.equal(species.records[entry.speciesIndex],undefined);assert.equal(getDatabaseSlot(entry.speciesIndex).bookOrdinal,entry.speciesIndex-13);}
+    }else if(PLAYABLE.includes(entry.speciesIndex)){assert.equal(species.records[entry.speciesIndex],undefined);assert.equal(getDatabaseSlot(entry.speciesIndex).bookOrdinal,218+PLAYABLE.indexOf(entry.speciesIndex));}
+    else{assert.ok([229,230].includes(entry.speciesIndex));assert.equal(species.records[entry.speciesIndex],undefined);assert.equal(getDatabaseSlot(entry.speciesIndex).bookOrdinal,entry.speciesIndex-13);}
   }
   for(let s=0;s<7;s++)assert.deepEqual(dex.entries.filter(e=>e.numberingStageIndex===s).map(e=>e.serial),Array.from({length:[8,12,15,41,69,53,42][s]},(_,i)=>i+1));
   for(let i=224;i<=228;i++)assert.equal(getDatabaseDisplayEntry(i),null);
@@ -57,7 +61,7 @@ test('archived revision-one identity receipt stays immutable while the explicit 
 test('eggs stay an untracked content index outside normal registration and selectors',()=>{
   const book=projectDatabase({starterSpeciesId:'species-000'}),before=JSON.stringify(book);
   const rows=databaseDisplayRows(book);
-  assert.equal(rows.length,240);assert.equal(book.slotCount,218);assert.equal(book.registeredCount,0);
+  assert.equal(rows.length,240);assert.equal(book.slotCount,226);assert.equal(book.registeredCount,0);
   assert.ok(rows.filter(e=>e.kind==='EGG').every(e=>e.state==='NOT_TRACKED'&&e.legacyBookOrdinal===null));
   assert.ok(rows.filter(e=>e.kind==='REGULAR').every(e=>e.state==='UNDISCOVERED'));
   assert.throws(()=>getDatabaseSlot(0),/UNKNOWN_DATABASE_SLOT/);

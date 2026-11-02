@@ -17,6 +17,7 @@ import { cageEditorArtCells, cageUiLidImage, cageUiName, cageUiSummary } from '.
 import { ranchEcologyType } from '../cage/ranchEcology.js';
 import { hexWorldPassageGain, hexWorldPassageView } from './hexWorldPassages.js';
 import { uiText } from '../text/uiText.js';
+import { gachaCurrencyImage, gachaIcon } from './cyberGachaIcons.js';
 
 const HEX_W = 48, HEX_H = 56;            // editor px of one hex (native 96 × 112 at ÷2)
 const MIN_ZOOM = 0.35, MAX_ZOOM = 2.2;
@@ -129,6 +130,10 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
   let cage = null, view = { x: 0, y: 0, zoom: 0.8 }, fitted = false;
   let selected = null, moving = false, hoverSlot = null;
   let passages = null, passageKey = null, layers = new Map(), animatedVerdict = null, toastTimer = null;
+  // DIAMOND_ECONOMY_20261102: the land last painted, so a purchase plays the gold hex wave once.
+  let paintedLand = null, waveTimer = null, wave = null;
+  // Inline SVG glyphs where the document can draw them (a test document without SVG gets a plain span).
+  const icon = (name, className) => (canDraw ? gachaIcon(name, className, doc) : el(doc, 'span', className));
   const cellNodes = new Map();
   const SVG = svgNamespace(doc), canDraw = Boolean(SVG);
 
@@ -233,7 +238,9 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
 
   // ---------------------------------------------------------------- preview
   const draftPlacements = () => (cage?.placements ?? []).map(p => ({ moduleId: p.moduleId, slotIndex: p.slotIndex, instanceId: p.instanceId }));
-  const pickedModule = () => (moving && selected) ? selected.moduleId : cage?.tray?.find(t => t.selected)?.moduleId ?? null;
+  // A picked royal card (DIAMOND_ECONOMY_20261102) places its base cage like any tray card.
+  const pickedCard = () => cage?.tray?.find(t => t.selected) ?? cage?.royalTray?.find(r => r.selected) ?? null;
+  const pickedModule = () => (moving && selected) ? selected.moduleId : pickedCard()?.moduleId ?? null;
   // The tapped hex is always one of the cage's own cells (productFitPlacement):
   // the cage is never pushed a hex away from where the player tapped.
   function fitAt(slotIndex) {
@@ -322,7 +329,7 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
       return;
     }
     if (slot.moduleId) { select(slot); return; }
-    if (cage.tray.some(t => t.selected)) {
+    if (pickedCard()) {
       // No land left: the Lid stays on. Moving a placed cage still works.
       if (layers.get(slot.slotIndex) === 'lid') {
         fx(cellNodes.get(slot.slotIndex), 'denied');
@@ -372,13 +379,16 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
     overlay.replaceChildren();
     if (!passages) { overlay.append(ghostLayer); return; }
     const open = new Set(passages.connections.map(c => c.id));
+    // Owner 2026-11-02: one type at one height joins into one map, so its shared
+    // edges show no border even where no passage opened (as the ranch draws it).
+    const joined = new Set(passages.closed.filter(c => c.reason === 'NO_SAFE_EXIT').map(c => c.id));
     const pick = pickedModule(), pickType = pick ? ranchEcologyType(pick) : null;
     const rims = doc.createElementNS(SVG, 'g'), bridges = doc.createElementNS(SVG, 'g'), exits = doc.createElementNS(SVG, 'g');
     rims.setAttribute('class', 'cm-hexworld__rims');
     for (const outline of passages.outlines) {
       const synergy = pickType !== null && ranchEcologyType(outline.moduleId) === pickType;
       for (const edge of outline.edges) {
-        if (open.has(edge.id)) continue;
+        if (open.has(edge.id) || joined.has(edge.id)) continue;
         line(rims, edge.a, edge.b, 'cm-hexworld__rim-shadow');
         line(rims, edge.a, edge.b, synergy ? 'cm-hexworld__rim cm-hexworld__rim--synergy' : 'cm-hexworld__rim');
       }
@@ -388,6 +398,7 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
       line(bridges, c.a, c.b, 'cm-hexworld__bridge');
     }
     for (const e of passages.exits) {
+      if (joined.has(e.id)) continue;   // inside one joined map: nothing to connect there
       const owner = passages.outlines.find(o => o.instanceId === e.instanceId);
       const synergy = pickType !== null && owner && ranchEcologyType(owner.moduleId) === pickType;
       chevron(exits, e, synergy ? 'cm-hexworld__exit cm-hexworld__exit--synergy' : 'cm-hexworld__exit');
@@ -442,6 +453,11 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
       cell.dataset.filled = slot.moduleId ? 'true' : 'false';
       cell.dataset.fixed = slot.fixed ? 'true' : 'false';
       cell.dataset.layer = layers.get(slot.slotIndex) ?? 'open';
+      // A repaint during the gold wave rebuilds the cell; it picks the wave up where it was.
+      if (wave?.slots.has(slot.slotIndex)) {
+        cell.dataset.landWave = 'true';
+        cell.style.setProperty('--wave-delay', `${wave.slots.get(slot.slotIndex) - (Date.now() - wave.start)}ms`);
+      }
       if (slot.instanceId) cell.dataset.instanceId = slot.instanceId;
       if (selected && slot.instanceId && slot.instanceId === selected.instanceId) cell.dataset.selected = moving ? 'moving' : 'true';
       if (pickType !== null && slot.moduleId && ranchEcologyType(slot.moduleId) === pickType) cell.dataset.synergy = 'true';
@@ -458,6 +474,10 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
         cell.style.backgroundSize = `${visual.imageWidth}px ${visual.imageHeight}px`;
         cell.style.backgroundPosition = `${visual.imageX}px ${visual.imageY}px`;
       } else if (lid && cell.dataset.layer === 'lid') cell.style.backgroundImage = `url('${lid}')`;
+      // A royal cage wears the gold frame; a cage running a core shows what it runs.
+      const automation = slot.instanceId ? cage.automation?.[slot.instanceId] : null;
+      if (automation?.royal) cell.dataset.royal = automation.edition;
+      if (automation && !automation.royal) cell.dataset.automated = [automation.clean ? 'clean' : '', automation.feed ? 'feed' : ''].filter(Boolean).join(' ');
       cell.addEventListener('click', () => onCell(slot));
       cell.addEventListener('pointerenter', () => previewAt(slot.slotIndex));
       cellNodes.set(slot.slotIndex, cell);
@@ -474,9 +494,14 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
     const taken = [];
     for (const { slot, points } of [...badges.values()].sort((a, b) => Math.min(...a.points.map(q => q.y)) - Math.min(...b.points.map(q => q.y)))) {
       const p = { x: points.reduce((s, q) => s + q.x, 0) / points.length, y: points.reduce((s, q) => s + q.y, 0) / points.length };
-      const badge = el(doc, 'span', 'cm-hexworld__badge', cageUiName(slot.moduleId, slot.displayName));
+      const automation = cage.automation?.[slot.instanceId] ?? null;
+      const royalName = automation?.royal ? (cage.royalTray?.find((entry) => entry.edition === automation.edition)?.name
+        ?? (automation.edition === 'STELLAR_ZOO' ? '全自動星際動物園' : '全自動皇家牧場')) : null;
+      const badge = el(doc, 'span', 'cm-hexworld__badge', royalName ? uiText(royalName) : cageUiName(slot.moduleId, slot.displayName));
       badge.setAttribute('aria-hidden', 'true');
       if (slot.fixed) badge.dataset.fixed = 'true';
+      if (royalName) { badge.dataset.royal = automation.edition; badge.prepend(icon('crown', 'cm-hexworld__badge-crown')); }
+      else if (automation) badge.append(icon('robot', 'cm-hexworld__badge-core'));
       const x = p.x + HEX_W / 2;
       let y = p.y + HEX_H / 2 - 7;
       board.append(badge);
@@ -493,26 +518,82 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
 
   function paintCounter() {
     const used = cage.productGrid?.usedCells ?? 0, cap = cage.productGrid?.cellCap ?? 100, landCap = cage.landCapacity ?? cap;
-    counter.replaceChildren(
-      el(doc, 'strong', 'cm-hexworld__count', `${used}／${cap}`),
-      el(doc, 'span', 'cm-hexworld__land-note', landCap < cap ? uiText('可用土地 {n} 格', { n: landCap }) : uiText('全部土地已開放'))
-    );
+    // DIAMOND_ECONOMY_20261102: the big number is the land (20 → 100 by diamonds); the cells in use sit under it.
+    const meter = el(doc, 'span', 'cm-hexworld__land-meter');
+    meter.append(el(doc, 'strong', 'cm-hexworld__count', `${Math.min(cap, landCap)}／${cap}`), el(doc, 'span', 'cm-hexworld__land-label', uiText('可用土地')));
+    const notes = el(doc, 'span', 'cm-hexworld__notes');
+    notes.append(el(doc, 'span', 'cm-hexworld__land-note', landCap < cap ? uiText('可用土地 {n} 格', { n: landCap }) : uiText('全部土地已開放')),
+      el(doc, 'span', 'cm-hexworld__used-note', uiText('已使用 {n} 格', { n: used })));
+    counter.replaceChildren(meter, notes);
     counter.dataset.full = used >= Math.min(cap, landCap) ? 'true' : 'false';
   }
 
-  function paintLand() {
-    land.replaceChildren();
+  /** The diamond land key: +10 cells for 1,000 diamonds; at 100 cells a crowned, closed key. */
+  function landKey() {
     const rows = cage.productGrid?.landRows ?? [];
-    if (!rows.length || !openLandPurchase) return;
+    if (!openLandPurchase && rows.length) return null;
+    if (!rows.length) {
+      if (!cage.productGrid) return null;
+      const done = el(doc, 'button', 'cm-vs2-action cm-hexworld__buy-land cm-land-key');
+      done.type = 'button';
+      done.disabled = true;
+      done.dataset.landMax = 'true';
+      done.append(icon('crown', 'cm-land-key__icon'), el(doc, 'span', 'cm-land-key__label', uiText('已達最大 100 格領域')));
+      return done;
+    }
     const next = rows[0];
-    const buy = el(doc, 'button', 'cm-vs2-action cm-cage-row-lock cm-hexworld__buy-land');
+    const buy = el(doc, 'button', 'cm-vs2-action cm-cage-row-lock cm-hexworld__buy-land cm-land-key');
     buy.type = 'button';
     buy.dataset.lockedTestRow = String(next.row);
     buy.setAttribute('aria-haspopup', 'dialog');
     buy.setAttribute('aria-label', uiText('CAGE_TEST_BUY_ROW', { row: next.row + 1, count: next.cells, price: 1000 }));
-    buy.textContent = uiText('開放土地 +{n} 格', { n: next.cells });
+    const price = el(doc, 'span', 'cm-land-key__price');
+    price.append(gachaCurrencyImage('diamond', 'cm-land-key__diamond', doc), el(doc, 'span', '', (1000).toLocaleString('en-US')));
+    buy.append(el(doc, 'span', 'cm-land-key__label', uiText('擴充土地 +{n}格', { n: next.cells })), price);
+    if ((cage.testDiamonds ?? 0) < 1000) buy.dataset.short = 'true';
     buy.addEventListener('click', () => openLandPurchase(next.row));
-    land.append(buy);
+    return buy;
+  }
+  let landKeyNode = null;
+  function paintLand() {
+    land.replaceChildren();
+    landKeyNode?.remove();
+    landKeyNode = landKey();
+    if (landKeyNode) toolbar.append(landKeyNode);
+  }
+
+  /**
+   * Gold hex wave (DIAMOND_ECONOMY_20261102): after a land purchase, the empty cells nearest the ranch light
+   * up ring by ring -- as many as the purchase opened. Land is a count, so these show where it can grow.
+   */
+  function playLandWave(cells) {
+    const filled = cage.slots.filter((s) => s.moduleId).map((s) => s.slotIndex);
+    const seen = new Set(filled), order = [];
+    let ring = filled;
+    for (let depth = 1; ring.length && order.length < cells; depth += 1) {
+      const next = [];
+      for (const slot of ring) for (const n of hexWorldNeighbours(slot)) {
+        if (seen.has(n)) continue;
+        seen.add(n); next.push(n);
+        if (order.length < cells) order.push({ slot: n, depth });
+      }
+      ring = next;
+    }
+    wave = { start: Date.now(), slots: new Map(order.map(({ slot, depth }) => [slot, (depth - 1) * 120 + (slot % 3) * 40])) };
+    for (const [slot, delay] of wave.slots) {
+      const node = cellNodes.get(slot);
+      if (!node) continue;
+      node.dataset.landWave = 'true';
+      node.style.setProperty('--wave-delay', `${delay}ms`);
+    }
+    if (waveTimer) clearTimeout(waveTimer);
+    waveTimer = setTimeout(() => {
+      wave = null;
+      for (const node of cellNodes.values()) { delete node.dataset.landWave; node.style.removeProperty('--wave-delay'); }
+      waveTimer = null;
+    }, 2400);
+    say(uiText('可用土地 +{n} 格！', { n: cells }), 'connected');
+    return order.map((entry) => entry.slot);
   }
 
   function refreshPassages() {
@@ -547,10 +628,16 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
       paintLand();
       if (!fitted) fitted = fitTo(occupiedSlots());
       apply();
+      const landNow = Math.min(cage.productGrid?.cellCap ?? 100, cage.landCapacity ?? 100);
+      if (paintedLand !== null && landNow > paintedLand) {
+        root.dataset.landWave = String(playLandWave(landNow - paintedLand).length);
+        fx(counter, 'sparkle');
+      }
+      paintedLand = landNow;
     },
     refit() { fitted = fitTo(occupiedSlots()); },
     getView: () => ({ ...view, selected: selected?.instanceId ?? null, moving, passages: passages?.connections.length ?? null }),
-    dispose() { if (toastTimer) clearTimeout(toastTimer); sizeWatch?.disconnect(); root.remove(); }
+    dispose() { if (toastTimer) clearTimeout(toastTimer); if (waveTimer) clearTimeout(waveTimer); sizeWatch?.disconnect(); root.remove(); }
   });
 }
 

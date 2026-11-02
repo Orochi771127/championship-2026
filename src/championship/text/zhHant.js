@@ -1,5 +1,6 @@
 import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
-import { AWAKENED_FORM_NAMES } from "./growthStageTerms.js";
+import {getDatabaseIllustration} from '../database/databaseIllustrations.js';
+import { AWAKENED_FORM_NAMES, AWAKENED_SECOND_TIER_NAMES } from "./growthStageTerms.js";
 // Traditional Chinese display copy.
 //
 // WHAT THIS IS, AND WHAT IT IS NOT
@@ -58,7 +59,7 @@ export const TEXT_SOURCE_LANGUAGE = "ja";
 
 // Display translations keyed by the original text-bank selectors confirmed at
 // ARM9 02088480 and OVL4 0210BB9C (2026-09-13). Unknown indices stay absent.
-const GENERATIONS = Object.freeze(['培育蛋','幼年期Ⅰ','幼年期Ⅱ','成長期','成熟期',AWAKENED_FORM_NAMES['zh-Hant'],'究極體']);
+const GENERATIONS = Object.freeze(['培育蛋','幼年期Ⅰ','幼年期Ⅱ','成長期','成熟期',AWAKENED_FORM_NAMES['zh-Hant'],AWAKENED_SECOND_TIER_NAMES['zh-Hant']]);
 const PERSONALITIES = Object.freeze(['坦率','任性','急躁','悠閒','熱血','冷靜','大膽','膽小','？？？']);
 const ROSTER_FAMILIES = Object.freeze(['無','獸','機械','昆蟲植物','鳥','龍','水','聖','暗黑']);
 const TAMER_RANK_NAMES = Object.freeze(['綠階','藍階','紅階','白階','青銅','白銀','黃金','白金','冠軍','大師']);
@@ -270,6 +271,8 @@ export function gateName(recordIndex, japanese) {
  */
 export function speciesName(recordIndex, fallback = undefined) {
   const extension=getProductExtension(recordIndex);if(extension)return extension.displayNameByLocale?.[getLocale()]??extension.displayNameZh;
+  // Original characters (231+) keep their approved Dex name in every locale, like the native species.
+  const original=getDatabaseIllustration(recordIndex);if(original)return original.displayName;
   const loc = getLocale();
   const egg = EGG_BY_LOCALE[loc] ?? "培育蛋";
   const unknown = fallback === undefined ? (UNKNOWN_BY_LOCALE[loc] ?? "未確認生物") : fallback;

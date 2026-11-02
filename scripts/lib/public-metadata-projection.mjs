@@ -13,7 +13,6 @@ export function metadataProjection(source,row,paths){
  const type=row.type;
  if(type==='BATTLE_MAP')return publicMapProjection(source);
  if(type==='HUNT_DEPTH')return {schemaVersion:1,renderType:type,pieces:structuredClone(source.pieces)};
- if(type==='CAGE_FOREGROUND')return {schemaVersion:1,renderType:type,...pick(source,['fieldId','width','height','pixelScale','nativeOrigin']),objects:source.objects.map(o=>pick(o,['id','src','sha256','x','y','width','height','depthNative','maskRects']))};
  if(type==='VFX_VISIBILITY')return {renderType:type,...pick(source,['schemaVersion','kind','animationName','frameCount','nodeCount','nodeNames','frames'])};
  if(type==='VFX_MATERIAL')return {renderType:type,...pick(source,['schemaVersion','kind','animationName','frameCount']),tracks:source.tracks.map(t=>({materialName:t.materialName,channels:{diffuse:pick(t.channels.diffuse,['rgb8']),polygonAlpha:{...pick(t.channels.polygonAlpha,['storage','value','denominator']),...(t.channels.polygonAlpha.runs?{runs:t.channels.polygonAlpha.runs.map(r=>pick(r,['startFrame','endFrame','value']))}:{})}}}))};
  if(type==='VFX_RUNTIME')return {schemaVersion:1,renderType:type,...pick(source,['assetId','family','tickerPolicy','gateEarthMounted']),systems:source.systems.map(s=>({...pick(s,['systemId','logicalGroup','model','triggerBinding','playback']),sidecars:s.sidecars.map(file=>{if(!paths.has(file))throw Error('UNPROJECTED_VFX_SIDECAR:'+file);return paths.get(file);})}))};

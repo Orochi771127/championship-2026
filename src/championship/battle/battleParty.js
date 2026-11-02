@@ -1,5 +1,6 @@
 import {productFormText} from '../text/productFormText.js';
-import {productBaseSpeciesIndex,isKnownSpeciesIndex} from '../contracts/productSpeciesData.js';
+import {productBaseSpeciesIndex,isKnownSpeciesIndex,productSpeciesRecord} from '../contracts/productSpeciesData.js';
+import {isPlayableProductOriginal} from '../contracts/productOriginalSpecies.js';
 import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
 // Original individual qualification and the ordinary title-match party seam.
 // Source: ARM9 02092204/02092380/02092244; OVL10 0210FF08, 02112D40;
@@ -27,28 +28,51 @@ export function battlePartyCondition(index) {
     field14:r.field24,minimum03c:r.field14,minimum010:r.field15,individual018:r.field18,species014:r.field1C};
 }
 
-export function nativeBattleQualification(profile, condition) {
-  const f=profile?.fields, n=profile?.narrowFields;
-  const s=conditions.species[isKnownSpeciesIndex(f?.['000'])?productBaseSpeciesIndex(f['000']):-1];
-  if(!s||!n)return false;
+// An original character qualifies by its own stage, attribute and race over its behavior donor's row.
+const conditionSpecies=index=>{
+  const row=conditions.species[isKnownSpeciesIndex(index)?productBaseSpeciesIndex(index):-1];
+  if(!row||!isPlayableProductOriginal(index))return row;
+  const r=productSpeciesRecord(index);
+  return {...row,index,fields:{...row.fields,'0c':r.generationIndex,'10':r.attributeIndex,'18':r.familyBits}};
+};
+function speciesFits(s,condition){
   if(condition.family!==0 && (condition.family&s.fields['18'])===0)return false;
   if(condition.generation!==7 && condition.generation!==s.fields['0c'])return false;
   if(condition.attribute!==0 && condition.attribute!==s.fields['10'])return false;
-  if(condition.minimum03c!==0 && condition.minimum03c>n['03c'])return false;
-  if(condition.minimum010!==0 && condition.minimum010>(f['010']|0))return false;
-  if(condition.individual018!==-1 && condition.individual018!==(f['018']|0))return false;
   if(condition.species014!==0 && condition.species014!==s.fields['14'])return false;
   return condition.field14===0||condition.field14===s.field68||s.field68===3;
 }
 
-export function battlePartyAdmission(profile,recordIndex=null) {
+/**
+ * The original qualification (ARM9 02092244). OWNER_APPROVED_ADAPTATION 2026-11-02
+ * (STAGE_REDESIGN_BURST_20261102): a match for 覺醒體 (generation 5) or 究極體 (6) also admits a 成熟期
+ * that can burst into a fitting form; `burstForms` are the forms it may take in that match.
+ */
+export function nativeBattleQualification(profile, condition, {burstForms=[]}={}) {
+  const f=profile?.fields, n=profile?.narrowFields;
+  const s=conditionSpecies(f?.['000']);
+  if(!s||!n)return false;
+  if(condition.minimum03c!==0 && condition.minimum03c>n['03c'])return false;
+  if(condition.minimum010!==0 && condition.minimum010>(f['010']|0))return false;
+  if(condition.individual018!==-1 && condition.individual018!==(f['018']|0))return false;
+  if(speciesFits(s,condition))return true;
+  return burstFormFitting(profile,condition,burstForms)!==null;
+}
+/** The first of `burstForms` that lets this 成熟期 enter a 覺醒體/究極體 match, or null. */
+export function burstFormFitting(profile,condition,burstForms=[]){
+  const s=conditionSpecies(profile?.fields?.['000']);
+  if(!s||s.fields['0c']!==4||![5,6].includes(condition.generation))return null;
+  return burstForms.find(form=>{const fs=conditionSpecies(form);return Boolean(fs&&speciesFits(fs,condition));})??null;
+}
+
+export function battlePartyAdmission(profile,recordIndex=null,{burstForms=[]}={}) {
   if(!profile)return {ok:false,reason:'PROFILE_UNAVAILABLE',message:'這隻夥伴的個體資料尚未完整。'};
   const extension=getProductExtension(profile.fields?.['000']);
   if(extension&&!extension.runtimeReady)return {ok:false,reason:'PRODUCT_SPECIES_NOT_READY',message:productFormText('notReady')};
-  const f=profile.fields,s=conditions.species[isKnownSpeciesIndex(f['000'])?productBaseSpeciesIndex(f['000']):-1];
+  const f=profile.fields,s=conditionSpecies(f['000']);
   if(!s||s.fields['0c']<=1)return {ok:false,reason:'TOO_YOUNG',message:'這隻夥伴還太幼小，暫時無法參賽。'};
   if(['134','138','13c'].some(k=>f[k]!==0))return {ok:false,reason:'CONDITION_UNFIT',message:'這隻夥伴目前的身體狀況無法參賽。'};
-  if(!nativeBattleQualification(profile,battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C)))
+  if(!nativeBattleQualification(profile,battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C),{burstForms}))
     return {ok:false,reason:'MATCH_CONDITION',message:'這隻夥伴不符合本場比賽的參賽條件。'};
   return {ok:true};
 }

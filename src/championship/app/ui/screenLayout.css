@@ -1807,6 +1807,8 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
 .cm-ambience[data-theme="snow"]::after { background: radial-gradient(120% 90% at 50% 50%, transparent 50%, rgba(120, 180, 255, 0.42)), linear-gradient(180deg, rgba(200, 230, 255, 0.25), transparent 30%); }
 .cm-ambience[data-theme="data"]::after { background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(60, 220, 255, 0.34)); }
 .cm-ambience[data-theme="sun"]::after { background: radial-gradient(80% 60% at 30% -10%, rgba(255, 220, 140, 0.45), transparent 70%), radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(255, 200, 120, 0.22)); }
+/* Owner 2026-11-02: the ranch floats over a data sea; a soft teal glow rises from below. */
+.cm-ambience[data-theme="datasea"]::after { background: radial-gradient(80% 60% at 30% -10%, rgba(255, 220, 140, 0.3), transparent 70%), radial-gradient(110% 50% at 50% 115%, rgba(40, 205, 230, 0.34), transparent 72%); }
 .cm-ambience__particles { position: absolute; inset: 0; width: 100%; height: 100%; }
 :root[data-quality="saver"] .cm-ambience__particles { display: none; }
 
@@ -2102,6 +2104,8 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
 :root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="record"] { grid-column: span 4; order: 4; align-items: center; text-align: center; }
 :root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="record"] > :is(dt, dd) { text-align: center; }
 :root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="record"] > dd { font-size: 18px; }
+/* Burst forms (2026-11-02): one full-width card after the record cards. */
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="burst"] { grid-column: 1 / -1; order: 5; }
 :root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-detail > :is(.cm-digimon-resistance, .cm-digimon-untraced, .cm-digimon-empty) { grid-column: 1 / -1; order: 5; }
 :root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-resistance { padding: 8px 10px; border: 2px solid var(--ax-ink); border-radius: 12px; background: #fff; box-shadow: 0 3px 0 var(--ax-ink); }
 :root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-resistance__bar { display: flex; gap: 3px; height: 14px; padding: 2px; border: 2px solid var(--ax-ink); border-radius: 999px; background: #2a2740; }

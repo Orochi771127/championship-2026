@@ -1,6 +1,6 @@
 {
   "id": "CHAMPIONSHIP_SCENE_MUSIC_R1_20261016",
-  "scope": "Nine previously delivered scene MP3s retained unchanged, plus Owner-supplied Podium Geometry for CAGE_EDIT field/facility setup. Nine-track historical ledger remains a separate closed cohort. Owner-supplied Clash at the Concrete Edge (2026-11-02) is the battle_normal cue and replaces the retired 32-second normal-field cue.",
+  "scope": "Nine previously delivered scene MP3s retained unchanged, plus Owner-supplied Podium Geometry for CAGE_EDIT field/facility setup. Nine-track historical ledger remains a separate closed cohort. Owner-supplied Clash at the Concrete Edge (2026-11-02) is the battle_normal cue and replaces the retired 32-second normal-field cue. Owner-supplied Hexagon Cradles (2026-11-02) is the New Game story and interactive tutorial cue (onboarding only; not a ranch or battle choice).",
   "processing": "Measured runtime gain only, approximately -24 LUFS and <= -3 dBTP; no speed/pitch changes, no low-pass or transcoding. 0.8 second loop crossfade. Listening pending.",
   "acceptance": "Podium: technical decode/measurement only; browser and human listening pending. No BPM or 8-56 second loop assumed. Prior nine retain their recorded verification.",
   "files": [
@@ -236,6 +236,30 @@
       "measuredIntegratedLufs": -12.88,
       "measuredTruePeakDbtp": -0.86,
       "playbackGainDb": -11.2
+    },
+    {
+      "id": "hexagon_cradles",
+      "path": "opening/hexagon_cradles.mp3",
+      "sha256": "5227d9193d545a72349dfbd3ff79b672116b0748c7748c82dc7b41404845d535",
+      "bytes": 2040101,
+      "seconds": 127.451429,
+      "sampleRate": 44100,
+      "channels": 2,
+      "source": "Owner supplied hexagon_cradles.mp3 (archive onboarding-ai-chan-owner-approved-20261103/originals/audio), approved 2026-11-02 for the New Game story and the interactive tutorial; web copy approved at 128 kbps 2026-11-02T16:23:15Z",
+      "sourceSha256": "5c532c1c2c3cf4a966f06075732d3ea224d9d5f2ac18ff6d5c694f7013396db2",
+      "sourceBytes": 3064960,
+      "originalUnchanged": false,
+      "webEncoding": "-6 dB linear gain (no dynamic loudness normalisation), 0.5 s fade-in and 2 s fade-out, MP3 128 kbps 44.1 kHz stereo; archive web/audio/hexagon_cradles.web.128k.mp3, copied byte-identical",
+      "category": "opening",
+      "titles": {
+        "zh": "\u516d\u89d2\u6416\u7c43",
+        "en": "Hexagon Cradles"
+      },
+      "titleStatus": "Product display translation, not embedded artist metadata",
+      "measuredIntegratedLufs": -18.5,
+      "measuredTruePeakDbtp": -5.49,
+      "playbackGainDb": -5.5,
+      "loopNote": "Not a seamless musical loop: the 0.8 s standard crossfade restarts it inside its own fade-out. Listening and device acceptance pending."
     }
   ],
   "cues": {
@@ -330,6 +354,14 @@
       "trimEnd": 5.09,
       "crossfade": 0.1,
       "loopStart": 66.821
+    },
+    "hexagon_cradles": {
+      "path": "./assets/production/scene-music-r1/opening/hexagon_cradles.mp3",
+      "loop": true,
+      "gainDb": -5.5,
+      "trimStart": 0,
+      "trimEnd": 1.2,
+      "crossfade": 0.8
     }
   }
 }

@@ -10,6 +10,8 @@ import {applyNativeRaisingGrowth} from '../src/championship/raising/nativeRaisin
 import {applyNativeTrainingCommand,createNativeTrainingTimeline,stepNativeTrainingTimeline} from '../src/championship/raising/nativeRaisingTraining.js';
 import {projectNativeRaisingCalendar} from '../src/championship/raising/nativeRaisingCalendar.js';
 const receipt=JSON.parse(readFileSync(new URL('../docs/research/RAISING_LIFECYCLE_CPU_CHECK_2026-09-08.json',import.meta.url)));
+// The cartridge's own tables: product tables add the playable originals' branches (Owner 2026-11-03).
+const nativeLifecycle=JSON.parse(readFileSync(new URL('../src/data/championship/catalogs/raising-lifecycle.r1.json',import.meta.url)));
 
 test('eight-day calendar registration, title wins and championship countdown match 1024 original CPU cases',()=>{
   const calendar=JSON.parse(readFileSync(new URL('../docs/research/RAISING_CALENDAR_CPU_CHECK_2026-09-09.json',import.meta.url)));
@@ -61,7 +63,7 @@ test('ordinary evolution and rebirth preserve all original phase boundaries and 
 });
 test('all original evolution predicates, order, ancestry, rank and capacity outcomes match the original CPU',()=>{
   for(const row of receipt.evolution){let cursor=0;const calls=[];
-    const actual=evaluateNativeEvolution({version:1,...row.before},{rank:row.rank,roster:row.roster,lifetime:!!row.lifetime},{next(channel){calls.push(['rng',channel]);return row.rolls[cursor++];}});
+    const actual=evaluateNativeEvolution({version:1,...row.before},{rank:row.rank,roster:row.roster,lifetime:!!row.lifetime,table:nativeLifecycle},{next(channel){calls.push(['rng',channel]);return row.rolls[cursor++];}});
     const label=`species ${row.speciesIndex}, rank ${row.rank}, lifetime ${row.lifetime}`;
     assert.equal(actual.code,row.result,label);assert.deepEqual(actual.profile,{version:1,...row.after},label);
     assert.deepEqual(actual.actor,row.actor,label);assert.deepEqual(calls,row.calls.filter(c=>c[0]==='rng'),label);assert.equal(cursor,row.rolls.length,label);

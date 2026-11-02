@@ -47,7 +47,8 @@ test('new 20-cell ranch shows one land control for the next row, never per-cell 
  assert.ok(view.cells.every(c=>c.dataset.unlocked==='true'&&!c.disabled&&c.textContent!=='🔒'));
  assert.equal(view.locks.length,1);const [lock]=view.locks;
  assert.equal(lock.dataset.lockedTestRow,'2');assert.equal(lock.tag,'button');assert.equal(lock.attributes['aria-haspopup'],'dialog');
- assert.equal(lock.textContent,uiText('開放土地 +{n} 格',{n:10}));
+ // DIAMOND_ECONOMY_20261102: the land key names the step and its diamond price.
+ assert.equal(walk(lock).filter(n=>!n.children.length).map(n=>n.textContent??'').join(''),uiText('擴充土地 +{n}格',{n:10})+'1,000');
  assert.ok(view.nodes.some(n=>n.textContent===uiText('可用土地 {n} 格',{n:20})));
 });
 

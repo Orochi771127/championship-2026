@@ -9,7 +9,8 @@ import {databaseHeroPortrait, databaseHeroSilhouette} from '../presentation/data
 import {databaseBodyStats, formatBodyHeight, formatDataWeight} from '../database/databaseBodyStats.js';
 import {databaseStory, databaseStoryHeading, databaseVerifiedData, databaseVerifiedHeading} from '../database/databaseStories.js';
 import {originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
-import { speciesName, generationName, shopItemDescription as shopDescriptionText, shopItemName } from "../text/zhHant.js";
+import { speciesName, generationName, shopItemDescription as shopDescriptionText, shopItemName, cageName } from "../text/zhHant.js";
+import { recommendedCages } from "../raising/productTrainingPolicy.js";
 import {databaseDisplayRows, getDatabaseDisplayEntry} from '../database/databaseDisplayCatalog.js';
 import {databaseIllustrationText} from '../database/databaseIllustrations.js';
 import {openingEggChoices} from './openingEggChoices.js';
@@ -41,7 +42,7 @@ import { showChoiceDialog } from './uiDialog.js';
 import { prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { isDesktopBrowseLayout } from './portraitFrame.js';
 import { createCyberGachaPanel } from './cyberGachaView.js';
-import { gachaIcon, paintGachaTicketBadge } from './cyberGachaIcons.js';
+import { gachaCurrencyImage, gachaIcon, paintGachaTicketBadge } from './cyberGachaIcons.js';
 
 const CATEGORY_LABELS = Object.freeze({
   TRAINING_GOODS: "養成用品",
@@ -991,6 +992,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       detail.append(dataSection);
     }
     paintEvolutionRoutes(selected);
+    paintBurst(selected);
     if (!conditionControls.has(expandedConditionBranch)) expandedConditionBranch = null;
     if (focusedBranch !== null) conditionControls.get(focusedBranch)?.toggle.focus({preventScroll:true});
     if (selected.source === "STARTER" && selected.instances.length === 0) {
@@ -1097,6 +1099,64 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       graph.append(targets);
     }
     section.append(graph); detail.append(section);
+  }
+
+  // OWNER_APPROVED_ADAPTATION 2026-11-02: burst evolution. A 成熟期 page lists the forms it takes in battle
+  // and their unlock conditions; a 覺醒體 page lists the 成熟期 that burst into it.
+  /** One plain line for a burst form's conditions: the best cages for its points, its battles, win rate and stars. */
+  function dexAwakeningHint(conditions) {
+    const hints = [];
+    const point = conditions.find(condition => recommendedCages(condition.id).length);
+    if (point) hints.push(uiText('AWAKENING_HINT_CAGES', {cages: recommendedCages(point.id).slice(0, 2).map(cage => cageName(cage.definition, null)).join('、')}));
+    const battles = conditions.find(condition => condition.id === 'BATTLE_COUNT');
+    if (battles) hints.push(uiText('AWAKENING_HINT_BATTLES_TOTAL', {count: battles.value}));
+    if (conditions.some(condition => condition.id === 'EVOLUTION_WIN_PERCENT')) hints.push(uiText('AWAKENING_HINT_WINS'));
+    const rebirth = conditions.find(condition => condition.id === 'REBIRTH_COUNT');
+    if (rebirth) hints.push(uiText('AWAKENING_HINT_STARS', {count: rebirth.value}));
+    return hints.join('・') || uiText('DEX_CONDITIONS_NO_NUMERIC');
+  }
+  function paintBurst(selected) {
+    const burst = selected.burst;
+    if (!burst) return;
+    const section = element('section', 'cm-dex-burst');
+    section.dataset.burstKind = burst.kind;
+    section.setAttribute('aria-label', uiText('DEX_BURST'));
+    section.append(element('h3', 'cm-dex-burst__heading', 'DEX_BURST'),
+      element('p', 'cm-vs2-shop__meta', burst.kind === 'BASE' ? 'DEX_BURST_NOTE' : 'DEX_BURST_FROM'));
+    // An alternate battle form (229/230) is its own card beside the form it replaces.
+    const rows = burst.kind === 'BASE'
+      ? burst.forms.flatMap(form => [{species: form.formSpeciesIndex, revealed: form.revealed, tier: form.tier, conditions: form.conditions},
+        ...form.alternates.map((alternate, i) => ({species: alternate, revealed: form.alternatesRevealed[i], tier: form.tier, conditions: form.conditions}))])
+      : burst.bases.map(base => ({species: base.baseSpeciesIndex, revealed: base.revealed, tier: burst.tier, conditions: null}));
+    const targets = element('ul', 'cm-dex-burst__targets');
+    for (const row of rows) {
+      const mapping = getDatabaseDisplayEntry(row.species);
+      const name = row.revealed ? speciesName(row.species) : '????';
+      const item = element('li', 'cm-dex-burst__branch');
+      item.dataset.burstTier = String(row.tier);
+      const button = element('button', 'cm-dex-burst__target');
+      button.type = 'button'; button.disabled = !row.revealed; button.dataset.revealed = String(row.revealed);
+      button.setAttribute('aria-label', `${mapping?.displayCode ?? ''} · ${name} · ${uiText(`DEX_BURST_TIER_${row.tier}`)}`);
+      const copy = element('span', 'cm-dex-burst__copy');
+      copy.append(element('span', 'cm-vs2-shop__meta', mapping?.displayCode ?? ''), element('strong', 'cm-dex-burst__name', name),
+        element('span', 'cm-dex-burst__status', `DEX_BURST_TIER_${row.tier}`));
+      button.append(portrait(row.species, row.revealed), copy);
+      button.addEventListener('click', () => {
+        listScroll = list.scrollTop;
+        lastOpened = row.species;
+        if (mapping && activeStage !== null && activeStage !== mapping.numberingStageIndex) { activeStage = mapping.numberingStageIndex; stageFilter.value = String(activeStage); }
+        source.intents.selectDatabaseSpecies(row.species);
+        paint(source.getFrame());
+        detail.querySelector('h2')?.focus({preventScroll:true});
+      });
+      item.append(button);
+      // Awakening raising (Owner 2026-11-02): players read where to train and how much to battle, not the rules.
+      if (row.conditions) item.append(element('p', 'cm-dex-burst__conditions', dexAwakeningHint(row.conditions), false));
+      targets.append(item);
+    }
+    section.append(targets);
+    if (burst.kind === 'BASE') section.append(element('p', 'cm-dex-conditions__notice', 'DEX_BURST_METAL'));
+    detail.append(section);
   }
 
   // A registered partner's completed route plays in full colour; any other
@@ -1462,6 +1522,24 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     up.addEventListener("click", () => source.intents.setTamerRank(cage.tamerRank + 1));
     if (mode === VS2_PRESENTATION_MODES.DEVELOPER) census.append(down, rankLabel, up);
     else census.append(rankLabel);
+    // DIAMOND_ECONOMY_20261102: the land key also sits by the rank capsule (the same confirmation).
+    const land = cage.land;
+    if (land?.available) {
+      const expand = element("button", "cm-vs2-cage-rank__expand cm-land-key cm-arcade-key");
+      expand.type = "button";
+      expand.dataset.landExpand = land.max ? "max" : String(land.nextRow);
+      if (land.max) {
+        expand.disabled = true;
+        expand.append(gachaIcon("crown", "cm-land-key__icon"), element("span", "cm-land-key__label", uiText("已達最大 100 格領域")));
+      } else {
+        expand.setAttribute("aria-haspopup", "dialog");
+        expand.setAttribute("aria-label", uiText("擴充土地 +{n}格（{price} 鑽石）", { n: land.step, price: land.price }));
+        expand.append(gachaCurrencyImage("diamond", "cm-land-key__diamond"), element("span", "cm-land-key__label", uiText("+{n}格", { n: land.step })));
+        if (land.diamonds < land.price) expand.dataset.short = "true";
+        expand.addEventListener("click", () => { void rowPurchase.open(land.nextRow); });
+      }
+      census.append(expand);
+    }
     const reason = cage.lastVerdict?.reason;
     status.textContent = uiText(reason ? CAGE_VERDICT_COPY[reason] ?? "" : "");
     if (cage.lastVerdict && cage.lastVerdict !== paintedVerdict) {
@@ -1625,7 +1703,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     }
 
     tray.replaceChildren();
-    if (cage.tray.length === 0) {
+    if (cage.tray.length === 0 && !(cage.royalTray ?? []).some((royal) => royal.available > 0)) {
       tray.append(element("p", "cm-vs2-shop__empty cm-cage-filter-empty", filters.hidden
         ? "已持有的設施皆已放置。" : "這個格數的設施都已放置。"));
       trayEmpty = null;
@@ -1635,6 +1713,29 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     // The empty note for a size tab whose cages are all placed (hex world only).
     trayEmpty = element("p", "cm-vs2-shop__empty cm-cage-filter-empty", "這個格數的設施都已放置。");
     trayEmpty.hidden = true;
+    // DIAMOND_ECONOMY_20261102: gachapon royal cages come first, each with its own gold card.
+    for (const royal of cage.royalTray ?? []) {
+      if (royal.available < 1) continue;
+      const row = element("button", "cm-vs2-cage-tray__item cm-royal-card");
+      row.type = "button";
+      row.dataset.royal = royal.edition;
+      row.dataset.rarity = royal.rarity;
+      row.dataset.selected = royal.selected ? "true" : "false";
+      row.setAttribute("role", "listitem");
+      row.setAttribute("aria-pressed", royal.selected ? "true" : "false");
+      row.setAttribute("aria-label", uiText("選擇{cage}。{effect}", { cage: uiText(royal.name), effect: uiText("全自動飼育：自動給食・自動清掃・睡眠恢復 +30%・獸系訓練 +3") }));
+      const image = element("img", "cm-facility-thumb cm-royal-card__art");
+      image.src = royal.art; image.alt = "";
+      row.append(image, element("span", "cm-vs2-cage-tray__name", `${uiText(royal.name)} ×${royal.available}`),
+        element("span", "cm-vs2-cage-tray__effect", uiText("全自動飼育：自動給食・自動清掃・睡眠恢復 +30%・獸系訓練 +3")));
+      decorateCartridge(row, royal.moduleId, { count: royal.available });
+      row.prepend(gachaIcon("crown", "cm-royal-card__crown"));
+      row.addEventListener("click", () => {
+        if (royal.selected) source.intents.selectCageModule(null);
+        else source.intents.selectRoyalCage?.(royal.id);
+      });
+      tray.append(row);
+    }
     for (const item of cage.tray) {
       const row = element("button", "cm-vs2-cage-tray__item");
       row.type = "button";

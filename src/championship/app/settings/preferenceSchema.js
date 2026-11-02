@@ -26,6 +26,8 @@
 
 import { musicChoicesForScene } from "../../presentation/sceneMusicCatalog.js";
 import { SYSTEM_BACKGROUND_IDS } from "../../presentation/systemBackgrounds.js";
+import { AI_CHAN_APPEARANCES } from "../../presentation/aiChanGuide.js";
+import { OPENING_STORY_BEAT_IDS } from "../openingStoryScript.js";
 
 export const PREFERENCES_VERSION = 1;
 export const PREFERENCES_KIND = "CHAMPIONSHIP_PREFERENCES";
@@ -53,6 +55,10 @@ const DEFINITIONS = {
   systemBackgroundId: { category: "appearance", scope: "account", type: "enum", values: ["", ...SYSTEM_BACKGROUND_IDS], default: "" },
   textScale: { category: "appearance", scope: "device", type: "enum", values: [100, 115, 130], default: 100 },
   hudDensity: { category: "appearance", scope: "device", type: "enum", values: ["standard", "compact"], default: "standard" },
+  // Ai-chan's form (Owner 2026-11-02): chosen in the New Game story, switchable here.
+  // "" = not chosen yet; she is shown as the cat until the player picks. Both forms
+  // are the same guide with the same tutorial.
+  guideAppearance: { category: "appearance", scope: "account", type: "enum", values: ["", ...AI_CHAN_APPEARANCES], default: "" },
   // Quality
   quality: { category: "quality", scope: "device", type: "enum", values: ["auto", "saver", "balanced", "high"], default: "auto" },
   // Sound. Only categories with a real source exist (see audioBus.js).
@@ -71,6 +77,10 @@ const DEFINITIONS = {
   raisingHintSeen: { category: "access", scope: "device", type: "boolean", default: false },
   // Story theater (Owner 2026-10-28): the ranch badge stops pulsing once the first rift chapter was watched or skipped.
   storyRiftChapter1Seen: { category: "access", scope: "device", type: "boolean", default: false },
+  // New Game story reading position (2026-11-03): an interrupted story (return to
+  // title, reload, closed tab) reopens at this page on the next New Game. A
+  // presentation bookmark, never game progress; cleared once a New Game starts.
+  openingStoryResume: { category: "access", scope: "device", type: "enum", values: ["", ...OPENING_STORY_BEAT_IDS], default: "" },
   reducedMotion: { category: "access", scope: "device", type: "enum", values: ["system", "on", "off"], default: "system" },
   flashIntensity: { category: "access", scope: "account", type: "enum", values: ["standard", "soft"], default: "standard" },
   highlightMode: { category: "access", scope: "account", type: "enum", values: ["full", "compact"], default: "full" }

@@ -295,5 +295,44 @@
     "functionalAcceptance": "OWNER_TESTS",
     "physicalDeviceAccepted": false,
     "commercialReleaseAccepted": false
+  },
+  "onboardingAiChan20261103": {
+    "selectionId": "ONBOARDING_AI_CHAN_LAYERED_V3_20261103",
+    "status": "OWNER_AUTHORIZED_PUBLIC_PLAYTEST",
+    "authorizationRecordedOn": "2026-11-02",
+    "ownerInstruction": "讓Claude code做完讓他自我審查後，沒問題就上線整合至main並公開發佈",
+    "scope": "New Game story (Owner-approved Ai-chan layered v3: 16:9 background video, cat/catgirl closed-mouth idle portraits, DOM text) and the interactive tutorial guide's Ai-chan identity and Hexagon Cradles music. Title, logo and NS33 title film unchanged. Source ZIP, PNG masters and the local archive/evidence are not public payload.",
+    "media": [
+      {
+        "role": "background",
+        "path": "assets/production/opening/ai-chan-layered-v3-20261103/background.mp4",
+        "sha256": "b0962103da22b392fd787e07db81830ffab6930d66bd74aa2e88d6fe5bf075d0",
+        "bytes": 9904450
+      },
+      {
+        "role": "guideCat",
+        "path": "assets/production/opening/ai-chan-layered-v3-20261103/cat_idle.webp",
+        "sha256": "453f97fdcba19ea82cee4d6eebd54bd375b41f3c4b12c15b779370e4355da6d6",
+        "bytes": 79144
+      },
+      {
+        "role": "guideCatgirl",
+        "path": "assets/production/opening/ai-chan-layered-v3-20261103/catgirl_idle.webp",
+        "sha256": "fd22302d4abfb8d047d3f77e1dec315aa4cd34fb9fe03a28c7c04a20674bed3c",
+        "bytes": 78444
+      },
+      {
+        "role": "music",
+        "path": "assets/production/scene-music-r1/opening/hexagon_cradles.mp3",
+        "sha256": "5227d9193d545a72349dfbd3ff79b672116b0748c7748c82dc7b41404845d535",
+        "bytes": 2040101
+      }
+    ],
+    "sourceContract": "docs/reports/onboarding-ai-chan-2026-11-03/REPORT_ZH_TW.md",
+    "rightsDocumentVerified": false,
+    "physicalDeviceAccepted": false,
+    "listeningAccepted": false,
+    "finalArtAccepted": false,
+    "commercialReleaseAccepted": false
   }
 }

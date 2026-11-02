@@ -933,6 +933,18 @@
 .cm-dex-routes__copy { display: grid; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
 .cm-dex-routes__name { font-size: var(--fs-label); }
 .cm-dex-routes__status { color: var(--c-text-2); font-size: var(--fs-caption); line-height: 1.5; }
+/* Burst forms (OWNER_APPROVED_ADAPTATION 2026-11-02): own list, styled like the route cards, no arrows. */
+.cm-dex-burst { grid-column: 1 / -1; min-width: 0; max-width: 100%; }
+.cm-dex-burst__heading { margin: 0 0 var(--sp-2); font-size: var(--fs-body); }
+.cm-dex-burst__targets { list-style: none; display: grid; gap: 8px; margin: 0; padding: 0; min-width: 0; }
+.cm-dex-burst__branch { min-width: 0; }
+.cm-dex-burst__branch[data-burst-tier="2"] .cm-dex-burst__target { border-color: var(--c-accent); }
+.cm-dex-burst__target { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 8px; align-items: center; width: 100%; min-height: 76px; min-width: 44px; padding: 8px; color: var(--c-text-1); background: var(--c-surface-1); border: 1px solid var(--c-line-2); border-radius: var(--r-control); font: inherit; text-align: left; box-sizing: border-box; }
+.cm-dex-burst__target:disabled { opacity: 1; cursor: default; }
+.cm-dex-burst__target:focus-visible { outline: 3px solid var(--c-accent); outline-offset: -3px; }
+.cm-dex-burst__copy { display: grid; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+.cm-dex-burst__name { font-size: var(--fs-label); }
+.cm-dex-burst__status { color: var(--c-text-2); font-size: var(--fs-caption); line-height: 1.5; }
 /* Read-only evolution conditions. The existing detail pane owns scrolling. */
 .cm-dex-conditions__toggle { box-sizing: border-box; display: block; width: auto; max-width: 100%; min-width: 44px; min-height: 44px; margin-top: 6px; padding: 8px 12px; border: 1px solid var(--c-line-2); border-radius: var(--r-control); background: var(--c-surface-1); color: var(--c-text-1); font: inherit; line-height: 1.4; text-align: left; white-space: normal; overflow-wrap: anywhere; cursor: pointer; }
 .cm-dex-conditions__toggle:focus-visible { outline: 3px solid var(--c-accent); outline-offset: 2px; }
@@ -1568,3 +1580,43 @@ body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database_
 .cm-hexworld__land { display: flex; gap: var(--sp-2); }
 .cm-hexworld__land .cm-hexworld__buy-land { position: static; width: auto; height: auto; min-width: 44px; min-height: 44px; padding: 0 var(--sp-3); }
 .cm-vs2-root[data-hex-world="true"] .cm-cage-board-scroll { display: none; }
+
+/* ---- Diamond economy (DIAMOND_ECONOMY_20261102): land key, gold hex wave, royal cages ---- */
+.cm-hexworld__land-meter { display: inline-flex; align-items: baseline; gap: 6px; }
+.cm-hexworld__land-label { font-size: 12px; font-weight: 900; letter-spacing: .04em; }
+.cm-hexworld__notes { display: inline-flex; flex-direction: column; gap: 0; font-size: 11px; line-height: 1.2; opacity: .88; }
+.cm-hexworld__used-note { font-weight: 700; }
+.cm-land-key { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; min-height: 44px;
+  padding: 4px 12px; white-space: nowrap; font-weight: 900; }
+.cm-land-key__diamond, .cm-land-key__icon { width: 22px; height: 22px; flex: none; object-fit: contain; filter: drop-shadow(0 1px 0 #14141f); }
+.cm-land-key__price { display: inline-flex; align-items: center; gap: 3px; padding: 1px 8px 1px 4px; border: 2px solid #14141f; border-radius: 999px;
+  background: rgba(10, 30, 70, .35); color: #fff; font-variant-numeric: tabular-nums; }
+.cm-land-key__price .cm-land-key__diamond { width: 18px; height: 18px; }
+.cm-land-key[data-short="true"] { opacity: .82; }
+.cm-vs2-cage-rank__expand { min-height: 36px; padding: 2px 10px; font-size: 13px; }
+.cm-vs2-cage-rank__expand .cm-land-key__diamond { width: 20px; height: 20px; }
+.cm-hexworld__cell[data-land-wave="true"] { z-index: 3; animation: cm-land-wave 1500ms cubic-bezier(.2, .9, .3, 1) var(--wave-delay, 0ms) both; }
+.cm-hexworld__cell[data-land-wave="true"]::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+  clip-path: polygon(50% 0, 100% 21.4%, 100% 78.6%, 50% 100%, 0 78.6%, 0 21.4%);
+  background: radial-gradient(circle at 50% 45%, rgba(255, 250, 200, .95) 0, rgba(255, 210, 63, .85) 45%, rgba(255, 159, 28, 0) 75%);
+  animation: cm-land-wave-glow 1500ms ease-out var(--wave-delay, 0ms) both; }
+@keyframes cm-land-wave { 0% { transform: scale(.6); filter: brightness(1); } 35% { transform: scale(1.12); filter: brightness(1.8) saturate(1.4); }
+  70% { transform: scale(.98); } 100% { transform: none; filter: none; } }
+@keyframes cm-land-wave-glow { 0% { opacity: 0; } 25% { opacity: 1; } 100% { opacity: 0; } }
+.cm-hexworld__cell[data-royal] { filter: drop-shadow(0 0 3px rgba(255, 210, 63, .95)) drop-shadow(0 0 1px #a86400); }
+.cm-hexworld__cell[data-automated] { filter: drop-shadow(0 0 2px rgba(46, 196, 241, .9)); }
+.cm-hexworld__badge[data-royal] { display: inline-flex; align-items: center; gap: 2px; background: linear-gradient(180deg, #fff2a8, #ffc928);
+  color: #3a2600; border-color: #8a5a00; box-shadow: 0 0 0 1px #fff7cf inset, 0 2px 0 #8a5a00; }
+.cm-hexworld__badge-crown, .cm-hexworld__badge-core { width: 12px; height: 12px; flex: none; vertical-align: -2px; }
+.cm-royal-card { position: relative; border-color: #8a5a00 !important; background: linear-gradient(160deg, #fff6c9 0%, #ffd23f 55%, #ff9f1c 100%) !important;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .7), 0 0 0 2px #fff3b0, 0 4px 0 #8a5a00 !important; color: #2b1a00; }
+.cm-royal-card[data-rarity="UR"] { background: linear-gradient(160deg, #f1e3ff 0%, #b98cff 50%, #ffd23f 100%) !important; }
+.cm-royal-card[data-selected="true"] { outline: 3px solid #14141f; outline-offset: 2px; }
+.cm-royal-card__crown { position: absolute; top: -9px; left: 50%; width: 24px; height: 24px; transform: translateX(-50%); z-index: 2; }
+.cm-royal-card__art { object-fit: contain; }
+@media (prefers-reduced-motion: reduce) {
+  .cm-hexworld__cell[data-land-wave="true"], .cm-hexworld__cell[data-land-wave="true"]::before { animation-duration: 1ms; }
+}
+.cm-vs2-cage-edit .cm-vs2-title { white-space: nowrap; }
+.cm-vs2-cage-edit .cm-vs2-cage-rank:has(.cm-vs2-cage-rank__expand) { flex-wrap: wrap; justify-content: flex-end; white-space: normal; row-gap: 4px;
+  padding: 4px 6px 4px 10px; }

@@ -2,8 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {listCageDefinitions} from '../src/championship/cage/cageCatalog.js';
 import {originalCageLocationArt} from '../src/championship/presentation/originalCageLocationArt.js';
-import {originalShopCageThumbnail} from '../src/championship/presentation/originalShopCageArt.js';
-import {cageUiImage} from '../src/championship/presentation/cageUiArt.js';
+import {cageUiImage,cageUiThumbnail} from '../src/championship/presentation/cageUiArt.js';
 import {uiText} from '../src/championship/text/uiText.js';
 import {setLocale} from '../src/championship/text/locale.js';
 
@@ -11,8 +10,9 @@ test('every existing cage keeps its identity and uses its accepted picture for t
  const base='https://orochi771127.github.io/championship-2026/';
  for(const definition of listCageDefinitions()){
   const actual=originalCageLocationArt(definition.cageDefinitionIndex,base);
+  // Owner 2026-11-02: the shop picture is the 3D render of the cage.
   const expected=definition.cageDefinitionIndex===35?cageUiImage(definition.moduleId,base)
-   :originalShopCageThumbnail(definition.shopRecordIndex,base).src;
+   :cageUiThumbnail(definition.moduleId);
   assert.equal(actual,expected);assert.doesNotMatch(actual,/internal-|assembled-ui/);
  }
  for(const value of [null,undefined,-1,36,'1'])assert.equal(originalCageLocationArt(value,base),null);

@@ -50,9 +50,9 @@ test("every species move has a theme the preview can draw", () => {
   assert.equal(moveVfxTheme(1), null, "the 30 learnable special skills keep their own presentation");
 });
 
-test("all 218 partners name every move in five languages", () => {
+test("all 226 partners name every move in five languages", () => {
   const list = partners();
-  assert.equal(list.length, 218);
+  assert.equal(list.length, 226, "218 plus the eight playable originals (Owner 2026-11-03)");
   for (const locale of LOCALES) {
     for (const { speciesIndex } of list) {
       const data = databaseVerifiedData(speciesIndex, locale);

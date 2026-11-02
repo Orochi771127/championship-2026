@@ -2,7 +2,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {auditPagesModuleClosure} from './pages-module-closure.mjs';
-import {selectedShopCageProjection,SHOP_CAGE_PUBLIC} from './public-shop-cage-projection.mjs';
 import {assertPublicRanchStreaming} from './public-ranch-streaming-boundary.mjs';
 import {assertPagesPayloadSize} from './pages-payload-size.mjs';
 import {assertPublicCharacterSelection} from './public-character-boundary.mjs';
@@ -110,13 +109,12 @@ export function publicArtifactPlan({root,input,index}){
   const filename=path.join(root,PUBLIC_RUNTIME_ALLOWLIST_PATH);
   if(!fs.existsSync(filename))throw Error('PUBLIC_ALLOWLIST_REQUIRED');
   const allowlist=JSON.parse(fs.readFileSync(filename,'utf8'));
-  const projection=selectedShopCageProjection({root,input,index});
   const render=input.files.includes('src/championship/presentation/publicRenderDescriptors.js')?projectPublicRenderSources({root,input,index}):{descriptors:[],media:new Map()};
   const maps=input.files.includes('src/championship/presentation/publicMapRequests.js')?selectedMapProjections({root,input}):{descriptors:[],files:new Map()};
   const metadata=input.files.includes('src/championship/presentation/publicMetadata.js')?projectPublicMetadata({root,input}):{descriptors:[],media:new Map()};
   const clean=input.files.some(file=>file.startsWith('assets/production/public-media-clean-20261017/'))?publicCleanMedia({root}):[];
   const program=input.authoring?.programRecipePath?publicProgramData({root}):[];
-  const renderedMedia=new Map([...projection.files,...render.media,...maps.files,...metadata.media]);
+  const renderedMedia=new Map([...render.media,...maps.files,...metadata.media]);
   const runtime=publicRuntimeIndex(allowlist,index,renderedMedia),files=allowlist.files.map(row=>row.path),available=new Set(files);
   for(const descriptor of render.descriptors){
     const selected=allowlist.assets.find(row=>row.id===descriptor.id),file=path.join(root,descriptor.path);
@@ -141,12 +139,6 @@ export function publicArtifactPlan({root,input,index}){
   for(const row of program){const selected=allowlist.files.find(file=>file.path===row.path);
     if(selected?.sha256!==row.sha256||JSON.stringify(selected.jsonFields)!==JSON.stringify(row.jsonFields))throw Error('PUBLIC_PROGRAM_SELECTION:'+row.path);
     assertPublicBytes(row.path,row.bytes,{jsonFields:row.jsonFields});
-  }
-  if(projection.manifest){
-    const bytes=Buffer.from(JSON.stringify(projection.manifest,null,2)+'\n');
-    if(!available.has(SHOP_CAGE_PUBLIC)||!fs.readFileSync(path.join(root,SHOP_CAGE_PUBLIC)).equals(bytes)
-      ||allowlist.files.find(row=>row.path===SHOP_CAGE_PUBLIC)?.sha256!==sha(bytes)
-      ||[...projection.files].some(([file,hash])=>allowlist.files.find(row=>row.path===file)?.sha256!==hash))throw Error('PUBLIC_SHOP_CAGE_PROJECTION_MISMATCH');
   }
   if(!available.has('championship.html')||!available.has(PUBLIC_RUNTIME_INDEX_PATH))throw Error('PUBLIC_ALLOWLIST_ENTRY_REQUIRED');
   for(const file of files)if(!input.files.includes(file))throw Error('PUBLIC_ALLOWLIST_OUTSIDE_BUILD_INPUTS: '+file);

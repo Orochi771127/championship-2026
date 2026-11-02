@@ -45,8 +45,10 @@ if(isMainThread) {
     process.stdout.write(JSON.stringify({result,requirements:nativeEvolutionRequirements(original.rules[0][0])}));
   } else {
     let count=0;
-    original.rules.forEach((group,i)=>group.forEach((rule,branch)=>{
-      const result=project(i+8,branch,{sourceRegistered:true,registeredSpecies:[i+8,rule.target],evolutionBranches:[i*5+branch]});
+    // The encyclopedia projects the ranch's growth tables (OWNER_APPROVED_ADAPTATION 2026-11-02).
+    const {PRODUCT_GROWTH_RULES:growth,growthBranchHistoryIndex}=await import('../../src/championship/contracts/productGrowthRules.js');
+    growth.rules.forEach((group,i)=>group.forEach((rule,branch)=>{
+      const result=project(i+8,branch,{sourceRegistered:true,registeredSpecies:[i+8,rule.target],evolutionBranches:[i*5+growthBranchHistoryIndex(i+8,branch)]});
       if(!result)throw new Error('EXPECTED_REVEALED_RESULT');count++;
     }));
     const projectionSideEffects=sideEffectAttempts;

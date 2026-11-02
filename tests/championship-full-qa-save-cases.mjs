@@ -12,7 +12,7 @@ import { BITS_WALLET_CAP, SHOP_PURCHASE_DOMAIN, listShopRecords }
   from "../src/championship/shop/shopCatalog.js";
 import { nativeHuntSpeciesByIndex } from "../src/championship/hunt/capture/nativeHuntSources.js";
 import { slotCountForTamerRank } from "../src/championship/cage/cageCatalog.js";
-import { FULL_QA_STACKABLE_QUANTITY, FULL_QA_ULTIMATES, createFullQaSaveText }
+import { FULL_QA_PARTNERS, FULL_QA_STACKABLE_QUANTITY, FULL_QA_ULTIMATES, createFullQaSaveText }
   from "../scripts/lib/championshipFullQaSave.mjs";
 
 const catalog = JSON.parse(fs.readFileSync("src/data/championship/catalogs/creature-species.r1.json", "utf8"));
@@ -41,17 +41,22 @@ async function fixture() {
   return { s, restored, text };
 }
 
-test("full QA save is a bounded canonical save with five visible Ultimate residents", async (t) => {
+// OWNER_APPROVED_ADAPTATION 2026-11-02: the five showcase 究極體 are burst forms of five 成熟期 residents.
+test("full QA save is a bounded canonical save with five 成熟期 residents whose 究極體 bursts are unlocked", async (t) => {
   const { restored, text } = await fixture();
   t.after(() => restored.dispose());
   assert.ok(Buffer.byteLength(text) < CHAMPIONSHIP_MODERN_SAVE_MAX_BYTES);
   const save = deserializeChampionshipModernSave(text);
-  assert.equal(save.raising.collection.length, FULL_QA_ULTIMATES.length);
-  assert.deepEqual(save.raising.collection.map((entry) => entry.displayName), FULL_QA_ULTIMATES.map((entry) => entry.displayName));
-  assert.ok(save.raising.collection.every((entry) => nativeHuntSpeciesByIndex(entry.nativeProfile.fields["000"]).generation === 6));
-  assert.equal(restored.getRaisingInstances().filter((entry) => entry.source.kind === "COLLECTION").length, 5);
-  assert.ok(restored.getRaisingInstances().filter((entry) => entry.source.kind === "COLLECTION")
-    .every((entry) => nativeHuntSpeciesByIndex(entry.profile?.speciesIndex).generation === 6));
+  assert.equal(save.raising.collection.length, FULL_QA_PARTNERS.length);
+  assert.deepEqual(save.raising.collection.map((entry) => entry.displayName), FULL_QA_PARTNERS.map((entry) => entry.displayName));
+  assert.ok(save.raising.collection.every((entry) => nativeHuntSpeciesByIndex(entry.nativeProfile.fields["000"]).generation === 4));
+  const collection = restored.getRaisingInstances().filter((entry) => entry.source.kind === "COLLECTION");
+  assert.equal(collection.length, 5);
+  assert.ok(collection.every((entry) => nativeHuntSpeciesByIndex(entry.profile?.speciesIndex).generation === 4));
+  for (const [i, entry] of save.raising.collection.entries()) {
+    const burst = restored.getPartnerBurst(entry.instanceId);
+    assert.ok(burst.some((form) => form.form === FULL_QA_ULTIMATES[i].speciesIndex && form.unlocked && form.tier === 2), entry.instanceId);
+  }
 });
 
 test("full QA save opens current progression and keeps enough inventory for repeated tests", async (t) => {

@@ -15,7 +15,7 @@ import { openRanchExpansionPreview, ranchExpansionMapMarkup, ranchExpansionPrevi
 import { UI_COPY } from "../src/championship/text/uiText.js";
 import { UI_COPY_EN } from "../src/championship/text/uiText.en.js";
 
-const manifest = JSON.parse(fs.readFileSync(new URL("../assets/production/cage/final-intake-20261008/manifest.json", import.meta.url), "utf8"));
+const manifest = JSON.parse(fs.readFileSync(new URL("./fixtures/cage-padded-intake-20261008.manifest.json", import.meta.url), "utf8"));
 const placements = [{ moduleId: "championship:2026:cage:waiting-room", slotIndex: 0 }, { moduleId: "championship:2026:cage:0", slotIndex: 8 }];
 
 // ---- a minimal DOM, enough for the sheet and the progress view ----------

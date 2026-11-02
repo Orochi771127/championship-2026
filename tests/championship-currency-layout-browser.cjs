@@ -2,6 +2,7 @@
 // The fixture does NOT prove save/gameplay state. The normal flow never injects state.
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const {chromium,webkit}=require('playwright');
+const {playStory}=require('./championship-browser-opening.cjs'); // the one shared New Game story driver
 const {resolveAsset,serveBuild}=require('./alternate-form-browser-support.cjs');
 const repo=path.resolve(process.env.HUD_SOURCE_ROOT||process.cwd()),out=path.resolve(process.env.CHAMPIONSHIP_QA_OUTPUT_ROOT||'.tmp/browser-qa','currency-layout');
 fs.mkdirSync(out,{recursive:true});
@@ -99,7 +100,7 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
    if(await page.locator('#cm-film-skip').isVisible()){await page.locator('#cm-film-skip').click();await page.locator('#cm-opening-film').waitFor({state:'hidden'});await page.waitForTimeout(400);}
    await page.locator('#cm-login').click();await page.locator('#cm-new-game').click();
    const story=page.locator('.cm-opening-story'),deadline=Date.now()+120000;
-   while(await story.count()){if(Date.now()>deadline)throw Error('Opening comic timeout');const text=page.locator('[data-story-action="text"]');if(await text.isVisible()){try{await text.click({timeout:2000});}catch(error){if(await text.isVisible())throw error;}}if(await story.isVisible())await story.click({position:{x:10,y:10}});await page.waitForTimeout(1200);}
+   await playStory(page);
    await page.locator('.cm-opening__envelope').click();await page.locator('.cm-opening__letter button').click();await page.locator('#cm-opening-name').fill('介面測試');await page.locator('.cm-opening__name button[type="submit"]').click();await page.locator('.cm-opening__choices button').first().click();
    await page.locator('.cm-opening__envelope').click();await page.locator('.cm-opening__letter button').click();await page.locator('.cm-opening__letter button').click();if(await page.locator('[data-egg-confirm]').isVisible())await page.locator('[data-egg-confirm]').click();await page.locator('#cm-opening-name').fill('小夥伴');await page.locator('.cm-opening__name button[type="submit"]').click();
    await page.locator('#cm-root[data-active-screen="RAISING_HOME"]').waitFor();
