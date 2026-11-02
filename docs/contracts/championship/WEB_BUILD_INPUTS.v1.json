@@ -271,6 +271,7 @@
     "src/championship/modes/championshipModeRegistry.js",
     "src/championship/modes/createChampionshipModeShell.js",
     "src/championship/modes/dataArena/dataArenaConfig.js",
+    "src/championship/modes/dataArena/dataArenaEligibility.js",
     "src/championship/modes/dataArena/dataArenaGrid.js",
     "src/championship/modes/dataArena/dataArenaNav.js",
     "src/championship/modes/dataArena/dataArenaProps.js",
@@ -8491,6 +8492,7 @@
     "src/championship/modes/championshipModeRegistry.js",
     "src/championship/modes/createChampionshipModeShell.js",
     "src/championship/modes/dataArena/dataArenaConfig.js",
+    "src/championship/modes/dataArena/dataArenaEligibility.js",
     "src/championship/modes/dataArena/dataArenaGrid.js",
     "src/championship/modes/dataArena/dataArenaNav.js",
     "src/championship/modes/dataArena/dataArenaProps.js",
@@ -39496,7 +39498,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "a48f3ceddf2a1cf49ef68eb8d4cb70465632a61f15649eb2f405351c63428da1"
+        "sha256": "c3fd9a22ad5229bf687e7c44dc78d92916bb772b9150ebec1ae33138d73e6739"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -39540,11 +39542,11 @@
       },
       {
         "path": "src/championship/app/dataArena.css",
-        "sha256": "51c8b4761c2722087e92a8dfaefbef1aeb996c72b180ac655f7569dc037b843c"
+        "sha256": "53bb7848e8747247d84d60dd0ff57a6ee27f0886aacd1d22cc3e8e25170798aa"
       },
       {
         "path": "src/championship/app/dataArenaScreen.js",
-        "sha256": "66a7a0a1f37ff9038d0dd87dd5815ceb0efa8baa10862853392e89b4663b9063"
+        "sha256": "af0ba7c24001993d78a9a9a442a4d26ab3cd3171c0d93a3912844c36e359ec4f"
       },
       {
         "path": "src/championship/app/daylightSkin.css",
@@ -39648,7 +39650,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "f151c5c35e68927b55fb6ddfc1cdb093b54b255d7a7d1cbff29ee43e77103ac6"
+        "sha256": "4bca968d5095d2b29e62d5dc0321f5d3cb0379ff11614db96420c018c89d6991"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -40571,6 +40573,10 @@
         "sha256": "d006da09a53c3bb6f8dfc0be9c9a041138e31c76a6c1599fff67c906c4106229"
       },
       {
+        "path": "src/championship/modes/dataArena/dataArenaEligibility.js",
+        "sha256": "c0d18f4680df6a858ca64e61e6c9fed76e3a7f16963036d6b772bab3c5a5c286"
+      },
+      {
         "path": "src/championship/modes/dataArena/dataArenaGrid.js",
         "sha256": "b15aee4905122d059c21899d73d837580dac22bf163be1ffd64b5d0fd2849ad3"
       },
@@ -40612,7 +40618,7 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaSimulation.js",
-        "sha256": "591ec04fbad4fac72ae0aada2aac0f0029a5e188fb2533767014c3af2bdf8a8a"
+        "sha256": "d6f88c1ce878fc3747a73115d05849aa26840f30c66d262e065e23c1b7db42e7"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaUpgrades.js",
@@ -40804,7 +40810,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-        "sha256": "6cf719527527c3f95ff6d82bc35913a964267402ce34802f4d19566332262648"
+        "sha256": "29bacacdf206606c311cc41e3be542dec03f6f9a8b62e02685a88bfbd7382a0f"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
@@ -41528,7 +41534,7 @@
       },
       {
         "path": "src/championship/text/dataArenaText.js",
-        "sha256": "86229271f96d77ea0a4453a45d3c4227a5e7a3b608525abf1722dce1aea61d0e"
+        "sha256": "6f80e5f99ae8e76384ba1201fdb2fe560c2fb418f7fbf7f6b6ee2ff223b22e79"
       },
       {
         "path": "src/championship/text/evolutionPresentationText.js",

@@ -3123,6 +3123,8 @@ async function enterDataArena(dataArenaButton) {
       resolutionCap: currentQuality().pixiResolutionCap,
       qa: arenaParams.get("arenaQa") === "1",
       seed: /^\d{1,10}$/.test(seedParam) ? Number(seedParam) >>> 0 : null,
+      // Only partners raised or lit in the Dex may enter (Owner 2026-11-02).
+      progress: app.getDataArenaProgress?.() ?? null,
       onExit: restoreBattle,
       // Cyber Gachapon: a manual-battle win pays 1-3 tickets, a cup 3-10, into the one save.
       onVictory: ({ tournament }) => app?.grantGachaTickets?.(tournament ? 3 + Math.floor(Math.random() * 8) : 1 + Math.floor(Math.random() * 3), 'DATA_ARENA')
