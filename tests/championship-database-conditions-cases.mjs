@@ -5,7 +5,7 @@ import {readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 // OWNER_APPROVED_ADAPTATION 2026-11-02: the encyclopedia reads the ranch's growth tables (native branches up to
 // 成熟期 plus three appended ones); 覺醒體/究極體 are battle burst forms, not growth routes.
-import {PRODUCT_GROWTH_RULES} from '../src/championship/contracts/productGrowthRules.js';
+import {PRODUCT_GROWTH_RULES,growthBranchHistoryIndex} from '../src/championship/contracts/productGrowthRules.js';
 const lifecycle=JSON.parse(JSON.stringify(PRODUCT_GROWTH_RULES));
 import {deepFreeze} from '../src/championship/contracts/championshipContracts.js';
 import {nativeEvolutionRequirements} from '../src/championship/raising/nativeRaisingLifecycle.js';
@@ -13,8 +13,9 @@ import {projectDatabaseEvolutionRoutes} from '../src/championship/database/datab
 import {DATABASE_EVOLUTION_CONDITION_DESCRIPTORS as descriptors,
   projectDatabaseEvolutionConditions as project} from '../src/championship/database/databaseEvolutionConditions.js';
 
-const registeredSpecies=Array.from({length:216},(_,i)=>i+8);
-const options=(source,branch)=>({sourceRegistered:true,registeredSpecies,evolutionBranches:[(source-8)*5+branch]});
+// Native species and the playable originals (Owner 2026-11-03), whose branches keep native history slots.
+const registeredSpecies=[...Array.from({length:216},(_,i)=>i+8),231,232,234,235,236,237,239,240];
+const options=(source,branch)=>({sourceRegistered:true,registeredSpecies,evolutionBranches:[(source-8)*5+growthBranchHistoryIndex(source,branch)]});
 const before=JSON.stringify(lifecycle);
 deepFreeze(lifecycle);
 const frozen=value=>{
@@ -30,11 +31,11 @@ const isolated=(mode,fixture)=>{
   return JSON.parse(child.stdout);
 };
 
-test('all 235 growth branches preserve exact rules/order, freeze output and leave frozen inputs unchanged',()=>{
+test('all 244 growth branches (235 native-era plus nine to and from the playable originals) preserve exact rules/order, freeze output and leave frozen inputs unchanged',()=>{
   let count=0,rows=0;
   const active=new Set(),kinds={ORDINARY:0,LIFETIME_ONLY:0};
-  assert.equal(lifecycle.rules.length,179);
-  assert.equal(lifecycle.rules.filter(group=>group.length).length,64);
+  assert.equal(lifecycle.rules.length,233);
+  assert.equal(lifecycle.rules.filter(group=>group.length).length,67);
   assert.equal(Math.max(...lifecycle.rules.map(group=>group.length)),5);
   lifecycle.rules.forEach((group,i)=>group.forEach((rule,branch)=>{
     const source=i+8,context=deepFreeze(options(source,branch)),snapshot=JSON.stringify(context);
@@ -53,8 +54,8 @@ test('all 235 growth branches preserve exact rules/order, freeze output and leav
     assert.deepEqual(project(source,branch,context),result);
     assert.equal(JSON.stringify(context),snapshot);
   }));
-  assert.equal(count,235);assert.equal(rows,181);assert.equal(active.size,15);
-  assert.deepEqual(kinds,{ORDINARY:159,LIFETIME_ONLY:76});
+  assert.equal(count,244);assert.equal(rows,194);assert.equal(active.size,15);
+  assert.deepEqual(kinds,{ORDINARY:165,LIFETIME_ONLY:79});
   assert.equal(JSON.stringify(lifecycle),before);
 });
 
@@ -81,7 +82,7 @@ test('unknown source/branch returns no conditions, including target-only registr
     {...options(8,0),registeredSpecies:null},{...options(8,0),evolutionBranches:['0',0.5,-1,9999]}]){
     assert.equal(project(8,0,context),null);
   }
-  const edges=lifecycle.rules.flatMap((group,i)=>group.map((rule,branch)=>({source:i+8,target:rule.target,branch,offset:i*5+branch})));
+  const edges=lifecycle.rules.flatMap((group,i)=>group.map((rule,branch)=>({source:i+8,target:rule.target,branch,offset:i*5+growthBranchHistoryIndex(i+8,branch)})));
   const first=edges[0],other=edges.find(edge=>edge.target===first.target&&edge.source!==first.source);
   assert.ok(other);
   assert.equal(project(other.source,other.branch,{sourceRegistered:true,registeredSpecies,evolutionBranches:[first.offset]}),null);
@@ -110,7 +111,7 @@ test('zero disables rows; all-zero lifetime routes retain their lifetime-only co
       allZero++;const result=project(i+8,branch,options(i+8,branch));
       assert.deepEqual(result.conditions,[]);assert.equal(result.lifetimeOnly,true);
     }
-  }));assert.equal(allZero,64);
+  }));assert.equal(allZero,67);
 });
 
 test('real lifetime care uses a lower bound; synthetic ordinary care uses an upper bound',()=>{
@@ -157,8 +158,8 @@ test('output contains no species/profile/name/raw rule fields and never reports 
   assert.ok(result.caveatIds.includes('THRESHOLDS_DO_NOT_GUARANTEE_EVOLUTION'));
 });
 
-test('pure import and all 235 projections do not invoke resolver/normalizer/constructor, RNG, timers, storage or network',()=>{
-  assert.deepEqual(isolated('purity'),{count:235,importAndProjectionSideEffects:0,forbiddenProjectionCalls:0,functionTrapsVerified:5,globalTrapsVerified:8});
+test('pure import and all 244 projections do not invoke resolver/normalizer/constructor, RNG, timers, storage or network',()=>{
+  assert.deepEqual(isolated('purity'),{count:244,importAndProjectionSideEffects:0,forbiddenProjectionCalls:0,functionTrapsVerified:5,globalTrapsVerified:8});
   const text=readFileSync(new URL('../src/championship/database/databaseEvolutionConditions.js',import.meta.url),'utf8');
   for(const forbidden of [/evaluateNativeEvolution\s*\(/,/evaluateNativeRebirth\s*\(/,/Math\.random\s*\(/,/localStorage/,/setTimeout\s*\(/,/\.next\s*\(/])assert.doesNotMatch(text,forbidden);
 });

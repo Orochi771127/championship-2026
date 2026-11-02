@@ -20,7 +20,8 @@ const OUT = 'src/data/championship/product-hunt-overlay.r1.json';
 
 const generation = i => species[i]?.generationIndex;
 const basesOf = new Map();
-for (const entry of burst.bases) for (const form of entry.forms) for (const i of [form.form, ...(form.alternates ?? [])]) {
+// Original characters (231+) are reached only by evolution (Owner 2026-10-29 / 11-03); hunts never offer them.
+for (const entry of burst.bases.filter(e => e.base < 224)) for (const form of entry.forms) for (const i of [form.form, ...(form.alternates ?? [])]) {
   basesOf.set(i, [...(basesOf.get(i) ?? []), entry.base]);
 }
 // Habitat of each gate (product taxonomy, not ROM): preferred elements and races.

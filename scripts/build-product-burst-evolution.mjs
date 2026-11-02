@@ -15,6 +15,7 @@ const lifecycle = read('src/data/championship/catalogs/raising-lifecycle.r1.json
 const species = read('src/data/championship/catalogs/creature-species.r1.json').records;
 const taxonomy = new Map(read('src/data/championship/species-taxonomy.v1.json').entries.map(e => [e.speciesIndex, e]));
 const extensions = read('src/data/championship/product-species-extensions.r1.json').entries;
+const originals = read('src/data/championship/product-species-originals.r1.json').entries;
 const OUT = 'src/data/championship/product-burst-evolution.r1.json';
 const FORM_CAP = 3, TIER1_PER_BASE = 2, TIER2_PER_BASE = 2;
 // Native attribute counter index (thresholds 0..10) of each race: the standard condition's counter.
@@ -76,6 +77,25 @@ for (const e of extensions.filter(e => e.runtimeReady && e.evolutionReady)) {
   for (const m of sources2.get(e.baseSpeciesIndex) ?? []) tier2.get(m).find(f => f.form === e.baseSpeciesIndex).alternates = [e.speciesIndex];
 }
 
+// Playable original 成熟期 (Owner 2026-11-03) come after every native base, so native assignments never move.
+// Their tier-1 forms are their own ready routes and tier 2 follows those forms' native routes, under the same
+// fan-in cap; a form already at the cap is taken only when it is the base's only one.
+const playable = new Set(originals.filter(e => e.runtimeReady && e.evolutionReady).map(e => e.speciesIndex));
+const capped = (candidates, sources, limit) => {
+  const open = candidates.filter(f => (sources.get(f.form)?.length ?? 0) < FORM_CAP);
+  return (open.length ? open : candidates.slice(0, 1)).slice(0, limit);
+};
+const originalBases = originals.filter(e => playable.has(e.speciesIndex) && e.generationIndex === 4).map(e => {
+  const t1 = capped(e.evolution.filter(r => (playable.has(r.target) || r.target < 224) && generation(r.target) === 5)
+    .map(rule => ({form: rule.target, tier: 1, via: null, ...conditionOf(rule, 1)})), sources1, TIER1_PER_BASE);
+  for (const f of t1) sources1.get(f.form)?.push(e.speciesIndex);
+  const t2 = capped(t1.flatMap(f => branches(f.form).filter(r => generation(r.target) === 6)
+    .map(rule => ({form: rule.target, tier: 2, via: f.form, ...conditionOf(rule, 2)})))
+    .filter((f, i, all) => all.findIndex(o => o.form === f.form) === i), sources2, TIER2_PER_BASE);
+  for (const f of t2) sources2.get(f.form)?.push(e.speciesIndex);
+  return {base: e.speciesIndex, forms: [...t1, ...t2]};
+});
+
 const missing1 = AW.filter(a => !sources1.get(a).length), missing2 = UL.filter(u => !sources2.get(u).length);
 if (missing1.length || missing2.length) throw new Error(`BURST_FORM_UNREACHED ${missing1} ${missing2}`);
 const document = {
@@ -96,7 +116,7 @@ const document = {
     bloodlinePerks: {emma: {chargeMultiplier: 1.2}, beta: {noWeakness: true}, chronoOre: {extraSeconds: 4},
       chronoMetal: {healPercent: 15}, chronoAlloy: {cooldownMultiplier: 0.85, speedPercent: 15}, supernova: {multiplierBonus: 0.1}},
     training: {cooldownSeconds: 300, dwellSeconds: 300, afterMatchMinimumSeconds: 60, counterBestGain: 10}},
-  bases: MA.map(m => ({base: m, forms: [...tier1.get(m), ...tier2.get(m)]}))
+  bases: [...MA.map(m => ({base: m, forms: [...tier1.get(m), ...tier2.get(m)]})), ...originalBases]
 };
 const text = JSON.stringify(document, null, 1) + '\n';
 if (process.argv.includes('--check')) {

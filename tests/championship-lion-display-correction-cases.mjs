@@ -131,7 +131,9 @@ test('212 unrelated profiles retain exact content with the approved 077/078 copy
   assert.equal(hash(JSON.stringify(unrelatedProfiles.map(row=>unarmedStoryBefore.entries.find(old=>old.speciesIndex===row.speciesIndex)??row))),baseline.unaffectedProfilesSha256);
   const currentText=fs.readFileSync('src/championship/text/battleMoveNames.js','utf8');
   const exclude=new Set([273,274,285,286,287,288]);
-  const unrelated=text=>text.split(/\r?\n/).filter(line=>!exclude.has(Number(/^\s*(\d+):/.exec(line)?.[1]))).join('\n');
+  // The playable originals' names (Owner 2026-11-03) are merged in from their own contract by four added lines.
+  const merged=/productOriginalMoveNames|Playable original characters' moves|product-species-originals\.r1\.json/;
+  const unrelated=text=>text.split(/\r?\n/).filter(line=>!exclude.has(Number(/^\s*(\d+):/.exec(line)?.[1]))&&!merged.test(line)).join('\n');
   assert.equal(hash(unrelated(currentText)),baseline.unaffectedMoveNamesSha256);
   for(const id of exclude)assert.equal(BATTLE_MOVE_NAMES[id].length,5);
 });

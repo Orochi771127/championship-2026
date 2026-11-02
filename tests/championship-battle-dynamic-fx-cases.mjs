@@ -21,6 +21,7 @@ import {battleFxApprovedMoveName, createBattleFxLookups} from '../src/championsh
 import {BATTLE_MOVE_NAMES, battleMoveName} from '../src/championship/text/battleMoveNames.js';
 import {SPECIES_NAMES_ZH} from '../src/championship/text/catalogs.zhHant.js';
 import {getBattleCatalogRecord, listBattleCatalogRecords, listMoveRecordsForSpecies} from '../src/championship/battle/battleCatalogs.js';
+import {listProductOriginalMoveRecords} from '../src/championship/contracts/productOriginalSpecies.js';
 import {createBattleRuntime} from '../src/championship/app/battleRuntime.js';
 
 const SCHEDULE = Object.freeze({entryMode: 0, scheduleSlotA: 2, scheduleSlotB: 3, progressCounter: 0});
@@ -88,6 +89,9 @@ test('every species move has one unique approved name in each shipped language (
   const {setLocale} = await import('../src/championship/text/locale.js');
   const speciesMoves = listBattleCatalogRecords('moves').filter(move => move.recordIndex > 30);
   assert.equal(speciesMoves.length, 565);
+  // The playable original characters' moves (records 596+, Owner 2026-11-03) carry their own five names.
+  speciesMoves.push(...listProductOriginalMoveRecords());
+  assert.equal(speciesMoves.length, 565 + 22);
   assert.deepEqual(Object.keys(BATTLE_MOVE_NAMES).map(Number).sort((a, b) => a - b), speciesMoves.map(move => move.recordIndex));
   for (const [column, locale] of ['zh-Hant', 'en', 'ja', 'th', 'vi'].entries()) {
     const names = Object.values(BATTLE_MOVE_NAMES).map(entry => entry[column]);

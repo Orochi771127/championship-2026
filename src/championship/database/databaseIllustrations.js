@@ -3,6 +3,7 @@
 import catalog from '../../data/championship/database-illustrations.r1.json' with {type:'json'};
 import {deepFreeze} from '../contracts/championshipContracts.js';
 import {getLocale} from '../text/locale.js';
+import {isPlayableProductOriginal} from '../contracts/productOriginalSpecies.js';
 
 export function assertDatabaseIllustrationCatalog(entries){
  const ids=new Set(),codes=new Set(),forms=new Map();
@@ -39,8 +40,9 @@ export function getDatabaseIllustrationStory(speciesIndex, locale = getLocale())
   const entry = getDatabaseIllustration(speciesIndex);
   return entry?.profileByLocale?.[locale] ?? null;
 }
+// A playable original (Owner 2026-11-03) is a regular registrable Dex entry; only art-only identities are rows here.
 export function databaseIllustrationRow(speciesIndex){
-  const entry=getDatabaseIllustration(speciesIndex);
+  const entry=isPlayableProductOriginal(speciesIndex)?null:getDatabaseIllustration(speciesIndex);
   return entry?deepFreeze({...entry,kind:'ILLUSTRATION',state:'NOT_TRACKED',viewable:true,
     source:null,instanceCount:0,instances:[],evolutionRoutes:[]}):null;
 }

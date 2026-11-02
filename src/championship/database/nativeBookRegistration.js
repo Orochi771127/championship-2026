@@ -1,7 +1,10 @@
 import {listProductExtensions} from '../contracts/productSpeciesExtensions.js';
+import {listProductOriginals,isPlayableProductOriginal} from '../contracts/productOriginalSpecies.js';
 import { NATIVE_REGULAR_BOOK_SPECIES } from "../../data/championship/nativeBookSpecies.js";
 
-const regular = new Set([...NATIVE_REGULAR_BOOK_SPECIES,...listProductExtensions().map(e=>e.speciesIndex)]);
+// Playable original characters (Owner 2026-11-03) register like the product extensions.
+const regular = new Set([...NATIVE_REGULAR_BOOK_SPECIES,...listProductExtensions().map(e=>e.speciesIndex),
+  ...listProductOriginals().filter(e=>isPlayableProductOriginal(e.speciesIndex)).map(e=>e.speciesIndex)]);
 
 export function normalizeRegisteredSpecies(value = []) {
   if (!Array.isArray(value) || value.length > regular.size || new Set(value).size !== value.length
