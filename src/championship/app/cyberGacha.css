@@ -434,3 +434,58 @@
 :root[data-motion="reduced"] :is(.cm-gacha__ball-shell, .cm-gacha__aura, .cm-gacha__rays, .cm-gacha__motes > span, .cm-gacha-badge, .cm-gacha-dock-badge),
 :root[data-motion="reduced"] .cm-gacha__glass::after, :root[data-motion="reduced"] .cm-gacha__crank::before,
 :root[data-motion="reduced"] .cm-gacha__card::after { animation: none; }
+
+/* ---- Ranch automation, directed forging, diamond rewards and the founder box (DIAMOND_ECONOMY_20261102) ---- */
+.cm-gacha__pane--box { display: none; }
+.cm-gacha[data-mode="BOX"] .cm-gacha__pane--box { display: flex; flex-direction: column; gap: 10px; min-height: 0; overflow-y: auto; padding-bottom: 88px; }
+.cm-gacha__mode[data-pending]:not([data-pending="0"])::before { content: attr(data-pending); position: absolute; top: -7px; right: -5px; z-index: 3;
+  min-width: 18px; height: 18px; padding: 0 4px; border: 2px solid var(--g-ink); border-radius: 999px; background: #ff4d5e; color: #fff;
+  font-size: 11px; font-weight: 900; line-height: 14px; text-align: center; }
+.cm-gacha__pool, .cm-gacha__forge, .cm-gacha__rewards { display: flex; flex-direction: column; gap: 6px; margin: 4px 0 0; padding: 8px;
+  border: 3px solid var(--g-ink); border-radius: 14px; background: var(--g-slate-2); box-shadow: 0 4px 0 var(--g-ink); }
+.cm-gacha__pool-title { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 13.5px; font-weight: 900; color: var(--g-yellow);
+  text-shadow: var(--g-outline); }
+.cm-gacha__pool-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.cm-gacha__pool-card { position: relative; display: grid; grid-template-columns: 52px minmax(0, 1fr); align-items: center; gap: 6px; padding: 6px;
+  border: 2.5px solid var(--g-ink); border-radius: 12px; background: var(--g-slate); box-shadow: inset 0 2px 0 rgba(255, 255, 255, .1), 0 3px 0 var(--g-ink); }
+.cm-gacha__pool-card[data-rarity="SSR"], .cm-gacha__forge-row[data-rarity="SSR"] { box-shadow: inset 0 2px 0 rgba(255, 255, 255, .1), 0 3px 0 var(--g-ink), 0 0 0 2px #ffd23f; }
+.cm-gacha__pool-card[data-rarity="UR"], .cm-gacha__forge-row[data-rarity="UR"] { box-shadow: inset 0 2px 0 rgba(255, 255, 255, .1), 0 3px 0 var(--g-ink), 0 0 0 2px #c79bff; }
+.cm-gacha__pool-card .cm-gacha-icon { width: 52px; height: 52px; }
+.cm-gacha__pool-card .cm-gacha__tile-rarity { left: 4px; }
+.cm-gacha__pool-copy { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.cm-gacha__pool-name { font-size: 12px; font-weight: 900; line-height: 1.2; color: #fff; }
+.cm-gacha__pool-rate { font-size: 11px; font-weight: 800; color: var(--g-yellow); font-variant-numeric: tabular-nums; }
+.cm-gacha__pool-effect { font-size: 10.5px; font-weight: 700; line-height: 1.3; color: var(--g-muted); }
+.cm-gacha__forge-list { display: flex; flex-direction: column; gap: 6px; }
+.cm-gacha__forge-row { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 5px 6px;
+  border: 2.5px solid var(--g-ink); border-radius: 12px; background: var(--g-slate); box-shadow: 0 3px 0 var(--g-ink); }
+.cm-gacha__forge-row .cm-gacha-icon { width: 46px; height: 46px; }
+.cm-gacha__forge-key { min-height: 40px; }
+.cm-gacha__cages { display: flex; flex-direction: column; gap: 6px; }
+.cm-gacha__cage { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 6px 4px 10px; border: 2.5px solid var(--g-ink);
+  border-radius: 12px; background: var(--g-slate); box-shadow: 0 3px 0 var(--g-ink); }
+.cm-gacha__cage[data-royal] { background: linear-gradient(90deg, #5a4300, var(--g-slate)); }
+.cm-gacha__cage-name { font-size: 12.5px; font-weight: 900; color: #fff; }
+.cm-gacha__reward-list { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.cm-gacha__reward { display: flex; justify-content: space-between; gap: 8px; padding: 5px 10px; border: 2px solid var(--g-ink); border-radius: 10px;
+  background: var(--g-slate); font-size: 12px; font-weight: 800; }
+.cm-gacha__reward strong { color: #7fdcff; font-variant-numeric: tabular-nums; }
+.cm-gacha__reward--empty { justify-content: center; color: var(--g-muted); }
+.cm-gacha__claim { align-self: stretch; }
+.cm-gacha__founder { position: relative; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 10px; padding: 10px; border: 3px solid var(--g-ink);
+  border-radius: 16px; background: linear-gradient(160deg, #1b2a6b 0%, #24124d 60%, #3d2a00 100%);
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, .14), 0 5px 0 var(--g-ink), 0 0 0 2px #ffd23f; }
+.cm-gacha__founder-art { width: 96px; height: 96px; object-fit: contain; filter: drop-shadow(0 4px 0 rgba(0, 0, 0, .45)); }
+.cm-gacha__founder-copy { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.cm-gacha__founder-title { display: flex; align-items: center; gap: 5px; margin: 0; font-size: 14px; font-weight: 1000; color: #ffe27a; text-shadow: var(--g-outline); }
+.cm-gacha__founder-crown { width: 20px; height: 20px; flex: none; }
+.cm-gacha__founder-tag { align-self: flex-start; padding: 0 8px; border: 2px solid var(--g-ink); border-radius: 999px; background: #ffd23f; color: var(--g-ink);
+  font-size: 10.5px; font-weight: 900; }
+.cm-gacha__founder-items { display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 0; list-style: none; font-size: 11.5px; font-weight: 800; color: #fff; }
+.cm-gacha__founder-items li { display: flex; align-items: center; gap: 5px; }
+.cm-gacha__founder-icon { width: 20px; height: 20px; flex: none; object-fit: contain; }
+.cm-gacha__founder[data-state="claimed"] { filter: saturate(.65); }
+.cm-gacha__founder-claim { align-self: stretch; }
+/* Four mode keys (DIAMOND_ECONOMY_20261102): the icon sits over the label so every label stays whole on a phone. */
+.cm-gacha__mode { flex-direction: column; gap: 2px; padding: 3px 4px; min-height: 50px; font-size: 12.5px; }
+.cm-gacha__mode .cm-gacha-key__icon { width: 20px; height: 20px; }

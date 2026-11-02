@@ -16,8 +16,9 @@ import { prefersReducedMotion } from "../presentation/presentationPreferences.js
 import { shopGoodsPresentation } from "../presentation/shopGoodsUiArt.js";
 import { GACHA_TICKET_ART, gachaCurrencyImage, gachaIcon, gachaKindIconName, gachaTicketImage } from "./cyberGachaIcons.js";
 import { GACHA_CAPSULE_RADIUS, crankTurn, settleCapsules, simulateTumble } from "./cyberGachaPhysics.js";
-import { GACHA_PERSONALITY_CHOICES, gachaChipEffectLines, gachaChipTiming } from "../gacha/cyberGacha.js";
-import { personalityName } from "../text/zhHant.js";
+import { GACHA_PERSONALITY_CHOICES, GACHA_AUTOMATION_SHARE, gachaChipEffectLines, gachaChipTiming } from "../gacha/cyberGacha.js";
+import { automationEffectLines, automationTiming } from "../gacha/ranchAutomation.js";
+import { cageName, personalityName } from "../text/zhHant.js";
 
 const UI_ART = "assets/production/ui/cyber-gacha-r1/";
 export const CYBER_GACHA_ART = Object.freeze({
@@ -53,9 +54,26 @@ const REFUSALS = Object.freeze({
   NOT_ARMED: "這個晶片沒有裝填。",
   CHOOSE_PERSONALITY: "請先選擇新的性格。",
   SAME_PERSONALITY: "拍檔已經是這個性格了。",
+  AWAKENING_ENERGY_FULL: "道具能補的覺醒能量已滿，剩下靠訓練和對戰。",
+  NO_AWAKENING_TARGET: "這隻拍檔目前沒有可以覺醒的形態。",
+  NOT_AN_AWAKENING_ITEM: "這個道具不能注入覺醒能量。",
   SAVE_FAILED: "存檔失敗，這次沒有扣除任何東西。",
-  WALLET_CHANGED: "錢包已變更，請再試一次。"
+  WALLET_CHANGED: "錢包已變更，請再試一次。",
+  // DIAMOND_ECONOMY_20261102: forging, mounting cores and the founder box.
+  NOT_ENOUGH_SHARDS: "金屬碎片數量不足。",
+  STACK_FULL: "這個道具已經持有上限。",
+  UNKNOWN_CAGE: "請先在設施配置放置並確認這座籠舍。",
+  ALREADY_MOUNTED: "這座籠舍已經掛載同一種核心。",
+  ROYAL_ALREADY_AUTOMATED: "皇家籠舍已內建全自動功能，不需要再掛載。",
+  NOT_MOUNTED: "這座籠舍沒有掛載這個核心。",
+  FOUNDER_PACK_LOCKED: "贏得第一枚錦標賽獎牌後才能領取。",
+  ALREADY_CLAIMED: "已經領取過了。",
+  NO_DIAMOND_WALLET: "這個版本沒有鑽石錢包。"
 });
+// Premium-machine rates of the automation items (their tier's rate x the automation share, split evenly).
+const AUTOMATION_RATES = Object.freeze({ SR: 0.28, SSR: 0.1, UR: 0.02 });
+const AUTOMATION_PER_TIER = Object.freeze({ SR: 2, SSR: 1, UR: 1 });
+const ratePercent = (rarity) => (((AUTOMATION_RATES[rarity] ?? 0) * GACHA_AUTOMATION_SHARE * 100) / (AUTOMATION_PER_TIER[rarity] ?? 1)).toFixed(1);
 
 // The machine squashes and rattles while the crank turns (origin: its feet).
 const MACHINE_RATTLE = [0, 0.07, 0.14, 0.22, 0.3, 0.38, 0.46, 0.54, 0.62, 0.72, 0.84, 1].map((offset, index, list) => {
@@ -117,6 +135,31 @@ const bestRarity = (prizes) => prizes.reduce((top, prize) => (RARITY_ORDER[prize
 // floating line keeps two parts; the use panel lists the rest.
 const ENHANCE_STATS = Object.freeze([["maxHp", "最大 HP"], ["attack", "攻擊"], ["defense", "防禦"], ["wisdom", "智力"], ["speed", "速度"], ["maxTp", "最大 TP"]]);
 const FOUR_STATS = Object.freeze(["attack", "defense", "wisdom", "speed"]);
+/**
+ * The bag's note for one metal row of the gacha frame: what 「強化銘刻」 and 「催化進化」 do. On a 成熟期 a
+ * metal feeds the awakening (Owner 2026-11-02 awakening raising); `item.awaken` carries its numbers.
+ */
+export function gachaMetalNote(item) {
+  const awaken = item.awaken ?? { fill: false, tier1: 0, tier2: 0, cap: 60 };
+  const enhance = RARITY_ORDER[item.rarity] >= 2
+    ? uiText("強化：全能力 +{n}，並銘刻金屬血統「{perk}」與腳底流光。", { n: item.boost, perk: uiText(`BLOODLINE_PERK_${item.family}`) })
+    : uiText("強化：全能力 +{n}。", { n: item.boost });
+  const early = uiText(item.rarity === "R" ? "催化：幼年期無視不足條件，強制進化。" : "催化：成長期以前無視不足條件，強制進化。");
+  const mature = awaken.fill ? uiText("成熟期：覺醒能量一次充滿，並免除轉生條件。")
+    : awaken.tier2 && awaken.tier2 !== awaken.tier1
+      ? uiText("成熟期：注入覺醒能量 +{n}%（二段 +{m}%），道具最多補到 {cap}%。", { n: awaken.tier1, m: awaken.tier2, cap: awaken.cap })
+      : uiText("成熟期：注入覺醒能量 +{n}%，道具最多補到 {cap}%。", { n: awaken.tier1, cap: awaken.cap });
+  const fuse = item.fusesInto ? [uiText("集滿 {count} 個可熔合成「{metal}」。", { count: item.fusionCost, metal: uiText(item.fusesInto.name) })] : [];
+  return [enhance, early, mature, ...fuse].join("");
+}
+
+/** The bag's line after a metal fed an awakening. */
+export function awakeningEnergySummary(result) {
+  if (result?.kind !== "AWAKEN_ENERGY") return "";
+  if (result.ready) return uiText("覺醒能量已滿：到牧場點拍檔，開始覺醒儀式。");
+  return uiText("覺醒能量 +{n}%（目前 {percent}%）", { n: result.amount, percent: result.percent ?? 0 });
+}
+
 export function enhanceSummary(result) {
   const { before, after } = result ?? {};
   if (result?.kind !== "ENHANCE" || !before || !after) return "";
@@ -236,7 +279,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   const modes = element("div", "cm-gacha__modes");
   modes.setAttribute("role", "tablist");
   const modeButtons = new Map();
-  for (const [id, label, icon] of [["MACHINE", "轉蛋機", "machine"], ["SYNTH", "合成爐", "furnace"], ["BAG", "晶片背包", "bag"]]) {
+  for (const [id, label, icon] of [["MACHINE", "轉蛋機", "machine"], ["SYNTH", "合成爐", "furnace"], ["BAG", "晶片背包", "bag"], ["BOX", "禮盒獎勵", "gift"]]) {
     const tab = key("cm-gacha__mode", uiText(label), gachaIcon(icon, "cm-gacha-key__icon"));
     tab.dataset.mode = id;
     tab.setAttribute("role", "tab");
@@ -308,7 +351,10 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   pulls.append(single, ten);
   const rates = element("p", "cm-gacha__plate cm-gacha__rates");
   deck.append(pity, stage, machineSwitch);
-  machinePane.append(deck, pulls, rates);
+  // DIAMOND_ECONOMY_20261102: the prize pool preview shows the new automation items with their rates and effects.
+  const pool = element("section", "cm-gacha__pool");
+  pool.setAttribute("aria-label", uiText("獎池預覽"));
+  machinePane.append(deck, pulls, rates, pool);
 
   // ---- Synthesizer ----------------------------------------------------------
   const synthPane = element("div", "cm-gacha__pane cm-gacha__pane--synth");
@@ -324,7 +370,10 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   const synthList = element("div", "cm-gacha__chip-grid");
   const synthHead = element("div", "cm-gacha__synth-head");
   synthHead.append(furnace, synthNote);
-  synthPane.append(synthHead, slots, synthActions, synthList);
+  // Directed forging: fixed recipes for every automation item (the pity path).
+  const forge = element("section", "cm-gacha__forge");
+  forge.setAttribute("aria-label", uiText("定向合成（保底）"));
+  synthPane.append(synthHead, slots, synthActions, forge, synthList);
   let synthSlots = [];
 
   // ---- Bag ----------------------------------------------------------------
@@ -332,6 +381,12 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   const bagGrid = element("div", "cm-gacha__chip-grid cm-gacha__chip-grid--bag");
   const usePanel = element("div", "cm-gacha__use");
   bagPane.append(usePanel, bagGrid);
+
+  // ---- Rewards box: diamond rewards to claim and the founder box -----------------
+  const boxPane = element("div", "cm-gacha__pane cm-gacha__pane--box");
+  const rewardsCard = element("section", "cm-gacha__rewards");
+  const founderCard = element("section", "cm-gacha__founder");
+  boxPane.append(rewardsCard, founderCard);
   let bagSelection = null;
   let partnerSelection = null;
   let personalitySelection = null;
@@ -376,7 +431,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   pityPicker.hidden = true;
   pityPicker.setAttribute("role", "dialog");
   pityPicker.setAttribute("aria-modal", "true");
-  root.append(wallet, modes, machinePane, synthPane, bagPane, revealStage, pityPicker, clock);
+  root.append(wallet, modes, machinePane, synthPane, bagPane, boxPane, revealStage, pityPicker, clock);
   host.append(root);
 
   let lastFrame = null;
@@ -618,7 +673,8 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
           else if (result.kind === "SYNTH") await smeltFurnace();
           if (!life.signal.aborted) await reveal(result, { fromChute: Boolean(action.pull) });
         } else fx(root, "gacha-use", result.kind === "ARMED" ? uiText("已裝填") : result.kind === "DISARMED" ? uiText("已取回")
-          : enhanceSummary(result) || uiText("已使用"));
+          : result.kind === "MOUNT" ? uiText("已掛載") : result.kind === "UNMOUNT" ? uiText("已卸下")
+          : enhanceSummary(result) || awakeningEnergySummary(result) || uiText("已使用"));
       }
       root.dataset.machine = machineId;
     } finally {
@@ -691,7 +747,8 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
       element("span", "cm-gacha__tile-name", uiText(item.name)),
       element("span", "cm-gacha__tile-count", uiText("持有 {n} 個", { n: count })));
     // A chip's first effect line, so the grid reads without opening each tile.
-    const effect = CHIP_FAMILIES.has(item.kind) ? gachaChipEffectLines(item)[0] : null;
+    const effect = CHIP_FAMILIES.has(item.kind) ? gachaChipEffectLines(item)[0]
+      : item.kind === "AUTOMATION" ? automationEffectLines(item)[item.edition ? 1 : 0] : null;
     if (effect) tile.append(element("span", "cm-gacha__tile-effect", uiText(effect.text, effect.params)));
     if (item.armed) tile.append(element("span", "cm-gacha__tile-flag", uiText("已裝填")));
     if (locked) tile.append(gachaIcon("lock", "cm-gacha__tile-lock"));
@@ -755,27 +812,138 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     return grid;
   }
 
+  /** Every effect line of an automation item, then where it is used. */
+  function automationEffectList(item) {
+    const list = element("ul", "cm-gacha__effects");
+    for (const line of automationEffectLines(item)) list.append(element("li", "", uiText(line.text, line.params)));
+    list.append(element("li", "cm-gacha__effects-when", uiText(automationTiming(item))));
+    return list;
+  }
+  const cageLabel = (cage) => cageName(cage.definitionIndex, "");
+
+  /** The prize pool preview: the four automation items, their rates and what they do. */
+  function paintPool(frame, premium) {
+    pool.hidden = !premium || !frame.automation?.length;
+    if (pool.hidden) return;
+    pool.replaceChildren(element("h3", "cm-gacha__pool-title", uiText("獎池預覽・新增全自動飼育")));
+    const list = element("div", "cm-gacha__pool-list");
+    for (const item of frame.automation) {
+      const card = element("article", "cm-gacha__pool-card");
+      card.dataset.rarity = item.rarity;
+      card.dataset.itemId = item.id;
+      card.append(itemIcon({ ...item, kind: "AUTOMATION" }), element("span", "cm-gacha__tile-rarity", item.rarity));
+      const copy = element("div", "cm-gacha__pool-copy");
+      copy.append(element("strong", "cm-gacha__pool-name", uiText(item.name)),
+        element("span", "cm-gacha__pool-rate", uiText("機率 {n}%", { n: ratePercent(item.rarity) })),
+        element("span", "cm-gacha__pool-effect", uiText(automationEffectLines(item)[item.edition ? 1 : 0]?.text ?? "",
+          automationEffectLines(item)[item.edition ? 1 : 0]?.params)));
+      card.append(copy);
+      list.append(card);
+    }
+    pool.append(list);
+  }
+
+  /** Directed forging: each recipe, what it takes, and its key. */
+  function paintForge(frame) {
+    forge.replaceChildren(element("h3", "cm-gacha__pool-title", uiText("定向合成（保底）")),
+      element("p", "cm-gacha__plate cm-gacha__note", uiText("抽不到也不怕：R／SR 晶片＋金屬碎片可指定合成全自動飼育道具（不使用星核碎片）。")));
+    const list = element("div", "cm-gacha__forge-list");
+    for (const item of frame.automation ?? []) {
+      if (!item.recipe) continue;
+      const row = element("div", "cm-gacha__forge-row");
+      row.dataset.rarity = item.rarity;
+      row.dataset.itemId = item.id;
+      const copy = element("div", "cm-gacha__pool-copy");
+      copy.append(element("strong", "cm-gacha__pool-name", uiText(item.name)),
+        element("span", "cm-gacha__pool-rate", uiText("晶片 ×{chips}＋金屬碎片 ×{shards}", { chips: item.recipe.chips, shards: item.recipe.shards })));
+      const make = key("cm-gacha__action cm-gacha__forge-key", uiText("合成"), gachaIcon("furnace", "cm-gacha-key__icon"));
+      make.disabled = !item.recipe.ready;
+      make.dataset.forge = item.id;
+      make.addEventListener("click", () => { returnFocus = make; again = null; void run({ call: () => intents.gachaForgeAutomation(item.id) }); });
+      row.append(itemIcon({ ...item, kind: "AUTOMATION" }), copy, make);
+      list.append(row);
+    }
+    forge.append(list);
+  }
+
+  /** Diamond rewards waiting to be claimed, and the founder box. */
+  function paintBox(frame) {
+    rewardsCard.replaceChildren();
+    const pending = frame.diamondRewards ?? [];
+    const total = pending.reduce((sum, entry) => sum + entry.amount, 0);
+    const head = element("h3", "cm-gacha__pool-title");
+    head.append(gachaCurrencyImage("diamond", "cm-gacha__price-icon"), element("span", "", uiText("鑽石獎勵")));
+    rewardsCard.append(head, element("p", "cm-gacha__plate cm-gacha__note",
+      uiText("故事章節首通、錦標賽階級晉升、圖鑑登錄滿 10／25／50／100 隻，各領一次 200～500 鑽石。")));
+    const list = element("ul", "cm-gacha__reward-list");
+    const LABEL = { STORY: "故事章節首通", RANK: "階級 {n} 晉升", DEX: "圖鑑登錄 {n} 隻" };
+    for (const entry of pending) {
+      const item = element("li", "cm-gacha__reward");
+      item.dataset.kind = entry.kind;
+      item.append(element("span", "", uiText(LABEL[entry.kind] ?? "", { n: entry.value })), element("strong", "", `+${fmt(entry.amount)}`));
+      list.append(item);
+    }
+    if (!pending.length) list.append(element("li", "cm-gacha__reward cm-gacha__reward--empty", uiText("目前沒有可領取的鑽石獎勵。")));
+    const claim = key("cm-gacha__action cm-gacha__action--primary cm-gacha__claim", uiText("全部領取 +{n}", { n: fmt(total) }), gachaCurrencyImage("diamond", "cm-gacha-key__icon"));
+    claim.disabled = !pending.length || frame.diamonds === null;
+    claim.addEventListener("click", () => {
+      const result = intents.claimDiamondRewards?.();
+      if (result?.ok && result.granted) fx(claim, "purchase", uiText("鑽石 +{n}", { n: fmt(result.granted) }));
+      else fx(claim, "denied");
+    });
+    rewardsCard.append(list, claim);
+
+    const founder = frame.founder;
+    founderCard.hidden = !founder;
+    if (!founder) return;
+    founderCard.dataset.state = founder.claimed ? "claimed" : founder.unlocked ? "ready" : "locked";
+    const art = image(founder.art, "cm-gacha__founder-art", uiText("創始馴獸師開拓禮盒"));
+    const copy = element("div", "cm-gacha__founder-copy");
+    const title = element("h3", "cm-gacha__founder-title");
+    title.append(gachaIcon("crown", "cm-gacha__founder-crown"), element("span", "", uiText("創始馴獸師開拓禮盒")));
+    const contents = element("ul", "cm-gacha__founder-items");
+    const diamonds = element("li", "");
+    diamonds.append(gachaCurrencyImage("diamond", "cm-gacha__price-icon"), element("span", "", uiText("鑽石 ×{n}（可直接擴充 10 格土地）", { n: fmt(founder.diamonds) })));
+    contents.append(diamonds);
+    for (const entry of founder.items) {
+      const row = element("li", "");
+      row.append(image(entry.art, "cm-gacha__founder-icon"), element("span", "", `${uiText(entry.name)} ×${entry.quantity}`));
+      contents.append(row);
+    }
+    const tickets = element("li", "");
+    tickets.append(gachaTicketImage("cm-gacha__price-icon cm-gacha__price-icon--ticket"), element("span", "", uiText("數碼轉蛋券 ×{n}", { n: founder.tickets })));
+    const frameLine = element("li", "");
+    frameLine.append(gachaIcon("crown", "cm-gacha__founder-icon"), element("span", "", uiText("創始冠軍炫耀名片金框")));
+    contents.append(tickets, frameLine);
+    const state = element("p", "cm-gacha__plate cm-gacha__note", uiText(founder.claimed ? "已領取，感謝支持！"
+      : founder.unlocked ? "測試版：達成錦標賽頭銜，可免費領取 1 次。" : "測試版：贏得第一枚錦標賽獎牌後可免費領取 1 次（未來保留金流接口）。"));
+    const take = key("cm-gacha__action cm-gacha__action--primary cm-gacha__founder-claim", uiText(founder.claimed ? "已領取" : "免費領取"), gachaIcon("gift", "cm-gacha-key__icon"));
+    take.disabled = !founder.available;
+    take.addEventListener("click", () => { returnFocus = take; again = null; void run({ call: () => intents.claimFounderPack() }); });
+    copy.append(title, element("span", "cm-gacha__founder-tag", uiText("固定內容・零隨機")), contents, state, take);
+    founderCard.replaceChildren(art, copy);
+  }
+
   function paintBag(frame) {
     bagGrid.replaceChildren();
-    const items = [...frame.metals.map((m) => ({ ...m, kind: "METAL" })), ...frame.chips];
+    const automation = (frame.automation ?? []).map((item) => ({ ...item, kind: "AUTOMATION", automationKind: item.kind }));
+    const items = [...automation, ...frame.metals.map((m) => ({ ...m, kind: "METAL" })), ...frame.chips];
     for (const item of items) {
-      if (item.owned < 1 && !item.armed) continue;
-      bagGrid.append(chipTile(item, { selected: bagSelection === item.id, onClick: () => { bagSelection = item.id; fx(bagGrid, "toggle"); paint(lastFrame); } }));
+      const installed = item.kind === "AUTOMATION" && item.placed > 0;
+      if (item.owned < 1 && !item.armed && !installed) continue;
+      const tile = chipTile(item, { selected: bagSelection === item.id, onClick: () => { bagSelection = item.id; fx(bagGrid, "toggle"); paint(lastFrame); } });
+      // A mounted core or a placed royal cage stays selectable (to take it back off).
+      if (installed) { tile.disabled = false; tile.append(element("span", "cm-gacha__tile-flag", uiText(item.edition ? "已放置 {n}" : "已掛載 {n}", { n: item.placed }))); }
+      bagGrid.append(tile);
     }
     if (!bagGrid.childElementCount) bagGrid.append(element("p", "cm-gacha__plate cm-gacha__note", uiText("背包還是空的。去轉蛋機轉一次吧！")));
     usePanel.replaceChildren();
-    const item = items.find((entry) => entry.id === bagSelection && entry.owned > 0);
+    const item = items.find((entry) => entry.id === bagSelection && (entry.owned > 0 || (entry.kind === "AUTOMATION" && entry.placed > 0)));
     if (!item) return;
     usePanel.append(element("strong", "cm-gacha__use-title", uiText(item.name)));
+    if (item.kind === "AUTOMATION") { paintAutomationUse(frame, item); return; }
     const metal = item.kind === "METAL";
-    // OWNER_APPROVED_ADAPTATION 2026-11-02: natural growth ends at 成熟期, where SSR/UR metals unlock burst forms.
-    const CATALYST_NOTE = { R: "催化：幼年期無視不足條件，強制進化。", SR: "催化：成長期以前無視不足條件，強制進化。",
-      SSR: "催化：成長期以前強制進化；成熟期解鎖一段覺醒（戰鬥中爆裂進化）。",
-      UR: "催化：成長期以前強制進化；成熟期解鎖二段覺醒（尚無一段時先解鎖一段）。" };
-    const describe = metal
-      ? [uiText(RARITY_ORDER[item.rarity] >= 2 ? "強化：全能力 +{n}。SSR 以上會為拍檔銘刻「[{title}]」金屬血統與腳底流光。" : "強化：全能力 +{n}。",
-          { n: item.boost, title: frame.bloodlines[item.family]?.title ?? "" }), uiText(CATALYST_NOTE[item.rarity] ?? CATALYST_NOTE.R),
-        ...(item.fusesInto ? [uiText("集滿 {count} 個可熔合成「{metal}」。", { count: item.fusionCost, metal: uiText(item.fusesInto.name) })] : [])].join("")
+    const describe = metal ? gachaMetalNote(item)
       : uiText("{kind}・原「{origin}」", { kind: uiText(KIND_LABEL[item.kind] ?? ""), origin: uiText(item.origin) });
     usePanel.append(element("p", "cm-gacha__use-note", describe));
     if (!metal) usePanel.append(chipEffectList(item));
@@ -820,6 +988,34 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     usePanel.append(actions);
   }
 
+  /** A core mounts on a placed cage (or comes back off one); a royal cage is placed in the facility editor. */
+  function paintAutomationUse(frame, item) {
+    usePanel.append(automationEffectList(item));
+    if (item.automationKind !== "CORE") {
+      usePanel.append(element("p", "cm-gacha__use-note", uiText("已放置 {placed} 座・背包 {owned} 座", { placed: item.placed, owned: item.owned })));
+      return;
+    }
+    const cages = element("div", "cm-gacha__partners cm-gacha__cages");
+    for (const cage of frame.cages ?? []) {
+      const mounted = cage.mounted.includes(item.module);
+      const row = element("div", "cm-gacha__cage");
+      row.dataset.instanceId = cage.instanceId;
+      if (cage.royal) row.dataset.royal = cage.edition;
+      row.append(element("span", "cm-gacha__cage-name", cage.royal ? uiText(cage.edition === "STELLAR_ZOO" ? "全自動星際動物園" : "全自動皇家牧場") : cageLabel(cage)));
+      const action = key(`cm-gacha__action${mounted ? "" : " cm-gacha__action--primary"}`, uiText(cage.royal ? "已內建" : mounted ? "卸下" : "掛載"));
+      action.disabled = cage.royal || (!mounted && item.owned < 1);
+      action.dataset.mount = mounted ? "off" : "on";
+      action.addEventListener("click", () => {
+        returnFocus = action; again = null;
+        void run({ call: () => (mounted ? intents.gachaUnmountCore(item.module, cage.instanceId) : intents.gachaMountCore(item.id, cage.instanceId)) });
+      });
+      row.append(action);
+      cages.append(row);
+    }
+    if (!cages.childElementCount) cages.append(element("p", "cm-gacha__plate cm-gacha__note", uiText("先到「設施配置」放置並確認籠舍。")));
+    usePanel.append(cages);
+  }
+
   function pricePlate(premium, frame, price, count) {
     const plate = element("span", "cm-gacha__price");
     if (!premium) plate.append(gachaCurrencyImage("bits", "cm-gacha__price-icon"), element("span", "", fmt(price.bits)));
@@ -848,6 +1044,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     rates.textContent = uiText(premium
       ? "機率 R 60%・SR 28%・SSR 10%・UR 2%｜十連必出 SR 以上進化金屬或 Ω 晶片"
       : "培育補給與狩獵道具 45%・R 晶片 27%・位元幣袋 20%・基礎進化金屬 7%・轉蛋券 1%");
+    paintPool(frame, premium);
     pityLabel.textContent = `${fmt(frame.pity)} / ${fmt(frame.pityMax)}`;
     pity.setAttribute("aria-label", uiText("核心熔煉值：{n} / {max}", { n: frame.pity, max: frame.pityMax }));
     pity.setAttribute("aria-valuemax", String(frame.pityMax));
@@ -856,8 +1053,11 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     pity.dataset.ready = String(frame.pity >= frame.pityMax);
     pityClaim.hidden = frame.pity < frame.pityMax;
     synthSlots = synthSlots.filter((id) => (frame.chips.find((c) => c.id === id)?.owned ?? 0) > 0);
-    if (root.dataset.mode === "SYNTH") paintSynth(frame);
+    if (root.dataset.mode === "SYNTH") { paintSynth(frame); paintForge(frame); }
     if (root.dataset.mode === "BAG") paintBag(frame);
+    if (root.dataset.mode === "BOX") paintBox(frame);
+    const boxTab = modeButtons.get("BOX");
+    if (boxTab) boxTab.dataset.pending = String((frame.diamondRewards?.length ?? 0) + (frame.founder?.available ? 1 : 0));
     if (!revealActions.hidden) paintAgain();
   }
 

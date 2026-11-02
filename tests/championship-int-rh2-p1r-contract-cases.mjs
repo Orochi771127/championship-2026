@@ -30,7 +30,8 @@ test("P1R consumes only the published presentation seam", () => {
   assert.match(view, /careForCreature/, "the care intent stays on the seam");
   assert.doesNotMatch(view, /int-rh2-care-button/, "no generic CARE control");
   assert.match(view, /presentation\.intents\.requestSave/);
-  assert.match(view, /mountField\(\{ host: fieldHost, recoveryHost: root, source: presentation,onTrainingFrame:renderTrainingLabels \}\)/);
+  // DIAMOND_ECONOMY_20261102: the field also hands the view its automation badges (presentation only).
+  assert.match(view, /mountField\(\{ host: fieldHost, recoveryHost: root, source: presentation,onTrainingFrame:renderTrainingLabels,onCageBadgeFrame:renderCageBadges \}\)/);
   assert.doesNotMatch(view, /championshipStandaloneApp|championshipRaisingProduction|savePort|createChampionshipR2Session/);
   assert.doesNotMatch(view, /new Application|requestAnimationFrame|new Ticker|THREE/);
 });

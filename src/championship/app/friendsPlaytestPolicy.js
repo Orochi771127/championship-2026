@@ -5,14 +5,24 @@ export const FRIENDS_PLAYTEST_POLICY = Object.freeze({
   enabled: true, version: 1, grantId: 'friends-playtest:coins:v1', grantCoins: 8000000,
   initialTestDiamonds: 20000, shopOpen: true, huntOpen: true, fullDexView: true, lateMedalPreview: true
 });
+// DIAMOND_ECONOMY_20261102: this wallet is the public build's diamond balance. Story,
+// rank and encyclopedia rewards add to it, so it may grow past the starting grant.
+export const DIAMOND_WALLET_CAP = 9999999;
 export function normalizeFriendsPlaytestState(value) {
   if (value == null) return null;
   if (![1,2].includes(value.version) || !Array.isArray(value.grants) || value.grants.some(id => id !== FRIENDS_PLAYTEST_POLICY.grantId)) {
     throw new TypeError('INVALID_FRIENDS_PLAYTEST_STATE');
   }
   const diamonds = value.diamonds ?? 0, purchases = value.purchases ?? [];
-  if (!Number.isSafeInteger(diamonds) || diamonds < 0 || diamonds > 20000 || !Array.isArray(purchases) || purchases.some(row => (!Number.isInteger(row)||row<2||row>=10)) || new Set(purchases).size !== purchases.length) throw new TypeError('INVALID_TEST_DIAMOND_WALLET');
+  if (!Number.isSafeInteger(diamonds) || diamonds < 0 || diamonds > DIAMOND_WALLET_CAP || !Array.isArray(purchases) || purchases.some(row => (!Number.isInteger(row)||row<2||row>=10)) || new Set(purchases).size !== purchases.length) throw new TypeError('INVALID_TEST_DIAMOND_WALLET');
   return Object.freeze({version: value.version, grants: Object.freeze([...new Set(value.grants)]), diamonds, purchases:Object.freeze([...purchases])});
+}
+/** Earned diamonds into the wallet (capped). No wallet, no credit. */
+export function creditTestDiamonds(state, amount) {
+  const current = normalizeFriendsPlaytestState(state);
+  if (!current || !Number.isSafeInteger(amount) || amount <= 0) return {state:current, granted:0};
+  const diamonds = Math.min(DIAMOND_WALLET_CAP, current.diamonds + amount);
+  return {state:normalizeFriendsPlaytestState({...current, diamonds}), granted:diamonds-current.diamonds};
 }
 export function grantFriendsPlaytestCoins(bits, state, cap, policy = FRIENDS_PLAYTEST_POLICY) {
   const current = normalizeFriendsPlaytestState(state);

@@ -918,3 +918,11 @@
 :root[data-theme="arcade"] .cm-medals__tile[data-acquired="true"] .cm-medals__status { color: #ffd166; font-weight: 800; }
 :root[data-theme="arcade"] .cm-medals__tile[data-acquired="true"] .cm-medals__number { color: rgba(255, 209, 102, 0.78); font-weight: 800; }
 :root[data-theme="arcade"] .cm-medals__tile[data-acquired="true"]:active { background: linear-gradient(180deg, #2a1a4d, #170e30); }
+
+/* Diamond land key (DIAMOND_ECONOMY_20261102): the official blue diamond face; at 100 cells a gold crowned key. */
+:root[data-theme="arcade"] .cm-land-key { --key-face: linear-gradient(180deg, #7fdcff 0%, #2ea8f5 52%, #1d74d8 100%); --key-shade: #134a96; --key-ink: #fff;
+  text-shadow: 0 2px 0 var(--ax-ink), 2px 0 0 var(--ax-ink), -2px 0 0 var(--ax-ink), 0 -2px 0 var(--ax-ink); }
+:root[data-theme="arcade"] .cm-land-key[data-land-max], :root[data-theme="arcade"] .cm-land-key[data-land-expand="max"] {
+  --key-face: linear-gradient(180deg, #fff1a6 0%, #ffd23f 50%, #ff9f1c 100%); --key-shade: #a86400; --key-ink: #3a2600; text-shadow: none; }
+:root[data-theme="arcade"] .cm-land-key:disabled { filter: none; }
+:root[data-theme="arcade"] .cm-hexworld__count { font-size: 18px; }

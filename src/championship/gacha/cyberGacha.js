@@ -12,6 +12,10 @@
 // coin bags and tickets, and an R chip from the premium machine brings a supply.
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
+import {
+  AUTOMATION_ITEMS, AUTOMATION_STACK_CAP, getAutomationItem, getAutomationRecipe, coreForModule, normalizeAutomationStacks,
+  normalizeAutomationMounts, normalizeRoyalEditions, normalizeBondCarry
+} from "./ranchAutomation.js";
 
 export const CYBER_GACHA_VERSION = 1;
 export const GACHA_RARITIES = Object.freeze(["R", "SR", "SSR", "UR"]);
@@ -187,7 +191,8 @@ export function normalizeCyberGacha(value) {
   if (typeof value !== "object" || Array.isArray(value) || value.version !== CYBER_GACHA_VERSION) {
     throw gachaError("INVALID_CYBER_GACHA_STATE");
   }
-  const allowed = new Set(["version", "tickets", "pity", "pulls", "welcome", "chips", "metals", "bloodlines", "armed", "claimed"]);
+  const allowed = new Set(["version", "tickets", "pity", "pulls", "welcome", "chips", "metals", "bloodlines", "armed", "claimed",
+    "automation", "mounts", "editions", "bondCarry"]);
   for (const key of Object.keys(value)) if (!allowed.has(key)) throw gachaError(`UNKNOWN_CYBER_GACHA_KEY: ${key}`);
   const bloodlines = {};
   const entries = Object.entries(value.bloodlines ?? {});
@@ -206,6 +211,12 @@ export function normalizeCyberGacha(value) {
   const claimed = value.claimed ?? [];
   if (!Array.isArray(claimed) || claimed.length > GACHA_BLOODLINE_LIMIT
     || claimed.some((key) => typeof key !== "string" || !/^[\w:.-]{1,60}$/.test(key))) throw gachaError("INVALID_CLAIMED_REWARDS");
+  // Ranch automation (DIAMOND_ECONOMY_20261102): bag stacks, mounted cores, royal
+  // editions and affection carry. Written only once used, so older saves keep their shape.
+  const automation = normalizeAutomationStacks(value.automation);
+  const mounts = normalizeAutomationMounts(value.mounts);
+  const editions = normalizeRoyalEditions(value.editions);
+  const bondCarry = normalizeBondCarry(value.bondCarry);
   return deepFreeze({
     version: CYBER_GACHA_VERSION,
     tickets: count(value.tickets, GACHA_TICKET_CAP),
@@ -216,14 +227,20 @@ export function normalizeCyberGacha(value) {
     metals: normalizeStacks(value.metals, METAL_BY_ID),
     bloodlines,
     armed,
-    claimed: [...new Set(claimed)].sort()
+    claimed: [...new Set(claimed)].sort(),
+    ...(Object.keys(automation).length ? { automation } : {}),
+    ...(Object.keys(mounts).length ? { mounts } : {}),
+    ...(Object.keys(editions).length ? { editions } : {}),
+    ...(Object.keys(bondCarry).length ? { bondCarry } : {})
   });
 }
 
 function plain(state) {
   return {
     ...state, chips: { ...state.chips }, metals: { ...state.metals }, bloodlines: { ...state.bloodlines }, claimed: [...state.claimed],
-    armed: { ...(state.armed.hunt ? { hunt: [...state.armed.hunt] } : {}), ...(state.armed.bounty ? { bounty: state.armed.bounty } : {}) }
+    armed: { ...(state.armed.hunt ? { hunt: [...state.armed.hunt] } : {}), ...(state.armed.bounty ? { bounty: state.armed.bounty } : {}) },
+    automation: { ...state.automation }, editions: { ...state.editions }, bondCarry: { ...state.bondCarry },
+    mounts: Object.fromEntries(Object.entries(state.mounts ?? {}).map(([id, modules]) => [id, [...modules]]))
   };
 }
 
@@ -267,11 +284,23 @@ function rollRarity(table, random) {
 
 const PREMIUM_RATES = Object.freeze([["R", 0.6], ["SR", 0.28], ["SSR", 0.1], ["UR", 0.02]]);
 
+// DIAMOND_ECONOMY_20261102: ranch automation takes this share of the SR, SSR and
+// UR tiers (cores 4.2%, royal ranch 1.5%, stellar zoo 0.3% of all pulls); chips and
+// metals split the rest as before. The same two draws decide every prize.
+export const GACHA_AUTOMATION_SHARE = 0.15;
+
 function premiumPrize(rarity, random) {
   const chips = GACHA_CHIPS.filter((chip) => chip.rarity === rarity);
   const metals = GACHA_METALS.filter((metal) => metal.rarity === rarity);
+  const automation = AUTOMATION_ITEMS.filter((item) => item.rarity === rarity);
+  // Automation sits at the top of the roll, so the metal half keeps its low rolls.
+  let roll = random();
+  if (automation.length && roll >= 1 - GACHA_AUTOMATION_SHARE) {
+    return { kind: "AUTOMATION", id: pick(automation, random).id, rarity, quantity: 1 };
+  }
+  if (automation.length) roll /= 1 - GACHA_AUTOMATION_SHARE;
   // Metals are the point of the premium machine: they take half of every tier.
-  const metal = metals.length && (!chips.length || random() < 0.5);
+  const metal = metals.length && (!chips.length || roll < 0.5);
   const entry = metal ? pick(metals, random) : pick(chips, random);
   return { kind: metal ? "METAL" : "CHIP", id: entry.id, rarity, quantity: 1 };
 }
@@ -320,6 +349,7 @@ function addPrize(next, prize) {
   if (prize.kind === "CHIP") next.chips[prize.id] = Math.min(GACHA_STACK_CAP, (next.chips[prize.id] ?? 0) + prize.quantity);
   else if (prize.kind === "METAL") next.metals[prize.id] = Math.min(GACHA_STACK_CAP, (next.metals[prize.id] ?? 0) + prize.quantity);
   else if (prize.kind === "TICKETS") next.tickets = Math.min(GACHA_TICKET_CAP, next.tickets + prize.quantity);
+  else if (prize.kind === "AUTOMATION") next.automation[prize.id] = Math.min(AUTOMATION_STACK_CAP, (next.automation[prize.id] ?? 0) + prize.quantity);
 }
 
 /**
@@ -539,4 +569,152 @@ export function takeArmedHuntChips(state) {
 export function gachaBloodlineOf(state, instanceId) {
   const family = state?.bloodlines?.[instanceId];
   return family && GACHA_BLOODLINES[family] ? Object.freeze({ family, ...GACHA_BLOODLINES[family] }) : null;
+}
+
+// ---- Ranch automation (OWNER_APPROVED_ADAPTATION 2026-11-02, DIAMOND_ECONOMY_20261102) ----
+
+/** Once-only keys recorded together (diamond rewards keep their ledger here); no tickets. */
+export function recordGachaClaims(state, keys) {
+  const current = normalizeCyberGacha(state);
+  const fresh = [...new Set(keys)].filter((key) => !current.claimed.includes(key));
+  if (!fresh.length) return { state: current, recorded: [] };
+  for (const key of fresh) if (typeof key !== "string" || !/^[\w:.-]{1,60}$/.test(key)) throw gachaError("INVALID_REWARD_KEY");
+  const next = plain(current);
+  next.claimed.push(...fresh);
+  return { state: normalizeCyberGacha(next), recorded: fresh };
+}
+
+// The furnace's directed recipes take one unit at a time: spare copies before the
+// last copy of a kind, lower rarities first, then the largest stacks. Locked chips
+// never go in, and neither does the 星核 (supernova) family, which another batch owns.
+function forgeUnits(rows, need) {
+  const units = rows.flatMap((row) => Array.from({ length: row.owned }, (_, copy) => ({ ...row, last: copy === 0 })));
+  units.sort((a, b) => Number(a.last) - Number(b.last) || a.rank - b.rank || b.owned - a.owned || a.id.localeCompare(b.id));
+  return units.length >= need ? units.slice(0, need).map((unit) => unit.id) : null;
+}
+export const forgeShardPool = () => GACHA_METALS.filter((metal) => metal.id.endsWith("-shard") && metal.family !== "supernova");
+
+/** Which chips and shards a directed recipe would take, or why it cannot run yet. */
+export function automationForgePlan(state, itemId) {
+  const current = normalizeCyberGacha(state);
+  const recipe = getAutomationRecipe(itemId);
+  if (!recipe) return deepFreeze({ ok: false, reason: "UNKNOWN_RECIPE" });
+  if ((current.automation?.[itemId] ?? 0) >= AUTOMATION_STACK_CAP) return deepFreeze({ ok: false, reason: "STACK_FULL" });
+  // Only R and SR chips go in: an SSR/UR chip is never melted down for automation.
+  const chips = forgeUnits(GACHA_CHIPS.filter((chip) => !chip.locked && RANK[chip.rarity] <= RANK.SR)
+    .map((chip) => ({ id: chip.id, owned: current.chips[chip.id] ?? 0, rank: RANK[chip.rarity] })), recipe.chips);
+  const shards = forgeUnits(forgeShardPool()
+    .map((metal) => ({ id: metal.id, owned: current.metals[metal.id] ?? 0, rank: RANK[metal.rarity] })), recipe.shards);
+  if (!chips) return deepFreeze({ ok: false, reason: "NOT_ENOUGH_CHIPS", recipe });
+  if (!shards) return deepFreeze({ ok: false, reason: "NOT_ENOUGH_SHARDS", recipe });
+  return deepFreeze({ ok: true, id: itemId, recipe, chips, shards });
+}
+
+/** Directed forging (the pity path): the recipe's chips and shards in, that exact item out. */
+export function forgeAutomationItem(state, itemId) {
+  const plan = automationForgePlan(state, itemId);
+  if (!plan.ok) return plan;
+  const next = plain(normalizeCyberGacha(state));
+  for (const id of plan.chips) next.chips[id] -= 1;
+  for (const id of plan.shards) next.metals[id] -= 1;
+  addPrize(next, { kind: "AUTOMATION", id: itemId, quantity: 1 });
+  return deepFreeze({ ok: true, consumed: { chips: plan.chips, shards: plan.shards },
+    prize: { kind: "AUTOMATION", id: itemId, rarity: getAutomationItem(itemId).rarity, quantity: 1 }, state: normalizeCyberGacha(next) });
+}
+
+/** Mount one core from the bag on a placed cage instance. A royal edition already carries both. */
+export function mountAutomationCore(state, coreId, instanceId) {
+  const current = normalizeCyberGacha(state);
+  const core = getAutomationItem(coreId);
+  if (core?.kind !== "CORE") return deepFreeze({ ok: false, reason: "NOT_A_CORE" });
+  if (typeof instanceId !== "string" || !/^[a-z0-9:_-]{3,96}$/i.test(instanceId)) return deepFreeze({ ok: false, reason: "UNKNOWN_CAGE" });
+  if ((current.automation?.[coreId] ?? 0) < 1) return deepFreeze({ ok: false, reason: "NOT_OWNED" });
+  if (current.editions?.[instanceId]) return deepFreeze({ ok: false, reason: "ROYAL_ALREADY_AUTOMATED" });
+  const mounted = current.mounts?.[instanceId] ?? [];
+  if (mounted.includes(core.module)) return deepFreeze({ ok: false, reason: "ALREADY_MOUNTED" });
+  const next = plain(current);
+  next.automation[coreId] -= 1;
+  next.mounts[instanceId] = [...mounted, core.module];
+  return deepFreeze({ ok: true, state: normalizeCyberGacha(next) });
+}
+
+/** Take a mounted core back into the bag. */
+export function unmountAutomationCore(state, module, instanceId) {
+  const current = normalizeCyberGacha(state);
+  const core = coreForModule(module), mounted = current.mounts?.[instanceId] ?? [];
+  if (!core || !mounted.includes(module)) return deepFreeze({ ok: false, reason: "NOT_MOUNTED" });
+  if ((current.automation?.[core.id] ?? 0) >= AUTOMATION_STACK_CAP) return deepFreeze({ ok: false, reason: "STACK_FULL" });
+  const next = plain(current);
+  next.mounts[instanceId] = mounted.filter((m) => m !== module);
+  if (!next.mounts[instanceId].length) delete next.mounts[instanceId];
+  next.automation[core.id] = (next.automation[core.id] ?? 0) + 1;
+  return deepFreeze({ ok: true, state: normalizeCyberGacha(next) });
+}
+
+/**
+ * A confirmed facility layout. `editions` names every placed royal cage (null keeps
+ * the current ones); royal cages leaving the layout go back to the bag and new ones
+ * come out of it. Cores on a cage that left, or on a royal cage (which carries both
+ * already), come back to the bag too.
+ */
+export function settleRanchAutomation(state, { editions = null, liveInstanceIds = [] } = {}) {
+  const current = normalizeCyberGacha(state);
+  const live = new Set(liveInstanceIds);
+  const wanted = Object.fromEntries(Object.entries(editions ?? current.editions ?? {}).filter(([id]) => live.has(id)));
+  const next = plain(current);
+  for (const item of AUTOMATION_ITEMS.filter((entry) => entry.edition)) {
+    const total = (current.automation?.[item.id] ?? 0) + Object.values(current.editions ?? {}).filter((e) => e === item.edition).length;
+    const placed = Object.values(wanted).filter((e) => e === item.edition).length;
+    if (placed > total) return deepFreeze({ ok: false, reason: "ROYAL_CAGE_NOT_OWNED" });
+    next.automation[item.id] = Math.min(AUTOMATION_STACK_CAP, total - placed);
+  }
+  next.editions = wanted;
+  for (const [id, modules] of Object.entries(next.mounts)) {
+    if (live.has(id) && !wanted[id]) continue;
+    for (const module of modules) {
+      const core = coreForModule(module);
+      next.automation[core.id] = Math.min(AUTOMATION_STACK_CAP, (next.automation[core.id] ?? 0) + 1);
+    }
+    delete next.mounts[id];
+  }
+  return deepFreeze({ ok: true, state: normalizeCyberGacha(next) });
+}
+
+/**
+ * One partner's affection carry after an auto-feed (tenths, 0 clears it). With `liveIds`, carries of
+ * partners no longer held are dropped, so the record never outgrows the ranch.
+ */
+export function setGachaBondCarry(state, instanceId, tenths, liveIds = null) {
+  const current = normalizeCyberGacha(state);
+  const live = liveIds ? new Set(liveIds) : null;
+  const stale = live ? Object.keys(current.bondCarry ?? {}).filter((id) => !live.has(id)) : [];
+  if ((current.bondCarry?.[instanceId] ?? 0) === tenths && !stale.length) return current;
+  const next = plain(current);
+  for (const id of stale) delete next.bondCarry[id];
+  if (tenths) next.bondCarry[instanceId] = tenths; else delete next.bondCarry[instanceId];
+  return normalizeCyberGacha(next);
+}
+
+/** Automation items straight into the bag (a grant, not a pull). */
+export function grantGachaAutomation(state, itemId, quantity = 1) {
+  const current = normalizeCyberGacha(state);
+  if (!getAutomationItem(itemId) || !Number.isSafeInteger(quantity) || quantity < 1) return deepFreeze({ ok: false, reason: "UNKNOWN_ITEM" });
+  const next = plain(current);
+  addPrize(next, { kind: "AUTOMATION", id: itemId, quantity });
+  return deepFreeze({ ok: true, state: normalizeCyberGacha(next) });
+}
+
+/** A fixed bundle paid once under `key`: automation items and tickets (the caller credits diamonds). */
+export function claimGachaBundle(state, { key, items = [], tickets = 0 }) {
+  const current = normalizeCyberGacha(state);
+  if (typeof key !== "string" || !/^[\w:.-]{1,60}$/.test(key)) throw gachaError("INVALID_REWARD_KEY");
+  if (current.claimed.includes(key)) return deepFreeze({ ok: false, reason: "ALREADY_CLAIMED" });
+  const next = plain(current);
+  next.claimed.push(key);
+  for (const [id, quantity] of items) {
+    if (!getAutomationItem(id) || !Number.isSafeInteger(quantity) || quantity < 1) throw gachaError(`UNKNOWN_GACHA_ITEM: ${id}`);
+    addPrize(next, { kind: "AUTOMATION", id, quantity });
+  }
+  next.tickets = Math.min(GACHA_TICKET_CAP, next.tickets + Math.max(0, tickets | 0));
+  return deepFreeze({ ok: true, state: normalizeCyberGacha(next) });
 }

@@ -22,6 +22,9 @@ export function createRanchRowPurchasePrompt({ source, ask = showChoiceDialog, r
         const choice = await ask({
           title: uiText('CAGE_TEST_ROW_TITLE', { row: row + 1 }),
           message: [uiText('CAGE_TEST_ROW_DETAILS', { count, price: 1000 }),
+            // DIAMOND_ECONOMY_20261102: what the land becomes and what else grows with it.
+            ...(cage.land ? [uiText('可用土地 {before} → {after} 格', { before: cage.land.capacity, after: Math.min(cage.land.cap, cage.land.capacity + count) }),
+              uiText('每擴充一階，狩獵記憶卡容量 +{g} G。', { g: 8 })] : []),
             uiText('CAGE_TEST_DIAMOND_BALANCE', { amount: cage.testDiamonds ?? 0 }),
             ...(!affordable ? [uiText('CAGE_TEST_DIAMONDS_INSUFFICIENT')] : [])].join('\n\n'),
           actions: [
