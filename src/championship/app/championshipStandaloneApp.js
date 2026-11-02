@@ -1600,8 +1600,10 @@ export function createChampionshipStandaloneApp({
 
     /** Data Arena entry rights (Owner 2026-11-02): Dex-registered species and the partners held on the ranch now. */
     getDataArenaProgress() {
-      const owned = [creature, ...(raising?.collection ?? [])].map((entry) => entry?.speciesId).filter((id) => /^species-\d{3}$/.test(id ?? ""));
-      return Object.freeze({ registeredSpecies: Object.freeze([...registeredSpeciesValue]), ownedSpecies: Object.freeze([...new Set(owned)]) });
+      const held = [creature && { speciesId: creature.speciesId, instanceId: creature.creatureId }, ...(raising?.collection ?? []).map(({ speciesId, instanceId }) => ({ speciesId, instanceId }))]
+        .filter((entry) => /^species-\d{3}$/.test(entry?.speciesId ?? "")).map((entry) => Object.freeze(entry));
+      return Object.freeze({ registeredSpecies: Object.freeze([...registeredSpeciesValue]), ownedSpecies: Object.freeze([...new Set(held.map((entry) => entry.speciesId))]),
+        ownedInstances: Object.freeze(held) });
     },
 
     getSession() {

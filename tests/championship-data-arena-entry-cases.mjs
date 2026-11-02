@@ -13,10 +13,13 @@ const index = (speciesId) => Number(speciesId.slice(8));
 
 test("only partners raised or registered in the Dex may enter; raised ones lead the list", () => {
   const registered = [index(relay[5].speciesId), index(relay[9].speciesId), index(relay[12].speciesId)];
-  const rows = dataArenaEntries(relay, { registeredSpecies: registered, ownedSpecies: [relay[12].speciesId] });
+  const rows = dataArenaEntries(relay, { registeredSpecies: registered, ownedSpecies: [relay[12].speciesId],
+    ownedInstances: [{ speciesId: relay[12].speciesId, instanceId: "championship:2026:instance:0007" }] });
   assert.equal(rows.length, relay.length, "every roster partner is listed (locked ones as locked)");
   assert.equal(rows[0].id, relay[12].id);
   assert.equal(rows[0].entry, DATA_ARENA_ENTRY.BRED);
+  assert.equal(rows[0].instanceId, "championship:2026:instance:0007", "a raised partner keeps its ranch individual");
+  assert.equal(rows[1].instanceId, null, "a Dex-only partner has none");
   assert.deepEqual(rows.filter(dataArenaEntryUsable).map((row) => row.id), [relay[12].id, relay[5].id, relay[9].id]);
   assert.ok(rows.slice(3).every((row) => row.entry === DATA_ARENA_ENTRY.LOCKED));
   const power = dataArenaPartnerPower(rows);
