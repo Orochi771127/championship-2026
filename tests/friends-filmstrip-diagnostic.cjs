@@ -96,10 +96,16 @@ function join(rows){
  return {status:'PAIRED_DIAGNOSTIC_ONLY',commit:on.commit,buildId:BUILD,order:['on','off'],lifecycleChanges,performanceComparable:lifecycleChanges.length===0,move20Ms:{on:on.filmstrip.metrics.move20Ms,off:off.filmstrip.metrics.move20Ms},ratioOffToOn:off.filmstrip.metrics.move20Ms/on.filmstrip.metrics.move20Ms,limitations:['One fixed-order pair, not general causal proof','Independent fresh contexts, natural clock and actors are not same-frame paired','A recorded natural hatch makes the timing ratio unsuitable for performance conclusions','OFF second may benefit from OS caches','Does not complete source-corners or waive canceled Friends gates']};
 }
 module.exports={BASE,BUILD,RESOURCES,transform,join};
+function retainedTraceName(row){
+ const name=row.finalTrace?.file;
+ assert.ok(typeof name==='string'&&/^[a-zA-Z0-9_-]+-trace\.zip$/.test(name)&&path.basename(name)===name,'Safe finalTrace basename required');
+ assert.ok(Number.isSafeInteger(row.finalTrace.bytes)&&row.finalTrace.bytes>0,'Positive finalTrace bytes required');
+ return name;
+}
 if(require.main===module){
  if(process.argv[2]==='join'){
   assert.equal(process.argv.length,6);const rows=process.argv.slice(3,5).map(p=>JSON.parse(fs.readFileSync(p)));const receipt=join(rows);assert.equal(receipt.commit,process.env.GITHUB_SHA,'Current run commit required');
-  receipt.retainedArtifacts=process.argv.slice(3,5).map((resultFile,i)=>({mode:rows[i].filmstrip.mode,files:['filmstrip-before.png','filmstrip-after.png','source-corners-trace.zip'].map(name=>{const file=path.join(path.dirname(resultFile),name),stat=fs.statSync(file);assert.ok(stat.isFile()&&stat.size>0,'Required explicit PNG/action trace retained: '+name);const bytes=fs.readFileSync(file);assert.equal(bytes.subarray(0,name.endsWith('.png')?8:4).toString('hex'),name.endsWith('.png')?'89504e470d0a1a0a':'504b0304','Expected PNG or traceZIP signature');return {name,bytes:stat.size,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};})}));
+  receipt.retainedArtifacts=process.argv.slice(3,5).map((resultFile,i)=>({mode:rows[i].filmstrip.mode,files:['filmstrip-before.png','filmstrip-after.png',retainedTraceName(rows[i])].map(name=>{const file=path.join(path.dirname(resultFile),name),stat=fs.statSync(file);assert.ok(stat.isFile()&&stat.size>0,'Required explicit PNG/action trace retained: '+name);const bytes=fs.readFileSync(file);assert.equal(bytes.subarray(0,name.endsWith('.png')?8:4).toString('hex'),name.endsWith('.png')?'89504e470d0a1a0a':'504b0304','Expected PNG or traceZIP signature');if(name.endsWith('.zip'))assert.equal(stat.size,rows[i].finalTrace.bytes,'Trace bytes match capture receipt');return {name,bytes:stat.size,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};})}));
   fs.writeFileSync(process.argv[5],JSON.stringify(receipt,null,2)+'\n');
  }else{
   const mode=process.argv[2];const filename=path.join(__dirname,'championship-friends-playtest-browser.cjs');const source=transform(fs.readFileSync(filename,'utf8'),mode);
