@@ -22,11 +22,10 @@ function hash(a, b) {
 const clamp01 = v => Math.max(0, Math.min(1, v));
 const easeOutCubic = t => 1 - (1 - t) ** 3;
 
-/** Unit-radius hex cells covering a disc, ordered from the feet (bottom) up. */
-function shellCells(rings = 4) {
-  const cells = [], size = 1 / (rings + 0.5), w = Math.sqrt(3) * size;
-  for (let q = -rings; q <= rings; q++) for (let r = -rings; r <= rings; r++) {
-    if (Math.abs(q + r) > rings) continue;
+/** Unit-radius hex cells (about seventy) covering a disc, ordered from the feet (bottom) up. */
+function shellCells(size = 0.135) {
+  const cells = [], w = Math.sqrt(3) * size, span = Math.ceil(1 / w) + 2;
+  for (let q = -span; q <= span; q++) for (let r = -span; r <= span; r++) {
     const x = w * (q + r / 2), y = 1.5 * size * r;
     if (Math.hypot(x, y) > 1 + size * 0.25) continue;
     cells.push({x, y, size});
@@ -46,13 +45,19 @@ function hexPath(g, cx, cy, radius, rotation, squashX = 1) {
 
 /**
  * Where one plate sits on the sphere: a disc cell pushed out toward the rim reads as a curved shell.
- * Returns screen offsets (unit radius), a shade 0..1 and a foreshortening factor.
+ * Returns screen offsets (unit radius), a light 0..1 (lit from the upper left) and a foreshortening factor.
  */
 function onSphere(cell) {
   const d = Math.min(0.999, Math.hypot(cell.x, cell.y));
   const curve = Math.sin(d * Math.PI / 2) / Math.max(d, 1e-6);
-  const depth = Math.sqrt(1 - Math.min(1, (d * curve) ** 2) * 0.92);
-  return {x: cell.x * curve, y: cell.y * curve, shade: 0.55 + 0.45 * depth, squash: 0.55 + 0.45 * depth};
+  const x = cell.x * curve, y = cell.y * curve, z = Math.sqrt(Math.max(0, 1 - x * x - y * y));
+  const light = Math.max(0, -0.42 * x - 0.5 * y + 0.76 * z);
+  return {x, y, shade: 0.35 + 0.65 * light, squash: 0.55 + 0.45 * z};
+}
+// Mix two 0xRRGGBB colours: t = 0 gives a, 1 gives b.
+function mix(a, b, t) {
+  const k = clamp01(t), ch = s => Math.round(((a >> s) & 255) * (1 - k) + ((b >> s) & 255) * k);
+  return (ch(16) << 16) | (ch(8) << 8) | ch(0);
 }
 
 export function createBattleBurstShell({PIXI, layer, reducedMotion = false}) {
@@ -73,6 +78,12 @@ export function createBattleBurstShell({PIXI, layer, reducedMotion = false}) {
     const crack = clamp01((wrapFrame - WRAP_END) / (CRACK_END - WRAP_END));
     const flash = clamp01((wrapFrame - CRACK_END) / 8);
     const pulse = 1 + 0.035 * Math.sin(crack * Math.PI * 6) * crack;
+    // A dark core closes behind the last plates, so the finished shell is a solid ball.
+    const closed = reducedMotion ? clamp01(wrapFrame / 10) : clamp01((wrapFrame - (WRAP_END - 14)) / 12);
+    if (closed > 0) {
+      g.circle(x, y, radius * pulse * 0.97);
+      g.fill({color: colors.edge, alpha: 0.96 * closed * (1 - flash)});
+    }
     for (const cell of CELLS) {
       const seat = onSphere(cell);
       // Plates land from the feet up across the wrap; each takes 12 frames to fly in.
@@ -88,9 +99,14 @@ export function createBattleBurstShell({PIXI, layer, reducedMotion = false}) {
       const sy = reducedMotion ? py : py + Math.sin(angle) * far * (1 - k);
       const spin = reducedMotion ? 0 : (1 - k) * (hash(cell.index, 3) - 0.5) * 6;
       hexPath(g, x + sx * radius, y + sy * radius, cell.size * radius * 0.94, spin, seat.squash);
-      g.fill({color: colors.plate, alpha: (reducedMotion ? t : Math.min(1, t * 1.6)) * (0.72 + 0.28 * seat.shade) * (1 - flash)});
+      g.fill({color: mix(colors.edge, colors.plate, seat.shade), alpha: (reducedMotion ? t : Math.min(1, t * 1.8)) * 0.96 * (1 - flash)});
       g.stroke({width: Math.max(1, radius * 0.025), color: crack > 0 ? colors.seam : colors.edge,
         alpha: (crack > 0 ? 0.5 + 0.5 * crack : 0.9) * (1 - flash)});
+    }
+    if (closed > 0) {
+      // A soft highlight on the upper left of the closed shell.
+      g.arc(x - radius * 0.18, y - radius * 0.2, radius * 0.62, Math.PI * 1.05, Math.PI * 1.55);
+      g.stroke({width: Math.max(1, radius * 0.07), color: 0xffffff, alpha: 0.28 * closed * (1 - flash)});
     }
     if (crack > 0) {
       // Light leaking through the seams.
@@ -118,7 +134,7 @@ export function createBattleBurstShell({PIXI, layer, reducedMotion = false}) {
       const px = seat.x * scale + Math.cos(dir) * travel, py = seat.y * scale + Math.sin(dir) * travel + (reducedMotion ? 0 : k * k * 0.6);
       hexPath(g, x + px * radius, y + py * radius, cell.size * radius * 0.94 * scale * (1 - 0.4 * t),
         reducedMotion ? 0 : k * (hash(cell.index, 13) - 0.5) * 9, seat.squash);
-      g.fill({color: colors.plate, alpha: (1 - t) * (0.72 + 0.28 * seat.shade)});
+      g.fill({color: mix(colors.edge, colors.plate, seat.shade), alpha: 0.96 * (1 - t)});
       g.stroke({width: 1, color: colors.seam, alpha: 0.6 * (1 - t)});
     }
   }

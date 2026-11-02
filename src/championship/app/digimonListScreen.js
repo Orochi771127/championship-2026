@@ -133,7 +133,7 @@ export function appendCreatureDetail(detail, entry, { onBurstForm = null } = {})
   if (Array.isArray(entry.burst) && entry.burst.length) {
     const group = element("div", "cm-digimon-stat cm-digimon-burst");
     group.dataset.row = "burst";
-    group.dataset.group = "record";
+    group.dataset.group = "burst";
     group.append(element("dt", "cm-digimon-detail__label", "DEX_BURST"));
     const cell = element("dd", "cm-digimon-detail__value");
     for (const form of entry.burst) {

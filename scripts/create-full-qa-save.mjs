@@ -6,7 +6,7 @@ import { createChampionshipStandaloneApp } from "../src/championship/app/champio
 import { CHAMPIONSHIP_MODERN_SAVE_KEY, deserializeChampionshipModernSave }
   from "../src/championship/app/championshipStandaloneSave.js";
 import { BITS_WALLET_CAP, SHOP_RECORD_COUNT } from "../src/championship/shop/shopCatalog.js";
-import { FULL_QA_ULTIMATES, createFullQaSaveText } from "./lib/championshipFullQaSave.mjs";
+import { FULL_QA_PARTNERS, createFullQaSaveText } from "./lib/championshipFullQaSave.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const output = path.join(root, "qa/championship-full-qa-save.json");
@@ -54,9 +54,11 @@ try {
     bits: save.shop.bits,
     shopListings: SHOP_RECORD_COUNT,
     registeredSpecies: save.progression.registeredSpecies.length,
-    ultimateResidents: FULL_QA_ULTIMATES.map((entry) => ({
-      speciesIndex: entry.speciesIndex,
-      displayName: entry.displayName
+    // 成熟期 residents with the showcase 究極體 unlocked as their burst form (STAGE_REDESIGN_BURST_20261102).
+    burstResidents: FULL_QA_PARTNERS.map((entry) => ({
+      speciesIndex: entry.baseSpeciesIndex,
+      displayName: entry.displayName,
+      burstForms: entry.unlocks
     }))
   }));
 } finally {
