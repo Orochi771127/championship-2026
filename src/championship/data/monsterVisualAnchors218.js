@@ -14,7 +14,7 @@
 //   muzzle  [x, y, heightRatio, releaseIndex, releaseMs]
 //   head    [headFocusX, headFocusY, headSafeScale, opaqueInHead]
 export const MONSTER_VISUAL_ANCHORS_SCHEMA = 1;
-export const MONSTER_VISUAL_ANCHORS_SUMMARY = Object.freeze({"species":226,"withMotion":226,"withHead":226,"motionErrors":[],"art":{"atlas":113,"reviewed":72,"reviewed-right":41},"maxCellAspect":1.95,"multiCellPages":226,"muzzleInUpperBody":226,"stances":{"grounded":170,"hovering":7,"tail-below":49},"headsOnBody":223,"headsMostlyDrawn":226});
+export const MONSTER_VISUAL_ANCHORS_SUMMARY = Object.freeze({"species":226,"withMotion":226,"withHead":226,"motionErrors":[],"art":{"atlas":112,"reviewed":72,"reviewed-right":42},"maxCellAspect":1.95,"multiCellPages":226,"muzzleInUpperBody":226,"stances":{"grounded":171,"hovering":7,"tail-below":48},"headsOnBody":223,"headsMostlyDrawn":226});
 const ACTION_IDS = Object.freeze(["stand","walk","attack","cheer"]);
 const ROWS = {
   "species-008": [["m001_zurumon",4,[-22,-56,27,1],[[2,41,37,10.1],[2,41,36,10.4],[2,33,35,7.3],[2,42,32,7.4]],["grounded",0,37],[-20,-25,0.71,1,250],"atlas"],[0.4942,0.6412,0.5718,0.743]],
@@ -108,7 +108,7 @@ const ROWS = {
   "species-091": [["m324_gesomon",4,[-100,-150,104,11],[[4,177,153,60.7],[4,178,133,69.4],[3,200,145,56.6],[1,174,137,68.9]],["grounded",2,150],[81,-110,0.79,1,167],"reviewed-right"],[0.4363,0.3719,0.3947,0.81]],
   "species-129": [["m372_geremon",4,[-84,-139,108,3],[[4,185,133,42.9],[4,177,134,44.5],[3,187,141,40],[1,139,131,29.9]],["grounded",0,132],[78,-104,0.85,0,0],"reviewed-right"],[0.7214,0.4913,0.3385,0.95]],
   "species-092": [["m325_centalmon",4,[-94,-177,100,4],[[4,174,179,62.5],[4,187,167,62.4],[3,174,178,62.9],[1,175,172,64.7]],["grounded",2,175],[-73,-116,0.77,2,333],"reviewed"],[0.3575,0.2269,0.4525,0.567]],
-  "species-123": [["m366_coredramon_ten",4,[-132,-158,132,51],[[2,124,191,9.3],[2,124,191,9.3],[2,229,124,9.7],[2,168,119,8]],["tail-below",10,144],[-106,-52,0.56,1,250],"atlas"],[0.8229,0.4722,0.3203,0.836]],
+  "species-123": [["m366_coredramon_ten",4,[-91,-124,118,5],[[4,174,125,68.8],[4,191,118,66.4],[3,209,126,56.8],[1,182,127,64.7]],["grounded",0,123],[100,-64,0.55,1,167],"reviewed-right"],[0.8229,0.4722,0.3203,0.836]],
   "species-124": [["m367_coredramon_ti",4,[-86,-148,104,3],[[4,187,150,56.8],[4,175,131,69.5],[3,185,134,64.3],[1,170,145,64.7]],["grounded",1,148],[85,-90,0.69,0,0],"reviewed-right"],[0.6432,0.349,0.5768,0.659]],
   "species-093": [["m326_cockatrimon",4,[-89,-150,90,5],[[4,156,138,6.4],[4,168,134,6.1],[3,164,154,56.4],[1,155,153,60.1]],["grounded",0,137],[-74,-105,0.88,2,333],"reviewed"],[0.3495,0.2191,0.309,0.584]],
   "species-094": [["m328_thanderballmon",4,[-77,-139,89,9],[[4,152,134,52.1],[4,156,138,49.3],[3,160,135,49.2],[1,149,123,58]],["grounded",6,132],[-70,-107,0.88,2,333],"reviewed"],[0.6273,0.5058,0.5405,0.829]],
