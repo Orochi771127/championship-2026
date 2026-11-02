@@ -90,6 +90,9 @@ test('controlled neglected-adult save follows native disappearance and Continue 
   let started=false;
   for(let i=0;i<500&&app.getRaisingActorFrame(id);i++){started||=app.getRaisingLifecycleFrame().evolution?.target===-1;frames(app,1);}
   assert.equal(started,true);assert.equal(app.getRaisingInstances().length,0);assert.equal(app.hasRaisingPresentation(),false);
+  // The departed starter keeps its Dex entry but no longer counts as raised in the Data Arena.
+  const arena=app.getDataArenaProgress();
+  assert.deepEqual([arena.ownedSpecies,arena.ownedInstances],[[],[]]);assert.ok(arena.registeredSpecies.includes(71));
   assert.equal(app.save().phase,'SAVED');await app.dispose();const restored=h.create();assert.ok(await restored.continueGame());
   assert.equal(restored.getRaisingInstances().length,0);await restored.dispose();
 });
