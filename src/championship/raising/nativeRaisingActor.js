@@ -585,9 +585,12 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
   // Real-time ranch (OWNER_APPROVED_ADAPTATION 2026-11-02, productTrainingPolicy.js): a partner also trains every
   // dwell period it stays in a cage and once after a battle or hunt; any training starts the cooldown.
   const policy=context.training??null;
-  if(policy&&realtimeTrainingDue(actor,policy,{healthy:!['134','138','13c'].some(k=>next.fields[k]===1),trainingCage:actor.cageDefinitionIndex!==35}))
+  // Only a partner standing in a real training cage (not carried, not the waiting room) trains on the clock.
+  const trainingCage=Number.isInteger(actor.cageDefinitionIndex)&&actor.cageDefinitionIndex!==35&&!actor.detached
+    &&Boolean(lifecycleRules.cages[actor.cageDefinitionIndex]);
+  if(policy&&realtimeTrainingDue(actor,policy,{healthy:!['134','138','13c'].some(k=>next.fields[k]===1),trainingCage}))
     actor.trainingPending=true;
-  if(actor.state===1&&actor.trainingPending){
+  if(actor.state===1&&actor.trainingPending&&(!policy||trainingCage)){
     actor.trainingPending=false;actor.state=11;
     if(policy)beginRealtimeTraining(actor,policy);
     const growthPercent=habitatMatch(next.fields['000'],actor.cageDefinitionIndex)?TAXONOMY_HABITAT_BONUS.growthPercent:100;
