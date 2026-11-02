@@ -55,6 +55,9 @@ export const UI_COPY_VI = Object.freeze({
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "Nền trang hệ thống",
   "SYSTEM_BACKGROUND_HINT": "Đóng Cài đặt rồi mở Cửa hàng, Bách khoa hoặc Trợ giúp từ Hệ thống. Ảnh hiện quanh và giữa các thẻ. Màn hình đầu, trang trại và cảnh chiến đấu không đổi.",
+  // Ai-chan guide form setting (2026-11-03), PRODUCT_AUTHORED.
+  "GUIDE_APPEARANCE_LABEL": "Ngoại hình người hướng dẫn",
+  "GUIDE_APPEARANCE_HINT": "Cả hai dáng đều là Ai-chan; nội dung hướng dẫn giống hệt nhau.",
   "SYSTEM_BACKGROUND_DEFAULT": "Mặc định",
   "SYSTEM_BACKGROUND_DEFAULT_HINT": "Giữ nền giao diện ban đầu.",
   "SYSTEM_BACKGROUND_CUSTOM": "Chọn ảnh",

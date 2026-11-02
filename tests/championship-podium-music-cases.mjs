@@ -32,11 +32,11 @@ function fixture(){
  return {doc,win,media,contexts,timers,promises,bus,music,delay(value){delay=value;},fire(){for(const [id,t] of [...timers]){if(timers.delete(id))t.fn();}},async start(id='podium_geometry'){music.setScene(id);doc.emit('pointerdown');await flush();},dispose(){music.dispose();bus.dispose();}};
 }
 
-test('field setup uses the exact new file while home/tutorial defaults and explicit choices remain intact',()=>{
- for(const tutorial of [false,true]){
-  assert.equal(resolveSceneMusic(selectOriginalMusic({screen:'CAGE_EDIT',tutorial}).id,'raising',{}),'podium_geometry');
-  assert.equal(resolveSceneMusic(selectOriginalMusic({screen:'RAISING_HOME',tutorial}).id,'raising',{}),'a_quiet_evening_training');
- }
+test('field setup uses the exact new file while home defaults, the tutorial cue and explicit choices remain intact',()=>{
+ assert.equal(resolveSceneMusic(selectOriginalMusic({screen:'CAGE_EDIT'}).id,'raising',{}),'podium_geometry');
+ assert.equal(resolveSceneMusic(selectOriginalMusic({screen:'RAISING_HOME'}).id,'raising',{}),'a_quiet_evening_training');
+ // Owner 2026-11-02: the tutorial plays the story's Hexagon Cradles; main.js routes it without the ranch preference scene.
+ for(const screen of ['CAGE_EDIT','RAISING_HOME'])assert.equal(resolveSceneMusic(selectOriginalMusic({screen,tutorial:true}).id,null,{raisingMusic:'moon'}),'hexagon_cradles');
  assert.equal(resolveSceneMusic('podium_geometry','raising',{raisingMusic:'moon'}),'moon');
  const source=JSON.parse(fs.readFileSync(new URL('../docs/reports/podium-music-2026-10-18/SOURCE_AND_MEASUREMENTS.json',import.meta.url)));
  const bytes=fs.readFileSync(new URL('../assets/production/scene-music-r1/system/podium_geometry.mp3',import.meta.url));

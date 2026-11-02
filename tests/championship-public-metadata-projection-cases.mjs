@@ -25,8 +25,8 @@ test('arena cast uses exact public character and HUD bindings; changed bytes fai
  }
 });
 // 2026-11-02 (Owner): the CM03/CM24 cage foreground and its source-bounds provenance were deleted with the old 2D cages.
-test('51 source descriptions remain byte-identical; only 33 required runtime descriptions are selected',()=>{
- assert.equal(recipe.sources.length,51);assert.equal(projection.descriptors.length,33);
+test('52 source descriptions remain byte-identical; only 33 required runtime descriptions are selected',()=>{
+ assert.equal(recipe.sources.length,52);assert.equal(projection.descriptors.length,33);
  for(const r of recipe.sources){assert.equal(sha(fs.readFileSync(r.path)),r.sha256);assert.ok(!input.files.includes(r.path));}
  for(const r of projection.descriptors){assert.ok(input.files.includes(r.path));assert.ok(fs.readFileSync(r.path).equals(r.bytes));validatePublicMetadata(r.value);}
 });

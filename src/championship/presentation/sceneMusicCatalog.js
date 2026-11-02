@@ -28,7 +28,9 @@ const entries = [
   ['mirage_of_the_arena', '競技場蜃景', 'Mirage of the Arena', ['battle']],
   ['inferno_overdrive', '地獄超速', 'Inferno Overdrive', ['battle']],
   ['clash_at_the_emerald_edge', '翠緣交鋒', 'Clash at the Emerald Edge', ['battle']],
-  ['magma_breach', '熔岩突破', 'Magma Breach', ['battle']]
+  ['magma_breach', '熔岩突破', 'Magma Breach', ['battle']],
+  // Owner 2026-11-02: New Game story and tutorial only; not a ranch or battle choice.
+  ['hexagon_cradles', '六角搖籃', 'Hexagon Cradles', ['opening']]
 ];
 
 export const SCENE_MUSIC_TRACKS = Object.freeze(entries.map(([id, zh, en, categories]) =>

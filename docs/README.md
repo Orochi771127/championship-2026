@@ -1,5 +1,7 @@
 # Cyber Partner: Tournament / 網線拍檔：錦標賽 — Documentation Hub
 
+- [2026-11-03 新遊戲開場故事與愛醬導覽（Owner 核准 layered v3，本機首版，未發布）](reports/onboarding-ai-chan-2026-11-03/REPORT_ZH_TW.md)
+
 - [2026-10-19 角色定稿圖鑑、15 張完整單張補入與全部 36 個工作樹收尾盤點](reports/dex-workspace-closeout-2026-10-19/REPORT_ZH_TW.md)／[單張與持裝定稿規則](contracts/championship/DATABASE_FINAL_ART_2026-10-19.md)／[逐角色 CSV](reports/dex-workspace-closeout-2026-10-19/character-finalization.csv)
 
 - [2026-10-15 晴空競技 UI／HUD 與演出層：規範、改前／改後與驗收](reports/ui-ceremony-2026-10-15/REPORT_ZH_TW.md)／[視覺與動效規範](reports/ui-ceremony-2026-10-15/SPEC_ZH_TW.md)

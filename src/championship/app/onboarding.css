@@ -837,9 +837,9 @@ dialog.cm-dialog[data-variant="tutorial-guide"] .cm-dialog__action:active:not(:d
   #cm-opening .cm-license__body { grid-template-columns: minmax(0, 1fr); }
   #cm-opening .cm-license__photo { display: none; }
 }
-body[data-landscape-entry] #cm-opening .cm-cutscene { grid-template: auto minmax(0, 1fr) / minmax(0, 1.4fr) minmax(0, 1fr); }
+body[data-landscape-entry] #cm-opening .cm-cutscene:not(.cm-opening-story) { grid-template: auto minmax(0, 1fr) / minmax(0, 1.4fr) minmax(0, 1fr); }
 body[data-landscape-entry] #cm-opening .cm-cutscene__top { grid-column: 1 / -1; }
-body[data-landscape-entry] #cm-opening .cm-cutscene__dialogue { align-self: end; }
+body[data-landscape-entry] #cm-opening .cm-cutscene:not(.cm-opening-story) .cm-cutscene__dialogue { align-self: end; }
 body[data-landscape-entry] #cm-opening .cm-incubator { width: min(100%, 780px); }
 body[data-landscape-entry] #cm-opening .cm-opening__egg-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
@@ -855,25 +855,16 @@ body[data-landscape-entry] #cm-opening .cm-opening__egg-grid { grid-template-col
   color: var(--ob-text);
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35), 0 0 20px rgba(62, 232, 255, 0.25);
 }
+/* Ai-chan's face (2026-11-03) replaces the former robot badge; same size and frame. */
 .cm-guide-badge {
   position: relative;
-  display: grid;
-  place-items: center;
   flex-shrink: 0;
   width: 40px;
   height: 40px;
   border: 2.5px solid var(--ob-ink);
   border-radius: 12px;
-  background: linear-gradient(160deg, #6ff3ff, #2ec4f1 55%, #0b7f9c);
   box-shadow: 0 4px 0 #06485a, 0 0 14px rgba(62, 232, 255, 0.6);
-  color: var(--ob-ink);
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: -0.02em;
 }
-.cm-guide-badge::before { content: ""; position: absolute; top: 9px; left: 9px; right: 9px; height: 9px; border-radius: 5px; background: var(--ob-ink); box-shadow: inset 0 0 0 2px #0b7f9c; }
-.cm-guide-badge::after { content: ""; position: absolute; top: 11px; left: 13px; width: 5px; height: 5px; border-radius: 50%; background: #9dfaff; box-shadow: 9px 0 0 #9dfaff; animation: ob-blink 1.6s steps(2, jump-none) infinite; }
-.cm-guide-badge span { position: relative; margin-top: 18px; font-size: 9px; letter-spacing: 0.08em; }
 .cm-guide-step {
   display: inline-block;
   padding: 0 7px;
@@ -917,10 +908,7 @@ dialog.cm-dialog[data-variant="tutorial-guide"] .cm-dialog__panel {
 dialog.cm-dialog[data-variant="tutorial-guide"] .cm-dialog__title { display: none; }
 dialog.cm-dialog[data-variant="tutorial-guide"] .cm-dialog__panel { display: flex; flex-direction: column; }
 dialog.cm-dialog[data-variant="tutorial-guide"] .cm-guide-head { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; }
-dialog.cm-dialog[data-variant="tutorial-guide"] .cm-guide-head .cm-guide-badge { width: 52px; height: 52px; border-radius: 15px; }
-dialog.cm-dialog[data-variant="tutorial-guide"] .cm-guide-head .cm-guide-badge::before { top: 12px; left: 11px; right: 11px; height: 12px; }
-dialog.cm-dialog[data-variant="tutorial-guide"] .cm-guide-head .cm-guide-badge::after { top: 15px; left: 16px; width: 6px; height: 6px; box-shadow: 12px 0 0 #9dfaff; }
-dialog.cm-dialog[data-variant="tutorial-guide"] .cm-guide-head .cm-guide-badge span { margin-top: 22px; font-size: 10px; }
+dialog.cm-dialog[data-variant="tutorial-guide"] .cm-guide-head .cm-guide-badge { width: 56px; height: 56px; border-radius: 15px; }
 dialog.cm-dialog[data-variant="tutorial-guide"] .cm-guide-who { display: grid; gap: 3px; }
 dialog.cm-dialog[data-variant="tutorial-guide"] .cm-guide-name { margin: 0; color: var(--ob-cyan); font-size: 13px; font-weight: 900; letter-spacing: 0.1em; }
 dialog.cm-dialog[data-variant="tutorial-guide"] .cm-guide-lesson { margin: 0; display: flex; align-items: center; gap: 6px; color: var(--ob-text-2); font-size: 12px; font-weight: 800; }
@@ -994,6 +982,171 @@ dialog.cm-dialog[data-variant="tutorial-guide"][open] { animation: ob-holo-in 42
 .cm-tamer-code__label { color: var(--ob-text-2); font-weight: 800; }
 .cm-tamer-code__value { color: var(--ob-gold); font-family: ui-monospace, "SFMono-Regular", monospace; font-size: 16px; font-weight: 900; letter-spacing: 0.08em; }
 .cm-tamer-code__guest { margin-left: auto; padding: 1px 8px; border: 1.5px solid rgba(61, 220, 132, 0.6); border-radius: 999px; color: #8ff0b9; font-weight: 900; }
+
+/* ---- Ai-chan (Owner 2026-11-02) -------------------------------------------------
+   One guide, two forms. Both approved stills are mounted and the chosen one is
+   shown; the windows are fixed (half body 1 : 0.815, a square face crop), so the
+   picture never jumps between forms and the cat's paws stay outside the frame.
+   No mouth, blink, float or pose cycles. */
+.cm-ai-chan { position: relative; display: block; overflow: hidden; }
+.cm-ai-chan--half { width: 100%; aspect-ratio: 1 / 0.815; }
+.cm-ai-chan--avatar {
+  width: 44px;
+  height: 44px;
+  background: radial-gradient(80% 80% at 50% 30%, #f5fbff 0%, #bfe9f5 60%, #6cc8e0 100%);
+}
+.cm-ai-chan__img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  opacity: 0;
+  transition: opacity 240ms ease;
+  user-select: none;
+  pointer-events: none;
+}
+.cm-ai-chan[data-appearance="cat"] .cm-ai-chan__img[data-form="cat"],
+.cm-ai-chan[data-appearance="catgirl"] .cm-ai-chan__img[data-form="catgirl"] { opacity: 1; }
+.cm-ai-chan__img[data-failed="true"] { display: none; }
+.cm-ai-chan__fallback {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-items: center;
+  color: #0b4f63;
+  font-size: 13px;
+  font-weight: 900;
+}
+.cm-ai-chan[data-failed="true"] .cm-ai-chan__fallback { display: grid; }
+/* A picture that could not load leaves a visible name plate in the story, never an empty frame. */
+.cm-ai-chan--half[data-failed="true"] .cm-ai-chan__fallback {
+  inset: auto 20% 18% 20%;
+  height: 56px;
+  border: 2px solid rgba(62, 232, 255, 0.55);
+  border-radius: 16px;
+  background: rgba(9, 15, 31, 0.82);
+  color: #3ee8ff;
+  font-size: 20px;
+  letter-spacing: 0.2em;
+}
+.cm-choice__body .cm-ai-chan--avatar { flex-shrink: 0; border: 2px solid rgba(20, 20, 31, 0.6); border-radius: 12px; }
+
+/* ---- New Game story: background video / Ai-chan / text layers (2026-11-03) -------
+   The 16:9 background keeps its whole picture on landscape and desktop screens
+   (contain). Portrait phones frame the same video's centre (cover); Ai-chan and
+   the text reflow independently. Text sits over a shade, never in the video. */
+#cm-opening .cm-opening-story { grid-template: auto minmax(0, 1fr) auto / minmax(0, 1fr); background: #04070f; }
+#cm-opening .cm-opening-story__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 70% at 50% 40%, rgba(62, 232, 255, 0.10), transparent 70%),
+    linear-gradient(180deg, #0b1430 0%, #04070f 75%);
+}
+#cm-opening .cm-opening-story__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: 50% 50%;
+  opacity: 0;
+  transition: opacity 420ms ease;
+}
+#cm-opening .cm-opening-story[data-backdrop="ready"] .cm-opening-story__video { opacity: 1; }
+#cm-opening .cm-opening-story[data-backdrop="failed"] .cm-opening-story__video { display: none; }
+#cm-opening .cm-opening-story__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(4, 7, 15, 0.62) 0%, rgba(4, 7, 15, 0) 16%, rgba(4, 7, 15, 0) 52%, rgba(4, 7, 15, 0.72) 100%);
+}
+#cm-opening .cm-opening-story .cm-cutscene__sky { display: none; }
+#cm-opening .cm-opening-story .cm-cutscene__panels { pointer-events: none; }
+#cm-opening .cm-opening-story .cm-cutscene__top { flex-wrap: wrap; row-gap: 6px; }
+#cm-opening .cm-opening-story .cm-cutscene__chapter { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#cm-opening .cm-opening-story .cm-cutscene__pips { order: 5; flex: 1 0 100%; gap: 3px; margin: 0; }
+#cm-opening .cm-opening-story .cm-cutscene__pip { flex: 1 1 0; width: auto; height: 3px; }
+#cm-opening .cm-cutscene__tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1.5px solid rgba(168, 189, 216, 0.45);
+  border-radius: 10px;
+  background: rgba(9, 15, 31, 0.78);
+  color: var(--ob-text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+#cm-opening .cm-cutscene__tool:disabled { opacity: 0.4; cursor: default; }
+#cm-opening .cm-opening-story .cm-cutscene__skip { min-height: 44px; }
+#cm-opening .cm-cutscene__tool-icon { color: var(--ob-cyan); font-size: 16px; line-height: 1; }
+@media (max-width: 599px) {
+  #cm-opening .cm-cutscene__tool { padding: 0; }
+  #cm-opening .cm-cutscene__tool-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+#cm-opening .cm-opening-story .cm-cutscene__dialogue { justify-self: center; width: min(100%, 980px); box-sizing: border-box; }
+#cm-opening .cm-opening-story__status {
+  position: absolute;
+  z-index: 3;
+  top: calc(108px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  max-width: calc(100% - 32px);
+  margin: 0;
+  padding: 6px 12px;
+  border: 1px solid rgba(62, 232, 255, 0.45);
+  border-radius: 999px;
+  background: rgba(9, 15, 31, 0.86);
+  color: var(--ob-text);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+/* Ai-chan stands in the lower left of the 16:9 frame, beside the text. */
+#cm-opening .cm-opening-story__guide {
+  position: absolute;
+  z-index: 1;
+  left: max(3%, env(safe-area-inset-left, 0px));
+  bottom: 0;
+  width: min(38vw, calc(60vh / 0.815));
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 280ms ease, transform 280ms ease;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.5));
+}
+#cm-opening .cm-opening-story[data-guide="visible"] .cm-opening-story__guide { opacity: 1; transform: none; }
+#cm-opening .cm-opening-story[data-guide="visible"] .cm-cutscene__dialogue {
+  justify-self: end;
+  width: min(calc(100% - min(38vw, calc(60vh / 0.815)) - 12px), 760px);
+}
+#cm-opening .cm-opening-story .cm-cutscene__choices { grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+#cm-opening .cm-opening-story .cm-cutscene__choice { min-height: 48px; }
+@media (orientation: portrait) {
+  #cm-opening .cm-opening-story__video { object-fit: cover; }
+  /* Portrait: she stands centred above the text box instead of beside it. */
+  #cm-opening .cm-opening-story__guide {
+    left: 50%;
+    /* The stage keeps 14px under the text box (plus the home indicator); she stands 8px above the box. */
+    bottom: calc(var(--story-dialogue-h, 190px) + 22px + env(safe-area-inset-bottom, 0px));
+    width: min(82vw, 360px, calc((100vh - var(--story-dialogue-h, 190px) - 150px) / 0.815));
+    transform: translate(-50%, 14px);
+  }
+  #cm-opening .cm-opening-story[data-guide="visible"] .cm-opening-story__guide { transform: translate(-50%, 0); }
+  #cm-opening .cm-opening-story[data-guide="visible"] .cm-cutscene__dialogue { justify-self: stretch; width: auto; }
+}
 
 /* ---- Reduced motion -------------------------------------------------------------- */
 :root[data-motion="reduced"] :is(#cm-opening, .cm-tutorial-guidance, .cm-guide-spotlight, dialog.cm-dialog[data-variant="tutorial-guide"]) *,
