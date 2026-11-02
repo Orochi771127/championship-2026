@@ -6,6 +6,7 @@ import {loadSupportMetadata,validateSupportGeometry,eligibleSupportOwner,encodeP
 import {CONTACT_HEIGHT_FIELDS,transformContactTriangles,contactHeightAtPoint,loadLogicalBridges,logicalContactHeightAtPoint,projectedContactIntersections,canonicalContactNativeCoordinate} from './ranchContactHeight.js';
 import {createRanchSupportOwnerResolver} from './ranchSupportOwner.js';
 import {createRanchPlinth} from './ranchPlinth.js';
+import {ranchCageFalls,createRanchWaterSeam} from './ranchWaterfalls.js';
 import * as THREE from '../../../node_modules/three/build/three.module.js';
 import { GLTFLoader } from '../../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from '../../../node_modules/three/examples/jsm/loaders/DRACOLoader.js';
@@ -14,7 +15,7 @@ import { cappedPixelRatio, currentQualityTier, isMobileOrStandaloneEnvironment, 
 import { ranchSharedBoundaries } from '../cage/ranchConnections.js';
 import { ranchBorderWithinSharedSegments } from './ranchBorderMembership.js';
 import { enhanceCageObject } from './cageHd2dEnhancer.js';
-import { loadCageGroundMaps, installCageGroundMap } from './cageGroundMap.js';
+import { loadCageGroundMaps, installCageGroundMap, cageGroundWaterEdges } from './cageGroundMap.js';
 import { getCageDefinitionByModuleId } from '../cage/cageCatalog.js';
 
 const MANIFEST = 'assets/production/cage/three-20261021/manifest.json';
@@ -93,8 +94,11 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   const lavaMaterials=new Set(), dynamicShaders=new Set(), smokeNodes=[];
   // HD-2D enhancer (Owner 2026-10-27): one shared clock for every themed cage material.
   const hd2dTime={value:0}, hd2dPlaced=[];
+  // Ground size of one screen pixel (fixed orthographic camera): beach water fades its
+  // finest wave bands with it instead of derivatives (Owner 2026-11-02).
+  const waterPixel={value:.004};
   // Cage ground maps (Owner 2026-10-28 ground standard), keyed by GLB material name.
-  const groundMaps=new Map();let groundMapsHooked=0;
+  const groundMaps=new Map(),waterEdges=new Map();let groundMapsHooked=0;
   const authoredDepthMaterials=new Set();
   let cm07Ambient=null,plinth=null;
   const dynamicParticles=[], dynamicMachines=[], dynamicBeacons=[];
@@ -145,6 +149,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       const gltf=await loader.parseAsync(bytes,new URL('.',new URL(url,location.href)).href);
       const ownGroundMaps=await loadCageGroundMaps(gltf,THREE);
       for(const [name,entry] of ownGroundMaps)groundMaps.set(name,entry);
+      // Beach water from its ground map; lava, icy water and sand measured on this exact GLB.
+      waterEdges.set(id,[...cageGroundWaterEdges(ownGroundMaps).map(edge=>({kind:'water',edge})),...ranchCageFalls(id,hash)]);
       if(supportFields.has(id)){
         const meshes=[];gltf.scene.traverse(o=>{if(o.isMesh)meshes.push(o);});
         verifiedSupport.set(id,await validateSupportGeometry(supportFields.get(id),hash,meshes));
@@ -175,24 +181,35 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     const taggedPlacements=placements.map((p,idx)=>({...p,ownerIndex:p.ownerIndex??idx}));
     supportPlacements.push(...taggedPlacements.filter(p=>p.fragmentOfSlot===undefined&&!p.foldCap));
     let sharedEdges=[],passageEdges={open:[],closed:[]};
-    // Owner 2026-10-27: border art opens only where the walk rule opened a
-    // passage (same ecology, same height, safe exits on both sides). Without
-    // a navigation frame (tutorial baseline) the compatible edges open as before.
+    // Owner 2026-11-02 (replaces the 10-27 rule): cages of one type at one height
+    // join into one map, so their shared edges show no border, as the facility
+    // editor shows them; a border stays only between different types or heights.
+    // Partners still cross only where the walk rule opened a passage (safe exits on
+    // both sides); `open` lists those, and the thresholds diagnostic counts them.
+    // Without a navigation frame (tutorial baseline) the compatible edges open.
     const passageIds=Array.isArray(connections)?new Set(connections.map(c=>c.id)):null;
     try {
       const all=ranchSharedBoundaries(taggedPlacements);
       const isOpen=b=>passageIds?passageIds.has(b.id):b.compatible;
-      passageEdges={open:all.filter(isOpen).map(b=>({a:b.a,b:b.b,ecology:b.ecology})),closed:all.filter(b=>!isOpen(b)).map(b=>({a:b.a,b:b.b}))};
-      const boundaries=all.filter(isOpen);
+      const joined=b=>b.merged||isOpen(b);
+      passageEdges={open:all.filter(isOpen).map(b=>({a:b.a,b:b.b,ecology:b.ecology})),closed:all.filter(b=>!joined(b)).map(b=>({a:b.a,b:b.b}))};
+      const boundaries=all.filter(joined);
+      const centre=polygon=>ranchNativeToWorld(polygon.reduce((s,q)=>s+q[0],0)/polygon.length,polygon.reduce((s,q)=>s+q[1],0)/polygon.length);
       sharedEdges=boundaries.map(b=>({
         left:b.left,right:b.right,
         a:ranchNativeToWorld(b.a[0],b.a[1]),
-        b:ranchNativeToWorld(b.b[0],b.b[1])
+        b:ranchNativeToWorld(b.b[0],b.b[1]),
+        inside:[centre(b.polygons[0]),centre(b.polygons[1])]
       }));
     } catch(_){/* fall back to distinct bounded cages */}
 
     // Owner 2026-10-27 diorama plinth: below the walk plane, GLBs untouched.
-    if(!wrap){plinth=createRanchPlinth({placements:taggedPlacements,towardSun:[-15,35,8],passages:passageEdges});scene.add(plinth.group);}
+    // Owner 2026-11-02: each cage's water, lava or sand at its outer edges, in world space (cages are translated only).
+    const water=wrap?[]:taggedPlacements.filter(p=>p.fragmentOfSlot===undefined&&!p.foldCap).flatMap(p=>{
+      const o=ranchNativeToWorld(p.x/unit,p.y/unit);
+      return (waterEdges.get(p.fieldId)??[]).map(({kind,edge:[x0,z0,x1,z1]})=>({kind,owner:p.ownerIndex,a:{x:o.x+x0,z:o.z+z0},b:{x:o.x+x1,z:o.z+z1}}));
+    });
+    if(!wrap){plinth=createRanchPlinth({placements:taggedPlacements,towardSun:[-15,35,8],passages:passageEdges,water,facing:direction});scene.add(plinth.group);}
     for(const p of taggedPlacements.filter(p=>p.fragmentOfSlot===undefined&&!p.foldCap)) {
       for(const shift of wrap?[-wrap,0,wrap]:[0]) {
         const object=models.get(p.fieldId).scene.clone(true);
@@ -239,6 +256,15 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
             }
             if(ranchBorderWithinSharedSegments(corners,localEdges))o.visible=false;
           });
+          // Owner 2026-11-02: two beaches meet water to water. Each covers its own side
+          // of the open edge at floor height (see createRanchWaterSeam).
+          if((waterEdges.get(p.fieldId)??[]).some(w=>w.kind==='water')){
+            const seam=createRanchWaterSeam(object,myEdges.map((e,i)=>{
+              const c=e.inside[e.left===p.ownerIndex?0:1];
+              return {edge:localEdges[i],inside:{x:c.x-unwrapped.x,z:c.z-unwrapped.z}};
+            }));
+            if(seam){seam.position.copy(object.position);scene.add(seam);}
+          }
         }
 
         // Bounding box for local centers
@@ -617,7 +643,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     signal?.throwIfAborted();
     // After every authored hook is installed: the ground maps (every quality tier), then
     // themed glow, glints and sway (not in saver quality).
-    for(const {object} of hd2dPlaced)groundMapsHooked+=installCageGroundMap(object,groundMaps);
+    for(const {object} of hd2dPlaced)groundMapsHooked+=installCageGroundMap(object,groundMaps,{time:hd2dTime,pixel:waterPixel,sparkle:currentQualityTier()!=='saver'&&!softwareRenderer});
     if(currentQualityTier()!=='saver'&&!softwareRenderer)for(const {object,moduleId} of hd2dPlaced)enhanceCageObject(object,{
       definitionIndex:getCageDefinitionByModuleId(moduleId)?.cageDefinitionIndex??null,time:hd2dTime,
       authored:m=>lavaMaterials.has(m)||dynamicShaders.has(m)});
@@ -866,6 +892,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     camera.left=-width/(32*pixelScale);camera.right=-camera.left;camera.top=height/(32*pixelScale);camera.bottom=-camera.top;
     camera.position.set(center.x,center.y,center.z).addScaledVector(direction,200);
     camera.lookAt(center.x,center.y,center.z);camera.updateProjectionMatrix();camera.updateMatrixWorld();
+    waterPixel.value=1/(16*pixelScale*renderer.getPixelRatio()*Math.max(.2,direction.y));
     sun.position.set(center.x-15,35,center.z+8);sun.target.position.set(center.x,0,center.z);
     for(const {object,p,shift,mixer} of instances){
       const x=bounds.x+(p.x/field.nativePixelWorldScale+shift)*pixelScale,y=bounds.y+p.y/field.nativePixelWorldScale*pixelScale*groundY;
@@ -927,7 +954,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     canvas.dataset.animatedInstances=String(instances.filter(i=>i.mixer&&i.object.visible).length);
     canvas.dataset.textureCount=String(renderer.info.memory.textures);
     canvas.dataset.viewPitch=String(view.pitch);canvas.dataset.plinthEdges=String(plinth?.edges??0);
-    canvas.dataset.passageAppearance='invisible';canvas.dataset.navigationConnections=String(connections?.length??0);canvas.dataset.passageThresholds=String(plinth?.thresholds??0);
+    canvas.dataset.passageAppearance='invisible';canvas.dataset.navigationConnections=String(connections?.length??0);canvas.dataset.passageThresholds=String(plinth?.thresholds??0);canvas.dataset.waterfalls=String(plinth?.waterfalls??0);
     return true;
   }
   function dispose(){

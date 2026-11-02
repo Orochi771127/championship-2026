@@ -372,13 +372,16 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
     overlay.replaceChildren();
     if (!passages) { overlay.append(ghostLayer); return; }
     const open = new Set(passages.connections.map(c => c.id));
+    // Owner 2026-11-02: one type at one height joins into one map, so its shared
+    // edges show no border even where no passage opened (as the ranch draws it).
+    const joined = new Set(passages.closed.filter(c => c.reason === 'NO_SAFE_EXIT').map(c => c.id));
     const pick = pickedModule(), pickType = pick ? ranchEcologyType(pick) : null;
     const rims = doc.createElementNS(SVG, 'g'), bridges = doc.createElementNS(SVG, 'g'), exits = doc.createElementNS(SVG, 'g');
     rims.setAttribute('class', 'cm-hexworld__rims');
     for (const outline of passages.outlines) {
       const synergy = pickType !== null && ranchEcologyType(outline.moduleId) === pickType;
       for (const edge of outline.edges) {
-        if (open.has(edge.id)) continue;
+        if (open.has(edge.id) || joined.has(edge.id)) continue;
         line(rims, edge.a, edge.b, 'cm-hexworld__rim-shadow');
         line(rims, edge.a, edge.b, synergy ? 'cm-hexworld__rim cm-hexworld__rim--synergy' : 'cm-hexworld__rim');
       }
@@ -388,6 +391,7 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
       line(bridges, c.a, c.b, 'cm-hexworld__bridge');
     }
     for (const e of passages.exits) {
+      if (joined.has(e.id)) continue;   // inside one joined map: nothing to connect there
       const owner = passages.outlines.find(o => o.instanceId === e.instanceId);
       const synergy = pickType !== null && owner && ranchEcologyType(owner.moduleId) === pickType;
       chevron(exits, e, synergy ? 'cm-hexworld__exit cm-hexworld__exit--synergy' : 'cm-hexworld__exit');

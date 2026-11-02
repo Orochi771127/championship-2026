@@ -1112,7 +1112,7 @@ async function mountRaisingHome() {
       expansionCta.addEventListener('click', openExpansionSheet);
       host.append(expansionCta);
       // HD-2D ambience over the ranch (Owner 2026-10-27): vignette and warm motes.
-      const ambience = mountAmbience(host, { theme: 'sun' });
+      const ambience = mountAmbience(host, { theme: 'datasea' });
       function placeExpansionCta(rect) {
         const frame = rect?.visible;
         // Too little of the rows on screen to point at: hide rather than float.
