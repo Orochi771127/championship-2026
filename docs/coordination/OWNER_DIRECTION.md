@@ -3,7 +3,7 @@
 <!-- record-id: GACHA_ITEM_EFFECTS_20261102 -->
 ## 2026-11-02 — Every gachapon item says what it does, and does it where it is used
 
-With a pasted proposal for the 18 chips and the evolution metals, the Owner asks (2026-11-02) 「請你先盤點，目前轉蛋機可以得到的道具作用跟項目然後把作用都實裝到遊戲裡頭」 and to settle the metals with the evolution session. That session's STAGE_REDESIGN_BURST_20261102 owns metals, shards, catalysis, bloodlines and the real-time clock, so this batch covers chips, hunt cartridges, bounty beacons, supplies and the machines' prize tables. The Owner's paste asks not to push or deploy until the report is reviewed.
+With a pasted proposal for the 18 chips and the evolution metals, the Owner asks (2026-11-02) 「請你先盤點，目前轉蛋機可以得到的道具作用跟項目然後把作用都實裝到遊戲裡頭」 and to settle the metals with the evolution session. That session's STAGE_REDESIGN_BURST_20261102 owns metals, shards, catalysis, bloodlines and the real-time clock, so this batch covers chips, hunt cartridges, bounty beacons, supplies and the machines' prize tables. After the report and phone screenshots, the Owner answers 「Commit 並開 PR」 (PR #150) and then 「合併上線」, which authorizes the merge to main and publication.
 
 OWNER_APPROVED_ADAPTATION on top of CYBER_GACHA_20261029. No save field, ROM table or metal rule changes.
 
