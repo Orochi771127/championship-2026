@@ -116,6 +116,8 @@ export function withReadyProductOriginals(lifecycle,source=catalog){
   for(const x of inserts){
     const list=[...rules[x.source-8]];list.splice(x.position-1,0,{target:x.target,kind:x.kind,thresholds:[...x.thresholds]});rules[x.source-8]=list;
   }
+  // Species with no table row of their own (224..230 between the natives and the originals) have no branches.
+  for(let i=0;i<rules.length;i++)rules[i]??=[];
   return {...lifecycle,species,rules};
 }
 const byIndexOf=(entries,index)=>entries.some(e=>e.speciesIndex===index);

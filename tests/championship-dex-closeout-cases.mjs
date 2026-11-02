@@ -1,5 +1,6 @@
 import {assertApproved20Registry} from './approved20-20261022-contract.cjs';
 import test from 'node:test';
+import {isPlayableProductOriginal} from '../src/championship/contracts/productOriginalSpecies.js';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -59,7 +60,8 @@ test('the nine explicitly approved equipped versions use their own identity and 
 });
 
 test('new art browses in five locales without exposing gameplay data or changing player state',()=>{
-  try{for(const locale of ['zh-Hant','en','ja','th','vi'])for(const row of manifest.entries){
+  // A playable original (Owner 2026-11-03) is a regular entry: hidden until registered, like every partner.
+  try{for(const locale of ['zh-Hant','en','ja','th','vi'])for(const row of manifest.entries.filter(r=>!isPlayableProductOriginal(r.speciesIndex))){
     const view=makeView({locale,selectedSpeciesIndex:row.speciesIndex,registeredSpecies:[],collection:[]});
     try{
       const image=view.root.querySelector('.cm-dex-hero__image');

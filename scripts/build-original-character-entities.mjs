@@ -30,7 +30,14 @@ for (const e of originals) {
   const donorBinding = catalog.speciesBindings.find(b => b.speciesId === speciesId(e.behaviorDonor));
   const donor = catalog.characters.find(c => c.entityId === donorBinding?.entityId);
   if (!donor) throw new Error(`ORIGINAL_ENTITY_DONOR_MISSING ${e.speciesIndex}`);
-  const runtime = {...read(donor.runtimePath), entityId: e.entityId};
+  // Atlas references point back at the donor's published pages (relative to the new runtime); with the
+  // reviewed set replacing every pixel they are never requested, but the publication boundary resolves them.
+  const donorRuntime = read(donor.runtimePath), donorDir = donor.runtimePath.slice(0, donor.runtimePath.lastIndexOf('/'));
+  const back = path => `${'../'.repeat(2)}${donorDir.slice(ROOT.slice(0, ROOT.lastIndexOf('/') + 1).length)}/${path}`;
+  const rebase = atlas => ({...atlas, data: back(atlas.data), image: back(atlas.image)});
+  const runtime = {...donorRuntime, entityId: e.entityId,
+    sides: {...donorRuntime.sides, main: {...donorRuntime.sides.main, atlases: donorRuntime.sides.main.atlases.map(rebase)}},
+    ...(donorRuntime.streaming ? {streaming: {...donorRuntime.streaming, pages: donorRuntime.streaming.pages.map(rebase)}} : {})};
   const hud = read(donor.hudPath);
   const renamed = cell => ({...cell, entityId: e.entityId, speciesId: speciesId(e.speciesIndex)});
   const hudOut = {...hud, entityId: e.entityId, portrait: renamed(hud.portrait), battle: {...hud.battle, cells: hud.battle.cells.map(renamed)}};

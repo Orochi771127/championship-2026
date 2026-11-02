@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 // OWNER_APPROVED_ADAPTATION 2026-11-02: the encyclopedia projects the ranch's growth tables.
-import {PRODUCT_GROWTH_RULES} from '../src/championship/contracts/productGrowthRules.js';
+import {PRODUCT_GROWTH_RULES,growthBranchHistoryIndex} from '../src/championship/contracts/productGrowthRules.js';
 const lifecycle=JSON.parse(JSON.stringify(PRODUCT_GROWTH_RULES));
 import {deepFreeze} from '../src/championship/contracts/championshipContracts.js';
 import {projectDatabase} from '../src/championship/database/databaseRuntime.js';
@@ -19,8 +19,9 @@ import {ControlledEvent,simulateButtonKeyActivation,serializeControlledNode} fro
 // pixels, native keyboard default actions, screen reader or visual layout is
 // exercised. Only unrelated screen dependencies and art delivery are stubbed.
 import {makeView} from './helpers/dex-conditions-ui-fixture.mjs';
-const allRegistered = Array.from({length:216},(_,i)=>i+8);
-const allOffsets=lifecycle.rules.flatMap((group,i)=>group.map((_,branch)=>i*5+branch));
+// Native species plus the playable originals (Owner 2026-11-03); offsets are history slots, native ones unchanged.
+const allRegistered = [...Array.from({length:216},(_,i)=>i+8),231,232,234,235,236,237,239,240];
+const allOffsets=lifecycle.rules.flatMap((group,i)=>group.map((_,branch)=>i*5+growthBranchHistoryIndex(i+8,branch)));
 const plain = value=>JSON.parse(JSON.stringify(value));
 const frozen=value=>{if(value&&typeof value==='object'){assert.ok(Object.isFrozen(value));for(const child of Object.values(value))frozen(child);}};
 
@@ -35,13 +36,16 @@ function assertNoToggleSideEffects(fixture,before){
   assert.equal(q(fixture,'input'),before.input);assert.equal(q(fixture,'.cm-vs2-database__detail'),before.detail);assert.equal(q(fixture,'h2'),before.title);assert.deepEqual(qa(fixture,'.cm-dex-routes__target'),before.routes);fixture.assertUnchanged();
 }
 
-test('real projectDatabase joins all 235 growth branches; original route and book field contracts remain intact; native inputs and results are frozen',()=>{
+test('real projectDatabase joins all 244 growth branches; original route and book field contracts remain intact; native inputs and results are frozen',()=>{
   const snapshot=JSON.stringify(lifecycle);deepFreeze(lifecycle);let count=0;
   for(let i=0;i<lifecycle.rules.length;i++){
+    // Past 223 only the playable originals are book entries (224..230: duplicate forms, sentinel, alternate
+    // forms; 233, 238, 241..244: art-only originals).
+    if(i+8>=224&&!allRegistered.includes(i+8))continue;
     const source=i+8;const options=deepFreeze({registeredSpecies:[...allRegistered],evolutionBranches:[...allOffsets],selectedSpeciesIndex:source});
     const result=projectDatabase(options),originalRoutes=projectDatabaseEvolutionRoutes(source,{sourceRegistered:true,registeredSpecies:allRegistered,evolutionBranches:allOffsets});frozen(result);
     assert.deepEqual(Object.keys(result).sort(),['slotCount','eggCount','regularCount','registeredCount','unlockEvidence','entries','selected'].sort());
-    assert.equal(result.slotCount,218);assert.equal(result.eggCount,0);assert.equal(result.regularCount,218);assert.equal(result.registeredCount,216);assert.equal(result.entries.length,218);
+    assert.equal(result.slotCount,226);assert.equal(result.eggCount,0);assert.equal(result.regularCount,226);assert.equal(result.registeredCount,224);assert.equal(result.entries.length,226);
     assert.ok(result.entries.filter(e=>[229,230].includes(e.speciesIndex)).every(e=>e.state==='UNDISCOVERED'));
     assert.equal(result.selected.speciesIndex,source);assert.equal(result.selected.state,'REGISTERED');assert.deepEqual(plain(result.selected.instances),[]);
     assert.deepEqual(Object.keys(result.selected).sort(),['bookOrdinal','speciesIndex','speciesId','displayName','kind','state','source','instanceCount','identityEvidence','instances','evolutionRoutes','burst'].sort());
@@ -58,7 +62,7 @@ test('real projectDatabase joins all 235 growth branches; original route and boo
       frozen(conditions);count++;
     });
   }
-  assert.equal(count,235);assert.equal(JSON.stringify(lifecycle),snapshot);
+  assert.equal(count,244);assert.equal(JSON.stringify(lifecycle),snapshot);
 });
 
 test('exact source8/history0/registered target20 is required; unknown, target-only and contradictory histories emit no condition DOM or aria',()=>{

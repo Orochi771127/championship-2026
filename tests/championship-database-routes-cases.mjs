@@ -10,23 +10,31 @@ import {databaseHeroPortrait} from '../src/championship/presentation/databaseHer
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 // OWNER_APPROVED_ADAPTATION 2026-11-02: the Dex shows the ranch's growth tables (native branches up to 成熟期 plus three
 // appended ones); 覺醒體/究極體 are battle burst forms and no longer growth routes.
-import {PRODUCT_GROWTH_RULES} from '../src/championship/contracts/productGrowthRules.js';
-const lifecycle=JSON.parse(JSON.stringify(PRODUCT_GROWTH_RULES)),registeredSpecies=Array.from({length:216},(_,i)=>i+8);
-const GROWTH_BRANCHES=235;
+import {PRODUCT_GROWTH_RULES,growthBranchHistoryIndex} from '../src/championship/contracts/productGrowthRules.js';
+// Playable originals (Owner 2026-11-03) add nine growth branches; every branch keeps a history slot (native
+// branches their native slot), so saved completion flags never move.
+const PLAYABLE=[231,232,234,235,236,237,239,240];
+const lifecycle=JSON.parse(JSON.stringify(PRODUCT_GROWTH_RULES)),registeredSpecies=[...Array.from({length:216},(_,i)=>i+8),...PLAYABLE];
+const GROWTH_BRANCHES=244;
+const slot=(source,branch)=>(source-8)*5+growthBranchHistoryIndex(source,branch);
 
-test('all 235 growth candidate identities retain exact source/branch history offsets and live display identities',()=>{
+test('all 244 growth candidate identities retain exact source/branch history offsets and live display identities',()=>{
   const before=JSON.stringify(lifecycle);let count=0;
-  assert.equal(lifecycle.rules.length,179);assert.equal(lifecycle.rules.filter(r=>r.length).length,64);
-  for(let source=8;source<=186;source++){
-    const rules=lifecycle.rules[source-8],flags=rules.map((_,i)=>(source-8)*5+i);
+  assert.equal(lifecycle.rules.length,233);assert.equal(lifecycle.rules.filter(r=>r.length).length,67);
+  for(let source=8;source<=240;source++){
+    const rules=lifecycle.rules[source-8],flags=rules.map((_,i)=>slot(source,i));
     const routes=projectDatabaseEvolutionRoutes(source,{sourceRegistered:true,registeredSpecies,evolutionBranches:flags}).filter(route=>!route.productRouteId);
     assert.equal(routes.length,rules.length);assert.ok(routes.length<=5);
     routes.forEach((route,index)=>{
       count++;assert.equal(route.sourceSpeciesIndex,source);assert.equal(route.branchIndex,index);assert.equal(route.targetSpeciesIndex,rules[index].target);
-      assert.equal(route.legacyBranchOffset,(source-8)*5+index);assert.equal(route.historyState,'RECORDED');assert.equal(route.revealed,true);assert.ok(getDatabaseDisplayEntry(route.targetSpeciesIndex));
+      assert.equal(route.legacyBranchOffset,slot(source,index));assert.equal(route.historyState,'RECORDED');assert.equal(route.revealed,true);assert.ok(getDatabaseDisplayEntry(route.targetSpeciesIndex));
     });
   }
   assert.equal(count,GROWTH_BRANCHES);assert.equal(JSON.stringify(lifecycle),before);
+  // B205 checks 星塵豬 first, yet 拳擊狼 keeps slot 0 (offset 75) and 星塵豬 takes the slot after the natives.
+  const b205=projectDatabaseEvolutionRoutes(23,{sourceRegistered:true,registeredSpecies,evolutionBranches:[75]});
+  assert.deepEqual(b205.map(r=>[r.targetSpeciesIndex,r.legacyBranchOffset,r.historyState]),
+    [[231,79,'NOT_RECORDED'],[38,75,'RECORDED'],[40,76,'NOT_RECORDED'],[67,77,'NOT_RECORDED'],[36,78,'NOT_RECORDED']]);
 });
 
 test('registration never fills a branch; empty history or [5] cannot reveal source8 to20 offset0',()=>{
@@ -40,7 +48,7 @@ test('registration never fills a branch; empty history or [5] cannot reveal sour
 });
 
 test('same target from different sources has independent histories; malformed flags stay conservative and unchanged',()=>{
-  const edges=lifecycle.rules.flatMap((rules,i)=>rules.map((r,j)=>({source:i+8,target:r.target,offset:i*5+j})));
+  const edges=lifecycle.rules.flatMap((rules,i)=>rules.map((r,j)=>({source:i+8,target:r.target,offset:slot(i+8,j)})));
   const pair=edges.find(a=>edges.some(b=>a.source!==b.source&&a.target===b.target)),other=edges.find(b=>pair.source!==b.source&&pair.target===b.target);
   const first=projectDatabaseEvolutionRoutes(pair.source,{sourceRegistered:true,registeredSpecies,evolutionBranches:[pair.offset]}).find(r=>r.targetSpeciesIndex===pair.target);
   const second=projectDatabaseEvolutionRoutes(other.source,{sourceRegistered:true,registeredSpecies,evolutionBranches:[pair.offset]}).find(r=>r.targetSpeciesIndex===other.target);
@@ -56,7 +64,7 @@ test('unknown source, eggs, empty group and final stages expose no invented bran
   for(const index of [0,7,72,93,136,160,187,211,222,228,229,230])assert.deepEqual(projectDatabaseEvolutionRoutes(index,{sourceRegistered:true,registeredSpecies,evolutionBranches:[0]}),[]);
   const book=projectDatabase({registeredSpecies:[8,20],selectedSpeciesIndex:8});
   assert.equal(book.selected.instanceCount,0);assert.equal(book.selected.state,'REGISTERED');assert.equal(book.selected.evolutionRoutes[0].historyState,'NOT_RECORDED');
-  assert.equal(book.slotCount,218);
+  assert.equal(book.slotCount,226);
 });
 
 test('all 216 ordinary public portraits preserve exact selected HUD hashes and aliases96/97',()=>{
@@ -89,10 +97,10 @@ test('private provenance, foreign paths and changed identities cannot pass the h
  assert.equal(calls,4);
 });
 
-test('burst alternate forms (229/230) are not growth routes; the 235 growth offsets stay native',()=>{
+test('burst alternate forms (229/230) are not growth routes; the growth offsets stay native',()=>{
   const registered=[...registeredSpecies,229,230],snapshot=JSON.stringify(lifecycle),extras=[];let nativeCount=0;
-  for(let source=8;source<=186;source++){
-    const flags=(lifecycle.rules[source-8]??[]).map((_,i)=>(source-8)*5+i);
+  for(let source=8;source<=240;source++){
+    const flags=(lifecycle.rules[source-8]??[]).map((_,i)=>slot(source,i));
     const routes=projectDatabaseEvolutionRoutes(source,{sourceRegistered:true,registeredSpecies:registered,evolutionBranches:flags});
     nativeCount+=routes.filter(r=>!r.productRouteId).length;
     for(const route of routes.filter(r=>r.productRouteId)){
