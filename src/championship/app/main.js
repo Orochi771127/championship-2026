@@ -2249,6 +2249,8 @@ async function openGameplay() {
       responsiveLayout: RESPONSIVE_LAYOUT_CANDIDATE,
       root: document.body,
       onMenuEntry: runToolbarMenuEntry,
+      relabelEntry: entry => entry.id === "endDay" && app.getClockPolicy?.() === "REALTIME_V1"
+        ? { ...entry, label: "讓拍檔休息", hint: "讓牧場的拍檔躺下休息" } : null,
       getTutorialCheckpoint:()=>app.getInteractiveTutorial()?.checkpoint??null,
       onToolChange:(tool,context)=>{if(context?.userInitiated)app.selectInteractiveTutorialTool(tool,context.checkpoint);},
       getFoodStock:()=>{const rows=app.getShopFrame()?.listings??[];return {
@@ -2517,7 +2519,16 @@ function projectRoster() {
 }
 
 /** Repaint the four info_bar fields from the R2 snapshot and the current screen. */
+// Real-time ranch light: morning, day, dusk or night over the field (styles.css), refreshed with the status bar.
+function syncDayPeriod() {
+  let day = null;
+  try { day = app?.getDayPeriod?.() ?? null; } catch { day = null; }
+  if (day) { document.body.dataset.dayPeriod = day.period; document.body.dataset.nightNap = String(day.nightNap); }
+  else { delete document.body.dataset.dayPeriod; delete document.body.dataset.nightNap; }
+}
+
 function refreshStatusBar() {
+  syncDayPeriod();
   settingsPanel?.refreshSaveStatus?.();
   // Cyber Gachapon: unspent tickets glow on the Shop button (10 after the welcome grant).
   try {
@@ -3211,8 +3222,13 @@ function boot() {
       partnerLife: globalThis.__CHAMPIONSHIP_PARTNER_LIFE__ !== false,
       huntExpansionLoader: loadHuntExpansionReview,
       catalog: productEntities,
-      cages: RAISING_CAGES
+      cages: RAISING_CAGES,
+      // Owner 2026-11-02: the ranch runs on the device's local time (no fast-forward, a night nap 22:00-07:00,
+      // up to twelve hours of growth while closed); ?clock=native keeps the original fast clock.
+      clockPolicy: new URLSearchParams(location.search).get("clock") === "native" ? "NATIVE" : "REALTIME_V1"
     });
+    setInterval(syncDayPeriod, 15000);
+    document.addEventListener("visibilitychange", syncDayPeriod);
   } catch (error) {
     console.warn(error);
     note(`Championship 2026 could not start: ${error.message}`);

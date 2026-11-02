@@ -1359,3 +1359,15 @@ dialog.cm-dialog[data-variant="expansion"] .cm-dialog__panel { max-height: calc(
 /* Owner 2026-10-30: portraits now show the painted Dex illustration (newArtPortrait.js);
    scale it smoothly where a slot was set up for nearest-neighbour pixel cells. */
 img[src*="/production/database-"][src] { image-rendering: auto; }
+
+/* Real-time ranch light (OWNER_APPROVED_ADAPTATION 2026-11-02): the device's morning, day, dusk or night
+   tints the field only; the HUD, toolbar and dialogs stay untouched. */
+body[data-day-period] .int-rh2-field-host::after {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  mix-blend-mode: multiply; transition: background-color 2s ease;
+}
+body[data-day-period="MORNING"] .int-rh2-field-host::after { background-color: rgba(255, 214, 170, 0.18); }
+body[data-day-period="DAY"] .int-rh2-field-host::after { background-color: rgba(255, 255, 255, 0); }
+body[data-day-period="DUSK"] .int-rh2-field-host::after { background-color: rgba(255, 150, 96, 0.28); }
+body[data-day-period="NIGHT"] .int-rh2-field-host::after { background-color: rgba(46, 62, 140, 0.46); }
+@media (prefers-reduced-motion: reduce) { body[data-day-period] .int-rh2-field-host::after { transition: none; } }

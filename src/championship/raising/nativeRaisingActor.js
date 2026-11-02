@@ -594,6 +594,17 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
   return {...result,profile:grown.profile,changed:result.changed||ageDelta>0||grown.events.length>0||next!==profile};
 }
 
+// Night nap (OWNER_APPROVED_ADAPTATION 2026-11-02, real-time clock; not original behaviour). An idle partner
+// lies down for the night; one already asleep keeps sleeping until morning instead of waking when its native
+// sleep runs out. Returns the new profile, or null when nothing changed.
+export function beginNativeRaisingNap(actor,profile,rng) {
+  if(!actor||actor.speciesIndex<8||actor.detached||actor.evolution)return null;
+  if(actor.state===1){const next=enterNativeRaisingSleep(profile,actor.poolSlot,rng);actor.state=4;request(actor,13);return next;}
+  if(actor.state===4&&(profile.fields['17c']|0)>=(profile.fields['178']|0)){
+    const next=structuredClone(profile);next.fields['17c']=0;return normalizeNativeIndividualProfile(next);
+  }
+  return null;
+}
 export function stepNativeRaisingAgeClock(remainder,minuteDelta) {
   if(!Number.isInteger(remainder)||remainder<0||remainder>4||!Number.isInteger(minuteDelta)||minuteDelta<0)throw new TypeError("INVALID_RAISING_AGE_CLOCK");
   let total=remainder+minuteDelta;
