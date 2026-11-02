@@ -14,14 +14,28 @@ const POINT_KINDS = 11;
 export const TRAINING_KIND_OF_CONDITION = Object.freeze(Object.fromEntries(BURST_CONDITION_IDS.map((id, i) =>
   [id, (parseInt(BURST_CONDITION_FIELDS[i], 16) - 0x100) / 4])));
 
+// DIAMOND_ECONOMY_20261102: the zoo (24) and the ranch (25) gave no training in the original (their
+// feeding and cleaning moved to the gachapon's automation items). On the real-time ranch they train the
+// beast family (kind 4) a little below the other grassland cages, with small HP / speed / bird extras.
+export const PRODUCT_CAGE_PROGRAMS = Object.freeze({
+  24: Object.freeze([{weight: 70, commands: [[4, 4]]}, {weight: 20, commands: [[4, 5], [21, 3]]}, {weight: 10, commands: [[6, 4]]}]
+    .map(program => Object.freeze({...program, commands: Object.freeze(program.commands.map(c => Object.freeze(c)))}))),
+  25: Object.freeze([{weight: 70, commands: [[4, 5]]}, {weight: 20, commands: [[4, 6], [16, 30]]}, {weight: 10, commands: [[16, 50]]}]
+    .map(program => Object.freeze({...program, commands: Object.freeze(program.commands.map(c => Object.freeze(c)))})))
+});
+const programsOf = (cage, definition) => PRODUCT_CAGE_PROGRAMS[definition] ?? cage?.programs ?? [];
+
 // The best single-program gain of each point kind across the cage catalog, and each cage's own best gain.
-const cageGains = rules.cages.map(cage => {
+// The levelling scale reads the original programs only; recommendations include the overlay.
+const gainsOf = programs => {
   const best = new Array(POINT_KINDS).fill(0);
-  for (const program of cage?.programs ?? []) for (const [kind, delta] of program.commands ?? [])
+  for (const program of programs) for (const [kind, delta] of program.commands ?? [])
     if (kind < POINT_KINDS && delta > best[kind]) best[kind] = delta;
   return best;
-});
-const bestByKind = Array.from({length: POINT_KINDS}, (_, kind) => Math.max(0, ...cageGains.map(gains => gains[kind])));
+};
+const cageGains = rules.cages.map((cage, definition) => gainsOf(programsOf(cage, definition)));
+const originalGains = rules.cages.map(cage => gainsOf(cage?.programs ?? []));
+const bestByKind = Array.from({length: POINT_KINDS}, (_, kind) => Math.max(0, ...originalGains.map(gains => gains[kind])));
 
 /** Multiplier for a positive point gain of each native kind (0..10). */
 export const TRAINING_POINT_SCALE = Object.freeze(bestByKind.map(best => best > 0 ? AWAKENING_TRAINING_RULES.counterBestGain / best : 1));
@@ -45,7 +59,8 @@ export const TRAINING_COOLDOWN_FRAMES = AWAKENING_TRAINING_RULES.cooldownSeconds
 export const TRAINING_DWELL_FRAMES = AWAKENING_TRAINING_RULES.dwellSeconds * 60;
 /** The policy the REALTIME_V1 ranch passes to its actors (dueMinimumFrames: the after-match minimum). */
 export const REALTIME_TRAINING_POLICY = Object.freeze({cooldownFrames: TRAINING_COOLDOWN_FRAMES, dwellFrames: TRAINING_DWELL_FRAMES,
-  dueMinimumFrames: AWAKENING_TRAINING_RULES.afterMatchMinimumSeconds * 60, pointScale: TRAINING_POINT_SCALE});
+  dueMinimumFrames: AWAKENING_TRAINING_RULES.afterMatchMinimumSeconds * 60, pointScale: TRAINING_POINT_SCALE,
+  cagePrograms: PRODUCT_CAGE_PROGRAMS});
 
 /**
  * One frame of a partner's real-time training clock (fields on the actor: trainingCooldown, trainingDwell,

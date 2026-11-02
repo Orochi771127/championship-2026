@@ -1,0 +1,57 @@
+{
+  "id": "DIAMOND_ECONOMY_20261102",
+  "classification": "OWNER_APPROVED_ADAPTATION: the diamond economy loop; the Bits shop's zoo and ranch lose their free feeding and cleaning, ranch automation moves to the gachapon, diamonds buy land from 20 to 100 cells",
+  "supersedes": {
+    "contract": "docs/contracts/championship/STAGE_REDESIGN_BURST_20261102.json",
+    "sourceLock": "src/championship/app/championshipStandaloneSave.js"
+  },
+  "saveField": {
+    "path": "progression.cyberGacha.automation | mounts | editions | bondCarry; flags.friendsPlaytest.diamonds",
+    "shape": "automation: {itemId: 1..99} unmounted cores and unplaced royal cages; mounts: {cageInstanceId: [AUTO_CLEAN, AUTO_FEED]}; editions: {cageInstanceId: ROYAL_RANCH | STELLAR_ZOO}; bondCarry: {partnerId: 0..9 tenths}; the playtest diamond wallet may hold up to 9,999,999",
+    "normalizer": "normalizeCyberGacha (src/championship/gacha/cyberGacha.js) with the ranchAutomation.js normalizers; normalizeFriendsPlaytestState raises the wallet cap",
+    "migration": "none: the new keys are written only once used, so every other save keeps its exact bytes and schemaVersion",
+    "stockCheck": "a placed royal cage counts as one more copy of its base cage (zoo 24 / ranch 25) in the save's CAGE_INSTANCE_STOCK check (royalCopiesByDefinition)"
+  },
+  "rules": {
+    "bitsShopZooRanch": "no automatic feeding or cleaning in the product; the real-time ranch trains the beast family there (PRODUCT_CAGE_PROGRAMS); the NATIVE parity overnight writer is unchanged",
+    "cores": "SR 智慧自動清掃核心 clears droppings at once (+50 Bits each); SR 智慧自動給食核心 feeds a partner whose satiety falls to the native hungry flag (<= 2) to full, affection +2.4 carried in tenths",
+    "royalCages": "SSR 全自動皇家牧場 (ranch 25) and UR 全自動星際動物園 (zoo 24): both cores built in, sleep recovers 30% faster, +3 beast points per training, gold frame on the board and a ranch badge",
+    "gacha": "premium machine: automation takes the top 15% of each SR/SSR/UR category roll (cores 2.1% each, royal ranch 1.5%, stellar zoo 0.3%); R tiers, the ten-pull guarantee and the Bits machine are unchanged",
+    "furnace": "directed recipes: cores 5 chips + 2 shards, royal ranch 5 + 6, stellar zoo 5 + 10; locked chips and the 星核 (supernova) family never go in",
+    "land": "20 cells to 100, +10 per 1,000 diamonds, saved at once; each step lifts the hunt memory card by 8 G",
+    "rewards": "story chapter first clear 300 (paid with the chapter); tamer rank 1-3: 300, 4-6: 400, 7-9: 500; encyclopedia 10/25/50/100: 200/300/400/500, claimed in the gachapon's rewards box; ledger keys dia:* in progression.cyberGacha.claimed",
+    "founderBox": "fixed: 1,000 diamonds, one feed core, one clean core, five tickets, the founder gold brag frame; free once in the playtest after the first tournament medal"
+  },
+  "notChanged": [
+    "ROM tables and the NATIVE overnight writer",
+    "Bits machine, R-tier and guarantee rolls",
+    "shop prices and every existing reward",
+    "the save key and schemaVersion"
+  ],
+  "sourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "15067ee0d3f47971a91a8189edaaa0c22ba3d43a831408b4f8bcc1e525b64c11"
+  },
+  "historicalSourceLocks": {
+    "STAGE_REDESIGN_BURST_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "44b4ceec862776600a237a9cc54a160952f24305ed431a0b33a5addf4bba968d"
+    },
+    "ONLINE_BIND_REWARD_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c7abccc2403e3428e4754c87981a940db378dc4b1c17995363df6049ceeb680"
+    },
+    "CYBER_GACHA_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c4e7336e17e35099758cea84ff533e81c60c08bacbafef356afdbf55953b135"
+    },
+    "BATTLE_TACTICS_20261028": {
+      "src/championship/app/championshipStandaloneSave.js": "3a72fce7d38151f473f343fb8b9f59349daef1beb7cb09b6a0547c628d07ac8e"
+    },
+    "HEX_CAGE_WORLD_20261026": {
+      "src/championship/app/championshipStandaloneSave.js": "aaa72f6e08b150ac9bebb81fb2e6a8efefd532ab0ed7b7e24a7a0a9ae3d97f74"
+    }
+  },
+  "authorization": "Owner brief pasted 2026-11-02 (four phases: automation into the gachapon, 20 to 100 cell diamond land, a founder box, tests and three phone screenshots), with answers to four questions: beast training for the shop ranch and zoo, +8 G memory card per land step, auto-feed +2 x 1.2 affection, and the founder box condition left to the implementer (first tournament medal). The same brief asks for no push and no deployment.",
+  "tests": [
+    "tests/championship-diamond-economy-cases.mjs",
+    "tests/championship-lion-display-correction-cases.mjs"
+  ],
+  "physicalDeviceAccepted": false
+}

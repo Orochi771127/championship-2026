@@ -115,6 +115,8 @@ export async function mountRaisingFieldPixiPresentation({
   signal = null,
   getSelectedTool = () => null,
   onTrainingFrame = () => {},
+  // DIAMOND_ECONOMY_20261102: automated cages' badges and recent auto-clean / auto-feed events, in screen px.
+  onCageBadgeFrame = () => {},
   onActorFrame = null,
   onResidentAssetState = () => {},
   // Locked expansion bays (2026-10-12): where they show on screen, and a tap
@@ -1256,6 +1258,18 @@ export async function mountRaisingFieldPixiPresentation({
       drawPartnerEmote(entry,covered);
     }
     onTrainingFrame(trainingLabels);
+    const cageBadges=[],automationEvents=[];
+    if(!covered&&fieldArt?.field){
+      for(const badge of source.getCageAutomation?.()??[]){
+        const point=raisingNativeToScreen(badge.anchorQ12,fieldArt.field,view,cameraX);
+        if(point)cageBadges.push({id:badge.instanceId,x:point.x,y:point.y,royal:badge.royal,edition:badge.edition,clean:badge.clean,feed:badge.feed,art:badge.art});
+      }
+      for(const event of source.getAutomationEvents?.()??[]){
+        const point=event.positionQ12?raisingNativeToScreen(event.positionQ12,fieldArt.field,view,cameraX):null;
+        if(point)automationEvents.push({serial:event.serial,kind:event.kind,x:point.x,y:point.y,bits:event.bits??0,affection:event.affection??0});
+      }
+    }
+    onCageBadgeFrame(cageBadges,automationEvents);
     if(fieldArt?.threeScene){
       const rendered=fieldArt.threeScene.render({
         bounds:raisingFieldViewport(fieldArt.field,view,12,cameraX),

@@ -415,6 +415,17 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
       publish();
       return result;
     },
+    // DIAMOND_ECONOMY_20261102: the next +10 cells for 1,000 diamonds (saved at once).
+    expandRanchLand() {
+      const result = app.expandRanchLand?.() ?? { ok: false, reason: "LAND_EXPANSION_UNAVAILABLE" };
+      if (result.ok) committed("purchase");
+      publish();
+      return result;
+    },
+    selectRoyalCage(itemId) {
+      app.selectRoyalCage?.(itemId);
+      return commit();
+    },
     confirmCageEdit() {
       app.confirmCageEdit();
       committed("cage-layout");
@@ -488,6 +499,28 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
     },
     gachaFuseShards(shardId) {
       if (app.gachaFuseShards?.(shardId)?.ok) committed("purchase");
+      return commit();
+    },
+    gachaForgeAutomation(itemId) {
+      if (app.gachaForgeAutomation?.(itemId)?.ok) committed("purchase");
+      return commit();
+    },
+    gachaMountCore(coreId, instanceId) {
+      if (app.gachaMountCore?.(coreId, instanceId)?.ok) committed("purchase");
+      return commit();
+    },
+    gachaUnmountCore(module, instanceId) {
+      if (app.gachaUnmountCore?.(module, instanceId)?.ok) committed("purchase");
+      return commit();
+    },
+    claimDiamondRewards() {
+      const result = app.claimDiamondRewards?.() ?? { ok: false };
+      if (result.ok && result.granted) committed("purchase");
+      commit();
+      return result;
+    },
+    claimFounderPack() {
+      if (app.claimFounderPack?.()?.ok) committed("purchase");
       return commit();
     },
     selectGate(gateId) {

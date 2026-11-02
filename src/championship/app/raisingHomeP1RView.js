@@ -356,7 +356,37 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     }
     for(const [id,n] of trainingNodes)if(!live.has(id)){n.remove();trainingNodes.delete(id);}
   }
-  const field = await mountField({ host: fieldHost, recoveryHost: root, source: presentation,onTrainingFrame:renderTrainingLabels });
+  // DIAMOND_ECONOMY_20261102: a badge over every automated cage ("全自動飼育運轉中"), and a small pop for
+  // each auto-clean (+bits) and auto-feed (+affection). Pops only follow events newer than the first frame.
+  const cageBadgeLayer=node('div','int-rh2-cage-badges');cageBadgeLayer.setAttribute('aria-hidden','true');fieldHost.append(cageBadgeLayer);
+  const cageBadgeNodes=new Map();let lastAutomationSerial=null;
+  function renderCageBadges(badges,events=[]){
+    const live=new Set();
+    for(const badge of badges){
+      live.add(badge.id);let item=cageBadgeNodes.get(badge.id);
+      if(!item){item={node:node('div','int-rh2-cage-auto'),key:null};cageBadgeLayer.append(item.node);cageBadgeNodes.set(badge.id,item);}
+      const key=`${badge.royal}:${badge.edition}:${badge.clean}:${badge.feed}:${getLocale()}`;
+      if(item.key!==key){
+        item.key=key;item.node.dataset.royal=badge.royal?badge.edition:'';item.node.dataset.icon=badge.royal?'crown':'core';
+        const both=badge.clean&&badge.feed,parts=[badge.feed?uiText('自動給食'):null,badge.clean?uiText('自動清掃'):null].filter(Boolean);
+        const icon=node('img','int-rh2-cage-auto__icon');icon.alt='';if(badge.art)icon.src=badge.art;
+        item.node.replaceChildren(icon,
+          node('strong','int-rh2-cage-auto__title',uiText(both?'全自動飼育運轉中':badge.clean?'自動清掃運轉中':'自動給食運轉中')),
+          node('span','int-rh2-cage-auto__sub',uiText('（{parts}）',{parts:parts.join(' · ')})));
+      }
+      item.node.style.left=`${Math.round(badge.x)}px`;item.node.style.top=`${Math.round(badge.y)}px`;
+    }
+    for(const [id,item] of cageBadgeNodes)if(!live.has(id)){item.node.remove();cageBadgeNodes.delete(id);}
+    const newest=events.reduce((max,event)=>Math.max(max,event.serial),0);
+    if(lastAutomationSerial===null){lastAutomationSerial=newest;return;}
+    for(const event of events)if(event.serial>lastAutomationSerial){
+      const pop=node('span','int-rh2-auto-pop',event.kind==='CLEAN'?uiText('自動清掃 +{n}',{n:event.bits}):uiText('自動給食・親密 +{n}',{n:event.affection}));
+      pop.dataset.kind=event.kind;pop.style.left=`${Math.round(event.x)}px`;pop.style.top=`${Math.round(event.y)}px`;cageBadgeLayer.append(pop);
+      setTimeout(()=>pop.remove(),2000);
+    }
+    lastAutomationSerial=Math.max(lastAutomationSerial,newest);
+  }
+  const field = await mountField({ host: fieldHost, recoveryHost: root, source: presentation,onTrainingFrame:renderTrainingLabels,onCageBadgeFrame:renderCageBadges });
   if (!field || typeof field.render !== "function" || typeof field.dispose !== "function") {
     throw new TypeError("Claude-owned field presenter must expose render(frame) and dispose()");
   }

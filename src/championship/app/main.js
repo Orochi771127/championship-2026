@@ -1066,7 +1066,7 @@ async function mountRaisingHome() {
     firstRunHint: true, // UI entry guidance; its first-use preference is not calendar/save state.
     nextHintDuration: () => consumeRaisingHintDuration(settings.store),
     storySeen: () => settings.store.get().storyRiftChapter1Seen === true,
-    mountField({ host, recoveryHost, source: fieldSource, onTrainingFrame }) {
+    mountField({ host, recoveryHost, source: fieldSource, onTrainingFrame, onCageBadgeFrame }) {
       let closed = false, attempt = null, effects = null, scene = null, phase = 'loading';
       let residentStates = [], lastFrame = fieldSource.getFrame();
       const residentNotice = createResidentAssetNotice({onChange(){ if (!closed && phase === 'ready') show('ready'); }});
@@ -1182,7 +1182,7 @@ async function mountRaisingHome() {
               stage, source: fieldSource, fieldArt, characterBundle, signal: owner.signal,
               responsiveLayout: RESPONSIVE_LAYOUT_CANDIDATE,
               getLayoutSample: readRaisingLayoutSample,
-              getSelectedTool: () => toolbar?.getSelectedTool() ?? null, onTrainingFrame,
+              getSelectedTool: () => toolbar?.getSelectedTool() ?? null, onTrainingFrame, onCageBadgeFrame,
               onResidentAssetState(states) {
                 if (!active(owner)) return;
                 const failed=states.find(s=>s.state==='error');
@@ -2282,6 +2282,11 @@ async function openGameplay() {
   // stage and the synthesizer can be checked on an isolated QA save. Public hosts never bind it.
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("gachaQa"))
     globalThis.__championshipGachaQa = { grantTickets: (amount) => app.grantGachaTickets(amount, 'QA'), frame: () => app.getCyberGachaFrame() };
+  // Loopback review only (?diamondQa): automation items into the bag, and the land / badge readouts.
+  if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("diamondQa"))
+    globalThis.__championshipDiamondQa = { grant: (id, n = 1) => app.grantAutomationItem(id, n, 'QA'), cage: () => app.getCageEditFrame(),
+      badges: () => app.getCageAutomationFrame(), events: () => app.getAutomationEvents(), rewards: () => app.getDiamondRewards(),
+      saveStatus: () => app.savePort.getStatus() };
   refreshStatusBar();
   refreshToolbarMode();
 

@@ -7,6 +7,7 @@ import manifest from '../../../assets/production/public-runtime/cage-ui.map.v1.j
 // the field's own world rect), so a frame covers exactly the rect the old field art did.
 import threeManifest from '../../../assets/production/public-runtime/cage-ui-three.v1.json' with { type: 'json' };
 import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
+import { PRODUCT_CAGE_CHANNEL_OVERRIDES } from '../cage/cageEffects.js';
 import { productGridCell } from '../cage/productRanchGrid.js';
 import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
 import { RANCH_EXPANSION_FIRST_SLOT, isAnnexSlot } from '../cage/ranchExpansion.js';
@@ -47,7 +48,9 @@ const channelNames = { DEFENSE:'防禦上升', HP:'生命值上升', TP:'技力�
 export function cageUiSummary(moduleId, fallback = '') {
   const definition = getCageDefinitionByModuleId(moduleId);
   if (!definition) return fallback;
-  const {channels, capacity} = definition.training;
+  // DIAMOND_ECONOMY_20261102: the shop's zoo and ranch train the beast family instead of feeding and cleaning.
+  const channels = PRODUCT_CAGE_CHANNEL_OVERRIDES[definition.cageDefinitionIndex] ?? definition.training.channels;
+  const {capacity} = definition.training;
   // Each part is resolved on its own, so a translation never has to match
   // the joined line.
   const parts = channels.map(channel=>channelNames[channel.id]).filter(Boolean).map((part)=>uiText(part));
