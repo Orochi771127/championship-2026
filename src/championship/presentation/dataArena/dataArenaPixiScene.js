@@ -360,12 +360,24 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     let actionRequest = null, actionElapsed = 0, motion = null;
     shadow.scale.set((ROLE_HEIGHT[role] / 64) * 0.9, (ROLE_HEIGHT[role] / 64) * 0.75);
     container.addChild(shadow, sprite);
+    // A slim follow bar under a rival's feet; its named bar lives in the HUD strip (Owner 2026-11-02).
+    const healthGfx = role === "PLAYER" || role === "MATE" ? null : new PIXI.Graphics();
+    if (healthGfx) container.addChild(healthGfx);
+    let healthShown = -1;
     objects.addChild(container);
     const ringGfx = role === "PLAYER" ? new PIXI.Graphics() : null;
     if (ringGfx) container.addChildAt(ringGfx, 1);
     return {
       role, container, sprite, shadow, ringGfx, scale, controller, hasArt: Boolean(bundle),
       resetAction(){action.clear();reviewedArena?.reset();actionRequest=null;},
+      setHealth(share) {
+        if (!healthGfx) return;
+        const shown = Math.round(Math.max(0, Math.min(1, share)) * 40) / 40;
+        if (shown === healthShown) return;
+        healthShown = shown;
+        healthGfx.clear();
+        if (shown > 0) healthGfx.rect(-25, 10, 50, 7).fill({ color: 0x05060d, alpha: 0.78 }).rect(-24, 11, 48 * shown, 5).fill(0xff4a6a);
+      },
       // Where this body's move is drawn leaving it; null keeps the default hand offset.
       releasePoint(angle){
         if(!reviewedArena||(partial&&!onReviewed))return null;
@@ -646,32 +658,65 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   function ring(x, y, radius, tint, life = 0.4, alpha = 0.9) {
     spawn({ x, y, texture: textures.ring, tint, scale: 0.1, scaleTo: radius / 58, life, alpha, add: true });
   }
-  const numbers = [], numberPool = [];
+  // Track one of the combat telemetry (Owner 2026-11-02): numbers and short
+  // words ride beside the body that earned them, frameless with a hard dark
+  // outline. Spawns at one spot within 200 ms step (±14, -18) so none overlap.
+  const numbers = [], numberPool = [], wordPool = [];
+  const recentSpawns = [];
+  const WORD_TONES = Object.freeze({ dodge: 0x9fe8ff, good: 0x8dffb0, warn: 0xffd6a0, chain: 0xffcf8a, crit: 0xffd34d, info: 0xeaf6ff });
+  function stackOffset(x, y) {
+    while (recentSpawns.length && elapsed - recentSpawns[0].at > 0.2) recentSpawns.shift();
+    const near = recentSpawns.filter((spawn) => Math.hypot(spawn.x - x, spawn.y - y) < 56).length;
+    recentSpawns.push({ x, y, at: elapsed });
+    return near ? { x: (near % 2 ? 14 : -14) * Math.ceil(near / 2), y: -18 * near } : { x: 0, y: 0 };
+  }
+  function recycle(entry) {
+    entry.text.visible = false; (entry.word ? wordPool : numberPool).push(entry.text);
+    if (entry.ghost) { entry.ghost.visible = false; wordPool.push(entry.ghost); }
+  }
+  function makeText(word) {
+    const text = new PIXI.Text({ text: "", style: { fontFamily: '"Noto Sans TC","Arial Black",system-ui,sans-serif', fontSize: word ? 22 : 26, fontWeight: "900",
+      fontStyle: word ? "italic" : "normal", fill: 0xffffff, stroke: { color: 0x05060d, width: 5, join: "round" },
+      dropShadow: { color: 0x000000, alpha: 0.45, blur: 0, distance: 2, angle: Math.PI / 2 } } });
+    text.anchor.set(0.5);
+    numberLayer.addChild(text);
+    return text;
+  }
   function damageNumber(x, y, amount, tint) {
     if (!(amount >= 1)) return;
-    if (numbers.length >= 8) { const old = numbers.shift(); old.text.visible = false; numberPool.push(old.text); }
-    let text = numberPool.pop();
-    if (!text) {
-      text = new PIXI.Text({ text: "", style: { fontFamily: '"Noto Sans TC","Arial Black",system-ui,sans-serif', fontSize: 26, fontWeight: "900",
-        fill: 0xffffff, stroke: { color: 0x05060d, width: 6, join: "round" } } });
-      text.anchor.set(0.5);
-      numberLayer.addChild(text);
-    }
+    if (numbers.length >= 10) recycle(numbers.shift());
+    const text = numberPool.pop() ?? makeText(false);
     text.text = String(Math.round(amount)); text.style.fill = tint; text.visible = true; text.alpha = 1;
-    const side = numbers.length % 2 ? 1 : -1;
-    numbers.push({ text, x, y, vx: reducedMotion ? 0 : side * 46, vy: reducedMotion ? -30 : -270, age: 0, life: 0.8 });
+    const offset = stackOffset(x, y), side = offset.x > 0 ? 1 : offset.x < 0 ? -1 : (numbers.length % 2 ? 1 : -1);
+    numbers.push({ text, x: x + offset.x, y: y + offset.y, vx: reducedMotion ? 0 : side * 46, vy: reducedMotion ? -30 : -270, age: 0, life: 0.8, gravity: 720 });
+  }
+  /** A short word beside a body: a dodge is an icy italic with one trailing afterimage, gone in 450 ms. */
+  function floatText(x, y, message, tone = "info") {
+    if (!message) return;
+    if (numbers.length >= 10) recycle(numbers.shift());
+    const dodge = tone === "dodge";
+    const text = wordPool.pop() ?? makeText(true);
+    text.text = message; text.style.fill = WORD_TONES[tone] ?? WORD_TONES.info; text.visible = true; text.alpha = 1;
+    let ghost = null;
+    if (dodge && !reducedMotion) { ghost = wordPool.pop() ?? makeText(true); ghost.text = message; ghost.style.fill = WORD_TONES.dodge; ghost.visible = true; ghost.alpha = 0.35; }
+    const offset = stackOffset(x, y);
+    // Rises 24 px (dodge) or 30 px on a shallow arc, then fades.
+    const life = dodge ? 0.45 : 0.75, rise = dodge ? 24 : 30;
+    numbers.push({ text, ghost, word: true, x: x + offset.x + (dodge ? 18 : 0), y: y + offset.y, vx: reducedMotion ? 0 : (dodge ? 30 : 0),
+      vy: reducedMotion ? -rise / life : -2 * rise / life, gravity: reducedMotion ? 0 : 2 * rise / (life * life), age: 0, life });
   }
   function updateNumbers(dt) {
     for (let i = numbers.length - 1; i >= 0; i--) {
       const n = numbers[i];
       n.age += dt;
-      if (n.age >= n.life) { n.text.visible = false; numberPool.push(n.text); numbers.splice(i, 1); continue; }
-      if (!reducedMotion) n.vy += 720 * dt;
+      if (n.age >= n.life) { recycle(n); numbers.splice(i, 1); continue; }
+      if (!reducedMotion) n.vy += n.gravity * dt;
       n.x += n.vx * dt; n.y += n.vy * dt;
       const t = n.age / n.life;
       n.text.position.set(n.x, n.y);
-      n.text.scale.set(reducedMotion ? 1 : n.age < 0.1 ? 1.7 - 7 * n.age : 1);
+      n.text.scale.set(reducedMotion ? 1 : n.age < 0.1 ? (n.word ? 1.3 - 3 * n.age : 1.7 - 7 * n.age) : 1);
       n.text.alpha = t > 0.7 ? (1 - t) / 0.3 : 1;
+      if (n.ghost) { n.ghost.position.set(n.x - n.vx * 0.06, n.y - n.vy * 0.06); n.ghost.scale.copyFrom(n.text.scale); n.ghost.alpha = n.text.alpha * 0.35; }
     }
   }
   /** A contact: a saturated halo under a white-hot core (additive). */
@@ -1069,6 +1114,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       bossView.update(dtMs, { x: boss.x, y: boss.y, facing: boss.facing, flash: boss.hitFlash,
         alpha: entering ? clamp(boss.stateTime / 2.6, 0, 1) : boss.state === "DOWN" ? 0.85 : 1,
         lift: entering ? (1 - clamp(boss.stateTime / 2.6, 0, 1)) * 260 : 0, seq });
+      bossView.setHealth(boss.state === "DOWN" || entering ? 0 : boss.hp / boss.maxHp);
       bossView.sprite.tint = boss.hitFlash > 0 ? 0xffb0b0 : boss.enraged ? mixColor(0xffffff, 0xff6060, 0.35 + 0.15 * Math.sin(elapsed * 8)) : 0xffffff;
     }
 
@@ -1085,6 +1131,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         : rival.cast || rival.lunge || rival.recovery > 0 ? DATA_ARENA_SEQUENCES.ATTACK : Math.hypot(rival.vx, rival.vy) > 30 || rival.dashTimer > 0 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
       actorView.update(dtMs, { x: rival.x, y: rival.y, facing: rival.facing, flash: rival.hitFlash, alpha: rival.invulnerable > 0 ? 0.55 : 1, seq });
       actorView.sprite.tint = statusTint(rival, rival.hitFlash > 0 ? 0xff9a9a : 0xffffff);
+      actorView.setHealth(rival.active === false ? 0 : rival.hp / rival.maxHp);
     }
     for (const [id, view] of rivalViews) if (!state.rivals.some((rival) => rival.id === id)) { view.container.destroy({ children: true }); rivalViews.delete(id); }
     if (!(state.mate.state === "ABSENT")) mateView.container.visible = true; else mateView.container.visible = false;
@@ -1375,6 +1422,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     handleEvents,
     worldToScreen,
     screenToWorld,
+    floatText,
+    damageNumber,
     setShake(enabled) { camera.setShake(enabled); },
     getDiagnostics() {
       const sorted = [...fpsWindow].sort((a, b) => a - b);
