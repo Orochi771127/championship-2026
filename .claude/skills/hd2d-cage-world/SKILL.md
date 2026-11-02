@@ -1,6 +1,6 @@
 ---
 name: hd2d-cage-world
-description: HD-2D look for the 36 ranch cage GLBs, series connectivity between cages, and the shop cage cards. Use when changing how a cage looks or moves in the 3D ranch, which cages join into one area, what is drawn on a shared edge, or the shop's 籠子設施 cards. Never applies to the title, logo, main menu or opening.
+description: HD-2D look for the 36 ranch cage GLBs, series connectivity between cages, the beach water and edge falls over the data sea, and the shop cage cards. Use when changing how a cage looks or moves in the 3D ranch, which cages join into one area, what is drawn on a shared or outer edge, or the shop's 籠子設施 cards. Never applies to the title, logo, main menu or opening.
 ---
 
 # HD-2D cage world
@@ -24,6 +24,9 @@ logo, main menu and opening stay exactly as live main shipped them.
 | Series groups (which cages join) | `src/championship/cage/ranchEcology.js` → `RANCH_ECOLOGY_GROUPS` |
 | Shared edges and passages | `src/championship/cage/ranchConnections.js` (`ranchSharedBoundaries`) |
 | Plinth, closed rims, open seams | `src/championship/presentation/ranchPlinth.js` |
+| Edge falls (water, lava, icy water, sand), beach seam strips | `src/championship/presentation/ranchWaterfalls.js` |
+| Beach coast pipeline (2026-11-02) | `R:\Projects\Championship2026\cage-coast-20261102\scripts\` (`bake_coast`, `make_groundmap`, `sea_mask`, `pack_coast`, `install_batch`, `cage_falls`, `update_contracts`) |
+| 10/06 showcase masters (shop and editor art came from these) | `docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r*/seam-v3/fields/field_cmXX_01/master.blend` (untracked; copy on `D:\Championship2026-backups\cage-opus-masters-20261102\`) |
 | Shop cage cards | `src/championship/app/vs4Screens.js` (`decorateShopCageCard`, `cageSeriesLabel`), `ui/screenLayout.css` |
 
 ## Enhancer rules
@@ -66,14 +69,41 @@ logo, main menu and opening stay exactly as live main shipped them.
   snowfield. Anything else joins only its own kind. Changing a group changes
   walking, the editor's ✨ preview and the shop tag together; update
   `tests/championship-hex-builder-cases.mjs` when you do.
-- A passage opens only where the walk rule opened it (same series, same
-  height, safe exits on both sides).
-- On an open edge the authored rim and fence strip dissolve and nothing else is
+- Owner 2026-11-02 (replaces the 10-27 rule): cages of one series at one
+  height join into one map. Their shared edges show no border in the ranch and
+  no rim or exit chevron in the facility editor, whether or not a passage
+  opened. A border (low rim) stays only between different series or heights.
+- Partners still cross only where the walk rule opened a passage (same series,
+  same height, safe exits on both sides); the editor's bridges show those.
+- On a joined edge the authored rim and fence strip dissolve and nothing else is
   drawn: the two cages' own floors meet. Owner 2026-11-01 removed the painted
   seam-bridge strips (they read as a plaster stuck on the floor); do not add a
-  strip, patch or threshold back on open edges.
-- `canvas.dataset.passageThresholds` counts open edges;
+  painted strip, patch or threshold back. The only exception is the beach seam
+  strip (`createRanchWaterSeam`): it is drawn in the beach's own material, so it
+  shows exactly the water around it and closes the joint's hairline gap.
+- `canvas.dataset.passageThresholds` counts open passages;
   `navigationConnections` counts the walk rule's passages. They must agree.
+
+## Data sea, beaches and edge falls (Owner 2026-11-02)
+
+- The ranch is islands floating over a data sea: the purple background stays and
+  the ranch ambience theme is `datasea` (sideways glints that twinkle, a teal
+  glow from below). There is no sea plane at ground height.
+- 海灘 and 小海灘 follow their 10/06 showcase masters: the coast lives in the
+  ground map's alpha (A = 1 dry land; `water: { h0, edges }` on the spec), and
+  the shader paints the showcase sea from it with world-space waves, so two
+  beaches' waves run on across a seam. The finest wave bands fade with the
+  camera's pixel size (`uCageGroundPixel`), never with derivatives: those jump at
+  the floors' millimetre steps and drew a dotted line. 小海灘's island never
+  reaches its own edge (`make_groundmap.py --island`).
+- Where a cage's water, lava (火山, 小火山), icy water (冰原) or sand (沙漠, a few
+  thin streams) reaches a free outer edge facing the camera, it pours over the
+  rim, down the cliff and breaks into pixels: one merged mesh and one shader for
+  the whole ranch, no texture. Lava, icy water and sand spans are measured on the
+  exact GLB (`RANCH_CAGE_FALLS`, keyed by its sha256): a changed GLB pours
+  nothing until `cage_falls.py` measures it again.
+- 小高山's floor is the 10/06 stone summit again (ground map), not sky.
+- Walking is unchanged: a beach's sea tiles were already walkable game data.
 
 ## Mobile budget
 
@@ -101,7 +131,8 @@ logo, main menu and opening stay exactly as live main shipped them.
 - Browser on the isolated QA port (never 8732): place 小運動場 next to
   運動場 and 小火山 next to 火山 in the facility editor, return to the 40°
   ranch, confirm `passageThresholds` equals `navigationConnections`, no
-  console errors, and the bridge is visible on the seam.
+  console errors, and no rim or line on any same-series seam (also 海灘 next to
+  小海灘, where the walk rule keeps some edges closed) at 390×844 zoomed out.
 - Shop 籠子設施 tab in desktop 1366×768, portrait 390×844 and landscape
   844×390: no horizontal scroll, last row clear of the footer.
 - Title zero-diff against live main.

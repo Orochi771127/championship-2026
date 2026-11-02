@@ -15,13 +15,16 @@ export const AMBIENCE_BY_BIOME = Object.freeze({
   Oasis: 'sun', Seaside: 'sun', Crag: 'sun'
 });
 
-// count, colour, size px, rise px/s (negative falls), sway px, life s
+// count, colour, size px, rise px/s (negative falls), sway px, life s;
+// optional drift px/s (sideways) and twinkle (brightness pulse)
 const THEMES = Object.freeze({
   ember: { count: 30, color: [255, 128, 48], size: [1.5, 3.2], rise: [18, 46], sway: 14, life: [3, 6], glow: true },
   motes: { count: 26, color: [170, 255, 140], size: [1.4, 2.8], rise: [4, 14], sway: 22, life: [4, 8], glow: true },
   snow: { count: 34, color: [235, 246, 255], size: [1.6, 3.4], rise: [-30, -14], sway: 26, life: [5, 9], glow: false },
   data: { count: 24, color: [96, 240, 255], size: [1.2, 2.4], rise: [6, 18], sway: 10, life: [3, 6], glow: true },
-  sun: { count: 22, color: [255, 236, 170], size: [1.2, 2.6], rise: [3, 10], sway: 18, life: [4, 8], glow: true }
+  sun: { count: 22, color: [255, 236, 170], size: [1.2, 2.6], rise: [3, 10], sway: 18, life: [4, 8], glow: true },
+  // Owner 2026-11-02: the ranch floats over a data sea; glints drift on it like light on water.
+  datasea: { count: 26, color: [205, 244, 255], size: [1.0, 2.3], rise: [-2, 2], drift: [6, 16], sway: 6, life: [3, 7], glow: true, twinkle: true }
 });
 
 export function ambienceTheme(biomeId, fallback = 'sun') {
@@ -38,7 +41,7 @@ export function mountAmbience(host, { theme = 'sun', doc = globalThis.document, 
   layer.append(canvas);
   host.append(layer);
   const ctx = canvas.getContext?.('2d') ?? null;
-  const pool = Array.from({ length: AMBIENCE_PARTICLE_CAP }, () => ({ x: 0, y: 0, size: 1, vy: 0, phase: 0, age: 0, life: 1 }));
+  const pool = Array.from({ length: AMBIENCE_PARTICLE_CAP }, () => ({ x: 0, y: 0, size: 1, vx: 0, vy: 0, phase: 0, age: 0, life: 1 }));
   let current = THEMES[theme] ? theme : 'sun', frame = 0, last = 0, width = 0, height = 0, ratio = 1;
   let glowFill = '', coreFill = '';
   const paint = () => { const [r, g, b] = THEMES[current].color; glowFill = `rgba(${r},${g},${b},0.18)`; coreFill = `rgb(${r},${g},${b})`; };
@@ -55,6 +58,7 @@ export function mountAmbience(host, { theme = 'sun', doc = globalThis.document, 
     p.y = anywhere ? random() * height : (spec.rise[0] > 0 ? height + 6 : -6);
     p.size = span(spec.size);
     p.vy = span(spec.rise);
+    p.vx = spec.drift ? span(spec.drift) : 0;
     p.phase = random() * Math.PI * 2;
     p.life = span(spec.life);
     p.age = anywhere ? random() * p.life : 0;
@@ -79,11 +83,13 @@ export function mountAmbience(host, { theme = 'sun', doc = globalThis.document, 
       const p = pool[i];
       p.age += dt;
       p.y -= p.vy * dt;
+      p.x += p.vx * dt;
       p.phase += dt * 1.3;
-      if (p.age > p.life || p.y < -10 || p.y > height + 10) seed(p, false);
+      if (p.age > p.life || p.y < -10 || p.y > height + 10 || p.x > width + 10) seed(p, false);
       const fade = Math.min(1, p.age / 0.6, (p.life - p.age) / 0.8);
       const x = p.x + Math.sin(p.phase) * spec.sway * 0.4;
-      ctx.globalAlpha = Math.max(0, fade) * 0.85;
+      const twinkle = spec.twinkle ? 0.55 + 0.45 * Math.sin(p.phase * 2.3) : 1;
+      ctx.globalAlpha = Math.max(0, fade) * 0.85 * twinkle;
       if (spec.glow) {
         ctx.fillStyle = glowFill;
         ctx.beginPath(); ctx.arc(x, p.y, p.size * 3, 0, Math.PI * 2); ctx.fill();

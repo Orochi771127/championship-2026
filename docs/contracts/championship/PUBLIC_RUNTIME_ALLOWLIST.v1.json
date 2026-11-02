@@ -561,16 +561,16 @@
       "path": "assets/production/battle/menu-cube-v1/public-manifest.json",
       "sha256": "eaebcb5e4e7a6a82e4b849f3913e62c20cfa7533101f967311b753488abdc3e0",
       "jsonFields": [
-        "schemaVersion",
         "assetId",
+        "bytes",
         "faces",
+        "height",
         "id",
         "label",
-        "texture",
-        "width",
-        "height",
+        "schemaVersion",
         "sha256",
-        "bytes"
+        "texture",
+        "width"
       ]
     },
     {
@@ -4263,7 +4263,7 @@
     },
     {
       "path": "assets/production/cage/three-20261021/field_cm09_01.glb",
-      "sha256": "c63d8a5e5f45ece0b7d96f5dac9236bb89df4e2a18ab4cda471fbf3c5d580abe"
+      "sha256": "d434907e6e3dbfd0d3f44cdb177aea227242de4fc455ac9cf3811042e8e761a1"
     },
     {
       "path": "assets/production/cage/three-20261021/field_cm10_01.glb",
@@ -4367,11 +4367,11 @@
     },
     {
       "path": "assets/production/cage/three-20261021/field_cm37_01.glb",
-      "sha256": "29938978b9841feec8468d2cfa204369bbfd08fd4855ef3a75eaea267d014658"
+      "sha256": "e147b6e22dd79ea230fe7f45a310c0da62be2aabd452d90fb808f828bbee766c"
     },
     {
       "path": "assets/production/cage/three-20261021/field_cm39_01.glb",
-      "sha256": "8f5b978941215411e6911719359b23baf800eeb66b251a07090854db3ed1a482"
+      "sha256": "075d4d932b1fd5b7f5c6e4467fe636a3e4905eb08d715b717892a2003718b6f2"
     },
     {
       "path": "assets/production/cage/three-20261021/field_cm40_01.glb",
@@ -4403,7 +4403,7 @@
     },
     {
       "path": "assets/production/cage/three-20261021/manifest.json",
-      "sha256": "91b1661d3f593646231731a346c1c04c8ecf7806d6289f90dcd4ee062897818c",
+      "sha256": "8d3aa3efd3f9dbef4dcf4785ee493f7d8867ab860c10e3e3790348c95c6525a7",
       "jsonFields": [
         "bytes",
         "cameraElevationDegrees",
@@ -4419,7 +4419,7 @@
     },
     {
       "path": "assets/production/cage/three-20261021/physical-ground-tops.r2.json",
-      "sha256": "adf6d668ca3b219d8c29647ac252e2069c459aa2f8b39a51f5177f14f13bb22e",
+      "sha256": "5e6b4fe7d840dcbab57131f7fd8c90068b2f4e879a36c6072c893a9a8ac0b31c",
       "jsonFields": [
         "authoredTransform",
         "component",
@@ -121377,21 +121377,21 @@
       "path": "assets/production/public-runtime/shop-cage-thumbnails.v1.json",
       "sha256": "d049241e1a2177cee5f31baf8a606b5184fccabe3679841c5a29982002bd7098",
       "jsonFields": [
-        "schemaVersion",
-        "records",
-        "shopRecordIndex",
-        "itemIndex",
         "cageDefinitionIndex",
-        "moduleId",
-        "fieldId",
-        "src",
-        "width",
-        "height",
-        "sha256",
         "category",
-        "subcategory",
+        "density",
+        "fieldId",
+        "height",
+        "itemIndex",
         "logicalOrigin",
-        "density"
+        "moduleId",
+        "records",
+        "schemaVersion",
+        "sha256",
+        "shopRecordIndex",
+        "src",
+        "subcategory",
+        "width"
       ]
     },
     {
@@ -122363,19 +122363,19 @@
       "path": "manifest.webmanifest",
       "sha256": "eb5138d81791c6057febefc514ad211f92852ff72698acfa65be70810af65154",
       "jsonFields": [
+        "background_color",
+        "display",
+        "icons",
         "id",
         "name",
-        "short_name",
-        "start_url",
+        "purpose",
         "scope",
-        "display",
-        "background_color",
-        "theme_color",
-        "icons",
-        "src",
+        "short_name",
         "sizes",
-        "type",
-        "purpose"
+        "src",
+        "start_url",
+        "theme_color",
+        "type"
       ]
     },
     {
@@ -122560,7 +122560,7 @@
     },
     {
       "path": "src/championship/app/hexWorldEditor.js",
-      "sha256": "1ded9274d2715402ce6270cd6324695b527dcf1c9b83d73c09404ded244cb194"
+      "sha256": "a4c3fc9dea4d34c329e124c914a99deb53639bba651461aef0a53a1ed9f54c3f"
     },
     {
       "path": "src/championship/app/hexWorldPassages.js",
@@ -122620,7 +122620,7 @@
     },
     {
       "path": "src/championship/app/main.js",
-      "sha256": "05cfd6a90bf7843f252c5ad1c4086944bafd452727f2d9c28dda8d8a3abfd4a2"
+      "sha256": "94ed5479d96f23d5a1b86ce19677c9594a5b511956495ad40585ef4b0766a234"
     },
     {
       "path": "src/championship/app/medalCollection.css",
@@ -122828,7 +122828,7 @@
     },
     {
       "path": "src/championship/app/ui/ambienceLayer.js",
-      "sha256": "83339188119eefd0cf32de890abf854566052b33d3dcbdce185e5bcaa27a7c68"
+      "sha256": "ad54cabc368989e15475c39bc11ceed3692d3c6164ac6d6e54908b59dd36da2a"
     },
     {
       "path": "src/championship/app/ui/arcade.css",
@@ -122868,7 +122868,7 @@
     },
     {
       "path": "src/championship/app/ui/screenLayout.css",
-      "sha256": "8a81e1259d6d8e21c4e2db88726d8b7875bdb59c84de4c884c3bfd2672fdf9c5"
+      "sha256": "984adf28a9bec84f999c32925f5e93dd10dca40a9a37ad8c8c449ef56c1f881c"
     },
     {
       "path": "src/championship/app/ui/settings.css",
@@ -123696,7 +123696,7 @@
     },
     {
       "path": "src/championship/presentation/cageGroundMap.js",
-      "sha256": "aa7ea969d73c73d5e993a4fc5efdf9564000a9d5c7300fc4e14a46d86ddc775e"
+      "sha256": "b5f90054b2c1c6a132b0fba51d4fce14f8ab98319398224f7e339b72f3f3b63b"
     },
     {
       "path": "src/championship/presentation/cageHd2dEnhancer.js",
@@ -124060,11 +124060,11 @@
     },
     {
       "path": "src/championship/presentation/ranchPhysicalSupport.js",
-      "sha256": "c6734883739ae7de4e81d3331d3b6209d574d0600f39cf803f887f4a00b480a9"
+      "sha256": "0e1e983b6ea83888d9292aefb11adaeeee18916d06fcd54ca8457567a50370a8"
     },
     {
       "path": "src/championship/presentation/ranchPlinth.js",
-      "sha256": "5d0d1cb57f60d9bc00deb24d7932757ff26060610ac7b809f88a1ddc1f53eb98"
+      "sha256": "40d22722b278b0e271da4a5c77941e7de4f3c3f324d857205f2b7bcb6332ded0"
     },
     {
       "path": "src/championship/presentation/ranchSelectionRing.js",
@@ -124080,7 +124080,11 @@
     },
     {
       "path": "src/championship/presentation/ranchThreeScene.js",
-      "sha256": "98729a95358eb3e734bcc0c257336c4c58b2f2df7f6bb3f1ff2c1c0ca900aa7a"
+      "sha256": "a8e3dcc89237f7783d9e8422a287898561b7782339c3e76adec065c34a691fce"
+    },
+    {
+      "path": "src/championship/presentation/ranchWaterfalls.js",
+      "sha256": "aa228b3b3673d6539aa925f65fcdfabb320ce5e6d45c7b6a57342a0699b59edb"
     },
     {
       "path": "src/championship/presentation/reviewedCharacterAnimation.js",
@@ -126039,19 +126043,19 @@
       "path": "src/data/championship/database-body-stats.v1.json",
       "sha256": "193480417347ee88109deab30d82699683c1bfdc3183bfef1bf83ca405278332",
       "jsonFields": [
-        "schemaVersion",
-        "kind",
-        "owner",
-        "method",
-        "baseMetres",
-        "EG",
+        "AW",
         "B1",
         "B2",
+        "EG",
         "GR",
         "MA",
-        "AW",
         "UL",
-        "rows"
+        "baseMetres",
+        "kind",
+        "method",
+        "owner",
+        "rows",
+        "schemaVersion"
       ]
     },
     {
@@ -126091,16 +126095,16 @@
       "path": "src/data/championship/database-hero-portraits.public.v1.json",
       "sha256": "9b0ed63eb2e0d684d834a6e9adb175a2249f951d93b797c1d98e35700b918f83",
       "jsonFields": [
-        "schemaVersion",
-        "entries",
-        "speciesIndex",
-        "speciesId",
         "displayCode",
-        "src",
-        "width",
+        "entries",
         "height",
+        "schemaVersion",
         "sha256",
-        "thumbnail"
+        "speciesId",
+        "speciesIndex",
+        "src",
+        "thumbnail",
+        "width"
       ]
     },
     {
@@ -126119,23 +126123,23 @@
       "path": "src/data/championship/database-illustrations.r1.json",
       "sha256": "85dc0d4d66f01c60dd7cf4c7041d8bd9709ace1a6ea50a4b072a50ea80e4fa03",
       "jsonFields": [
-        "schemaVersion",
-        "entries",
-        "speciesIndex",
-        "speciesId",
-        "displayCode",
-        "numberingStageIndex",
-        "serial",
-        "displayName",
-        "formKey",
         "characterKey",
-        "form",
-        "profileByLocale",
-        "zh-Hant",
+        "displayCode",
+        "displayName",
         "en",
+        "entries",
+        "form",
+        "formKey",
         "ja",
+        "numberingStageIndex",
+        "profileByLocale",
+        "schemaVersion",
+        "serial",
+        "speciesId",
+        "speciesIndex",
         "th",
-        "vi"
+        "vi",
+        "zh-Hant"
       ]
     },
     {
@@ -126177,13 +126181,13 @@
       "path": "src/data/championship/online-service.v1.json",
       "sha256": "91141fe13ea5590471a9ee270065c76eb9e3694b7173145a3a7a584f2c4eb025",
       "jsonFields": [
-        "schemaVersion",
-        "supabaseUrl",
-        "supabaseAnonKey",
         "googleSignIn",
+        "note",
         "oauthProviders",
         "roomCodeLength",
-        "note"
+        "schemaVersion",
+        "supabaseAnonKey",
+        "supabaseUrl"
       ]
     },
     {
@@ -126445,16 +126449,16 @@
       "path": "src/data/championship/raising-contact-footprints.v1.json",
       "sha256": "9bd579cd0d96886848a4de95dbec6e28c66cadf2f9be1cc903fdb9c0171c4c1a",
       "jsonFields": [
-        "schemaVersion",
-        "kind",
-        "method",
-        "frames",
         "default",
         "depth",
-        "front",
         "depthPerHeight",
+        "frames",
+        "front",
+        "kind",
+        "method",
         "minDepth",
-        "rows"
+        "rows",
+        "schemaVersion"
       ]
     },
     {
@@ -126518,17 +126522,17 @@
       "path": "src/data/championship/stage-body-size.v1.json",
       "sha256": "54a1468de6dfaf43f90e015286fd301492fa9ae97714756c4483386429798867",
       "jsonFields": [
-        "schemaVersion",
-        "kind",
-        "owner",
-        "metric",
-        "reference",
         "AW",
         "UL",
-        "spread",
         "band",
+        "kind",
+        "metric",
+        "owner",
+        "reference",
         "relativeFrom",
-        "rows"
+        "rows",
+        "schemaVersion",
+        "spread"
       ]
     }
   ],
