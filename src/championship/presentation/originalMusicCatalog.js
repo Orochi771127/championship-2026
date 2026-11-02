@@ -1,8 +1,9 @@
 // Owner-approved original audio presentation; provisional mapping and gain, listening acceptance pending.
 export const ORIGINAL_MUSIC_CUES = Object.freeze({
+  // 2026-11-02 web audit: loopStart cues hand off on a measured musical repeat; other trims skip silent tails.
   "podium_geometry": {
     "path": "./assets/production/scene-music-r1/system/podium_geometry.mp3",
-    "loop": true, "gainDb": -11.9, "trimStart": 0, "trimEnd": 0, "crossfade": 0.8
+    "loop": true, "gainDb": -11.9, "trimStart": 0, "trimEnd": 7.596, "crossfade": 0.1, "loopStart": 13.126
   },
   "core": {
     "path": "./assets/production/original-music-r1/bgm_central_radiant_core.mp3",
@@ -79,7 +80,7 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
   // Owner 2026-11-02: Clash at the Concrete Edge replaces the retired 32-second normal-field cue.
   "battle_normal": {
     "path": "./assets/production/scene-music-r1/battle/clash_at_the_concrete_edge.mp3",
-    "loop": true, "gainDb": -11.2, "trimStart": 0, "trimEnd": 0, "crossfade": 0.8
+    "loop": true, "gainDb": -11.2, "trimStart": 0, "trimEnd": 5.09, "crossfade": 0.1, "loopStart": 66.821
   },
   // Owner 2026-11-02: shop BGM, 120 BPM. The 0-8 s intro plays once; loops cut 56.0 -> 8.0 (exactly 24 bars).
   "lucky_draw_counter": {
@@ -132,7 +133,7 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
     "loop": true,
     "gainDb": -11.7,
     "trimStart": 0,
-    "trimEnd": 0,
+    "trimEnd": 0.47,
     "crossfade": 0.8
   },
   "unison_under_fire": {
@@ -140,7 +141,7 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
     "loop": true,
     "gainDb": -11.7,
     "trimStart": 0,
-    "trimEnd": 0,
+    "trimEnd": 2.6,
     "crossfade": 0.8
   },
   "clash_at_the_emerald_edge": {
@@ -148,7 +149,7 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
     "loop": true,
     "gainDb": -12.5,
     "trimStart": 0,
-    "trimEnd": 0,
+    "trimEnd": 2.75,
     "crossfade": 0.8
 },
   "magma_breach": {
@@ -156,31 +157,31 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
     "loop": true,
     "gainDb": -12.4,
     "trimStart": 0,
-    "trimEnd": 0,
-    "crossfade": 0.8
+    "trimEnd": 9.46,
+    "crossfade": 0.05, "loopStart": 72.55
 },
   "south_pole_siege": {
     "path": "./assets/production/scene-music-r1/battle/south_pole_siege.mp3",
-    "loop": true, "gainDb": -11.7, "trimStart": 0, "trimEnd": 0, "crossfade": 0.8
+    "loop": true, "gainDb": -11.7, "trimStart": 0.17, "trimEnd": 2.66, "crossfade": 0.8
   },
   "titan_s_final_strike": {
     "path": "./assets/production/scene-music-r1/battle/titan_s_final_strike.mp3",
-    "loop": true, "gainDb": -11.7, "trimStart": 0, "trimEnd": 0, "crossfade": 0.8
+    "loop": true, "gainDb": -11.7, "trimStart": 0.46, "trimEnd": 2.65, "crossfade": 0.8
   },
   "mirage_of_the_arena": {
     "path": "./assets/production/scene-music-r1/battle/mirage_of_the_arena.mp3",
-    "loop": true, "gainDb": -11.6, "trimStart": 0, "trimEnd": 0, "crossfade": 0.8
+    "loop": true, "gainDb": -11.6, "trimStart": 0, "trimEnd": 2.16, "crossfade": 0.8
   },
   "inferno_overdrive": {
     "path": "./assets/production/scene-music-r1/battle/inferno_overdrive.mp3",
-    "loop": true, "gainDb": -10.7, "trimStart": 0, "trimEnd": 0, "crossfade": 0.8
+    "loop": true, "gainDb": -10.7, "trimStart": 0, "trimEnd": 11.04, "crossfade": 0.1, "loopStart": 21.672
   },
   "federation_siege": {
     "path": "./assets/production/scene-music-r1/battle/federation_siege.mp3",
     "loop": true,
     "gainDb": -11.5,
     "trimStart": 0,
-    "trimEnd": 0,
+    "trimEnd": 0.94,
     "crossfade": 0.8
   }
 });

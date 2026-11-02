@@ -42,17 +42,17 @@ test('field setup uses the exact new file while home/tutorial defaults and expli
  const bytes=fs.readFileSync(new URL('../assets/production/scene-music-r1/system/podium_geometry.mp3',import.meta.url));
  assert.equal(createHash('sha256').update(bytes).digest('hex'),source.runtime?.sha256??source.measurement.sha256);assert.equal(bytes.length,source.runtime?.bytes??1442442);
  assert.equal(source.measurement.bytes,1442442);assert.equal(source.measurement.sha256,'f149580019ec9fd123b52e7fc0824cd6612874a5571e5632995d77531edbeb12');
- assert.equal(source.bpm,null);assert.equal(source.loopStartSeconds,0);assert.ok(source.loopEndSeconds>59&&source.loopEndSeconds<60);
+ assert.equal(source.bpm,123);assert.equal(source.loopStartSeconds,ORIGINAL_MUSIC_CUES.podium_geometry.loopStart);assert.ok(Math.abs(source.loopEndSeconds+ORIGINAL_MUSIC_CUES.podium_geometry.trimEnd+ORIGINAL_MUSIC_CUES.podium_geometry.crossfade-59.846)<.001);
  assert.equal(source.listeningAccepted,false);assert.ok(source.measurement.truePeakDbtp+ORIGINAL_MUSIC_CUES.podium_geometry.gainDb<=-3);
  const old=JSON.parse(fs.readFileSync(new URL('../docs/reports/music-repair-2026-10-18/NINE_TRACK_LEDGER.json',import.meta.url)));
  assert.equal(old.files.length,9);for(const row of old.files){const b=fs.readFileSync(new URL('../'+row.runtimePath,import.meta.url));assert.equal(createHash('sha256').update(b).digest('hex'),row.sha256);}
 });
 
 test('loop preparation stays paused and zero-gain, reuses the second stream and obeys the audio clock',async()=>{
- const f=fixture();try{await f.start();const a=f.media[0],ctx=f.contexts[0];a.currentTime=57.5;ctx.currentTime=10;a.ontimeupdate();
+ const f=fixture();try{await f.start();const a=f.media[0],ctx=f.contexts[0],cue=ORIGINAL_MUSIC_CUES.podium_geometry,handoff=a.duration-cue.trimEnd-cue.crossfade;a.currentTime=handoff-1.55;ctx.currentTime=10;a.ontimeupdate();
  assert.equal(f.music.inspect().prepared,'podium_geometry');assert.equal(f.media.length,2);const next=f.media[1],loads=next.loads;
  assert.equal(next.paused,true);assert.equal(next.plays,0);ctx.state='interrupted';f.fire();await flush();assert.equal(f.music.inspect().starts,1);
- f.win.emit('pageshow');await flush();a.currentTime=59.3;ctx.currentTime=12;a.ontimeupdate();await flush();
+ f.win.emit('pageshow');await flush();a.currentTime=handoff+.25;ctx.currentTime=12;a.ontimeupdate();await flush();
  assert.equal(f.music.inspect().starts,2);assert.equal(next.loads,loads,'prepared MP3 is not reloaded at its seam');assert.equal(f.media.length,2);
  ctx.currentTime=13;f.fire();await flush();assert.equal(f.music.inspect().voices,1);
  }finally{f.dispose();}
@@ -63,6 +63,15 @@ test('a JS cleanup wake cannot retire an audible tail before the audio-clock fad
  const ctx=f.contexts[0];ctx.state='suspended';f.fire();assert.equal(f.music.inspect().voices,2);ctx.state='running';ctx.currentTime=.3;f.fire();assert.equal(f.music.inspect().voices,2);
  ctx.currentTime=1;f.fire();assert.equal(f.music.inspect().voices,1);
  }finally{f.dispose();}
+});
+
+test('scene changes into short-seam cues keep the standard 0.8 s transition; only loop passes use the short seam',async()=>{
+ for(const id of ['lucky_draw_counter','sweetest_level_up','podium_geometry']){
+  const f=fixture();try{await f.start('login');f.music.setScene(id);await flush();const ctx=f.contexts[0];
+  ctx.currentTime=.3;f.fire();assert.equal(f.music.inspect().voices,2,id+' still crossfading from the previous scene');
+  ctx.currentTime=1;f.fire();assert.equal(f.music.inspect().voices,1,id);
+  }finally{f.dispose();}
+ }
 });
 
 test('native AudioContext interruptions pause the stream and rearm once on state recovery',async()=>{

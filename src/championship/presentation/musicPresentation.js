@@ -182,7 +182,9 @@ export function createMusicPresentation({ bus, cues, baseUrl = globalThis.locati
       const old = current; current = slot; pending = null; starts++;
       buffered();
       if (!cue.loop) playedResults.add(desired.attemptId);
-      const seconds = old ? Math.min(cue.crossfade || .35, .8) : .2;
+      // A loop pass uses the cue's own seam crossfade; a scene change keeps the
+      // standard transition even when the incoming cue loops on a short seam.
+      const seconds = !old ? .2 : old.key === key ? Math.min(cue.crossfade || .35, .8) : cue.crossfade ? .8 : .35;
       gain(slot, 10 ** (cue.gainDb / 20), seconds);
       if (old) {
         gain(old, 0, seconds);

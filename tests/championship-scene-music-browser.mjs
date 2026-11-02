@@ -12,7 +12,8 @@ const LOCALES = ['zh-Hant', 'en', 'ja', 'th', 'vi'];
 const SIZES = [[320,568], [390,844], [844,390], [1366,768]];
 const PREF = 'championshipModernSave:preferences:v1';
 const SAVE = 'championshipModernSave:v1';
-const TRACKS = JSON.parse(await fs.readFile('assets/production/scene-music-r1/manifest.json','utf8')).files.map(f=>({...f,scene:f.category,path:'assets/production/scene-music-r1/'+f.path,zh:f.titles.zh,en:f.titles.en}));
+const SCENE_MANIFEST = JSON.parse(await fs.readFile('assets/production/scene-music-r1/manifest.json','utf8')), SCENE_CUES = SCENE_MANIFEST.cues;
+const TRACKS = SCENE_MANIFEST.files.map(f=>({...f,scene:f.category,path:'assets/production/scene-music-r1/'+f.path,zh:f.titles.zh,en:f.titles.en}));
 const NAMES = {
  moon:['空靈月湖畔','Ethereal Moon Lakefront'],lofi:['林卡拉慢拍','Linkara Lo-fi'],
  battle_normal:['石緣交鋒','Clash at the Concrete Edge'],battle_final:['錦標賽決戰','Championship Final'],
@@ -277,7 +278,7 @@ async function main() {
     const loopStarts=(await page.evaluate(()=>musicQA.inspect())).music.starts,seek=await page.evaluate(()=>nativeAudioQA.seekNearEnd());const loopRecord={case:'real-decoded-loop-boundary-seek',id:t.id,beforeStarts:loopStarts,rangeProbe,seek,status:'PENDING'};report.transport.push(loopRecord);await write();
     assert.ok(seek.before.seekable.some(([a,b])=>a<=seek.target&&b>=seek.target),'Native target lies inside seekable range');
     await page.waitForFunction(starts=>JSON.parse(document.documentElement.dataset.musicState).starts>starts,loopStarts,{timeout:10000});await waitCue(page,t.id);const loop=await page.evaluate(()=>musicQA.inspect());const seekEvents=await page.evaluate(at=>nativeAudioQA.events.filter(e=>e.time>=at&&['seeking','seeked','timeupdate','ended','playing'].includes(e.type)),seek.at);
-    assert.ok(seekEvents.some(e=>e.type==='seeked'&&e.src===seek.before.src&&e.position>=seek.target-.2),'Observe native seeked at the requested end boundary');assert.ok(loop.music.position<5,'Real loop restarts near cue head');await assertBounded(page);Object.assign(loopRecord,{status:'PASS',after:loop.music,seekEvents});
+    assert.ok(seekEvents.some(e=>e.type==='seeked'&&e.src===seek.before.src&&e.position>=seek.target-.2),'Observe native seeked at the requested end boundary');const head=SCENE_CUES[t.id]?.loopStart??SCENE_CUES[t.id]?.trimStart??0;assert.ok(loop.music.position>=head-.5&&loop.music.position<head+5,'Real loop restarts near the cue loop head');await assertBounded(page);Object.assign(loopRecord,{status:'PASS',after:loop.music,seekEvents});
    }
    await page.evaluate(()=>musicQA.music.setScene('battle_normal'));
    for(const id of ['battle_normal','battle_final']){await select(page,'battleMusic',id);await waitCue(page,id);report.transport.push({case:'existing-battle-choice',id,native:await assertBounded(page)});}await select(page,'battleMusic','federation_siege');
