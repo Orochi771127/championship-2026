@@ -1697,7 +1697,9 @@ async function mountBattleField() {
           const fxLookupsLoading=BATTLE_DYNAMIC_FX?import('./battleFxLookups.js'):null;
           const loaded=await Promise.allSettled([
             step('arena',ownArt(loadOptionalBattleFieldArt(stage,source))),
-            step('fighters',ownArt(loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId),['main'],{signal:characters.signal,battleAtlas:true}))),
+            // Burst evolution (2026-11-02): a combatant's burst form is drawn mid-match, so its art loads up front too.
+            step('fighters',ownArt(loadOptionalCharacterReview(stage,[...new Set(source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId)
+              .flatMap(entry=>[entry.speciesId,...(entry.burst?[`species-${String(entry.burst.form).padStart(3,'0')}`]:[])]))],['main'],{signal:characters.signal,battleAtlas:true}))),
             step('effects',ownArt(loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href}).then(art=>loadOptionalOriginalVfxReview(stage,art))))
           ]);
           [fieldArt,characterRoster,effectArt]=loaded.map(result=>result.status==='fulfilled'?result.value:null);
