@@ -33,10 +33,11 @@
     "bytes": 958423
   },
   "runtimeGainDb": -11.9,
-  "bpm": null,
-  "loopStartSeconds": 0,
-  "loopEndSeconds": 59.846458,
-  "crossfadeSeconds": 0.8,
+  "bpm": 123,
+  "loopStartSeconds": 13.126,
+  "loopEndSeconds": 52.15,
+  "crossfadeSeconds": 0.1,
   "listeningAccepted": false,
-  "bpmAndReferenceLoopPointsNotAssumed": true
+  "bpmAndReferenceLoopPointsNotAssumed": true,
+  "loopMeasured20261102": "Owner shared Gemini notes claiming 120 BPM with a 8.0-56.0 s loop; measured waveform correlation at that 48 s lag is 0.19 (0/9 matching 1 s blocks), so it was rejected. Measured tempo is about 123 BPM (1.951 s bars). The section repeats at a lag of exactly 39.0245 s (20 bars); the first pass plays 0-52.15 s once, then each loop pass hands off 52.15 -> 13.126 s with a 0.1 s crossfade (0.4 s window correlation 0.84 before / 0.83 after). Listening acceptance is still pending."
 }

@@ -244,7 +244,7 @@
       "loop": true,
       "gainDb": -11.7,
       "trimStart": 0,
-      "trimEnd": 0,
+      "trimEnd": 0.47,
       "crossfade": 0.8
     },
     "unison_under_fire": {
@@ -252,7 +252,7 @@
       "loop": true,
       "gainDb": -11.7,
       "trimStart": 0,
-      "trimEnd": 0,
+      "trimEnd": 2.6,
       "crossfade": 0.8
     },
     "federation_siege": {
@@ -260,23 +260,23 @@
       "loop": true,
       "gainDb": -11.5,
       "trimStart": 0,
-      "trimEnd": 0,
+      "trimEnd": 0.94,
       "crossfade": 0.8
     },
     "south_pole_siege": {
       "path": "./assets/production/scene-music-r1/battle/south_pole_siege.mp3",
       "loop": true,
       "gainDb": -11.7,
-      "trimStart": 0,
-      "trimEnd": 0,
+      "trimStart": 0.17,
+      "trimEnd": 2.66,
       "crossfade": 0.8
     },
     "titan_s_final_strike": {
       "path": "./assets/production/scene-music-r1/battle/titan_s_final_strike.mp3",
       "loop": true,
       "gainDb": -11.7,
-      "trimStart": 0,
-      "trimEnd": 0,
+      "trimStart": 0.46,
+      "trimEnd": 2.65,
       "crossfade": 0.8
     },
     "mirage_of_the_arena": {
@@ -284,7 +284,7 @@
       "loop": true,
       "gainDb": -11.6,
       "trimStart": 0,
-      "trimEnd": 0,
+      "trimEnd": 2.16,
       "crossfade": 0.8
     },
     "inferno_overdrive": {
@@ -292,15 +292,16 @@
       "loop": true,
       "gainDb": -10.7,
       "trimStart": 0,
-      "trimEnd": 0,
-      "crossfade": 0.8
+      "trimEnd": 11.04,
+      "crossfade": 0.1,
+      "loopStart": 21.672
     },
     "clash_at_the_emerald_edge": {
       "path": "./assets/production/scene-music-r1/battle/clash_at_the_emerald_edge.mp3",
       "loop": true,
       "gainDb": -12.5,
       "trimStart": 0,
-      "trimEnd": 0,
+      "trimEnd": 2.75,
       "crossfade": 0.8
     },
     "magma_breach": {
@@ -308,24 +309,27 @@
       "loop": true,
       "gainDb": -12.4,
       "trimStart": 0,
-      "trimEnd": 0,
-      "crossfade": 0.8
+      "trimEnd": 9.46,
+      "crossfade": 0.05,
+      "loopStart": 72.55
     },
     "podium_geometry": {
       "path": "./assets/production/scene-music-r1/system/podium_geometry.mp3",
       "loop": true,
       "gainDb": -11.9,
       "trimStart": 0,
-      "trimEnd": 0,
-      "crossfade": 0.8
+      "trimEnd": 7.596,
+      "crossfade": 0.1,
+      "loopStart": 13.126
     },
     "battle_normal": {
       "path": "./assets/production/scene-music-r1/battle/clash_at_the_concrete_edge.mp3",
       "loop": true,
       "gainDb": -11.2,
       "trimStart": 0,
-      "trimEnd": 0,
-      "crossfade": 0.8
+      "trimEnd": 5.09,
+      "crossfade": 0.1,
+      "loopStart": 66.821
     }
   }
 }
