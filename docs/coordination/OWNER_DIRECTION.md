@@ -14,6 +14,20 @@ OWNER_APPROVED_ADAPTATION. ROM growth, hatch and evolution functions and tables 
 - Saves: a partner that is already 覺醒體/究極體 returns to its 成熟期 ancestor with that form unlocked.
 - Real time (same day): natural growth to 成熟期 takes about 1.5 days, offline included up to 12 hours; offline never causes sickness, hunger or death.
 
+<!-- record-id: GACHA_ITEM_EFFECTS_20261102 -->
+## 2026-11-02 — Every gachapon item says what it does, and does it where it is used
+
+With a pasted proposal for the 18 chips and the evolution metals, the Owner asks (2026-11-02) 「請你先盤點，目前轉蛋機可以得到的道具作用跟項目然後把作用都實裝到遊戲裡頭」 and to settle the metals with the evolution session. That session's STAGE_REDESIGN_BURST_20261102 owns metals, shards, catalysis, bloodlines and the real-time clock, so this batch covers chips, hunt cartridges, bounty beacons, supplies and the machines' prize tables. After the report and phone screenshots, the Owner answers 「Commit 並開 PR」 (PR #150) and then 「合併上線」, which authorizes the merge to main and publication.
+
+OWNER_APPROVED_ADAPTATION on top of CYBER_GACHA_20261029. No save field, ROM table or metal rule changes.
+
+- The bag, the hunt loadout and the battle menu spell each chip out from its own numbers (`gachaChipEffectLines`); the stat values on main are kept.
+- Hunt cartridges load and unload on the hunt loadout, bounty beacons on the battle menu (`disarmGachaItem` returns a loaded one to the bag). The hunt HUD shows the loaded cartridges.
+- The rare lure also calls one partner of the field's rarest candidate (lowest table weight, then latest stage) after the native actors (`appendNativeRareLureActor`). The Ω beacon also drops one random metal shard.
+- The reshape chip writes a personality the player picks from the eight traced ones (8, ？？？, has no battle table).
+- Bits machine: supplies 45%, R chips 27%, coin bags 20% (30,000 / 60,000 / 150,000 / 500,000), one ticket 1%; metals unchanged (R 6%, SR 1%). An R chip from the premium machine brings feed ×5 or protein ×1. Supplies a full stack cannot hold come back at their shop price.
+- Left for the Owner: larger chip numbers, chips adding race or faction counters, cores lowering care mistakes, and beacons adding battle counts. These would bypass the burst-unlock gates or distort the ROM battle record.
+
 <!-- record-id: NO_PAGE_PINCH_ZOOM_20261102 -->
 ## 2026-11-02 — Two fingers never zoom or drag the page
 

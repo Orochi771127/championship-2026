@@ -158,6 +158,7 @@ import { resultHeroAnchor, resultStageLight } from '../presentation/battleResult
 import { formatDateTime, formatList, onLocaleChange, getLocale } from '../text/locale.js';
 import { retranslate, setLabel, setText, uiText } from '../text/uiText.js';
 import { paintGachaTicketBadge } from './cyberGachaIcons.js';
+import { gachaChipEffectLines, getGachaMetal } from '../gacha/cyberGacha.js';
 
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
 // fetched the first time that view asks for one. The wrappers keep the same
@@ -1524,8 +1525,16 @@ async function mountBattleSelect() {
   battleRuntime = (await loadBattleRuntime())({ schedule: app.getBattleSchedule(), mode:1, battleType:0 });
   battleAttemptId = null;
   battleProgressBefore = null;
+  const { shopGoodsPresentation } = await import('../presentation/shopGoodsUiArt.js');
   return createBattleSelectView({
     root,
+    // Cyber Gachapon bounty beacons, display-ready (Owner 2026-11-02).
+    gachaBeacons:{
+      read:()=>(app.getGachaTacticalSlots?.('BOUNTY')??[]).map(slot=>({...slot,art:shopGoodsPresentation(slot.shopRecordIndex)?.src??null,
+        effectText:gachaChipEffectLines(slot).map(line=>uiText(line.text,line.params)).join('・')})),
+      arm:id=>app.gachaUseItem(id),
+      disarm:id=>app.gachaDisarmItem(id)
+    },
     matches: battleRuntime.listMatches(),
     arenaChoices:battleRuntime.listSelectableArenas(),
     getPracticeSelection:async()=>({candidates:await app.getBattlePartyCandidates(null)}),
@@ -1945,7 +1954,8 @@ async function mountBattleResult() {
     progression,
     // Owner 2026-10-29: 📸 brag card for a won battle, starring the winning partner.
     brag: battleResultBrag({ participants, matchTitle }),
-    gachaDrop:tutorial?null:(drop=>drop&&receipt&&drop.attemptId===(receipt.attemptId??null)?drop:null)(app.getLastBattleGachaDrop?.()),
+    gachaDrop:tutorial?null:(drop=>drop&&receipt&&drop.attemptId===(receipt.attemptId??null)
+      ?{...drop,metalNames:(drop.metals??[]).map(id=>getGachaMetal(id)?.name??id)}:null)(app.getLastBattleGachaDrop?.()),
     onExit() {
       if(tutorial){app.endInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
       battleRuntime?.dispose();

@@ -24,6 +24,7 @@ import { CHAMPIONSHIP_SCREENS } from "./championshipScreenStack.js";
 import { huntGateThumbnail, huntTargetReadout, huntPluginReadout } from "../presentation/huntMobileReadouts.js";
 import { raisingDisplayName, shopItemName, speciesNameForId } from "../text/zhHant.js";
 import { getHuntCatalogItem } from "../hunt/loadout/huntEquipmentCatalog.js";
+import { gachaChipEffectLines, getGachaChip } from "../gacha/cyberGacha.js";
 
 export const GATE_HUNT_PRESENTATION_CONTRACT_VERSION = "VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT/v1";
 
@@ -214,6 +215,9 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
       admission,
       canBegin: loadout.getConfirmationState().canConfirm && admission.canEnter,
       entryError: app.getHuntEntryError?.() ?? null,
+      // Cyber Gachapon cartridges the player holds or has loaded for this hunt,
+      // with their effect lines (uiText templates) for the view (2026-11-02).
+      gachaCartridges: (app.getGachaTacticalSlots?.("HUNT") ?? []).map(slot => ({ ...slot, effectLines: gachaChipEffectLines(slot) })),
       presentationRule: "Render the five recovered equipment classes and four plugin positions. No original rule requires anything to be equipped. Show the recovered Gate fee and wallet from admission; disable start when admission fails. Do not invent an item effect, a carry limit, an item price, or a companion."
     };
   }
@@ -237,6 +241,10 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
         target: huntTargetReadout(runtime, app.getHuntLoadout()?.getHudCapabilities()),
         plugins:huntPluginReadout(runtime,app.getHuntLoadout()?.getHudCapabilities()),
         time:app.getHuntTimeState?.() ?? null,
+        // The cartridges this hunt started with, and the partner the rare lure called.
+        gacha:{ boosts:(app.getHuntGachaBoosts?.() ?? []).map(getGachaChip).filter(Boolean)
+          .map(chip => ({ id:chip.id, name:chip.name, shopRecordIndex:chip.shopRecordIndex })),
+          rareLure:(lure => lure ? { speciesId:lure.speciesId, name:speciesNameForId(lure.speciesId) } : null)(app.getHuntRareLure?.()) },
         gateName: gate?.tutorial ? "教學關卡" : gate?.displayName ?? null,
         // Presentation mood only (ambience colour, particles); never a rule.
         biomeId: gate?.tutorial ? null : gate?.biomeId ?? null,
@@ -448,6 +456,20 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
     },
     // Cyber Gachapon (OWNER_APPROVED_ADAPTATION 2026-10-29): each returns the
     // next frame; its shop.gacha.lastResult is the saved receipt.
+    // Loading a cartridge from the hunt loadout, taking it back, and the
+    // personality pick of the reshape chip (2026-11-02).
+    gachaArmItem(itemId) {
+      if (app.gachaUseItem?.(itemId)?.ok) committed("purchase");
+      return commit();
+    },
+    gachaDisarmItem(itemId) {
+      if (app.gachaDisarmItem?.(itemId)?.ok) committed("purchase");
+      return commit();
+    },
+    gachaReshapePersonality(instanceId, personalityIndex) {
+      if (app.gachaReshapePersonality?.(instanceId, personalityIndex)?.ok) committed("purchase");
+      return commit();
+    },
     gachaPull(machine, count = 1) {
       if (app.gachaPull?.(machine, count)?.ok) committed("purchase");
       return commit();

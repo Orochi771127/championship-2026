@@ -135,7 +135,7 @@ function shell(root, screen, label) {
  * Mode identity is now traced through OVL10 0210F88C's help-bank dispatch.
  * The application supplies each mode's entries; this view holds only selection.
  */
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -221,6 +221,44 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     arena.addEventListener('click', () => { if (!entering) void onOpenDataArena(arena); });
     header.append(arena);
     matchOnlyNodes.push(arena);
+  }
+  // Cyber Gachapon bounty beacons (Owner 2026-11-02): one rides the next won AI
+  // match; tap it again to put it back in the bag. Hidden while none are held.
+  // `read()` hands over display-ready rows: name, effect text, art, counts.
+  if (gachaBeacons) {
+    const strip = element("div", "cm-vs5-beacons");
+    strip.setAttribute("role", "group");
+    strip.setAttribute("aria-label", uiText("深網強敵信標"));
+    const paintBeacons = () => {
+      const slots = gachaBeacons.read() ?? [];
+      const armed = slots.find((slot) => slot.armed) ?? null;
+      strip.hidden = slots.length === 0;
+      strip.dataset.armed = String(Boolean(armed));
+      strip.replaceChildren(element("span", "cm-vs5-beacons__label", armed ? "下一場勝利生效" : "賞金信標"));
+      for (const slot of slots) {
+        const key = element("button", "cm-vs5-beacon");
+        key.type = "button";
+        key.dataset.gachaChip = slot.id;
+        key.dataset.rarity = slot.rarity;
+        key.setAttribute("aria-pressed", String(slot.armed));
+        if (slot.art) {
+          const image = element("img", "cm-vs5-beacon__icon");
+          Object.assign(image, { src: slot.art, alt: "", decoding: "async" });
+          key.append(image);
+        }
+        key.append(element("span", "cm-vs5-beacon__name", slot.name), element("span", "cm-vs5-beacon__effect", slot.effectText, false),
+          element("span", "cm-vs5-beacon__count", slot.armed ? uiText("已裝填") : uiText("持有 {n} 個", { n: slot.owned }), false));
+        key.addEventListener("click", () => {
+          if (entering) return;
+          if (slot.armed) gachaBeacons.disarm(slot.id);
+          else { if (armed) gachaBeacons.disarm(armed.id); gachaBeacons.arm(slot.id); }
+          paintBeacons();
+        });
+        strip.append(key);
+      }
+    };
+    paintBeacons();
+    header.append(strip);
   }
   async function selectMode(id){
     if(cubeDisposed||entering)return;
@@ -1229,6 +1267,9 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         frag.append(drop);
         if (gachaDrop.bonusBits > 0) frag.append(element("p", "cm-vs5-result__detail cm-vs5-result__gacha",
           uiText("賞金信標加成 +{bits} 位元幣", { bits: gachaDrop.bonusBits })));
+        // The Ω beacon's metal shard (2026-11-02); the caller names it.
+        for (const name of gachaDrop.metalNames ?? []) frag.append(element("p", "cm-vs5-result__detail cm-vs5-result__gacha",
+          uiText("賞金信標掉落：{item}", { item: uiText(name) }), false));
       }
       return frag;
     }
