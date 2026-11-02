@@ -114,22 +114,28 @@
   min-height: 0;
   max-width: min(92vw, 520px);
   padding: 8px 18px;
-  transform: translateX(-50%);
+  /* translate, not transform: the purchase pulse animates transform and would throw the toast sideways. */
+  translate: -50% 0;
   pointer-events: none;
+  transition: opacity 240ms cubic-bezier(0.2, 0.9, 0.3, 1);
 }
 :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__status:empty { display: none; }
+/* Owner 2026-11-02: it fades after a moment (RECEIPT_TOAST_MS in vs4Screens.js). */
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__status[data-leaving="true"] { opacity: 0; }
 
 /* Detail sheet: centred card on desktop, bottom sheet on a phone. */
 .cm-vs2-shop__sheet { position: fixed; inset: 0; z-index: var(--z-dialog); display: grid; place-items: center; padding: 16px; }
 .cm-vs2-shop__sheet[hidden] { display: none; }
 .cm-vs2-shop__sheet-scrim { position: absolute; inset: 0; background: var(--c-scrim); }
 :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail {
+  /* Owner 2026-11-02: the picture sits beside the words, not above them in a tall empty frame. */
+  --shop-detail-art: 168px;
   position: relative;
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto auto;
-  gap: var(--sp-3);
-  width: min(520px, 100%);
+  grid-template-columns: var(--shop-detail-art) minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  gap: var(--sp-3) var(--sp-4);
+  width: min(560px, 100%);
   height: auto;
   min-height: 0;
   align-self: center;
@@ -141,8 +147,10 @@
   background: var(--c-surface-1);
   box-shadow: var(--shadow-lift);
 }
-:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art { height: 200px; min-height: 0; }
-:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art .cm-vs2-shop__art-large { width: min(180px, 70%); height: min(180px, 90%); }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art { grid-row: 1 / span 2; align-self: start; width: 100%; height: auto; aspect-ratio: 1; min-height: 0; max-height: none; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art .cm-vs2-shop__art-large { width: 84%; height: 84%; object-fit: contain; }
+/* Wide screens keep the keys under the words; a phone gives them the sheet's full width. */
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-actions { grid-column: 2; }
 :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-description { max-height: none; }
 .cm-vs2-shop__detail-actions { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--sp-3); }
 .cm-vs2-shop__detail-actions .cm-vs2-action { min-height: 52px; }
@@ -152,7 +160,9 @@
   :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__tab { min-width: 0; padding: 0 4px; }
   :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .cm-vs2-shop__sheet { place-items: end stretch; padding: 0; }
-  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail { align-self: end; width: 100%; max-height: 86%; border-radius: var(--r-sheet) var(--r-sheet) 0 0; padding-bottom: max(var(--sp-4), var(--safe-bottom)); }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art { grid-row: 1; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-actions { grid-column: 1 / -1; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail { --shop-detail-art: 116px; align-self: end; width: 100%; max-height: 86%; border-radius: var(--r-sheet) var(--r-sheet) 0 0; padding-bottom: max(var(--sp-4), var(--safe-bottom)); }
 }
 @media (max-height: 500px) and (orientation: landscape) {
   :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__list { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 10px; }
@@ -161,9 +171,7 @@
   :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__row[data-cage-card="true"] { gap: 4px; padding: 6px 6px 8px; }
   .cm-vs2-shop__series, .cm-vs2-shop__effect { font-size: 11px; padding-block: 1px; margin-top: 1px; }
   .cm-vs2-shop__cells { top: 3px; left: 3px; font-size: 11px; }
-  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail { grid-template-columns: 200px minmax(0, 1fr); grid-template-rows: auto auto; width: min(680px, 100%); }
-  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art { grid-row: 1 / span 2; height: auto; min-height: 160px; }
-  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-actions { grid-column: 2; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail { --shop-detail-art: 132px; width: min(620px, 100%); }
 }
 
 /* Viewport health check 2026-11-01: the detail's 關閉 / 購買 sat under the footer's way back
@@ -175,7 +183,7 @@
   :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail { padding-bottom: var(--sp-4); }
 }
 @media (max-width: 600px) and (max-height: 700px) {
-  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-art { height: 140px; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail { --shop-detail-art: 100px; }
 }
 :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail-actions {
   position: sticky; bottom: calc(-1 * var(--sp-4)); z-index: 1;
