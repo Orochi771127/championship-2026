@@ -44,7 +44,7 @@ test('real projectDatabase joins all 235 growth branches; original route and boo
     assert.equal(result.slotCount,218);assert.equal(result.eggCount,0);assert.equal(result.regularCount,218);assert.equal(result.registeredCount,216);assert.equal(result.entries.length,218);
     assert.ok(result.entries.filter(e=>[229,230].includes(e.speciesIndex)).every(e=>e.state==='UNDISCOVERED'));
     assert.equal(result.selected.speciesIndex,source);assert.equal(result.selected.state,'REGISTERED');assert.deepEqual(plain(result.selected.instances),[]);
-    assert.deepEqual(Object.keys(result.selected).sort(),['bookOrdinal','speciesIndex','speciesId','displayName','kind','state','source','instanceCount','identityEvidence','instances','evolutionRoutes'].sort());
+    assert.deepEqual(Object.keys(result.selected).sort(),['bookOrdinal','speciesIndex','speciesId','displayName','kind','state','source','instanceCount','identityEvidence','instances','evolutionRoutes','burst'].sort());
     const nativeRoutes=result.selected.evolutionRoutes.filter(route=>!route.productRouteId);
     assert.equal(nativeRoutes.length,lifecycle.rules[i].length);
     for(const route of result.selected.evolutionRoutes.filter(route=>route.productRouteId)){

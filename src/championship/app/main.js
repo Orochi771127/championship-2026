@@ -2458,6 +2458,8 @@ function projectRoster() {
       instanceId,
       // The starter's name is set by the opening; collected ones can be renamed.
       bloodline: app.getPartnerBloodline?.(instanceId) ?? null,
+      // OWNER_APPROVED_ADAPTATION 2026-11-02: the 成熟期 partner's burst forms and their progress.
+      burst: app.getPartnerBurst?.(instanceId) ?? null,
       renameable: source?.kind !== "STARTER"
         && Boolean(app.getRaisingState()?.collection?.some((entry) => entry.instanceId === instanceId)),
       stats: profile,

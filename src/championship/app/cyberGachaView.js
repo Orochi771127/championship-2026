@@ -691,9 +691,14 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     if (!item) return;
     usePanel.append(element("strong", "cm-gacha__use-title", uiText(item.name)));
     const metal = item.kind === "METAL";
+    // OWNER_APPROVED_ADAPTATION 2026-11-02: natural growth ends at 成熟期, where SSR/UR metals unlock burst forms.
+    const CATALYST_NOTE = { R: "催化：幼年期無視不足條件，強制進化。", SR: "催化：成長期以前無視不足條件，強制進化。",
+      SSR: "催化：成長期以前強制進化；成熟期解鎖一段覺醒（戰鬥中爆裂進化）。",
+      UR: "催化：成長期以前強制進化；成熟期解鎖二段覺醒（尚無一段時先解鎖一段）。" };
     const describe = metal
-      ? uiText(RARITY_ORDER[item.rarity] >= 2 ? "強化：全能力 +{n}。SSR 以上會為拍檔銘刻「[{title}]」金屬血統與腳底流光。催化：無視不足條件，強制突破進化。"
-        : "強化：全能力 +{n}。催化：無視不足條件，強制突破進化。", { n: item.boost, title: frame.bloodlines[item.family]?.title ?? "" })
+      ? [uiText(RARITY_ORDER[item.rarity] >= 2 ? "強化：全能力 +{n}。SSR 以上會為拍檔銘刻「[{title}]」金屬血統與腳底流光。" : "強化：全能力 +{n}。",
+          { n: item.boost, title: frame.bloodlines[item.family]?.title ?? "" }), uiText(CATALYST_NOTE[item.rarity] ?? CATALYST_NOTE.R),
+        ...(item.fusesInto ? [uiText("集滿 {count} 個可熔合成「{metal}」。", { count: item.fusionCost, metal: uiText(item.fusesInto.name) })] : [])].join("")
       : uiText("{kind}・原「{origin}」", { kind: uiText(KIND_LABEL[item.kind] ?? ""), origin: uiText(item.origin) });
     usePanel.append(element("p", "cm-gacha__use-note", describe));
     const needsPartner = metal || item.kind === "GROWTH";
@@ -719,6 +724,13 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     };
     if (metal) { use("ENHANCE", "強化銘刻", "spark"); use("CATALYST", "催化進化", "evolve"); }
     else use("USE", item.kind === "GROWTH" ? "使用" : "裝填");
+    if (metal && item.fusesInto) {
+      const fuse = key("cm-gacha__action", uiText("熔合 {count}→1", { count: item.fusionCost }), gachaIcon("spark", "cm-gacha-key__icon"));
+      fuse.disabled = item.owned < item.fusionCost;
+      fuse.dataset.useMode = "FUSE";
+      fuse.addEventListener("click", () => { returnFocus = fuse; again = null; run({ call: () => intents.gachaFuseShards(item.id) }); });
+      actions.append(fuse);
+    }
     usePanel.append(actions);
   }
 

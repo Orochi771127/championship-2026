@@ -3,7 +3,7 @@
 <!-- record-id: STAGE_REDESIGN_BURST_20261102 -->
 ## 2026-11-02 — 成熟期 is the main form; 覺醒體 become battle-only burst evolution
 
-After the evolution inventory, the Owner proposes (2026-11-02) 「怕大家都只想用究極體，所以就集體可不可以變成一個所謂的爆裂進化就是在戰鬥中可以進化…把究極體跟覺醒體加在一起統稱覺醒體。讓大家多使用的是成熟期」, asks that hunt maps, free battles, title matches and championships, the encyclopedia's evolution routes and conditions, and the gachapon evolution metals and shards follow it, accepts the proposal (`R:\Projects\Championship2026\stage-redesign-20261102\STAGE_REDESIGN_PLAN_ZH_TW.md`) and its six recommended values, and directs 「好，可以實作」.
+After the evolution inventory, the Owner proposes (2026-11-02) 「怕大家都只想用究極體，所以就集體可不可以變成一個所謂的爆裂進化就是在戰鬥中可以進化…把究極體跟覺醒體加在一起統稱覺醒體。讓大家多使用的是成熟期」, asks that hunt maps, free battles, title matches and championships, the encyclopedia's evolution routes and conditions, and the gachapon evolution metals and shards follow it, accepts the stage-redesign proposal (kept with the private art and audit material, outside the repository) and its six recommended values, and directs 「好，可以實作」.
 
 OWNER_APPROVED_ADAPTATION. ROM growth, hatch and evolution functions and tables stay as traced; the product layer wraps them.
 

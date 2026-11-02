@@ -1,6 +1,6 @@
 import { uiText } from "../text/uiText.js";
 import { formatList } from "../text/locale.js";
-import {generationName,personalityName,specialSkillName} from '../text/zhHant.js';
+import {generationName,personalityName,specialSkillName,speciesName} from '../text/zhHant.js';
 import {speciesTaxonomy,TAXONOMY_RESISTANCE_AXES} from '../contracts/speciesTaxonomy.js';
 import {taxonomyText} from '../text/taxonomyText.js';
 import {taxonomyBadgeRow} from '../presentation/taxonomyBadgeArt.js';
@@ -127,6 +127,25 @@ export function appendCreatureDetail(detail, entry) {
     const cell = element("dd", "cm-digimon-detail__value cm-taxonomy-detail");
     cell.append(taxonomyBadgeRow(taxonomy), elementChartButton(taxonomy.element));
     group.append(term, cell);
+    detail.append(group);
+  }
+  // OWNER_APPROVED_ADAPTATION 2026-11-02: a 成熟期 partner's burst forms, unlocked or with their progress.
+  if (Array.isArray(entry.burst) && entry.burst.length) {
+    const group = element("div", "cm-digimon-stat cm-digimon-burst");
+    group.dataset.row = "burst";
+    group.dataset.group = "record";
+    group.append(element("dt", "cm-digimon-detail__label", "DEX_BURST"));
+    const cell = element("dd", "cm-digimon-detail__value");
+    for (const form of entry.burst) {
+      const line = element("p", "cm-digimon-burst__form");
+      line.dataset.tier = String(form.tier);
+      line.dataset.unlocked = String(form.unlocked);
+      line.append(element("strong", "", `DEX_BURST_TIER_${form.tier}`), " ", element("span", "", speciesName(form.form), false), " ");
+      if (form.unlocked) line.append(element("span", "cm-digimon-burst__state", "已解鎖"));
+      else line.append(element("span", "cm-digimon-burst__state", form.rows.map(row => `${uiText(`DEX_CONDITION_${row.id}`)} ${row.current}/${row.value}`).join("・"), false));
+      cell.append(line);
+    }
+    group.append(cell);
     detail.append(group);
   }
   const graphValues = entry.stats?.resistanceGraph;

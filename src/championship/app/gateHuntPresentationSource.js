@@ -464,6 +464,10 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
       if (app.gachaUseItem?.(itemId, instanceId, options)?.ok) committed("purchase");
       return commit();
     },
+    gachaFuseShards(shardId) {
+      if (app.gachaFuseShards?.(shardId)?.ok) committed("purchase");
+      return commit();
+    },
     selectGate(gateId) {
       if (app.getSelectedGateId() === gateId) return currentFrame;
       app.selectGate(gateId,tutorial()?.checkpoint);

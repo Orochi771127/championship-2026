@@ -991,6 +991,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       detail.append(dataSection);
     }
     paintEvolutionRoutes(selected);
+    paintBurst(selected);
     if (!conditionControls.has(expandedConditionBranch)) expandedConditionBranch = null;
     if (focusedBranch !== null) conditionControls.get(focusedBranch)?.toggle.focus({preventScroll:true});
     if (selected.source === "STARTER" && selected.instances.length === 0) {
@@ -1097,6 +1098,61 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       graph.append(targets);
     }
     section.append(graph); detail.append(section);
+  }
+
+  // OWNER_APPROVED_ADAPTATION 2026-11-02: burst evolution. A 成熟期 page lists the forms it takes in battle
+  // and their unlock conditions; a 覺醒體 page lists the 成熟期 that burst into it.
+  function paintBurst(selected) {
+    const burst = selected.burst;
+    if (!burst) return;
+    const section = element('section', 'cm-dex-routes cm-dex-burst');
+    section.dataset.burstKind = burst.kind;
+    section.setAttribute('aria-label', uiText('DEX_BURST'));
+    section.append(element('h3', 'cm-dex-routes__heading', 'DEX_BURST'),
+      element('p', 'cm-vs2-shop__meta', burst.kind === 'BASE' ? 'DEX_BURST_NOTE' : 'DEX_BURST_FROM'));
+    const rows = burst.kind === 'BASE'
+      ? burst.forms.map(form => ({species: form.formSpeciesIndex, revealed: form.revealed, tier: form.tier, conditions: form.conditions}))
+      : burst.bases.map(base => ({species: base.baseSpeciesIndex, revealed: base.revealed, tier: burst.tier, conditions: null}));
+    const targets = element('ul', 'cm-dex-routes__targets');
+    for (const row of rows) {
+      const mapping = getDatabaseDisplayEntry(row.species);
+      const name = row.revealed ? speciesName(row.species) : '????';
+      const item = element('li', 'cm-dex-routes__branch');
+      item.dataset.burstTier = String(row.tier);
+      const button = element('button', 'cm-dex-routes__target');
+      button.type = 'button'; button.disabled = !row.revealed;
+      button.setAttribute('aria-label', `${mapping?.displayCode ?? ''} · ${name} · ${uiText(`DEX_BURST_TIER_${row.tier}`)}`);
+      const copy = element('span', 'cm-dex-routes__copy');
+      copy.append(element('span', 'cm-vs2-shop__meta', mapping?.displayCode ?? ''), element('strong', 'cm-dex-routes__name', name),
+        element('span', 'cm-dex-routes__status', `DEX_BURST_TIER_${row.tier}`));
+      button.append(portrait(row.species, row.revealed), copy);
+      button.addEventListener('click', () => {
+        listScroll = list.scrollTop;
+        lastOpened = row.species;
+        if (mapping && activeStage !== null && activeStage !== mapping.numberingStageIndex) { activeStage = mapping.numberingStageIndex; stageFilter.value = String(activeStage); }
+        source.intents.selectDatabaseSpecies(row.species);
+        paint(source.getFrame());
+        detail.querySelector('h2')?.focus({preventScroll:true});
+      });
+      item.append(button);
+      if (row.conditions) {
+        const values = element('dl', 'cm-dex-conditions__list cm-dex-burst__conditions');
+        for (const condition of row.conditions) {
+          const line = element('div', 'cm-dex-conditions__row');
+          const unitKey = {PERCENT:'DEX_CONDITIONS_PERCENT', BATTLES:'DEX_CONDITIONS_BATTLES', TIMES:'DEX_CONDITIONS_TIMES'}[condition.unit];
+          const value = unitKey ? uiText(unitKey, {value:condition.value, count:condition.value}) : uiText('{value}', {value:condition.value});
+          line.append(element('dt', '', `DEX_CONDITION_${condition.id}`),
+            element('dd', '', uiText(condition.operator === 'LTE' ? 'DEX_CONDITIONS_LTE' : 'DEX_CONDITIONS_GTE', {value})));
+          values.append(line);
+        }
+        if (!row.conditions.length) values.append(element('p', 'cm-dex-conditions__notice', 'DEX_CONDITIONS_NO_NUMERIC'));
+        item.append(values);
+      }
+      targets.append(item);
+    }
+    section.append(targets);
+    if (burst.kind === 'BASE') section.append(element('p', 'cm-dex-conditions__notice', 'DEX_BURST_METAL'));
+    detail.append(section);
   }
 
   // A registered partner's completed route plays in full colour; any other
