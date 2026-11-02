@@ -415,7 +415,9 @@ test("Hunt exposes only the authorized native controls/readouts and no invented 
     // Hunt result already lists -- projected read-only for the catch toast.
     // biomeId (Owner 2026-10-27) is the confirmed gate's own biome, read only
     // for the field's ambience colour; no rule reads it.
-    ["actorName", "biomeId", "capabilities", "exitAvailable", "gateName", "note", "onCard", "plugins", "target", "time"],
+    // gacha (Owner 2026-11-02) names the Cyber Gachapon cartridges this hunt
+    // started with and the partner the rare lure called; display only.
+    ["actorName", "biomeId", "capabilities", "exitAvailable", "gacha", "gateName", "note", "onCard", "plugins", "target", "time"],
     "the Hunt HUD grew a field whose original semantics are unknown"
   );
 
