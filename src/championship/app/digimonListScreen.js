@@ -163,8 +163,9 @@ export function appendCreatureDetail(detail, entry) {
  * @param {Array<object>} options.entries roster entries with displayName, stats, identity
  * @param {() => void} options.onExit
  * @param {(instanceId: string, name: string) => ({ok: boolean, entries?: Array<object>})} [options.onRename]
+ * @param {(instanceId: string) => ({ok: boolean, reason?: string, entries?: Array<object>})} [options.onRebirth]
  */
-export function createDigimonListView({ root, entries = [], onExit, onRename = null } = {}) {
+export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null } = {}) {
   if (!root) throw new TypeError("The Digimon list requires a root element");
 
   root.replaceChildren();
@@ -244,6 +245,11 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     controls.append(button);
   }
   controls.prepend(nameEdit);
+  // OWNER_APPROVED_ADAPTATION 2026-11-02: 成熟期 no longer ages out, so rebirth is the player's choice.
+  const rebirth = element("button", "cm-digimon-control", "轉生");
+  rebirth.type = "button";
+  rebirth.dataset.control = "rebirth_button";
+  controls.append(rebirth);
   // Say why two of the three stay grey instead of leaving a silent row.
   const controlsNote = element("p", "cm-digimon-controls-note", "移除與報名尚未開放。");
 
@@ -268,7 +274,26 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
   editorSave.type = "submit";
   editorActions.append(editorCancel, editorSave);
   editor.append(editorLabel, editorMessage, editorActions);
-  function closeEditor() { editor.hidden = true; editorMessage.textContent = ""; }
+  // Rebirth asks once in place, like Name Edit, and reports the result under the controls.
+  const rebirthPanel = element("div", "cm-digimon-rename cm-digimon-rebirth");
+  rebirthPanel.hidden = true;
+  const rebirthQuestion = element("p", "cm-digimon-rename__label", "", false);
+  const rebirthActions = element("div", "cm-digimon-rename__actions");
+  const rebirthCancel = element("button", "cm-screen-back", "取消");
+  rebirthCancel.type = "button";
+  const rebirthConfirm = element("button", "cm-screen-primary", "轉生");
+  rebirthConfirm.type = "button";
+  rebirthActions.append(rebirthCancel, rebirthConfirm);
+  const rebirthMessage = element("p", "cm-digimon-rename__message");
+  rebirthMessage.setAttribute("role", "status");
+  rebirthPanel.append(rebirthQuestion, rebirthActions);
+  const REBIRTH_REFUSALS = Object.freeze({
+    PARTNER_NOT_IN_RANCH: "這隻拍檔不在牧場裡，請先讓牠住進籠舍再轉生。",
+    EVOLUTION_RUNNING: "牧場裡正在進化，請稍後再試。",
+    NOT_FINAL_STAGE: "只有成熟期的拍檔可以轉生。"
+  });
+  function closeRebirth() { rebirthPanel.hidden = true; }
+  function closeEditor() { editor.hidden = true; editorMessage.textContent = ""; closeRebirth(); }
   function refreshControls() {
     const entry = entries[selectedIndex];
     const renameable = Boolean(onRename && entry && entry.renameable !== false);
@@ -276,7 +301,33 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     nameEdit.dataset.state = onRename ? "READY" : "NOT_IMPLEMENTED";
     nameEdit.title = !onRename ? uiText("In the original, not yet in this build")
       : entry?.renameable === false ? uiText("初始夥伴的名字在開場時決定，無法更改。") : "";
+    const mature = entry?.identity?.generationIndex === 4;
+    rebirth.disabled = !(onRebirth && mature);
+    rebirth.dataset.state = onRebirth ? "READY" : "NOT_IMPLEMENTED";
+    rebirth.title = onRebirth && !mature ? uiText("只有成熟期的拍檔可以轉生。") : "";
   }
+  rebirth.addEventListener("click", () => {
+    const entry = entries[selectedIndex];
+    if (!entry || rebirth.disabled) return;
+    editor.hidden = true;
+    rebirthMessage.textContent = "";
+    rebirthQuestion.textContent = uiText("讓 {name} 轉生回蛋嗎？轉生次數 +1，下一代的能力會得到加成。", { name: entry.displayName ?? "" });
+    rebirthPanel.hidden = false;
+    rebirthPanel.scrollIntoView?.({ block: "center" });
+  });
+  rebirthCancel.addEventListener("click", () => closeRebirth());
+  rebirthConfirm.addEventListener("click", () => {
+    const entry = entries[selectedIndex];
+    if (!entry) return;
+    const result = onRebirth?.(entry.instanceId);
+    closeRebirth();
+    if (!result?.ok) { rebirthMessage.textContent = uiText(REBIRTH_REFUSALS[result?.reason] ?? "現在無法轉生。"); return; }
+    rebirthMessage.textContent = uiText("{name} 開始轉生，回到牧場就能看到。", { name: entry.displayName ?? "" });
+    if (Array.isArray(result.entries)) entries = result.entries;
+    renderList();
+    renderDetail();
+    refreshControls();
+  });
   nameEdit.addEventListener("click", () => {
     const entry = entries[selectedIndex];
     if (!entry || nameEdit.disabled) return;
@@ -315,7 +366,7 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
   back.addEventListener("click", () => { onExit?.(); });
   footer.append(back);
 
-  shell.append(list, detail, controls, controlsNote, editor, footer);
+  shell.append(list, detail, controls, controlsNote, editor, rebirthPanel, rebirthMessage, footer);
   root.append(shell);
   renderList();
   renderDetail();

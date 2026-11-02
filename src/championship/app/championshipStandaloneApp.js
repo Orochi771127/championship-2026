@@ -6,6 +6,7 @@ import {GACHA_CHIPS,GACHA_METALS,GACHA_GOODS,GACHA_PITY_MAX,GACHA_MACHINES,GACHA
 import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, normalizeFriendsPlaytestState, purchaseTestRanchRow } from './friendsPlaytestPolicy.js';
 import { planOnlineBindReward } from './onlineBindRewardPolicy.js';
 import {beginNativeRaisingEvolution} from '../raising/nativeRaisingActor.js';
+import {productRebirth} from '../raising/productGrowthPolicy.js';
 import {NATIVE_RAISING_LIFECYCLE_RULES} from '../raising/nativeRaisingLifecycle.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
@@ -2711,6 +2712,25 @@ export function createChampionshipStandaloneApp({
       savePort.markDirty();
       publishScreens();
       return Object.freeze({ ok: true, displayName: raising.collection.find((entry) => entry.instanceId === instanceId)?.displayName ?? null });
+    },
+
+    /**
+     * The player's own rebirth of a 成熟期 partner (OWNER_APPROVED_ADAPTATION 2026-11-02: 成熟期 no longer ages
+     * out). The native rebirth record (cycle +1, egg) plays through the ranch's evolution presentation, as the
+     * metal catalyst does, so the partner must be in the ranch.
+     */
+    rebirthRaisingPartner(instanceId) {
+      requireSession();
+      const profile=raisingNativeProfile(instanceId),actor=raisingActors.get(instanceId);
+      if(!profile)return Object.freeze({ok:false,reason:'UNKNOWN_INDIVIDUAL'});
+      if(!actor)return Object.freeze({ok:false,reason:'PARTNER_NOT_IN_RANCH'});
+      if([...raisingActors.values()].some(a=>a.evolution))return Object.freeze({ok:false,reason:'EVOLUTION_RUNNING'});
+      const rebirth=productRebirth(profile);
+      if(!rebirth.ok)return Object.freeze({ok:false,reason:rebirth.reason});
+      writeRaisingNativeProfile(instanceId,rebirth.profile);
+      beginNativeRaisingEvolution(actor,{target:rebirth.target},{next:nextGameplayRandom},raisingFoods);
+      publishRaising();
+      return Object.freeze({ok:true,target:rebirth.target});
     },
 
     getCageEditFrame() {

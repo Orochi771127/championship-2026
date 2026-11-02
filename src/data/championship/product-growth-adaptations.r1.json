@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "contract": "PRODUCT_GROWTH_ADAPTATIONS.v1",
+  "authority": "OWNER_APPROVED_ADAPTATION_STAGE_REDESIGN_20261102",
+  "note": "Natural growth ends at generation 4 (成熟期); generations 5 and 6 are battle-only burst forms. A fresh egg hatches only a generation-1 species. Branches below are appended after the native ones so recorded branch history keeps its native positions; thresholds use the native 26-value layout (0..10 attribute counters, 11..21 stat curve percent, 22 battles, 23 win percent, 24 rebirths, 25 care mistakes).",
+  "finalNaturalGeneration": 4,
+  "hatchPool": { "first": 8, "count": 12 },
+  "appendedBranches": [
+    { "source": 19, "target": 31, "kind": 0, "thresholds": [0,0,0,20,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "B106 had only a lifetime branch" },
+    { "source": 31, "target": 63, "kind": 0, "thresholds": [0,0,0,20,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "B212 had only lifetime branches" },
+    { "source": 56, "target": 93, "kind": 0, "thresholds": [0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 10,50,0,0], "reason": "MA30 had no evolution source" }
+  ]
+}

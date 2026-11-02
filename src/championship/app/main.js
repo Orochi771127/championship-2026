@@ -2011,6 +2011,11 @@ async function mountCurrentScreen() {
         if (result.ok) autosave?.request('rename');
         return result.ok ? { ...result, entries: projectRoster() } : result;
       },
+      onRebirth(instanceId) {
+        const result = app.rebirthRaisingPartner(instanceId);
+        if (result.ok) autosave?.request('rebirth');
+        return result.ok ? { ...result, entries: projectRoster() } : result;
+      },
       onExit() { app.leaveScreen(); }
     });
     else if (target === CHAMPIONSHIP_SCREENS.CHAMPIONSHIP) {

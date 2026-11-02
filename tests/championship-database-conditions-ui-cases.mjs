@@ -2,7 +2,9 @@ import {databaseHeroPortrait} from '../src/championship/presentation/databaseHer
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import lifecycle from '../src/data/championship/catalogs/raising-lifecycle.r1.json' with {type:'json'};
+// OWNER_APPROVED_ADAPTATION 2026-11-02: the encyclopedia projects the ranch's growth tables.
+import {PRODUCT_GROWTH_RULES} from '../src/championship/contracts/productGrowthRules.js';
+const lifecycle=JSON.parse(JSON.stringify(PRODUCT_GROWTH_RULES));
 import {deepFreeze} from '../src/championship/contracts/championshipContracts.js';
 import {projectDatabase} from '../src/championship/database/databaseRuntime.js';
 import {projectDatabaseEvolutionRoutes} from '../src/championship/database/databaseEvolutionRoutes.js';
@@ -33,7 +35,7 @@ function assertNoToggleSideEffects(fixture,before){
   assert.equal(q(fixture,'input'),before.input);assert.equal(q(fixture,'.cm-vs2-database__detail'),before.detail);assert.equal(q(fixture,'h2'),before.title);assert.deepEqual(qa(fixture,'.cm-dex-routes__target'),before.routes);fixture.assertUnchanged();
 }
 
-test('real projectDatabase joins all 477 exact branches; original route and book field contracts remain intact; native inputs and results are frozen',()=>{
+test('real projectDatabase joins all 235 growth branches; original route and book field contracts remain intact; native inputs and results are frozen',()=>{
   const snapshot=JSON.stringify(lifecycle);deepFreeze(lifecycle);let count=0;
   for(let i=0;i<lifecycle.rules.length;i++){
     const source=i+8;const options=deepFreeze({registeredSpecies:[...allRegistered],evolutionBranches:[...allOffsets],selectedSpeciesIndex:source});
@@ -56,7 +58,7 @@ test('real projectDatabase joins all 477 exact branches; original route and book
       frozen(conditions);count++;
     });
   }
-  assert.equal(count,477);assert.equal(JSON.stringify(lifecycle),snapshot);
+  assert.equal(count,235);assert.equal(JSON.stringify(lifecycle),snapshot);
 });
 
 test('exact source8/history0/registered target20 is required; unknown, target-only and contradictory histories emit no condition DOM or aria',()=>{
@@ -176,7 +178,8 @@ test('five real locale dictionaries own all 37 condition keys and format labels,
     const values=[uiText('DEX_CONDITIONS_GTE',{value:20}),uiText('DEX_CONDITIONS_LTE',{value:3}),uiText('DEX_CONDITIONS_PERCENT',{value:70}),
       ...[1,2].map(value=>uiText('DEX_CONDITIONS_BATTLES',{value,count:value})),...[1,2].map(value=>uiText('DEX_CONDITIONS_TIMES',{value,count:value}))];
     assert.deepEqual(values,expectedUnits[locale]);
-    for(const [source,branch] of [[8,0],[8,2],[20,0],[43,1],[73,0],[22,2]]){
+    // [56,4] is the appended GR30 -> MA30 branch (battles + win percent), standing in for the former [73,0].
+    for(const [source,branch] of [[8,0],[8,2],[20,0],[43,1],[56,4],[22,2]]){
       const f=makeView({locale,selectedSpeciesIndex:source,registeredSpecies:allRegistered,evolutionBranches:[(source-8)*5+branch]});
       const button=toggle(f,branch);assert.ok(button,`${locale}:${source}:${branch}`);assert.equal(button.textContent,uiText('DEX_CONDITIONS'));assert.equal(button.getAttribute('aria-label'),uiText('DEX_CONDITIONS_TOGGLE',{branch:branch+1}));
       button.click();const panel=panelFor(f,button),model=f.frame().database.selected.evolutionRoutes[branch].conditions;
@@ -259,15 +262,11 @@ test('real host-imported runtime/helpers and VM screen execution never touch hos
 });
 
 
-test('production product route conditions use their independent history and never fabricate native offsets',()=>{
-  const expected=[[139,229,'139:211:229'],[143,229,'143:211:229'],[144,230,'144:222:230']];
-  for(const [source,target,id] of expected){
-    const input={registeredSpecies:[...allRegistered,229,230],evolutionBranches:[...allOffsets],selectedSpeciesIndex:source};
-    const before=JSON.stringify(input),unrecorded=projectDatabase(input).selected.evolutionRoutes.find(r=>r.productRouteId===id);
-    assert.equal(unrecorded.targetSpeciesIndex,target);assert.equal(unrecorded.conditions,null);assert.equal(unrecorded.legacyBranchOffset,null);
-    const recorded=projectDatabase({...input,productEvolutionBranches:[id]}).selected.evolutionRoutes.find(r=>r.productRouteId===id);
-    assert.equal(recorded.historyState,'RECORDED');assert.equal(recorded.revealed,true);assert.ok(recorded.conditions);
-    assert.equal(recorded.conditions.comparison.state,'NOT_COMPARED');frozen(recorded.conditions);
-    assert.equal(JSON.stringify(input),before);
+test('burst alternate forms are not growth routes: former 覺醒體 sources expose no product route or condition',()=>{
+  // OWNER_APPROVED_ADAPTATION 2026-11-02: 229/230 are chosen as battle burst forms, never reached by ranch growth.
+  for(const source of [139,143,144]){
+    const input={registeredSpecies:[...allRegistered,229,230],evolutionBranches:[...allOffsets],productEvolutionBranches:[`${source}:211:229`,`${source}:222:230`],selectedSpeciesIndex:source};
+    const before=JSON.stringify(input),routes=projectDatabase(input).selected.evolutionRoutes;
+    assert.deepEqual(plain(routes),[]);assert.equal(JSON.stringify(input),before);
   }
 });
