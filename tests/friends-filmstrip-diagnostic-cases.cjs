@@ -32,3 +32,5 @@ for(const mutation of ['none','missing-png','missing-trace','bad-trace-signature
 });
 
 test('truncated capture retains unchanged full Three visibility/dimensions/fallback guard after metrics',()=>{for(const mode of ['on','off']){const out=transform(source,mode);const seam="await legacyTopContour('08-source-'+scenario.name);\n   const diagnosticThreeAfter=await readThree();\n   evidence.filmstrip.threeProgress={before:threeBefore,after:diagnosticThreeAfter};write();\n   friendsThreeProgress(threeBefore,diagnosticThreeAfter);\n   await friendsDrainReadbacks";assert.equal(out.split(seam).length,2);}});
+
+test('snapshot readiness waits for every resident and retains strict join rejection',()=>{for(const mode of ['on','off']){const out=transform(source,mode);assert.ok(out.includes('timeout:30000'));assert.ok(out.includes('await waitResidentReady();return page.locator'));assert.ok(out.includes('readinessWaitsMs'));}const r=rows();r[0].filmstrip.after.assets[0].state='loading';assert.throws(()=>join(r));});
