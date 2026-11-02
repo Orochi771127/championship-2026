@@ -1404,8 +1404,10 @@ export function createChampionshipStandaloneApp({
 
     /** Data Arena entry rights (Owner 2026-11-02): Dex-registered species and the partners held on the ranch now. */
     getDataArenaProgress() {
-      const held = [creature && { speciesId: creature.speciesId, instanceId: creature.creatureId }, ...(raising?.collection ?? []).map(({ speciesId, instanceId }) => ({ speciesId, instanceId }))]
-        .filter((entry) => /^species-\d{3}$/.test(entry?.speciesId ?? "")).map((entry) => Object.freeze(entry));
+      // Current membership only: a starter that disappeared or was released keeps
+      // its save record but is no longer a raising instance, so it earns no bonus.
+      const held = (session ? listRaisingInstances(instanceSources()) : []).map(({ speciesId, instanceId }) => ({ speciesId, instanceId }))
+        .filter((entry) => /^species-\d{3}$/.test(entry.speciesId ?? "")).map((entry) => Object.freeze(entry));
       return Object.freeze({ registeredSpecies: Object.freeze([...registeredSpeciesValue]), ownedSpecies: Object.freeze([...new Set(held.map((entry) => entry.speciesId))]),
         ownedInstances: Object.freeze(held) });
     },

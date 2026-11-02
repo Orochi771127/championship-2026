@@ -787,6 +787,8 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
   display:grid; grid-template-columns:auto auto minmax(0, 1fr) auto; align-items:center; gap:6px; padding:0 10px 0 6px; text-align:left;
   border-radius:3px 12px 3px 12px; border:2px solid #4a1020; background:linear-gradient(90deg, rgba(40,6,18,.92), rgba(16,4,10,.8)); box-shadow:0 0 0 1px rgba(255,90,120,.45), 0 3px 0 #0a0206; }
 .da-root[data-mode="RELAY"] .da-boss { top:calc(max(8px, env(safe-area-inset-top)) + 70px); }
+/* display:grid would beat the browser's [hidden]; the harbor guardian strip stays hidden until it spawns. */
+.da-boss[hidden] { display:none; }
 .da-boss__element { display:grid; place-items:center; width:18px; height:18px; border-radius:50%; background:color-mix(in srgb, var(--tax-color, #ff4a6a) 30%, #12060c); color:var(--tax-color, #ff4a6a); }
 .da-boss__element:empty { display:none; }
 .da-boss__element svg { width:14px; height:14px; }
