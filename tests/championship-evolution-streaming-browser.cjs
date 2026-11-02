@@ -114,7 +114,17 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
     await route.fulfill({response,body:text});
    });
    if(baseline)await page.route('**/src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js',async route=>{
-    baselinePresenterRequests++;await route.fulfill({status:200,contentType:'text/javascript',body:await fs.readFile('.tmp/evolution-baseline-presenter.js','utf8')});
+    // The historical presenter requires the historical zoom API. Isolate that
+    // dependency under a test-only URL so current modules keep their own API.
+    const original=await fs.readFile('.tmp/evolution-baseline-presenter.js','utf8');
+    const body=exactReplace(original,"from './raisingZoomInput.js'","from './evolution-baseline-zoom.js'");
+    baselinePresenterRequests++;await route.fulfill({status:200,contentType:'text/javascript',body});
+   });
+   if(baseline)await page.route('**/src/championship/presentation/intRh2/evolution-baseline-zoom.js',async route=>{
+    const body=await fs.readFile('.tmp/evolution-baseline-zoom.js','utf8');
+    evidence.baselineZoomSHA256=require('node:crypto').createHash('sha256').update(body).digest('hex');
+    assert.equal(evidence.baselineZoomSHA256,'ed564907fee53887838421ab43a00e26d1f86edd6eb8482b69cd356636de8085','Exact historical zoom bytes required');
+    await route.fulfill({status:200,contentType:'text/javascript',body});
    });
    await page.route('**/*',async route=>{
     if(!targetPaths.has(new URL(route.request().url()).pathname)||allow)return route.fallback();
@@ -148,7 +158,7 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
     assert.ok(loadedPages.some(p=>p.entityId===config.entityId),'Target initial atlas is actually resident');
     // Reviewed-art pages (side 'reviewed') carry no imageUrl and are never target pages.
     assert.ok(!loadedPages.some(p=>p.imageUrl&&targetPaths.has(new URL(p.imageUrl).pathname)),'Target39 page absent from real loaded atlas diagnostics');
-    if(baseline)assert.ok(baselinePresenterRequests>0,'Baseline presenter response actually installed');
+    if(baseline){assert.ok(baselinePresenterRequests>0,'Baseline presenter response actually installed');assert.ok(evidence.baselineZoomSHA256,'Historical zoom dependency actually loaded');}
     assert.deepEqual(evidence.errors,[],'No startup page error');
     evidence.preparation={console:evidence.console,httpFailures:evidence.httpFailures,requestFailures:evidence.requestFailures};
     evidence.console=[];evidence.httpFailures=[];evidence.requestFailures=[];
