@@ -32,7 +32,7 @@ test('browser harness has no private setters, accelerated clock, synthetic battl
  const source=fs.readFileSync(new URL('./championship-alternate-form-browser.cjs',import.meta.url),'utf8');
  assert.doesNotMatch(source,/addInitScript|storage\.setItem|localStorage\.setItem|sessionStorage\.setItem|__alternateFormQaApp|advanceFrames|page\.clock|--no-sandbox|--disable-web-security|--enable-unsafe|--use-gl|--use-angle/);
  assert.match(source,/chromiumSandbox:true/);assert.match(source,/timeout:600000/);assert.match(source,/BLOCKED_GPU/);assert.match(source,/#cm-root\[data-active-screen="BATTLE_RESULT"\]/);assert.doesNotMatch(source,/locator\('[^']*\[data-screen="BATTLE_RESULT"\]/);assert.match(source,/#cm-root\.int-rh2-root\[data-active-screen="RAISING_HOME"\]/);assert.match(source,/alternateAwaitReady/);assert.match(source,/alternateMakeReady/);assert.match(source,/await raisingReady\('battle-return'\)/);
- assert.match(source,/captureFourFormDatabase/);assert.match(source,/FOUR_FORM_DEX_HERO_SOURCE_AND_CHOICE_PREVIEW_CAPTURE_PASS/);assert.match(source,/dexVisualReview='PENDING_ROOT_SCREENSHOT_REVIEW'/);assert.match(source,/data-entry-id="database"/);assert.match(source,/evolution-choice-preview/);assert.match(source,/dexIdentityAfter,evidence.dexIdentityBefore/);
+ assert.match(source,/captureFourFormDatabase/);assert.match(source,/FOUR_FORM_DEX_HERO_SOURCE_AND_CHOICE_PREVIEW_CAPTURE_PASS/);assert.match(source,/dexVisualReview='PENDING_ROOT_SCREENSHOT_REVIEW'/);assert.match(source,/data-entry-id="database"/);assert.match(source,/burst-form-preview/);assert.match(source,/dexIdentityAfter,evidence.dexIdentityBefore/);
  const workflow=fs.readFileSync(new URL('../.github/workflows/alternate-form-browser.yml',import.meta.url),'utf8');assert.match(workflow,/contents: read/);assert.match(workflow,/npm run build:playtest && npm run validate:playtest/);assert.doesNotMatch(workflow,/continue-on-error|secrets\.|pages: write|pull_request_target/);
 });
 
@@ -82,15 +82,17 @@ test('canonical post-reload contract rejects stale/unknown schemas, mismatched r
  assert.throws(()=>assertEvolved(assert,report));assert.throws(()=>assertEvolved(assert,report,{schemaVersion:7}));
 });
 
+// OWNER_APPROVED_ADAPTATION 2026-11-02 (STAGE_REDESIGN_BURST_20261102): the legacy forms are burst forms; the flow proves
+// the migration (assertMigrated) and a battle that loads all four burst forms (assertBurstBattleLoaders).
 test('whole reachable acceptance flow uses canonical saved and reloaded contracts before unchanged battle proof',()=>{
  const source=fs.readFileSync(new URL('./championship-alternate-form-browser.cjs',import.meta.url),'utf8');
  const helper=fs.readFileSync(new URL('./alternate-form-browser-support.cjs',import.meta.url),'utf8');
  const compiled=fs.readFileSync(new URL('./alternate-form-compiled-support.cjs',import.meta.url),'utf8');
  assert.match(source,/assert\.equal\(saved\.schemaVersion,7\)/);assert.match(source,/assert\.equal\(saved\.cageEdit\?\.layoutVersion,'PRODUCT_HEX_WORLD_V1'\)/);
- const reload=source.indexOf("await page.reload({waitUntil:'domcontentloaded'});await boot();"),read=source.indexOf('const reloadedSaved=await page.evaluate',reload),check=source.indexOf('assertEvolved(assert,reloaded,reloadedSaved)',read),battle=source.indexOf("[data-entry-id=\"battle\"]",check);
- assert.ok(reload>=0&&read>reload&&check>read&&battle>check);assert.equal(source.split('assertEvolved(assert,').length-1,1);
+ const reload=source.indexOf("await page.reload({waitUntil:'domcontentloaded'});await boot();"),read=source.indexOf('const reloadedSaved=await page.evaluate',reload),check=source.indexOf('assertMigrated(assert,reloaded,reloadedSaved,burstBase)',read),battle=source.indexOf("[data-entry-id=\"battle\"]",check);
+ assert.ok(reload>=0&&read>reload&&check>read&&battle>check);assert.equal(source.split('assertMigrated(assert,').length-1,1);
  assert.match(source,/assert\.deepEqual\(reloadedSaved\.shop\?\.cageQuantities,saved\.shop\.cageQuantities/);
- assert.match(source,/assertCurrentPublicBattleLoaders\(assert,last.actualLoaderReports,beforeBattleReportCount\)/);
+ assert.match(source,/assertBurstBattleLoaders\(assert,last.actualLoaderReports,beforeBattleReportCount\)/);
  for(const text of [source,helper,compiled])assert.doesNotMatch(text,/assert\.equal\([^;\n]*(?:saveSchema|schemaVersion)[^;\n]*,\s*6\s*\)/);
  for(const text of ["JSON.stringify(r.loadedSides)==='[\"main\"]'",'beforeCount','replacementFailures','privateIndexRequested,false'])assert.ok(compiled.includes(text),text);
  assert.match(source,/NATURAL_FOUR_ACTOR_BATTLE_RESULT_PASS/);assert.match(source,/await raisingReady\('battle-return'\)/);

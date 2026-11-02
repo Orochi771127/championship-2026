@@ -37,4 +37,17 @@ function assertBattleLoaders(assert,reports,beforeCount,{exactCount=false}={}){
  assert.ok(battleReport,'New battle-specific main-side loader report must prove all four actual entities');
  assert.equal(battleReport.completedOriginalArt.scope,'OWNER_HASH_SELECTED_PLAYTEST');assert.equal(battleReport.completedOriginalArt.publicReleasePermitted,true);return battleReport;
 }
-module.exports={MIME,resolveAsset,serveBuild,assertEvolved,assertBattleLoaders};
+// OWNER_APPROVED_ADAPTATION 2026-11-02 (STAGE_REDESIGN_BURST_20261102): the legacy 211/222/229/230 partners are their 成熟期
+// now, on the ranch and in the reloaded save, with the form each was kept as a burst form.
+function assertMigrated(assert,report,saved,burstBase){
+ assert.equal(report.qaOnly,true);assert.equal(report.namespace,'championshipAlternateFormsQA:r1:');assert.equal(report.saveSchema,7);
+ assert.equal(saved?.schemaVersion,7,'Reloaded storage must retain canonical schema7');
+ assert.equal(saved?.cageEdit?.layoutVersion,'PRODUCT_HEX_WORLD_V1','Reloaded storage must retain product grid');
+ assert.match(report.storage,/sessionStorage/);assert.deepEqual(report.errors,[]);
+ for(const [suffix,form]of [['0001',211],['0002',222],['0003',229],['0004',230]]){
+  const id=`championship:2026:instance:${suffix}`,instance=report.instances.find(i=>i.instanceId===id);
+  assert.ok(instance,`Missing actual instance ${suffix}`);assert.equal(instance.speciesIndex,burstBase(form));assert.equal(instance.actorSpeciesIndex,burstBase(form));
+  assert.ok(saved.progression.burstEvolution.unlocks[id].includes(form),`${suffix} keeps ${form}`);
+ }
+}
+module.exports={MIME,resolveAsset,serveBuild,assertEvolved,assertMigrated,assertBattleLoaders};

@@ -22,7 +22,8 @@ export function projectDatabaseBurst(speciesIndex, {fullView = false, registered
   const forms = burstFormsFor(speciesIndex);
   if (forms.length) {
     return deepFreeze({kind: 'BASE', forms: forms.map(form => ({tier: form.tier, formSpeciesIndex: form.form, viaSpeciesIndex: form.via,
-      alternates: [...(form.alternates ?? [])], revealed: seen(form.form), conditions: conditionRows(form.thresholds)}))});
+      alternates: [...(form.alternates ?? [])], alternatesRevealed: (form.alternates ?? []).map(seen),
+      revealed: seen(form.form), conditions: conditionRows(form.thresholds)}))});
   }
   const bases = burstBasesFor(speciesIndex);
   if (bases.length) {
