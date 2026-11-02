@@ -100,16 +100,35 @@ function friendsMenuDomState({group,entry}){
     const visible=el=>Boolean(el&&!el.hidden&&el.getClientRects().length&&getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden');
     return {buttonCount:controls.length,buttonVisible:visible(control),buttonEnabled:Boolean(control&&!control.disabled),expanded:control?.getAttribute('aria-expanded')==='true',openMenu:panels.length===0?null:panels.length===1?panel.dataset.menuId:'MULTIPLE_OPEN_MENUS',entryCount:panel?.dataset.menuId===group?panel.querySelectorAll(`button[data-entry-id="${entry}"]`).length:0};
 }
+function friendsOpenMenuEntryReady({group,entry}){
+ const visible=el=>Boolean(el&&!el.hidden&&el.getClientRects?.()?.length&&getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden');
+ if([...document.querySelectorAll('[role="dialog"]')].some(visible))return false;
+ const calendar=document.querySelector('.int-rh2-calendar'),layer=document.querySelector('.int-rh2-lifecycle');
+ if(calendar&&!calendar.hidden||layer&&!layer.hidden||document.querySelector('.cm-ceremony'))return false;
+ const panels=[...document.querySelectorAll('.cm-toolbar__menu:not([hidden])')];
+ if(panels.length!==1||panels[0].dataset.menuId!==group||!visible(panels[0]))return false;
+ const controls=[...document.querySelectorAll(`button.cm-toolbar__cell[data-menu-id="${group}"]`)];
+ if(controls.length!==1||!visible(controls[0])||controls[0].disabled||controls[0].getAttribute('aria-expanded')!=='true')return false;
+ const entries=[...panels[0].querySelectorAll(`button[data-entry-id="${entry}"]`)];
+ if(entries.length!==1||!visible(entries[0])||entries[0].disabled)return false;
+ const target=entries[0],r=target.getBoundingClientRect();
+ if(!(r.width>0&&r.height>0))return false;
+ const hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);
+ return hit===target||Boolean(hit&&target.contains(hit));
+}
 function friendsMakeMenuObservation(overlayReader){
  // Playwright serializes functions without Node closures. Embed only these exact
  // local read-only helpers; no page globals or production functions are installed.
- return new Function('input',`const readOverlay=(${overlayReader.toString()});const readState=(${friendsMenuDomState.toString()});const calendar=document.querySelector('.int-rh2-calendar');return {overlay:readOverlay(input.selector),calendarAbsentOrHidden:!calendar||calendar.hidden,state:readState(input)};`);
+ return new Function('input',`const readOverlay=(${overlayReader.toString()});const readState=(${friendsMenuDomState.toString()});const readEntry=(${friendsOpenMenuEntryReady.toString()});const calendar=document.querySelector('.int-rh2-calendar');return {overlay:readOverlay(input.selector),calendarAbsentOrHidden:!calendar||calendar.hidden,menuEntryReady:readEntry(input),state:readState(input)};`);
 }
 async function friendsInspectMenu(api,deadline){
  const snapshot=await api.observe();
  // Disabled/visible calendars, known dialogs, animations and unknown obstruction
  // retain the full existing acknowledgment/wait path and a fresh state read.
  if(snapshot.overlay?.kind==='canvas'&&snapshot.calendarAbsentOrHidden===true)return {handled:[],state:snapshot.state};
+ // The already-open exact menu can cover all canvas probes. Accept only its
+ // visible enabled target actually hit-tested in this same observation.
+ if(snapshot.overlay===false&&snapshot.menuEntryReady===true&&snapshot.calendarAbsentOrHidden===true)return {handled:[],state:snapshot.state};
  const handled=await api.clear(deadline);return {handled,state:await api.state()};
 }
 function friendsRecognizedOverlay(value){return value?.kind==='calendar'||value?.kind==='registration-notice-94';}
