@@ -11,7 +11,7 @@ OWNER_APPROVED_ADAPTATION. ROM tables and the NATIVE overnight writer stay as tr
 - Gachapon: SR 智慧自動清掃核心 (+50 Bits per clean, no care mistakes), SR 智慧自動給食核心 (feeds a hungry partner to full, +2.4 affection), SSR 全自動皇家牧場 and UR 全自動星際動物園 (editions of the ranch and zoo: both cores built in, sleep 30 % faster, +3 beast points per training, gold frame and a 「全自動飼育運轉中」 ranch badge). They take the top 15 % of each SR/SSR/UR category roll; the furnace forges each from fixed chips and shards.
 - Land: 20 → 100 cells, +10 per 1,000 diamonds, saved at once, with a gold hex wave; the diamond wallet is the public build's existing wallet (cap raised to 9,999,999).
 - Diamonds for players who never pay: story chapter first clear 300, tamer rank 1–9 300–500, encyclopedia 10/25/50/100 200–500, the founder box 1,000.
-- Self-review fixes before publication: auto-feed affection carries drop partners no longer held; the furnace never melts SSR/UR chips; the hunt's land bonus can never block a hunt; a story chapter's diamonds show a toast.
+- Self-review fixes before publication: auto-feed affection carries drop partners no longer held; the furnace never melts SSR/UR chips; the hunt's land bonus can never block a hunt; a story chapter's diamonds show a toast; the land purchase and the wallet label keep 「測試鑽」 and 「沒有真實付款」 in all five languages, because these are still the friends-playtest test diamonds (CYBER_GACHA_20261029) and the Friends playtest gate checks that wording.
 - Not done: raising the 16-partner ranch pool; real payments; the founder gold frame on the brag card itself.
 
 <!-- record-id: STAGE_REDESIGN_BURST_20261102 -->
