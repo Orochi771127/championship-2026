@@ -31,21 +31,23 @@ test('neutral authored labels never replace terms inside player nicknames or fal
    assert.equal(speciesName(-1,nickname),nickname);
  }}finally{setLocale('zh-Hant');}
 });
-const source=fs.readFileSync(new URL('../src/championship/app/openingStoryPresentation.js',import.meta.url),'utf8');
-const paragraphs=Function('return '+source.match(/const TEXT=(\[[\s\S]*?\]);/)[1])();
-for(const [locale,four,eligibility,invitation]of [
- ['zh-Hant','每四年','取得參賽資格','你也迎來'],['en','four years','Earning a place','your own chance'],
- ['ja','4年に一度','出場資格','あなたにも'],['th','ทุกสี่ปี','ได้สิทธิ์เข้าร่วม','คุณเองก็ได้รับโอกาส'],
- ['vi','bốn năm','quyền tham dự','bạn cũng đã có cơ hội']])test(locale+' four opening paragraphs preserve story meanings and registered pending terms',()=>{
- setLocale(locale);const result=paragraphs.map(openingStoryText),terms=getOpeningBrandTerms(locale);
- assert.equal(result.length,4);assert.ok(result[0].includes(four));assert.ok(result[1].includes(eligibility));assert.ok(result[2].includes(invitation));
- assert.ok(result[0].includes(terms.tournament));assert.ok(result[2].includes(terms.tournament));assert.ok(result[1].includes(terms.creature));
- assert.equal(terms.creature,PENDING_TERMS_REGISTRY.CREATURE_SPECIES_TERM.candidates[locale][0]);
- assert.ok(result.every(t=>! /數碼獸|數碼寶貝|Digimon|デジモン|ดิจิมอน/i.test(t)));
- assert.equal(openingStoryText('OWNER_PLAYER_NAME_123'),'OWNER_PLAYER_NAME_123');
+// Owner 2026-11-02: the New Game story is the Ai-chan layered v3 text. zh-Hant is the
+// approved wording; the other four locales are product-authored translations that must
+// keep the approved core in every language.
+for(const [locale,four,eligibility,heartCore,name]of [
+ ['zh-Hant','每四年','取得參賽資格','心核','愛醬'],['en','every four years','Earning a place','heart core','Ai-chan'],
+ ['ja','四年に一度','出場資格','心核','アイちゃん'],['th','ทุกสี่ปี','ได้สิทธิ์เข้าร่วม','แกนหัวใจ','ไอจัง'],
+ ['vi','bốn năm một lần','tư cách dự giải','lõi tâm','Ai-chan']])test(locale+' New Game story keeps the approved core and Ai-chan\'s name',()=>{
+ try{
+  setLocale(locale);const chapter=openingPrologueChapter(),pages=chapter.beats.map(beat=>resolveOpeningStoryText(beat.text));
+  assert.ok(pages.every(page=>typeof page==='string'&&page.trim().length>0));
+  const all=pages.join('\n');
+  for(const phrase of [four,eligibility,heartCore,name])assert.ok(all.includes(phrase),locale+' '+phrase);
+  assert.ok(!/數碼獸|數碼寶貝|Digimon|デジモン|ดิจิมอน|愛將|澄音/i.test(all));
+  for(const choice of chapter.beats.flatMap(beat=>beat.choices))assert.ok(resolveOpeningStoryText(choice.label).length>0);
+ }finally{setLocale('zh-Hant');}
 });
-
-import {waitForOpeningComicImages} from '../src/championship/app/openingStoryPresentation.js';
+import {openingPrologueChapter,resolveOpeningStoryText} from '../src/championship/app/openingStoryPresentation.js';
 test('five-language opening gift letters and egg naming use central terms without rewriting player input',()=>{
  const tamer='從現在起，你也是數碼獸馴獸師了。\n與夥伴一起，朝冠軍賽優勝邁進吧！\n贈禮應該就快送到了。',egg='這顆數碼蛋送給你。\n請替牠取個名字。';
  try{for(const locale of ['zh-Hant','en','ja','th','vi']){
@@ -60,14 +62,11 @@ test('five-language opening gift letters and egg naming use central terms withou
  assert.equal(getOpeningBrandTerms('unsupported').egg,'培育蛋');
  }finally{setLocale('zh-Hant');}
 });
-test('cold comic startup waits for every successful decode without advancing native time',async()=>{
- let first,second,settled=false;const a={complete:false,naturalWidth:0,decode:()=>new Promise(r=>{first=()=>{a.naturalWidth=640;r();};})},b={complete:false,naturalWidth:0,decode:()=>new Promise(r=>{second=()=>{b.naturalWidth=560;r();};})};
- const ready=waitForOpeningComicImages([a,b]).then(v=>{settled=true;return v;});await Promise.resolve();first();await Promise.resolve();assert.equal(settled,false);second();assert.equal(await ready,true);
-});
-test('cached images, decode failures, timeout and dispose settle without hanging the opening',async()=>{
- assert.equal(await waitForOpeningComicImages([{complete:true,naturalWidth:1}]),true);
- assert.equal(await waitForOpeningComicImages([{complete:true,naturalWidth:0}]),false);
- assert.equal(await waitForOpeningComicImages([{complete:false,decode:async()=>{throw Error('NETWORK');}}]),false);
- const pending={complete:false,decode:()=>new Promise(()=>{})};assert.equal(await waitForOpeningComicImages([pending],{timeoutMs:1}),false);
- const c=new AbortController(),promise=waitForOpeningComicImages([pending],{signal:c.signal});c.abort();assert.equal(await promise,false);
+test('the approved zh-Hant story is used verbatim, page by page, in the package order',()=>{
+ setLocale('zh-Hant');
+ const pages=openingPrologueChapter().beats.map(beat=>resolveOpeningStoryText(beat.text));
+ assert.equal(pages[0],'每天，都有無數聲音留在網路上。有人分享旅途的風景，有人記下晚餐的香氣，也有人在深夜，寫下一句還沒勇氣說出口的話。');
+ assert.equal(pages[8],'連線成功！我是愛醬，你的導覽員。');assert.equal(pages[9],'貓……貓居然會說話？！');
+ assert.equal(pages[10],'嗯？換成這個樣子，你會比較習慣嗎？');assert.equal(pages[12],'現在，可以好好聽我介紹了嗎？');
+ assert.equal(pages.at(-1),'你還不知道自己能走多遠，也不知道裂隙深處藏著什麼。但當你轉過頭，牠依然站在身邊。那麼，就從今天開始，寫下屬於你們的故事吧。');
 });

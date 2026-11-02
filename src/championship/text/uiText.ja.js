@@ -55,6 +55,9 @@ export const UI_COPY_JA = Object.freeze({
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "システム背景",
   "SYSTEM_BACKGROUND_HINT": "設定を閉じ、システムからショップ・図鑑・ヘルプを開くと、カードの周囲や隙間に画像が表示されます。タイトル・牧場・戦闘シーンは変わりません。",
+  // Ai-chan guide form setting (2026-11-03), PRODUCT_AUTHORED.
+  "GUIDE_APPEARANCE_LABEL": "案内役の姿",
+  "GUIDE_APPEARANCE_HINT": "どちらの姿も同じ案内役アイちゃんです。チュートリアルの内容は同じです。",
   "SYSTEM_BACKGROUND_DEFAULT": "標準",
   "SYSTEM_BACKGROUND_DEFAULT_HINT": "元の画面背景を使います。",
   "SYSTEM_BACKGROUND_CUSTOM": "画像を選択",

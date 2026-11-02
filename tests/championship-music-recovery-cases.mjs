@@ -19,10 +19,14 @@ function fixture(){
  const music=createMusicPresentation({bus,cues:ORIGINAL_MUSIC_CUES,doc,win,AudioClass:Media,baseUrl:'https://example.test/',resolveCue:(id,scene)=>resolveSceneMusic(id,scene,{})});
  return {bus,music,doc,win,media,contexts,dispose(){music.dispose();bus.dispose();}};
 }
-test('missing, invalid, explicit default and tutorial raising use Quiet Evening; explicit player choices persist',()=>{
- for(const input of [{},{raisingMusic:'default'},{raisingMusic:'stale'},{raisingMusic:'victory'}]){
+test('missing, invalid and explicit default raising use Quiet Evening; the tutorial keeps its own cue; explicit player choices persist',()=>{
+ for(const input of [{},{raisingMusic:'default'},{raisingMusic:'stale'},{raisingMusic:'victory'},{raisingMusic:'moon'}]){
   const prefs=normalizePreferences(input);
-  for(const screen of ['RAISING_HOME','CAGE_EDIT'])for(const tutorial of [false,true])assert.equal(resolveSceneMusic(selectOriginalMusic({screen,tutorial}).id,'raising',prefs),screen==='CAGE_EDIT'?'podium_geometry':'a_quiet_evening_training');
+  for(const screen of ['RAISING_HOME','CAGE_EDIT']){
+   if(input.raisingMusic!=='moon')assert.equal(resolveSceneMusic(selectOriginalMusic({screen}).id,'raising',prefs),screen==='CAGE_EDIT'?'podium_geometry':'a_quiet_evening_training');
+   // Owner 2026-11-02: story and tutorial share Hexagon Cradles; a ranch preference never replaces it (main.js passes no scene).
+   assert.equal(resolveSceneMusic(selectOriginalMusic({screen,tutorial:true}).id,null,prefs),'hexagon_cradles');
+  }
  }
  for(const id of ['moon','lofi','a_quiet_evening_training'])assert.equal(resolveSceneMusic('moon','raising',{raisingMusic:id}),id);
  for(const id of ['login','core','moon','harbor','victory','defeat','draw',null])assert.equal(resolveSceneMusic(id,null,{}),id);

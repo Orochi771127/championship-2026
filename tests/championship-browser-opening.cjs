@@ -13,12 +13,17 @@
 // -------------------
 // The optional NS33 TITLE film precedes LOGIN and has its own Skip intro
 // action. The story described below is the separate New Game onboarding.
-// LOGIN reveals New Game / Continue. New Game then plays the scrolling story,
-// the envelope, the welcome letter, the tamer name and its confirmation, the
-// two gift letters, the local eight-egg chooser, and finally the egg's name.
-// Public builds keep their existing single-egg opening.
-// None of it is skippable, so the gates perform it rather than reaching past
-// it: that sequence IS the accepted boot path.
+// LOGIN reveals New Game / Continue. New Game then plays the story (since
+// 2026-11-03 the Ai-chan story: a background video, Ai-chan's picture and
+// paged text, with her cat / catgirl choice), the envelope, the welcome letter,
+// the tamer name and its confirmation, the two gift letters, the local
+// eight-egg chooser, and finally the egg's name. Public builds keep their
+// existing single-egg opening.
+// The gates perform it the way a player does, with the story's own keys:
+// the skip key (which still stops at Ai-chan's form choice until one is
+// made) or tapping page by page, and the choice through its own button. They
+// never write storage or call the story module to get past it: that sequence
+// IS the accepted boot path.
 //
 // Since the interactive tutorial (2026-10-09), a New Game on loopback or the
 // approved public host then lands on Raising Home with the tutorial's
@@ -70,6 +75,48 @@ async function declineTutorial(page, { timeout = 60000 } = {}) {
 }
 
 /**
+ * Play the New Game story to its end through the player's own controls.
+ *
+ * story            "skip": the skip key (it stops at Ai-chan's choice while no
+ *                  form is chosen yet); "read": tap every page.
+ * guideAppearance  the form picked at the choice: "cat" or "catgirl".
+ * Returns { pages, choice } as observed: the page ids shown and the form picked.
+ */
+async function playStory(page, { story = "skip", guideAppearance = "cat", timeout = 90000 } = {}) {
+  if (!["skip", "read"].includes(story)) throw new TypeError(`unknown story option: ${story}`);
+  if (!["cat", "catgirl"].includes(guideAppearance)) throw new TypeError(`unknown guide appearance: ${guideAppearance}`);
+  await page.locator(".cm-opening-story").waitFor({ timeout });
+  const started = Date.now(), pages = [];
+  let choice = null;
+  const size = page.viewportSize() ?? { width: 390, height: 844 };
+  // A tap on the story itself, clear of the top keys and the choice buttons.
+  const tap = () => page.locator(".cm-opening-story").click({ position: { x: size.width / 2, y: size.height * 0.42 }, force: true }).catch(() => {});
+  while (Date.now() - started < timeout) {
+    if (await page.locator(".cm-opening__envelope").count()) return { pages, choice };
+    const state = await page.evaluate(() => {
+      const root = document.querySelector(".cm-opening-story");
+      return root ? { busy: root.getAttribute("aria-busy"), typing: root.dataset.typing, kind: root.dataset.beatKind,
+        id: root.dataset.beatId, leaving: root.dataset.storyStage === "leaving" } : null;
+    });
+    if (!state || state.leaving) { await page.waitForTimeout(100); continue; }
+    if (state.busy === "true") {
+      // The background is still loading: after a moment, read the text first, as a player can.
+      if (Date.now() - started > 3000) await page.locator('[data-story-action="text"]').click().catch(() => {});
+      await page.waitForTimeout(150);
+      continue;
+    }
+    if (state.id && pages.at(-1) !== state.id) pages.push(state.id);
+    if (state.kind === "choice") {
+      if (state.typing === "false") { await page.click(`[data-story-choice="${guideAppearance}"]`); choice = guideAppearance; }
+      else await tap();
+    } else if (story === "skip") await page.click(".cm-cutscene__skip").catch(() => {});
+    else await tap();
+    await page.waitForTimeout(120);
+  }
+  throw new Error(`the New Game story did not finish in ${timeout} ms (pages ${pages.join(",")})`);
+}
+
+/**
  * Play the New Game opening through to the egg's name.
  *
  * Assumes LOGIN has already been clicked. Returns the names it entered so a
@@ -77,20 +124,15 @@ async function declineTutorial(page, { timeout = 60000 } = {}) {
  * invitation that follows is declined unless `tutorial: "keep"` leaves it open
  * for a gate that tests the tutorial itself.
  */
-async function playOpening(page, { trainerName = "測試", eggName = "小蛋", eggSpeciesIndex = 0, onEggChoice = null, tutorial = "decline" } = {}) {
+async function playOpening(page, { trainerName = "測試", eggName = "小蛋", eggSpeciesIndex = 0, onEggChoice = null, tutorial = "decline",
+  story = "skip", guideAppearance = "cat" } = {}) {
   if (!["decline", "keep"].includes(tutorial)) throw new TypeError(`unknown tutorial option: ${tutorial}`);
   await page.click("#cm-new-game");
   // With a save already stored, New Game first asks before the opening can
   // replace it (2026-09-28). A gate that means to start over says so here.
   const replace = page.locator('dialog.cm-dialog [data-action="new"]');
   if (await replace.isVisible().catch(() => false)) await replace.click();
-  // The story advances on click once a card has finished revealing, and ends on
-  // its own otherwise. Nudge it so a gate does not sit through the full run.
-  const story = page.locator(".cm-opening-story");
-  for (let attempt = 0; attempt < 40 && (await page.locator(".cm-opening__envelope").count()) === 0; attempt += 1) {
-    if (await story.count()) await story.click({ force: true }).catch(() => {});
-    await page.waitForTimeout(250);
-  }
+  const storyRun = await playStory(page, { story, guideAppearance });
   await page.click(".cm-opening__envelope");
   await page.click(".cm-opening__letter button");
   await page.fill("#cm-opening-name", trainerName);
@@ -108,7 +150,7 @@ async function playOpening(page, { trainerName = "測試", eggName = "小蛋", e
   await page.fill("#cm-opening-name", eggName);
   await page.click(".cm-opening__name button[type=submit]");
   const tutorialDeclined = tutorial === "decline" ? await declineTutorial(page) : false;
-  return { trainerName, eggName, tutorialDeclined };
+  return { trainerName, eggName, tutorialDeclined, story: storyRun };
 }
 
 /**
@@ -389,7 +431,7 @@ async function leaveHuntField(page, { attempts = 30 } = {}) {
 }
 
 module.exports = {
-  login, playOpening, declineTutorial, startGame, openFreshGame, openHunt, selectEnterableGate,
+  login, playStory, playOpening, declineTutorial, startGame, openFreshGame, openHunt, selectEnterableGate,
   liveWilds, selectHuntTool, captureOneWild, leaveHuntField,
   RAISING_HOME, GATE_CONFIRM, WILD_POSITIONS
 };

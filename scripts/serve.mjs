@@ -68,7 +68,10 @@ const mime = new Map([
   [".html", "text/html; charset=utf-8"], [".js", "text/javascript; charset=utf-8"],
   [".mjs", "text/javascript; charset=utf-8"], [".json", "application/json; charset=utf-8"],
   [".css", "text/css; charset=utf-8"], [".png", "image/png"], [".webp", "image/webp"],
-  [".glb", "model/gltf-binary"], [".wav", "audio/wav"], [".svg", "image/svg+xml"]
+  [".glb", "model/gltf-binary"], [".wav", "audio/wav"], [".svg", "image/svg+xml"],
+  // Media: GitHub Pages serves these types and answers byte ranges; so does this
+  // server (2026-11-03), so a local story video can seek like the published one.
+  [".mp4", "video/mp4"], [".mp3", "audio/mpeg"], [".ogg", "audio/ogg"], [".m4a", "audio/mp4"]
 ]);
 
 const server = http.createServer((request, response) => {
@@ -111,11 +114,26 @@ const server = http.createServer((request, response) => {
       if(real!==file){response.writeHead(403).end('Forbidden');return;}
       response.setHeader('X-Championship-Build',internalManifest.buildId);
     }
-    response.writeHead(200, {
+    const headers = {
       "Content-Type": mime.get(path.extname(file).toLowerCase()) ?? "application/octet-stream",
       "Cache-Control": "no-store",
-      "Cross-Origin-Resource-Policy": "same-origin"
-    });
+      "Cross-Origin-Resource-Policy": "same-origin",
+      "Accept-Ranges": "bytes"
+    };
+    // One byte range (bytes=a-b, a-, -n), as browsers request for media seeking.
+    const range = /^bytes=(\d*)-(\d*)$/.exec(String(request.headers.range ?? "").trim());
+    if (range && (range[1] || range[2])) {
+      const start = range[1] ? Number(range[1]) : Math.max(0, stat.size - Number(range[2]));
+      const end = range[1] && range[2] ? Math.min(Number(range[2]), stat.size - 1) : stat.size - 1;
+      if (start > end || start >= stat.size) {
+        response.writeHead(416, { ...headers, "Content-Range": `bytes */${stat.size}` }).end();
+        return;
+      }
+      response.writeHead(206, { ...headers, "Content-Range": `bytes ${start}-${end}/${stat.size}`, "Content-Length": end - start + 1 });
+      fs.createReadStream(file, { start, end }).pipe(response);
+      return;
+    }
+    response.writeHead(200, { ...headers, "Content-Length": stat.size });
     fs.createReadStream(file).pipe(response);
   } catch {
     response.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" }).end("Not found");

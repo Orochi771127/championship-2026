@@ -23,6 +23,8 @@ import {
 } from "./preferenceSchema.js";
 import { musicChoicesForScene, musicTrackTitle } from "../../presentation/sceneMusicCatalog.js";
 import { SYSTEM_BACKGROUNDS } from "../../presentation/systemBackgrounds.js";
+import { AI_CHAN_APPEARANCES, createAiChanPortrait, resolveGuideAppearance } from "../../presentation/aiChanGuide.js";
+import { aiChanStoryText } from "../../text/aiChanStoryText.js";
 import { QUALITY_TIERS } from "../../presentation/presentationPreferences.js";
 import { readTitleViewportDiagnostics } from '../portraitFrame.js';
 
@@ -168,11 +170,10 @@ export function createSettingsPanel({
     return set;
   }
 
-  function radioGroup(id, labelKey, choices, { hint = null, render = null, onChoose = null } = {}) {
+  function radioGroup(id, labelKey, choices, { hint = null, render = null, onChoose = null, current = store.get()[id] } = {}) {
     const set = fieldset(id, labelKey, hint);
     const options = node("div", "cm-setting__options");
     options.dataset.count = String(choices.length);
-    const current = store.get()[id];
     for (const choice of choices) {
       const label = node("label", "cm-choice");
       const input = doc.createElement("input");
@@ -344,6 +345,14 @@ export function createSettingsPanel({
       text.append(note("這是文字大小的預覽：生命值 128／技力 64。"));
       section.append(text);
       section.append(radioGroup("hudDensity", "資訊密度", HUD_CHOICES));
+      // Ai-chan's form (Owner 2026-11-02). Not chosen yet ("") reads as the cat she starts as.
+      const ai = aiChanStoryText();
+      section.append(radioGroup("guideAppearance", "GUIDE_APPEARANCE_LABEL", AI_CHAN_APPEARANCES.map(form => ({
+        value: form, name: ai.forms[form], literal: true
+      })), {
+        hint: "GUIDE_APPEARANCE_HINT", current: resolveGuideAppearance(store.get().guideAppearance),
+        render: choice => createAiChanPortrait({ doc, mode: "avatar", appearance: choice.value }).root
+      }));
     },
     quality(section) {
       const described = quality?.describe?.() ?? { tier: "balanced", reason: null };

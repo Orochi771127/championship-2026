@@ -14,10 +14,13 @@ const PREF = 'championshipModernSave:preferences:v1';
 const SAVE = 'championshipModernSave:v1';
 const SCENE_MANIFEST = JSON.parse(await fs.readFile('assets/production/scene-music-r1/manifest.json','utf8')), SCENE_CUES = SCENE_MANIFEST.cues;
 const TRACKS = SCENE_MANIFEST.files.map(f=>({...f,scene:f.category,path:'assets/production/scene-music-r1/'+f.path,zh:f.titles.zh,en:f.titles.en}));
+// Settings offers only ranch and battle scene tracks; the New Game story/tutorial cue (category 'opening') is never a choice.
+const CHOICE_TRACKS = TRACKS.filter(t=>t.scene==='raising'||t.scene==='battle');
+assert.deepEqual(TRACKS.filter(t=>!CHOICE_TRACKS.includes(t)).map(t=>[t.id,t.scene]),[['hexagon_cradles','opening']],'Only the onboarding cue is outside the settings choices');
 const NAMES = {
  moon:['空靈月湖畔','Ethereal Moon Lakefront'],lofi:['林卡拉慢拍','Linkara Lo-fi'],
  battle_normal:['石緣交鋒','Clash at the Concrete Edge'],battle_final:['錦標賽決戰','Championship Final'],
- ...Object.fromEntries(TRACKS.map(t=>[t.id,[t.zh,t.en]]))
+ ...Object.fromEntries(CHOICE_TRACKS.map(t=>[t.id,[t.zh,t.en]]))
 };
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const choice = (key,value) => `[data-setting="${key}"] input[value="${value}"]`;
@@ -268,7 +271,7 @@ async function main() {
   try{
    await page.waitForTimeout(200);assert.equal((await page.evaluate(()=>musicQA.inspect())).native.media.length,0,'No autoplay bypass');
    await page.locator('#open').click();await waitCue(page,'a_quiet_evening_training');
-   for(const t of TRACKS){
+   for(const t of CHOICE_TRACKS){
     await page.evaluate(({id,scene})=>musicQA.music.setScene(id,null,scene),sourceForTrack(t));
     await select(page,t.scene+'Music',t.id);const evidence=await nativeEvidence(page,t.id);checkNativeMedia(evidence,t);
     // Full response byte identity is additional evidence, not the decoder claim.
