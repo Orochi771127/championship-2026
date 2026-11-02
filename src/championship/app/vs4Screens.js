@@ -9,7 +9,8 @@ import {databaseHeroPortrait, databaseHeroSilhouette} from '../presentation/data
 import {databaseBodyStats, formatBodyHeight, formatDataWeight} from '../database/databaseBodyStats.js';
 import {databaseStory, databaseStoryHeading, databaseVerifiedData, databaseVerifiedHeading} from '../database/databaseStories.js';
 import {originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
-import { speciesName, generationName, shopItemDescription as shopDescriptionText, shopItemName } from "../text/zhHant.js";
+import { speciesName, generationName, shopItemDescription as shopDescriptionText, shopItemName, cageName } from "../text/zhHant.js";
+import { recommendedCages } from "../raising/productTrainingPolicy.js";
 import {databaseDisplayRows, getDatabaseDisplayEntry} from '../database/databaseDisplayCatalog.js';
 import {databaseIllustrationText} from '../database/databaseIllustrations.js';
 import {openingEggChoices} from './openingEggChoices.js';
@@ -1102,6 +1103,18 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
 
   // OWNER_APPROVED_ADAPTATION 2026-11-02: burst evolution. A 成熟期 page lists the forms it takes in battle
   // and their unlock conditions; a 覺醒體 page lists the 成熟期 that burst into it.
+  /** One plain line for a burst form's conditions: the best cages for its points, its battles, win rate and stars. */
+  function dexAwakeningHint(conditions) {
+    const hints = [];
+    const point = conditions.find(condition => recommendedCages(condition.id).length);
+    if (point) hints.push(uiText('AWAKENING_HINT_CAGES', {cages: recommendedCages(point.id).slice(0, 2).map(cage => cageName(cage.definition, null)).join('、')}));
+    const battles = conditions.find(condition => condition.id === 'BATTLE_COUNT');
+    if (battles) hints.push(uiText('AWAKENING_HINT_BATTLES_TOTAL', {count: battles.value}));
+    if (conditions.some(condition => condition.id === 'EVOLUTION_WIN_PERCENT')) hints.push(uiText('AWAKENING_HINT_WINS'));
+    const rebirth = conditions.find(condition => condition.id === 'REBIRTH_COUNT');
+    if (rebirth) hints.push(uiText('AWAKENING_HINT_STARS', {count: rebirth.value}));
+    return hints.join('・') || uiText('DEX_CONDITIONS_NO_NUMERIC');
+  }
   function paintBurst(selected) {
     const burst = selected.burst;
     if (!burst) return;
@@ -1137,19 +1150,8 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
         detail.querySelector('h2')?.focus({preventScroll:true});
       });
       item.append(button);
-      if (row.conditions) {
-        const values = element('dl', 'cm-dex-conditions__list cm-dex-burst__conditions');
-        for (const condition of row.conditions) {
-          const line = element('div', 'cm-dex-conditions__row');
-          const unitKey = {PERCENT:'DEX_CONDITIONS_PERCENT', BATTLES:'DEX_CONDITIONS_BATTLES', TIMES:'DEX_CONDITIONS_TIMES'}[condition.unit];
-          const value = unitKey ? uiText(unitKey, {value:condition.value, count:condition.value}) : uiText('{value}', {value:condition.value});
-          line.append(element('dt', '', `DEX_CONDITION_${condition.id}`),
-            element('dd', '', uiText(condition.operator === 'LTE' ? 'DEX_CONDITIONS_LTE' : 'DEX_CONDITIONS_GTE', {value})));
-          values.append(line);
-        }
-        if (!row.conditions.length) values.append(element('p', 'cm-dex-conditions__notice', 'DEX_CONDITIONS_NO_NUMERIC'));
-        item.append(values);
-      }
+      // Awakening raising (Owner 2026-11-02): players read where to train and how much to battle, not the rules.
+      if (row.conditions) item.append(element('p', 'cm-dex-burst__conditions', dexAwakeningHint(row.conditions), false));
       targets.append(item);
     }
     section.append(targets);

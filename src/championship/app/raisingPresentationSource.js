@@ -137,20 +137,24 @@ function speciesLabel(speciesId) {
  * Home actors are the frozen R2 starters plus enclosed collection instances.
  * Collection IDs never enter the R2 snapshot; they only appear here.
  */
-function homeMembers(snapshot, instances) {
+function homeMembers(snapshot, instances, displayOf = () => null) {
   const residents = new Map(snapshot.residents.map((resident) => [resident.residentId, resident]));
   return instances.map((instance) => {
     const resident = residents.get(instance.source.residentId);
+    // Awakening raising (OWNER_APPROVED_ADAPTATION 2026-11-02): a 成熟期 may show a learned form on the ranch
+    // (its ceremony's ten minutes, or the look the player chose). The partner itself stays the 成熟期.
+    const shown = displayOf(instance.instanceId);
+    const speciesId = Number.isInteger(shown) ? `species-${String(shown).padStart(3, "0")}` : instance.speciesId;
     return {
       creatureId: instance.instanceId,
       displayName: raisingDisplayName(instance),
-      speciesId: productSpeciesId(instance.speciesId),
+      speciesId: productSpeciesId(speciesId),
       // The species table's base HP/TP are not this individual's persistent
       // current or grown values. Unknown player profiles remain unknown.
       stats: instance.profile,
       facing: resident?.facing ?? "right",
       intent: resident?.intent ?? "idle",
-      spriteResident: { ...resident, speciesId: instance.speciesId, residentId: instance.instanceId }
+      spriteResident: { ...resident, speciesId, residentId: instance.instanceId }
     };
   });
 }
@@ -182,7 +186,8 @@ export function createRaisingPresentationSource(app) {
     if (!snapshot || !raising) throw new Error("CHAMPIONSHIP_RAISING_SESSION_NOT_OPEN");
     const assignments = raising.assignments;
     const selectedCreatureId = app.getSelectedCreatureId();
-    const members = homeMembers(snapshot, app.getRaisingInstances());
+    const members = homeMembers(snapshot, app.getRaisingInstances(), (id) => app.getRaisingDisplaySpecies?.(id) ?? null);
+    const awakeningSigns = app.getAwakeningSigns?.() ?? {};
     const lanes = cageLanes(cages, members, assignments);
     const saveStatus = app.savePort.getStatus();
     const phase = SAVE_PHASES.has(saveStatus.phase) ? saveStatus.phase : "CLEAN";
@@ -231,6 +236,8 @@ export function createRaisingPresentationSource(app) {
         stats: member.stats ?? null,
         // Owner 2026-10-28: mood, habitat fit and affection read from the partner's own fields.
         partner: app.getPartnerReading?.(member.creatureId) ?? null,
+        // Awakening raising: {form, tier, percent, glow, ready} while a form is still to learn.
+        awakening: awakeningSigns[member.creatureId] ?? null,
         displayCapacityG: /^championship:creature:species-\d{3}$/.test(member.speciesId)
           ? nativeHuntToolSpecies(Number(member.speciesId.slice(-3))).displayCapacityG : null,
         nativeCageDefinition: app.getRaisingActorFrame?.(member.creatureId)?.cageDefinitionIndex ?? null,
@@ -346,6 +353,8 @@ export function createRaisingPresentationSource(app) {
     cleanFood(input) {const result=app.cleanRaisingFood?.(input)??false;publish();return result;},
     placeFood(input) {const result=app.placeRaisingFood?.(input)??{ok:false,reason:"UNAVAILABLE"};publish();return result;},
     touchPartner(creatureId){return app.touchRaisingPartner?.(creatureId)??null;},
+    /** The first awakening of a ready partner (the ranch plays its ceremony). */
+    awaken(creatureId){const result=app.awakenPartner?.(creatureId)??{ok:false,reason:"UNAVAILABLE"};if(result.ok)publish();return result;},
     touchEgg(creatureId,checkpoint=null) { return app.touchRaisingEgg?.(creatureId,checkpoint) ?? false; },
     treatResident(creatureId,kind,checkpoint=null){const result=app.treatRaisingResident?.(creatureId,kind,checkpoint)??{ok:false};publish();return result;},
     selectCreature(creatureId) {

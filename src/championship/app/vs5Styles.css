@@ -870,9 +870,29 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
   80% { opacity: 1; transform: translate(-50%, 0) scale(1); }
   100% { opacity: 0; transform: translate(-50%, -8px) scale(1); }
 }
+/* The player's call (awakening raising, 2026-11-02): a 56px hex button at the field's lower left with a ring that
+   empties over the wait; the bloodline colours it. Opponents about to burst pulse their gauge red. */
+.cm-vs5-burst-button {
+  position: absolute; left: max(12px, env(safe-area-inset-left)); bottom: 18%; z-index: 7; width: 56px; height: 56px; padding: 0;
+  border: 0; display: grid; place-items: center; cursor: pointer; color: #fff; touch-action: manipulation;
+  clip-path: polygon(25% 3%, 75% 3%, 100% 50%, 75% 97%, 25% 97%, 0 50%);
+  background: conic-gradient(var(--bloodline, #ffb52e) calc(var(--burst-left, 1) * 360deg), rgba(15, 23, 42, .85) 0);
+  animation: cm-vs5-burst-button .5s ease-in-out infinite alternate;
+}
+.cm-vs5-burst-button::before {
+  content: ""; position: absolute; inset: 4px; clip-path: inherit;
+  background: radial-gradient(circle at 50% 35%, #ff9a3c, #c2410c 70%, #7c2d12);
+}
+.cm-vs5-burst-button__label { position: relative; font-weight: 900; font-size: 11px; line-height: 1.05; text-align: center; letter-spacing: .02em;
+  text-shadow: 0 1px 0 #7c2d12, 0 0 6px #fde68a; max-width: 44px; overflow-wrap: anywhere; }
+:is(:lang(zh), :lang(ja)) .cm-vs5-burst-button__label { max-width: 2.3em; font-size: 12px; }
+.cm-vs5-burst-button[hidden] { display: none; }
+.cm-vs5-fighter[data-burst-warn="true"] .cm-vs5-burst-gauge__fill { background: linear-gradient(90deg, #f43f5e, #fb923c); animation: cm-vs5-burst-ready .35s ease-in-out infinite alternate; }
+@keyframes cm-vs5-burst-button { from { filter: brightness(.9); transform: scale(1); } to { filter: brightness(1.15); transform: scale(1.06); } }
 @keyframes cm-vs5-burst-ready { from { opacity: .55; } to { opacity: 1; } }
 @keyframes cm-vs5-burst-call-fade { 0%, 100% { opacity: 0; } 10%, 85% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
   .cm-vs5-burst-call.is-live { animation-name: cm-vs5-burst-call-fade; }
   .cm-vs5-fighter[data-burst-ready="true"] .cm-vs5-burst-gauge__fill { animation: none; }
+  .cm-vs5-burst-button, .cm-vs5-fighter[data-burst-warn="true"] .cm-vs5-burst-gauge__fill { animation: none; }
 }

@@ -17,6 +17,9 @@ import {CHAMPIONSHIP_MODERN_SAVE_KEY} from '../src/championship/app/championship
 import {createFullQaSaveText} from '../scripts/lib/championshipFullQaSave.mjs';
 import {createNativeRaisingStarter} from '../src/championship/raising/nativeRaisingStarter.js';
 import {restoreChannelRng} from '../src/championship/battle/battleRngChannel.js';
+import {createDataArenaSimulation} from '../src/championship/modes/dataArena/dataArenaSimulation.js';
+import {createBattleBurst,BATTLE_BURST_V1,BATTLE_BURST_FRAMES,BATTLE_BURST_WRAP_FRAMES,BATTLE_BURST_CHAIN_FRAMES,BATTLE_BURST_MANUAL_FRAMES,
+  BATTLE_BURST_WEAK_FRAMES} from '../src/championship/battle/battleBurst.js';
 
 const read = p => JSON.parse(readFileSync(p, 'utf8'));
 const care = read('docs/research/RAISING_CARE_CPU_CHECK_2026-09-08.json');
@@ -251,3 +254,101 @@ test('the app: feed shards and metals, the ceremony teaches the form, the look s
     }
   } finally { await app.dispose(); }
 });
+
+// ---- battle: manual call, pinch and bond, bloodline perks, the tier-2 chain ----
+
+const slot = (hp = 100, maxHp = 100) => ({currentHp: hp, maxHp, field28: 50});
+function fill(burst, slots, frame = 1) { burst.onHit({attackerSlot: 0, defenderSlot: 1, damage: 100, defenderMaxHp: 100, defenderHp: 50}); return burst.step(frame, slots); }
+function run(burst, slots, from, frames) { const events = []; for (let f = from; f < from + frames; f++) { if (burst.holding()) events.push(...burst.hold(f)); else events.push(...burst.step(f, slots)); } return events; }
+
+test('battle: a manual plan waits READY for the call, at most six seconds, and goes at once in a pinch', () => {
+  const slots = [slot(), slot()];
+  let burst = createBattleBurst({policy: BATTLE_BURST_V1, plans: [{form: 137, tier: 1, manual: true}, null]});
+  assert.deepEqual(fill(burst, slots).map(e => e.kind), ['READY']);
+  assert.equal(burst.snapshot(0, 1).phase, 'READY');
+  assert.equal(burst.request(1), false, 'only a waiting slot');
+  assert.equal(burst.request(0), true);
+  assert.equal(burst.step(2, slots)[0].kind, 'WRAP', 'the call starts the wrap');
+  burst = createBattleBurst({policy: BATTLE_BURST_V1, plans: [{form: 137, tier: 1, manual: true}, null]});
+  fill(burst, slots);
+  assert.equal(run(burst, slots, 2, BATTLE_BURST_MANUAL_FRAMES - 2).some(e => e.kind === 'WRAP'), false);
+  assert.equal(run(burst, slots, BATTLE_BURST_MANUAL_FRAMES, 2).some(e => e.kind === 'WRAP'), true, 'six seconds later it bursts by itself');
+  burst = createBattleBurst({policy: BATTLE_BURST_V1, plans: [{form: 137, tier: 1, manual: true}, null]});
+  fill(burst, slots);
+  slots[0].currentHp = 20;
+  assert.equal(burst.step(3, slots)[0].kind, 'WRAP', 'below 30 % HP it bursts at once');
+  const auto = createBattleBurst({policy: BATTLE_BURST_V1, plans: [{form: 137, tier: 1}, null]});
+  assert.equal(fill(auto, [slot(), slot()])[0].kind, 'WRAP', 'opponents and headless runs burst at once');
+});
+
+test('battle: damage taken in a pinch and a high bond fill the gauge faster', () => {
+  const plain = createBattleBurst({policy: BATTLE_BURST_V1, plans: [null, {form: 137, tier: 1}]});
+  plain.onHit({attackerSlot: 0, defenderSlot: 1, damage: 10, defenderMaxHp: 100, defenderHp: 60});
+  const pinch = createBattleBurst({policy: BATTLE_BURST_V1, plans: [null, {form: 137, tier: 1}]});
+  pinch.onHit({attackerSlot: 0, defenderSlot: 1, damage: 10, defenderMaxHp: 100, defenderHp: 20});
+  assert.equal(plain.snapshot(1).gauge, 20);
+  assert.equal(pinch.snapshot(1).gauge, 30, 'x1.5 below 30 % HP');
+  const bonded = createBattleBurst({policy: BATTLE_BURST_V1, plans: [null, {form: 137, tier: 1, bond: 100}]});
+  bonded.onHit({attackerSlot: 0, defenderSlot: 1, damage: 10, defenderMaxHp: 100, defenderHp: 60});
+  assert.equal(bonded.snapshot(1).gauge, 24, 'full bond: +20 %');
+  const emma = createBattleBurst({policy: BATTLE_BURST_V1, plans: [null, {form: 137, tier: 1, bloodline: 'emma'}]});
+  emma.onHit({attackerSlot: 0, defenderSlot: 1, damage: 10, defenderMaxHp: 100, defenderHp: 60});
+  assert.equal(emma.snapshot(1).gauge, 24, '艾瑪: +20 %');
+  assert.equal(plain.snapshot(1).warn, false);
+  plain.onHit({attackerSlot: 0, defenderSlot: 1, damage: 30, defenderMaxHp: 100, defenderHp: 60});
+  assert.equal(plain.snapshot(1).warn, true, 'a gauge from 80 warns the other side');
+});
+
+test('battle: bloodline perks -- no weakness, a longer burst, a heal, a quicker cooldown, a higher multiplier', () => {
+  const burstOf = bloodline => { const b = createBattleBurst({policy: BATTLE_BURST_V1, plans: [{form: 137, tier: 1, bloodline}, null]}), slots = [slot(), slot()];
+    fill(b, slots); const events = run(b, slots, 2, BATTLE_BURST_WRAP_FRAMES + 1); return {b, slots, events}; };
+  const beta = burstOf('beta'), plain = burstOf(null);
+  assert.equal(beta.b.snapshot(0).phase, 'BURST');
+  run(beta.b, beta.slots, 100, BATTLE_BURST_FRAMES + 2);
+  run(plain.b, plain.slots, 100, BATTLE_BURST_FRAMES + 2);
+  assert.equal(beta.b.snapshot(0).phase, 'SPENT', '貝塔: no weakness');
+  assert.equal(plain.b.snapshot(0).phase, 'WEAK');
+  assert.equal(burstOf('chronoOre').b.snapshot(0).burstFrames, BATTLE_BURST_FRAMES + 240, '時晶: +4 s');
+  assert.equal(burstOf('chronoMetal').events.find(e => e.kind === 'BURST').healPercent, 15, '時鋼: heals 15 %');
+  const alloy = burstOf('chronoAlloy');
+  run(alloy.b, alloy.slots, 200, 20);
+  assert.equal(alloy.slots[0].field28, 47, '時輪: three extra cooldown frames in twenty');
+  const nova = burstOf('supernova');
+  assert.equal(nova.b.scaleDamage({attackerSlot: 0, defenderSlot: 1, damage: 100}), 150, '星核: x1.5 instead of x1.4');
+  assert.equal(plain.b.scaleDamage({attackerSlot: 0, defenderSlot: 1, damage: 100}) <= 140, true);
+  void BATTLE_BURST_WEAK_FRAMES;
+});
+
+test('battle: a tier-2 burst plays through its tier-1 form', () => {
+  const b = createBattleBurst({policy: BATTLE_BURST_V1, plans: [{form: 203, tier: 2, via: 137}, null]}), slots = [slot(), slot()];
+  fill(b, slots);
+  assert.equal(b.snapshot(0).wrapFrames, BATTLE_BURST_WRAP_FRAMES + BATTLE_BURST_CHAIN_FRAMES);
+  const shown = [];
+  for (let f = 0; f < BATTLE_BURST_WRAP_FRAMES + BATTLE_BURST_CHAIN_FRAMES; f++) { shown.push(b.display(0)); b.hold(10 + f); }
+  assert.equal(shown[0], null, 'the 成熟期 while wrapped');
+  assert.ok(shown.includes(137), 'its tier-1 form between the two flashes');
+  assert.equal(b.display(0), 203);
+});
+
+test('arena relay: a ranch partner bursts into its own form, waits for the call, and carries its bloodline', () => {
+  const t1 = burstFormsFor(87).find(f => f.tier === 1), t2 = burstFormsFor(87).find(f => f.tier === 2);
+  const plan = t2 ? {form: t2.form, tier: 2, via: t2.via, bloodline: 'chronoMetal', bond: 50} : {form: t1.form, tier: 1, bloodline: 'chronoMetal'};
+  const relay = (plans, manual = true) => createDataArenaSimulation({mode: 'RELAY', partnerId: 'relay-species-087', relayReserveId: 'relay-species-096',
+    relayArenaId: 'field_bm02_01', seed: 5, relayBurstPlans: plans, relayManualBurst: manual});
+  const sim = relay({'relay-species-087': plan});
+  assert.equal(sim.getSnapshot().relay.burst.form, plan.form, 'its own learned form');
+  let ready = false;
+  for (let i = 0; i < 60 * 150 && !ready; i++) { sim.step({}); ready = sim.drainEvents().some(e => e.type === 'BURST_READY' && e.side === 'player'); }
+  assert.ok(ready, 'the gauge fills and waits for the call');
+  assert.equal(sim.getSnapshot().relay.burst.phase, 'READY');
+  assert.ok(sim.getSnapshot().relay.burst.readyLeft > 0);
+  sim.step({burst: true});
+  const burst = sim.drainEvents().find(e => e.type === 'BURST' && e.side === 'player');
+  assert.ok(burst, 'the call bursts at once');
+  assert.equal(burst.bloodline, 'chronoMetal');
+  assert.equal(burst.via, plan.via ?? null, 'a tier-2 form plays through its tier-1 form');
+  assert.equal(sim.getSnapshot().relay.burst.phase, 'BURST');
+  assert.equal(relay({'relay-species-087': null}).getSnapshot().relay.burst, null, 'a partner that learned no form does not burst');
+  assert.equal(relay({}).getSnapshot().relay.burst.form, t1.form, 'a Dex-only entry keeps its first tier-1 form');
+});
+

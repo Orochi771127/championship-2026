@@ -7,6 +7,8 @@
 // phaseFrame), so it holds with the battle and replays identically; no timer or Math.random is used.
 
 const WRAP_END = 42, CRACK_END = 63;            // wrapFrame 0..41 wrap, 42..62 crack, 63..71 flash
+// A tier-2 chain (wrapFrames > 72) then shows its tier-1 form in a ring of light and flashes again.
+const CHAIN_START = 72;
 const SCATTER_FRAMES = 30, SHATTER_FRAMES = 24;
 const PALETTE = Object.freeze({
   1: {plate: 0x5b9cf0, edge: 0x1e3a8a, seam: 0xbfe3ff, flash: 0xffffff},
@@ -54,6 +56,12 @@ function onSphere(cell) {
   const light = Math.max(0, -0.42 * x - 0.5 * y + 0.76 * z);
   return {x, y, shade: 0.35 + 0.65 * light, squash: 0.55 + 0.45 * z};
 }
+// A bloodline's colour (#rrggbb) tints the plates (awakening raising, Owner 2026-11-02).
+function paletteFor(tier, color) {
+  const base = PALETTE[tier] ?? PALETTE[1];
+  const tint = typeof color === 'string' && /^#[0-9a-f]{6}$/i.test(color) ? parseInt(color.slice(1), 16) : null;
+  return tint === null ? base : {plate: mix(base.plate, tint, 0.92), edge: mix(0x1b1b2e, tint, 0.5), seam: mix(0xffffff, tint, 0.35), flash: base.flash};
+}
 // Mix two 0xRRGGBB colours: t = 0 gives a, 1 gives b.
 function mix(a, b, t) {
   const k = clamp01(t), ch = s => Math.round(((a >> s) & 255) * (1 - k) + ((b >> s) & 255) * k);
@@ -73,8 +81,8 @@ export function createBattleBurstShell({PIXI, layer, reducedMotion = false}) {
     return entry;
   }
 
-  function drawWrap(g, {x, y, radius, tier, slot}, wrapFrame) {
-    const colors = PALETTE[tier] ?? PALETTE[1], n = CELLS.length;
+  function drawWrap(g, {x, y, radius, tier, slot, color}, wrapFrame) {
+    const colors = paletteFor(tier, color), n = CELLS.length;
     const crack = clamp01((wrapFrame - WRAP_END) / (CRACK_END - WRAP_END));
     const flash = clamp01((wrapFrame - CRACK_END) / 8);
     const pulse = 1 + 0.035 * Math.sin(crack * Math.PI * 6) * crack;
@@ -119,8 +127,21 @@ export function createBattleBurstShell({PIXI, layer, reducedMotion = false}) {
     }
   }
 
-  function drawScatter(g, {x, y, radius, tier, slot}, frame, total, scale = 1) {
-    const colors = PALETTE[tier] ?? PALETTE[1], t = clamp01(frame / total);
+  // The chain's middle: the tier-1 form stands in a ring of light, then a second flash grows over it.
+  function drawChain(g, {x, y, radius, tier, color}, wrapFrame, wrapFrames) {
+    const colors = paletteFor(tier, color), t = clamp01((wrapFrame - CHAIN_START) / Math.max(1, wrapFrames - CHAIN_START));
+    const fade = clamp01(1 - (wrapFrame - CHAIN_START) / 4), second = clamp01((t - 0.5) / 0.5);
+    if (fade > 0) { g.circle(x, y, radius * 1.9); g.fill({color: colors.flash, alpha: 0.5 * fade}); }
+    for (let ring = 0; ring < 2; ring++) {
+      const k = reducedMotion ? 0.5 : (t * 1.6 + ring * 0.35) % 1;
+      g.circle(x, y, radius * (0.8 + k * 0.9));
+      g.stroke({width: Math.max(1, radius * 0.06 * (1 - k)), color: colors.seam, alpha: 0.85 * (1 - k)});
+    }
+    if (second > 0) { g.circle(x, y, radius * (0.6 + second * 1.2)); g.fill({color: colors.flash, alpha: 0.9 * second}); }
+  }
+
+  function drawScatter(g, {x, y, radius, tier, slot, color}, frame, total, scale = 1) {
+    const colors = paletteFor(tier, color), t = clamp01(frame / total);
     if (t >= 1) return;
     const k = easeOutCubic(t);
     if (!reducedMotion) {
@@ -142,16 +163,19 @@ export function createBattleBurstShell({PIXI, layer, reducedMotion = false}) {
   return Object.freeze({
     /**
      * One combatant's shell for this frame. `burst` is the published combatant.burst; x/y is the body centre in
-     * the actor layer. Returns 'BURST' on the frame the shell blows open (the scene shakes the camera then).
+     * the actor layer; `color` (#rrggbb) is the partner's bloodline. Returns 'BURST' on the frame the shell blows
+     * open (the scene shakes the camera then).
      */
-    update(slot, {x, y, width, height, zIndex, burst}) {
+    update(slot, {x, y, width, height, zIndex, burst, color = null}) {
       if (!burst) { this.retire(slot); return null; }
       const entry = graphicFor(slot), g = entry.g;
       g.clear();
       g.zIndex = zIndex;
-      const radius = Math.max(18, Math.max(width, height) * 0.62), shape = {x, y, radius, tier: burst.tier, slot};
+      const radius = Math.max(18, Math.max(width, height) * 0.62), shape = {x, y, radius, tier: burst.tier, slot, color};
       let cue = null;
-      if (burst.phase === 'WRAP' && Number.isFinite(burst.wrapFrame)) drawWrap(g, shape, burst.wrapFrame);
+      if (burst.phase === 'WRAP' && Number.isFinite(burst.wrapFrame) && burst.wrapFrames > CHAIN_START && burst.wrapFrame >= CHAIN_START)
+        drawChain(g, shape, burst.wrapFrame, burst.wrapFrames);
+      else if (burst.phase === 'WRAP' && Number.isFinite(burst.wrapFrame)) drawWrap(g, shape, burst.wrapFrame);
       else if (burst.phase === 'BURST' && Number.isFinite(burst.phaseFrame)) {
         if (entry.lastPhase !== 'BURST') cue = 'BURST';
         drawScatter(g, shape, burst.phaseFrame, SCATTER_FRAMES);

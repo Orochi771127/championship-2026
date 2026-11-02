@@ -873,3 +873,18 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-overlay[data-palette="arcade"] .da-result--victory .da-title { color:#fff; -webkit-text-stroke:6px var(--ink); paint-order:stroke fill; text-shadow:0 4px 0 var(--ink); }
 .da-overlay[data-palette="arcade"] :is(.da-result--defeat, .da-result--timeout) .da-title { color:#c0283a; }
 .da-overlay[data-palette="arcade"] .da-panel--loading { color:var(--ink); }
+
+/* Awakening raising (2026-11-02): the burst call. Touch: a 56px disc beside the switch (left thumb); it fills with the
+   gauge, glows while READY and empties over the wait. Desktop: a slot beside the switch (key B). */
+.da-root:not([data-mode="RELAY"]) :is(.da-relay-burst,.da-tbtn--burst) { display:none; }
+.da-root[data-mode="RELAY"] .da-tbtn--burst { left:calc(max(16px,env(safe-area-inset-left)) + 84px); bottom:calc(var(--da-control-bottom) + 148px); width:56px; height:56px;
+  border-color:#ffb52e; background:conic-gradient(#ffb52ecc calc(var(--burst, 0) * 360deg), #102e49c9 0); }
+.da-root[data-mode="RELAY"] .da-tbtn--burst.is-ready { border-color:#fff3b0; box-shadow:0 0 14px #ffb52e; animation:da-burst-ready .45s ease-in-out infinite alternate; }
+.da-relay-burst { border-color:#ffb52e; }
+.da-relay-burst.is-ready { box-shadow:0 0 12px #ffb52e; animation:da-burst-ready .45s ease-in-out infinite alternate; }
+/* Above the relay buttons' own display rule: a fighter that cannot burst has no call. */
+.da-root[data-mode="RELAY"] :is(.da-tbtn--burst,.da-relay-burst)[hidden] { display:none; }
+@keyframes da-burst-ready { from { filter:brightness(.95); } to { filter:brightness(1.25); } }
+@media (prefers-reduced-motion: reduce) { :is(.da-tbtn--burst,.da-relay-burst).is-ready { animation:none; } }
+/* A call-out never breaks inside a Chinese or Japanese word (爆裂進化！冰砲狼 breaks after the mark). */
+.da-banner { word-break: keep-all; }

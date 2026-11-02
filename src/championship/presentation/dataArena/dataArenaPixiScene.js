@@ -27,9 +27,13 @@ import { reviewedReleasePoint, releaseOffset, reviewedIdleBreath, reviewedWinHop
 import { RELAY_ACTION_PROFILES, relaySequence, relayEffectStyle } from '../../modes/dataArena/dataArenaRelay.js';
 import { RELAY_ROSTER, relayPartner } from '../../modes/dataArena/dataArenaRelayRoster.js';
 import { createBattleBurstShell } from '../vs5/battleBurstShell.js';
+import { GACHA_BLOODLINES } from '../../gacha/cyberGacha.js';
 // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): the hex shell closes over the 成熟期 for this long before
 // its form stands in; then the plates scatter. The match itself never pauses.
 const ARENA_BURST_REVEAL_SECONDS = 0.6, ARENA_BURST_SCATTER_SECONDS = 0.5, ARENA_BURST_SHATTER_SECONDS = 0.4;
+// A tier-2 burst shows its tier-1 form for this long before the second flash (awakening raising, 2026-11-02).
+const ARENA_BURST_CHAIN_SECONDS = 0.3;
+const arenaReveal = burst => ARENA_BURST_REVEAL_SECONDS + (burst?.via != null ? ARENA_BURST_CHAIN_SECONDS : 0);
 
 const T = DATA_ARENA_TERRAIN;
 const TAU = Math.PI * 2;
@@ -114,12 +118,15 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   /** The shell for one fighter from its burst record (relay): wrap, then scatter; a short shatter when it ends. */
   function drawArenaBurstShell(key, body, burst, role) {
     const height = ROLE_HEIGHT[role] ?? 80, centerY = body.y - floorOffset(body.x, body.y) - height * 0.5;
-    const shape = { x: body.x, y: centerY, width: height * 0.8, height, zIndex: body.y + 0.5 };
-    const since = burst && burst.startedAt !== null ? state.time - burst.startedAt : Infinity;
-    if (burst?.phase === 'BURST' && since < ARENA_BURST_REVEAL_SECONDS) {
-      burstShell.update(key, { ...shape, burst: { phase: 'WRAP', tier: burst.tier, wrapFrame: since / ARENA_BURST_REVEAL_SECONDS * 72, wrapFrames: 72 } });
-    } else if (burst?.phase === 'BURST' && since < ARENA_BURST_REVEAL_SECONDS + ARENA_BURST_SCATTER_SECONDS) {
-      burstShell.update(key, { ...shape, burst: { phase: 'BURST', tier: burst.tier, phaseFrame: (since - ARENA_BURST_REVEAL_SECONDS) * 60 } });
+    const shape = { x: body.x, y: centerY, width: height * 0.8, height, zIndex: body.y + 0.5, color: GACHA_BLOODLINES[burst?.bloodline]?.color ?? null };
+    const since = burst && burst.startedAt !== null ? state.time - burst.startedAt : Infinity, reveal = arenaReveal(burst);
+    if (burst?.phase === 'BURST' && since < reveal) {
+      // The wrap runs 0.6 s; a tier-2 chain adds its tier-1 form's 0.3 s (frames 72..89 of the shell).
+      const frames = burst.via != null ? 90 : 72, wrapFrame = since < ARENA_BURST_REVEAL_SECONDS ? since / ARENA_BURST_REVEAL_SECONDS * 72
+        : 72 + (since - ARENA_BURST_REVEAL_SECONDS) / ARENA_BURST_CHAIN_SECONDS * 18;
+      burstShell.update(key, { ...shape, burst: { phase: 'WRAP', tier: burst.tier, wrapFrame, wrapFrames: frames } });
+    } else if (burst?.phase === 'BURST' && since < reveal + ARENA_BURST_SCATTER_SECONDS) {
+      burstShell.update(key, { ...shape, burst: { phase: 'BURST', tier: burst.tier, phaseFrame: (since - reveal) * 60 } });
     } else if (burst?.phase === 'WEAK' && state.time - (burst.until - 5) < ARENA_BURST_SHATTER_SECONDS) {
       burstShell.update(key, { ...shape, burst: { phase: 'WEAK', tier: burst.tier, phaseFrame: (state.time - (burst.until - 5)) * 60 } });
     } else burstShell.retire(key);
@@ -1088,8 +1095,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     // with the bundle scope and all views are destroyed with this scene.
     // Burst evolution: once the shell has closed, the form's view stands in for the bursting 成熟期.
     const playerBurst = state.gameMode === 'RELAY' ? state.relay?.team?.[state.relay.active]?.burst ?? null : null;
-    const shownPartnerId = playerBurst?.phase === 'BURST' && state.player.burstPartnerId && state.time - playerBurst.startedAt >= ARENA_BURST_REVEAL_SECONDS
-      && cast.partners.some(m => m.partnerId === state.player.burstPartnerId) ? state.player.burstPartnerId : state.player.partnerId;
+    // A tier-2 chain shows its tier-1 form between the two flashes.
+    const burstSince = playerBurst?.phase === 'BURST' && state.player.burstPartnerId ? state.time - playerBurst.startedAt : -1;
+    const wantedPartnerId = burstSince >= arenaReveal(playerBurst) ? state.player.burstPartnerId
+      : burstSince >= ARENA_BURST_REVEAL_SECONDS && playerBurst?.via != null ? `relay-species-${String(playerBurst.via).padStart(3, '0')}` : null;
+    const shownPartnerId = wantedPartnerId && cast.partners.some(m => m.partnerId === wantedPartnerId) ? wantedPartnerId : state.player.partnerId;
     if (state.gameMode === 'RELAY' && shownPartnerId !== partnerId) {
       playerView.container.visible = false;
       partnerId = shownPartnerId;
@@ -1146,7 +1156,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     for (const rival of state.rivals) {
       // Burst evolution: a bursting rival is drawn as its form once the shell has closed.
       const rb = state.gameMode === 'RELAY' ? rival.burst ?? null : null;
-      const formMember = rb?.phase === 'BURST' && rival.burstSpeciesId && state.time - rb.startedAt >= ARENA_BURST_REVEAL_SECONDS
+      const formMember = rb?.phase === 'BURST' && rival.burstSpeciesId && state.time - rb.startedAt >= arenaReveal(rb)
         ? cast.partners.find((entry) => entry.speciesId === rival.burstSpeciesId) : null;
       const viewKey = formMember ? `${rival.id}:${rival.burstSpeciesId}` : rival.id;
       let actorView = rivalViews.get(viewKey);

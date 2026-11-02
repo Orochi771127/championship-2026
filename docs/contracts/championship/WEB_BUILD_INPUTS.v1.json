@@ -491,6 +491,7 @@
     "src/championship/raising/nativeRaisingWaste.js",
     "src/championship/raising/nativeTutorialRaisingActor.js",
     "src/championship/raising/productGrowthPolicy.js",
+    "src/championship/raising/productTrainingPolicy.js",
     "src/championship/raising/raisingGroundReview.js",
     "src/championship/raising/raisingHomeDefinition.js",
     "src/championship/raising/raisingHomePersistenceR2.js",
@@ -8712,6 +8713,7 @@
     "src/championship/raising/nativeRaisingWaste.js",
     "src/championship/raising/nativeTutorialRaisingActor.js",
     "src/championship/raising/productGrowthPolicy.js",
+    "src/championship/raising/productTrainingPolicy.js",
     "src/championship/raising/raisingGroundReview.js",
     "src/championship/raising/raisingHomeDefinition.js",
     "src/championship/raising/raisingHomePersistenceR2.js",
@@ -39454,7 +39456,7 @@
       },
       {
         "path": "src/championship/app/battlePresentationSource.js",
-        "sha256": "ac47e5869b066714fb27e7bc90b03dca97e6d4c422f00902e9dfe7fd7976917a"
+        "sha256": "ed44fb8f9219affceded969c005750e1a6988434a14ab64454ad3370687f8886"
       },
       {
         "path": "src/championship/app/battleRosterSource.js",
@@ -39462,7 +39464,7 @@
       },
       {
         "path": "src/championship/app/battleRuntime.js",
-        "sha256": "faede2458bfd85b9c09bb27660ce964d144333acbb9a97facae5dfbe546e0d84"
+        "sha256": "0592fb29e7bd5940fa41d625a1f706d256c4cfb915811345ab75bb1e2332143f"
       },
       {
         "path": "src/championship/app/bindRewardPopup.js",
@@ -39498,7 +39500,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "c3fd9a22ad5229bf687e7c44dc78d92916bb772b9150ebec1ae33138d73e6739"
+        "sha256": "cc09773bd3ff7a437232783705111c6442d09d26e2539c69790b722cd3c25686"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -39542,11 +39544,11 @@
       },
       {
         "path": "src/championship/app/dataArena.css",
-        "sha256": "53bb7848e8747247d84d60dd0ff57a6ee27f0886aacd1d22cc3e8e25170798aa"
+        "sha256": "9cd04ceae00ab53ec081654817213a7b5a3036f7a45290420e1b35b67decf394"
       },
       {
         "path": "src/championship/app/dataArenaScreen.js",
-        "sha256": "af0ba7c24001993d78a9a9a442a4d26ab3cd3171c0d93a3912844c36e359ec4f"
+        "sha256": "900be3967d7bc1122c73309397c2a4cf275edd03a3b1919b111922a03f8e2a1e"
       },
       {
         "path": "src/championship/app/daylightSkin.css",
@@ -39554,7 +39556,7 @@
       },
       {
         "path": "src/championship/app/digimonListScreen.js",
-        "sha256": "3eee7b82a4c491bd447ae58b5eac5794404f6720cee829a3b893717c71296800"
+        "sha256": "b79f033df9140707043dd1c6e267cd1bf6bef130100e1a6e0154ba3f1f38929c"
       },
       {
         "path": "src/championship/app/downloadSaveBackup.js",
@@ -39650,7 +39652,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "4bca968d5095d2b29e62d5dc0321f5d3cb0379ff11614db96420c018c89d6991"
+        "sha256": "12525f6f0f43ea8f1e3cd8f1ea9e425217edcb0c7391205664217d749c745a8f"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -39754,7 +39756,7 @@
       },
       {
         "path": "src/championship/app/raisingPresentationSource.js",
-        "sha256": "7049feb4e9e3309c13c7399f724ce64021f99b15c8661981a448ac28fdba0c43"
+        "sha256": "d5f025fcb01a9c6e5434cfca53866e884b73bdde05aec66c21d49ff69939c0e4"
       },
       {
         "path": "src/championship/app/ranchBackpack.js",
@@ -39838,7 +39840,7 @@
       },
       {
         "path": "src/championship/app/styles.css",
-        "sha256": "3091d722a9cef668962b00508272333f3b46b40350a66007f03ccab173808f1b"
+        "sha256": "f586b6fc166931b8ce16465612e8605489aaa441d93ec65458b7eb1179ef3dd7"
       },
       {
         "path": "src/championship/app/tamerInfoScreen.js",
@@ -39946,15 +39948,15 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "7e901a402563d6903fc2dcb3237c17977f0599292139b8240176a365fddc6c40"
+        "sha256": "eb5b6f748ea71c8a903200b5e26004f68cf61d79c4964e42c9d1b1624ea35fd7"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
-        "sha256": "8e7aa5799ca0281aae85e1191fafb98f634c1828561815320600f12f8b8a559a"
+        "sha256": "666051a2d46ea1627a65a467aa2f4a22ec2d5823f1c3768ca5ab78200a206a64"
       },
       {
         "path": "src/championship/app/vs5Styles.css",
-        "sha256": "59f58745391da5b69a7ab36290ec03fc48c1f758d2aa539355b42a2bca3c3f1b"
+        "sha256": "6953e410235667cee465d93b6af6d78f441c0ef94382b4a6f1d9a4e3a0e1910d"
       },
       {
         "path": "src/championship/app/webAppInstall.js",
@@ -39974,7 +39976,7 @@
       },
       {
         "path": "src/championship/battle/battleBurst.js",
-        "sha256": "818e4e5f38d61d625b06b2af4825e4b607765b8fa34981710ac7dad35eed2e99"
+        "sha256": "a4adee17495c1c4e5108e075551892d428f704ad8175e69d29c6039afeec5e42"
       },
       {
         "path": "src/championship/battle/battleCandidateBuckets.js",
@@ -40250,7 +40252,7 @@
       },
       {
         "path": "src/championship/contracts/productBurstEvolution.js",
-        "sha256": "83ffd72025f4ce9274eddfe8a6b94537d77c71647885119e930c1e913e1b5001"
+        "sha256": "34d8b59e330f9dac64e11e24b0bf4acc0ec188c85d81db933d1a4299676b8365"
       },
       {
         "path": "src/championship/contracts/productGrowthRules.js",
@@ -40574,7 +40576,7 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaEligibility.js",
-        "sha256": "c0d18f4680df6a858ca64e61e6c9fed76e3a7f16963036d6b772bab3c5a5c286"
+        "sha256": "e4678b6c5b7f3cd4ad36a5448173fe5659bbf282987fc6b593cf23238ac0cf2f"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaGrid.js",
@@ -40618,7 +40620,7 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaSimulation.js",
-        "sha256": "d6f88c1ce878fc3747a73115d05849aa26840f30c66d262e065e23c1b7db42e7"
+        "sha256": "b5067e559dbe15a064644e75a3199f423ad49add80437954d7f0aa97b48a2d12"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaUpgrades.js",
@@ -40810,7 +40812,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-        "sha256": "29bacacdf206606c311cc41e3be542dec03f6f9a8b62e02685a88bfbd7382a0f"
+        "sha256": "53ec1c357469bc1b27aed6717c5e2ac63a8d8ac1d31fb87b3f9e3bf698973488"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
@@ -40878,7 +40880,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "498d85dd516089f929def608ea01a53286634e1cbc25ab2b30ebbbbe5a154c33"
+        "sha256": "a383c87023b9b0420e2cc74a24c03a23a9b6065e390772ca8c9e1a8b91648e0a"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingContactShadow.js",
@@ -41310,7 +41312,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/battleBurstShell.js",
-        "sha256": "f76664b1b4c94508eebd32a172771b389228f73ecfcc82ba203e4b7dee185084"
+        "sha256": "db4b681d6a560013c130e873e71b899c068db723d33aa2de03e72b0391835bf5"
       },
       {
         "path": "src/championship/presentation/vs5/battleCubeArt.js",
@@ -41322,7 +41324,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
-        "sha256": "d42cb42319e19c616d6ed402e13e05eb5c6d558d72518b0acbb295ff07387a20"
+        "sha256": "0d50079c97b1f32deedac8f0c72a626016c9a1d3fde183e49c566bf427749067"
       },
       {
         "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
@@ -41362,7 +41364,7 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingActor.js",
-        "sha256": "229bcd621963ef70aaf60f3d3382f17cf7fd31ae8493ae46c805902488542175"
+        "sha256": "867ccf81d1147d0be8bfb66cb8abe24305acc641926911b7df0da5dc85ecc9f9"
       },
       {
         "path": "src/championship/raising/nativeRaisingCalendar.js",
@@ -41434,7 +41436,7 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingTraining.js",
-        "sha256": "a1e3a414a8f23575f06a2e712148a8c33bf2f73968e91c47655a1b8811e6bd52"
+        "sha256": "a9221ad353ba6b7be600e5f9b407a59b4c061ca9906239dd8fb491c2722e85ee"
       },
       {
         "path": "src/championship/raising/nativeRaisingTreatment.js",
@@ -41451,6 +41453,10 @@
       {
         "path": "src/championship/raising/productGrowthPolicy.js",
         "sha256": "17461df25b74c70ad9792f008ff77b95ed77529f1dcb6361403e7af9399d04d8"
+      },
+      {
+        "path": "src/championship/raising/productTrainingPolicy.js",
+        "sha256": "014d42061d183012a5b294fa4df3e7c4e6a73abc9f5a78c5367aa42c6ae81ed5"
       },
       {
         "path": "src/championship/raising/raisingGroundReview.js",
@@ -41534,7 +41540,7 @@
       },
       {
         "path": "src/championship/text/dataArenaText.js",
-        "sha256": "6f80e5f99ae8e76384ba1201fdb2fe560c2fb418f7fbf7f6b6ee2ff223b22e79"
+        "sha256": "37e83b6b393fee0bb2e85b804999798563f31f1b1fe24ae1ccfaf0a7b59e9789"
       },
       {
         "path": "src/championship/text/evolutionPresentationText.js",
@@ -41658,23 +41664,23 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "1fb638552a5ded2a4287649d35f7ab6d07ca729d4ab007ea7e82b50cc7289491"
+        "sha256": "1d9253105ae020c2919a6dc807111b7ae1ec31b5cc0fd5030011a991e60e377f"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "6e8c996ef61ee031f3d16ccfceb8d246fb040c92d7bb9d8700766400d533d65f"
+        "sha256": "20c4980be829cf602ddec631241e94e531afce8be45569fbc89e00f9458200d1"
       },
       {
         "path": "src/championship/text/uiText.js",
-        "sha256": "52dbe92c03f14b3f11556bc3b1d4fae8bab21e342d70ca5cf3fc89f0f484ce27"
+        "sha256": "48b6c2a1a97d7b8a5ed52e1caedca0b934551148f773fca9241b178fef0fe9cd"
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "a84a15d63030d504042d0e3f90776aec7ae434c0e69bda97665bb7d375dd21b8"
+        "sha256": "a6f8cadf962fc45bee956c7019a63d3fdfaece0e47a496bcb4da3bd8a2f9c623"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "e4abc523e34c5536f75ad00ea6c6bb4126f688290519f31cf9ec2ff8716875f4"
+        "sha256": "5e18c74bf4a7892d4d7c41afb4cc00503a80dfab89bd9db001ab208153b61e3e"
       },
       {
         "path": "src/championship/text/zhHant.js",
@@ -41918,7 +41924,7 @@
       },
       {
         "path": "src/data/championship/product-burst-evolution.r1.json",
-        "sha256": "353d9f1b9a496a96e26e18f57b4aec967f9107b948270c9602f0a2035fa1c939"
+        "sha256": "12f365a05cf4943f5efc5dce29ca31223674b2ac2cbff862a74cea4c928c0d29"
       },
       {
         "path": "src/data/championship/product-growth-adaptations.r1.json",
