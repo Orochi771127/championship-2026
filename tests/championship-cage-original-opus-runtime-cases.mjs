@@ -14,6 +14,7 @@ import { validateRuntimeMapArtBundle } from '../src/championship/presentation/ru
 import { getOriginalCageVisualBinding } from '../src/championship/presentation/originalCageVisualBindings.js';
 import { listCageDefinitions } from '../src/championship/cage/cageCatalog.js';
 import { cageUiImage } from '../src/championship/presentation/cageUiArt.js';
+import threeUi from '../assets/production/public-runtime/cage-ui-three.v1.json' with { type: 'json' };
 
 const sha = (path) => createHash('sha256').update(fs.readFileSync(path)).digest('hex').toUpperCase();
 
@@ -38,7 +39,8 @@ test('every cage definition binds to a field of the new bundle', () => {
   for (const definition of definitions) {
     const binding = getOriginalCageVisualBinding(definition.cageDefinitionIndex);
     assert.ok(ids.has(binding.fieldId), binding.fieldId);
-    assert.equal(cageUiImage(definition.moduleId),(selectedRanchSportsField(binding.fieldId)??manifest.fields.find(f=>f.fieldId===binding.fieldId)).frames[0].src);
+    // Owner 2026-11-02: the UI shows the 3D render of the field the cage binds to.
+    assert.equal(cageUiImage(definition.moduleId),threeUi.fields.find(f=>f.fieldId===binding.fieldId).frame.src);
   }
 });
 

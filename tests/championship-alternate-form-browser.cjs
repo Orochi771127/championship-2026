@@ -3,9 +3,9 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require('playwright');
 const {createHash}=require('node:crypto');
-const {resolveAsset,assertEvolved,assertBattleLoaders}=require('./alternate-form-browser-support.cjs');
+const {resolveAsset,assertMigrated,assertBattleLoaders}=require('./alternate-form-browser-support.cjs');
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest');
-const {validatedPair,assertCurrentPublicBattleLoaders}=require('./alternate-form-compiled-support.cjs');
+const {validatedPair,assertBurstBattleLoaders}=require('./alternate-form-compiled-support.cjs');
 const {webRenditions}=require('./helpers/dex-web-renditions.cjs');
 const qaRoot=path.resolve(process.env.CHAMPIONSHIP_ALTERNATE_QA_ARTIFACT||'.tmp/alternate-form-compiled-qa');
 const output=require('./browser-qa-output.cjs')('alternate-forms');fs.mkdirSync(output,{recursive:true});
@@ -50,6 +50,10 @@ async function alternateAwaitReady(api){
  const coreAsset=entry=>{const {blockers,...core}=entry;return core;};
  assert.deepEqual(readCatalog('src/data/championship/alternate-form-assets.r1.json').characters.map(coreAsset),readCatalog('qa/alternate-form-asset-catalog.json').characters.map(coreAsset),'QA and production must use the same four action/geometry/own-art configurations');
  const fixture=JSON.parse(fs.readFileSync(pair.resolve('/qa/alternate-form-save.json')));
+ // OWNER_APPROVED_ADAPTATION 2026-11-02 (STAGE_REDESIGN_BURST_20261102): 覺醒體/究極體 -- 229/230 included -- are battle burst
+ // forms. The fixture's 211/222/229/230/139/144 partners load as their 成熟期 with those forms unlocked; nothing evolves into 229/230.
+ const burstTable=JSON.parse(fs.readFileSync('src/data/championship/product-burst-evolution.r1.json','utf8'));
+ const burstBase=form=>burstTable.bases.find(entry=>entry.forms.some(f=>f.form===form||f.alternates?.includes(form))).base;
  assert.equal(fixture.raising.collection.find(i=>i.instanceId.endsWith(':0005')).speciesId,'species-139');
  assert.equal(fixture.raising.collection.find(i=>i.instanceId.endsWith(':0006')).speciesId,'species-144');
  const server=await pair.serve();let browser,context,page;
@@ -137,9 +141,10 @@ async function alternateAwaitReady(api){
    for(const viewport of [{width:844,height:390},{width:390,height:844}]){
     await page.setViewportSize(viewport);
     for(const id of [222,230,211,229]){await select(id);await capture(detail.locator('.cm-dex-hero'),id,'hero',viewport);await capture(detail.locator('.cm-dex-routes__source .cm-dex-portrait'),id,'source-preview',viewport);}
-    for(const [source,ids] of [[139,[211,229]],[144,[222,230]]]){
+    // OWNER_APPROVED_ADAPTATION 2026-11-02: the four forms are burst forms on their 成熟期's page (each alternate beside its form).
+    for(const [source,ids] of [[burstBase(211),[211,229]],[burstBase(222),[222,230]]]){
      await select(source);
-     for(const id of ids){const target=detail.locator(`.cm-dex-routes__target[aria-label^="${codes.get(id)} · "]`);assert.equal(await target.count(),1);assert.equal(await target.getAttribute('data-revealed'),'true');await capture(target.locator('.cm-dex-portrait'),id,'evolution-choice-preview',viewport);}
+     for(const id of ids){const target=detail.locator(`.cm-dex-burst__target[aria-label^="${codes.get(id)} · "]`);assert.equal(await target.count(),1);assert.equal(await target.getAttribute('data-revealed'),'true');await capture(target.locator('.cm-dex-portrait'),id,'burst-form-preview',viewport);}
     }
    }
    evidence.dexIdentityAfter=await identitySnapshot();assert.deepEqual(evidence.dexIdentityAfter,evidence.dexIdentityBefore,'Read-only Dex navigation must not change saved identity or registration');
@@ -169,34 +174,22 @@ async function alternateAwaitReady(api){
   if(!evidence.gpu.some(g=>g.available&&!g.lost&&!/Disabled/i.test(JSON.stringify(g))))throw Error('BLOCKED_GPU: standard official Chromium has no usable WebGL');
   assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);
   await boot();
-  for(const target of [229,230]){
-   const button=page.locator(`.int-rh2-evolution-choice__option[data-species-index="${target}"]`);
-   await button.waitFor({state:'visible',timeout:180000});
-   for(const viewport of [{width:844,height:390},{width:390,height:844}]){
-    await page.setViewportSize(viewport);
-    const boxes=await page.locator('.int-rh2-evolution-choice__option:visible').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height,text:n.textContent,position:getComputedStyle(n).position};}));
-    assert.equal(boxes.length,2);assert.ok(boxes.every(b=>b.width>0&&b.height>0&&b.text.trim()&&b.position!=='absolute'));
-    const [a,b]=boxes;assert.ok(a.right<=b.x||b.right<=a.x||a.bottom<=b.y||b.bottom<=a.y,'Choice buttons must not overlap');
-    assert.ok(boxes.every(b=>b.x>=0&&b.right<=viewport.width&&b.y>=0&&b.bottom<=viewport.height),'Choices must fit viewport');
-    evidence.assertions.push({choice:target,viewport,boxes});await shot(`choice-${target}-${viewport.width}`);
-   }
-   await button.focus();assert.equal(await button.evaluate(n=>n===document.activeElement),true);await button.press('Enter');
-   // The reveal: the classic ceremony, or the arcade evolution runner that
-   // replaces it (2026-10-28) and plays over the native sequence itself.
-   const ceremony=page.locator('.cm-ceremony[data-kind="evolve"], .cm-morph').first();
-   await ceremony.waitFor({state:'visible',timeout:120000});await ceremony.waitFor({state:'hidden',timeout:20000});
-  }
   await page.setViewportSize({width:844,height:390});
   await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="saveQuit"]').click();await page.locator('#cm-login').waitFor({state:'visible'});
   const saved=await page.evaluate(key=>JSON.parse(sessionStorage.getItem(key)),qaKey);
   assert.equal(saved.schemaVersion,7);
   assert.equal(saved.cageEdit?.layoutVersion,'PRODUCT_HEX_WORLD_V1');
   assert.deepEqual(saved.shop?.cageQuantities,Object.fromEntries(fixture.shop.cageOwned.map(index=>[index,1])));
-  for(const [suffix,species]of [['0005','species-229'],['0006','species-230']])assert.equal(saved.raising.collection.find(i=>i.instanceId.endsWith(':'+suffix)).speciesId,species);
+  for(const [suffix,form]of [['0001',211],['0002',222],['0003',229],['0004',230]]){
+   const id=`championship:2026:instance:${suffix}`;
+   assert.equal(saved.raising.collection.find(i=>i.instanceId===id).speciesId,`species-${String(burstBase(form)).padStart(3,'0')}`,`${suffix} returns to its 成熟期`);
+   assert.ok(saved.progression.burstEvolution.unlocks[id].includes(form),`${suffix} keeps ${form} as a burst form`);
+   assert.equal(saved.progression.burstEvolution.preferred[id],form,`${suffix} still bursts into ${form}`);
+  }
   await page.reload({waitUntil:'domcontentloaded'});await boot();
   const reloaded=await diagnostics('save-reload-evolved');
   const reloadedSaved=await page.evaluate(key=>JSON.parse(sessionStorage.getItem(key)),qaKey);
-  assertEvolved(assert,reloaded,reloadedSaved);assert.deepEqual(reloadedSaved.shop?.cageQuantities,saved.shop.cageQuantities,'Reload must retain exact fixture-owned quantities');const beforeBattleReportCount=reloaded.actualLoaderReports.length;evidence.assertions.push('NORMAL_SAVE_EXIT_RELOAD_EVOLVED_0005_0006_PASS');
+  assertMigrated(assert,reloaded,reloadedSaved,burstBase);assert.deepEqual(reloadedSaved.shop?.cageQuantities,saved.shop.cageQuantities,'Reload must retain exact fixture-owned quantities');const beforeBattleReportCount=reloaded.actualLoaderReports.length;evidence.assertions.push('NORMAL_SAVE_EXIT_RELOAD_BURST_FORMS_PASS');
   await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="battle"]').click();
   await page.locator('[data-face-id="PRACTICE_BATTLE"]').click();
   for(const [id,team]of [[211,'A'],[229,'A'],[222,'B'],[230,'B']]){
@@ -220,17 +213,22 @@ async function alternateAwaitReady(api){
   const qaCatalog=JSON.parse(fs.readFileSync(pair.resolve('/qa/alternate-form-product-catalog.json')));
   const extensionName=id=>{const entry=qaCatalog.entries.find(e=>e.speciesIndex===id);return entry.displayNameByLocale?.['zh-Hant']??entry.displayNameZh;};
   evidence.hudTeams=await page.locator('.cm-vs5-fighter[data-present="true"]').evaluateAll(nodes=>nodes.map(n=>({team:Number(n.dataset.team),name:n.querySelector('.cm-vs5-fighter__name').textContent})));
-  assert.deepEqual(evidence.hudTeams.filter(n=>n.team===0).map(n=>n.name).sort(),['蹦迪猿',extensionName(229)].sort());
-  assert.deepEqual(evidence.hudTeams.filter(n=>n.team===1).map(n=>n.name).sort(),['天帝龍',extensionName(230)].sort());await diagnostics('four-actors-battle-running');
+  // Each side starts as its two 成熟期 and bursts into 211/229 (team A) or 222/230 (team B) during the match.
+  assert.equal(evidence.hudTeams.filter(n=>n.team===0).length,2);assert.equal(evidence.hudTeams.filter(n=>n.team===1).length,2);
+  await page.evaluate(()=>{window.__burstNamesSeen=new Set();const record=()=>{for(const card of document.querySelectorAll('.cm-vs5-fighter[data-burst="BURST"] .cm-vs5-fighter__name'))window.__burstNamesSeen.add(card.textContent);};
+   window.__burstObserver=new MutationObserver(record);window.__burstObserver.observe(document.body,{subtree:true,attributes:true,attributeFilter:['data-burst'],childList:true,characterData:true});record();});
+  await diagnostics('four-actors-battle-running');
   // Natural game clock only. Timeout is failure, never a synthetic victory.
   await page.locator('#cm-root[data-active-screen="BATTLE_RESULT"]').waitFor({state:'visible',timeout:600000});await shot('battle-result');
   evidence.result=await page.locator('#cm-root[data-active-screen="BATTLE_RESULT"] .cm-vs5-shell').evaluate(n=>({verdict:n.dataset.verdict,reason:n.dataset.endReason,text:n.innerText}));
+  evidence.burstNamesSeen=await page.evaluate(()=>{window.__burstObserver?.disconnect();return [...(window.__burstNamesSeen??[])];});
+  assert.ok(evidence.burstNamesSeen.length>0,'at least one partner burst during the match');
   assert.ok(['TEAM_ZERO_AHEAD','TEAM_ONE_AHEAD','LEVEL'].includes(evidence.result.verdict));assert.ok(['TIME_UP','TEAM_DOWN'].includes(evidence.result.reason));evidence.assertions.push('NATURAL_FOUR_ACTOR_BATTLE_RESULT_PASS');
   for(let n=0;n<12&&!(await page.locator('.cm-vs5-exit').isVisible());n++)await page.getByRole('button',{name:'下一頁',exact:true}).click();
   await page.locator('.cm-vs5-exit').click();await page.locator('#cm-root.int-rh2-root[data-active-screen="RAISING_HOME"]').waitFor({state:'visible'});assert.equal(await page.locator('#cm-root .cm-vs5-result__body').count(),0);
   await raisingReady('battle-return');const last=await diagnostics('battle-complete');
   assert.deepEqual(last.errors,[]);assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);assert.deepEqual(evidence.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_VFX_ART_FALLBACK|BATTLE_CORE_VFX_UNAVAILABLE/.test(m.text)),[],'No product error or VFX fallback is accepted');
-  evidence.battleLoaderReport=assertCurrentPublicBattleLoaders(assert,last.actualLoaderReports,beforeBattleReportCount);
+  evidence.battleLoaderReport=assertBurstBattleLoaders(assert,last.actualLoaderReports,beforeBattleReportCount);
   await captureFourFormDatabase();
   assert.deepEqual(evidence.pageErrors,[]);assert.deepEqual(evidence.networkErrors,[]);
   assert.equal(await page.evaluate(key=>localStorage.getItem(key),saveKey),null);

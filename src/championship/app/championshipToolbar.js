@@ -159,7 +159,7 @@ function element(tag, className, text) {
  * @param {(entry: object) => void} options.onMenuEntry
  * @param {(toolId: string|null) => void} [options.onToolChange]
  */
-export function createChampionshipToolbar({ responsiveLayout = false, root, onMenuEntry, onToolChange, getFoodStock=()=>null, subscribeInventory=null, getTutorialCheckpoint=()=>null, menuExtras = null } = {}) {
+export function createChampionshipToolbar({ responsiveLayout = false, root, onMenuEntry, onToolChange, getFoodStock=()=>null, subscribeInventory=null, getTutorialCheckpoint=()=>null, menuExtras = null, relabelEntry = null } = {}) {
   if (!root) throw new TypeError("The toolbar requires a root element");
   if (typeof onMenuEntry !== "function") throw new TypeError("The toolbar requires an onMenuEntry handler");
 
@@ -210,6 +210,8 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
   }
 
   function entryButton(entry, className = "cm-toolbar__entry") {
+    // The app may restate an entry for its mode (real time: End Day lets the partners rest).
+    entry = relabelEntry?.(entry) ?? entry;
     // Two lines: the original entry name, then what it is for, so Hunt,
     // Battle and Shop can be found without knowing the menus by heart.
     const button = element("button", className);

@@ -35,6 +35,8 @@ import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, RELAY_LOADOUTS, 
 import { relayOwnMoveInfo, relayBasicRecord } from '../modes/dataArena/dataArenaRelayKits.js';
 import { battleMoveName } from '../text/battleMoveNames.js';
 import { speciesTaxonomyForId, elementMatchup, factionResonance } from '../contracts/speciesTaxonomy.js';
+import { burstBasesFor, burstFormsFor, isBurstForm } from '../contracts/productBurstEvolution.js';
+import { speciesName } from '../text/zhHant.js';
 import { taxonomyText } from '../text/taxonomyText.js';
 import { taxonomyBadgeRow, resonanceStrip, taxonomyGlyph, TAXONOMY_COLORS, svgElement } from '../presentation/taxonomyBadgeArt.js';
 import { elementChartButton } from './elementChartModal.js';
@@ -43,7 +45,7 @@ import { dataArenaEntries, dataArenaEntryUsable, dataArenaPartnerPower } from '.
 
 const STEP_MS = DATA_ARENA_STEP_SECONDS * 1000;
 const MOVE_KEYS = Object.freeze({ KeyW: [0, -1], ArrowUp: [0, -1], KeyS: [0, 1], ArrowDown: [0, 1], KeyA: [-1, 0], ArrowLeft: [-1, 0], KeyD: [1, 0], ArrowRight: [1, 0] });
-const GAME_KEYS = new Set([...Object.keys(MOVE_KEYS), "Space", "ShiftLeft", "ShiftRight", "Tab", "KeyQ", "KeyE", "KeyR", "KeyF", "KeyC",
+const GAME_KEYS = new Set([...Object.keys(MOVE_KEYS), "Space", "ShiftLeft", "ShiftRight", "Tab", "KeyQ", "KeyE", "KeyR", "KeyF", "KeyC", "KeyB",
   "KeyJ", "KeyK", "KeyL", "KeyX", "Escape", "KeyP", "Digit1", "Digit2", "Digit3", "Digit4"]);
 // Skill keys -> kit slot (moves 2-4). Slot 1 (the beam) is held: left mouse, 1 or J.
 const SKILL_KEYS = Object.freeze({ Digit2: 0, KeyK: 0, Digit3: 1, KeyL: 1, KeyQ: 1, Digit4: 2, KeyE: 2 });
@@ -111,7 +113,8 @@ function ensureStylesheet() {
  * Pixi stage attached to `host`; `audioBus`/`music` are the product's.
  */
 export async function openDataArena({ ensureStage, audioBus = null, music = null, storage = null, reducedMotion = false,
-  resolutionCap = 2, onExit = () => {}, onVictory = null, href = globalThis.location?.href, qa = false, seed = null, progress = null }) {
+  resolutionCap = 2, onExit = () => {}, onVictory = null, href = globalThis.location?.href, qa = false, seed = null, progress = null,
+  burstPlanOf = null }) {
   await ensureStylesheet();
   const lifetime = new AbortController();
   const { signal } = lifetime;
@@ -123,15 +126,37 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   const settings = records.get().settings;
   let shake = settings.shake && !reducedMotion;
   let quality = settings.quality === "auto" ? (coarse || Math.min(innerWidth, innerHeight) < 500 ? "low" : "high") : settings.quality;
-  let partnerId = records.get().lastPartnerId;
+  // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): former 覺醒體/究極體 are a 成熟期's burst forms in the
+  // relay too, so they are not picked; a saved pick of one becomes the 成熟期 that bursts into it.
+  const relayIndexOf = id => Number(String(relayPartner(id)?.speciesId ?? '').split('-').at(-1));
+  // Stage 5/6 entries (the ROM's 224-227 duplicates too) and the alternate forms are never picked.
+  const relayBurstOnly = p => (p?.generationIndex ?? 0) >= 5 || isBurstForm(p?.speciesIndex);
+  const relayPickable = id => {
+    if (!String(id ?? '').startsWith('relay-') || !relayPartner(id) || !relayBurstOnly(relayPartner(id))) return id;
+    const base = burstBasesFor(relayIndexOf(id)).map(i => `relay-species-${String(i).padStart(3, '0')}`).find(b => relayPartner(b));
+    return base ?? RELAY_ROSTER.find(p => !relayBurstOnly(p))?.id ?? id;
+  };
+  // Awakening raising (Owner 2026-11-02): a relay entry raised on the ranch bursts into the form that partner
+  // learned (null: it learned none); a Dex-only entry keeps its first tier-1 form (undefined lets the simulation
+  // choose it).
+  const relayBurstPlanOf = id => {
+    const instanceId = entryOf('RELAY', id)?.instanceId ?? null;
+    return instanceId && typeof burstPlanOf === 'function' ? burstPlanOf(instanceId) ?? null : undefined;
+  };
+  const relayBurstMembers = id => {
+    const own = relayBurstPlanOf(id), plan = own === undefined ? burstFormsFor(relayIndexOf(id)).find(f => f.tier === 1) ?? null : own;
+    return [plan?.via, plan?.form].filter(Number.isInteger)
+      .map(form => cast.partners.find(m => m.partnerId === `relay-species-${String(form).padStart(3, '0')}`) ?? null);
+  };
+  let partnerId = relayPickable(records.get().lastPartnerId);
   const relayLoadouts = records.get().relayLoadouts ?? {};
-  let relayReserveId=records.get().relayReserveId,relayArenaId=records.get().relayArenaId;
+  let relayReserveId=relayPickable(records.get().relayReserveId),relayArenaId=records.get().relayArenaId;
   let gameMode = MODES.includes(records.get().lastMode) ? records.get().lastMode : "TOURNAMENT";
   const rivalName = (rivalId) => cast.rivals.find((rival) => rival.rivalId === rivalId)?.name ?? "";
   // Entry rights (Owner 2026-11-02): partners raised on the ranch or lit in the
   // Dex fight; a thin save is lent practice partners. Tournament and harbor share three kits.
   const roster = (list) => list.map(({ id, speciesId }) => ({ id, speciesId }));
-  const entryLists = { TOURNAMENT: dataArenaEntries(roster(DATA_ARENA_PARTNERS), progress), RELAY: dataArenaEntries(roster(RELAY_ROSTER), progress) };
+  const entryLists = { TOURNAMENT: dataArenaEntries(roster(DATA_ARENA_PARTNERS), progress), RELAY: dataArenaEntries(roster(RELAY_ROSTER.filter((p) => !relayBurstOnly(p))), progress) };
   entryLists.HARBOR = entryLists.TOURNAMENT;
   const entriesFor = (mode) => entryLists[mode] ?? entryLists.TOURNAMENT;
   const entryOf = (mode, id) => entriesFor(mode).find((row) => row.id === id) ?? null;
@@ -179,7 +204,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
 
   // ------------------------------------------------------------------ input
   const keys = new Set();
-  const latch = { dash: false, surge: false, ride: false, cast: null, ult: false, castAuto: false, switchPartner: false };
+  const latch = { dash: false, surge: false, ride: false, cast: null, ult: false, castAuto: false, switchPartner: false, burst: false };
   const pointer = { x: null, y: null, fire: false };
   const sticks = { move: null, aim: null };
   let aimVector = { x: 1, y: 0 };
@@ -206,9 +231,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     // Without a mouse (keyboard, or a tapped touch button) skills auto-aim; the aim stick or mouse aims by hand.
     const manualTouch = touchActive && sticks.aim?.vector && Math.hypot(sticks.aim.vector.x, sticks.aim.vector.y) > 0.28;
     const autoAim = latch.castAuto || (!pointer.mouse && !manualTouch);
-    const input = { moveX: mx, moveY: my, aimX, aimY, fire, dash: latch.dash, surge: latch.surge, ride: latch.ride, cast: latch.cast, ult: latch.ult, autoAim, switchPartner: latch.switchPartner };
+    const input = { moveX: mx, moveY: my, aimX, aimY, fire, dash: latch.dash, surge: latch.surge, ride: latch.ride, cast: latch.cast, ult: latch.ult, autoAim, switchPartner: latch.switchPartner, burst: latch.burst };
     latch.dash = latch.surge = latch.ride = latch.ult = latch.castAuto = false;
-    latch.cast = null; latch.switchPartner = false;
+    latch.cast = null; latch.switchPartner = false; latch.burst = false;
     return input;
   }
 
@@ -232,13 +257,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     if (event.code in SKILL_KEYS) latch.cast = SKILL_KEYS[event.code];
     if (event.code === "KeyR") latch.ult = true;
     if (event.code === "KeyX") latch.switchPartner = true;
+    if (event.code === "KeyB") latch.burst = true;
     if (event.code === "KeyF") latch.surge = true;
     if (event.code === "KeyC") latch.ride = true;
   }, { signal, capture: true });
   window.addEventListener("keyup", (event) => keys.delete(event.code), { signal, capture: true });
   window.addEventListener("blur", releaseInputs, { signal });
   function releaseInputs() {
-    keys.clear(); Object.assign(latch, { dash:false, surge:false, ride:false, cast:null, ult:false, castAuto:false, switchPartner:false }); pointer.fire = false; sticks.move = sticks.aim = null;
+    keys.clear(); Object.assign(latch, { dash:false, surge:false, ride:false, cast:null, ult:false, castAuto:false, switchPartner:false, burst:false }); pointer.fire = false; sticks.move = sticks.aim = null;
     basicPointerId = null;
     for (const node of touch.querySelectorAll('.is-pressed')) node.classList.remove('is-pressed');
     for (const knob of touch.querySelectorAll(".da-stick")) knob.hidden = true;
@@ -288,11 +314,13 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   const surgeButton = button("da-tbtn da-tbtn--surge", t("touch.surge"), () => {}, signal);
   const rideButton = button("da-tbtn da-tbtn--ride", t("touch.ride"), () => {}, signal);
   const switchButton = button("da-tbtn da-tbtn--switch", t("relay.switch"), () => {}, signal);
+  // The player's call for a full burst gauge, beside the switch (awakening raising, 2026-11-02).
+  const burstButton = button("da-tbtn da-tbtn--burst", t("relay.touch.burst"), () => {}, signal);
   const ultButton = button("da-tbtn da-tbtn--ult", t("touch.ult"), () => {}, signal);
   const skillButtons = [0, 1, 2].map((slot) => button(`da-tbtn da-tbtn--skill da-tbtn--s${slot + 1}`, String(slot + 2), () => {}, signal));
   // A tapped skill auto-aims at the nearest visible rival (the aim stick still steers the beam).
   const press = (key) => () => { if (key === "ult") latch.ult = true; else if (typeof key === "number") latch.cast = key; else latch[key] = true; if (key === "ult" || typeof key === "number") latch.castAuto = true; };
-  for (const [node, key] of [[switchButton, "switchPartner"], [dashButton, "dash"], [surgeButton, "surge"], [rideButton, "ride"], [ultButton, "ult"], ...skillButtons.map((node, slot) => [node, slot])]) {
+  for (const [node, key] of [[switchButton, "switchPartner"], [burstButton, "burst"], [dashButton, "dash"], [surgeButton, "surge"], [rideButton, "ride"], [ultButton, "ult"], ...skillButtons.map((node, slot) => [node, slot])]) {
     const fire = press(key);
     node.addEventListener("pointerdown", (event) => { event.preventDefault(); event.stopPropagation(); if (root.dataset.state === "PLAY") { fire(); tick(); node.setPointerCapture?.(event.pointerId); node.classList.add("is-pressed"); } }, { signal });
     for (const end of ["pointerup", "pointercancel", "pointerleave"]) node.addEventListener(end, () => node.classList.remove("is-pressed"), { signal });
@@ -432,19 +460,20 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     hudRefs.surge = el("div", "da-chip da-chip--harbor", t("hud.surge"));
     hudRefs.ride = el("div", "da-chip da-chip--harbor", t("hud.ride"));
     hudRefs.switch = button('da-relay-switch', t('relay.switch'), () => { if (root.dataset.state === 'PLAY') latch.switchPartner = true; }, signal);
+    hudRefs.burst = button('da-relay-burst', t('relay.burst.button'), () => { if (root.dataset.state === 'PLAY') latch.burst = true; }, signal);
     hudRefs.team = el('div', 'da-relay-team');
     // Mini tags for seats 1 and 2 (number, name, a health sliver) and the pair's
     // faction resonance as one small badge on the same row, inside the top bar.
     hudRefs.teamRows = [0, 1].map((index) => {
       const tag = el('div', 'da-mini');
-      tag.append(el('span', 'da-mini__no', String(index + 1)), el('span', 'da-mini__name'), el('span', 'da-mini__hp'));
+      tag.append(el('span', 'da-mini__no', String(index + 1)), el('span', 'da-mini__name'), el('span', 'da-mini__hp'), el('span', 'da-mini__state'));
       return tag;
     });
     hudRefs.team.append(...hudRefs.teamRows);
     const resonance = sim?.getState().relay?.resonance ?? [];
     if (resonance.length) { hudRefs.resonance = resonanceStrip(resonance, {hint: false}); hudRefs.resonance.classList.add('da-hud__resonance'); hudRefs.team.appendChild(hudRefs.resonance); }
     left.appendChild(hudRefs.team);
-    bottom.append(hudRefs.switch, gauges, kit, hudRefs.dash, hudRefs.surge, hudRefs.ride);
+    bottom.append(hudRefs.switch, hudRefs.burst, gauges, kit, hudRefs.dash, hudRefs.surge, hudRefs.ride);
     hudRefs.banner = el("div", "da-banner");
     hudRefs.banner.hidden = true;
     // Track three: one tactical line under the rival strip (see tactical()).
@@ -484,15 +513,28 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       put('phase', hudRefs.phase, text, t('mode.RELAY'));
       put('objective', hudRefs.objective, text, t('relay.remaining', { count: 2 - snap.relay.enemyIndex }));
       snap.relay.team.forEach((member, index) => {
-        const name = cast.partners.find(p => p.partnerId === member.partnerId)?.name ?? '';
+        // Burst evolution: the form's name while burst; the gauge or a mark in the tag's own state slot.
+        const name = member.burst?.phase === 'BURST' ? speciesName(member.burst.form) : cast.partners.find(p => p.partnerId === member.partnerId)?.name ?? '';
+        const state = member.burst ? member.burst.phase === 'CHARGING' ? `⚡${member.burst.gauge}%` : member.burst.phase === 'READY' ? t('relay.burst.ready')
+          : member.burst.phase === 'BURST' ? t('relay.burst.mark') : '' : '';
         const share = Math.round(Math.max(0, member.hp) / member.maxHp * 20) / 20;
         put(`team${index}`, hudRefs.teamRows[index], (node, value) => {
-          const [active, hp] = value.split('|');
+          const [active, hp, label, shown, phase] = value.split('|');
           node.classList.toggle('is-active', active === '1'); node.classList.toggle('is-down', Number(hp) <= 0);
-          node.children[1].textContent = name; node.children[2].style.setProperty('--hp', hp); node.title = `${name} ${member.hp}/${member.maxHp}`;
-        }, `${index === snap.relay.active ? 1 : 0}|${share}`);
+          node.children[1].textContent = label; node.children[2].style.setProperty('--hp', hp); node.children[3].textContent = shown;
+          node.dataset.burst = phase; node.title = `${label} ${member.hp}/${member.maxHp}`;
+        }, `${index === snap.relay.active ? 1 : 0}|${share}|${name}|${state}|${member.burst?.phase ?? ''}`);
       });
       put('tpFull', hudRefs.energy, (node, v) => node.classList.toggle('is-full', v), snap.kit.energy >= DATA_ARENA_RELAY.ultimateTp);
+      // The burst call: the button fills with the gauge, glows while READY and empties over the wait.
+      const own = snap.relay.burst;
+      const burstState = !own || own.phase === 'SPENT' || own.phase === 'WEAK' ? 'none' : own.phase;
+      const burstFill = own?.phase === 'CHARGING' ? Math.round(own.gauge / 5) * 5 / 100 : own?.phase === 'READY' ? Math.round((own.readyLeft ?? 0) / 0.25) * 0.25 / 6 : 1;
+      for (const [key, node] of [['burstBtn', hudRefs.burst], ['tburst', burstButton]])
+        put(key, node, (n, value) => { const [phase, fill] = value.split('|'); n.dataset.burst = phase; n.hidden = phase === 'none'; n.style.setProperty('--burst', fill);
+          n.classList.toggle('is-ready', phase === 'READY'); }, `${burstState}|${burstFill}`);
+      if (snap.relay.rivalBurst?.warn && !rivalBurstWarned) { rivalBurstWarned = true; audio?.play('warn'); tactical(t('relay.burst.rivalWarn'), { tone: 'warn', key: 'burst-warn' }); }
+      if (!snap.relay.rivalBurst?.warn) rivalBurstWarned = false;
       const cooldown = snap.relay.switchCooldown;
       const label = cooldown > 0 ? `${t('relay.switch')} ${Math.ceil(cooldown)}s` : t('relay.switch');
       put('switch', hudRefs.switch, text, label);
@@ -563,7 +605,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const rival = snap.rivals[0];
     if (rival) {
       put("bossShown", hudRefs.boss, (node, v) => { node.hidden = !v; }, true);
-      put("bossName", hudRefs.bossName, text, rivalName(rival.id));
+      // Burst evolution: a burst relay rival goes by its form's name.
+      const rivalBurst = snap.relay?.rivalBurst;
+      put("bossName", hudRefs.bossName, text, rivalBurst?.phase === 'BURST' ? speciesName(rivalBurst.form) : rivalName(rival.id));
       put("bossElement", hudRefs.bossElement, (node, speciesId) => {
         const element = speciesTaxonomyForId(speciesId)?.element ?? null;
         node.replaceChildren(...(element ? [taxonomyGlyph(`element.${element}`, 16)] : []));
@@ -656,6 +700,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   }
   let tpFlashTimer = null;
   let bannerTimer = null;
+  let rivalBurstWarned = false;
   function banner(message, tone = "warn", ms = 2600) {
     const node = hudRefs.banner;
     node.textContent = message; node.dataset.tone = tone; node.hidden = false;
@@ -672,6 +717,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         case 'RELAY_SWITCH': releaseInputs(); buildHud(); audio?.play('capture'); toast(t('relay.switched'), { x: event.x, y: event.y - 70, tone: 'good', key: 'relay-switch' }); break;
         case 'RELAY_INTRO': banner(t('relay.ready'), 'phase', 2000); break;
         case 'RELAY_RIVAL': audio?.play('warn'); tactical(t('relay.rival'), { tone: 'warn', key: 'relay-rival' }); break;
+        // Awakening raising (2026-11-02): a full gauge waits for the player's call.
+        case 'BURST_READY': if (event.side === 'player') { audio?.play('pickup'); tactical(t('relay.burst.readyCall'), { tone: 'good', key: 'burst-ready' }); } break;
+        // Burst evolution (2026-11-02): the call-out names the form.
+        case 'BURST': audio?.play(event.side === 'player' ? 'pickup' : 'warn');
+          banner(t(`relay.burst.${event.side}`, { name: speciesName(event.form) }), event.side === 'player' ? 'good' : 'warn', 1600); break;
         // Stage three arena zones and cover (2026-10-28).
         case 'ARENA_WARNING': audio?.play('warn'); tactical(t(`arena.${event.kind}.warn`), { tone: 'warn', ms: 2400 }); break;
         case 'ARENA_ACTIVE': tactical(t(`arena.${event.kind}.active`), { tone: 'good' }); break;
@@ -826,7 +876,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   // ------------------------------------------------------------------ assets
   async function loadCast(selectedPartnerId) {
     const partner = cast.partners.find((p) => p.partnerId === selectedPartnerId);
-    const wanted = (gameMode === 'RELAY' ? [...cast.partners.filter(p => relayTeamIds(selectedPartnerId,relayReserveId).includes(p.partnerId)), ...cast.rivals.slice(0, 2)] : gameMode === "TOURNAMENT" ? [partner, ...cast.rivals] : [partner, cast.mate, cast.boss]).filter((member) => member?.art);
+    // A relay fighter's burst form (and each rival's) is drawn mid-match, so its art loads up front.
+    const relayTeam = gameMode === 'RELAY' ? relayTeamIds(selectedPartnerId,relayReserveId) : [];
+    const rivalForms = gameMode === 'RELAY' ? cast.rivals.slice(0, 2).map(r => { const form = burstFormsFor(Number(String(r.speciesId).split('-').at(-1))).find(f => f.tier === 1)?.form;
+      return form === undefined ? null : cast.partners.find(m => m.speciesId === `species-${String(form).padStart(3, '0')}`) ?? null; }) : [];
+    const wanted = (gameMode === 'RELAY' ? [...cast.partners.filter(p => relayTeam.includes(p.partnerId)), ...relayTeam.flatMap(relayBurstMembers), ...cast.rivals.slice(0, 2), ...rivalForms] : gameMode === "TOURNAMENT" ? [partner, ...cast.rivals] : [partner, cast.mate, cast.boss]).filter((member) => member?.art);
     bundleScope ??= createPixiAssetScope(stage.PIXI, href, { signal });
     let failed = false;
     // Release a partner no longer on the field.
@@ -913,7 +967,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     if (signal.aborted) return;
     matchId++;
     const matchSeed = seed ?? ((Date.now() ^ (matchId * 2654435761)) >>> 0);
-    sim = createDataArenaSimulation({ seed: matchSeed, partnerId, quality, mode: gameMode, partnerPower, ...(gameMode==="RELAY"?{relayLoadouts,relayReserveId,relayArenaId,portrait:globalThis.innerHeight>globalThis.innerWidth}:{}) });
+    const relayBurstPlans = gameMode === "RELAY" ? Object.fromEntries(relayTeamIds(partnerId, relayReserveId).map(id => [id, relayBurstPlanOf(id)]).filter(([, plan]) => plan !== undefined)) : {};
+    sim = createDataArenaSimulation({ seed: matchSeed, partnerId, quality, mode: gameMode, partnerPower, ...(gameMode==="RELAY"?{relayLoadouts,relayReserveId,relayArenaId,portrait:globalThis.innerHeight>globalThis.innerWidth,
+      relayBurstPlans, relayManualBurst: true}:{}) });
     // Harbor art is loaded on entry only; a failed pack keeps the playable
     // geometry and existing presentation available. No character texture changes.
     if (gameMode === 'HARBOR' || gameMode === 'TOURNAMENT' || gameMode === 'RELAY') {

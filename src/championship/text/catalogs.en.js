@@ -1,4 +1,4 @@
-import { AWAKENED_FORM_NAMES } from "./growthStageTerms.js";
+import { AWAKENED_FORM_NAMES, AWAKENED_SECOND_TIER_NAMES } from "./growthStageTerms.js";
 // English catalog copy, keyed exactly like catalogs.zhHant.js (original
 // record indices). PRODUCT_AUTHORED, 2026-09-29: translated from the approved
 // zh-Hant text, not from the cartridge, and not yet reviewed by a native
@@ -205,8 +205,8 @@ const HELP_ROWS = [
   ["Baby I and II", "A newborn companion and its next stage are called the Baby stages. Baby I can't battle yet; from Baby II on, a companion can take part in battles."],
   ["Child", "Companions that have grown out of the Baby stages. Their attack rises, and they begin to branch into many kinds to cope with different surroundings."],
   ["Adult", "Companions that have left the Child stage and can hold their own. Attack and intelligence rise further, and many kinds have features suited to particular surroundings."],
-  [`${AWAKENED_FORM_NAMES.en}`, `The stage after Adult, where a companion becomes complete. In the wild, it is said to be very hard to grow into an ${AWAKENED_FORM_NAMES.en}.`],
-  ["Ultimate", `The stage of ultimate power, reached only after an ${AWAKENED_FORM_NAMES.en} meets even harsher conditions. As a rule, a companion can't grow this far without a tamer's help.`],
+  [`${AWAKENED_FORM_NAMES.en}`, `An Adult's burst evolution in battle. When the burst gauge fills, a shell of hex plates wraps the Adult and blows open; it is far stronger for a while, then returns to Adult. The first tier needs tamer rank 4.`],
+  [AWAKENED_SECOND_TIER_NAMES.en, `A burst evolution that comes through the first tier under harsher conditions. It is even stronger and needs tamer rank 6. Adults no longer grow on their own: meet the conditions or use an evolution metal to unlock it.`],
   ["Digi-Egg", "A companion's egg. companions have no sexes and do not breed; each generation is renewed by returning to a Digi-Egg."],
   ["Attribute", "Most companions have one of three attributes: Vaccine, Virus or Data. There are also Free companions with no attribute. Baby companions have no attribute."],
   ["Family", "Classified by the direction of their evolution, companions fall broadly into eight families. Adjusting a companion's family lets you steer its evolution to some extent."],
@@ -268,7 +268,7 @@ const EVENT_ROWS = [
   ["Vector Sector", "Holding back the moves of the team captain, 小仙狐, is the key to winning!\n3-on-3 battle."],
   ["Bit Agent", "Watch out for 摔跤絨's power and they're not a hard team to beat!\n3-on-3 battle."],
   ["Tough Digitizer", "A duo proud of their strength! Raise your HP before you take them on!\nChild only, 3-on-3 battle."],
-  ["Core Crusher", "The Ultimate 法老王 enters the ring! A one-on-one showdown that every tamer is watching!\n1-on-1 battle."],
+  ["Core Crusher", "A second-tier Awakened 法老王 enters the ring! A one-on-one showdown that every tamer is watching!\n1-on-1 battle."],
   ["Silver Freeze", "The title holders are three tricky Adult partners! You must take on their team of three alone!\n1-on-3 battle."],
   ["Spring Ace", "The rule is a one-on-one duel! Send out your team's ace!\n1-on-1 battle."],
   ["Summer Phantom", "A special three-on-one match! Can three partners work together to beat 海島鯨 and rule the height of summer?\nAdult only, 3-on-1 battle."],
@@ -290,13 +290,13 @@ const EVENT_ROWS = [
   ["Small Challenger", "The title holder 嚇人蜥 has powerful claws, but find its weak point and you might win easily!\n1-on-1 battle."],
   ["Big Fighter", "A special three-on-one match! Break the unbelievable power of 划槳將 with teamwork!\nAdult only, 3-on-1 battle."],
   ["Giant Extreme", `A special three-on-one match! Can you withstand 老千皇's attacks and beat it with teamwork?\n${AWAKENED_FORM_NAMES.en} only, 3-on-1 battle.`],
-  ["Perfect Fighter", "A title match that every tamer is watching! Face it with your strongest line-up!\nUltimate only, 3-on-3 battle."],
+  ["Perfect Fighter", "A title match that every tamer is watching! Face it with your strongest line-up!\nPartners that can reach Awakened II only, 3-on-3 battle."],
   ["Virus Slayer", "The Virus-type partners they call invaders are about to unleash their power!\nVirus attribute only, 3-on-3 battle."],
   ["Gene Guardian", "Your opponents are three Baby II partners, and you must face them alone! You're outnumbered, but none of them is that strong!\n1-on-3 battle."],
   ["Data Killer", "To master battle, you must understand data!\nData attribute only, 3-on-3 battle."],
-  ["Noise Divider", "Can you defeat this elite opposing squad?\nVirus attribute and Ultimate only, 3-on-3 battle."],
-  ["Security Line Decider", "The title match that decides the strongest Vaccine attribute partners!\nVaccine attribute and Ultimate only, 3-on-3 battle."],
-  ["Giant Gatekeeper", "A one-on-one duel to decide the strongest Data-attribute partner!\nData attribute and Ultimate only, 1-on-1 battle."],
+  ["Noise Divider", "Can you defeat this elite opposing squad?\nPartners that can reach a Virus-attribute Awakened II only, 3-on-3 battle."],
+  ["Security Line Decider", "The title match that decides the strongest Vaccine attribute partners!\nPartners that can reach a Vaccine-attribute Awakened II only, 3-on-3 battle."],
+  ["Giant Gatekeeper", "A one-on-one duel to decide the strongest Data-attribute partner!\nPartners that can reach a Data-attribute Awakened II only, 1-on-1 battle."],
   ["Aqua Crusher", "The arena is water. Aquatic partners have the advantage.\nWater arena, 3-on-3 battle."],
   ["Blizzard Field", "The stage is a snowy mountain! Beware 冰魔人's icy claws and 雪人偶's punches!\nSnow arena, 3-on-3 battle."],
   ["Volcano Striker", "A title match held on a volcano. Waves of heat from raging magma sweep over the partners!\nVolcano arena, 3-on-3 battle."],
@@ -322,7 +322,7 @@ const EVENT_ROWS = [
   ["Lunar Evolution", "One of the \"Seven Top Titles\", the highest rank of title there is! Face a formidable team devoted to ultimate beauty!\n3-on-3 battle."],
   ["Blade Guardian", "One of the \"Seven Top Titles\", the highest rank of title there is! Face a formidable team that has mastered Dragon-family tactics!\n3-on-3 battle."],
   ["Golden Wings", "Take on the dazzling title holders! A title match that every tamer is watching!\n3-on-3 battle."],
-  ["Reflection War", "Among Ultimates, this may be one of the easier opponents. A title match that every tamer is watching!\n3-on-3 battle."],
+  ["Reflection War", "Among second-tier Awakened foes, this may be one of the easier opponents. A title match that every tamer is watching!\n3-on-3 battle."],
   ["Tutorial Battle", "A battle for learning the ropes. It's fine if you lose!"]
 ];
 export const TITLE_EVENTS_EN = Object.freeze(EVENT_ROWS.map(([name, description], recordIndex) => Object.freeze({ recordIndex, name, description })));

@@ -103,7 +103,9 @@ test("the ROM catalogs keep their Japanese untouched", () => {
   assert.equal(help.records[32].title,"完全体");
   assert.match(help.records[32].body,/完全体/);
   assert.match(events.records[27].description,/完全体/);
-  assert.match(helpText(32,'body'),/完整夥伴/,'ordinary complete adjective remains');
+  // OWNER_APPROVED_ADAPTATION 2026-11-02 (STAGE_REDESIGN_BURST_20261102): the product help now explains the
+  // 覺醒體 as a burst form; the native record above keeps its own wording.
+  assert.match(helpText(32,'body'),/爆裂進化/,'the help describes the burst form');
 });
 
 test("every regular species and egg has Chinese identity copy at its original index", () => {

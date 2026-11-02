@@ -899,9 +899,11 @@ test('arena scene failed ground bake releases render textures, root and canvas m
   root.parent = { removeChild() { calls.push('remove'); } };
   const error = new Error('GPU bake failed');
   const PIXI = { Container: Display, Graphics, Sprite: Display, RenderTexture: { create: () => ({ destroy() { calls.push('renderTexture'); } }) }, Matrix: class { translate() { return this; } } };
-  const env = { T: { STANDS: 1 }, createDataArenaTextures: () => ({ destroy() { calls.push('textures'); } }), createDataArenaCamera: () => ({}), console };
+  // The burst shell (2026-11-02) is created with the scene and released with it.
+  const env = { T: { STANDS: 1 }, createDataArenaTextures: () => ({ destroy() { calls.push('textures'); } }), createDataArenaCamera: () => ({}), console,
+    createBattleBurstShell: () => ({ update() { return null; }, retire() {}, dispose() { calls.push('burstShell'); } }) };
   arenaRunSource(functionSource, env);
   assert.throws(() => env.mountDataArenaScene({ stage: { PIXI, createSceneRoot: () => root, markScene: () => () => calls.push('unmark'), app: { renderer: { render() { throw error; } } } },
     sim: { getState: () => ({}), grid: { map: { rects: [], flammable: [], pylons: [], gates: [], beacons: [], playerSpawn: [0, 0], rivalSpawn: [1, 1] }, cols: 2, rows: 2, cell: 64 } }, cast: {} }), (actual) => actual === error);
-  assert.deepEqual(calls, ['renderTexture', 'unmark', 'remove', 'textures']);
+  assert.deepEqual(calls, ['renderTexture', 'burstShell', 'unmark', 'remove', 'textures']);
 });

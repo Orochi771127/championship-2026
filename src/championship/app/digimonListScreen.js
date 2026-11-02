@@ -1,6 +1,6 @@
 import { uiText } from "../text/uiText.js";
 import { formatList } from "../text/locale.js";
-import {generationName,personalityName,specialSkillName} from '../text/zhHant.js';
+import {generationName,personalityName,specialSkillName,speciesName,cageName} from '../text/zhHant.js';
 import {speciesTaxonomy,TAXONOMY_RESISTANCE_AXES} from '../contracts/speciesTaxonomy.js';
 import {taxonomyText} from '../text/taxonomyText.js';
 import {taxonomyBadgeRow} from '../presentation/taxonomyBadgeArt.js';
@@ -101,7 +101,115 @@ const ROW_GROUPS = Object.freeze({
   num_battle: "record", win_rate: "record", digitama: "record"
 });
 
-export function appendCreatureDetail(detail, entry) {
+/**
+ * Awakening raising (OWNER_APPROVED_ADAPTATION 2026-11-02): one or two plain hints for a form, never the raw
+ * conditions (Owner: the game keeps the full rules; players read what to do next). [{key, values}] for uiText.
+ */
+export function awakeningHints(form, { formName = speciesName, cageLabel = (definition) => cageName(definition, null) } = {}) {
+  if (!form || form.learned) return [];
+  if (form.ready) return [{ key: "AWAKENING_HINT_TAP", values: {} }];
+  const hints = [];
+  if (!form.viaMet && Number.isInteger(form.via)) hints.push({ key: "AWAKENING_HINT_VIA", values: { name: formName(form.via) } });
+  const rebirth = (form.gates ?? []).find((row) => row.id === "REBIRTH_COUNT" && !row.met);
+  if (rebirth) hints.push({ key: "AWAKENING_HINT_STARS", values: { count: Math.max(1, rebirth.value - rebirth.current) } });
+  const open = (form.rows ?? []).filter((row) => !row.met);
+  const points = open.filter((row) => Array.isArray(row.cages) && row.cages.length)
+    .sort((a, b) => a.current / a.value - b.current / b.value)[0];
+  if (points) hints.push({ key: "AWAKENING_HINT_CAGES", values: { cages: points.cages.slice(0, 2).map((cage) => cageLabel(cage.definition)).join("、") } });
+  const battles = open.find((row) => row.id === "BATTLE_COUNT");
+  if (battles) hints.push({ key: "AWAKENING_HINT_BATTLES", values: { count: battles.value - battles.current } });
+  if (open.some((row) => row.id === "EVOLUTION_WIN_PERCENT")) hints.push({ key: "AWAKENING_HINT_WINS", values: {} });
+  return hints.slice(0, 2);
+}
+
+// The awakening path on a 成熟期's card: each form with one progress bar, a plain state and at most two hints;
+// energy items, the core-transcendence star, the battle form and the ranch look are one tap each.
+function appendAwakening(detail, entry, onAwakening) {
+  const view = entry.awakening;
+  const group = element("div", "cm-digimon-stat cm-digimon-burst cm-awakening");
+  group.dataset.row = "burst";
+  group.dataset.group = "burst";
+  const head = element("dt", "cm-digimon-detail__label cm-awakening__head");
+  head.append(element("span", "", "AWAKENING_TITLE"));
+  if (view.stars > 0) head.append(element("span", "cm-awakening__stars", "★".repeat(view.stars), false));
+  group.append(head);
+  const cell = element("dd", "cm-digimon-detail__value");
+  if (entry.bloodline?.family) {
+    const perk = element("p", "cm-awakening__perk", `BLOODLINE_PERK_${entry.bloodline.family}`);
+    if (entry.bloodline.color) perk.style.setProperty("--bloodline", entry.bloodline.color);
+    cell.append(perk);
+  }
+  const act = (action, value) => onAwakening?.(action, entry.instanceId, value);
+  const button = (className, text, onClick, localize = true) => {
+    const node = element("button", className, text, localize);
+    node.type = "button";
+    if (onAwakening) node.addEventListener("click", onClick); else node.disabled = true;
+    return node;
+  };
+  for (const form of view.forms) {
+    const row = element("div", "cm-awakening__form");
+    row.dataset.tier = String(form.tier);
+    row.dataset.state = form.learned ? "learned" : form.ready ? "ready" : "raising";
+    row.dataset.focus = String(view.focus === form.form);
+    const title = element("p", "cm-awakening__title");
+    title.append(element("strong", "cm-awakening__tier", form.tier === 2 ? "AWAKENING_TIER_2" : "AWAKENING_TIER_1"),
+      element("span", "cm-awakening__name", speciesName(form.form), false),
+      element("span", "cm-awakening__state", form.learned ? "AWAKENING_STATE_LEARNED" : form.ready ? "AWAKENING_STATE_READY" : "AWAKENING_STATE_RAISING"));
+    row.append(title);
+    if (!form.learned) {
+      const bar = element("div", "cm-awakening__bar");
+      bar.setAttribute("role", "meter"); bar.setAttribute("aria-valuemin", "0"); bar.setAttribute("aria-valuemax", "100");
+      bar.setAttribute("aria-valuenow", String(form.percent));
+      bar.style.setProperty("--percent", `${form.percent}%`);
+      bar.append(element("span", "cm-awakening__fill"), element("span", "cm-awakening__percent", `${form.percent}%`, false));
+      row.append(bar);
+      const hints = awakeningHints(form);
+      if (hints.length) row.append(element("p", "cm-awakening__hint", hints.map((hint) => uiText(hint.key, hint.values)).join("・"), false));
+      const actions = element("div", "cm-awakening__actions");
+      if (view.focus !== form.form && form.viaMet) actions.append(button("cm-awakening__btn", "AWAKENING_SET_TARGET", () => act("target", form.form)));
+      if (view.focus === form.form && !form.ready) {
+        const full = form.energy >= view.itemCap;
+        for (const feed of view.feeds) {
+          if (full && !feed.fill) continue;
+          const label = uiText(feed.fill ? "AWAKENING_FEED_FILL" : "AWAKENING_FEED_ITEM", { name: feed.name, amount: feed.amount });
+          const node = button("cm-awakening__btn cm-awakening__feed", `${label} ×${feed.owned}`, () => act("feed", feed.itemId), false);
+          node.dataset.rarity = feed.rarity;
+          actions.append(node);
+        }
+        if (full) actions.append(element("span", "cm-awakening__note", "AWAKENING_ENERGY_FULL"));
+        if ((form.gates ?? []).some((gate) => gate.id === "REBIRTH_COUNT" && !gate.met)) {
+          if (view.canTranscend) actions.append(button("cm-awakening__btn cm-awakening__transcend", "AWAKENING_TRANSCEND", () => act("transcend", view.transcendItems[0])));
+          else actions.append(element("span", "cm-awakening__note", view.bond < view.bondMinimum ? "AWAKENING_TRANSCEND_BOND" : "AWAKENING_TRANSCEND_HINT"));
+        }
+      }
+      if (actions.childElementCount) row.append(actions);
+    } else {
+      const actions = element("div", "cm-awakening__actions");
+      for (const shown of [form.form, ...(form.alternatesUnlocked ?? [])]) {
+        if (form.planned === shown) actions.append(element("span", "cm-awakening__note cm-awakening__planned", "出戰形態"));
+        else actions.append(button("cm-awakening__btn", "設為爆裂形態", () => act("battle", shown)));
+      }
+      row.append(actions);
+    }
+    cell.append(row);
+  }
+  // The ranch look: the usual 成熟期 or any learned form, switched at any time.
+  const learned = view.forms.filter((form) => form.learned).flatMap((form) => [form.form, ...(form.alternatesUnlocked ?? [])]);
+  if (learned.length) {
+    const looks = element("div", "cm-awakening__looks");
+    looks.append(element("span", "cm-awakening__label", "AWAKENING_LOOK"));
+    for (const look of [null, ...learned]) {
+      const node = button("cm-awakening__btn cm-awakening__look", look === null ? "AWAKENING_LOOK_BASE" : speciesName(look), () => act("look", look), look === null);
+      node.setAttribute("aria-pressed", String(view.appearance === look));
+      looks.append(node);
+    }
+    cell.append(looks);
+  }
+  group.append(cell);
+  detail.append(group);
+}
+
+export function appendCreatureDetail(detail, entry, { onBurstForm = null, onAwakening = null } = {}) {
   for (const row of TRACED_DETAIL_ROWS) {
     const value = row.read(entry);
     if (value === null || value === undefined) continue;
@@ -127,6 +235,42 @@ export function appendCreatureDetail(detail, entry) {
     const cell = element("dd", "cm-digimon-detail__value cm-taxonomy-detail");
     cell.append(taxonomyBadgeRow(taxonomy), elementChartButton(taxonomy.element));
     group.append(term, cell);
+    detail.append(group);
+  }
+  // OWNER_APPROVED_ADAPTATION 2026-11-02: a 成熟期 partner's awakening path (or, without it, its burst forms).
+  if (entry.awakening?.forms?.length) appendAwakening(detail, entry, onAwakening);
+  else if (Array.isArray(entry.burst) && entry.burst.length) {
+    const group = element("div", "cm-digimon-stat cm-digimon-burst");
+    group.dataset.row = "burst";
+    group.dataset.group = "burst";
+    group.append(element("dt", "cm-digimon-detail__label", "DEX_BURST"));
+    const cell = element("dd", "cm-digimon-detail__value");
+    for (const form of entry.burst) {
+      // Each unlocked form, and each unlocked alternate of it, is a choice for the battle burst.
+      for (const shown of [form.form, ...(form.unlocked ? form.alternatesUnlocked ?? [] : [])]) {
+        const line = element("p", "cm-digimon-burst__form");
+        line.dataset.tier = String(form.tier);
+        line.dataset.unlocked = String(form.unlocked);
+        line.append(element("strong", "", `DEX_BURST_TIER_${form.tier}`), " ", element("span", "", speciesName(shown), false), " ");
+        if (!form.unlocked) {
+          line.append(element("span", "cm-digimon-burst__state", form.rows.map(row => `${uiText(`DEX_CONDITION_${row.id}`)} ${row.current}/${row.value}`).join("・"), false));
+        } else if (form.planned === shown) {
+          line.dataset.planned = "true";
+          line.append(element("span", "cm-digimon-burst__state", "出戰形態"));
+        } else {
+          line.append(element("span", "cm-digimon-burst__state", "已解鎖"));
+          if (onBurstForm) {
+            const choose = element("button", "cm-digimon-burst__choose", "設為爆裂形態");
+            choose.type = "button";
+            choose.dataset.form = String(shown);
+            choose.addEventListener("click", () => onBurstForm(entry.instanceId, shown));
+            line.append(" ", choose);
+          }
+        }
+        cell.append(line);
+      }
+    }
+    group.append(cell);
     detail.append(group);
   }
   const graphValues = entry.stats?.resistanceGraph;
@@ -163,8 +307,9 @@ export function appendCreatureDetail(detail, entry) {
  * @param {Array<object>} options.entries roster entries with displayName, stats, identity
  * @param {() => void} options.onExit
  * @param {(instanceId: string, name: string) => ({ok: boolean, entries?: Array<object>})} [options.onRename]
+ * @param {(instanceId: string) => ({ok: boolean, reason?: string, entries?: Array<object>})} [options.onRebirth]
  */
-export function createDigimonListView({ root, entries = [], onExit, onRename = null } = {}) {
+export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null, onBurstForm = null, onAwakening = null } = {}) {
   if (!root) throw new TypeError("The Digimon list requires a root element");
 
   root.replaceChildren();
@@ -187,7 +332,14 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
       detail.append(element("p", "cm-digimon-empty", "No partner in the roster."));
       return;
     }
-    appendCreatureDetail(detail, entry);
+    appendCreatureDetail(detail, entry, { onBurstForm: onBurstForm ? (instanceId, form) => {
+      const result = onBurstForm(instanceId, form);
+      if (result?.ok && Array.isArray(result.entries)) { entries = result.entries; renderDetail(); }
+    } : null, onAwakening: onAwakening ? (action, instanceId, value) => {
+      const result = onAwakening(action, instanceId, value);
+      if (Array.isArray(result?.entries)) { entries = result.entries; renderDetail(); }
+      return result;
+    } : null });
     // Say what is missing rather than leaving the panel silently short.
     const note = element("p", "cm-digimon-untraced",
       `${UNTRACED_DETAIL_ROWS.length} further rows the original shows are not traced yet.`);
@@ -244,6 +396,11 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     controls.append(button);
   }
   controls.prepend(nameEdit);
+  // OWNER_APPROVED_ADAPTATION 2026-11-02: 成熟期 no longer ages out, so rebirth is the player's choice.
+  const rebirth = element("button", "cm-digimon-control", "轉生");
+  rebirth.type = "button";
+  rebirth.dataset.control = "rebirth_button";
+  controls.append(rebirth);
   // Say why two of the three stay grey instead of leaving a silent row.
   const controlsNote = element("p", "cm-digimon-controls-note", "移除與報名尚未開放。");
 
@@ -268,7 +425,26 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
   editorSave.type = "submit";
   editorActions.append(editorCancel, editorSave);
   editor.append(editorLabel, editorMessage, editorActions);
-  function closeEditor() { editor.hidden = true; editorMessage.textContent = ""; }
+  // Rebirth asks once in place, like Name Edit, and reports the result under the controls.
+  const rebirthPanel = element("div", "cm-digimon-rename cm-digimon-rebirth");
+  rebirthPanel.hidden = true;
+  const rebirthQuestion = element("p", "cm-digimon-rename__label", "", false);
+  const rebirthActions = element("div", "cm-digimon-rename__actions");
+  const rebirthCancel = element("button", "cm-screen-back", "取消");
+  rebirthCancel.type = "button";
+  const rebirthConfirm = element("button", "cm-screen-primary", "轉生");
+  rebirthConfirm.type = "button";
+  rebirthActions.append(rebirthCancel, rebirthConfirm);
+  const rebirthMessage = element("p", "cm-digimon-rename__message");
+  rebirthMessage.setAttribute("role", "status");
+  rebirthPanel.append(rebirthQuestion, rebirthActions);
+  const REBIRTH_REFUSALS = Object.freeze({
+    PARTNER_NOT_IN_RANCH: "這隻拍檔不在牧場裡，請先讓牠住進籠舍再轉生。",
+    EVOLUTION_RUNNING: "牧場裡正在進化，請稍後再試。",
+    NOT_FINAL_STAGE: "只有成熟期的拍檔可以轉生。"
+  });
+  function closeRebirth() { rebirthPanel.hidden = true; }
+  function closeEditor() { editor.hidden = true; editorMessage.textContent = ""; closeRebirth(); }
   function refreshControls() {
     const entry = entries[selectedIndex];
     const renameable = Boolean(onRename && entry && entry.renameable !== false);
@@ -276,7 +452,33 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     nameEdit.dataset.state = onRename ? "READY" : "NOT_IMPLEMENTED";
     nameEdit.title = !onRename ? uiText("In the original, not yet in this build")
       : entry?.renameable === false ? uiText("初始夥伴的名字在開場時決定，無法更改。") : "";
+    const mature = entry?.identity?.generationIndex === 4;
+    rebirth.disabled = !(onRebirth && mature);
+    rebirth.dataset.state = onRebirth ? "READY" : "NOT_IMPLEMENTED";
+    rebirth.title = onRebirth && !mature ? uiText("只有成熟期的拍檔可以轉生。") : "";
   }
+  rebirth.addEventListener("click", () => {
+    const entry = entries[selectedIndex];
+    if (!entry || rebirth.disabled) return;
+    editor.hidden = true;
+    rebirthMessage.textContent = "";
+    rebirthQuestion.textContent = uiText("讓 {name} 轉生回蛋嗎？轉生次數 +1，下一代的能力會得到加成。", { name: entry.displayName ?? "" });
+    rebirthPanel.hidden = false;
+    rebirthPanel.scrollIntoView?.({ block: "center" });
+  });
+  rebirthCancel.addEventListener("click", () => closeRebirth());
+  rebirthConfirm.addEventListener("click", () => {
+    const entry = entries[selectedIndex];
+    if (!entry) return;
+    const result = onRebirth?.(entry.instanceId);
+    closeRebirth();
+    if (!result?.ok) { rebirthMessage.textContent = uiText(REBIRTH_REFUSALS[result?.reason] ?? "現在無法轉生。"); return; }
+    rebirthMessage.textContent = uiText("{name} 開始轉生，回到牧場就能看到。", { name: entry.displayName ?? "" });
+    if (Array.isArray(result.entries)) entries = result.entries;
+    renderList();
+    renderDetail();
+    refreshControls();
+  });
   nameEdit.addEventListener("click", () => {
     const entry = entries[selectedIndex];
     if (!entry || nameEdit.disabled) return;
@@ -315,7 +517,7 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
   back.addEventListener("click", () => { onExit?.(); });
   footer.append(back);
 
-  shell.append(list, detail, controls, controlsNote, editor, footer);
+  shell.append(list, detail, controls, controlsNote, editor, rebirthPanel, rebirthMessage, footer);
   root.append(shell);
   renderList();
   renderDetail();

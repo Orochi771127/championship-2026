@@ -9,7 +9,8 @@ import {databaseHeroPortrait, databaseHeroSilhouette} from '../presentation/data
 import {databaseBodyStats, formatBodyHeight, formatDataWeight} from '../database/databaseBodyStats.js';
 import {databaseStory, databaseStoryHeading, databaseVerifiedData, databaseVerifiedHeading} from '../database/databaseStories.js';
 import {originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.js";
-import { speciesName, generationName, shopItemDescription as shopDescriptionText, shopItemName } from "../text/zhHant.js";
+import { speciesName, generationName, shopItemDescription as shopDescriptionText, shopItemName, cageName } from "../text/zhHant.js";
+import { recommendedCages } from "../raising/productTrainingPolicy.js";
 import {databaseDisplayRows, getDatabaseDisplayEntry} from '../database/databaseDisplayCatalog.js';
 import {databaseIllustrationText} from '../database/databaseIllustrations.js';
 import {openingEggChoices} from './openingEggChoices.js';
@@ -991,6 +992,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       detail.append(dataSection);
     }
     paintEvolutionRoutes(selected);
+    paintBurst(selected);
     if (!conditionControls.has(expandedConditionBranch)) expandedConditionBranch = null;
     if (focusedBranch !== null) conditionControls.get(focusedBranch)?.toggle.focus({preventScroll:true});
     if (selected.source === "STARTER" && selected.instances.length === 0) {
@@ -1097,6 +1099,64 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       graph.append(targets);
     }
     section.append(graph); detail.append(section);
+  }
+
+  // OWNER_APPROVED_ADAPTATION 2026-11-02: burst evolution. A 成熟期 page lists the forms it takes in battle
+  // and their unlock conditions; a 覺醒體 page lists the 成熟期 that burst into it.
+  /** One plain line for a burst form's conditions: the best cages for its points, its battles, win rate and stars. */
+  function dexAwakeningHint(conditions) {
+    const hints = [];
+    const point = conditions.find(condition => recommendedCages(condition.id).length);
+    if (point) hints.push(uiText('AWAKENING_HINT_CAGES', {cages: recommendedCages(point.id).slice(0, 2).map(cage => cageName(cage.definition, null)).join('、')}));
+    const battles = conditions.find(condition => condition.id === 'BATTLE_COUNT');
+    if (battles) hints.push(uiText('AWAKENING_HINT_BATTLES_TOTAL', {count: battles.value}));
+    if (conditions.some(condition => condition.id === 'EVOLUTION_WIN_PERCENT')) hints.push(uiText('AWAKENING_HINT_WINS'));
+    const rebirth = conditions.find(condition => condition.id === 'REBIRTH_COUNT');
+    if (rebirth) hints.push(uiText('AWAKENING_HINT_STARS', {count: rebirth.value}));
+    return hints.join('・') || uiText('DEX_CONDITIONS_NO_NUMERIC');
+  }
+  function paintBurst(selected) {
+    const burst = selected.burst;
+    if (!burst) return;
+    const section = element('section', 'cm-dex-burst');
+    section.dataset.burstKind = burst.kind;
+    section.setAttribute('aria-label', uiText('DEX_BURST'));
+    section.append(element('h3', 'cm-dex-burst__heading', 'DEX_BURST'),
+      element('p', 'cm-vs2-shop__meta', burst.kind === 'BASE' ? 'DEX_BURST_NOTE' : 'DEX_BURST_FROM'));
+    // An alternate battle form (229/230) is its own card beside the form it replaces.
+    const rows = burst.kind === 'BASE'
+      ? burst.forms.flatMap(form => [{species: form.formSpeciesIndex, revealed: form.revealed, tier: form.tier, conditions: form.conditions},
+        ...form.alternates.map((alternate, i) => ({species: alternate, revealed: form.alternatesRevealed[i], tier: form.tier, conditions: form.conditions}))])
+      : burst.bases.map(base => ({species: base.baseSpeciesIndex, revealed: base.revealed, tier: burst.tier, conditions: null}));
+    const targets = element('ul', 'cm-dex-burst__targets');
+    for (const row of rows) {
+      const mapping = getDatabaseDisplayEntry(row.species);
+      const name = row.revealed ? speciesName(row.species) : '????';
+      const item = element('li', 'cm-dex-burst__branch');
+      item.dataset.burstTier = String(row.tier);
+      const button = element('button', 'cm-dex-burst__target');
+      button.type = 'button'; button.disabled = !row.revealed; button.dataset.revealed = String(row.revealed);
+      button.setAttribute('aria-label', `${mapping?.displayCode ?? ''} · ${name} · ${uiText(`DEX_BURST_TIER_${row.tier}`)}`);
+      const copy = element('span', 'cm-dex-burst__copy');
+      copy.append(element('span', 'cm-vs2-shop__meta', mapping?.displayCode ?? ''), element('strong', 'cm-dex-burst__name', name),
+        element('span', 'cm-dex-burst__status', `DEX_BURST_TIER_${row.tier}`));
+      button.append(portrait(row.species, row.revealed), copy);
+      button.addEventListener('click', () => {
+        listScroll = list.scrollTop;
+        lastOpened = row.species;
+        if (mapping && activeStage !== null && activeStage !== mapping.numberingStageIndex) { activeStage = mapping.numberingStageIndex; stageFilter.value = String(activeStage); }
+        source.intents.selectDatabaseSpecies(row.species);
+        paint(source.getFrame());
+        detail.querySelector('h2')?.focus({preventScroll:true});
+      });
+      item.append(button);
+      // Awakening raising (Owner 2026-11-02): players read where to train and how much to battle, not the rules.
+      if (row.conditions) item.append(element('p', 'cm-dex-burst__conditions', dexAwakeningHint(row.conditions), false));
+      targets.append(item);
+    }
+    section.append(targets);
+    if (burst.kind === 'BASE') section.append(element('p', 'cm-dex-conditions__notice', 'DEX_BURST_METAL'));
+    detail.append(section);
   }
 
   // A registered partner's completed route plays in full colour; any other

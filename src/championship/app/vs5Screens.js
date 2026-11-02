@@ -859,7 +859,7 @@ function floatingMeterNumerals(value, label) {
   };
 }
 
-function combatantCard(combatant, compact,hudArt=null, floatingHud=false) {
+function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurstCall=null) {
   const card = element("li", `cm-vs5-fighter${compact ? " cm-vs5-fighter--compact" : ""}`);
   card.dataset.slot = String(combatant.slot);
   card.dataset.team = String(combatant.team);
@@ -895,9 +895,40 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false) {
     }
     card.append(resource.wrap);
   }
+  // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): the gauge fills while charging, then drains while
+  // the burst form lasts; the plate glows while wrapped or burst and dims while weakened.
+  let burstMeter = null, burstPhase = null, shownName = combatant.displayName ?? null;
+  if (combatant.burst) {
+    // Its own element, not a .cm-vs5-meter: the HP/TP meter readers (and their geometry checks) never see it.
+    const wrap = element("div", "cm-vs5-burst-gauge");
+    wrap.setAttribute("aria-label", uiText("BATTLE_BURST_GAUGE"));
+    wrap.setAttribute("role", "meter");
+    wrap.setAttribute("aria-valuemin", "0");
+    const fill = element("span", "cm-vs5-burst-gauge__fill");
+    wrap.append(fill);
+    burstMeter = { wrap, fill };
+    card.append(wrap);
+  }
   return {
     card,
     update(next,frame=0,outcome=null) {
+      if (next.displayName && next.displayName !== shownName && name.lastChild?.nodeType === 3) {
+        name.lastChild.textContent = next.displayName; shownName = next.displayName;
+      }
+      if (burstMeter && next.burst) {
+        const b = next.burst;
+        const ratio = b.phase === "CHARGING" ? b.gauge / Math.max(1, b.gaugeMax) : b.phase === "WRAP" ? 1
+          : b.phase === "BURST" ? 1 - (b.phaseFrame ?? 0) / Math.max(1, b.burstFrames) : 0;
+        burstMeter.fill.style.width = `${Math.round(Math.max(0, Math.min(1, ratio)) * 100)}%`;
+        burstMeter.wrap.setAttribute("aria-valuenow", String(Math.round(Math.max(0, Math.min(1, ratio)) * 100)));
+        burstMeter.wrap.setAttribute("aria-valuemax", "100");
+        card.dataset.burst = b.phase;
+        card.dataset.burstReady = String(b.phase === "READY" || (b.phase === "CHARGING" && b.gauge >= b.gaugeMax));
+        // Awakening raising (2026-11-02): an opponent about to burst warns the player.
+        card.dataset.burstWarn = String(b.warn === true);
+        if (b.phase !== burstPhase && b.phase === "BURST") onBurstCall?.(next);
+        burstPhase = b.phase;
+      }
       const requested=outcome?.ended&&outcome.winningTeam===next.team?9:next.down?5:0;
       if(requested!==sequenceId){sequenceId=requested;sequenceStart=frame;}
       const image=hudArt?.getBattleFrame(next.speciesId,sequenceId,Math.max(0,frame-sequenceStart));
@@ -932,7 +963,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false) {
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null, onBurst=null }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
   if(![0,1].includes(localTeamIndex))throw new TypeError('The Battle field view requires a local team');
@@ -950,13 +981,38 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   const cards = new Map();
   for (const combatant of frame.combatants) {
     const compact = combatant.team !== localTeamIndex;
-    const built = combatantCard(combatant, compact,hudArt,dynamicFx);
+    const built = combatantCard(combatant, compact,hudArt,dynamicFx,next=>burstCall(next));
     cards.set(combatant.slot, built);
     (compact ? opponents : players).append(built.card);
   }
 
   const host = element("div", "cm-vs5-field");
   host.setAttribute("aria-label", uiText("Battle field. The match runs on its own."));
+  // Burst evolution call-out over the field: 「爆裂進化！名字」, restarted for each burst.
+  const burstBanner = element("p", "cm-vs5-burst-call");
+  burstBanner.hidden = true;
+  burstBanner.setAttribute("role", "status");
+  burstBanner.addEventListener?.("animationend", () => { burstBanner.hidden = true; });
+  function burstCall(next) {
+    if (viewDisposed) return;
+    burstBanner.textContent = uiText("BATTLE_BURST_CALL", { name: next.displayName ?? "" });
+    burstBanner.dataset.side = next.team === localTeamIndex ? "player" : "opponent";
+    burstBanner.dataset.tier = String(next.burst?.tier ?? 1);
+    burstBanner.hidden = false;
+    burstBanner.classList.remove("is-live");
+    void burstBanner.offsetWidth;
+    burstBanner.classList.add("is-live");
+  }
+  host.append(burstBanner);
+  // Awakening raising (OWNER_APPROVED_ADAPTATION 2026-11-02): when a partner's gauge is full the player calls its
+  // burst; the ring empties over the wait, and the battle bursts by itself when it runs out.
+  const burstButton = element("button", "cm-vs5-burst-button");
+  burstButton.type = "button";
+  burstButton.hidden = true;
+  burstButton.append(element("span", "cm-vs5-burst-button__label", uiText("BATTLE_BURST_BUTTON")));
+  let burstReadySlot = null;
+  burstButton.addEventListener("click", () => { if (burstReadySlot !== null) onBurst?.(burstReadySlot); });
+  if (onBurst) host.append(burstButton);
   host.setAttribute('aria-busy','true');
   // 2026-10-12: real progress while the arena loads -- steps finish with their
   // loads, bytes are what the network delivered, nothing moves on a timer.
@@ -1085,6 +1141,14 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
       for (const combatant of view.combatants) {
         if (!combatant.present) continue;
         cards.get(combatant.slot)?.update(combatant,view.animationFrame??0,view.outcome);
+      }
+      const ready = view.combatants.find((c) => c.present && c.team === localTeamIndex && c.burst?.phase === "READY") ?? null;
+      burstReadySlot = ready?.slot ?? null;
+      burstButton.hidden = !ready || view.outcome.ended;
+      if (ready) {
+        burstButton.style.setProperty("--burst-left", String(Math.max(0, 1 - (ready.burst.readyFrame ?? 0) / Math.max(1, ready.burst.readyFrames ?? 1))));
+        if (ready.bloodline?.color) burstButton.style.setProperty("--bloodline", ready.bloodline.color); else burstButton.style.removeProperty("--bloodline");
+        burstButton.setAttribute("aria-label", uiText("BATTLE_BURST_BUTTON_FOR", { name: ready.displayName ?? "" }));
       }
       clock.update(view.clock);
       log.update(localOutcome(view.outcome));

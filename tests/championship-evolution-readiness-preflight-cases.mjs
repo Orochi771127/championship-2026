@@ -43,7 +43,8 @@ test('actual natural-clock batch stops on first newly started evolution before l
  const appSource=readFileSync(new URL('src/championship/app/championshipStandaloneApp.js',base),'utf8');
  const a=appSource.indexOf('    advanceNaturalClock({ frames } = {}) {'),b=appSource.indexOf('    getSelectedCreatureId()',a);
  let evolving=false,nativeSteps=0;const snapshot={clockMinutes:480,clockUnits:0,clockSubunits:0};
- const context={now:()=>0,discoveryCheckAt:0,NATIVE_CLOCK_CADENCE:{trainingDivisor:200,elapsedUnitsPerFrame:16},DAY_END_MINUTES:1320,
+ // realtime:false -- the native fast clock this batch rule belongs to (the real-time clock runs one frame per call).
+ const context={now:()=>0,discoveryCheckAt:0,realtime:false,NATIVE_CLOCK_CADENCE:{trainingDivisor:200,elapsedUnitsPerFrame:16},DAY_END_MINUTES:1320,
  requireSession:()=>({getRaisingHomeSnapshot:()=>snapshot}),advanceNativeRaising(){nativeSteps++;evolving=true;},nativeMessages:{morningPending:false,entryChecked:true,queue:[],activeId:null},ageNativeRaisingMessages:x=>x};
  vm.runInNewContext('globalThis.app={'+appSource.slice(a,b)+'};',context);
  Object.assign(context.app,{getClockRunState:()=>({running:true}),advanceClock:()=>({accepted:true}),getCalendar:()=>snapshot,deliverRaisingFeast(){},hasRaisingPresentation:()=>evolving});

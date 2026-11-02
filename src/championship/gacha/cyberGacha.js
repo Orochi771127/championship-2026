@@ -387,6 +387,25 @@ export function autoFillSynthesizer(state) {
   return picked.length === 5 ? Object.freeze(picked) : Object.freeze([]);
 }
 
+// OWNER_APPROVED_ADAPTATION 2026-11-02 (STAGE_REDESIGN_BURST_20261102): three shards of one family fuse into
+// that family's metal, so shards keep a way up now that SSR/UR metals unlock burst forms.
+export const GACHA_SHARD_FUSION_COST = 3;
+export function shardFusionTarget(shardId) {
+  const shard = getGachaMetal(shardId);
+  if (!shard || !shard.id.endsWith("-shard")) return null;
+  return GACHA_METALS.find((metal) => metal.family === shard.family && !metal.id.endsWith("-shard")) ?? null;
+}
+export function fuseGachaShards(state, shardId) {
+  const current = normalizeCyberGacha(state), target = shardFusionTarget(shardId);
+  if (!target) return deepFreeze({ ok: false, reason: "NOT_A_SHARD" });
+  if ((current.metals[shardId] ?? 0) < GACHA_SHARD_FUSION_COST) return deepFreeze({ ok: false, reason: "NOT_ENOUGH_SHARDS" });
+  const next = plain(current);
+  next.metals[shardId] -= GACHA_SHARD_FUSION_COST;
+  addPrize(next, { kind: "METAL", id: target.id, quantity: 1 });
+  return deepFreeze({ ok: true, consumed: { id: shardId, quantity: GACHA_SHARD_FUSION_COST },
+    prize: { kind: "METAL", id: target.id, rarity: target.rarity, quantity: 1 }, state: normalizeCyberGacha(next) });
+}
+
 /** Five chips in, one metal out; better chips raise the odds of an SSR/UR critical. */
 export function synthesizeGachaMetal(state, chipIds, { random }) {
   const current = normalizeCyberGacha(state);

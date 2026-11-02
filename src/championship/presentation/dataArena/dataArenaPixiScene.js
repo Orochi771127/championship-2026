@@ -26,6 +26,14 @@ import { createDataArenaElementFx } from './dataArenaElementFx.js';
 import { reviewedReleasePoint, releaseOffset, reviewedIdleBreath, reviewedWinHop, reviewedMoveRate } from './dataArenaReviewedMotion.js';
 import { RELAY_ACTION_PROFILES, relaySequence, relayEffectStyle } from '../../modes/dataArena/dataArenaRelay.js';
 import { RELAY_ROSTER, relayPartner } from '../../modes/dataArena/dataArenaRelayRoster.js';
+import { createBattleBurstShell } from '../vs5/battleBurstShell.js';
+import { GACHA_BLOODLINES } from '../../gacha/cyberGacha.js';
+// Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): the hex shell closes over the 成熟期 for this long before
+// its form stands in; then the plates scatter. The match itself never pauses.
+const ARENA_BURST_REVEAL_SECONDS = 0.6, ARENA_BURST_SCATTER_SECONDS = 0.5, ARENA_BURST_SHATTER_SECONDS = 0.4;
+// A tier-2 burst shows its tier-1 form for this long before the second flash (awakening raising, 2026-11-02).
+const ARENA_BURST_CHAIN_SECONDS = 0.3;
+const arenaReveal = burst => ARENA_BURST_REVEAL_SECONDS + (burst?.via != null ? ARENA_BURST_CHAIN_SECONDS : 0);
 
 const T = DATA_ARENA_TERRAIN;
 const TAU = Math.PI * 2;
@@ -105,6 +113,24 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   // drawn fighters 55 ms (drawing only; the simulation and input keep running).
   const numberLayer = new PIXI.Container({ label: "arena damage numbers" });
   world.addChild(groundChunks, tactical, water, cellFx, bridge, marks, objects, shotGlow, shots, beams, particles, lights, numberLayer);
+  const burstShell = createBattleBurstShell({ PIXI, layer: objects, reducedMotion });
+  rollback.push(() => burstShell.dispose());
+  /** The shell for one fighter from its burst record (relay): wrap, then scatter; a short shatter when it ends. */
+  function drawArenaBurstShell(key, body, burst, role) {
+    const height = ROLE_HEIGHT[role] ?? 80, centerY = body.y - floorOffset(body.x, body.y) - height * 0.5;
+    const shape = { x: body.x, y: centerY, width: height * 0.8, height, zIndex: body.y + 0.5, color: GACHA_BLOODLINES[burst?.bloodline]?.color ?? null };
+    const since = burst && burst.startedAt !== null ? state.time - burst.startedAt : Infinity, reveal = arenaReveal(burst);
+    if (burst?.phase === 'BURST' && since < reveal) {
+      // The wrap runs 0.6 s; a tier-2 chain adds its tier-1 form's 0.3 s (frames 72..89 of the shell).
+      const frames = burst.via != null ? 90 : 72, wrapFrame = since < ARENA_BURST_REVEAL_SECONDS ? since / ARENA_BURST_REVEAL_SECONDS * 72
+        : 72 + (since - ARENA_BURST_REVEAL_SECONDS) / ARENA_BURST_CHAIN_SECONDS * 18;
+      burstShell.update(key, { ...shape, burst: { phase: 'WRAP', tier: burst.tier, wrapFrame, wrapFrames: frames } });
+    } else if (burst?.phase === 'BURST' && since < reveal + ARENA_BURST_SCATTER_SECONDS) {
+      burstShell.update(key, { ...shape, burst: { phase: 'BURST', tier: burst.tier, phaseFrame: (since - reveal) * 60 } });
+    } else if (burst?.phase === 'WEAK' && state.time - (burst.until - 5) < ARENA_BURST_SHATTER_SECONDS) {
+      burstShell.update(key, { ...shape, burst: { phase: 'WEAK', tier: burst.tier, phaseFrame: (state.time - (burst.until - 5)) * 60 } });
+    } else burstShell.retire(key);
+  }
   // Five-layer element dressing and original effect cells (VFX_FIVE_LAYER_20261101).
   const elementFx = typeof createDataArenaElementFx === 'function' ? createDataArenaElementFx({ PIXI, ground: cellFx, front: particles, art: effectArt, quality, reducedMotion }) : null;
   if (elementFx) rollback.push(() => elementFx.dispose());
@@ -1067,9 +1093,16 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
 
     // Actors. Keep a view per selected team member; shared texture ownership stays
     // with the bundle scope and all views are destroyed with this scene.
-    if (state.gameMode === 'RELAY' && state.player.partnerId !== partnerId) {
+    // Burst evolution: once the shell has closed, the form's view stands in for the bursting 成熟期.
+    const playerBurst = state.gameMode === 'RELAY' ? state.relay?.team?.[state.relay.active]?.burst ?? null : null;
+    // A tier-2 chain shows its tier-1 form between the two flashes.
+    const burstSince = playerBurst?.phase === 'BURST' && state.player.burstPartnerId ? state.time - playerBurst.startedAt : -1;
+    const wantedPartnerId = burstSince >= arenaReveal(playerBurst) ? state.player.burstPartnerId
+      : burstSince >= ARENA_BURST_REVEAL_SECONDS && playerBurst?.via != null ? `relay-species-${String(playerBurst.via).padStart(3, '0')}` : null;
+    const shownPartnerId = wantedPartnerId && cast.partners.some(m => m.partnerId === wantedPartnerId) ? wantedPartnerId : state.player.partnerId;
+    if (state.gameMode === 'RELAY' && shownPartnerId !== partnerId) {
       playerView.container.visible = false;
-      partnerId = state.player.partnerId;
+      partnerId = shownPartnerId;
       if (!playerViews.has(partnerId)) playerViews.set(partnerId, createActorView('PLAYER', cast.partners.find(m => m.partnerId === partnerId), state.player));
       playerView = playerViews.get(partnerId); playerView.container.visible = true;
       actionEvents.delete(state.player.id);
@@ -1086,6 +1119,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const sink = player.state === "FALLING" ? clamp(player.stateTime / 0.7, 0, 1) : 0;
     playerView.update(dtMs, { x: player.x, y: riding ? mate.y - 2 : player.y, facing: player.facing, flash: player.hitFlash,
       alpha: blink ? 0.35 : 1, lift: riding ? 44 : 0, seq: playerSeq, sink });
+    if (state.gameMode === 'RELAY') drawArenaBurstShell('player', player, playerBurst, 'PLAYER');
     if (riding) playerView.container.zIndex = mate.y + 1;
     if (playerView.ringGfx) {
       const g = playerView.ringGfx;
@@ -1120,12 +1154,19 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
 
     // Rivals (tournament).
     for (const rival of state.rivals) {
-      let actorView = rivalViews.get(rival.id);
+      // Burst evolution: a bursting rival is drawn as its form once the shell has closed.
+      const rb = state.gameMode === 'RELAY' ? rival.burst ?? null : null;
+      const formMember = rb?.phase === 'BURST' && rival.burstSpeciesId && state.time - rb.startedAt >= arenaReveal(rb)
+        ? cast.partners.find((entry) => entry.speciesId === rival.burstSpeciesId) : null;
+      const viewKey = formMember ? `${rival.id}:${rival.burstSpeciesId}` : rival.id;
+      let actorView = rivalViews.get(viewKey);
       if (!actorView) {
-        const member = cast.rivals?.find((entry) => entry.rivalId === rival.definitionId);
+        const member = formMember ? { ...formMember, role: 'RIVAL' } : cast.rivals?.find((entry) => entry.rivalId === rival.definitionId);
         actorView = createActorView(member?.role ?? "RIVAL", member, rival);
-        rivalViews.set(rival.id, actorView);
+        rivalViews.set(viewKey, actorView);
       }
+      for (const [key, view] of rivalViews) if (String(key).split(':')[0] === String(rival.id)) view.container.visible = key === viewKey;
+      if (rb) drawArenaBurstShell(`rival:${rival.id}`, rival, rb, 'RIVAL');
       const seq = rival.hp <= 0 ? DATA_ARENA_SEQUENCES.DOWN : rival.hitFlash > 0 ? DATA_ARENA_SEQUENCES.HIT
         : relayWinner === 'rival' ? DATA_ARENA_SEQUENCES.WIN
         : rival.cast || rival.lunge || rival.recovery > 0 ? DATA_ARENA_SEQUENCES.ATTACK : Math.hypot(rival.vx, rival.vy) > 30 || rival.dashTimer > 0 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
@@ -1133,7 +1174,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       actorView.sprite.tint = statusTint(rival, rival.hitFlash > 0 ? 0xff9a9a : 0xffffff);
       actorView.setHealth(rival.active === false ? 0 : rival.hp / rival.maxHp);
     }
-    for (const [id, view] of rivalViews) if (!state.rivals.some((rival) => rival.id === id)) { view.container.destroy({ children: true }); rivalViews.delete(id); }
+    for (const [id, view] of rivalViews) if (!state.rivals.some((rival) => String(rival.id) === String(id).split(':')[0])) { view.container.destroy({ children: true }); rivalViews.delete(id); burstShell.retire(`rival:${String(id).split(':')[0]}`); }
     if (!(state.mate.state === "ABSENT")) mateView.container.visible = true; else mateView.container.visible = false;
     playerView.sprite.tint = statusTint(state.player, playerView.sprite.tint);
 

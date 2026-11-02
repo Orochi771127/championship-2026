@@ -67,10 +67,10 @@ test('stage aliases never rewrite placeholder names, ordinary perfect adjectives
     assert.equal(uiText('完全に回復'),'完全に回復');
     assert.equal(uiText('perfect timing'),'perfect timing');
   }
-  setLocale('en');assert.equal(generationName(6),'Ultimate');
+  setLocale('en');assert.equal(generationName(6),'Awakened II');
   assert.equal(titleEventText(28,'name'),'Perfect Fighter');
   assert.ok(titleEventText(57,'description').includes('ultimate beauty'));
-  setLocale('ja');assert.equal(generationName(6),'究極体');
+  setLocale('ja');assert.equal(generationName(6),'覚醒体・二段');
 });
 
 function inEnglish(t) {
@@ -147,7 +147,7 @@ test("English catalogs: names, help, events, shop, mail, tutorial", (t) => {
   inEnglish(t);
   assert.equal(gateName(0), "Dyna Grassland");
   assert.equal(cageName(18), "Hot Spring");
-  assert.equal(generationName(6), "Ultimate");
+  assert.equal(generationName(6), "Awakened II");
   assert.equal(tamerRankName(9), "Master");
   assert.equal(helpText(20, "title"), "Capture basics");
   assert.equal(titleEventText(8, "name"), "Spring Ace");
@@ -166,7 +166,7 @@ test("Japanese: design keys, catalogs, shop, tutorial, and battle", (t) => {
   assert.equal(uiText("1,250 Bits"), "1,250 Bits");
   assert.equal(gateName(0), "ダイナ草原");
   assert.equal(cageName(18), "温泉");
-  assert.equal(generationName(6), "究極体");
+  assert.equal(generationName(6), "覚醒体・二段");
   assert.equal(tamerRankName(9), "マスター");
   assert.equal(shopItemName(0), "エサ");
   assert.equal(battleMenuLabels().chooseMatch, "対戦を選択");
@@ -181,7 +181,7 @@ test("Thai: design keys, catalogs, shop, tutorial, and Gregorian calendar dates"
   assert.equal(uiText("1,250 Bits"), "1,250 Bits");
   assert.equal(gateName(0), "ทุ่งหญ้าไดนา");
   assert.equal(cageName(18), "น้ำพุร้อน");
-  assert.equal(generationName(6), "ขั้นสุดยอด");
+  assert.equal(generationName(6), "ร่างตื่นพลัง ขั้น 2");
   assert.equal(tamerRankName(9), "มาสเตอร์");
   assert.equal(shopItemName(0), "อาหาร");
   assert.equal(battleMenuLabels().chooseMatch, "เลือกการแข่งขัน");
@@ -199,7 +199,7 @@ test("Vietnamese: design keys, catalogs, shop, tutorial, and battle", (t) => {
   assert.equal(uiText("1,250 Bits"), "1,250 Bits");
   assert.equal(gateName(0), "Đồng cỏ Dyna");
   assert.equal(cageName(18), "Suối nước nóng");
-  assert.equal(generationName(6), "Tối hậu");
+  assert.equal(generationName(6), "Thức tỉnh bậc 2");
   assert.equal(tamerRankName(9), "Bậc thầy");
   assert.equal(shopItemName(0), "Thức ăn");
   assert.equal(battleMenuLabels().chooseMatch, "Chọn trận đấu");
