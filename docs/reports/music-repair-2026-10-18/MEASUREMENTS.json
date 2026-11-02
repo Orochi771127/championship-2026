@@ -784,10 +784,38 @@
       "runtimeGainDb": -9,
       "projectedLufs": -24.03,
       "projectedTruePeakDbtp": -10.14
+    },
+    {
+      "path": "assets/production/original-music-r1/bgm_sweetest_level_up.mp3",
+      "sha256": "e5de50be5be35832ce6ecb52a4dccf1716c369aaf1ec73427ca504e98ea54fa3",
+      "bytes": 1933940,
+      "sampleRate": 44100,
+      "channels": 2,
+      "seconds": 120.8,
+      "lufs": -15.13,
+      "truePeakDbtp": -1.54,
+      "lra": 11.4,
+      "threshold": -25.29,
+      "monoDecodePeak": 1.0614731311798096,
+      "spectralEnergyShare": {
+        "low": 0.673756,
+        "mid": 0.262517,
+        "presence": 0.040155,
+        "high": 0.020448
+      },
+      "spectralCentroidHz": 542.8,
+      "edgePeakFirst20ms": 0.0,
+      "edgePeakLast20ms": 0.018271567299962044,
+      "decodeErrors": null,
+      "listeningCompleted": false,
+      "runtimeGainDb": -8.9,
+      "projectedLufs": -24.03,
+      "projectedTruePeakDbtp": -10.44
     }
   ],
   "listeningCompleted": false,
   "physicalIphoneAccepted": false,
   "note20261102": "Retired championship_battle_normal_r1 ogg/m4a rows removed; the Concrete Edge row measures the shipped web encode, not the Owner's original bytes.",
-  "note20261102shop": "Lucky Draw Counter (Owner 2026-11-02, SHOP cue) row measures the web encode; spectral fields use the same 22,050 Hz mono, 4096-point Hann method as the battle_normal row."
+  "note20261102shop": "Lucky Draw Counter (Owner 2026-11-02, SHOP cue) row measures the web encode; spectral fields use the same 22,050 Hz mono, 4096-point Hann method as the battle_normal row.",
+  "note20261102loadout": "Sweetest Level Up (Owner 2026-11-02, GATE_SELECT, HUNT_LOADOUT and BATTLE_SELECT cue) row measures the web encode with the same method as the battle_normal row."
 }
