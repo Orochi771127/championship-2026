@@ -60,6 +60,23 @@ function transform(source,mode){
  replace("evidence.status='PASS';write();console.log('CHAMPIONSHIP_FRIENDS_PLAYTEST_BROWSER_PASS');","evidence.status='DIAGNOSTIC_CAPTURED';write();console.log('FRIENDS_FILMSTRIP_DIAGNOSTIC_CAPTURED');");
  return source;
 }
+const identity=state=>state.assets.map(a=>({creatureId:a.creatureId,speciesId:a.speciesId,entityId:a.entityId})).sort((a,b)=>a.creatureId.localeCompare(b.creatureId));
+function pairedLifecycle(on,off){
+ // Compare equivalent time boundaries, not an egg before its hatch to its own
+ // later form. Both independent contexts must show the same transition.
+ assert.deepEqual(identity(off.before),identity(on.before),'Same starting residents');
+ assert.deepEqual(identity(off.after),identity(on.after),'Same ending residents');
+ const before=identity(on.before),after=identity(on.after);
+ assert.deepEqual(after.map(a=>a.creatureId),before.map(a=>a.creatureId),'No actor added/removed');
+ const changes=before.flatMap((a,i)=>JSON.stringify(a)===JSON.stringify(after[i])?[]:[{before:a,after:after[i]}]);
+ if(changes.length){
+  const seedBytes=fs.readFileSync(path.join(__dirname,'../qa/championship-full-qa-save.json'));
+  assert.equal(crypto.createHash('sha256').update(seedBytes).digest('hex'),'04303429e62c1394dbd696ae67423f957512ed0987384cd962e89176bf6663b4','Exact immutable hatch fixture');
+  const seed=JSON.parse(seedBytes);assert.equal(seed.creature.nativeProfile.fields['000'],0);assert.equal(seed.creature.nativeProfile.fields['140'],14);
+  assert.deepEqual(changes,[{before:{creatureId:seed.creature.creatureId,speciesId:'championship:creature:species-000',entityId:'e000_digitama'},after:{creatureId:seed.creature.creatureId,speciesId:'championship:creature:species-014',entityId:'m007_botamon'}}],'Only the same fixture-defined natural hatch in both contexts');
+ }
+ return changes;
+}
 function join(rows){
  assert.equal(rows.length,2);assert.deepEqual(rows.map(r=>r.filmstrip?.mode).sort(),['off','on']);
  const on=rows.find(r=>r.filmstrip.mode==='on'),off=rows.find(r=>r.filmstrip.mode==='off');
@@ -67,14 +84,15 @@ function join(rows){
   assert.equal(r.status,'DIAGNOSTIC_CAPTURED');assert.equal(r.partition,undefined);assert.equal(r.buildId,BUILD);assert.equal(r.commit,on.commit);assert.match(r.commit,/^[a-f0-9]{40}$/);
   const f=r.filmstrip;assert.equal(f.schema,1);assert.equal(f.scope,'FIRST_ADJACENT_DESKTOP_GESTURE_ONLY');assert.equal(f.order,i+1);assert.equal(f.completedGestures,1);assert.equal(f.gestureSteps,20);assert.equal(f.gesture.steps,20);assert.equal(f.baselineRunnerSha256,BASE);assert.equal(f.diagnosticRunnerSha256,crypto.createHash('sha256').update(fs.readFileSync(__filename)).digest('hex'));assert.equal(r.browserVersion,on.browserVersion);
   assert.deepEqual(f.before.viewport,{width:1280,height:800,dpr:1});assert.deepEqual(f.after.viewport,f.before.viewport);assert.deepEqual(f.after.renderer,f.before.renderer);assert.deepEqual(f.before.renderer,on.filmstrip.before.renderer);assert.ok(Number.isSafeInteger(f.before.threeFrames)&&Number.isSafeInteger(f.after.threeFrames)&&f.before.threeFrames>0&&f.after.threeFrames>f.before.threeFrames,'Actual Three frames advance across the gesture');
-  for(const state of [f.before,f.after]){assert.ok(state.assets.length>0);assert.ok(state.assets.every(a=>a.state==='ready'&&!a.error));const ids=state.assets.map(a=>({creatureId:a.creatureId,speciesId:a.speciesId,entityId:a.entityId})).sort((a,b)=>a.creatureId.localeCompare(b.creatureId));const reference=on.filmstrip.before.assets.map(a=>({creatureId:a.creatureId,speciesId:a.speciesId,entityId:a.entityId})).sort((a,b)=>a.creatureId.localeCompare(b.creatureId));assert.deepEqual(ids,reference);}
+  for(const state of [f.before,f.after]){assert.ok(state.assets.length>0);assert.ok(state.assets.every(a=>a.state==='ready'&&!a.error));}
   assert.equal(f.resourceAuthority,'THREE_PUBLIC_MANIFEST_GLB_RESPONSES_V1');assert.deepEqual(f.resources,RESOURCES);verifyThreeResponses(r);
   assert.deepEqual(f.savedInvariant.before,f.savedInvariant.after);assert.equal(f.before.loadState,'ready');assert.equal(f.after.loadState,'ready');assert.equal(f.before.ariaBusy,'false');assert.equal(f.after.ariaBusy,'false');
   for(const k of ['beforePngMs','move20Ms','mouseUpMs','existing250msWaitElapsed','afterPngMs'])assert.ok(Number.isFinite(f.metrics[k])&&f.metrics[k]>=0,k);
   assert.ok(f.metrics.move20Ms>0,'Positive measured gesture duration required');assert.deepEqual(r.pageErrors,[]);assert.deepEqual(r.networkErrors,[]);assert.deepEqual(r.console.filter(m=>m.type==='error'||/CHAMPIONSHIP_RANCH_3D_FALLBACK|CHAMPIONSHIP_PIXI_FALLBACK|CHAMPIONSHIP_HUNT_(ART|DEPTH)_FALLBACK|Hunt feedback art unavailable/.test(m.text)),[]);
  }
  assert.deepEqual(on.filmstrip.savedInvariant.before.placements,off.filmstrip.savedInvariant.before.placements);assert.deepEqual(on.filmstrip.gesture,off.filmstrip.gesture,'Exact actual CSS gesture must match');
- return {status:'PAIRED_DIAGNOSTIC_ONLY',commit:on.commit,buildId:BUILD,order:['on','off'],move20Ms:{on:on.filmstrip.metrics.move20Ms,off:off.filmstrip.metrics.move20Ms},ratioOffToOn:off.filmstrip.metrics.move20Ms/on.filmstrip.metrics.move20Ms,limitations:['One fixed-order pair, not general causal proof','Independent fresh contexts, natural clock and actors are not same-frame paired','OFF second may benefit from OS caches','Does not complete source-corners or waive canceled Friends gates']};
+ const lifecycleChanges=pairedLifecycle(on.filmstrip,off.filmstrip);
+ return {status:'PAIRED_DIAGNOSTIC_ONLY',commit:on.commit,buildId:BUILD,order:['on','off'],lifecycleChanges,performanceComparable:lifecycleChanges.length===0,move20Ms:{on:on.filmstrip.metrics.move20Ms,off:off.filmstrip.metrics.move20Ms},ratioOffToOn:off.filmstrip.metrics.move20Ms/on.filmstrip.metrics.move20Ms,limitations:['One fixed-order pair, not general causal proof','Independent fresh contexts, natural clock and actors are not same-frame paired','A recorded natural hatch makes the timing ratio unsuitable for performance conclusions','OFF second may benefit from OS caches','Does not complete source-corners or waive canceled Friends gates']};
 }
 module.exports={BASE,BUILD,RESOURCES,transform,join};
 if(require.main===module){
