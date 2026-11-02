@@ -78,7 +78,10 @@ import { uiText } from '../text/uiText.js';
 import {nativeTreatmentAdmission} from '../raising/nativeRaisingTreatment.js';
 import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded,beginNativeRaisingCarry,releaseNativeRaisingCarry,cancelNativeRaisingCarry,beginNativeRaisingStroke,releaseNativeRaisingStroke,touchNativeRaisingActor} from '../raising/nativeRaisingActor.js';
 import {classifyNativeRaisingHand,stepNativeRaisingStrokeInput,nativeRaisingHandAdmission} from '../raising/nativeRaisingHand.js';
-import {createNativeRaisingActor,initializeNativeRaisingActor,interruptNativeRaisingFeeding,removeNativeRaisingFoodTarget,projectNativeRaisingActor,stepNativeRaisingActor,stepNativeRaisingAgeClock,touchNativeRaisingEgg,wakeNativeRaisingActor,startNativeRaisingMorning,stepNativeRaisingEvolution,enterNativeRaisingCage} from "../raising/nativeRaisingActor.js";
+import {createNativeRaisingActor,initializeNativeRaisingActor,interruptNativeRaisingFeeding,removeNativeRaisingFoodTarget,projectNativeRaisingActor,stepNativeRaisingActor,stepNativeRaisingAgeClock,touchNativeRaisingEgg,wakeNativeRaisingActor,startNativeRaisingMorning,stepNativeRaisingEvolution,enterNativeRaisingCage,beginNativeRaisingNap} from "../raising/nativeRaisingActor.js";
+import {NATIVE_RAISING_LIFECYCLE_RULES} from '../raising/nativeRaisingLifecycle.js';
+import {CLOCK_POLICIES,CLOCK_POLICY_NATIVE,CLOCK_POLICY_REALTIME,REALTIME_FOOD_UNITS_PER_SECOND,REALTIME_WAKE_SECONDS,isNightNap,offlineGrowthSeconds,
+  realtimeAgeRate,realtimeClockAdvance,realtimeDayPeriod,takeAgeUnits} from '../time/realtimeClock.js';
 // The ranch ground for either layout: the original board, or (expansion
 // prototype) the same ring continued into its annex.
 import {createRanchRaisingGround as createNativeRaisingGround,ranchRaisingSpawnPosition as nativeRaisingSpawnPosition,
@@ -186,6 +189,9 @@ export function createChampionshipStandaloneApp({
   // Owner 2026-10-28 partner life (moods, stroll finds, greetings). The product
   // shell turns it on; harnesses keep the original frame-for-frame behaviour.
   partnerLife = false,
+  // OWNER_APPROVED_ADAPTATION 2026-11-02: the product shell runs the ranch on the device's local time
+  // (REALTIME_V1); harnesses keep the native fast clock (time/realtimeClock.js).
+  clockPolicy = CLOCK_POLICY_NATIVE,
   // Cyber Gachapon draws (product randomness, not the ROM channel sequence).
   gachaRandom = Math.random
 } = {}) {
@@ -193,6 +199,12 @@ export function createChampionshipStandaloneApp({
   const savePort = createChampionshipPersistentSavePort({ storage, now, locks });
 
   const cageIds = cages.map((cage) => cage.cageId);
+  if (!CLOCK_POLICIES.includes(clockPolicy)) throw new TypeError("CHAMPIONSHIP_CLOCK_POLICY_UNKNOWN");
+  const realtime = clockPolicy === CLOCK_POLICY_REALTIME;
+  // Real time: when the clock last matched the device, fractional age per partner, and who is awake at night.
+  let realtimeLastMs = null, realtimeSyncAt = -Infinity, huntRealtime = null;
+  const realtimeAge = new Map(), realtimeWake = new Map();
+  const realNowMs = () => { const ms = Date.parse(now()); return Number.isFinite(ms) ? ms : Date.now(); };
   let session = null;
   let creature = null;
   let revision = 0;
@@ -335,7 +347,7 @@ export function createChampionshipStandaloneApp({
     tutorialBattleCandidate?.runtime.dispose();tutorialBattleCandidate=null;
     tutorialHuntCandidate=null;
     huntRuntime = null;
-    huntDeadlineMinute = null;
+    huntDeadlineMinute = null; huntRealtime = null;
     huntEntryError = null;
     huntLoadout = null;
     huntResult = null;
@@ -829,15 +841,17 @@ export function createChampionshipStandaloneApp({
 
   function advanceNativeRaising(frames,before) {
     synchronizeNativeRaisingActors();
+    // Real time: each partner ages at its stage's pace and the night is a nap (time/realtimeClock.js).
+    const nowMs=realtime?realNowMs():0,night=realtime&&isNightNap(before.clockMinutes);
     // Training and care move the burst counters; check about once a second of play.
     burstCheckFrames+=frames;if(burstCheckFrames>=60){burstCheckFrames=0;settleBurstUnlocks();}
     const ids=currentInstanceIds();
     let priorMinutes=0,changed=false;
     for(let frame=1;frame<=frames;frame++) {
       advanceRaisingHand();
-      const minutes=Math.floor((before.clockUnits+before.clockSubunits/1000+frame*NATIVE_CLOCK_CADENCE.elapsedUnitsPerFrame)/NATIVE_CLOCK_CADENCE.trainingDivisor);
-      const age=stepNativeRaisingAgeClock(raisingAgeRemainder,minutes-priorMinutes);
-      priorMinutes=minutes;raisingAgeRemainder=age.remainder;
+      const minutes=realtime?0:Math.floor((before.clockUnits+before.clockSubunits/1000+frame*NATIVE_CLOCK_CADENCE.elapsedUnitsPerFrame)/NATIVE_CLOCK_CADENCE.trainingDivisor);
+      const age=realtime?{ageDelta:takeAgeUnits(realtimeAge,'food',REALTIME_FOOD_UNITS_PER_SECOND/60)}:stepNativeRaisingAgeClock(raisingAgeRemainder,minutes-priorMinutes);
+      if(!realtime){priorMinutes=minutes;raisingAgeRemainder=age.remainder;}
       const signals=new Map();
       for(const food of raisingFoods) {
         const wasFresh=food.present&&food.freshness>0;
@@ -851,7 +865,15 @@ export function createChampionshipStandaloneApp({
         const actor=nativeRaisingActor(id);
         if(!actor)continue;
         const residents=[...raisingActors].filter(([,other])=>!other.detached&&(other.cageInstanceId??other.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).sort((a,b)=>a[1].poolSlot-b[1].poolSlot);
-        const result=stepNativeRaisingActor(actor,raisingNativeProfile(id),{ageDelta:age.ageDelta,rng:{next:nextGameplayRandom},
+        let ageDelta=age.ageDelta;
+        if(realtime){
+          ageDelta=takeAgeUnits(realtimeAge,id,realtimeAgeRate(nativeHuntSpeciesByIndex(actor.speciesIndex).generation)/60);
+          if(night&&!((realtimeWake.get(id)??0)>nowMs)){
+            const napped=beginNativeRaisingNap(actor,raisingNativeProfile(id),{next:nextGameplayRandom});
+            if(napped){writeRaisingNativeProfile(id,napped);changed=true;}
+          }
+        }
+        const result=stepNativeRaisingActor(actor,raisingNativeProfile(id),{ageDelta,rng:{next:nextGameplayRandom},
           feeding:raisingGround?{ground:raisingGround,foods:raisingFoods,signals,actors:raisingActors.values()}:null,
           lifecycle:raisingGround?{rank:Math.min(9,tamerRankValue),minute:before.clockMinutes+minutes,season:before.season,
             onJoin:()=>notifyNativeRaisingResidentAdded(actor,[...raisingActors.values()].filter(a=>!a.detached),{next:nextGameplayRandom}),
@@ -872,6 +894,62 @@ export function createChampionshipStandaloneApp({
     }
     if(raisingGround)storeNativeRaisingHome();
     if(changed)publishRaising();
+  }
+
+  // ---- Real-time clock (OWNER_APPROVED_ADAPTATION 2026-11-02; time/realtimeClock.js) ----
+  /** Move the world clock to the device's local time (whole real days, then the minute). Returns minutes moved. */
+  function syncRealtimeClock(nowMs=realNowMs(),{rollForward=false}={}){
+    if(!realtime||!session||tutorialBaseline||huntCommitActive)return 0;
+    const active=requireSession(),before=active.getRaisingHomeSnapshot();
+    // A device clock set back: the world clock waits for it to catch up.
+    if(realtimeLastMs!==null&&nowMs<realtimeLastMs)return 0;
+    const minutes=realtimeClockAdvance({clockMinutes:before.clockMinutes,lastMs:realtimeLastMs??nowMs,nowMs,rollForward});
+    realtimeLastMs=nowMs;
+    if(minutes<=0)return 0;
+    active.advanceRaisingClock({units:minutes*400,divisor:400,clearElapsed:true,expectedClockRevision:before.clockRevision});
+    const after=active.getRaisingHomeSnapshot();
+    if(after.season!==before.season||after.dayOfSeason!==before.dayOfSeason)rebuildFreeBattleMenu();
+    nativeMessages=ageNativeRaisingMessages(nativeMessages,minutes);
+    const start=before.clockMinutes,end=start+minutes;
+    // 07:00 opens the day's messages and entry check; each new hour every partner may check its evolution again.
+    if(Math.floor((end-420)/1440)>Math.floor((start-420)/1440))nativeMessages=normalizeNativeRaisingMessages({...nativeMessages,entryChecked:false,morningPending:true});
+    if(Math.floor(end/60)>Math.floor(start/60))for(const actor of raisingActors.values())actor.evolutionChecked=false;
+    savePort.markDirty();
+    return minutes;
+  }
+  /** Growth while the game was closed: age only (no hunger, sickness or death), at most to the end of a stage. */
+  function applyOfflineGrowth(seconds){
+    if(!realtime||!(seconds>0))return;
+    for(const id of partnerIds()){
+      const profile=partnerProfile(id);if(!profile)continue;
+      const index=profile.fields['000'],rule=NATIVE_RAISING_LIFECYCLE_RULES.species[index];
+      const generation=index<8?0:nativeHuntSpeciesByIndex(index).generation;
+      if(generation>=4||(index>=8&&!rule))continue;
+      const life=index<8?60:profile.fields['04c']?NATIVE_RAISING_LIFECYCLE_RULES.extendedLife[generation]:rule.life;
+      const age=profile.fields['18c']>>>0,grown=Math.min(Math.max(age,life),age+Math.floor(realtimeAgeRate(generation)*seconds));
+      if(grown>age){const next=structuredClone(profile);next.fields['18c']=grown>>>0;writeRaisingNativeProfile(id,next,{markDirty:false});}
+    }
+  }
+  /** At night a touch, feeding or treatment wakes a partner for ten minutes. */
+  function wakeRealtimePartner(id){
+    if(!realtime||!session||!isNightNap(requireSession().getRaisingHomeSnapshot().clockMinutes))return;
+    realtimeWake.set(id,realNowMs()+REALTIME_WAKE_SECONDS*1000);
+    const actor=raisingActors.get(id),profile=raisingNativeProfile(id);
+    if(!actor||!profile)return;
+    const woken=wakeNativeRaisingActor(actor,profile,raisingFoods,{next:nextGameplayRandom});
+    if(woken){writeRaisingNativeProfile(id,woken);publishRaising();}
+  }
+  /** 「讓拍檔休息」: every idle partner lies down now (at night it sleeps until morning). */
+  function restRaisingPartners(){
+    let changed=false;
+    for(const [id,actor] of raisingActors){
+      realtimeWake.delete(id);
+      const profile=raisingNativeProfile(id);if(!profile)continue;
+      const napped=beginNativeRaisingNap(actor,profile,{next:nextGameplayRandom});
+      if(napped){writeRaisingNativeProfile(id,napped);changed=true;}
+    }
+    if(changed){savePort.markDirty();publishRaising();}
+    return Object.freeze({accepted:true,code:'REST'});
   }
 
   function advanceRaisingHand(){
@@ -1164,7 +1242,7 @@ export function createChampionshipStandaloneApp({
     }else if(step.screen==='HUNT_FIELD'){
       if(!tutorialHuntCandidate)return;
       huntRuntime=tutorialHuntCandidate.runtime;huntLoadout=tutorialHuntCandidate.loadout;
-      selectedGateId=confirmedGateId=TUTORIAL_GATE.gateId;huntDeadlineMinute=null;
+      selectedGateId=confirmedGateId=TUTORIAL_GATE.gateId;huntDeadlineMinute=null;huntRealtime=null;
       if(screens.current()==='RAISING_HOME')screens.enter(CHAMPIONSHIP_SCREENS.GATE_SELECT);
       if(screens.current()==='GATE_SELECT')screens.enter(CHAMPIONSHIP_SCREENS.HUNT_LOADOUT);
       if(screens.current()==='HUNT_LOADOUT')screens.enter(CHAMPIONSHIP_SCREENS.HUNT_FIELD);
@@ -1357,6 +1435,14 @@ export function createChampionshipStandaloneApp({
     raising = repairStrollLogNames(candidate.production);
     burstEvolution = normalizeBurstEvolution(saved.progression.burstEvolution ?? null);
     migrateLegacyBurstPartners();
+    if (realtime) {
+      // Up to twelve hours of growth while the game was closed, then the clock shows the device's time.
+      realtimeAge.clear(); realtimeWake.clear(); realtimeSyncAt = -Infinity;
+      realtimeLastMs = Date.parse(saved.updatedAt);
+      applyOfflineGrowth(offlineGrowthSeconds(realtimeLastMs, realNowMs()));
+      if (!(realtimeLastMs <= realNowMs())) realtimeLastMs = realNowMs();
+      syncRealtimeClock(realNowMs(), { rollForward: true });
+    }
     raisingHand=null;raisingActors.clear();raisingAgeRemainder=0;
     instanceIdentity = candidate.identity;
     selectedCreatureId = null;
@@ -1536,6 +1622,8 @@ export function createChampionshipStandaloneApp({
       initializeNativeRaisingHome();
       selectedDatabaseSpeciesIndex = null;
       resetExpedition();
+      // Real time: the first day starts at the device's current time.
+      if (realtime) { realtimeAge.clear(); realtimeWake.clear(); realtimeSyncAt = -Infinity; realtimeLastMs = realNowMs(); syncRealtimeClock(realtimeLastMs, { rollForward: true }); }
       return { creature, snapshot: session.getRaisingHomeSnapshot(), raising };
     },
 
@@ -1659,6 +1747,8 @@ export function createChampionshipStandaloneApp({
     },
     requestRaisingDayEnd(){
       if(this.hasRaisingPresentation()||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)return false;
+      // Real time has no day to end: the toolbar entry lets the partners rest instead.
+      if(realtime)return restRaisingPartners().accepted;
       raisingDayConfirmation=true;publishRaising();return true;
     },
     confirmRaisingDayEnd(accepted){
@@ -1718,6 +1808,7 @@ export function createChampionshipStandaloneApp({
     },
 
     beginRaisingHand(instanceId,pointer){
+      wakeRealtimePartner(instanceId);
       if(tutorialBaseline){
         if(instanceId!==creature.creatureId||raisingHand||!tutorialInput(pointer?.checkpoint,"carry","hand")
           ||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
@@ -1756,6 +1847,7 @@ export function createChampionshipStandaloneApp({
       raisingHand.held=false;advanceRaisingHand();publishRaising();return true;
     },
     beginRaisingCarry(instanceId,pointer){
+      wakeRealtimePartner(instanceId);
       if(this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME||!raisingGround
         ||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
       const actor=raisingActors.get(instanceId),profile=raisingNativeProfile(instanceId);
@@ -1798,6 +1890,7 @@ export function createChampionshipStandaloneApp({
     },
 
     treatRaisingResident(instanceId,kind,checkpoint=null) {
+      wakeRealtimePartner(instanceId);
       if(tutorialBaseline){
         const illness=kind===1,action=illness?"illness":"injury";
         if((kind!==0&&kind!==1)||instanceId!==creature.creatureId||!tutorialInput(checkpoint,action,illness?"medicine":"woundMedicine"))return {ok:false};
@@ -1847,6 +1940,7 @@ export function createChampionshipStandaloneApp({
     },
 
     placeRaisingFood({x,y,protein=false,checkpoint=null}={}) {
+      for(const id of raisingActors.keys())wakeRealtimePartner(id);
       if(tutorialBaseline){
         const [dx,dy]=tutorialBoardOffset();
         if(protein||!tutorialInput(checkpoint,"feed","feed")||!Number.isFinite(x)||!Number.isFinite(y)||Math.abs(x-dx-100)>12||Math.abs(y-dy-120)>12)return {ok:false,reason:"TUTORIAL_TARGET_REQUIRED"};
@@ -1973,6 +2067,7 @@ export function createChampionshipStandaloneApp({
     },
     /** A tap on a partner: its mood emote, and +1 affection (field 020) at most once per cooldown. */
     touchRaisingPartner(instanceId){
+      wakeRealtimePartner(instanceId);
       if(!partnerLife||!session||tutorialBaseline||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)return null;
       const actor=nativeRaisingActor(instanceId),profile=raisingNativeProfile(instanceId),reading=partnerReading(instanceId,actor);
       if(!reading)return null;
@@ -2309,7 +2404,12 @@ export function createChampionshipStandaloneApp({
       if(this.hasRaisingPresentation())return Object.freeze({running:false,reason:'RAISING_PRESENTATION'});
       const snapshot = session.getRaisingHomeSnapshot();
       if (snapshot.paused) return Object.freeze({ running: false, reason: "PAUSED" });
-      if (snapshot.clockMinutes >= DAY_END_MINUTES) return Object.freeze({ running: false, reason: "DAY_END" });
+      // Real time has no 22:00 day end: the night is a nap and the clock keeps the device's time.
+      if (!realtime && snapshot.clockMinutes >= DAY_END_MINUTES) return Object.freeze({ running: false, reason: "DAY_END" });
+      if (realtime && screens.current() === CHAMPIONSHIP_SCREENS.HUNT_FIELD && huntRealtime) {
+        const left = huntRealtime.limitMinutes * 400 - huntRealtime.elapsedUnits;
+        return Object.freeze({ running: left > 0, reason: left > 0 ? "NORMAL_HUNT" : "HUNT_TIME_UP" });
+      }
       // OVL0 02116CB0 resumes normal Hunt (the tutorial mode 2 is separate).
       // 02116D28 stores min(entry minute + 8 hours, 22:00) in session+18.
       if (screens.current() === CHAMPIONSHIP_SCREENS.HUNT_FIELD && huntDeadlineMinute !== null) {
@@ -2336,6 +2436,25 @@ export function createChampionshipStandaloneApp({
       if(new Date(now()).getTime()-discoveryCheckAt>=5000)settleDiscoveries();
       const runState = this.getClockRunState();
       if (!runState.running || frames === 0) return Object.freeze({ accepted: false, code: runState.reason ?? "NO_ELAPSED_FRAMES" });
+      if (realtime) {
+        // The world clock follows the device; a hunt counts down on its own (480 hunt minutes, 25 frames each).
+        const nowMs = realNowMs();
+        if (nowMs - realtimeSyncAt >= 1000) { realtimeSyncAt = nowMs; syncRealtimeClock(nowMs); }
+        if (runState.reason === "NORMAL_HUNT") {
+          huntRealtime.elapsedUnits += frames * NATIVE_CLOCK_CADENCE.elapsedUnitsPerFrame;
+          this.checkHuntDeadline();
+          return Object.freeze({ accepted: true, code: "HUNT_COUNTDOWN" });
+        }
+        let last = Object.freeze({ accepted: false, code: "NO_ELAPSED_FRAMES" });
+        for (let i = 0; i < frames; i++) {
+          const beforeFrame = requireSession().getRaisingHomeSnapshot();
+          advanceNativeRaising(1, beforeFrame);
+          last = Object.freeze({ accepted: true, code: "REALTIME" });
+          this.settleRaisingFrameMessages(beforeFrame.clockMinutes);
+          if (this.hasRaisingPresentation()) break;
+        }
+        return last;
+      }
       const snapshot = requireSession().getRaisingHomeSnapshot();
       const inHunt = runState.reason === "NORMAL_HUNT";
       const divisor = inHunt ? 400 : NATIVE_CLOCK_CADENCE.trainingDivisor;
@@ -2351,18 +2470,7 @@ export function createChampionshipStandaloneApp({
         for(let i=0;i<activeFrames;i++){
           const beforeFrame=requireSession().getRaisingHomeSnapshot();
           last=this.advanceClock({units:NATIVE_CLOCK_CADENCE.elapsedUnitsPerFrame,divisor,clearElapsed:frames>=framesUntilStop&&i===activeFrames-1});
-          if(last.accepted){advanceNativeRaising(1,beforeFrame);
-            const c=this.getCalendar();nativeMessages=ageNativeRaisingMessages(nativeMessages,c.clockMinutes-beforeFrame.clockMinutes);
-            if(nativeMessages.morningPending)this.prepareMorningMessages();
-            this.deliverRaisingFeast();
-            if(!nativeMessages.entryChecked&&c.clockMinutes>=420&&c.clockMinutes<900){
-              const championship=c.season===2&&c.dayOfSeason===4&&nativeTitles.championship[c.year%4===3?'worldEntry':'entry'];
-              const registered=this.getAvailableBattleRecordIndices().some(id=>nativeTitles.registered.includes(id)&&!battleBadgesValue.includes(id));
-              if(championship||registered){nativeMessages=enqueueNativeRaisingMessage(nativeMessages,null,{system:true,textId:94,minutes:900-c.clockMinutes,required:false});}
-              nativeMessages=normalizeNativeRaisingMessages({...nativeMessages,entryChecked:true});
-            }
-            if(nativeMessages.queue.some(q=>q.system&&!q.opened)||(nativeMessages.activeId!==null&&nativeMessages.queue.some(q=>q.id===nativeMessages.activeId&&!q.opened)))this.openRaisingMail();
-          }
+          if(last.accepted){advanceNativeRaising(1,beforeFrame);this.settleRaisingFrameMessages(beforeFrame.clockMinutes);}
           if(this.hasRaisingPresentation())break;
         }
         return last;
@@ -2371,6 +2479,30 @@ export function createChampionshipStandaloneApp({
         divisor, clearElapsed: frames >= framesUntilStop });
       if (inHunt) this.checkHuntDeadline();
       return result;
+    },
+
+    /** After one raising frame: message ageing (native clock), morning mail, feast, the day's entry notice. */
+    settleRaisingFrameMessages(beforeMinutes) {
+      const c=this.getCalendar();
+      if(!realtime)nativeMessages=ageNativeRaisingMessages(nativeMessages,c.clockMinutes-beforeMinutes);
+      if(nativeMessages.morningPending)this.prepareMorningMessages();
+      this.deliverRaisingFeast();
+      if(!nativeMessages.entryChecked&&c.clockMinutes>=420&&c.clockMinutes<900){
+        const championship=c.season===2&&c.dayOfSeason===4&&nativeTitles.championship[c.year%4===3?'worldEntry':'entry'];
+        const registered=this.getAvailableBattleRecordIndices().some(id=>nativeTitles.registered.includes(id)&&!battleBadgesValue.includes(id));
+        if(championship||registered){nativeMessages=enqueueNativeRaisingMessage(nativeMessages,null,{system:true,textId:94,minutes:900-c.clockMinutes,required:false});}
+        nativeMessages=normalizeNativeRaisingMessages({...nativeMessages,entryChecked:true});
+      }
+      if(nativeMessages.queue.some(q=>q.system&&!q.opened)||(nativeMessages.activeId!==null&&nativeMessages.queue.some(q=>q.id===nativeMessages.activeId&&!q.opened)))this.openRaisingMail();
+    },
+
+    /** NATIVE or REALTIME_V1 (time/realtimeClock.js). */
+    getClockPolicy() { return clockPolicy; },
+    /** Real time only: MORNING / DAY / DUSK / NIGHT for the ranch light, and whether it is the night nap. */
+    getDayPeriod() {
+      if (!realtime || !session) return null;
+      const minute = requireSession().getRaisingHomeSnapshot().clockMinutes;
+      return Object.freeze({ period: realtimeDayPeriod(minute), nightNap: isNightNap(minute) });
     },
 
     getSelectedCreatureId() {
@@ -2425,6 +2557,7 @@ export function createChampionshipStandaloneApp({
      */
     endDay() {
       if(this.hasRaisingPresentation())return Object.freeze({accepted:false,code:'RAISING_PRESENTATION'});
+      if(realtime)return restRaisingPartners();
       cancelRaisingHand();
       const before=requireSession().getRaisingHomeSnapshot();
       const result = dispatchRaisingHomeCommand({ type: RAISING_HOME_COMMANDS.END_DAY });
@@ -3832,6 +3965,8 @@ export function createChampionshipStandaloneApp({
         if (entry) { gameplayRng = entry.rng; huntPersistentState = entry.persistentState; }
         huntRuntime = candidateRuntime;
         huntDeadlineMinute = entry ? Math.min(requireSession().getRaisingHomeSnapshot().clockMinutes + 480 + (boosts.extraSeconds ?? 0), DAY_END_MINUTES) : null;
+        // Real time: the hunt's own countdown, 480 hunt minutes (+ an armed chrono cartridge's), no 22:00 cut.
+        huntRealtime = realtime && entry ? { elapsedUnits: 0, limitMinutes: 480 + (boosts.extraSeconds ?? 0) } : null;
         if (armed.chips.length) { cyberGacha = armed.state; lastHuntGachaBoosts = Object.freeze([...armed.chips]); }
         // Hunt resume discards the prior scene's raw sub-minute remainder.
         if (entry) requireSession().advanceRaisingClock({ units: 0, divisor: 400, clearElapsed: true,
@@ -3860,12 +3995,19 @@ export function createChampionshipStandaloneApp({
      */
     getHuntTimeState() {
       if (huntDeadlineMinute === null || screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD) return null;
+      if (huntRealtime) return Object.freeze({ deadlineMinute: huntRealtime.limitMinutes,
+        remainingMinutes: Math.max(0, huntRealtime.limitMinutes - Math.floor(huntRealtime.elapsedUnits / 400)),
+        evidence: "PRODUCT_REALTIME_HUNT_COUNTDOWN" });
       return Object.freeze({ deadlineMinute: huntDeadlineMinute,
         remainingMinutes: Math.max(0, huntDeadlineMinute - requireSession().getRaisingHomeSnapshot().clockMinutes),
         evidence: "ROM_NORMAL_HUNT_CLOCK_AND_DEADLINE" });
     },
 
     checkHuntDeadline() {
+      if (huntRealtime) {
+        if (screens.current() === CHAMPIONSHIP_SCREENS.HUNT_FIELD && huntRealtime.elapsedUnits >= huntRealtime.limitMinutes * 400) this.exitHunt();
+        return;
+      }
       if (screens.current() === CHAMPIONSHIP_SCREENS.HUNT_FIELD && huntDeadlineMinute !== null
         && requireSession().getRaisingHomeSnapshot().clockMinutes >= huntDeadlineMinute) this.exitHunt();
     },
@@ -3899,7 +4041,7 @@ export function createChampionshipStandaloneApp({
           active.advanceRaisingClock({ units: 0, divisor: 400, clearElapsed: true,
             expectedClockRevision: active.getRaisingHomeSnapshot().clockRevision });
         }
-        huntDeadlineMinute = null;
+        huntDeadlineMinute = null; huntRealtime = null;
         const entries = huntRuntime?.getOnCardEntries() ?? [];
         if (entries.length > 0) {
           const entry = entries[0];

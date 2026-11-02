@@ -740,6 +740,8 @@ export const TEXT_EN = Object.freeze({
   "移除與報名尚未開放。": "Remove and Enter are not available yet.",
   "轉生": "Rebirth",
   "已解鎖": "Unlocked",
+  "讓拍檔休息": "Let partners rest",
+  "讓牧場的拍檔躺下休息": "Your partners lie down to rest",
   "出戰形態": "Battle form",
   "設為爆裂形態": "Use in battle",
   "這隻拍檔不在牧場裡，請先讓牠住進籠舍再轉生。": "This partner isn't in the ranch. Move it into a cage before its rebirth.",

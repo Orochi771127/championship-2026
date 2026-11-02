@@ -35,6 +35,8 @@ import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, RELAY_LOADOUTS, 
 import { relayOwnMoveInfo, relayBasicRecord } from '../modes/dataArena/dataArenaRelayKits.js';
 import { battleMoveName } from '../text/battleMoveNames.js';
 import { speciesTaxonomyForId, elementMatchup, factionResonance } from '../contracts/speciesTaxonomy.js';
+import { burstBasesFor, burstFormsFor, isBurstForm } from '../contracts/productBurstEvolution.js';
+import { speciesName } from '../text/zhHant.js';
 import { taxonomyText } from '../text/taxonomyText.js';
 import { taxonomyBadgeRow, resonanceStrip } from '../presentation/taxonomyBadgeArt.js';
 import { elementChartButton } from './elementChartModal.js';
@@ -104,9 +106,23 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   const settings = records.get().settings;
   let shake = settings.shake && !reducedMotion;
   let quality = settings.quality === "auto" ? (coarse || Math.min(innerWidth, innerHeight) < 500 ? "low" : "high") : settings.quality;
-  let partnerId = records.get().lastPartnerId;
+  // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): former 覺醒體/究極體 are a 成熟期's burst forms in the
+  // relay too, so they are not picked; a saved pick of one becomes the 成熟期 that bursts into it.
+  const relayIndexOf = id => Number(String(relayPartner(id)?.speciesId ?? '').split('-').at(-1));
+  // Stage 5/6 entries (the ROM's 224-227 duplicates too) and the alternate forms are never picked.
+  const relayBurstOnly = p => (p?.generationIndex ?? 0) >= 5 || isBurstForm(p?.speciesIndex);
+  const relayPickable = id => {
+    if (!String(id ?? '').startsWith('relay-') || !relayPartner(id) || !relayBurstOnly(relayPartner(id))) return id;
+    const base = burstBasesFor(relayIndexOf(id)).map(i => `relay-species-${String(i).padStart(3, '0')}`).find(b => relayPartner(b));
+    return base ?? RELAY_ROSTER.find(p => !relayBurstOnly(p))?.id ?? id;
+  };
+  const relayBurstMember = id => {
+    const form = burstFormsFor(relayIndexOf(id)).find(f => f.tier === 1)?.form;
+    return form === undefined ? null : cast.partners.find(m => m.partnerId === `relay-species-${String(form).padStart(3, '0')}`) ?? null;
+  };
+  let partnerId = relayPickable(records.get().lastPartnerId);
   const relayLoadouts = records.get().relayLoadouts ?? {};
-  let relayReserveId=records.get().relayReserveId,relayArenaId=records.get().relayArenaId;
+  let relayReserveId=relayPickable(records.get().relayReserveId),relayArenaId=records.get().relayArenaId;
   let gameMode = MODES.includes(records.get().lastMode) ? records.get().lastMode : "TOURNAMENT";
   const rivalName = (rivalId) => cast.rivals.find((rival) => rival.rivalId === rivalId)?.name ?? "";
 
@@ -448,7 +464,10 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       put('phase', hudRefs.phase, text, t('mode.RELAY'));
       put('objective', hudRefs.objective, text, t('relay.remaining', { count: 2 - snap.relay.enemyIndex }));
       snap.relay.team.forEach((member, index) => {
-        const team = `${index === snap.relay.active ? '▶' : '◇'} ${cast.partners.find(p => p.partnerId === member.partnerId)?.name} ${member.hp}/${member.maxHp}`;
+        // Burst evolution: the gauge while charging; while burst, the form's name and a mark.
+        const burst = member.burst ? member.burst.phase === 'CHARGING' ? ` ⚡${member.burst.gauge}%` : member.burst.phase === 'BURST' ? ` ${t('relay.burst.mark')}` : '' : '';
+        const name = member.burst?.phase === 'BURST' ? speciesName(member.burst.form) : cast.partners.find(p => p.partnerId === member.partnerId)?.name;
+        const team = `${index === snap.relay.active ? '▶' : '◇'} ${name} ${member.hp}/${member.maxHp}${burst}`;
         put(`team${index}`, hudRefs.teamRows[index], (node, value) => { node.textContent = value; node.title = value; }, team);
       });
       const cooldown = snap.relay.switchCooldown;
@@ -521,7 +540,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const rival = snap.rivals[0];
     if (rival) {
       put("bossShown", hudRefs.boss, (node, v) => { node.hidden = !v; }, true);
-      put("bossName", hudRefs.bossName, text, rivalName(rival.id));
+      // Burst evolution: a burst relay rival goes by its form's name.
+      const rivalBurst = snap.relay?.rivalBurst;
+      put("bossName", hudRefs.bossName, text, rivalBurst?.phase === 'BURST' ? speciesName(rivalBurst.form) : rivalName(rival.id));
       put("bossHp", hudRefs.bossFill, bossWidth, Math.round((rival.hp / rival.maxHp) * 200) / 200);
       put("bossShield", hudRefs.bossShield, text, rival.rooted ? "❄" : rival.slowed ? "≋" : rival.casting ? "!" : "");
     } else {
@@ -575,6 +596,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         case 'RELAY_SWITCH': releaseInputs(); buildHud(); audio?.play('capture'); toast(t('relay.switched')); break;
         case 'RELAY_INTRO': banner(t('relay.ready'), 'phase', 2000); break;
         case 'RELAY_RIVAL': audio?.play('warn'); banner(t('relay.rival'), 'warn', 1500); break;
+        // Burst evolution (2026-11-02): the call-out names the form.
+        case 'BURST': audio?.play(event.side === 'player' ? 'pickup' : 'warn');
+          banner(t(`relay.burst.${event.side}`, { name: speciesName(event.form) }), event.side === 'player' ? 'good' : 'warn', 1600); break;
         // Stage three arena zones and cover (2026-10-28).
         case 'ARENA_WARNING': audio?.play('warn'); banner(t(`arena.${event.kind}.warn`), 'warn', 2400); break;
         case 'ARENA_ACTIVE': banner(t(`arena.${event.kind}.active`), 'good', 2200); break;
@@ -722,7 +746,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   // ------------------------------------------------------------------ assets
   async function loadCast(selectedPartnerId) {
     const partner = cast.partners.find((p) => p.partnerId === selectedPartnerId);
-    const wanted = (gameMode === 'RELAY' ? [...cast.partners.filter(p => relayTeamIds(selectedPartnerId,relayReserveId).includes(p.partnerId)), ...cast.rivals.slice(0, 2)] : gameMode === "TOURNAMENT" ? [partner, ...cast.rivals] : [partner, cast.mate, cast.boss]).filter((member) => member?.art);
+    // A relay fighter's burst form (and each rival's) is drawn mid-match, so its art loads up front.
+    const relayTeam = gameMode === 'RELAY' ? relayTeamIds(selectedPartnerId,relayReserveId) : [];
+    const rivalForms = gameMode === 'RELAY' ? cast.rivals.slice(0, 2).map(r => { const form = burstFormsFor(Number(String(r.speciesId).split('-').at(-1))).find(f => f.tier === 1)?.form;
+      return form === undefined ? null : cast.partners.find(m => m.speciesId === `species-${String(form).padStart(3, '0')}`) ?? null; }) : [];
+    const wanted = (gameMode === 'RELAY' ? [...cast.partners.filter(p => relayTeam.includes(p.partnerId)), ...relayTeam.map(relayBurstMember), ...cast.rivals.slice(0, 2), ...rivalForms] : gameMode === "TOURNAMENT" ? [partner, ...cast.rivals] : [partner, cast.mate, cast.boss]).filter((member) => member?.art);
     bundleScope ??= createPixiAssetScope(stage.PIXI, href, { signal });
     let failed = false;
     // Release a partner no longer on the field.
@@ -933,7 +961,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           for(const item of items){const option=el('option','',item.name);option.value=item.id;option.selected=item.id===value;select.append(option);}
           select.addEventListener('change',()=>{change(select.value);refresh();},{signal});label.append(select);relayOptions.append(label);
         };
-        const choices=RELAY_ROSTER.map(p=>({id:p.id,name:`${t('relay.stage.'+p.generationIndex)} · ${cast.partners.find(c=>c.partnerId===p.id).name}`}));
+        const choices=RELAY_ROSTER.filter(p=>!relayBurstOnly(p)).map(p=>({id:p.id,name:`${t('relay.stage.'+p.generationIndex)} · ${cast.partners.find(c=>c.partnerId===p.id).name}`}));
         pick('relay.first',partnerId,choices,id=>{partnerId=id;});
         pick('relay.reserve',team[1],choices.filter(p=>p.id!==partnerId),id=>{relayReserveId=id;});
         pick('relay.map',relayArenaId,RELAY_MAP_IDS.map((id,i)=>({id,name:t('relay.map.'+(i+1))})),id=>{relayArenaId=id;});

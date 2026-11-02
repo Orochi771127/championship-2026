@@ -35,6 +35,7 @@ import { relayBattleMap } from './dataArenaRelayMaps.js';
 import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, relayMove, relayFacing8, relayKit, relayMoveElement } from './dataArenaRelay.js';
 import { createRelayArenaEvents } from './dataArenaRelayArena.js';
 import { speciesTaxonomyForId, elementMultiplierPercent, factionResonance, TAXONOMY_RESONANCE } from '../../contracts/speciesTaxonomy.js';
+import { BURST_RULES, burstFormsFor, burstMultiplier } from '../../contracts/productBurstEvolution.js';
 
 const DT = DATA_ARENA_STEP_SECONDS;
 const TAU = Math.PI * 2;
@@ -243,6 +244,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if (player.state === "RIDING") { hurtMate(amount * DATA_ARENA_MATE.ride.damageShare, source, x, y); return true; }
     if (player.invulnerable > 0) return false;
     amount *= playerTakenScale();
+    // Burst evolution (relay): every hit on the fighter is scaled by both sides' burst and fills both gauges.
+    amount = scaleArenaBurst(player, amount); chargeArenaBurst(player, amount);
     player.hp -= amount;
     chargeUlt(amount * DATA_ARENA_ENERGY.ultPerDamageTaken);
     state.stats.damageTaken += amount;
@@ -608,7 +611,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if (body.burn > 0) {
       body.burn = Math.max(0, body.burn - DT);
       const dps = 8 * DT;
-      if (body === player) { if (player.invulnerable <= 0) { player.hp = Math.max(1, player.hp - dps); state.stats.damageTaken += dps; } }
+      if (body === player) { if (player.invulnerable <= 0) { player.hp = Math.max(1, player.hp - dps); state.stats.damageTaken += dps; chargeArenaBurst(player, dps); } }
       else if (isRival(body)) damageRival(body, dps, "BURN");
       else if (body !== state.boss) damageEnemy(body, dps, "FIRE");
     }
@@ -744,6 +747,42 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   const coverElement = (caster, moveId) => relayMoveElement(moveId, casterElement(caster));
   // Player-side faction resonance (relay only). Rivals fight alone and carry none.
   const resonant = key => relayMode && (state.relay?.resonance?.includes(key) ?? false);
+  // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02, STAGE_REDESIGN_BURST_20261102), RELAY only: a 成熟期
+  // fighter's gauge fills from damage dealt (150 per foe max HP) and taken (200 per own max HP); full, it bursts once
+  // per match into its first one-stage form for 20 s (dealt x1.4, taken divided by the same), then is weakened
+  // (x0.85) for 5 s. Switching out ends a burst. Its form is drawn while it lasts.
+  const arenaBurstPlan = speciesId => {
+    const form = burstFormsFor(Number(String(speciesId).split('-').at(-1))).find(f => f.tier === 1);
+    return form ? { form: form.form, tier: 1, gauge: 0, phase: 'CHARGING', until: 0, startedAt: null } : null;
+  };
+  const burstOfBody = body => !relayMode || !body ? null : body === player ? state.relay?.team?.[state.relay.active]?.burst ?? null : body.burst ?? null;
+  const burstFactor = b => !b ? 1 : b.phase === 'BURST' ? burstMultiplier(b.tier) : b.phase === 'WEAK' ? BURST_RULES.weaknessMultiplier : 1;
+  const burstAttackerOf = target => target === player ? state.rivals[0] ?? null : isRival(target) ? player : null;
+  function scaleArenaBurst(target, amount) {
+    if (!relayMode) return amount;
+    const attacker = burstAttackerOf(target);
+    return attacker ? amount * burstFactor(burstOfBody(attacker)) / burstFactor(burstOfBody(target)) : amount;
+  }
+  function chargeArenaBurst(target, amount) {
+    if (!relayMode || !(amount > 0)) return;
+    const charge = (b, value) => { if (b && b.phase === 'CHARGING') b.gauge = Math.min(BURST_RULES.gaugeMaximum, b.gauge + value); };
+    const maxHp = target.maxHp || 1;
+    charge(burstOfBody(burstAttackerOf(target)), 150 * amount / maxHp);
+    charge(burstOfBody(target), 200 * amount / maxHp);
+  }
+  function stepArenaBurst(body, b, side, silent = false) {
+    if (!b) return;
+    const down = !body || body.hp <= 0, display = body === player ? 'burstPartnerId' : 'burstSpeciesId';
+    const formId = `species-${String(b.form).padStart(3, '0')}`;
+    if (b.phase === 'CHARGING' && !down && b.gauge >= BURST_RULES.gaugeMaximum) {
+      b.phase = 'BURST'; b.until = state.time + BURST_RULES.durationSeconds; b.startedAt = state.time;
+      if (!silent) { body[display] = body === player ? `relay-${formId}` : formId; emit({ type: 'BURST', side, form: b.form, tier: b.tier, x: body.x, y: body.y }); }
+    } else if (b.phase === 'BURST' && (down || state.time >= b.until)) {
+      b.phase = down ? 'SPENT' : 'WEAK'; b.until = state.time + BURST_RULES.weaknessSeconds;
+      if (!silent && body) { body[display] = null; emit({ type: 'BURST_END', side, form: b.form, x: body.x, y: body.y }); }
+    } else if (b.phase === 'WEAK' && (down || state.time >= b.until)) b.phase = 'SPENT';
+  }
+  const burstSnapshot = b => b ? { phase: b.phase, gauge: Math.round(b.gauge), tier: b.tier, form: b.form, startedAt: b.startedAt } : null;
   const playerTakenScale = () => (resonant('LUMEN') ? TAXONOMY_RESONANCE.LUMEN.damageTakenPercent / 100 : 1) * (resonant('TRI') ? 100 / TAXONOMY_RESONANCE.TRI.defensePercent : 1);
   const playerDealtScale = ultimate => (resonant('TRI') ? TAXONOMY_RESONANCE.TRI.attackPercent / 100 : 1) * (ultimate && resonant('RIFT') ? TAXONOMY_RESONANCE.RIFT.signaturePercent / 100 : 1);
   // The taxonomy element an elemental hit from this caster carries; physical hits carry none.
@@ -1844,6 +1883,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   function damageRival(rival, amount, cause) {
     if (rival.hp <= 0 || !rival.active) return false;
     if (rival.invulnerable > 0 && cause !== "BURN") return false;
+    if (relayMode) { amount = scaleArenaBurst(rival, amount); chargeArenaBurst(rival, amount); }
     rival.hp = Math.max(0, rival.hp - amount);
     rival.hitFlash = 0.12;
     if (cause !== "BURN") emit({ type: "RIVAL_HIT", amount, cause, x: rival.x, y: rival.y });
@@ -2089,6 +2129,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if (!relay || (!forced && (relay.switchCooldown > 0 || player.state !== 'NORMAL' || player.cast || player.lunge || player.recovery > 0))) return false;
     const index = relay.team.findIndex((entry, i) => i !== relay.active && entry.hp > 0);
     if (index < 0) return false;
+    const leaving = relay.team[relay.active]?.burst;
+    if (leaving && (leaving.phase === 'BURST' || leaving.phase === 'WEAK')) { leaving.phase = 'SPENT'; emit({ type: 'BURST_END', side: 'player', form: leaving.form, x: player.x, y: player.y }); }
+    player.burstPartnerId = null;
     saveRelayPlayer(); relay.active = index;
     const entry = relay.team[index];
     partner = relayPartner(entry.partnerId);
@@ -2109,7 +2152,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   function relayRival(index) {
     const definition = DATA_ARENA_RIVALS[index];
     const rival = createRival({ ...definition, hp: Math.round(definition.hp * DATA_ARENA_RELAY.rivalHpScale) }, 0);
-    rival.active = true; return rival;
+    rival.active = true; rival.burst = arenaBurstPlan(definition.speciesId); rival.burstSpeciesId = null; return rival;
   }
   function updateRelay() {
     const relay = state.relay, t = state.tournament;
@@ -2124,6 +2167,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     // Cooldowns tick on the bench; TP regenerates only for the active member.
     relay.team.forEach((entry, i) => { if (i !== relay.active) for (const id in entry.cooldowns) entry.cooldowns[id] = Math.max(0, entry.cooldowns[id] - DT); });
     const rival = state.rivals[0];
+    stepArenaBurst(player, burstOfBody(player), 'player'); stepArenaBurst(rival, rival.burst, 'rival');
     if (player.hp <= 0) {
       relay.playerDownAt ??= state.time;
       player.cast = player.lunge = player.action = null; removeTelegraph(`cast:${player.id}`);
@@ -2338,7 +2382,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       team: relayTeamIds(partnerId,relayReserveId).map(id => {
         const p = relayPartner(id), hp = Math.round(p.hp * DATA_ARENA_RELAY.playerHpScale);
         return { partnerId: id, speciesId: p.speciesId, hp, maxHp: hp, energy: DATA_ARENA_RELAY.tpMax, energySpentAt: -Infinity,
-          cooldowns: Object.create(null), ult: 0, burn: 0, slow: 0, slowTimer: 0, root: 0, dashCharges: 1, dashRecharge: 0 };
+          cooldowns: Object.create(null), ult: 0, burn: 0, slow: 0, slowTimer: 0, root: 0, dashCharges: 1, dashRecharge: 0, burst: arenaBurstPlan(p.speciesId) };
       }) };
     // Faction resonance (Owner 2026-10-29) from the relay pair plus any companions the caller names.
     state.relay.resonance = factionResonance([...state.relay.team.map(e => e.speciesId), ...relayCompanionSpecies].map(id => speciesTaxonomyForId(id)?.faction));
@@ -2394,7 +2438,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         pods: state.pods.map((p) => ({ x: p.x, y: p.y, ready: p.respawn <= 0 })),
         gameMode: mode,
         relay: relayMode ? { active: state.relay.active, switchCooldown: state.relay.switchCooldown, enemyIndex: state.relay.enemyIndex, resonance: [...state.relay.resonance],
-          team: state.relay.team.map((entry, index) => ({ partnerId: entry.partnerId, speciesId: entry.speciesId,
+          burst: burstSnapshot(burstOfBody(player)), rivalBurst: burstSnapshot(state.rivals[0]?.burst ?? null),
+          team: state.relay.team.map((entry, index) => ({ partnerId: entry.partnerId, speciesId: entry.speciesId, burst: burstSnapshot(entry.burst),
             hp: Math.round(index === state.relay.active ? player.hp : entry.hp), maxHp: entry.maxHp,
             tp: Math.round(index === state.relay.active ? player.energy : entry.energy) })) } : null,
         kit: { moves: player.kit.moves.map((id) => ({ id, cooldown: player.cooldowns[id] ?? 0, cooldownMax: (moveFor(id).cooldown ?? 0) * stat.cooldownScale,

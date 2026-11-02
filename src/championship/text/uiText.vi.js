@@ -907,6 +907,8 @@ export const TEXT_VI = Object.freeze({
   "移除與報名尚未開放。": "Việc xóa và đăng ký vẫn chưa được mở.",
   "轉生": "Tái sinh",
   "已解鎖": "Đã mở khóa",
+  "讓拍檔休息": "Cho bạn đồng hành nghỉ",
+  "讓牧場的拍檔躺下休息": "Cho bạn đồng hành trong trại nằm nghỉ",
   "出戰形態": "Dạng xuất trận",
   "設為爆裂形態": "Chọn dạng này",
   "這隻拍檔不在牧場裡，請先讓牠住進籠舍再轉生。": "Bạn đồng hành này không ở trong trang trại. Hãy cho nó vào chuồng trước khi tái sinh.",
