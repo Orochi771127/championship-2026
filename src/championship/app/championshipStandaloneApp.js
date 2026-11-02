@@ -59,7 +59,7 @@ import { getChampionshipGate, listChampionshipGates } from "../gate/gateCatalog.
 import { gateAdmission, isGateUnlocked } from "../gate/gateAdmission.js";
 import { createHuntWorld } from "../hunt/huntWorld.js";
 import { applyNativeHuntReturn } from "../hunt/capture/nativeHuntHistory.js";
-import { nativeHuntCatalogForBiome, nativeHuntSpeciesByIndex } from "../hunt/capture/nativeHuntSources.js";
+import { productHuntCatalogForBiome, resolveProductHuntPoolSources, nativeHuntSpeciesByIndex } from "../hunt/capture/nativeHuntSources.js";
 import { nativeIndividualProfile, projectNativeIndividualStats } from "../raising/nativeIndividualProfile.js";
 import { createNativeRaisingStarter } from "../raising/nativeRaisingStarter.js";
 import {createNativeHuntIndividual} from '../hunt/capture/nativeHuntIndividual.js';
@@ -3753,7 +3753,7 @@ export function createChampionshipStandaloneApp({
           modifiers: huntPersistentState.modifiers.map(row => row.map(() => 0)) } : huntPersistentState;
         const lured = huntCaptureReplay === null ? prepareNativeHuntEntry({ biomeId:gate.biomeId, expansion,
           clock:requireSession().getRaisingHomeSnapshot(),
-          rngSnapshot:gameplayRngSnapshot(), persistentState:lurePersistent }) : null;
+          rngSnapshot:gameplayRngSnapshot(), persistentState:lurePersistent, resolvePool:resolveProductHuntPoolSources }) : null;
         const entry = lured && boosts.rareLure ? { ...lured, persistentState:{ ...lured.persistentState,
           modifiers:structuredClone(huntPersistentState.modifiers) } } : lured;
         const world = createHuntWorld(gate, entry);
@@ -3823,7 +3823,7 @@ export function createChampionshipStandaloneApp({
           const cards = huntRuntime.getOnCardEntries();
           const returnRng = restoreChannelRng(gameplayRngSnapshot());
           const returned = applyNativeHuntReturn({ ...returnContext, ...huntPersistentState,
-            catalog:nativeHuntCatalogForBiome(returnContext.biomeIndex), speciesByIndex:nativeHuntSpeciesByIndex, rng:returnRng,
+            catalog:productHuntCatalogForBiome(returnContext.biomeIndex), speciesByIndex:nativeHuntSpeciesByIndex, rng:returnRng,
             records:cards.map(({nativeProfile:{fields,narrowFields,name}}) => ({fields,narrowFields,name})) });
           // Validate every candidate before publishing any record, RNG or history.
           const candidates = returned.records.map((individual,i) => {
