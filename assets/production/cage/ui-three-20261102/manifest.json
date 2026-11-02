@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "assetId": "art:cage:original-opus:v1",
+  "assetId": "art:cage:ui-three:20261102",
   "family": "CAGE",
   "product": "DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD",
-  "artifactMaturity": "ORIGINAL_BLENDER_2_5D_CAGE_FIELDS",
-  "productionStatus": "OWNER_DIRECTED_RUNTIME_REPLACEMENT_2026_10_06",
+  "artifactMaturity": "ORIGINAL_3D_CAGE_RENDERS",
+  "productionStatus": "OWNER_DIRECTED_RUNTIME_REPLACEMENT_2026_11_02",
   "shippingStatus": "NOT_SHIPPING_READY",
   "humanApproved": true,
   "runtimeEligible": true,
@@ -12,16 +12,16 @@
   "rightsStatus": "PROJECT_ORIGINAL",
   "rights": {
     "status": "PROJECT_ORIGINAL",
-    "authority": "docs/handoff/cage-art-opus-20261005/PROGRESS_OPUS.md",
-    "ownerDirective": "Owner 2026-10-06: replace the old original cage maps with the new versions and publish",
+    "authority": "assets/production/cage/three-20261021/manifest.json",
+    "ownerDirective": "Owner 2026-11-02: replace the old shop and facility-editor cage pictures with how the ranch draws the cages",
     "sourceRastersLoaded": false,
-    "review": "docs/art/production/original-character-cage-r1/cage-base3d-v1/review/refinement-opus-r17",
+    "review": ".claude/skills/hd2d-cage-world/SKILL.md",
     "romDerivedPixels": false
   },
   "fieldCount": 37,
   "defaultPreviewFieldId": "field_cm01_01",
   "memoryPolicy": "N_ACTIVE_TILES_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
-  "filter": "nearest",
+  "filter": "linear",
   "fields": [
     {
       "fieldId": "field_cm01_01",
@@ -33,11 +33,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r5/seam-v3/fields/field_cm01_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm01_01/frame-00.webp",
-          "sha256": "267E886D3238670BD0FE7CA3F9265281CC7EB65D6021F08D055F30E1A0AA580C",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm01_01.webp",
+          "sha256": "34cde0db7a3383b415dc05b04e3e6c1a84139c90bc6b451d08c67c696f557aa5",
           "durationMs": null
         }
       ]
@@ -52,11 +51,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r8/seam-v3/fields/field_cm02_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm02_01/frame-00.webp",
-          "sha256": "5894AF3E6AEB8BC72A0AE1D11EF9B2F3EAFAF321E1029E460F328490B79357F4",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm02_01.webp",
+          "sha256": "ff4d9d7bbff09d89b0fe4d7cbf5e0b4bcde94c7ece565b9caf59510f0b491593",
           "durationMs": null
         }
       ]
@@ -71,11 +69,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r15/seam-v3/fields/field_cm03_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm03_01/frame-00.webp",
-          "sha256": "0C4FD9DE89D649AF0681EB1198D9F23076D33A76B1FDA8C8E8DABBBA7EA9594E",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm03_01.webp",
+          "sha256": "8570dc5deee64afae23a915214af61089668e092cb2c43fd263efc9282e9da54",
           "durationMs": null
         }
       ]
@@ -90,11 +87,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r8/seam-v3/fields/field_cm04_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm04_01/frame-00.webp",
-          "sha256": "C440238EBE9963D3B71E7ADF6615E4DBD826540C9E1A318C013F76F00D413B57",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm04_01.webp",
+          "sha256": "19c30f42a06891cc45b1b2bd0ee8b90d19955ca890dcb7fc5c5ec7904aa936f7",
           "durationMs": null
         }
       ]
@@ -109,11 +105,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r13/seam-v3/fields/field_cm05_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm05_01/frame-00.webp",
-          "sha256": "D668EA0B9A1B6E8E8910468FA8985711A1D55D18F44F1CF09AF1D87CED554281",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm05_01.webp",
+          "sha256": "b1dca1ddb60a9bd47eb51fc67480c77e5bed7e2966c4638295f41e6f818b2898",
           "durationMs": null
         }
       ]
@@ -128,11 +123,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r1/seam-v3/fields/field_cm06_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm06_01/frame-00.webp",
-          "sha256": "6A5835C8770F2B66269005F419710E0159B7B7CE62C828000B488C62033B1E94",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm06_01.webp",
+          "sha256": "8aa7bbbd013093436fe91b4027b7b44ee10496601052f1fe051ff23d460e7133",
           "durationMs": null
         }
       ]
@@ -147,17 +141,11 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r11/seam-v3/fields/field_cm07_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm07_01/frame-00.webp",
-          "sha256": "56E4B4E102DFB97A676C794337CD7046A6BC6506380944C735C747538D0C38A0",
-          "durationMs": 835.7556556544072
-        },
-        {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm07_01/frame-01.webp",
-          "sha256": "938451F3736C933D20141577BB15EC263F911E335F487772CD3A55445E938BD2",
-          "durationMs": 835.7556556544072
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm07_01.webp",
+          "sha256": "cfbf362fab00362bd9c84b68d0d84dbc9a37bc3c9d9d01f7630baa828061679b",
+          "durationMs": null
         }
       ]
     },
@@ -171,11 +159,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r17/seam-v3/fields/field_cm08_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm08_01/frame-00.webp",
-          "sha256": "EF4B39477CD8C9F0263AD21124E03460C5E08EEA4C6429307ADAF82861F4524E",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm08_01.webp",
+          "sha256": "f0af85739926ad2a08db8e07ef8b17fba09a2a74be863a487bef22fbbb5e0953",
           "durationMs": null
         }
       ]
@@ -190,17 +177,11 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r10/seam-v3/fields/field_cm09_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm09_01/frame-00.webp",
-          "sha256": "BB7E6F43D2990456F090FFFDBED9BA5AAAA994C7B6C971A4C06B18473A9D8A24",
-          "durationMs": 334.30226226176285
-        },
-        {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm09_01/frame-01.webp",
-          "sha256": "494C4105163C1CD793D0FF7FC8EC1C56D64A05CDCF5B265A70304CE9DFB71B88",
-          "durationMs": 334.30226226176285
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm09_01.webp",
+          "sha256": "c279a6ad5a773905765f82d34de440c706d39c219773248b5e34cd76d58c06ed",
+          "durationMs": null
         }
       ]
     },
@@ -214,11 +195,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r7/seam-v3/fields/field_cm10_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm10_01/frame-00.webp",
-          "sha256": "DD6ACFD0DC3BCB23B7557E74230E72B5AAA84A0D9B05F82E7FDB10A2521781F0",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm10_01.webp",
+          "sha256": "3226691315d70a84e58c09d8e609825448b4acfe85ee5d866db630da624b047f",
           "durationMs": null
         }
       ]
@@ -233,11 +213,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r12/seam-v3/fields/field_cm11_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm11_01/frame-00.webp",
-          "sha256": "A8CDF2DCCCB3CD8E197A252A4DBE5B43A0D627B27B514332401AC6B3654ADECF",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm11_01.webp",
+          "sha256": "6db7e7d26c351f5340b23c328cf89400f73229a8953770d4b5c52793263d784a",
           "durationMs": null
         }
       ]
@@ -252,11 +231,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r5/seam-v3/fields/field_cm12_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm12_01/frame-00.webp",
-          "sha256": "95D928BCB620C52EC44640DD50FC0624472D4E34C3ABDE56EB08DF7DC71AD810",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm12_01.webp",
+          "sha256": "02992f64b6d99a3cda3ada1d58fae22dfcf092c568758d80dfc5d65889edcef3",
           "durationMs": null
         }
       ]
@@ -271,11 +249,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r14/seam-v3/fields/field_cm13_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm13_01/frame-00.webp",
-          "sha256": "3A396536C45176F024B31BB2B60AB453FD7A09DE1BC5A7AB634C7D633720F9D3",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm13_01.webp",
+          "sha256": "29d337089a2270c2fbf3214c96cf1974c881604873faa1c380a2cb44dead27a0",
           "durationMs": null
         }
       ]
@@ -290,11 +267,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r3/seam-v3/fields/field_cm14_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm14_01/frame-00.webp",
-          "sha256": "E0B5A239D8F7751BFF318A646268B2BFD4F0092024986ED0DC4B7371248FC7CB",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm14_01.webp",
+          "sha256": "bd94c83f7eabc35ad953bc5c24c275b9d7b0caead4cc9d91f1c74d893f6d17cc",
           "durationMs": null
         }
       ]
@@ -309,11 +285,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r1/seam-v3/fields/field_cm15_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm15_01/frame-00.webp",
-          "sha256": "A430DF34C71E2867BC59CF39865990FCB9A7BA115E756AE36C14F9E7CDFD4875",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm15_01.webp",
+          "sha256": "0cab95e38cf6f08f29f2a886b974e28df2266f31dc05861a6b7c6eeb2370e80f",
           "durationMs": null
         }
       ]
@@ -328,11 +303,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r2/seam-v3/fields/field_cm16_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm16_01/frame-00.webp",
-          "sha256": "2D41DFF3CA96732AC712561AD03C86A89255F4EB56A0F0889AA7D671795EB661",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm16_01.webp",
+          "sha256": "015325d6ca40297fb58906c1cd0f2c8df23c4067377195482d5ed9c9b06ee402",
           "durationMs": null
         }
       ]
@@ -347,11 +321,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r1/seam-v3/fields/field_cm17_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm17_01/frame-00.webp",
-          "sha256": "7850B1745BE1A217205F939B2457EA3CAD743FFF6AAC868C5F7B36D39FC8C79A",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm17_01.webp",
+          "sha256": "0bb02848cc861f70315d5d23400ca7e3f99c74aeb9819dc4ddcc543f93aeb37a",
           "durationMs": null
         }
       ]
@@ -366,11 +339,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r9/seam-v3/fields/field_cm18_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm18_01/frame-00.webp",
-          "sha256": "943FCF1771EF1E445205A238E53666D19D9B4506A00C38D0B28B6D8EEE7F8DE6",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm18_01.webp",
+          "sha256": "aa7f1725a8ecedcb0cc0b2566d1b420d729046e71d0d51bb26fdadf015a28d15",
           "durationMs": null
         }
       ]
@@ -385,11 +357,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r4/seam-v3/fields/field_cm19_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm19_01/frame-00.webp",
-          "sha256": "7F3DF1B0BD66314B4B39ED8487B85780824B39F49B12DBC0CD1F9904B60018B6",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm19_01.webp",
+          "sha256": "2b03785a5a1b896e253fc6eff1bb22b767ecf731f763eac1701fd110e39cb913",
           "durationMs": null
         }
       ]
@@ -404,11 +375,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r13/seam-v3/fields/field_cm20_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm20_01/frame-00.webp",
-          "sha256": "1B82334DDEC9BD3B6A538D922A994F41014AE43C876A3C06D582BB986977BA80",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm20_01.webp",
+          "sha256": "1c976f3ee2496ad178da1e30bdd1c6aa9b7cec297eb3d91b6fd33ca4cead8be3",
           "durationMs": null
         }
       ]
@@ -423,17 +393,11 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r11/seam-v3/fields/field_cm21_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm21_01/frame-00.webp",
-          "sha256": "3986FBEED1FD0DFDED4909BBA78CDDB996E1D08A6CC20F9805281C033B16534E",
-          "durationMs": 334.30226226176285
-        },
-        {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm21_01/frame-01.webp",
-          "sha256": "5D775DA06A6639440471C7957DD41C5CF09365F9C86E9657414C9F6B08C12622",
-          "durationMs": 334.30226226176285
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm21_01.webp",
+          "sha256": "697bf328143afac5e8ab4b38956199f887d1b90957fae6cd4e06cec118b1e0c7",
+          "durationMs": null
         }
       ]
     },
@@ -447,11 +411,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r4/seam-v3/fields/field_cm22_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm22_01/frame-00.webp",
-          "sha256": "0B96E3A1DACD85350A607CB363AEB6C516A8FA4A47D4D91CFC58864BB3AF134E",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm22_01.webp",
+          "sha256": "b861e488a819646094da607866d6e1d9b6fd019292067fc2d5c27c8d92c110b2",
           "durationMs": null
         }
       ]
@@ -466,11 +429,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r16/seam-v3/fields/field_cm23_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm23_01/frame-00.webp",
-          "sha256": "D4D6CC12D0F2E282AF843404631589173853C2F3EE9BC547ACC782D1FC32D809",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm23_01.webp",
+          "sha256": "8ef33d2cbf30f6a922269bb4f921b928f7e2f2928a0145c2511736c22888f5f3",
           "durationMs": null
         }
       ]
@@ -485,11 +447,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r3/seam-v3/fields/field_cm24_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm24_01/frame-00.webp",
-          "sha256": "2ED03164A60BAA95E682DBDF6A8CC781E6899EBABA8F4C171AE91A147D8243BE",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm24_01.webp",
+          "sha256": "249c67f2c37f7542466e114ed9e1a338aec98575e26ef602d73eee6703c3c207",
           "durationMs": null
         }
       ]
@@ -504,11 +465,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r12/seam-v3/fields/field_cm25_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm25_01/frame-00.webp",
-          "sha256": "ABC4304513585540315666AB1EE47BC76E905F40572D6F98E27069BD6D366CB4",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm25_01.webp",
+          "sha256": "29962f42805c627fa360f93f3f89b19cd87d21caa8b8aa89da20f516b41d63ac",
           "durationMs": null
         }
       ]
@@ -523,11 +483,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r12/seam-v3/fields/field_cm26_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm26_01/frame-00.webp",
-          "sha256": "632E2ECC7211F386657DE2AF9DCE986F767CC2AB04B933A6A53F03656727BBB9",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm26_01.webp",
+          "sha256": "47f74f07d410e728d7a2ad4c4d93aba9953fc4943141b4f2b4cffea2fbc17c07",
           "durationMs": null
         }
       ]
@@ -542,11 +501,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r5/seam-v3/fields/field_cm27_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm27_01/frame-00.webp",
-          "sha256": "5BD988FE4374BB4D864A397BA19A80A85C52B44DB3D0EDD513CE7307D7F852B2",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm27_01.webp",
+          "sha256": "1892fbdbfc8393d9374a473a99fe4c1c8b980684cbc57dce30d4c9abaabc0db9",
           "durationMs": null
         }
       ]
@@ -561,11 +519,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/seam-v3/fields/field_cm28_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm28_01/frame-00.webp",
-          "sha256": "DCEC7D19AC6F95FBEDF84BEF659E435A04382525BDE1ED45A41F552AC1446A96",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm28_01.webp",
+          "sha256": "b3dd76697c7841203a47433d398945dcd780823a8973f0b41aa7a26d40126aeb",
           "durationMs": null
         }
       ]
@@ -580,11 +537,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/seam-v3/fields/field_cm29_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm29_01/frame-00.webp",
-          "sha256": "BC51E2306358CD50A7809691208BE9CB1FC68BC610F3850A3BF471A0214A895B",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm29_01.webp",
+          "sha256": "9d96b5d48af38cf052235c1c0740d75c30c64d7da2d5e3ce573d52092a1e5f44",
           "durationMs": null
         }
       ]
@@ -599,11 +555,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r15/seam-v3/fields/field_cm30_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm30_01/frame-00.webp",
-          "sha256": "F40BC90EEE938AD582AEE341BA0649D728404A95E3F2F4A09BF705D21DE5ED99",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm30_01.webp",
+          "sha256": "d9caea361a989401e746b7130bb57d875259ecf7f11f5b4335865212d68f005e",
           "durationMs": null
         }
       ]
@@ -618,11 +573,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r2/seam-v3/fields/field_cm31_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm31_01/frame-00.webp",
-          "sha256": "F0913AB6D1705EB91CA1DB9F4224AFFCAFC7374D2D943AB778C6ECF3A9FB24DF",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm31_01.webp",
+          "sha256": "00291fc3e1f4b1774c4fab5df782e5e8b809f26a7dfcfb0f15ccdf2dab6f237e",
           "durationMs": null
         }
       ]
@@ -637,11 +591,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r9/seam-v3/fields/field_cm32_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm32_01/frame-00.webp",
-          "sha256": "654738506FD0BCC458AF76ACEC601D260FB9F3DF34216FFDE9D4E38EAFF8F7F0",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm32_01.webp",
+          "sha256": "6e494c5abd0e22e0abe070457fb038b04f8037831b0d0bd66b772531f1effe54",
           "durationMs": null
         }
       ]
@@ -656,11 +609,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r13/seam-v3/fields/field_cm34_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm34_01/frame-00.webp",
-          "sha256": "87D01FA2F9B3E39B38D170C95DFD02D40BE637A2EC4D6D2FDA6989FC14C754CD",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm34_01.webp",
+          "sha256": "0d5924b669224f3807dd262f432ce393194558f5677e7acac047091342fc85b9",
           "durationMs": null
         }
       ]
@@ -675,11 +627,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r11/seam-v3/fields/field_cm35_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm35_01/frame-00.webp",
-          "sha256": "8C229E2041C735F0485019EBC947D3C81869C2C8BFAD7860ADFDE76DC91F6818",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm35_01.webp",
+          "sha256": "2f43855683c48b4e1fbfc71c72f5aa99bf18b648257546a3a0e33ad4d2a075b0",
           "durationMs": null
         }
       ]
@@ -694,11 +645,10 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r6/seam-v3/fields/field_cm37_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm37_01/frame-00.webp",
-          "sha256": "6FE17B694DAB46F7CF462ABADFDCB0C503310FEBCC7E1B483958F945DA18F619",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm37_01.webp",
+          "sha256": "bf4a59b87445f5ce7c4990f803e5e686ba1ccbc08af39c509c87a2b99ca12012",
           "durationMs": null
         }
       ]
@@ -713,17 +663,11 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r10/seam-v3/fields/field_cm39_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm39_01/frame-00.webp",
-          "sha256": "B5E98BB93D36E20B0CA7E16997BC98E36BFE31F94F504336F4BE63A0A40C9474",
-          "durationMs": 334.30226226176285
-        },
-        {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm39_01/frame-01.webp",
-          "sha256": "95DEA030D6B2049B53774C3645A2B11856B148CA7123F96B3833EA44D22FE587",
-          "durationMs": 334.30226226176285
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm39_01.webp",
+          "sha256": "23c8efd357162a8ec0d5f7a4df0b5e5a0e740d88a18e91eb32f60ac2efdc0f6e",
+          "durationMs": null
         }
       ]
     },
@@ -737,20 +681,18 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
       "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
       "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "source": "docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r6/seam-v3/fields/field_cm40_01/frame-00.png",
       "frames": [
         {
-          "src": "assets/production/cage/original-opus-v1/fields/field_cm40_01/frame-00.webp",
-          "sha256": "CB0953765013C0CE69423DED9282F4FD795EDB159F285FD491EBC19A120158AB",
+          "src": "assets/production/cage/ui-three-20261102/frames/field_cm40_01.webp",
+          "sha256": "a313b10a7641afcda58abf9acadc7e98bafbedde8a029fbbcfc4efc55d287e2e",
           "durationMs": null
         }
       ]
     }
   ],
   "notes": [
-    "Procedural original Blender renders (opus rounds r1-r17); no ROM pixels.",
-    "Collision, walkability, ranch placement and training effects stay in the Cage runtime.",
-    "cm07/cm09/cm21/cm39 keep two ground frames with the original verified durations.",
-    "cm28 is the Waiting Room, cm29 the LID. cm33/cm36/cm38 (unreferenced) are not carried over."
+    "Renders of the 3D cage GLBs by ranchThreeScene at the layout view (52 deg), 4 px per native px, each field world rect; no ROM pixels.",
+    "One static frame per field; the 2D ranch is a fallback only, the ranch itself is the 3D scene.",
+    "cm28 is the Waiting Room, cm29 the LID."
   ]
 }

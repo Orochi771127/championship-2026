@@ -1,6 +1,4 @@
-import {selectRanchCageArt} from '../src/championship/presentation/ranchCageArtSelection.js';
 import test from 'node:test';
-import cageFieldManifest from '../assets/production/cage/original-opus-v1/manifest.json' with { type: 'json' };
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';

@@ -26,7 +26,7 @@ logo, main menu and opening stay exactly as live main shipped them.
 | Plinth, closed rims, open seams | `src/championship/presentation/ranchPlinth.js` |
 | Edge falls (water, lava, icy water, sand), beach seam strips | `src/championship/presentation/ranchWaterfalls.js` |
 | Beach coast pipeline (2026-11-02) | `R:\Projects\Championship2026\cage-coast-20261102\scripts\` (`bake_coast`, `make_groundmap`, `sea_mask`, `pack_coast`, `install_batch`, `cage_falls`, `update_contracts`) |
-| 10/06 showcase masters (shop and editor art came from these) | `docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r*/seam-v3/fields/field_cmXX_01/master.blend` (untracked; copy on `D:\Championship2026-backups\cage-opus-masters-20261102\`) |
+| 10/06 showcase masters (the deleted 10/06 field art came from these) | `docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r*/seam-v3/fields/field_cmXX_01/master.blend` (untracked; copy on `D:\Championship2026-backups\cage-opus-masters-20261102\`) |
 | Shop cage cards | `src/championship/app/vs4Screens.js` (`decorateShopCageCard`, `cageSeriesLabel`), `ui/screenLayout.css` |
 | Shop, editor and location pictures (renders of the 3D cages) | `assets/production/public-runtime/cage-ui-three.v1.json` → `src/championship/presentation/cageUiArt.js` |
 
@@ -127,8 +127,11 @@ logo, main menu and opening stay exactly as live main shipped them.
   again: `cage-ui-render.html` (local review page, 37 fields) then
   `pack_ui_three.py` (both in `cage-coast-20261102\scripts\`), then restate the
   contracts. The public manifest may not carry `ownerDirection` or other private keys.
-- The 10/08 shop thumbnails and the 10/06 field art stay stored and validated as
-  fallbacks; the 2D ranch on other hosts still uses `cage-ui.map.v1.json`.
+- The public `cage-ui` map is projected from the same renders
+  (`assets/production/cage/ui-three-20261102/manifest.json`, map recipe role
+  `cage-ui`), so the 2D ranch on other hosts shows them too. The 10/06 Blender
+  field art and the 10/08 shop thumbnails were deleted on 2026-11-02 (Owner); do
+  not bring them back.
 
 ## Shop cage cards
 

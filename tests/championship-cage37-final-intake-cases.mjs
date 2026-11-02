@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import manifest from '../assets/production/cage/final-intake-20261008/manifest.json' with {type:'json'};
-import previous from '../assets/production/cage/original-opus-v1/manifest.json' with {type:'json'};
+// The licensed bundle defines the geometry and timing the 10/06 bundle (deleted 2026-11-02) also kept.
+import previous from '../assets/production/cage/licensed-runtime-v1/manifest.json' with {type:'json'};
 import {validateRuntimeMapArtBundle} from '../src/championship/presentation/runtimeMapArtBundle.js';
 import {createRaisingCageArtPlan} from '../src/championship/presentation/raisingCageArtPlan.js';
 import {listCageDefinitions} from '../src/championship/cage/cageCatalog.js';

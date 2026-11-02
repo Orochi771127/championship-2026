@@ -38,7 +38,7 @@ test('37 renders, one per runtime field: exact files, sizes and the GLB each was
 test('the runtime check rejects a wrong size, a foreign path, a missing field or a bad hash', () => {
   for (const change of [
     (m) => { m.fields[0].frame.width += 1; },
-    (m) => { m.fields[0].thumbnail.src = 'assets/production/cage/shop-final-20261008/thumbnails/x.webp'; },
+    (m) => { m.fields[0].thumbnail.src = 'assets/production/cage/three-20261021/x.webp'; },
     (m) => { m.fields[0].frame.src = 'assets/production/cage/ui-three-20261102/../x.webp'; },
     (m) => { m.fields.pop(); },
     (m) => { m.fields[1] = m.fields[0]; },

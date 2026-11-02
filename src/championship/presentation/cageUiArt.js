@@ -1,4 +1,3 @@
-import { originalShopCageThumbnail } from './originalShopCageArt.js';
 // Presentation of the existing production fields and traced editor coordinates.
 // The editor's slot ownership is authoritative; no geometry here places a cage.
 // The runtime cage fields (Owner 2026-10-06: original opus art replaces the licensed pixels).
@@ -78,10 +77,7 @@ export function cageUiImage(moduleId, baseUrl) {
 export function shopCageUiImage(shopRecordIndex, baseUrl) {
   const definition = listCageDefinitions().find((entry) => entry.shopRecordIndex === shopRecordIndex);
   const three = definition ? cageUiThumbnail(definition.moduleId) : null;
-  if (three) return three;
-  const original = originalShopCageThumbnail(shopRecordIndex, baseUrl);
-  if (original) return original.src;
-  return definition ? cageUiImage(definition.moduleId, baseUrl) : null;
+  return three ?? (definition ? cageUiImage(definition.moduleId, baseUrl) : null);
 }
 export function cageEditorArtCells(slots, baseUrl, { productGrid = false } = {}) {
   // An expansion annex slot (20..29) is drawn on its own board with the same

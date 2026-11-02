@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 42,
+    "registeredRuntimeBundles": 41,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -391,28 +391,15 @@
       "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
     },
     {
-      "assetId": "art:cage:original-opus:v1",
-      "manifestPath": "assets/production/cage/original-opus-v1/manifest.json",
+      "assetId": "art:cage:ui-three:20261102",
+      "manifestPath": "assets/production/cage/ui-three-20261102/manifest.json",
       "rightsStatus": "PROJECT_ORIGINAL",
-      "productionStatus": "OWNER_DIRECTED_RUNTIME_REPLACEMENT_2026_10_06",
+      "productionStatus": "OWNER_DIRECTED_RUNTIME_REPLACEMENT_2026_11_02",
       "shippingStatus": "NOT_SHIPPING_READY",
       "humanApproved": true,
       "runtimeEligible": true,
       "shippingReady": false,
-      "maturity": "ORIGINAL_BLENDER_2_5D_CAGE_FIELDS"
-    },
-    {
-      "assetId": "art:cage:shop-final:20261008",
-      "runtimeEligible": true,
-      "localOnly": true,
-      "publicReleasePermitted": false,
-      "humanApproved": false,
-      "runtimeQaPassed": false,
-      "shippingReady": false,
-      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
-      "manifestPath": "assets/production/cage/shop-final-20261008/manifest.json",
-      "scope": "35 final shop thumbnails; local integration only",
-      "ownerDirection": "Owner 2026-10-09 13:53 UTC authorized local review and integration of the final 21-part intake; art/runtime/publication acceptance remain separate."
+      "maturity": "ORIGINAL_3D_CAGE_RENDERS"
     },
     {
       "assetId": "art:cage:final-intake:20261008",

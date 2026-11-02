@@ -1,14 +1,15 @@
-import {selectedRanchSportsField} from '../src/championship/presentation/ranchCageArtSelection.js';
 import {publicMapManifestPath} from '../src/championship/presentation/publicMapRequests.js';
 import {isOriginalRuntimeLocation} from '../src/championship/presentation/originalRuntimeLocation.js';
-// Owner 2026-10-06: the original Blender cage fields (opus rounds r1-r17) replace the
-// licensed pixel fields at runtime. Art only: collision, walkability, ranch placement and
+// Owner 2026-10-06: original cage fields replaced the licensed pixel fields at runtime.
+// Owner 2026-11-02: those 10/06 Blender fields are deleted; the UI bundle is now the renders
+// of the 3D cage GLBs (cage-ui role). Art only: collision, walkability, ranch placement and
 // cage training stay in the Cage runtime and are covered by their own cases.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
-import manifest from '../assets/production/cage/original-opus-v1/manifest.json' with { type: 'json' };
+import manifest from '../assets/production/cage/ui-three-20261102/manifest.json' with { type: 'json' };
+import uiMap from '../assets/production/public-runtime/cage-ui.map.v1.json' with { type: 'json' };
 import licensed from '../assets/production/cage/licensed-runtime-v1/manifest.json' with { type: 'json' };
 import { validateRuntimeMapArtBundle } from '../src/championship/presentation/runtimeMapArtBundle.js';
 import { getOriginalCageVisualBinding } from '../src/championship/presentation/originalCageVisualBindings.js';
@@ -16,23 +17,27 @@ import { listCageDefinitions } from '../src/championship/cage/cageCatalog.js';
 import { cageUiImage } from '../src/championship/presentation/cageUiArt.js';
 import threeUi from '../assets/production/public-runtime/cage-ui-three.v1.json' with { type: 'json' };
 
-const sha = (path) => createHash('sha256').update(fs.readFileSync(path)).digest('hex').toUpperCase();
+const sha = (path) => createHash('sha256').update(fs.readFileSync(path)).digest('hex');
 
-test('the original cage bundle validates in the runtime loader and every frame matches its hash', () => {
+test('the cage UI bundle validates in the runtime loader and every frame matches its hash', () => {
   const checked = validateRuntimeMapArtBundle(manifest);
   assert.equal(checked.family, 'CAGE');
   assert.equal(manifest.rights.status, 'PROJECT_ORIGINAL');
   assert.equal(manifest.rights.romDerivedPixels, false);
   assert.equal(manifest.fields.length, 37);
   for (const field of manifest.fields) {
+    assert.equal(field.frames.length, 1, field.fieldId);
     for (const frame of field.frames) {
-      assert.ok(frame.src.startsWith('assets/production/cage/original-opus-v1/'), frame.src);
+      assert.ok(frame.src.startsWith('assets/production/cage/ui-three-20261102/frames/'), frame.src);
       assert.equal(sha(frame.src), frame.sha256, frame.src);
     }
   }
+  // The public cage-ui map is the projection of exactly these frames.
+  assert.deepEqual(uiMap.fields.map((f) => [f.fieldId, f.frames.map((x) => x.src)]), manifest.fields.map((f) => [f.fieldId, f.frames.map((x) => x.src)]));
+  assert.equal(fs.existsSync('assets/production/cage/original-opus-v1'), false);
 });
 
-test('every cage definition binds to a field of the new bundle', () => {
+test('every cage definition binds to a field of the bundle', () => {
   const ids = new Set(manifest.fields.map((field) => field.fieldId));
   const definitions = listCageDefinitions();
   assert.equal(definitions.length, 36);
@@ -44,15 +49,14 @@ test('every cage definition binds to a field of the new bundle', () => {
   }
 });
 
-test('sizes and animated ground timings match the fields they replace', () => {
+test('sizes match the fields they replace; renders are one static frame', () => {
   const old = new Map(licensed.fields.map((field) => [field.fieldId, field]));
   for (const field of manifest.fields) {
     const before = old.get(field.fieldId);
     for (const key of ['worldWidthPx', 'worldHeightPx', 'nativeWidthPx', 'nativeHeightPx', 'visualRole']) {
       assert.equal(field[key], before[key], `${field.fieldId}:${key}`);
     }
-    assert.equal(field.frames.length, before.frames.length, field.fieldId);
-    field.frames.forEach((frame, index) => assert.equal(frame.durationMs, before.frames[index].durationMs));
+    assert.deepEqual(field.frames.map((frame) => frame.durationMs), [null], field.fieldId);
   }
 });
 

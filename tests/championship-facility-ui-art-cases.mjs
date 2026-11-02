@@ -1,4 +1,3 @@
-import {selectRanchCageArt} from '../src/championship/presentation/ranchCageArtSelection.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -7,8 +6,6 @@ import threeUi from '../assets/production/public-runtime/cage-ui-three.v1.json' 
 import uiMap from '../assets/production/public-runtime/cage-ui.map.v1.json' with {type:'json'};
 import {listCageDefinitions} from '../src/championship/cage/cageCatalog.js';
 import {createCageEditRuntime} from '../src/championship/cage/cageEditRuntime.js';
-// Owner 2026-10-06: the runtime cage fields are the original opus renders.
-import manifest from '../assets/production/cage/original-opus-v1/manifest.json' with {type:'json'};
 
 test('all 36 editor facilities resolve to existing production art; shop joins by record identity',()=>{
   for(const d of listCageDefinitions()) {

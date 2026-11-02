@@ -1,6 +1,5 @@
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';import {createHash} from 'node:crypto';
 import {publicRuntimeIndex,PUBLIC_RUNTIME_INDEX_PATH,PUBLIC_RUNTIME_ALLOWLIST_PATH} from './lib/public-runtime-boundary.mjs';
-import {selectedShopCageProjection} from './lib/public-shop-cage-projection.mjs';
 import {projectPublicRenderSources,PUBLIC_RENDER_FIELDS,PUBLIC_RENDER_RECIPE} from './lib/public-render-projection.mjs';
 import {selectedMapProjections,MAP_RECIPE,PUBLIC_MAP_FIELDS} from './lib/public-map-projection.mjs';
 import {projectPublicMetadata,METADATA_RECIPE} from './lib/public-metadata-projection.mjs';
@@ -16,14 +15,14 @@ const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const write=(file,value)=>{fs.mkdirSync(path.dirname(path.join(root,file)),{recursive:true});fs.writeFileSync(path.join(root,file),JSON.stringify(value,null,2)+'\n');};
 const inputPath='docs/contracts/championship/WEB_BUILD_INPUTS.v1.json',input=read(inputPath),allow=read(PUBLIC_RUNTIME_ALLOWLIST_PATH);
 const index=read('assets/production/ART_PRODUCTION_INDEX.json'),heroes=read('src/data/championship/database-hero-portraits.public.v1.json');
-const render=projectPublicRenderSources({root,input,index}),shop=selectedShopCageProjection({root,input,index});
+const render=projectPublicRenderSources({root,input,index});
 const maps=selectedMapProjections({root,input});
 const metadata=projectPublicMetadata({root,input});
 const cleanMedia=publicCleanMedia({root}),cleanMap=new Map(cleanMedia.map(row=>[row.sourcePath,row]));
 const allCleanMedia=read(CLEAN_MEDIA_RECIPE).files,inactiveClean=new Set(allCleanMedia.filter(row=>!cleanMap.has(row.sourcePath)).map(row=>row.path));
 const program=publicProgramData({root});
 input.importMap['pixi.js']='./assets/production/public-runtime/vendor-pixi.mjs';
-const selectedOriginal=new Map([...shop.files,...render.media,...maps.files,...metadata.media]);
+const selectedOriginal=new Map([...render.media,...maps.files,...metadata.media]);
 const activeHeroes=new Set(heroes.entries.map(row=>row.src));
 const excluded=[];
 const buildOnly=new Set(['assets/production/ART_PRODUCTION_INDEX.json','src/data/championship/public-playtest.r1.json',
