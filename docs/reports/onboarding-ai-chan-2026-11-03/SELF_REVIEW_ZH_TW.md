@@ -54,6 +54,11 @@
 
 以上都是本機 Chromium 的 viewport 模擬（390×844、844×390、1366×768），不是實體手機、iOS 或 Safari 的認證。
 
+7. **其他瀏覽器 gate 的相容性（PR #160 第一次 CI 發現）**：
+   - Dex、Friends、cage100、currency、database、approved-dex、rexmon 等 8 個 gate 各自寫死舊四卡漫畫的點擊方式（文字鍵＋左上角點擊），過不了愛醬的外觀選擇頁，因此逾時。已全部改用共用的 `playStory()`：只按看得到的跳過鍵與真正的選擇按鈕，不寫 storage，不關閉故事。
+   - Scene music gate 原本把 scene-music manifest 的每一首都當成設定頁選項。Hexagon Cradles 刻意只用於故事與教學，不是育成或戰鬥選項；gate 改為只從 raising／battle 曲目取選項，並明確斷言 hexagon_cradles（opening）是唯一不在選項中的曲目。
+   - Friends filmstrip 診斷的 BASE pin 改為修改後 runner 的精確 SHA-256。
+
 ## 結論
 
-沒有阻擋發布的問題。可以在角色動畫 release（PR #158）完成合併與 Pages 部署之後，依正常 PR 流程整合到 main 並發布。
+沒有阻擋發布的問題。依 Owner 授權與已核發的 main 寫入時段（故事先行），以正常 PR 流程合併並發布；角色 release（PR #158）之後再整合最新 main。
