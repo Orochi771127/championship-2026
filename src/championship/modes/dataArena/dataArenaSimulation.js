@@ -62,7 +62,7 @@ export function pointSegmentDistance(px, py, ax, ay, bx, by) {
 const NEUTRAL_INPUT = Object.freeze({ moveX: 0, moveY: 0, aimX: null, aimY: null, fire: false, dash: false, surge: false, ride: false, cast: null, ult: false, autoAim: false });
 export const DATA_ARENA_MODES = Object.freeze(["TOURNAMENT", "HARBOR", "RELAY"]);
 
-export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PARTNERS[0].id, quality = "high", mode = "HARBOR", relayLoadouts = {}, relayReserveId = null, relayCompanionSpecies = [], relayArenaId = null, portrait = false } = {}) {
+export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PARTNERS[0].id, quality = "high", mode = "HARBOR", relayLoadouts = {}, relayReserveId = null, relayCompanionSpecies = [], relayArenaId = null, portrait = false, partnerPower = {} } = {}) {
   if (!DATA_ARENA_MODES.includes(mode)) throw new RangeError(`DATA_ARENA_UNKNOWN_MODE:${mode}`);
   const relayMode = mode === "RELAY";
   const tournamentMode = mode === "TOURNAMENT" || relayMode;
@@ -72,6 +72,10 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   const map = relayMode ? relayBattleMap(relayArenaId,portrait) : tournamentMode ? DATA_ARENA_DUEL_MAP : DATA_ARENA_MAP;
   let partner = relayMode ? relayPartner(partnerId) : DATA_ARENA_PARTNERS.find((entry) => entry.id === partnerId);
   if (!partner) throw new RangeError(`DATA_ARENA_UNKNOWN_PARTNER:${partnerId}`);
+  // Entry power (Owner 2026-11-02): a partner raised on the ranch fights at
+  // 1.1, a practice loan at 0.85, a Dex-registered one at 1. It scales the
+  // partner's HP and every hit it deals; rivals and the course are unchanged.
+  const powerOf = (id) => { const value = Number(partnerPower?.[id]); return Number.isFinite(value) && value > 0 ? value : 1; };
   const random = createArenaRandom(seed);
   const grid = createDataArenaGrid({ map });
   const cell = map.cell;
@@ -103,6 +107,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     slow: 0, slowTimer: 0, root: 0, burn: 0, damageScale: 1
   };
   if (tournamentMode) { player.maxHp = Math.round(partner.hp * DATA_ARENA_TOURNAMENT.playerHpScale); player.hp = player.maxHp; }
+  if (powerOf(partnerId) !== 1) { player.maxHp = Math.round(player.maxHp * powerOf(partnerId)); player.hp = player.maxHp; }
   const laser = {
     angle: 0, firing: false, heat: 0, overheated: false, overheatTimer: 0,
     x0: 0, y0: 0, x1: 0, y1: 0, endKind: "RANGE", igniteCell: -1, igniteAccum: 0, hitTimer: 0
@@ -137,7 +142,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   // ------------------------------------------------------------------ derived stats
   const stat = {
     get speed() { return partner.speed * (1 + upgradeValue(upgrades, "speed")); },
-    get laserDps() { return partner.laserDps * (1 + upgradeValue(upgrades, "laserDps")) * (state.cheerTimer > 0 ? DATA_ARENA_CROWD.cheerLaserDps : 1); },
+    get laserDps() { return partner.laserDps * (1 + upgradeValue(upgrades, "laserDps")) * (state.cheerTimer > 0 ? DATA_ARENA_CROWD.cheerLaserDps : 1) * powerOf(partner.id); },
     get heatCapacity() { return partner.heatCapacity * (1 + upgradeValue(upgrades, "heatCapacity")); },
     get cooling() { return partner.coolPerSecond * (1 + upgradeValue(upgrades, "cooling")) * (state.cheerTimer > 0 ? DATA_ARENA_CROWD.cheerCooling : 1); },
     get pierce() { return upgradeValue(upgrades, "pierce"); },
@@ -156,7 +161,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     get energyRegen() { return DATA_ARENA_ENERGY.regen * (1 + upgradeValue(upgrades, "energyRegen")); },
     get cooldownScale() { return Math.max(0.5, 1 + upgradeValue(upgrades, "cooldown")); },
     get ultGain() { return 1 + upgradeValue(upgrades, "ultGain"); },
-    get skillDamage() { return 1 + upgradeValue(upgrades, "skillDamage"); }
+    get skillDamage() { return (1 + upgradeValue(upgrades, "skillDamage")) * powerOf(partner.id); }
   };
   player.dashCharges = stat.dashCharges;
 
@@ -2336,7 +2341,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   if (relayMode) {
     state.relay = { active: 0, switchCooldown: 0, enemyIndex: 0, playerDownAt: null, enemyDownAt: null,
       team: relayTeamIds(partnerId,relayReserveId).map(id => {
-        const p = relayPartner(id), hp = Math.round(p.hp * DATA_ARENA_RELAY.playerHpScale);
+        const p = relayPartner(id), hp = Math.round(p.hp * DATA_ARENA_RELAY.playerHpScale * powerOf(id));
         return { partnerId: id, speciesId: p.speciesId, hp, maxHp: hp, energy: DATA_ARENA_RELAY.tpMax, energySpentAt: -Infinity,
           cooldowns: Object.create(null), ult: 0, burn: 0, slow: 0, slowTimer: 0, root: 0, dashCharges: 1, dashRecharge: 0 };
       }) };

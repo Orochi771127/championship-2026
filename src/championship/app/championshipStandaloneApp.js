@@ -1402,6 +1402,14 @@ export function createChampionshipStandaloneApp({
       return creature;
     },
 
+    /** Data Arena entry rights (Owner 2026-11-02): Dex-registered species and the partners held on the ranch now. */
+    getDataArenaProgress() {
+      const held = [creature && { speciesId: creature.speciesId, instanceId: creature.creatureId }, ...(raising?.collection ?? []).map(({ speciesId, instanceId }) => ({ speciesId, instanceId }))]
+        .filter((entry) => /^species-\d{3}$/.test(entry?.speciesId ?? "")).map((entry) => Object.freeze(entry));
+      return Object.freeze({ registeredSpecies: Object.freeze([...registeredSpeciesValue]), ownedSpecies: Object.freeze([...new Set(held.map((entry) => entry.speciesId))]),
+        ownedInstances: Object.freeze(held) });
+    },
+
     getSession() {
       return session;
     },

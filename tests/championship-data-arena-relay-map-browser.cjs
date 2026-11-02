@@ -31,10 +31,18 @@ const write = () => fs.writeFileSync(path.join(output,'validation.json'),JSON.st
   for(let i=first;i<=last;i++){
     if(i>first){await page.click('#cm-data-arena');await page.waitForSelector('.da-panel--select');}
     await page.click('.da-mode[data-mode="RELAY"]');
-    const options=page.locator('.da-relay-options select');
-    check(`roster ${i} includes 196`,await options.nth(0).locator('option').count()===196);
-    if(i===11){await options.nth(0).selectOption('relay-species-230');await options.nth(1).selectOption('relay-species-229');}
-    const id=`field_bm${String(i).padStart(2,'0')}_01`;await options.nth(2).selectOption(id);
+    // Roster drawer and map chips replace the selects (2026-11-02); the whole Dex lists all 196.
+    await page.click('.da-seat[data-seat="first"] .da-seat__change');
+    await page.locator('.da-drawer .da-segment').first().locator('.da-chip-btn').nth(1).click();
+    check(`roster ${i} includes 196`,await page.locator('.da-roster').count()===196);
+    await page.click('.da-drawer__close');
+    // Map 11 takes the two newest partners this save may field.
+    if(i===11)for(const seat of ['first','reserve']){
+      await page.click(`.da-seat[data-seat="${seat}"] .da-seat__change`);
+      const ids=await page.$$eval('.da-roster:not([data-entry="LOCKED"]):not([data-seat])',cells=>cells.map(cell=>cell.dataset.partner));
+      await page.click(`.da-roster[data-partner="${ids.sort().at(-1)}"]`);
+    }
+    const id=`field_bm${String(i).padStart(2,'0')}_01`;await page.click(`.da-map[data-map="${id}"]`);
     await page.click('.da-panel--select .da-btn--primary');await page.click('.da-panel--brief .da-btn--primary');
     await page.waitForFunction(()=>window.__dataArenaQA?.state()==='PLAY',null,{timeout:60000});
     await page.waitForFunction(()=>__dataArenaQA.snapshot().time>2.1);
