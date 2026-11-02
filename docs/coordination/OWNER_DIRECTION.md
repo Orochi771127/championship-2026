@@ -1,5 +1,15 @@
 # Championship Owner Direction
 
+<!-- record-id: NO_PAGE_PINCH_ZOOM_20261102 -->
+## 2026-11-02 — Two fingers never zoom or drag the page
+
+With a screenshot of the iPhone home-screen app, its prologue slid off screen, the Owner asks (2026-11-02) 「為什麼我用iPhone 將網頁加入主畫面，變成網頁app後我可以用兩指，然後讓那個畫面的頁面跑掉」. Told that iOS ignores `user-scalable=no`, that only the Data Arena cancelled the gesture, and that the fix would block page zoom game-wide, keep the ranch's and the cage editor's own two-finger zoom and cost low-vision players page zoom (the game keeps its text-size setting), the Owner answers 「1」: fix it, then commit, push, merge to main and publish.
+
+- Supersedes the 2026-10-11 mobile-touch rule that kept pan and pinch on the page (`touch-action: manipulation`).
+- `mobileTouch.css`: `html { touch-action: pan-x pan-y; }`; `main.js` cancels iOS `gesturestart` / `gesturechange`. The viewport meta is unchanged.
+- Canvases keep `touch-action: none` and receive both fingers as pointers, so the ranch and cage editor zoom as before.
+- Input only: no pixel of the title, logo, main menu, letter or prologue changes (`scripts/qa/title-zero-diff.cjs`).
+
 <!-- record-id: SHOP_PURCHASE_POLISH_20261102 -->
 ## 2026-11-02 — Shop purchase: a toast that leaves, cards that stay still, the bits coin, a compact detail card
 

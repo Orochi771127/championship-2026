@@ -351,6 +351,11 @@ globalThis.addEventListener('pageshow',syncTitleArt);
 document.addEventListener('visibilitychange',()=>{
   if(document.hidden)syncTitleImages.suspend();else syncTitleArt();
 });
+// Owner 2026-11-02: two fingers must not zoom or drag the page (the home-screen
+// app slid off screen). iOS ignores user-scalable=no and zooms through its own
+// gesture events; cancelling them leaves pointer events, so the ranch and the
+// cage editor keep their own two-finger zoom on their canvases.
+for(const type of ['gesturestart','gesturechange'])document.addEventListener(type,event=>event.preventDefault(),{passive:false});
 const titleNote = document.getElementById("cm-title-note");
 const newGameButton = document.getElementById("cm-new-game");
 const continueButton = document.getElementById("cm-continue");
