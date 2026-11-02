@@ -83,7 +83,7 @@ import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded,beginNativeRais
 import {classifyNativeRaisingHand,stepNativeRaisingStrokeInput,nativeRaisingHandAdmission} from '../raising/nativeRaisingHand.js';
 import {createNativeRaisingActor,initializeNativeRaisingActor,interruptNativeRaisingFeeding,removeNativeRaisingFoodTarget,projectNativeRaisingActor,stepNativeRaisingActor,stepNativeRaisingAgeClock,touchNativeRaisingEgg,wakeNativeRaisingActor,startNativeRaisingMorning,stepNativeRaisingEvolution,enterNativeRaisingCage,beginNativeRaisingNap} from "../raising/nativeRaisingActor.js";
 import {NATIVE_RAISING_LIFECYCLE_RULES} from '../raising/nativeRaisingLifecycle.js';
-import {CLOCK_POLICIES,CLOCK_POLICY_NATIVE,CLOCK_POLICY_REALTIME,REALTIME_FOOD_UNITS_PER_SECOND,REALTIME_WAKE_SECONDS,isNightNap,offlineGrowthSeconds,
+import {CLOCK_POLICIES,CLOCK_POLICY_NATIVE,CLOCK_POLICY_REALTIME,REALTIME_FOOD_UNITS_PER_SECOND,REALTIME_WAKE_SECONDS,REALTIME_DISTURBANCE,isNightNap,offlineGrowthSeconds,
   realtimeAgeRate,realtimeClockAdvance,realtimeDayPeriod,takeAgeUnits} from '../time/realtimeClock.js';
 // The ranch ground for either layout: the original board, or (expansion
 // prototype) the same ring continued into its annex.
@@ -934,14 +934,29 @@ export function createChampionshipStandaloneApp({
       if(grown>age){const next=structuredClone(profile);next.fields['18c']=grown>>>0;writeRaisingNativeProfile(id,next,{markDirty:false});}
     }
   }
-  /** At night a touch, feeding or treatment wakes a partner for ten minutes. */
-  function wakeRealtimePartner(id){
-    if(!realtime||!session||!isNightNap(requireSession().getRaisingHomeSnapshot().clockMinutes))return;
+  /**
+   * At night a touch, feeding or treatment wakes a partner for ten minutes. Handling a sleeping partner awake
+   * (`disturb`: a tap, the hand, a carry) also disturbs it (OWNER_APPROVED_ADAPTATION 2026-11-02, night disturbance):
+   * 育成妨礙 on the native care-mistake count and lost affection. Returns true when it disturbed a sleeper.
+   */
+  function wakeRealtimePartner(id,{disturb=false}={}){
+    if(!realtime||!session||!isNightNap(requireSession().getRaisingHomeSnapshot().clockMinutes))return false;
     realtimeWake.set(id,realNowMs()+REALTIME_WAKE_SECONDS*1000);
     const actor=raisingActors.get(id),profile=raisingNativeProfile(id);
-    if(!actor||!profile)return;
-    const woken=wakeNativeRaisingActor(actor,profile,raisingFoods,{next:nextGameplayRandom});
-    if(woken){writeRaisingNativeProfile(id,woken);publishRaising();}
+    if(!actor||!profile)return false;
+    let woken=wakeNativeRaisingActor(actor,profile,raisingFoods,{next:nextGameplayRandom});
+    if(!woken)return false;
+    const disturbed=disturb&&actor.speciesIndex>=8;
+    if(disturbed){
+      const next=structuredClone(woken),rule=REALTIME_DISTURBANCE;
+      next.narrowFields['03d']=Math.min(rule.careMistakeMaximum,(next.narrowFields['03d']|0)+rule.careMistakes);
+      next.fields['020']=Math.max(0,(next.fields['020']|0)-rule.affectionLoss);
+      woken=normalizeNativeIndividualProfile(next);
+    }
+    writeRaisingNativeProfile(id,woken);
+    if(disturbed)emitPartnerLife({kind:'disturbed',partnerId:id});
+    publishRaising();
+    return disturbed;
   }
   /** 「讓拍檔休息」: every idle partner lies down now (at night it sleeps until morning). */
   function restRaisingPartners(){
@@ -1856,7 +1871,6 @@ export function createChampionshipStandaloneApp({
     },
 
     beginRaisingHand(instanceId,pointer){
-      wakeRealtimePartner(instanceId);
       if(tutorialBaseline){
         if(instanceId!==creature.creatureId||raisingHand||!tutorialInput(pointer?.checkpoint,"carry","hand")
           ||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
@@ -1866,7 +1880,9 @@ export function createChampionshipStandaloneApp({
       if(raisingHand||this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME
         ||!raisingGround||!raisingActors.has(instanceId)||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
       const point={...pointer,x:Math.floor(pointer.x),y:Math.floor(pointer.y)};
-      raisingHand={id:instanceId,mode:1,elapsed:0,held:true,inside:true,origin:{...point},pointer:{...point},previous:{...point}};return true;
+      // Only a hand that takes hold wakes it; a tap on release of this press is the same handling, not a second one.
+      const disturbed=wakeRealtimePartner(instanceId,{disturb:true});
+      raisingHand={id:instanceId,mode:1,elapsed:0,held:true,inside:true,origin:{...point},pointer:{...point},previous:{...point},disturbed};return true;
     },
     updateRaisingHand(instanceId,pointer){
       if(tutorialBaseline&&!tutorialInput(pointer?.checkpoint,"carry","hand"))return false;
@@ -1895,12 +1911,12 @@ export function createChampionshipStandaloneApp({
       raisingHand.held=false;advanceRaisingHand();publishRaising();return true;
     },
     beginRaisingCarry(instanceId,pointer){
-      wakeRealtimePartner(instanceId);
       if(this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME||!raisingGround
         ||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
-      const actor=raisingActors.get(instanceId),profile=raisingNativeProfile(instanceId);
-      if(!actor||!profile||[...raisingActors.values()].some(a=>a.state===6))return false;
-      const p=beginNativeRaisingCarry(actor,profile,pointer,{ground:raisingGround,foods:raisingFoods,rng:{next:nextGameplayRandom}});if(!p)return false;
+      const actor=raisingActors.get(instanceId);
+      if(!actor||!raisingNativeProfile(instanceId)||[...raisingActors.values()].some(a=>a.state===6))return false;
+      wakeRealtimePartner(instanceId,{disturb:true});
+      const p=beginNativeRaisingCarry(actor,raisingNativeProfile(instanceId),pointer,{ground:raisingGround,foods:raisingFoods,rng:{next:nextGameplayRandom}});if(!p)return false;
       actor.carryCameraX=pointer.cameraX??0;writeRaisingNativeProfile(instanceId,p);savePort.markDirty();publishRaising();return true;
     },
     updateRaisingCarry(instanceId,pointer){
@@ -2115,10 +2131,12 @@ export function createChampionshipStandaloneApp({
     },
     /** A tap on a partner: its mood emote, and +1 affection (field 020) at most once per cooldown. */
     touchRaisingPartner(instanceId){
-      wakeRealtimePartner(instanceId);
+      const disturbed=wakeRealtimePartner(instanceId,{disturb:true})||(raisingHand?.id===instanceId&&raisingHand.disturbed===true);
       if(!partnerLife||!session||tutorialBaseline||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)return null;
       const actor=nativeRaisingActor(instanceId),profile=raisingNativeProfile(instanceId),reading=partnerReading(instanceId,actor);
       if(!reading)return null;
+      // A partner woken in the night is cross, not pleased: no affection and no mood emote for that tap.
+      if(disturbed)return Object.freeze({...reading,gained:0,disturbed:true});
       const at=Date.now(),c=this.getCalendar(),dayKey=strollDayKey({season:c.season,day:c.dayOfSeason});
       let gained=0;
       if(raising?.nativeHome&&reading.affection<100&&canTapAffection(raising.nativeHome.strollLog,instanceId,at)){
