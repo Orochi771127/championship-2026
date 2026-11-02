@@ -9,6 +9,9 @@ import {GACHA_CHIPS, GACHA_METALS, GACHA_GOODS, GACHA_PITY_MAX, GACHA_WELCOME_TI
   takeArmedHuntChips, claimGachaReward, applyGachaBoost} from '../src/championship/gacha/cyberGacha.js';
 import {getShopRecord} from '../src/championship/shop/shopCatalog.js';
 import {CYBER_GACHA_ART} from '../src/championship/app/cyberGachaView.js';
+import {GACHA_BITS_BAGS, GACHA_BITS_MACHINE_RATES, GACHA_PERSONALITY_COUNT, GACHA_PERSONALITY_CHOICES, gachaChipEffectLines,
+  gachaChipTiming, disarmGachaItem} from '../src/championship/gacha/cyberGacha.js';
+import {enhanceSummary} from '../src/championship/app/cyberGachaView.js';
 
 // Cyber Gachapon, OWNER_APPROVED_ADAPTATION 2026-10-29: the Shop's third tab.
 
@@ -286,4 +289,186 @@ test('arcade armour keys, a whole tab badge and plates that read on any skin', (
   assert.match(view, /duration: 420, delay, easing: "cubic-bezier\(\.34,1\.56,\.64,1\)"/);
   assert.match(view, /const delay = 55 \* index;/);
   assert.doesNotMatch(view, /crank-stage|順時針轉一整圈/, 'the drag-the-handle stage is gone: one tap turns the crank');
+});
+
+// ---- Third pass (Owner 2026-11-02): every effect spelled out from its own
+// numbers, cartridges and beacons loaded before play and taken back out, coin
+// prizes, the reshape chip's own pick, the Ω beacon's shard and the rare lure's
+// partner. ----
+
+test('every chip spells out its effect from its own numbers, in every locale', async () => {
+  const lines = id => gachaChipEffectLines(GACHA_CHIPS.find(chip => chip.id === id));
+  for (const chip of GACHA_CHIPS) assert.ok(gachaChipEffectLines(chip).length > 0, chip.id);
+  assert.deepEqual(lines('chip:attack').map(line => [line.text, line.params?.n]), [['攻擊 +{n}', 8], ['HP／TP 回滿', undefined]]);
+  assert.deepEqual(lines('chip:core-beta')[0], {text: '攻擊・防禦・智力・速度 +{n}', params: {n: 12}});
+  assert.ok(lines('chip:core-beta').some(line => line.text === '最大 TP +{n}' && line.params.n === 24));
+  assert.deepEqual(lines('chip:chrono'), [{text: '狩獵限時 +{n} 小時', params: {n: 2}}]);
+  assert.deepEqual(lines('chip:gravity'), [{text: '野生拍檔移動速度 -{n}%', params: {n: 50}}]);
+  assert.deepEqual(lines('chip:bounty-omega').map(line => [line.text, line.params.n]),
+    [['位元幣獎金 ×{n}', 5], ['轉蛋券 +{n}', 5], ['隨機金屬碎片 ×{n}', 1]]);
+  const keys = new Set([...GACHA_CHIPS.flatMap(chip => [...gachaChipEffectLines(chip).map(line => line.text), gachaChipTiming(chip)]),
+    ...GACHA_BITS_BAGS.map(bag => bag.name), '附贈 {item} ×{n}', '補給已滿的部分換成 {bits} 位元幣', '已取回',
+    '性格：{name}', '選擇新的性格', '請先選擇新的性格。', '拍檔已經是這個性格了。', '這個晶片沒有裝填。', '最大 HP', '最大 TP',
+    '轉蛋卡匣', '誘餌引來：{name}', '賞金信標', '下一場勝利生效', '賞金信標掉落：{item}',
+    '培育補給與狩獵道具 45%・R 晶片 27%・位元幣袋 20%・基礎進化金屬 7%・轉蛋券 1%']);
+  for (const locale of ['en', 'ja', 'th', 'vi']) {
+    const TEXT = (await import(`../src/championship/text/uiText.${locale}.js`))[`TEXT_${locale.toUpperCase()}`];
+    for (const key of keys) {
+      assert.equal(typeof TEXT[key], 'string', `${locale}: ${key}`);
+      assert.doesNotMatch(TEXT[key], EMOJI, `${locale}: ${key}`);
+      for (const param of key.match(/\{\w+\}/g) ?? []) assert.ok(TEXT[key].includes(param), `${locale}: ${key} keeps ${param}`);
+    }
+  }
+});
+
+test('the Bits machine pays coin bags and a ticket; its metal share stays R 6% and SR 1%', () => {
+  const rate = slot => GACHA_BITS_MACHINE_RATES.find(([id]) => id === slot)[1];
+  assert.ok(Math.abs(GACHA_BITS_MACHINE_RATES.reduce((sum, [, weight]) => sum + weight, 0) - 1) < 1e-9);
+  assert.equal(rate('METAL_R'), 0.06);
+  assert.equal(rate('METAL_SR'), 0.01);
+  assert.equal(GACHA_BITS_BAGS.reduce((sum, bag) => sum + rate(bag.id), 0).toFixed(3), '0.200');
+  const state = normalizeCyberGacha({version: 1});
+  const pull = roll => pullCyberGacha(state, {machine: 'BITS', count: 1, bits: 50_000, random: seq([roll, 0.5])});
+  assert.deepEqual(pull(0.8).prizes[0], {kind: 'BITS', id: 'bits:pouch', rarity: 'R', quantity: 1, bits: 30_000});
+  assert.equal(pull(0.87).prizes[0].bits, 60_000);
+  assert.equal(pull(0.97).prizes[0].bits, 150_000);
+  assert.equal(pull(0.999).prizes[0].bits, 500_000);
+  const ticket = pull(0.99);
+  assert.equal(ticket.prizes[0].kind, 'TICKETS');
+  assert.equal(ticket.state.tickets, 1, 'the ticket prize lands in the save');
+  assert.equal(pull(0.93).prizes[0].kind, 'METAL');
+  assert.equal(pull(0.2).prizes[0].kind, 'GOODS');
+});
+
+test('an R chip from the premium machine brings feed x5 or protein x1, alternating by pull position', () => {
+  const ten = pullCyberGacha(normalizeCyberGacha({version: 1, tickets: 10}), {machine: 'PREMIUM', count: 10, random: seq([0.55])});
+  const chips = ten.prizes.slice(0, 9);
+  assert.ok(chips.every(prize => prize.kind === 'CHIP' && prize.rarity === 'R'));
+  assert.deepEqual(chips.map(prize => [prize.bonus.id, prize.bonus.quantity, prize.bonus.shopRecordIndex]),
+    Array.from({length: 9}, (_, i) => (i % 2 ? ['goods:protein', 1, 1] : ['goods:feed', 5, 0])));
+  assert.equal(ten.prizes[9].guaranteed, true);
+  assert.equal(ten.prizes[9].bonus, undefined);
+});
+
+test('the reshape chip writes the picked personality; loaded cartridges and beacons come back out', () => {
+  const profile = {fields: {'058': 100, '050': 10, '05c': 40, '054': 0, '060': 50, '064': 50, '068': 50, '06c': 50, '020': 50, '010': 20, '018': 3}};
+  assert.deepEqual([GACHA_PERSONALITY_COUNT, GACHA_PERSONALITY_CHOICES], [9, 8], 'the ninth (？？？) has no battle table and is never offered');
+  assert.equal(applyGachaBoost(profile, {personality: 1, personalityIndex: 7}).fields['018'], 7);
+  assert.equal(applyGachaBoost(profile, {personality: 1, personalityIndex: 8}).fields['018'], 7, 'a pick never lands on ？？？');
+  assert.equal(applyGachaBoost(profile, {personality: 1}).fields['018'], 4, 'without a pick it still steps to the next one');
+  let state = normalizeCyberGacha({version: 1, chips: {'chip:gravity': 1, 'chip:bounty-beta': 2}});
+  state = spendGachaItem(spendGachaItem(state, 'chip:gravity').state, 'chip:bounty-beta').state;
+  assert.deepEqual([state.chips['chip:gravity'], state.armed.hunt, state.armed.bounty], [undefined, ['chip:gravity'], 'chip:bounty-beta']);
+  const hunt = disarmGachaItem(state, 'chip:gravity');
+  assert.equal(hunt.ok, true);
+  assert.deepEqual([hunt.state.chips['chip:gravity'], hunt.state.armed.hunt], [1, undefined]);
+  const bounty = disarmGachaItem(hunt.state, 'chip:bounty-beta');
+  assert.deepEqual([bounty.state.chips['chip:bounty-beta'], bounty.state.armed.bounty], [2, undefined]);
+  assert.equal(disarmGachaItem(bounty.state, 'chip:bounty-beta').reason, 'NOT_ARMED');
+  assert.equal(disarmGachaItem(bounty.state, 'chip:hp').reason, 'NOT_ARMED');
+});
+
+test('the Ω beacon also drops one random metal shard into the bag', () => {
+  const state = spendGachaItem(normalizeCyberGacha({version: 1, chips: {'chip:bounty-omega': 1}}), 'chip:bounty-omega').state;
+  const win = settleGachaBattleWin(state, {bits: 1000, random: seq([0, 0.5])});
+  assert.equal(win.bonusBits, 4000);
+  assert.equal(win.tickets, 1 + 5);
+  assert.deepEqual(win.metals, ['metal:chrono-metal-shard']);
+  assert.equal(win.state.metals['metal:chrono-metal-shard'], 1);
+  assert.deepEqual(settleGachaBattleWin(normalizeCyberGacha({version: 1}), {bits: 1000, random: seq([0])}).metals, []);
+});
+
+test('the rare lure calls the field rarest candidate into a prepared entry, after the untouched native actors', async () => {
+  const {prepareNativeHuntEntry, appendNativeRareLureActor} = await import('../src/championship/hunt/capture/nativeHuntEntryTransaction.js');
+  const {resolveNativeHuntPoolSources} = await import('../src/championship/hunt/capture/nativeHuntSources.js');
+  const app = harness(Math.random).make();
+  await app.newGame();
+  try {
+    app.openGate(); app.selectGate(app.getGates().find(gate => gate.biomeId === 'Grass').gateId); app.confirmGate();
+    const entry = prepareNativeHuntEntry({biomeId: app.getConfirmedGate().biomeId, clock: app.getCalendar(),
+      rngSnapshot: app.getGameplayRngState(), persistentState: app.getHuntPersistentState()});
+    const before = structuredClone(entry.encounter.actors);
+    const lured = appendNativeRareLureActor(entry);
+    assert.equal(lured.encounter.actors.length, before.length + 1);
+    assert.deepEqual(lured.encounter.actors.slice(0, -1), before, 'the native actors are untouched');
+    const added = lured.encounter.actors.at(-1);
+    assert.equal(added.speciesIndex, lured.rareLure.speciesIndex);
+    assert.equal(added.individual.fields['000'], added.speciesIndex);
+    assert.equal(added.individual.fields['004'], before.length);
+    // The lure reads the table the entry itself drew from, never a second lookup.
+    const {candidateInput} = resolveNativeHuntPoolSources({...entry.scene, modifiers: entry.persistentState.modifiers});
+    assert.deepEqual(entry.candidates, candidateInput.entries);
+    const rows = entry.candidates.filter(row => row.weight > 0);
+    assert.equal(rows.find(row => row.speciesIndex === added.speciesIndex).weight, Math.min(...rows.map(row => row.weight)));
+    assert.equal(appendNativeRareLureActor({...entry, candidates: []}).encounter, entry.encounter, 'no table, no extra partner');
+  } finally { await app.dispose(); }
+});
+
+async function qaApp(chips, random = Math.random) {
+  const {data, cages, make} = harness(random);
+  const first = make();
+  await first.newGame();
+  first.save();
+  const save = JSON.parse(createFullQaSaveText(JSON.parse(data.get(CHAMPIONSHIP_MODERN_SAVE_KEY)), {cageIds: cages.map(e => e.cageId)}));
+  await first.dispose();
+  save.progression.cyberGacha = {version: 1, welcome: true, chips};
+  data.set(CHAMPIONSHIP_MODERN_SAVE_KEY, JSON.stringify(save));
+  const app = make();
+  await app.continueGame();
+  return {app, saved: () => JSON.parse(data.get(CHAMPIONSHIP_MODERN_SAVE_KEY))};
+}
+
+test('the app loads and takes back cartridges, reshapes a personality and pays coin bags, saving each step', async () => {
+  const {app, saved} = await qaApp({'chip:gravity': 1, 'chip:personality': 1, 'chip:bounty-alpha': 1}, seq([0.8]));
+  try {
+    const slots = kind => app.getGachaTacticalSlots(kind).map(slot => [slot.id, slot.owned, slot.armed]);
+    assert.deepEqual(slots('HUNT'), [['chip:gravity', 1, false]]);
+    assert.deepEqual(slots('BOUNTY'), [['chip:bounty-alpha', 1, false]]);
+    assert.equal(app.gachaUseItem('chip:gravity').kind, 'ARMED');
+    assert.deepEqual(slots('HUNT'), [['chip:gravity', 0, true]], 'a loaded cartridge stays listed');
+    assert.deepEqual(saved().progression.cyberGacha.armed, {hunt: ['chip:gravity']});
+    assert.equal(app.gachaDisarmItem('chip:gravity').kind, 'DISARMED');
+    assert.equal(saved().progression.cyberGacha.chips['chip:gravity'], 1);
+    assert.equal(saved().progression.cyberGacha.armed.hunt, undefined);
+    assert.equal(app.gachaDisarmItem('chip:gravity').reason, 'NOT_ARMED');
+
+    const partner = app.getCyberGachaFrame().partners[0];
+    const from = partner.stats.personalityIndex, to = (from + 4) % GACHA_PERSONALITY_CHOICES;
+    assert.equal(app.gachaReshapePersonality(partner.instanceId, GACHA_PERSONALITY_CHOICES).reason, 'CHOOSE_PERSONALITY');
+    assert.equal(app.gachaReshapePersonality(partner.instanceId, from).reason, 'SAME_PERSONALITY');
+    const reshaped = app.gachaReshapePersonality(partner.instanceId, to);
+    assert.equal(reshaped.ok, true, reshaped.reason);
+    assert.deepEqual([reshaped.before.personalityIndex, reshaped.after.personalityIndex], [from, to]);
+    assert.match(enhanceSummary(reshaped), /^性格：/, 'the toast names the new personality');
+    assert.equal(enhanceSummary({kind: 'ENHANCE', before: {attack: 1, defense: 1, wisdom: 1, speed: 1, maxHp: 10, maxTp: 4},
+      after: {attack: 13, defense: 13, wisdom: 13, speed: 13, maxHp: 130, maxTp: 28}}), '全能力 +12・最大 HP +120', 'two parts at most');
+    assert.equal(app.getCyberGachaFrame().partners[0].stats.personalityIndex, to);
+    assert.equal(app.getCyberGachaFrame().chips.find(chip => chip.id === 'chip:personality').owned, 0);
+    assert.equal(saved().progression.cyberGacha.chips['chip:personality'], undefined);
+
+    app.openShop();
+    const bits = app.getCyberGachaFrame().bits;
+    const pull = app.gachaPull('BITS', 10);
+    assert.equal(pull.ok, true, pull.reason);
+    assert.ok(pull.prizes.every(prize => prize.kind === 'BITS' && prize.bits === 30_000 && prize.name === '位元幣小錢袋'));
+    assert.equal(app.getCyberGachaFrame().bits, bits - 450_000 + 300_000);
+    assert.equal(saved().shop.bits, bits - 150_000, 'the charge and the coins are one saved transaction');
+  } finally { await app.dispose(); }
+});
+
+test('a loaded rare lure adds that partner to the live hunt, and the field knows its name', async () => {
+  const {app} = await qaApp({'chip:rare-bait': 1});
+  try {
+    assert.equal(app.gachaUseItem('chip:rare-bait').kind, 'ARMED');
+    app.openGate(); app.selectGate(app.getGates().find(gate => gate.biomeId === 'Grass').gateId); app.confirmGate();
+    await app.beginHunt();
+    assert.equal(app.getHuntEntryError(), null);
+    const actors = app.getHuntRuntime().getNativeEntryState().encounter.actors;
+    const added = actors.at(-1);
+    assert.equal(added.individual.fields['004'], actors.length - 1);
+    assert.equal(app.getHuntRareLure().speciesId, `species-${String(added.speciesIndex).padStart(3, '0')}`);
+    assert.equal(app.getHuntRuntime().getWildCreatures().length, actors.length);
+    assert.deepEqual(app.getHuntGachaBoosts(), ['chip:rare-bait']);
+    assert.deepEqual(app.getGachaTacticalSlots('HUNT'), [], 'the cartridge was used up by this hunt');
+  } finally { await app.dispose(); }
 });

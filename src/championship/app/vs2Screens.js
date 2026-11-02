@@ -489,10 +489,21 @@ export function createHuntLoadoutView({ root, source }) {
   pluginList.setAttribute("role", "group");
   pluginList.setAttribute("aria-label", uiText("Plugin positions"));
 
+  // Cyber Gachapon cartridges (Owner 2026-11-02): tap one to load it for this
+  // hunt, tap it again to put it back in the bag. Hidden while none are held.
+  const cartridgeList = element("div", "cm-vs2-loadout cm-vs2-loadout--gacha");
+  cartridgeList.setAttribute("role", "group");
+  cartridgeList.setAttribute("aria-label", uiText("狩獵戰術卡匣"));
+  const cartridgeRow = element("div", "cm-vs2-loadout__row");
+  const cartridgeOptions = element("div", "cm-vs2-loadout__options");
+  cartridgeRow.append(element("span", "cm-vs2-loadout__label", "轉蛋卡匣"), cartridgeOptions);
+  cartridgeList.append(cartridgeRow);
+  cartridgeList.hidden = true;
+
   const entryStatus = element("p", "cm-vs2-status");
   entryStatus.setAttribute("role", "status");
   entryStatus.hidden = true;
-  body.append(gatePlate, equipmentList, pluginList, entryStatus);
+  body.append(gatePlate, equipmentList, pluginList, cartridgeList, entryStatus);
   const evidence = developerOnly(mode, "Five equipment classes and four plugin positions are ROM_VERIFIED. Native item and plugin effects use the existing Hunt runtime. The empty-loadout confirmation rule remains PRODUCT_AUTHORED; individual icon parity is incomplete.");
   if (evidence) body.append(evidence);
 
@@ -504,6 +515,43 @@ export function createHuntLoadoutView({ root, source }) {
 
   const classRows = new Map();
   const pluginRows = new Map();
+  const cartridgeButtons = new Map();
+
+  function renderCartridges(slots = []) {
+    cartridgeList.hidden = slots.length === 0;
+    for (const [id, button] of cartridgeButtons) {
+      if (!slots.some((slot) => slot.id === id)) { button.remove(); cartridgeButtons.delete(id); }
+    }
+    for (const slot of slots) {
+      let button = cartridgeButtons.get(slot.id);
+      if (!button) {
+        button = element("button", "cm-vs2-loadout__option cm-vs2-loadout__option--gacha");
+        button.type = "button";
+        button.dataset.gachaChip = slot.id;
+        button.dataset.rarity = slot.rarity;
+        const art = shopGoodsPresentation(slot.shopRecordIndex);
+        if (art?.src) {
+          const image = element("img", "cm-vs2-loadout__icon");
+          image.src = art.src; image.alt = ""; image.loading = "lazy";
+          button.append(image);
+          button.dataset.hasArt = "true";
+        }
+        const effect = slot.effectLines?.[0];
+        const effectText = element("span", "cm-vs2-loadout__effect");
+        effectText.textContent = effect ? uiText(effect.text, effect.params) : "";
+        button.append(element("span", "cm-vs2-loadout__name", slot.name), effectText, element("span", "cm-vs2-loadout__detail"));
+        button.addEventListener("click", () => {
+          const current = source.getFrame().huntLoadout?.gachaCartridges?.find((entry) => entry.id === slot.id);
+          if (current?.armed) source.intents.gachaDisarmItem(slot.id); else source.intents.gachaArmItem(slot.id);
+        });
+        cartridgeButtons.set(slot.id, button);
+        cartridgeOptions.append(button);
+      }
+      button.dataset.selected = String(slot.armed);
+      button.setAttribute("aria-pressed", String(slot.armed));
+      button.querySelector(".cm-vs2-loadout__detail").textContent = slot.armed ? uiText("已裝填") : uiText("持有 {n} 個", { n: slot.owned });
+    }
+  }
 
   /** One row per recovered equipment class. Empty is empty, never disabled. */
   function renderClass(entry, selected) {
@@ -601,6 +649,7 @@ export function createHuntLoadoutView({ root, source }) {
       renderClass(entry, selected);
     }
     renderPlugins(block);
+    renderCartridges(block.gachaCartridges ?? []);
     begin.disabled = !block.canBegin;
     const admissionMessage = gateAdmissionMessage(block.admission);
     const entryError = block.entryError === "INSUFFICIENT_FUNDS" && block.admission?.canEnter ? null : block.entryError;
@@ -616,6 +665,7 @@ export function createHuntLoadoutView({ root, source }) {
     dispose() {
       classRows.clear();
       pluginRows.clear();
+      cartridgeButtons.clear();
       root.replaceChildren();
       root.className = "";
       delete root.dataset.uiAuthority;
@@ -656,7 +706,34 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   const hudCopy = element("div", "cm-vs2-hud__copy");
   const gateName = element("strong", "cm-vs2-hud__gate", block.hud.gateName ?? "");
   const companion = element("span", "cm-vs2-hud__companion", block.hud.companionName ?? "");
-  hudCopy.append(gateName, companion);
+  // The cartridges this hunt started with ride the gate row, the partner the
+  // rare lure called rides the clock row, so the HUD keeps its two lines.
+  const gachaIcons = element("span", "cm-vs2-hud__gacha");
+  const gachaLure = element("span", "cm-vs2-hud__gacha-lure");
+  gachaIcons.hidden = gachaLure.hidden = true;
+  let gachaKey = "";
+  function paintGachaLine(gacha) {
+    const key = JSON.stringify(gacha ?? null);
+    if (key === gachaKey) return;
+    gachaKey = key;
+    gachaIcons.replaceChildren();
+    for (const chip of gacha?.boosts ?? []) {
+      const art = shopGoodsPresentation(chip.shopRecordIndex);
+      if (!art?.src) continue;
+      const image = element("img", "cm-vs2-hud__gacha-icon");
+      image.src = art.src; image.alt = uiText(chip.name); image.title = uiText(chip.name);
+      gachaIcons.append(image);
+    }
+    gachaIcons.hidden = gachaIcons.childElementCount === 0;
+    gachaLure.textContent = gacha?.rareLure ? uiText("誘餌引來：{name}", { name: uiText(gacha.rareLure.name ?? "") }) : "";
+    gachaLure.hidden = !gacha?.rareLure;
+  }
+  paintGachaLine(block.hud.gacha);
+  const gateRow = element("span", "cm-vs2-hud__row");
+  const clockRow = element("span", "cm-vs2-hud__row");
+  gateRow.append(gateName, gachaIcons);
+  clockRow.append(companion, gachaLure);
+  hudCopy.append(gateRow, clockRow);
   const exit = actionButton("返回牧場");
   exit.classList.add("cm-vs2-hud__exit");
   hud.append(hudSignal, hudCopy, exit);
@@ -1014,6 +1091,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     if (!next) return;
     exit.disabled = !next.hud.exitAvailable;
     gateName.textContent = uiText(next.hud.gateName ?? "");
+    paintGachaLine(next.hud.gacha);
     const remaining=next.hud.time?.remainingMinutes;
     companion.textContent = uiText(remaining == null ? next.hud.companionName ?? "" :
       uiText('剩餘 {time}', { time: `${String(Math.floor(remaining/60)).padStart(2,'0')}:${String(remaining%60).padStart(2,'0')}` }));

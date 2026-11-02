@@ -5,6 +5,7 @@ import {GACHA_CHIPS,GACHA_METALS,GACHA_GOODS,GACHA_PITY_MAX,GACHA_MACHINES,GACHA
   inscribesBloodline,catalystRarityForGeneration,spendGachaItem,settleGachaBattleWin,takeArmedHuntChips,gachaBloodlineOf,claimGachaReward} from '../gacha/cyberGacha.js';
 import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, normalizeFriendsPlaytestState, purchaseTestRanchRow } from './friendsPlaytestPolicy.js';
 import { planOnlineBindReward } from './onlineBindRewardPolicy.js';
+import {GACHA_PERSONALITY_CHOICES,GACHA_TICKET_PRIZE,getGachaBitsBag,disarmGachaItem} from '../gacha/cyberGacha.js';
 import {beginNativeRaisingEvolution} from '../raising/nativeRaisingActor.js';
 import {NATIVE_RAISING_LIFECYCLE_RULES} from '../raising/nativeRaisingLifecycle.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
@@ -277,6 +278,7 @@ export function createChampionshipStandaloneApp({
   let lastGachaResult = null;
   let lastBattleGachaDrop = null;
   let lastHuntGachaBoosts = Object.freeze([]);
+  let lastHuntRareLure = null;
   let gachaSerial = 0;
   let selectedDatabaseSpeciesIndex = null;
   let cageEdit = null;
@@ -1001,9 +1003,10 @@ export function createChampionshipStandaloneApp({
     return true;
   }
   function gachaPrizeView(prize){
-    const entry=prize.kind==='CHIP'?getGachaChip(prize.id):prize.kind==='METAL'?getGachaMetal(prize.id):getGachaGoods(prize.id);
+    const entry=prize.kind==='CHIP'?getGachaChip(prize.id):prize.kind==='METAL'?getGachaMetal(prize.id)
+      :prize.kind==='BITS'?getGachaBitsBag(prize.id):prize.kind==='TICKETS'?GACHA_TICKET_PRIZE:getGachaGoods(prize.id);
     return Object.freeze({...prize,name:entry?.name??prize.id,art:entry?.art??null,
-      shopRecordIndex:entry?.shopRecordIndex??null,family:entry?.family??null});
+      shopRecordIndex:entry?.shopRecordIndex??null,family:entry?.family??null,...(prize.bonus?{bonus:gachaPrizeView(prize.bonus)}:{})});
   }
   function gachaReceipt(result){
     lastGachaResult=Object.freeze({...result,serial:++gachaSerial});publishScreens();return lastGachaResult;
@@ -1355,7 +1358,7 @@ export function createChampionshipStandaloneApp({
       if(result.receipt?.status==="SETTLED"&&result.receipt.won){
         const drop=settleGachaBattleWin(gachaState(),{bits:Math.max(0,result.wallet-expectedBits),random:gachaRandom});
         cyberGacha=drop.state;wallet=Math.min(BITS_WALLET_CAP,result.wallet+drop.bonusBits);
-        lastBattleGachaDrop=Object.freeze({attemptId:result.receipt.attemptId??null,tickets:drop.tickets,bonusBits:wallet-result.wallet,beacon:drop.beacon});
+        lastBattleGachaDrop=Object.freeze({attemptId:result.receipt.attemptId??null,tickets:drop.tickets,bonusBits:wallet-result.wallet,beacon:drop.beacon,metals:drop.metals});
       }
       const committed = requireShop().applyBitsTransaction({ expectedBits, bits: wallet });
       if (!committed.ok) {
@@ -2904,16 +2907,23 @@ export function createChampionshipStandaloneApp({
       if(!result.ok)return gachaRefusal(result.reason);
       const friends=result.charge.diamonds?normalizeFriendsPlaytestState({...friendsPlaytest,
         diamonds:friendsPlaytest.diamonds-result.charge.diamonds}):friendsPlaytest;
-      const goods=result.prizes.filter(prize=>prize.kind==='GOODS');
-      let candidate=null;
-      if(result.charge.bits||goods.length){
+      // Goods, and the supply riding with a premium R chip, land in the shop's own
+      // stacks; what a full stack cannot hold comes back at its shop price.
+      // Coin bags pay the wallet in the same transaction as the Bits charge.
+      const goods=result.prizes.flatMap(prize=>prize.kind==='GOODS'?[prize]:prize.bonus?[prize.bonus]:[]);
+      const coins=result.prizes.reduce((sum,prize)=>sum+(prize.kind==='BITS'?prize.bits:0),0);
+      let candidate=null,refundBits=0;
+      if(result.charge.bits||goods.length||coins){
         candidate=gachaShopCandidate();
-        if(result.charge.bits){const bits=candidate.getBits();
-          if(!candidate.applyBitsTransaction({expectedBits:bits,bits:bits-result.charge.bits}).ok)return gachaRefusal('WALLET_CHANGED');}
-        for(const prize of goods)candidate.receiveNativeGift(prize.shopRecordIndex,prize.quantity);
+        for(const prize of goods){
+          const kept=candidate.receiveNativeGift(prize.shopRecordIndex,prize.quantity);
+          refundBits+=(prize.quantity-kept)*getShopRecord(prize.shopRecordIndex).unitPriceBits;
+        }
+        const bits=candidate.getBits(),after=Math.min(BITS_WALLET_CAP,bits-result.charge.bits+coins+refundBits);
+        if(after!==bits&&!candidate.applyBitsTransaction({expectedBits:bits,bits:after}).ok)return gachaRefusal('WALLET_CHANGED');
       }
       if(!commitGacha({state:result.state,friends,shopCandidate:candidate}))return gachaRefusal('SAVE_FAILED');
-      return gachaReceipt({ok:true,kind:'PULL',machine,count,charge:result.charge,prizes:result.prizes.map(gachaPrizeView)});
+      return gachaReceipt({ok:true,kind:'PULL',machine,count,charge:result.charge,refundBits,prizes:result.prizes.map(gachaPrizeView)});
     },
 
     gachaClaimPity(metalId){
@@ -3006,6 +3016,53 @@ export function createChampionshipStandaloneApp({
       publishScreens();
       return Object.freeze({ok:true,granted:result.granted,tickets:result.state.tickets,reason});
     },
+
+    /**
+     * Hunt cartridges (kind HUNT) or bounty beacons (BOUNTY) the player holds or
+     * has loaded, for the hunt loadout and the battle menu (Owner 2026-11-02).
+     * Loading goes through gachaUseItem; gachaDisarmItem takes one back out.
+     */
+    getGachaTacticalSlots(kind){
+      if(!session||(kind!=='HUNT'&&kind!=='BOUNTY'))return Object.freeze([]);
+      const state=gachaState();
+      return deepFreeze(GACHA_CHIPS.filter(chip=>chip.kind===kind).map(chip=>({id:chip.id,kind,name:chip.name,rarity:chip.rarity,
+        effect:chip.effect,shopRecordIndex:chip.shopRecordIndex,owned:state.chips[chip.id]??0,
+        armed:kind==='HUNT'?state.armed.hunt?.includes(chip.id)===true:state.armed.bounty===chip.id})).filter(slot=>slot.owned>0||slot.armed));
+    },
+
+    gachaDisarmItem(itemId){
+      requireSession();
+      const result=disarmGachaItem(gachaState(),itemId);
+      if(!result.ok)return gachaRefusal(result.reason);
+      if(!commitGacha({state:result.state}))return gachaRefusal('SAVE_FAILED');
+      return gachaReceipt({ok:true,kind:'DISARMED',itemId});
+    },
+
+    /** The reshape chip on one partner: it takes the personality the player picked. */
+    gachaReshapePersonality(instanceId,personalityIndex){
+      requireSession();
+      const chip=getGachaChip('chip:personality'),state=gachaState();
+      if((state.chips[chip.id]??0)<1)return gachaRefusal('NOT_OWNED');
+      if(!Number.isInteger(personalityIndex)||personalityIndex<0||personalityIndex>=GACHA_PERSONALITY_CHOICES)return gachaRefusal('CHOOSE_PERSONALITY');
+      const profile=instanceId?gachaProfile(instanceId):null;
+      if(!profile)return gachaRefusal('UNKNOWN_INDIVIDUAL');
+      if(profile.fields['018']===personalityIndex)return gachaRefusal('SAME_PERSONALITY');
+      const nextProfile=normalizeNativeIndividualProfile(applyGachaBoost(profile,{...chip.effect,personalityIndex}),
+        this.resolveRaisingInstance(instanceId).speciesId);
+      const spent=spendGachaItem(state,chip.id);
+      if(!spent.ok)return gachaRefusal(spent.reason);
+      const before={creature,raising,registered:registeredSpeciesValue};
+      writeRaisingNativeProfile(instanceId,nextProfile,{markDirty:false});
+      if(!commitGacha({state:spent.state})){
+        creature=before.creature;raising=before.raising;registeredSpeciesValue=before.registered;return gachaRefusal('SAVE_FAILED');
+      }
+      publishRaising();
+      return gachaReceipt({ok:true,kind:'ENHANCE',itemId:chip.id,instanceId,personality:personalityIndex,
+        before:projectNativeIndividualStats(profile),after:projectNativeIndividualStats(nextProfile)});
+    },
+
+    /** The partner the rare-lure cartridge called into this hunt, or null. */
+    getHuntRareLure(){return screens.current()===CHAMPIONSHIP_SCREENS.HUNT_FIELD?lastHuntRareLure:null;},
 
     getFreeBattleMatches(){return listNativeFreeBattleMatches(freeBattleMenu);},
 
@@ -3601,7 +3658,7 @@ export function createChampionshipStandaloneApp({
         // for all 29 fields, and a hunt reads one. Nothing before this screen
         // touches it, so it is fetched here; main.js warms it once a screen is
         // up, which is several taps before anyone can reach this.
-        const { prepareNativeHuntEntry } = await import("../hunt/capture/nativeHuntEntryTransaction.js");
+        const { prepareNativeHuntEntry, appendNativeRareLureActor } = await import("../hunt/capture/nativeHuntEntryTransaction.js");
         const expansion = huntCaptureReplay === null && typeof huntExpansionLoader === 'function' ? await huntExpansionLoader(gate) : null;
         // Cyber Gachapon cartridges armed for this hunt (OWNER_APPROVED_ADAPTATION 2026-10-29).
         const armed = takeArmedHuntChips(gachaState());
@@ -3612,8 +3669,10 @@ export function createChampionshipStandaloneApp({
         const lured = huntCaptureReplay === null ? prepareNativeHuntEntry({ biomeId:gate.biomeId, expansion,
           clock:requireSession().getRaisingHomeSnapshot(),
           rngSnapshot:gameplayRngSnapshot(), persistentState:lurePersistent }) : null;
-        const entry = lured && boosts.rareLure ? { ...lured, persistentState:{ ...lured.persistentState,
-          modifiers:structuredClone(huntPersistentState.modifiers) } } : lured;
+        // It also calls one more partner, this field's rarest (2026-11-02).
+        const entry = lured && boosts.rareLure ? appendNativeRareLureActor({ ...lured, persistentState:{ ...lured.persistentState,
+          modifiers:structuredClone(huntPersistentState.modifiers) } }) : lured;
+        lastHuntRareLure = entry?.rareLure ? Object.freeze({ speciesId:`species-${String(entry.rareLure.speciesIndex).padStart(3, "0")}` }) : null;
         const world = createHuntWorld(gate, entry);
         const factory = huntRuntimeFactory
           ?? (await import("../hunt/huntRuntime.js")).createHuntRuntime;
