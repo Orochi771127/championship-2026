@@ -45,7 +45,7 @@ test('background and mute pause at the existing position; loop crossfade still w
 });
 
 test('saved mute prevents first audio fetch; result cue plays once per actual attempt and never loops',async()=>{
-  const f=fixture({muted:true});f.music.setScene('battle_normal');f.doc.emit('pointerdown');await settle();assert.equal(f.media.length,0);
+  const f=fixture({muted:true});f.music.setScene('battle_final');f.doc.emit('pointerdown');await settle();assert.equal(f.media.length,0);
   f.bus.setLevels({muted:false});f.music.preferencesChanged();await settle();assert.equal(f.media[0].loop,true);
   f.music.setScene('victory','battle:42');await settle();const result=f.media.find(m=>m.src.includes('victory'));assert.equal(result.loop,false);f.finishFades();result.onended();assert.equal(f.music.inspect().playing,null);
   const starts=f.music.inspect().starts;f.music.setScene('victory','battle:42');f.music.setScene('core');await settle();f.music.setScene('victory','battle:42');await settle();assert.equal(f.music.inspect().starts,starts+1);assert.equal(f.music.inspect().playing,null);
@@ -83,4 +83,28 @@ test('initial stream buffering ends at canplaythrough, releases on mute/error, a
   const active=f.media.find(m=>m.src.includes('moon'));active.error={code:2};active.onerror();
   assert.equal(f.music.inspect().initialBuffering,false);assert.equal(active.oncanplaythrough,null);
   f.music.dispose();
+});
+
+test('shop plays Lucky Draw Counter; its 0-8 s intro plays once and every loop pass resumes on the 8 s downbeat',async()=>{
+  assert.equal(selectOriginalMusic({screen:'SHOP'}).id,'lucky_draw_counter');
+  const cue=ORIGINAL_MUSIC_CUES.lucky_draw_counter;assert.equal(cue.loopStart,8);assert.equal(57-cue.trimEnd-cue.crossfade,56,'loop hands off at 56.0 s, exactly 24 bars at 120 BPM after 8.0 s');
+  const f=fixture();f.music.setScene('lucky_draw_counter');f.doc.emit('pointerdown');await settle();
+  const a=f.media[0];assert.match(a.src,/original-music-r1\/bgm_lucky_draw_counter\.mp3$/);assert.equal(a.loop,false);a.onloadedmetadata();assert.equal(a.currentTime,0,'first entry plays the intro');
+  // A seek past the hand-off restarts without a prepared slot.
+  a.duration=57;a.currentTime=56.2;a.ontimeupdate();await settle();const b=f.media[1];b.onloadedmetadata();assert.equal(b.currentTime,8);assert.equal(f.music.inspect().starts,2);
+  // The normal path prepares the next pass ahead of the hand-off.
+  f.finishFades();b.duration=57;b.readyState=1;b.currentTime=54;b.ontimeupdate();a.onloadedmetadata();assert.equal(a.currentTime,8);a.readyState=1;a.currentTime=3;
+  b.currentTime=56;b.ontimeupdate();await settle();assert.equal(f.music.inspect().starts,3);assert.equal(a.currentTime,8);assert.equal(f.media.length,2);
+  f.music.dispose();f.bus.dispose();
+});
+
+test('hunt gate select, hunt loadout and battle select play Sweetest Level Up; loop passes resume at 68.8 s after the first full pass',async()=>{
+  for(const screen of ['GATE_SELECT','HUNT_LOADOUT','BATTLE_SELECT'])assert.equal(selectOriginalMusic({screen}).id,'sweetest_level_up',screen);
+  assert.equal(selectOriginalMusic({screen:'HUNT_FIELD',biome:'Seaside'}).id,'harbor');
+  const cue=ORIGINAL_MUSIC_CUES.sweetest_level_up;assert.equal(cue.loopStart,68.8);
+  assert.ok(Math.abs(120.8-cue.trimEnd-cue.crossfade-120)<1e-9,'hands off at 120.0 s');assert.ok(Math.abs(120-cue.loopStart-51.2)<1e-9,'32 bars at 150 BPM');
+  const f=fixture();f.music.setScene('sweetest_level_up');f.doc.emit('pointerdown');await settle();
+  const a=f.media[0];assert.match(a.src,/original-music-r1\/bgm_sweetest_level_up\.mp3$/);a.onloadedmetadata();assert.equal(a.currentTime,0);
+  a.duration=120.8;a.currentTime=120.05;a.ontimeupdate();await settle();const b=f.media[1];b.onloadedmetadata();assert.equal(b.currentTime,68.8);assert.equal(f.music.inspect().starts,2);
+  f.music.dispose();f.bus.dispose();
 });

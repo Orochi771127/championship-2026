@@ -1,9 +1,11 @@
-/* Application surfaces only: HUD and toolbar are mounted outside #cm-root.
- * manipulation removes double-tap zoom while retaining pan/pinch. Do not set
- * touch-action on descendants: canvases keep their narrower gesture contracts.
+/* The page pans but never zooms (Owner 2026-11-02: a two-finger pinch zoomed and
+ * dragged the home-screen app off screen; main.js cancels iOS's own gesture
+ * events). Set on the root, so the HUD, toolbar and dialogs mounted outside
+ * #cm-root fall under it too. Do not set touch-action on descendants: canvases
+ * keep their narrower gesture contracts (none) and their own two-finger zoom.
  */
+html { touch-action: pan-x pan-y; }
 :where(#cm-root, #cm-title, .cm-status-bar, .cm-toolbar, .cm-dialog, .cm-sheet, .cm-settings) {
-  touch-action: manipulation;
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
@@ -11,7 +13,7 @@
 
 /* Native text editing, manual copy/paste, help and diagnostic text remain
  * selectable. data-selectable also gives future room codes an explicit opt-in.
- * touch-action is deliberately unchanged: these surfaces still allow pinch.
+ * touch-action is unchanged: like the rest of the page they pan but never zoom.
  */
 :where(#cm-root, #cm-title, .cm-status-bar, .cm-toolbar, .cm-dialog, .cm-sheet, .cm-settings)
 :is(input, textarea, [contenteditable=""], [contenteditable="true"], [contenteditable="plaintext-only"],

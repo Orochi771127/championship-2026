@@ -50,6 +50,10 @@ const CATEGORY_LABELS = Object.freeze({
   CAGES: "籠子設施"
 });
 
+// How long a purchase line stays up, then how long it takes to fade (ui/screenLayout.css).
+const RECEIPT_TOAST_MS = 1600;
+const RECEIPT_TOAST_FADE_MS = 240;
+
 const RECEIPT_COPY = Object.freeze({
   PURCHASED: "購買完成。",
   INSUFFICIENT_FUNDS: "持有金額不足。",
@@ -322,6 +326,26 @@ export function createShopView({ root, source }) {
 
   let paintedBits = null;
   let paintedReceipt = null;
+  // Owner 2026-11-02: the purchase line is a short toast. It covered the tabs
+  // until the next purchase; now it fades after a moment and stays gone.
+  let settledReceipt = null;
+  let receiptTimers = [];
+  const timers = root.ownerDocument?.defaultView ?? globalThis;
+  function settleReceiptLater(receipt) {
+    for (const timer of receiptTimers) timers.clearTimeout(timer);
+    delete status.dataset.leaving;
+    receiptTimers = [
+      timers.setTimeout(() => { status.dataset.leaving = "true"; }, RECEIPT_TOAST_MS),
+      timers.setTimeout(() => {
+        settledReceipt = receipt;
+        delete status.dataset.leaving;
+        status.textContent = "";
+        status.dataset.tone = "";
+      }, RECEIPT_TOAST_MS + RECEIPT_TOAST_FADE_MS),
+    ];
+  }
+  // The cards deal in when a tab opens; a repaint for a purchase or a pick keeps them still.
+  let dealtCategory = null;
   function paint(nextFrame) {
     const shop = nextFrame?.shop;
     if (!shop) return;
@@ -336,13 +360,15 @@ export function createShopView({ root, source }) {
     // Name the item and its new count, so a second purchase of the same item
     // reads differently from the first instead of repeating the same line.
     const boughtRow = receipt?.ok ? shop.listings.find((row) => row.shopRecordIndex === receipt.shopRecordIndex) : null;
-    status.textContent = receipt
+    const shownReceipt = receipt && receipt !== settledReceipt ? receipt : null;
+    status.textContent = shownReceipt
       ? (boughtRow ? uiText("已購買「{item}」，持有 {owned}/{max}。", { item: productName(boughtRow), owned: boughtRow.owned, max: boughtRow.maxOwned })
         : uiText(RECEIPT_COPY[receipt.reason] ?? ""))
       : "";
-    status.dataset.tone = receipt ? (receipt.ok ? "ok" : "refused") : "";
+    status.dataset.tone = shownReceipt ? (shownReceipt.ok ? "ok" : "refused") : "";
     if (receipt && receipt !== paintedReceipt) {
       pulse(status);
+      settleReceiptLater(receipt);
       if (boughtRow) arcadeFx(buy, "purchase", `-${boughtRow.unitPriceBits}`);
       else arcadeFx(buy, "denied");
     }
@@ -374,6 +400,8 @@ export function createShopView({ root, source }) {
 
     const rows = shop.listings.filter((row) => row.category === activeCategory);
     const restoreCardFocus = list.contains(document.activeElement);
+    list.dataset.dealt = String(dealtCategory === activeCategory);
+    dealtCategory = activeCategory;
     list.replaceChildren();
     if (rows.length === 0) {
       list.append(element("p", "cm-vs2-shop__empty", "這個分類目前沒有販售商品。"));
@@ -466,6 +494,7 @@ export function createShopView({ root, source }) {
     render: paint,
     dispose() {
       stopBackKeys();
+      for (const timer of receiptTimers) timers.clearTimeout(timer);
       gachaPanel?.dispose();
       root.removeEventListener("keydown", onSheetKey, true);
       delete root.dataset.sheet;

@@ -6,9 +6,14 @@ const css=read('src/championship/app/mobileTouch.css');
 test('scoped gesture guards cover game root plus separately mounted HUD, toolbar and dialogs',()=>{
  assert.match(css,/#cm-root, #cm-title, \.cm-status-bar, \.cm-toolbar, \.cm-dialog, \.cm-sheet, \.cm-settings/);
  assert.equal((css.match(/touch-action\s*:/g)||[]).length,1);
- assert.match(css,/touch-action:\s*manipulation/);
- assert.doesNotMatch(css,/(?:^|\})\s*(?:html|body|\*)\s*[{,]/m);
+ // Owner 2026-11-02: the page pans but never zooms; only the root carries the limit.
+ assert.match(css,/^html \{ touch-action: pan-x pan-y; \}$/m);
+ assert.doesNotMatch(css,/(?:^|\})\s*(?:body|\*)\s*[{,]/m);
  assert.doesNotMatch(css,/touch-action:\s*none|!important/);
+});
+test('iOS gesture events are cancelled so two fingers never zoom or drag the page',()=>{
+ const main=read('src/championship/app/main.js');
+ assert.match(main,/for\(const type of \['gesturestart','gesturechange'\]\)document\.addEventListener\(type,event=>event\.preventDefault\(\),\{passive:false\}\);/);
 });
 test('editable, readable, help, errors and shared-code selection/callouts have explicit exceptions',()=>{
  for(const term of ['input, textarea','[contenteditable="true"]','[contenteditable="plaintext-only"]','[data-selectable="true"]','.cm-help-shell','.cm-dialog__message','[role="alert"]','[role="status"]'])assert.ok(css.includes(term),term);

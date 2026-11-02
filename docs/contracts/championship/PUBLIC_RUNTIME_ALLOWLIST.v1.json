@@ -119285,6 +119285,14 @@
       "sha256": "2d6aa0884f57cadaf794197c5f9a2d406a2f871223dcd7c234481604ca8a7dc5"
     },
     {
+      "path": "assets/production/original-music-r1/bgm_sweetest_level_up.mp3",
+      "sha256": "e5de50be5be35832ce6ecb52a4dccf1716c369aaf1ec73427ca504e98ea54fa3"
+    },
+    {
+      "path": "assets/production/original-music-r1/bgm_lucky_draw_counter.mp3",
+      "sha256": "486bd721565788aac5dab0e720a497dea9551214d8806691515a9b44b6b0b43c"
+    },
+    {
       "path": "assets/production/original-music-r1/bgm_southern_harbor_nexus.mp3",
       "sha256": "2693e1dd0f160ed01d8cbb636aaad718ff8b6e4e48a7696f64b28f36d8f24068"
     },
@@ -119299,14 +119307,6 @@
     {
       "path": "assets/production/original-music-r1/championship_battle_final_r1.ogg",
       "sha256": "d8d22a02aca6740d55cd80f0f8fd2f3c82692f5c5d77b79bee68da908c697805"
-    },
-    {
-      "path": "assets/production/original-music-r1/championship_battle_normal_r1.m4a",
-      "sha256": "156f1168a491ec321fec3750ce9cde295e8ac58f7f0d42f11e2785d917b04cf9"
-    },
-    {
-      "path": "assets/production/original-music-r1/championship_battle_normal_r1.ogg",
-      "sha256": "67cb80063acf1cbb50b3ff8834348674c1fb00909b879ae30e5a27fad898d907"
     },
     {
       "path": "assets/production/original-music-r1/championship_defeat_r1.m4a",
@@ -121556,6 +121556,10 @@
       "sha256": "a256b27825a9e15db0f3490368b205b95535eaca6e22c0ae1fa93b176c1817c9"
     },
     {
+      "path": "assets/production/scene-music-r1/battle/clash_at_the_concrete_edge.mp3",
+      "sha256": "10661091627767447e4c68551d2fec73fbe6ed3f52bdf7aeed63ee16bf06fe81"
+    },
+    {
       "path": "assets/production/scene-music-r1/battle/clash_at_the_emerald_edge.mp3",
       "sha256": "0a7ab6f95b92a0a6a147586da04785838006c864ba8a05aa7815b99b0fa9fe92"
     },
@@ -122633,7 +122637,7 @@
     },
     {
       "path": "src/championship/app/main.js",
-      "sha256": "c392a11c28ffe64c4e7be46100600d7823b7ccdf57cbb0ef2445bfde9820cc8c"
+      "sha256": "b458a9b9f61eb330774a068b445152e5a4b634251b02506c9ded5abc35c91732"
     },
     {
       "path": "src/championship/app/medalCollection.css",
@@ -122653,7 +122657,7 @@
     },
     {
       "path": "src/championship/app/mobileTouch.css",
-      "sha256": "19a5aa745944517f89e9920f1ab17912b21501bf05a88fa5c62781aead02bff2"
+      "sha256": "58c09e83582b680e98b03c77126690c93d93a95223ad26fe702a92cde6f0feb7"
     },
     {
       "path": "src/championship/app/nativeOpeningState.js",
@@ -122853,7 +122857,7 @@
     },
     {
       "path": "src/championship/app/ui/arcadeMotion.css",
-      "sha256": "2be95d94b8e533d611c676dcdc8467980f82d7e36fe2536d9084da930503fcdc"
+      "sha256": "aec0f25f2e337955375838bf47bbdf27d87838ff5536343129dd8cc6549b9723"
     },
     {
       "path": "src/championship/app/ui/ceremony.css",
@@ -122881,7 +122885,7 @@
     },
     {
       "path": "src/championship/app/ui/screenLayout.css",
-      "sha256": "e5df0d105820cf31e4399c2c1d6d4ffc90c96f573399882f0f13ab26f7f102f8"
+      "sha256": "9ac809b73d58e8ab7e8280711bce4e68c5f702aac5a6d035f74308eb96f4ebec"
     },
     {
       "path": "src/championship/app/ui/settings.css",
@@ -122921,7 +122925,7 @@
     },
     {
       "path": "src/championship/app/vs2Styles.css",
-      "sha256": "42972c63e73219dfef8d27906b8a2c342595509758f880fdb364a0062df6b696"
+      "sha256": "c6d45101c5961c80323c1d2fae126376572eb71e580aa60b8f643773db8812c3"
     },
     {
       "path": "src/championship/app/vs3Screens.js",
@@ -122929,7 +122933,7 @@
     },
     {
       "path": "src/championship/app/vs4Screens.js",
-      "sha256": "87d0c05d4e741dd0ec183ce0257b681d5f1c140ab0d3284c35d0a6409c21855a"
+      "sha256": "89ecd51d7d1fac7db92aad7adf3ab01c168b2905d6e04d9eaac02385d4a6f7de"
     },
     {
       "path": "src/championship/app/vs5Screens.js",
@@ -123929,7 +123933,7 @@
     },
     {
       "path": "src/championship/presentation/musicPresentation.js",
-      "sha256": "67f9748700e1429e6674b336b0fddef87b1f4ac343cb2cb6af1cd4d37e94fe82"
+      "sha256": "10d2a0145bb32651d03ab8f36d38dc107567a9fa6d2f3f28422ae69a4863ab6f"
     },
     {
       "path": "src/championship/presentation/nativeHuntCharacterAction.js",
@@ -123953,7 +123957,7 @@
     },
     {
       "path": "src/championship/presentation/originalMusicCatalog.js",
-      "sha256": "d204cc4dda90fe462725653c21ad8dd9412ba3379a4daa045803c8318341a15d"
+      "sha256": "f18f775694ce79563ec1d2feb3a52103fa0318f70a8a51e3af38bed30cc83246"
     },
     {
       "path": "src/championship/presentation/originalRuntimeLocation.js",
@@ -124097,7 +124101,7 @@
     },
     {
       "path": "src/championship/presentation/sceneMusicCatalog.js",
-      "sha256": "ca864ea42d70f5aeb5b12ccd4dca0f692e605e88cf50c62954d4e6a8cc7aa698"
+      "sha256": "532f6dcedda1a0e75d580c0f48258039958ecf1928d71bded7942e2407c1f32f"
     },
     {
       "path": "src/championship/presentation/shopGoodsUiArt.js",
