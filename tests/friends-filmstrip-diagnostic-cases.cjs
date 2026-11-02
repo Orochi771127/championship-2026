@@ -33,10 +33,21 @@ for(const mutation of ['none','missing-png','missing-trace','bad-trace-signature
 
 test('truncated capture retains unchanged full Three visibility/dimensions/fallback guard after metrics',()=>{for(const mode of ['on','off']){const out=transform(source,mode);const seam="await legacyTopContour('08-source-'+scenario.name);\n   const diagnosticThreeAfter=await readThree();\n   evidence.filmstrip.threeProgress={before:threeBefore,after:diagnosticThreeAfter};write();\n   friendsThreeProgress(threeBefore,diagnosticThreeAfter);\n   await friendsDrainReadbacks";assert.equal(out.split(seam).length,2);}});
 
-test('snapshot readiness waits for every resident and retains strict join rejection',()=>{for(const mode of ['on','off']){const out=transform(source,mode);assert.ok(out.includes('timeout:30000'));assert.ok(out.includes('await waitResidentReady();return page.locator'));assert.ok(out.includes('readinessWaitsMs'));}const r=rows();r[0].filmstrip.after.assets[0].state='loading';assert.throws(()=>join(r));});
+test('snapshot readiness waits for every resident and retains strict join rejection',()=>{for(const mode of ['on','off']){const out=transform(source,mode);assert.ok(out.includes('timeout:30000'));assert.ok(out.includes('page.waitForFunction(function readResidentObservation()'));assert.ok(!out.includes('await waitResidentReady();return page.locator'));assert.ok(out.includes('return await handle.jsonValue()'));assert.ok(out.includes('readinessWaitsMs'));}const r=rows();r[0].filmstrip.after.assets[0].state='loading';assert.throws(()=>join(r));});
 
 const {captureReady}=require('./friends-filmstrip-diagnostic.cjs');
 function captureApi(after){let index=0;const records=[],shots=[],retained=[];return {records,shots,retained,api:{now:()=>0,ready:s=>{if(s.error)throw Error('fatal renderer');return s.ready;},poll:async()=>({ready:true}),shot:async i=>shots.push(i),observe:async()=>after[index++],record:r=>records.push(r),retain:async i=>retained.push(i)}};}
 test('capture retries only transient state and retains failed original observations/PNGs',async()=>{const h=captureApi([{ready:false},{ready:true}]);const result=await captureReady(h.api);assert.equal(result.attempt,1);assert.deepEqual(h.shots,[0,1]);assert.equal(h.records[0].after.ready,false);assert.deepEqual(h.retained,[1]);});
 test('capture fatal resource error is not retried or accepted',async()=>{const h=captureApi([{error:true}]);await assert.rejects(captureReady(h.api),/fatal renderer/);assert.deepEqual(h.shots,[0]);assert.deepEqual(h.retained,[]);});
 test('capture has a bounded three-attempt failure with every raw observation retained',async()=>{const h=captureApi([{ready:false},{ready:false},{ready:false}]);await assert.rejects(captureReady(h.api),/three retained attempts/);assert.equal(h.records.length,3);assert.deepEqual(h.retained,[]);});
+
+const {readResidentObservation}=require('./friends-filmstrip-diagnostic.cjs');
+function richReceipt({state='ready',error=null,busy='false',frames='10'}={}){
+ let reads=0;const host={dataset:{loadState:'ready',get residentAssets(){reads++;return JSON.stringify([{state,error}]);},residentScreenPositions:'[]'},getAttribute:()=>busy,getBoundingClientRect:()=>({x:0,y:0}),clientWidth:1280,clientHeight:800};
+ const gl={getExtension:()=>null,getParameter:()=> 'test'},canvas={dataset:{frames},className:'cm-ranch-three-canvas',width:1280,height:800,getContext:()=>gl};
+ const document={querySelector:()=>host,querySelectorAll:()=>[canvas]};
+ const value=vm.runInNewContext('('+readResidentObservation.toString()+')()',{document,innerWidth:1280,innerHeight:800,devicePixelRatio:1});return {value,reads,host};
+}
+test('rich receipt returns the same atomic ready asset snapshot once',()=>{const r=richReceipt();assert.equal(r.reads,1);assert.equal(r.value.assets[0].state,'ready');r.host.dataset.loadState='loading';assert.equal(r.value.loadState,'ready');assert.equal(r.value.renderer.width,1280);});
+test('rich receipt polls transient loading without publishing it',()=>{assert.equal(richReceipt({state:'loading'}).value,false);assert.equal(richReceipt({busy:'true'}).value,false);});
+test('rich receipt retains fatal resource and renderer failures',()=>{assert.throws(()=>richReceipt({error:'missing texture'}),/Resident resource failure/);assert.throws(()=>richReceipt({frames:'0'}),/actually rendered/);});
