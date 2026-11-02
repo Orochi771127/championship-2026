@@ -17,18 +17,22 @@ const MIN_USABLE = 2;
 const speciesIndex = (speciesId) => /^species-\d{3}$/.test(speciesId ?? "") ? Number(speciesId.slice(8)) : null;
 
 /**
- * `progress` is `{ registeredSpecies: number[], ownedSpecies: string[] }` read
- * from the canonical save, or null in a controlled harness (every partner open).
- * `roster` lists `{ id, speciesId }` in display order.
+ * `progress` is `{ registeredSpecies: number[], ownedSpecies: string[],
+ * ownedInstances?: { speciesId, instanceId }[] }` read from the canonical save,
+ * or null in a controlled harness (every partner open). `roster` lists
+ * `{ id, speciesId }` in display order. Each row keeps `instanceId`: the ranch
+ * individual of that species (the first held one), or null.
  */
 export function dataArenaEntries(roster, progress) {
-  if (!progress) return Object.freeze(roster.map((member, order) => Object.freeze({ ...member, entry: DATA_ARENA_ENTRY.REGISTERED, order })));
+  if (!progress) return Object.freeze(roster.map((member, order) => Object.freeze({ ...member, entry: DATA_ARENA_ENTRY.REGISTERED, instanceId: null, order })));
   const registered = new Set(progress.registeredSpecies ?? []);
   const owned = new Set(progress.ownedSpecies ?? []);
+  const instances = new Map();
+  for (const { speciesId, instanceId } of progress.ownedInstances ?? []) if (!instances.has(speciesId)) instances.set(speciesId, instanceId);
   const rows = roster.map((member, order) => {
     const entry = owned.has(member.speciesId) ? DATA_ARENA_ENTRY.BRED
       : registered.has(speciesIndex(member.speciesId)) ? DATA_ARENA_ENTRY.REGISTERED : DATA_ARENA_ENTRY.LOCKED;
-    return { ...member, entry, order };
+    return { ...member, entry, instanceId: instances.get(member.speciesId) ?? null, order };
   });
   let usable = rows.filter((row) => row.entry !== DATA_ARENA_ENTRY.LOCKED).length;
   for (const speciesId of DATA_ARENA_RENTAL_SPECIES) {
