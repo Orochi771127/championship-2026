@@ -47,8 +47,8 @@ test('every 成熟期 bursts into its own former routes; every 覺醒體/究極�
   assert.equal(table.bases.length, native(4).length);
 });
 
-test('rank gates and multipliers follow the approved values', () => {
-  assert.deepEqual([0, 3, 4, 5, 6, 9].map(burstTierForRank), [0, 0, 1, 1, 2, 2]);
+test('no rank gate (awakening raising, Owner 2026-11-02) and the approved multipliers', () => {
+  assert.deepEqual([0, 3, 4, 5, 6, 9].map(burstTierForRank), [2, 2, 2, 2, 2, 2], 'a raised form is usable at any tamer rank');
   assert.equal(burstMultiplier(1), 1.4);
   assert.equal(burstMultiplier(2), 1.7);
   assert.equal(burstMultiplier(0), 1);
@@ -162,12 +162,16 @@ test('a save holding 究極體 partners loads them as 成熟期 with those forms
     const partners = app.getCyberGachaFrame().partners;
     const target = partners.find(p => (app.getPartnerBurst(p.instanceId) ?? []).some(f => f.tier === 1 && !f.unlocked));
     assert.ok(target, 'a partner with a locked tier-1 form');
+    // Awakening raising (Owner 2026-11-02): a metal on a 成熟期 feeds its focus form; it is learned in the ceremony.
     const used = app.gachaUseItem('metal:emma', target.instanceId, {mode: 'CATALYST'});
     assert.equal(used.ok, true, used.reason);
-    assert.equal(used.kind, 'BURST_UNLOCK');
-    assert.ok(app.getPartnerBurst(target.instanceId).some(f => f.form === used.target && f.unlocked));
+    assert.equal(used.kind, 'AWAKEN_ENERGY');
+    assert.equal(used.tier, 1);
+    assert.equal(used.amount, 50);
+    assert.ok(!app.getPartnerBurst(target.instanceId).some(f => f.form === used.target && f.unlocked), 'energy alone does not teach the form');
     const stored = JSON.parse(data.get(CHAMPIONSHIP_MODERN_SAVE_KEY)).progression.burstEvolution;
     assert.equal(stored.migrated, true);
-    assert.ok(stored.unlocks[target.instanceId].includes(used.target));
+    assert.equal(stored.version, 2);
+    assert.equal(stored.energy[target.instanceId][used.target], 50);
   } finally { await app.dispose(); }
 });

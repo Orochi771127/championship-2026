@@ -219,6 +219,8 @@ const loadBattleRuntime = async () => {
   // Cyber Gachapon: an owned partner's metal bloodline badge rides its battle plate.
   return options => create({ aiPolicy: BATTLE_AI_POLICY, taxonomyPolicy: BATTLE_TAXONOMY_POLICY, getBloodline: id => app?.getPartnerBloodline?.(id) ?? null,
     burstPolicy: options.mode === 3 ? "OFF" : BATTLE_BURST_POLICY,
+    // Awakening raising (2026-11-02): the player calls a partner's burst (with a six-second automatic fallback).
+    burstManual: true,
     burstPlans: [...team(options.playerIndividuals), ...team(options.opponentIndividuals)], ...options });
 };
 
@@ -496,8 +498,8 @@ function releaseStrollHold(id) {
   clearTimeout(pending.timer); strollFlightsPending.delete(id);
   return pending;
 }
-// Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): a partner that unlocks a burst form -- by its own
-// conditions, a battle or an evolution metal -- says so on the ranch, in the stroll toast.
+// Awakening raising (OWNER_APPROVED_ADAPTATION 2026-11-02): a partner ready to learn a form says so on the ranch,
+// in the stroll toast; the player taps its crest to play the ceremony.
 function showBurstUnlockToast() {
   if (app?.getScreen?.() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
   const latest = (app.takeBurstUnlockNotices?.() ?? []).at(-1);
@@ -505,15 +507,34 @@ function showBurstUnlockToast() {
   const entry = app.getRaisingInstances().find((e) => e.instanceId === latest.instanceId);
   let toast = document.querySelector('.cm-stroll-toast');
   if (!toast) { toast = document.createElement('div'); toast.className = 'cm-stroll-toast'; toast.setAttribute('role', 'status'); document.body.append(toast); }
-  toast.textContent = uiText('BURST_UNLOCK_TOAST', { name: entry ? raisingDisplayName(entry) : '', form: speciesName(latest.forms[0]) });
+  toast.textContent = uiText(latest.ready ? 'AWAKENING_READY_TOAST' : 'BURST_UNLOCK_TOAST', { name: entry ? raisingDisplayName(entry) : '', form: speciesName(latest.forms[0]) });
   toast.classList.remove('is-shown'); void toast.offsetWidth; toast.classList.add('is-shown');
   clearTimeout(showStrollToast.timer);
   showStrollToast.timer = setTimeout(() => toast.classList.remove('is-shown'), 3200);
+}
+// The ranch's first awakening ends with this card: the form, its stage, what it does now and its bloodline's perk.
+function showAwakeningCard(detail) {
+  if (!detail?.form) return;
+  document.querySelector('.cm-awakening-card')?.remove();
+  const card = document.createElement('div');
+  card.className = 'cm-awakening-card'; card.setAttribute('role', 'status'); card.dataset.tier = String(detail.tier ?? 1);
+  if (detail.bloodline?.color) card.style.setProperty('--bloodline', detail.bloodline.color);
+  const line = (className, text) => { const node = document.createElement(className === 'cm-awakening-card__tier' ? 'span' : 'p'); node.className = className; node.textContent = text; return node; };
+  const name = line('cm-awakening-card__name', speciesName(detail.form));
+  name.prepend(line('cm-awakening-card__tier', uiText(detail.tier === 2 ? 'AWAKENING_TIER_2' : 'AWAKENING_TIER_1')));
+  card.append(line('cm-awakening-card__title', uiText('AWAKENING_LEARNED_TITLE')), name, line('cm-awakening-card__note', uiText('AWAKENING_LEARNED_NOTE')));
+  if (detail.bloodline?.family) card.append(line('cm-awakening-card__perk', uiText(`BLOODLINE_PERK_${detail.bloodline.family}`)));
+  const close = () => card.remove();
+  card.addEventListener('click', close);
+  document.body.append(card);
+  setTimeout(close, 4800);
 }
 function listenPartnerFinds() {
   if (partnerFindListening) return;
   partnerFindListening = true;
   setInterval(showBurstUnlockToast, 2000);
+  // The card follows a moment after the form stands, so the player sees the form first.
+  document.addEventListener('cm-awakening', (event) => setTimeout(() => showAwakeningCard(event.detail), 650));
   app.subscribePartnerLife?.((event) => {
     if (event.kind !== 'find' || !event.tool || !toolbar || app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
     toolbar.holdToolStock(event.tool);
@@ -1205,6 +1226,10 @@ async function mountRaisingHome() {
             }).then(value => { owner.transfer(fieldArt); owner.transfer(characterBundle); return value; });
             const next = await owner.own(pending);
             owner.signal.throwIfAborted(); owner.transfer(next); scene = next; owner.stopTimer();
+            // Loopback review only (?awakeningQa): read the awakening signs and find a crest to tap. Public hosts never bind it.
+            if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("awakeningQa"))
+              globalThis.__championshipAwakeningQa = { signs: () => app.getAwakeningSigns(), view: (id) => app.getPartnerAwakening(id),
+                focus: (id) => next.focusResident?.(id, { reducedMotion: true }) ?? false, crest: (id) => next.awakeningCrestPoint?.(id) ?? null };
             progress.done('scene'); stopTracking();
             delete root.dataset.fieldFallback; show('ready'); scene.render(lastFrame);
             resumeTutorialPresentation();
@@ -1650,6 +1675,7 @@ async function mountBattleField() {
     frame: { ...source.getFrame(), rosterEvidence: activeRuntime.rosterEvidence() },
     localTeamIndex:activeRuntime.localTeamIndex(),
     hudArt:hudProxy,
+    onBurst: slot => activeRuntime.requestBurst?.(slot) ?? false,
     resonance: (()=>{const t=activeRuntime.taxonomy?.(),local=activeRuntime.localTeamIndex();return t?{player:t.resonance[local],opponent:t.resonance[1-local],render:keys=>resonanceStrip(keys,{hint:false})}:null;})(),
     dynamicFx: BATTLE_DYNAMIC_FX,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
@@ -1708,7 +1734,8 @@ async function mountBattleField() {
             step('arena',ownArt(loadOptionalBattleFieldArt(stage,source))),
             // Burst evolution (2026-11-02): a combatant's burst form is drawn mid-match, so its art loads up front too.
             step('fighters',ownArt(loadOptionalCharacterReview(stage,[...new Set(source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId)
-              .flatMap(entry=>[entry.speciesId,...(entry.burst?[`species-${String(entry.burst.form).padStart(3,'0')}`]:[])]))],['main'],{signal:characters.signal,battleAtlas:true}))),
+              .flatMap(entry=>[entry.speciesId,...(entry.burst?[entry.burst.form,...(Number.isInteger(entry.burst.via)?[entry.burst.via]:[])]
+                .map(form=>`species-${String(form).padStart(3,'0')}`):[])]))],['main'],{signal:characters.signal,battleAtlas:true}))),
             step('effects',ownArt(loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href}).then(art=>loadOptionalOriginalVfxReview(stage,art))))
           ]);
           [fieldArt,characterRoster,effectArt]=loaded.map(result=>result.status==='fulfilled'?result.value:null);
@@ -2057,6 +2084,16 @@ async function mountCurrentScreen() {
         const result = app.setPartnerBurstForm(instanceId, form);
         if (result.ok) autosave?.request('burst-form');
         return result.ok ? { ...result, entries: projectRoster() } : result;
+      },
+      // Awakening raising (2026-11-02): goal, energy items, core transcendence, battle form and ranch look.
+      onAwakening(action, instanceId, value) {
+        const result = action === 'target' ? app.setAwakeningTarget(instanceId, value)
+          : action === 'feed' ? app.feedAwakening(instanceId, value)
+          : action === 'transcend' ? app.transcendPartner(instanceId, value)
+          : action === 'battle' ? app.setPartnerBurstForm(instanceId, value)
+          : action === 'look' ? app.setPartnerAppearance(instanceId, value) : { ok: false, reason: 'UNKNOWN_ACTION' };
+        if (result?.ok) autosave?.request(`awakening-${action}`);
+        return { ...result, entries: projectRoster() };
       },
       onExit() { app.leaveScreen(); }
     });
@@ -2504,6 +2541,7 @@ function projectRoster() {
       bloodline: app.getPartnerBloodline?.(instanceId) ?? null,
       // OWNER_APPROVED_ADAPTATION 2026-11-02: the 成熟期 partner's burst forms and their progress.
       burst: app.getPartnerBurst?.(instanceId) ?? null,
+      awakening: app.getPartnerAwakening?.(instanceId) ?? null,
       renameable: source?.kind !== "STARTER"
         && Boolean(app.getRaisingState()?.collection?.some((entry) => entry.instanceId === instanceId)),
       stats: profile,
@@ -3123,6 +3161,10 @@ async function enterDataArena(dataArenaButton) {
       resolutionCap: currentQuality().pixiResolutionCap,
       qa: arenaParams.get("arenaQa") === "1",
       seed: /^\d{1,10}$/.test(seedParam) ? Number(seedParam) >>> 0 : null,
+      // Only partners raised or lit in the Dex may enter (Owner 2026-11-02).
+      progress: app.getDataArenaProgress?.() ?? null,
+      // Awakening raising (2026-11-02): a relay entry from the ranch bursts into the form its partner learned.
+      burstPlanOf: (instanceId) => app.getBattleBurstPlan?.(instanceId) ?? null,
       onExit: restoreBattle,
       // Cyber Gachapon: a manual-battle win pays 1-3 tickets, a cup 3-10, into the one save.
       onVictory: ({ tournament }) => app?.grantGachaTickets?.(tournament ? 3 + Math.floor(Math.random() * 8) : 1 + Math.floor(Math.random() * 3), 'DATA_ARENA')

@@ -128,6 +128,9 @@ export function createBattleRuntime(options = {}) {
   // fixtures and replays on the original rules. burstPlans[slot] is an owned partner's {form, tier}.
   const burstPolicy=options.burstPolicy??BATTLE_BURST_OFF;
   const burstPlans=Array.isArray(options.burstPlans)?options.burstPlans:[];
+  // Awakening raising (Owner 2026-11-02): in an interactive battle the local team's partners wait READY for the
+  // player's call (requestBurst); headless runs and replays burst at once as before.
+  const burstManual=options.burstManual===true;
   let burst=createBattleBurst({policy:BATTLE_BURST_OFF});
   // Owner-approved arena hazards (2026-10-18) are opt-in per battle. Off keeps
   // every parity fixture and replay byte-for-byte on the original rules.
@@ -416,7 +419,7 @@ export function createBattleRuntime(options = {}) {
         actor:parameters,sourcePoint:effectActors.position(parameters),hpAfter:defender.currentHp,result:result.code});
         if(contacts.history.length>128)contacts.history.shift();}
       hits.push({ slot: targetSlot, damage: resolved.damage, critical: resolved.critical });
-      burst.onHit({attackerSlot:slot,defenderSlot:targetSlot,damage:resolved.damage,defenderMaxHp:defender.maxHp??0});
+      burst.onHit({attackerSlot:slot,defenderSlot:targetSlot,damage:resolved.damage,defenderMaxHp:defender.maxHp??0,defenderHp:defender.currentHp});
       arenaHazards?.onHit({move,attackerSlot:slot,targetPosition:nativeActors?.position(targetSlot)});
       state?.launch?.startImpact({targetObject:nativeActors.address(targetSlot),xyz:nativeActors.position(targetSlot),
         targetBox:nativeActors.box(targetSlot),resultCode:result.code,nativeKind,offset:impactOffset,
@@ -451,7 +454,12 @@ export function createBattleRuntime(options = {}) {
     // Once released, the established timing/exclusive/session order is unchanged.
     if(!opening.advance())return deepFreeze({frame:liveSession.frame,events:[],ended:false});
     // A burst wrap holds the whole battle: no native frame, AI, clock or RNG advances while it plays.
-    if(burst.holding()){burst.hold(liveSession.frame);return deepFreeze({frame:liveSession.frame,events:[],ended:false});}
+    if(burst.holding()){
+      // A bloodline that heals at the burst (時鋼) restores HP the moment the shell opens.
+      for(const event of burst.hold(liveSession.frame))if(event.healPercent>0){const c=liveSession.slots[event.slot];
+        if(c&&c.currentHp>0){c.currentHp=Math.min(c.maxHp,c.currentHp+Math.round(c.maxHp*event.healPercent/100));nativeActors?.syncCombatants();}}
+      return deepFreeze({frame:liveSession.frame,events:[],ended:false});
+    }
     nativeActors?.setFrame(liveSession.frame);
     nativeActors.updateWorldFlags();
     if(!advanceBattlePresentationTiming(nativeActors.memory,nativeActors.worldAddress)){
@@ -536,6 +544,12 @@ export function createBattleRuntime(options = {}) {
 
   return Object.freeze({
     listMatches,
+
+    /** The player calls a local partner's READY burst (awakening raising, Owner 2026-11-02). */
+    requestBurst(slot) {
+      if(!session||battleTeamOfSlot(slot)!==localTeamIndex)return false;
+      return burst.request(slot);
+    },
 
     prepareOpening() {
       if(!session)throw runtimeError('NO_MATCH_STARTED');
@@ -763,7 +777,7 @@ export function createBattleRuntime(options = {}) {
       // bursts into it, at the form's strength.
       burst=createBattleBurst({policy:burstPolicy,plans:session.slots.map((c,slot)=>{
         if(!c)return null;
-        if(burstPlans[slot])return burstPlans[slot];
+        if(burstPlans[slot])return burstManual&&battleTeamOfSlot(slot)===localTeamIndex?{...burstPlans[slot],manual:true}:burstPlans[slot];
         if(roster[slot]?.instanceId)return null;
         const tier=burstFormTier(c.speciesId),bases=burstBasesFor(c.speciesId);
         return tier&&bases.length?{form:c.speciesId,tier,baseline:burstMultiplier(tier),base:bases[0]}:null;
@@ -796,6 +810,7 @@ export function createBattleRuntime(options = {}) {
       source = createBattlePresentationSource({ session, step: stepMatch, getOpening:opening.snapshot, arenaIndex, getSpecialPrelude,
         ...(typeof options.getBloodline === 'function' ? {getBloodline:options.getBloodline} : {}),
         getBurst:slot=>burst.snapshot(slot,session.frame),
+        getInstanceId:slot=>roster[slot]?.instanceId??null,
         getArenaHazards:()=>arenaHazards?.snapshot()??null,
         getNativeActor:slot=>nativeActors.project(slot),getImpactEffects:()=>impactEffects.snapshot({
           exclusiveOwner:session.slots.find(c=>c?.field94)?.field94??0}),getNativeLifecycle:()=>({

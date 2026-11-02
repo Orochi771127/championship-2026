@@ -24,6 +24,7 @@ import {selectProductHatchSpecies,productLifeThreshold,evaluateProductEvolution}
 import {enterNativeRaisingSleep,exitNativeRaisingSleep,enterNativeRaisingMorning} from './nativeRaisingSleep.js';
 import {habitatMatch,TAXONOMY_HABITAT_BONUS} from '../contracts/speciesTaxonomy.js';
 import {enterNativeRaisingTraining,applyNativeCageEntryConditions,createNativeTrainingTimeline,stepNativeTrainingTimeline} from './nativeRaisingTraining.js';
+import {realtimeTrainingDue,beginRealtimeTraining,cageEntryTrains} from './productTrainingPolicy.js';
 import {nativeCarryPosition,nativeCarryVelocity,nativeReleaseVelocity,stepNativeRaisingFlight,nativeLandingReaction} from './nativeRaisingCarry.js';
 import {findRanchRaisingOpenTile as findNativeRaisingOpenTile} from './nativeRaisingRanchRing.js';
 import {nativeRaisingHandAdmission,enterNativeRaisingStroke,stepNativeRaisingStroke,nativeRaisingTapWakes,enterNativeRaisingTap,selectNativeRaisingTapReaction} from './nativeRaisingHand.js';
@@ -425,7 +426,7 @@ export function startNativeRaisingMorning(actor,profile,rng) {
   actor.state=25;request(actor,13); // 0211C9AC preserves an already playing sleep sequence.
   const morning=enterNativeRaisingMorning(profile,actor.poolSlot,rng);actor.morningWait=morning.waitFrames;actor.morningFrames=0;return morning.profile;
 }
-export function enterNativeRaisingCage(actor,profile,{previousDefinition,ground,season,level=0,foods=[]},rng){
+export function enterNativeRaisingCage(actor,profile,{previousDefinition,ground,season,level=0,foods=[],trainingCooldown=false},rng){
   detachFood(actor,foods);
   if(actor.speciesIndex<8)return profile;
   let p=profile;const definition=actor.cageDefinitionIndex,reaction=lifecycleRules.cages[definition].entryReaction;
@@ -433,7 +434,9 @@ export function enterNativeRaisingCage(actor,profile,{previousDefinition,ground,
   if(delta){p=structuredClone(p);p.fields['01c']=Math.max(0,Math.min(100,p.fields['01c']+delta));}
   if(reaction===-1)p=applyNativeCageEntryConditions(p,{definition,season,level},rng);
   const f=p.fields,healthy=!['134','138','13c'].some(k=>f[k]===1)&&(f['050']|0)>Math.trunc((f['058']|0)/10);
-  actor.training=null;actor.trainingPending=healthy&&reaction!==-1&&previousDefinition!==definition;
+  // Real-time ranch (OWNER_APPROVED_ADAPTATION 2026-11-02): entering cages trains at most once per cooldown.
+  actor.training=null;actor.trainingPending=healthy&&reaction!==-1&&previousDefinition!==definition&&(!trainingCooldown||cageEntryTrains(actor));
+  if(trainingCooldown&&previousDefinition!==definition)actor.trainingDwell=0;
   if(!healthy){actor.state=f['13c']===1?18:1;actor.activity=null;request(actor,actor.state===18?15:1,true);}
   else if(previousDefinition===definition&&reaction!==-1)enterIdle(actor,rng);
   return normalizeNativeIndividualProfile(p);
@@ -579,10 +582,20 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
     }
     if(actor.state===1){const fed=stepFeeding(actor,next,ageDelta,rng,{...feeding,fullGrowth:true});result={...fed,changed:result.changed||fed.changed};next=fed.profile;}
   } else {result=stepFeeding(actor,next,ageDelta,rng,{...feeding,fullGrowth:true});next=result.profile;}
-  if(actor.state===1&&actor.trainingPending){
+  // Real-time ranch (OWNER_APPROVED_ADAPTATION 2026-11-02, productTrainingPolicy.js): a partner also trains every
+  // dwell period it stays in a cage and once after a battle or hunt; any training starts the cooldown.
+  const policy=context.training??null;
+  // Only a partner standing in a real training cage (not carried, not the waiting room) trains on the clock.
+  const trainingCage=Number.isInteger(actor.cageDefinitionIndex)&&actor.cageDefinitionIndex!==35&&!actor.detached
+    &&Boolean(lifecycleRules.cages[actor.cageDefinitionIndex]);
+  if(policy&&realtimeTrainingDue(actor,policy,{healthy:!['134','138','13c'].some(k=>next.fields[k]===1),trainingCage}))
+    actor.trainingPending=true;
+  if(actor.state===1&&actor.trainingPending&&(!policy||trainingCage)){
     actor.trainingPending=false;actor.state=11;
+    if(policy)beginRealtimeTraining(actor,policy);
     const growthPercent=habitatMatch(next.fields['000'],actor.cageDefinitionIndex)?TAXONOMY_HABITAT_BONUS.growthPercent:100;
-    const trained=enterNativeRaisingTraining(next,{definition:actor.cageDefinitionIndex,season:context.season,level:context.cageLevel??0,stressed:a['404']===1,growthPercent},rng);
+    const trained=enterNativeRaisingTraining(next,{definition:actor.cageDefinitionIndex,season:context.season,level:context.cageLevel??0,stressed:a['404']===1,growthPercent,
+      pointScale:policy?.pointScale??null},rng);
     next=trained.profile;result.changed=true;actor.training=createNativeTrainingTimeline(trained.commands);if(trained.commands?.length)request(actor,30);
   }
   const grown=applyNativeRaisingGrowth(next,a,{state:actor.state,phase:actor.stroke?.phase??0,ageDelta,baseUnit:60,generation:s.generation,mode:context.season,minute:context.minute,

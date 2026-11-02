@@ -84,8 +84,18 @@ const document = {
   authority: 'OWNER_APPROVED_ADAPTATION_STAGE_REDESIGN_20261102',
   generator: 'scripts/build-product-burst-evolution.mjs',
   note: 'A 成熟期 partner bursts in battle into a former 覺醒體 (tier 1) or 究極體 (tier 2). Thresholds use the native 26-value evolution layout and are read on the 成熟期 itself; stat percentages refer to its own curve.',
+  // Awakening raising (Owner 2026-11-02): forms are raised on the ranch and learned in a ceremony; no tamer
+  // rank gate. Items push a target's progress (shards and SSR metals at most itemCap percent, a UR metal fills
+  // it); remembered forms halve their point and battle thresholds; transcendence stars count as rebirths.
   rules: {tierMultiplier: {1: 1.4, 2: 1.7}, oncePerBattle: true, durationSeconds: 20, durationRounds: 3, weaknessSeconds: 5,
-    weaknessMultiplier: 0.85, minimumTamerRank: {1: 4, 2: 6}, unlockMetalRarity: {1: 'SSR', 2: 'UR'}, gaugeMaximum: 100},
+    weaknessMultiplier: 0.85, minimumTamerRank: {1: 0, 2: 0}, unlockMetalRarity: {1: 'SSR', 2: 'UR'}, gaugeMaximum: 100,
+    awakening: {shardEnergy: {R: 8, SR: 15, SSR: 25}, metalEnergy: {SSR: {1: 50, 2: 30}}, itemCap: 60, fillRarity: 'UR',
+      memoryThresholdPercent: 50, glowPercent: 80, ceremonyDisplaySeconds: 600,
+      transcendence: {bondMinimum: 80, maxStars: 5, metalRarities: ['SSR', 'UR']}},
+    battle: {manualSeconds: 6, pinchHpPercent: 30, pinchTakenMultiplier: 1.5, bondChargeBonus: 0.2, warnGauge: 80, chainFrames: 18},
+    bloodlinePerks: {emma: {chargeMultiplier: 1.2}, beta: {noWeakness: true}, chronoOre: {extraSeconds: 4},
+      chronoMetal: {healPercent: 15}, chronoAlloy: {cooldownMultiplier: 0.85, speedPercent: 15}, supernova: {multiplierBonus: 0.1}},
+    training: {cooldownSeconds: 300, dwellSeconds: 300, afterMatchMinimumSeconds: 60, counterBestGain: 10}},
   bases: MA.map(m => ({base: m, forms: [...tier1.get(m), ...tier2.get(m)]}))
 };
 const text = JSON.stringify(document, null, 1) + '\n';

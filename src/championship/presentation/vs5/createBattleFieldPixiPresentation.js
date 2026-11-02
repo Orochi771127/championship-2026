@@ -63,6 +63,7 @@ import {createBattleFxCamera,clampBattleCameraToMap} from '../battleFx/battleFxC
 import {createBattleFxEventTracker} from '../battleFx/battleFxEvents.js';
 import {createBattleFxLayer} from '../battleFx/battleFxLayer.js';
 import {createBattleBurstShell} from './battleBurstShell.js';
+import {GACHA_BLOODLINES} from '../../gacha/cyberGacha.js';
 
 const PALETTE = Object.freeze({
   letterbox: 0x072f5e,
@@ -382,7 +383,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
         const based = Array.isArray(motion?.baseBounds);
         const bodyH = Math.max(8, (based ? (motion.baseBounds[3] - motion.baseBounds[1]) * packedScale / resolution : trim.height) * scale);
         const bodyW = Math.max(8, (based ? (motion.baseBounds[2] - motion.baseBounds[0]) * packedScale / resolution : trim.width) * scale);
-        const cue = burstShell.update(combatant.slot, {x, y:y - lift - bodyH / 2, width:bodyW, height:bodyH, zIndex:y + 0.5, burst:combatant.burst});
+        const cue = burstShell.update(combatant.slot, {x, y:y - lift - bodyH / 2, width:bodyW, height:bodyH, zIndex:y + 0.5, burst:combatant.burst, color:combatant.bloodline?.color ?? GACHA_BLOODLINES[combatant.burst?.bloodline]?.color ?? null});
         if (cue === 'BURST') director?.shake?.(0.7);
         shellSlots.add(combatant.slot);
       }

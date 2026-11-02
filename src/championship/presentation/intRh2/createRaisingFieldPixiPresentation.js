@@ -24,6 +24,8 @@ import { createNativeCharacterAnimationTimeline } from "../characterAnimationTim
 import { prefersReducedMotion } from '../presentationPreferences.js';
 import { uiText } from '../../text/uiText.js';
 import {bindRaisingZoomInput} from './raisingZoomInput.js';
+import {createBattleBurstShell} from '../vs5/battleBurstShell.js';
+import {BATTLE_BURST_WRAP_FRAMES,BATTLE_BURST_CHAIN_FRAMES} from '../../battle/battleBurst.js';
 import {zoomRaisingCamera} from './raisingFieldViewport.js';
 import { initialRaisingReferenceViewport, sampleRaisingReferenceViewport, desktopRaisingViewportWidth, centerRaisingNativeY, raisingFieldViewport, resizeRaisingCamera, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingCarryEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
 
@@ -214,6 +216,81 @@ export async function mountRaisingFieldPixiPresentation({
   const wasteGraphics = new Map();
   const evolutionGlow=new PIXI.Graphics();evolutionGlow.eventMode='none';fxLayer.addChild(evolutionGlow);
   const emoteLayer=new PIXI.Container({label:'partner emotes'});emoteLayer.eventMode='none';fxLayer.addChild(emoteLayer);
+  // Awakening raising (OWNER_APPROVED_ADAPTATION 2026-11-02): a partner close to learning a form wears a hex crest
+  // over its head (lit from 80 %, flashing when ready). Tapping a ready partner or its crest plays the first
+  // awakening here: the battle's hex shell wraps it and blows open, and the learned form stands in its place
+  // (through its tier-1 form for a tier-2 form); the DOM shell then shows the learned card (cm-awakening).
+  const crestLayer=new PIXI.Container({label:'awakening crests'});crestLayer.eventMode='passive';fxLayer.addChild(crestLayer);
+  const awakeningShell=createBattleBurstShell({PIXI:stage.PIXI,layer:fxLayer,reducedMotion});
+  const crests=new Map(),ceremonies=new Map();
+  const awakeningSpecies=index=>`championship:creature:species-${String(index).padStart(3,'0')}`;
+  // While its ceremony runs, a partner keeps the 成熟期 (then its tier-1 form) on screen until the form is revealed.
+  function shownResident(resident){
+    const c=ceremonies.get(resident.creatureId);
+    if(!c||c.revealed)return resident;
+    const speciesId=c.showVia&&c.via?c.via:c.held;
+    return speciesId===resident.speciesId?resident:{...resident,speciesId};
+  }
+  function startAwakening(creatureId){
+    if(ceremonies.has(creatureId)||typeof source.intents.awaken!=='function')return false;
+    const resident=source.getFrame().residents.find(r=>r.creatureId===creatureId);
+    if(!resident?.awakening?.ready)return false;
+    const ceremony={frame:0,held:resident.speciesId,pending:true,revealed:false,showVia:false};
+    ceremonies.set(creatureId,ceremony);
+    const result=source.intents.awaken(creatureId);
+    if(!result?.ok){ceremonies.delete(creatureId);sync(source.getFrame(),{force:true});return false;}
+    const via=Number.isInteger(result.via)?awakeningSpecies(result.via):null;
+    Object.assign(ceremony,{pending:false,form:awakeningSpecies(result.form),via,tier:result.tier,color:result.bloodline?.color??null,
+      wrapFrames:BATTLE_BURST_WRAP_FRAMES+(via?BATTLE_BURST_CHAIN_FRAMES:0),result});
+    // The forms' art loads while the shell closes, so the reveal draws at once.
+    for(const id of [via,ceremony.form].filter(Boolean))Promise.resolve(characterBundle?.ensureSpecies?.(id)).catch(()=>{});
+    return true;
+  }
+  function crestHex(g,r){const points=[];for(let i=0;i<6;i++){const a=-Math.PI/2+i*Math.PI/3;points.push(Math.cos(a)*r,Math.sin(a)*r);}return g.poly(points);}
+  function drawAwakeningCrests(covered){
+    const now=performance.now(),live=new Set();
+    for(const resident of source.getFrame().residents){
+      const sign=resident.awakening,entry=actors.get(resident.creatureId);
+      if(!sign?.glow||!entry||covered||!entry.root.visible||ceremonies.has(resident.creatureId))continue;
+      live.add(resident.creatureId);
+      let g=crests.get(resident.creatureId);
+      if(!g){
+        const id=resident.creatureId;
+        g=new PIXI.Graphics();g.label='awakening crest';g.eventMode='static';g.cursor='pointer';g.hitArea=new PIXI.Circle(0,0,22);
+        g.on('pointertap',event=>{event.stopPropagation();startAwakening(id);});crestLayer.addChild(g);crests.set(id,g);
+      }
+      const visible=entry.visibleGeometry,head=entry.root.toGlobal({x:visible?visible.x+visible.width/2:0,y:visible?visible.y:-90});
+      const ready=sign.ready,beat=reducedMotion||prefersReducedMotion()?0:Math.sin(now/(ready?110:420)),r=ready?16+2*beat:10;
+      const local=crestLayer.toLocal(head);g.position.set(local.x,local.y-(ready?16:12));
+      g.clear();
+      if(ready){g.circle(0,0,r+12).fill({color:0xffd34d,alpha:.18+.12*beat});g.circle(0,0,r+7+3*beat).stroke({color:0xfff3b0,width:2,alpha:.75});}
+      crestHex(g,r+5).fill({color:ready?0xfff3b0:0xffd34d,alpha:ready?.45+.25*beat:.2});
+      crestHex(g,r).fill({color:ready?0xffd34d:0x2a1e3f}).stroke({color:ready?0xffffff:0xffd34d,width:ready?3:2});
+      if(ready)crestHex(g,r*.45).fill({color:0xffffff});
+      else g.arc(0,0,r+3,-Math.PI/2,-Math.PI/2+Math.PI*2*Math.min(1,sign.percent/100)).stroke({color:0xffd34d,width:2});
+    }
+    for(const [id,g] of crests)if(!live.has(id)){g.destroy();crests.delete(id);}
+  }
+  function stepAwakeningCeremonies(){
+    for(const [id,c] of ceremonies){
+      if(c.pending)continue;
+      c.frame+=1;
+      if(c.via&&!c.showVia&&c.frame>=BATTLE_BURST_WRAP_FRAMES-9){c.showVia=true;sync(source.getFrame(),{force:true});}
+      if(!c.revealed&&c.frame>=c.wrapFrames){
+        c.revealed=true;sync(source.getFrame(),{force:true});
+        app.canvas?.dispatchEvent(new CustomEvent('cm-awakening',{bubbles:true,detail:{...c.result}}));
+      }
+      const entry=actors.get(id),visible=entry?.visibleGeometry;
+      if(entry){
+        const a=fxLayer.toLocal(entry.root.toGlobal({x:visible?visible.x:-30,y:visible?visible.y:-90}));
+        const b=fxLayer.toLocal(entry.root.toGlobal({x:visible?visible.x+visible.width:30,y:visible?visible.y+visible.height:0}));
+        const burst=c.frame<c.wrapFrames?{phase:'WRAP',tier:c.tier,wrapFrame:c.frame,wrapFrames:c.wrapFrames}
+          :{phase:'BURST',tier:c.tier,phaseFrame:c.frame-c.wrapFrames};
+        awakeningShell.update(id,{x:(a.x+b.x)/2,y:(a.y+b.y)/2,width:Math.abs(b.x-a.x),height:Math.abs(b.y-a.y),zIndex:1e6,burst,color:c.color});
+      }
+      if(c.frame>c.wrapFrames+40){awakeningShell.retire(id);ceremonies.delete(id);}
+    }
+  }
   let partnerEventSeq=null;
   const evolutionBackdrop=new PIXI.Graphics();evolutionBackdrop.eventMode='none';scene.addChildAt(evolutionBackdrop,4);
   const evolutionWriting=new PIXI.Container();evolutionWriting.eventMode='none';scene.addChildAt(evolutionWriting,5);
@@ -509,7 +586,8 @@ export async function mountRaisingFieldPixiPresentation({
     drag = null;
     completed.entry.root.cursor = "grab";
     if(!completed.moved&&event.type!=='pointercancel'&&event.type!=='pointerupoutside'){revealResident(completed.creatureId);
-      if(!completed.tool||completed.tool==='hand')source.intents.touchPartner?.(completed.creatureId);}
+      // A ready partner awakens on a tap instead of reacting to it.
+      if((!completed.tool||completed.tool==='hand')&&!startAwakening(completed.creatureId))source.intents.touchPartner?.(completed.creatureId);}
     if(completed.nativeHand){source.intents.endHand?.(completed.creatureId,{cancelled:event.type==='pointercancel'||event.type==='pointerupoutside',checkpoint:completed.tutorialCheckpoint});
       sync(source.getFrame(),{force:true});return;}
     if(completed.carried){source.intents.releaseCarry?.(completed.creatureId);sync(source.getFrame(),{force:true});return;}
@@ -828,7 +906,8 @@ export async function mountRaisingFieldPixiPresentation({
       actors.delete(creatureId);
       reportResidentAssets();
     }
-    for (const resident of frame.residents) {
+    for (const frameResident of frame.residents) {
+      const resident = shownResident(frameResident);
       const previous = actors.get(resident.creatureId);
       if (previous && previous.speciesId !== resident.speciesId) {
         previous.loadToken++;
@@ -1126,6 +1205,7 @@ export async function mountRaisingFieldPixiPresentation({
     for(const g of foodGraphics.values())g.visible=!covered;for(const g of wasteGraphics.values())g.visible=!covered;
     const trainingLabels=[];
     readPartnerLife(covered);
+    drawAwakeningCrests(covered);stepAwakeningCeremonies();
     for (const [creatureId, entry] of actors) {
       entry.root.visible=!covered||creatureId===lifecycle?.instanceId;
       const native=actorFrameFor(creatureId);
@@ -1647,6 +1727,14 @@ export async function mountRaisingFieldPixiPresentation({
 
     /** Ease the camera so a resident is in the middle of the view. Ignored
      * while the player is dragging; the wrapped board takes the short way. */
+    /** Where a partner's awakening crest is on the page (CSS px), or null (loopback QA taps it). */
+    awakeningCrestPoint(creatureId) {
+      const crest = crests.get(creatureId), canvas = app.canvas;
+      if (!crest || crest.destroyed || !canvas?.isConnected) return null;
+      const point = crest.getGlobalPosition(), rect = canvas.getBoundingClientRect();
+      return { x: rect.left + point.x * rect.width / Math.max(1, app.screen.width), y: rect.top + point.y * rect.height / Math.max(1, app.screen.height) };
+    },
+
     focusResident(creatureId, { reducedMotion = false } = {}) {
       const field = fieldArt?.field;
       const native = source.getActorFrame?.(creatureId);
@@ -1710,6 +1798,7 @@ export async function mountRaisingFieldPixiPresentation({
     dispose() {
       if (disposed) return;
       disposed = true;
+      awakeningShell.dispose();for(const g of crests.values())g.destroy();crests.clear();ceremonies.clear();
       lifetime.abort(); signal?.removeEventListener('abort', abort);
       cancelInput();
       zoomInput?.dispose();

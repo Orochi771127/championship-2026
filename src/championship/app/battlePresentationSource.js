@@ -175,7 +175,7 @@ function requireSession(session) {
  */
 export function createBattlePresentationSource({ session, step, arenaIndex = 0, getSpecialPrelude = () => null,
   getOpening = () => null, getNativeActor = () => null, getNativeLifecycle = () => null, getImpactEffects = () => [],
-  getArenaHazards = () => null, getBloodline = () => null, getBurst = () => null } = {}) {
+  getArenaHazards = () => null, getBloodline = () => null, getBurst = () => null, getInstanceId = () => null } = {}) {
   requireSession(session);
   if (typeof step !== "function") {
     throw sourceError("REQUIRES_A_STEP_FUNCTION");
@@ -213,7 +213,9 @@ export function createBattlePresentationSource({ session, step, arenaIndex = 0, 
     // session has no original world positions and keeps its labeled stand-in.
     // Cyber Gachapon (2026-10-29): present only when this owned partner has one.
     let bloodline=null;
-    try{bloodline=combatant?.instanceId?getBloodline(combatant.instanceId):null;}catch{bloodline=null;}
+    // The session's combatants do not carry the owned partner's id; the runtime names it per slot.
+    const instanceId=combatant?.instanceId??getInstanceId(slot);
+    try{bloodline=instanceId?getBloodline(instanceId):null;}catch{bloodline=null;}
     // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): a combatant may be shown as another species (its
     // burst form, or the 成熟期 a former 覺醒體/究極體 preset starts as). That species has its own art, so the
     // native cell sample of the fighting species is withheld and the shared sequence request drives it.
@@ -225,7 +227,10 @@ export function createBattlePresentationSource({ session, step, arenaIndex = 0, 
       ...(displayed ? {speciesId:`species-${String(displayed.recordIndex).padStart(3,"0")}`,displayName:speciesName(displayed.recordIndex,displayed.identifier)} : {}),
       ...(bloodline ? {bloodline:{family:bloodline.family,title:bloodline.title,color:bloodline.color}} : {}),
       ...(burst ? {burst:{phase:burst.phase,gauge:burst.gauge,gaugeMax:burst.gaugeMax,tier:burst.tier,form:burst.form,base:burst.base,
-        wrapFrame:burst.wrapFrame,wrapFrames:burst.wrapFrames,phaseFrame:burst.phaseFrame,burstFrames:burst.burstFrames,weakFrames:burst.weakFrames}} : {}),
+        wrapFrame:burst.wrapFrame,wrapFrames:burst.wrapFrames,phaseFrame:burst.phaseFrame,burstFrames:burst.burstFrames,weakFrames:burst.weakFrames,
+        // Awakening raising (2026-11-02): the player's call window, the opponent warning, the tier-2 chain.
+        via:burst.via??null,manual:burst.manual===true,readyFrame:burst.readyFrame??null,readyFrames:burst.readyFrames??null,warn:burst.warn===true,
+        bloodline:burst.bloodline??null}} : {}),
       ...(native ? {stand:native.stand,nativeMotion:native.motion,nativeAnimation:displayed?null:native.nativeAnimation} : {}),
       animationRequest:focusRequest ?? native?.animationRequest ?? {...projected.animationRequest,
         sequenceStartFrame:animationStarts.get(slot)?.frame??null}});
