@@ -45,8 +45,8 @@ test('growth pace: an egg reaches 成熟期 in about a day and a half of real ti
 function harness(clock) {
   const data = new Map(), storage = {getItem: k => data.get(k) ?? null, setItem: (k, v) => data.set(k, v), removeItem: k => data.delete(k)};
   const cages = JSON.parse(readFileSync('docs/contracts/championship/raising-home-presentation.v1.json', 'utf8')).cages;
-  const make = policy => createChampionshipStandaloneApp({storage, locks: null, cages, catalog: species, clockPolicy: policy,
-    rngClock: () => ({hour: 13, minute: 20, second: 50}), now: () => new Date(clock.ms).toISOString()});
+  const make = (policy, options = {}) => createChampionshipStandaloneApp({storage, locks: null, cages, catalog: species, clockPolicy: policy,
+    rngClock: () => ({hour: 13, minute: 20, second: 50}), now: () => new Date(clock.ms).toISOString(), ...options});
   return {data, cages, make};
 }
 
@@ -125,5 +125,89 @@ test('REALTIME_V1 load: up to twelve hours of growth while closed, partners nap 
     const before = app.getCalendar().clockMinutes;
     assert.equal(app.endDay().code, 'REST');
     assert.equal(app.getCalendar().clockMinutes, before);
+  } finally { await app.dispose(); }
+});
+
+test('night disturbance: handling a sleeping partner costs 育成妨礙 and affection; care does not; once per wake', async () => {
+  const clock = {ms: at(9)};
+  const {data, cages, make} = harness(clock);
+  const first = make('REALTIME_V1');
+  await first.newGame();
+  first.save();
+  const saved = JSON.parse(createFullQaSaveText(JSON.parse(data.get(CHAMPIONSHIP_MODERN_SAVE_KEY)), {cageIds: cages.map(e => e.cageId)}));
+  await first.dispose();
+  saved.raising.collection.forEach(entry => { entry.nativeProfile.fields['020'] = 50; entry.nativeProfile.narrowFields['03d'] = 0; });
+  saved.updatedAt = new Date(at(23)).toISOString();
+  data.set(CHAMPIONSHIP_MODERN_SAVE_KEY, JSON.stringify(saved));
+  clock.ms = at(23);
+  const app = make('REALTIME_V1');
+  await app.continueGame();
+  try {
+    for (let i = 0; i < 120; i++) app.advanceNaturalClock({frames: 1});
+    const asleep = saved.raising.collection.map(e => e.instanceId).filter(id => app.getRaisingActorFrame(id)?.state === 4);
+    assert.ok(asleep.length >= 2, 'partners nap at 23:00');
+    const stored = id => {
+      app.save();
+      const entry = JSON.parse(data.get(CHAMPIONSHIP_MODERN_SAVE_KEY)).raising.collection.find(c => c.instanceId === id);
+      return {care: entry.nativeProfile.narrowFields['03d'], bond: entry.nativeProfile.fields['020']};
+    };
+    const events = [], off = app.subscribePartnerLife(event => events.push(event));
+    const [a, b] = asleep;
+    app.touchRaisingPartner(a);
+    assert.notEqual(app.getRaisingActorFrame(a).state, 4, 'the tap wakes it');
+    assert.deepEqual(stored(a), {care: 1, bond: 45}, '育成妨礙 +1 and affection -5');
+    assert.ok(events.some(event => event.kind === 'disturbed' && event.partnerId === a));
+    app.touchRaisingPartner(a);
+    assert.deepEqual(stored(a), {care: 1, bond: 45}, 'awake for ten minutes: no second count');
+    app.treatRaisingResident(b, 0);
+    assert.notEqual(app.getRaisingActorFrame(b).state, 4, 'treatment wakes it too');
+    assert.deepEqual(stored(b), {care: 0, bond: 50}, 'care never counts as 育成妨礙');
+    off();
+  } finally { await app.dispose(); }
+});
+
+test('night disturbance with the hand: one press counts once, its release is no extra tap, a refused hand wakes nobody', async () => {
+  const clock = {ms: at(9)};
+  const {data, cages, make} = harness(clock);
+  const first = make('REALTIME_V1');
+  await first.newGame();
+  first.save();
+  const saved = JSON.parse(createFullQaSaveText(JSON.parse(data.get(CHAMPIONSHIP_MODERN_SAVE_KEY)), {cageIds: cages.map(e => e.cageId)}));
+  await first.dispose();
+  saved.raising.collection.forEach(entry => { entry.nativeProfile.fields['020'] = 50; entry.nativeProfile.narrowFields['03d'] = 0; });
+  saved.updatedAt = new Date(at(23)).toISOString();
+  data.set(CHAMPIONSHIP_MODERN_SAVE_KEY, JSON.stringify(saved));
+  clock.ms = at(23);
+  const app = make('REALTIME_V1', {partnerLife: true});
+  await app.continueGame();
+  try {
+    for (let i = 0; i < 120; i++) app.advanceNaturalClock({frames: 1});
+    const asleep = saved.raising.collection.map(e => e.instanceId).filter(id => app.getRaisingActorFrame(id)?.state === 4);
+    assert.ok(asleep.length >= 2, 'partners nap at 23:00');
+    const stored = id => {
+      app.save();
+      const entry = JSON.parse(data.get(CHAMPIONSHIP_MODERN_SAVE_KEY)).raising.collection.find(c => c.instanceId === id);
+      return {care: entry.nativeProfile.narrowFields['03d'], bond: entry.nativeProfile.fields['020']};
+    };
+    const events = [], off = app.subscribePartnerLife(event => events.push(event));
+    const [a, b] = asleep;
+    assert.equal(app.beginRaisingHand(a, {x: 120, y: 100}), true, 'the hand takes hold');
+    assert.deepEqual(stored(a), {care: 1, bond: 45}, 'picking it up is 育成妨礙');
+    assert.equal(app.beginRaisingHand(b, {x: 160, y: 100}), false, 'a second hand is refused');
+    assert.equal(app.getRaisingActorFrame(b).state, 4, 'and that partner sleeps on');
+    assert.deepEqual(stored(b), {care: 0, bond: 50});
+    const release = app.touchRaisingPartner(a);
+    assert.equal(release?.disturbed, true, 'the tap on release belongs to the same press');
+    assert.equal(release.gained, 0);
+    assert.ok(!events.some(event => event.kind === 'tap'), 'no pleased emote over the cross one');
+    assert.deepEqual(stored(a), {care: 1, bond: 45}, 'no second count and no pet');
+    assert.equal(app.endRaisingHand(a), true);
+    const before = stored(a);
+    const pet = app.touchRaisingPartner(a);
+    assert.equal(pet?.disturbed, undefined, 'awake now: a later tap is a normal one');
+    assert.equal(pet.gained, 1);
+    assert.deepEqual(stored(a), {care: 1, bond: before.bond + 1});
+    assert.equal(events.filter(event => event.kind === 'disturbed').length, 1);
+    off();
   } finally { await app.dispose(); }
 });
