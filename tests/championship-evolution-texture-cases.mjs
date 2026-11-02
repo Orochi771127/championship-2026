@@ -72,6 +72,7 @@ test('recovery mount is root sibling outside inert field host, layered above lif
 test('actual scene isPlayable getter blocks source and target loading/error then resumes ready',()=>{
  const start=source.indexOf('    get isPlayable() {'),end=source.indexOf('    // The P1R DOM shell',start);
  const entry={speciesId:'species8',assetState:'ready'},context={disposed:false,lifetime:{signal:{aborted:false}},source:{getFrame:()=>({residents:[{creatureId:'id',speciesId:'species8'}]})},actors:new Map([['id',entry]])};
+ context.actorFrameFor=id=>context.source.getActorFrame?.(id);
  vm.runInNewContext('globalThis.scene={'+source.slice(start,end)+'};',context);
  for(const state of ['loading','error']){entry.evolutionAssetState=state;assert.equal(context.scene.isPlayable,false);}
  entry.evolutionAssetState='ready';assert.equal(context.scene.isPlayable,true);

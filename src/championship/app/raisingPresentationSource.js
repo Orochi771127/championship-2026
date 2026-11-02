@@ -149,6 +149,7 @@ function homeMembers(snapshot, instances, displayOf = () => null) {
       creatureId: instance.instanceId,
       displayName: raisingDisplayName(instance),
       speciesId: productSpeciesId(speciesId),
+      ...(Number.isInteger(shown)?{appearanceBaseSpeciesId:productSpeciesId(instance.speciesId)}:{}),
       // The species table's base HP/TP are not this individual's persistent
       // current or grown values. Unknown player profiles remain unknown.
       stats: instance.profile,
@@ -228,6 +229,7 @@ export function createRaisingPresentationSource(app) {
         creatureId: member.creatureId,
         displayName: member.displayName,
         speciesId: member.speciesId,
+        ...(member.appearanceBaseSpeciesId?{appearanceBaseSpeciesId:member.appearanceBaseSpeciesId}:{}),
         cageId: assignments[member.creatureId],
         lane: lanes.get(member.creatureId) ?? { x: 0.5, y: 0.72 },
         facing: member.facing,

@@ -1,4 +1,5 @@
 import {createCareImageTextureScope} from './careImageTextureScope.js';
+import {createRaisingAppearanceFrames} from './raisingAppearanceFrame.js';
 import { getReviewedRaisingContactShadow } from './raisingContactShadow.js';
 import { getRaisingFootprintShadow } from './raisingFootprintShadow.js';
 import {createPixiAssetScope} from '../pixiCharacterRuntimeBundle.js';
@@ -171,10 +172,12 @@ export async function mountRaisingFieldPixiPresentation({
   // facing and a position offset while a cutscene plays; the simulation frame
   // underneath is untouched and the clock is paused by the caller.
   const storyPuppets = new Map();
+  const appearanceFrames=createRaisingAppearanceFrames(BATTLE_CHARACTER_PROFILES);
   const STORY_PUPPET_SEQUENCES = Object.freeze({ idle: 0, walk: 2, attack: 7, hit: 26, hop: 0, face: 0, sleep: 13 });
   const NATIVE_TICK_MS = 560190 / 33513982 * 1000;
   function actorFrameFor(creatureId) {
-    const native = source.getActorFrame?.(creatureId);
+    const resident=source.getFrame().residents.find(r=>r.creatureId===creatureId);
+    const native = appearanceFrames.read(creatureId,source.getActorFrame?.(creatureId),resident,actors.get(creatureId));
     const puppet = storyPuppets.get(creatureId);
     if (!puppet || !native) return native;
     const snap = puppet.timeline?.getSnapshot() ?? null;
@@ -1154,6 +1157,8 @@ export async function mountRaisingFieldPixiPresentation({
       }
     }
     stepCameraFocus(ticker.deltaMS);
+    const appearanceResidents=source.getFrame().residents;
+    appearanceFrames.retain(appearanceResidents.map(r=>r.creatureId));
     stepStoryPuppets(ticker.deltaMS);
     if(drag?.nativeHand)drag.carried=source.getActorFrame?.(drag.creatureId)?.state===6;
     if(drag?.carried&&fieldArt?.field?.presentationMode==='NATIVE_RANCH'){
@@ -1668,7 +1673,7 @@ export async function mountRaisingFieldPixiPresentation({
         // current native frame, not only loading flags set by a previous draw.
         // This getter stays read-only; the still-running scene ticker starts
         // the existing async loads while the simulation gate discards elapsed.
-        const frame=source.getActorFrame?.(resident.creatureId),e=frame?.evolution;
+        const frame=actorFrameFor(resident.creatureId),e=frame?.evolution;
         if(frame&&entry.nativeFramePresenter?.isFrameReady&&!entry.nativeFramePresenter.isFrameReady(frame))return false;
         if(!e||e.choicePending||e.target<0)return true;
         if(entry.evolutionTarget!==e.target||!entry.evolutionSprite||!entry.evolutionPresenter||entry.evolutionAssetState!=='ready')return false;
@@ -1814,7 +1819,7 @@ export async function mountRaisingFieldPixiPresentation({
     dispose() {
       if (disposed) return;
       disposed = true;
-      awakeningShell.dispose();for(const g of crests.values())g.destroy();crests.clear();ceremonies.clear();
+      awakeningShell.dispose();for(const g of crests.values())g.destroy();crests.clear();ceremonies.clear();appearanceFrames.clear();
       lifetime.abort(); signal?.removeEventListener('abort', abort);
       cancelInput();
       zoomInput?.dispose();

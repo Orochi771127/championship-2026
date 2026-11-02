@@ -1,0 +1,256 @@
+{
+  "scope": "AW23 species154 General53 and Arena32 core public-playtest preparation",
+  "sourceArtReview": "DOT_DELEGATED_SELF_REVIEW_PASS",
+  "sourceZIP_SHA256": "38d1ce63021f31593ee706cdb9c77685d22feb5b59bd70a5bff8500736c06f2f",
+  "selectedManifestSHA256": "5e9e316b8fe7ab7123f36d6cf956000813a747955db0cb8dbaf6edc2c93600c0",
+  "generalChecks": [
+    {
+      "view": "desktop",
+      "sha256": "660d174f096d69f98371ecdef271c0c771b104767d33006c8eec593ede25513c",
+      "contexts": 53,
+      "events": 83,
+      "context": {
+        "devicePixelRatio": 1,
+        "viewport": [
+          1366,
+          768
+        ],
+        "quality": "balanced"
+      },
+      "forcedNumericSelector": true,
+      "nativeCallerClockVerified": false
+    },
+    {
+      "view": "mobile",
+      "sha256": "7179125e509f92e1121b88376386123eb4a9c5dba1ec89630c283aa39dd082d8",
+      "contexts": 53,
+      "events": 83,
+      "context": {
+        "devicePixelRatio": 3,
+        "viewport": [
+          390,
+          844
+        ],
+        "quality": "balanced"
+      },
+      "forcedNumericSelector": true,
+      "nativeCallerClockVerified": false
+    },
+    {
+      "view": "landscape",
+      "sha256": "020298f01c70db1cbba6289ab264b7a74de613bc56ebb4cd0d1bae7056862102",
+      "contexts": 53,
+      "events": 83,
+      "context": {
+        "devicePixelRatio": 1,
+        "viewport": [
+          844,
+          390
+        ],
+        "quality": "balanced"
+      },
+      "forcedNumericSelector": true,
+      "nativeCallerClockVerified": false
+    }
+  ],
+  "naturalDaytime": {
+    "sha256": "b02f6f022a1e81a6836efb7fdcf243af05d6812a9c407ee540e01dc775fc84d3",
+    "clips": [
+      "main:0",
+      "main:14"
+    ],
+    "assets": [
+      "GENERAL_CARE16_v1/2",
+      "GENERAL_CARE16_v1/3",
+      "GENERAL_MAIN_A16_v1/0",
+      "GENERAL_MAIN_A16_v1/1"
+    ],
+    "learnedAppearanceViaProductAPI": true,
+    "numericSelectorForced": false,
+    "timezone": "UTC",
+    "physicalIOS": false
+  },
+  "registration": [
+    {
+      "assetId": "GENERAL_FACE_COVER_REPAIR_v1/00",
+      "method": "OWN_HEAD_SUPPORT_LANDMARK_CANDIDATE",
+      "referencePose": "GENERAL_MAIN_A16_v1/0",
+      "referenceEye": [
+        220,
+        210
+      ],
+      "referenceGround": [
+        256,
+        440
+      ],
+      "newEye": [
+        540,
+        540
+      ],
+      "newGround": [
+        600,
+        1068
+      ],
+      "referenceDensity": 8,
+      "newDensity": 20,
+      "runtimeValidated": true,
+      "allRawRGBAUnchanged": true,
+      "validationScope": "Forced numeric selector, all events at three viewport sizes; not all natural state triggers"
+    },
+    {
+      "assetId": "GENERAL_CARE16_v1/5",
+      "method": "EXISTING_NORMALIZED_512_COHORT_ORIGIN_DENSITY",
+      "runtimeValidated": true,
+      "allRawRGBAUnchanged": true,
+      "validationScope": "Forced numeric selector, all events at three viewport sizes; not all natural state triggers"
+    },
+    {
+      "assetId": "GENERAL_BOUND16_v1/13",
+      "method": "EXISTING_NORMALIZED_512_COHORT_ORIGIN_DENSITY",
+      "runtimeValidated": true,
+      "allRawRGBAUnchanged": true,
+      "validationScope": "Forced numeric selector, all events at three viewport sizes; not all natural state triggers"
+    }
+  ],
+  "effects": [
+    {
+      "assetId": "GENERAL_CARE16_v1/9__orange",
+      "base": "GENERAL_CARE16_v1/9",
+      "recipe": "orange",
+      "eyeMask": null,
+      "alphaSHA256": "e9da3412d0eed1740276066daaca3ff8d32d3ed17ac2011f0a8706c617444a60",
+      "alphaUnchanged": true,
+      "outputSHA256": "3bf3adcfca162e81e52d01a9522b9548fef86bdc7d3193cff8b32d4b220c82aa",
+      "recipeStatus": "INTERNAL_ENGINEERING_QA_NOT_NATIVE_PIXEL_RECONSTRUCTION"
+    },
+    {
+      "assetId": "GENERAL_CARE16_v1/9__black_eyes",
+      "base": "GENERAL_CARE16_v1/9",
+      "recipe": "black_eyes",
+      "eyeMask": [
+        [
+          221,
+          211
+        ],
+        [
+          232,
+          208
+        ],
+        [
+          238,
+          212
+        ],
+        [
+          233,
+          220
+        ],
+        [
+          225,
+          222
+        ],
+        [
+          221,
+          218
+        ]
+      ],
+      "alphaSHA256": "e9da3412d0eed1740276066daaca3ff8d32d3ed17ac2011f0a8706c617444a60",
+      "alphaUnchanged": true,
+      "outputSHA256": "812555f6e190081eb43e8796f0bd5ff4e446c8b3625ff62d260d1b142707e704",
+      "recipeStatus": "INTERNAL_ENGINEERING_QA_NOT_NATIVE_PIXEL_RECONSTRUCTION"
+    },
+    {
+      "assetId": "GENERAL_MAIN_A16_v1/0__black_eyes",
+      "base": "GENERAL_MAIN_A16_v1/0",
+      "recipe": "black_eyes",
+      "eyeMask": [
+        [
+          215,
+          205
+        ],
+        [
+          224,
+          203
+        ],
+        [
+          229,
+          207
+        ],
+        [
+          225,
+          214
+        ],
+        [
+          219,
+          216
+        ],
+        [
+          215,
+          212
+        ]
+      ],
+      "alphaSHA256": "82d0d3357e4f4a02420bd5cb342fa3b22021a7dcf3a5da6af334a27761e8df89",
+      "alphaUnchanged": true,
+      "outputSHA256": "bfdd1f0ab97760e1e86c06f895a389975703bc7710c10ef7310245f9f4f092a6",
+      "recipeStatus": "INTERNAL_ENGINEERING_QA_NOT_NATIVE_PIXEL_RECONSTRUCTION"
+    },
+    {
+      "assetId": "GENERAL_MAIN_B16_v1/6__sepia",
+      "base": "GENERAL_MAIN_B16_v1/6",
+      "recipe": "sepia",
+      "eyeMask": null,
+      "alphaSHA256": "34ae9ac83c8f023167a4284f19533c7da554be4c4d841ee30092427c07dda294",
+      "alphaUnchanged": true,
+      "outputSHA256": "1d0a42c049914f0bef6e6c807492e460dd5e1224853beb39d1054e4c24fa628a",
+      "recipeStatus": "INTERNAL_ENGINEERING_QA_NOT_NATIVE_PIXEL_RECONSTRUCTION"
+    },
+    {
+      "assetId": "GENERAL_MAIN_A16_v1/0__white",
+      "base": "GENERAL_MAIN_A16_v1/0",
+      "recipe": "white",
+      "eyeMask": null,
+      "alphaSHA256": "82d0d3357e4f4a02420bd5cb342fa3b22021a7dcf3a5da6af334a27761e8df89",
+      "alphaUnchanged": true,
+      "outputSHA256": "10a6d1c630bc187646c19c70a9c0a04a3daa098ebda304ff90cd6ac7161440bf",
+      "recipeStatus": "INTERNAL_ENGINEERING_QA_NOT_NATIVE_PIXEL_RECONSTRUCTION"
+    }
+  ],
+  "limitations": [
+    "General all53 forced in actual Raising renderer; only main0/main14 natural daytime and main13 night observed",
+    "Sub independent natural result scenes not all exercised",
+    "Arena32 are core move/melee/ranged/hurt only; idle and KO use existing caller behavior and are not separate source-complete acceptance",
+    "Source integer ticks unchanged; presentation 60Hz is not original caller timing proof",
+    "No claim all205 characters or two complete sets accepted; publication still pending CI/deployment"
+  ],
+  "runtimePublication": "NOT_YET_PUBLISHED",
+  "formalLocalSelectionNaturalPlayback": {
+    "evidenceSHA256": "52fdc972c68169284e3b69d22be75cde008936c054b9e1d9f52ec4feb6ef9e07",
+    "selectionAndAssetsIntercepted": false,
+    "clips": [
+      "main:0",
+      "main:14"
+    ],
+    "frames": 601,
+    "errors": [],
+    "physicalIOS": false
+  },
+  "build": {
+    "exitCode": 0,
+    "buildId": "ae820d438406db4de7efb8717f65289fa355843f29039cdc00990ba01ce85d74",
+    "fileCount": 7736,
+    "validationExitCode": 0
+  },
+  "additionalArenaRequirements": {
+    "idle": "same-heading move first key via existing caller",
+    "charge": "selected attack first key until CAST_RELEASE",
+    "KO": "last same-heading Hurt key hold; dedicated context not reviewed",
+    "victory": "existing ranged D fallback; dedicated victory not reviewed",
+    "completeTwoSetsAccepted": false
+  },
+  "fullCI": {
+    "tests": 3327,
+    "pass": 3327,
+    "fail": 0,
+    "exitCode": 0,
+    "logSHA256": "2a76010a35da3e60eec65b8ed6877dd84ed5fba7904e3a78e56d7af169a1d1be"
+  }
+}

@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 44,
+    "registeredRuntimeBundles": 45,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -549,6 +549,20 @@
       "runtimeQaEvidence": "docs/reports/accepted-character-scopes-slice2-20261101/LOCAL_QA_RECEIPT.json",
       "runtimeQaEvidenceAtUTC": "2026-11-01T16:00:09.019494+00:00",
       "runtimeQaScope": "General Main0/Sub0 normal idle aliases only"
+    },
+    {
+      "assetId": "art:characters:self-reviewed-20261102:aw23",
+      "manifestPath": "assets/production/characters/self-reviewed-20261102/AW23/animation.public-v1.json",
+      "manifestSha256": "5e9e316b8fe7ab7123f36d6cf956000813a747955db0cb8dbaf6edc2c93600c0",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "DELEGATED_ART_SELF_REVIEW_RUNTIME_CHECKED",
+      "shippingStatus": "OWNER_PUBLIC_PLAYTEST",
+      "humanApproved": false,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "publicationAuthorized": true,
+      "scope": "General 53 numeric sequences and Arena 32 core actions; natural all-state acceptance not claimed",
+      "runtimeQaEvidence": "docs/reports/aw-ul-release-20261102/AW23_RELEASE_VALIDATION.json"
     }
   ]
 }
