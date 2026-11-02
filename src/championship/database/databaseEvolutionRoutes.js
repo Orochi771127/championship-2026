@@ -1,7 +1,8 @@
 import {productEvolutionOptions} from '../contracts/productSpeciesData.js';
 // Read-only join of ordered candidates and the existing five-slot history.
 // No resolver, eligibility, RNG, writer or save normalization runs here.
-import lifecycle from '../../data/championship/catalogs/raising-lifecycle.r1.json' with {type:'json'};
+// The ranch's growth tables (OWNER_APPROVED_ADAPTATION 2026-11-02: natural growth ends at 成熟期, appended branches).
+import {PRODUCT_GROWTH_RULES as lifecycle} from '../contracts/productGrowthRules.js';
 import {deepFreeze} from '../contracts/championshipContracts.js';
 
 function validOffset(value) {

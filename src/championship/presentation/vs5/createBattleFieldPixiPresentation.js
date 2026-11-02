@@ -62,6 +62,7 @@ import {createBm03GroundShadows} from '../bm03GroundShadows.js';
 import {createBattleFxCamera,clampBattleCameraToMap} from '../battleFx/battleFxCamera.js';
 import {createBattleFxEventTracker} from '../battleFx/battleFxEvents.js';
 import {createBattleFxLayer} from '../battleFx/battleFxLayer.js';
+import {createBattleBurstShell} from './battleBurstShell.js';
 
 const PALETTE = Object.freeze({
   letterbox: 0x072f5e,
@@ -232,6 +233,9 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   // unconditional map clamp below still cover-fits even without a director.
   responsiveLayout = responsiveLayout && Boolean(fxLayer);
   const director = fxLayer ? createBattleFxCamera({reducedMotion, responsiveLayout, boundedMap:true, wideCover:true}) : null;
+  // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): the hex shell that wraps and bursts a partner.
+  const burstShell = createBattleBurstShell({PIXI:stage.PIXI, layer:actorLayer, reducedMotion});
+  const shellSlots = new Set();
   const tracker = fxLayer ? createBattleFxEventTracker() : null;
   // One authored map only. The camera covers the viewport and stays within
   // the real arena throughout tracking, zoom and shake; no duplicated terrain.
@@ -280,6 +284,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     slotInfos.clear();
     motionEvents.length = 0;
     groundShadows?.begin(rect);
+    shellSlots.clear();
     // Arena source pixels and sprite packed pixels have different enlargements.
     // Never size a creature using its atlas dimensions or a fixed circle radius.
     const nativeWidth = fieldArt?.field.nativeWidthPx;
@@ -372,6 +377,15 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
         sprite.scale.set(held.scaleX, held.scaleY); sprite.position.set(held.x, held.y); sprite.rotation = held.rotation;
       }
       sprite.zIndex = y;
+      if (combatant.burst) {
+        // The shell centres on the drawn body and draws just in front of its own fighter.
+        const based = Array.isArray(motion?.baseBounds);
+        const bodyH = Math.max(8, (based ? (motion.baseBounds[3] - motion.baseBounds[1]) * packedScale / resolution : trim.height) * scale);
+        const bodyW = Math.max(8, (based ? (motion.baseBounds[2] - motion.baseBounds[0]) * packedScale / resolution : trim.width) * scale);
+        const cue = burstShell.update(combatant.slot, {x, y:y - lift - bodyH / 2, width:bodyW, height:bodyH, zIndex:y + 0.5, burst:combatant.burst});
+        if (cue === 'BURST') director?.shake?.(0.7);
+        shellSlots.add(combatant.slot);
+      }
       // Down remains a session fact; original effect/return-to-idle timing is separate.
       sprite.alpha = combatant.nativeMotion?.alpha ?? (combatant.down ? 0.35 : 1);
       if(fall)sprite.alpha*=1-0.85*sink;
@@ -460,6 +474,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       rendered.add(combatant.slot);
     }
     groundShadows?.end();
+    burstShell.retireExcept(shellSlots);
     return rendered;
   }
 
@@ -689,6 +704,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       if (scene.parent) scene.parent.removeChild(scene);
       effectSprites?.dispose();
       fxLayer?.dispose();
+      burstShell.dispose();
       if (debugHook && globalThis.__championshipBattleDiagnostics) delete globalThis.__championshipBattleDiagnostics;
       if (debugHook && globalThis.__championshipBattleState) delete globalThis.__championshipBattleState;
       const shadowDisposal=groundShadows?.dispose();

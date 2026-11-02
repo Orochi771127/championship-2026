@@ -851,6 +851,13 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
 .cm-digimon-untraced { grid-column: 1 / -1; margin: var(--sp-2) 0; color: var(--c-text-3); font-size: var(--fs-label); }
 
 .cm-digimon-resistance { grid-column: 1 / -1; display: grid; gap: 6px; padding: 12px 0 8px; }
+/* Burst forms (OWNER_APPROVED_ADAPTATION 2026-11-02): a full-width list, one form per line. */
+.cm-digimon-stat.cm-digimon-burst { grid-column: 1 / -1; }
+.cm-digimon-burst .cm-digimon-detail__value { display: grid; gap: 6px; text-align: left; font-weight: var(--fw-regular, 400); }
+.cm-digimon-burst__form { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0; }
+.cm-digimon-burst__form[data-planned="true"] .cm-digimon-burst__state { color: var(--c-accent); font-weight: var(--fw-strong); }
+.cm-digimon-burst__form[data-unlocked="false"] .cm-digimon-burst__state { color: var(--c-text-3); font-size: var(--fs-label); }
+.cm-digimon-burst__choose { min-height: 32px; padding: 2px 10px; border: 1px solid var(--c-line-2); border-radius: var(--r-control); background: var(--c-surface-2); color: var(--c-text-1); font: inherit; font-size: var(--fs-label); }
 .cm-digimon-resistance__title { color: var(--c-text-3); font-size: var(--fs-body-sm); }
 .cm-digimon-resistance__bar { display: flex; height: 10px; overflow: hidden; border-radius: 5px; background: var(--c-surface-3); gap: 2px; }
 .cm-digimon-resistance__segment { min-width: 2px; }

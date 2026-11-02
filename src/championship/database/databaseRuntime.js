@@ -7,6 +7,7 @@ import { deepFreeze } from "../contracts/championshipContracts.js";
 import {databaseIllustrationRow} from './databaseIllustrations.js';
 import {projectDatabaseEvolutionRoutes} from './databaseEvolutionRoutes.js';
 import {projectDatabaseEvolutionConditions} from './databaseEvolutionConditions.js';
+import {projectDatabaseBurst} from './databaseBurstEvolution.js';
 import {
   DATABASE_EGG_COUNT,
   DATABASE_REGULAR_COUNT,
@@ -102,7 +103,9 @@ export function projectDatabase({
       evolutionRoutes:projectDatabaseEvolutionRoutes(slot.speciesIndex, routeContext).map(route=>({
         ...route,
         conditions:projectDatabaseEvolutionConditions(slot.speciesIndex, route.branchIndex, {...routeContext,productRouteId:route.productRouteId??null})
-      }))
+      })),
+      // OWNER_APPROVED_ADAPTATION 2026-11-02: forms a 成熟期 bursts into in battle, or the 成熟期 behind a form.
+      burst:projectDatabaseBurst(slot.speciesIndex, routeContext)
     };
   }
 

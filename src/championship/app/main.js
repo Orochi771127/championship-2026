@@ -206,10 +206,20 @@ const BATTLE_AI_POLICY =
 // teams alike); ?battleTaxonomy=original keeps the original damage rules. The tutorial stays original.
 const BATTLE_TAXONOMY_POLICY =
   new URLSearchParams(globalThis.location?.search ?? "").get("battleTaxonomy") === "original" ? "ORIGINAL" : "TAXONOMY_V1";
+// Owner 2026-11-02 (STAGE_REDESIGN_BURST_20261102): menu battles let a 成熟期 burst into its unlocked form and
+// former 覺醒體/究極體 opponents start as their 成熟期 (BURST_V1); ?battleBurst=off keeps the original rules.
+// Link battles stay off: their codes carry no burst plan, and both sides must simulate alike.
+const BATTLE_BURST_POLICY =
+  new URLSearchParams(globalThis.location?.search ?? "").get("battleBurst") === "off" ? "OFF" : "BURST_V1";
 const loadBattleRuntime = async () => {
   const create = (await import("./battleRuntime.js")).createBattleRuntime;
+  // A 覺醒體/究極體 match fixes the form that admitted the partner; otherwise its chosen form.
+  const planOf = entry => entry?.burst ?? (entry?.instanceId ? app?.getBattleBurstPlan?.(entry.instanceId) ?? null : null);
+  const team = list => { const plans = (list ?? []).map(planOf); while (plans.length < 3) plans.push(null); return plans; };
   // Cyber Gachapon: an owned partner's metal bloodline badge rides its battle plate.
-  return options => create({ aiPolicy: BATTLE_AI_POLICY, taxonomyPolicy: BATTLE_TAXONOMY_POLICY, getBloodline: id => app?.getPartnerBloodline?.(id) ?? null, ...options });
+  return options => create({ aiPolicy: BATTLE_AI_POLICY, taxonomyPolicy: BATTLE_TAXONOMY_POLICY, getBloodline: id => app?.getPartnerBloodline?.(id) ?? null,
+    burstPolicy: options.mode === 3 ? "OFF" : BATTLE_BURST_POLICY,
+    burstPlans: [...team(options.playerIndividuals), ...team(options.opponentIndividuals)], ...options });
 };
 
 // Screen modules and art load through their existing foreground owners.
@@ -486,9 +496,24 @@ function releaseStrollHold(id) {
   clearTimeout(pending.timer); strollFlightsPending.delete(id);
   return pending;
 }
+// Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): a partner that unlocks a burst form -- by its own
+// conditions, a battle or an evolution metal -- says so on the ranch, in the stroll toast.
+function showBurstUnlockToast() {
+  if (app?.getScreen?.() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
+  const latest = (app.takeBurstUnlockNotices?.() ?? []).at(-1);
+  if (!latest?.forms?.length) return;
+  const entry = app.getRaisingInstances().find((e) => e.instanceId === latest.instanceId);
+  let toast = document.querySelector('.cm-stroll-toast');
+  if (!toast) { toast = document.createElement('div'); toast.className = 'cm-stroll-toast'; toast.setAttribute('role', 'status'); document.body.append(toast); }
+  toast.textContent = uiText('BURST_UNLOCK_TOAST', { name: entry ? raisingDisplayName(entry) : '', form: speciesName(latest.forms[0]) });
+  toast.classList.remove('is-shown'); void toast.offsetWidth; toast.classList.add('is-shown');
+  clearTimeout(showStrollToast.timer);
+  showStrollToast.timer = setTimeout(() => toast.classList.remove('is-shown'), 3200);
+}
 function listenPartnerFinds() {
   if (partnerFindListening) return;
   partnerFindListening = true;
+  setInterval(showBurstUnlockToast, 2000);
   app.subscribePartnerLife?.((event) => {
     if (event.kind !== 'find' || !event.tool || !toolbar || app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
     toolbar.holdToolStock(event.tool);
@@ -1681,7 +1706,9 @@ async function mountBattleField() {
           const fxLookupsLoading=BATTLE_DYNAMIC_FX?import('./battleFxLookups.js'):null;
           const loaded=await Promise.allSettled([
             step('arena',ownArt(loadOptionalBattleFieldArt(stage,source))),
-            step('fighters',ownArt(loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId),['main'],{signal:characters.signal,battleAtlas:true}))),
+            // Burst evolution (2026-11-02): a combatant's burst form is drawn mid-match, so its art loads up front too.
+            step('fighters',ownArt(loadOptionalCharacterReview(stage,[...new Set(source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId)
+              .flatMap(entry=>[entry.speciesId,...(entry.burst?[`species-${String(entry.burst.form).padStart(3,'0')}`]:[])]))],['main'],{signal:characters.signal,battleAtlas:true}))),
             step('effects',ownArt(loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href}).then(art=>loadOptionalOriginalVfxReview(stage,art))))
           ]);
           [fieldArt,characterRoster,effectArt]=loaded.map(result=>result.status==='fulfilled'?result.value:null);
@@ -2019,6 +2046,16 @@ async function mountCurrentScreen() {
       onRename(instanceId, name) {
         const result = app.renameRosterInstance(instanceId, name);
         if (result.ok) autosave?.request('rename');
+        return result.ok ? { ...result, entries: projectRoster() } : result;
+      },
+      onRebirth(instanceId) {
+        const result = app.rebirthRaisingPartner(instanceId);
+        if (result.ok) autosave?.request('rebirth');
+        return result.ok ? { ...result, entries: projectRoster() } : result;
+      },
+      onBurstForm(instanceId, form) {
+        const result = app.setPartnerBurstForm(instanceId, form);
+        if (result.ok) autosave?.request('burst-form');
         return result.ok ? { ...result, entries: projectRoster() } : result;
       },
       onExit() { app.leaveScreen(); }
@@ -2463,6 +2500,8 @@ function projectRoster() {
       instanceId,
       // The starter's name is set by the opening; collected ones can be renamed.
       bloodline: app.getPartnerBloodline?.(instanceId) ?? null,
+      // OWNER_APPROVED_ADAPTATION 2026-11-02: the 成熟期 partner's burst forms and their progress.
+      burst: app.getPartnerBurst?.(instanceId) ?? null,
       renameable: source?.kind !== "STARTER"
         && Boolean(app.getRaisingState()?.collection?.some((entry) => entry.instanceId === instanceId)),
       stats: profile,

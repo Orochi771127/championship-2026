@@ -3,7 +3,10 @@ import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
-import lifecycle from '../src/data/championship/catalogs/raising-lifecycle.r1.json' with {type:'json'};
+// OWNER_APPROVED_ADAPTATION 2026-11-02: the encyclopedia reads the ranch's growth tables (native branches up to
+// 成熟期 plus three appended ones); 覺醒體/究極體 are battle burst forms, not growth routes.
+import {PRODUCT_GROWTH_RULES} from '../src/championship/contracts/productGrowthRules.js';
+const lifecycle=JSON.parse(JSON.stringify(PRODUCT_GROWTH_RULES));
 import {deepFreeze} from '../src/championship/contracts/championshipContracts.js';
 import {nativeEvolutionRequirements} from '../src/championship/raising/nativeRaisingLifecycle.js';
 import {projectDatabaseEvolutionRoutes} from '../src/championship/database/databaseEvolutionRoutes.js';
@@ -27,11 +30,11 @@ const isolated=(mode,fixture)=>{
   return JSON.parse(child.stdout);
 };
 
-test('all 477 real branches preserve exact rules/order, freeze output and leave frozen inputs unchanged',()=>{
+test('all 235 growth branches preserve exact rules/order, freeze output and leave frozen inputs unchanged',()=>{
   let count=0,rows=0;
   const active=new Set(),kinds={ORDINARY:0,LIFETIME_ONLY:0};
   assert.equal(lifecycle.rules.length,179);
-  assert.equal(lifecycle.rules.filter(group=>group.length).length,178);
+  assert.equal(lifecycle.rules.filter(group=>group.length).length,64);
   assert.equal(Math.max(...lifecycle.rules.map(group=>group.length)),5);
   lifecycle.rules.forEach((group,i)=>group.forEach((rule,branch)=>{
     const source=i+8,context=deepFreeze(options(source,branch)),snapshot=JSON.stringify(context);
@@ -50,8 +53,8 @@ test('all 477 real branches preserve exact rules/order, freeze output and leave 
     assert.deepEqual(project(source,branch,context),result);
     assert.equal(JSON.stringify(context),snapshot);
   }));
-  assert.equal(count,477);assert.equal(rows,473);assert.equal(active.size,15);
-  assert.deepEqual(kinds,{ORDINARY:323,LIFETIME_ONLY:154});
+  assert.equal(count,235);assert.equal(rows,181);assert.equal(active.size,15);
+  assert.deepEqual(kinds,{ORDINARY:159,LIFETIME_ONLY:76});
   assert.equal(JSON.stringify(lifecycle),before);
 });
 
@@ -107,7 +110,7 @@ test('zero disables rows; all-zero lifetime routes retain their lifetime-only co
       allZero++;const result=project(i+8,branch,options(i+8,branch));
       assert.deepEqual(result.conditions,[]);assert.equal(result.lifetimeOnly,true);
     }
-  }));assert.equal(allZero,140);
+  }));assert.equal(allZero,64);
 });
 
 test('real lifetime care uses a lower bound; synthetic ordinary care uses an upper bound',()=>{
@@ -141,21 +144,21 @@ test('11 synthetic stat percentages reuse native target-curve truncation; nonzer
 test('output contains no species/profile/name/raw rule fields and never reports current attainment',()=>{
   const rootKeys=['ruleKind','lifetimeOnly','evaluationOrder','conditions','comparison','caveatIds'].sort();
   const rowKeys=['id','thresholdIndex','operator','value','unit','valueType'].sort();
-  const context=options(171,0);
+  const context=options(56,4);
   for(const key of ['profile','nativeProfile','rng','runtime','save'])Object.defineProperty(context,key,{get(){throw new Error('MUST_NOT_READ_INDIVIDUAL_CONTEXT');}});
-  const result=project(171,0,context);
+  const result=project(56,4,context);
   assert.deepEqual(Object.keys(result).sort(),rootKeys);
   for(const row of result.conditions)assert.deepEqual(Object.keys(row).sort(),rowKeys);
   assert.deepEqual(result.comparison,{state:'NOT_COMPARED',reason:'NO_INDIVIDUAL_CONTEXT'});
-  assert.equal(result.conditions.find(row=>row.id==='EVOLUTION_WIN_PERCENT').value,70);
+  assert.equal(result.conditions.find(row=>row.id==='EVOLUTION_WIN_PERCENT').value,50);
   assert.equal(result.conditions.find(row=>row.id==='EVOLUTION_WIN_PERCENT').valueType,'NATIVE_Q12_INTEGER_PERCENT');
   const serialized=JSON.stringify(result);
   for(const forbidden of ['species-','sourceSpecies','targetSpecies','nativeProfile','displayName','"name"','"current"','"met"','"eligible"','"progress"','"thresholds"'])assert.ok(!serialized.includes(forbidden),forbidden);
   assert.ok(result.caveatIds.includes('THRESHOLDS_DO_NOT_GUARANTEE_EVOLUTION'));
 });
 
-test('pure import and all 477 projections do not invoke resolver/normalizer/constructor, RNG, timers, storage or network',()=>{
-  assert.deepEqual(isolated('purity'),{count:477,importAndProjectionSideEffects:0,forbiddenProjectionCalls:0,functionTrapsVerified:5,globalTrapsVerified:8});
+test('pure import and all 235 projections do not invoke resolver/normalizer/constructor, RNG, timers, storage or network',()=>{
+  assert.deepEqual(isolated('purity'),{count:235,importAndProjectionSideEffects:0,forbiddenProjectionCalls:0,functionTrapsVerified:5,globalTrapsVerified:8});
   const text=readFileSync(new URL('../src/championship/database/databaseEvolutionConditions.js',import.meta.url),'utf8');
   for(const forbidden of [/evaluateNativeEvolution\s*\(/,/evaluateNativeRebirth\s*\(/,/Math\.random\s*\(/,/localStorage/,/setTimeout\s*\(/,/\.next\s*\(/])assert.doesNotMatch(text,forbidden);
 });

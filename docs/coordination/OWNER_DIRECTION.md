@@ -1,5 +1,19 @@
 # Championship Owner Direction
 
+<!-- record-id: STAGE_REDESIGN_BURST_20261102 -->
+## 2026-11-02 — 成熟期 is the main form; 覺醒體 become battle-only burst evolution
+
+After the evolution inventory, the Owner proposes (2026-11-02) 「怕大家都只想用究極體，所以就集體可不可以變成一個所謂的爆裂進化就是在戰鬥中可以進化…把究極體跟覺醒體加在一起統稱覺醒體。讓大家多使用的是成熟期」, asks that hunt maps, free battles, title matches and championships, the encyclopedia's evolution routes and conditions, and the gachapon evolution metals and shards follow it, accepts the stage-redesign proposal (kept with the private art and audit material, outside the repository) and its six recommended values, and directs 「好，可以實作」.
+
+OWNER_APPROVED_ADAPTATION. ROM growth, hatch and evolution functions and tables stay as traced; the product layer wraps them.
+
+- Natural growth: 幼年期 I → 幼年期 II → 成長期 → 成熟期, which is the end. 成熟期 neither evolves nor reaches the end of its life; rebirth is the player's choice (roster 轉生). A fresh egg hatches a 幼年期 I species (pool 8–19 instead of the ROM's 8–27). Three appended branches: B106 → B212 and B212 → GR24 (both could only wait for their lifetime) and GR30 → MA30 (MA30 had no source). `product-growth-adaptations.r1.json`, `productGrowthRules.js`, `productGrowthPolicy.js`.
+- 覺醒體 (burst forms): tier 1 = the former 覺醒體, tier 2 = the former 究極體. Each 成熟期 bursts into the forms of its own former evolution routes (at most three 成熟期 per form). Burst stats = the partner's own × 1.4 (tier 1) / × 1.7 (tier 2); once per battle, about 3 rounds / 20 s, then a short weakness. Tamer rank 4–5 allows tier 1, rank 6+ tier 2.
+- Unlock conditions are the former evolution conditions; former lifetime-only routes use the standard ones (tier 1: race counter ≥ 30 and 8 battles; tier 2: race counter ≥ 60, 16 battles, win 50%). SSR metals unlock a tier-1 form, UR metals a tier-2 form; three shards of one family fuse into the next rarity.
+- Opponents that were 覺醒體/究極體 start as the 成熟期 that bursts into the same form; the five title fixtures restricted to 覺醒體/究極體 accept a 成熟期 with that tier unlocked. Hunts no longer spawn 覺醒體 (each entry becomes a 成熟期 that bursts into it); capturable species absent from every map are placed by element, race and gate fee.
+- Saves: a partner that is already 覺醒體/究極體 returns to its 成熟期 ancestor with that form unlocked.
+- Real time (same day): natural growth to 成熟期 takes about 1.5 days, offline included up to 12 hours; offline never causes sickness, hunger or death.
+
 <!-- record-id: GACHA_ITEM_EFFECTS_20261102 -->
 ## 2026-11-02 — Every gachapon item says what it does, and does it where it is used
 

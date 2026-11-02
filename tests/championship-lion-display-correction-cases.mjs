@@ -1,4 +1,5 @@
 import {APPROVED10,assertApproved20Registry as assert224} from './approved20-20261022-contract.cjs';
+import {PRODUCT_FINAL_NATURAL_GENERATION,productGeneration} from '../src/championship/contracts/productGrowthRules.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -48,6 +49,10 @@ test('upstream and downstream routes keep their original ordered targets, offset
     for(let i=0;i<chain.length-1;i++){
       const source=chain[i],target=chain[i+1];
       const selected=projectDatabase({registeredSpecies:pathIds,evolutionBranches:savedOffsets,selectedSpeciesIndex:source}).selected;
+      // OWNER_APPROVED_ADAPTATION 2026-11-02: natural growth ends at 成熟期; from there the page lists burst forms.
+      if(productGeneration(source)>=PRODUCT_FINAL_NATURAL_GENERATION){
+        assert.deepEqual(selected.evolutionRoutes,[]);assert.ok(selected.burst,`${source} shows its burst forms`);continue;
+      }
       const targets=lifecycle.rules[source-8].map(rule=>rule.target);
       assert.deepEqual(selected.evolutionRoutes.map(r=>r.targetSpeciesIndex),targets);
       const route=selected.evolutionRoutes.find(r=>r.targetSpeciesIndex===target);
@@ -92,9 +97,10 @@ test('normal Database component selects corrected codes, navigates both routes a
 test('native data stays pinned, separately authorized savev7 is reviewed, the original95 heroes stay intact and only the approved MA62 hero is added',()=>{
   // The later Owner-authorized100-cell save extension, then the hex cage world
   // (2026-10-26), then the battle plan (2026-10-28), then the Cyber Gachapon save field
-  // and the first-bind gift marker (both 2026-10-29) supersede this one source pin only.
-  const followup=JSON.parse(fs.readFileSync("docs/contracts/championship/ONLINE_BIND_REWARD_20261029.json","utf8"));
-  assert.equal(followup.supersedes.contract,"docs/contracts/championship/CYBER_GACHA_20261029.json");
+  // and the first-bind gift marker (both 2026-10-29), then the burst evolution record (2026-11-02)
+  // supersede this one source pin only.
+  const followup=JSON.parse(fs.readFileSync("docs/contracts/championship/STAGE_REDESIGN_BURST_20261102.json","utf8"));
+  assert.equal(followup.supersedes.contract,"docs/contracts/championship/ONLINE_BIND_REWARD_20261029.json");
   assert.deepEqual(Object.keys(followup.sourceLocks),["src/championship/app/championshipStandaloneSave.js"]);
   // Owner-authorized MA05 replacement preserves the deployed AW40/GR01 trial and all other221 selections;
   // all unrelated native/gameplay pins remain exact. This pins the entire reviewed new file.

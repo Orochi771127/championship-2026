@@ -22,4 +22,13 @@ function assertCurrentPublicBattleLoaders(assert,reports,beforeCount){
  const report=reports.slice(beforeCount).find(r=>JSON.stringify(r.loadedSides)==='["main"]'&&JSON.stringify([...r.loadedEntityIds].sort())===JSON.stringify(entities));
  assert.ok(report,'New battle-specific actual public main roster must contain exactly all four entities');assert.equal(report.publicCharacters.loaded.length,entities.length);return report;
 }
-module.exports={pairedResolver,validatedPair,assertCurrentPublicBattleLoaders};
+// OWNER_APPROVED_ADAPTATION 2026-11-02 (STAGE_REDESIGN_BURST_20261102): the four forms are burst forms, so the battle's
+// public main roster loads them beside the 成熟期 that fight first; it must hold all four.
+function assertBurstBattleLoaders(assert,reports,beforeCount){
+ assert.ok(Array.isArray(reports)&&reports.length>beforeCount,'New actual public loader report required');
+ const entities=['m528_metaletemon','m540_imperialdramon_fm','oc_crownbrass_mandrill','oc_celestyrant_battle_r10'];
+ for(const report of reports){assert.equal(report.qaObservedLoader,'CURRENT_PUBLIC_CHARACTER_ROSTER');assert.ok(!report.error);assert.deepEqual(report.failures,[]);assert.deepEqual(report.replacementFailures,[]);assert.equal(report.assetId,'art:public:characters:v1');assert.equal(report.runtimeEligible,true);assert.equal(report.publicCharacters?.privateIndexRequested,false);assert.deepEqual([...report.publicCharacters.loaded].sort(),[...report.loadedEntityIds].sort());}
+ const report=reports.slice(beforeCount).find(r=>JSON.stringify(r.loadedSides)==='["main"]'&&entities.every(id=>r.loadedEntityIds.includes(id)));
+ assert.ok(report,'New battle-specific actual public main roster must contain all four burst forms');return report;
+}
+module.exports={pairedResolver,validatedPair,assertCurrentPublicBattleLoaders,assertBurstBattleLoaders};

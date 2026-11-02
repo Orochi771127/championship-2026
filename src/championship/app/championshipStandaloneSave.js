@@ -26,6 +26,7 @@ import { normalizeFreeBattleMenu } from "../battle/nativeFreeBattle.js";
 import { normalizeNativeRaisingMessages } from "../raising/nativeRaisingMessages.js";
 import { normalizeNativeOpening } from './nativeOpeningState.js';
 import { normalizeCyberGacha } from '../gacha/cyberGacha.js';
+import { normalizeBurstEvolution } from '../contracts/productBurstEvolution.js';
 import { RANCH_DECKS_LAYOUT, normalizeRanchExpansion } from "../cage/ranchExpansion.js";
 
 import {getCageDefinitionByModuleId} from "../cage/cageCatalog.js";
@@ -56,7 +57,7 @@ const ALLOWED_TOP_LEVEL_KEYS_V4 = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V3, "
 const ALLOWED_TOP_LEVEL_KEYS = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V4, "huntHistory"]);
 
 const ALLOWED_CREATURE_KEYS = Object.freeze(["creatureId", "speciesId", "displayName", "nativeProfile"]);
-const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun", "freeBattleMenu", "battleTactics", "cyberGacha"]);
+const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun", "freeBattleMenu", "battleTactics", "cyberGacha", "burstEvolution"]);
 const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "cageOwned", "cageQuantities"]);
 // `expansion` exists only beside layoutVersion NATIVE_DECKS_V1 (2026-10-05):
 // the ranch expansion prototype versions its own slice, so a save that never
@@ -405,6 +406,8 @@ export function createChampionshipModernSave({
       ...(progression.battleTactics!==undefined?{battleTactics:normalizeBattleTactics(progression.battleTactics)}:{}),
       // OWNER_APPROVED_ADAPTATION 2026-10-29: Cyber Gachapon tickets, chips, metals and bloodlines.
       ...(progression.cyberGacha!==undefined?{cyberGacha:normalizeCyberGacha(progression.cyberGacha)}:{}),
+      // OWNER_APPROVED_ADAPTATION 2026-11-02: burst evolution unlocks per partner.
+      ...(progression.burstEvolution!==undefined?{burstEvolution:normalizeBurstEvolution(progression.burstEvolution)}:{}),
       ...(progression.nativeTitles!==undefined?{nativeTitles:normalizeNativeTitleProgress(progression.nativeTitles)}:{}),
       // A tournament runs over several rounds, and a browser tab can close
       // between them, so the run is carried. Whether the original's own save

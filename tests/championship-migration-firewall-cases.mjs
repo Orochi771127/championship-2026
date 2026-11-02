@@ -155,6 +155,9 @@ test("only the authorized source families are present", () => {
       // BM05 ice) on the shared Data Arena grid; a local review that reads the
       // session and never changes the original AI.
       "battleArenaHazards.js",
+      // Owner 2026-11-02 (STAGE_REDESIGN_BURST_20261102): opt-in burst evolution (OFF by default), a
+      // per-hit damage scale and a held wrap on the existing session; it owns no screen or RNG.
+      "battleBurst.js",
       "battleCandidateBuckets.js",
       "battleCatalogs.js",
       "battleContactTargeting.js",

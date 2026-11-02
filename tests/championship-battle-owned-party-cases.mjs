@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {burstBasesFor} from '../src/championship/contracts/productBurstEvolution.js';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {battlePartyCondition,nativeBattleQualification,battlePartyAdmission,buildOwnedBattleCreature,settleOwnedBattleIndividual,drawNativeTitleBattleArena} from '../src/championship/battle/battleParty.js';
@@ -75,11 +76,16 @@ test('owned Free Battle singles and teams finish through the shared settlement a
   let runtime;
   try{
     await app.newGame();app.save();
+    // OWNER_APPROVED_ADAPTATION 2026-11-02: a saved 究極體 would return to its 成熟期, so the strong partner is the 成熟期 that bursts into 217.
+    const adultSpecies=burstBasesFor(217)[0];
     const [key,text]=[...data][0],save=JSON.parse(text),adult=structuredClone(nativeIndividualProfile(
-      createNativeHuntIndividual({species:nativeHuntSpeciesByIndex(217),rng:{next:()=>11}})));
+      createNativeHuntIndividual({species:nativeHuntSpeciesByIndex(adultSpecies),rng:{next:()=>11}})));
     adult.fields['050']=adult.fields['058']=30000;adult.fields['054']=adult.fields['05c']=9000;
     for(const entry of BATTLE_CREATURE_STAT_MAP)if(entry.value!==0x54)adult.fields[entry.value.toString(16).padStart(3,'0')]=999;
-    save.creature.nativeProfile=adult;save.creature.speciesId='species-217';data.set(key,JSON.stringify(save));await app.continueGame();
+    // ...trained up to the 究極體's stat levels, so it still wins every round without bursting.
+    const ultimate=nativeIndividualProfile(createNativeHuntIndividual({species:nativeHuntSpeciesByIndex(217),rng:{next:()=>11}}));
+    for(const entry of BATTLE_CREATURE_STAT_MAP)if(entry.level!==null){const k=entry.level.toString(16).padStart(3,'0');adult.fields[k]=ultimate.fields[k];}
+    save.creature.nativeProfile=adult;save.creature.speciesId=`species-${String(adultSpecies).padStart(3,'0')}`;data.set(key,JSON.stringify(save));await app.continueGame();
     const id=app.getRaisingInstances()[0].instanceId;
     for(const kind of ['SINGLE','TEAM']){
       app.openBattle();const match=app.getFreeBattleMatches().find(row=>row.kind===kind),wallet=app.getShopFrame().bits;
@@ -114,11 +120,16 @@ test('owned championship rounds use arena 10, one committed draw and native roun
   let runtime;
   try{
     await app.newGame();app.save();
+    // OWNER_APPROVED_ADAPTATION 2026-11-02: a saved 究極體 would return to its 成熟期, so the strong partner is the 成熟期 that bursts into 217.
+    const adultSpecies=burstBasesFor(217)[0];
     const [key,text]=[...data][0],save=JSON.parse(text),adult=structuredClone(nativeIndividualProfile(
-      createNativeHuntIndividual({species:nativeHuntSpeciesByIndex(217),rng:{next:()=>11}})));
+      createNativeHuntIndividual({species:nativeHuntSpeciesByIndex(adultSpecies),rng:{next:()=>11}})));
     adult.fields['050']=adult.fields['058']=30000;adult.fields['054']=adult.fields['05c']=9000;
     for(const entry of BATTLE_CREATURE_STAT_MAP)if(entry.value!==0x54)adult.fields[entry.value.toString(16).padStart(3,'0')]=999;
-    save.creature.nativeProfile=adult;save.creature.speciesId='species-217';
+    // ...trained up to the 究極體's stat levels, so it still wins every round without bursting.
+    const ultimate=nativeIndividualProfile(createNativeHuntIndividual({species:nativeHuntSpeciesByIndex(217),rng:{next:()=>11}}));
+    for(const entry of BATTLE_CREATURE_STAT_MAP)if(entry.level!==null){const k=entry.level.toString(16).padStart(3,'0');adult.fields[k]=ultimate.fields[k];}
+    save.creature.nativeProfile=adult;save.creature.speciesId=`species-${String(adultSpecies).padStart(3,'0')}`;
     save.progression.nativeTitles.championship={stage:1,entry:1,worldEntry:0};
     data.set(key,JSON.stringify(save));assert.equal(app.inspectSave().present,true,JSON.stringify(app.inspectSave()));
     await app.continueGame();app.openBattle();app.openChampionship();
