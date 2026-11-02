@@ -9,8 +9,11 @@ import {GACHA_PERSONALITY_CHOICES,GACHA_TICKET_PRIZE,getGachaBitsBag,disarmGacha
 import {beginNativeRaisingEvolution} from '../raising/nativeRaisingActor.js';
 import {productRebirth,PRODUCT_GROWTH_RULES} from '../raising/productGrowthPolicy.js';
 import {constructNativeIndividualForm} from '../raising/nativeIndividualEvolution.js';
-import {normalizeBurstEvolution,createBurstEvolutionState,withBurstMigrated,legacyBurstMigration,unlockBurstForms,forgetBurstUnlocks,
-  burstUnlocksOf,earnedBurstForms,metalUnlockableForms,burstFormsFor,evaluateBurstConditions,preferBurstForm,preferredBurstForm,burstPlanFor,burstTierForRank,burstFormTier} from '../contracts/productBurstEvolution.js';
+import {normalizeBurstEvolution,createBurstEvolutionState,withBurstMigrated,legacyBurstMigration,unlockBurstForms,
+  burstUnlocksOf,burstFormsFor,evaluateBurstConditions,preferBurstForm,preferredBurstForm,burstPlanFor,burstTierForRank,burstFormTier,
+  AWAKENING_RULES,partnerAwakenings,awakeningFocus,awakeningTargetOf,awakeningAppearanceOf,transcendStarsOf,feedAwakeningEnergy,
+  addTranscendStar,setAwakeningTarget,setAwakeningAppearance,clearAwakeningShown,learnAwakening,awakeningDisplayFor} from '../contracts/productBurstEvolution.js';
+import {REALTIME_TRAINING_POLICY,recommendedCages} from '../raising/productTrainingPolicy.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
@@ -843,8 +846,8 @@ export function createChampionshipStandaloneApp({
     synchronizeNativeRaisingActors();
     // Real time: each partner ages at its stage's pace and the night is a nap (time/realtimeClock.js).
     const nowMs=realtime?realNowMs():0,night=realtime&&isNightNap(before.clockMinutes);
-    // Training and care move the burst counters; check about once a second of play.
-    burstCheckFrames+=frames;if(burstCheckFrames>=60){burstCheckFrames=0;settleBurstUnlocks();}
+    // Training and care move the awakening conditions; refresh the ranch signs about once a second of play.
+    burstCheckFrames+=frames;if(burstCheckFrames>=60){burstCheckFrames=0;refreshAwakeningSigns();}
     const ids=currentInstanceIds();
     let priorMinutes=0,changed=false;
     for(let frame=1;frame<=frames;frame++) {
@@ -876,6 +879,7 @@ export function createChampionshipStandaloneApp({
         const result=stepNativeRaisingActor(actor,raisingNativeProfile(id),{ageDelta,rng:{next:nextGameplayRandom},
           feeding:raisingGround?{ground:raisingGround,foods:raisingFoods,signals,actors:raisingActors.values()}:null,
           lifecycle:raisingGround?{rank:Math.min(9,tamerRankValue),minute:before.clockMinutes+minutes,season:before.season,
+            training:realtime?REALTIME_TRAINING_POLICY:null,
             onJoin:()=>notifyNativeRaisingResidentAdded(actor,[...raisingActors.values()].filter(a=>!a.detached),{next:nextGameplayRandom}),
             getResidents:()=>[...raisingActors].filter(([,a])=>!a.detached&&(a.cageInstanceId??a.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).sort((a,b)=>a[1].poolSlot-b[1].poolSlot).map(([key])=>raisingNativeProfile(key)),
             roster:[actor.speciesIndex,...ids.filter(other=>other!==id).map(other=>raisingNativeProfile(other).fields['000'])],
@@ -1123,17 +1127,51 @@ export function createChampionshipStandaloneApp({
     burstEvolution=withBurstMigrated(state);
     if(changed)savePort.markDirty();
   }
-  let lastBurstUnlocks=Object.freeze([]),burstCheckFrames=0;
-  /** Record the forms partners have earned by their own conditions; returns [{instanceId, forms}]. */
-  function settleBurstUnlocks(ids=partnerIds(),{publish=true}={}){
-    let state=burstState();const notices=[];
+  let lastBurstUnlocks=Object.freeze([]),burstCheckFrames=0;const awakeningSigns=new Map();
+  /**
+   * Awakening raising (OWNER_APPROVED_ADAPTATION 2026-11-02): a form is learned in its ceremony on the ranch, never
+   * on its own. This refreshes each partner's ranch sign (its focus form: glow from glowPercent, ready at 100 with
+   * every gate met) and returns the partners that just became ready, for a ranch notice.
+   */
+  function refreshAwakeningSigns(ids=partnerIds(),{publish=true}={}){
+    const state=burstState(),notices=[];let changed=false;
     for(const id of ids){
-      const profile=partnerProfile(id);if(!profile)continue;
-      const earned=earnedBurstForms(profile,burstUnlocksOf(state,id));if(!earned.length)continue;
-      state=unlockBurstForms(state,id,earned)??state;notices.push(Object.freeze({instanceId:id,forms:Object.freeze([...earned])}));
+      const profile=partnerProfile(id),awakenings=profile?partnerAwakenings(profile,state,id):[];
+      const ready=awakenings.find(a=>a.ready)??null,focus=ready??awakeningFocus(awakenings,awakeningTargetOf(state,id));
+      const sign=focus?Object.freeze({form:focus.form,tier:focus.tier,percent:focus.percent,glow:focus.glow,ready:Boolean(ready)}):null;
+      const before=awakeningSigns.get(id)??null;
+      if(JSON.stringify(before)!==JSON.stringify(sign)){changed=true;if(sign)awakeningSigns.set(id,sign);else awakeningSigns.delete(id);}
+      if(sign?.ready&&!before?.ready)notices.push(Object.freeze({instanceId:id,forms:Object.freeze([sign.form]),ready:true}));
     }
-    if(notices.length){burstEvolution=state;lastBurstUnlocks=Object.freeze([...lastBurstUnlocks,...notices].slice(-8));savePort.markDirty();if(publish)publishRaising();}
+    if(notices.length)lastBurstUnlocks=Object.freeze([...lastBurstUnlocks,...notices].slice(-8));
+    if(changed&&publish)publishRaising();
     return notices;
+  }
+  /** After a battle or a hunt the ranch partners train once more (REALTIME_V1; raising/productTrainingPolicy.js). */
+  function queueRanchTraining(){if(!realtime)return;for(const actor of raisingActors.values())if(actor.speciesIndex>=8)actor.trainingDue=true;}
+  /** One partner's awakening path (roster card): its forms with progress rows and their cages, gates, usable items. */
+  function partnerAwakeningView(instanceId){
+    const profile=partnerProfile(instanceId);if(!profile)return null;
+    const state=burstState(),awakenings=partnerAwakenings(profile,state,instanceId);if(!awakenings.length)return null;
+    const target=awakeningTargetOf(state,instanceId),focus=awakeningFocus(awakenings,target),plan=partnerBurstPlan(instanceId);
+    const learned=new Set(burstUnlocksOf(state,instanceId)),owned=id=>gachaState().metals[id]??0,rules=AWAKENING_RULES.transcendence;
+    const feeds=GACHA_METALS.filter(m=>owned(m.id)>0).map(m=>{const shard=m.id.endsWith('-shard'),fill=!shard&&m.rarity===AWAKENING_RULES.fillRarity;
+      const amount=!focus?0:fill?100:shard?AWAKENING_RULES.shardEnergy[m.rarity]??0:AWAKENING_RULES.metalEnergy[m.rarity]?.[focus.tier]??0;
+      return {itemId:m.id,name:m.name,rarity:m.rarity,family:m.family,art:m.art,owned:owned(m.id),amount,fill};}).filter(f=>f.amount>0);
+    const bond=profile.fields['020']|0,stars=transcendStarsOf(state,instanceId);
+    const transcendItems=GACHA_METALS.filter(m=>!m.id.endsWith('-shard')&&rules.metalRarities.includes(m.rarity)&&owned(m.id)>0).map(m=>m.id);
+    return deepFreeze({instanceId,base:profile.fields['000'],focus:focus?.form??null,target,appearance:awakeningAppearanceOf(state,instanceId),
+      bloodline:gachaBloodlineOf(cyberGacha,instanceId)?.family??null,bond,stars,maxStars:rules.maxStars,bondMinimum:rules.bondMinimum,
+      canTranscend:stars<rules.maxStars&&bond>=rules.bondMinimum&&transcendItems.length>0,transcendItems,feeds,itemCap:AWAKENING_RULES.itemCap,
+      forms:awakenings.map(a=>({...a,rows:a.rows.map(row=>({...row,cages:recommendedCages(row.id)})),
+        planned:plan&&[a.form,...a.alternates].includes(plan.form)?plan.form:null,alternatesUnlocked:a.alternates.filter(x=>learned.has(x))}))});
+  }
+  /** The battle plan with what the battle reads besides the form: its tier-1 form (tier 2), bloodline and bond. */
+  function battleBurstPlanOf(instanceId,plan=partnerBurstPlan(instanceId)){
+    const profile=partnerProfile(instanceId);if(!plan||!profile)return plan??null;
+    const entry=burstFormsFor(profile.fields['000']).find(f=>f.form===plan.form||f.alternates?.includes(plan.form));
+    return Object.freeze({...plan,via:plan.tier===2?entry?.via??null:null,bloodline:gachaBloodlineOf(cyberGacha,instanceId)?.family??null,
+      bond:profile.fields['020']|0});
   }
   /** One partner's burst forms with their conditions, current values and unlock state (roster, battle setup). */
   function partnerBurstView(instanceId){
@@ -1492,8 +1530,8 @@ export function createChampionshipStandaloneApp({
       battleEconomy = result.state;
       if(preparedRng)gameplayRng=preparedRng;
       for(const entry of individualResults)writeRaisingNativeProfile(entry.instanceId,entry.nativeProfile,{markDirty:false});
-      // Battles and wins are burst conditions: record what the match earned.
-      settleBurstUnlocks(individualResults.map(entry=>entry.instanceId),{publish:false});
+      // Battles and wins are awakening conditions; the ranch partners also train once after the match.
+      queueRanchTraining();refreshAwakeningSigns(individualResults.map(entry=>entry.instanceId),{publish:false});
       // A form the player's partner burst into this match is registered in the encyclopedia.
       for(const form of burstForms)registeredSpeciesValue=registerNativeBookSpecies(registeredSpeciesValue,form);
       if (result.receipt?.status === "SETTLED") {
@@ -1891,7 +1929,7 @@ export function createChampionshipStandaloneApp({
       actor.positionQ12=[Math.trunc(x)*4096,Math.trunc(y)*4096,0];actor.destinationQ12=[...actor.positionQ12];
       actor.cageDefinitionIndex=cage.definitionIndex;actor.cageInstanceId=cage.instanceId;
       if(actor.speciesIndex>=8)writeRaisingNativeProfile(instanceId,enterNativeRaisingCage(actor,raisingNativeProfile(instanceId),{
-        previousDefinition,ground:raisingGround,foods:raisingFoods,season:requireSession().getRaisingHomeSnapshot().season}, {next:nextGameplayRandom}));
+        previousDefinition,ground:raisingGround,foods:raisingFoods,season:requireSession().getRaisingHomeSnapshot().season,trainingCooldown:realtime}, {next:nextGameplayRandom}));
       storeNativeRaisingPositions();storeNativeRaisingHome();interactionCount++;savePort.markDirty();publishRaising();return true;
     },
 
@@ -2942,8 +2980,8 @@ export function createChampionshipStandaloneApp({
       const rebirth=productRebirth(profile);
       if(!rebirth.ok)return Object.freeze({ok:false,reason:rebirth.reason});
       writeRaisingNativeProfile(instanceId,rebirth.profile);
-      // A reborn partner grows into a 成熟期 of its own again, so its burst forms start over.
-      burstEvolution=forgetBurstUnlocks(burstState(),instanceId)??burstEvolution;
+      // Awakening raising (Owner 2026-11-02): a reborn partner keeps every form it learned; it bursts into them
+      // again once it is a 成熟期 that can (awakeningDisplayFor and burstPlanFor read its current 成熟期).
       beginNativeRaisingEvolution(actor,{target:rebirth.target},{next:nextGameplayRandom},raisingFoods);
       publishRaising();
       return Object.freeze({ok:true,target:rebirth.target});
@@ -3129,7 +3167,102 @@ export function createChampionshipStandaloneApp({
     getPartnerBloodline(instanceId){return gachaBloodlineOf(cyberGacha,instanceId);},
     /** The partner's burst forms, conditions, current values and unlock state (OWNER_APPROVED_ADAPTATION 2026-11-02). */
     getPartnerBurst(instanceId){return partnerBurstView(instanceId);},
-    getBattleBurstPlan(instanceId){return partnerBurstPlan(instanceId);},
+    getBattleBurstPlan(instanceId){return battleBurstPlanOf(instanceId);},
+    /** Awakening raising (OWNER_APPROVED_ADAPTATION 2026-11-02): the partner's awakening path, or null. */
+    getPartnerAwakening(instanceId){return partnerAwakeningView(instanceId);},
+    /** Ranch signs of partners still raising a form: {instanceId: {form, tier, percent, glow, ready}}. */
+    getAwakeningSigns(){return Object.freeze(Object.fromEntries(awakeningSigns));},
+    /** The learned form a 成熟期 shows on the ranch now (its ceremony's display, or its chosen look), or null. */
+    getRaisingDisplaySpecies(instanceId){
+      const profile=partnerProfile(instanceId);
+      return profile?awakeningDisplayFor(burstState(),instanceId,profile.fields['000'],realNowMs()):null;
+    },
+    /** The form shards and metals push for this partner (null: the default focus). */
+    setAwakeningTarget(instanceId,form){
+      requireSession();
+      const view=partnerAwakeningView(instanceId);if(!view)return Object.freeze({ok:false,reason:'NOT_AWAKENABLE'});
+      if(form!==null&&!view.forms.some(f=>f.form===form&&!f.learned))return Object.freeze({ok:false,reason:'NOT_A_TARGET'});
+      const next=setAwakeningTarget(burstState(),instanceId,form);
+      if(next){burstEvolution=next;savePort.markDirty();refreshAwakeningSigns([instanceId]);}
+      return Object.freeze({ok:true,target:form});
+    },
+    /**
+     * Feed a shard or a metal to the partner's focus form: shards and SSR metals add awakening energy up to the
+     * item cap, a UR metal fills the form and lifts its rebirth gate. A full metal also raises every stat and
+     * inscribes its bloodline, as using it always did.
+     */
+    feedAwakening(instanceId,itemId){
+      requireSession();
+      const metal=getGachaMetal(itemId),state=gachaState();
+      if(!metal)return gachaRefusal('UNKNOWN_ITEM');
+      if((state.metals[itemId]??0)<1)return gachaRefusal('NOT_OWNED');
+      const profile=gachaProfile(instanceId);if(!profile)return gachaRefusal('UNKNOWN_INDIVIDUAL');
+      const view=partnerAwakeningView(instanceId),focus=view?.forms.find(f=>f.form===view.focus)??null;
+      if(!focus)return gachaRefusal('NO_AWAKENING_TARGET');
+      const shard=metal.id.endsWith('-shard'),fill=!shard&&metal.rarity===AWAKENING_RULES.fillRarity;
+      const amount=fill?100:shard?AWAKENING_RULES.shardEnergy[metal.rarity]??0:AWAKENING_RULES.metalEnergy[metal.rarity]?.[focus.tier]??0;
+      if(!amount)return gachaRefusal('NOT_AN_AWAKENING_ITEM');
+      const nextBurst=feedAwakeningEnergy(burstState(),instanceId,focus.form,{amount,fill});
+      if(!nextBurst)return gachaRefusal('AWAKENING_ENERGY_FULL');
+      const bloodline=inscribesBloodline(metal)?metal.family:null;
+      const spent=spendGachaItem(state,itemId,{instanceId,bloodline});
+      if(!spent.ok)return gachaRefusal(spent.reason);
+      const before={creature,raising,registered:registeredSpeciesValue,burst:burstEvolution};
+      if(!shard)writeRaisingNativeProfile(instanceId,normalizeNativeIndividualProfile(applyGachaBoost(profile,metalBoostEffect(metal)),
+        this.resolveRaisingInstance(instanceId).speciesId),{markDirty:false});
+      burstEvolution=nextBurst;
+      if(!commitGacha({state:spent.state})){
+        creature=before.creature;raising=before.raising;registeredSpeciesValue=before.registered;burstEvolution=before.burst;return gachaRefusal('SAVE_FAILED');
+      }
+      refreshAwakeningSigns([instanceId],{publish:false});publishRaising();
+      const after=partnerAwakeningView(instanceId)?.forms.find(f=>f.form===focus.form);
+      return gachaReceipt({ok:true,kind:'AWAKEN_ENERGY',itemId,instanceId,target:focus.form,tier:focus.tier,amount,fill,
+        percent:after?.percent??null,ready:after?.ready===true,bloodline});
+    },
+    /** Core transcendence: with bond at bondMinimum, a full SSR/UR metal lights a star that counts as a rebirth. */
+    transcendPartner(instanceId,itemId){
+      requireSession();
+      const metal=getGachaMetal(itemId),state=gachaState(),rules=AWAKENING_RULES.transcendence;
+      if(!metal||metal.id.endsWith('-shard')||!rules.metalRarities.includes(metal.rarity))return gachaRefusal('NOT_A_TRANSCEND_METAL');
+      if((state.metals[itemId]??0)<1)return gachaRefusal('NOT_OWNED');
+      const profile=gachaProfile(instanceId);
+      if(!profile||!burstFormsFor(profile.fields['000']).length)return gachaRefusal('NOT_AWAKENABLE');
+      if((profile.fields['020']|0)<rules.bondMinimum)return gachaRefusal('BOND_TOO_LOW');
+      const nextBurst=addTranscendStar(burstState(),instanceId);if(!nextBurst)return gachaRefusal('STARS_FULL');
+      const bloodline=inscribesBloodline(metal)?metal.family:null;
+      const spent=spendGachaItem(state,itemId,{instanceId,bloodline});if(!spent.ok)return gachaRefusal(spent.reason);
+      const before=burstEvolution;burstEvolution=nextBurst;
+      if(!commitGacha({state:spent.state})){burstEvolution=before;return gachaRefusal('SAVE_FAILED');}
+      refreshAwakeningSigns([instanceId],{publish:false});publishRaising();
+      return gachaReceipt({ok:true,kind:'TRANSCEND',itemId,instanceId,stars:transcendStarsOf(burstEvolution,instanceId),bloodline});
+    },
+    /**
+     * The first awakening, played on the ranch: a ready form is learned, the account remembers it, the
+     * encyclopedia registers it and the ranch shows it for ceremonyDisplaySeconds. A tier-2 form plays through
+     * its tier-1 form (`via`).
+     */
+    awakenPartner(instanceId,form=null){
+      requireSession();
+      const view=partnerAwakeningView(instanceId);if(!view)return Object.freeze({ok:false,reason:'NOT_AWAKENABLE'});
+      const ready=view.forms.filter(f=>f.ready),chosen=ready.find(f=>f.form===form)??ready.find(f=>f.form===view.focus)??ready[0];
+      if(!chosen)return Object.freeze({ok:false,reason:'NOT_READY'});
+      const until=realNowMs()+AWAKENING_RULES.ceremonyDisplaySeconds*1000;
+      burstEvolution=learnAwakening(burstState(),instanceId,chosen.form,{shownUntil:until});
+      for(const f of [chosen.form,...chosen.alternates])registeredSpeciesValue=registerNativeBookSpecies(registeredSpeciesValue,f);
+      savePort.markDirty();refreshAwakeningSigns([instanceId],{publish:false});publishRaising();
+      const bloodline=gachaBloodlineOf(cyberGacha,instanceId);
+      return Object.freeze({ok:true,instanceId,form:chosen.form,tier:chosen.tier,via:chosen.tier===2?chosen.via:null,base:view.base,
+        bloodline:bloodline?Object.freeze({family:bloodline.family,color:bloodline.color,ring:bloodline.ring}):null,until});
+    },
+    /** The ranch look: a learned form, or null for the 成熟期 itself; it also ends the ceremony's display. */
+    setPartnerAppearance(instanceId,form){
+      requireSession();
+      if(!partnerProfile(instanceId))return Object.freeze({ok:false,reason:'UNKNOWN_INDIVIDUAL'});
+      if(form!==null&&!burstUnlocksOf(burstState(),instanceId).includes(form))return Object.freeze({ok:false,reason:'BURST_FORM_LOCKED'});
+      const current=burstState(),chosen=setAwakeningAppearance(current,instanceId,form)??current,next=clearAwakeningShown(chosen,instanceId)??chosen;
+      if(next!==current){burstEvolution=next;savePort.markDirty();publishRaising();}
+      return Object.freeze({ok:true,appearance:form});
+    },
     /** Choose which unlocked form (an alternate included) this partner bursts into. */
     setPartnerBurstForm(instanceId,form){
       requireSession();
@@ -3213,6 +3346,8 @@ export function createChampionshipStandaloneApp({
       if(!profile)return gachaRefusal('UNKNOWN_INDIVIDUAL');
       const speciesId=this.resolveRaisingInstance(instanceId).speciesId;
       const bloodline=metal&&inscribesBloodline(metal)?metal.family:null;
+      // Awakening raising (Owner 2026-11-02): a metal or shard used on a 成熟期 feeds its awakening.
+      if(metal&&mode==='CATALYST'&&nativeHuntSpeciesByIndex(profile.fields['000']).generation===4)return this.feedAwakening(instanceId,itemId);
       if(metal&&mode==='CATALYST'){
         const actor=raisingActors.get(instanceId),index=profile.fields['000'];
         if(!actor)return gachaRefusal('PARTNER_NOT_IN_RANCH');
@@ -3722,7 +3857,7 @@ export function createChampionshipStandaloneApp({
         // A 成熟期 admitted to a 覺醒體/究極體 match bursts into the form that admitted it.
         const fitting=nativeBattleQualification(nativeProfile,condition)?null:burstFormFitting(nativeProfile,condition,partnerBurstForms(instanceId));
         individuals.push({instanceId,nativeProfile:structuredClone(nativeProfile),
-          ...(fitting!==null?{burst:Object.freeze({form:fitting,tier:burstFormTier(fitting)})}:{})});
+          ...(fitting!==null?{burst:battleBurstPlanOf(instanceId,Object.freeze({form:fitting,tier:burstFormTier(fitting)}))}:{})});
       }
       return {ok:true,individuals};
     },
@@ -4024,6 +4159,7 @@ export function createChampionshipStandaloneApp({
       if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD) return screens.current();
       if (huntRuntime?.hasPendingCaptureAnimation()) return screens.current();
       huntCommitActive = true;
+      queueRanchTraining();
       try {
         const returnContext = huntRuntime?.getNativeReturnContext?.();
         if (returnContext) {
