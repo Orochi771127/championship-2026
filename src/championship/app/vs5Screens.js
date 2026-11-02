@@ -899,8 +899,15 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
   // the burst form lasts; the plate glows while wrapped or burst and dims while weakened.
   let burstMeter = null, burstPhase = null, shownName = combatant.displayName ?? null;
   if (combatant.burst) {
-    burstMeter = meter("cm-vs5-meter--burst", "BATTLE_BURST_GAUGE");
-    card.append(burstMeter.wrap);
+    // Its own element, not a .cm-vs5-meter: the HP/TP meter readers (and their geometry checks) never see it.
+    const wrap = element("div", "cm-vs5-burst-gauge");
+    wrap.setAttribute("aria-label", uiText("BATTLE_BURST_GAUGE"));
+    wrap.setAttribute("role", "meter");
+    wrap.setAttribute("aria-valuemin", "0");
+    const fill = element("span", "cm-vs5-burst-gauge__fill");
+    wrap.append(fill);
+    burstMeter = { wrap, fill };
+    card.append(wrap);
   }
   return {
     card,
