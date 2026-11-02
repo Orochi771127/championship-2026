@@ -175,7 +175,7 @@ function requireSession(session) {
  */
 export function createBattlePresentationSource({ session, step, arenaIndex = 0, getSpecialPrelude = () => null,
   getOpening = () => null, getNativeActor = () => null, getNativeLifecycle = () => null, getImpactEffects = () => [],
-  getArenaHazards = () => null, getBloodline = () => null } = {}) {
+  getArenaHazards = () => null, getBloodline = () => null, getBurst = () => null } = {}) {
   requireSession(session);
   if (typeof step !== "function") {
     throw sourceError("REQUIRES_A_STEP_FUNCTION");
@@ -214,9 +214,19 @@ export function createBattlePresentationSource({ session, step, arenaIndex = 0, 
     // Cyber Gachapon (2026-10-29): present only when this owned partner has one.
     let bloodline=null;
     try{bloodline=combatant?.instanceId?getBloodline(combatant.instanceId):null;}catch{bloodline=null;}
+    // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): a combatant may be shown as another species (its
+    // burst form, or the 成熟期 a former 覺醒體/究極體 preset starts as). That species has its own art, so the
+    // native cell sample of the fighting species is withheld and the shared sequence request drives it.
+    let burst=null;
+    try{burst=getBurst(slot);}catch{burst=null;}
+    const shown=burst?.display??null;
+    const displayed=shown!==null&&shown!==combatant.speciesId&&isKnownSpeciesIndex(shown)?productSpeciesRecord(shown):null;
     return deepFreeze({...projected,
+      ...(displayed ? {speciesId:`species-${String(displayed.recordIndex).padStart(3,"0")}`,displayName:speciesName(displayed.recordIndex,displayed.identifier)} : {}),
       ...(bloodline ? {bloodline:{family:bloodline.family,title:bloodline.title,color:bloodline.color}} : {}),
-      ...(native ? {stand:native.stand,nativeMotion:native.motion,nativeAnimation:native.nativeAnimation} : {}),
+      ...(burst ? {burst:{phase:burst.phase,gauge:burst.gauge,gaugeMax:burst.gaugeMax,tier:burst.tier,form:burst.form,base:burst.base,
+        wrapFrame:burst.wrapFrame,wrapFrames:burst.wrapFrames,phaseFrame:burst.phaseFrame,burstFrames:burst.burstFrames,weakFrames:burst.weakFrames}} : {}),
+      ...(native ? {stand:native.stand,nativeMotion:native.motion,nativeAnimation:displayed?null:native.nativeAnimation} : {}),
       animationRequest:focusRequest ?? native?.animationRequest ?? {...projected.animationRequest,
         sequenceStartFrame:animationStarts.get(slot)?.frame??null}});
   }

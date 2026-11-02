@@ -1105,26 +1105,26 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
   function paintBurst(selected) {
     const burst = selected.burst;
     if (!burst) return;
-    const section = element('section', 'cm-dex-routes cm-dex-burst');
+    const section = element('section', 'cm-dex-burst');
     section.dataset.burstKind = burst.kind;
     section.setAttribute('aria-label', uiText('DEX_BURST'));
-    section.append(element('h3', 'cm-dex-routes__heading', 'DEX_BURST'),
+    section.append(element('h3', 'cm-dex-burst__heading', 'DEX_BURST'),
       element('p', 'cm-vs2-shop__meta', burst.kind === 'BASE' ? 'DEX_BURST_NOTE' : 'DEX_BURST_FROM'));
     const rows = burst.kind === 'BASE'
       ? burst.forms.map(form => ({species: form.formSpeciesIndex, revealed: form.revealed, tier: form.tier, conditions: form.conditions}))
       : burst.bases.map(base => ({species: base.baseSpeciesIndex, revealed: base.revealed, tier: burst.tier, conditions: null}));
-    const targets = element('ul', 'cm-dex-routes__targets');
+    const targets = element('ul', 'cm-dex-burst__targets');
     for (const row of rows) {
       const mapping = getDatabaseDisplayEntry(row.species);
       const name = row.revealed ? speciesName(row.species) : '????';
-      const item = element('li', 'cm-dex-routes__branch');
+      const item = element('li', 'cm-dex-burst__branch');
       item.dataset.burstTier = String(row.tier);
-      const button = element('button', 'cm-dex-routes__target');
+      const button = element('button', 'cm-dex-burst__target');
       button.type = 'button'; button.disabled = !row.revealed;
       button.setAttribute('aria-label', `${mapping?.displayCode ?? ''} · ${name} · ${uiText(`DEX_BURST_TIER_${row.tier}`)}`);
-      const copy = element('span', 'cm-dex-routes__copy');
-      copy.append(element('span', 'cm-vs2-shop__meta', mapping?.displayCode ?? ''), element('strong', 'cm-dex-routes__name', name),
-        element('span', 'cm-dex-routes__status', `DEX_BURST_TIER_${row.tier}`));
+      const copy = element('span', 'cm-dex-burst__copy');
+      copy.append(element('span', 'cm-vs2-shop__meta', mapping?.displayCode ?? ''), element('strong', 'cm-dex-burst__name', name),
+        element('span', 'cm-dex-burst__status', `DEX_BURST_TIER_${row.tier}`));
       button.append(portrait(row.species, row.revealed), copy);
       button.addEventListener('click', () => {
         listScroll = list.scrollTop;

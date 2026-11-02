@@ -843,3 +843,36 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter[data-present="false"] { display: none; }
 
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--resource .cm-vs5-meter__value { font-size: calc(11px * var(--text-scale, 1)); }
+
+/* ---------------- Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02) ----------------
+   The gauge rides the card's bottom edge out of the grid flow, so no card layout gains a row. */
+.cm-vs5-fighter > .cm-vs5-meter--burst {
+  position: absolute; left: 8px; right: 8px; bottom: 2px; height: 3px; min-height: 0;
+  border-radius: 2px; background: rgba(30, 58, 138, 0.35); overflow: hidden;
+}
+.cm-vs5-meter--burst .cm-vs5-meter__fill { background: linear-gradient(90deg, #3b82f6, #7dd3fc); }
+.cm-vs5-fighter[data-burst-ready="true"] .cm-vs5-meter--burst .cm-vs5-meter__fill { background: #e0f2fe; animation: cm-vs5-burst-ready .6s ease-in-out infinite alternate; }
+.cm-vs5-fighter[data-burst="WRAP"], .cm-vs5-fighter[data-burst="BURST"] { box-shadow: 0 0 0 2px #7dd3fc, 0 0 14px rgba(125, 211, 252, .65); }
+.cm-vs5-fighter[data-burst="WEAK"] { filter: saturate(.55) brightness(.9); }
+.cm-vs5-burst-call {
+  position: absolute; left: 50%; top: 20%; z-index: 6; margin: 0; padding: 6px 22px;
+  transform: translate(-50%, 0); white-space: nowrap; pointer-events: none;
+  font-weight: 800; font-size: clamp(18px, 4.4vw, 34px); letter-spacing: .06em; color: #fff;
+  background: linear-gradient(90deg, rgba(30, 58, 138, 0), rgba(30, 58, 138, .86) 18%, rgba(30, 58, 138, .86) 82%, rgba(30, 58, 138, 0));
+  text-shadow: 0 2px 0 #1e3a8a, 0 0 12px #7dd3fc;
+}
+.cm-vs5-burst-call[data-tier="2"] { text-shadow: 0 2px 0 #1b2f73, 0 0 14px #ffd36b; }
+.cm-vs5-burst-call[data-side="opponent"] { top: auto; bottom: 20%; }
+.cm-vs5-burst-call.is-live { animation: cm-vs5-burst-call 1.4s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes cm-vs5-burst-call {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(1.6); }
+  12% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  80% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -8px) scale(1); }
+}
+@keyframes cm-vs5-burst-ready { from { opacity: .55; } to { opacity: 1; } }
+@keyframes cm-vs5-burst-call-fade { 0%, 100% { opacity: 0; } 10%, 85% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .cm-vs5-burst-call.is-live { animation-name: cm-vs5-burst-call-fade; }
+  .cm-vs5-fighter[data-burst-ready="true"] .cm-vs5-meter--burst .cm-vs5-meter__fill { animation: none; }
+}

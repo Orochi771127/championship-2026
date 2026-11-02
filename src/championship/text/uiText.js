@@ -116,6 +116,8 @@ export const UI_COPY = Object.freeze({
   "DEX_BURST_TIER_1": "一段覺醒",
   "DEX_BURST_TIER_2": "二段覺醒",
   "DEX_BURST_METAL": "條件達成即可解鎖；SSR 進化金屬可直接解鎖一段，UR 進化金屬可直接解鎖二段。",
+  "BATTLE_BURST_GAUGE": "爆裂量表",
+  "BATTLE_BURST_CALL": "爆裂進化！{name}",
   "DEX_IMAGE_MISSING": "圖像暫缺",
   "DEX_STAGE": "成長階段",
   "DEX_ALL": "全部階段",

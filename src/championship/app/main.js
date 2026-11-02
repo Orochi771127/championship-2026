@@ -205,10 +205,19 @@ const BATTLE_AI_POLICY =
 // teams alike); ?battleTaxonomy=original keeps the original damage rules. The tutorial stays original.
 const BATTLE_TAXONOMY_POLICY =
   new URLSearchParams(globalThis.location?.search ?? "").get("battleTaxonomy") === "original" ? "ORIGINAL" : "TAXONOMY_V1";
+// Owner 2026-11-02 (STAGE_REDESIGN_BURST_20261102): menu battles let a 成熟期 burst into its unlocked form and
+// former 覺醒體/究極體 opponents start as their 成熟期 (BURST_V1); ?battleBurst=off keeps the original rules.
+// Link battles stay off: their codes carry no burst plan, and both sides must simulate alike.
+const BATTLE_BURST_POLICY =
+  new URLSearchParams(globalThis.location?.search ?? "").get("battleBurst") === "off" ? "OFF" : "BURST_V1";
 const loadBattleRuntime = async () => {
   const create = (await import("./battleRuntime.js")).createBattleRuntime;
+  const planOf = entry => entry?.instanceId ? app?.getBattleBurstPlan?.(entry.instanceId) ?? null : null;
+  const team = list => { const plans = (list ?? []).map(planOf); while (plans.length < 3) plans.push(null); return plans; };
   // Cyber Gachapon: an owned partner's metal bloodline badge rides its battle plate.
-  return options => create({ aiPolicy: BATTLE_AI_POLICY, taxonomyPolicy: BATTLE_TAXONOMY_POLICY, getBloodline: id => app?.getPartnerBloodline?.(id) ?? null, ...options });
+  return options => create({ aiPolicy: BATTLE_AI_POLICY, taxonomyPolicy: BATTLE_TAXONOMY_POLICY, getBloodline: id => app?.getPartnerBloodline?.(id) ?? null,
+    burstPolicy: options.mode === 3 ? "OFF" : BATTLE_BURST_POLICY,
+    burstPlans: [...team(options.playerIndividuals), ...team(options.opponentIndividuals)], ...options });
 };
 
 // Screen modules and art load through their existing foreground owners.
@@ -2014,6 +2023,11 @@ async function mountCurrentScreen() {
       onRebirth(instanceId) {
         const result = app.rebirthRaisingPartner(instanceId);
         if (result.ok) autosave?.request('rebirth');
+        return result.ok ? { ...result, entries: projectRoster() } : result;
+      },
+      onBurstForm(instanceId, form) {
+        const result = app.setPartnerBurstForm(instanceId, form);
+        if (result.ok) autosave?.request('burst-form');
         return result.ok ? { ...result, entries: projectRoster() } : result;
       },
       onExit() { app.leaveScreen(); }

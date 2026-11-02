@@ -101,7 +101,7 @@ const ROW_GROUPS = Object.freeze({
   num_battle: "record", win_rate: "record", digitama: "record"
 });
 
-export function appendCreatureDetail(detail, entry) {
+export function appendCreatureDetail(detail, entry, { onBurstForm = null } = {}) {
   for (const row of TRACED_DETAIL_ROWS) {
     const value = row.read(entry);
     if (value === null || value === undefined) continue;
@@ -137,13 +137,29 @@ export function appendCreatureDetail(detail, entry) {
     group.append(element("dt", "cm-digimon-detail__label", "DEX_BURST"));
     const cell = element("dd", "cm-digimon-detail__value");
     for (const form of entry.burst) {
-      const line = element("p", "cm-digimon-burst__form");
-      line.dataset.tier = String(form.tier);
-      line.dataset.unlocked = String(form.unlocked);
-      line.append(element("strong", "", `DEX_BURST_TIER_${form.tier}`), " ", element("span", "", speciesName(form.form), false), " ");
-      if (form.unlocked) line.append(element("span", "cm-digimon-burst__state", "已解鎖"));
-      else line.append(element("span", "cm-digimon-burst__state", form.rows.map(row => `${uiText(`DEX_CONDITION_${row.id}`)} ${row.current}/${row.value}`).join("・"), false));
-      cell.append(line);
+      // Each unlocked form, and each unlocked alternate of it, is a choice for the battle burst.
+      for (const shown of [form.form, ...(form.unlocked ? form.alternatesUnlocked ?? [] : [])]) {
+        const line = element("p", "cm-digimon-burst__form");
+        line.dataset.tier = String(form.tier);
+        line.dataset.unlocked = String(form.unlocked);
+        line.append(element("strong", "", `DEX_BURST_TIER_${form.tier}`), " ", element("span", "", speciesName(shown), false), " ");
+        if (!form.unlocked) {
+          line.append(element("span", "cm-digimon-burst__state", form.rows.map(row => `${uiText(`DEX_CONDITION_${row.id}`)} ${row.current}/${row.value}`).join("・"), false));
+        } else if (form.planned === shown) {
+          line.dataset.planned = "true";
+          line.append(element("span", "cm-digimon-burst__state", "出戰形態"));
+        } else {
+          line.append(element("span", "cm-digimon-burst__state", "已解鎖"));
+          if (onBurstForm) {
+            const choose = element("button", "cm-digimon-burst__choose", "設為爆裂形態");
+            choose.type = "button";
+            choose.dataset.form = String(shown);
+            choose.addEventListener("click", () => onBurstForm(entry.instanceId, shown));
+            line.append(" ", choose);
+          }
+        }
+        cell.append(line);
+      }
     }
     group.append(cell);
     detail.append(group);
@@ -184,7 +200,7 @@ export function appendCreatureDetail(detail, entry) {
  * @param {(instanceId: string, name: string) => ({ok: boolean, entries?: Array<object>})} [options.onRename]
  * @param {(instanceId: string) => ({ok: boolean, reason?: string, entries?: Array<object>})} [options.onRebirth]
  */
-export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null } = {}) {
+export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null, onBurstForm = null } = {}) {
   if (!root) throw new TypeError("The Digimon list requires a root element");
 
   root.replaceChildren();
@@ -207,7 +223,10 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
       detail.append(element("p", "cm-digimon-empty", "No partner in the roster."));
       return;
     }
-    appendCreatureDetail(detail, entry);
+    appendCreatureDetail(detail, entry, { onBurstForm: onBurstForm ? (instanceId, form) => {
+      const result = onBurstForm(instanceId, form);
+      if (result?.ok && Array.isArray(result.entries)) { entries = result.entries; renderDetail(); }
+    } : null });
     // Say what is missing rather than leaving the panel silently short.
     const note = element("p", "cm-digimon-untraced",
       `${UNTRACED_DETAIL_ROWS.length} further rows the original shows are not traced yet.`);

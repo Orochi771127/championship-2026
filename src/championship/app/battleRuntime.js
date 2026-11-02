@@ -64,6 +64,8 @@ import { createBattleImpactEffects } from '../battle/battleImpactEffects.js';
 import {createBattleSoundEvents} from '../battle/battleSoundEvents.js';
 import {beginBattlePresentationEngagement,endBattlePresentationEngagement,writeBattleHitTiming,advanceBattlePresentationTiming} from '../battle/battlePresentationHost.js';
 import { createBattleHitRuntime } from '../battle/battleHitRuntime.js';
+import {createBattleBurst,BATTLE_BURST_OFF} from '../battle/battleBurst.js';
+import {burstBasesFor,burstFormTier,burstMultiplier} from '../contracts/productBurstEvolution.js';
 import {createBattleNormalRuntime} from '../battle/battleNormalRuntime.js';
 import {normalBattleStands,normalBattleLaunchGuard} from '../battle/battleNormalFlow.js';
 import { battleHitEligible } from '../battle/battleHitState.js';
@@ -122,6 +124,11 @@ export function createBattleRuntime(options = {}) {
   const aiPolicy=options.aiPolicy??BATTLE_AI_ORIGINAL;
   const taxonomyPolicy=options.taxonomyPolicy??BATTLE_TAXONOMY_ORIGINAL;
   let taxonomy=createBattleTaxonomyAdaptation({policy:taxonomyPolicy});
+  // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02) is opt-in like the taxonomy: OFF keeps parity
+  // fixtures and replays on the original rules. burstPlans[slot] is an owned partner's {form, tier}.
+  const burstPolicy=options.burstPolicy??BATTLE_BURST_OFF;
+  const burstPlans=Array.isArray(options.burstPlans)?options.burstPlans:[];
+  let burst=createBattleBurst({policy:BATTLE_BURST_OFF});
   // Owner-approved arena hazards (2026-10-18) are opt-in per battle. Off keeps
   // every parity fixture and replay byte-for-byte on the original rules.
   // Arena hazards are injected (createBattleArenaHazards), never imported here,
@@ -396,8 +403,9 @@ export function createBattleRuntime(options = {}) {
       });
       if (!inputs) continue;
       const resolvedNative = resolveBattleDamage({ ...inputs, rng, critBonus: taxonomy.critBonus(slot) });
-      const resolved = {...resolvedNative, damage: taxonomy.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
-        elementSelector: move.elementSelect ?? 0, damage: resolvedNative.damage, signature: signatureMoves[slot] === move.recordIndex})};
+      const resolved = {...resolvedNative, damage: burst.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
+        damage: taxonomy.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
+          elementSelector: move.elementSelect ?? 0, damage: resolvedNative.damage, signature: signatureMoves[slot] === move.recordIndex})})};
       const result=hitRuntime.apply(targetSlot,{move,damage:resolved.damage,critical:resolved.critical,nativeKind,
         sourcePoint:parameters?effectActors.position(parameters):nativeActors.position(slot),statusInputs:{attackerIndex:inputs.statusAttackerIndex,
           selectedDefenseIndex:inputs.statusDefenderIndex,
@@ -408,6 +416,7 @@ export function createBattleRuntime(options = {}) {
         actor:parameters,sourcePoint:effectActors.position(parameters),hpAfter:defender.currentHp,result:result.code});
         if(contacts.history.length>128)contacts.history.shift();}
       hits.push({ slot: targetSlot, damage: resolved.damage, critical: resolved.critical });
+      burst.onHit({attackerSlot:slot,defenderSlot:targetSlot,damage:resolved.damage,defenderMaxHp:defender.maxHp??0});
       arenaHazards?.onHit({move,attackerSlot:slot,targetPosition:nativeActors?.position(targetSlot)});
       state?.launch?.startImpact({targetObject:nativeActors.address(targetSlot),xyz:nativeActors.position(targetSlot),
         targetBox:nativeActors.box(targetSlot),resultCode:result.code,nativeKind,offset:impactOffset,
@@ -441,6 +450,8 @@ export function createBattleRuntime(options = {}) {
     // The opening never touches native flags, animation, AI, cooldown, clock or RNG.
     // Once released, the established timing/exclusive/session order is unchanged.
     if(!opening.advance())return deepFreeze({frame:liveSession.frame,events:[],ended:false});
+    // A burst wrap holds the whole battle: no native frame, AI, clock or RNG advances while it plays.
+    if(burst.holding()){burst.hold(liveSession.frame);return deepFreeze({frame:liveSession.frame,events:[],ended:false});}
     nativeActors?.setFrame(liveSession.frame);
     nativeActors.updateWorldFlags();
     if(!advanceBattlePresentationTiming(nativeActors.memory,nativeActors.worldAddress)){
@@ -483,6 +494,7 @@ export function createBattleRuntime(options = {}) {
     nativeActors?.advance();
     effectActors?.advance();
     if(!liveSession.ended&&taxonomy.regen(liveSession.frame,liveSession.slots).length)nativeActors?.syncCombatants();
+    if(!liveSession.ended)burst.step(liveSession.frame,liveSession.slots);
     if(arenaHazards&&!liveSession.ended){
       // After the native step, outside AI dispatch: read positions, write HP only.
       const changed=arenaHazards.step({slots:liveSession.slots,positionOf:s=>nativeActors.position(s),
@@ -642,7 +654,10 @@ export function createBattleRuntime(options = {}) {
             // Black Iron's opening TP may exceed the maximum during the match; the saved TP never does.
             currentHp:session.slots[i].currentHp,metricLimit:Math.min(session.slots[i].metricLimit,session.slots[i].metricBase),
             verdict:session.verdict,mode,teamIndex:Math.floor(i/3),rewardPercent:taxonomy.rewardPercent(Math.floor(i/3)),...(chosen.championship?{event:chosen.recordIndex,cursor:chosen.cursor+1,totalRounds:chosen.totalRounds}:{})})}]:[])}:{}),
-        ...(taxonomy.rewardPercent(localTeamIndex)!==100?{rewardPercent:taxonomy.rewardPercent(localTeamIndex)}:{})
+        ...(taxonomy.rewardPercent(localTeamIndex)!==100?{rewardPercent:taxonomy.rewardPercent(localTeamIndex)}:{}),
+        // Burst forms the local team took this match (encyclopedia registration).
+        ...(burst.bursts().some(b=>battleTeamOfSlot(b.slot)===localTeamIndex)
+          ?{bursts:burst.bursts().filter(b=>battleTeamOfSlot(b.slot)===localTeamIndex).map(b=>b.form)}:{})
       });
     },
 
@@ -744,6 +759,15 @@ export function createBattleRuntime(options = {}) {
       taxonomy=createBattleTaxonomyAdaptation({policy:taxonomyPolicy,speciesBySlot:session.slots.map(c=>c?.speciesId??null),teamOf:battleTeamOfSlot});
       signatureMoves=session.slots.map(c=>{if(!c)return null;const costliest=listMoveRecordsForCombatant(c).filter(m=>m.actionCost>0).sort((x,y)=>y.actionCost-x.actionCost)[0];return costliest?.recordIndex??null;});
       taxonomy.applyStart(session.slots);
+      // Owned partners bring their plan; a preset that was a former 覺醒體/究極體 starts as the 成熟期 that
+      // bursts into it, at the form's strength.
+      burst=createBattleBurst({policy:burstPolicy,plans:session.slots.map((c,slot)=>{
+        if(!c)return null;
+        if(burstPlans[slot])return burstPlans[slot];
+        if(roster[slot]?.instanceId)return null;
+        const tier=burstFormTier(c.speciesId),bases=burstBasesFor(c.speciesId);
+        return tier&&bases.length?{form:c.speciesId,tier,baseline:burstMultiplier(tier),base:bases[0]}:null;
+      })});
       nativeActors=createBattleNativeActors({slots:session.slots,creatures:roster,stands:normalBattleStands(session.slots)});
       soundEvents.attach(nativeActors.memory);
       // Use the same species move list as current normal selection. Appended
@@ -771,6 +795,7 @@ export function createBattleRuntime(options = {}) {
           return ok;}});
       source = createBattlePresentationSource({ session, step: stepMatch, getOpening:opening.snapshot, arenaIndex, getSpecialPrelude,
         ...(typeof options.getBloodline === 'function' ? {getBloodline:options.getBloodline} : {}),
+        getBurst:slot=>burst.snapshot(slot,session.frame),
         getArenaHazards:()=>arenaHazards?.snapshot()??null,
         getNativeActor:slot=>nativeActors.project(slot),getImpactEffects:()=>impactEffects.snapshot({
           exclusiveOwner:session.slots.find(c=>c?.field94)?.field94??0}),getNativeLifecycle:()=>({

@@ -62,18 +62,26 @@ export function evaluateBurstConditions(profile, form) {
 }
 
 // ---- per-partner unlock record (saved under progression.burstEvolution) ----
+// unlocks: forms each partner may burst into; preferred: the one it bursts into when the player (or a migrated
+// save) chose one, otherwise the highest unlocked tier the tamer rank allows.
 export function createBurstEvolutionState() { return deepFreeze({version: BURST_VERSION, unlocks: {}, migrated: false}); }
 export function normalizeBurstEvolution(value) {
   if (value == null) return createBurstEvolutionState();
   if (typeof value !== 'object' || value.version !== BURST_VERSION || typeof value.unlocks !== 'object' || value.unlocks === null
-    || Object.keys(value).some(key => !['version', 'unlocks', 'migrated'].includes(key))) throw new TypeError('INVALID_BURST_EVOLUTION');
+    || Object.keys(value).some(key => !['version', 'unlocks', 'migrated', 'preferred'].includes(key))
+    || (value.preferred !== undefined && (typeof value.preferred !== 'object' || value.preferred === null))) throw new TypeError('INVALID_BURST_EVOLUTION');
   const unlocks = {};
   for (const [instanceId, forms] of Object.entries(value.unlocks)) {
     if (typeof instanceId !== 'string' || !instanceId || !Array.isArray(forms) || forms.length > 16
       || forms.some(form => !Number.isSafeInteger(form) || !isBurstForm(form))) throw new TypeError('INVALID_BURST_EVOLUTION');
     unlocks[instanceId] = [...new Set(forms)].sort((a, b) => a - b);
   }
-  return deepFreeze({version: BURST_VERSION, unlocks, migrated: value.migrated === true});
+  const preferred = {};
+  for (const [instanceId, form] of Object.entries(value.preferred ?? {})) {
+    if (!unlocks[instanceId]?.includes(form)) throw new TypeError('INVALID_BURST_EVOLUTION');
+    preferred[instanceId] = form;
+  }
+  return deepFreeze({version: BURST_VERSION, unlocks, migrated: value.migrated === true, ...(Object.keys(preferred).length ? {preferred} : {})});
 }
 export function burstUnlocksOf(state, instanceId) { return Object.freeze([...(state?.unlocks?.[instanceId] ?? [])]); }
 /** A new state with the forms added (null when nothing changes). */
@@ -89,7 +97,32 @@ export function forgetBurstUnlocks(state, instanceId) {
   const current = normalizeBurstEvolution(state);
   if (!current.unlocks[instanceId]) return null;
   const {[instanceId]: removed, ...rest} = current.unlocks;
-  return normalizeBurstEvolution({...current, unlocks: rest});
+  const {[instanceId]: dropped, ...keep} = current.preferred ?? {};
+  return normalizeBurstEvolution({version: current.version, unlocks: rest, migrated: current.migrated, preferred: keep});
+}
+export function preferredBurstForm(state, instanceId) { return state?.preferred?.[instanceId] ?? null; }
+/** Choose the unlocked form a partner bursts into (null when unchanged or not unlocked). */
+export function preferBurstForm(state, instanceId, form) {
+  const current = normalizeBurstEvolution(state);
+  if (!current.unlocks[instanceId]?.includes(form) || current.preferred?.[instanceId] === form) return null;
+  return normalizeBurstEvolution({...current, preferred: {...(current.preferred ?? {}), [instanceId]: form}});
+}
+
+/**
+ * The form a 成熟期 bursts into in one battle: its chosen form when the rank allows that tier, otherwise the
+ * highest unlocked tier the rank allows (table order breaks ties). Returns {form, tier} or null.
+ */
+export function burstPlanFor(baseSpeciesIndex, unlocked = [], {maxTier = 2, preferred = null} = {}) {
+  const have = new Set(unlocked), options = [];
+  for (const entry of burstFormsFor(baseSpeciesIndex)) {
+    if (entry.tier > maxTier) continue;
+    for (const form of [entry.form, ...(entry.alternates ?? [])]) if (have.has(form)) options.push({form, tier: entry.tier});
+  }
+  if (!options.length) return null;
+  const chosen = options.find(option => option.form === preferred);
+  if (chosen) return Object.freeze({...chosen});
+  const top = Math.max(...options.map(option => option.tier));
+  return Object.freeze({...options.find(option => option.tier === top)});
 }
 
 /**
@@ -118,18 +151,20 @@ export function metalUnlockableForms(baseSpeciesIndex, rarity, unlocked = []) {
 }
 
 /**
- * A partner saved as a former 覺醒體/究極體 returns to its 成熟期 ancestor (history slot 0x14C) or, without
- * history, to the first 成熟期 that bursts into it; the form it was (and the tier-1 form a tier-2 form comes
- * through) is unlocked. Returns null for anything else.
+ * A partner saved as a former 覺醒體/究極體 (an alternate battle form included) returns to its 成熟期 ancestor
+ * (history slot 0x14C) or, without history, to the first 成熟期 that bursts into it; the form it was (and the
+ * tier-1 form a tier-2 form comes through) is unlocked. Returns null for anything else.
  */
 export function legacyBurstMigration(profile) {
   const species = profile?.fields?.['000'], g = generation(species);
-  if (g !== 5 && g !== 6) return null;
+  if (g !== 5 && g !== 6 && !isBurstForm(species)) return null;
   const ancestor = profile.fields['14c'];
   const bases = burstBasesFor(species);
-  const base = generation(ancestor) === 4 && burstFormsFor(ancestor).length ? ancestor : bases[0] ?? null;
+  // The recorded 成熟期 when it bursts into this form; otherwise one that does (rebalancing moved some forms).
+  const base = bases.includes(ancestor) ? ancestor : generation(ancestor) === 4 && burstFormsFor(ancestor).length && !bases.length ? ancestor : bases[0] ?? null;
   if (base === null) return null;
   const forms = burstFormsFor(base), match = forms.find(form => form.form === species || form.alternates?.includes(species));
-  const unlock = match ? [match.form, ...(match.alternates ?? []), ...(match.tier === 2 && match.via ? [match.via] : [])] : [forms[0].form];
-  return deepFreeze({base, unlock: [...new Set(unlock)]});
+  // The form it was (an alternate also opens its base form) and, for a tier-2 form, the tier-1 form it comes through.
+  const unlock = match ? [match.form, ...(match.form !== species ? [species] : []), ...(match.tier === 2 && match.via ? [match.via] : [])] : [forms[0].form];
+  return deepFreeze({base, unlock: [...new Set(unlock)], preferred: match ? species : null});
 }

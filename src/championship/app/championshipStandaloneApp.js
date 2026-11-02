@@ -9,7 +9,7 @@ import {beginNativeRaisingEvolution} from '../raising/nativeRaisingActor.js';
 import {productRebirth,PRODUCT_GROWTH_RULES} from '../raising/productGrowthPolicy.js';
 import {constructNativeIndividualForm} from '../raising/nativeIndividualEvolution.js';
 import {normalizeBurstEvolution,createBurstEvolutionState,withBurstMigrated,legacyBurstMigration,unlockBurstForms,forgetBurstUnlocks,
-  burstUnlocksOf,earnedBurstForms,metalUnlockableForms,burstFormsFor,evaluateBurstConditions} from '../contracts/productBurstEvolution.js';
+  burstUnlocksOf,earnedBurstForms,metalUnlockableForms,burstFormsFor,evaluateBurstConditions,preferBurstForm,preferredBurstForm,burstPlanFor,burstTierForRank,burstFormTier} from '../contracts/productBurstEvolution.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
@@ -1030,8 +1030,14 @@ export function createChampionshipStandaloneApp({
     for(const id of partnerIds()){
       const profile=partnerProfile(id),plan=profile?legacyBurstMigration(profile):null;
       if(!plan)continue;
-      writeRaisingNativeProfile(id,constructNativeIndividualForm(profile,plan.base,{next:nextGameplayRandom}),{markDirty:false});
-      state=unlockBurstForms(state,id,plan.unlock)??state;changed=true;
+      const formed=structuredClone(constructNativeIndividualForm(profile,plan.base,{next:nextGameplayRandom}));
+      // Like any 成熟期 it records no 成熟期/覺醒體/究極體 ancestor (slots 0x14C/0x150/0x154): its former forms
+      // live in the burst record now, and its Link/password transport stays native.
+      for(const slot of ['14c','150','154'])formed.fields[slot]=228;
+      writeRaisingNativeProfile(id,formed,{markDirty:false});
+      state=unlockBurstForms(state,id,plan.unlock)??state;
+      if(plan.preferred!==null)state=preferBurstForm(state,id,plan.preferred)??state;
+      changed=true;
     }
     burstEvolution=withBurstMigrated(state);
     if(changed)savePort.markDirty();
@@ -1051,10 +1057,18 @@ export function createChampionshipStandaloneApp({
   /** One partner's burst forms with their conditions, current values and unlock state (roster, battle setup). */
   function partnerBurstView(instanceId){
     const profile=partnerProfile(instanceId);if(!profile)return null;
-    const unlocked=new Set(burstUnlocksOf(burstState(),instanceId));
+    const unlocked=new Set(burstUnlocksOf(burstState(),instanceId)),plan=partnerBurstPlan(instanceId);
     return Object.freeze(burstFormsFor(profile.fields['000']).map(form=>{const check=evaluateBurstConditions(profile,form);
-      return Object.freeze({form:form.form,tier:form.tier,via:form.via,alternates:Object.freeze([...(form.alternates??[])]),
-        unlocked:unlocked.has(form.form),met:check.met,rows:check.rows});}));
+      const alternates=[...(form.alternates??[])];
+      return Object.freeze({form:form.form,tier:form.tier,via:form.via,alternates:Object.freeze(alternates),
+        alternatesUnlocked:Object.freeze(alternates.filter(a=>unlocked.has(a))),unlocked:unlocked.has(form.form),
+        planned:plan&&[form.form,...alternates].includes(plan.form)?plan.form:null,met:check.met,rows:check.rows});}));
+  }
+  /** The form this partner bursts into in battle now (tamer rank gates the tier), or null. */
+  function partnerBurstPlan(instanceId){
+    const profile=partnerProfile(instanceId);if(!profile)return null;
+    const state=burstState();
+    return burstPlanFor(profile.fields['000'],burstUnlocksOf(state,instanceId),{maxTier:burstTierForRank(tamerRankValue),preferred:preferredBurstForm(state,instanceId)});
   }
 
   function liveSaveRequest(nextRevision=revision) {
@@ -1357,7 +1371,7 @@ export function createChampionshipStandaloneApp({
     applySavedGameData(saved,candidate,options);
   }
 
-  function applyBattleTransaction(result, individualResults=[], preparedRng=null) {
+  function applyBattleTransaction(result, individualResults=[], preparedRng=null, burstForms=[]) {
     if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
     if (!result.ok || result.duplicate) return result;
     const before = battleEconomy;
@@ -1386,6 +1400,8 @@ export function createChampionshipStandaloneApp({
       for(const entry of individualResults)writeRaisingNativeProfile(entry.instanceId,entry.nativeProfile,{markDirty:false});
       // Battles and wins are burst conditions: record what the match earned.
       settleBurstUnlocks(individualResults.map(entry=>entry.instanceId),{publish:false});
+      // A form the player's partner burst into this match is registered in the encyclopedia.
+      for(const form of burstForms)registeredSpeciesValue=registerNativeBookSpecies(registeredSpeciesValue,form);
       if (result.receipt?.status === "SETTLED") {
         nativeTitles=applyNativeBattleRecord(nativeTitles,result.receipt);
         // A tournament round is not a title on its own: the payout gate and the
@@ -2779,6 +2795,8 @@ export function createChampionshipStandaloneApp({
       const rebirth=productRebirth(profile);
       if(!rebirth.ok)return Object.freeze({ok:false,reason:rebirth.reason});
       writeRaisingNativeProfile(instanceId,rebirth.profile);
+      // A reborn partner grows into a 成熟期 of its own again, so its burst forms start over.
+      burstEvolution=forgetBurstUnlocks(burstState(),instanceId)??burstEvolution;
       beginNativeRaisingEvolution(actor,{target:rebirth.target},{next:nextGameplayRandom},raisingFoods);
       publishRaising();
       return Object.freeze({ok:true,target:rebirth.target});
@@ -2964,6 +2982,16 @@ export function createChampionshipStandaloneApp({
     getPartnerBloodline(instanceId){return gachaBloodlineOf(cyberGacha,instanceId);},
     /** The partner's burst forms, conditions, current values and unlock state (OWNER_APPROVED_ADAPTATION 2026-11-02). */
     getPartnerBurst(instanceId){return partnerBurstView(instanceId);},
+    getBattleBurstPlan(instanceId){return partnerBurstPlan(instanceId);},
+    /** Choose which unlocked form (an alternate included) this partner bursts into. */
+    setPartnerBurstForm(instanceId,form){
+      requireSession();
+      if(!partnerProfile(instanceId))return Object.freeze({ok:false,reason:'UNKNOWN_INDIVIDUAL'});
+      if(!burstUnlocksOf(burstState(),instanceId).includes(form))return Object.freeze({ok:false,reason:'BURST_FORM_LOCKED'});
+      const next=preferBurstForm(burstState(),instanceId,form);
+      if(next){burstEvolution=next;savePort.markDirty();publishRaising();}
+      return Object.freeze({ok:true,form});
+    },
     /** Burst unlocks earned since the last read (for a ranch notice). */
     takeBurstUnlockNotices(){const notices=lastBurstUnlocks;lastBurstUnlocks=Object.freeze([]);return notices;},
 
@@ -3527,7 +3555,7 @@ export function createChampionshipStandaloneApp({
     },
 
     /** The battle judges itself; nothing else may push the result screen. */
-    finishMatch({ attemptId, ended, mode, battleType, matchIndex, outcomeEntries, individualResults=[], rewardPercent } = {}) {
+    finishMatch({ attemptId, ended, mode, battleType, matchIndex, outcomeEntries, individualResults=[], rewardPercent, bursts=[] } = {}) {
       requireSession();
       if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
       if (battleTransactionActive) return Object.freeze({ ok: false, reason: "TRANSACTION_ACTIVE" });
@@ -3558,7 +3586,8 @@ export function createChampionshipStandaloneApp({
         updates=individualResults.map(entry=>({instanceId:entry.instanceId,nativeProfile:normalizeNativeIndividualProfile(
           entry.nativeProfile,this.resolveRaisingInstance(entry.instanceId).speciesId)}));
       }
-      const result = applyBattleTransaction(settleBattleAttempt(battleEconomy, { attemptId, outcomeEntries, ...(rewardPercent===undefined?{}:{rewardPercent}) }, requireShop().getBits()),updates);
+      const result = applyBattleTransaction(settleBattleAttempt(battleEconomy, { attemptId, outcomeEntries, ...(rewardPercent===undefined?{}:{rewardPercent}) }, requireShop().getBits()),updates,null,
+        Array.isArray(bursts)?bursts.filter(form=>Number.isSafeInteger(form)&&burstFormTier(form)!==null):[]);
       if (!result.ok || result.duplicate) return result;
       for(const entry of updates)raisingActors.delete(entry.instanceId);
       battlePartyIds=null;
