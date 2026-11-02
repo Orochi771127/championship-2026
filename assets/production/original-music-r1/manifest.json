@@ -1,9 +1,9 @@
 {
   "id": "CHAMPIONSHIP_ORIGINAL_MUSIC_R1_20261010",
-  "scope": "Nine explicitly approved existing original tracks plus five Owner-delivered original combat/result cues; no Nexus code or save integration; plus Owner-supplied Lucky Draw Counter (2026-11-02) as the SHOP cue",
+  "scope": "Nine explicitly approved existing original tracks plus five Owner-delivered original combat/result cues; no Nexus code or save integration; plus Owner-supplied Lucky Draw Counter (2026-11-02) as the SHOP cue; plus Owner-supplied Sweetest Level Up (2026-11-02) as the GATE_SELECT, HUNT_LOADOUT and BATTLE_SELECT cue",
   "loudness": "Runtime gain targets approximately -24 LUFS, true peak <= -3 dBTP, maximum boost +12 dB. Four formerly capped quiet cues updated 2026-10-18; source bytes unchanged.",
   "acceptance": "Technical playback/transport testing; human listening acceptance pending",
-  "loopNotes": "MP3 measured edge trim and 0.8s crossfade are a technical treatment, not seamless-listening acceptance. Combat OGG native duration 32 seconds, 0..1536000 samples at 48 kHz; results do not loop. Lucky Draw Counter (120 BPM): the 0-8 s intro plays once; each loop pass hands off at 56.0 s to 8.0 s (24 bars) with a 0.05 s crossfade inside a near-silent break.",
+  "loopNotes": "MP3 measured edge trim and 0.8s crossfade are a technical treatment, not seamless-listening acceptance. Combat OGG native duration 32 seconds, 0..1536000 samples at 48 kHz; results do not loop. Lucky Draw Counter (120 BPM): the 0-8 s intro plays once; each loop pass hands off at 56.0 s to 8.0 s (24 bars) with a 0.05 s crossfade inside a near-silent break. Sweetest Level Up (150 BPM): the 0-68.8 s first pass plays once; each loop pass hands off at 120.0 s to 68.8 s (32 bars, 51.2 s) with a 0.1 s crossfade because the repeated section is close but not sample-identical.",
   "files": [
     {
       "path": "bgm_central_radiant_core.mp3",
@@ -117,6 +117,28 @@
         ],
         "evidence": "Measured beat interval 0.5004 s; waveform correlation peak at lag 48.000 s between 8.0 s and 56.0 s; 56.00-56.05 s is a -46 dB break before the 56.075 s downbeat"
       }
+    },
+    {
+      "path": "bgm_sweetest_level_up.mp3",
+      "sha256": "e5de50be5be35832ce6ecb52a4dccf1716c369aaf1ec73427ca504e98ea54fa3",
+      "bytes": 1933940,
+      "seconds": 120.8,
+      "source": "Owner supplied Downloads file sweetest_level_up.mp3 (192 kbps, 130.743 s), assigned to GATE_SELECT, HUNT_LOADOUT and BATTLE_SELECT on 2026-11-02",
+      "sourceSha256": "93ec384fefca27b5e6525edbaa5aacc6f8834f04ff4cb2c914ea9fd634f9af6f",
+      "sourceBytes": 3143954,
+      "webEncoding": "Cut at 120.8 s (0.8 s past the 120.0 s loop hand-off; the non-repeating 121.6-128 s ending and trailing silence removed), 0.5 s safety fade-out, -2.5 dB pre-gain (source peaks +0.9 dBFS), LAME MP3 128 kbps CBR 44.1 kHz stereo, metadata stripped",
+      "loop": {
+        "bpm": 150,
+        "introSeconds": [
+          0,
+          68.8
+        ],
+        "loopSeconds": [
+          68.8,
+          120.0
+        ],
+        "evidence": "Supplied 25.6-128.0 s loop rejected: waveform correlation 0.02 at lag 102.4 s. Measured repetition at lag exactly 51.2 s (32 bars) for bars 51.2-70.4 vs 102.4-121.6 s (per-bar correlation 0.57-0.74); the 0.4 s windows either side of the 120.0/68.8 s bar line correlate 0.81/0.80; downbeats follow at +0.1 s"
+      }
     }
   ],
   "cues": {
@@ -200,6 +222,15 @@
       "trimEnd": 0.95,
       "crossfade": 0.05,
       "loopStart": 8
+    },
+    "sweetest_level_up": {
+      "path": "./assets/production/original-music-r1/bgm_sweetest_level_up.mp3",
+      "loop": true,
+      "gainDb": -8.9,
+      "trimStart": 0,
+      "trimEnd": 0.7,
+      "crossfade": 0.1,
+      "loopStart": 68.8
     },
     "battle_final": {
       "path": "./assets/production/original-music-r1/championship_battle_final_r1.ogg",

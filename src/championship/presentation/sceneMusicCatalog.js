@@ -16,6 +16,7 @@ const entries = [
   ['battle_normal', '石緣交鋒', 'Clash at the Concrete Edge', ['battle']],
   ['battle_final', '錦標賽決戰', 'Championship Final', ['battle']],
   ['lucky_draw_counter', '幸運抽獎櫃檯', 'Lucky Draw Counter', ['system']],
+  ['sweetest_level_up', '甜蜜升級', 'Sweetest Level Up', ['system']],
   ['victory', '勝利之聲', 'Victory', ['result']],
   ['defeat', '敗北之聲', 'Defeat', ['result']],
   ['draw', '平手之聲', 'Draw', ['result']],

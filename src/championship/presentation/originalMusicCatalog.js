@@ -86,6 +86,11 @@ export const ORIGINAL_MUSIC_CUES = Object.freeze({
     "path": "./assets/production/original-music-r1/bgm_lucky_draw_counter.mp3",
     "loop": true, "gainDb": -9, "trimStart": 0, "trimEnd": 0.95, "crossfade": 0.05, "loopStart": 8
   },
+  // Owner 2026-11-02: hunt gate select, hunt loadout and battle select. 150 BPM; the ending never plays, loops cut 120.0 -> 68.8 (32 bars).
+  "sweetest_level_up": {
+    "path": "./assets/production/original-music-r1/bgm_sweetest_level_up.mp3",
+    "loop": true, "gainDb": -8.9, "trimStart": 0, "trimEnd": 0.7, "crossfade": 0.1, "loopStart": 68.8
+  },
   "battle_final": {
     "path": "./assets/production/original-music-r1/championship_battle_final_r1.ogg",
     "loop": true,
@@ -184,8 +189,8 @@ const BIOMES = Object.freeze({grass:'plains',savanna:'plains',forest:'plains',ju
   factory:'forge',mine:'forge',sewer:'forge',volcano:'forge',seaside:'harbor',ice:'moon',
   damp:'tidal',oasis:'tidal',canyon:'mystic',crag:'mystic',desert:'mystic',ruins:'mystic'});
 const SCREENS = Object.freeze({RAISING_HOME:'moon',CAGE_EDIT:'podium_geometry',DATABASE:'moon',DIGIMON_LIST:'moon',
-  HELP:'moon',TAMER_INFO:'moon',SHOP:'lucky_draw_counter',GATE_SELECT:'harbor',HUNT_LOADOUT:'harbor',
-  MEDALS:'core',SCHEDULE:'core',BATTLE_SELECT:'core',CHAMPIONSHIP:'core'});
+  HELP:'moon',TAMER_INFO:'moon',SHOP:'lucky_draw_counter',GATE_SELECT:'sweetest_level_up',HUNT_LOADOUT:'sweetest_level_up',
+  MEDALS:'core',SCHEDULE:'core',BATTLE_SELECT:'sweetest_level_up',CHAMPIONSHIP:'core'});
 // Owner-specified field assignments; unassigned fields retain the prior normal/final cues.
 export const BATTLE_FIELD_MUSIC = Object.freeze({
   1: 'clash_at_the_emerald_edge', 2: 'magma_breach',

@@ -97,3 +97,14 @@ test('shop plays Lucky Draw Counter; its 0-8 s intro plays once and every loop p
   b.currentTime=56;b.ontimeupdate();await settle();assert.equal(f.music.inspect().starts,3);assert.equal(a.currentTime,8);assert.equal(f.media.length,2);
   f.music.dispose();f.bus.dispose();
 });
+
+test('hunt gate select, hunt loadout and battle select play Sweetest Level Up; loop passes resume at 68.8 s after the first full pass',async()=>{
+  for(const screen of ['GATE_SELECT','HUNT_LOADOUT','BATTLE_SELECT'])assert.equal(selectOriginalMusic({screen}).id,'sweetest_level_up',screen);
+  assert.equal(selectOriginalMusic({screen:'HUNT_FIELD',biome:'Seaside'}).id,'harbor');
+  const cue=ORIGINAL_MUSIC_CUES.sweetest_level_up;assert.equal(cue.loopStart,68.8);
+  assert.ok(Math.abs(120.8-cue.trimEnd-cue.crossfade-120)<1e-9,'hands off at 120.0 s');assert.ok(Math.abs(120-cue.loopStart-51.2)<1e-9,'32 bars at 150 BPM');
+  const f=fixture();f.music.setScene('sweetest_level_up');f.doc.emit('pointerdown');await settle();
+  const a=f.media[0];assert.match(a.src,/original-music-r1\/bgm_sweetest_level_up\.mp3$/);a.onloadedmetadata();assert.equal(a.currentTime,0);
+  a.duration=120.8;a.currentTime=120.05;a.ontimeupdate();await settle();const b=f.media[1];b.onloadedmetadata();assert.equal(b.currentTime,68.8);assert.equal(f.music.inspect().starts,2);
+  f.music.dispose();f.bus.dispose();
+});
