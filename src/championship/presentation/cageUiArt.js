@@ -3,6 +3,10 @@ import { originalShopCageThumbnail } from './originalShopCageArt.js';
 // The editor's slot ownership is authoritative; no geometry here places a cage.
 // The runtime cage fields (Owner 2026-10-06: original opus art replaces the licensed pixels).
 import manifest from '../../../assets/production/public-runtime/cage-ui.map.v1.json' with { type: 'json' };
+// Owner 2026-11-02: the shop and the facility editor show each cage as the ranch draws it.
+// Renders of the 3D cage models (ranchThreeScene, layout view 52°, 4 px per native px,
+// the field's own world rect), so a frame covers exactly the rect the old field art did.
+import threeManifest from '../../../assets/production/public-runtime/cage-ui-three.v1.json' with { type: 'json' };
 import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
 import { productGridCell } from '../cage/productRanchGrid.js';
 import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
@@ -14,6 +18,25 @@ import { cageName } from '../text/zhHant.js';
 import { uiText } from '../text/uiText.js';
 
 const art = validateRuntimeMapArtBundle(selectRanchCageArt(manifest));
+const THREE_UI_DIR = 'assets/production/cage/ui-three-20261102/';
+const imageRow = (row, width, height) => row && Object.keys(row).sort().join() === 'height,sha256,src,width'
+  && typeof row.src === 'string' && row.src.startsWith(THREE_UI_DIR) && row.src.endsWith('.webp') && !row.src.includes('..')
+  && /^[a-f0-9]{64}$/.test(row.sha256) && (width === undefined || (row.width === width && row.height === height));
+/** The 3D cage UI renders, checked field by field against the runtime field sizes. */
+export function validateCageThreeUi(candidate) {
+  const fail = (reason) => { throw new Error('CAGE_THREE_UI_INVALID:' + reason); };
+  if (candidate?.schemaVersion !== 1 || candidate.assetId !== 'art:cage:ui-three:20261102' || !Array.isArray(candidate.fields)) fail('SCHEMA');
+  const seen = new Set();
+  for (const row of candidate.fields) {
+    const field = art.fields.find((entry) => entry.fieldId === row?.fieldId);
+    if (!field || seen.has(row.fieldId) || !/^[a-f0-9]{64}$/.test(row.modelSha256)) fail('FIELD');
+    if (!imageRow(row.frame, field.worldWidthPx, field.worldHeightPx) || !imageRow(row.thumbnail, 256, 192)) fail('IMAGE');
+    seen.add(row.fieldId);
+  }
+  if (seen.size !== art.fields.length) fail('COUNT');
+  return candidate;
+}
+const threeUi = new Map(validateCageThreeUi(threeManifest).fields.map((row) => [row.fieldId, row]));
 export function cageUiName(moduleId, fallback = '') {
   const definition = getCageDefinitionByModuleId(moduleId);
   return cageName(definition?.cageDefinitionIndex, fallback);
@@ -33,14 +56,19 @@ export function cageUiSummary(moduleId, fallback = '') {
   if (capacity !== null) parts.push(uiText('建議 {count} 隻', { count: capacity }));
   return parts.join(' · ') || uiText('固定待機區');
 }
+const fieldIdOf = (definition) => getOriginalCageVisualBinding(definition?.cageDefinitionIndex)?.fieldId ?? null;
 function runtimeFieldFrame(definition) {
-  const binding = getOriginalCageVisualBinding(definition?.cageDefinitionIndex);
-  return art.fields.find((field) => field.fieldId === binding?.fieldId)?.frames[0]?.src ?? null;
+  const fieldId = fieldIdOf(definition);
+  return threeUi.get(fieldId)?.frame.src ?? art.fields.find((field) => field.fieldId === fieldId)?.frames[0]?.src ?? null;
 }
 /** The blue Lid that covers a bay nothing is built on (the ranch draws the same art). */
 export function cageUiLidImage() {
   const lid = ORIGINAL_CAGE_STRUCTURAL_VISUALS.find((entry) => entry.role === 'LID')?.fieldId;
-  return art.fields.find((field) => field.fieldId === lid)?.frames[0]?.src ?? null;
+  return threeUi.get(lid)?.frame.src ?? art.fields.find((field) => field.fieldId === lid)?.frames[0]?.src ?? null;
+}
+/** The 256x192 card picture of a cage (the whole render, fitted and centred), or null. */
+export function cageUiThumbnail(moduleId) {
+  return threeUi.get(fieldIdOf(getCageDefinitionByModuleId(moduleId)))?.thumbnail.src ?? null;
 }
 export function cageUiImage(moduleId, baseUrl) {
   // The runtime field picture comes first, so the editor shows the same cage art as the ranch.
@@ -48,9 +76,11 @@ export function cageUiImage(moduleId, baseUrl) {
   return runtimeFieldFrame(definition);
 }
 export function shopCageUiImage(shopRecordIndex, baseUrl) {
+  const definition = listCageDefinitions().find((entry) => entry.shopRecordIndex === shopRecordIndex);
+  const three = definition ? cageUiThumbnail(definition.moduleId) : null;
+  if (three) return three;
   const original = originalShopCageThumbnail(shopRecordIndex, baseUrl);
   if (original) return original.src;
-  const definition = listCageDefinitions().find((entry) => entry.shopRecordIndex === shopRecordIndex);
   return definition ? cageUiImage(definition.moduleId, baseUrl) : null;
 }
 export function cageEditorArtCells(slots, baseUrl, { productGrid = false } = {}) {
@@ -74,11 +104,12 @@ export function cageEditorArtCells(slots, baseUrl, { productGrid = false } = {})
     const height = (Math.max(...peers.map((entry) => entry.y)) - top + 28) * 2;
     const definition = getCageDefinitionByModuleId(cell.moduleId);
     const image = cageUiImage(cell.moduleId, baseUrl);
-    const field = art.fields.find(field=>field.frames[0]?.src === image);
+    const field = definition ? art.fields.find((entry) => entry.fieldId === fieldIdOf(definition)) : null;
     const sourceWidth = field?.worldWidthPx ?? width;
     const sourceHeight = field?.worldHeightPx ?? height;
     const scale = Math.min(width / sourceWidth, height / sourceHeight);
-    const padding=field?.visualPaddingNative??{};
+    // A 3D render covers exactly the world rect; older field art may carry padding.
+    const padding=(threeUi.get(field?.fieldId)?.frame.src===image?null:field?.visualPaddingNative)??{};
     const unit=field?.nativePixelWorldScale??4;
     const padX=(padding.left??0)*unit,padY=(padding.top??0)*unit;
     const imageWidth = (sourceWidth+padX+(padding.right??0)*unit) * scale;
