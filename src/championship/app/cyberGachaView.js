@@ -53,6 +53,9 @@ const REFUSALS = Object.freeze({
   NOT_ARMED: "這個晶片沒有裝填。",
   CHOOSE_PERSONALITY: "請先選擇新的性格。",
   SAME_PERSONALITY: "拍檔已經是這個性格了。",
+  AWAKENING_ENERGY_FULL: "道具能補的覺醒能量已滿，剩下靠訓練和對戰。",
+  NO_AWAKENING_TARGET: "這隻拍檔目前沒有可以覺醒的形態。",
+  NOT_AN_AWAKENING_ITEM: "這個道具不能注入覺醒能量。",
   SAVE_FAILED: "存檔失敗，這次沒有扣除任何東西。",
   WALLET_CHANGED: "錢包已變更，請再試一次。"
 });
@@ -117,6 +120,31 @@ const bestRarity = (prizes) => prizes.reduce((top, prize) => (RARITY_ORDER[prize
 // floating line keeps two parts; the use panel lists the rest.
 const ENHANCE_STATS = Object.freeze([["maxHp", "最大 HP"], ["attack", "攻擊"], ["defense", "防禦"], ["wisdom", "智力"], ["speed", "速度"], ["maxTp", "最大 TP"]]);
 const FOUR_STATS = Object.freeze(["attack", "defense", "wisdom", "speed"]);
+/**
+ * The bag's note for one metal row of the gacha frame: what 「強化銘刻」 and 「催化進化」 do. On a 成熟期 a
+ * metal feeds the awakening (Owner 2026-11-02 awakening raising); `item.awaken` carries its numbers.
+ */
+export function gachaMetalNote(item) {
+  const awaken = item.awaken ?? { fill: false, tier1: 0, tier2: 0, cap: 60 };
+  const enhance = RARITY_ORDER[item.rarity] >= 2
+    ? uiText("強化：全能力 +{n}，並銘刻金屬血統「{perk}」與腳底流光。", { n: item.boost, perk: uiText(`BLOODLINE_PERK_${item.family}`) })
+    : uiText("強化：全能力 +{n}。", { n: item.boost });
+  const early = uiText(item.rarity === "R" ? "催化：幼年期無視不足條件，強制進化。" : "催化：成長期以前無視不足條件，強制進化。");
+  const mature = awaken.fill ? uiText("成熟期：覺醒能量一次充滿，並免除轉生條件。")
+    : awaken.tier2 && awaken.tier2 !== awaken.tier1
+      ? uiText("成熟期：注入覺醒能量 +{n}%（二段 +{m}%），道具最多補到 {cap}%。", { n: awaken.tier1, m: awaken.tier2, cap: awaken.cap })
+      : uiText("成熟期：注入覺醒能量 +{n}%，道具最多補到 {cap}%。", { n: awaken.tier1, cap: awaken.cap });
+  const fuse = item.fusesInto ? [uiText("集滿 {count} 個可熔合成「{metal}」。", { count: item.fusionCost, metal: uiText(item.fusesInto.name) })] : [];
+  return [enhance, early, mature, ...fuse].join("");
+}
+
+/** The bag's line after a metal fed an awakening. */
+export function awakeningEnergySummary(result) {
+  if (result?.kind !== "AWAKEN_ENERGY") return "";
+  if (result.ready) return uiText("覺醒能量已滿：到牧場點拍檔，開始覺醒儀式。");
+  return uiText("覺醒能量 +{n}%（目前 {percent}%）", { n: result.amount, percent: result.percent ?? 0 });
+}
+
 export function enhanceSummary(result) {
   const { before, after } = result ?? {};
   if (result?.kind !== "ENHANCE" || !before || !after) return "";
@@ -618,7 +646,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
           else if (result.kind === "SYNTH") await smeltFurnace();
           if (!life.signal.aborted) await reveal(result, { fromChute: Boolean(action.pull) });
         } else fx(root, "gacha-use", result.kind === "ARMED" ? uiText("已裝填") : result.kind === "DISARMED" ? uiText("已取回")
-          : enhanceSummary(result) || uiText("已使用"));
+          : enhanceSummary(result) || awakeningEnergySummary(result) || uiText("已使用"));
       }
       root.dataset.machine = machineId;
     } finally {
@@ -768,14 +796,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     if (!item) return;
     usePanel.append(element("strong", "cm-gacha__use-title", uiText(item.name)));
     const metal = item.kind === "METAL";
-    // OWNER_APPROVED_ADAPTATION 2026-11-02: natural growth ends at 成熟期, where SSR/UR metals unlock burst forms.
-    const CATALYST_NOTE = { R: "催化：幼年期無視不足條件，強制進化。", SR: "催化：成長期以前無視不足條件，強制進化。",
-      SSR: "催化：成長期以前強制進化；成熟期解鎖一段覺醒（戰鬥中爆裂進化）。",
-      UR: "催化：成長期以前強制進化；成熟期解鎖二段覺醒（尚無一段時先解鎖一段）。" };
-    const describe = metal
-      ? [uiText(RARITY_ORDER[item.rarity] >= 2 ? "強化：全能力 +{n}。SSR 以上會為拍檔銘刻「[{title}]」金屬血統與腳底流光。" : "強化：全能力 +{n}。",
-          { n: item.boost, title: frame.bloodlines[item.family]?.title ?? "" }), uiText(CATALYST_NOTE[item.rarity] ?? CATALYST_NOTE.R),
-        ...(item.fusesInto ? [uiText("集滿 {count} 個可熔合成「{metal}」。", { count: item.fusionCost, metal: uiText(item.fusesInto.name) })] : [])].join("")
+    const describe = metal ? gachaMetalNote(item)
       : uiText("{kind}・原「{origin}」", { kind: uiText(KIND_LABEL[item.kind] ?? ""), origin: uiText(item.origin) });
     usePanel.append(element("p", "cm-gacha__use-note", describe));
     if (!metal) usePanel.append(chipEffectList(item));
