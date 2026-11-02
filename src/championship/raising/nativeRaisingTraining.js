@@ -35,9 +35,10 @@ export function applyNativeCageEntryConditions(profile,{definition,season,level=
   let p=profile;for(const [kind,delta] of rules.cages[definition].commands)if(kind!==6)p=applyNativeTrainingCommand(p,{kind:22+kind,delta,season,level},rng).profile;
   return p;
 }
-export function enterNativeRaisingTraining(profile,{definition,season,level=0,stressed=false,growthPercent=100,pointScale=null},rng){
+export function enterNativeRaisingTraining(profile,{definition,season,level=0,stressed=false,growthPercent=100,pointScale=null,programs=null},rng){
   let roll=rng.next(definition+3)%100,program=null;
-  for(const candidate of rules.cages[definition].programs){if(roll<candidate.weight){program=candidate;break;}roll-=candidate.weight;}
+  // `programs` is the real-time ranch's product overlay (productTrainingPolicy.js); native play passes none.
+  for(const candidate of programs??rules.cages[definition].programs){if(roll<candidate.weight){program=candidate;break;}roll-=candidate.weight;}
   if(!program)return {profile,commands:null};
   let p=profile;const commands=[];
   for(const [kind,delta] of program.commands){const result=applyNativeTrainingCommand(p,{kind,delta,season,level,growthPercent,pointScale},rng);p=result.profile;commands.push({kind,delta:result.delta,outcome:result.outcome});}

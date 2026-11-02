@@ -224,6 +224,20 @@ export function getCageTraining(cageDefinitionIndex) {
   return BY_DEFINITION_INDEX[cageDefinitionIndex] ?? null;
 }
 
+// OWNER_APPROVED_ADAPTATION 2026-11-02 (DIAMOND_ECONOMY_20261102): the Bits shop's zoo (24) and
+// ranch (25) no longer feed and clean by themselves -- that moved to the gachapon's automation
+// items -- and the product ranch trains the beast family there instead (productTrainingPolicy.js).
+// The original text above stays the evidence; this is what the product shows and runs.
+export const PRODUCT_CAGE_CHANNEL_OVERRIDES = Object.freeze({
+  24: Object.freeze([up(CAGE_TRAINING_CHANNELS.FAMILY_BEAST)]),
+  25: Object.freeze([up(CAGE_TRAINING_CHANNELS.FAMILY_BEAST)])
+});
+export const PRODUCT_CAGE_CHANNEL_EVIDENCE = "OWNER_APPROVED_ADAPTATION_20261102_AUTOMATION_TO_GACHA";
+/** The channels the product shows for a cage: the override when there is one, else the original. */
+export function productCageChannels(cageDefinitionIndex) {
+  return PRODUCT_CAGE_CHANNEL_OVERRIDES[cageDefinitionIndex] ?? getCageTraining(cageDefinitionIndex)?.channels ?? Object.freeze([]);
+}
+
 export function trainingViewFromDefinition(definition) {
   const trainingRecord = definition?.training ?? getCageTraining(definition?.cageDefinitionIndex);
   if (!trainingRecord) {

@@ -42,7 +42,7 @@ import { showChoiceDialog } from './uiDialog.js';
 import { prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { isDesktopBrowseLayout } from './portraitFrame.js';
 import { createCyberGachaPanel } from './cyberGachaView.js';
-import { gachaIcon, paintGachaTicketBadge } from './cyberGachaIcons.js';
+import { gachaCurrencyImage, gachaIcon, paintGachaTicketBadge } from './cyberGachaIcons.js';
 
 const CATEGORY_LABELS = Object.freeze({
   TRAINING_GOODS: "養成用品",
@@ -1522,6 +1522,24 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     up.addEventListener("click", () => source.intents.setTamerRank(cage.tamerRank + 1));
     if (mode === VS2_PRESENTATION_MODES.DEVELOPER) census.append(down, rankLabel, up);
     else census.append(rankLabel);
+    // DIAMOND_ECONOMY_20261102: the land key also sits by the rank capsule (the same confirmation).
+    const land = cage.land;
+    if (land?.available) {
+      const expand = element("button", "cm-vs2-cage-rank__expand cm-land-key cm-arcade-key");
+      expand.type = "button";
+      expand.dataset.landExpand = land.max ? "max" : String(land.nextRow);
+      if (land.max) {
+        expand.disabled = true;
+        expand.append(gachaIcon("crown", "cm-land-key__icon"), element("span", "cm-land-key__label", uiText("已達最大 100 格領域")));
+      } else {
+        expand.setAttribute("aria-haspopup", "dialog");
+        expand.setAttribute("aria-label", uiText("擴充土地 +{n}格（{price} 鑽石）", { n: land.step, price: land.price }));
+        expand.append(gachaCurrencyImage("diamond", "cm-land-key__diamond"), element("span", "cm-land-key__label", uiText("+{n}格", { n: land.step })));
+        if (land.diamonds < land.price) expand.dataset.short = "true";
+        expand.addEventListener("click", () => { void rowPurchase.open(land.nextRow); });
+      }
+      census.append(expand);
+    }
     const reason = cage.lastVerdict?.reason;
     status.textContent = uiText(reason ? CAGE_VERDICT_COPY[reason] ?? "" : "");
     if (cage.lastVerdict && cage.lastVerdict !== paintedVerdict) {
@@ -1685,7 +1703,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     }
 
     tray.replaceChildren();
-    if (cage.tray.length === 0) {
+    if (cage.tray.length === 0 && !(cage.royalTray ?? []).some((royal) => royal.available > 0)) {
       tray.append(element("p", "cm-vs2-shop__empty cm-cage-filter-empty", filters.hidden
         ? "已持有的設施皆已放置。" : "這個格數的設施都已放置。"));
       trayEmpty = null;
@@ -1695,6 +1713,29 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     // The empty note for a size tab whose cages are all placed (hex world only).
     trayEmpty = element("p", "cm-vs2-shop__empty cm-cage-filter-empty", "這個格數的設施都已放置。");
     trayEmpty.hidden = true;
+    // DIAMOND_ECONOMY_20261102: gachapon royal cages come first, each with its own gold card.
+    for (const royal of cage.royalTray ?? []) {
+      if (royal.available < 1) continue;
+      const row = element("button", "cm-vs2-cage-tray__item cm-royal-card");
+      row.type = "button";
+      row.dataset.royal = royal.edition;
+      row.dataset.rarity = royal.rarity;
+      row.dataset.selected = royal.selected ? "true" : "false";
+      row.setAttribute("role", "listitem");
+      row.setAttribute("aria-pressed", royal.selected ? "true" : "false");
+      row.setAttribute("aria-label", uiText("選擇{cage}。{effect}", { cage: uiText(royal.name), effect: uiText("全自動飼育：自動給食・自動清掃・睡眠恢復 +30%・獸系訓練 +3") }));
+      const image = element("img", "cm-facility-thumb cm-royal-card__art");
+      image.src = royal.art; image.alt = "";
+      row.append(image, element("span", "cm-vs2-cage-tray__name", `${uiText(royal.name)} ×${royal.available}`),
+        element("span", "cm-vs2-cage-tray__effect", uiText("全自動飼育：自動給食・自動清掃・睡眠恢復 +30%・獸系訓練 +3")));
+      decorateCartridge(row, royal.moduleId, { count: royal.available });
+      row.prepend(gachaIcon("crown", "cm-royal-card__crown"));
+      row.addEventListener("click", () => {
+        if (royal.selected) source.intents.selectCageModule(null);
+        else source.intents.selectRoyalCage?.(royal.id);
+      });
+      tray.append(row);
+    }
     for (const item of cage.tray) {
       const row = element("button", "cm-vs2-cage-tray__item");
       row.type = "button";

@@ -75,6 +75,37 @@ const ICONS = Object.freeze({
     ["circle", { cx: 6.8, cy: 16.8, r: 0.9, fill: "#fff", stroke: "none" }],
     ["circle", { cx: 17.6, cy: 7, r: 0.8, fill: "#fff", stroke: "none" }]
   ],
+  // DIAMOND_ECONOMY_20261102: royal cages, automation cores, the land key and the founder box.
+  crown: [
+    ["path", { d: "M3.6 17.6 2.8 7.4l5 4.2L12 4.4l4.2 7.2 5-4.2-.8 10.2z", fill: "#ffd23f" }],
+    ["path", { d: "M3.8 19.6h16.4", fill: "none", "stroke-width": 2.2 }],
+    ["circle", { cx: 12, cy: 13.4, r: 1.5, fill: "#ff4d5e", "stroke-width": 1.2 }]
+  ],
+  robot: [
+    ["path", { d: "M12 2.8v2.6", fill: "none" }],
+    ["circle", { cx: 12, cy: 2.6, r: 1.2, fill: "#2ec4f1", "stroke-width": 1.2 }],
+    ["rect", { x: 4.6, y: 5.6, width: 14.8, height: 11.8, rx: 3.6, fill: "#d9f6ff" }],
+    ["circle", { cx: 9.2, cy: 11.2, r: 1.7, fill: "#2ec4f1", "stroke-width": 1.2 }],
+    ["circle", { cx: 14.8, cy: 11.2, r: 1.7, fill: "#2ec4f1", "stroke-width": 1.2 }],
+    ["path", { d: "M7.4 20.4a4.6 2.2 0 0 0 9.2 0", fill: "#3ddc84" }]
+  ],
+  clean: [
+    ["path", { d: "M14.6 3.4 9.4 12.6", fill: "none", "stroke-width": 2.2 }],
+    ["path", { d: "M6.2 12.2h7.4l1.4 8.6H4.8z", fill: "#2ec4f1" }],
+    ["path", { d: "M18.6 4.2c.3 1.4.9 2 2.3 2.3-1.4.3-2 .9-2.3 2.3-.3-1.4-.9-2-2.3-2.3 1.4-.3 2-.9 2.3-2.3z", fill: "#fff", "stroke-width": 1.1 }]
+  ],
+  feed: [
+    ["path", { d: "M3.4 11.6h17.2a8.6 7.4 0 0 1-17.2 0z", fill: "#ff9f1c" }],
+    ["circle", { cx: 9, cy: 9.4, r: 1.9, fill: "#a5642c", "stroke-width": 1.2 }],
+    ["circle", { cx: 13.4, cy: 8.6, r: 1.9, fill: "#a5642c", "stroke-width": 1.2 }],
+    ["circle", { cx: 16.4, cy: 10, r: 1.5, fill: "#a5642c", "stroke-width": 1.2 }]
+  ],
+  gift: [
+    ["rect", { x: 3.6, y: 9, width: 16.8, height: 11.6, rx: 1.6, fill: "#3b4fd8" }],
+    ["rect", { x: 2.6, y: 6.6, width: 18.8, height: 4, rx: 1.2, fill: "#5b6cff" }],
+    ["path", { d: "M12 6.6v14", fill: "none", stroke: "#ffd23f", "stroke-width": 2.4 }],
+    ["path", { d: "M12 6.4C10.4 3 7 3.2 7.4 5.2c.3 1.4 2.6 1.4 4.6 1.2zM12 6.4c1.6-3.4 5-3.2 4.6-1.2-.3 1.4-2.6 1.4-4.6 1.2z", fill: "#ffd23f", "stroke-width": 1.3 }]
+  ],
   // Chip families: A-class growth chips, B-class hunt cartridges, C-class bounty beacons.
   growth: [
     ["path", { d: "M9 3.4v2.6M12 3.4v2.6M15 3.4v2.6M9 18v2.6M12 18v2.6M15 18v2.6M3.4 9H6M3.4 12H6M3.4 15H6M18 9h2.6M18 12h2.6M18 15h2.6", fill: "none", "stroke-width": 1.5 }],

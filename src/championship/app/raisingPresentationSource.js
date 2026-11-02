@@ -393,6 +393,9 @@ export function createRaisingPresentationSource(app) {
     getWasteFrame(){return app.getRaisingWasteFrame?.()??[];},
     getLifecycleFrame(){return app.getRaisingLifecycleFrame?.()??null;},
     getPartnerLife(){return app.getPartnerLifeFrame?.()??null;},
+    // DIAMOND_ECONOMY_20261102: automated cages and their recent auto-clean / auto-feed events.
+    getCageAutomation(){return app.getCageAutomationFrame?.()??[];},
+    getAutomationEvents(){return app.getAutomationEvents?.()??[];},
     getFrame() {
       return currentFrame;
     },

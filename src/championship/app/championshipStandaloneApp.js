@@ -3,7 +3,13 @@ import {habitatMatch} from '../contracts/speciesTaxonomy.js';
 import {GACHA_CHIPS,GACHA_METALS,GACHA_GOODS,GACHA_PITY_MAX,GACHA_MACHINES,GACHA_BLOODLINES,getGachaChip,getGachaMetal,getGachaGoods,gachaRarityRank,
   grantGachaWelcome,grantGachaTickets,pullCyberGacha,claimGachaPity,autoFillSynthesizer,synthesizeGachaMetal,applyGachaBoost,metalBoostEffect,
   inscribesBloodline,catalystRarityForGeneration,spendGachaItem,fuseGachaShards,shardFusionTarget,GACHA_SHARD_FUSION_COST,settleGachaBattleWin,takeArmedHuntChips,gachaBloodlineOf,claimGachaReward} from '../gacha/cyberGacha.js';
-import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, normalizeFriendsPlaytestState, purchaseTestRanchRow } from './friendsPlaytestPolicy.js';
+import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, normalizeFriendsPlaytestState, purchaseTestRanchRow, creditTestDiamonds } from './friendsPlaytestPolicy.js';
+import {recordGachaClaims,automationForgePlan,forgeAutomationItem,mountAutomationCore,unmountAutomationCore,settleRanchAutomation,
+  setGachaBondCarry,claimGachaBundle,grantGachaAutomation} from '../gacha/cyberGacha.js';
+import {AUTOMATION_ITEMS,AUTOMATION_RECIPES,AUTOMATION_RULES,getAutomationItem,automationItemForEdition,cageAutomation,royalTotal,autoFeedAffection,royalSleepBonus,
+  FOUNDER_PACK_ART} from '../gacha/ranchAutomation.js';
+import {LAND_EXPANSION,DIAMOND_REWARDS,FOUNDER_PACK,diamondRewardKey,dueDiamondMilestones,landExpansionTier,landMemoryBonusG,
+  founderPackUnlocked} from '../gacha/diamondRewards.js';
 import { planOnlineBindReward } from './onlineBindRewardPolicy.js';
 import {GACHA_PERSONALITY_CHOICES,GACHA_TICKET_PRIZE,getGachaBitsBag,disarmGachaItem} from '../gacha/cyberGacha.js';
 import {beginNativeRaisingEvolution} from '../raising/nativeRaisingActor.js';
@@ -92,7 +98,7 @@ import {createRanchRaisingGround as createNativeRaisingGround,ranchRaisingSpawnP
 import {createNativeRaisingFood,stepNativeRaisingFood,foodVisualQuarter,nativeRaisingFeast,reconcileNativeFoodReservations} from "../raising/nativeRaisingFood.js";
 import {separateNativeRaisingGroundActors} from '../raising/nativeGroundSpacing.js';
 import {stepRanchConveyor} from '../raising/ranchConveyor.js';
-import {PRODUCT_RANCH_GRID,PRODUCT_WAITING_ROOM_SLOT,productGridCell} from '../cage/productRanchGrid.js';
+import {PRODUCT_RANCH_GRID,PRODUCT_WAITING_ROOM_SLOT,productGridCell,productPlacementCells} from '../cage/productRanchGrid.js';
 import {normalizeNativeRaisingHome,nativeRaisingRebuiltListOrder} from "../raising/nativeRaisingHomeState.js";
 import {allocateNativeRaisingWaste} from '../raising/nativeRaisingWaste.js';
 import {projectNativeRaisingCalendar} from '../raising/nativeRaisingCalendar.js';
@@ -113,7 +119,7 @@ import {getDatabaseIllustration} from '../database/databaseIllustrations.js';
 import { registerNativeBookSpecies, retainOwnedBookSpecies } from "../database/nativeBookRegistration.js";
 import {getShopRecord,BITS_WALLET_CAP} from '../shop/shopCatalog.js';
 import { createCageEditRuntime } from "../cage/cageEditRuntime.js";
-import { normalizeTamerRank, slotCountForTamerRank } from "../cage/cageCatalog.js";
+import { normalizeTamerRank, slotCountForTamerRank, listCageDefinitions } from "../cage/cageCatalog.js";
 import { validateRanchLayout } from '../cage/ranchExpansion.js';
 import { getMatchRecord, matchEntryFee, matchPayout, resolveMatchList } from "../battle/battleMatchSelection.js";
 import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from "../battle/battleOutcome.js";
@@ -313,6 +319,14 @@ export function createChampionshipStandaloneApp({
   let battleTactics={};
   // OWNER_APPROVED_ADAPTATION 2026-10-29: Cyber Gachapon (tickets, chips, metals, bloodlines).
   let cyberGacha=null;
+  // DIAMOND_ECONOMY_20261102: royal cages placed in the facility draft (instanceId -> edition),
+  // the royal card picked in the tray, the last automation events and diamond rewards for the UI.
+  let draftRoyalEditions=null;
+  let pendingRoyalEdition=null;
+  let automationEvents=[];
+  let automationSerial=0;
+  let lastDiamondRewards=Object.freeze([]);
+  let lastLandExpansion=null;
   // OWNER_APPROVED_ADAPTATION 2026-11-02: burst evolution unlocks per partner (STAGE_REDESIGN_BURST_20261102).
   let burstEvolution=null;
   let nativeMessages=createNativeRaisingMessages();
@@ -375,7 +389,13 @@ export function createChampionshipStandaloneApp({
   }
 
   function shopCageOwned() {
-    return shop?.toSave() ?? [];
+    const stock=shop?.toSave() ?? [];
+    // DIAMOND_ECONOMY_20261102: a royal cage (bag or placed) is one more copy of its base cage.
+    const royal=royalCageCopies();
+    if(!royal.size||Array.isArray(stock)||!stock.cageQuantities)return stock;
+    const quantities=Array.isArray(stock.cageQuantities)?[...stock.cageQuantities]:{...stock.cageQuantities},owned=new Set(stock.cageOwned??[]);
+    for(const [record,count] of royal){quantities[record]=(quantities[record]??0)+count;owned.add(record);}
+    return {...stock,cageQuantities:quantities,cageOwned:[...owned].sort((a,b)=>a-b)};
   }
 
   function tamerRank() {
@@ -770,6 +790,8 @@ export function createChampionshipStandaloneApp({
   }
 
   function spawnRaisingWaste(definition,speciesIndex,positionQ12,cageInstanceId=null) {
+    // DIAMOND_ECONOMY_20261102: an automated cage clears it at once (the partner still counts it as done).
+    if(cageInstanceId&&cyberGacha&&cageAutomation(cyberGacha,cageInstanceId).clean){autoCleanWaste(cageInstanceId,positionQ12);return true;}
     const waste=allocateNativeRaisingWaste(raisingWaste,{speciesIndex,cageDefinitionIndex:definition,positionQ12});
     if(!waste)return false;if(cageInstanceId)waste.cageInstanceId=cageInstanceId;raisingWaste=raisingWaste.filter(w=>w.present);raisingWaste.push(waste);
     raisingDirtySignals.set(cageInstanceId??definition,{dirtyAdded:true});savePort.markDirty();return true;
@@ -879,7 +901,7 @@ export function createChampionshipStandaloneApp({
         const result=stepNativeRaisingActor(actor,raisingNativeProfile(id),{ageDelta,rng:{next:nextGameplayRandom},
           feeding:raisingGround?{ground:raisingGround,foods:raisingFoods,signals,actors:raisingActors.values()}:null,
           lifecycle:raisingGround?{rank:Math.min(9,tamerRankValue),minute:before.clockMinutes+minutes,season:before.season,
-            training:realtime?REALTIME_TRAINING_POLICY:null,
+            training:realtime?REALTIME_TRAINING_POLICY:null,trainingBonus:royalTrainingBonus(actor),
             onJoin:()=>notifyNativeRaisingResidentAdded(actor,[...raisingActors.values()].filter(a=>!a.detached),{next:nextGameplayRandom}),
             getResidents:()=>[...raisingActors].filter(([,a])=>!a.detached&&(a.cageInstanceId??a.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).sort((a,b)=>a[1].poolSlot-b[1].poolSlot).map(([key])=>raisingNativeProfile(key)),
             roster:[actor.speciesIndex,...ids.filter(other=>other!==id).map(other=>raisingNativeProfile(other).fields['000'])],
@@ -887,6 +909,9 @@ export function createChampionshipStandaloneApp({
             rottenFoodCount:raisingFoods.filter(f=>f.present&&(f.cageInstanceId??f.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)&&f.freshness<=0).length,
             ...raisingDirtySignals.get(actor.cageInstanceId??actor.cageDefinitionIndex),spawnWaste:(species,position)=>spawnRaisingWaste(actor.cageDefinitionIndex,species,position,actor.cageInstanceId)}:null});
         if(result.changed) {writeRaisingNativeProfile(id,result.profile);changed=true;}
+        // DIAMOND_ECONOMY_20261102: an auto-feed cage feeds a hungry partner; a royal cage speeds up its sleep.
+        if(autoFeedRaisingPartner(id,actor))changed=true;
+        if(royalSleepStep(id,actor,ageDelta))changed=true;
         if(result.landed){storeNativeRaisingPositions();savePort.markDirty();}
         if(result.evolutionStarted){publishRaising();return;}
       }
@@ -1108,7 +1133,8 @@ export function createChampionshipStandaloneApp({
   }
   function gachaPrizeView(prize){
     const entry=prize.kind==='CHIP'?getGachaChip(prize.id):prize.kind==='METAL'?getGachaMetal(prize.id)
-      :prize.kind==='BITS'?getGachaBitsBag(prize.id):prize.kind==='TICKETS'?GACHA_TICKET_PRIZE:getGachaGoods(prize.id);
+      :prize.kind==='BITS'?getGachaBitsBag(prize.id):prize.kind==='TICKETS'?GACHA_TICKET_PRIZE
+      :prize.kind==='AUTOMATION'?getAutomationItem(prize.id):getGachaGoods(prize.id);
     return Object.freeze({...prize,name:entry?.name??prize.id,art:entry?.art??null,
       shopRecordIndex:entry?.shopRecordIndex??null,family:entry?.family??null,...(prize.bonus?{bonus:gachaPrizeView(prize.bonus)}:{})});
   }
@@ -1116,6 +1142,154 @@ export function createChampionshipStandaloneApp({
     lastGachaResult=Object.freeze({...result,serial:++gachaSerial});publishScreens();return lastGachaResult;
   }
   function gachaRefusal(reason){return gachaReceipt({ok:false,reason});}
+
+  // ---- Ranch automation and diamonds (OWNER_APPROVED_ADAPTATION 2026-11-02, DIAMOND_ECONOMY_20261102) ----
+  // Cores and royal cages live in the gachapon state; the cage instances stay in cageEdit. A royal cage is
+  // one more copy of its base cage (zoo / ranch) for ownership, and carries its edition by instance id.
+  const ROYAL_ITEMS=AUTOMATION_ITEMS.filter(item=>item.edition);
+  const baseDefinitionOf=item=>listCageDefinitions().find(d=>d.cageDefinitionIndex===item.baseDefinition)??null;
+  function royalCageCopies(){
+    const copies=new Map();if(!cyberGacha)return copies;
+    for(const item of ROYAL_ITEMS){const n=royalTotal(cyberGacha,item.edition),record=baseDefinitionOf(item)?.shopRecordIndex;
+      if(n>0&&Number.isInteger(record))copies.set(record,(copies.get(record)??0)+n);}
+    return copies;
+  }
+  /** Royal editions of the facility draft: the committed ones until the draft places or removes one. */
+  function royalDraft(){return draftRoyalEditions??{...(cyberGacha?.editions??{})};}
+  function royalTrayView(frame){
+    const draft=royalDraft(),live=new Set((frame.placements??[]).map(p=>p.instanceId).filter(Boolean));
+    return ROYAL_ITEMS.map(item=>{
+      const moduleId=baseDefinitionOf(item)?.moduleId??null,total=royalTotal(gachaState(),item.edition);
+      const placed=Object.entries(draft).filter(([id,edition])=>edition===item.edition&&live.has(id)).length;
+      return Object.freeze({id:item.id,edition:item.edition,name:item.name,rarity:item.rarity,art:item.art,moduleId,total,
+        available:Math.max(0,total-placed),selected:pendingRoyalEdition===item.edition&&frame.selectedModuleId===moduleId});
+    }).filter(entry=>entry.total>0);
+  }
+  /** What each placed cage runs by itself, by instance id (the draft's royal cages included). */
+  function cageAutomationView(frame){
+    const state={...gachaState(),editions:royalDraft()},out={};
+    for(const p of frame.placements??[]){
+      if(!p.instanceId)continue;
+      const auto=cageAutomation(state,p.instanceId);
+      if(auto.clean||auto.feed)out[p.instanceId]=Object.freeze({edition:auto.edition,royal:auto.royal,clean:auto.clean,feed:auto.feed,mounted:auto.mounted});
+    }
+    return Object.freeze(out);
+  }
+  function landView(frame){
+    const grid=frame.productGrid;if(!grid)return null;
+    const capacity=Math.min(grid.cellCap,frame.landCapacity??grid.landCapacity),next=grid.landRows?.[0]??null;
+    return Object.freeze({capacity,cap:grid.cellCap,used:grid.usedCells,tier:landExpansionTier(capacity),price:LAND_EXPANSION.price,
+      step:next?.cells??0,nextRow:next?.row??null,max:!next,diamonds:friendsPlaytest?.diamonds??0,
+      available:playtestPolicy?.enabled===true&&Boolean(friendsPlaytest),memoryBonusG:landExpansionTier(capacity)*LAND_EXPANSION.memoryGPerTier});
+  }
+  function pushAutomationEvent(event){
+    automationEvents=[...automationEvents,Object.freeze({...event,serial:++automationSerial})].slice(-12);
+  }
+  function cageAutomationOf(actor){return actor?.cageInstanceId&&cyberGacha?cageAutomation(cyberGacha,actor.cageInstanceId):null;}
+  /** An automated cage clears a dropping at once and pays the cleaning bonus into the bits wallet. */
+  function autoCleanWaste(cageInstanceId,positionQ12){
+    const credited=shop?Math.max(0,Math.min(AUTOMATION_RULES.cleanBits,BITS_WALLET_CAP-shop.getBits())):0;
+    if(credited>0)shop.creditBits(credited,{evidence:'OWNER_APPROVED_ADAPTATION'});
+    pushAutomationEvent({kind:'CLEAN',cageInstanceId,bits:credited,positionQ12:positionQ12?[...positionQ12]:null});
+    savePort.markDirty();
+  }
+  /** Droppings already lying in a cage that just became automated are cleared too. */
+  function sweepAutomatedCage(instanceId){
+    let swept=0;
+    for(const waste of raisingWaste)if(waste.present&&waste.cageInstanceId===instanceId){waste.present=false;swept++;autoCleanWaste(instanceId,waste.positionQ12);}
+    if(swept){raisingWaste=raisingWaste.filter(w=>w.present);raisingDirtySignals.set(instanceId,{dirtyRemoved:true});storeNativeRaisingHome();}
+    return swept;
+  }
+  /** A hungry partner (the native hungry flag, satiety <= 2) in an auto-feed cage is fed to full: +2.4 affection. */
+  function autoFeedRaisingPartner(id,actor){
+    const auto=cageAutomationOf(actor);
+    if(!auto?.feed||actor.detached||actor.evolution||actor.state===4||actor.speciesIndex<8)return false;
+    const profile=raisingNativeProfile(id);if(!profile)return false;
+    const species=nativeHuntSpeciesByIndex(profile.fields['000']);
+    if(!species||species.generation===0||(profile.fields['008']|0)>AUTOMATION_RULES.hungrySatiety)return false;
+    const gain=autoFeedAffection(gachaState().bondCarry?.[id]??0),next=structuredClone(profile);
+    next.fields['008']=species.field1c;next.fields['174']=0;next.fields['170']=0;next.fields['184']=0;
+    next.fields['020']=Math.min(100,(next.fields['020']|0)+gain.points)>>>0;
+    if(actor.growthFields)actor.growthFields['418']=0;
+    writeRaisingNativeProfile(id,normalizeNativeIndividualProfile(next));
+    cyberGacha=setGachaBondCarry(gachaState(),id,gain.carry,currentInstanceIds());
+    pushAutomationEvent({kind:'FEED',cageInstanceId:actor.cageInstanceId,instanceId:id,affection:gain.points,
+      positionQ12:actor.positionQ12?[...actor.positionQ12]:null});
+    savePort.markDirty();return true;
+  }
+  /** Sleep in a royal cage recovers 30% faster (the native sleep counter 17c advances 1.3x). */
+  function royalSleepStep(id,actor,units){
+    const auto=cageAutomationOf(actor);if(!auto?.royal||actor.state!==4||!(units>0))return false;
+    const bonus=royalSleepBonus(units,actor.royalSleepCarry??0,auto.sleepPercent);actor.royalSleepCarry=bonus.carry;
+    if(!bonus.units)return false;
+    const profile=raisingNativeProfile(id);if(!profile)return false;
+    const next=structuredClone(profile);next.fields['17c']=((next.fields['17c']|0)+bonus.units)>>>0;
+    writeRaisingNativeProfile(id,normalizeNativeIndividualProfile(next));return true;
+  }
+  const royalTrainingBonus=actor=>cageAutomationOf(actor)?.royal
+    ?Object.freeze({kind:AUTOMATION_RULES.trainingKind,points:AUTOMATION_RULES.royalTrainingPoints}):null;
+  /** Ranch badges: each automated cage's top centre in native Q12, for the field's badge layer. */
+  let badgeCache={ground:null,key:'',value:Object.freeze([])};
+  function cageAutomationBadges(){
+    if(!raisingGround||!cyberGacha||raisingGround.layoutVersion!==PRODUCT_RANCH_GRID)return Object.freeze([]);
+    // Read every frame by the field: rebuilt only when the ground or what the cages run changes.
+    const key=JSON.stringify([cyberGacha.editions??null,cyberGacha.mounts??null]);
+    if(badgeCache.ground===raisingGround&&badgeCache.key===key)return badgeCache.value;
+    const badges=[];
+    for(const p of raisingGround.placements){
+      const auto=p.instanceId?cageAutomation(cyberGacha,p.instanceId):null;
+      if(!auto||!(auto.clean||auto.feed))continue;
+      const cells=(productPlacementCells(p)??[]).map(slot=>productGridCell(slot));if(!cells.length)continue;
+      const top=Math.min(...cells.map(c=>c.y)),row=cells.filter(c=>c.y===top);
+      const x=row.reduce((s,c)=>s+c.x+48,0)/row.length;
+      const art=(auto.royal?automationItemForEdition(auto.edition):getAutomationItem(auto.clean?'auto:clean-core':'auto:feed-core'))?.art??null;
+      badges.push(Object.freeze({instanceId:p.instanceId,definitionIndex:p.definitionIndex,edition:auto.edition,royal:auto.royal,art,
+        clean:auto.clean,feed:auto.feed,anchorQ12:Object.freeze([Math.round(x*4096),Math.round((top+40)*4096),0])}));
+    }
+    badgeCache={ground:raisingGround,key,value:Object.freeze(badges)};
+    return badgeCache.value;
+  }
+  /** Tamer rank and encyclopedia diamonds reached and not yet claimed (the player claims them in the gachapon). */
+  function pendingDiamondMilestones(){
+    if(!friendsPlaytest||!session)return Object.freeze([]);
+    const claimed=gachaState().claimed;
+    // A chapter cleared before diamonds existed pays them here once.
+    const story=claimed.filter(key=>key.startsWith('story:')).map(key=>key.slice(6))
+      .map(id=>Object.freeze({key:diamondRewardKey.story(id),kind:'STORY',value:id,amount:DIAMOND_REWARDS.storyChapter}))
+      .filter(entry=>entry.key.length<=60&&!claimed.includes(entry.key));
+    return Object.freeze([...story,...dueDiamondMilestones({claimed,rank:tamerRankValue,registeredCount:registeredSpeciesValue.length})]);
+  }
+  /** Every confirmed cage that can take a core, with what it runs (for the bag's mount list). */
+  function automationCageList(state){
+    return Object.freeze((cageEdit?.toSave().placements??[]).filter(p=>p.instanceId).map(p=>{
+      const auto=cageAutomation(state,p.instanceId);
+      return Object.freeze({instanceId:p.instanceId,moduleId:p.moduleId,
+        definitionIndex:listCageDefinitions().find(d=>d.moduleId===p.moduleId)?.cageDefinitionIndex??null,
+        royal:auto.royal,edition:auto.edition,mounted:auto.mounted,clean:auto.clean,feed:auto.feed});
+    }));
+  }
+  /** Pay `due` rewards (and record their keys) in one durable save; nothing is paid unless it is saved. */
+  function payDiamondRewards(due,{state=gachaState()}={}){
+    const fresh=due.filter(entry=>!state.claimed.includes(entry.key));
+    if(!friendsPlaytest||!fresh.length)return Object.freeze({ok:true,granted:0,rewards:Object.freeze([])});
+    const recorded=recordGachaClaims(state,fresh.map(entry=>entry.key));
+    const credit=creditTestDiamonds(friendsPlaytest,fresh.reduce((sum,entry)=>sum+entry.amount,0));
+    if(!commitGacha({state:recorded.state,friends:credit.state}))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
+    lastDiamondRewards=Object.freeze(fresh.map(entry=>Object.freeze({...entry,serial:++automationSerial})));
+    return Object.freeze({ok:true,granted:credit.granted,diamonds:friendsPlaytest.diamonds,rewards:lastDiamondRewards});
+  }
+  function founderPackView(){
+    const claimed=gachaState().claimed.includes(FOUNDER_PACK.key),unlocked=founderPackUnlocked({medals:battleBadgesValue});
+    return Object.freeze({key:FOUNDER_PACK.key,art:FOUNDER_PACK_ART,diamonds:FOUNDER_PACK.diamonds,tickets:FOUNDER_PACK.tickets,
+      items:Object.freeze(FOUNDER_PACK.items.map(([id,quantity])=>Object.freeze({id,quantity,name:getAutomationItem(id).name,art:getAutomationItem(id).art}))),
+      frame:FOUNDER_PACK.frame,unlock:FOUNDER_PACK.unlock,unlocked,claimed,available:Boolean(friendsPlaytest)&&unlocked&&!claimed});
+  }
+  function huntMemoryCapacityG(){
+    const card=maxGFromInventory(huntInventory);
+    // The land bonus never blocks a hunt: an unreadable layout falls back to the card alone.
+    let land=null;try{land=cageEdit?.getFrame(...cageEditArgs())?.landCapacity??null;}catch{land=null;}
+    return card+(Number.isFinite(land)?landMemoryBonusG(land,card):0);
+  }
 
   // ---- Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02, STAGE_REDESIGN_BURST_20261102) ----
   // A 成熟期 partner earns burst forms by the former evolution conditions or by an SSR/UR metal; the record is
@@ -1503,11 +1677,13 @@ export function createChampionshipStandaloneApp({
     friendsPlaytest = saved.flags.friendsPlaytest ?? null;
     onlineBindReward = saved.flags.onlineBindReward ?? null;
     openShopAndHunt({ shopSnapshot: saved.shop });
+    // The welcome tickets ride the next save; an unsaved grant is simply granted again.
+    // Restored before the cage editor: royal cages count as copies of their base cage (DIAMOND_ECONOMY_20261102).
+    cyberGacha=grantGachaWelcome(saved.progression.cyberGacha??null).state;
+    draftRoyalEditions=null;pendingRoyalEdition=null;automationEvents=[];
     cageEdit = createCageEditRuntime({ snapshot: saved.cageEdit, publicTestGrid: playtestPolicy?.enabled === true, initialTamerRank: tamerRankValue });
     freeBattleMenu=saved.progression.freeBattleMenu??null;
     battleTactics=normalizeBattleTactics(saved.progression.battleTactics);
-    // The welcome tickets ride the next save; an unsaved grant is simply granted again.
-    cyberGacha=grantGachaWelcome(saved.progression.cyberGacha??null).state;
     initializeNativeRaisingHome({tutorialBoundary});
     selectedDatabaseSpeciesIndex = null;
     resetExpedition();
@@ -3012,7 +3188,17 @@ export function createChampionshipStandaloneApp({
 
     getCageEditFrame() {
       if (!cageEdit) return null;
-      return Object.freeze({...requireCageEdit().getFrame(...cageEditArgs()),testDiamonds:friendsPlaytest?.diamonds??0});
+      const frame=requireCageEdit().getFrame(...cageEditArgs());
+      if(!frame.productGrid)return Object.freeze({...frame,testDiamonds:friendsPlaytest?.diamonds??0});
+      // DIAMOND_ECONOMY_20261102: royal cages get their own tray cards; the base card keeps the plain copies.
+      const royal=royalTrayView(frame);
+      const tray=frame.tray.map(item=>{
+        const mine=royal.filter(entry=>entry.moduleId===item.moduleId);if(!mine.length)return item;
+        return Object.freeze({...item,availableCount:item.availableCount-mine.reduce((sum,entry)=>sum+entry.available,0),
+          ownedCount:item.ownedCount-mine.reduce((sum,entry)=>sum+entry.total,0),selected:item.selected&&pendingRoyalEdition===null});
+      }).filter(item=>item.availableCount>0);
+      return Object.freeze({...frame,tray:Object.freeze(tray),testDiamonds:friendsPlaytest?.diamonds??0,royalTray:Object.freeze(royal),
+        automation:cageAutomationView(frame),land:landView(frame),landExpansion:lastLandExpansion});
     },
 
     openCageEdit() {
@@ -3020,6 +3206,7 @@ export function createChampionshipStandaloneApp({
       requireCageEdit();
       if (screens.current() === CHAMPIONSHIP_SCREENS.CAGE_EDIT) return screens.current();
       cageEdit.selectModule(null, ...cageEditArgs());
+      draftRoyalEditions=null;pendingRoyalEdition=null;
       screens.enter(CHAMPIONSHIP_SCREENS.CAGE_EDIT);
       publishScreens();
       return screens.current();
@@ -3030,6 +3217,19 @@ export function createChampionshipStandaloneApp({
         throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
       }
       requireCageEdit().selectModule(moduleId, ...cageEditArgs());
+      pendingRoyalEdition=null;
+      publishScreens();
+      return this.getCageEditFrame();
+    },
+
+    /** Pick a royal cage card (DIAMOND_ECONOMY_20261102): its base cage is selected and the next placement is royal. */
+    selectRoyalCage(itemId) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
+      const item=getAutomationItem(itemId),editor=requireCageEdit();
+      const card=item?.edition?royalTrayView(editor.getFrame(...cageEditArgs())).find(entry=>entry.id===itemId):null;
+      if(!card||card.available<1){editor.selectModule(null,...cageEditArgs());pendingRoyalEdition=null;publishScreens();return this.getCageEditFrame();}
+      editor.selectModule(card.moduleId,...cageEditArgs());
+      pendingRoyalEdition=item.edition;
       publishScreens();
       return this.getCageEditFrame();
     },
@@ -3038,7 +3238,18 @@ export function createChampionshipStandaloneApp({
       if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
         throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
       }
-      requireCageEdit().placeAt(slotIndex, ...cageEditArgs());
+      const editor=requireCageEdit(),before=new Set(editor.getFrame(...cageEditArgs()).placements.map(p=>p.instanceId));
+      const frame=editor.placeAt(slotIndex, ...cageEditArgs());
+      // A royal card's placement carries its edition; with no plain copy left, the base cage placed is royal.
+      const added=frame.placements.find(p=>p.instanceId&&!before.has(p.instanceId));
+      if(added){
+        const royal=royalTrayView(frame).filter(entry=>entry.moduleId===added.moduleId);
+        const plainLeft=(frame.tray.find(item=>item.moduleId===added.moduleId)?.availableCount??0)-royal.reduce((s,e)=>s+e.available,0);
+        const edition=royal.find(entry=>entry.edition===pendingRoyalEdition&&entry.available>0)?.edition
+          ??(plainLeft<0?royal.find(entry=>entry.available>0)?.edition:null);
+        if(edition)draftRoyalEditions={...royalDraft(),[added.instanceId]:edition};
+        pendingRoyalEdition=null;
+      }
       publishScreens();
       return this.getCageEditFrame();
     },
@@ -3050,6 +3261,10 @@ export function createChampionshipStandaloneApp({
       // Hex cage world v1: a cage that is some partner's home cannot be taken
       // away; the player moves the partner first (Owner direction 2026-10-26).
       requireCageEdit().removePlacement(moduleId, ...cageEditArgs(), { residentInstances: ranchResidentInstances() });
+      // A royal cage taken off the board goes back to its card (the edition follows the instance id).
+      const live=new Set(requireCageEdit().getFrame(...cageEditArgs()).placements.map(p=>p.instanceId));
+      const draft=royalDraft();
+      if(Object.keys(draft).some(id=>!live.has(id)))draftRoyalEditions=Object.fromEntries(Object.entries(draft).filter(([id])=>live.has(id)));
       publishScreens();
       return this.getCageEditFrame();
     },
@@ -3099,6 +3314,23 @@ export function createChampionshipStandaloneApp({
       return Object.freeze({...this.getCageEditFrame(),ok:true,receipt:purchase.receipt});
     },
 
+    /**
+     * Diamond land expansion (DIAMOND_ECONOMY_20261102): the next +10 cells for 1,000 diamonds, saved at once
+     * (the same atomic row purchase), up to 100 cells. Each step also lifts the hunt memory card by 8 G.
+     */
+    expandRanchLand() {
+      requireSession();
+      const frame=this.getCageEditFrame(),land=frame?.land;
+      if(!land)return Object.freeze({...frame,ok:false,reason:'LAND_EXPANSION_UNAVAILABLE'});
+      if(land.max)return Object.freeze({...frame,ok:false,reason:'LAND_AT_MAXIMUM'});
+      const result=this.buyRanchTestRow(land.nextRow);
+      if(!result.ok)return Object.freeze({...result,before:land.capacity,after:land.capacity});
+      const after=this.getCageEditFrame().land?.capacity??land.capacity;
+      lastLandExpansion=Object.freeze({serial:++automationSerial,before:land.capacity,after,row:land.nextRow,tier:landExpansionTier(after)});
+      publishScreens();
+      return Object.freeze({...this.getCageEditFrame(),ok:true,receipt:result.receipt,before:land.capacity,after});
+    },
+
     revokeRanchExpansionPrototype() {
       return changeRanchExpansion((editor) => editor.revokeExpansion(...cageEditArgs()));
     },
@@ -3107,6 +3339,7 @@ export function createChampionshipStandaloneApp({
     revertCageEdit() {
       if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
       requireCageEdit().revert(...cageEditArgs());
+      draftRoyalEditions=null;pendingRoyalEdition=null;
       publishScreens();
       return this.getCageEditFrame();
     },
@@ -3119,6 +3352,19 @@ export function createChampionshipStandaloneApp({
       const before = JSON.stringify(editor.toSave());
       storeNativeRaisingPositions();storeNativeRaisingHome();
       editor.confirm(...cageEditArgs());
+      // DIAMOND_ECONOMY_20261102: the confirmed layout settles royal cages and cores (bag <-> board).
+      const liveIds=editor.toSave().placements.map(p=>p.instanceId).filter(Boolean);
+      const royalBefore=JSON.stringify(cyberGacha?.editions??{}),mountsBefore=JSON.stringify(cyberGacha?.mounts??{});
+      if(cyberGacha&&(draftRoyalEditions||Object.keys(cyberGacha.mounts??{}).length||Object.keys(cyberGacha.editions??{}).length)){
+        const settled=settleRanchAutomation(cyberGacha,{editions:royalDraft(),liveInstanceIds:liveIds});
+        if(settled.ok){cyberGacha=settled.state;savePort.markDirty();}
+      }
+      draftRoyalEditions=null;pendingRoyalEdition=null;
+      const automationChanged=JSON.stringify(cyberGacha?.editions??{})!==royalBefore||JSON.stringify(cyberGacha?.mounts??{})!==mountsBefore;
+      if (automationChanged&&JSON.stringify(editor.toSave()) === before) {
+        for(const id of Object.keys(cyberGacha?.editions??{}))sweepAutomatedCage(id);
+        publishRaising();
+      }
       if (JSON.stringify(editor.toSave()) !== before) {
         const nextGround=createNativeRaisingGround({...editor.toSave(),unlockedCount:slotCountForTamerRank(tamerRankValue)});
         // Owner 2026-10-27: partners beside a newly opened passage go and look.
@@ -3136,6 +3382,7 @@ export function createChampionshipStandaloneApp({
         }
         raisingActors.clear();initializeNativeRaisingHome({restoreLayoutPositions:true});savePort.markDirty();
         for(const actor of raisingActors.values()){const across=visits.get(actor.cageInstanceId);if(across)actor.passageVisit=across;}
+        for(const id of Object.keys(cyberGacha?.editions??{}))sweepAutomatedCage(id);
       }
       publishScreens();
       return this.getCageEditFrame();
@@ -3186,8 +3433,84 @@ export function createChampionshipStandaloneApp({
           return {...metal,owned:state.metals[metal.id]??0,awaken:{fill:tier1.fill,tier1:tier1.amount,tier2:tier2.amount,cap:AWAKENING_RULES.itemCap},
             ...(into?{fusesInto:{id:into.id,name:into.name,rarity:into.rarity},fusionCost:GACHA_SHARD_FUSION_COST}:{})};}),
         goods:GACHA_GOODS,bloodlines:GACHA_BLOODLINES,autoFill:autoFillSynthesizer(state),
-        armed:state.armed,partners,lastResult:lastGachaResult});
+        armed:state.armed,partners,lastResult:lastGachaResult,
+        // DIAMOND_ECONOMY_20261102: ranch automation items, directed recipes, placed cages, rewards and the founder box.
+        automation:AUTOMATION_ITEMS.map(item=>{
+          const recipe=AUTOMATION_RECIPES.find(r=>r.id===item.id),plan=automationForgePlan(state,item.id);
+          return Object.freeze({...item,owned:state.automation?.[item.id]??0,
+            placed:item.edition?Object.values(state.editions??{}).filter(e=>e===item.edition).length
+              :Object.values(state.mounts??{}).filter(m=>m.includes(item.module)).length,
+            recipe:recipe?Object.freeze({chips:recipe.chips,shards:recipe.shards,ready:plan.ok,reason:plan.ok?null:plan.reason}):null});
+        }),
+        cages:automationCageList(state),
+        diamondRewards:pendingDiamondMilestones(),lastDiamondRewards,founder:founderPackView()});
     },
+
+    /** Forge one automation item from its fixed recipe (the furnace's pity path). */
+    gachaForgeAutomation(itemId){
+      if(screens.current()!==CHAMPIONSHIP_SCREENS.SHOP)throw new Error('CHAMPIONSHIP_SHOP_NOT_ACTIVE');
+      const result=forgeAutomationItem(gachaState(),itemId);
+      if(!result.ok)return gachaRefusal(result.reason);
+      if(!commitGacha({state:result.state}))return gachaRefusal('SAVE_FAILED');
+      return gachaReceipt({ok:true,kind:'FORGE',consumed:result.consumed,prizes:[gachaPrizeView(result.prize)]});
+    },
+    /** Mount a core from the bag on a placed (confirmed) cage; droppings already there are cleared at once. */
+    gachaMountCore(coreId,instanceId){
+      requireSession();
+      if(!cageEdit?.toSave().placements.some(p=>p.instanceId===instanceId))return gachaRefusal('UNKNOWN_CAGE');
+      const result=mountAutomationCore(gachaState(),coreId,instanceId);
+      if(!result.ok)return gachaRefusal(result.reason);
+      if(!commitGacha({state:result.state}))return gachaRefusal('SAVE_FAILED');
+      const swept=getAutomationItem(coreId)?.module==='AUTO_CLEAN'?sweepAutomatedCage(instanceId):0;
+      publishRaising();
+      return gachaReceipt({ok:true,kind:'MOUNT',itemId:coreId,instanceId,swept});
+    },
+    gachaUnmountCore(module,instanceId){
+      requireSession();
+      const result=unmountAutomationCore(gachaState(),module,instanceId);
+      if(!result.ok)return gachaRefusal(result.reason);
+      if(!commitGacha({state:result.state}))return gachaRefusal('SAVE_FAILED');
+      publishRaising();
+      return gachaReceipt({ok:true,kind:'UNMOUNT',module,instanceId});
+    },
+    /** Claim every rank and encyclopedia diamond reward reached so far, in one save. */
+    claimDiamondRewards(){
+      requireSession();
+      const paid=payDiamondRewards(pendingDiamondMilestones());
+      publishScreens();
+      return paid;
+    },
+    getDiamondRewards(){return Object.freeze({pending:pendingDiamondMilestones(),last:lastDiamondRewards});},
+    /** The founder box (fixed contents, no randomness): free once in the playtest after a first tournament medal. */
+    getFounderPack(){return session?founderPackView():null;},
+    claimFounderPack(){
+      requireSession();
+      const view=founderPackView();
+      if(!friendsPlaytest)return gachaRefusal('NO_DIAMOND_WALLET');
+      if(view.claimed)return gachaRefusal('ALREADY_CLAIMED');
+      if(!view.unlocked)return gachaRefusal('FOUNDER_PACK_LOCKED');
+      const bundle=claimGachaBundle(gachaState(),{key:FOUNDER_PACK.key,items:FOUNDER_PACK.items,tickets:FOUNDER_PACK.tickets});
+      if(!bundle.ok)return gachaRefusal(bundle.reason);
+      const credit=creditTestDiamonds(friendsPlaytest,FOUNDER_PACK.diamonds);
+      if(!commitGacha({state:bundle.state,friends:credit.state}))return gachaRefusal('SAVE_FAILED');
+      return gachaReceipt({ok:true,kind:'FOUNDER',diamonds:credit.granted,tickets:FOUNDER_PACK.tickets,
+        prizes:FOUNDER_PACK.items.map(([id,quantity])=>gachaPrizeView({kind:'AUTOMATION',id,rarity:getAutomationItem(id).rarity,quantity}))});
+    },
+    /** Automation items into the bag (loopback QA and future grants), saved at once. */
+    grantAutomationItem(itemId,quantity=1,reason='REWARD'){
+      requireSession();
+      const result=grantGachaAutomation(gachaState(),itemId,quantity);
+      if(!result.ok)return Object.freeze({ok:false,reason:result.reason});
+      if(!commitGacha({state:result.state}))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
+      publishScreens();
+      return Object.freeze({ok:true,itemId,quantity,reason});
+    },
+    /** Whether the brag card wears the founder's gold frame. */
+    hasFounderFrame(){return Boolean(cyberGacha?.claimed?.includes(FOUNDER_PACK.key));},
+    /** The ranch field's automation badges (top centre of each automated cage, native Q12). */
+    getCageAutomationFrame(){return session?cageAutomationBadges():Object.freeze([]);},
+    /** Recent auto-clean / auto-feed events, newest last (each has a serial for the UI). */
+    getAutomationEvents(){return Object.freeze([...automationEvents]);},
 
     /** The bloodline inscribed on one partner, or null (name badges, rings, cards). */
     getPartnerBloodline(instanceId){return gachaBloodlineOf(cyberGacha,instanceId);},
@@ -3421,6 +3744,16 @@ export function createChampionshipStandaloneApp({
     claimGachaReward(key,amount){
       requireSession();
       const result=claimGachaReward(gachaState(),key,amount);
+      // DIAMOND_ECONOMY_20261102: a story chapter's first clear also pays diamonds, in the same save.
+      const story=typeof key==='string'&&key.startsWith('story:')&&friendsPlaytest
+        ?[Object.freeze({key:diamondRewardKey.story(key.slice(6)),kind:'STORY',value:key.slice(6),amount:DIAMOND_REWARDS.storyChapter})]
+          .filter(entry=>!result.state.claimed.includes(entry.key)):[];
+      if(story.length){
+        const paid=payDiamondRewards(story,{state:result.state});
+        if(!paid.ok)return Object.freeze({ok:false,reason:'SAVE_FAILED'});
+        publishScreens();
+        return Object.freeze({ok:true,granted:result.granted,tickets:cyberGacha.tickets,diamonds:paid.granted,key});
+      }
       if(!result.granted)return Object.freeze({ok:true,granted:0,key});
       if(!commitGacha({state:result.state}))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
       publishScreens();
@@ -4103,7 +4436,7 @@ export function createChampionshipStandaloneApp({
         const factory = huntRuntimeFactory
           ?? (await import("../hunt/huntRuntime.js")).createHuntRuntime;
         const candidateRuntime = factory({ world, nativeEntry:entry,
-          captureReplay:huntCaptureReplay, maxCardG:maxGFromInventory(huntInventory),
+          captureReplay:huntCaptureReplay, maxCardG:huntMemoryCapacityG(),
           nativeControls:entry ? {loadout:requireLoadout(),consumeItem:(id,n=1)=>requireShop().consumeHuntItem(id,n),onChange:publishScreens,
             ...(armed.chips.length ? {boosts} : {})} : null,
           fieldActor:{ actorId:"championship:2026:actor:tamer", displayName:"Tamer" } });
@@ -4408,7 +4741,7 @@ export function createChampionshipStandaloneApp({
         lastShopReceipt = null;
       }
       if (from === CHAMPIONSHIP_SCREENS.DATABASE) selectedDatabaseSpeciesIndex = null;
-      if (from === CHAMPIONSHIP_SCREENS.CAGE_EDIT) cageEdit?.revert(...cageEditArgs());
+      if (from === CHAMPIONSHIP_SCREENS.CAGE_EDIT) {cageEdit?.revert(...cageEditArgs());draftRoyalEditions=null;pendingRoyalEdition=null;}
       screens.back();
       publishScreens();
       return screens.current();
