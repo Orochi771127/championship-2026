@@ -27,13 +27,22 @@ function transform(source,mode){
   const before=await boundary('saved:read-only',()=>saved());
   const waitResidentReady=async()=>{const started=performance.now();await page.waitForFunction(()=>{const h=document.querySelector('.int-rh2-field-host');if(!h)return false;const assets=JSON.parse(h.dataset.residentAssets||'[]');return h.dataset.loadState==='ready'&&h.getAttribute('aria-busy')==='false'&&assets.length>0&&assets.every(a=>a.state==='ready'&&!a.error);},null,{timeout:30000});(evidence.filmstrip.readinessWaitsMs??=[]).push(performance.now()-started);write();};
   const observe=async()=>{await waitResidentReady();return page.locator('.int-rh2-field-host').evaluate(h=>{const canvases=document.querySelectorAll('.cm-ranch-three-canvas');if(canvases.length!==1||!(Number(canvases[0].dataset.frames)>0))throw Error('One actually rendered Three canvas required');const c=canvases[0],gl=c.getContext('webgl2');if(!gl)throw Error('Actual Three WebGL2 context required');const ext=gl.getExtension('WEBGL_debug_renderer_info');const renderer={className:c.className,width:c.width,height:c.height,version:gl.getParameter(gl.VERSION),vendor:gl.getParameter(gl.VENDOR),renderer:gl.getParameter(gl.RENDERER),unmaskedVendor:ext?gl.getParameter(ext.UNMASKED_VENDOR_WEBGL):null,unmaskedRenderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):null};return {renderer,threeFrames:Number(c.dataset.frames),viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},rect:{x:h.getBoundingClientRect().x,y:h.getBoundingClientRect().y,width:h.clientWidth,height:h.clientHeight},loadState:h.dataset.loadState,ariaBusy:h.getAttribute('aria-busy'),assets:JSON.parse(h.dataset.residentAssets||'[]'),positions:JSON.parse(h.dataset.residentScreenPositions||'[]')};});};
-  const measured=async(name,action)=>{const t=performance.now();try{return await action();}finally{evidence.filmstrip.metrics[name]=performance.now()-t;write();}};`);
+  const measured=async(name,action)=>{const t=performance.now();try{return await action();}finally{evidence.filmstrip.metrics[name]=performance.now()-t;write();}};
+  const captureField=async(label,metric)=>{
+   const ready=s=>{assert.equal(s.overlay?.kind,'canvas');return friendsThreeSnapshotReady(s.three);};
+   const poll=new Function('selector','const s=('+friendsMakeFieldObservation().toString()+')(selector);return s.overlay?.kind==="canvas"&&('+friendsThreeSnapshotReady.toString()+')(s.three)?s:false;');
+   return require('./friends-filmstrip-diagnostic.cjs').captureReady({
+    now:()=>performance.now(),ready,
+    poll:async timeout=>{const h=await page.waitForFunction(poll,ranchCanvasSelector,{timeout});try{return await h.jsonValue();}finally{await h.dispose();}},
+    observe:()=>page.evaluate(friendsMakeFieldObservation(),ranchCanvasSelector),
+    shot:attempt=>measured(metric,()=>shot(label+'-attempt-'+attempt)),
+    record:row=>{(evidence.filmstrip.captureAttempts??=[]).push({label,...row});write();},
+    retain:attempt=>fs.copyFileSync(path.join(output,label+'-attempt-'+attempt+'.png'),path.join(output,label+'.png'))
+   });
+  };`);
  replace('for(let gesture=0;gesture<4;gesture++){',`await clearCalendar(null,{fieldReady:true});
    evidence.filmstrip.before=await observe();write();
-   (evidence.filmstrip.fieldCaptures??={}).before={before:await page.evaluate(friendsMakeFieldObservation(),ranchCanvasSelector)};write();
-   await measured('beforePngMs',()=>shot('filmstrip-before'));
-   evidence.filmstrip.fieldCaptures.before.rawPngRetained=true;write();
-   evidence.filmstrip.fieldCaptures.before.after=await page.evaluate(friendsMakeFieldObservation(),ranchCanvasSelector);write();
+   (evidence.filmstrip.fieldCaptures??={}).before=await captureField('filmstrip-before','beforePngMs');write();
    friendsFieldCaptureReady(evidence.filmstrip.fieldCaptures.before.before);friendsFieldCaptureReady(evidence.filmstrip.fieldCaptures.before.after);
    for(let gesture=0;gesture<1;gesture++){`);
  replace("await boundary('mouse.move',()=>page.mouse.move(box.x+start.x,box.y+Math.min(box.height-120,start.y+420),{steps:20}));await boundary('mouse.up',()=>page.mouse.up());await boundary('wait:250',()=>page.waitForTimeout(250));",`evidence.filmstrip.gesture={box,start,end:{x:box.x+start.x,y:box.y+Math.min(box.height-120,start.y+420)},steps:20};write();
@@ -41,10 +50,7 @@ function transform(source,mode){
     await measured('mouseUpMs',()=>page.mouse.up());await measured('existing250msWaitElapsed',()=>page.waitForTimeout(250));`);
  replace("evidence.assertions.push({topContour:label,viewport,ordinaryCameraSwipes:4,legacyTelemetry:'NOT_ENABLED',visualReviewRequired:true});write();await boundary('clearCalendar',()=>clearCalendar(null,{fieldReady:Boolean(evidence.sourceCoverage)}));await (evidence.sourceCoverage?sourceShot(label+'-top-contour-'+viewport.width):shot(label+'-top-contour-'+viewport.width));",`assert.deepEqual(viewport,{width:1280,height:800});
    await clearCalendar(null,{fieldReady:true});evidence.filmstrip.after=await observe();write();
-   (evidence.filmstrip.fieldCaptures??={}).after={before:await page.evaluate(friendsMakeFieldObservation(),ranchCanvasSelector)};write();
-   await measured('afterPngMs',()=>shot('filmstrip-after'));
-   evidence.filmstrip.fieldCaptures.after.rawPngRetained=true;write();
-   evidence.filmstrip.fieldCaptures.after.after=await page.evaluate(friendsMakeFieldObservation(),ranchCanvasSelector);write();
+   (evidence.filmstrip.fieldCaptures??={}).after=await captureField('filmstrip-after','afterPngMs');write();
    friendsFieldCaptureReady(evidence.filmstrip.fieldCaptures.after.before);friendsFieldCaptureReady(evidence.filmstrip.fieldCaptures.after.after);
    const after=await saved();assert.deepEqual(after.cageEdit.placements,before.cageEdit.placements);assert.deepEqual(after.shop,before.shop,'Swipes cannot spend food or change inventory');
    evidence.filmstrip.savedInvariant={before:{shop:before.shop,placements:before.cageEdit.placements},after:{shop:after.shop,placements:after.cageEdit.placements}};
@@ -95,7 +101,20 @@ function join(rows){
  const lifecycleChanges=pairedLifecycle(on.filmstrip,off.filmstrip);
  return {status:'PAIRED_DIAGNOSTIC_ONLY',commit:on.commit,buildId:BUILD,order:['on','off'],lifecycleChanges,performanceComparable:lifecycleChanges.length===0,move20Ms:{on:on.filmstrip.metrics.move20Ms,off:off.filmstrip.metrics.move20Ms},ratioOffToOn:off.filmstrip.metrics.move20Ms/on.filmstrip.metrics.move20Ms,limitations:['One fixed-order pair, not general causal proof','Independent fresh contexts, natural clock and actors are not same-frame paired','A recorded natural hatch makes the timing ratio unsuitable for performance conclusions','OFF second may benefit from OS caches','Does not complete source-corners or waive canceled Friends gates']};
 }
-module.exports={BASE,BUILD,RESOURCES,transform,join};
+async function captureReady(api){
+ const deadline=api.now()+30000;
+ for(let attempt=0;attempt<3;attempt++){
+  const remaining=deadline-api.now();assert.ok(remaining>0,'Field capture readiness budget exhausted');
+  const before=await api.poll(remaining);assert.equal(api.ready(before),true,'Atomic pre-capture snapshot ready');
+  await api.shot(attempt);const after=await api.observe();
+  const row={attempt,before,after,rawPngRetained:true};api.record(row);
+  // Fatal renderer/resource errors throw here. Only transient not-ready state
+  // can retry, with each original PNG and observation retained independently.
+  if(api.ready(after)){await api.retain(attempt);return row;}
+ }
+ throw Error('Field capture stayed transient across three retained attempts');
+}
+module.exports={BASE,BUILD,RESOURCES,transform,join,captureReady};
 function retainedTraceName(row){
  const name=row.finalTrace?.file;
  assert.ok(typeof name==='string'&&/^[a-zA-Z0-9_-]+-trace\.zip$/.test(name)&&path.basename(name)===name,'Safe finalTrace basename required');
