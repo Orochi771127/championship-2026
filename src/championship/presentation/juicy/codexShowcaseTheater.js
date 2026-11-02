@@ -23,6 +23,7 @@
 // change. Closing a preview or leaving the detail cancels every animation and
 // timer it started and drops the images it set.
 import movesCatalog from "../../../data/championship/catalogs/battle-moves.r1.json" with { type: "json" };
+import { listProductOriginalMoveRecords } from "../../contracts/productOriginalSpecies.js";
 import { battleFxFamilyName, battleFxMoveBanks, describeBattleFxMove, BATTLE_FX_PALETTES } from "../battleFx/battleFxRecipes.js";
 import { moveVfxTheme } from "../battleFx/moveVfxThemes.js";
 import { resolveMoveVfx } from "../vfx/unifiedMoveVfxResolver.js";
@@ -36,7 +37,7 @@ import { SHOWCASE_CARRIER_STYLES, SHOWCASE_STREAM_STYLES, playShowcaseStyle, sho
 import { SHOWCASE_ACTIONS, SHOWCASE_ATTACK_SEQUENCE, createSpriteMotion, loadShowcaseMotionShared, showcaseFitScale,
   showcaseMotionAvailable } from "./spriteMotionPlayer.js";
 
-const moveRecords = new Map((movesCatalog.records ?? []).map(record => [record.recordIndex, record]));
+const moveRecords = new Map([...(movesCatalog.records ?? []), ...listProductOriginalMoveRecords()].map(record => [record.recordIndex, record]));
 
 /**
  * A move's preview look: its theme (style, element, stage tier; see

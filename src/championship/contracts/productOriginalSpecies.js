@@ -1,21 +1,25 @@
-// Owner-approved provisional data (2026-10-29) for original identities that are art-only today:
-// species record fields, moves and ordered evolution branches. Attributes and fine settings will be
-// revised for every character later. Nothing here takes effect until an entry is runtimeReady and
-// evolutionReady; until then registration, capture, battle and evolution stay exactly as before.
+// Owner-approved provisional data (2026-10-29) for original identities: species record fields, moves and
+// ordered evolution branches. Attributes and fine settings will be revised for every character later.
+// An entry takes effect only when runtimeReady and evolutionReady (Owner 2026-11-03: the ones with motion
+// art); the rest stay art-only Dex entries and are left out of registration, capture, battle and evolution.
+// A ready entry keeps its own record, lifecycle, moves and branches; tables traced from the cartridge that
+// have no row for it (cage reactions, walk flags, battle eligibility rows) read its behaviorDonor's row.
 import catalog from '../../data/championship/product-species-originals.r1.json' with {type:'json'};
+import battleMoves from '../../data/championship/catalogs/battle-moves.r1.json' with {type:'json'};
 import nativeSpecies from '../../data/championship/catalogs/creature-species.r1.json' with {type:'json'};
 import statCurve from '../../data/championship/catalogs/creature-stat-curve.r1.json' with {type:'json'};
 import nativeLifecycle from '../../data/championship/catalogs/raising-lifecycle.r1.json' with {type:'json'};
 import {deepFreeze} from './championshipContracts.js';
 
 const LOCALES=['zh-Hant','en','ja','th','vi'];
+const MOVE_KIND=Object.freeze({MELEE:0,RANGED:1});
 const int=(v,min,max=Infinity)=>Number.isSafeInteger(v)&&v>=min&&v<=max;
 const thresholdsOk=t=>Array.isArray(t)&&t.length===26&&t.every(v=>int(v,0));
 
 // Validates a catalog against the native tables; the game loads only a catalog that passes.
-export function assertProductOriginalCatalog(source,{species=nativeSpecies.records,curveRows=statCurve.rows,rules=nativeLifecycle.rules}={}){
+export function assertProductOriginalCatalog(source,{species=nativeSpecies.records,curveRows=statCurve.rows,rules=nativeLifecycle.rules,moves=battleMoves.records}={}){
   const fail=code=>{throw new Error('PRODUCT_ORIGINAL_'+code);};
-  const byIndex=new Map(),entities=new Set();
+  const byIndex=new Map(),entities=new Set(),moveRecords=new Set();
   for(const e of source.entries){
     if(!int(e.speciesIndex,231)||e.speciesId!==`species-${e.speciesIndex}`||byIndex.has(e.speciesIndex)
       ||!/^oc_[a-z0-9_]+$/.test(e.entityId)||entities.has(e.entityId))fail('IDENTITY');
@@ -32,8 +36,15 @@ export function assertProductOriginalCatalog(source,{species=nativeSpecies.recor
       keys.add(m.moveKey);
     });
     if(typeof e.runtimeReady!=='boolean'||typeof e.evolutionReady!=='boolean'||(e.evolutionReady&&!e.runtimeReady))fail('READINESS');
-    // Ready means the battle lane and every locale can carry the entry; otherwise it stays data only.
-    if(e.runtimeReady&&e.moves.some(m=>!int(m.battleMoveRecord,0)||LOCALES.some(k=>typeof m.nameByLocale[k]!=='string'||!m.nameByLocale[k].trim())))fail('NOT_BOUND');
+    // Move records continue after the cartridge's table; ids are stable for every entry, ready or not.
+    for(const m of e.moves){if(!int(m.battleMoveRecord,moves.length)||moveRecords.has(m.battleMoveRecord))fail('MOVE_RECORD');moveRecords.add(m.battleMoveRecord);}
+    // Ready means the battle lane and every locale can carry the entry; otherwise it stays data only. A ready
+    // move borrows a native move of its kind for timing and effect banks; its own numbers replace the donor's.
+    if(e.runtimeReady&&e.moves.some(m=>!int(m.donorMoveRecord,1,moves.length-1)||moves[m.donorMoveRecord].kind!==MOVE_KIND[m.kind]
+      ||LOCALES.some(k=>typeof m.nameByLocale[k]!=='string'||!m.nameByLocale[k].trim())))fail('NOT_BOUND');
+    // The behavior donor is a native species of the same stage and race.
+    const donor=species[e.behaviorDonor];
+    if(e.runtimeReady&&(!int(e.behaviorDonor,8,223)||donor?.recordIndex!==e.behaviorDonor||donor.generationIndex!==e.generationIndex||donor.familyBits!==e.familyBits))fail('BEHAVIOR_DONOR');
     byIndex.set(e.speciesIndex,e);entities.add(e.entityId);
   }
   const generation=i=>byIndex.get(i)?.generationIndex??species[i]?.generationIndex;
@@ -68,6 +79,24 @@ export function productOriginalSpeciesRecord(index){
     huntClassByte:e.huntClassByte,sourceEvidence:'PRODUCT_ORIGINAL_PROVISIONAL'}:null;
 }
 export function productOriginalMoves(index){return byIndex.get(index)?.moves??null;}
+/** The native species whose traced per-species rows a playable original reads, or null. */
+export function productOriginalBehaviorDonor(index){return isPlayableProductOriginal(index)?byIndex.get(index).behaviorDonor:null;}
+
+// Battle move records of the playable originals: the donor record's timing and effect banks with the
+// original's own owner, kind, power, cost, element, status and target. Ids continue after the native table.
+const moveRecordsById=new Map(),moveNamesById=new Map();
+for(const e of byIndex.values())if(isPlayableProductOriginal(e.speciesIndex))for(const m of e.moves){
+  moveRecordsById.set(m.battleMoveRecord,deepFreeze({...battleMoves.records[m.donorMoveRecord],recordIndex:m.battleMoveRecord,speciesId:e.speciesIndex,
+    kind:MOVE_KIND[m.kind],power:m.power,actionCost:m.actionCost,elementSelect:m.elementSelect,statusCode:m.statusCode,targetMode:m.targetMode,
+    productDonorRecord:m.donorMoveRecord}));
+  moveNamesById.set(m.battleMoveRecord,Object.freeze(LOCALES.map(k=>m.nameByLocale[k])));
+}
+/** A playable original's battle move record by id, or null. */
+export function productOriginalMoveRecord(id){return moveRecordsById.get(id)??null;}
+/** Every playable original's battle move record, in id order. */
+export function listProductOriginalMoveRecords(){return [...moveRecordsById.values()];}
+/** [zh-Hant, en, ja, th, vi] names of the playable originals' moves, keyed by record id. */
+export function productOriginalMoveNames(){return Object.fromEntries(moveNamesById);}
 
 // The lifecycle tables the raising engine reads, with ready originals merged in: their own species
 // parameters and ordered branches, plus branches inserted into native sources at their positions.

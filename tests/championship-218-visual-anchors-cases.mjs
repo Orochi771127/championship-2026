@@ -19,13 +19,13 @@ const localFetch = async url => {
 };
 const BASE = "http://127.0.0.1:8811/championship.html";
 
-test("218/218 Dex partners have anchors, with no gap and no stray id", () => {
+test("every Dex partner has anchors (218 plus the eight playable originals), with no gap and no stray id", () => {
   assert.ok((MONSTER_VISUAL_ANCHORS_SUMMARY.art.reviewed ?? 0) + (MONSTER_VISUAL_ANCHORS_SUMMARY.art["reviewed-right"] ?? 0) >= 100, "the reviewed artwork is calibrated");
-  assert.equal(slots.length, 218);
+  assert.equal(slots.length, 226);
   assert.deepEqual([...MONSTER_VISUAL_ANCHOR_IDS].sort(), slots.map(slot => slot.speciesId).sort());
-  assert.equal(MONSTER_VISUAL_ANCHORS_SUMMARY.species, 218);
-  assert.equal(MONSTER_VISUAL_ANCHORS_SUMMARY.withMotion, 218);
-  assert.equal(MONSTER_VISUAL_ANCHORS_SUMMARY.withHead, 218);
+  assert.equal(MONSTER_VISUAL_ANCHORS_SUMMARY.species, 226);
+  assert.equal(MONSTER_VISUAL_ANCHORS_SUMMARY.withMotion, 226);
+  assert.equal(MONSTER_VISUAL_ANCHORS_SUMMARY.withHead, 226);
   assert.deepEqual(MONSTER_VISUAL_ANCHORS_SUMMARY.motionErrors, []);
   for (const slot of slots) {
     const anchor = monsterVisualAnchor(slot.speciesIndex);
@@ -66,7 +66,7 @@ test("the muzzle sits ahead in the upper body and the feet stand on the origin",
     stances[foot.stance]++;
     if (foot.stance === "grounded") assert.ok(Math.abs(foot.lowestPixel) <= 8, `${id}: grounded feet meet the origin`);
   }
-  assert.equal(stances.grounded + stances["tail-below"] + stances.hovering, 218);
+  assert.equal(stances.grounded + stances["tail-below"] + stances.hovering, 226);
   assert.ok(stances.grounded > 109, "most partners stand with their feet on the origin");
   assert.deepEqual(stances, MONSTER_VISUAL_ANCHORS_SUMMARY.stances);
 });

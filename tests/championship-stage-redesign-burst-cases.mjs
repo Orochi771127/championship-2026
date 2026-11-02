@@ -39,12 +39,18 @@ test('every 成熟期 bursts into its own former routes; every 覺醒體/究極�
     }
   }
   for (const form of [...native(5), ...native(6)]) {
-    const bases = burstBasesFor(form);
-    assert.ok(bases.length >= 1 && bases.length <= 3, `${form}: ${bases}`);
+    const bases = burstBasesFor(form), nativeBases = bases.filter(b => b < 224);
+    assert.ok(nativeBases.length >= 1 && nativeBases.length <= 3, `${form}: ${bases}`);
+    // A playable original (Owner 2026-11-03) takes a capped form only when it is that original's only form.
+    for (const b of bases.filter(b => b > 230)) if (bases.length > 3) assert.equal(burstFormsFor(b).filter(f => f.tier === 1).length, 1, `${form}: ${b}`);
   }
+  // Playable original 成熟期 follow every native base, each with at least one tier-1 form.
+  const originalBases = table.bases.slice(native(4).length).map(entry => entry.base);
+  assert.deepEqual(originalBases, [232, 234, 235, 236, 240]);
+  for (const base of originalBases) assert.ok(burstFormsFor(base).some(f => f.tier === 1), `${base} has a tier-1 form`);
   assert.deepEqual([...burstBasesFor(229)], [...burstBasesFor(211)], 'the alternate battle form rides on its base form');
   assert.deepEqual([...burstBasesFor(230)], [...burstBasesFor(222)]);
-  assert.equal(table.bases.length, native(4).length);
+  assert.equal(table.bases.length, native(4).length + 5);
 });
 
 test('no rank gate (awakening raising, Owner 2026-11-02) and the approved multipliers', () => {

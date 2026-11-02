@@ -44,6 +44,7 @@
 import arenaDocument from "../../data/championship/catalogs/battle-arenas.r1.json" with { type: "json" };
 import eligibilityDocument from "../../data/championship/catalogs/battle-eligibility.r1.json" with { type: "json" };
 import moveDocument from "../../data/championship/catalogs/battle-moves.r1.json" with { type: "json" };
+import { productOriginalMoveRecord, listProductOriginalMoveRecords } from "../contracts/productOriginalSpecies.js";
 import opponentTeamDocument from "../../data/championship/catalogs/battle-opponent-teams.r1.json" with { type: "json" };
 import presetDocument from "../../data/championship/catalogs/battle-presets.r1.json" with { type: "json" };
 import titleEventDocument from "../../data/championship/catalogs/battle-title-events.r1.json" with { type: "json" };
@@ -112,7 +113,8 @@ export function listBattleCatalogRecords(name) {
 }
 
 export function getBattleCatalogRecord(name, recordIndex) {
-  const record = listBattleCatalogRecords(name)[recordIndex];
+  // Playable original characters' moves continue after the cartridge's table (productOriginalSpecies.js).
+  const record = listBattleCatalogRecords(name)[recordIndex] ?? (name === "moves" ? productOriginalMoveRecord(recordIndex) : undefined);
   if (!record || record.recordIndex !== recordIndex) {
     throw catalogError(`UNKNOWN_RECORD: ${name}[${recordIndex}]`);
   }
@@ -151,7 +153,7 @@ export function listMoveRecordsForSpecies(speciesId) {
     throw catalogError("INVALID_SPECIES_ID");
   }
   const matches = [];
-  for (const record of listBattleCatalogRecords("moves")) {
+  for (const record of [...listBattleCatalogRecords("moves"), ...listProductOriginalMoveRecords()]) {
     if (record.speciesId !== speciesId) {
       continue;
     }

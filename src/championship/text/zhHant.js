@@ -1,4 +1,5 @@
 import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
+import {getDatabaseIllustration} from '../database/databaseIllustrations.js';
 import { AWAKENED_FORM_NAMES, AWAKENED_SECOND_TIER_NAMES } from "./growthStageTerms.js";
 // Traditional Chinese display copy.
 //
@@ -270,6 +271,8 @@ export function gateName(recordIndex, japanese) {
  */
 export function speciesName(recordIndex, fallback = undefined) {
   const extension=getProductExtension(recordIndex);if(extension)return extension.displayNameByLocale?.[getLocale()]??extension.displayNameZh;
+  // Original characters (231+) keep their approved Dex name in every locale, like the native species.
+  const original=getDatabaseIllustration(recordIndex);if(original)return original.displayName;
   const loc = getLocale();
   const egg = EGG_BY_LOCALE[loc] ?? "培育蛋";
   const unknown = fallback === undefined ? (UNKNOWN_BY_LOCALE[loc] ?? "未確認生物") : fallback;
