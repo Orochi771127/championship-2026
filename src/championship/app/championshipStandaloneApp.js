@@ -12,7 +12,7 @@ import {constructNativeIndividualForm} from '../raising/nativeIndividualEvolutio
 import {normalizeBurstEvolution,createBurstEvolutionState,withBurstMigrated,legacyBurstMigration,unlockBurstForms,
   burstUnlocksOf,burstFormsFor,evaluateBurstConditions,preferBurstForm,preferredBurstForm,burstPlanFor,burstTierForRank,burstFormTier,
   AWAKENING_RULES,partnerAwakenings,awakeningFocus,awakeningTargetOf,awakeningAppearanceOf,transcendStarsOf,feedAwakeningEnergy,
-  addTranscendStar,setAwakeningTarget,setAwakeningAppearance,clearAwakeningShown,learnAwakening,awakeningDisplayFor} from '../contracts/productBurstEvolution.js';
+  addTranscendStar,setAwakeningTarget,setAwakeningAppearance,clearAwakeningShown,learnAwakening,awakeningDisplayFor,awakeningItemEnergy} from '../contracts/productBurstEvolution.js';
 import {REALTIME_TRAINING_POLICY,recommendedCages} from '../raising/productTrainingPolicy.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
@@ -1170,9 +1170,10 @@ export function createChampionshipStandaloneApp({
     const state=burstState(),awakenings=partnerAwakenings(profile,state,instanceId);if(!awakenings.length)return null;
     const target=awakeningTargetOf(state,instanceId),focus=awakeningFocus(awakenings,target),plan=partnerBurstPlan(instanceId);
     const learned=new Set(burstUnlocksOf(state,instanceId)),owned=id=>gachaState().metals[id]??0,rules=AWAKENING_RULES.transcendence;
-    const feeds=GACHA_METALS.filter(m=>owned(m.id)>0).map(m=>{const shard=m.id.endsWith('-shard'),fill=!shard&&m.rarity===AWAKENING_RULES.fillRarity;
-      const amount=!focus?0:fill?100:shard?AWAKENING_RULES.shardEnergy[m.rarity]??0:AWAKENING_RULES.metalEnergy[m.rarity]?.[focus.tier]??0;
-      return {itemId:m.id,name:m.name,rarity:m.rarity,family:m.family,art:m.art,owned:owned(m.id),amount,fill};}).filter(f=>f.amount>0);
+    // Each button says what the item really adds now: items stop at the item cap, so a metal near it adds less.
+    const room=Math.max(0,AWAKENING_RULES.itemCap-(focus?.energy??0));
+    const feeds=GACHA_METALS.filter(m=>owned(m.id)>0).map(m=>{const {amount:nominal,fill}=focus?awakeningItemEnergy(m,focus.tier):{amount:0,fill:false};
+      return {itemId:m.id,name:m.name,rarity:m.rarity,family:m.family,art:m.art,owned:owned(m.id),amount:fill?nominal:Math.min(nominal,room),fill};}).filter(f=>f.amount>0);
     const bond=profile.fields['020']|0,stars=transcendStarsOf(state,instanceId);
     const transcendItems=GACHA_METALS.filter(m=>!m.id.endsWith('-shard')&&rules.metalRarities.includes(m.rarity)&&owned(m.id)>0).map(m=>m.id);
     return deepFreeze({instanceId,base:profile.fields['000'],focus:focus?.form??null,target,appearance:awakeningAppearanceOf(state,instanceId),
@@ -3180,7 +3181,10 @@ export function createChampionshipStandaloneApp({
         chips:GACHA_CHIPS.map(chip=>({...chip,owned:state.chips[chip.id]??0,
           armed:state.armed.hunt?.includes(chip.id)===true||state.armed.bounty===chip.id})),
         metals:GACHA_METALS.map(metal=>{const into=shardFusionTarget(metal.id);
-          return {...metal,owned:state.metals[metal.id]??0,...(into?{fusesInto:{id:into.id,name:into.name,rarity:into.rarity},fusionCost:GACHA_SHARD_FUSION_COST}:{})};}),
+          // What it does for an awakening (the bag explains 「催化進化」 on a 成熟期 from these numbers).
+          const tier1=awakeningItemEnergy(metal,1),tier2=awakeningItemEnergy(metal,2);
+          return {...metal,owned:state.metals[metal.id]??0,awaken:{fill:tier1.fill,tier1:tier1.amount,tier2:tier2.amount,cap:AWAKENING_RULES.itemCap},
+            ...(into?{fusesInto:{id:into.id,name:into.name,rarity:into.rarity},fusionCost:GACHA_SHARD_FUSION_COST}:{})};}),
         goods:GACHA_GOODS,bloodlines:GACHA_BLOODLINES,autoFill:autoFillSynthesizer(state),
         armed:state.armed,partners,lastResult:lastGachaResult});
     },
@@ -3221,9 +3225,10 @@ export function createChampionshipStandaloneApp({
       const profile=gachaProfile(instanceId);if(!profile)return gachaRefusal('UNKNOWN_INDIVIDUAL');
       const view=partnerAwakeningView(instanceId),focus=view?.forms.find(f=>f.form===view.focus)??null;
       if(!focus)return gachaRefusal('NO_AWAKENING_TARGET');
-      const shard=metal.id.endsWith('-shard'),fill=!shard&&metal.rarity===AWAKENING_RULES.fillRarity;
-      const amount=fill?100:shard?AWAKENING_RULES.shardEnergy[metal.rarity]??0:AWAKENING_RULES.metalEnergy[metal.rarity]?.[focus.tier]??0;
-      if(!amount)return gachaRefusal('NOT_AN_AWAKENING_ITEM');
+      const shard=metal.id.endsWith('-shard'),{amount:nominal,fill}=awakeningItemEnergy(metal,focus.tier);
+      if(!nominal)return gachaRefusal('NOT_AN_AWAKENING_ITEM');
+      // The receipt reports what was really added: items stop at the item cap.
+      const amount=fill?nominal:Math.min(nominal,Math.max(0,AWAKENING_RULES.itemCap-(focus.energy??0)));
       const nextBurst=feedAwakeningEnergy(burstState(),instanceId,focus.form,{amount,fill});
       if(!nextBurst)return gachaRefusal('AWAKENING_ENERGY_FULL');
       const bloodline=inscribesBloodline(metal)?metal.family:null;
@@ -3376,23 +3381,6 @@ export function createChampionshipStandaloneApp({
         if([...raisingActors.values()].some(a=>a.evolution))return gachaRefusal('EVOLUTION_RUNNING');
         const species=nativeHuntSpeciesByIndex(index);
         if(gachaRarityRank(metal.rarity)<gachaRarityRank(catalystRarityForGeneration(species.generation)))return gachaRefusal('METAL_TOO_WEAK');
-        // OWNER_APPROVED_ADAPTATION 2026-11-02: on a 成熟期 an SSR metal unlocks a tier-1 burst form and a UR
-        // metal a tier-2 one (a UR opens a tier-1 form first when none is unlocked yet).
-        if(species.generation===4){
-          const unlocked=burstUnlocksOf(burstState(),instanceId);
-          let forms=metalUnlockableForms(index,metal.rarity,unlocked);
-          if(!forms.length&&metal.rarity==='UR')forms=metalUnlockableForms(index,'SSR',unlocked);
-          if(form!==null)forms=forms.filter(f=>f===form);
-          if(!forms.length)return gachaRefusal('NO_BURST_FORM');
-          const chosen=burstFormsFor(index).find(f=>f.form===forms[0]),beforeBurst=burstEvolution;
-          const spent=spendGachaItem(state,itemId,{instanceId,bloodline});
-          if(!spent.ok)return gachaRefusal(spent.reason);
-          burstEvolution=unlockBurstForms(burstState(),instanceId,[chosen.form,...(chosen.alternates??[])])??burstEvolution;
-          if(!commitGacha({state:spent.state})){burstEvolution=beforeBurst;return gachaRefusal('SAVE_FAILED');}
-          lastBurstUnlocks=Object.freeze([...lastBurstUnlocks,Object.freeze({instanceId,forms:Object.freeze([chosen.form,...(chosen.alternates??[])])})].slice(-8));
-          publishRaising();
-          return gachaReceipt({ok:true,kind:'BURST_UNLOCK',itemId,instanceId,target:chosen.form,tier:chosen.tier,bloodline});
-        }
         const rules=PRODUCT_GROWTH_RULES.rules[index-8]??[];
         const choices=rules.map((rule,ruleIndex)=>({rule,ruleIndex})).filter(({rule})=>rule.kind!==1);
         if(species.generation===0||species.generation>=4||!choices.length)return gachaRefusal('NO_EVOLUTION_ROUTE');

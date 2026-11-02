@@ -237,6 +237,11 @@ export function awakeningFocus(awakenings, target = null) {
  * Item energy for one partner's form. A shard or an SSR metal adds `amount`, up to itemCap; a UR metal fills the
  * form and waives its rebirth gate. Null when nothing changes (already at the cap or filled).
  */
+/** What one gacha metal adds to an awakening of this tier: {amount, fill}; amount 0 means it is no awakening item. */
+export function awakeningItemEnergy(metal, tier) {
+  const shard = metal.id.endsWith('-shard'), fill = !shard && metal.rarity === AWAKENING_RULES.fillRarity;
+  return {fill, amount: fill ? 100 : shard ? AWAKENING_RULES.shardEnergy[metal.rarity] ?? 0 : AWAKENING_RULES.metalEnergy[metal.rarity]?.[tier] ?? 0};
+}
 export function feedAwakeningEnergy(state, instanceId, form, {amount = 0, fill = false} = {}) {
   const current = normalizeBurstEvolution(state);
   if (!isBurstForm(form)) throw new TypeError('INVALID_BURST_FORM');
