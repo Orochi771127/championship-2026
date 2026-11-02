@@ -495,9 +495,24 @@ function releaseStrollHold(id) {
   clearTimeout(pending.timer); strollFlightsPending.delete(id);
   return pending;
 }
+// Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): a partner that unlocks a burst form -- by its own
+// conditions, a battle or an evolution metal -- says so on the ranch, in the stroll toast.
+function showBurstUnlockToast() {
+  if (app?.getScreen?.() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
+  const latest = (app.takeBurstUnlockNotices?.() ?? []).at(-1);
+  if (!latest?.forms?.length) return;
+  const entry = app.getRaisingInstances().find((e) => e.instanceId === latest.instanceId);
+  let toast = document.querySelector('.cm-stroll-toast');
+  if (!toast) { toast = document.createElement('div'); toast.className = 'cm-stroll-toast'; toast.setAttribute('role', 'status'); document.body.append(toast); }
+  toast.textContent = uiText('BURST_UNLOCK_TOAST', { name: entry ? raisingDisplayName(entry) : '', form: speciesName(latest.forms[0]) });
+  toast.classList.remove('is-shown'); void toast.offsetWidth; toast.classList.add('is-shown');
+  clearTimeout(showStrollToast.timer);
+  showStrollToast.timer = setTimeout(() => toast.classList.remove('is-shown'), 3200);
+}
 function listenPartnerFinds() {
   if (partnerFindListening) return;
   partnerFindListening = true;
+  setInterval(showBurstUnlockToast, 2000);
   app.subscribePartnerLife?.((event) => {
     if (event.kind !== 'find' || !event.tool || !toolbar || app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
     toolbar.holdToolStock(event.tool);

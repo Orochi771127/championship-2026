@@ -129,6 +129,7 @@ export const UI_COPY_EN = Object.freeze({
   "DEX_BURST_METAL": "Meeting the conditions unlocks a form; an SSR evolution metal unlocks a tier-1 form at once, a UR metal a tier-2 form.",
   "BATTLE_BURST_GAUGE": "Burst gauge",
   "BATTLE_BURST_CALL": "Burst Evolution! {name}",
+  "BURST_UNLOCK_TOAST": "{name} unlocked an Awakened form: {form}!",
   "DEX_IMAGE_MISSING": "Image unavailable",
   "DEX_STAGE": "Growth stage",
   "DEX_ALL": "All stages",

@@ -117,6 +117,7 @@ export const UI_COPY_TH = Object.freeze({
   "DEX_BURST_METAL": "ครบเงื่อนไขจะปลดล็อก โลหะวิวัฒนาการ SSR ปลดล็อกขั้นที่ 1 ได้ทันที และ UR ปลดล็อกขั้นที่ 2",
   "BATTLE_BURST_GAUGE": "เกจเบิร์สต์",
   "BATTLE_BURST_CALL": "เบิร์สต์อีโวลูชัน! {name}",
+  "BURST_UNLOCK_TOAST": "{name} ปลดล็อกร่างตื่นพลัง: {form}!",
   "DEX_IMAGE_MISSING": "ยังไม่มีภาพ",
   "DEX_STAGE": "ขั้นการเติบโต",
   "DEX_ALL": "ทุกขั้น",

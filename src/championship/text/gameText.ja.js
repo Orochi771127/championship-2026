@@ -1,7 +1,7 @@
-import { AWAKENED_FORM_NAMES } from "./growthStageTerms.js";
+import { AWAKENED_FORM_NAMES, AWAKENED_SECOND_TIER_NAMES } from "./growthStageTerms.js";
 // Japanese for the tables in zhHant.js. PRODUCT_AUTHORED, 2026-10-09.
 
-export const GENERATIONS_JA = Object.freeze(["タマゴ", "幼年期Ⅰ", "幼年期Ⅱ", "成長期", "成熟期", AWAKENED_FORM_NAMES.ja, "究極体"]);
+export const GENERATIONS_JA = Object.freeze(["タマゴ", "幼年期Ⅰ", "幼年期Ⅱ", "成長期", "成熟期", AWAKENED_FORM_NAMES.ja, AWAKENED_SECOND_TIER_NAMES.ja]);
 export const PERSONALITIES_JA = Object.freeze(["すなお", "わがまま", "せっかち", "のんき", "ねっけつ", "れいせい", "たいだん", "おくびょう", "？？？"]);
 export const ROSTER_FAMILIES_JA = Object.freeze(["なし", "ケモノ", "キカイ", "ムシクサ", "トリ", "リュウ", "ミズ", "セイ", "アンコク"]);
 export const TAMER_RANK_NAMES_JA = Object.freeze(["グリーン", "ブルー", "レッド", "ホワイト", "ブロンズ", "シルバー", "ゴールド", "プラチナ", "チャンピオン", "マスター"]);

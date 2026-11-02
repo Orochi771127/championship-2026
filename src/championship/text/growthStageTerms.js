@@ -3,6 +3,12 @@
 export const AWAKENED_FORM_NAMES = Object.freeze({
   'zh-Hant':'覺醒體', en:'Awakened', ja:'覚醒体', th:'ร่างตื่นพลัง', vi:'Thức tỉnh'
 });
+// Owner 2026-11-02 (STAGE_REDESIGN_BURST_20261102): 究極體 joins 覺醒體 as its second tier (both are battle
+// burst forms of a 成熟期), so the former 究極體 stage is shown as the 覺醒體's second tier.
+export const AWAKENED_SECOND_TIER_NAMES = Object.freeze({
+  'zh-Hant':`${AWAKENED_FORM_NAMES['zh-Hant']}・二段`, en:`${AWAKENED_FORM_NAMES.en} II`, ja:`${AWAKENED_FORM_NAMES.ja}・二段`,
+  th:`${AWAKENED_FORM_NAMES.th} ขั้น 2`, vi:`${AWAKENED_FORM_NAMES.vi} bậc 2`
+});
 export const AWAKENED_RADAR_NAMES = Object.freeze({
   'zh-Hant':`${AWAKENED_FORM_NAMES['zh-Hant']}雷達`,
   en:`${AWAKENED_FORM_NAMES.en} radar`, ja:`${AWAKENED_FORM_NAMES.ja}レーダー`,

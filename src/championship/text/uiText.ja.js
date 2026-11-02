@@ -117,6 +117,7 @@ export const UI_COPY_JA = Object.freeze({
   "DEX_BURST_METAL": "条件を満たすと解放。SSR 進化メタルで一段、UR 進化メタルで二段を即解放できます。",
   "BATTLE_BURST_GAUGE": "バーストゲージ",
   "BATTLE_BURST_CALL": "バースト進化！{name}",
+  "BURST_UNLOCK_TOAST": "{name}が覚醒形態「{form}」を解放した！",
   "DEX_IMAGE_MISSING": "画像未提供",
   "DEX_STAGE": "成長段階",
   "DEX_ALL": "すべての段階",

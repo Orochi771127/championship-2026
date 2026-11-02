@@ -117,6 +117,7 @@ export const UI_COPY_VI = Object.freeze({
   "DEX_BURST_METAL": "Đạt điều kiện sẽ mở khóa; kim loại tiến hóa SSR mở ngay bậc 1, UR mở ngay bậc 2.",
   "BATTLE_BURST_GAUGE": "Thanh bùng nổ",
   "BATTLE_BURST_CALL": "Tiến hóa bùng nổ! {name}",
+  "BURST_UNLOCK_TOAST": "{name} đã mở khóa dạng thức tỉnh: {form}!",
   "DEX_IMAGE_MISSING": "Chưa có hình ảnh",
   "DEX_STAGE": "Giai đoạn phát triển",
   "DEX_ALL": "Tất cả giai đoạn",
