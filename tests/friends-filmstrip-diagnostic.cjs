@@ -25,8 +25,7 @@ function transform(source,mode){
  replace('await context.tracing.start({screenshots:true,snapshots:true,sources:true});',`await context.tracing.start({screenshots:${mode==='on'},snapshots:true,sources:true});`);
  replace("async function legacyTopContour(label,viewports=[{width:1280,height:800},{width:390,height:844}]){\n  const before=await boundary('saved:read-only',()=>saved());",`async function legacyTopContour(label,viewports=[{width:1280,height:800},{width:390,height:844}]){
   const before=await boundary('saved:read-only',()=>saved());
-  const waitResidentReady=async()=>{const started=performance.now();await page.waitForFunction(()=>{const h=document.querySelector('.int-rh2-field-host');if(!h)return false;const assets=JSON.parse(h.dataset.residentAssets||'[]');return h.dataset.loadState==='ready'&&h.getAttribute('aria-busy')==='false'&&assets.length>0&&assets.every(a=>a.state==='ready'&&!a.error);},null,{timeout:30000});(evidence.filmstrip.readinessWaitsMs??=[]).push(performance.now()-started);write();};
-  const observe=async()=>{await waitResidentReady();return page.locator('.int-rh2-field-host').evaluate(h=>{const canvases=document.querySelectorAll('.cm-ranch-three-canvas');if(canvases.length!==1||!(Number(canvases[0].dataset.frames)>0))throw Error('One actually rendered Three canvas required');const c=canvases[0],gl=c.getContext('webgl2');if(!gl)throw Error('Actual Three WebGL2 context required');const ext=gl.getExtension('WEBGL_debug_renderer_info');const renderer={className:c.className,width:c.width,height:c.height,version:gl.getParameter(gl.VERSION),vendor:gl.getParameter(gl.VENDOR),renderer:gl.getParameter(gl.RENDERER),unmaskedVendor:ext?gl.getParameter(ext.UNMASKED_VENDOR_WEBGL):null,unmaskedRenderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):null};return {renderer,threeFrames:Number(c.dataset.frames),viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},rect:{x:h.getBoundingClientRect().x,y:h.getBoundingClientRect().y,width:h.clientWidth,height:h.clientHeight},loadState:h.dataset.loadState,ariaBusy:h.getAttribute('aria-busy'),assets:JSON.parse(h.dataset.residentAssets||'[]'),positions:JSON.parse(h.dataset.residentScreenPositions||'[]')};});};
+  const observe=async()=>{const started=performance.now();const handle=await page.waitForFunction(${readResidentObservation.toString()},null,{timeout:30000});try{return await handle.jsonValue();}finally{await handle.dispose();(evidence.filmstrip.readinessWaitsMs??=[]).push(performance.now()-started);write();}};
   const measured=async(name,action)=>{const t=performance.now();try{return await action();}finally{evidence.filmstrip.metrics[name]=performance.now()-t;write();}};
   const captureField=async(label,metric)=>{
    const ready=s=>{assert.equal(s.overlay?.kind,'canvas');return friendsThreeSnapshotReady(s.three);};
@@ -101,6 +100,20 @@ function join(rows){
  const lifecycleChanges=pairedLifecycle(on.filmstrip,off.filmstrip);
  return {status:'PAIRED_DIAGNOSTIC_ONLY',commit:on.commit,buildId:BUILD,order:['on','off'],lifecycleChanges,performanceComparable:lifecycleChanges.length===0,move20Ms:{on:on.filmstrip.metrics.move20Ms,off:off.filmstrip.metrics.move20Ms},ratioOffToOn:off.filmstrip.metrics.move20Ms/on.filmstrip.metrics.move20Ms,limitations:['One fixed-order pair, not general causal proof','Independent fresh contexts, natural clock and actors are not same-frame paired','A recorded natural hatch makes the timing ratio unsuitable for performance conclusions','OFF second may benefit from OS caches','Does not complete source-corners or waive canceled Friends gates']};
 }
+// Read readiness and the rich receipt in one browser turn. No later RPC may
+// replace this snapshot after a resident begins another asynchronous load.
+function readResidentObservation(){
+ const h=document.querySelector('.int-rh2-field-host');if(!h)return false;
+ const assets=JSON.parse(h.dataset.residentAssets||'[]');
+ if(h.dataset.loadState==='error'||assets.some(a=>a.error||a.state==='error'))throw Error('Resident resource failure');
+ if(h.dataset.loadState!=='ready'||h.getAttribute('aria-busy')!=='false'||!assets.length||!assets.every(a=>a.state==='ready'))return false;
+ const canvases=document.querySelectorAll('.cm-ranch-three-canvas');
+ if(canvases.length!==1||!(Number(canvases[0].dataset.frames)>0))throw Error('One actually rendered Three canvas required');
+ const c=canvases[0],gl=c.getContext('webgl2');if(!gl)throw Error('Actual Three WebGL2 context required');
+ const ext=gl.getExtension('WEBGL_debug_renderer_info');
+ const renderer={className:c.className,width:c.width,height:c.height,version:gl.getParameter(gl.VERSION),vendor:gl.getParameter(gl.VENDOR),renderer:gl.getParameter(gl.RENDERER),unmaskedVendor:ext?gl.getParameter(ext.UNMASKED_VENDOR_WEBGL):null,unmaskedRenderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):null};
+ return {renderer,threeFrames:Number(c.dataset.frames),viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},rect:{x:h.getBoundingClientRect().x,y:h.getBoundingClientRect().y,width:h.clientWidth,height:h.clientHeight},loadState:h.dataset.loadState,ariaBusy:h.getAttribute('aria-busy'),assets,positions:JSON.parse(h.dataset.residentScreenPositions||'[]')};
+}
 async function captureReady(api){
  const deadline=api.now()+30000;
  for(let attempt=0;attempt<3;attempt++){
@@ -114,7 +127,7 @@ async function captureReady(api){
  }
  throw Error('Field capture stayed transient across three retained attempts');
 }
-module.exports={BASE,BUILD,RESOURCES,transform,join,captureReady};
+module.exports={BASE,BUILD,RESOURCES,transform,join,captureReady,readResidentObservation};
 function retainedTraceName(row){
  const name=row.finalTrace?.file;
  assert.ok(typeof name==='string'&&/^[a-zA-Z0-9_-]+-trace\.zip$/.test(name)&&path.basename(name)===name,'Safe finalTrace basename required');
