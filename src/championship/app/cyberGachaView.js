@@ -818,7 +818,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   /** Directed forging: each recipe, what it takes, and its key. */
   function paintForge(frame) {
     forge.replaceChildren(element("h3", "cm-gacha__pool-title", uiText("定向合成（保底）")),
-      element("p", "cm-gacha__plate cm-gacha__note", uiText("抽不到也不怕：晶片＋金屬碎片可指定合成全自動飼育道具（不使用星核碎片）。")));
+      element("p", "cm-gacha__plate cm-gacha__note", uiText("抽不到也不怕：R／SR 晶片＋金屬碎片可指定合成全自動飼育道具（不使用星核碎片）。")));
     const list = element("div", "cm-gacha__forge-list");
     for (const item of frame.automation ?? []) {
       if (!item.recipe) continue;

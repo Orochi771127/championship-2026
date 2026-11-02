@@ -649,7 +649,7 @@ export const TEXT_VI = Object.freeze({
   "已達最大 100 格領域": "Đã đạt lãnh địa tối đa 100 ô",
   "已領取": "Đã nhận",
   "已領取，感謝支持！": "Đã nhận. Cảm ơn bạn đã ủng hộ!",
-  "抽不到也不怕：晶片＋金屬碎片可指定合成全自動飼育道具（不使用星核碎片）。": "Quay không trúng cũng không sao: chip + mảnh kim loại hợp thành chỉ định vật phẩm chăm sóc tự động (không dùng mảnh Lõi sao).",
+  "抽不到也不怕：R／SR 晶片＋金屬碎片可指定合成全自動飼育道具（不使用星核碎片）。": "Quay không trúng cũng không sao: chip R/SR + mảnh kim loại hợp thành chỉ định vật phẩm chăm sóc tự động (không dùng mảnh Lõi sao).",
   "掛載": "Gắn",
   "掛載到任一籠舍：大便一出現就自動清掉（0 照顧失誤）": "Gắn vào chuồng bất kỳ: phân xuất hiện là được dọn ngay (0 lỗi chăm sóc)",
   "掛載到任一籠舍：拍檔肚子餓時自動投餵到飽": "Gắn vào chuồng bất kỳ: tự cho cộng sự đói ăn đến no",

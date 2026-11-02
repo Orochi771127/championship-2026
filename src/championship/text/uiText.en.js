@@ -487,7 +487,7 @@ export const TEXT_EN = Object.freeze({
   "已達最大 100 格領域": "Max 100-cell domain reached",
   "已領取": "Claimed",
   "已領取，感謝支持！": "Claimed. Thank you for your support!",
-  "抽不到也不怕：晶片＋金屬碎片可指定合成全自動飼育道具（不使用星核碎片）。": "No luck? Chips + metal shards forge any auto-care item directly (star-core shards are never used).",
+  "抽不到也不怕：R／SR 晶片＋金屬碎片可指定合成全自動飼育道具（不使用星核碎片）。": "No luck? R/SR chips + metal shards forge any auto-care item directly (star-core shards are never used).",
   "掛載": "Mount",
   "掛載到任一籠舍：大便一出現就自動清掉（0 照顧失誤）": "Mount on any cage: droppings are cleared the moment they appear (no care mistakes)",
   "掛載到任一籠舍：拍檔肚子餓時自動投餵到飽": "Mount on any cage: hungry partners are fed until full",

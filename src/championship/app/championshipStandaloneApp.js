@@ -1197,7 +1197,7 @@ export function createChampionshipStandaloneApp({
     next.fields['020']=Math.min(100,(next.fields['020']|0)+gain.points)>>>0;
     if(actor.growthFields)actor.growthFields['418']=0;
     writeRaisingNativeProfile(id,normalizeNativeIndividualProfile(next));
-    cyberGacha=setGachaBondCarry(gachaState(),id,gain.carry);
+    cyberGacha=setGachaBondCarry(gachaState(),id,gain.carry,currentInstanceIds());
     pushAutomationEvent({kind:'FEED',cageInstanceId:actor.cageInstanceId,instanceId:id,affection:gain.points,
       positionQ12:actor.positionQ12?[...actor.positionQ12]:null});
     savePort.markDirty();return true;
@@ -1270,7 +1270,9 @@ export function createChampionshipStandaloneApp({
       frame:FOUNDER_PACK.frame,unlock:FOUNDER_PACK.unlock,unlocked,claimed,available:Boolean(friendsPlaytest)&&unlocked&&!claimed});
   }
   function huntMemoryCapacityG(){
-    const card=maxGFromInventory(huntInventory),land=cageEdit?.getFrame(...cageEditArgs())?.landCapacity;
+    const card=maxGFromInventory(huntInventory);
+    // The land bonus never blocks a hunt: an unreadable layout falls back to the card alone.
+    let land=null;try{land=cageEdit?.getFrame(...cageEditArgs())?.landCapacity??null;}catch{land=null;}
     return card+(Number.isFinite(land)?landMemoryBonusG(land,card):0);
   }
 

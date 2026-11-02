@@ -600,7 +600,8 @@ export function automationForgePlan(state, itemId) {
   const recipe = getAutomationRecipe(itemId);
   if (!recipe) return deepFreeze({ ok: false, reason: "UNKNOWN_RECIPE" });
   if ((current.automation?.[itemId] ?? 0) >= AUTOMATION_STACK_CAP) return deepFreeze({ ok: false, reason: "STACK_FULL" });
-  const chips = forgeUnits(GACHA_CHIPS.filter((chip) => !chip.locked)
+  // Only R and SR chips go in: an SSR/UR chip is never melted down for automation.
+  const chips = forgeUnits(GACHA_CHIPS.filter((chip) => !chip.locked && RANK[chip.rarity] <= RANK.SR)
     .map((chip) => ({ id: chip.id, owned: current.chips[chip.id] ?? 0, rank: RANK[chip.rarity] })), recipe.chips);
   const shards = forgeUnits(forgeShardPool()
     .map((metal) => ({ id: metal.id, owned: current.metals[metal.id] ?? 0, rank: RANK[metal.rarity] })), recipe.shards);
@@ -679,11 +680,17 @@ export function settleRanchAutomation(state, { editions = null, liveInstanceIds 
   return deepFreeze({ ok: true, state: normalizeCyberGacha(next) });
 }
 
-/** One partner's affection carry after an auto-feed (tenths, 0 clears it). */
-export function setGachaBondCarry(state, instanceId, tenths) {
+/**
+ * One partner's affection carry after an auto-feed (tenths, 0 clears it). With `liveIds`, carries of
+ * partners no longer held are dropped, so the record never outgrows the ranch.
+ */
+export function setGachaBondCarry(state, instanceId, tenths, liveIds = null) {
   const current = normalizeCyberGacha(state);
-  if ((current.bondCarry?.[instanceId] ?? 0) === tenths) return current;
+  const live = liveIds ? new Set(liveIds) : null;
+  const stale = live ? Object.keys(current.bondCarry ?? {}).filter((id) => !live.has(id)) : [];
+  if ((current.bondCarry?.[instanceId] ?? 0) === tenths && !stale.length) return current;
   const next = plain(current);
+  for (const id of stale) delete next.bondCarry[id];
   if (tenths) next.bondCarry[instanceId] = tenths; else delete next.bondCarry[instanceId];
   return normalizeCyberGacha(next);
 }

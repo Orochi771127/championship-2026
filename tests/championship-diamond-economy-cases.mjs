@@ -123,6 +123,8 @@ test('directed forging is the pity path: fixed chips and shards in, that exact i
   let state = normalizeCyberGacha({version: 1, chips: {'chip:hp': 3, 'chip:attack': 1, 'chip:core-omega': 9, 'chip:personality': 9},
     metals: {'metal:emma-shard': 1, 'metal:beta-shard': 1, 'metal:supernova-shard': 9}});
   assert.equal(automationForgePlan(state, 'auto:clean-core').reason, 'NOT_ENOUGH_CHIPS', 'Ω and reshape chips are locked out');
+  const precious = normalizeCyberGacha({version: 1, chips: {'chip:chrono': 9, 'chip:core-beta': 9}, metals: {'metal:emma-shard': 9}});
+  assert.equal(automationForgePlan(precious, 'auto:clean-core').reason, 'NOT_ENOUGH_CHIPS', 'SSR chips are never melted down');
   state = normalizeCyberGacha({...state, chips: {...state.chips, 'chip:defense': 1}});
   const plan = automationForgePlan(state, 'auto:clean-core');
   assert.equal(plan.ok, true, plan.reason);
@@ -185,6 +187,8 @@ test('auto-feed is +2.4 affection carried in tenths; royal sleep recovers 30% fa
   const state = setGachaBondCarry(normalizeCyberGacha({version: 1}), 'creature:1', 4);
   assert.deepEqual(state.bondCarry, {'creature:1': 4});
   assert.equal(setGachaBondCarry(state, 'creature:1', 0).bondCarry, undefined);
+  // Carries of partners no longer held are dropped, so the record never outgrows the ranch.
+  assert.deepEqual(setGachaBondCarry(state, 'creature:2', 3, ['creature:2']).bondCarry, {'creature:2': 3});
 });
 
 // ---------------------------------------------------------------- diamonds: rewards, land, founder box

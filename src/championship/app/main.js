@@ -2695,6 +2695,8 @@ async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = '
         try {
           const reward = app.claimGachaReward?.(`story:${chapterId}`, 3 + Math.floor(Math.random() * 3));
           if (reward?.granted) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: uiText('轉蛋券 +{n}', { n: reward.granted }) } }));
+          // DIAMOND_ECONOMY_20261102: a chapter's first clear also pays diamonds.
+          if (reward?.diamonds) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: uiText('鑽石 +{n}', { n: reward.diamonds }) } }));
         } catch { /* a reward never breaks the story */ }
       }
     }
