@@ -21,9 +21,17 @@ function graphemes(text) {
  * onComplete(result)  after the last beat (result.choices holds picked choice ids)
  * onSkip()    the skip capsule; defaults to onComplete
  * rootClass   extra classes on the root (the opening keeps .cm-opening-story)
+ * panels      false: the chapter brings its own backdrop, so no comic panels
+ *             or signal glyph are drawn (the New Game opening, 2026-11-03)
+ * startAt     the beat to open on (an interrupted reading resumes there)
+ * onBeat(index, beat)            after a beat is shown
+ * onChoice(id, beat, index)      when a choice is picked, before advancing
+ * skipTo(index) => index | null  a later beat the skip key must still show
+ *             (a choice the player has not made yet); null finishes
  */
 export function createStoryCutsceneStage({ host, chapter, labels = {}, onComplete = () => {}, onSkip = null,
-  resolveText = text => text, resolveSpeaker = speaker => speaker, rootClass = "", doc = globalThis.document } = {}) {
+  resolveText = text => text, resolveSpeaker = speaker => speaker, rootClass = "", doc = globalThis.document,
+  panels: showPanels = true, startAt = 0, onBeat = null, onChoice = null, skipTo = null } = {}) {
   if (!host || !chapter?.beats?.length) throw new TypeError("STORY_STAGE_REQUIRES_HOST_AND_CHAPTER");
   const el = (tag, className, text) => { const node = doc.createElement(tag); if (className) node.className = className; if (text !== undefined) node.textContent = text; return node; };
   const root = el("section", `cm-cutscene ${rootClass}`.trim());
@@ -68,6 +76,7 @@ export function createStoryCutsceneStage({ host, chapter, labels = {}, onComplet
   const beat = () => chapter.beats[index];
 
   function renderPanels(art, effect) {
+    if (!showPanels) { panels.dataset.count = "0"; panels.dataset.backdrop = "external"; panels.setAttribute("aria-hidden", "true"); panels.replaceChildren(); return; }
     // A text-only beat keeps the stage alive with a signal rather than a void.
     const figures = art.length ? art.map((picture, i) => {
       const figure = el("figure", "cm-cutscene__panel");
@@ -121,11 +130,16 @@ export function createStoryCutsceneStage({ host, chapter, labels = {}, onComplet
       const button = el("button", "cm-cutscene__choice cm-arcade-key", resolveText(choice.label));
       button.type = "button";
       button.dataset.storyChoice = choice.id;
-      button.addEventListener("click", event => { event.stopPropagation(); if (root.dataset.typing === "true") return; picked.push(choice.id); advance(choice.next); });
+      button.addEventListener("click", event => {
+        event.stopPropagation();
+        if (root.dataset.typing === "true" || disposed || finishing) return;
+        picked.push(choice.id); onChoice?.(choice.id, current, index); advance(choice.next);
+      });
       return button;
     }));
     choiceRow.hidden = current.choices.length === 0;
     typingTimer = setTimeout(finishTyping, count * TYPE_MS + 240);
+    onBeat?.(index, current);
   }
 
   function finishTyping() {
@@ -177,14 +191,25 @@ export function createStoryCutsceneStage({ host, chapter, labels = {}, onComplet
     if (event.target.closest?.("button")) return;
     if (event.key === "Enter" || event.key === " ") { event.preventDefault(); tap(); }
   });
-  skip.addEventListener("click", () => finish(onSkip ?? onComplete));
+  skip.addEventListener("click", () => {
+    if (disposed || finishing) return;
+    const target = skipTo?.(index);
+    if (Number.isInteger(target) && target > index && target < chapter.beats.length) { show(target); return; }
+    finish(onSkip ?? onComplete);
+  });
   doc.addEventListener("visibilitychange", visibility);
 
   return Object.freeze({
     root,
     /** Start at the first beat (callers may hold the stage while art loads). */
-    start() { if (!disposed && index < 0) { root.focus({ preventScroll: true }); show(0); } },
+    start() {
+      if (disposed || index >= 0) return;
+      root.focus({ preventScroll: true });
+      show(Number.isInteger(startAt) && startAt > 0 && startAt < chapter.beats.length ? startAt : 0);
+    },
     tap,
+    /** Show a beat directly: the previous page, or the first one on replay. */
+    goTo(next) { if (!disposed && !finishing && index >= 0 && Number.isInteger(next) && next >= 0 && next < chapter.beats.length) show(next); },
     getBeatIndex: () => index,
     dispose
   });

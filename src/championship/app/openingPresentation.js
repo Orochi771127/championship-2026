@@ -21,7 +21,9 @@ import {getLocale} from '../text/locale.js';
 const NAME_MAX=5;
 const pick=(list,current)=>{const options=list.filter(name=>name!==current);return options[Math.floor(Math.random()*options.length)]??list[0];};
 
-export function createOpeningPresentation({host,onStart,onCancel=()=>{},allowEggChoice=false}){
+// guide: the Ai-chan story hooks (appearance, choose, resume, progress, started),
+// backed by the preference store in main.js. The opening itself stores nothing.
+export function createOpeningPresentation({host,onStart,onCancel=()=>{},allowEggChoice=false,guide={}}){
   let trainerName='',eggName='',eggSpeciesIndex=0,busy=false,story=null;
   // Copy is resolved when each card is built, so the language the player
   // chose on the title is the language of the whole opening.
@@ -158,6 +160,6 @@ export function createOpeningPresentation({host,onStart,onCancel=()=>{},allowEgg
     n.append(raw('p','cm-incubator__kicker',words.incubatorKicker),title,hint);if(copy.nameNote)n.append(el('p','cm-opening__egg-name-note',copy.nameNote));
     n.append(grid,actions);n.addEventListener('submit',e=>{e.preventDefault();name('egg',start);});show(n);grid.querySelector('input:checked').focus({preventScroll:true});
   }
-  async function start(){if(busy)return;busy=true;host.inert=true;try{if(await onStart({trainerName,eggName,eggSpeciesIndex})===false){name('egg',start);return;}host.hidden=true;host.replaceChildren();}finally{busy=false;host.inert=false;}}
-  return {begin(){trainerName='';eggName='';eggSpeciesIndex=0;story?.dispose();story=createOpeningStoryPresentation({host,onCancel(){story=null;host.replaceChildren();host.hidden=true;onCancel();},onComplete(){story=null;envelope(()=>letter('歡迎來到數位世界。\n首先，請輸入姓名，完成馴獸師登錄。',()=>name('trainer',confirmTrainer)));}});},reset(){story?.dispose();story=null;host.replaceChildren();host.hidden=true;host.inert=false;busy=false;}};
+  async function start(){if(busy)return;busy=true;host.inert=true;try{if(await onStart({trainerName,eggName,eggSpeciesIndex})===false){name('egg',start);return;}guide.started?.();host.hidden=true;host.replaceChildren();}finally{busy=false;host.inert=false;}}
+  return {begin(){trainerName='';eggName='';eggSpeciesIndex=0;story?.dispose();story=createOpeningStoryPresentation({host,guide,onCancel(){story=null;host.replaceChildren();host.hidden=true;onCancel();},onComplete(){story=null;envelope(()=>letter('歡迎來到數位世界。\n首先，請輸入姓名，完成馴獸師登錄。',()=>name('trainer',confirmTrainer)));}});},reset(){story?.dispose();story=null;host.replaceChildren();host.hidden=true;host.inert=false;busy=false;}};
 }

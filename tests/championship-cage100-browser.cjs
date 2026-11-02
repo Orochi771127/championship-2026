@@ -1,5 +1,6 @@
 // Isolated normal public-game flow. Never opens a persistent/private browser profile.
 const {chromium}=require('playwright');
+const {playStory}=require('./championship-browser-opening.cjs'); // the one shared New Game story driver
 const {serveBuild,resolveAsset}=require('./alternate-form-browser-support.cjs');
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),artifact=path.join(root,'dist/github-playtest');
@@ -31,14 +32,7 @@ const write=()=>fs.writeFileSync(path.join(output,'normal-flow.json'),JSON.strin
   const saveQuit=async()=>{await menu('SYSTEM','saveQuit');await page.locator('#cm-login').waitFor({state:'visible'});};
   await page.goto(publicBase+'championship.html',{waitUntil:'domcontentloaded'});await login();assert.equal(await page.locator('#cm-continue').isEnabled(),false);await page.locator('#cm-new-game').click();
   const story=page.locator('.cm-opening-story'),deadline=Date.now()+120000;
-  while(await story.count()){
-   if(Date.now()>deadline)throw Error('Opening comic did not finish');
-   for(const target of [page.locator('[data-story-action="text"]'),story]){
-    if(!await target.isVisible())continue;
-    try{await target.click({position:{x:10,y:10},timeout:3000});}catch(error){if(error.name!=='TimeoutError'||await target.isVisible())throw error;}
-   }
-   await page.waitForTimeout(1000);
-  }
+  await playStory(page);
   await page.locator('.cm-opening__envelope').click();await page.locator('.cm-opening__letter button').click();
   await page.locator('#cm-opening-name').fill('百格驗收');await page.locator('.cm-opening__name button[type="submit"]').click();
   await page.locator('.cm-opening__choices button').first().click();

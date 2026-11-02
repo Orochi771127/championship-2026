@@ -4,6 +4,7 @@
 // QA seed stays unchanged; one explicitly historical-wallet derivative is test-only.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require('playwright');
+const {playStory}=require('./championship-browser-opening.cjs'); // the one shared New Game story driver
 const {resolveAsset,serveBuild}=require('./alternate-form-browser-support.cjs');
 const {createInstallerFixtures}=require('./friends-installer-fixture-support.cjs');
 const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT||'dist/github-playtest');
@@ -520,12 +521,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
    }
   }
   const until=Date.now()+120000;
-  while(await story.count()){
-   if(Date.now()>until)throw Error('Normal opening comic did not finish');
-   const text=page.locator('[data-story-action="text"]');if(await text.isVisible())await clickStoryAffordance(text);
-   if(await story.isVisible())await clickStoryAffordance(story,{position:{x:10,y:10}});
-   await page.waitForTimeout(1200);
-  }
+  await playStory(page); // shared normal-UI driver for the Ai-chan New Game story
   await page.locator('.cm-opening__envelope').click();await page.locator('.cm-opening__letter button').click();
   await page.locator('#cm-opening-name').fill('朋友測試');await page.locator('.cm-opening__name button[type="submit"]').click();
   await page.locator('.cm-opening__choices button').first().click();

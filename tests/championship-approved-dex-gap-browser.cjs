@@ -4,6 +4,7 @@ const {assertApproved20Registry}=require('./approved20-20261022-contract.cjs');
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {createHash}=require('node:crypto');
 const {chromium}=require('playwright');
+const {playStory}=require('./championship-browser-opening.cjs'); // the one shared New Game story driver
 const {resolveAsset,serveBuild}=require('./alternate-form-browser-support.cjs');
 const {clickOptionalComicControl}=require('./championship-dex-portrait-browser.cjs');
 const root=path.resolve(process.env.DEX_GAP_ROOT||'dist/github-playtest');
@@ -41,7 +42,7 @@ async function main(){let browser,context,server,page;const jobs=[];
   await page.locator('#cm-login').waitFor({state:'visible'});await page.waitForFunction(()=>document.querySelector('#cm-login')?.disabled===false);
   await page.locator('#cm-login').click();await page.locator('#cm-new-game').waitFor({state:'visible'});assert.equal(await page.locator('#cm-continue').isEnabled(),false);await page.locator('#cm-new-game').click();
   const story=page.locator('.cm-opening-story'),deadline=Date.now()+120000;
-  while(await story.count()){if(Date.now()>deadline)throw Error('Normal comic timeout');await clickOptionalComicControl(page,page.locator('[data-story-action="text"]'));await clickOptionalComicControl(page,story,{position:{x:10,y:10}});await page.waitForTimeout(1200);}
+  await playStory(page);
   await page.locator('.cm-opening__envelope').click();await page.locator('.cm-opening__letter button').click();await page.locator('#cm-opening-name').fill('Dex Audit');await page.locator('.cm-opening__name button[type="submit"]').click();
   await page.locator('.cm-opening__choices button').first().click();await page.locator('.cm-opening__envelope').click();await page.locator('.cm-opening__letter button').click();await page.locator('.cm-opening__letter button').click();
   if(await page.locator('[data-egg-confirm]').isVisible())await page.locator('[data-egg-confirm]').click();await page.locator('#cm-opening-name').fill('Partner');await page.locator('.cm-opening__name button[type="submit"]').click();

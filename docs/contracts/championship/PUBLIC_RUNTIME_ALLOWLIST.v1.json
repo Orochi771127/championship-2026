@@ -117649,6 +117649,18 @@
       "sha256": "048c2ee9cd049398421631536e99e3b72aaa8f79c53068ecf3617371ef183b38"
     },
     {
+      "path": "assets/production/opening/ai-chan-layered-v3-20261103/background.mp4",
+      "sha256": "b0962103da22b392fd787e07db81830ffab6930d66bd74aa2e88d6fe5bf075d0"
+    },
+    {
+      "path": "assets/production/opening/ai-chan-layered-v3-20261103/cat_idle.webp",
+      "sha256": "453f97fdcba19ea82cee4d6eebd54bd375b41f3c4b12c15b779370e4355da6d6"
+    },
+    {
+      "path": "assets/production/opening/ai-chan-layered-v3-20261103/catgirl_idle.webp",
+      "sha256": "fd22302d4abfb8d047d3f77e1dec315aa4cd34fb9fe03a28c7c04a20674bed3c"
+    },
+    {
       "path": "assets/production/opening/original-comic-r2-20261010/01_arena.webp",
       "sha256": "73635ac2a8d1d32601979f44fcb065a20c4235e562b8438f6a495d806dc6b44b"
     },
@@ -119873,6 +119885,10 @@
       "sha256": "3ec79829ce642ba14a043ac873b674c5b5b17562699257a65d7c3cf13a7ce8c4"
     },
     {
+      "path": "assets/production/scene-music-r1/opening/hexagon_cradles.mp3",
+      "sha256": "5227d9193d545a72349dfbd3ff79b672116b0748c7748c82dc7b41404845d535"
+    },
+    {
       "path": "assets/production/scene-music-r1/raising/a_quiet_evening_training.mp3",
       "sha256": "e02524e6ebba8ee5b580b7071216105bde45a0f33b1f5c4bd08dbc49d623ba57"
     },
@@ -120362,7 +120378,7 @@
     },
     {
       "path": "championship.html",
-      "sha256": "0fd0965378265e19fef817a72edb4c1491c3a20ce55030060f2af67f7f9f0da4"
+      "sha256": "4dff3d2eee80e4185dfe97da95f70453947fd7dfb1693d3b50b56e6cef0a3dcc"
     },
     {
       "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -120894,7 +120910,7 @@
     },
     {
       "path": "src/championship/app/interactiveTutorialPreview.js",
-      "sha256": "e21f0e5eaa5af58759d922403878e2cb1fb369703740c2d7bf44a6ffd2310023"
+      "sha256": "744481ac5e9edf296ba62a37f0b67b37e15ae52bbec5ca3a51b81b8ee687456d"
     },
     {
       "path": "src/championship/app/interactiveTutorialRaisingSteps.js",
@@ -120918,7 +120934,7 @@
     },
     {
       "path": "src/championship/app/main.js",
-      "sha256": "edc1c552dcd221524d58c62e1393163c752ce000f277040f1e7fe74a180bcc6d"
+      "sha256": "30b94a5336a34c528ef70f0512f2ff54a77d132c1bc74e38b1cc426ad49811db"
     },
     {
       "path": "src/championship/app/medalCollection.css",
@@ -120945,10 +120961,6 @@
       "sha256": "50bf700fd201d9e6ce14fb748c7ae26f70f4c9fb13b00cfc3e0b6c54893bbfa1"
     },
     {
-      "path": "src/championship/app/nativeOpeningStory.js",
-      "sha256": "05c1cf994e3eec326eea4a2cf4049eb526a958b3bb8c4dfc02ce968ae798e3ba"
-    },
-    {
       "path": "src/championship/app/nativeTutorialBattleEntry.js",
       "sha256": "bed8e897215a82fdf7cc13f7c38fcd183e3681de2e022da57cf50df0252e9213"
     },
@@ -120962,7 +120974,7 @@
     },
     {
       "path": "src/championship/app/onboarding.css",
-      "sha256": "c1681cde66b8de3f02a87eb7a4921ee3af76029d0714dedfb1352acd8f34ea24"
+      "sha256": "0e2d7816f1d76ffe91ef57651bbda92ac0e5cc43edcfb6e8789ccea693c48d5a"
     },
     {
       "path": "src/championship/app/onlineAccountPanel.js",
@@ -120990,11 +121002,15 @@
     },
     {
       "path": "src/championship/app/openingPresentation.js",
-      "sha256": "999d97c403e827b389643968b81308a98e955266bcf20ce328921191041a6a2e"
+      "sha256": "da71f2a86f2309e1b27fce6af34a7e8f8054adc4a2918fe8f6111a4796a0afd2"
     },
     {
       "path": "src/championship/app/openingStoryPresentation.js",
-      "sha256": "2d9bf98171d7f45556ea65a78edc3296ed83f18fe2be950602c0a5715a87be57"
+      "sha256": "c15bd9553bef902c4610eec530bc3fbb7b5f14d595146b3c314bcbe9e8c9c5f4"
+    },
+    {
+      "path": "src/championship/app/openingStoryScript.js",
+      "sha256": "22583a740b4899442c6bb49ded67add3532c26a3ced0c21488ee095b955356da"
     },
     {
       "path": "src/championship/app/phase1ProductCreatures.js",
@@ -121070,7 +121086,7 @@
     },
     {
       "path": "src/championship/app/settings/preferenceSchema.js",
-      "sha256": "8323b34ae98687c8ceea9e7ea2a87f6c8b3c01d7e3a5834e7cc65466c60ae600"
+      "sha256": "c0971bb76e98d16c43416fac01bf0b69a2dddd36604bb8965a84e82c8cca3b46"
     },
     {
       "path": "src/championship/app/settings/preferenceStore.js",
@@ -121082,7 +121098,7 @@
     },
     {
       "path": "src/championship/app/settings/settingsPanel.js",
-      "sha256": "7313b385eaaa7049a58e17784f29a09fc7119f69d6648c251bbdf00410bd5813"
+      "sha256": "9d24bd831d01760e13ba32a926a38861a102aea79594f3c482b3a8c7767581a8"
     },
     {
       "path": "src/championship/app/shopOriginalVideo.css",
@@ -121102,7 +121118,7 @@
     },
     {
       "path": "src/championship/app/storyCutsceneStage.js",
-      "sha256": "2592d7a194b449f28f9140916b7456af96a93d8b0c98abb7d2d0d12357dcc9a3"
+      "sha256": "29837b9ec63fd1c8d8d7f9df7a05ab890f450de459a251dfccff9993e0fd0ef5"
     },
     {
       "path": "src/championship/app/styles.css",
@@ -121933,6 +121949,10 @@
       "sha256": "19189cd561ea21abb6fed5022593c98c8c9c969de837d825177cd98e2354aea0"
     },
     {
+      "path": "src/championship/presentation/aiChanGuide.js",
+      "sha256": "5c1bede83097a74f08b05a12824acb2fcac48bba969080808ec8044836496474"
+    },
+    {
       "path": "src/championship/presentation/animationHandoff.js",
       "sha256": "fadf407389c3c511b36e10b5f1889bb2c6a1058db5e4731799b79536dea81f49"
     },
@@ -122254,7 +122274,7 @@
     },
     {
       "path": "src/championship/presentation/originalMusicCatalog.js",
-      "sha256": "f18f775694ce79563ec1d2feb3a52103fa0318f70a8a51e3af38bed30cc83246"
+      "sha256": "9fd21a5ca1da21d57eead820784479af77b04a207c0ff8edefb34799e8b72dec"
     },
     {
       "path": "src/championship/presentation/originalRuntimeLocation.js",
@@ -122394,7 +122414,7 @@
     },
     {
       "path": "src/championship/presentation/sceneMusicCatalog.js",
-      "sha256": "532f6dcedda1a0e75d580c0f48258039958ecf1928d71bded7942e2407c1f32f"
+      "sha256": "8d5401a215aa61802e755186e3ec0e7fca245ed0589081fc11be3418f4c63fd9"
     },
     {
       "path": "src/championship/presentation/shopGoodsUiArt.js",
@@ -122761,6 +122781,10 @@
       "sha256": "138f47cf000d6dd1494b251f8ff8be9d58c099f5256536eb0554d3c5bb3d747a"
     },
     {
+      "path": "src/championship/text/aiChanStoryText.js",
+      "sha256": "4b12116e7db26000aad90b2a7586a74ad31df8250d449c59fffe5ac29b45082b"
+    },
+    {
       "path": "src/championship/text/battleMoveNames.js",
       "sha256": "f6a7e9dd9246d582041820ccfc9eb434f2c0e96272b0d2244ad958649493fe2b"
     },
@@ -122850,7 +122874,7 @@
     },
     {
       "path": "src/championship/text/onboardingText.js",
-      "sha256": "ab403f386ae13ad7e3077a67ff6eb5a6e4222c7a63828bc9a12e9640678e3e88"
+      "sha256": "ed8a02da295b0b23fc2017cfa6228b6d1f178f6ab31d18f23d24d9728c3b66bc"
     },
     {
       "path": "src/championship/text/onlineText.js",
@@ -122922,23 +122946,23 @@
     },
     {
       "path": "src/championship/text/uiText.en.js",
-      "sha256": "49b0a4e6f70069500d1d0661a67fbe92e5aede3cffa265cef9d04c8c61572dd0"
+      "sha256": "ec82f5924e073d08f7eedc97809d6d4abe8897aae320f532da8fabb49a006cac"
     },
     {
       "path": "src/championship/text/uiText.ja.js",
-      "sha256": "7ab4aa1f23dafbe430e02e640f9ad364f2aac297ec81eaeadd69d06e2000b68b"
+      "sha256": "b831312f24c38ac662231427d568ec1b50caa154a9e2a3f715bfed5a441107c1"
     },
     {
       "path": "src/championship/text/uiText.js",
-      "sha256": "403382d83ae0b67a7b825ed8a7f8ec1ed1a86d673dde6d168cd0927ee62e5653"
+      "sha256": "f38d34f9ec062fda5eb55f5eccf05178feefc975a90ad7d6ae5646f8bd483f32"
     },
     {
       "path": "src/championship/text/uiText.th.js",
-      "sha256": "74363e90df177d67bc96b5d4bfb9c000b37b450c4edb412b65ec4bf37a187dd0"
+      "sha256": "5d5c44c348ca914c54da24cff0cff465550bac31f5c484accbd97303f61776c0"
     },
     {
       "path": "src/championship/text/uiText.vi.js",
-      "sha256": "e4e75912e906d4f593671f6f0a7d5cff3d78affa2dc67978f696f84173ba3e20"
+      "sha256": "95f63d28e80185cbf395a8804fc8f762bfff8a865bd3f76f718d855a726637f3"
     },
     {
       "path": "src/championship/text/zhHant.js",
