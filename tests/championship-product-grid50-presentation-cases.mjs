@@ -103,9 +103,10 @@ test('top contour survives runtime loading and wrap copies without moving ground
   await assert.rejects(loadRuntimeMapArtTileSet({PIXI,manifest,...plan,productGrid:null,presentationMode:plan.mode}),/TILE_SET_INTEGER_POSITION_REQUIRED/);
 });
 
-// Source-canvas padding never changes logical geometry or legacy sourceRect.
+// Source-canvas padding never changes logical geometry or legacy sourceRect. The padded 10/08
+// intake art was deleted on 2026-11-02 (Owner); its manifest stays as this fixture.
 import {loadRuntimeMapArtField,validateRuntimeMapArtBundle} from '../src/championship/presentation/runtimeMapArtBundle.js';
-const paddedManifest=JSON.parse(fs.readFileSync('assets/production/cage/final-intake-20261008/manifest.json','utf8'));
+const paddedManifest=JSON.parse(fs.readFileSync('tests/fixtures/cage-padded-intake-20261008.manifest.json','utf8'));
 const water=paddedManifest.fields.find(f=>f.fieldId==='field_cm39_01');
 function paddingPixi({badSize=false}={}) {
   class Animation extends Sprite {constructor({textures}){super(textures[0]);this.textures=textures;}gotoAndStop(i){this.texture=this.textures[i];this.frameIndex=i;}}
@@ -177,12 +178,6 @@ test('padded art leaves all legal Grid50 plans and resident bounds identical to 
   }
   assert.ok(count>2793);
 });
-test('new files preserve phase timings and have provenance-linked verified hashes',()=>{
-  const evidence=JSON.parse(fs.readFileSync('assets/production/cage/source-bounds-r1-20261015/provenance.json','utf8'));
-  assert.equal(evidence.frames.length,4);
-  for(const e of evidence.frames){assert.equal(e.previousFrame.durationMs,e.candidateFrame.durationMs);assert.equal(e.previousFrame.durationRawTicks,e.candidateFrame.durationRawTicks);assert.notEqual(e.previousFrame.src,e.candidateFrame.src);}
-});
-
 test('unpadded fields retain legacy crop dimensions and zero origin exactly',async()=>{
   for(const f of paddedManifest.fields.filter(f=>!f.visualPaddingNative)){
     const sourceRect={x:1,y:2,width:f.worldWidthPx-2,height:f.worldHeightPx-4};

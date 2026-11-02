@@ -12,7 +12,6 @@ import {getOriginalCageVisualBinding} from '../src/championship/presentation/ori
 import {cageName} from '../src/championship/text/zhHant.js';
 import review from '../src/data/championship/catalogs/raising-ground.review-20261019.json' with {type:'json'};
 import source from '../src/data/championship/catalogs/raising-ground.r1.json' with {type:'json'};
-import sports from '../src/data/championship/catalogs/ranch-sports-art.r1.json' with {type:'json'};
 import modelGround from '../src/data/championship/catalogs/ranch-three-ground.r1.json' with {type:'json'};
 applyRaisingGroundReview(review);
 const defs=listCageDefinitions(),unlockedSlots=Array.from({length:100},(_,i)=>i);
@@ -62,7 +61,6 @@ for(let d=0;d<35;d++){
 const noConnection=records.filter(r=>!r.connectedLayouts).map(({definition,rotation,name})=>({definition,rotation,name}));
 const report={schemaVersion:1,status:failures.length||noConnection.length?'FAIL':'GEOMETRY_AND_NAVIGATION_CHECKED',
   scope:'Controlled data audit, not visual acceptance or physical-device QA',
-  selectedSports:sports.fields.map(f=>({fieldId:f.fieldId,sha256:f.frames[0].sha256})),
   movableDefinitions:35,orientations:35,combinations,openEdges:open,closedEdges:closed,
   fixed:{definition:35,rotationEnabled:false,reason:'FIXED_WAITING_ROOM'},
   noConnection,

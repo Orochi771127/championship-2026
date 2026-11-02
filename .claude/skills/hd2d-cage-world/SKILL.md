@@ -129,9 +129,12 @@ logo, main menu and opening stay exactly as live main shipped them.
   contracts. The public manifest may not carry `ownerDirection` or other private keys.
 - The public `cage-ui` map is projected from the same renders
   (`assets/production/cage/ui-three-20261102/manifest.json`, map recipe role
-  `cage-ui`), so the 2D ranch on other hosts shows them too. The 10/06 Blender
-  field art and the 10/08 shop thumbnails were deleted on 2026-11-02 (Owner); do
-  not bring them back.
+  `cage-ui`). It is the only cage map role: the 2D ranch (used when the 3D one
+  cannot start) loads it on every host. The 10/06 Blender field art, the 10/08
+  shop thumbnails and intake, and the 10/19 polish set with its foreground,
+  ambient, shared-edge and sports-park layers were deleted on 2026-11-02 (Owner);
+  do not bring them back. `tests/fixtures/cage-padded-intake-20261008.manifest.json`
+  keeps only the padded-field numbers for the loader tests.
 
 ## Shop cage cards
 

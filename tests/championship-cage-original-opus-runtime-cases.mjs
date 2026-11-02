@@ -60,15 +60,14 @@ test('sizes match the fields they replace; renders are one static frame', () => 
   }
 });
 
-test('the ranch loader reads the new bundle; the licensed bundle stays stored but unused', () => {
+test('the 2D ranch reads the renders everywhere; the licensed bundle stays stored but unused', () => {
   const main = fs.readFileSync('src/championship/app/main.js', 'utf8');
-  const expression = main.match(/const CAGE_ART_MANIFEST_URL = ([\s\S]*?);/)[1];
-  const select = hostname => Function('isOriginalRuntimeLocation','publicMapManifestPath', 'return '+expression)(()=>isOriginalRuntimeLocation({hostname}),publicMapManifestPath);
-  for (const host of ['localhost','127.0.0.1','[::1]'])
-    assert.equal(select(host), 'assets/production/public-runtime/cage-final.map.v1.json');
-  for (const host of ['orochi771127.github.io','example.com','localhost.evil.test'])
-    assert.equal(select(host), 'assets/production/public-runtime/cage-ui.map.v1.json');
-  assert.equal(Function('isOriginalRuntimeLocation','publicMapManifestPath','return '+expression)(()=>isOriginalRuntimeLocation('https://orochi771127.github.io/championship-2026/'),publicMapManifestPath), 'assets/production/public-runtime/cage-final.map.v1.json');
+  // Owner 2026-11-02: the 2D ranch (used when the 3D one cannot start) draws the renders too.
+  assert.match(main, /const CAGE_ART_MANIFEST_URL = publicMapManifestPath\('cage-ui'\);/);
+  assert.equal(publicMapManifestPath('cage-ui'), 'assets/production/public-runtime/cage-ui.map.v1.json');
+  assert.throws(() => publicMapManifestPath('cage-final'), /PUBLIC_MAP_SELECTION_MISSING/);
+  for (const gone of ['polish-review-20261019', 'final-intake-20261008', 'foreground-review-polish-20261019', 'ambient-review-polish-20261019'])
+    assert.ok(!fs.existsSync(`assets/production/cage/${gone}`), gone);
   assert.doesNotMatch(main, /cage\/licensed-runtime-v1/);
   assert.ok(fs.existsSync('assets/production/cage/licensed-runtime-v1/manifest.json'));
 });

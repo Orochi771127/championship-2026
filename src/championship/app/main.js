@@ -80,9 +80,7 @@ import {
   validateRuntimeMapArtBundle
 } from "../presentation/runtimeMapArtBundle.js";
 import { createRanchCageArtPlan as createRaisingCageArtPlan, ranchExpansionPreviewPlan } from "../presentation/raisingRanchArtPlan.js";
-import { withCageForeground } from "../presentation/cageForeground.js";
 import { withRanchPassages } from "../presentation/ranchPassages.js";
-import {selectRanchCageArt,ranchCageLayerGroups} from "../presentation/ranchCageArtSelection.js";
 import { withRanchExpansionPreview } from "../presentation/raisingExpansionPreview.js";
 import { openRanchExpansionPreview } from './ranchExpansionPreview.js';
 import { createLoadProgressView, observeLoadActivity } from './loadProgress.js';
@@ -246,13 +244,9 @@ const HUNT_DAY_NIGHT_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("huntReview") ==
   ? "assets/production/hunt/hm234-day-review-20261007/day-night-r1-20261008/manifest.json" : null;
 const HUNT_DAY_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("huntReview") === "hm234-20261007"
   ? "assets/production/hunt/hm234-day-review-20261007/manifest.json" : null;
-// Owner 2026-10-09: final 37 cage fields in normal local play; existing geometry and clocks.
-const CAGE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
-  ? publicMapManifestPath('cage-final')
-  : publicMapManifestPath('cage-ui');
-// Local review (2026-10-19): the re-lit cage polish, loopback ?cageReview only.
-const CAGE_REVIEW_MANIFEST_URL = LOCAL_MAP_REVIEW.get("cageReview") === "polish-20261019"
-  ? "assets/production/cage/polish-review-20261019/manifest.json" : null;
+// Owner 2026-11-02: the 2D ranch, kept for when the 3D one cannot start, draws the
+// same renders of the 3D cages as the shop and the facility editor.
+const CAGE_ART_MANIFEST_URL = publicMapManifestPath('cage-ui');
 // Owner 2026-10-07: completed original arenas in normal local play; publication remains gated.
 const LICENSED_BATTLE_ART_MANIFEST_URL = isOriginalRuntimeLocation()
   ? (LOCAL_MAP_REVIEW.get("battleReview") === "stage-20261007"
@@ -893,9 +887,9 @@ async function loadOptionalHuntFieldArt(stage, { signal = null, onProgress = nul
 async function loadOptionalCageFieldArt(stage, { signal } = {}) {
   const PIXI = createPixiAssetScope(stage.PIXI, location.href, { signal });
   try {
-    const response = await fetchRuntimeMapResponse(CAGE_REVIEW_MANIFEST_URL ?? CAGE_ART_MANIFEST_URL, globalThis.location.href, { signal });
+    const response = await fetchRuntimeMapResponse(CAGE_ART_MANIFEST_URL, globalThis.location.href, { signal });
     if (!response.ok) throw new Error(`CAGE_ART_MANIFEST_HTTP_${response.status}`);
-    const manifest = validateRuntimeMapArtBundle(selectRanchCageArt(await response.json()));
+    const manifest = validateRuntimeMapArtBundle(await response.json());
     const cageFrame = app.getCageEditFrame();
     const plan = createRaisingCageArtPlan({ manifest,
       placements: cageFrame?.placements ?? [],
@@ -933,27 +927,7 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
       presentationMode: plan.mode,
       productGrid: plan.productGrid ?? null
     });
-    let art=fieldArt;
-    const layerGroups=ranchCageLayerGroups(manifest,plan.placements);
-    try{for(const group of layerGroups)art=await withCageForeground({PIXI,art,...group,fetchImpl:(url,options)=>fetch(url,{...options,signal})});}
-    catch(error){await fieldArt.dispose();throw error;}
-    art=await withRanchPassages({art,connections:app.getRanchExplorationFrame()?.connections??[]});
-    // Hide a shared rim only where navigation actually permits crossing.
-    if(isOriginalRuntimeLocation()) {
-    try{
-      const { withCageSharedEdges } = await import('../presentation/cageSharedEdges.js');
-      art=await withCageSharedEdges({PIXI,art,manifest,connections:app.getRanchExplorationFrame()?.connections??[],
-        fetchImpl:(url,options)=>fetch(url,{...options,signal})});
-    }catch(error){console.warn(`CHAMPIONSHIP_CAGE_SHARED_EDGES_FALLBACK: ${error.message}`);}
-    // Polish (2026-10-19): generated cage motion (wind, glow, water,
-    // particles); any failure keeps the static ranch.
-    try{
-      const { withCageAmbient } = await import('../presentation/cageAmbient.js');
-      for(const group of layerGroups)art=await withCageAmbient({PIXI,art,...group,renderer:stage.app?.renderer??null,
-        quality:currentQualityTier()==='saver'?'low':'high',reducedMotion:prefersReducedMotion(),
-        fetchImpl:(url,options)=>fetch(url,{...options,signal})});
-    }catch(error){console.warn(`CHAMPIONSHIP_CAGE_AMBIENT_FALLBACK: ${error.message}`);}
-    }
+    const art=await withRanchPassages({art:fieldArt,connections:app.getRanchExplorationFrame()?.connections??[]});
     // A ranch without the expansion shows its locked rows below the board
     // (2026-10-12). Decoration only, so a failure keeps the ranch as it was.
     const preview = app.getInteractiveTutorial()?.finished === false ? null
@@ -3404,8 +3378,8 @@ function boot() {
 }
 
 // Polished cages (2026-10-19) carry walkability that matches their art; applied
-// before the ranch is built, on the public playtest and the loopback cage review.
-if (CAGE_REVIEW_MANIFEST_URL || MAP_POLISH_PUBLIC) {
+// before the ranch is built, on the public playtest.
+if (MAP_POLISH_PUBLIC) {
   try {
     const [{ applyRaisingGroundReview }, review] = await Promise.all([import("../raising/raisingGroundReview.js"),
       import("../../data/championship/catalogs/raising-ground.review-20261019.json", { with: { type: "json" } })]);
