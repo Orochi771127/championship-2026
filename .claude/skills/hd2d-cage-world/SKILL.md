@@ -28,6 +28,7 @@ logo, main menu and opening stay exactly as live main shipped them.
 | Beach coast pipeline (2026-11-02) | `R:\Projects\Championship2026\cage-coast-20261102\scripts\` (`bake_coast`, `make_groundmap`, `sea_mask`, `pack_coast`, `install_batch`, `cage_falls`, `update_contracts`) |
 | 10/06 showcase masters (shop and editor art came from these) | `docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r*/seam-v3/fields/field_cmXX_01/master.blend` (untracked; copy on `D:\Championship2026-backups\cage-opus-masters-20261102\`) |
 | Shop cage cards | `src/championship/app/vs4Screens.js` (`decorateShopCageCard`, `cageSeriesLabel`), `ui/screenLayout.css` |
+| Shop, editor and location pictures (renders of the 3D cages) | `assets/production/public-runtime/cage-ui-three.v1.json` → `src/championship/presentation/cageUiArt.js` |
 
 ## Enhancer rules
 
@@ -113,6 +114,21 @@ logo, main menu and opening stay exactly as live main shipped them.
   plinth.
 - Check `canvas.dataset.drawCalls`, `triangles` and `textureCount` before and
   after a change on a full ranch.
+
+## Shop and editor pictures (Owner 2026-11-02)
+
+- The shop cards and detail, the facility editor board and tray, the empty-land lid
+  and the companion location marker all show renders of the 3D cage GLBs: the
+  production renderer at the layout view (52°), 4 px per native px, framing each
+  field's world rect exactly as the old field art did (no plinth, transparent).
+  Thumbnails fit the whole frame into 256×192, centred (the 10/08 shop rule).
+- Each row records the GLB sha256 it was rendered from;
+  `tests/championship-cage-ui-three-cases.mjs` fails when a GLB changes, so render
+  again: `cage-ui-render.html` (local review page, 37 fields) then
+  `pack_ui_three.py` (both in `cage-coast-20261102\scripts\`), then restate the
+  contracts. The public manifest may not carry `ownerDirection` or other private keys.
+- The 10/08 shop thumbnails and the 10/06 field art stay stored and validated as
+  fallbacks; the 2D ranch on other hosts still uses `cage-ui.map.v1.json`.
 
 ## Shop cage cards
 
