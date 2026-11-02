@@ -90,12 +90,13 @@
   white-space: nowrap;
 }
 .cm-vs2-shop .cm-vs2-shop__wallet { color: var(--c-gold-strong); }
+/* The status bar's bits coin, so the shop shows the same money (Owner 2026-11-02). */
 .cm-vs2-shop .cm-vs2-shop__wallet::before {
   content: "";
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, var(--c-coin-light) 0 22%, var(--c-gold) 45%, var(--c-coin-shade) 100%);
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  background: url("../../../assets/production/public-media-clean-20261017/currency-hud-r1/bits-48.png") center / contain no-repeat;
 }
 
 .cm-vs2-body {
