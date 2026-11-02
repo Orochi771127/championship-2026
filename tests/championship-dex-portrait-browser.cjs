@@ -269,6 +269,7 @@ async function clickOptionalComicControl(page, control, options = {}) {
 }
 async function main() {
   const { chromium } = require('playwright');
+  const { playStory } = require('./championship-browser-opening.cjs'); // the one shared New Game story driver
   const { resolveAsset, serveBuild } = require('./alternate-form-browser-support.cjs');
   const root = path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT || 'dist/github-playtest');
   const output = require('./browser-qa-output.cjs')('dex-portrait');
@@ -393,12 +394,7 @@ async function main() {
     assert.equal(await page.locator('#cm-continue').isEnabled(), false, 'Ephemeral profile must start without a user save');
     await page.locator('#cm-new-game').click();
     const story = page.locator('.cm-opening-story'), deadline = Date.now() + 120000;
-    while (await story.count()) {
-      if (Date.now() > deadline) throw Error('NORMAL_ONBOARDING_BLOCKED: opening comic timeout');
-      await clickOptionalComicControl(page, page.locator('[data-story-action="text"]'));
-      await clickOptionalComicControl(page, story, { position: { x: 10, y: 10 } });
-      await page.waitForTimeout(1200);
-    }
+    await playStory(page);
     await page.locator('.cm-opening__envelope').click(); await page.locator('.cm-opening__letter button').click();
     await page.locator('#cm-opening-name').fill('圖鑑測試'); await page.locator('.cm-opening__name button[type="submit"]').click();
     await page.locator('.cm-opening__choices button').first().click();
