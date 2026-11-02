@@ -267,6 +267,7 @@
     "src/championship/modes/championshipModeRegistry.js",
     "src/championship/modes/createChampionshipModeShell.js",
     "src/championship/modes/dataArena/dataArenaConfig.js",
+    "src/championship/modes/dataArena/dataArenaEligibility.js",
     "src/championship/modes/dataArena/dataArenaGrid.js",
     "src/championship/modes/dataArena/dataArenaNav.js",
     "src/championship/modes/dataArena/dataArenaProps.js",
@@ -7786,12 +7787,12 @@
     "assets/production/original-music-r1/bgm_ethereal_moon_lakefront.mp3",
     "assets/production/original-music-r1/bgm_linkara_lofi.mp3",
     "assets/production/original-music-r1/bgm_login_page.mp3",
+    "assets/production/original-music-r1/bgm_lucky_draw_counter.mp3",
     "assets/production/original-music-r1/bgm_northern_verdant_plains.mp3",
     "assets/production/original-music-r1/bgm_southeast_forge_hills.mp3",
-    "assets/production/original-music-r1/bgm_sweetest_level_up.mp3",
-    "assets/production/original-music-r1/bgm_lucky_draw_counter.mp3",
     "assets/production/original-music-r1/bgm_southern_harbor_nexus.mp3",
     "assets/production/original-music-r1/bgm_southwest_tidal_frontier.mp3",
+    "assets/production/original-music-r1/bgm_sweetest_level_up.mp3",
     "assets/production/original-music-r1/championship_battle_final_r1.m4a",
     "assets/production/original-music-r1/championship_battle_final_r1.ogg",
     "assets/production/original-music-r1/championship_defeat_r1.m4a",
@@ -8481,6 +8482,7 @@
     "src/championship/modes/championshipModeRegistry.js",
     "src/championship/modes/createChampionshipModeShell.js",
     "src/championship/modes/dataArena/dataArenaConfig.js",
+    "src/championship/modes/dataArena/dataArenaEligibility.js",
     "src/championship/modes/dataArena/dataArenaGrid.js",
     "src/championship/modes/dataArena/dataArenaNav.js",
     "src/championship/modes/dataArena/dataArenaProps.js",
@@ -37760,6 +37762,10 @@
         "sha256": "0b11d5fd93c3bd835442b5d15973d35202f1c46e86dea847e4d32c4ee288dbe9"
       },
       {
+        "path": "assets/production/original-music-r1/bgm_lucky_draw_counter.mp3",
+        "sha256": "486bd721565788aac5dab0e720a497dea9551214d8806691515a9b44b6b0b43c"
+      },
+      {
         "path": "assets/production/original-music-r1/bgm_northern_verdant_plains.mp3",
         "sha256": "f077b271ceb1879e90ff242a90e00714bc03e019f08f85ad951c055b2d52cea7"
       },
@@ -37768,20 +37774,16 @@
         "sha256": "2d6aa0884f57cadaf794197c5f9a2d406a2f871223dcd7c234481604ca8a7dc5"
       },
       {
-        "path": "assets/production/original-music-r1/bgm_sweetest_level_up.mp3",
-        "sha256": "e5de50be5be35832ce6ecb52a4dccf1716c369aaf1ec73427ca504e98ea54fa3"
-      },
-      {
-        "path": "assets/production/original-music-r1/bgm_lucky_draw_counter.mp3",
-        "sha256": "486bd721565788aac5dab0e720a497dea9551214d8806691515a9b44b6b0b43c"
-      },
-      {
         "path": "assets/production/original-music-r1/bgm_southern_harbor_nexus.mp3",
         "sha256": "2693e1dd0f160ed01d8cbb636aaad718ff8b6e4e48a7696f64b28f36d8f24068"
       },
       {
         "path": "assets/production/original-music-r1/bgm_southwest_tidal_frontier.mp3",
         "sha256": "07fb560745beb9baed13c6de203f27c15e6d6a35d33a69447c5c7710867c0778"
+      },
+      {
+        "path": "assets/production/original-music-r1/bgm_sweetest_level_up.mp3",
+        "sha256": "e5de50be5be35832ce6ecb52a4dccf1716c369aaf1ec73427ca504e98ea54fa3"
       },
       {
         "path": "assets/production/original-music-r1/championship_battle_final_r1.m4a",
@@ -39481,7 +39483,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "8122dfa2835027f8fa637d29751e6cd24f2990b399f291415ac818e6e272b725"
+        "sha256": "dbca50a65272468911ce6ae110b9257aec57e2ca34f79e2c20092b70db78a038"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -39525,11 +39527,11 @@
       },
       {
         "path": "src/championship/app/dataArena.css",
-        "sha256": "51c8b4761c2722087e92a8dfaefbef1aeb996c72b180ac655f7569dc037b843c"
+        "sha256": "651ece598c8db7819a2c6581e866788de9415bbc839225cd76d3c427bba4b94a"
       },
       {
         "path": "src/championship/app/dataArenaScreen.js",
-        "sha256": "d3e1722408d54ea046a8d3b6fdd0e61c84fd0124e560ca119e0ed6a474be0764"
+        "sha256": "5d71dcf52f6a0ca1fba4443f6e5481c70f17651ee6c4b8e05a64bf5a0d5b458d"
       },
       {
         "path": "src/championship/app/daylightSkin.css",
@@ -39633,7 +39635,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "7ef318ec4bbcdc142c9d7f70e0a01c09d80bf29b2e69e219cb505f03d2188bf1"
+        "sha256": "096a7f4690208a94796b57f6f5f7b1d0699a283da60cefbb1f65c0950a736913"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -40540,6 +40542,10 @@
         "sha256": "d006da09a53c3bb6f8dfc0be9c9a041138e31c76a6c1599fff67c906c4106229"
       },
       {
+        "path": "src/championship/modes/dataArena/dataArenaEligibility.js",
+        "sha256": "e4678b6c5b7f3cd4ad36a5448173fe5659bbf282987fc6b593cf23238ac0cf2f"
+      },
+      {
         "path": "src/championship/modes/dataArena/dataArenaGrid.js",
         "sha256": "b15aee4905122d059c21899d73d837580dac22bf163be1ffd64b5d0fd2849ad3"
       },
@@ -40581,7 +40587,7 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaSimulation.js",
-        "sha256": "eb2e4e12742cdbc7b4ba1ebe1f8c7a5135e7cc93c5ce5087b6991e2ad74937dc"
+        "sha256": "394566261125c6695b86559c27ad960f9098307d7aecd06fd619f350c47aac82"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaUpgrades.js",
@@ -40773,7 +40779,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-        "sha256": "e16776a78bd68818eec209fe41fc29ed2fc36cd29d012fa7ec7805db01d3472c"
+        "sha256": "0fb0e8e84ac004d3b14d4f88adc599a1557fd8d2db4f72aa4d7c1a6d9ab8319b"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
@@ -41493,7 +41499,7 @@
       },
       {
         "path": "src/championship/text/dataArenaText.js",
-        "sha256": "385de262182d32bcbfa5ff6d3742cceb62400c2116a34eeb8985a73df91de11e"
+        "sha256": "65d6ee794892367a6a8cb7768cca500bf1fe85a3807fa16385842d4afb0787d8"
       },
       {
         "path": "src/championship/text/evolutionPresentationText.js",
