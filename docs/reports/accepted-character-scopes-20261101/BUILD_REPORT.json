@@ -1,0 +1,331 @@
+{
+  "status": "LOCAL_INTEGRATION_PENDING_RENDER_QA",
+  "baseCommit": "141c4559c8978ddf146c3805b81f475f04b07f44",
+  "roles": {
+    "GR03": {
+      "speciesId": "species-068",
+      "scope": "Arena Walk8",
+      "newClips": 8,
+      "uniqueDrawings": 24,
+      "nativeEventsPerVisualClip": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "replacedClips": [
+        "gr03.arena.walk.S",
+        "gr03.arena.walk.SE",
+        "gr03.arena.walk.E",
+        "gr03.arena.walk.NE",
+        "gr03.arena.walk.N",
+        "gr03.arena.walk.NW",
+        "gr03.arena.walk.W",
+        "gr03.arena.walk.SW"
+      ],
+      "selectedPath": "assets/production/characters/reviewed107-20261026/GR03/animation.public-v1.json",
+      "selectedSHA256": "1a02e6b44edd7ea9a74a94a9ef4512ccfb6c8e789884ec378aca6177c61a0c07",
+      "authoringPath": "assets/production/characters/reviewed107-20261026/GR03/animation.web-v4-20261101.json",
+      "authoringSHA256": "297b924ef78a75da5db5adefc7e2aa773174960f6d61ed095733165e088e4cf3",
+      "sourceHashes": {
+        "manifest": "e36e504f6b4a2b5327103e488c5375cca1ae5603a2ebc98d714ffdd0fff2eea2"
+      },
+      "registration": {
+        "basis": "Delivered own-art cohort transforms, distinct from source event geometry; new game transform below. No raw modifications, no inferred mirror.",
+        "gameTransform": {
+          "commonToNative": 0.04004050073637702,
+          "storedDensity": 8,
+          "referenceHeight": 21.75,
+          "originsPerDirection": {
+            "D": [
+              1089.3480459770117,
+              713.6270983055318
+            ],
+            "DR": [
+              370.56752873563215,
+              665.9787356321839
+            ],
+            "R": [
+              350.4825287356322,
+              703.2324137931034
+            ],
+            "UR": [
+              356.4942528735632,
+              670.2160919540231
+            ],
+            "U": [
+              1132.8219540229884,
+              699.8005747126437
+            ],
+            "UL": [
+              446.98574712643676,
+              556.616091954023
+            ],
+            "L": [
+              429.6574712643678,
+              679.9724137931036
+            ],
+            "DL": [
+              429.6574712643678,
+              656.9287356321839
+            ]
+          },
+          "reference": "Current selected action median body height; one scalar per role, one origin per direction; gameplay position/velocity unchanged.",
+          "enginePivotParity": "NOT_CLAIMED"
+        }
+      },
+      "pages": [
+        {
+          "path": "assets/production/characters/reviewed107-20261026/GR03/web-atlas-v2/52b39ebb78f6e6b64d8d519ffc7feafd3d247909f66b290a540da337eedf1889.webp",
+          "sha256": "52b39ebb78f6e6b64d8d519ffc7feafd3d247909f66b290a540da337eedf1889",
+          "size": [
+            1901,
+            416
+          ],
+          "bytes": 960380
+        }
+      ]
+    },
+    "GR16": {
+      "speciesId": "species-046",
+      "scope": "Arena Walk8",
+      "newClips": 8,
+      "uniqueDrawings": 24,
+      "nativeEventsPerVisualClip": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "replacedClips": [
+        "A1_Down",
+        "A1_DownRight",
+        "A1_Right",
+        "A1_UpRight",
+        "A2_Up",
+        "A2_UpLeft",
+        "A2_Left",
+        "A2_DownLeft"
+      ],
+      "selectedPath": "assets/production/characters/reviewed107-20261026/GR16/animation.public-v1.json",
+      "selectedSHA256": "b13b7de1986395eb51a3dbc345fdc9ea0a01cc9c599f5c5bed9ce1ab871ef653",
+      "authoringPath": "assets/production/characters/reviewed107-20261026/GR16/animation.web-v4-20261101.json",
+      "authoringSHA256": "5d506b35a0eb5c25a0b9ed99e9279b1e33b6773f5cb82cb986997727869ab54a",
+      "sourceHashes": {
+        "manifest": "e171e2492201f3cf1307dd422c2e6a5cc92abe53a6a60c378d5141332f51402c",
+        "acceptanceReconstructed": "014b0320cf64fe2ac93cfd45fde212be19b620dfc34146f3da707b198d9d3445",
+        "acceptanceOriginal": "75928c15029240e8aeeb5631e73ff8fe019df782062bc1a846823e3967125896"
+      },
+      "registration": {
+        "basis": "Common full canvasheight724 and nominal cellcenter, no perframebboxfit/warp; singleton cohorts visibly differ and remain flagged",
+        "historicalPendingRetained": true,
+        "acceptanceSupersedesHistoricalStylePending": true,
+        "gameTransform": {
+          "commonToNative": 0.02987861456321017,
+          "storedDensity": 8,
+          "referenceHeight": 20.25,
+          "originsPerDirection": {
+            "D": [
+              313.3788977981418,
+              685.9804632811506
+            ],
+            "DR": [
+              448.51953671884945,
+              696.9804632811506
+            ],
+            "R": [
+              474.6211022018582,
+              659.6132747868143
+            ],
+            "UR": [
+              415.90820287641594,
+              633.5937380679649
+            ],
+            "U": [
+              372.8164057528319,
+              647.7968690339824
+            ],
+            "UL": [
+              416.29686903398243,
+              601.5937380679649
+            ],
+            "L": [
+              347.931812396589,
+              663.0926562301132
+            ],
+            "DL": [
+              393.8378834160621,
+              683.4296805396461
+            ]
+          },
+          "reference": "Current selected action median body height; one scalar per role, one origin per direction; gameplay position/velocity unchanged.",
+          "enginePivotParity": "NOT_CLAIMED"
+        }
+      },
+      "pages": [
+        {
+          "path": "assets/production/characters/reviewed107-20261026/GR16/web-atlas-v2/cc952cc44b13a038b4e23b512c432b70f1c2c1f60b710ad89b4b78d0753ee239.webp",
+          "sha256": "cc952cc44b13a038b4e23b512c432b70f1c2c1f60b710ad89b4b78d0753ee239",
+          "size": [
+            2044,
+            364
+          ],
+          "bytes": 703204
+        }
+      ]
+    },
+    "GR14": {
+      "speciesId": "species-066",
+      "scope": "General Main0/Sub0 normal idle aliases",
+      "newClips": 2,
+      "uniqueDrawings": 2,
+      "nativeEventsPerVisualClip": [
+        2
+      ],
+      "replacedClips": [],
+      "selectedPath": "assets/production/characters/reviewed107-20261026/GR14/animation.public-v1.json",
+      "selectedSHA256": "b6a42629cc93ca3b7da2bcbc9c34fc36ea1406998630c8859672c8f48bc7f3bb",
+      "authoringPath": "assets/production/characters/reviewed107-20261026/GR14/animation.web-v4-20261101.json",
+      "authoringSHA256": "437288232413c864ece6c028381e97302e7eb85248f6a209c8c93e7686aae909",
+      "sourceHashes": {
+        "manifest": "ddf2fe27be7a12b95fd29cf0b8eea2cd71f46b4d014386b94c0eb44e23457f4b"
+      },
+      "registration": {
+        "basis": "Own-character anatomical/sole registration first, then ONE game transform; no per-frame bounding-box fit.",
+        "GR15ReferenceOnly": null,
+        "manualSoleLandmarks": {
+          "A": [
+            [
+              205,
+              970
+            ],
+            [
+              530,
+              984
+            ]
+          ],
+          "B": [
+            [
+              205,
+              970
+            ],
+            [
+              530,
+              993
+            ]
+          ]
+        },
+        "naturalTorsoAndHeadDeformationPreserved": true,
+        "gameTransform": {
+          "commonToNative": 0.01680672268907563,
+          "storedDensity": 4,
+          "referenceHeight": 16.0,
+          "originsPerDirection": {
+            "null": [
+              479.0625,
+              802.5
+            ]
+          },
+          "reference": "Current selected action median body height; one scalar per role, one origin per direction; gameplay position/velocity unchanged.",
+          "enginePivotParity": "NOT_CLAIMED"
+        }
+      },
+      "pages": [
+        {
+          "path": "assets/production/characters/reviewed107-20261026/GR14/web-atlas-v2/e869ee254a06aa321c000a6613a1f23b8281a7a66422af0a96bae6a20ea3c41f.webp",
+          "sha256": "e869ee254a06aa321c000a6613a1f23b8281a7a66422af0a96bae6a20ea3c41f",
+          "size": [
+            120,
+            85
+          ],
+          "bytes": 12932
+        }
+      ]
+    },
+    "GR15": {
+      "speciesId": "species-045",
+      "scope": "General Main0/Sub0 normal idle aliases",
+      "newClips": 2,
+      "uniqueDrawings": 2,
+      "nativeEventsPerVisualClip": [
+        2
+      ],
+      "replacedClips": [],
+      "selectedPath": "assets/production/characters/reviewed107-20261026/GR15/animation.public-v1.json",
+      "selectedSHA256": "9d1417e117653c134b345cf7404918664fb542d48a545c49550ba8d3c53ba892",
+      "authoringPath": "assets/production/characters/reviewed107-20261026/GR15/animation.web-v4-20261101.json",
+      "authoringSHA256": "c099e5eb34356b15f1ab6be59dd9e4b0dfad5f858776e0932d1d6ca1f87b61e8",
+      "sourceHashes": {
+        "manifest": "ddf2fe27be7a12b95fd29cf0b8eea2cd71f46b4d014386b94c0eb44e23457f4b"
+      },
+      "registration": {
+        "basis": "Own-character anatomical/sole registration first, then ONE game transform; no per-frame bounding-box fit.",
+        "GR15ReferenceOnly": {
+          "previewScales": [
+            0.45,
+            0.29
+          ],
+          "ratio": 0.6444444444444444,
+          "notRuntimeScaleOrPivot": true
+        },
+        "manualSoleLandmarks": {
+          "A": [
+            [
+              190,
+              969
+            ],
+            [
+              501,
+              959
+            ]
+          ],
+          "B": [
+            [
+              300,
+              1503
+            ],
+            [
+              781,
+              1495
+            ]
+          ]
+        },
+        "naturalTorsoAndHeadDeformationPreserved": true,
+        "gameTransform": {
+          "commonToNative": 0.022088153790712415,
+          "storedDensity": 4,
+          "referenceHeight": 19.75,
+          "originsPerDirection": {
+            "null": [
+              269.10158227848103,
+              906.7494374120956
+            ]
+          },
+          "reference": "Current selected action median body height; one scalar per role, one origin per direction; gameplay position/velocity unchanged.",
+          "enginePivotParity": "NOT_CLAIMED"
+        }
+      },
+      "pages": [
+        {
+          "path": "assets/production/characters/reviewed107-20261026/GR15/web-atlas-v2/f0287f0f79404a99fe3eb1a4a0abc31cdda456fd1e01f18b651cacfc03e20168.webp",
+          "sha256": "f0287f0f79404a99fe3eb1a4a0abc31cdda456fd1e01f18b651cacfc03e20168",
+          "size": [
+            140,
+            100
+          ],
+          "bytes": 21434
+        }
+      ]
+    }
+  },
+  "noPublication": true,
+  "noNewArt": true
+}
