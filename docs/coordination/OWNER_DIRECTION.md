@@ -1,5 +1,16 @@
 # Championship Owner Direction
 
+<!-- record-id: SHOP_PURCHASE_POLISH_20261102 -->
+## 2026-11-02 — Shop purchase: a toast that leaves, cards that stay still, the bits coin, a compact detail card
+
+From a phone screenshot of the shop the Owner reports (2026-11-02): 「商店內，我買東西的時候後面都會跳動一下，然後附圖中有一個已購買什麼什麼的都會擋住後面的按鈕他應該是買完東西就要消失可能停個1秒2秒就要消失」; 「上方有一個持有多少的位元幣他那個錢幣的圖片跟我們的位元幣的圖片是不一樣的」; 「那個購買圖啊，都佔了很大的空間，然後都有很大的空白處，空間利用跟位子利用不是很好，請你想一個比較適合的排版」. After the fixes were shown, the Owner answers 「一樣 commit、push、整合至 main 並發佈建置」, which authorizes this batch's commit, push, merge to main and publication.
+
+- Presentation only: no price, stock, purchase rule, double-tap guard or save change.
+- The purchase line stays 1.6 s and fades in 0.24 s (`RECEIPT_TOAST_MS` in `vs4Screens.js`); a repaint no longer brings it back. It centres with `translate`, so the purchase pulse no longer throws it sideways.
+- A purchase or a pick repaints the cards without replaying their deal-in; changing tabs still deals them in.
+- The shop wallet shows the status bar's bits coin (`currency-hud-r1/bits-48.png`) instead of a drawn disc.
+- The detail card puts the picture beside the words (168px desktop, 132px short landscape, 116px phone, 100px short phone); the 390×844 card drops from about 470px to 218px.
+
 <!-- record-id: VFX_SHARED_292_PUBLIC_20261102 -->
 ## 2026-11-02 — The 292-cell shared VFX web atlas becomes the public selection
 

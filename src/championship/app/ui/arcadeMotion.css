@@ -79,6 +79,8 @@
   animation: cm-deal 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 @keyframes cm-deal { from { opacity: 0; translate: 0 24px; scale: 0.9; } }
+/* A shop repaint (a purchase, a pick) rebuilds the same cards: they stay put (Owner 2026-11-02). */
+.cm-vs2-shop__list[data-dealt="true"] > .cm-vs2-shop__row { animation: none; }
 :is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(2) { animation-delay: 18ms; }
 :is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(3) { animation-delay: 36ms; }
 :is(.cm-vs2-shop__list, .cm-vs2-gates) > :nth-child(4) { animation-delay: 54ms; }
