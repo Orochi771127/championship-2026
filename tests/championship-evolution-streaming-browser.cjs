@@ -222,9 +222,22 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
      await delay(100);const cameraAfter=await page.evaluate(()=>__freezeScene.getDiagnostics().cameraX);
      evidence.drag={cameraBefore,cameraAfter};assert.notEqual(cameraAfter,cameraBefore,'Recovered world responds to drag');
      const zoomBefore=await page.evaluate(()=>__freezeScene.getDiagnostics().zoom);
-     await page.locator('.cm-ranch-zoom').click();
+     // Current ranch input is continuous wheel/pinch zoom; the old button was
+     // removed. Playwright cannot send wheel or multi-touch gestures in mobile
+     // WebKit. Keep its mobile context and label the controlled pointer pinch;
+     // real browser drag above and HUD clicks below still prove input recovery.
+     const zoomInput=engine==='webkit'?'synthetic-pointer-pinch':'mouse-wheel';
+     if(engine==='webkit')await canvas.evaluate(node=>{
+      const r=node.getBoundingClientRect(),x=r.x+r.width*.5,y=r.y+r.height*.65,gap=r.width*.15;
+      const fire=(type,id,clientX)=>node.dispatchEvent(new PointerEvent(type,{bubbles:true,cancelable:true,pointerType:'touch',pointerId:id,isPrimary:id===1,clientX,clientY:y,button:0,buttons:type==='pointerup'?0:1}));
+      fire('pointerdown',1,x-gap);fire('pointerdown',2,x+gap);
+      fire('pointermove',1,x-gap*.5);fire('pointermove',2,x+gap*.5);
+      fire('pointerup',1,x-gap*.5);fire('pointerup',2,x+gap*.5);
+     });
+     else{await page.mouse.move(box.x+box.width*.5,box.y+box.height*.65);await page.mouse.wheel(0,120);}
+     await page.waitForFunction(before=>__freezeScene.getDiagnostics().zoom<before,zoomBefore,{timeout:5000});
      const zoomAfter=await page.evaluate(()=>__freezeScene.getDiagnostics().zoom);
-     evidence.zoom={zoomBefore,zoomAfter};assert.notEqual(zoomAfter,zoomBefore,'Recovered zoom button responds');
+     evidence.zoom={input:zoomInput,zoomBefore,zoomAfter};assert.ok(zoomAfter<zoomBefore&&zoomAfter>=.5,'Recovered continuous zoom responds within bounds');
      await page.locator('button.cm-toolbar__cell[data-menu-id="SYSTEM"]').click();
      assert.ok(await page.locator('.cm-toolbar__menu:not([hidden])').isVisible(),'HUD toolbar is interactive after resume');
      await page.screenshot({path:`${out}/${engine}-${mode}-resumed.png`,fullPage:true});

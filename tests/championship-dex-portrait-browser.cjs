@@ -355,7 +355,9 @@ async function main() {
         const parsed = new URL(url), relative = parsed.pathname.slice(new URL(PUBLIC_BASE).pathname.length);
         if(relative.startsWith('qa/alternate-form-')||relative==='alternate-form-qa.html'){evidence.networkErrors.push({url,error:'NORMAL_ENTRY_MUST_NOT_LOAD_ALTERNATE_QA'});return route.abort();}
         if (resolveAsset(root, '/' + relative)) {
-          const response = await route.fetch({ url: server.origin + '/' + relative + parsed.search, maxRedirects: 0 });
+          // Retry only transient ECONNRESET from the local asset server, at most
+          // twice. Playwright does not retry HTTP failures (including 404/503).
+          const response = await route.fetch({ url: server.origin + '/' + relative + parsed.search, maxRedirects: 0, maxRetries: 2 });
           return route.fulfill({ response });
         }
       }
