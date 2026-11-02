@@ -26,6 +26,7 @@ import { normalizeFreeBattleMenu } from "../battle/nativeFreeBattle.js";
 import { normalizeNativeRaisingMessages } from "../raising/nativeRaisingMessages.js";
 import { normalizeNativeOpening } from './nativeOpeningState.js';
 import { normalizeCyberGacha } from '../gacha/cyberGacha.js';
+import { royalCopiesByDefinition } from '../gacha/ranchAutomation.js';
 import { normalizeBurstEvolution } from '../contracts/productBurstEvolution.js';
 import { RANCH_DECKS_LAYOUT, normalizeRanchExpansion } from "../cage/ranchExpansion.js";
 
@@ -436,11 +437,14 @@ export function createChampionshipModernSave({
 
   if(save.cageEdit?.layoutVersion===PRODUCT_RANCH_GRID){
     const placedCounts=new Map();
+    // DIAMOND_ECONOMY_20261102: a gachapon royal cage (bag or placed) is one more copy of its base cage.
+    const royal=royalCopiesByDefinition(save.progression.cyberGacha);
     for(const placement of cageEdit.placements){
       const definition=getCageDefinitionByModuleId(placement.moduleId);
       if(definition.alwaysOwned)continue;
       const count=(placedCounts.get(placement.moduleId)??0)+1;
-      const stock=save.shop?.cageQuantities?.[definition.shopRecordIndex]??(save.shop?.cageOwned.includes(definition.shopRecordIndex)?1:0);
+      const stock=(save.shop?.cageQuantities?.[definition.shopRecordIndex]??(save.shop?.cageOwned.includes(definition.shopRecordIndex)?1:0))
+        +(royal.get(definition.cageDefinitionIndex)??0);
       if(count>stock)throw saveError('CAGE_INSTANCE_STOCK_MISMATCH');
       placedCounts.set(placement.moduleId,count);
     }

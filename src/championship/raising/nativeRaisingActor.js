@@ -595,8 +595,16 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
     if(policy)beginRealtimeTraining(actor,policy);
     const growthPercent=habitatMatch(next.fields['000'],actor.cageDefinitionIndex)?TAXONOMY_HABITAT_BONUS.growthPercent:100;
     const trained=enterNativeRaisingTraining(next,{definition:actor.cageDefinitionIndex,season:context.season,level:context.cageLevel??0,stressed:a['404']===1,growthPercent,
-      pointScale:policy?.pointScale??null},rng);
-    next=trained.profile;result.changed=true;actor.training=createNativeTrainingTimeline(trained.commands);if(trained.commands?.length)request(actor,30);
+      pointScale:policy?.pointScale??null,programs:policy?.cagePrograms?.[actor.cageDefinitionIndex]??null},rng);
+    next=trained.profile;
+    // A royal cage (DIAMOND_ECONOMY_20261102) adds its points on top, shown as one more rising label.
+    const bonus=policy?context.trainingBonus:null;
+    if(bonus?.points>0&&trained.commands?.length){
+      const field=(0x100+bonus.kind*4).toString(16).padStart(3,'0');
+      next=structuredClone(next);next.fields[field]=(next.fields[field]+bonus.points)>>>0;next=normalizeNativeIndividualProfile(next);
+      trained.commands.push({kind:bonus.kind,delta:bonus.points,outcome:'APPLIED'});
+    }
+    result.changed=true;actor.training=createNativeTrainingTimeline(trained.commands);if(trained.commands?.length)request(actor,30);
   }
   const grown=applyNativeRaisingGrowth(next,a,{state:actor.state,phase:actor.stroke?.phase??0,ageDelta,baseUnit:60,generation:s.generation,mode:context.season,minute:context.minute,
     ranchSize:capacity,effects:nativeCageConditionEffects(actor.cageDefinitionIndex,context.season,context.cageLevel??1),satietyMaximum:s.field1c,
