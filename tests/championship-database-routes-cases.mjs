@@ -8,11 +8,15 @@ import {getDatabaseDisplayEntry} from '../src/championship/database/databaseDisp
 import {acceptedDatabasePortraitConfig,validateAcceptedDatabasePortrait,loadAcceptedDatabasePortrait} from '../src/championship/presentation/acceptedDatabasePortraits.js';
 import {databaseHeroPortrait} from '../src/championship/presentation/databaseHeroPortraits.js';
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
-const lifecycle=read('src/data/championship/catalogs/raising-lifecycle.r1.json'),registeredSpecies=Array.from({length:216},(_,i)=>i+8);
+// OWNER_APPROVED_ADAPTATION 2026-11-02: the Dex shows the ranch's growth tables (native branches up to 成熟期 plus three
+// appended ones); 覺醒體/究極體 are battle burst forms and no longer growth routes.
+import {PRODUCT_GROWTH_RULES} from '../src/championship/contracts/productGrowthRules.js';
+const lifecycle=JSON.parse(JSON.stringify(PRODUCT_GROWTH_RULES)),registeredSpecies=Array.from({length:216},(_,i)=>i+8);
+const GROWTH_BRANCHES=235;
 
-test('all 477 native candidate identities retain exact source/branch history offsets and live display identities',()=>{
+test('all 235 growth candidate identities retain exact source/branch history offsets and live display identities',()=>{
   const before=JSON.stringify(lifecycle);let count=0;
-  assert.equal(lifecycle.rules.length,179);assert.equal(lifecycle.rules.filter(r=>r.length).length,178);
+  assert.equal(lifecycle.rules.length,179);assert.equal(lifecycle.rules.filter(r=>r.length).length,64);
   for(let source=8;source<=186;source++){
     const rules=lifecycle.rules[source-8],flags=rules.map((_,i)=>(source-8)*5+i);
     const routes=projectDatabaseEvolutionRoutes(source,{sourceRegistered:true,registeredSpecies,evolutionBranches:flags}).filter(route=>!route.productRouteId);
@@ -22,7 +26,7 @@ test('all 477 native candidate identities retain exact source/branch history off
       assert.equal(route.legacyBranchOffset,(source-8)*5+index);assert.equal(route.historyState,'RECORDED');assert.equal(route.revealed,true);assert.ok(getDatabaseDisplayEntry(route.targetSpeciesIndex));
     });
   }
-  assert.equal(count,477);assert.equal(JSON.stringify(lifecycle),before);
+  assert.equal(count,GROWTH_BRANCHES);assert.equal(JSON.stringify(lifecycle),before);
 });
 
 test('registration never fills a branch; empty history or [5] cannot reveal source8 to20 offset0',()=>{
@@ -49,7 +53,7 @@ test('same target from different sources has independent histories; malformed fl
 
 test('unknown source, eggs, empty group and final stages expose no invented branches',()=>{
   assert.deepEqual(projectDatabaseEvolutionRoutes(8,{registeredSpecies,evolutionBranches:[0]}),[]);
-  for(const index of [0,7,160,187,211,222,228,229,230])assert.deepEqual(projectDatabaseEvolutionRoutes(index,{sourceRegistered:true,registeredSpecies,evolutionBranches:[0]}),[]);
+  for(const index of [0,7,72,93,136,160,187,211,222,228,229,230])assert.deepEqual(projectDatabaseEvolutionRoutes(index,{sourceRegistered:true,registeredSpecies,evolutionBranches:[0]}),[]);
   const book=projectDatabase({registeredSpecies:[8,20],selectedSpeciesIndex:8});
   assert.equal(book.selected.instanceCount,0);assert.equal(book.selected.state,'REGISTERED');assert.equal(book.selected.evolutionRoutes[0].historyState,'NOT_RECORDED');
   assert.equal(book.slotCount,218);
@@ -85,7 +89,7 @@ test('private provenance, foreign paths and changed identities cannot pass the h
  assert.equal(calls,4);
 });
 
-test('production appends exactly three product routes without borrowing the 477 native history offsets',()=>{
+test('burst alternate forms (229/230) are not growth routes; the 235 growth offsets stay native',()=>{
   const registered=[...registeredSpecies,229,230],snapshot=JSON.stringify(lifecycle),extras=[];let nativeCount=0;
   for(let source=8;source<=186;source++){
     const flags=(lifecycle.rules[source-8]??[]).map((_,i)=>(source-8)*5+i);
@@ -98,7 +102,7 @@ test('production appends exactly three product routes without borrowing the 477 
       assert.equal(routes.find(r=>!r.productRouteId&&r.branchIndex===route.branchIndex).historyState,'RECORDED');
     }
   }
-  assert.equal(nativeCount,477);assert.deepEqual(extras,[[139,229,'139:211:229'],[143,229,'143:211:229'],[144,230,'144:222:230']]);
+  assert.equal(nativeCount,GROWTH_BRANCHES);assert.deepEqual(extras,[]);
   for(const [source,target,productRouteId] of extras){
     const options={sourceRegistered:true,registeredSpecies:registered,evolutionBranches:[],productEvolutionBranches:[productRouteId]},before=JSON.stringify(options);
     const routes=projectDatabaseEvolutionRoutes(source,options),route=routes.find(r=>r.productRouteId===productRouteId);

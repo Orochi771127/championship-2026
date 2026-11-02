@@ -557,10 +557,14 @@ async function main() {
         await openSpecies(species);await capture(`production-${species}-hero-${viewport.width}`,species);
         await capturePreview(page.locator('.cm-vs2-database__detail .cm-dex-routes__source .cm-dex-portrait'),species,'source-preview',viewport);
       }
-      for(const [source,targets] of [[139,[211,229]],[144,[222,230]]]){
+      // OWNER_APPROVED_ADAPTATION 2026-11-02 (STAGE_REDESIGN_BURST_20261102): 211/229 and 222/230 are burst forms
+      // (each alternate beside its form) on the page of the 成熟期 that bursts into them, no longer evolution choices.
+      const burstTable=JSON.parse(fs.readFileSync(path.join(process.cwd(),'src/data/championship/product-burst-evolution.r1.json'),'utf8'));
+      const burstBase=form=>burstTable.bases.find(entry=>entry.forms.some(f=>f.form===form)).base;
+      for(const [source,targets] of [[burstBase(211),[211,229]],[burstBase(222),[222,230]]]){
         const detail=page.locator('.cm-vs2-database__detail');if(await detail.isVisible()){await listReturn.click();await detail.waitFor({state:'hidden'});}
         const row=page.locator(`.cm-vs2-database__row[data-species-index="${source}"]`);await row.scrollIntoViewIfNeeded();await row.click();await detail.waitFor({state:'visible'});
-        for(const species of targets){const target=detail.locator(`.cm-dex-routes__target[aria-label^="${EXPECTED[species].displayCode} · "]`);assert.equal(await target.count(),1);assert.equal(await target.getAttribute('data-revealed'),'true');await capturePreview(target.locator('.cm-dex-portrait'),species,'evolution-choice-preview',viewport);}
+        for(const species of targets){const target=detail.locator(`.cm-dex-burst__target[aria-label^="${EXPECTED[species].displayCode} · "]`);assert.equal(await target.count(),1);assert.equal(await target.getAttribute('data-revealed'),'true');await capturePreview(target.locator('.cm-dex-portrait'),species,'burst-form-preview',viewport);}
       }
     }
     evidence.normalProductionFormCoverage='HERO_SOURCE_TARGET_4_FORMS_2_VIEWPORTS';

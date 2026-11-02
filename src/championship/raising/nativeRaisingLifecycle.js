@@ -29,14 +29,15 @@ function passes(profile,rule,lifetime) {
   return (t[23]===0||t[23]<=percentage)&&(t[24]===0||t[24]<=n['03c'])&&(t[25]===0||t[25]>=n['03d']);
 }
 
-export function evaluateNativeEvolution(profile,{rank,roster,lifetime=false,lifeThreshold=null},rng) {
+// `table` defaults to the native tables; the product growth policy passes its own (same shape).
+export function evaluateNativeEvolution(profile,{rank,roster,lifetime=false,lifeThreshold=null,table=rules},rng) {
   const p=structuredClone(normalizeNativeIndividualProfile(profile)),f=p.fields,species=nativeHuntSpeciesByIndex(f['000']);
-  if(!Number.isInteger(rank)||!rules.ranks[rank]||!Array.isArray(roster))throw new TypeError('NATIVE_EVOLUTION_CONTEXT_REQUIRED');
-  const actor={'1e8':0,'1f0':0,'1f4':0,'428':lifeThreshold??rules.species[f['000']].life,'454':0,'464':0};
+  if(!Number.isInteger(rank)||!table.ranks[rank]||!Array.isArray(roster))throw new TypeError('NATIVE_EVOLUTION_CONTEXT_REQUIRED');
+  const actor={'1e8':0,'1f0':0,'1f4':0,'428':lifeThreshold??table.species[f['000']].life,'454':0,'464':0};
   const result=code=>({profile:normalizeNativeIndividualProfile(p),code,actor,target:code===1?actor['1e8']:null});
-  const list=rules.rules[f['000']-8];
+  const list=table.rules[f['000']-8];
   if(species.generation===0||species.generation===6||!list?.length)return result(0);
-  const extend=()=>{f['04c']=1;actor['428']=rules.extendedLife[species.generation];return result(2);};
+  const extend=()=>{f['04c']=1;actor['428']=table.extendedLife[species.generation];return result(2);};
   const ancestry=()=>species.generation>=1&&species.generation<=5
     ?[f[key(0x140+species.generation*4)],f[key(0x158+species.generation*4)]]:[228,228];
   const select=(target,index,last)=>{actor['1e8']=target;actor['1f4']=index;actor['1f0']=Number(last);return result(1);};
@@ -44,13 +45,13 @@ export function evaluateNativeEvolution(profile,{rank,roster,lifetime=false,life
   for(const [index,rule] of list.entries()) {
     if(!passes(p,rule,lifetime)){actor['454']=1;continue;}
     // Physical roster order includes this individual once at index zero.
-    const capacity=roster.slice(1).reduce((sum,s)=>sum+rules.species[s].capacity,0)+rules.species[rule.target].capacity;
-    if(rules.ranks[rank].generation<=species.generation) {
+    const capacity=roster.slice(1).reduce((sum,s)=>sum+table.species[s].capacity,0)+table.species[rule.target].capacity;
+    if(table.ranks[rank].generation<=species.generation) {
       if(f['04c']!==0)return result(3);
       if(lifetime&&signed(f['020'])<50)return result(0);
       return extend();
     }
-    if(capacity>rules.ranks[rank].capacity)return {...result(lifetime?0:2),capacityBlocked:true};
+    if(capacity>table.ranks[rank].capacity)return {...result(lifetime?0:2),capacityBlocked:true};
     let target=rule.target;
     if(lifetime){const [first,second]=ancestry();
       if(first!==228&&second!==228){const roll=rng.next(0xc6)%3;if(roll===0)target=inherit(second);else if(roll===1)target=inherit(first);}
