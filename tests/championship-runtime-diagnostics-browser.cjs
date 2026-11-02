@@ -14,7 +14,7 @@ const selected=JSON.parse(fs.readFileSync('src/data/championship/accepted-origin
  page.setDefaultTimeout(30000);const failures=[];let failingCage=false;
  const server=http.createServer((request,response)=>{
    const relative=decodeURIComponent(new URL(request.url,'http://local').pathname).slice(1);
-   if(failingCage&&relative==='assets/production/cage/final-intake-20261008/manifest.json'){response.writeHead(503);response.end('controlled failure');return;}
+   if(failingCage&&relative==='assets/production/public-runtime/cage-ui.map.v1.json'){response.writeHead(503);response.end('controlled failure');return;}
    let file=path.resolve(root,relative);
    // Source loopback URLs use preview paths; supply only the same folder's
    // already approved public bytes when that preview is absent from Git.

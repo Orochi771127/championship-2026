@@ -308,11 +308,8 @@
     "src/championship/presentation/battleFx/moveVfxThemes.js",
     "src/championship/presentation/battleResultCharacters.js",
     "src/championship/presentation/bm03GroundShadows.js",
-    "src/championship/presentation/cageAmbient.js",
-    "src/championship/presentation/cageForeground.js",
     "src/championship/presentation/cageGroundMap.js",
     "src/championship/presentation/cageHd2dEnhancer.js",
-    "src/championship/presentation/cageSharedEdges.js",
     "src/championship/presentation/cageUiArt.js",
     "src/championship/presentation/ceremony/ceremonyAudio.js",
     "src/championship/presentation/ceremony/ceremonyRunner.js",
@@ -396,7 +393,6 @@
     "src/championship/presentation/raisingFeedbackArt.js",
     "src/championship/presentation/raisingRanchArtPlan.js",
     "src/championship/presentation/ranchBorderMembership.js",
-    "src/championship/presentation/ranchCageArtSelection.js",
     "src/championship/presentation/ranchContactHeight.js",
     "src/championship/presentation/ranchGroundShadows.js",
     "src/championship/presentation/ranchPassages.js",
@@ -705,168 +701,6 @@
     "assets/production/battle/menu-cube-v1/title-match.png",
     "assets/production/battle/shared-ambient-r2/cloud-shadow-tile.webp",
     "assets/production/battle/shared-ambient-r2/gust-streak-tile.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm01_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm01_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm02_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm02_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm04_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm04_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm05_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm05_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm06_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm06_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm07_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm07_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm08_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm08_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm09_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm09_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm10_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm10_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm11_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm11_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm12_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm12_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm13_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm13_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm14_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm14_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm15_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm15_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm16_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm16_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm17_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm17_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm18_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm18_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm19_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm19_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm20_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm20_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm21_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm21_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm22_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm22_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm23_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm23_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm24_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm24_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm25_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm25_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm26_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm26_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm27_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm27_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm30_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm30_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm31_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm31_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm32_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm32_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm34_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm34_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm35_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm35_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm37_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm37_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm39_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm39_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm40_01-ambient.webp",
-    "assets/production/cage/ambient-review-polish-20261019/field_cm40_01.json",
-    "assets/production/cage/ambient-review-polish-20261019/index.json",
-    "assets/production/cage/cm02-goal-foreground-polish-20261019/manifest.json",
-    "assets/production/cage/cm03-r18-foreground-20261009/ath03-00-0.png",
-    "assets/production/cage/cm03-r18-foreground-20261009/ath03-00-1.png",
-    "assets/production/cage/cm03-r18-foreground-20261009/ath03-01-jump-frame.png",
-    "assets/production/cage/cm03-r18-foreground-20261009/ath03-01-mat.png",
-    "assets/production/cage/cm03-r18-foreground-20261009/ath03-02.png",
-    "assets/production/cage/cm03-r18-foreground-20261009/ath03-03.png",
-    "assets/production/cage/cm03-r18-foreground-20261009/ath03-04.png",
-    "assets/production/cage/cm03-r18-foreground-20261009/ath03-05.png",
-    "assets/production/cage/cm03-r18-foreground-20261009/stadium-board-row.png",
-    "assets/production/cage/cm03-r18-foreground-20261009/stadium-mast-0.png",
-    "assets/production/cage/cm03-r18-foreground-20261009/stadium-mast-1.png",
-    "assets/production/cage/cm03-r18-foreground-20261009/stadium-stand-0.png",
-    "assets/production/cage/cm03-r18-foreground-20261009/stadium-stand-1.png",
-    "assets/production/cage/cm03-r18-foreground-20261009/stadium-stand-2.png",
-    "assets/production/cage/cm24-final-foreground-20261010/cm24-altar.png",
-    "assets/production/cage/cm24-final-foreground-20261010/cm24-cushion.png",
-    "assets/production/cage/cm24-final-foreground-20261010/cm24-incense.png",
-    "assets/production/cage/cm24-final-foreground-20261010/cm24-left-candle.png",
-    "assets/production/cage/cm24-final-foreground-20261010/cm24-left-pillar.png",
-    "assets/production/cage/cm24-final-foreground-20261010/cm24-offering.png",
-    "assets/production/cage/cm24-final-foreground-20261010/cm24-right-candle.png",
-    "assets/production/cage/cm24-final-foreground-20261010/cm24-right-pillar.png",
-    "assets/production/cage/cm24-final-foreground-20261010/cm24-statue.png",
-    "assets/production/cage/final-intake-20261008/fields/field_cm03_01/frame-00.webp",
-    "assets/production/cage/final-intake-20261008/fields/field_cm24_01/frame-00.webp",
-    "assets/production/cage/final-intake-20261008/fields/field_cm28_01/frame-00.webp",
-    "assets/production/cage/final-intake-20261008/fields/field_cm29_01/frame-00.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm01_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm01_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm04_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm04_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm05_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm05_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm06_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm06_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm07_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm07_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm08_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm08_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm09_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm09_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm10_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm10_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm11_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm11_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm12_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm12_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm13_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm13_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm14_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm14_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm15_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm15_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm16_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm16_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm17_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm17_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm18_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm18_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm19_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm19_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm20_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm20_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm21_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm21_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm22_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm22_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm23_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm23_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm25_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm25_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm26_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm26_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm27_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm27_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm30_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm30_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm31_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm31_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm32_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm32_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm34_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm34_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm35_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm35_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm37_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm37_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm39_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm39_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm40_01-occluders.webp",
-    "assets/production/cage/foreground-review-polish-20261019/field_cm40_01.json",
-    "assets/production/cage/foreground-review-polish-20261019/index.json",
     "assets/production/cage/licensed-runtime-v1/fields/field_cm01_01/frame-00.png",
     "assets/production/cage/licensed-runtime-v1/fields/field_cm02_01/frame-00.png",
     "assets/production/cage/licensed-runtime-v1/fields/field_cm03_01/frame-00.png",
@@ -911,46 +745,6 @@
     "assets/production/cage/licensed-runtime-v1/fields/field_cm39_01/frame-00.png",
     "assets/production/cage/licensed-runtime-v1/fields/field_cm39_01/frame-01.png",
     "assets/production/cage/licensed-runtime-v1/fields/field_cm40_01/frame-00.png",
-    "assets/production/cage/polish-review-20261019/fields/field_cm01_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm02_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm04_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm05_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm06_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm07_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm07_01/frame-01.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm08_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm09_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm09_01/frame-01.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm10_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm11_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm12_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm13_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm14_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm15_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm16_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm17_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm18_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm19_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm20_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm21_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm21_01/frame-01.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm22_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm23_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm25_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm26_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm27_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm30_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm31_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm32_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm34_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm35_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm37_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm39_01/frame-00.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm39_01/frame-01.webp",
-    "assets/production/cage/polish-review-20261019/fields/field_cm40_01/frame-00.webp",
-    "assets/production/cage/shared-edges-polish-20261019/field_cm02_01-edges.webp",
-    "assets/production/cage/shared-edges-polish-20261019/field_cm30_01-edges.webp",
-    "assets/production/cage/shared-edges-polish-20261019/index.json",
     "assets/production/cage/three-20261021/field_cm01_01.glb",
     "assets/production/cage/three-20261021/field_cm02_01.glb",
     "assets/production/cage/three-20261021/field_cm03_01.glb",
@@ -7980,7 +7774,6 @@
     "assets/production/public-media-clean-20261017/original-ui-intake-20261007/toolbar-point64-r1-20261009/system-rest.png",
     "assets/production/public-runtime/battle-audio.render.v1.json",
     "assets/production/public-runtime/battle-effects.render.v1.json",
-    "assets/production/public-runtime/cage-final.map.v1.json",
     "assets/production/public-runtime/cage-ui-three.v1.json",
     "assets/production/public-runtime/cage-ui.map.v1.json",
     "assets/production/public-runtime/evolution-glyphs.v1.json",
@@ -7994,8 +7787,6 @@
     "assets/production/public-runtime/metadata/arena-tournament.v1.json",
     "assets/production/public-runtime/metadata/battle-baseline.v1.json",
     "assets/production/public-runtime/metadata/battle-original.v1.json",
-    "assets/production/public-runtime/metadata/cage-foreground-cm03.v1.json",
-    "assets/production/public-runtime/metadata/cage-foreground-cm24.v1.json",
     "assets/production/public-runtime/metadata/hunt-pieces-0370ad9efa4eac35.v1.json",
     "assets/production/public-runtime/metadata/hunt-pieces-1026f2478622db83.v1.json",
     "assets/production/public-runtime/metadata/hunt-pieces-241530dcb2297dd4.v1.json",
@@ -8528,11 +8319,8 @@
     "src/championship/presentation/battleFx/moveVfxThemes.js",
     "src/championship/presentation/battleResultCharacters.js",
     "src/championship/presentation/bm03GroundShadows.js",
-    "src/championship/presentation/cageAmbient.js",
-    "src/championship/presentation/cageForeground.js",
     "src/championship/presentation/cageGroundMap.js",
     "src/championship/presentation/cageHd2dEnhancer.js",
-    "src/championship/presentation/cageSharedEdges.js",
     "src/championship/presentation/cageUiArt.js",
     "src/championship/presentation/ceremony/ceremonyAudio.js",
     "src/championship/presentation/ceremony/ceremonyRunner.js",
@@ -8616,7 +8404,6 @@
     "src/championship/presentation/raisingFeedbackArt.js",
     "src/championship/presentation/raisingRanchArtPlan.js",
     "src/championship/presentation/ranchBorderMembership.js",
-    "src/championship/presentation/ranchCageArtSelection.js",
     "src/championship/presentation/ranchContactHeight.js",
     "src/championship/presentation/ranchGroundShadows.js",
     "src/championship/presentation/ranchPassages.js",
@@ -8807,7 +8594,6 @@
     "src/data/championship/catalogs/raising-lifecycle.r1.json",
     "src/data/championship/catalogs/raising-messages.r1.json",
     "src/data/championship/catalogs/ranch-conveyor.r1.json",
-    "src/data/championship/catalogs/ranch-sports-art.r1.json",
     "src/data/championship/catalogs/ranch-sports-ground.r1.json",
     "src/data/championship/catalogs/ranch-three-ground.r1.json",
     "src/data/championship/catalogs/rng-channels.r1.json",
@@ -9421,654 +9207,6 @@
         "sha256": "92377e537d49bf9cf9a469bfbf4e6ff5a7aecd4911d20e95a3d68cc4ad3b07c7"
       },
       {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm01_01-ambient.webp",
-        "sha256": "2ed38fa002e52435f8fdd7425d050b6b21c16ea6533c9e1a501fd1a2e888088d"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm01_01.json",
-        "sha256": "c7ec044ec04517cef296a3cd182974ad7bacf5deb350ae1627449350cb412c8c"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm02_01-ambient.webp",
-        "sha256": "a3f888f78a3ce4751282dd88bdfb62bd393c7c28aff438d8822b53b22720b7dc"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm02_01.json",
-        "sha256": "3df30070be01357a26893e78a64b6e6ade2aaf1eb96b2da43630d14b68d17779"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm04_01-ambient.webp",
-        "sha256": "81d07bad7c31d17773152ae538d61aeee495daa93de07773393160a6ff363cb9"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm04_01.json",
-        "sha256": "4c34d3936f0db258fa907b3f7ef8db93888f7aac384cbac57956fa753d8d4547"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm05_01-ambient.webp",
-        "sha256": "a746c93914918e7d6278146865fde344506bf4827bcae9d5a5b1296e288e7f88"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm05_01.json",
-        "sha256": "19162e8ad5eaae50497ef6eda282b76e434764d613b959b489b7d2d3ffc2f85f"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm06_01-ambient.webp",
-        "sha256": "277152f3fa9219c9eccf97b365a8cb93e2acc8f80e6bf6da8156623559a73108"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm06_01.json",
-        "sha256": "19ec4f16fd50d09dc4eaa8af08e6843a8f672d666a50d376da33c4b15fc73342"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm07_01-ambient.webp",
-        "sha256": "84e7f89e81f2b2409416a02303f8b24156c4893e70c95327de4331cfe5d69e70"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm07_01.json",
-        "sha256": "4e5f857ee58c3007852d92f0843a8460b23cb71229f5a71d5f8bf4f55ebe3f60"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm08_01-ambient.webp",
-        "sha256": "294ba6cab3cdcc5837642c455fd3a5eae310c1cfb22fa5ccdb4b5855536aea01"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm08_01.json",
-        "sha256": "3cd896b1dbd5ff94d965fac0683d3eeb725605a1b8283f99f499fcb134908913"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm09_01-ambient.webp",
-        "sha256": "4bf16b433f68d7fb3e5352108188d999e18fba7e822e492d58b45dbf1b5b2f44"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm09_01.json",
-        "sha256": "fe50e03c414ccb57aba4c2d91efce0fb8307d7ae9865a346368c0ef1142e7455"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm10_01-ambient.webp",
-        "sha256": "7da74119f30b9afdb8f1e5ea5d9b94c80e8535031e20912c459fc282dd9dce90"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm10_01.json",
-        "sha256": "626998c68b0df9f881552dfb0223e2bd89251b7a555e2e4ed597effb035768d5"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm11_01-ambient.webp",
-        "sha256": "f157e539928786ce8e8141a57ed788147a4813f3bee8bef98b14df6a617f8ac8"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm11_01.json",
-        "sha256": "2bf07f81ad4a4007eb153beeeda4e9fad514dd19251e52f6ec181918adbc357a"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm12_01-ambient.webp",
-        "sha256": "81fb8bf215d309fdafd974b8dd858b94b636b86cd89789b04f770fd7a8a60e25"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm12_01.json",
-        "sha256": "6a2edd92d402dc163eb16042700c054f34f223eb6b2a862b795a4c6015b5d9c3"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm13_01-ambient.webp",
-        "sha256": "ad54ddd45d7af6e2aaf87b5c3abe81072c6298529e160d57358122338263c8a4"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm13_01.json",
-        "sha256": "376f8acbde92b8eaa62c5cdc22560378aaccc0960be957ab39aa4fb68d2599f7"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm14_01-ambient.webp",
-        "sha256": "3aa309f63df714dcecf9c58c5a2f1e1bdc5493f128e6182f788435cc1e997445"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm14_01.json",
-        "sha256": "162beb3790c8e9538edc8c6fb40cb2d1b70d1297a53cb5bbb73fc5e9e3f29976"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm15_01-ambient.webp",
-        "sha256": "b6d1e0dfcf65e536b8dd1a22d4ad8af3ceb69cba97367d85a8d5262ff83c5674"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm15_01.json",
-        "sha256": "fe82bf13fdb6f80754d649a0b686581a80af6c902f88d6899e3667a969add137"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm16_01-ambient.webp",
-        "sha256": "8e151570b118202d36131cf0f09c55738a74576e12f2ee9e4b913093e99180b1"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm16_01.json",
-        "sha256": "44e9f9db219d7ba0f122e2f8a1219a754b29f82f32135ed362a30929d14de608"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm17_01-ambient.webp",
-        "sha256": "fd9500e87b308ee66dddd4fe05640511f2b5ce358d680c40458e6cd9cee80df2"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm17_01.json",
-        "sha256": "464358c761cace9031c83347903581d79a3c148addfc23c9b26b8242b73e45e9"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm18_01-ambient.webp",
-        "sha256": "820ad217e4172b1b44b8eddfc84f8f335444e456d60c0103dabb9bd4a4cc95f6"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm18_01.json",
-        "sha256": "17441d6a440a4f9ab3c16ce1c202026bf36b388e624510fba28a955872f8895d"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm19_01-ambient.webp",
-        "sha256": "e5e3a5307ede4a56988ceb41e3b5d98a44119b34abda4bf2050ea2e8909a0bc0"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm19_01.json",
-        "sha256": "f5984ac38c6c4c8033c00782de6a26d73f89dc2a3f19480098d805571801da3d"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm20_01-ambient.webp",
-        "sha256": "c79443e4c137c62a68f667f56708612798601931114be5a65cd3cc39b2f82dad"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm20_01.json",
-        "sha256": "6b0a4a65e002c29b83f9c4a1efb9c3b2542d5c89217f565ea96afc6318c7392b"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm21_01-ambient.webp",
-        "sha256": "9ae0d905e899b33049f838fba8dcfe1a480c1093eb7cd18d5eda022de6a15dd9"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm21_01.json",
-        "sha256": "9f5740a3b068ceefa0cbf83052bde663eee0b85f89c096e8cc1cf806450b6d87"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm22_01-ambient.webp",
-        "sha256": "109350961e5ffb3e165188bb0bdc4ca69d0bf94ebab6359f0e3c254de6a101c5"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm22_01.json",
-        "sha256": "bd0cc2f876214daed38c5532c0f19e6d6c62075162b175509b13b9aa64aa1952"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm23_01-ambient.webp",
-        "sha256": "81df76628cee52664adfddb5ed98031bb9f9a13cde265836ba04aa3498ed706a"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm23_01.json",
-        "sha256": "a9df357a431808c011e80c89bc59b970edcf93714a72bfb8f8a937d9c9249c08"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm24_01-ambient.webp",
-        "sha256": "0df2dc9c475c44ea6d046aae3a891c76ff7f61fe946dc92ba2e00ec851d2e260"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm24_01.json",
-        "sha256": "808b6cb19c926a45e8b9e3c936fb6e5b8bcfb0c89451ece5821526ca73a02e84"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm25_01-ambient.webp",
-        "sha256": "46957466da7f45ac3dc1b732e08735e5649bbe430a9772a0532919351bedcbeb"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm25_01.json",
-        "sha256": "e97fcbf030ec034bb87e96ab7d1e3d41b6e414b275400975d2f63072f71a73d7"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm26_01-ambient.webp",
-        "sha256": "8d91929ba8e3ffab12ba034b130d32ebe0c8996bd722d4de9a5bc78777363136"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm26_01.json",
-        "sha256": "23c506c92c36706ca928f8d6f879fefed1722066910a90c5b80f81b750c7a7d6"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm27_01-ambient.webp",
-        "sha256": "8c60fc0a156abecbb4b9ac6a4fe86bf986faf128a6f3e8ef8a8a8ef9d620a7ab"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm27_01.json",
-        "sha256": "a47774800c1a8c1aeaea4d4d4ce06ec17d5d5d44d486b40160eef2cb460172ff"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm30_01-ambient.webp",
-        "sha256": "befdd52789fe4f1eb13a389e09a0834f0ca44ea1d2e18b975b0f00cfca0ef1be"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm30_01.json",
-        "sha256": "242e25a53350cd83c6bcb1d300be49d9bfaeea31b3a2f2524512464d69f358d0"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm31_01-ambient.webp",
-        "sha256": "a19db9a7798e8689608c21135a72a6ad02eb7a6b7e0c1cf6e249dbbc66595c81"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm31_01.json",
-        "sha256": "dd76c5f13d44123f7fd9f478a009801f78b515dc13a52c3dc92ead9fc388bea6"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm32_01-ambient.webp",
-        "sha256": "0c9e781fae602dd045a8fe4cf98150af75cc878bfcfe6864898c0a87c6ef7d40"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm32_01.json",
-        "sha256": "c991c7b72515b12c20b0568daf3c878e9d2f002b1a0acfc3fc21270578266b72"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm34_01-ambient.webp",
-        "sha256": "1aa114a75a0c6a4a8f7b4a9ed83414bb9e7d087f170426d7fe944b9599b4cfd0"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm34_01.json",
-        "sha256": "cf87609ff7af90926550a1386497e105aca3e4b95b632a91fd655167b40b07d0"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm35_01-ambient.webp",
-        "sha256": "84e7f89e81f2b2409416a02303f8b24156c4893e70c95327de4331cfe5d69e70"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm35_01.json",
-        "sha256": "95704265b3050661407970110d9037e93d6e1908ebd5f955f31661a9b0b06dd0"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm37_01-ambient.webp",
-        "sha256": "6256a02c24d8913fa863fa7484668f7e5f0e97ea9a613d456c38cd0dbfdec7af"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm37_01.json",
-        "sha256": "b4f9d47e712a3a43d984b6364394663d534da5374b691ea71298c2f900d6c9b2"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm39_01-ambient.webp",
-        "sha256": "71775b1a43a70d30729171f9baf83d419a1cab7b16e35e2ff9892c595047b58a"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm39_01.json",
-        "sha256": "ed88887aa1d53e9a5afdcc13e1eee47e067b634e7f1cca73e679fecb2418ecdd"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm40_01-ambient.webp",
-        "sha256": "eca52408ff9afcf23aac7d29869979dc89e09ee0a06b777251aad84da50f042a"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/field_cm40_01.json",
-        "sha256": "798fe957ae3cbcbd9d1634db52289c8a2f4d34396c6246a2737a3abcf37be5b1"
-      },
-      {
-        "path": "assets/production/cage/ambient-review-polish-20261019/index.json",
-        "sha256": "1e4ccee23c287ca2d8fa42d0116e6bc4866b4b59ef8a25d086cd345ce62b5490"
-      },
-      {
-        "path": "assets/production/cage/cm02-goal-foreground-polish-20261019/manifest.json",
-        "sha256": "441531b7361fc7d00da166939c0847ad7f37b2538f3d9b884057764a7642a136"
-      },
-      {
-        "path": "assets/production/cage/cm03-r18-foreground-20261009/ath03-00-0.png",
-        "sha256": "3decb312bf22fbb7306ccea40f3661e3f2f16173350b207891bae10b9d063bc3"
-      },
-      {
-        "path": "assets/production/cage/cm03-r18-foreground-20261009/ath03-00-1.png",
-        "sha256": "31d7e5d869c0a341e4f0202fcb721455ae6a3bc4baee338df8bf05c5d5dab13a"
-      },
-      {
-        "path": "assets/production/cage/cm03-r18-foreground-20261009/ath03-01-jump-frame.png",
-        "sha256": "c78c1cc9fb26e1526060bda8ba67131c2315398a8ffdaa62fa7090684bbb397a"
-      },
-      {
-        "path": "assets/production/cage/cm03-r18-foreground-20261009/ath03-01-mat.png",
-        "sha256": "9fa6e3cc40c538300901ea48ece2aad73c07b640ea6e021b2123d40e47cc3a36"
-      },
-      {
-        "path": "assets/production/cage/cm03-r18-foreground-20261009/ath03-02.png",
-        "sha256": "504d3bee06367249085c57f0efbead1f9297ebce6112999385826d20d503d6f6"
-      },
-      {
-        "path": "assets/production/cage/cm03-r18-foreground-20261009/ath03-03.png",
-        "sha256": "be2b523d13bba3cee6f761a88fa5aef828d3b6262c185a2b200a3de609e10c8a"
-      },
-      {
-        "path": "assets/production/cage/cm03-r18-foreground-20261009/ath03-04.png",
-        "sha256": "130c244172494e0eb2198f2e20f79327fdeebbde464e1b0242cb2c4973f1d9ef"
-      },
-      {
-        "path": "assets/production/cage/cm03-r18-foreground-20261009/ath03-05.png",
-        "sha256": "25e645befd3586ad19fc5e033a1ab9bc5b3d92db41501c5789428197a7268123"
-      },
-      {
-        "path": "assets/production/cage/cm03-r18-foreground-20261009/stadium-board-row.png",
-        "sha256": "688d40865e5f723f8d3c1cda44192ada464b54e993e87cf35607b193c54e07ba"
-      },
-      {
-        "path": "assets/production/cage/cm03-r18-foreground-20261009/stadium-mast-0.png",
-        "sha256": "62cd5a3ed2d47bf44e2c8d2e67865118aad6d964adf89e3ad716701820c4bd82"
-      },
-      {
-        "path": "assets/production/cage/cm03-r18-foreground-20261009/stadium-mast-1.png",
-        "sha256": "8d245ea9390caa9a1cc11d69622658cc492b4a606bb65eb8329ee839d73de209"
-      },
-      {
-        "path": "assets/production/cage/cm03-r18-foreground-20261009/stadium-stand-0.png",
-        "sha256": "57852751e1a004ebd599ed9670d02e7fd0e4dccfd8ca6f533b989e119d00d2f1"
-      },
-      {
-        "path": "assets/production/cage/cm03-r18-foreground-20261009/stadium-stand-1.png",
-        "sha256": "5574d02b71c842bff336b1295abc2bd7e5c1da84245dc683ebff7754d8ffc79a"
-      },
-      {
-        "path": "assets/production/cage/cm03-r18-foreground-20261009/stadium-stand-2.png",
-        "sha256": "6a4b0358227cf4fc0c06fb0d63ca2398299bd1a8b83af3e2f4832dd8ddc36f0f"
-      },
-      {
-        "path": "assets/production/cage/cm24-final-foreground-20261010/cm24-altar.png",
-        "sha256": "010392724ad4974a25a34bf354f05947ea1456d99e4adf82578e51f5253dc17e"
-      },
-      {
-        "path": "assets/production/cage/cm24-final-foreground-20261010/cm24-cushion.png",
-        "sha256": "3003f86dec4b088b95c7043241ada10c21d4bf0310ef23d232f647ca8e689f08"
-      },
-      {
-        "path": "assets/production/cage/cm24-final-foreground-20261010/cm24-incense.png",
-        "sha256": "0715b67c1d43be797a709fabef2776a4bee5cf1b139d726b177eec3fe315e886"
-      },
-      {
-        "path": "assets/production/cage/cm24-final-foreground-20261010/cm24-left-candle.png",
-        "sha256": "8f2a4988ab7520cf709196ec7afb950f507e01cf0500960b2d04557dd0e0212b"
-      },
-      {
-        "path": "assets/production/cage/cm24-final-foreground-20261010/cm24-left-pillar.png",
-        "sha256": "d0b9afa71f6a7ba7e6a3a5f7eadd3c4a58b130ea62812e01664e8e180193ee3b"
-      },
-      {
-        "path": "assets/production/cage/cm24-final-foreground-20261010/cm24-offering.png",
-        "sha256": "6b35e10e9410bf734390b6fa5d5023b7bdbac22e8445b1cb1a791b564e16f53e"
-      },
-      {
-        "path": "assets/production/cage/cm24-final-foreground-20261010/cm24-right-candle.png",
-        "sha256": "5fa0eff96eb4e29fff33a86003d830cff2b568c11813e521bc0fb3b7902b71da"
-      },
-      {
-        "path": "assets/production/cage/cm24-final-foreground-20261010/cm24-right-pillar.png",
-        "sha256": "194731e4cbf30f59629a71a0bf65464f35054f8b4907c4c342439504b5d3c6df"
-      },
-      {
-        "path": "assets/production/cage/cm24-final-foreground-20261010/cm24-statue.png",
-        "sha256": "ddbdca6347bd44944f7826439ce6f4a78fadf623fa3517366d0db53a3863a038"
-      },
-      {
-        "path": "assets/production/cage/final-intake-20261008/fields/field_cm03_01/frame-00.webp",
-        "sha256": "b757e18558a44b0f2ebd3052ae9de508258cff9b4670fe3b8215fb55bf6d70df"
-      },
-      {
-        "path": "assets/production/cage/final-intake-20261008/fields/field_cm24_01/frame-00.webp",
-        "sha256": "601b05420d77f23fdc1dea75323ed350a85f11bb28068b77212c922989dd6146"
-      },
-      {
-        "path": "assets/production/cage/final-intake-20261008/fields/field_cm28_01/frame-00.webp",
-        "sha256": "8da7ea008641479f1889143b2d14dc0942e4c897f53d28cce05ec906afc4f9e6"
-      },
-      {
-        "path": "assets/production/cage/final-intake-20261008/fields/field_cm29_01/frame-00.webp",
-        "sha256": "44ef978cb914e7249fe308f63e1b4c21135b9eb7594a93352177dde85b20fd56"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm01_01-occluders.webp",
-        "sha256": "e9dd807577e05cd875991c0c2c9db377036ddec7bee00a958a8c3954e3508217"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm01_01.json",
-        "sha256": "21d71754201e56829e6c12a4683455f5afc4d7a6cc3f26856ec028b8b1ce74d6"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm04_01-occluders.webp",
-        "sha256": "bfed973ea67ad0d073ca325fc69df8954e7ea7ba113c78da1c990bbb4b9fd6df"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm04_01.json",
-        "sha256": "4371cadffec80b95d301529f4b451189d0955d757f46cefb9ab95a13da2bd2ba"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm05_01-occluders.webp",
-        "sha256": "60f55b6da22066913a0656f7f780c140d8db4ada1b21e817485f4fcd4b32a5a7"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm05_01.json",
-        "sha256": "f413969e7f38e5a924e501fb5a78d52a9321ad159aedbcaade6f98b19ef9c5b1"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm06_01-occluders.webp",
-        "sha256": "088fa06e6ffc4b88738955a8c38e14c6e6e21577fdfe806d335c4d2905c1397a"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm06_01.json",
-        "sha256": "6e24c5e326c0d808bd537e3ac6ea0435886b9d5705ca67e60641f1bb00668371"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm07_01-occluders.webp",
-        "sha256": "60ebc55ac69f292d1a7789c7956090b6e51879dadfecd0980698a17c1b071da4"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm07_01.json",
-        "sha256": "358e7bcf5f6032f2ed1e33415b5d16888b85834d62be765a2bfb2da4bed1cf8e"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm08_01-occluders.webp",
-        "sha256": "b68c0d93ccb9f4ec50a726c579a941dd2c1bd39e753e2508e589d4292de3ff68"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm08_01.json",
-        "sha256": "c63d16f4fc341b57d48a9ead5805ff69b6b312af4b4c20669890964a531372c0"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm09_01-occluders.webp",
-        "sha256": "2de7f9097cb25427edf9299158c2eceb5020a28ff852260756a921a46e34eb0e"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm09_01.json",
-        "sha256": "cbf52ecbb83f55110bea7c2f830a6a0cb459fb885ca529185ad14dde744146f4"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm10_01-occluders.webp",
-        "sha256": "2c881b6142d4a9924fc22c10db134192656d78297614fd14c85d91bf68e68838"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm10_01.json",
-        "sha256": "2f4842df48dbaacc4872197d9992586db32e83d4d9c35b07b6f53172c9ef4638"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm11_01-occluders.webp",
-        "sha256": "9fd767ea35fa8921c232bcbab4773b553666cfb8e5edc3a9dedcfa91891774af"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm11_01.json",
-        "sha256": "f85c3fc509b7e20604972eb208f8ebd4f48d5a048d02a4d0de0d241623a7afe2"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm12_01-occluders.webp",
-        "sha256": "7634d3c4d4e53eb9e2db4d5a8c29e8ff043627e65804a21bc254f9a90636d403"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm12_01.json",
-        "sha256": "ad3c1846e267fa818ce316e0148bf1616c7e99137e048c8b952cc4adbe1c78f0"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm13_01-occluders.webp",
-        "sha256": "fa590e9c23cb2bbe9868377ca8c963c75252ada8f9dc54816d405b02525ec716"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm13_01.json",
-        "sha256": "11dd0c9de08cc6b52a05784bcee6c29831f653bcdd0c5428ee5365c7dd8c093a"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm14_01-occluders.webp",
-        "sha256": "62e665ad8b8ca0f079469a7fd7767bc9626ffd3b86e55e91ed5834231e4a076a"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm14_01.json",
-        "sha256": "1eafbb30333b63b31cb6b780ad8b447925f277781fd2d5372d5c3f009acadc25"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm15_01-occluders.webp",
-        "sha256": "bddecea159d5d850e89a014b7c9d4b3d5acfac893d44fe3e7c7ffa7c33d86148"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm15_01.json",
-        "sha256": "a4340872dab83814b8d4d9538216e8ee5c58ead7f13a1a5f40f2a11455fe02bc"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm16_01-occluders.webp",
-        "sha256": "5f1bb466dbad4a22909bf9658c70149e3a0e2ac3fbcfc92f0fdac04ccf4a3a6f"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm16_01.json",
-        "sha256": "c4959ac32666811a0e745af6e167a2f955a23a2e0c37d89b11a0fc8bfc24936e"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm17_01-occluders.webp",
-        "sha256": "206bacf05af67cd50084955e45df14cd1ad7cc390b9d1530f65af9cde904e8f2"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm17_01.json",
-        "sha256": "c179cd694c42d9fc8065475394b85f6ae537905bdd6ff8888d666bf27fa7cb5b"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm18_01-occluders.webp",
-        "sha256": "d5d24dd0765a2472be2b4b4a261b0b46d3203e9ce810cce82a77e65d59f7a1c3"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm18_01.json",
-        "sha256": "1fe19645e545e9f31071a4073e3c56edfb972dcc62b5cb6f63694d9451733540"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm19_01-occluders.webp",
-        "sha256": "b5d4fc5a35cea0391bd0bdd48973eaf54cae2ad49ea6dbed1ae56e0087d4d4c4"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm19_01.json",
-        "sha256": "836faafb592c9ea427d6cd49f41cc184a93962d1074f623b1f13e5bd1214aa38"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm20_01-occluders.webp",
-        "sha256": "27f9035a0ebe7aec20133fe190ea92562abf2cabbc84bc88d3f78c394e2e5bc3"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm20_01.json",
-        "sha256": "c053d0b90782ad8175873261fdb242d75fb3b4fb1498ce878832d553f1b892c0"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm21_01-occluders.webp",
-        "sha256": "11f2fb61d5c7f74e2ddffb7f744b8610864c54eccd1bb8e2c75f203f3492c7f0"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm21_01.json",
-        "sha256": "b1a457ae420c297f858a1cd7919a2c336471d254dadb378bf56fa8bb7deed0ac"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm22_01-occluders.webp",
-        "sha256": "83d68caabf0e2e97f329f0afd4af369f1174d7934a0b7cadbf31f32f547aaf24"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm22_01.json",
-        "sha256": "b1d6e07ec43a1972c23585754d16ec1150dbb8efbde26f23dcdd2622ca1153ef"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm23_01-occluders.webp",
-        "sha256": "6d67fb5f09c6a649e68ea3789fd646a47935fa7089463277aa250571e9caf092"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm23_01.json",
-        "sha256": "f2145bff4ac71499f29a51bbed5065a947630f5c22a49bbe28f51558385bf2dc"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm25_01-occluders.webp",
-        "sha256": "ff73e8cdbf65412244035215ae09789316e378d0c076bad2bf062657eaefe5ec"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm25_01.json",
-        "sha256": "261f7f36e7ea33a9d22f22ed399840a1253161bc1f548096551baa24c3e35293"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm26_01-occluders.webp",
-        "sha256": "ca5d5a62cdb7ca8b7c6d7da70278b75c6a7368be6a7a31f6425e127116f555e1"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm26_01.json",
-        "sha256": "0979082fe2f0d09168753d63d27b06db7f76f4fdeeed34402dc121f652dfdef4"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm27_01-occluders.webp",
-        "sha256": "6d73b0e693c8707b3471d4b3e87f2788c7d114fe10f0b91ab6a9ecf84a9073af"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm27_01.json",
-        "sha256": "b31031254f77828b8e43ca13b69c0865c534412530beeac22cc17d0466e65c05"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm30_01-occluders.webp",
-        "sha256": "13e453cd0cbf096fb80608606eb236e3b0a052bdad6b03d928fe4382957b7fc5"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm30_01.json",
-        "sha256": "9986dfcdcb7854730d37bd233705bad387cc558a50c69f43a3ca349ea11678ec"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm31_01-occluders.webp",
-        "sha256": "07d9f853359d009403e978e436e68470bf8660aec12fcf13b576796237db80a7"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm31_01.json",
-        "sha256": "a0bfa94b28a6f115da4d2990119754b83f02a5a2a574706854297635dacf1b6f"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm32_01-occluders.webp",
-        "sha256": "47e26d79d056433407c397ee8dc83f34612134f37c40db40950c46f93b5c3092"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm32_01.json",
-        "sha256": "e0b83c8ff8caa6dac0516bb6cbb7a7cc8df1cda045c63664cf6160d838e30db5"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm34_01-occluders.webp",
-        "sha256": "de744c17801bb47f418a3f3ce21b74f3580fd6b7ed568ba5b80c45391c812190"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm34_01.json",
-        "sha256": "0415329f3827c0c68d5ba6da4e7dbb9400a9825605d0db9bf99f9aa431c35031"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm35_01-occluders.webp",
-        "sha256": "63a49a8296069e19a2606439b05b0430a2671c9f1f633214a4939c825eb6388b"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm35_01.json",
-        "sha256": "baa127f517b1fcfee76b6f7050986b5588b15187a4c5843ea5ae4b8b96279633"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm37_01-occluders.webp",
-        "sha256": "16cfef3e4e8526ded916c55b2bf5dbce58abe4f7ebaaf8eb78ec1e2aa4ed9bdf"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm37_01.json",
-        "sha256": "96dd659cc079c4f6b428e60e3cd33caad51652fe0ce623dc3e4465dbf5fdcc73"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm39_01-occluders.webp",
-        "sha256": "2013f3c87dcd81f652ae2e6c8070da4743fca4613390a6cdcca0648719acac55"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm39_01.json",
-        "sha256": "671e4b08065eb380e184a78ad4aea5008245c1d9a997e39a05e339b8bf21ea80"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm40_01-occluders.webp",
-        "sha256": "99d19ffe6babfb4897e5776199328bd2b4b4eb5cedba10f1632fd45606556721"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/field_cm40_01.json",
-        "sha256": "ee8ca26bac926b6cd717d36203aeec9be26e0f75bb4046381790c8b8aab6d2f4"
-      },
-      {
-        "path": "assets/production/cage/foreground-review-polish-20261019/index.json",
-        "sha256": "5b43b82df86be119c583471d3ab23b43dd5f8ea93d2ad52719a12fa2ccba7f13"
-      },
-      {
         "path": "assets/production/cage/licensed-runtime-v1/fields/field_cm01_01/frame-00.png",
         "sha256": "816ec7851457df8df012a71cf36cebc69dbdaf62e42b2c091d746733fa1dbb0a"
       },
@@ -10243,166 +9381,6 @@
       {
         "path": "assets/production/cage/licensed-runtime-v1/fields/field_cm40_01/frame-00.png",
         "sha256": "6466f513a4e8d429455f165e4478c800cd76a5d341914ef1f31d330da4565862"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm01_01/frame-00.webp",
-        "sha256": "6bda4c412a5c5773742fdb405922cd5f1694fc0079dbe4329627721d8ab31acc"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm02_01/frame-00.webp",
-        "sha256": "b7760c89fb6c33104dbc39da104f48b5038b99e2592b74e191b5f1c4596a28d2"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm04_01/frame-00.webp",
-        "sha256": "7a9d1d081cba3a82dff6526e3b802ca168f09bd8a01eaaaee8324351b1822af2"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm05_01/frame-00.webp",
-        "sha256": "7be1fa1266b67d4c1c0bd66e912c779a5f0f12cf58905d86315b59de8f5be1ff"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm06_01/frame-00.webp",
-        "sha256": "5dd804c73a276988aa246f154d968066c31699050b49f4558acb7db495cc7380"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm07_01/frame-00.webp",
-        "sha256": "a266049bd318c127cc99c38ff1447432d894f30bef24b579065fc09b4c5f916c"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm07_01/frame-01.webp",
-        "sha256": "e0543c7717bafc77db2833c7f7ece676902c5ddc4af32e1e2bbc86c8b2fc095d"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm08_01/frame-00.webp",
-        "sha256": "854e5d0dfe17447af7079b4bcd07f47a27f698c93a7e3ddd2f5740bf93a1d0fd"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm09_01/frame-00.webp",
-        "sha256": "9d6c44a541507e9dde2ad22f9eafa62d288057b1fb77d708c6c183ae19caf580"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm09_01/frame-01.webp",
-        "sha256": "14e765b1fd8aa82f9f6025c234b7eaa816c78aba19122204d16411cf60c21674"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm10_01/frame-00.webp",
-        "sha256": "170c5970b4bc9c3e7ffc700d1137938967084c66191b9f0bc7958f21d49329c2"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm11_01/frame-00.webp",
-        "sha256": "350642bc8e32b7df58243a4193bd3dbd4ea412109359a2bc44fc630ceba77879"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm12_01/frame-00.webp",
-        "sha256": "1784ba0e4c5a9692885c9024ca5856649d5235dc135f7fbad633765070878b52"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm13_01/frame-00.webp",
-        "sha256": "50d30cb4068fba2d28240bf807a61d625ac69236c887e06fec58539765b462da"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm14_01/frame-00.webp",
-        "sha256": "c4aaf5912bf68f760d3cd0577983b949495cabb981a92dabf9cc371a543ba1f5"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm15_01/frame-00.webp",
-        "sha256": "ec347b6f2358fd8d84d3297eb8027bf50549eb30a37cd95fecf15a8a506c4dbe"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm16_01/frame-00.webp",
-        "sha256": "342634b6b050541947e39679ee2050ee5ed33f88e1b2739fd562838014f88700"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm17_01/frame-00.webp",
-        "sha256": "8b710a39e7fcbfac1e6287c2855ad1a2550137278cc184aea878017ba2f3b4d7"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm18_01/frame-00.webp",
-        "sha256": "aa03997619e93f3dd24150f34bd287d1e6fd5c423309f51be4e99a9377f37755"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm19_01/frame-00.webp",
-        "sha256": "4093ce6c393ee75dea914d8b72350d03ee5d13577feec7b94ea785dc7bb371ce"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm20_01/frame-00.webp",
-        "sha256": "872276ccd922e6428ce09b838707535b6c98fdb131a41f0506ae9b8f0e7579c0"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm21_01/frame-00.webp",
-        "sha256": "a6992a24bb926b2cfcce6cb5249bf5827a4a7bfbef037a90ae0e0bdb9dddbb22"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm21_01/frame-01.webp",
-        "sha256": "9249cad938fd9dd61871343ce57757b66d22c0aa0b55bc414a66426b4bf17f12"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm22_01/frame-00.webp",
-        "sha256": "3e8db1fa9f7da133c620e528484e0ba8f95a37571f1b15a63798c67516dd5ecd"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm23_01/frame-00.webp",
-        "sha256": "c33bb2ec7632c5bc3af588ea69f85788a79ca4e8c449a942a7ef02acbd9ded78"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm25_01/frame-00.webp",
-        "sha256": "a8bf3c24afca5197539d2da01febdbddd6379b43f2520ff95dcb2cd0f94c131b"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm26_01/frame-00.webp",
-        "sha256": "d758b8f04673239aa5582448b2a3cf7034d4255432d460cc9c37d7c232cd0d70"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm27_01/frame-00.webp",
-        "sha256": "84e9da60d78ae5a34de49111a6dc8b7a9db3a004afa72bf385da46c1d99f1bec"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm30_01/frame-00.webp",
-        "sha256": "161442aea55535f86eafd942fcc125f11683e138396a0aa66176a0034711b048"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm31_01/frame-00.webp",
-        "sha256": "c32b0211618757ce2f32b509c5875bae94c44540a89b8bfad69c6b0a1fb9e6e0"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm32_01/frame-00.webp",
-        "sha256": "c139f1a03c8d61ce41ae1458e9ac55cecf9eff67bcfdab25037b53ff260a0f0f"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm34_01/frame-00.webp",
-        "sha256": "0cbfd19c5b07a862cd537f35b91a5f0a640eccde0432c3743dff45028ba8aa5e"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm35_01/frame-00.webp",
-        "sha256": "75ad216aac52fdf4387d503c1497de67d89b2ce17f463e9ca4db8e1b78a99f22"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm37_01/frame-00.webp",
-        "sha256": "813188ad88e6c65915caa8fbc26d64f3faa9f346345c17f0e8249dcc8609f021"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm39_01/frame-00.webp",
-        "sha256": "10e0d45931237b8d54792004d6a770992408d1c530c95d9deaaf1ce37f0fa3b6"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm39_01/frame-01.webp",
-        "sha256": "05768cd893c03afd539fb7ce9ce7f613bdd51cc254cbaba38baab8c6ad1625ca"
-      },
-      {
-        "path": "assets/production/cage/polish-review-20261019/fields/field_cm40_01/frame-00.webp",
-        "sha256": "54be15762f3c5fd41dee9a261e735d9c41cebd029b218da2ed3476e9169696c4"
-      },
-      {
-        "path": "assets/production/cage/shared-edges-polish-20261019/field_cm02_01-edges.webp",
-        "sha256": "89cd626aaf51433efc878f4dfe92dbd096d25f979ee4fc4114ab835fd757c11b"
-      },
-      {
-        "path": "assets/production/cage/shared-edges-polish-20261019/field_cm30_01-edges.webp",
-        "sha256": "348c07879e93f66349259ad15ea16ac484ffe472778b9ac19f866b21c96fc33e"
-      },
-      {
-        "path": "assets/production/cage/shared-edges-polish-20261019/index.json",
-        "sha256": "06a700dbe0a5022a6ea9e90d683daf9c8a6f48e4b23b9c81cee065cd0484bec5"
       },
       {
         "path": "assets/production/cage/three-20261021/field_cm01_01.glb",
@@ -38482,7 +37460,7 @@
       },
       {
         "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
-        "sha256": "c4ed2444516987caeaf891c7217a3de21eaeae3c28fcc358f8c2f4691e65d8d8"
+        "sha256": "c9019acb67700809f65eba672f5adcd4944934cb696ce8da62330a87d6fe4899"
       },
       {
         "path": "assets/production/public-media-clean-20261017/currency-hud-r1/bits-24.png",
@@ -38519,10 +37497,6 @@
       {
         "path": "assets/production/public-runtime/battle-effects.render.v1.json",
         "sha256": "50bfda1b33cb6761318076ca88719cfadf9a05e1f6d52bf5b0faf55a6e8b41b6"
-      },
-      {
-        "path": "assets/production/public-runtime/cage-final.map.v1.json",
-        "sha256": "bdd39492c2566a7bb00181d44eb3a41af23c925c2d376735edf25c7346fc37c9"
       },
       {
         "path": "assets/production/public-runtime/cage-ui-three.v1.json",
@@ -38575,14 +37549,6 @@
       {
         "path": "assets/production/public-runtime/metadata/battle-original.v1.json",
         "sha256": "58eb2d588c0299c260f5655f6b937541ad95d06892a16dbfb596f5a632b8b899"
-      },
-      {
-        "path": "assets/production/public-runtime/metadata/cage-foreground-cm03.v1.json",
-        "sha256": "55c79a382a25349c89c6147fddef9d60f59581a83224874313a2366181f6edef"
-      },
-      {
-        "path": "assets/production/public-runtime/metadata/cage-foreground-cm24.v1.json",
-        "sha256": "d46068e01a2d830c55f24d9698410238fb8e0b75d57ee8bc67c7e864b6ec3909"
       },
       {
         "path": "assets/production/public-runtime/metadata/hunt-pieces-0370ad9efa4eac35.v1.json",
@@ -39378,7 +38344,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "6f1bb98b8f6eaa8eea14e948d8faf768c69a6eab2154c75b14c333931ccd7e58"
+        "sha256": "0fd0965378265e19fef817a72edb4c1491c3a20ce55030060f2af67f7f9f0da4"
       },
       {
         "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -39642,7 +38608,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "6d32249f264976f6b25145cababad1fb79724acdf3f6be4fa9f93e6c26a4c163"
+        "sha256": "7a28cc7052feb86d686079099af868dfcb39f579a8e083ff13a86d32a11237de"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -40202,7 +39168,7 @@
       },
       {
         "path": "src/championship/cage/ranchEcology.js",
-        "sha256": "21aed4b85046f978702a1074d1aea434c30a5fb184279728558479f030dcbba1"
+        "sha256": "c55ce0d734ae45609964adcd012d67f2499db2ec6afe10e443bc590030478052"
       },
       {
         "path": "src/championship/cage/ranchExpansion.js",
@@ -40713,14 +39679,6 @@
         "sha256": "8abbdd084f51c14b0e12bfdb74867c97584c50be71282e221615c93c27ea12ff"
       },
       {
-        "path": "src/championship/presentation/cageAmbient.js",
-        "sha256": "6a0167f9674e8243cab6a980ecd3851f87a5f306b1a48f9f92aa78a5350da558"
-      },
-      {
-        "path": "src/championship/presentation/cageForeground.js",
-        "sha256": "19e11ecf9d2fafe7f2638a32d19bc2b31abd0039472465566145d64993c64b7a"
-      },
-      {
         "path": "src/championship/presentation/cageGroundMap.js",
         "sha256": "b5f90054b2c1c6a132b0fba51d4fce14f8ab98319398224f7e339b72f3f3b63b"
       },
@@ -40729,12 +39687,8 @@
         "sha256": "0ebc9729920c81821ff7e23a99b8928a8ca2089886b5b2f1ee36c74b96d2c416"
       },
       {
-        "path": "src/championship/presentation/cageSharedEdges.js",
-        "sha256": "635a49521f2110fec851854a7db4ea195e3a921f3490eba871638d4011bcea51"
-      },
-      {
         "path": "src/championship/presentation/cageUiArt.js",
-        "sha256": "618a817f9ccd48b8d515c77917db7966677b0b0396c574ae69763885d13b511d"
+        "sha256": "9f3e0933424de9fbfd277a954e9064d511df3e4f11af783d2ee5da99574b3b86"
       },
       {
         "path": "src/championship/presentation/ceremony/ceremonyAudio.js",
@@ -41030,11 +39984,11 @@
       },
       {
         "path": "src/championship/presentation/publicMapRequests.js",
-        "sha256": "ccad672a71cec5659a1ec098ad145c5c3f57a7474fd246cb861c7c134cb699fc"
+        "sha256": "1244ae80f08a95716818cb02f325252738af74b1b7f0d22a74be4e90ea22a694"
       },
       {
         "path": "src/championship/presentation/publicMetadata.js",
-        "sha256": "8d3a8c328abe1ba9a28c38ff5af16a8780ba7ae20ced292034eabf6a19847841"
+        "sha256": "5633615939c3461c6af2c840d18d2779f43c858c4d198a7ccd55376653d8b681"
       },
       {
         "path": "src/championship/presentation/publicRenderDescriptors.js",
@@ -41063,10 +40017,6 @@
       {
         "path": "src/championship/presentation/ranchBorderMembership.js",
         "sha256": "cdcd2de46ce03398efd43b86f1a4c9f1d8ef43e2e9a05af52876a6f1cf569deb"
-      },
-      {
-        "path": "src/championship/presentation/ranchCageArtSelection.js",
-        "sha256": "fd9a586661ae9d00539d45091cd6ee485a37507d11cd6e6d1d26bea79952cfae"
       },
       {
         "path": "src/championship/presentation/ranchContactHeight.js",
@@ -41827,10 +40777,6 @@
       {
         "path": "src/data/championship/catalogs/ranch-conveyor.r1.json",
         "sha256": "0e0996a024e157c1ea3d3fb0bed6d22259c823759ef36cd757c75e1b7d2d6b57"
-      },
-      {
-        "path": "src/data/championship/catalogs/ranch-sports-art.r1.json",
-        "sha256": "9b6b5ed6b9b25e4043ed5aca8d05b5fd85608432313fbfc9022d2a5e3b31ea98"
       },
       {
         "path": "src/data/championship/catalogs/ranch-sports-ground.r1.json",

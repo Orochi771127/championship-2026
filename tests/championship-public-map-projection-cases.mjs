@@ -16,7 +16,7 @@ const maps=selectedMapProjections({root:process.cwd(),input});
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 
 test('map exports preserve every frame, clock, footprint, native pixel scale and occlusion reference',()=>{
- assert.equal(maps.descriptors.length,6);assert.deepEqual(maps.descriptors.map(row=>row.role).sort(),['cage-final','cage-ui','hunt-accepted','hunt-hm01x2','hunt-night','hunt-three-fallback']);
+ assert.equal(maps.descriptors.length,5);assert.deepEqual(maps.descriptors.map(row=>row.role).sort(),['cage-ui','hunt-accepted','hunt-hm01x2','hunt-night','hunt-three-fallback']);
  assert.equal(maps.descriptors.find(row=>row.role==='hunt-three-fallback').value.fields.length,19);
  for(const descriptor of maps.descriptors){
   const row=recipe.sources.find(row=>row.role===descriptor.role),source=read(row.path);
@@ -47,14 +47,14 @@ test('public map format excludes private source evidence and refuses unknown met
  }
  for(const row of recipe.sources){assert.equal(sha(fs.readFileSync(row.path)),row.sha256);assert.ok(!input.files.includes(row.path));}
  assert.ok(!input.files.includes('assets/production/hunt/licensed-runtime-v1/manifest.json'));
- assert.equal(sha(fs.readFileSync('assets/production/ART_PRODUCTION_INDEX.json')),'9dba69bb8d2c4cc6275004c0870b837a5320c1e335f7cbe88afafc3a69fbc338');
+ assert.equal(sha(fs.readFileSync('assets/production/ART_PRODUCTION_INDEX.json')),'c825e5667a67936c3a1a3468673aa92fc87f42566d2618cbb8028139e2e960aa');
 });
 
 test('map exports require existing media hash approvals, including all final cages and night fields',()=>{
  const copy=structuredClone(input),first=maps.files.keys().next().value;
  copy.publicPlaytest.files=copy.publicPlaytest.files.filter(row=>row.path!==first);
  assert.throws(()=>selectedMapProjections({root:process.cwd(),input:copy}),/PUBLIC_MAP_MEDIA_NOT_APPROVED/);
- assert.equal(maps.descriptors.find(row=>row.role==='cage-final').value.fields.length,37);
+ assert.equal(maps.descriptors.find(row=>row.role==='cage-ui').value.fields.length,37);
  assert.equal(maps.descriptors.find(row=>row.role==='hunt-night').value.fields[0].fieldId,'field_hm10_01');
 });
 

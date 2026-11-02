@@ -1,7 +1,7 @@
 // OWNER_APPROVED_ADAPTATION, 2026-10-26: ecology types for the hex cage world.
 // "Same type" is decided by ecology, not by artwork: two different-looking
 // forest cages are both forest. The groups extend the authored large/small
-// theme pairs (shared-edges-polish-20261019) with two natural pairs; every
+// theme pairs (from the 2026-10-19 shared-edge polish) with two natural pairs; every
 // other cage is its own type, so copies of one cage still join. The waiting
 // room is a fixed facility and never joins anything.
 //

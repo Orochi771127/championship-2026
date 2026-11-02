@@ -9,14 +9,13 @@ import threeManifest from '../../../assets/production/public-runtime/cage-ui-thr
 import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
 import { productGridCell } from '../cage/productRanchGrid.js';
 import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
-import {selectRanchCageArt} from './ranchCageArtSelection.js';
 import { RANCH_EXPANSION_FIRST_SLOT, isAnnexSlot } from '../cage/ranchExpansion.js';
 import { getOriginalCageVisualBinding, ORIGINAL_CAGE_STRUCTURAL_VISUALS } from './originalCageVisualBindings.js';
 import { validateRuntimeMapArtBundle } from './runtimeMapArtBundle.js';
 import { cageName } from '../text/zhHant.js';
 import { uiText } from '../text/uiText.js';
 
-const art = validateRuntimeMapArtBundle(selectRanchCageArt(manifest));
+const art = validateRuntimeMapArtBundle(manifest);
 const THREE_UI_DIR = 'assets/production/cage/ui-three-20261102/';
 const imageRow = (row, width, height) => row && Object.keys(row).sort().join() === 'height,sha256,src,width'
   && typeof row.src === 'string' && row.src.startsWith(THREE_UI_DIR) && row.src.endsWith('.webp') && !row.src.includes('..')
