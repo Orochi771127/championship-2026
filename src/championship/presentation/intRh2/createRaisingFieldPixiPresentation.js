@@ -1496,6 +1496,8 @@ export async function mountRaisingFieldPixiPresentation({
       if(event.kind==='tap'){const entry=actors.get(event.partnerId);if(!entry)continue;
         if(!reducedMotion&&!prefersReducedMotion())entry.hopStart=performance.now();
         showPartnerEmote(entry,MOOD_ICON[event.mood]??'smile',{label:event.gained?'+'+event.gained:null});}
+      // Night disturbance (2026-11-02): a partner woken from its sleep is cross.
+      else if(event.kind==='disturbed')showPartnerEmote(actors.get(event.partnerId),'anger',{ms:1900});
       else if(event.kind==='greeting'){const icon=event.relation==='rival'?'bolt':'note';
         for(const id of [event.a,event.b])showPartnerEmote(actors.get(id),icon,{ms:1800});}
       else if(event.kind==='find'){

@@ -530,6 +530,17 @@ function listenPartnerFinds() {
   // The card follows a moment after the form stands, so the player sees the form first.
   document.addEventListener('cm-awakening', (event) => setTimeout(() => showAwakeningCard(event.detail), 650));
   app.subscribePartnerLife?.((event) => {
+    // Night disturbance (2026-11-02): say who was woken and that it counts as 育成妨礙.
+    if (event.kind === 'disturbed' && app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) {
+      const entry = app.getRaisingInstances().find((e) => e.instanceId === event.partnerId);
+      let toast = document.querySelector('.cm-stroll-toast');
+      if (!toast) { toast = document.createElement('div'); toast.className = 'cm-stroll-toast'; toast.setAttribute('role', 'status'); document.body.append(toast); }
+      toast.textContent = uiText('NIGHT_DISTURBED_TOAST', { name: entry ? raisingDisplayName(entry) : '' });
+      toast.classList.remove('is-shown'); void toast.offsetWidth; toast.classList.add('is-shown');
+      clearTimeout(showStrollToast.timer);
+      showStrollToast.timer = setTimeout(() => toast.classList.remove('is-shown'), 3200);
+      return;
+    }
     if (event.kind !== 'find' || !event.tool || !toolbar || app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
     toolbar.holdToolStock(event.tool);
     const id = event.entry.id, gained = event.entry.quantity;
@@ -1200,10 +1211,11 @@ async function mountRaisingHome() {
             }).then(value => { owner.transfer(fieldArt); owner.transfer(characterBundle); return value; });
             const next = await owner.own(pending);
             owner.signal.throwIfAborted(); owner.transfer(next); scene = next; owner.stopTimer();
-            // Loopback review only (?awakeningQa): read the awakening signs and find a crest to tap. Public hosts never bind it.
+            // Loopback review only (?awakeningQa): read the awakening signs and find a crest or a partner to tap. Public hosts never bind it.
             if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("awakeningQa"))
               globalThis.__championshipAwakeningQa = { signs: () => app.getAwakeningSigns(), view: (id) => app.getPartnerAwakening(id),
-                focus: (id) => next.focusResident?.(id, { reducedMotion: true }) ?? false, crest: (id) => next.awakeningCrestPoint?.(id) ?? null };
+                focus: (id) => next.focusResident?.(id, { reducedMotion: true }) ?? false, crest: (id) => next.awakeningCrestPoint?.(id) ?? null,
+                rect: (id) => next.actorScreenRect?.(id) ?? null };
             progress.done('scene'); stopTracking();
             delete root.dataset.fieldFallback; show('ready'); scene.render(lastFrame);
             resumeTutorialPresentation();

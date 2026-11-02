@@ -15,6 +15,11 @@ export const CLOCK_POLICIES = Object.freeze([CLOCK_POLICY_NATIVE, CLOCK_POLICY_R
 export const REALTIME_NIGHT_START_MINUTE = 22 * 60;
 export const REALTIME_NIGHT_END_MINUTE = 7 * 60;
 export const REALTIME_WAKE_SECONDS = 600;
+// Night disturbance (Owner 2026-11-02): waking a sleeping partner by handling it (a tap, the hand, a carry; never
+// feeding or treatment) costs 育成妨礙 +1 on the native care-mistake count (at most 7, the native cap; lifetime
+// evolution routes read it) and affection -5. It stays awake for REALTIME_WAKE_SECONDS, so it is counted again
+// only after it falls asleep again.
+export const REALTIME_DISTURBANCE = Object.freeze({careMistakes: 1, careMistakeMaximum: 7, affectionLoss: 5});
 export const REALTIME_OFFLINE_CAP_SECONDS = 12 * 3600;
 // Native age units per real second by generation (egg, 幼年期 I, 幼年期 II, 成長期, 成熟期, 覺醒體, 究極體).
 // With the native lifespans 60 / 1440 / 5760 / 11520 that is about 2 min / 30 min / 3 h / 32 h per stage.

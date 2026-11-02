@@ -198,7 +198,11 @@ test('the app: feed shards and metals, the ceremony teaches the form, the look s
     assert.equal(fed.amount, 8);
     fed = app.feedAwakening(id, 'metal:emma');
     assert.equal(fed.amount, 50);
+    assert.equal(app.getPartnerAwakening(id).feeds.find(f => f.itemId === 'metal:emma').amount, 2, 'near the cap the button says what it really adds');
     fed = app.feedAwakening(id, 'metal:emma');
+    assert.equal(fed.amount, 2, 'and so does the receipt');
+    assert.deepEqual({...app.getCyberGachaFrame().metals.find(m => m.id === 'metal:emma').awaken}, {fill: false, tier1: 50, tier2: 30, cap: 60});
+    assert.deepEqual({...app.getCyberGachaFrame().metals.find(m => m.id === 'metal:supernova').awaken}, {fill: true, tier1: 100, tier2: 100, cap: 60});
     assert.equal(app.getPartnerAwakening(id).forms.find(f => f.form === focus).energy, AWAKENING_RULES.itemCap, 'shards and SSR stop at 60');
     assert.equal(app.feedAwakening(id, 'metal:beta-shard').reason, 'AWAKENING_ENERGY_FULL');
     assert.equal(app.getPartnerBloodline(id)?.family, 'emma', 'an SSR metal inscribes its bloodline');
@@ -352,3 +356,24 @@ test('arena relay: a ranch partner bursts into its own form, waits for the call,
   assert.equal(relay({}).getSnapshot().relay.burst.form, t1.form, 'a Dex-only entry keeps its first tier-1 form');
 });
 
+
+test('the bag explains each metal by the current rules: awakening energy on a 成熟期 and its bloodline perk by name', async () => {
+  const {gachaMetalNote, awakeningEnergySummary} = await import('../src/championship/app/cyberGachaView.js');
+  const {GACHA_METALS} = await import('../src/championship/gacha/cyberGacha.js');
+  const {awakeningItemEnergy} = await import('../src/championship/contracts/productBurstEvolution.js');
+  const item = id => {
+    const metal = GACHA_METALS.find(m => m.id === id), t1 = awakeningItemEnergy(metal, 1), t2 = awakeningItemEnergy(metal, 2);
+    return {...metal, kind: 'METAL', awaken: {fill: t1.fill, tier1: t1.amount, tier2: t2.amount, cap: AWAKENING_RULES.itemCap}};
+  };
+  const ur = gachaMetalNote(item('metal:supernova'));
+  assert.match(ur, /星核：爆裂威力更強/, 'the bloodline is named with its perk');
+  assert.match(ur, /一次充滿，並免除轉生條件/);
+  for (const id of GACHA_METALS.map(m => m.id)) assert.doesNotMatch(gachaMetalNote(item(id)), /解鎖/, `${id}: no stale unlock wording`);
+  assert.match(gachaMetalNote(item('metal:emma')), /\+50%（二段 \+30%），道具最多補到 60%/);
+  assert.match(gachaMetalNote(item('metal:supernova-shard')), /星核.*\+25%，道具最多補到 60%/);
+  const shard = gachaMetalNote(item('metal:emma-shard'));
+  assert.match(shard, /幼年期.*\+8%/);
+  assert.doesNotMatch(shard, /銘刻/, 'an R shard inscribes no bloodline');
+  assert.equal(awakeningEnergySummary({kind: 'AWAKEN_ENERGY', amount: 2, percent: 60}), '覺醒能量 +2%（目前 60%）');
+  assert.match(awakeningEnergySummary({kind: 'AWAKEN_ENERGY', amount: 100, fill: true, ready: true}), /到牧場點拍檔/);
+});

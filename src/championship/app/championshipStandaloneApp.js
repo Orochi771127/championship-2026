@@ -18,7 +18,7 @@ import {constructNativeIndividualForm} from '../raising/nativeIndividualEvolutio
 import {normalizeBurstEvolution,createBurstEvolutionState,withBurstMigrated,legacyBurstMigration,unlockBurstForms,
   burstUnlocksOf,burstFormsFor,evaluateBurstConditions,preferBurstForm,preferredBurstForm,burstPlanFor,burstTierForRank,burstFormTier,
   AWAKENING_RULES,partnerAwakenings,awakeningFocus,awakeningTargetOf,awakeningAppearanceOf,transcendStarsOf,feedAwakeningEnergy,
-  addTranscendStar,setAwakeningTarget,setAwakeningAppearance,clearAwakeningShown,learnAwakening,awakeningDisplayFor} from '../contracts/productBurstEvolution.js';
+  addTranscendStar,setAwakeningTarget,setAwakeningAppearance,clearAwakeningShown,learnAwakening,awakeningDisplayFor,awakeningItemEnergy} from '../contracts/productBurstEvolution.js';
 import {REALTIME_TRAINING_POLICY,recommendedCages} from '../raising/productTrainingPolicy.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
@@ -89,7 +89,7 @@ import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded,beginNativeRais
 import {classifyNativeRaisingHand,stepNativeRaisingStrokeInput,nativeRaisingHandAdmission} from '../raising/nativeRaisingHand.js';
 import {createNativeRaisingActor,initializeNativeRaisingActor,interruptNativeRaisingFeeding,removeNativeRaisingFoodTarget,projectNativeRaisingActor,stepNativeRaisingActor,stepNativeRaisingAgeClock,touchNativeRaisingEgg,wakeNativeRaisingActor,startNativeRaisingMorning,stepNativeRaisingEvolution,enterNativeRaisingCage,beginNativeRaisingNap} from "../raising/nativeRaisingActor.js";
 import {NATIVE_RAISING_LIFECYCLE_RULES} from '../raising/nativeRaisingLifecycle.js';
-import {CLOCK_POLICIES,CLOCK_POLICY_NATIVE,CLOCK_POLICY_REALTIME,REALTIME_FOOD_UNITS_PER_SECOND,REALTIME_WAKE_SECONDS,isNightNap,offlineGrowthSeconds,
+import {CLOCK_POLICIES,CLOCK_POLICY_NATIVE,CLOCK_POLICY_REALTIME,REALTIME_FOOD_UNITS_PER_SECOND,REALTIME_WAKE_SECONDS,REALTIME_DISTURBANCE,isNightNap,offlineGrowthSeconds,
   realtimeAgeRate,realtimeClockAdvance,realtimeDayPeriod,takeAgeUnits} from '../time/realtimeClock.js';
 // The ranch ground for either layout: the original board, or (expansion
 // prototype) the same ring continued into its annex.
@@ -959,14 +959,29 @@ export function createChampionshipStandaloneApp({
       if(grown>age){const next=structuredClone(profile);next.fields['18c']=grown>>>0;writeRaisingNativeProfile(id,next,{markDirty:false});}
     }
   }
-  /** At night a touch, feeding or treatment wakes a partner for ten minutes. */
-  function wakeRealtimePartner(id){
-    if(!realtime||!session||!isNightNap(requireSession().getRaisingHomeSnapshot().clockMinutes))return;
+  /**
+   * At night a touch, feeding or treatment wakes a partner for ten minutes. Handling a sleeping partner awake
+   * (`disturb`: a tap, the hand, a carry) also disturbs it (OWNER_APPROVED_ADAPTATION 2026-11-02, night disturbance):
+   * 育成妨礙 on the native care-mistake count and lost affection. Returns true when it disturbed a sleeper.
+   */
+  function wakeRealtimePartner(id,{disturb=false}={}){
+    if(!realtime||!session||!isNightNap(requireSession().getRaisingHomeSnapshot().clockMinutes))return false;
     realtimeWake.set(id,realNowMs()+REALTIME_WAKE_SECONDS*1000);
     const actor=raisingActors.get(id),profile=raisingNativeProfile(id);
-    if(!actor||!profile)return;
-    const woken=wakeNativeRaisingActor(actor,profile,raisingFoods,{next:nextGameplayRandom});
-    if(woken){writeRaisingNativeProfile(id,woken);publishRaising();}
+    if(!actor||!profile)return false;
+    let woken=wakeNativeRaisingActor(actor,profile,raisingFoods,{next:nextGameplayRandom});
+    if(!woken)return false;
+    const disturbed=disturb&&actor.speciesIndex>=8;
+    if(disturbed){
+      const next=structuredClone(woken),rule=REALTIME_DISTURBANCE;
+      next.narrowFields['03d']=Math.min(rule.careMistakeMaximum,(next.narrowFields['03d']|0)+rule.careMistakes);
+      next.fields['020']=Math.max(0,(next.fields['020']|0)-rule.affectionLoss);
+      woken=normalizeNativeIndividualProfile(next);
+    }
+    writeRaisingNativeProfile(id,woken);
+    if(disturbed)emitPartnerLife({kind:'disturbed',partnerId:id});
+    publishRaising();
+    return disturbed;
   }
   /** 「讓拍檔休息」: every idle partner lies down now (at night it sleeps until morning). */
   function restRaisingPartners(){
@@ -1329,9 +1344,10 @@ export function createChampionshipStandaloneApp({
     const state=burstState(),awakenings=partnerAwakenings(profile,state,instanceId);if(!awakenings.length)return null;
     const target=awakeningTargetOf(state,instanceId),focus=awakeningFocus(awakenings,target),plan=partnerBurstPlan(instanceId);
     const learned=new Set(burstUnlocksOf(state,instanceId)),owned=id=>gachaState().metals[id]??0,rules=AWAKENING_RULES.transcendence;
-    const feeds=GACHA_METALS.filter(m=>owned(m.id)>0).map(m=>{const shard=m.id.endsWith('-shard'),fill=!shard&&m.rarity===AWAKENING_RULES.fillRarity;
-      const amount=!focus?0:fill?100:shard?AWAKENING_RULES.shardEnergy[m.rarity]??0:AWAKENING_RULES.metalEnergy[m.rarity]?.[focus.tier]??0;
-      return {itemId:m.id,name:m.name,rarity:m.rarity,family:m.family,art:m.art,owned:owned(m.id),amount,fill};}).filter(f=>f.amount>0);
+    // Each button says what the item really adds now: items stop at the item cap, so a metal near it adds less.
+    const room=Math.max(0,AWAKENING_RULES.itemCap-(focus?.energy??0));
+    const feeds=GACHA_METALS.filter(m=>owned(m.id)>0).map(m=>{const {amount:nominal,fill}=focus?awakeningItemEnergy(m,focus.tier):{amount:0,fill:false};
+      return {itemId:m.id,name:m.name,rarity:m.rarity,family:m.family,art:m.art,owned:owned(m.id),amount:fill?nominal:Math.min(nominal,room),fill};}).filter(f=>f.amount>0);
     const bond=profile.fields['020']|0,stars=transcendStarsOf(state,instanceId);
     const transcendItems=GACHA_METALS.filter(m=>!m.id.endsWith('-shard')&&rules.metalRarities.includes(m.rarity)&&owned(m.id)>0).map(m=>m.id);
     return deepFreeze({instanceId,base:profile.fields['000'],focus:focus?.form??null,target,appearance:awakeningAppearanceOf(state,instanceId),
@@ -2032,7 +2048,6 @@ export function createChampionshipStandaloneApp({
     },
 
     beginRaisingHand(instanceId,pointer){
-      wakeRealtimePartner(instanceId);
       if(tutorialBaseline){
         if(instanceId!==creature.creatureId||raisingHand||!tutorialInput(pointer?.checkpoint,"carry","hand")
           ||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
@@ -2042,7 +2057,9 @@ export function createChampionshipStandaloneApp({
       if(raisingHand||this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME
         ||!raisingGround||!raisingActors.has(instanceId)||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
       const point={...pointer,x:Math.floor(pointer.x),y:Math.floor(pointer.y)};
-      raisingHand={id:instanceId,mode:1,elapsed:0,held:true,inside:true,origin:{...point},pointer:{...point},previous:{...point}};return true;
+      // Only a hand that takes hold wakes it; a tap on release of this press is the same handling, not a second one.
+      const disturbed=wakeRealtimePartner(instanceId,{disturb:true});
+      raisingHand={id:instanceId,mode:1,elapsed:0,held:true,inside:true,origin:{...point},pointer:{...point},previous:{...point},disturbed};return true;
     },
     updateRaisingHand(instanceId,pointer){
       if(tutorialBaseline&&!tutorialInput(pointer?.checkpoint,"carry","hand"))return false;
@@ -2071,12 +2088,12 @@ export function createChampionshipStandaloneApp({
       raisingHand.held=false;advanceRaisingHand();publishRaising();return true;
     },
     beginRaisingCarry(instanceId,pointer){
-      wakeRealtimePartner(instanceId);
       if(this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME||!raisingGround
         ||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
-      const actor=raisingActors.get(instanceId),profile=raisingNativeProfile(instanceId);
-      if(!actor||!profile||[...raisingActors.values()].some(a=>a.state===6))return false;
-      const p=beginNativeRaisingCarry(actor,profile,pointer,{ground:raisingGround,foods:raisingFoods,rng:{next:nextGameplayRandom}});if(!p)return false;
+      const actor=raisingActors.get(instanceId);
+      if(!actor||!raisingNativeProfile(instanceId)||[...raisingActors.values()].some(a=>a.state===6))return false;
+      wakeRealtimePartner(instanceId,{disturb:true});
+      const p=beginNativeRaisingCarry(actor,raisingNativeProfile(instanceId),pointer,{ground:raisingGround,foods:raisingFoods,rng:{next:nextGameplayRandom}});if(!p)return false;
       actor.carryCameraX=pointer.cameraX??0;writeRaisingNativeProfile(instanceId,p);savePort.markDirty();publishRaising();return true;
     },
     updateRaisingCarry(instanceId,pointer){
@@ -2291,10 +2308,12 @@ export function createChampionshipStandaloneApp({
     },
     /** A tap on a partner: its mood emote, and +1 affection (field 020) at most once per cooldown. */
     touchRaisingPartner(instanceId){
-      wakeRealtimePartner(instanceId);
+      const disturbed=wakeRealtimePartner(instanceId,{disturb:true})||(raisingHand?.id===instanceId&&raisingHand.disturbed===true);
       if(!partnerLife||!session||tutorialBaseline||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)return null;
       const actor=nativeRaisingActor(instanceId),profile=raisingNativeProfile(instanceId),reading=partnerReading(instanceId,actor);
       if(!reading)return null;
+      // A partner woken in the night is cross, not pleased: no affection and no mood emote for that tap.
+      if(disturbed)return Object.freeze({...reading,gained:0,disturbed:true});
       const at=Date.now(),c=this.getCalendar(),dayKey=strollDayKey({season:c.season,day:c.dayOfSeason});
       let gained=0;
       if(raising?.nativeHome&&reading.affection<100&&canTapAffection(raising.nativeHome.strollLog,instanceId,at)){
@@ -3409,7 +3428,10 @@ export function createChampionshipStandaloneApp({
         chips:GACHA_CHIPS.map(chip=>({...chip,owned:state.chips[chip.id]??0,
           armed:state.armed.hunt?.includes(chip.id)===true||state.armed.bounty===chip.id})),
         metals:GACHA_METALS.map(metal=>{const into=shardFusionTarget(metal.id);
-          return {...metal,owned:state.metals[metal.id]??0,...(into?{fusesInto:{id:into.id,name:into.name,rarity:into.rarity},fusionCost:GACHA_SHARD_FUSION_COST}:{})};}),
+          // What it does for an awakening (the bag explains 「催化進化」 on a 成熟期 from these numbers).
+          const tier1=awakeningItemEnergy(metal,1),tier2=awakeningItemEnergy(metal,2);
+          return {...metal,owned:state.metals[metal.id]??0,awaken:{fill:tier1.fill,tier1:tier1.amount,tier2:tier2.amount,cap:AWAKENING_RULES.itemCap},
+            ...(into?{fusesInto:{id:into.id,name:into.name,rarity:into.rarity},fusionCost:GACHA_SHARD_FUSION_COST}:{})};}),
         goods:GACHA_GOODS,bloodlines:GACHA_BLOODLINES,autoFill:autoFillSynthesizer(state),
         armed:state.armed,partners,lastResult:lastGachaResult,
         // DIAMOND_ECONOMY_20261102: ranch automation items, directed recipes, placed cages, rewards and the founder box.
@@ -3526,9 +3548,10 @@ export function createChampionshipStandaloneApp({
       const profile=gachaProfile(instanceId);if(!profile)return gachaRefusal('UNKNOWN_INDIVIDUAL');
       const view=partnerAwakeningView(instanceId),focus=view?.forms.find(f=>f.form===view.focus)??null;
       if(!focus)return gachaRefusal('NO_AWAKENING_TARGET');
-      const shard=metal.id.endsWith('-shard'),fill=!shard&&metal.rarity===AWAKENING_RULES.fillRarity;
-      const amount=fill?100:shard?AWAKENING_RULES.shardEnergy[metal.rarity]??0:AWAKENING_RULES.metalEnergy[metal.rarity]?.[focus.tier]??0;
-      if(!amount)return gachaRefusal('NOT_AN_AWAKENING_ITEM');
+      const shard=metal.id.endsWith('-shard'),{amount:nominal,fill}=awakeningItemEnergy(metal,focus.tier);
+      if(!nominal)return gachaRefusal('NOT_AN_AWAKENING_ITEM');
+      // The receipt reports what was really added: items stop at the item cap.
+      const amount=fill?nominal:Math.min(nominal,Math.max(0,AWAKENING_RULES.itemCap-(focus.energy??0)));
       const nextBurst=feedAwakeningEnergy(burstState(),instanceId,focus.form,{amount,fill});
       if(!nextBurst)return gachaRefusal('AWAKENING_ENERGY_FULL');
       const bloodline=inscribesBloodline(metal)?metal.family:null;
@@ -3681,23 +3704,6 @@ export function createChampionshipStandaloneApp({
         if([...raisingActors.values()].some(a=>a.evolution))return gachaRefusal('EVOLUTION_RUNNING');
         const species=nativeHuntSpeciesByIndex(index);
         if(gachaRarityRank(metal.rarity)<gachaRarityRank(catalystRarityForGeneration(species.generation)))return gachaRefusal('METAL_TOO_WEAK');
-        // OWNER_APPROVED_ADAPTATION 2026-11-02: on a 成熟期 an SSR metal unlocks a tier-1 burst form and a UR
-        // metal a tier-2 one (a UR opens a tier-1 form first when none is unlocked yet).
-        if(species.generation===4){
-          const unlocked=burstUnlocksOf(burstState(),instanceId);
-          let forms=metalUnlockableForms(index,metal.rarity,unlocked);
-          if(!forms.length&&metal.rarity==='UR')forms=metalUnlockableForms(index,'SSR',unlocked);
-          if(form!==null)forms=forms.filter(f=>f===form);
-          if(!forms.length)return gachaRefusal('NO_BURST_FORM');
-          const chosen=burstFormsFor(index).find(f=>f.form===forms[0]),beforeBurst=burstEvolution;
-          const spent=spendGachaItem(state,itemId,{instanceId,bloodline});
-          if(!spent.ok)return gachaRefusal(spent.reason);
-          burstEvolution=unlockBurstForms(burstState(),instanceId,[chosen.form,...(chosen.alternates??[])])??burstEvolution;
-          if(!commitGacha({state:spent.state})){burstEvolution=beforeBurst;return gachaRefusal('SAVE_FAILED');}
-          lastBurstUnlocks=Object.freeze([...lastBurstUnlocks,Object.freeze({instanceId,forms:Object.freeze([chosen.form,...(chosen.alternates??[])])})].slice(-8));
-          publishRaising();
-          return gachaReceipt({ok:true,kind:'BURST_UNLOCK',itemId,instanceId,target:chosen.form,tier:chosen.tier,bloodline});
-        }
         const rules=PRODUCT_GROWTH_RULES.rules[index-8]??[];
         const choices=rules.map((rule,ruleIndex)=>({rule,ruleIndex})).filter(({rule})=>rule.kind!==1);
         if(species.generation===0||species.generation>=4||!choices.length)return gachaRefusal('NO_EVOLUTION_ROUTE');
