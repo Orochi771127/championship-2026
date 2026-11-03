@@ -1,0 +1,53 @@
+{
+  "id": "ROYAL_NEW_MAPS_20261103",
+  "classification": "OWNER_APPROVED_ADAPTATION: the gachapon royal cages 全自動皇家牧場 and 全自動星際動物園 become their own maps (definitions 36/37, the waiting room four-hex shape, own walk data, Blender GLB and UI pictures); older saves move their royal placements onto them",
+  "supersedes": {
+    "contract": "docs/contracts/championship/DIAMOND_ECONOMY_20261102.json",
+    "sourceLock": "src/championship/app/championshipStandaloneSave.js"
+  },
+  "saveField": {
+    "path": "cageEdit.placements[].moduleId may be championship:2026:cage:royal-ranch or championship:2026:cage:stellar-zoo",
+    "migration": "on load, a placement whose instance id carries a royal edition and whose module is its base cage (ranch 25 / zoo 24) moves onto its royal module at the nearest free four-hex footprint (most old hexes reused, then shortest move), keeping its instance id; residents respawn on the map (local XY 0), food and droppings move to the nearest safe ground of the same instance (royalCageMigration.js, rehomeRoyalCageContents)",
+    "stockCheck": "a royal cage (bag or placed) is one copy of its own module (royalCopiesByDefinition keyed 36 / 37); the shop zoo and ranch stocks no longer include it"
+  },
+  "rules": {
+    "simulation": "the royal maps run by the original ranch (25) and zoo (24) rules (cageRuleDefinitionIndex): capacity, food, waste, training, habitat; the built-in feed, clean, sleep and beast bonuses stay on the edition by instance id",
+    "availability": "never sold for Bits; only the premium gachapon (SSR royal ranch, UR stellar zoo) and the furnace recipes give them; the facility editor lists a royal card only while one is held",
+    "ecology": "each joins only its own kind"
+  },
+  "notChanged": [
+    "the 36 original cage definitions and the authoring-locked catalog files",
+    "gachapon rates, recipes and the attachment cores",
+    "the save key and schemaVersion"
+  ],
+  "sourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "aeebf3e57825b7f025709c7f315d5ca72ddfaa46c5d278ffaf2f3dade0731c9d"
+  },
+  "historicalSourceLocks": {
+    "DIAMOND_ECONOMY_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "15067ee0d3f47971a91a8189edaaa0c22ba3d43a831408b4f8bcc1e525b64c11"
+    },
+    "STAGE_REDESIGN_BURST_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "44b4ceec862776600a237a9cc54a160952f24305ed431a0b33a5addf4bba968d"
+    },
+    "ONLINE_BIND_REWARD_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c7abccc2403e3428e4754c87981a940db378dc4b1c17995363df6049ceeb680"
+    },
+    "CYBER_GACHA_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c4e7336e17e35099758cea84ff533e81c60c08bacbafef356afdbf55953b135"
+    },
+    "BATTLE_TACTICS_20261028": {
+      "src/championship/app/championshipStandaloneSave.js": "3a72fce7d38151f473f343fb8b9f59349daef1beb7cb09b6a0547c628d07ac8e"
+    },
+    "HEX_CAGE_WORLD_20261026": {
+      "src/championship/app/championshipStandaloneSave.js": "aaa72f6e08b150ac9bebb81fb2e6a8efefd532ab0ed7b7e24a7a0a9ae3d97f74"
+    }
+  },
+  "authorization": "Owner 2026-11-03: new maps in their own files, hexagon arrangement like the waiting room, stellar zoo, a far more lavish royal ranch built in Blender; after the preview 「是可以啦，但可以再做精細一點，可以有一些動態效果，而且要做成3D地圖……自己去做測試OK就可以加入遊戲commit 跟push然後整合至main發佈」 and 「沒問題就幫我commit跟push至main整合發佈」.",
+  "tests": [
+    "tests/championship-royal-cage-maps-cases.mjs",
+    "tests/championship-diamond-economy-cases.mjs",
+    "tests/championship-lion-display-correction-cases.mjs"
+  ],
+  "physicalDeviceAccepted": false
+}
