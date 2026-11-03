@@ -1,6 +1,6 @@
 // Diamond economy -- OWNER_APPROVED_ADAPTATION 2026-11-02 (DIAMOND_ECONOMY_20261102).
 //
-// Diamonds buy ranch land (20 → 100 cells, +10 per 1,000) and premium pulls.
+// Diamonds buy ranch land (20 → 100 cells, +10 a step at 200 → 2,200) and premium pulls.
 // A player who never pays still earns them: every story chapter's first clear,
 // every tamer rank reached for the first time and four encyclopedia milestones
 // pay 200–500 once each, and the founder box adds 1,000 more. The once-only
@@ -9,7 +9,8 @@
 import { deepFreeze } from "../contracts/championshipContracts.js";
 
 export const LAND_EXPANSION = deepFreeze({
-  price: 1000,        // diamonds for one step
+  // Owner 2026-11-03: diamonds for each +10 step, cheapest first (20→30 costs 200 ... 90→100 costs 2,200; 8,000 in all).
+  prices: [200, 400, 600, 800, 1000, 1200, 1600, 2200],
   cells: 10,          // one legacy land row
   baseCells: 20,
   maxCells: 100,
@@ -61,6 +62,11 @@ export function landExpansionTier(landCapacity) {
   const cells = Number.isFinite(landCapacity) ? landCapacity : LAND_EXPANSION.baseCells;
   const steps = (LAND_EXPANSION.maxCells - LAND_EXPANSION.baseCells) / LAND_EXPANSION.cells;
   return Math.max(0, Math.min(steps, Math.floor((cells - LAND_EXPANSION.baseCells) / LAND_EXPANSION.cells)));
+}
+
+/** Diamonds for the next +10 step from this land capacity; null once all 100 cells are open. */
+export function landExpansionPrice(landCapacity) {
+  return LAND_EXPANSION.prices[landExpansionTier(landCapacity)] ?? null;
 }
 
 /** Memory-card capacity a land tier adds; nothing without a card. */

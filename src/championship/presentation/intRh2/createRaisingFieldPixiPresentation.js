@@ -905,6 +905,7 @@ export async function mountRaisingFieldPixiPresentation({
       entry.loadToken += 1;
       actorLayer.removeChild(entry.root);
       entry.root.destroy({ children: true });
+      entry.emote?.destroy({ children: true });entry.sleepZ?.destroy({ children: true });
       actors.delete(creatureId);
       reportResidentAssets();
     }
@@ -1256,6 +1257,7 @@ export async function mountRaisingFieldPixiPresentation({
       }
       drawEvolution(entry,native);
       drawPartnerEmote(entry,covered);
+      drawSleepZzz(entry,native,covered);
     }
     onTrainingFrame(trainingLabels);
     const cageBadges=[],automationEvents=[];
@@ -1459,15 +1461,33 @@ export async function mountRaisingFieldPixiPresentation({
     note:['....KKK..','....KNNK.','....KNKK.','....KN...','....KN...','.KKKKN...','KNNNKN...','KNNNNK...','.KKKK....'],
     sparkle:['....K....','...KYK...','...KYK...','.KKYWYKK.','KYYWWWYYK','.KKYWYKK.','...KYK...','...KYK...','....K....'],
     meat:['.....KK..','....KWWK.','..KKKWWK.','.KOOBKKK.','KOOOOBK..','KOPOOBK..','KOOOOBK..','.KOOBK...','..KKK....'],
-    zzz:['....NNNNN','.......N.','......N..','.....NNNN','NNNN.....','...N.....','..N......','.N.......','NNNN.....'],
-    anger:['.RR...RR.','R.R...R.R','RR.....RR','.........','.........','.........','RR.....RR','R.R...R.R','.RR...RR.'],
     bolt:['....KKK.','...KYYK.','..KYYK..','.KYYKKK.','KYYYYYYK','.KKKYYK.','...KYK..','..KYK...','..KK....'],
     gift:['..K...K..','.KRK.KRK.','..KRKRK..','KKKKKKKKK','KRRRYRRRK','KKKKYKKKK','.KRRYRRK.','.KRRYRRK.','.KKKKKKK.'],
     smile:['..KKKKK..','.KYYYYYK.','KYYKYKYYK','KYYYYYYYK','KYKYYYKYK','KYYKKKYYK','.KYYYYYK.','..KKKKK..']
   };
   const MOOD_ICON={love:'heart',happy:'note',energetic:'sparkle',hungry:'meat',sleepy:'zzz',unwell:'anger',calm:'smile'};
+  // Owner 2026-11-03: the 9x9 anger and sleep pixels read as a pink die and a scribble, so these
+  // two are vector marks. Anger: four bright-red arcs bowing in to the centre (the anime vein),
+  // inked outline, white sheen. Sleep: three outlined ice-blue Zs climbing small to large.
+  const VECTOR_EMOTES=new Set(['anger','zzz']);
+  function drawAngerVein(g,r=14){
+    // Each quadrant's arc is centred on that quadrant's outer corner, so its belly faces the middle.
+    const arcs=[[-1,-1],[1,-1],[1,1],[-1,1]].map(([sx,sy])=>{const cx=sx*r,cy=sy*r,start=Math.atan2(-sy,-sx)-0.44;return [cx,cy,start,start+0.88];});
+    // Ink outline, bright red body, then a thin white sheen on the inner edge.
+    for(const [width,color,alpha,k] of [[10,0x1a0f24,1,.86],[6.2,0xef4444,1,.86],[1.7,0xffffff,.9,.8]])
+      for(const [cx,cy,a0,a1] of arcs){
+        g.moveTo(cx+Math.cos(a0)*r*k,cy+Math.sin(a0)*r*k);
+        g.arc(cx,cy,r*k,a0,a1).stroke({color,width,alpha,cap:'round',join:'round'});
+      }
+  }
+  function drawZ(g,x,y,size,{fill=0xbfe9ff,ink=0x14243f}={}){
+    const pts=[x,y,x+size,y,x,y+size,x+size,y+size];
+    for(const [width,color] of [[size*.42+2.6,ink],[size*.42,fill]])g.poly(pts,false).stroke({color,width,cap:'round',join:'round'});
+  }
+  function drawZzz(g){drawZ(g,-14,2,6);drawZ(g,-5,-6,8.5);drawZ(g,5,-16,11,{fill:0xffffff});}
   function createEmote(icon,label=null){
-    const px=3,rows=EMOTE_ICONS[icon]??EMOTE_ICONS.smile,w=Math.max(...rows.map(r=>r.length))*px,h=rows.length*px,pad=6;
+    const vector=VECTOR_EMOTES.has(icon);
+    const px=3,rows=EMOTE_ICONS[icon]??EMOTE_ICONS.smile,w=vector?32:Math.max(...rows.map(r=>r.length))*px,h=vector?32:rows.length*px,pad=6;
     const bubble=new PIXI.Container({label:'partner emote '+icon});bubble.eventMode='none';
     const box=new PIXI.Graphics(),bw=w+pad*2,bh=h+pad*2;
     // Pixel-stepped corners and a two-pixel tail, the bubble's anchor at the tail tip.
@@ -1475,8 +1495,11 @@ export async function mountRaisingFieldPixiPresentation({
       .rect(-bw/2+4,-bh-4,bw-8,bh-4).rect(-bw/2+2,-bh-2,bw-4,bh-8).fill({color:0xffffff})
       .rect(-4,-6,8,2).rect(-2,-4,4,2).rect(-1,-2,2,2).fill({color:0x2a1e3f}).rect(-2,-6,4,2).fill({color:0xffffff});
     const art=new PIXI.Graphics();
-    rows.forEach((row,y)=>[...row].forEach((ch,x)=>{const c=EMOTE_PALETTE[ch];if(c!==undefined)art.rect(x*px,y*px,px,px).fill({color:c});}));
-    art.position.set(-w/2,-bh-6+pad);bubble.addChild(box,art);
+    if(icon==='anger'){drawAngerVein(art);art.position.set(0,-bh-6+pad+h/2);bubble.pulse=art;}
+    else if(icon==='zzz'){drawZzz(art);art.position.set(0,-bh-6+pad+h/2+2);}
+    else{rows.forEach((row,y)=>[...row].forEach((ch,x)=>{const c=EMOTE_PALETTE[ch];if(c!==undefined)art.rect(x*px,y*px,px,px).fill({color:c});}));
+      art.position.set(-w/2,-bh-6+pad);}
+    bubble.addChild(box,art);bubble.art=art;
     if(label){const text=new PIXI.Text({text:label,style:{fontFamily:'Tahoma, "Noto Sans TC", sans-serif',fontSize:13,fontWeight:'bold',fill:0xff4d6d,stroke:{color:0xffffff,width:3}}});
       text.anchor.set(0,1);text.position.set(bw/2-2,-bh+2);bubble.addChild(text);}
     return bubble;
@@ -1534,6 +1557,30 @@ export async function mountRaisingFieldPixiPresentation({
     const k=Math.min(1,age/260),back=1.70158;
     bubble.scale.set(Math.max(.01,1+(back+1)*(k-1)**3+back*(k-1)**2));
     bubble.alpha=Math.max(0,Math.min(1,(entry.emoteMs-age)/300));
+    // An angry vein throbs (0.9 <-> 1.15) for as long as it shows.
+    if(bubble.pulse&&!bubble.pulse.destroyed)bubble.pulse.scale.set(reducedMotion||prefersReducedMotion()?1:1.025+.125*Math.sin(age/95));
+  }
+  // A sleeping partner (native state 4) breathes out Zs that drift up and right, small to large,
+  // without a bubble; any reaction bubble takes the head while it shows.
+  function drawSleepZzz(entry,native,covered){
+    const asleep=native?.state===4&&!covered&&entry.root.visible&&!entry.emote&&!native?.evolution;
+    if(!asleep){if(entry.sleepZ){entry.sleepZ.visible=false;}return;}
+    if(!entry.sleepZ||entry.sleepZ.destroyed){
+      entry.sleepZ=new PIXI.Container({label:'partner sleep zzz'});entry.sleepZ.eventMode='none';
+      for(const [size,fill] of [[6,0xbfe9ff],[8.5,0xd7f2ff],[11,0xffffff]]){const z=new PIXI.Graphics();drawZ(z,-size/2,-size/2,size,{fill});entry.sleepZ.addChild(z);}
+      emoteLayer.addChild(entry.sleepZ);entry.sleepStart=performance.now();
+    }
+    const bubble=entry.sleepZ;bubble.visible=true;
+    const visible=entry.visibleGeometry;
+    const head=entry.root.toGlobal({x:visible?visible.x+visible.width*.62:8,y:visible?visible.y+visible.height*.18:-40});
+    const local=emoteLayer.toLocal(head);bubble.position.set(local.x,local.y);
+    const still=reducedMotion||prefersReducedMotion(),t=(performance.now()-entry.sleepStart)/2400;
+    bubble.children.forEach((z,i)=>{
+      const phase=still?0.35+i*.22:((t+i/3)%1),ease=1-(1-phase)**2;
+      z.position.set(4+i*7+ease*10,-4-i*9-ease*16);
+      z.alpha=still?1:Math.min(1,phase*4)*Math.min(1,(1-phase)*3);
+      z.scale.set(.75+ease*.4);
+    });
   }
   function drawPassageVisit(entry,visiting,covered) {
     if(!entry.visitGlyph){if(!visiting)return;entry.visitGlyph=new PIXI.Graphics();entry.visitGlyph.eventMode='none';entry.root.addChild(entry.visitGlyph);}

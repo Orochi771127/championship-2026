@@ -4,7 +4,7 @@ import {formatNumber} from '../text/locale.js';
 import {shopItemName} from '../text/zhHant.js';
 import {shopGoodsPresentation} from '../presentation/shopGoodsUiArt.js';
 import {RANCH_DISCOVERY_REWARDS} from '../raising/ranchDiscoveries.js';
-import {STROLL_REWARDS} from '../raising/ranchPartnerLife.js';
+import {STROLL_REWARDS,pendingStrollEntries} from '../raising/ranchPartnerLife.js';
 import {getCageDefinition} from '../cage/cageCatalog.js';
 import {cageName,localizeSpeciesCodes} from '../text/zhHant.js';
 import {formatWorldClockTime} from '../time/championshipWorldClock.js';
@@ -44,7 +44,6 @@ function rewardRow(doc,reward,label){
 // whom, newest first, read from the saved stroll log. A name saved by an older
 // build as an internal code ("SPECIES 084") reads as its catalog name.
 const STROLL_SEASONS=['春季','夏季','秋季','冬季'];
-const STROLL_TOOL_SLOTS={feed:'餵食',protein:'蛋白質',medicine:'藥品',woundMedicine:'傷藥'};
 const strollName=name=>localizeSpeciesCodes(name)??'';
 // Stand-ins for the names while the sentence is localized, so each name can be
 // drawn as its own chip wherever the language puts it.
@@ -53,8 +52,8 @@ function strollLogParts(entry,names){
   const when=uiText('{season} 第{day}日 {time}',{season:uiText(STROLL_SEASONS[entry.season]??''),day:entry.day+1,time:formatWorldClockTime(entry.minute)});
   const place=Number.isInteger(entry.cage)?cageName(entry.cage,getCageDefinition(entry.cage)?.displayName??null):null;
   const item=uiText('【{item} ×{n}】',{item:uiText(STROLL_REWARDS[entry.reward]?.label??entry.reward),n:entry.quantity});
-  const slot=STROLL_TOOL_SLOTS[entry.reward];
-  const stored=slot?uiText('（已放入{slot}欄）',{slot:uiText(slot)}):uiText('（已存入錢包）');
+  // Owner 2026-11-03: a find waits here until 收下發現 pays it (entries saved before that were paid at once).
+  const stored=entry.claimed===false?uiText('（點擊下方收下發現領取）'):uiText('（已領取入袋）');
   const what=entry.kind==='greeting'
     ?uiText(place?'{a} 和 {b} 在{place}相遇打招呼，一起找到了{item}':'{a} 和 {b} 相遇打招呼，一起找到了{item}',{a:names.a,b:names.b,place:uiText(place??''),item})
     :uiText(place?'{name}在{place}散步，找到了{item}':'{name}散步時找到了{item}',{name:names.a,place:uiText(place??''),item});
@@ -66,6 +65,7 @@ export function strollLogLine(entry){
 }
 function strollLogRow(doc,entry){
   const row=doc.createElement('li');row.dataset.kind=entry.kind;row.dataset.reward=entry.reward;
+  row.dataset.claimed=String(entry.claimed!==false);
   if(entry.relation)row.dataset.relation=entry.relation;
   const {when,what,stored,item}=strollLogParts(entry,NAME_MARKS);
   const time=doc.createElement('span');time.className='int-rh2-stroll-log__when';time.textContent=when;
@@ -124,8 +124,11 @@ export function mountRanchDiscoveryJournal(root,source){
   const observer=typeof view?.ResizeObserver==='function'?new view.ResizeObserver(place):null;
   const bar=doc.querySelector?.('.cm-status-bar');if(bar)observer?.observe(bar);
   function update(frame){
-    last=frame?.exploration??null;button.hidden=!last?.pending?.length||!!frame?.tutorial&&!frame.tutorial.finished;
-    const c=copy();button.textContent=`${c.title} · ${last?.pending.length??0}/12`;
+    last=frame?.exploration??null;
+    const waiting=pendingStrollEntries(source.getPartnerLife?.()?.log).length;
+    button.hidden=!(last?.pending?.length||waiting)||!!frame?.tutorial&&!frame.tutorial.finished;
+    button.dataset.waiting=String(waiting);
+    const c=copy();button.textContent=`${c.title} · ${last?.pending.length??0}/12${waiting?` · +${waiting}`:''}`;
     button.setAttribute('aria-label',button.textContent);
     place();
   }
@@ -138,28 +141,42 @@ export function mountRanchDiscoveryJournal(root,source){
       p.className='int-rh2-discovery-paths';
       p.textContent=`${data.connections.length} ${c.path}${closed?` · ${closed} ${c.blocked}`:''}`;
       p.dataset.connections=String(data.connections.length);
-      // Passages join areas; partners who share one area meet without one (the greeting rule).
-      if(!data.connections.length){const note=doc.createElement('span');note.className='int-rh2-discovery-paths__note';note.textContent=uiText('同一區域內的拍檔仍會相遇');p.append(' · ',note);}
+      // Owner 2026-11-03: partners stroll -- and meet on the way -- only once passages link cages.
+      if(!data.connections.length){const note=doc.createElement('span');note.className='int-rh2-discovery-paths__note';
+        note.textContent=uiText('請先於【設施配置】放置並連接更多籠舍，當棲地連通擴大後，拍檔就會沿著連通步道跨區散步、並在途中偶遇打招呼！');p.append(doc.createElement('br'),note);}
       body.append(p);
-      if(!data.pending.length){const empty=doc.createElement('p');empty.textContent=data.active?c.empty:c.none;body.append(empty);}
+      if(!data.pending.length&&!pendingStrollEntries(source.getPartnerLife?.()?.log).length){const empty=doc.createElement('p');empty.textContent=data.active?c.empty:c.none;body.append(empty);}
       for(const item of data.pending){
         const reward=ranchDiscoveryReward(item.kind);if(!reward)continue;
         body.append(rewardRow(doc,reward,`${item.name??c.partner} · ${uiText(reward.name)}`));
       }
+      const waiting=pendingStrollEntries(source.getPartnerLife?.()?.log);
+      if(data.pending.length||waiting.length){const hint=doc.createElement('p');hint.className='int-rh2-discovery-claim';
+        hint.textContent=uiText('（點擊下方收下發現領取）');body.append(hint);}
       if(source.getPartnerLife?.())body.append(strollSection(doc,source.getPartnerLife().log));
       const foot=doc.createElement('p');foot.className='int-rh2-discovery-foot';foot.textContent=`${uiText('收下的發現會放進背包，飼料、蛋白質、傷藥也會加到育成工具的數量。')} ${c.full}`;body.append(foot);
       const action=await showChoiceDialog({title:c.title,message:c.about,content:body,variant:'ranch-discoveries',signal:life.signal,
-        actions:[{id:'close',label:c.close},{id:'collect',label:c.collect,tone:'primary',disabled:!data.pending.length}],cancelId:'close',doc});
+        actions:[{id:'close',label:c.close},{id:'collect',label:c.collect,tone:'primary',disabled:!data.pending.length&&!waiting.length}],cancelId:'close',doc});
       if(action==='collect'&&!life.signal.aborted){
         const before=data.pending,result=source.intents.collectDiscoveries();
         const left=new Set((source.getFrame().exploration?.pending??[]).map(p=>p.id));
         const got=ranchDiscoveryTotals(before.filter(p=>!left.has(p.id)));
+        // Stroll finds paid by this collect, totalled per item beside the discoveries.
+        const still=new Set(pendingStrollEntries(source.getPartnerLife?.()?.log).map(e=>e.id));
+        for(const entry of waiting.filter(e=>!still.has(e.id))){
+          const spec=STROLL_REWARDS[entry.reward];if(!spec)continue;
+          let src=null;if(spec.record!==undefined)try{src=shopGoodsPresentation(spec.record)?.src??null;}catch{src=null;}
+          const reward=spec.bits?{kind:'bits',bits:spec.bits,quantity:spec.bits*entry.quantity,name:'金幣',src:BITS_ICON}
+            :{kind:entry.reward,record:spec.record,quantity:entry.quantity,name:shopItemName(spec.record)??spec.label,src};
+          const same=got.find(g=>spec.bits?g.bits:g.record===spec.record);
+          if(same)same.quantity+=reward.quantity;else got.push(reward);
+        }
         const message=result.ok?`${c.saved} · ${result.collected}${result.remaining?` · ${c.full}`:''}`
           :result.reason==='INVENTORY_FULL'?c.full:result.reason==='EMPTY'?c.empty:c.failed;
         let content=null;
         if(result.ok&&got.length){
           content=doc.createElement('div');content.className='int-rh2-discovery-list';
-          const head=doc.createElement('p');head.textContent=uiText('已放入背包：');content.append(head);
+          const head=doc.createElement('p');head.textContent=uiText('（已領取入袋）已放入背包與育成工具欄：');content.append(head);
           for(const reward of got)content.append(rewardRow(doc,reward,uiText(reward.name)));
         }
         await showChoiceDialog({title:c.title,message,content,variant:'ranch-discoveries',actions:[{id:'close',label:c.close}],cancelId:'close',signal:life.signal,doc});

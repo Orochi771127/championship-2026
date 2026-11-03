@@ -47,16 +47,16 @@ test('new 20-cell ranch shows one land control for the next row, never per-cell 
  assert.ok(view.cells.every(c=>c.dataset.unlocked==='true'&&!c.disabled&&c.textContent!=='🔒'));
  assert.equal(view.locks.length,1);const [lock]=view.locks;
  assert.equal(lock.dataset.lockedTestRow,'2');assert.equal(lock.tag,'button');assert.equal(lock.attributes['aria-haspopup'],'dialog');
- // DIAMOND_ECONOMY_20261102: the land key names the step and its diamond price.
- assert.equal(walk(lock).filter(n=>!n.children.length).map(n=>n.textContent??'').join(''),uiText('擴充土地 +{n}格',{n:10})+'1,000');
+ // DIAMOND_ECONOMY_20261102: the land key names the step and its diamond price; Owner 2026-11-03: the first step costs 200.
+ assert.equal(walk(lock).filter(n=>!n.children.length).map(n=>n.textContent??'').join(''),'200'+uiText('擴充 +{n} 格',{n:10}));
  assert.ok(view.nodes.some(n=>n.textContent===uiText('可用土地 {n} 格',{n:20})));
 });
 
-test('old 40-cell QA ranch migrates to 40 cells of land and offers row 5 for 1000 diamonds',()=>{
+test('old 40-cell QA ranch migrates to 40 cells of land and offers row 5 at the third step price (600 diamonds)',()=>{
  const view=render(legacy());
  assert.equal(view.cage.landCapacity,40);
  assert.equal(view.locks.length,1);assert.equal(view.locks[0].dataset.lockedTestRow,'4');
- assert.equal(view.locks[0].attributes['aria-label'],uiText('CAGE_TEST_BUY_ROW',{row:5,count:10,price:1000}));
+ assert.equal(view.locks[0].attributes['aria-label'],uiText('CAGE_TEST_BUY_ROW',{row:5,count:10,price:600}));
 });
 
 test('only the land control opens confirmation; the editor never buys directly',()=>{
@@ -89,8 +89,9 @@ test('a refused purchase leaves the land control available for an authorized ret
 
 test('land control uses the existing complete price, count and test-currency copy in every locale',()=>{
  try{for(const locale of LOCALES){setLocale(locale);const [lock]=render(fresh()).locks;
-  assert.equal(lock.attributes['aria-label'],uiText('CAGE_TEST_BUY_ROW',{row:3,count:10,price:1000}));
-  assert.match(lock.attributes['aria-label'].replace(/[^0-9]/g,''),/1000/);assert.doesNotMatch(lock.attributes['aria-label'],/CAGE_TEST_BUY_ROW|\{(?:row|count|price)\}/);
+  // Owner 2026-11-03: the first +10 step costs 200 diamonds.
+  assert.equal(lock.attributes['aria-label'],uiText('CAGE_TEST_BUY_ROW',{row:3,count:10,price:200}));
+  assert.match(lock.attributes['aria-label'].replace(/[^0-9]/g,''),/200/);assert.doesNotMatch(lock.attributes['aria-label'],/CAGE_TEST_BUY_ROW|\{(?:row|count|price)\}/);
  }}finally{setLocale('zh-Hant');}
 });
 

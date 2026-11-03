@@ -513,7 +513,7 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
       refreshFoodStock();
       const button=rail.querySelector(`[data-tool-id="${toolId}"]`);if(!button||disposed)return;
       button.classList.remove('is-stock-landed');void button.offsetWidth;button.classList.add('is-stock-landed');
-      const plus=element('span','cm-toolbar__stock-gain',`+${gained}`);plus.setAttribute('aria-hidden','true');button.append(plus);
+      const plus=element('span','cm-toolbar__stock-gain',`+${gained} ▲`);plus.setAttribute('aria-hidden','true');button.append(plus);
       plus.addEventListener('animationend',()=>plus.remove(),{once:true});setTimeout(()=>plus.remove(),1600);
       button.addEventListener('animationend',event=>{if(event.target===button)button.classList.remove('is-stock-landed');},{once:true});
     },

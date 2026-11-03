@@ -15,7 +15,7 @@ import {GACHA_AUTOMATION_SHARE, GACHA_CHIPS, automationForgePlan, claimGachaBund
   setGachaBondCarry, unmountAutomationCore} from '../src/championship/gacha/cyberGacha.js';
 import {AUTOMATION_ITEMS, AUTOMATION_RECIPES, AUTOMATION_RULES, autoFeedAffection, automationEffectLines, cageAutomation,
   royalCopiesByDefinition, royalSleepBonus, royalTotal} from '../src/championship/gacha/ranchAutomation.js';
-import {DIAMOND_REWARDS, FOUNDER_PACK, LAND_EXPANSION, dueDiamondMilestones, founderPackUnlocked, landExpansionTier,
+import {DIAMOND_REWARDS, FOUNDER_PACK, LAND_EXPANSION, dueDiamondMilestones, founderPackUnlocked, landExpansionTier, landExpansionPrice,
   landMemoryBonusG} from '../src/championship/gacha/diamondRewards.js';
 import {PRODUCT_CAGE_CHANNEL_OVERRIDES, getCageTraining, productCageChannels} from '../src/championship/cage/cageEffects.js';
 import {cageUiSummary} from '../src/championship/presentation/cageUiArt.js';
@@ -209,15 +209,19 @@ test('diamond rewards: rank 1-9 and encyclopedia 10/25/50/100 pay 200-500 once; 
   assert.equal(creditTestDiamonds(null, 500).granted, 0);
 });
 
-test('land: 20 cells, +10 per 1,000 diamonds, 8 steps to 100; each step lifts the memory card by 8 G', () => {
-  assert.deepEqual([LAND_EXPANSION.baseCells, LAND_EXPANSION.cells, LAND_EXPANSION.price, LAND_EXPANSION.maxCells], [20, 10, 1000, 100]);
+test('land: 20 cells, +10 a step at 200 → 2,200 diamonds (8,000 in all), 8 steps to 100; each step lifts the memory card by 8 G', () => {
+  assert.deepEqual([LAND_EXPANSION.baseCells, LAND_EXPANSION.cells, LAND_EXPANSION.maxCells], [20, 10, 100]);
+  // Owner 2026-11-03: the price climbs step by step.
+  assert.deepEqual(LAND_EXPANSION.prices, [200, 400, 600, 800, 1000, 1200, 1600, 2200]);
+  assert.equal(LAND_EXPANSION.prices.reduce((a, b) => a + b, 0), 8000);
+  assert.deepEqual([20, 30, 40, 50, 60, 70, 80, 90, 100].map(landExpansionPrice), [200, 400, 600, 800, 1000, 1200, 1600, 2200, null]);
   assert.deepEqual([20, 29, 30, 60, 100, 140].map(landExpansionTier), [0, 0, 1, 4, 8, 8]);
   assert.equal(landMemoryBonusG(30, 32), 8);
   assert.equal(landMemoryBonusG(100, 96), 64);
   assert.equal(landMemoryBonusG(100, 0), 0, 'no card, no bonus');
 });
 
-test('app: 1,000 diamonds open +10 land cells at once and the save keeps them; 100 is the most', async () => {
+test('app: each step opens +10 land cells at its own price (200 → 2,200) and the save keeps them; 100 is the most', async () => {
   const h = harness();
   let app = h.make();
   try {
@@ -227,18 +231,28 @@ test('app: 1,000 diamonds open +10 land cells at once and the save keeps them; 1
     assert.equal(start.land.capacity, 20);
     assert.equal(start.land.diamonds, 20000);
     assert.equal(start.land.max, false);
+    assert.deepEqual([start.land.price, start.land.tier, start.land.tiers], [200, 0, 8]);
     const first = app.expandRanchLand();
     assert.equal(first.ok, true, first.reason);
     assert.deepEqual([first.before, first.after], [20, 30]);
-    assert.equal(app.getCageEditFrame().testDiamonds, 19000);
+    assert.equal(app.getCageEditFrame().testDiamonds, 19800);
     assert.equal(app.getCageEditFrame().land.memoryBonusG, 8);
+    assert.equal(app.getCageEditFrame().land.price, 400, 'the next step costs more');
+    assert.equal(app.getCageEditFrame().lastVerdict.price, 200, 'the receipt names what was paid');
     const saved = h.saved();
-    assert.equal(saved.flags.friendsPlaytest.diamonds, 19000, 'debited in the durable save');
+    assert.equal(saved.flags.friendsPlaytest.diamonds, 19800, 'debited in the durable save');
     assert.deepEqual(saved.cageEdit.gridAccess.testUnlockedRows, [2]);
-    for (let step = 2; step <= 8; step += 1) assert.equal(app.expandRanchLand().ok, true, `step ${step}`);
+    const paid = [200];
+    for (let step = 2; step <= 8; step += 1) {
+      const before = app.getCageEditFrame().testDiamonds;
+      assert.equal(app.expandRanchLand().ok, true, `step ${step}`);
+      paid.push(before - app.getCageEditFrame().testDiamonds);
+    }
+    assert.deepEqual(paid, [200, 400, 600, 800, 1000, 1200, 1600, 2200]);
     const full = app.getCageEditFrame();
     assert.equal(full.land.capacity, 100);
     assert.equal(full.land.max, true);
+    assert.equal(full.land.tier, 8);
     assert.equal(full.testDiamonds, 12000);
     const refused = app.expandRanchLand();
     assert.equal(refused.ok, false);
@@ -267,7 +281,7 @@ test('app: without diamonds the land key refuses and nothing changes', async () 
     await poor.newGame();
     poor.save();
     const save = h2.saved();
-    save.flags.friendsPlaytest.diamonds = 999;
+    save.flags.friendsPlaytest.diamonds = 199;
     h2.data.set(CHAMPIONSHIP_MODERN_SAVE_KEY, JSON.stringify(save));
     await poor.dispose();
     const again = h2.make();

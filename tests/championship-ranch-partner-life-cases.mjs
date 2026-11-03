@@ -5,7 +5,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {PARTNER_LIFE_RULES,partnerHabitatFit,partnerMood,partnerAffectionHearts,partnerTypeBits,partnerPeerRelation,
-  strollFindWeights,rollStrollFind,strollIntervalFrames,emptyStrollLog,normalizeStrollLog,appendStrollEntry,strollLogForDay,
+  strollFindWeights,rollStrollFind,strollIntervalFrames,emptyStrollLog,normalizeStrollLog,appendStrollEntry,pendingStrollEntries,claimStrollEntries,greetingGapFrames,strollLogForDay,
   canStrollFind,canGreet,canTapAffection,recordTap,strollLogName} from '../src/championship/raising/ranchPartnerLife.js';
 import {normalizeNativeRaisingHome} from '../src/championship/raising/nativeRaisingHomeState.js';
 import {createNativeRaisingActor,initializeNativeRaisingActor,stepNativeRaisingActor,holdNativeRaisingActorForGreeting} from '../src/championship/raising/nativeRaisingActor.js';
@@ -119,7 +119,9 @@ async function appHarness({partnerLife=true,full=false}={}){
 }
 const owned=(app,record)=>app.getShopFrame().listings.find(r=>r.shopRecordIndex===record).owned;
 
-test('a stroll find pays +1 into the Shop inventory and the saved log in one write, and survives reload',async()=>{
+// Owner 2026-11-03: a find waits in the saved log until 收下發現, which pays the same Shop
+// inventory the toolbar badges and the bag read, and tells the toolbar what each tool gained.
+test('a stroll find waits in the saved log; 收下發現 pays it into the Shop inventory and the toolbar hears it',async()=>{
   const h=await appHarness();let a=h.app;
   try{
     assert.ok(h.partner,'the QA save has an adult partner on the ranch');
@@ -127,33 +129,63 @@ test('a stroll find pays +1 into the Shop inventory and the saved log in one wri
     const shopSeen=[];const unsubscribe=a.subscribeShop(frame=>shopSeen.push(frame));
     for(const [reward,record] of [['feed',0],['protein',1],['medicine',2],['woundMedicine',3]]){
       const before=owned(a,record),result=a.grantStrollDiscoveryReward({partnerId:h.partner,reward});
-      assert.equal(result.ok,true,reward);assert.equal(result.owned,before+1);assert.equal(owned(a,record),before+1);
-      assert.equal(result.tool,reward);
+      assert.equal(result.ok,true,reward);assert.equal(result.pending,true);assert.equal(owned(a,record),before,'nothing is paid before 收下發現');
+      assert.equal(result.tool,reward);assert.equal(result.entry.claimed,false);
     }
-    assert.equal(shopSeen.length,4,'the toolbar observers hear every find');
+    assert.equal(shopSeen.length,0,'a waiting find changes no count');
     assert.deepEqual(events.map(e=>e.kind),['find','find','find','find']);
-    const saved=deserializeChampionshipModernSave(h.data.get(CHAMPIONSHIP_MODERN_SAVE_KEY));
-    assert.deepEqual(saved.shop.quantities.slice(0,4),[47,47,47,47]);
+    assert.ok(events.every(e=>e.pending===true));
+    let saved=deserializeChampionshipModernSave(h.data.get(CHAMPIONSHIP_MODERN_SAVE_KEY));
     assert.equal(saved.raising.nativeHome.strollLog.entries.length,4);
-    assert.deepEqual(saved.raising.nativeHome.strollLog.entries.map(e=>e.reward),['feed','protein','medicine','woundMedicine']);
-    stop();unsubscribe();await a.dispose();a=h.create();await a.continueGame();
+    assert.ok(saved.raising.nativeHome.strollLog.entries.every(e=>e.claimed===false),'the waiting finds are saved');
+    stop();await a.dispose();a=h.create();await a.continueGame();
+    assert.equal(pendingStrollEntries(a.getPartnerLifeFrame().log).length,4,'reload keeps them waiting');
+    const heard=[];const stop2=a.subscribePartnerLife(e=>heard.push(e));const seen=[];const unsubscribe2=a.subscribeShop(frame=>seen.push(frame));
+    const collected=a.collectRanchDiscoveries();
+    assert.equal(collected.ok,true,collected.reason);
     assert.deepEqual([0,1,2,3].map(i=>owned(a,i)),[47,47,47,47]);
-    assert.equal(a.getPartnerLifeFrame().log.entries.length,4);
+    assert.deepEqual({...collected.gains},{feed:1,protein:1,medicine:1,woundMedicine:1});
+    assert.equal(seen.length,1,'the toolbar badges repaint at once');
+    assert.deepEqual(heard.filter(e=>e.kind==='collected').map(e=>({...e.gains})),[{feed:1,protein:1,medicine:1,woundMedicine:1}]);
+    assert.equal(pendingStrollEntries(a.getPartnerLifeFrame().log).length,0);
+    saved=deserializeChampionshipModernSave(h.data.get(CHAMPIONSHIP_MODERN_SAVE_KEY));
+    assert.deepEqual(saved.shop.quantities.slice(0,4),[47,47,47,47]);
+    assert.ok(saved.raising.nativeHome.strollLog.entries.every(e=>e.claimed!==false),'collected in the same write');
+    assert.equal(a.collectRanchDiscoveries().ok,false,'a second collect pays nothing');
+    stop2();unsubscribe2();unsubscribe();await a.dispose();a=h.create();await a.continueGame();
+    assert.deepEqual([0,1,2,3].map(i=>owned(a,i)),[47,47,47,47]);
   }finally{await a.dispose();}
 });
 
-test('a failed save keeps both the inventory and the log untouched; a full slot pays nothing',async()=>{
+test('a failed save keeps both the inventory and the log untouched; a full slot waits for nothing',async()=>{
   const h=await appHarness();const a=h.app;
   try{
     const before=JSON.stringify(a.getShopFrame());
     h.block(true);assert.equal(a.grantStrollDiscoveryReward({partnerId:h.partner,reward:'feed'}).reason,'SAVE_FAILED');
     assert.equal(JSON.stringify(a.getShopFrame()),before);assert.equal(a.getPartnerLifeFrame().log,null);
-    h.block(false);assert.equal(a.grantStrollDiscoveryReward({partnerId:h.partner,reward:'feed',quantity:2}).owned,48);
+    h.block(false);assert.equal(a.grantStrollDiscoveryReward({partnerId:h.partner,reward:'feed',quantity:2}).ok,true);
     assert.equal(a.getPartnerLifeFrame().log.entries.at(-1).quantity,2);
+    h.block(true);assert.equal(a.collectRanchDiscoveries().reason,'SAVE_FAILED');h.block(false);
+    assert.equal(owned(a,0),46,'a failed collect pays nothing');
+    assert.equal(pendingStrollEntries(a.getPartnerLifeFrame().log).length,1,'and the find keeps waiting');
+    assert.equal(a.collectRanchDiscoveries().ok,true);assert.equal(owned(a,0),48);
   }finally{await a.dispose();}
   const full=await appHarness({full:true});
   try{assert.equal(full.app.grantStrollDiscoveryReward({partnerId:full.partner,reward:'feed'}).reason,'INVENTORY_FULL');}
   finally{await full.app.dispose();}
+});
+
+test('the stroll log keeps a waiting find past its cap and slows greetings to 15–30 minutes',()=>{
+  assert.deepEqual([...PARTNER_LIFE_RULES.findIntervalFrames],[54000,108000]);
+  assert.deepEqual([...PARTNER_LIFE_RULES.greetingGapFrames],[54000,108000]);
+  assert.equal(PARTNER_LIFE_RULES.pairCooldownMs,30*60*1000);
+  assert.equal(greetingGapFrames(0),54000);assert.equal(greetingGapFrames(.999999),108000);
+  let log=null;const base={reward:'feed',quantity:1,partnerId:'raising:aa',partnerName:'A',cage:null,season:0,day:0,minute:0};
+  log=appendStrollEntry(log,{...base,kind:'find',claimed:false},{dayKey:'0:0',at:1});
+  for(let i=0;i<PARTNER_LIFE_RULES.logCap+5;i++)log=appendStrollEntry(log,{...base,kind:'find'},{dayKey:'0:0',at:2+i});
+  assert.equal(log.entries.length,PARTNER_LIFE_RULES.logCap);
+  assert.equal(pendingStrollEntries(log).length,1,'the unclaimed find survives the cap');
+  assert.equal(pendingStrollEntries(claimStrollEntries(log,[pendingStrollEntries(log)[0].id])).length,0);
 });
 
 test('a tap reads the mood and adds one affection per cooldown; harnesses without partner life are untouched',async()=>{

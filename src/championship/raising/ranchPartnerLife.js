@@ -38,17 +38,19 @@ export const STROLL_REWARDS=deepFreeze({
 export const STROLL_KINDS=Object.freeze(Object.keys(STROLL_REWARDS));
 
 export const PARTNER_LIFE_RULES=deepFreeze({
-  // Native frames (60 a second) a partner must stroll before it may find something.
-  findIntervalFrames:[5400,10800],
+  // Native frames (60 a second) a partner must stroll before it may find something
+  // (Owner 2026-11-03: 15–30 minutes, was 1.5–3).
+  findIntervalFrames:[54000,108000],
   findChance:{cozy:.85,neutral:.6,poor:.3},
   // Per in-game day across the ranch, so the economy keeps its shape.
   dailyFinds:8,dailyGreetings:4,
   greetingFrames:90,
   // Ranch-wide quiet frames before (and between) greetings: partners who
-  // start out side by side in one cage do not all greet at once.
-  greetingGapFrames:1800,
-  // Real time between two greetings of the same pair, and between affection taps.
-  pairCooldownMs:5*60*1000,tapCooldownMs:10*60*1000,tapAffection:1,
+  // start out side by side in one cage do not all greet at once. Owner 2026-11-03:
+  // a random 15–30 minutes of ranch time between two greetings (was 30 s).
+  greetingGapFrames:[54000,108000],
+  // Real time between two greetings of the same pair (Owner 2026-11-03: 30 min), and between affection taps.
+  pairCooldownMs:30*60*1000,tapCooldownMs:10*60*1000,tapAffection:1,
   logCap:40,nameMax:12
 });
 
@@ -173,9 +175,11 @@ export function normalizeStrollLog(raw){
       ||!integer(e.quantity,2)||e.quantity<1||!idOk(e.partnerId)||!nameOk(e.partnerName)
       ||(e.cage!==null&&!integer(e.cage,63))||!integer(e.season,3)||!integer(e.day,999)||!integer(e.minute,1439))fail();
     if(e.kind==='greeting'&&(!idOk(e.partnerB)||!nameOk(e.partnerBName)||!['friendly','rival'].includes(e.relation)))fail();
+    if(e.claimed!==undefined&&typeof e.claimed!=='boolean')fail();
     previous=e.id;
+    // Owner 2026-11-03: a find waits in the journal (claimed:false) until 收下發現; older entries were paid at once.
     return Object.freeze({id:e.id,at:e.at,kind:e.kind,reward:e.reward,quantity:e.quantity,partnerId:e.partnerId,partnerName:e.partnerName,
-      cage:e.cage,season:e.season,day:e.day,minute:e.minute,
+      cage:e.cage,season:e.season,day:e.day,minute:e.minute,...(e.claimed===false?{claimed:false}:{}),
       ...(e.kind==='greeting'?{partnerB:e.partnerB,partnerBName:e.partnerBName,relation:e.relation}:{})});
   });
   const stamps=(map,keyOk)=>{if(Object.keys(map).length>64)fail();
@@ -196,10 +200,28 @@ export function strollPairKey(a,b){return a<b?`${a}|${b}`:`${b}|${a}`;}
 /** Append one find or greeting; the oldest entries fall off past the cap. */
 export function appendStrollEntry(log,entry,{dayKey,at}){
   const state=strollLogForDay(log,dayKey),id=state.sequence+1;
-  const entries=[...state.entries,{...entry,id,at}].slice(-PARTNER_LIFE_RULES.logCap);
+  // Past the cap the oldest collected entries fall off first, so an unclaimed find is never lost.
+  let entries=[...state.entries,{...entry,id,at}];
+  while(entries.length>PARTNER_LIFE_RULES.logCap){
+    const drop=entries.findIndex(e=>e.claimed!==false);
+    entries.splice(drop<0?0:drop,1);
+  }
   const day={...state.day,[entry.kind==='greeting'?'greetings':'finds']:state.day[entry.kind==='greeting'?'greetings':'finds']+1};
   const pairs=entry.kind==='greeting'?Object.fromEntries([...Object.entries(state.pairs),[strollPairKey(entry.partnerId,entry.partnerB),at]].slice(-64)):state.pairs;
   return normalizeStrollLog({...state,sequence:id,entries,day,pairs});
+}
+
+/** Finds still waiting in the journal for 收下發現. */
+export function pendingStrollEntries(log){return (log?.entries??[]).filter(e=>e.claimed===false);}
+/** The log with these entry ids marked as collected. */
+export function claimStrollEntries(log,ids){
+  const set=new Set(ids);if(!log||!set.size)return log;
+  return normalizeStrollLog({...log,entries:log.entries.map(e=>set.has(e.id)?{...e,claimed:true}:e)});
+}
+/** Ranch-wide frames to wait before the next greeting. */
+export function greetingGapFrames(random){
+  const [low,high]=PARTNER_LIFE_RULES.greetingGapFrames;
+  return low+Math.floor(Math.max(0,Math.min(.999999,random))*(high-low+1));
 }
 
 export function canStrollFind(log,dayKey){return strollLogForDay(log,dayKey).day.finds<PARTNER_LIFE_RULES.dailyFinds;}

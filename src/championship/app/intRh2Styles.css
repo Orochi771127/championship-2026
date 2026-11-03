@@ -131,7 +131,7 @@ body[data-desktop-raising] .int-rh2-companion[data-open="false"] {
   z-index: var(--z-card);
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  grid-template-areas: "portrait copy actions" "vitals vitals vitals";
+  grid-template-areas: "portrait copy actions" "vitals vitals vitals" "boost boost boost";
   align-items: center;
   column-gap: var(--sp-2);
   row-gap: 6px;
@@ -182,6 +182,18 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
   background: var(--c-surface-3);
 }
 .int-rh2-companion__portrait img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
+.int-rh2-companion__portrait[hidden] { display: none; }
+/* Owner 2026-11-03: chips and metals are used straight from the partner card. */
+.int-rh2-companion__boost { grid-area: boost; min-height: 40px; padding: 6px 14px; border: 2px solid #14141f; border-radius: 999px;
+  background: #ffd23f; color: #14141f; font: inherit; font-size: 14px; font-weight: 900; box-shadow: 0 3px 0 #14141f; cursor: pointer; }
+.int-rh2-companion__boost { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+/* A four-point spark drawn in CSS (no system emoji, no image URL). */
+.int-rh2-companion__boost-icon { width: 16px; height: 16px; flex: none; background: #14141f;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
+.int-rh2-companion__boost:active { transform: translateY(2px); box-shadow: 0 1px 0 #14141f; }
+.int-rh2-companion__boost[hidden] { display: none; }
+/* The encyclopedia thumbnail is painted art, not pixels: smooth it and let it fill the well. */
+.int-rh2-companion__portrait[data-source="dex"] img { image-rendering: auto; object-fit: cover; }
 
 .int-rh2-companion__copy {
   grid-area: copy;
@@ -822,7 +834,7 @@ body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-compa
   max-height: calc(100% - 16px);
   transform: none; overflow-y: auto; overscroll-behavior: contain;
   grid-template-columns: auto minmax(0, 1fr);
-  grid-template-areas: "portrait copy" "actions actions" "vitals vitals";
+  grid-template-areas: "portrait copy" "actions actions" "vitals vitals" "boost boost";
   pointer-events: none;
 }
 /* Only actual readout controls/content receive input. The rest of the field,

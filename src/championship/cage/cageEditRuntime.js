@@ -263,11 +263,11 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
 
     // Internal grant half of the app's atomic wallet + access transaction.
     // The public UI may only call app.buyRanchTestRow, which performs the debit.
-    applyTestRowPurchase(row, shopCageOwned = [], tamerRank = 0) {
+    applyTestRowPurchase(row, shopCageOwned = [], tamerRank = 0, price = 1000) {
       const quote = this.quoteTestRow(row,shopCageOwned,tamerRank);
       if (!quote.ok) { lastVerdict=quote; return getFrame(shopCageOwned,tamerRank); }
       gridAccess = normalizeProductRanchAccess({ ...gridAccess, testUnlockedRows:[...gridAccess.testUnlockedRows,row] });
-      lastVerdict = { ok:true, reason:'TEST_ROW_PURCHASED' }; return getFrame(shopCageOwned,tamerRank);
+      lastVerdict = { ok:true, reason:'TEST_ROW_PURCHASED', price }; return getFrame(shopCageOwned,tamerRank);
     },
 
     rejectTestRowPurchase(reason, shopCageOwned = [], tamerRank = 0) {

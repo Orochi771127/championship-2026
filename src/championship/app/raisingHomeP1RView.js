@@ -93,7 +93,7 @@ function cageName(frame, cageId) {
  */
 export async function createRaisingHomeP1RView({ root, source, mountField, hudArt=null, getRosterEntry=null,
   renderCreatureDetail=null, openRoster=null, firstRunHint=false, nextHintDuration=consumeRaisingHintDuration, storySeen=null,
-  evolutionCinematic=null } = {}) {
+  evolutionCinematic=null, portraitFallback=null } = {}) {
   if (!root) throw new TypeError("INT-RH2 P1R view requires a root element");
   const presentation = assertPresentationSource(source);
   if (typeof mountField !== "function") {
@@ -160,6 +160,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   companion.setAttribute("aria-hidden", "true");
   const portraitSlot=node('div','int-rh2-companion__portrait');
   const portrait=node('img');portrait.alt='';portrait.hidden=true;portraitSlot.append(portrait);
+  // A picture that fails to load takes its well with it rather than leaving a blank square.
+  portrait.addEventListener('error',()=>{portraitSlot.hidden=true;});
   // The name area is the way into the full record: one large target instead
   // of a separate small button, so the card stays two rows tall.
   const companionCopy = node("button", "int-rh2-companion__copy");
@@ -236,7 +238,18 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     cardToggle.setAttribute("aria-expanded", String(expanded));
   });
   actions.append(previous, next, cardToggle, close);
-  companion.append(portraitSlot, companionCopy, actions, vitals);
+  // Owner 2026-11-03: gachapon chips and evolution metals are used from the partner itself --
+  // the bag opens on its chips with this partner already chosen.
+  const boost = node('button', 'int-rh2-companion__boost');
+  boost.type = 'button';
+  // A CSS-drawn spark, not a system emoji (the gachapon rule).
+  boost.append(node('span', 'int-rh2-companion__boost-icon'), node('span', 'int-rh2-companion__boost-label', uiText('使用晶片／進化金屬催化')));
+  boost.dataset.action = 'partner-boost';
+  boost.addEventListener('click', () => {
+    const id = companion.dataset.creatureId;
+    if (id) document.dispatchEvent(new CustomEvent('cm-open-backpack', { detail: { tab: 'chips', partnerId: id } }));
+  });
+  companion.append(portraitSlot, companionCopy, actions, vitals, boost);
 
   // What the removed status line alone used to carry: a save that failed or
   // was overtaken by another tab, and the day's lifecycle events. An ordinary
@@ -576,14 +589,20 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     const ranchImage = originalCageLocationArt(resident?.nativeCageDefinition);
     ranchIcon.hidden = !ranchImage;
     if (ranchImage && ranchIcon.getAttribute('src') !== ranchImage) ranchIcon.src = ranchImage;
-    const image=hudArt?.getPortrait(resident?.speciesId);
+    // The HUD portrait art is local-only; the public build falls back to the encyclopedia's own
+    // thumbnail (every published species has one), so the well never stands empty (Owner 2026-11-03).
+    const speciesIndex=Number(/species-(\d{3})$/.exec(resident?.speciesId??'')?.[1]??NaN);
+    const hud=hudArt?.getPortrait(resident?.speciesId)??null,dex=hud?null:portraitFallback?.(speciesIndex)??null;
+    const image=hud??dex;
+    portraitSlot.dataset.source=hud?'hud':dex?'dex':'none';
     portrait.hidden=!image;
-    // The portrait art is local-only, so on the public build the well would be
-    // an empty square beside the name. No picture, no well.
+    // No picture, no well.
     portraitSlot.hidden=!image;
     if(image&&portrait.getAttribute('src')!==image.src)portrait.src=image.src;
     if (resident && companion.dataset.open !== "true") { openedAt = Date.now(); pressedSinceOpen = false; }
     companion.dataset.open = resident ? "true" : "false";
+    if (resident) companion.dataset.creatureId = resident.creatureId; else delete companion.dataset.creatureId;
+    boost.hidden = !resident || (frame.tutorial && !frame.tutorial.finished) || !(speciesIndex >= 8);
     companion.setAttribute("aria-hidden", resident ? "false" : "true");
     companion.inert = !resident;
     const several = (frame.residents?.length ?? 0) > 1;

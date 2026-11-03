@@ -8,7 +8,7 @@ import {recordGachaClaims,automationForgePlan,forgeAutomationItem,mountAutomatio
   setGachaBondCarry,claimGachaBundle,grantGachaAutomation} from '../gacha/cyberGacha.js';
 import {AUTOMATION_ITEMS,AUTOMATION_RECIPES,AUTOMATION_RULES,getAutomationItem,automationItemForEdition,cageAutomation,royalTotal,autoFeedAffection,royalSleepBonus,
   FOUNDER_PACK_ART} from '../gacha/ranchAutomation.js';
-import {LAND_EXPANSION,DIAMOND_REWARDS,FOUNDER_PACK,diamondRewardKey,dueDiamondMilestones,landExpansionTier,landMemoryBonusG,
+import {LAND_EXPANSION,DIAMOND_REWARDS,FOUNDER_PACK,diamondRewardKey,dueDiamondMilestones,landExpansionTier,landExpansionPrice,landMemoryBonusG,
   founderPackUnlocked} from '../gacha/diamondRewards.js';
 import { planOnlineBindReward } from './onlineBindRewardPolicy.js';
 import {GACHA_PERSONALITY_CHOICES,GACHA_TICKET_PRIZE,getGachaBitsBag,disarmGachaItem} from '../gacha/cyberGacha.js';
@@ -27,7 +27,8 @@ import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.
 import {getProductExtension,requirePlayableProductExtension} from '../contracts/productSpeciesExtensions.js';
 import {settleRanchDiscoveries,removeCollectedDiscoveries,RANCH_DISCOVERY_REWARDS} from '../raising/ranchDiscoveries.js';
 import {PARTNER_LIFE_RULES,PARTNER_MOODS,STROLL_REWARDS,partnerHabitatFit,partnerMood,partnerAffectionHearts,partnerTypeBits,partnerPeerRelation,
-  strollFindChance,rollStrollFind,strollIntervalFrames,strollDayKey,appendStrollEntry,canStrollFind,canGreet,canTapAffection,recordTap,strollLogName,strollPairKey,renameStrollLogPartners} from '../raising/ranchPartnerLife.js';
+  strollFindChance,rollStrollFind,strollIntervalFrames,strollDayKey,appendStrollEntry,canStrollFind,canGreet,canTapAffection,recordTap,strollLogName,strollPairKey,renameStrollLogPartners,
+  pendingStrollEntries,claimStrollEntries,greetingGapFrames} from '../raising/ranchPartnerLife.js';
 import {localizeSpeciesCodes,speciesNameForId} from '../text/zhHant.js';
 import {holdNativeRaisingActorForGreeting} from '../raising/nativeRaisingActor.js';
 import {nativeRaisingPeerStopDistanceQ12} from '../raising/nativeRaisingMovement.js';
@@ -630,9 +631,9 @@ export function createChampionshipStandaloneApp({
   // Partner life (OWNER_APPROVED_ADAPTATION 2026-10-28). A stroll now and then
   // turns up an item, partners who meet in one connected area greet each other
   // and find twice as much, and a tap reads the partner's mood from its own
-  // fields. Every reward is paid into the Shop inventory and written to
-  // nativeHome.strollLog in one save, exactly like collecting discoveries.
-  const partnerLifeState={strollFrames:new Map(),nextFindAt:new Map(),greetings:[],pairsSeen:new Map(),events:[],eventSeq:0,quietFrames:0};
+  // fields. A find is saved to nativeHome.strollLog as waiting and paid into the
+  // Shop inventory by 收下發現, together with the discoveries (Owner 2026-11-03).
+  const partnerLifeState={strollFrames:new Map(),nextFindAt:new Map(),greetings:[],pairsSeen:new Map(),events:[],eventSeq:0,quietFrames:0,greetingGap:null};
   const partnerLifeListeners=new Set();
   // Product draws only: the native gameplay stream is never consumed here.
   let partnerLifeSeed=(Date.now()^0x5bd1e995)>>>0;
@@ -671,38 +672,38 @@ export function createChampionshipStandaloneApp({
     for(const listener of [...partnerLifeListeners])try{listener(row);}catch{/* observers never change partner life */}
     return row;
   }
-  // One atomic grant: the Shop gift (or Bits) and the log entry are saved
-  // together; a failed save leaves both untouched.
+  // Owner 2026-11-03: a find is written to the saved log as waiting (claimed:false); 收下發現
+  // (collectRanchDiscoveries) pays it into the same Shop inventory the toolbar and the bag read.
+  // A slot already full refuses the find, so nothing waits that could never be paid.
   function grantStrollDiscoveryReward({partnerId,partnerB=null,relation=null,reward,quantity=1,cage=null,calendar}){
     if(!session||tutorialBaseline||!raising?.nativeHome||battleTransactionActive||huntCommitActive)return {ok:false,reason:'UNAVAILABLE'};
     const spec=STROLL_REWARDS[reward];
     if(!spec||!Number.isInteger(quantity)||quantity<1||quantity>2||!calendar)return {ok:false,reason:'INVALID_REWARD'};
     storeNativeRaisingPositions();storeNativeRaisingHome();
-    const candidate=createShopRuntime({snapshot:requireShop().toSave(),allowRepeatedCages:playtestPolicy?.enabled===true,
-      allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
-    let granted;
-    if(spec.bits){const before=candidate.getBits();candidate.creditBits(spec.bits*quantity);granted=candidate.getBits()>before?quantity:0;}
-    else granted=candidate.receiveNativeGift(spec.record,quantity);
-    if(!granted)return {ok:false,reason:'INVENTORY_FULL'};
+    const listing=spec.record===undefined?null:requireShop().getFrame().listings?.find(row=>row.shopRecordIndex===spec.record)??null;
+    const room=spec.bits?(requireShop().getBits()<BITS_WALLET_CAP?quantity:0):listing?Math.min(quantity,Math.max(0,listing.maxOwned-listing.owned)):quantity;
+    if(!room)return {ok:false,reason:'INVENTORY_FULL'};
     const at=Date.now(),dayKey=strollDayKey(calendar);
-    const strollLog=appendStrollEntry(raising.nativeHome.strollLog,{kind:partnerB?'greeting':'find',reward,quantity:granted,partnerId,
+    const strollLog=appendStrollEntry(raising.nativeHome.strollLog,{kind:partnerB?'greeting':'find',reward,quantity:room,partnerId,
       partnerName:partnerName(partnerId),cage:Number.isInteger(cage)?cage:null,season:calendar.season,day:calendar.day,minute:calendar.minute,
-      ...(partnerB?{partnerB,partnerBName:partnerName(partnerB),relation}:{})},{dayKey,at});
+      ...(partnerB?{partnerB,partnerBName:partnerName(partnerB),relation}:{}),claimed:false},{dayKey,at});
     const nextRaising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,strollLog})});
-    const status=savePort.save({...liveSaveRequest(revision+1),raising:nextRaising,shop:candidate.toSave()});
+    const status=savePort.save({...liveSaveRequest(revision+1),raising:nextRaising});
     if(status.phase!=='SAVED'){savePort.discardPendingWrite();return {ok:false,reason:'SAVE_FAILED'};}
-    raising=nextRaising;
-    shop=createShopRuntime({snapshot:candidate.toSave(),huntInventory,allowRepeatedCages:playtestPolicy?.enabled===true,
-      allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
-    applyMappedHuntInventoryFromShop(shop,huntInventory);bindShopRuntime();revision++;
-    const frame=shop.getFrame(),entry=strollLog.entries.at(-1);
-    const owned=spec.record===undefined?null:frame.listings?.find(row=>row.shopRecordIndex===spec.record)?.owned??null;
-    // The find event goes first, so a shell can hold the badge before the
-    // Shop observers repaint it.
-    emitPartnerLife({kind:'find',entry,tool:spec.tool,owned});
-    for(const listener of [...shopListeners])try{listener(frame);}catch{/* observers never break the shop */}
+    raising=nextRaising;revision++;
+    const entry=strollLog.entries.at(-1),owned=listing?.owned??null;
+    emitPartnerLife({kind:'find',entry,tool:spec.tool,owned,pending:true});
     publishRaising();
-    return {ok:true,entry,tool:spec.tool,owned};
+    return {ok:true,entry,tool:spec.tool,owned,pending:true};
+  }
+  /** Is this partner out of its own cage (walking a passage or in a neighbour's cage)? */
+  function partnerOffHome(actor){
+    if(actor.explorationRoute?.length)return true;
+    const nav=raisingGround?.navigation;if(!nav?.ownerAt||!actor.positionQ12)return false;
+    const owner=nav.ownerAt([actor.positionQ12[0]>>12,actor.positionQ12[1]>>12]);if(!owner)return false;
+    const placement=raisingGround.placements?.find(p=>p.ownerIndex===owner.ownerIndex);
+    if(!placement)return false;
+    return actor.cageInstanceId?placement.instanceId!==actor.cageInstanceId:placement.definitionIndex!==actor.cageDefinitionIndex;
   }
   function partnerCanMeet(actor){
     return actor.speciesIndex>=8&&!actor.detached&&Boolean(actor.positionQ12)&&!actor.evolution&&!(actor.greetingHold>0)
@@ -725,10 +726,16 @@ export function createChampionshipStandaloneApp({
       grantStrollDiscoveryReward({partnerId:greeting.a,partnerB:greeting.b,relation:greeting.relation,reward:find.kind,quantity:find.quantity,
         cage:actor?.cageDefinitionIndex??null,calendar});
     }
+    // Owner 2026-11-03: partners only stroll -- and so only meet or find things -- once a passage links
+    // two cages; in one closed cage they rest and do not greet each other every minute.
+    if(!(raisingGround?.navigation?.connections?.length>0))return;
     const free=[...raisingActors].filter(([,actor])=>partnerCanMeet(actor));
     partnerLifeState.quietFrames++;
-    if(partnerLifeState.quietFrames>=PARTNER_LIFE_RULES.greetingGapFrames)meet:for(let i=0;i<free.length;i++)for(let j=i+1;j<free.length;j++){
+    partnerLifeState.greetingGap??=greetingGapFrames(partnerLifeRandom());
+    if(partnerLifeState.quietFrames>=partnerLifeState.greetingGap)meet:for(let i=0;i<free.length;i++)for(let j=i+1;j<free.length;j++){
       const [idA,a]=free[i],[idB,b]=free[j];
+      // A real meeting on the way: at least one of the two is out walking, off its own cage.
+      if(!partnerOffHome(a)&&!partnerOffHome(b))continue;
       const radius=Math.max(nativeRaisingPeerStopDistanceQ12(a)??0,nativeRaisingPeerStopDistanceQ12(b)??0)/4096+8;
       const dx=(a.positionQ12[0]-b.positionQ12[0])/4096,dy=(a.positionQ12[1]-b.positionQ12[1])/4096;
       if(dx*dx+dy*dy>radius*radius||partnerRegion(a)!==partnerRegion(b))continue;
@@ -738,7 +745,8 @@ export function createChampionshipStandaloneApp({
       if(!holdNativeRaisingActorForGreeting(a,b.positionQ12,PARTNER_LIFE_RULES.greetingFrames))continue;
       if(!holdNativeRaisingActorForGreeting(b,a.positionQ12,PARTNER_LIFE_RULES.greetingFrames)){a.greetingHold=0;continue;}
       const relation=partnerPeerRelation(partnerSpecies(a),partnerSpecies(b));
-      partnerLifeState.greetings.push({a:idA,b:idB,relation,frames:PARTNER_LIFE_RULES.greetingFrames});partnerLifeState.quietFrames=0;
+      partnerLifeState.greetings.push({a:idA,b:idB,relation,frames:PARTNER_LIFE_RULES.greetingFrames});
+      partnerLifeState.quietFrames=0;partnerLifeState.greetingGap=greetingGapFrames(partnerLifeRandom());
       emitPartnerLife({kind:'greeting',a:idA,b:idB,relation});
       break meet;
     }
@@ -1179,7 +1187,7 @@ export function createChampionshipStandaloneApp({
   function landView(frame){
     const grid=frame.productGrid;if(!grid)return null;
     const capacity=Math.min(grid.cellCap,frame.landCapacity??grid.landCapacity),next=grid.landRows?.[0]??null;
-    return Object.freeze({capacity,cap:grid.cellCap,used:grid.usedCells,tier:landExpansionTier(capacity),price:LAND_EXPANSION.price,
+    return Object.freeze({capacity,cap:grid.cellCap,used:grid.usedCells,tier:landExpansionTier(capacity),tiers:LAND_EXPANSION.prices.length,price:landExpansionPrice(capacity)??0,
       step:next?.cells??0,nextRow:next?.row??null,max:!next,diamonds:friendsPlaytest?.diamonds??0,
       available:playtestPolicy?.enabled===true&&Boolean(friendsPlaytest),memoryBonusG:landExpansionTier(capacity)*LAND_EXPANSION.memoryGPerTier});
   }
@@ -2259,30 +2267,45 @@ export function createChampionshipStandaloneApp({
       if(!session||tutorialBaseline||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME
         ||this.hasRaisingPresentation()||battleTransactionActive||huntCommitActive)return {ok:false,reason:'UNAVAILABLE'};
       storeNativeRaisingPositions();storeNativeRaisingHome();
-      const state=raising.nativeHome?.discoveries;
-      if(!state?.pending.length)return {ok:false,reason:'EMPTY'};
+      const state=raising.nativeHome?.discoveries,waiting=pendingStrollEntries(raising.nativeHome?.strollLog);
+      if(!state?.pending.length&&!waiting.length)return {ok:false,reason:'EMPTY'};
       // Speculative inventory has no live Hunt binding or observers.
       const candidate=createShopRuntime({snapshot:requireShop().toSave(),allowRepeatedCages:playtestPolicy?.enabled===true,
         allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
-      const accepted=[];
-      for(const entry of state.pending){
+      // Owner 2026-11-03: what each tool gained, so the toolbar can count up (+4 ▲) at once.
+      const accepted=[],claimed=[],gains={},toolOfRecord=Object.fromEntries(Object.values(STROLL_REWARDS).filter(r=>r.record!==undefined).map(r=>[r.record,r.tool]));
+      const gain=(tool,n)=>{if(tool&&n>0)gains[tool]=(gains[tool]??0)+n;};
+      for(const entry of state?.pending??[]){
         const reward=RANCH_DISCOVERY_REWARDS[entry.kind];
         if(reward.bits){
           const before=candidate.getBits();
           if(before+reward.bits>BITS_WALLET_CAP)continue;
-          candidate.creditBits(reward.bits);accepted.push(entry.id);
+          candidate.creditBits(reward.bits);accepted.push(entry.id);gain('bits',reward.bits);
         }else{
           const record=getShopRecord(reward.record);
           if(candidate.toSave().quantities[reward.record]+reward.quantity>record.maxOwned)continue;
-          candidate.receiveNativeGift(reward.record,reward.quantity);accepted.push(entry.id);
+          candidate.receiveNativeGift(reward.record,reward.quantity);accepted.push(entry.id);gain(toolOfRecord[reward.record],reward.quantity);
         }
       }
-      if(!accepted.length)return {ok:false,reason:'INVENTORY_FULL'};
+      for(const entry of waiting){
+        const spec=STROLL_REWARDS[entry.reward];
+        if(spec.bits){
+          const amount=spec.bits*entry.quantity;
+          if(candidate.getBits()+amount>BITS_WALLET_CAP)continue;
+          candidate.creditBits(amount);claimed.push(entry.id);gain('bits',amount);
+        }else{
+          const record=getShopRecord(spec.record);
+          if(candidate.toSave().quantities[spec.record]+entry.quantity>record.maxOwned)continue;
+          candidate.receiveNativeGift(spec.record,entry.quantity);claimed.push(entry.id);gain(spec.tool,entry.quantity);
+        }
+      }
+      if(!accepted.length&&!claimed.length)return {ok:false,reason:'INVENTORY_FULL'};
       const nextRaising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({
-        ...raising.nativeHome,discoveries:removeCollectedDiscoveries(state,accepted)})});
+        ...raising.nativeHome,...(state?{discoveries:removeCollectedDiscoveries(state,accepted)}:{}),
+        ...(claimed.length?{strollLog:claimStrollEntries(raising.nativeHome.strollLog,claimed)}:{})})});
       // Cyber Gachapon: every fifth journal find is a milestone worth 3 tickets, once.
       let nextGacha=gachaState(),journalTickets=0;
-      for(let mark=Math.floor((state.collected??0)/5)+1;mark<=Math.floor((nextRaising.nativeHome.discoveries.collected??0)/5);mark++){
+      for(let mark=Math.floor((state?.collected??0)/5)+1;mark<=Math.floor((nextRaising.nativeHome.discoveries?.collected??0)/5);mark++){
         const claim=claimGachaReward(nextGacha,`journal:${mark*5}`,3);nextGacha=claim.state;journalTickets+=claim.granted;
       }
       const status=savePort.save({...liveSaveRequest(revision+1),raising:nextRaising,shop:candidate.toSave(),cyberGacha:nextGacha});
@@ -2291,7 +2314,12 @@ export function createChampionshipStandaloneApp({
       shop=createShopRuntime({snapshot:candidate.toSave(),huntInventory,allowRepeatedCages:playtestPolicy?.enabled===true,
         allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
       applyMappedHuntInventoryFromShop(shop,huntInventory);bindShopRuntime();revision++;
-      publishRaising();return {ok:true,collected:accepted.length,remaining:raising.nativeHome.discoveries.pending.length,gachaTickets:journalTickets};
+      // The toolbar badges and the bag read the Shop: tell them now, then say what each tool gained.
+      const frame=shop.getFrame();
+      emitPartnerLife({kind:'collected',gains:Object.freeze({...gains})});
+      for(const listener of [...shopListeners])try{listener(frame);}catch{/* observers never break the shop */}
+      publishRaising();return {ok:true,collected:accepted.length+claimed.length,remaining:raising.nativeHome.discoveries?.pending.length??0,
+        gachaTickets:journalTickets,gains:Object.freeze({...gains})};
     },
 
     // Partner life (Owner 2026-10-28). Readers are pure; the two writers below
@@ -3199,7 +3227,10 @@ export function createChampionshipStandaloneApp({
           ownedCount:item.ownedCount-mine.reduce((sum,entry)=>sum+entry.total,0),selected:item.selected&&pendingRoyalEdition===null});
       }).filter(item=>item.availableCount>0);
       return Object.freeze({...frame,tray:Object.freeze(tray),testDiamonds:friendsPlaytest?.diamonds??0,royalTray:Object.freeze(royal),
-        automation:cageAutomationView(frame),land:landView(frame),landExpansion:lastLandExpansion});
+        automation:cageAutomationView(frame),land:landView(frame),landExpansion:lastLandExpansion,
+        // Owner 2026-11-03: the cores in the bag, so a selected cage can take one in place.
+        cores:Object.freeze(AUTOMATION_ITEMS.filter(item=>item.kind==='CORE').map(item=>Object.freeze({id:item.id,name:item.name,module:item.module,
+          owned:cyberGacha?.automation?.[item.id]??0}))),gachaResult:lastGachaResult});
     },
 
     openCageEdit() {
@@ -3296,7 +3327,10 @@ export function createChampionshipStandaloneApp({
       if (!playtestPolicy?.enabled || screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT || tutorialBaseline || battleTransactionActive || huntCommitActive || battleEconomy.active) return {ok:false,reason:'TEST_ROW_PURCHASE_UNAVAILABLE'};
       const editor = requireCageEdit();
       const quote = editor.quoteTestRow(row, ...cageEditArgs());
-      const purchase = quote.ok ? purchaseTestRanchRow(friendsPlaytest,row) : quote;
+      // Owner 2026-11-03: the step price climbs with the land already open (200 → 2,200).
+      const price = this.getCageEditFrame()?.land?.price
+        || LAND_EXPANSION.prices[Math.min(LAND_EXPANSION.prices.length - 1, friendsPlaytest?.purchases?.length ?? 0)];
+      const purchase = quote.ok ? purchaseTestRanchRow(friendsPlaytest,row,price) : quote;
       if (!purchase.ok) {
         editor.rejectTestRowPurchase(purchase.reason,...cageEditArgs());publishScreens();
         return Object.freeze({...this.getCageEditFrame(),ok:false,reason:purchase.reason});
@@ -3310,13 +3344,13 @@ export function createChampionshipStandaloneApp({
         editor.rejectTestRowPurchase('SAVE_FAILED',...cageEditArgs());publishScreens();
         return Object.freeze({...this.getCageEditFrame(),ok:false,reason:'SAVE_FAILED'});
       }
-      friendsPlaytest=purchase.state;editor.applyTestRowPurchase(row,...cageEditArgs());revision+=1;
+      friendsPlaytest=purchase.state;editor.applyTestRowPurchase(row,...cageEditArgs(),price);revision+=1;
       raisingActors.clear();initializeNativeRaisingHome();publishScreens();
       return Object.freeze({...this.getCageEditFrame(),ok:true,receipt:purchase.receipt});
     },
 
     /**
-     * Diamond land expansion (DIAMOND_ECONOMY_20261102): the next +10 cells for 1,000 diamonds, saved at once
+     * Diamond land expansion (DIAMOND_ECONOMY_20261102): the next +10 cells for the step's price (200 → 2,200), saved at once
      * (the same atomic row purchase), up to 100 cells. Each step also lifts the hunt memory card by 8 G.
      */
     expandRanchLand() {

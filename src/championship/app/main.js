@@ -463,10 +463,14 @@ function strollFindText(entry) {
     ? uiText(entry.relation === 'rival' ? '⚡ {a} 和 {b} 互相打了招呼，一起找到了{item}！' : '🎵 {a} 和 {b} 互相打了招呼，一起找到了{item}！', { a: entry.partnerName, b: entry.partnerBName, item })
     : uiText('✨ {name} 散步時找到了{item}！', { name: entry.partnerName, item });
 }
+// Owner 2026-11-03: a find waits in the journal until 收下發現, so the toast says where to collect it.
+function strollFindToastText(entry) {
+  return entry.claimed === false ? `${strollFindText(entry)} ${uiText('（到探索手帳收下）')}` : strollFindText(entry);
+}
 function showStrollToast(entry) {
   let toast = document.querySelector('.cm-stroll-toast');
   if (!toast) { toast = document.createElement('div'); toast.className = 'cm-stroll-toast'; toast.setAttribute('role', 'status'); document.body.append(toast); }
-  toast.textContent = strollFindText(entry);
+  toast.textContent = strollFindToastText(entry);
   toast.classList.remove('is-shown'); void toast.offsetWidth; toast.classList.add('is-shown');
   clearTimeout(showStrollToast.timer);
   showStrollToast.timer = setTimeout(() => toast.classList.remove('is-shown'), 2800);
@@ -547,7 +551,14 @@ function listenPartnerFinds() {
       showStrollToast.timer = setTimeout(() => toast.classList.remove('is-shown'), 3200);
       return;
     }
-    if (event.kind !== 'find' || !event.tool || !toolbar || app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
+    // 收下發現 paid the tools: each badge counts up with its gain (+4 ▲).
+    if (event.kind === 'collected' && toolbar) {
+      for (const [tool, gained] of Object.entries(event.gains ?? {})) if (tool !== 'bits' && gained > 0) toolbar.landToolStock(tool, { gained });
+      if ((event.gains?.bits ?? 0) > 0) document.querySelector('.cm-status-bar__bits')?.dispatchEvent(new CustomEvent('cm-fx', { bubbles: true, detail: { kind: 'purchase' } }));
+      return;
+    }
+    // A waiting find changes no count yet; only a paid one (older saves) holds its badge.
+    if (event.kind !== 'find' || event.pending || !event.tool || !toolbar || app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
     toolbar.holdToolStock(event.tool);
     const id = event.entry.id, gained = event.entry.quantity;
     strollFlightsPending.set(id, { tool: event.tool, timer: setTimeout(() => { if (releaseStrollHold(id)) toolbar.landToolStock(event.tool, { gained }); }, 1500) });
@@ -556,6 +567,12 @@ function listenPartnerFinds() {
     const { x, y, find } = event.detail ?? {}, entry = find?.entry;
     if (!entry || !Number.isFinite(x) || !Number.isFinite(y)) return;
     showStrollToast(entry);
+    // A waiting find flies to the journal badge, where 收下發現 pays it.
+    if (find.pending) {
+      const journal = document.querySelector('.int-rh2-discoveries:not([hidden])');
+      if (journal) flyStrollFind({ x, y }, journal, null, () => journal.dispatchEvent(new CustomEvent('cm-fx', { bubbles: true, detail: { kind: 'sparkle' } })));
+      return;
+    }
     const tool = find.tool;
     const target = tool ? toolbar?.getToolButton(tool) : document.querySelector('.cm-status-bar__bits');
     const held = releaseStrollHold(entry.id);
@@ -1080,6 +1097,8 @@ async function mountRaisingHome() {
   void loadPixiModule().catch(() => {});
   const p1r = await createRaisingHomeP1RView({
     root, hudArt: null, source,
+    // Owner 2026-11-03: the partner card's portrait is the encyclopedia's own thumbnail (every published species has one).
+    portraitFallback: speciesIndex => { const hero = databaseHeroPortrait(speciesIndex); return hero?.thumbnail ?? hero ?? null; },
     // Arcade evolution (Owner 2026-10-28); null keeps the original sequence.
     evolutionCinematic: await loadRaisingEvolutionCinematic(),
     getRosterEntry: creatureId => projectRoster().find(entry => entry.instanceId === creatureId) ?? null,
@@ -2346,6 +2365,30 @@ function refreshToolbarMode() {
   else toolbar.setMode(null);
 }
 
+/**
+ * The bag (Owner 2026-11-03): supplies, chips, metals and automation, each usable in place. Chips,
+ * metals and cores go through the app's gacha intents (they save first); a supply picks its tool.
+ * `cm-open-backpack` opens it from a partner card with that partner chosen.
+ */
+function openBackpack({ tab = 'supplies', partnerId = null } = {}) {
+  void openRanchBackpack({
+    getShopFrame: () => app.getShopFrame(),
+    getGachaFrame: () => { try { return app.getCyberGachaFrame?.() ?? null; } catch { return null; } },
+    tab, partnerId,
+    intents: {
+      useItem: (itemId, instanceId, options) => app.gachaUseItem(itemId, instanceId, options),
+      reshape: (instanceId, personality) => app.gachaReshapePersonality(instanceId, personality),
+      mountCore: (coreId, cageId) => app.gachaMountCore(coreId, cageId),
+      unmountCore: (module, cageId) => app.gachaUnmountCore(module, cageId),
+      disarm: (itemId) => app.gachaDisarmItem(itemId),
+      selectTool: (toolId) => { if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) document.querySelector(`.cm-toolbar [data-tool-id="${toolId}"]`)?.click(); },
+      openFacilities: () => { if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) expeditionSource?.intents.openCageEdit(); },
+      openHunt: () => { if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) expeditionSource?.intents.openGate(); }
+    }
+  });
+}
+document.addEventListener('cm-open-backpack', (event) => openBackpack(event.detail ?? {}));
+
 /** Act on a submenu entry. Entries with no destination yet never reach here. */
 function runToolbarMenuEntry(entry,context={}) {
   if(app.getInteractiveTutorial()&&!app.getInteractiveTutorial().finished){app.openInteractiveTutorialMenu(entry.id,context.checkpoint);return;}
@@ -2355,7 +2398,7 @@ function runToolbarMenuEntry(entry,context={}) {
   // Focus returns to the Menu button: the menu item itself is gone by then.
   if (entry.action === "OPEN_SETTINGS") { openSettings(document.querySelector('.cm-toolbar__cell[data-menu-id="SYSTEM"]')); return; }
   // Owner 2026-10-27: the bag and the discovery journal, from the System menu.
-  if (entry.action === "OPEN_BACKPACK") { void openRanchBackpack({ getShopFrame: () => app.getShopFrame() }); return; }
+  if (entry.action === "OPEN_BACKPACK") { openBackpack(); return; }
   if (entry.action === "OPEN_RANCH_JOURNAL") { document.dispatchEvent(new CustomEvent(RANCH_JOURNAL_OPEN_EVENT)); return; }
   if (entry.action === "OPEN_STORY") { openStoryMap({ source: 'menu' }); return; }
   if (entry.action === "OPEN_FRIENDS") { ensureFriendsDrawer().open(); return; }
