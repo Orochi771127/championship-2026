@@ -306,8 +306,24 @@ export function shopItemName(recordIndex, fallback = null) {
   const table = SHOP_NAMES_BY_LOCALE[loc] ?? SHOP_NAMES_ZH;
   return table[recordIndex] ?? SHOP_NAMES_ZH[recordIndex] ?? fallback;
 }
+// Owner 2026-11-03 (DIAMOND_ECONOMY_20261102 follow-up): the Bits zoo (115) and ranch (116) no longer
+// feed or clean by themselves, so their shop copy drops the original's auto-care line in every language.
+const SHOP_DESCRIPTION_OVERRIDES = Object.freeze({
+  115: Object.freeze({ 'zh-Hant': '熱鬧的草原生態棲地，空間稍微擁擠。建議容納 4 隻夥伴。（可加掛自動化模組）',
+    en: 'A lively grassland habitat, a little cramped. Suggested for 4 partners. (Takes automation attachments.)',
+    ja: 'にぎやかな草原の生息地。少し手狭。推奨収容数 4。（自動化モジュールを取り付け可能）',
+    th: 'ที่อยู่ทุ่งหญ้าคึกคัก ค่อนข้างแคบ แนะนำ 4 ตัว (ติดโมดูลอัตโนมัติได้)',
+    vi: 'Môi trường đồng cỏ nhộn nhịp, hơi chật. Khuyến nghị 4 bạn đồng hành. (Gắn được mô-đun tự động.)' }),
+  116: Object.freeze({ 'zh-Hant': '空間寬廣舒適的大型草原棲地。建議容納 8 隻夥伴。（可加掛自動化模組）',
+    en: 'A large, roomy and comfortable grassland habitat. Suggested for 8 partners. (Takes automation attachments.)',
+    ja: '広々として快適な大きな草原の生息地。推奨収容数 8。（自動化モジュールを取り付け可能）',
+    th: 'ที่อยู่ทุ่งหญ้าขนาดใหญ่ กว้างขวางสบาย แนะนำ 8 ตัว (ติดโมดูลอัตโนมัติได้)',
+    vi: 'Môi trường đồng cỏ lớn, rộng rãi thoải mái. Khuyến nghị 8 bạn đồng hành. (Gắn được mô-đun tự động.)' })
+});
 export function shopItemDescription(recordIndex, fallback = null) {
   const loc = getLocale();
+  const override = SHOP_DESCRIPTION_OVERRIDES[recordIndex];
+  if (override) return override[loc] ?? override['zh-Hant'];
   const table = SHOP_DESCRIPTIONS_BY_LOCALE[loc] ?? SHOP_DESCRIPTIONS_ZH;
   return table[recordIndex] ?? SHOP_DESCRIPTIONS_ZH[recordIndex] ?? fallback;
 }

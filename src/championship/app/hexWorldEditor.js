@@ -317,7 +317,7 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
     if (!moving && placed && cage.cores?.length) {
       const mount = el(doc, 'button', 'cm-vs2-action cm-hexworld__mount');
       mount.type = 'button';
-      mount.append(icon('robot', 'cm-hexworld__mount-icon'), el(doc, 'span', '', uiText('掛載自動餵食／清掃機')));
+      mount.append(icon('robot', 'cm-hexworld__mount-icon'), el(doc, 'span', '', uiText('籠舍外掛模組槽')));
       mount.dataset.hexAction = 'mount';
       mount.setAttribute('aria-expanded', String(mountOpen));
       mount.addEventListener('click', () => { mountOpen = !mountOpen; paintSelection(); });
@@ -335,6 +335,7 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
     const auto = cage.automation?.[instanceId] ?? null;
     const list = el(doc, 'div', 'cm-hexworld__mounts');
     if (auto?.royal) { list.append(el(doc, 'p', 'cm-hexworld__note', uiText('皇家籠舍已內建全自動功能，不需要再掛載。'))); return list; }
+    list.append(el(doc, 'p', 'cm-hexworld__note', uiText('任何籠舍都能掛載；掛上的模組可隨時卸下，改掛到別座籠舍。')));
     for (const core of cage.cores ?? []) {
       const on = core.module === 'AUTO_FEED' ? Boolean(auto?.feed) : Boolean(auto?.clean);
       const pick = el(doc, 'button', 'cm-vs2-action cm-hexworld__mount-core');
@@ -353,7 +354,7 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
       list.append(pick);
     }
     if (!(cage.cores ?? []).some((core) => core.owned > 0) && !auto?.feed && !auto?.clean)
-      list.append(el(doc, 'p', 'cm-hexworld__note', uiText('背包裡還沒有自動餵食／清掃核心，到商店的轉蛋機轉轉看！')));
+      list.append(el(doc, 'p', 'cm-hexworld__note', uiText('背包裡還沒有自動給食機／清掃機，到商店的轉蛋機轉轉看！')));
     return list;
   }
 

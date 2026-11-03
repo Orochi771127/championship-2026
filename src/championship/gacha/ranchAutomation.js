@@ -1,12 +1,14 @@
 // Ranch automation -- OWNER_APPROVED_ADAPTATION 2026-11-02 (DIAMOND_ECONOMY_20261102).
 //
 // The Bits shop's zoo (24) and ranch (25) no longer feed and clean by
-// themselves: that convenience now comes from the gachapon. Two SR cores mount
-// on any placed cage instance; two gacha-only royal cages carry both cores built
-// in, 30% faster sleep and +3 beast points per training. Since 2026-11-03 (Owner)
-// each royal cage is its own map and module (cageCatalog.js definitions 36 and 37,
-// run by the ranch's and the zoo's rules); the edition record by instance id stays. The five-in-one furnace also forges every item from chips and
-// shards, so automation never depends on luck alone.
+// themselves: that convenience now comes from the gachapon. Two SR attachments
+// (Owner 2026-11-03: the auto-feeder and the auto-cleaner) mount on any placed
+// cage instance of all 37 kinds and come off again at no cost; two gacha-only
+// royal cages carry both cores built in, 30% faster sleep and +3 beast points per
+// training. Since 2026-11-03 (Owner) each royal cage is its own map and module
+// (productCageCatalog.js definitions 36 and 37, run by the ranch's and the zoo's
+// rules); the edition record by instance id stays. The five-in-one furnace also
+// forges every item from chips and shards, so automation never depends on luck alone.
 //
 // Pure: state in, state out. The cage instances themselves stay in cageEdit;
 // this module only records which instance carries what.
@@ -19,8 +21,8 @@ export const AUTOMATION_MODULES = Object.freeze({ CLEAN: "AUTO_CLEAN", FEED: "AU
 export const ROYAL_EDITIONS = Object.freeze({ RANCH: "ROYAL_RANCH", ZOO: "STELLAR_ZOO" });
 
 export const AUTOMATION_ITEMS = deepFreeze([
-  { id: "auto:clean-core", kind: "CORE", rarity: "SR", name: "智慧自動清掃核心", module: "AUTO_CLEAN", art: `${ART}auto_clean_core_160.webp` },
-  { id: "auto:feed-core", kind: "CORE", rarity: "SR", name: "智慧自動給食核心", module: "AUTO_FEED", art: `${ART}auto_feed_core_160.webp` },
+  { id: "auto:clean-core", kind: "CORE", rarity: "SR", name: "奈米自動清掃機", module: "AUTO_CLEAN", art: `${ART}auto_clean_core_160.webp` },
+  { id: "auto:feed-core", kind: "CORE", rarity: "SR", name: "智慧自動給食機", module: "AUTO_FEED", art: `${ART}auto_feed_core_160.webp` },
   { id: "auto:royal-ranch", kind: "ROYAL_CAGE", rarity: "SSR", name: "全自動皇家牧場", edition: "ROYAL_RANCH", baseDefinition: 25, cageDefinition: 36, art: `${ART}royal_ranch_160.webp` },
   { id: "auto:stellar-zoo", kind: "ROYAL_CAGE", rarity: "UR", name: "全自動星際動物園", edition: "STELLAR_ZOO", baseDefinition: 24, cageDefinition: 37, art: `${ART}stellar_zoo_160.webp` }
 ]);
