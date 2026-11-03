@@ -123,6 +123,16 @@ export function createOpeningPresentation({host,onStart,onCancel=()=>{},allowEgg
     // iOS raises the keyboard over the lower half: the host already follows
     // the visible viewport, and once it has settled a card taller than that
     // scrolls itself (never the page) to bring the slot to its middle.
+    // Owner 2026-11-03: on a phone the keyboard pushed the licence / incubator off screen. While a touch
+    // keyboard is up the card goes compact (no photo, badge or pod art), so the name and 決定 fit above it;
+    // when it closes any page offset iOS left behind is undone.
+    const touch=globalThis.matchMedia?.('(pointer: coarse)')?.matches===true;
+    let typingTimer=null;
+    input.addEventListener('focus',()=>{if(!touch)return;clearTimeout(typingTimer);n.classList.add('is-typing');});
+    input.addEventListener('blur',()=>{if(!touch)return;clearTimeout(typingTimer);typingTimer=setTimeout(()=>{
+      if(document.activeElement===input)return;n.classList.remove('is-typing');
+      if(globalThis.scrollY||document.scrollingElement?.scrollTop)globalThis.scrollTo?.(0,0);
+    },160);});
     input.addEventListener('focus',()=>setTimeout(()=>{
       if(!input.isConnected||n.scrollHeight<=n.clientHeight+1)return;
       const card=n.getBoundingClientRect(),target=slot.getBoundingClientRect();
