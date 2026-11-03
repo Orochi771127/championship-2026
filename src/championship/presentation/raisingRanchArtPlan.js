@@ -11,12 +11,14 @@
 
 import { PRODUCT_RANCH_GRID, PRODUCT_RANCH_COLUMNS, PRODUCT_RANCH_ROWS, productGridCell, validateProductRanch, productFieldTileOrigin, PRODUCT_RANCH_WORLD_WIDTH, PRODUCT_RANCH_WORLD_HEIGHT } from "../cage/productRanchGrid.js";
 import { deepFreeze } from "../contracts/championshipContracts.js";
-import { getCageDefinitionByModuleId, MAX_SLOT_COUNT } from "../cage/cageCatalog.js";
-import { ORIGINAL_CAGE_DEFINITION_SHAPES, ORIGINAL_CAGE_SHAPE_MASKS } from "../cage/ranchSlotGeometry.js";
+import { MAX_SLOT_COUNT } from "../cage/cageCatalog.js";
+import { getCageDefinitionByModuleId } from "../cage/productCageCatalog.js";
+import { ORIGINAL_CAGE_SHAPE_MASKS } from "../cage/ranchSlotGeometry.js";
 import { NATIVE_RANCH_LAYOUT, RANCH_DECKS_LAYOUT, RANCH_EXPANSION_DECK_SLOTS, annexSlotCount, ranchRing, ringFieldTileOrigin,
   validateRanchLayout } from "../cage/ranchExpansion.js";
-import { getOriginalCageVisualBinding, ORIGINAL_CAGE_STRUCTURAL_VISUALS } from "./originalCageVisualBindings.js";
+import { getCageVisualBinding, ORIGINAL_CAGE_STRUCTURAL_VISUALS } from "./originalCageVisualBindings.js";
 import { createRaisingCageArtPlan } from "./raisingCageArtPlan.js";
+import { cageDefinitionShape } from '../cage/cageShapes.js';
 
 function fail(reason) { throw new Error(`RAISING_CAGE_ART_PLAN_INVALID:${reason}`); }
 
@@ -70,7 +72,7 @@ export function composeRanchArtPlan({ manifest, placements, layoutVersion, unloc
   const tiles = ring.placements.map(({ slotIndex, moduleId }) => {
     const definition = getCageDefinitionByModuleId(moduleId);
     if (!definition) fail(`MODULE_UNKNOWN:${moduleId}`);
-    const field = fields.get(getOriginalCageVisualBinding(definition.cageDefinitionIndex)?.fieldId);
+    const field = fields.get(getCageVisualBinding(definition.cageDefinitionIndex)?.fieldId);
     if (!field) fail(`FIELD_MISSING_FOR_MODULE:${moduleId}`);
     return { slotIndex, fieldId: field.fieldId, worldWidthPx: field.worldWidthPx, worldHeightPx: field.worldHeightPx,
       identity: { moduleId, cageDefinitionIndex: definition.cageDefinitionIndex } };
@@ -98,7 +100,7 @@ export function composeRanchArtPlan({ manifest, placements, layoutVersion, unloc
   for (const tile of [...tiles].sort((a, b) => (a.slotIndex % 2) - (b.slotIndex % 2) || a.slotIndex - b.slotIndex)) {
     const field = fields.get(tile.fieldId);
     const unit = field.worldWidthPx / field.nativeWidthPx;
-    const shape = ORIGINAL_CAGE_DEFINITION_SHAPES[tile.identity.cageDefinitionIndex];
+    const shape = cageDefinitionShape(tile.identity.cageDefinitionIndex);
     const geometry = ringCellGeometry({ field, slotIndex: tile.slotIndex, shapeIndex: shape, unit, ringCount: ring.ringCount });
     place(tile, tile.identity, geometry);
     if (tile.identity.cageDefinitionIndex === 35) {
@@ -184,9 +186,9 @@ export function createProductGridArtPlan({manifest,placements}) {
   all.sort((a,b)=>productGridCell(a.slotIndex).row-productGridCell(b.slotIndex).row||a.slotIndex-b.slotIndex);
   for(const p of all){
     const definitionIndex=p.definition?.cageDefinitionIndex??null;
-    const field=fields.get(getOriginalCageVisualBinding(definitionIndex)?.fieldId);
+    const field=fields.get(getCageVisualBinding(definitionIndex)?.fieldId);
     if(!field)fail("PRODUCT_GRID_FIELD_REQUIRED");
-    const origin=productFieldTileOrigin(p.slotIndex,ORIGINAL_CAGE_DEFINITION_SHAPES[definitionIndex]);
+    const origin=productFieldTileOrigin(p.slotIndex,cageDefinitionShape(definitionIndex));
     const x=origin.tileX*8*unit,y=origin.tileY*8*unit;
     result.push({slotIndex:p.slotIndex,fieldId:field.fieldId,worldWidthPx:field.worldWidthPx,worldHeightPx:field.worldHeightPx,
       moduleId:p.moduleId,instanceId:p.instanceId??null,cageDefinitionIndex:definitionIndex,

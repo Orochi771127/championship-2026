@@ -2,10 +2,10 @@
 //
 // The Bits shop's zoo (24) and ranch (25) no longer feed and clean by
 // themselves: that convenience now comes from the gachapon. Two SR cores mount
-// on any placed cage instance; two gacha-only royal cages are editions of the
-// zoo and the ranch that keep the base cage's footprint, ground, walk map and
-// art, and carry both cores built in, 30% faster sleep and +3 beast points per
-// training. The five-in-one furnace also forges every item from chips and
+// on any placed cage instance; two gacha-only royal cages carry both cores built
+// in, 30% faster sleep and +3 beast points per training. Since 2026-11-03 (Owner)
+// each royal cage is its own map and module (cageCatalog.js definitions 36 and 37,
+// run by the ranch's and the zoo's rules); the edition record by instance id stays. The five-in-one furnace also forges every item from chips and
 // shards, so automation never depends on luck alone.
 //
 // Pure: state in, state out. The cage instances themselves stay in cageEdit;
@@ -21,8 +21,8 @@ export const ROYAL_EDITIONS = Object.freeze({ RANCH: "ROYAL_RANCH", ZOO: "STELLA
 export const AUTOMATION_ITEMS = deepFreeze([
   { id: "auto:clean-core", kind: "CORE", rarity: "SR", name: "智慧自動清掃核心", module: "AUTO_CLEAN", art: `${ART}auto_clean_core_160.webp` },
   { id: "auto:feed-core", kind: "CORE", rarity: "SR", name: "智慧自動給食核心", module: "AUTO_FEED", art: `${ART}auto_feed_core_160.webp` },
-  { id: "auto:royal-ranch", kind: "ROYAL_CAGE", rarity: "SSR", name: "全自動皇家牧場", edition: "ROYAL_RANCH", baseDefinition: 25, art: `${ART}royal_ranch_160.webp` },
-  { id: "auto:stellar-zoo", kind: "ROYAL_CAGE", rarity: "UR", name: "全自動星際動物園", edition: "STELLAR_ZOO", baseDefinition: 24, art: `${ART}stellar_zoo_160.webp` }
+  { id: "auto:royal-ranch", kind: "ROYAL_CAGE", rarity: "SSR", name: "全自動皇家牧場", edition: "ROYAL_RANCH", baseDefinition: 25, cageDefinition: 36, art: `${ART}royal_ranch_160.webp` },
+  { id: "auto:stellar-zoo", kind: "ROYAL_CAGE", rarity: "UR", name: "全自動星際動物園", edition: "STELLAR_ZOO", baseDefinition: 24, cageDefinition: 37, art: `${ART}stellar_zoo_160.webp` }
 ]);
 
 export const AUTOMATION_RULES = deepFreeze({
@@ -192,13 +192,13 @@ export const automationTiming = (item) => (item?.kind === "CORE"
   ? "在背包選一座已放置的籠舍掛載，可隨時卸下"
   : "到「設施配置」的托盤放上地圖，以金框標示");
 
-/** Royal cages held (bag + placed) by base cage definition: each is one more copy of that cage. */
+/** Royal cages held (bag + placed) by their own cage definition (36, 37): the copies of that cage owned. */
 export function royalCopiesByDefinition(state) {
   const copies = new Map();
   for (const item of AUTOMATION_ITEMS) {
     if (!item.edition) continue;
     const n = royalTotal(state, item.edition);
-    if (n > 0) copies.set(item.baseDefinition, (copies.get(item.baseDefinition) ?? 0) + n);
+    if (n > 0) copies.set(item.cageDefinition, (copies.get(item.cageDefinition) ?? 0) + n);
   }
   return copies;
 }

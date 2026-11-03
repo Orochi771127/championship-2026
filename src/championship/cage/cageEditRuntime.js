@@ -19,10 +19,10 @@ import {
   PLACEMENT_MODEL,
   SLOT_COUNT_EVIDENCE,
   TAMER_RANK_TABLE_LAST_INDEX,
-  getCageDefinitionByModuleId,
   listCageDefinitions,
   slotCountForTamerRank
 } from "./cageCatalog.js";
+import { getCageDefinitionByModuleId } from "./productCageCatalog.js";
 import {ownedModuleIds,ownedModuleCount} from "./cageInventory.js";
 import { trainingViewFromDefinition } from "./cageEffects.js";
 import { NATIVE_RANCH_LAYOUT, WAITING_ROOM_MODULE, originalStartingRanch, nativePlacementMask, validateNativeRanch } from './nativeRanchLayout.js';

@@ -7,7 +7,7 @@
 //
 // Appearance (seams dissolve) and passage (partners may cross) are separate
 // policies so cross-ecology movement can be tuned later without touching art.
-import { getCageDefinitionByModuleId } from './cageCatalog.js';
+import { getCageDefinitionByModuleId } from './productCageCatalog.js';
 
 export const RANCH_ECOLOGY_GROUPS = Object.freeze({
   // Owner 2026-10-27: each series joins its small, large and themed members.

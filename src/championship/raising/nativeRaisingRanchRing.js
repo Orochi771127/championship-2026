@@ -9,8 +9,7 @@
 // original layout and require identical results, so the two cannot drift.
 
 import source from "../../data/championship/catalogs/raising-ground.r1.json" with { type: "json" };
-import { ORIGINAL_CAGE_DEFINITION_SHAPES } from "../cage/ranchSlotGeometry.js";
-import { getCageDefinitionByModuleId } from "../cage/cageCatalog.js";
+import { cageRuleDefinitionIndex, getCageDefinitionByModuleId } from "../cage/productCageCatalog.js";
 import { RANCH_DECKS_LAYOUT, ranchRing, ringFieldTileOrigin, validateRanchLayout } from "../cage/ranchExpansion.js";
 import { createNativeRaisingGround, findNativeRaisingOpenTile, nativeRaisingEntryPosition, nativeRaisingSpawnPosition } from "./nativeRaisingGround.js";
 
@@ -21,6 +20,7 @@ import { reviewGroundField,parseRaisingGroundField } from "./raisingGroundReview
 import sportsGround from '../../data/championship/catalogs/ranch-sports-ground.r1.json' with {type:'json'};
 import threeGround from '../../data/championship/catalogs/ranch-three-ground.r1.json' with {type:'json'};
 import { connectRanchGround } from "../cage/ranchConnections.js";
+import { cageDefinitionShape } from '../cage/cageShapes.js';
 const fields = source.fields.map((field) => {
   const cells = field.runs.flatMap(([count, ...v]) => Array.from({ length: count }, () => v));
   const clearance = field.clearanceRuns.flatMap(([count, v]) => Array(count).fill(v));
@@ -32,7 +32,7 @@ const modelContactGround=new Map(threeGround.fields.map(f=>[f.definitionIndex,pa
 
 /** 020502D8's origin for a ring slot. */
 export function ringCageOrigin(definitionIndex, ringSlot) {
-  const p = ringFieldTileOrigin(ringSlot, ORIGINAL_CAGE_DEFINITION_SHAPES[definitionIndex]);
+  const p = ringFieldTileOrigin(ringSlot, cageDefinitionShape(definitionIndex));
   return [p.tileX * 8, p.tileY * 8 - (ringSlot % 2 === 0 ? 24 : 0), 0];
 }
 
@@ -44,7 +44,7 @@ export function composeRanchRingGround(ring) {
   const steps = [...placements, ...ring.uncovered.map((slotIndex) => ({ definitionIndex: 36, slotIndex }))];
   for (const p of steps) {
     const f = reviewGroundField(p.definitionIndex) ?? fields[p.definitionIndex], row = p.slotIndex % 2, col = Math.floor(p.slotIndex / 2);
-    const x = p.definitionIndex === 36 ? col * 12 + row * 6 : ringFieldTileOrigin(p.slotIndex, ORIGINAL_CAGE_DEFINITION_SHAPES[p.definitionIndex]).tileX;
+    const x = p.definitionIndex === 36 ? col * 12 + row * 6 : ringFieldTileOrigin(p.slotIndex, cageDefinitionShape(p.definitionIndex)).tileX;
     const y = row * 8, crop = row === 0 ? 3 : 0;
     for (let sy = crop; sy < f.height; sy++) for (let sx = 0; sx < f.width; sx++) {
       const i = (y + sy - crop) * width + ((x + sx) % width), [owner, type, distance] = f.cells[sy * f.width + sx];
@@ -85,7 +85,7 @@ export function createRanchRaisingGround(frame) {
 export function ringRaisingSpawnPosition(ground, definition, rng) {
   const p = ground.placement(definition), f = reviewGroundField(definition) ?? fields[definition];
   if (!p || !f || typeof rng?.next !== "function") throw new TypeError("NATIVE_RAISING_SPAWN_CONTEXT_REQUIRED");
-  const origin = ringFieldTileOrigin(p.slotIndex, ORIGINAL_CAGE_DEFINITION_SHAPES[definition]);
+  const origin = ringFieldTileOrigin(p.slotIndex, cageDefinitionShape(definition));
   const max = f.width * f.height - 1;
   let threshold = [0, 15, 23, 27, 29, 30, 31, 32, 33, 34].includes(definition) ? 1 : 2, rejections = 0;
   for (let guard = 0; guard < 100000; guard++) {
@@ -122,10 +122,14 @@ export function composeProductRanchGround(frame) {
   const width = PRODUCT_RANCH_WORLD_WIDTH / 8, height = PRODUCT_RANCH_WORLD_HEIGHT / 8;
   const terrain = new Uint8Array(width * height).fill(1), clearance = new Uint8Array(width * height);
   const owners = new Int16Array(width * height).fill(-1);
-  const placements = frame.placements.map((p,ownerIndex)=>({...p,ownerIndex,definitionIndex:getCageDefinitionByModuleId(p.moduleId).cageDefinitionIndex}));
+  // A gachapon royal cage (Owner 2026-11-03) lays out its own map (fieldDefinitionIndex) while the
+  // simulation runs it by its base cage's rules (definitionIndex); for the 36 originals both agree.
+  const placements = frame.placements.map((p,ownerIndex)=>{const fieldDefinitionIndex=getCageDefinitionByModuleId(p.moduleId).cageDefinitionIndex;
+    return {...p,ownerIndex,definitionIndex:cageRuleDefinitionIndex(fieldDefinitionIndex),fieldDefinitionIndex};});
   for (const p of placements) {
-    const field = modelContactGround.get(p.definitionIndex) ?? reviewGroundField(p.definitionIndex) ?? selectedSportsGround.get(p.definitionIndex) ?? fields[p.definitionIndex];
-    const origin = productFieldTileOrigin(p.slotIndex, ORIGINAL_CAGE_DEFINITION_SHAPES[p.definitionIndex]);
+    const f = p.fieldDefinitionIndex;
+    const field = modelContactGround.get(f) ?? reviewGroundField(f) ?? selectedSportsGround.get(f) ?? fields[f];
+    const origin = productFieldTileOrigin(p.slotIndex, cageDefinitionShape(f));
     for (let sy=origin.cropTopTiles; sy<field.height; sy++) for (let sx=0; sx<field.width; sx++) {
       const y=origin.tileY+sy, x=origin.tileX+sx;
       if (y<0 || y>=height || x<0 || x>=width) continue;
@@ -144,7 +148,7 @@ export function composeProductRanchGround(frame) {
     cageAt:(x,y)=>Number.isFinite(x)&&Number.isFinite(y)?map.get(read(owners,Math.floor(x/8),Math.floor(y/8),-1))??null:null,
     placement,
     origin:reference=>{const p=placement(reference);if(!p)return null;
-      const o=productFieldTileOrigin(p.slotIndex,ORIGINAL_CAGE_DEFINITION_SHAPES[p.definitionIndex]);return [o.tileX*8,o.tileY*8,0];}
+      const o=productFieldTileOrigin(p.slotIndex,cageDefinitionShape(p.fieldDefinitionIndex));return [o.tileX*8,o.tileY*8,0];}
   }));
 }
 

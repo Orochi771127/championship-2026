@@ -586,7 +586,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     const resident = selectedResident(frame);
     root.dataset.selection = resident ? "selected" : "none";
     if (resident) { hintStarted = true; hintTimer.hide(); }
-    const ranchImage = originalCageLocationArt(resident?.nativeCageDefinition);
+    const ranchImage = originalCageLocationArt(resident?.nativeCageMapDefinition ?? resident?.nativeCageDefinition);
     ranchIcon.hidden = !ranchImage;
     if (ranchImage && ranchIcon.getAttribute('src') !== ranchImage) ranchIcon.src = ranchImage;
     // The HUD portrait art is local-only; the public build falls back to the encyclopedia's own

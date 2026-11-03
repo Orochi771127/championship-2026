@@ -122,6 +122,7 @@ import { registerNativeBookSpecies, retainOwnedBookSpecies } from "../database/n
 import {getShopRecord,BITS_WALLET_CAP} from '../shop/shopCatalog.js';
 import { createCageEditRuntime } from "../cage/cageEditRuntime.js";
 import { normalizeTamerRank, slotCountForTamerRank, listCageDefinitions } from "../cage/cageCatalog.js";
+import { getCageDefinitionByModuleId, getGachaCageDefinitionByEdition } from "../cage/productCageCatalog.js";
 import { validateRanchLayout } from '../cage/ranchExpansion.js';
 import { getMatchRecord, matchEntryFee, matchPayout, resolveMatchList } from "../battle/battleMatchSelection.js";
 import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from "../battle/battleOutcome.js";
@@ -392,12 +393,10 @@ export function createChampionshipStandaloneApp({
 
   function shopCageOwned() {
     const stock=shop?.toSave() ?? [];
-    // DIAMOND_ECONOMY_20261102: a royal cage (bag or placed) is one more copy of its base cage.
+    // Owner 2026-11-03: a royal cage (bag or placed) is a copy of its own module, counted from the gachapon.
     const royal=royalCageCopies();
-    if(!royal.size||Array.isArray(stock)||!stock.cageQuantities)return stock;
-    const quantities=Array.isArray(stock.cageQuantities)?[...stock.cageQuantities]:{...stock.cageQuantities},owned=new Set(stock.cageOwned??[]);
-    for(const [record,count] of royal){quantities[record]=(quantities[record]??0)+count;owned.add(record);}
-    return {...stock,cageQuantities:quantities,cageOwned:[...owned].sort((a,b)=>a-b)};
+    if(!royal.size)return stock;
+    return Array.isArray(stock)?{cageOwned:stock,gachaCages:Object.fromEntries(royal)}:{...stock,gachaCages:Object.fromEntries(royal)};
   }
 
   function tamerRank() {
@@ -1153,14 +1152,15 @@ export function createChampionshipStandaloneApp({
   function gachaRefusal(reason){return gachaReceipt({ok:false,reason});}
 
   // ---- Ranch automation and diamonds (OWNER_APPROVED_ADAPTATION 2026-11-02, DIAMOND_ECONOMY_20261102) ----
-  // Cores and royal cages live in the gachapon state; the cage instances stay in cageEdit. A royal cage is
-  // one more copy of its base cage (zoo / ranch) for ownership, and carries its edition by instance id.
+  // Cores and royal cages live in the gachapon state; the cage instances stay in cageEdit. Since 2026-11-03
+  // (Owner) a royal cage is its own module and map (cageCatalog.js definitions 36, 37) and still carries its
+  // edition by instance id, which runs its built-in feeding, cleaning and bonuses.
   const ROYAL_ITEMS=AUTOMATION_ITEMS.filter(item=>item.edition);
-  const baseDefinitionOf=item=>listCageDefinitions().find(d=>d.cageDefinitionIndex===item.baseDefinition)??null;
+  const royalModuleOf=item=>getGachaCageDefinitionByEdition(item.edition)?.moduleId??null;
   function royalCageCopies(){
     const copies=new Map();if(!cyberGacha)return copies;
-    for(const item of ROYAL_ITEMS){const n=royalTotal(cyberGacha,item.edition),record=baseDefinitionOf(item)?.shopRecordIndex;
-      if(n>0&&Number.isInteger(record))copies.set(record,(copies.get(record)??0)+n);}
+    for(const item of ROYAL_ITEMS){const n=royalTotal(cyberGacha,item.edition),moduleId=royalModuleOf(item);
+      if(n>0&&moduleId)copies.set(moduleId,n);}
     return copies;
   }
   /** Royal editions of the facility draft: the committed ones until the draft places or removes one. */
@@ -1168,7 +1168,7 @@ export function createChampionshipStandaloneApp({
   function royalTrayView(frame){
     const draft=royalDraft(),live=new Set((frame.placements??[]).map(p=>p.instanceId).filter(Boolean));
     return ROYAL_ITEMS.map(item=>{
-      const moduleId=baseDefinitionOf(item)?.moduleId??null,total=royalTotal(gachaState(),item.edition);
+      const moduleId=royalModuleOf(item),total=royalTotal(gachaState(),item.edition);
       const placed=Object.entries(draft).filter(([id,edition])=>edition===item.edition&&live.has(id)).length;
       return Object.freeze({id:item.id,edition:item.edition,name:item.name,rarity:item.rarity,art:item.art,moduleId,total,
         available:Math.max(0,total-placed),selected:pendingRoyalEdition===item.edition&&frame.selectedModuleId===moduleId});
@@ -1273,7 +1273,7 @@ export function createChampionshipStandaloneApp({
     return Object.freeze((cageEdit?.toSave().placements??[]).filter(p=>p.instanceId).map(p=>{
       const auto=cageAutomation(state,p.instanceId);
       return Object.freeze({instanceId:p.instanceId,moduleId:p.moduleId,
-        definitionIndex:listCageDefinitions().find(d=>d.moduleId===p.moduleId)?.cageDefinitionIndex??null,
+        definitionIndex:getCageDefinitionByModuleId(p.moduleId)?.cageDefinitionIndex??null,
         royal:auto.royal,edition:auto.edition,mounted:auto.mounted,clean:auto.clean,feed:auto.feed});
     }));
   }
@@ -1960,7 +1960,10 @@ export function createChampionshipStandaloneApp({
         // Current and maximum HP for frame readers. These reads do not create
         // a second HP owner; the recovery-cage stars do not read them.
         currentHp:profile.fields["050"],
-        maxHp:profile.fields["058"]
+        maxHp:profile.fields["058"],
+        // The map the partner lives on: a royal cage (Owner 2026-11-03) runs by its base cage's rules
+        // (cageDefinitionIndex) but is drawn and named as itself.
+        cageMapDefinitionIndex:raisingGround?.placement?.(actor.cageInstanceId)?.fieldDefinitionIndex??actor.cageDefinitionIndex??null
       }) : null;
     },
 
@@ -3219,13 +3222,9 @@ export function createChampionshipStandaloneApp({
       if (!cageEdit) return null;
       const frame=requireCageEdit().getFrame(...cageEditArgs());
       if(!frame.productGrid)return Object.freeze({...frame,testDiamonds:friendsPlaytest?.diamonds??0});
-      // DIAMOND_ECONOMY_20261102: royal cages get their own tray cards; the base card keeps the plain copies.
+      // DIAMOND_ECONOMY_20261102: royal cages get their own tray cards (their own modules since 2026-11-03).
       const royal=royalTrayView(frame);
-      const tray=frame.tray.map(item=>{
-        const mine=royal.filter(entry=>entry.moduleId===item.moduleId);if(!mine.length)return item;
-        return Object.freeze({...item,availableCount:item.availableCount-mine.reduce((sum,entry)=>sum+entry.available,0),
-          ownedCount:item.ownedCount-mine.reduce((sum,entry)=>sum+entry.total,0),selected:item.selected&&pendingRoyalEdition===null});
-      }).filter(item=>item.availableCount>0);
+      const tray=frame.tray;
       return Object.freeze({...frame,tray:Object.freeze(tray),testDiamonds:friendsPlaytest?.diamonds??0,royalTray:Object.freeze(royal),
         automation:cageAutomationView(frame),land:landView(frame),landExpansion:lastLandExpansion,
         // Owner 2026-11-03: the cores in the bag, so a selected cage can take one in place.
@@ -3272,13 +3271,10 @@ export function createChampionshipStandaloneApp({
       }
       const editor=requireCageEdit(),before=new Set(editor.getFrame(...cageEditArgs()).placements.map(p=>p.instanceId));
       const frame=editor.placeAt(slotIndex, ...cageEditArgs());
-      // A royal card's placement carries its edition; with no plain copy left, the base cage placed is royal.
+      // A royal cage's placement carries its edition by instance id (its module is the royal map).
       const added=frame.placements.find(p=>p.instanceId&&!before.has(p.instanceId));
       if(added){
-        const royal=royalTrayView(frame).filter(entry=>entry.moduleId===added.moduleId);
-        const plainLeft=(frame.tray.find(item=>item.moduleId===added.moduleId)?.availableCount??0)-royal.reduce((s,e)=>s+e.available,0);
-        const edition=royal.find(entry=>entry.edition===pendingRoyalEdition&&entry.available>0)?.edition
-          ??(plainLeft<0?royal.find(entry=>entry.available>0)?.edition:null);
+        const edition=getCageDefinitionByModuleId(added.moduleId)?.gachaEdition??null;
         if(edition)draftRoyalEditions={...royalDraft(),[added.instanceId]:edition};
         pendingRoyalEdition=null;
       }

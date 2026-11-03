@@ -13,7 +13,7 @@ const policyPath='src/data/championship/public-playtest.r1.json';
 const input=read(inputPath),allow=read(allowPath),policy=read(policyPath);
 const manifestPath='assets/production/cage/three-20261021/manifest.json';
 const manifest=read(manifestPath);
-if(manifest.fields.length!==37||manifest.fields.some(row=>Object.keys(row).sort().join(',')!=='bytes,fieldId,sha256,url'
+if(manifest.fields.length!==39||manifest.fields.some(row=>Object.keys(row).sort().join(',')!=='bytes,fieldId,sha256,url'
   ||!/^[a-f0-9]{64}$/.test(row.sha256)||row.bytes!==fs.statSync(row.url).size||row.sha256!==hash(row.url)))
   throw Error('RANCH_3D_MODEL_SELECTION_NOT_CLOSED');
 const selected=[
@@ -66,7 +66,7 @@ input.publicPlaytest.ownerInstruction='請自我審查沒問題後commit 跟push
 policy.ranchTrue3D20261021={
   selectionId:'RANCH_TRUE_3D_PUBLIC_20261021',status:'OWNER_AUTHORIZED_PUBLIC_PLAYTEST',
   authorizationRecordedOn:'2026-10-21',
-  scope:'Fixed-camera true 3D ranch with existing 2D actors, invisible navigation passages and rideable factory conveyor; exact 37 first-party Draco/WebP GLB hashes selected and served on the existing Pages origin.',
+  scope:'Fixed-camera true 3D ranch with existing 2D actors, invisible navigation passages and rideable factory conveyor; exact 39 first-party Draco/WebP GLB hashes (37 cages plus the two gachapon royal maps, Owner 2026-11-03) selected and served on the existing Pages origin.',
   modelSource:'assets/production/cage/three-20261021/',
   physicalDeviceAccepted:false,commercialArtAccepted:false,commercialReleaseAccepted:false,
 };

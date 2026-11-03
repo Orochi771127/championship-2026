@@ -5,7 +5,7 @@ import {shopItemName} from '../text/zhHant.js';
 import {shopGoodsPresentation} from '../presentation/shopGoodsUiArt.js';
 import {RANCH_DISCOVERY_REWARDS} from '../raising/ranchDiscoveries.js';
 import {STROLL_REWARDS,pendingStrollEntries} from '../raising/ranchPartnerLife.js';
-import {getCageDefinition} from '../cage/cageCatalog.js';
+import { getCageDefinition } from '../cage/productCageCatalog.js';
 import {cageName,localizeSpeciesCodes} from '../text/zhHant.js';
 import {formatWorldClockTime} from '../time/championshipWorldClock.js';
 const copy=()=>Object.fromEntries(["title", "about", "empty", "none", "full", "collect", "close", "food", "herb", "bits", "rare", "partner", "path", "blocked", "saved", "failed"].map(key=>[key,uiText(`RANCH_JOURNAL_${key.toUpperCase()}`)]));

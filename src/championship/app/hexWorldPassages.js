@@ -6,7 +6,7 @@
 import { composeProductRanchGround } from '../raising/nativeRaisingRanchRing.js';
 import { ranchSafeExits } from '../cage/ranchConnections.js';
 import { RANCH_ECOLOGY_GROUPS, ranchEcologyType } from '../cage/ranchEcology.js';
-import { getCageDefinitionByModuleId } from '../cage/cageCatalog.js';
+import { getCageDefinitionByModuleId } from '../cage/productCageCatalog.js';
 import { cageName } from '../text/zhHant.js';
 
 const view = (p) => p.map((entry) => ({ moduleId: entry.moduleId, slotIndex: entry.slotIndex, instanceId: entry.instanceId }));

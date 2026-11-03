@@ -8,7 +8,7 @@
 import presentation from "../../../docs/contracts/championship/raising-home-presentation.v1.json" with { type: "json" };
 import toolbarContract from "../../../docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json" with { type: "json" };
 import { projectWorldClockDisplay } from "../time/championshipWorldClock.js";
-import {getCageDefinition} from "../cage/cageCatalog.js";
+import { getCageDefinition } from "../cage/productCageCatalog.js";
 import { raisingDisplayName, cageName } from "../text/zhHant.js";
 import {nativeHuntToolSpecies} from '../hunt/capture/nativeHuntToolRules.js';
 
@@ -243,7 +243,8 @@ export function createRaisingPresentationSource(app) {
         displayCapacityG: /^championship:creature:species-\d{3}$/.test(member.speciesId)
           ? nativeHuntToolSpecies(Number(member.speciesId.slice(-3))).displayCapacityG : null,
         nativeCageDefinition: app.getRaisingActorFrame?.(member.creatureId)?.cageDefinitionIndex ?? null,
-        nativeCageName: (()=>{const definition=app.getRaisingActorFrame?.(member.creatureId)?.cageDefinitionIndex;
+        nativeCageMapDefinition: app.getRaisingActorFrame?.(member.creatureId)?.cageMapDefinitionIndex ?? null,
+        nativeCageName: (()=>{const frame=app.getRaisingActorFrame?.(member.creatureId),definition=frame?.cageMapDefinitionIndex??frame?.cageDefinitionIndex;
           return Number.isInteger(definition)?cageName(definition, getCageDefinition(definition)?.displayName??null):null;})(),
         sprite: spriteProjection(member.spriteResident)
       })),
