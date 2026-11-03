@@ -182,3 +182,19 @@ test('all 232 partners: every walk, run and struggle in Hunt is animated or cove
   }
   assert.ok(report.summary.afterAnimated>=report.summary.huntBodies/2);
 });
+
+test('expanded hunt maps steer on every tile, so an escaping partner never freezes the field',async()=>{
+  const {createNativeHuntEnvironment}=await import('../src/championship/hunt/capture/nativeHuntSceneSources.js');
+  const {steerNativeHuntDirectionCell}=await import('../src/championship/hunt/capture/nativeHuntMovement.js');
+  const expansions=JSON.parse(fs.readFileSync('src/data/championship/catalogs/hunt-art-expansions-20261023.json','utf8')).environments;
+  let maps=0;
+  for(const [fieldId,data] of Object.entries(expansions)){
+    const environment=createNativeHuntEnvironment(data);maps++;
+    for(let y=0;y<environment.height;y++)for(let x=0;x<environment.width;x++){
+      const cell=environment.readDirectionCell(x,y);
+      assert.ok([0x1000,0x59a,0xcd].includes(cell.blendQ12),`${fieldId} ${x},${y}`);
+      steerNativeHuntDirectionCell([0,4096,0],cell);
+    }
+  }
+  assert.equal(maps,21);
+});

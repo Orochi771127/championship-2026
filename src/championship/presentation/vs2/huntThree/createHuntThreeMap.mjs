@@ -70,9 +70,11 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
   offLost=stage.onContextLost(()=>fail(new Error('HM02_CONTEXT_LOST_USE_2D')));
   function cropTexture(texture){
     const image=texture.source?.resource,frame=texture.frame,res=texture.source?.resolution??1;
-    if(!image||texture.rotate)throw new Error('HM02_UNSUPPORTED_SPRITE_SOURCE');
+    // Reviewed sets drawn facing the other way load as groupD8 12 (mirrored about the pivot).
+    if(!image||(texture.rotate&&texture.rotate!==12))throw new Error('HM02_UNSUPPORTED_SPRITE_SOURCE');
     const canvas=document.createElement('canvas');canvas.width=Math.round(frame.width*res);canvas.height=Math.round(frame.height*res);
     const ctx=canvas.getContext('2d');if(!ctx)throw new Error('HM02_CPU_TEXTURE_CANVAS_UNAVAILABLE');
+    if(texture.rotate===12){ctx.translate(canvas.width,0);ctx.scale(-1,1);}
     ctx.drawImage(image,frame.x*res,frame.y*res,frame.width*res,frame.height*res,0,0,canvas.width,canvas.height);
     const t=new THREE.CanvasTexture(canvas);t.colorSpace=THREE.SRGBColorSpace;t.minFilter=THREE.NearestFilter;t.magFilter=THREE.NearestFilter;t.generateMipmaps=false;
     return t;

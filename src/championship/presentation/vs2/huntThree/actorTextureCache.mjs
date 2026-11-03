@@ -7,7 +7,8 @@ export function createActorTextureCache({create,maxEntries=64,maxBytes=16*1024*1
   const size=key=>{
     const r=key?.source?.resolution??1,f=key?.frame;
     const w=Math.round((f?.width??0)*r),h=Math.round((f?.height??0)*r);
-    if(!(r>0)||!Number.isFinite(r)||w<1||h<1||!Number.isSafeInteger(w*h*4)||key.rotate)
+    // groupD8 12 (a horizontally mirrored frame) is the only rotation cropTexture draws.
+    if(!(r>0)||!Number.isFinite(r)||w<1||h<1||!Number.isSafeInteger(w*h*4)||(key.rotate&&key.rotate!==12))
       throw new Error('HM02_UNSUPPORTED_SPRITE_SOURCE');
     return w*h*4;
   };

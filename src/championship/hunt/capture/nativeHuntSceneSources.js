@@ -42,6 +42,12 @@ export function createNativeHuntEnvironment(data) {
   };
   // 02087F30 returns byte zero out of bounds; retain its consumed semantics.
   const outsideDirection = deepFreeze({ targetQ12:[0,-4096,0], blendQ12:0xcd });
+  // Hunt four fixes (Owner 2026-11-03): an expansion's unassigned tiles were
+  // stored with blend 0, which the native steering refuses. A bound partner
+  // escaping into the appended east/south tiles threw on every tick and froze
+  // the whole field. They read as native byte zero, like the outside.
+  const palette = expanded ? data.directionPalette.map(cell => [0x1000, 0x59a, 0xcd].includes(cell?.blendQ12) ? cell
+    : deepFreeze({ ...cell, targetQ12:[0,-4096,0], blendQ12:0xcd })) : data.directionPalette;
   const readTerrain = (x,y) => { validate(x,y); return outside(x,y) ? 1 : terrain[y * data.width + x]; };
   return Object.freeze({ width:data.width, height:data.height, wrap:false, readTerrain,
     ...(expanded ? { adaptation:NATIVE_HUNT_EXPANSION_ADAPTATION } : {}),
@@ -49,7 +55,7 @@ export function createNativeHuntEnvironment(data) {
     isBlocked:(x,y) => readTerrain(x,y) === 1,
     readDirectionCell(x,y) {
       validate(x,y);
-      return outside(x,y) ? outsideDirection : data.directionPalette[direction[y * data.width + x]];
+      return outside(x,y) ? outsideDirection : palette[direction[y * data.width + x]];
     }
   });
 }
