@@ -39,6 +39,7 @@ jobs:
           set -euo pipefail
           mkdir -p .tmp/browser-qa/evolution
           git show 3b3ff45a0bd6486b8e24b45f3010bb8e8f2dec97:src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js > .tmp/evolution-baseline-presenter.js
+          git show 3b3ff45a0bd6486b8e24b45f3010bb8e8f2dec97:src/championship/presentation/intRh2/raisingZoomInput.js > .tmp/evolution-baseline-zoom.js
           python3 -u -m http.server 8765 --bind 127.0.0.1 > .tmp/browser-qa/evolution/server.log 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT

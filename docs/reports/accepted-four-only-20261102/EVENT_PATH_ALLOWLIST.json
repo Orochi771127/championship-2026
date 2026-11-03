@@ -1,0 +1,846 @@
+{
+  "base": "b692ad5b51b4956100b4d84fb5ce491cc5d1b391",
+  "roles": [
+    "GR03",
+    "GR14",
+    "GR15",
+    "GR16"
+  ],
+  "events": [
+    {
+      "role": "GR03",
+      "clipId": "accepted:arena:D:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "D",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR03_GR03_S_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_S_B",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_S_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_S_C",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR03",
+      "clipId": "accepted:arena:DR:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "DR",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR03_GR03_SE_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_SE_B",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_SE_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_SE_C",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR03",
+      "clipId": "accepted:arena:R:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "R",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR03_GR03_E_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_E_B",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_E_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_E_C",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR03",
+      "clipId": "accepted:arena:UR:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "UR",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR03_GR03_NE_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_NE_B",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_NE_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_NE_C",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR03",
+      "clipId": "accepted:arena:U:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "U",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR03_GR03_N_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_N_B",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_N_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_N_C",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR03",
+      "clipId": "accepted:arena:UL:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "UL",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR03_GR03_NW_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_NW_B",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_NW_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_NW_C",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR03",
+      "clipId": "accepted:arena:L:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "L",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR03_GR03_W_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_W_B",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_W_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_W_C",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR03",
+      "clipId": "accepted:arena:DL:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "DL",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR03_GR03_SW_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_SW_B",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_SW_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR03_GR03_SW_C",
+          "durationMs": 200.0,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR14",
+      "clipId": "main:0",
+      "mode": "main",
+      "action": "idle",
+      "direction": null,
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR14_G000",
+          "durationMs": 516.6666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR14_G001",
+          "durationMs": 366.6666666666667,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR14",
+      "clipId": "sub:0",
+      "mode": "sub",
+      "action": "idle",
+      "direction": null,
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR14_G000",
+          "durationMs": 516.6666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR14_G001",
+          "durationMs": 366.6666666666667,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR15",
+      "clipId": "main:0",
+      "mode": "main",
+      "action": "idle",
+      "direction": null,
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR15_G000",
+          "durationMs": 516.6666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR15_G001",
+          "durationMs": 366.6666666666667,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR15",
+      "clipId": "sub:0",
+      "mode": "sub",
+      "action": "idle",
+      "direction": null,
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR15_G000",
+          "durationMs": 516.6666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR15_G001",
+          "durationMs": 366.6666666666667,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR16",
+      "clipId": "accepted:arena:D:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "D",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR16_Down_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_Down_B",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_Down_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_Down_C",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR16",
+      "clipId": "accepted:arena:DR:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "DR",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR16_DownRight_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_DownRight_B",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_DownRight_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_DownRight_C",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR16",
+      "clipId": "accepted:arena:R:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "R",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR16_Right_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_Right_B",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_Right_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_Right_C",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR16",
+      "clipId": "accepted:arena:UR:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "UR",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR16_UpRight_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_UpRight_B",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_UpRight_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_UpRight_C",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR16",
+      "clipId": "accepted:arena:U:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "U",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR16_Up_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_Up_B",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_Up_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_Up_C",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR16",
+      "clipId": "accepted:arena:UL:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "UL",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR16_UpLeft_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_UpLeft_B",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_UpLeft_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_UpLeft_C",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR16",
+      "clipId": "accepted:arena:L:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "L",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR16_Left_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_Left_B",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_Left_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_Left_C",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "role": "GR16",
+      "clipId": "accepted:arena:DL:walk",
+      "mode": "arena",
+      "action": "move",
+      "direction": "DL",
+      "frames": [
+        {
+          "assetId": "accepted20261101_GR16_DownLeft_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_DownLeft_B",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_DownLeft_A",
+          "durationMs": 133.33333333333334,
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "assetId": "accepted20261101_GR16_DownLeft_C",
+          "durationMs": 166.66666666666666,
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  ],
+  "paths": [
+    {
+      "path": "assets/production/characters/reviewed107-20261026/GR03/animation.public-v1.json",
+      "sha256": "1a02e6b44edd7ea9a74a94a9ef4512ccfb6c8e789884ec378aca6177c61a0c07"
+    },
+    {
+      "path": "assets/production/characters/reviewed107-20261026/GR03/animation.web-v4-20261101.json",
+      "sha256": "297b924ef78a75da5db5adefc7e2aa773174960f6d61ed095733165e088e4cf3"
+    },
+    {
+      "path": "assets/production/characters/reviewed107-20261026/GR03/web-atlas-v2/52b39ebb78f6e6b64d8d519ffc7feafd3d247909f66b290a540da337eedf1889.webp",
+      "sha256": "52b39ebb78f6e6b64d8d519ffc7feafd3d247909f66b290a540da337eedf1889"
+    },
+    {
+      "path": "assets/production/characters/reviewed107-20261026/GR14/animation.public-v1.json",
+      "sha256": "b6a42629cc93ca3b7da2bcbc9c34fc36ea1406998630c8859672c8f48bc7f3bb"
+    },
+    {
+      "path": "assets/production/characters/reviewed107-20261026/GR14/animation.web-v4-20261101.json",
+      "sha256": "437288232413c864ece6c028381e97302e7eb85248f6a209c8c93e7686aae909"
+    },
+    {
+      "path": "assets/production/characters/reviewed107-20261026/GR14/web-atlas-v2/e869ee254a06aa321c000a6613a1f23b8281a7a66422af0a96bae6a20ea3c41f.webp",
+      "sha256": "e869ee254a06aa321c000a6613a1f23b8281a7a66422af0a96bae6a20ea3c41f"
+    },
+    {
+      "path": "assets/production/characters/reviewed107-20261026/GR15/animation.public-v1.json",
+      "sha256": "9d1417e117653c134b345cf7404918664fb542d48a545c49550ba8d3c53ba892"
+    },
+    {
+      "path": "assets/production/characters/reviewed107-20261026/GR15/animation.web-v4-20261101.json",
+      "sha256": "c099e5eb34356b15f1ab6be59dd9e4b0dfad5f858776e0932d1d6ca1f87b61e8"
+    },
+    {
+      "path": "assets/production/characters/reviewed107-20261026/GR15/web-atlas-v2/f0287f0f79404a99fe3eb1a4a0abc31cdda456fd1e01f18b651cacfc03e20168.webp",
+      "sha256": "f0287f0f79404a99fe3eb1a4a0abc31cdda456fd1e01f18b651cacfc03e20168"
+    },
+    {
+      "path": "assets/production/characters/reviewed107-20261026/GR16/animation.public-v1.json",
+      "sha256": "b13b7de1986395eb51a3dbc345fdc9ea0a01cc9c599f5c5bed9ce1ab871ef653"
+    },
+    {
+      "path": "assets/production/characters/reviewed107-20261026/GR16/animation.web-v4-20261101.json",
+      "sha256": "5d506b35a0eb5c25a0b9ed99e9279b1e33b6773f5cb82cb986997727869ab54a"
+    },
+    {
+      "path": "assets/production/characters/reviewed107-20261026/GR16/web-atlas-v2/cc952cc44b13a038b4e23b512c432b70f1c2c1f60b710ad89b4b78d0753ee239.webp",
+      "sha256": "cc952cc44b13a038b4e23b512c432b70f1c2c1f60b710ad89b4b78d0753ee239"
+    }
+  ],
+  "onlyFourScopes": true,
+  "noAdditionalCandidates": true,
+  "newUniqueDrawings": 52,
+  "Walk8Events": 64,
+  "IdleEventsIncludingAliases": 8,
+  "replacedOriginalClipIds": {
+    "GR03": [
+      "gr03.arena.walk.S",
+      "gr03.arena.walk.SE",
+      "gr03.arena.walk.E",
+      "gr03.arena.walk.NE",
+      "gr03.arena.walk.N",
+      "gr03.arena.walk.NW",
+      "gr03.arena.walk.W",
+      "gr03.arena.walk.SW"
+    ],
+    "GR14": [],
+    "GR15": [],
+    "GR16": [
+      "A1_Down",
+      "A1_DownRight",
+      "A1_Right",
+      "A1_UpRight",
+      "A2_Up",
+      "A2_UpLeft",
+      "A2_Left",
+      "A2_DownLeft"
+    ]
+  }
+}

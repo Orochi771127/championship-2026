@@ -106101,7 +106101,7 @@
     },
     {
       "path": "assets/production/characters/reviewed107-20261026/GR03/animation.public-v1.json",
-      "sha256": "b82435ed8b4deee7a12cf98f7c322ef7d1f1e4040e1239dd6bfe7d364250091f",
+      "sha256": "1a02e6b44edd7ea9a74a94a9ef4512ccfb6c8e789884ec378aca6177c61a0c07",
       "jsonFields": [
         "action",
         "afterHoldMs",
@@ -106115,6 +106115,7 @@
         "direction",
         "displayCode",
         "durationMs",
+        "facingLocked",
         "frame",
         "frameIndex",
         "frames",
@@ -106130,6 +106131,7 @@
         "offset",
         "origin",
         "rootArenaContextApproval",
+        "sampling",
         "schemaVersion",
         "scope",
         "sha256",
@@ -106143,6 +106145,10 @@
     {
       "path": "assets/production/characters/reviewed107-20261026/GR03/web-atlas-v2/3803410f9af44d596d6c0aab50422ee90d9b002185cbcffa89725ffb6ac9434f.webp",
       "sha256": "3803410f9af44d596d6c0aab50422ee90d9b002185cbcffa89725ffb6ac9434f"
+    },
+    {
+      "path": "assets/production/characters/reviewed107-20261026/GR03/web-atlas-v2/52b39ebb78f6e6b64d8d519ffc7feafd3d247909f66b290a540da337eedf1889.webp",
+      "sha256": "52b39ebb78f6e6b64d8d519ffc7feafd3d247909f66b290a540da337eedf1889"
     },
     {
       "path": "assets/production/characters/reviewed107-20261026/GR03/web-atlas-v2/59339ab025f969927ddf56e83f7e04015cfa1bcbe13db34cb00ea57c4f96ae94.webp",
@@ -106626,7 +106632,7 @@
     },
     {
       "path": "assets/production/characters/reviewed107-20261026/GR14/animation.public-v1.json",
-      "sha256": "8a5fac89a6b32263d06255f246e3221190bb79017fc98c5a792256899001254b",
+      "sha256": "b6a42629cc93ca3b7da2bcbc9c34fc36ea1406998630c8859672c8f48bc7f3bb",
       "jsonFields": [
         "action",
         "afterHoldMs",
@@ -106640,6 +106646,7 @@
         "direction",
         "displayCode",
         "durationMs",
+        "facingLocked",
         "frame",
         "frameIndex",
         "frames",
@@ -106655,6 +106662,7 @@
         "offset",
         "origin",
         "rootArenaContextApproval",
+        "sampling",
         "schemaVersion",
         "scope",
         "sha256",
@@ -106686,8 +106694,12 @@
       "sha256": "c437d4167f2e5786fa4378246113004ec96f04b243de711faf3539ddbb91839a"
     },
     {
+      "path": "assets/production/characters/reviewed107-20261026/GR14/web-atlas-v2/e869ee254a06aa321c000a6613a1f23b8281a7a66422af0a96bae6a20ea3c41f.webp",
+      "sha256": "e869ee254a06aa321c000a6613a1f23b8281a7a66422af0a96bae6a20ea3c41f"
+    },
+    {
       "path": "assets/production/characters/reviewed107-20261026/GR15/animation.public-v1.json",
-      "sha256": "519591e61710667fa40b44fa830380202c2aed47ab85b13e32c24b8c71855209",
+      "sha256": "9d1417e117653c134b345cf7404918664fb542d48a545c49550ba8d3c53ba892",
       "jsonFields": [
         "action",
         "afterHoldMs",
@@ -106701,6 +106713,7 @@
         "direction",
         "displayCode",
         "durationMs",
+        "facingLocked",
         "frame",
         "frameIndex",
         "frames",
@@ -106716,6 +106729,7 @@
         "offset",
         "origin",
         "rootArenaContextApproval",
+        "sampling",
         "schemaVersion",
         "scope",
         "sha256",
@@ -106743,12 +106757,16 @@
       "sha256": "e4a7a86a076699cd3b6e5512893b7d82af5eecdcd8b18050722c67570e422997"
     },
     {
+      "path": "assets/production/characters/reviewed107-20261026/GR15/web-atlas-v2/f0287f0f79404a99fe3eb1a4a0abc31cdda456fd1e01f18b651cacfc03e20168.webp",
+      "sha256": "f0287f0f79404a99fe3eb1a4a0abc31cdda456fd1e01f18b651cacfc03e20168"
+    },
+    {
       "path": "assets/production/characters/reviewed107-20261026/GR15/web-atlas-v2/f058556644c61400d38b88fba5bb506392bbaca27faa082915062ef7dcae07c4.webp",
       "sha256": "f058556644c61400d38b88fba5bb506392bbaca27faa082915062ef7dcae07c4"
     },
     {
       "path": "assets/production/characters/reviewed107-20261026/GR16/animation.public-v1.json",
-      "sha256": "ed44b208fb7f2445eec535e1d4e9cadc32915be4899f103a86fd91cc6aefb5bb",
+      "sha256": "b13b7de1986395eb51a3dbc345fdc9ea0a01cc9c599f5c5bed9ce1ab871ef653",
       "jsonFields": [
         "action",
         "arena",
@@ -106792,6 +106810,10 @@
     {
       "path": "assets/production/characters/reviewed107-20261026/GR16/web-atlas-v2/87616b4fc91f6a400448496962886784759e9e03f46f1d4ab6e61479968b4137.webp",
       "sha256": "87616b4fc91f6a400448496962886784759e9e03f46f1d4ab6e61479968b4137"
+    },
+    {
+      "path": "assets/production/characters/reviewed107-20261026/GR16/web-atlas-v2/cc952cc44b13a038b4e23b512c432b70f1c2c1f60b710ad89b4b78d0753ee239.webp",
+      "sha256": "cc952cc44b13a038b4e23b512c432b70f1c2c1f60b710ad89b4b78d0753ee239"
     },
     {
       "path": "assets/production/characters/reviewed107-20261026/GR17/animation.public-v1.json",
@@ -111698,6 +111720,130 @@
     {
       "path": "assets/production/characters/reviewed107-20261026/MA69/web-atlas-v2/e44ae3f7860b2fc4481de112955c70674f1f23e5ca525e8ec5184cb5475168d6.webp",
       "sha256": "e44ae3f7860b2fc4481de112955c70674f1f23e5ca525e8ec5184cb5475168d6"
+    },
+    {
+      "path": "assets/production/characters/self-reviewed-20261102/AW23/animation.public-v1.json",
+      "sha256": "6fb962f8f371988cacef3f209ee80f11cdb2d3d7e66d93ec1ad35e2365190994",
+      "jsonFields": [
+        "action",
+        "afterHoldMs",
+        "arena",
+        "assetId",
+        "authorizedContext",
+        "bindingSha256",
+        "clipId",
+        "clips",
+        "density",
+        "direction",
+        "displayCode",
+        "durationMs",
+        "facingLocked",
+        "frame",
+        "frameIndex",
+        "frames",
+        "hold",
+        "id",
+        "image",
+        "kind",
+        "loop",
+        "main15Terminal",
+        "mirrorX",
+        "mode",
+        "neutralReturn",
+        "offset",
+        "origin",
+        "release",
+        "rootArenaContextApproval",
+        "sampling",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "source",
+        "sourceContextIds",
+        "sourceSize",
+        "speciesId",
+        "trim"
+      ]
+    },
+    {
+      "path": "assets/production/characters/self-reviewed-20261102/AW23/web-atlas-v2/3ada567d55d27fa6bb65f551cde587feddc28eefdb94de54e557691477d3b203.webp",
+      "sha256": "3ada567d55d27fa6bb65f551cde587feddc28eefdb94de54e557691477d3b203"
+    },
+    {
+      "path": "assets/production/characters/self-reviewed-20261102/AW23/web-atlas-v2/52e15df54e0e7cde48d2ca7ac4c8f3e7f0b834e084744ff305df6d73c00da801.webp",
+      "sha256": "52e15df54e0e7cde48d2ca7ac4c8f3e7f0b834e084744ff305df6d73c00da801"
+    },
+    {
+      "path": "assets/production/characters/self-reviewed-20261102/AW23/web-atlas-v2/7d1e0a2285231854ae12d2d3e944affe8c75eae14c2b05b84c616c07a3a48843.webp",
+      "sha256": "7d1e0a2285231854ae12d2d3e944affe8c75eae14c2b05b84c616c07a3a48843"
+    },
+    {
+      "path": "assets/production/characters/self-reviewed-20261102/AW23/web-atlas-v2/83380c50259fd9619d18a6eeb102c5172edf250fcb758a22908c7da085966f43.webp",
+      "sha256": "83380c50259fd9619d18a6eeb102c5172edf250fcb758a22908c7da085966f43"
+    },
+    {
+      "path": "assets/production/characters/self-reviewed-20261102/AW23/web-atlas-v2/acfd9c2a77e82b05e70361b324032d090935f7e034f1de4ecaeb5d3583c14e3b.webp",
+      "sha256": "acfd9c2a77e82b05e70361b324032d090935f7e034f1de4ecaeb5d3583c14e3b"
+    },
+    {
+      "path": "assets/production/characters/self-reviewed-20261102/AW23/web-atlas-v2/f405aaad67b45616badca0ab67855cecb52ad1ff989ed3294e38c9f9848874a0.webp",
+      "sha256": "f405aaad67b45616badca0ab67855cecb52ad1ff989ed3294e38c9f9848874a0"
+    },
+    {
+      "path": "assets/production/characters/self-reviewed-20261102/UL14/animation.public-v1.json",
+      "sha256": "1505fde267a4b1ff8211ed304d0be83d2e9cac468bc8a3e0142b7184d6ab7808",
+      "jsonFields": [
+        "action",
+        "afterHoldMs",
+        "arena",
+        "assetId",
+        "authorizedContext",
+        "bindingSha256",
+        "clipId",
+        "clips",
+        "density",
+        "direction",
+        "displayCode",
+        "durationMs",
+        "facingLocked",
+        "frame",
+        "frameIndex",
+        "frames",
+        "hold",
+        "id",
+        "image",
+        "kind",
+        "loop",
+        "main15Terminal",
+        "mirrorX",
+        "mode",
+        "neutralReturn",
+        "offset",
+        "origin",
+        "release",
+        "rootArenaContextApproval",
+        "sampling",
+        "schemaVersion",
+        "scope",
+        "sha256",
+        "source",
+        "sourceContextIds",
+        "sourceSize",
+        "speciesId",
+        "trim"
+      ]
+    },
+    {
+      "path": "assets/production/characters/self-reviewed-20261102/UL14/web-atlas-v2/1483565c522684e1b15d25a060c1b2b1f4bc5055e7a6e86fab0be2a858496a13.webp",
+      "sha256": "1483565c522684e1b15d25a060c1b2b1f4bc5055e7a6e86fab0be2a858496a13"
+    },
+    {
+      "path": "assets/production/characters/self-reviewed-20261102/UL14/web-atlas-v2/85a325eee2dd8cda43dcb60a7decf4e16d0e2d67f7c0d8f583942aaf774f5a1b.webp",
+      "sha256": "85a325eee2dd8cda43dcb60a7decf4e16d0e2d67f7c0d8f583942aaf774f5a1b"
+    },
+    {
+      "path": "assets/production/characters/self-reviewed-20261102/UL14/web-atlas-v2/a7ee155a0aca13bb020466058baa2edb1603049fedf51277948a1fff9b741e47.webp",
+      "sha256": "a7ee155a0aca13bb020466058baa2edb1603049fedf51277948a1fff9b741e47"
     },
     {
       "path": "assets/production/data-arena/harbor-blender-r2/caustics/layer-high.webp",
@@ -121059,7 +121205,7 @@
     },
     {
       "path": "src/championship/app/raisingPresentationSource.js",
-      "sha256": "89c11eaa2895048cc294832ad9da927d6881d2fec1066d28c0dfc9414436e544"
+      "sha256": "19cb53466b737b972045c7d9ba5209ef9130dfe3a98856b117ea36677b3521a9"
     },
     {
       "path": "src/championship/app/ranchBackpack.js",
@@ -122183,7 +122329,11 @@
     },
     {
       "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-      "sha256": "5229c47f7a0f376f36439a49a61a2f5863867b13134329ca38f69b0d406aefed"
+      "sha256": "6c1a21d3e1f7c2c9b550b2c6b314136819c3f19f4e8983e4c36fb4e923e70c49"
+    },
+    {
+      "path": "src/championship/presentation/intRh2/raisingAppearanceFrame.js",
+      "sha256": "5e434cd5010117063b1d1cfacc66ce46fc9a68d3ac3a31c06d6f0f336c2bbc28"
     },
     {
       "path": "src/championship/presentation/intRh2/raisingContactShadow.js",
@@ -124844,7 +124994,7 @@
     },
     {
       "path": "src/data/championship/reviewed-animation-selection.v1.json",
-      "sha256": "1faa3d5b25eefba06e3aea4b3b0c55e093908ea1e09ca3d2a80fd57241010710",
+      "sha256": "4458ff404224481019559cf65fffa7fbd524b7ad85c1f77dc4ff4368b1741728",
       "jsonFields": [
         "arenaGroundFromWalk",
         "authoringPath",

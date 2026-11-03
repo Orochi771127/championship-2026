@@ -39,9 +39,10 @@ test('generalMirrorFrames: single frames drawn facing opposite to their set are 
  // Clip-by-clip re-check the same day: GR38 blink/exhale (MA_02/03) added; BD_06/07 and MB_10 already
  // faced like their clips; MA50/MA63 sleep cells were right as stored; MA53 pleased cells 12-13 added.
  assert.deepEqual(Object.fromEntries(selection.characters.filter(c=>c.generalMirrorFrames).map(c=>[c.displayCode,c.generalMirrorFrames.length])),
-  {GR05:2,GR38:8,MA03:1,MA20:2,MA43:1,MA53:2,MA54:1,MA64:4,AW28:1,AW27:2});
+  {GR05:2,GR38:8,MA03:1,MA20:2,MA43:1,MA53:2,MA54:1,MA64:4,AW28:1,AW27:2,UL14:3});
  for(const entry of selection.characters.filter(c=>c.generalMirrorFrames)){const d=read(entry.displayCode);
-  for(const id of entry.generalMirrorFrames)assert.ok(d.frames[id],entry.displayCode+' '+id);}
+  const frames=Array.isArray(d.frames)?Object.fromEntries(d.frames.map(f=>[f.id,f])):d.frames;
+  for(const id of entry.generalMirrorFrames)assert.ok(frames[id],entry.displayCode+' '+id);}
  // [code, Main sequence whose first frame is listed, Main sequence whose first frame is not]
  for(const [code,listed,plain] of [['GR05',7,2],['MA64',3,2],['MA20',15,2],['GR38',0,2]]){
   const entry=selection.characters.find(c=>c.displayCode===code),d=read(code);
