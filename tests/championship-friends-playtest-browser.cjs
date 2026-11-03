@@ -209,6 +209,8 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
 (async()=>{
  // The 40° ranch view (2026-10-27) squeezes the ground vertically; bodies keep the horizontal scale.
  const {groundScaleY}=(await import(require('node:url').pathToFileURL(path.join(__dirname,'../src/championship/presentation/ranchThreeCoordinates.js')).href)).ranchViewProjection();
+ // Hunt tool families (HUNT_TOOL_TIERS_20261103): a shop saved before them folds each tool onto one row once.
+ const {migrateHuntToolQuantities}=await import(require('node:url').pathToFileURL(path.join(__dirname,'../src/championship/shop/huntToolTiers.js')).href);
  const build=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json')));evidence.buildId=build.buildId;assert.equal(build.target,'GITHUB_PAGES_OWNER_PLAYTEST');assert.equal(build.publicPlaytest?.ownerApproved,true);
  assert.ok(resolveAsset(root,'/championship.html'));
  assert.equal(resolveAsset(root,'/full-qa-save.html'),null,'Private QA installer must stay outside the public build');
@@ -220,7 +222,9 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
  // open. Only finds the later save's stroll log records may change the bag.
  const STROLL_RECORDS={feed:0,protein:1,medicine:2,woundMedicine:3};
  const expectedShop=(shop,later=null,baseline=null)=>{
-  const base={...shop,cageQuantities:shop.cageQuantities??Object.fromEntries(shop.cageOwned.map(id=>[id,1]))};
+  const plain={...shop,cageQuantities:shop.cageQuantities??Object.fromEntries(shop.cageOwned.map(id=>[id,1]))};
+  const folded=later?.shop?.toolTiers&&!shop.toolTiers?[...plain.quantities]:null;
+  const base=folded?{...plain,quantities:folded,toolTiers:migrateHuntToolQuantities(folded)}:plain;
   const since=baseline?.raising?.nativeHome?.strollLog?.sequence??0,entries=(later?.raising?.nativeHome?.strollLog?.entries??[]).filter(e=>e.id>since);
   if(!entries.length)return base;
   const quantities=[...base.quantities];let bits=base.bits;
