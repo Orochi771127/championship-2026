@@ -19,6 +19,7 @@ import { hexWorldPassageGain, hexWorldPassageView } from './hexWorldPassages.js'
 import { uiText } from '../text/uiText.js';
 import { gachaCurrencyImage, gachaIcon } from './cyberGachaIcons.js';
 import { gachaRefusalText } from './cyberGachaView.js';
+import { coreRunSeconds, formatRunClock } from '../gacha/ranchAutomation.js';
 import { landExpansionPrice } from '../gacha/diamondRewards.js';
 
 const HEX_W = 48, HEX_H = 56;            // editor px of one hex (native 96 × 112 at ÷2)
@@ -334,27 +335,28 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
   function mountPicker(instanceId) {
     const auto = cage.automation?.[instanceId] ?? null;
     const list = el(doc, 'div', 'cm-hexworld__mounts');
-    if (auto?.royal) { list.append(el(doc, 'p', 'cm-hexworld__note', uiText('皇家籠舍已內建全自動功能，不需要再掛載。'))); return list; }
-    list.append(el(doc, 'p', 'cm-hexworld__note', uiText('任何籠舍都能掛載；掛上的模組可隨時卸下，改掛到別座籠舍。')));
+    if (auto?.royal) { list.append(el(doc, 'p', 'cm-hexworld__note', uiText('皇家籠舍已內建全自動功能，不需要再部署。'))); return list; }
+    list.append(el(doc, 'p', 'cm-hexworld__note', uiText('每次部署持續 1 小時；運轉中再投入一個可延長 +1 小時（最多 24 小時）。')));
     for (const core of cage.cores ?? []) {
-      const on = core.module === 'AUTO_FEED' ? Boolean(auto?.feed) : Boolean(auto?.clean);
+      const left = coreRunSeconds(auto, core);
       const pick = el(doc, 'button', 'cm-vs2-action cm-hexworld__mount-core');
       pick.type = 'button';
       pick.dataset.coreId = core.id;
-      pick.dataset.mounted = String(on);
+      pick.dataset.mounted = String(left > 0);
       pick.append(icon('robot', 'cm-hexworld__mount-icon'), el(doc, 'span', '', uiText(core.name)),
-        el(doc, 'span', 'cm-hexworld__mount-state', on ? uiText('運轉中 · 卸下') : uiText('背包 ×{n} · 掛載', { n: core.owned })));
-      pick.disabled = !on && core.owned < 1;
+        el(doc, 'span', 'cm-hexworld__mount-state', left > 0 ? uiText('運轉中 {time} · 背包 ×{n} · 延長 +1 小時', { time: formatRunClock(left), n: core.owned })
+          : uiText('背包 ×{n} · 部署 1 小時', { n: core.owned })));
+      pick.disabled = core.owned < 1;
       pick.addEventListener('click', () => {
-        if (on) source.intents.gachaUnmountCore?.(core.module, instanceId); else source.intents.gachaMountCore?.(core.id, instanceId);
+        source.intents.gachaDeployCore?.(core.id, instanceId);
         const result = source.getFrame()?.cageEdit?.gachaResult;
         if (result && !result.ok) say(gachaRefusalText(result.reason), 'blocked');
-        else { say(uiText(on ? '已卸下' : '已掛載，籠舍旁會亮起自動運轉標誌。'), 'ok'); fx(cellNodes.get(selected?.slotIndex), on ? 'unsnap' : 'sparkle'); }
+        else { say(uiText(left > 0 ? '已延長 +1 小時' : '已部署：機器運轉 1 小時'), 'ok'); fx(cellNodes.get(selected?.slotIndex), 'sparkle'); }
       });
       list.append(pick);
     }
     if (!(cage.cores ?? []).some((core) => core.owned > 0) && !auto?.feed && !auto?.clean)
-      list.append(el(doc, 'p', 'cm-hexworld__note', uiText('背包裡還沒有自動給食機／清掃機，到商店的轉蛋機轉轉看！')));
+      list.append(el(doc, 'p', 'cm-hexworld__note', uiText('背包裡還沒有自動餵食機／掃地機器人，到商店的轉蛋機轉轉看！')));
     return list;
   }
 

@@ -1,5 +1,21 @@
 # Championship Owner Direction
 
+<!-- record-id: AUTO_CARE_3D_20261103 -->
+## 2026-11-03 — Auto-care as 3D machines: a patrolling cleaning robot, a meat-throwing feeder, one hour per core
+
+From a phone ranch screenshot (two flat device pictures on the floor and a 「⚙️ 全自動飼育運轉中（自動給食・自動清掃）」 banner over a partner, while another partner showed the hungry bubble with 99 meat in the bag and nothing was thrown) the Owner pastes a five-phase brief, then adds 「扭蛋的道具很醜耶，請照上面的做」: remove the floor pictures and the banner; build a 3D cleaning robot and a 3D feeding tower in Blender 5.2; the robot strolls the cage and every connected cage and drives to droppings; the tower lobs one piece of meat at a partner showing the hungry bubble and takes one 餵食 from the bag; the cores become consumables lasting one hour each (duplicates extend or run in other cages, 皇家雙效核心 runs both); a curious-partner / ride easter egg; tests, `npm run test:ci` and four phone screenshots; no push or deployment.
+
+OWNER_APPROVED_ADAPTATION (`gacha/ranchAutomation.js`, `gacha/cyberGacha.js`, `raising/autoCareMachines.js`, `presentation/ranchAutoCareProps.js`):
+- Items: 奈米掃地機器人 (SR), 智慧自動餵食機 (SR) and the new 皇家雙效核心 (SSR, both machines; furnace recipe 5→8 chips, 4 shards). The premium machine's SSR automation share is now split between the dual core and the royal ranch (0.75 % each of all pulls; it was 1.5 % for the royal ranch alone). Bag and gacha icons are rendered from the same Blender models.
+- Consumables: deploying a core on a placed cage uses it up and runs its machine(s) for 3600 s; another core on a running machine adds 3600 s, at most 24 h. The save keeps `cyberGacha.runs` (seconds left per cage instance and machine). Cores still mounted in an older save go back into the bag once; a cage removed from the layout gives back one core per whole hour left. Nothing is unmounted any more.
+- Time: runs count down by real play time on the ranch (the ranch simulation's own frames), not while the game is closed. A feeding tower with no meat holds its time.
+- Cleaning robot: stands on the cage's lower-left floor (its main walkable component), strolls the whole walkable cluster it can reach (connected cages through open passages, `navigation.component`) at 0.8 world units/s, locks on to the nearest dropping (green flash, radar ring, 「!」), drives at 2.0 units/s, sweeps for 0.4 s and pays +50 bits. A dropping on an obstacle is swept from the nearest floor within 64 px.
+- Feeding tower: at the lower-left corner; for any partner of its cluster showing the native hungry bubble (status 3, growth flag 418) or at the native hungry satiety, it turns 0.2 s with a squash, lobs one bone-in meat on a 0.55 s arc with a gold dotted trail, and on landing takes one 餵食 (shop record 0) and feeds the partner to full with the 2.4-affection auto-feed (heart, −1 on the meat pop and on the toolbar key). With no meat it throws nothing and its tag reads 缺肉待補.
+- Easter egg: an in-training or rookie partner the robot passes shows a 「?」; an in-training partner hops on its lid for three seconds now and then (18 % of meetings, 24 s cooldown per partner).
+- Ranch UI: no banner and no floor pictures. A small translucent drawn tag (CSS icon + 58:42) floats over each running machine; a tap opens its time left and 「續航 +1 小時」. Bag, gacha screen and facility editor show 「部署 1 小時 / 延長 +1 小時」 and the time left.
+- Machines draw in the ranch's Three scene (shared depth, light and shadow) from `assets/production/items/auto-care-3d-r1/*.glb` (`scripts/blender/build_auto_care_3d_props.py`), with built-in meshes of the same shape until the models load. Royal cages keep their built-in instant feeding and cleaning unchanged (another session owns their new maps).
+- Machines use their own seeded random stream; the gameplay RNG and the native raising sequences are unchanged.
+
 <!-- record-id: GRMA_WALK_BOUND_FIX_20261103 -->
 ## 2026-11-03 — Walk jumps, Main17 stand/lie flip and MA01's floating walk fixed with existing frames
 

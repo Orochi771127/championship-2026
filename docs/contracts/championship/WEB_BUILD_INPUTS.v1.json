@@ -396,6 +396,7 @@
     "src/championship/presentation/raisingExpansionPreview.js",
     "src/championship/presentation/raisingFeedbackArt.js",
     "src/championship/presentation/raisingRanchArtPlan.js",
+    "src/championship/presentation/ranchAutoCareProps.js",
     "src/championship/presentation/ranchBorderMembership.js",
     "src/championship/presentation/ranchContactHeight.js",
     "src/championship/presentation/ranchDecalFloor.js",
@@ -466,6 +467,7 @@
     "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
     "src/championship/presentation/vs5/prepareBattleVfxGpu.js",
     "src/championship/r2/createChampionshipR2Session.js",
+    "src/championship/raising/autoCareMachines.js",
     "src/championship/raising/createRaisingHomeRuntime.js",
     "src/championship/raising/nativeGroundSpacing.js",
     "src/championship/raising/nativeIndividualEvolution.js",
@@ -7567,6 +7569,8 @@
     "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-152.png",
     "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-153.png",
     "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-154.png",
+    "assets/production/items/auto-care-3d-r1/auto_cleaner_bot.glb",
+    "assets/production/items/auto-care-3d-r1/auto_feeder_tower.glb",
     "assets/production/items/digital-metals-r1/attract_light_160.webp",
     "assets/production/items/digital-metals-r1/beta_ore_160.webp",
     "assets/production/items/digital-metals-r1/beta_shard_160.webp",
@@ -7593,6 +7597,7 @@
     "assets/production/items/digital-metals-r1/wound_medicine_160.webp",
     "assets/production/items/ranch-automation-r1/auto_clean_core_160.webp",
     "assets/production/items/ranch-automation-r1/auto_feed_core_160.webp",
+    "assets/production/items/ranch-automation-r1/auto_royal_core_160.webp",
     "assets/production/items/ranch-automation-r1/founder_pack_160.webp",
     "assets/production/items/ranch-automation-r1/royal_ranch_160.webp",
     "assets/production/items/ranch-automation-r1/stellar_zoo_160.webp",
@@ -8481,6 +8486,7 @@
     "src/championship/presentation/raisingExpansionPreview.js",
     "src/championship/presentation/raisingFeedbackArt.js",
     "src/championship/presentation/raisingRanchArtPlan.js",
+    "src/championship/presentation/ranchAutoCareProps.js",
     "src/championship/presentation/ranchBorderMembership.js",
     "src/championship/presentation/ranchContactHeight.js",
     "src/championship/presentation/ranchDecalFloor.js",
@@ -8551,6 +8557,7 @@
     "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
     "src/championship/presentation/vs5/prepareBattleVfxGpu.js",
     "src/championship/r2/createChampionshipR2Session.js",
+    "src/championship/raising/autoCareMachines.js",
     "src/championship/raising/createRaisingHomeRuntime.js",
     "src/championship/raising/nativeGroundSpacing.js",
     "src/championship/raising/nativeIndividualEvolution.js",
@@ -36721,6 +36728,14 @@
         "sha256": "85a1f16f330fc08564bef192f2f596594055ff8ed8a7b7dfefd8a6d8f784ac11"
       },
       {
+        "path": "assets/production/items/auto-care-3d-r1/auto_cleaner_bot.glb",
+        "sha256": "263ab20d10c0a0b81b9e089bd89515031d00b17031b14489469152194681bdde"
+      },
+      {
+        "path": "assets/production/items/auto-care-3d-r1/auto_feeder_tower.glb",
+        "sha256": "14b688982948dae5f160901e7c7c40c84b80d6011a323c71b97a096f3765b58c"
+      },
+      {
         "path": "assets/production/items/digital-metals-r1/attract_light_160.webp",
         "sha256": "b7af3d45daf62d553c6721144979cd5ce38acf251063dbe134415814a5716a12"
       },
@@ -36818,11 +36833,15 @@
       },
       {
         "path": "assets/production/items/ranch-automation-r1/auto_clean_core_160.webp",
-        "sha256": "eda352767334ca2d7ff3e0af04b489a9c59af222da91d8ae4b3339923c71b991"
+        "sha256": "d6642c7bbf6096ead96fad8121e7dd0bc8c26bda7e9e8a34e4b0c0f0a130ca8a"
       },
       {
         "path": "assets/production/items/ranch-automation-r1/auto_feed_core_160.webp",
-        "sha256": "7eaa9aa7d9111fd7ccb941fc40f0d839f5cdab5b925ba7176c0488642a666b25"
+        "sha256": "6ec273a87369b4e62145fb69f4439bbbccdc9bbcafd4fc61717210fdd1ce0296"
+      },
+      {
+        "path": "assets/production/items/ranch-automation-r1/auto_royal_core_160.webp",
+        "sha256": "81505f41b742031b505ec520ce2f2522ced92b9aa3e98d4e87991ed80b5ab593"
       },
       {
         "path": "assets/production/items/ranch-automation-r1/founder_pack_160.webp",
@@ -38802,7 +38821,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "acee8b48982752f663964aecd6bd8d2d2e6075dc6e11106a907ef2b03bf12626"
+        "sha256": "35f2de922d58c1327470459d8ddb83daf198de63c44c52dc10c9cf161f2fe36c"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -38822,7 +38841,7 @@
       },
       {
         "path": "src/championship/app/championshipToolbar.js",
-        "sha256": "ff8518d93fb35ce99291597e9b854321bff52b07f6ffc160eb06bf23fd3d2c66"
+        "sha256": "93f34cac0a356c6527ba655d3ba6773ba40efe3149c3f938c6870df5a85ce57c"
       },
       {
         "path": "src/championship/app/codeClipboard.js",
@@ -38842,7 +38861,7 @@
       },
       {
         "path": "src/championship/app/cyberGachaView.js",
-        "sha256": "8479c3b129cce06d7c576e128f5f271dae8140bdd17430296cba6ca2d875ce5f"
+        "sha256": "7386e50c2643bb0bd58af5641fc14fa0b7d080986fef29d8a6ae848f617a18d0"
       },
       {
         "path": "src/championship/app/dataArena.css",
@@ -38886,7 +38905,7 @@
       },
       {
         "path": "src/championship/app/gateHuntPresentationSource.js",
-        "sha256": "42fe9b291b7873e9bc5f4f362c55113cae3de971993d296e6fa6e4e17a43f9a3"
+        "sha256": "ab5094b68d01710b91fbddff68443cfe3e62f7191ce732fe899c1f210fe18c04"
       },
       {
         "path": "src/championship/app/helpScreen.js",
@@ -38894,7 +38913,7 @@
       },
       {
         "path": "src/championship/app/hexWorldEditor.js",
-        "sha256": "a2df6fc7a81122f9720a3cb5ea84d01aad4d8ce19eb04e0495c24eaa908625dc"
+        "sha256": "6d0d1f8e15bc045e3804a9ad1813dcccda3b910f6ddca52c0ca7bfd2d61f24e3"
       },
       {
         "path": "src/championship/app/hexWorldPassages.js",
@@ -38938,7 +38957,7 @@
       },
       {
         "path": "src/championship/app/intRh2Styles.css",
-        "sha256": "3919c26e9418f13f6d9d7947cdb99588a0898340505806cf3f83da7842e04a9a"
+        "sha256": "624ef23d02676237ec50432b64f0624486594ccff45d434df40f171b7f6ed6d8"
       },
       {
         "path": "src/championship/app/loadProgress.js",
@@ -38954,7 +38973,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "71ca255a0985d4c2a746c846a3a90030ad361f7c95238786851167e89ee5697f"
+        "sha256": "77b94a891a1ce8ab9680c86c9a7bfaa1948d3c449bcba40b9d34b38ba16a8514"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -39054,15 +39073,15 @@
       },
       {
         "path": "src/championship/app/raisingHomeP1RView.js",
-        "sha256": "b9dec34ad87b337a6e9bb2389e5538d44f3ce35579d79ea74e89f30b643a49d8"
+        "sha256": "3ba7fe1df0c0216957821002794a5c9c5849adeb542b5f8e7be9e22a1052df3d"
       },
       {
         "path": "src/championship/app/raisingPresentationSource.js",
-        "sha256": "19cb53466b737b972045c7d9ba5209ef9130dfe3a98856b117ea36677b3521a9"
+        "sha256": "0c88fd5f7a5a045867a1f35da5e51f2c30f4e18870e3598405191002c653a979"
       },
       {
         "path": "src/championship/app/ranchBackpack.js",
-        "sha256": "cb357eea8ed4754f8c933c9dba71517946432b9615a0f2715527cc61b3752da1"
+        "sha256": "79b615fbb33ea1b7f5c5d9ffae4b021e3dabe275982578e1358337205c762629"
       },
       {
         "path": "src/championship/app/ranchDiscoveryJournal.js",
@@ -39202,7 +39221,7 @@
       },
       {
         "path": "src/championship/app/ui/screenLayout.css",
-        "sha256": "6b0e8625781903c0e9ee7a111b6487e212b064bdf16b06b23c26a2987d01e294"
+        "sha256": "daa9dec6c410e871c2df646f4af39227ecb38b86677161cce3c8aaa5ddc6843d"
       },
       {
         "path": "src/championship/app/ui/settings.css",
@@ -39658,7 +39677,7 @@
       },
       {
         "path": "src/championship/gacha/cyberGacha.js",
-        "sha256": "f40ea6710425f02484b3006532a7730560947a4cf2b3d1451aa05f615a78c955"
+        "sha256": "c1d092548c6700b4a1f9fb2bba29fac70ccd6bab2d62058a8f34cf6b0a9fb8e6"
       },
       {
         "path": "src/championship/gacha/diamondRewards.js",
@@ -39666,7 +39685,7 @@
       },
       {
         "path": "src/championship/gacha/ranchAutomation.js",
-        "sha256": "b3649953e97bcdaca73bb3a96d1ce9fcc48953e98317d0026bf3f9f6d894e3f6"
+        "sha256": "2276ae0e9fc045925706104dd5a9724961fe7e44fbb6d7bae2da0a02593d59cd"
       },
       {
         "path": "src/championship/gate/gateAdmission.js",
@@ -40182,7 +40201,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "80301ca8542a78e516d49a16fe21333363b2e9649edca4c515b25651f01ad494"
+        "sha256": "20420a5255d78946cf69fa335a6af2534b66bbe55fe1d65c7f7cb10e4c067edb"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingAppearanceFrame.js",
@@ -40377,6 +40396,10 @@
         "sha256": "d15795b71eca38f05365ff2c26506902a291cb6e36560f946abc048ca90db262"
       },
       {
+        "path": "src/championship/presentation/ranchAutoCareProps.js",
+        "sha256": "14ee2232d839bbb2b6d9b021ee0a7b755ac849037ccac911128711381ef8cdeb"
+      },
+      {
         "path": "src/championship/presentation/ranchBorderMembership.js",
         "sha256": "cdcd2de46ce03398efd43b86f1a4c9f1d8ef43e2e9a05af52876a6f1cf569deb"
       },
@@ -40418,7 +40441,7 @@
       },
       {
         "path": "src/championship/presentation/ranchThreeScene.js",
-        "sha256": "6df8723f45c5c0b0fd069a02f2b99e3621bd976c0ed7d6c0b42199ac8db4d657"
+        "sha256": "02dc5c026e597e5eb85e14429cf6e4af3e70123ed59be09f57de44b01124010d"
       },
       {
         "path": "src/championship/presentation/ranchWaterfalls.js",
@@ -40655,6 +40678,10 @@
       {
         "path": "src/championship/r2/createChampionshipR2Session.js",
         "sha256": "4749da3945225d282d77f88f6cd753536c261fe495f92da9d649fc85f602524f"
+      },
+      {
+        "path": "src/championship/raising/autoCareMachines.js",
+        "sha256": "c8376e01d8753c03e4bd799ddffe067bc2e3bae3eb3273885d60bf3b64be5250"
       },
       {
         "path": "src/championship/raising/createRaisingHomeRuntime.js",
@@ -40982,11 +41009,11 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "08b269395c984126c03f1802050bab08a4144c75540af510a605a4a137eb2ac1"
+        "sha256": "304a1f3ec8f7d04fd60a297bb8b56187a6a1ae23fe6e5a64375d431b81073394"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "5c945ccf2f54f327d5e58a5e4dc57c004527956e9056abcf679731f4c65f75ce"
+        "sha256": "477a8273d1af5c0e15cc5189887ea1dfc27d80617be11928bc8e24fa0263cd48"
       },
       {
         "path": "src/championship/text/uiText.js",
@@ -40994,11 +41021,11 @@
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "42d80f008618b79ad119b8b9add4c5142e97dfbcdd65820f80a8f9aabb1874b4"
+        "sha256": "b7ad165b49b458fd4f4776498fe4488499a5dddffb84c91ac865cf44671f115c"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "693865e2bca1c16f20d6640186b6e330161155acd4d1ec35d51159125fd05925"
+        "sha256": "f5901a358cd965f7093b83581f3d3d1a35518fcc002919053f1474c498783ba8"
       },
       {
         "path": "src/championship/text/zhHant.js",

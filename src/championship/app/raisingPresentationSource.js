@@ -355,6 +355,8 @@ export function createRaisingPresentationSource(app) {
     cleanFood(input) {const result=app.cleanRaisingFood?.(input)??false;publish();return result;},
     placeFood(input) {const result=app.placeRaisingFood?.(input)??{ok:false,reason:"UNAVAILABLE"};publish();return result;},
     touchPartner(creatureId){return app.touchRaisingPartner?.(creatureId)??null;},
+    /** A battery for a running ranch machine (+1 hour, one core from the bag; AUTO_CARE_3D_20261103). */
+    deployCore(coreId,instanceId){const result=app.gachaDeployCore?.(coreId,instanceId)??{ok:false,reason:"UNAVAILABLE"};publish();return result;},
     /** The first awakening of a ready partner (the ranch plays its ceremony). */
     awaken(creatureId){const result=app.awakenPartner?.(creatureId)??{ok:false,reason:"UNAVAILABLE"};if(result.ok)publish();return result;},
     touchEgg(creatureId,checkpoint=null) { return app.touchRaisingEgg?.(creatureId,checkpoint) ?? false; },
@@ -395,9 +397,11 @@ export function createRaisingPresentationSource(app) {
     getWasteFrame(){return app.getRaisingWasteFrame?.()??[];},
     getLifecycleFrame(){return app.getRaisingLifecycleFrame?.()??null;},
     getPartnerLife(){return app.getPartnerLifeFrame?.()??null;},
-    // DIAMOND_ECONOMY_20261102: automated cages and their recent auto-clean / auto-feed events.
+    // DIAMOND_ECONOMY_20261102 / AUTO_CARE_3D_20261103: running machines' tags and their recent events.
     getCageAutomation(){return app.getCageAutomationFrame?.()??[];},
     getAutomationEvents(){return app.getAutomationEvents?.()??[];},
+    // AUTO_CARE_3D_20261103: the deployed 3D cleaning robots and feeding towers (native px).
+    getAutoCareFrame(){return app.getAutoCareFrame?.()??null;},
     getFrame() {
       return currentFrame;
     },

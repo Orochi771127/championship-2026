@@ -369,42 +369,71 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     }
     for(const [id,n] of trainingNodes)if(!live.has(id)){n.remove();trainingNodes.delete(id);}
   }
-  // DIAMOND_ECONOMY_20261102: a badge over every automated cage ("全自動飼育運轉中"), and a small pop for
-  // each auto-clean (+bits) and auto-feed (+affection). Pops only follow events newer than the first frame.
-  const cageBadgeLayer=node('div','int-rh2-cage-badges');cageBadgeLayer.setAttribute('aria-hidden','true');fieldHost.append(cageBadgeLayer);
-  const cageBadgeNodes=new Map();let lastAutomationSerial=null;
-  // Owner 2026-11-03: a gold gear, drawn in CSS (never an item picture, an emoji or an image URL), beside the running label.
-  function automationGear(){
-    const gear=node('span','int-rh2-cage-auto__icon');gear.append(node('span','int-rh2-cage-auto__gear'),node('span','int-rh2-cage-auto__hub'));
-    return gear;
+  // AUTO_CARE_3D_20261103 (Owner 2026-11-03: no banner over the partners): a small translucent countdown over each
+  // running 3D machine (drawn icons, never emoji or pictures). A tap opens its time left and a battery (+1 hour).
+  // Pops follow the machines: +bits for a sweep, -1 meat and +affection for a feed, a "!" when a robot spots a dropping.
+  const cageBadgeLayer=node('div','int-rh2-cage-badges');fieldHost.append(cageBadgeLayer);
+  const cageBadgeNodes=new Map();let lastAutomationSerial=null,openTag=null;
+  fieldHost.addEventListener('pointerdown',()=>{openTag=null;});
+  const runClock=seconds=>{const s=Math.max(0,Math.floor(seconds)),h=Math.floor(s/3600),m=Math.floor(s%3600/60),r=s%60;
+    return h?`${h}:${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`;};
+  function tagDetail(tag){
+    const panel=node('div','int-rh2-care-tag__detail');
+    // The time left is rewritten in place every second (renderCageBadges), never by rebuilding the card.
+    panel.append(node('strong','int-rh2-care-tag__name',uiText(tag.kind==='FEED'?'智慧自動餵食機':'奈米掃地機器人')),
+      node('span','int-rh2-care-tag__left',uiText('剩餘 {time}',{time:runClock(tag.seconds)})));
+    if(tag.noMeat)panel.append(node('span','int-rh2-care-tag__hint',uiText('缺肉待補：到商店買肉，或領探索手帳的獎勵')));
+    const battery=node('button','int-rh2-care-tag__battery');battery.type='button';
+    battery.append(node('span','int-rh2-care-tag__cell'),node('span','',uiText('續航 +1 小時（背包 ×{n}）',{n:tag.owned})));
+    battery.disabled=tag.owned<1||!tag.extendable||typeof presentation.intents.deployCore!=='function';
+    battery.addEventListener('click',event=>{event.stopPropagation();
+      const result=presentation.intents.deployCore?.(tag.coreId,tag.instanceId);
+      showNotice(result?.ok?uiText('已延長 +1 小時'):uiText('沒有可用的模組或已達 24 小時上限'));openTag=null;});
+    panel.append(battery);
+    return panel;
   }
   function renderCageBadges(badges,events=[]){
     const live=new Set();
-    for(const badge of badges){
-      live.add(badge.id);let item=cageBadgeNodes.get(badge.id);
-      if(!item){item={node:node('div','int-rh2-cage-auto'),devices:node('div','int-rh2-cage-devices'),key:null};
-        cageBadgeLayer.append(item.devices,item.node);cageBadgeNodes.set(badge.id,item);}
-      const key=`${badge.royal}:${badge.edition}:${badge.clean}:${badge.feed}:${getLocale()}`;
-      if(item.key!==key){
-        item.key=key;item.node.dataset.royal=badge.royal?badge.edition:'';item.node.dataset.icon=badge.royal?'crown':'core';
-        const both=badge.clean&&badge.feed,parts=[badge.feed?uiText('自動給食'):null,badge.clean?uiText('自動清掃'):null].filter(Boolean);
-        item.devices.replaceChildren(...(badge.devices??[]).map(src=>{const device=node('span','int-rh2-cage-device');
-          const img=node('img');img.alt='';img.src=src;device.append(img);return device;}));
-        item.node.replaceChildren(automationGear(),
-          node('strong','int-rh2-cage-auto__title',uiText(both?'全自動飼育運轉中':badge.clean?'自動清掃運轉中':'自動給食運轉中')),
-          node('span','int-rh2-cage-auto__sub',uiText('（{parts}）',{parts:parts.join(' · ')})));
+    for(const tag of badges){
+      live.add(tag.id);let item=cageBadgeNodes.get(tag.id);
+      if(!item){
+        const button=node('button','int-rh2-care-tag');button.type='button';button.dataset.kind=tag.kind;button.dataset.machine=tag.id;
+        const icon=node('span','int-rh2-care-tag__icon'),time=node('span','int-rh2-care-tag__time');
+        button.append(icon,time);
+        button.addEventListener('pointerdown',event=>event.stopPropagation());
+        button.addEventListener('click',event=>{event.stopPropagation();openTag=openTag===tag.id?null:tag.id;item.detailKey=null;});
+        item={node:button,time,detail:null,detailKey:null};cageBadgeLayer.append(button);cageBadgeNodes.set(tag.id,item);
       }
-      item.node.style.left=`${Math.round(badge.x)}px`;item.node.style.top=`${Math.round(badge.y)}px`;
-      item.devices.hidden=!Number.isFinite(badge.dx)||!badge.devices?.length;
-      if(!item.devices.hidden){item.devices.style.left=`${Math.round(badge.dx)}px`;item.devices.style.top=`${Math.round(badge.dy)}px`;}
+      item.node.dataset.noMeat=String(Boolean(tag.noMeat));item.node.dataset.alert=String(Boolean(tag.alert));
+      const label=tag.noMeat?uiText('缺肉待補'):runClock(tag.seconds);
+      if(item.time.textContent!==label)item.time.textContent=label;
+      item.node.setAttribute('aria-label',uiText(tag.kind==='FEED'?'智慧自動餵食機 剩餘 {time}':'奈米掃地機器人 剩餘 {time}',{time:runClock(tag.seconds)}));
+      item.node.style.left=`${Math.round(tag.x)}px`;item.node.style.top=`${Math.round(tag.y)}px`;
+      const width=fieldHost.clientWidth||0;item.node.dataset.edge=tag.x<110?'left':width&&tag.x>width-110?'right':'';
+      const open=openTag===tag.id,detailKey=open?`${tag.owned}:${tag.extendable}:${tag.noMeat}:${getLocale()}`:null;
+      item.node.setAttribute('aria-expanded',String(open));
+      if(item.detailKey!==detailKey){item.detail?.remove();item.detail=open?tagDetail(tag):null;if(item.detail)item.node.append(item.detail);item.detailKey=detailKey;}
+      else if(item.detail){const left=item.detail.querySelector('.int-rh2-care-tag__left'),text=uiText('剩餘 {time}',{time:runClock(tag.seconds)});
+        if(left&&left.textContent!==text)left.textContent=text;}
     }
-    for(const [id,item] of cageBadgeNodes)if(!live.has(id)){item.node.remove();item.devices.remove();cageBadgeNodes.delete(id);}
+    for(const [id,item] of cageBadgeNodes)if(!live.has(id)){item.node.remove();cageBadgeNodes.delete(id);if(openTag===id)openTag=null;}
     const newest=events.reduce((max,event)=>Math.max(max,event.serial),0);
     if(lastAutomationSerial===null){lastAutomationSerial=newest;return;}
     for(const event of events)if(event.serial>lastAutomationSerial){
-      const pop=node('span','int-rh2-auto-pop',event.kind==='CLEAN'?uiText('自動清掃 +{n}',{n:event.bits}):uiText('自動給食・親密 +{n}',{n:event.affection}));
+      const text=event.kind==='CLEAN'?uiText('+{n} 位元幣',{n:event.bits})
+        :event.kind==='FEED'?(event.meat?uiText('親密 +{n}',{n:event.affection}):uiText('自動給食・親密 +{n}',{n:event.affection}))
+        :event.kind==='LOCK'?'!':event.kind==='EXPIRE'?uiText('電力耗盡'):null;
+      if(text===null)continue;
+      const pop=node('span','int-rh2-auto-pop',text);
       pop.dataset.kind=event.kind;pop.style.left=`${Math.round(event.x)}px`;pop.style.top=`${Math.round(event.y)}px`;cageBadgeLayer.append(pop);
       setTimeout(()=>pop.remove(),2000);
+      if(event.kind==='FEED'&&event.meat){
+        const spent=node('span','int-rh2-auto-pop int-rh2-auto-pop--meat',`−${event.meat}`);spent.prepend(node('span','int-rh2-care-tag__icon'));
+        spent.dataset.kind='MEAT';spent.style.left=`${Math.round(event.x+22)}px`;spent.style.top=`${Math.round(event.y-14)}px`;cageBadgeLayer.append(spent);
+        setTimeout(()=>spent.remove(),2000);
+        // The toolbar's 餵食 key counts down with the same −1 (main.js).
+        fieldHost.dispatchEvent(new CustomEvent('cm-stock-spent',{bubbles:true,detail:{tool:'feed',spent:event.meat}}));
+      }
     }
     lastAutomationSerial=Math.max(lastAutomationSerial,newest);
   }
