@@ -2,7 +2,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const BASE='baec5bf6a60751db718d8d02f2957858e75fcd20dde9f1067b317cdf32bfd3ad';
 // AW23/species196 web-atlas repack on the Ai-chan story build; the same cage/Three resources below remain pinned.
-const BUILD='185cd96b81f200fb6a17ce22bb7027794b35ecde97d04ca9d9e814e146599952';
+const BUILD='1ea70c692466e36aaeac948484068ab0fc13bbed24c31b669621574759c6bb16';
 const RESOURCES=Object.freeze([{"path":"assets/production/cage/three-20261021/manifest.json","bytes":8530,"sha256":"8d3aa3efd3f9dbef4dcf4785ee493f7d8867ab860c10e3e3790348c95c6525a7"},{"fieldId":"field_cm02_01","path":"assets/production/cage/three-20261021/field_cm02_01.glb","bytes":900856,"sha256":"80efcd18ff4d9e2ee94fa64843b7e14ba5abd2705e64339be531762356684307"},{"fieldId":"field_cm18_01","path":"assets/production/cage/three-20261021/field_cm18_01.glb","bytes":1853276,"sha256":"6657497289f9f10ac376f5d31d2ff50b0cb1629da65f64c49bade3788cbc6e41"},{"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":281140,"sha256":"075d4d932b1fd5b7f5c6e4467fe636a3e4905eb08d715b717892a2003718b6f2"}]);
 function verifyThreeResponses(row){
  assert.equal(row.sourceThreeReadbacksComplete?.responses,row.sourceThreeResponses?.length,'All owned response reads completed');
