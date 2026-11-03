@@ -122593,7 +122593,7 @@
     },
     {
       "path": "src/championship/presentation/stageBodySize.js",
-      "sha256": "90b6960307accb4b25f380b0d5d8f70b68c9f90ce2f12b2a720f4a06d3aedeff"
+      "sha256": "2fafb5086b557b35fedc04b0e8ee2c06a7e5c296902ba02987f84d1908cf0398"
     },
     {
       "path": "src/championship/presentation/story/HybridStoryDirector.js",
@@ -124511,7 +124511,7 @@
     },
     {
       "path": "src/data/championship/database-body-stats.v1.json",
-      "sha256": "193480417347ee88109deab30d82699683c1bfdc3183bfef1bf83ca405278332",
+      "sha256": "ba3da6d9bc68983fe5c9e1eef8e916833294c000bbd95191b15498cf61ab5cc9",
       "jsonFields": [
         "AW",
         "B1",
@@ -125037,19 +125037,26 @@
     },
     {
       "path": "src/data/championship/stage-body-size.v1.json",
-      "sha256": "54a1468de6dfaf43f90e015286fd301492fa9ae97714756c4483386429798867",
+      "sha256": "956a246d432e6956b31ac9e13f8c7ca20c2e0903136ee2ae065c2ab919f79076",
       "jsonFields": [
-        "AW",
-        "UL",
+        "GR",
+        "H",
+        "L",
+        "M",
+        "XL",
+        "XS",
         "band",
+        "classFactor",
         "kind",
+        "maxGrow",
         "metric",
         "owner",
+        "personalVariation",
         "reference",
         "relativeFrom",
         "rows",
         "schemaVersion",
-        "spread"
+        "sizeClass"
       ]
     }
   ],
