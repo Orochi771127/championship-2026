@@ -43,6 +43,7 @@ import { prefersReducedMotion } from '../presentation/presentationPreferences.js
 import { isDesktopBrowseLayout } from './portraitFrame.js';
 import { createCyberGachaPanel } from './cyberGachaView.js';
 import { gachaCurrencyImage, gachaIcon, paintGachaTicketBadge } from './cyberGachaIcons.js';
+import { landExpansionPrice } from '../gacha/diamondRewards.js';
 
 const CATEGORY_LABELS = Object.freeze({
   TRAINING_GOODS: "養成用品",
@@ -1596,7 +1597,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
         rowLock.type = 'button';
         rowLock.dataset.lockedTestRow = String(row);
         rowLock.setAttribute('aria-haspopup', 'dialog');
-        rowLock.setAttribute('aria-label', uiText('CAGE_TEST_BUY_ROW', { row: row + 1, count: remaining, price: cage.land?.price || 1000 }));
+        rowLock.setAttribute('aria-label', uiText('CAGE_TEST_BUY_ROW', { row: row + 1, count: remaining, price: cage.land?.price || landExpansionPrice(cage.landCapacity) || 1000 }));
         rowLock.style.left = `${(left + Math.max(...lockedArt.map(cell=>cell.x)) + 48) / 2 - 22}px`;
         rowLock.style.top = `${Math.min(...lockedArt.map(cell=>cell.y)) + 6}px`;
         const icon = element('span', 'cm-cage-row-lock__icon', '🔒');

@@ -186,6 +186,10 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
 /* Owner 2026-11-03: chips and metals are used straight from the partner card. */
 .int-rh2-companion__boost { grid-area: boost; min-height: 40px; padding: 6px 14px; border: 2px solid #14141f; border-radius: 999px;
   background: #ffd23f; color: #14141f; font: inherit; font-size: 14px; font-weight: 900; box-shadow: 0 3px 0 #14141f; cursor: pointer; }
+.int-rh2-companion__boost { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+/* A four-point spark drawn in CSS (no system emoji, no image URL). */
+.int-rh2-companion__boost-icon { width: 16px; height: 16px; flex: none; background: #14141f;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
 .int-rh2-companion__boost:active { transform: translateY(2px); box-shadow: 0 1px 0 #14141f; }
 .int-rh2-companion__boost[hidden] { display: none; }
 /* The encyclopedia thumbnail is painted art, not pixels: smooth it and let it fill the well. */

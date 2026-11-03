@@ -995,6 +995,8 @@
 .cm-backpack__count { grid-area: count; justify-self: end; font-size: 13px; font-weight: 900; font-variant-numeric: tabular-nums; }
 .cm-backpack__use { grid-area: use; justify-self: end; white-space: nowrap; }
 .cm-backpack__key { min-height: 40px; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 900; }
+.cm-backpack__key { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.cm-backpack__key-icon { width: 18px; height: 18px; flex: none; }
 .cm-backpack__key--primary { background: #ffd23f; }
 .cm-backpack__picker { grid-area: picker; display: grid; gap: 8px; padding-top: 6px; border-top: 2px dashed rgba(20, 20, 31, 0.18); }
 .cm-backpack__note { margin: 0; font-size: 12px; font-weight: 800; }

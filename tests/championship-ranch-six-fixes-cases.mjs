@@ -51,7 +51,7 @@ function fakeDocument(){
     };
     return node;
   }
-  return {createElement:make};
+  return {createElement:make,createElementNS:(_ns,tag)=>make(tag)};
 }
 
 test('the land key: one per editor, the census capsule reads land tier, prices climb 200 → 2,200', () => {
@@ -140,13 +140,16 @@ test('bag: gachapon chips, metals and cores all appear in the four tabs, each wi
 
 test('the partner card, the bag and the facility editor each reach the gachapon items', () => {
   const card=source('src/championship/app/raisingHomeP1RView.js');
-  assert.match(card,/✨ 使用晶片／進化金屬催化/);
+  assert.match(card,/使用晶片／進化金屬催化/);
+  for (const line of card.split('\n').filter(l=>/companion__boost|使用晶片/.test(l)))
+    assert.doesNotMatch(line,/\p{Extended_Pictographic}/u,'no system emoji on the boost key');
+  assert.match(card,/portraitFallback/,'the portrait falls back to the encyclopedia thumbnail');
   assert.match(card,/cm-open-backpack/);
   const main=source('src/championship/app/main.js');
   assert.match(main,/addEventListener\('cm-open-backpack'/);
   assert.match(main,/gachaUseItem\(itemId, instanceId, options\)/);
   const editor=source('src/championship/app/hexWorldEditor.js');
-  assert.match(editor,/🤖 掛載自動餵食／清掃機/);
+  assert.match(editor,/掛載自動餵食／清掃機/);
   assert.match(editor,/source\.intents\.gachaMountCore/);
 });
 

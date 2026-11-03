@@ -1097,6 +1097,8 @@ async function mountRaisingHome() {
   void loadPixiModule().catch(() => {});
   const p1r = await createRaisingHomeP1RView({
     root, hudArt: null, source,
+    // Owner 2026-11-03: the partner card's portrait is the encyclopedia's own thumbnail (every published species has one).
+    portraitFallback: speciesIndex => { const hero = databaseHeroPortrait(speciesIndex); return hero?.thumbnail ?? hero ?? null; },
     // Arcade evolution (Owner 2026-10-28); null keeps the original sequence.
     evolutionCinematic: await loadRaisingEvolutionCinematic(),
     getRosterEntry: creatureId => projectRoster().find(entry => entry.instanceId === creatureId) ?? null,

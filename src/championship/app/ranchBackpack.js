@@ -4,7 +4,7 @@
 //
 // Owner 2026-11-03: the bag is also where gachapon prizes are used. Four tabs --
 // daily supplies, overclock chips, evolution metals and ranch automation -- read
-// the app's gacha frame, and every row has one 「⚡ 立即使用 / 掛載」 key that opens
+// the app's gacha frame, and every row has one 「立即使用 / 掛載」 key (drawn icons, no emoji) that opens
 // its picker inline (a partner, a cage or a personality). Every use goes through
 // the same app intents as the gachapon centre, which save before they answer.
 import { showChoiceDialog } from './uiDialog.js';
@@ -14,6 +14,7 @@ import { shopItemName, cageName, personalityName } from '../text/zhHant.js';
 import { shopGoodsPresentation } from '../presentation/shopGoodsUiArt.js';
 import { GACHA_PERSONALITY_CHOICES, gachaChipEffectLines } from '../gacha/cyberGacha.js';
 import { automationEffectLines } from '../gacha/ranchAutomation.js';
+import { gachaIcon } from './cyberGachaIcons.js';
 import { awakeningEnergySummary, enhanceSummary, gachaItemArt, gachaMetalNote, gachaRefusalText, partnerNameplate } from './cyberGachaView.js';
 
 export const BACKPACK_SECTIONS = Object.freeze([
@@ -65,9 +66,12 @@ function el(doc, tag, className, text) {
   if (text !== undefined) node.textContent = text;
   return node;
 }
-function key(doc, className, label, { primary = false } = {}) {
-  const node = el(doc, 'button', `cm-backpack__key${primary ? ' cm-backpack__key--primary' : ''}${className ? ` ${className}` : ''}`, label);
+function key(doc, className, label, { primary = false, icon = null } = {}) {
+  const node = el(doc, 'button', `cm-backpack__key${primary ? ' cm-backpack__key--primary' : ''}${className ? ` ${className}` : ''}`);
   node.type = 'button';
+  // Drawn icons, never system emoji (the gachapon's 2026-10-29 rule).
+  if (icon) node.append(gachaIcon(icon, 'cm-backpack__key-icon', doc));
+  node.append(el(doc, 'span', 'cm-backpack__key-label', label));
   return node;
 }
 
@@ -186,7 +190,8 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
     if (!usable) return null;
     const mount = item.kind === 'AUTOMATION';
     const huntUse = item.kind === 'SUPPLY' && !item.tool;
-    const button = key(doc, 'cm-backpack__use', uiText(mount ? '⚡ 立即掛載' : huntUse ? '⚡ 出發狩獵使用' : '⚡ 立即使用'), { primary: true });
+    const button = key(doc, 'cm-backpack__use', uiText(mount ? '立即掛載' : huntUse ? '出發狩獵使用' : '立即使用'),
+      { primary: true, icon: mount ? 'robot' : huntUse ? 'hunt' : 'bolt' });
     button.dataset.use = item.id;
     button.setAttribute('aria-expanded', String(state.open === item.id));
     button.disabled = item.owned < 1 && !(mount && item.placed > 0) && !item.armed;
@@ -288,16 +293,16 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
       panel.append(grid);
     }
     const actions = el(doc, 'div', 'cm-backpack__actions');
-    const go = (mode, label, primary) => {
-      const button = key(doc, '', uiText(label), { primary });
+    const go = (mode, label, primary, icon) => {
+      const button = key(doc, '', uiText(label), { primary, icon });
       button.dataset.useMode = mode;
       button.disabled = !state.partner || item.owned < 1 || (reshape && state.personality === null);
       button.addEventListener('click', () => finish(reshape ? intents.reshape?.(state.partner, state.personality)
         : intents.useItem?.(item.id, state.partner, { mode })));
       actions.append(button);
     };
-    if (item.kind === 'METAL') { go('ENHANCE', '✨ 強化銘刻', true); go('CATALYST', '⚡ 催化進化', false); }
-    else go('USE', '✨ 使用晶片', true);
+    if (item.kind === 'METAL') { go('ENHANCE', '強化銘刻', true, 'spark'); go('CATALYST', '催化進化', false, 'evolve'); }
+    else go('USE', '使用晶片', true, 'spark');
     panel.append(actions);
     return panel;
   }

@@ -11,7 +11,6 @@ import { retranslate, setLabel, setText, uiText } from "../text/uiText.js";
 import {raisingMessageText,raisingMessageSender} from '../text/raisingMessages.zhHant.js';
 import { speciesName } from "../text/zhHant.js";
 import { originalCageLocationArt } from '../presentation/originalCageLocationArt.js';
-import { databaseHeroPortrait } from '../presentation/databaseHeroPortraits.js';
 import { prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
 import { buildEvolve } from '../presentation/ceremony/ceremonyScenes.js';
@@ -94,7 +93,7 @@ function cageName(frame, cageId) {
  */
 export async function createRaisingHomeP1RView({ root, source, mountField, hudArt=null, getRosterEntry=null,
   renderCreatureDetail=null, openRoster=null, firstRunHint=false, nextHintDuration=consumeRaisingHintDuration, storySeen=null,
-  evolutionCinematic=null } = {}) {
+  evolutionCinematic=null, portraitFallback=null } = {}) {
   if (!root) throw new TypeError("INT-RH2 P1R view requires a root element");
   const presentation = assertPresentationSource(source);
   if (typeof mountField !== "function") {
@@ -241,8 +240,10 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   actions.append(previous, next, cardToggle, close);
   // Owner 2026-11-03: gachapon chips and evolution metals are used from the partner itself --
   // the bag opens on its chips with this partner already chosen.
-  const boost = node('button', 'int-rh2-companion__boost', uiText('✨ 使用晶片／進化金屬催化'));
+  const boost = node('button', 'int-rh2-companion__boost');
   boost.type = 'button';
+  // A CSS-drawn spark, not a system emoji (the gachapon rule).
+  boost.append(node('span', 'int-rh2-companion__boost-icon'), node('span', 'int-rh2-companion__boost-label', uiText('使用晶片／進化金屬催化')));
   boost.dataset.action = 'partner-boost';
   boost.addEventListener('click', () => {
     const id = companion.dataset.creatureId;
@@ -591,9 +592,9 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     // The HUD portrait art is local-only; the public build falls back to the encyclopedia's own
     // thumbnail (every published species has one), so the well never stands empty (Owner 2026-11-03).
     const speciesIndex=Number(/species-(\d{3})$/.exec(resident?.speciesId??'')?.[1]??NaN);
-    const dex=databaseHeroPortrait(speciesIndex);
-    const image=hudArt?.getPortrait(resident?.speciesId)??(dex?.thumbnail??dex)??null;
-    portraitSlot.dataset.source=image?(image===dex||image===dex?.thumbnail?'dex':'hud'):'none';
+    const hud=hudArt?.getPortrait(resident?.speciesId)??null,dex=hud?null:portraitFallback?.(speciesIndex)??null;
+    const image=hud??dex;
+    portraitSlot.dataset.source=hud?'hud':dex?'dex':'none';
     portrait.hidden=!image;
     // No picture, no well.
     portraitSlot.hidden=!image;

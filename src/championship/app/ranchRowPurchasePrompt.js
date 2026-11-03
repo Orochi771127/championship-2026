@@ -1,5 +1,6 @@
 import { showChoiceDialog } from './uiDialog.js';
 import { uiText } from '../text/uiText.js';
+import { landExpansionPrice } from '../gacha/diamondRewards.js';
 
 // Presentation only. The existing intent owns validation, atomic save and debit.
 export function createRanchRowPurchasePrompt({ source, ask = showChoiceDialog, restoreFocus = () => {} }) {
@@ -19,7 +20,7 @@ export function createRanchRowPurchasePrompt({ source, ask = showChoiceDialog, r
       pending = true;
       try {
         // Owner 2026-11-03: the step's own price (200 → 2,200), quoted from the frame the app recomputes on buy.
-        const price = cage.land?.price || 1000;
+        const price = cage.land?.price || landExpansionPrice(cage.landCapacity) || 1000;
         const affordable = (cage.testDiamonds ?? 0) >= price;
         const choice = await ask({
           title: uiText('CAGE_TEST_ROW_TITLE', { row: row + 1 }),
