@@ -3445,3 +3445,139 @@ body:not([data-desktop-raising]):has(#cm-root[data-active-screen="RAISING_HOME"]
 @media (max-height: 500px) and (orientation: landscape) {
   :where(body:has(#cm-root:not([hidden]))) dialog.cm-dialog { width: min(560px, calc(100vw - 32px - var(--safe-left) - var(--safe-right))); }
 }
+
+/* ======================================================================== *
+ * Battle polish (Owner 2026-11-03): pre-battle roster with faces and plan
+ * capsules (no native <select>), an opaque versus board, the safe window
+ * between the floating HUD rows, livelier cards and a legible result title.
+ * ======================================================================== */
+/* Roster rows: the partner's face and badges, its HP / TP, a check. */
+/* The name is the button's own text (an anonymous grid item in column 2). */
+.cm-vs5-party .cm-vs5-party-row { display: grid; grid-template-columns: 48px minmax(0, 1fr); align-items: center; column-gap: 10px; row-gap: 3px; text-align: left; min-height: 72px; font-weight: 900; }
+.cm-vs5-party .cm-vs5-party-row > .cm-vs5-member__portrait { grid-column: 1; grid-row: 1 / span 3; align-self: center; }
+.cm-vs5-party .cm-vs5-party-row > :is(.cm-vs5-member__meta, .cm-vs5-match__fee) { grid-column: 2; }
+.cm-vs5-party .cm-vs5-party-row > .cm-vs5-match__fee { display: grid; gap: 4px; font-weight: 700; }
+.cm-vs5-party-row[data-refused="true"] { min-height: 56px; }
+.cm-vs5-party-row[data-refused="true"] .cm-vs5-member__portrait { filter: grayscale(1); }
+.cm-vs5-member { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.cm-vs5-member__portrait {
+  position: relative; flex: 0 0 48px; width: 48px; height: 48px; overflow: hidden; border-radius: 10px 4px 10px 4px;
+  background: radial-gradient(circle at 50% 35%, #fff 0, #dfe9ff 55%, #b8c8ec 100%); box-shadow: inset 0 0 0 2px #14141f;
+}
+.cm-vs5-member__portrait > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 24%; }
+.cm-vs5-member__portrait[data-empty="true"]::after { content: "?"; position: absolute; inset: 0; display: grid; place-items: center; font-weight: 900; color: #5a6688; }
+.cm-vs5-member__text { display: grid; gap: 3px; min-width: 0; }
+.cm-vs5-member__name { font-weight: 900; line-height: 1.2; overflow-wrap: anywhere; }
+.cm-vs5-member__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; min-width: 0; }
+.cm-vs5-member__meta .cm-tax-row { display: inline-flex; flex-wrap: wrap; gap: 3px; }
+.cm-vs5-member__meta .cm-tax-badge { font-size: 11px; }
+.cm-vs5-member__meters { display: grid; gap: 3px; width: min(100%, 220px); }
+.cm-vs5-member__bar { display: block; height: 6px; border-radius: 3px; background: rgb(20 20 31 / 18%); overflow: hidden; }
+.cm-vs5-member__bar::before { content: ""; display: block; width: var(--fill, 0%); height: 100%; border-radius: inherit; background: linear-gradient(90deg, #26b86c, #8cf0a8); }
+.cm-vs5-member__bar--tp::before { background: linear-gradient(90deg, #3a6fd8, #8cc8ff); }
+.cm-vs5-tactics__name .cm-vs5-member__portrait, .cm-vs5-practice-member__name .cm-vs5-member__portrait { flex-basis: 38px; width: 38px; height: 38px; }
+
+/* Battle plan: three lit capsules. */
+.cm-vs5-tactic { display: inline-grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; min-width: 0; }
+.cm-vs5-tactic > .cm-vs5-tactic__label { display: none; }
+.cm-vs5-tactic__option {
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-height: var(--target, 44px); min-width: 0;
+  padding: 0 8px; border: 2px solid #14141f; border-radius: 999px; font: inherit; font-size: 13px; font-weight: 900; white-space: nowrap;
+  background: linear-gradient(180deg, #fff, #e4e8f2); color: #3a4258; box-shadow: 0 3px 0 #14141f; cursor: pointer;
+  transition: transform 90ms ease-out, box-shadow 90ms ease-out;
+  --lit-a: #ff8a3c; --lit-b: #e0332f; --lit-ink: #fff;
+}
+.cm-vs5-tactic__option[data-kind="normal"] { --lit-a: #55e0ff; --lit-b: #1f7fe0; }
+.cm-vs5-tactic__option[data-kind="support"] { --lit-a: #8cf07a; --lit-b: #1f9e55; }
+.cm-vs5-tactic__glyph { width: 14px; height: 14px; flex: 0 0 14px; background: currentColor; opacity: 0.85;
+  clip-path: polygon(50% 0, 63% 35%, 100% 38%, 72% 60%, 82% 100%, 50% 77%, 18% 100%, 28% 60%, 0 38%, 37% 35%); }
+.cm-vs5-tactic__option[data-kind="normal"] .cm-vs5-tactic__glyph { clip-path: polygon(14% 0, 100% 86%, 86% 100%, 0 14%); }
+.cm-vs5-tactic__option[data-kind="support"] .cm-vs5-tactic__glyph { clip-path: polygon(50% 0, 100% 18%, 92% 62%, 50% 100%, 8% 62%, 0 18%); }
+.cm-vs5-tactic__option[aria-checked="true"] {
+  background: linear-gradient(180deg, var(--lit-a), var(--lit-b)); color: var(--lit-ink);
+  text-shadow: 0 1px 0 rgb(0 0 0 / 45%); box-shadow: 0 1px 0 #14141f, 0 0 0 2px #fff inset, 0 0 12px color-mix(in srgb, var(--lit-a) 70%, transparent);
+  transform: translateY(2px);
+}
+.cm-vs5-tactic__option:active { transform: translateY(3px); box-shadow: 0 0 0 #14141f; }
+.cm-vs5-tactic__option:focus-visible { outline: 3px solid #ffd23f; outline-offset: 2px; }
+.cm-vs5-tactics__row { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+@media (min-width: 560px) { .cm-vs5-tactics__row { grid-template-columns: minmax(0, 1fr) auto; } }
+
+/* Arena: a scrolling row of chips. */
+.cm-vs5-arena-choice { display: grid; gap: 6px; min-width: 0; }
+.cm-vs5-arena-choice__label { font-weight: 900; }
+.cm-vs5-arena-choice__row { display: flex; gap: 6px; overflow-x: auto; padding: 2px 2px 6px; scrollbar-width: none; overscroll-behavior-x: contain; }
+.cm-vs5-arena-choice__row::-webkit-scrollbar { display: none; }
+.cm-vs5-arena-chip {
+  flex: 0 0 auto; min-height: 40px; padding: 0 14px; border: 2px solid #14141f; border-radius: 10px 4px 10px 4px;
+  background: linear-gradient(180deg, #fffdf2, #ffe9a8); color: #14141f; font: inherit; font-weight: 900; white-space: nowrap;
+  box-shadow: 0 3px 0 #14141f; cursor: pointer;
+}
+.cm-vs5-arena-chip[aria-checked="true"] { background: linear-gradient(180deg, #ffd23f, #f0a51a); transform: translateY(2px); box-shadow: 0 1px 0 #14141f, inset 0 0 0 2px #fff; }
+.cm-vs5-arena-chip:focus-visible { outline: 3px solid #7b3cff; outline-offset: 2px; }
+
+/* Loading: an opaque versus board; the HUD rows wait for the field. */
+.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-loading="true"] > :is(.cm-vs5-clock, .cm-vs5-roster) { visibility: hidden; }
+.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-loading="true"] > .cm-vs5-log > :not(.cm-vs5-exit) { visibility: hidden; }
+/* The versus toast and the cut-in strip open below the opponent cards. */
+.cm-vs5-field > .cm-ceremony[data-kind="versus"] { padding-top: calc(var(--battle-safe-top, 0px) + 10px); }
+.cm-vs5-field .cm-cutin__band { top: calc(var(--battle-safe-top, 18%) + 40px); }
+/* The burst call and the player's burst key keep inside the safe window too. */
+.cm-vs5-field > .cm-vs5-burst-call { top: calc(var(--battle-safe-top, 18%) + 10px); }
+.cm-vs5-field > .cm-vs5-burst-call[data-side="opponent"] { top: auto; bottom: calc(var(--battle-safe-bottom, 18%) + 10px); }
+.cm-vs5-field > .cm-vs5-burst-button { bottom: calc(var(--battle-safe-bottom, 18%) + 12px); }
+/* The move name: a solid bright face over a hard dark stroke and a glow in the
+   move's colour -- a clipped gradient with a transparent fill painted dark. */
+.cm-cutin .cm-cutin__name {
+  background: none; color: #fff6cf; -webkit-text-fill-color: #fff6cf;
+  -webkit-text-stroke: 5px #1a0c00; paint-order: stroke fill;
+  filter: drop-shadow(0 3px 0 #000) drop-shadow(0 0 9px color-mix(in srgb, var(--jc-main, #ffd23f) 85%, transparent));
+}
+.cm-cutin .cm-cutin__kicker { color: #ffe27a; -webkit-text-stroke: 3px #120a00; paint-order: stroke fill; text-shadow: none; }
+
+/* Cards: whoever is acting lights gold; a hit leaves a red-white drain. */
+.cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter__mini {
+  position: absolute; top: -9px; right: -6px; z-index: 2; width: 26px; height: 26px; overflow: hidden; border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #fff, #c7d4f0); box-shadow: 0 0 0 2px #050a10, 0 0 0 3px var(--plate-edge, #3ddc84);
+}
+.cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter__mini > img { position: absolute; left: 50%; bottom: -2px; width: 34px; height: 34px; transform: translateX(-50%); object-fit: contain; image-rendering: pixelated; }
+.cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter__mini[hidden] { display: none; }
+.cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter__badge {
+  position: absolute; top: -8px; right: 22px; z-index: 2; display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%; background: #050a10; box-shadow: 0 0 0 1.5px var(--plate-edge, #3ddc84);
+}
+.cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter__badge > svg { width: 14px; height: 14px; }
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-roster .cm-vs5-fighter[data-acting="true"] {
+  --plate-edge: #ffd23f; --plate-glow: #fff3a0;
+  box-shadow: inset 0 0 0 2px #ffd23f, inset 0 0 0 3px rgba(0, 0, 0, 0.45), 0 0 0 2px #ffd23f, 0 0 14px 2px rgba(255, 210, 63, 0.75), 0 4px 0 #050a10;
+}
+.cm-vs5-shell[data-hud="floating"] .cm-vs5-meter::before { z-index: 0; }
+.cm-vs5-shell[data-hud="floating"] .cm-vs5-meter__fill { z-index: 1; }
+.cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--hp::before {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.85), #ff5a5a); transition: width 520ms cubic-bezier(0.2, 0.9, 0.3, 1) 380ms;
+}
+.cm-vs5-shell[data-hud="floating"] :is(.cm-vs5-fighter__hp, .cm-vs5-meter__value) { z-index: 2; }
+
+/* Result: one clean title. Win: gold with a dark edge; loss: cool silver with a navy edge. */
+:root:not([data-theme="none"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell[data-panel="RESULT"] .cm-vs5-result__body .cm-vs5-title {
+  -webkit-text-stroke: 0; paint-order: normal; letter-spacing: 0.04em;
+  background: var(--title-fill); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  text-shadow: none; filter: drop-shadow(-2px 0 0 var(--title-edge)) drop-shadow(2px 0 0 var(--title-edge)) drop-shadow(0 -2px 0 var(--title-edge)) drop-shadow(0 3px 0 var(--title-edge)) drop-shadow(0 0 10px var(--title-glow));
+  --title-fill: linear-gradient(180deg, #ffffff 0%, #d5dde9 52%, #93a3bc 100%); --title-edge: #16224a; --title-glow: rgba(120, 160, 230, 0.45);
+}
+:root:not([data-theme="none"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell[data-verdict="TEAM_ZERO_AHEAD"][data-panel="RESULT"] .cm-vs5-result__body .cm-vs5-title {
+  --title-fill: linear-gradient(180deg, #fff6c8 0%, #ffd23f 48%, #f0a51a 100%); --title-edge: #2a1600; --title-glow: rgba(255, 196, 40, 0.55);
+}
+:root:not([data-theme="none"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell[data-panel="RESULT"] .cm-vs5-result__body .cm-vs5-title::before { content: none; }
+/* Result: what each side did -- two compact tables, one line per partner. */
+.cm-vs5-result__summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; width: 100%; margin: 4px 0 0; }
+.cm-vs5-result__side { display: grid; align-content: start; gap: 3px; margin: 0; padding: 6px 10px 8px; border: 2px solid #14141f; border-radius: 8px 16px 8px 16px; background: #fff; text-align: left; }
+.cm-vs5-result__side[data-side="player"] { background: linear-gradient(180deg, #ecfff4, #d4f5e4); }
+.cm-vs5-result__side[data-side="opponent"] { background: linear-gradient(180deg, #fff0f2, #fbd9df); }
+:root .cm-vs5-root .cm-vs5-result__row { display: grid; grid-template-columns: minmax(0, 1fr) 4.2em 2.6em; align-items: center; gap: 0 4px; margin: 0; font-size: 12px; line-height: 1.45; color: #14141f; font-variant-numeric: tabular-nums; text-shadow: none; }
+:root .cm-vs5-root .cm-vs5-result__row--head { padding-bottom: 2px; border-bottom: 1.5px solid rgb(20 20 31 / 25%); font-size: 11px; }
+:root .cm-vs5-root .cm-vs5-result__side-title { margin: 0; font-size: 12px; font-weight: 900; letter-spacing: 0.08em; color: #14141f; text-shadow: none; }
+.cm-vs5-result__row-name { min-width: 0; overflow-wrap: anywhere; font-weight: 900; line-height: 1.25; }
+.cm-vs5-result__row[data-down="true"] .cm-vs5-result__row-name { opacity: 0.6; }
+.cm-vs5-result__mvp { display: inline-block; margin-right: 3px; padding: 0 4px; border: 1.5px solid #14141f; border-radius: 999px; background: #ffd23f; font-size: 9px; line-height: 1.3; letter-spacing: 0.04em; vertical-align: 1px; }
+.cm-vs5-result__stat { font-weight: 800; white-space: nowrap; text-align: right; color: #3a4258; }

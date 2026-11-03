@@ -1708,6 +1708,13 @@ export const TEXT_VI = Object.freeze({
   "必殺技優先": "Ưu tiên tuyệt chiêu",
   "普通攻擊": "Tấn công thường",
   "支援優先": "Ưu tiên hỗ trợ",
+  // Battle polish (Owner 2026-11-03): plan capsule, record feed, result summary
+  "必殺優先": "Ưu tiên tuyệt chiêu",
+  "傷害": "Sát thương",
+  "擊倒": "Hạ gục",
+  "{name}攻擊{target}，造成 {damage} 傷害": "{name} đánh {target}, gây {damage} sát thương",
+  "{target}受到 {damage} 傷害": "{target} chịu {damage} sát thương",
+  "{name}回復了 {amount} 生命值": "{name} hồi {amount} HP",
   "對戰開始！": "BẮT ĐẦU!",
   "會心一擊！": "CHÍ MẠNG!",
   "重擊！": "ĐÒN MẠNH!",

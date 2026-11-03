@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 // Exercise the shipped mount owner without a browser, network or art fixture.
 const main=readFileSync(new URL('../src/championship/app/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n');
-const binding=main.slice(main.indexOf('    mountField({ host,onReady,onError,progress=null }) {'),main.indexOf('    onExit: tutorial?undefined:'));
+const binding=main.slice(main.indexOf('    mountField({ host,onReady,onError,progress=null,safeInsets=null }) {'),main.indexOf('    onExit: tutorial?undefined:'));
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
 const flush=async()=>{for(let i=0;i<80;i++)await Promise.resolve();};
 

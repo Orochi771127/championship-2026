@@ -83,13 +83,21 @@ const DECALS = {
     c.fillStyle = rgba(p.main, 0.9); for (let i = 0; i < 6; i++) c.fillRect(30 + r() * 68, 18 + r() * 28, 4, 3);
   },
   roots(c, p, r) {
-    c.strokeStyle = rgba(p.edge, 0.95); c.lineWidth = 3; c.lineCap = 'round';
+    c.lineCap = 'round';
     for (let i = 0; i < 5; i++) {
-      const a = i * TAU / 5 + r(); c.beginPath(); c.moveTo(64, 32);
-      c.quadraticCurveTo(64 + Math.cos(a + 0.6) * 26, 32 + Math.sin(a + 0.6) * 11, 64 + Math.cos(a) * 54, 32 + Math.sin(a) * 23); c.stroke();
+      const a = i * TAU / 5 + r(), tx = 64 + Math.cos(a) * 54, ty = 32 + Math.sin(a) * 23;
+      const cx = 64 + Math.cos(a + 0.6) * 26, cy = 32 + Math.sin(a + 0.6) * 11;
+      // A dark vine under a lit one: it reads as a raised root on any floor.
+      for (const [width, color] of [[7, 'rgba(10,40,16,0.55)'], [4.5, rgba(p.edge, 0.95)], [1.6, rgba(p.core, 0.9)]]) {
+        c.strokeStyle = color; c.lineWidth = width; c.beginPath(); c.moveTo(64, 32); c.quadraticCurveTo(cx, cy, tx, ty); c.stroke();
+      }
     }
-    c.fillStyle = rgba(p.main, 0.95);
-    for (let i = 0; i < 6; i++) { const a = r() * TAU, d = 18 + r() * 30; c.beginPath(); c.ellipse(64 + Math.cos(a) * d, 32 + Math.sin(a) * d * 0.42, 5, 2.5, a, 0, TAU); c.fill(); }
+    for (let i = 0; i < 7; i++) {
+      const a = r() * TAU, d = 18 + r() * 30, x = 64 + Math.cos(a) * d, y = 32 + Math.sin(a) * d * 0.42;
+      c.fillStyle = 'rgba(10,40,16,0.5)'; c.beginPath(); c.ellipse(x, y + 1, 7, 3.4, a, 0, TAU); c.fill();
+      c.fillStyle = rgba(p.main, 0.98); c.beginPath(); c.ellipse(x, y, 6.5, 3, a, 0, TAU); c.fill();
+      c.fillStyle = rgba(p.core, 0.9); c.beginPath(); c.ellipse(x - 1.5, y - 0.8, 2.5, 1, a, 0, TAU); c.fill();
+    }
   },
   swirl(c, p) {
     c.strokeStyle = rgba(p.main, 0.75); c.lineWidth = 3;
@@ -110,6 +118,33 @@ const DECALS = {
     c.fillStyle = rgba(p.main, 0.9); for (let i = 0; i < 5; i++) c.fillRect(36 + r() * 56, 20 + r() * 24, 2, 2);
   }
 };
+
+/**
+ * Ground cells (Owner 2026-11-03): each mark also plays the element's own hit
+ * or ground sequence from the shared effect atlas at the mark, so a hit leaves
+ * crystal spikes, cracks or a burst on the floor instead of only thin lines.
+ * [bankId, sequence] pairs from battleEffectProfiles.json (sequence 2 is a
+ * bank's three-frame hit); every frame is in the shipped 292-cell web atlas.
+ */
+export const ELEMENT_GROUND_CELLS = Object.freeze({
+  roots: Object.freeze([[53, 2], [25, 1]]),   // toge00 jade spikes, seed00 seeds
+  crack: Object.freeze([[24, 2]]),            // rock00 shatter
+  scorch: Object.freeze([[149, 0]]),          // explo
+  frost: Object.freeze([[26, 2]]),            // snowcrystal00
+  puddle: Object.freeze([[91, 0]]),           // tsunami
+  static: Object.freeze([[28, 2]]),           // thunderball00
+  swirl: Object.freeze([[33, 2]]),            // tatumaki00
+  sunburst: Object.freeze([[1, 33]]),         // battle light burst
+  shade: Object.freeze([[100, 2]])            // dark01
+});
+
+/** A soft lit pool under every mark: brightest in the middle, foreshortened like the floor. */
+function groundGlow(c, p) {
+  const g = c.createRadialGradient(64, 32, 1, 64, 32, 62);
+  g.addColorStop(0, rgba(p.core, 0.42)); g.addColorStop(0.45, rgba(p.main, 0.24)); g.addColorStop(1, 'rgba(0,0,0,0)');
+  c.save(); c.translate(64, 32); c.scale(1, 0.46); c.translate(-64, -32);
+  c.fillStyle = g; c.beginPath(); c.arc(64, 32, 62, 0, TAU); c.fill(); c.restore();
+}
 
 const STORMS = {
   vortex(c, p, r, v) {
@@ -220,7 +255,7 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
   const ringTexture = () => texture('ring', 64, 64, c => { c.strokeStyle = '#fff'; c.lineWidth = 5; c.beginPath(); c.arc(32, 32, 28, 0, TAU); c.stroke(); });
   const sparkTexture = () => texture('spark', 8, 2, c => { c.fillStyle = '#fff'; c.fillRect(0, 0, 8, 2); });
   const decalTexture = (kind, paletteKey, palette, variant) => texture(`decal:${kind}:${paletteKey}:${variant}`, 128, 64,
-    c => (DECALS[kind] ?? DECALS.crack)(c, palette, seeded(variant * 977 + kind.length)));
+    c => { groundGlow(c, palette); (DECALS[kind] ?? DECALS.crack)(c, palette, seeded(variant * 977 + kind.length)); });
   const stormTexture = (kind, paletteKey, palette, variant) => texture(`storm:${kind}:${paletteKey}:${variant}`, 256, 256,
     c => (STORMS[kind] ?? STORMS.burst)(c, palette, seeded(variant * 131 + kind.length * 7), variant));
   function hueFilter(hue) {
@@ -230,17 +265,19 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
     return [f];
   }
 
-  /** A four-second ground mark at a ground point. */
-  function decal({x, y, kind, palette, paletteKey = 'neutral', size = 40}) {
+  /** A four-second ground mark at a ground point, with the element's own ground cells. */
+  function decal({x, y, kind, palette, paletteKey = 'neutral', size = 40, scale = 0}) {
     const look = decalTexture(kind, paletteKey, palette, 1 + (created.decals % 3));
     if (!look) return;
     if (decals.length >= (rich ? 16 : 6)) { const old = decals.shift(); old.sprite.destroy(); }
     const sprite = new PIXI.Sprite(look);
-    sprite.anchor.set(0.5); sprite.position.set(x, y); sprite.scale.set(Math.max(18, size) / 128 * 2.1);
-    sprite.rotation = (random() - 0.5) * 0.2; sprite.alpha = 0;
+    sprite.anchor.set(0.5); sprite.position.set(x, y); sprite.scale.set(Math.max(18, size) / 128 * 2.1, Math.max(18, size) / 128 * 1.9);
+    sprite.rotation = (random() - 0.5) * 0.12; sprite.alpha = 0;
     decalLayer.addChild(sprite);
     decals.push({sprite, age: 0, life: ELEMENT_DECAL_MS});
     created.decals++;
+    if (scale > 0) for (const [bankId, sequence] of (rich ? ELEMENT_GROUND_CELLS[kind] ?? [] : (ELEMENT_GROUND_CELLS[kind] ?? []).slice(0, 1)))
+      cell({bankId, sequence, x, y, scale: scale * 0.9, ground: true});
   }
   /** The signature backdrop over the field rectangle (world space). */
   function storm({kind, palette, paletteKey = 'neutral', rect, center = null}) {
@@ -288,7 +325,7 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
    * Play one native sequence of the effect atlas at a point (or following a
    * point getter). `scale` is screen px per native px; `repeatMs` loops it.
    */
-  function cell({bankId, sequence, x = 0, y = 0, scale = 2, hue = 0, follow = null, repeatMs = 0, flip = false, overlay = false, alpha = 1}) {
+  function cell({bankId, sequence, x = 0, y = 0, scale = 2, hue = 0, follow = null, repeatMs = 0, flip = false, overlay = false, alpha = 1, ground = false}) {
     const profile = profiles.banks[(bankId | 0) - 1]?.sequences?.[sequence];
     if (!art || !profile) return null;
     const frames = profile.frames.map(f => ({art: art.getCell(bankId, f.cell), ticks: Math.max(1, f.ticks)}));
@@ -297,9 +334,11 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
     const sprite = new PIXI.Sprite(frames[0].art.texture);
     sprite.filters = hueFilter(hue);
     sprite.alpha = alpha;
-    frontLayer.addChild(sprite);
+    // Ground cells lie with the marks, under the fighters; the rest play over them.
+    (ground ? decalLayer : frontLayer).addChild(sprite);
     const total = frames.reduce((t, f) => t + f.ticks, 0) * TICK_MS;
-    cells.push({sprite, frames, total, x, y, follow, scale, flip, age: 0, life: Math.max(total, repeatMs), loop: repeatMs > 0 || profile.playbackMode === 2});
+    // A ground cell plays its sequence once, however the bank loops it in flight.
+    cells.push({sprite, frames, total, x, y, follow, scale, flip, age: 0, life: ground ? total : Math.max(total, repeatMs), loop: !ground && (repeatMs > 0 || profile.playbackMode === 2)});
     created[overlay ? 'overlays' : 'cells']++;
     return true;
   }

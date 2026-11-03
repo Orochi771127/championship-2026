@@ -110,12 +110,19 @@ test('Practice rows and chosen Free Battle partners offer the three plans in ROM
     setBattleTactic:(id,value)=>{writes.push([id,value]);return {ok:true};},
     mountCube:({onSelect})=>{globalThis.__select=onSelect;return {dispose(){}};}});
   globalThis.__select('PRACTICE_BATTLE');await new Promise(r=>setTimeout(r,0));
-  const selects=byClass(root,'cm-vs5-tactic__select');
-  assert.equal(selects.length,2);
-  assert.deepEqual(selects[0].children.map(o=>o.textContent),['必殺技優先','普通攻擊','支援優先']);
-  assert.deepEqual(selects.map(s=>s.value),['1','2']);
-  selects[0].value='0';selects[0].listeners.change();
+  // Owner 2026-11-03: three capsules per partner, never a native <select>.
+  assert.equal(all(root).filter(node=>node.tagName==='select').length,0);
+  const groups=byClass(root,'cm-vs5-tactic');
+  assert.equal(groups.length,2);
+  const options=byClass(groups[0],'cm-vs5-tactic__option');
+  assert.deepEqual(options.map(o=>byClass(o,'cm-vs5-tactic__text')[0].textContent),['必殺優先','普通攻擊','支援優先']);
+  assert.deepEqual(options.map(o=>o.dataset.value),['0','1','2']);
+  assert.deepEqual(groups.map(g=>g.dataset.value),['1','2']);
+  assert.deepEqual(options.map(o=>o.getAttribute('aria-checked')),['false','true','false']);
+  options[0].click();
   assert.deepEqual(writes,[['p1',0]]);
+  assert.equal(groups[0].dataset.value,'0');
+  assert.equal(options[0].getAttribute('aria-checked'),'true');
   // Practice keeps the A / B keys as the row's only buttons.
   assert.deepEqual(byClass(root,'cm-vs5-practice-member').map(row=>row.children.filter(c=>c.tagName==='button').length),[2,2]);
 
@@ -125,6 +132,6 @@ test('Practice rows and chosen Free Battle partners offer the three plans in ROM
   assert.equal(box.hidden,true,'no plan rows before a partner is chosen');
   all(root).find(node=>node.dataset.instanceId==='p2').click();
   assert.equal(box.hidden,false);
-  assert.deepEqual(byClass(box,'cm-vs5-tactic__select').map(s=>s.value),['2']);
+  assert.deepEqual(byClass(box,'cm-vs5-tactic').map(g=>g.dataset.value),['2']);
   view.dispose();delete globalThis.__select;
 });

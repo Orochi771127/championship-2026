@@ -38,11 +38,10 @@ try{
  await page.clock.install();await page.clock.pauseAt(new Date(Date.now()+1000));
  async function step(ms=67){await page.waitForTimeout(40);await page.clock.runFor(ms);}
  await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="battle"]').click();await page.locator('.cm-vs5-cube__face[data-face-id="PRACTICE_BATTLE"]').click();
- await page.locator('.cm-vs5-arena-choice select').waitFor();
- const selects=await page.locator('select').evaluateAll(es=>es.map(e=>({class:e.className,options:[...e.options].map(o=>[o.value,o.textContent])})));console.log(JSON.stringify({selects}));
- const arena=page.locator('.cm-vs5-arena-select select, select.cm-vs5-arena-select');
- // Battle plan selects (作戰方針) follow the arena select, so pick the arena by its label.
- await page.locator('.cm-vs5-arena-choice select').selectOption('3');
+ await page.locator('.cm-vs5-arena-choice .cm-vs5-arena-chip').first().waitFor();
+ // Owner 2026-11-03: the arena and the battle plans are tap chips; no native <select> remains.
+ assert.equal(await page.locator('.cm-vs5-root select').count(),0);
+ await page.locator('.cm-vs5-arena-choice .cm-vs5-arena-chip[data-index="3"]').click();
  // Exercise a real six-actor practice battle through the existing team UI.
  assert.ok(await page.locator('.cm-vs5-practice-member button:nth-of-type(1):enabled').count()>=6,'QA seed must admit six actual actors; do not substitute cloned HUDs for the live battle');
  for(const team of [1,2])for(let n=0;n<3;n++)await page.locator(`.cm-vs5-practice-member button:nth-of-type(${team}):enabled[aria-pressed="false"]`).first().click();
