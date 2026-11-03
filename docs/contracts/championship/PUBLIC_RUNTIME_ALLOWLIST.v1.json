@@ -121053,7 +121053,7 @@
     },
     {
       "path": "src/championship/app/huntMobile.css",
-      "sha256": "5475fd905537cddb001fe2bfd91a20f36baa7a23d8def934c41af30858730413"
+      "sha256": "d8bdc444cb6f13f94b7c44806c94fbeacd50140ccfc789a4cc8fa18706c62af8"
     },
     {
       "path": "src/championship/app/huntTacticalDock.js",
@@ -121137,7 +121137,7 @@
     },
     {
       "path": "src/championship/app/nativeUiSkin.css",
-      "sha256": "8f05c2c63b71cb31908ffffb4e7385754509582c306f3dce54e2c91021c6344a"
+      "sha256": "382992636a6188f4c0c1b34fdc1146a21c555670830a91abf060687dc5d967c4"
     },
     {
       "path": "src/championship/app/onboarding.css",
@@ -121349,7 +121349,7 @@
     },
     {
       "path": "src/championship/app/ui/screenLayout.css",
-      "sha256": "0e3134193d46de4fc782f192b6a4d19d52996e1d80b1d96adbe886be9cdded49"
+      "sha256": "6b0e8625781903c0e9ee7a111b6487e212b064bdf16b06b23c26a2987d01e294"
     },
     {
       "path": "src/championship/app/ui/settings.css",
@@ -121385,11 +121385,11 @@
     },
     {
       "path": "src/championship/app/vs2Screens.js",
-      "sha256": "888f93427b7120d5d96d4f06b477b1b699f18d568a5bc40c18b01b21efd18992"
+      "sha256": "2b7d7031783996866a0a2a5da4a9f6e8e11851f477d88e06e9e370af24496b74"
     },
     {
       "path": "src/championship/app/vs2Styles.css",
-      "sha256": "914d54fc3a39c26b3fd0e343e196eee8494368c78d36815c36943d0a1ea056f5"
+      "sha256": "3f186fbae5bc5b6a8d12b58bf3a51d6904ab9891b62c3a7c6cfff2b2c718db39"
     },
     {
       "path": "src/championship/app/vs3Screens.js",
@@ -121873,7 +121873,7 @@
     },
     {
       "path": "src/championship/hunt/capture/nativeHuntFieldControls.js",
-      "sha256": "2ff09f43a973e6b905484e1f3077367ae4e3dc14986fe976de5090d10e1b436a"
+      "sha256": "7303d24704a9e49536d51c3fb3914521dc352f17330d79a21361e0bff624d1f1"
     },
     {
       "path": "src/championship/hunt/capture/nativeHuntGateVariant.js",
@@ -121913,7 +121913,7 @@
     },
     {
       "path": "src/championship/hunt/capture/nativeHuntSceneSources.js",
-      "sha256": "6157d8cc278abdcfa99abd9cc1b55b2b377a572e5f3278d2663724fddc737412"
+      "sha256": "016fb56fa93bb91f903dbce3d7c311fee68c74c95b3f775e11e5436422b76d20"
     },
     {
       "path": "src/championship/hunt/capture/nativeHuntSources.js",
@@ -121945,7 +121945,7 @@
     },
     {
       "path": "src/championship/hunt/capture/nativeWildActor.js",
-      "sha256": "47fb29b05703ba2107382dd7b2c628c47f8aa17b3d8a35ffdd7a46c2eba423c1"
+      "sha256": "e1538ed778424b21cbd89e6b558dea7535315ed8ad8523e8bd16630aa81085f8"
     },
     {
       "path": "src/championship/hunt/capture/nativeWildSpatial.js",
@@ -122221,7 +122221,7 @@
     },
     {
       "path": "src/championship/presentation/characterRosterCore.js",
-      "sha256": "62fd874c35e1fbbf129f8e395d8705407b83d2b72540a17305a5872734033cf0"
+      "sha256": "9403eb42151ee86c07cf87174dbcb7df9282020a90cfb411c42985228b3a8de9"
     },
     {
       "path": "src/championship/presentation/cm07Ambient.js",
@@ -122569,11 +122569,11 @@
     },
     {
       "path": "src/championship/presentation/reviewedCharacterAnimation.js",
-      "sha256": "adf7e8c6503c2ea21f3226e85b6f0bb1b285a398276d1474c4897c302f563a05"
+      "sha256": "57b18ab444a373f9805547bbba4eff9cbab1466bf775b55003185b10f47f7238"
     },
     {
       "path": "src/championship/presentation/reviewedCharacterLoader.js",
-      "sha256": "68d02e4c7b1851271c519cb86be9f9b0ec69378e566fdc0ac87058bf7857e47d"
+      "sha256": "10b4a5613de54c3d1c23b01db06741b9dd9a505a8a73b12152992350620f91cc"
     },
     {
       "path": "src/championship/presentation/reviewedSelection.js",
@@ -122661,7 +122661,7 @@
     },
     {
       "path": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
-      "sha256": "2fda766207e517b316c5bc4f4c97e7413989f06726dd1d0917404a52f0bdd6e0"
+      "sha256": "1c4e50009c069ddd547c187e3bed2aa40d685691f9595dffb8a23cfa9f22cd29"
     },
     {
       "path": "src/championship/presentation/vs2/gateFocusTween.js",
@@ -122670,6 +122670,10 @@
     {
       "path": "src/championship/presentation/vs2/gateWorldLayout.js",
       "sha256": "54771ba4366376f1cb796f49f1eb37ae297d524ad28e3a579b8387f34285236d"
+    },
+    {
+      "path": "src/championship/presentation/vs2/huntActorMotion.js",
+      "sha256": "39b36c943652a72bc47f0a17fef23fcf91be5ec97cb61b8a6bdefedfc9d90583"
     },
     {
       "path": "src/championship/presentation/vs2/huntContactShadow.js",
@@ -122696,8 +122700,12 @@
       "sha256": "20d94340eedb123a69ecc5348574f0d5be9b35d5d9acf7eaa80adb6bf5637dd6"
     },
     {
+      "path": "src/championship/presentation/vs2/huntThree/actorShadows.mjs",
+      "sha256": "1b2fdcab2407d6f67bd8acee1fc17f13773160c34ba468ad74097ce40c2d2ac6"
+    },
+    {
       "path": "src/championship/presentation/vs2/huntThree/actorTextureCache.mjs",
-      "sha256": "17075171bb2a0f239d0a73cdb3a6ebc5b020737d2cf40796a9b2b89e9f6af7b5"
+      "sha256": "6ef200b73dbccdecb39d863768ffbf776994b8d0b3bb616b107937b393f708fc"
     },
     {
       "path": "src/championship/presentation/vs2/huntThree/authoredMapAssets.mjs",
@@ -122705,7 +122713,7 @@
     },
     {
       "path": "src/championship/presentation/vs2/huntThree/createHuntThreeMap.mjs",
-      "sha256": "e389ddd0828e3cafdc7d0d2a30511215349c83da784468c38fd3f966bdeb868f"
+      "sha256": "d6bdf993ff1dc3132ba23905f43d2a72e9fa05ad8fa421894be51a11c9d1644c"
     },
     {
       "path": "src/championship/presentation/vs2/huntThree/dracoLifecycle.mjs",
