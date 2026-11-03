@@ -5,7 +5,14 @@ import {readFileSync} from 'node:fs';
 import species from '../src/data/championship/catalogs/creature-species.r1.json' with {type: 'json'};
 import lifecycle from '../src/data/championship/catalogs/raising-lifecycle.r1.json' with {type: 'json'};
 import {REALTIME_AGE_UNITS_PER_SECOND,REALTIME_OFFLINE_CAP_SECONDS,isNightNap,localMinuteOfDay,offlineGrowthSeconds,
-  realtimeClockAdvance,realtimeDayPeriod,takeAgeUnits} from '../src/championship/time/realtimeClock.js';
+  realtimeClockAdvance,realtimeDayPeriod,realtimeRecoveryEffect,takeAgeUnits} from '../src/championship/time/realtimeClock.js';
+import {nativeCageConditionEffects} from '../src/championship/raising/nativeRaisingOvernight.js';
+import {SHOP_DESCRIPTIONS_ZH} from '../src/championship/text/catalogs.zhHant.js';
+import {SHOP_DESCRIPTIONS_EN} from '../src/championship/text/catalogs.en.js';
+import {SHOP_DESCRIPTIONS_JA} from '../src/championship/text/catalogs.ja.js';
+import {SHOP_DESCRIPTIONS_TH} from '../src/championship/text/catalogs.th.js';
+import {SHOP_DESCRIPTIONS_VI} from '../src/championship/text/catalogs.vi.js';
+import cageDefinitions from '../src/data/championship/catalogs/cage-definitions.r1.json' with {type: 'json'};
 import {createChampionshipStandaloneApp} from '../src/championship/app/championshipStandaloneApp.js';
 import {CHAMPIONSHIP_MODERN_SAVE_KEY} from '../src/championship/app/championshipStandaloneSave.js';
 import {createFullQaSaveText} from '../scripts/lib/championshipFullQaSave.mjs';
@@ -210,4 +217,71 @@ test('night disturbance with the hand: one press counts once, its release is no 
     assert.equal(events.filter(event => event.kind === 'disturbed').length, 1);
     off();
   } finally { await app.dispose(); }
+});
+
+// OWNER_APPROVED_ADAPTATION 2026-11-03: recovery cages heal on real time, not on the partner's age clock.
+test('recovery cages on real time: full HP in about 10 / 7 / 4 minutes at any maximum HP', () => {
+  const fullSeconds = (definition, maxHp) => {
+    const hp = nativeCageConditionEffects(definition).find(e => e.kind === 1);
+    return Math.ceil(maxHp / realtimeRecoveryEffect(hp, maxHp).delta) * hp.interval;
+  };
+  for (const maxHp of [300, 1090, 1600, 4800]) {
+    assert.ok(fullSeconds(15, maxHp) <= 600 && fullSeconds(15, maxHp) > 480, `mini infirmary ${maxHp}: ${fullSeconds(15, maxHp)} s`);
+    assert.ok(fullSeconds(28, maxHp) <= 400, `infirmary ${maxHp}`);
+    assert.ok(fullSeconds(18, maxHp) <= 240, `hot spring ${maxHp}`);
+  }
+  const stress = nativeCageConditionEffects(15).find(e => e.kind === 2);
+  assert.deepEqual(realtimeRecoveryEffect(stress, 1600), stress, 'stress keeps its native step');
+});
+
+test('REALTIME_V1: a partner at HP 57 in the mini infirmary heals fully and calms down within ten minutes', async () => {
+  const clock = {ms: at(17, 40)};
+  const {data, cages, make} = harness(clock);
+  const first = make('REALTIME_V1');
+  await first.newGame();
+  first.save();
+  const saved = JSON.parse(createFullQaSaveText(JSON.parse(data.get(CHAMPIONSHIP_MODERN_SAVE_KEY)), {cageIds: cages.map(e => e.cageId)}));
+  await first.dispose();
+  const patient = saved.raising.collection[1];
+  patient.nativeProfile.fields['050'] = 57; patient.nativeProfile.fields['01c'] = 60;
+  data.set(CHAMPIONSHIP_MODERN_SAVE_KEY, JSON.stringify(saved));
+  const app = make('REALTIME_V1');
+  await app.continueGame();
+  try {
+    const id = patient.instanceId;
+    let placed = false;
+    for (let y = 4; y < 2000 && !placed; y += 8) for (let x = 4; x < 2000 && !placed; x += 8)
+      placed = app.moveRaisingResidentToGround(id, {x, y}) && app.getRaisingActorFrame(id)?.cageDefinitionIndex === 15;
+    assert.ok(placed, 'the QA save has a mini infirmary');
+    const fields = () => { app.save(); return JSON.parse(data.get(CHAMPIONSHIP_MODERN_SAVE_KEY)).raising.collection.find(e => e.instanceId === id).nativeProfile.fields; };
+    const maxHp = fields()['058'];
+    const minutes = n => { for (let s = 0; s < n * 60; s++) { clock.ms += 1000; app.advanceNaturalClock({frames: 60}); } };
+    minutes(5);
+    const half = fields();
+    assert.ok(half['050'] > maxHp / 2 && half['050'] < maxHp, `half way after five minutes: ${half['050']}/${maxHp}`);
+    minutes(5);
+    const done = fields();
+    assert.equal(done['050'], maxHp, 'full after ten minutes');
+    assert.equal(done['01c'], 0, 'stress gone');
+    assert.equal(done['13c'], 0, 'no longer collapsed');
+  } finally { await app.dispose(); }
+});
+
+test('cage shop descriptions name the cage effect in every locale (no stray 防御力 copy)', () => {
+  const defense = {ja: /防御力/, th: /พลังป้องกัน/, vi: /phòng thủ/};
+  const tables = {ja: SHOP_DESCRIPTIONS_JA, th: SHOP_DESCRIPTIONS_TH, vi: SHOP_DESCRIPTIONS_VI};
+  const beast = {zh: /獸種族上升/, en: /Raises the Beast family/, ja: /獣族適性/, th: /เผ่าสัตว์ป่า/, vi: /chủng tộc dã thú/};
+  const recover = {zh: /回復生命值/, en: /Recovers HP/, ja: /HPが回復/, th: /ฟื้นฟู HP/, vi: /Hồi HP/};
+  for (const cage of cageDefinitions.records.filter(c => c.playerFacing && Number.isInteger(c.shopRecordIndex))) {
+    const isDefense = cage.effect.kind === 'STAT_UP' && cage.effect.target === 'DEFENSE';
+    for (const [locale, table] of Object.entries(tables))
+      assert.equal(defense[locale].test(table[cage.shopRecordIndex]), isDefense, `${locale} cage ${cage.cageIndex}: ${table[cage.shopRecordIndex]}`);
+    // DIAMOND_ECONOMY_20261102: the Bits shop zoo and ranch train the beast family instead of caring automatically.
+    if (cage.effect.kind === 'AUTO_CARE')
+      for (const [locale, table] of Object.entries({zh: SHOP_DESCRIPTIONS_ZH, en: SHOP_DESCRIPTIONS_EN, ...tables}))
+        assert.match(table[cage.shopRecordIndex], beast[locale], `${locale} cage ${cage.cageIndex}: ${table[cage.shopRecordIndex]}`);
+    if (cage.effect.kind === 'RECOVER')
+      for (const [locale, table] of Object.entries({zh: SHOP_DESCRIPTIONS_ZH, en: SHOP_DESCRIPTIONS_EN, ...tables}))
+        assert.match(table[cage.shopRecordIndex], recover[locale], `${locale} cage ${cage.cageIndex}`);
+  }
 });
