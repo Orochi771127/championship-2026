@@ -564,6 +564,11 @@ function listenPartnerFinds() {
     const id = event.entry.id, gained = event.entry.quantity;
     strollFlightsPending.set(id, { tool: event.tool, timer: setTimeout(() => { if (releaseStrollHold(id)) toolbar.landToolStock(event.tool, { gained }); }, 1500) });
   });
+  // AUTO_CARE_3D_20261103: a feeding tower's meat leaves the bag with a −1 on the 餵食 key.
+  document.addEventListener('cm-stock-spent', (event) => {
+    const { tool, spent } = event.detail ?? {};
+    if (typeof tool === 'string' && spent > 0) toolbar?.spendToolStock?.(tool, { spent });
+  });
   document.addEventListener('cm-partner-find', (event) => {
     const { x, y, find } = event.detail ?? {}, entry = find?.entry;
     if (!entry || !Number.isFinite(x) || !Number.isFinite(y)) return;
@@ -2367,7 +2372,9 @@ async function openGameplay() {
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("diamondQa"))
     globalThis.__championshipDiamondQa = { grant: (id, n = 1) => app.grantAutomationItem(id, n, 'QA'), cage: () => app.getCageEditFrame(),
       badges: () => app.getCageAutomationFrame(), events: () => app.getAutomationEvents(), rewards: () => app.getDiamondRewards(),
-      saveStatus: () => app.savePort.getStatus() };
+      saveStatus: () => app.savePort.getStatus(),
+      // AUTO_CARE_3D_20261103: the 3D machines and a deploy, for the ranch review.
+      autoCare: () => app.getAutoCareFrame(), deploy: (coreId, instanceId) => app.gachaDeployCore(coreId, instanceId) };
   refreshStatusBar();
   refreshToolbarMode();
 
@@ -2417,8 +2424,7 @@ function openBackpack({ tab = 'supplies', partnerId = null } = {}) {
     intents: {
       useItem: (itemId, instanceId, options) => app.gachaUseItem(itemId, instanceId, options),
       reshape: (instanceId, personality) => app.gachaReshapePersonality(instanceId, personality),
-      mountCore: (coreId, cageId) => app.gachaMountCore(coreId, cageId),
-      unmountCore: (module, cageId) => app.gachaUnmountCore(module, cageId),
+      deployCore: (coreId, cageId) => app.gachaDeployCore(coreId, cageId),
       disarm: (itemId) => app.gachaDisarmItem(itemId),
       selectTool: (toolId) => { if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) document.querySelector(`.cm-toolbar [data-tool-id="${toolId}"]`)?.click(); },
       openFacilities: () => { if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) expeditionSource?.intents.openCageEdit(); },

@@ -1,9 +1,12 @@
 // Ranch automation -- OWNER_APPROVED_ADAPTATION 2026-11-02 (DIAMOND_ECONOMY_20261102).
 //
 // The Bits shop's zoo (24) and ranch (25) no longer feed and clean by
-// themselves: that convenience now comes from the gachapon. Two SR attachments
-// (Owner 2026-11-03: the auto-feeder and the auto-cleaner) mount on any placed
-// cage instance of all 37 kinds and come off again at no cost; two gacha-only royal cages are editions of the
+// themselves: that convenience now comes from the gachapon. Owner 2026-11-03
+// (AUTO_CARE_3D_20261103): the cores are consumables. Deploying one on any placed
+// cage instance uses it up and runs its machine for one real hour (a 3D cleaning
+// robot that patrols the cage's connected cluster, or a feeding tower that lobs the
+// player's own meat at hungry partners); another core of the same kind adds an hour
+// (up to 24). The royal dual core runs both at once. Two gacha-only royal cages are editions of the
 // zoo and the ranch that keep the base cage's footprint, ground, walk map and
 // art, and carry both cores built in, 30% faster sleep and +3 beast points per
 // training. The five-in-one furnace also forges every item from chips and
@@ -20,8 +23,9 @@ export const AUTOMATION_MODULES = Object.freeze({ CLEAN: "AUTO_CLEAN", FEED: "AU
 export const ROYAL_EDITIONS = Object.freeze({ RANCH: "ROYAL_RANCH", ZOO: "STELLAR_ZOO" });
 
 export const AUTOMATION_ITEMS = deepFreeze([
-  { id: "auto:clean-core", kind: "CORE", rarity: "SR", name: "奈米自動清掃機", module: "AUTO_CLEAN", art: `${ART}auto_clean_core_160.webp` },
-  { id: "auto:feed-core", kind: "CORE", rarity: "SR", name: "智慧自動給食機", module: "AUTO_FEED", art: `${ART}auto_feed_core_160.webp` },
+  { id: "auto:clean-core", kind: "CORE", rarity: "SR", name: "奈米掃地機器人", module: "AUTO_CLEAN", modules: ["AUTO_CLEAN"], art: `${ART}auto_clean_core_160.webp` },
+  { id: "auto:feed-core", kind: "CORE", rarity: "SR", name: "智慧自動餵食機", module: "AUTO_FEED", modules: ["AUTO_FEED"], art: `${ART}auto_feed_core_160.webp` },
+  { id: "auto:royal-core", kind: "CORE", rarity: "SSR", name: "皇家雙效核心", modules: ["AUTO_CLEAN", "AUTO_FEED"], art: `${ART}auto_royal_core_160.webp` },
   { id: "auto:royal-ranch", kind: "ROYAL_CAGE", rarity: "SSR", name: "全自動皇家牧場", edition: "ROYAL_RANCH", baseDefinition: 25, art: `${ART}royal_ranch_160.webp` },
   { id: "auto:stellar-zoo", kind: "ROYAL_CAGE", rarity: "UR", name: "全自動星際動物園", edition: "STELLAR_ZOO", baseDefinition: 24, art: `${ART}stellar_zoo_160.webp` }
 ]);
@@ -32,7 +36,10 @@ export const AUTOMATION_RULES = deepFreeze({
   hungrySatiety: 2,         // the native hungry flag (nativeRaisingGrowth: satiety <= 2)
   royalSleepPercent: 130,   // sleep recovers 30% faster in a royal cage
   royalTrainingPoints: 3,   // extra beast-family points per training in a royal cage
-  trainingKind: 4           // native training kind 4 = 獸 (beast) family counter
+  trainingKind: 4,          // native training kind 4 = 獸 (beast) family counter
+  runSeconds: 3600,         // one deployed core runs its machine for one real hour
+  runCapSeconds: 86400,     // stacked batteries stop at 24 hours per machine
+  feedMeat: 1               // every piece of meat a feeding tower throws is one 餵食 from the bag
 });
 
 // Directed forging (pity): fixed inputs, fixed output. Shards exclude the 星核
@@ -40,6 +47,7 @@ export const AUTOMATION_RULES = deepFreeze({
 export const AUTOMATION_RECIPES = deepFreeze([
   { id: "auto:clean-core", chips: 5, shards: 2 },
   { id: "auto:feed-core", chips: 5, shards: 2 },
+  { id: "auto:royal-core", chips: 8, shards: 4 },
   { id: "auto:royal-ranch", chips: 5, shards: 6 },
   { id: "auto:stellar-zoo", chips: 5, shards: 10 }
 ]);
@@ -57,6 +65,8 @@ export const getAutomationItem = (id) => ITEM_BY_ID.get(id) ?? null;
 export const automationItemForEdition = (edition) => ITEM_BY_EDITION.get(edition) ?? null;
 export const getAutomationRecipe = (id) => RECIPE_BY_ID.get(id) ?? null;
 export const coreForModule = (module) => AUTOMATION_ITEMS.find((item) => item.module === module) ?? null;
+/** The machines one core runs (the royal dual core runs both). */
+export const coreModules = (item) => (item?.kind === "CORE" ? item.modules : []);
 
 function automationError(message) {
   const error = new Error(message);
@@ -76,7 +86,10 @@ export function normalizeAutomationStacks(value) {
   return out;
 }
 
-/** Cores mounted on cage instances: {instanceId: ["AUTO_CLEAN", "AUTO_FEED"]}. */
+/**
+ * Cores mounted on cage instances before 2026-11-03: {instanceId: ["AUTO_CLEAN", "AUTO_FEED"]}.
+ * Read only to give those cores back (normalizeCyberGacha); nothing mounts any more.
+ */
 export function normalizeAutomationMounts(value) {
   const out = {};
   if (value == null) return out;
@@ -87,6 +100,26 @@ export function normalizeAutomationMounts(value) {
     if (!INSTANCE_ID.test(instanceId) || !Array.isArray(modules) || modules.some((m) => !MODULE_ORDER.includes(m))
       || new Set(modules).size !== modules.length) throw automationError("INVALID_AUTOMATION_MOUNT");
     if (modules.length) out[instanceId] = MODULE_ORDER.filter((m) => modules.includes(m));
+  }
+  return out;
+}
+
+/** Running machines by cage instance: {instanceId: {AUTO_CLEAN: seconds, AUTO_FEED: seconds}}, up to 24 h each. */
+export function normalizeAutomationRuns(value) {
+  const out = {};
+  if (value == null) return out;
+  if (typeof value !== "object" || Array.isArray(value)) throw automationError("INVALID_AUTOMATION_RUNS");
+  const entries = Object.entries(value);
+  if (entries.length > AUTOMATION_INSTANCE_LIMIT) throw automationError("TOO_MANY_AUTOMATION_RUNS");
+  for (const [instanceId, run] of entries) {
+    if (!INSTANCE_ID.test(instanceId) || !run || typeof run !== "object" || Array.isArray(run)) throw automationError("INVALID_AUTOMATION_RUN");
+    const kept = {};
+    for (const [module, seconds] of Object.entries(run)) {
+      if (!MODULE_ORDER.includes(module) || !Number.isSafeInteger(seconds) || seconds < 0) throw automationError("INVALID_AUTOMATION_RUN");
+      if (seconds > 0) kept[module] = Math.min(AUTOMATION_RULES.runCapSeconds, seconds);
+    }
+    const ordered = Object.fromEntries(MODULE_ORDER.filter((m) => kept[m]).map((m) => [m, kept[m]]));
+    if (Object.keys(ordered).length) out[instanceId] = ordered;
   }
   return out;
 }
@@ -120,12 +153,13 @@ export function normalizeBondCarry(value) {
 }
 
 /**
- * What one cage instance does by itself. A royal edition carries both cores
- * plus its own bonuses; a plain cage only what is mounted on it.
+ * What one cage instance does by itself. A royal edition carries both machines built
+ * in (no timer) plus its own bonuses; a plain cage only what is running on it now.
  */
 export function cageAutomation(state, instanceId) {
   const edition = instanceId ? state?.editions?.[instanceId] ?? null : null;
-  const mounted = instanceId ? state?.mounts?.[instanceId] ?? [] : [];
+  const run = instanceId ? state?.runs?.[instanceId] ?? {} : {};
+  const mounted = MODULE_ORDER.filter((m) => run[m] > 0);
   const royal = edition !== null;
   return Object.freeze({
     instanceId: instanceId ?? null,
@@ -133,7 +167,10 @@ export function cageAutomation(state, instanceId) {
     royal,
     clean: royal || mounted.includes(AUTOMATION_MODULES.CLEAN),
     feed: royal || mounted.includes(AUTOMATION_MODULES.FEED),
-    mounted: Object.freeze([...mounted]),
+    // Seconds left on each deployed machine (0 when none; a royal cage's are built in).
+    cleanSeconds: run.AUTO_CLEAN ?? 0,
+    feedSeconds: run.AUTO_FEED ?? 0,
+    mounted: Object.freeze(mounted),
     sleepPercent: royal ? AUTOMATION_RULES.royalSleepPercent : 100,
     trainingPoints: royal ? AUTOMATION_RULES.royalTrainingPoints : 0
   });
@@ -173,11 +210,18 @@ export function royalSleepBonus(units, carryHundredths = 0, percent = AUTOMATION
 export function automationEffectLines(item) {
   const lines = [];
   const line = (text, params) => lines.push(Object.freeze(params ? { text, params: Object.freeze(params) } : { text }));
-  if (item?.module === AUTOMATION_MODULES.CLEAN) {
-    line("掛載到任一籠舍：大便一出現就自動清掉（0 照顧失誤）");
-    line("每次自動清掃 +{n} 位元幣", { n: AUTOMATION_RULES.cleanBits });
+  const hours = AUTOMATION_RULES.runSeconds / 3600, cap = AUTOMATION_RULES.runCapSeconds / 3600;
+  if (item?.id === "auto:royal-core") {
+    line("部署到任一籠舍：掃地機器人＋自動餵食機同時運轉 {n} 小時", { n: hours });
+    line("巡邏清便每坨 +{n} 位元幣；拍檔餓了就拋肉（每塊扣 1 個餵食）", { n: AUTOMATION_RULES.cleanBits });
+    line("運轉中再用一個：兩台各延長 {n} 小時（最多 {cap} 小時）", { n: hours, cap });
+  } else if (item?.module === AUTOMATION_MODULES.CLEAN) {
+    line("部署到任一籠舍：3D 掃地機器人巡邏 {n} 小時，看到大便就開過去吸掉", { n: hours });
+    line("每清一坨 +{n} 位元幣；連通的籠舍都會巡到", { n: AUTOMATION_RULES.cleanBits });
+    line("重複持有：延長 +{n} 小時（最多 {cap} 小時），或在別的籠舍再放一台", { n: hours, cap });
   } else if (item?.module === AUTOMATION_MODULES.FEED) {
-    line("掛載到任一籠舍：拍檔肚子餓時自動投餵到飽");
+    line("部署到任一籠舍：自動餵食機運轉 {n} 小時，拍檔冒出要肉氣泡就拋一塊肉", { n: hours });
+    line("每拋一塊肉扣 1 個餵食；沒肉時暫停計時，不會白白耗電");
     line("每次自動投餵，親密度 +{n}（比餵飽多 20%）", { n: AUTOMATION_RULES.feedBondTenths / 10 });
   } else if (item?.edition) {
     line(item.baseDefinition === 25 ? "轉蛋限定奇觀籠舍：牧場的皇家版本" : "轉蛋限定奇觀籠舍：動物園的星際版本");
@@ -190,7 +234,7 @@ export function automationEffectLines(item) {
 
 /** Where an automation item is used. */
 export const automationTiming = (item) => (item?.kind === "CORE"
-  ? "在背包選一座已放置的籠舍掛載，可隨時卸下"
+  ? "每次持續 1 小時：在背包選一座籠舍部署，運轉中可追加電池"
   : "到「設施配置」的托盤放上地圖，以金框標示");
 
 /** Royal cages held (bag + placed) by base cage definition: each is one more copy of that cage. */
@@ -202,4 +246,19 @@ export function royalCopiesByDefinition(state) {
     if (n > 0) copies.set(item.baseDefinition, (copies.get(item.baseDefinition) ?? 0) + n);
   }
   return copies;
+}
+
+/** A run's time left as the ranch tag shows it: 1:00:00, 59:10. */
+export function formatRunClock(seconds) {
+  const s = Math.max(0, Math.floor(seconds || 0)), h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), r = s % 60;
+  const pad = (n) => String(n).padStart(2, "0");
+  return h ? `${h}:${pad(m)}:${pad(r)}` : `${pad(m)}:${pad(r)}`;
+}
+
+/** Seconds left on what a core runs at one cage ({cleanSeconds, feedSeconds}); the royal core reads its longer machine. */
+export function coreRunSeconds(cage, item) {
+  if (!cage) return 0;
+  const modules = item?.modules ?? (item?.module ? [item.module] : []);
+  const left = modules.map((module) => (module === AUTOMATION_MODULES.FEED ? cage.feedSeconds : cage.cleanSeconds) ?? 0);
+  return left.length ? Math.max(...left) : 0;
 }

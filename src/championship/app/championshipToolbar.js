@@ -518,6 +518,14 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
       button.addEventListener('animationend',event=>{if(event.target===button)button.classList.remove('is-stock-landed');},{once:true});
     },
 
+    /** A unit used by a ranch machine (AUTO_CARE_3D_20261103): count down and float the loss. */
+    spendToolStock(toolId,{spent=1}={}) {
+      refreshFoodStock();
+      const button=rail.querySelector(`[data-tool-id="${toolId}"]`);if(!button||disposed)return;
+      const minus=element('span','cm-toolbar__stock-gain cm-toolbar__stock-gain--spent',`−${spent}`);minus.setAttribute('aria-hidden','true');button.append(minus);
+      minus.addEventListener('animationend',()=>minus.remove(),{once:true});setTimeout(()=>minus.remove(),1600);
+    },
+
     // Display/input constraint for an app-owned tutorial step; no gameplay
     // predicate or progression lives here. Restore the prior tool on exit.
     setTutorialTool(toolId,{select=true,key=null,menuEntry="hunt"}={}) {

@@ -116,7 +116,7 @@ export async function mountRaisingFieldPixiPresentation({
   signal = null,
   getSelectedTool = () => null,
   onTrainingFrame = () => {},
-  // DIAMOND_ECONOMY_20261102: automated cages' badges and recent auto-clean / auto-feed events, in screen px.
+  // AUTO_CARE_3D_20261103: each running machine's countdown tag and recent machine events, in screen px.
   onCageBadgeFrame = () => {},
   onActorFrame = null,
   onResidentAssetState = () => {},
@@ -1267,22 +1267,27 @@ export async function mountRaisingFieldPixiPresentation({
     onTrainingFrame(trainingLabels);
     const cageBadges=[],automationEvents=[];
     if(!covered&&fieldArt?.field){
-      for(const badge of source.getCageAutomation?.()??[]){
-        const point=raisingNativeToScreen(badge.anchorQ12,fieldArt.field,view,cameraX);
-        const device=badge.deviceQ12?raisingNativeToScreen(badge.deviceQ12,fieldArt.field,view,cameraX):null;
-        if(point)cageBadges.push({id:badge.instanceId,x:point.x,y:point.y,royal:badge.royal,edition:badge.edition,clean:badge.clean,feed:badge.feed,art:badge.art,
-          devices:badge.devices??[],dx:device?.x??null,dy:device?.y??null});
+      const nativeScale=getRaisingNativePixelScale(fieldArt.field,view),lift=fieldArt.field.view?.screenLift??16*Math.cos(52*Math.PI/180);
+      const groundLift=(q12)=>fieldArt.threeScene?(fieldArt.threeScene.groundHeight(q12[0]/4096,q12[1]/4096)??0)*lift*nativeScale:0;
+      // One small countdown per running machine, floating just over it (never a banner over the cage).
+      for(const tag of source.getCageAutomation?.()??[]){
+        if(!tag.positionQ12)continue;
+        const point=raisingNativeToScreen(tag.positionQ12,fieldArt.field,view,cameraX);
+        if(point)cageBadges.push({...tag,x:point.x,y:point.y-groundLift(tag.positionQ12)-tag.lift*nativeScale});
       }
       for(const event of source.getAutomationEvents?.()??[]){
         const point=event.positionQ12?raisingNativeToScreen(event.positionQ12,fieldArt.field,view,cameraX):null;
-        if(point)automationEvents.push({serial:event.serial,kind:event.kind,x:point.x,y:point.y,bits:event.bits??0,affection:event.affection??0});
+        if(point)automationEvents.push({serial:event.serial,kind:event.kind,x:point.x,y:point.y-groundLift(event.positionQ12),
+          bits:event.bits??0,affection:event.affection??0,meat:event.meat??0,machine:event.machine??null,instanceId:event.instanceId??null});
       }
+      reactToMachines(source.getAutomationEvents?.()??[]);
     }
     onCageBadgeFrame(cageBadges,automationEvents);
     if(fieldArt?.threeScene){
       const rendered=fieldArt.threeScene.render({
         bounds:raisingFieldViewport(fieldArt.field,view,12,cameraX),
-        actors,food:foodGraphics,waste:wasteGraphics,covered,deltaMS:ticker.deltaMS
+        actors,food:foodGraphics,waste:wasteGraphics,covered,deltaMS:ticker.deltaMS,
+        autoCare:source.getAutoCareFrame?.()??null
       });
       productionArtLayer.visible=!rendered;
       backgroundLayer.visible=!rendered;
@@ -1470,7 +1475,8 @@ export async function mountRaisingFieldPixiPresentation({
     meat:['.....KK..','....KWWK.','..KKKWWK.','.KOOBKKK.','KOOOOBK..','KOPOOBK..','KOOOOBK..','.KOOBK...','..KKK....'],
     bolt:['....KKK.','...KYYK.','..KYYK..','.KYYKKK.','KYYYYYYK','.KKKYYK.','...KYK..','..KYK...','..KK....'],
     gift:['..K...K..','.KRK.KRK.','..KRKRK..','KKKKKKKKK','KRRRYRRRK','KKKKYKKKK','.KRRYRRK.','.KRRYRRK.','.KKKKKKK.'],
-    smile:['..KKKKK..','.KYYYYYK.','KYYKYKYYK','KYYYYYYYK','KYKYYYKYK','KYYKKKYYK','.KYYYYYK.','..KKKKK..']
+    smile:['..KKKKK..','.KYYYYYK.','KYYKYKYYK','KYYYYYYYK','KYKYYYKYK','KYYKKKYYK','.KYYYYYK.','..KKKKK..'],
+    question:['..KKKKK..','.KCCCCCK.','KCCKKKCCK','.KK..KCCK','....KCCK.','...KCCK..','...KKKK..','...KCCK..','...KKKK..']
   };
   const MOOD_ICON={love:'heart',happy:'note',energetic:'sparkle',hungry:'meat',sleepy:'zzz',unwell:'anger',calm:'smile'};
   // Owner 2026-11-03: the 9x9 anger and sleep pixels read as a pink die and a scribble, so these
@@ -1515,6 +1521,22 @@ export async function mountRaisingFieldPixiPresentation({
     if(!entry)return;
     entry.emote?.destroy({children:true});
     entry.emote=createEmote(icon,label);entry.emoteStart=performance.now();entry.emoteMs=ms;emoteLayer.addChild(entry.emote);
+  }
+  // AUTO_CARE_3D_20261103: partners react to the machines -- a heart for the meat that just landed, a "?"
+  // at a passing robot, a happy note when a baby hops on for a ride. Presentation only, no RNG.
+  let machineEventSerial=null;
+  function reactToMachines(events){
+    const newest=events.reduce((max,event)=>Math.max(max,event.serial),0);
+    if(machineEventSerial===null){machineEventSerial=newest;return;}
+    for(const event of events){
+      if(event.serial<=machineEventSerial)continue;
+      const entry=event.instanceId?actors.get(event.instanceId):null;
+      if(!entry)continue;
+      if(event.kind==='FEED'){if(!reducedMotion&&!prefersReducedMotion())entry.hopStart=performance.now();showPartnerEmote(entry,'heart',{ms:1600});}
+      else if(event.kind==='CURIOUS')showPartnerEmote(entry,'question',{ms:1500});
+      else if(event.kind==='RIDE')showPartnerEmote(entry,'note',{ms:1800});
+    }
+    machineEventSerial=Math.max(machineEventSerial,newest);
   }
   function readPartnerLife(covered){
     const life=source.getPartnerLife?.();if(!life)return;
