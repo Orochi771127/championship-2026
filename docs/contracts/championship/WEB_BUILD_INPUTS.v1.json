@@ -432,12 +432,14 @@
     "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
     "src/championship/presentation/vs2/gateFocusTween.js",
     "src/championship/presentation/vs2/gateWorldLayout.js",
+    "src/championship/presentation/vs2/huntActorMotion.js",
     "src/championship/presentation/vs2/huntContactShadow.js",
     "src/championship/presentation/vs2/huntDepthOccluders.js",
     "src/championship/presentation/vs2/huntFactoryShutters.js",
     "src/championship/presentation/vs2/huntFieldPointer.js",
     "src/championship/presentation/vs2/huntFoliageDither.js",
     "src/championship/presentation/vs2/huntThree/actorBounds.mjs",
+    "src/championship/presentation/vs2/huntThree/actorShadows.mjs",
     "src/championship/presentation/vs2/huntThree/actorTextureCache.mjs",
     "src/championship/presentation/vs2/huntThree/authoredMapAssets.mjs",
     "src/championship/presentation/vs2/huntThree/createHuntThreeMap.mjs",
@@ -6059,6 +6061,7 @@
     "assets/production/characters/reviewed107-20261026/MA23/web-atlas-v2/09a6989ec0c3d50b3023cc31c60797028f3f876f27de27ee5123f69b50aa0aaf.webp",
     "assets/production/characters/reviewed107-20261026/MA23/web-atlas-v2/5da73efd3d056265a03615395bb311c9ef65eb1e74abfeab0b82462721dae668.webp",
     "assets/production/characters/reviewed107-20261026/MA24/animation.public-v1.json",
+    "assets/production/characters/reviewed107-20261026/MA24/web-atlas-v2/3395bbee9e0d903a02c44cac58774ba56b17886f78be4e8e354fbf022e1efc75.webp",
     "assets/production/characters/reviewed107-20261026/MA24/web-atlas-v2/50a9fe29576d98e29dc1bea7d6fa4875590215ef1808a70411e8ba72c533f09c.webp",
     "assets/production/characters/reviewed107-20261026/MA24/web-atlas-v2/8cb23ce7be03bb6b140226fcd0ac7ad80e5b6f1437a07f95c6ae1c0bbec405b2.webp",
     "assets/production/characters/reviewed107-20261026/MA24/web-atlas-v2/c5ce9e2d68d2ee0393b43c8dbc0e14e07bbde76b1fc3690a88f37769110c64e1.webp",
@@ -8497,12 +8500,14 @@
     "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
     "src/championship/presentation/vs2/gateFocusTween.js",
     "src/championship/presentation/vs2/gateWorldLayout.js",
+    "src/championship/presentation/vs2/huntActorMotion.js",
     "src/championship/presentation/vs2/huntContactShadow.js",
     "src/championship/presentation/vs2/huntDepthOccluders.js",
     "src/championship/presentation/vs2/huntFactoryShutters.js",
     "src/championship/presentation/vs2/huntFieldPointer.js",
     "src/championship/presentation/vs2/huntFoliageDither.js",
     "src/championship/presentation/vs2/huntThree/actorBounds.mjs",
+    "src/championship/presentation/vs2/huntThree/actorShadows.mjs",
     "src/championship/presentation/vs2/huntThree/actorTextureCache.mjs",
     "src/championship/presentation/vs2/huntThree/authoredMapAssets.mjs",
     "src/championship/presentation/vs2/huntThree/createHuntThreeMap.mjs",
@@ -8686,9 +8691,7 @@
     "src/data/championship/ranch-render-selection.v1.json",
     "src/data/championship/reviewed-animation-selection.v1.json",
     "src/data/championship/species-taxonomy.v1.json",
-    "src/data/championship/stage-body-size.v1.json",
-    "src/championship/presentation/vs2/huntActorMotion.js",
-    "src/championship/presentation/vs2/huntThree/actorShadows.mjs"
+    "src/data/championship/stage-body-size.v1.json"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -30680,7 +30683,11 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA24/animation.public-v1.json",
-        "sha256": "6b76cb54404b396f961393e2e45326c62a53ac7e00017de53c7d31227fddf73b"
+        "sha256": "fa420305eb360ff2795ccb8358abdaed7d6048bba18907ba037f86a722fe2ef7"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA24/web-atlas-v2/3395bbee9e0d903a02c44cac58774ba56b17886f78be4e8e354fbf022e1efc75.webp",
+        "sha256": "3395bbee9e0d903a02c44cac58774ba56b17886f78be4e8e354fbf022e1efc75"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA24/web-atlas-v2/50a9fe29576d98e29dc1bea7d6fa4875590215ef1808a70411e8ba72c533f09c.webp",
@@ -40435,6 +40442,10 @@
         "sha256": "54771ba4366376f1cb796f49f1eb37ae297d524ad28e3a579b8387f34285236d"
       },
       {
+        "path": "src/championship/presentation/vs2/huntActorMotion.js",
+        "sha256": "39b36c943652a72bc47f0a17fef23fcf91be5ec97cb61b8a6bdefedfc9d90583"
+      },
+      {
         "path": "src/championship/presentation/vs2/huntContactShadow.js",
         "sha256": "c284a006e2bec65205011553f2c62633edd514c5a3ec587d6a282caf1172cc41"
       },
@@ -40457,6 +40468,10 @@
       {
         "path": "src/championship/presentation/vs2/huntThree/actorBounds.mjs",
         "sha256": "20d94340eedb123a69ecc5348574f0d5be9b35d5d9acf7eaa80adb6bf5637dd6"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntThree/actorShadows.mjs",
+        "sha256": "1b2fdcab2407d6f67bd8acee1fc17f13773160c34ba468ad74097ce40c2d2ac6"
       },
       {
         "path": "src/championship/presentation/vs2/huntThree/actorTextureCache.mjs",
@@ -41184,7 +41199,7 @@
       },
       {
         "path": "src/data/championship/reviewed-animation-selection.v1.json",
-        "sha256": "1a73c7af9d593a46f67b795b18fb8c74009d6345b9908a3b2a4a965cd3f522f1"
+        "sha256": "1faa3d5b25eefba06e3aea4b3b0c55e093908ea1e09ca3d2a80fd57241010710"
       },
       {
         "path": "src/data/championship/species-taxonomy.v1.json",
@@ -41193,14 +41208,6 @@
       {
         "path": "src/data/championship/stage-body-size.v1.json",
         "sha256": "54a1468de6dfaf43f90e015286fd301492fa9ae97714756c4483386429798867"
-      },
-      {
-        "path": "src/championship/presentation/vs2/huntActorMotion.js",
-        "sha256": "39b36c943652a72bc47f0a17fef23fcf91be5ec97cb61b8a6bdefedfc9d90583"
-      },
-      {
-        "path": "src/championship/presentation/vs2/huntThree/actorShadows.mjs",
-        "sha256": "1b2fdcab2407d6f67bd8acee1fc17f13773160c34ba468ad74097ce40c2d2ac6"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",

@@ -13,6 +13,15 @@ OWNER_APPROVED_ADAPTATION. The native rope controller, AI states and capture rul
 - Shadows (Hunt Three maps): a feathered contact ellipse (centre 0.45) plus the partner's current frame laid on the ground along the map's sun (0x120e1a, 0.30; 0.16 at night), turned to face the light. Found and fixed: reviewed partners' frame snapshots lacked the native frame authority, so Hunt dropped to its 2D fallback whenever one spawned.
 - Motion: reviewed hunt loops run on their own clock instead of restarting with the shorter native loop (99 partners were cut short); flee and bound-escape sequences play 1.6×; a one-drawing walk or struggle borrows the same character's animated move or hurt clip; anything still on one drawing hops with squash and stretch while moving, shakes with sweat while bound, and shows blinking stars when downed; runners lean and kick dust. Audit: `scripts/qa/hunt-motion-binding-audit.mjs`.
 
+<!-- record-id: MA24_WEAK_WALK_20261103 -->
+## 2026-11-03 — MA24 weak walk plays two drawings instead of sliding one pose
+
+The Owner's 2026-11-03 animation brief reports partners translating across the ranch in one fixed pose (screenshot height suggests MA24, species-090) and directs: bind the two new MA24 weak-walk keys already archived on R 「在正常發布候選中完成綁定與測試」, check other characters for the same problem without forcing special states onto the normal walk, and 「符合來源／權利、完整測試、CI 和正常畫面驗證後，依專案流程整合 main 並公開發布」. This entry covers only that MA24 change.
+
+- Cause: on the ranch the native raising actor plays sequence 12 (weak walk, cells 16/17, 37/37 ticks) while HP is above 10 % and at most 20 % of its maximum (`nativeRaisingActor.js`), and the body keeps moving. MA24's reviewed set resolved sequence 12 to a one-drawing `weak_move` alias, so the body slid in one pose.
+- Fix: the two keys from `character-animation-art-archive-20261025/ma24-main12-20261103-task2` (ZIP sha256 3a4b92e0…; dot's own MA24 drawing, same 256 canvas, origin [128,220] and density 4 as MA24's other General cells; not a separate Owner art approval) become an explicit `main:12` clip at 37/37 ticks. Web page per the 2026-10-28 delivery spec (lossless, the lossy page failed the gate); authoring `animation.web-v3-ma24-main12-20261103.json`, web-v2 untouched. The healthy walk is unchanged.
+- Same structural problem, still open: 53 other selected 成熟期 sets hold one drawing for sequence 12 (listed in `tests/championship-weak-walk-pose-cases.mjs`, which only lets the list shrink). They need their own second drawing; none is replaced by the healthy walk.
+
 <!-- record-id: DIAMOND_ECONOMY_20261102 -->
 ## 2026-11-02 — Diamonds close the loop: shop cages lose free automation, gachapon automation, land 20 → 100
 
