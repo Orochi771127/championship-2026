@@ -1614,6 +1614,9 @@ body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database_
 .cm-hexworld__badge[data-royal] { display: inline-flex; align-items: center; gap: 2px; background: linear-gradient(180deg, #fff2a8, #ffc928);
   color: #3a2600; border-color: #8a5a00; box-shadow: 0 0 0 1px #fff7cf inset, 0 2px 0 #8a5a00; }
 .cm-hexworld__badge-crown, .cm-hexworld__badge-core { width: 12px; height: 12px; flex: none; vertical-align: -2px; }
+/* Owner 2026-11-03: a cage with an attachment wears a small gold tech tag on its label. */
+.cm-hexworld__badge-core { width: 14px; height: 14px; margin-left: 3px; padding: 1px; border-radius: 4px; background: linear-gradient(180deg, #fff3b0, #ffd23f);
+  box-shadow: 0 0 0 1.5px #14141f, 0 0 6px rgba(255, 210, 63, .9); }
 .cm-royal-card { position: relative; border-color: #8a5a00 !important; background: linear-gradient(160deg, #fff6c9 0%, #ffd23f 55%, #ff9f1c 100%) !important;
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, .7), 0 0 0 2px #fff3b0, 0 4px 0 #8a5a00 !important; color: #2b1a00; }
 .cm-royal-card[data-rarity="UR"] { background: linear-gradient(160deg, #f1e3ff 0%, #b98cff 50%, #ffd23f 100%) !important; }
