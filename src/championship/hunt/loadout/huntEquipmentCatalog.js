@@ -5,6 +5,7 @@ import shop from "../../../data/championship/catalogs/shop.r1.json" with { type:
 import native from "../../../data/championship/catalogs/hunt-tools.r1.json" with { type: "json" };
 import { deepFreeze } from "../../contracts/championshipContracts.js";
 import { HUNT_ANALYZER_FIELD_ORDER, HUNT_CHECKER_TARGETS } from "./huntLoadoutContract.js";
+import { huntToolMaxOwned } from "../../shop/huntToolTiers.js";
 
 const CLASSES = { ROPE:"ROPE", SHOT:"SHOT", WIRE:"WIRE", MEAT:"ENTRAP", DECOY:"ENTRAP",
   LIGHT:"ENTRAP", CAPTURE_TRAP:"DAMAGE_TRAP", BOMB:"DAMAGE_TRAP", MINE:"DAMAGE_TRAP" };
@@ -42,7 +43,7 @@ const items = rows.map(row => {
   const common = { itemId:row.productItemId, shopRecordIndex:row.shopRecordIndex,
     nativeSubcategory:row.subcategory, nativeItemIndex:row.itemIndex,
     displayName:LABELS[row.subcategory]?.[row.itemIndex], displayNameAuthority:"CHAMPIONSHIP_2026_LOCALIZATION",
-    identityEvidence:"ROM_VERIFIED", maxOwned:row.maxOwned, initialOwned:row.initialOwned,
+    identityEvidence:"ROM_VERIFIED", maxOwned:huntToolMaxOwned(row), initialOwned:row.initialOwned,
     unlock:{ kind:row.unlockKind, parameter:row.unlockParameter }, unlockEvidence:row.unlockEvidence };
   if (!common.displayName) throw Error("HUNT_ITEM_LABEL_REQUIRED");
   if (row.category === "PLUGINS") return { ...common, kind:"PLUGIN", pluginKind:row.subcategory,
@@ -52,7 +53,8 @@ const items = rows.map(row => {
   const statValue = equipmentClass === "ROPE" ? native.ropes[row.itemIndex].durabilityByte
     : equipmentClass === "WIRE" ? native.wires[row.itemIndex].maxLength : null;
   return { ...common, kind:"EQUIPMENT", equipmentClass, tier:row.itemIndex + 1,
-    countable:equipmentClass !== "ROPE", statValue, statLabel:equipmentClass === "ROPE" ? "durability" : equipmentClass === "WIRE" ? "length" : null,
+    // Ropes are counted since HUNT_TOOL_TIERS_20261103: a snapped rope costs one.
+    countable:true, statValue, statLabel:equipmentClass === "ROPE" ? "durability" : equipmentClass === "WIRE" ? "length" : null,
     statEffect:"ROM_VERIFIED_FUNCTIONAL_COLUMN", durability:equipmentClass === "ROPE" ? statValue : null };
 });
 

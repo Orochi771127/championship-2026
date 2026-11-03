@@ -1,0 +1,49 @@
+{
+  "id": "HUNT_TOOL_TIERS_20261103",
+  "classification": "OWNER_APPROVED_ADAPTATION: one shop slot per hunt tool upgraded in place (α→β→γ), counted ropes that snap one at a time, and one memory card with seven sizes",
+  "supersedes": {
+    "contract": "docs/contracts/championship/DIAMOND_ECONOMY_20261102.json",
+    "sourceLock": "src/championship/app/championshipStandaloneSave.js"
+  },
+  "saveField": {
+    "path": "shop.toolTiers; shop.ropeWear",
+    "shape": "toolTiers: {familyId: -1..tierCount-1} for the 18 families in src/championship/shop/huntToolTiers.js; ropeWear: {rope familyId: 1..999} per-mille of the rope in hand still left (a fresh rope is not stored)",
+    "normalizer": "normalizeShopSlice (championshipStandaloneSave.js) with normalizeHuntToolTiers / normalizeRopeWear",
+    "migration": "a shop slice without toolTiers is migrated once by the shop runtime: each family takes its top tier held, its stock moves to that tier's row (ammo of all tiers added, cap 99; a rope held 1/1 becomes 15; the last memory card wins); schemaVersion and the save key are unchanged"
+  },
+  "rules": {
+    "families": "rope colours 捕捉/強力/克隆/究極 (rows 4-15, three tiers each); guns 手槍/連發/睡眠/麻痺步槍/散彈/麻痺散彈, wires 標準/磁力/電擊, meat 普通→大型, decoy, mine and trap (α→β); memory card rows 50-52 plus sizes 128/160/200/256 G",
+    "ropes": "a colour or the next tier costs that row's ROM price once and adds 10 ropes; refill per rope 20/35/50, 80/110/150, 200/260/320, 450/600/800 Bits; durability stays the ROM value; a snap spends one rope, the next is ready after 15 ticks; the last of a colour hands over to the best other colour; with none left five ropes cost 1.5x the refill price",
+    "gear": "the β model costs pistol 300, rapid 600, sleep 1500, paralysis rifle 3000, shotgun 3600, paralysis shotgun 7800, standard wire 900, magnetic 3300, electric 12000, meat 2400, decoy 24000, mine 24000, trap 44000 Bits; every α unit becomes β 1:1",
+    "memoryCard": "32 G (ROM starting card) -> 64 G 4850 -> 96 G 9850 Bits; then 128/160/200/256 G for 150000/350000/800000/1800000 Bits or 300/500/800/1200 test diamonds"
+  },
+  "notChanged": [
+    "ROM shop table rows, prices of the first tiers and unlock rules",
+    "the native rope writer and its wear",
+    "bombs, lights, poison and paralysis meat (separate items)",
+    "the save key and schemaVersion"
+  ],
+  "sourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "798b838a72251d800b6feb989946e6a5feed1e6724bd5455a562ad55958b613a"
+  },
+  "historicalSourceLocks": {
+    "DIAMOND_ECONOMY_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "15067ee0d3f47971a91a8189edaaa0c22ba3d43a831408b4f8bcc1e525b64c11"
+    },
+    "STAGE_REDESIGN_BURST_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "44b4ceec862776600a237a9cc54a160952f24305ed431a0b33a5addf4bba968d"
+    },
+    "ONLINE_BIND_REWARD_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c7abccc2403e3428e4754c87981a940db378dc4b1c17995363df6049ceeb680"
+    },
+    "CYBER_GACHA_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c4e7336e17e35099758cea84ff533e81c60c08bacbafef356afdbf55953b135"
+    },
+    "BATTLE_TACTICS_20261028": {
+      "src/championship/app/championshipStandaloneSave.js": "3a72fce7d38151f473f343fb8b9f59349daef1beb7cb09b6a0547c628d07ac8e"
+    },
+    "HEX_CAGE_WORLD_20261026": {
+      "src/championship/app/championshipStandaloneSave.js": "aaa72f6e08b150ac9bebb81fb2e6a8efefd532ab0ed7b7e24a7a0a9ae3d97f74"
+    }
+  }
+}

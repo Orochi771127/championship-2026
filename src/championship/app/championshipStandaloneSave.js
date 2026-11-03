@@ -12,6 +12,7 @@ import {requiresProductSaveVersion} from '../contracts/productSpeciesData.js';
 // way back in. This envelope adds standalone identity around that, nothing more.
 
 import { BITS_WALLET_CAP, SHOP_RECORD_COUNT } from "../shop/shopCatalog.js";
+import { normalizeHuntToolTiers, normalizeRopeWear } from "../shop/huntToolTiers.js";
 import { createBattleEconomyState, normalizeBattleEconomyState } from "../battle/battleEconomyTransaction.js";
 import { createRaisingInstanceIdentityState, normalizeRaisingInstanceIdentityState } from "../raising/raisingInstanceIdentity.js";
 import { normalizeGameplayRngState } from "../battle/battleRngChannel.js";
@@ -59,7 +60,8 @@ const ALLOWED_TOP_LEVEL_KEYS = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V4, "hun
 
 const ALLOWED_CREATURE_KEYS = Object.freeze(["creatureId", "speciesId", "displayName", "nativeProfile"]);
 const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun", "freeBattleMenu", "battleTactics", "cyberGacha", "burstEvolution"]);
-const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "cageOwned", "cageQuantities"]);
+// toolTiers / ropeWear: hunt tool families (HUNT_TOOL_TIERS_20261103); a save without them is migrated by the shop.
+const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "cageOwned", "cageQuantities", "toolTiers", "ropeWear"]);
 // `expansion` exists only beside layoutVersion NATIVE_DECKS_V1 (2026-10-05):
 // the ranch expansion prototype versions its own slice, so a save that never
 // takes the grant keeps exactly its old shape and schemaVersion stays 5.
@@ -149,7 +151,7 @@ function assertAllowedKeys(object, allowed, label) {
  * Shop is the durable economy slice: Bits, visibility, quantities, cages.
  * Hunt expedition state still must not appear here.
  */
-function normalizeShopSlice(shop) {
+export function normalizeShopSlice(shop) {
   if (shop == null) return null;
   if (typeof shop !== "object" || Array.isArray(shop)) throw saveError("INVALID_SHOP_SLICE");
   assertAllowedKeys(shop, ALLOWED_SHOP_KEYS, "shop");
@@ -191,8 +193,11 @@ function normalizeShopSlice(shop) {
     }
     if(cageOwned.some(index=>cageQuantities[index]===undefined))throw saveError('INVALID_CAGE_STOCK');
   }
+  if (shop.ropeWear !== undefined && shop.toolTiers === undefined) throw saveError("INVALID_ROPE_WEAR");
   return {
     ...(cageQuantities?{cageQuantities}:{}),
+    ...(shop.toolTiers !== undefined ? { toolTiers: normalizeHuntToolTiers(shop.toolTiers, saveError) } : {}),
+    ...(shop.ropeWear !== undefined ? { ropeWear: normalizeRopeWear(shop.ropeWear, saveError) } : {}),
     bits: shop.bits,
     visibility: [...shop.visibility],
     quantities: [...shop.quantities],

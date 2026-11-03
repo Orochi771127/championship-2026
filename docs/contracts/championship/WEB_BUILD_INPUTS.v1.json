@@ -56,6 +56,7 @@
     "src/championship/app/hexWorldPassages.js",
     "src/championship/app/huntLayoutResolver.js",
     "src/championship/app/huntTacticalDock.js",
+    "src/championship/app/huntToolFamilyCards.js",
     "src/championship/app/interactiveTutorialBattleSteps.js",
     "src/championship/app/interactiveTutorialCheckpoint.js",
     "src/championship/app/interactiveTutorialHuntSteps.js",
@@ -506,6 +507,7 @@
     "src/championship/raising/ranchExplorationWalk.js",
     "src/championship/raising/ranchLayoutPositions.js",
     "src/championship/raising/ranchPartnerLife.js",
+    "src/championship/shop/huntToolTiers.js",
     "src/championship/shop/shopCatalog.js",
     "src/championship/shop/shopRuntime.js",
     "src/championship/text/aiChanStoryText.js",
@@ -8120,6 +8122,7 @@
     "src/championship/app/huntLayoutResolver.js",
     "src/championship/app/huntMobile.css",
     "src/championship/app/huntTacticalDock.js",
+    "src/championship/app/huntToolFamilyCards.js",
     "src/championship/app/interactiveTutorial.css",
     "src/championship/app/interactiveTutorialBattleSteps.js",
     "src/championship/app/interactiveTutorialCheckpoint.js",
@@ -8596,6 +8599,7 @@
     "src/championship/raising/ranchExplorationWalk.js",
     "src/championship/raising/ranchLayoutPositions.js",
     "src/championship/raising/ranchPartnerLife.js",
+    "src/championship/shop/huntToolTiers.js",
     "src/championship/shop/shopCatalog.js",
     "src/championship/shop/shopRuntime.js",
     "src/championship/text/aiChanStoryText.js",
@@ -38821,7 +38825,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "faab19ece5ac522ce673146699e3c5e917c250f4d7f6642e280edf867b4d9e37"
+        "sha256": "d98311aa50d4aac183a47d48ac1a0de8f2923a227de9ed5ce14ec05cf50a39c7"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -38829,7 +38833,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneSave.js",
-        "sha256": "15067ee0d3f47971a91a8189edaaa0c22ba3d43a831408b4f8bcc1e525b64c11"
+        "sha256": "798b838a72251d800b6feb989946e6a5feed1e6724bd5455a562ad55958b613a"
       },
       {
         "path": "src/championship/app/championshipStatusBar.js",
@@ -38905,7 +38909,7 @@
       },
       {
         "path": "src/championship/app/gateHuntPresentationSource.js",
-        "sha256": "ab5094b68d01710b91fbddff68443cfe3e62f7191ce732fe899c1f210fe18c04"
+        "sha256": "535af1fc40b65063c0f2b49dccd8a4e604157d09a1382cac9eb74e0af4e1098e"
       },
       {
         "path": "src/championship/app/helpScreen.js",
@@ -38930,6 +38934,10 @@
       {
         "path": "src/championship/app/huntTacticalDock.js",
         "sha256": "f37753d1ef79e77027db7168c27ee02d4768e0e7b75479bc4d670fbdcbf493a5"
+      },
+      {
+        "path": "src/championship/app/huntToolFamilyCards.js",
+        "sha256": "d8e95799924ef1c025913f1537647742468d3cda2706a0ab5d16f2ec2a57d216"
       },
       {
         "path": "src/championship/app/interactiveTutorial.css",
@@ -39081,7 +39089,7 @@
       },
       {
         "path": "src/championship/app/ranchBackpack.js",
-        "sha256": "79b615fbb33ea1b7f5c5d9ffae4b021e3dabe275982578e1358337205c762629"
+        "sha256": "441665c570fbce82e402d4cc41319f8a947f3e296c46de34e1795baa6dbeb890"
       },
       {
         "path": "src/championship/app/ranchDiscoveryJournal.js",
@@ -39221,7 +39229,7 @@
       },
       {
         "path": "src/championship/app/ui/screenLayout.css",
-        "sha256": "c630227c60495c978bd52d2196a87b6f0c202faf93568f8c575ac0699482f8c6"
+        "sha256": "fa9f30ea21a6a59456c2e9668c01b122fd25376912393bd32ca5caabad786440"
       },
       {
         "path": "src/championship/app/ui/settings.css",
@@ -39257,7 +39265,7 @@
       },
       {
         "path": "src/championship/app/vs2Screens.js",
-        "sha256": "2b7d7031783996866a0a2a5da4a9f6e8e11851f477d88e06e9e370af24496b74"
+        "sha256": "a77d511d6b3c9792602a3db2c22db6f8c6e77c2c58e951b0c5b0ee497a5ec9a0"
       },
       {
         "path": "src/championship/app/vs2Styles.css",
@@ -39269,7 +39277,7 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "1024b43ffb8214104aee91bbeef4dc0d50e2fb4fb3ea8c4e287134121060f652"
+        "sha256": "b7e7ea4f19e2d8628022fff1fae46472f8b9397a71ad636c67dc7cc6e79696fa"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
@@ -39709,7 +39717,7 @@
       },
       {
         "path": "src/championship/hunt/capture/huntRopeTactics.js",
-        "sha256": "b7c89b99d3cf2dde3198a70604753d80762fb3d6fa0fd29313ef119bb2264d04"
+        "sha256": "7fe854a3722ee58f17a510aa339ade17ea2fe653a009be7c9a32ff5d9399fa4e"
       },
       {
         "path": "src/championship/hunt/capture/memoryCardCapacity.js",
@@ -39745,7 +39753,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntFieldControls.js",
-        "sha256": "7303d24704a9e49536d51c3fb3914521dc352f17330d79a21361e0bff624d1f1"
+        "sha256": "f0420bdf2038d2ada55c4b47e361a69fbc3317b930001a861800c5218231be1b"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntGateVariant.js",
@@ -39857,7 +39865,7 @@
       },
       {
         "path": "src/championship/hunt/loadout/huntEquipmentCatalog.js",
-        "sha256": "050381845ddb5b1b16936a539f44612ff76bbd10759b3055a803c0cc84ec3d84"
+        "sha256": "5b7d509cf7178664b20f2dfb6d0f07e1e19a1a09947889832d295a7c574c6163"
       },
       {
         "path": "src/championship/hunt/loadout/huntInventory.js",
@@ -39865,7 +39873,7 @@
       },
       {
         "path": "src/championship/hunt/loadout/huntLoadoutContract.js",
-        "sha256": "0b4245dfe05dc7ce13b30622fe268870b071e4a2cd1403486e709962727b388f"
+        "sha256": "5226fa0621d60b586dfb2600fad52b046eb6804fc78084e060358a76a431fa57"
       },
       {
         "path": "src/championship/hunt/loadout/huntLoadoutRuntime.js",
@@ -40836,12 +40844,16 @@
         "sha256": "188cc102144bd4d86ec622c48a92e8b553564ecd047ccfc14e54eca1d798ac02"
       },
       {
+        "path": "src/championship/shop/huntToolTiers.js",
+        "sha256": "cc44f060f89dbdb1d31ebfa4d924167e9d080f2e1afbfeb6fed59705607fd14f"
+      },
+      {
         "path": "src/championship/shop/shopCatalog.js",
         "sha256": "b814998d3e5f2cfb5e44759a893ad2adaa0b80e48da8fa185606744f6476e2e6"
       },
       {
         "path": "src/championship/shop/shopRuntime.js",
-        "sha256": "138f47cf000d6dd1494b251f8ff8be9d58c099f5256536eb0554d3c5bb3d747a"
+        "sha256": "35f55b123932473890b473b9dae6ff0861e591c73c9274790e86cd61bc03a2e8"
       },
       {
         "path": "src/championship/text/aiChanStoryText.js",
@@ -41009,11 +41021,11 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "01aa38bfe97197a46a58b13913e6880452661891b0d4726124ea6e63f78563a2"
+        "sha256": "b35657de7801072107eb90677509c35f322ed0ec95ec8f11757b6d30347d1e21"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "d16cdcaf66dc880eda7f7ed9627a320f7e4be70bae6779797e8a2439d1e84966"
+        "sha256": "688ad8266e667dd49b6edf81c47699fdcf985d6e3cd83a0a84f3edab510475bd"
       },
       {
         "path": "src/championship/text/uiText.js",
@@ -41021,11 +41033,11 @@
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "bd052590bc3d9c11f90fe34c2cbf163511525f5bda96acdda8ffb088be1940a8"
+        "sha256": "8cee8228d56230e5bd3fb54b9793d163a4535851d3eac089a9cd694a2aa10337"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "123d6932813421d841483bd618f6cde8ca2dd7a5291d1d1b010c768e1ed13789"
+        "sha256": "3c4ea943ce19d200d37c9950b1fad75a49f8f8334ce1682f100692c2f51c275e"
       },
       {
         "path": "src/championship/text/zhHant.js",

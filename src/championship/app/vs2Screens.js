@@ -865,7 +865,23 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     let checkpoint=null;
     button.addEventListener("pointerdown",()=>{checkpoint=source.getFrame().tutorial?.checkpoint??null;});
     button.addEventListener("keydown",()=>{checkpoint=source.getFrame().tutorial?.checkpoint??null;});
-    button.addEventListener("click",()=>{replay(button,"pop");source.intents.selectHuntTool(tool.id,checkpoint);});
+    button.addEventListener("click",()=>{
+      replay(button,"pop");
+      // Every rope snapped: the rope key buys five more on the spot (HUNT_TOOL_TIERS_20261103).
+      if(tool.id==="ROPE"&&button.dataset.exhausted==="true"){
+        fx(source.intents.buyEmergencyHuntRopes?.()?.ok?"snap":"denied");
+        return;
+      }
+      source.intents.selectHuntTool(tool.id,checkpoint);});
+    if (tool.id === "ROPE") {
+      // The rope in hand: how many are left (corner badge) and how worn this one is.
+      const stock = element("span", "cm-hunt-rope-stock");
+      stock.setAttribute("aria-hidden", "true");
+      const wear = element("span", "cm-hunt-rope-wear");
+      wear.setAttribute("aria-hidden", "true");
+      wear.append(element("i"));
+      button.append(stock, wear);
+    }
     toolButtons.set(tool.id,button);
     if (fixed) tools.append(button);
     else { if (belt.parentNode !== tools) tools.append(belt); belt.append(button); }
@@ -897,6 +913,36 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   // finger lifts, through the field's own tap path. Not during the tutorial,
   // whose gestures are scripted.
   let field = null, deployHint = null, latestFrame = frame;
+  // A rope count that drops in hand is a snap: spark the rope key once (HUNT_TOOL_TIERS_20261103).
+  let ropeSeen = null;
+  function paintRopeKey(button, tool) {
+    const stock = tool.stock ?? 0, wear = Math.max(0, Math.min(1, tool.wear ?? 0));
+    button.dataset.exhausted = String(Boolean(tool.exhausted));
+    button.dataset.refillLabel = uiText("補 5 根");
+    button.dataset.swapping = String(Boolean(tool.swapping));
+    const badge = button.querySelector(".cm-hunt-rope-stock"), bar = button.querySelector(".cm-hunt-rope-wear");
+    if (badge) badge.textContent = `×${stock}`;
+    if (bar) {
+      bar.style.setProperty("--wear", wear.toFixed(3));
+      bar.dataset.level = wear <= 0.25 ? "low" : wear <= 0.6 ? "worn" : "fresh";
+      bar.hidden = stock <= 0;
+    }
+    button.setAttribute("aria-label", tool.exhausted
+      ? uiText("繩索耗盡，緊急補充 5 根（{bits} 位元幣）", { bits: (tool.emergencyBits ?? 0).toLocaleString("en-US") })
+      : uiText("繩索：{name}，剩 {n} 根，這根還有 {pct}%", { name: uiText(tool.ropeLabel ?? tool.ropeName ?? tool.label), n: stock, pct: Math.round(wear * 100) }));
+    // Same rope, one fewer; or the last of a colour snapped and the next colour came in.
+    const snapped = ropeSeen && ((ropeSeen.itemId === tool.itemId && stock < ropeSeen.stock)
+      || (ropeSeen.itemId !== tool.itemId && ropeSeen.stock === 1 && latestFrame?.huntField?.toolState?.notice === "ROPE_SWITCHED"));
+    if (snapped) {
+      replay(button, "snap");
+      const burst = element("span", "cm-hunt-rope-snap", uiText("啪嚓！"));
+      burst.setAttribute("aria-hidden", "true");
+      button.append(burst);
+      setTimeout(() => burst.remove(), 900);
+      fx("denied");
+    }
+    ropeSeen = { itemId: tool.itemId, stock };
+  }
   const fieldIsLive = () => Boolean(field && field.isPlayable !== false && typeof field.deployAt === 'function');
   const overField = (x, y) => {
     const hit = root.ownerDocument?.elementFromPoint?.(x, y);
@@ -1055,7 +1101,9 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     ROPE_TOO_HEAVY:"繩索出力過大，請換用輕型捕捉繩！",ROPE_TOO_WEAK:"這條繩索拉不動這個階段，請換用更高階的繩索",
     ROPE_FRAGILE:"克隆繩：清醒的夥伴容易掙斷，先用陷阱、睡眠彈或肉餌",RAGE_GUARD:"狂暴警戒中：先用連發槍、肉餌或陷阱破防",
     GUARD_BROKEN:"狂暴警戒已解除！",ROPE_OVERHEATED:"繩索纏繞冷卻中 · 切換備用繩索或稍候",PERFECT_COMBO:"完美連攜捕獲！",
-    GOOD_COMBO:"連攜捕獲！",DATA_IMPRINT:"數據拓印成功！",ROPE_SWITCHED:"已切換繩索"};
+    GOOD_COMBO:"連攜捕獲！",DATA_IMPRINT:"數據拓印成功！",ROPE_SWITCHED:"已切換繩索",
+    // Counted ropes (HUNT_TOOL_TIERS_20261103).
+    ROPE_REPLACED:"啪嚓！繩索拉斷了 · 已換上新繩索（剩 {n} 根）",ROPE_EXHAUSTED:"繩索耗盡 · 點繩索鍵緊急補充 5 根（{bits} 位元幣）"};
   const INSTRUCTIONS={ROPE:"快速畫圈綑綁：{item} · 按住目標拉動繩索",SHOT:"按住目標射擊：{item}",WIRE:"拖曳拉出鋼索：{item} · 放手完成",
     MEAT:"點擊地面部署：{item}",DECOY:"點擊地面部署：{item} · 再輕觸指定移動方向",LIGHT:"點擊地面部署：{item} · 夜間吸引目標",
     CAPTURE_TRAP:"點擊地面部署：{item} · 困住後切換手掌收取",BOMB:"點擊地面部署：{item}",MINE:"點擊地面部署：{item} · 目標經過時引爆"};
@@ -1066,7 +1114,10 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     const selectedTool = state.tools.find(t => t.id === state.activeTool);
     let kind = notice ? "notice" : "instruction", text;
     if (deployHint) { kind = deployHint.valid ? "deploy" : "notice"; text = deployHint.text; }
-    else if (notice) text = uiText(NOTICES[notice]);
+    else if (notice) {
+      const ropeTool = state.tools.find(t => t.id === 'ROPE');
+      text = uiText(NOTICES[notice], { n: ropeTool?.stock ?? 0, bits: (ropeTool?.emergencyBits ?? 0).toLocaleString('en-US') });
+    }
     else {
       const template = INSTRUCTIONS[selectedTool?.subtype ?? selectedTool?.id];
       const item = uiText(selectedTool?.id === 'ROPE' ? selectedTool.ropeLabel ?? selectedTool.label : selectedTool?.label ?? '');
@@ -1101,12 +1152,12 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     radar.hidden=!plugins?.radar;radar.replaceChildren();
     for(const marker of plugins?.radar??[]){const dot=element('i');dot.style.left=`${marker.x*100}%`;dot.style.top=`${marker.y*100}%`;radar.append(dot);}
     if(next.toolState){
-      for(const tool of next.toolState.tools){const button=toolButtons.get(tool.id);if(button){button.disabled=field.isPlayable===false||!tool.enabled;button.setAttribute("aria-pressed",String(next.toolState.activeTool===tool.id));
+      for(const tool of next.toolState.tools){const button=toolButtons.get(tool.id);if(button){button.disabled=field.isPlayable===false||(!tool.enabled&&!(tool.id==='ROPE'&&tool.exhausted&&!nextFrame.tutorial));button.setAttribute("aria-pressed",String(next.toolState.activeTool===tool.id));
         const counter=plugins?.counters.find(c=>c.id===tool.id);
         const cooling=tool.id==='ROPE'&&tool.overheatSeconds>0?` · ${uiText('冷卻 {seconds} 秒',{seconds:tool.overheatSeconds})}`:'';
         renderHuntTool(button,tool,{label:uiText(tool.label),count:counter?` ×${counter.quantity}`:'',cooling});
         if(counter)button.dataset.quantity=String(counter.quantity);else delete button.dataset.quantity;
-        if(tool.id==='ROPE'){button.dataset.ropeRole=tool.role??'';button.dataset.overheat=String(tool.overheatSeconds??0);}}}
+        if(tool.id==='ROPE'){button.dataset.ropeRole=tool.role??'';button.dataset.overheat=String(tool.overheatSeconds??0);paintRopeKey(button,tool);}}}
       const ropeTool=next.toolState.tools.find(t=>t.id==='ROPE');
       ropeSwap.hidden=!(ropeTool?.spares>0);
       ropeSwap.disabled=field.isPlayable===false||!ropeTool;

@@ -84,9 +84,12 @@ test("maxOwned and hidden rows refuse the buy without writing", () => {
   const hidden = listShopRecords().find((record) => record.unlockKind !== "INITIAL_AVAILABLE");
   assert.equal(shop.buy(hidden.shopRecordIndex, 1).reason, "UNAVAILABLE");
 
+  // The ROM row caps the rope at one; since HUNT_TOOL_TIERS_20261103 the row refills its counted family.
   const rope = listShopRecords().find((record) => record.productItemId === "championship:2026:hunt-item:rope-i");
   assert.equal(rope.maxOwned, 1);
-  assert.equal(shop.buy(rope.shopRecordIndex, 1).reason, "MAX_OWNED");
+  assert.equal(shop.buy(rope.shopRecordIndex, 1).owned, 16);
+  const card = listShopRecords().find((record) => record.productItemId === "championship:2026:hunt-memory:card-32");
+  assert.equal(shop.buy(card.shopRecordIndex, 1).reason, "MAX_OWNED");
 });
 
 test("a mapped Hunt SKU grant lands in the Shop-owned Hunt inventory", () => {

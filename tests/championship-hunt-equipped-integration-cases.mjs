@@ -12,7 +12,7 @@ const frame=1000*560190/33513982;
 // input handling and AI remain the normal application path. No outcome injection.
 test('all 34 consumables reach normal generated actors, consume stock and leave valid AI frames',async()=>{
   let checked=0;
-  for(const item of HUNT_EQUIPMENT_ITEMS.filter(i=>i.countable)){
+  for(const item of HUNT_EQUIPMENT_ITEMS.filter(i=>i.countable&&i.equipmentClass!=='ROPE')){ // ropes are counted too since HUNT_TOOL_TIERS_20261103
     const saved=new Map(),storage={getItem:k=>saved.get(k)??null,setItem:(k,v)=>saved.set(k,v),removeItem:k=>saved.delete(k)};
     const app=createChampionshipStandaloneApp({storage,catalog,cages,rngClock:()=>({hour:13,minute:20,second:50}),
       huntStartingInventory:[{itemId:item.itemId,quantity:2},{itemId:HUNT_MEMORY_CARDS[0].itemId,quantity:1}]});

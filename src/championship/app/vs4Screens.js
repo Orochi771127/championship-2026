@@ -44,6 +44,7 @@ import { isDesktopBrowseLayout } from './portraitFrame.js';
 import { createCyberGachaPanel } from './cyberGachaView.js';
 import { gachaCurrencyImage, gachaIcon, paintGachaTicketBadge } from './cyberGachaIcons.js';
 import { landExpansionPrice } from '../gacha/diamondRewards.js';
+import { huntFamilyActions, huntFamilyBadge, huntFamilyDescription, huntFamilyEntries, huntFamilyLadder, huntFamilyMeta, huntFamilyName, huntFamilyReceiptText } from './huntToolFamilyCards.js';
 
 const CATEGORY_LABELS = Object.freeze({
   TRAINING_GOODS: "養成用品",
@@ -61,7 +62,11 @@ const RECEIPT_COPY = Object.freeze({
   INSUFFICIENT_FUNDS: "持有金額不足。",
   MAX_OWNED: "已達持有上限。",
   UNAVAILABLE: "此商品目前不販售。",
-  INVALID_QUANTITY: "無法購買這個數量。"
+  INVALID_QUANTITY: "無法購買這個數量。",
+  TIER_LOCKED: "這一階尚未開放。",
+  MAX_TIER: "已達最高階。",
+  INSUFFICIENT_DIAMONDS: "測試鑽不足。",
+  SAVE_FAILED: "存檔失敗，這次沒有扣款。"
 });
 
 const SHOP_PLACEHOLDERS = Object.freeze({
@@ -164,7 +169,10 @@ export function createShopView({ root, source }) {
   // Owner 2026-10-27: a cage's detail names the cages it joins into one area.
   const detailSynergy = element("p", "cm-vs2-shop__detail-synergy cm-cage-cart__synergy");
   detailSynergy.hidden = true;
-  detailCopy.append(detailName, detailDescription, detailSynergy, detailMeta, detailState);
+  // Hunt tool families (HUNT_TOOL_TIERS_20261103): the tier ladder and the family's own keys.
+  const detailFamily = element("div", "cm-shop-family__sheet");
+  detailFamily.hidden = true;
+  detailCopy.append(detailName, detailDescription, detailSynergy, detailMeta, detailState, detailFamily);
   detail.setAttribute("role", "dialog");
   detail.setAttribute("aria-modal", "true");
   const detailActions = element("div", "cm-vs2-shop__detail-actions");
@@ -211,6 +219,7 @@ export function createShopView({ root, source }) {
   const categories = Object.keys(CATEGORY_LABELS);
   let activeCategory = categories[0];
   let selectedRow = null;
+  let selectedFamily = null;
   let revealSelectedCard = true;
   const selectedByCategory = new Map();
   const tabButtons = new Map();
@@ -268,7 +277,7 @@ export function createShopView({ root, source }) {
   // intent, so the second is dropped instead of charging twice.
   let lastBuy = { at: -Infinity, record: null };
   buy.addEventListener("click", () => {
-    if (!selectedRow) return;
+    if (!selectedRow || selectedFamily) return;
     const now = globalThis.performance?.now?.() ?? Date.now();
     if (lastBuy.record === selectedRow.shopRecordIndex && now - lastBuy.at < 220) return;
     lastBuy = { at: now, record: selectedRow.shopRecordIndex };
@@ -308,12 +317,17 @@ export function createShopView({ root, source }) {
     host.append(element("span", "cm-vs2-shop__art-fallback", SHOP_PLACEHOLDERS[row.category] ?? "商品"));
   }
 
+  // One card per listing, except a hunt tool family, which is one card for all its tiers.
+  function cardEntries(shop) {
+    const rows = shop?.listings.filter((row) => row.category === activeCategory) ?? [];
+    return huntFamilyEntries(rows, (shop?.huntFamilies ?? []).filter((family) => family.visible));
+  }
   function moveSelection(offset) {
-    const rows = source.getFrame()?.shop?.listings.filter((row) => row.category === activeCategory) ?? [];
-    if (!rows.length) return;
-    const current = Math.max(0, rows.findIndex((row) => row.shopRecordIndex === selectedRow?.shopRecordIndex));
-    const index = Math.max(0, Math.min(rows.length - 1, current + offset));
-    selectedByCategory.set(activeCategory, rows[index].shopRecordIndex);
+    const entries = cardEntries(source.getFrame()?.shop);
+    if (!entries.length) return;
+    const current = Math.max(0, entries.findIndex((entry) => entry.key === selectedByCategory.get(activeCategory)));
+    const index = Math.max(0, Math.min(entries.length - 1, current + offset));
+    selectedByCategory.set(activeCategory, entries[index].key);
     revealSelectedCard = true;
     paint(source.getFrame());
   }
@@ -346,6 +360,50 @@ export function createShopView({ root, source }) {
       }, RECEIPT_TOAST_MS + RECEIPT_TOAST_FADE_MS),
     ];
   }
+  /**
+   * A hunt tool family card: the tier badge on the art, the held count, and
+   * the upgrade and +10 keys right on the card. Tapping elsewhere opens the sheet.
+   */
+  function familyCard(entry, selected, shop) {
+    const { row, family } = entry;
+    const card = element("div", "cm-vs2-shop__row cm-shop-family");
+    card.tabIndex = 0;
+    card.setAttribute("role", "option");
+    card.dataset.selected = String(selected);
+    card.setAttribute("aria-selected", String(selected));
+    card.dataset.family = family.familyId;
+    card.dataset.kind = family.kind;
+    card.dataset.tier = String(family.tier);
+    const art = element("span", "cm-vs2-shop__card-art");
+    appendProductArt(art, row);
+    const badge = element("span", "cm-shop-family__badge", huntFamilyBadge(family));
+    badge.dataset.tier = String(family.tier);
+    art.append(badge);
+    const name = element("div", "cm-vs2-shop__name");
+    name.append(element("strong", "", huntFamilyName(family)));
+    if (row.visibility === "NEW") name.append(element("span", "cm-vs2-shop__new", "NEW"));
+    name.append(element("span", "cm-vs2-shop__meta", huntFamilyMeta(family)));
+    if (family.kind === "ROPE" && family.owned > 0 && family.wear < 1) {
+      const wear = element("span", "cm-shop-family__wear");
+      wear.style.setProperty("--wear", String(family.wear));
+      wear.setAttribute("aria-label", uiText("手上這根繩子剩 {n}%", { n: Math.round(family.wear * 100) }));
+      name.append(wear);
+    }
+    const open = () => {
+      selectedByCategory.set(activeCategory, entry.key);
+      paint(source.getFrame());
+      openDetail(list.querySelector?.('[data-selected="true"]'));
+    };
+    card.addEventListener("click", open);
+    card.addEventListener("keydown", (event) => {
+      if (event.target !== card || (event.key !== "Enter" && event.key !== " ")) return;
+      event.preventDefault();
+      open();
+    });
+    card.append(art, name, huntFamilyActions(document, family, { bits: shop.bits, diamonds: shop.testDiamonds ?? null, intents: source.intents, compact: true }));
+    return card;
+  }
+
   // The cards deal in when a tab opens; a repaint for a purchase or a pick keeps them still.
   let dealtCategory = null;
   function paint(nextFrame) {
@@ -363,15 +421,17 @@ export function createShopView({ root, source }) {
     // reads differently from the first instead of repeating the same line.
     const boughtRow = receipt?.ok ? shop.listings.find((row) => row.shopRecordIndex === receipt.shopRecordIndex) : null;
     const shownReceipt = receipt && receipt !== settledReceipt ? receipt : null;
+    const familyText = shownReceipt ? huntFamilyReceiptText(shownReceipt, shop.huntFamilies) : null;
     status.textContent = shownReceipt
-      ? (boughtRow ? uiText("已購買「{item}」，持有 {owned}/{max}。", { item: productName(boughtRow), owned: boughtRow.owned, max: boughtRow.maxOwned })
-        : uiText(RECEIPT_COPY[receipt.reason] ?? ""))
+      ? (familyText ?? (boughtRow ? uiText("已購買「{item}」，持有 {owned}/{max}。", { item: productName(boughtRow), owned: boughtRow.owned, max: boughtRow.maxOwned })
+        : uiText(RECEIPT_COPY[receipt.reason] ?? "")))
       : "";
     status.dataset.tone = shownReceipt ? (shownReceipt.ok ? "ok" : "refused") : "";
     if (receipt && receipt !== paintedReceipt) {
       pulse(status);
       settleReceiptLater(receipt);
-      if (boughtRow) arcadeFx(buy, "purchase", `-${boughtRow.unitPriceBits}`);
+      if (boughtRow && receipt.familyId) arcadeFx(list.querySelector?.('[data-selected="true"]') ?? buy, "purchase", receipt.cost ? `-${receipt.cost}` : "");
+      else if (boughtRow) arcadeFx(buy, "purchase", `-${boughtRow.unitPriceBits}`);
       else arcadeFx(buy, "denied");
     }
     paintedReceipt = receipt ?? null;
@@ -400,7 +460,8 @@ export function createShopView({ root, source }) {
       if (gachaPanel) gachaPanel.root.hidden = true;
     }
 
-    const rows = shop.listings.filter((row) => row.category === activeCategory);
+    const entries = cardEntries(shop);
+    const rows = entries.map((entry) => entry.row);
     const restoreCardFocus = list.contains(document.activeElement);
     list.dataset.dealt = String(dealtCategory === activeCategory);
     dealtCategory = activeCategory;
@@ -418,10 +479,12 @@ export function createShopView({ root, source }) {
       return;
     }
     const requested = selectedByCategory.get(activeCategory);
-    selectedRow = rows.find((row) => row.shopRecordIndex === requested) ?? rows[0];
-    selectedByCategory.set(activeCategory, selectedRow.shopRecordIndex);
-    const selectedIndex = rows.findIndex((row) => row.shopRecordIndex === selectedRow.shopRecordIndex);
-    const selectedName = productName(selectedRow);
+    const selectedEntry = entries.find((entry) => entry.key === requested) ?? entries[0];
+    selectedRow = selectedEntry.row;
+    selectedFamily = selectedEntry.family;
+    selectedByCategory.set(activeCategory, selectedEntry.key);
+    const selectedIndex = entries.indexOf(selectedEntry);
+    const selectedName = selectedFamily ? huntFamilyName(selectedFamily) : productName(selectedRow);
     appendProductArt(detailArt, selectedRow, { detailView: true });
     detailName.textContent = uiText(selectedName);
     detailDescription.textContent = shopItemDescription(selectedRow);
@@ -429,12 +492,21 @@ export function createShopView({ root, source }) {
     detailSynergy.textContent = cageDefinition ? cageSynergyLabel(cageDefinition.moduleId) : "";
     detailSynergy.hidden = !cageDefinition;
     detailMeta.textContent = uiText("{bits} 位元幣 · 持有 {owned}/{max}", { bits: selectedRow.unitPriceBits, owned: selectedRow.owned, max: selectedRow.maxOwned });
+    detailFamily.hidden = !selectedFamily;
+    detailFamily.replaceChildren();
+    buy.hidden = Boolean(selectedFamily);
+    if (selectedFamily) {
+      detailMeta.textContent = huntFamilyMeta(selectedFamily);
+      detailDescription.textContent = huntFamilyDescription(selectedFamily, detailDescription.textContent);
+      detailFamily.append(huntFamilyLadder(document, selectedFamily),
+        huntFamilyActions(document, selectedFamily, { bits: shop.bits, diamonds: shop.testDiamonds ?? null, intents: source.intents }));
+    }
     const full = selectedRow.owned >= selectedRow.maxOwned;
     const shortBits = full ? 0 : Math.max(0, selectedRow.unitPriceBits - shop.bits);
     buy.textContent = uiText(full ? (selectedRow.maxOwned === 1 ? "已持有" : "已達上限") : "購買");
     buy.disabled = full || shortBits > 0;
     buy.setAttribute("aria-label", full ? uiText("{item}已達持有上限", { item: selectedName }) : uiText("購買{item}", { item: selectedName }));
-    detailState.hidden = !buy.disabled;
+    detailState.hidden = !buy.disabled || Boolean(selectedFamily);
     detailState.textContent = full
       ? (selectedRow.maxOwned === 1 ? uiText("已經持有，無法再購買。") : uiText("已達持有上限 {max}。", { max: selectedRow.maxOwned }))
       : shortBits > 0 ? uiText("持有金額不足，還差 {bits} 位元幣。", { bits: shortBits }) : "";
@@ -442,12 +514,19 @@ export function createShopView({ root, source }) {
     next.disabled = selectedIndex >= rows.length - 1;
     let selectedCard = null;
     const cageByShopRecord = new Map(listCageDefinitions().map((entry) => [entry.shopRecordIndex, entry]));
-    for (const row of rows) {
+    for (const entry of entries) {
+      const { row, family } = entry;
+      if (family) {
+        const card = familyCard(entry, entry === selectedEntry, shop);
+        if (entry === selectedEntry) selectedCard = card;
+        list.append(card);
+        continue;
+      }
       const displayName = productName(row);
       const item = element("button", "cm-vs2-shop__row");
       item.type = "button";
       item.setAttribute("role", "option");
-      const selected = row.shopRecordIndex === selectedRow.shopRecordIndex;
+      const selected = entry === selectedEntry;
       if (selected) selectedCard = item;
       item.dataset.selected = String(selected);
       item.setAttribute("aria-selected", String(selected));
@@ -465,7 +544,7 @@ export function createShopView({ root, source }) {
       const cage = row.category === "CAGES" ? cageByShopRecord.get(row.shopRecordIndex) : null;
       if (cage) decorateShopCageCard(item, art, name, cage.moduleId);
       item.addEventListener("click", () => {
-        selectedByCategory.set(activeCategory, row.shopRecordIndex);
+        selectedByCategory.set(activeCategory, entry.key);
         paint(source.getFrame());
         openDetail(list.querySelector?.('[data-selected="true"]'));
       });
