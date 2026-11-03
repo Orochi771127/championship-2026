@@ -98,9 +98,10 @@ test('native data stays pinned, separately authorized savev7 is reviewed, the or
   // The later Owner-authorized100-cell save extension, then the hex cage world
   // (2026-10-26), then the battle plan (2026-10-28), then the Cyber Gachapon save field
   // and the first-bind gift marker (both 2026-10-29), then the burst evolution record and the
-  // diamond economy's royal-cage stock check (both 2026-11-02) supersede this one source pin only.
-  const followup=JSON.parse(fs.readFileSync("docs/contracts/championship/DIAMOND_ECONOMY_20261102.json","utf8"));
-  assert.equal(followup.supersedes.contract,"docs/contracts/championship/STAGE_REDESIGN_BURST_20261102.json");
+  // diamond economy's royal-cage stock check (both 2026-11-02), then the hunt tool tiers (2026-11-03)
+  // supersede this one source pin only.
+  const followup=JSON.parse(fs.readFileSync("docs/contracts/championship/HUNT_TOOL_TIERS_20261103.json","utf8"));
+  assert.equal(followup.supersedes.contract,"docs/contracts/championship/DIAMOND_ECONOMY_20261102.json");
   assert.deepEqual(Object.keys(followup.sourceLocks),["src/championship/app/championshipStandaloneSave.js"]);
   // Owner-authorized MA05 replacement preserves the deployed AW40/GR01 trial and all other221 selections;
   // all unrelated native/gameplay pins remain exact. This pins the entire reviewed new file.

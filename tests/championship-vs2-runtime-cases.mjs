@@ -292,7 +292,7 @@ test("VS2 walks Raising Home to the Hunt field and back through the published se
   source.intents.selectEquipment("ROPE", "championship:2026:hunt-item:rope-i");
   const equipped = source.getFrame().huntLoadout.selectedEquipment
     .find((slot) => slot.equipmentClass === "ROPE");
-  assert.equal(equipped.quantity, 1);
+  assert.equal(equipped.quantity, 15, 'the starting rope became 15 counted ropes (HUNT_TOOL_TIERS_20261103)');
   assert.equal(equipped.durability, 6, 'native basic rope byte, not the historical example value');
   assert.equal(equipped.durabilityConsumption, "ROM_NATIVE_PULL_CONTROLLER");
 

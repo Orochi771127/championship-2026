@@ -112,7 +112,7 @@ import {settleNativeRaisingCage,nativeCageConditionEffects} from '../raising/nat
 import { maxGFromInventory } from "../hunt/capture/memoryCardCapacity.js";
 import { createHuntInventory } from "../hunt/loadout/huntInventory.js";
 import { createHuntLoadout } from "../hunt/loadout/huntLoadoutRuntime.js";
-import { HUNT_STARTING_INVENTORY } from "../hunt/loadout/huntEquipmentCatalog.js";
+import { HUNT_STARTING_INVENTORY, getHuntCatalogItem } from "../hunt/loadout/huntEquipmentCatalog.js";
 import {
   applyMappedHuntInventoryFromShop,
   createShopRuntime
@@ -1337,8 +1337,14 @@ export function createChampionshipStandaloneApp({
       items:Object.freeze(FOUNDER_PACK.items.map(([id,quantity])=>Object.freeze({id,quantity,name:getAutomationItem(id).name,art:getAutomationItem(id).art}))),
       frame:FOUNDER_PACK.frame,unlock:FOUNDER_PACK.unlock,unlocked,claimed,available:Boolean(friendsPlaytest)&&unlocked&&!claimed});
   }
+  /** The rope colour an emergency bundle refills: the rope in hand, else the best colour ever held. */
+  function emergencyRopeFamily(itemId){
+    const families=requireShop().getFrame().huntFamilies.filter(f=>f.kind==='ROPE');
+    return families.find(f=>f.productItemId===itemId&&f.tier>=0)??families.filter(f=>f.tier>=0).at(-1)??families[0];
+  }
   function huntMemoryCapacityG(){
-    const card=maxGFromInventory(huntInventory);
+    // HUNT_TOOL_TIERS_20261103: the one memory card grows past the three ROM sizes (128 → 256 G).
+    const card=Math.max(maxGFromInventory(huntInventory),shop?.memoryCardCapacityG?.()??0);
     // The land bonus never blocks a hunt: an unreadable layout falls back to the card alone.
     let land=null;try{land=cageEdit?.getFrame(...cageEditArgs())?.landCapacity??null;}catch{land=null;}
     return card+(Number.isFinite(land)?landMemoryBonusG(land,card):0);
@@ -3004,7 +3010,64 @@ export function createChampionshipStandaloneApp({
 
     getShopFrame() {
       if (!shop) return null;
-      return Object.freeze({ ...shop.getFrame(), lastReceipt: lastShopReceipt });
+      return Object.freeze({ ...shop.getFrame(), lastReceipt: lastShopReceipt, testDiamonds: friendsPlaytest?.diamonds ?? null });
+    },
+
+    /**
+     * Hunt tool families (HUNT_TOOL_TIERS_20261103): raise one tool a tier in
+     * place. The memory card's sizes past 96 G also take test diamonds, which
+     * are spent in the same save as the upgrade.
+     */
+    upgradeHuntTool(familyId, currency = 'BITS') {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.SHOP) throw new Error("CHAMPIONSHIP_SHOP_NOT_ACTIVE");
+      if (currency === 'DIAMONDS') {
+        const price = requireShop().getFrame().huntFamilies.find(f => f.familyId === familyId)?.next?.diamonds;
+        if (!friendsPlaytest || !Number.isSafeInteger(price)) lastShopReceipt = Object.freeze({ ok:false, reason:'UNAVAILABLE', familyId });
+        else if (friendsPlaytest.diamonds < price) lastShopReceipt = Object.freeze({ ok:false, reason:'INSUFFICIENT_DIAMONDS', familyId, cost:price });
+        else {
+          const candidate = gachaShopCandidate(), receipt = candidate.upgradeHuntFamily(familyId, { currency:'DIAMONDS' });
+          const friends = receipt.ok ? normalizeFriendsPlaytestState({ ...friendsPlaytest, diamonds:friendsPlaytest.diamonds - price }) : null;
+          if (!receipt.ok) lastShopReceipt = receipt;
+          else {
+            const status = savePort.save({ ...liveSaveRequest(revision + 1), friendsPlaytest:friends, shop:candidate.toSave() });
+            if (status.phase !== 'SAVED') { savePort.discardPendingWrite(); lastShopReceipt = Object.freeze({ ok:false, reason:'SAVE_FAILED' }); }
+            else {
+              friendsPlaytest = friends; revision += 1;
+              shop = createShopRuntime({ snapshot:candidate.toSave(), huntInventory, allowRepeatedCages:playtestPolicy?.enabled === true,
+                allItemsVisible:playtestPolicy?.shopOpen === true, progression:progressionContext() });
+              applyMappedHuntInventoryFromShop(shop, huntInventory); bindShopRuntime();
+              lastShopReceipt = receipt;
+            }
+          }
+        }
+      } else {
+        lastShopReceipt = requireShop().upgradeHuntFamily(familyId);
+        if (lastShopReceipt.ok) savePort.markDirty();
+      }
+      publishScreens();
+      return lastShopReceipt;
+    },
+
+    refillHuntTool(familyId, quantity = 1) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.SHOP) throw new Error("CHAMPIONSHIP_SHOP_NOT_ACTIVE");
+      lastShopReceipt = requireShop().refillHuntFamily(familyId, quantity);
+      if (lastShopReceipt.ok) savePort.markDirty();
+      publishScreens();
+      return lastShopReceipt;
+    },
+
+    /** Every rope snapped out on the field: five more of the rope in hand (or the best colour held), paid in bits. */
+    buyEmergencyHuntRopes() {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD || !huntRuntime) return Object.freeze({ ok:false, reason:'UNAVAILABLE' });
+      const selected = huntLoadout?.getSelectedEquipment().find(s => s.equipmentClass === 'ROPE')?.itemId ?? null;
+      const receipt = requireShop().buyEmergencyRopes(emergencyRopeFamily(selected).familyId);
+      if (receipt.ok) {
+        const itemId = getShopRecord(receipt.shopRecordIndex).productItemId;
+        huntLoadout?.selectEquipment('ROPE', itemId);
+        savePort.markDirty();
+      }
+      publishScreens();
+      return receipt;
     },
 
     subscribeShop(listener) {
@@ -4427,6 +4490,9 @@ export function createChampionshipStandaloneApp({
       confirmedGateId = selectedGateId;
       // Entering the loadout builds it over the Shop-owned inventory.
       huntLoadout = createHuntLoadout({ inventory: huntInventory });
+      // HUNT_TOOL_TIERS_20261103: the strongest rope colour held is tied on first.
+      const bestRope = huntLoadout.listAvailableEquipment().find(c => c.equipmentClass === "ROPE")?.items.at(-1);
+      if (bestRope) huntLoadout.selectEquipment("ROPE", bestRope.itemId);
       screens.enter(CHAMPIONSHIP_SCREENS.HUNT_LOADOUT);
       publishScreens();
       return screens.current();
@@ -4516,7 +4582,11 @@ export function createChampionshipStandaloneApp({
           ?? (await import("../hunt/huntRuntime.js")).createHuntRuntime;
         const candidateRuntime = factory({ world, nativeEntry:entry,
           captureReplay:huntCaptureReplay, maxCardG:huntMemoryCapacityG(),
-          nativeControls:entry ? {loadout:requireLoadout(),consumeItem:(id,n=1)=>requireShop().consumeHuntItem(id,n),onChange:publishScreens,
+          nativeControls:entry ? {loadout:requireLoadout(),consumeItem:(id,n=1)=>{
+              // A snapped rope is spent in the save at once (HUNT_TOOL_TIERS_20261103).
+              const spent=requireShop().consumeHuntItem(id,n);if(spent.ok&&getHuntCatalogItem(id)?.equipmentClass==='ROPE')savePort.markDirty();return spent;},
+            ropeLedger:{wear:id=>requireShop().getRopeWear(id),setWear:(id,fraction)=>requireShop().setRopeWear(id,fraction),
+              emergencyBits:id=>emergencyRopeFamily(id)?.emergencyBits??null},onChange:publishScreens,
             ...(armed.chips.length ? {boosts} : {})} : null,
           fieldActor:{ actorId:"championship:2026:actor:tamer", displayName:"Tamer" } });
         if (!candidateRuntime || candidateRuntime.world !== world) throw Error("HUNT_ENTRY_RUNTIME_INVALID");

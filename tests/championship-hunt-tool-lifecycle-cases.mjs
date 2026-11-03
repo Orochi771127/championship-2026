@@ -18,7 +18,7 @@ function fixture(kind,index=0,quantity=20,{night=false,terrain=0}={}){
 }
 test('all 34 consumables use their original equipment class and spend once on activation',()=>{
   let count=0;
-  for(const item of HUNT_EQUIPMENT_ITEMS.filter(i=>i.countable)){
+  for(const item of HUNT_EQUIPMENT_ITEMS.filter(i=>i.countable&&i.equipmentClass!=='ROPE')){ // ropes are counted too since HUNT_TOOL_TIERS_20261103
     const f=fixture(item.nativeSubcategory,item.nativeItemIndex);
     assert.equal(f.tools.canUse(item.equipmentClass),true,item.itemId);
     assert.equal(f.tools.use(f.selected(),p()),true,item.itemId);

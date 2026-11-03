@@ -74,9 +74,9 @@ test("the five equipment classes and four plugin positions are preserved exactly
   assert.equal(loadout.getSelectedPlugins().length, 4);
 });
 
-test("the rope is the single equipped class and the rest are countable", () => {
-  assert.equal(HUNT_EQUIPMENT_CLASS_RULES.ROPE.maxOwned, 1);
-  assert.equal(HUNT_EQUIPMENT_CLASS_RULES.ROPE.countable, false);
+test("the rope keeps its durability and, since HUNT_TOOL_TIERS_20261103, is counted like the rest", () => {
+  assert.equal(HUNT_EQUIPMENT_CLASS_RULES.ROPE.maxOwned, 99);
+  assert.equal(HUNT_EQUIPMENT_CLASS_RULES.ROPE.countable, true);
   assert.equal(HUNT_EQUIPMENT_CLASS_RULES.ROPE.hasDurability, true);
   for (const className of HUNT_COUNTED_CLASSES) {
     assert.equal(HUNT_EQUIPMENT_CLASS_RULES[className].maxOwned, 99);
@@ -117,8 +117,8 @@ test("inventory quantity is capped at the per-item maximum", () => {
   inventory.grant(SHOT, 500);
   // A two-digit readout cannot show a third digit, and the ROM caps at 99.
   assert.equal(inventory.getQuantity(SHOT), 99);
-  inventory.grant(ROPE, 40);
-  assert.equal(inventory.getQuantity(ROPE), 1, "the rope is a single equipped item");
+  inventory.grant(ROPE, 140);
+  assert.equal(inventory.getQuantity(ROPE), 99, "ropes are counted up to 99 (HUNT_TOOL_TIERS_20261103)");
 });
 
 test("availability is a Shop-side rule with its three recovered kinds", () => {
@@ -271,7 +271,7 @@ test("the loadout seam exposes the read-only surface and no companion", async ()
   // Quantity and durability travel with the selection, as the Owner specified.
   source.intents.selectEquipment("ROPE", ROPE);
   const rope = source.getFrame().huntLoadout.selectedEquipment.find((slot) => slot.equipmentClass === "ROPE");
-  assert.equal(rope.quantity, 1);
+  assert.equal(rope.quantity, 15, "the starting 1/1 rope became 15 ropes (HUNT_TOOL_TIERS_20261103)");
   assert.equal(rope.durability, 6);
   await app.dispose();
 });

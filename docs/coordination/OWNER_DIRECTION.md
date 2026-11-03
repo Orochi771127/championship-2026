@@ -1,5 +1,20 @@
 # Championship Owner Direction
 
+<!-- record-id: HUNT_TOOL_TIERS_20261103 -->
+## 2026-11-03 — One shop slot per hunt tool, upgraded in place; ropes are counted and snap one at a time
+
+The Owner pastes two versions of a phase brief with six phone pictures of the hunt shop (2026-11-03): tools of the same kind (捕捉繩 α/β/γ, 手槍 α/β, 記憶卡 32G/64G/96G…) take a slot per tier and old tiers stay in the hunt menus. Every same-kind tool becomes one slot upgraded in place, in the shop, the bag and the hunt loadout and dock; ropes become counted (持有 X/99) and a rope worn to nothing spends one and the next is tied on; the memory card becomes one card with sizes past 96 G. Asked, the Owner answers 「第一個問題沿用原本設定」 (ropes keep the ROM durability, not the brief's new numbers), leaves the gear model-upgrade fee to the implementer, and hands over the rest including the screenshots. After the report the Owner answers 「請你自我審查沒有問題就commit、push然後整合進main部署」, which authorizes this batch's push, merge to main and publication after a self-review.
+
+OWNER_APPROVED_ADAPTATION. The ROM shop table, the native rope writer and its wear stay as traced; `src/championship/shop/huntToolTiers.js` groups the rows.
+
+- Families: four rope colours (three tiers), six guns, three wires, meat, decoys, mines and traps (α→β), and the memory card. The family's stock sits on its current tier's row only; save `shop.toolTiers` (family → tier) and `shop.ropeWear` (the rope in hand's remaining durability, per-mille). Bombs, lights, poison and paralysis meat are different items, not tiers, and stay single.
+- Old saves: each family takes the top tier held; ammo of all tiers is added up (cap 99); a rope held as 1/1 becomes 15 ropes of that tier; the last memory card held wins.
+- Ropes: buying a colour or the next tier pays that row's ROM price once and adds 10 ropes; ropes already held move up 1:1. Refill per rope 20/35/50, 80/110/150, 200/260/320, 450/600/800 Bits. Durability per tier is the ROM value. Wear carries from one pull to the next; a snap spends one rope, the next is ready after 0.25 s (it replaces the 15 s overheat in normal hunts); the last of a colour hands over to the best other colour; with none left the rope key sells five (1.5× the refill price). The loadout ties on the best colour held.
+- Gear: the β model costs about thirty β units (five for the traps): pistol 300, rapid 600, sleep 1,500, paralysis rifle 3,000, shotgun 3,600, paralysis shotgun 7,800, standard wire 900, magnetic 3,300, electric 12,000, meat 2,400, decoy 24,000, mine 24,000, trap 44,000. Every α unit becomes β 1:1.
+- Memory card: the ROM starts the player with the 32 G card, so the card runs 32 → 64 (4,850) → 96 (9,850) for Bits, then 128 / 160 / 200 / 256 G for 150,000 / 350,000 / 800,000 / 1,800,000 Bits or 300 / 500 / 800 / 1,200 test diamonds (the friends-playtest diamonds; the land +8 G per step still adds on top).
+- Self-review fix before publication: a refused emergency bundle (too few Bits) no longer leaves a never-bought rope colour unlocked.
+- Not done: a rope-snap sound of its own (the existing denied cue plays); the hunt loadout keeps the catalog's rope names (基礎捕捉繩 γ…) while the shop says 捕捉繩 γ.
+
 <!-- record-id: INFIRMARY_REALTIME_HEAL_20261103 -->
 ## 2026-11-03 — Infirmaries heal on real time; cage shop copy fixed
 

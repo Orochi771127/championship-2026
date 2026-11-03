@@ -15,6 +15,7 @@ import { shopGoodsPresentation } from '../presentation/shopGoodsUiArt.js';
 import { GACHA_PERSONALITY_CHOICES, gachaChipEffectLines } from '../gacha/cyberGacha.js';
 import { automationEffectLines } from '../gacha/ranchAutomation.js';
 import { gachaIcon } from './cyberGachaIcons.js';
+import { huntFamilyBadge, huntFamilyName } from './huntToolFamilyCards.js';
 import { awakeningEnergySummary, enhanceSummary, gachaItemArt, gachaMetalNote, gachaRefusalText, partnerNameplate } from './cyberGachaView.js';
 
 export const BACKPACK_SECTIONS = Object.freeze([
@@ -33,14 +34,24 @@ export const BACKPACK_TABS = Object.freeze([
 // Shop records behind the four Training tools (main.js getFoodStock): using one picks the tool.
 export const BACKPACK_SUPPLY_TOOLS = Object.freeze({ 0: 'feed', 1: 'protein', 2: 'medicine', 3: 'woundMedicine' });
 
-/** Owned, non-cage items grouped as the shop groups them. */
+/**
+ * Owned, non-cage items grouped as the shop groups them. A hunt tool family
+ * (HUNT_TOOL_TIERS_20261103) holds its stock on its current tier's row only, so
+ * it lists once, named by that tier; the memory card shows its size and level.
+ */
 export function backpackSections(shopFrame) {
   const listings = shopFrame?.listings ?? [];
+  const families = new Map((shopFrame?.huntFamilies ?? []).map((family) => [family.familyId, family]));
   return BACKPACK_SECTIONS.map(({ category, title }) => ({
     category, title,
     items: listings.filter((row) => row.category === category && row.owned > 0)
-      .map((row) => ({ shopRecordIndex: row.shopRecordIndex, name: shopItemName(row.shopRecordIndex) ?? row.displayName,
-        owned: row.owned, maxOwned: row.maxOwned }))
+      .map((row) => {
+        const family = row.familyId ? families.get(row.familyId) : null;
+        return { shopRecordIndex: row.shopRecordIndex, name: family ? huntFamilyName(family) : shopItemName(row.shopRecordIndex) ?? row.displayName,
+          owned: row.owned, maxOwned: row.maxOwned,
+          // The tier is in the name; the memory card also wears its level.
+          ...(family?.kind === 'MEMORY' ? { tierBadge: huntFamilyBadge(family) } : {}) };
+      })
   })).filter((section) => section.items.length);
 }
 
@@ -51,7 +62,8 @@ export function backpackSections(shopFrame) {
 export function backpackTabs(shopFrame, gachaFrame) {
   const supplies = backpackSections(shopFrame).flatMap((section) => section.items.map((item) => ({
     kind: 'SUPPLY', id: `shop:${item.shopRecordIndex}`, name: item.name, owned: item.owned, shopRecordIndex: item.shopRecordIndex,
-    category: section.category, tool: BACKPACK_SUPPLY_TOOLS[item.shopRecordIndex] ?? null
+    category: section.category, tool: BACKPACK_SUPPLY_TOOLS[item.shopRecordIndex] ?? null,
+    ...(item.tierBadge ? { tierBadge: item.tierBadge } : {})
   })));
   const chips = (gachaFrame?.chips ?? []).filter((chip) => chip.owned > 0 || chip.armed).map((chip) => ({ ...chip, chipKind: chip.kind, kind: 'CHIP' }));
   const metals = (gachaFrame?.metals ?? []).filter((metal) => metal.owned > 0).map((metal) => ({ ...metal, kind: 'METAL' }));
@@ -177,6 +189,7 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
     const copy = el(doc, 'span', 'cm-backpack__copy');
     const title = el(doc, 'span', 'cm-backpack__name', uiText(item.name));
     if (item.rarity) title.prepend(el(doc, 'span', 'cm-backpack__rarity', item.rarity));
+    if (item.tierBadge) title.prepend(el(doc, 'span', 'cm-backpack__tier', item.tierBadge));
     copy.append(title, el(doc, 'span', 'cm-backpack__effect', effectLine(item)));
     const count = el(doc, 'span', 'cm-backpack__count', `×${formatNumber(item.owned)}`);
     const flags = [];
