@@ -18,7 +18,8 @@ test('opening, cancel and repeated taps never debit; explicit Buy purchases once
  const reload=JSON.parse(JSON.stringify(h.wallet));assert.equal(purchaseTestRanchRow(reload,2).reason,'ALREADY_OPEN');assert.equal(reload.diamonds,9000);
 });
 test('insufficient funds disable Buy and cannot debit even if an injected dialog returns buy',async()=>{
- const h=harness(999),p=h.prompt.open(2);assert.equal(h.options.actions[1].disabled,true);h.resolve('buy');await p;assert.equal(h.calls,0);assert.equal(h.wallet.diamonds,999);
+ // Owner 2026-11-03: the first +10 step costs 200 diamonds, so 199 is one short.
+ const h=harness(199),p=h.prompt.open(2);assert.equal(h.options.actions[1].disabled,true);h.resolve('buy');await p;assert.equal(h.calls,0);assert.equal(h.wallet.diamonds,199);
 });
 test('dismissal, navigation, disposal and a stale unlocked row cannot dispatch',async()=>{
  for(const mode of ['escape','navigate','dispose','unlocked']){const h=harness(),p=h.prompt.open(2);if(mode==='navigate')h.frame.screen='HOME';if(mode==='dispose'){h.prompt.dispose();assert.equal(h.options.signal.aborted,true);}if(mode==='unlocked')h.frame.cageEdit.slots.forEach(s=>{if(s.row===2)s.unlocked=true;});h.resolve(mode==='escape'?null:'buy');await p;assert.equal(h.calls,0,mode);}
