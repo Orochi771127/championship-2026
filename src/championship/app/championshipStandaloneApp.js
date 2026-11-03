@@ -926,6 +926,8 @@ export function createChampionshipStandaloneApp({
             rottenFoodCount:raisingFoods.filter(f=>f.present&&(f.cageInstanceId??f.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)&&f.freshness<=0).length,
             ...raisingDirtySignals.get(actor.cageInstanceId??actor.cageDefinitionIndex),spawnWaste:(species,position)=>spawnRaisingWaste(actor.cageDefinitionIndex,species,position,actor.cageInstanceId)}:null});
         if(result.changed) {writeRaisingNativeProfile(id,result.profile);changed=true;}
+        // Owner 2026-11-03: a partner fresh out of its egg stays up a while before any night nap.
+        if(result.hatched)realtimeWake.set(id,realNowMs()+REALTIME_WAKE_SECONDS*1000);
         // DIAMOND_ECONOMY_20261102: an auto-feed cage feeds a hungry partner; a royal cage speeds up its sleep.
         if(autoFeedRaisingPartner(id,actor))changed=true;
         if(royalSleepStep(id,actor,ageDelta))changed=true;
@@ -2084,6 +2086,8 @@ export function createChampionshipStandaloneApp({
           if(selectedCreatureId===id)selectedCreatureId=null;
           raisingLifecycleMessage={kind:'DISAPPEARED',instanceId:id};storeNativeRaisingHome();savePort.markDirty();break;
         }
+        // Owner 2026-11-03: a new form stays up a while before any night nap, like a fresh hatch.
+        if(result.evolved&&result.event.target>=8)realtimeWake.set(id,realNowMs()+REALTIME_WAKE_SECONDS*1000);
         if(result.evolved){const event=result.event;raisingLifecycleMessage={kind:event.target<8?'REBORN':'EVOLVED',instanceId:id,target:event.target,
             // Display only: the persistent stats before and after the form write.
             oldSpecies:event.oldSpecies,stats:evolutionStatChange(profileBefore,result.profile)};

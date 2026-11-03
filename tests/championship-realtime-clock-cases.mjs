@@ -285,3 +285,23 @@ test('cage shop descriptions name the cage effect in every locale (no stray é˜²å
         assert.match(table[cage.shopRecordIndex], recover[locale], `${locale} cage ${cage.cageIndex}`);
   }
 });
+
+test('night: a partner fresh out of its egg stays up for the wake window, then naps', async () => {
+  // Owner 2026-11-03: at 22:59 a new partner hatched straight into its night nap.
+  const clock = {ms: at(23)};
+  const {make} = harness(clock);
+  const app = make('REALTIME_V1');
+  await app.newGame();
+  try {
+    const id = app.getRaisingInstances()[0].instanceId;
+    assert.equal(app.getDayPeriod().nightNap, true);
+    for (let i = 0; i < 3; i++) { assert.equal(app.touchRaisingEgg(id), true); app.advanceNaturalClock({frames: 1}); }
+    for (let i = 0; i < 60 && app.getRaisingActorFrame(id)?.speciesIndex < 8; i++) app.advanceNaturalClock({frames: 60});
+    assert.ok(app.getRaisingActorFrame(id).speciesIndex >= 8, 'hatched');
+    for (let i = 0; i < 240; i++) app.advanceNaturalClock({frames: 1});
+    assert.notEqual(app.getRaisingActorFrame(id).state, 4, 'awake right after hatching');
+    clock.ms += 11 * 60_000;
+    for (let i = 0; i < 600 && app.getRaisingActorFrame(id).state !== 4; i++) app.advanceNaturalClock({frames: 1});
+    assert.equal(app.getRaisingActorFrame(id).state, 4, 'naps once the wake window has passed');
+  } finally { await app.dispose(); }
+});

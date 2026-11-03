@@ -919,6 +919,9 @@ export async function mountRaisingFieldPixiPresentation({
         previous.loadToken++;
         if (drag?.creatureId === resident.creatureId) drag=null;
         actorLayer.removeChild(previous.root);previous.root.destroy({children:true});
+        // Owner 2026-11-03: the Zs and bubble live on the emote layer, so a hatch or evolution left the old
+        // form's Zs behind, frozen on screen while the field scrolled.
+        previous.emote?.destroy({children:true});previous.sleepZ?.destroy({children:true});
         actors.delete(resident.creatureId);
       }
       const entry = actors.get(resident.creatureId) ?? createActor(resident);
@@ -1568,9 +1571,9 @@ export async function mountRaisingFieldPixiPresentation({
     if(bubble.pulse&&!bubble.pulse.destroyed)bubble.pulse.scale.set(reducedMotion||prefersReducedMotion()?1:1.025+.125*Math.sin(age/95));
   }
   // A sleeping partner (native state 4) breathes out Zs that drift up and right, small to large,
-  // without a bubble; any reaction bubble takes the head while it shows.
+  // without a bubble; any reaction bubble takes the head while it shows. An egg (species 0-7) never does.
   function drawSleepZzz(entry,native,covered){
-    const asleep=native?.state===4&&!covered&&entry.root.visible&&!entry.emote&&!native?.evolution;
+    const asleep=native?.state===4&&native.speciesIndex>=8&&!covered&&entry.root.visible&&!entry.emote&&!native?.evolution;
     if(!asleep){if(entry.sleepZ){entry.sleepZ.visible=false;}return;}
     if(!entry.sleepZ||entry.sleepZ.destroyed){
       entry.sleepZ=new PIXI.Container({label:'partner sleep zzz'});entry.sleepZ.eventMode='none';
