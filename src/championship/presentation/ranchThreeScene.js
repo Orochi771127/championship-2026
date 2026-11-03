@@ -1,6 +1,7 @@
 // Fixed-camera terrain, actors and contact shadows share one depth buffer.
 import {createRanchGroundShadows} from './ranchGroundShadows.js';
-import {createRanchSelectionRing,createRanchBloodlineRings} from './ranchSelectionRing.js';
+import {createRanchSelectionRing,createRanchBloodlineRings,ranchSelectionRingPlacement,RANCH_SELECTION_RING,RANCH_BLOODLINE_RING} from './ranchSelectionRing.js';
+import {createRanchDecalFloorGrid,ranchDecalFloorHeight} from './ranchDecalFloor.js';
 import {createCm07Ambient} from './cm07Ambient.js';
 import {loadSupportMetadata,validateSupportGeometry,eligibleSupportOwner,encodeProjectedTriangle,projectedTriangleTouchesBox,SUPPORT_MAX_TRIANGLES} from './ranchPhysicalSupport.js';
 import {CONTACT_HEIGHT_FIELDS,transformContactTriangles,contactHeightAtPoint,loadLogicalBridges,logicalContactHeightAtPoint,projectedContactIntersections,canonicalContactNativeCoordinate} from './ranchContactHeight.js';
@@ -88,6 +89,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   sun.shadow.bias=-.00015;sun.shadow.normalBias=.025;sun.shadow.radius=3;sun.shadow.intensity=.82;
   scene.add(sun,sun.target);
   const models=new Map(), instances=[], textures=new Map(), sprites=new Map();
+  // Visible floor sheets per cage model, and where each placed copy sits (decals only).
+  const decalFloorGrids=new Map(), decalFloors=[];
   const groundShadows=createRanchGroundShadows(scene);
   const selectionRing=createRanchSelectionRing(scene,{view});
   const bloodlineRings=createRanchBloodlineRings(scene,{view,getBloodline:typeof getBloodline==='function'?getBloodline:()=>null});
@@ -219,6 +222,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
         const object=models.get(p.fieldId).scene.clone(true);
         const point=ranchNativeToWorld(p.x/unit+shift,p.y/unit);
         object.position.set(point.x,point.y,point.z);scene.add(object);
+        if(!decalFloorGrids.has(p.fieldId))decalFloorGrids.set(p.fieldId,createRanchDecalFloorGrid(models.get(p.fieldId).scene));
+        decalFloors.push({grid:decalFloorGrids.get(p.fieldId),offset:object.position});
         hd2dPlaced.push({object,moduleId:p.moduleId});
 
         // Direction A: Hexagonal checkerboard layering for unplaced slots (field_cm29_01)
@@ -936,6 +941,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       // Evolution is a screen-space presentation owned by the existing scene.
       if(covered||entry.evolutionActive){if(entry.sprite)entry.sprite.renderable=true;continue;}
       syncSprite(id,entry.sprite,entry.root,bounds,pixelScale);
+      syncDecalHeight(entry,bounds,pixelScale);
       groundShadows.sync(id,entry,bounds,pixelScale,sprites.get(id)?.seen===true,view);
       selectionRing.sync(id,entry,bounds,pixelScale,sprites.get(id)?.seen===true,view);
       bloodlineRings.sync(id,entry,bounds,pixelScale,sprites.get(id)?.seen===true,view);
@@ -984,6 +990,14 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     draco.dispose();
     renderer.dispose();renderer.forceContextLoss();canvas.remove();Object.assign(pixi.style,previousStyle);
     canvas.removeEventListener('webglcontextlost',contextLost);canvas.removeEventListener('webglcontextrestored',contextRestored);
+  }
+  // Shadows and rings follow a thin floor sheet (grass, track, sand) over the walk
+  // height across the widest decal's footprint; walking and actor depth do not.
+  function syncDecalHeight(entry,bounds,pixelScale){
+    const root=entry.root;if(!root)return;
+    const base=root.threeGroundHeight??0,placement=ranchSelectionRingPlacement(entry,bounds,pixelScale,view,{base});
+    root.threeDecalHeight=placement?ranchDecalFloorHeight(decalFloors,placement.center.x,placement.center.z,base,
+      placement.radius*RANCH_BLOODLINE_RING.radiusScale/RANCH_SELECTION_RING.radiusScale):base;
   }
   function updateContactTriangles(instance){
     const mesh=instance.supportMesh;mesh.updateWorldMatrix(true,false);
