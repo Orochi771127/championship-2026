@@ -1264,7 +1264,9 @@ export async function mountRaisingFieldPixiPresentation({
     if(!covered&&fieldArt?.field){
       for(const badge of source.getCageAutomation?.()??[]){
         const point=raisingNativeToScreen(badge.anchorQ12,fieldArt.field,view,cameraX);
-        if(point)cageBadges.push({id:badge.instanceId,x:point.x,y:point.y,royal:badge.royal,edition:badge.edition,clean:badge.clean,feed:badge.feed,art:badge.art});
+        const device=badge.deviceQ12?raisingNativeToScreen(badge.deviceQ12,fieldArt.field,view,cameraX):null;
+        if(point)cageBadges.push({id:badge.instanceId,x:point.x,y:point.y,royal:badge.royal,edition:badge.edition,clean:badge.clean,feed:badge.feed,art:badge.art,
+          devices:badge.devices??[],dx:device?.x??null,dy:device?.y??null});
       }
       for(const event of source.getAutomationEvents?.()??[]){
         const point=event.positionQ12?raisingNativeToScreen(event.positionQ12,fieldArt.field,view,cameraX):null;
