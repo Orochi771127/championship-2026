@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
-import {getDatabaseIllustration,listDatabaseIllustrations,databaseIllustrationText,DATABASE_ILLUSTRATION_COPY} from '../src/championship/database/databaseIllustrations.js';
+import {getDatabaseIllustration,listDatabaseIllustrations,databaseIllustrationText,databaseIllustrationLinks,DATABASE_ILLUSTRATION_COPY} from '../src/championship/database/databaseIllustrations.js';
 import {inspectScopedLocaleCopy} from '../scripts/check-locale-coverage.mjs';
 import {DATABASE_DISPLAY_CATALOG,databaseDisplayRows} from '../src/championship/database/databaseDisplayCatalog.js';
 import {projectDatabase} from '../src/championship/database/databaseRuntime.js';
@@ -41,7 +41,10 @@ test('every art-only detail shows its selected full illustration and authored st
       assert.equal(hero.src,art.src);hero.naturalWidth=art.width;hero.naturalHeight=art.height;hero.onload();
       assert.equal(f.root.querySelector('.cm-dex-hero').dataset.art,'ready');
       assert.equal(f.root.querySelector('.cm-dex-profile__text')?.textContent,databaseStory(id,locale));
-      for(const selector of ['.cm-dex-data','.cm-dex-conditions__toggle','input'])assert.equal(f.root.querySelector(selector),null);
+      // Owner 2026-11-03: planned data and links are shown; nothing playable is.
+      assert.ok(f.root.querySelector('.cm-dex-data'),'planned data shown (Owner 2026-11-03)');assert.equal(Boolean(f.root.querySelector('[data-showcase]')),false,'no previews without motion art');
+      for(const selector of ['.cm-dex-conditions__toggle','input','.cm-dex-routes__target','.cm-dex-burst'])assert.equal(f.root.querySelector(selector),null);
+      assert.equal(Boolean(f.root.querySelector('.cm-dex-planned')),databaseIllustrationLinks(id).length>0);
       assert.ok(f.root.textContent.includes(databaseIllustrationText('status',locale)));
       f.assertUnchanged();
     }finally{f.dispose();}
@@ -97,7 +100,9 @@ test('art-only browsing cannot register, instantiate or invent gameplay/evolutio
     assert.throws(()=>getDatabaseSlot(id),/UNKNOWN_DATABASE_SLOT/);
     assert.throws(()=>normalizeRegisteredSpecies([id]));
     assert.equal(getProductExtension(id),null);assert.throws(()=>requirePlayableProductExtension(id));
-    assert.equal(Boolean(databaseStory(id)),ids.includes(id));assert.equal(databaseVerifiedData(id),null);
+    assert.equal(Boolean(databaseStory(id)),ids.includes(id));
+    // Planned data is display only (Owner 2026-11-03): moves come from the data file, not the battle catalog.
+    assert.ok(databaseVerifiedData(id).moves.every(m=>m.recordIndex>=596&&m.name&&m.name!=='????'));
     const book=projectDatabase({selectedSpeciesIndex:id,registeredSpecies:[id],starterSpeciesId:`species-${id}`,collection:[{speciesId:`species-${id}`,instanceId:'invalid-art-instance'}]});
     assert.equal(book.slotCount,226);assert.equal(book.regularCount,226);assert.equal(book.registeredCount,0);
     assert.equal(book.entries.length,226);assert.equal(book.selected.state,'NOT_TRACKED');assert.equal(book.selected.source,null);
