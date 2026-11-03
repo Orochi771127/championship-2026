@@ -92,7 +92,9 @@ import {classifyNativeRaisingHand,stepNativeRaisingStrokeInput,nativeRaisingHand
 import {createNativeRaisingActor,initializeNativeRaisingActor,interruptNativeRaisingFeeding,removeNativeRaisingFoodTarget,projectNativeRaisingActor,stepNativeRaisingActor,stepNativeRaisingAgeClock,touchNativeRaisingEgg,wakeNativeRaisingActor,startNativeRaisingMorning,stepNativeRaisingEvolution,enterNativeRaisingCage,beginNativeRaisingNap} from "../raising/nativeRaisingActor.js";
 import {NATIVE_RAISING_LIFECYCLE_RULES} from '../raising/nativeRaisingLifecycle.js';
 import {CLOCK_POLICIES,CLOCK_POLICY_NATIVE,CLOCK_POLICY_REALTIME,REALTIME_FOOD_UNITS_PER_SECOND,REALTIME_WAKE_SECONDS,REALTIME_DISTURBANCE,isNightNap,offlineGrowthSeconds,
-  realtimeAgeRate,realtimeClockAdvance,realtimeDayPeriod,takeAgeUnits} from '../time/realtimeClock.js';
+  realtimeAgeRate,realtimeClockAdvance,realtimeDayPeriod,takeAgeUnits,REALTIME_RECOVERY_CAGES,REALTIME_RECOVERY_TICKS_PER_SECOND,
+  realtimeRecoveryEffect} from '../time/realtimeClock.js';
+import {applyNativeRaisingCondition} from '../raising/nativeRaisingCare.js';
 // The ranch ground for either layout: the original board, or (expansion
 // prototype) the same ring continued into its annex.
 import {createRanchRaisingGround as createNativeRaisingGround,ranchRaisingSpawnPosition as nativeRaisingSpawnPosition,
@@ -915,6 +917,7 @@ export function createChampionshipStandaloneApp({
           feeding:raisingGround?{ground:raisingGround,foods:raisingFoods,signals,actors:raisingActors.values()}:null,
           lifecycle:raisingGround?{rank:Math.min(9,tamerRankValue),minute:before.clockMinutes+minutes,season:before.season,
             training:realtime?REALTIME_TRAINING_POLICY:null,trainingBonus:royalTrainingBonus(actor),
+            cageEffects:realtime&&REALTIME_RECOVERY_CAGES.includes(actor.cageDefinitionIndex)?[]:undefined,
             onJoin:()=>notifyNativeRaisingResidentAdded(actor,[...raisingActors.values()].filter(a=>!a.detached),{next:nextGameplayRandom}),
             getResidents:()=>[...raisingActors].filter(([,a])=>!a.detached&&(a.cageInstanceId??a.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).sort((a,b)=>a[1].poolSlot-b[1].poolSlot).map(([key])=>raisingNativeProfile(key)),
             roster:[actor.speciesIndex,...ids.filter(other=>other!==id).map(other=>raisingNativeProfile(other).fields['000'])],
@@ -925,6 +928,7 @@ export function createChampionshipStandaloneApp({
         // DIAMOND_ECONOMY_20261102: an auto-feed cage feeds a hungry partner; a royal cage speeds up its sleep.
         if(autoFeedRaisingPartner(id,actor))changed=true;
         if(royalSleepStep(id,actor,ageDelta))changed=true;
+        if(realtime&&realtimeRecoveryStep(id,actor,before.season))changed=true;
         if(result.landed){storeNativeRaisingPositions();savePort.markDirty();}
         if(result.evolutionStarted){publishRaising();return;}
       }
@@ -1254,6 +1258,22 @@ export function createChampionshipStandaloneApp({
     const profile=raisingNativeProfile(id);if(!profile)return false;
     const next=structuredClone(profile);next.fields['17c']=((next.fields['17c']|0)+bonus.units)>>>0;
     writeRaisingNativeProfile(id,normalizeNativeIndividualProfile(next));return true;
+  }
+  /** Real time: a recovery cage's condition commands tick once a real second (time/realtimeClock.js). */
+  function realtimeRecoveryStep(id,actor,season){
+    if(actor.detached||actor.speciesIndex<8||!REALTIME_RECOVERY_CAGES.includes(actor.cageDefinitionIndex))return false;
+    const ticks=takeAgeUnits(realtimeAge,`${id}:recovery`,REALTIME_RECOVERY_TICKS_PER_SECOND/60);
+    if(!ticks)return false;
+    const profile=raisingNativeProfile(id);if(!profile)return false;
+    const effects=nativeCageConditionEffects(actor.cageDefinitionIndex,season),satietyMaximum=nativeHuntSpeciesByIndex(actor.speciesIndex).field1c;
+    let next=profile;
+    for(let i=0;i<ticks;i++){
+      actor.recoveryTicks=((actor.recoveryTicks??0)+1)%240;
+      for(const e of effects)if(actor.recoveryTicks%e.interval===0)
+        next=applyNativeRaisingCondition(next,{...realtimeRecoveryEffect(e,next.fields['058']),satietyMaximum});
+    }
+    if(['050','01c','020'].every(k=>next.fields[k]===profile.fields[k]))return false;
+    writeRaisingNativeProfile(id,next);return true;
   }
   const royalTrainingBonus=actor=>cageAutomationOf(actor)?.royal
     ?Object.freeze({kind:AUTOMATION_RULES.trainingKind,points:AUTOMATION_RULES.royalTrainingPoints}):null;

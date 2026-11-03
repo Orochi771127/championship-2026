@@ -120973,7 +120973,7 @@
     },
     {
       "path": "src/championship/app/championshipStandaloneApp.js",
-      "sha256": "d42ec4d654d0c1caaf2e9f2c15434210c450238b09ebbed9ca68efb2b4cc664b"
+      "sha256": "2bdf6d6eb66a97f5c3e585b4dfd7ef2a0c86af674ed3fc2a76c96b2e96999f7b"
     },
     {
       "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -122629,7 +122629,7 @@
     },
     {
       "path": "src/championship/presentation/stageBodySize.js",
-      "sha256": "90b6960307accb4b25f380b0d5d8f70b68c9f90ce2f12b2a720f4a06d3aedeff"
+      "sha256": "2fafb5086b557b35fedc04b0e8ee2c06a7e5c296902ba02987f84d1908cf0398"
     },
     {
       "path": "src/championship/presentation/story/HybridStoryDirector.js",
@@ -122857,7 +122857,7 @@
     },
     {
       "path": "src/championship/raising/nativeRaisingActor.js",
-      "sha256": "e51ea9a735c9c6ee56e9105307147655d628eb7bb064f87084eccf1349c911f2"
+      "sha256": "d08cc0d995a71f13eeefb1618cc137f5158da253da77185cf316b78be1a5a877"
     },
     {
       "path": "src/championship/raising/nativeRaisingCalendar.js",
@@ -123017,23 +123017,23 @@
     },
     {
       "path": "src/championship/text/catalogs.en.js",
-      "sha256": "9e04deda475527e1e44508dc1e2d045701e123f568a72c73855ba91ac77c1228"
+      "sha256": "3579955a5d28923755af61b8c9f96c82b59876d6098e3b12032d260614469bc4"
     },
     {
       "path": "src/championship/text/catalogs.ja.js",
-      "sha256": "5047bd738c5139e35c224cf79e11255d6389b26f9260fd2584f983280d2a334e"
+      "sha256": "eeac61e6b059fdaac5e8ba6531c44df99f7bd27bd4512f112ea2542dcc299ca2"
     },
     {
       "path": "src/championship/text/catalogs.th.js",
-      "sha256": "a73706ff62d7832efa414d6111e637adae953a8294499514b1be9d4153c7fec8"
+      "sha256": "1e571197e42440acd5f30d7f7b85ce62be3bd4ed5a43a299e013448eb003ddd1"
     },
     {
       "path": "src/championship/text/catalogs.vi.js",
-      "sha256": "b88b9d022d863608150933552cfeebd28e06839b4328a4d5ac253cc0afe18f89"
+      "sha256": "10bcae70eafd479a7960778f516705afb9c56ad49aaf46cedadcc26a50cce19e"
     },
     {
       "path": "src/championship/text/catalogs.zhHant.js",
-      "sha256": "e509667839f2e8a3fcbd57b2c94e33c20b1ae97176d92e35a0811a514c116bc0"
+      "sha256": "2af2b5cb895187eae5295d1be12c90453440d5d55681b56f002db1af47bba32d"
     },
     {
       "path": "src/championship/text/dataArenaText.js",
@@ -123189,7 +123189,7 @@
     },
     {
       "path": "src/championship/time/realtimeClock.js",
-      "sha256": "b58076f3266d0aea670c81d7ef789cc4cbe747255bb44c9ee8679d99018cd6c1"
+      "sha256": "df5772e12b1688d4c1cd31292b9a111dffacb25def19ccede9952ec2009eb625"
     },
     {
       "path": "src/data/championship/battleCharacterGeometry.js",
@@ -124547,7 +124547,7 @@
     },
     {
       "path": "src/data/championship/database-body-stats.v1.json",
-      "sha256": "193480417347ee88109deab30d82699683c1bfdc3183bfef1bf83ca405278332",
+      "sha256": "ba3da6d9bc68983fe5c9e1eef8e916833294c000bbd95191b15498cf61ab5cc9",
       "jsonFields": [
         "AW",
         "B1",
@@ -125073,19 +125073,26 @@
     },
     {
       "path": "src/data/championship/stage-body-size.v1.json",
-      "sha256": "54a1468de6dfaf43f90e015286fd301492fa9ae97714756c4483386429798867",
+      "sha256": "956a246d432e6956b31ac9e13f8c7ca20c2e0903136ee2ae065c2ab919f79076",
       "jsonFields": [
-        "AW",
-        "UL",
+        "GR",
+        "H",
+        "L",
+        "M",
+        "XL",
+        "XS",
         "band",
+        "classFactor",
         "kind",
+        "maxGrow",
         "metric",
         "owner",
+        "personalVariation",
         "reference",
         "relativeFrom",
         "rows",
         "schemaVersion",
-        "spread"
+        "sizeClass"
       ]
     }
   ],

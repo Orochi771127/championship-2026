@@ -607,7 +607,7 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
     result.changed=true;actor.training=createNativeTrainingTimeline(trained.commands);if(trained.commands?.length)request(actor,30);
   }
   const grown=applyNativeRaisingGrowth(next,a,{state:actor.state,phase:actor.stroke?.phase??0,ageDelta,baseUnit:60,generation:s.generation,mode:context.season,minute:context.minute,
-    ranchSize:capacity,effects:nativeCageConditionEffects(actor.cageDefinitionIndex,context.season,context.cageLevel??1),satietyMaximum:s.field1c,
+    ranchSize:capacity,effects:context.cageEffects??nativeCageConditionEffects(actor.cageDefinitionIndex,context.season,context.cageLevel??1),satietyMaximum:s.field1c,
     peerCount:residents.length,residents,wasteCount:context.wasteCount,rottenFoodCount:context.rottenFoodCount,
     dirtyAdded:context.dirtyAdded,dirtyRemoved:context.dirtyRemoved},rng);
   actor.growthFields=grown.actorFields;
