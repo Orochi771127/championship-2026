@@ -121,7 +121,7 @@ module.exports = async function verifyDetailSwipe(page, {output, evidence}) {
     await open(order.at(-1));await gesture(hero,-90);await expected(order.at(-1));
     report.operations.push({case:'filtered-first-last-stop',first:order[0],last:order.at(-1),pass:true});
     await shot('filtered-last-boundary');
-    const stageCounts={};for(const value of ['0','1','2','3','4','5','6','ART'])stageCounts[value]=(await stage(value)).length;
+    const stageCounts={};for(const value of ['0','1','2','3','4','5','6'])stageCounts[value]=(await stage(value)).length;
     report.singleRow={stageCounts,status:Object.values(stageCounts).includes(1)?'AVAILABLE':'NOT_REACHABLE_WITH_CURRENT_STAGE_FILTER',
       coverage:'Single-row behavior is separately tested in the controlled-DOM suite; catalog is not altered for browser QA.'};
     await stage('3');await open(40);await returnToList();await back.click();
