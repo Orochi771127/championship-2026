@@ -20,7 +20,8 @@
 //
 // Combo: lure (meat) -> disable (trap / sleep / stun) -> rope capture is a
 // PERFECT chain; one of the two before the rope is GOOD. A rope that breaks
-// overheats for this hunt only; ownership (持有 1/1) never changes.
+// overheats for this hunt only. Since HUNT_TOOL_TIERS_20261103 ropes are
+// counted: a snap spends one rope and the next comes in after ropeSwapTicks.
 // Nothing here is saved except the bonus bits the Home commit credits.
 
 export const HUNT_ROPE_ROLES = Object.freeze(['SWIFT', 'TOUGH', 'CLONE', 'ULTIMATE']);
@@ -38,6 +39,7 @@ export const HUNT_ROPE_TACTICS = Object.freeze({
   guardHit: Object.freeze({ shot: 25, rapidShot: 34, meat: 50, trap: 60, sleep: 50, stun: 50, blast: 40 }),
   pacifiedWindowTicks: 120,       // a partner disabled within 2 s of the bind counts as pacified
   overheatTicks: 900,             // 15 s of hunt time at the native 60 Hz
+  ropeSwapTicks: 15,              // 0.25 s to tie on the next rope after a snap
   comboBitsPerGeneration: Object.freeze({ PERFECT: 150, GOOD: 50 }),
   imprintScale: 2
 });
@@ -199,7 +201,7 @@ export function createHuntRopeTactics({ generationOf }) {
       return row.combo;
     },
     combo: actor => memory.get(actor.wildId)?.combo ?? null,
-    overheat(itemId) { overheat.set(itemId, frame + HUNT_ROPE_TACTICS.overheatTicks); },
+    overheat(itemId, ticks = HUNT_ROPE_TACTICS.overheatTicks) { overheat.set(itemId, frame + ticks); },
     overheatTicks: itemId => Math.max(0, (overheat.get(itemId) ?? 0) - frame),
     frame: () => frame
   });

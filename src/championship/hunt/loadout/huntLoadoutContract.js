@@ -44,12 +44,13 @@ export const HUNT_EQUIPMENT_CLASS_ORDER = deepFreeze(["ROPE", "SHOT", "WIRE", "E
 /**
  * Per-class rules.
  *
- * ROPE is the odd one out in the ROM and stays the odd one out here: a single
- * equipped tether with a durability value, capped at one owned. The other four
- * cap at 99 and are the four classes the Hunt HUD counts.
+ * In the ROM the rope is a single tether with a durability value, capped at
+ * one owned. Since HUNT_TOOL_TIERS_20261103 ropes are counted like the rest
+ * (/99) and keep their durability; the other four are still the four classes
+ * the Hunt HUD counts.
  */
 export const HUNT_EQUIPMENT_CLASS_RULES = deepFreeze({
-  ROPE: { maxOwned: 1, countable: false, hasDurability: true, statLabel: "durability" },
+  ROPE: { maxOwned: 99, countable: true, hasDurability: true, statLabel: "durability" },
   SHOT: { maxOwned: 99, countable: true, hasDurability: false, statLabel: "power" },
   WIRE: { maxOwned: 99, countable: true, hasDurability: false, statLabel: "length" },
   ENTRAP: { maxOwned: 99, countable: true, hasDurability: false, statLabel: null },

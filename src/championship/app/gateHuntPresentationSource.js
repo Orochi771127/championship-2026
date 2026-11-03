@@ -465,6 +465,15 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
       if (receipt?.ok) committed("purchase");
       return commit();
     },
+    // Hunt tool families (HUNT_TOOL_TIERS_20261103): one card per tool, upgraded in place.
+    upgradeHuntTool(familyId, currency = "BITS") {
+      if (app.upgradeHuntTool?.(familyId, currency)?.ok) committed("purchase");
+      return commit();
+    },
+    refillHuntTool(familyId, quantity = 1) {
+      if (app.refillHuntTool?.(familyId, quantity)?.ok) committed("purchase");
+      return commit();
+    },
     // Cyber Gachapon (OWNER_APPROVED_ADAPTATION 2026-10-29): each returns the
     // next frame; its shop.gacha.lastResult is the saved receipt.
     // Loading a cartridge from the hunt loadout, taking it back, and the
@@ -566,6 +575,7 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
     },
     abortEnclosureStroke() { return app.abortEnclosureStroke(); },
     cycleHuntRope() { const accepted=tutorial()?false:app.getHuntRuntime()?.cycleRope?.()??false; publish(); return accepted; },
+    buyEmergencyHuntRopes() { const receipt=tutorial()?null:app.buyEmergencyHuntRopes?.()??null; publish(); return receipt; },
     selectHuntTool(kind,checkpoint=tutorial()?.checkpoint) { const accepted=tutorial()?app.interactiveHuntInput('select',[kind],checkpoint):app.getHuntRuntime()?.selectTool(kind)??false; publish(); return accepted; },
     toolPointerDown(x,y) { tutorialGesture=tutorial()?.checkpoint??null;const accepted=tutorial()?app.interactiveHuntInput('down',[x,y],tutorialGesture):app.getHuntRuntime()?.toolPointerDown(x,y)??false; publish(); return accepted; },
     toolPointerMove(x,y) { return tutorial()?app.interactiveHuntInput('move',[x,y],tutorialGesture):app.getHuntRuntime()?.toolPointerMove(x,y)??false; },

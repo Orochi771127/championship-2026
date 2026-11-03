@@ -33,7 +33,7 @@ export function separateNativeHuntGroundActors(actors,environment){
   return result;
 }
 
-export function createNativeHuntFieldControls({ records,wildIds,environment,rng,loadout,consumeItem,maxCardG,night=false,onChange=()=>{},boosts=null }) {
+export function createNativeHuntFieldControls({ records,wildIds,environment,rng,loadout,consumeItem,maxCardG,night=false,onChange=()=>{},boosts=null,ropeLedger=null }) {
   if (!rng?.next || !loadout?.getSelectedEquipment || typeof consumeItem!=="function") throw Error("NATIVE_HUNT_CONTROL_AUTHORITIES_REQUIRED");
   const actors=records.map((r,i)=>createNativeWildActor(r,wildIds[i]));
   let activeTool="HAND", pointer=null, stroke=null, closure=null, rope=null, selectedWildId=null;
@@ -140,13 +140,34 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     a.events.push(a.bound?{code:0x14}:{code:0x2e,strength:2,statusSelector:0,response:nativeShotSpeciesResponse(a.speciesIndex)});
     emit("ROPE_TOO_HEAVY");
   };
+  // HUNT_TOOL_TIERS_20261103: ropes are counted. The worn state of the rope in
+  // hand carries from one pull to the next; a snap spends it and ties on the
+  // next one, then another colour, and only an empty bag stops the rope key.
+  const ownedRopes=()=>loadout.listAvailableEquipment?.().find(c=>c.equipmentClass==="ROPE")?.items??[];
+  const ropeLeft=(item)=>item?.quantity??0;
+  const wearOf=itemId=>rope?.itemId===itemId&&rope.full>0?rope.state.durability/rope.full:(ropeLedger?.wear?.(itemId)??1);
   // The rope key: which rope, its role, any overheat and how many spares (read once per frame).
   const ropeTool=()=>{
-    const item=equipped("ROPE");
-    return {id:"ROPE",label:"繩索",enabled:!!item,itemId:item?.itemId??null,shopRecordIndex:item?.shopRecordIndex??null,
+    const item=equipped("ROPE"),spares=ownedRopes().filter(entry=>entry.itemId!==item?.itemId).length,stock=ropeLeft(item);
+    return {id:"ROPE",label:"繩索",enabled:!!item&&stock>0,itemId:item?.itemId??null,shopRecordIndex:item?.shopRecordIndex??null,
       ropeName:item?.displayName??null,role:item?huntRopeRole(item.nativeItemIndex):null,
-      overheatSeconds:item?Math.ceil(tactics.overheatTicks(item.itemId)/60):0,
-      spares:Math.max(0,(loadout.listAvailableEquipment?.().find(c=>c.equipmentClass==="ROPE")?.items.length??1)-1)};
+      // Tying on the next rope after a snap is a flash, not a cooldown to count down.
+      overheatSeconds:item&&tactics.overheatTicks(item.itemId)>HUNT_ROPE_TACTICS.ropeSwapTicks?Math.ceil(tactics.overheatTicks(item.itemId)/60):0,
+      stock,wear:item&&stock>0?Math.max(0,Math.min(1,wearOf(item.itemId))):0,swapping:!!item&&tactics.overheatTicks(item.itemId)>0,
+      exhausted:stock<=0&&spares===0,spares,
+      emergencyBits:stock<=0&&spares===0?ropeLedger?.emergencyBits?.(item?.itemId??null)??null:null};
+  };
+  // The rope in hand snapped: spend it, and tie on the next one (0.25 s), or another colour.
+  const snapRope=a=>{
+    const itemId=rope.itemId;rope=null;a.events.push({code:0x14});
+    if(a.tutorialScripted){emit("ROPE_BROKEN");return;}
+    ropeLedger?.setWear?.(itemId,1);
+    const spent=consumeItem(itemId,1),left=spent?.ok?spent.owned:0;
+    if(left>0){tactics.overheat(itemId,HUNT_ROPE_TACTICS.ropeSwapTicks);emit("ROPE_REPLACED");return;}
+    const next=ownedRopes().filter(entry=>entry.itemId!==itemId&&entry.quantity>0).at(-1);
+    if(next&&typeof loadout.selectEquipment==="function"){
+      loadout.selectEquipment("ROPE",next.itemId);tactics.overheat(next.itemId,HUNT_ROPE_TACTICS.ropeSwapTicks);emit("ROPE_SWITCHED");return;}
+    emit("ROPE_EXHAUSTED");
   };
   const bindCaught=(caught,serial,from)=>{
     const item=equipped("ROPE");
@@ -240,7 +261,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
       // The numerical writer compares the squared distance before normalizing.
       // Inputs outside its bounded CPU test range necessarily exceed break range.
       if(Math.abs(dx)>0x100000 || Math.abs(dy)>0x100000) {
-        a.events.push({code:0x14});if(!a.tutorialScripted)tactics.overheat(rope.itemId);rope=null;emit("ROPE_BROKEN");return;
+        snapRope(a);return;
       }
       const next=stepNativeRopeController(rope.state,a.currentHp,{dxQ12:dx,dyQ12:dy,movementBlocked:!!a.movementRestricted});
       const overstretched=(dx/Q12)**2+(dy/Q12)**2>160*160;
@@ -248,11 +269,12 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
       rope.state=huntRopeWear(before,next.rope,{movementBlocked:!!a.movementRestricted,overstretched,groupHold:tactics.groupHold(a,actors),
         terrainCrossed:next.rope.band!=="SLACK"&&huntRopeCrossesBlocked(anchor,pointer.q12,blockedPixel)});
       if(sureCapture&&rope.state.controllerState!==6)rope.state=Object.freeze({...rope.state,durability:before.durability});
+      if(rope.state.controllerState!==6&&!a.tutorialScripted)ropeLedger?.setWear?.(rope.itemId,rope.state.durability/rope.full);
       a.currentHp=sureCapture?Math.max(0,a.currentHp-2*Math.max(0,a.currentHp-next.currentHp)):next.currentHp;tactics.syncHp(a);
       if(a.currentHp<=0)tactics.ropeDowned(a,before.role);
       if(next.events.includes(0x11))a.destinationQ12=[...nativeStrongPullDestination(a.positionQ12,pointer.q12)];
       for(const code of next.events)a.events.push({code});
-      if(rope.state.controllerState===6){a.events.push({code:0x14});if(!a.tutorialScripted)tactics.overheat(rope.itemId);rope=null;emit("ROPE_BROKEN");if(pointer?.released)pointer=null;return;}
+      if(rope.state.controllerState===6){snapRope(a);if(pointer?.released)pointer=null;return;}
       if(pointer.released){a.events.push({code:0x12});rope=null;pointer=null;}
     }
   }
@@ -280,8 +302,9 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
       }
       if(activeTool==="ROPE"){
         const item=equipped("ROPE");if(!item)return false;
-        // A rope that broke this hunt is still tangled: switch to a spare or wait.
-        if(tactics.overheatTicks(item.itemId)>0){emit("ROPE_OVERHEATED");return true;}
+        if(ropeLeft(item)<=0){emit("ROPE_EXHAUSTED");return true;}
+        // The next rope is still being tied on (0.25 s after a snap).
+        if(tactics.overheatTicks(item.itemId)>0)return true;
         // OWNER_APPROVED_ADAPTATION 2026-11-03: once a loop is on a partner, a
         // press anywhere is a pull. The drag is read from the press point, as if
         // the finger had landed on the partner's rope anchor.
@@ -296,6 +319,10 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
           rope={actor:a,itemId:item.itemId,state:huntTacticalRope(nativeRopeParameters(item.nativeItemIndex,a.speciesIndex,a.maxHp),{nativeItemIndex:item.nativeItemIndex,
             generation,maxHp:a.maxHp,coefficient:huntRopeCoefficient(nativeRopeRow(item.nativeItemIndex),nativeHuntToolSpecies(a.speciesIndex)),
             pacified:tactics.pacified(a),rage:tactics.rage(a)})};
+          // A rope already worn on an earlier partner starts this pull worn as far.
+          rope.full=rope.state.durability;
+          const left=a.tutorialScripted?1:(ropeLedger?.wear?.(item.itemId)??1);
+          if(left<1)rope.state=Object.freeze({...rope.state,durability:Math.max(1,Math.round(rope.state.durability*left))});
           if(rope.state.rage)notice="RAGE_GUARD";else if(rope.state.fragile)notice="ROPE_FRAGILE";
         }
         else {stroke=createNativeRopeStroke();ages.fill(0);lasso.reset({x:p[0]>>12,y:p[1]>>12});lassoClosed=false;}
@@ -316,7 +343,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     cancel(){if(rope)rope.actor.events.push({code:0x12});consumables.cancel();pointer=null;stroke=null;rope=null;ages.fill(0);lasso.reset();},
     /** Swap to the next owned rope, skipping overheated ones when another is ready. */
     cycleRope(){
-      const owned=loadout.listAvailableEquipment?.().find(c=>c.equipmentClass==="ROPE")?.items??[];
+      const owned=ownedRopes();
       if(owned.length<2||typeof loadout.selectEquipment!=="function")return false;
       const current=owned.findIndex(item=>item.selected);
       const order=owned.map((_,i)=>owned[(current+1+i)%owned.length]).filter(item=>!item.selected);
