@@ -572,9 +572,10 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
    assert.equal(await lock.getAttribute('aria-haspopup'),'dialog');
    assert.ok(['none','normal','""'].includes(await lock.evaluate(el=>getComputedStyle(el,'::before').content)),'No horizontal row-rule pseudo-element');
   }
-  for(const [row,balance,total]of [[2,19000,30],[3,18000,40],[4,17000,50],[5,16000,60],[6,15000,70],[7,14000,80],[8,13000,90],[9,12000,100]]){
+  // Land prices (Owner 2026-11-03): each +10 cells costs 200, 400, 600, 800, 1,000, 1,200, 1,600 then 2,200 diamonds.
+  for(const [row,balance,total,price]of [[2,19800,30,200],[3,19400,40,400],[4,18800,50,600],[5,18000,60,800],[6,17000,70,1000],[7,15800,80,1200],[8,14200,90,1600],[9,12000,100,2200]]){
    const button=page.locator(`button.cm-cage-row-lock[data-locked-test-row="${row}"]`);
-   const label=await button.getAttribute('aria-label');assert.match(label.replaceAll(',',''),/1000/);assert.match(label,/測試鑽/);assert.match(label,/10/);
+   const label=await button.getAttribute('aria-label');assert.ok(label.replaceAll(',','').includes(String(price)),'Lock label names this step price');assert.match(label,/測試鑽/);assert.match(label,/10/);
    await button.scrollIntoViewIfNeeded();const box=await button.boundingBox();assert.ok(box&&box.height>=44&&box.width>=44,'Row lock touch target');assert.ok(box.x>=0&&box.x+box.width<=390,'Lock stays inside mobile viewport');await noOverflow();
    const beforePurchase=await saved();
    await button.click();
@@ -583,7 +584,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
    assert.equal(await page.evaluate(()=>document.activeElement?.dataset.action),'cancel');
    assert.ok((await dialog.locator('.cm-dialog__title').innerText()).includes(String(row+1)));
    const detail=await dialog.locator('.cm-dialog__message').innerText();
-   for(const value of ['10','1000',String(balance+1000)])assert.ok(detail.replaceAll(',','').includes(value),'Dialog includes count, price and balance');
+   for(const value of ['10',String(price),String(balance+price)])assert.ok(detail.replaceAll(',','').includes(value),'Dialog includes count, price and balance');
    assert.match(detail,/測試鑽/);assert.deepEqual(await saved(),beforePurchase,'Opening confirmation cannot mutate save');
    await button.evaluate(el=>{el.click();el.click();});assert.equal(await page.locator('dialog[open]').count(),1);assert.deepEqual(await saved(),beforePurchase);
    await shot('row-'+row+'-confirmation');
@@ -640,7 +641,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   const huntBox=await huntCanvas.boundingBox();assert.ok(huntBox&&huntBox.width>0&&huntBox.height>0,'Normal Pixi hunt canvas must be visible');await shot('06-paid-hunt');
   await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();
   const afterHunt=await saved();assert.equal(afterHunt.shop.bits,afterShop.shop.bits-fee+strollBits(afterHunt,{since:strollSequence(afterShop)}));assert.equal(afterHunt.flags.friendsPlaytest.diamonds,12000);
-  evidence.assertions.push({freshUi:true,rowBalances:[20000,19000,18000,17000,16000,15000,14000,13000,12000],shopPrice:purchase.price,huntFee:fee,finalBits:afterHunt.shop.bits});write();
+  evidence.assertions.push({freshUi:true,rowBalances:[20000,19800,19400,18800,18000,17000,15800,14200,12000],shopPrice:purchase.price,huntFee:fee,finalBits:afterHunt.shop.bits});write();
   evidence.partition.completed.push('fresh-economy');write();
   }
   if(groups.includes('legacy-persistence')){
@@ -666,11 +667,11 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   assert.equal(await legacyLand(),40);
   await page.locator('button[data-locked-test-row="4"]').click();
   await page.locator('dialog[data-variant="ranch-row-purchase"] [data-action="buy"]').click();
-  await page.waitForFunction(key=>JSON.parse(localStorage.getItem(key)).flags.friendsPlaytest.diamonds===9000,saveKey);
+  await page.waitForFunction(key=>JSON.parse(localStorage.getItem(key)).flags.friendsPlaytest.diamonds===9400,saveKey);
   assert.equal(await legacyLand(),50);
-  await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();await wallet(9000);
+  await page.locator('#cm-root').getByRole('button',{name:'返回牧場',exact:true}).click();await home();await saveQuit();await continueSaved();await wallet(9400);
   const legacyAfterPurchase=await saved();assert.deepEqual(legacyAfterPurchase.shop,expectedShop(old.shop,legacyAfterPurchase,old));assert.deepEqual(legacyAfterPurchase.cageEdit.placements,expectedPlacements(old.cageEdit.placements));
-  evidence.assertions.push({historicalWalletPreserved:10000,legacyGrant:0,afterPurchaseAndReload:9000});
+  evidence.assertions.push({historicalWalletPreserved:10000,legacyGrant:0,afterPurchaseAndReload:9400});
   evidence.assertions.push({oldQaPreserved:true,oldBits:old.shop.bits,oldPlacements:old.cageEdit.placements});await shot('07-old-save-preserved');await legacyTopContour('07-old-save');
   evidence.partition.completed.push('legacy-persistence');write();
   }
