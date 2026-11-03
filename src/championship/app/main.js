@@ -2369,7 +2369,8 @@ function openBackpack({ tab = 'supplies', partnerId = null } = {}) {
       unmountCore: (module, cageId) => app.gachaUnmountCore(module, cageId),
       disarm: (itemId) => app.gachaDisarmItem(itemId),
       selectTool: (toolId) => { if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) document.querySelector(`.cm-toolbar [data-tool-id="${toolId}"]`)?.click(); },
-      openFacilities: () => { if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) expeditionSource?.intents.openCageEdit(); }
+      openFacilities: () => { if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) expeditionSource?.intents.openCageEdit(); },
+      openHunt: () => { if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) expeditionSource?.intents.openGate(); }
     }
   });
 }

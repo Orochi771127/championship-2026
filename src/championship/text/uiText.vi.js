@@ -660,6 +660,7 @@ export const TEXT_VI = Object.freeze({
   "超頻晶片": "Chip ép xung",
   "自動模組": "Mô-đun tự động",
   "⚡ 立即使用": "⚡ Dùng ngay",
+  "⚡ 出發狩獵使用": "⚡ Dùng khi đi săn",
   "⚡ 立即掛載": "⚡ Gắn ngay",
   "✨ 強化銘刻": "✨ Cường hóa & khắc",
   "⚡ 催化進化": "⚡ Xúc tác tiến hóa",

@@ -630,8 +630,8 @@ export function createChampionshipStandaloneApp({
   // Partner life (OWNER_APPROVED_ADAPTATION 2026-10-28). A stroll now and then
   // turns up an item, partners who meet in one connected area greet each other
   // and find twice as much, and a tap reads the partner's mood from its own
-  // fields. Every reward is paid into the Shop inventory and written to
-  // nativeHome.strollLog in one save, exactly like collecting discoveries.
+  // fields. A find is saved to nativeHome.strollLog as waiting and paid into the
+  // Shop inventory by 收下發現, together with the discoveries (Owner 2026-11-03).
   const partnerLifeState={strollFrames:new Map(),nextFindAt:new Map(),greetings:[],pairsSeen:new Map(),events:[],eventSeq:0,quietFrames:0,greetingGap:null};
   const partnerLifeListeners=new Set();
   // Product draws only: the native gameplay stream is never consumed here.
@@ -3327,7 +3327,8 @@ export function createChampionshipStandaloneApp({
       const editor = requireCageEdit();
       const quote = editor.quoteTestRow(row, ...cageEditArgs());
       // Owner 2026-11-03: the step price climbs with the land already open (200 → 2,200).
-      const price = this.getCageEditFrame()?.land?.price || LAND_EXPANSION.prices.at(-1);
+      const price = this.getCageEditFrame()?.land?.price
+        || LAND_EXPANSION.prices[Math.min(LAND_EXPANSION.prices.length - 1, friendsPlaytest?.purchases?.length ?? 0)];
       const purchase = quote.ok ? purchaseTestRanchRow(friendsPlaytest,row,price) : quote;
       if (!purchase.ok) {
         editor.rejectTestRowPurchase(purchase.reason,...cageEditArgs());publishScreens();

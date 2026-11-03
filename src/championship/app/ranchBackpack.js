@@ -181,15 +181,17 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
   }
 
   function actionKey(item) {
-    const usable = item.kind === 'SUPPLY' ? Boolean(item.tool && intents.selectTool) : true;
+    // A care supply picks its tool; hunt tools and plug-ins are used out on a hunt, so their key sets out.
+    const usable = item.kind === 'SUPPLY' ? Boolean(item.tool ? intents.selectTool : intents.openHunt) : true;
     if (!usable) return null;
     const mount = item.kind === 'AUTOMATION';
-    const button = key(doc, 'cm-backpack__use', uiText(mount ? '⚡ 立即掛載' : '⚡ 立即使用'), { primary: true });
+    const huntUse = item.kind === 'SUPPLY' && !item.tool;
+    const button = key(doc, 'cm-backpack__use', uiText(mount ? '⚡ 立即掛載' : huntUse ? '⚡ 出發狩獵使用' : '⚡ 立即使用'), { primary: true });
     button.dataset.use = item.id;
     button.setAttribute('aria-expanded', String(state.open === item.id));
     button.disabled = item.owned < 1 && !(mount && item.placed > 0) && !item.armed;
     button.addEventListener('click', () => {
-      if (item.kind === 'SUPPLY') { intents.selectTool?.(item.tool); onLeave(); return; }
+      if (item.kind === 'SUPPLY') { if (item.tool) intents.selectTool?.(item.tool); else intents.openHunt?.(); onLeave(); return; }
       state.open = state.open === item.id ? null : item.id;
       state.receipt = null;
       paint();

@@ -44,7 +44,6 @@ function rewardRow(doc,reward,label){
 // whom, newest first, read from the saved stroll log. A name saved by an older
 // build as an internal code ("SPECIES 084") reads as its catalog name.
 const STROLL_SEASONS=['春季','夏季','秋季','冬季'];
-const STROLL_TOOL_SLOTS={feed:'餵食',protein:'蛋白質',medicine:'藥品',woundMedicine:'傷藥'};
 const strollName=name=>localizeSpeciesCodes(name)??'';
 // Stand-ins for the names while the sentence is localized, so each name can be
 // drawn as its own chip wherever the language puts it.

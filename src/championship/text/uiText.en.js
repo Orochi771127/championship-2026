@@ -498,6 +498,7 @@ export const TEXT_EN = Object.freeze({
   "超頻晶片": "Overclock chips",
   "自動模組": "Automation",
   "⚡ 立即使用": "⚡ Use now",
+  "⚡ 出發狩獵使用": "⚡ Use on a hunt",
   "⚡ 立即掛載": "⚡ Mount now",
   "✨ 強化銘刻": "✨ Enhance & inscribe",
   "⚡ 催化進化": "⚡ Catalyse evolution",

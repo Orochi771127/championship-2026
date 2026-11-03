@@ -1470,13 +1470,14 @@ export async function mountRaisingFieldPixiPresentation({
   // two are vector marks. Anger: four bright-red arcs bowing in to the centre (the anime vein),
   // inked outline, white sheen. Sleep: three outlined ice-blue Zs climbing small to large.
   const VECTOR_EMOTES=new Set(['anger','zzz']);
-  function drawAngerVein(g,r=13){
+  function drawAngerVein(g,r=14){
     // Each quadrant's arc is centred on that quadrant's outer corner, so its belly faces the middle.
-    const arcs=[[-1,-1],[1,-1],[1,1],[-1,1]].map(([sx,sy])=>{const cx=sx*r,cy=sy*r,start=Math.atan2(-sy,-sx)-0.62;return [cx,cy,start,start+1.24];});
-    for(const [width,color,alpha] of [[8.5,0x1a0f24,1],[5,0xef4444,1],[1.6,0xffffff,.85]])
+    const arcs=[[-1,-1],[1,-1],[1,1],[-1,1]].map(([sx,sy])=>{const cx=sx*r,cy=sy*r,start=Math.atan2(-sy,-sx)-0.44;return [cx,cy,start,start+0.88];});
+    // Ink outline, bright red body, then a thin white sheen on the inner edge.
+    for(const [width,color,alpha,k] of [[10,0x1a0f24,1,.86],[6.2,0xef4444,1,.86],[1.7,0xffffff,.9,.8]])
       for(const [cx,cy,a0,a1] of arcs){
-        const k=width<2?.94:1;g.moveTo(cx+Math.cos(a0)*r*.78*k,cy+Math.sin(a0)*r*.78*k);
-        g.arc(cx,cy,r*.78*k,a0,a1).stroke({color,width,alpha,cap:'round',join:'round'});
+        g.moveTo(cx+Math.cos(a0)*r*k,cy+Math.sin(a0)*r*k);
+        g.arc(cx,cy,r*k,a0,a1).stroke({color,width,alpha,cap:'round',join:'round'});
       }
   }
   function drawZ(g,x,y,size,{fill=0xbfe9ff,ink=0x14243f}={}){
