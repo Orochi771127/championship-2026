@@ -147,7 +147,9 @@ try{
    assert.ok(b.value.left>=b.bar.left-1&&b.value.top>=b.bar.top-1&&b.value.right<=b.bar.right+1&&b.value.bottom<=b.bar.bottom+1);
   }}
   }
-  if(phase!=='before'){const p=s.placement,r=p.artRect;const bounds={left:r.x*p.zoom+p.x,top:r.y*p.zoom+p.y,right:(r.x+r.width)*p.zoom+p.x,bottom:(r.y+r.height)*p.zoom+p.y};assert.ok(bounds.left<=.01&&bounds.top<=.01&&bounds.right>=p.width-.01&&bounds.bottom>=p.height-.01,JSON.stringify(bounds));s.mapBounds=bounds;
+  if(phase!=='before'){const p=s.placement,r=p.artRect;const bounds={left:r.x*p.zoom+p.x,top:r.y*p.zoom+p.y,right:(r.x+r.width)*p.zoom+p.x,bottom:(r.y+r.height)*p.zoom+p.y};// Owner 2026-11-03: the art covers the safe window between the floating HUD rows; the strips under them may show the backdrop.
+   const safeTop=p.insets?.top??0,safeBottom=p.insets?.bottom??0;
+   assert.ok(bounds.left<=.01&&bounds.top<=safeTop+.01&&bounds.right>=p.width-.01&&bounds.bottom>=p.height-safeBottom-.01,JSON.stringify({bounds,insets:p.insets}));s.mapBounds=bounds;
    s.alignment=await page.evaluate(()=>{const p=__qaBattleScene.getFieldPlacement(),v=__qaSource.getView(),d=__qaBattleScene.getDiagnostics();return d.dynamicFx.bodies.map(b=>{const stand=v.combatants[b.slot].stand,expected={x:p.artRect.x+stand.x*p.artRect.width,y:p.artRect.y+stand.y*p.artRect.height};const actual=__qaWorld.toGlobal({x:expected.x,y:expected.y});return {slot:b.slot,localError:Math.max(Math.abs(b.x-expected.x),Math.abs(b.groundY-expected.y)),screenError:Math.max(Math.abs(actual.x-(expected.x*p.zoom+p.x)),Math.abs(actual.y-(expected.y*p.zoom+p.y)))};});});
    assert.ok(s.alignment.every(a=>a.localError<=1&&a.screenError<.01));
    assert.ok(s.field.right<=width+1&&s.field.bottom<=height+1);

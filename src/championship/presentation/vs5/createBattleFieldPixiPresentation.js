@@ -623,7 +623,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     focusPlacement=focus ? {...transform,nativeScale,
       width:rect.width,height:rect.height,reducedMotion,hyperWrap:Boolean(fxLayer?.hyperWrapActive?.())}:null;
     fieldPlacement={...transform,artRect:{...artRect},width:rect.width,height:rect.height,
-      nativeScale,reducedMotion};
+      nativeScale,reducedMotion,insets:lastInsets ? {top:lastInsets.top, bottom:lastInsets.bottom} : null};
   }
 
   function advance(ticker) {
