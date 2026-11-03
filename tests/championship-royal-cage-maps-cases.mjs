@@ -160,3 +160,37 @@ test('app: royal cages saved the 11-02 way load onto their own maps, still fed a
     assert.deepEqual(again.progression.cyberGacha.editions, {[royalId]: 'ROYAL_RANCH', [stellarId]: 'STELLAR_ZOO'});
   } finally { await app.dispose(); }
 });
+
+test('app: the royal maps come only from the shop\'s gachapon; the facility editor lists them only after a pull', async () => {
+  const rolls = [];
+  const h = harness();
+  const app = h.make({gachaRandom: () => (rolls.length ? rolls.shift() : 0.1)});
+  try {
+    await app.newGame();
+    assert.ok(listCageDefinitions().every(d => ![ROYAL, STELLAR].includes(d.moduleId)), 'never sold for Bits');
+    app.openCageEdit();
+    let frame = app.getCageEditFrame();
+    assert.deepEqual(frame.royalTray, [], 'no royal card before a pull');
+    assert.ok(!frame.tray.some(t => [ROYAL, STELLAR].includes(t.moduleId)));
+    assert.notEqual(app.selectCageModule(ROYAL).selectedModuleId, ROYAL, 'an unowned royal map cannot be picked');
+    app.leaveScreen();
+    // One premium pull lands on SSR, then on the automation slice: the royal ranch; the next on UR: the stellar zoo.
+    app.grantGachaTickets(2, 'TEST');
+    app.openShop();
+    rolls.push(0.9, 0.95, 0);
+    assert.deepEqual(app.gachaPull('PREMIUM', 1).prizes.map(p => p.id), ['auto:royal-ranch']);
+    app.leaveScreen();
+    app.openCageEdit();
+    frame = app.getCageEditFrame();
+    assert.deepEqual(frame.royalTray.map(r => [r.id, r.moduleId, r.available]), [['auto:royal-ranch', ROYAL, 1]]);
+    app.leaveScreen();
+    app.openShop();
+    rolls.push(0.99, 0.95, 0);
+    app.gachaPull('PREMIUM', 1);
+    app.leaveScreen();
+    app.openCageEdit();
+    frame = app.getCageEditFrame();
+    assert.deepEqual(frame.royalTray.map(r => [r.id, r.moduleId, r.available]), [['auto:royal-ranch', ROYAL, 1], ['auto:stellar-zoo', STELLAR, 1]]);
+    assert.equal(app.selectRoyalCage('auto:stellar-zoo').selectedModuleId, STELLAR, 'now placeable');
+  } finally { await app.dispose(); }
+});
