@@ -45,12 +45,14 @@ export function isLateMedalPreview(event, condition) {
 }
 
 // Separate simulated currency. Never calls Wallet, payment APIs or real entitlements.
-export function purchaseTestRanchRow(wallet, row) {
+// price: the land step's diamonds (Owner 2026-11-03: 200 → 2,200 by step; 1,000 before).
+export function purchaseTestRanchRow(wallet, row, price = 1000) {
   const state = normalizeFriendsPlaytestState(wallet);
   if ((!Number.isInteger(row)||row<2||row>=10)) return {ok:false,reason:'INVALID_TEST_ROW',state};
   if (state?.purchases.includes(row)) return {ok:false,reason:'ALREADY_OPEN',state};
-  if (!state || state.diamonds < 1000) return {ok:false,reason:'INSUFFICIENT_TEST_DIAMONDS',state};
-  return {ok:true,state:normalizeFriendsPlaytestState({...state,diamonds:state.diamonds-1000,purchases:[...state.purchases,row]}),receipt:Object.freeze({row,amount:1000,currency:'TEST_DIAMONDS',idempotencyKey:`friends-playtest:ranch-row:${row}`,testOnly:true})};
+  if (!Number.isSafeInteger(price) || price <= 0) return {ok:false,reason:'INVALID_TEST_ROW_PRICE',state};
+  if (!state || state.diamonds < price) return {ok:false,reason:'INSUFFICIENT_TEST_DIAMONDS',state};
+  return {ok:true,state:normalizeFriendsPlaytestState({...state,diamonds:state.diamonds-price,purchases:[...state.purchases,row]}),receipt:Object.freeze({row,amount:price,currency:'TEST_DIAMONDS',idempotencyKey:`friends-playtest:ranch-row:${row}`,testOnly:true})};
 }
 
 // Existing saves retain their wallet. Version2 records normalization only;

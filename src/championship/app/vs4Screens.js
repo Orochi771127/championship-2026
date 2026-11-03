@@ -1509,11 +1509,15 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     down.setAttribute("aria-label", uiText("Lower stand-in rank until title matches write it"));
     down.disabled = cage.tamerRank <= 0;
     down.addEventListener("click", () => source.intents.setTamerRank(cage.tamerRank - 1));
+    // Owner 2026-11-03: with diamond land the capsule counts land steps (土地階級 0 → 8) over the open land.
+    const land = cage.land;
     const rankLabel = element(
       "span",
       "cm-vs2-cage-rank__label",
-      uiText("階級 {rank} · {used} / {total} 格", { rank: cage.tamerRank, used: cage.occupiedCount ?? cage.placements.length,
-        total: cage.unlockedCount + (cage.expansion?.annexSlotCount ?? 0) })
+      land?.available && mode !== VS2_PRESENTATION_MODES.DEVELOPER
+        ? uiText("土地階級 {tier} · 已用 {used} / {total} 格", { tier: land.tier, used: land.used, total: land.capacity })
+        : uiText("階級 {rank} · {used} / {total} 格", { rank: cage.tamerRank, used: cage.occupiedCount ?? cage.placements.length,
+          total: cage.unlockedCount + (cage.expansion?.annexSlotCount ?? 0) })
     );
     const up = element("button", "cm-vs2-cage-rank__step", "+");
     up.type = "button";
@@ -1522,26 +1526,10 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     up.addEventListener("click", () => source.intents.setTamerRank(cage.tamerRank + 1));
     if (mode === VS2_PRESENTATION_MODES.DEVELOPER) census.append(down, rankLabel, up);
     else census.append(rankLabel);
-    // DIAMOND_ECONOMY_20261102: the land key also sits by the rank capsule (the same confirmation).
-    const land = cage.land;
-    if (land?.available) {
-      const expand = element("button", "cm-vs2-cage-rank__expand cm-land-key cm-arcade-key");
-      expand.type = "button";
-      expand.dataset.landExpand = land.max ? "max" : String(land.nextRow);
-      if (land.max) {
-        expand.disabled = true;
-        expand.append(gachaIcon("crown", "cm-land-key__icon"), element("span", "cm-land-key__label", uiText("已達最大 100 格領域")));
-      } else {
-        expand.setAttribute("aria-haspopup", "dialog");
-        expand.setAttribute("aria-label", uiText("擴充土地 +{n}格（{price} 鑽石）", { n: land.step, price: land.price }));
-        expand.append(gachaCurrencyImage("diamond", "cm-land-key__diamond"), element("span", "cm-land-key__label", uiText("+{n}格", { n: land.step })));
-        if (land.diamonds < land.price) expand.dataset.short = "true";
-        expand.addEventListener("click", () => { void rowPurchase.open(land.nextRow); });
-      }
-      census.append(expand);
-    }
+    // Owner 2026-11-03: one land key only -- the board's, beside 可用土地. The rank capsule stays a
+    // read-out so the 設施配置 title is never covered.
     const reason = cage.lastVerdict?.reason;
-    status.textContent = uiText(reason ? CAGE_VERDICT_COPY[reason] ?? "" : "");
+    status.textContent = uiText(reason ? CAGE_VERDICT_COPY[reason] ?? "" : "", { price: (cage.lastVerdict?.price ?? 0).toLocaleString("en-US") });
     if (cage.lastVerdict && cage.lastVerdict !== paintedVerdict) {
       const kind = !cage.lastVerdict.ok ? "denied" : /REMOVED|CLEARED|RETURNED/.test(reason) ? "unsnap" : /PLACED|MOVED/.test(reason) ? "snap" : "sparkle";
       const cell = Number.isInteger(cage.lastVerdict.slotIndex) ? root.querySelector?.(`.cm-hexworld__cell[data-slot-index="${cage.lastVerdict.slotIndex}"]`) : null;
@@ -1608,7 +1596,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
         rowLock.type = 'button';
         rowLock.dataset.lockedTestRow = String(row);
         rowLock.setAttribute('aria-haspopup', 'dialog');
-        rowLock.setAttribute('aria-label', uiText('CAGE_TEST_BUY_ROW', { row: row + 1, count: remaining, price: 1000 }));
+        rowLock.setAttribute('aria-label', uiText('CAGE_TEST_BUY_ROW', { row: row + 1, count: remaining, price: cage.land?.price || 1000 }));
         rowLock.style.left = `${(left + Math.max(...lockedArt.map(cell=>cell.x)) + 48) / 2 - 22}px`;
         rowLock.style.top = `${Math.min(...lockedArt.map(cell=>cell.y)) + 6}px`;
         const icon = element('span', 'cm-cage-row-lock__icon', '🔒');

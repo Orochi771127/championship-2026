@@ -18,10 +18,12 @@ export function createRanchRowPurchasePrompt({ source, ask = showChoiceDialog, r
       if (!count) return;
       pending = true;
       try {
-        const affordable = (cage.testDiamonds ?? 0) >= 1000;
+        // Owner 2026-11-03: the step's own price (200 → 2,200), quoted from the frame the app recomputes on buy.
+        const price = cage.land?.price || 1000;
+        const affordable = (cage.testDiamonds ?? 0) >= price;
         const choice = await ask({
           title: uiText('CAGE_TEST_ROW_TITLE', { row: row + 1 }),
-          message: [uiText('CAGE_TEST_ROW_DETAILS', { count, price: 1000 }),
+          message: [uiText('CAGE_TEST_ROW_DETAILS', { count, price: price.toLocaleString('en-US') }),
             // DIAMOND_ECONOMY_20261102: what the land becomes and what else grows with it.
             ...(cage.land ? [uiText('可用土地 {before} → {after} 格', { before: cage.land.capacity, after: Math.min(cage.land.cap, cage.land.capacity + count) }),
               uiText('每擴充一階，狩獵記憶卡容量 +{g} G。', { g: 8 })] : []),

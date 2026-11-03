@@ -1577,6 +1577,12 @@ body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database_
 .cm-hexworld__selection[hidden] { display: none; }
 .cm-hexworld__selected, .cm-hexworld__note { margin: 0; font-size: var(--fs-body-sm); color: var(--c-text-1); }
 .cm-hexworld__actions { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+/* Owner 2026-11-03: feed / clean cores mount on the selected cage in place. */
+.cm-hexworld__mounts { display: grid; gap: 6px; margin-top: 6px; }
+.cm-hexworld__mount-core { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; align-items: center; gap: 8px; min-height: 44px; text-align: start; }
+.cm-hexworld__mount-icon { width: 22px; height: 22px; }
+.cm-hexworld__mount-state { padding: 0 8px; border-radius: 999px; background: rgba(20, 20, 31, 0.1); font-size: 12px; font-weight: 900; white-space: nowrap; }
+.cm-hexworld__mount-core[data-mounted="true"] .cm-hexworld__mount-state { background: #14141f; color: #5eead4; }
 .cm-hexworld__land { display: flex; gap: var(--sp-2); }
 .cm-hexworld__land .cm-hexworld__buy-land { position: static; width: auto; height: auto; min-width: 44px; min-height: 44px; padding: 0 var(--sp-3); }
 .cm-vs2-root[data-hex-world="true"] .cm-cage-board-scroll { display: none; }

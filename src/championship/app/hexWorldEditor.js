@@ -18,6 +18,7 @@ import { ranchEcologyType } from '../cage/ranchEcology.js';
 import { hexWorldPassageGain, hexWorldPassageView } from './hexWorldPassages.js';
 import { uiText } from '../text/uiText.js';
 import { gachaCurrencyImage, gachaIcon } from './cyberGachaIcons.js';
+import { gachaRefusalText } from './cyberGachaView.js';
 
 const HEX_W = 48, HEX_H = 56;            // editor px of one hex (native 96 × 112 at ÷2)
 const MIN_ZOOM = 0.35, MAX_ZOOM = 2.2;
@@ -128,7 +129,7 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
   root.append(toolbar, viewport, selection, land);
 
   let cage = null, view = { x: 0, y: 0, zoom: 0.8 }, fitted = false;
-  let selected = null, moving = false, hoverSlot = null;
+  let selected = null, moving = false, hoverSlot = null, mountOpen = false;
   let passages = null, passageKey = null, layers = new Map(), animatedVerdict = null, toastTimer = null;
   // DIAMOND_ECONOMY_20261102: the land last painted, so a purchase plays the gold hex wave once.
   let paintedLand = null, waveTimer = null, wave = null;
@@ -283,6 +284,7 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
   function select(slot) {
     selected = slot ? { instanceId: slot.instanceId, moduleId: slot.moduleId, slotIndex: slot.slotIndex, fixed: slot.fixed } : null;
     moving = false;
+    mountOpen = false;
     paintSelection();
     paintCells();
   }
@@ -309,12 +311,48 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
       remove.addEventListener('click', () => { const id = selected.instanceId ?? selected.moduleId; selected = null; source.intents.removeCagePlacement(id); });
       actions.append(move, remove);
     }
+    // Owner 2026-11-03: a placed cage takes the bag's feed / clean cores right here.
+    const placed = selected.instanceId && cage.placements?.some?.((p) => p.instanceId === selected.instanceId);
+    if (!moving && placed && cage.cores?.length) {
+      const mount = el(doc, 'button', 'cm-vs2-action cm-hexworld__mount', uiText('🤖 掛載自動餵食／清掃機'));
+      mount.type = 'button';
+      mount.dataset.hexAction = 'mount';
+      mount.setAttribute('aria-expanded', String(mountOpen));
+      mount.addEventListener('click', () => { mountOpen = !mountOpen; paintSelection(); });
+      actions.append(mount);
+    }
     const cancel = el(doc, 'button', 'cm-vs2-action', moving ? '取消移動' : '取消選取');
     cancel.type = 'button';
     cancel.dataset.hexAction = 'cancel';
     cancel.addEventListener('click', () => { if (moving) { moving = false; paintSelection(); paintCells(); } else select(null); });
     actions.append(cancel);
     selection.append(actions);
+    if (mountOpen && !moving && selected.instanceId) selection.append(mountPicker(selected.instanceId));
+  }
+  function mountPicker(instanceId) {
+    const auto = cage.automation?.[instanceId] ?? null;
+    const list = el(doc, 'div', 'cm-hexworld__mounts');
+    if (auto?.royal) { list.append(el(doc, 'p', 'cm-hexworld__note', uiText('皇家籠舍已內建全自動功能，不需要再掛載。'))); return list; }
+    for (const core of cage.cores ?? []) {
+      const on = core.module === 'AUTO_FEED' ? Boolean(auto?.feed) : Boolean(auto?.clean);
+      const pick = el(doc, 'button', 'cm-vs2-action cm-hexworld__mount-core');
+      pick.type = 'button';
+      pick.dataset.coreId = core.id;
+      pick.dataset.mounted = String(on);
+      pick.append(icon('robot', 'cm-hexworld__mount-icon'), el(doc, 'span', '', uiText(core.name)),
+        el(doc, 'span', 'cm-hexworld__mount-state', on ? uiText('運轉中 · 卸下') : uiText('背包 ×{n} · 掛載', { n: core.owned })));
+      pick.disabled = !on && core.owned < 1;
+      pick.addEventListener('click', () => {
+        if (on) source.intents.gachaUnmountCore?.(core.module, instanceId); else source.intents.gachaMountCore?.(core.id, instanceId);
+        const result = source.getFrame()?.cageEdit?.gachaResult;
+        if (result && !result.ok) say(gachaRefusalText(result.reason), 'blocked');
+        else { say(uiText(on ? '已卸下' : '已掛載，籠舍旁會亮起自動運轉標誌。'), 'ok'); fx(cellNodes.get(selected?.slotIndex), on ? 'unsnap' : 'sparkle'); }
+      });
+      list.append(pick);
+    }
+    if (!(cage.cores ?? []).some((core) => core.owned > 0) && !auto?.feed && !auto?.clean)
+      list.append(el(doc, 'p', 'cm-hexworld__note', uiText('背包裡還沒有自動餵食／清掃核心，到商店的轉蛋機轉轉看！')));
+    return list;
   }
 
   function onCell(slot) {
@@ -528,7 +566,7 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
     counter.dataset.full = used >= Math.min(cap, landCap) ? 'true' : 'false';
   }
 
-  /** The diamond land key: +10 cells for 1,000 diamonds; at 100 cells a crowned, closed key. */
+  /** The diamond land key: +10 cells for the step's price (200 → 2,200); at 100 cells a crowned, closed key. */
   function landKey() {
     const rows = cage.productGrid?.landRows ?? [];
     if (!openLandPurchase && rows.length) return null;
@@ -541,16 +579,17 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
       done.append(icon('crown', 'cm-land-key__icon'), el(doc, 'span', 'cm-land-key__label', uiText('已達最大 100 格領域')));
       return done;
     }
-    const next = rows[0];
+    const next = rows[0], cost = cage.land?.price || 1000;
     const buy = el(doc, 'button', 'cm-vs2-action cm-cage-row-lock cm-hexworld__buy-land cm-land-key');
     buy.type = 'button';
     buy.dataset.lockedTestRow = String(next.row);
     buy.setAttribute('aria-haspopup', 'dialog');
-    buy.setAttribute('aria-label', uiText('CAGE_TEST_BUY_ROW', { row: next.row + 1, count: next.cells, price: 1000 }));
+    buy.setAttribute('aria-label', uiText('CAGE_TEST_BUY_ROW', { row: next.row + 1, count: next.cells, price: cost }));
     const price = el(doc, 'span', 'cm-land-key__price');
-    price.append(gachaCurrencyImage('diamond', 'cm-land-key__diamond', doc), el(doc, 'span', '', (1000).toLocaleString('en-US')));
-    buy.append(el(doc, 'span', 'cm-land-key__label', uiText('擴充土地 +{n}格', { n: next.cells })), price);
-    if ((cage.testDiamonds ?? 0) < 1000) buy.dataset.short = 'true';
+    price.append(gachaCurrencyImage('diamond', 'cm-land-key__diamond', doc), el(doc, 'span', '', cost.toLocaleString('en-US')));
+    buy.dataset.landPrice = String(cost);
+    buy.append(price, el(doc, 'span', 'cm-land-key__label', uiText('擴充 +{n} 格', { n: next.cells })));
+    if ((cage.testDiamonds ?? 0) < cost) buy.dataset.short = 'true';
     buy.addEventListener('click', () => openLandPurchase(next.row));
     return buy;
   }

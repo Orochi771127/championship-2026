@@ -70,6 +70,8 @@ const REFUSALS = Object.freeze({
   ALREADY_CLAIMED: "已經領取過了。",
   NO_DIAMOND_WALLET: "這個版本沒有鑽石錢包。"
 });
+/** The player-facing line for a refused gacha intent (shared with the ranch bag). */
+export function gachaRefusalText(reason) { return uiText(REFUSALS[reason] ?? "無法完成。"); }
 // Premium-machine rates of the automation items (their tier's rate x the automation share, split evenly).
 const AUTOMATION_RATES = Object.freeze({ SR: 0.28, SSR: 0.1, UR: 0.02 });
 const AUTOMATION_PER_TIER = Object.freeze({ SR: 2, SSR: 1, UR: 1 });
