@@ -25,44 +25,41 @@ function harness() {
 const placedCages = (app) => app.getCageEditFrame().placements.filter((p) => p.instanceId);
 const mounts = (app) => app.getCyberGachaFrame().cages;
 
-test('the feeder and the cleaner are named as attachments', () => {
-  assert.deepEqual(AUTOMATION_ITEMS.filter((i) => i.kind === 'CORE').map((i) => i.name).sort(), ['奈米自動清掃機', '智慧自動給食機'].sort());
+test('the feeder and the cleaner are named as consumable machines (AUTO_CARE_3D_20261103)', () => {
+  assert.deepEqual(AUTOMATION_ITEMS.filter((i) => i.kind === 'CORE').map((i) => i.name).sort(), ['奈米掃地機器人', '智慧自動餵食機', '皇家雙效核心'].sort());
 });
 
-test('an attachment mounts on every kind of placed cage, comes off at no cost and moves to another', async () => {
+test('a core deploys on every kind of placed cage for one hour; another core extends it; it never comes back off', async () => {
   const h = harness(); const app = h.make();
   try {
     await app.newGame();
-    assert.equal(app.grantAutomationItem('auto:feed-core', 1, 'TEST').ok, true);
-    assert.equal(app.grantAutomationItem('auto:clean-core', 1, 'TEST').ok, true);
     const placed = placedCages(app);
     assert.ok(placed.length >= 2, 'a new ranch has several cages');
+    assert.equal(app.grantAutomationItem('auto:feed-core', placed.length + 1, 'TEST').ok, true);
+    assert.equal(app.grantAutomationItem('auto:clean-core', 1, 'TEST').ok, true);
     const kinds = new Set();
     for (const cage of placed) {
       kinds.add(getCageDefinitionByModuleId(cage.moduleId)?.cageDefinitionIndex ?? cage.moduleId);
-      const on = app.gachaMountCore('auto:feed-core', cage.instanceId);
+      const on = app.gachaDeployCore('auto:feed-core', cage.instanceId);
       assert.equal(on.ok, true, `${cage.moduleId}: ${on.reason}`);
-      assert.ok(mounts(app).find((c) => c.instanceId === cage.instanceId).feed, cage.moduleId);
-      assert.equal(app.getCyberGachaFrame().automation.find((i) => i.id === 'auto:feed-core').owned, 0, 'the feeder left the bag');
-      const off = app.gachaUnmountCore('AUTO_FEED', cage.instanceId);
-      assert.equal(off.ok, true, off.reason);
-      assert.equal(app.getCyberGachaFrame().automation.find((i) => i.id === 'auto:feed-core').owned, 1, 'back in the bag, nothing lost');
+      const row = mounts(app).find((c) => c.instanceId === cage.instanceId);
+      assert.ok(row.feed && row.feedSeconds === 3600, cage.moduleId);
     }
     assert.ok(kinds.size >= 2, 'more than one kind of cage took it');
-    // Both on one cage, then the cleaner moves to another.
+    assert.equal(app.getCyberGachaFrame().automation.find((i) => i.id === 'auto:feed-core').owned, 1, 'each deploy used one core');
     const [a, b] = placed;
-    assert.equal(app.gachaMountCore('auto:feed-core', a.instanceId).ok, true);
-    assert.equal(app.gachaMountCore('auto:clean-core', a.instanceId).ok, true);
-    assert.equal(app.gachaUnmountCore('AUTO_CLEAN', a.instanceId).ok, true);
-    assert.equal(app.gachaMountCore('auto:clean-core', b.instanceId).ok, true);
-    const after = mounts(app);
-    assert.deepEqual([after.find((c) => c.instanceId === a.instanceId).mounted, after.find((c) => c.instanceId === b.instanceId).mounted], [['AUTO_FEED'], ['AUTO_CLEAN']]);
-    // The save keeps where each attachment runs.
-    assert.deepEqual(h.saved().progression.cyberGacha.mounts, { [a.instanceId]: ['AUTO_FEED'], [b.instanceId]: ['AUTO_CLEAN'] });
+    assert.equal(app.gachaDeployCore('auto:feed-core', a.instanceId).kind, 'EXTEND');
+    assert.equal(app.gachaDeployCore('auto:clean-core', b.instanceId).kind, 'DEPLOY');
+    assert.equal(app.gachaUnmountCore, undefined, 'nothing comes back off');
+    // The save keeps each machine's seconds left.
+    app.save();
+    const runs = h.saved().progression.cyberGacha.runs;
+    assert.equal(runs[a.instanceId].AUTO_FEED, 7200);
+    assert.deepEqual(runs[b.instanceId], { AUTO_CLEAN: 3600, AUTO_FEED: 3600 });
   } finally { await app.dispose(); }
 });
 
-test('droppings saved without a cage instance are swept the moment the cage is cleaned, and on load', async () => {
+test('droppings saved without a cage instance belong to the cage they lie in; the deployed robot sweeps them one by one', async () => {
   const h = harness(); let app = h.make();
   try {
     await app.newGame();
@@ -78,17 +75,13 @@ test('droppings saved without a cage instance are swept the moment the cage is c
     await app.dispose(); app = h.make(); await app.continueGame();
     assert.equal(app.getRaisingWasteFrame().length, 5, 'five droppings lie in the cage');
     const bitsBefore = app.getShopFrame().bits;
-    const result = app.gachaMountCore('auto:clean-core', cage.instanceId);
+    const result = app.gachaDeployCore('auto:clean-core', cage.instanceId);
     assert.equal(result.ok, true, result.reason);
-    assert.equal(app.getRaisingWasteFrame().length, 0, 'mounting the cleaner clears them at once');
-    assert.equal(app.getShopFrame().bits, Math.min(9999999, bitsBefore + 5 * 50), 'each one pays +50 bits');
-    // Load again with droppings in an already cleaned cage: none survive the load.
-    app.save();
-    const again = h.saved();
-    again.raising.nativeHome.waste = [{ slot: 0, speciesIndex: 17, cageDefinitionIndex: definition, localPositionQ12: [70 * 4096, 90 * 4096, 0] }];
-    h.data.set(CHAMPIONSHIP_MODERN_SAVE_KEY, JSON.stringify(again));
-    await app.dispose(); app = h.make(); await app.continueGame();
-    assert.equal(app.getRaisingWasteFrame().length, 0, 'a cleaned cage starts clean');
+    assert.equal(app.getRaisingWasteFrame().length, 5, 'deploying never clears them by magic: the robot has to drive there');
+    for (let i = 0; i < 60 * 90 && app.getRaisingWasteFrame().length; i++) app.advanceNaturalClock({ frames: 1 });
+    const swept = 5 - app.getRaisingWasteFrame().length;
+    assert.ok(swept >= 1, 'the robot swept the old droppings');
+    assert.equal(app.getShopFrame().bits, Math.min(9999999, bitsBefore + swept * 50), 'each one pays +50 bits');
   } finally { await app.dispose(); }
 });
 
@@ -108,12 +101,12 @@ test('the Bits zoo and ranch no longer promise auto-care in any language', () =>
   } finally { setLocale('zh-Hant'); }
 });
 
-test('the badge is a drawn gear with devices on the ground; the scrim dots are faint; the bag tabs are not sticky', () => {
+test('no banner or pictures over the cage, a small drawn tag per machine; the scrim dots are faint; the bag tabs are not sticky', () => {
   const view = source('src/championship/app/raisingHomeP1RView.js');
-  assert.match(view, /function automationGear\(\)/);
-  assert.doesNotMatch(view, /node\('img','int-rh2-cage-auto__icon'\)/, 'no item picture beside the running label');
-  assert.match(view, /int-rh2-cage-auto__gear/);
-  assert.match(view, /int-rh2-cage-device/);
+  assert.doesNotMatch(view, /int-rh2-cage-auto|int-rh2-cage-device/, 'no banner and no item pictures on the ranch floor');
+  const tags = view.slice(view.indexOf('function renderCageBadges'), view.indexOf('const field = await mountField'));
+  assert.doesNotMatch(tags, /node\('img'|\.src=/, 'the machine tags draw their icons');
+  assert.match(view, /int-rh2-care-tag__icon/);
   const tokens = source('src/championship/app/ui/tokens.css');
   const alpha = Number(/--ax-dots: radial-gradient\(rgba\(20, 20, 31, ([0-9.]+)\)/.exec(tokens)?.[1]);
   assert.ok(alpha > 0 && alpha <= 0.05, `scrim dot alpha ${alpha}`);

@@ -110,14 +110,14 @@ test('bag: gachapon chips, metals and cores all appear in the four tabs, each wi
     // Shared gachapon helpers (the partner nameplate) build with the global document.
     const previousDocument=globalThis.document;globalThis.document=doc;t.after(()=>{globalThis.document=previousDocument;});
     const panel=createBackpackPanel({doc,getShopFrame:()=>app.getShopFrame(),getGachaFrame:()=>app.getCyberGachaFrame(),tab:'automation',
-      intents:{mountCore:(core,cage)=>{calls.push(['mount',core,cage]);return app.gachaMountCore(core,cage);},useItem:(...a)=>app.gachaUseItem(...a)}});
+      intents:{deployCore:(core,cage)=>{calls.push(['deploy',core,cage]);return app.gachaDeployCore(core,cage);},useItem:(...a)=>app.gachaUseItem(...a)}});
     for(const tab of ['chips','metals','automation']){
       panel.element.querySelector(`.cm-backpack__tab[data-tab="${tab}"]`).click();
       const rows=panel.element.querySelectorAll('.cm-backpack__item');
       assert.equal(rows.length,tabs[tab].length,tab);
       assert.equal(panel.element.querySelectorAll('.cm-backpack__use').length,rows.length,`${tab}: every row has its key`);
     }
-    // Mount the feed core on the first placed cage straight from the bag.
+    // Deploy the feed core on the first placed cage straight from the bag (one hour).
     panel.element.querySelector('.cm-backpack__use[data-use="auto:feed-core"]').click();
     const cage=panel.element.querySelector('.cm-backpack__cage');
     assert.ok(cage,'the placed cages are listed');
@@ -150,7 +150,7 @@ test('the partner card, the bag and the facility editor each reach the gachapon 
   assert.match(main,/gachaUseItem\(itemId, instanceId, options\)/);
   const editor=source('src/championship/app/hexWorldEditor.js');
   assert.match(editor,/籠舍外掛模組槽/);
-  assert.match(editor,/source\.intents\.gachaMountCore/);
+  assert.match(editor,/source\.intents\.gachaDeployCore/);
 });
 
 test('收下發現 pays waiting finds: two feed ×2 finds add 4 to the feed tool and say so', async () => {

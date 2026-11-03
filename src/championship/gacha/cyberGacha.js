@@ -13,8 +13,8 @@
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
 import {
-  AUTOMATION_ITEMS, AUTOMATION_STACK_CAP, getAutomationItem, getAutomationRecipe, coreForModule, normalizeAutomationStacks,
-  normalizeAutomationMounts, normalizeRoyalEditions, normalizeBondCarry
+  AUTOMATION_ITEMS, AUTOMATION_RULES, AUTOMATION_STACK_CAP, getAutomationItem, getAutomationRecipe, coreForModule, coreModules,
+  normalizeAutomationStacks, normalizeAutomationMounts, normalizeAutomationRuns, normalizeRoyalEditions, normalizeBondCarry
 } from "./ranchAutomation.js";
 
 export const CYBER_GACHA_VERSION = 1;
@@ -192,7 +192,7 @@ export function normalizeCyberGacha(value) {
     throw gachaError("INVALID_CYBER_GACHA_STATE");
   }
   const allowed = new Set(["version", "tickets", "pity", "pulls", "welcome", "chips", "metals", "bloodlines", "armed", "claimed",
-    "automation", "mounts", "editions", "bondCarry"]);
+    "automation", "mounts", "runs", "editions", "bondCarry"]);
   for (const key of Object.keys(value)) if (!allowed.has(key)) throw gachaError(`UNKNOWN_CYBER_GACHA_KEY: ${key}`);
   const bloodlines = {};
   const entries = Object.entries(value.bloodlines ?? {});
@@ -214,7 +214,13 @@ export function normalizeCyberGacha(value) {
   // Ranch automation (DIAMOND_ECONOMY_20261102): bag stacks, mounted cores, royal
   // editions and affection carry. Written only once used, so older saves keep their shape.
   const automation = normalizeAutomationStacks(value.automation);
-  const mounts = normalizeAutomationMounts(value.mounts);
+  // AUTO_CARE_3D_20261103: cores are consumables now. A core still mounted from an older
+  // save goes back into the bag once, so the player deploys it for its hour.
+  for (const modules of Object.values(normalizeAutomationMounts(value.mounts))) for (const module of modules) {
+    const core = coreForModule(module);
+    automation[core.id] = Math.min(AUTOMATION_STACK_CAP, (automation[core.id] ?? 0) + 1);
+  }
+  const runs = normalizeAutomationRuns(value.runs);
   const editions = normalizeRoyalEditions(value.editions);
   const bondCarry = normalizeBondCarry(value.bondCarry);
   return deepFreeze({
@@ -229,7 +235,7 @@ export function normalizeCyberGacha(value) {
     armed,
     claimed: [...new Set(claimed)].sort(),
     ...(Object.keys(automation).length ? { automation } : {}),
-    ...(Object.keys(mounts).length ? { mounts } : {}),
+    ...(Object.keys(runs).length ? { runs } : {}),
     ...(Object.keys(editions).length ? { editions } : {}),
     ...(Object.keys(bondCarry).length ? { bondCarry } : {})
   });
@@ -240,7 +246,7 @@ function plain(state) {
     ...state, chips: { ...state.chips }, metals: { ...state.metals }, bloodlines: { ...state.bloodlines }, claimed: [...state.claimed],
     armed: { ...(state.armed.hunt ? { hunt: [...state.armed.hunt] } : {}), ...(state.armed.bounty ? { bounty: state.armed.bounty } : {}) },
     automation: { ...state.automation }, editions: { ...state.editions }, bondCarry: { ...state.bondCarry },
-    mounts: Object.fromEntries(Object.entries(state.mounts ?? {}).map(([id, modules]) => [id, [...modules]]))
+    runs: Object.fromEntries(Object.entries(state.runs ?? {}).map(([id, run]) => [id, { ...run }]))
   };
 }
 
@@ -622,40 +628,53 @@ export function forgeAutomationItem(state, itemId) {
     prize: { kind: "AUTOMATION", id: itemId, rarity: getAutomationItem(itemId).rarity, quantity: 1 }, state: normalizeCyberGacha(next) });
 }
 
-/** Mount one core from the bag on a placed cage instance. A royal edition already carries both. */
-export function mountAutomationCore(state, coreId, instanceId) {
+/**
+ * Deploy one core from the bag on a placed cage instance (AUTO_CARE_3D_20261103): the
+ * core is used up and each machine it runs gets one more hour (a fresh deploy or a
+ * battery on a running one), at most 24 hours. A royal edition already carries both.
+ */
+export function deployAutomationCore(state, coreId, instanceId) {
   const current = normalizeCyberGacha(state);
   const core = getAutomationItem(coreId);
   if (core?.kind !== "CORE") return deepFreeze({ ok: false, reason: "NOT_A_CORE" });
   if (typeof instanceId !== "string" || !/^[a-z0-9:_-]{3,96}$/i.test(instanceId)) return deepFreeze({ ok: false, reason: "UNKNOWN_CAGE" });
   if ((current.automation?.[coreId] ?? 0) < 1) return deepFreeze({ ok: false, reason: "NOT_OWNED" });
   if (current.editions?.[instanceId]) return deepFreeze({ ok: false, reason: "ROYAL_ALREADY_AUTOMATED" });
-  const mounted = current.mounts?.[instanceId] ?? [];
-  if (mounted.includes(core.module)) return deepFreeze({ ok: false, reason: "ALREADY_MOUNTED" });
+  const run = current.runs?.[instanceId] ?? {}, { runSeconds, runCapSeconds } = AUTOMATION_RULES;
+  if (coreModules(core).some((module) => (run[module] ?? 0) + runSeconds > runCapSeconds)) return deepFreeze({ ok: false, reason: "RUN_FULL" });
   const next = plain(current);
   next.automation[coreId] -= 1;
-  next.mounts[instanceId] = [...mounted, core.module];
-  return deepFreeze({ ok: true, state: normalizeCyberGacha(next) });
+  next.runs[instanceId] = { ...run };
+  for (const module of coreModules(core)) next.runs[instanceId][module] = (run[module] ?? 0) + runSeconds;
+  const extended = coreModules(core).some((module) => (run[module] ?? 0) > 0);
+  return deepFreeze({ ok: true, extended, state: normalizeCyberGacha(next) });
 }
 
-/** Take a mounted core back into the bag. */
-export function unmountAutomationCore(state, module, instanceId) {
+/**
+ * Run the deployed machines down by `seconds` of real time. `paused` names machines that
+ * wait (a feeding tower with no meat to throw): {instanceId: ["AUTO_FEED"]}. Returns the
+ * state and the machines whose hour ran out ({instanceId, module}).
+ */
+export function tickAutomationRuns(state, seconds, { paused = {} } = {}) {
   const current = normalizeCyberGacha(state);
-  const core = coreForModule(module), mounted = current.mounts?.[instanceId] ?? [];
-  if (!core || !mounted.includes(module)) return deepFreeze({ ok: false, reason: "NOT_MOUNTED" });
-  if ((current.automation?.[core.id] ?? 0) >= AUTOMATION_STACK_CAP) return deepFreeze({ ok: false, reason: "STACK_FULL" });
-  const next = plain(current);
-  next.mounts[instanceId] = mounted.filter((m) => m !== module);
-  if (!next.mounts[instanceId].length) delete next.mounts[instanceId];
-  next.automation[core.id] = (next.automation[core.id] ?? 0) + 1;
-  return deepFreeze({ ok: true, state: normalizeCyberGacha(next) });
+  if (!Number.isSafeInteger(seconds) || seconds <= 0 || !current.runs) return deepFreeze({ state: current, expired: [] });
+  const next = plain(current), expired = [];
+  for (const [instanceId, run] of Object.entries(next.runs)) {
+    for (const module of Object.keys(run)) {
+      if (paused[instanceId]?.includes(module)) continue;
+      run[module] = Math.max(0, run[module] - seconds);
+      if (!run[module]) { delete run[module]; expired.push({ instanceId, module }); }
+    }
+    if (!Object.keys(run).length) delete next.runs[instanceId];
+  }
+  return deepFreeze({ state: normalizeCyberGacha(next), expired });
 }
 
 /**
  * A confirmed facility layout. `editions` names every placed royal cage (null keeps
  * the current ones); royal cages leaving the layout go back to the bag and new ones
- * come out of it. Cores on a cage that left, or on a royal cage (which carries both
- * already), come back to the bag too.
+ * come out of it. A machine running on a cage that left, or on a royal cage (which
+ * carries both already), gives back one core per whole hour it had left.
  */
 export function settleRanchAutomation(state, { editions = null, liveInstanceIds = [] } = {}) {
   const current = normalizeCyberGacha(state);
@@ -669,13 +688,13 @@ export function settleRanchAutomation(state, { editions = null, liveInstanceIds 
     next.automation[item.id] = Math.min(AUTOMATION_STACK_CAP, total - placed);
   }
   next.editions = wanted;
-  for (const [id, modules] of Object.entries(next.mounts)) {
+  for (const [id, run] of Object.entries(next.runs)) {
     if (live.has(id) && !wanted[id]) continue;
-    for (const module of modules) {
-      const core = coreForModule(module);
-      next.automation[core.id] = Math.min(AUTOMATION_STACK_CAP, (next.automation[core.id] ?? 0) + 1);
+    for (const [module, seconds] of Object.entries(run)) {
+      const core = coreForModule(module), hours = Math.floor(seconds / AUTOMATION_RULES.runSeconds);
+      if (hours) next.automation[core.id] = Math.min(AUTOMATION_STACK_CAP, (next.automation[core.id] ?? 0) + hours);
     }
-    delete next.mounts[id];
+    delete next.runs[id];
   }
   return deepFreeze({ ok: true, state: normalizeCyberGacha(next) });
 }
