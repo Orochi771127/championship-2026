@@ -420,7 +420,25 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
 .int-rh2-cage-auto[data-royal="ROYAL_RANCH"], .int-rh2-cage-auto[data-royal="STELLAR_ZOO"] { background: linear-gradient(180deg, #fff7c8, #ffd23f 60%, #ffae2b);
   color: #3a2600; box-shadow: 0 3px 0 #14141f, 0 0 12px rgba(255, 210, 63, .85); }
 .int-rh2-cage-auto[data-royal="STELLAR_ZOO"] { background: linear-gradient(180deg, #f5ecff, #c9a6ff 55%, #ffd23f); }
-.int-rh2-cage-auto[data-icon="crown"] .int-rh2-cage-auto__icon { grid-row: 1 / span 2; width: 26px; height: 26px; object-fit: contain; filter: drop-shadow(0 1px 0 #14141f); }
+/* Owner 2026-11-03: a drawn gold gear leads the badge; the badge is lighter so it never hides the cage. */
+.int-rh2-cage-auto { opacity: .94; }
+.int-rh2-cage-auto__icon { position: relative; grid-row: 1 / span 2; width: 22px; height: 22px; filter: drop-shadow(0 1px 0 #14141f); }
+.int-rh2-cage-auto__gear { position: absolute; inset: 0; background: #14141f;
+  clip-path: polygon(99.0% 59.8%, 79.9% 70.0%, 77.8% 91.6%, 57.0% 85.3%, 40.2% 99.0%, 30.0% 79.9%, 8.4% 77.8%, 14.7% 57.0%, 1.0% 40.2%, 20.1% 30.0%, 22.2% 8.4%, 43.0% 14.7%, 59.8% 1.0%, 70.0% 20.1%, 91.6% 22.2%, 85.3% 43.0%); }
+.int-rh2-cage-auto__gear::after { content: ""; position: absolute; inset: 2px; background: linear-gradient(180deg, #fff3a8, #ffd23f 55%, #e7a51b);
+  clip-path: polygon(99.0% 59.8%, 79.9% 70.0%, 77.8% 91.6%, 57.0% 85.3%, 40.2% 99.0%, 30.0% 79.9%, 8.4% 77.8%, 14.7% 57.0%, 1.0% 40.2%, 20.1% 30.0%, 22.2% 8.4%, 43.0% 14.7%, 59.8% 1.0%, 70.0% 20.1%, 91.6% 22.2%, 85.3% 43.0%); }
+.int-rh2-cage-auto__hub { position: absolute; inset: 34%; border-radius: 50%; background: #14141f; }
+.int-rh2-cage-auto:not([data-royal=""]) .int-rh2-cage-auto__icon { width: 24px; height: 24px; }
+/* The running devices: a feeder tower and a disc cleaner standing on the cage's corner, a soft cyan ring under each. */
+.int-rh2-cage-devices { position: absolute; display: flex; align-items: flex-end; gap: 2px; transform: translate(-50%, -100%); }
+.int-rh2-cage-devices[hidden] { display: none; }
+.int-rh2-cage-device { position: relative; display: grid; place-items: end center; width: 34px; height: 38px; }
+.int-rh2-cage-device::before { content: ""; position: absolute; left: 3px; right: 3px; bottom: 0; height: 9px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(94, 234, 212, .85), rgba(56, 189, 248, .35) 70%, transparent);
+  animation: int-rh2-device-glow 1.8s ease-in-out infinite; }
+.int-rh2-cage-device img { position: relative; width: 32px; height: 32px; object-fit: contain; margin-bottom: 3px;
+  filter: drop-shadow(0 2px 0 rgba(20, 20, 31, .55)) drop-shadow(0 0 4px rgba(94, 234, 212, .7)); }
+@keyframes int-rh2-device-glow { 0%, 100% { opacity: .65; transform: scaleX(.9); } 50% { opacity: 1; transform: scaleX(1.08); } }
 .int-rh2-cage-auto__title { font-size: 12.5px; font-weight: 1000; line-height: 1.1; }
 .int-rh2-cage-auto__sub { font-size: 10.5px; font-weight: 800; line-height: 1.1; opacity: .9; }
 .int-rh2-auto-pop { position: absolute; transform: translate(-50%, -100%); padding: 1px 7px; border: 2px solid #14141f; border-radius: 999px;
@@ -430,7 +448,7 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
 @keyframes int-rh2-cage-auto-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -3px; } }
 @keyframes int-rh2-auto-pop { 0% { opacity: 0; translate: 0 6px; } 15% { opacity: 1; translate: 0 0; } 80% { opacity: 1; translate: 0 -22px; }
   100% { opacity: 0; translate: 0 -30px; } }
-@media (prefers-reduced-motion: reduce) { .int-rh2-cage-auto { animation: none; } .int-rh2-auto-pop { animation-duration: 1.2s; } }
+@media (prefers-reduced-motion: reduce) { .int-rh2-cage-auto, .int-rh2-cage-device::before { animation: none; } .int-rh2-auto-pop { animation-duration: 1.2s; } }
 /* ---- Detail sheet (the full record) --------------------------------------- *
  * One component: a bottom sheet on a phone, a side sheet on a tablet. */
 .int-rh2-detail {

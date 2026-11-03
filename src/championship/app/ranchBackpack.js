@@ -90,6 +90,12 @@ function itemArt(doc, item) {
   return frame;
 }
 
+/** Names of the placed cages an attachment is mounted on (a royal cage's built-in pair is not an attachment). */
+function mountedAt(item, gacha) {
+  return (gacha?.cages ?? []).filter((cage) => !cage.royal && cage.mounted?.includes(item.module))
+    .map((cage) => cageName(cage.definitionIndex, ''));
+}
+
 function effectLine(item) {
   if (item.kind === 'CHIP') { const line = gachaChipEffectLines({ ...item, kind: item.chipKind })[0]; return line ? uiText(line.text, line.params) : ''; }
   if (item.kind === 'METAL') return gachaMetalNote(item);
@@ -175,8 +181,15 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
     const count = el(doc, 'span', 'cm-backpack__count', `×${formatNumber(item.owned)}`);
     const flags = [];
     if (item.armed) flags.push(uiText('已裝填'));
-    if (item.kind === 'AUTOMATION' && item.placed > 0) flags.push(uiText(item.edition ? '已放置 {n}' : '已掛載 {n}', { n: item.placed }));
+    if (item.kind === 'AUTOMATION' && item.placed > 0 && item.edition) flags.push(uiText('已放置 {n}', { n: item.placed }));
     if (flags.length) copy.append(el(doc, 'span', 'cm-backpack__flag', flags.join('・')));
+    // Owner 2026-11-03: an attachment says where it runs, by cage name, so it can be taken off and moved.
+    const at = item.kind === 'AUTOMATION' && !item.edition ? mountedAt(item, gacha) : [];
+    if (at.length) {
+      const where = el(doc, 'span', 'cm-backpack__mounted', uiText('已掛載於：{cages}', { cages: at.join('、') }));
+      where.dataset.count = String(at.length);
+      copy.append(where);
+    }
     const action = actionKey(item);
     node.append(itemArt(doc, item), copy, count);
     if (action) node.append(action);
@@ -189,8 +202,9 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
     const usable = item.kind === 'SUPPLY' ? Boolean(item.tool ? intents.selectTool : intents.openHunt) : true;
     if (!usable) return null;
     const mount = item.kind === 'AUTOMATION';
+    const swap = mount && !item.edition && item.owned < 1 && item.placed > 0;
     const huntUse = item.kind === 'SUPPLY' && !item.tool;
-    const button = key(doc, 'cm-backpack__use', uiText(mount ? '立即掛載' : huntUse ? '出發狩獵使用' : '立即使用'),
+    const button = key(doc, 'cm-backpack__use', uiText(swap ? '卸下／換裝' : mount ? '立即掛載' : huntUse ? '出發狩獵使用' : '立即使用'),
       { primary: true, icon: mount ? 'robot' : huntUse ? 'hunt' : 'bolt' });
     button.dataset.use = item.id;
     button.setAttribute('aria-expanded', String(state.open === item.id));
@@ -240,7 +254,7 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
         if (intents.openFacilities) panel.append(go);
         return panel;
       }
-      panel.append(el(doc, 'p', 'cm-backpack__note', uiText('選一座已放置的籠舍掛上去：')));
+      panel.append(el(doc, 'p', 'cm-backpack__note', uiText('任何一座已放置的籠舍都能掛；掛上的可隨時卸下，改掛到別座：')));
       const cages = el(doc, 'div', 'cm-backpack__choices');
       for (const cage of gacha?.cages ?? []) {
         const mounted = cage.mounted.includes(item.module);
