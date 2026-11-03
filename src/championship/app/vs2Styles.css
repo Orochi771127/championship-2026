@@ -461,19 +461,6 @@
 .cm-vs2-hud__exit { pointer-events: auto; min-height: var(--target); padding: 0 var(--sp-4); background: var(--c-surface-glass); }
 
 .cm-hunt-info { position: absolute; top: 74px; left: 12px; right: 12px; z-index: 5; display: grid; justify-items: start; gap: 8px; pointer-events: none; }
-.cm-vs2-target {
-  width: min(260px, 100%);
-  padding: 8px 12px;
-  border: 1px solid var(--c-line-2);
-  border-radius: var(--r-card);
-  background: var(--c-surface-hud);
-}
-.cm-vs2-target[data-selected="true"] { border-color: var(--c-accent-line); }
-.cm-vs2-target__name { display: block; color: var(--c-text-2); font-size: var(--fs-body-sm); font-weight: var(--fw-strong); }
-.cm-vs2-target[data-selected="true"] .cm-vs2-target__name { color: var(--c-text-1); font-size: var(--fs-body); }
-.cm-vs2-target__stats { display: grid; grid-template-columns: auto 1fr auto 1fr; gap: 3px 8px; margin: 6px 0 0; color: var(--c-text-3); font-size: var(--fs-label); }
-.cm-vs2-target__stats dd { margin: 0; color: var(--c-text-1); font-weight: var(--fw-strong); text-align: right; font-variant-numeric: tabular-nums; }
-.cm-vs2-target:not([data-selected="true"]) .cm-vs2-target__stats { display: none; }
 .cm-hunt-plugin-hud { display: grid; gap: 6px; }
 .cm-hunt-memory {
   padding: 5px 9px;
@@ -1199,9 +1186,6 @@ body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-pa
 }
 body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-panel .cm-hunt-info {
   position: static; inset: auto; display: grid; gap: 8px; flex: 0 0 auto;
-}
-body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-panel .cm-vs2-target {
-  width: 100%; min-width: 0;
 }
 body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-panel .cm-hunt-tools {
   position: static; inset: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));

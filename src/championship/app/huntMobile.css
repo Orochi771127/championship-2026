@@ -86,11 +86,6 @@
 .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud__signal { display: none; }
 .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud__exit { pointer-events: auto; font-size: 12px; }
 .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud__gate {  font-size: 16px;  }
-.cm-vs2-target { position: absolute; z-index: 5; top: 65px; left: 10px; width: min(248px, calc(100% - 20px)); padding: 9px 11px; border: 1px solid #d5ad39; border-radius: 3px 14px 3px 12px; background: linear-gradient(115deg, #f6ffe6ee, #daf2e3e8); box-shadow: 0 2px 8px #234d4b33; pointer-events: none; }
-.cm-vs2-target__name { color: #215b55; font-size: 12px; }
-.cm-vs2-target__stats { display: grid; grid-template-columns: auto 1fr auto 1fr; gap: 4px 8px; margin: 7px 0 0; font-size: 11px; color: #497264; }
-.cm-vs2-target__stats dd { margin: 0; color: #244f4f; font-weight: 800; text-align: right; font-variant-numeric: tabular-nums; }
-.cm-vs2-target:not([data-selected="true"]) .cm-vs2-target__stats { display: none; }
 .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-field__hint { position: absolute; bottom: 8px; left: 50%; width: max-content; max-width: calc(100% - 16px); transform: translateX(-50%); margin: 0; padding: 6px 10px;     font-size: 10px; letter-spacing: 0; pointer-events: none; }
 .cm-toolbar[data-mode="2"] { background: linear-gradient(#e7f6e7, #bddacb); border-top-color: #dbad3e; }
 .cm-toolbar[data-mode="2"] .cm-toolbar__cell { border-color: #8bad9b; background: linear-gradient(#f3faee, #cee3cb); }
