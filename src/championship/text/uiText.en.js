@@ -1557,6 +1557,13 @@ export const TEXT_EN = Object.freeze({
   "必殺技優先": "Special Attack",
   "普通攻擊": "Normal Attack",
   "支援優先": "Support",
+  // Battle polish (Owner 2026-11-03): plan capsule, record feed, result summary
+  "擊倒": "KO",
+  "傷害": "DMG",
+  "必殺優先": "Special first",
+  "{name}攻擊{target}，造成 {damage} 傷害": "{name} hits {target} for {damage}",
+  "{target}受到 {damage} 傷害": "{target} takes {damage} damage",
+  "{name}回復了 {amount} 生命值": "{name} recovers {amount} HP",
   "對戰開始！": "FIGHT!",
   "會心一擊！": "CRITICAL!",
   "重擊！": "SMASH!",

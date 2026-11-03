@@ -22,8 +22,12 @@ export function battleFxApprovedMoveName(moveId) {
   return battleMoveName(moveId);
 }
 
-export function createBattleFxLookups({getView, onFeed = null, onCutIn = null, showIds = false}) {
+/** Ordinary hits feed the record at most this often, so it keeps moving without flickering. */
+export const BATTLE_FEED_HIT_INTERVAL_MS = 900;
+
+export function createBattleFxLookups({getView, onFeed = null, onCutIn = null, onTally = null, showIds = false, now = () => globalThis.performance?.now?.() ?? Date.now()}) {
   const looks = new Map();
+  let lastSkillFeedAt = -Infinity, lastHitFeedAt = -Infinity;
   function describeMove(slot, moveId) {
     if (!Number.isSafeInteger(moveId)) return null;
     if (!looks.has(moveId)) {
@@ -65,6 +69,7 @@ export function createBattleFxLookups({getView, onFeed = null, onCutIn = null, s
     moveNameOf,
     text: value => uiText(value),
     onEvent(event) {
+      if (typeof onTally === 'function') onTally(event);
       if (typeof onFeed !== 'function') return;
       if (event.type === 'LAUNCH') {
         const look = describeMove(event.slot, event.moveId);
@@ -74,6 +79,7 @@ export function createBattleFxLookups({getView, onFeed = null, onCutIn = null, s
           : (ultimate ? '{name}發動絕招！' : '{name}使出技能！');
         // The cue tells the record band which line is a signature move, and whose.
         onFeed(uiText(template, {name: nameOfSlot(event.slot), move}), {tier: look.tier, slot: event.slot});
+        lastSkillFeedAt = now();
         // Arcade cut-in (2026-10-28): a signature move's strip, decoration only.
         if (ultimate && typeof onCutIn === 'function') {
           const combatant = getView()?.combatants?.[event.slot];
@@ -82,6 +88,20 @@ export function createBattleFxLookups({getView, onFeed = null, onCutIn = null, s
         }
       } else if (event.type === 'KO') {
         onFeed(uiText('{name}倒下了！', {name: nameOfSlot(event.slot)}));
+        lastSkillFeedAt = now();
+      } else if (event.type === 'HIT' && event.damage > 0) {
+        // Owner 2026-11-03: the record kept a knockout line for the rest of the
+        // match. Ordinary exchanges now feed it too, throttled, and never over
+        // a fresh skill or knockout line.
+        const at = now();
+        if (at - lastSkillFeedAt < 1200 || at - lastHitFeedAt < BATTLE_FEED_HIT_INTERVAL_MS) return;
+        lastHitFeedAt = at;
+        const attacker = Number.isInteger(event.attackerSlot) ? nameOfSlot(event.attackerSlot) : '';
+        onFeed(attacker ? uiText('{name}攻擊{target}，造成 {damage} 傷害', {name: attacker, target: nameOfSlot(event.slot), damage: event.damage})
+          : uiText('{target}受到 {damage} 傷害', {target: nameOfSlot(event.slot), damage: event.damage}), {tier: 'basic', slot: event.attackerSlot ?? event.slot});
+      } else if (event.type === 'HEAL' && event.amount > 0) {
+        onFeed(uiText('{name}回復了 {amount} 生命值', {name: nameOfSlot(event.slot), amount: event.amount}), {tier: 'support', slot: event.slot});
+        lastSkillFeedAt = now();
       }
     }
   });

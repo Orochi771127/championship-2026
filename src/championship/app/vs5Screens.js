@@ -135,7 +135,7 @@ function shell(root, screen, label) {
  * Mode identity is now traced through OVL10 0210F88C's help-bank dispatch.
  * The application supplies each mode's entries; this view holds only selection.
  */
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -314,22 +314,67 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   // The battle plan (作戰方針): the original team-setup menu's three rows in
   // their order, so the stored value is the row (0 / 1 / 2, default 1).
   const tactics=new Map();
+  // Owner 2026-11-03: one tap per choice -- three lit capsules instead of a
+  // native <select> (which opened the system wheel on a phone).
   function tacticPicker(entry,name){
     if(typeof setBattleTactic!=='function')return null;
-    const label=element('label','cm-vs5-tactic'),select=element('select','cm-vs5-tactic__select');
-    select.setAttribute('aria-label',`${name} · ${uiText('作戰方針')}`);
-    ['必殺技優先','普通攻擊','支援優先'].forEach((text,value)=>{const option=element('option','',text);option.value=String(value);select.append(option);});
-    select.value=String(tactics.get(entry.instanceId)??entry.tactic??1);
-    select.addEventListener('change',()=>{const value=Number(select.value);
-      if(setBattleTactic(entry.instanceId,value)?.ok!==false)tactics.set(entry.instanceId,value);else select.value=String(tactics.get(entry.instanceId)??entry.tactic??1);});
-    label.append(element('span','cm-vs5-tactic__label','作戰方針'),select);
-    return label;
+    const group=element('div','cm-vs5-tactic');
+    group.setAttribute('role','radiogroup');group.setAttribute('aria-label',`${name} · ${uiText('作戰方針')}`);
+    group.append(element('span','cm-vs5-tactic__label','作戰方針'));
+    const buttons=[];
+    const paint=()=>{const value=tactics.get(entry.instanceId)??entry.tactic??1;group.dataset.value=String(value);
+      buttons.forEach((button,index)=>{button.setAttribute('aria-checked',String(index===value));button.tabIndex=index===value?0:-1;});};
+    [['必殺優先','special'],['普通攻擊','normal'],['支援優先','support']].forEach(([text,kind],value)=>{
+      const button=element('button','cm-vs5-tactic__option');button.type='button';button.dataset.value=String(value);button.dataset.kind=kind;
+      button.setAttribute('role','radio');
+      button.append(element('i','cm-vs5-tactic__glyph'),element('span','cm-vs5-tactic__text',text));
+      button.addEventListener('click',()=>{if(setBattleTactic(entry.instanceId,value)?.ok!==false)tactics.set(entry.instanceId,value);paint();});
+      buttons.push(button);group.append(button);
+    });
+    // Arrow keys move along the three, as a radio group does.
+    group.addEventListener('keydown',event=>{const step=event.key==='ArrowRight'||event.key==='ArrowDown'?1:event.key==='ArrowLeft'||event.key==='ArrowUp'?-1:0;
+      if(!step)return;event.preventDefault();const current=Number(group.dataset.value??1),next=(current+step+3)%3;buttons[next].click();buttons[next].focus();});
+    paint();
+    return group;
   }
   function arenaSelector(){
-    const label=element('label','cm-vs5-arena-choice','對戰場地'),select=element('select');
-    select.setAttribute('aria-label',uiText('對戰場地'));select.append(element('option','','隨機場地'));select.children[0].value='';
-    for(const arena of arenaChoices){const option=element('option','',arena.identifier.replace('BATTLE_',''));option.value=String(arena.index);select.append(option);}
-    label.append(select);return {node:label,value:()=>select.value?Number(select.value):null};
+    const node=element('div','cm-vs5-arena-choice');
+    node.append(element('span','cm-vs5-arena-choice__label','對戰場地'));
+    const row=element('div','cm-vs5-arena-choice__row');row.setAttribute('role','radiogroup');row.setAttribute('aria-label',uiText('對戰場地'));
+    let chosen=null;const chips=[];
+    const paint=()=>chips.forEach(([chip,value])=>{chip.setAttribute('aria-checked',String(value===chosen));chip.tabIndex=value===chosen?0:-1;});
+    for(const [label,value,identifier] of [['隨機場地',null,'RANDOM'],...arenaChoices.map(arena=>[arena.identifier.replace('BATTLE_',''),arena.index,arena.identifier])]){
+      const chip=element('button','cm-vs5-arena-chip',label);chip.type='button';chip.setAttribute('role','radio');chip.dataset.arena=identifier;chip.dataset.index=value===null?'':String(value);
+      chip.addEventListener('click',()=>{chosen=value;paint();});chips.push([chip,value]);row.append(chip);
+    }
+    paint();node.append(row);return {node,value:()=>chosen};
+  }
+  // A roster row: the partner's portrait, stage and three-axis badges beside
+  // its name (the app supplies them), then its HP / TP as two short meters.
+  function memberFace(entry,name){
+    const look=typeof describeMember==='function'?describeMember(entry):null;
+    const face=element('span','cm-vs5-member');
+    const frame=element('span','cm-vs5-member__portrait');
+    if(look?.portrait?.src){const image=document.createElement('img');image.alt='';image.decoding='async';image.loading='lazy';image.src=look.portrait.src;
+      image.addEventListener('error',()=>image.remove(),{once:true});frame.append(image);}
+    else frame.dataset.empty='true';
+    const text=element('span','cm-vs5-member__text');
+    text.append(element('span','cm-vs5-member__name',name,false));
+    const meta=element('span','cm-vs5-member__meta');
+    if(look?.stage)meta.append(element('span','cm-vs5-member__stage',look.stage,false));
+    if(look?.badges)meta.append(look.badges);
+    if(meta.children.length)text.append(meta);
+    face.append(frame,text);
+    return face;
+  }
+  function memberMeters(profile){
+    const meters=element('span','cm-vs5-member__meters');meters.setAttribute('aria-hidden','true');
+    for(const [key,now,max] of [['hp',profile.currentHp,profile.maxHp],['tp',profile.currentTp,profile.maxTp]]){
+      const bar=element('span',`cm-vs5-member__bar cm-vs5-member__bar--${key}`);
+      bar.style.setProperty('--fill',`${Math.round(Math.max(0,Math.min(1,(Number(now)||0)/Math.max(1,Number(max)||1)))*100)}%`);
+      meters.append(bar);
+    }
+    return meters;
   }
   function showRefusal(result,match){
     if(result?.ok!==false)return;
@@ -362,15 +407,24 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       if(mode!=='FREE_BATTLE')return;
       const rows=selectedIds.map(id=>candidates.find(c=>c.instanceId===id)).filter(Boolean)
         .map(entry=>{const row=element('div','cm-vs5-tactics__row'),name=memberName(entry);const picker=tacticPicker(entry,name);
-          if(!picker)return null;row.append(element('span','cm-vs5-tactics__name',name,false),picker);return row;}).filter(Boolean);
+          if(!picker)return null;const label=element('span','cm-vs5-tactics__name');label.append(memberFace(entry,name));row.append(label,picker);return row;}).filter(Boolean);
       tacticsBox.replaceChildren(...(rows.length?[element('h3','cm-vs5-tactics__title','作戰方針'),...rows]:[]));tacticsBox.hidden=rows.length===0;
     };
     for(const entry of candidates){
-      const button=actionButton(memberName(entry));
+      // The name stays the button's own text (its accessible name); the face,
+      // badges and meters sit beside it.
+      const name=memberName(entry),button=actionButton(name);
+      button.classList.add('cm-vs5-party-row');
+      const face=memberFace(entry,name);face.querySelector?.('.cm-vs5-member__name')?.remove();
+      const portrait=face.querySelector?.('.cm-vs5-member__portrait'),meta=face.querySelector?.('.cm-vs5-member__meta');
+      if(portrait)button.prepend(portrait);if(meta)button.append(meta);
       button.dataset.instanceId=entry.instanceId;button.setAttribute('aria-pressed','false');
       button.disabled=!entry.admission.ok;
-      if(!entry.admission.ok)button.append(element('span','cm-vs5-match__fee',entry.admission.message));
-      else if(entry.profile)button.append(element('span','cm-vs5-match__fee',uiText('HP {hp}／{maxHp}　TP {tp}／{maxTp}',{hp:entry.profile.currentHp,maxHp:entry.profile.maxHp,tp:entry.profile.currentTp,maxTp:entry.profile.maxTp})));
+      if(!entry.admission.ok){button.dataset.refused='true';button.append(element('span','cm-vs5-match__fee',entry.admission.message));}
+      else if(entry.profile){
+        const stats=element('span','cm-vs5-match__fee',uiText('HP {hp}／{maxHp}　TP {tp}／{maxTp}',{hp:entry.profile.currentHp,maxHp:entry.profile.maxHp,tp:entry.profile.currentTp,maxTp:entry.profile.maxTp}));
+        stats.prepend(memberMeters(entry.profile));button.append(stats);
+      }
       button.addEventListener('click',()=>{
         selectedIds=selectedIds.includes(entry.instanceId)?selectedIds.filter(id=>id!==entry.instanceId):[...selectedIds,entry.instanceId];
         for(const [c,b] of controls){const picked=selectedIds.includes(c.instanceId);b.setAttribute('aria-pressed',String(picked));b.disabled=!c.admission.ok||(!picked&&selectedIds.length>=limit);}
@@ -410,7 +464,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     partyPanel.append(summary,arena.node);
     for(const entry of candidates){
       const row=element('div','cm-vs5-practice-member'),name=memberName(entry);
-      row.append(element('span','cm-vs5-practice-member__name',name));
+      const label=element('span','cm-vs5-practice-member__name');label.append(memberFace(entry,name));row.append(label);
       if(!entry.admission.ok)row.append(element('span','cm-vs5-match__fee',entry.admission.message));
       for(const team of [0,1]){const button=actionButton(uiText('{team} 隊',{team:team===0?'A':'B'}));button.setAttribute('aria-label',uiText('{name} {team} 隊',{name,team:team===0?'A':'B'}));
         button.addEventListener('click',()=>{if(button.disabled)return;const ids=teams[team],at=ids.indexOf(entry.instanceId);if(at<0)ids.push(entry.instanceId);else ids.splice(at,1);refresh();});
@@ -859,7 +913,7 @@ function floatingMeterNumerals(value, label) {
   };
 }
 
-function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurstCall=null) {
+function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurstCall=null, badge=null) {
   const card = element("li", `cm-vs5-fighter${compact ? " cm-vs5-fighter--compact" : ""}`);
   card.dataset.slot = String(combatant.slot);
   card.dataset.team = String(combatant.team);
@@ -882,6 +936,14 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
   const updateHpNumerals = floatingHud ? floatingMeterNumerals(hpValue, 'HP') : null;
   const portrait=element('img','cm-vs5-fighter__portrait');portrait.alt='';portrait.hidden=true;
   card.append(portrait);
+  // Floating HUD (Owner 2026-11-03): a round mini portrait on the plate's
+  // corner and the element glyph beside it; neither changes the plate's size.
+  let mini=null,miniImage=null;
+  if(floatingHud){
+    mini=element('span','cm-vs5-fighter__mini');mini.hidden=true;mini.setAttribute('aria-hidden','true');
+    miniImage=element('img','');miniImage.alt='';mini.append(miniImage);card.append(mini);
+    if(badge){const holder=element('span','cm-vs5-fighter__badge');holder.setAttribute('aria-hidden','true');holder.append(badge);card.append(holder);}
+  }
   card.append(name, hp.wrap);
   if (floatingHud) hp.wrap.append(hpValue); else card.append(hpValue);
   let resource = null;
@@ -911,7 +973,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
   }
   return {
     card,
-    update(next,frame=0,outcome=null) {
+    update(next,frame=0,outcome=null,actingSlot=null) {
       if (next.displayName && next.displayName !== shownName && name.lastChild?.nodeType === 3) {
         name.lastChild.textContent = next.displayName; shownName = next.displayName;
       }
@@ -934,6 +996,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
       const image=hudArt?.getBattleFrame(next.speciesId,sequenceId,Math.max(0,frame-sequenceStart));
       portrait.hidden=floatingHud||!image;
       if(image){if(portrait.getAttribute('src')!==image.src)portrait.src=image.src;}
+      if(mini){mini.hidden=!image;if(image&&miniImage.getAttribute('src')!==image.src)miniImage.src=image.src;}
       hp.fill.style.width = `${Math.round(next.hp.ratio * 100)}%`;
       // The arcade rebuild's hit feel: the bar drops at once and a white ghost
       // (the meter's ::before, CSS-delayed) follows after a beat.
@@ -947,6 +1010,8 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
       hp.wrap.setAttribute("aria-valuemax", String(next.hp.maximum));
       card.dataset.down = String(next.down);
       card.dataset.engaged = String(next.engaged);
+      // The plate of whoever is acting lights up (its own move or a launch it owns).
+      card.dataset.acting = String(!next.down && (Boolean(next.action) || next.slot === actingSlot));
       if (resource) {
         resource.fill.style.width = `${Math.round(next.resource.ratio * 100)}%`;
         resource.wrap.style?.setProperty?.("--ghost", resource.fill.style.width);
@@ -963,7 +1028,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null, onBurst=null }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null, onBurst=null, fighterBadge=null }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
   if(![0,1].includes(localTeamIndex))throw new TypeError('The Battle field view requires a local team');
@@ -973,6 +1038,9 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   // Owner 2026-10-12: the dynamic presentation gives the arena most of the
   // screen; the bands keep their order and content (styles in vs5Styles.css).
   if (dynamicFx) { section.dataset.fx = "dynamic"; section.dataset.hud = "floating"; }
+  // Owner 2026-11-03: the loading board is opaque and the HUD rows wait for the
+  // field, so nothing half-placed shows through the versus board.
+  section.dataset.loading = "true";
   if (responsiveLayout && dynamicFx) section.dataset.responsiveBattle = "candidate";
   section.dataset.rosterEvidence = frame.rosterEvidence ?? "PRODUCT_AUTHORED";
 
@@ -981,7 +1049,8 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   const cards = new Map();
   for (const combatant of frame.combatants) {
     const compact = combatant.team !== localTeamIndex;
-    const built = combatantCard(combatant, compact,hudArt,dynamicFx,next=>burstCall(next));
+    const built = combatantCard(combatant, compact,hudArt,dynamicFx,next=>burstCall(next),
+      dynamicFx && typeof fighterBadge === "function" && combatant.present ? fighterBadge(combatant) : null);
     cards.set(combatant.slot, built);
     (compact ? opponents : players).append(built.card);
   }
@@ -1106,18 +1175,46 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   // three, the field, the player's three, the record.
   section.append(clock.band, opponents, host, players, log.band);
 
+  // HUD-aware safe window (Owner 2026-11-03): the field pixels the floating
+  // rows cover -- the arena badge and the opponent cards above, the player
+  // cards and the record below. The scene keeps every fighter between them;
+  // the cut-in strip and the versus card read the same edges from CSS.
+  let safe = {top: 0, bottom: 0}, safeMeasured = false;
+  const measureSafe = () => {
+    if (viewDisposed || section.dataset.hud !== "floating" || typeof host.getBoundingClientRect !== "function") return safe;
+    const field = host.getBoundingClientRect();
+    if (!(field.height > 0)) return safe;
+    const visible = node => node && !node.hidden && node.getClientRects?.().length > 0;
+    const above = [clock.band, opponents].filter(visible).map(node => node.getBoundingClientRect().bottom);
+    const below = [players, log.band].filter(visible).map(node => node.getBoundingClientRect().top);
+    const top = above.length ? Math.max(0, Math.max(...above) - field.top) : 0;
+    const bottom = below.length ? Math.max(0, field.bottom - Math.min(...below)) : 0;
+    // A HUD row is never allowed to claim more than 45 % of the field.
+    const next = {top: Math.round(Math.min(top, field.height * 0.45)), bottom: Math.round(Math.min(bottom, field.height * 0.45))};
+    if (next.top !== safe.top || next.bottom !== safe.bottom || !safeMeasured) {
+      safe = next; safeMeasured = true;
+      host.style?.setProperty?.("--battle-safe-top", `${safe.top}px`);
+      host.style?.setProperty?.("--battle-safe-bottom", `${safe.bottom}px`);
+      host.dataset.safeTop = String(safe.top); host.dataset.safeBottom = String(safe.bottom);
+    }
+    return safe;
+  };
+  const SafeObserver = globalThis.ResizeObserver;
+  const safeObserver = typeof SafeObserver === "function" ? new SafeObserver(() => measureSafe()) : null;
+  for (const node of [host, clock.band, opponents, players, log.band]) safeObserver?.observe(node);
+
   // Ceremony (2026-10-15): the two sides meet at the top of the arena as it
   // opens. A toast: it takes no input and leaves the native READY/FIGHT cue,
   // which owns the centre, untouched.
   let versus = null;
   const sideNames = (mine) => frame.combatants.filter((c) => c.present !== false && (c.team === localTeamIndex) === mine)
     .map((c) => c.displayName ?? uiText(`SLOT ${c.slot + 1}`));
-  const field = mountField({ host, progress,
-    onReady(){stopLoadingTrack();host.setAttribute('aria-busy','false');loading.remove();
+  const field = mountField({ host, progress, safeInsets: () => safeMeasured ? safe : measureSafe(),
+    onReady(){stopLoadingTrack();host.setAttribute('aria-busy','false');loading.remove();section.dataset.loading='false';measureSafe();
       if(viewDisposed||versus)return;
       versus=ceremonies?.versus?.({host,playerLabel:uiText('我方'),playerNames:sideNames(true),
         opponentLabel:uiText('對手'),opponentNames:sideNames(false),onDone:()=>{versus=null;}})??null;},
-    onError(){stopLoadingTrack();progress?.fail();host.setAttribute('aria-busy','false');loading.dataset.state='error';
+    onError(){stopLoadingTrack();progress?.fail();host.setAttribute('aria-busy','false');loading.dataset.state='error';section.dataset.loading='error';
       loadingText.textContent=uiText('對戰場地載入失敗，請返回牧場後再試。');}
   });
 
@@ -1138,9 +1235,11 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
       // Keep accessible DOM copy even when Pixi owns the visible banner.
       openingOverlay.hidden=!cue || view.openingFxVisible===true;
       openingOverlay.style.display=openingOverlay.hidden?'none':'grid';
+      // Whoever is acting: the special prelude's caster, else the owner of a live launch.
+      const actingSlot = view.specialPrelude?.slot ?? (view.nativeLifecycle?.active ?? []).find(launch => Number.isInteger(launch?.ownerSlot))?.ownerSlot ?? null;
       for (const combatant of view.combatants) {
         if (!combatant.present) continue;
-        cards.get(combatant.slot)?.update(combatant,view.animationFrame??0,view.outcome);
+        cards.get(combatant.slot)?.update(combatant,view.animationFrame??0,view.outcome,actingSlot);
       }
       const ready = view.combatants.find((c) => c.present && c.team === localTeamIndex && c.burst?.phase === "READY") ?? null;
       burstReadySlot = ready?.slot ?? null;
@@ -1168,6 +1267,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
     },
     dispose() {
       viewDisposed = true;
+      safeObserver?.disconnect();
       versus?.dispose();
       stopLoadingTrack();
       field?.dispose?.();
@@ -1200,7 +1300,40 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
  * Panels advance one at a time, which is how the original presents them; the
  * last one returns home.
  */
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null }) {
+/**
+ * What each side did in the match (Owner 2026-11-03): damage dealt and
+ * knockouts per partner, read from the presentation's own hit record, with
+ * the winning side's top scorer marked MVP. Display only; no settlement.
+ */
+function resultSummary(summary, winningTeam) {
+  const box = element("div", "cm-vs5-result__summary");
+  let mvp = null;
+  for (const row of summary.rows) if (row.team === winningTeam && (!mvp || row.damage > mvp.damage)) mvp = row;
+  for (const side of ["player", "opponent"]) {
+    const rows = summary.rows.filter(row => row.side === side);
+    if (!rows.length) continue;
+    const group = element("section", "cm-vs5-result__side");
+    group.dataset.side = side;
+    // One header line names the columns; each partner is then one line.
+    const head = element("p", "cm-vs5-result__row cm-vs5-result__row--head");
+    head.append(element("span", "cm-vs5-result__side-title", side === "player" ? "我方" : "對手"),
+      element("span", "cm-vs5-result__stat", "傷害"), element("span", "cm-vs5-result__stat", "擊倒"));
+    group.append(head);
+    for (const row of rows) {
+      const line = element("p", "cm-vs5-result__row");
+      line.dataset.down = String(Boolean(row.down));
+      const name = element("span", "cm-vs5-result__row-name", row.name, false);
+      if (row === mvp && row.damage > 0) { line.dataset.mvp = "true"; name.prepend(element("span", "cm-vs5-result__mvp", "MVP", false)); }
+      line.append(name, element("span", "cm-vs5-result__stat", formatBits(row.damage), false),
+        element("span", "cm-vs5-result__stat", String(row.knockouts), false));
+      group.append(line);
+    }
+    box.append(group);
+  }
+  return box;
+}
+
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
   let disposed=false;
 
@@ -1246,6 +1379,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         if (settlement.clamped) line.append(element("span", "cm-vs5-result__cap", "持有金額已達上限"));
         frag.append(line);
       }
+      if (summary?.rows?.length) frag.append(resultSummary(summary, outcome.winningTeam));
       return frag;
     }
   });

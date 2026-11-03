@@ -198,3 +198,16 @@ test('with no passage between cages, partners in one cage never greet or find on
     assert.match(code,/if\(!partnerOffHome\(a\)&&!partnerOffHome\(b\)\)continue;/);
   }finally{await app.dispose();}
 });
+
+test('night Zs: never on an egg, never left behind by a hatch, and a fresh hatch stays awake a while', () => {
+  // Owner 2026-11-03: an egg showed Zs that stayed put while the field scrolled; after hatching
+  // there were two sets and the new partner went straight to sleep.
+  const view=source('src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js');
+  assert.match(view,/const asleep=native\?\.state===4&&native\.speciesIndex>=8&&/);
+  assert.match(view,/previous\.root\.destroy\(\{children:true\}\);[\s\S]{0,200}previous\.emote\?\.destroy\(\{children:true\}\);previous\.sleepZ\?\.destroy\(\{children:true\}\);/);
+  const app=source('src/championship/app/championshipStandaloneApp.js');
+  assert.match(app,/if\(result\.hatched\)realtimeWake\.set\(id,realNowMs\(\)\+REALTIME_WAKE_SECONDS\*1000\);/);
+  assert.match(app,/if\(result\.evolved&&result\.event\.target>=8\)realtimeWake\.set\(id,realNowMs\(\)\+REALTIME_WAKE_SECONDS\*1000\);/);
+  // The nap honours that window.
+  assert.match(app,/if\(night&&!\(\(realtimeWake\.get\(id\)\?\?0\)>nowMs\)\)\{/);
+});

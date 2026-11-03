@@ -132,16 +132,32 @@ const FOLLOW_FORMS = new Set(['projectile', 'stream', 'beam']);
 
 /**
  * The arcade impact quartet (Owner direction 2026-10-28), layered on the
- * dynamic presentation when `juicy` is on: a 140 ms wind-up squash and glint,
- * an additive white-core / element-halo contact flash, a 60 ms presentation
- * hit-stop on heavy hits (the battle keeps stepping; only drawing holds), an
- * element-tinted hit flash with an 8-12 px knockback, and pooled arcing damage
+ * dynamic presentation when `juicy` is on: a 120 ms wind-up squash and glint,
+ * an additive white-core / element-halo contact flash, a 65 ms presentation
+ * hit-stop on solid hits (the battle keeps stepping; only drawing holds), an
+ * element-tinted hit flash with a 14-30 px knockback slide and dust (Owner
+ * 2026-11-03 four-beat feel: wind-up, lunge, hit-stop, knockback), and pooled arcing damage
  * numbers (critical: 1.4x with an amber star). Specials hand their title to
  * the DOM cut-in strip, dim the field 35 % for about half a second and close
  * a charge ring on the caster; ordinary skills get a slanted name capsule.
  */
-export const BATTLE_FX_JUICY = Object.freeze({windupMs: 140, hitStopMs: 60, capsuleMs: 550, dimStrength: 0.35, dimMs: 520,
-  knockPx: Object.freeze({light: 8, medium: 10, heavy: 12}), numberMs: 820, criticalScale: 1.4, numberPool: 6});
+export const BATTLE_FX_JUICY = Object.freeze({windupMs: 120, hitStopMs: 65, capsuleMs: 550, dimStrength: 0.35, dimMs: 520,
+  knockPx: Object.freeze({light: 14, medium: 22, heavy: 30}), knockMs: 200, slowMoMs: 180, numberMs: 820, criticalScale: 1.4, numberPool: 6});
+
+/**
+ * The hyper ring wrapped round its caster (Owner 2026-11-03): a ground circle
+ * and a crown of light streaks on an ellipse at the caster's feet. Streaks and
+ * arcs on the far half (sin < 0) draw behind the body, the near half in front,
+ * so the ring encloses the fighter instead of lying over it.
+ */
+export function battleHyperWrapStreaks({count = 18, phase = 0} = {}) {
+  const streaks = [];
+  for (let i = 0; i < count; i++) {
+    const angle = phase + i * TAU / count;
+    streaks.push({angle, back: Math.sin(angle) < 0, lift: 0.55 + 0.45 * Math.abs(Math.sin(i * 2.399 + phase * 3))});
+  }
+  return streaks;
+}
 
 export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, quality = 'balanced', reducedMotion = false, responsiveLayout = false,
   flashScale = 1, describeMove = () => null, nameOfSlot = () => '', moveNameOf = () => '', text = value => value, seed = 0x51ed, juicy = false,
@@ -155,11 +171,13 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   const scorchLayer = new PIXI.Container({label: 'battle fx scorch'});
   const groundGfx = new PIXI.Graphics(); groundGfx.label = 'battle fx ground shock rings';
   const ghostLayer = new PIXI.Container({label: 'battle fx dash afterimages'});
-  worldBack.addChild(scorchLayer, groundGfx, ghostLayer);
+  const hyperBack = new PIXI.Graphics(); hyperBack.label = 'battle fx hyper ring (behind)'; hyperBack.blendMode = 'add';
+  worldBack.addChild(scorchLayer, groundGfx, hyperBack, ghostLayer);
   const trailGfx = new PIXI.Graphics(); trailGfx.blendMode = 'add'; trailGfx.label = 'battle fx motion streaks';
   const particleLayer = new PIXI.Container({label: 'battle fx particles'});
   const flashLayer = new PIXI.Container({label: 'battle fx contact flashes'});
-  worldFront.addChild(trailGfx, particleLayer, flashLayer);
+  const hyperFront = new PIXI.Graphics(); hyperFront.label = 'battle fx hyper ring (in front)'; hyperFront.blendMode = 'add';
+  worldFront.addChild(hyperFront, trailGfx, particleLayer, flashLayer);
   const speedGfx = new PIXI.Graphics(); speedGfx.label = 'battle fx speed lines';
   const barGfx = new PIXI.Graphics(); barGfx.label = 'battle fx overhead bars';
   const wordLayer = new PIXI.Container({label: 'battle fx words'});
@@ -195,6 +213,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   const numbers = [], numberPool = [];
   const capsules = [];
   let hitStop = null;
+  let hyper = null; // {slot, age} while the special prelude shows its ring
   const quartet = {windups: 0, hitStops: 0, numbers: 0, criticals: 0, capsules: 0, implodes: 0, pillars: 0};
   const anchors = {NATIVE_IMPACT: 0, PROJECTILE_END: 0, BODY_SIDE: 0};
   let lastCtx = null;
@@ -519,7 +538,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           fx.flashTint = palette.main; fx.knock = 1; fx.knockPx = BATTLE_FX_JUICY.knockPx[tier];
           // Contact: a saturated halo under a white-hot core (additive), readable on dark and pale floors.
           spawnFlash({x: hit.x, y: hit.y, tint: palette.main, size: (tier === 'heavy' ? 46 : 30) * 1.9, life: tier === 'heavy' ? 210 : 150});
-          if (tier === 'heavy' && !reducedMotion) {
+          if (tier !== 'light' && !reducedMotion) {
             hitStop = {ms: BATTLE_FX_JUICY.hitStopMs, slots: new Set([event.slot, event.attackerSlot].filter(s => s !== null && s !== undefined))};
             element?.hold(BATTLE_FX_JUICY.hitStopMs);
             quartet.hitStops++;
@@ -527,6 +546,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           const p = toScreen(ctx, hit.x, target.top);
           spawnNumber({x: p.x, y: p.y, value: event.damage, critical, dir: fx.knockDir || 1,
             tint: target.team === ctx.localTeam ? 0xffd0c8 : 0xffffff});
+          // Knockback slide: dust kicks up behind the struck feet along the blow.
+          dust({x: target.x, groundY: target.groundY, count: rich ? 4 : 2, spread: target.width * 0.3, push: fx.knockDir, life: 520, scale: 0.9});
         }
         // Original cells drawn by this layer: a fallback record's own hit set, the
         // element accent on a bank-less melee hit, and the struck body's overlay.
@@ -537,7 +558,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           if (vfx.overlay && tier !== 'light') element?.cell({...vfx.overlay, scale: ctx.nativeScale * 0.85, repeatMs: tier === 'heavy' ? 1000 : 640, overlay: true,
             follow: () => { const now = slot(event.slot); return now && !now.down ? {x: now.x, y: now.top + now.height * 0.45} : null; }});
           if (tier !== 'light' || look?.tier === 'ultimate') element?.decal({x: hit.x, y: hit.groundY, kind: vfx.decal, palette, paletteKey: vfx.paletteKey,
-            size: target.width * (tier === 'heavy' ? 1.3 : 0.9)});
+            size: target.width * (tier === 'heavy' ? 1.3 : 0.9), scale: ctx.nativeScale});
         }
         if (critical) cue({type: 'CRIT', system: CRITICAL_VFX_SYSTEM, slot: event.slot, x: target.x, y: target.groundY});
         // At the contact point: a flash and sparks that fall to the target's ground.
@@ -554,11 +575,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           spawnRing({x: hit.x, groundY: hit.groundY, radius: target.width * 0.8, tint: palette.core, life: 280, delay: 60});
           debris({x: hit.x, y: hit.groundY, groundY: hit.groundY, count: rich ? 10 : 5, palette});
           if (!vfx) spawnScorch({x: hit.x, groundY: hit.groundY, size: target.width * 1.1});
-          director?.impact('heavy');
+          director?.impact('heavy', fx.knockDir);
           // A signature hit pushes the lens toward the contact (1.22x, 260 ms).
-          if (look?.tier === 'ultimate') director?.lens?.({x: hit.x, y: hit.y, amount: 0.22, ms: 260});
+          if (look?.tier === 'ultimate') { director?.lens?.({x: hit.x, y: hit.y, amount: 0.22, ms: 260}); director?.slowMo?.(BATTLE_FX_JUICY.slowMoMs); }
           screenFlash = Math.max(screenFlash, 0.18);
-        } else if (tier === 'medium') { director?.impact('medium'); }
+        } else if (tier === 'medium') { director?.impact('medium', fx.knockDir); }
         // Light hits keep local sparks/squash, leaving the camera readable.
         const p = toScreen(ctx, hit.x, hit.y);
         if (critical) word({screenX: p.x, screenY: p.y - 14, content: text('會心一擊！'), size: 20, fill: 0xffe36a});
@@ -603,7 +624,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         ctx.camera?.director?.sequence([{slots: [event.slot], durationMs: 1200, boost: 0.3, includeDown: true}, {slots: null, durationMs: 900, boost: -0.08}]);
         ctx.camera?.director?.shake(0.6);
         screenFlash = Math.max(screenFlash, 0.45);
-        if (event.teamDown) showBanner('K.O.!', {size: 44, fill: 0xffe36a, life: 1500});
+        if (event.teamDown) { showBanner('K.O.!', {size: 44, fill: 0xffe36a, life: 1500}); ctx.camera?.director?.slowMo?.(BATTLE_FX_JUICY.slowMoMs); }
         else { const p = toScreen(ctx, info.x, info.top); word({screenX: p.x, screenY: p.y - 8, content: text('倒下！'), size: 20, fill: 0xffb4a0}); }
       }
     }
@@ -616,8 +637,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     // report one landing; one dust ring per fighter per quarter second.
     if (!info || elapsed - (landedAt.get(slot) ?? -1e9) < 250) return;
     landedAt.set(slot, elapsed);
-    dust({x: info.x, groundY: info.groundY, count: Math.round((rich ? 6 : 3) * strength), spread: info.width * 0.55, scale: 1.1});
-    spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.7 * strength, tint: DUST, life: 300, alpha: 0.6, width: 2});
+    // Dust only: a grey stroked ring read as a flat disc on pale sand (Owner 2026-11-03).
+    dust({x: info.x, groundY: info.groundY, count: Math.round((rich ? 7 : 3) * strength), spread: info.width * 0.6, scale: 1.15});
   }
   /** Running or being driven across the ground: a puff behind the feet. */
   function footstep(slot, ctx, direction = 0) {
@@ -659,6 +680,40 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         trailGfx.moveTo(pts[i - 1].x, pts[i - 1].y).lineTo(pts[i].x, pts[i].y);
         trailGfx.stroke({width: Math.max(0.6, 3 * t), color: entry.palette.main, alpha: 0.35 * t, cap: 'round'});
       }
+    }
+  }
+
+  /** The special prelude's ring, split in depth round the caster. */
+  function drawHyperWrap(view, ctx, dtMs) {
+    hyperBack.clear(); hyperFront.clear();
+    const focus = view.specialPrelude;
+    if (!focus?.hyperVisible) { hyper = null; return; }
+    const info = ctx.slotInfo?.(focus.slot);
+    if (!info) return;
+    if (!hyper || hyper.slot !== focus.slot) hyper = {slot: focus.slot, age: 0};
+    hyper.age += dtMs;
+    const grow = reducedMotion ? 1 : easeOut(clamp(hyper.age / 220, 0, 1));
+    const rx = Math.max(20, info.width * 0.68) * (0.6 + 0.4 * grow), ry = rx * 0.34;
+    const height = (info.height * 0.9 + 12) * grow, x = info.x, y = info.groundY;
+    const spin = reducedMotion ? 0 : hyper.age / 520;
+    const gold = 0xffd23f, cyan = 0x7ff6ff, white = 0xffffff;
+    // The ground circle: the far arc behind, the near arc in front.
+    hyperBack.ellipse(x, y, rx * 1.12, ry * 1.12).fill({color: gold, alpha: 0.12});
+    for (const [g, from, to] of [[hyperBack, Math.PI, TAU], [hyperFront, 0, Math.PI]]) {
+      for (const [k, width, color, alpha] of [[1, 4, gold, 0.85], [0.78, 1.5, white, 0.7]]) {
+        g.moveTo(x + Math.cos(from) * rx * k, y + Math.sin(from) * ry * k);
+        for (let i = 1; i <= 24; i++) { const a = from + (to - from) * i / 24; g.lineTo(x + Math.cos(a) * rx * k, y + Math.sin(a) * ry * k); }
+        g.stroke({width, color, alpha});
+      }
+    }
+    // The crown: rising light streaks on the rim, far ones behind the body.
+    for (const streak of battleHyperWrapStreaks({phase: spin})) {
+      const g = streak.back ? hyperBack : hyperFront;
+      const sx = x + Math.cos(streak.angle) * rx, sy = y + Math.sin(streak.angle) * ry;
+      const top = sy - height * streak.lift * (0.8 + 0.2 * Math.sin(hyper.age / 90 + streak.angle * 3));
+      const alpha = streak.back ? 0.75 : 0.45;
+      g.moveTo(sx, sy).lineTo(sx, top).stroke({width: 5, color: cyan, alpha: alpha * 0.45, cap: 'round'});
+      g.moveTo(sx, sy).lineTo(sx, top).stroke({width: 1.6, color: white, alpha, cap: 'round'});
     }
   }
 
@@ -721,27 +776,30 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       if (r.age >= r.life) { rings.splice(i, 1); continue; }
       if (r.age < 0) continue;
       const k = easeOut(r.age / r.life), radius = r.implode ? r.radius * (1.7 - 1.45 * k) : r.radius * (0.2 + k);
-      groundGfx.ellipse(r.x, r.y, radius, radius * 0.34).stroke({width: r.width * (1 - k * 0.6), color: r.tint, alpha: r.alpha * (r.implode ? 0.4 + 0.6 * (1 - k) : 1 - k)});
+      const fade = r.alpha * (r.implode ? 0.4 + 0.6 * (1 - k) : 1 - k);
+      // Owner 2026-11-03: a lit shock wave on the floor -- a soft pool, a wide
+      // coloured band and a white-hot rim -- never a lone grey stroke.
+      groundGfx.ellipse(r.x, r.y, radius, radius * 0.34).fill({color: r.tint, alpha: 0.16 * fade});
+      groundGfx.ellipse(r.x, r.y, radius, radius * 0.34).stroke({width: r.width * 3 * (1 - k * 0.5), color: r.tint, alpha: 0.35 * fade});
+      groundGfx.ellipse(r.x, r.y, radius, radius * 0.34).stroke({width: Math.max(1, r.width * 0.8 * (1 - k * 0.6)), color: mixColor(r.tint, 0xffffff, 0.65), alpha: fade});
     }
     // Team rings at each fighter's feet (Owner 2026-10-28): green / cyan for the
     // local side, red / orange for the other, so a clinch still reads as two
     // teams. Drawn on the existing ground layer; a fallen fighter's ring fades.
+    // Owner 2026-11-03: a soft lit disc with one bright rim, not stroked target
+    // rings; a fallen fighter's ring goes out instead of lingering as a grey disc.
     for (const combatant of view.combatants ?? []) {
-      if (!combatant.present) continue;
+      if (!combatant.present || combatant.down) continue;
       const info = ctx.slotInfo?.(combatant.slot);
       if (!info) continue;
-      const mine = combatant.team === ctx.localTeam, fade = combatant.down ? 0.3 : 1;
-      const rx = Math.max(14, info.width * 0.6), ry = rx * 0.3;
-      const core = mine ? 0x3ddc84 : 0xff3b5c, edge = mine ? 0x3ddcff : 0xff9a3c;
-      groundGfx.ellipse(info.x, info.groundY, rx, ry).fill({color: core, alpha: 0.14 * fade});
-      groundGfx.ellipse(info.x, info.groundY, rx, ry).stroke({width: 2.5, color: core, alpha: 0.9 * fade});
-      groundGfx.ellipse(info.x, info.groundY, rx * 1.24, ry * 1.24).stroke({width: 1.5, color: edge, alpha: 0.6 * fade});
-      for (const side of [-1, 1]) {
-        groundGfx.moveTo(info.x + side * rx * 1.12, info.groundY).lineTo(info.x + side * rx * 1.4, info.groundY);
-        groundGfx.moveTo(info.x, info.groundY + side * ry * 1.12).lineTo(info.x, info.groundY + side * ry * 1.4);
-      }
-      groundGfx.stroke({width: 2, color: edge, alpha: 0.75 * fade});
+      const mine = combatant.team === ctx.localTeam;
+      const rx = Math.max(14, info.width * 0.6), ry = rx * 0.32;
+      const core = mine ? 0x3ddc84 : 0xff3b5c, edge = mine ? 0x8ff7ff : 0xffc27a;
+      for (const [k, alpha] of [[1.18, 0.07], [1, 0.1], [0.72, 0.12]]) groundGfx.ellipse(info.x, info.groundY, rx * k, ry * k).fill({color: core, alpha});
+      groundGfx.ellipse(info.x, info.groundY, rx, ry).stroke({width: 3.5, color: core, alpha: 0.35});
+      groundGfx.ellipse(info.x, info.groundY, rx, ry).stroke({width: 1.5, color: edge, alpha: 0.9});
     }
+    drawHyperWrap(view, ctx, realMs);
     for (let i = scorches.length - 1; i >= 0; i--) {
       const s = scorches[i];
       s.age += dtMs;
@@ -751,7 +809,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     for (const fx of actorFx.values()) {
       fx.flash = Math.max(0, fx.flash - dtMs / 120);
       fx.squash = Math.max(0, fx.squash - dtMs / 180);
-      fx.knock = Math.max(0, fx.knock - dtMs / 220);
+      fx.knock = Math.max(0, fx.knock - dtMs / BATTLE_FX_JUICY.knockMs);
       fx.charge = Math.max(0, fx.charge - dtMs / BATTLE_FX_JUICY.windupMs);
       fx.dashMs = Math.max(0, fx.dashMs - dtMs);
       if (fx.flash === 0) fx.flashTint = 0xffffff;
@@ -942,6 +1000,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     },
     /** Juicy hit-stop: whether this slot's drawn frame should hold this frame. */
     holdFor(slot) { return Boolean(hitStop?.slots.has(slot)); },
+    /** True while this layer draws the hyper ring round its caster. */
+    hyperWrapActive: () => Boolean(hyper),
     hitStopActive: () => Boolean(hitStop),
     /** Afterimage colour while a melee move's dash is live (juicy), else null. */
     ghostTint(slot) { const fx = actorFx.get(slot); return juicy && fx?.dashMs > 0 ? fx.dashTint : null; },
@@ -954,12 +1014,12 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     getDiagnostics: () => Object.freeze({particles: particles.length, peakParticles: peak, created, cap, flashes: flashes.length,
       rings: rings.length, scorches: scorches.length, words: words.length, ghosts: ghosts.length, tracked: tracked.size, eventsHandled,
       hitAnchors: {...anchors}, callout: callout ? {tier: callout.tier, age: callout.age} : null, banner: banner ? banner.node.text : null, dim: Boolean(dim),
-      dimStrength: dim?.strength ?? null, juicy, quartet: {...quartet, numbersLive: numbers.length, capsulesLive: capsules.length, hitStop: Boolean(hitStop)},
+      dimStrength: dim?.strength ?? null, juicy, hyperWrap: hyper ? {slot: hyper.slot, age: Math.round(hyper.age)} : null, quartet: {...quartet, numbersLive: numbers.length, capsulesLive: capsules.length, hitStop: Boolean(hitStop)},
       element: element?.getDiagnostics() ?? null, cuesPending: cues.length}),
     /** Bounded 3D cues since the last call (buff, critical, signature weather), oldest first. */
     consumeCues: () => cues.splice(0),
     dispose() {
-      for (const node of [scorchLayer, groundGfx, ghostLayer, trailGfx, particleLayer, flashLayer, speedGfx, barGfx, wordLayer, numberLayer, calloutLayer, flashGfx]) {
+      for (const node of [scorchLayer, groundGfx, hyperBack, ghostLayer, hyperFront, trailGfx, particleLayer, flashLayer, speedGfx, barGfx, wordLayer, numberLayer, calloutLayer, flashGfx]) {
         node.parent?.removeChild(node);
         node.destroy({children: true});
       }

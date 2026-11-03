@@ -96,12 +96,17 @@ test('background is the approved 16:9 video and every page owns an ordered segme
   let end=0;
   for(const beat of OPENING_STORY_BEATS){
     assert.equal(beat.video[0],end,beat.id);assert.ok(beat.video[1]>beat.video[0],beat.id);end=beat.video[1];
-    // Ai-chan's layer only inside the package's 38-50 s guide window, and always there.
+    // Ai-chan stands full size inside the 38-50 s guide window; before it she is absent, after it she
+    // tells the rest docked in the corner (Owner 2026-11-03), never vanishing for a narrator.
     const inWindow=beat.video[0]>=AI_CHAN_GUIDE_WINDOW[0]&&beat.video[1]<=AI_CHAN_GUIDE_WINDOW[1];
-    assert.equal(Boolean(beat.guide),inWindow,beat.id);
+    const after=beat.video[0]>=AI_CHAN_GUIDE_WINDOW[1];
+    assert.equal(Boolean(beat.guide),inWindow||after,beat.id);
+    if(after)assert.deepEqual([beat.guide,beat.speaker],['docked','ai'],beat.id);
+    // The connection grid flows under the phone's last page and the whole conversation.
+    if(inWindow||beat.id==='phone-2')assert.deepEqual([...beat.loop],[32,50],beat.id);else assert.equal(beat.loop,undefined,beat.id);
   }
   assert.equal(end,80);
-  assert.deepEqual(OPENING_STORY_BEATS.filter(beat=>beat.guide).map(beat=>[beat.id,beat.speaker,beat.guide]),
+  assert.deepEqual(OPENING_STORY_BEATS.filter(beat=>beat.guide&&beat.guide!=='docked').map(beat=>[beat.id,beat.speaker,beat.guide]),
     [['ai-greeting','ai','cat'],['ai-surprise','player','cat'],['ai-offer','ai','cat'],['ai-choose','ai','catgirl'],['ai-ready','ai','chosen']]);
   // Every approved paragraph is one page, in package order.
   assert.deepEqual(OPENING_STORY_BEATS.filter(beat=>beat.kind==='narration').map(beat=>beat.section+beat.paragraph),

@@ -1788,6 +1788,13 @@ export const TEXT_TH = Object.freeze({
   "必殺技優先": "เน้นท่าไม้ตาย",
   "普通攻擊": "โจมตีปกติ",
   "支援優先": "เน้นสนับสนุน",
+  // Battle polish (Owner 2026-11-03): plan capsule, record feed, result summary
+  "擊倒": "ล้ม",
+  "傷害": "ความเสียหาย",
+  "必殺優先": "เน้นท่าไม้ตาย",
+  "{name}攻擊{target}，造成 {damage} 傷害": "{name} โจมตี {target} {damage} หน่วย",
+  "{target}受到 {damage} 傷害": "{target} ได้รับความเสียหาย {damage}",
+  "{name}回復了 {amount} 生命值": "{name} ฟื้นฟู HP {amount}",
   "對戰開始！": "เริ่มต่อสู้!",
   "會心一擊！": "คริติคอล!",
   "重擊！": "หนักหน่วง!",

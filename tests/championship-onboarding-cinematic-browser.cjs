@@ -192,6 +192,8 @@ async function portraitStoryAndTutorial(browser) {
     s = await story(page);
     assert.deepEqual([s.guide, s.form], ['visible', 'cat']);
     assert.ok(s.time >= 38 && s.time < 50, `Ai-chan appears in the 38-50 s window (${s.time})`);
+    // Owner 2026-11-03: the connection grid keeps flowing behind her; it never holds a still.
+    assert.deepEqual([s.hold, s.paused], ['false', false], 'the grid loops behind Ai-chan');
     await shot(page, 'portrait-03-greeting-cat');
     await tapStory(page); await waitTyped(page); s = await story(page); assert.equal(s.id, 'ai-surprise');
     await page.click('.cm-cutscene__skip');

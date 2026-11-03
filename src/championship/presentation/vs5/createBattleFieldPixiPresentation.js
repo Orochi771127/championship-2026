@@ -130,6 +130,35 @@ export function battleBandRect(band, frame) {
   });
 }
 
+/**
+ * Display-only separation (Owner 2026-11-03): fighters whose ground points
+ * nearly coincide are drawn apart sideways, so a clinch of six reads as six
+ * bodies instead of one heap. Each point is pushed by at most `maxShift`, so
+ * native impact sparks still land on the drawn body; the stand positions the
+ * battle owns are untouched. Returns slot -> offset x.
+ */
+export function battleSeparationOffsets(points, radius, maxShift = radius) {
+  const offsets = new Map(points.map(p => [p.slot, 0]));
+  if (!(radius > 0)) return offsets;
+  for (let pass = 0; pass < 3; pass++) {
+    for (let i = 0; i < points.length; i++) for (let j = i + 1; j < points.length; j++) {
+      const a = points[i], b = points[j];
+      const ax = a.x + offsets.get(a.slot), bx = b.x + offsets.get(b.slot);
+      const dx = bx - ax, dy = (b.y - a.y) * 2.2, distance = Math.hypot(dx, dy);
+      if (distance >= radius) continue;
+      // Teammates spread fully; opponents only partly, so a melee exchange still touches.
+      const share = (radius - distance) / 2 * (a.team === b.team ? 1 : 0.55);
+      const side = dx !== 0 ? Math.sign(dx) : (a.slot < b.slot ? 1 : -1);
+      offsets.set(a.slot, offsets.get(a.slot) - side * share);
+      offsets.set(b.slot, offsets.get(b.slot) + side * share);
+    }
+  }
+  // Scale the whole set, never clamp it: clamping would stack a pile again at the cap.
+  const cap = Math.max(0, Math.min(radius, maxShift)), peak = Math.max(0, ...[...offsets.values()].map(Math.abs));
+  if (peak > cap) for (const [slot, value] of offsets) offsets.set(slot, value * cap / peak);
+  return offsets;
+}
+
 function drawStandMarkers(graphic, rect, view, renderedSlots = new Set()) {
   for (const combatant of view.combatants) {
     if (!combatant.present || renderedSlots.has(combatant.slot)) continue;
@@ -194,7 +223,7 @@ function drawField(graphic, rect, frame, view, renderedSlots) {
  */
 export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt = null, characterRoster = null, effectArt = null, autoAdvance = true,
   onView = null, dynamicFx = false, fx = null, localTeam = 0, responsiveLayout = false,
-  reducedMotion = prefersReducedMotion(), juicy = false }) {
+  reducedMotion = prefersReducedMotion(), juicy = false, safeInsets = null }) {
   assertDependencies(stage, source);
   responsiveLayout = responsiveLayout && dynamicFx;
   if (fieldArt !== null && (!fieldArt.displayObject || typeof fieldArt.update !== "function"
@@ -245,6 +274,13 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   let layoutDtMs = 0;
   const motionEvents = [];
   let lastCamera = null;
+  // HUD-aware camera (Owner 2026-11-03): the screen pixels the floating HUD
+  // rows cover, read from the DOM view on each draw. Fighters stay between them.
+  const readInsets = () => {
+    if (typeof safeInsets !== 'function') return null;
+    try { const value = safeInsets(); return value && (value.top > 0 || value.bottom > 0) ? value : null; } catch { return null; }
+  };
+  let lastInsets = null;
 
   let groundShadows = null;
   try { groundShadows = await createBm03GroundShadows({PIXI:stage.PIXI,parent:shadowLayer,fieldArt}); }
@@ -290,6 +326,11 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     // Never size a creature using its atlas dimensions or a fixed circle radius.
     const nativeWidth = fieldArt?.field.nativeWidthPx;
     const nativeScale = nativeWidth > 0 ? rect.width / nativeWidth : null;
+    // Dynamic presentation: spread overlapping standing fighters, eased per slot.
+    const spread = fxLayer && nativeScale && !reducedMotion ? battleSeparationOffsets(view.combatants
+      .filter(c => c.present && !c.down && c.speciesId)
+      .map(c => ({slot:c.slot, team:c.team, x:rect.x + c.stand.x * rect.width, y:rect.y + c.stand.y * rect.height})), 34 * nativeScale, 14 * nativeScale) : null;
+    const ease = Math.min(1, layoutDtMs / 140);
     for (const combatant of view.combatants) {
       let entry = actors.get(combatant.slot);
       if (entry && (!combatant.present || entry.speciesId !== combatant.speciesId)) {
@@ -351,7 +392,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
           bottom=motion.baseBounds[3]*packedScale/resolution;
         }
       }
-      const x = rect.x + combatant.stand.x * rect.width;
+      entry.spreadX = spread ? (entry.spreadX ?? 0) + ((spread.get(combatant.slot) ?? 0) - (entry.spreadX ?? 0)) * (layoutDtMs > 0 ? ease : 0) : 0;
+      const x = rect.x + combatant.stand.x * rect.width + entry.spreadX;
       const y = rect.y + combatant.stand.y * rect.height;
       // Dynamic presentation only: a hit squash and knock about the ground
       // anchor. The stand position the simulation owns is unchanged.
@@ -438,7 +480,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
         slotInfos.set(combatant.slot, {slot:combatant.slot, x, y:y-lift, groundY:y, liftNative:(combatant.nativeMotion?.heightNativePx ?? 0),
           top:y-lift-bodyHeight, height:bodyHeight, width:bodyWidth,
           facing:combatant.stand.facing, team:combatant.team, down:combatant.down, engaged:combatant.engaged,framingBounds,
-          left:x-bodyWidth/2, right:x+bodyWidth/2, bottom:y});
+          left:x-bodyWidth/2, right:x+bodyWidth/2, bottom:y, spread:entry.spreadX});
       }
       if (fxLayer) {
         // Field interaction from the fighter's own native motion (never the
@@ -537,11 +579,13 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     // Dynamic presentation: events from this view, then the camera for it.
     let camera = {zoom:1, x:0, y:0};
     let fxContext = null;
+    const insets = fxLayer && fieldArt ? readInsets() : null;
+    lastInsets = insets;
     if (fxLayer && fieldArt) {
       const events = [...tracker.consume(view), ...motionEvents];
       camera = director.update({dtMs, viewport:{width:rect.width, height:rect.height}, art:artRect,
-        subjects:[...slotInfos.values()], points:fxLayer.projectilePoints()});
-      fxContext = {artRect, nativeScale, localTeam, opening:view.opening, viewport:{width:rect.width, height:rect.height},
+        subjects:[...slotInfos.values()], points:fxLayer.projectilePoints(), insets});
+      fxContext = {artRect, nativeScale, localTeam, opening:view.opening, viewport:{width:rect.width, height:rect.height}, insets,
         slotInfo:slot => slotInfos.get(slot) ?? null,
         opponentsOf:slot => view.combatants.filter(c => c.present && !c.down && c.team !== view.combatants[slot]?.team).map(c => c.slot),
         camera:{...camera, director}};
@@ -561,7 +605,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     const composed=Object.freeze({zoom:prelude.zoom*camera.zoom, x:prelude.zoom*camera.x+prelude.x, y:prelude.zoom*camera.y+prelude.y,
       anchorX:prelude.anchorX, anchorY:prelude.anchorY});
     const transform=fieldArt ? clampBattleCameraToMap({viewport:rect,art:artRect,transform:composed,
-      anchor:{x:anchorLocalX,y:anchorLocalY},box:camera.framingBox??null}) : composed;
+      // The original special prelude keeps framing its own focus, as before the HUD-aware shot.
+      anchor:{x:anchorLocalX,y:anchorLocalY},box:(focus ? camera.focusBox ?? camera.framingBox : camera.framingBox)??null,insets}) : composed;
     world.scale.set(transform.zoom);
     world.position.set(transform.x,transform.y);
     lastCamera = fxLayer ? {...camera, total:transform.zoom} : null;
@@ -573,10 +618,12 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     if (fxLayer && fxContext) fxLayer.updateScreen({viewport:{width:rect.width, height:rect.height}, view,
       ctx:{...fxContext, camera:{zoom:transform.zoom, x:transform.x, y:transform.y, director}}, dtMs});
     drawBattleDigitalCurtain(curtain,rect.width,rect.height,focus,reducedMotion);
+    // hyperWrap: the dynamic layer draws the hyper ring around the caster in
+    // depth (back half behind, front half in front), so the flat 3D copy stays off.
     focusPlacement=focus ? {...transform,nativeScale,
-      width:rect.width,height:rect.height,reducedMotion}:null;
+      width:rect.width,height:rect.height,reducedMotion,hyperWrap:Boolean(fxLayer?.hyperWrapActive?.())}:null;
     fieldPlacement={...transform,artRect:{...artRect},width:rect.width,height:rect.height,
-      nativeScale,reducedMotion};
+      nativeScale,reducedMotion,insets:lastInsets ? {top:lastInsets.top, bottom:lastInsets.bottom} : null};
   }
 
   function advance(ticker) {
@@ -595,7 +642,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     if (autoAdvance && !source.getFrame().outcome.ended) {
       const elapsed=ticker?.deltaMS??nativeFrameMs;
       if(!Number.isFinite(elapsed)||elapsed<0)throw new TypeError('BATTLE_INVALID_FRAME_ELAPSED');
-      pendingFrames += elapsed/nativeFrameMs;
+      // Slow motion (signature hit, final K.O.) paces the same frames more slowly; none is skipped.
+      pendingFrames += elapsed/nativeFrameMs*(director?.timeScale?.() ?? 1);
       while(pendingFrames+1e-9>=1 && !disposed && !source.getFrame().outcome.ended){
         pendingFrames=Math.max(0,pendingFrames-1);
         const beforeOpening=(current ?? source.getView()).opening;
@@ -667,8 +715,11 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
         viewport: Object.freeze({ ...lastViewport }),
         effectSprites:effectSprites?.getDiagnostics() ?? null,
         dynamicFx:fxLayer ? Object.freeze({...fxLayer.getDiagnostics(), camera:lastCamera,
-          bodies:[...slotInfos.values()].map(b=>Object.freeze({slot:b.slot,x:Math.round(b.x),groundY:Math.round(b.groundY),top:Math.round(b.top),width:Math.round(b.width)})),
-          director:director.getState()}) : null,
+          bodies:[...slotInfos.values()].map(b=>Object.freeze({slot:b.slot,x:Math.round(b.x),groundY:Math.round(b.groundY),top:Math.round(b.top),width:Math.round(b.width),down:Boolean(b.down),
+            // The declared display separation; the body is otherwise on its stand.
+            spread:Math.round((b.spread ?? 0)*100)/100})),
+          director:director.getState(), insets:lastInsets,
+          world:fieldPlacement ? Object.freeze({zoom:fieldPlacement.zoom, x:fieldPlacement.x, y:fieldPlacement.y}) : null}) : null,
         groundShadows:groundShadows?.getDiagnostics() ?? null,
         characters: Object.freeze([...actors].map(([slot, entry]) => Object.freeze({
           slot, speciesId: entry.speciesId, entityId: entry.actor.entityId,

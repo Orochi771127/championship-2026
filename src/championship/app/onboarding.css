@@ -1132,6 +1132,16 @@ dialog.cm-dialog[data-variant="tutorial-guide"][open] { animation: ob-holo-in 42
   justify-self: end;
   width: min(calc(100% - min(38vw, calc(60vh / 0.815)) - 12px), 760px);
 }
+/* Owner 2026-11-03: after her introduction Ai-chan tells the rest docked small in the lower-left corner,
+   above the text box, so the partner's scenes stay clear and the box keeps its full width. */
+#cm-opening .cm-opening-story__guide { transition: opacity 280ms ease, transform 280ms ease, width 360ms cubic-bezier(.22, 1, .36, 1), bottom 360ms cubic-bezier(.22, 1, .36, 1), left 360ms cubic-bezier(.22, 1, .36, 1); }
+#cm-opening .cm-opening-story[data-guide-dock="true"] .cm-opening-story__guide {
+  left: max(12px, env(safe-area-inset-left, 0px));
+  bottom: calc(var(--story-dialogue-h, 190px) + 18px + env(safe-area-inset-bottom, 0px));
+  width: clamp(84px, 22vw, 132px);
+  transform: none;
+}
+#cm-opening .cm-opening-story[data-guide-dock="true"] .cm-cutscene__dialogue { justify-self: stretch; width: auto; }
 #cm-opening .cm-opening-story .cm-cutscene__choices { grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
 #cm-opening .cm-opening-story .cm-cutscene__choice { min-height: 48px; }
 @media (orientation: portrait) {
@@ -1146,6 +1156,11 @@ dialog.cm-dialog[data-variant="tutorial-guide"][open] { animation: ob-holo-in 42
   }
   #cm-opening .cm-opening-story[data-guide="visible"] .cm-opening-story__guide { transform: translate(-50%, 0); }
   #cm-opening .cm-opening-story[data-guide="visible"] .cm-cutscene__dialogue { justify-self: stretch; width: auto; }
+}
+
+@media (orientation: portrait) {
+  #cm-opening .cm-opening-story[data-guide-dock="true"] .cm-opening-story__guide { left: max(12px, env(safe-area-inset-left, 0px)); transform: none; width: clamp(84px, 24vw, 120px); }
+  #cm-opening .cm-opening-story[data-guide-dock="true"] .cm-cutscene__dialogue { justify-self: stretch; width: auto; }
 }
 
 /* ---- Reduced motion -------------------------------------------------------------- */
@@ -1164,6 +1179,19 @@ dialog.cm-dialog[data-variant="tutorial-guide"][open] { animation: ob-holo-in 42
     transition-duration: 1ms !important;
   }
 }
+
+/* ---- Typing on a phone (Owner 2026-11-03) -------------------------------------------
+   The software keyboard covers the lower half; while the name field has focus the licence and
+   the incubator drop their decoration so the name, its count and 決定 stay above the keyboard. */
+#cm-opening .cm-opening__name.is-typing { padding-top: 12px; padding-bottom: 12px; }
+#cm-opening .cm-license.is-typing :is(.cm-license__photo, .cm-license__kicker, .cm-license__org, .cm-license__number),
+#cm-opening .cm-license.is-typing > .cm-guest-badge,
+#cm-opening .cm-pod.is-typing :is(.cm-pod__kicker, .cm-pod__caption) { display: none; }
+#cm-opening .cm-license.is-typing .cm-license__body { grid-template-columns: minmax(0, 1fr); }
+#cm-opening .cm-license.is-typing .cm-license__top { margin-bottom: 6px; }
+#cm-opening .cm-pod.is-typing .cm-pod__stage { height: 64px; }
+#cm-opening .cm-pod.is-typing .cm-pod__egg { height: 48px; }
+#cm-opening .cm-opening__name.is-typing .cm-onboard-cta { margin-top: 10px; }
 
 /* ---- Short landscape phones (viewport health check 2026-11-01) ------------------
    On 844x390 and 667x375 the tamer licence and the egg incubator ran past the screen
