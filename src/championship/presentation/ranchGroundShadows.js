@@ -12,13 +12,21 @@ export function ranchShadowWorldPoint(point,bounds,pixelScale,height,view=RANCH_
   return ranchNativeToWorld((point.x-bounds.x)/pixelScale,
     (point.y-bounds.y)/(pixelScale*view.groundScaleY)+height*view.lift,height);
 }
-export function ranchShadowScreenEllipses(shadow,ellipses){
-  return ellipses.map(e=>{
+// Owner 2026-11-03: the contact ellipse is centred on the feet, so half of it hung
+// below them and read as a shadow shifted down. The 3D contact shadow moves up by
+// this share of the contact ellipse's vertical radius (screen space), so most of it
+// lies under the body. The selection and bloodline rings keep the feet centre: they
+// surround the partner (Owner, the same day).
+export const RANCH_CONTACT_SHADOW_RAISE=.5;
+export function ranchShadowScreenEllipses(shadow,ellipses,{raise=0}={}){
+  const screen=ellipses.map(e=>{
     const c=shadow.toGlobal({x:e.x,y:e.y});
     const x=shadow.toGlobal({x:e.x+e.radiusX,y:e.y});
     const y=shadow.toGlobal({x:e.x,y:e.y+e.radiusY});
     return {x:c.x,y:c.y,rx:Math.abs(x.x-c.x),ry:Math.abs(y.y-c.y)};
   }).filter(e=>e.rx>0&&e.ry>0&&Object.values(e).every(Number.isFinite));
+  const up=screen.length?screen[0].ry*raise:0;
+  return screen.map(e=>({...e,y:e.y-up}));
 }
 export function createRanchGroundShadows(scene){
   const items=new Map();
@@ -30,7 +38,7 @@ export function createRanchGroundShadows(scene){
   function sync(key,entry,bounds,pixelScale,actorTransferred,view=RANCH_LAYOUT_VIEW){
     const shadow=entry.shadow;
     if(!actorTransferred||!shadow?.visible||!entry.root.visible||!entry.groundShadowEllipses?.length)return;
-    const ellipses=ranchShadowScreenEllipses(shadow,entry.groundShadowEllipses);
+    const ellipses=ranchShadowScreenEllipses(shadow,entry.groundShadowEllipses,{raise:RANCH_CONTACT_SHADOW_RAISE});
     if(!ellipses.length)return;
     let item=items.get(key);
     if(item&&(item.count!==ellipses.length||item.shadow!==shadow)){release(item);items.delete(key);item=null;}
@@ -51,9 +59,10 @@ export function createRanchGroundShadows(scene){
     }
     const left=Math.min(...ellipses.map(e=>e.x-e.rx)),right=Math.max(...ellipses.map(e=>e.x+e.rx));
     const top=Math.min(...ellipses.map(e=>e.y-e.ry)),bottom=Math.max(...ellipses.map(e=>e.y+e.ry));
-    // Below the existing actor support depth (.015), above the contact plane.
+    // Just above the contact plane: the walk height, or the visible floor sheet
+    // over it (ranchDecalFloor.js). Below the actor support depth on plain floor.
     // No actor world push, disabled depth test, or environment depth change.
-    const height=(entry.root.threeGroundHeight??0)+.006;
+    const height=(entry.root.threeDecalHeight??entry.root.threeGroundHeight??0)+.006;
     const positions=item.mesh.geometry.attributes.position;
     [{x:left,y:top},{x:right,y:top},{x:left,y:bottom},{x:right,y:bottom}].forEach((p,i)=>{
       const w=ranchShadowWorldPoint(p,bounds,pixelScale,height,view);positions.setXYZ(i,w.x,w.y,w.z);

@@ -411,44 +411,59 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
 }
 .int-rh2-training-label[data-positive="true"] { color: #86f2d8; -webkit-text-stroke-color: #06231c; text-shadow: 0 1px 0 #06231c, 0 0 6px rgba(0, 0, 0, 0.6); }
 
-/* Ranch automation badges (DIAMOND_ECONOMY_20261102): "全自動飼育運轉中" over each automated cage. */
+/* Ranch machine tags (AUTO_CARE_3D_20261103, Owner 2026-11-03: no banner over the partners). One small translucent
+ * countdown floats over each running 3D machine; a tap opens its time left and a battery. Icons are drawn in CSS. */
 .int-rh2-cage-badges { position: absolute; inset: 0; z-index: 4; overflow: hidden; pointer-events: none; }
-.int-rh2-cage-auto { position: absolute; display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; align-items: center;
-  column-gap: 5px; padding: 3px 9px 3px 5px; border: 2.5px solid #14141f; border-radius: 12px; transform: translate(-50%, -100%);
-  background: linear-gradient(180deg, #e9fbff, #9fe3ff); color: #08263a; white-space: nowrap; box-shadow: 0 3px 0 #14141f;
-  animation: int-rh2-cage-auto-bob 2.4s ease-in-out infinite; }
-.int-rh2-cage-auto[data-royal="ROYAL_RANCH"], .int-rh2-cage-auto[data-royal="STELLAR_ZOO"] { background: linear-gradient(180deg, #fff7c8, #ffd23f 60%, #ffae2b);
-  color: #3a2600; box-shadow: 0 3px 0 #14141f, 0 0 12px rgba(255, 210, 63, .85); }
-.int-rh2-cage-auto[data-royal="STELLAR_ZOO"] { background: linear-gradient(180deg, #f5ecff, #c9a6ff 55%, #ffd23f); }
-/* Owner 2026-11-03: a drawn gold gear leads the badge; the badge is lighter so it never hides the cage. */
-.int-rh2-cage-auto { opacity: .94; }
-.int-rh2-cage-auto__icon { position: relative; grid-row: 1 / span 2; width: 22px; height: 22px; filter: drop-shadow(0 1px 0 #14141f); }
-.int-rh2-cage-auto__gear { position: absolute; inset: 0; background: #14141f;
-  clip-path: polygon(99.0% 59.8%, 79.9% 70.0%, 77.8% 91.6%, 57.0% 85.3%, 40.2% 99.0%, 30.0% 79.9%, 8.4% 77.8%, 14.7% 57.0%, 1.0% 40.2%, 20.1% 30.0%, 22.2% 8.4%, 43.0% 14.7%, 59.8% 1.0%, 70.0% 20.1%, 91.6% 22.2%, 85.3% 43.0%); }
-.int-rh2-cage-auto__gear::after { content: ""; position: absolute; inset: 2px; background: linear-gradient(180deg, #fff3a8, #ffd23f 55%, #e7a51b);
-  clip-path: polygon(99.0% 59.8%, 79.9% 70.0%, 77.8% 91.6%, 57.0% 85.3%, 40.2% 99.0%, 30.0% 79.9%, 8.4% 77.8%, 14.7% 57.0%, 1.0% 40.2%, 20.1% 30.0%, 22.2% 8.4%, 43.0% 14.7%, 59.8% 1.0%, 70.0% 20.1%, 91.6% 22.2%, 85.3% 43.0%); }
-.int-rh2-cage-auto__hub { position: absolute; inset: 34%; border-radius: 50%; background: #14141f; }
-.int-rh2-cage-auto:not([data-royal=""]) .int-rh2-cage-auto__icon { width: 24px; height: 24px; }
-/* The running devices: a feeder tower and a disc cleaner standing on the cage's corner, a soft cyan ring under each. */
-.int-rh2-cage-devices { position: absolute; display: flex; align-items: flex-end; gap: 2px; transform: translate(-50%, -100%); }
-.int-rh2-cage-devices[hidden] { display: none; }
-.int-rh2-cage-device { position: relative; display: grid; place-items: end center; width: 34px; height: 38px; }
-.int-rh2-cage-device::before { content: ""; position: absolute; left: 3px; right: 3px; bottom: 0; height: 9px; border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(94, 234, 212, .85), rgba(56, 189, 248, .35) 70%, transparent);
-  animation: int-rh2-device-glow 1.8s ease-in-out infinite; }
-.int-rh2-cage-device img { position: relative; width: 32px; height: 32px; object-fit: contain; margin-bottom: 3px;
-  filter: drop-shadow(0 2px 0 rgba(20, 20, 31, .55)) drop-shadow(0 0 4px rgba(94, 234, 212, .7)); }
-@keyframes int-rh2-device-glow { 0%, 100% { opacity: .65; transform: scaleX(.9); } 50% { opacity: 1; transform: scaleX(1.08); } }
-.int-rh2-cage-auto__title { font-size: 12.5px; font-weight: 1000; line-height: 1.1; }
-.int-rh2-cage-auto__sub { font-size: 10.5px; font-weight: 800; line-height: 1.1; opacity: .9; }
-.int-rh2-auto-pop { position: absolute; transform: translate(-50%, -100%); padding: 1px 7px; border: 2px solid #14141f; border-radius: 999px;
+.int-rh2-care-tag { position: absolute; display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 7px 0 4px;
+  border: 1px solid rgba(255, 255, 255, .28); border-radius: 999px; transform: translate(-50%, -100%);
+  background: rgba(12, 16, 34, .58); color: #f2fbff; font: 800 11px/1 system-ui, sans-serif; font-variant-numeric: tabular-nums;
+  white-space: nowrap; pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); transition: transform 160ms cubic-bezier(.23, 1, .32, 1); }
+.int-rh2-care-tag:active { transform: translate(-50%, -100%) scale(.96); }
+.int-rh2-care-tag::after { content: ""; position: absolute; left: 50%; bottom: -4px; width: 6px; height: 6px; margin-left: -3px;
+  background: rgba(12, 16, 34, .58); transform: rotate(45deg); border-right: 1px solid rgba(255, 255, 255, .28); border-bottom: 1px solid rgba(255, 255, 255, .28); }
+.int-rh2-care-tag__icon { position: relative; flex: none; width: 13px; height: 13px; }
+/* Robot: a white disc with a cyan sensor band and a green halo. */
+.int-rh2-care-tag[data-kind="CLEAN"] .int-rh2-care-tag__icon { border-radius: 50%; background: radial-gradient(circle at 50% 42%, #ffffff 0 34%, #d7e1ec 35% 62%, #46ff86 63% 72%, #d7e1ec 73%);
+  box-shadow: inset 0 -2px 0 #18d8ff; }
+/* Meat: a red-brown chunk with a bone end (also the −1 pop beside the partner). */
+.int-rh2-care-tag[data-kind="FEED"] .int-rh2-care-tag__icon, .int-rh2-auto-pop--meat .int-rh2-care-tag__icon {
+  border-radius: 55% 45% 50% 50%; background: radial-gradient(circle at 38% 36%, #ff9a7a 0 18%, #d2492e 19% 70%, #8c2c1c 71%); width: 11px; height: 11px; margin-right: 2px; }
+.int-rh2-care-tag[data-kind="FEED"] .int-rh2-care-tag__icon::after, .int-rh2-auto-pop--meat .int-rh2-care-tag__icon::after {
+  content: ""; position: absolute; right: -4px; top: -2px; width: 6px; height: 4px; border-radius: 2px; background: #fff6e2; transform: rotate(-35deg); }
+.int-rh2-care-tag[data-no-meat="true"] { border-color: rgba(255, 186, 64, .9); color: #ffd98a; animation: int-rh2-care-blink 1.1s steps(2, jump-none) infinite; }
+.int-rh2-care-tag[data-alert="true"] { border-color: rgba(70, 255, 134, .9); box-shadow: 0 0 8px rgba(70, 255, 134, .55); }
+.int-rh2-care-tag__detail { position: absolute; left: 50%; bottom: calc(100% + 8px); display: grid; gap: 4px; min-width: 168px; padding: 8px 10px;
+  border: 2px solid #14141f; border-radius: 12px; background: #f6fbff; color: #0b1e2c; box-shadow: 0 3px 0 #14141f; text-align: left;
+  transform: translateX(-50%); transform-origin: 50% 100%; cursor: default; white-space: normal;
+  animation: int-rh2-care-detail-in 180ms cubic-bezier(.23, 1, .32, 1) both; }
+/* Near a screen edge the card opens inwards from the tag instead of centring on it. */
+.int-rh2-care-tag[data-edge="left"] .int-rh2-care-tag__detail { left: -4px; transform: none; transform-origin: 12% 100%; }
+.int-rh2-care-tag[data-edge="right"] .int-rh2-care-tag__detail { left: auto; right: -4px; transform: none; transform-origin: 88% 100%; }
+.int-rh2-care-tag__name { font-size: 12.5px; font-weight: 1000; }
+.int-rh2-care-tag__left { font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.int-rh2-care-tag__hint { font-size: 11px; font-weight: 700; color: #9a5a00; }
+.int-rh2-care-tag__battery { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 30px; padding: 4px 10px;
+  border: 2px solid #14141f; border-radius: 10px; background: linear-gradient(180deg, #8ff7c0, #34d17d); color: #06281a;
+  font: 900 12px/1.1 system-ui, sans-serif; box-shadow: 0 2px 0 #14141f; cursor: pointer; transition: transform 140ms ease-out; }
+.int-rh2-care-tag__battery:active { transform: scale(.97); }
+.int-rh2-care-tag__battery:disabled { background: #d5dbe2; color: #5b6570; cursor: not-allowed; }
+/* A battery cell, drawn. */
+.int-rh2-care-tag__cell { position: relative; width: 14px; height: 8px; border: 2px solid currentColor; border-radius: 2px; }
+.int-rh2-care-tag__cell::before { content: ""; position: absolute; inset: 1px 5px 1px 1px; background: currentColor; }
+.int-rh2-care-tag__cell::after { content: ""; position: absolute; right: -4px; top: 1px; width: 2px; height: 2px; background: currentColor; }
+.int-rh2-auto-pop { position: absolute; display: inline-flex; align-items: center; transform: translate(-50%, -100%); padding: 1px 7px; border: 2px solid #14141f; border-radius: 999px;
   background: #fff465; color: #14141f; font-size: 12px; font-weight: 1000; white-space: nowrap; box-shadow: 0 2px 0 #14141f;
   animation: int-rh2-auto-pop 1.6s cubic-bezier(.2, .9, .3, 1) both; }
 .int-rh2-auto-pop[data-kind="FEED"] { background: #ffd0e4; }
-@keyframes int-rh2-cage-auto-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -3px; } }
+.int-rh2-auto-pop[data-kind="MEAT"] { background: #fff1e6; color: #8c2c1c; }
+.int-rh2-auto-pop[data-kind="LOCK"] { min-width: 18px; justify-content: center; background: #46ff86; font-size: 13px; }
+.int-rh2-auto-pop[data-kind="EXPIRE"] { background: #dfe6ee; color: #3c4652; }
 @keyframes int-rh2-auto-pop { 0% { opacity: 0; translate: 0 6px; } 15% { opacity: 1; translate: 0 0; } 80% { opacity: 1; translate: 0 -22px; }
   100% { opacity: 0; translate: 0 -30px; } }
-@media (prefers-reduced-motion: reduce) { .int-rh2-cage-auto, .int-rh2-cage-device::before { animation: none; } .int-rh2-auto-pop { animation-duration: 1.2s; } }
+@keyframes int-rh2-care-blink { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+@keyframes int-rh2-care-detail-in { from { opacity: 0; scale: .95; } to { opacity: 1; scale: 1; } }
+@media (prefers-reduced-motion: reduce) { .int-rh2-care-tag, .int-rh2-care-tag__detail { animation: none; } .int-rh2-auto-pop { animation-duration: 1.2s; } }
 /* ---- Detail sheet (the full record) --------------------------------------- *
  * One component: a bottom sheet on a phone, a side sheet on a tablet. */
 .int-rh2-detail {
