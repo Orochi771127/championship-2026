@@ -1014,6 +1014,10 @@
 :root[data-theme="arcade"] .cm-backpack__item { border: 3px solid var(--ax-ink); background: var(--ax-white); box-shadow: 0 4px 0 var(--ax-white-sh); }
 :root[data-theme="arcade"] .cm-backpack__count { padding: 0 6px; border-radius: 999px; background: var(--ax-ink); color: var(--ax-yellow); }
 @media (max-width: 380px) { .cm-backpack__item { grid-template-areas: "art copy count" "use use use" "picker picker picker"; } .cm-backpack__use { justify-self: stretch; } }
+/* AUTO_CARE_3D_20261103: a core's two-way key (deploy 1 h / extend +1 h) takes its own row, so the copy keeps its width. */
+.cm-backpack__item[data-kind="AUTOMATION"] { grid-template-areas: "art copy count" "use use use" "picker picker picker"; }
+.cm-backpack__item[data-kind="AUTOMATION"] .cm-backpack__use { justify-self: stretch; }
+.cm-backpack__duty { display: block; font-size: 12px; font-weight: 900; line-height: 1.35; color: #7c3aed; }
 
 /* ---- Journal rows: the real item, its art and count ---- */
 .int-rh2-discovery-item { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: center; gap: 8px; }
@@ -2898,6 +2902,7 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
   color: #1fd67a; font-weight: 900; font-size: 15px; -webkit-text-stroke: 2px #fff; paint-order: stroke;
   animation: cm-stock-gain 1.1s ease-out forwards;
 }
+.cm-toolbar__stock-gain--spent { color: #ff4d6d; }
 @keyframes cm-stock-gain { 0% { opacity: 0; transform: translateY(6px) scale(.8); } 20% { opacity: 1; transform: translateY(0) scale(1.1); } 100% { opacity: 0; transform: translateY(-22px) scale(1); } }
 @media (prefers-reduced-motion: reduce) {
   .cm-toolbar__cell.is-stock-landed, .cm-toolbar__stock-gain { animation-duration: .01ms; }

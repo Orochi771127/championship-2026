@@ -505,12 +505,8 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
       if (app.gachaForgeAutomation?.(itemId)?.ok) committed("purchase");
       return commit();
     },
-    gachaMountCore(coreId, instanceId) {
-      if (app.gachaMountCore?.(coreId, instanceId)?.ok) committed("purchase");
-      return commit();
-    },
-    gachaUnmountCore(module, instanceId) {
-      if (app.gachaUnmountCore?.(module, instanceId)?.ok) committed("purchase");
+    gachaDeployCore(coreId, instanceId) {
+      if (app.gachaDeployCore?.(coreId, instanceId)?.ok) committed("purchase");
       return commit();
     },
     claimDiamondRewards() {
