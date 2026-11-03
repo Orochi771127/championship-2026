@@ -68,7 +68,7 @@ test('new art browses in five locales without exposing gameplay data or changing
       assert.equal(image.src,row.display.src);
       image.naturalWidth=row.display.width;image.naturalHeight=row.display.height;image.onload();
       assert.equal(view.root.querySelector('.cm-dex-hero').dataset.art,'ready');
-      assert.equal(view.root.querySelector('.cm-dex-data'),null);
+      assert.ok(view.root.querySelector('.cm-dex-data'),'planned data shown (Owner 2026-11-03)');assert.equal(Boolean(view.root.querySelector('[data-showcase]')),false,'no previews without motion art');
       assert.equal(view.root.querySelector('.cm-dex-conditions__toggle'),null);
       view.assertUnchanged();
     }finally{view.dispose();}

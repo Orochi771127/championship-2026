@@ -73,7 +73,7 @@ test("the production encyclopedia preserves 216 native rows and appends two form
   assert.equal(slots.filter((slot) => slot.kind === "REGULAR").length, DATABASE_REGULAR_COUNT);
   assert.equal(slots.slice(0,216).some((slot) => /[\u3040-\u30ff]/.test(slot.displayName)), false);
   assert.deepEqual(slots.slice(216,218).map(slot=>slot.displayName),["王銅獼王","天穹帝龍・戰鬥型態"]);
-  assert.deepEqual(slots.slice(218).map(slot=>slot.displayName),["星塵豬","隕甲豬","星海母","極光鯊","天穹螳","星核豆獸","雷霆貓狼","雷霆戰狼"]);
+  assert.deepEqual(slots.slice(218).map(slot=>slot.displayName),["星塵豬","隕甲豬","星海母","極光鯊","天穹螳","星核豆獸","迅雷貓狼","雷霆戰狼"]);
   assert.equal(DATABASE_UNLOCK_EVIDENCE, "ROM_VERIFIED_02116A20_REGISTRATION");
 });
 

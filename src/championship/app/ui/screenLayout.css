@@ -2366,6 +2366,13 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
   box-shadow: 0 4px 0 var(--ax-ink);
 }
 :root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-routes__heading { margin: 0 0 8px; color: var(--ax-yellow); text-shadow: 0 2px 0 #0e101a; }
+/* Owner 2026-11-03: an art-only original's planned links, light text on the dark route panel. */
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-planned__list { margin: 0 0 8px; padding: 0; list-style: none; display: grid; gap: 6px; }
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-planned__link {
+  padding: 8px 10px; border-radius: 12px; background: rgba(255, 255, 255, 0.08);
+  color: #f4f1ff; font-size: 14px; font-weight: 700; line-height: 1.4;
+}
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] .cm-dex-planned .cm-dex-conditions__notice { color: #c9c3e6; }
 :root[data-theme="arcade"] body .cm-vs2-root[data-screen="DATABASE"] :is(.cm-dex-routes__source, .cm-dex-routes__target) {
   border: 2px solid var(--ax-ink);
   border-radius: 12px;
