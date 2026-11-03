@@ -510,7 +510,11 @@ for(const [code,target] of [['MA01','MAIN_B16_v1/cell_09'],['MA02','MAIN_B16/cel
   assert.equal(createHash('sha256').update(oldBytes).digest('hex'),policy.previousManifestSha256);
   // web-v2 may move storage (image/sha256/frame/trim, Arena placement) but never identity or geometry.
   const identity=frames=>Object.fromEntries(Object.entries(frames).map(([k,{image,sha256,frame,trim,arena,v1,...rest}])=>[k,rest]));
-  const old=JSON.parse(oldBytes);assert.deepEqual(identity(d.frames),identity(old.frames));assert.deepEqual(d.clips,old.clips);
+  // A named patch (2026-11-03 walk/bound fixes) may re-bind only the clips it lists, from frames the role already has.
+  const replaced=new Set(d.patch20261103?.replacedClips??[]),kept=clips=>clips.filter(c=>!replaced.has(c.id));
+  const old=JSON.parse(oldBytes);assert.deepEqual(identity(d.frames),identity(old.frames));
+  assert.deepEqual(d.clips.map(c=>c.id),old.clips.map(c=>c.id));assert.deepEqual(kept(d.clips),kept(old.clips));
+  for(const c of d.clips.filter(c=>replaced.has(c.id)))assert.ok(c.frames.every(f=>d.frames[f.assetId]),c.id);
   for(const [k,f] of Object.entries(d.frames)){const o=old.frames[k],s=f.v1??f;
    assert.deepEqual([s.image,s.sha256,s.frame??null,s.trim??null],[o.image,o.sha256,o.frame??null,o.trim??null],k);}
   assert.equal(policy.scope,'MAIN15_UNBOUND_ONLY');assert.equal(policy.frameIndex,1);assert.equal(policy.assetId,target);
