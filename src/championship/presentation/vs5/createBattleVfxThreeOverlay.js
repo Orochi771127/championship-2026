@@ -126,7 +126,7 @@ export async function mountBattleVfxThreeOverlay({
   // a cue comes from the dynamic layer's events, never from damage guesses.
   const cueSystems = new Map(); // systemId -> {fx, container, until, loop, span, ready}
   const CUE_COMPANION = Object.freeze({'common-snowstome': 'common-snow', 'common-rain': 'common-mist'});
-  const WEATHER_MS = 1500, BUFF_MS = 1100;
+  const WEATHER_MS = 1500, BUFF_MS = 1100, IMPACT_MAX_MS = 1500;
   function cueSystem(systemId) {
     if (!runtime.resolveSystemId(systemId)) return null;
     let entry = cueSystems.get(systemId);
@@ -202,7 +202,9 @@ export async function mountBattleVfxThreeOverlay({
     if (live) {
       const focus = view.specialPrelude;
       const placement = getFocusPlacement();
-      model.visible = Boolean(focus?.hyperVisible && placement);
+      // The dynamic layer wraps the hyper ring round the caster in depth
+      // (Owner 2026-11-03); a flat copy here would lie over the body.
+      model.visible = Boolean(focus?.hyperVisible && placement && !placement.hyperWrap);
       if (model.visible) {
         const frame = placement.reducedMotion ? 0 : Math.max(0,focus.frame-1);
         instance.sampleNativeFrame(frame);ring.sampleNativeFrame(frame);
@@ -220,7 +222,11 @@ export async function mountBattleVfxThreeOverlay({
       const field=getFieldPlacement(),active=view.impactEffects??[];
       for(const item of impacts){
         const effect=active.find(e=>e.type===item.type&&e.slot===item.slot);
-        item.container.visible=Boolean(effect&&field);
+        // An impact sprite never outlives IMPACT_MAX_MS on screen, even if its
+        // record lingers in the published view (Owner 2026-11-03: orphan bar).
+        if(!effect||item.effectId!==effect.id){item.effectId=effect?.id??null;item.shownMs=0;}
+        else item.shownMs=(item.shownMs??0)+effectiveDeltaMS;
+        item.container.visible=Boolean(effect&&field&&item.shownMs<IMPACT_MAX_MS);
         if(!item.container.visible)continue;
         visibleImpacts++;
         item.fx.sampleNativeFrame(field.reducedMotion?0:effect.frame);
@@ -296,7 +302,9 @@ export async function mountBattleVfxThreeOverlay({
         threeUsed: true,
         systemId: resolvedId,
         requestedSystemId: systemId,
-        impacts:{capacity:impacts.length,visible:impacts.filter(e=>e.container.visible).length},
+        impacts:{capacity:impacts.length,visible:impacts.filter(e=>e.container.visible).length,
+          capped:impacts.filter(e=>e.effectId!==null&&e.effectId!==undefined&&e.shownMs>=IMPACT_MAX_MS).length},
+        hyperVisible:model.visible,
         cues:[...cueSystems].map(([id,e])=>({id,ready:e.ready,visible:e.container.visible,failed:e.failed??null})),
         vfx: instance.getDiagnostics()
       });

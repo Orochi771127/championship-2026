@@ -151,7 +151,9 @@ test('Practice selection requires two distinct owned teams and passes the select
   const find=name=>descendants(root).find(n=>n.attributes['aria-label']===name);
   const confirm=descendants(root).find(n=>n.textContent==='開始練習');assert.equal(confirm.disabled,true);
   find('甲 A 隊').click();assert.equal(find('甲 B 隊').disabled,true);assert.equal(confirm.disabled,true);
-  find('乙 B 隊').click();assert.equal(confirm.disabled,false);find('對戰場地').value='1';confirm.click();
+  find('乙 B 隊').click();assert.equal(confirm.disabled,false);
+  // Owner 2026-11-03: the arena is a row of chips, not a native <select>.
+  descendants(root).find(n=>n.className.includes('cm-vs5-arena-chip')&&n.dataset.index==='1').click();confirm.click();
   assert.deepEqual(entered,[[-1,[['a'],['b']],'PRACTICE_BATTLE',1]]);assert.equal(confirm.disabled,true);
   await Promise.resolve();view.dispose();
 });

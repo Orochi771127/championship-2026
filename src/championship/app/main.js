@@ -1,5 +1,6 @@
 import {createResidentAssetNotice,collectRaisingInitialSequences} from './residentAssetNotice.js';
-import { resonanceStrip } from '../presentation/taxonomyBadgeArt.js';
+import { resonanceStrip, taxonomyBadgeRow, taxonomyGlyph } from '../presentation/taxonomyBadgeArt.js';
+import { speciesTaxonomyForId } from '../contracts/speciesTaxonomy.js';
 import {huntThreeProductionRequest} from '../presentation/vs2/huntThree/manifestBindings.mjs';
 import { FRIENDS_PLAYTEST_POLICY } from './friendsPlaytestPolicy.js';
 import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../contracts/productBattleTransport.js';
@@ -104,7 +105,7 @@ import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } 
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
 import { configureCeremonyAudio, playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
 import { createSkillCutInLayer } from '../presentation/juicy/skillCutIn.js';
-import { juicyPortrait, juicyPresentationEnabled } from '../presentation/juicy/juicyArt.js';
+import { juicyPortrait, juicyPresentationEnabled, juicySpeciesIndex } from '../presentation/juicy/juicyArt.js';
 import { installArcadeFx, requestArcadeFx } from './ui/arcadeFx.js';
 import { installTitleParade } from './titleParade.js';
 import { buildMedal, buildVersus } from '../presentation/ceremony/ceremonyScenes.js';
@@ -1501,6 +1502,33 @@ async function mountHuntField() {
 // screens; the views below are handed only what they draw.
 let battleRuntime = null;
 let battleAttemptId = null;
+// Owner 2026-11-03: what each partner did in the presented match (damage dealt,
+// knockouts), tallied from the dynamic layer's HIT / KO events for the result's
+// summary. Presentation record only; the settlement never reads it.
+let battleSummaryTally = null;
+function startBattleSummaryTally(attemptId) {
+  battleSummaryTally = {attemptId, damage: new Map(), knockouts: new Map(), lastHitter: new Map(), final: null};
+}
+function tallyBattleEvent(event) {
+  const tally = battleSummaryTally;
+  if (!tally || !event) return;
+  if (event.type === 'HIT' && Number.isInteger(event.attackerSlot) && event.damage > 0) {
+    tally.damage.set(event.attackerSlot, (tally.damage.get(event.attackerSlot) ?? 0) + event.damage);
+    tally.lastHitter.set(event.slot, event.attackerSlot);
+  } else if (event.type === 'KO' && tally.lastHitter.has(event.slot)) {
+    const by = tally.lastHitter.get(event.slot);
+    tally.knockouts.set(by, (tally.knockouts.get(by) ?? 0) + 1);
+  }
+}
+function battleSummaryFor(attemptId) {
+  const tally = battleSummaryTally;
+  if (!tally || tally.attemptId !== attemptId || !tally.final) return null;
+  const {combatants, localTeam} = tally.final;
+  const rows = combatants.filter(c => c?.present !== false && c?.speciesId).map(c => ({slot: c.slot, name: c.displayName ?? '',
+    side: c.team === localTeam ? 'player' : 'opponent', team: c.team === localTeam ? 0 : 1, down: Boolean(c.down),
+    damage: tally.damage.get(c.slot) ?? 0, knockouts: tally.knockouts.get(c.slot) ?? 0}));
+  return rows.length ? {rows} : null;
+}
 let battleProgressBefore = null;
 
 // Entry publishes BATTLE_FIELD synchronously, before an async enterMatch
@@ -1583,6 +1611,9 @@ async function mountBattleSelect() {
     },
     matches: battleRuntime.listMatches(),
     arenaChoices:battleRuntime.listSelectableArenas(),
+    // Owner 2026-11-03: each roster row shows the partner's Database thumbnail and its three-axis badges.
+    describeMember:entry=>{const index=juicySpeciesIndex(entry?.speciesId);const hero=index===null?null:databaseHeroPortrait(index);
+      return {portrait:hero?.thumbnail??null,badges:entry?.speciesId?taxonomyBadgeRow(speciesTaxonomyForId(entry.speciesId)):null};},
     getPracticeSelection:async()=>({candidates:await app.getBattlePartyCandidates(null)}),
     setBattleTactic:(instanceId,tactic)=>app.setBattleTactic(instanceId,tactic),
     getPasswordSelection:async()=>({maxLength:PRODUCT_BATTLE_CODE_MAX_LENGTH,candidates:await app.getPasswordTeamCandidates(),
@@ -1684,6 +1715,7 @@ async function mountBattleField() {
   const activeRuntime = battleRuntime;
   const activeAttemptId = battleAttemptId;
   const source = activeRuntime.startMatch();
+  startBattleSummaryTally(activeAttemptId);
   activeRuntime.prepareOpening();
   let hudArt=null,viewDisposed=false;
   // Optional portraits must not hold the screen/navigation owner hostage.
@@ -1700,10 +1732,12 @@ async function mountBattleField() {
     resonance: (()=>{const t=activeRuntime.taxonomy?.(),local=activeRuntime.localTeamIndex();return t?{player:t.resonance[local],opponent:t.resonance[1-local],render:keys=>resonanceStrip(keys,{hint:false})}:null;})(),
     dynamicFx: BATTLE_DYNAMIC_FX,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
+    // Owner 2026-11-03: the element glyph on each floating card.
+    fighterBadge: combatant => { const key = speciesTaxonomyForId(combatant.speciesId)?.element; return key ? taxonomyGlyph(`element.${key}`, 14) : null; },
     askToLeave: showChoiceDialog,
     loadingProgress: { createView: createLoadProgressView,
       observeActivity: onChange => observeLoadActivity(onChange, { subscribeSettled: onPixiAssetSettled }) },
-    mountField({ host,onReady,onError,progress=null }) {
+    mountField({ host,onReady,onError,progress=null,safeInsets=null }) {
       let disposed = false;
       const characters = new AbortController();
       let scene = null;
@@ -1770,7 +1804,7 @@ async function mountBattleField() {
           // Resolved with the art, so the scene still mounts in the same task as
           // the overlay: no frame may render between the two.
           const fxLookups = fxLookupsModule
-            ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),onFeed:(line,cue)=>view.feed?.(line,cue),
+            ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),onFeed:(line,cue)=>view.feed?.(line,cue),onTally:tallyBattleEvent,
               onCutIn:juicy?cue=>cutIn?.play({team:cue.team===activeRuntime.localTeamIndex()?'ally':'enemy',portrait:juicyPortrait(cue.speciesId),
                 moveName:cue.moveName,casterName:cue.casterName,palette:cue.palette}):null,
               // Local acceptance shows stable skill IDs; players see approved names only.
@@ -1792,7 +1826,7 @@ async function mountBattleField() {
           // rejection returns cleanup to the catch below, late success to scene.
           for(const resource of [fieldArt,characterRoster,effectArt])loadingArt.delete(resource);
           scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster, effectArt,onView:frame=>view.render(frame),
-            dynamicFx:BATTLE_DYNAMIC_FX, responsiveLayout:RESPONSIVE_BATTLE_CANDIDATE, fx:fxLookups, localTeam:activeRuntime.localTeamIndex(), juicy });
+            dynamicFx:BATTLE_DYNAMIC_FX, responsiveLayout:RESPONSIVE_BATTLE_CANDIDATE, fx:fxLookups, localTeam:activeRuntime.localTeamIndex(), juicy, safeInsets });
           if (disposed) {
             await Promise.all([release(vfxOverlay),release(scene)]);
             return;
@@ -1869,6 +1903,9 @@ async function mountBattleField() {
     }
     view.render(observed);
     if (showPersonality) root.dataset.battlePersonality = battlePersonalityReadout(activeRuntime);
+    if (observed.outcome.ended && battleSummaryTally?.attemptId === activeAttemptId && !battleSummaryTally.final)
+      battleSummaryTally.final = {combatants: observed.combatants.map(c => ({slot: c.slot, present: c.present, speciesId: c.speciesId,
+        displayName: c.displayName, team: c.team, down: c.down})), localTeam: activeRuntime.localTeamIndex()};
     if (observed.outcome.ended && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
       if(tutorial){app.finishInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
       app.finishMatch({ ...activeRuntime.getSettlementResult(), attemptId: activeAttemptId });
@@ -1955,6 +1992,7 @@ async function mountBattleResult() {
   // clear battleRuntime while those requests are still pending.
   const participants=tutorial?.participants??battleRuntime.getResultParticipants();
   const outcome=tutorial?.outcome??battleRuntime.outcome();
+  const summary=tutorial?null:battleSummaryFor(battleAttemptId);
   let hudArt=null,disposed=false,resultCharacters=null;
   const receipt = tutorial?null:app.getBattleReceipt();
   const progression = battleProgressBefore?{rankBefore:battleProgressBefore.rank,rankAfter:app.getTamerRank(),
@@ -1982,6 +2020,7 @@ async function mountBattleResult() {
     :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null;
   const resultView=createBattleResultView({
     ceremonies: battleCeremonies,
+    summary,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
     root,
     outcome,

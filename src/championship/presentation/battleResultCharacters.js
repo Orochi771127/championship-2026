@@ -89,8 +89,12 @@ export async function mountBattleResultCharacters({stage,hudArt,participants,won
   // trip per frame. Gather the distinct sources, load them together, then build
   // the sprites in participant order exactly as before.
   try{
-    const chosen=participants.slice(0,3).map((p,i)=>({p,i,cells:p&&hudArt?hudArt.getBattleCells(p.speciesId,sequence):[]}))
-      .filter(e=>e.cells.length);
+    // Owner 2026-11-03: a partner without the result pose still takes the
+    // stage in its idle pose (Sub 0) instead of leaving the podium empty.
+    const chosen=participants.slice(0,3).map((p,i)=>{
+      for(const seq of [sequence,0]){const cells=p&&hudArt?hudArt.getBattleCells(p.speciesId,seq):[];if(cells.length)return {p,i,cells,seq};}
+      return {p,i,cells:[],seq:sequence};
+    }).filter(e=>e.cells.length);
     for(const src of chosen.flatMap(e=>e.cells.map(c=>c.src)))sources.add(src);
     await wait(Promise.all([...sources].map(async src=>{
       const texture=await PIXI.Assets.load(src);loadSignal.throwIfAborted();
@@ -99,7 +103,7 @@ export async function mountBattleResultCharacters({stage,hudArt,participants,won
     loadSignal.throwIfAborted();
     // No scene, callback or canvas content exists while a texture is pending.
     scene=stage.createSceneRoot('native result characters');
-    for(const {p,i,cells} of chosen){
+    for(const {p,i,cells,seq} of chosen){
       // HUD cells are alpha-cropped. Union every animation cell in logical
       // pixels so a later pose cannot jump outside the result container.
       for(const cell of cells){
@@ -107,10 +111,10 @@ export async function mountBattleResultCharacters({stage,hudArt,participants,won
         const box={left,top,right:left+cell.width,bottom:top+cell.height};
         bounds=bounds?{left:Math.min(bounds.left,box.left),top:Math.min(bounds.top,box.top),right:Math.max(bounds.right,box.right),bottom:Math.max(bounds.bottom,box.bottom)}:box;
       }
-      const sprite=new stage.PIXI.Sprite();scene.addChild(sprite);actors.push({sprite,speciesId:p.speciesId,anchor:anchors[i]});}
+      const sprite=new stage.PIXI.Sprite();scene.addChild(sprite);actors.push({sprite,speciesId:p.speciesId,anchor:anchors[i],sequence:seq});}
     const {loadReviewedResultSub}=actors.length?await import('./reviewedCharacterLoader.js'):{loadReviewedResultSub:null};
     await wait(Promise.all(actors.map(async actor=>{
-      const bundle=await loadReviewedResultSub({PIXI,sprite:actor.sprite,speciesId:actor.speciesId,sequenceId:sequence,signal:loadSignal});
+      const bundle=await loadReviewedResultSub({PIXI,sprite:actor.sprite,speciesId:actor.speciesId,sequenceId:actor.sequence,signal:loadSignal});
       if(!bundle)return;
       if(disposed){await bundle.dispose();return;}
       actor.reviewed=bundle;reviewedBundles.add(bundle);
@@ -120,7 +124,7 @@ export async function mountBattleResultCharacters({stage,hudArt,participants,won
   }catch(error){dispose();throw error;}
   function apply(){for(const actor of actors){
     if(actor.reviewed){const frame=actor.reviewed.sample(elapsed);if(frame?.geometry){actor.sprite.scale.set(frameScale/frame.geometry.scale);continue;}}
-    const cell=hudArt.getBattleFrame(actor.speciesId,sequence,elapsed);if(!cell)continue;
+    const cell=hudArt.getBattleFrame(actor.speciesId,actor.sequence,elapsed);if(!cell)continue;
     const texture=loaded.get(cell.src);actor.sprite.texture=texture;
     actor.sprite.anchor.set(cell.origin[0]/cell.width,cell.origin[1]/cell.height);
     // Use logical cell size for both HD and legacy 1x textures.
