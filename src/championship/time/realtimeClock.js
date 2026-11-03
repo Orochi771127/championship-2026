@@ -62,6 +62,20 @@ export function offlineGrowthSeconds(lastMs, nowMs) {
   return Math.max(0, Math.min(REALTIME_OFFLINE_CAP_SECONDS, (nowMs - lastMs) / 1000));
 }
 
+// Recovery cages -- OWNER_APPROVED_ADAPTATION 2026-11-03 (infirmary heal on real time). Natively the mini infirmary,
+// the hot spring and the infirmary heal on the partner's age clock, most of it in the 22:00 overnight settlement.
+// Real time has neither (from 成熟期 on a partner ages one unit per twenty seconds), so a partner barely healed.
+// Here their condition commands tick once a real second instead, at their native intervals. Each HP step heals
+// delta/2400 of the maximum HP, so at any maximum the mini infirmary (+8 every 2 ticks) heals fully in about ten
+// minutes, the infirmary (+12) in about seven and the hot spring (+20) in about four. Stress and affection keep
+// their native steps (the mini infirmary: stress -1 every 6 s).
+export const REALTIME_RECOVERY_CAGES = Object.freeze([15, 18, 28]);
+export const REALTIME_RECOVERY_TICKS_PER_SECOND = 1;
+export function realtimeRecoveryEffect(effect, maxHp) {
+  if (effect.kind !== 1 || effect.delta === 0) return effect;
+  return {...effect, delta: Math.sign(effect.delta) * Math.max(1, Math.ceil((maxHp >>> 0) * Math.abs(effect.delta) / 2400))};
+}
+
 export function realtimeAgeRate(generation) {
   return REALTIME_AGE_UNITS_PER_SECOND[generation] ?? REALTIME_AGE_UNITS_PER_SECOND[4];
 }

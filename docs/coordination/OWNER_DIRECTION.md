@@ -21,6 +21,30 @@ OWNER_APPROVED_ADAPTATION (`stage-body-size.v1.json`, `stageBodySize.js`):
 - Applies wherever the stage body size already applied: ranch, hunt and battle geometry, reviewed General art, title parade. Data Arena still sizes by role height.
 - Any partner the Owner later wants larger is an explicit exception in the class list.
 
+<!-- record-id: INFIRMARY_REALTIME_HEAL_20261103 -->
+## 2026-11-03 — Infirmaries heal on real time; cage shop copy fixed
+
+The Owner reports 「我把我的夥伴丟進去他不會回血耶」 (小焰 at HP 57/1090 in the mini infirmary). Cause: the infirmaries heal on the partner's age clock, mostly in the 22:00 overnight settlement. On the real-time clock a 成熟期 partner ages one unit per twenty seconds and there is no overnight settlement, so the mini infirmary healed about 16 HP a minute (a full heal took over an hour; the NATIVE clock heals fully in about two minutes). Offered real-time healing or the native speed, the Owner chooses 「A，日文說明一起修正」.
+
+OWNER_APPROVED_ADAPTATION, REALTIME_V1 only (`time/realtimeClock.js`); NATIVE and the overnight writer stay as traced.
+
+- The mini infirmary (15), the hot spring (18) and the infirmary (28) run their condition commands once a real second at their native intervals. Each HP step heals delta/2400 of the maximum HP, so at any maximum a partner is full in about ten / four / seven minutes. Stress and affection keep their native steps. On the real-time ranch these cages skip the age-clock copy of the same commands.
+- A partner that has collapsed gets up once its HP is above 10 %, as it does natively.
+- Shop copy: the Japanese, Thai and Vietnamese descriptions of the research lab, hospital, gas room, both infirmaries, hot spring, zoo, ranch and ring all said 「defense up」. They now name each cage's effect. The zoo and ranch say 「beast family up」 in all five languages (DIAMOND_ECONOMY_20261102 replaced their automatic care with beast training).
+
+<!-- record-id: HUNT_FOUR_FIXES_20261103 -->
+## 2026-11-03 — Hunt: no ??? card, a bound partner is pulled from anywhere and never freezes, HD-2D shadows, no sliding on one drawing
+
+The Owner pastes a four-phase brief from phone testing on 南橋峽谷 and 波浪海岸 (2026-11-03): remove the all-??? target card and the 「◎ 輕觸夥伴查看」 capsule; fix partners that freeze and cannot be pulled, above all near the bottom hint and dock; replace the flat black disc with two-layer HD-2D shadows; stop partners sliding on one drawing while they walk, flee or struggle; prove it with tests and three phone screenshots, no push or deployment. After the report the Owner answers 「Review first」, then 「請你自我審查沒有問題以後就commit 跟push然後整合至main發佈」, which authorizes this batch's push, merge to main and publication after a self-review.
+
+OWNER_APPROVED_ADAPTATION. The native rope controller, AI states and capture rules stay as traced; the product layer wraps them.
+
+- The target card and capsule are gone (the analyzer plug-ins are gacha chips now). A tap belongs to the tool in hand.
+- Rope: once a loop is on a partner, a press anywhere on the field pulls the nearest bound partner; the drag is read from the press point as if the finger had landed on its rope anchor. Scripted tutorial partners keep the exact hit test.
+- Watchdogs (`HUNT_FIELD_WATCHDOG`): a bound partner nobody pulls for 3 s slips its loop and runs on; a walker that cannot move for 1 s drops its goal (a partner wedged in a blocked cell steps to the nearest standable one); non-finite input or positions are ignored or restored; roaming goals keep 10 tiles clear of the map's bottom edge. The camera eases after a roped or bound partner that leaves the middle of the screen (12 % sides, 20 % top, 25 % bottom).
+- Shadows (Hunt Three maps): a feathered contact ellipse (centre 0.45) plus the partner's current frame laid on the ground along the map's sun (0x120e1a, 0.30; 0.16 at night), turned to face the light. Found and fixed: reviewed partners' frame snapshots lacked the native frame authority, so Hunt dropped to its 2D fallback whenever one spawned.
+- Motion: reviewed hunt loops run on their own clock instead of restarting with the shorter native loop (99 partners were cut short); flee and bound-escape sequences play 1.6×; a one-drawing walk or struggle borrows the same character's animated move or hurt clip; anything still on one drawing hops with squash and stretch while moving, shakes with sweat while bound, and shows blinking stars when downed; runners lean and kick dust. Audit: `scripts/qa/hunt-motion-binding-audit.mjs`.
+
 <!-- record-id: AW_UL_TAKEOVER_20261103 -->
 ## 2026-11-03 — Claude takes over Codex's AW/UL release; web-sized AW23 and species 196
 

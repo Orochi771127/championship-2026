@@ -3,7 +3,7 @@
 import { createNativeRopeStroke,sampleNativeRopeStroke,expireNativeRopeSlots,recognizeNativeRopeStroke } from "./nativeRopeStroke.js";
 import { nativeRopeParameters,nativeRopeRow,nativeHuntToolSpecies,stepNativeRopeController,nativeStrongPullDestination,nativeShotSpeciesResponse } from "./nativeHuntToolRules.js";
 import { createHuntRopeTactics,huntRopeRole,huntRopeBindRule,huntRopeCoefficient,huntTacticalRope,huntRopeWear,huntRopeCrossesBlocked,HUNT_ROPE_TACTICS } from "./huntRopeTactics.js";
-import { createNativeWildActor,stepNativeWildActor,nativeWildCaptureSnapshot,nativeWildCharacterFrame,nativeWildRequest } from "./nativeWildActor.js";
+import { createNativeWildActor,stepNativeWildActor,nativeWildCaptureSnapshot,nativeWildCharacterFrame,nativeWildRequest,enterNativeWildState } from "./nativeWildActor.js";
 import { createNativeHuntConsumables } from './nativeHuntConsumables.js';
 import { nativeWildRandom } from "./nativeCapturePhases.js";
 import { queryNativeHuntActors } from "./nativeWildSpatial.js";
@@ -12,6 +12,10 @@ import {separateGroundFootpoints,canTraverseGroundStep} from '../../field/ground
 import { createLassoTracker, lassoContains, LASSO_RULES } from "./ropeLassoGesture.js";
 const Q12=4096;
 const FRAME_MS=1000*560190/33513982;
+// OWNER_APPROVED_ADAPTATION 2026-11-03 (hunt four fixes): no partner may freeze.
+// A bound partner nobody pulls slips its loop after 3 s; a walker that cannot
+// move for 1 s gives up its goal; roaming goals keep clear of the dock band.
+export const HUNT_FIELD_WATCHDOG=Object.freeze({boundIdleTicks:180,stuckTicks:60,bottomRoamMarginTiles:10,freeRadiusTiles:6});
 export function nativeHuntGroundSpacingEligible(a){
   return !!(a.actorActive&&a.wildActive&&!a.hidden&&!a.passage&&!a.cardState&&!a.tutorialScripted&&[1,2,3].includes(a.aiState)
     &&a.positionQ12?.[2]===0&&a.currentHp>0&&!a.bound&&!a.pull11&&!a.pull13&&!a.movementRestricted
@@ -74,6 +78,61 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     const terrain=environment.readTerrain(Math.floor(x/8),Math.floor(y/8));
     return !(Number.isInteger(terrain)&&terrain>=0&&terrain<=4&&terrain!==1);
   };
+  const standable=(x,y)=>{
+    if(typeof environment?.readTerrain!=="function")return true;
+    const terrain=environment.readTerrain(x,y);
+    return Number.isInteger(terrain)&&terrain>=0&&terrain<=4&&terrain!==1;
+  };
+  // A bound partner the finger did not land on: the nearest one still on the
+  // field. Scripted tutorial partners keep the exact native hit test.
+  const nearestBound=p=>{
+    let best=null,bestD=Infinity;
+    for(const a of actors){
+      if(!a.bound||!a.actorActive||a.hidden||a.passage||a.cardState||a.tutorialScripted)continue;
+      const d=Math.hypot((a.positionQ12[0]-p[0])/Q12,(a.positionQ12[1]-p[1])/Q12);
+      if(d<bestD){bestD=d;best=a;}
+    }
+    return best;
+  };
+  const restoreFinite=(a,before)=>{
+    if(a.positionQ12.every(Number.isFinite))return;
+    a.positionQ12=[...before];a.directionQ12=[0,0,0];a.destinationQ12=[before[0],before[1],0];
+  };
+  // A partner wedged inside a blocked cell steps out to the nearest standable one.
+  function nearestFreeCell(position){
+    const cx=Math.floor((position[0]>>12)/8),cy=Math.floor((position[1]>>12)/8);
+    if(standable(cx,cy))return null;
+    for(let r=1;r<=HUNT_FIELD_WATCHDOG.freeRadiusTiles;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){
+      if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;
+      const x=cx+dx,y=cy+dy;
+      if(x<0||y<0||x>=(environment?.width??0)||y>=(environment?.height??0)||!standable(x,y))continue;
+      return [(x*8+4)*Q12,(y*8+4)*Q12,position[2]??0];
+    }
+    return null;
+  }
+  // Watchdogs (HUNT_FIELD_WATCHDOG). They only ever hand a partner back to its
+  // own AI; they never move a capture forward.
+  function watch(a,before){
+    if(!a.actorActive||a.hidden||a.passage||a.cardState||a.tutorialScripted)return;
+    restoreFinite(a,before);
+    if(a.bound&&rope?.actor!==a){
+      if(++a.boundIdleTicks>=HUNT_FIELD_WATCHDOG.boundIdleTicks){a.bound=0;a.boundIdleTicks=0;nativeWildRequest(a,a.request);}
+    }else a.boundIdleTicks=0;
+    const walking=[2,3,8].includes(a.aiState)&&!a.pull11&&!a.movementRestricted&&!a.followTarget&&rope?.actor!==a;
+    const still=a.positionQ12[0]===before[0]&&a.positionQ12[1]===before[1];
+    a.stuckTicks=walking&&still?a.stuckTicks+1:0;
+    if(a.stuckTicks>=HUNT_FIELD_WATCHDOG.stuckTicks&&!a.bound){
+      a.stuckTicks=0;
+      const free=nearestFreeCell(a.positionQ12);
+      if(free)a.positionQ12=free;
+      a.destinationQ12=[a.positionQ12[0],a.positionQ12[1],0];a.directionQ12=[0,0,0];a.followTarget=0;a.followTicks=0;
+      enterNativeWildState(a,1,host);
+    }
+    // Roaming goals stay above the band the dock covers at the map's bottom edge.
+    const limit=((environment?.height??0)-HUNT_FIELD_WATCHDOG.bottomRoamMarginTiles)*8*Q12;
+    if([2,3].includes(a.aiState)&&!a.foodTarget&&!a.seekingFood&&!a.decoyCenter&&!a.followTarget&&limit>0&&a.destinationQ12[1]>limit)
+      a.destinationQ12=[a.destinationQ12[0],limit,0];
+  }
   // ULTIMATE on a 幼年期 / 成長期: the rope throws it off and it bolts away.
   const repel=(a,from)=>{
     const away=[a.positionQ12[0]-from[0],a.positionQ12[1]-from[1]],length=Math.hypot(away[0],away[1])||1;
@@ -129,10 +188,11 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     frame++;
     // Actor requests from the previous tool update precede the next tool tick.
     for(const a of actors){
-      const stun=a.shotShakeTicks,at=slow&&!a.bound&&a.positionQ12?[...a.positionQ12]:null;
+      const stun=a.shotShakeTicks,at=slow&&!a.bound&&a.positionQ12?[...a.positionQ12]:null,before=[...a.positionQ12];
       stepNativeWildActor(a,host);
       if(stunRate>1&&a.shotShakeTicks>stun)a.shotShakeTicks=Math.min(900,stun+Math.round((a.shotShakeTicks-stun)*stunRate));
       if(at&&a.positionQ12&&!a.bound)for(const i of [0,1])a.positionQ12[i]=at[i]+Math.trunc((a.positionQ12[i]-at[i])*(1-slow));
+      watch(a,before);
     }
     // One Q12 position owner, before consumable and rope readers. Proposals
     // read terrain only: queryControllers has damage/capture side effects.
@@ -176,6 +236,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
       if(a.cardState || !a.bound){rope=null;return;}
       const anchor=[a.positionQ12[0],a.positionQ12[1]-10*Q12];
       const dx=pointer.q12[0]-anchor[0],dy=pointer.q12[1]-anchor[1];
+      if(!Number.isFinite(dx)||!Number.isFinite(dy))return;
       // The numerical writer compares the squared distance before normalizing.
       // Inputs outside its bounded CPU test range necessarily exceed break range.
       if(Math.abs(dx)>0x100000 || Math.abs(dy)>0x100000) {
@@ -208,6 +269,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     },
     pointerDown(x,y){
       if(pointer)return false;
+      if(!Number.isFinite(x)||!Number.isFinite(y))return false;
       const p=[Math.floor(x/2)*Q12,Math.floor(y/2)*Q12,0],a=targetAt(p);
       selectedWildId=a?.wildId??null;
       notice=null;
@@ -220,10 +282,17 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
         const item=equipped("ROPE");if(!item)return false;
         // A rope that broke this hunt is still tangled: switch to a spare or wait.
         if(tactics.overheatTicks(item.itemId)>0){emit("ROPE_OVERHEATED");return true;}
-        if(a?.bound&&huntRopeBindRule(item.nativeItemIndex,tactics.generation(a))==="REPEL"){repel(a,p);onChange();return true;}
-        pointer={kind:a?.bound?"ROPE_PULL":"ROPE_STROKE",q12:p,pixels:p.slice(0,2).map(n=>n>>12),released:false};
-        if(a?.bound){
-          const generation=tactics.generation(a);
+        // OWNER_APPROVED_ADAPTATION 2026-11-03: once a loop is on a partner, a
+        // press anywhere is a pull. The drag is read from the press point, as if
+        // the finger had landed on the partner's rope anchor.
+        const held=a?.bound?a:nearestBound(p);
+        if(held)selectedWildId=held.wildId;
+        if(held&&huntRopeBindRule(item.nativeItemIndex,tactics.generation(held))==="REPEL"){repel(held,p);onChange();return true;}
+        const offset=held&&held!==a?[held.positionQ12[0]-p[0],held.positionQ12[1]-10*Q12-p[1]]:null;
+        pointer={kind:held?"ROPE_PULL":"ROPE_STROKE",q12:offset?[p[0]+offset[0],p[1]+offset[1],0]:p,finger:p,offset,
+          pixels:p.slice(0,2).map(n=>n>>12),released:false};
+        if(held){
+          const a=held,generation=tactics.generation(a);
           rope={actor:a,itemId:item.itemId,state:huntTacticalRope(nativeRopeParameters(item.nativeItemIndex,a.speciesIndex,a.maxHp),{nativeItemIndex:item.nativeItemIndex,
             generation,maxHp:a.maxHp,coefficient:huntRopeCoefficient(nativeRopeRow(item.nativeItemIndex),nativeHuntToolSpecies(a.speciesIndex)),
             pacified:tactics.pacified(a),rage:tactics.rage(a)})};
@@ -238,7 +307,11 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
       }
       return false;
     },
-    pointerMove(x,y){if(!pointer)return false;pointer.q12=[Math.floor(x/2)*Q12,Math.floor(y/2)*Q12,0];pointer.pixels=pointer.q12.slice(0,2).map(n=>n>>12);return true;},
+    pointerMove(x,y){
+      if(!pointer)return false;if(!Number.isFinite(x)||!Number.isFinite(y))return true;
+      const finger=[Math.floor(x/2)*Q12,Math.floor(y/2)*Q12,0];
+      pointer.finger=finger;pointer.q12=pointer.offset?[finger[0]+pointer.offset[0],finger[1]+pointer.offset[1],0]:finger;
+      pointer.pixels=finger.slice(0,2).map(n=>n>>12);return true;},
     pointerUp(x,y){if(!pointer)return false;this.pointerMove(x,y);pointer.released=true;return true;},
     cancel(){if(rope)rope.actor.events.push({code:0x12});consumables.cancel();pointer=null;stroke=null;rope=null;ages.fill(0);lasso.reset();},
     /** Swap to the next owned rope, skipping overheated ones when another is ready. */
@@ -284,7 +357,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
         unavailableReason:consumables.canUse(kind)?null:'NATIVE_HUNT_TOOL_CONTROLLER_UNAVAILABLE'}))],
       objects:consumables.getObjects(),
       rope:rope?{wildId:rope.actor.wildId,from:[rope.actor.positionQ12[0]/2048,rope.actor.positionQ12[1]/2048-20],
-        to:pointer.q12.slice(0,2).map(n=>n/2048),durability:rope.state.durability,capacity:rope.state.baseDurability,band:rope.state.band,
+        to:(pointer.finger??pointer.q12).slice(0,2).map(n=>n/2048),durability:rope.state.durability,capacity:rope.state.baseDurability,band:rope.state.band,
         role:rope.state.role,rage:rope.state.rage,fragile:rope.state.fragile,guard:tactics.guard(rope.actor)}:null,
       points:stroke?.slots.filter(Boolean).map(s=>({x:s.positionQ12[0]/2048,y:s.positionQ12[1]/2048}))??[],
       closure:closure?{x:closure.centerQ12[0]/2048,y:closure.centerQ12[1]/2048,ticks:closure.ticks,serial:closure.serial,

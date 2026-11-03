@@ -235,15 +235,15 @@ export const SHOP_DESCRIPTIONS_VI = Object.freeze([
   "Nhà máy điện. Giúp tăng kháng sét. Khuyến nghị 6 cá thể.",
   "Thánh điện. Giúp tăng kháng quang. Khuyến nghị 6 cá thể.",
   "Hang động. Giúp tăng kháng ám. Khuyến nghị 2 cá thể.",
-  "Viện nghiên cứu. Giúp tăng phòng thủ. Khuyến nghị 8 cá thể.",
-  "Bệnh viện. Giúp tăng phòng thủ. Khuyến nghị 6 cá thể.",
-  "Phòng khí độc. Giúp tăng phòng thủ. Khuyến nghị 4 cá thể.",
-  "Trạm xá nhỏ. Giúp tăng phòng thủ. Khuyến nghị 2 cá thể.",
-  "Trạm xá. Giúp tăng phòng thủ. Khuyến nghị 4 cá thể.",
-  "Suối nước nóng. Giúp tăng phòng thủ. Khuyến nghị 8 cá thể.",
-  "Vườn thú. Giúp tăng phòng thủ. Khuyến nghị 4 cá thể.",
-  "Trang trại. Giúp tăng phòng thủ. Khuyến nghị 8 cá thể.",
-  "Võ đài. Giúp tăng phòng thủ. Khuyến nghị 6 cá thể."
+  "Viện nghiên cứu. Giúp tăng thuộc tính dữ liệu. Khuyến nghị 8 cá thể.",
+  "Bệnh viện. Giúp tăng thuộc tính vắc-xin. Khuyến nghị 6 cá thể.",
+  "Phòng khí độc. Giúp tăng thuộc tính vi-rút. Khuyến nghị 4 cá thể.",
+  "Trạm xá nhỏ. Hồi HP và giảm căng thẳng. Khuyến nghị 2 cá thể.",
+  "Trạm xá. Hồi HP và giảm căng thẳng. Khuyến nghị 4 cá thể.",
+  "Suối nước nóng. Hồi HP và giảm căng thẳng. Khuyến nghị 8 cá thể.",
+  "Vườn thú. Giúp tăng chủng tộc dã thú. Khuyến nghị 4 cá thể.",
+  "Trang trại. Giúp tăng chủng tộc dã thú. Khuyến nghị 8 cá thể.",
+  "Võ đài. Giúp tăng số trận đấu. Khuyến nghị 6 cá thể."
 ]);
 
 const HELP_ROWS = [
