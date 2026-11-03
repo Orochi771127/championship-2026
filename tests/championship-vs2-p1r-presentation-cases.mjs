@@ -63,9 +63,13 @@ test("temporary Hunt renderer preserves the shared Pixi/runtime authority bounda
   const imports = [...field.matchAll(/^import\s+.*?from\s+(['"])(.*?)\1;/gm)].map(match => match[2]);
   assert.deepEqual(imports, [
     "./huntContactShadow.js", "./huntFactoryShutters.js", "./huntFoliageDither.js", "./huntFieldPointer.js",
-    "../presentationPreferences.js", "../nativeHuntCharacterAction.js",
+    "./huntActorMotion.js", "../presentationPreferences.js", "../nativeHuntCharacterAction.js",
     "../huntFeedbackArt.js", "../vfx/captureStorageVfx.js"
   ]);
+  // The motion layer (hunt four fixes) reads the published actor only.
+  const motion = fs.readFileSync("src/championship/presentation/vs2/huntActorMotion.js", "utf8");
+  assert.doesNotMatch(motion, /^import\s/m);
+  assert.doesNotMatch(motion, /new\s+(?:PIXI\.)?Application|ticker\.add|localStorage|positionQ12|nextChannel/);
   const shutters = fs.readFileSync("src/championship/presentation/vs2/huntFactoryShutters.js", "utf8");
   assert.doesNotMatch(shutters, /new\s+(?:PIXI\.)?Application|ticker\.add|localStorage|positionQ12|nextChannel/);
   assert.match(field, /stage\.createSceneRoot/);

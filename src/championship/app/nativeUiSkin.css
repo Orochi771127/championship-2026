@@ -1808,13 +1808,9 @@
   position: absolute; z-index: 5; top: 65px; left: 10px; right: 10px;
   display: flex; align-items: flex-start; gap: 8px; pointer-events: none;
 }
-:where(:root[data-theme="classic"]) .cm-hunt-info .cm-vs2-target {
-  position: relative; top: auto; left: auto; flex: 1; width: auto; min-width: 0;
-}
 :where(:root[data-theme="classic"]) .cm-hunt-info .cm-hunt-plugin-hud { position: static; flex: 0 0 auto; }
 :where(:root[data-theme="classic"]) .cm-hunt-info .cm-hunt-radar { width: 64px; height: 64px; }
 :where(:root[data-theme="classic"]) .cm-hunt-info .cm-hunt-plugin-hud:has(> [hidden]):not(:has(> :not([hidden]))) { display: none; }
-:where(:root[data-theme="classic"]) .cm-hunt-info .cm-vs2-target__stats { grid-template-columns: auto minmax(0,1fr) auto minmax(0,1fr); gap: 4px; }
 
 :where(:root[data-theme="classic"]) .cm-vs2-result__row { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; text-align: left; }
 :where(:root[data-theme="classic"]) .cm-vs2-result__thumbnail { display: grid; place-items: center; width: 48px; height: 56px; }

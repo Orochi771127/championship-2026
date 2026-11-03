@@ -1,5 +1,70 @@
 # Championship Owner Direction
 
+<!-- record-id: GRMA_WALK_BOUND_FIX_20261103 -->
+## 2026-11-03 — Walk jumps, Main17 stand/lie flip and MA01's floating walk fixed with existing frames
+
+A frame-level audit of the 107 shipped 成長期/成熟期 sets compared the flagged clips with the original cells. In the original, the walk (sequence 2) keeps both cells on the ground, and Main17 (bound weak idle) holds two near-identical standing cells (37/28 ticks). Several sets break this. The Owner chose 「Fix now with existing art」.
+
+- Re-bound from frames each role already ships; no pixel changes. Each role gets a new authoring file `animation.web-patch-20261103.json` with a `patch20261103` block naming the clips it replaces; the parent authoring files are untouched.
+- MA02:
+  - General walk and run keep their two grounded ends. The two middle drawings jumped and tumbled in the air.
+  - Arena R and L drop their airborne middle frame.
+- MA15 Arena DR/DL and MA21 Arena D drop the airborne middle frame. Every shortened clip still alternates two distinct drawings.
+- Main17:
+  - GR03 now plays its two standing bound-idle drawings at 37/28 ticks.
+  - GR37 holds its one weak-sitting drawing for 65 ticks; no second sitting drawing exists.
+  - Both used to alternate standing and lying flat.
+- MA01 walk/run floated 6.5–10.5 native px while every other General clip stands on the pivot. One offset per clip grounds them and keeps the step bob.
+- Left as they are:
+  - MA02 Arena DR/UR/UL/DL: the first and last frames are the same pose, so removing the jump would leave a slide. These need a new grounded drawing from dot.
+  - MA13: its mid-step lift is a real heavy stride.
+  - GR26: the whole set sits about 5 px above the pivot in every clip, a consistent offset rather than a broken walk.
+- `tests/championship-weak-walk-pose-cases.mjs` keeps these clips grounded and Main17 standing, and pins the four remaining MA02 headings.
+<!-- record-id: STAGE_BODY_SIZE_GR_MA_20261103 -->
+## 2026-11-03 — Body size follows species and biology, not stage
+
+From a ranch screenshot the Owner asks 「全遊戲的角色的大小再幫我檢查一次…同一個時期的，像那個狼怎麼會比龍大？」. Measured at idle (S = √(height × width), native px), the redrawn Growth and Mature art had drifted from the original relative sizes. Mature ran from 24 to 50 (2.1×; the original idle cells span 1.76×) and Growth from 13 to 33 (2.5×). In the screenshot MA21 角暴龍 showed at 47, MA11 風刃狼 at 40 and MA34 熔岩龍 at 30.
+
+The Owner first chooses 「A 依原作比例收斂」 and asks whether it will blur the art. Then come 「有的太大的可以再縮小一點」, 「縮小一點點就好…讓彼此大小稍微有一點差異，但是又不會到那種落差很大」, 「像數碼寶貝，機械暴龍獸，跟戰鬥暴龍獸就有體型差異，然後機械邪龍獸也是很大一隻」 and 「不是那種究極體就很大，而是要依照他們的物種然後可能生物性啊，來調整大小」. Offered size classes, the Owner answers 「A」. After reviewing the 157-partner class sheet, the Owner answers 「可以，套用」.
+
+OWNER_APPROVED_ADAPTATION (`stage-body-size.v1.json`, `stageBodySize.js`):
+- Growth: one band. Relative size comes from the original first idle cell (`character-main-zero-scale-candidates.json`, nativeVisibleSize); target = 20.2 × relative^0.7, within 0.8–1.1×. Result 17–22.
+- Mature, Awakened and Ultimate share one ruler: target S = 40 × class × personal variation. Classes: small 0.75, humanoid 0.88, standard 1, large 1.15, giant 1.35. The personal variation is the original idle cell relative to its stage, ^0.3, within ±5 %. The stage no longer sets the size, so a large Mature dragon can stand taller than a humanoid Ultimate.
+- Classes (`sizeClass` in the table) were assigned by each partner's species and biology:
+  - small 8: e.g. 白靈貓, 小鋼豆.
+  - humanoid 50: e.g. 白天使, 戰暴龍, 黑鎧龍.
+  - standard 34: e.g. 風刃狼, 火九尾.
+  - large 48: e.g. 角暴龍, 熔岩龍, 機暴龍, 紅機龍.
+  - giant 17: e.g. 毀滅龍, 海島鯨, 長毛象, 海皇龍.
+- Sharpness: no partner is enlarged more than 1.5× beyond its live scale, and shrinking never blurs. At 1.5× no partner is less sharp than art already live (about 2.1 source px per native px at the least). The review sheet showed a 1.3× limit. In the ranch check MA34 熔岩龍 then still read the same size as the wolf, so the limit was raised to 1.5× on that measurement. 19 large or giant partners whose art is drawn small still stay below their target, e.g. MA67 極光鯊 38 of 46, UL04 拋錨王 48 of 55. They need larger art to reach it.
+- Dex heights and weights follow the new body. Growth keeps its stage base. From Mature up, heights use one shared ruler (stage base MA 2.6 / AW 3.0 / UL 3.4 m × (idle height / shared median)^1.6), so 角暴龍 3.3 m, 機暴龍 3.35 m, 戰暴龍 2.65 m, 毀滅龍 4.6 m.
+- Applies wherever the stage body size already applied: ranch, hunt and battle geometry, reviewed General art, title parade. Data Arena still sizes by role height.
+- Any partner the Owner later wants larger is an explicit exception in the class list.
+
+<!-- record-id: INFIRMARY_REALTIME_HEAL_20261103 -->
+## 2026-11-03 — Infirmaries heal on real time; cage shop copy fixed
+
+The Owner reports 「我把我的夥伴丟進去他不會回血耶」 (小焰 at HP 57/1090 in the mini infirmary). Cause: the infirmaries heal on the partner's age clock, mostly in the 22:00 overnight settlement. On the real-time clock a 成熟期 partner ages one unit per twenty seconds and there is no overnight settlement, so the mini infirmary healed about 16 HP a minute (a full heal took over an hour; the NATIVE clock heals fully in about two minutes). Offered real-time healing or the native speed, the Owner chooses 「A，日文說明一起修正」.
+
+OWNER_APPROVED_ADAPTATION, REALTIME_V1 only (`time/realtimeClock.js`); NATIVE and the overnight writer stay as traced.
+
+- The mini infirmary (15), the hot spring (18) and the infirmary (28) run their condition commands once a real second at their native intervals. Each HP step heals delta/2400 of the maximum HP, so at any maximum a partner is full in about ten / four / seven minutes. Stress and affection keep their native steps. On the real-time ranch these cages skip the age-clock copy of the same commands.
+- A partner that has collapsed gets up once its HP is above 10 %, as it does natively.
+- Shop copy: the Japanese, Thai and Vietnamese descriptions of the research lab, hospital, gas room, both infirmaries, hot spring, zoo, ranch and ring all said 「defense up」. They now name each cage's effect. The zoo and ranch say 「beast family up」 in all five languages (DIAMOND_ECONOMY_20261102 replaced their automatic care with beast training).
+
+<!-- record-id: HUNT_FOUR_FIXES_20261103 -->
+## 2026-11-03 — Hunt: no ??? card, a bound partner is pulled from anywhere and never freezes, HD-2D shadows, no sliding on one drawing
+
+The Owner pastes a four-phase brief from phone testing on 南橋峽谷 and 波浪海岸 (2026-11-03): remove the all-??? target card and the 「◎ 輕觸夥伴查看」 capsule; fix partners that freeze and cannot be pulled, above all near the bottom hint and dock; replace the flat black disc with two-layer HD-2D shadows; stop partners sliding on one drawing while they walk, flee or struggle; prove it with tests and three phone screenshots, no push or deployment. After the report the Owner answers 「Review first」, then 「請你自我審查沒有問題以後就commit 跟push然後整合至main發佈」, which authorizes this batch's push, merge to main and publication after a self-review.
+
+OWNER_APPROVED_ADAPTATION. The native rope controller, AI states and capture rules stay as traced; the product layer wraps them.
+
+- The target card and capsule are gone (the analyzer plug-ins are gacha chips now). A tap belongs to the tool in hand.
+- Rope: once a loop is on a partner, a press anywhere on the field pulls the nearest bound partner; the drag is read from the press point as if the finger had landed on its rope anchor. Scripted tutorial partners keep the exact hit test.
+- Watchdogs (`HUNT_FIELD_WATCHDOG`): a bound partner nobody pulls for 3 s slips its loop and runs on; a walker that cannot move for 1 s drops its goal (a partner wedged in a blocked cell steps to the nearest standable one); non-finite input or positions are ignored or restored; roaming goals keep 10 tiles clear of the map's bottom edge. The camera eases after a roped or bound partner that leaves the middle of the screen (12 % sides, 20 % top, 25 % bottom).
+- Shadows (Hunt Three maps): a feathered contact ellipse (centre 0.45) plus the partner's current frame laid on the ground along the map's sun (0x120e1a, 0.30; 0.16 at night), turned to face the light. Found and fixed: reviewed partners' frame snapshots lacked the native frame authority, so Hunt dropped to its 2D fallback whenever one spawned.
+- Motion: reviewed hunt loops run on their own clock instead of restarting with the shorter native loop (99 partners were cut short); flee and bound-escape sequences play 1.6×; a one-drawing walk or struggle borrows the same character's animated move or hurt clip; anything still on one drawing hops with squash and stretch while moving, shakes with sweat while bound, and shows blinking stars when downed; runners lean and kick dust. Audit: `scripts/qa/hunt-motion-binding-audit.mjs`.
+
 <!-- record-id: AW_UL_TAKEOVER_20261103 -->
 ## 2026-11-03 — Claude takes over Codex's AW/UL release; web-sized AW23 and species 196
 

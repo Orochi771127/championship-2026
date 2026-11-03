@@ -442,7 +442,8 @@
     "tests/championship-three-axis-taxonomy-cases.mjs",
     "tests/championship-accepted-four-boundary-cases.mjs",
     "tests/championship-accepted-scopes-cases.mjs",
-    "tests/raising-appearance-frame.test.mjs"
+    "tests/raising-appearance-frame.test.mjs",
+    "tests/championship-hunt-four-fixes-cases.mjs"
   ],
   "localReference": {
     "tests/championship-scene-music-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Scene music actual-browser workflow with native media decoding, production Settings/transport, and controlled normal-game Raising/Battle/Data Arena flows.",
