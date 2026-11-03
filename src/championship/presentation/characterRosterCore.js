@@ -138,7 +138,7 @@ export async function loadCharacterRosterCore({
       const record = records.get(entityId);
       const verifiedGeometry=geometryResolver({entityId,record,runtime:bundle.runtime,side,appearance:appearances.get(entityId)});
       const battleGeometry = presentation === 'battle' ? verifiedGeometry : null;
-      const actor = bundle.createActor({ speciesId:canonicalSpeciesId(speciesId),side, animation: 0,
+      const actor = bundle.createActor({ speciesId:canonicalSpeciesId(speciesId),side, animation: 0, presentation,
         reducedMotion: nativeFramePresentation || battleGeometry ? reducedMotion : true, nativeFramePresentation, battleGeometry,
         nativeGeometry: nativeFramePresentation ? verifiedGeometry : null });
       // The first source frame is identity art. No unverified idle/happy/walk

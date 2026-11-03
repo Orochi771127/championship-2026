@@ -1703,7 +1703,7 @@
 :root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud[data-urgent="critical"] .cm-vs2-hud__companion { color: #ff8a95; }
 @keyframes cm-clock-beat { 50% { filter: drop-shadow(0 4px 0 rgba(20, 20, 31, 0.6)) drop-shadow(0 0 8px rgba(255, 77, 94, 0.75)); } }
 
-/* The target: a quiet capsule until something is picked. */
+/* Plug-in HUD (memory card, radar) under the gate plate. */
 :root[data-theme="arcade"] body:not([data-hunt-wide]) .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-info {
   top: 70px;
   justify-items: center;
@@ -1712,34 +1712,6 @@
   background: none;
   box-shadow: none;
 }
-:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target:not([data-selected="true"]) {
-  width: auto;
-  padding: 4px 12px;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(20, 20, 31, 0.6);
-  box-shadow: none;
-  opacity: 0.85;
-  pointer-events: none;
-}
-:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target:not([data-selected="true"]) .cm-vs2-target__name { color: #fff; font-size: 12px; font-weight: 800; }
-:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target:not([data-selected="true"]) .cm-vs2-target__name::before { content: "\25CE  "; color: var(--biome); }
-:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target[data-selected="true"] {
-  width: min(300px, 100%);
-  padding: 10px 14px;
-  border: 3px solid #14141f;
-  border-top: 5px solid var(--biome);
-  border-radius: 16px;
-  background: #fff8e6;
-  color: #14141f;
-  box-shadow: 0 5px 0 #14141f;
-  transform-origin: 50% 0;
-  animation: cm-target-open 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-@keyframes cm-target-open { from { opacity: 0.4; transform: scale(0.6, 0.4); } }
-:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target[data-selected="true"] .cm-vs2-target__name { color: #14141f; font-size: 16px; font-weight: 900; }
-:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target[data-selected="true"] .cm-vs2-target__stats { color: #5a5a6e; }
-:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-target[data-selected="true"] .cm-vs2-target__stats dd { color: #14141f; }
 
 /* Caption-weight hint: no white pill, hard shadowed words. */
 :root[data-theme="arcade"] body:not([data-hunt-wide]) .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-field__hint {
@@ -1818,7 +1790,7 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
 /* A catch lands: the field jolts once. */
 .cm-vs2-field__viewport[data-shake="true"] .cm-vs2-field__canvas { animation: cm-field-shake 320ms cubic-bezier(0.36, 0.07, 0.19, 0.97); }
 @keyframes cm-field-shake { 20% { translate: -4px 2px; } 40% { translate: 4px -2px; } 60% { translate: -3px 1px; } 80% { translate: 2px 0; } }
-:root[data-motion="reduced"] .cm-vs2-root[data-screen="HUNT_FIELD"] :is(.cm-vs2-hud__copy, .cm-vs2-target, .cm-hunt-tools .cm-vs2-action, .cm-vs2-field__canvas) { animation: none !important; }
+:root[data-motion="reduced"] .cm-vs2-root[data-screen="HUNT_FIELD"] :is(.cm-vs2-hud__copy, .cm-hunt-tools .cm-vs2-action, .cm-vs2-field__canvas) { animation: none !important; }
 :root[data-motion="reduced"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action::before,
 :root[data-motion="reduced"] .cm-vs2-field__viewport::after { animation: none !important; }
 

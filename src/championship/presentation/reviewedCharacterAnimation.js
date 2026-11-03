@@ -70,6 +70,34 @@ export function reviewedNumericClip(document, side, id) {
   return null;
 }
 
+// Hunt motion (Owner 2026-11-03): a partner that walks, runs or struggles in
+// Hunt never stands on one drawing. When the numeric route lands on a clip with
+// a single drawing, the same character's own animated move (for walking) or
+// struggle/hurt (for a bound struggle) plays instead, looped. Hunt only.
+export const HUNT_MOVE_SEQUENCES = Object.freeze([2, 3, 12, 18, 19, 22]);
+export const HUNT_STRUGGLE_SEQUENCES = Object.freeze([20, 21]);
+// Fleeing and bound-escape sequences play 1.6x faster than their walk.
+export const HUNT_RUN_SEQUENCES = Object.freeze([3, 19, 21]);
+export const HUNT_RUN_RATE = 1.6;
+export const reviewedClipDrawings = (clip) => new Set((clip?.frames ?? []).map((frame) => frame.assetId)).size;
+export function reviewedHuntMotionClip(document, side, id) {
+  const binding = reviewedNumericClip(document, side, id);
+  if (!binding || side !== 'main' || reviewedClipDrawings(binding.clip) > 1) return binding;
+  // Numeric deliveries name clips by sequence (walk 2, run 3, hurt 6, knockback 26);
+  // labelled ones by action. Both are the same character's own drawings.
+  const struggle = HUNT_STRUGGLE_SEQUENCES.includes(id);
+  if (!struggle && !HUNT_MOVE_SEQUENCES.includes(id)) return binding;
+  const numeric = struggle ? [21, 20, 6, 26, 7] : [2, 3, 12, 18, 19];
+  const named = struggle ? ['bound_struggle', 'hurt', 'knockback', 'melee'] : ['move', 'run', 'weak_move'];
+  const candidates = [...numeric.map((n) => (c) => c.id === `main:${n}`),
+    ...named.flatMap((action) => (semanticVariants[action] ?? [action]).map((name) => (c) => c.action === name))];
+  for (const matches of candidates) {
+    const clip = document.clips.find((c) => c.mode === 'main' && matches(c) && reviewedClipDrawings(c) > 1);
+    if (clip) return { clip: { ...clip, loop: true, neutralReturn: null }, alias: true, mappingEvidence: 'HUNT_MOTION_ANIMATED_ALIAS' };
+  }
+  return binding;
+}
+
 export function reviewedArenaClip(document, action, direction) {
   return document.clips.find(c=>c.mode==='arena' && c.action===action && c.direction===direction) ?? null;
 }

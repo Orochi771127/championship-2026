@@ -30,6 +30,7 @@ export function createNativeWildActor(record, wildId) {
     drowsy:0, distracted:0, blinded:0, blindTicks:0, poisonPending:0, stunPending:0, poisoned:0,
     poisonElapsed:0, poisonDuration:0, recoveryTicks:0, shotShakeTicks:0,
     movementRestricted:0, restrictedTicks:0, pull13:0, pull11:0, escapeCounter:0, distanceAccumulatorQ12:0,
+    boundIdleTicks:0, stuckTicks:0,
     terrainPose:7, counter:0, expired:0, events:[], cardState:null, displayName:null, handController:null,
     animator:null, sequenceId:null, foodTarget:null, seekingFood:0, decoyCenter:null };
   nativeWildRequest(a,0);
