@@ -39,3 +39,13 @@ test('baseline egg target0 uses resident sequence0 and does not throw',()=>{
 test('baseline egg target7 uses resident sequence0 and does not throw',()=>{
   const f=setup({target:7,sequence:0});assert.doesNotThrow(f.draw);
 });
+
+test('browser baseline isolates its historical zoom dependency and still requires the original texture exception',()=>{
+  const browser=readFileSync(new URL('tests/championship-evolution-streaming-browser.cjs',base),'utf8');
+  const workflow=readFileSync(new URL('.github/workflows/evolution-streaming-review.yml',base),'utf8');
+  assert.ok(workflow.includes('3b3ff45a0bd6486b8e24b45f3010bb8e8f2dec97:src/championship/presentation/intRh2/raisingZoomInput.js'));
+  assert.ok(browser.includes('ed564907fee53887838421ab43a00e26d1f86edd6eb8482b69cd356636de8085'));
+  assert.ok(browser.includes('if(baseline)await page.route(\'**/src/championship/presentation/intRh2/evolution-baseline-zoom.js\''));
+  assert.ok(!browser.includes("page.route('**/src/championship/presentation/intRh2/raisingZoomInput.js'"));
+  assert.ok(browser.includes('Baseline reproduces exact exception in actual browser'));
+});

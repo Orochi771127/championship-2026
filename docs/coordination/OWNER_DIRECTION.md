@@ -1,5 +1,16 @@
 # Championship Owner Direction
 
+<!-- record-id: AW_UL_TAKEOVER_20261103 -->
+## 2026-11-03 — Claude takes over Codex's AW/UL release; web-sized AW23 and species 196
+
+The Owner asks 「那你不能把Codex的接過來，由你來做嗎？我的覺醒體、究極體，新的角色動作動畫美術動作都還沒有上線。請你處理。」 and then 「你要用適合網頁遊戲的圖檔跟規格」. This hands Codex's open PRs #158 (GR03/GR16 Walk8, GR14/GR15 normal idle) and #159 (AW23, species 196) to Claude.
+
+- Both are merged onto current main. Contracts take main's rows plus the branches' own additions, with the release-boundary baseline moved forward to main's selection. Codex's branches and worktrees are left as they were.
+- Web delivery: AW23 and species 196 shipped one image per frame (16 MB and 24 MB). Each set is now repacked to the 2026-10-28 web spec as per-mode WebP pages with exact alpha and every frame at 28 dB or more.
+- Painted frames are kept at no more than 2× the density-4 game grid, the 2026-11-01 sharpness rule. Species 196 (stored at density 12 and 32) is resampled once to density 8, at unchanged on-screen size; AW23 is already at density 8.
+- Result: AW23 5.9 MB, species 196 3.7 MB. AW23's Arena still decodes to 45.6 MB, in the range of the live AW28 (reported, not shrunk).
+- Not included: the other UL and AW coverage sets are dot first-pass sources with recorded heading, limb and identity defects (`AW_UL_RELEASE_TRIAGE.csv` in the R progress folder). They are not published wholesale; each needs its own review.
+
 <!-- record-id: MA24_WEAK_WALK_20261103 -->
 ## 2026-11-03 — MA24 weak walk plays two drawings instead of sliding one pose
 
