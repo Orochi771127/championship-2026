@@ -67,6 +67,9 @@ export const UI_COPY_EN = Object.freeze({
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "System background",
   "SYSTEM_BACKGROUND_HINT": "Close Settings, then open Shop, Database or Help from System. The image appears around and between cards. Title, ranch and battle scenes stay unchanged.",
+  // Ai-chan guide form setting (2026-11-03), PRODUCT_AUTHORED.
+  "GUIDE_APPEARANCE_LABEL": "Guide appearance",
+  "GUIDE_APPEARANCE_HINT": "Both looks are the same guide, Ai-chan; the tutorial is identical.",
   "SYSTEM_BACKGROUND_DEFAULT": "Default",
   "SYSTEM_BACKGROUND_DEFAULT_HINT": "Keep the original interface background.",
   "SYSTEM_BACKGROUND_CUSTOM": "Choose an image",

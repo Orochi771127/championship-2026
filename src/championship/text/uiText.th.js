@@ -55,6 +55,9 @@ export const UI_COPY_TH = Object.freeze({
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "พื้นหลังหน้าระบบ",
   "SYSTEM_BACKGROUND_HINT": "ปิดการตั้งค่า แล้วเปิดร้านค้า ฐานข้อมูล หรือวิธีเล่นจากเมนูระบบ ภาพจะแสดงรอบและระหว่างการ์ด หน้าชื่อเกม ฟาร์ม และฉากต่อสู้จะไม่เปลี่ยน",
+  // Ai-chan guide form setting (2026-11-03), PRODUCT_AUTHORED.
+  "GUIDE_APPEARANCE_LABEL": "รูปลักษณ์ไกด์",
+  "GUIDE_APPEARANCE_HINT": "ทั้งสองร่างคือไกด์ไอจังคนเดียวกัน เนื้อหาบทสอนเหมือนกันทุกอย่าง",
   "SYSTEM_BACKGROUND_DEFAULT": "ค่าเริ่มต้น",
   "SYSTEM_BACKGROUND_DEFAULT_HINT": "ใช้พื้นหลังเดิมของหน้าจอ",
   "SYSTEM_BACKGROUND_CUSTOM": "เลือกรูปภาพ",

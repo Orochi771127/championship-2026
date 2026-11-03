@@ -5,6 +5,7 @@
 // a theme never changes a move's power, cost, element, range or timing, and
 // the battle keeps drawing the move's own banks.
 import table from '../../../data/championship/move-vfx-themes.r1.json' with {type: 'json'};
+import {productOriginalMoveRecord} from '../../contracts/productOriginalSpecies.js';
 
 export const MOVE_VFX_STYLES = Object.freeze([...table.styles]);
 const MELEE_STYLES = new Set(['strike', 'claw', 'slash', 'pierce']);
@@ -13,5 +14,6 @@ const themes = new Map(table.moves.map(([recordIndex, style, element, tier, sour
 
 /** {style, element, tier, source} for a species move record, or null. */
 export function moveVfxTheme(recordIndex) {
-  return themes.get(recordIndex) ?? null;
+  // An original character's move shows the theme of the native move it borrows its effect banks from.
+  return themes.get(recordIndex) ?? themes.get(productOriginalMoveRecord(recordIndex)?.productDonorRecord) ?? null;
 }

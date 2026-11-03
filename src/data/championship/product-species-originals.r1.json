@@ -1,7 +1,7 @@
 {
   "revision": 1,
   "authority": "OWNER_APPROVED_PROVISIONAL_ORIGINAL_DATA_20261029",
-  "note": "Owner 2026-10-29: connect these numbers now; attribute (vaccine/virus/data/free) and other fine settings will be revised for every character later. Inert until an entry is runtimeReady and evolutionReady.",
+  "note": "Owner 2026-10-29: connect these numbers now; attribute (vaccine/virus/data/free) and other fine settings will be revised for every character later. Owner 2026-11-03: the eight entries with motion art are playable (runtimeReady and evolutionReady); the five without motion art, and UL42 with its pair UL41, wait for art.",
   "proposal": "docs/planning/roster14-stats-skills-evolution-20261029/PROPOSAL.v1.json",
   "elementSelect": "0 physical 1 heat 2 cold 3 light 4 dark 5 thunder (inferred from defender resistance order)",
   "entries": [
@@ -16,6 +16,7 @@
       "familyBits": 1,
       "huntClassByte": 2,
       "generationScaledByte": 10,
+      "behaviorDonor": 36,
       "lifecycle": {
         "sleepMin": 60,
         "sleepMax": 120,
@@ -32,9 +33,14 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 596,
+          "donorMoveRecord": 65,
           "nameByLocale": {
-            "zh-Hant": "星角突進"
+            "zh-Hant": "星角突進",
+            "en": "Star Horn Rush",
+            "ja": "スターホーンラッシュ",
+            "th": "พุ่งเขาดารา",
+            "vi": "Lao Sừng Sao"
           }
         },
         {
@@ -45,9 +51,14 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 597,
+          "donorMoveRecord": 63,
           "nameByLocale": {
-            "zh-Hant": "星塵衝撞"
+            "zh-Hant": "星塵衝撞",
+            "en": "Stardust Ram",
+            "ja": "スターダストラム",
+            "th": "ชนละอองดาว",
+            "vi": "Húc Bụi Sao"
           }
         }
       ],
@@ -85,8 +96,8 @@
           ]
         }
       ],
-      "runtimeReady": false,
-      "evolutionReady": false
+      "runtimeReady": true,
+      "evolutionReady": true
     },
     {
       "speciesIndex": 232,
@@ -99,6 +110,7 @@
       "familyBits": 1,
       "huntClassByte": 2,
       "generationScaledByte": 14,
+      "behaviorDonor": 114,
       "lifecycle": {
         "sleepMin": 60,
         "sleepMax": 180,
@@ -115,9 +127,14 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 598,
+          "donorMoveRecord": 256,
           "nameByLocale": {
-            "zh-Hant": "星岩衝撞"
+            "zh-Hant": "星岩衝撞",
+            "en": "Starstone Ram",
+            "ja": "スターストーンラム",
+            "th": "ชนหินดารา",
+            "vi": "Húc Đá Sao"
           }
         },
         {
@@ -128,9 +145,14 @@
           "elementSelect": 3,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 599,
+          "donorMoveRecord": 170,
           "nameByLocale": {
-            "zh-Hant": "彗星光軌"
+            "zh-Hant": "彗星光軌",
+            "en": "Comet Trail",
+            "ja": "コメットトレイル",
+            "th": "แสงหางดาวหาง",
+            "vi": "Quỹ Đạo Sao Chổi"
           }
         },
         {
@@ -141,9 +163,14 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 600,
+          "donorMoveRecord": 279,
           "nameByLocale": {
-            "zh-Hant": "重力碎牆"
+            "zh-Hant": "重力碎牆",
+            "en": "Gravity Breaker",
+            "ja": "グラビティブレイカー",
+            "th": "ทลายกำแพงแรงโน้มถ่วง",
+            "vi": "Phá Tường Trọng Lực"
           }
         }
       ],
@@ -213,8 +240,8 @@
           ]
         }
       ],
-      "runtimeReady": false,
-      "evolutionReady": false
+      "runtimeReady": true,
+      "evolutionReady": true
     },
     {
       "speciesIndex": 233,
@@ -227,6 +254,7 @@
       "familyBits": 1,
       "huntClassByte": 3,
       "generationScaledByte": 18,
+      "behaviorDonor": null,
       "lifecycle": {
         "sleepMin": 60,
         "sleepMax": 180,
@@ -243,7 +271,8 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 601,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "金甲拳"
           }
@@ -256,7 +285,8 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 602,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "引力衝擊波"
           }
@@ -269,7 +299,8 @@
           "elementSelect": 3,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 603,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "星爆威壓"
           }
@@ -290,6 +321,7 @@
       "familyBits": 32,
       "huntClassByte": 2,
       "generationScaledByte": 14,
+      "behaviorDonor": 91,
       "lifecycle": {
         "sleepMin": 60,
         "sleepMax": 180,
@@ -306,9 +338,14 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 604,
+          "donorMoveRecord": 202,
           "nameByLocale": {
-            "zh-Hant": "觸手輕撫"
+            "zh-Hant": "觸手輕撫",
+            "en": "Tendril Touch",
+            "ja": "テンドリルタッチ",
+            "th": "สัมผัสหนวด",
+            "vi": "Xúc Tu Vuốt Nhẹ"
           }
         },
         {
@@ -319,9 +356,14 @@
           "elementSelect": 5,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 605,
+          "donorMoveRecord": 163,
           "nameByLocale": {
-            "zh-Hant": "電離光粉"
+            "zh-Hant": "電離光粉",
+            "en": "Ion Glitter",
+            "ja": "イオングリッター",
+            "th": "ผงแสงไอออน",
+            "vi": "Bụi Sáng Ion"
           }
         },
         {
@@ -332,9 +374,14 @@
           "elementSelect": 3,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 606,
+          "donorMoveRecord": 170,
           "nameByLocale": {
-            "zh-Hant": "星雲淨化"
+            "zh-Hant": "星雲淨化",
+            "en": "Nebula Cleanse",
+            "ja": "ネビュラクレンズ",
+            "th": "ชำระเนบิวลา",
+            "vi": "Thanh Tẩy Tinh Vân"
           }
         }
       ],
@@ -404,8 +451,8 @@
           ]
         }
       ],
-      "runtimeReady": false,
-      "evolutionReady": false
+      "runtimeReady": true,
+      "evolutionReady": true
     },
     {
       "speciesIndex": 235,
@@ -418,6 +465,7 @@
       "familyBits": 32,
       "huntClassByte": 2,
       "generationScaledByte": 14,
+      "behaviorDonor": 97,
       "lifecycle": {
         "sleepMin": 60,
         "sleepMax": 180,
@@ -434,9 +482,14 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 607,
+          "donorMoveRecord": 217,
           "nameByLocale": {
-            "zh-Hant": "破冰背鰭"
+            "zh-Hant": "破冰背鰭",
+            "en": "Icebreaker Fin",
+            "ja": "アイスブレイクフィン",
+            "th": "ครีบทลายน้ำแข็ง",
+            "vi": "Vây Phá Băng"
           }
         },
         {
@@ -447,9 +500,14 @@
           "elementSelect": 2,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 608,
+          "donorMoveRecord": 212,
           "nameByLocale": {
-            "zh-Hant": "極光衝刺"
+            "zh-Hant": "極光衝刺",
+            "en": "Aurora Dash",
+            "ja": "オーロラダッシュ",
+            "th": "พุ่งแสงเหนือ",
+            "vi": "Lao Cực Quang"
           }
         },
         {
@@ -460,9 +518,14 @@
           "elementSelect": 3,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 609,
+          "donorMoveRecord": 170,
           "nameByLocale": {
-            "zh-Hant": "極光斷訊"
+            "zh-Hant": "極光斷訊",
+            "en": "Aurora Blackout",
+            "ja": "オーロラブラックアウト",
+            "th": "แสงเหนือตัดสัญญาณ",
+            "vi": "Cực Quang Ngắt Sóng"
           }
         }
       ],
@@ -532,8 +595,8 @@
           ]
         }
       ],
-      "runtimeReady": false,
-      "evolutionReady": false
+      "runtimeReady": true,
+      "evolutionReady": true
     },
     {
       "speciesIndex": 236,
@@ -546,6 +609,7 @@
       "familyBits": 4,
       "huntClassByte": 2,
       "generationScaledByte": 14,
+      "behaviorDonor": 89,
       "lifecycle": {
         "sleepMin": 60,
         "sleepMax": 180,
@@ -562,9 +626,14 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 610,
+          "donorMoveRecord": 198,
           "nameByLocale": {
-            "zh-Hant": "翡翠鐮"
+            "zh-Hant": "翡翠鐮",
+            "en": "Jade Scythe",
+            "ja": "ジェイドサイズ",
+            "th": "เคียวมรกต",
+            "vi": "Liềm Ngọc Bích"
           }
         },
         {
@@ -575,9 +644,14 @@
           "elementSelect": 5,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 611,
+          "donorMoveRecord": 163,
           "nameByLocale": {
-            "zh-Hant": "電磁鐮刃"
+            "zh-Hant": "電磁鐮刃",
+            "en": "Magnet Scythe",
+            "ja": "マグネサイズ",
+            "th": "ใบเคียวแม่เหล็กไฟฟ้า",
+            "vi": "Liềm Điện Từ"
           }
         },
         {
@@ -588,9 +662,14 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 612,
+          "donorMoveRecord": 199,
           "nameByLocale": {
-            "zh-Hant": "青光一閃"
+            "zh-Hant": "青光一閃",
+            "en": "Azure Flash",
+            "ja": "アズールフラッシュ",
+            "th": "แสงฟ้าวาบเดียว",
+            "vi": "Thanh Quang Nhất Thiểm"
           }
         }
       ],
@@ -660,8 +739,8 @@
           ]
         }
       ],
-      "runtimeReady": false,
-      "evolutionReady": false
+      "runtimeReady": true,
+      "evolutionReady": true
     },
     {
       "speciesIndex": 237,
@@ -674,6 +753,7 @@
       "familyBits": 2,
       "huntClassByte": 2,
       "generationScaledByte": 10,
+      "behaviorDonor": 50,
       "lifecycle": {
         "sleepMin": 60,
         "sleepMax": 120,
@@ -690,9 +770,14 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 613,
+          "donorMoveRecord": 98,
           "nameByLocale": {
-            "zh-Hant": "豆豆彈跳"
+            "zh-Hant": "星豆彈跳",
+            "en": "Star Bean Bounce",
+            "ja": "スタービーンバウンド",
+            "th": "กระโดดถั่วดารา",
+            "vi": "Đậu Sao Bật Nhảy"
           }
         },
         {
@@ -703,9 +788,14 @@
           "elementSelect": 3,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 614,
+          "donorMoveRecord": 197,
           "nameByLocale": {
-            "zh-Hant": "星能壓縮彈"
+            "zh-Hant": "星能壓縮彈",
+            "en": "Star Core Shot",
+            "ja": "スターコアショット",
+            "th": "กระสุนพลังดาวอัด",
+            "vi": "Đạn Nén Tinh Năng"
           }
         }
       ],
@@ -775,8 +865,8 @@
           ]
         }
       ],
-      "runtimeReady": false,
-      "evolutionReady": false
+      "runtimeReady": true,
+      "evolutionReady": true
     },
     {
       "speciesIndex": 238,
@@ -789,6 +879,7 @@
       "familyBits": 1,
       "huntClassByte": 2,
       "generationScaledByte": 8,
+      "behaviorDonor": null,
       "lifecycle": {
         "sleepMin": 30,
         "sleepMax": 60,
@@ -805,7 +896,8 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 615,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "靜電撲咬"
           }
@@ -818,7 +910,8 @@
           "elementSelect": 5,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 616,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "劈啪電團"
           }
@@ -872,6 +965,7 @@
       "familyBits": 1,
       "huntClassByte": 2,
       "generationScaledByte": 10,
+      "behaviorDonor": 38,
       "lifecycle": {
         "sleepMin": 60,
         "sleepMax": 120,
@@ -888,9 +982,14 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 617,
+          "donorMoveRecord": 69,
           "nameByLocale": {
-            "zh-Hant": "電爪撲擊"
+            "zh-Hant": "電爪撲擊",
+            "en": "Spark Claw",
+            "ja": "スパーククロー",
+            "th": "ตะปบกรงเล็บไฟฟ้า",
+            "vi": "Vuốt Điện Vồ"
           }
         },
         {
@@ -901,9 +1000,14 @@
           "elementSelect": 5,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 618,
+          "donorMoveRecord": 210,
           "nameByLocale": {
-            "zh-Hant": "金光迅雷"
+            "zh-Hant": "金光迅雷",
+            "en": "Golden Bolt",
+            "ja": "ゴールデンボルト",
+            "th": "สายฟ้าแสงทอง",
+            "vi": "Sấm Kim Quang"
           }
         },
         {
@@ -914,9 +1018,14 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 619,
+          "donorMoveRecord": 80,
           "nameByLocale": {
-            "zh-Hant": "蓄電突進"
+            "zh-Hant": "蓄電突進",
+            "en": "Charged Rush",
+            "ja": "チャージラッシュ",
+            "th": "พุ่งชาร์จไฟ",
+            "vi": "Lao Tích Điện"
           }
         }
       ],
@@ -954,8 +1063,8 @@
           ]
         }
       ],
-      "runtimeReady": false,
-      "evolutionReady": false
+      "runtimeReady": true,
+      "evolutionReady": true
     },
     {
       "speciesIndex": 240,
@@ -968,6 +1077,7 @@
       "familyBits": 1,
       "huntClassByte": 2,
       "generationScaledByte": 14,
+      "behaviorDonor": 79,
       "lifecycle": {
         "sleepMin": 60,
         "sleepMax": 180,
@@ -984,9 +1094,14 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 620,
+          "donorMoveRecord": 173,
           "nameByLocale": {
-            "zh-Hant": "雷牙咬"
+            "zh-Hant": "雷牙咬",
+            "en": "Thunder Fang",
+            "ja": "サンダーファング",
+            "th": "เขี้ยวสายฟ้า",
+            "vi": "Nanh Sấm"
           }
         },
         {
@@ -997,9 +1112,14 @@
           "elementSelect": 5,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 621,
+          "donorMoveRecord": 163,
           "nameByLocale": {
-            "zh-Hant": "雷速突擊"
+            "zh-Hant": "雷速突擊",
+            "en": "Bolt Assault",
+            "ja": "ボルトアサルト",
+            "th": "จู่โจมความเร็วสายฟ้า",
+            "vi": "Đột Kích Tốc Sấm"
           }
         },
         {
@@ -1010,9 +1130,14 @@
           "elementSelect": 5,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 622,
+          "donorMoveRecord": 210,
           "nameByLocale": {
-            "zh-Hant": "狼群雷陣"
+            "zh-Hant": "狼群雷陣",
+            "en": "Pack Storm",
+            "ja": "パックストーム",
+            "th": "ค่ายสายฟ้าฝูงหมาป่า",
+            "vi": "Lôi Trận Bầy Sói"
           }
         }
       ],
@@ -1082,8 +1207,8 @@
           ]
         }
       ],
-      "runtimeReady": false,
-      "evolutionReady": false
+      "runtimeReady": true,
+      "evolutionReady": true
     },
     {
       "speciesIndex": 241,
@@ -1096,6 +1221,7 @@
       "familyBits": 1,
       "huntClassByte": 3,
       "generationScaledByte": 18,
+      "behaviorDonor": null,
       "lifecycle": {
         "sleepMin": 60,
         "sleepMax": 180,
@@ -1112,7 +1238,8 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 623,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "雷刃拳"
           }
@@ -1125,7 +1252,8 @@
           "elementSelect": 5,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 624,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "狂雷裂空"
           }
@@ -1138,7 +1266,8 @@
           "elementSelect": 5,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 625,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "萬伏雷刃"
           }
@@ -1192,6 +1321,7 @@
       "familyBits": 1,
       "huntClassByte": 0,
       "generationScaledByte": 24,
+      "behaviorDonor": null,
       "lifecycle": {
         "sleepMin": 60,
         "sleepMax": 180,
@@ -1208,7 +1338,8 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 626,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "霸狼撲"
           }
@@ -1221,7 +1352,8 @@
           "elementSelect": 5,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 627,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "神雷風暴"
           }
@@ -1234,7 +1366,8 @@
           "elementSelect": 5,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 628,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "雷光翼斬"
           }
@@ -1247,7 +1380,8 @@
           "elementSelect": 5,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 629,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "天雷審判"
           }
@@ -1268,6 +1402,7 @@
       "familyBits": 16,
       "huntClassByte": 0,
       "generationScaledByte": 24,
+      "behaviorDonor": null,
       "lifecycle": {
         "sleepMin": 60,
         "sleepMax": 180,
@@ -1284,7 +1419,8 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 630,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "機甲龍顎"
           }
@@ -1297,7 +1433,8 @@
           "elementSelect": 5,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 631,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "雙背軌道砲"
           }
@@ -1310,7 +1447,8 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 632,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "分節尾刃"
           }
@@ -1331,6 +1469,7 @@
       "familyBits": 2,
       "huntClassByte": 0,
       "generationScaledByte": 24,
+      "behaviorDonor": null,
       "lifecycle": {
         "sleepMin": 60,
         "sleepMax": 180,
@@ -1347,7 +1486,8 @@
           "elementSelect": 0,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 633,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "兩指龍爪"
           }
@@ -1360,7 +1500,8 @@
           "elementSelect": 5,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 634,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "右臂磁軌砲"
           }
@@ -1373,7 +1514,8 @@
           "elementSelect": 5,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 635,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "雙背軌道砲齊射"
           }
@@ -1386,7 +1528,8 @@
           "elementSelect": 3,
           "statusCode": 0,
           "targetMode": 1,
-          "battleMoveRecord": null,
+          "battleMoveRecord": 636,
+          "donorMoveRecord": null,
           "nameByLocale": {
             "zh-Hant": "胸甲琥珀光"
           }

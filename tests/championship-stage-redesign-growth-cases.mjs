@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import lifecycle from '../src/data/championship/catalogs/raising-lifecycle.r1.json' with {type:'json'};
 import species from '../src/data/championship/catalogs/creature-species.r1.json' with {type:'json'};
-import {PRODUCT_GROWTH_RULES,PRODUCT_HATCH_POOL} from '../src/championship/contracts/productGrowthRules.js';
+import {PRODUCT_GROWTH_RULES,PRODUCT_HATCH_POOL,growthBranchHistoryIndex,productGeneration} from '../src/championship/contracts/productGrowthRules.js';
 import {selectProductHatchSpecies,productLifeThreshold,evaluateProductEvolution,productRebirth,isFinalNaturalStage,
   PRODUCT_NO_LIFE_LIMIT} from '../src/championship/raising/productGrowthPolicy.js';
 import {selectNativeHatchSpecies} from '../src/championship/raising/nativeIndividualEvolution.js';
@@ -15,7 +15,7 @@ const care = JSON.parse(fs.readFileSync('docs/research/RAISING_CARE_CPU_CHECK_20
 const hatch = JSON.parse(fs.readFileSync('docs/research/RAISING_HATCH_CPU_CHECK_2026-09-08.json', 'utf8'));
 const starter = () => createNativeRaisingStarter(restoreChannelRng(care.starterRng));
 const as = (index, change = {}) => { const p = structuredClone(starter()); p.fields['000'] = index; Object.assign(p.fields, change); return p; };
-const generation = i => species.records[i].generationIndex;
+const generation = i => productGeneration(i);
 
 test('a fresh egg hatches a 幼年期 I species for every channel value; ancestry keeps the native choice', () => {
   assert.deepEqual({...PRODUCT_HATCH_POOL}, {first: 8, count: 12});
@@ -36,16 +36,27 @@ test('a fresh egg hatches a 幼年期 I species for every channel value; ancestr
 });
 
 test('growth tables: native branches up to 成長期, none from 成熟期 on, three appended branches at the end', () => {
-  assert.equal(PRODUCT_GROWTH_RULES.rules.length, lifecycle.rules.length);
+  // Natives and the playable originals' own lists (231..240, Owner 2026-11-03).
+  assert.equal(PRODUCT_GROWTH_RULES.rules.length, 240 - 8 + 1);
   const appended = [[19, 31], [31, 63], [56, 93]];
+  // Playable originals are checked first where the 10-29 proposal placed them; history keeps native slots.
+  const inserted = new Map([[23, 231], [30, 237], [37, 234], [42, 235], [49, 236]]);
   PRODUCT_GROWTH_RULES.rules.forEach((list, i) => {
-    const source = i + 8, native = lifecycle.rules[i];
+    const source = i + 8, native = lifecycle.rules[i] ?? [];
     if (generation(source) >= 4) { assert.deepEqual([...list], [], `species ${source}`); return; }
-    assert.deepEqual(JSON.parse(JSON.stringify(list.slice(0, native.length))), native, `species ${source} keeps native order`);
-    const extra = list.slice(native.length).map(r => [source, r.target]);
-    assert.deepEqual(extra, appended.filter(([s]) => s === source));
+    const own = list.filter(r => !(inserted.get(source) === r.target));
+    assert.deepEqual(JSON.parse(JSON.stringify(own.slice(0, native.length))), native, `species ${source} keeps native order`);
+    const extra = own.slice(native.length).map(r => [source, r.target]);
+    if (source < 224) assert.deepEqual(extra, appended.filter(([s]) => s === source));
+    if (inserted.has(source)) assert.equal(list.findIndex(r => r.target === inserted.get(source)) < native.length, true);
     for (const rule of list) assert.equal(generation(rule.target), generation(source) + 1);
+    // The completed-route slots stay native: native branches keep theirs, the rest follow.
+    const slots = list.map((rule, branch) => growthBranchHistoryIndex(source, branch));
+    assert.deepEqual([...slots].sort((a, b) => a - b), list.map((_, k) => k), `species ${source} slots`);
+    native.forEach((rule, k) => assert.equal(slots[list.findIndex(r => r.target === rule.target && r.kind === rule.kind
+      && r.thresholds.every((v, t) => v === rule.thresholds[t]))], k));
   });
+  assert.deepEqual([231, 237, 239].map(s => PRODUCT_GROWTH_RULES.rules[s - 8].map(r => r.target)), [[232], [94, 88], [240]]);
   // Every species that could only wait for its lifetime can now evolve early.
   for (const [source] of appended.slice(0, 2)) assert.ok(PRODUCT_GROWTH_RULES.rules[source - 8].some(r => r.kind === 0));
   // MA30 has a source.

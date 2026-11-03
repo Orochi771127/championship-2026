@@ -56,6 +56,9 @@ export const UI_COPY = Object.freeze({
   // Static system backgrounds; display copy only.
   "SYSTEM_BACKGROUND_LABEL": "系統背景",
   "SYSTEM_BACKGROUND_HINT": "關閉設定後，從「系統」開啟商店、圖鑑或說明；圖片顯示在卡片外圍與空隙。標題、牧場與戰鬥場景不變。",
+  // Ai-chan guide form setting (2026-11-03), PRODUCT_AUTHORED.
+  "GUIDE_APPEARANCE_LABEL": "導覽員外觀",
+  "GUIDE_APPEARANCE_HINT": "愛醬的兩個樣子是同一位導覽員，教學內容完全相同。",
   "SYSTEM_BACKGROUND_DEFAULT": "預設",
   "SYSTEM_BACKGROUND_DEFAULT_HINT": "保留原本的介面背景。",
   "SYSTEM_BACKGROUND_CUSTOM": "自選",

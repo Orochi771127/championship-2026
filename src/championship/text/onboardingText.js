@@ -1,6 +1,8 @@
 // PRODUCT_AUTHORED onboarding copy (Owner 2026-10-28): the cinematic prologue,
 // the tamer licence terminal, the eight-egg incubator, the hatching pod and the
 // tactical tutorial guide. Display-only; player input is never rewritten.
+// guideName (Owner 2026-11-02): the guide is Ai-chan, one character in every
+// locale: 愛醬 / Ai-chan / アイちゃん / ไอจัง (never 愛將 or 澄音).
 import {getLocale} from './locale.js';
 
 const COPY={
@@ -12,7 +14,7 @@ const COPY={
   mailKicker:'INCOMING MAIL',mailFrom:'錦標賽營運本部',
   incubatorKicker:'ELEMENTAL INCUBATOR',locked:'已鎖定',
   podKicker:'HATCHING POD',partnerPlaceholder:'輸入拍檔暱稱',randomPartner:'隨機好名',giftEgg:'錦標賽贈禮蛋',
-  guideName:'AI 戰術引導員',guideNext:'下一步',guideSkip:'跳過教學',guideAction:'請操作高亮的位置',
+  guideName:'愛醬',guideNext:'下一步',guideSkip:'跳過教學',guideAction:'請操作高亮的位置',
   tamerCode:'馴獸師名片碼',guestPass:'遊客通行證',
   lessons:['孵化','餵食','清潔','治療','移動訓練','休養','傷藥','出發準備','狩獵','對戰'],
   elements:{star:'星辰',fire:'火焰',water:'水流',forest:'森木',thunder:'雷電',moon:'月暗',crystal:'晶石',holy:'聖光'},
@@ -27,7 +29,7 @@ const COPY={
   mailKicker:'INCOMING MAIL',mailFrom:'Tournament Office',
   incubatorKicker:'ELEMENTAL INCUBATOR',locked:'Locked',
   podKicker:'HATCHING POD',partnerPlaceholder:'Partner nickname',randomPartner:'Suggest',giftEgg:'Tournament gift egg',
-  guideName:'AI Tactical Guide',guideNext:'Next',guideSkip:'Skip tutorial',guideAction:'Use the highlighted control',
+  guideName:'Ai-chan',guideNext:'Next',guideSkip:'Skip tutorial',guideAction:'Use the highlighted control',
   tamerCode:'Tamer ID',guestPass:'Guest pass',
   lessons:['Hatch','Feed','Clean','Medicine','Moving','Rest','Wounds','Set out','Hunt','Battle'],
   elements:{star:'Star',fire:'Flame',water:'Tide',forest:'Grove',thunder:'Thunder',moon:'Moon',crystal:'Crystal',holy:'Holy'},
@@ -42,7 +44,7 @@ const COPY={
   mailKicker:'INCOMING MAIL',mailFrom:'大会運営本部',
   incubatorKicker:'ELEMENTAL INCUBATOR',locked:'決定済み',
   podKicker:'HATCHING POD',partnerPlaceholder:'パートナーのニックネーム',randomPartner:'おまかせ',giftEgg:'大会からの贈り物のタマゴ',
-  guideName:'AI戦術ガイド',guideNext:'次へ',guideSkip:'スキップ',guideAction:'光っている場所を操作しよう',
+  guideName:'アイちゃん',guideNext:'次へ',guideSkip:'スキップ',guideAction:'光っている場所を操作しよう',
   tamerCode:'テイマーID',guestPass:'ゲストパス',
   lessons:['孵化','ごはん','おそうじ','治療','移動','休養','傷薬','出発準備','狩り','対戦'],
   elements:{star:'星',fire:'炎',water:'水',forest:'森',thunder:'雷',moon:'月',crystal:'晶',holy:'聖'},
@@ -57,7 +59,7 @@ const COPY={
   mailKicker:'INCOMING MAIL',mailFrom:'สำนักงานจัดการแข่งขัน',
   incubatorKicker:'ELEMENTAL INCUBATOR',locked:'ล็อกแล้ว',
   podKicker:'HATCHING POD',partnerPlaceholder:'ชื่อเล่นคู่หู',randomPartner:'สุ่มชื่อ',giftEgg:'ไข่ของขวัญจากการแข่งขัน',
-  guideName:'ไกด์ยุทธวิธี AI',guideNext:'ต่อไป',guideSkip:'ข้ามบทสอน',guideAction:'แตะตำแหน่งที่ไฮไลต์',
+  guideName:'ไอจัง',guideNext:'ต่อไป',guideSkip:'ข้ามบทสอน',guideAction:'แตะตำแหน่งที่ไฮไลต์',
   tamerCode:'รหัสผู้ฝึก',guestPass:'บัตรผ่านผู้เยี่ยมชม',
   lessons:['ฟักไข่','ให้อาหาร','ทำความสะอาด','รักษา','เคลื่อนย้าย','พักฟื้น','ยาแผล','เตรียมออกเดินทาง','ล่า','ต่อสู้'],
   elements:{star:'ดวงดาว',fire:'เปลวไฟ',water:'สายน้ำ',forest:'พงไพร',thunder:'สายฟ้า',moon:'จันทรา',crystal:'ผลึก',holy:'แสงศักดิ์สิทธิ์'},
@@ -72,7 +74,7 @@ const COPY={
   mailKicker:'INCOMING MAIL',mailFrom:'Ban tổ chức giải',
   incubatorKicker:'ELEMENTAL INCUBATOR',locked:'Đã chọn',
   podKicker:'HATCHING POD',partnerPlaceholder:'Biệt danh bạn đồng hành',randomPartner:'Gợi ý',giftEgg:'Trứng quà tặng của giải',
-  guideName:'Hướng dẫn chiến thuật AI',guideNext:'Tiếp',guideSkip:'Bỏ qua hướng dẫn',guideAction:'Chạm vào vị trí được làm sáng',
+  guideName:'Ai-chan',guideNext:'Tiếp',guideSkip:'Bỏ qua hướng dẫn',guideAction:'Chạm vào vị trí được làm sáng',
   tamerCode:'Mã huấn luyện viên',guestPass:'Thẻ khách',
   lessons:['Ấp trứng','Cho ăn','Dọn dẹp','Chữa bệnh','Di chuyển','Nghỉ ngơi','Băng vết thương','Chuẩn bị','Săn bắt','Chiến đấu'],
   elements:{star:'Tinh tú',fire:'Lửa',water:'Nước',forest:'Rừng',thunder:'Sấm',moon:'Trăng',crystal:'Pha lê',holy:'Thánh quang'},

@@ -54,9 +54,12 @@ test('saved mute prevents first audio fetch; result cue plays once per actual at
 });
 
 test('route mapping uses canonical biome, championship last round, outcome and attempt identity',()=>{
-  assert.deepEqual(selectOriginalMusic({titleVisible:true}),{id:'login'});assert.deepEqual(selectOriginalMusic({titleVisible:true,openingVisible:true}),{id:'lofi'});
+  assert.deepEqual(selectOriginalMusic({titleVisible:true}),{id:'login'});assert.deepEqual(selectOriginalMusic({titleVisible:true,openingVisible:true}),{id:'hexagon_cradles'});
   for(const screen of ['RAISING_HOME','SHOP','DATABASE','MEDALS','CAGE_EDIT','DIGIMON_LIST','SCHEDULE','HELP','TAMER_INFO','GATE_SELECT','HUNT_LOADOUT','BATTLE_SELECT','CHAMPIONSHIP'])assert.ok(selectOriginalMusic({screen}).id,screen);
-  assert.equal(selectOriginalMusic({screen:'HUNT_FIELD',biome:'Factory'}).id,'forge');assert.equal(selectOriginalMusic({screen:'HUNT_FIELD',biome:'Ice'}).id,'moon');assert.equal(selectOriginalMusic({screen:'RAISING_HOME',tutorial:true}).id,'lofi');
+  assert.equal(selectOriginalMusic({screen:'HUNT_FIELD',biome:'Factory'}).id,'forge');assert.equal(selectOriginalMusic({screen:'HUNT_FIELD',biome:'Ice'}).id,'moon');// Owner 2026-11-02: one cue from the New Game story through every tutorial screen; a tutorial battle result keeps its sting.
+  for(const screen of ['RAISING_HOME','GATE_SELECT','HUNT_LOADOUT','HUNT_FIELD','HUNT_RESULT','BATTLE_SELECT','BATTLE_FIELD'])assert.equal(selectOriginalMusic({screen,tutorial:true,biome:'Factory'}).id,'hexagon_cradles',screen);
+  assert.deepEqual(selectOriginalMusic({screen:'BATTLE_RESULT',tutorial:true,outcome:{ended:true,winningTeam:0},attemptId:'tutorial:1'}),{id:'victory',attemptId:'tutorial:1'});
+  assert.equal(selectOriginalMusic({screen:'RAISING_HOME',tutorial:false}).id,'moon');
   assert.equal(selectOriginalMusic({screen:'BATTLE_FIELD',chosen:{practice:true,cursor:2,totalRounds:3}}).id,'battle_normal');assert.equal(selectOriginalMusic({screen:'BATTLE_FIELD',chosen:{championship:true,cursor:2,totalRounds:3}}).id,'battle_final');
   for(const [winningTeam,id]of [[0,'victory'],[1,'defeat'],[null,'draw']])assert.deepEqual(selectOriginalMusic({screen:'BATTLE_RESULT',outcome:{ended:true,winningTeam},attemptId:'battle:3'}),{id,attemptId:'battle:3'});
   assert.equal(selectOriginalMusic({screen:'BATTLE_RESULT',outcome:{ended:true,winningTeam:0}}).id,null);

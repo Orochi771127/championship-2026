@@ -1,5 +1,6 @@
 import {productFormText} from '../text/productFormText.js';
-import {productBaseSpeciesIndex,isKnownSpeciesIndex} from '../contracts/productSpeciesData.js';
+import {productBaseSpeciesIndex,isKnownSpeciesIndex,productSpeciesRecord} from '../contracts/productSpeciesData.js';
+import {isPlayableProductOriginal} from '../contracts/productOriginalSpecies.js';
 import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
 // Original individual qualification and the ordinary title-match party seam.
 // Source: ARM9 02092204/02092380/02092244; OVL10 0210FF08, 02112D40;
@@ -27,7 +28,13 @@ export function battlePartyCondition(index) {
     field14:r.field24,minimum03c:r.field14,minimum010:r.field15,individual018:r.field18,species014:r.field1C};
 }
 
-const conditionSpecies=index=>conditions.species[isKnownSpeciesIndex(index)?productBaseSpeciesIndex(index):-1];
+// An original character qualifies by its own stage, attribute and race over its behavior donor's row.
+const conditionSpecies=index=>{
+  const row=conditions.species[isKnownSpeciesIndex(index)?productBaseSpeciesIndex(index):-1];
+  if(!row||!isPlayableProductOriginal(index))return row;
+  const r=productSpeciesRecord(index);
+  return {...row,index,fields:{...row.fields,'0c':r.generationIndex,'10':r.attributeIndex,'18':r.familyBits}};
+};
 function speciesFits(s,condition){
   if(condition.family!==0 && (condition.family&s.fields['18'])===0)return false;
   if(condition.generation!==7 && condition.generation!==s.fields['0c'])return false;
@@ -62,7 +69,7 @@ export function battlePartyAdmission(profile,recordIndex=null,{burstForms=[]}={}
   if(!profile)return {ok:false,reason:'PROFILE_UNAVAILABLE',message:'這隻夥伴的個體資料尚未完整。'};
   const extension=getProductExtension(profile.fields?.['000']);
   if(extension&&!extension.runtimeReady)return {ok:false,reason:'PRODUCT_SPECIES_NOT_READY',message:productFormText('notReady')};
-  const f=profile.fields,s=conditions.species[isKnownSpeciesIndex(f['000'])?productBaseSpeciesIndex(f['000']):-1];
+  const f=profile.fields,s=conditionSpecies(f['000']);
   if(!s||s.fields['0c']<=1)return {ok:false,reason:'TOO_YOUNG',message:'這隻夥伴還太幼小，暫時無法參賽。'};
   if(['134','138','13c'].some(k=>f[k]!==0))return {ok:false,reason:'CONDITION_UNFIT',message:'這隻夥伴目前的身體狀況無法參賽。'};
   if(!nativeBattleQualification(profile,battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C),{burstForms}))

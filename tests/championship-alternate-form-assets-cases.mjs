@@ -1,5 +1,7 @@
 import {PUBLIC_CHARACTER_RENDER_KIND,characterRenderAnimations} from '../src/championship/presentation/publicCharacterRenderContract.js';
 import assert from 'node:assert/strict';
+import {listProductOriginals,isPlayableProductOriginal} from '../src/championship/contracts/productOriginalSpecies.js';
+const speciesCatalog=JSON.parse(fs.readFileSync(new URL('../src/data/championship/catalogs/creature-species.r1.json',import.meta.url),'utf8'));
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -56,7 +58,8 @@ console.log('PASS: real completed-original loader adapter with fetch/decode doub
 for(const [filename,symbol] of [['battleCharacterProfiles.js','BATTLE_CHARACTER_PROFILES'],['battleCharacterGeometry.js','BATTLE_CHARACTER_GEOMETRY'],['characterNativeSizing.js','CHARACTER_NATIVE_SIZING']]){
  const file=fs.readFileSync(path.join(root,'src/data/championship',filename),'utf8').replace(/^import .*;\n/gm,'').replace(/^export /gm,'');
  const names=filename==='battleCharacterProfiles.js'?[symbol,'BATTLE_SPECIES_ENTITIES','BATTLE_SPECIES_MOVEMENT']:[symbol];
- const result=new Function('ACTIVE_ALTERNATE_FORM_ASSETS',file+';return {'+names.join(',')+'};')(configs);
+ // The playable original characters (Owner 2026-11-03) are bound after the alternates from their own contract.
+ const result=new Function('ACTIVE_ALTERNATE_FORM_ASSETS','listProductOriginals','isPlayableProductOriginal','speciesCatalog',file+';return {'+names.join(',')+'};')(configs,listProductOriginals,isPlayableProductOriginal,speciesCatalog);
  assert(result[symbol].oc_crownbrass_mandrill);assert(result[symbol].oc_celestyrant_battle_r10);
  if(filename==='battleCharacterProfiles.js'){
   assert.equal(result.BATTLE_SPECIES_ENTITIES[228],null);assert.equal(result.BATTLE_SPECIES_ENTITIES[229],'oc_crownbrass_mandrill');assert.equal(result.BATTLE_SPECIES_ENTITIES[230],'oc_celestyrant_battle_r10');

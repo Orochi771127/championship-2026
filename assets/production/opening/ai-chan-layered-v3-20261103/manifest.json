@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:opening:ai-chan-layered-v3:20261103",
+  "scope": "New Game story background video and the Ai-chan guide's two closed-mouth idle portraits (cat, catgirl), used as separate layers: video, transparent portrait, DOM text and music. Not the title, logo or NS33 title film.",
+  "rightsStatus": "ORIGINAL_GENERATED",
+  "productionStatus": "OWNER_APPROVED_GENERATED_ORIGINAL",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "humanApproved": true,
+  "runtimeEligible": true,
+  "publicReleasePermitted": true,
+  "shippingReady": false,
+  "artifactMaturity": "OWNER_APPROVED_LAYERED_V3_STATIC_FIRST_VERSION",
+  "classification": "OWNER_APPROVED_ADAPTATION",
+  "ownerApproval": {
+    "approvedAtUtc": "2026-11-02T16:14:44Z",
+    "statement": "Owner approved this layered v3 story and Ai-chan guide version, and authorised Claude to complete paging and interaction; the package's own candidate/pending labels predate that approval.",
+    "deploymentAuthorized": true,
+    "commercialRightsCleared": false,
+    "publicationAuthorizedOn": "2026-11-02",
+    "publicationRecord": "src/data/championship/public-playtest.r1.json#onboardingAiChan20261103"
+  },
+  "source": {
+    "archive": "AI_CHAN_FULL_STORY_LAYERED_CANDIDATE_v3.zip",
+    "archiveBytes": 10189737,
+    "archiveSha256": "73aab2e2c4ec93ab0da7d5787e2173e58bc434a8143243a35aa771ccd70dcd50",
+    "intakeRecord": "Local archive onboarding-ai-chan-owner-approved-20261103 (handoff/ASSETS_READY_FOR_INTEGRATION_ZH_TW.md, evidence/LAYERED_ZIP_INTAKE.json); ZIP CRC and path safety verified before extraction.",
+    "romDerived": false,
+    "thirdPartyCharacters": false
+  },
+  "conversion": "None. Every file is the package's own bytes, copied unchanged (no re-encoding of the WebP portraits or the MP4).",
+  "files": [
+    {
+      "role": "background",
+      "src": "assets/production/opening/ai-chan-layered-v3-20261103/background.mp4",
+      "packagePath": "assets/background.mp4",
+      "bytes": 9904450,
+      "sha256": "b0962103da22b392fd787e07db81830ffab6930d66bd74aa2e88d6fe5bf075d0",
+      "video": {
+        "width": 1280,
+        "height": 720,
+        "aspect": "16:9",
+        "seconds": 80,
+        "fps": 24,
+        "frames": 1920,
+        "codec": "h264",
+        "pixelFormat": "yuv420p",
+        "audio": false
+      },
+      "containsGuidePixels": false,
+      "containsBakedText": false,
+      "portraitFraming": "Same video, centre-framed (object-fit cover) on portrait screens; whole 16:9 frame (contain) on landscape and desktop. No separate 9:16 file was supplied in this package."
+    },
+    {
+      "role": "guide-cat",
+      "src": "assets/production/opening/ai-chan-layered-v3-20261103/cat_idle.webp",
+      "packagePath": "assets/cat_idle.webp",
+      "bytes": 79144,
+      "sha256": "453f97fdcba19ea82cee4d6eebd54bd375b41f3c4b12c15b779370e4355da6d6",
+      "width": 716,
+      "height": 768,
+      "alpha": true,
+      "anchor": "Top-aligned half-body window, width : height = 1 : 0.815 (timeline.json); window ends at source row 584, above the paws. Face window cx 380, cy 215, size 300."
+    },
+    {
+      "role": "guide-catgirl",
+      "src": "assets/production/opening/ai-chan-layered-v3-20261103/catgirl_idle.webp",
+      "packagePath": "assets/catgirl_idle.webp",
+      "bytes": 78444,
+      "sha256": "fd22302d4abfb8d047d3f77e1dec315aa4cd34fb9fe03a28c7c04a20674bed3c",
+      "width": 631,
+      "height": 768,
+      "alpha": true,
+      "anchor": "Same window, image raised 14% of the window height (timeline.json catgirlImageTop); ends at source row 586, at the hips. Face window cx 318, cy 212, size 230."
+    }
+  ],
+  "guideCue": {
+    "visibleSeconds": [
+      38,
+      50
+    ],
+    "forms": [
+      "cat",
+      "catgirl"
+    ],
+    "defaultForm": "cat",
+    "talkLoop": false,
+    "blinkLoop": false,
+    "poseLoop": false
+  },
+  "notIncluded": "The 34-expression WebP pack, PNG masters and the separate 9:16 background were not in this package and are not referenced.",
+  "music": "assets/production/scene-music-r1/manifest.json#hexagon_cradles",
+  "acceptance": "Local Chromium normal-flow QA only (390x844, 844x390, 1366x768). Physical-device, iOS Safari and human listening acceptance are pending."
+}

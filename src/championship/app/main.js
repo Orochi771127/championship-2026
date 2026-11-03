@@ -151,6 +151,7 @@ import { createAudioBus } from '../presentation/audioBus.js';
 import { createMusicPresentation } from '../presentation/musicPresentation.js';
 import { resolveSceneMusic } from '../presentation/sceneMusicCatalog.js';
 import { ORIGINAL_MUSIC_CUES, selectOriginalMusic } from '../presentation/originalMusicCatalog.js';
+import { setGuideAppearance } from '../presentation/aiChanGuide.js';
 import { cappedPixelRatio, currentQuality, currentQualityTier, highlightMode, prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { resultHeroAnchor, resultStageLight } from '../presentation/battleResultCharacters.js';
 import { formatDateTime, formatList, onLocaleChange, getLocale } from '../text/locale.js';
@@ -410,7 +411,12 @@ function scheduleRanchTitlePreload(){
     }catch{ranchTitlePreloadProgress=null;ranchTitlePreloadStatus.hidden=true;titleNoteMessage.hidden=false;}
   },500)));
 }
+// Ai-chan's form and the story bookmark live in the preference document (never
+// the game save). The bookmark is cleared once a New Game has really started.
 const openingPresentation=createOpeningPresentation({host:document.getElementById('cm-opening'),onStart:startNewGame,
+  guide:{appearance:()=>settings.store.get().guideAppearance,choose:form=>settings.store.set('guideAppearance',form),
+    resume:()=>settings.store.get().openingStoryResume,progress:id=>settings.store.set('openingStoryResume',id),
+    started:()=>settings.store.set('openingStoryResume','')},
   allowEggChoice:shouldOfferInteractiveTutorial(location),onCancel(){
     titleActions.hidden=false;if(titleSettingsButton)titleSettingsButton.hidden=false;refreshContinue();newGameButton.focus({preventScroll:true});
   }});
@@ -659,6 +665,9 @@ const music = createMusicPresentation({bus:settings.audio,cues:ORIGINAL_MUSIC_CU
     syncTitleArt();
   }});
 settings.store.subscribe((values,changed)=>{if(changed.some(id=>['muted','masterVolume','sfxVolume','musicVolume','raisingMusic','battleMusic'].includes(id)))music.preferencesChanged();});
+// The tutorial guide and the story follow the stored form; "" (not chosen yet) shows the cat.
+setGuideAppearance(settings.store.get().guideAppearance);
+settings.store.subscribe((values,changed)=>{if(changed.includes('guideAppearance'))setGuideAppearance(values.guideAppearance);});
 const tutorialMusicAttempts=new WeakMap();let tutorialMusicSequence=0;
 function syncMusic(){
   if(dataArenaSession)return; // the arena picks its own cues on the shared music presentation
@@ -667,10 +676,12 @@ function syncMusic(){
   const screen=app?.getScreen(),tutorialBattle=app?.getInteractiveTutorialBattle?.(),runtime=tutorialBattle?.runtime??battleRuntime;
   let attemptId=battleAttemptId;
   if(tutorialBattle?.runtime){if(!tutorialMusicAttempts.has(runtime))tutorialMusicAttempts.set(runtime,`tutorial:${++tutorialMusicSequence}`);attemptId=tutorialMusicAttempts.get(runtime);}
-  const cue=selectOriginalMusic({screen,tutorial:app?.getInteractiveTutorial?.()?.finished===false,
+  const tutorialActive=app?.getInteractiveTutorial?.()?.finished===false;
+  const cue=selectOriginalMusic({screen,tutorial:tutorialActive,
     biome:app?.getConfirmedGate?.()?.biomeId,chosen:runtime?.getChosenMatch?.(),
     outcome:screen===CHAMPIONSHIP_SCREENS.BATTLE_RESULT?(tutorialBattle?.outcome??runtime?.outcome?.()):null,attemptId});
-  music.setScene(cue.id,cue.attemptId,['RAISING_HOME','CAGE_EDIT'].includes(screen)?'raising':null);
+  // The tutorial keeps its own approved cue: the ranch's music preference applies after it.
+  music.setScene(cue.id,cue.attemptId,!tutorialActive&&['RAISING_HOME','CAGE_EDIT'].includes(screen)?'raising':null);
 }
 // Resolve the new cue before art reads its buffering state on title return.
 const musicOverlayObserver=new MutationObserver(()=>{syncMusic();syncTitleArt();openingFilm?.sync();});

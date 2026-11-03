@@ -52,6 +52,8 @@ test("the 216 native names remain a separate witness from the 218-row product bo
   assert.deepEqual(nativeSlots.map(s=>s.speciesIndex).sort((a,b)=>a-b),names.records.map(r=>r.recordIndex));
   assert.deepEqual(slots.filter(s=>s.identityEvidence==='PRODUCT_EXTENSION_EXPLICIT').map(s=>s.speciesIndex),[229,230]);
   assert.equal(species.records.length,228);assert.equal(species.records[228],undefined);
-  assert.equal(DATABASE_EGG_COUNT,0);assert.equal(DATABASE_REGULAR_COUNT,218);assert.equal(DATABASE_SLOT_COUNT,218);
-  assert.equal(DATABASE_SLOT_COUNT,names.recordCount+2);
+  assert.equal(DATABASE_EGG_COUNT,0);assert.equal(DATABASE_REGULAR_COUNT,226);assert.equal(DATABASE_SLOT_COUNT,226);
+  // Two product forms and the eight playable original characters (Owner 2026-11-03) carry their own names.
+  assert.deepEqual(slots.filter(s=>s.identityEvidence==='PRODUCT_ORIGINAL_EXPLICIT').map(s=>s.speciesIndex),[231,232,234,235,236,237,239,240]);
+  assert.equal(DATABASE_SLOT_COUNT,names.recordCount+2+8);
 });

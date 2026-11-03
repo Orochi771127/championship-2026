@@ -4,6 +4,7 @@ import {listProductExtensions,planUltimateDisplayOrder} from '../contracts/produ
 import nativeCatalog from '../../data/championship/database-display.r1.json' with {type:'json'};
 import {deepFreeze} from '../contracts/championshipContracts.js';
 import {listDatabaseIllustrations,databaseIllustrationRow} from './databaseIllustrations.js';
+import {isPlayableProductOriginal} from '../contracts/productOriginalSpecies.js';
 
 // Owner-approved 2026-10-17 identity correction. Keep the archived native
 // receipt, stable species IDs and legacy book ordinals; correct live labels only.
@@ -13,12 +14,17 @@ const enabled=listProductExtensions().every(e=>e.runtimeReady&&e.evolutionReady)
 const planned=enabled?planUltimateDisplayOrder(correctedNative.entries):[];
 const ultimate=new Map(planned.map(e=>[e.speciesIndex,e]));
 const catalog=enabled?{...correctedNative,entries:[...correctedNative.entries.map(e=>ultimate.get(e.speciesIndex)??e),...listProductExtensions().map(e=>({...ultimate.get(e.speciesIndex),entryKey:`dex-species-${e.speciesIndex}`,contentStatus:'PUBLISHED',legacyBookOrdinal:null,firstPublishedRevision:2}))].sort((a,b)=>a.numberingStageIndex-b.numberingStageIndex||a.serial-b.serial)}:{...correctedNative,entries:[...correctedNative.entries].sort((a,b)=>a.numberingStageIndex-b.numberingStageIndex||a.serial-b.serial)};
-// Illustration entries have their assigned evolution stage and serial.
-const displayCatalog={...catalog,entries:[...catalog.entries,...listDatabaseIllustrations().map(entry=>({
+// Illustration entries have their assigned evolution stage and serial. A playable original keeps that
+// code and becomes a regular entry the book registers (databaseCatalog.js).
+const displayCatalog={...catalog,entries:[...catalog.entries,...listDatabaseIllustrations().map(entry=>isPlayableProductOriginal(entry.speciesIndex)?{
+  entryKey:`dex-species-${entry.speciesIndex}`,speciesIndex:entry.speciesIndex,speciesId:entry.speciesId,
+  numberingStageIndex:entry.numberingStageIndex,serial:entry.serial,displayCode:entry.displayCode,
+  legacyBookOrdinal:null,contentStatus:'PUBLISHED',firstPublishedRevision:3
+}:{
   ...databaseIllustrationRow(entry.speciesIndex),entryKey:`dex-illustration-${entry.speciesIndex}`,
   numberingStageIndex:entry.numberingStageIndex,serial:entry.serial,
   legacyBookOrdinal:null,contentStatus:'PUBLISHED'
-}))].sort((a,b)=>a.numberingStageIndex-b.numberingStageIndex||a.serial-b.serial)};
+})].sort((a,b)=>a.numberingStageIndex-b.numberingStageIndex||a.serial-b.serial)};
 export const DATABASE_DISPLAY_CATALOG = deepFreeze(displayCatalog);
 const bySpecies = new Map(displayCatalog.entries.map(entry=>[entry.speciesIndex,entry]));
 export function getDatabaseDisplayEntry(speciesIndex) { return bySpecies.get(speciesIndex) ?? null; }

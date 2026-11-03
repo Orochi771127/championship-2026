@@ -138,18 +138,20 @@ test("Database translates every registered species without revealing unregistere
   assert.equal(NATIVE_REGULAR_BOOK_SPECIES.length,216);
   assert.equal(createHash('sha256').update(JSON.stringify(NATIVE_REGULAR_BOOK_SPECIES)).digest('hex'),
     '577aac3c81ffaa86239e064c39e8c708c659ea90533d693504a6ffe33af23ab8');
-  const registeredSpecies=[...NATIVE_REGULAR_BOOK_SPECIES,229,230];
+  // Owner 2026-11-03: the playable originals are regular book entries too.
+  const PLAYABLE=[231,232,234,235,236,237,239,240];
+  const registeredSpecies=[...NATIVE_REGULAR_BOOK_SPECIES,229,230,...PLAYABLE];
   const entries = registeredSpecies.map((id, index) => ({
     speciesIndex: id, bookOrdinal: index, state: "REGISTERED", displayName: `M_${id}`
   }));
-  const frame = { screen: "DATABASE", database: { entries, selected: null, registeredCount: 218, slotCount: 218 } };
+  const frame = { screen: "DATABASE", database: { entries, selected: null, registeredCount: 226, slotCount: 226 } };
   const selected = [];
   const view = createDatabaseView({ root, source: { getFrame: () => frame, intents: { selectDatabaseSpecies: id => selected.push(id) } } });
   const allRows=root.querySelectorAll(".cm-vs2-database__row");
   assert.equal(allRows.length,240);
-  const rows=allRows.filter(row=>Number(row.dataset.speciesIndex)<231);
+  const rows=allRows.filter(row=>Number(row.dataset.speciesIndex)<231||PLAYABLE.includes(Number(row.dataset.speciesIndex)));
   const playableDisplay=DATABASE_DISPLAY_CATALOG.entries.filter(row=>row.kind!=='ILLUSTRATION');
-  assert.equal(rows.length,226);assert.equal(playableDisplay.length,226);
+  assert.equal(rows.length,234);assert.equal(playableDisplay.length,234);
   assert.deepEqual(rows.map(row=>[Number(row.dataset.speciesIndex),row.dataset.displayCode]),
     playableDisplay.map(row=>[row.speciesIndex,row.displayCode]));
   // These explicit owner-approved identities and raw-order checks are independent
@@ -160,11 +162,11 @@ test("Database translates every registered species without revealing unregistere
     assert.equal(matches[0].dataset.state,'REGISTERED');
   }
   const ids=rows.map(row=>Number(row.dataset.speciesIndex));
-  assert.equal(new Set(ids).size,226);assert.ok(!ids.includes(228));
+  assert.equal(new Set(ids).size,234);assert.ok(!ids.includes(228));
   assert.deepEqual(ids.filter(id=>id>=8).sort((a,b)=>a-b),[...registeredSpecies].sort((a,b)=>a-b));
-  assert.deepEqual(ids.filter(id=>id>=8&&![211,222,229,230].includes(id)),
+  assert.deepEqual(ids.filter(id=>id>=8&&![211,222,229,230,...PLAYABLE].includes(id)),
     NATIVE_REGULAR_BOOK_SPECIES.filter(id=>![211,222].includes(id)).map(id=>id===121?125:id===125?121:id));
-  assert.deepEqual(['EG','B1','B2','GR','MA','AW','UL'].map(prefix=>rows.filter(row=>row.dataset.displayCode.startsWith(prefix)).length),[8,12,14,38,64,51,39]);
+  assert.deepEqual(['EG','B1','B2','GR','MA','AW','UL'].map(prefix=>rows.filter(row=>row.dataset.displayCode.startsWith(prefix)).length),[8,12,14,41,69,51,39]);
   assert.equal(rows.at(-1).dataset.displayCode,'UL39');
   for (const row of rows) row.click();
   assert.deepEqual(selected,playableDisplay.map(row=>row.numberingStageIndex===0?null:row.speciesIndex));

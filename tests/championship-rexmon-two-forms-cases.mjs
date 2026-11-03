@@ -58,7 +58,7 @@ test('the form link joins exactly the two Rexmon forms at one stage and rejects 
 });
 
 test('both forms are browsable ultimate art only: no slot, registration, extension, stats, story or evolution',()=>{
-  assert.equal(listDatabaseSlots().length,218);
+  assert.equal(listDatabaseSlots().length,226,'native, alternate forms and the eight playable originals');
   const book=projectDatabase();
   assert.deepEqual(databaseDisplayRows(book,6).filter(e=>e.kind==='ILLUSTRATION').map(e=>e.speciesIndex),[242,243,244]);
   for(const id of ids){

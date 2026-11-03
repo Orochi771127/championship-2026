@@ -14,6 +14,7 @@ import { planOnlineBindReward } from './onlineBindRewardPolicy.js';
 import {GACHA_PERSONALITY_CHOICES,GACHA_TICKET_PRIZE,getGachaBitsBag,disarmGachaItem} from '../gacha/cyberGacha.js';
 import {beginNativeRaisingEvolution} from '../raising/nativeRaisingActor.js';
 import {productRebirth,PRODUCT_GROWTH_RULES} from '../raising/productGrowthPolicy.js';
+import {growthBranchHistoryIndex} from '../contracts/productGrowthRules.js';
 import {constructNativeIndividualForm} from '../raising/nativeIndividualEvolution.js';
 import {normalizeBurstEvolution,createBurstEvolutionState,withBurstMigrated,legacyBurstMigration,unlockBurstForms,
   burstUnlocksOf,burstFormsFor,evaluateBurstConditions,preferBurstForm,preferredBurstForm,burstPlanFor,burstTierForRank,burstFormTier,
@@ -2044,7 +2045,7 @@ export function createChampionshipStandaloneApp({
             oldSpecies:event.oldSpecies,stats:evolutionStatChange(profileBefore,result.profile)};
           if(event.productRouteId){const productEvolutionBranches=[...new Set([...(raising.nativeHome?.productEvolutionBranches??[]),event.productRouteId])];
             raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,productEvolutionBranches})});}
-          else if(event.target>=8&&!event.inherited){const branches=[...new Set([...(raising.nativeHome?.evolutionBranches??[]),(event.oldSpecies-8)*5+event.index])];
+          else if(event.target>=8&&!event.inherited){const branches=[...new Set([...(raising.nativeHome?.evolutionBranches??[]),(event.oldSpecies-8)*5+growthBranchHistoryIndex(event.oldSpecies,event.index)])];
             raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,evolutionBranches:branches})});}
           savePort.markDirty();}
       }

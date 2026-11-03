@@ -11,20 +11,21 @@ import {TUTORIAL_RAISING_STEPS} from '../src/championship/app/interactiveTutoria
 import {TUTORIAL_HUNT_STEPS} from '../src/championship/app/interactiveTutorialHuntSteps.js';
 import {TUTORIAL_BATTLE_STEPS} from '../src/championship/app/interactiveTutorialBattleSteps.js';
 import {openingPrologueChapter} from '../src/championship/app/openingStoryPresentation.js';
-import {OPENING_STORY_CARDS} from '../src/championship/app/nativeOpeningStory.js';
+import {OPENING_STORY_BEATS} from '../src/championship/app/openingStoryScript.js';
 import {OPENING_EGG_CHOICES,OPENING_EGG_ELEMENTS,openingEggChoices} from '../src/championship/app/openingEggChoices.js';
 
 const memoryStore=()=>{let text=null;return {writes:0,read(){return {text,error:null};},write(next){this.writes++;text=next;return {ok:true,error:null};}};};
 const chapter=(beats,extra={})=>({schemaVersion:1,chapterId:'chapter-1',beats,...extra});
 
-test('the prologue is a valid story chapter: four beats, original text and order, original holds as auto-advance',()=>{
+test('the New Game prologue (Ai-chan v3, Owner 2026-11-02) is a valid story chapter the reader paces',()=>{
   const prologue=openingPrologueChapter();
   assert.equal(prologue.chapterId,'prologue-opening');assert.equal(prologue.unlockCondition.kind,'newGame');
-  assert.equal(prologue.beats.length,4);
-  assert.deepEqual(prologue.beats.map(beat=>beat.illustration.length),[3,1,1,0]);
-  assert.deepEqual(prologue.beats.map(beat=>beat.autoAdvanceMs),OPENING_STORY_CARDS.map(card=>Math.round(card.frames*1000/60)));
-  assert.match(prologue.beats[0].text,/每四年/);assert.match(prologue.beats[3].text,/郵件/);
-  assert.ok(prologue.beats.flatMap(beat=>beat.illustration).every(art=>art.src.startsWith('assets/production/opening/')));
+  // One page per approved paragraph (16) plus Ai-chan's four lines and her form choice.
+  assert.equal(prologue.beats.length,21);assert.deepEqual(prologue.beats.map(beat=>beat.id),OPENING_STORY_BEATS.map(beat=>beat.id));
+  // The background is a separate video layer: no comic panels, and no page advances on its own.
+  assert.ok(prologue.beats.every(beat=>beat.illustration.length===0&&beat.autoAdvanceMs===null));
+  const choices=prologue.beats.filter(beat=>beat.choices.length);
+  assert.equal(choices.length,1);assert.deepEqual(choices[0].choices.map(choice=>choice.id).sort(),['cat','catgirl']);
   assert.deepEqual(validateStoryChapter(prologue),prologue);
 });
 
