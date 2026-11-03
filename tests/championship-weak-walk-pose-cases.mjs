@@ -41,3 +41,41 @@ test('MA24 weak walk plays its two delivered drawings at the native 37/37 ticks'
  const native=json(runtimeOf.get(entry.speciesId)).sides.main.animations.find(a=>a.id===12);
  assert.deepEqual(native.frames.map(f=>f.ticks),[37,37]);
 });
+
+// Owner 2026-11-03 「Fix now with existing art」: walks whose original keeps both cells on the ground no longer jump,
+// and the bound weak idle (Main17) no longer flips between standing and lying flat. Feet = alpha-box bottom below
+// the pivot plus the clip offset, in native px.
+const byCode=code=>manifest(selection.characters.find(c=>c.displayCode===code));
+const feet=(d,clip)=>clip.frames.map(fr=>{const f0=d.frames[fr.assetId],f=clip.mode==='arena'&&f0.arena?{...f0,...f0.arena}:f0;
+ return (f.trim[1]+f.trim[3]-f.origin[1]+(fr.offset?.[1]??0))/f.density;});
+const GROUNDED_WALKS={MA02:['general/MAIN_A16/source_left_threequarter/walk','general/MAIN_A16/source_left_threequarter/run',
+ 'arena/ARENA_R_UR16/R/walk','arena/ARENA_L_DL16/L/walk'],MA15:['arena/ARENA_D_DR16_v1/DR/walk','arena/ARENA_L_DL16_v1/DL/walk'],
+ MA21:['arena/ARENA_D_DR16_v1/D/walk'],MA01:['general/MAIN_A16/main_reference_facing/walk','general/MAIN_A16/main_reference_facing/run']};
+// Still airborne: their only other drawings repeat the first pose, so removing the jump would leave a slide. Needs dot.
+const KNOWN_AIRBORNE_WALKS=['MA02:arena/ARENA_D_DR16/DR/walk','MA02:arena/ARENA_R_UR16/UR/walk','MA02:arena/ARENA_U_UL16/UL/walk','MA02:arena/ARENA_L_DL16/DL/walk'];
+
+test('re-bound walks keep every frame on the ground and keep at least two distinct drawings',()=>{
+ for(const [code,ids] of Object.entries(GROUNDED_WALKS)){
+  const d=byCode(code);
+  for(const id of ids){
+   const clip=d.clips.find(c=>c.id===id);assert.ok(clip,code+' '+id);
+   assert.ok(new Set(clip.frames.map(f=>f.assetId)).size>=2,code+' '+id+' must still alternate');
+   for(const v of feet(d,clip))assert.ok(Math.abs(v)<=3,`${code} ${id} feet ${v}`);
+  }
+  assert.ok(d.patch20261103===undefined,'public manifests carry no authoring block');
+ }
+ const airborne=[];
+ for(const code of ['MA02']){const d=byCode(code);
+  for(const clip of d.clips.filter(c=>c.action==='move'))if(feet(d,clip).some(v=>v<-3))airborne.push(`${code}:${clip.id}`);}
+ assert.deepEqual(airborne,KNOWN_AIRBORNE_WALKS);
+});
+
+test('Main17 bound weak idle stays a standing pose (no lying-flat frame) for GR03 and GR37',()=>{
+ for(const code of ['GR03','GR37']){
+  const d=byCode(code),weak=reviewedNumericClip(d,'main',17).clip,stand=reviewedNumericClip(d,'main',16).clip;
+  const h=clip=>clip.frames.map(f=>d.frames[f.assetId].trim[3]/d.frames[f.assetId].density);
+  const standing=Math.max(...h(stand));
+  for(const v of h(weak))assert.ok(v>=0.8*standing,`${code} Main17 frame height ${v} vs standing ${standing}`);
+  assert.equal(Math.round(weak.frames.reduce((n,f)=>n+f.durationMs,0)*60/1000),37+28);
+ }
+});
