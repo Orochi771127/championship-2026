@@ -135,24 +135,28 @@ export function createOpeningStoryPresentation({host,onComplete,onCancel=()=>{},
     const check=(now,meta)=>{
       frameHandle=null;if(disposed||!segment)return;
       const at=meta?.mediaTime??video.currentTime;
+      // A looping page wraps to the start of its range and keeps flowing (Owner 2026-11-03).
+      if(loop&&at>=loop[1]-0.06){seek(loop[0]);watch();return;}
       // Hold a frame and a half before the boundary, so the next scene never flashes.
-      if(at>=segment[1]-0.06){video.pause();root.dataset.backdropHold='true';return;}
+      if(!loop&&at>=segment[1]-0.06){video.pause();root.dataset.backdropHold='true';return;}
       watch();
     };
     if(typeof video.requestVideoFrameCallback==='function'){frameKind='video';frameHandle=video.requestVideoFrameCallback(check);}
     else{frameKind='frame';frameHandle=doc.defaultView?.requestAnimationFrame?.(()=>check())??null;}
   }
   function seek(seconds){try{video.currentTime=seconds;}catch{/* metadata not ready; applied on loadedmetadata */}}
-  function playSegment(range){
-    segment=range;root.dataset.backdropHold='false';
+  let loop=null;
+  function playSegment(range,loopRange=null){
+    segment=range;loop=loopRange;root.dataset.backdropHold='false';
     if(root.dataset.backdrop==='failed')return;
     const [start,end]=range,at=video.currentTime;
     if(motionReduced(doc)){
       // A still of the page's own scene; the background never plays.
       stopWatch();video.pause();seek(Math.min(start+1,(start+end)/2));root.dataset.backdropHold='true';return;
     }
-    // Continue straight on from the previous page; otherwise jump to this page's start.
-    if(!(at>=start-0.25&&at<end-0.1))seek(start);
+    // Continue straight on from the previous page (or anywhere inside a running loop); otherwise jump to this page's start.
+    const inside=loop?at>=loop[0]-0.25&&at<loop[1]-0.1:at>=start-0.25&&at<end-0.1;
+    if(!inside)seek(start);
     if(doc.hidden)return;
     const playing=video.play();
     if(playing?.then)playing.then(watch,()=>{root.dataset.backdropHold='true';});else watch();
@@ -166,12 +170,12 @@ export function createOpeningStoryPresentation({host,onComplete,onCancel=()=>{},
   function visibility(){
     if(disposed)return;
     if(doc.hidden){stopWatch();video.pause();}
-    else if(started&&segment&&root.dataset.backdropHold!=='true')playSegment(segment);
+    else if(started&&segment&&root.dataset.backdropHold!=='true')playSegment(segment,loop);
   }
   doc.addEventListener('visibilitychange',visibility);
   // --- pages ------------------------------------------------------------------------
   function guideForm(beat){
-    if(beat.guide==='chosen')return chosen||'cat';
+    if(beat.guide==='chosen'||beat.guide==='docked')return chosen||'cat';
     return beat.guide;
   }
   function showBeat(index){
@@ -184,9 +188,10 @@ export function createOpeningStoryPresentation({host,onComplete,onCancel=()=>{},
     previous.disabled=index===0;
     const form=guideForm(beat);
     root.dataset.guide=form?'visible':leftGuide?'leaving':'hidden';
+    root.dataset.guideDock=String(beat.guide==='docked');
     if(form){portrait.setAppearance(form);guideLayer.dataset.form=form;}
     guide.progress?.(beat.id);
-    if(started)playSegment(beat.video);else segment=beat.video;
+    if(started)playSegment(beat.video,beat.loop??null);else{segment=beat.video;loop=beat.loop??null;}
   }
   previous.addEventListener('click',event=>{event.stopPropagation();if(current>0)stage.goTo(current-1);});
   replay.addEventListener('click',event=>{event.stopPropagation();notice(words.resumed,false);seek(0);stage.goTo(0);});
@@ -195,7 +200,7 @@ export function createOpeningStoryPresentation({host,onComplete,onCancel=()=>{},
     if(disposed||started)return;started=true;loading.remove();
     root.setAttribute('aria-busy','false');stage.start();
     if(resumeIndex>0)notice(words.resumed);
-    if(segment)playSegment(segment);
+    if(segment)playSegment(segment,loop);
   }
   function dispose(){
     if(disposed)return;disposed=true;stopWatch();
