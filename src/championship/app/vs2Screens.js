@@ -829,17 +829,9 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       build: (stage, env) => buildCapture(stage, env, { kicker: uiText(kicker), name: caught.name ?? '', chip }),
       onDone: () => { captureToast = null; delete viewport.dataset.combo; } });
   }
-  const target = element("section", "cm-vs2-target");
-  target.setAttribute('aria-label', uiText('狩獵目標資訊'));
-  const targetName = element('strong', 'cm-vs2-target__name', '輕觸夥伴查看');
-  const targetStats = element('dl', 'cm-vs2-target__stats');
-  const targetValues = new Map();
-  for (const [key, label] of [['generation', '世代'], ['family', '種族'], ['hp', 'HP'], ['alignment', '屬性'], ['personality', '性格'], ['capacity', '容量']]) {
-    const value = element('dd', '', '—');
-    targetValues.set(key, value);
-    targetStats.append(element('dt', '', label), value);
-  }
-  target.append(targetName, targetStats);
+  // No target readout (Owner 2026-11-03): the analyzer plug-ins became gacha
+  // chips, so the 「輕觸夥伴查看」 capsule and its all-??? card are gone. A tap on
+  // a partner belongs to the tool in hand (rope, shot, lure, hand).
   const pluginHud=element('aside','cm-hunt-plugin-hud');
   const memory=element('span','cm-hunt-memory');memory.hidden=true;memory.setAttribute('aria-label',uiText('記憶卡容量'));
   const radar=element('div','cm-hunt-radar');radar.hidden=true;radar.setAttribute('role','img');radar.setAttribute('aria-label',uiText('狩獵雷達'));
@@ -890,9 +882,9 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   ropeSwap.replaceChildren(swapRole, swapName, swapMark);
   ropeSwap.addEventListener('click', () => { replay(ropeSwap, 'pop'); source.intents.cycleHuntRope?.(); });
   if (block.toolState) tools.append(ropeSwap);
-  const movementHint = element("p", "cm-vs2-field__hint", "拖曳地面移動視野 · 輕觸夥伴選取");
+  const movementHint = element("p", "cm-vs2-field__hint", "拖曳地面移動視野 · 目標倒地後輕觸抓取");
   const info = element('div', 'cm-hunt-info');
-  info.append(target, pluginHud);
+  info.append(pluginHud);
   // display:contents in legacy; one scrollable controls column when wide.
   const controlsPanel = element('aside', 'cm-hunt-controls-panel');
   controlsPanel.append(info, movementHint);
@@ -1104,10 +1096,6 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
       // The scripted tutorial speaks for itself at this moment.
       if (!nextFrame.tutorial) announceCapture(caught, onCard.length);
     }
-    const selected = next.hud.target;
-    targetName.textContent = uiText(selected ? selected.name??'野生夥伴' : '輕觸夥伴查看');
-    target.dataset.selected = String(Boolean(selected));
-    for (const [key, value] of targetValues) value.textContent = uiText(selected?.[key] ?? '—');
     const plugins=next.hud.plugins;
     memory.hidden=!plugins?.memory;memory.textContent=uiText(plugins?.memory?`${plugins.memory.usedG} / ${plugins.memory.maxG} G`:'');
     radar.hidden=!plugins?.radar;radar.replaceChildren();
@@ -1142,8 +1130,15 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     // Mode writes no general diagnostics; active tutorials expose only the render projection above.
     if (mode === VS2_PRESENTATION_MODES.DEVELOPER) {
       fieldHost.dataset.huntToolState = JSON.stringify(next.toolState);
+      // Which drawing and motion layer each partner shows (hunt four fixes), a few times a second.
+      const now = performance.now();
+      if (now - motionPublishedAt > 250) {
+        motionPublishedAt = now;
+        fieldHost.dataset.huntActorMotion = JSON.stringify(field.getDiagnostics?.()?.actorMotion ?? []);
+      }
     }
   }
+  let motionPublishedAt = 0;
 
   render(frame);
   return Object.freeze({

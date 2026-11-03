@@ -17,6 +17,7 @@ import { createHuntFactoryShutters } from './huntFactoryShutters.js';
 
 import { describeHuntActorSilhouette } from "./huntFoliageDither.js";
 import { createHuntFieldPointer } from "./huntFieldPointer.js";
+import { createHuntActorMotion, stepHuntActorMotion, stepHuntDust, HUNT_ACTOR_MOTION } from "./huntActorMotion.js";
 import { flashScale } from '../presentationPreferences.js';
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import {huntTrapLayers} from '../huntFeedbackArt.js';
@@ -143,6 +144,9 @@ export async function mountHuntFieldPixiPresentation({
   const terrainLayer = new PIXI.Container({ label: "modular terrain" });
   const objectLayer = new PIXI.Container({ label: "field objects", sortableChildren: true });
   const actorLayer = new PIXI.Container({ label: "actors" });
+  // Dust kicked up by running partners (huntActorMotion.js); drawn under them.
+  const dustGraphic = new PIXI.Graphics({ label: "hunt dust" });
+  const dustPuffs = [];
   let threeActive = false;
   threePilot?.setFallbackRestore(() => {
     if (threeActive) fieldArt?.occluders?.attach(actorLayer);
@@ -189,7 +193,7 @@ export async function mountHuntFieldPixiPresentation({
   fieldArt?.occluders?.configureFoliageDither?.(app.renderer);
   fieldArt?.occluders?.attach(actorLayer);
   const factoryShutters = createHuntFactoryShutters({ PIXI, layer: actorLayer, spec: fieldArt?.factoryShutters, mapSprite: fieldArt?.displayObject });
-  world.addChild(productionArtLayer, terrainLayer, objectLayer, actorLayer, strokeLayer);
+  world.addChild(productionArtLayer, terrainLayer, objectLayer, dustGraphic, actorLayer, strokeLayer);
   scene.addChild(backdrop, world, mapClip, captureLayer, flashGraphic);
 
   const chunkCache = new Map();
@@ -347,6 +351,8 @@ export async function mountHuntFieldPixiPresentation({
         node.contactShadowArt = actor.contactShadowArt ?? null;
         node.lastCharacterX = null;
         node.lastCharacterY = null;
+        node.restScale = actor.sprite.scale.x;
+        node.motion = createHuntActorMotion();
       }
     }
     // Added last so it sits above the character sprite. The node itself is
@@ -354,8 +360,11 @@ export async function mountHuntFieldPixiPresentation({
     // rather than being drawn backwards with it.
     const stamina = new PIXI.Graphics();
     stamina.visible = false;
-    node.addChild(stamina);
+    // Sweat over a bound partner, stars over a stunned or downed one.
+    const moodFx = new PIXI.Graphics();
+    node.addChild(stamina, moodFx);
     node.stamina = stamina;
+    node.moodFx = moodFx;
     node.body = body;
     node.ring = ring;
     node.contactShadow = shadow;
@@ -414,7 +423,81 @@ export async function mountHuntFieldPixiPresentation({
     }
   }
 
-  function syncActors(view) {
+  /** The partner's motion layer: hop, struggle, lean, dust (huntActorMotion.js). */
+  function syncMotion(node, wild, nativeFrame, placed, deltaMs, now) {
+    const sprite = node.characterSprite;
+    if (!sprite || !node.motion) return;
+    if (!placed && Number.isFinite(node.restScale)) sprite.scale.set(node.restScale, node.restScale);
+    const motion = stepHuntActorMotion(node.motion, { now, dt: deltaMs, worldX: wild.worldX, worldY: wild.worldY,
+      textureKey: sprite.texture?.uid ?? nativeFrame?.cell ?? null, aiState: wild.aiState ?? null, bound: wild.bound === true,
+      stunned: (wild.stunTicks ?? 0) > 0 || wild.state === "DOWN_ANIMATION", handReady: wild.state === "HAND_READY",
+      reducedMotion: reducedFx() });
+    sprite.position.set(motion.offsetX, motion.offsetY);
+    sprite.scale.set(sprite.scale.x * motion.scaleX, sprite.scale.y * motion.scaleY);
+    node.motionLean = motion.lean;
+    node.motionShadowScale = motion.shadowScale;
+    node.contactShadow.alpha = motion.shadowAlpha;
+    node.motionState = motion.hop ? "HOP" : motion.struggle ? "STRUGGLE" : motion.running ? "RUN" : "NATIVE";
+    if (motion.dust && sprite.visible) {
+      const back = node.motion.vx >= 0 ? -1 : 1;
+      dustPuffs.push({ x: wild.worldX + back * 6, y: wild.worldY, vx: back * 14, age: 0 });
+    }
+    const fx = node.moodFx.clear();
+    if (!motion.mood || !sprite.visible) return;
+    // The drawn body's top (the texture's trim, not its padded canvas), a little above.
+    const texture = sprite.texture, trimTop = texture?.trim?.y ?? 0;
+    const top = sprite.y + (trimTop - sprite.anchor.y * (texture?.orig?.height ?? 0)) * Math.abs(sprite.scale.y) - 5;
+    const t = now / 1000;
+    if (motion.mood === "struggle") {
+      for (const [side, phase] of [[-1, 0], [1, 0.5]]) {
+        const lift = ((t * 1.6 + phase) % 1), x = side * (9 + lift * 4), y = top + 4 + lift * 6;
+        fx.moveTo(x, y - 5).quadraticCurveTo(x + 3.5, y, x, y + 3).quadraticCurveTo(x - 3.5, y, x, y - 5)
+          .fill({ color: 0x9fe6ff, alpha: 0.95 * (1 - lift * 0.6) }).stroke({ color: 0xffffff, width: 1, alpha: 0.9 * (1 - lift * 0.6) });
+      }
+    } else {
+      const blink = wild.state === "HAND_READY" ? 0.55 + 0.45 * Math.sin(t * 9) : 1;
+      for (let i = 0; i < 3; i++) {
+        const a = t * 4 + i * Math.PI * 2 / 3;
+        fx.star(Math.cos(a) * 11, top + Math.sin(a) * 3.5, 5, 3.6, 1.6).fill({ color: 0xffe066, alpha: blink })
+          .stroke({ color: 0x8a5a00, width: 0.8, alpha: blink });
+      }
+    }
+  }
+
+  function syncDust(deltaMs) {
+    stepHuntDust(dustPuffs, deltaMs);
+    dustGraphic.clear();
+    for (const puff of dustPuffs) {
+      const k = puff.age / HUNT_ACTOR_MOTION.dustLifeMs;
+      dustGraphic.ellipse(puff.x, puff.y, 2.5 + k * 4, 1.4 + k * 2).fill({ color: 0xe6dcc4, alpha: 0.38 * (1 - k) ** 2 });
+    }
+  }
+
+  // Owner 2026-11-03: a roped or bound partner stays where it can be pulled:
+  // never under the dock (bottom quarter), the HUD band or a side edge. The
+  // camera eases after it through the same pan intent a drag uses.
+  const FOLLOW_BOX = Object.freeze({ left: 0.12, right: 0.88, top: 0.2, bottom: 0.75, ease: 0.12, maxStep: 24 });
+  function followHeldPartner(view) {
+    if (view.tutorial || !view.transform || typeof source.intents.panCamera !== "function") return;
+    const held = view.tools?.rope?.wildId ?? null;
+    // A finger drawing a loop or dragging the map owns the view; a pull does not.
+    if (!held && pointer.getOwner() !== null) return;
+    const target = view.wildCreatures.find((wild) => wild.wildId === held) ?? view.wildCreatures.find((wild) => wild.bound);
+    if (!target) return;
+    const rect = view.viewRect ?? view.camera, scale = view.transform.scale;
+    const width = view.transform.viewportWidth, height = view.transform.viewportHeight;
+    const x = (view.viewportOffset?.x ?? 0) + (target.worldX - rect.left) * scale;
+    const y = (view.viewportOffset?.y ?? 0) + (target.worldY - rect.top) * scale;
+    const outside = (value, low, high) => value < low ? value - low : value > high ? value - high : 0;
+    const dx = outside(x, width * FOLLOW_BOX.left, width * FOLLOW_BOX.right);
+    const dy = outside(y, height * FOLLOW_BOX.top, height * FOLLOW_BOX.bottom);
+    if (!dx && !dy || ![dx, dy].every(Number.isFinite)) return;
+    const step = (d) => Math.sign(d) * Math.min(FOLLOW_BOX.maxStep, Math.abs(d) * FOLLOW_BOX.ease) / scale;
+    source.intents.panCamera(step(dx), step(dy), width, height, view.panRequest);
+  }
+
+  function syncActors(view, deltaMs = 0) {
+    const now = performance.now();
     if (!playerNode) {
       playerNode = createActorNode(0xe7c36f, "companion", { player: true });
       actorLayer.addChild(playerNode);
@@ -448,7 +531,8 @@ export async function mountHuntFieldPixiPresentation({
       // Shared cave passage (rebuilt review maps): fade into / out of the cave dark.
       node.alpha = wild.passageAlpha ?? 1;
       const nativeFrame = node.nativeFramePresenter?.apply(wild.nativeAnimation ?? null);
-      if (node.characterSprite) applyNativeCharacterCellGeometry(node.characterSprite,nativeFrame,2);
+      const placed = node.characterSprite ? applyNativeCharacterCellGeometry(node.characterSprite,nativeFrame,2) : false;
+      syncMotion(node, wild, nativeFrame, placed, deltaMs, now);
       node.scale.x = nativeFrame ? (nativeFrame.flipX ? -1 : 1) : (wild.facing === "left" ? -1 : 1);
       node.scale.y = nativeFrame?.flipY ? -1 : 1;
       const contact = huntContactShadow(wild.speciesId, nativeFrame, wild.worldZ ?? 0, node.contactShadowArt);
@@ -707,7 +791,9 @@ export async function mountHuntFieldPixiPresentation({
       syncObjects(view);
       syncTerrain(view);
     }
-    syncActors(view);
+    syncActors(view, deltaMs);
+    syncDust(deltaMs);
+    followHeldPartner(view);
     factoryShutters?.sync(view, deltaMs);
     revealActorsBehindFoliage(view);
     syncEnclosure(view);
@@ -855,6 +941,9 @@ export async function mountHuntFieldPixiPresentation({
         objectCount: objectNodes.size,
         characterAssetFailures,
         characterArt: characterBundle?.getDiagnostics() ?? null,
+        actorMotion: [...wildNodes.entries()].map(([wildId, node]) => Object.freeze({ wildId,
+          state: node.motionState ?? "NATIVE", textureKey: node.motion?.textureKey ?? null, lean: node.motionLean ?? 0 })),
+        dustPuffs: dustPuffs.length,
         nativeCharacterFrames: [...wildNodes.entries()].flatMap(([wildId, node]) => {
           const frame = node.nativeFramePresenter?.getSnapshot();
           return frame ? [{ wildId, ...frame }] : [];

@@ -9,6 +9,7 @@ import {installSharedPass} from './sharedPass.mjs';
 import {installFlatGroundDepthCandidate} from './supportDepth.mjs';
 import {loadAuthoredMapAssets,configureAuthoredLighting} from './authoredMapAssets.mjs';
 import {hd2dLook,applyHd2dLighting,createHd2dPost} from './hd2dLook.mjs';
+import {HUNT_ACTOR_SHADOW,huntContactEnvelope,huntSoftContactVertices,huntCastShadowReach,huntCastShadowVertices,createHuntCastShadowMaterial} from './actorShadows.mjs';
 
 // Caller provides a hash-verified manifest and an explicit appearance approval,
 // authored actor support resolver and already-owned Pixi nodes. No gameplay API.
@@ -55,7 +56,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
     cleanup('abort listener',()=>signal?.removeEventListener('abort',onAbort));
     cleanup('shared pass',()=>pass?.dispose());cleanup('borrowed nodes',restore);
     cleanup('context listener',()=>offLost?.());
-    for(const a of actors.values())for(const owned of [a.geometry,a.material,a.userData.shadow?.geometry,a.userData.shadow?.material])resourceDisposer.once(owned);
+    for(const a of actors.values())for(const owned of [a.geometry,a.material,a.userData.shadow?.geometry,a.userData.shadow?.material,a.userData.cast?.geometry,a.userData.cast?.material])resourceDisposer.once(owned);
     actors.clear();cleanup('actor textures',()=>textures.dispose());
     for(const batch of batches)resourceDisposer.once(batch);batches.clear();
     cleanup('scene',()=>resourceDisposer.gltf(gltf));cleanup('prototypes',()=>resourceDisposer.gltf(prototypeGltf));cleanup('external assets',releaseExternal);
@@ -69,9 +70,11 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
   offLost=stage.onContextLost(()=>fail(new Error('HM02_CONTEXT_LOST_USE_2D')));
   function cropTexture(texture){
     const image=texture.source?.resource,frame=texture.frame,res=texture.source?.resolution??1;
-    if(!image||texture.rotate)throw new Error('HM02_UNSUPPORTED_SPRITE_SOURCE');
+    // Reviewed sets drawn facing the other way load as groupD8 12 (mirrored about the pivot).
+    if(!image||(texture.rotate&&texture.rotate!==12))throw new Error('HM02_UNSUPPORTED_SPRITE_SOURCE');
     const canvas=document.createElement('canvas');canvas.width=Math.round(frame.width*res);canvas.height=Math.round(frame.height*res);
     const ctx=canvas.getContext('2d');if(!ctx)throw new Error('HM02_CPU_TEXTURE_CANVAS_UNAVAILABLE');
+    if(texture.rotate===12){ctx.translate(canvas.width,0);ctx.scale(-1,1);}
     ctx.drawImage(image,frame.x*res,frame.y*res,frame.width*res,frame.height*res,0,0,canvas.width,canvas.height);
     const t=new THREE.CanvasTexture(canvas);t.colorSpace=THREE.SRGBColorSpace;t.minFilter=THREE.NearestFilter;t.magFilter=THREE.NearestFilter;t.generateMipmaps=false;
     return t;
@@ -158,6 +161,15 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
       try{shaderGuard.draw(()=>renderer.render(scene,camera));}finally{renderer.autoClear=true;}
     }});
   } catch(error){fail(error);return null;}
+  // Same-length rewrites update in place; a new length gets a new buffer.
+  function writeAttributes(mesh,attributes){
+    for(const [name,[values,size]] of Object.entries(attributes)){
+      const current=mesh.geometry.attributes[name];
+      if(current?.array.length===values.length){current.array.set(values);current.needsUpdate=true;}
+      else mesh.geometry.setAttribute(name,new THREE.Float32BufferAttribute(values,size));
+    }
+    mesh.geometry.computeBoundingSphere();
+  }
   return Object.freeze({
     setFallbackRestore(callback){restoreFallback=callback;},
     sync({view:next,wildNodes,backgroundNodes=[]}) {
@@ -177,31 +189,41 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
         view=next;const live=new Set();
         for(const {wild,node,sprite,support,quad,opacity} of records){
           live.add(wild.wildId);let actor=actors.get(wild.wildId);
-          if(support.offscreen){if(actor){actor.visible=false;actor.material.map=null;if(actor.userData.shadow)actor.userData.shadow.visible=false;}hide(sprite);hide(node.body);hide(node.contactShadow);continue;}
+          if(support.offscreen){if(actor){actor.visible=false;actor.material.map=null;if(actor.userData.shadow)actor.userData.shadow.visible=false;if(actor.userData.cast){actor.userData.cast.visible=false;actor.userData.cast.material.map=null;}}hide(sprite);hide(node.body);hide(node.contactShadow);continue;}
           if(!actor){const geometry=new THREE.BufferGeometry();geometry.setIndex([0,1,2,0,2,3]);geometry.setAttribute('position',new THREE.Float32BufferAttribute(new Float32Array(12),3));geometry.setAttribute('uv',new THREE.Float32BufferAttribute([0,1,0,0,1,0,1,1],2));
             const material=new THREE.MeshBasicMaterial({alphaTest:0,transparent:true,depthTest:true,depthWrite:true,side:THREE.DoubleSide});installFlatGroundDepthCandidate(material,{THREE,groundHeight:support.groundHeight,eyeDirection:map.eye});
             actor=new THREE.Mesh(geometry,material);actor.userData.supportHeight=support.groundHeight;actors.set(wild.wildId,actor);scene.add(actor);}
           const t=sprite.texture,p=actor.geometry.attributes.position;
-          quad.forEach(([dx,dy],i)=>p.setXYZ(i,...map.actorVertex({worldX:wild.worldX,worldY:wild.worldY,worldZ:wild.worldZ??0,supportOffsetY:0,groundHeight:support.groundHeight},dx,dy)));
+          // A fleeing partner leans into its run (the Pixi node cannot skew, so the lean is applied here).
+          const lean=Number.isFinite(node.motionLean)?node.motionLean:0,points=[];
+          quad.forEach(([dx,dy],i)=>{const v=map.actorVertex({worldX:wild.worldX,worldY:wild.worldY,worldZ:wild.worldZ??0,supportOffsetY:0,groundHeight:support.groundHeight},dx-dy*lean,dy);points.push(v);p.setXYZ(i,...v);});
           if(actor.userData.supportHeight!==support.groundHeight){installFlatGroundDepthCandidate(actor.material,{THREE,groundHeight:support.groundHeight,eyeDirection:map.eye});actor.userData.supportHeight=support.groundHeight;}
           p.needsUpdate=true;actor.geometry.computeBoundingSphere();if(!actor.material.map)actor.material.needsUpdate=true;actor.material.map=textures.get(t);actor.material.opacity=opacity;actor.material.color.set(sprite.tint??0xffffff);actor.visible=sprite.visible&&node.visible&&!support.offscreen;
           const ellipses=node.threeContactEllipses;
           if(!Array.isArray(ellipses))throw new Error('HM02_EXISTING_SHADOW_BINDING_REQUIRED');
+          // HD-2D shadows (Owner 2026-11-03), both under the partner and before
+          // transparent actors, keeping the opaque foreground depth test.
+          // Layer 1: a feathered contact shadow around the measured soles.
           let shadow=actor.userData.shadow;
-          if(!shadow){shadow=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial({color:0x02070a,transparent:true,opacity:.48,depthTest:true,depthWrite:false,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1}));// Opaque terrain/props render first; ground shadows precede transparent
-            // actors, while retaining the opaque foreground depth test.
+          if(!shadow){shadow=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial({color:0x02070a,vertexColors:true,transparent:true,opacity:HUNT_ACTOR_SHADOW.contactOpacity,depthTest:true,depthWrite:false,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1}));
             shadow.renderOrder=-1;actor.userData.shadow=shadow;scene.add(shadow);}
-          const vertices=[];
-          for(const e of ellipses)for(let i=0;i<20;i++){
-            for(const [dx,dy]of [[0,0],[Math.cos(i*Math.PI/10)*e.radiusX,Math.sin(i*Math.PI/10)*e.radiusY],[Math.cos((i+1)*Math.PI/10)*e.radiusX,Math.sin((i+1)*Math.PI/10)*e.radiusY]]){
-              const [x,y]=nativeShadowPoint(wild,node,e.x+dx,e.y+dy);
-              vertices.push(...map.ground(x,y,support.groundHeight+.0001));
-            }
-          }
-          if(shadow.geometry.attributes.position?.array.length!==vertices.length){shadow.geometry.dispose();shadow.geometry=new THREE.BufferGeometry();shadow.geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));}else{shadow.geometry.attributes.position.array.set(vertices);shadow.geometry.attributes.position.needsUpdate=true;}shadow.geometry.computeBoundingSphere();shadow.visible=actor.visible&&node.contactShadow.visible!==false;shadow.material.opacity=.48*(node.alpha??wild.passageAlpha??1)*(node.contactShadow.alpha??1);
+          const envelope=huntContactEnvelope(ellipses,node.motionShadowScale);
+          if(!envelope)throw new Error('HM02_EXISTING_SHADOW_BINDING_REQUIRED');
+          const soft=huntSoftContactVertices(envelope,(x,y)=>map.ground(...nativeShadowPoint(wild,node,x,y),support.groundHeight+.0001));
+          writeAttributes(shadow,{position:[soft.positions,3],color:[soft.colors,4]});
+          const fade=(node.alpha??wild.passageAlpha??1)*(node.contactShadow.alpha??1);
+          shadow.visible=actor.visible&&node.contactShadow.visible!==false;shadow.material.opacity=HUNT_ACTOR_SHADOW.contactOpacity*fade;
+          // Layer 2: the current frame cast along the map's sun, like its props.
+          let cast=actor.userData.cast;
+          if(!cast){const geometry=new THREE.BufferGeometry();geometry.setIndex([0,1,2,0,2,3]);geometry.setAttribute('uv',new THREE.Float32BufferAttribute([0,1,0,0,1,0,1,1],2));
+            cast=new THREE.Mesh(geometry,createHuntCastShadowMaterial(THREE));cast.renderOrder=-2;actor.userData.cast=cast;scene.add(cast);}
+          writeAttributes(cast,{position:[huntCastShadowVertices(points,map.ground(wild.worldX,wild.worldY,support.groundHeight),support.groundHeight,huntCastShadowReach(sun)),3]});
+          if(!cast.material.map)cast.material.needsUpdate=true;cast.material.map=actor.material.map;
+          cast.material.opacity=(fieldId.endsWith('_02')?HUNT_ACTOR_SHADOW.castNightOpacity:HUNT_ACTOR_SHADOW.castOpacity)*fade;
+          cast.visible=shadow.visible;
           hide(sprite);hide(node.body);hide(node.contactShadow);
         }
-        for(const [id,a]of actors)if(!live.has(id)){scene.remove(a);if(a.userData.shadow)scene.remove(a.userData.shadow);a.geometry.dispose();a.material.dispose();a.userData.shadow?.geometry.dispose();a.userData.shadow?.material.dispose();actors.delete(id);}
+        for(const [id,a]of actors)if(!live.has(id)){scene.remove(a);for(const layer of [a.userData.shadow,a.userData.cast])if(layer){scene.remove(layer);layer.geometry.dispose();layer.material.dispose();}a.geometry.dispose();a.material.dispose();actors.delete(id);}
         for(const n of backgroundNodes)hide(n);
         // Keep native UI/rings/stamina/tools and pointer mapping on existing Pixi.
         if(!baked&&!authored){const night=fieldId.endsWith('_02');ambient.intensity=night?.55:1.6;sun.intensity=night?.65:2.2;sun.color.set(night?0x9eb8ff:0xffe3b0);}

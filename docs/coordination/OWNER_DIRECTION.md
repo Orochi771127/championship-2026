@@ -12,6 +12,19 @@ OWNER_APPROVED_ADAPTATION. Pipeline and rules: `docs/art/production/ART_PRODUCTI
 - Saves from 11-02 that placed a royal cage as a ranch or zoo move it onto its own map on load (nearest free four-hex footprint, same instance id; residents respawn on it, food and droppings move to the nearest safe ground).
 - Verified: auto-feed and auto-clean events for both maps in the app tests and in a phone-portrait browser run on an isolated loopback port.
 
+<!-- record-id: HUNT_FOUR_FIXES_20261103 -->
+## 2026-11-03 — Hunt: no ??? card, a bound partner is pulled from anywhere and never freezes, HD-2D shadows, no sliding on one drawing
+
+The Owner pastes a four-phase brief from phone testing on 南橋峽谷 and 波浪海岸 (2026-11-03): remove the all-??? target card and the 「◎ 輕觸夥伴查看」 capsule; fix partners that freeze and cannot be pulled, above all near the bottom hint and dock; replace the flat black disc with two-layer HD-2D shadows; stop partners sliding on one drawing while they walk, flee or struggle; prove it with tests and three phone screenshots, no push or deployment. After the report the Owner answers 「Review first」, then 「請你自我審查沒有問題以後就commit 跟push然後整合至main發佈」, which authorizes this batch's push, merge to main and publication after a self-review.
+
+OWNER_APPROVED_ADAPTATION. The native rope controller, AI states and capture rules stay as traced; the product layer wraps them.
+
+- The target card and capsule are gone (the analyzer plug-ins are gacha chips now). A tap belongs to the tool in hand.
+- Rope: once a loop is on a partner, a press anywhere on the field pulls the nearest bound partner; the drag is read from the press point as if the finger had landed on its rope anchor. Scripted tutorial partners keep the exact hit test.
+- Watchdogs (`HUNT_FIELD_WATCHDOG`): a bound partner nobody pulls for 3 s slips its loop and runs on; a walker that cannot move for 1 s drops its goal (a partner wedged in a blocked cell steps to the nearest standable one); non-finite input or positions are ignored or restored; roaming goals keep 10 tiles clear of the map's bottom edge. The camera eases after a roped or bound partner that leaves the middle of the screen (12 % sides, 20 % top, 25 % bottom).
+- Shadows (Hunt Three maps): a feathered contact ellipse (centre 0.45) plus the partner's current frame laid on the ground along the map's sun (0x120e1a, 0.30; 0.16 at night), turned to face the light. Found and fixed: reviewed partners' frame snapshots lacked the native frame authority, so Hunt dropped to its 2D fallback whenever one spawned.
+- Motion: reviewed hunt loops run on their own clock instead of restarting with the shorter native loop (99 partners were cut short); flee and bound-escape sequences play 1.6×; a one-drawing walk or struggle borrows the same character's animated move or hurt clip; anything still on one drawing hops with squash and stretch while moving, shakes with sweat while bound, and shows blinking stars when downed; runners lean and kick dust. Audit: `scripts/qa/hunt-motion-binding-audit.mjs`.
+
 <!-- record-id: AW_UL_TAKEOVER_20261103 -->
 ## 2026-11-03 — Claude takes over Codex's AW/UL release; web-sized AW23 and species 196
 
