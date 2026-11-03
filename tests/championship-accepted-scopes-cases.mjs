@@ -11,8 +11,10 @@ const selection=read('src/data/championship/reviewed-animation-selection.v1.json
 for(const code of ['GR03','GR16','GR14','GR15'])test(`${code}: exact accepted scope changes, verified payloads, other animations preserved`,()=>{
  const e=selection.find(x=>x.displayCode===code),doc=read(e.path),aut=read(e.authoringPath),base=read(`${report}/baseline/${code}/public.json`);
  assert.equal(digest(e.path),e.sha256);assert.equal(digest(e.authoringPath),e.authoringSha256);
- const changed=aut.acceptedScopes20261101.replacedClips,frames=new Map(doc.frames.map(f=>[f.id,f]));
+ // A later named patch (2026-11-03 walk/bound fixes) may re-bind only the clips it lists, from existing frames.
+ const patched=aut.patch20261103?.replacedClips??[],changed=[...aut.acceptedScopes20261101.replacedClips,...patched],frames=new Map(doc.frames.map(f=>[f.id,f]));
  for(const c of base.clips)if(!changed.includes(c.id))assert.deepEqual(doc.clips.find(x=>x.id===c.id),c,`${code} preserved ${c.id}`);
+ for(const id of patched)assert.ok(doc.clips.find(x=>x.id===id).frames.every(f=>frames.has(f.assetId)),`${code} patched ${id}`);
  for(const f of doc.frames.filter(f=>f.id.startsWith('accepted20261101_'))){
   assert.equal(digest(path.join(path.dirname(e.path),f.image)),f.sha256);
   assert.ok(!f.mirrorX,'no invented mirroring');assert.equal(f.sampling,'smooth');
