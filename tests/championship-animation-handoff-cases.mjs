@@ -111,7 +111,7 @@ test('default selection: GR16 seated sleep and GR18 Bound8 ship in the public ma
  for(const code of ['GR16','GR18']){
   const entry=selection.characters.find(c=>c.displayCode===code);
   assert.equal(sha(entry.path),entry.sha256);assert.equal(sha(entry.authoringPath),entry.authoringSha256);
-  assert.match(entry.authoringPath,/animation\.web-v3-20261101\.json$/);
+  assert.ok(entry.authoringPath.endsWith(`animation.web-v${code==='GR16'?4:3}-20261101.json`));
   const pub=readJson(entry.path),aut=readJson(entry.authoringPath),frames=Object.fromEntries(pub.frames.map(f=>[f.id,f]));
   assert.equal(pub.frames.length,Object.keys(aut.frames).length);assert.equal(pub.clips.length,aut.clips.length);
   const clips=pub.clips.filter(c=>String(c.id).startsWith('handoff:')||c.id==='main:13');

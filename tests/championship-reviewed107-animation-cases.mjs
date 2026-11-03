@@ -26,12 +26,13 @@ const cast=(id,t,type='CAST',angle=0)=>({type,actionId:id,t,angle,moveId:'pulse'
 test('107 canonical growth/mature selections plus Owner-directed awakened pilots; excluded growth codes keep legal fallback',()=>{
  // Owner 2026-10-30: UL42 Arena set added display-only (option A, not playable).
  // Owner 2026-11-02: MA28 returns to its reviewed set (「Ma28換新的」, #114 set chosen).
- assert.equal(selection.characters.length,115);assert.equal(selection.errors.length,0);
+ // Owner 2026-11-03: AW23 and species196 (UL14) join from the Codex release Claude took over.
+ assert.equal(selection.characters.length,117);assert.equal(selection.errors.length,0);
  assert.equal(selection.characters.filter(c=>c.displayCode.startsWith('GR')).length,38);
  assert.equal(selection.characters.filter(c=>c.displayCode.startsWith('MA')).length,69);
- assert.deepEqual(selection.characters.filter(c=>c.displayCode.startsWith('AW')).map(c=>c.displayCode),['AW29','AW25','AW28','AW32','AW26','AW27','AW31']);
+ assert.deepEqual(selection.characters.filter(c=>c.displayCode.startsWith('AW')).map(c=>c.displayCode),['AW29','AW25','AW28','AW32','AW26','AW27','AW31','AW23']);
  assert.deepEqual(selection.excluded,['GR04','GR13','GR32']);
- assert.equal(new Set(selection.characters.map(c=>c.speciesId)).size,115);
+ assert.equal(new Set(selection.characters.map(c=>c.speciesId)).size,117);
  for(const entry of selection.characters){assert.ok(!selection.excluded.includes(entry.displayCode));
   assert.equal(read(entry.displayCode).speciesId,entry.speciesId);}
 });

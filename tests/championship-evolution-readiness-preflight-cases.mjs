@@ -11,6 +11,7 @@ function fixture(){
  let frame={sequenceId:0,evolution:null},sourceReady=true,targetReady=true;
  const entry={speciesId:'species8',assetState:'ready',nativeFramePresenter:{isFrameReady:()=>sourceReady}};
  const context={disposed:false,lifetime:{signal:{aborted:false}},source:{getFrame:()=>({residents:[{creatureId:'id',speciesId:'species8'}]}),getActorFrame:()=>frame},actors:new Map([['id',entry]])};
+ context.actorFrameFor=id=>context.source.getActorFrame?.(id);
  vm.runInNewContext('globalThis.scene={'+source.slice(start,end)+'};',context);
  const evolve=()=>frame.evolution={target:9,phase:0,totalFrames:0,targetFrame:{sequenceId:39,frameIndex:0}};
  const ready=()=>Object.assign(entry,{evolutionTarget:9,evolutionSprite:{},evolutionAssetState:'ready',evolutionPresenter:{isFrameReady:()=>targetReady}});

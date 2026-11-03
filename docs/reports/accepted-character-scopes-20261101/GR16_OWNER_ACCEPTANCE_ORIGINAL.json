@@ -1,0 +1,67 @@
+{
+  "status": "OWNER_ACCEPTED_GR16_NEW_CANONICAL_WALK8_ONLY",
+  "ownerApproved": true,
+  "runtimeVerified": null,
+  "runtimeStatus": "NOT_VERIFIED",
+  "scope": "GR16 own-character canonical new-style Walk8 only, 24 selected raw crops, 32 native ABAC events. Not other actions, General/full role, GR11, or runtime approval.",
+  "evidence": {
+    "deliveryMessageId": "Sentinel_f9ca3416cc7c8191a08c2229aa7243c6",
+    "deliveryAtUTC": "2026-11-01T13:33:46.408354Z",
+    "deliveryCaption": "這段是紫色星尾角色 GR16 的新版八方向走路，我把原本的總覽改成逐方向放大連播，沒有改動姿勢。請看左右側與後斜方向，換腳是否夠清楚；這次只確認這隻的走路。",
+    "userMessageId": "Sentinel_9d3bf6d5c26c8191a8452a0f675fdca9",
+    "userText": "可以",
+    "ackMessageId": "Sentinel_e767542a903c81919cfeaccd8e0bca59",
+    "ackAtUTC": "2026-11-01T13:40:06.698665Z"
+  },
+  "exactManifestSha256": "e171e2492201f3cf1307dd422c2e6a5cc92abe53a6a60c378d5141332f51402c",
+  "exactVideoSha256": "748faa8e2405a1030d55302e2d57e73d853ed6d272411de79846de047516c239",
+  "exactLibraryFileId": "libfile_f5a7069ff93481919af528d5390c780c",
+  "exactLibraryVersion": 0,
+  "selectedRawFileHashes": {
+    "GR16_CANONICAL_DOWN_UP_WALK_ABC_v1/raw/Down_ABC_CANONICAL_UNBOUND.png": "a874f52957d14c7916302cf986836f2d1a6f03d2870ee70f389cf3f419e8cf50",
+    "GR16_DOWN_UP_WALK_C_FOCUSED_v1/raw/Down_C_FOCUSED_UNBOUND.png": "a91bf4bc84f1282fdf6b1bdb9a84431be0a4c474a187cfb0286099cf75b945c9",
+    "GR16_DR_A_COMPACT_FOCUSED_v1/raw/DR_A_COMPACT_UNBOUND.png": "1aa0141f5ae91e8835d9b127496ac9a1958dbea7609ba28dff61297e6022005f",
+    "GR16_DR_UR_TAIL_ONLY_EDIT_v1/raw/DownRight_TAIL_EDIT_UNBOUND.png": "4d93b9ca90818bfe842143193b5389c881d1d474b8c9bdfff4fd65becce88366",
+    "GR16_CANONICAL_RIGHT_WALK_ABC_PILOT_v1/raw/RIGHT_WALK_ABC_CANONICAL_UNBOUND.png": "11c4e19574fbfc4e5eef9da9ef5e8edfca4c798ecf6b7ca882573b2d9808fa76",
+    "GR16_DR_UR_TAIL_ONLY_EDIT_v1/raw/UpRight_TAIL_EDIT_UNBOUND.png": "5fc824bc38b21b7c3c0b4a286274d0314355b92175356a47bf4e4906e1a61188",
+    "GR16_UP_UL_COHORT_STRIP_EDITS_v1/raw/Up_COHORT_EDIT_UNBOUND.png": "beaa839247e03b749efc2e265847dd6dc1bd1eb66f453fa01145f803e6f84805",
+    "GR16_UP_UL_COHORT_STRIP_EDITS_v1/raw/UpLeft_COHORT_EDIT_UNBOUND.png": "30242ae970c8dde3a7a7ce520b3f806a118c0fcc53ac64117db87428b64dced9",
+    "GR16_LEFT_TEMPLE_ONLY_EDIT_v1/raw/LEFT_TEMPLE_EDIT_UNBOUND.png": "ec0552bcc383a1a879b429886db9e56a96e6b0c883f4a451e94a3d1f6d0d1918",
+    "GR16_CANONICAL_DL_UL_WALK_ABC_v1/raw/DownLeft_ABC_UNBOUND.png": "83dccfc181154b5de64e14eaceb2a4d735d1b62250654c19a6e2867a192caafa"
+  },
+  "warnings": {
+    "Down": [
+      "Corrected C opposing support scoped accepted; singleton redraw/head/cuff/registration drift"
+    ],
+    "DownRight": [
+      "CompactA accepted; singleton drift vs tail-fixedBC",
+      "Tail-fix non-tail deltas retained; C foot amplitude"
+    ],
+    "Right": [
+      "A less-compact stagger; tiny far-eye/camera and registration drift"
+    ],
+    "UpRight": [
+      "Tail-fixed candidate non-tail deltas",
+      "Native B narrow/C open contact not generic mirrored pair"
+    ],
+    "Up": [
+      "New whole-strip cohort edit scoped accepted; C support oppositeB intact",
+      "C sole/tail/fur differences remain, no owner style pass"
+    ],
+    "UpLeft": [
+      "New whole-strip cohort edit scoped accepted; right-supportB preserved, rear-left camera/bodyvolume improved",
+      "B/C narrow-vs-open amplitude subtle per source, not forced mirror"
+    ],
+    "Left": [
+      "Temple removed; two legs readable; A/C amplitude close",
+      "Body/arm/leglength drift from earlierstrip, natural occlusion review"
+    ],
+    "DownLeft": [
+      "A compact close toB amplitude warning",
+      "C extended step amplitude, front-left camera and handfoot proximity review"
+    ]
+  },
+  "pendingReceiptsPreserved": true,
+  "noNewArt": true,
+  "runtimeAnchorRetarget": null
+}
