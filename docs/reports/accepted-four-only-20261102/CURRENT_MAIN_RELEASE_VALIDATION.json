@@ -1,0 +1,770 @@
+{
+  "schema": "character-release-four-scopes-validation.v1",
+  "verifiedAtUTC": "2026-11-02T18:19:20.163641+00:00",
+  "base": "00771ab15c796c3f74e0fff67115a50ea9f17e8d",
+  "sourceCommit": "6f9f7a81577734ea17b96a358cf8120fa0889c81",
+  "scopes": {
+    "GR03": "Walk8 v4 only",
+    "GR16": "canonical Walk8 v2 only",
+    "GR14": "normal idle Main0/Sub0 alias only",
+    "GR15": "normal idle Main0/Sub0 alias only"
+  },
+  "checks": {
+    "focused": {
+      "tests": 14,
+      "exitCode": 0
+    },
+    "ci": {
+      "tests": 3322,
+      "initialPass": 3320,
+      "initialFail": 2,
+      "initialExitCode": 1,
+      "reason": "Windows sandbox symlink EPERM and loopback EACCES",
+      "affectedModuleRerunTests": 34,
+      "affectedModuleRerunPass": 34,
+      "affectedModuleRerunExitCode": 0
+    },
+    "buildExitCode": 0,
+    "validateExitCode": 0,
+    "publicPayloadExitCode": 0,
+    "buildId": "c270bb7680a0c5128f11c17bc554caab9bac597915db51586f01cf3311899164",
+    "artifactFiles": 7630
+  },
+  "renderer": [
+    {
+      "code": "GR03",
+      "view": "desktop",
+      "report": "release-inputs-20261102/renderer/GR03-desktop/arena-desktop-0-species-068.json",
+      "sha256": "e113f302965b55d5e13b29c9d1f96afeba6017dd7124b483592c5bbfabdaabe7",
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "controlledDirections": 8,
+      "controlledUniqueDrawings": 24,
+      "normalInputObservedDirections": {
+        "UL": [
+          "UL"
+        ],
+        "DR": [
+          "DR"
+        ],
+        "UR": [
+          "UR",
+          "R"
+        ],
+        "DL": [
+          "DL",
+          "L"
+        ],
+        "U": [
+          "U"
+        ],
+        "D": [
+          "D"
+        ],
+        "L": [
+          "L"
+        ],
+        "R": [
+          "R"
+        ]
+      },
+      "inputNote": "Real match with controlled roster fixture; wall/collision can yield adjacent headings. Separate render-only velocity override verifies all drawings; it is not natural combat/state validation."
+    },
+    {
+      "code": "GR03",
+      "view": "mobile",
+      "report": "release-inputs-20261102/renderer/GR03-mobile/arena-mobile-0-species-068.json",
+      "sha256": "88491392d2ee0d8067e7322e81fad37832da533b5a737cd16b1b09c8fc955d55",
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "controlledDirections": 8,
+      "controlledUniqueDrawings": 24,
+      "normalInputObservedDirections": {
+        "UL": [
+          "UL"
+        ],
+        "DR": [
+          "DR"
+        ],
+        "UR": [
+          "UR",
+          "U"
+        ],
+        "DL": [
+          "DL"
+        ],
+        "U": [
+          "U"
+        ],
+        "D": [
+          "D"
+        ],
+        "L": [
+          "L"
+        ],
+        "R": [
+          "R"
+        ]
+      },
+      "inputNote": "Real match with controlled roster fixture; wall/collision can yield adjacent headings. Separate render-only velocity override verifies all drawings; it is not natural combat/state validation."
+    },
+    {
+      "code": "GR03",
+      "view": "landscape",
+      "report": "release-inputs-20261102/renderer/GR03-landscape/arena-landscape-0-species-068.json",
+      "sha256": "272255ba2c50f5f8f693bc91d75246e05d715be2b5cf3bb838ecf87770d2a3e7",
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "controlledDirections": 8,
+      "controlledUniqueDrawings": 24,
+      "normalInputObservedDirections": {
+        "UL": [
+          "UL"
+        ],
+        "DR": [
+          "DR"
+        ],
+        "UR": [
+          "UR"
+        ],
+        "DL": [
+          "DL"
+        ],
+        "U": [
+          "U"
+        ],
+        "D": [
+          "D"
+        ],
+        "L": [
+          "L"
+        ],
+        "R": [
+          "R"
+        ]
+      },
+      "inputNote": "Real match with controlled roster fixture; wall/collision can yield adjacent headings. Separate render-only velocity override verifies all drawings; it is not natural combat/state validation."
+    },
+    {
+      "code": "GR16",
+      "view": "desktop",
+      "report": "release-inputs-20261102/renderer/GR16-desktop/arena-desktop-0-species-046.json",
+      "sha256": "ab530de2ee055c1e64f4db3879e89e3ce93513b13a5e994c35967adc306acdb1",
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "controlledDirections": 8,
+      "controlledUniqueDrawings": 24,
+      "normalInputObservedDirections": {
+        "UL": [
+          "UL"
+        ],
+        "DR": [
+          "DR"
+        ],
+        "UR": [
+          "UR",
+          "U"
+        ],
+        "DL": [
+          "DL"
+        ],
+        "U": [
+          "U"
+        ],
+        "D": [
+          "D"
+        ],
+        "L": [
+          "L"
+        ],
+        "R": [
+          "R"
+        ]
+      },
+      "inputNote": "Real match with controlled roster fixture; wall/collision can yield adjacent headings. Separate render-only velocity override verifies all drawings; it is not natural combat/state validation."
+    },
+    {
+      "code": "GR16",
+      "view": "mobile",
+      "report": "release-inputs-20261102/renderer/GR16-mobile/arena-mobile-0-species-046.json",
+      "sha256": "8b43c1f1f51ff2657ed4e65b9aaeafae78a41bb2cc3cacfcf41b2932106ecd94",
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "controlledDirections": 8,
+      "controlledUniqueDrawings": 24,
+      "normalInputObservedDirections": {
+        "UL": [
+          "UL"
+        ],
+        "DR": [
+          "DR"
+        ],
+        "UR": [
+          "UR",
+          "U"
+        ],
+        "DL": [
+          "DL"
+        ],
+        "U": [
+          "U"
+        ],
+        "D": [
+          "D"
+        ],
+        "L": [
+          "L"
+        ],
+        "R": [
+          "R"
+        ]
+      },
+      "inputNote": "Real match with controlled roster fixture; wall/collision can yield adjacent headings. Separate render-only velocity override verifies all drawings; it is not natural combat/state validation."
+    },
+    {
+      "code": "GR16",
+      "view": "landscape",
+      "report": "release-inputs-20261102/renderer/GR16-landscape/arena-landscape-0-species-046.json",
+      "sha256": "2bf9f2e01d45e57e3b21f02f35a29dddd1713035e7a0d9ce15f589d2523aacb4",
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "controlledDirections": 8,
+      "controlledUniqueDrawings": 24,
+      "normalInputObservedDirections": {
+        "UL": [
+          "UL"
+        ],
+        "DR": [
+          "DR"
+        ],
+        "UR": [
+          "UR",
+          "U"
+        ],
+        "DL": [
+          "DL"
+        ],
+        "U": [
+          "U"
+        ],
+        "D": [
+          "D"
+        ],
+        "L": [
+          "L"
+        ],
+        "R": [
+          "R"
+        ]
+      },
+      "inputNote": "Real match with controlled roster fixture; wall/collision can yield adjacent headings. Separate render-only velocity override verifies all drawings; it is not natural combat/state validation."
+    },
+    {
+      "code": "GR14",
+      "view": "desktop",
+      "report": "release-inputs-20261102/renderer/GR14-desktop/desktop.json",
+      "sha256": "a972fa28b8b3f516e7426b116f02ac1922c2d9663262467f14405416f41deafe",
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "controlledSamples": 6,
+      "assets": [
+        "accepted20261101_GR14_G000",
+        "accepted20261101_GR14_G001"
+      ],
+      "context": {
+        "devicePixelRatio": 1,
+        "viewport": [
+          1366,
+          768
+        ],
+        "quality": "balanced"
+      },
+      "naturalInitialClips": [
+        "main:sleep"
+      ],
+      "textureAndBounds": [
+        {
+          "asset": "accepted20261101_GR14_G000",
+          "bounds": {
+            "x": 666.8970588235294,
+            "y": 356.53153886371655,
+            "width": 26,
+            "height": 34.5
+          },
+          "texture": {
+            "width": 48,
+            "height": 69,
+            "sourceWidth": 120,
+            "sourceHeight": 85,
+            "scaleMode": "linear"
+          },
+          "canvas": {
+            "width": 1366,
+            "height": 768,
+            "clientWidth": 1366,
+            "clientHeight": 768,
+            "host": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 768
+            }
+          }
+        },
+        {
+          "asset": "accepted20261101_GR14_G001",
+          "bounds": {
+            "x": 666.8970588235294,
+            "y": 356.53153886371655,
+            "width": 26,
+            "height": 34.5
+          },
+          "texture": {
+            "width": 48,
+            "height": 66,
+            "sourceWidth": 120,
+            "sourceHeight": 85,
+            "scaleMode": "linear"
+          },
+          "canvas": {
+            "width": 1366,
+            "height": 768,
+            "clientWidth": 1366,
+            "clientHeight": 768,
+            "host": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 768
+            }
+          }
+        }
+      ],
+      "inputNote": "Single resident save; first natural sample recorded before story-puppet idle playback. Natural idle trigger and independent Sub0 scene not claimed."
+    },
+    {
+      "code": "GR14",
+      "view": "mobile",
+      "report": "release-inputs-20261102/renderer/GR14-mobile/mobile.json",
+      "sha256": "0f4ad3116e2377eebfe9e489677fc29cf9a9d80c4311d033de1312f18bc18b0c",
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "controlledSamples": 6,
+      "assets": [
+        "accepted20261101_GR14_G000",
+        "accepted20261101_GR14_G001"
+      ],
+      "context": {
+        "devicePixelRatio": 3,
+        "viewport": [
+          390,
+          844
+        ],
+        "quality": "balanced"
+      },
+      "naturalInitialClips": [
+        "main:sleep"
+      ],
+      "textureAndBounds": [
+        {
+          "asset": "accepted20261101_GR14_G000",
+          "bounds": {
+            "x": 170.988445378151,
+            "y": 380.297308295575,
+            "width": 39,
+            "height": 51.75
+          },
+          "texture": {
+            "width": 48,
+            "height": 69,
+            "sourceWidth": 120,
+            "sourceHeight": 85,
+            "scaleMode": "linear"
+          },
+          "canvas": {
+            "width": 780,
+            "height": 1688,
+            "clientWidth": 390,
+            "clientHeight": 844,
+            "host": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 844
+            }
+          }
+        },
+        {
+          "asset": "accepted20261101_GR14_G001",
+          "bounds": {
+            "x": 170.988445378151,
+            "y": 380.297308295575,
+            "width": 39,
+            "height": 51.75
+          },
+          "texture": {
+            "width": 48,
+            "height": 66,
+            "sourceWidth": 120,
+            "sourceHeight": 85,
+            "scaleMode": "linear"
+          },
+          "canvas": {
+            "width": 780,
+            "height": 1688,
+            "clientWidth": 390,
+            "clientHeight": 844,
+            "host": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 844
+            }
+          }
+        }
+      ],
+      "inputNote": "Single resident save; first natural sample recorded before story-puppet idle playback. Natural idle trigger and independent Sub0 scene not claimed."
+    },
+    {
+      "code": "GR14",
+      "view": "landscape",
+      "report": "release-inputs-20261102/renderer/GR14-landscape/landscape.json",
+      "sha256": "5562a60d03d3ebf3cf10f36c460998ef9a01e69aca6cab6408e1d9b2a676ca91",
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "controlledSamples": 6,
+      "assets": [
+        "accepted20261101_GR14_G000",
+        "accepted20261101_GR14_G001"
+      ],
+      "context": {
+        "devicePixelRatio": 1,
+        "viewport": [
+          844,
+          390
+        ],
+        "quality": "balanced"
+      },
+      "naturalInitialClips": [
+        "main:sleep"
+      ],
+      "textureAndBounds": [
+        {
+          "asset": "accepted20261101_GR14_G000",
+          "bounds": {
+            "x": 405.8970588235294,
+            "y": 167.53153886371652,
+            "width": 26,
+            "height": 34.5
+          },
+          "texture": {
+            "width": 48,
+            "height": 69,
+            "sourceWidth": 120,
+            "sourceHeight": 85,
+            "scaleMode": "linear"
+          },
+          "canvas": {
+            "width": 844,
+            "height": 390,
+            "clientWidth": 844,
+            "clientHeight": 390,
+            "host": {
+              "x": 0,
+              "y": 0,
+              "width": 844,
+              "height": 390
+            }
+          }
+        },
+        {
+          "asset": "accepted20261101_GR14_G001",
+          "bounds": {
+            "x": 405.8970588235294,
+            "y": 167.53153886371652,
+            "width": 26,
+            "height": 34.5
+          },
+          "texture": {
+            "width": 48,
+            "height": 66,
+            "sourceWidth": 120,
+            "sourceHeight": 85,
+            "scaleMode": "linear"
+          },
+          "canvas": {
+            "width": 844,
+            "height": 390,
+            "clientWidth": 844,
+            "clientHeight": 390,
+            "host": {
+              "x": 0,
+              "y": 0,
+              "width": 844,
+              "height": 390
+            }
+          }
+        }
+      ],
+      "inputNote": "Single resident save; first natural sample recorded before story-puppet idle playback. Natural idle trigger and independent Sub0 scene not claimed."
+    },
+    {
+      "code": "GR15",
+      "view": "desktop",
+      "report": "release-inputs-20261102/renderer/GR15-desktop/desktop.json",
+      "sha256": "2068a029470bf7f862ef986a5129532a75ae5512064e03abf935dc5f95c6aa65",
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "controlledSamples": 6,
+      "assets": [
+        "accepted20261101_GR15_G000",
+        "accepted20261101_GR15_G001"
+      ],
+      "context": {
+        "devicePixelRatio": 1,
+        "viewport": [
+          1366,
+          768
+        ],
+        "quality": "balanced"
+      },
+      "naturalInitialClips": [
+        "gr15.main.sleep"
+      ],
+      "textureAndBounds": [
+        {
+          "asset": "accepted20261101_GR15_G000",
+          "bounds": {
+            "x": 671.1120857306178,
+            "y": 343.44948673328224,
+            "width": 29,
+            "height": 43.5
+          },
+          "texture": {
+            "width": 58,
+            "height": 84,
+            "sourceWidth": 140,
+            "sourceHeight": 100,
+            "scaleMode": "linear"
+          },
+          "canvas": {
+            "width": 1366,
+            "height": 768,
+            "clientWidth": 1366,
+            "clientHeight": 768,
+            "host": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 768
+            }
+          }
+        },
+        {
+          "asset": "accepted20261101_GR15_G001",
+          "bounds": {
+            "x": 671.0016449616642,
+            "y": 343.3611341181194,
+            "width": 29,
+            "height": 43.5
+          },
+          "texture": {
+            "width": 58,
+            "height": 80,
+            "sourceWidth": 140,
+            "sourceHeight": 100,
+            "scaleMode": "linear"
+          },
+          "canvas": {
+            "width": 1366,
+            "height": 768,
+            "clientWidth": 1366,
+            "clientHeight": 768,
+            "host": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 768
+            }
+          }
+        }
+      ],
+      "inputNote": "Single resident save; first natural sample recorded before story-puppet idle playback. Natural idle trigger and independent Sub0 scene not claimed."
+    },
+    {
+      "code": "GR15",
+      "view": "mobile",
+      "report": "release-inputs-20261102/renderer/GR15-mobile/mobile.json",
+      "sha256": "082afd90632000e14099dfaa4a628085a3b6a71b03c485652f7e6927ee30a61e",
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "controlledSamples": 6,
+      "assets": [
+        "accepted20261101_GR15_G000",
+        "accepted20261101_GR15_G001"
+      ],
+      "context": {
+        "devicePixelRatio": 3,
+        "viewport": [
+          390,
+          844
+        ],
+        "quality": "balanced"
+      },
+      "naturalInitialClips": [
+        "gr15.main.sleep"
+      ],
+      "textureAndBounds": [
+        {
+          "asset": "accepted20261101_GR15_G000",
+          "bounds": {
+            "x": 177.31098573878347,
+            "y": 360.6742300999236,
+            "width": 43.5,
+            "height": 65.25
+          },
+          "texture": {
+            "width": 58,
+            "height": 84,
+            "sourceWidth": 140,
+            "sourceHeight": 100,
+            "scaleMode": "linear"
+          },
+          "canvas": {
+            "width": 780,
+            "height": 1688,
+            "clientWidth": 390,
+            "clientHeight": 844,
+            "host": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 844
+            }
+          }
+        },
+        {
+          "asset": "accepted20261101_GR15_G001",
+          "bounds": {
+            "x": 177.14532458535314,
+            "y": 360.54170117717933,
+            "width": 43.5,
+            "height": 65.25
+          },
+          "texture": {
+            "width": 58,
+            "height": 80,
+            "sourceWidth": 140,
+            "sourceHeight": 100,
+            "scaleMode": "linear"
+          },
+          "canvas": {
+            "width": 780,
+            "height": 1688,
+            "clientWidth": 390,
+            "clientHeight": 844,
+            "host": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 844
+            }
+          }
+        }
+      ],
+      "inputNote": "Single resident save; first natural sample recorded before story-puppet idle playback. Natural idle trigger and independent Sub0 scene not claimed."
+    },
+    {
+      "code": "GR15",
+      "view": "landscape",
+      "report": "release-inputs-20261102/renderer/GR15-landscape/landscape.json",
+      "sha256": "c7e8cd6e2ce29e97a65788ecf815bc10ab9e58b242c1d3d7bbec5636fb562e13",
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "controlledSamples": 6,
+      "assets": [
+        "accepted20261101_GR15_G000",
+        "accepted20261101_GR15_G001"
+      ],
+      "context": {
+        "devicePixelRatio": 1,
+        "viewport": [
+          844,
+          390
+        ],
+        "quality": "balanced"
+      },
+      "naturalInitialClips": [
+        "gr15.main.sleep"
+      ],
+      "textureAndBounds": [
+        {
+          "asset": "accepted20261101_GR15_G000",
+          "bounds": {
+            "x": 410.1120857306177,
+            "y": 154.44948673328224,
+            "width": 29,
+            "height": 43.5
+          },
+          "texture": {
+            "width": 58,
+            "height": 84,
+            "sourceWidth": 140,
+            "sourceHeight": 100,
+            "scaleMode": "linear"
+          },
+          "canvas": {
+            "width": 844,
+            "height": 390,
+            "clientWidth": 844,
+            "clientHeight": 390,
+            "host": {
+              "x": 0,
+              "y": 0,
+              "width": 844,
+              "height": 390
+            }
+          }
+        },
+        {
+          "asset": "accepted20261101_GR15_G001",
+          "bounds": {
+            "x": 410.00164496166417,
+            "y": 154.36113411811942,
+            "width": 29,
+            "height": 43.5
+          },
+          "texture": {
+            "width": 58,
+            "height": 80,
+            "sourceWidth": 140,
+            "sourceHeight": 100,
+            "scaleMode": "linear"
+          },
+          "canvas": {
+            "width": 844,
+            "height": 390,
+            "clientWidth": 844,
+            "clientHeight": 390,
+            "host": {
+              "x": 0,
+              "y": 0,
+              "width": 844,
+              "height": 390
+            }
+          }
+        }
+      ],
+      "inputNote": "Single resident save; first natural sample recorded before story-puppet idle playback. Natural idle trigger and independent Sub0 scene not claimed."
+    }
+  ],
+  "limitations": [
+    "Private handoff flag remains disabled (0); public roster eligibility unchanged.",
+    "This does not complete all actions of these roles or all 205 roles.",
+    "Phone emulation uses DPR3; raising canvas is capped at DPR2. Actual iOS hardware untested.",
+    "Initial natural resident state was sleep in this fixture; idle clips checked through existing story-puppet selector.",
+    "Sub0 aliases have data/renderer equivalence checks, no independent natural Sub0 scene run.",
+    "Original HUD and labeled unobscured supplemental observations both preserved locally.",
+    "No homepage Main2 change; this release cannot resolve every old title-parade character."
+  ]
+}

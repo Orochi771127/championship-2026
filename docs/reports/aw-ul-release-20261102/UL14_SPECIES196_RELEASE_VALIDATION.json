@@ -1,0 +1,2547 @@
+{
+  "speciesId": "species-196",
+  "historicalRole": "UL14",
+  "currentCatalogAlias": "UL13",
+  "sourceArt": "DOT_SELF_REVIEW_PASS",
+  "sourceZIP_SHA256": "f8edc8d94cffa6e7531c6f1cd9a7e1337316cba9103803053ad487c59572f581",
+  "selectedManifestSHA256": "ab96cc6d073d90eb8ce7015f26198bf17d60a2b029f50209e605f87bb677909d",
+  "coreGeneral": 53,
+  "coreArena": 32,
+  "events": 339,
+  "runtime": [
+    {
+      "mode": "general",
+      "view": "mobile",
+      "contracts": 53,
+      "evidenceSHA256": "297804ad4059bae0f22b9be60a819f501fbe2654ee7d705be009283989e9967d",
+      "forcedRenderer": true
+    },
+    {
+      "mode": "general",
+      "view": "desktop",
+      "contracts": 53,
+      "evidenceSHA256": "ee33f5b52dfdb25474018aebdcdf497d260fc387c00588572ce8b4f7b6fdde48",
+      "forcedRenderer": true
+    },
+    {
+      "mode": "general",
+      "view": "landscape",
+      "contracts": 53,
+      "evidenceSHA256": "346d96c8c72d59e1b1970578cdabb717b8fbe948e2b2eddc5895e11de355b91b",
+      "forcedRenderer": true
+    },
+    {
+      "mode": "arena",
+      "view": "mobile",
+      "contracts": 32,
+      "evidenceSHA256": "27f635e40c542ea9b751d0228133d47be37cae31c3f5a2a38a4b0be474bfb9d9",
+      "forcedRenderer": true
+    },
+    {
+      "mode": "arena",
+      "view": "desktop",
+      "contracts": 32,
+      "evidenceSHA256": "e004491905302eac85c22e36f6441e3fff8cd82854a1e8c0f47cc21e0a636fbc",
+      "forcedRenderer": true
+    },
+    {
+      "mode": "arena",
+      "view": "landscape",
+      "contracts": 32,
+      "evidenceSHA256": "a93176052b7f225500000dcd262bb23f6105a2fcd40e95c0cedc8247d7b7169e",
+      "forcedRenderer": true
+    }
+  ],
+  "naturalPlayback": {
+    "mode": "general",
+    "observed": "main:13 sleep",
+    "samples": 601,
+    "evidenceSHA256": "ba1e7042ff6736b5bcb79cf9bb10d541ae6c32e7a4d730fc933137e6b0665fe4",
+    "allStatesVerified": false
+  },
+  "additionalArena": "Idle/charge use existing directional core aliases; KO holds finalHurt without approvedKO context; victory fallback rangedD. Dedicated KO/victory context acceptance not claimed.",
+  "visualReview": "All General renderer phases and eight-direction Arena actual screenshots reviewed; original live-match HUD overlay retained separately from supplementary simulation-held render inspection.",
+  "physicalIOSVerified": false,
+  "nativeCallerHzVerified": false,
+  "sourceNumericalContracts": [
+    {
+      "clip": "main:0",
+      "integerTicks": [
+        31,
+        22
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:1",
+      "integerTicks": [
+        37,
+        28
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:2",
+      "integerTicks": [
+        15,
+        12
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:3",
+      "integerTicks": [
+        7,
+        7
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:4",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:5",
+      "integerTicks": [
+        7
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:6",
+      "integerTicks": [
+        7
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:7",
+      "integerTicks": [
+        15,
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:8",
+      "integerTicks": [
+        15,
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:9",
+      "integerTicks": [
+        15,
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:10",
+      "integerTicks": [
+        15,
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:11",
+      "integerTicks": [
+        5,
+        6
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:12",
+      "integerTicks": [
+        37,
+        37
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:13",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:14",
+      "integerTicks": [
+        25,
+        31
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:15",
+      "integerTicks": [
+        31
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:16",
+      "integerTicks": [
+        31,
+        22
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:17",
+      "integerTicks": [
+        37,
+        28
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:18",
+      "integerTicks": [
+        15,
+        12
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:19",
+      "integerTicks": [
+        7,
+        7
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:20",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:21",
+      "integerTicks": [
+        5,
+        6
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:22",
+      "integerTicks": [
+        37,
+        37
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:23",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:24",
+      "integerTicks": [
+        25,
+        31
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:25",
+      "integerTicks": [
+        31
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:26",
+      "integerTicks": [
+        6,
+        3,
+        9,
+        9
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:27",
+      "integerTicks": [
+        2
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:28",
+      "integerTicks": [
+        15,
+        21
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:29",
+      "integerTicks": [
+        11,
+        16
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:30",
+      "integerTicks": [
+        11,
+        37
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:31",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:32",
+      "integerTicks": [
+        7
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:33",
+      "integerTicks": [
+        31,
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:34",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:35",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:36",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:37",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:38",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "main:39",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "sub:0",
+      "integerTicks": [
+        31,
+        22
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "sub:1",
+      "integerTicks": [
+        37,
+        28
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "sub:2",
+      "integerTicks": [
+        7
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "sub:3",
+      "integerTicks": [
+        7
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "sub:4",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "sub:5",
+      "integerTicks": [
+        31
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "sub:6",
+      "integerTicks": [
+        2
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "sub:7",
+      "integerTicks": [
+        15,
+        21
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "sub:8",
+      "integerTicks": [
+        11,
+        16
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "sub:9",
+      "integerTicks": [
+        11,
+        37
+      ],
+      "rawMode": 2,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "sub:10",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "sub:11",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "sub:12",
+      "integerTicks": [
+        37
+      ],
+      "rawMode": 1,
+      "sourceClockHz": null,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\General53.json"
+    },
+    {
+      "clip": "arena:D:melee",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": true,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:DR:melee",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": true,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:R:melee",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": true,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:UR:melee",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": true,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:U:melee",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": true,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:UL:melee",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": true,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:L:melee",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": true,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:DL:melee",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": true,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:D:hurt",
+      "integerTicks": [
+        2,
+        8
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:DR:hurt",
+      "integerTicks": [
+        2,
+        8
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:R:hurt",
+      "integerTicks": [
+        2,
+        8
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:UR:hurt",
+      "integerTicks": [
+        2,
+        8
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:U:hurt",
+      "integerTicks": [
+        2,
+        8
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:UL:hurt",
+      "integerTicks": [
+        2,
+        8
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:L:hurt",
+      "integerTicks": [
+        2,
+        8
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:DL:hurt",
+      "integerTicks": [
+        2,
+        8
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:D:ranged",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:DR:ranged",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:R:ranged",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:UR:ranged",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:U:ranged",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:UL:ranged",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:L:ranged",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:DL:ranged",
+      "integerTicks": [
+        2,
+        2,
+        6,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:D:move",
+      "integerTicks": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:DR:move",
+      "integerTicks": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:R:move",
+      "integerTicks": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:UR:move",
+      "integerTicks": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:U:move",
+      "integerTicks": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:UL:move",
+      "integerTicks": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:L:move",
+      "integerTicks": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    },
+    {
+      "clip": "arena:DL:move",
+      "integerTicks": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "rawMode": null,
+      "sourceClockHz": 60,
+      "nativeCallerVerified": false,
+      "presentationHz": 60,
+      "priorOrderCorrected": false,
+      "exactSourceMap": "ul14-full-source\\maps\\Arena32.json"
+    }
+  ],
+  "registration": [
+    {
+      "id": "77f519cdd42300cb73c5b3af0292b7e35559c1a16bcb7d849019811cfebc628f",
+      "source": "ul14-full-source\\assets\\GENERAL_1_00.png",
+      "size": [
+        475,
+        443
+      ],
+      "origin": [
+        261.25,
+        387
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "ed2f25731fc59ff48243dbae2471aa17a88bbd9aa8b9ec1a39e0f6278938f901",
+      "source": "ul14-full-source\\assets\\GENERAL_NEUTRAL_B_ACCEPTED.png",
+      "size": [
+        1507,
+        1044
+      ],
+      "origin": [
+        855,
+        1005
+      ],
+      "density": 32,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "SKULL_EYE_EAR_AND_NEAR_FOREPAW_LANDMARKS_RELATIVE_TO_GENERAL_1_00"
+    },
+    {
+      "id": "abdc101079bd4e0f287747cf914cd0da5efc5a63d74c31ceec91311ea3c0ca8e",
+      "source": "ul14-full-source\\assets\\GENERAL_2_05.png",
+      "size": [
+        468,
+        386
+      ],
+      "origin": [
+        257.4,
+        351
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "4ad66848741548e17e1493118832c364bef1025456125b9f99dd9f8c1607d2a8",
+      "source": "ul14-full-source\\assets\\GENERAL_1_02.png",
+      "size": [
+        490,
+        486
+      ],
+      "origin": [
+        269.5,
+        408
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "0a1330df7e3aa5b47036947cae282e7d7762a08ab138afbfbb8fe20e4404a92d",
+      "source": "ul14-full-source\\assets\\GENERAL_1_03.png",
+      "size": [
+        483,
+        399
+      ],
+      "origin": [
+        265.65,
+        357
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "5bbe52c25545ba062ddb7cdd3917df1630610bd62324dced859c15eaf0213fc6",
+      "source": "ul14-full-source\\assets\\GENERAL_1_04.png",
+      "size": [
+        505,
+        421
+      ],
+      "origin": [
+        277.75,
+        358
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "f335bc83b27a417e1cabc52ac2ff1fa10a00e5f945cc403721d705e6035b7b9f",
+      "source": "ul14-full-source\\assets\\GENERAL_AIRBORNE_v1.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "origin": [
+        840,
+        1050
+      ],
+      "density": 32,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "SKULL_AND_TORSO_DENSITY_WITH_VIRTUAL_GROUND_BELOW_AIRBORNE_FEET"
+    },
+    {
+      "id": "44856b15f82d30f2df54c60973c62a2a72a1992de1842108cfe9f0ebbbf2a4fd__general_mirror",
+      "source": "ul14-full-source\\assets\\GENERAL_1_06.png",
+      "size": [
+        518,
+        332
+      ],
+      "origin": [
+        284.9,
+        283
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "d9eaabf04450af23051fbc7da6a9c42525bd195e354a2dcbae116c9d91ece882",
+      "source": "ul14-full-source\\assets\\GENERAL_2_03.png",
+      "size": [
+        520,
+        492
+      ],
+      "origin": [
+        286.0,
+        412
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "fa8815c2faf6bc62bc1e1b75aad7b72845045a029c110d27847557a9b9a6d150__general_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_E_03.png",
+      "size": [
+        546,
+        451
+      ],
+      "origin": [
+        273.0,
+        446
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "f8708714ca81ad95f74cf53017e8740552ea37247a63ad44a983fa8e52a1b9f1__general_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_E_04.png",
+      "size": [
+        694,
+        369
+      ],
+      "origin": [
+        347.0,
+        359
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "abb0e3338c541962b20d9f0713603f782527a61390f3d85eab1c1273d1b3085f",
+      "source": "ul14-full-source\\assets\\GENERAL_2_04.png",
+      "size": [
+        450,
+        422
+      ],
+      "origin": [
+        247.5,
+        373
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "9bf948b99c8e32768fff322b243389ee61595624da7c719d437f1c4dd53900b0",
+      "source": "ul14-full-source\\assets\\GENERAL_2_06.png",
+      "size": [
+        480,
+        402
+      ],
+      "origin": [
+        264.0,
+        349
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "ff3c82e9e421351a532522012ca963b766ca34b72c251e97847c33ce66c27fa8",
+      "source": "ul14-full-source\\assets\\GENERAL_2_07.png",
+      "size": [
+        460,
+        313
+      ],
+      "origin": [
+        253.0,
+        285
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "5679982793bbcb6948be06b496758849584b4a337f0e2cc9fa01ac1ea5087b4b",
+      "source": "ul14-full-source\\assets\\GENERAL_3_00.png",
+      "size": [
+        464,
+        431
+      ],
+      "origin": [
+        255.2,
+        417
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "591c38adb4c33cfc63d919637b6c24cdafe3bcddffbc18df49030a79d393a25e",
+      "source": "ul14-full-source\\assets\\GENERAL_3_01.png",
+      "size": [
+        498,
+        494
+      ],
+      "origin": [
+        273.9,
+        415
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "f5f057f53a90ba89f6f6bcb8f24e811e3aa39677638942e874532080af1b1744",
+      "source": "ul14-full-source\\assets\\GENERAL_3_02.png",
+      "size": [
+        488,
+        493
+      ],
+      "origin": [
+        268.4,
+        425
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "bbf665807dec7acd3d3da7a707de785ee6fc118c8436c858b4c75a6ffae0e721",
+      "source": "ul14-full-source\\assets\\GENERAL_3_06.png",
+      "size": [
+        488,
+        381
+      ],
+      "origin": [
+        268.4,
+        342
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "ee12a7321cf0a515e3055f03f38511802445ef484d6fee3e91b2c011136d4cda",
+      "source": "ul14-full-source\\assets\\GENERAL_3_07.png",
+      "size": [
+        460,
+        355
+      ],
+      "origin": [
+        253.0,
+        346
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "e9cbb6c0ada6138d530c469527dbe69e90b269f762a7b531c4c9444922387599",
+      "source": "ul14-full-source\\assets\\GENERAL_4_00.png",
+      "size": [
+        432,
+        517
+      ],
+      "origin": [
+        237.6,
+        450
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "bedfb224cd33fb82374c187dfb1064b35032faa8f305333fc1877ff05b480f72",
+      "source": "ul14-full-source\\assets\\GENERAL_4_01.png",
+      "size": [
+        480,
+        443
+      ],
+      "origin": [
+        264.0,
+        419
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "8c92ae89e90d87011c9ec698bfbddf89351308f203aa5d3033a4f8e0724e69b3",
+      "source": "ul14-full-source\\assets\\GENERAL_4_02.png",
+      "size": [
+        473,
+        483
+      ],
+      "origin": [
+        260.15,
+        407
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "17381176cba9f6ae6042160ab68b67e79d04a25cd8cbda2f88f26185a197b6b0",
+      "source": "ul14-full-source\\assets\\GENERAL_4_03.png",
+      "size": [
+        458,
+        471
+      ],
+      "origin": [
+        251.9,
+        422
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "63b7f2455f0424918d6187c93cae554632f4f62a3359eba6a79ce65746a06279",
+      "source": "ul14-full-source\\assets\\GENERAL_4_04.png",
+      "size": [
+        463,
+        370
+      ],
+      "origin": [
+        254.65,
+        338
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "2d9390b3cd76822065438d5213b43a21d2031dba9f9d773990f036bcf622cd0f",
+      "source": "ul14-full-source\\assets\\GENERAL_4_05.png",
+      "size": [
+        467,
+        338
+      ],
+      "origin": [
+        256.85,
+        328
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "12ee7eb30ba8e8ce3ae831785b6931a61f32e3761f62d16b29eba5744846c074",
+      "source": "ul14-full-source\\assets\\GENERAL_4_06.png",
+      "size": [
+        497,
+        436
+      ],
+      "origin": [
+        273.35,
+        421
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "687a17984bbd3ff4decf575b71cd1e8901adffb26f72426a34849653afa8b57d",
+      "source": "ul14-full-source\\assets\\ARENA_S_00.png",
+      "size": [
+        534,
+        499
+      ],
+      "origin": [
+        267.0,
+        475
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "c185c3dec3b25395fac64802d380c0a4fc16971afe8248ee7fd2f3c9a11a9ec4",
+      "source": "ul14-full-source\\assets\\ARENA_S_03.png",
+      "size": [
+        498,
+        494
+      ],
+      "origin": [
+        249.0,
+        486
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "53d788d8ad387328f685335abc929df9b15c5d769923d65f1e0974b48f3715b8",
+      "source": "ul14-full-source\\assets\\ARENA_S_01.png",
+      "size": [
+        511,
+        517
+      ],
+      "origin": [
+        255.5,
+        492
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "7083a6f7149f319e09300e94cfff9a47cf0c6cbc22a4e09162ed4a0d488efcab",
+      "source": "ul14-full-source\\assets\\ARENA_S_02.png",
+      "size": [
+        512,
+        535
+      ],
+      "origin": [
+        256.0,
+        495
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "c40eae6c6fb96ea698fbc5959e1f64b8ca338b778ac174787b0a095be5fe7b08",
+      "source": "ul14-full-source\\assets\\ARENA_S_04.png",
+      "size": [
+        529,
+        495
+      ],
+      "origin": [
+        264.5,
+        483
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "2410eaa9ab81389ccf0d7ac45f8333b181a77bc70c2a6be38af86d10ecd1964f",
+      "source": "ul14-full-source\\assets\\ARENA_SE_00.png",
+      "size": [
+        562,
+        477
+      ],
+      "origin": [
+        281.0,
+        464
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "d560f8b0323714f717d25ff8362656f91587146aaea5c92ad87c4342e30583b6",
+      "source": "ul14-full-source\\assets\\ARENA_SE_03.png",
+      "size": [
+        587,
+        541
+      ],
+      "origin": [
+        293.5,
+        514
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "3744dc1669233638efa37a61caa0403633d47cd8432fd2ea842a35e3cb18fa31",
+      "source": "ul14-full-source\\assets\\ARENA_SE_01.png",
+      "size": [
+        547,
+        515
+      ],
+      "origin": [
+        273.5,
+        461
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "0e8fe53dba2bed7c1cb49403ea2c137cf57a7a5d90e31e4f67abb36f254fdba9",
+      "source": "ul14-full-source\\assets\\ARENA_SE_02.png",
+      "size": [
+        519,
+        490
+      ],
+      "origin": [
+        259.5,
+        479
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "ea3b7da9252490a0c03b3eb819f8e1141106f2cda67a6bacba88a7ec52f8cd3e",
+      "source": "ul14-full-source\\assets\\ARENA_SE_04.png",
+      "size": [
+        600,
+        457
+      ],
+      "origin": [
+        300.0,
+        452
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "d89703e74d4a1598f0468833138a31cb206b7ab145f6fd05cf9faa1b5263acac",
+      "source": "ul14-full-source\\assets\\ARENA_E_00.png",
+      "size": [
+        594,
+        406
+      ],
+      "origin": [
+        297.0,
+        395
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "fa8815c2faf6bc62bc1e1b75aad7b72845045a029c110d27847557a9b9a6d150",
+      "source": "ul14-full-source\\assets\\ARENA_E_03.png",
+      "size": [
+        546,
+        451
+      ],
+      "origin": [
+        273.0,
+        446
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "c675c1aae055a99d8306844e59196b8639ef73471cc4765155ce48b73515c732",
+      "source": "ul14-full-source\\assets\\ARENA_E_01.png",
+      "size": [
+        603,
+        395
+      ],
+      "origin": [
+        301.5,
+        383
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "1ead35854ba389d1e1079ae6587508e73f25ec3e4bddcea0abf0c3bce253b383",
+      "source": "ul14-full-source\\assets\\ARENA_E_02.png",
+      "size": [
+        564,
+        478
+      ],
+      "origin": [
+        282.0,
+        397
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "f8708714ca81ad95f74cf53017e8740552ea37247a63ad44a983fa8e52a1b9f1",
+      "source": "ul14-full-source\\assets\\ARENA_E_04.png",
+      "size": [
+        694,
+        369
+      ],
+      "origin": [
+        347.0,
+        359
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "1e5093385c2b4a8927e73517d4962bec32f6c4e66037464533916dd4ab33697e",
+      "source": "ul14-full-source\\assets\\ARENA_NE_00.png",
+      "size": [
+        576,
+        477
+      ],
+      "origin": [
+        288.0,
+        468
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "3141f7a833e6ff0e3e7786d7ec4d7b703d1f46a6d24279455391e45e9131a8bd",
+      "source": "ul14-full-source\\assets\\ARENA_NE_03.png",
+      "size": [
+        563,
+        549
+      ],
+      "origin": [
+        281.5,
+        539
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "455175f6e2230d33a05d0cf67beabada86e304da34533ae1880bf5378718ef8e",
+      "source": "ul14-full-source\\assets\\ARENA_NE_01.png",
+      "size": [
+        609,
+        543
+      ],
+      "origin": [
+        304.5,
+        477
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "e49df75baa4ac94d5a20f75716b16abeb1479e2a310d5e1ada436dfb9156765b",
+      "source": "ul14-full-source\\assets\\ARENA_NE_02.png",
+      "size": [
+        537,
+        571
+      ],
+      "origin": [
+        268.5,
+        486
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "7dc36bd0bc1a05e3f8b097b607a493aa63eafb65d8b016bfac2202571920b005",
+      "source": "ul14-full-source\\assets\\ARENA_NE_04.png",
+      "size": [
+        673,
+        533
+      ],
+      "origin": [
+        336.5,
+        500
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "325626434d9ee25ae295c40a85eb9b05e5a4672c8669345b6d2165da395fa576",
+      "source": "ul14-full-source\\assets\\ARENA_N_00.png",
+      "size": [
+        518,
+        550
+      ],
+      "origin": [
+        259.0,
+        468
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "9aa4fbbf4c5168de61e5d14eed930dda4a58ab2a447fb30a43de9efb4939915f",
+      "source": "ul14-full-source\\assets\\ARENA_N_03.png",
+      "size": [
+        481,
+        559
+      ],
+      "origin": [
+        240.5,
+        523
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "b6e56d48b8003e213146f55ad88b11897f05f6b51d03ddeede5d25bf057c04b7",
+      "source": "ul14-full-source\\assets\\ARENA_N_01.png",
+      "size": [
+        521,
+        555
+      ],
+      "origin": [
+        260.5,
+        431
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "a8c1ea17d750a634f0ce1c0536f021e8aaa1c2ff0cc9242946ceb254a18a4bd0",
+      "source": "ul14-full-source\\assets\\ARENA_N_02.png",
+      "size": [
+        487,
+        556
+      ],
+      "origin": [
+        243.5,
+        434
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "1dbf1b16c3f375a935c864198c05239819e79daceceb75b5f9c2254fbd58a71d",
+      "source": "ul14-full-source\\assets\\ARENA_N_04.png",
+      "size": [
+        533,
+        527
+      ],
+      "origin": [
+        266.5,
+        478
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "1e5093385c2b4a8927e73517d4962bec32f6c4e66037464533916dd4ab33697e__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_NE_00.png",
+      "size": [
+        576,
+        477
+      ],
+      "origin": [
+        288.0,
+        468
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "3141f7a833e6ff0e3e7786d7ec4d7b703d1f46a6d24279455391e45e9131a8bd__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_NE_03.png",
+      "size": [
+        563,
+        549
+      ],
+      "origin": [
+        281.5,
+        539
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "455175f6e2230d33a05d0cf67beabada86e304da34533ae1880bf5378718ef8e__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_NE_01.png",
+      "size": [
+        609,
+        543
+      ],
+      "origin": [
+        304.5,
+        477
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "e49df75baa4ac94d5a20f75716b16abeb1479e2a310d5e1ada436dfb9156765b__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_NE_02.png",
+      "size": [
+        537,
+        571
+      ],
+      "origin": [
+        268.5,
+        486
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "7dc36bd0bc1a05e3f8b097b607a493aa63eafb65d8b016bfac2202571920b005__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_NE_04.png",
+      "size": [
+        673,
+        533
+      ],
+      "origin": [
+        336.5,
+        500
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "d89703e74d4a1598f0468833138a31cb206b7ab145f6fd05cf9faa1b5263acac__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_E_00.png",
+      "size": [
+        594,
+        406
+      ],
+      "origin": [
+        297.0,
+        395
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "fa8815c2faf6bc62bc1e1b75aad7b72845045a029c110d27847557a9b9a6d150__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_E_03.png",
+      "size": [
+        546,
+        451
+      ],
+      "origin": [
+        273.0,
+        446
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "c675c1aae055a99d8306844e59196b8639ef73471cc4765155ce48b73515c732__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_E_01.png",
+      "size": [
+        603,
+        395
+      ],
+      "origin": [
+        301.5,
+        383
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "1ead35854ba389d1e1079ae6587508e73f25ec3e4bddcea0abf0c3bce253b383__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_E_02.png",
+      "size": [
+        564,
+        478
+      ],
+      "origin": [
+        282.0,
+        397
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "f8708714ca81ad95f74cf53017e8740552ea37247a63ad44a983fa8e52a1b9f1__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_E_04.png",
+      "size": [
+        694,
+        369
+      ],
+      "origin": [
+        347.0,
+        359
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "2410eaa9ab81389ccf0d7ac45f8333b181a77bc70c2a6be38af86d10ecd1964f__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_SE_00.png",
+      "size": [
+        562,
+        477
+      ],
+      "origin": [
+        281.0,
+        464
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "d560f8b0323714f717d25ff8362656f91587146aaea5c92ad87c4342e30583b6__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_SE_03.png",
+      "size": [
+        587,
+        541
+      ],
+      "origin": [
+        293.5,
+        514
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "3744dc1669233638efa37a61caa0403633d47cd8432fd2ea842a35e3cb18fa31__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_SE_01.png",
+      "size": [
+        547,
+        515
+      ],
+      "origin": [
+        273.5,
+        461
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "0e8fe53dba2bed7c1cb49403ea2c137cf57a7a5d90e31e4f67abb36f254fdba9__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_SE_02.png",
+      "size": [
+        519,
+        490
+      ],
+      "origin": [
+        259.5,
+        479
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "ea3b7da9252490a0c03b3eb819f8e1141106f2cda67a6bacba88a7ec52f8cd3e__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_SE_04.png",
+      "size": [
+        600,
+        457
+      ],
+      "origin": [
+        300.0,
+        452
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "b5fd59c989dddb3f54dc8a42386c8c2aa337d26530a3fa06c4c12d4110da886a",
+      "source": "ul14-full-source\\assets\\ARENA_S_05.png",
+      "size": [
+        495,
+        481
+      ],
+      "origin": [
+        247.5,
+        444
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "923c77d7c1d7061ce4ccabd4eb473fd945d70acae871c1350f305deda47b9755",
+      "source": "ul14-full-source\\assets\\ARENA_SE_05.png",
+      "size": [
+        464,
+        391
+      ],
+      "origin": [
+        232.0,
+        382
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "07168ae7654693dbfdbdf824de862eee1cf2e92632d7e668375cbd67b6d7beec",
+      "source": "ul14-full-source\\assets\\ARENA_E_05.png",
+      "size": [
+        544,
+        367
+      ],
+      "origin": [
+        272.0,
+        356
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "1dde4cfe1dd4f5a4470cc18df5fc0c5418641680f368264391a6056523fae6e7",
+      "source": "ul14-full-source\\assets\\ARENA_NE_05.png",
+      "size": [
+        496,
+        408
+      ],
+      "origin": [
+        248.0,
+        387
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "166bba33c35726184679af3eae4e1f0c118bb96e3c78843c6be513518985660a",
+      "source": "ul14-full-source\\assets\\ARENA_N_05.png",
+      "size": [
+        481,
+        472
+      ],
+      "origin": [
+        240.5,
+        428
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "1dde4cfe1dd4f5a4470cc18df5fc0c5418641680f368264391a6056523fae6e7__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_NE_05.png",
+      "size": [
+        496,
+        408
+      ],
+      "origin": [
+        248.0,
+        387
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "07168ae7654693dbfdbdf824de862eee1cf2e92632d7e668375cbd67b6d7beec__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_E_05.png",
+      "size": [
+        544,
+        367
+      ],
+      "origin": [
+        272.0,
+        356
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    },
+    {
+      "id": "923c77d7c1d7061ce4ccabd4eb473fd945d70acae871c1350f305deda47b9755__arena_mirror",
+      "source": "ul14-full-source\\assets\\ARENA_SE_05.png",
+      "size": [
+        464,
+        391
+      ],
+      "origin": [
+        232.0,
+        382
+      ],
+      "density": 12,
+      "status": "LANDMARK_CANDIDATE_PENDING_RUNTIME",
+      "registrationMethod": "VISIBLE_SUPPORT_ROI_CONTACT_AT_FIXED_COHORT_DENSITY"
+    }
+  ],
+  "fxAlphaEvidence": [
+    {
+      "asset": "f335bc83b27a417e1cabc52ac2ff1fa10a00e5f945cc403721d705e6035b7b9f__FX_ORANGE",
+      "kind": "ORANGE",
+      "body": "f335bc83b27a417e1cabc52ac2ff1fa10a00e5f945cc403721d705e6035b7b9f",
+      "alphaUnchanged": true,
+      "alphaSHA256": "f2d0ed9d4c0d05d87a49d06c23da0a66b21ca3094119fcdef18c555fd1cdeda7",
+      "ownEyePolygon": null
+    },
+    {
+      "asset": "f335bc83b27a417e1cabc52ac2ff1fa10a00e5f945cc403721d705e6035b7b9f__FX_BLACK_WITH_LIGHT_EYES",
+      "kind": "BLACK_WITH_LIGHT_EYES",
+      "body": "f335bc83b27a417e1cabc52ac2ff1fa10a00e5f945cc403721d705e6035b7b9f",
+      "alphaUnchanged": true,
+      "alphaSHA256": "f2d0ed9d4c0d05d87a49d06c23da0a66b21ca3094119fcdef18c555fd1cdeda7",
+      "ownEyePolygon": [
+        [
+          468,
+          201
+        ],
+        [
+          487,
+          195
+        ],
+        [
+          506,
+          204
+        ],
+        [
+          499,
+          223
+        ],
+        [
+          480,
+          228
+        ],
+        [
+          467,
+          218
+        ]
+      ]
+    },
+    {
+      "asset": "77f519cdd42300cb73c5b3af0292b7e35559c1a16bcb7d849019811cfebc628f__FX_BLACK_WITH_LIGHT_EYES",
+      "kind": "BLACK_WITH_LIGHT_EYES",
+      "body": "77f519cdd42300cb73c5b3af0292b7e35559c1a16bcb7d849019811cfebc628f",
+      "alphaUnchanged": true,
+      "alphaSHA256": "b21d748c55e0157178b56f0b9fa8da280bac395ec6b8370195f0a22c9443c4c3",
+      "ownEyePolygon": [
+        [
+          141,
+          157
+        ],
+        [
+          154,
+          149
+        ],
+        [
+          168,
+          155
+        ],
+        [
+          164,
+          168
+        ],
+        [
+          150,
+          173
+        ],
+        [
+          141,
+          166
+        ]
+      ]
+    },
+    {
+      "asset": "d9eaabf04450af23051fbc7da6a9c42525bd195e354a2dcbae116c9d91ece882__FX_SEPIA",
+      "kind": "SEPIA",
+      "body": "d9eaabf04450af23051fbc7da6a9c42525bd195e354a2dcbae116c9d91ece882",
+      "alphaUnchanged": true,
+      "alphaSHA256": "4dbdf1fcc8f3db8cca49c782e0aae0ee3eeba79ed3172caab786731ebc6e38d9",
+      "ownEyePolygon": null
+    },
+    {
+      "asset": "77f519cdd42300cb73c5b3af0292b7e35559c1a16bcb7d849019811cfebc628f__FX_WHITE",
+      "kind": "WHITE",
+      "body": "77f519cdd42300cb73c5b3af0292b7e35559c1a16bcb7d849019811cfebc628f",
+      "alphaUnchanged": true,
+      "alphaSHA256": "b21d748c55e0157178b56f0b9fa8da280bac395ec6b8370195f0a22c9443c4c3",
+      "ownEyePolygon": null
+    }
+  ],
+  "productionPublicVerified": false
+}

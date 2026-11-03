@@ -114,7 +114,17 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
     await route.fulfill({response,body:text});
    });
    if(baseline)await page.route('**/src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js',async route=>{
-    baselinePresenterRequests++;await route.fulfill({status:200,contentType:'text/javascript',body:await fs.readFile('.tmp/evolution-baseline-presenter.js','utf8')});
+    // The historical presenter requires the historical zoom API. Isolate that
+    // dependency under a test-only URL so current modules keep their own API.
+    const original=await fs.readFile('.tmp/evolution-baseline-presenter.js','utf8');
+    const body=exactReplace(original,"from './raisingZoomInput.js'","from './evolution-baseline-zoom.js'");
+    baselinePresenterRequests++;await route.fulfill({status:200,contentType:'text/javascript',body});
+   });
+   if(baseline)await page.route('**/src/championship/presentation/intRh2/evolution-baseline-zoom.js',async route=>{
+    const body=await fs.readFile('.tmp/evolution-baseline-zoom.js','utf8');
+    evidence.baselineZoomSHA256=require('node:crypto').createHash('sha256').update(body).digest('hex');
+    assert.equal(evidence.baselineZoomSHA256,'ed564907fee53887838421ab43a00e26d1f86edd6eb8482b69cd356636de8085','Exact historical zoom bytes required');
+    await route.fulfill({status:200,contentType:'text/javascript',body});
    });
    await page.route('**/*',async route=>{
     if(!targetPaths.has(new URL(route.request().url()).pathname)||allow)return route.fallback();
@@ -148,7 +158,7 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
     assert.ok(loadedPages.some(p=>p.entityId===config.entityId),'Target initial atlas is actually resident');
     // Reviewed-art pages (side 'reviewed') carry no imageUrl and are never target pages.
     assert.ok(!loadedPages.some(p=>p.imageUrl&&targetPaths.has(new URL(p.imageUrl).pathname)),'Target39 page absent from real loaded atlas diagnostics');
-    if(baseline)assert.ok(baselinePresenterRequests>0,'Baseline presenter response actually installed');
+    if(baseline){assert.ok(baselinePresenterRequests>0,'Baseline presenter response actually installed');assert.ok(evidence.baselineZoomSHA256,'Historical zoom dependency actually loaded');}
     assert.deepEqual(evidence.errors,[],'No startup page error');
     evidence.preparation={console:evidence.console,httpFailures:evidence.httpFailures,requestFailures:evidence.requestFailures};
     evidence.console=[];evidence.httpFailures=[];evidence.requestFailures=[];
@@ -212,9 +222,22 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
      await delay(100);const cameraAfter=await page.evaluate(()=>__freezeScene.getDiagnostics().cameraX);
      evidence.drag={cameraBefore,cameraAfter};assert.notEqual(cameraAfter,cameraBefore,'Recovered world responds to drag');
      const zoomBefore=await page.evaluate(()=>__freezeScene.getDiagnostics().zoom);
-     await page.locator('.cm-ranch-zoom').click();
+     // Current ranch input is continuous wheel/pinch zoom; the old button was
+     // removed. Playwright cannot send wheel or multi-touch gestures in mobile
+     // WebKit. Keep its mobile context and label the controlled pointer pinch;
+     // real browser drag above and HUD clicks below still prove input recovery.
+     const zoomInput=engine==='webkit'?'synthetic-pointer-pinch':'mouse-wheel';
+     if(engine==='webkit')await canvas.evaluate(node=>{
+      const r=node.getBoundingClientRect(),x=r.x+r.width*.5,y=r.y+r.height*.65,gap=r.width*.15;
+      const fire=(type,id,clientX)=>node.dispatchEvent(new PointerEvent(type,{bubbles:true,cancelable:true,pointerType:'touch',pointerId:id,isPrimary:id===1,clientX,clientY:y,button:0,buttons:type==='pointerup'?0:1}));
+      fire('pointerdown',1,x-gap);fire('pointerdown',2,x+gap);
+      fire('pointermove',1,x-gap*.5);fire('pointermove',2,x+gap*.5);
+      fire('pointerup',1,x-gap*.5);fire('pointerup',2,x+gap*.5);
+     });
+     else{await page.mouse.move(box.x+box.width*.5,box.y+box.height*.65);await page.mouse.wheel(0,120);}
+     await page.waitForFunction(before=>__freezeScene.getDiagnostics().zoom<before,zoomBefore,{timeout:5000});
      const zoomAfter=await page.evaluate(()=>__freezeScene.getDiagnostics().zoom);
-     evidence.zoom={zoomBefore,zoomAfter};assert.notEqual(zoomAfter,zoomBefore,'Recovered zoom button responds');
+     evidence.zoom={input:zoomInput,zoomBefore,zoomAfter};assert.ok(zoomAfter<zoomBefore&&zoomAfter>=.5,'Recovered continuous zoom responds within bounds');
      await page.locator('button.cm-toolbar__cell[data-menu-id="SYSTEM"]').click();
      assert.ok(await page.locator('.cm-toolbar__menu:not([hidden])').isVisible(),'HUD toolbar is interactive after resume');
      await page.screenshot({path:`${out}/${engine}-${mode}-resumed.png`,fullPage:true});

@@ -1,0 +1,35 @@
+{
+  "scope": [
+    "species-154",
+    "species-196"
+  ],
+  "ci": {
+    "passed": 3329,
+    "failed": 0,
+    "exitCode": 0
+  },
+  "build": {
+    "buildId": "2e9b00f0ce5f584cd0871b193d75edc025726fba7cbb7f901ed636006bc3c0ff",
+    "inputSha256": "c78c125611659c8792cfd519ac2f6bdda5df2b57d899ebe54a58e49084c42e3c",
+    "fileCount": 7796,
+    "target": "GITHUB_PAGES_OWNER_PLAYTEST"
+  },
+  "buildExitCode": 0,
+  "validateExitCode": 0,
+  "diagnosticUnitTests": {
+    "passed": 61,
+    "failed": 0
+  },
+  "logHashes": {
+    "aw-ul-batch-ci-authorized-recovery.log": "802510fba87c52ede68e47beb9f20b78a72491695fbaaceabdef0e712caee819",
+    "aw-ul-batch-build-recovery.log": "d69b924f398ca75994eee1c1d27ed3854762aa087749d8463a5592ccf154e489",
+    "aw-ul-batch-validate-recovery.log": "7ad48a1096f6ee869305ab690fec70951167d17013d80dd3b1bca1c8fd011565",
+    "aw-ul-batch-diagnostic-pin.log": "a1886663b9101b040fbd8a794cb6bbf83f13fa6fe515731392577b8bb668a2f1"
+  },
+  "remoteChecks": "PENDING_NEW_HEAD",
+  "publicDeployment": "NOT_PERFORMED",
+  "excludedCandidates": [
+    "species-216"
+  ],
+  "baselineEvolutionBrowser": "historical zoom dependency isolated; actual browser result pending CI"
+}
