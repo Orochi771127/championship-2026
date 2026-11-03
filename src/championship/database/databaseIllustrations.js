@@ -3,7 +3,8 @@
 import catalog from '../../data/championship/database-illustrations.r1.json' with {type:'json'};
 import {deepFreeze} from '../contracts/championshipContracts.js';
 import {getLocale} from '../text/locale.js';
-import {isPlayableProductOriginal} from '../contracts/productOriginalSpecies.js';
+import {isPlayableProductOriginal,listProductOriginals,PRODUCT_ORIGINAL_SPECIES} from '../contracts/productOriginalSpecies.js';
+import nativeSpecies from '../../data/championship/catalogs/creature-species.r1.json' with {type:'json'};
 
 export function assertDatabaseIllustrationCatalog(entries){
  const ids=new Set(),codes=new Set(),forms=new Map();
@@ -47,13 +48,26 @@ export function databaseIllustrationRow(speciesIndex){
     source:null,instanceCount:0,instances:[],evolutionRoutes:[]}):null;
 }
 export const DATABASE_ILLUSTRATION_COPY=deepFreeze({
-  'zh-Hant':{label:'角色美術',status:'角色美術圖鑑；養成與對戰資料尚未開放。'},
-  en:{label:'Character art',status:'Character art gallery. Raising and battle data are not available yet.'},
-  ja:{label:'キャラクターアート',status:'キャラクターアート図鑑。育成・対戦データは未公開です。'},
-  th:{label:'ภาพตัวละคร',status:'แกลเลอรีภาพตัวละคร ยังไม่มีข้อมูลการเลี้ยงและการต่อสู้'},
-  vi:{label:'Tranh nhân vật',status:'Bộ sưu tập tranh nhân vật. Chưa có dữ liệu nuôi dưỡng và chiến đấu.'}
+  'zh-Hant':{label:'預定角色',status:'動作圖製作中，暫未開放取得；以下為預定資料。'},
+  en:{label:'Planned partner',status:'Motion art in progress; not obtainable yet. The data below is planned.'},
+  ja:{label:'予定キャラクター',status:'モーション制作中のため未解放です。以下は予定データです。'},
+  th:{label:'คู่หูที่วางแผนไว้',status:'กำลังทำภาพเคลื่อนไหว ยังรับไม่ได้ ข้อมูลด้านล่างเป็นข้อมูลที่วางแผนไว้'},
+  vi:{label:'Bạn đồng hành dự kiến',status:'Đang làm hoạt ảnh, chưa thể nhận. Dữ liệu bên dưới là dự kiến.'}
 });
 export function databaseIllustrationText(key,locale=getLocale()){
   const copy=Object.hasOwn(DATABASE_ILLUSTRATION_COPY,locale)?DATABASE_ILLUSTRATION_COPY[locale]:DATABASE_ILLUSTRATION_COPY['zh-Hant'];
   return Object.hasOwn(copy,key)?copy[key]:'';
+}
+
+// Owner 2026-11-03: an art-only original lists its planned links -- the partners that evolve or awaken into it
+// and the forms it becomes -- from the provisional data. Display only: none of these routes is active yet.
+const generationOf=index=>nativeSpecies.records[index]?.generationIndex??listProductOriginals().find(e=>e.speciesIndex===index)?.generationIndex??null;
+const linkKind=to=>generationOf(to)===6?'AWAKEN_2':generationOf(to)===5?'AWAKEN':'EVOLVE';
+export function databaseIllustrationLinks(speciesIndex){
+  if(!databaseIllustrationRow(speciesIndex))return Object.freeze([]);
+  const links=[];
+  for(const e of listProductOriginals())for(const r of e.evolution)
+    if(e.speciesIndex===speciesIndex||r.target===speciesIndex)links.push({from:e.speciesIndex,to:r.target});
+  for(const x of PRODUCT_ORIGINAL_SPECIES.nativeInserts)if(x.target===speciesIndex)links.push({from:x.source,to:x.target});
+  return deepFreeze(links.map(l=>({...l,kind:linkKind(l.to)})));
 }

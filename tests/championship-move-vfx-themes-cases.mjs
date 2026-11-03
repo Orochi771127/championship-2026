@@ -4,6 +4,7 @@
 // special preview plays that theme instead of one beam, and the encrypted
 // preview still names the move.
 import test from "node:test";
+import { isKnownSpeciesIndex } from "../src/championship/contracts/productSpeciesData.js";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { spawnSync } from "node:child_process";
@@ -24,7 +25,8 @@ const partners = () => {
   for (let index = 0; index < 400; index++) {
     let data = null;
     try { data = databaseVerifiedData(index, "zh-Hant"); } catch { data = null; }
-    if (data) list.push(data);
+    // Art-only originals show planned moves in the Dex (Owner 2026-11-03); they have no battle effects yet.
+    if (data && isKnownSpeciesIndex(index)) list.push(data);
   }
   return list;
 };

@@ -12,7 +12,7 @@ import {originalDatabaseIcon} from "../presentation/completedOriginalUi20261007.
 import { speciesName, generationName, shopItemDescription as shopDescriptionText, shopItemName, cageName } from "../text/zhHant.js";
 import { recommendedCages } from "../raising/productTrainingPolicy.js";
 import {databaseDisplayRows, getDatabaseDisplayEntry} from '../database/databaseDisplayCatalog.js';
-import {databaseIllustrationText} from '../database/databaseIllustrations.js';
+import {databaseIllustrationText,databaseIllustrationLinks} from '../database/databaseIllustrations.js';
 import {openingEggChoices} from './openingEggChoices.js';
 import {openingEggText} from '../text/openingEggText.js';
 import {loadAcceptedDatabasePortrait} from '../presentation/acceptedDatabasePortraits.js';
@@ -624,8 +624,9 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
   filterLabel.append(element('span', '', 'DEX_STAGE'));
   const stageFilter = element('select', 'cm-vs2-database__stage');
   stageFilter.setAttribute('aria-label', uiText('DEX_STAGE'));
-  for (const value of ['', '0', '1', '2', '3', '4', '5', '6', 'ART']) {
-    const option = element('option', '', value === '' ? uiText('DEX_ALL') : value === 'ART' ? databaseIllustrationText('label') : generationName(Number(value)));
+  // Owner 2026-11-03: no separate 角色美術 filter; art-only originals sit in their own stages.
+  for (const value of ['', '0', '1', '2', '3', '4', '5', '6']) {
+    const option = element('option', '', value === '' ? uiText('DEX_ALL') : generationName(Number(value)));
     option.value = value;
     stageFilter.append(option);
   }
@@ -940,8 +941,10 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       profile.append(title,prose);
       detail.append(profile);
     }
-    if (selected.kind==='ILLUSTRATION') return;
+    // Owner 2026-11-03: an art-only original shows its planned data (no motion art yet, so no previews).
+    const illustration = selected.kind==='ILLUSTRATION';
     const verifiedData = databaseVerifiedData(selected.speciesIndex);
+    if (illustration && !verifiedData) return;
     if (verifiedData) {
       const dataSection = element('section', 'cm-dex-data');
       const dataHeading = databaseVerifiedHeading();
@@ -949,7 +952,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       const dataTitle = element('h3', 'cm-dex-profile__heading');
       dataTitle.textContent = dataHeading;
       dataSection.append(dataTitle);
-      const signature = showcaseOn() ? juicySignatureMove(verifiedData.moves) : null;
+      const signature = showcaseOn() && !illustration ? juicySignatureMove(verifiedData.moves) : null;
       // A viewable but unregistered partner previews as an encrypted signal.
       const specialPreview = signature ? showcase.specialButton({speciesIndex: selected.speciesIndex, speciesId: selected.speciesId,
         name: speciesName(selected.speciesIndex, selected.displayName), move: signature, encrypted: selected.state !== 'REGISTERED', silhouette: true}) : null;
@@ -992,6 +995,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       }
       detail.append(dataSection);
     }
+    if (illustration) { paintPlannedLinks(selected); return; }
     paintEvolutionRoutes(selected);
     paintBurst(selected);
     if (!conditionControls.has(expandedConditionBranch)) expandedConditionBranch = null;
@@ -1116,6 +1120,25 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     if (rebirth) hints.push(uiText('AWAKENING_HINT_STARS', {count: rebirth.value}));
     return hints.join('・') || uiText('DEX_CONDITIONS_NO_NUMERIC');
   }
+  // Owner 2026-11-03: an art-only original lists its planned evolution and awakening links (display only).
+  function paintPlannedLinks(selected) {
+    const links = databaseIllustrationLinks(selected.speciesIndex);
+    if (!links.length) return;
+    const section = element('section', 'cm-dex-routes cm-dex-planned');
+    section.setAttribute('aria-label', uiText('DEX_PLANNED'));
+    section.append(element('h3', 'cm-dex-routes__heading', 'DEX_PLANNED'));
+    const list = element('ul', 'cm-dex-planned__list');
+    const label = index => `${getDatabaseDisplayEntry(index)?.displayCode ?? ''} ${speciesName(index)}`;
+    for (const link of links) {
+      const row = element('li', 'cm-dex-planned__link');
+      row.dataset.kind = link.kind;
+      row.textContent = `${label(link.from)} → ${label(link.to)} · ${uiText(`DEX_PLANNED_${link.kind}`)}`;
+      list.append(row);
+    }
+    section.append(list, element('p', 'cm-dex-conditions__notice', 'DEX_PLANNED_NOTE'));
+    detail.append(section);
+  }
+
   function paintBurst(selected) {
     const burst = selected.burst;
     if (!burst) return;

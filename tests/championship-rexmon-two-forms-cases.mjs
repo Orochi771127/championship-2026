@@ -65,7 +65,9 @@ test('both forms are browsable ultimate art only: no slot, registration, extensi
     assert.throws(()=>getDatabaseSlot(id),/UNKNOWN_DATABASE_SLOT/);
     assert.throws(()=>normalizeRegisteredSpecies([id]));
     assert.equal(getProductExtension(id),null);assert.equal(acceptedDatabasePortraitConfig(id),null);assert.equal(acceptedDatabaseIllustrationPreview(id),null);
-    assert.equal(databaseStory(id),null);assert.equal(databaseVerifiedData(id),null);
+    assert.equal(databaseStory(id),null);
+    // Owner 2026-11-03: the planned data (moves from the data file) is shown in the Dex.
+    assert.ok(databaseVerifiedData(id).moves.length>=3);
     const selected=projectDatabase({selectedSpeciesIndex:id,registeredSpecies:[id],collection:[{speciesId:`species-${id}`,instanceId:'invalid-art-instance'}]});
     assert.equal(selected.registeredCount,0);assert.equal(selected.selected.kind,'ILLUSTRATION');assert.equal(selected.selected.state,'NOT_TRACKED');
     assert.deepEqual(selected.selected.instances,[]);assert.deepEqual(selected.selected.evolutionRoutes,[]);
@@ -80,7 +82,9 @@ test('the Dex detail loads each selected main image with its silhouette and head
       assert.equal(hero.src,art.src);hero.naturalWidth=art.width;hero.naturalHeight=art.height;hero.onload();
       assert.equal(f.root.querySelector('.cm-dex-hero').dataset.art,'ready');
       assert.ok(f.root.querySelector('.cm-vs2-database__detail-title').textContent.includes(name));
-      for(const selector of ['.cm-dex-data','.cm-dex-conditions__toggle','input','.cm-dex-profile__text'])assert.equal(f.root.querySelector(selector),null);
+      assert.ok(f.root.querySelector('.cm-dex-data'),'planned data shown (Owner 2026-11-03)');assert.equal(Boolean(f.root.querySelector('[data-showcase]')),false,'no previews without motion art');
+      for(const selector of ['.cm-dex-conditions__toggle','input','.cm-dex-profile__text','.cm-dex-routes__target'])assert.equal(f.root.querySelector(selector),null);
+      assert.ok(f.root.querySelector('.cm-dex-planned'),'AW45 awakens into both forms');
       f.assertUnchanged();
     }finally{f.dispose();}
   }}finally{setLocale('zh-Hant');}

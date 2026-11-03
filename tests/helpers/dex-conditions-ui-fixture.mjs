@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import {deepFreeze} from '../../src/championship/contracts/championshipContracts.js';
 import {projectDatabase} from '../../src/championship/database/databaseRuntime.js';
 import {databaseDisplayRows,getDatabaseDisplayEntry} from '../../src/championship/database/databaseDisplayCatalog.js';
-import {databaseIllustrationText} from '../../src/championship/database/databaseIllustrations.js';
+import {databaseIllustrationText,databaseIllustrationLinks} from '../../src/championship/database/databaseIllustrations.js';
 import {speciesName,generationName,cageName} from '../../src/championship/text/zhHant.js';
 import {recommendedCages} from '../../src/championship/raising/productTrainingPolicy.js';
 import {setLabel,setText,uiText} from '../../src/championship/text/uiText.js';
@@ -46,7 +46,7 @@ export function makeView({locale='zh-Hant',selectedSpeciesIndex=8,registeredSpec
     setTimeout:forbidden('TIMER'),setInterval:forbidden('TIMER'),requestAnimationFrame:forbidden('RAF'),
     addEventListener(type,fn){if(!listeners.has(type))listeners.set(type,new Set());listeners.get(type).add(fn);},
     removeEventListener(type,fn){listeners.get(type)?.delete(fn);},
-    databaseHeroPortrait,databaseHeroSilhouette,databaseBodyStats,formatBodyHeight,formatDataWeight,databaseStory,databaseStoryHeading,databaseVerifiedData,databaseVerifiedHeading,databaseDisplayRows,getDatabaseDisplayEntry,databaseIllustrationText,speciesName,generationName,cageName,recommendedCages,setLabel,setText,uiText,isDesktopBrowseLayout,
+    databaseHeroPortrait,databaseHeroSilhouette,databaseBodyStats,formatBodyHeight,formatDataWeight,databaseStory,databaseStoryHeading,databaseVerifiedData,databaseVerifiedHeading,databaseDisplayRows,getDatabaseDisplayEntry,databaseIllustrationText,databaseIllustrationLinks,speciesName,generationName,cageName,recommendedCages,setLabel,setText,uiText,isDesktopBrowseLayout,
     // Emblem helpers draw into this fixture's document.
     taxonomyBadge:inDocument(document,taxonomyBadge),elementChartButton:inDocument(document,elementChartButton),
     originalDatabaseIcon:()=>null,
