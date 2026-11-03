@@ -1,5 +1,16 @@
 # Championship Owner Direction
 
+<!-- record-id: INFIRMARY_REALTIME_HEAL_20261103 -->
+## 2026-11-03 — Infirmaries heal on real time; cage shop copy fixed
+
+The Owner reports 「我把我的夥伴丟進去他不會回血耶」 (小焰 at HP 57/1090 in the mini infirmary). Cause: the infirmaries heal on the partner's age clock, mostly in the 22:00 overnight settlement. On the real-time clock a 成熟期 partner ages one unit per twenty seconds and there is no overnight settlement, so the mini infirmary healed about 16 HP a minute (a full heal took over an hour; the NATIVE clock heals fully in about two minutes). Offered real-time healing or the native speed, the Owner chooses 「A，日文說明一起修正」.
+
+OWNER_APPROVED_ADAPTATION, REALTIME_V1 only (`time/realtimeClock.js`); NATIVE and the overnight writer stay as traced.
+
+- The mini infirmary (15), the hot spring (18) and the infirmary (28) run their condition commands once a real second at their native intervals. Each HP step heals delta/2400 of the maximum HP, so at any maximum a partner is full in about ten / four / seven minutes. Stress and affection keep their native steps. On the real-time ranch these cages skip the age-clock copy of the same commands.
+- A partner that has collapsed gets up once its HP is above 10 %, as it does natively.
+- Shop copy: the Japanese, Thai and Vietnamese descriptions of the research lab, hospital, gas room, both infirmaries, hot spring, zoo, ranch and ring all said 「defense up」. They now name each cage's effect. The zoo and ranch say 「beast family up」 in all five languages (DIAMOND_ECONOMY_20261102 replaced their automatic care with beast training).
+
 <!-- record-id: AW_UL_TAKEOVER_20261103 -->
 ## 2026-11-03 — Claude takes over Codex's AW/UL release; web-sized AW23 and species 196
 

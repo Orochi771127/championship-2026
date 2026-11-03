@@ -166,8 +166,8 @@ export const SHOP_DESCRIPTIONS_EN = Object.freeze([
   "A mini version of the Infirmary. Recovers HP and stress. Suggested for 2 companions.",
   "An infirmary that heals companions. Recovers HP and stress. Suggested for 4 companions.",
   "A hot spring that heals companions. Recovers HP and stress. Suggested for 8 companions.",
-  "Takes care of feeding and droppings automatically, though it's a little cramped. Suggested for 4 companions.",
-  "Takes care of feeding and droppings automatically, with plenty of comfortable room. Suggested for 8 companions.",
+  "A zoo for all kinds of animals, a little cramped. Raises the Beast family. Suggested for 4 companions.",
+  "A roomy, comfortable ranch. Raises the Beast family. Suggested for 8 companions.",
   "Sparring again and again in a practice ring. Raises battle count. Suggested for 6 companions."
 ]);
 
