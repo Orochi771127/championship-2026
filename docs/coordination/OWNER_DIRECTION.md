@@ -1,5 +1,26 @@
 # Championship Owner Direction
 
+<!-- record-id: GRMA_WALK_BOUND_FIX_20261103 -->
+## 2026-11-03 — Walk jumps, Main17 stand/lie flip and MA01's floating walk fixed with existing frames
+
+A frame-level audit of the 107 shipped 成長期/成熟期 sets compared the flagged clips with the original cells. In the original, the walk (sequence 2) keeps both cells on the ground, and Main17 (bound weak idle) holds two near-identical standing cells (37/28 ticks). Several sets break this. The Owner chose 「Fix now with existing art」.
+
+- Re-bound from frames each role already ships; no pixel changes. Each role gets a new authoring file `animation.web-patch-20261103.json` with a `patch20261103` block naming the clips it replaces; the parent authoring files are untouched.
+- MA02:
+  - General walk and run keep their two grounded ends. The two middle drawings jumped and tumbled in the air.
+  - Arena R and L drop their airborne middle frame.
+- MA15 Arena DR/DL and MA21 Arena D drop the airborne middle frame. Every shortened clip still alternates two distinct drawings.
+- Main17:
+  - GR03 now plays its two standing bound-idle drawings at 37/28 ticks.
+  - GR37 holds its one weak-sitting drawing for 65 ticks; no second sitting drawing exists.
+  - Both used to alternate standing and lying flat.
+- MA01 walk/run floated 6.5–10.5 native px while every other General clip stands on the pivot. One offset per clip grounds them and keeps the step bob.
+- Left as they are:
+  - MA02 Arena DR/UR/UL/DL: the first and last frames are the same pose, so removing the jump would leave a slide. These need a new grounded drawing from dot.
+  - MA13: its mid-step lift is a real heavy stride.
+  - GR26: the whole set sits about 5 px above the pivot in every clip, a consistent offset rather than a broken walk.
+- `tests/championship-weak-walk-pose-cases.mjs` keeps these clips grounded and Main17 standing, and pins the four remaining MA02 headings.
+
 <!-- record-id: AW_UL_TAKEOVER_20261103 -->
 ## 2026-11-03 — Claude takes over Codex's AW/UL release; web-sized AW23 and species 196
 
