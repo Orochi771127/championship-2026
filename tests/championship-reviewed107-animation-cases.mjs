@@ -379,8 +379,11 @@ test('pinned root approval consumes precisely the 76 authorized context holds, p
   assert.equal(createHash('sha256').update(fs.readFileSync(oldPath)).digest('hex'),d.rootArtContextApproval.previousManifestSha256);
   // web-v2 moves storage only; identity/geometry must match and `v1` must point at the old storage.
   const identity=frames=>Object.fromEntries(Object.entries(frames).map(([k,{image,sha256,frame,trim,arena,v1,...rest}])=>[k,rest]));
-  assert.deepEqual(identity(d.frames),identity(old.frames));assert.deepEqual(d.clips.slice(0,old.clips.length),old.clips);
-  for(const [k,f] of Object.entries(d.frames)){const o=old.frames[k],s=f.v1??f;
+  // A later scoped patch may append frames and clips; the root-reviewed ones stay exactly as they were.
+  const kept=Object.fromEntries(Object.entries(d.frames).filter(([k])=>k in old.frames));
+  assert.ok(Object.keys(kept).length===Object.keys(d.frames).length||d.patch20261103,code+' appended frames need a named patch');
+  assert.deepEqual(identity(kept),identity(old.frames));assert.deepEqual(d.clips.slice(0,old.clips.length),old.clips);
+  for(const [k,f] of Object.entries(kept)){const o=old.frames[k],s=f.v1??f;
    assert.deepEqual([s.image,s.sha256,s.frame??null,s.trim??null],[o.image,o.sha256,o.frame??null,o.trim??null],code+'/'+k);}
   assert.deepEqual(d.clips.filter(c=>c.mode==='arena'&&c.action!=='ko'),old.clips.filter(c=>c.mode==='arena'&&c.action!=='ko'));
  }
@@ -658,5 +661,25 @@ test('Arena playback extensions for the Data Arena scene: cadence phase, victory
  const bundle=await attachReviewedCharacterAnimation({bundle:baseline(),PIXI:mock.PIXI,speciesId:entry.speciesId,usage:'arena',baseUrl:'http://127.0.0.1:8768/championship.html',fetchImpl:fileFetch});
  const actor=bundle.createActor({animation:0});assert.ok(actor.reviewedArena.referenceHeight>20&&actor.reviewedArena.referenceHeight<64);
  assert.equal(actor.reviewedArena.sample({...sampleState,vy:1}).geometry.referenceHeight,actor.reviewedArena.referenceHeight);
+ await bundle.dispose();
+});
+
+test('MA24 weak walk (Main12) alternates its two delivered drawings on the native 37/37-tick events instead of sliding one pose',async()=>{
+ const d=read('MA24'),b=reviewedNumericClip(d,'main',12);
+ assert.equal(b.mappingEvidence,'EXPLICIT_NUMERIC_SELECTION');assert.equal(b.clip.action,'weak_move');assert.equal(b.clip.loop,true);
+ assert.deepEqual(b.clip.frames.map(f=>f.assetId),['ma24-main12:20261103:1','ma24-main12:20261103:2']);
+ for(const f of b.clip.frames)assert.equal(Math.round(f.durationMs*60/1000),37);
+ assert.deepEqual(b.clip.source.nativeSequence,{id:12,cells:[16,17],ticks:[37,37]});
+ assert.equal(d.patch20261103.scope,'General main 12 weak_move only');
+ for(const f of b.clip.frames){const fr=d.frames[f.assetId];
+  assert.deepEqual([fr.sourceSize,fr.origin,fr.density],[[256,256],[128,220],4]);assert.equal(fr.trim[1]+fr.trim[3]<=256,true);}
+ // Healthy walking keeps its own clip.
+ assert.equal(reviewedNumericClip(d,'main',2).clip.action,'move');
+ const mock=mockPixi(),base=baseline();base.runtime.sides.main.animations=[{id:0,frames:[{ticks:60}]},{id:12,frames:[{ticks:37},{ticks:37}]}];
+ const entry=selection.characters.find(c=>c.displayCode==='MA24');
+ const bundle=await attachReviewedCharacterAnimation({bundle:base,PIXI:mock.PIXI,speciesId:entry.speciesId,usage:'general',baseUrl:'http://127.0.0.1:8768/championship.html',fetchImpl:fileFetch});
+ const actor=bundle.createActor({side:'main'}),seen=[];
+ for(const [frameIndex,q] of [[0,0],[0,36*4096],[1,0],[1,36*4096]])seen.push(actor.nativeFramePresenter.apply({sequenceId:12,frameIndex,elapsedQ12:q,flipBits:0}).assetId);
+ assert.deepEqual(seen,['ma24-main12:20261103:1','ma24-main12:20261103:1','ma24-main12:20261103:2','ma24-main12:20261103:2']);
  await bundle.dispose();
 });
