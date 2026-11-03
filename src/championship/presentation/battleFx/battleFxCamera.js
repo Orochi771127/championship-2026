@@ -41,8 +41,12 @@ export function battleFxUnionBox(boxes) {
  * (player cards + record) cover. Without insets the window is the viewport.
  */
 export function battleFxSafeWindow(viewport, insets = null) {
-  const top = clamp(Number(insets?.top) || 0, 0, viewport.height * 0.45);
-  const bottom = clamp(Number(insets?.bottom) || 0, 0, viewport.height * 0.45);
+  let top = clamp(Number(insets?.top) || 0, 0, viewport.height * 0.45);
+  let bottom = clamp(Number(insets?.bottom) || 0, 0, viewport.height * 0.45);
+  // A short landscape field cannot give the HUD rows most of its height: past
+  // 45 % together they shrink in proportion, so a group still fits the window.
+  const limit = viewport.height * 0.45;
+  if (top + bottom > limit) { const k = limit / (top + bottom); top *= k; bottom *= k; }
   const height = Math.max(1, viewport.height - top - bottom);
   return Object.freeze({top, bottom, height, centerY: top + height / 2});
 }

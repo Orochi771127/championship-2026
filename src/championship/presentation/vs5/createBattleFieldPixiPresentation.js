@@ -480,7 +480,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
         slotInfos.set(combatant.slot, {slot:combatant.slot, x, y:y-lift, groundY:y, liftNative:(combatant.nativeMotion?.heightNativePx ?? 0),
           top:y-lift-bodyHeight, height:bodyHeight, width:bodyWidth,
           facing:combatant.stand.facing, team:combatant.team, down:combatant.down, engaged:combatant.engaged,framingBounds,
-          left:x-bodyWidth/2, right:x+bodyWidth/2, bottom:y});
+          left:x-bodyWidth/2, right:x+bodyWidth/2, bottom:y, spread:entry.spreadX});
       }
       if (fxLayer) {
         // Field interaction from the fighter's own native motion (never the
@@ -715,7 +715,9 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
         viewport: Object.freeze({ ...lastViewport }),
         effectSprites:effectSprites?.getDiagnostics() ?? null,
         dynamicFx:fxLayer ? Object.freeze({...fxLayer.getDiagnostics(), camera:lastCamera,
-          bodies:[...slotInfos.values()].map(b=>Object.freeze({slot:b.slot,x:Math.round(b.x),groundY:Math.round(b.groundY),top:Math.round(b.top),width:Math.round(b.width),down:Boolean(b.down)})),
+          bodies:[...slotInfos.values()].map(b=>Object.freeze({slot:b.slot,x:Math.round(b.x),groundY:Math.round(b.groundY),top:Math.round(b.top),width:Math.round(b.width),down:Boolean(b.down),
+            // The declared display separation; the body is otherwise on its stand.
+            spread:Math.round((b.spread ?? 0)*100)/100})),
           director:director.getState(), insets:lastInsets,
           world:fieldPlacement ? Object.freeze({zoom:fieldPlacement.zoom, x:fieldPlacement.x, y:fieldPlacement.y}) : null}) : null,
         groundShadows:groundShadows?.getDiagnostics() ?? null,

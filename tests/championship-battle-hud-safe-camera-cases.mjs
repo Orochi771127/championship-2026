@@ -31,8 +31,12 @@ test('the safe window lies between the HUD rows and the art only has to cover it
   const full = Math.max(viewport.width / art.width, viewport.height / art.height);
   assert.ok(battleFxSafeCover(viewport, art, insets) < full, 'a HUD-aware shot may pull back past full cover');
   assert.ok(battleFxSafeCover(viewport, art, insets) * art.width >= viewport.width, 'the picture still spans the width');
-  // An inset can never take more than 45 % of the field.
+  // An inset can never take more than 45 % of the field, nor can the two together:
+  // a short landscape field keeps at least 55 % of its height for the fighters.
   assert.equal(battleFxSafeWindow(viewport, {top: 900, bottom: 0}).top, viewport.height * 0.45);
+  const landscape = battleFxSafeWindow({width: 844, height: 342}, {top: 152, bottom: 124});
+  assert.ok(Math.abs(landscape.height - 342 * 0.55) < 0.01, `landscape window ${landscape.height}`);
+  assert.ok(landscape.top > landscape.bottom, 'the rows shrink in proportion');
 });
 
 test('fighters at the top edge of the arena are framed below the opponent cards, not under them', () => {

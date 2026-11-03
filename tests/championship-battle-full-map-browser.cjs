@@ -78,7 +78,8 @@ try{
       if(crop>1&&a.primaryViolations.length<16)a.primaryViolations.push({crop,box,p});
     }
     a.minZoom=Math.min(a.minZoom,p.zoom);a.maxZoom=Math.max(a.maxZoom,p.zoom);
-    const gap=Math.max(0,r.x*p.zoom+p.x,r.y*p.zoom+p.y,p.width-((r.x+r.width)*p.zoom+p.x),p.height-((r.y+r.height)*p.zoom+p.y));
+    // Owner 2026-11-03: the strips under the floating HUD rows may show the backdrop; the safe window between them may not.
+    const gap=Math.max(0,r.x*p.zoom+p.x,r.y*p.zoom+p.y-(p.insets?.top??0),p.width-((r.x+r.width)*p.zoom+p.x),p.height-(p.insets?.bottom??0)-((r.y+r.height)*p.zoom+p.y));
     if(gap>.01&&a.violations.length<16)a.violations.push({gap,p});
    };
    __qaStage.app.ticker.add(__qaAuditTick);
@@ -150,8 +151,9 @@ try{
   if(phase!=='before'){const p=s.placement,r=p.artRect;const bounds={left:r.x*p.zoom+p.x,top:r.y*p.zoom+p.y,right:(r.x+r.width)*p.zoom+p.x,bottom:(r.y+r.height)*p.zoom+p.y};// Owner 2026-11-03: the art covers the safe window between the floating HUD rows; the strips under them may show the backdrop.
    const safeTop=p.insets?.top??0,safeBottom=p.insets?.bottom??0;
    assert.ok(bounds.left<=.01&&bounds.top<=safeTop+.01&&bounds.right>=p.width-.01&&bounds.bottom>=p.height-safeBottom-.01,JSON.stringify({bounds,insets:p.insets}));s.mapBounds=bounds;
-   s.alignment=await page.evaluate(()=>{const p=__qaBattleScene.getFieldPlacement(),v=__qaSource.getView(),d=__qaBattleScene.getDiagnostics();return d.dynamicFx.bodies.map(b=>{const stand=v.combatants[b.slot].stand,expected={x:p.artRect.x+stand.x*p.artRect.width,y:p.artRect.y+stand.y*p.artRect.height};const actual=__qaWorld.toGlobal({x:expected.x,y:expected.y});return {slot:b.slot,localError:Math.max(Math.abs(b.x-expected.x),Math.abs(b.groundY-expected.y)),screenError:Math.max(Math.abs(actual.x-(expected.x*p.zoom+p.x)),Math.abs(actual.y-(expected.y*p.zoom+p.y)))};});});
-   assert.ok(s.alignment.every(a=>a.localError<=1&&a.screenError<.01));
+   s.alignment=await page.evaluate(()=>{const p=__qaBattleScene.getFieldPlacement(),v=__qaSource.getView(),d=__qaBattleScene.getDiagnostics();return d.dynamicFx.bodies.map(b=>{const stand=v.combatants[b.slot].stand,expected={x:p.artRect.x+stand.x*p.artRect.width,y:p.artRect.y+stand.y*p.artRect.height};const actual=__qaWorld.toGlobal({x:expected.x,y:expected.y});return {slot:b.slot,spread:b.spread??0,localError:Math.max(Math.abs(b.x-(b.spread??0)-expected.x),Math.abs(b.groundY-expected.y)),screenError:Math.max(Math.abs(actual.x-(expected.x*p.zoom+p.x)),Math.abs(actual.y-(expected.y*p.zoom+p.y)))};});});
+   // Owner 2026-11-03: overlapping fighters are drawn apart by a declared, capped display offset (spread).
+   assert.ok(s.alignment.every(a=>a.localError<=1&&a.screenError<.01&&Math.abs(a.spread)<=14*p.nativeScale+1),JSON.stringify(s.alignment));
    assert.ok(s.field.right<=width+1&&s.field.bottom<=height+1);
    if(width>height){assert.ok(s.field.width>=width*.9);assert.ok(s.field.height>=height*.8);}
   }
@@ -165,7 +167,9 @@ try{
   report.syntheticSafeArea=await page.evaluate(()=>{const shell=document.querySelector('.cm-vs5-shell').getBoundingClientRect(),field=document.querySelector('.cm-vs5-field').getBoundingClientRect(),clock=document.querySelector('.cm-vs5-clock').getBoundingClientRect(),exit=document.querySelector('.cm-vs5-exit').getBoundingClientRect();return {shell:{x:shell.x,y:shell.y,right:shell.right,bottom:shell.bottom},field:{x:field.x,y:field.y,right:field.right,bottom:field.bottom},clock:{x:clock.x,y:clock.y},exit:{right:exit.right,bottom:exit.bottom}};});const safe=report.syntheticSafeArea;assert.ok(Math.abs(safe.field.x-safe.shell.x)<1&&Math.abs(safe.field.right-safe.shell.right)<1);assert.ok(safe.clock.x>=safe.shell.x+29&&safe.clock.y>=safe.shell.y+19);assert.ok(safe.exit.right<=safe.shell.right-29&&safe.exit.bottom<=safe.shell.bottom-15);
   await page.screenshot({path:path.join(out,phase+'-safe-area-844x390.png')});
   // Observe actual running frames, including native special prelude and effects.
-  report.liveFrames=[];for(let i=0;i<25;i++){await step(400);const d=await page.evaluate(()=>{const p=__qaBattleScene.getFieldPlacement(),r=p.artRect,v=__qaSource.getView();return {frame:v.nativeLifecycle?.frame,special:!!v.specialPrelude,fx:__qaBattleScene.getDiagnostics().dynamicFx.eventsHandled,zoom:p.zoom,left:r.x*p.zoom+p.x,top:r.y*p.zoom+p.y,right:(r.x+r.width)*p.zoom+p.x,bottom:(r.y+r.height)*p.zoom+p.y,width:p.width,height:p.height};});assert.ok(d.left<=.01&&d.top<=.01&&d.right>=d.width-.01&&d.bottom>=d.height-.01);report.liveFrames.push(d);}
+  report.liveFrames=[];for(let i=0;i<25;i++){await step(400);const d=await page.evaluate(()=>{const p=__qaBattleScene.getFieldPlacement(),r=p.artRect,v=__qaSource.getView();return {frame:v.nativeLifecycle?.frame,special:!!v.specialPrelude,fx:__qaBattleScene.getDiagnostics().dynamicFx.eventsHandled,zoom:p.zoom,left:r.x*p.zoom+p.x,top:r.y*p.zoom+p.y,right:(r.x+r.width)*p.zoom+p.x,bottom:(r.y+r.height)*p.zoom+p.y,width:p.width,height:p.height,safeTop:p.insets?.top??0,safeBottom:p.insets?.bottom??0};});
+   // The art covers the HUD-safe window on every live frame (Owner 2026-11-03).
+   assert.ok(d.left<=.01&&d.top<=d.safeTop+.01&&d.right>=d.width-.01&&d.bottom>=d.height-d.safeBottom-.01,JSON.stringify(d));report.liveFrames.push(d);}
   // Observe the real first kind-1 launch without forcing combat state. This is
   // a bounded additional 20s window, not a promise of a launch at tick300.
   for(let n=0;n<100;n++){
