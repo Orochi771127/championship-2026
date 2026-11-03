@@ -1,5 +1,5 @@
 import {createPixiAssetScope} from './pixiCharacterRuntimeBundle.js';
-import {reviewedNumericClip,sampleReviewedCharacterClip,createReviewedArenaPlayback} from './reviewedCharacterAnimation.js';
+import {reviewedNumericClip,sampleReviewedCharacterClip,createReviewedArenaPlayback,reviewedHuntMotionClip,HUNT_RUN_SEQUENCES,HUNT_RUN_RATE} from './reviewedCharacterAnimation.js';
 import {reviewedCharacterSelection,reviewedCharacterSelections,reviewedGeneralDisplayScale} from './reviewedSelection.js';
 import {reviewedDocumentRef,handoffOnlyArenaEntry} from './animationHandoff.js';
 
@@ -142,18 +142,38 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
         sprite.texture=textures.get(sample.assetId);sprite.anchor.set(adjusted.origin[0]/placement.sourceSize[0],adjusted.origin[1]/placement.sourceSize[1]);
         current={...sample,geometry:adjusted,mirrorX:document.frames[sample.assetId].mirrorX===true,sourceFrameIndex:sample.frameIndex};return current;
       };
+      // Hunt (Owner 2026-11-03): a looping reviewed clip runs on its own clock
+      // while the native sequence stays the same. The native loop is often
+      // shorter than the reviewed walk, so reading only its position restarted
+      // the walk every loop and left long clips on their first drawings.
+      const hunt=options.presentation==='hunt';
+      let huntClock={sequenceId:null,ticks:0,last:0};
+      const huntTicks=(sequence,id,ticks)=>{
+        if(huntClock.sequenceId!==id){huntClock={sequenceId:id,ticks,last:ticks};return ticks;}
+        const intro=sequence.frames.slice(0,sequence.loopStartFrame??0).reduce((n,f)=>n+f.ticks,0);
+        const loop=sequence.frames.reduce((n,f)=>n+f.ticks,0)-intro;
+        let step=ticks-huntClock.last;if(step<0)step+=loop;
+        huntClock.last=ticks;huntClock.ticks+=Math.max(0,step)*(HUNT_RUN_SEQUENCES.includes(id)?HUNT_RUN_RATE:1);
+        return huntClock.ticks;
+      };
       const nativeApply=frame=>{
         restoreBaselineAnchor();
         const native=actor.nativeFramePresenter?.apply(frame)??null;
-        const sequence=source.get(frame?.sequenceId),binding=reviewedNumericClip(document,side,frame?.sequenceId);
+        const sequence=source.get(frame?.sequenceId),binding=(hunt?reviewedHuntMotionClip:reviewedNumericClip)(document,side,frame?.sequenceId);
         // Owner 2026-10-28: a flipped native frame mirrors the reviewed artwork (the
         // presenter mirrors the sprite from flipBits) instead of showing the original.
         if(!frame||!sequence||!binding){current=null;return native;}
-        const ticks=sequence.frames.slice(0,frame.frameIndex).reduce((n,f)=>n+f.ticks,0)+(frame.elapsedQ12??0)/4096;
+        let ticks=sequence.frames.slice(0,frame.frameIndex).reduce((n,f)=>n+f.ticks,0)+(frame.elapsedQ12??0)/4096;
+        if(hunt&&sequence.playbackMode===2&&binding.clip.loop&&!options.reducedMotion)ticks=huntTicks(sequence,frame.sequenceId,ticks);
+        else huntClock.sequenceId=null;
         const sampled=apply(sampleReviewedCharacterClip(document,side,frame.sequenceId,binding.clip,ticks*1000/60,{holdFirst:options.reducedMotion,nativeActive:frame.active,
           terminal:[15,25].includes(frame.sequenceId)&&['down','down_ko','bound_down'].includes(binding.clip.action)}));
         // A front-facing clip (handoff facingLocked) is drawn as authored, never mirrored by facing.
         if(sampled&&binding.clip.facingLocked===true)sampled.facingLocked=true;
+        // The snapshot keeps the native frame's authority and flips under the
+        // reviewed drawing: the shared Hunt Three scene refuses a frame without
+        // them, and dropped to its 2D fallback whenever a reviewed partner was out.
+        if(sampled)current={...native,...sampled};
         return {...native,...sampled};
       };
       let id=options.animation??0,elapsed=0,fallbackId=null;
@@ -186,7 +206,8 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
         return {...native,...sample,baseBounds:geometry.get(reviewedNumericClip(document,side,0)?.clip?.frames?.[0]?.assetId)?.nativeBounds??native.baseBounds};
       },getSnapshot:()=>current}:null;
       return Object.freeze({...actor,controller,
-        nativeFramePresenter:actor.nativeFramePresenter?{...actor.nativeFramePresenter,apply:nativeApply,getSnapshot:()=>current}:null,
+        nativeFramePresenter:actor.nativeFramePresenter?{...actor.nativeFramePresenter,apply:nativeApply,
+          getSnapshot:()=>current??actor.nativeFramePresenter.getSnapshot()}:null,
         battleAnimator,reviewedArena:{referenceHeight:[...geometry.values()][0]?.referenceHeight??null,partial:entry.partialArena===true,
           observe:event=>arenaPlayback.observe(event),reset:()=>arenaPlayback.reset(),sample(state){
           const sample=arenaPlayback.sample(state);if(sample.fallbackSequenceId!==undefined){
