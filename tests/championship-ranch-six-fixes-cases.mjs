@@ -149,7 +149,7 @@ test('the partner card, the bag and the facility editor each reach the gachapon 
   assert.match(main,/addEventListener\('cm-open-backpack'/);
   assert.match(main,/gachaUseItem\(itemId, instanceId, options\)/);
   const editor=source('src/championship/app/hexWorldEditor.js');
-  assert.match(editor,/掛載自動餵食／清掃機/);
+  assert.match(editor,/籠舍外掛模組槽/);
   assert.match(editor,/source\.intents\.gachaMountCore/);
 });
 

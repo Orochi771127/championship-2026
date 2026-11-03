@@ -541,7 +541,8 @@
   --ax-hl: inset 0 3px 0 rgba(255, 255, 255, 0.45);
   --ax-depth: 6px;
   --ax-hard: 0 6px 0 var(--ax-ink);
-  --ax-dots: radial-gradient(rgba(20, 20, 31, 0.55) 1.2px, transparent 1.6px) 0 0 / 6px 6px;
+  /* Owner 2026-11-03: the scrim dots read as a black screen over the cards behind a sheet; kept as a faint texture. */
+  --ax-dots: radial-gradient(rgba(20, 20, 31, 0.05) 1.2px, transparent 1.6px) 0 0 / 6px 6px;
   --ax-dots-light: radial-gradient(rgba(255, 255, 255, 0.16) 1.2px, transparent 1.6px) 0 0 / 6px 6px;
   --ax-stage: radial-gradient(rgba(255, 255, 255, 0.10) 1.2px, transparent 1.6px) 0 0 / 8px 8px,
     linear-gradient(180deg, #3b2468 0%, #4a2f7f 42%, #2f5a86 78%, #2a8a8f 100%);

@@ -231,6 +231,7 @@ export function createChampionshipStandaloneApp({
   let discoveryCheckAt=0;
   let raisingFoods=[];
   let raisingWaste=[];
+  let automationPatrolFrames=0;
   let raisingDayTransition=null;
   let raisingDayConfirmation=false;
   let raisingLifecycleMessage=null;
@@ -791,7 +792,11 @@ export function createChampionshipStandaloneApp({
       if(origin)raisingFoods.push(createNativeRaisingFood({...f,cageInstanceId:f.cageInstanceId??raisingGround.placement(f.cageDefinitionIndex)?.instanceId,positionQ12:f.localPositionQ12.map((n,i)=>n+origin[i]*4096),restored:true}));
     }
     for(const w of raising.nativeHome?.waste??[]){const origin=raisingGround.origin(w.cageInstanceId??w.cageDefinitionIndex);
-      if(origin)raisingWaste.push({...w,cageInstanceId:w.cageInstanceId??raisingGround.placement(w.cageDefinitionIndex)?.instanceId,present:true,positionQ12:w.localPositionQ12.map((n,i)=>n+origin[i]*4096)});}
+      if(!origin)continue;
+      const positionQ12=w.localPositionQ12.map((n,i)=>n+origin[i]*4096);
+      raisingWaste.push({...w,cageInstanceId:w.cageInstanceId??cageInstanceAt(positionQ12)??raisingGround.placement(w.cageDefinitionIndex)?.instanceId,present:true,positionQ12});}
+    // Owner 2026-11-03: an auto-clean cage never keeps droppings from before it was cleaned, or from an older save.
+    sweepAllAutomatedCages();
     if(restoreInteractiveTutorialActor()) {storeNativeRaisingHome();return;}
     if(raising.nativeHome?.pendingOvernightMinutes!==undefined&&!tutorialBoundary)settleRaisingOvernight();
     else synchronizeNativeRaisingActors(tutorialBoundary||restoreLayoutPositions?{
@@ -932,6 +937,7 @@ export function createChampionshipStandaloneApp({
       if(raisingGround)for(const actor of raisingActors.values())if(stepRanchConveyor(actor,raisingGround))changed=true;
       if(raisingGround&&separateNativeRaisingGroundActors(raisingActors.values(),raisingGround).changed)changed=true;
       raisingDirtySignals.clear();
+      if(++automationPatrolFrames>=60){automationPatrolFrames=0;if(sweepAllAutomatedCages())changed=true;}
       stepPartnerLife(before);
     }
     if(raisingGround)storeNativeRaisingHome();
@@ -1206,11 +1212,25 @@ export function createChampionshipStandaloneApp({
     pushAutomationEvent({kind:'CLEAN',cageInstanceId,bits:credited,positionQ12:positionQ12?[...positionQ12]:null});
     savePort.markDirty();
   }
-  /** Droppings already lying in a cage that just became automated are cleared too. */
+  /** The placed cage instance whose ground holds this native position, or null. */
+  function cageInstanceAt(positionQ12){
+    const nav=raisingGround?.navigation;if(!nav?.ownerAt||!positionQ12)return null;
+    const owner=nav.ownerAt([positionQ12[0]>>12,positionQ12[1]>>12]);if(!owner)return null;
+    return raisingGround.placements?.find(p=>p.ownerIndex===owner.ownerIndex)?.instanceId??null;
+  }
+  /** Droppings already lying in a cage that just became automated are cleared too -- by owner or by where they lie. */
   function sweepAutomatedCage(instanceId){
     let swept=0;
-    for(const waste of raisingWaste)if(waste.present&&waste.cageInstanceId===instanceId){waste.present=false;swept++;autoCleanWaste(instanceId,waste.positionQ12);}
+    for(const waste of raisingWaste)if(waste.present&&(waste.cageInstanceId===instanceId||cageInstanceAt(waste.positionQ12)===instanceId)){
+      waste.present=false;swept++;autoCleanWaste(instanceId,waste.positionQ12);}
     if(swept){raisingWaste=raisingWaste.filter(w=>w.present);raisingDirtySignals.set(instanceId,{dirtyRemoved:true});storeNativeRaisingHome();}
+    return swept;
+  }
+  /** Every auto-clean cage on the ground (mounted core or royal edition) swept at once. */
+  function sweepAllAutomatedCages(){
+    if(!raisingGround||!cyberGacha)return 0;
+    let swept=0;
+    for(const p of raisingGround.placements??[])if(p.instanceId&&cageAutomation(cyberGacha,p.instanceId).clean)swept+=sweepAutomatedCage(p.instanceId);
     return swept;
   }
   /** A hungry partner (the native hungry flag, satiety <= 2) in an auto-feed cage is fed to full: +2.4 affection. */
@@ -1272,8 +1292,12 @@ export function createChampionshipStandaloneApp({
       const top=Math.min(...cells.map(c=>c.y)),row=cells.filter(c=>c.y===top);
       const x=row.reduce((s,c)=>s+c.x+48,0)/row.length;
       const art=(auto.royal?automationItemForEdition(auto.edition):getAutomationItem(auto.clean?'auto:clean-core':'auto:feed-core'))?.art??null;
-      badges.push(Object.freeze({instanceId:p.instanceId,definitionIndex:p.definitionIndex,edition:auto.edition,royal:auto.royal,art,
-        clean:auto.clean,feed:auto.feed,anchorQ12:Object.freeze([Math.round(x*4096),Math.round((top+40)*4096),0])}));
+      // Owner 2026-11-03: the running devices stand at the cage's lower-left hex, on the ground, where the player sees them.
+      const bottom=Math.max(...cells.map(c=>c.y)),corner=cells.filter(c=>c.y===bottom).reduce((a,c)=>c.x<a.x?c:a);
+      const devices=Object.freeze([auto.feed?getAutomationItem('auto:feed-core')?.art:null,auto.clean?getAutomationItem('auto:clean-core')?.art:null].filter(Boolean));
+      badges.push(Object.freeze({instanceId:p.instanceId,definitionIndex:p.definitionIndex,edition:auto.edition,royal:auto.royal,art,devices,
+        clean:auto.clean,feed:auto.feed,anchorQ12:Object.freeze([Math.round(x*4096),Math.round((top+40)*4096),0]),
+        deviceQ12:Object.freeze([Math.round((corner.x+30)*4096),Math.round((corner.y+40)*4096),0])}));
     }
     badgeCache={ground:raisingGround,key,value:Object.freeze(badges)};
     return badgeCache.value;
