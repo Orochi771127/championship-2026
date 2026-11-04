@@ -17,8 +17,17 @@ function drawCover(g, prop, w, h, fraction, showBar) {
   const look = COVER_LOOK[prop.material] ?? COVER_LOOK.STONE, rise = 26;
   g.clear();
   if (prop.destroyed) {
-    g.ellipse(w / 2, h / 2, w * .5, h * .38).fill({ color: prop.charred ? 0x211a13 : look.edge, alpha: .55 });
-    for (let i = 0; i < 9; i++) g.rect(6 + (i * 17) % (w - 14), 6 + (i * 23) % (h - 12), 8 + i % 3 * 3, 5 + i % 2 * 3).fill({ color: i % 2 ? look.face : look.top });
+    // Rubble: lit, irregular chunks over a soft shadow (Owner 2026-11-05: the old rows of
+    // rectangles read as a pixel smudge). Placed from the prop's id, so it never shuffles.
+    g.ellipse(w / 2, h / 2 + 4, w * .46, h * .3).fill({ color: 0x000000, alpha: .18 });
+    let seed = [...String(prop.id)].reduce((n, c) => (n * 31 + c.charCodeAt(0)) >>> 0, 7);
+    const rnd = () => (seed = (Math.imul(seed, 1103515245) + 12345) >>> 0) / 4294967296;
+    for (let i = 0; i < 8; i++) {
+      const cx = w * (.18 + .64 * rnd()), cy = h * (.25 + .5 * rnd()), r = 5 + rnd() * 7, pts = [];
+      for (let k = 0; k < 6; k++) { const a = k / 6 * Math.PI * 2 + rnd() * .5, rr = r * (.75 + rnd() * .35); pts.push(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr * .75); }
+      g.poly(pts).fill({ color: prop.charred ? 0x2c241c : look.edge });
+      g.poly(pts.map((v, j) => j % 2 ? v - 2.5 : v)).fill({ color: prop.charred ? 0x4a3a2c : i % 2 ? look.face : look.top });
+    }
     return;
   }
   const face = prop.charred ? 0x4a3a2c : look.face, alpha = look.alpha ?? 1;

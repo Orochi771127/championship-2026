@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>招式特效套件｜內部審圖</title>
+  <style>
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body { display: grid; grid-template-rows: auto minmax(0, 1fr); background: #151a1d; color: #f4f0df; font-family: system-ui, sans-serif; }
+    header { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; padding: max(.5rem, env(safe-area-inset-top)) .75rem .5rem; background: #20272a; border-bottom: 1px solid #4d6762; }
+    h1 { margin: 0 auto 0 0; font-size: clamp(.85rem, 2.8vw, 1.05rem); }
+    select, button { min-height: 36px; border: 1px solid #6d8e86; border-radius: 7px; color: #f4f0df; background: #263330; padding: .3rem .5rem; font-size: .8rem; }
+    button[aria-pressed="true"] { background: #4a6a3a; }
+    #host { min-height: 0; width: 100%; height: 100%; }
+    #host canvas { display: block; width: 100%; height: 100%; }
+    #evidence { position: fixed; left: .55rem; bottom: max(.55rem, env(safe-area-inset-bottom)); padding: .35rem .5rem; border-radius: 5px; background: rgb(10 15 17 / .78); color: #c9d8d4; font: 11px/1.25 ui-monospace, monospace; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>招式特效套件 v1</h1>
+    <select id="style" aria-label="展演風格"></select>
+    <select id="palette" aria-label="屬性色"></select>
+    <button id="ultimate" type="button" aria-pressed="false">必殺</button>
+    <button id="auto" type="button" aria-pressed="true">自動輪播</button>
+  </header>
+  <main id="host" aria-label="特效預覽"></main>
+  <output id="evidence" aria-live="polite">載入中</output>
+  <script type="module">
+    import * as PIXI from "./node_modules/pixi.js/dist/pixi.mjs";
+    import {createMoveVfxKit, moveVfxArchetype, moveVfxArchetypeIsMelee} from "./src/championship/presentation/vfx/moveVfxKit.js";
+
+    // Each style with the element colour a typical move of it carries.
+    const STYLES = [["fireball", "fire", "火球"], ["flame", "fire", "火焰"], ["missile", "metal", "飛彈"], ["gatling", "metal", "機槍"],
+      ["water", "water", "水"], ["ice", "ice", "冰"], ["thorn", "nature", "尖刺"], ["holy", "light", "聖光"], ["beam", "light", "光束"],
+      ["thunder", "thunder", "雷"], ["dark", "dark", "暗"], ["sound", "psychic", "音波"], ["spore", "toxic", "孢子"], ["seed", "nature", "種子"],
+      ["leaf", "nature", "葉"], ["quake", "earth", "地裂"], ["wind", "wind", "風"], ["strike", "neutral", "拳擊"], ["claw", "fire", "爪擊"],
+      ["slash", "metal", "斬擊"], ["pierce", "light", "穿刺"],
+      // Archetypes a recipe picks by name or original family (moveVfxRecipes.js).
+      ["@vine", "nature", "藤鞭"], ["@roots", "nature", "樹根破地"], ["@tree", "nature", "巨樹"], ["@missile", "metal", "飛彈"],
+      ["@gatling", "metal", "機槍"], ["@cannon", "metal", "砲彈"], ["@meteor", "fire", "隕石"], ["@pillar", "fire", "火柱"],
+      ["@spikes", "ice", "冰刺"], ["@tornado", "wind", "龍捲風"], ["@arrows", "light", "箭雨"], ["@blackhole", "dark", "黑洞"], ["@bite", "neutral", "咬擊"]];
+    const PALETTES = ["fire", "water", "ice", "light", "dark", "thunder", "nature", "metal", "earth", "toxic", "psychic", "wind", "neutral"];
+    const params = new URLSearchParams(location.search);
+    const $ = id => document.getElementById(id);
+    for (const [key, , label] of STYLES) $("style").append(new Option(`${label}（${key}）`, key));
+    $("palette").append(new Option("依風格", ""));
+    for (const key of PALETTES) $("palette").append(new Option(key, key));
+    if (params.get("style")) $("style").value = params.get("style");
+    if (params.get("palette")) $("palette").value = params.get("palette");
+    const state = {auto: params.get("auto") !== "0", ultimate: params.get("ultimate") === "1"};
+    $("auto").setAttribute("aria-pressed", String(state.auto));
+    $("ultimate").setAttribute("aria-pressed", String(state.ultimate));
+
+    const app = new PIXI.Application();
+    await app.init({resizeTo: $("host"), backgroundColor: 0x2f5a24, antialias: true, autoDensity: true, resolution: Math.min(2, devicePixelRatio)});
+    $("host").append(app.canvas);
+    // A grass field like the arena's, with soft light patches.
+    const field = new PIXI.Graphics();
+    const drawField = () => {
+      field.clear().rect(0, 0, app.screen.width, app.screen.height).fill(0x4f8a2c);
+      for (let i = 0; i < 18; i++) field.circle((i * 397) % app.screen.width, (i * 211) % app.screen.height, 60 + (i * 37) % 90).fill({color: i % 2 ? 0x5f9c34 : 0x447a26, alpha: 0.5});
+    };
+    drawField(); app.renderer.on("resize", drawField);
+    const groundLayer = new PIXI.Container(), actorLayer = new PIXI.Container(), front = new PIXI.Container();
+    app.stage.addChild(field, groundLayer, actorLayer, front);
+    const kit = createMoveVfxKit({PIXI, front, ground: groundLayer, quality: params.get("quality") ?? "balanced"});
+    // Two stand-ins: a shadow and a body, so the shots have somewhere to go.
+    const actor = tint => { const g = new PIXI.Graphics(); g.ellipse(0, 0, 26, 9).fill({color: 0x000000, alpha: 0.3}); g.roundRect(-16, -48, 32, 44, 12).fill(tint); actorLayer.addChild(g); return g; };
+    const caster = actor(0x6fd0ff), target = actor(0xff8a7a);
+
+    const shots = [];
+    let time = 0, next = 400, round = 0;
+    const look = () => {
+      const entry = STYLES.find(([key]) => key === $("style").value) ?? STYLES[0];
+      const archetype = entry[0].startsWith("@") ? entry[0].slice(1) : moveVfxArchetype(entry[0]);
+      return {style: entry[0], archetype, paletteKey: $("palette").value || entry[1]};
+    };
+    function place() {
+      // Each round fires a new direction, so a shot's turn is visible.
+      const w = app.screen.width, h = app.screen.height, a = round * 2.39996;
+      const cx = w / 2, cy = h * 0.55, r = Math.min(w, h) * 0.32;
+      caster.position.set(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.8);
+      target.position.set(cx - Math.cos(a) * r * 0.9, cy - Math.sin(a) * r * 0.7);
+    }
+    function fire() {
+      const {archetype, paletteKey} = look();
+      place(); round++;
+      const hand = {x: caster.x, y: caster.y - 30}, hit = {x: target.x, y: target.y - 26};
+      const angle = Math.atan2(hit.y - hand.y, hit.x - hand.x);
+      kit.charge({x: hand.x, y: hand.y, paletteKey, size: state.ultimate ? 44 : 32, ms: state.ultimate ? 520 : 320});
+      const after = state.ultimate ? 520 : 320;
+      setTimeout(() => {
+        if (moveVfxArchetypeIsMelee(archetype)) {
+          kit.melee({x: hand.x, y: hand.y, angle, paletteKey, archetype});
+          setTimeout(() => land(archetype, paletteKey, hit, angle), 120);
+          return;
+        }
+        kit.launch({x: hand.x, y: hand.y, angle, paletteKey, archetype});
+        if (archetype === "lance" && state.ultimate) {
+          kit.beam({x0: hand.x, y0: hand.y, x1: hit.x, y1: hit.y, paletteKey, ms: 520, width: 30});
+          setTimeout(() => land(archetype, paletteKey, hit, angle), 360);
+          return;
+        }
+        const shot = {x: hand.x, y: hand.y, vx: Math.cos(angle) * 560, vy: Math.sin(angle) * 560, alive: true, archetype, paletteKey, hit, angle};
+        shot.handle = kit.projectile({follow: () => shot.alive ? shot : null, paletteKey, archetype, size: state.ultimate ? 38 : 30});
+        shots.push(shot);
+      }, after);
+    }
+    function land(archetype, paletteKey, hit, angle) {
+      const args = {x: hit.x, y: hit.y, groundY: target.y, angle, paletteKey, archetype};
+      if (state.ultimate) kit.signature(args); else kit.impact({...args, heavy: round % 3 === 0});
+    }
+    app.ticker.add(ticker => {
+      const dt = ticker.deltaMS; time += dt;
+      for (const shot of shots) {
+        if (!shot.alive) continue;
+        shot.x += shot.vx * dt / 1000; shot.y += shot.vy * dt / 1000;
+        if ((shot.hit.x - shot.x) * shot.vx + (shot.hit.y - shot.y) * shot.vy <= 0) { shot.alive = false; land(shot.archetype, shot.paletteKey, shot.hit, shot.angle); }
+      }
+      for (let i = shots.length - 1; i >= 0; i--) if (!shots[i].alive) shots.splice(i, 1);
+      kit.update(dt);
+      if (state.auto && time >= next) { next = time + 1900; fire(); }
+      const d = kit.getDiagnostics();
+      $("evidence").textContent = `${look().style} → ${look().archetype} · ${look().paletteKey} · live ${d.live} · sheets ${d.sheets} · fps ${Math.round(app.ticker.FPS)}`;
+    });
+    $("auto").onclick = () => { state.auto = !state.auto; $("auto").setAttribute("aria-pressed", String(state.auto)); };
+    $("ultimate").onclick = () => { state.ultimate = !state.ultimate; $("ultimate").setAttribute("aria-pressed", String(state.ultimate)); };
+    app.canvas.addEventListener("pointerdown", () => fire());
+    for (const id of ["style", "palette"]) $(id).onchange = () => { next = time + 200; };
+    window.__moveVfxKit = {kit, fire, state, look};
+  </script>
+</body>
+</html>
