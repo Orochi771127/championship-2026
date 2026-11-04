@@ -35,7 +35,11 @@
       ["water", "water", "水"], ["ice", "ice", "冰"], ["thorn", "nature", "尖刺"], ["holy", "light", "聖光"], ["beam", "light", "光束"],
       ["thunder", "thunder", "雷"], ["dark", "dark", "暗"], ["sound", "psychic", "音波"], ["spore", "toxic", "孢子"], ["seed", "nature", "種子"],
       ["leaf", "nature", "葉"], ["quake", "earth", "地裂"], ["wind", "wind", "風"], ["strike", "neutral", "拳擊"], ["claw", "fire", "爪擊"],
-      ["slash", "metal", "斬擊"], ["pierce", "light", "穿刺"]];
+      ["slash", "metal", "斬擊"], ["pierce", "light", "穿刺"],
+      // Archetypes a recipe picks by name or original family (moveVfxRecipes.js).
+      ["@vine", "nature", "藤鞭"], ["@roots", "nature", "樹根破地"], ["@tree", "nature", "巨樹"], ["@missile", "metal", "飛彈"],
+      ["@gatling", "metal", "機槍"], ["@cannon", "metal", "砲彈"], ["@meteor", "fire", "隕石"], ["@pillar", "fire", "火柱"],
+      ["@spikes", "ice", "冰刺"], ["@tornado", "wind", "龍捲風"], ["@arrows", "light", "箭雨"], ["@blackhole", "dark", "黑洞"], ["@bite", "neutral", "咬擊"]];
     const PALETTES = ["fire", "water", "ice", "light", "dark", "thunder", "nature", "metal", "earth", "toxic", "psychic", "wind", "neutral"];
     const params = new URLSearchParams(location.search);
     const $ = id => document.getElementById(id);
@@ -69,7 +73,8 @@
     let time = 0, next = 400, round = 0;
     const look = () => {
       const entry = STYLES.find(([key]) => key === $("style").value) ?? STYLES[0];
-      return {style: entry[0], archetype: moveVfxArchetype(entry[0]), paletteKey: $("palette").value || entry[1]};
+      const archetype = entry[0].startsWith("@") ? entry[0].slice(1) : moveVfxArchetype(entry[0]);
+      return {style: entry[0], archetype, paletteKey: $("palette").value || entry[1]};
     };
     function place() {
       // Each round fires a new direction, so a shot's turn is visible.

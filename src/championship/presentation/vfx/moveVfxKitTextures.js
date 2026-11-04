@@ -167,6 +167,61 @@ const SHEETS = Object.freeze({
     const vein = 1 - smooth(0, 0.08, Math.abs(y));
     return (1 - smooth(w * 0.75, w + 0.01, Math.abs(y))) * (0.6 + 0.3 * (1 - Math.abs(y) / (w + 0.01))) + vein * 0.35 * (1 - smooth(0.6, 1, Math.abs(x)));
   }},
+  // A vine section, tileable along x: a twisting stem with thorn buds.
+  stem: {width: 64, height: 24, frames: 1, fn(x, y) {
+    const centre = Math.sin(x * Math.PI) * 0.22, d = Math.abs(y - centre);
+    const bud = Math.max(0, 1 - Math.hypot((x - 0.45) / 0.18, (y - centre + 0.55) / 0.3)) + Math.max(0, 1 - Math.hypot((x + 0.5) / 0.18, (y - centre - 0.55) / 0.3));
+    return (1 - smooth(0.28, 0.42, d)) * (0.5 + 0.35 * (1 - d / 0.42)) + smooth(0.2, 0.6, bud) * 0.6;
+  }},
+  // A spike pointing up (roots, ground spikes, ice and earth), anchored at its base.
+  spike: {width: 32, height: 96, frames: 1, fn(x, y) {
+    const up = (1 - y) / 2; // 0 at the base, 1 at the tip
+    const bend = Math.sin(up * Math.PI) * 0.12, half = 0.85 * (1 - up) ** 0.9;
+    const d = Math.abs(x - bend) / (half + 0.001);
+    return (1 - smooth(0.82, 1, d)) * (x < bend ? 0.85 : 0.55) * (0.6 + 0.4 * up);
+  }},
+  // A tree trunk, anchored at its base, with two branches near the top.
+  trunk: {width: 48, height: 96, frames: 1, fn(x, y, t, n) {
+    const up = (1 - y) / 2, half = 0.42 - up * 0.18;
+    const bark = n(x * 30 + 64, y * 8) * 0.35;
+    const trunk = 1 - smooth(half - 0.06, half, Math.abs(x));
+    const branch = up > 0.6 ? Math.max(1 - smooth(0, 0.09, Math.abs(y + 0.25 + x * 0.9)), 1 - smooth(0, 0.09, Math.abs(y + 0.4 - x * 0.8))) * smooth(0.6, 0.7, up) : 0;
+    return Math.max(trunk * (0.45 + bark) * (x < 0 ? 1 : 0.75), branch * 0.6);
+  }},
+  // A canopy that bursts open from a bud, leaf-edged.
+  canopy: {width: 128, height: 96, frames: 8, fn(x, y, t, n) {
+    const grow = 0.3 + 0.7 * (1 - (1 - Math.min(1, t * 1.6)) ** 3);
+    let blob = 0;
+    for (const [cx, cy, r] of [[0, 0.05, 0.55], [-0.45, 0.2, 0.42], [0.45, 0.2, 0.42], [-0.22, -0.3, 0.42], [0.25, -0.32, 0.4]]) blob = Math.max(blob, 1 - Math.hypot((x - cx * grow) / (r * grow), (y - cy * grow) / (r * grow * 1.15)));
+    const leaves = n(x * 70 + 64, y * 70 + 64);
+    return smooth(0.02, 0.25, blob + (leaves - 0.5) * 0.25) * (0.3 + leaves * 0.35 + blob * 0.25);
+  }},
+  // A missile facing right: nose cone, body, tail fins.
+  missile: {width: 64, height: 24, frames: 1, fn(x, y) {
+    const body = x > -0.65 && x < 0.45 && Math.abs(y) < 0.38 ? 1 : 0;
+    const nose = x >= 0.45 && Math.abs(y) < 0.38 * (1 - (x - 0.45) / 0.5) ? 1 : 0;
+    const fin = x < -0.35 && x > -0.85 && Math.abs(y) < 0.38 + (-0.35 - x) * 1.4 ? 1 : 0;
+    const shade = 0.75 - y * 0.35, band = Math.abs(x - 0.15) < 0.06 ? 0.35 : 0;
+    return Math.max(body * (shade + band), nose * (shade + 0.15), fin * 0.45);
+  }},
+  // A cannon ball with a highlight.
+  ball: {width: 32, height: 32, frames: 1, fn(x, y) {
+    const r = Math.hypot(x, y);
+    return (1 - smooth(0.8, 0.9, r)) * (0.35 + 0.65 * (1 - smooth(0, 0.55, Math.hypot(x + 0.3, y + 0.3))));
+  }},
+  // A rock chunk with facets.
+  rock: {width: 48, height: 40, frames: 1, fn(x, y, t, n) {
+    const a = Math.atan2(y, x), r = Math.hypot(x, y), edge = 0.78 + 0.14 * Math.cos(a * 5 + 1) + 0.06 * Math.cos(a * 9);
+    return (1 - smooth(edge - 0.06, edge, r)) * (0.45 + (y < 0 ? 0.3 : 0) + (x < 0 ? 0.12 : 0) + n(x * 20 + 64, y * 20) * 0.15);
+  }},
+  // A tornado funnel, wide at the top, looping.
+  funnel: {width: 64, height: 128, frames: 8, loop: true, fn(x, y, t, n) {
+    const up = (1 - y) / 2, half = 0.12 + 0.78 * up ** 1.4, sway = Math.sin(up * 4 + t * TAU) * 0.08;
+    const d = Math.abs(x - sway) / half;
+    if (d > 1) return 0;
+    const bands = n(Math.asin(Math.max(-1, Math.min(1, (x - sway) / half))) * 30 + t * 128, up * 40);
+    return (1 - smooth(0.7, 1, d)) * (0.3 + bands * 0.7) * smooth(0, 0.12, up) * (1 - smooth(0.92, 1, up));
+  }},
   // A ground mark (normal blend, smoke colour), flattened by the caller.
   decal: {width: 128, height: 128, frames: 1, smoke: true, fn(x, y, t, n) {
     const r = Math.hypot(x, y), rough = n(x * 30 + 64, y * 30 + 64);

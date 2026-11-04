@@ -76,3 +76,53 @@ test("Data Arena draws its arcs from their own start point and lets the kit own 
   const fx = fs.readFileSync("src/championship/presentation/dataArena/dataArenaElementFx.js", "utf8");
   assert.match(fx, /if \(kit\) kit\.wash\(/, "the kit replaces the line-art storm");
 });
+
+test("recipes give vines, roots, trees, missiles and the rest to the moves that name them", async () => {
+  const { moveVfxRecipe, DATA_ARENA_POOL_ARCHETYPE } = await import("../src/championship/presentation/vfx/moveVfxRecipes.js");
+  const { RELAY_POOL_MOVE_ELEMENT } = await import("../src/championship/modes/dataArena/dataArenaRelayKits.js");
+  assert.equal(moveVfxRecipe({ style: "vine", element: "WOOD", name: "苔藤鞭" }).archetype, "vine");
+  assert.equal(moveVfxRecipe({ style: "strike", element: "WOOD", name: "樹根撞" }).archetype, "roots");
+  assert.equal(moveVfxRecipe({ style: "strike", element: "WOOD", name: "樹王撞" }).archetype, "tree");
+  assert.equal(moveVfxRecipe({ style: "missile", element: "METAL", name: "赤鋼轟爆" }).source, "STYLE", "a plain missile style stays a missile");
+  assert.equal(moveVfxRecipe({ style: "missile", element: "METAL", name: "赤鋼轟爆" }).archetype, "missile");
+  assert.equal(moveVfxRecipe({ style: "water", element: "WATER", name: "潮鬃水砲" }).archetype, "water", "水砲 is water, not a cannon");
+  assert.equal(moveVfxRecipe({ style: "shell", element: "METAL", name: "鋼城砲擊" }).archetype, "cannon");
+  assert.equal(moveVfxRecipe({ style: "fireball", element: "FIRE", name: "x", families: ["magmaball01"] }).archetype, "meteor");
+  assert.equal(moveVfxRecipe({ style: "dark", element: "MOON", name: "幽豆咬" }).archetype, "orb", "a ranged move never bites");
+  assert.equal(moveVfxRecipe({ style: "strike", element: "MOON", name: "幽豆咬" }).archetype, "bite");
+  for (const [id, archetype] of Object.entries(DATA_ARENA_POOL_ARCHETYPE)) {
+    assert.ok(id in RELAY_POOL_MOVE_ELEMENT, id);
+    assert.ok(MOVE_VFX_ARCHETYPES.includes(archetype), `${id} -> ${archetype}`);
+  }
+  for (const id of Object.keys(RELAY_POOL_MOVE_ELEMENT)) if (!/Guard|Shield$/.test(id)) assert.ok(id in DATA_ARENA_POOL_ARCHETYPE, `pool move ${id} has an effect`);
+});
+
+test("every archetype draws a shot and a hit without errors and ends", () => {
+  const PIXI = fakePixi(), front = new PIXI.Container();
+  const kit = createMoveVfxKit({ PIXI, front, doc, quality: "saver", resolution: 0.5 });
+  for (const archetype of MOVE_VFX_ARCHETYPES) {
+    const shot = { x: 0, y: 0, alive: true };
+    kit.projectile({ follow: () => shot.alive ? shot : null, paletteKey: "nature", archetype, size: 20 });
+    for (let i = 0; i < 5; i++) { shot.x += 8; shot.y -= 3; kit.update(16); }
+    shot.alive = false;
+    kit.impact({ x: 10, y: 10, paletteKey: "nature", archetype, heavy: true });
+    kit.melee({ x: 0, y: 0, angle: 1, paletteKey: "nature", archetype });
+  }
+  for (let i = 0; i < 500; i++) kit.update(16);
+  const d = kit.getDiagnostics();
+  assert.equal(d.live, 0); assert.equal(d.flying, 0);
+  kit.dispose();
+});
+
+test("the AI battle keeps its cells and draws its dressing in stepped pixel bands, with no beam line", async () => {
+  const { pixelateCanvas } = await import("../src/championship/presentation/vfx/pixelateCanvas.js");
+  const data = new Uint8ClampedArray([255, 255, 255, 250, 255, 255, 255, 120, 255, 255, 255, 10, 255, 0, 0, 255]);
+  const canvas = { width: 4, height: 1, getContext: () => ({ getImageData: () => ({ data }), putImageData() {} }) };
+  pixelateCanvas(canvas, { block: 1, levels: 4 });
+  assert.deepEqual([data[3], data[7], data[11]], [255, 128, 0], "alpha steps to quarters and faint pixels drop out");
+  const layer = fs.readFileSync("src/championship/presentation/battleFx/battleFxLayer.js", "utf8");
+  assert.match(layer, /createElementVfxLayer\(\{[^}]*pixel: true\}\)/);
+  assert.doesNotMatch(layer, /travelling wave/, "no drawn line joins a beam to its caster");
+  const element = fs.readFileSync("src/championship/presentation/vfx/elementVfxLayer.js", "utf8");
+  assert.match(element, /STORMS\[pixel \? 'wash' : kind\]/, "pixel storms are a banded wash, never line art");
+});

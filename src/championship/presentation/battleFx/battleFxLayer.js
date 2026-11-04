@@ -19,6 +19,7 @@
 import {battleOpeningText} from '../../text/battleOpeningText.js';
 import {BATTLE_FX_PALETTES, battleFxFamilyForm, battleFxFamilyPalette} from './battleFxRecipes.js';
 import {createElementVfxLayer} from '../vfx/elementVfxLayer.js';
+import {pixelateCanvas} from '../vfx/pixelateCanvas.js';
 import {CRITICAL_VFX_SYSTEM, supportVfxSystem} from '../vfx/unifiedMoveVfxResolver.js';
 
 const TAU = Math.PI * 2;
@@ -87,10 +88,15 @@ function makeCanvas(width, height) {
 /** Generated textures; null when no 2D canvas exists (Node tests). */
 function createTextures(PIXI) {
   if (!makeCanvas(1, 1)) return null;
+  // Pixel look (MOVE_VFX_KIT_20261105): the AI battle draws sequence cells, so its
+  // generated glows, dust and marks are pixelated to match instead of smooth gradients.
   const linear = (w, h, draw) => {
     const canvas = makeCanvas(w, h), ctx = canvas.getContext('2d');
     draw(ctx);
-    return PIXI.Texture.from(canvas);
+    pixelateCanvas(canvas, {block: 1, levels: 4});
+    const texture = PIXI.Texture.from(canvas);
+    texture.source.scaleMode = 'nearest';
+    return texture;
   };
   const pixel = (w, h, draw) => {
     const texture = linear(w, h, draw);
@@ -113,7 +119,7 @@ function createTextures(PIXI) {
     debris: [[0, 0, 3, 3], [0, 1, 4, 2], [1, 0, 2, 3]].map(([x, y, w, h]) => pixel(4, 3, ctx => {
       ctx.fillStyle = '#fff'; ctx.fillRect(x, y, w, h); ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fillRect(x, y + h - 1, w, 1);
     })),
-    // Scorch: a soft dark oval with a faint warm rim, linear so it stays smooth.
+    // Scorch: a dark oval with a faint warm rim, stepped like the rest.
     scorch: linear(96, 40, ctx => {
       ctx.translate(48, 20); ctx.scale(1, 0.4);
       const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 48);
@@ -189,7 +195,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   // rings, signature storms, four-second ground marks, struck-body overlays and
   // the fallback cells of records that name no effect bank. resolveMove(slot,
   // moveId) is presentation/vfx/unifiedMoveVfxResolver.js through the app.
-  const element = createElementVfxLayer({PIXI, ground: worldBack, front: worldFront, art: effectArt, quality, reducedMotion, seed: seed ^ 0x77});
+  const element = createElementVfxLayer({PIXI, ground: worldBack, front: worldFront, art: effectArt, quality, reducedMotion, seed: seed ^ 0x77, pixel: true});
   const cues = []; // bounded 3D cues for the Three overlay: buffs, criticals, signature weather
   const cue = value => { cues.push(Object.freeze(value)); if (cues.length > 24) cues.shift(); }; // unread cues never pile up
   const vfxOf = (slot, moveId) => Number.isSafeInteger(moveId) ? resolveMove(slot, moveId) ?? null : null;
@@ -650,35 +656,15 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   function drawStreaks() {
     trailGfx.clear();
     for (const entry of tracked.values()) {
-      // A beam joins its release point to its head with a travelling wave.
-      if (entry.form === 'beam' && entry.origin && entry.last && !reducedMotion) {
-        const dx = entry.last.x - entry.origin.x, dy = entry.last.y - entry.origin.y, len = Math.hypot(dx, dy);
-        if (len > 6) {
-          const nx = -dy / len, ny = dx / len, amp = 3.2 * Math.min(1, entry.ageMs / 120);
-          for (const [width, color, alpha] of [[5, entry.palette.main, 0.35], [1.6, entry.palette.core, 0.85]]) {
-            for (let i = 0; i <= 14; i++) {
-              const t = i / 14, w = Math.sin(t * Math.PI * 4 - elapsed / 30) * amp * Math.sin(t * Math.PI);
-              const x = entry.origin.x + dx * t + nx * w, y = entry.origin.y + dy * t + ny * w;
-              if (i) trailGfx.lineTo(x, y); else trailGfx.moveTo(x, y);
-            }
-            trailGfx.stroke({width, color, alpha, cap: 'round'});
-          }
-        }
-      }
+      // The beam itself is the record's own cells; no drawn line joins it to the caster (Owner 2026-11-05).
       if (entry.form !== 'projectile' && entry.form !== 'stream') continue;
-      const pts = entry.points;
+      // A pixel trail: stepped squares on the native pixel grid, shrinking and fading behind the shot.
+      const pts = entry.points, unit = Math.max(2, Math.round(lastCtx?.nativeScale ?? 2));
       for (let i = 1; i < pts.length; i++) {
-        const t = i / (pts.length - 1);
-        if (juicy) {
-          // A saturated glow under a white core: the trail reads on any floor.
-          trailGfx.moveTo(pts[i - 1].x, pts[i - 1].y).lineTo(pts[i].x, pts[i].y);
-          trailGfx.stroke({width: Math.max(1.5, 8 * t), color: entry.palette.main, alpha: 0.28 * t, cap: 'round'});
-          trailGfx.moveTo(pts[i - 1].x, pts[i - 1].y).lineTo(pts[i].x, pts[i].y);
-          trailGfx.stroke({width: Math.max(0.5, 2 * t), color: 0xffffff, alpha: 0.55 * t, cap: 'round'});
-          continue;
-        }
-        trailGfx.moveTo(pts[i - 1].x, pts[i - 1].y).lineTo(pts[i].x, pts[i].y);
-        trailGfx.stroke({width: Math.max(0.6, 3 * t), color: entry.palette.main, alpha: 0.35 * t, cap: 'round'});
+        const t = i / (pts.length - 1), size = unit * Math.max(1, Math.round((juicy ? 3 : 2) * t));
+        const x = Math.round(pts[i].x / unit) * unit - size / 2, y = Math.round(pts[i].y / unit) * unit - size / 2;
+        trailGfx.rect(x, y, size, size).fill({color: entry.palette.main, alpha: (juicy ? 0.55 : 0.4) * t});
+        if (juicy && t > 0.5) trailGfx.rect(x + size / 4, y + size / 4, size / 2, size / 2).fill({color: 0xffffff, alpha: 0.7 * t});
       }
     }
   }

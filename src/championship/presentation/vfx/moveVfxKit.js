@@ -32,8 +32,19 @@ const STYLE_ARCHETYPE = Object.freeze({
   dark: 'orb', sound: 'orb', spore: 'orb', seed: 'leaf', leaf: 'leaf', vine: 'leaf',
   quake: 'quake', wind: 'wind', strike: 'strike', claw: 'claw', slash: 'slash', pierce: 'pierce'
 });
-export const MOVE_VFX_ARCHETYPES = Object.freeze([...new Set(Object.values(STYLE_ARCHETYPE))]);
-const MELEE = new Set(['strike', 'claw', 'slash', 'pierce']);
+// Archetypes a recipe picks by name or effect family (moveVfxRecipes.js); no style maps to them by default.
+const NAMED_ARCHETYPES = Object.freeze(['vine', 'roots', 'tree', 'gatling', 'cannon', 'meteor', 'pillar', 'spikes', 'tornado', 'arrows', 'blackhole', 'bite']);
+export const MOVE_VFX_ARCHETYPES = Object.freeze([...new Set([...Object.values(STYLE_ARCHETYPE), ...NAMED_ARCHETYPES])]);
+const MELEE = new Set(['strike', 'claw', 'slash', 'pierce', 'bite']);
+// Material colours that do not follow the move's element: bark, roots, foliage, steel, rock.
+const MATERIAL = Object.freeze({
+  bark: Object.freeze({core: 0xd8b07a, main: 0x8a5a30, edge: 0x3e2614, smoke: 0x6a5238}),
+  root: Object.freeze({core: 0xd8e2a0, main: 0x7a6436, edge: 0x34260f, smoke: 0x5c4a30}),
+  foliage: Object.freeze({core: 0xd8ff9a, main: 0x58c23a, edge: 0x1d6428, smoke: 0x40602c}),
+  steel: Object.freeze({core: 0xffffff, main: 0xc6cfdb, edge: 0x48505e, smoke: 0x8c8c8c}),
+  iron: Object.freeze({core: 0x9aa4b4, main: 0x4a5160, edge: 0x1c2028, smoke: 0x6a6a6a}),
+  rock: Object.freeze({core: 0xe8d6b0, main: 0x9a7a54, edge: 0x4a3a28, smoke: 0x8a7458})
+});
 
 /** The archetype a VFX style plays as; unknown styles strike. */
 export function moveVfxArchetype(style) { return STYLE_ARCHETYPE[style] ?? 'strike'; }
@@ -78,6 +89,9 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
 
   const parts = [];
   const projectiles = [];
+  // Delayed calls run on the kit's clock (the callers' one ticker), never a browser timer.
+  const pending = [];
+  const later = (fn, ms) => pending.push({fn, at: ms});
   const created = {parts: 0, projectiles: 0, impacts: 0, beams: 0, bolts: 0, charges: 0, launches: 0, melees: 0, signatures: 0};
 
   /**
@@ -164,7 +178,49 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   }
 
   // How each archetype's shot looks in flight: the head, and what it leaves behind.
+  // A part that rides a projectile `back` sizes behind its head, turned with it.
+  const rider = (p, spec) => part({...spec, life: 1e9, follow: () => p.alive ? {x: p.x - Math.cos(p.angle) * p.size * spec.back, y: p.y - Math.sin(p.angle) * p.size * spec.back} : null,
+    onUpdate: q => { q.rotation = p.angle; q.flipY = Math.cos(p.angle) < 0; }});
   const HEADS = Object.freeze({
+    vine: {head: 'spike', len: 0.9, turn: Math.PI / 2, glow: 1.2, every: 18, trail(p, at, size) {
+      // The vine grows behind the thorn: stem sections laid along the path, leaves now and then.
+      part({name: 'stem', paletteKey: MATERIAL.foliage, x: at.x, y: at.y, px: size * 1.3, life: 520, rotation: at.angle, fadeIn: 20, fadeOut: 0.4, flipY: random() < 0.5});
+      if (random() < 0.3) part({name: 'leaf', paletteKey: MATERIAL.foliage, x: at.x + spread(size * 0.5), y: at.y + spread(size * 0.5), px: size * 0.7, life: 700, rotation: random() * TAU, spin: spread(6), vy: 20, fadeOut: 0.4});
+    }},
+    roots: {head: 'leaf', len: 1.2, spin: 10, glow: 1.4, every: 40, trail(p, at, size) { smoke(at.x, at.y + size * 0.5, MATERIAL.root, size * 0.7, 1, 6); }},
+    tree: {head: 'leaf', len: 1.3, spin: 8, glow: 2.0, every: 34, trail(p, at, size) {
+      part({name: 'leaf', paletteKey: MATERIAL.foliage, x: at.x, y: at.y, px: size * 0.6, life: 600, rotation: random() * TAU, spin: spread(10), vx: spread(40), vy: 25, fadeOut: 0.5});
+    }},
+    missile: {head: 'missile', material: 'steel', len: 3.2, anchor: [0.55, 0.5], glow: 0, every: 22,
+      riders: [{name: 'comet', paletteKey: 'fire', px: 2.2, back: 1.25, anchor: [0.78, 0.5], fps: 26}], trail(p, at, size) {
+      smoke(at.x - Math.cos(at.angle) * size * 1.6, at.y - Math.sin(at.angle) * size * 1.6, 'neutral', size * 0.95, 1, 12);
+    }},
+    gatling: {head: 'streak', len: 2.4, anchor: [0.85, 0.5], glow: 1.2, every: 16, trail(p, at, size) {
+      part({name: 'streak', paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 2.6, life: 110, rotation: at.angle, anchor: [0.9, 0.5], alpha: 0.5, fadeOut: 1});
+    }},
+    cannon: {head: 'ball', material: 'iron', len: 1.2, glow: 1.6, every: 18,
+      riders: [{name: 'comet', paletteKey: 'fire', px: 1.7, back: 0.45, anchor: [0.8, 0.5], fps: 24}], trail(p, at, size) {
+      smoke(at.x, at.y, 'neutral', size * 0.8, 1, 10);
+    }},
+    meteor: {head: 'rock', material: 'rock', len: 1.4, spin: 4, glow: 2.2, every: 16,
+      riders: [{name: 'comet', paletteKey: 'fire', px: 3.0, back: 0.1, anchor: [0.8, 0.5], fps: 24}], trail(p, at, size) {
+      part({name: 'burst', paletteKey: 'fire', x: at.x, y: at.y, px: size * 1.5, life: 380, rotation: random() * TAU, grow: [0.7, 1.2], fadeOut: 0.6, alpha: 0.8});
+    }},
+    pillar: {head: 'orb', len: 1.5, fps: 18, glow: 2.4, every: 30, trail(p, at, size) {
+      part({name: 'glow', paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 1.4, life: 300, grow: [1, 0.3], alpha: 0.6});
+    }},
+    spikes: {head: 'spike', len: 1.1, turn: Math.PI / 2, glow: 1.4, every: 26, trail(p, at, size) {
+      part({name: 'spike', paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 0.5, life: 180, rotation: at.angle + Math.PI / 2, alpha: 0.45, fadeOut: 1});
+    }},
+    tornado: {head: 'funnel', len: 1.4, anchor: [0.5, 0.85], fps: 20, upright: true, glow: 1.2, every: 30, trail(p, at, size) {
+      smoke(at.x, at.y + size * 0.3, p.paletteKey, size * 0.8, 1, 20);
+    }},
+    arrows: {head: 'streak', len: 4.2, anchor: [0.85, 0.5], glow: 2.0, every: 14, trail(p, at, size) {
+      part({name: 'streak', paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 3.8, life: 130, rotation: at.angle, anchor: [0.85, 0.5], alpha: 0.5, fadeOut: 1});
+    }},
+    blackhole: {head: 'orb', len: 1.9, fps: 16, spin: -4, glow: 2.6, every: 34, trail(p, at, size) {
+      part({name: 'ring', paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 2.2, life: 300, grow: [1, 0.2], alpha: 0.6});
+    }},
     fire: {head: 'comet', len: 3.4, anchor: [0.78, 0.5], fps: 22, glow: 2.6, every: 14, trail(p, at, size) {
       part({name: 'burst', paletteKey: p.paletteKey, x: at.x + spread(size * 0.3), y: at.y + spread(size * 0.3), px: size * 1.7, life: 420,
         vx: -Math.cos(at.angle) * 50, vy: -Math.sin(at.angle) * 50 - 20, rotation: random() * TAU, grow: [0.7, 1.25], fadeOut: 0.6, alpha: 0.85});
@@ -239,8 +295,9 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     if (!first) return null;
     created.projectiles++;
     const p = {follow, paletteKey, look, size, x: first.x, y: first.y, angle: first.angle ?? 0, acc: 0, alive: true, spin: 0};
-    p.glow = part({name: 'glow', paletteKey, px: size * look.glow, life: 1e9, follow: () => p.alive ? p : null, alpha: 0.85});
-    p.head = part({name: look.head, paletteKey, px: size * look.len, life: 1e9, fps: look.fps ?? 0, frame: look.frame ?? null,
+    p.riders = (look.riders ?? []).map(spec => rider(p, {...spec, px: size * spec.px}));
+    p.glow = look.glow ? part({name: 'glow', paletteKey, px: size * look.glow, life: 1e9, follow: () => p.alive ? p : null, alpha: 0.85}) : null;
+    p.head = part({name: look.head, paletteKey: look.material ? MATERIAL[look.material] : paletteKey, px: size * look.len, life: 1e9, fps: look.fps ?? 0, frame: look.frame ?? null,
       anchor: look.anchor ?? [0.5, 0.5], follow: () => p.alive ? p : null, fadeIn: 30});
     projectiles.push(p);
     return Object.freeze({stop() { p.alive = false; }});
@@ -253,12 +310,78 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     p.x = at.x; p.y = at.y;
     p.spin += (p.look.spin ?? 0) * dt / 1000;
     // Shapes face right; a leftward heading mirrors top to bottom so nothing flies upside down.
-    p.head.rotation = p.look.spin ? p.spin : p.angle;
-    p.head.flipY = !p.look.spin && Math.cos(p.angle) < 0;
+    p.head.rotation = p.look.upright ? 0 : p.look.spin ? p.spin : p.angle + (p.look.turn ?? 0);
+    p.head.flipY = !p.look.spin && !p.look.turn && !p.look.upright && Math.cos(p.angle) < 0;
     p.acc += dt;
     const every = p.look.every * (rich ? 1 : 2);
     while (p.acc >= every) { p.acc -= every; p.look.trail(p, {x: p.x, y: p.y, angle: p.angle}, p.size); }
     return true;
+  }
+
+  const leafBurst = (x, y, R, count) => {
+    for (let i = 0; i < (rich ? count : Math.ceil(count / 2)); i++) {
+      const a = random() * TAU, v = 120 + random() * 220;
+      part({name: 'leaf', paletteKey: MATERIAL.foliage, x, y, px: R * 0.75, life: 760, rotation: a, spin: spread(16), vx: Math.cos(a) * v, vy: Math.sin(a) * v, gravity: 160, drag: 2, fadeOut: 0.4});
+    }
+  };
+  /** A part anchored at its base that rises out of the ground, holds, then sinks. */
+  const rising = (spec, rise = 0.22, sink = 0.25) => {
+    const p = part({anchor: [0.5, 0.95], ...spec});
+    const full = p.stretch[1];
+    p.onUpdate = q => { const k = q.age / q.life; q.stretch[1] = full * (k < rise ? easeOut(k / rise) : k > 1 - sink ? Math.max(0.05, (1 - k) / sink) : 1); };
+    return p;
+  };
+  function rootsAt(x, y, R) {
+    for (let i = 0; i < (rich ? 7 : 4); i++) {
+      const a = random() * TAU, r = R * (0.2 + random() * 0.9);
+      rising({name: 'spike', paletteKey: MATERIAL.root, x: x + Math.cos(a) * r * 1.3, y: y + Math.sin(a) * r * 0.5, px: R * (0.7 + random() * 0.4), life: 820, delay: i * 40, rotation: spread(0.7)});
+    }
+    smoke(x, y, MATERIAL.root, R * 1.6, 4, 30);
+    decal({x, y, paletteKey: MATERIAL.root, px: R * 3.2});
+  }
+  function treeAt(x, y, R) {
+    rising({name: 'trunk', paletteKey: MATERIAL.bark, x, y, px: R * 2, life: 1300, fadeOut: 0.25}, 0.18, 0.2);
+    part({name: 'canopy', paletteKey: MATERIAL.foliage, x, y: y - R * 3.6, px: R * 6, life: 1100, delay: 180, fadeIn: 60, fadeOut: 0.25});
+    later(() => leafBurst(x, y - R * 3.6, R * 1.4, 14), 420);
+    ring(x, y, MATERIAL.foliage, R * 4, 420, 0.4);
+    smoke(x, y, MATERIAL.root, R * 1.4, 3, 30);
+  }
+  function explosion(x, y, groundY, R) {
+    flare(x, y, 'fire', R * 3.4, 180, random());
+    part({name: 'burst', paletteKey: 'fire', x, y, px: R * 4.4, life: 600, rotation: random() * TAU, grow: [0.8, 1.3], fadeOut: 0.3});
+    part({name: 'burst', paletteKey: 'fire', x: x + spread(R), y: y - R * 0.4, px: R * 2.6, life: 520, delay: 80, rotation: random() * TAU, grow: [0.7, 1.2], fadeOut: 0.3});
+    ring(x, groundY, 'fire', R * 5, 420, 0.45);
+    smoke(x, y - R * 0.3, 'neutral', R * 2.2, 5, 60);
+    sparks({x, y, paletteKey: 'fire', count: 12, speed: [240, 560], life: 460, size: R * 0.9});
+    for (let i = 0; i < (rich ? 5 : 2); i++) part({name: 'rock', paletteKey: MATERIAL.iron, x, y, px: R * 0.3, life: 620, spin: spread(14), vx: spread(360), vy: -160 - random() * 200, gravity: 900, fadeOut: 0.4});
+    decal({x, y: groundY, paletteKey: 'fire', px: R * 3.6});
+  }
+  function meteorAt(x, y, groundY, R) {
+    const fall = Math.PI / 2 - 0.45, dist = R * 9, ms = 260, vx = Math.cos(fall) * dist / (ms / 1000), vy = Math.sin(fall) * dist / (ms / 1000);
+    const from = {x: x - Math.cos(fall) * dist, y: groundY - Math.sin(fall) * dist};
+    part({name: 'comet', paletteKey: 'fire', ...from, px: R * 5, life: ms, fps: 24, anchor: [0.78, 0.5], rotation: fall, vx, vy, fadeIn: 20, fadeOut: 0.05});
+    part({name: 'rock', paletteKey: MATERIAL.rock, ...from, px: R * 1.4, life: ms, spin: 6, vx, vy, fadeIn: 20, fadeOut: 0.05});
+    later(() => explosion(x, groundY - R * 0.3, groundY, R * 1.3), ms);
+  }
+  function pillarAt(x, y, paletteKey, R) {
+    const height = R * 6.5;
+    const col = part({name: 'beam', paletteKey, x, y, px: height, life: 620, fps: 30, anchor: [0, 0.5], rotation: -Math.PI / 2, fadeIn: 20, fadeOut: 0.35});
+    const full = R * 1.6 / (col.book.height * height / col.book.width);
+    col.onUpdate = q => { const k = q.age / q.life; q.stretch[1] = full * (k < 0.15 ? easeOut(k / 0.15) : 1 + 0.1 * Math.sin(q.age / 30)); };
+    ring(x, y, paletteKey, R * 3.6, 520, 0.42);
+    part({name: 'glow', paletteKey, x, y: y - height * 0.4, px: R * 5, life: 520, fadeOut: 0.5, alpha: 0.6});
+    for (let i = 0; i < (rich ? 10 : 4); i++) part({name: 'streak', paletteKey, x: x + spread(R * 1.2), y: y - random() * height * 0.5, px: R * 0.9, life: 420, delay: random() * 200, rotation: -Math.PI / 2, vy: -300 - random() * 200, fadeOut: 0.5});
+    decal({x, y, paletteKey, px: R * 3});
+  }
+  function spikesAt(x, y, paletteKey, R) {
+    const material = paletteId(paletteKey) === 'earth' ? MATERIAL.rock : paletteKey;
+    for (let i = 0; i < (rich ? 8 : 4); i++) {
+      const a = (i / 8) * TAU + spread(0.4), r = R * (0.5 + random() * 0.7);
+      rising({name: 'spike', paletteKey: material, x: x + Math.cos(a) * r * 1.2, y: y + Math.sin(a) * r * 0.45, px: R * (0.5 + random() * 0.35), life: 700, delay: i * 25, rotation: Math.cos(a) * 0.35});
+    }
+    rising({name: 'spike', paletteKey: material, x, y, px: R * 0.9, life: 760});
+    smoke(x, y, 'neutral', R * 1.4, 3, 30);
+    ring(x, y, paletteKey, R * 3.4, 380, 0.42);
   }
 
   /** A landed hit: the archetype's burst, a shock ring, sparks and a ground mark. */
@@ -267,7 +390,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     const k = heavy ? 1.4 : 1, R = size * k;
     flare(x, y, paletteKey, R * 3, heavy ? 200 : 150, random());
     switch (archetype) {
-      case 'fire': case 'missile':
+      case 'fire':
         part({name: 'burst', paletteKey, x, y, px: R * 4, life: 560, rotation: random() * TAU, grow: [0.8, 1.25], fadeOut: 0.3});
         part({name: 'burst', paletteKey, x: x + spread(R), y: y - R * 0.3, px: R * 2.2, life: 480, delay: 70, rotation: random() * TAU, grow: [0.7, 1.2], fadeOut: 0.3});
         smoke(x, y - R * 0.2, paletteKey, R * 1.8, 3, 50);
@@ -334,6 +457,47 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
         break;
       case 'bullet':
         sparks({x, y, paletteKey, count: 4, angle: angle + Math.PI, cone: 1.8, speed: [160, 320], life: 200, size: R * 0.6});
+        break;
+      case 'vine':
+        // Lashes of vine whip out of the hit and leaves scatter.
+        for (let i = 0; i < 5; i++) {
+          const a = angle + Math.PI + spread(2.4);
+          for (let k = 0; k < 4; k++) part({name: 'stem', paletteKey: MATERIAL.foliage, x: x + Math.cos(a) * R * 0.45 * k, y: y + Math.sin(a) * R * 0.45 * k, px: R * 0.9, life: 420, delay: k * 30, rotation: a, fadeOut: 0.5});
+        }
+        leafBurst(x, y, R, 8);
+        break;
+      case 'roots': rootsAt(x, groundY, R); break;
+      case 'tree': treeAt(x, groundY, R); break;
+      case 'missile': case 'cannon': explosion(x, y, groundY, R * (archetype === 'cannon' ? 1.35 : 1)); break;
+      case 'meteor': meteorAt(x, y, groundY, R); break;
+      case 'pillar': pillarAt(x, groundY, paletteKey, R); break;
+      case 'spikes': spikesAt(x, groundY, paletteKey, R); break;
+      case 'tornado':
+        part({name: 'funnel', paletteKey, x, y: groundY, px: R * 2.6, life: 760, fps: 20, anchor: [0.5, 0.9], vx: Math.cos(angle) * 40, grow: [0.6, 1.1], fadeIn: 60, fadeOut: 0.35});
+        smoke(x, groundY, paletteKey, R * 1.4, 4, 50);
+        for (let i = 0; i < (rich ? 6 : 3); i++) part({name: 'rock', paletteKey: MATERIAL.rock, x: x + spread(R), y: groundY - random() * R * 2, px: R * 0.35, life: 600, spin: spread(12), vx: spread(160), vy: -120 - random() * 120, gravity: 300, fadeOut: 0.4});
+        break;
+      case 'arrows':
+        for (let i = 0; i < (rich ? 7 : 4); i++) {
+          const tx = x + spread(R * 2.4), ty = groundY + spread(R * 0.8), fall = Math.PI / 2 + 0.25;
+          part({name: 'streak', paletteKey, x: tx - Math.cos(fall) * R * 6, y: ty - Math.sin(fall) * R * 6, px: R * 3, life: 160, delay: i * 45, rotation: fall, anchor: [0.9, 0.5],
+            vx: Math.cos(fall) * R * 6 / 0.16, vy: Math.sin(fall) * R * 6 / 0.16, fadeIn: 10, fadeOut: 0.2});
+          part({name: 'flare', paletteKey, x: tx, y: ty, px: R * 1.6, life: 160, delay: i * 45 + 150, grow: [0.5, 1.1], fadeOut: 0.7});
+        }
+        break;
+      case 'blackhole':
+        part({name: 'orb', paletteKey, x, y, px: R * 2.6, life: 620, fps: 18, spin: -6, grow: [1.2, 0.3], fadeOut: 0.3});
+        for (let i = 0; i < 3; i++) part({name: 'ring', paletteKey, x, y, px: R * 4.4, life: 420, delay: i * 90, grow: [1, 0.1], fadeOut: 0.3, alpha: 0.7});
+        for (let i = 0; i < (rich ? 10 : 4); i++) {
+          const a = random() * TAU, r = R * (1.8 + random());
+          part({name: 'streak', paletteKey, x: x + Math.cos(a) * r, y: y + Math.sin(a) * r, px: R * 0.8, life: 360, rotation: a + Math.PI, vx: -Math.cos(a) * r / 0.36, vy: -Math.sin(a) * r / 0.36, fadeOut: 0.3});
+        }
+        part({name: 'burst', paletteKey, x, y, px: R * 2.6, life: 320, delay: 520, grow: [0.5, 1.3], fadeOut: 0.5});
+        break;
+      case 'bite':
+        for (const side of [-1, 1]) part({name: 'slash', paletteKey, x, y: y + side * R * 0.9, px: R * 3.4, life: 320, rotation: side < 0 ? Math.PI / 2 : -Math.PI / 2,
+          vy: -side * R * 0.9 / 0.12, drag: 9, fadeOut: 0.4});
+        sparks({x, y, paletteKey, count: 6, speed: [180, 360], life: 240, size: R * 0.7});
         break;
       default: // strike
         part({name: 'burst', paletteKey, x, y, px: R * 1.8, life: 260, rotation: random() * TAU, grow: [0.6, 1.1], fadeOut: 0.5});
@@ -410,10 +574,11 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
 
   function update(dtMs) {
     const dt = Math.max(0, Math.min(100, dtMs));
+    for (let i = pending.length - 1; i >= 0; i--) if ((pending[i].at -= dt) <= 0) pending.splice(i, 1)[0].fn();
     for (let i = projectiles.length - 1; i >= 0; i--) {
       const p = projectiles[i];
       if (stepProjectile(p, dt)) continue;
-      p.head.age = p.head.life; p.glow.age = p.glow.life;
+      for (const q of [p.head, p.glow, ...p.riders]) if (q) q.age = q.life;
       projectiles.splice(i, 1);
     }
     for (let i = parts.length - 1; i >= 0; i--) {
@@ -440,7 +605,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     getDiagnostics: () => Object.freeze({...created, live: parts.length, flying: projectiles.length, sheets: sheets.size}),
     dispose() {
       for (const p of parts) p.sprite.destroy();
-      parts.length = 0; projectiles.length = 0;
+      parts.length = 0; projectiles.length = 0; pending.length = 0;
       for (const entry of sheets.values()) for (const texture of entry.textures) texture.destroy(true);
       sheets.clear(); intensities.clear();
       for (const layer of [decalLayer, smokeLayer, lightLayer]) layer.destroy({children: true});

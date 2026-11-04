@@ -10,7 +10,9 @@
 import {moveNameElement} from '../../text/moveNameElements.js';
 import {speciesTaxonomyForId} from '../../contracts/speciesTaxonomy.js';
 import {createElementVfxLayer} from '../vfx/elementVfxLayer.js';
-import {createMoveVfxKit, moveVfxArchetype} from '../vfx/moveVfxKit.js';
+import {createMoveVfxKit} from '../vfx/moveVfxKit.js';
+import {DATA_ARENA_POOL_ARCHETYPE, moveVfxRecipe} from '../vfx/moveVfxRecipes.js';
+import {battleMoveName} from '../../text/battleMoveNames.js';
 import {STYLE_FALLBACK_CELLS, elementVfx} from '../vfx/unifiedMoveVfxResolver.js';
 import {relayOwnMoveInfo, RELAY_POOL_MOVE_ELEMENT} from '../../modes/dataArena/dataArenaRelayKits.js';
 import {relayEffectStyle} from '../../modes/dataArena/dataArenaRelay.js';
@@ -65,7 +67,12 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
   const look = (moveId, speciesId) => {
     const element = dataArenaMoveElement(moveId, speciesId);
     const arena = Object.entries(ARENA_ELEMENT).find(([, e]) => e === element)?.[0] ?? null;
-    return {...elementVfx(element), element, style: dataArenaMoveStyle(moveId, arena) ?? 'strike'};
+    const style = dataArenaMoveStyle(moveId, arena) ?? 'strike';
+    // The kit effect: a partner's own move by its approved name, a pool move by its own entry.
+    const own = relayOwnMoveInfo(moveId);
+    const archetype = own ? moveVfxRecipe({style, element, name: battleMoveName(own.record) ?? ''}).archetype
+      : DATA_ARENA_POOL_ARCHETYPE[moveId] ?? moveVfxRecipe({style, element}).archetype;
+    return {...elementVfx(element), element, style, archetype};
   };
   const cellFor = (v, role) => pick(v.style, role) ?? (MELEE.has(v.style) ? null : pick(ELEMENT_STYLE[v.element], role));
   let stats = {casts: 0, releases: 0, hits: 0, ults: 0, projectiles: 0};
@@ -83,7 +90,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     release({x, y, angle = 0, moveId, speciesId, melee = false}) {
       const v = look(moveId, speciesId);
       if (kit) {
-        const archetype = moveVfxArchetype(v.style);
+        const archetype = v.archetype;
         if (melee) kit.melee({x, y, angle, paletteKey: v.paletteKey, archetype, size: 34});
         else kit.launch({x, y, angle, paletteKey: v.paletteKey, archetype, size: 28});
         stats.releases++;
@@ -98,7 +105,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     projectile({follow, moveId, speciesId, angle = 0, lifeMs = 950, scale = SCALE * 0.82, size = 26}) {
       if (kit) {
         const v = look(moveId, speciesId);
-        const ok = Boolean(kit.projectile({follow, paletteKey: v.paletteKey, archetype: moveVfxArchetype(v.style), size}));
+        const ok = Boolean(kit.projectile({follow, paletteKey: v.paletteKey, archetype: v.archetype, size}));
         if (ok) stats.projectiles++;
         return ok;
       }
@@ -114,7 +121,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     hit({x, y, groundY = y, moveId, speciesId, heavy = false, follow = null, angle = 0, size = 30}) {
       const v = look(moveId, speciesId);
       if (kit) {
-        kit.impact({x, y, groundY, angle, paletteKey: v.paletteKey, archetype: moveVfxArchetype(v.style), heavy, size});
+        kit.impact({x, y, groundY, angle, paletteKey: v.paletteKey, archetype: v.archetype, heavy, size});
         if (heavy) layer.hold(55);
         stats.hits++;
         return;
@@ -140,7 +147,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     area({x, y, radius = 100, moveId, speciesId}) {
       if (!kit) return false;
       const v = look(moveId, speciesId);
-      kit.impact({x, y, groundY: y, paletteKey: v.paletteKey, archetype: moveVfxArchetype(v.style), heavy: true, size: Math.max(20, radius * 0.31)});
+      kit.impact({x, y, groundY: y, paletteKey: v.paletteKey, archetype: v.archetype, heavy: true, size: Math.max(20, radius * 0.31)});
       stats.hits++;
       return true;
     },
@@ -150,7 +157,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
       // The kit washes the field in the move's colour; the line-art storm stays for the classic look.
       if (kit) kit.wash({rect, center, paletteKey: v.paletteKey});
       else layer.storm({kind: v.storm, palette: v.palette, paletteKey: v.paletteKey, rect, center});
-      if (center && kit) kit.signature({x: center.x, y: center.y, paletteKey: v.paletteKey, archetype: moveVfxArchetype(v.style), size: 40});
+      if (center && kit) kit.signature({x: center.x, y: center.y, paletteKey: v.paletteKey, archetype: v.archetype, size: 40});
       else if (center) {
         const cell = cellFor(v, 'hit') ?? cellFor(v, 'launch');
         if (cell) layer.cell({...cell, x: center.x, y: center.y, scale: SCALE * 1.25});
