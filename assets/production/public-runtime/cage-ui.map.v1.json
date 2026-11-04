@@ -3,7 +3,7 @@
   "kind": "MAP_ART_RENDER_V1",
   "assetId": "art:cage:ui-three:20261102",
   "family": "CAGE",
-  "fieldCount": 37,
+  "fieldCount": 39,
   "defaultPreviewFieldId": "field_cm01_01",
   "memoryPolicy": "N_ACTIVE_TILES_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
   "filter": "linear",
@@ -670,6 +670,42 @@
         {
           "src": "assets/production/cage/ui-three-20261102/frames/field_cm40_01.webp",
           "sha256": "a313b10a7641afcda58abf9acadc7e98bafbedde8a029fbbcfc4efc55d287e2e",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_royal_ranch_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "GACHA_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/ui-three-20261102/frames/field_royal_ranch_01.webp",
+          "sha256": "23b50b7f92a1cf866f12b8630baf8c11738d3e7163c841a4533baf6cf52a7b7b",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_stellar_zoo_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "GACHA_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/ui-three-20261102/frames/field_stellar_zoo_01.webp",
+          "sha256": "159c9e5c739419574c273d8d703e34750baafcbceff561976531fd0d01182c60",
           "durationMs": null
         }
       ]

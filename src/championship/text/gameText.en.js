@@ -36,7 +36,8 @@ export const CAGE_NAMES_EN = Object.freeze({
   20: "Ice Field", 21: "Power Plant", 22: "Gas Room", 23: "Temple",
   24: "Zoo", 25: "Ranch", 26: "Ring", 27: "Mini Sports Ground",
   28: "Infirmary", 29: "Mini Garden", 30: "Mini Gym", 31: "Mini Volcano",
-  32: "Mini Mountain", 33: "Mini Beach", 34: "Cave", 35: "Waiting Room"
+  32: "Mini Mountain", 33: "Mini Beach", 34: "Cave", 35: "Waiting Room",
+  36: "Royal Auto Ranch", 37: "Stellar Auto Zoo"
 });
 
 export const CAGE_EFFECT_LABELS_EN = Object.freeze({

@@ -26,7 +26,8 @@ export const CAGE_NAMES_VI = Object.freeze({
   20: "Cánh đồng băng", 21: "Nhà máy điện", 22: "Phòng khí độc", 23: "Ngôi đền",
   24: "Vườn thú", 25: "Trang trại", 26: "Võ đài", 27: "Sân vận động nhỏ",
   28: "Trạm xá", 29: "Vườn nhỏ", 30: "Phòng gym nhỏ", 31: "Núi lửa nhỏ",
-  32: "Núi nhỏ", 33: "Bãi biển nhỏ", 34: "Hang động", 35: "Phòng chờ"
+  32: "Núi nhỏ", 33: "Bãi biển nhỏ", 34: "Hang động", 35: "Phòng chờ",
+  36: "Nông trại Hoàng gia Tự động", 37: "Sở thú Tinh tú Tự động"
 });
 
 export const CAGE_EFFECT_LABELS_VI = Object.freeze({

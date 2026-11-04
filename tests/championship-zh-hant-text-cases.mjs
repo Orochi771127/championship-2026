@@ -63,7 +63,9 @@ test("it covers every cage and every gate the ROM catalogs hold", () => {
   for (const record of gates.records) {
     assert.ok(GATE_NAMES[record.recordIndex], `gate ${record.recordIndex} has no Chinese name`);
   }
-  assert.equal(Object.keys(CAGE_NAMES).length, cages.recordCount);
+  // The ROM's 36 cages plus the gachapon's two royal maps (Owner 2026-11-03).
+  assert.equal(Object.keys(CAGE_NAMES).length, cages.recordCount + 2);
+  assert.deepEqual([CAGE_NAMES[36], CAGE_NAMES[37]], ["全自動皇家牧場", "全自動星際動物園"]);
   assert.equal(Object.keys(GATE_NAMES).length, gates.recordCount);
   assert.equal(CAGE_NAMES[9], "高山");
   assert.equal(CAGE_NAMES[32], "小高山");

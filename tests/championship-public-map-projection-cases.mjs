@@ -54,7 +54,8 @@ test('map exports require existing media hash approvals, including all final cag
  const copy=structuredClone(input),first=maps.files.keys().next().value;
  copy.publicPlaytest.files=copy.publicPlaytest.files.filter(row=>row.path!==first);
  assert.throws(()=>selectedMapProjections({root:process.cwd(),input:copy}),/PUBLIC_MAP_MEDIA_NOT_APPROVED/);
- assert.equal(maps.descriptors.find(row=>row.role==='cage-ui').value.fields.length,37);
+ // 37 original fields plus the gachapon's two royal maps (Owner 2026-11-03).
+ assert.equal(maps.descriptors.find(row=>row.role==='cage-ui').value.fields.length,39);
  assert.equal(maps.descriptors.find(row=>row.role==='hunt-night').value.fields[0].fieldId,'field_hm10_01');
 });
 

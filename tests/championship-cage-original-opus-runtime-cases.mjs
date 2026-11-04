@@ -24,7 +24,8 @@ test('the cage UI bundle validates in the runtime loader and every frame matches
   assert.equal(checked.family, 'CAGE');
   assert.equal(manifest.rights.status, 'PROJECT_ORIGINAL');
   assert.equal(manifest.rights.romDerivedPixels, false);
-  assert.equal(manifest.fields.length, 37);
+  // 37 original fields plus the gachapon's two royal maps (Owner 2026-11-03).
+  assert.equal(manifest.fields.length, 39);
   for (const field of manifest.fields) {
     assert.equal(field.frames.length, 1, field.fieldId);
     for (const frame of field.frames) {
@@ -51,7 +52,13 @@ test('every cage definition binds to a field of the bundle', () => {
 
 test('sizes match the fields they replace; renders are one static frame', () => {
   const old = new Map(licensed.fields.map((field) => [field.fieldId, field]));
-  for (const field of manifest.fields) {
+  // The royal maps (Owner 2026-11-03) replace nothing: they take the waiting room's 240 x 200 native field.
+  const royal = new Set(['field_royal_ranch_01', 'field_stellar_zoo_01']);
+  for (const field of manifest.fields.filter((entry) => royal.has(entry.fieldId))) {
+    assert.deepEqual([field.worldWidthPx, field.worldHeightPx, field.nativeWidthPx, field.nativeHeightPx, field.visualRole], [960, 800, 240, 200, 'GACHA_CAGE']);
+    assert.deepEqual(field.frames.map((frame) => frame.durationMs), [null], field.fieldId);
+  }
+  for (const field of manifest.fields.filter((entry) => !royal.has(entry.fieldId))) {
     const before = old.get(field.fieldId);
     for (const key of ['worldWidthPx', 'worldHeightPx', 'nativeWidthPx', 'nativeHeightPx', 'visualRole']) {
       assert.equal(field[key], before[key], `${field.fieldId}:${key}`);

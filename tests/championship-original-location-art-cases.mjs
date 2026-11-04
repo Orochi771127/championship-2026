@@ -15,7 +15,10 @@ test('every existing cage keeps its identity and uses its accepted picture for t
    :cageUiThumbnail(definition.moduleId);
   assert.equal(actual,expected);assert.doesNotMatch(actual,/internal-|assembled-ui/);
  }
- for(const value of [null,undefined,-1,36,'1'])assert.equal(originalCageLocationArt(value,base),null);
+ // Owner 2026-11-03: the gachapon's royal maps (36, 37) show their own card picture.
+ assert.equal(originalCageLocationArt(36,base),cageUiThumbnail('championship:2026:cage:royal-ranch'));
+ assert.equal(originalCageLocationArt(37,base),cageUiThumbnail('championship:2026:cage:stellar-zoo'));
+ for(const value of [null,undefined,-1,38,'1'])assert.equal(originalCageLocationArt(value,base),null);
 });
 
 test('title prefetch status is localized and interpolated in all five supported languages',t=>{

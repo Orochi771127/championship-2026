@@ -6,12 +6,13 @@ import manifest from '../../../assets/production/public-runtime/cage-ui.map.v1.j
 // Renders of the 3D cage models (ranchThreeScene, layout view 52°, 4 px per native px,
 // the field's own world rect), so a frame covers exactly the rect the old field art did.
 import threeManifest from '../../../assets/production/public-runtime/cage-ui-three.v1.json' with { type: 'json' };
-import { getCageDefinitionByModuleId, listCageDefinitions } from '../cage/cageCatalog.js';
+import { listCageDefinitions } from '../cage/cageCatalog.js';
+import { getCageDefinitionByModuleId } from '../cage/productCageCatalog.js';
 import { PRODUCT_CAGE_CHANNEL_OVERRIDES } from '../cage/cageEffects.js';
 import { productGridCell } from '../cage/productRanchGrid.js';
 import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
 import { RANCH_EXPANSION_FIRST_SLOT, isAnnexSlot } from '../cage/ranchExpansion.js';
-import { getOriginalCageVisualBinding, ORIGINAL_CAGE_STRUCTURAL_VISUALS } from './originalCageVisualBindings.js';
+import { getCageVisualBinding, ORIGINAL_CAGE_STRUCTURAL_VISUALS } from './originalCageVisualBindings.js';
 import { validateRuntimeMapArtBundle } from './runtimeMapArtBundle.js';
 import { cageName } from '../text/zhHant.js';
 import { uiText } from '../text/uiText.js';
@@ -57,7 +58,7 @@ export function cageUiSummary(moduleId, fallback = '') {
   if (capacity !== null) parts.push(uiText('建議 {count} 隻', { count: capacity }));
   return parts.join(' · ') || uiText('固定待機區');
 }
-const fieldIdOf = (definition) => getOriginalCageVisualBinding(definition?.cageDefinitionIndex)?.fieldId ?? null;
+const fieldIdOf = (definition) => getCageVisualBinding(definition?.cageDefinitionIndex)?.fieldId ?? null;
 function runtimeFieldFrame(definition) {
   const fieldId = fieldIdOf(definition);
   return threeUi.get(fieldId)?.frame.src ?? art.fields.find((field) => field.fieldId === fieldId)?.frames[0]?.src ?? null;

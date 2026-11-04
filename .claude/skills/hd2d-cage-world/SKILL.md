@@ -29,6 +29,7 @@ logo, main menu and opening stay exactly as live main shipped them.
 | 10/06 showcase masters (the deleted 10/06 field art came from these) | `docs/art/production/original-character-cage-r1/cage-base3d-v1/opm-opus-r*/seam-v3/fields/field_cmXX_01/master.blend` (untracked; copy on `D:\Championship2026-backups\cage-opus-masters-20261102\`) |
 | Shop cage cards | `src/championship/app/vs4Screens.js` (`decorateShopCageCard`, `cageSeriesLabel`), `ui/screenLayout.css` |
 | Shop, editor and location pictures (renders of the 3D cages) | `assets/production/public-runtime/cage-ui-three.v1.json` → `src/championship/presentation/cageUiArt.js` |
+| Gachapon royal maps (Owner 2026-11-03): 全自動皇家牧場 (36), 全自動星際動物園 (37) | `scripts/build-royal-cage-maps.py` and its siblings; definitions in `src/championship/cage/productCageCatalog.js`; rules in `docs/art/production/ART_PRODUCTION_ROYAL_CAGE_MAPS_ZH_TW.md` |
 
 ## Enhancer rules
 

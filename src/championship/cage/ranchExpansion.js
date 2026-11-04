@@ -17,11 +17,13 @@
 // version, so a save that never took the grant never changes shape.
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
-import { MAX_SLOT_COUNT, getCageDefinitionByModuleId } from "./cageCatalog.js";
-import { ORIGINAL_CAGE_DEFINITION_SHAPES, ORIGINAL_CAGE_SHAPE_MASKS } from "./ranchSlotGeometry.js";
+import { MAX_SLOT_COUNT } from "./cageCatalog.js";
+import { getCageDefinitionByModuleId } from "./productCageCatalog.js";
+import { ORIGINAL_CAGE_SHAPE_MASKS } from "./ranchSlotGeometry.js";
 import { NATIVE_RANCH_LAYOUT, WAITING_ROOM_MODULE, validateNativeRanch } from "./nativeRanchLayout.js";
 
 import { PRODUCT_RANCH_GRID, LEGACY_PRODUCT_RANCH_GRID, validateProductRanch } from './productRanchGrid.js';
+import { cageDefinitionShape } from './cageShapes.js';
 
 export const RANCH_DECKS_LAYOUT = "NATIVE_DECKS_V1";
 export const RANCH_EXPANSION_VERSION = 1;
@@ -91,7 +93,7 @@ export function annexLocalSlot(slotIndex) {
 
 function shapeMaskOf(moduleId) {
   const definition = getCageDefinitionByModuleId(moduleId);
-  return definition ? ORIGINAL_CAGE_SHAPE_MASKS[ORIGINAL_CAGE_DEFINITION_SHAPES[definition.cageDefinitionIndex]] : null;
+  return definition ? ORIGINAL_CAGE_SHAPE_MASKS[cageDefinitionShape(definition.cageDefinitionIndex)] : null;
 }
 
 /** Annex-local footprint: the original masks and upper-row rule inside ten bits. */
