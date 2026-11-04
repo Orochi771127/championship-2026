@@ -3,7 +3,7 @@ import {habitatMatch} from '../contracts/speciesTaxonomy.js';
 import {GACHA_CHIPS,GACHA_METALS,GACHA_GOODS,GACHA_PITY_MAX,GACHA_MACHINES,GACHA_BLOODLINES,getGachaChip,getGachaMetal,getGachaGoods,gachaRarityRank,
   grantGachaWelcome,grantGachaTickets,pullCyberGacha,claimGachaPity,autoFillSynthesizer,synthesizeGachaMetal,applyGachaBoost,metalBoostEffect,
   inscribesBloodline,catalystRarityForGeneration,spendGachaItem,fuseGachaShards,shardFusionTarget,GACHA_SHARD_FUSION_COST,settleGachaBattleWin,takeArmedHuntChips,gachaBloodlineOf,claimGachaReward} from '../gacha/cyberGacha.js';
-import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, normalizeFriendsPlaytestState, purchaseTestRanchRow, creditTestDiamonds } from './friendsPlaytestPolicy.js';
+import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, normalizeFriendsPlaytestState, purchaseTestRanchRow, creditTestDiamonds, productDiamondWallet } from './friendsPlaytestPolicy.js';
 import {recordGachaClaims,automationForgePlan,forgeAutomationItem,deployAutomationCore,tickAutomationRuns,settleRanchAutomation,
   setGachaBondCarry,claimGachaBundle,grantGachaAutomation} from '../gacha/cyberGacha.js';
 import {AUTOMATION_ITEMS,AUTOMATION_RECIPES,AUTOMATION_RULES,getAutomationItem,cageAutomation,royalTotal,autoFeedAffection,royalSleepBonus,
@@ -181,6 +181,10 @@ export function evolutionStatChange(before, after) {
 export function createChampionshipStandaloneApp({
   storage,
   playtestPolicy = null,
+  // Owner 2026-11-04: the product economy -- the diamond wallet, the 10 x 10 hex land and its diamond
+  // rows -- stands apart from the friends playtest (which only adds its grant and opens everything).
+  // The public entry turns it on; the default app keeps the original economy and grid.
+  productEconomy = false,
   locks = globalThis.window?.navigator?.locks,
   catalog,
   cages = [],
@@ -302,6 +306,7 @@ export function createChampionshipStandaloneApp({
   let huntLoadout = null;
   let shop = null;
   let friendsPlaytest = null;
+  const productLand = productEconomy === true || playtestPolicy?.enabled === true;
   // Owner 2026-10-29: the save's record of a paid first-bind reward (onlineBindRewardPolicy.js).
   let onlineBindReward = null;
   let lastShopReceipt = null;
@@ -462,7 +467,8 @@ export function createChampionshipStandaloneApp({
     }
     const grant = newSave ? grantFriendsPlaytestCoins(shop.getBits(), friendsPlaytest, shop.getFrame().bitsCap, playtestPolicy) : {bits:shop.getBits(),state:friendsPlaytest,granted:0};
     if (grant.granted) shop.applyBitsTransaction({expectedBits:shop.getBits(),bits:grant.bits});
-    friendsPlaytest = grant.state;
+    // Owner 2026-11-04: with the product economy every save has the diamond wallet; the playtest grant only fills it.
+    friendsPlaytest = productEconomy ? productDiamondWallet(grant.state) : grant.state;
     if (grant.granted) savePort.markDirty();
     bindShopRuntime();
   }
@@ -664,7 +670,9 @@ export function createChampionshipStandaloneApp({
     const habitat=raceHabitat&&!dirty?'cozy':native;
     const mood=partnerMood({fields,growth:actor.growthFields??{},state:actor.state,statusMusic:actor.statusMusic,habitat});
     return Object.freeze({mood,emoji:PARTNER_MOODS[mood].emoji,habitat,raceHabitat,hearts:partnerAffectionHearts(fields),
-      affection:Math.max(0,Math.min(100,Number(fields['020'])||0)),greeting:partnerLifeState.greetings.some(g=>g.a===id||g.b===id)});
+      affection:Math.max(0,Math.min(100,Number(fields['020'])||0)),greeting:partnerLifeState.greetings.some(g=>g.a===id||g.b===id),
+      // Owner 2026-11-04: its next form would overfill the cage for this tamer rank.
+      crowded:Boolean(actor.capacityBlocked)});
   }
   function partnerRegion(actor){
     const nav=raisingGround?.navigation,home=`cage:${actor.cageInstanceId??actor.cageDefinitionIndex}`;
@@ -921,7 +929,8 @@ export function createChampionshipStandaloneApp({
         }
         const result=stepNativeRaisingActor(actor,raisingNativeProfile(id),{ageDelta,rng:{next:nextGameplayRandom},
           feeding:raisingGround?{ground:raisingGround,foods:raisingFoods,signals,actors:raisingActors.values()}:null,
-          lifecycle:raisingGround?{rank:Math.min(9,tamerRankValue),minute:before.clockMinutes+minutes,season:before.season,
+          // The playtest lifts the rank's evolution ceiling and cage capacity (Owner 2026-11-04).
+          lifecycle:raisingGround?{rank:playtestPolicy?.enabled===true?9:Math.min(9,tamerRankValue),minute:before.clockMinutes+minutes,season:before.season,
             training:realtime?REALTIME_TRAINING_POLICY:null,trainingBonus:royalTrainingBonus(actor),
             cageEffects:realtime&&REALTIME_RECOVERY_CAGES.includes(actor.cageDefinitionIndex)?[]:undefined,
             onJoin:()=>notifyNativeRaisingResidentAdded(actor,[...raisingActors.values()].filter(a=>!a.detached),{next:nextGameplayRandom}),
@@ -1209,7 +1218,7 @@ export function createChampionshipStandaloneApp({
     const capacity=Math.min(grid.cellCap,frame.landCapacity??grid.landCapacity),next=grid.landRows?.[0]??null;
     return Object.freeze({capacity,cap:grid.cellCap,used:grid.usedCells,tier:landExpansionTier(capacity),tiers:LAND_EXPANSION.prices.length,price:landExpansionPrice(capacity)??0,
       step:next?.cells??0,nextRow:next?.row??null,max:!next,diamonds:friendsPlaytest?.diamonds??0,
-      available:playtestPolicy?.enabled===true&&Boolean(friendsPlaytest),memoryBonusG:landExpansionTier(capacity)*LAND_EXPANSION.memoryGPerTier});
+      available:productLand&&Boolean(friendsPlaytest),memoryBonusG:landExpansionTier(capacity)*LAND_EXPANSION.memoryGPerTier});
   }
   function pushAutomationEvent(event){
     automationEvents=[...automationEvents,Object.freeze({...event,serial:++automationSerial})].slice(-12);
@@ -1876,7 +1885,9 @@ export function createChampionshipStandaloneApp({
     // Restored before the cage editor: royal cages count as copies of their base cage (DIAMOND_ECONOMY_20261102).
     cyberGacha=grantGachaWelcome(saved.progression.cyberGacha??null).state;
     draftRoyalEditions=null;pendingRoyalEdition=null;automationEvents=[];resetAutoCare();
-    cageEdit = createCageEditRuntime({ snapshot: saved.cageEdit, publicTestGrid: playtestPolicy?.enabled === true, initialTamerRank: tamerRankValue });
+// Owner 2026-11-04: the 10 x 10 hex land (20 cells, rows bought with diamonds) belongs to the product
+    // economy, not only to the playtest; tamer rank no longer sets the cell count there.
+    cageEdit = createCageEditRuntime({ snapshot: saved.cageEdit, publicTestGrid: productLand, initialTamerRank: tamerRankValue });
     freeBattleMenu=saved.progression.freeBattleMenu??null;
     battleTactics=normalizeBattleTactics(saved.progression.battleTactics);
     initializeNativeRaisingHome({tutorialBoundary});
@@ -2052,7 +2063,7 @@ export function createChampionshipStandaloneApp({
       friendsPlaytest = null;
       onlineBindReward = null;
       openShopAndHunt({newSave:true});
-      cageEdit = createCageEditRuntime({ initializeOriginal: true, publicTestGrid: playtestPolicy?.enabled === true, initialTamerRank: tamerRankValue });
+      cageEdit = createCageEditRuntime({ initializeOriginal: true, publicTestGrid: productLand, initialTamerRank: tamerRankValue });
       rebuildFreeBattleMenu();
       initializeNativeRaisingHome();
       selectedDatabaseSpeciesIndex = null;
@@ -3569,7 +3580,7 @@ export function createChampionshipStandaloneApp({
     // a hidden purchase after the UI has reported rollback.
     buyRanchTestRow(row) {
       requireSession();
-      if (!playtestPolicy?.enabled || screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT || tutorialBaseline || battleTransactionActive || huntCommitActive || battleEconomy.active) return {ok:false,reason:'TEST_ROW_PURCHASE_UNAVAILABLE'};
+      if (!productLand || screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT || tutorialBaseline || battleTransactionActive || huntCommitActive || battleEconomy.active) return {ok:false,reason:'TEST_ROW_PURCHASE_UNAVAILABLE'};
       const editor = requireCageEdit();
       const quote = editor.quoteTestRow(row, ...cageEditArgs());
       // Owner 2026-11-03: the step price climbs with the land already open (200 → 2,200).

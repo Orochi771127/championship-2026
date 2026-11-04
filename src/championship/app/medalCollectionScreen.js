@@ -23,7 +23,8 @@ function statusIcon(acquired) {
   const icon=element('span',acquired?'cm-medals__state-icon cm-medals__state-icon--earned':'cm-medals__state-icon cm-medals__state-icon--locked',acquired?'✓':undefined);
   icon.setAttribute('aria-hidden','true');return icon;
 }
-export function createMedalCollectionView({root,battleBadges=[],onExit,playtestPolicy=null}={}) {
+// unlockText(titleId): Owner 2026-11-04, what winning that title opens (badgeUnlockText.js), passed in by main.js.
+export function createMedalCollectionView({root,battleBadges=[],onExit,playtestPolicy=null,unlockText=null}={}) {
   const entries=medalCollection(battleBadges,playtestPolicy),count=entries.filter(m=>m.acquired).length;
   root.replaceChildren();root.className='cm-vs2-root';root.dataset.screen='MEDALS';
   root.dataset.uiAuthority='CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R';
@@ -74,6 +75,8 @@ export function createMedalCollectionView({root,battleBadges=[],onExit,playtestP
     fact('取得方式',entry.conditionEvidence==='ROM_VERIFIED_TITLE_WIN'?'贏得這場頭銜賽。':'取得條件尚待查證。');
     fact('賽事日期',event?uiText('{season} 第 {day} 日',{season:uiText(['春季','夏季','秋季','冬季'][event.season]),day:event.dayOfSeason+1}):'尚待查證');
     fact('參賽階級',Number.isInteger(entry.requiredRank)?tamerRankName(entry.requiredRank):'尚待查證');
+    const opened=unlockText?.(entry.titleId)??null;
+    if(opened){fact(uiText(entry.earned?'已解鎖':'獲得後解鎖'),opened,true);details.lastElementChild.classList.add('cm-medal-dialog__unlock');}
     if(entry.earned)fact('取得時間','此存檔未記錄取得日期。');
     const extra=describeMedalDetails(entry.titleId);
     for(const item of extra?.facts??[])fact(item.label,item.value,true);
@@ -99,6 +102,8 @@ export function createMedalCollectionView({root,battleBadges=[],onExit,playtestP
     artwork.append(statusIcon(entry.acquired));button.append(artwork);
     button.append(element('span','cm-medals__number',String(entry.titleId+1).padStart(2,'0')),
       element('span','cm-medals__name',name),element('span','cm-medals__status',entry.testPreview?'FRIENDS_MEDAL_PREVIEW_BADGE':entry.acquired?'已取得':'未取得'));
+    // A badge that opens something wears a small gold key, so the collection reads as a map of rewards.
+    if(unlockText?.(entry.titleId)){button.dataset.unlocks='true';const key=element('span','cm-medals__key');key.setAttribute('aria-hidden','true');artwork.append(key);}
     button.addEventListener('click',()=>select(entry));grid.append(button);
   }
   const footer=element('footer','cm-vs2-footer');const back=element('button','cm-vs2-action','返回牧場');back.type='button';back.addEventListener('click',()=>onExit?.());footer.append(back);

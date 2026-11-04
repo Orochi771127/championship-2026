@@ -1,5 +1,8 @@
 import { uiText, TAMER_FIELD_LABELS } from "../text/uiText.js";
-import {generationName,tamerRankName} from '../text/zhHant.js';
+import {generationName,tamerRankName,gateName,shopItemName} from '../text/zhHant.js';
+import {PRODUCT_RAISING_LIFECYCLE_RULES} from '../contracts/productSpeciesData.js';
+import {PRODUCT_FINAL_NATURAL_GENERATION} from '../contracts/productGrowthRules.js';
+import {RANK_UNLOCKS,TAMER_RANK_COUNT} from './rankUnlocks.js';
 import {NATIVE_RAISING_LIFECYCLE_RULES} from '../raising/nativeRaisingLifecycle.js';
 import {slotCountForTamerRank} from '../cage/cageCatalog.js';
 import {nativeBattleWinPercent} from '../battle/nativeTitleProgression.js';
@@ -104,6 +107,58 @@ export const TAMER_INFO_UNSOURCED_EVIDENCE = "UNKNOWN_REQUIRES_TRACE";
 const TAMER_FIELD_GROUPS = Object.freeze({ name: "card", rank: "card", license: "card", money: "card",
   title: "progress", guid: "progress", map: "progress", battle: "stats", win: "stats", time: "stats", have: "stats", cage: "stats" });
 
+/** The furthest stage a partner grows to by itself at this rank (awakened forms come from the cage, not age). */
+function naturalCeiling(rank) {
+  return Math.min(PRODUCT_RAISING_LIFECYCLE_RULES.ranks[rank].generation, PRODUCT_FINAL_NATURAL_GENERATION);
+}
+
+/**
+ * Owner 2026-11-04: every rank and what reaching it opens -- hunt grounds, shop cages and tools,
+ * title matches, the growth ceiling and the first-time diamonds -- with the current and next rank
+ * marked. Read from the gating tables themselves (rankUnlocks.js).
+ */
+function rankUnlockPanel(current) {
+  const panel = element("details", "cm-rank-unlocks");
+  panel.dataset.currentRank = String(current);
+  const next = current + 1 < TAMER_RANK_COUNT ? RANK_UNLOCKS[current + 1] : null;
+  const summary = element("summary", "cm-rank-unlocks__summary");
+  summary.append(element("span", "cm-rank-unlocks__title", "階級解鎖一覽"));
+  const preview = element("span", "cm-rank-unlocks__preview", next
+    ? uiText("下一階 {rank}：{items}", { rank: tamerRankName(next.rank), items: unlockLines(next).slice(0, 2).join("・") })
+    : uiText("已達最高階級"));
+  summary.append(preview);
+  panel.append(summary);
+  const list = element("ol", "cm-rank-unlocks__list");
+  for (const row of RANK_UNLOCKS) {
+    const item = element("li", "cm-rank-unlocks__row");
+    item.dataset.rank = String(row.rank);
+    item.dataset.state = row.rank < current ? "reached" : row.rank === current ? "current" : row.rank === current + 1 ? "next" : "locked";
+    const head = element("p", "cm-rank-unlocks__head");
+    head.append(element("strong", "cm-rank-unlocks__name", tamerRankName(row.rank)));
+    if (row.rank === current) head.append(element("span", "cm-rank-unlocks__tag", "目前"));
+    else if (row.rank === current + 1) head.append(element("span", "cm-rank-unlocks__tag cm-rank-unlocks__tag--next", "下一階"));
+    if (row.diamonds > 0) head.append(element("span", "cm-rank-unlocks__diamonds", uiText("首次升階 {n} 鑽", { n: row.diamonds.toLocaleString() })));
+    const lines = element("ul", "cm-rank-unlocks__lines");
+    for (const text of unlockLines(row)) { const line = document.createElement("li"); line.textContent = text; lines.append(line); }
+    item.append(head, lines);
+    list.append(item);
+  }
+  panel.append(list);
+  return panel;
+}
+
+/** One rank's openings as short localized lines; rank 0 reads as what is open from the start. */
+function unlockLines(row) {
+  const lines = [];
+  if (row.gates.length) lines.push(uiText("狩獵場：{names}", { names: row.gates.map(index => gateName(index)).join("、") }));
+  if (row.shop.cages.length) lines.push(uiText("商店籠舍：{names}", { names: row.shop.cages.map(index => shopItemName(index)).join("、") }));
+  if (row.shop.tools || row.shop.plugins) lines.push(uiText("狩獵道具 {tools} 項・外掛 {plugins} 項", { tools: row.shop.tools, plugins: row.shop.plugins }));
+  if (row.titles) lines.push(uiText("頭銜賽 {n} 場", { n: row.titles }));
+  const ceiling = naturalCeiling(row.rank), before = row.rank > 0 ? naturalCeiling(row.rank - 1) : -1;
+  if (ceiling !== before) lines.push(uiText("自然進化可達 {stage}", { stage: generationName(ceiling) }));
+  return lines;
+}
+
 function element(tag, className, text) {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -137,7 +192,7 @@ export function tamerCompletionPercent(count,total){
  * @param {() => void} [options.onExit]
  */
 export function createTamerInfoView({ root, walletBits = null, tamerRank = null, trainerName=null,
-  titleCount=null,registeredCount=null,battleRecord=null,tamerCard=null,renderOnline=null,onExit } = {}) {
+  titleCount=null,registeredCount=null,battleRecord=null,tamerCard=null,renderOnline=null,onExit,landCells=null } = {}) {
   if (!root) throw new TypeError("Tamer Info requires a root element");
 
   root.replaceChildren();
@@ -149,8 +204,10 @@ export function createTamerInfoView({ root, walletBits = null, tamerRank = null,
   const values = {
     money: Number.isInteger(walletBits) ? Math.min(walletBits, TAMER_INFO_MONEY_CAP) : null,
     have:rank?.capacity??null,
-    cage:rank?slotCountForTamerRank(tamerRank):null,
-    license:rank?generationName(rank.generation):null,
+    // Owner 2026-11-04: with the product economy the cell count is the land bought with diamonds, not the rank.
+    cage:Number.isInteger(landCells)?landCells:rank?slotCountForTamerRank(tamerRank):null,
+    // The licence names the furthest natural stage at this rank under the product's growth rules.
+    license:rank?generationName(naturalCeiling(tamerRank)):null,
     rank:tamerRankName(tamerRank),
     title:tamerCompletionPercent(titleCount,61),
     guid:tamerCompletionPercent(registeredCount,216),
@@ -228,7 +285,7 @@ export function createTamerInfoView({ root, walletBits = null, tamerRank = null,
   back.addEventListener("click", () => { onExit?.(); });
   footer.append(back);
 
-  shell.append(table, note);
+  shell.append(table, rankUnlockPanel(Number.isInteger(tamerRank) ? tamerRank : 0), note);
   if (typeof renderOnline === "function") renderOnline(shell, "bottom");
   shell.append(footer);
   root.append(shell);

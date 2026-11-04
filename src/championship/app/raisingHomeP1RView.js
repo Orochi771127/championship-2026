@@ -186,8 +186,11 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   moodChip.append(moodEmoji, moodLabel, moodHearts); moodChip.hidden = true;
   // Owner 2026-10-29: a race habitat lights its chip beside the place label.
   const habitatChip = node('span', 'cm-habitat-chip int-rh2-companion__habitat'); habitatChip.hidden = true;
+  // Owner 2026-11-04: a cage too full for the next form says so here instead of evolution silently waiting.
+  const crowdedChip = node('span', 'int-rh2-companion__crowded', uiText('籠舍太擠，暫時無法進化')); crowdedChip.hidden = true;
+  crowdedChip.title = uiText('這個籠舍的夥伴總量超過目前馴獸師階級的容量。把一些夥伴移到別的籠舍，或提升階級後就能進化。');
   const placeRow = node('span', 'int-rh2-companion__place-row');
-  placeRow.append(placeChip, moodChip, habitatChip);
+  placeRow.append(placeChip, moodChip, habitatChip, crowdedChip);
   const more = node("span", "int-rh2-companion__more", "詳細");
   more.setAttribute("aria-hidden", "true");
 
@@ -523,6 +526,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   function paintPartnerMood(partner) {
     moodChip.hidden = !partner;
     habitatChip.hidden = !partner?.raceHabitat;
+    crowdedChip.hidden = !partner?.crowded;
     if (partner?.raceHabitat && habitatChip.dataset.race !== partner.raceHabitat) {
       habitatChip.dataset.race = partner.raceHabitat;
       const glyph = taxonomyGlyph(`race.${partner.raceHabitat}`, 16); glyph.style.setProperty('--tax-color', TAXONOMY_COLORS[`race.${partner.raceHabitat}`]);
