@@ -191,3 +191,18 @@ test('before/after actual clearCalendar: do not click calendar that appeared aft
 test('actual phase preparation keeps raw postcapture rejection and no clock mutation',()=>{assert.ok(runnerSource.includes("boundary('capture-ready',()=>clearCalendar(null,{fieldReady:true}))"));const a=runnerSource.indexOf('async function clearCalendar('),z=runnerSource.indexOf('// A date/lifecycle overlay',a),body=runnerSource.slice(a,z);assert.ok(body.indexOf("if(observed.kind==='canvas')return handled")<body.indexOf('calendar.click'));assert.doesNotMatch(body,/calendar\.isVisible|force:|dispatchEvent|clock\.install|advanceNaturalClock/);assert.ok(runnerSource.includes('friendsFieldCaptureReady(row.after)'));});
 test('serialized field preparation polls actual DOM readiness without replacing unknown overlay',()=>{const vm=require('node:vm'),selector='#actual-pixi-canvas';let busy='true',calendar=null;const pixi={getBoundingClientRect:()=>({right:390,top:0,height:600})},three={dataset:{frames:'8'},width:390,height:600,getBoundingClientRect:()=>({width:390,height:600})},host={get dataset(){return{loadState:'ready',residentAssets:JSON.stringify([{state:busy==='true'?'loading':'ready'}])};},getAttribute:()=>busy};const document={querySelectorAll:s=>s===selector?[pixi]:s.includes('.cm-ranch-three-canvas')?[three]:[],querySelector:s=>s==='.int-rh2-field-host'?host:s==='.int-rh2-calendar'?calendar:null,elementFromPoint:()=>pixi};const run=()=>vm.runInNewContext('('+preparationFns.friendsMakePreparationPoll(true).toString()+')(selector)',{selector,document,getComputedStyle:()=>({display:'block',visibility:'visible',pointerEvents:'auto'})});assert.equal(run(),false);calendar={hidden:false,disabled:false};assert.equal(run().overlay.kind,'calendar');calendar=null;busy='false';const ready=run();assert.equal(ready.overlay.kind,'canvas');assert.equal(ready.three.busy,'false');});
 test('calendar is only clicked from actual recognized calendar observation',async()=>{const events=[],stop=new Error('STOP_AFTER_NORMAL_UI_CLICK'),page={evaluate:async()=>{events.push('observe');return{overlay:{kind:'calendar'},three:null};},locator:()=>({isVisible:()=>{throw Error('FORBIDDEN_UNRELATED_VISIBILITY_READ');},click:async options=>{assert.equal(options.timeout,90000);events.push('normalClick');throw stop;}})};await assert.rejects(actualCalendarFunction(runnerSource,page)(),e=>e===stop);assert.deepEqual(events,['observe','normalClick']);});
+test('reloaded source shop is compared with the seed after the game\'s own tool-tier migration (HUNT_TOOL_TIERS_20261103)',async()=>{
+ const {migratedShop}=require('./friends-playtest-groups.cjs');
+ const url=require('node:url').pathToFileURL(require('node:path').join(__dirname,'../src/championship/shop/huntToolTiers.js')).href;
+ const {migrateHuntToolQuantities,HUNT_TOOL_FAMILIES}=await import(url);
+ const canonical=migratedShop(migrateHuntToolQuantities);
+ // A pre-tier seed holding one of every rope tier: the migrated shop keeps the top tier with the migration stock.
+ const rope=HUNT_TOOL_FAMILIES.find(f=>f.kind==='ROPE'),quantities=Array(118).fill(0);for(const r of rope.records)quantities[r]=1;
+ const seed={bits:9999999,quantities,cageOwned:[]},out=canonical(seed);
+ assert.equal(out.toolTiers[rope.familyId],2);assert.equal(out.quantities[rope.records[2]],15);assert.equal(out.quantities[rope.records[0]],0);
+ assert.deepEqual(seed.quantities[rope.records[0]],1,'the seed itself is never mutated');
+ // A shop that already carries toolTiers is left exactly as it is.
+ assert.equal(canonical(out),out);
+ // Without a canonicalizer verifySource compares the seed as it is (the former behaviour).
+ assert.equal(verifySource.length,1);
+});
