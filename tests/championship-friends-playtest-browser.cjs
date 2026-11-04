@@ -295,7 +295,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   }
   await page.locator('#cm-login').click();await page.locator('#cm-new-game').waitFor({state:'visible'});
  }
- async function screen(name){await page.locator(`#cm-root[data-active-screen="${name}"]`).waitFor();}
+ async function screen(name,timeout){await page.locator(`#cm-root[data-active-screen="${name}"]`).waitFor(timeout?{timeout}:undefined);}
  // Three supplies visuals underneath; the unique Pixi canvas owns real input.
  const ranchCanvasSelector='#cm-root[data-active-screen="RAISING_HOME"] canvas.cm-raising-pixi-canvas';
  async function ranchCanvas(){const canvas=page.locator(ranchCanvasSelector);await canvas.waitFor({state:'visible',timeout:180000});assert.equal(await canvas.count(),1,'Exactly one ranch input canvas');assert.notEqual(await canvas.evaluate(el=>getComputedStyle(el).pointerEvents),'none','Ranch canvas must receive ordinary input');return canvas;}
@@ -637,7 +637,10 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
    if(fee>0)break;await page.locator('#cm-root').getByRole('button',{name:'返回選場',exact:true}).click();if((await listToggle.innerText()).includes('場地列表'))await listToggle.click();
   }
   assert.ok(fee>0,'Use a paid gate, not a fee-waiver/free gate');
-  await page.getByRole('button',{name:'開始狩獵',exact:true}).click();await screen('HUNT_FIELD');
+  // The screen attribute is set only once the whole field has mounted (createHuntFieldView awaits the art), so
+  // this wait is the load itself: allow the game's own watchdog ceiling (LOAD_MAX_MS 240 s), not the 90 s default,
+  // which a software-GL CI runner routing every request through the test sometimes passed (2026-11-04).
+  await page.getByRole('button',{name:'開始狩獵',exact:true}).click();await screen('HUNT_FIELD',240000);
   await page.locator('.cm-vs2-field__canvas[aria-busy="false"]').waitFor({timeout:180000});
   await page.locator('.cm-vs2-field__loading').waitFor({state:'detached',timeout:5000});
   assert.equal(await page.locator('[data-field-fallback="true"],.int-rh2-field-fallback').count(),0,'Hunt must not use an unplayable fallback');
