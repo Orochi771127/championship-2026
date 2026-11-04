@@ -15,6 +15,7 @@
 // ticker's delta), reads no simulation state and writes nothing back. All
 // textures are drawn to canvases on first use and destroyed on dispose.
 import profiles from '../../../data/championship/battleEffectProfiles.json' with {type: 'json'};
+import {pixelateCanvas} from './pixelateCanvas.js';
 
 const TAU = Math.PI * 2;
 const TICK_MS = 1000 / 60;
@@ -226,6 +227,14 @@ const STORMS = {
     for (let i = 0; i < 10; i++) { let a = i * TAU / 10 + r() * 0.3, x = 0, y = 0; c.beginPath(); c.moveTo(0, 0); for (let k = 0; k < 5; k++) { a += (r() - 0.5) * 0.6; x += Math.cos(a) * 26; y += Math.sin(a) * 26; c.lineTo(x, y); } c.stroke(); }
     const g = c.createRadialGradient(0, 0, 0, 0, 0, 110); g.addColorStop(0, rgba(p.main, 0.7)); g.addColorStop(1, rgba(p.smoke, 0)); c.fillStyle = g; c.fillRect(-128, -128, 256, 256);
   },
+  // A banded flash of the element's colour (pixel look): concentric steps, no strokes,
+  // so nothing turns into a long line once it is scaled to the field.
+  wash(c, p) {
+    c.translate(128, 128);
+    for (const [r, colour, a] of [[128, p.edge, 0.35], [100, p.main, 0.45], [70, p.main, 0.6], [42, p.core, 0.75]]) {
+      c.fillStyle = rgba(colour, a); c.beginPath(); c.arc(0, 0, r, 0, TAU); c.fill();
+    }
+  },
   burst(c, p) {
     c.translate(128, 128);
     for (let i = 0; i < 16; i++) { const a = i * TAU / 16; c.beginPath(); c.moveTo(Math.cos(a - 0.05) * 30, Math.sin(a - 0.05) * 30); c.lineTo(Math.cos(a) * 128, Math.sin(a) * 128); c.lineTo(Math.cos(a + 0.05) * 30, Math.sin(a + 0.05) * 30); c.fillStyle = rgba(i % 2 ? p.main : p.core, 0.7); c.fill(); }
@@ -237,7 +246,12 @@ const STORMS = {
  * muzzle rings, sparks and cells (over them). `art` is the loaded effect art
  * (getCell) or null when this host loads none; cells then play nothing.
  */
-export function createElementVfxLayer({PIXI, ground, front, art = null, quality = 'balanced', reducedMotion = false, seed = 0x5eed}) {
+/**
+ * `pixel` (the AI battle, MOVE_VFX_KIT_20261105): every generated texture is
+ * pixelated to sit with the sequence cells, and signature storms become a
+ * banded wash instead of line art.
+ */
+export function createElementVfxLayer({PIXI, ground, front, art = null, quality = 'balanced', reducedMotion = false, seed = 0x5eed, pixel = false}) {
   if (!makeCanvas(1, 1)) return null;
   const rich = quality !== 'saver';
   const random = seeded(seed);
@@ -261,7 +275,10 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
       if (!canvas) return null;
       const c = canvas.getContext('2d');
       try { draw(c); } catch { /* a partial 2D context draws what it can */ }
+      // Stepped bands, not blocks: a texture's own pixels are scaled per sprite, so blocks would not match the cells' grid.
+      if (pixel) pixelateCanvas(canvas, {block: 1, levels: 4});
       t = PIXI.Texture.from(canvas);
+      if (pixel && t.source) t.source.scaleMode = 'nearest';
       textures.set(key, t);
     }
     return t;
@@ -275,8 +292,8 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
   const sparkTexture = () => texture('spark', 8, 2, c => { c.fillStyle = '#fff'; c.fillRect(0, 0, 8, 2); });
   const decalTexture = (kind, paletteKey, palette, variant) => texture(`decal:${kind}:${paletteKey}:${variant}`, 128, 64,
     c => { groundGlow(c, palette); (DECALS[kind] ?? DECALS.crack)(c, palette, seeded(variant * 977 + kind.length)); });
-  const stormTexture = (kind, paletteKey, palette, variant) => texture(`storm:${kind}:${paletteKey}:${variant}`, 256, 256,
-    c => (STORMS[kind] ?? STORMS.burst)(c, palette, seeded(variant * 131 + kind.length * 7), variant));
+  const stormTexture = (kind, paletteKey, palette, variant) => texture(`storm:${pixel ? 'wash' : kind}:${paletteKey}:${variant}`, 256, 256,
+    c => (STORMS[pixel ? 'wash' : kind] ?? STORMS.burst)(c, palette, seeded(variant * 131 + kind.length * 7), variant));
   function hueFilter(hue) {
     if (!hue || !PIXI.ColorMatrixFilter) return null;
     let f = filters.get(hue);
@@ -308,7 +325,7 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
     const sprites = variants.map(v => {
       const sprite = new PIXI.Sprite(stormTexture(kind, paletteKey, palette, v));
       sprite.anchor.set(0.5); sprite.position.set(cx, cy); sprite.scale.set(cover);
-      sprite.blendMode = kind === 'eclipse' ? 'normal' : 'add'; sprite.alpha = 0; sprite.visible = false;
+      sprite.blendMode = kind === 'eclipse' && !pixel ? 'normal' : 'add'; sprite.alpha = 0; sprite.visible = false;
       stormLayer.addChild(sprite);
       return sprite;
     });
@@ -343,8 +360,11 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
   /**
    * Play one native sequence of the effect atlas at a point (or following a
    * point getter). `scale` is screen px per native px; `repeatMs` loops it.
+   * `angle` (radians) turns a travelling cell to its heading; the cells are
+   * drawn facing right, so a leftward heading mirrors them top to bottom
+   * instead of drawing them upside down.
    */
-  function cell({bankId, sequence, x = 0, y = 0, scale = 2, hue = 0, follow = null, repeatMs = 0, flip = false, overlay = false, alpha = 1, ground = false}) {
+  function cell({bankId, sequence, x = 0, y = 0, scale = 2, hue = 0, follow = null, repeatMs = 0, flip = false, angle = null, overlay = false, alpha = 1, ground = false}) {
     const profile = profiles.banks[(bankId | 0) - 1]?.sequences?.[sequence];
     if (!art || !profile) return null;
     const frames = profile.frames.map(f => ({art: art.getCell(bankId, f.cell), ticks: Math.max(1, f.ticks)}));
@@ -357,7 +377,7 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
     (ground ? decalLayer : frontLayer).addChild(sprite);
     const total = frames.reduce((t, f) => t + f.ticks, 0) * TICK_MS;
     // A ground cell plays its sequence once, however the bank loops it in flight.
-    cells.push({sprite, frames, total, x, y, follow, scale, flip, age: 0, life: ground ? total : Math.max(total, repeatMs), loop: !ground && (repeatMs > 0 || profile.playbackMode === 2)});
+    cells.push({sprite, frames, total, x, y, follow, scale, flip, angle, age: 0, life: ground ? total : Math.max(total, repeatMs), loop: !ground && (repeatMs > 0 || profile.playbackMode === 2)});
     created[overlay ? 'overlays' : 'cells']++;
     return true;
   }
@@ -370,7 +390,8 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
     const w = c.frame?.[2] ?? c.texture.width, h = c.frame?.[3] ?? c.texture.height;
     s.anchor.set((c.origin?.[0] ?? w / 2) / w, (c.origin?.[1] ?? h / 2) / h);
     const k = entry.scale / (c.pixelsPerNativePixel ?? 1);
-    s.scale.set(entry.flip ? -k : k, k);
+    if (Number.isFinite(entry.angle)) { s.rotation = entry.angle; s.scale.set(k, Math.cos(entry.angle) < 0 ? -k : k); }
+    else s.scale.set(entry.flip ? -k : k, k);
     // A followed body that has gone (knocked out, left) hides the cell instead of
     // dropping it at the origin.
     const at = entry.follow ? entry.follow() : entry;

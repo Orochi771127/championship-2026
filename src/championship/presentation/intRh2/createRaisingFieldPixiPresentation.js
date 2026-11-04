@@ -272,7 +272,7 @@ export async function mountRaisingFieldPixiPresentation({
       crestHex(g,r+5).fill({color:ready?0xfff3b0:0xffd34d,alpha:ready?.45+.25*beat:.2});
       crestHex(g,r).fill({color:ready?0xffd34d:0x2a1e3f}).stroke({color:ready?0xffffff:0xffd34d,width:ready?3:2});
       if(ready)crestHex(g,r*.45).fill({color:0xffffff});
-      else g.arc(0,0,r+3,-Math.PI/2,-Math.PI/2+Math.PI*2*Math.min(1,sign.percent/100)).stroke({color:0xffd34d,width:2});
+      else g.moveTo(0,-(r+3)).arc(0,0,r+3,-Math.PI/2,-Math.PI/2+Math.PI*2*Math.min(1,sign.percent/100)).stroke({color:0xffd34d,width:2});
     }
     for(const [id,g] of crests)if(!live.has(id)){g.destroy();crests.delete(id);}
   }

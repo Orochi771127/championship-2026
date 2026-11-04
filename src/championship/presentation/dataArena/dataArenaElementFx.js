@@ -10,6 +10,9 @@
 import {moveNameElement} from '../../text/moveNameElements.js';
 import {speciesTaxonomyForId} from '../../contracts/speciesTaxonomy.js';
 import {createElementVfxLayer} from '../vfx/elementVfxLayer.js';
+import {createMoveVfxKit} from '../vfx/moveVfxKit.js';
+import {DATA_ARENA_POOL_ARCHETYPE, moveVfxRecipe} from '../vfx/moveVfxRecipes.js';
+import {battleMoveName} from '../../text/battleMoveNames.js';
 import {STYLE_FALLBACK_CELLS, elementVfx} from '../vfx/unifiedMoveVfxResolver.js';
 import {relayOwnMoveInfo, RELAY_POOL_MOVE_ELEMENT} from '../../modes/dataArena/dataArenaRelayKits.js';
 import {relayEffectStyle} from '../../modes/dataArena/dataArenaRelay.js';
@@ -43,10 +46,19 @@ export function dataArenaMoveStyle(moveId, arenaElement = null) {
   try { return relayEffectStyle(moveId, arenaElement)?.style ?? null; } catch { return null; }
 }
 
-export function createDataArenaElementFx({PIXI, ground, front, art = null, quality = 'high', reducedMotion = false}) {
+/**
+ * `kit` (MOVE_VFX_KIT_20261105, default on; ?moveVfx=classic keeps the cells):
+ * every phase of a move -- charge, release, shot, hit, signature close -- is
+ * drawn by the move VFX kit in one style instead of atlas cells over vector
+ * heads. The signature storm, hit-stop and the struck-body hold stay here.
+ */
+export function createDataArenaElementFx({PIXI, ground, front, art = null, quality = 'high', reducedMotion = false, kit: useKit = true}) {
   const layer = createElementVfxLayer({PIXI, ground, front, art, quality: quality === 'low' ? 'saver' : 'balanced', reducedMotion, seed: 0xda7a});
   if (!layer) return null;
+  const kit = useKit ? createMoveVfxKit({PIXI, front, ground, quality: quality === 'low' ? 'saver' : 'balanced', reducedMotion, seed: 0xda7b}) : null;
   const SCALE = 5; // world px per native px: the arena camera shows the field far wider than a battle
+  // Kit effects read at phone size under that wide camera (Owner 2026-11-05: they looked small).
+  const KIT = 1.4;
   const pick = (style, role) => {
     for (const set of [STYLE_FALLBACK_CELLS[style], ALTERNATE[style]]) {
       const cell = set?.[role];
@@ -57,7 +69,12 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
   const look = (moveId, speciesId) => {
     const element = dataArenaMoveElement(moveId, speciesId);
     const arena = Object.entries(ARENA_ELEMENT).find(([, e]) => e === element)?.[0] ?? null;
-    return {...elementVfx(element), element, style: dataArenaMoveStyle(moveId, arena) ?? 'strike'};
+    const style = dataArenaMoveStyle(moveId, arena) ?? 'strike';
+    // The kit effect: a partner's own move by its approved name, a pool move by its own entry.
+    const own = relayOwnMoveInfo(moveId);
+    const archetype = own ? moveVfxRecipe({style, element, name: battleMoveName(own.record) ?? ''}).archetype
+      : DATA_ARENA_POOL_ARCHETYPE[moveId] ?? moveVfxRecipe({style, element}).archetype;
+    return {...elementVfx(element), element, style, archetype};
   };
   const cellFor = (v, role) => pick(v.style, role) ?? (MELEE.has(v.style) ? null : pick(ELEMENT_STYLE[v.element], role));
   let stats = {casts: 0, releases: 0, hits: 0, ults: 0, projectiles: 0};
@@ -67,30 +84,50 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     cast({x, y, moveId, speciesId, windup = 0.2, size = 30, follow = null}) {
       if (reducedMotion) return;
       const v = look(moveId, speciesId);
+      if (kit) { kit.charge({x, y, paletteKey: v.paletteKey, size: size * KIT, ms: Math.max(0.12, windup) * 1000, follow}); stats.casts++; return; }
       layer.charge({x, y, palette: v.palette, ms: Math.max(0.12, windup) * 1000, size, follow});
       stats.casts++;
     },
     /** Release: perpendicular Muzzle Ring + 7 recoil sparks + the style's 292-frame HD launch cell. */
     release({x, y, angle = 0, moveId, speciesId, melee = false}) {
       const v = look(moveId, speciesId);
+      if (kit) {
+        const archetype = v.archetype;
+        if (melee) kit.melee({x, y, angle, paletteKey: v.paletteKey, archetype, size: 34 * KIT});
+        else kit.launch({x, y, angle, paletteKey: v.paletteKey, archetype, size: 28 * KIT});
+        stats.releases++;
+        return;
+      }
       layer.muzzle({x, y, angle, palette: v.palette, size: melee ? 34 : 28});
       const cell = cellFor(v, 'launch') ?? cellFor(v, 'body');
-      if (cell) layer.cell({...cell, x, y, scale: SCALE, flip: Math.cos(angle) < 0});
+      if (cell) layer.cell({...cell, x, y, scale: SCALE, angle});
       stats.releases++;
     },
     /** Attach a looping 292-frame 4x HD Web Atlas sequence to a live projectile in flight. */
-    projectile({follow, moveId, speciesId, angle = 0, lifeMs = 950, scale = SCALE * 0.82}) {
+    projectile({follow, moveId, speciesId, angle = 0, lifeMs = 950, scale = SCALE * 0.82, size = 26}) {
+      if (kit) {
+        const v = look(moveId, speciesId);
+        const ok = Boolean(kit.projectile({follow, paletteKey: v.paletteKey, archetype: v.archetype, size: size * KIT}));
+        if (ok) stats.projectiles++;
+        return ok;
+      }
       if (!art) return false;
       const v = look(moveId, speciesId);
       const cell = cellFor(v, 'body') ?? cellFor(v, 'launch') ?? cellFor(v, 'hit');
       if (!cell) return false;
-      const ok = layer.cell({...cell, follow, scale, repeatMs: lifeMs, flip: Math.cos(angle) < 0});
+      const ok = layer.cell({...cell, follow, scale, repeatMs: lifeMs, angle});
       if (ok) stats.projectiles++;
       return ok;
     },
     /** A landed move: 292-frame HD hit cell, 4-second ground decal + HD ground cells, and struck-body overlay. */
-    hit({x, y, groundY = y, moveId, speciesId, heavy = false, follow = null}) {
+    hit({x, y, groundY = y, moveId, speciesId, heavy = false, follow = null, angle = 0, size = 30}) {
       const v = look(moveId, speciesId);
+      if (kit) {
+        kit.impact({x, y, groundY, angle, paletteKey: v.paletteKey, archetype: v.archetype, heavy, size: size * KIT});
+        if (heavy) layer.hold(55);
+        stats.hits++;
+        return;
+      }
       const cell = cellFor(v, 'hit');
       if (cell) layer.cell({...cell, x, y, scale: heavy ? SCALE * 1.18 : SCALE});
       // Heavy fire/water/wood impacts also trigger signature 292-frame atlas bursts (explo 149, tsunami 91, toge00 53).
@@ -108,20 +145,33 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
       if (heavy) layer.hold(55);
       stats.hits++;
     },
-    /** 80 TP power skill: the element storm over the visible arena + HD atlas burst. */
+    /** An area move landing (nova, zone): one heavy hit sized to the area. */
+    area({x, y, radius = 100, moveId, speciesId}) {
+      if (!kit) return false;
+      const v = look(moveId, speciesId);
+      kit.impact({x, y, groundY: y, paletteKey: v.paletteKey, archetype: v.archetype, heavy: true, size: Math.max(20 * KIT, radius * 0.31)});
+      stats.hits++;
+      return true;
+    },
+    /** 80 TP power skill: the element backdrop over the visible arena and its signature close. */
     ult({moveId, speciesId, rect, center}) {
       const v = look(moveId, speciesId);
-      layer.storm({kind: v.storm, palette: v.palette, paletteKey: v.paletteKey, rect, center});
-      if (center) {
+      // The kit washes the field in the move's colour; the line-art storm stays for the classic look.
+      if (kit) kit.wash({rect, center, paletteKey: v.paletteKey});
+      else layer.storm({kind: v.storm, palette: v.palette, paletteKey: v.paletteKey, rect, center});
+      if (center && kit) kit.signature({x: center.x, y: center.y, paletteKey: v.paletteKey, archetype: v.archetype, size: 40 * KIT});
+      else if (center) {
         const cell = cellFor(v, 'hit') ?? cellFor(v, 'launch');
         if (cell) layer.cell({...cell, x: center.x, y: center.y, scale: SCALE * 1.25});
       }
       layer.hold(65);
       stats.ults++;
     },
-    update: dtMs => layer.update(dtMs),
+    /** True when the kit draws the shots, so the scene hides its own vector heads. */
+    drawsShots: () => Boolean(kit),
+    update(dtMs) { layer.update(dtMs); kit?.update(layer.holding() ? 0 : dtMs); },
     holding: () => layer.holding(),
-    getDiagnostics: () => Object.freeze({...layer.getDiagnostics(), ...stats, originalCells: art?.getDiagnostics?.() ?? null}),
-    dispose: () => layer.dispose()
+    getDiagnostics: () => Object.freeze({...layer.getDiagnostics(), ...stats, originalCells: art?.getDiagnostics?.() ?? null, kit: kit?.getDiagnostics() ?? null}),
+    dispose() { kit?.dispose(); layer.dispose(); }
   });
 }
