@@ -343,8 +343,11 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
   /**
    * Play one native sequence of the effect atlas at a point (or following a
    * point getter). `scale` is screen px per native px; `repeatMs` loops it.
+   * `angle` (radians) turns a travelling cell to its heading; the cells are
+   * drawn facing right, so a leftward heading mirrors them top to bottom
+   * instead of drawing them upside down.
    */
-  function cell({bankId, sequence, x = 0, y = 0, scale = 2, hue = 0, follow = null, repeatMs = 0, flip = false, overlay = false, alpha = 1, ground = false}) {
+  function cell({bankId, sequence, x = 0, y = 0, scale = 2, hue = 0, follow = null, repeatMs = 0, flip = false, angle = null, overlay = false, alpha = 1, ground = false}) {
     const profile = profiles.banks[(bankId | 0) - 1]?.sequences?.[sequence];
     if (!art || !profile) return null;
     const frames = profile.frames.map(f => ({art: art.getCell(bankId, f.cell), ticks: Math.max(1, f.ticks)}));
@@ -357,7 +360,7 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
     (ground ? decalLayer : frontLayer).addChild(sprite);
     const total = frames.reduce((t, f) => t + f.ticks, 0) * TICK_MS;
     // A ground cell plays its sequence once, however the bank loops it in flight.
-    cells.push({sprite, frames, total, x, y, follow, scale, flip, age: 0, life: ground ? total : Math.max(total, repeatMs), loop: !ground && (repeatMs > 0 || profile.playbackMode === 2)});
+    cells.push({sprite, frames, total, x, y, follow, scale, flip, angle, age: 0, life: ground ? total : Math.max(total, repeatMs), loop: !ground && (repeatMs > 0 || profile.playbackMode === 2)});
     created[overlay ? 'overlays' : 'cells']++;
     return true;
   }
@@ -370,7 +373,8 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
     const w = c.frame?.[2] ?? c.texture.width, h = c.frame?.[3] ?? c.texture.height;
     s.anchor.set((c.origin?.[0] ?? w / 2) / w, (c.origin?.[1] ?? h / 2) / h);
     const k = entry.scale / (c.pixelsPerNativePixel ?? 1);
-    s.scale.set(entry.flip ? -k : k, k);
+    if (Number.isFinite(entry.angle)) { s.rotation = entry.angle; s.scale.set(k, Math.cos(entry.angle) < 0 ? -k : k); }
+    else s.scale.set(entry.flip ? -k : k, k);
     // A followed body that has gone (knocked out, left) hides the cell instead of
     // dropping it at the origin.
     const at = entry.follow ? entry.follow() : entry;

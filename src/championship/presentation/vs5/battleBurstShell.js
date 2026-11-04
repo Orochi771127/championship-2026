@@ -113,7 +113,8 @@ export function createBattleBurstShell({PIXI, layer, reducedMotion = false}) {
     }
     if (closed > 0) {
       // A soft highlight on the upper left of the closed shell.
-      g.arc(x - radius * 0.18, y - radius * 0.2, radius * 0.62, Math.PI * 1.05, Math.PI * 1.55);
+      g.moveTo(x - radius * 0.18 + Math.cos(Math.PI * 1.05) * radius * 0.62, y - radius * 0.2 + Math.sin(Math.PI * 1.05) * radius * 0.62)
+        .arc(x - radius * 0.18, y - radius * 0.2, radius * 0.62, Math.PI * 1.05, Math.PI * 1.55);
       g.stroke({width: Math.max(1, radius * 0.07), color: 0xffffff, alpha: 0.28 * closed * (1 - flash)});
     }
     if (crack > 0) {

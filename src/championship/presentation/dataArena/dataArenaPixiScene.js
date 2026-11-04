@@ -133,7 +133,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     } else burstShell.retire(key);
   }
   // Five-layer element dressing and original effect cells (VFX_FIVE_LAYER_20261101).
-  const elementFx = typeof createDataArenaElementFx === 'function' ? createDataArenaElementFx({ PIXI, ground: cellFx, front: particles, art: effectArt, quality, reducedMotion }) : null;
+  const elementFx = typeof createDataArenaElementFx === 'function' ? createDataArenaElementFx({ PIXI, ground: cellFx, front: particles, art: effectArt, quality, reducedMotion,
+    // One-style move effects (MOVE_VFX_KIT_20261105); ?moveVfx=classic keeps the cells over vector heads.
+    kit: new URLSearchParams(globalThis.location?.search ?? '').get('moveVfx') !== 'classic' }) : null;
+  const kitShots = Boolean(elementFx?.drawsShots?.());
   if (elementFx) rollback.push(() => elementFx.dispose());
 
   const camera = createDataArenaCamera({ worldWidth, worldHeight, reducedMotion, shake, cover: Boolean(grid.map.battleFieldId), artBounds: environment?.manifest?.cameraArtBounds });
@@ -598,12 +601,15 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (state.gameMode === 'RELAY' && projectile.moveId && elementFx?.projectile) {
       const ownerSpecies = projectile.owner === 'player' ? state.player.speciesId
         : (state.rivals.find(r => r.active && r.hp > 0) ?? state.rivals[0])?.speciesId ?? null;
-      elementFx.projectile({
-        follow: () => (!projectile.dead && state.projectiles.includes(projectile) ? { x: projectile.x, y: projectile.y - 12 } : null),
+      entry.kitDrawn = elementFx.projectile({
+        follow: () => (!projectile.dead && state.projectiles.includes(projectile) ? { x: projectile.x, y: projectile.y - 12, angle: Math.atan2(projectile.vy, projectile.vx) } : null),
         moveId: projectile.moveId,
         speciesId: ownerSpecies,
         angle: Math.atan2(projectile.vy, projectile.vx),
-      });
+        size: Math.max(20, projectile.radius * 2.2),
+      }) === true;
+      // The kit draws this shot's head and trail; the vector head and its glow stand down.
+      if (entry.kitDrawn) entry.sprite.visible = entry.glow.visible = false;
     }
     shotViews.set(projectile.id, entry);
     return entry;
@@ -806,7 +812,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
 
   // ------------------------------------------------------------------ relay looks (stage two, 2026-10-28)
   // Drawing only: hit-stop holds the fighters' drawn frames while the
-  // simulation keeps stepping; tethers, charge orbs and impact bursts read events.
+  // simulation keeps stepping; charge orbs and impact bursts read events.
   const relayMode = state.gameMode === 'RELAY';
   const relayElementOf = (team) => team === 'player' ? relayPartner(state.player.partnerId)?.element ?? null
     : RELAY_ROSTER.find(p => p.speciesId === (state.rivals.find(r => r.active && r.hp > 0) ?? state.rivals[0])?.speciesId)?.element ?? null;
@@ -835,6 +841,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (broken) { puff(event.x, event.y - 10, tint, 4, 1.4); camera.addTrauma(0.32); }
     else camera.addTrauma(event.weak ? 0.12 : 0.05);
   }
+  // An arc that starts its own path: Graphics.arc() alone joins its first point to the
+  // previous one (or the world origin), which drew long lines across the field (Owner 2026-11-05).
+  const arcPath = (gfx, x, y, r, a0, a1) => gfx.moveTo(x + Math.cos(a0) * r, y + Math.sin(a0) * r).arc(x, y, r, a0, a1);
   const zoneGfx = new PIXI.Graphics(); zoneGfx.label = "arena relay zones"; zoneGfx.blendMode = "add";
   cellFx.addChild(zoneGfx);
   function drawArenaZones() {
@@ -852,14 +861,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         zoneGfx.circle(zone.x, zone.y, zone.radius).stroke({ color: tint, width: active ? 3.5 : 2, alpha: active ? 0.88 : pulse });
         for (let i = 0; i < 6; i++) {
           const a0 = elapsed * (active ? 1.4 : 0.7) + (i * TAU) / 6;
-          zoneGfx.arc(zone.x, zone.y, zone.radius - 6, a0, a0 + 0.28).stroke({ color: 0xffffff, width: 2.5, alpha: active ? 0.75 : 0.4 });
+          arcPath(zoneGfx, zone.x, zone.y, zone.radius - 6, a0, a0 + 0.28).stroke({ color: 0xffffff, width: 2.5, alpha: active ? 0.75 : 0.4 });
         }
         if (!active) zoneGfx.circle(zone.x, zone.y, zone.radius * (1 - (arena.remaining % 1))).stroke({ color: tint, width: 1.5, alpha: 0.5 });
       }
       const channel = arena.channel?.[0] ?? 0;
       if (active && channel > 0) {
         const zone = arena.zones.find(z => Math.hypot(state.player.x - z.x, state.player.y - z.y) <= z.radius);
-        if (zone) zoneGfx.arc(zone.x, zone.y, zone.radius + 8, -Math.PI / 2, -Math.PI / 2 + TAU * channel / 0.7).stroke({ color: 0xffffff, width: 4, alpha: 0.9 });
+        if (zone) arcPath(zoneGfx, zone.x, zone.y, zone.radius + 8, -Math.PI / 2, -Math.PI / 2 + TAU * channel / 0.7).stroke({ color: 0xffffff, width: 4, alpha: 0.9 });
       }
       if (active && !reducedMotion && rich && Math.floor(elapsed * 8) !== Math.floor((elapsed - 1 / 60) * 8))
         for (const zone of arena.zones) spawn({ x: zone.x + (Math.random() - 0.5) * zone.radius, y: zone.y + (Math.random() - 0.3) * zone.radius * 0.6, vy: -50, texture: textures.glow, tint, scale: 0.18, scaleTo: 0.05, life: 0.6, alpha: 0.7 });
@@ -873,17 +882,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       zoneGfx.circle(sc.x, sc.y, sc.radius * 0.66).stroke({ color: 0x6ff7ff, width: 2.5, alpha: 0.8 * pulse });
       for (let i = 0; i < 8; i++) {
         const a0 = -elapsed * 1.8 + (i * TAU) / 8;
-        zoneGfx.arc(sc.x, sc.y, sc.radius - 7, a0, a0 + 0.25).stroke({ color: 0xffffff, width: 3, alpha: 0.85 });
+        arcPath(zoneGfx, sc.x, sc.y, sc.radius - 7, a0, a0 + 0.25).stroke({ color: 0xffffff, width: 3, alpha: 0.85 });
       }
       if ((sc.channel?.[0] ?? 0) > 0) {
-        zoneGfx.arc(sc.x, sc.y, sc.radius + 10, -Math.PI / 2, -Math.PI / 2 + TAU * (sc.channel[0] / 0.65)).stroke({ color: 0xffffff, width: 5, alpha: 0.95 });
+        arcPath(zoneGfx, sc.x, sc.y, sc.radius + 10, -Math.PI / 2, -Math.PI / 2 + TAU * (sc.channel[0] / 0.65)).stroke({ color: 0xffffff, width: 5, alpha: 0.95 });
       }
     }
   }
-  const tethers = new Map();
-  const tetherGfx = new PIXI.Graphics(); tetherGfx.blendMode = "add";
   let hitStop = 0, statusTick = 0;
-  shotGlow.addChild(tetherGfx);
   // Heavy hits hold the drawn fighters 55 ms in every mode (Owner 2026-11-01); the simulation keeps stepping.
   const heavyHit = (amount) => { if (!reducedMotion && amount >= 22) hitStop = Math.max(hitStop, relayMode && amount >= 40 ? 0.08 : 0.055); };
   const casterSpecies = (event) => event.team === 'player' || event.casterId === state.player.id ? state.player.speciesId
@@ -909,7 +915,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         } else if (event.type === 'CAST_RELEASE') {
           const at = releaseAt(event);
           elementFx.release({ x: at.x, y: at.y, angle: event.angle ?? 0, moveId: event.moveId, speciesId: casterSpecies(event), melee: event.moveType === 'LUNGE' });
-          lastRelease[event.team === 'player' ? 'player' : 'rival'] = { moveId: event.moveId, speciesId: casterSpecies(event) };
+          lastRelease[event.team === 'player' ? 'player' : 'rival'] = { moveId: event.moveId, speciesId: casterSpecies(event), angle: event.angle ?? 0 };
         } else if (event.type === 'SKILL_HIT') {
           elementFx.hit({ x: event.x, y: event.y - 14, groundY: event.y, moveId: event.moveId, speciesId: state.player.speciesId });
         } else if (event.type === 'RIVAL_HIT' && event.cause !== 'LASER' && lastRelease.player) {
@@ -987,7 +993,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "MOUNTED": ring(event.x, event.y, 70, 0x7fe9ff, 0.35); break;
         case "OVERHEAT": puff(state.player.x, state.player.y - 40, 0xdddddd, 6, 1.2); break;
         case "BRIDGE_LIFTED": bridgeLift = 0; camera.addTrauma(0.25); break;
-        case "CAST": if(state.gameMode==='RELAY'){const fx=relayLook(event.moveId,event.team);spawn({x:event.x,y:event.y-BEAM_ELEVATION,texture:textures.ring,tint:fx.tint,scale:.7,scaleTo:.12,life:event.windup,alpha:.65});
+        case "CAST": if(state.gameMode==='RELAY'&&!kitShots){const fx=relayLook(event.moveId,event.team);spawn({x:event.x,y:event.y-BEAM_ELEVATION,texture:textures.ring,tint:fx.tint,scale:.7,scaleTo:.12,life:event.windup,alpha:.65});
             // Charge orb at the hand: grows through the windup, so the release reads before it lands.
             if(event.moveType!=='LUNGE'&&!elementFx){const at=releaseAt(event);spawn({x:at.x,y:at.y,texture:textures.glow,tint:fx.tint,scale:.12,scaleTo:.5,life:Math.max(.12,event.windup),alpha:.9});}}break;
         case "CAST_RELEASE": {
@@ -995,9 +1001,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             const fx=relayLook(event.moveId,event.team),{x,y,reviewed}=releaseAt(event);
             // Shots of a reviewed body are drawn leaving its mouth or hand, then settle on their path.
             if(reviewed)releaseOrigins.set(event.actionId,{x,y,born:elapsed});
+            if(kitShots)break;
             spawn({x,y,texture:event.moveType==='LUNGE'?textures.relaySlash:textures.glow,tint:fx.tint,scale:event.moveType==='LUNGE'?.7:.6,scaleTo:.15,life:.19,rotation:event.angle});
             burst(x,y,{count:5,speed:150,angle:event.angle,spread:1.2,tint:fx.tint,texture:fx.texture==='relayCrystal'?textures.shard:textures.spark,life:.22});
-            if(fx.tether&&!reducedMotion)tethers.set(event.actionId,{x,y,born:elapsed,tint:fx.tint});
           } else if(event.team==='player')spawn({x:event.x+Math.cos(event.angle)*26,y:event.y-BEAM_ELEVATION+Math.sin(event.angle)*26,texture:textures.glow,tint:0x6ff7ff,scale:.45,scaleTo:.1,life:.14});break;
         }
         case "ULT_CAST": ring(event.x, event.y, 160, event.team === "player" ? 0xffe066 : 0xff3b5c, 0.5); camera.addTrauma(0.25); camera.focusBoost?.(1.22, 0.5); crowdReact("CHEER", event.x, 1.2);
@@ -1053,10 +1059,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           ring(event.x, event.y - 24, 130, 0xffe066, 0.48);
           burst(event.x, event.y - 24, { count: 22, speed: 320, tint: 0xffe066, life: 0.55 });
           break;
-        case "NOVA": for (let i = 0; i < 3; i++) ring(event.x, event.y, event.radius * (0.6 + i * 0.25), state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xc8f4ff : event.effect === "SLOW" ? 0x5fd8c8 : 0xff8a3c, 0.4 + i * 0.12);
+        case "NOVA": if (kitShots && state.gameMode === 'RELAY' && elementFx.area({ x: event.x, y: event.y - 20, radius: event.radius, moveId: event.moveId, speciesId: casterSpecies(event) })) { camera.addTrauma(0.5); break; }
+          for (let i = 0; i < 3; i++) ring(event.x, event.y, event.radius * (0.6 + i * 0.25), state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xc8f4ff : event.effect === "SLOW" ? 0x5fd8c8 : 0xff8a3c, 0.4 + i * 0.12);
           burst(event.x, event.y - 20, { count: 24, speed: 380, tint: state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xd8f6ff : 0xffb070, texture: textures.shard, scale: 1.8, gravity: 200, life: 0.7 }); camera.addTrauma(0.5);
           if (state.gameMode === 'RELAY') relayImpact(event.x, event.y - 20, relayLook(event.moveId, event.team)); break;
-        case "ZONE_BURST": ring(event.x, event.y, event.radius, event.team === "player" ? 0x6ff7ff : 0xff5a3c, 0.35);
+        case "ZONE_BURST": if (kitShots && state.gameMode === 'RELAY' && elementFx.area({ x: event.x, y: event.y, radius: event.radius, moveId: event.moveId, speciesId: casterSpecies(event) })) { camera.addTrauma(0.18); break; }
+          ring(event.x, event.y, event.radius, event.team === "player" ? 0x6ff7ff : 0xff5a3c, 0.35);
           burst(event.x, event.y, { count: 12, speed: 260, tint: state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xd8f6ff : event.effect === "IGNITE" ? 0xff9a3c : 0xbff4ff, gravity: 260, life: 0.5 }); camera.addTrauma(0.18);
           if (state.gameMode === 'RELAY') relayImpact(event.x, event.y, relayLook(event.moveId, event.team)); break;
         case "BARRIER_UP": ring(event.x, event.y - 16, 70, 0xffe066, 0.3); break;
@@ -1069,12 +1077,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           if (event.mult > 1) burst(event.x, event.y - 34, { count: 6, speed: 200, tint: 0xffd34d, life: 0.35 }); break;
         case "STATUS_CLEARED": burst(event.x, event.y - 24, { count: 8, speed: 180, tint: 0xd8f6ff, texture: textures.shard, gravity: 300, life: 0.45 }); puff(event.x, event.y - 10, 0xeef7ff, 3, 1); break;
         case "BLINK": afterimage(event.fromX, event.fromY, event.x - event.fromX); burst(event.x, event.y - 20, { count: 10, speed: 200, tint: 0xd8f6ff, texture: textures.shard }); break;
-        case "RIVAL_HIT": if (event.cause !== "LASER") { burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); contact(event.x, event.y - 30, 0xffb070); }
+        case "RIVAL_HIT": if (event.cause !== "LASER" && !(kitShots && relayMode)) { burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); contact(event.x, event.y - 30, 0xffb070); }
           damageNumber(event.x, event.y - 56, event.amount, 0xffffff); heavyHit(event.amount); break;
         case "RIVAL_DODGE": puff(event.x, event.y, 0xa89580, 3, 0.9); break;
         case "RIVAL_SPLASH": ring(event.x, event.y, 50, 0x9fe8ff, 0.4); break;
-        case "SKILL_HIT": spawn({ x: event.x, y: event.y - 14, texture: textures.glow, tint: state.gameMode==='RELAY'?relayLook(event.moveId,'player').tint:MOVE_TINT[event.moveId] ?? 0xffffff, scale: 0.6, scaleTo: 0.15, life: 0.14 });
-          if (state.gameMode === 'RELAY') { relayImpact(event.x, event.y - 14, relayLook(event.moveId, 'player')); tethers.delete(event.actionId); } break;
+        case "SKILL_HIT": if (kitShots && state.gameMode === 'RELAY') break;
+          spawn({ x: event.x, y: event.y - 14, texture: textures.glow, tint: state.gameMode==='RELAY'?relayLook(event.moveId,'player').tint:MOVE_TINT[event.moveId] ?? 0xffffff, scale: 0.6, scaleTo: 0.15, life: 0.14 });
+          if (state.gameMode === 'RELAY') { relayImpact(event.x, event.y - 14, relayLook(event.moveId, 'player')); } break;
         case "STATUS": burst(event.x, event.y - 30, { count: 4, speed: 120, tint: event.status === "ROOT" ? 0xd8f6ff : event.status === "SLOW" ? 0x7fc8ff : 0xff9a3c, life: 0.35 }); break;
         case "ROUND_WON": crowdReact("VICTORY", event.x ?? worldWidth / 2, 1.4); confetti(); camera.addTrauma(0.3); break;
         case "ROUND_LOST": crowdReact("DEFEAT", worldWidth / 2, 1); break;
@@ -1320,12 +1329,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
 
     // Shots.
     const liveShots = new Set();
-    tetherGfx.clear();
     for (const projectile of state.projectiles) {
       liveShots.add(projectile.id);
       const entry = shotView(projectile);
       const visible = inView(projectile.x, projectile.y);
-      entry.sprite.visible = visible; entry.glow.visible = visible && rich; entry.shadow.visible = visible;
+      entry.sprite.visible = visible && !entry.kitDrawn; entry.glow.visible = visible && rich && !entry.kitDrawn; entry.shadow.visible = visible;
       if (!visible) continue;
       const lift = projectile.kind === "TIDE" ? 18 : 12;
       if (entry.origin) { entry.from = [entry.origin.x - projectile.x, entry.origin.y - (projectile.y - lift)]; entry.fromBorn = entry.origin.born; entry.origin = null; }
@@ -1337,20 +1345,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       else entry.sprite.alpha = 1;
       if (projectile.kind !== "ORB") entry.sprite.rotation = Math.atan2(projectile.vy, projectile.vx);
       else entry.sprite.rotation = elapsed * 4;
-      const tether = tethers.get(projectile.actionId);
-      if (tether && elapsed - tether.born < 0.45) {
-        // Dual-layer additive neon beam + high-frequency sine-wave white core.
-        const fade = 1 - (elapsed - tether.born) / 0.45, dx = projectile.x - tether.x, dy = projectile.y - lift - tether.y;
-        const len = Math.hypot(dx, dy) || 1, nx = -dy / len, ny = dx / len;
-        const points = Array.from({ length: 13 }, (_, i) => { const t = i / 12, wave = Math.sin(i * 2.3 - elapsed * 52) * 4.5 * Math.sin(t * Math.PI);
-          return [tether.x + dx * t + nx * wave, tether.y + dy * t + ny * wave]; });
-        for (const [width, color, alpha] of [[14, tether.tint, 0.35 * fade], [7, tether.tint, 0.65 * fade], [3.2, 0xffffff, 0.95 * fade]]) {
-          tetherGfx.moveTo(...points[0]); for (const point of points.slice(1)) tetherGfx.lineTo(...point);
-          tetherGfx.stroke({ width, color, alpha, cap: 'round', join: 'round' });
-        }
-      }
     }
-    for (const [id, tether] of tethers) if (elapsed - tether.born >= 0.45) tethers.delete(id);
     for (const [id, origin] of releaseOrigins) if (elapsed - origin.born >= 0.5) releaseOrigins.delete(id);
     for (const [id, entry] of shotViews) {
       if (liveShots.has(id)) continue;
@@ -1438,14 +1433,18 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     for (const t of state.telegraphs) {
       const p = clamp(t.t / t.duration, 0, 1);
       const mine = t.team === "player";
-      if (t.kind === "LINE" && mine) {
-        const ex = t.x + Math.cos(t.angle) * t.length, ey = t.y + Math.sin(t.angle) * t.length;
-        g.moveTo(t.x, t.y).lineTo(ex, ey).stroke({ width: Math.max(4, t.width), color: 0x6ff7ff, alpha: 0.22 + 0.25 * p });
-        g.moveTo(t.x, t.y).lineTo(ex, ey).stroke({ width: 2, color: 0xffffff, alpha: 0.55 * p });
-      } else if (t.kind === "CONE" && mine) {
-        for (let i = 0; i < t.count; i++) {
-          const a = t.angle - t.spread / 2 + (t.spread * i) / Math.max(1, t.count - 1);
-          g.moveTo(t.x, t.y).lineTo(t.x + Math.cos(a) * t.length * 0.6, t.y + Math.sin(a) * t.length * 0.6).stroke({ width: 3.5, color: 0x6ff7ff, alpha: 0.45 });
+      if ((t.kind === "LINE" || t.kind === "CONE") && mine) {
+        // Own aim: short chevrons near the feet instead of a line across the field (Owner 2026-11-05).
+        const rays = t.kind === "CONE" ? Array.from({ length: t.count }, (_, i) => t.angle - t.spread / 2 + (t.spread * i) / Math.max(1, t.count - 1)) : [t.angle];
+        const reach = Math.min(t.length, 96);
+        for (const a of rays) {
+          const ca = Math.cos(a), sa = Math.sin(a);
+          for (let k = 0; k < 3; k++) {
+            const d = 30 + reach * (k + 1) / 3 - 18, w = 9 - k, alpha = (0.75 - k * 0.2) * (0.5 + 0.5 * p);
+            const cx = t.x + ca * d, cy = t.y + sa * d;
+            g.moveTo(cx - ca * w - sa * w, cy - sa * w + ca * w).lineTo(cx, cy).lineTo(cx - ca * w + sa * w, cy - sa * w - ca * w)
+              .stroke({ width: 3, color: 0x6ff7ff, alpha, cap: 'round', join: 'round' });
+          }
         }
       } else if (t.kind === "CIRCLE" && mine) {
         const fxColor = t.moveId ? relayLook(t.moveId, 'player').tint : 0x6ff7ff;
@@ -1453,20 +1452,19 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         g.circle(t.x, t.y, t.radius * Math.max(0.18, p)).fill({ color: fxColor, alpha: 0.16 }).stroke({ width: 1.8, color: 0xffffff, alpha: 0.55 });
         for (let i = 0; i < 6; i++) {
           const a0 = elapsed * 2.2 + (i * TAU) / 6;
-          g.arc(t.x, t.y, t.radius - 5, a0, a0 + 0.3).stroke({ width: 2.2, color: 0xffffff, alpha: 0.65 });
+          arcPath(g, t.x, t.y, t.radius - 5, a0, a0 + 0.3).stroke({ width: 2.2, color: 0xffffff, alpha: 0.65 });
         }
       } else if (t.kind === "LINE") {
         const ex = t.x + Math.cos(t.angle) * t.length, ey = t.y + Math.sin(t.angle) * t.length;
+        // A danger band that fills from the attacker as the strike nears, not a bare line across the field (Owner 2026-11-05).
         const nx = -Math.sin(t.angle) * (t.width / 2 + 4), ny = Math.cos(t.angle) * (t.width / 2 + 4);
-        g.poly([t.x + nx, t.y + ny, ex + nx, ey + ny, ex - nx, ey - ny, t.x - nx, t.y - ny]).fill({ color: 0xff3b5c, alpha: 0.16 + 0.22 * p });
+        g.poly([t.x + nx, t.y + ny, ex + nx, ey + ny, ex - nx, ey - ny, t.x - nx, t.y - ny]).fill({ color: 0xff3b5c, alpha: 0.1 + 0.1 * p });
         const fx = t.x + Math.cos(t.angle) * t.length * p, fy = t.y + Math.sin(t.angle) * t.length * p;
-        g.moveTo(t.x, t.y).lineTo(fx, fy).stroke({ width: 3.5, color: 0xffd0d8, alpha: 0.92 });
+        g.poly([t.x + nx, t.y + ny, fx + nx, fy + ny, fx - nx, fy - ny, t.x - nx, t.y - ny]).fill({ color: 0xff2f4a, alpha: 0.2 });
       } else if (t.kind === "CONE") {
-        for (let i = 0; i < t.count; i++) {
-          const a = t.angle - t.spread / 2 + (t.spread * i) / (t.count - 1);
-          g.moveTo(t.x, t.y).lineTo(t.x + Math.cos(a) * t.length * (0.4 + 0.6 * p), t.y + Math.sin(a) * t.length * (0.4 + 0.6 * p))
-            .stroke({ width: 4, color: 0xff7a2a, alpha: 0.4 + 0.45 * p });
-        }
+        // A filled warning fan that grows toward its reach.
+        const reach = t.length * (0.4 + 0.6 * p), a0 = t.angle - t.spread / 2 - 0.08, a1 = t.angle + t.spread / 2 + 0.08;
+        g.moveTo(t.x, t.y).arc(t.x, t.y, reach, a0, a1).lineTo(t.x, t.y).fill({ color: 0xff7a2a, alpha: 0.18 + 0.2 * p });
       } else if (t.kind === "RING") {
         for (let i = 0; i < t.count; i++) {
           const a = (i / t.count) * TAU;
@@ -1480,7 +1478,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         g.circle(t.x, t.y, t.radius * Math.max(0.18, p)).fill({ color, alpha: t.danger ? 0.24 : 0.15 }).stroke({ width: 1.8, color: 0xffd0d8, alpha: 0.6 });
         for (let i = 0; i < 6; i++) {
           const a0 = -elapsed * 2.2 + (i * TAU) / 6;
-          g.arc(t.x, t.y, t.radius - 5, a0, a0 + 0.28).stroke({ width: 2.2, color: 0xffd0d8, alpha: 0.65 });
+          arcPath(g, t.x, t.y, t.radius - 5, a0, a0 + 0.28).stroke({ width: 2.2, color: 0xffd0d8, alpha: 0.65 });
         }
       }
     }
@@ -1496,7 +1494,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const pts = [];
       for (let i = 0; i < 6; i++) {
         const a0 = elapsed * (zone.team === "player" ? 2.4 : -2.4) + (i * TAU) / 6;
-        g.arc(zone.x, zone.y, zone.radius - 6, a0, a0 + 0.32).stroke({ width: 3, color, alpha: 0.9 });
+        arcPath(g, zone.x, zone.y, zone.radius - 6, a0, a0 + 0.32).stroke({ width: 3, color, alpha: 0.9 });
         pts.push(zone.x + Math.cos(a0) * (zone.radius * 0.72), zone.y + Math.sin(a0) * (zone.radius * 0.72));
       }
       if (pts.length === 12) {
@@ -1511,7 +1509,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const self = state.player;
     if (self.barrier > 0) {
       const half = (self.barrierArc ?? 2) / 2;
-      g.arc(self.x, self.y - 16, self.barrierRadius ?? 64, self.barrierAngle - half, self.barrierAngle + half).stroke({ width: 7, color: 0xffe066, alpha: 0.85 });
+      arcPath(g, self.x, self.y - 16, self.barrierRadius ?? 64, self.barrierAngle - half, self.barrierAngle + half).stroke({ width: 7, color: 0xffe066, alpha: 0.85 });
     }
     for (const body of [self, ...state.rivals]) if (body.root > 0) g.ellipse(body.x, body.y, 30, 12).stroke({ width: 4, color: 0xc8f4ff, alpha: 0.9 });
     for (const scan of state.scans) {
@@ -1520,21 +1518,21 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const ex = scan.x + Math.cos(scan.angle) * DATA_ARENA_SCAN.length, ey = scan.y + Math.sin(scan.angle) * DATA_ARENA_SCAN.length;
       g.moveTo(scan.x, scan.y).lineTo(ex, ey).stroke({ width: 2 + p * 6, color: 0xff2f5a, alpha: 0.35 + 0.4 * p });
       const arc = scan.angle + scan.spin * 0.45;
-      g.arc(scan.x, scan.y, 220, Math.min(scan.angle, arc), Math.max(scan.angle, arc)).stroke({ width: 4, color: 0xffd0da, alpha: 0.7 });
+      arcPath(g, scan.x, scan.y, 220, Math.min(scan.angle, arc), Math.max(scan.angle, arc)).stroke({ width: 4, color: 0xffd0da, alpha: 0.7 });
     }
     // Beacons: capture progress ring.
     for (const beacon of state.beacons) {
       if (!beacon.active) continue;
       if (beacon.captured) { g.circle(beacon.x, beacon.y, DATA_ARENA_BEACON.radius).stroke({ width: 6, color: 0x5affc8, alpha: 0.9 }); continue; }
       g.circle(beacon.x, beacon.y, DATA_ARENA_BEACON.radius).stroke({ width: 4, color: 0x5affc8, alpha: 0.35 + 0.25 * Math.sin(elapsed * 4) });
-      if (beacon.progress > 0) g.arc(beacon.x, beacon.y, DATA_ARENA_BEACON.radius - 8, -Math.PI / 2, -Math.PI / 2 + beacon.progress * TAU).stroke({ width: 10, color: 0x5affc8, alpha: 0.95 });
+      if (beacon.progress > 0) arcPath(g, beacon.x, beacon.y, DATA_ARENA_BEACON.radius - 8, -Math.PI / 2, -Math.PI / 2 + beacon.progress * TAU).stroke({ width: 10, color: 0x5affc8, alpha: 0.95 });
       g.circle(beacon.x, beacon.y, 18).fill({ color: 0x5affc8, alpha: 0.6 + 0.3 * Math.sin(elapsed * 6) });
     }
     // Mate revive ring and ride reach hint.
     const mate = state.mate, player = state.player;
     if (mate.state === "DOWNED") {
       g.circle(mate.x, mate.y, 86).stroke({ width: 3, color: 0x8dffb0, alpha: 0.6 });
-      if (mate.reviveProgress > 0) g.arc(mate.x, mate.y, 78, -Math.PI / 2, -Math.PI / 2 + mate.reviveProgress * TAU).stroke({ width: 8, color: 0x8dffb0 });
+      if (mate.reviveProgress > 0) arcPath(g, mate.x, mate.y, 78, -Math.PI / 2, -Math.PI / 2 + mate.reviveProgress * TAU).stroke({ width: 8, color: 0x8dffb0 });
     } else if (player.state === "NORMAL" && mate.state === "FOLLOW" && Math.hypot(player.x - mate.x, player.y - mate.y) < 120) {
       g.ellipse(mate.x, mate.y, 44, 18).stroke({ width: 3, color: 0x7fe9ff, alpha: 0.4 + 0.3 * Math.sin(elapsed * 6) });
     }
