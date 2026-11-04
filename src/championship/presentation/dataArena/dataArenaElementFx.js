@@ -57,6 +57,8 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
   if (!layer) return null;
   const kit = useKit ? createMoveVfxKit({PIXI, front, ground, quality: quality === 'low' ? 'saver' : 'balanced', reducedMotion, seed: 0xda7b}) : null;
   const SCALE = 5; // world px per native px: the arena camera shows the field far wider than a battle
+  // Kit effects read at phone size under that wide camera (Owner 2026-11-05: they looked small).
+  const KIT = 1.4;
   const pick = (style, role) => {
     for (const set of [STYLE_FALLBACK_CELLS[style], ALTERNATE[style]]) {
       const cell = set?.[role];
@@ -82,7 +84,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     cast({x, y, moveId, speciesId, windup = 0.2, size = 30, follow = null}) {
       if (reducedMotion) return;
       const v = look(moveId, speciesId);
-      if (kit) { kit.charge({x, y, paletteKey: v.paletteKey, size, ms: Math.max(0.12, windup) * 1000, follow}); stats.casts++; return; }
+      if (kit) { kit.charge({x, y, paletteKey: v.paletteKey, size: size * KIT, ms: Math.max(0.12, windup) * 1000, follow}); stats.casts++; return; }
       layer.charge({x, y, palette: v.palette, ms: Math.max(0.12, windup) * 1000, size, follow});
       stats.casts++;
     },
@@ -91,8 +93,8 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
       const v = look(moveId, speciesId);
       if (kit) {
         const archetype = v.archetype;
-        if (melee) kit.melee({x, y, angle, paletteKey: v.paletteKey, archetype, size: 34});
-        else kit.launch({x, y, angle, paletteKey: v.paletteKey, archetype, size: 28});
+        if (melee) kit.melee({x, y, angle, paletteKey: v.paletteKey, archetype, size: 34 * KIT});
+        else kit.launch({x, y, angle, paletteKey: v.paletteKey, archetype, size: 28 * KIT});
         stats.releases++;
         return;
       }
@@ -105,7 +107,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     projectile({follow, moveId, speciesId, angle = 0, lifeMs = 950, scale = SCALE * 0.82, size = 26}) {
       if (kit) {
         const v = look(moveId, speciesId);
-        const ok = Boolean(kit.projectile({follow, paletteKey: v.paletteKey, archetype: v.archetype, size}));
+        const ok = Boolean(kit.projectile({follow, paletteKey: v.paletteKey, archetype: v.archetype, size: size * KIT}));
         if (ok) stats.projectiles++;
         return ok;
       }
@@ -121,7 +123,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     hit({x, y, groundY = y, moveId, speciesId, heavy = false, follow = null, angle = 0, size = 30}) {
       const v = look(moveId, speciesId);
       if (kit) {
-        kit.impact({x, y, groundY, angle, paletteKey: v.paletteKey, archetype: v.archetype, heavy, size});
+        kit.impact({x, y, groundY, angle, paletteKey: v.paletteKey, archetype: v.archetype, heavy, size: size * KIT});
         if (heavy) layer.hold(55);
         stats.hits++;
         return;
@@ -147,7 +149,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     area({x, y, radius = 100, moveId, speciesId}) {
       if (!kit) return false;
       const v = look(moveId, speciesId);
-      kit.impact({x, y, groundY: y, paletteKey: v.paletteKey, archetype: v.archetype, heavy: true, size: Math.max(20, radius * 0.31)});
+      kit.impact({x, y, groundY: y, paletteKey: v.paletteKey, archetype: v.archetype, heavy: true, size: Math.max(20 * KIT, radius * 0.31)});
       stats.hits++;
       return true;
     },
@@ -157,7 +159,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
       // The kit washes the field in the move's colour; the line-art storm stays for the classic look.
       if (kit) kit.wash({rect, center, paletteKey: v.paletteKey});
       else layer.storm({kind: v.storm, palette: v.palette, paletteKey: v.paletteKey, rect, center});
-      if (center && kit) kit.signature({x: center.x, y: center.y, paletteKey: v.paletteKey, archetype: v.archetype, size: 40});
+      if (center && kit) kit.signature({x: center.x, y: center.y, paletteKey: v.paletteKey, archetype: v.archetype, size: 40 * KIT});
       else if (center) {
         const cell = cellFor(v, 'hit') ?? cellFor(v, 'launch');
         if (cell) layer.cell({...cell, x: center.x, y: center.y, scale: SCALE * 1.25});
