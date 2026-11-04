@@ -3,11 +3,12 @@ import {habitatMatch} from '../contracts/speciesTaxonomy.js';
 import {GACHA_CHIPS,GACHA_METALS,GACHA_GOODS,GACHA_PITY_MAX,GACHA_MACHINES,GACHA_BLOODLINES,getGachaChip,getGachaMetal,getGachaGoods,gachaRarityRank,
   grantGachaWelcome,grantGachaTickets,pullCyberGacha,claimGachaPity,autoFillSynthesizer,synthesizeGachaMetal,applyGachaBoost,metalBoostEffect,
   inscribesBloodline,catalystRarityForGeneration,spendGachaItem,fuseGachaShards,shardFusionTarget,GACHA_SHARD_FUSION_COST,settleGachaBattleWin,takeArmedHuntChips,gachaBloodlineOf,claimGachaReward} from '../gacha/cyberGacha.js';
-import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, normalizeFriendsPlaytestState, purchaseTestRanchRow, creditTestDiamonds } from './friendsPlaytestPolicy.js';
-import {recordGachaClaims,automationForgePlan,forgeAutomationItem,mountAutomationCore,unmountAutomationCore,settleRanchAutomation,
+import { grantFriendsPlaytestCoins, migrateFriendsPlaytestDiamonds, normalizeFriendsPlaytestState, purchaseTestRanchRow, creditTestDiamonds, productDiamondWallet } from './friendsPlaytestPolicy.js';
+import {recordGachaClaims,automationForgePlan,forgeAutomationItem,deployAutomationCore,tickAutomationRuns,settleRanchAutomation,
   setGachaBondCarry,claimGachaBundle,grantGachaAutomation} from '../gacha/cyberGacha.js';
-import {AUTOMATION_ITEMS,AUTOMATION_RECIPES,AUTOMATION_RULES,getAutomationItem,automationItemForEdition,cageAutomation,royalTotal,autoFeedAffection,royalSleepBonus,
-  FOUNDER_PACK_ART} from '../gacha/ranchAutomation.js';
+import {AUTOMATION_ITEMS,AUTOMATION_RECIPES,AUTOMATION_RULES,getAutomationItem,cageAutomation,royalTotal,autoFeedAffection,royalSleepBonus,
+  coreModules,FOUNDER_PACK_ART} from '../gacha/ranchAutomation.js';
+import {AUTO_CARE_RULES,createCleanerBot,stepCleanerBot,cleanerCuriosity,stepCleanerRider,createFeederTower,stepFeederTower,machineHome} from '../raising/autoCareMachines.js';
 import {LAND_EXPANSION,DIAMOND_REWARDS,FOUNDER_PACK,diamondRewardKey,dueDiamondMilestones,landExpansionTier,landExpansionPrice,landMemoryBonusG,
   founderPackUnlocked} from '../gacha/diamondRewards.js';
 import { planOnlineBindReward } from './onlineBindRewardPolicy.js';
@@ -102,7 +103,9 @@ import {createRanchRaisingGround as createNativeRaisingGround,ranchRaisingSpawnP
 import {createNativeRaisingFood,stepNativeRaisingFood,foodVisualQuarter,nativeRaisingFeast,reconcileNativeFoodReservations} from "../raising/nativeRaisingFood.js";
 import {separateNativeRaisingGroundActors} from '../raising/nativeGroundSpacing.js';
 import {stepRanchConveyor} from '../raising/ranchConveyor.js';
-import {PRODUCT_RANCH_GRID,PRODUCT_WAITING_ROOM_SLOT,productGridCell,productPlacementCells} from '../cage/productRanchGrid.js';
+import {PRODUCT_RANCH_GRID,PRODUCT_WAITING_ROOM_SLOT,productGridCell,productPlacementCells,repairProductRanchPlacements} from '../cage/productRanchGrid.js';
+import {ownedModuleCount} from '../cage/cageInventory.js';
+import {WAITING_ROOM_MODULE} from '../cage/nativeRanchLayout.js';
 import {normalizeNativeRaisingHome,nativeRaisingRebuiltListOrder} from "../raising/nativeRaisingHomeState.js";
 import {allocateNativeRaisingWaste} from '../raising/nativeRaisingWaste.js';
 import {projectNativeRaisingCalendar} from '../raising/nativeRaisingCalendar.js';
@@ -112,7 +115,7 @@ import {settleNativeRaisingCage,nativeCageConditionEffects} from '../raising/nat
 import { maxGFromInventory } from "../hunt/capture/memoryCardCapacity.js";
 import { createHuntInventory } from "../hunt/loadout/huntInventory.js";
 import { createHuntLoadout } from "../hunt/loadout/huntLoadoutRuntime.js";
-import { HUNT_STARTING_INVENTORY } from "../hunt/loadout/huntEquipmentCatalog.js";
+import { HUNT_STARTING_INVENTORY, getHuntCatalogItem } from "../hunt/loadout/huntEquipmentCatalog.js";
 import {
   applyMappedHuntInventoryFromShop,
   createShopRuntime
@@ -181,6 +184,10 @@ export function evolutionStatChange(before, after) {
 export function createChampionshipStandaloneApp({
   storage,
   playtestPolicy = null,
+  // Owner 2026-11-04: the product economy -- the diamond wallet, the 10 x 10 hex land and its diamond
+  // rows -- stands apart from the friends playtest (which only adds its grant and opens everything).
+  // The public entry turns it on; the default app keeps the original economy and grid.
+  productEconomy = false,
   locks = globalThis.window?.navigator?.locks,
   catalog,
   cages = [],
@@ -302,6 +309,48 @@ export function createChampionshipStandaloneApp({
   let huntLoadout = null;
   let shop = null;
   let friendsPlaytest = null;
+  // Owner 2026-11-04: what the last Continue repaired in a refused ranch layout (null when nothing).
+  let ranchLoadRepair = null;
+  /**
+   * The cage editor for a saved layout. A layout the editor refuses (a full ranch saved on 2026-11-04
+   * was refused with ChampionshipCageEditError and locked the whole save) is repaired rather than
+   * refusing Continue. The editor is opened and its frame built, so the ownership check runs here too:
+   * copies placed beyond the copies owned go back to storage (saved order kept), then the largest
+   * valid hex world in the saved order, else the starting ranch. Every cage stays owned; partners
+   * whose cage is gone move to the waiting room as on any load.
+   */
+  function loadCageEditor(snapshot) {
+    ranchLoadRepair = null;
+    const open = value => {
+      const editor = createCageEditRuntime({ snapshot: value, publicTestGrid: productLand, initialTamerRank: tamerRankValue });
+      editor.getFrame(...cageEditArgs());
+      return editor;
+    };
+    try { return open(snapshot); }
+    catch (error) {
+      const code = typeof error?.message === 'string' ? error.message : 'UNKNOWN';
+      if (error?.name !== 'ChampionshipCageEditError' && !/RANCH|CAGE/.test(code)) throw error;
+      console.warn('CHAMPIONSHIP_RANCH_LAYOUT_REPAIRED', code);
+      if (snapshot?.layoutVersion === PRODUCT_RANCH_GRID && Array.isArray(snapshot.placements)) {
+        // Copies beyond what is owned (bought copies plus royal editions) first, then the cell rules.
+        const [stock] = cageEditArgs(), placedOf = new Map();
+        const owned = snapshot.placements.filter(entry => {
+          const placed = (placedOf.get(entry?.moduleId) ?? 0) + 1;
+          placedOf.set(entry?.moduleId, placed);
+          return entry?.moduleId === WAITING_ROOM_MODULE || placed <= ownedModuleCount(entry?.moduleId, stock);
+        });
+        const repair = repairProductRanchPlacements(owned);
+        try {
+          const editor = open({ ...snapshot, placements: repair.placements });
+          ranchLoadRepair = Object.freeze({ code, removed: snapshot.placements.length - repair.placements.length, reset: false });
+          return editor;
+        } catch { /* fall through to the starting ranch */ }
+      }
+      ranchLoadRepair = Object.freeze({ code, removed: Array.isArray(snapshot?.placements) ? snapshot.placements.length : 0, reset: true });
+      return createCageEditRuntime({ initializeOriginal: true, publicTestGrid: productLand, initialTamerRank: tamerRankValue });
+    }
+  }
+  const productLand = productEconomy === true || playtestPolicy?.enabled === true;
   // Owner 2026-10-29: the save's record of a paid first-bind reward (onlineBindRewardPolicy.js).
   let onlineBindReward = null;
   let lastShopReceipt = null;
@@ -331,6 +380,9 @@ export function createChampionshipStandaloneApp({
   let pendingRoyalEdition=null;
   let automationEvents=[];
   let automationSerial=0;
+  // AUTO_CARE_3D_20261103: the deployed machines on the current ground (never saved: the save keeps only
+  // each machine's seconds left), the robots leaving after their hour, and the run clock's carry.
+  let autoCare={ground:null,cleaners:new Map(),feeders:new Map(),retiring:[],runCarry:0,saveCarry:0,wasteKeys:new WeakMap(),wasteSerial:0};
   let lastDiamondRewards=Object.freeze([]);
   let lastLandExpansion=null;
   // OWNER_APPROVED_ADAPTATION 2026-11-02: burst evolution unlocks per partner (STAGE_REDESIGN_BURST_20261102).
@@ -457,7 +509,8 @@ export function createChampionshipStandaloneApp({
     }
     const grant = newSave ? grantFriendsPlaytestCoins(shop.getBits(), friendsPlaytest, shop.getFrame().bitsCap, playtestPolicy) : {bits:shop.getBits(),state:friendsPlaytest,granted:0};
     if (grant.granted) shop.applyBitsTransaction({expectedBits:shop.getBits(),bits:grant.bits});
-    friendsPlaytest = grant.state;
+    // Owner 2026-11-04: with the product economy every save has the diamond wallet; the playtest grant only fills it.
+    friendsPlaytest = productEconomy ? productDiamondWallet(grant.state) : grant.state;
     if (grant.granted) savePort.markDirty();
     bindShopRuntime();
   }
@@ -659,7 +712,9 @@ export function createChampionshipStandaloneApp({
     const habitat=raceHabitat&&!dirty?'cozy':native;
     const mood=partnerMood({fields,growth:actor.growthFields??{},state:actor.state,statusMusic:actor.statusMusic,habitat});
     return Object.freeze({mood,emoji:PARTNER_MOODS[mood].emoji,habitat,raceHabitat,hearts:partnerAffectionHearts(fields),
-      affection:Math.max(0,Math.min(100,Number(fields['020'])||0)),greeting:partnerLifeState.greetings.some(g=>g.a===id||g.b===id)});
+      affection:Math.max(0,Math.min(100,Number(fields['020'])||0)),greeting:partnerLifeState.greetings.some(g=>g.a===id||g.b===id),
+      // Owner 2026-11-04: its next form would overfill the cage for this tamer rank.
+      crowded:Boolean(actor.capacityBlocked)});
   }
   function partnerRegion(actor){
     const nav=raisingGround?.navigation,home=`cage:${actor.cageInstanceId??actor.cageDefinitionIndex}`;
@@ -805,8 +860,9 @@ export function createChampionshipStandaloneApp({
   }
 
   function spawnRaisingWaste(definition,speciesIndex,positionQ12,cageInstanceId=null) {
-    // DIAMOND_ECONOMY_20261102: an automated cage clears it at once (the partner still counts it as done).
-    if(cageInstanceId&&cyberGacha&&cageAutomation(cyberGacha,cageInstanceId).clean){autoCleanWaste(cageInstanceId,positionQ12);return true;}
+    // DIAMOND_ECONOMY_20261102: a royal cage clears it at once (the partner still counts it as done). A deployed
+    // cleaning robot (AUTO_CARE_3D_20261103) drives over and sweeps it up instead.
+    if(cageInstanceId&&cyberGacha&&cageAutomation(cyberGacha,cageInstanceId).royal){autoCleanWaste(cageInstanceId,positionQ12);return true;}
     const waste=allocateNativeRaisingWaste(raisingWaste,{speciesIndex,cageDefinitionIndex:definition,positionQ12});
     if(!waste)return false;if(cageInstanceId)waste.cageInstanceId=cageInstanceId;raisingWaste=raisingWaste.filter(w=>w.present);raisingWaste.push(waste);
     raisingDirtySignals.set(cageInstanceId??definition,{dirtyAdded:true});savePort.markDirty();return true;
@@ -915,7 +971,8 @@ export function createChampionshipStandaloneApp({
         }
         const result=stepNativeRaisingActor(actor,raisingNativeProfile(id),{ageDelta,rng:{next:nextGameplayRandom},
           feeding:raisingGround?{ground:raisingGround,foods:raisingFoods,signals,actors:raisingActors.values()}:null,
-          lifecycle:raisingGround?{rank:Math.min(9,tamerRankValue),minute:before.clockMinutes+minutes,season:before.season,
+          // The playtest lifts the rank's evolution ceiling and cage capacity (Owner 2026-11-04).
+          lifecycle:raisingGround?{rank:playtestPolicy?.enabled===true?9:Math.min(9,tamerRankValue),minute:before.clockMinutes+minutes,season:before.season,
             training:realtime?REALTIME_TRAINING_POLICY:null,trainingBonus:royalTrainingBonus(actor),
             cageEffects:realtime&&REALTIME_RECOVERY_CAGES.includes(actor.cageDefinitionIndex)?[]:undefined,
             onJoin:()=>notifyNativeRaisingResidentAdded(actor,[...raisingActors.values()].filter(a=>!a.detached),{next:nextGameplayRandom}),
@@ -925,7 +982,10 @@ export function createChampionshipStandaloneApp({
             rottenFoodCount:raisingFoods.filter(f=>f.present&&(f.cageInstanceId??f.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)&&f.freshness<=0).length,
             ...raisingDirtySignals.get(actor.cageInstanceId??actor.cageDefinitionIndex),spawnWaste:(species,position)=>spawnRaisingWaste(actor.cageDefinitionIndex,species,position,actor.cageInstanceId)}:null});
         if(result.changed) {writeRaisingNativeProfile(id,result.profile);changed=true;}
-        // DIAMOND_ECONOMY_20261102: an auto-feed cage feeds a hungry partner; a royal cage speeds up its sleep.
+        // Owner 2026-11-03: a partner fresh out of its egg stays up a while before any night nap.
+        if(result.hatched)realtimeWake.set(id,realNowMs()+REALTIME_WAKE_SECONDS*1000);
+        // DIAMOND_ECONOMY_20261102: a royal cage feeds a hungry partner and speeds up its sleep (a deployed
+        // feeding tower throws meat instead: stepAutoCare).
         if(autoFeedRaisingPartner(id,actor))changed=true;
         if(royalSleepStep(id,actor,ageDelta))changed=true;
         if(realtime&&realtimeRecoveryStep(id,actor,before.season))changed=true;
@@ -935,6 +995,7 @@ export function createChampionshipStandaloneApp({
       reconcileNativeFoodReservations(raisingActors.values(),raisingFoods);
       if(raisingGround)for(const actor of raisingActors.values())if(stepRanchConveyor(actor,raisingGround))changed=true;
       if(raisingGround&&separateNativeRaisingGroundActors(raisingActors.values(),raisingGround).changed)changed=true;
+      if(stepAutoCare(1/60))changed=true;
       raisingDirtySignals.clear();
       if(++automationPatrolFrames>=60){automationPatrolFrames=0;if(sweepAllAutomatedCages())changed=true;}
       stepPartnerLife(before);
@@ -1190,7 +1251,8 @@ export function createChampionshipStandaloneApp({
     for(const p of frame.placements??[]){
       if(!p.instanceId)continue;
       const auto=cageAutomation(state,p.instanceId);
-      if(auto.clean||auto.feed)out[p.instanceId]=Object.freeze({edition:auto.edition,royal:auto.royal,clean:auto.clean,feed:auto.feed,mounted:auto.mounted});
+      if(auto.clean||auto.feed)out[p.instanceId]=Object.freeze({edition:auto.edition,royal:auto.royal,clean:auto.clean,feed:auto.feed,mounted:auto.mounted,
+        cleanSeconds:auto.cleanSeconds,feedSeconds:auto.feedSeconds});
     }
     return Object.freeze(out);
   }
@@ -1199,7 +1261,7 @@ export function createChampionshipStandaloneApp({
     const capacity=Math.min(grid.cellCap,frame.landCapacity??grid.landCapacity),next=grid.landRows?.[0]??null;
     return Object.freeze({capacity,cap:grid.cellCap,used:grid.usedCells,tier:landExpansionTier(capacity),tiers:LAND_EXPANSION.prices.length,price:landExpansionPrice(capacity)??0,
       step:next?.cells??0,nextRow:next?.row??null,max:!next,diamonds:friendsPlaytest?.diamonds??0,
-      available:playtestPolicy?.enabled===true&&Boolean(friendsPlaytest),memoryBonusG:landExpansionTier(capacity)*LAND_EXPANSION.memoryGPerTier});
+      available:productLand&&Boolean(friendsPlaytest),memoryBonusG:landExpansionTier(capacity)*LAND_EXPANSION.memoryGPerTier});
   }
   function pushAutomationEvent(event){
     automationEvents=[...automationEvents,Object.freeze({...event,serial:++automationSerial})].slice(-12);
@@ -1218,7 +1280,7 @@ export function createChampionshipStandaloneApp({
     const owner=nav.ownerAt([positionQ12[0]>>12,positionQ12[1]>>12]);if(!owner)return null;
     return raisingGround.placements?.find(p=>p.ownerIndex===owner.ownerIndex)?.instanceId??null;
   }
-  /** Droppings already lying in a cage that just became automated are cleared too -- by owner or by where they lie. */
+  /** Droppings already lying in a royal cage are cleared too -- by owner or by where they lie. */
   function sweepAutomatedCage(instanceId){
     let swept=0;
     for(const waste of raisingWaste)if(waste.present&&(waste.cageInstanceId===instanceId||cageInstanceAt(waste.positionQ12)===instanceId)){
@@ -1226,29 +1288,163 @@ export function createChampionshipStandaloneApp({
     if(swept){raisingWaste=raisingWaste.filter(w=>w.present);raisingDirtySignals.set(instanceId,{dirtyRemoved:true});storeNativeRaisingHome();}
     return swept;
   }
-  /** Every auto-clean cage on the ground (mounted core or royal edition) swept at once. */
+  /** Every royal cage on the ground swept at once (a deployed robot sweeps its own cluster). */
   function sweepAllAutomatedCages(){
     if(!raisingGround||!cyberGacha)return 0;
     let swept=0;
-    for(const p of raisingGround.placements??[])if(p.instanceId&&cageAutomation(cyberGacha,p.instanceId).clean)swept+=sweepAutomatedCage(p.instanceId);
+    for(const p of raisingGround.placements??[])if(p.instanceId&&cageAutomation(cyberGacha,p.instanceId).royal)swept+=sweepAutomatedCage(p.instanceId);
     return swept;
   }
-  /** A hungry partner (the native hungry flag, satiety <= 2) in an auto-feed cage is fed to full: +2.4 affection. */
-  function autoFeedRaisingPartner(id,actor){
-    const auto=cageAutomationOf(actor);
-    if(!auto?.feed||actor.detached||actor.evolution||actor.state===4||actor.speciesIndex<8)return false;
+  /** Whether a partner shows the hungry bubble (native status 3, growth flag 418) or is down to the native hungry satiety. */
+  function partnerWantsMeat(id,actor){
+    if(actor.detached||actor.evolution||actor.state===4||actor.speciesIndex<8)return false;
     const profile=raisingNativeProfile(id);if(!profile)return false;
     const species=nativeHuntSpeciesByIndex(profile.fields['000']);
-    if(!species||species.generation===0||(profile.fields['008']|0)>AUTOMATION_RULES.hungrySatiety)return false;
+    if(!species||species.generation===0)return false;
+    return Boolean(actor.growthFields?.['418'])||(profile.fields['008']|0)<=AUTOMATION_RULES.hungrySatiety;
+  }
+  /** A hungry partner in a royal cage is fed to full at once: +2.4 affection. */
+  function autoFeedRaisingPartner(id,actor){
+    const auto=cageAutomationOf(actor);
+    if(!auto?.royal||!partnerWantsMeat(id,actor))return false;
+    return feedPartnerToFull(id,actor,{meat:0});
+  }
+  /** Feed one partner to full (auto-feed rules): satiety, the hunger counters and the hungry bubble reset, +2.4 affection. */
+  function feedPartnerToFull(id,actor,{meat}){
+    const profile=raisingNativeProfile(id);if(!profile)return false;
+    const species=nativeHuntSpeciesByIndex(profile.fields['000']);if(!species)return false;
     const gain=autoFeedAffection(gachaState().bondCarry?.[id]??0),next=structuredClone(profile);
     next.fields['008']=species.field1c;next.fields['174']=0;next.fields['170']=0;next.fields['184']=0;
     next.fields['020']=Math.min(100,(next.fields['020']|0)+gain.points)>>>0;
     if(actor.growthFields)actor.growthFields['418']=0;
     writeRaisingNativeProfile(id,normalizeNativeIndividualProfile(next));
     cyberGacha=setGachaBondCarry(gachaState(),id,gain.carry,currentInstanceIds());
-    pushAutomationEvent({kind:'FEED',cageInstanceId:actor.cageInstanceId,instanceId:id,affection:gain.points,
+    pushAutomationEvent({kind:'FEED',cageInstanceId:actor.cageInstanceId,instanceId:id,affection:gain.points,meat,
       positionQ12:actor.positionQ12?[...actor.positionQ12]:null});
     savePort.markDirty();return true;
+  }
+
+  // ---- 3D auto-care machines (OWNER_APPROVED_ADAPTATION 2026-11-03, AUTO_CARE_3D_20261103) ----
+  // Each deployed core runs a machine for its hour: a cleaning robot that strolls its cage's connected
+  // cluster and sweeps droppings, or a feeding tower that throws the player's own meat (one 餵食 each) at
+  // partners showing the hungry bubble. The run clock counts real play time; a tower without meat waits.
+  function resetAutoCare(){
+    for(const bot of autoCare.cleaners.values())releaseRider(bot);
+    autoCare={ground:null,cleaners:new Map(),feeders:new Map(),retiring:[],runCarry:0,saveCarry:0,wasteKeys:new WeakMap(),wasteSerial:0};
+  }
+  function wasteKey(waste){let key=autoCare.wasteKeys.get(waste);if(!key){key='w'+(++autoCare.wasteSerial);autoCare.wasteKeys.set(waste,key);}return key;}
+  function placementCellsOf(p){return (productPlacementCells(p)??[]).map(slot=>productGridCell(slot));}
+  /** Machines follow the save's runs: a new run brings its machine out, an ended one folds away. */
+  function syncAutoCareMachines(){
+    if(autoCare.ground!==raisingGround){
+      for(const bot of autoCare.cleaners.values())releaseRider(bot);
+      autoCare.cleaners.clear();autoCare.feeders.clear();autoCare.retiring=[];autoCare.ground=raisingGround;
+    }
+    const ground=raisingGround,want=new Set();
+    if(ground&&ground.layoutVersion===PRODUCT_RANCH_GRID&&cyberGacha&&!tutorialBaseline)for(const p of ground.placements??[]){
+      if(!p.instanceId)continue;
+      const auto=cageAutomation(cyberGacha,p.instanceId);
+      if(auto.royal||!(auto.cleanSeconds>0||auto.feedSeconds>0))continue;
+      if(auto.feedSeconds>0){const key='feed:'+p.instanceId;want.add(key);
+        if(!autoCare.feeders.has(key)){const home=machineHome(ground,p.ownerIndex,placementCellsOf(p));
+          if(home)autoCare.feeders.set(key,createFeederTower({id:key,instanceId:p.instanceId,home,ground}));}}
+      if(auto.cleanSeconds>0){const key='clean:'+p.instanceId;want.add(key);
+        if(!autoCare.cleaners.has(key)){const home=machineHome(ground,p.ownerIndex,placementCellsOf(p),{along:30});
+          if(home)autoCare.cleaners.set(key,createCleanerBot({id:key,instanceId:p.instanceId,home,ground}));}}
+    }
+    for(const map of [autoCare.cleaners,autoCare.feeders])for(const [key,machine] of map)if(!want.has(key)){
+      if(machine.kind==='CLEANER')releaseRider(machine);
+      map.delete(key);autoCare.retiring.push({machine,t:0});
+      pushAutomationEvent({kind:'EXPIRE',machine:machine.kind,cageInstanceId:machine.instanceId,positionQ12:[machine.x*4096,machine.y*4096,0]});
+    }
+  }
+  /** A partner riding a robot hops back down where the robot is. */
+  function releaseRider(bot){
+    const id=bot?.rider?.id;if(!id)return;bot.rider=null;
+    const actor=raisingActors.get(id);if(actor?.positionQ12){actor.positionQ12[2]=0;actor.autoCareRide=false;}
+  }
+  /** One sixtieth of a second for every machine. Returns true when the ranch changed. */
+  function stepAutoCare(dt){
+    if(!raisingGround||!cyberGacha)return false;
+    syncAutoCareMachines();
+    autoCare.retiring=autoCare.retiring.filter(entry=>(entry.t+=dt)<AUTO_CARE_RULES.retireSeconds);
+    if(!autoCare.cleaners.size&&!autoCare.feeders.size)return false;
+    let changed=false;
+    const actors=[...raisingActors].filter(([,a])=>!a.detached&&a.positionQ12&&a.speciesIndex>=8);
+    // Cleaners: droppings on the ground, nearest first; each robot claims the one it goes for.
+    if(autoCare.cleaners.size){
+      const waste=raisingWaste.filter(w=>w.present).map(w=>({key:wasteKey(w),x:w.positionQ12[0]/4096,y:w.positionQ12[1]/4096,waste:w}));
+      const claimed=new Set(),partners=actors.map(([id,a])=>({id,x:a.positionQ12[0]/4096,y:a.positionQ12[1]/4096,
+        generation:nativeHuntSpeciesByIndex(a.speciesIndex)?.generation??9,busy:a.state===4||a.state===6||Boolean(a.evolution)||a.autoCareRide===true||raisingHand?.id===id}));
+      for(const bot of autoCare.cleaners.values()){
+        for(const event of stepCleanerBot(bot,dt,{ground:raisingGround,waste,claimed})){
+          if(event.kind==='LOCK')pushAutomationEvent({kind:'LOCK',cageInstanceId:bot.instanceId,positionQ12:[bot.x*4096,bot.y*4096,0]});
+          else if(event.kind==='SWEPT'){const hit=waste.find(w=>w.key===event.key);if(!hit||!hit.waste.present)continue;
+            hit.waste.present=false;const owner=hit.waste.cageInstanceId??hit.waste.cageDefinitionIndex;
+            raisingWaste=raisingWaste.filter(w=>w.present);raisingDirtySignals.set(owner,{dirtyRemoved:true});
+            autoCleanWaste(bot.instanceId,hit.waste.positionQ12);storeNativeRaisingHome();changed=true;}
+        }
+        for(const event of cleanerCuriosity(bot,partners)){
+          pushAutomationEvent({kind:event.kind,cageInstanceId:bot.instanceId,instanceId:event.partnerId,positionQ12:[bot.x*4096,bot.y*4096,0]});
+          if(event.kind==='RIDE'){const a=raisingActors.get(event.partnerId);if(a)a.autoCareRide=true;}
+        }
+        const off=stepCleanerRider(bot,dt);
+        if(off){const a=raisingActors.get(off);if(a?.positionQ12){a.positionQ12[2]=0;a.autoCareRide=false;}}
+        // A rider sits on the robot's lid and goes where it goes.
+        const rider=bot.rider?raisingActors.get(bot.rider.id):null;
+        // A rider hops off before the robot leaves its own cage (it never rides into a neighbour's).
+        const home=rider?raisingGround.cageAt(bot.x,bot.y):null;
+        if(rider?.positionQ12&&!rider.detached&&!rider.evolution&&rider.state!==6&&rider.state!==4
+          &&(home?.instanceId??null)===(rider.cageInstanceId??null)){
+          rider.positionQ12[0]=Math.round(bot.x*4096);rider.positionQ12[1]=Math.round(bot.y*4096)+1;
+          rider.positionQ12[2]=AUTO_CARE_RULES.rideLift*4096;
+        }else if(bot.rider)releaseRider(bot);
+      }
+    }
+    // Feeders: partners showing the hungry bubble; one piece of meat per throw, taken when it lands.
+    if(autoCare.feeders.size){
+      const hungry=actors.filter(([id,a])=>a.autoCareRide!==true&&partnerWantsMeat(id,a)).map(([id,a])=>({id,x:a.positionQ12[0]/4096,y:a.positionQ12[1]/4096}));
+      const meat=shop?shop.toSave().quantities[0]??0:0,claimed=new Set();
+      for(const tower of autoCare.feeders.values()){
+        for(const event of stepFeederTower(tower,dt,{ground:raisingGround,hungry,meat,claimed})){
+          if(event.kind==='THROW')pushAutomationEvent({kind:'THROW',cageInstanceId:tower.instanceId,instanceId:event.targetId,positionQ12:[tower.x*4096,tower.y*4096,0]});
+          if(event.kind!=='LAND')continue;
+          const actor=raisingActors.get(event.targetId);
+          if(!actor||!partnerWantsMeat(event.targetId,actor))continue;
+          const spent=shop?.consumeRaisingFood(false);
+          if(!spent?.ok)continue;
+          if(feedPartnerToFull(event.targetId,actor,{meat:AUTOMATION_RULES.feedMeat}))changed=true;
+        }
+      }
+    }
+    // The run clock: whole seconds of play, a tower out of meat holding its own.
+    autoCare.runCarry+=dt;
+    if(autoCare.runCarry>=1){
+      const seconds=Math.floor(autoCare.runCarry);autoCare.runCarry-=seconds;
+      const paused={};for(const tower of autoCare.feeders.values())if(tower.noMeat)paused[tower.instanceId]=['AUTO_FEED'];
+      const ticked=tickAutomationRuns(cyberGacha,seconds,{paused});
+      cyberGacha=ticked.state;
+      autoCare.saveCarry+=seconds;
+      if(ticked.expired.length||autoCare.saveCarry>=15){autoCare.saveCarry=0;savePort.markDirty();}
+      if(ticked.expired.length){syncAutoCareMachines();changed=true;}
+    }
+    return changed;
+  }
+  /** The machines for the ranch field, in native px (the field turns them into 3D props and tags). */
+  function autoCareFrame(){
+    if(!raisingGround||!cyberGacha||autoCare.ground!==raisingGround)return Object.freeze({cleaners:Object.freeze([]),feeders:Object.freeze([])});
+    const seconds=(machine)=>{const auto=cageAutomation(cyberGacha,machine.instanceId);return machine.kind==='CLEANER'?auto.cleanSeconds:auto.feedSeconds;};
+    const cleaner=(bot,retire=null)=>Object.freeze({key:bot.id,instanceId:bot.instanceId,x:bot.x,y:bot.y,heading:bot.heading,mode:bot.mode,
+      brush:bot.brush,alert:bot.alert,sweep:bot.sweep,rider:bot.rider?.id??null,retire,seconds:retire===null?seconds(bot):0});
+    const feeder=(tower,retire=null)=>Object.freeze({key:tower.id,instanceId:tower.instanceId,x:tower.x,y:tower.y,yaw:tower.yaw,phase:tower.phase,
+      t:tower.t,from:tower.from,to:tower.to,targetId:tower.targetId,noMeat:tower.noMeat,retire,seconds:retire===null?seconds(tower):0});
+    const leaving=autoCare.retiring.map(entry=>({machine:entry.machine,retire:entry.t/AUTO_CARE_RULES.retireSeconds}));
+    return Object.freeze({
+      cleaners:Object.freeze([...[...autoCare.cleaners.values()].map(bot=>cleaner(bot)),
+        ...leaving.filter(e=>e.machine.kind==='CLEANER').map(e=>cleaner(e.machine,e.retire))]),
+      feeders:Object.freeze([...[...autoCare.feeders.values()].map(tower=>feeder(tower)),
+        ...leaving.filter(e=>e.machine.kind==='FEEDER').map(e=>feeder(e.machine,e.retire))])
+    });
   }
   /** Sleep in a royal cage recovers 30% faster (the native sleep counter 17c advances 1.3x). */
   function royalSleepStep(id,actor,units){
@@ -1277,30 +1473,21 @@ export function createChampionshipStandaloneApp({
   }
   const royalTrainingBonus=actor=>cageAutomationOf(actor)?.royal
     ?Object.freeze({kind:AUTOMATION_RULES.trainingKind,points:AUTOMATION_RULES.royalTrainingPoints}):null;
-  /** Ranch badges: each automated cage's top centre in native Q12, for the field's badge layer. */
-  let badgeCache={ground:null,key:'',value:Object.freeze([])};
-  function cageAutomationBadges(){
-    if(!raisingGround||!cyberGacha||raisingGround.layoutVersion!==PRODUCT_RANCH_GRID)return Object.freeze([]);
-    // Read every frame by the field: rebuilt only when the ground or what the cages run changes.
-    const key=JSON.stringify([cyberGacha.editions??null,cyberGacha.mounts??null]);
-    if(badgeCache.ground===raisingGround&&badgeCache.key===key)return badgeCache.value;
-    const badges=[];
-    for(const p of raisingGround.placements){
-      const auto=p.instanceId?cageAutomation(cyberGacha,p.instanceId):null;
-      if(!auto||!(auto.clean||auto.feed))continue;
-      const cells=(productPlacementCells(p)??[]).map(slot=>productGridCell(slot));if(!cells.length)continue;
-      const top=Math.min(...cells.map(c=>c.y)),row=cells.filter(c=>c.y===top);
-      const x=row.reduce((s,c)=>s+c.x+48,0)/row.length;
-      const art=(auto.royal?automationItemForEdition(auto.edition):getAutomationItem(auto.clean?'auto:clean-core':'auto:feed-core'))?.art??null;
-      // Owner 2026-11-03: the running devices stand at the cage's lower-left hex, on the ground, where the player sees them.
-      const bottom=Math.max(...cells.map(c=>c.y)),corner=cells.filter(c=>c.y===bottom).reduce((a,c)=>c.x<a.x?c:a);
-      const devices=Object.freeze([auto.feed?getAutomationItem('auto:feed-core')?.art:null,auto.clean?getAutomationItem('auto:clean-core')?.art:null].filter(Boolean));
-      badges.push(Object.freeze({instanceId:p.instanceId,definitionIndex:p.definitionIndex,edition:auto.edition,royal:auto.royal,art,devices,
-        clean:auto.clean,feed:auto.feed,anchorQ12:Object.freeze([Math.round(x*4096),Math.round((top+40)*4096),0]),
-        deviceQ12:Object.freeze([Math.round((corner.x+30)*4096),Math.round((corner.y+40)*4096),0])}));
+  /**
+   * Ranch tags (Owner 2026-11-03: no banner over the cage): one small countdown per running machine, over the
+   * machine itself, with what a battery would do. Native Q12; `lift` is how high above the ground it floats (px).
+   */
+  function autoCareTags(){
+    const frame=autoCareFrame(),state=gachaState(),tags=[];
+    const owned=id=>state.automation?.[id]??0;
+    for(const [list,kind] of [[frame.feeders,'FEED'],[frame.cleaners,'CLEAN']])for(const m of list){
+      if(m.retire!==null)continue;
+      const module=kind==='FEED'?'AUTO_FEED':'AUTO_CLEAN',coreId=kind==='FEED'?'auto:feed-core':'auto:clean-core';
+      tags.push(Object.freeze({id:m.key,kind,instanceId:m.instanceId,seconds:m.seconds,noMeat:kind==='FEED'&&m.noMeat,alert:kind==='CLEAN'&&m.alert>0,
+        coreId,owned:owned(coreId),extendable:m.seconds+AUTOMATION_RULES.runSeconds<=AUTOMATION_RULES.runCapSeconds,module,
+        positionQ12:Object.freeze([Math.round(m.x*4096),Math.round(m.y*4096),0]),lift:kind==='FEED'?30:12}));
     }
-    badgeCache={ground:raisingGround,key,value:Object.freeze(badges)};
-    return badgeCache.value;
+    return Object.freeze(tags);
   }
   /** Tamer rank and encyclopedia diamonds reached and not yet claimed (the player claims them in the gachapon). */
   function pendingDiamondMilestones(){
@@ -1318,7 +1505,8 @@ export function createChampionshipStandaloneApp({
       const auto=cageAutomation(state,p.instanceId);
       return Object.freeze({instanceId:p.instanceId,moduleId:p.moduleId,
         definitionIndex:getCageDefinitionByModuleId(p.moduleId)?.cageDefinitionIndex??null,
-        royal:auto.royal,edition:auto.edition,mounted:auto.mounted,clean:auto.clean,feed:auto.feed});
+        royal:auto.royal,edition:auto.edition,mounted:auto.mounted,clean:auto.clean,feed:auto.feed,
+        cleanSeconds:auto.cleanSeconds,feedSeconds:auto.feedSeconds});
     }));
   }
   /** Pay `due` rewards (and record their keys) in one durable save; nothing is paid unless it is saved. */
@@ -1337,8 +1525,14 @@ export function createChampionshipStandaloneApp({
       items:Object.freeze(FOUNDER_PACK.items.map(([id,quantity])=>Object.freeze({id,quantity,name:getAutomationItem(id).name,art:getAutomationItem(id).art}))),
       frame:FOUNDER_PACK.frame,unlock:FOUNDER_PACK.unlock,unlocked,claimed,available:Boolean(friendsPlaytest)&&unlocked&&!claimed});
   }
+  /** The rope colour an emergency bundle refills: the rope in hand, else the best colour ever held. */
+  function emergencyRopeFamily(itemId){
+    const families=requireShop().getFrame().huntFamilies.filter(f=>f.kind==='ROPE');
+    return families.find(f=>f.productItemId===itemId&&f.tier>=0)??families.filter(f=>f.tier>=0).at(-1)??families[0];
+  }
   function huntMemoryCapacityG(){
-    const card=maxGFromInventory(huntInventory);
+    // HUNT_TOOL_TIERS_20261103: the one memory card grows past the three ROM sizes (128 → 256 G).
+    const card=Math.max(maxGFromInventory(huntInventory),shop?.memoryCardCapacityG?.()??0);
     // The land bonus never blocks a hunt: an unreadable layout falls back to the card alone.
     let land=null;try{land=cageEdit?.getFrame(...cageEditArgs())?.landCapacity??null;}catch{land=null;}
     return card+(Number.isFinite(land)?landMemoryBonusG(land,card):0);
@@ -1733,8 +1927,10 @@ export function createChampionshipStandaloneApp({
     // The welcome tickets ride the next save; an unsaved grant is simply granted again.
     // Restored before the cage editor: royal cages count as copies of their base cage (DIAMOND_ECONOMY_20261102).
     cyberGacha=grantGachaWelcome(saved.progression.cyberGacha??null).state;
-    draftRoyalEditions=null;pendingRoyalEdition=null;automationEvents=[];
-    cageEdit = createCageEditRuntime({ snapshot: saved.cageEdit, publicTestGrid: playtestPolicy?.enabled === true, initialTamerRank: tamerRankValue });
+    draftRoyalEditions=null;pendingRoyalEdition=null;automationEvents=[];resetAutoCare();
+// Owner 2026-11-04: the 10 x 10 hex land (20 cells, rows bought with diamonds) belongs to the product
+    // economy, not only to the playtest; tamer rank no longer sets the cell count there.
+    cageEdit = loadCageEditor(saved.cageEdit);
     freeBattleMenu=saved.progression.freeBattleMenu??null;
     battleTactics=normalizeBattleTactics(saved.progression.battleTactics);
     initializeNativeRaisingHome({tutorialBoundary});
@@ -1910,7 +2106,7 @@ export function createChampionshipStandaloneApp({
       friendsPlaytest = null;
       onlineBindReward = null;
       openShopAndHunt({newSave:true});
-      cageEdit = createCageEditRuntime({ initializeOriginal: true, publicTestGrid: playtestPolicy?.enabled === true, initialTamerRank: tamerRankValue });
+      cageEdit = createCageEditRuntime({ initializeOriginal: true, publicTestGrid: productLand, initialTamerRank: tamerRankValue });
       rebuildFreeBattleMenu();
       initializeNativeRaisingHome();
       selectedDatabaseSpeciesIndex = null;
@@ -2087,6 +2283,8 @@ export function createChampionshipStandaloneApp({
           if(selectedCreatureId===id)selectedCreatureId=null;
           raisingLifecycleMessage={kind:'DISAPPEARED',instanceId:id};storeNativeRaisingHome();savePort.markDirty();break;
         }
+        // Owner 2026-11-03: a new form stays up a while before any night nap, like a fresh hatch.
+        if(result.evolved&&result.event.target>=8)realtimeWake.set(id,realNowMs()+REALTIME_WAKE_SECONDS*1000);
         if(result.evolved){const event=result.event;raisingLifecycleMessage={kind:event.target<8?'REBORN':'EVOLVED',instanceId:id,target:event.target,
             // Display only: the persistent stats before and after the form write.
             oldSpecies:event.oldSpecies,stats:evolutionStatChange(profileBefore,result.profile)};
@@ -2957,6 +3155,8 @@ export function createChampionshipStandaloneApp({
     },
 
     getHuntEntryError() { return huntEntryError; },
+    /** What the last Continue repaired in a refused ranch layout, once; null afterwards (Owner 2026-11-04). */
+    takeRanchLoadRepair() { const repair = ranchLoadRepair; ranchLoadRepair = null; return repair; },
     advanceHunt(deltaMs){
       if(!huntRuntime)return;
       if(!tutorialBaseline){huntRuntime.tick(deltaMs);return;}
@@ -3007,7 +3207,64 @@ export function createChampionshipStandaloneApp({
 
     getShopFrame() {
       if (!shop) return null;
-      return Object.freeze({ ...shop.getFrame(), lastReceipt: lastShopReceipt });
+      return Object.freeze({ ...shop.getFrame(), lastReceipt: lastShopReceipt, testDiamonds: friendsPlaytest?.diamonds ?? null });
+    },
+
+    /**
+     * Hunt tool families (HUNT_TOOL_TIERS_20261103): raise one tool a tier in
+     * place. The memory card's sizes past 96 G also take test diamonds, which
+     * are spent in the same save as the upgrade.
+     */
+    upgradeHuntTool(familyId, currency = 'BITS') {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.SHOP) throw new Error("CHAMPIONSHIP_SHOP_NOT_ACTIVE");
+      if (currency === 'DIAMONDS') {
+        const price = requireShop().getFrame().huntFamilies.find(f => f.familyId === familyId)?.next?.diamonds;
+        if (!friendsPlaytest || !Number.isSafeInteger(price)) lastShopReceipt = Object.freeze({ ok:false, reason:'UNAVAILABLE', familyId });
+        else if (friendsPlaytest.diamonds < price) lastShopReceipt = Object.freeze({ ok:false, reason:'INSUFFICIENT_DIAMONDS', familyId, cost:price });
+        else {
+          const candidate = gachaShopCandidate(), receipt = candidate.upgradeHuntFamily(familyId, { currency:'DIAMONDS' });
+          const friends = receipt.ok ? normalizeFriendsPlaytestState({ ...friendsPlaytest, diamonds:friendsPlaytest.diamonds - price }) : null;
+          if (!receipt.ok) lastShopReceipt = receipt;
+          else {
+            const status = savePort.save({ ...liveSaveRequest(revision + 1), friendsPlaytest:friends, shop:candidate.toSave() });
+            if (status.phase !== 'SAVED') { savePort.discardPendingWrite(); lastShopReceipt = Object.freeze({ ok:false, reason:'SAVE_FAILED' }); }
+            else {
+              friendsPlaytest = friends; revision += 1;
+              shop = createShopRuntime({ snapshot:candidate.toSave(), huntInventory, allowRepeatedCages:playtestPolicy?.enabled === true,
+                allItemsVisible:playtestPolicy?.shopOpen === true, progression:progressionContext() });
+              applyMappedHuntInventoryFromShop(shop, huntInventory); bindShopRuntime();
+              lastShopReceipt = receipt;
+            }
+          }
+        }
+      } else {
+        lastShopReceipt = requireShop().upgradeHuntFamily(familyId);
+        if (lastShopReceipt.ok) savePort.markDirty();
+      }
+      publishScreens();
+      return lastShopReceipt;
+    },
+
+    refillHuntTool(familyId, quantity = 1) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.SHOP) throw new Error("CHAMPIONSHIP_SHOP_NOT_ACTIVE");
+      lastShopReceipt = requireShop().refillHuntFamily(familyId, quantity);
+      if (lastShopReceipt.ok) savePort.markDirty();
+      publishScreens();
+      return lastShopReceipt;
+    },
+
+    /** Every rope snapped out on the field: five more of the rope in hand (or the best colour held), paid in bits. */
+    buyEmergencyHuntRopes() {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD || !huntRuntime) return Object.freeze({ ok:false, reason:'UNAVAILABLE' });
+      const selected = huntLoadout?.getSelectedEquipment().find(s => s.equipmentClass === 'ROPE')?.itemId ?? null;
+      const receipt = requireShop().buyEmergencyRopes(emergencyRopeFamily(selected).familyId);
+      if (receipt.ok) {
+        const itemId = getShopRecord(receipt.shopRecordIndex).productItemId;
+        huntLoadout?.selectEquipment('ROPE', itemId);
+        savePort.markDirty();
+      }
+      publishScreens();
+      return receipt;
     },
 
     subscribeShop(listener) {
@@ -3272,8 +3529,8 @@ export function createChampionshipStandaloneApp({
       return Object.freeze({...frame,tray:Object.freeze(tray),testDiamonds:friendsPlaytest?.diamonds??0,royalTray:Object.freeze(royal),
         automation:cageAutomationView(frame),land:landView(frame),landExpansion:lastLandExpansion,
         // Owner 2026-11-03: the cores in the bag, so a selected cage can take one in place.
-        cores:Object.freeze(AUTOMATION_ITEMS.filter(item=>item.kind==='CORE').map(item=>Object.freeze({id:item.id,name:item.name,module:item.module,
-          owned:cyberGacha?.automation?.[item.id]??0}))),gachaResult:lastGachaResult});
+        cores:Object.freeze(AUTOMATION_ITEMS.filter(item=>item.kind==='CORE').map(item=>Object.freeze({id:item.id,name:item.name,module:item.module??null,
+          modules:item.modules,owned:cyberGacha?.automation?.[item.id]??0}))),gachaResult:lastGachaResult});
     },
 
     openCageEdit() {
@@ -3364,7 +3621,7 @@ export function createChampionshipStandaloneApp({
     // a hidden purchase after the UI has reported rollback.
     buyRanchTestRow(row) {
       requireSession();
-      if (!playtestPolicy?.enabled || screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT || tutorialBaseline || battleTransactionActive || huntCommitActive || battleEconomy.active) return {ok:false,reason:'TEST_ROW_PURCHASE_UNAVAILABLE'};
+      if (!productLand || screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT || tutorialBaseline || battleTransactionActive || huntCommitActive || battleEconomy.active) return {ok:false,reason:'TEST_ROW_PURCHASE_UNAVAILABLE'};
       const editor = requireCageEdit();
       const quote = editor.quoteTestRow(row, ...cageEditArgs());
       // Owner 2026-11-03: the step price climbs with the land already open (200 → 2,200).
@@ -3514,7 +3771,8 @@ export function createChampionshipStandaloneApp({
           const recipe=AUTOMATION_RECIPES.find(r=>r.id===item.id),plan=automationForgePlan(state,item.id);
           return Object.freeze({...item,owned:state.automation?.[item.id]??0,
             placed:item.edition?Object.values(state.editions??{}).filter(e=>e===item.edition).length
-              :Object.values(state.mounts??{}).filter(m=>m.includes(item.module)).length,
+              :Object.values(state.runs??{}).filter(run=>coreModules(item).some(m=>run[m]>0)).length,
+            runSeconds:AUTOMATION_RULES.runSeconds,runCapSeconds:AUTOMATION_RULES.runCapSeconds,
             recipe:recipe?Object.freeze({chips:recipe.chips,shards:recipe.shards,ready:plan.ok,reason:plan.ok?null:plan.reason}):null});
         }),
         cages:automationCageList(state),
@@ -3529,24 +3787,21 @@ export function createChampionshipStandaloneApp({
       if(!commitGacha({state:result.state}))return gachaRefusal('SAVE_FAILED');
       return gachaReceipt({ok:true,kind:'FORGE',consumed:result.consumed,prizes:[gachaPrizeView(result.prize)]});
     },
-    /** Mount a core from the bag on a placed (confirmed) cage; droppings already there are cleared at once. */
-    gachaMountCore(coreId,instanceId){
+    /**
+     * Deploy a core from the bag on a placed (confirmed) cage for one hour, or add an hour to the machine already
+     * running there (AUTO_CARE_3D_20261103). The core is used up; the machine comes out on the ranch at once.
+     */
+    gachaDeployCore(coreId,instanceId){
       requireSession();
       if(!cageEdit?.toSave().placements.some(p=>p.instanceId===instanceId))return gachaRefusal('UNKNOWN_CAGE');
-      const result=mountAutomationCore(gachaState(),coreId,instanceId);
+      const result=deployAutomationCore(gachaState(),coreId,instanceId);
       if(!result.ok)return gachaRefusal(result.reason);
       if(!commitGacha({state:result.state}))return gachaRefusal('SAVE_FAILED');
-      const swept=getAutomationItem(coreId)?.module==='AUTO_CLEAN'?sweepAutomatedCage(instanceId):0;
+      if(raisingGround)syncAutoCareMachines();
       publishRaising();
-      return gachaReceipt({ok:true,kind:'MOUNT',itemId:coreId,instanceId,swept});
-    },
-    gachaUnmountCore(module,instanceId){
-      requireSession();
-      const result=unmountAutomationCore(gachaState(),module,instanceId);
-      if(!result.ok)return gachaRefusal(result.reason);
-      if(!commitGacha({state:result.state}))return gachaRefusal('SAVE_FAILED');
-      publishRaising();
-      return gachaReceipt({ok:true,kind:'UNMOUNT',module,instanceId});
+      const auto=cageAutomation(cyberGacha,instanceId);
+      return gachaReceipt({ok:true,kind:result.extended?'EXTEND':'DEPLOY',itemId:coreId,instanceId,
+        cleanSeconds:auto.cleanSeconds,feedSeconds:auto.feedSeconds});
     },
     /** Claim every rank and encyclopedia diamond reward reached so far, in one save. */
     claimDiamondRewards(){
@@ -3582,8 +3837,10 @@ export function createChampionshipStandaloneApp({
     },
     /** Whether the brag card wears the founder's gold frame. */
     hasFounderFrame(){return Boolean(cyberGacha?.claimed?.includes(FOUNDER_PACK.key));},
-    /** The ranch field's automation badges (top centre of each automated cage, native Q12). */
-    getCageAutomationFrame(){return session?cageAutomationBadges():Object.freeze([]);},
+    /** The ranch field's machine countdown tags (one per running machine, native Q12). */
+    getCageAutomationFrame(){return session?autoCareTags():Object.freeze([]);},
+    /** The deployed 3D machines (cleaning robots, feeding towers, the ones folding away), native px. */
+    getAutoCareFrame(){return session?autoCareFrame():Object.freeze({cleaners:Object.freeze([]),feeders:Object.freeze([])});},
     /** Recent auto-clean / auto-feed events, newest last (each has a serial for the UI). */
     getAutomationEvents(){return Object.freeze([...automationEvents]);},
 
@@ -4423,6 +4680,9 @@ export function createChampionshipStandaloneApp({
       confirmedGateId = selectedGateId;
       // Entering the loadout builds it over the Shop-owned inventory.
       huntLoadout = createHuntLoadout({ inventory: huntInventory });
+      // HUNT_TOOL_TIERS_20261103: the strongest rope colour held is tied on first.
+      const bestRope = huntLoadout.listAvailableEquipment().find(c => c.equipmentClass === "ROPE")?.items.at(-1);
+      if (bestRope) huntLoadout.selectEquipment("ROPE", bestRope.itemId);
       screens.enter(CHAMPIONSHIP_SCREENS.HUNT_LOADOUT);
       publishScreens();
       return screens.current();
@@ -4512,7 +4772,11 @@ export function createChampionshipStandaloneApp({
           ?? (await import("../hunt/huntRuntime.js")).createHuntRuntime;
         const candidateRuntime = factory({ world, nativeEntry:entry,
           captureReplay:huntCaptureReplay, maxCardG:huntMemoryCapacityG(),
-          nativeControls:entry ? {loadout:requireLoadout(),consumeItem:(id,n=1)=>requireShop().consumeHuntItem(id,n),onChange:publishScreens,
+          nativeControls:entry ? {loadout:requireLoadout(),consumeItem:(id,n=1)=>{
+              // A snapped rope is spent in the save at once (HUNT_TOOL_TIERS_20261103).
+              const spent=requireShop().consumeHuntItem(id,n);if(spent.ok&&getHuntCatalogItem(id)?.equipmentClass==='ROPE')savePort.markDirty();return spent;},
+            ropeLedger:{wear:id=>requireShop().getRopeWear(id),setWear:(id,fraction)=>requireShop().setRopeWear(id,fraction),
+              emergencyBits:id=>emergencyRopeFamily(id)?.emergencyBits??null},onChange:publishScreens,
             ...(armed.chips.length ? {boosts} : {})} : null,
           fieldActor:{ actorId:"championship:2026:actor:tamer", displayName:"Tamer" } });
         if (!candidateRuntime || candidateRuntime.world !== world) throw Error("HUNT_ENTRY_RUNTIME_INVALID");

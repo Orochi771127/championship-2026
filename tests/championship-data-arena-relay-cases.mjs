@@ -11,8 +11,8 @@ import { createDataArenaCamera } from '../src/championship/presentation/dataAren
 const run = (sim, seconds, input = {}) => { for (let i = 0; i < Math.ceil(seconds * 60); i++) sim.step(input); };
 const create = () => { const sim = createDataArenaSimulation({ mode:'RELAY', partnerId:'corona-cub', seed:19 }); run(sim, 2.1); return sim; };
 
-test('relay adapters keep our identities and eight movement directions', () => {
-  assert.deepEqual(relayTeamIds('corona-cub'), ['corona-cub','frost-drake']);
+test('relay adapters keep our 3v3 identities and eight movement directions', () => {
+  assert.deepEqual(relayTeamIds('corona-cub'), ['corona-cub','frost-drake','ember-lizard']);
   assert.equal(new Set(Array.from({length:8},(_,i)=>relayFacing8(i*Math.PI/4))).size,8);
   assert.equal(relayMove('relayRay').energy,0);
   assert.equal(relayMove('dawnLance',true).energy,80);
@@ -37,25 +37,36 @@ test('switch preserves independent HP TP and cooldowns and cannot reset the reso
   sim.step({switchPartner:true}); assert.equal(p.speciesId,'species-061');
   // Disable rival damage for this isolated resource contract, not browser proof.
   sim.getState().rivals[0].active=false;
-  run(sim,6.1); sim.step({switchPartner:true});
+  run(sim,6.1); sim.step({switchPartner:1});
   assert.equal(p.speciesId,'species-064'); assert.equal(p.hp,110);
   assert.ok(p.energy<42); assert.equal(p.cooldowns.sunSpear,0);
 });
-test('knockout replaces the player once and whole-team defeat settles', () => {
+test('knockout replaces the player through all 3 partners and whole-team defeat settles', () => {
   const sim=create(),state=sim.getState();
   state.rivals[0].active=false;
   sim.internals.hurtPlayer(1000,'TEST',0,0); run(sim,1.2);
   assert.equal(state.player.speciesId,'species-061'); assert.equal(state.player.state,'NORMAL');
-  run(sim,1); sim.internals.hurtPlayer(1000,'TEST',0,0); run(sim,1.5);
+  run(sim,1.3); sim.internals.hurtPlayer(1000,'TEST',0,0); run(sim,1.2);
+  assert.equal(state.player.speciesId,'species-034'); assert.equal(state.player.state,'NORMAL');
+  run(sim,1.3); sim.internals.hurtPlayer(1000,'TEST',0,0); run(sim,1.5);
   assert.equal(state.result.outcome,'DEFEAT'); assert.equal(state.result.mode,'RELAY');
   assert.equal(state.result.tournament,null);
 });
-test('both rival knockouts settle victory and a new match has clean team resources', () => {
+test('all 3 rival knockouts increment kills and settle victory while tactical rival switches preserve HP', () => {
   const sim=create(),state=sim.getState();
+  assert.equal(sim.getSnapshot().relay.rivalsAlive, 3);
   state.rivals[0].invulnerable=0; sim.internals.damageRival(state.rivals[0],1000,'TEST'); run(sim,1.2);
-  assert.equal(state.relay.enemyIndex,1); assert.equal(state.rivals[0].definitionId,'flame');
+  assert.equal(state.kills, 1);
+  assert.equal(sim.getSnapshot().relay.rivalsAlive, 2);
+  assert.equal(state.rivals[0].definitionId,'flame');
+  state.rivals[0].invulnerable=0; sim.internals.damageRival(state.rivals[0],1000,'TEST'); run(sim,1.2);
+  assert.equal(state.kills, 2);
+  assert.equal(sim.getSnapshot().relay.rivalsAlive, 1);
+  assert.equal(state.rivals[0].definitionId,'storm');
   state.rivals[0].invulnerable=0; sim.internals.damageRival(state.rivals[0],1000,'TEST'); run(sim,1.5);
+  assert.equal(state.kills, 3);
   assert.equal(state.result.outcome,'VICTORY');
+  assert.equal(state.result.kills, 3);
   assert.equal(create().getSnapshot().relay.team[0].tp,100);
 });
 test('relay animation maps ticks around release without dropping repeated slots or anchors', () => {
@@ -147,4 +158,28 @@ test('zone targeting cannot place an attack beyond cover or spend TP on a blocke
   p.x=560;p.y=350;const before=p.energy;
   assert.equal(sim.internals.beginCast(p,'iceCage',730,350),false);
   assert.equal(p.energy,before);assert.equal(p.cast,null);
+});
+
+test('3v3 direct reserve tag-in shockwave, perfect switch, manual burst fallback and combo tracking work',()=>{
+  const sim=createDataArenaSimulation({mode:'RELAY',partnerId:'relay-species-037',relayReserveId:'relay-species-054',relayThirdId:'relay-species-034',relayManualBurst:true,seed:19});
+  run(sim,2.1);
+  const s=sim.getState(),p=s.player,r=s.rivals[0];
+  assert.equal(s.relay.team.length,3);
+  // Every member has a burst state (manual burst fallback even for species without a ranch plan).
+  assert.ok(s.relay.team.every(m=>m.burst&&m.burst.form>0));
+  // Place rival right beside player and add a hostile telegraph on player to trigger Perfect Switch + Tag-In Shockwave.
+  r.active=true;r.root=5;r.invulnerable=0;r.x=p.x+60;r.y=p.y;
+  const rHpBefore=r.hp;
+  s.telegraphs.push({kind:'CIRCLE',x:p.x,y:p.y,radius:100,t:0.2,duration:0.8,owner:'cast:rival-1'});
+  s.relay.team[2].energy=40;
+  sim.drainEvents();
+  // Switch directly to 3rd slot (大將席).
+  sim.step({switchPartner:3});
+  const events=sim.drainEvents();
+  assert.equal(s.relay.active,2);
+  assert.ok(events.some(e=>e.type==='RELAY_PERFECT_SWITCH'));
+  assert.ok(events.some(e=>e.type==='RELAY_TAG_BURST'&&e.perfect===true));
+  assert.ok(p.energy>=65,'Perfect switch restores +25 TP');
+  assert.ok(r.hp<rHpBefore,'Tag-in shockwave damages nearby rival');
+  assert.ok(p.tagShield>1.0,'Tag-in grants 1.2s damage reduction shield');
 });

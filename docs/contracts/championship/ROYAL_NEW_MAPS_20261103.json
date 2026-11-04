@@ -2,7 +2,7 @@
   "id": "ROYAL_NEW_MAPS_20261103",
   "classification": "OWNER_APPROVED_ADAPTATION: the gachapon royal cages 全自動皇家牧場 and 全自動星際動物園 become their own maps (definitions 36/37, the waiting room four-hex shape, own walk data, Blender GLB and UI pictures); older saves move their royal placements onto them",
   "supersedes": {
-    "contract": "docs/contracts/championship/DIAMOND_ECONOMY_20261102.json",
+    "contract": "docs/contracts/championship/HUNT_TOOL_TIERS_20261103.json",
     "sourceLock": "src/championship/app/championshipStandaloneSave.js"
   },
   "saveField": {
@@ -21,9 +21,12 @@
     "the save key and schemaVersion"
   ],
   "sourceLocks": {
-    "src/championship/app/championshipStandaloneSave.js": "aeebf3e57825b7f025709c7f315d5ca72ddfaa46c5d278ffaf2f3dade0731c9d"
+    "src/championship/app/championshipStandaloneSave.js": "16ddc21be1570c51e87fb592635d5a5437ed25b9a8aeb660993f07494598b8c1"
   },
   "historicalSourceLocks": {
+    "HUNT_TOOL_TIERS_20261103": {
+      "src/championship/app/championshipStandaloneSave.js": "798b838a72251d800b6feb989946e6a5feed1e6724bd5455a562ad55958b613a"
+    },
     "DIAMOND_ECONOMY_20261102": {
       "src/championship/app/championshipStandaloneSave.js": "15067ee0d3f47971a91a8189edaaa0c22ba3d43a831408b4f8bcc1e525b64c11"
     },

@@ -45,9 +45,11 @@ export const RELAY_FIELD_THEMES = Object.freeze({
 });
 
 export const RELAY_ARENA_RULES = Object.freeze({ firstWarning: 8, warningSeconds: 2.5, activeSeconds: 6, intervalSeconds: 22, claimSeconds: 0.7,
-  healShare: 0.06, tpGain: 20, cooldownCut: 2, speedScale: 1.15, coverPressure: 0.25, zoneRadius: 68, aiReach: 420 });
+  healShare: 0.06, tpGain: 20, cooldownCut: 2, speedScale: 1.15, coverPressure: 0.25, zoneRadius: 68, aiReach: 420,
+  superCoreTimes: Object.freeze([60, 120]), superCoreWarning: 2.5, superCoreActive: 10, superCoreRadius: 76, superCoreClaim: 0.65 });
 // Contested zones above and below the centre lane (landscape cells).
 const ZONE_TARGETS = Object.freeze([[25, 10], [26, 28]]);
+const SUPER_CORE_TARGET = Object.freeze([25, 19]);
 
 const dryKinds = new Set([T.GROUND, T.SHALLOW]);
 /**
@@ -102,8 +104,11 @@ export function createRelayArenaEvents({ map, grid, emit, now, bodies, effects }
   const theme = RELAY_FIELD_THEMES[map.battleFieldId] ?? null;
   const R = RELAY_ARENA_RULES;
   const zones = (map.arenaZones ?? []).map(([c, r], id) => ({ id, x: (c + 0.5) * map.cell, y: (r + 0.5) * map.cell, radius: R.zoneRadius }));
-  const state = { kind: theme?.event ?? null, phase: 'DORMANT', remaining: R.firstWarning, cycle: -1, claimed: [false, false], channel: [0, 0], zones };
-  let phaseKey = '', pressured = -1;
+  const coreX = ((SUPER_CORE_TARGET[0] ?? Math.floor(map.cols / 2)) + 0.5) * map.cell;
+  const coreY = ((SUPER_CORE_TARGET[1] ?? Math.floor(map.rows / 2)) + 0.5) * map.cell;
+  const superCore = { x: coreX, y: coreY, radius: R.superCoreRadius, phase: 'DORMANT', remaining: 0, cycle: -1, claimed: false, channel: 0 };
+  const state = { kind: theme?.event ?? null, phase: 'DORMANT', remaining: R.firstWarning, cycle: -1, claimed: [false, false], channel: [0, 0], zones, superCore };
+  let phaseKey = '', pressured = -1, corePhaseKey = '';
   const zoneAt = (body) => zones.find(z => Math.hypot(body.x - z.x, body.y - z.y) <= z.radius) ?? null;
   const live = (body) => body && body.hp > 0;
   function useful(body, team) {
@@ -126,6 +131,38 @@ export function createRelayArenaEvents({ map, grid, emit, now, bodies, effects }
     if (state.kind === 'TIDE') { body.burn = 0; body.slow = 0; body.slowTimer = 0; body.root = 0; }
     emit({ type: 'ARENA_CLAIM', kind: state.kind, team, x: zone.x, y: zone.y, amount });
   }
+  function stepSuperCore(dt, roundTime) {
+    let activeCycle = -1, cPhase = 'DORMANT', cRem = 0;
+    for (let i = 0; i < R.superCoreTimes.length; i++) {
+      const t0 = R.superCoreTimes[i];
+      if (roundTime >= t0 - R.superCoreWarning && roundTime < t0 + R.superCoreActive) {
+        activeCycle = i;
+        if (roundTime < t0) { cPhase = 'WARNING'; cRem = t0 - roundTime; }
+        else { cPhase = 'ACTIVE'; cRem = t0 + R.superCoreActive - roundTime; }
+        break;
+      }
+    }
+    if (activeCycle !== superCore.cycle && activeCycle !== -1) {
+      superCore.cycle = activeCycle; superCore.claimed = false; superCore.channel = 0;
+    }
+    if (superCore.claimed && activeCycle === superCore.cycle) { cPhase = 'DORMANT'; cRem = 0; }
+    superCore.phase = cPhase; superCore.remaining = cRem;
+    const ck = `${activeCycle}:${cPhase}`;
+    if (ck !== corePhaseKey) {
+      corePhaseKey = ck;
+      if (cPhase === 'WARNING') emit({ type: 'SUPER_CORE_WARNING', x: superCore.x, y: superCore.y, radius: superCore.radius });
+      if (cPhase === 'ACTIVE') emit({ type: 'SUPER_CORE_ACTIVE', x: superCore.x, y: superCore.y, radius: superCore.radius });
+    }
+    if (cPhase !== 'ACTIVE' || superCore.claimed) { superCore.channel = 0; return; }
+    const [player] = bodies();
+    if (live(player) && Math.hypot(player.x - superCore.x, player.y - superCore.y) <= superCore.radius) {
+      superCore.channel = Math.min(R.superCoreClaim, superCore.channel + dt);
+      if (superCore.channel + 1e-8 >= R.superCoreClaim) {
+        superCore.claimed = true; superCore.channel = 0; superCore.phase = 'DORMANT';
+        effects.triLinkRush?.(player, 0, superCore);
+      }
+    } else superCore.channel = Math.max(0, superCore.channel - dt * 0.5);
+  }
   function pressure() {
     // Thermal vents crack every standing cover block once per active phase.
     const events = [];
@@ -134,6 +171,7 @@ export function createRelayArenaEvents({ map, grid, emit, now, bodies, effects }
     emit({ type: 'ARENA_PRESSURE', kind: state.kind });
   }
   function step(dt, roundTime) {
+    stepSuperCore(dt, roundTime);
     if (!state.kind || !zones.length) return;
     if (roundTime < R.firstWarning) { state.phase = 'DORMANT'; state.remaining = R.firstWarning - roundTime; return; }
     const cycle = Math.floor((roundTime - R.firstWarning) / R.intervalSeconds), into = roundTime - R.firstWarning - cycle * R.intervalSeconds;

@@ -2,9 +2,9 @@
 //
 // Only partners the player raised or registered may fight: a species held on
 // the ranch right now counts as raised (+10 %), a species lit in the Dex counts
-// as registered, everything else stays locked. A save with fewer than two
-// usable partners for the chosen mode is lent two practice partners at 85 %,
-// so a new save and the automated gates can always start a match.
+// as registered, everything else stays locked. A save with fewer than three
+// usable partners for the chosen mode is lent practice partners at 85 %,
+// so a new save and the automated gates can always start a 3v3 match.
 // Read-only: this never writes the Dex, the ranch or the arena record.
 
 export const DATA_ARENA_ENTRY = Object.freeze({ BRED: "BRED", REGISTERED: "REGISTERED", RENTAL: "RENTAL", LOCKED: "LOCKED" });
@@ -12,7 +12,7 @@ export const DATA_ARENA_ENTRY_POWER = Object.freeze({ BRED: 1.1, REGISTERED: 1, 
 const ORDER = Object.freeze({ RENTAL: 0, BRED: 1, REGISTERED: 2, LOCKED: 3 });
 // Practice partners: the three Tournament kits' 成長期 species, which carry reviewed motion.
 export const DATA_ARENA_RENTAL_SPECIES = Object.freeze(["species-034", "species-061", "species-064"]);
-const MIN_USABLE = 2;
+const MIN_USABLE = 3;
 
 const speciesIndex = (speciesId) => /^species-\d{3}$/.test(speciesId ?? "") ? Number(speciesId.slice(8)) : null;
 

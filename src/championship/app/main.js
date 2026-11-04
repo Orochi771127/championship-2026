@@ -1,5 +1,6 @@
 import {createResidentAssetNotice,collectRaisingInitialSequences} from './residentAssetNotice.js';
-import { resonanceStrip } from '../presentation/taxonomyBadgeArt.js';
+import { resonanceStrip, taxonomyBadgeRow, taxonomyGlyph } from '../presentation/taxonomyBadgeArt.js';
+import { speciesTaxonomyForId } from '../contracts/speciesTaxonomy.js';
 import {huntThreeProductionRequest} from '../presentation/vs2/huntThree/manifestBindings.mjs';
 import { FRIENDS_PLAYTEST_POLICY } from './friendsPlaytestPolicy.js';
 import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../contracts/productBattleTransport.js';
@@ -66,6 +67,7 @@ import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from ".
 import { BATTLE_MATCH_LIST_CAP } from "../battle/battleMatchSelection.js";
 import { createHelpView } from "./helpScreen.js";
 import { createMedalCollectionView } from "./medalCollectionScreen.js";
+import { badgeUnlockText } from "./badgeUnlockText.js";
 import { createTamerInfoView } from "./tamerInfoScreen.js";
 import { createOpeningPresentation } from './openingPresentation.js';
 import { createOpeningFilm } from './openingFilm.js';
@@ -104,7 +106,7 @@ import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } 
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
 import { configureCeremonyAudio, playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
 import { createSkillCutInLayer } from '../presentation/juicy/skillCutIn.js';
-import { juicyPortrait, juicyPresentationEnabled } from '../presentation/juicy/juicyArt.js';
+import { juicyPortrait, juicyPresentationEnabled, juicySpeciesIndex } from '../presentation/juicy/juicyArt.js';
 import { installArcadeFx, requestArcadeFx } from './ui/arcadeFx.js';
 import { installTitleParade } from './titleParade.js';
 import { buildMedal, buildVersus } from '../presentation/ceremony/ceremonyScenes.js';
@@ -562,6 +564,11 @@ function listenPartnerFinds() {
     toolbar.holdToolStock(event.tool);
     const id = event.entry.id, gained = event.entry.quantity;
     strollFlightsPending.set(id, { tool: event.tool, timer: setTimeout(() => { if (releaseStrollHold(id)) toolbar.landToolStock(event.tool, { gained }); }, 1500) });
+  });
+  // AUTO_CARE_3D_20261103: a feeding tower's meat leaves the bag with a −1 on the 餵食 key.
+  document.addEventListener('cm-stock-spent', (event) => {
+    const { tool, spent } = event.detail ?? {};
+    if (typeof tool === 'string' && spent > 0) toolbar?.spendToolStock?.(tool, { spent });
   });
   document.addEventListener('cm-partner-find', (event) => {
     const { x, y, find } = event.detail ?? {}, entry = find?.entry;
@@ -1496,6 +1503,33 @@ async function mountHuntField() {
 // screens; the views below are handed only what they draw.
 let battleRuntime = null;
 let battleAttemptId = null;
+// Owner 2026-11-03: what each partner did in the presented match (damage dealt,
+// knockouts), tallied from the dynamic layer's HIT / KO events for the result's
+// summary. Presentation record only; the settlement never reads it.
+let battleSummaryTally = null;
+function startBattleSummaryTally(attemptId) {
+  battleSummaryTally = {attemptId, damage: new Map(), knockouts: new Map(), lastHitter: new Map(), final: null};
+}
+function tallyBattleEvent(event) {
+  const tally = battleSummaryTally;
+  if (!tally || !event) return;
+  if (event.type === 'HIT' && Number.isInteger(event.attackerSlot) && event.damage > 0) {
+    tally.damage.set(event.attackerSlot, (tally.damage.get(event.attackerSlot) ?? 0) + event.damage);
+    tally.lastHitter.set(event.slot, event.attackerSlot);
+  } else if (event.type === 'KO' && tally.lastHitter.has(event.slot)) {
+    const by = tally.lastHitter.get(event.slot);
+    tally.knockouts.set(by, (tally.knockouts.get(by) ?? 0) + 1);
+  }
+}
+function battleSummaryFor(attemptId) {
+  const tally = battleSummaryTally;
+  if (!tally || tally.attemptId !== attemptId || !tally.final) return null;
+  const {combatants, localTeam} = tally.final;
+  const rows = combatants.filter(c => c?.present !== false && c?.speciesId).map(c => ({slot: c.slot, name: c.displayName ?? '',
+    side: c.team === localTeam ? 'player' : 'opponent', team: c.team === localTeam ? 0 : 1, down: Boolean(c.down),
+    damage: tally.damage.get(c.slot) ?? 0, knockouts: tally.knockouts.get(c.slot) ?? 0}));
+  return rows.length ? {rows} : null;
+}
 let battleProgressBefore = null;
 
 // Entry publishes BATTLE_FIELD synchronously, before an async enterMatch
@@ -1578,6 +1612,9 @@ async function mountBattleSelect() {
     },
     matches: battleRuntime.listMatches(),
     arenaChoices:battleRuntime.listSelectableArenas(),
+    // Owner 2026-11-03: each roster row shows the partner's Database thumbnail and its three-axis badges.
+    describeMember:entry=>{const index=juicySpeciesIndex(entry?.speciesId);const hero=index===null?null:databaseHeroPortrait(index);
+      return {portrait:hero?.thumbnail??null,badges:entry?.speciesId?taxonomyBadgeRow(speciesTaxonomyForId(entry.speciesId)):null};},
     getPracticeSelection:async()=>({candidates:await app.getBattlePartyCandidates(null)}),
     setBattleTactic:(instanceId,tactic)=>app.setBattleTactic(instanceId,tactic),
     getPasswordSelection:async()=>({maxLength:PRODUCT_BATTLE_CODE_MAX_LENGTH,candidates:await app.getPasswordTeamCandidates(),
@@ -1679,6 +1716,7 @@ async function mountBattleField() {
   const activeRuntime = battleRuntime;
   const activeAttemptId = battleAttemptId;
   const source = activeRuntime.startMatch();
+  startBattleSummaryTally(activeAttemptId);
   activeRuntime.prepareOpening();
   let hudArt=null,viewDisposed=false;
   // Optional portraits must not hold the screen/navigation owner hostage.
@@ -1695,10 +1733,12 @@ async function mountBattleField() {
     resonance: (()=>{const t=activeRuntime.taxonomy?.(),local=activeRuntime.localTeamIndex();return t?{player:t.resonance[local],opponent:t.resonance[1-local],render:keys=>resonanceStrip(keys,{hint:false})}:null;})(),
     dynamicFx: BATTLE_DYNAMIC_FX,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
+    // Owner 2026-11-03: the element glyph on each floating card.
+    fighterBadge: combatant => { const key = speciesTaxonomyForId(combatant.speciesId)?.element; return key ? taxonomyGlyph(`element.${key}`, 14) : null; },
     askToLeave: showChoiceDialog,
     loadingProgress: { createView: createLoadProgressView,
       observeActivity: onChange => observeLoadActivity(onChange, { subscribeSettled: onPixiAssetSettled }) },
-    mountField({ host,onReady,onError,progress=null }) {
+    mountField({ host,onReady,onError,progress=null,safeInsets=null }) {
       let disposed = false;
       const characters = new AbortController();
       let scene = null;
@@ -1765,7 +1805,7 @@ async function mountBattleField() {
           // Resolved with the art, so the scene still mounts in the same task as
           // the overlay: no frame may render between the two.
           const fxLookups = fxLookupsModule
-            ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),onFeed:(line,cue)=>view.feed?.(line,cue),
+            ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),onFeed:(line,cue)=>view.feed?.(line,cue),onTally:tallyBattleEvent,
               onCutIn:juicy?cue=>cutIn?.play({team:cue.team===activeRuntime.localTeamIndex()?'ally':'enemy',portrait:juicyPortrait(cue.speciesId),
                 moveName:cue.moveName,casterName:cue.casterName,palette:cue.palette}):null,
               // Local acceptance shows stable skill IDs; players see approved names only.
@@ -1787,7 +1827,7 @@ async function mountBattleField() {
           // rejection returns cleanup to the catch below, late success to scene.
           for(const resource of [fieldArt,characterRoster,effectArt])loadingArt.delete(resource);
           scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster, effectArt,onView:frame=>view.render(frame),
-            dynamicFx:BATTLE_DYNAMIC_FX, responsiveLayout:RESPONSIVE_BATTLE_CANDIDATE, fx:fxLookups, localTeam:activeRuntime.localTeamIndex(), juicy });
+            dynamicFx:BATTLE_DYNAMIC_FX, responsiveLayout:RESPONSIVE_BATTLE_CANDIDATE, fx:fxLookups, localTeam:activeRuntime.localTeamIndex(), juicy, safeInsets });
           if (disposed) {
             await Promise.all([release(vfxOverlay),release(scene)]);
             return;
@@ -1864,6 +1904,9 @@ async function mountBattleField() {
     }
     view.render(observed);
     if (showPersonality) root.dataset.battlePersonality = battlePersonalityReadout(activeRuntime);
+    if (observed.outcome.ended && battleSummaryTally?.attemptId === activeAttemptId && !battleSummaryTally.final)
+      battleSummaryTally.final = {combatants: observed.combatants.map(c => ({slot: c.slot, present: c.present, speciesId: c.speciesId,
+        displayName: c.displayName, team: c.team, down: c.down})), localTeam: activeRuntime.localTeamIndex()};
     if (observed.outcome.ended && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
       if(tutorial){app.finishInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
       app.finishMatch({ ...activeRuntime.getSettlementResult(), attemptId: activeAttemptId });
@@ -1950,6 +1993,7 @@ async function mountBattleResult() {
   // clear battleRuntime while those requests are still pending.
   const participants=tutorial?.participants??battleRuntime.getResultParticipants();
   const outcome=tutorial?.outcome??battleRuntime.outcome();
+  const summary=tutorial?null:battleSummaryFor(battleAttemptId);
   let hudArt=null,disposed=false,resultCharacters=null;
   const receipt = tutorial?null:app.getBattleReceipt();
   const progression = battleProgressBefore?{rankBefore:battleProgressBefore.rank,rankAfter:app.getTamerRank(),
@@ -1977,6 +2021,7 @@ async function mountBattleResult() {
     :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null;
   const resultView=createBattleResultView({
     ceremonies: battleCeremonies,
+    summary,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
     root,
     outcome,
@@ -2081,7 +2126,7 @@ async function mountCurrentScreen() {
     if (target === CHAMPIONSHIP_SCREENS.RAISING_HOME) view = await mountRaisingHome();
     else if (target === CHAMPIONSHIP_SCREENS.SHOP) view = await createShopView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.DATABASE) view = await createDatabaseView({ root, source: expeditionSource, isWideLayout: () => portraitFrame.isBrowseWide('DATABASE') });
-    else if (target === CHAMPIONSHIP_SCREENS.MEDALS) view = createMedalCollectionView({root, playtestPolicy: FRIENDS_PLAYTEST_POLICY, battleBadges:app.getBattleBadges(), onExit(){app.leaveScreen();}});
+    else if (target === CHAMPIONSHIP_SCREENS.MEDALS) view = createMedalCollectionView({root, playtestPolicy: FRIENDS_PLAYTEST_POLICY, battleBadges:app.getBattleBadges(), unlockText:badgeUnlockText, onExit(){app.leaveScreen();}});
     else if (target === CHAMPIONSHIP_SCREENS.CAGE_EDIT) view = await createCageEditView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) view = createDigimonListView({
       root,
@@ -2152,6 +2197,8 @@ async function mountCurrentScreen() {
         root,
         walletBits: Number.isInteger(shopFrame?.bits) ? shopFrame.bits : null,
         titleCount:app.getBattleBadges().filter(id=>id>=0&&id<61).length,
+        // Owner 2026-11-04: the cage field shows the land opened with diamonds (product economy).
+        landCells:app.getCageEditFrame?.()?.land?.capacity??null,
         registeredCount:app.getDatabaseFrame().registeredCount,
         battleRecord:app.getTitleProgress().record??null,
         tamerRank: app.getTamerRank?.() ?? null,
@@ -2328,7 +2375,9 @@ async function openGameplay() {
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("diamondQa"))
     globalThis.__championshipDiamondQa = { grant: (id, n = 1) => app.grantAutomationItem(id, n, 'QA'), cage: () => app.getCageEditFrame(),
       badges: () => app.getCageAutomationFrame(), events: () => app.getAutomationEvents(), rewards: () => app.getDiamondRewards(),
-      saveStatus: () => app.savePort.getStatus() };
+      saveStatus: () => app.savePort.getStatus(),
+      // AUTO_CARE_3D_20261103: the 3D machines and a deploy, for the ranch review.
+      autoCare: () => app.getAutoCareFrame(), deploy: (coreId, instanceId) => app.gachaDeployCore(coreId, instanceId) };
   refreshStatusBar();
   refreshToolbarMode();
 
@@ -2378,8 +2427,7 @@ function openBackpack({ tab = 'supplies', partnerId = null } = {}) {
     intents: {
       useItem: (itemId, instanceId, options) => app.gachaUseItem(itemId, instanceId, options),
       reshape: (instanceId, personality) => app.gachaReshapePersonality(instanceId, personality),
-      mountCore: (coreId, cageId) => app.gachaMountCore(coreId, cageId),
-      unmountCore: (module, cageId) => app.gachaUnmountCore(module, cageId),
+      deployCore: (coreId, cageId) => app.gachaDeployCore(coreId, cageId),
       disarm: (itemId) => app.gachaDisarmItem(itemId),
       selectTool: (toolId) => { if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) document.querySelector(`.cm-toolbar [data-tool-id="${toolId}"]`)?.click(); },
       openFacilities: () => { if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) expeditionSource?.intents.openCageEdit(); },
@@ -3112,6 +3160,16 @@ async function continueGame() {
       return;
     }
     await openGameplay();
+    // Owner 2026-11-04: a refused ranch layout no longer locks the save; say once what was tidied.
+    const repair = app.takeRanchLoadRepair?.();
+    if (repair) {
+      recoveryDiagnostics.record('RANCH_REPAIRED', { error: { name: 'ChampionshipCageEditError', message: repair.code } });
+      await showChoiceDialog({ title: uiText("牧場配置已自動整理"),
+        message: repair.reset
+          ? uiText("上次儲存的牧場配置無法讀取，已改回初始牧場。所有籠舍都收回倉庫，夥伴都在等候室，其他進度完整保留。")
+          : uiText("上次儲存的牧場配置有 {n} 個籠舍無法放置，已收回倉庫；夥伴移到等候室，其他進度完整保留。", { n: repair.removed }),
+        actions: [{ id: "ok", label: uiText("知道了"), tone: "primary" }], cancelId: "ok" });
+    }
   } catch (error) {
     console.warn(error);
     newGameButton.disabled = false;
@@ -3303,6 +3361,8 @@ function boot() {
   try {
     app = createChampionshipStandaloneApp({
       playtestPolicy: FRIENDS_PLAYTEST_POLICY,
+      // Owner 2026-11-04: diamonds and the hex land stay when the friends playtest is switched off.
+      productEconomy: true,
       storage: window.localStorage,
       // Owner 2026-10-28: moods, stroll finds and greetings on the ranch. A QA
       // harness that must observe an unchanged inventory (the friends playtest

@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import * as THREE from '../node_modules/three/build/three.module.js';
 import {RANCH_SELECTION_RING,ranchSelectionRingPlacement,createRanchSelectionRing} from '../src/championship/presentation/ranchSelectionRing.js';
-import {ranchShadowWorldPoint} from '../src/championship/presentation/ranchGroundShadows.js';
+import {ranchShadowWorldPoint,ranchShadowScreenEllipses,RANCH_CONTACT_SHADOW_RAISE} from '../src/championship/presentation/ranchGroundShadows.js';
 
 const source=f=>fs.readFileSync(new URL('../'+f,import.meta.url),'utf8');
 function fakeEntry({offset={x:200,y:300},radiusX=42,radiusY=12,visible=true}={}){
@@ -16,7 +16,20 @@ function fakeEntry({offset={x:200,y:300},radiusX=42,radiusY=12,visible=true}={})
 }
 const bounds={x:0,y:0,scale:1},pixelScale=2;
 
-test('the ring is centred on the contact shadow and grows with the body',()=>{
+// Owner 2026-11-03: the shadow hung half below the feet and read as shifted down, so
+// the shadow rises; the ring stays round the feet so it still surrounds the partner.
+test('only the contact shadow rises half the contact ellipse height, every ellipse together, size unchanged',()=>{
+  const shadow={toGlobal:p=>({x:p.x+200,y:p.y+300})},ellipses=[{x:0,y:3,radiusX:42,radiusY:12},{x:20,y:0,radiusX:10,radiusY:4}];
+  const flat=ranchShadowScreenEllipses(shadow,ellipses),raised=ranchShadowScreenEllipses(shadow,ellipses,{raise:RANCH_CONTACT_SHADOW_RAISE});
+  assert.equal(RANCH_CONTACT_SHADOW_RAISE,.5);
+  assert.deepEqual(flat.map(e=>e.y),[303,300]);
+  assert.deepEqual(raised.map(e=>e.y),[297,294]);
+  assert.deepEqual(raised.map(e=>[e.x,e.rx,e.ry]),flat.map(e=>[e.x,e.rx,e.ry]));
+  assert.match(source('src/championship/presentation/ranchGroundShadows.js'),/ranchShadowScreenEllipses\(shadow,entry\.groundShadowEllipses,\{raise:RANCH_CONTACT_SHADOW_RAISE\}\)/);
+  assert.doesNotMatch(source('src/championship/presentation/ranchSelectionRing.js'),/RANCH_CONTACT_SHADOW_RAISE/);
+});
+
+test('the ring is centred on the feet (the unraised contact centre) and grows with the body',()=>{
   const small=ranchSelectionRingPlacement(fakeEntry(),bounds,pixelScale);
   const foot=ranchShadowWorldPoint({x:200,y:303},bounds,pixelScale,RANCH_SELECTION_RING.lift);
   for(const axis of ['x','y','z'])assert.ok(Math.abs(small.center[axis]-foot[axis])<1e-9,axis);

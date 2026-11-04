@@ -1,6 +1,7 @@
 // Fixed-camera terrain, actors and contact shadows share one depth buffer.
 import {createRanchGroundShadows} from './ranchGroundShadows.js';
-import {createRanchSelectionRing,createRanchBloodlineRings} from './ranchSelectionRing.js';
+import {createRanchSelectionRing,createRanchBloodlineRings,ranchSelectionRingPlacement,RANCH_SELECTION_RING,RANCH_BLOODLINE_RING} from './ranchSelectionRing.js';
+import {createRanchDecalFloorGrid,ranchDecalFloorHeight} from './ranchDecalFloor.js';
 import {createCm07Ambient} from './cm07Ambient.js';
 import {loadSupportMetadata,validateSupportGeometry,eligibleSupportOwner,encodeProjectedTriangle,projectedTriangleTouchesBox,SUPPORT_MAX_TRIANGLES} from './ranchPhysicalSupport.js';
 import {CONTACT_HEIGHT_FIELDS,transformContactTriangles,contactHeightAtPoint,loadLogicalBridges,logicalContactHeightAtPoint,projectedContactIntersections,canonicalContactNativeCoordinate} from './ranchContactHeight.js';
@@ -17,6 +18,7 @@ import { ranchBorderWithinSharedSegments } from './ranchBorderMembership.js';
 import { enhanceCageObject } from './cageHd2dEnhancer.js';
 import { loadCageGroundMaps, installCageGroundMap, cageGroundWaterEdges } from './cageGroundMap.js';
 import { getCageDefinitionByModuleId } from '../cage/productCageCatalog.js';
+import { createRanchAutoCareProps } from './ranchAutoCareProps.js';
 
 const MANIFEST = 'assets/production/cage/three-20261021/manifest.json';
 const right = new THREE.Vector3(Math.SQRT1_2, 0, -Math.SQRT1_2);
@@ -87,6 +89,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   sun.shadow.bias=-.00015;sun.shadow.normalBias=.025;sun.shadow.radius=3;sun.shadow.intensity=.82;
   scene.add(sun,sun.target);
   const models=new Map(), instances=[], textures=new Map(), sprites=new Map();
+  // Visible floor sheets per cage model, and where each placed copy sits (decals only).
+  const decalFloorGrids=new Map(), decalFloors=[];
   const groundShadows=createRanchGroundShadows(scene);
   const selectionRing=createRanchSelectionRing(scene,{view});
   const bloodlineRings=createRanchBloodlineRings(scene,{view,getBloodline:typeof getBloodline==='function'?getBloodline:()=>null});
@@ -108,6 +112,9 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   const loader=new GLTFLoader();
   const draco=new DRACOLoader().setDecoderPath('node_modules/three/examples/jsm/libs/draco/');
   loader.setDRACOLoader(draco);
+  // AUTO_CARE_3D_20261103: the deployed cleaning robots and feeding towers, in this scene's depth and light.
+  const autoCareProps=createRanchAutoCareProps(scene,{load:url=>loader.loadAsync(url),castShadow:renderer.shadowMap.enabled,
+    groundHeight:(x,y)=>{try{return groundHeight(x,y);}catch{return 0;}}});
 
   function createParticleSystem({count,color,size,opacity,initParticle,updateParticle}){
     const geo=new THREE.BufferGeometry();
@@ -215,6 +222,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
         const object=models.get(p.fieldId).scene.clone(true);
         const point=ranchNativeToWorld(p.x/unit+shift,p.y/unit);
         object.position.set(point.x,point.y,point.z);scene.add(object);
+        if(!decalFloorGrids.has(p.fieldId))decalFloorGrids.set(p.fieldId,createRanchDecalFloorGrid(models.get(p.fieldId).scene));
+        decalFloors.push({grid:decalFloorGrids.get(p.fieldId),offset:object.position});
         hd2dPlaced.push({object,moduleId:p.moduleId});
 
         // Direction A: Hexagonal checkerboard layering for unplaced slots (field_cm29_01)
@@ -901,7 +910,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   }
 
   let wasHidden=false;
-  function render({bounds,actors,food,waste,covered=false,deltaMS=0}) {
+  function render({bounds,actors,food,waste,covered=false,deltaMS=0,autoCare=null}) {
     if(disposed||lost){groundShadows.reset();selectionRing.reset();for(const item of sprites.values())if(!item.sprite.destroyed)item.sprite.renderable=true;canvas.style.visibility='hidden';return false;}
     if(document.hidden){wasHidden=true;return true;}
     const effectiveDeltaMS=wasHidden?0:deltaMS;
@@ -954,12 +963,14 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       // Evolution is a screen-space presentation owned by the existing scene.
       if(covered||entry.evolutionActive){if(entry.sprite)entry.sprite.renderable=true;continue;}
       syncSprite(id,entry.sprite,entry.root,bounds,pixelScale);
+      syncDecalHeight(entry,bounds,pixelScale);
       groundShadows.sync(id,entry,bounds,pixelScale,sprites.get(id)?.seen===true,view);
       selectionRing.sync(id,entry,bounds,pixelScale,sprites.get(id)?.seen===true,view);
       bloodlineRings.sync(id,entry,bounds,pixelScale,sprites.get(id)?.seen===true,view);
     }
     for(const [id,root] of food??[])syncSprite('food:'+id,root.children?.[1],root,bounds,pixelScale);
     for(const [id,sprite] of waste??[])syncSprite('waste:'+id,sprite,sprite,bounds,pixelScale);
+    autoCareProps.sync(autoCare,{time:prefersReducedMotion()?0:sceneClock,visible:!covered});
     for(const [key,item] of sprites){if(!item.seen){item.mesh.visible=false;item.upperMesh.visible=false;if(item.sprite.destroyed){disposeSpriteItem(item);sprites.delete(key);}else item.sprite.renderable=true;}}
     const usedMaps=new Set([...sprites.values()].map(item=>item.mesh.material.map));
     for(const [source,entry] of textures)if(!usedMaps.has(entry.texture)){
@@ -980,7 +991,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     return true;
   }
   function dispose(){
-    if(disposed)return;disposed=true;groundShadows.dispose();selectionRing.dispose();bloodlineRings.dispose();plinth?.dispose();plinth=null;supportOwnerResolver?.dispose();supportOwnerResolver=null;
+    if(disposed)return;disposed=true;groundShadows.dispose();selectionRing.dispose();bloodlineRings.dispose();autoCareProps.dispose();plinth?.dispose();plinth=null;supportOwnerResolver?.dispose();supportOwnerResolver=null;
     cm07Ambient?.dispose();cm07Ambient=null;
     lavaMaterials.clear();dynamicShaders.clear();smokeNodes.length=0;
     for(const material of authoredDepthMaterials)material.dispose();authoredDepthMaterials.clear();
@@ -1001,6 +1012,14 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     draco.dispose();
     renderer.dispose();renderer.forceContextLoss();canvas.remove();Object.assign(pixi.style,previousStyle);
     canvas.removeEventListener('webglcontextlost',contextLost);canvas.removeEventListener('webglcontextrestored',contextRestored);
+  }
+  // Shadows and rings follow a thin floor sheet (grass, track, sand) over the walk
+  // height across the widest decal's footprint; walking and actor depth do not.
+  function syncDecalHeight(entry,bounds,pixelScale){
+    const root=entry.root;if(!root)return;
+    const base=root.threeGroundHeight??0,placement=ranchSelectionRingPlacement(entry,bounds,pixelScale,view,{base});
+    root.threeDecalHeight=placement?ranchDecalFloorHeight(decalFloors,placement.center.x,placement.center.z,base,
+      placement.radius*RANCH_BLOODLINE_RING.radiusScale/RANCH_SELECTION_RING.radiusScale):base;
   }
   function updateContactTriangles(instance){
     const mesh=instance.supportMesh;mesh.updateWorldMatrix(true,false);
@@ -1064,6 +1083,6 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     }
     return {x:best.x,y:best.y};
   }
-  return {render,dispose,groundHeight,pickGroundNative,getDiagnostics:()=>({selectionRings:selectionRing.diagnostics(),bloodlineRings:bloodlineRings.diagnostics(),spriteDiagnostics:[...sprites].filter(([key,item])=>item.mesh.visible||item.upperMesh.visible).map(([key,item])=>({key,partition:item.partition,companionId:item.upperMesh.id,physicalSupport:item.physicalSupport,screenQuad:item.screenQuad,worldCenter:item.mesh.position.toArray(),worldScale:item.mesh.scale.toArray(),projectionError:item.projectionError,envelopeNativeExtent:item.envelopeNativeExtent??null,supportStatus:item.supportStatus??'NATIVE_ORIGIN',depthTest:item.mesh.material.depthTest,depthWrite:item.mesh.material.depthWrite})),mode:'TRUE_3D_FIXED_CAMERA_2D_ACTORS',passageAppearance:'invisible',navigationConnections:connections?.length??0,frames,lastRenderMs,models:models.size,groundMaps:groundMaps.size,groundMapsHooked,textureCap,animatedInstances:instances.filter(i=>i.mixer).length,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,memory:{...renderer.info.memory},lost}),groundContact,contactHeight};
+  return {render,dispose,groundHeight,pickGroundNative,getDiagnostics:()=>({autoCare:autoCareProps.diagnostics(),selectionRings:selectionRing.diagnostics(),bloodlineRings:bloodlineRings.diagnostics(),spriteDiagnostics:[...sprites].filter(([key,item])=>item.mesh.visible||item.upperMesh.visible).map(([key,item])=>({key,partition:item.partition,companionId:item.upperMesh.id,physicalSupport:item.physicalSupport,screenQuad:item.screenQuad,worldCenter:item.mesh.position.toArray(),worldScale:item.mesh.scale.toArray(),projectionError:item.projectionError,envelopeNativeExtent:item.envelopeNativeExtent??null,supportStatus:item.supportStatus??'NATIVE_ORIGIN',depthTest:item.mesh.material.depthTest,depthWrite:item.mesh.material.depthWrite})),mode:'TRUE_3D_FIXED_CAMERA_2D_ACTORS',passageAppearance:'invisible',navigationConnections:connections?.length??0,frames,lastRenderMs,models:models.size,groundMaps:groundMaps.size,groundMapsHooked,textureCap,animatedInstances:instances.filter(i=>i.mixer).length,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,memory:{...renderer.info.memory},lost}),groundContact,contactHeight};
 }
 

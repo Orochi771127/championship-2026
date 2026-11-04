@@ -291,23 +291,23 @@ export const DATA_ARENA_MOVES = deepFreeze({
   iceShard: { type: "BOLT", mechanic: "slowing projectile", energy: 16, cooldown: 0.8, windup: 0.1, range: 600, speed: 760, radius: 10, damage: 18, onHit: { slow: 0.45, slowSeconds: 1.6 }, onTerrain: "FREEZE" },
   frostStep: { type: "BLINK", mechanic: "short teleport leaving an ice trail", energy: 20, cooldown: 4, windup: 0, distance: 250, freezeTrail: true },
   iceCage: { type: "ZONE", mechanic: "delayed root area", energy: 30, cooldown: 7, windup: 0.18, range: 520, radius: 100, delay: 0.9, damage: 24, effect: "ROOT", rootSeconds: 1.1 },
-  coreNova: { type: "NOVA", mechanic: "ultimate: telegraphed burst around self", windup: 0.65, radius: 240, damage: 70, effect: "IGNITE" },
-  dawnLance: { type: "LANCE", mechanic: "ultimate: fan of heavy piercing shots", windup: 0.55, range: 900, speed: 900, radius: 22, damage: 42, count: 5, spread: 0.7, pierce: 4 },
-  whiteout: { type: "NOVA", mechanic: "ultimate: wide freezing burst", windup: 0.6, radius: 260, damage: 54, effect: "ROOT", rootSeconds: 1.6, freezeWater: true },
+  coreNova: { type: "NOVA", mechanic: "ultimate: telegraphed burst around self", windup: 0.65, radius: 245, damage: 96, effect: "IGNITE" },
+  dawnLance: { type: "LANCE", mechanic: "ultimate: fan of heavy piercing shots", windup: 0.55, range: 900, speed: 900, radius: 22, damage: 46, count: 5, spread: 0.7, pierce: 4 },
+  whiteout: { type: "NOVA", mechanic: "ultimate: wide freezing burst", windup: 0.6, radius: 265, damage: 90, effect: "ROOT", rootSeconds: 1.6, freezeWater: true },
   // Rivals -------------------------------------------------------------------
   tideBolt: { type: "BOLT", mechanic: "projectile", energy: 14, cooldown: 1.1, windup: 0.32, range: 600, speed: 640, radius: 11, damage: 16 },
-  tideWave: { type: "WAVE", mechanic: "wide knockback wave", energy: 26, cooldown: 5, windup: 0.6, range: 560, speed: 420, radius: 34, damage: 20, knockback: 320 },
-  foamZone: { type: "ZONE", mechanic: "delayed slowing area", energy: 24, cooldown: 6, windup: 0.3, range: 520, radius: 120, delay: 1.0, damage: 14, effect: "SLOW", slow: 0.5, slowSeconds: 2 },
-  surfRush: { type: "LUNGE", mechanic: "dash attack", energy: 22, cooldown: 6, windup: 0.55, distance: 300, speed: 950, width: 56, damage: 24 },
+  tideWave: { type: "WAVE", mechanic: "wide knockback wave", energy: 26, cooldown: 5, windup: 0.6, range: 560, speed: 420, radius: 34, damage: 28, knockback: 320 },
+  foamZone: { type: "ZONE", mechanic: "delayed slowing area", energy: 24, cooldown: 6, windup: 0.3, range: 520, radius: 120, delay: 1.0, damage: 28, effect: "SLOW", slow: 0.5, slowSeconds: 2 },
+  surfRush: { type: "LUNGE", mechanic: "dash attack", energy: 22, cooldown: 6, windup: 0.55, distance: 300, speed: 950, width: 56, damage: 30 },
   flameBall: { type: "BOLT", mechanic: "projectile that ignites terrain", energy: 16, cooldown: 1.2, windup: 0.32, range: 600, speed: 600, radius: 12, damage: 18, onTerrain: "IGNITE" },
   emberFan: { type: "SPREAD", mechanic: "fan of projectiles", energy: 24, cooldown: 3.6, windup: 0.45, range: 520, speed: 480, radius: 9, damage: 12, count: 5, spread: 1.0 },
-  flamePillar: { type: "ZONE", mechanic: "delayed ground detonation", energy: 26, cooldown: 5.5, windup: 0.3, range: 560, radius: 110, delay: 1.0, damage: 28, effect: "IGNITE" },
-  shardVolley: { type: "BOLT", mechanic: "heavy beam-blocking projectile", energy: 18, cooldown: 1.4, windup: 0.36, range: 620, speed: 460, radius: 14, damage: 19, shard: 30 },
-  quakeSlam: { type: "ZONE", mechanic: "delayed ground detonation", energy: 26, cooldown: 4.8, windup: 0.3, range: 540, radius: 130, delay: 0.95, damage: 30, effect: "NONE" },
-  brutalCharge: { type: "LUNGE", mechanic: "dash attack", energy: 24, cooldown: 5.5, windup: 0.6, distance: 340, speed: 1000, width: 64, damage: 28 },
-  vortex: { type: "NOVA", mechanic: "ultimate: telegraphed burst around self", windup: 1.1, radius: 230, damage: 32, effect: "SLOW", slow: 0.5, slowSeconds: 2 },
-  inferno: { type: "NOVA", mechanic: "ultimate: telegraphed burst around self", windup: 1.1, radius: 240, damage: 34, effect: "IGNITE" },
-  shardStorm: { type: "LANCE", mechanic: "ultimate: wide fan of heavy shots", windup: 1.0, range: 760, speed: 420, radius: 16, damage: 18, count: 9, spread: 1.6, shard: 30 }
+  flamePillar: { type: "ZONE", mechanic: "delayed ground detonation", energy: 26, cooldown: 5.5, windup: 0.3, range: 560, radius: 110, delay: 1.0, damage: 32, effect: "IGNITE" },
+  shardVolley: { type: "BOLT", mechanic: "heavy beam-blocking projectile", energy: 18, cooldown: 1.4, windup: 0.36, range: 620, speed: 460, radius: 14, damage: 22, shard: 30 },
+  quakeSlam: { type: "ZONE", mechanic: "delayed ground detonation", energy: 26, cooldown: 4.8, windup: 0.3, range: 540, radius: 130, delay: 0.95, damage: 34, effect: "NONE" },
+  brutalCharge: { type: "LUNGE", mechanic: "dash attack", energy: 24, cooldown: 5.5, windup: 0.6, distance: 340, speed: 1000, width: 64, damage: 32 },
+  vortex: { type: "NOVA", mechanic: "ultimate: telegraphed burst around self", windup: 1.0, radius: 245, damage: 92, effect: "SLOW", slow: 0.5, slowSeconds: 2 },
+  inferno: { type: "NOVA", mechanic: "ultimate: telegraphed burst around self", windup: 1.0, radius: 250, damage: 96, effect: "IGNITE" },
+  shardStorm: { type: "LANCE", mechanic: "ultimate: wide fan of heavy shots", windup: 1.0, range: 760, speed: 460, radius: 16, damage: 26, count: 9, spread: 1.5, shard: 30 }
 });
 
 export const DATA_ARENA_KITS = deepFreeze({

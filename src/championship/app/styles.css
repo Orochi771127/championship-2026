@@ -1036,6 +1036,22 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
 .cm-tamer-field__value[data-field-id="rank"] { color: var(--c-accent-strong); }
 .cm-tamer-fields > :nth-last-child(-n + 2) { border-bottom: 0; }
 .cm-tamer-note { margin: 0; color: var(--c-text-3); font-size: var(--fs-label); }
+/* Owner 2026-11-04: rank unlocks overview under the tamer fields (tamerInfoScreen.js). */
+.cm-rank-unlocks { margin: 12px 0 0; border: 2px solid var(--c-line-2, #14141f); border-radius: 12px; background: var(--c-surface-1, #fff); color: var(--c-text-1, #14141f); }
+.cm-rank-unlocks__summary { display: grid; gap: 2px; padding: 10px 14px; cursor: pointer; list-style-position: inside; }
+.cm-rank-unlocks__title { font-weight: 900; }
+.cm-rank-unlocks__preview { color: var(--c-text-2, #3a4258); font-size: var(--fs-label, 12px); overflow-wrap: anywhere; }
+.cm-rank-unlocks__list { display: grid; gap: 6px; margin: 0; padding: 0 10px 12px; list-style: none; }
+.cm-rank-unlocks__row { padding: 8px 10px; border-radius: 10px; background: var(--c-surface-2, #f1f3f9); }
+.cm-rank-unlocks__row[data-state="reached"] { opacity: 0.62; }
+.cm-rank-unlocks__row[data-state="current"] { box-shadow: inset 0 0 0 2px #3ddc84; background: #ecfff4; }
+.cm-rank-unlocks__row[data-state="next"] { box-shadow: inset 0 0 0 2px #ffd23f; background: #fff8dc; }
+.cm-rank-unlocks__head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 4px; }
+.cm-rank-unlocks__name { font-weight: 900; }
+.cm-rank-unlocks__tag { padding: 0 8px; border-radius: 999px; background: #3ddc84; color: #04130a; font-size: 11px; font-weight: 900; }
+.cm-rank-unlocks__tag--next { background: #ffd23f; color: #2a1600; }
+.cm-rank-unlocks__diamonds { margin-left: auto; font-size: 12px; font-weight: 800; color: #1f5fd6; }
+.cm-rank-unlocks__lines { display: grid; gap: 2px; margin: 0; padding: 0 0 0 16px; font-size: var(--fs-label, 12px); overflow-wrap: anywhere; }
 
 /* ---- Championship run ---------------------------------------------------- */
 .cm-championship-board { display: grid; gap: var(--sp-2); padding: var(--sp-2); }

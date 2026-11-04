@@ -77,7 +77,11 @@ function normalizePlacements(raw, slotLimit = MAX_SLOT_COUNT, instances=false) {
     if (!definition) continue;
     if (!Number.isSafeInteger(slotIndex) || slotIndex < 0 || slotIndex >= slotLimit) continue;
     const identity=instances?entry.instanceId:definition.moduleId;
-    if (seenModules.has(identity) || seenSlots.has(slotIndex)) {
+    // Owner 2026-11-04: eight hex shapes do not cover their own anchor, so two hex cages may share an
+    // anchor without sharing a cell -- the editor places that and the save accepts it, but refusing it
+    // here locked a full ranch out of Continue. Hex placements are told apart by instance; their cells
+    // are checked by validateProductRanch. Native layouts keep one cage per anchor.
+    if (seenModules.has(identity) || (!instances && seenSlots.has(slotIndex))) {
       throw cageError("DUPLICATE_CAGE_PLACEMENT");
     }
     seenModules.add(identity);

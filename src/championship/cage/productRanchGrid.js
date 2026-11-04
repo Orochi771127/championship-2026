@@ -142,6 +142,37 @@ export function productRanchProblem(placements, capacity = PRODUCT_RANCH_CELL_CA
   if (occupied.size > limit) return limit < PRODUCT_RANCH_CELL_CAP ? 'LAND_CAPACITY' : 'CELL_CAP';
   return waitingCount === 1 ? null : 'WAITING_ROOM_REQUIRED';
 }
+/**
+ * Owner 2026-11-04: a saved hex world the check refuses must not lock the whole save. The
+ * largest valid layout that keeps the saved order: one waiting room first (the saved one, else
+ * its home cell), then each cage that is in bounds, unique, clear of the cells already kept and
+ * within the cell cap. Cages left out stay owned and return to storage; partners whose cage is
+ * gone move to the waiting room on load. `removed` lists what was left out.
+ */
+export function repairProductRanchPlacements(placements) {
+  const list = Array.isArray(placements) ? placements.filter(entry => entry && typeof entry === 'object') : [];
+  const kept = [], removed = [], occupied = new Set(), identities = new Set();
+  const fits = entry => {
+    const cells = productPlacementCells(entry), identity = entry.instanceId ?? entry.moduleId;
+    if (!cells || identities.has(identity) || (entry.instanceId !== undefined && !/^[a-z0-9:_-]{3,96}$/i.test(entry.instanceId))) return null;
+    if (cells.some(cell => occupied.has(cell)) || occupied.size + cells.length > PRODUCT_RANCH_CELL_CAP) return null;
+    return cells;
+  };
+  const keep = (entry, cells) => {
+    kept.push({ moduleId: entry.moduleId, slotIndex: entry.slotIndex, ...(entry.instanceId ? { instanceId: entry.instanceId } : {}) });
+    for (const cell of cells) occupied.add(cell);
+    identities.add(entry.instanceId ?? entry.moduleId);
+  };
+  const waiting = list.find(entry => entry.moduleId === WAITING_ROOM_MODULE && fits(entry))
+    ?? { moduleId: WAITING_ROOM_MODULE, slotIndex: PRODUCT_WAITING_ROOM_SLOT };
+  keep(waiting, productPlacementCells(waiting));
+  for (const entry of list) {
+    if (entry === waiting) continue;
+    const cells = entry.moduleId === WAITING_ROOM_MODULE ? null : fits(entry);
+    if (cells) keep(entry, cells); else removed.push(entry);
+  }
+  return { placements: kept, removed };
+}
 /** Valid hex world. A legacy positional unlock list only counts as land capacity. */
 export function validateProductRanch(placements, capacity = PRODUCT_RANCH_CELL_CAP) {
   return productRanchProblem(placements, Array.isArray(capacity) ? capacity.length : capacity ?? PRODUCT_RANCH_CELL_CAP) === null;

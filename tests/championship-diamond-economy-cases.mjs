@@ -11,8 +11,8 @@ import {CHAMPIONSHIP_MODERN_SAVE_KEY} from '../src/championship/app/championship
 import {FRIENDS_PLAYTEST_POLICY, creditTestDiamonds, normalizeFriendsPlaytestState} from '../src/championship/app/friendsPlaytestPolicy.js';
 import {createFullQaSaveText} from '../scripts/lib/championshipFullQaSave.mjs';
 import {GACHA_AUTOMATION_SHARE, GACHA_CHIPS, automationForgePlan, claimGachaBundle, forgeAutomationItem, forgeShardPool,
-  grantGachaAutomation, mountAutomationCore, normalizeCyberGacha, pullCyberGacha, recordGachaClaims, settleRanchAutomation,
-  setGachaBondCarry, unmountAutomationCore} from '../src/championship/gacha/cyberGacha.js';
+  grantGachaAutomation, deployAutomationCore, normalizeCyberGacha, pullCyberGacha, recordGachaClaims, settleRanchAutomation,
+  setGachaBondCarry} from '../src/championship/gacha/cyberGacha.js';
 import {AUTOMATION_ITEMS, AUTOMATION_RECIPES, AUTOMATION_RULES, autoFeedAffection, automationEffectLines, cageAutomation,
   royalCopiesByDefinition, royalSleepBonus, royalTotal} from '../src/championship/gacha/ranchAutomation.js';
 import {DIAMOND_REWARDS, FOUNDER_PACK, LAND_EXPANSION, dueDiamondMilestones, founderPackUnlocked, landExpansionTier, landExpansionPrice,
@@ -84,16 +84,17 @@ test('the native overnight writer keeps its traced zoo/ranch behaviour for parit
 
 // ---------------------------------------------------------------- automation items, pity forging, mounting
 
-test('automation items: SR cores, an SSR royal ranch and a UR stellar zoo, each with its own art and effect lines', () => {
-  assert.deepEqual(AUTOMATION_ITEMS.map(i => [i.id, i.rarity]), [['auto:clean-core', 'SR'], ['auto:feed-core', 'SR'], ['auto:royal-ranch', 'SSR'], ['auto:stellar-zoo', 'UR']]);
+test('automation items: SR cores, an SSR royal dual core and royal ranch, a UR stellar zoo, each with its own art and effect lines', () => {
+  assert.deepEqual(AUTOMATION_ITEMS.map(i => [i.id, i.rarity]), [['auto:clean-core', 'SR'], ['auto:feed-core', 'SR'], ['auto:royal-core', 'SSR'], ['auto:royal-ranch', 'SSR'], ['auto:stellar-zoo', 'UR']]);
   for (const item of AUTOMATION_ITEMS) {
     assert.ok(readFileSync(new URL('../' + item.art, import.meta.url)).length > 1000, item.art);
     assert.ok(automationEffectLines(item).length >= 2, item.id);
   }
   assert.deepEqual(AUTOMATION_ITEMS.filter(i => i.edition).map(i => i.baseDefinition), [25, 24]);
-  assert.match(automationEffectLines(AUTOMATION_ITEMS[0]).map(l => l.text).join(), /0 照顧失誤/);
+  // AUTO_CARE_3D_20261103: a core is one hour of a 3D machine.
+  assert.match(automationEffectLines(AUTOMATION_ITEMS[0]).map(l => l.text).join(), /巡邏 \{n\} 小時/);
   assert.equal(automationEffectLines(AUTOMATION_ITEMS[0])[1].params.n, 50);
-  assert.equal(automationEffectLines(AUTOMATION_ITEMS[1])[1].params.n, 2.4);
+  assert.equal(automationEffectLines(AUTOMATION_ITEMS[1])[2].params.n, 2.4);
 });
 
 test('the premium machine pays automation at the top of each SR+ roll; R tiers and metals keep their rolls', () => {
@@ -103,22 +104,23 @@ test('the premium machine pays automation at the top of each SR+ roll; R tiers a
   assert.deepEqual(sr.prizes.map(p => [p.kind, p.id, p.rarity]), [['AUTOMATION', 'auto:clean-core', 'SR']]);
   assert.equal(sr.state.automation['auto:clean-core'], 1);
   const ssr = pullCyberGacha(state, {machine: 'PREMIUM', count: 1, random: seq([0.9, 0.95, 0])});
-  assert.deepEqual(ssr.prizes.map(p => p.id), ['auto:royal-ranch']);
+  assert.deepEqual(ssr.prizes.map(p => p.id), ['auto:royal-core']);
+  assert.deepEqual(pullCyberGacha(state, {machine: 'PREMIUM', count: 1, random: seq([0.9, 0.95, 0.99])}).prizes.map(p => p.id), ['auto:royal-ranch']);
   const ur = pullCyberGacha(state, {machine: 'PREMIUM', count: 1, random: seq([0.99, 0.9, 0])});
   assert.deepEqual(ur.prizes.map(p => p.id), ['auto:stellar-zoo']);
   // A low category roll still gives a metal in every tier.
   assert.equal(pullCyberGacha(state, {machine: 'PREMIUM', count: 1, random: seq([0.7, 0.01, 0])}).prizes[0].kind, 'METAL');
   assert.equal(pullCyberGacha(state, {machine: 'PREMIUM', count: 1, random: seq([0.1, 0.99, 0])}).prizes[0].kind, 'CHIP', 'R has no automation');
-  // Overall rates: cores 2.1% each, royal ranch 1.5%, stellar zoo 0.3%.
+  // Overall rates: cores 2.1% each, royal dual core and royal ranch 0.75% each (AUTO_CARE_3D_20261103), stellar zoo 0.3%.
   assert.equal(GACHA_AUTOMATION_SHARE, 0.15);
   assert.equal(Math.round(0.28 * GACHA_AUTOMATION_SHARE / 2 * 1000) / 10, 2.1);
-  assert.equal(Math.round(0.1 * GACHA_AUTOMATION_SHARE * 1000) / 10, 1.5);
+  assert.equal(Math.round(0.1 * GACHA_AUTOMATION_SHARE / 2 * 10000) / 100, 0.75);
   assert.equal(Math.round(0.02 * GACHA_AUTOMATION_SHARE * 1000) / 10, 0.3);
 });
 
 test('directed forging is the pity path: fixed chips and shards in, that exact item out; locked chips and star-core shards never go in', () => {
   assert.deepEqual(AUTOMATION_RECIPES.map(r => [r.id, r.chips, r.shards]),
-    [['auto:clean-core', 5, 2], ['auto:feed-core', 5, 2], ['auto:royal-ranch', 5, 6], ['auto:stellar-zoo', 5, 10]]);
+    [['auto:clean-core', 5, 2], ['auto:feed-core', 5, 2], ['auto:royal-core', 8, 4], ['auto:royal-ranch', 5, 6], ['auto:stellar-zoo', 5, 10]]);
   assert.ok(forgeShardPool().every(m => m.family !== 'supernova'));
   let state = normalizeCyberGacha({version: 1, chips: {'chip:hp': 3, 'chip:attack': 1, 'chip:core-omega': 9, 'chip:personality': 9},
     metals: {'metal:emma-shard': 1, 'metal:beta-shard': 1, 'metal:supernova-shard': 9}});
@@ -139,27 +141,23 @@ test('directed forging is the pity path: fixed chips and shards in, that exact i
   assert.equal(forged.prize.rarity, 'SR');
 });
 
-test('cores mount on one cage and come back off; a royal edition already runs both; a confirmed layout settles the bag', () => {
+test('cores deploy on one cage for an hour each; a royal edition already runs both; a confirmed layout settles the bag', () => {
   let state = grantGachaAutomation(grantGachaAutomation(normalizeCyberGacha({version: 1}), 'auto:clean-core', 1).state, 'auto:feed-core', 1).state;
-  assert.equal(mountAutomationCore(state, 'auto:royal-ranch', 'cage:instance:3').reason, 'NOT_A_CORE');
-  state = mountAutomationCore(state, 'auto:clean-core', 'cage:instance:3').state;
-  assert.equal(mountAutomationCore(grantGachaAutomation(state, 'auto:clean-core').state, 'auto:clean-core', 'cage:instance:3').reason, 'ALREADY_MOUNTED');
-  state = mountAutomationCore(state, 'auto:feed-core', 'cage:instance:3').state;
-  assert.deepEqual(state.mounts, {'cage:instance:3': ['AUTO_CLEAN', 'AUTO_FEED']});
+  assert.equal(deployAutomationCore(state, 'auto:royal-ranch', 'cage:instance:3').reason, 'NOT_A_CORE');
+  state = deployAutomationCore(state, 'auto:clean-core', 'cage:instance:3').state;
+  state = deployAutomationCore(state, 'auto:feed-core', 'cage:instance:3').state;
+  assert.deepEqual(state.runs, {'cage:instance:3': {AUTO_CLEAN: 3600, AUTO_FEED: 3600}});
   assert.equal(state.automation, undefined, 'the bag is empty');
   const auto = cageAutomation(state, 'cage:instance:3');
   assert.equal(auto.clean && auto.feed && !auto.royal, true);
   assert.equal(auto.sleepPercent, 100); assert.equal(auto.trainingPoints, 0);
-  const off = unmountAutomationCore(state, 'AUTO_FEED', 'cage:instance:3');
-  assert.deepEqual(off.state.mounts, {'cage:instance:3': ['AUTO_CLEAN']});
-  assert.equal(off.state.automation['auto:feed-core'], 1);
   // Royal cages: placed from the bag by the facility layout; one that leaves goes back, cores on a removed cage too.
   state = grantGachaAutomation(state, 'auto:royal-ranch', 2).state;
   assert.equal(royalTotal(state, 'ROYAL_RANCH'), 2);
   const placed = settleRanchAutomation(state, {editions: {'cage:instance:9': 'ROYAL_RANCH'}, liveInstanceIds: ['cage:instance:3', 'cage:instance:9']});
   assert.deepEqual(placed.state.editions, {'cage:instance:9': 'ROYAL_RANCH'});
   assert.equal(placed.state.automation['auto:royal-ranch'], 1);
-  assert.equal(mountAutomationCore(grantGachaAutomation(placed.state, 'auto:clean-core').state, 'auto:clean-core', 'cage:instance:9').reason, 'ROYAL_ALREADY_AUTOMATED');
+  assert.equal(deployAutomationCore(grantGachaAutomation(placed.state, 'auto:clean-core').state, 'auto:clean-core', 'cage:instance:9').reason, 'ROYAL_ALREADY_AUTOMATED');
   const royal = cageAutomation(placed.state, 'cage:instance:9');
   assert.deepEqual([royal.royal, royal.clean, royal.feed, royal.sleepPercent, royal.trainingPoints], [true, true, true, 130, 3]);
   // Owner 2026-11-03: a royal ranch is its own map (definition 36), not one more copy of the ranch.
@@ -168,7 +166,7 @@ test('cores mount on one cage and come back off; a royal edition already runs bo
   assert.equal(removed.state.automation['auto:royal-ranch'], 2);
   assert.equal(removed.state.automation['auto:clean-core'], 1);
   assert.equal(removed.state.automation['auto:feed-core'], 1);
-  assert.equal(removed.state.mounts, undefined);
+  assert.equal(removed.state.runs, undefined, 'a removed cage gives back one core per whole hour left');
   assert.equal(settleRanchAutomation(state, {editions: {a: 'STELLAR_ZOO', 'cage:instance:9': 'STELLAR_ZOO'}, liveInstanceIds: ['cage:instance:9']}).reason, 'ROYAL_CAGE_NOT_OWNED');
   assert.throws(() => normalizeCyberGacha({version: 1, editions: {'cage:instance:1': 'GOLD'}}), /INVALID_ROYAL_EDITION/);
   assert.throws(() => normalizeCyberGacha({version: 1, mounts: {'cage:instance:1': ['AUTO_WASH']}}), /INVALID_AUTOMATION_MOUNT/);
@@ -327,7 +325,8 @@ test('app: a royal ranch from the bag is placed as its own map, saved with its e
     assert.equal(saved.progression.cyberGacha.automation?.['auto:royal-ranch'] ?? 0, 0);
     assert.ok(saved.cageEdit.placements.some(p => p.instanceId === placedId && p.moduleId === 'championship:2026:cage:royal-ranch'), 'the save holds the royal map the shop never sold');
     assert.equal(app.savePort.getStatus().phase, 'SAVED', 'the stock check counts royal cages');
-    assert.ok(app.getCageAutomationFrame().some(b => b.instanceId === placedId && b.royal && b.clean && b.feed), 'the ranch badge');
+    // AUTO_CARE_3D_20261103: no banner over a cage; only deployed machines carry a small tag, and a royal cage's pair is built in.
+    assert.deepEqual(app.getCageAutomationFrame(), [], 'no machine tag over a royal cage');
     await app.dispose();
     app = h.make();
     await app.continueGame();

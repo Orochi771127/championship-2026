@@ -23,7 +23,10 @@ export function productHuntSpecies(index){
    rungs:Object.freeze(base.rungs.map(r=>Math.max(0,Math.min(26,r+shift)))),ancestors:Object.freeze(ancestors)});
 }
 export function productLifecycleSpecies(index){return PRODUCT_RAISING_LIFECYCLE_RULES.species[index]??nativeLifecycle.species[productBaseSpeciesIndex(index)];}
-export const PRODUCT_RAISING_LIFECYCLE_RULES=Object.freeze(withReadyProductOriginals({...nativeLifecycle,species:Object.freeze(Object.assign({},nativeLifecycle.species,Object.fromEntries(listProductExtensions().map(e=>[e.speciesIndex,nativeLifecycle.species[e.baseSpeciesIndex]]))))}));
+// Owner 2026-11-04: at launch a partner may evolve to 成熟期 from rank 1 (藍階); the original opens it at
+// rank 2 (紅階). Capacity per rank is unchanged.
+export const PRODUCT_RANK_GROWTH=Object.freeze(nativeLifecycle.ranks.map((rank,index)=>index===1?Object.freeze({...rank,generation:nativeLifecycle.ranks[2].generation}):rank));
+export const PRODUCT_RAISING_LIFECYCLE_RULES=Object.freeze(withReadyProductOriginals({...nativeLifecycle,ranks:PRODUCT_RANK_GROWTH,species:Object.freeze(Object.assign({},nativeLifecycle.species,Object.fromEntries(listProductExtensions().map(e=>[e.speciesIndex,nativeLifecycle.species[e.baseSpeciesIndex]]))))}));
 export function productEvolutionOptions(target){const extra=listProductExtensions().filter(e=>e.baseSpeciesIndex===target&&e.runtimeReady&&e.evolutionReady);return Object.freeze([target,...extra.map(e=>e.speciesIndex)]);}
 export function requiresProductSaveVersion(value){
  if(!value||typeof value!=='object')return false;

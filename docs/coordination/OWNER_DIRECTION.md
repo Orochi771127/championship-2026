@@ -12,6 +12,102 @@ OWNER_APPROVED_ADAPTATION. Pipeline and rules: `docs/art/production/ART_PRODUCTI
 - Saves from 11-02 that placed a royal cage as a ranch or zoo move it onto its own map on load (nearest free four-hex footprint, same instance id; residents respawn on it, food and droppings move to the nearest safe ground).
 - Verified: auto-feed and auto-clean events for both maps in the app tests and in a phone-portrait browser run on an isolated loopback port.
 
+<!-- record-id: MA_WEAK_FOUR_SLOT_CYCLES_20261104 -->
+## 2026-11-04 — Eleven 成熟期 weak walks play dot's four-slot cycle
+
+dot delivers a 53-package index plus nine more packages (2026-11-04). Every 成熟期 Main12 weak-walk proposal has three to six poses, while the original sequence 12 is two cells at 37/37 ticks. Asked, the Owner answers 「Allow 4-pose cycle」: four sequence positions per cycle, keeping the original 74 ticks.
+
+OWNER_APPROVED_ADAPTATION.
+
+- Bound: MA05, MA07, MA09, MA10, MA13, MA14, MA17, MA36, MA47, MA49 and MA66 play dot's sequence order at 19/18/19/18 ticks. MA66 uses three poses over four slots (A→M→B→M).
+- Registration:
+  - poses keep dot's shared canvas (offset and scale from each package's `SEQUENCE_MANIFEST.json`), so the motion between them is as delivered;
+  - one density per role (median silhouette area against the old one-drawing weak frame), at most density 8;
+  - one origin per role, with the lowest pose on the old weak feet line;
+  - pixels with alpha below 10 are cleared.
+- MA13 uses dot's C2 repair in place of C, whose opaque white wedge is a visible defect.
+- Authoring `animation.web-weak-20261104b.json` with `patch20261104Weak`; MA66's patch sits on its KO patch.
+- Not bound:
+  - MA20, MA37, MA40: the poses do not match the shipped drawing (upright vs crouched, a flat flame shape vs the compact bird, standing vs kneeling).
+  - MA11, MA15, MA48: six-pose cycles are outside the four-slot approval.
+  - MA35, MA67: dot reports jumps and pending fin roots.
+  - AW48 (species-176), AW50 (species-179) and every UL species: they have no reviewed set in the game.
+- Archive: 54 new packages, SHA-checked, in `D:/Championship2026-archive/character-animation-art-archive-20261025/drive-delivery-20261104-v2`. R: had 27 MB free.
+
+<!-- record-id: ORIGINAL8_KO_WEAK_MOVES_20261104 -->
+## 2026-11-04 — Arena KO for the eight playable originals; MA23, MA31 and MA51 weak moves play two drawings
+
+dot delivers a 20-package manifest and eight extra links (2026-11-04). The Owner directs: dedupe and archive everything, review against the master, three-view and original semantics, play in sequence, and bind only what passes. 「原創 8 角 KO 總覽」 counts as the first appearance approval, but playback, ground, size and meaning are still checked. 「原作時序未知的不要猜」. 「不要以舊圖或單格假裝補齊，也不要為了湊套數混用不一致設計」. 「合併或公開發布前先向我報告具體範圍」.
+
+- Archive: 28 manifest ZIPs plus 10 extra ZIPs and one PNG are in `D:/Championship2026-archive/character-animation-art-archive-20261025/drive-delivery-20261104-v1`, SHA-checked. R: had 0 bytes free, so they move to R later.
+- KO: GR39, GR40, GR41, MA65, MA67 and MA69 each get one new static Arena KO frame. MA66 and MA68 reuse their own shipped lying cells (MAIN_B16 cell_09 / cell_10), with no redraw.
+  - Each uses the existing `Arena_KO_STATIC_UNBOUND_ONLY` contract.
+  - Size: the KO silhouette area matches the role's median Arena walk area.
+  - Ground: the bottom of the drawing is the contact point.
+  - Format: one WebP page per role, at most density 8.
+  - Files: authoring `animation.web-ko-20261104.json` with a `patch20261104KO` block naming its parents.
+  - dot's fall key sequences stay archived, because the runtime KO is a hold and the original gives no fall timing.
+- Weak move: MA23, MA31 and MA51 get dot's two-pose sequence 12. The two drawings play at the native 37/37 ticks, on the old one-drawing weak frame's size and ground line. Authoring is `animation.web-weak-20261104.json` with `patch20261104Weak`; they leave the known single-drawing Main12 list.
+- Held, not bound:
+  - MA48 weak move: the original is a flight, but the shipped MA48 set is a grounded bird.
+  - MA48 six-phase, MA35 three-pose and MA67 swim: more poses than the two native cells, with no timing for the extras.
+  - Every AW/UL package (AW41, AW45, AW46, AW48, AW50, UL09/UL37, UL11, UL12, UL13, UL22, UL25, UL40): dot marks each one HOLD or unplayed.
+- UL22 identity: the south-walk package's master `CURRENT_PUBLIC_MASTER_species217.webp` (sha256 b8013deb…) is species-217's Dex portrait.
+  - The game shows species-217 as UL22.
+  - `database-display.r1.json` stores the pre-reorder native code UL21, and `planUltimateDisplayOrder` renumbers it at runtime.
+  - Bind by species id and SHA, never by code.
+- Not reachable in normal play yet: the originals are not on the Data Arena relay roster, so the KO was checked through the loopback QA cast.
+<!-- record-id: HUNT_TOOL_TIERS_20261103 -->
+## 2026-11-03 — One shop slot per hunt tool, upgraded in place; ropes are counted and snap one at a time
+
+The Owner pastes two versions of a phase brief with six phone pictures of the hunt shop (2026-11-03): tools of the same kind (捕捉繩 α/β/γ, 手槍 α/β, 記憶卡 32G/64G/96G…) take a slot per tier and old tiers stay in the hunt menus. Every same-kind tool becomes one slot upgraded in place, in the shop, the bag and the hunt loadout and dock; ropes become counted (持有 X/99) and a rope worn to nothing spends one and the next is tied on; the memory card becomes one card with sizes past 96 G. Asked, the Owner answers 「第一個問題沿用原本設定」 (ropes keep the ROM durability, not the brief's new numbers), leaves the gear model-upgrade fee to the implementer, and hands over the rest including the screenshots. After the report the Owner answers 「請你自我審查沒有問題就commit、push然後整合進main部署」, which authorizes this batch's push, merge to main and publication after a self-review.
+
+OWNER_APPROVED_ADAPTATION. The ROM shop table, the native rope writer and its wear stay as traced; `src/championship/shop/huntToolTiers.js` groups the rows.
+
+- Families: four rope colours (three tiers), six guns, three wires, meat, decoys, mines and traps (α→β), and the memory card. The family's stock sits on its current tier's row only; save `shop.toolTiers` (family → tier) and `shop.ropeWear` (the rope in hand's remaining durability, per-mille). Bombs, lights, poison and paralysis meat are different items, not tiers, and stay single.
+- Old saves: each family takes the top tier held; ammo of all tiers is added up (cap 99); a rope held as 1/1 becomes 15 ropes of that tier; the last memory card held wins.
+- Ropes: buying a colour or the next tier pays that row's ROM price once and adds 10 ropes; ropes already held move up 1:1. Refill per rope 20/35/50, 80/110/150, 200/260/320, 450/600/800 Bits. Durability per tier is the ROM value. Wear carries from one pull to the next; a snap spends one rope, the next is ready after 0.25 s (it replaces the 15 s overheat in normal hunts); the last of a colour hands over to the best other colour; with none left the rope key sells five (1.5× the refill price). The loadout ties on the best colour held.
+- Gear: the β model costs about thirty β units (five for the traps): pistol 300, rapid 600, sleep 1,500, paralysis rifle 3,000, shotgun 3,600, paralysis shotgun 7,800, standard wire 900, magnetic 3,300, electric 12,000, meat 2,400, decoy 24,000, mine 24,000, trap 44,000. Every α unit becomes β 1:1.
+- Memory card: the ROM starts the player with the 32 G card, so the card runs 32 → 64 (4,850) → 96 (9,850) for Bits, then 128 / 160 / 200 / 256 G for 150,000 / 350,000 / 800,000 / 1,800,000 Bits or 300 / 500 / 800 / 1,200 test diamonds (the friends-playtest diamonds; the land +8 G per step still adds on top).
+- Self-review fix before publication: a refused emergency bundle (too few Bits) no longer leaves a never-bought rope colour unlocked.
+- Not done: a rope-snap sound of its own (the existing denied cue plays); the hunt loadout keeps the catalog's rope names (基礎捕捉繩 γ…) while the shop says 捕捉繩 γ.
+
+<!-- record-id: AUTO_CARE_3D_20261103 -->
+## 2026-11-03 — Auto-care as 3D machines: a patrolling cleaning robot, a meat-throwing feeder, one hour per core
+
+From a phone ranch screenshot (two flat device pictures on the floor and a 「⚙️ 全自動飼育運轉中（自動給食・自動清掃）」 banner over a partner, while another partner showed the hungry bubble with 99 meat in the bag and nothing was thrown) the Owner pastes a five-phase brief, then adds 「扭蛋的道具很醜耶，請照上面的做」: remove the floor pictures and the banner; build a 3D cleaning robot and a 3D feeding tower in Blender 5.2; the robot strolls the cage and every connected cage and drives to droppings; the tower lobs one piece of meat at a partner showing the hungry bubble and takes one 餵食 from the bag; the cores become consumables lasting one hour each (duplicates extend or run in other cages, 皇家雙效核心 runs both); a curious-partner / ride easter egg; tests, `npm run test:ci` and four phone screenshots; no push or deployment.
+
+OWNER_APPROVED_ADAPTATION (`gacha/ranchAutomation.js`, `gacha/cyberGacha.js`, `raising/autoCareMachines.js`, `presentation/ranchAutoCareProps.js`):
+- Items: 奈米掃地機器人 (SR), 智慧自動餵食機 (SR) and the new 皇家雙效核心 (SSR, both machines; furnace recipe 5→8 chips, 4 shards). The premium machine's SSR automation share is now split between the dual core and the royal ranch (0.75 % each of all pulls; it was 1.5 % for the royal ranch alone). Bag and gacha icons are rendered from the same Blender models.
+- Consumables: deploying a core on a placed cage uses it up and runs its machine(s) for 3600 s; another core on a running machine adds 3600 s, at most 24 h. The save keeps `cyberGacha.runs` (seconds left per cage instance and machine). Cores still mounted in an older save go back into the bag once; a cage removed from the layout gives back one core per whole hour left. Nothing is unmounted any more.
+- Time: runs count down by real play time on the ranch (the ranch simulation's own frames), not while the game is closed. A feeding tower with no meat holds its time.
+- Cleaning robot: stands on the cage's lower-left floor (its main walkable component), strolls the whole walkable cluster it can reach (connected cages through open passages, `navigation.component`) at 0.8 world units/s, locks on to the nearest dropping (green flash, radar ring, 「!」), drives at 2.0 units/s, sweeps for 0.4 s and pays +50 bits. A dropping on an obstacle is swept from the nearest floor within 64 px.
+- Feeding tower: at the lower-left corner; for any partner of its cluster showing the native hungry bubble (status 3, growth flag 418) or at the native hungry satiety, it turns 0.2 s with a squash, lobs one bone-in meat on a 0.55 s arc with a gold dotted trail, and on landing takes one 餵食 (shop record 0) and feeds the partner to full with the 2.4-affection auto-feed (heart, −1 on the meat pop and on the toolbar key). With no meat it throws nothing and its tag reads 缺肉待補.
+- Easter egg: an in-training or rookie partner the robot passes shows a 「?」; an in-training partner hops on its lid for three seconds now and then (18 % of meetings, 24 s cooldown per partner).
+- Ranch UI: no banner and no floor pictures. A small translucent drawn tag (CSS icon + 58:42) floats over each running machine; a tap opens its time left and 「續航 +1 小時」. Bag, gacha screen and facility editor show 「部署 1 小時 / 延長 +1 小時」 and the time left.
+- Machines draw in the ranch's Three scene (shared depth, light and shadow) from `assets/production/items/auto-care-3d-r1/*.glb` (`scripts/blender/build_auto_care_3d_props.py`), with built-in meshes of the same shape until the models load. Royal cages keep their built-in instant feeding and cleaning unchanged (another session owns their new maps).
+- Machines use their own seeded random stream; the gameplay RNG and the native raising sequences are unchanged.
+
+<!-- record-id: GRMA_WALK_BOUND_FIX_20261103 -->
+## 2026-11-03 — Walk jumps, Main17 stand/lie flip and MA01's floating walk fixed with existing frames
+
+A frame-level audit of the 107 shipped 成長期/成熟期 sets compared the flagged clips with the original cells. In the original, the walk (sequence 2) keeps both cells on the ground, and Main17 (bound weak idle) holds two near-identical standing cells (37/28 ticks). Several sets break this. The Owner chose 「Fix now with existing art」.
+
+- Re-bound from frames each role already ships; no pixel changes. Each role gets a new authoring file `animation.web-patch-20261103.json` with a `patch20261103` block naming the clips it replaces; the parent authoring files are untouched.
+- MA02:
+  - General walk and run keep their two grounded ends. The two middle drawings jumped and tumbled in the air.
+  - Arena R and L drop their airborne middle frame.
+- MA15 Arena DR/DL and MA21 Arena D drop the airborne middle frame. Every shortened clip still alternates two distinct drawings.
+- Main17:
+  - GR03 now plays its two standing bound-idle drawings at 37/28 ticks.
+  - GR37 holds its one weak-sitting drawing for 65 ticks; no second sitting drawing exists.
+  - Both used to alternate standing and lying flat.
+- MA01 walk/run floated 6.5–10.5 native px while every other General clip stands on the pivot. One offset per clip grounds them and keeps the step bob.
+- Left as they are:
+  - MA02 Arena DR/UR/UL/DL: the first and last frames are the same pose, so removing the jump would leave a slide. These need a new grounded drawing from dot.
+  - MA13: its mid-step lift is a real heavy stride.
+  - GR26: the whole set sits about 5 px above the pivot in every clip, a consistent offset rather than a broken walk.
+- `tests/championship-weak-walk-pose-cases.mjs` keeps these clips grounded and Main17 standing, and pins the four remaining MA02 headings.
 <!-- record-id: STAGE_BODY_SIZE_GR_MA_20261103 -->
 ## 2026-11-03 — Body size follows species and biology, not stage
 

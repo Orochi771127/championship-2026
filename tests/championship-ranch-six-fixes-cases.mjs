@@ -110,14 +110,14 @@ test('bag: gachapon chips, metals and cores all appear in the four tabs, each wi
     // Shared gachapon helpers (the partner nameplate) build with the global document.
     const previousDocument=globalThis.document;globalThis.document=doc;t.after(()=>{globalThis.document=previousDocument;});
     const panel=createBackpackPanel({doc,getShopFrame:()=>app.getShopFrame(),getGachaFrame:()=>app.getCyberGachaFrame(),tab:'automation',
-      intents:{mountCore:(core,cage)=>{calls.push(['mount',core,cage]);return app.gachaMountCore(core,cage);},useItem:(...a)=>app.gachaUseItem(...a)}});
+      intents:{deployCore:(core,cage)=>{calls.push(['deploy',core,cage]);return app.gachaDeployCore(core,cage);},useItem:(...a)=>app.gachaUseItem(...a)}});
     for(const tab of ['chips','metals','automation']){
       panel.element.querySelector(`.cm-backpack__tab[data-tab="${tab}"]`).click();
       const rows=panel.element.querySelectorAll('.cm-backpack__item');
       assert.equal(rows.length,tabs[tab].length,tab);
       assert.equal(panel.element.querySelectorAll('.cm-backpack__use').length,rows.length,`${tab}: every row has its key`);
     }
-    // Mount the feed core on the first placed cage straight from the bag.
+    // Deploy the feed core on the first placed cage straight from the bag (one hour).
     panel.element.querySelector('.cm-backpack__use[data-use="auto:feed-core"]').click();
     const cage=panel.element.querySelector('.cm-backpack__cage');
     assert.ok(cage,'the placed cages are listed');
@@ -150,7 +150,7 @@ test('the partner card, the bag and the facility editor each reach the gachapon 
   assert.match(main,/gachaUseItem\(itemId, instanceId, options\)/);
   const editor=source('src/championship/app/hexWorldEditor.js');
   assert.match(editor,/籠舍外掛模組槽/);
-  assert.match(editor,/source\.intents\.gachaMountCore/);
+  assert.match(editor,/source\.intents\.gachaDeployCore/);
 });
 
 test('收下發現 pays waiting finds: two feed ×2 finds add 4 to the feed tool and say so', async () => {
@@ -197,4 +197,17 @@ test('with no passage between cages, partners in one cage never greet or find on
     assert.match(code,/if\(!\(raisingGround\?\.navigation\?\.connections\?\.length>0\)\)return;/);
     assert.match(code,/if\(!partnerOffHome\(a\)&&!partnerOffHome\(b\)\)continue;/);
   }finally{await app.dispose();}
+});
+
+test('night Zs: never on an egg, never left behind by a hatch, and a fresh hatch stays awake a while', () => {
+  // Owner 2026-11-03: an egg showed Zs that stayed put while the field scrolled; after hatching
+  // there were two sets and the new partner went straight to sleep.
+  const view=source('src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js');
+  assert.match(view,/const asleep=native\?\.state===4&&native\.speciesIndex>=8&&/);
+  assert.match(view,/previous\.root\.destroy\(\{children:true\}\);[\s\S]{0,200}previous\.emote\?\.destroy\(\{children:true\}\);previous\.sleepZ\?\.destroy\(\{children:true\}\);/);
+  const app=source('src/championship/app/championshipStandaloneApp.js');
+  assert.match(app,/if\(result\.hatched\)realtimeWake\.set\(id,realNowMs\(\)\+REALTIME_WAKE_SECONDS\*1000\);/);
+  assert.match(app,/if\(result\.evolved&&result\.event\.target>=8\)realtimeWake\.set\(id,realNowMs\(\)\+REALTIME_WAKE_SECONDS\*1000\);/);
+  // The nap honours that window.
+  assert.match(app,/if\(night&&!\(\(realtimeWake\.get\(id\)\?\?0\)>nowMs\)\)\{/);
 });

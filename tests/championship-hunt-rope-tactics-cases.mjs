@@ -163,7 +163,7 @@ function lasso(runtime, wildId, notices) {
   return at();
 }
 
-test("a live hunt: the ultimate rope throws off a small partner, a spare rope binds it, a snapped rope overheats", async () => {
+test("a live hunt: the ultimate rope throws off a small partner, a spare rope binds it, a snapped rope is replaced", async () => {
   const { runtime } = await huntWith([0, 11], 11);
   const small = runtime.getWildCreatures().find(w => nativeHuntToolSpecies(w.speciesIndex).generation <= 3);
   assert.ok(small, "the grass gate has a 幼年期 / 成長期 partner");
@@ -178,17 +178,18 @@ test("a live hunt: the ultimate rope throws off a small partner, a spare rope bi
   for (let i = 0; i < 200; i++) runtime.tick(FRAME); // let the startled partner settle
   const caught = lasso(runtime, small.wildId, new Set());
   assert.equal(caught.bound, true, "the light rope binds it");
-  // Pull far past the snap distance: the rope breaks and overheats.
+  // Pull far past the snap distance: the rope snaps. Since HUNT_TOOL_TIERS_20261103 ropes
+  // are counted, so the snapped one is spent and the next is tied on in 0.25 s.
   runtime.toolPointerDown(caught.worldX, caught.worldY - 10); runtime.tick(FRAME);
   runtime.toolPointerMove(caught.worldX + 500, caught.worldY); runtime.tick(FRAME); runtime.tick(FRAME);
-  assert.equal(runtime.getToolState().notice, "ROPE_BROKEN");
+  assert.equal(runtime.getToolState().notice, "ROPE_REPLACED");
   runtime.toolPointerUp(caught.worldX + 500, caught.worldY); runtime.tick(FRAME);
   tool = runtime.getToolState().tools.find(t => t.id === "ROPE");
-  assert.ok(tool.overheatSeconds > 0, "the broken rope is cooling");
-  const p = runtime.getWildCreatures().find(w => w.wildId === small.wildId);
-  runtime.toolPointerDown(p.worldX, p.worldY); runtime.tick(FRAME);
-  assert.equal(runtime.getToolState().notice, "ROPE_OVERHEATED");
-  runtime.toolPointerUp(p.worldX, p.worldY);
+  assert.equal(tool.stock, 14, "one rope spent");
+  assert.equal(tool.overheatSeconds, 0, "tying on the next rope is no cooldown");
+  assert.equal(tool.swapping, true);
+  for (let i = 0; i < 16; i++) runtime.tick(FRAME);
+  assert.equal(runtime.getToolState().tools.find(t => t.id === "ROPE").swapping, false);
   assert.equal(runtime.cycleRope(), true, "a spare can be swapped in at once");
   tool = runtime.getToolState().tools.find(t => t.id === "ROPE");
   assert.equal(tool.role, "ULTIMATE"); assert.equal(tool.overheatSeconds, 0);

@@ -50,10 +50,12 @@ const GLOW_FRAGMENT=`varying float vGlowHeight; varying vec2 vGlowSide; uniform 
     #include <colorspace_fragment>
   }`;
 
-export function ranchSelectionRingPlacement(entry,bounds,pixelScale,view=RANCH_LAYOUT_VIEW){
+// Decals lie on the visible floor (ranchDecalFloor.js); the walk height otherwise.
+export const ranchDecalBaseHeight=root=>root?.threeDecalHeight??root?.threeGroundHeight??0;
+export function ranchSelectionRingPlacement(entry,bounds,pixelScale,view=RANCH_LAYOUT_VIEW,{base=ranchDecalBaseHeight(entry?.root)}={}){
   const ellipses=entry?.shadow&&entry.groundShadowEllipses?.length?ranchShadowScreenEllipses(entry.shadow,entry.groundShadowEllipses):[];
   if(!ellipses.length||!(pixelScale>0))return null;
-  const contact=ellipses[0],height=(entry.root?.threeGroundHeight??0)+RANCH_SELECTION_RING.lift;
+  const contact=ellipses[0],height=base+RANCH_SELECTION_RING.lift;
   const center=ranchShadowWorldPoint({x:contact.x,y:contact.y},bounds,pixelScale,height,view);
   // A horizontal screen offset is a native offset along the ground's right
   // axis; 16 native pixels make one world unit there.

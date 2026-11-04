@@ -17,7 +17,7 @@ import { shopGoodsPresentation } from "../presentation/shopGoodsUiArt.js";
 import { GACHA_TICKET_ART, gachaCurrencyImage, gachaIcon, gachaKindIconName, gachaTicketImage } from "./cyberGachaIcons.js";
 import { GACHA_CAPSULE_RADIUS, crankTurn, settleCapsules, simulateTumble } from "./cyberGachaPhysics.js";
 import { GACHA_PERSONALITY_CHOICES, GACHA_AUTOMATION_SHARE, gachaChipEffectLines, gachaChipTiming } from "../gacha/cyberGacha.js";
-import { automationEffectLines, automationTiming } from "../gacha/ranchAutomation.js";
+import { automationEffectLines, automationTiming, coreRunSeconds, formatRunClock } from "../gacha/ranchAutomation.js";
 import { cageName, personalityName } from "../text/zhHant.js";
 
 const UI_ART = "assets/production/ui/cyber-gacha-r1/";
@@ -63,9 +63,9 @@ const REFUSALS = Object.freeze({
   NOT_ENOUGH_SHARDS: "金屬碎片數量不足。",
   STACK_FULL: "這個道具已經持有上限。",
   UNKNOWN_CAGE: "請先在設施配置放置並確認這座籠舍。",
-  ALREADY_MOUNTED: "這座籠舍已經掛載同一種核心。",
-  ROYAL_ALREADY_AUTOMATED: "皇家籠舍已內建全自動功能，不需要再掛載。",
-  NOT_MOUNTED: "這座籠舍沒有掛載這個核心。",
+  ROYAL_ALREADY_AUTOMATED: "皇家籠舍已內建全自動功能，不需要再部署。",
+  RUN_FULL: "這台已經運轉到 24 小時上限了。",
+  NOT_A_CORE: "這個道具不能部署到籠舍。",
   FOUNDER_PACK_LOCKED: "贏得第一枚錦標賽獎牌後才能領取。",
   ALREADY_CLAIMED: "已經領取過了。",
   NO_DIAMOND_WALLET: "這個版本沒有鑽石錢包。"
@@ -74,7 +74,7 @@ const REFUSALS = Object.freeze({
 export function gachaRefusalText(reason) { return uiText(REFUSALS[reason] ?? "無法完成。"); }
 // Premium-machine rates of the automation items (their tier's rate x the automation share, split evenly).
 const AUTOMATION_RATES = Object.freeze({ SR: 0.28, SSR: 0.1, UR: 0.02 });
-const AUTOMATION_PER_TIER = Object.freeze({ SR: 2, SSR: 1, UR: 1 });
+const AUTOMATION_PER_TIER = Object.freeze({ SR: 2, SSR: 2, UR: 1 });
 const ratePercent = (rarity) => (((AUTOMATION_RATES[rarity] ?? 0) * GACHA_AUTOMATION_SHARE * 100) / (AUTOMATION_PER_TIER[rarity] ?? 1)).toFixed(1);
 
 // The machine squashes and rattles while the crank turns (origin: its feet).
@@ -990,7 +990,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     usePanel.append(actions);
   }
 
-  /** A core mounts on a placed cage (or comes back off one); a royal cage is placed in the facility editor. */
+  /** A core deploys on a placed cage for one hour, or adds an hour to its running machine; a royal cage is placed in the facility editor. */
   function paintAutomationUse(frame, item) {
     usePanel.append(automationEffectList(item));
     if (item.automationKind !== "CORE") {
@@ -999,17 +999,18 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     }
     const cages = element("div", "cm-gacha__partners cm-gacha__cages");
     for (const cage of frame.cages ?? []) {
-      const mounted = cage.mounted.includes(item.module);
+      const left = coreRunSeconds(cage, item), full = left + (item.runSeconds ?? 3600) > (item.runCapSeconds ?? 86400);
       const row = element("div", "cm-gacha__cage");
       row.dataset.instanceId = cage.instanceId;
       if (cage.royal) row.dataset.royal = cage.edition;
       row.append(element("span", "cm-gacha__cage-name", cage.royal ? uiText(cage.edition === "STELLAR_ZOO" ? "全自動星際動物園" : "全自動皇家牧場") : cageLabel(cage)));
-      const action = key(`cm-gacha__action${mounted ? "" : " cm-gacha__action--primary"}`, uiText(cage.royal ? "已內建" : mounted ? "卸下" : "掛載"));
-      action.disabled = cage.royal || (!mounted && item.owned < 1);
-      action.dataset.mount = mounted ? "off" : "on";
+      if (!cage.royal && left > 0) row.append(element("span", "cm-gacha__cage-left", uiText("運轉中 {time}", { time: formatRunClock(left) })));
+      const action = key("cm-gacha__action cm-gacha__action--primary", uiText(cage.royal ? "已內建" : left > 0 ? "延長 +1 小時" : "部署 1 小時"));
+      action.disabled = cage.royal || item.owned < 1 || full;
+      action.dataset.mount = left > 0 ? "extend" : "deploy";
       action.addEventListener("click", () => {
         returnFocus = action; again = null;
-        void run({ call: () => (mounted ? intents.gachaUnmountCore(item.module, cage.instanceId) : intents.gachaMountCore(item.id, cage.instanceId)) });
+        void run({ call: () => intents.gachaDeployCore(item.id, cage.instanceId) });
       });
       row.append(action);
       cages.append(row);

@@ -13,8 +13,9 @@ import { formatNumber } from '../text/locale.js';
 import { shopItemName, cageName, personalityName } from '../text/zhHant.js';
 import { shopGoodsPresentation } from '../presentation/shopGoodsUiArt.js';
 import { GACHA_PERSONALITY_CHOICES, gachaChipEffectLines } from '../gacha/cyberGacha.js';
-import { automationEffectLines } from '../gacha/ranchAutomation.js';
+import { automationEffectLines, coreRunSeconds, formatRunClock } from '../gacha/ranchAutomation.js';
 import { gachaIcon } from './cyberGachaIcons.js';
+import { huntFamilyBadge, huntFamilyName } from './huntToolFamilyCards.js';
 import { awakeningEnergySummary, enhanceSummary, gachaItemArt, gachaMetalNote, gachaRefusalText, partnerNameplate } from './cyberGachaView.js';
 
 export const BACKPACK_SECTIONS = Object.freeze([
@@ -33,14 +34,24 @@ export const BACKPACK_TABS = Object.freeze([
 // Shop records behind the four Training tools (main.js getFoodStock): using one picks the tool.
 export const BACKPACK_SUPPLY_TOOLS = Object.freeze({ 0: 'feed', 1: 'protein', 2: 'medicine', 3: 'woundMedicine' });
 
-/** Owned, non-cage items grouped as the shop groups them. */
+/**
+ * Owned, non-cage items grouped as the shop groups them. A hunt tool family
+ * (HUNT_TOOL_TIERS_20261103) holds its stock on its current tier's row only, so
+ * it lists once, named by that tier; the memory card shows its size and level.
+ */
 export function backpackSections(shopFrame) {
   const listings = shopFrame?.listings ?? [];
+  const families = new Map((shopFrame?.huntFamilies ?? []).map((family) => [family.familyId, family]));
   return BACKPACK_SECTIONS.map(({ category, title }) => ({
     category, title,
     items: listings.filter((row) => row.category === category && row.owned > 0)
-      .map((row) => ({ shopRecordIndex: row.shopRecordIndex, name: shopItemName(row.shopRecordIndex) ?? row.displayName,
-        owned: row.owned, maxOwned: row.maxOwned }))
+      .map((row) => {
+        const family = row.familyId ? families.get(row.familyId) : null;
+        return { shopRecordIndex: row.shopRecordIndex, name: family ? huntFamilyName(family) : shopItemName(row.shopRecordIndex) ?? row.displayName,
+          owned: row.owned, maxOwned: row.maxOwned,
+          // The tier is in the name; the memory card also wears its level.
+          ...(family?.kind === 'MEMORY' ? { tierBadge: huntFamilyBadge(family) } : {}) };
+      })
   })).filter((section) => section.items.length);
 }
 
@@ -51,7 +62,8 @@ export function backpackSections(shopFrame) {
 export function backpackTabs(shopFrame, gachaFrame) {
   const supplies = backpackSections(shopFrame).flatMap((section) => section.items.map((item) => ({
     kind: 'SUPPLY', id: `shop:${item.shopRecordIndex}`, name: item.name, owned: item.owned, shopRecordIndex: item.shopRecordIndex,
-    category: section.category, tool: BACKPACK_SUPPLY_TOOLS[item.shopRecordIndex] ?? null
+    category: section.category, tool: BACKPACK_SUPPLY_TOOLS[item.shopRecordIndex] ?? null,
+    ...(item.tierBadge ? { tierBadge: item.tierBadge } : {})
   })));
   const chips = (gachaFrame?.chips ?? []).filter((chip) => chip.owned > 0 || chip.armed).map((chip) => ({ ...chip, chipKind: chip.kind, kind: 'CHIP' }));
   const metals = (gachaFrame?.metals ?? []).filter((metal) => metal.owned > 0).map((metal) => ({ ...metal, kind: 'METAL' }));
@@ -90,10 +102,15 @@ function itemArt(doc, item) {
   return frame;
 }
 
-/** Names of the placed cages an attachment is mounted on (a royal cage's built-in pair is not an attachment). */
+/** Where a core's machines run now, with the time left (a royal cage's built-in pair is not a deployment). */
 function mountedAt(item, gacha) {
-  return (gacha?.cages ?? []).filter((cage) => !cage.royal && cage.mounted?.includes(item.module))
-    .map((cage) => cageName(cage.definitionIndex, ''));
+  return (gacha?.cages ?? []).filter((cage) => !cage.royal && coreRunSeconds(cage, item) > 0)
+    .map((cage) => `${cageName(cage.definitionIndex, '')} ${formatRunClock(coreRunSeconds(cage, item))}`);
+}
+/** What one core runs, for the bag row (Owner 2026-11-03: say it lasts one hour). */
+function coreDutyLine(item) {
+  if (item.id === 'auto:royal-core') return uiText('每次持續 1 小時（掃地機器人＋自動餵食機）');
+  return uiText(item.module === 'AUTO_FEED' ? '每次持續 1 小時（自動丟肉，扣餵食）' : '每次持續 1 小時（自動巡邏清便）');
 }
 
 function effectLine(item) {
@@ -110,8 +127,8 @@ export function backpackReceiptText(result) {
   if (!result.ok) return gachaRefusalText(result.reason);
   if (result.kind === 'ARMED') return uiText('已裝填，下次狩獵／勝利時生效。');
   if (result.kind === 'DISARMED') return uiText('已取回');
-  if (result.kind === 'MOUNT') return uiText('已掛載，籠舍旁會亮起自動運轉標誌。');
-  if (result.kind === 'UNMOUNT') return uiText('已卸下');
+  if (result.kind === 'DEPLOY') return uiText('已部署：機器運轉 1 小時，到牧場看看它！');
+  if (result.kind === 'EXTEND') return uiText('已延長 +1 小時');
   if (result.kind === 'CATALYST') return uiText('催化完成：回到牧場看拍檔進化！');
   return enhanceSummary(result) || awakeningEnergySummary(result) || uiText('已使用');
 }
@@ -122,8 +139,8 @@ export function renderBackpack(doc, shopFrame) {
 
 /**
  * The live bag panel. `intents` are app calls that return the app's own receipt:
- * useItem(itemId, instanceId, {mode}), reshape(instanceId, personality), mountCore(coreId, cageId),
- * unmountCore(module, cageId), disarm(itemId), selectTool(toolId) and openFacilities().
+ * useItem(itemId, instanceId, {mode}), reshape(instanceId, personality), deployCore(coreId, cageId),
+ * disarm(itemId), selectTool(toolId) and openFacilities().
  */
 export function createBackpackPanel({ doc = globalThis.document, getShopFrame, getGachaFrame = () => null, intents = {},
   tab = 'supplies', partnerId = null, onLeave = () => {} } = {}) {
@@ -177,16 +194,18 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
     const copy = el(doc, 'span', 'cm-backpack__copy');
     const title = el(doc, 'span', 'cm-backpack__name', uiText(item.name));
     if (item.rarity) title.prepend(el(doc, 'span', 'cm-backpack__rarity', item.rarity));
+    if (item.tierBadge) title.prepend(el(doc, 'span', 'cm-backpack__tier', item.tierBadge));
     copy.append(title, el(doc, 'span', 'cm-backpack__effect', effectLine(item)));
     const count = el(doc, 'span', 'cm-backpack__count', `×${formatNumber(item.owned)}`);
     const flags = [];
     if (item.armed) flags.push(uiText('已裝填'));
     if (item.kind === 'AUTOMATION' && item.placed > 0 && item.edition) flags.push(uiText('已放置 {n}', { n: item.placed }));
     if (flags.length) copy.append(el(doc, 'span', 'cm-backpack__flag', flags.join('・')));
-    // Owner 2026-11-03: an attachment says where it runs, by cage name, so it can be taken off and moved.
+    if (item.kind === 'AUTOMATION' && item.automationKind === 'CORE') copy.append(el(doc, 'span', 'cm-backpack__duty', coreDutyLine(item)));
+    // Owner 2026-11-03: a core says where its machine runs now, by cage name, with the time left.
     const at = item.kind === 'AUTOMATION' && !item.edition ? mountedAt(item, gacha) : [];
     if (at.length) {
-      const where = el(doc, 'span', 'cm-backpack__mounted', uiText('已掛載於：{cages}', { cages: at.join('、') }));
+      const where = el(doc, 'span', 'cm-backpack__mounted', uiText('運轉中：{cages}', { cages: at.join('、') }));
       where.dataset.count = String(at.length);
       copy.append(where);
     }
@@ -201,14 +220,13 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
     // A care supply picks its tool; hunt tools and plug-ins are used out on a hunt, so their key sets out.
     const usable = item.kind === 'SUPPLY' ? Boolean(item.tool ? intents.selectTool : intents.openHunt) : true;
     if (!usable) return null;
-    const mount = item.kind === 'AUTOMATION';
-    const swap = mount && !item.edition && item.owned < 1 && item.placed > 0;
+    const mount = item.kind === 'AUTOMATION', core = mount && item.automationKind === 'CORE';
     const huntUse = item.kind === 'SUPPLY' && !item.tool;
-    const button = key(doc, 'cm-backpack__use', uiText(swap ? '卸下／換裝' : mount ? '立即掛載' : huntUse ? '出發狩獵使用' : '立即使用'),
+    const button = key(doc, 'cm-backpack__use', uiText(core ? '部署 1 小時 / 延長 +1 小時' : mount ? '前往放置' : huntUse ? '出發狩獵使用' : '立即使用'),
       { primary: true, icon: mount ? 'robot' : huntUse ? 'hunt' : 'bolt' });
     button.dataset.use = item.id;
     button.setAttribute('aria-expanded', String(state.open === item.id));
-    button.disabled = item.owned < 1 && !(mount && item.placed > 0) && !item.armed;
+    button.disabled = item.owned < 1 && !(mount && !core && item.placed > 0) && !item.armed;
     button.addEventListener('click', () => {
       if (item.kind === 'SUPPLY') { if (item.tool) intents.selectTool?.(item.tool); else intents.openHunt?.(); onLeave(); return; }
       state.open = state.open === item.id ? null : item.id;
@@ -254,19 +272,20 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
         if (intents.openFacilities) panel.append(go);
         return panel;
       }
-      panel.append(el(doc, 'p', 'cm-backpack__note', uiText('任何一座已放置的籠舍都能掛；掛上的可隨時卸下，改掛到別座：')));
+      panel.append(el(doc, 'p', 'cm-backpack__note', uiText('選一座籠舍：每次用掉 1 個、運轉 1 小時；運轉中的再投入一個就延長 +1 小時（最多 24 小時）。不相連的籠舍可以各放一台。')));
       const cages = el(doc, 'div', 'cm-backpack__choices');
       for (const cage of gacha?.cages ?? []) {
-        const mounted = cage.mounted.includes(item.module);
+        const left = coreRunSeconds(cage, item), full = left + (item.runSeconds ?? 3600) > (item.runCapSeconds ?? 86400);
         const pick = el(doc, 'button', 'cm-backpack__choice cm-backpack__cage');
         pick.type = 'button';
         pick.dataset.instanceId = cage.instanceId;
-        pick.dataset.mounted = String(mounted);
+        pick.dataset.mounted = String(left > 0);
         const label = cage.royal ? uiText(cage.edition === 'STELLAR_ZOO' ? '全自動星際動物園' : '全自動皇家牧場') : cageName(cage.definitionIndex, '');
         pick.append(el(doc, 'span', 'cm-backpack__cage-name', label),
-          el(doc, 'span', 'cm-backpack__cage-state', uiText(cage.royal ? '已內建' : mounted ? '卸下' : '掛載')));
-        pick.disabled = cage.royal || (!mounted && item.owned < 1);
-        pick.addEventListener('click', () => finish(mounted ? intents.unmountCore?.(item.module, cage.instanceId) : intents.mountCore?.(item.id, cage.instanceId)));
+          el(doc, 'span', 'cm-backpack__cage-state', cage.royal ? uiText('已內建') : left > 0
+            ? uiText('剩 {time} · 延長 +1 小時', { time: formatRunClock(left) }) : uiText('部署 1 小時')));
+        pick.disabled = cage.royal || item.owned < 1 || full;
+        pick.addEventListener('click', () => finish(intents.deployCore?.(item.id, cage.instanceId)));
         cages.append(pick);
       }
       if (!cages.childElementCount) cages.append(el(doc, 'p', 'cm-backpack__empty', uiText('先到「設施配置」放置並確認籠舍。')));

@@ -60,44 +60,63 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     return {...elementVfx(element), element, style: dataArenaMoveStyle(moveId, arena) ?? 'strike'};
   };
   const cellFor = (v, role) => pick(v.style, role) ?? (MELEE.has(v.style) ? null : pick(ELEMENT_STYLE[v.element], role));
-  let stats = {casts: 0, releases: 0, hits: 0, ults: 0};
+  let stats = {casts: 0, releases: 0, hits: 0, ults: 0, projectiles: 0};
   return Object.freeze({
     look,
-    /** Windup at the release point. */
-    cast({x, y, moveId, speciesId, windup = 0.2, size = 26}) {
+    /** Windup at the release point: high-saturation Charge Orb + 4 inward-spiraling motes. */
+    cast({x, y, moveId, speciesId, windup = 0.2, size = 30, follow = null}) {
       if (reducedMotion) return;
       const v = look(moveId, speciesId);
-      layer.charge({x, y, palette: v.palette, ms: Math.max(0.12, windup) * 1000, size});
+      layer.charge({x, y, palette: v.palette, ms: Math.max(0.12, windup) * 1000, size, follow});
       stats.casts++;
     },
-    /** Release: muzzle ring across the shot and the style's original launch cell. */
+    /** Release: perpendicular Muzzle Ring + 7 recoil sparks + the style's 292-frame HD launch cell. */
     release({x, y, angle = 0, moveId, speciesId, melee = false}) {
       const v = look(moveId, speciesId);
-      layer.muzzle({x, y, angle, palette: v.palette, size: melee ? 30 : 24});
-      const cell = cellFor(v, 'launch');
+      layer.muzzle({x, y, angle, palette: v.palette, size: melee ? 34 : 28});
+      const cell = cellFor(v, 'launch') ?? cellFor(v, 'body');
       if (cell) layer.cell({...cell, x, y, scale: SCALE, flip: Math.cos(angle) < 0});
       stats.releases++;
     },
-    /** A landed move: the style's original hit cell, the element mark and body overlay. */
+    /** Attach a looping 292-frame 4x HD Web Atlas sequence to a live projectile in flight. */
+    projectile({follow, moveId, speciesId, angle = 0, lifeMs = 950, scale = SCALE * 0.82}) {
+      if (!art) return false;
+      const v = look(moveId, speciesId);
+      const cell = cellFor(v, 'body') ?? cellFor(v, 'launch') ?? cellFor(v, 'hit');
+      if (!cell) return false;
+      const ok = layer.cell({...cell, follow, scale, repeatMs: lifeMs, flip: Math.cos(angle) < 0});
+      if (ok) stats.projectiles++;
+      return ok;
+    },
+    /** A landed move: 292-frame HD hit cell, 4-second ground decal + HD ground cells, and struck-body overlay. */
     hit({x, y, groundY = y, moveId, speciesId, heavy = false, follow = null}) {
       const v = look(moveId, speciesId);
       const cell = cellFor(v, 'hit');
-      if (cell) layer.cell({...cell, x, y, scale: SCALE});
+      if (cell) layer.cell({...cell, x, y, scale: heavy ? SCALE * 1.18 : SCALE});
+      // Heavy fire/water/wood impacts also trigger signature 292-frame atlas bursts (explo 149, tsunami 91, toge00 53).
+      if (heavy && v.element === 'FIRE' && art?.has?.(149, 0)) layer.cell({bankId: 149, sequence: 0, x, y: y - 8, scale: SCALE * 1.15});
+      else if (heavy && v.element === 'WATER' && art?.has?.(91, 0)) layer.cell({bankId: 91, sequence: 0, x, y: groundY, scale: SCALE * 1.05});
+      else if (heavy && v.element === 'WOOD' && art?.has?.(53, 2)) layer.cell({bankId: 53, sequence: 2, x, y: groundY, scale: SCALE * 1.05});
       // A melee hit also carries its element's original accent cell, as in the AI battle.
       if (MELEE.has(v.style) && v.accent && art?.has?.(v.accent[0], v.accent[1]))
-        layer.cell({bankId: v.accent[0], sequence: v.accent[1], x, y: y - 6, scale: SCALE * 0.8});
-      // Every landed move marks the ground for four seconds; heavy ones mark wider.
-      layer.decal({x, y: groundY, kind: v.decal, palette: v.palette, paletteKey: v.paletteKey, size: heavy ? 110 : 70});
-      if (heavy && v.overlay && art?.has?.(v.overlay[0], v.overlay[1]) && follow)
-        layer.cell({bankId: v.overlay[0], sequence: v.overlay[1], follow, scale: SCALE * 0.8, repeatMs: 800, overlay: true});
+        layer.cell({bankId: v.accent[0], sequence: v.accent[1], x, y: y - 6, scale: SCALE * 0.88});
+      // Every landed move marks the ground for four seconds AND spawns its 292-frame HD ground cells (scale: SCALE).
+      layer.decal({x, y: groundY, kind: v.decal, palette: v.palette, paletteKey: v.paletteKey, size: heavy ? 116 : 76, scale: SCALE});
+      const overlayCell = v.overlay ?? v.accent;
+      if (overlayCell && art?.has?.(overlayCell[0], overlayCell[1]) && follow)
+        layer.cell({bankId: overlayCell[0], sequence: overlayCell[1], follow, scale: SCALE * 0.82, repeatMs: heavy ? 900 : 520, overlay: true});
       if (heavy) layer.hold(55);
       stats.hits++;
     },
-    /** 80 TP power skill: the element storm over the visible arena. */
+    /** 80 TP power skill: the element storm over the visible arena + HD atlas burst. */
     ult({moveId, speciesId, rect, center}) {
       const v = look(moveId, speciesId);
       layer.storm({kind: v.storm, palette: v.palette, paletteKey: v.paletteKey, rect, center});
-      layer.hold(55);
+      if (center) {
+        const cell = cellFor(v, 'hit') ?? cellFor(v, 'launch');
+        if (cell) layer.cell({...cell, x: center.x, y: center.y, scale: SCALE * 1.25});
+      }
+      layer.hold(65);
       stats.ults++;
     },
     update: dtMs => layer.update(dtMs),

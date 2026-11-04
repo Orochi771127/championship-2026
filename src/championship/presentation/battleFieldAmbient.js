@@ -135,6 +135,101 @@ export function maskedTiling(PIXI, renderer, { tile, mask, rect, tileScale, tint
     get alpha() { return t.alpha; }, set alpha(v) { t.alpha = v; } };
 }
 
+// The scan sweep inside the floor mask: a soft 80 px band with an 8 px bright
+// core (both composited normally, as the sprite-mask path did), one pass.
+const MASKED_SCAN_FRAGMENT = `in vec2 vUV;
+uniform sampler2D uMask;
+uniform vec3 uBand;
+uniform vec4 uColor;
+out vec4 finalColor;
+void main() {
+  vec4 m = texture(uMask, vUV);
+  float d = abs(vUV.x - uBand.x);
+  float glow = d < uBand.y ? 0.06 : 0.0, core = d < uBand.z ? 0.18 : 0.0;
+  vec3 rgb = vec3(0.784, 0.984, 1.0) * core + vec3(0.498, 0.953, 1.0) * glow * (1.0 - core);
+  finalColor = vec4(rgb, core + glow * (1.0 - core)) * (m.a * m.r) * uColor;
+}`;
+
+/**
+ * The floor scan sweep shown only inside the floor mask. On WebGL one mesh
+ * (Owner 2026-11-04: the sprite-mask path rendered an offscreen strip the
+ * height of the zoomed floor, unclipped by the viewport); otherwise the
+ * original Container + sprite mask + Graphics band. `sweep(x)` places the
+ * band's centre at field x; `sweep(null)` hides it.
+ */
+export function maskedScan(PIXI, renderer, { mask, rect }) {
+  if (renderer?.type === PIXI.RendererType?.WEBGL && PIXI.Mesh && PIXI.GlProgram && PIXI.Geometry && PIXI.UniformGroup) {
+    try {
+      const uniforms = new PIXI.UniformGroup({
+        uBand: { value: new Float32Array([-1, 40 / rect.width, 4 / rect.width]), type: "vec3<f32>" }
+      });
+      const geometry = new PIXI.Geometry({
+        attributes: { aPosition: [0, 0, rect.width, 0, rect.width, rect.height, 0, rect.height], aUV: [0, 0, 1, 0, 1, 1, 0, 1] },
+        indexBuffer: [0, 1, 2, 0, 2, 3]
+      });
+      const shader = new PIXI.Shader({
+        glProgram: new PIXI.GlProgram({ vertex: MASKED_TILING_VERTEX, fragment: MASKED_SCAN_FRAGMENT, name: "ambient-masked-scan" }),
+        resources: { uMask: mask.source, ambientScan: uniforms }
+      });
+      const mesh = new PIXI.Mesh({ geometry, shader, label: "floor scan sweep" });
+      mesh.position.set(rect.x, rect.y);
+      mesh.blendMode = "normal";
+      const band = uniforms.uniforms.uBand;
+      return {
+        displayObject: mesh, technique: "MESH_SHADER",
+        destroy() { geometry.destroy(); shader.destroy(); },
+        sweep(x) { mesh.visible = x !== null; if (x !== null) { band[0] = (x - rect.x) / rect.width; uniforms.update(); } }
+      };
+    } catch (error) {
+      console.warn(`CHAMPIONSHIP_AMBIENT_MASKED_SCAN_FALLBACK: ${error.message}`);
+    }
+  }
+  const fx = new PIXI.Container({ label: "floor scan sweep" });
+  const maskSprite = new PIXI.Sprite(mask);
+  maskSprite.position.set(rect.x, rect.y);
+  maskSprite.width = rect.width; maskSprite.height = rect.height;
+  fx.addChild(maskSprite); fx.mask = maskSprite;
+  const g = new PIXI.Graphics({ label: "scan band" });
+  g.blendMode = "add";
+  fx.addChild(g);
+  return { displayObject: fx, technique: "SPRITE_MASK", destroy() {},
+    sweep(x) {
+      g.clear();
+      if (x === null) return;
+      g.rect(x - 40, rect.y, 80, rect.height).fill({ color: 0x7ff3ff, alpha: 0.06 });
+      g.rect(x - 4, rect.y, 8, rect.height).fill({ color: 0xc8fbff, alpha: 0.18 });
+    } };
+}
+
+/**
+ * Whether a field point lies inside a mask texture drawn at `scale` from the
+ * origin (alpha x red, as the masked shader reads it), from a 128-pixel-wide
+ * copy read once. Null when the pixels cannot be read; callers then treat
+ * every point as inside.
+ */
+export function waterLookup(texture, scale = 1) {
+  const image = texture?.source?.resource, doc = globalThis.document;
+  if (!image || !doc?.createElement || !(texture.width > 0) || !(texture.height > 0)) return null;
+  try {
+    const cw = 128, ch = Math.max(1, Math.round(cw * texture.height / texture.width));
+    const canvas = doc.createElement("canvas");
+    canvas.width = cw; canvas.height = ch;
+    const context = canvas.getContext("2d", { willReadFrequently: true });
+    context.drawImage(image, 0, 0, cw, ch);
+    const data = context.getImageData(0, 0, cw, ch).data;
+    canvas.width = canvas.height = 0;
+    const sx = cw / (texture.width * scale), sy = ch / (texture.height * scale);
+    return (x, y) => {
+      const i = Math.floor(x * sx), j = Math.floor(y * sy);
+      if (i < 0 || j < 0 || i >= cw || j >= ch) return false;
+      const k = (j * cw + i) * 4;
+      return data[k + 3] * data[k] > 127 * 255;
+    };
+  } catch {
+    return null;
+  }
+}
+
 /**
  * @param {object} options
  * @param {object} options.PIXI
@@ -173,18 +268,23 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   const root = new PIXI.Container({ label: "battle field with ambient layers" });
   root.addChild(art.displayObject);
 
-  // --- BM04 lagoon: caustics, glints, ripples share the water mask.
-  let waterFx = null, glints = null, ripples = null, causticLayers = [];
+  // --- BM04 lagoon: caustics, glints, ripples stay inside the water mask.
+  // Owner 2026-11-04: a sprite mask here rendered the whole lagoon into an
+  // offscreen filter texture that Pixi never clips to the viewport; a pushed-in
+  // battle camera grew it past 8192 x 4096 (with 4x MSAA, ~640 MB) and iOS
+  // Safari killed the page on the first move. The caustics now use the
+  // single-pass masked mesh; glints and ripples keep to water by a coarse
+  // lookup of the same mask.
+  let waterFx = null, glints = null, ripples = null, causticLayers = [], onWater = null;
   if (ambient.waterMask) {
     waterFx = new PIXI.Container({ label: "lagoon water fx" });
-    const mask = new PIXI.Sprite(tex(ambient.waterMask.src));
-    mask.scale.set(ambient.waterMask.scale ?? 1);
-    waterFx.addChild(mask);
-    waterFx.mask = mask;
+    const maskTexture = tex(ambient.waterMask.src), maskScale = ambient.waterMask.scale ?? 1;
+    const rect = { x: 0, y: 0, width: maskTexture.width * maskScale, height: maskTexture.height * maskScale };
+    onWater = waterLookup(maskTexture, maskScale);
     causticLayers = (low ? [[1.7, 0.22, 9, 4]] : [[1.6, 0.17, 11, 5], [2.4, 0.11, -7, 9]]).map(([scale, alpha, vx, vy]) => {
-      const t = new PIXI.TilingSprite({ texture: tex(ambient.caustics.src), width: W, height: H });
-      t.tileScale.set(scale); t.alpha = alpha; t.tint = 0xe9fff8; t.blendMode = "add"; t.label = "caustics";
-      waterFx.addChild(t);
+      const t = maskedTiling(PIXI, renderer, { tile: tex(ambient.caustics.src), mask: maskTexture, rect, tileScale: scale,
+        tint: 0xe9fff8, alpha, label: "caustics" });
+      waterFx.addChild(t.displayObject);
       return { t, vx, vy, base: alpha };
     });
     glints = new PIXI.Graphics({ label: "sun glints" });
@@ -266,15 +366,10 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   }
   let scan = null;
   if (ambient.scan && ambient.floorMask) {
-    const fx = new PIXI.Container({ label: "floor scan sweep" });
-    const mask = new PIXI.Sprite(tex(ambient.floorMask.src));
-    mask.position.set(ambient.floorMask.x, ambient.floorMask.y);
-    mask.width = ambient.floorMask.width; mask.height = ambient.floorMask.height;
-    fx.addChild(mask); fx.mask = mask;
-    scan = { g: new PIXI.Graphics({ label: "scan band" }), box: ambient.floorMask };
-    scan.g.blendMode = "add";
-    fx.addChild(scan.g);
-    root.addChild(fx);
+    scan = maskedScan(PIXI, renderer, { mask: tex(ambient.floorMask.src), rect: ambient.floorMask });
+    scan.box = ambient.floorMask;
+    scan.sweep(null);
+    root.addChild(scan.displayObject);
   }
   const rotors = (ambient.rotors ?? []).map(r => {
     const sp = new PIXI.Sprite(tex(r.src));
@@ -370,8 +465,13 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   const puffs = new PIXI.Graphics({ label: "splash and puff" });
   foreground.addChild(puffs);
 
-  const glintSpots = glints ? Array.from({ length: low ? 14 : 34 }, () => ({
-    x: rand() * W, y: H * 0.12 + rand() * H * 0.82, phase: rand() * TAU, speed: 0.6 + rand() * 1.4, size: 2 + rand() * 3 })) : [];
+  // Glints sparkle on open water only (the lagoon has no mask to clip them).
+  const glintSpots = [];
+  for (let tries = 0; glints && glintSpots.length < (low ? 14 : 34) && tries < 600; tries++) {
+    const x = rand() * W, y = H * 0.12 + rand() * H * 0.82;
+    if (onWater && !onWater(x, y)) continue;
+    glintSpots.push({ x, y, phase: rand() * TAU, speed: 0.6 + rand() * 1.4, size: 2 + rand() * 3 });
+  }
   const rippleRings = [];
   const fighters = new Map();
   const bursts = [];
@@ -403,7 +503,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       if (!c?.present || !c.stand || c.down) { fighters.delete(key); return; }
       const x = c.stand.x * W, y = c.stand.y * H, z = c.nativeMotion?.heightNativePx ?? 0;
       const f = fighters.get(key) ?? { x, y, z, since: 0 };
-      const wet = waterFx ? true : openCells.has(cellOf(x, y));
+      const wet = waterFx ? (onWater?.(x, y) ?? true) : openCells.has(cellOf(x, y));
       if (wet && z <= 2 && f.z > 6) ring(x, y, 46, 900, 3, 0xffffff, 0.75);
       else if (wet && z <= 2 && Math.hypot(x - f.x, y - f.y) > 7 && f.since > 200) { ring(x, y, 26, 700, 2, 0xe8fffb, 0.5); f.since = 0; }
       f.x = x; f.y = y; f.z = z;
@@ -604,15 +704,8 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       halos.circle(lx, ly, 12).fill({ color: 0xe8f6ff, alpha: 0.18 * f });
     }
     if (scan) {
-      scan.g.clear();
-      if (!reducedMotion) {
-        const period = 6.5, k = (s % period) / period;
-        if (k < 0.5) {
-          const x = scan.box.x + (k / 0.5) * (scan.box.width + 160) - 80;
-          scan.g.rect(x - 40, scan.box.y, 80, scan.box.height).fill({ color: 0x7ff3ff, alpha: 0.06 });
-          scan.g.rect(x - 4, scan.box.y, 8, scan.box.height).fill({ color: 0xc8fbff, alpha: 0.18 });
-        }
-      }
+      const period = 6.5, k = (s % period) / period;
+      scan.sweep(!reducedMotion && k < 0.5 ? scan.box.x + (k / 0.5) * (scan.box.width + 160) - 80 : null);
     }
     moteLayer.clear();
     for (const m of motes) {
@@ -713,7 +806,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
           boundary: Boolean(boundary), iceStates: Boolean(ice), snow: snow.length, lava: Boolean(lavaFx), crust: Boolean(crust), embers: embers.length,
           emissive: Boolean(emissive), clouds: Boolean(clouds), gust: Boolean(gust), scan: Boolean(scan), rotors: rotors.length,
           particles: motes.length, smoke: smoke.length },
-        maskedTechnique: [flowLayer, waveLayer, gust].filter(Boolean).map(l => l.technique),
+        maskedTechnique: [flowLayer, waveLayer, gust, scan, ...causticLayers.map(c => c.t)].filter(Boolean).map(l => l.technique),
         live: { ripples: rippleRings.length, charged: hazards?.charged?.length ?? 0, arcs: arcs.length, swell: swellT >= 0,
           iceCells: hazards?.ice?.length ?? 0, openCells: openCells.size, cooledCells: hazards?.lava?.length ?? 0,
           burning: hazards?.burningSlots?.length ?? 0, bursts: bursts.length,
@@ -726,7 +819,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       root.removeChild(art.displayObject);
       foreground.destroy({ children: true });
       root.destroy({ children: true });
-      for (const layer of [flowLayer, waveLayer, gust]) layer?.destroy();
+      for (const layer of [flowLayer, waveLayer, gust, scan, ...causticLayers.map(c => c.t)]) layer?.destroy();
       await art.dispose();
       for (const t of textures.values()) t?.source?.removeAllListeners?.("change");
       await Promise.allSettled(sources.map(src => PIXI.Assets.unload(src)));

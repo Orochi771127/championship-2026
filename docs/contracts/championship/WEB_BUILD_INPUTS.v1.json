@@ -21,6 +21,7 @@
     "node_modules/three/examples/jsm/utils/SkeletonUtils.js",
     "src/championship/app/assetPrefetch.js",
     "src/championship/app/autosaveScheduler.js",
+    "src/championship/app/badgeUnlockText.js",
     "src/championship/app/battleFxLookups.js",
     "src/championship/app/battlePresentationSource.js",
     "src/championship/app/battleRosterSource.js",
@@ -56,6 +57,7 @@
     "src/championship/app/hexWorldPassages.js",
     "src/championship/app/huntLayoutResolver.js",
     "src/championship/app/huntTacticalDock.js",
+    "src/championship/app/huntToolFamilyCards.js",
     "src/championship/app/interactiveTutorialBattleSteps.js",
     "src/championship/app/interactiveTutorialCheckpoint.js",
     "src/championship/app/interactiveTutorialHuntSteps.js",
@@ -91,6 +93,7 @@
     "src/championship/app/ranchRowPurchasePrompt.js",
     "src/championship/app/ranchStoryBadge.js",
     "src/championship/app/ranchTitlePreload.js",
+    "src/championship/app/rankUnlocks.js",
     "src/championship/app/residentAssetNotice.js",
     "src/championship/app/runtimeRecoveryDiagnostics.js",
     "src/championship/app/saveConflictArbiter.js",
@@ -399,8 +402,10 @@
     "src/championship/presentation/raisingExpansionPreview.js",
     "src/championship/presentation/raisingFeedbackArt.js",
     "src/championship/presentation/raisingRanchArtPlan.js",
+    "src/championship/presentation/ranchAutoCareProps.js",
     "src/championship/presentation/ranchBorderMembership.js",
     "src/championship/presentation/ranchContactHeight.js",
+    "src/championship/presentation/ranchDecalFloor.js",
     "src/championship/presentation/ranchGroundShadows.js",
     "src/championship/presentation/ranchPassages.js",
     "src/championship/presentation/ranchPhysicalSupport.js",
@@ -468,6 +473,7 @@
     "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
     "src/championship/presentation/vs5/prepareBattleVfxGpu.js",
     "src/championship/r2/createChampionshipR2Session.js",
+    "src/championship/raising/autoCareMachines.js",
     "src/championship/raising/createRaisingHomeRuntime.js",
     "src/championship/raising/nativeGroundSpacing.js",
     "src/championship/raising/nativeIndividualEvolution.js",
@@ -506,6 +512,7 @@
     "src/championship/raising/ranchExplorationWalk.js",
     "src/championship/raising/ranchLayoutPositions.js",
     "src/championship/raising/ranchPartnerLife.js",
+    "src/championship/shop/huntToolTiers.js",
     "src/championship/shop/shopCatalog.js",
     "src/championship/shop/shopRuntime.js",
     "src/championship/text/aiChanStoryText.js",
@@ -5980,10 +5987,13 @@
     "assets/production/characters/reviewed107-20261026/GR39/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/GR39/web-atlas-v2/2ea2614a3de169cb9e597d59d2fb69b1ecd36428555a824bc10ac29a2725bccc.webp",
     "assets/production/characters/reviewed107-20261026/GR39/web-atlas-v2/40fca5bbf05ba4b9b283864cdc85c4e252f0983c2196d0755a9b0a36f59d15fa.webp",
+    "assets/production/characters/reviewed107-20261026/GR39/web-atlas-v2/6f1aa3545e26f319b4ec0d12741fcdca22794fb432b6688042fe819a3a46e02e.webp",
     "assets/production/characters/reviewed107-20261026/GR40/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/GR40/web-atlas-v2/7bebf1031fe47d7434e12c82001fefb6fe6873d0f6e2dd9bcf6b922979c9a3ae.webp",
     "assets/production/characters/reviewed107-20261026/GR40/web-atlas-v2/d494616ef67dcb392c8229df755e8604fc4a61b2987791f567bf455e9d5324f3.webp",
+    "assets/production/characters/reviewed107-20261026/GR40/web-atlas-v2/e278800a93b6721d2d52e414c3d5a5a37f5d41792012b437e061c71f15ad6dea.webp",
     "assets/production/characters/reviewed107-20261026/GR41/animation.public-v1.json",
+    "assets/production/characters/reviewed107-20261026/GR41/web-atlas-v2/1ba55cad7553ee8bdc6fdfa012a0c39e78b50c2282c376c799d937710635e2f9.webp",
     "assets/production/characters/reviewed107-20261026/GR41/web-atlas-v2/238c2bce404208100108fb872c037911883593405e01acdc7e46fbf49a7d75d0.webp",
     "assets/production/characters/reviewed107-20261026/GR41/web-atlas-v2/7e40d6174fee998e5f03870dfc0085c170c43b54351d281590692720dab67c73.webp",
     "assets/production/characters/reviewed107-20261026/MA01/animation.public-v1.json",
@@ -5999,12 +6009,14 @@
     "assets/production/characters/reviewed107-20261026/MA04/web-atlas-v2/8da50163e7cfa72e539f743417dc2bfc6afd1e1ca74f730c14b5ce6e78bd0e37.webp",
     "assets/production/characters/reviewed107-20261026/MA04/web-atlas-v2/dea25efb526d313fbc85cc7737b48a4cd9b5a4bbfca011b869e060b7a9b0ba4c.webp",
     "assets/production/characters/reviewed107-20261026/MA05/animation.public-v1.json",
+    "assets/production/characters/reviewed107-20261026/MA05/web-atlas-v2/3cf27021bc1c1df2388299ce94dd7088c0714154ce23a9684527b22773a86e5e.webp",
     "assets/production/characters/reviewed107-20261026/MA05/web-atlas-v2/6c7a1ecc3cd566cdae544a9c83d503527ea3328c25a2f1c9d685444e9ecfd3cb.webp",
     "assets/production/characters/reviewed107-20261026/MA05/web-atlas-v2/c4f0dbd9f773b526d9a43c82f202927168fad5a2c80f364e1a7ad63de24f9ea1.webp",
     "assets/production/characters/reviewed107-20261026/MA06/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/MA06/web-atlas-v2/530e2fb19e141c8e235efb727f5fa5b2eefce5b52f429825c70311065ae279a3.webp",
     "assets/production/characters/reviewed107-20261026/MA06/web-atlas-v2/89169fe72dff6e53caa29ca6eba8018892cdf085ea49cb7adc26aca414b71d51.webp",
     "assets/production/characters/reviewed107-20261026/MA07/animation.public-v1.json",
+    "assets/production/characters/reviewed107-20261026/MA07/web-atlas-v2/06967fcb37b9bbac502829e2fa54ccb82515094b373e62eb5e217b3c7b2105c1.webp",
     "assets/production/characters/reviewed107-20261026/MA07/web-atlas-v2/468bbc686df658fbd25d30cd79dcf47b786a705c2c46b5659d4cf0acc76d92a8.webp",
     "assets/production/characters/reviewed107-20261026/MA07/web-atlas-v2/a272044c72ba0a10fb95e2f02bbf4e77bca2fe5115e2074b2eddcfb362c048bd.webp",
     "assets/production/characters/reviewed107-20261026/MA08/animation.public-v1.json",
@@ -6018,10 +6030,12 @@
     "assets/production/characters/reviewed107-20261026/MA08/web-atlas-v2/d26f97dfae06943b9669489f7c9cd97421390bd6d4964610e65c118c505abc48.webp",
     "assets/production/characters/reviewed107-20261026/MA09/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/MA09/web-atlas-v2/26d847ad8231e5ae90d30a64fc6efb5624c0c55d5fc70bc92f8bf4b6d79524bc.webp",
+    "assets/production/characters/reviewed107-20261026/MA09/web-atlas-v2/466ffb587f45ec4f9dd89d8aa662ec39e6bf94edb05e817e3256ec90170f54b0.webp",
     "assets/production/characters/reviewed107-20261026/MA09/web-atlas-v2/a4c262def42488fdfd34bc5e6781bddc09338ae643c5cced8579d90522b8c474.webp",
     "assets/production/characters/reviewed107-20261026/MA10/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/MA10/web-atlas-v2/0e54dd6b149bcef0a8ec6e0bc42b5afaf27eed011a7680081f26d6e480f4c5b0.webp",
     "assets/production/characters/reviewed107-20261026/MA10/web-atlas-v2/ccec739f389a7c27229b5f3d333619a5974c529fc7ff1b778135581f5b2a15cb.webp",
+    "assets/production/characters/reviewed107-20261026/MA10/web-atlas-v2/d86d5ec703122d402457e35e546bdede3c71799afdc93ffb994fab7d8be6c464.webp",
     "assets/production/characters/reviewed107-20261026/MA11/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/MA11/web-atlas-v2/07ab6ff757750d0ee573196e9edbcb118cb521760ba6cfd7811571808e27c37d.webp",
     "assets/production/characters/reviewed107-20261026/MA11/web-atlas-v2/f6967aa3ded3d3040116cc0cddb1128805262dbae0ca5ac0a72885d331b729ad.webp",
@@ -6037,11 +6051,13 @@
     "assets/production/characters/reviewed107-20261026/MA13/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/MA13/web-atlas-v2/0203535cc90c2c3e092d3a2dd5dc6bf5f7832e209433a390e13e73290ee2d87a.webp",
     "assets/production/characters/reviewed107-20261026/MA13/web-atlas-v2/134f8040318859b2a251affac872853afd3d4d15da0c47ac5bbefdb752d1890a.webp",
+    "assets/production/characters/reviewed107-20261026/MA13/web-atlas-v2/380b6cc0119e3b8732dc523d6580de636e1f5b44eee7844e7a29042cd024c407.webp",
     "assets/production/characters/reviewed107-20261026/MA13/web-atlas-v2/3ce07802654d2636b47fc5e382173e9023e98c3735a4a0c246739afa9135dc0c.webp",
     "assets/production/characters/reviewed107-20261026/MA13/web-atlas-v2/439edf151391647ba92203666264b8e9dcb4ef530ea81eef6b9a9b62ddaaac0b.webp",
     "assets/production/characters/reviewed107-20261026/MA13/web-atlas-v2/7816264b87ff0b94af0f67779ddb78d68b91b3e06436309cdea7dc547ec261e0.webp",
     "assets/production/characters/reviewed107-20261026/MA14/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/MA14/web-atlas-v2/70747bd10c6ccfb385079feb8d2003158eb7ce8902088d3d5b51537ddb8b4eb9.webp",
+    "assets/production/characters/reviewed107-20261026/MA14/web-atlas-v2/a63b87d6115fa4248aa4345db0735d879a4bdd5ca4e1e7f7af7b1d747fef7df6.webp",
     "assets/production/characters/reviewed107-20261026/MA14/web-atlas-v2/d3bab05c898a90b2f4b1fc26c69a25eccbdd4bedce14ae8776c9a237ac694577.webp",
     "assets/production/characters/reviewed107-20261026/MA15/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/MA15/web-atlas-v2/0af584b9bc67fb8042cbece74441f96c21e896355005c153670cc7007d15cf43.webp",
@@ -6054,6 +6070,7 @@
     "assets/production/characters/reviewed107-20261026/MA16/web-atlas-v2/2a1a80cc57620fd54143d3a4a0e3b4ba454af399d82cd3e3f85c5b3cda4fea9f.webp",
     "assets/production/characters/reviewed107-20261026/MA17/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/MA17/web-atlas-v2/0ab68485bae7697f200fc51db4cb93665c75318aa4bcfd645b07e73c150f4ef0.webp",
+    "assets/production/characters/reviewed107-20261026/MA17/web-atlas-v2/7b639c22ff90a500dd0e6c063874de64a911afff57b8c9acdb6a3409f896c2cb.webp",
     "assets/production/characters/reviewed107-20261026/MA17/web-atlas-v2/cd2b2dedd5c48284cbc348c7c1e0224828dcbb50e9c8832017aed56d125f699d.webp",
     "assets/production/characters/reviewed107-20261026/MA17/web-atlas-v2/d8614f0277c098e03a2408e7392e845765355a2f5f17d83b8f9e6c241f00dae0.webp",
     "assets/production/characters/reviewed107-20261026/MA18/animation.public-v1.json",
@@ -6072,6 +6089,7 @@
     "assets/production/characters/reviewed107-20261026/MA22/web-atlas-v2/9e2dcdd82c9f8f7f8ccf9d9b7e38911ba8c2d55692e8cebbac98a039bc696944.webp",
     "assets/production/characters/reviewed107-20261026/MA22/web-atlas-v2/f24f867404c337c8c8c3d1588e5b79d68a14ce6acdf29528ac959de387d499c7.webp",
     "assets/production/characters/reviewed107-20261026/MA23/animation.public-v1.json",
+    "assets/production/characters/reviewed107-20261026/MA23/web-atlas-v2/027f2baedc2fb908ebe88678d7d2ee026ed24bb908d3cd2bd2d29ac0414af177.webp",
     "assets/production/characters/reviewed107-20261026/MA23/web-atlas-v2/09a6989ec0c3d50b3023cc31c60797028f3f876f27de27ee5123f69b50aa0aaf.webp",
     "assets/production/characters/reviewed107-20261026/MA23/web-atlas-v2/5da73efd3d056265a03615395bb311c9ef65eb1e74abfeab0b82462721dae668.webp",
     "assets/production/characters/reviewed107-20261026/MA24/animation.public-v1.json",
@@ -6111,6 +6129,7 @@
     "assets/production/characters/reviewed107-20261026/MA31/web-atlas-v2/80b8b15cda8560f7a7fb8056066643edfdda5e512c220e92b00185eac7c683bd.webp",
     "assets/production/characters/reviewed107-20261026/MA31/web-atlas-v2/8136c054c7d0a6751c986e43037a38708aae32df4033b13c56febb1812304cf8.webp",
     "assets/production/characters/reviewed107-20261026/MA31/web-atlas-v2/a85f5a697754b0b077f3ccbd0bd10169b61092033eb80d8230938214e8dd77ac.webp",
+    "assets/production/characters/reviewed107-20261026/MA31/web-atlas-v2/c99cb21bc47232edaa779c0352b660382ccfc9959da76003384c09a66f3c3916.webp",
     "assets/production/characters/reviewed107-20261026/MA31/web-atlas-v2/d00c5ebf4940cabcf46fe5d2cca65935f2b8cedae28cd9ca9314fe3d57b4a88d.webp",
     "assets/production/characters/reviewed107-20261026/MA31/web-atlas-v2/e66d6831c5b82124cc62dc105c33b29a202f18cffca34ad9075252ae3826828e.webp",
     "assets/production/characters/reviewed107-20261026/MA32/animation.public-v1.json",
@@ -6133,6 +6152,7 @@
     "assets/production/characters/reviewed107-20261026/MA36/web-atlas-v2/0e9e8edc44b9e39ad6165554867a142d320823287f15a17b574ac192f58350a9.webp",
     "assets/production/characters/reviewed107-20261026/MA36/web-atlas-v2/130d2f2dc5169d69c4cbb33669c7fa9e231a57e325cd4b6313fef11fe6fd8c19.webp",
     "assets/production/characters/reviewed107-20261026/MA36/web-atlas-v2/280b7d3c033a15a049c317fe8f1e7d7312c5008b082687a4144f98e5b578bb77.webp",
+    "assets/production/characters/reviewed107-20261026/MA36/web-atlas-v2/450d48884d6c1e51ab46b2f72c1901cecba72170a67dc21ed2d93d3c568ee729.webp",
     "assets/production/characters/reviewed107-20261026/MA36/web-atlas-v2/dbe1273abb05688b3af9d7a420179f7cc062cd9c887b951ae4752d2481998bab.webp",
     "assets/production/characters/reviewed107-20261026/MA36/web-atlas-v2/e15585323c7cf5012d7eb36e3e769f518f4de7841be05b4d3786d72184ee7e0a.webp",
     "assets/production/characters/reviewed107-20261026/MA37/animation.public-v1.json",
@@ -6191,10 +6211,12 @@
     "assets/production/characters/reviewed107-20261026/MA47/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/MA47/web-atlas-v2/8b71fc2247cbcbea22bc6317cbad66a5c5c36526a2817c99cf5f87bb869bdea9.webp",
     "assets/production/characters/reviewed107-20261026/MA47/web-atlas-v2/ab20a1a6b5abf4ec802a8c84538c832141cc57d52a1e39454964dd2eb41e738f.webp",
+    "assets/production/characters/reviewed107-20261026/MA47/web-atlas-v2/f5332874af98635509375fa24adc51a3bc38cba04e55d3586053b9e47f817aee.webp",
     "assets/production/characters/reviewed107-20261026/MA48/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/MA48/web-atlas-v2/d999efb86a973689ed5b1bf9403f0972ee0c734cccbb122bb38d7661442272b5.webp",
     "assets/production/characters/reviewed107-20261026/MA48/web-atlas-v2/f0d9a89c8ebbb2b4cbde3cf9d90e3dd253752133703324d55b2fc1b392aea02e.webp",
     "assets/production/characters/reviewed107-20261026/MA49/animation.public-v1.json",
+    "assets/production/characters/reviewed107-20261026/MA49/web-atlas-v2/3fa56144144ea377fd11191edf3c40a4e92caac1375da4b95fee4484aa4f84b7.webp",
     "assets/production/characters/reviewed107-20261026/MA49/web-atlas-v2/52f523f04a5d0163bac48a9878b86b4881afb18f1156d18d84218090b81077c1.webp",
     "assets/production/characters/reviewed107-20261026/MA49/web-atlas-v2/be519869845b7503038badbdb51ff5d03840395ebe7aefc88f8ee3b3febab5f2.webp",
     "assets/production/characters/reviewed107-20261026/MA50/animation.public-v1.json",
@@ -6203,6 +6225,7 @@
     "assets/production/characters/reviewed107-20261026/MA51/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/MA51/web-atlas-v2/1eb6169bd76e796b2be5686c84d5dc2b4f66a0d063feb3b3d910d45b3ae87bd1.webp",
     "assets/production/characters/reviewed107-20261026/MA51/web-atlas-v2/29ce207b58d01531bdbfe7f4c06f857a8af582fefc471230c055a38c32e4398b.webp",
+    "assets/production/characters/reviewed107-20261026/MA51/web-atlas-v2/903fdaf5072d32a61b9665528e538e189950d064075ae069fc099e6f45e97b38.webp",
     "assets/production/characters/reviewed107-20261026/MA51/web-atlas-v2/c2d62508970c2fdfa429e58fb2dde3580c82aa249139e4cbfbebf5511df8fea2.webp",
     "assets/production/characters/reviewed107-20261026/MA51/web-atlas-v2/c3d38fc38a95ae71f25a17126d75622aa476e986b13f1baa12b22a1f2385266e.webp",
     "assets/production/characters/reviewed107-20261026/MA51/web-atlas-v2/ef86aa2ae523e67239c60c352cef696c76d1364c7cdca2f84770af16d049f309.webp",
@@ -6258,17 +6281,22 @@
     "assets/production/characters/reviewed107-20261026/MA64/web-atlas-v2/43d5eb1435a6f05d34ac74636e957f10011967526994f2b0e14c72483c1032ab.webp",
     "assets/production/characters/reviewed107-20261026/MA65/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/MA65/web-atlas-v2/65246462478ca1a2d245721bd0bfbfee9fb96be612f005dfa6d05e405346947c.webp",
+    "assets/production/characters/reviewed107-20261026/MA65/web-atlas-v2/95492faa85ff01b064e54ef115b42d853b895b92fd3c9f0c1146acf3a2147f91.webp",
     "assets/production/characters/reviewed107-20261026/MA65/web-atlas-v2/99b181fd842cc2dfbf97a39c7c531cbc9df2bc24a7e1bb2a043d8c6206dc49ac.webp",
     "assets/production/characters/reviewed107-20261026/MA66/animation.public-v1.json",
+    "assets/production/characters/reviewed107-20261026/MA66/web-atlas-v2/04ed566e315f04857609d1eea4323f25e4bb1b4aec5e9997333c24d70aaacac5.webp",
     "assets/production/characters/reviewed107-20261026/MA66/web-atlas-v2/478bacc8dac2d4b31f0180c8fd152dbb1c53921182907a1ced69ecad14973b23.webp",
+    "assets/production/characters/reviewed107-20261026/MA66/web-atlas-v2/90f9690e4a124d41a159180bb9a7a204ed12835f77f1707a2731187fc7348701.webp",
     "assets/production/characters/reviewed107-20261026/MA66/web-atlas-v2/c19f484f2c28551da14e88191b926aa5d226019e56432d6d3d509ba55551b19b.webp",
     "assets/production/characters/reviewed107-20261026/MA67/animation.public-v1.json",
     "assets/production/characters/reviewed107-20261026/MA67/web-atlas-v2/43ce581697a51ed753cb4fe17d3179b5236ddd9b169abb4ce82bc156d58bda04.webp",
     "assets/production/characters/reviewed107-20261026/MA67/web-atlas-v2/625c9ba9244998f49485513e5433e42450fd98ff28999be9566b072a8ffaab1c.webp",
     "assets/production/characters/reviewed107-20261026/MA67/web-atlas-v2/9e4639c3068cf795e483aa6550d67ff166212d3c684715be2b4ce770791c5b23.webp",
     "assets/production/characters/reviewed107-20261026/MA67/web-atlas-v2/a299e44d5061eff06e25cad9f6f47504478f73e76f91277903151a3f52d36c18.webp",
+    "assets/production/characters/reviewed107-20261026/MA67/web-atlas-v2/b61d05c5df4ac621b2616a9f2bcfa5e8f6a4e84acbce540b274b53bbcf62e6a1.webp",
     "assets/production/characters/reviewed107-20261026/MA67/web-atlas-v2/e8b6afd9c0a92fe831b1622e1fc44edba7f2aa8427ad7c3b0ad8f947e56a129b.webp",
     "assets/production/characters/reviewed107-20261026/MA68/animation.public-v1.json",
+    "assets/production/characters/reviewed107-20261026/MA68/web-atlas-v2/81480e13bc8c54eb4420562554d3a08a5fbace02ec5c14b0687fe07a4f7a019f.webp",
     "assets/production/characters/reviewed107-20261026/MA68/web-atlas-v2/89f89a1bc33d872c2b032835d0668a4909b1ae5b75ba49650d82c23af15b416c.webp",
     "assets/production/characters/reviewed107-20261026/MA68/web-atlas-v2/bd41505917361b956fe8564fd05b8a2991707abd8af95613c40b2d28d79ce3c6.webp",
     "assets/production/characters/reviewed107-20261026/MA69/animation.public-v1.json",
@@ -6277,6 +6305,7 @@
     "assets/production/characters/reviewed107-20261026/MA69/web-atlas-v2/c237b6b98172c12871ecc484eb5f508bea6ecf22186806420990fbf958e8f3be.webp",
     "assets/production/characters/reviewed107-20261026/MA69/web-atlas-v2/c7731a09534da87fbfc86a1ba9e45c38360c59e606ff7bb5b52299ce29d76fe5.webp",
     "assets/production/characters/reviewed107-20261026/MA69/web-atlas-v2/e44ae3f7860b2fc4481de112955c70674f1f23e5ca525e8ec5184cb5475168d6.webp",
+    "assets/production/characters/reviewed107-20261026/MA69/web-atlas-v2/ec9e79c699270dab57cdb936c03fe686e13bb46677f70d5ca1bb4da3fbadf7df.webp",
     "assets/production/characters/self-reviewed-20261102/AW23/animation.public-v1.json",
     "assets/production/characters/self-reviewed-20261102/AW23/web-atlas-v2/3ada567d55d27fa6bb65f551cde587feddc28eefdb94de54e557691477d3b203.webp",
     "assets/production/characters/self-reviewed-20261102/AW23/web-atlas-v2/52e15df54e0e7cde48d2ca7ac4c8f3e7f0b834e084744ff305df6d73c00da801.webp",
@@ -7575,6 +7604,8 @@
     "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-152.png",
     "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-153.png",
     "assets/production/internal-faithful-baseline/raising-feedback-v1/cell-154.png",
+    "assets/production/items/auto-care-3d-r1/auto_cleaner_bot.glb",
+    "assets/production/items/auto-care-3d-r1/auto_feeder_tower.glb",
     "assets/production/items/digital-metals-r1/attract_light_160.webp",
     "assets/production/items/digital-metals-r1/beta_ore_160.webp",
     "assets/production/items/digital-metals-r1/beta_shard_160.webp",
@@ -7601,6 +7632,7 @@
     "assets/production/items/digital-metals-r1/wound_medicine_160.webp",
     "assets/production/items/ranch-automation-r1/auto_clean_core_160.webp",
     "assets/production/items/ranch-automation-r1/auto_feed_core_160.webp",
+    "assets/production/items/ranch-automation-r1/auto_royal_core_160.webp",
     "assets/production/items/ranch-automation-r1/founder_pack_160.webp",
     "assets/production/items/ranch-automation-r1/royal_ranch_160.webp",
     "assets/production/items/ranch-automation-r1/stellar_zoo_160.webp",
@@ -8083,6 +8115,7 @@
     "node_modules/three/examples/jsm/utils/SkeletonUtils.js",
     "src/championship/app/assetPrefetch.js",
     "src/championship/app/autosaveScheduler.js",
+    "src/championship/app/badgeUnlockText.js",
     "src/championship/app/battleFxLookups.js",
     "src/championship/app/battlePresentationSource.js",
     "src/championship/app/battleRosterSource.js",
@@ -8123,6 +8156,7 @@
     "src/championship/app/huntLayoutResolver.js",
     "src/championship/app/huntMobile.css",
     "src/championship/app/huntTacticalDock.js",
+    "src/championship/app/huntToolFamilyCards.js",
     "src/championship/app/interactiveTutorial.css",
     "src/championship/app/interactiveTutorialBattleSteps.js",
     "src/championship/app/interactiveTutorialCheckpoint.js",
@@ -8166,6 +8200,7 @@
     "src/championship/app/ranchRowPurchasePrompt.js",
     "src/championship/app/ranchStoryBadge.js",
     "src/championship/app/ranchTitlePreload.js",
+    "src/championship/app/rankUnlocks.js",
     "src/championship/app/residentAssetNotice.js",
     "src/championship/app/runtimeRecoveryDiagnostics.js",
     "src/championship/app/saveConflictArbiter.js",
@@ -8492,8 +8527,10 @@
     "src/championship/presentation/raisingExpansionPreview.js",
     "src/championship/presentation/raisingFeedbackArt.js",
     "src/championship/presentation/raisingRanchArtPlan.js",
+    "src/championship/presentation/ranchAutoCareProps.js",
     "src/championship/presentation/ranchBorderMembership.js",
     "src/championship/presentation/ranchContactHeight.js",
+    "src/championship/presentation/ranchDecalFloor.js",
     "src/championship/presentation/ranchGroundShadows.js",
     "src/championship/presentation/ranchPassages.js",
     "src/championship/presentation/ranchPhysicalSupport.js",
@@ -8561,6 +8598,7 @@
     "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
     "src/championship/presentation/vs5/prepareBattleVfxGpu.js",
     "src/championship/r2/createChampionshipR2Session.js",
+    "src/championship/raising/autoCareMachines.js",
     "src/championship/raising/createRaisingHomeRuntime.js",
     "src/championship/raising/nativeGroundSpacing.js",
     "src/championship/raising/nativeIndividualEvolution.js",
@@ -8599,6 +8637,7 @@
     "src/championship/raising/ranchExplorationWalk.js",
     "src/championship/raising/ranchLayoutPositions.js",
     "src/championship/raising/ranchPartnerLife.js",
+    "src/championship/shop/huntToolTiers.js",
     "src/championship/shop/shopCatalog.js",
     "src/championship/shop/shopRuntime.js",
     "src/championship/text/aiChanStoryText.js",
@@ -29700,7 +29739,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/GR03/animation.public-v1.json",
-        "sha256": "1a02e6b44edd7ea9a74a94a9ef4512ccfb6c8e789884ec378aca6177c61a0c07"
+        "sha256": "0914a7018d9e2e3e2dc990cc5989d8dc03c41246943b8e75dba2e117b2762682"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/GR03/web-atlas-v2/3803410f9af44d596d6c0aab50422ee90d9b002185cbcffa89725ffb6ac9434f.webp",
@@ -30328,7 +30367,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/GR37/animation.public-v1.json",
-        "sha256": "817299dca0b794d35dbd1b1e5ff3715e680bb597f25f001260b1e81a8f624563"
+        "sha256": "5a943a348eec9717842a8b2eaeb2ce834b78f124d286481e03b41e0592032c5c"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/GR37/web-atlas-v2/25697d6d5e7fa4d4bf6648b46062b5384445979a8a8884a9f0806ea2b0b14787.webp",
@@ -30364,7 +30403,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/GR39/animation.public-v1.json",
-        "sha256": "43f1858bf196cec37361105785cf7819bc92ce35720a84a9efb90635376b51e5"
+        "sha256": "f7829bc895159b60abf44448fe2ec5851d9faa816670c17324cf454598457820"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/GR39/web-atlas-v2/2ea2614a3de169cb9e597d59d2fb69b1ecd36428555a824bc10ac29a2725bccc.webp",
@@ -30375,8 +30414,12 @@
         "sha256": "40fca5bbf05ba4b9b283864cdc85c4e252f0983c2196d0755a9b0a36f59d15fa"
       },
       {
+        "path": "assets/production/characters/reviewed107-20261026/GR39/web-atlas-v2/6f1aa3545e26f319b4ec0d12741fcdca22794fb432b6688042fe819a3a46e02e.webp",
+        "sha256": "6f1aa3545e26f319b4ec0d12741fcdca22794fb432b6688042fe819a3a46e02e"
+      },
+      {
         "path": "assets/production/characters/reviewed107-20261026/GR40/animation.public-v1.json",
-        "sha256": "11c8a48ad9bb0f2424b2e7ca18eeef63132c904fd40be11d435b456d45c19f90"
+        "sha256": "5e6822063ef484054e13b684853ebc8f058688f57d18f62e39f3f5c432d283e8"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/GR40/web-atlas-v2/7bebf1031fe47d7434e12c82001fefb6fe6873d0f6e2dd9bcf6b922979c9a3ae.webp",
@@ -30387,8 +30430,16 @@
         "sha256": "d494616ef67dcb392c8229df755e8604fc4a61b2987791f567bf455e9d5324f3"
       },
       {
+        "path": "assets/production/characters/reviewed107-20261026/GR40/web-atlas-v2/e278800a93b6721d2d52e414c3d5a5a37f5d41792012b437e061c71f15ad6dea.webp",
+        "sha256": "e278800a93b6721d2d52e414c3d5a5a37f5d41792012b437e061c71f15ad6dea"
+      },
+      {
         "path": "assets/production/characters/reviewed107-20261026/GR41/animation.public-v1.json",
-        "sha256": "67e0752e95f8ddd78ed63f6dc8ef8ee704e4aee72ff3c274a4ac0ee93b013544"
+        "sha256": "1b620f5b1b0d80761135e12d935bf9c583878c5b67bd31549edc8baf9c92bf9d"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/GR41/web-atlas-v2/1ba55cad7553ee8bdc6fdfa012a0c39e78b50c2282c376c799d937710635e2f9.webp",
+        "sha256": "1ba55cad7553ee8bdc6fdfa012a0c39e78b50c2282c376c799d937710635e2f9"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/GR41/web-atlas-v2/238c2bce404208100108fb872c037911883593405e01acdc7e46fbf49a7d75d0.webp",
@@ -30400,7 +30451,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA01/animation.public-v1.json",
-        "sha256": "3db48192e86c82e8886d1d983290b11cbadb7f6505bde66ee2616be7db7c63f1"
+        "sha256": "3010b55fa2d759e393cb23ca74dd14b2d62d20e26c77552f84f4cccf06eef113"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA01/web-atlas-v2/877964068940ad85faaf1de640f390c8b645c97e74ddfb7c1d31c759eeec7e89.webp",
@@ -30412,7 +30463,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA02/animation.public-v1.json",
-        "sha256": "560e50748ebd41d7325c19ef804c8842510796ba70ac803fbb1320a5f8dea941"
+        "sha256": "0b9d0876571f0fe84a4312bfe4c3fa48bf7c30c50ddb4b44fc43328d5b2f9da4"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA02/web-atlas-v2/18aa9a152c875b0a4056da3a7b95c876fcb91976807829a351ee6187bdd03976.webp",
@@ -30448,7 +30499,11 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA05/animation.public-v1.json",
-        "sha256": "05cd0e264267582815fb7babaa9449322bab5f57d38340e3006325236301af75"
+        "sha256": "c002db924a7b884954f5317eb69f3ddd6dae437ea8219f178fee3c5ea2de9701"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA05/web-atlas-v2/3cf27021bc1c1df2388299ce94dd7088c0714154ce23a9684527b22773a86e5e.webp",
+        "sha256": "3cf27021bc1c1df2388299ce94dd7088c0714154ce23a9684527b22773a86e5e"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA05/web-atlas-v2/6c7a1ecc3cd566cdae544a9c83d503527ea3328c25a2f1c9d685444e9ecfd3cb.webp",
@@ -30472,7 +30527,11 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA07/animation.public-v1.json",
-        "sha256": "7596bbd0a0ad5d68d94340fba8f886d45752bbf96069dace2a8567552ab3d3a3"
+        "sha256": "52c425cd758f394c7f8a9f4ffb61bc4939d69855dc02d2c6f6ee9b37ec82ce0a"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA07/web-atlas-v2/06967fcb37b9bbac502829e2fa54ccb82515094b373e62eb5e217b3c7b2105c1.webp",
+        "sha256": "06967fcb37b9bbac502829e2fa54ccb82515094b373e62eb5e217b3c7b2105c1"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA07/web-atlas-v2/468bbc686df658fbd25d30cd79dcf47b786a705c2c46b5659d4cf0acc76d92a8.webp",
@@ -30520,11 +30579,15 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA09/animation.public-v1.json",
-        "sha256": "7b8629f2fd5381f40b8c55696f57eee8957fc88bff625c4a09419d8f94c45c95"
+        "sha256": "2f51d2f8a13f876b8ef0494525e842de15ead12458adf33c1e5ee506bde10d02"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA09/web-atlas-v2/26d847ad8231e5ae90d30a64fc6efb5624c0c55d5fc70bc92f8bf4b6d79524bc.webp",
         "sha256": "26d847ad8231e5ae90d30a64fc6efb5624c0c55d5fc70bc92f8bf4b6d79524bc"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA09/web-atlas-v2/466ffb587f45ec4f9dd89d8aa662ec39e6bf94edb05e817e3256ec90170f54b0.webp",
+        "sha256": "466ffb587f45ec4f9dd89d8aa662ec39e6bf94edb05e817e3256ec90170f54b0"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA09/web-atlas-v2/a4c262def42488fdfd34bc5e6781bddc09338ae643c5cced8579d90522b8c474.webp",
@@ -30532,7 +30595,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA10/animation.public-v1.json",
-        "sha256": "7f8ac1b96ebcb53d415854701907c2202a715039e1970d18279046b7b7af8339"
+        "sha256": "f922921bdb4fd2a4c171b9fe7a1a0871d52f9d892a91f2cea4aff344eefc62de"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA10/web-atlas-v2/0e54dd6b149bcef0a8ec6e0bc42b5afaf27eed011a7680081f26d6e480f4c5b0.webp",
@@ -30541,6 +30604,10 @@
       {
         "path": "assets/production/characters/reviewed107-20261026/MA10/web-atlas-v2/ccec739f389a7c27229b5f3d333619a5974c529fc7ff1b778135581f5b2a15cb.webp",
         "sha256": "ccec739f389a7c27229b5f3d333619a5974c529fc7ff1b778135581f5b2a15cb"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA10/web-atlas-v2/d86d5ec703122d402457e35e546bdede3c71799afdc93ffb994fab7d8be6c464.webp",
+        "sha256": "d86d5ec703122d402457e35e546bdede3c71799afdc93ffb994fab7d8be6c464"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA11/animation.public-v1.json",
@@ -30592,7 +30659,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA13/animation.public-v1.json",
-        "sha256": "038b53c58e6e181255cf9c8c3ef2b318b4bb450b141621a2ae9a0639de8bfcac"
+        "sha256": "b6d53b727458c575ab9d604b9b64f9aceadc85b9f51201b61bccb54d0fec0697"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA13/web-atlas-v2/0203535cc90c2c3e092d3a2dd5dc6bf5f7832e209433a390e13e73290ee2d87a.webp",
@@ -30601,6 +30668,10 @@
       {
         "path": "assets/production/characters/reviewed107-20261026/MA13/web-atlas-v2/134f8040318859b2a251affac872853afd3d4d15da0c47ac5bbefdb752d1890a.webp",
         "sha256": "134f8040318859b2a251affac872853afd3d4d15da0c47ac5bbefdb752d1890a"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA13/web-atlas-v2/380b6cc0119e3b8732dc523d6580de636e1f5b44eee7844e7a29042cd024c407.webp",
+        "sha256": "380b6cc0119e3b8732dc523d6580de636e1f5b44eee7844e7a29042cd024c407"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA13/web-atlas-v2/3ce07802654d2636b47fc5e382173e9023e98c3735a4a0c246739afa9135dc0c.webp",
@@ -30616,11 +30687,15 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA14/animation.public-v1.json",
-        "sha256": "8928245553f3647efd723e3ce08b0a7396fab7c0770129aabef63a0b9eae385b"
+        "sha256": "e0c4d582e0f93c5d420d8d7601dc0aabf9d6f1ad2e1630b1fa1c3776aa8ebcff"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA14/web-atlas-v2/70747bd10c6ccfb385079feb8d2003158eb7ce8902088d3d5b51537ddb8b4eb9.webp",
         "sha256": "70747bd10c6ccfb385079feb8d2003158eb7ce8902088d3d5b51537ddb8b4eb9"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA14/web-atlas-v2/a63b87d6115fa4248aa4345db0735d879a4bdd5ca4e1e7f7af7b1d747fef7df6.webp",
+        "sha256": "a63b87d6115fa4248aa4345db0735d879a4bdd5ca4e1e7f7af7b1d747fef7df6"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA14/web-atlas-v2/d3bab05c898a90b2f4b1fc26c69a25eccbdd4bedce14ae8776c9a237ac694577.webp",
@@ -30628,7 +30703,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA15/animation.public-v1.json",
-        "sha256": "e7379b86fe911ec01ea2f84c8e988c0ef7c7fb4d6d53147928ceb4eabb4bef6e"
+        "sha256": "b286b49453fbeb57fe1b6ae927e3bb7e893768d488b699de5b258148f194c49d"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA15/web-atlas-v2/0af584b9bc67fb8042cbece74441f96c21e896355005c153670cc7007d15cf43.webp",
@@ -30664,11 +30739,15 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA17/animation.public-v1.json",
-        "sha256": "87fa916e024a208f3e6bb37532d0f3b8a71fa09d3b54c43e02199214fa8895af"
+        "sha256": "bca4ac43dc4d343a4977f93cdb8f74fe6236d08ce0d1b16413b6fedf00b982c0"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA17/web-atlas-v2/0ab68485bae7697f200fc51db4cb93665c75318aa4bcfd645b07e73c150f4ef0.webp",
         "sha256": "0ab68485bae7697f200fc51db4cb93665c75318aa4bcfd645b07e73c150f4ef0"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA17/web-atlas-v2/7b639c22ff90a500dd0e6c063874de64a911afff57b8c9acdb6a3409f896c2cb.webp",
+        "sha256": "7b639c22ff90a500dd0e6c063874de64a911afff57b8c9acdb6a3409f896c2cb"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA17/web-atlas-v2/cd2b2dedd5c48284cbc348c7c1e0224828dcbb50e9c8832017aed56d125f699d.webp",
@@ -30716,7 +30795,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA21/animation.public-v1.json",
-        "sha256": "9af9e13bcb588f3c3f3d5c674f007a6681c6e9c7a88596cc5d18569080c113da"
+        "sha256": "a4934ce5c112049e41d68c712eb0551c9e2b634762b124a3db7867bd396d3d6b"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA21/web-atlas-v2/42381d821f496a1c3414e0ebf5e85cdb98a6a8b7585947a3a72bb7b4e8455768.webp",
@@ -30740,7 +30819,11 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA23/animation.public-v1.json",
-        "sha256": "131691d3c7fd8475c2fd5483676b7905f9d67bd258a9c1760814cedfa122d1cc"
+        "sha256": "31f2c5dd25af3e5ea22561cbda86da12d1ad559015dceeea07b6832f4bb1726e"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA23/web-atlas-v2/027f2baedc2fb908ebe88678d7d2ee026ed24bb908d3cd2bd2d29ac0414af177.webp",
+        "sha256": "027f2baedc2fb908ebe88678d7d2ee026ed24bb908d3cd2bd2d29ac0414af177"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA23/web-atlas-v2/09a6989ec0c3d50b3023cc31c60797028f3f876f27de27ee5123f69b50aa0aaf.webp",
@@ -30876,7 +30959,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA31/animation.public-v1.json",
-        "sha256": "89e465c7a168578f5508d1d4d6caa5c12ec1adb861abb625bcf3e7d6fb4bc0a8"
+        "sha256": "4d66597204fb7beedb0481b83d63534e519923c21cd79472145e23ef5c46de2e"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA31/web-atlas-v2/19a989f909d3a677b7d1ebfb155751969d99b3aaaeaf8260f4797000ac86476f.webp",
@@ -30897,6 +30980,10 @@
       {
         "path": "assets/production/characters/reviewed107-20261026/MA31/web-atlas-v2/a85f5a697754b0b077f3ccbd0bd10169b61092033eb80d8230938214e8dd77ac.webp",
         "sha256": "a85f5a697754b0b077f3ccbd0bd10169b61092033eb80d8230938214e8dd77ac"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA31/web-atlas-v2/c99cb21bc47232edaa779c0352b660382ccfc9959da76003384c09a66f3c3916.webp",
+        "sha256": "c99cb21bc47232edaa779c0352b660382ccfc9959da76003384c09a66f3c3916"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA31/web-atlas-v2/d00c5ebf4940cabcf46fe5d2cca65935f2b8cedae28cd9ca9314fe3d57b4a88d.webp",
@@ -30972,7 +31059,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA36/animation.public-v1.json",
-        "sha256": "bc276eafb7221a5cebc8fb0e6bcba0ca1bd20a8e4b93de2da7f65ae9cf811bab"
+        "sha256": "c18ce22e3e649e4bc45985321d531a28903151cd91a543a318b5a43930736f22"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA36/web-atlas-v2/0e9e8edc44b9e39ad6165554867a142d320823287f15a17b574ac192f58350a9.webp",
@@ -30985,6 +31072,10 @@
       {
         "path": "assets/production/characters/reviewed107-20261026/MA36/web-atlas-v2/280b7d3c033a15a049c317fe8f1e7d7312c5008b082687a4144f98e5b578bb77.webp",
         "sha256": "280b7d3c033a15a049c317fe8f1e7d7312c5008b082687a4144f98e5b578bb77"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA36/web-atlas-v2/450d48884d6c1e51ab46b2f72c1901cecba72170a67dc21ed2d93d3c568ee729.webp",
+        "sha256": "450d48884d6c1e51ab46b2f72c1901cecba72170a67dc21ed2d93d3c568ee729"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA36/web-atlas-v2/dbe1273abb05688b3af9d7a420179f7cc062cd9c887b951ae4752d2481998bab.webp",
@@ -31208,7 +31299,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA47/animation.public-v1.json",
-        "sha256": "c048de8b86fb0ef331842c58afc903f7dd6f56f7d67789bce398f2c161f6ec19"
+        "sha256": "05227b886e2f34b40b8253e0760384c79874db9faa36a609e3a85b1277f1cba7"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA47/web-atlas-v2/8b71fc2247cbcbea22bc6317cbad66a5c5c36526a2817c99cf5f87bb869bdea9.webp",
@@ -31217,6 +31308,10 @@
       {
         "path": "assets/production/characters/reviewed107-20261026/MA47/web-atlas-v2/ab20a1a6b5abf4ec802a8c84538c832141cc57d52a1e39454964dd2eb41e738f.webp",
         "sha256": "ab20a1a6b5abf4ec802a8c84538c832141cc57d52a1e39454964dd2eb41e738f"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA47/web-atlas-v2/f5332874af98635509375fa24adc51a3bc38cba04e55d3586053b9e47f817aee.webp",
+        "sha256": "f5332874af98635509375fa24adc51a3bc38cba04e55d3586053b9e47f817aee"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA48/animation.public-v1.json",
@@ -31232,7 +31327,11 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA49/animation.public-v1.json",
-        "sha256": "e5af004bb86fe42ee25ca828c96269c1532f1530cced214f9b088a6111b9d1bb"
+        "sha256": "399a1204da9761a0c4271926e7101f0795b4d3fefe158e0e02397e6af2c79105"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA49/web-atlas-v2/3fa56144144ea377fd11191edf3c40a4e92caac1375da4b95fee4484aa4f84b7.webp",
+        "sha256": "3fa56144144ea377fd11191edf3c40a4e92caac1375da4b95fee4484aa4f84b7"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA49/web-atlas-v2/52f523f04a5d0163bac48a9878b86b4881afb18f1156d18d84218090b81077c1.webp",
@@ -31256,7 +31355,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA51/animation.public-v1.json",
-        "sha256": "358572dcdfb17d2c66ff4f9b6041567f87f28101d6272e3f7431165d73dba0d4"
+        "sha256": "9778990624b13005b4bbb88c159cacb5c6ecb507b681282f00fe915e5b179ca9"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA51/web-atlas-v2/1eb6169bd76e796b2be5686c84d5dc2b4f66a0d063feb3b3d910d45b3ae87bd1.webp",
@@ -31265,6 +31364,10 @@
       {
         "path": "assets/production/characters/reviewed107-20261026/MA51/web-atlas-v2/29ce207b58d01531bdbfe7f4c06f857a8af582fefc471230c055a38c32e4398b.webp",
         "sha256": "29ce207b58d01531bdbfe7f4c06f857a8af582fefc471230c055a38c32e4398b"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA51/web-atlas-v2/903fdaf5072d32a61b9665528e538e189950d064075ae069fc099e6f45e97b38.webp",
+        "sha256": "903fdaf5072d32a61b9665528e538e189950d064075ae069fc099e6f45e97b38"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA51/web-atlas-v2/c2d62508970c2fdfa429e58fb2dde3580c82aa249139e4cbfbebf5511df8fea2.webp",
@@ -31480,11 +31583,15 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA65/animation.public-v1.json",
-        "sha256": "7adb5362349d242fc6d3a87b56c4c783a70ed18155edf42c85811b038fd595a4"
+        "sha256": "4bd35e6a3c10440bbfc62651c80ef844fc3b60a5e00f056b4b5652681a95677b"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA65/web-atlas-v2/65246462478ca1a2d245721bd0bfbfee9fb96be612f005dfa6d05e405346947c.webp",
         "sha256": "65246462478ca1a2d245721bd0bfbfee9fb96be612f005dfa6d05e405346947c"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA65/web-atlas-v2/95492faa85ff01b064e54ef115b42d853b895b92fd3c9f0c1146acf3a2147f91.webp",
+        "sha256": "95492faa85ff01b064e54ef115b42d853b895b92fd3c9f0c1146acf3a2147f91"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA65/web-atlas-v2/99b181fd842cc2dfbf97a39c7c531cbc9df2bc24a7e1bb2a043d8c6206dc49ac.webp",
@@ -31492,11 +31599,19 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA66/animation.public-v1.json",
-        "sha256": "9c268da104b4e0cc3977d2fb2aa7bb832a2399576d91490214c09e002713949e"
+        "sha256": "d987a7048459e174b5450abfd1e1f5f7ede77de09e5ba3535ee3148861373d4b"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA66/web-atlas-v2/04ed566e315f04857609d1eea4323f25e4bb1b4aec5e9997333c24d70aaacac5.webp",
+        "sha256": "04ed566e315f04857609d1eea4323f25e4bb1b4aec5e9997333c24d70aaacac5"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA66/web-atlas-v2/478bacc8dac2d4b31f0180c8fd152dbb1c53921182907a1ced69ecad14973b23.webp",
         "sha256": "478bacc8dac2d4b31f0180c8fd152dbb1c53921182907a1ced69ecad14973b23"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA66/web-atlas-v2/90f9690e4a124d41a159180bb9a7a204ed12835f77f1707a2731187fc7348701.webp",
+        "sha256": "90f9690e4a124d41a159180bb9a7a204ed12835f77f1707a2731187fc7348701"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA66/web-atlas-v2/c19f484f2c28551da14e88191b926aa5d226019e56432d6d3d509ba55551b19b.webp",
@@ -31504,7 +31619,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA67/animation.public-v1.json",
-        "sha256": "ece1fd0be9fe9fb6987c2c1a97dc5e9dbc8523da8d61ba4884d3132bfd32a76c"
+        "sha256": "cc2bde338b6817a53ce64fdc2d18936bcb08a77140f3f7dc7d2417be7cb99b4b"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA67/web-atlas-v2/43ce581697a51ed753cb4fe17d3179b5236ddd9b169abb4ce82bc156d58bda04.webp",
@@ -31523,12 +31638,20 @@
         "sha256": "a299e44d5061eff06e25cad9f6f47504478f73e76f91277903151a3f52d36c18"
       },
       {
+        "path": "assets/production/characters/reviewed107-20261026/MA67/web-atlas-v2/b61d05c5df4ac621b2616a9f2bcfa5e8f6a4e84acbce540b274b53bbcf62e6a1.webp",
+        "sha256": "b61d05c5df4ac621b2616a9f2bcfa5e8f6a4e84acbce540b274b53bbcf62e6a1"
+      },
+      {
         "path": "assets/production/characters/reviewed107-20261026/MA67/web-atlas-v2/e8b6afd9c0a92fe831b1622e1fc44edba7f2aa8427ad7c3b0ad8f947e56a129b.webp",
         "sha256": "e8b6afd9c0a92fe831b1622e1fc44edba7f2aa8427ad7c3b0ad8f947e56a129b"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA68/animation.public-v1.json",
-        "sha256": "2329436d19416e9e1aba3846eeb828bd3821352b7602be42baf840c0dfa4cc28"
+        "sha256": "200fce58e0ca28dc0f5b3819a4504c9f92bc93167eb34a3b99f9f06947bdd221"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA68/web-atlas-v2/81480e13bc8c54eb4420562554d3a08a5fbace02ec5c14b0687fe07a4f7a019f.webp",
+        "sha256": "81480e13bc8c54eb4420562554d3a08a5fbace02ec5c14b0687fe07a4f7a019f"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA68/web-atlas-v2/89f89a1bc33d872c2b032835d0668a4909b1ae5b75ba49650d82c23af15b416c.webp",
@@ -31540,7 +31663,7 @@
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA69/animation.public-v1.json",
-        "sha256": "67a6c8e91092e6e9000287076808784866c544a2a55092e9ab913deedfd2ec32"
+        "sha256": "c50cdc302b3f1a98ac06b48dff8470f250eda20dace03e8338ed9829bbf22721"
       },
       {
         "path": "assets/production/characters/reviewed107-20261026/MA69/web-atlas-v2/1071b995b5959025abba3555c15c13bff17734523cab846716fff9f00389ffe2.webp",
@@ -31561,6 +31684,10 @@
       {
         "path": "assets/production/characters/reviewed107-20261026/MA69/web-atlas-v2/e44ae3f7860b2fc4481de112955c70674f1f23e5ca525e8ec5184cb5475168d6.webp",
         "sha256": "e44ae3f7860b2fc4481de112955c70674f1f23e5ca525e8ec5184cb5475168d6"
+      },
+      {
+        "path": "assets/production/characters/reviewed107-20261026/MA69/web-atlas-v2/ec9e79c699270dab57cdb936c03fe686e13bb46677f70d5ca1bb4da3fbadf7df.webp",
+        "sha256": "ec9e79c699270dab57cdb936c03fe686e13bb46677f70d5ca1bb4da3fbadf7df"
       },
       {
         "path": "assets/production/characters/self-reviewed-20261102/AW23/animation.public-v1.json",
@@ -36755,6 +36882,14 @@
         "sha256": "85a1f16f330fc08564bef192f2f596594055ff8ed8a7b7dfefd8a6d8f784ac11"
       },
       {
+        "path": "assets/production/items/auto-care-3d-r1/auto_cleaner_bot.glb",
+        "sha256": "263ab20d10c0a0b81b9e089bd89515031d00b17031b14489469152194681bdde"
+      },
+      {
+        "path": "assets/production/items/auto-care-3d-r1/auto_feeder_tower.glb",
+        "sha256": "14b688982948dae5f160901e7c7c40c84b80d6011a323c71b97a096f3765b58c"
+      },
+      {
         "path": "assets/production/items/digital-metals-r1/attract_light_160.webp",
         "sha256": "b7af3d45daf62d553c6721144979cd5ce38acf251063dbe134415814a5716a12"
       },
@@ -36852,11 +36987,15 @@
       },
       {
         "path": "assets/production/items/ranch-automation-r1/auto_clean_core_160.webp",
-        "sha256": "eda352767334ca2d7ff3e0af04b489a9c59af222da91d8ae4b3339923c71b991"
+        "sha256": "d6642c7bbf6096ead96fad8121e7dd0bc8c26bda7e9e8a34e4b0c0f0a130ca8a"
       },
       {
         "path": "assets/production/items/ranch-automation-r1/auto_feed_core_160.webp",
-        "sha256": "7eaa9aa7d9111fd7ccb941fc40f0d839f5cdab5b925ba7176c0488642a666b25"
+        "sha256": "6ec273a87369b4e62145fb69f4439bbbccdc9bbcafd4fc61717210fdd1ce0296"
+      },
+      {
+        "path": "assets/production/items/ranch-automation-r1/auto_royal_core_160.webp",
+        "sha256": "81505f41b742031b505ec520ce2f2522ced92b9aa3e98d4e87991ed80b5ab593"
       },
       {
         "path": "assets/production/items/ranch-automation-r1/founder_pack_160.webp",
@@ -38787,8 +38926,12 @@
         "sha256": "02dc4889e0609e9e89d48051617525842925ee0bf5081b057686f4fe065ccc76"
       },
       {
+        "path": "src/championship/app/badgeUnlockText.js",
+        "sha256": "051c22f1eb6c8bc9945341fc81b903c8a1cf07fd6b3c515bfb708e792315d989"
+      },
+      {
         "path": "src/championship/app/battleFxLookups.js",
-        "sha256": "a419612a0de7af43b2968685923329d41da62bef856f3b159ca18e080bf819b2"
+        "sha256": "3824f58594e4b8a7a25302b6302ff334983b9f10c1ec515ce431dca983e22bf4"
       },
       {
         "path": "src/championship/app/battlePresentationSource.js",
@@ -38836,7 +38979,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "2bdf6d6eb66a97f5c3e585b4dfd7ef2a0c86af674ed3fc2a76c96b2e96999f7b"
+        "sha256": "6045de73bfe0cca817e31f7eb3519b3a5f33df40c7ab23a06d5cec03947ad971"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -38844,7 +38987,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneSave.js",
-        "sha256": "aeebf3e57825b7f025709c7f315d5ca72ddfaa46c5d278ffaf2f3dade0731c9d"
+        "sha256": "16ddc21be1570c51e87fb592635d5a5437ed25b9a8aeb660993f07494598b8c1"
       },
       {
         "path": "src/championship/app/championshipStatusBar.js",
@@ -38856,7 +38999,7 @@
       },
       {
         "path": "src/championship/app/championshipToolbar.js",
-        "sha256": "ff8518d93fb35ce99291597e9b854321bff52b07f6ffc160eb06bf23fd3d2c66"
+        "sha256": "93f34cac0a356c6527ba655d3ba6773ba40efe3149c3f938c6870df5a85ce57c"
       },
       {
         "path": "src/championship/app/codeClipboard.js",
@@ -38876,15 +39019,15 @@
       },
       {
         "path": "src/championship/app/cyberGachaView.js",
-        "sha256": "8479c3b129cce06d7c576e128f5f271dae8140bdd17430296cba6ca2d875ce5f"
+        "sha256": "7386e50c2643bb0bd58af5641fc14fa0b7d080986fef29d8a6ae848f617a18d0"
       },
       {
         "path": "src/championship/app/dataArena.css",
-        "sha256": "d6535c69481163045c418c631269a7bd25c76ecd06e4af3db3fbe458b0faaba0"
+        "sha256": "8c820c5f3a62ed9967cd5564441ed714d1502c37389f3f081b3459532bf5fd09"
       },
       {
         "path": "src/championship/app/dataArenaScreen.js",
-        "sha256": "900be3967d7bc1122c73309397c2a4cf275edd03a3b1919b111922a03f8e2a1e"
+        "sha256": "bc9397a86fa5bca1963b8027eebbc9ed3738037f70c0ad7383165ea341c286bc"
       },
       {
         "path": "src/championship/app/daylightSkin.css",
@@ -38912,7 +39055,7 @@
       },
       {
         "path": "src/championship/app/friendsPlaytestPolicy.js",
-        "sha256": "f525b23f0cc9192c198753bcf729fdc4695ffa748fe3c34e651ce35333017f96"
+        "sha256": "936efcb20ee2939dd88268da8c669202609f58c9afd1993fa377bba8cbe431a2"
       },
       {
         "path": "src/championship/app/futureSystemsPort.js",
@@ -38920,7 +39063,7 @@
       },
       {
         "path": "src/championship/app/gateHuntPresentationSource.js",
-        "sha256": "42fe9b291b7873e9bc5f4f362c55113cae3de971993d296e6fa6e4e17a43f9a3"
+        "sha256": "535af1fc40b65063c0f2b49dccd8a4e604157d09a1382cac9eb74e0af4e1098e"
       },
       {
         "path": "src/championship/app/helpScreen.js",
@@ -38928,7 +39071,7 @@
       },
       {
         "path": "src/championship/app/hexWorldEditor.js",
-        "sha256": "a2df6fc7a81122f9720a3cb5ea84d01aad4d8ce19eb04e0495c24eaa908625dc"
+        "sha256": "6d0d1f8e15bc045e3804a9ad1813dcccda3b910f6ddca52c0ca7bfd2d61f24e3"
       },
       {
         "path": "src/championship/app/hexWorldPassages.js",
@@ -38945,6 +39088,10 @@
       {
         "path": "src/championship/app/huntTacticalDock.js",
         "sha256": "f37753d1ef79e77027db7168c27ee02d4768e0e7b75479bc4d670fbdcbf493a5"
+      },
+      {
+        "path": "src/championship/app/huntToolFamilyCards.js",
+        "sha256": "d8e95799924ef1c025913f1537647742468d3cda2706a0ab5d16f2ec2a57d216"
       },
       {
         "path": "src/championship/app/interactiveTutorial.css",
@@ -38972,7 +39119,7 @@
       },
       {
         "path": "src/championship/app/intRh2Styles.css",
-        "sha256": "3919c26e9418f13f6d9d7947cdb99588a0898340505806cf3f83da7842e04a9a"
+        "sha256": "624ef23d02676237ec50432b64f0624486594ccff45d434df40f171b7f6ed6d8"
       },
       {
         "path": "src/championship/app/loadProgress.js",
@@ -38988,11 +39135,11 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "71ca255a0985d4c2a746c846a3a90030ad361f7c95238786851167e89ee5697f"
+        "sha256": "6022f6260882026153682443ecf4dddc4034f747325b8b9d9cab6dd35a6dca05"
       },
       {
         "path": "src/championship/app/medalCollection.css",
-        "sha256": "564497c9f160dec7aa7062ccdc225170652b38d639a69889a53188ac48317bab"
+        "sha256": "fefe4abd4642422f5b341175876a6f9e9ad5e4925e451efef9f3b6ef8695be75"
       },
       {
         "path": "src/championship/app/medalCollection.js",
@@ -39000,7 +39147,7 @@
       },
       {
         "path": "src/championship/app/medalCollectionScreen.js",
-        "sha256": "709ab27008d4c1304cd2decdc792f252d2811ce98286376d4f141e4a0183a248"
+        "sha256": "ec4eddde127528ef25602c3ace0340b8234242641715bb5d5cf85e545cd8a083"
       },
       {
         "path": "src/championship/app/medalDetails.js",
@@ -39028,7 +39175,7 @@
       },
       {
         "path": "src/championship/app/onboarding.css",
-        "sha256": "0e2d7816f1d76ffe91ef57651bbda92ac0e5cc43edcfb6e8789ccea693c48d5a"
+        "sha256": "b97596aaf174e9fd22fcc6d158117cdd3d6a8bdf7fd12c2e318d2f6e6b4a9823"
       },
       {
         "path": "src/championship/app/onlineAccountPanel.js",
@@ -39056,15 +39203,15 @@
       },
       {
         "path": "src/championship/app/openingPresentation.js",
-        "sha256": "da71f2a86f2309e1b27fce6af34a7e8f8054adc4a2918fe8f6111a4796a0afd2"
+        "sha256": "12b72a8b0fd7bb8df28c2fa23684b82681d35ada8977788f3a25c7bcdd6a3580"
       },
       {
         "path": "src/championship/app/openingStoryPresentation.js",
-        "sha256": "c15bd9553bef902c4610eec530bc3fbb7b5f14d595146b3c314bcbe9e8c9c5f4"
+        "sha256": "f40a56de787dcaee0753c4388afe0879fdbc55c5a081108ddb1f2a0461a26b48"
       },
       {
         "path": "src/championship/app/openingStoryScript.js",
-        "sha256": "22583a740b4899442c6bb49ded67add3532c26a3ced0c21488ee095b955356da"
+        "sha256": "03c12d0553b3fc67921cb9d4186031a908ecf4bdc2282c9e9bb20fceb6f9e276"
       },
       {
         "path": "src/championship/app/phase1ProductCreatures.js",
@@ -39088,15 +39235,15 @@
       },
       {
         "path": "src/championship/app/raisingHomeP1RView.js",
-        "sha256": "1b3bdbf73d32ab50e095e4c272b238b81a2bb263e5b2a663d195f31be18d7b26"
+        "sha256": "931545c82ab65ec9bc1539d309230c2cf9b82fdb7421eef55b1163c8315d7fab"
       },
       {
         "path": "src/championship/app/raisingPresentationSource.js",
-        "sha256": "31b78a5f89cf4c6265940d0e99992aa575157ae65903ef976054f0f845658070"
+        "sha256": "4736217d6aea4d5f5e104c39e814a5e48cfffb37fd9fa45f81ac3a44af3ebd13"
       },
       {
         "path": "src/championship/app/ranchBackpack.js",
-        "sha256": "cb357eea8ed4754f8c933c9dba71517946432b9615a0f2715527cc61b3752da1"
+        "sha256": "441665c570fbce82e402d4cc41319f8a947f3e296c46de34e1795baa6dbeb890"
       },
       {
         "path": "src/championship/app/ranchDiscoveryJournal.js",
@@ -39119,12 +39266,16 @@
         "sha256": "10b67a37c38e8c7f2c191cd47179e78598c6fd32c11e975e705a074f8e6c32da"
       },
       {
+        "path": "src/championship/app/rankUnlocks.js",
+        "sha256": "095b43cf8cf579afe775c73d6d3421a4404f07fce28878483bd2489891b3efb6"
+      },
+      {
         "path": "src/championship/app/residentAssetNotice.js",
         "sha256": "f94d3a65d586852f5065421e5643f67908e3e7e744244be4ecf29bd2a586d150"
       },
       {
         "path": "src/championship/app/runtimeRecoveryDiagnostics.js",
-        "sha256": "0df4d7a8152bf8c22d3129ccacf3db49d172b97f171c4a32e0462cf1fa91fb96"
+        "sha256": "f4638c31ad9c7505ecf066319de311e4fc9bde3f50f2072c99e8581de0c0276b"
       },
       {
         "path": "src/championship/app/saveConflictArbiter.js",
@@ -39176,11 +39327,11 @@
       },
       {
         "path": "src/championship/app/styles.css",
-        "sha256": "f586b6fc166931b8ce16465612e8605489aaa441d93ec65458b7eb1179ef3dd7"
+        "sha256": "f0c37fe312f5908b6c0f9295ec05e6fe81c27a73ebc934ba9d64ac662e78a609"
       },
       {
         "path": "src/championship/app/tamerInfoScreen.js",
-        "sha256": "7ad1e15eb4d0cd0d68cf920ad817b09d1abe6ad522744245f0201fb9be16cb5e"
+        "sha256": "aed828a0fc0abc459a7258fe75a452288e190a28a9d32c899d54d33ae96ac0b4"
       },
       {
         "path": "src/championship/app/titleParade.js",
@@ -39220,7 +39371,7 @@
       },
       {
         "path": "src/championship/app/ui/juicyShowcase.css",
-        "sha256": "46b8f117a4a0dfaf91b3ce4cc437ad7c547224678ccc6588ead13699131c7508"
+        "sha256": "264c8649ffcf48aeed2a7d500693a8f2b2aa0843b2e56ff23c0006889620a467"
       },
       {
         "path": "src/championship/app/ui/loadingWalker.js",
@@ -39236,7 +39387,7 @@
       },
       {
         "path": "src/championship/app/ui/screenLayout.css",
-        "sha256": "6b0e8625781903c0e9ee7a111b6487e212b064bdf16b06b23c26a2987d01e294"
+        "sha256": "72d1667a1a4e8aa66bd617ba96f3b5473ca4d8c64d4b916c0152d723af905eab"
       },
       {
         "path": "src/championship/app/ui/settings.css",
@@ -39272,7 +39423,7 @@
       },
       {
         "path": "src/championship/app/vs2Screens.js",
-        "sha256": "2b7d7031783996866a0a2a5da4a9f6e8e11851f477d88e06e9e370af24496b74"
+        "sha256": "a77d511d6b3c9792602a3db2c22db6f8c6e77c2c58e951b0c5b0ee497a5ec9a0"
       },
       {
         "path": "src/championship/app/vs2Styles.css",
@@ -39284,11 +39435,11 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "af60e3fb3db444a41a2e1effd2934987d54304dabdd47615297486a54fa329e3"
+        "sha256": "e8f149e69458ed82cb75a9dd6d6eb27ddba0a0f345e62b679b43e59b0ea6cdf9"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
-        "sha256": "666051a2d46ea1627a65a467aa2f4a22ec2d5823f1c3768ca5ab78200a206a64"
+        "sha256": "fd6c0d33e8bae0dfc27f8c4615013c18d70973edc9b26b9558c9cb0158b5d196"
       },
       {
         "path": "src/championship/app/vs5Styles.css",
@@ -39524,7 +39675,7 @@
       },
       {
         "path": "src/championship/cage/cageEditRuntime.js",
-        "sha256": "72a966b641d5c1be54d90e79ba3531e8ac604dafd5c10506fd3fed8b636d0ed2"
+        "sha256": "0c0957663997dd11b56d407f6487d699dabea6c1b31f65c70f4f5f40cfe0f31a"
       },
       {
         "path": "src/championship/cage/cageEffects.js",
@@ -39548,7 +39699,7 @@
       },
       {
         "path": "src/championship/cage/productRanchGrid.js",
-        "sha256": "2719e41ca6b0d423d41338be0bf5b0b0178617a0497b974fb314c344dfb60541"
+        "sha256": "42c08966e705e8ef7bfc162a2875271c9156771d2e49d92489bdda4cccd346c8"
       },
       {
         "path": "src/championship/cage/ranchConnections.js",
@@ -39616,7 +39767,7 @@
       },
       {
         "path": "src/championship/contracts/productSpeciesData.js",
-        "sha256": "c67a7dd51e618a2344af4fa049f182e66d678fb2de5addc876f92dd250570117"
+        "sha256": "8466a3cd1fd33cbd0b8b2c73f63ec4242e866ae37913ca0d3b43d569367fc519"
       },
       {
         "path": "src/championship/contracts/productSpeciesExtensions.js",
@@ -39704,7 +39855,7 @@
       },
       {
         "path": "src/championship/gacha/cyberGacha.js",
-        "sha256": "f40ea6710425f02484b3006532a7730560947a4cf2b3d1451aa05f615a78c955"
+        "sha256": "c1d092548c6700b4a1f9fb2bba29fac70ccd6bab2d62058a8f34cf6b0a9fb8e6"
       },
       {
         "path": "src/championship/gacha/diamondRewards.js",
@@ -39712,7 +39863,7 @@
       },
       {
         "path": "src/championship/gacha/ranchAutomation.js",
-        "sha256": "3c8f784a53df0131d84eeb21f0e83f9c559bb6607bd585703ad9dd969c35b3ac"
+        "sha256": "06608ca277cb795829986e5f7c7e66b13e62b573da3247e439dfaf50b063997c"
       },
       {
         "path": "src/championship/gate/gateAdmission.js",
@@ -39736,7 +39887,7 @@
       },
       {
         "path": "src/championship/hunt/capture/huntRopeTactics.js",
-        "sha256": "b7c89b99d3cf2dde3198a70604753d80762fb3d6fa0fd29313ef119bb2264d04"
+        "sha256": "7fe854a3722ee58f17a510aa339ade17ea2fe653a009be7c9a32ff5d9399fa4e"
       },
       {
         "path": "src/championship/hunt/capture/memoryCardCapacity.js",
@@ -39772,7 +39923,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntFieldControls.js",
-        "sha256": "7303d24704a9e49536d51c3fb3914521dc352f17330d79a21361e0bff624d1f1"
+        "sha256": "f0420bdf2038d2ada55c4b47e361a69fbc3317b930001a861800c5218231be1b"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntGateVariant.js",
@@ -39884,7 +40035,7 @@
       },
       {
         "path": "src/championship/hunt/loadout/huntEquipmentCatalog.js",
-        "sha256": "050381845ddb5b1b16936a539f44612ff76bbd10759b3055a803c0cc84ec3d84"
+        "sha256": "5b7d509cf7178664b20f2dfb6d0f07e1e19a1a09947889832d295a7c574c6163"
       },
       {
         "path": "src/championship/hunt/loadout/huntInventory.js",
@@ -39892,7 +40043,7 @@
       },
       {
         "path": "src/championship/hunt/loadout/huntLoadoutContract.js",
-        "sha256": "0b4245dfe05dc7ce13b30622fe268870b071e4a2cd1403486e709962727b388f"
+        "sha256": "5226fa0621d60b586dfb2600fad52b046eb6804fc78084e060358a76a431fa57"
       },
       {
         "path": "src/championship/hunt/loadout/huntLoadoutRuntime.js",
@@ -39928,11 +40079,11 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaConfig.js",
-        "sha256": "d006da09a53c3bb6f8dfc0be9c9a041138e31c76a6c1599fff67c906c4106229"
+        "sha256": "9c72ffc83be018ebc62c382b3012585eae725499fb3c6af6cbdf3034d14752ab"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaEligibility.js",
-        "sha256": "e4678b6c5b7f3cd4ad36a5448173fe5659bbf282987fc6b593cf23238ac0cf2f"
+        "sha256": "947d4bae17d6dafc5ed38740ab6456044509f898a4e33b2fc54533d44369f4e4"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaGrid.js",
@@ -39948,11 +40099,11 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaRelay.js",
-        "sha256": "a1244d8766ffccfe453c0dba6523043fdf00661692fbc040fdc68eb0fc58fbe9"
+        "sha256": "13a8c4656c38dc74b3680c00b673f71cda1cc4ff6e34974f1a348c165cfc4337"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaRelayArena.js",
-        "sha256": "f56c60fd5cc24c3c8e0345dff8c3265d47700aa9dc56789aceb65c535e8143c5"
+        "sha256": "55183f5eda8e79531e8ced112bfd01dc7983d49e0357994618b255050cba052d"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaRelayElements.js",
@@ -39972,11 +40123,11 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaSave.js",
-        "sha256": "43b8008d2803dabe608425bf4ff91cd732307d5acb46b56d32eb864a4cd44dfc"
+        "sha256": "8cda8ef5292b39de41bf1afb2c5016290140ee4c8a4d6191c3fddaa5142279b2"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaSimulation.js",
-        "sha256": "b5067e559dbe15a064644e75a3199f423ad49add80437954d7f0aa97b48a2d12"
+        "sha256": "1beebb7b12937ec2d5ee4442a310adbe94bf22dad2258dd0cf866c5883d622f0"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaUpgrades.js",
@@ -40044,7 +40195,7 @@
       },
       {
         "path": "src/championship/presentation/battleFieldAmbient.js",
-        "sha256": "f686eac0a64849e910bc3015d5ccf5fc6c3bc70474443495b0d73b77448bd1b2"
+        "sha256": "5eb64460581c69d426cdb8f187109fc2071a61e544fed10fb023aedd1a3d4bc4"
       },
       {
         "path": "src/championship/presentation/battleFocusViewport.js",
@@ -40052,7 +40203,7 @@
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxCamera.js",
-        "sha256": "fd324be1c626bae30b54a92cdebdb657388827efff983de51e9fcaad2946fbc2"
+        "sha256": "0997e08c25e0073d305d769caa532da4d4ed026f0bb9ce32355e254469b5a016"
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxEvents.js",
@@ -40060,7 +40211,7 @@
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxLayer.js",
-        "sha256": "bc6f6963794271a47c1224810db2567128121f9b6ec55b74450b491375b1a3b7"
+        "sha256": "1872024edd92a3c7d31e80ca9bac66c170aa1401268b8c1da9abe2006e0adddb"
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxPalettes.js",
@@ -40076,7 +40227,7 @@
       },
       {
         "path": "src/championship/presentation/battleResultCharacters.js",
-        "sha256": "9e516f84e19db50dfdb8439d1d3aaf20b3027df942870f812efba7667e13e266"
+        "sha256": "3d74ff3e41a83863d18b36e061cd909b92ec0ed7df633de5c5767ae4e56e5c43"
       },
       {
         "path": "src/championship/presentation/bm03GroundShadows.js",
@@ -40136,7 +40287,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaCamera.js",
-        "sha256": "262cd547b3bcc5b7fe635125de1c73cc0fde700d1c46c4c96528be6fc2b39f18"
+        "sha256": "982d7eb1cc5246272c201836166698233fbbc931771334dac9b1fd6634ef5279"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaCharacterAction.js",
@@ -40144,7 +40295,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaElementFx.js",
-        "sha256": "b0ac358978dc018863a443860c7d5a66cc88f17ab70874adb729a329626551fa"
+        "sha256": "d7af82f15ad34e1b97a419f14c301857c98dac623293ce3614a000b6b95df567"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaEnvironment.js",
@@ -40160,11 +40311,11 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-        "sha256": "53ec1c357469bc1b27aed6717c5e2ac63a8d8ac1d31fb87b3f9e3bf698973488"
+        "sha256": "a92b2abc8cd0bbf0400ad7ce4f88c514f7852aebbd268cc81978b306dea4a847"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
-        "sha256": "0df93a8f5ffb3bc4d1a7d8c575faf407edf0fc393b277bc2f278dfccebf313d1"
+        "sha256": "6bbf868b76ded634634eb96ce3f3fa0f78921b117ab438292feeab5bfc36ca4c"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRelayMapArt.js",
@@ -40228,7 +40379,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "80301ca8542a78e516d49a16fe21333363b2e9649edca4c515b25651f01ad494"
+        "sha256": "8e9252bdff7d699f81c7d7c93bab70aae9c61d8033af44d01ded6ba9ff1464e8"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingAppearanceFrame.js",
@@ -40280,7 +40431,7 @@
       },
       {
         "path": "src/championship/presentation/juicy/skillCutIn.js",
-        "sha256": "c4b782b0417cc4c7b49a704549ec902bd724d1f25b05eb416a8b06a69b672b72"
+        "sha256": "e93f320265d70f6cc949c3f3ff638c1d3d27765d641033d6892ac20cbb79d9c1"
       },
       {
         "path": "src/championship/presentation/juicy/spriteMotionPlayer.js",
@@ -40423,6 +40574,10 @@
         "sha256": "f424a1e716a4b2711d20fb6112e1dd60d1c366b3d8ae59cfc77757c204b72f8d"
       },
       {
+        "path": "src/championship/presentation/ranchAutoCareProps.js",
+        "sha256": "14ee2232d839bbb2b6d9b021ee0a7b755ac849037ccac911128711381ef8cdeb"
+      },
+      {
         "path": "src/championship/presentation/ranchBorderMembership.js",
         "sha256": "cdcd2de46ce03398efd43b86f1a4c9f1d8ef43e2e9a05af52876a6f1cf569deb"
       },
@@ -40431,8 +40586,12 @@
         "sha256": "06925993fa5be144a8b0603c6b51213d010575fc4c85ffd55ffb7b64e7f94fef"
       },
       {
+        "path": "src/championship/presentation/ranchDecalFloor.js",
+        "sha256": "4f4cba250bb7aaaf9a56eecbc8c953a77bba0a85bdd15283f2b0d9a0ecd88319"
+      },
+      {
         "path": "src/championship/presentation/ranchGroundShadows.js",
-        "sha256": "0882f6a3859b7d7cd50e1cdefc63c6a567d361a320db8370df1f12e227056e6b"
+        "sha256": "9702997e5dee7406fdbc847c991423b57ddb3c840299a2b54925ea863fdcadea"
       },
       {
         "path": "src/championship/presentation/ranchPassages.js",
@@ -40448,7 +40607,7 @@
       },
       {
         "path": "src/championship/presentation/ranchSelectionRing.js",
-        "sha256": "6e5a2c8de947a390de4091f3ff6798c20379c092e089426bc1ce6f9695aaaefe"
+        "sha256": "eaeced815dc852b248d9e25fa59af3086db5e7a73facacde68d3d1c0848b42ce"
       },
       {
         "path": "src/championship/presentation/ranchSupportOwner.js",
@@ -40460,7 +40619,7 @@
       },
       {
         "path": "src/championship/presentation/ranchThreeScene.js",
-        "sha256": "fa7a09dc934f52b6d5cad9e6d3262fc5c9cb34d29e0b94f6c48388d074877d67"
+        "sha256": "3366e616b3e74f1484bdb298a8d1d2d8d9f022682ec6487e6dbffbe90fc72b7c"
       },
       {
         "path": "src/championship/presentation/ranchWaterfalls.js",
@@ -40472,7 +40631,7 @@
       },
       {
         "path": "src/championship/presentation/reviewedCharacterLoader.js",
-        "sha256": "10b4a5613de54c3d1c23b01db06741b9dd9a505a8a73b12152992350620f91cc"
+        "sha256": "a12a657af8f5aa9f8613995f925789c61a8f4a0051ef52b5bc1c9590ea73f4f2"
       },
       {
         "path": "src/championship/presentation/reviewedSelection.js",
@@ -40532,7 +40691,7 @@
       },
       {
         "path": "src/championship/presentation/vfx/elementVfxLayer.js",
-        "sha256": "7792818229dd23294fa5a41605f38c9d661c92dae99a092ed373299ec16124bf"
+        "sha256": "ee1e9ec78040af47979b97b9f10ccc7210f2b5daebfe8ae2c6369af00541c296"
       },
       {
         "path": "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
@@ -40680,7 +40839,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
-        "sha256": "0d50079c97b1f32deedac8f0c72a626016c9a1d3fde183e49c566bf427749067"
+        "sha256": "d23972d5869136ededb12cc172d0185388d29ef9bb934046c2e9783efe75334e"
       },
       {
         "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
@@ -40688,7 +40847,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
-        "sha256": "a0f009cedcc200678dfbdd6b86eb3d475b3d76a453cc006c570824e6da25e78f"
+        "sha256": "4b57c4d059bfc9b58a7c3a4205b9af809cb6a1e7a4feb889d82e29426dc3370e"
       },
       {
         "path": "src/championship/presentation/vs5/prepareBattleVfxGpu.js",
@@ -40697,6 +40856,10 @@
       {
         "path": "src/championship/r2/createChampionshipR2Session.js",
         "sha256": "4749da3945225d282d77f88f6cd753536c261fe495f92da9d649fc85f602524f"
+      },
+      {
+        "path": "src/championship/raising/autoCareMachines.js",
+        "sha256": "c8376e01d8753c03e4bd799ddffe067bc2e3bae3eb3273885d60bf3b64be5250"
       },
       {
         "path": "src/championship/raising/createRaisingHomeRuntime.js",
@@ -40720,7 +40883,7 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingActor.js",
-        "sha256": "d08cc0d995a71f13eeefb1618cc137f5158da253da77185cf316b78be1a5a877"
+        "sha256": "c5be5d04fab0d8c13b52b45997997422a1e5490bbd4f8cbff6ec36c42cb82724"
       },
       {
         "path": "src/championship/raising/nativeRaisingCalendar.js",
@@ -40851,12 +41014,16 @@
         "sha256": "188cc102144bd4d86ec622c48a92e8b553564ecd047ccfc14e54eca1d798ac02"
       },
       {
+        "path": "src/championship/shop/huntToolTiers.js",
+        "sha256": "cc44f060f89dbdb1d31ebfa4d924167e9d080f2e1afbfeb6fed59705607fd14f"
+      },
+      {
         "path": "src/championship/shop/shopCatalog.js",
         "sha256": "b814998d3e5f2cfb5e44759a893ad2adaa0b80e48da8fa185606744f6476e2e6"
       },
       {
         "path": "src/championship/shop/shopRuntime.js",
-        "sha256": "138f47cf000d6dd1494b251f8ff8be9d58c099f5256536eb0554d3c5bb3d747a"
+        "sha256": "35f55b123932473890b473b9dae6ff0861e591c73c9274790e86cd61bc03a2e8"
       },
       {
         "path": "src/championship/text/aiChanStoryText.js",
@@ -40900,7 +41067,7 @@
       },
       {
         "path": "src/championship/text/dataArenaText.js",
-        "sha256": "37e83b6b393fee0bb2e85b804999798563f31f1b1fe24ae1ccfaf0a7b59e9789"
+        "sha256": "04909711f80c63df9f922bc0794427ce4e5c1f18bf7709018c0d0dd2221c50c2"
       },
       {
         "path": "src/championship/text/evolutionPresentationText.js",
@@ -41024,11 +41191,11 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "08b269395c984126c03f1802050bab08a4144c75540af510a605a4a137eb2ac1"
+        "sha256": "ae304f1501b67b1156b3a698a4d3cfaa87e7835806ccbbf35e9048c0b4045112"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "5c945ccf2f54f327d5e58a5e4dc57c004527956e9056abcf679731f4c65f75ce"
+        "sha256": "8f5566bf3d3599d1453a0a7d07237aebb2b7aca241041c547134b35927c7abc2"
       },
       {
         "path": "src/championship/text/uiText.js",
@@ -41036,11 +41203,11 @@
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "42d80f008618b79ad119b8b9add4c5142e97dfbcdd65820f80a8f9aabb1874b4"
+        "sha256": "63f3d168ae595ecddc23fd1016347799781c1160650a94757779744954876877"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "693865e2bca1c16f20d6640186b6e330161155acd4d1ec35d51159125fd05925"
+        "sha256": "840c09a459f1e2a1b37f5ade4c8d2fb077ec97987e9434810adb7643c3588e62"
       },
       {
         "path": "src/championship/text/zhHant.js",
@@ -41328,7 +41495,7 @@
       },
       {
         "path": "src/data/championship/reviewed-animation-selection.v1.json",
-        "sha256": "4458ff404224481019559cf65fffa7fbd524b7ad85c1f77dc4ff4368b1741728"
+        "sha256": "b9fea814be3fa07b742aa5f9217b5653a4afa984ef720ea066a8c1db664d0eef"
       },
       {
         "path": "src/data/championship/species-taxonomy.v1.json",

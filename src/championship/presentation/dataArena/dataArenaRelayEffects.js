@@ -69,10 +69,13 @@ export function createDataArenaRelayEffects(PIXI) {
       c.fillStyle='#fff';c.beginPath();c.moveTo(52,26);c.lineTo(70,26);c.quadraticCurveTo(80,32,70,38);c.lineTo(52,38);c.closePath();c.fill();
     }),
     make('relayDrop',c=>{
-      const g=c.createLinearGradient(4,0,60,0);g.addColorStop(0,'#ffffff00');g.addColorStop(1,'#ffffffaa');
-      c.fillStyle=g;c.beginPath();c.moveTo(4,30);c.quadraticCurveTo(40,22,60,24);c.lineTo(60,40);c.quadraticCurveTo(40,42,4,34);c.fill();
-      c.fillStyle='#fff';c.beginPath();c.moveTo(82,32);c.quadraticCurveTo(66,14,52,32);c.quadraticCurveTo(66,50,82,32);c.fill();
-      c.fillStyle='#ffffff88';c.beginPath();c.arc(64,27,3,0,Math.PI*2);c.fill();
+      const g=c.createRadialGradient(64,32,3,64,32,26);g.addColorStop(0,'#ffffff');g.addColorStop(.5,'#ffffffdd');g.addColorStop(1,'#ffffff00');
+      c.fillStyle=g;c.beginPath();c.arc(64,32,25,0,Math.PI*2);c.fill();
+      const tail=c.createLinearGradient(4,0,64,0);tail.addColorStop(0,'#ffffff00');tail.addColorStop(1,'#ffffffcc');
+      c.fillStyle=tail;c.beginPath();c.moveTo(4,32);c.quadraticCurveTo(36,16,64,20);c.lineTo(64,44);c.quadraticCurveTo(36,48,4,32);c.fill();
+      c.strokeStyle='#fff';c.lineWidth=2.5;c.beginPath();c.arc(64,32,14,-0.9,0.9);c.stroke();
+      c.fillStyle='#fff';c.beginPath();c.arc(68,27,4.5,0,Math.PI*2);c.fill();
+      c.beginPath();c.arc(54,36,2.5,0,Math.PI*2);c.fill();
     }),
     make('relayBolt',c=>{
       line(c,[[4,32],[18,24],[30,38],[44,22],[56,38],[66,28],[82,32]],6,'#ffffffaa');

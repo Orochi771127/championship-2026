@@ -51,6 +51,8 @@ function ownerFixture(target,{hudLoad=async()=>hud([cell('result')]),stageLoad=n
       getBattleBadges:()=>[],leaveScreen(){screen='RAISING_HOME';events.push('exit-intent');}},
     battleRuntime:runtime,battleAttemptId:null,battleProgressBefore:null,mountedScreen:'PREVIOUS',mounting:Promise.resolve(),
     view:newView(),raisingSource:{},root:{dataset:{}},RESPONSIVE_BATTLE_CANDIDATE:false,BATTLE_DYNAMIC_FX:false,battleCeremonies:null,
+    // Battle polish (2026-11-03): the result summary tally lives beside the owners in main.js.
+    battleSummaryTally:null,startBattleSummaryTally(){},battleSummaryFor:()=>null,
     createLoadAttempt(options){
       const attempt=createLoadAttempt({...options,setTimer(fn,ms){const timer={fn,ms};timers.add(timer);return timer;},clearTimer:timer=>timers.delete(timer)});
       attempts.push(attempt);return attempt;
