@@ -228,9 +228,13 @@ export function getCageTraining(cageDefinitionIndex) {
 // ranch (25) no longer feed and clean by themselves -- that moved to the gachapon's automation
 // items -- and the product ranch trains the beast family there instead (productTrainingPolicy.js).
 // The original text above stays the evidence; this is what the product shows and runs.
+// Owner 2026-11-03: the gachapon's royal maps (36, 37) feed and clean by themselves and train
+// the beast family like their base cages.
 export const PRODUCT_CAGE_CHANNEL_OVERRIDES = Object.freeze({
   24: Object.freeze([up(CAGE_TRAINING_CHANNELS.FAMILY_BEAST)]),
-  25: Object.freeze([up(CAGE_TRAINING_CHANNELS.FAMILY_BEAST)])
+  25: Object.freeze([up(CAGE_TRAINING_CHANNELS.FAMILY_BEAST)]),
+  36: Object.freeze([Object.freeze({ id: CAGE_TRAINING_CHANNELS.AUTO_CARE, mode: CAGE_TRAINING_MODES.AUTO_CARE }), up(CAGE_TRAINING_CHANNELS.FAMILY_BEAST)]),
+  37: Object.freeze([Object.freeze({ id: CAGE_TRAINING_CHANNELS.AUTO_CARE, mode: CAGE_TRAINING_MODES.AUTO_CARE }), up(CAGE_TRAINING_CHANNELS.FAMILY_BEAST)])
 });
 export const PRODUCT_CAGE_CHANNEL_EVIDENCE = "OWNER_APPROVED_ADAPTATION_20261102_AUTOMATION_TO_GACHA";
 /** The channels the product shows for a cage: the override when there is one, else the original. */

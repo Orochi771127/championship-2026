@@ -1,5 +1,17 @@
 # Championship Owner Direction
 
+<!-- record-id: ROYAL_NEW_MAPS_20261103 -->
+## 2026-11-03 — The gachapon's royal ranch and stellar zoo become their own Blender maps
+
+The Owner rejects drawing 全自動皇家牧場／全自動星際動物園 as the plain ranch and zoo with extra decor: two new maps in their own files, the barn, silo and trough torn down, the waiting room's hexagon arrangement, stellar elements for the zoo, the royal ranch far more lavish, built in Blender. After the Blender preview: 「是可以啦，但可以再做精細一點，可以有一些動態效果，而且要做成3D地圖……適合網頁遊戲，然後你自己去做測試OK就可以加入遊戲commit 跟push然後整合至main發佈」, and 「你也要確認他會自己餵食，然後跟清理大便」.
+
+OWNER_APPROVED_ADAPTATION. Pipeline and rules: `docs/art/production/ART_PRODUCTION_ROYAL_CAGE_MAPS_ZH_TW.md`.
+
+- Definitions 36 (`championship:2026:cage:royal-ranch`) and 37 (`…:stellar-zoo`) in `productCageCatalog.js`, the waiting room's shape 10 (four hexes), own walk data, GLB and UI pictures; the 36 original definitions and the authoring-locked catalog files are unchanged.
+- The simulation runs them by the ranch's (25) and the zoo's (24) original rules; the built-in auto-feed, auto-clean, faster sleep and beast points stay with the edition record by instance id. Each joins only its own kind.
+- Saves from 11-02 that placed a royal cage as a ranch or zoo move it onto its own map on load (nearest free four-hex footprint, same instance id; residents respawn on it, food and droppings move to the nearest safe ground).
+- Verified: auto-feed and auto-clean events for both maps in the app tests and in a phone-portrait browser run on an isolated loopback port.
+
 <!-- record-id: MA_WEAK_FOUR_SLOT_CYCLES_20261104 -->
 ## 2026-11-04 — Eleven 成熟期 weak walks play dot's four-slot cycle
 

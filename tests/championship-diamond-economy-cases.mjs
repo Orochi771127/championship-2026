@@ -19,7 +19,7 @@ import {DIAMOND_REWARDS, FOUNDER_PACK, LAND_EXPANSION, dueDiamondMilestones, fou
   landMemoryBonusG} from '../src/championship/gacha/diamondRewards.js';
 import {PRODUCT_CAGE_CHANNEL_OVERRIDES, getCageTraining, productCageChannels} from '../src/championship/cage/cageEffects.js';
 import {cageUiSummary} from '../src/championship/presentation/cageUiArt.js';
-import {getCageDefinitionByModuleId} from '../src/championship/cage/cageCatalog.js';
+import {getCageDefinitionByModuleId} from '../src/championship/cage/productCageCatalog.js';
 import {PRODUCT_CAGE_PROGRAMS, REALTIME_TRAINING_POLICY, TRAINING_KIND_OF_CONDITION} from '../src/championship/raising/productTrainingPolicy.js';
 import {enterNativeRaisingTraining} from '../src/championship/raising/nativeRaisingTraining.js';
 import {settleNativeRaisingCage} from '../src/championship/raising/nativeRaisingOvernight.js';
@@ -160,7 +160,8 @@ test('cores deploy on one cage for an hour each; a royal edition already runs bo
   assert.equal(deployAutomationCore(grantGachaAutomation(placed.state, 'auto:clean-core').state, 'auto:clean-core', 'cage:instance:9').reason, 'ROYAL_ALREADY_AUTOMATED');
   const royal = cageAutomation(placed.state, 'cage:instance:9');
   assert.deepEqual([royal.royal, royal.clean, royal.feed, royal.sleepPercent, royal.trainingPoints], [true, true, true, 130, 3]);
-  assert.deepEqual([...royalCopiesByDefinition(placed.state)], [[25, 2]], 'both royal ranches count as ranch copies');
+  // Owner 2026-11-03: a royal ranch is its own map (definition 36), not one more copy of the ranch.
+  assert.deepEqual([...royalCopiesByDefinition(placed.state)], [[36, 2]], 'both royal ranches count as royal ranch copies');
   const removed = settleRanchAutomation(placed.state, {editions: {}, liveInstanceIds: []});
   assert.equal(removed.state.automation['auto:royal-ranch'], 2);
   assert.equal(removed.state.automation['auto:clean-core'], 1);
@@ -293,7 +294,7 @@ test('app: without diamonds the land key refuses and nothing changes', async () 
   } finally { await app.dispose(); }
 });
 
-test('app: a royal ranch from the bag is placed as a ranch copy, saved with its edition, and comes back after a reload', async () => {
+test('app: a royal ranch from the bag is placed as its own map, saved with its edition, and comes back after a reload', async () => {
   const h = harness();
   let app = h.make();
   try {
@@ -304,7 +305,7 @@ test('app: a royal ranch from the bag is placed as a ranch copy, saved with its 
     let frame = app.getCageEditFrame();
     const card = frame.royalTray.find(r => r.id === 'auto:royal-ranch');
     assert.equal(card.available, 1);
-    assert.equal(card.moduleId, moduleOf(25));
+    assert.equal(card.moduleId, 'championship:2026:cage:royal-ranch');
     assert.equal(frame.tray.some(t => t.moduleId === moduleOf(25)), false, 'no plain ranch was bought');
     // Try open positions until the ranch fits.
     let placedId = null;
@@ -315,14 +316,14 @@ test('app: a royal ranch from the bag is placed as a ranch copy, saved with its 
       if (placedId) break;
     }
     assert.ok(placedId, 'placed somewhere');
-    assert.equal(getCageDefinitionByModuleId(frame.placements.find(p => p.instanceId === placedId).moduleId).cageDefinitionIndex, 25);
+    assert.equal(getCageDefinitionByModuleId(frame.placements.find(p => p.instanceId === placedId).moduleId).cageDefinitionIndex, 36);
     assert.equal(app.getCageEditFrame().royalTray.find(r => r.id === 'auto:royal-ranch').available, 0);
     app.confirmCageEdit();
     app.save();
     const saved = h.saved();
     assert.deepEqual(saved.progression.cyberGacha.editions, {[placedId]: 'ROYAL_RANCH'});
     assert.equal(saved.progression.cyberGacha.automation?.['auto:royal-ranch'] ?? 0, 0);
-    assert.ok(saved.cageEdit.placements.some(p => p.instanceId === placedId && p.moduleId === moduleOf(25)), 'the save holds a ranch the shop never sold');
+    assert.ok(saved.cageEdit.placements.some(p => p.instanceId === placedId && p.moduleId === 'championship:2026:cage:royal-ranch'), 'the save holds the royal map the shop never sold');
     assert.equal(app.savePort.getStatus().phase, 'SAVED', 'the stock check counts royal cages');
     // AUTO_CARE_3D_20261103: no banner over a cage; only deployed machines carry a small tag, and a royal cage's pair is built in.
     assert.deepEqual(app.getCageAutomationFrame(), [], 'no machine tag over a royal cage');

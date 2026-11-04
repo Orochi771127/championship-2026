@@ -28,10 +28,11 @@ import { normalizeNativeRaisingMessages } from "../raising/nativeRaisingMessages
 import { normalizeNativeOpening } from './nativeOpeningState.js';
 import { normalizeCyberGacha } from '../gacha/cyberGacha.js';
 import { royalCopiesByDefinition } from '../gacha/ranchAutomation.js';
+import { migrateRoyalCagePlacements } from '../cage/royalCageMigration.js';
 import { normalizeBurstEvolution } from '../contracts/productBurstEvolution.js';
 import { RANCH_DECKS_LAYOUT, normalizeRanchExpansion } from "../cage/ranchExpansion.js";
 
-import {getCageDefinitionByModuleId} from "../cage/cageCatalog.js";
+import { getCageDefinitionByModuleId } from "../cage/productCageCatalog.js";
 import { PRODUCT_RANCH_GRID, PRODUCT_RANCH_LAYOUTS, LEGACY_PRODUCT_RANCH_GRID, normalizeProductRanchAccess, migrateProductRanch, validateProductRanch } from '../cage/productRanchGrid.js';
 
 export const CHAMPIONSHIP_MODERN_SAVE_KEY = "championshipModernSave:v1";
@@ -299,6 +300,36 @@ function restoreFixedRanchContents(save, previousLayout) {
   }
 }
 
+/** Residents of a royal cage moved onto its own map spawn afresh in it; food and droppings
+ * keep their instance and move to the nearest safe ground of the new map. */
+function rehomeRoyalCageContents(save, moved) {
+  const home = save.raising?.nativeHome;
+  if (!home) return;
+  const ids = new Set(moved.map((entry) => entry.instanceId));
+  const ground = composeProductRanchGround({...save.cageEdit, landCapacity:100});
+  const profiles = [save.creature, ...(save.raising.collection ?? [])];
+  for (const [id, owner] of Object.entries(home.cageAssignments ?? {})) {
+    if (!ids.has(owner)) continue;
+    for (const profile of profiles.filter(p => (p.creatureId ?? p.instanceId) === id && p.nativeProfile)) {
+      profile.nativeProfile = normalizeNativeIndividualProfile({...profile.nativeProfile,
+        fields:{...profile.nativeProfile.fields, '1c0':0, '1c4':0}}, profile.speciesId);
+    }
+  }
+  for (const item of [...(home.foods ?? []), ...(home.waste ?? [])]) {
+    if (!ids.has(item.cageInstanceId)) continue;
+    const target = ground.placement(item.cageInstanceId), origin = ground.origin(item.cageInstanceId);
+    const desired = [origin[0]+item.localPositionQ12[0]/4096, origin[1]+item.localPositionQ12[1]/4096];
+    let best = null;
+    for (let y=0; y<ground.height; y++) for (let x=0; x<ground.width; x++) {
+      if (ground.readTerrain(x,y)===1 || ground.readClearance(x,y)<2 || ground.cageAt(x*8,y*8)?.ownerIndex!==target.ownerIndex) continue;
+      const point=[x*8+4,y*8+4], distance=(point[0]-desired[0])**2+(point[1]-desired[1])**2;
+      if (!best || distance<best.distance) best={point,distance};
+    }
+    if (!best) throw saveError('RANCH_MIGRATION_NO_SAFE_GROUND');
+    item.localPositionQ12=[Math.round((best.point[0]-origin[0])*4096),Math.round((best.point[1]-origin[1])*4096),0];
+  }
+}
+
 function assertStableId(value, label) {
   if (typeof value !== "string" || !/^[a-z0-9:_-]{3,96}$/i.test(value)) {
     throw saveError(`INVALID_STABLE_ID: ${label}`);
@@ -440,11 +471,16 @@ export function createChampionshipModernSave({
     updatedAt
   };
 
+  // Owner 2026-11-03: royal cages placed as their base cage move onto their own maps.
+  if(save.cageEdit?.layoutVersion===PRODUCT_RANCH_GRID&&Object.keys(save.progression.cyberGacha?.editions??{}).length){
+    const migrated=migrateRoyalCagePlacements(save.cageEdit.placements,save.progression.cyberGacha.editions);
+    if(migrated.moved.length){save.cageEdit={...save.cageEdit,placements:migrated.placements};rehomeRoyalCageContents(save,migrated.moved);}
+  }
   if(save.cageEdit?.layoutVersion===PRODUCT_RANCH_GRID){
     const placedCounts=new Map();
     // DIAMOND_ECONOMY_20261102: a gachapon royal cage (bag or placed) is one more copy of its base cage.
     const royal=royalCopiesByDefinition(save.progression.cyberGacha);
-    for(const placement of cageEdit.placements){
+    for(const placement of save.cageEdit.placements){
       const definition=getCageDefinitionByModuleId(placement.moduleId);
       if(definition.alwaysOwned)continue;
       const count=(placedCounts.get(placement.moduleId)??0)+1;

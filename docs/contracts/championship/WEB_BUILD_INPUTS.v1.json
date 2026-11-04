@@ -180,12 +180,15 @@
     "src/championship/cage/cageEditRuntime.js",
     "src/championship/cage/cageEffects.js",
     "src/championship/cage/cageInventory.js",
+    "src/championship/cage/cageShapes.js",
     "src/championship/cage/nativeRanchLayout.js",
+    "src/championship/cage/productCageCatalog.js",
     "src/championship/cage/productRanchGrid.js",
     "src/championship/cage/ranchConnections.js",
     "src/championship/cage/ranchEcology.js",
     "src/championship/cage/ranchExpansion.js",
     "src/championship/cage/ranchSlotGeometry.js",
+    "src/championship/cage/royalCageMigration.js",
     "src/championship/config/socialLinksConfig.js",
     "src/championship/contracts/championshipContracts.js",
     "src/championship/contracts/evidenceAdapter.js",
@@ -796,6 +799,8 @@
     "assets/production/cage/three-20261021/field_cm37_01.glb",
     "assets/production/cage/three-20261021/field_cm39_01.glb",
     "assets/production/cage/three-20261021/field_cm40_01.glb",
+    "assets/production/cage/three-20261021/field_royal_ranch_01.glb",
+    "assets/production/cage/three-20261021/field_stellar_zoo_01.glb",
     "assets/production/cage/three-20261021/logical-stair-bridges.r1.json",
     "assets/production/cage/three-20261021/manifest.json",
     "assets/production/cage/three-20261021/physical-ground-tops.r2.json",
@@ -837,6 +842,8 @@
     "assets/production/cage/ui-three-20261102/frames/field_cm37_01.webp",
     "assets/production/cage/ui-three-20261102/frames/field_cm39_01.webp",
     "assets/production/cage/ui-three-20261102/frames/field_cm40_01.webp",
+    "assets/production/cage/ui-three-20261102/frames/field_royal_ranch_01.webp",
+    "assets/production/cage/ui-three-20261102/frames/field_stellar_zoo_01.webp",
     "assets/production/cage/ui-three-20261102/thumbnails/field_cm01_01.webp",
     "assets/production/cage/ui-three-20261102/thumbnails/field_cm02_01.webp",
     "assets/production/cage/ui-three-20261102/thumbnails/field_cm03_01.webp",
@@ -874,6 +881,8 @@
     "assets/production/cage/ui-three-20261102/thumbnails/field_cm37_01.webp",
     "assets/production/cage/ui-three-20261102/thumbnails/field_cm39_01.webp",
     "assets/production/cage/ui-three-20261102/thumbnails/field_cm40_01.webp",
+    "assets/production/cage/ui-three-20261102/thumbnails/field_royal_ranch_01.webp",
+    "assets/production/cage/ui-three-20261102/thumbnails/field_stellar_zoo_01.webp",
     "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/hud-r01/hud.render.json",
     "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/hud-r01/main-cell_000.webp",
     "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/hud-r01/sub-cell_001.webp",
@@ -8296,12 +8305,15 @@
     "src/championship/cage/cageEditRuntime.js",
     "src/championship/cage/cageEffects.js",
     "src/championship/cage/cageInventory.js",
+    "src/championship/cage/cageShapes.js",
     "src/championship/cage/nativeRanchLayout.js",
+    "src/championship/cage/productCageCatalog.js",
     "src/championship/cage/productRanchGrid.js",
     "src/championship/cage/ranchConnections.js",
     "src/championship/cage/ranchEcology.js",
     "src/championship/cage/ranchExpansion.js",
     "src/championship/cage/ranchSlotGeometry.js",
+    "src/championship/cage/royalCageMigration.js",
     "src/championship/config/socialLinksConfig.js",
     "src/championship/contracts/championshipContracts.js",
     "src/championship/contracts/evidenceAdapter.js",
@@ -9650,12 +9662,20 @@
         "sha256": "e559ace2fe0d01c3b4290fd138133de7ba2d2cd2143304c2e83e2471de0831d6"
       },
       {
+        "path": "assets/production/cage/three-20261021/field_royal_ranch_01.glb",
+        "sha256": "ca397b345b327dfd0899846510e17609b598f795ff8ddb553d4fef55fb2ee825"
+      },
+      {
+        "path": "assets/production/cage/three-20261021/field_stellar_zoo_01.glb",
+        "sha256": "97122836d8bd4b0365040943a6e62bb8663a2b965ad9179682cd2a4b1640382a"
+      },
+      {
         "path": "assets/production/cage/three-20261021/logical-stair-bridges.r1.json",
         "sha256": "f1b6df603c7b257d1e654b9d592901e6b18afecdc2415d5924c19a47ef9af49e"
       },
       {
         "path": "assets/production/cage/three-20261021/manifest.json",
-        "sha256": "8d3aa3efd3f9dbef4dcf4785ee493f7d8867ab860c10e3e3790348c95c6525a7"
+        "sha256": "92340fb78f42098535cf6cc38eb13efc59aa518467aa7ec9d078ab0dd96a2ba1"
       },
       {
         "path": "assets/production/cage/three-20261021/physical-ground-tops.r2.json",
@@ -9814,6 +9834,14 @@
         "sha256": "a313b10a7641afcda58abf9acadc7e98bafbedde8a029fbbcfc4efc55d287e2e"
       },
       {
+        "path": "assets/production/cage/ui-three-20261102/frames/field_royal_ranch_01.webp",
+        "sha256": "23b50b7f92a1cf866f12b8630baf8c11738d3e7163c841a4533baf6cf52a7b7b"
+      },
+      {
+        "path": "assets/production/cage/ui-three-20261102/frames/field_stellar_zoo_01.webp",
+        "sha256": "159c9e5c739419574c273d8d703e34750baafcbceff561976531fd0d01182c60"
+      },
+      {
         "path": "assets/production/cage/ui-three-20261102/thumbnails/field_cm01_01.webp",
         "sha256": "9e87a9c47d895fc0dc3e2a9c009ecce43c71037f7b02b7cbf23aa8f984d0d626"
       },
@@ -9960,6 +9988,14 @@
       {
         "path": "assets/production/cage/ui-three-20261102/thumbnails/field_cm40_01.webp",
         "sha256": "3b65005cf02b4d6946eb1c4e4335052e977bb0b9446c91c702fbe31f047fb41f"
+      },
+      {
+        "path": "assets/production/cage/ui-three-20261102/thumbnails/field_royal_ranch_01.webp",
+        "sha256": "4bfaeada3d797f5c99d0c884aba4d370377da9fe0f5b6745fc2d56b18d0f42f6"
+      },
+      {
+        "path": "assets/production/cage/ui-three-20261102/thumbnails/field_stellar_zoo_01.webp",
+        "sha256": "505b9d2d66aee3e40b844ddf01880487d66c2e4f539f048893ad9fcb924a51dd"
       },
       {
         "path": "assets/production/characters/accepted-20261010/e000_digitama-dot-intake-r01/hud-r01/hud.render.json",
@@ -37939,7 +37975,7 @@
       },
       {
         "path": "assets/production/PUBLIC_RUNTIME_INDEX.json",
-        "sha256": "c9019acb67700809f65eba672f5adcd4944934cb696ce8da62330a87d6fe4899"
+        "sha256": "638b1cc7e8eb449dc1ee06d000025973e595892217bbfe026d8ba0c21454b4f5"
       },
       {
         "path": "assets/production/public-media-clean-20261017/currency-hud-r1/bits-24.png",
@@ -37979,11 +38015,11 @@
       },
       {
         "path": "assets/production/public-runtime/cage-ui-three.v1.json",
-        "sha256": "fca02a2d009835cdaf63418e2b282af267b071fe308fa1fc42c626315fba1900"
+        "sha256": "18e29c070e79f41504ae71300fd11fdb36c891793af42622dc347f7e5fcfd727"
       },
       {
         "path": "assets/production/public-runtime/cage-ui.map.v1.json",
-        "sha256": "f3a94e03a38dd1392ca343c0b5f5b362d9658466434470e9451108a9a8ac3eda"
+        "sha256": "7a487b7c093bb850378ad7e87e586ec559da43322157a5560e18e2e1750daa65"
       },
       {
         "path": "assets/production/public-runtime/evolution-glyphs.v1.json",
@@ -38943,7 +38979,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "7cdd5dae55d20b2db42e5534234686a0ee4d496668890ad9d94c9da522bbb42b"
+        "sha256": "6045de73bfe0cca817e31f7eb3519b3a5f33df40c7ab23a06d5cec03947ad971"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -38951,7 +38987,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneSave.js",
-        "sha256": "798b838a72251d800b6feb989946e6a5feed1e6724bd5455a562ad55958b613a"
+        "sha256": "16ddc21be1570c51e87fb592635d5a5437ed25b9a8aeb660993f07494598b8c1"
       },
       {
         "path": "src/championship/app/championshipStatusBar.js",
@@ -39039,7 +39075,7 @@
       },
       {
         "path": "src/championship/app/hexWorldPassages.js",
-        "sha256": "08573fda3d1eda73015e2152f98e265961ba754a5222ad5b10ce57acb3bfa9cb"
+        "sha256": "95da8ad67115cb7a31ca6e36cf6f46f463ea937c07a86d6b402ff64af9205c17"
       },
       {
         "path": "src/championship/app/huntLayoutResolver.js",
@@ -39199,11 +39235,11 @@
       },
       {
         "path": "src/championship/app/raisingHomeP1RView.js",
-        "sha256": "8f8fe32f75054be405c672d7abf5da7b9ea1f41615d04bd92f344386b3d4e9cc"
+        "sha256": "931545c82ab65ec9bc1539d309230c2cf9b82fdb7421eef55b1163c8315d7fab"
       },
       {
         "path": "src/championship/app/raisingPresentationSource.js",
-        "sha256": "0c88fd5f7a5a045867a1f35da5e51f2c30f4e18870e3598405191002c653a979"
+        "sha256": "4736217d6aea4d5f5e104c39e814a5e48cfffb37fd9fa45f81ac3a44af3ebd13"
       },
       {
         "path": "src/championship/app/ranchBackpack.js",
@@ -39211,7 +39247,7 @@
       },
       {
         "path": "src/championship/app/ranchDiscoveryJournal.js",
-        "sha256": "3b60ced7ae739b0b0551788eba8708392581a87afc381ae754c9a5381badce03"
+        "sha256": "3ad0de21ed656d160cdd600e4e70925a028c52f8f859fb3cfc5b5b0457a64e60"
       },
       {
         "path": "src/championship/app/ranchExpansionPreview.js",
@@ -39399,7 +39435,7 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "b7e7ea4f19e2d8628022fff1fae46472f8b9397a71ad636c67dc7cc6e79696fa"
+        "sha256": "e8f149e69458ed82cb75a9dd6d6eb27ddba0a0f345e62b679b43e59b0ea6cdf9"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
@@ -39639,23 +39675,31 @@
       },
       {
         "path": "src/championship/cage/cageEditRuntime.js",
-        "sha256": "b650159b962bff60b9d49687750d84cfdff724c8f6b582ec1b9377af6f39a166"
+        "sha256": "0c0957663997dd11b56d407f6487d699dabea6c1b31f65c70f4f5f40cfe0f31a"
       },
       {
         "path": "src/championship/cage/cageEffects.js",
-        "sha256": "9409e9dd2ed72e3a0a9a32b8279ccd87fa009ac12053018ce68789ddf122a880"
+        "sha256": "770fcf6ac5662a36641a079bc2280274c4223cce3dae1a82e18bbc93ca4cb6b0"
       },
       {
         "path": "src/championship/cage/cageInventory.js",
-        "sha256": "ed77953bb30e102e691e934010afc626296bd158640d553804afe35f717f1085"
+        "sha256": "5ada9d8f0b0b4de405203055d520093466a2556525b3c90db88023a92be1131d"
+      },
+      {
+        "path": "src/championship/cage/cageShapes.js",
+        "sha256": "ad678ca9571615a697c82ec38804a834133f0393773006a528d33e7ac7689937"
       },
       {
         "path": "src/championship/cage/nativeRanchLayout.js",
         "sha256": "816f0a52801307872e76e228f5f0130c23ff6c7ad084a0e7f62b015a2f5e0454"
       },
       {
+        "path": "src/championship/cage/productCageCatalog.js",
+        "sha256": "86c9c62f236271db2f23aae256977c5d4d8017f7141d3ee81f86f32ee8d42044"
+      },
+      {
         "path": "src/championship/cage/productRanchGrid.js",
-        "sha256": "abadf12299bc7681b520612a0359b27bad996b28f8deb07971737321571002bf"
+        "sha256": "42c08966e705e8ef7bfc162a2875271c9156771d2e49d92489bdda4cccd346c8"
       },
       {
         "path": "src/championship/cage/ranchConnections.js",
@@ -39663,15 +39707,19 @@
       },
       {
         "path": "src/championship/cage/ranchEcology.js",
-        "sha256": "c55ce0d734ae45609964adcd012d67f2499db2ec6afe10e443bc590030478052"
+        "sha256": "2f8f87f25dd0e8f6b5580cbc03bd73b8491e9a6c73b746ec5113a6b884ed6c32"
       },
       {
         "path": "src/championship/cage/ranchExpansion.js",
-        "sha256": "29432451610ba8c898039eec69fa8deda15560ca3729f428f395058f20d0fa2e"
+        "sha256": "55bdbff3b93f7dbf6e5ddde678b3f5ba1cbdb16709d4394c3e406653e4e71ab0"
       },
       {
         "path": "src/championship/cage/ranchSlotGeometry.js",
         "sha256": "5507c4a39b0711f9662a911f817919dfef4c15e89838f9f63dbd4bc31248a6dd"
+      },
+      {
+        "path": "src/championship/cage/royalCageMigration.js",
+        "sha256": "a805beccb41104d75e48f56b24ec35c580d44de5f8d723307ec723ec098de74b"
       },
       {
         "path": "src/championship/config/socialLinksConfig.js",
@@ -39815,7 +39863,7 @@
       },
       {
         "path": "src/championship/gacha/ranchAutomation.js",
-        "sha256": "2276ae0e9fc045925706104dd5a9724961fe7e44fbb6d7bae2da0a02593d59cd"
+        "sha256": "06608ca277cb795829986e5f7c7e66b13e62b573da3247e439dfaf50b063997c"
       },
       {
         "path": "src/championship/gate/gateAdmission.js",
@@ -40195,7 +40243,7 @@
       },
       {
         "path": "src/championship/presentation/cageUiArt.js",
-        "sha256": "2ad062977ce858bcd3e3a6e681d134344520f8e316af4b6254f8431acfb9d7ab"
+        "sha256": "5203d9c5f56256b668f5a6a2259303f850a37dbdce10e495d97a07b2666d0ced"
       },
       {
         "path": "src/championship/presentation/ceremony/ceremonyAudio.js",
@@ -40435,11 +40483,11 @@
       },
       {
         "path": "src/championship/presentation/originalCageLocationArt.js",
-        "sha256": "ea4c3c7a0ef025a9dfa589ec3193ba349e5df821d0ab1332a1b97bcda20cc72f"
+        "sha256": "1b5448d1c0e6ec8c3cf334e5b3924d65929991657dfac49c8eece11e498c3d37"
       },
       {
         "path": "src/championship/presentation/originalCageVisualBindings.js",
-        "sha256": "ddee410ab9dd5bd64a8d5d2764c0f51a01a7456624fa015e03db68eb7a7cd3cd"
+        "sha256": "4e25111eb17e8a5a4927eface157638813622b6fcc00b2a5d05ba701c57968c0"
       },
       {
         "path": "src/championship/presentation/originalCaptureFrameArt.js",
@@ -40523,7 +40571,7 @@
       },
       {
         "path": "src/championship/presentation/raisingRanchArtPlan.js",
-        "sha256": "d15795b71eca38f05365ff2c26506902a291cb6e36560f946abc048ca90db262"
+        "sha256": "f424a1e716a4b2711d20fb6112e1dd60d1c366b3d8ae59cfc77757c204b72f8d"
       },
       {
         "path": "src/championship/presentation/ranchAutoCareProps.js",
@@ -40571,7 +40619,7 @@
       },
       {
         "path": "src/championship/presentation/ranchThreeScene.js",
-        "sha256": "02dc5c026e597e5eb85e14429cf6e4af3e70123ed59be09f57de44b01124010d"
+        "sha256": "3366e616b3e74f1484bdb298a8d1d2d8d9f022682ec6487e6dbffbe90fc72b7c"
       },
       {
         "path": "src/championship/presentation/ranchWaterfalls.js",
@@ -40891,7 +40939,7 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingRanchRing.js",
-        "sha256": "e9799d0a8887a9b18147608adde6e17525e84c7ea910f9890865d52ffb9e50c5"
+        "sha256": "a14fe2284727825b74c4a103f1ede965eb0ded7c8ebe9608f55ccfc8bb9f7ff2"
       },
       {
         "path": "src/championship/raising/nativeRaisingRecoveryStars.js",
@@ -41027,19 +41075,19 @@
       },
       {
         "path": "src/championship/text/gameText.en.js",
-        "sha256": "67b96781488a92919383ff036c96c66493aac014ae922a775e1dea634f38e5e0"
+        "sha256": "f0b732b12ae8bb858d080ba92ee4f53a09da02bed4183162f5f4a612baed0bf8"
       },
       {
         "path": "src/championship/text/gameText.ja.js",
-        "sha256": "58997ea9a2a9f6baaadd9018b9f68b5ef0f6b8ff0c411bf01722d72741f23531"
+        "sha256": "1cc3d16594f29c6987fb2620913acce0f462276654ddc6948c932798cb5e5370"
       },
       {
         "path": "src/championship/text/gameText.th.js",
-        "sha256": "85cfb38cce87fa70aebc90e434b447e5702e12e1c4ff59da3ecd7ada3474a9be"
+        "sha256": "e1e3b6d9db57152cf560714a2ceb60ae6a1a23db3a34e83cf0bacb7eb9f8532e"
       },
       {
         "path": "src/championship/text/gameText.vi.js",
-        "sha256": "da0e7abd4a42a4841d552859fa7b0ded6e452114d0019a9180765e19b4a3f10e"
+        "sha256": "6bc868f3b224941883d0ecd85acbd81a1ca1751d03ac31e47df41984ea9dc411"
       },
       {
         "path": "src/championship/text/growthStageTerms.js",
@@ -41163,7 +41211,7 @@
       },
       {
         "path": "src/championship/text/zhHant.js",
-        "sha256": "3f1de2ae6ec185fd48d367c9b7a4d775b56fcdc947de2d14e333fccb1a667788"
+        "sha256": "a308e819e9de41d6faf54f01dd3746ffb05f10b89a88ce942a62ae3492149e36"
       },
       {
         "path": "src/championship/time/championshipWorldClock.js",
@@ -41323,7 +41371,7 @@
       },
       {
         "path": "src/data/championship/catalogs/ranch-three-ground.r1.json",
-        "sha256": "c062cea37b0609e81ae3a9122bf3dcdd4cefffe890ce24f3002f83b65db83167"
+        "sha256": "454adb428227d8fa2e94488b0c63e749215375c4900f3760f8fa6ca25809df02"
       },
       {
         "path": "src/data/championship/catalogs/rng-channels.r1.json",

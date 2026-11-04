@@ -9,9 +9,10 @@
 // History: PRODUCT_GRID50_V1 (2026-10-15) → PRODUCT_GRID100_INSTANCES_V1
 // (2026-10-19, a wrapping 10×10 board) → PRODUCT_HEX_WORLD_V1 (this file).
 // Older layouts migrate forward; the 10×10 geometry below is kept only for that.
-import { getCageDefinitionByModuleId } from './cageCatalog.js';
-import { ORIGINAL_CAGE_DEFINITION_SHAPES, ORIGINAL_CAGE_SHAPE_MASKS } from './ranchSlotGeometry.js';
+import { getCageDefinitionByModuleId } from './productCageCatalog.js';
+import { ORIGINAL_CAGE_SHAPE_MASKS } from './ranchSlotGeometry.js';
 import { NATIVE_RANCH_LAYOUT, WAITING_ROOM_MODULE, validateNativeRanch } from './nativeRanchLayout.js';
+import { cageDefinitionShape } from './cageShapes.js';
 
 export const LEGACY_PRODUCT_RANCH_GRID = 'PRODUCT_GRID50_V1';
 export const LEGACY_PRODUCT_RANCH_GRID100 = 'PRODUCT_GRID100_INSTANCES_V1';
@@ -55,7 +56,7 @@ function footprint(entry, cellOf, slotOf, inRange) {
   if (!definition || !inRange(entry.slotIndex)) return null;
   const anchor = cellOf(entry.slotIndex);
   if (entry.rotation !== undefined && entry.rotation !== 0) return null;
-  const shape = ORIGINAL_CAGE_SHAPE_MASKS[ORIGINAL_CAGE_DEFINITION_SHAPES[definition.cageDefinitionIndex]];
+  const shape = ORIGINAL_CAGE_SHAPE_MASKS[cageDefinitionShape(definition.cageDefinitionIndex)];
   const cells = [];
   for (let bit = 0; bit < 8; bit++) if (shape & (1 << bit)) {
     const dr = bit % 2;
@@ -298,7 +299,7 @@ function legacyRotationCells(entry) {
   const definition = getCageDefinitionByModuleId(entry?.moduleId);
   if (!definition || entry.moduleId === WAITING_ROOM_MODULE ||
       !Number.isSafeInteger(entry.slotIndex) || entry.slotIndex < 0 || entry.slotIndex >= 100) return null;
-  const mask = ORIGINAL_CAGE_SHAPE_MASKS[ORIGINAL_CAGE_DEFINITION_SHAPES[definition.cageDefinitionIndex]];
+  const mask = ORIGINAL_CAGE_SHAPE_MASKS[cageDefinitionShape(definition.cageDefinitionIndex)];
   const source = [];
   for (let bit = 0; bit < 8; bit++) if (mask & (1 << bit)) source.push([Math.floor(bit / 2), bit % 2]);
   const [pq, pr] = source[0], anchor = legacyGrid100Cell(entry.slotIndex);
@@ -358,7 +359,7 @@ export function migrateToLegacyGrid100(snapshot, mainUnlocked = 20) {
   if (!validateNativeRanch(snapshot.placements.filter(p=>p.slotIndex < 20), mainUnlocked)) throw new Error('INVALID_PRODUCT_RANCH_MIGRATION');
   for (const p of snapshot.placements.filter(p=>p.slotIndex >= 20)) {
     const definition = getCageDefinitionByModuleId(p.moduleId);
-    const shape = ORIGINAL_CAGE_SHAPE_MASKS[ORIGINAL_CAGE_DEFINITION_SHAPES[definition.cageDefinitionIndex]];
+    const shape = ORIGINAL_CAGE_SHAPE_MASKS[cageDefinitionShape(definition.cageDefinitionIndex)];
     if (!expanded || p.slotIndex >= 20 + annexCount || ((shape & 0xaa) && (p.slotIndex & 1)) ||
       legacyGrid100PlacementCells(p).some(slot=>slot < 20 || slot >= 20 + annexCount)) throw new Error('INVALID_PRODUCT_RANCH_MIGRATION');
   }

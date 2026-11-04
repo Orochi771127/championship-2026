@@ -58,3 +58,16 @@ export const ORIGINAL_CAGE_UNREFERENCED_VISUAL_ASSETS = deepFreeze([
 export function getOriginalCageVisualBinding(cageDefinitionIndex) {
   return ORIGINAL_CAGE_DEFINITION_VISUAL_BINDINGS[cageDefinitionIndex] ?? null;
 }
+
+// OWNER_APPROVED_ADAPTATION 2026-11-03: the gachapon's royal cages (cageCatalog.js
+// listGachaCageDefinitions) draw their own maps, kept apart from the ROM table above.
+export const GACHA_CAGE_VISUAL_BINDINGS = deepFreeze([
+  { cageDefinitionIndex: 36, fieldId: "field_royal_ranch_01", role: "GACHA_CAGE", evidence: "OWNER_APPROVED_ADAPTATION_20261103" },
+  { cageDefinitionIndex: 37, fieldId: "field_stellar_zoo_01", role: "GACHA_CAGE", evidence: "OWNER_APPROVED_ADAPTATION_20261103" }
+]);
+
+/** The map a cage definition draws: the original binding, else a gachapon cage's own. */
+export function getCageVisualBinding(cageDefinitionIndex) {
+  return getOriginalCageVisualBinding(cageDefinitionIndex)
+    ?? GACHA_CAGE_VISUAL_BINDINGS.find((entry) => entry.cageDefinitionIndex === cageDefinitionIndex) ?? null;
+}

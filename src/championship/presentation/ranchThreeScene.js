@@ -17,7 +17,7 @@ import { ranchSharedBoundaries } from '../cage/ranchConnections.js';
 import { ranchBorderWithinSharedSegments } from './ranchBorderMembership.js';
 import { enhanceCageObject } from './cageHd2dEnhancer.js';
 import { loadCageGroundMaps, installCageGroundMap, cageGroundWaterEdges } from './cageGroundMap.js';
-import { getCageDefinitionByModuleId } from '../cage/cageCatalog.js';
+import { getCageDefinitionByModuleId } from '../cage/productCageCatalog.js';
 import { createRanchAutoCareProps } from './ranchAutoCareProps.js';
 
 const MANIFEST = 'assets/production/cage/three-20261021/manifest.json';
@@ -635,6 +635,28 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
             const beacon=new THREE.Mesh(beaconGeo,beaconMat);
             beacon.position.set(chimX,chimY+0.12,chimZ);
             object.add(beacon);dynamicBeacons.push(beacon);
+          }
+          // Owner 2026-11-03: the gachapon royal maps move beyond their GLB loop -- spray off the
+          // royal fountain's top jet, and starlight rising out of the stellar nebula pool.
+          if(p.fieldId==='field_royal_ranch_01'){
+            const c=ranchNativeToWorld(120,100);
+            const spray=pt=>{const a=Math.random()*Math.PI*2,s=0.18+Math.random()*0.22;
+              pt.x=c.x;pt.y=1.92;pt.z=c.z;pt.vx=Math.cos(a)*s;pt.vz=Math.sin(a)*s;pt.vy=0.35+Math.random()*0.35;};
+            const ps=createParticleSystem({count:24,color:0xe2f6ff,size:0.08,opacity:0.85,
+              initParticle:i=>{const pt={};spray(pt);pt.y-=(i/24)*0.5;return pt;},
+              updateParticle:(pt,dt)=>{pt.x+=pt.vx*dt;pt.y+=pt.vy*dt;pt.z+=pt.vz*dt;pt.vy-=2.2*dt;if(pt.y<1.42)spray(pt);}
+            });
+            object.add(ps.points);dynamicParticles.push(ps);
+          }
+          if(p.fieldId==='field_stellar_zoo_01'){
+            const c=ranchNativeToWorld(120,100);
+            const rise=pt=>{const a=Math.random()*Math.PI*2,r=Math.sqrt(Math.random())*1.25;
+              pt.x=c.x+Math.cos(a)*r;pt.z=c.z+Math.sin(a)*r;pt.y=0.14;pt.life=1.6+Math.random()*1.4;};
+            const ps=createParticleSystem({count:26,color:0xcdb4ff,size:0.1,opacity:0.8,
+              initParticle:i=>{const pt={seed:i*1.7};rise(pt);pt.y+=(i/26)*1.2;return pt;},
+              updateParticle:(pt,dt,t)=>{pt.y+=0.42*dt;pt.x+=Math.sin(t*1.3+pt.seed)*0.06*dt;pt.life-=dt;if(pt.life<=0||pt.y>1.8)rise(pt);}
+            });
+            object.add(ps.points);dynamicParticles.push(ps);
           }
         }
 
