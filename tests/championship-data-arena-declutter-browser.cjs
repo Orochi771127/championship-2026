@@ -35,7 +35,11 @@ const boxesInField = (field) => [...document.querySelectorAll('.da-root *')].fil
   const page = await context.newPage();
   page.on('pageerror', (error) => report.errors.push(error.stack));
   page.on('console', (message) => { if (message.type() === 'error') report.errors.push(message.text()); });
-  const save = fs.readFileSync(path.join(__dirname, '../qa/championship-full-qa-save.json'), 'utf8');
+  const rawSave = JSON.parse(fs.readFileSync(path.join(__dirname, '../qa/championship-full-qa-save.json'), 'utf8'));
+  if (Array.isArray(rawSave.progression?.registeredSpecies)) {
+    rawSave.progression.registeredSpecies = rawSave.progression.registeredSpecies.filter((n) => n !== 107 && n !== 108);
+  }
+  const save = JSON.stringify(rawSave);
   await context.addInitScript(({ origin, save }) => { if (location.origin === origin && !localStorage.getItem('declutterQaSeeded')) { localStorage.setItem('championshipModernSave:v1', save); localStorage.setItem('declutterQaSeeded', '1'); } }, { origin, save });
   const shot = async (name) => { await page.screenshot({ path: path.join(output, `${name}.png`) }); };
   try {
@@ -67,7 +71,7 @@ const boxesInField = (field) => [...document.querySelectorAll('.da-root *')].fil
     check('touch kit chips name the wheel discs', select.keys.includes('技 1') && select.keys.includes('終極技'), select.keys);
     check('three mode cartridges share one row', select.modes.every((m) => Math.abs(m.top - select.modes[0].top) < 1) && select.modes[0].height < 110, select.modes);
     check('the head clears a 47px notch', select.title.top >= 47 && select.head.top <= 0.5, select.title);
-    check('relay shows seat 1 and seat 2 with entry tags', select.seats.join() === 'first,reserve' && select.entries.length === 2, select);
+    check('relay shows seat 1, seat 2 and seat 3 with entry tags', select.seats.join() === 'first,reserve,third' && select.entries.length === 3, select);
     check('the dock carries the pair resonance strip', select.resonance);
     check('no horizontal page scroll', select.scroll === 390, select.scroll);
     await shot('01-select-relay-dock');
@@ -130,7 +134,7 @@ const boxesInField = (field) => [...document.querySelectorAll('.da-root *')].fil
     check('top bar and rival strip end within 105px', hud.boss.bottom <= 105 && hud.top.bottom <= hud.boss.top, hud);
     check('the rival strip is a slim 26px bar', Math.round(hud.boss.height) === 26, hud.boss);
     check('the tactical line sits above the field band', hud.tactical.bottom <= FIELD.top, hud.tactical);
-    check('seat 1 / 2 mini tags and resonance live in the top bar', hud.mini === 2 && hud.resonanceInBar, hud);
+    check('seat 1 / 2 / 3 mini tags and resonance live in the top bar', hud.mini === 3 && hud.resonanceInBar, hud);
     await shot('04-battle-clear-field');
 
     // Worst-case burst through the probe, then natural play with the attack held.

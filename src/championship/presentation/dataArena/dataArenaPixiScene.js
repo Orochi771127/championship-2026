@@ -28,6 +28,7 @@ import { RELAY_ACTION_PROFILES, relaySequence, relayEffectStyle } from '../../mo
 import { RELAY_ROSTER, relayPartner } from '../../modes/dataArena/dataArenaRelayRoster.js';
 import { createBattleBurstShell } from '../vs5/battleBurstShell.js';
 import { GACHA_BLOODLINES } from '../../gacha/cyberGacha.js';
+import { arenaText as t } from '../../text/dataArenaText.js';
 // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): the hex shell closes over the 成熟期 for this long before
 // its form stands in; then the plates scatter. The match itself never pauses.
 const ARENA_BURST_REVEAL_SECONDS = 0.6, ARENA_BURST_SCATTER_SECONDS = 0.5, ARENA_BURST_SHATTER_SECONDS = 0.4;
@@ -419,7 +420,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         container.position.set(x, y - floorOffset(x,y));
         container.zIndex = y;
         // Relay hit-stop: hold the drawn frame and pose; the simulation keeps stepping.
-        if (hitStop > 0) { sprite.tint = flash > 0 ? 0xff7a7a : 0xffffff; return; }
+        if (hitStop > 0) { sprite.tint = flash > 0.14 ? 0xffffff : flash > 0 ? 0xff7a7a : 0xffffff; return; }
         const event = actionEvents.get(body.id);
         if (body.hp <= 0) { action.clear(); actionEvents.delete(body.id); }
         else if (event && (event.type === 'CAST_RELEASE' || body.cast?.actionId === event.actionId)) action.observe(event);
@@ -474,15 +475,19 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         if(currentPlacement){sprite.x+=(facing>0?-1:1)*currentPlacement.offset[0]*cellScale;sprite.y+=currentPlacement.offset[1]*cellScale;}
         // Stage four: a staggered fighter shudders for its hitstun.
         if (body.hitstun > 0 && !reducedMotion) sprite.x += Math.sin(elapsed * 90) * 2.5;
+        if (Math.hypot(body.kbx ?? 0, body.kby ?? 0) > 80 && !reducedMotion && frameCount % 2 === 0) puff(x, y, 0xc8b89a, 1, 0.7);
         if (motion && relayProfile && !reducedMotion) {
           const a = body.action;
           // No action in progress means no lunge; a null action used to throw here and stop the HUD.
           const pulse = !a ? 0 : a.releasedAt === null ? Math.min(1, (state.time - a.startedAt) / a.windup) : Math.max(0, 1 - (state.time - a.releasedAt) / a.recovery);
           sprite.x += (facing > 0 ? 1 : -1) * relayProfile.thrust * pulse;
           sprite.y -= relayProfile.lift * pulse;
+          if (a && a.releasedAt === null) { sprite.scale.x *= 1 - 0.07 * pulse; sprite.scale.y *= 1 + 0.08 * pulse; }
+          else if (a && state.time - a.releasedAt < 0.12) { sprite.scale.x *= 1.12; sprite.scale.y *= 0.89; }
         }
+        if (flash > 0.1 && !reducedMotion) { sprite.scale.x *= 1.1; sprite.scale.y *= 0.9; }
         sprite.alpha = alpha;
-        sprite.tint = flash > 0 ? 0xff7a7a : 0xffffff;
+        sprite.tint = flash > 0.14 ? 0xffffff : flash > 0 ? 0xff7a7a : 0xffffff;
         shadow.alpha = (0.75 - sink * 0.6) * (lift > 0 ? 0.6 : 1);
       },
       diagnostics: () => ({ sequenceId: sequence, frameIndex: controller?.getSnapshot().sourceFrameIndex ?? null,
@@ -580,6 +585,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     // The texture's core is drawn at the collision radius (wave: its half height).
     const coreRadius = relayStyle ? 18 : projectile.kind === "SHARD" ? 13 : projectile.kind === "ORB" ? 10 : projectile.kind === "WAVE" ? 22 : 9;
     entry.sprite.scale.set(projectile.radius / coreRadius);
+    entry.sprite.blendMode = relayStyle || projectile.kind === "PBOLT" || projectile.kind === "EMBER" || projectile.kind === "TIDE" ? "add" : "normal";
     entry.sprite.anchor.set(!relayStyle && projectile.kind === "PBOLT" ? 32 / 48 : 0.5, 0.5);
     entry.sprite.tint = relayStyle?.tint ?? (projectile.kind === "PBOLT" ? MOVE_TINT[projectile.moveId] ?? 0xffffff : 0xffffff);
     entry.glow.tint = relayStyle?.tint ?? (projectile.kind === "PBOLT" ? MOVE_TINT[projectile.moveId] ?? 0xffffff : SHOT_TINT[projectile.kind] ?? 0xffffff);
@@ -589,6 +595,16 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     entry.glow.visible = rich;
     shots.addChild(entry.sprite); shotGlow.addChild(entry.glow); shotGlow.addChildAt(entry.shadow, 0);
     entry.origin = releaseOrigins.get(projectile.actionId) ?? null; entry.from = null;
+    if (state.gameMode === 'RELAY' && projectile.moveId && elementFx?.projectile) {
+      const ownerSpecies = projectile.owner === 'player' ? state.player.speciesId
+        : (state.rivals.find(r => r.active && r.hp > 0) ?? state.rivals[0])?.speciesId ?? null;
+      elementFx.projectile({
+        follow: () => (!projectile.dead && state.projectiles.includes(projectile) ? { x: projectile.x, y: projectile.y - 12 } : null),
+        moveId: projectile.moveId,
+        speciesId: ownerSpecies,
+        angle: Math.atan2(projectile.vy, projectile.vx),
+      });
+    }
     shotViews.set(projectile.id, entry);
     return entry;
   }
@@ -819,27 +835,50 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (broken) { puff(event.x, event.y - 10, tint, 4, 1.4); camera.addTrauma(0.32); }
     else camera.addTrauma(event.weak ? 0.12 : 0.05);
   }
-  const zoneGfx = new PIXI.Graphics(); zoneGfx.label = "arena relay zones";
+  const zoneGfx = new PIXI.Graphics(); zoneGfx.label = "arena relay zones"; zoneGfx.blendMode = "add";
   cellFx.addChild(zoneGfx);
   function drawArenaZones() {
     const arena = state.relay?.arena;
     zoneGfx.clear();
-    if (!arena?.kind || arena.phase === 'DORMANT') return;
-    const tint = ZONE_TINT[arena.kind] ?? 0xffffff, active = arena.phase === 'ACTIVE';
-    const pulse = reducedMotion ? 0.7 : 0.55 + 0.35 * Math.sin(elapsed * (active ? 5 : 9));
-    for (const zone of arena.zones) {
-      if (active) zoneGfx.circle(zone.x, zone.y, zone.radius).fill({ color: tint, alpha: 0.16 + 0.08 * pulse });
-      zoneGfx.circle(zone.x, zone.y, zone.radius).stroke({ color: tint, width: active ? 4 : 2, alpha: active ? 0.85 : pulse });
-      if (!active) zoneGfx.circle(zone.x, zone.y, zone.radius * (1 - (arena.remaining % 1))).stroke({ color: tint, width: 1.5, alpha: 0.5 });
+    if (!arena) return;
+    if (arena.kind && arena.phase !== 'DORMANT') {
+      const tint = ZONE_TINT[arena.kind] ?? 0xffffff, active = arena.phase === 'ACTIVE';
+      const pulse = reducedMotion ? 0.7 : 0.55 + 0.35 * Math.sin(elapsed * (active ? 5 : 9));
+      for (const zone of arena.zones) {
+        if (active) {
+          zoneGfx.circle(zone.x, zone.y, zone.radius).fill({ color: tint, alpha: 0.14 + 0.08 * pulse });
+          zoneGfx.circle(zone.x, zone.y, zone.radius * 0.72).stroke({ color: 0xffffff, width: 1.8, alpha: 0.45 * pulse });
+        }
+        zoneGfx.circle(zone.x, zone.y, zone.radius).stroke({ color: tint, width: active ? 3.5 : 2, alpha: active ? 0.88 : pulse });
+        for (let i = 0; i < 6; i++) {
+          const a0 = elapsed * (active ? 1.4 : 0.7) + (i * TAU) / 6;
+          zoneGfx.arc(zone.x, zone.y, zone.radius - 6, a0, a0 + 0.28).stroke({ color: 0xffffff, width: 2.5, alpha: active ? 0.75 : 0.4 });
+        }
+        if (!active) zoneGfx.circle(zone.x, zone.y, zone.radius * (1 - (arena.remaining % 1))).stroke({ color: tint, width: 1.5, alpha: 0.5 });
+      }
+      const channel = arena.channel?.[0] ?? 0;
+      if (active && channel > 0) {
+        const zone = arena.zones.find(z => Math.hypot(state.player.x - z.x, state.player.y - z.y) <= z.radius);
+        if (zone) zoneGfx.arc(zone.x, zone.y, zone.radius + 8, -Math.PI / 2, -Math.PI / 2 + TAU * channel / 0.7).stroke({ color: 0xffffff, width: 4, alpha: 0.9 });
+      }
+      if (active && !reducedMotion && rich && Math.floor(elapsed * 8) !== Math.floor((elapsed - 1 / 60) * 8))
+        for (const zone of arena.zones) spawn({ x: zone.x + (Math.random() - 0.5) * zone.radius, y: zone.y + (Math.random() - 0.3) * zone.radius * 0.6, vy: -50, texture: textures.glow, tint, scale: 0.18, scaleTo: 0.05, life: 0.6, alpha: 0.7 });
     }
-    // The player's claim fills an arc around the zone it stands in.
-    const channel = arena.channel?.[0] ?? 0;
-    if (active && channel > 0) {
-      const zone = arena.zones.find(z => Math.hypot(state.player.x - z.x, state.player.y - z.y) <= z.radius);
-      if (zone) zoneGfx.arc(zone.x, zone.y, zone.radius + 8, -Math.PI / 2, -Math.PI / 2 + TAU * channel / 0.7).stroke({ color: 0xffffff, width: 4, alpha: 0.9 });
+    const sc = arena.superCore;
+    if (sc && sc.phase !== 'DORMANT') {
+      const active = sc.phase === 'ACTIVE';
+      const pulse = reducedMotion ? 0.8 : 0.6 + 0.35 * Math.sin(elapsed * 7);
+      zoneGfx.circle(sc.x, sc.y, sc.radius).fill({ color: 0xffe066, alpha: active ? 0.18 + 0.08 * pulse : 0.08 });
+      zoneGfx.circle(sc.x, sc.y, sc.radius).stroke({ color: 0xffe066, width: active ? 4 : 2.5, alpha: active ? 0.95 : 0.65 });
+      zoneGfx.circle(sc.x, sc.y, sc.radius * 0.66).stroke({ color: 0x6ff7ff, width: 2.5, alpha: 0.8 * pulse });
+      for (let i = 0; i < 8; i++) {
+        const a0 = -elapsed * 1.8 + (i * TAU) / 8;
+        zoneGfx.arc(sc.x, sc.y, sc.radius - 7, a0, a0 + 0.25).stroke({ color: 0xffffff, width: 3, alpha: 0.85 });
+      }
+      if ((sc.channel?.[0] ?? 0) > 0) {
+        zoneGfx.arc(sc.x, sc.y, sc.radius + 10, -Math.PI / 2, -Math.PI / 2 + TAU * (sc.channel[0] / 0.65)).stroke({ color: 0xffffff, width: 5, alpha: 0.95 });
+      }
     }
-    if (active && !reducedMotion && rich && Math.floor(elapsed * 8) !== Math.floor((elapsed - 1 / 60) * 8))
-      for (const zone of arena.zones) spawn({ x: zone.x + (Math.random() - 0.5) * zone.radius, y: zone.y + (Math.random() - 0.3) * zone.radius * 0.6, vy: -50, texture: textures.glow, tint, scale: 0.18, scaleTo: 0.05, life: 0.6, alpha: 0.7 });
   }
   const tethers = new Map();
   const tetherGfx = new PIXI.Graphics(); tetherGfx.blendMode = "add";
@@ -961,9 +1000,58 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             if(fx.tether&&!reducedMotion)tethers.set(event.actionId,{x,y,born:elapsed,tint:fx.tint});
           } else if(event.team==='player')spawn({x:event.x+Math.cos(event.angle)*26,y:event.y-BEAM_ELEVATION+Math.sin(event.angle)*26,texture:textures.glow,tint:0x6ff7ff,scale:.45,scaleTo:.1,life:.14});break;
         }
-        case "ULT_CAST": ring(event.x, event.y, 160, event.team === "player" ? 0xffe066 : 0xff3b5c, 0.5); camera.addTrauma(0.25); crowdReact("CHEER", event.x, 1.2);
+        case "ULT_CAST": ring(event.x, event.y, 160, event.team === "player" ? 0xffe066 : 0xff3b5c, 0.5); camera.addTrauma(0.25); camera.focusBoost?.(1.22, 0.5); crowdReact("CHEER", event.x, 1.2);
           // The caster's charge ring closes in on its feet as the cut-in plays (2026-10-28).
           spawn({ x: event.x, y: event.y, texture: textures.ring, tint: event.team === "player" ? 0x5ff3ff : 0xb18cff, scale: 1.6, scaleTo: 0.15, life: 0.42, alpha: 0.9 });
+          break;
+        case "RELAY_TAG_BURST": {
+          const fx = relayLook(state.player.kit?.moves?.[0] ?? 'waterShot', 'player');
+          const tint = event.perfect ? 0xffe066 : fx.tint;
+          afterimage(event.x - (state.player.facing || 1) * 44, event.y, state.player.facing);
+          afterimage(event.x - (state.player.facing || 1) * 22, event.y, state.player.facing);
+          for (let i = 0; i < 3; i++) ring(event.x, event.y - 12, (event.radius ?? 135) * (0.55 + i * 0.22), tint, 0.36 + i * 0.08);
+          burst(event.x, event.y - 16, { count: event.perfect ? 22 : 14, speed: event.perfect ? 340 : 250, tint, life: 0.48 });
+          elementFx?.hit({ x: event.x, y: event.y - 20, groundY: event.y, moveId: state.player.kit?.moves?.[0] ?? 'waterShot', speciesId: state.player.speciesId, heavy: true });
+          camera.focusBoost?.(event.perfect ? 1.22 : 1.14, 0.38);
+          camera.addTrauma(event.perfect ? 0.42 : 0.25);
+          hitStop = Math.max(hitStop, reducedMotion ? 0 : event.perfect ? 0.075 : 0.045);
+          floatText(event.x, event.y - 64, event.perfect ? t("relay.perfectSwitchShort") : t("relay.tagShockwave"), "crit");
+          break;
+        }
+        case "RELAY_PERFECT_SWITCH":
+          ring(event.x, event.y - 24, 96, 0xffe066, 0.4);
+          floatText(event.x, event.y - 84, "+25 TP", "dodge");
+          break;
+        case "TRI_LINK_RUSH":
+          camera.focusBoost?.(1.25, 0.55);
+          camera.addTrauma(0.55);
+          hitStop = Math.max(hitStop, reducedMotion ? 0 : 0.085);
+          for (let i = 0; i < 4; i++) ring(event.x, event.y - 20, 110 + i * 55, [0xffe066, 0x6ff7ff, 0xff6ad5, 0x8dffb0][i % 4], 0.45 + i * 0.1);
+          burst(event.x, event.y - 24, { count: 32, speed: 380, tint: 0xffe066, texture: textures.shard, scale: 1.8, life: 0.7 });
+          if (elementFx) {
+            const rect = view ? { x: view.centerX - view.halfW, y: view.centerY - view.halfH, width: view.halfW * 2, height: view.halfH * 2 } : { x: 0, y: 0, width: worldWidth, height: worldHeight };
+            elementFx.ult({ moveId: state.player.kit?.ultimate ?? 'coreNova', speciesId: state.player.speciesId, rect, center: { x: event.x, y: event.y - 24 } });
+          }
+          floatText(event.x, event.y - 72, t("relay.triLinkShort"), "crit");
+          break;
+        case "SUPER_CORE_WARNING":
+        case "SUPER_CORE_ACTIVE":
+          ring(event.x, event.y, (event.radius ?? 68) * 1.35, 0xffe066, 0.5);
+          if (event.type === "SUPER_CORE_ACTIVE") floatText(event.x, event.y - 54, t("arena.SUPER_CORE.short"), "crit");
+          break;
+        case "RIVAL_KO":
+          camera.focusBoost?.(1.22, 0.48);
+          camera.addTrauma(0.5);
+          hitStop = Math.max(hitStop, reducedMotion ? 0 : 0.08);
+          for (let i = 0; i < 3; i++) ring(event.x, event.y - 20, 75 + i * 40, i % 2 ? 0xffffff : 0xffd34d, 0.42 + i * 0.1);
+          burst(event.x, event.y - 24, { count: 24, speed: 340, tint: 0xffd34d, texture: textures.shard, scale: 1.7, gravity: 280, life: 0.75 });
+          floatText(event.x, event.y - 66, t("relay.ko"), "crit");
+          break;
+        case "BURST":
+          camera.focusBoost?.(1.22, 0.48);
+          hitStop = Math.max(hitStop, reducedMotion ? 0 : 0.065);
+          ring(event.x, event.y - 24, 130, 0xffe066, 0.48);
+          burst(event.x, event.y - 24, { count: 22, speed: 320, tint: 0xffe066, life: 0.55 });
           break;
         case "NOVA": for (let i = 0; i < 3; i++) ring(event.x, event.y, event.radius * (0.6 + i * 0.25), state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xc8f4ff : event.effect === "SLOW" ? 0x5fd8c8 : 0xff8a3c, 0.4 + i * 0.12);
           burst(event.x, event.y - 20, { count: 24, speed: 380, tint: state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xd8f6ff : 0xffb070, texture: textures.shard, scale: 1.8, gravity: 200, life: 0.7 }); camera.addTrauma(0.5);
@@ -1251,12 +1339,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       else entry.sprite.rotation = elapsed * 4;
       const tether = tethers.get(projectile.actionId);
       if (tether && elapsed - tether.born < 0.45) {
-        // Beam styles stay joined to the caster's hand for a moment, rippling as they fade.
+        // Dual-layer additive neon beam + high-frequency sine-wave white core.
         const fade = 1 - (elapsed - tether.born) / 0.45, dx = projectile.x - tether.x, dy = projectile.y - lift - tether.y;
         const len = Math.hypot(dx, dy) || 1, nx = -dy / len, ny = dx / len;
-        const points = Array.from({ length: 9 }, (_, i) => { const t = i / 8, wave = Math.sin(i * 1.9 + elapsed * 40) * 3 * Math.sin(t * Math.PI);
+        const points = Array.from({ length: 13 }, (_, i) => { const t = i / 12, wave = Math.sin(i * 2.3 - elapsed * 52) * 4.5 * Math.sin(t * Math.PI);
           return [tether.x + dx * t + nx * wave, tether.y + dy * t + ny * wave]; });
-        for (const [width, color, alpha] of [[9, tether.tint, 0.45 * fade], [3, 0xffffff, 0.8 * fade]]) {
+        for (const [width, color, alpha] of [[14, tether.tint, 0.35 * fade], [7, tether.tint, 0.65 * fade], [3.2, 0xffffff, 0.95 * fade]]) {
           tetherGfx.moveTo(...points[0]); for (const point of points.slice(1)) tetherGfx.lineTo(...point);
           tetherGfx.stroke({ width, color, alpha, cap: 'round', join: 'round' });
         }
@@ -1344,33 +1432,40 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
 
   function drawMarks() {
     const g = marks;
+    g.blendMode = "add";
     g.clear();
-    // Telegraphs: fill grows with progress so the timing reads at a glance.
+    // Telegraphs: dual-layer additive energy arrays with rotating rune ticks.
     for (const t of state.telegraphs) {
       const p = clamp(t.t / t.duration, 0, 1);
       const mine = t.team === "player";
       if (t.kind === "LINE" && mine) {
         const ex = t.x + Math.cos(t.angle) * t.length, ey = t.y + Math.sin(t.angle) * t.length;
-        g.moveTo(t.x, t.y).lineTo(ex, ey).stroke({ width: Math.max(3, t.width), color: 0x6ff7ff, alpha: 0.18 + 0.2 * p });
+        g.moveTo(t.x, t.y).lineTo(ex, ey).stroke({ width: Math.max(4, t.width), color: 0x6ff7ff, alpha: 0.22 + 0.25 * p });
+        g.moveTo(t.x, t.y).lineTo(ex, ey).stroke({ width: 2, color: 0xffffff, alpha: 0.55 * p });
       } else if (t.kind === "CONE" && mine) {
         for (let i = 0; i < t.count; i++) {
           const a = t.angle - t.spread / 2 + (t.spread * i) / Math.max(1, t.count - 1);
-          g.moveTo(t.x, t.y).lineTo(t.x + Math.cos(a) * t.length * 0.6, t.y + Math.sin(a) * t.length * 0.6).stroke({ width: 3, color: 0x6ff7ff, alpha: 0.35 });
+          g.moveTo(t.x, t.y).lineTo(t.x + Math.cos(a) * t.length * 0.6, t.y + Math.sin(a) * t.length * 0.6).stroke({ width: 3.5, color: 0x6ff7ff, alpha: 0.45 });
         }
       } else if (t.kind === "CIRCLE" && mine) {
-        g.circle(t.x, t.y, t.radius).stroke({ width: 3, color: 0x6ff7ff, alpha: 0.7 });
-        g.circle(t.x, t.y, t.radius * p).fill({ color: 0x6ff7ff, alpha: 0.12 });
+        const fxColor = t.moveId ? relayLook(t.moveId, 'player').tint : 0x6ff7ff;
+        g.circle(t.x, t.y, t.radius).stroke({ width: 3, color: fxColor, alpha: 0.85 });
+        g.circle(t.x, t.y, t.radius * Math.max(0.18, p)).fill({ color: fxColor, alpha: 0.16 }).stroke({ width: 1.8, color: 0xffffff, alpha: 0.55 });
+        for (let i = 0; i < 6; i++) {
+          const a0 = elapsed * 2.2 + (i * TAU) / 6;
+          g.arc(t.x, t.y, t.radius - 5, a0, a0 + 0.3).stroke({ width: 2.2, color: 0xffffff, alpha: 0.65 });
+        }
       } else if (t.kind === "LINE") {
         const ex = t.x + Math.cos(t.angle) * t.length, ey = t.y + Math.sin(t.angle) * t.length;
         const nx = -Math.sin(t.angle) * (t.width / 2 + 4), ny = Math.cos(t.angle) * (t.width / 2 + 4);
-        g.poly([t.x + nx, t.y + ny, ex + nx, ey + ny, ex - nx, ey - ny, t.x - nx, t.y - ny]).fill({ color: 0xff3b5c, alpha: 0.14 + 0.2 * p });
+        g.poly([t.x + nx, t.y + ny, ex + nx, ey + ny, ex - nx, ey - ny, t.x - nx, t.y - ny]).fill({ color: 0xff3b5c, alpha: 0.16 + 0.22 * p });
         const fx = t.x + Math.cos(t.angle) * t.length * p, fy = t.y + Math.sin(t.angle) * t.length * p;
-        g.moveTo(t.x, t.y).lineTo(fx, fy).stroke({ width: 3, color: 0xffd0d8, alpha: 0.9 });
+        g.moveTo(t.x, t.y).lineTo(fx, fy).stroke({ width: 3.5, color: 0xffd0d8, alpha: 0.92 });
       } else if (t.kind === "CONE") {
         for (let i = 0; i < t.count; i++) {
           const a = t.angle - t.spread / 2 + (t.spread * i) / (t.count - 1);
           g.moveTo(t.x, t.y).lineTo(t.x + Math.cos(a) * t.length * (0.4 + 0.6 * p), t.y + Math.sin(a) * t.length * (0.4 + 0.6 * p))
-            .stroke({ width: 4, color: 0xff7a2a, alpha: 0.35 + 0.45 * p });
+            .stroke({ width: 4, color: 0xff7a2a, alpha: 0.4 + 0.45 * p });
         }
       } else if (t.kind === "RING") {
         for (let i = 0; i < t.count; i++) {
@@ -1380,18 +1475,38 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             .fill({ color: gap ? 0x6dffb3 : 0xff5cd6, alpha: gap ? 0.9 : 0.4 + 0.5 * p });
         }
       } else if (t.kind === "CIRCLE") {
-        const color = t.danger ? 0xff3b3b : 0xffa13b;
-        g.circle(t.x, t.y, t.radius).fill({ color, alpha: 0.1 }).stroke({ width: 3, color, alpha: 0.85 });
-        g.circle(t.x, t.y, t.radius * p).fill({ color, alpha: t.danger ? 0.22 : 0.12 });
+        const color = t.danger ? 0xff3b5c : 0xffa13b;
+        g.circle(t.x, t.y, t.radius).fill({ color, alpha: 0.12 }).stroke({ width: 3, color, alpha: 0.88 });
+        g.circle(t.x, t.y, t.radius * Math.max(0.18, p)).fill({ color, alpha: t.danger ? 0.24 : 0.15 }).stroke({ width: 1.8, color: 0xffd0d8, alpha: 0.6 });
+        for (let i = 0; i < 6; i++) {
+          const a0 = -elapsed * 2.2 + (i * TAU) / 6;
+          g.arc(t.x, t.y, t.radius - 5, a0, a0 + 0.28).stroke({ width: 2.2, color: 0xffd0d8, alpha: 0.65 });
+        }
       }
     }
-    // Delayed zones: the fill grows until it detonates. Cyan = yours, red/orange = hostile.
-    const ZONE_COLOR = { IGNITE: 0xff7a2a, ROOT: 0x9fe8ff, SLOW: 0x5fd8c8, NONE: 0xff3b5c };
+    // Delayed zones: additive glowing magic arrays with rotating rune borders instead of flat grey concentric rings.
+    const ZONE_COLOR = { IGNITE: 0xff5a1f, ROOT: 0x22e568, SLOW: 0x1ca3ff, NONE: 0xff3b5c };
     for (const zone of state.zones) {
       const p = clamp(zone.t / zone.delay, 0, 1);
-      const color = zone.team === "player" ? 0x6ff7ff : ZONE_COLOR[zone.move.effect] ?? 0xff3b5c;
-      g.circle(zone.x, zone.y, zone.radius).fill({ color, alpha: 0.08 }).stroke({ width: zone.team === "player" ? 3 : 4, color, alpha: 0.9 });
-      g.circle(zone.x, zone.y, zone.radius * p).fill({ color, alpha: zone.team === "player" ? 0.14 : 0.24 });
+      const zMoveId = zone.moveId ?? zone.move?.id;
+      const moveTint = zMoveId ? relayLook(zMoveId, zone.team).tint : null;
+      const color = ZONE_COLOR[zone.move?.effect] ?? moveTint ?? (zone.team === "player" ? 0x1ca3ff : 0xff3b5c);
+      g.circle(zone.x, zone.y, zone.radius).fill({ color, alpha: 0.22 }).stroke({ width: zone.team === "player" ? 4 : 4.5, color, alpha: 0.95 });
+      g.circle(zone.x, zone.y, zone.radius * Math.max(0.22, p)).fill({ color, alpha: 0.28 }).stroke({ width: 2.2, color: 0xffffff, alpha: 0.78 });
+      const pts = [];
+      for (let i = 0; i < 6; i++) {
+        const a0 = elapsed * (zone.team === "player" ? 2.4 : -2.4) + (i * TAU) / 6;
+        g.arc(zone.x, zone.y, zone.radius - 6, a0, a0 + 0.32).stroke({ width: 3, color, alpha: 0.9 });
+        pts.push(zone.x + Math.cos(a0) * (zone.radius * 0.72), zone.y + Math.sin(a0) * (zone.radius * 0.72));
+      }
+      if (pts.length === 12) {
+        g.poly([pts[0], pts[1], pts[4], pts[5], pts[8], pts[9]]).stroke({ width: 1.8, color, alpha: 0.75 });
+        g.poly([pts[2], pts[3], pts[6], pts[7], pts[10], pts[11]]).stroke({ width: 1.8, color: 0xffffff, alpha: 0.55 });
+      }
+      if (!reducedMotion && rich && frameCount % 5 === 0) {
+        const a = Math.random() * TAU, r = Math.random() * zone.radius * 0.85;
+        spawn({ x: zone.x + Math.cos(a) * r, y: zone.y + Math.sin(a) * r, vy: -48, texture: textures.spark, tint: color, scale: 0.7, scaleTo: 0.15, life: 0.45, alpha: 0.85 });
+      }
     }
     const self = state.player;
     if (self.barrier > 0) {

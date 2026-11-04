@@ -39,14 +39,32 @@ function seeded(seed) {
 const DECALS = {
   scorch(c, p, r) {
     const g = c.createRadialGradient(64, 32, 2, 64, 32, 60);
-    g.addColorStop(0, 'rgba(18,10,6,0.85)'); g.addColorStop(0.55, 'rgba(34,20,12,0.55)'); g.addColorStop(0.8, rgba(p.edge, 0.22)); g.addColorStop(1, 'rgba(0,0,0,0)');
+    g.addColorStop(0, 'rgba(24,10,4,0.9)'); g.addColorStop(0.45, 'rgba(42,16,8,0.65)'); g.addColorStop(0.78, rgba(p.edge, 0.35)); g.addColorStop(1, 'rgba(0,0,0,0)');
     c.fillStyle = g; c.beginPath(); c.ellipse(64, 32, 60, 28, 0, 0, TAU); c.fill();
-    c.fillStyle = rgba(p.main, 0.75);
-    for (let i = 0; i < 9; i++) { const a = r() * TAU, d = 10 + r() * 30; c.fillRect(64 + Math.cos(a) * d, 32 + Math.sin(a) * d * 0.45, 2, 2); }
+    c.strokeStyle = rgba(p.main, 0.85); c.lineWidth = 2.2;
+    for (let i = 0; i < 6; i++) {
+      const a = i * TAU / 6 + r() * 0.4;
+      c.beginPath(); c.moveTo(64 + Math.cos(a) * 6, 32 + Math.sin(a) * 3);
+      c.quadraticCurveTo(64 + Math.cos(a + 0.3) * 26, 32 + Math.sin(a + 0.3) * 12, 64 + Math.cos(a) * 46, 32 + Math.sin(a) * 20);
+      c.stroke();
+    }
+    c.fillStyle = rgba(p.core, 0.92);
+    for (let i = 0; i < 11; i++) { const a = r() * TAU, d = 8 + r() * 34; c.beginPath(); c.arc(64 + Math.cos(a) * d, 32 + Math.sin(a) * d * 0.45, 1.8 + r() * 1.5, 0, TAU); c.fill(); }
   },
-  puddle(c, p) {
-    c.fillStyle = rgba(p.edge, 0.35); c.beginPath(); c.ellipse(64, 32, 56, 24, 0, 0, TAU); c.fill();
-    for (const [rx, a] of [[50, 0.7], [36, 0.55], [20, 0.4]]) { c.strokeStyle = rgba(p.core, a); c.lineWidth = 2; c.beginPath(); c.ellipse(64, 32, rx, rx * 0.42, 0, 0, TAU); c.stroke(); }
+  puddle(c, p, r = () => 0.5) {
+    const g = c.createRadialGradient(64, 32, 4, 64, 32, 58);
+    g.addColorStop(0, rgba(p.core, 0.55)); g.addColorStop(0.45, rgba(p.main, 0.38)); g.addColorStop(0.82, rgba(p.edge, 0.22)); g.addColorStop(1, 'rgba(0,0,0,0)');
+    c.fillStyle = g; c.beginPath(); c.ellipse(64, 32, 58, 26, 0, 0, TAU); c.fill();
+    c.strokeStyle = rgba(p.core, 0.85); c.lineWidth = 2.2;
+    for (let i = 0; i < 4; i++) {
+      const a0 = i * TAU / 4 + 0.3;
+      c.beginPath(); c.ellipse(64, 32, 22 + i * 10, (22 + i * 10) * 0.42, 0, a0, a0 + 1.35); c.stroke();
+    }
+    c.fillStyle = rgba(p.core, 0.9);
+    for (let i = 0; i < 8; i++) {
+      const a = i * TAU / 8 + r() * 0.3, d = 14 + (i % 3) * 13;
+      c.beginPath(); c.arc(64 + Math.cos(a) * d, 32 + Math.sin(a) * d * 0.42, 2.2, 0, TAU); c.fill();
+    }
   },
   frost(c, p, r) {
     c.fillStyle = rgba(p.main, 0.28); c.beginPath(); c.ellipse(64, 32, 58, 26, 0, 0, TAU); c.fill();
@@ -83,20 +101,21 @@ const DECALS = {
     c.fillStyle = rgba(p.main, 0.9); for (let i = 0; i < 6; i++) c.fillRect(30 + r() * 68, 18 + r() * 28, 4, 3);
   },
   roots(c, p, r) {
+    const g = c.createRadialGradient(64, 32, 4, 64, 32, 56);
+    g.addColorStop(0, rgba(p.core, 0.48)); g.addColorStop(0.5, rgba(p.main, 0.28)); g.addColorStop(1, 'rgba(0,0,0,0)');
+    c.fillStyle = g; c.beginPath(); c.ellipse(64, 32, 56, 25, 0, 0, TAU); c.fill();
     c.lineCap = 'round';
-    for (let i = 0; i < 5; i++) {
-      const a = i * TAU / 5 + r(), tx = 64 + Math.cos(a) * 54, ty = 32 + Math.sin(a) * 23;
-      const cx = 64 + Math.cos(a + 0.6) * 26, cy = 32 + Math.sin(a + 0.6) * 11;
-      // A dark vine under a lit one: it reads as a raised root on any floor.
-      for (const [width, color] of [[7, 'rgba(10,40,16,0.55)'], [4.5, rgba(p.edge, 0.95)], [1.6, rgba(p.core, 0.9)]]) {
+    for (let i = 0; i < 6; i++) {
+      const a = i * TAU / 6 + r() * 0.4, tx = 64 + Math.cos(a) * 52, ty = 32 + Math.sin(a) * 22;
+      const cx = 64 + Math.cos(a + 0.55) * 28, cy = 32 + Math.sin(a + 0.55) * 12;
+      for (const [width, color] of [[6.5, 'rgba(8,36,14,0.6)'], [3.8, rgba(p.main, 0.92)], [1.5, rgba(p.core, 0.95)]]) {
         c.strokeStyle = color; c.lineWidth = width; c.beginPath(); c.moveTo(64, 32); c.quadraticCurveTo(cx, cy, tx, ty); c.stroke();
       }
     }
-    for (let i = 0; i < 7; i++) {
-      const a = r() * TAU, d = 18 + r() * 30, x = 64 + Math.cos(a) * d, y = 32 + Math.sin(a) * d * 0.42;
-      c.fillStyle = 'rgba(10,40,16,0.5)'; c.beginPath(); c.ellipse(x, y + 1, 7, 3.4, a, 0, TAU); c.fill();
-      c.fillStyle = rgba(p.main, 0.98); c.beginPath(); c.ellipse(x, y, 6.5, 3, a, 0, TAU); c.fill();
-      c.fillStyle = rgba(p.core, 0.9); c.beginPath(); c.ellipse(x - 1.5, y - 0.8, 2.5, 1, a, 0, TAU); c.fill();
+    for (let i = 0; i < 9; i++) {
+      const a = r() * TAU, d = 14 + r() * 34, x = 64 + Math.cos(a) * d, y = 32 + Math.sin(a) * d * 0.42;
+      c.fillStyle = rgba(p.main, 0.95); c.beginPath(); c.ellipse(x, y, 7, 3.2, a, 0, TAU); c.fill();
+      c.fillStyle = rgba(p.core, 0.95); c.beginPath(); c.ellipse(x - 1.2, y - 0.6, 3, 1.2, a, 0, TAU); c.fill();
     }
   },
   swirl(c, p) {

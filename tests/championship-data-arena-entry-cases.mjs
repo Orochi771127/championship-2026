@@ -28,21 +28,21 @@ test("only partners raised or registered in the Dex may enter; raised ones lead 
   assert.equal(power[relay[40].id], undefined, "a locked partner has no power entry");
 });
 
-test("a thin save is lent two practice partners at 85 % so every mode can start", () => {
+test("a thin save is lent practice partners up to 3 at 85 % so 3v3 Relay and every mode can start", () => {
   for (const roster of [relay, legacy]) {
     const rows = dataArenaEntries(roster, { registeredSpecies: [], ownedSpecies: ["species-000"] });
     const usable = rows.filter(dataArenaEntryUsable);
-    assert.equal(usable.length, 2);
+    assert.equal(usable.length, 3);
     assert.ok(usable.every((row) => row.entry === DATA_ARENA_ENTRY.RENTAL));
-    assert.deepEqual(usable.map((row) => row.speciesId), ["species-034", "species-061"]);
-    assert.deepEqual(Object.values(dataArenaPartnerPower(rows)), [0.85, 0.85]);
+    assert.deepEqual(usable.map((row) => row.speciesId).sort(), ["species-034", "species-061", "species-064"]);
+    assert.deepEqual(Object.values(dataArenaPartnerPower(rows)), [0.85, 0.85, 0.85]);
   }
-  // One registered partner: one loan tops the list up to two.
-  const one = dataArenaEntries(relay, { registeredSpecies: [index(relay[30].speciesId)], ownedSpecies: [] });
-  assert.deepEqual(one.filter(dataArenaEntryUsable).map((row) => row.entry), [DATA_ARENA_ENTRY.RENTAL, DATA_ARENA_ENTRY.REGISTERED]);
-  // Two registered partners: no loan.
+  // Two registered partners: one loan tops the list up to three.
   const two = dataArenaEntries(relay, { registeredSpecies: [index(relay[30].speciesId), index(relay[31].speciesId)], ownedSpecies: [] });
-  assert.ok(two.every((row) => row.entry !== DATA_ARENA_ENTRY.RENTAL));
+  assert.deepEqual(two.filter(dataArenaEntryUsable).map((row) => row.entry), [DATA_ARENA_ENTRY.RENTAL, DATA_ARENA_ENTRY.REGISTERED, DATA_ARENA_ENTRY.REGISTERED]);
+  // Three registered partners: no loan.
+  const three = dataArenaEntries(relay, { registeredSpecies: [index(relay[30].speciesId), index(relay[31].speciesId), index(relay[32].speciesId)], ownedSpecies: [] });
+  assert.ok(three.every((row) => row.entry !== DATA_ARENA_ENTRY.RENTAL));
 });
 
 test("a controlled harness without save progress keeps every partner open", () => {

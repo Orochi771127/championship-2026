@@ -5,8 +5,15 @@ import { RELAY_ROSTER, relayPartner } from './dataArenaRelayRoster.js';
 import { RELAY_POOL_MOVE_ELEMENT, relayOwnMove, relayOwnMoveInfo, relaySpeciesKit } from './dataArenaRelayKits.js';
 import { RELAY_PALETTE_ELEMENT } from './dataArenaRelayElements.js';
 
-export const DATA_ARENA_RELAY = Object.freeze({ seconds: 150, switchCooldown: 6, knockoutSeconds: 1.1,
-  tpMax: 100, tpRegen: 16, tpDelay: 0.6, ultimateTp: 80, ultimateCooldown: 12, playerHpScale: 1.8, rivalHpScale: 0.55 });
+export const DATA_ARENA_RELAY = Object.freeze({
+  seconds: 180, teamSize: 3, switchCooldown: 6, knockoutSeconds: 1.1,
+  tpMax: 100, tpRegen: 16, tpDelay: 0.6, basicTpGain: 5,
+  ultimateTp: 80, ultimateCooldown: 12,
+  tagShockwaveRadius: 135, tagShockwaveDamage: 28, tagShieldSeconds: 1.2,
+  perfectSwitchTp: 25, perfectSwitchWindow: 0.45,
+  triLinkDamage: 92, triLinkTpGain: 30, triLinkTimes: Object.freeze([60, 120]),
+  playerHpScale: 1.8, rivalHpScale: 0.55
+});
 
 // Anatomy-specific intentions, using approved existing action clips. These are
 // presentation adapters, not claims that new eight-direction drawings exist.
@@ -19,33 +26,33 @@ export const RELAY_ACTION_PROFILES = Object.freeze({
 const basics = Object.freeze({
   relaySlash: { type:'LUNGE',energy:0,cooldown:.65,windup:.18,recovery:.24,distance:84,speed:430,width:86,damage:18 },
   relayPunch: { type:'LUNGE',energy:0,cooldown:.55,windup:.14,recovery:.2,distance:64,speed:500,width:60,damage:17 },
-  relayShot: { type:'BOLT',energy:0,cooldown:.7,windup:.24,recovery:.28,range:650,speed:850,radius:10,damage:14 },
-  relayGust: { type:'SPREAD',energy:0,cooldown:.8,windup:.2,recovery:.3,range:410,speed:630,radius:8,damage:7,count:2,spread:.25 },
+  relayShot: { type:'BOLT',energy:0,cooldown:.7,windup:.24,recovery:.28,range:650,speed:850,radius:10,damage:16 },
+  relayGust: { type:'SPREAD',energy:0,cooldown:.8,windup:.2,recovery:.3,range:410,speed:630,radius:8,damage:8,count:2,spread:.25 },
   relaySweep: { type:'NOVA',energy:0,cooldown:.85,windup:.25,recovery:.3,radius:92,damage:18,effect:'NONE' },
-  relayRam: { type:'LUNGE',energy:0,cooldown:.8,windup:.25,recovery:.3,distance:110,speed:520,width:68,damage:21 },
+  relayRam: { type:'LUNGE',energy:0,cooldown:.8,windup:.25,recovery:.3,distance:110,speed:520,width:68,damage:18 },
   relayClaw: { type: 'LUNGE', energy: 0, cooldown: 0.6, windup: 0.14, recovery: 0.24, distance: 72, speed: 430, width: 70, damage: 18 },
-  relayRay: { type: 'BOLT', energy: 0, cooldown: 0.65, windup: 0.18, recovery: 0.26, range: 570, speed: 790, radius: 9, damage: 13 },
+  relayRay: { type: 'BOLT', energy: 0, cooldown: 0.65, windup: 0.18, recovery: 0.26, range: 570, speed: 790, radius: 9, damage: 15 },
   relayBreath: { type: 'SPREAD', energy: 0, cooldown: 0.8, windup: 0.22, recovery: 0.3, range: 370, speed: 570, radius: 9, damage: 6, count: 3, spread: 0.38 }
 });
 const extraMoves = Object.freeze({
-  arcBolt:{type:'BOLT',energy:18,cooldown:1.2,windup:.22,range:650,speed:900,radius:10,damage:23},
-  arcFan:{type:'SPREAD',energy:26,cooldown:3.5,windup:.24,range:500,speed:850,radius:8,damage:11,count:5,spread:.85},
-  arcField:{type:'ZONE',energy:28,cooldown:6,windup:.25,range:520,radius:110,delay:.8,damage:29,effect:'SLOW',slow:.4,slowSeconds:1.2},
-  arcStorm:{type:'LANCE',windup:.6,range:800,speed:1000,radius:16,damage:34,count:5,spread:.65,pierce:3},
-  seedBolt:{type:'BOLT',energy:16,cooldown:1,windup:.2,range:570,speed:630,radius:11,damage:21},
-  vineSnare:{type:'ZONE',energy:28,cooldown:6,windup:.22,range:500,radius:105,delay:.8,damage:22,effect:'ROOT',rootSeconds:1.2},
+  arcBolt:{type:'BOLT',energy:18,cooldown:1.2,windup:.22,range:650,speed:900,radius:10,damage:28},
+  arcFan:{type:'SPREAD',energy:26,cooldown:3.5,windup:.24,range:500,speed:850,radius:8,damage:12,count:5,spread:.85},
+  arcField:{type:'ZONE',energy:28,cooldown:6,windup:.25,range:520,radius:110,delay:.8,damage:32,effect:'SLOW',slow:.4,slowSeconds:1.2},
+  arcStorm:{type:'LANCE',windup:.6,range:800,speed:1000,radius:16,damage:36,count:5,spread:.65,pierce:3},
+  seedBolt:{type:'BOLT',energy:16,cooldown:1,windup:.2,range:570,speed:630,radius:11,damage:28},
+  vineSnare:{type:'ZONE',energy:28,cooldown:6,windup:.22,range:500,radius:105,delay:.8,damage:30,effect:'ROOT',rootSeconds:1.2},
   leafFan:{type:'SPREAD',energy:24,cooldown:3,windup:.24,range:480,speed:700,radius:9,damage:12,count:4,spread:.65},
-  grovePulse:{type:'NOVA',windup:.65,radius:245,damage:58,effect:'ROOT',rootSeconds:1.3},
-  shadeBolt:{type:'BOLT',energy:18,cooldown:1.2,windup:.22,range:640,speed:690,radius:12,damage:23},
+  grovePulse:{type:'NOVA',windup:.65,radius:250,damage:94,effect:'ROOT',rootSeconds:1.3},
+  shadeBolt:{type:'BOLT',energy:18,cooldown:1.2,windup:.22,range:640,speed:690,radius:12,damage:28},
   shadeStep:{type:'BLINK',energy:22,cooldown:4.5,windup:.16,distance:260},
-  shadeField:{type:'ZONE',energy:28,cooldown:6,windup:.24,range:520,radius:120,delay:.85,damage:28,effect:'SLOW',slow:.4,slowSeconds:1.5},
-  nightPulse:{type:'NOVA',windup:.65,radius:250,damage:64,effect:'SLOW',slow:.4,slowSeconds:1.5},
-  impactShot:{type:'BOLT',energy:18,cooldown:1.3,windup:.24,range:520,speed:640,radius:13,damage:25,knockback:170},
-  impactNova:{type:'NOVA',windup:.7,radius:230,damage:74,effect:'NONE'},
+  shadeField:{type:'ZONE',energy:28,cooldown:6,windup:.24,range:520,radius:120,delay:.85,damage:32,effect:'SLOW',slow:.4,slowSeconds:1.5},
+  nightPulse:{type:'NOVA',windup:.65,radius:250,damage:92,effect:'SLOW',slow:.4,slowSeconds:1.5},
+  impactShot:{type:'BOLT',energy:18,cooldown:1.3,windup:.24,range:520,speed:640,radius:13,damage:30,knockback:170},
+  impactNova:{type:'NOVA',windup:.7,radius:240,damage:104,effect:'NONE'},
   cinderGuard: { type:'BARRIER', energy:20, cooldown:7, windup:.16, duration:1.2, radius:60, arc:2.2 },
-  clawSweep: { type:'NOVA', energy:18, cooldown:3, windup:.2, radius:105, damage:24, effect:'NONE' },
-  radiantDash: { type:'LUNGE', energy:22, cooldown:4.5, windup:.2, distance:230, speed:1050, width:56, damage:27, invulnerable:true },
-  haloPulse: { type:'NOVA', energy:28, cooldown:5, windup:.3, radius:155, damage:29, effect:'NONE' },
+  clawSweep: { type:'NOVA', energy:18, cooldown:3, windup:.2, radius:105, damage:28, effect:'NONE' },
+  radiantDash: { type:'LUNGE', energy:22, cooldown:4.5, windup:.2, distance:230, speed:1050, width:56, damage:30, invulnerable:true },
+  haloPulse: { type:'NOVA', energy:28, cooldown:5, windup:.3, radius:155, damage:34, effect:'NONE' },
   frostFan: { type:'SPREAD', energy:22, cooldown:2.6, windup:.24, range:450, speed:650, radius:9, damage:11, count:4, spread:.65, onHit:{slow:.3,slowSeconds:1.2}, onTerrain:'FREEZE' },
   glacierGuard: { type:'BARRIER', energy:20, cooldown:7, windup:.16, duration:1.4, radius:64, arc:2.2 },
   // Same-element replacements for the guards and dashes pools used to borrow
@@ -56,8 +63,8 @@ const extraMoves = Object.freeze({
   barkGuard: { type:'BARRIER', energy:20, cooldown:7, windup:.16, duration:1.4, radius:64, arc:2.2 },
   duskGuard: { type:'BARRIER', energy:20, cooldown:7, windup:.16, duration:1.2, radius:60, arc:2.2 },
   ironGuard: { type:'BARRIER', energy:20, cooldown:7, windup:.16, duration:1.4, radius:64, arc:2.2 },
-  boltDash: { type:'LUNGE', energy:22, cooldown:4.5, windup:.2, distance:230, speed:1050, width:56, damage:27, invulnerable:true },
-  thornRush: { type:'LUNGE', energy:22, cooldown:6, windup:.55, distance:300, speed:950, width:56, damage:24 }
+  boltDash: { type:'LUNGE', energy:22, cooldown:4.5, windup:.2, distance:230, speed:1050, width:56, damage:30, invulnerable:true },
+  thornRush: { type:'LUNGE', energy:22, cooldown:6, windup:.55, distance:300, speed:950, width:56, damage:28 }
 });
 // A roster partner's five choices: its own moves first, then its element pool.
 const RELAY_SPECIES_KITS = Object.freeze(Object.fromEntries(RELAY_ROSTER.map(p=>[p.id,relaySpeciesKit(p.speciesIndex,p.element,id=>relayMove(id)?.type)])));
@@ -159,11 +166,21 @@ function relayLegacyStyle(id) {
   if(/tide|foam|surf|vortex/.test(id))return styles.water;
   return /sun|Light|dawn|relayRay|radiant|halo/.test(id)?styles.light:styles.fire;
 }
-export function relayTeamIds(firstId, reserveId) {
+export function relayTeamIds(firstId, reserveId = null, thirdId = null) {
   if (!relayPartner(firstId)) throw new RangeError('RELAY_UNKNOWN_PARTNER');
-  if(reserveId!==firstId&&relayPartner(reserveId))return [firstId,reserveId];
-  const first=DATA_ARENA_PARTNERS.findIndex(p=>p.id===firstId);
-  return [firstId,DATA_ARENA_PARTNERS[(first+1)%DATA_ARENA_PARTNERS.length].id];
+  const team = [firstId];
+  if (reserveId && reserveId !== firstId && relayPartner(reserveId)) team.push(reserveId);
+  if (thirdId && !team.includes(thirdId) && relayPartner(thirdId)) team.push(thirdId);
+  const firstIdx = Math.max(0, DATA_ARENA_PARTNERS.findIndex(p => p.id === firstId));
+  for (let i = 1; i <= DATA_ARENA_PARTNERS.length && team.length < DATA_ARENA_RELAY.teamSize; i++) {
+    const candidate = DATA_ARENA_PARTNERS[(firstIdx + i) % DATA_ARENA_PARTNERS.length].id;
+    if (!team.includes(candidate)) team.push(candidate);
+  }
+  for (const p of RELAY_ROSTER) {
+    if (team.length >= DATA_ARENA_RELAY.teamSize) break;
+    if (!team.includes(p.id)) team.push(p.id);
+  }
+  return team.slice(0, DATA_ARENA_RELAY.teamSize);
 }
 export function relayMove(id, ultimate = false) {
   const base = basics[id] ?? extraMoves[id] ?? DATA_ARENA_MOVES[id] ?? relayOwnMove(id);

@@ -25,14 +25,27 @@ export function dataArenaBaseZoom(viewportWidth, viewportHeight) {
 
 export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion = false, shake = true, cover = false, artBounds = null } = {}) {
   let x = worldWidth / 2, y = worldHeight / 2, zoom = null, trauma = 0, time = 0;
+  let boostScale = 1, boostTimer = 0, boostDuration = 0.45;
   let shakeEnabled = Boolean(shake) && !reducedMotion;
   return Object.freeze({
     setShake(enabled) { shakeEnabled = Boolean(enabled) && !reducedMotion; if (!shakeEnabled) trauma = 0; },
     /** Trauma in 0..1; displacement grows with its square. */
     addTrauma(amount) { if (shakeEnabled) trauma = Math.min(1, trauma + amount); },
+    /** Smooth spring-like zoom focus for Ultimates, Burst Evolution, Perfect Switch and K.O. */
+    focusBoost(scale = 1.22, seconds = 0.45) {
+      if (reducedMotion) return;
+      boostScale = Math.max(boostScale, clamp(scale, 1, 1.32));
+      boostDuration = Math.max(0.15, seconds);
+      boostTimer = Math.max(boostTimer, boostDuration);
+    },
     snap(targetX, targetY) { x = targetX; y = targetY; },
     update({ dtMs, viewport, target, velocity = { x: 0, y: 0 }, aim = null, threat = 0, opponent = null }) {
+      const dtSec = Math.max(0, dtMs) / 1000;
       time += Math.max(0, dtMs);
+      if (boostTimer > 0) {
+        boostTimer = Math.max(0, boostTimer - dtSec);
+        if (boostTimer <= 0) boostScale = 1;
+      }
       const base = dataArenaBaseZoom(viewport.width, viewport.height);
       let wanted = base * (1 - 0.14 * clamp(threat, 0, 1));
       let focusX = target.x, focusY = target.y;
@@ -45,13 +58,21 @@ export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion =
         const z = zoom ?? wanted;
         focusX = target.x + (opponent.x - target.x) * 0.42; focusY = target.y + (opponent.y - target.y) * 0.42 - 55 / z; // tall sprites (the champion) clear the rival bar
       }
+      if (boostTimer > 0 && boostScale > 1) {
+        const env = Math.sin(clamp(boostTimer / boostDuration, 0, 1) * Math.PI * 0.5);
+        wanted *= 1 + (boostScale - 1) * env;
+      }
       if(cover)wanted=Math.max(wanted,viewport.width/worldWidth,viewport.height/worldHeight);
       if (zoom === null) zoom = wanted;
-      else zoom += (wanted - zoom) * battleFxApproach(dtMs, reducedMotion ? 1400 : 650);
+      else zoom += (wanted - zoom) * battleFxApproach(dtMs, reducedMotion ? 1400 : (boostTimer > 0 ? 220 : 520));
       if(cover)zoom=Math.max(zoom,viewport.width/worldWidth,viewport.height/worldHeight);
-      const look = (reducedMotion ? 0.18 : 0.32) * (opponent ? 0.4 : 1);
+      const look = (reducedMotion ? 0.18 : 0.34) * (opponent ? 0.45 : 1);
       let lx = clamp(velocity.x * look, -170, 170), ly = clamp(velocity.y * look, -130, 130);
-      if (aim && !opponent) { lx += clamp((aim.x - target.x) * 0.16, -110, 110); ly += clamp((aim.y - target.y) * 0.16, -90, 90); }
+      if (aim) {
+        const aimWeight = opponent ? 0.08 : 0.16;
+        lx += clamp((aim.x - target.x) * aimWeight, -110, 110);
+        ly += clamp((aim.y - target.y) * aimWeight, -90, 90);
+      }
       const k = battleFxApproach(dtMs, reducedMotion ? 260 : 140);
       x += (focusX + lx - x) * k; y += (focusY + ly - y) * k;
       const halfW = viewport.width / (2 * zoom), halfH = viewport.height / (2 * zoom);

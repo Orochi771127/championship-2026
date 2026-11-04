@@ -22,7 +22,7 @@ const count = (value) => (Number.isSafeInteger(value) && value >= 0 ? Math.min(v
 export function defaultDataArenaRecords() {
   return {
     schemaVersion: 1, kind: "DATA_ARENA_RECORDS", runs: 0, wins: 0, bestScore: 0, bestVictorySeconds: null,
-    lastPartnerId: DATA_ARENA_PARTNERS[0].id, lastMode: "TOURNAMENT", relayLoadouts: {}, relayReserveId: null, relayArenaId: RELAY_MAP_IDS[0], partners: {}, modes: {}, settings: { shake: true, quality: "auto" }, briefingSeen: false
+    lastPartnerId: DATA_ARENA_PARTNERS[0].id, lastMode: "TOURNAMENT", relayLoadouts: {}, relayReserveId: null, relayThirdId: null, relayArenaId: RELAY_MAP_IDS[0], partners: {}, modes: {}, settings: { shake: true, quality: "auto" }, briefingSeen: false
   };
 }
 
@@ -48,7 +48,7 @@ export function sanitizeDataArenaRecords(raw) {
     runs: count(raw.runs), wins: Math.min(count(raw.wins), count(raw.runs)), bestScore: count(raw.bestScore),
     bestVictorySeconds: Number.isFinite(best) && best > 0 && best < 3600 ? best : null,
     lastPartnerId: PARTNER_IDS.has(raw.lastPartnerId) ? raw.lastPartnerId : base.lastPartnerId,
-    partners, modes, relayLoadouts, relayReserveId:PARTNER_IDS.has(raw.relayReserveId)?raw.relayReserveId:null, relayArenaId:RELAY_MAP_IDS.includes(raw.relayArenaId)?raw.relayArenaId:base.relayArenaId, lastMode: MODES.includes(raw.lastMode) ? raw.lastMode : base.lastMode,
+    partners, modes, relayLoadouts, relayReserveId:PARTNER_IDS.has(raw.relayReserveId)?raw.relayReserveId:null, relayThirdId:PARTNER_IDS.has(raw.relayThirdId)?raw.relayThirdId:null, relayArenaId:RELAY_MAP_IDS.includes(raw.relayArenaId)?raw.relayArenaId:base.relayArenaId, lastMode: MODES.includes(raw.lastMode) ? raw.lastMode : base.lastMode,
     settings: { shake: raw.settings?.shake !== false, quality: QUALITY.has(raw.settings?.quality) ? raw.settings.quality : "auto" },
     briefingSeen: raw.briefingSeen === true
   };
@@ -84,7 +84,7 @@ export function createDataArenaRecordStore({ port = null } = {}) {
       records.settings = sanitizeDataArenaRecords({ ...records, settings: { ...records.settings, ...patch } }).settings;
       return write();
     },
-    setRelayTeam(reserveId,arenaId) { records.relayReserveId=PARTNER_IDS.has(reserveId)?reserveId:null;records.relayArenaId=RELAY_MAP_IDS.includes(arenaId)?arenaId:RELAY_MAP_IDS[0];return write(); },
+    setRelayTeam(reserveId,arenaId,thirdId=null) { records.relayReserveId=PARTNER_IDS.has(reserveId)?reserveId:null;records.relayThirdId=PARTNER_IDS.has(thirdId)?thirdId:records.relayThirdId;records.relayArenaId=RELAY_MAP_IDS.includes(arenaId)?arenaId:RELAY_MAP_IDS[0];return write(); },
     setRelayLoadout(id, moves) { if (!PARTNER_IDS.has(id)) return false; records.relayLoadouts[id] = relayKit(id,moves).moves; return write(); },
     markBriefingSeen() { if (!records.briefingSeen) { records.briefingSeen = true; return write(); } return true; },
     setLastPartner(id) { if (PARTNER_IDS.has(id)) { records.lastPartnerId = id; return write(); } return false; },

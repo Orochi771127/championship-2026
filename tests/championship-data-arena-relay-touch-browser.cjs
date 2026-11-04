@@ -38,9 +38,9 @@ const check=(name,value)=>{report.checks.push({name,pass:!!value});assert.ok(val
    });
    report.layouts.push(layout);const label=`${viewport.width}x${viewport.height}`;
    check(label+' no overflow',layout.scroll===viewport.width);
-   // Awakening raising (2026-11-02): a fighter that can burst adds its burst call beside the switch.
+   // Awakening raising + 3v3 dual reserve tag buttons: 2 reserve tag buttons + burst call = 10 controls (9 without burst).
    const burstCall=await page.evaluate(()=>Boolean(__dataArenaQA.snapshot().relay?.burst));
-   check(label+(burstCall?' nine visible controls (burst call)':' eight visible controls'),layout.controls.length===(burstCall?9:8));
+   check(label+(burstCall?' ten visible controls (dual reserve + burst call)':' nine visible controls'),layout.controls.length===(burstCall?10:9));
    check(label+' targets at least 48 except pause 44',layout.controls.every(c=>c.w>=(c.id.includes('pause')?44:48)&&c.h>=(c.id.includes('pause')?44:48)));
    check(label+' targets inside safe viewport',layout.controls.every(c=>c.x>=8&&c.y>=8&&c.right<=layout.width-8&&c.bottom<=layout.height-8));
    check(label+' no overlapping hit rectangles',layout.controls.every((a,i)=>layout.controls.slice(i+1).every(b=>a.right<=b.x||b.right<=a.x||a.bottom<=b.y||b.bottom<=a.y)));

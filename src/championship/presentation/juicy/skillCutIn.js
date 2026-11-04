@@ -20,7 +20,7 @@ export const SKILL_CUT_IN_TIMING = Object.freeze({ length: 650, enter: 170, leav
 // The head square fills this share of the face box: its clear middle (the
 // box's sides fade out over 22 % each) and nearly all of its height, with a
 // margin round the square so ears, horns and the chin stay inside.
-export const SKILL_CUT_IN_FACE_FIT = Object.freeze({ width: 0.62, height: 0.9, margin: 1.12 });
+export const SKILL_CUT_IN_FACE_FIT = Object.freeze({ width: 0.62, height: 0.9, margin: 1.45 });
 
 /**
  * How the portrait sits in the strip's face box: the measured head square
