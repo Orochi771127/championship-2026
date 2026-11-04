@@ -353,7 +353,8 @@ test('arena relay: a ranch partner bursts into its own form, waits for the call,
   assert.equal(burst.via, plan.via ?? null, 'a tier-2 form plays through its tier-1 form');
   assert.equal(sim.getSnapshot().relay.burst.phase, 'BURST');
   assert.equal(relay({'relay-species-087': null}).getSnapshot().relay.burst, null, 'a partner that learned no form does not burst');
-  assert.equal(relay({}).getSnapshot().relay.burst.form, t1.form, 'a Dex-only entry keeps its first tier-1 form');
+  assert.equal(relay({}).getSnapshot().relay.burst, null, 'a Dex-only or rental entry has no burst call (earned only)');
+  assert.equal(relay({}, false).getSnapshot().relay.burst.form, t1.form, 'an auto-played entry keeps its first tier-1 form');
 });
 
 
