@@ -1,5 +1,28 @@
 # Championship Owner Direction
 
+<!-- record-id: ORIGINAL8_KO_WEAK_MOVES_20261104 -->
+## 2026-11-04 — Arena KO for the eight playable originals; MA23, MA31 and MA51 weak moves play two drawings
+
+dot delivers a 20-package manifest and eight extra links (2026-11-04). The Owner directs: dedupe and archive everything, review against the master, three-view and original semantics, play in sequence, and bind only what passes. 「原創 8 角 KO 總覽」 counts as the first appearance approval, but playback, ground, size and meaning are still checked. 「原作時序未知的不要猜」. 「不要以舊圖或單格假裝補齊，也不要為了湊套數混用不一致設計」. 「合併或公開發布前先向我報告具體範圍」.
+
+- Archive: 28 manifest ZIPs plus 10 extra ZIPs and one PNG are in `D:/Championship2026-archive/character-animation-art-archive-20261025/drive-delivery-20261104-v1`, SHA-checked. R: had 0 bytes free, so they move to R later.
+- KO: GR39, GR40, GR41, MA65, MA67 and MA69 each get one new static Arena KO frame. MA66 and MA68 reuse their own shipped lying cells (MAIN_B16 cell_09 / cell_10), with no redraw.
+  - Each uses the existing `Arena_KO_STATIC_UNBOUND_ONLY` contract.
+  - Size: the KO silhouette area matches the role's median Arena walk area.
+  - Ground: the bottom of the drawing is the contact point.
+  - Format: one WebP page per role, at most density 8.
+  - Files: authoring `animation.web-ko-20261104.json` with a `patch20261104KO` block naming its parents.
+  - dot's fall key sequences stay archived, because the runtime KO is a hold and the original gives no fall timing.
+- Weak move: MA23, MA31 and MA51 get dot's two-pose sequence 12. The two drawings play at the native 37/37 ticks, on the old one-drawing weak frame's size and ground line. Authoring is `animation.web-weak-20261104.json` with `patch20261104Weak`; they leave the known single-drawing Main12 list.
+- Held, not bound:
+  - MA48 weak move: the original is a flight, but the shipped MA48 set is a grounded bird.
+  - MA48 six-phase, MA35 three-pose and MA67 swim: more poses than the two native cells, with no timing for the extras.
+  - Every AW/UL package (AW41, AW45, AW46, AW48, AW50, UL09/UL37, UL11, UL12, UL13, UL22, UL25, UL40): dot marks each one HOLD or unplayed.
+- UL22 identity: the south-walk package's master `CURRENT_PUBLIC_MASTER_species217.webp` (sha256 b8013deb…) is species-217's Dex portrait.
+  - The game shows species-217 as UL22.
+  - `database-display.r1.json` stores the pre-reorder native code UL21, and `planUltimateDisplayOrder` renumbers it at runtime.
+  - Bind by species id and SHA, never by code.
+- Not reachable in normal play yet: the originals are not on the Data Arena relay roster, so the KO was checked through the loopback QA cast.
 <!-- record-id: HUNT_TOOL_TIERS_20261103 -->
 ## 2026-11-03 — One shop slot per hunt tool, upgraded in place; ropes are counted and snap one at a time
 
