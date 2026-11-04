@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import {reviewedNumericClip} from '../src/championship/presentation/reviewedCharacterAnimation.js';
+import {reviewedNumericClip,reviewedArenaKoClip,createReviewedArenaPlayback} from '../src/championship/presentation/reviewedCharacterAnimation.js';
 const root=path.resolve(import.meta.dirname,'..');
 const json=rel=>JSON.parse(fs.readFileSync(path.join(root,rel),'utf8'));
 const selection=json('src/data/championship/reviewed-animation-selection.v1.json');
@@ -15,9 +15,10 @@ const LOCOMOTION=[2,3,12,18,19,22];
 // A body moved across the ranch on one held drawing reads as a sliding statue whenever the original
 // alternates two or more drawings there. Main12 (weak walk, cells 37/37 ticks) is still one drawing for
 // these selected roles; each needs its own second drawing (no healthy-walk stand-in). Shrink, never grow.
+// 2026-11-04: MA23, MA31 and MA51 got dot's two-pose weak moves.
 const KNOWN_SINGLE_DRAWING_MAIN12=['MA03','MA04','MA05','MA06','MA07','MA08','MA09','MA10','MA11','MA12','MA13','MA14','MA15',
- 'MA16','MA17','MA18','MA19','MA20','MA21','MA22','MA23','MA25','MA26','MA27','MA28','MA29','MA30','MA31','MA32','MA35','MA36',
- 'MA37','MA38','MA39','MA40','MA41','MA42','MA43','MA44','MA45','MA46','MA47','MA48','MA49','MA51','MA52','MA53','MA62','MA65',
+ 'MA16','MA17','MA18','MA19','MA20','MA21','MA22','MA25','MA26','MA27','MA28','MA29','MA30','MA32','MA35','MA36',
+ 'MA37','MA38','MA39','MA40','MA41','MA42','MA43','MA44','MA45','MA46','MA47','MA48','MA49','MA52','MA53','MA62','MA65',
  'MA66','MA67','MA68','MA69'];
 
 test('a moving body never holds one drawing where the original alternates drawings (known Main12 gaps only)',()=>{
@@ -77,5 +78,28 @@ test('Main17 bound weak idle stays a standing pose (no lying-flat frame) for GR0
   const standing=Math.max(...h(stand));
   for(const v of h(weak))assert.ok(v>=0.8*standing,`${code} Main17 frame height ${v} vs standing ${standing}`);
   assert.equal(Math.round(weak.frames.reduce((n,f)=>n+f.durationMs,0)*60/1000),37+28);
+ }
+});
+
+test('MA23, MA31 and MA51 weak moves alternate two delivered drawings at the native 37/37 ticks, on the old weak ground line',()=>{
+ for(const code of ['MA23','MA31','MA51']){
+  const entry=selection.characters.find(c=>c.displayCode===code),doc=manifest(entry),binding=reviewedNumericClip(doc,'main',12);
+  assert.equal(binding.mappingEvidence,'EXPLICIT_NUMERIC_SELECTION',code);
+  assert.deepEqual(binding.clip.frames.map(f=>[f.assetId,Math.round(f.durationMs*60/1000)]),
+   [[`weak12:${code}:20261104:1`,37],[`weak12:${code}:20261104:2`,37]],code);
+  const native=json(runtimeOf.get(entry.speciesId)).sides.main.animations.find(a=>a.id===12);
+  assert.deepEqual(native.frames.map(f=>f.ticks),[37,37],code);
+  for(const f of binding.clip.frames)assert.ok(doc.frames[f.assetId].density<=8,code+' stays within the 2x grid');
+ }
+});
+
+test('the eight playable originals hold their own static Arena KO frame when knocked out',()=>{
+ for(const code of ['GR39','GR40','GR41','MA65','MA66','MA67','MA68','MA69']){
+  const doc=manifest(selection.characters.find(c=>c.displayCode===code)),ko=reviewedArenaKoClip(doc);
+  assert.ok(ko,code+' has an approved KO clip');assert.equal(ko.frames.length,1,code);
+  const pb=createReviewedArenaPlayback(doc,{nativeFallback:false});
+  pb.sample({time:0,hp:100,vx:1,vy:0,facing:1});
+  const s=pb.sample({time:2000,hp:0,vx:0,vy:0,facing:1});
+  assert.equal(s.phase,'KO_STATIC_HOLD',code);assert.equal(s.assetId,ko.frames[0].assetId,code);
  }
 });
