@@ -2,15 +2,18 @@ import {createChampionshipDiagnosticPort} from './ChampionshipPersistentSavePort
 
 export const DIAGNOSTIC_LIMIT = Object.freeze({entries:32,bytes:8192});
 const TYPES=new Set(['BOOT','PAGE_SHOW','PAGE_HIDE','VISIBILITY','SCREEN','LOAD','LOAD_FAILED','ASSET_FAILED',
-  'TITLE_RETURN','DOCUMENT_RELOAD','CONTEXT_LOST','CONTEXT_RESTORED','ERROR','REJECTION','CONTINUE_FAILED']);
+  'TITLE_RETURN','DOCUMENT_RELOAD','CONTEXT_LOST','CONTEXT_RESTORED','ERROR','REJECTION','CONTINUE_FAILED','RANCH_REPAIRED']);
 const SCREENS=new Set(['TITLE','RAISING_HOME','HUNT_FIELD','HUNT_RESULT','HUNT_LOADOUT','GATE_SELECT','BATTLE_SELECT',
   'BATTLE_FIELD','BATTLE_RESULT','CHAMPIONSHIP','SHOP','DATABASE','MEDALS','CAGE_EDIT','DIGIMON_LIST','SCHEDULE','HELP','TAMER_INFO']);
 const STAGES=new Set(['engine','facilities','partners','scene','arena','fighters','effects','overlay','loading','ready','error','cancelled',
   'loading-card','first-render','audio','gpu-warmup','first-vfx-render']);
 const CODES=['NATIVE_CHARACTER_TEXTURE_MISSING','UNVERIFIED_NATIVE_CHARACTER_FRAME','RESIDENT_ART_UNAVAILABLE',
   'RAISING_CORE_ART_UNAVAILABLE','BATTLE_CORE_ART_UNAVAILABLE','BATTLE_CORE_VFX_UNAVAILABLE','LOAD_TIMEOUT','LOAD_STALLED','SAVE_FAILED',
-  'CHAMPIONSHIP_MODERN_SAVE_CONFLICT','CHARACTER_RUNTIME_BUNDLE_DISPOSED'];
-const NAMES=new Set(['Error','TypeError','RangeError','SyntaxError','SecurityError','QuotaExceededError','AbortError']);
+  'CHAMPIONSHIP_MODERN_SAVE_CONFLICT','CHARACTER_RUNTIME_BUNDLE_DISPOSED',
+  // Owner 2026-11-04: which ranch check refused a saved layout (longer codes first: matched by includes()).
+  'NATIVE_RANCH_OWNERSHIP_OR_RANK_MISMATCH','INVALID_NATIVE_RANCH_MIGRATION','INVALID_PRODUCT_RANCH_ACCESS','RANCH_EXPANSION_WITHOUT_DECKS_LAYOUT',
+  'RANCH_EXPANSION_REQUIRED','UNKNOWN_RANCH_LAYOUT','INVALID_PRODUCT_RANCH','INVALID_NATIVE_RANCH'];
+const NAMES=new Set(['Error','TypeError','RangeError','SyntaxError','SecurityError','QuotaExceededError','AbortError','ChampionshipCageEditError']);
 const SOURCES=new Set(['save-and-quit','raising-load-return','raising-load-reload']);
 const kind='CHAMPIONSHIP_RUNTIME_DIAGNOSTICS';
 const boundedInt=n=>Number.isFinite(n)?Math.max(0,Math.min(2147483647,Math.round(n))):0;

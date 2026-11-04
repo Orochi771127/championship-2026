@@ -3160,6 +3160,16 @@ async function continueGame() {
       return;
     }
     await openGameplay();
+    // Owner 2026-11-04: a refused ranch layout no longer locks the save; say once what was tidied.
+    const repair = app.takeRanchLoadRepair?.();
+    if (repair) {
+      recoveryDiagnostics.record('RANCH_REPAIRED', { error: { name: 'ChampionshipCageEditError', message: repair.code } });
+      await showChoiceDialog({ title: uiText("牧場配置已自動整理"),
+        message: repair.reset
+          ? uiText("上次儲存的牧場配置無法讀取，已改回初始牧場。所有籠舍都收回倉庫，夥伴都在等候室，其他進度完整保留。")
+          : uiText("上次儲存的牧場配置有 {n} 個籠舍無法放置，已收回倉庫；夥伴移到等候室，其他進度完整保留。", { n: repair.removed }),
+        actions: [{ id: "ok", label: uiText("知道了"), tone: "primary" }], cancelId: "ok" });
+    }
   } catch (error) {
     console.warn(error);
     newGameButton.disabled = false;

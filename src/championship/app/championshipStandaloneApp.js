@@ -103,7 +103,9 @@ import {createRanchRaisingGround as createNativeRaisingGround,ranchRaisingSpawnP
 import {createNativeRaisingFood,stepNativeRaisingFood,foodVisualQuarter,nativeRaisingFeast,reconcileNativeFoodReservations} from "../raising/nativeRaisingFood.js";
 import {separateNativeRaisingGroundActors} from '../raising/nativeGroundSpacing.js';
 import {stepRanchConveyor} from '../raising/ranchConveyor.js';
-import {PRODUCT_RANCH_GRID,PRODUCT_WAITING_ROOM_SLOT,productGridCell,productPlacementCells} from '../cage/productRanchGrid.js';
+import {PRODUCT_RANCH_GRID,PRODUCT_WAITING_ROOM_SLOT,productGridCell,productPlacementCells,repairProductRanchPlacements} from '../cage/productRanchGrid.js';
+import {ownedModuleCount} from '../cage/cageInventory.js';
+import {WAITING_ROOM_MODULE} from '../cage/nativeRanchLayout.js';
 import {normalizeNativeRaisingHome,nativeRaisingRebuiltListOrder} from "../raising/nativeRaisingHomeState.js";
 import {allocateNativeRaisingWaste} from '../raising/nativeRaisingWaste.js';
 import {projectNativeRaisingCalendar} from '../raising/nativeRaisingCalendar.js';
@@ -306,6 +308,47 @@ export function createChampionshipStandaloneApp({
   let huntLoadout = null;
   let shop = null;
   let friendsPlaytest = null;
+  // Owner 2026-11-04: what the last Continue repaired in a refused ranch layout (null when nothing).
+  let ranchLoadRepair = null;
+  /**
+   * The cage editor for a saved layout. A layout the editor refuses (a full ranch saved on 2026-11-04
+   * was refused with ChampionshipCageEditError and locked the whole save) is repaired rather than
+   * refusing Continue. The editor is opened and its frame built, so the ownership check runs here too:
+   * copies placed beyond the copies owned go back to storage (saved order kept), then the largest
+   * valid hex world in the saved order, else the starting ranch. Every cage stays owned; partners
+   * whose cage is gone move to the waiting room as on any load.
+   */
+  function loadCageEditor(snapshot) {
+    ranchLoadRepair = null;
+    const open = value => {
+      const editor = createCageEditRuntime({ snapshot: value, publicTestGrid: productLand, initialTamerRank: tamerRankValue });
+      editor.getFrame(...cageEditArgs());
+      return editor;
+    };
+    try { return open(snapshot); }
+    catch (error) {
+      const code = typeof error?.message === 'string' ? error.message : 'UNKNOWN';
+      if (error?.name !== 'ChampionshipCageEditError' && !/RANCH|CAGE/.test(code)) throw error;
+      console.warn('CHAMPIONSHIP_RANCH_LAYOUT_REPAIRED', code);
+      if (snapshot?.layoutVersion === PRODUCT_RANCH_GRID && Array.isArray(snapshot.placements)) {
+        // Copies beyond what is owned (bought copies plus royal editions) first, then the cell rules.
+        const [stock] = cageEditArgs(), placedOf = new Map();
+        const owned = snapshot.placements.filter(entry => {
+          const placed = (placedOf.get(entry?.moduleId) ?? 0) + 1;
+          placedOf.set(entry?.moduleId, placed);
+          return entry?.moduleId === WAITING_ROOM_MODULE || placed <= ownedModuleCount(entry?.moduleId, stock);
+        });
+        const repair = repairProductRanchPlacements(owned);
+        try {
+          const editor = open({ ...snapshot, placements: repair.placements });
+          ranchLoadRepair = Object.freeze({ code, removed: snapshot.placements.length - repair.placements.length, reset: false });
+          return editor;
+        } catch { /* fall through to the starting ranch */ }
+      }
+      ranchLoadRepair = Object.freeze({ code, removed: Array.isArray(snapshot?.placements) ? snapshot.placements.length : 0, reset: true });
+      return createCageEditRuntime({ initializeOriginal: true, publicTestGrid: productLand, initialTamerRank: tamerRankValue });
+    }
+  }
   const productLand = productEconomy === true || playtestPolicy?.enabled === true;
   // Owner 2026-10-29: the save's record of a paid first-bind reward (onlineBindRewardPolicy.js).
   let onlineBindReward = null;
@@ -1887,7 +1930,7 @@ export function createChampionshipStandaloneApp({
     draftRoyalEditions=null;pendingRoyalEdition=null;automationEvents=[];resetAutoCare();
 // Owner 2026-11-04: the 10 x 10 hex land (20 cells, rows bought with diamonds) belongs to the product
     // economy, not only to the playtest; tamer rank no longer sets the cell count there.
-    cageEdit = createCageEditRuntime({ snapshot: saved.cageEdit, publicTestGrid: productLand, initialTamerRank: tamerRankValue });
+    cageEdit = loadCageEditor(saved.cageEdit);
     freeBattleMenu=saved.progression.freeBattleMenu??null;
     battleTactics=normalizeBattleTactics(saved.progression.battleTactics);
     initializeNativeRaisingHome({tutorialBoundary});
@@ -3109,6 +3152,8 @@ export function createChampionshipStandaloneApp({
     },
 
     getHuntEntryError() { return huntEntryError; },
+    /** What the last Continue repaired in a refused ranch layout, once; null afterwards (Owner 2026-11-04). */
+    takeRanchLoadRepair() { const repair = ranchLoadRepair; ranchLoadRepair = null; return repair; },
     advanceHunt(deltaMs){
       if(!huntRuntime)return;
       if(!tutorialBaseline){huntRuntime.tick(deltaMs);return;}
