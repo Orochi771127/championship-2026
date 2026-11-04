@@ -65,3 +65,7 @@
 .cm-medal-dialog__facts dd,.cm-medal-dialog__facts dt { overflow-wrap:anywhere; }
 .cm-medal-dialog__note { font-size:var(--fs-caption); line-height:1.5; color:var(--c-text-2); overflow-wrap:anywhere; }
 @media(max-height:500px) and (orientation:landscape) { .cm-medal-display__stage { height:176px; } }
+/* Owner 2026-11-04: what a badge opens, in gold; a small gold key marks such badges in the grid. */
+.cm-medal-dialog__facts dd.cm-medal-dialog__unlock { color:#8a5a00; font-weight:800; }
+.cm-medals__artwork > .cm-medals__key { position:absolute; left:-2px; top:-2px; width:22px; height:22px; border:2px solid #14141f; border-radius:50%;
+  background:radial-gradient(circle at 50% 38%, #14141f 0 2.6px, transparent 3px), linear-gradient(#14141f,#14141f) 50% 66% / 3px 7px no-repeat, linear-gradient(180deg,#fff3a8,#ffd23f 55%,#e7a51b); }

@@ -67,6 +67,7 @@ import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from ".
 import { BATTLE_MATCH_LIST_CAP } from "../battle/battleMatchSelection.js";
 import { createHelpView } from "./helpScreen.js";
 import { createMedalCollectionView } from "./medalCollectionScreen.js";
+import { badgeUnlockText } from "./badgeUnlockText.js";
 import { createTamerInfoView } from "./tamerInfoScreen.js";
 import { createOpeningPresentation } from './openingPresentation.js';
 import { createOpeningFilm } from './openingFilm.js';
@@ -2125,7 +2126,7 @@ async function mountCurrentScreen() {
     if (target === CHAMPIONSHIP_SCREENS.RAISING_HOME) view = await mountRaisingHome();
     else if (target === CHAMPIONSHIP_SCREENS.SHOP) view = await createShopView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.DATABASE) view = await createDatabaseView({ root, source: expeditionSource, isWideLayout: () => portraitFrame.isBrowseWide('DATABASE') });
-    else if (target === CHAMPIONSHIP_SCREENS.MEDALS) view = createMedalCollectionView({root, playtestPolicy: FRIENDS_PLAYTEST_POLICY, battleBadges:app.getBattleBadges(), onExit(){app.leaveScreen();}});
+    else if (target === CHAMPIONSHIP_SCREENS.MEDALS) view = createMedalCollectionView({root, playtestPolicy: FRIENDS_PLAYTEST_POLICY, battleBadges:app.getBattleBadges(), unlockText:badgeUnlockText, onExit(){app.leaveScreen();}});
     else if (target === CHAMPIONSHIP_SCREENS.CAGE_EDIT) view = await createCageEditView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) view = createDigimonListView({
       root,
@@ -2196,6 +2197,8 @@ async function mountCurrentScreen() {
         root,
         walletBits: Number.isInteger(shopFrame?.bits) ? shopFrame.bits : null,
         titleCount:app.getBattleBadges().filter(id=>id>=0&&id<61).length,
+        // Owner 2026-11-04: the cage field shows the land opened with diamonds (product economy).
+        landCells:app.getCageEditFrame?.()?.land?.capacity??null,
         registeredCount:app.getDatabaseFrame().registeredCount,
         battleRecord:app.getTitleProgress().record??null,
         tamerRank: app.getTamerRank?.() ?? null,
@@ -3348,6 +3351,8 @@ function boot() {
   try {
     app = createChampionshipStandaloneApp({
       playtestPolicy: FRIENDS_PLAYTEST_POLICY,
+      // Owner 2026-11-04: diamonds and the hex land stay when the friends playtest is switched off.
+      productEconomy: true,
       storage: window.localStorage,
       // Owner 2026-10-28: moods, stroll finds and greetings on the ranch. A QA
       // harness that must observe an unchanged inventory (the friends playtest
