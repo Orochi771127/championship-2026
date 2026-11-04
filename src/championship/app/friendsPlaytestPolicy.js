@@ -17,6 +17,14 @@ export function normalizeFriendsPlaytestState(value) {
   if (!Number.isSafeInteger(diamonds) || diamonds < 0 || diamonds > DIAMOND_WALLET_CAP || !Array.isArray(purchases) || purchases.some(row => (!Number.isInteger(row)||row<2||row>=10)) || new Set(purchases).size !== purchases.length) throw new TypeError('INVALID_TEST_DIAMOND_WALLET');
   return Object.freeze({version: value.version, grants: Object.freeze([...new Set(value.grants)]), diamonds, purchases:Object.freeze([...purchases])});
 }
+/**
+ * Owner 2026-11-04: the diamond wallet and the land it buys are the product's, not the
+ * playtest's. Every save carries one -- empty unless the playtest grant filled it -- so
+ * turning the playtest off keeps diamonds, rewards and land expansion working.
+ */
+export function productDiamondWallet(state) {
+  return normalizeFriendsPlaytestState(state) ?? normalizeFriendsPlaytestState({ version: 2, grants: [], diamonds: 0, purchases: [] });
+}
 /** Earned diamonds into the wallet (capped). No wallet, no credit. */
 export function creditTestDiamonds(state, amount) {
   const current = normalizeFriendsPlaytestState(state);
