@@ -153,7 +153,7 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
         const intro=sequence.frames.slice(0,sequence.loopStartFrame??0).reduce((n,f)=>n+f.ticks,0);
         const loop=sequence.frames.reduce((n,f)=>n+f.ticks,0)-intro;
         let step=ticks-huntClock.last;if(step<0)step+=loop;
-        huntClock.last=ticks;huntClock.ticks+=Math.max(0,step)*(HUNT_RUN_SEQUENCES.includes(id)?HUNT_RUN_RATE:1);
+        huntClock.last=ticks;huntClock.ticks+=Math.max(0,step)*(hunt&&HUNT_RUN_SEQUENCES.includes(id)?HUNT_RUN_RATE:1);
         return huntClock.ticks;
       };
       const nativeApply=frame=>{
@@ -164,9 +164,19 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
         // presenter mirrors the sprite from flipBits) instead of showing the original.
         if(!frame||!sequence||!binding){current=null;return native;}
         let ticks=sequence.frames.slice(0,frame.frameIndex).reduce((n,f)=>n+f.ticks,0)+(frame.elapsedQ12??0)/4096;
-        if(hunt&&sequence.playbackMode===2&&binding.clip.loop&&!options.reducedMotion)ticks=huntTicks(sequence,frame.sequenceId,ticks);
-        else huntClock.sequenceId=null;
-        const sampled=apply(sampleReviewedCharacterClip(document,side,frame.sequenceId,binding.clip,ticks*1000/60,{holdFirst:options.reducedMotion,nativeActive:frame.active,
+        // Ranch (Owner 2026-11-04): the same clock outside the hunt. A carried partner's native struggle (sequence 11)
+        // loops every 11 ticks while its reviewed pair runs 320 ms, so the second drawing showed 12 % of the time and
+        // the body looked pinned. A looping native sequence keeps its reviewed clip looping on its own clock; a
+        // one-shot that is longer than the native sequence is compressed into it so its last drawings still play.
+        let clip=binding.clip;
+        if(sequence.playbackMode===2&&!options.reducedMotion&&(hunt?binding.clip.loop:true)){
+          ticks=huntTicks(sequence,frame.sequenceId,ticks);if(!hunt)clip={...clip,loop:true};
+        }else{
+          huntClock.sequenceId=null;
+          const nativeTicks=sequence.frames.reduce((n,f)=>n+f.ticks,0),reviewedTicks=clip.frames.reduce((n,f)=>n+f.durationMs,0)*60/1000;
+          if(!hunt&&sequence.playbackMode===1&&!options.reducedMotion&&nativeTicks>0&&reviewedTicks>nativeTicks)ticks*=reviewedTicks/nativeTicks;
+        }
+        const sampled=apply(sampleReviewedCharacterClip(document,side,frame.sequenceId,clip,ticks*1000/60,{holdFirst:options.reducedMotion,nativeActive:frame.active,
           terminal:[15,25].includes(frame.sequenceId)&&['down','down_ko','bound_down'].includes(binding.clip.action)}));
         // A front-facing clip (handoff facingLocked) is drawn as authored, never mirrored by facing.
         if(sampled&&binding.clip.facingLocked===true)sampled.facingLocked=true;
