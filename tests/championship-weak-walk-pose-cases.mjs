@@ -15,11 +15,12 @@ const LOCOMOTION=[2,3,12,18,19,22];
 // A body moved across the ranch on one held drawing reads as a sliding statue whenever the original
 // alternates two or more drawings there. Main12 (weak walk, cells 37/37 ticks) is still one drawing for
 // these selected roles; each needs its own second drawing (no healthy-walk stand-in). Shrink, never grow.
-// 2026-11-04: MA23, MA31 and MA51 got dot's two-pose weak moves.
-const KNOWN_SINGLE_DRAWING_MAIN12=['MA03','MA04','MA05','MA06','MA07','MA08','MA09','MA10','MA11','MA12','MA13','MA14','MA15',
- 'MA16','MA17','MA18','MA19','MA20','MA21','MA22','MA25','MA26','MA27','MA28','MA29','MA30','MA32','MA35','MA36',
- 'MA37','MA38','MA39','MA40','MA41','MA42','MA43','MA44','MA45','MA46','MA47','MA48','MA49','MA52','MA53','MA62','MA65',
- 'MA66','MA67','MA68','MA69'];
+// 2026-11-04: MA23, MA31 and MA51 got dot's two-pose weak moves; MA05, MA07, MA09, MA10, MA13, MA14, MA17, MA36,
+// MA47, MA49 and MA66 got dot's four-slot cycles.
+const KNOWN_SINGLE_DRAWING_MAIN12=['MA03','MA04','MA06','MA08','MA11','MA12','MA15',
+ 'MA16','MA18','MA19','MA20','MA21','MA22','MA25','MA26','MA27','MA28','MA29','MA30','MA32','MA35',
+ 'MA37','MA38','MA39','MA40','MA41','MA42','MA43','MA44','MA45','MA46','MA48','MA52','MA53','MA62','MA65',
+ 'MA67','MA68','MA69'];
 
 test('a moving body never holds one drawing where the original alternates drawings (known Main12 gaps only)',()=>{
  const found=[];
@@ -90,6 +91,20 @@ test('MA23, MA31 and MA51 weak moves alternate two delivered drawings at the nat
   const native=json(runtimeOf.get(entry.speciesId)).sides.main.animations.find(a=>a.id===12);
   assert.deepEqual(native.frames.map(f=>f.ticks),[37,37],code);
   for(const f of binding.clip.frames)assert.ok(doc.frames[f.assetId].density<=8,code+' stays within the 2x grid');
+ }
+});
+
+// Owner 2026-11-04 「Allow 4-pose cycle」: four sequence positions keep the original's 74-tick cycle (37+37).
+test('four-slot weak cycles keep the native 74-tick cycle and stay within the 2x grid',()=>{
+ for(const code of ['MA05','MA07','MA09','MA10','MA13','MA14','MA17','MA36','MA47','MA49','MA66']){
+  const entry=selection.characters.find(c=>c.displayCode===code),doc=manifest(entry),binding=reviewedNumericClip(doc,'main',12);
+  assert.equal(binding.mappingEvidence,'EXPLICIT_NUMERIC_SELECTION',code);
+  const ticks=binding.clip.frames.map(f=>Math.round(f.durationMs*60/1000));
+  assert.deepEqual(ticks,[19,18,19,18],code);
+  const native=json(runtimeOf.get(entry.speciesId)).sides.main.animations.find(a=>a.id===12);
+  assert.equal(native.frames.reduce((n,f)=>n+f.ticks,0),ticks.reduce((n,t)=>n+t,0),code);
+  assert.ok(new Set(binding.clip.frames.map(f=>f.assetId)).size>=3,code+' keeps at least three drawings');
+  for(const f of binding.clip.frames){assert.ok(f.assetId.startsWith(`weak12:${code}:20261104b:`),code);assert.ok(doc.frames[f.assetId].density<=8,code);}
  }
 });
 

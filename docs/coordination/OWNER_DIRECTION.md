@@ -1,5 +1,27 @@
 # Championship Owner Direction
 
+<!-- record-id: MA_WEAK_FOUR_SLOT_CYCLES_20261104 -->
+## 2026-11-04 — Eleven 成熟期 weak walks play dot's four-slot cycle
+
+dot delivers a 53-package index plus nine more packages (2026-11-04). Every 成熟期 Main12 weak-walk proposal has three to six poses, while the original sequence 12 is two cells at 37/37 ticks. Asked, the Owner answers 「Allow 4-pose cycle」: four sequence positions per cycle, keeping the original 74 ticks.
+
+OWNER_APPROVED_ADAPTATION.
+
+- Bound: MA05, MA07, MA09, MA10, MA13, MA14, MA17, MA36, MA47, MA49 and MA66 play dot's sequence order at 19/18/19/18 ticks. MA66 uses three poses over four slots (A→M→B→M).
+- Registration:
+  - poses keep dot's shared canvas (offset and scale from each package's `SEQUENCE_MANIFEST.json`), so the motion between them is as delivered;
+  - one density per role (median silhouette area against the old one-drawing weak frame), at most density 8;
+  - one origin per role, with the lowest pose on the old weak feet line;
+  - pixels with alpha below 10 are cleared.
+- MA13 uses dot's C2 repair in place of C, whose opaque white wedge is a visible defect.
+- Authoring `animation.web-weak-20261104b.json` with `patch20261104Weak`; MA66's patch sits on its KO patch.
+- Not bound:
+  - MA20, MA37, MA40: the poses do not match the shipped drawing (upright vs crouched, a flat flame shape vs the compact bird, standing vs kneeling).
+  - MA11, MA15, MA48: six-pose cycles are outside the four-slot approval.
+  - MA35, MA67: dot reports jumps and pending fin roots.
+  - AW48 (species-176), AW50 (species-179) and every UL species: they have no reviewed set in the game.
+- Archive: 54 new packages, SHA-checked, in `D:/Championship2026-archive/character-animation-art-archive-20261025/drive-delivery-20261104-v2`. R: had 27 MB free.
+
 <!-- record-id: ORIGINAL8_KO_WEAK_MOVES_20261104 -->
 ## 2026-11-04 — Arena KO for the eight playable originals; MA23, MA31 and MA51 weak moves play two drawings
 
