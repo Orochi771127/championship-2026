@@ -252,6 +252,22 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   scene.addChild(letterbox,world,fxScreen,curtain,clip);
   world.mask=clip;
   if (fieldArt) productionArtLayer.addChild(fieldArt.displayObject);
+  // Owner 2026-11-04: the HUD-safe camera may pull back until the arena covers
+  // only the window between the HUD rows, and the strips past its top and
+  // bottom edges showed the bare letterbox as black bars. Mirrored, dimmed
+  // copies of the arena art continue both edges there (the same texture, so
+  // no new GPU memory).
+  if (fieldArt) {
+    const base = fieldArt.displayObject.texture ? fieldArt.displayObject : fieldArt.displayObject.children?.find(child => child.texture);
+    const { worldWidthPx, worldHeightPx } = fieldArt.field;
+    if (base?.texture?.width > 0) for (const y of [0, worldHeightPx * 2]) {
+      const bleed = new stage.PIXI.Sprite(base.texture);
+      bleed.label = "arena edge bleed"; bleed.eventMode = "none"; bleed.tint = 0xa8b2bc;
+      bleed.width = worldWidthPx; bleed.height = worldHeightPx; bleed.scale.y = -Math.abs(bleed.scale.y);
+      bleed.position.set(0, y);
+      productionArtLayer.addChildAt(bleed, 0);
+    }
+  }
   // Optional art foreground (e.g. palm canopies) draws over the fighters.
   if (fieldArt?.foregroundObject) world.addChildAt(fieldArt.foregroundObject, world.getChildIndex(fxFront));
   const effectSprites = effectArt ? createBattleEffectSprites({PIXI:stage.PIXI, parent:actorLayer, art:effectArt}) : null;
