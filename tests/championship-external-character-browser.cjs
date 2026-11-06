@@ -1,5 +1,6 @@
 // Controlled normal-UI check of the exact reduced public bundle. Only the game
-// URLs are fulfilled from disk; character requests use the live immutable host.
+// URLs are fulfilled from disk; character requests pass through the live
+// immutable HTTPS host, with their exact response bytes verified before delivery.
 // Fresh contexts use the repository QA save (or a genuine New Game), never an
 // owner's browser profile. This is Chromium/SwiftShader, not device acceptance.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
@@ -18,6 +19,7 @@ const mime={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript'
  '.mp4':'video/mp4','.wav':'audio/wav','.mp3':'audio/mpeg','.ogg':'audio/ogg','.woff2':'font/woff2'};
 fs.mkdirSync(output,{recursive:true});
 const report={schemaVersion:1,status:'RUNNING',controlledPublicOrigin:true,liveCharacterHost:assetBase,
+ liveCharacterTransport:'LIVE_HTTPS_PASSTHROUGH_EXACT_RESPONSE_BYTES',
  physicalDeviceAccepted:false,viewports:[],errors:[],responseHashes:[],missing:[],unexpected:[]};
 const write=()=>fs.writeFileSync(path.join(output,'browser.json'),JSON.stringify(report,null,2)+'\n');
 const screen=(page,id)=>page.waitForFunction(id=>document.querySelector('#cm-root')?.dataset.activeScreen===id,id,{timeout:120000});
@@ -34,7 +36,35 @@ async function isolated(browser,viewport,label,{seed=true}={}){
  },{save:seed?fs.readFileSync('qa/championship-full-qa-save.json','utf8'):null});
  await context.route('**/*',async route=>{
   const url=route.request().url();requests.push(url);
-  if(selected.has(url))return route.continue();
+  if(selected.has(url)){
+   const expected=selected.get(url);
+   const job=(async()=>{
+    let response;
+    try{
+     assert.equal(route.request().method(),'GET','Character delivery is read-only');
+     // APIResponse owns its body independently of Chromium's decoded-image
+     // cache. Nothing is read from local character assets or substituted here.
+     response=await route.fetch({maxRedirects:0,maxRetries:0,timeout:60000});
+     const bytes=await response.body();assert.equal(response.url(),url);assert.equal(response.status(),200);
+     assert.equal(bytes.length,expected.bytes);
+     const digest=sha(bytes);assert.equal(digest,expected.sha256,'Live character response differs from the selected release: '+expected.path);
+     const headers={...response.headers()},contentType=headers['content-type']||'';
+     assert.equal(contentType.split(';')[0].trim(),mime[path.extname(expected.path)],'Live character MIME differs: '+expected.path);
+     // APIResponse.body() has already decoded transport compression. Preserve
+     // MIME/cache/origin headers and the exact entity bytes; do not double-decode
+     // JSON or retain an encoded/chunked Content-Length when passing them on.
+     const contentEncoding=headers['content-encoding']||null;
+     delete headers['content-encoding'];delete headers['transfer-encoding'];
+     headers['content-length']=String(bytes.length);
+     await route.fulfill({status:response.status(),headers,body:bytes});
+     report.responseHashes.push({label,path:expected.path,status:response.status(),bytes:bytes.length,
+      sha256:digest,contentType,upstreamContentEncoding:contentEncoding});
+    }catch(error){
+     report.errors.push({label,kind:'live-response-verification',url,message:String(error)});
+     await route.abort().catch(()=>{});
+    }finally{await response?.dispose();}
+   })();jobs.push(job);return job;
+  }
   if(url.startsWith(base)&&['GET','HEAD'].includes(route.request().method())){
    const relative=decodeURIComponent(new URL(url).pathname.slice(new URL(base).pathname.length));
    // A missed boundary must fail, even if someone copied source assets back in.
@@ -55,18 +85,10 @@ async function isolated(browser,viewport,label,{seed=true}={}){
   if(!failure.includes('ERR_ABORTED'))report.errors.push({label,kind:'requestfailed',url:request.url(),failure});});
  page.on('response',response=>{
   if(response.status()>=400)report.errors.push({label,kind:'http',url:response.url(),status:response.status()});
-  const expected=selected.get(response.url());if(!expected)return;
-  jobs.push((async()=>{
-   const bytes=await response.body();assert.equal(response.status(),200);assert.equal(bytes.length,expected.bytes);
-   assert.equal(sha(bytes),expected.sha256,'Live character response differs from the selected release: '+expected.path);
-   report.responseHashes.push({label,path:expected.path,status:response.status(),bytes:bytes.length,sha256:sha(bytes)});
-  })().catch(error=>{
-   // Leaving a screen intentionally aborts a still-loading parade/preview.
-   if(!response.request().failure()?.errorText?.includes('ERR_ABORTED'))
-    report.errors.push({label,kind:'response-hash',url:response.url(),message:String(error)});
-  }));
  });
- return {page,context,requests,async settle(){await Promise.all(jobs);}};
+ return {page,context,requests,async settle(){
+  let count=0;while(count<jobs.length){const pending=jobs.slice(count);count=jobs.length;await Promise.all(pending);}
+ }};
 }
 
 async function ranchReady(page){
@@ -100,6 +122,7 @@ async function checkDex(page,label,checks){
   },before,{timeout:12000});
   assert.equal(await page.locator('.cm-showcase-motion[data-error]').count(),0);
   for(const action of ['attack','cheer'])await page.locator(`.cm-showcase-motion__action[data-action="${action}"]`).click();
+  await page.locator('.cm-showcase-motion__sprite').scrollIntoViewIfNeeded();
   await shot(page,`${label}-dex-${species}`);checks.push(`Dex ${species}: live motion pages, native frames advance, attack/cheer controls`);
   await page.locator('.cm-vs2-footer button').first().click();
  }
@@ -129,7 +152,7 @@ async function checkBattle(page,label,checks){
  }
  assert.ok(first&&second,'Fixture has two eligible practice members');
  await page.getByRole('button',{name:'開始練習',exact:true}).click();await screen(page,'BATTLE_FIELD');
- await page.locator('[data-screen="BATTLE_FIELD"][data-loading="false"]').waitFor();
+ await page.locator('#cm-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-loading="false"]').waitFor();
  await page.waitForFunction(()=>[...document.querySelectorAll('.cm-vs5-fighter__mini img')].some(image=>image.complete&&image.naturalWidth>0));
  await shot(page,`${label}-battle`);checks.push('normal practice battle renders characters and decoded HUD portraits');
  await page.locator('.cm-vs5-exit:visible').click();
