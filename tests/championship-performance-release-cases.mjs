@@ -82,10 +82,13 @@ test('removed machines still remove badges and release the opened detail selecti
 });
 
 function runStressAssertions(unhandledRejections=[], baseline=false) {
-  const start=stress.indexOf('    if (!BASELINE_ONLY) {');
-  const end=stress.indexOf('\n    await context.close();',start);
+  const end=stress.lastIndexOf('\n    await context.close();');
+  const start=stress.lastIndexOf('    if (!BASELINE_ONLY) {',end);
   assert.ok(start>=0 && end>start, 'Locate actual stress-harness terminal assertions');
-  vm.runInNewContext(stress.slice(start,end), {
+  const assertions=stress.slice(start,end);
+  assert.match(assertions, /assert\.equal\(unhandledRejections\.length, 0/);
+  assert.doesNotMatch(assertions, /\bawait\b/, 'Do not extract earlier asynchronous browser steps');
+  vm.runInNewContext(assertions, {
     assert, BASELINE_ONLY:baseline, pageErrors:[], unexpectedTitleDrops:[], unhandledRejections,
     report:{maxCanvasDpr:1.75,contextGrowth:0}, lastLoop:{gpu:{activeContexts:2}}, LOOPS:10
   });
