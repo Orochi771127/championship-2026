@@ -773,26 +773,13 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   // fighter's gauge fills from damage dealt (150 per foe max HP) and taken (200 per own max HP); full, it bursts once
   // per match for 20 s (dealt x1.4 / x1.7, taken divided by the same), then is weakened (x0.85) for 5 s. Switching
   // out ends a burst. Its form is drawn while it lasts. Awakening raising (2026-11-02): a ranch partner bursts into
-  // the form it learned (relayBurstPlans[partnerId], null for none) with its bloodline perk and bond; a Dex-only entry
-  // and a rival into their first tier-1 form. The player's fighter waits READY for the call when relayManualBurst
-  // (at most manualSeconds, at once below pinchHpPercent); damage taken in a pinch fills the gauge faster.
-  const DEFAULT_MANUAL_BURST_BY_ELEMENT = Object.freeze({
-    fire: 139, water: 138, frost: 140, ice: 140, nature: 144, light: 145,
-    storm: 143, thunder: 143, wind: 146, earth: 181, shadow: 148, dark: 148,
-    metal: 147, physical: 147, toxic: 144
-  });
+  // the form it learned (relayBurstPlans[partnerId], null for none) with its bloodline perk and bond; a rival and an
+  // auto-played entry into their first tier-1 form. The player's fighter waits READY for the call when relayManualBurst
+  // (at most manualSeconds, at once below pinchHpPercent); damage taken in a pinch fills the gauge faster. The call is
+  // earned (Owner 2026-11-04): a manual entry without a learned form has no burst and no button.
   const arenaBurstPlan = (speciesId, own = undefined, manual = false) => {
-    if (own === null) return null;
     let plan = own;
-    if (plan === undefined) {
-      const idx = Number(String(speciesId).split('-').at(-1));
-      const form = burstFormsFor(idx).find(f => f.tier === 1);
-      if (form) plan = { form: form.form, tier: 1 };
-      else if (manual) {
-        const elem = rosterElement.get(speciesId) ?? speciesTaxonomyForId(speciesId)?.element?.toLowerCase() ?? 'fire';
-        plan = { form: DEFAULT_MANUAL_BURST_BY_ELEMENT[elem] ?? 139, tier: 1 };
-      } else plan = null;
-    }
+    if (plan === undefined && !manual) { const form = burstFormsFor(Number(String(speciesId).split('-').at(-1))).find(f => f.tier === 1); plan = form ? { form: form.form, tier: 1 } : null; }
     if (!plan || !Number.isInteger(plan.form)) return null;
     const tier = plan.tier === 2 ? 2 : 1, perk = BLOODLINE_BURST_PERKS[plan.bloodline] ?? {}, bond = Math.max(0, Math.min(100, Number(plan.bond) || 0));
     return { form: plan.form, tier, via: tier === 2 && Number.isInteger(plan.via) ? plan.via : null,
@@ -968,7 +955,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   let kitBuffer = null;
   function playerKitInput(input) {
     if (input.ult || Number.isInteger(input.cast)) {
-      kitBuffer = { ult: input.ult, cast: Number.isInteger(input.cast) ? input.cast : null, autoAim: input.autoAim, left: DATA_ARENA_ENERGY.inputBuffer };
+      // A pointed press keeps its aim relative to the caster, so a buffered cast still goes where it was pointed.
+      const pointed = !input.autoAim && input.aimX !== null ? { dx: input.aimX - player.x, dy: input.aimY - player.y } : null;
+      kitBuffer = { ult: input.ult, cast: Number.isInteger(input.cast) ? input.cast : null, autoAim: input.autoAim, pointed, left: DATA_ARENA_ENERGY.inputBuffer };
     }
     if (!kitBuffer) return;
     const usable = (player.state === "NORMAL" || player.state === "RIDING") && !player.cast && !player.lunge && (!relayMode || player.recovery <= 0);
@@ -980,7 +969,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const request = kitBuffer;
     kitBuffer = null;
     const ids = kitMoveIds(player);
-    const aimFor = (range) => (request.autoAim || input.autoAim || input.aimX === null ? autoAim(player, range) : { x: input.aimX, y: input.aimY });
+    const aimFor = (range) => (request.pointed ? { x: player.x + request.pointed.dx, y: player.y + request.pointed.dy } : autoAim(player, range));
     if (request.ult) {
       if (relayMode ? canCast(player, player.kit.ultimate) && player.energy >= DATA_ARENA_RELAY.ultimateTp : player.ult >= DATA_ARENA_ENERGY.ultMax) {
         const move = moveFor(player.kit.ultimate, true);
@@ -2008,6 +1997,11 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       const weight = move.type === "ZONE" ? (Math.hypot(player.vx, player.vy) < 120 ? 3 : 1.2) : move.type === "LUNGE" ? (d < move.distance ? 1.4 : 0) : 2;
       if (weight > 0) options.push({ id, weight });
     }
+    // Owner 2026-11-04: a relay rival also throws its species' basic attack (0 TP) when in reach, not only skills.
+    if (relayMode && rival.basic && canCast(rival, rival.basic)) {
+      const basic = moveFor(rival.basic), reach = basic.type === "LUNGE" ? basic.distance + 40 : basic.type === "NOVA" ? basic.radius + 12 : basic.range;
+      if (d <= reach) options.push({ id: rival.basic, weight: options.length ? 2.5 : 1 });
+    }
     if (!options.length) return null;
     let roll = random() * options.reduce((sum, option) => sum + option.weight, 0);
     for (const option of options) { roll -= option.weight; if (roll <= 0) return option; }
@@ -2102,7 +2096,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if (!playerTargetable || !hasSight(rival.x, rival.y, player.x, player.y)) return;
     const pick = rivalPickMove(rival, d);
     if (!pick) return;
-    const move = DATA_ARENA_MOVES[pick.id];
+    const move = moveFor(pick.id, Boolean(pick.ultimate)) ?? DATA_ARENA_MOVES[pick.id];
     const travel = move.type === "ZONE" ? move.delay : move.speed ? d / move.speed + (move.windup ?? 0) : move.windup ?? 0;
     const lead = rival.tier.lead;
     const aimX = player.x + player.vx * travel * lead, aimY = player.y + player.vy * travel * lead;
@@ -2282,6 +2276,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   function relayRival(index) {
     const definition = DATA_ARENA_RIVALS[index % DATA_ARENA_RIVALS.length];
     const rival = createRival({ ...definition, hp: Math.round(definition.hp * DATA_ARENA_RELAY.rivalHpScale) }, Math.min(index, 1));
+    rival.basic = RELAY_ACTION_PROFILES[RELAY_ROSTER.find(p => p.speciesId === definition.speciesId)?.id]?.basic ?? 'relaySlash';
     rival.active = true; rival.burst = arenaBurstPlan(definition.speciesId); rival.burstSpeciesId = null; rival.koCounted = false; return rival;
   }
   function updateRelay() {
@@ -2589,6 +2584,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       damageRival, chooseRivalGoal, endRound, triggerTriLinkRush }),
     choose,
     drainEvents() { return events.splice(0, events.length); },
+    /** A move's rules as this mode plays them (range, type, radius), for the touch aim guide. Read-only. */
+    moveInfo(id, ultimate = false) { return moveFor(id, ultimate) ?? null; },
     /** Where auto-aim points now (nearest hostile in range with a clear path). Read-only. */
     autoAimPoint(range = DATA_ARENA_PLAYER.laser.range) { const aim = autoAim(player, range); return { x: aim.x, y: aim.y, locked: Boolean(aim.target) }; },
     getState: () => state,

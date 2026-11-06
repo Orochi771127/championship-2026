@@ -2,7 +2,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const BASE='b21fed713454e90e65136d3f3cd2b604a166be97c64dd03fc2ae49d44de55ea4';
 // Royal maps build (2026-11-03): the cage 3D manifest gains the two royal maps; the GLB resources below remain pinned.
-const BUILD='8fca61a1810cf80260d3d7103a50c0c4e8ba0042a66d9358a74d02c825aec154';
+const BUILD='55a1f660677bf600a9459c26f88b4a648165516a7c7b77beb63d0d1c5face784';
 const RESOURCES=Object.freeze([{"path":"assets/production/cage/three-20261021/manifest.json","bytes":9008,"sha256":"92340fb78f42098535cf6cc38eb13efc59aa518467aa7ec9d078ab0dd96a2ba1"},{"fieldId":"field_cm02_01","path":"assets/production/cage/three-20261021/field_cm02_01.glb","bytes":900856,"sha256":"80efcd18ff4d9e2ee94fa64843b7e14ba5abd2705e64339be531762356684307"},{"fieldId":"field_cm18_01","path":"assets/production/cage/three-20261021/field_cm18_01.glb","bytes":1853276,"sha256":"6657497289f9f10ac376f5d31d2ff50b0cb1629da65f64c49bade3788cbc6e41"},{"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":281140,"sha256":"075d4d932b1fd5b7f5c6e4467fe636a3e4905eb08d715b717892a2003718b6f2"}]);
 function verifyThreeResponses(row){
  assert.equal(row.sourceThreeReadbacksComplete?.responses,row.sourceThreeResponses?.length,'All owned response reads completed');

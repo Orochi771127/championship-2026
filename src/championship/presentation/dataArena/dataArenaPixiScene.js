@@ -1425,14 +1425,30 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     for (; w < waves.length; w++) if (waves[w]?.sprite) waves[w].sprite.visible = false;
   }
 
+  // Owner 2026-11-04: the player's own relay moves draw no range circles or arrays (the game judges the hit), only the
+  // short direction chevrons; while a thumb points a move, one guide shows its direction and where it lands. Rival
+  // warnings stay.
+  let aimGuide = null;
+  function drawAimGuide(g) {
+    const body = state.player.state === "RIDING" && state.mate ? state.mate : state.player;
+    if (!aimGuide || !body) return;
+    if (aimGuide.angle === null) { g.circle(body.x, body.y, aimGuide.radius).stroke({ width: 3, color: 0x6ff7ff, alpha: 0.8 }); return; }
+    const c = Math.cos(aimGuide.angle), s = Math.sin(aimGuide.angle), ex = body.x + c * aimGuide.length, ey = body.y + s * aimGuide.length;
+    g.moveTo(body.x + c * 26, body.y + s * 26).lineTo(ex, ey).stroke({ width: 8, color: 0x6ff7ff, alpha: 0.28 });
+    g.moveTo(body.x + c * 26, body.y + s * 26).lineTo(ex, ey).stroke({ width: 2.5, color: 0xffffff, alpha: 0.85 });
+    if (aimGuide.radius > 0) g.circle(ex, ey, aimGuide.radius).fill({ color: 0x6ff7ff, alpha: 0.12 }).stroke({ width: 2.5, color: 0x6ff7ff, alpha: 0.85 });
+    else g.poly([ex + c * 16, ey + s * 16, ex - s * 10, ey + c * 10, ex + s * 10, ey - c * 10]).fill({ color: 0xffffff, alpha: 0.9 });
+  }
   function drawMarks() {
     const g = marks;
     g.blendMode = "add";
     g.clear();
+    drawAimGuide(g);
     // Telegraphs: dual-layer additive energy arrays with rotating rune ticks.
     for (const t of state.telegraphs) {
       const p = clamp(t.t / t.duration, 0, 1);
       const mine = t.team === "player";
+      if (mine && relayMode && t.kind !== "LINE" && t.kind !== "CONE") continue; // relay: own direction chevrons only, no circles
       if ((t.kind === "LINE" || t.kind === "CONE") && mine) {
         // Own aim: short chevrons near the feet instead of a line across the field (Owner 2026-11-05).
         const rays = t.kind === "CONE" ? Array.from({ length: t.count }, (_, i) => t.angle - t.spread / 2 + (t.spread * i) / Math.max(1, t.count - 1)) : [t.angle];
@@ -1579,6 +1595,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     floatText,
     damageNumber,
     setShake(enabled) { camera.setShake(enabled); },
+    setAimGuide(guide) { aimGuide = guide; },
     getDiagnostics() {
       const sorted = [...fpsWindow].sort((a, b) => a - b);
       return {
