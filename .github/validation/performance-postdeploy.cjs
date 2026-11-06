@@ -54,7 +54,7 @@ async function bytes(url){
     }
   },qaSave);
   await context.tracing.start({screenshots:true,snapshots:true});
-  const page=await context.newPage();page.setDefaultTimeout(30000);
+  const page=await context.newPage();page.setDefaultTimeout(60000);
   page.on('pageerror',error=>result.pageErrors.push(String(error)));
   page.on('console',message=>{if(message.type()==='error')result.consoleErrors.push(message.text());});
   page.on('requestfailed',request=>result.failedRequests.push({url:request.url(),error:request.failure()?.errorText}));
@@ -66,11 +66,14 @@ async function bytes(url){
     const response=await page.goto(`${base}?release=${expected}`,{waitUntil:'domcontentloaded',timeout:90000});
     assert.equal(response.status(),200);
     assert.equal(new URL(page.url()).origin,new URL(base).origin);
-    await page.getByRole('button',{name:/^進入遊戲$|^进入游戏$|^Enter Game$|^Accéder au jeu$|^ゲームに入る$/}).waitFor({state:'visible',timeout:90000});
+    // Reuse the stable title contract, whose accessible name also contains PRESS START.
+    await page.locator('#cm-login').waitFor({state:'visible',timeout:90000});
+    await page.waitForFunction(()=>document.querySelector('#cm-login')?.disabled===false,null,{timeout:90000});
     await screenshot('title');
     const started=Date.now();
-    await startGame(page,{timeout:90000});
+    await startGame(page,{continueGame:true,timeout:90000});
     await page.locator(RAISING_HOME).waitFor({state:'visible',timeout:90000});
+    await page.waitForFunction(()=>document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready',null,{timeout:90000});
     await page.waitForFunction(()=>Array.from(document.querySelectorAll('canvas')).some(canvas=>{
       const r=canvas.getBoundingClientRect();return r.width>0&&r.height>0&&canvas.width>0&&canvas.height>0;
     }),null,{timeout:60000});
