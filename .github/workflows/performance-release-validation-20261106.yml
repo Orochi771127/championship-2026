@@ -1,0 +1,134 @@
+name: Validate authorized performance release 20261106
+on:
+  push:
+    branches: [ops/performance-release-validation-20261106]
+    paths: [.github/workflows/performance-release-validation-20261106.yml]
+permissions:
+  contents: write
+concurrency:
+  group: performance-release-validation-20261106
+  cancel-in-progress: false
+jobs:
+  validate-candidate:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 25
+    env:
+      BASE_SHA: 7312a31c2723d315517d5f64efbef0c1b7a4d1ce
+      CANDIDATE_SHA: a48679402869d28618f655d2006ebbd9870cc465
+      CANDIDATE_BRANCH: fix/performance-release-20261106
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: a48679402869d28618f655d2006ebbd9870cc465
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Verify exact candidate and retain approval scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
+          test "$(git ls-remote origin "refs/heads/$CANDIDATE_BRANCH" | cut -f1)" = "$CANDIDATE_SHA"
+          git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          mkdir -p .tmp/performance-release
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const base=process.env.BASE_SHA;
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const sourceFiles=[
+            ['src/championship/presentation/dataArena/dataArenaPixiScene.js','7f9fded5e6b389fe0a5574bc554461063d21a002'],
+            ['src/championship/app/raisingHomeP1RView.js','da5159ad1a83273188a728492b0663fd6a6169b5']
+          ];
+          const testFile='tests/championship-performance-release-cases.mjs';
+          const stressFile='tests/championship-mobile-stress-leak-browser.cjs';
+          const expectedChanged=[...sourceFiles.map(([file])=>file),testFile,stressFile].sort();
+          assert.deepEqual(git('diff','--name-only',base,'HEAD').split('\n').sort(),expectedChanged);
+          assert.equal(git('hash-object',stressFile),'84ba9260aeaf54be2aa3fe6409ac3cc1856c7226');
+          const entries=sourceFiles.map(([file,blob])=>{
+            assert.equal(git('hash-object',file),blob,'Reviewed product blob changed');
+            return {file,old:sha(execFileSync('git',['show',`${base}:${file}`])),next:sha(fs.readFileSync(file))};
+          });
+          const manifests=[
+            ['docs/contracts/championship/WEB_BUILD_INPUTS.v1.json',doc=>doc.publicPlaytest.files],
+            ['docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json',doc=>doc.files]
+          ];
+          const escape=value=>value.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+          for(const [file,rows] of manifests){
+            const original=fs.readFileSync(file,'utf8');
+            const expected=JSON.parse(original);
+            let next=original;
+            for(const entry of entries){
+              const matches=rows(expected).filter(row=>row.path===entry.file);
+              assert.equal(matches.length,1,'Exactly one existing reviewed path is required');
+              assert.equal(matches[0].sha256,entry.old,'Existing approval must match the previous public bytes');
+              matches[0].sha256=entry.next;
+              const regex=new RegExp('\\{[^{}]*"path"\\s*:\\s*"'+escape(entry.file)+'"[^{}]*\\}','g');
+              const blocks=[...next.matchAll(regex)];
+              assert.equal(blocks.length,1,'Only the exact existing approval row may change');
+              assert.equal(JSON.parse(blocks[0][0]).sha256,entry.old);
+              const replacement=blocks[0][0].replace(/("sha256"\s*:\s*")[a-f0-9]{64}("\s*)/,(_,a,b)=>a+entry.next+b);
+              assert.notEqual(replacement,blocks[0][0]);
+              next=next.slice(0,blocks[0].index)+replacement+next.slice(blocks[0].index+blocks[0][0].length);
+            }
+            assert.deepEqual(JSON.parse(next),expected,'No other approval or asset field may change');
+            fs.writeFileSync(file,next);
+          }
+          const scopeFile='tests/ci-test-scope.v1.json';
+          const scope=JSON.parse(fs.readFileSync(scopeFile,'utf8'));
+          assert.ok(!scope.portable.includes(testFile)&&!Object.hasOwn(scope.localReference,testFile));
+          scope.portable.push(testFile);
+          fs.writeFileSync(scopeFile,JSON.stringify(scope,null,2)+'\n');
+          const changed=git('diff','--name-only').split('\n').sort();
+          assert.deepEqual(changed,[...manifests.map(([file])=>file),scopeFile].sort());
+          fs.writeFileSync('.tmp/performance-release/approval-update.json',JSON.stringify({base,candidate:process.env.CANDIDATE_SHA,authorization:'Owner explicitly requested resolving failures, modifying main and redeploying this reviewed batch on 2026-11-06.',sources:entries,changed,assetsUnchanged:true,rightsFlagsUnchanged:true},null,2)+'\n');
+          console.log(JSON.stringify({reviewedFiles:entries,changed,scopeRetained:true},null,2));
+          NODE
+      - name: Install exact dependencies
+        run: npm ci
+      - name: Focused behavioral and regression probes
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --test tests/championship-performance-release-cases.mjs | tee .tmp/performance-release/focused-tests.log
+      - name: Full portable CI
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run test:ci > .tmp/performance-release/test-ci.log 2>&1 || { tail -n 160 .tmp/performance-release/test-ci.log; exit 1; }
+          tail -n 22 .tmp/performance-release/test-ci.log
+      - name: Exact public external-character build and validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run build:playtest -- --external-characters > .tmp/performance-release/build.log 2>&1 || { tail -n 100 .tmp/performance-release/build.log; exit 1; }
+          npm run validate:playtest -- --external-characters > .tmp/performance-release/validate.log 2>&1 || { tail -n 100 .tmp/performance-release/validate.log; exit 1; }
+          node scripts/assert-public-payload.mjs dist/github-playtest > .tmp/performance-release/public-payload.log 2>&1 || { cat .tmp/performance-release/public-payload.log; exit 1; }
+          tail -n 20 .tmp/performance-release/build.log
+          tail -n 20 .tmp/performance-release/validate.log
+          cat .tmp/performance-release/public-payload.log
+      - name: Publish only verified approval records to candidate branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git ls-remote origin "refs/heads/$CANDIDATE_BRANCH" | cut -f1)" = "$CANDIDATE_SHA"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/contracts/championship/WEB_BUILD_INPUTS.v1.json docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json tests/ci-test-scope.v1.json
+          git diff --cached --stat
+          git commit -m 'build: refresh only reviewed performance source hashes and register regression probes'
+          git push origin "HEAD:refs/heads/$CANDIDATE_BRANCH"
+          git rev-parse HEAD | tee .tmp/performance-release/verified-candidate-sha.txt
+      - name: Retain validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-release-validation-${{ github.run_id }}
+          path: .tmp/performance-release/
+          include-hidden-files: true
+          retention-days: 14
