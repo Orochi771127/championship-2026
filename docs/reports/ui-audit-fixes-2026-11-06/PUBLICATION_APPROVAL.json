@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "recordedOn": "2026-11-06",
+  "timezone": "Asia/Taipei",
+  "approvalId": "UI_AUDIT_RECOVERY_ACCESSIBILITY_PUBLICATION_20261106",
+  "ownerReply": "核准",
+  "approvedQuestion": "是否核准 PR #191 這批修復更新公開建置雜湊，並在公開產物及正常瀏覽器流程關卡通過後，合併到 main 並部署？",
+  "reviewedCommit": "3ec0c65a03fb320ca1da672e0e482cf7bc9d1666",
+  "pullRequest": "https://github.com/Orochi771127/championship-2026/pull/191",
+  "scope": [
+    "UIA-01",
+    "UIA-02",
+    "UIA-03",
+    "UIA-04",
+    "UIA-05",
+    "UIA-06"
+  ],
+  "authorizedActions": [
+    "refresh these 11 approved source hashes",
+    "commit and push this bounded release update",
+    "merge PR191 after release and normal-browser gates pass",
+    "deploy through existing GitHub Pages workflow",
+    "verify the deployed version"
+  ],
+  "publicSelectionCount": 8190,
+  "selectionPathsOrderAndNonHashFieldsUnchanged": true,
+  "approvedChanges": [
+    {
+      "path": "src/championship/app/dataArenaScreen.js",
+      "previousSha256": "bc9397a86fa5bca1963b8027eebbc9ed3738037f70c0ad7383165ea341c286bc",
+      "approvedSha256": "5224c02fbd54f55b3dbd7691bdc02af4734d315fd092f93e33a377f714585a44"
+    },
+    {
+      "path": "src/championship/app/main.js",
+      "previousSha256": "6022f6260882026153682443ecf4dddc4034f747325b8b9d9cab6dd35a6dca05",
+      "approvedSha256": "991f8c32291b3d540a0a62074855d35636477efe8d9739da641e1ec759a823ad"
+    },
+    {
+      "path": "src/championship/app/ui/screenLayout.css",
+      "previousSha256": "72d1667a1a4e8aa66bd617ba96f3b5473ca4d8c64d4b916c0152d723af905eab",
+      "approvedSha256": "7c935954b487c4d7373fbb9a28981acc29a75eb4c2771a4e49ceb0093d1c2c56"
+    },
+    {
+      "path": "src/championship/app/vs4Screens.js",
+      "previousSha256": "e8f149e69458ed82cb75a9dd6d6eb27ddba0a0f345e62b679b43e59b0ea6cdf9",
+      "approvedSha256": "fa311ded4facfa1fe882c8ef6722457284ad4fa14091b03b3e2905df1042bb72"
+    },
+    {
+      "path": "src/championship/app/vs5Screens.js",
+      "previousSha256": "fd6c0d33e8bae0dfc27f8c4615013c18d70973edc9b26b9558c9cb0158b5d196",
+      "approvedSha256": "9eb77ce2340cef1cb76fa635f4df769f00eecef8e6eb48ed92dab127f7e56953"
+    },
+    {
+      "path": "src/championship/text/dataArenaText.js",
+      "previousSha256": "04909711f80c63df9f922bc0794427ce4e5c1f18bf7709018c0d0dd2221c50c2",
+      "approvedSha256": "c748acf996497197e0dacaba84243c101906cd5a53b609c9a9eb200cf7517a95"
+    },
+    {
+      "path": "src/championship/text/uiText.en.js",
+      "previousSha256": "ae304f1501b67b1156b3a698a4d3cfaa87e7835806ccbbf35e9048c0b4045112",
+      "approvedSha256": "1db9506d07fb69fd561ff931d98c5003c3a9b2288a46c7c0657980d5813cc4c1"
+    },
+    {
+      "path": "src/championship/text/uiText.ja.js",
+      "previousSha256": "8f5566bf3d3599d1453a0a7d07237aebb2b7aca241041c547134b35927c7abc2",
+      "approvedSha256": "ab02694ed9e2e1d4aa7326109f064cd6d826bc3a7f50d8b55e255f4119f143ea"
+    },
+    {
+      "path": "src/championship/text/uiText.js",
+      "previousSha256": "a2c7d37a2270a87c530915bbda77d255a70a6e4bb773586a9f56f047344c446b",
+      "approvedSha256": "17c7cc1f191946d3a60949c4c276abd9192b732c5c0d85a3549961fa991d7da1"
+    },
+    {
+      "path": "src/championship/text/uiText.th.js",
+      "previousSha256": "63f3d168ae595ecddc23fd1016347799781c1160650a94757779744954876877",
+      "approvedSha256": "e36c65305d81e3186b88dc3454f149eec56e1698e311abea0caa694ce042264d"
+    },
+    {
+      "path": "src/championship/text/uiText.vi.js",
+      "previousSha256": "840c09a459f1e2a1b37f5ade4c8d2fb077ec97987e9434810adb7643c3588e62",
+      "approvedSha256": "882fed1fad744fba3cbb984ef3a8a80b1c039c26db5a2a3104b4f732c293d772"
+    }
+  ],
+  "doesNotAuthorizeNewAssetsOrGameplay": true,
+  "doesNotClaimPhysicalDeviceAcceptance": true,
+  "approvalTables": [
+    {
+      "path": "docs/contracts/championship/WEB_BUILD_INPUTS.v1.json",
+      "rows": "publicPlaytest.files",
+      "fileCount": 8190,
+      "changedSourceHashes": 11
+    },
+    {
+      "path": "docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json",
+      "rows": "files",
+      "fileCount": 8190,
+      "changedSourceHashes": 11,
+      "assetRowsUnchanged": 515
+    }
+  ],
+  "buildGateCodeUnchanged": true
+}

@@ -1,0 +1,6894 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "generatedAt": "2026-11-06T09:31:27.880Z",
+  "scope": "CONTROLLED_SHOP_COMPONENT_BROWSER",
+  "normalLoginHomeRoute": false,
+  "physicalDeviceAccepted": false,
+  "contrastMethod": "Computed paint stack; whole RGBA stops/pixels composited before RGB bounds; conservative, not glyph-pixel sampling",
+  "mathChecks": {
+    "status": "PASS",
+    "gradientInteriorSamples": 201,
+    "transparentStopOverWhite": {
+      "min": [
+        255,
+        255,
+        255,
+        1
+      ],
+      "max": [
+        255,
+        255,
+        255,
+        1
+      ]
+    },
+    "layeredFixtureContrast": 10.45603624152731
+  },
+  "sourceHashes": {
+    "championship.html": "4dff3d2eee80e4185dfe97da95f70453947fd7dfb1693d3b50b56e6cef0a3dcc",
+    "src/championship/app/vs4Screens.js": "fa311ded4facfa1fe882c8ef6722457284ad4fa14091b03b3e2905df1042bb72",
+    "src/championship/app/ui/screenLayout.css": "7c935954b487c4d7373fbb9a28981acc29a75eb4c2771a4e49ceb0093d1c2c56"
+  },
+  "styleOrder": [
+    "./src/championship/app/ui/tokens.css?v=settings-1",
+    "./src/championship/app/styles.css?v=ui-polish-20261012",
+    "./src/championship/app/interactiveTutorial.css?v=onboarding-20261009",
+    "./src/championship/app/intRh2Styles.css?v=hud-choice-20261015",
+    "./src/championship/app/vs2Styles.css?v=dex-silhouette-clip-20261029",
+    "./src/championship/app/medalCollection.css?v=source-outline-20261015",
+    "./src/championship/app/vs5Styles.css?v=ui-polish-20261012",
+    "./src/championship/app/opening.css?v=opening-naming-20261018",
+    "./src/championship/app/onboarding.css?v=onboarding-ai-chan-20261103",
+    "./src/championship/app/ui/highlight.css?v=settings-1",
+    "./src/championship/app/ui/ceremony.css?v=ceremony-20261015",
+    "./src/championship/app/ui/juicyShowcase.css?v=dex-silhouette-20261029",
+    "./src/championship/app/ui/settings.css?v=settings-2",
+    "./src/championship/app/ui/systemBackgrounds.css?v=system-backgrounds-r1",
+    "./src/championship/app/nativeUiSkin.css?v=classic-1",
+    "./src/championship/app/mobileTouch.css?v=touch-20261011-r2",
+    "./src/championship/app/ui/screenLayout.css?v=layout-1",
+    "./src/championship/app/ui/arcadeMotion.css?v=motion-1",
+    "./src/championship/app/ui/storyTheater.css?v=story-1",
+    "./src/championship/app/ui/online.css?v=online-1",
+    "./src/championship/app/ui/social.css?v=social-1",
+    "./src/championship/app/cyberGacha.css?v=gacha-1",
+    "./src/championship/app/ui/taxonomy.css?v=taxonomy-1",
+    "./src/championship/app/ui/arcade.css?v=arcade-1"
+  ],
+  "cases": [
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "night",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 29,
+      "fontSizes": [
+        12
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 4.944198916425154,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              25.99377162629758,
+              64.73287197231835,
+              54.54809688581315,
+              1
+            ],
+            "max": [
+              46.32989051376301,
+              116.87110204140278,
+              92.02613763724094,
+              1
+            ]
+          },
+          "cardBackground": "rgba(86, 227, 194, 0.14) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12
+        },
+        "unselected": {
+          "minimum": 11.378115514420106,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ],
+            "max": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ]
+          },
+          "cardBackground": "rgb(18, 28, 23) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "night",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        13.8
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 4.944198916425154,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              25.99377162629758,
+              64.73287197231835,
+              54.54809688581315,
+              1
+            ],
+            "max": [
+              46.32989051376301,
+              116.87110204140278,
+              92.02613763724094,
+              1
+            ]
+          },
+          "cardBackground": "rgba(86, 227, 194, 0.14) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 13.8
+        },
+        "unselected": {
+          "minimum": 11.378115514420106,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ],
+            "max": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ]
+          },
+          "cardBackground": "rgb(18, 28, 23) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 13.8
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "night",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        15.6
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 4.944198916425154,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              25.99377162629758,
+              64.73287197231835,
+              54.54809688581315,
+              1
+            ],
+            "max": [
+              46.32989051376301,
+              116.87110204140278,
+              92.02613763724094,
+              1
+            ]
+          },
+          "cardBackground": "rgba(86, 227, 194, 0.14) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 15.6
+        },
+        "unselected": {
+          "minimum": 11.378115514420106,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ],
+            "max": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ]
+          },
+          "cardBackground": "rgb(18, 28, 23) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 15.6
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "arcade",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 30,
+      "fontSizes": [
+        12
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 18.267340343949225,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(255, 255, 255)",
+          "backgroundBounds": {
+            "min": [
+              255,
+              255,
+              255,
+              1
+            ],
+            "max": [
+              255,
+              255,
+              255,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 210, 63) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12
+        },
+        "unselected": {
+          "minimum": 16.59867480523256,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(201, 255, 243)",
+          "backgroundBounds": {
+            "min": [
+              201,
+              255,
+              243,
+              1
+            ],
+            "max": [
+              201,
+              255,
+              243,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 248, 231) linear-gradient(rgb(255, 250, 240) 0%, rgb(255, 243, 214) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "arcade",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        13.8
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 18.267340343949225,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(255, 255, 255)",
+          "backgroundBounds": {
+            "min": [
+              255,
+              255,
+              255,
+              1
+            ],
+            "max": [
+              255,
+              255,
+              255,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 210, 63) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 13.8
+        },
+        "unselected": {
+          "minimum": 16.59867480523256,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(201, 255, 243)",
+          "backgroundBounds": {
+            "min": [
+              201,
+              255,
+              243,
+              1
+            ],
+            "max": [
+              201,
+              255,
+              243,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 248, 231) linear-gradient(rgb(255, 250, 240) 0%, rgb(255, 243, 214) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 13.8
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "arcade",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        15.6
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 18.267340343949225,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(255, 255, 255)",
+          "backgroundBounds": {
+            "min": [
+              255,
+              255,
+              255,
+              1
+            ],
+            "max": [
+              255,
+              255,
+              255,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 210, 63) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 15.6
+        },
+        "unselected": {
+          "minimum": 16.59867480523256,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(201, 255, 243)",
+          "backgroundBounds": {
+            "min": [
+              201,
+              255,
+              243,
+              1
+            ],
+            "max": [
+              201,
+              255,
+              243,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 248, 231) linear-gradient(rgb(255, 250, 240) 0%, rgb(255, 243, 214) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 15.6
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "arena",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 29,
+      "fontSizes": [
+        12
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 7.209311318202926,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              119.73774945282484,
+              186.95043434777472,
+              201.09734784228883,
+              1
+            ],
+            "max": [
+              191.65071895424836,
+              221.77013456362937,
+              227.96715109573242,
+              1
+            ]
+          },
+          "cardBackground": "rgba(8, 122, 140, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12
+        },
+        "unselected": {
+          "minimum": 13.179883952419921,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ],
+            "max": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "arena",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        13.8
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 7.209311318202926,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              119.73774945282484,
+              186.95043434777472,
+              201.09734784228883,
+              1
+            ],
+            "max": [
+              191.65071895424836,
+              221.77013456362937,
+              227.96715109573242,
+              1
+            ]
+          },
+          "cardBackground": "rgba(8, 122, 140, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 13.8
+        },
+        "unselected": {
+          "minimum": 13.179883952419921,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ],
+            "max": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 13.8
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "arena",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        15.6
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 7.209311318202926,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              119.73774945282484,
+              186.95043434777472,
+              201.09734784228883,
+              1
+            ],
+            "max": [
+              191.65071895424836,
+              221.77013456362937,
+              227.96715109573242,
+              1
+            ]
+          },
+          "cardBackground": "rgba(8, 122, 140, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 15.6
+        },
+        "unselected": {
+          "minimum": 13.179883952419921,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ],
+            "max": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 15.6
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "clear",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 29,
+      "fontSizes": [
+        12
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.69512397110175,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              127.32099162759536,
+              172.22795967895118,
+              220.19760768674868,
+              1
+            ],
+            "max": [
+              193.21788542868126,
+              215.02983467896962,
+              238.6686505190311,
+              1
+            ]
+          },
+          "cardBackground": "rgba(26, 104, 198, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12
+        },
+        "unselected": {
+          "minimum": 13.401058774295713,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ],
+            "max": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "clear",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        13.8
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.69512397110175,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              127.32099162759536,
+              172.22795967895118,
+              220.19760768674868,
+              1
+            ],
+            "max": [
+              193.21788542868126,
+              215.02983467896962,
+              238.6686505190311,
+              1
+            ]
+          },
+          "cardBackground": "rgba(26, 104, 198, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 13.8
+        },
+        "unselected": {
+          "minimum": 13.401058774295713,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ],
+            "max": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 13.8
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "clear",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        15.6
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.69512397110175,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              127.32099162759536,
+              172.22795967895118,
+              220.19760768674868,
+              1
+            ],
+            "max": [
+              193.21788542868126,
+              215.02983467896962,
+              238.6686505190311,
+              1
+            ]
+          },
+          "cardBackground": "rgba(26, 104, 198, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 15.6
+        },
+        "unselected": {
+          "minimum": 13.401058774295713,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ],
+            "max": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 15.6
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "warm",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 29,
+      "fontSizes": [
+        12
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.332802608568165,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              208.9170618747322,
+              157.94392235062935,
+              100.19136861547794,
+              1
+            ],
+            "max": [
+              230.58954248366013,
+              204.40744329104191,
+              173.13131872356783,
+              1
+            ]
+          },
+          "cardBackground": "rgba(168, 76, 8, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12
+        },
+        "unselected": {
+          "minimum": 12.22061803645679,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ],
+            "max": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 250, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "warm",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        13.8
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.332802608568165,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              208.9170618747322,
+              157.94392235062935,
+              100.19136861547794,
+              1
+            ],
+            "max": [
+              230.58954248366013,
+              204.40744329104191,
+              173.13131872356783,
+              1
+            ]
+          },
+          "cardBackground": "rgba(168, 76, 8, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 13.8
+        },
+        "unselected": {
+          "minimum": 12.22061803645679,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ],
+            "max": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 250, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 13.8
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "warm",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        15.6
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.332802608568165,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              208.9170618747322,
+              157.94392235062935,
+              100.19136861547794,
+              1
+            ],
+            "max": [
+              230.58954248366013,
+              204.40744329104191,
+              173.13131872356783,
+              1
+            ]
+          },
+          "cardBackground": "rgba(168, 76, 8, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 15.6
+        },
+        "unselected": {
+          "minimum": 12.22061803645679,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ],
+            "max": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 250, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 15.6
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "classic",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 29,
+      "fontSizes": [
+        12
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12
+        },
+        "unselected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "classic",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        13.8
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 13.8
+        },
+        "unselected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 13.8
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "theme": "classic",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        15.6
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 15.6
+        },
+        "unselected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 15.6
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": false,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "night",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 13,
+      "fontSizes": [
+        11
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 4.944198916425154,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              25.99377162629758,
+              64.73287197231835,
+              54.54809688581315,
+              1
+            ],
+            "max": [
+              46.32989051376301,
+              116.87110204140278,
+              92.02613763724094,
+              1
+            ]
+          },
+          "cardBackground": "rgba(86, 227, 194, 0.14) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 11
+        },
+        "unselected": {
+          "minimum": 11.378115514420106,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ],
+            "max": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ]
+          },
+          "cardBackground": "rgb(18, 28, 23) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 11
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "night",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        12.65
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 4.944198916425154,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              25.99377162629758,
+              64.73287197231835,
+              54.54809688581315,
+              1
+            ],
+            "max": [
+              46.32989051376301,
+              116.87110204140278,
+              92.02613763724094,
+              1
+            ]
+          },
+          "cardBackground": "rgba(86, 227, 194, 0.14) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12.65
+        },
+        "unselected": {
+          "minimum": 11.378115514420106,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ],
+            "max": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ]
+          },
+          "cardBackground": "rgb(18, 28, 23) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12.65
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "night",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        14.3
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 4.944198916425154,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              25.99377162629758,
+              64.73287197231835,
+              54.54809688581315,
+              1
+            ],
+            "max": [
+              46.32989051376301,
+              116.87110204140278,
+              92.02613763724094,
+              1
+            ]
+          },
+          "cardBackground": "rgba(86, 227, 194, 0.14) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 14.3
+        },
+        "unselected": {
+          "minimum": 11.378115514420106,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ],
+            "max": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ]
+          },
+          "cardBackground": "rgb(18, 28, 23) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 14.3
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "arcade",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 30,
+      "fontSizes": [
+        11
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 18.267340343949225,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(255, 255, 255)",
+          "backgroundBounds": {
+            "min": [
+              255,
+              255,
+              255,
+              1
+            ],
+            "max": [
+              255,
+              255,
+              255,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 210, 63) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 11
+        },
+        "unselected": {
+          "minimum": 16.59867480523256,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(201, 255, 243)",
+          "backgroundBounds": {
+            "min": [
+              201,
+              255,
+              243,
+              1
+            ],
+            "max": [
+              201,
+              255,
+              243,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 248, 231) linear-gradient(rgb(255, 250, 240) 0%, rgb(255, 243, 214) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 11
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "arcade",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        12.65
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 18.267340343949225,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(255, 255, 255)",
+          "backgroundBounds": {
+            "min": [
+              255,
+              255,
+              255,
+              1
+            ],
+            "max": [
+              255,
+              255,
+              255,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 210, 63) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12.65
+        },
+        "unselected": {
+          "minimum": 16.59867480523256,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(201, 255, 243)",
+          "backgroundBounds": {
+            "min": [
+              201,
+              255,
+              243,
+              1
+            ],
+            "max": [
+              201,
+              255,
+              243,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 248, 231) linear-gradient(rgb(255, 250, 240) 0%, rgb(255, 243, 214) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12.65
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "arcade",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        14.3
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 18.267340343949225,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(255, 255, 255)",
+          "backgroundBounds": {
+            "min": [
+              255,
+              255,
+              255,
+              1
+            ],
+            "max": [
+              255,
+              255,
+              255,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 210, 63) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 14.3
+        },
+        "unselected": {
+          "minimum": 16.59867480523256,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(201, 255, 243)",
+          "backgroundBounds": {
+            "min": [
+              201,
+              255,
+              243,
+              1
+            ],
+            "max": [
+              201,
+              255,
+              243,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 248, 231) linear-gradient(rgb(255, 250, 240) 0%, rgb(255, 243, 214) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 14.3
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "arena",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 13,
+      "fontSizes": [
+        11
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 7.209311318202926,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              119.73774945282484,
+              186.95043434777472,
+              201.09734784228883,
+              1
+            ],
+            "max": [
+              191.65071895424836,
+              221.77013456362937,
+              227.96715109573242,
+              1
+            ]
+          },
+          "cardBackground": "rgba(8, 122, 140, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 11
+        },
+        "unselected": {
+          "minimum": 13.179883952419921,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ],
+            "max": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 11
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "arena",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        12.65
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 7.209311318202926,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              119.73774945282484,
+              186.95043434777472,
+              201.09734784228883,
+              1
+            ],
+            "max": [
+              191.65071895424836,
+              221.77013456362937,
+              227.96715109573242,
+              1
+            ]
+          },
+          "cardBackground": "rgba(8, 122, 140, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12.65
+        },
+        "unselected": {
+          "minimum": 13.179883952419921,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ],
+            "max": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12.65
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "arena",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        14.3
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 7.209311318202926,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              119.73774945282484,
+              186.95043434777472,
+              201.09734784228883,
+              1
+            ],
+            "max": [
+              191.65071895424836,
+              221.77013456362937,
+              227.96715109573242,
+              1
+            ]
+          },
+          "cardBackground": "rgba(8, 122, 140, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 14.3
+        },
+        "unselected": {
+          "minimum": 13.179883952419921,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ],
+            "max": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 14.3
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "clear",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 13,
+      "fontSizes": [
+        11
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.69512397110175,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              127.32099162759536,
+              172.22795967895118,
+              220.19760768674868,
+              1
+            ],
+            "max": [
+              193.21788542868126,
+              215.02983467896962,
+              238.6686505190311,
+              1
+            ]
+          },
+          "cardBackground": "rgba(26, 104, 198, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 11
+        },
+        "unselected": {
+          "minimum": 13.401058774295713,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ],
+            "max": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 11
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "clear",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        12.65
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.69512397110175,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              127.32099162759536,
+              172.22795967895118,
+              220.19760768674868,
+              1
+            ],
+            "max": [
+              193.21788542868126,
+              215.02983467896962,
+              238.6686505190311,
+              1
+            ]
+          },
+          "cardBackground": "rgba(26, 104, 198, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12.65
+        },
+        "unselected": {
+          "minimum": 13.401058774295713,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ],
+            "max": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12.65
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "clear",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        14.3
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.69512397110175,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              127.32099162759536,
+              172.22795967895118,
+              220.19760768674868,
+              1
+            ],
+            "max": [
+              193.21788542868126,
+              215.02983467896962,
+              238.6686505190311,
+              1
+            ]
+          },
+          "cardBackground": "rgba(26, 104, 198, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 14.3
+        },
+        "unselected": {
+          "minimum": 13.401058774295713,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ],
+            "max": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 14.3
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "warm",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 13,
+      "fontSizes": [
+        11
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.332802608568165,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              208.9170618747322,
+              157.94392235062935,
+              100.19136861547794,
+              1
+            ],
+            "max": [
+              230.58954248366013,
+              204.40744329104191,
+              173.13131872356783,
+              1
+            ]
+          },
+          "cardBackground": "rgba(168, 76, 8, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 11
+        },
+        "unselected": {
+          "minimum": 12.22061803645679,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ],
+            "max": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 250, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 11
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "warm",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        12.65
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.332802608568165,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              208.9170618747322,
+              157.94392235062935,
+              100.19136861547794,
+              1
+            ],
+            "max": [
+              230.58954248366013,
+              204.40744329104191,
+              173.13131872356783,
+              1
+            ]
+          },
+          "cardBackground": "rgba(168, 76, 8, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12.65
+        },
+        "unselected": {
+          "minimum": 12.22061803645679,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ],
+            "max": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 250, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12.65
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "warm",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        14.3
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.332802608568165,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              208.9170618747322,
+              157.94392235062935,
+              100.19136861547794,
+              1
+            ],
+            "max": [
+              230.58954248366013,
+              204.40744329104191,
+              173.13131872356783,
+              1
+            ]
+          },
+          "cardBackground": "rgba(168, 76, 8, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 14.3
+        },
+        "unselected": {
+          "minimum": 12.22061803645679,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ],
+            "max": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 250, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 14.3
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "classic",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 13,
+      "fontSizes": [
+        11
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 11
+        },
+        "unselected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 11
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "classic",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        12.65
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12.65
+        },
+        "unselected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12.65
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "classic",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        14.3
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 14.3
+        },
+        "unselected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 14.3
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "night",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 13,
+      "fontSizes": [
+        12
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 4.944198916425154,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              25.99377162629758,
+              64.73287197231835,
+              54.54809688581315,
+              1
+            ],
+            "max": [
+              46.32989051376301,
+              116.87110204140278,
+              92.02613763724094,
+              1
+            ]
+          },
+          "cardBackground": "rgba(86, 227, 194, 0.14) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12
+        },
+        "unselected": {
+          "minimum": 11.378115514420106,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ],
+            "max": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ]
+          },
+          "cardBackground": "rgb(18, 28, 23) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "night",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 30,
+      "fontSizes": [
+        13.8
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 4.944198916425154,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              25.99377162629758,
+              64.73287197231835,
+              54.54809688581315,
+              1
+            ],
+            "max": [
+              46.32989051376301,
+              116.87110204140278,
+              92.02613763724094,
+              1
+            ]
+          },
+          "cardBackground": "rgba(86, 227, 194, 0.14) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 13.8
+        },
+        "unselected": {
+          "minimum": 11.378115514420106,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ],
+            "max": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ]
+          },
+          "cardBackground": "rgb(18, 28, 23) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 13.8
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "night",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        15.6
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 4.944198916425154,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              25.99377162629758,
+              64.73287197231835,
+              54.54809688581315,
+              1
+            ],
+            "max": [
+              46.32989051376301,
+              116.87110204140278,
+              92.02613763724094,
+              1
+            ]
+          },
+          "cardBackground": "rgba(86, 227, 194, 0.14) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 15.6
+        },
+        "unselected": {
+          "minimum": 11.378115514420106,
+          "foreground": "rgb(234, 245, 242)",
+          "background": "rgba(86, 227, 194, 0.14)",
+          "backgroundBounds": {
+            "min": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ],
+            "max": [
+              27.458823529411767,
+              56.09411764705882,
+              46.71764705882353,
+              1
+            ]
+          },
+          "cardBackground": "rgb(18, 28, 23) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 15.6
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "arcade",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 13,
+      "fontSizes": [
+        12
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 18.267340343949225,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(255, 255, 255)",
+          "backgroundBounds": {
+            "min": [
+              255,
+              255,
+              255,
+              1
+            ],
+            "max": [
+              255,
+              255,
+              255,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 210, 63) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12
+        },
+        "unselected": {
+          "minimum": 16.59867480523256,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(201, 255, 243)",
+          "backgroundBounds": {
+            "min": [
+              201,
+              255,
+              243,
+              1
+            ],
+            "max": [
+              201,
+              255,
+              243,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 248, 231) linear-gradient(rgb(255, 250, 240) 0%, rgb(255, 243, 214) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "arcade",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        13.8
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 18.267340343949225,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(255, 255, 255)",
+          "backgroundBounds": {
+            "min": [
+              255,
+              255,
+              255,
+              1
+            ],
+            "max": [
+              255,
+              255,
+              255,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 210, 63) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 13.8
+        },
+        "unselected": {
+          "minimum": 16.59867480523256,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(201, 255, 243)",
+          "backgroundBounds": {
+            "min": [
+              201,
+              255,
+              243,
+              1
+            ],
+            "max": [
+              201,
+              255,
+              243,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 248, 231) linear-gradient(rgb(255, 250, 240) 0%, rgb(255, 243, 214) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 13.8
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "arcade",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        15.6
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 18.267340343949225,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(255, 255, 255)",
+          "backgroundBounds": {
+            "min": [
+              255,
+              255,
+              255,
+              1
+            ],
+            "max": [
+              255,
+              255,
+              255,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 210, 63) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 15.6
+        },
+        "unselected": {
+          "minimum": 16.59867480523256,
+          "foreground": "rgb(20, 20, 31)",
+          "background": "rgb(201, 255, 243)",
+          "backgroundBounds": {
+            "min": [
+              201,
+              255,
+              243,
+              1
+            ],
+            "max": [
+              201,
+              255,
+              243,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 248, 231) linear-gradient(rgb(255, 250, 240) 0%, rgb(255, 243, 214) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 15.6
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "arena",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 13,
+      "fontSizes": [
+        12
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 7.209311318202926,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              119.73774945282484,
+              186.95043434777472,
+              201.09734784228883,
+              1
+            ],
+            "max": [
+              191.65071895424836,
+              221.77013456362937,
+              227.96715109573242,
+              1
+            ]
+          },
+          "cardBackground": "rgba(8, 122, 140, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12
+        },
+        "unselected": {
+          "minimum": 13.179883952419921,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ],
+            "max": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "arena",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 30,
+      "fontSizes": [
+        13.8
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 7.209311318202926,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              119.73774945282484,
+              186.95043434777472,
+              201.09734784228883,
+              1
+            ],
+            "max": [
+              191.65071895424836,
+              221.77013456362937,
+              227.96715109573242,
+              1
+            ]
+          },
+          "cardBackground": "rgba(8, 122, 140, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 13.8
+        },
+        "unselected": {
+          "minimum": 13.179883952419921,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ],
+            "max": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 13.8
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "arena",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        15.6
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 7.209311318202926,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              119.73774945282484,
+              186.95043434777472,
+              201.09734784228883,
+              1
+            ],
+            "max": [
+              191.65071895424836,
+              221.77013456362937,
+              227.96715109573242,
+              1
+            ]
+          },
+          "cardBackground": "rgba(8, 122, 140, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 15.6
+        },
+        "unselected": {
+          "minimum": 13.179883952419921,
+          "foreground": "rgb(13, 38, 56)",
+          "background": "rgba(8, 122, 140, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ],
+            "max": [
+              224.97254901960784,
+              238.95294117647057,
+              241.01960784313727,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 15.6
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "clear",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 13,
+      "fontSizes": [
+        12
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.69512397110175,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              127.32099162759536,
+              172.22795967895118,
+              220.19760768674868,
+              1
+            ],
+            "max": [
+              193.21788542868126,
+              215.02983467896962,
+              238.6686505190311,
+              1
+            ]
+          },
+          "cardBackground": "rgba(26, 104, 198, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12
+        },
+        "unselected": {
+          "minimum": 13.401058774295713,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ],
+            "max": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "clear",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 30,
+      "fontSizes": [
+        13.8
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.69512397110175,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              127.32099162759536,
+              172.22795967895118,
+              220.19760768674868,
+              1
+            ],
+            "max": [
+              193.21788542868126,
+              215.02983467896962,
+              238.6686505190311,
+              1
+            ]
+          },
+          "cardBackground": "rgba(26, 104, 198, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 13.8
+        },
+        "unselected": {
+          "minimum": 13.401058774295713,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ],
+            "max": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 13.8
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "clear",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        15.6
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.69512397110175,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              127.32099162759536,
+              172.22795967895118,
+              220.19760768674868,
+              1
+            ],
+            "max": [
+              193.21788542868126,
+              215.02983467896962,
+              238.6686505190311,
+              1
+            ]
+          },
+          "cardBackground": "rgba(26, 104, 198, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 15.6
+        },
+        "unselected": {
+          "minimum": 13.401058774295713,
+          "foreground": "rgb(16, 35, 58)",
+          "background": "rgba(26, 104, 198, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ],
+            "max": [
+              227.0392156862745,
+              237.0078431372549,
+              247.94901960784313,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 15.6
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "warm",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 13,
+      "fontSizes": [
+        12
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.332802608568165,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              208.9170618747322,
+              157.94392235062935,
+              100.19136861547794,
+              1
+            ],
+            "max": [
+              230.58954248366013,
+              204.40744329104191,
+              173.13131872356783,
+              1
+            ]
+          },
+          "cardBackground": "rgba(168, 76, 8, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12
+        },
+        "unselected": {
+          "minimum": 12.22061803645679,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ],
+            "max": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 250, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "warm",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 30,
+      "fontSizes": [
+        13.8
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.332802608568165,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              208.9170618747322,
+              157.94392235062935,
+              100.19136861547794,
+              1
+            ],
+            "max": [
+              230.58954248366013,
+              204.40744329104191,
+              173.13131872356783,
+              1
+            ]
+          },
+          "cardBackground": "rgba(168, 76, 8, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 13.8
+        },
+        "unselected": {
+          "minimum": 12.22061803645679,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ],
+            "max": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 250, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 13.8
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "warm",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        15.6
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.332802608568165,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              208.9170618747322,
+              157.94392235062935,
+              100.19136861547794,
+              1
+            ],
+            "max": [
+              230.58954248366013,
+              204.40744329104191,
+              173.13131872356783,
+              1
+            ]
+          },
+          "cardBackground": "rgba(168, 76, 8, 0.12) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 15.6
+        },
+        "unselected": {
+          "minimum": 12.22061803645679,
+          "foreground": "rgb(51, 35, 12)",
+          "background": "rgba(168, 76, 8, 0.12)",
+          "backgroundBounds": {
+            "min": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ],
+            "max": [
+              244.05882352941177,
+              228.60392156862744,
+              210.0392156862745,
+              1
+            ]
+          },
+          "cardBackground": "rgb(255, 250, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 15.6
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "classic",
+      "scale": 100,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 13,
+      "fontSizes": [
+        12
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 12
+        },
+        "unselected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 12
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "classic",
+      "scale": 115,
+      "effectCount": 35,
+      "textRectsChecked": 70,
+      "wrappedEffects": 30,
+      "fontSizes": [
+        13.8
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 13.8
+        },
+        "unselected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 13.8
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "theme": "classic",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "fontSizes": [
+        15.6
+      ],
+      "contrast": {
+        "selected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "防禦上升 ·建議 2 隻",
+          "fontSize": 15.6
+        },
+        "unselected": {
+          "minimum": 6.82860372997796,
+          "foreground": "rgb(234, 255, 242)",
+          "background": "rgba(255, 223, 70, 0.16)",
+          "backgroundBounds": {
+            "min": [
+              46.87450980392157,
+              62.03137254901961,
+              26.87843137254902,
+              1
+            ],
+            "max": [
+              57.78431372549019,
+              97.27843137254902,
+              47.858823529411765,
+              1
+            ]
+          },
+          "cardBackground": "rgba(0, 0, 0, 0) linear-gradient(rgb(20, 73, 44) 0%, rgb(13, 53, 32) 55%, rgb(7, 31, 19) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "text": "生命值上升 ·建議 2 隻",
+          "fontSize": 15.6
+        }
+      },
+      "violations": [],
+      "layout": {
+        "portraitFrame": false,
+        "desktopBrowse": true,
+        "landscapeMenu": false
+      }
+    }
+  ],
+  "locales": [
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "locale": "zh-Hant",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "name": "小保健室",
+      "title": {
+        "text": "小保健室",
+        "box": {
+          "left": 135,
+          "right": 356,
+          "top": 275.125,
+          "bottom": 308.921875,
+          "width": 221,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 135,
+            "right": 227,
+            "top": 277.125,
+            "bottom": 305.125
+          }
+        ],
+        "textClip": {
+          "left": 135,
+          "right": 356,
+          "top": 275.125,
+          "bottom": 308.921875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "回復生命值與壓力 ·建議 2 隻",
+        "box": {
+          "left": 203.5,
+          "right": 342,
+          "top": 339.375,
+          "bottom": 412.515625,
+          "width": 138.5,
+          "height": 73.140625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 213.5,
+            "right": 325.5,
+            "top": 345.375,
+            "bottom": 363.375
+          },
+          {
+            "left": 213.5,
+            "right": 240.859375,
+            "top": 366.421875,
+            "bottom": 384.421875
+          },
+          {
+            "left": 213.5,
+            "right": 283.21875,
+            "top": 387.46875,
+            "bottom": 405.46875
+          }
+        ],
+        "textClip": {
+          "left": 205.5,
+          "right": 340,
+          "top": 341.375,
+          "bottom": 410.515625
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "對戰次數上升 ·建議 6 隻",
+        "box": {
+          "left": 33,
+          "right": 171.5,
+          "top": 494.203125,
+          "bottom": 546.296875,
+          "width": 138.5,
+          "height": 52.09375
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 43,
+            "right": 150.359375,
+            "top": 500.203125,
+            "bottom": 518.203125
+          },
+          {
+            "left": 43,
+            "right": 112.71875,
+            "top": 521.25,
+            "bottom": 539.25
+          }
+        ],
+        "textClip": {
+          "left": 35,
+          "right": 169.5,
+          "top": 496.203125,
+          "bottom": 544.296875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "關閉",
+        "box": {
+          "left": 19,
+          "right": 105,
+          "top": 537,
+          "bottom": 581,
+          "width": 86,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 42,
+            "right": 82,
+            "top": 547.296875,
+            "bottom": 570.296875
+          }
+        ],
+        "textClip": {
+          "left": 22,
+          "right": 102,
+          "top": 540,
+          "bottom": 578
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "已持有",
+        "box": {
+          "left": 117,
+          "right": 356,
+          "top": 541,
+          "bottom": 585,
+          "width": 239,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 206.5,
+            "right": 266.5,
+            "top": 551.296875,
+            "bottom": 574.296875
+          }
+        ],
+        "textClip": {
+          "left": 120,
+          "right": 353,
+          "top": 544,
+          "bottom": 582
+        },
+        "receivesPointer": true,
+        "disabled": true
+      },
+      "back": {
+        "text": "返回牧場",
+        "box": {
+          "left": 16,
+          "right": 158,
+          "top": 613,
+          "bottom": 657,
+          "width": 142,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 55,
+            "right": 135,
+            "top": 623.296875,
+            "bottom": 646.296875
+          }
+        ],
+        "textClip": {
+          "left": 19,
+          "right": 155,
+          "top": 616,
+          "bottom": 654
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "locale": "en",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 121,
+      "wrappedEffects": 35,
+      "name": "Mini Infirmary",
+      "title": {
+        "text": "Mini Infirmary",
+        "box": {
+          "left": 135,
+          "right": 356,
+          "top": 205.734375,
+          "bottom": 239.53125,
+          "width": 221,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 135,
+            "right": 320.28125,
+            "top": 207.734375,
+            "bottom": 235.734375
+          }
+        ],
+        "textClip": {
+          "left": 135,
+          "right": 356,
+          "top": 205.734375,
+          "bottom": 239.53125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "Recovers HP and stress ·Suggested: 2",
+        "box": {
+          "left": 203.5,
+          "right": 342,
+          "top": 328.40625,
+          "bottom": 422.59375,
+          "width": 138.5,
+          "height": 94.1875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 213.5,
+            "right": 323.671875,
+            "top": 334.40625,
+            "bottom": 352.40625
+          },
+          {
+            "left": 213.5,
+            "right": 316.640625,
+            "top": 355.453125,
+            "bottom": 373.453125
+          },
+          {
+            "left": 213.5,
+            "right": 313.453125,
+            "top": 376.5,
+            "bottom": 394.5
+          },
+          {
+            "left": 213.5,
+            "right": 224.359375,
+            "top": 397.546875,
+            "bottom": 415.546875
+          }
+        ],
+        "textClip": {
+          "left": 205.5,
+          "right": 340,
+          "top": 330.40625,
+          "bottom": 420.59375
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "Battle count up ·Suggested: 6",
+        "box": {
+          "left": 33,
+          "right": 171.5,
+          "top": 452.375,
+          "bottom": 546.5625,
+          "width": 138.5,
+          "height": 94.1875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 43,
+            "right": 151.28125,
+            "top": 458.375,
+            "bottom": 476.375
+          },
+          {
+            "left": 43,
+            "right": 76.625,
+            "top": 479.421875,
+            "bottom": 497.421875
+          },
+          {
+            "left": 43,
+            "right": 142.953125,
+            "top": 500.46875,
+            "bottom": 518.46875
+          },
+          {
+            "left": 43,
+            "right": 53.859375,
+            "top": 521.515625,
+            "bottom": 539.515625
+          }
+        ],
+        "textClip": {
+          "left": 35,
+          "right": 169.5,
+          "top": 454.375,
+          "bottom": 544.5625
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "Close",
+        "box": {
+          "left": 19,
+          "right": 124.234375,
+          "top": 537,
+          "bottom": 581,
+          "width": 105.234375,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 42,
+            "right": 101.234375,
+            "top": 547.296875,
+            "bottom": 570.296875
+          }
+        ],
+        "textClip": {
+          "left": 22,
+          "right": 121.234375,
+          "top": 540,
+          "bottom": 578
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "Owned",
+        "box": {
+          "left": 136.234375,
+          "right": 356,
+          "top": 541,
+          "bottom": 585,
+          "width": 219.765625,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 208.28125,
+            "right": 283.953125,
+            "top": 551.296875,
+            "bottom": 574.296875
+          }
+        ],
+        "textClip": {
+          "left": 139.234375,
+          "right": 353,
+          "top": 544,
+          "bottom": 582
+        },
+        "receivesPointer": true,
+        "disabled": true
+      },
+      "back": {
+        "text": "Back to ranch",
+        "box": {
+          "left": 16,
+          "right": 228.953125,
+          "top": 613,
+          "bottom": 657,
+          "width": 212.953125,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 55,
+            "right": 205.953125,
+            "top": 623.296875,
+            "bottom": 646.296875
+          }
+        ],
+        "textClip": {
+          "left": 19,
+          "right": 225.953125,
+          "top": 616,
+          "bottom": 654
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "locale": "ja",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 99,
+      "wrappedEffects": 35,
+      "name": "ミニ保健室",
+      "title": {
+        "text": "ミニ保健室",
+        "box": {
+          "left": 135,
+          "right": 356,
+          "top": 309.921875,
+          "bottom": 343.71875,
+          "width": 221,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 135,
+            "right": 252,
+            "top": 311.921875,
+            "bottom": 339.921875
+          }
+        ],
+        "textClip": {
+          "left": 135,
+          "right": 356,
+          "top": 309.921875,
+          "bottom": 343.71875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "健康とプレッシャーを回復する ·2 のみを推奨",
+        "box": {
+          "left": 203.5,
+          "right": 342,
+          "top": 397.140625,
+          "bottom": 491.328125,
+          "width": 138.5,
+          "height": 94.1875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 213.5,
+            "right": 325.5,
+            "top": 403.140625,
+            "bottom": 421.140625
+          },
+          {
+            "left": 213.5,
+            "right": 325.5,
+            "top": 424.1875,
+            "bottom": 442.1875
+          },
+          {
+            "left": 213.5,
+            "right": 219.4375,
+            "top": 445.234375,
+            "bottom": 463.234375
+          },
+          {
+            "left": 213.5,
+            "right": 309.78125,
+            "top": 466.28125,
+            "bottom": 484.28125
+          }
+        ],
+        "textClip": {
+          "left": 205.5,
+          "right": 340,
+          "top": 399.140625,
+          "bottom": 489.328125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "戦闘回数の増加 ·6 のみを推奨",
+        "box": {
+          "left": 33,
+          "right": 171.5,
+          "top": 473.90625,
+          "bottom": 547.046875,
+          "width": 138.5,
+          "height": 73.140625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 43,
+            "right": 155,
+            "top": 479.90625,
+            "bottom": 497.90625
+          },
+          {
+            "left": 43,
+            "right": 48.9375,
+            "top": 500.953125,
+            "bottom": 518.953125
+          },
+          {
+            "left": 43,
+            "right": 139.28125,
+            "top": 522,
+            "bottom": 540
+          }
+        ],
+        "textClip": {
+          "left": 35,
+          "right": 169.5,
+          "top": 475.90625,
+          "bottom": 545.046875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "閉じる",
+        "box": {
+          "left": 19,
+          "right": 125,
+          "top": 537,
+          "bottom": 581,
+          "width": 106,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 42,
+            "right": 102,
+            "top": 547.296875,
+            "bottom": 570.296875
+          }
+        ],
+        "textClip": {
+          "left": 22,
+          "right": 122,
+          "top": 540,
+          "bottom": 578
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "すでに開催済み",
+        "box": {
+          "left": 137,
+          "right": 356,
+          "top": 541,
+          "bottom": 585,
+          "width": 219,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 176.5,
+            "right": 316.5,
+            "top": 551.296875,
+            "bottom": 574.296875
+          }
+        ],
+        "textClip": {
+          "left": 140,
+          "right": 353,
+          "top": 544,
+          "bottom": 582
+        },
+        "receivesPointer": true,
+        "disabled": true
+      },
+      "back": {
+        "text": "牧場に戻る",
+        "box": {
+          "left": 16,
+          "right": 178,
+          "top": 613,
+          "bottom": 657,
+          "width": 162,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 55,
+            "right": 155,
+            "top": 623.296875,
+            "bottom": 646.296875
+          }
+        ],
+        "textClip": {
+          "left": 19,
+          "right": 175,
+          "top": 616,
+          "bottom": 654
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "locale": "th",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 150,
+      "wrappedEffects": 35,
+      "name": "สวนหย่อมขนาดเล็ก",
+      "title": {
+        "text": "สวนหย่อมขนาดเล็ก",
+        "box": {
+          "left": 135,
+          "right": 356,
+          "top": 332.40625,
+          "bottom": 366.203125,
+          "width": 221,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 135,
+            "right": 332,
+            "top": 334.40625,
+            "bottom": 362.40625
+          }
+        ],
+        "textClip": {
+          "left": 135,
+          "right": 356,
+          "top": 332.40625,
+          "bottom": 366.203125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "คุณสมบัติอันศักดิ์สิทธิ์เพิ่มขึ้น ·แนะนำ 2 เท่านั้น",
+        "box": {
+          "left": 33,
+          "right": 171.5,
+          "top": 343.609375,
+          "bottom": 458.84375,
+          "width": 138.5,
+          "height": 115.234375
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 43,
+            "right": 127,
+            "top": 349.609375,
+            "bottom": 367.609375
+          },
+          {
+            "left": 43,
+            "right": 149,
+            "top": 370.65625,
+            "bottom": 388.65625
+          },
+          {
+            "left": 43,
+            "right": 48.9375,
+            "top": 391.703125,
+            "bottom": 409.703125
+          },
+          {
+            "left": 43,
+            "right": 108.28125,
+            "top": 412.75,
+            "bottom": 430.75
+          },
+          {
+            "left": 43,
+            "right": 89,
+            "top": 433.796875,
+            "bottom": 451.796875
+          }
+        ],
+        "textClip": {
+          "left": 35,
+          "right": 169.5,
+          "top": 345.609375,
+          "bottom": 456.84375
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "เพิ่มจำนวนการรบ ·แนะนำ 6 เท่านั้น",
+        "box": {
+          "left": 33,
+          "right": 171.5,
+          "top": 453.21875,
+          "bottom": 547.40625,
+          "width": 138.5,
+          "height": 94.1875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 43,
+            "right": 143,
+            "top": 459.21875,
+            "bottom": 477.21875
+          },
+          {
+            "left": 43,
+            "right": 72.359375,
+            "top": 480.265625,
+            "bottom": 498.265625
+          },
+          {
+            "left": 43,
+            "right": 108.28125,
+            "top": 501.3125,
+            "bottom": 519.3125
+          },
+          {
+            "left": 43,
+            "right": 89,
+            "top": 522.359375,
+            "bottom": 540.359375
+          }
+        ],
+        "textClip": {
+          "left": 35,
+          "right": 169.5,
+          "top": 455.21875,
+          "bottom": 545.40625
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "ปิด",
+        "box": {
+          "left": 19,
+          "right": 90,
+          "top": 537,
+          "bottom": 581,
+          "width": 71,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 42,
+            "right": 67,
+            "top": 547.296875,
+            "bottom": 570.296875
+          }
+        ],
+        "textClip": {
+          "left": 22,
+          "right": 87,
+          "top": 540,
+          "bottom": 578
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "ซื้อ",
+        "box": {
+          "left": 102,
+          "right": 356,
+          "top": 537,
+          "bottom": 581,
+          "width": 254,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 216.5,
+            "right": 241.5,
+            "top": 547.296875,
+            "bottom": 570.296875
+          }
+        ],
+        "textClip": {
+          "left": 105,
+          "right": 353,
+          "top": 540,
+          "bottom": 578
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "back": {
+        "text": "กลับไปที่ฟาร์ม",
+        "box": {
+          "left": 16,
+          "right": 197,
+          "top": 613,
+          "bottom": 657,
+          "width": 181,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 55,
+            "right": 174,
+            "top": 623.296875,
+            "bottom": 646.296875
+          }
+        ],
+        "textClip": {
+          "left": 19,
+          "right": 194,
+          "top": 616,
+          "bottom": 654
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "locale": "vi",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 162,
+      "wrappedEffects": 35,
+      "name": "Rừng rậm",
+      "title": {
+        "text": "Rừng rậm",
+        "box": {
+          "left": 135,
+          "right": 356,
+          "top": 252.328125,
+          "bottom": 286.125,
+          "width": 221,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 135,
+            "right": 262.90625,
+            "top": 254.328125,
+            "bottom": 282.328125
+          }
+        ],
+        "textClip": {
+          "left": 135,
+          "right": 356,
+          "top": 252.328125,
+          "bottom": 286.125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "Thuộc tính đông trùng hạ thảo tăng ·Chỉ đề xuất 6",
+        "box": {
+          "left": 203.5,
+          "right": 342,
+          "top": 351.546875,
+          "bottom": 487.828125,
+          "width": 138.5,
+          "height": 136.28125
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 213.5,
+            "right": 306.734375,
+            "top": 357.546875,
+            "bottom": 375.546875
+          },
+          {
+            "left": 213.5,
+            "right": 311.578125,
+            "top": 378.59375,
+            "bottom": 396.59375
+          },
+          {
+            "left": 213.5,
+            "right": 326.015625,
+            "top": 399.640625,
+            "bottom": 417.640625
+          },
+          {
+            "left": 213.5,
+            "right": 219.4375,
+            "top": 420.6875,
+            "bottom": 438.6875
+          },
+          {
+            "left": 213.5,
+            "right": 313.125,
+            "top": 441.734375,
+            "bottom": 459.734375
+          },
+          {
+            "left": 213.5,
+            "right": 224.359375,
+            "top": 462.78125,
+            "bottom": 480.78125
+          }
+        ],
+        "textClip": {
+          "left": 205.5,
+          "right": 340,
+          "top": 353.546875,
+          "bottom": 485.828125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "Tăng số lượng trận chiến ·Chỉ đề xuất 6",
+        "box": {
+          "left": 33,
+          "right": 171.5,
+          "top": 431.78125,
+          "bottom": 547.015625,
+          "width": 138.5,
+          "height": 115.234375
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 43,
+            "right": 111.859375,
+            "top": 437.78125,
+            "bottom": 455.78125
+          },
+          {
+            "left": 43,
+            "right": 134.625,
+            "top": 458.828125,
+            "bottom": 476.828125
+          },
+          {
+            "left": 43,
+            "right": 101.734375,
+            "top": 479.875,
+            "bottom": 497.875
+          },
+          {
+            "left": 43,
+            "right": 142.625,
+            "top": 500.921875,
+            "bottom": 518.921875
+          },
+          {
+            "left": 43,
+            "right": 53.859375,
+            "top": 521.96875,
+            "bottom": 539.96875
+          }
+        ],
+        "textClip": {
+          "left": 35,
+          "right": 169.5,
+          "top": 433.78125,
+          "bottom": 545.015625
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "Đóng",
+        "box": {
+          "left": 19,
+          "right": 122.578125,
+          "top": 537,
+          "bottom": 581,
+          "width": 103.578125,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 42,
+            "right": 99.578125,
+            "top": 547.296875,
+            "bottom": 570.296875
+          }
+        ],
+        "textClip": {
+          "left": 22,
+          "right": 119.578125,
+          "top": 540,
+          "bottom": 578
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "mua",
+        "box": {
+          "left": 134.578125,
+          "right": 356,
+          "top": 537,
+          "bottom": 581,
+          "width": 221.421875,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 221.59375,
+            "right": 268.96875,
+            "top": 547.296875,
+            "bottom": 570.296875
+          }
+        ],
+        "textClip": {
+          "left": 137.578125,
+          "right": 353,
+          "top": 540,
+          "bottom": 578
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "back": {
+        "text": "Trở lại trang trại",
+        "box": {
+          "left": 16,
+          "right": 257.796875,
+          "top": 613,
+          "bottom": 657,
+          "width": 241.796875,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 55,
+            "right": 234.796875,
+            "top": 623.296875,
+            "bottom": 646.296875
+          }
+        ],
+        "textClip": {
+          "left": 19,
+          "right": 254.796875,
+          "top": 616,
+          "bottom": 654
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "locale": "zh-Hant",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "name": "小保健室",
+      "title": {
+        "text": "小保健室",
+        "box": {
+          "left": 279,
+          "right": 713,
+          "top": 85.796875,
+          "bottom": 119.59375,
+          "width": 434,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 279,
+            "right": 371,
+            "top": 87.796875,
+            "bottom": 115.796875
+          }
+        ],
+        "textClip": {
+          "left": 279,
+          "right": 713,
+          "top": 85.796875,
+          "bottom": 119.59375
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "回復生命值與壓力 ·建議 2 隻",
+        "box": {
+          "left": 681.390625,
+          "right": 817,
+          "top": 187.296875,
+          "bottom": 251.1875,
+          "width": 135.609375,
+          "height": 63.890625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 691.390625,
+            "right": 789.390625,
+            "top": 191.296875,
+            "bottom": 207.296875
+          },
+          {
+            "left": 691.390625,
+            "right": 715.8125,
+            "top": 210.59375,
+            "bottom": 226.59375
+          },
+          {
+            "left": 691.390625,
+            "right": 753.296875,
+            "top": 229.890625,
+            "bottom": 245.890625
+          }
+        ],
+        "textClip": {
+          "left": 683.390625,
+          "right": 815,
+          "top": 189.296875,
+          "bottom": 249.1875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "對戰次數上升 ·建議 6 隻",
+        "box": {
+          "left": 681.390625,
+          "right": 817,
+          "top": 223.609375,
+          "bottom": 268.203125,
+          "width": 135.609375,
+          "height": 44.59375
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 691.390625,
+            "right": 785.8125,
+            "top": 227.609375,
+            "bottom": 243.609375
+          },
+          {
+            "left": 691.390625,
+            "right": 753.296875,
+            "top": 246.90625,
+            "bottom": 262.90625
+          }
+        ],
+        "textClip": {
+          "left": 683.390625,
+          "right": 815,
+          "top": 225.609375,
+          "bottom": 266.203125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "關閉",
+        "box": {
+          "left": 279,
+          "right": 365,
+          "top": 254,
+          "bottom": 298,
+          "width": 86,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 302,
+            "right": 342,
+            "top": 264.296875,
+            "bottom": 287.296875
+          }
+        ],
+        "textClip": {
+          "left": 282,
+          "right": 362,
+          "top": 257,
+          "bottom": 295
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "已持有",
+        "box": {
+          "left": 377,
+          "right": 713,
+          "top": 258,
+          "bottom": 302,
+          "width": 336,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 515,
+            "right": 575,
+            "top": 268.296875,
+            "bottom": 291.296875
+          }
+        ],
+        "textClip": {
+          "left": 380,
+          "right": 710,
+          "top": 261,
+          "bottom": 299
+        },
+        "receivesPointer": true,
+        "disabled": true
+      },
+      "back": {
+        "text": "返回牧場",
+        "box": {
+          "left": 12,
+          "right": 154,
+          "top": 340,
+          "bottom": 384,
+          "width": 142,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 51,
+            "right": 131,
+            "top": 350.296875,
+            "bottom": 373.296875
+          }
+        ],
+        "textClip": {
+          "left": 15,
+          "right": 151,
+          "top": 343,
+          "bottom": 381
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "locale": "en",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 87,
+      "wrappedEffects": 35,
+      "name": "Mini Infirmary",
+      "title": {
+        "text": "Mini Infirmary",
+        "box": {
+          "left": 279,
+          "right": 713,
+          "top": 85.796875,
+          "bottom": 119.59375,
+          "width": 434,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 279,
+            "right": 464.28125,
+            "top": 87.796875,
+            "bottom": 115.796875
+          }
+        ],
+        "textClip": {
+          "left": 279,
+          "right": 713,
+          "top": 85.796875,
+          "bottom": 119.59375
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "Recovers HP and stress ·Suggested: 2",
+        "box": {
+          "left": 681.390625,
+          "right": 817,
+          "top": 186.84375,
+          "bottom": 250.734375,
+          "width": 135.609375,
+          "height": 63.890625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 691.390625,
+            "right": 792.390625,
+            "top": 190.84375,
+            "bottom": 206.84375
+          },
+          {
+            "left": 691.390625,
+            "right": 785.953125,
+            "top": 210.140625,
+            "bottom": 226.140625
+          },
+          {
+            "left": 691.390625,
+            "right": 797.953125,
+            "top": 229.4375,
+            "bottom": 245.4375
+          }
+        ],
+        "textClip": {
+          "left": 683.390625,
+          "right": 815,
+          "top": 188.84375,
+          "bottom": 248.734375
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "Battle count up ·Suggested: 6",
+        "box": {
+          "left": 681.390625,
+          "right": 817,
+          "top": 224.15625,
+          "bottom": 288.046875,
+          "width": 135.609375,
+          "height": 63.890625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 691.390625,
+            "right": 790.671875,
+            "top": 228.15625,
+            "bottom": 244.15625
+          },
+          {
+            "left": 691.390625,
+            "right": 722.21875,
+            "top": 247.453125,
+            "bottom": 263.453125
+          },
+          {
+            "left": 691.390625,
+            "right": 797.953125,
+            "top": 266.75,
+            "bottom": 282.75
+          }
+        ],
+        "textClip": {
+          "left": 683.390625,
+          "right": 815,
+          "top": 226.15625,
+          "bottom": 286.046875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "Close",
+        "box": {
+          "left": 279,
+          "right": 384.234375,
+          "top": 254,
+          "bottom": 298,
+          "width": 105.234375,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 302,
+            "right": 361.234375,
+            "top": 264.296875,
+            "bottom": 287.296875
+          }
+        ],
+        "textClip": {
+          "left": 282,
+          "right": 381.234375,
+          "top": 257,
+          "bottom": 295
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "Owned",
+        "box": {
+          "left": 396.234375,
+          "right": 713,
+          "top": 258,
+          "bottom": 302,
+          "width": 316.765625,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 516.78125,
+            "right": 592.453125,
+            "top": 268.296875,
+            "bottom": 291.296875
+          }
+        ],
+        "textClip": {
+          "left": 399.234375,
+          "right": 710,
+          "top": 261,
+          "bottom": 299
+        },
+        "receivesPointer": true,
+        "disabled": true
+      },
+      "back": {
+        "text": "Back to ranch",
+        "box": {
+          "left": 12,
+          "right": 224.953125,
+          "top": 340,
+          "bottom": 384,
+          "width": 212.953125,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 51,
+            "right": 201.953125,
+            "top": 350.296875,
+            "bottom": 373.296875
+          }
+        ],
+        "textClip": {
+          "left": 15,
+          "right": 221.953125,
+          "top": 343,
+          "bottom": 381
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "locale": "ja",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 91,
+      "wrappedEffects": 35,
+      "name": "ミニ保健室",
+      "title": {
+        "text": "ミニ保健室",
+        "box": {
+          "left": 279,
+          "right": 713,
+          "top": 85.796875,
+          "bottom": 119.59375,
+          "width": 434,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 279,
+            "right": 396,
+            "top": 87.796875,
+            "bottom": 115.796875
+          }
+        ],
+        "textClip": {
+          "left": 279,
+          "right": 713,
+          "top": 85.796875,
+          "bottom": 119.59375
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "健康とプレッシャーを回復する ·2 のみを推奨",
+        "box": {
+          "left": 681.390625,
+          "right": 817,
+          "top": 186.515625,
+          "bottom": 250.40625,
+          "width": 135.609375,
+          "height": 63.890625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 691.390625,
+            "right": 789.390625,
+            "top": 190.515625,
+            "bottom": 206.515625
+          },
+          {
+            "left": 691.390625,
+            "right": 799.8125,
+            "top": 209.8125,
+            "bottom": 225.8125
+          },
+          {
+            "left": 691.390625,
+            "right": 776.328125,
+            "top": 229.109375,
+            "bottom": 245.109375
+          }
+        ],
+        "textClip": {
+          "left": 683.390625,
+          "right": 815,
+          "top": 188.515625,
+          "bottom": 248.40625
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "戦闘回数の増加 ·6 のみを推奨",
+        "box": {
+          "left": 681.390625,
+          "right": 817,
+          "top": 224.359375,
+          "bottom": 268.953125,
+          "width": 135.609375,
+          "height": 44.59375
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 691.390625,
+            "right": 799.8125,
+            "top": 228.359375,
+            "bottom": 244.359375
+          },
+          {
+            "left": 691.390625,
+            "right": 776.328125,
+            "top": 247.65625,
+            "bottom": 263.65625
+          }
+        ],
+        "textClip": {
+          "left": 683.390625,
+          "right": 815,
+          "top": 226.359375,
+          "bottom": 266.953125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "閉じる",
+        "box": {
+          "left": 279,
+          "right": 385,
+          "top": 254,
+          "bottom": 298,
+          "width": 106,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 302,
+            "right": 362,
+            "top": 264.296875,
+            "bottom": 287.296875
+          }
+        ],
+        "textClip": {
+          "left": 282,
+          "right": 382,
+          "top": 257,
+          "bottom": 295
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "すでに開催済み",
+        "box": {
+          "left": 397,
+          "right": 713,
+          "top": 258,
+          "bottom": 302,
+          "width": 316,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 485,
+            "right": 625,
+            "top": 268.296875,
+            "bottom": 291.296875
+          }
+        ],
+        "textClip": {
+          "left": 400,
+          "right": 710,
+          "top": 261,
+          "bottom": 299
+        },
+        "receivesPointer": true,
+        "disabled": true
+      },
+      "back": {
+        "text": "牧場に戻る",
+        "box": {
+          "left": 12,
+          "right": 174,
+          "top": 340,
+          "bottom": 384,
+          "width": 162,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 51,
+            "right": 151,
+            "top": 350.296875,
+            "bottom": 373.296875
+          }
+        ],
+        "textClip": {
+          "left": 15,
+          "right": 171,
+          "top": 343,
+          "bottom": 381
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "locale": "th",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 105,
+      "wrappedEffects": 35,
+      "name": "สวนหย่อมขนาดเล็ก",
+      "title": {
+        "text": "สวนหย่อมขนาดเล็ก",
+        "box": {
+          "left": 279,
+          "right": 713,
+          "top": 88,
+          "bottom": 121.796875,
+          "width": 434,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 279,
+            "right": 476,
+            "top": 90,
+            "bottom": 118
+          }
+        ],
+        "textClip": {
+          "left": 279,
+          "right": 713,
+          "top": 88,
+          "bottom": 121.796875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "คุณสมบัติอันศักดิ์สิทธิ์เพิ่มขึ้น ·แนะนำ 2 เท่านั้น",
+        "box": {
+          "left": 517.796875,
+          "right": 653.390625,
+          "top": 187.421875,
+          "bottom": 251.3125,
+          "width": 135.59375,
+          "height": 63.890625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 527.796875,
+            "right": 605.796875,
+            "top": 191.421875,
+            "bottom": 207.421875
+          },
+          {
+            "left": 527.796875,
+            "right": 635.21875,
+            "top": 210.71875,
+            "bottom": 226.71875
+          },
+          {
+            "left": 527.796875,
+            "right": 634.703125,
+            "top": 230.015625,
+            "bottom": 246.015625
+          }
+        ],
+        "textClip": {
+          "left": 519.796875,
+          "right": 651.390625,
+          "top": 189.421875,
+          "bottom": 249.3125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "เพิ่มจำนวนการรบ ·แนะนำ 6 เท่านั้น",
+        "box": {
+          "left": 681.390625,
+          "right": 817,
+          "top": 224.046875,
+          "bottom": 287.9375,
+          "width": 135.609375,
+          "height": 63.890625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 691.390625,
+            "right": 800.390625,
+            "top": 228.046875,
+            "bottom": 244.046875
+          },
+          {
+            "left": 691.390625,
+            "right": 696.828125,
+            "top": 247.34375,
+            "bottom": 263.34375
+          },
+          {
+            "left": 691.390625,
+            "right": 798.296875,
+            "top": 266.640625,
+            "bottom": 282.640625
+          }
+        ],
+        "textClip": {
+          "left": 683.390625,
+          "right": 815,
+          "top": 226.046875,
+          "bottom": 285.9375
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "ปิด",
+        "box": {
+          "left": 279,
+          "right": 350,
+          "top": 251.796875,
+          "bottom": 295.796875,
+          "width": 71,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 302,
+            "right": 327,
+            "top": 262.09375,
+            "bottom": 285.09375
+          }
+        ],
+        "textClip": {
+          "left": 282,
+          "right": 347,
+          "top": 254.796875,
+          "bottom": 292.796875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "ซื้อ",
+        "box": {
+          "left": 362,
+          "right": 713,
+          "top": 251.796875,
+          "bottom": 295.796875,
+          "width": 351,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 525,
+            "right": 550,
+            "top": 262.09375,
+            "bottom": 285.09375
+          }
+        ],
+        "textClip": {
+          "left": 365,
+          "right": 710,
+          "top": 254.796875,
+          "bottom": 292.796875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "back": {
+        "text": "กลับไปที่ฟาร์ม",
+        "box": {
+          "left": 12,
+          "right": 193,
+          "top": 340,
+          "bottom": 384,
+          "width": 181,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 51,
+            "right": 170,
+            "top": 350.296875,
+            "bottom": 373.296875
+          }
+        ],
+        "textClip": {
+          "left": 15,
+          "right": 190,
+          "top": 343,
+          "bottom": 381
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "locale": "vi",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 127,
+      "wrappedEffects": 35,
+      "name": "Rừng rậm",
+      "title": {
+        "text": "Rừng rậm",
+        "box": {
+          "left": 279,
+          "right": 713,
+          "top": 85.796875,
+          "bottom": 119.59375,
+          "width": 434,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 279,
+            "right": 406.90625,
+            "top": 87.796875,
+            "bottom": 115.796875
+          }
+        ],
+        "textClip": {
+          "left": 279,
+          "right": 713,
+          "top": 85.796875,
+          "bottom": 119.59375
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "Thuộc tính đông trùng hạ thảo tăng ·Chỉ đề xuất 6",
+        "box": {
+          "left": 27,
+          "right": 162.59375,
+          "top": 167.625,
+          "bottom": 270.109375,
+          "width": 135.59375,
+          "height": 102.484375
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 37,
+            "right": 122.484375,
+            "top": 171.625,
+            "bottom": 187.625
+          },
+          {
+            "left": 37,
+            "right": 126.921875,
+            "top": 190.921875,
+            "bottom": 206.921875
+          },
+          {
+            "left": 37,
+            "right": 140.171875,
+            "top": 210.21875,
+            "bottom": 226.21875
+          },
+          {
+            "left": 37,
+            "right": 42.4375,
+            "top": 229.515625,
+            "bottom": 245.515625
+          },
+          {
+            "left": 37,
+            "right": 143.265625,
+            "top": 248.8125,
+            "bottom": 264.8125
+          }
+        ],
+        "textClip": {
+          "left": 29,
+          "right": 160.59375,
+          "top": 169.625,
+          "bottom": 268.109375
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "Tăng số lượng trận chiến ·Chỉ đề xuất 6",
+        "box": {
+          "left": 681.390625,
+          "right": 817,
+          "top": 181.53125,
+          "bottom": 264.71875,
+          "width": 135.609375,
+          "height": 83.1875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 691.390625,
+            "right": 754.515625,
+            "top": 185.53125,
+            "bottom": 201.53125
+          },
+          {
+            "left": 691.390625,
+            "right": 775.40625,
+            "top": 204.828125,
+            "bottom": 220.828125
+          },
+          {
+            "left": 691.390625,
+            "right": 745.234375,
+            "top": 224.125,
+            "bottom": 240.125
+          },
+          {
+            "left": 691.390625,
+            "right": 797.65625,
+            "top": 243.421875,
+            "bottom": 259.421875
+          }
+        ],
+        "textClip": {
+          "left": 683.390625,
+          "right": 815,
+          "top": 183.53125,
+          "bottom": 262.71875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "Đóng",
+        "box": {
+          "left": 279,
+          "right": 382.578125,
+          "top": 254,
+          "bottom": 298,
+          "width": 103.578125,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 302,
+            "right": 359.578125,
+            "top": 264.296875,
+            "bottom": 287.296875
+          }
+        ],
+        "textClip": {
+          "left": 282,
+          "right": 379.578125,
+          "top": 257,
+          "bottom": 295
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "mua",
+        "box": {
+          "left": 394.578125,
+          "right": 713,
+          "top": 254,
+          "bottom": 298,
+          "width": 318.421875,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 530.09375,
+            "right": 577.46875,
+            "top": 264.296875,
+            "bottom": 287.296875
+          }
+        ],
+        "textClip": {
+          "left": 397.578125,
+          "right": 710,
+          "top": 257,
+          "bottom": 295
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "back": {
+        "text": "Trở lại trang trại",
+        "box": {
+          "left": 12,
+          "right": 253.796875,
+          "top": 340,
+          "bottom": 384,
+          "width": 241.796875,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 51,
+            "right": 230.796875,
+            "top": 350.296875,
+            "bottom": 373.296875
+          }
+        ],
+        "textClip": {
+          "left": 15,
+          "right": 250.796875,
+          "top": 343,
+          "bottom": 381
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "locale": "zh-Hant",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 73,
+      "wrappedEffects": 35,
+      "name": "小保健室",
+      "title": {
+        "text": "小保健室",
+        "box": {
+          "left": 604.5,
+          "right": 942.5,
+          "top": 365.984375,
+          "bottom": 399.78125,
+          "width": 338,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 604.5,
+            "right": 696.5,
+            "top": 367.984375,
+            "bottom": 395.984375
+          }
+        ],
+        "textClip": {
+          "left": 604.5,
+          "right": 942.5,
+          "top": 365.984375,
+          "bottom": 399.78125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "回復生命值與壓力 ·建議 2 隻",
+        "box": {
+          "left": 1080.5,
+          "right": 1232.5,
+          "top": 492.515625,
+          "bottom": 565.65625,
+          "width": 152,
+          "height": 73.140625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 1090.5,
+            "right": 1202.5,
+            "top": 498.515625,
+            "bottom": 516.515625
+          },
+          {
+            "left": 1090.5,
+            "right": 1117.859375,
+            "top": 519.5625,
+            "bottom": 537.5625
+          },
+          {
+            "left": 1090.5,
+            "right": 1160.21875,
+            "top": 540.609375,
+            "bottom": 558.609375
+          }
+        ],
+        "textClip": {
+          "left": 1082.5,
+          "right": 1230.5,
+          "top": 494.515625,
+          "bottom": 563.65625
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "對戰次數上升 ·建議 6 隻",
+        "box": {
+          "left": 890.5,
+          "right": 1042.5,
+          "top": 804.578125,
+          "bottom": 856.671875,
+          "width": 152,
+          "height": 52.09375
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 900.5,
+            "right": 1007.859375,
+            "top": 810.578125,
+            "bottom": 828.578125
+          },
+          {
+            "left": 900.5,
+            "right": 970.21875,
+            "top": 831.625,
+            "bottom": 849.625
+          }
+        ],
+        "textClip": {
+          "left": 892.5,
+          "right": 1040.5,
+          "top": 806.578125,
+          "bottom": 854.671875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "關閉",
+        "box": {
+          "left": 604.5,
+          "right": 690.5,
+          "top": 600.8125,
+          "bottom": 644.8125,
+          "width": 86,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 627.5,
+            "right": 667.5,
+            "top": 611.109375,
+            "bottom": 634.109375
+          }
+        ],
+        "textClip": {
+          "left": 607.5,
+          "right": 687.5,
+          "top": 603.8125,
+          "bottom": 641.8125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "已持有",
+        "box": {
+          "left": 702.5,
+          "right": 942.5,
+          "top": 604.8125,
+          "bottom": 648.8125,
+          "width": 240,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 792.5,
+            "right": 852.5,
+            "top": 615.109375,
+            "bottom": 638.109375
+          }
+        ],
+        "textClip": {
+          "left": 705.5,
+          "right": 939.5,
+          "top": 607.8125,
+          "bottom": 645.8125
+        },
+        "receivesPointer": true,
+        "disabled": true
+      },
+      "back": {
+        "text": "返回牧場",
+        "box": {
+          "left": 113.5,
+          "right": 255.5,
+          "top": 882,
+          "bottom": 926,
+          "width": 142,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 152.5,
+            "right": 232.5,
+            "top": 892.296875,
+            "bottom": 915.296875
+          }
+        ],
+        "textClip": {
+          "left": 116.5,
+          "right": 252.5,
+          "top": 885,
+          "bottom": 923
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "locale": "en",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 87,
+      "wrappedEffects": 35,
+      "name": "Mini Infirmary",
+      "title": {
+        "text": "Mini Infirmary",
+        "box": {
+          "left": 604.5,
+          "right": 942.5,
+          "top": 331.28125,
+          "bottom": 365.078125,
+          "width": 338,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 604.5,
+            "right": 789.78125,
+            "top": 333.28125,
+            "bottom": 361.28125
+          }
+        ],
+        "textClip": {
+          "left": 604.5,
+          "right": 942.5,
+          "top": 331.28125,
+          "bottom": 365.078125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "Recovers HP and stress ·Suggested: 2",
+        "box": {
+          "left": 1080.5,
+          "right": 1232.5,
+          "top": 493.046875,
+          "bottom": 566.1875,
+          "width": 152,
+          "height": 73.140625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 1090.5,
+            "right": 1200.671875,
+            "top": 499.046875,
+            "bottom": 517.046875
+          },
+          {
+            "left": 1090.5,
+            "right": 1193.640625,
+            "top": 520.09375,
+            "bottom": 538.09375
+          },
+          {
+            "left": 1090.5,
+            "right": 1206.734375,
+            "top": 541.140625,
+            "bottom": 559.140625
+          }
+        ],
+        "textClip": {
+          "left": 1082.5,
+          "right": 1230.5,
+          "top": 495.046875,
+          "bottom": 564.1875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "Battle count up ·Suggested: 6",
+        "box": {
+          "left": 890.5,
+          "right": 1042.5,
+          "top": 784.109375,
+          "bottom": 857.25,
+          "width": 152,
+          "height": 73.140625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 900.5,
+            "right": 1008.78125,
+            "top": 790.109375,
+            "bottom": 808.109375
+          },
+          {
+            "left": 900.5,
+            "right": 934.125,
+            "top": 811.15625,
+            "bottom": 829.15625
+          },
+          {
+            "left": 900.5,
+            "right": 1016.734375,
+            "top": 832.203125,
+            "bottom": 850.203125
+          }
+        ],
+        "textClip": {
+          "left": 892.5,
+          "right": 1040.5,
+          "top": 786.109375,
+          "bottom": 855.25
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "Close",
+        "box": {
+          "left": 604.5,
+          "right": 709.734375,
+          "top": 635.5,
+          "bottom": 679.5,
+          "width": 105.234375,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 627.5,
+            "right": 686.734375,
+            "top": 645.796875,
+            "bottom": 668.796875
+          }
+        ],
+        "textClip": {
+          "left": 607.5,
+          "right": 706.734375,
+          "top": 638.5,
+          "bottom": 676.5
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "Owned",
+        "box": {
+          "left": 721.734375,
+          "right": 942.5,
+          "top": 639.5,
+          "bottom": 683.5,
+          "width": 220.765625,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 794.28125,
+            "right": 869.953125,
+            "top": 649.796875,
+            "bottom": 672.796875
+          }
+        ],
+        "textClip": {
+          "left": 724.734375,
+          "right": 939.5,
+          "top": 642.5,
+          "bottom": 680.5
+        },
+        "receivesPointer": true,
+        "disabled": true
+      },
+      "back": {
+        "text": "Back to ranch",
+        "box": {
+          "left": 113.5,
+          "right": 326.453125,
+          "top": 882,
+          "bottom": 926,
+          "width": 212.953125,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 152.5,
+            "right": 303.453125,
+            "top": 892.296875,
+            "bottom": 915.296875
+          }
+        ],
+        "textClip": {
+          "left": 116.5,
+          "right": 323.453125,
+          "top": 885,
+          "bottom": 923
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "locale": "ja",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 91,
+      "wrappedEffects": 35,
+      "name": "ミニ保健室",
+      "title": {
+        "text": "ミニ保健室",
+        "box": {
+          "left": 604.5,
+          "right": 942.5,
+          "top": 351.6875,
+          "bottom": 385.484375,
+          "width": 338,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 604.5,
+            "right": 721.5,
+            "top": 353.6875,
+            "bottom": 381.6875
+          }
+        ],
+        "textClip": {
+          "left": 604.5,
+          "right": 942.5,
+          "top": 351.6875,
+          "bottom": 385.484375
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "健康とプレッシャーを回復する ·2 のみを推奨",
+        "box": {
+          "left": 1080.5,
+          "right": 1232.5,
+          "top": 492.921875,
+          "bottom": 566.0625,
+          "width": 152,
+          "height": 73.140625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 1090.5,
+            "right": 1202.5,
+            "top": 498.921875,
+            "bottom": 516.921875
+          },
+          {
+            "left": 1090.5,
+            "right": 1213.859375,
+            "top": 519.96875,
+            "bottom": 537.96875
+          },
+          {
+            "left": 1090.5,
+            "right": 1186.78125,
+            "top": 541.015625,
+            "bottom": 559.015625
+          }
+        ],
+        "textClip": {
+          "left": 1082.5,
+          "right": 1230.5,
+          "top": 494.921875,
+          "bottom": 564.0625
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "戦闘回数の増加 ·6 のみを推奨",
+        "box": {
+          "left": 890.5,
+          "right": 1042.5,
+          "top": 804.984375,
+          "bottom": 857.078125,
+          "width": 152,
+          "height": 52.09375
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 900.5,
+            "right": 1023.859375,
+            "top": 810.984375,
+            "bottom": 828.984375
+          },
+          {
+            "left": 900.5,
+            "right": 996.78125,
+            "top": 832.03125,
+            "bottom": 850.03125
+          }
+        ],
+        "textClip": {
+          "left": 892.5,
+          "right": 1040.5,
+          "top": 806.984375,
+          "bottom": 855.078125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "閉じる",
+        "box": {
+          "left": 604.5,
+          "right": 710.5,
+          "top": 615.109375,
+          "bottom": 659.109375,
+          "width": 106,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 627.5,
+            "right": 687.5,
+            "top": 625.40625,
+            "bottom": 648.40625
+          }
+        ],
+        "textClip": {
+          "left": 607.5,
+          "right": 707.5,
+          "top": 618.109375,
+          "bottom": 656.109375
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "すでに開催済み",
+        "box": {
+          "left": 722.5,
+          "right": 942.5,
+          "top": 619.109375,
+          "bottom": 663.109375,
+          "width": 220,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 762.5,
+            "right": 902.5,
+            "top": 629.40625,
+            "bottom": 652.40625
+          }
+        ],
+        "textClip": {
+          "left": 725.5,
+          "right": 939.5,
+          "top": 622.109375,
+          "bottom": 660.109375
+        },
+        "receivesPointer": true,
+        "disabled": true
+      },
+      "back": {
+        "text": "牧場に戻る",
+        "box": {
+          "left": 113.5,
+          "right": 275.5,
+          "top": 882,
+          "bottom": 926,
+          "width": 162,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 152.5,
+            "right": 252.5,
+            "top": 892.296875,
+            "bottom": 915.296875
+          }
+        ],
+        "textClip": {
+          "left": 116.5,
+          "right": 272.5,
+          "top": 885,
+          "bottom": 923
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "locale": "th",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 101,
+      "wrappedEffects": 35,
+      "name": "สวนหย่อมขนาดเล็ก",
+      "title": {
+        "text": "สวนหย่อมขนาดเล็ก",
+        "box": {
+          "left": 604.5,
+          "right": 942.5,
+          "top": 391.078125,
+          "bottom": 424.875,
+          "width": 338,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 604.5,
+            "right": 801.5,
+            "top": 393.078125,
+            "bottom": 421.078125
+          }
+        ],
+        "textClip": {
+          "left": 604.5,
+          "right": 942.5,
+          "top": 391.078125,
+          "bottom": 424.875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "คุณสมบัติอันศักดิ์สิทธิ์เพิ่มขึ้น ·แนะนำ 2 เท่านั้น",
+        "box": {
+          "left": 130.5,
+          "right": 282.5,
+          "top": 496.28125,
+          "bottom": 569.421875,
+          "width": 152,
+          "height": 73.140625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 140.5,
+            "right": 224.5,
+            "top": 502.28125,
+            "bottom": 520.28125
+          },
+          {
+            "left": 140.5,
+            "right": 257.859375,
+            "top": 523.328125,
+            "bottom": 541.328125
+          },
+          {
+            "left": 140.5,
+            "right": 257.21875,
+            "top": 544.375,
+            "bottom": 562.375
+          }
+        ],
+        "textClip": {
+          "left": 132.5,
+          "right": 280.5,
+          "top": 498.28125,
+          "bottom": 567.421875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "เพิ่มจำนวนการรบ ·แนะนำ 6 เท่านั้น",
+        "box": {
+          "left": 890.5,
+          "right": 1042.5,
+          "top": 742.796875,
+          "bottom": 815.9375,
+          "width": 152,
+          "height": 73.140625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 900.5,
+            "right": 1018.5,
+            "top": 748.796875,
+            "bottom": 766.796875
+          },
+          {
+            "left": 900.5,
+            "right": 906.4375,
+            "top": 769.84375,
+            "bottom": 787.84375
+          },
+          {
+            "left": 900.5,
+            "right": 1017.21875,
+            "top": 790.890625,
+            "bottom": 808.890625
+          }
+        ],
+        "textClip": {
+          "left": 892.5,
+          "right": 1040.5,
+          "top": 744.796875,
+          "bottom": 813.9375
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "ปิด",
+        "box": {
+          "left": 604.5,
+          "right": 675.5,
+          "top": 581.921875,
+          "bottom": 625.921875,
+          "width": 71,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 627.5,
+            "right": 652.5,
+            "top": 592.21875,
+            "bottom": 615.21875
+          }
+        ],
+        "textClip": {
+          "left": 607.5,
+          "right": 672.5,
+          "top": 584.921875,
+          "bottom": 622.921875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "ซื้อ",
+        "box": {
+          "left": 687.5,
+          "right": 942.5,
+          "top": 581.921875,
+          "bottom": 625.921875,
+          "width": 255,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 802.5,
+            "right": 827.5,
+            "top": 592.21875,
+            "bottom": 615.21875
+          }
+        ],
+        "textClip": {
+          "left": 690.5,
+          "right": 939.5,
+          "top": 584.921875,
+          "bottom": 622.921875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "back": {
+        "text": "กลับไปที่ฟาร์ม",
+        "box": {
+          "left": 113.5,
+          "right": 294.5,
+          "top": 882,
+          "bottom": 926,
+          "width": 181,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 152.5,
+            "right": 271.5,
+            "top": 892.296875,
+            "bottom": 915.296875
+          }
+        ],
+        "textClip": {
+          "left": 116.5,
+          "right": 291.5,
+          "top": 885,
+          "bottom": 923
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "locale": "vi",
+      "scale": 130,
+      "effectCount": 35,
+      "textRectsChecked": 123,
+      "wrappedEffects": 35,
+      "name": "Rừng rậm",
+      "title": {
+        "text": "Rừng rậm",
+        "box": {
+          "left": 604.5,
+          "right": 942.5,
+          "top": 375.75,
+          "bottom": 409.546875,
+          "width": 338,
+          "height": 33.796875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 604.5,
+            "right": 732.40625,
+            "top": 377.75,
+            "bottom": 405.75
+          }
+        ],
+        "textClip": {
+          "left": 604.5,
+          "right": 942.5,
+          "top": 375.75,
+          "bottom": 409.546875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "effect": {
+        "text": "Thuộc tính đông trùng hạ thảo tăng ·Chỉ đề xuất 6",
+        "box": {
+          "left": 700.5,
+          "right": 852.5,
+          "top": 482.28125,
+          "bottom": 576.46875,
+          "width": 152,
+          "height": 94.1875
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 710.5,
+            "right": 803.734375,
+            "top": 488.28125,
+            "bottom": 506.28125
+          },
+          {
+            "left": 710.5,
+            "right": 835.640625,
+            "top": 509.328125,
+            "bottom": 527.328125
+          },
+          {
+            "left": 710.5,
+            "right": 807.328125,
+            "top": 530.375,
+            "bottom": 548.375
+          },
+          {
+            "left": 710.5,
+            "right": 826.40625,
+            "top": 551.421875,
+            "bottom": 569.421875
+          }
+        ],
+        "textClip": {
+          "left": 702.5,
+          "right": 850.5,
+          "top": 484.28125,
+          "bottom": 574.46875
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "lastEffect": {
+        "text": "Tăng số lượng trận chiến ·Chỉ đề xuất 6",
+        "box": {
+          "left": 890.5,
+          "right": 1042.5,
+          "top": 698.390625,
+          "bottom": 771.53125,
+          "width": 152,
+          "height": 73.140625
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 900.5,
+            "right": 1024.203125,
+            "top": 704.390625,
+            "bottom": 722.390625
+          },
+          {
+            "left": 900.5,
+            "right": 1001.421875,
+            "top": 725.4375,
+            "bottom": 743.4375
+          },
+          {
+            "left": 900.5,
+            "right": 1016.40625,
+            "top": 746.484375,
+            "bottom": 764.484375
+          }
+        ],
+        "textClip": {
+          "left": 892.5,
+          "right": 1040.5,
+          "top": 700.390625,
+          "bottom": 769.53125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "close": {
+        "text": "Đóng",
+        "box": {
+          "left": 604.5,
+          "right": 708.078125,
+          "top": 591.03125,
+          "bottom": 635.03125,
+          "width": 103.578125,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 627.5,
+            "right": 685.078125,
+            "top": 601.328125,
+            "bottom": 624.328125
+          }
+        ],
+        "textClip": {
+          "left": 607.5,
+          "right": 705.078125,
+          "top": 594.03125,
+          "bottom": 632.03125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "buy": {
+        "text": "mua",
+        "box": {
+          "left": 720.078125,
+          "right": 942.5,
+          "top": 591.03125,
+          "bottom": 635.03125,
+          "width": 222.421875,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 807.59375,
+            "right": 854.96875,
+            "top": 601.328125,
+            "bottom": 624.328125
+          }
+        ],
+        "textClip": {
+          "left": 723.078125,
+          "right": 939.5,
+          "top": 594.03125,
+          "bottom": 632.03125
+        },
+        "receivesPointer": true,
+        "disabled": false
+      },
+      "back": {
+        "text": "Trở lại trang trại",
+        "box": {
+          "left": 113.5,
+          "right": 355.296875,
+          "top": 882,
+          "bottom": 926,
+          "width": 241.796875,
+          "height": 44
+        },
+        "whollyVisible": true,
+        "textFits": true,
+        "textRects": [
+          {
+            "left": 152.5,
+            "right": 332.296875,
+            "top": 892.296875,
+            "bottom": 915.296875
+          }
+        ],
+        "textClip": {
+          "left": 116.5,
+          "right": 352.296875,
+          "top": 885,
+          "bottom": 923
+        },
+        "receivesPointer": true,
+        "disabled": false
+      }
+    }
+  ],
+  "keyboard": [
+    {
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "firstName": "飼料",
+      "secondName": "蛋白質",
+      "namedNonmodal": true,
+      "tabToBackground": true,
+      "escapeBeforeBack": true,
+      "liveOpenerRestored": true,
+      "closeClickable": true,
+      "buyIntentDelivered": true,
+      "hiddenBuyFocusVisible": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "firstName": "飼料",
+      "secondName": "蛋白質",
+      "namedNonmodal": true,
+      "tabToBackground": true,
+      "escapeBeforeBack": true,
+      "liveOpenerRestored": true,
+      "closeClickable": true,
+      "buyIntentDelivered": true,
+      "hiddenBuyFocusVisible": true
+    },
+    {
+      "viewport": {
+        "width": 1363,
+        "height": 936
+      },
+      "firstName": "飼料",
+      "secondName": "蛋白質",
+      "namedNonmodal": true,
+      "tabToBackground": true,
+      "escapeBeforeBack": true,
+      "liveOpenerRestored": true,
+      "closeClickable": true,
+      "buyIntentDelivered": true,
+      "hiddenBuyFocusVisible": true
+    }
+  ],
+  "screenshots": [
+    "night-shop-375x667-130.png",
+    "thai-detail-844x390-130.png"
+  ],
+  "errors": [],
+  "missing": [],
+  "blockedExternal": [],
+  "origin": "http://127.0.0.1:45179",
+  "browser": "151.0.7922.34",
+  "finishedAt": "2026-11-06T09:31:44.644Z"
+}

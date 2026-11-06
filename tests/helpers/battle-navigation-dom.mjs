@@ -20,6 +20,7 @@ class Node{
   get textContent(){return this._text+this.children.map(child=>child.textContent).join('');}
   set textContent(text){this.replaceChildren();this._text=String(text);}
   append(...nodes){for(const node of nodes){node.parentNode?.children.splice(node.parentNode.children.indexOf(node),1);node.parentNode=this;this.children.push(node);}}
+  prepend(...nodes){for(const node of [...nodes].reverse()){node.remove();node.parentNode=this;this.children.unshift(node);}}
   appendChild(node){this.append(node);return node;}
   replaceChildren(...nodes){this.replaceCount++;for(const node of this.children)node.parentNode=null;this.children=[];this._text='';this.append(...nodes);}
   remove(){if(this.parentNode){this.parentNode.children.splice(this.parentNode.children.indexOf(this),1);this.parentNode=null;}}

@@ -199,6 +199,7 @@ export const UI_COPY_EN = Object.freeze({
   "FIELD_LOAD_RETRY": "Retry habitat",
   "FIELD_LOAD_CANCEL": "Cancel loading",
   "FIELD_LOAD_RETURN": "Save and return to title",
+  "BATTLE_LOAD_ERROR_TUTORIAL": "The battle arena couldn't load. Save and return to the title, then choose Continue.",
   "FIELD_LOAD_RELOAD": "Save and reload game",
   "FIELD_LOAD_TIMEOUT": "Loading is taking too long. Retry, or save and reload the game.",
   "FIELD_LOAD_CANCELLED": "Loading cancelled. Your progress is still here.",
