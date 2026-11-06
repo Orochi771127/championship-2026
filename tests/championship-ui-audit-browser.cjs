@@ -22,11 +22,86 @@ const profiles = [
   {viewport:{width:1363,height:936},layout:{portraitFrame:false,desktopBrowse:true,landscapeMenu:false}}
 ];
 
+// Shared verbatim with the browser fixture so --check-only exercises the same
+// compositing math without starting Chromium. Bound RGB only AFTER compositing
+// each complete RGBA tuple; independent RGB/alpha extrema invent colors such as
+// opaque black from a transparent-black and opaque-white gradient.
+function createContrastMath() {
+  const opaque = rgb => ({min:rgb.slice(0,3).concat(1),max:rgb.slice(0,3).concat(1)});
+  const over = (samples, background) => {
+    if (!samples.length) throw new Error('Cannot bound an empty paint sample');
+    const result = {min:[Infinity,Infinity,Infinity,1],max:[-Infinity,-Infinity,-Infinity,1]};
+    for (const rgba of samples) {
+      const alpha = rgba[3];
+      for (let channel = 0; channel < 3; channel++) {
+        const foreground = rgba[channel] * alpha;
+        result.min[channel] = Math.min(result.min[channel],foreground + background.min[channel] * (1-alpha));
+        result.max[channel] = Math.max(result.max[channel],foreground + background.max[channel] * (1-alpha));
+      }
+    }
+    return result;
+  };
+  const pixelSamples = pixels => {
+    const unique = new Map();
+    for (let i = 0; i < pixels.length; i += 4) {
+      const key = pixels[i]*0x1000000 + pixels[i+1]*0x10000 + pixels[i+2]*0x100 + pixels[i+3];
+      if (!unique.has(key)) unique.set(key,[pixels[i],pixels[i+1],pixels[i+2],pixels[i+3]/255]);
+    }
+    return [...unique.values()];
+  };
+  const luminance = rgb => rgb.slice(0,3).map(v => v/255).map(v => v <= .04045 ? v/12.92 : ((v+.055)/1.055)**2.4)
+    .reduce((sum, v, i) => sum + v * [.2126,.7152,.0722][i], 0);
+  const minimumContrast = (foreground, background) => {
+    const f = [luminance(foreground.min),luminance(foreground.max)], b = [luminance(background.min),luminance(background.max)];
+    return f[0] > b[1] ? (f[0]+.05)/(b[1]+.05) : b[0] > f[1] ? (b[0]+.05)/(f[1]+.05) : 1;
+  };
+  return {opaque,over,pixelSamples,minimumContrast};
+}
+
+function checkContrastMath() {
+  const {opaque,over,pixelSamples,minimumContrast} = createContrastMath();
+  const white = opaque([255,255,255]), black = opaque([0,0,0]);
+  const transparentToWhite = [[0,0,0,0],[255,255,255,1]];
+  assert.deepEqual(over(transparentToWhite,white),white,'transparent black cannot introduce an opaque-black gradient stop');
+  assert.deepEqual(over([[255,0,255,0],[0,200,10,0]],opaque([40,80,120])),opaque([40,80,120]),'RGB in fully transparent stops is invisible');
+
+  const stops = [[200,100,50,.25],[20,220,80,.75]], base = opaque([40,80,120]);
+  const bound = over(stops,base);
+  assert.deepEqual(bound,{min:[25,85,90,1],max:[80,185,102.5,1]},'composite actual stop tuples before taking extrema');
+  // Premultiplied-sRGB interpolation composites to a convex combination of
+  // the already-composited endpoints. Check interior samples against the
+  // independently calculated endpoint colors, not just the implementation.
+  for (let step = 0; step <= 200; step++) {
+    const t = step/200, alpha = .25*(1-t)+.75*t;
+    const rgba = [0,1,2].map(c => (stops[0][c]*.25*(1-t)+stops[1][c]*.75*t)/alpha).concat(alpha);
+    const actual = over([rgba],base);
+    for (let c = 0; c < 3; c++) {
+      const expected = [80,85,102.5][c]*(1-t)+[25,185,90][c]*t;
+      assert.ok(Math.abs(actual.min[c]-expected)<1e-10 && actual.min[c]>=bound.min[c]-1e-10 && actual.max[c]<=bound.max[c]+1e-10,'premultiplied gradient interior stays inside composited stop bounds');
+    }
+  }
+  assert.deepEqual(over(stops,{min:[20,40,60,1],max:[100,120,140,1]}),{min:[20,55,57.5,1],max:[125,195,117.5,1]},'each real tuple composites against both background bounds');
+
+  const pixels = pixelSamples(Uint8ClampedArray.from([0,0,0,0,255,255,255,255,255,255,255,255]));
+  assert.deepEqual(pixels,transparentToWhite,'deduplicate complete decoded RGBA pixels, preserving alpha correlation');
+  assert.deepEqual(over(pixels,white),white,'transparent image pixels cannot darken a white background');
+  assert.deepEqual(over(pixels,black),{min:[0,0,0,1],max:[255,255,255,1]},'cached raw pixels composite afresh for a different theme background');
+  assert.deepEqual(pixels,transparentToWhite,'compositing does not mutate cached pixel samples');
+  assert.equal(minimumContrast(black,white),21);
+  assert.equal(minimumContrast(white,white),1);
+  const paleGradient = over(transparentToWhite,opaque([238,245,250]));
+  const selectedEffect = over([[8,122,140,.12]],over([[8,122,140,.12]],paleGradient));
+  const layeredContrast = minimumContrast(over([[13,38,56,1]],selectedEffect),selectedEffect);
+  assert.ok(layeredContrast>4.5,'two translucent accent layers over a pale gradient retain dark-text contrast');
+  return {status:'PASS',gradientInteriorSamples:201,transparentStopOverWhite:over(transparentToWhite,white),layeredFixtureContrast:layeredContrast};
+}
+
 const fixtureModule = `
 import {createShopView} from './src/championship/app/vs4Screens.js';
 import {createShopRuntime} from './src/championship/shop/shopRuntime.js';
 import {mountPortraitFrame} from './src/championship/app/portraitFrame.js';
 import {setLocale} from './src/championship/text/locale.js';
+window.__uiAuditContrastMath = (${createContrastMath.toString()})();
 const root = document.getElementById('cm-root');
 let view, runtime;
 const calls = {leave: 0, buy: []};
@@ -81,25 +156,18 @@ async function settle(page) {
 }
 
 // Runs in Chromium. Contrast uses the final computed paint stack, including
-// alpha, gradient stops and decoded background-image pixels. Channel bounds
-// deliberately include every gradient/image color, so the reported minimum is
-// conservative; it is not an antialiased glyph-pixel contrast measurement.
+// alpha, gradient stops and decoded background-image pixels. Each complete
+// RGBA sample is composited before RGB bounds are formed. The reported minimum
+// includes every gradient/image color and remains conservative; it is not an
+// antialiased glyph-pixel contrast measurement.
 async function sampleShop() {
   const violations = [], rect = r => ({left:r.left, top:r.top, right:r.right, bottom:r.bottom, width:r.width, height:r.height});
+  const {opaque,over,pixelSamples,minimumContrast} = window.__uiAuditContrastMath;
   const canvas = document.createElement('canvas'); canvas.width = canvas.height = 1;
   const painter = canvas.getContext('2d', {willReadFrequently:true});
   const color = css => {
     painter.clearRect(0, 0, 1, 1); painter.fillStyle = css; painter.fillRect(0, 0, 1, 1);
     const value = [...painter.getImageData(0, 0, 1, 1).data]; value[3] /= 255; return value;
-  };
-  const bounds = colors => ({min:[0,1,2,3].map(i => Math.min(...colors.map(c => c[i]))), max:[0,1,2,3].map(i => Math.max(...colors.map(c => c[i])))});
-  const over = (fg, bg) => {
-    const candidates = [0,1,2].map(i => {
-      const values = [];
-      for (const a of [fg.min[3], fg.max[3]]) for (const f of [fg.min[i], fg.max[i]]) for (const b of [bg.min[i], bg.max[i]]) values.push(f * a + b * (1-a));
-      return values;
-    });
-    return {min:candidates.map(v => Math.min(...v)).concat(1), max:candidates.map(v => Math.max(...v)).concat(1)};
   };
   const layers = value => {
     const parts = []; let depth = 0, quote = '', start = 0, escaped = false;
@@ -115,13 +183,16 @@ async function sampleShop() {
     }
     parts.push(value.slice(start).trim()); return parts.filter(p => p !== 'none');
   };
-  const imageCache = window.__uiAuditImageBounds ??= new Map();
-  async function imageBounds(layer) {
+  // Cache raw tuples by URL, never bounds already painted on a theme's base.
+  const imageCache = window.__uiAuditImageSamples ??= new Map();
+  async function imageSamples(layer) {
     if (layer.includes('gradient(')) {
       if (/\bin\s+(?!srgb\b)[\w-]+/.test(layer)) throw new Error('Unmodelled gradient interpolation: ' + layer);
       const colors = layer.match(/(?:rgba?|color)\([^()]*\)/g)?.map(color) ?? [];
       if (colors.length < 2) throw new Error('Unmodelled computed gradient: ' + layer);
-      return bounds(colors);
+      // Default/sRGB gradients interpolate premultiplied colors, so each
+      // interior composite is a convex combination of composited stop colors.
+      return colors;
     }
     const match = /^url\((["']?)(.*?)\1\)$/.exec(layer);
     if (!match) throw new Error('Unmodelled computed background: ' + layer);
@@ -132,32 +203,24 @@ async function sampleShop() {
       const tile = document.createElement('canvas'); tile.width = image.naturalWidth; tile.height = image.naturalHeight;
       const ctx = tile.getContext('2d', {willReadFrequently:true}); ctx.drawImage(image, 0, 0);
       const pixels = ctx.getImageData(0, 0, tile.width, tile.height).data;
-      const result = {min:[255,255,255,1], max:[0,0,0,0]};
-      for (let i = 0; i < pixels.length; i += 4) for (let c = 0; c < 4; c++) {
-        const value = c === 3 ? pixels[i+c] / 255 : pixels[i+c];
-        result.min[c] = Math.min(result.min[c], value); result.max[c] = Math.max(result.max[c], value);
-      }
-      return result;
+      return pixelSamples(pixels);
     })());
     return imageCache.get(href);
   }
   async function paintedBackground(node) {
     const ancestry = []; for (let e = node; e; e = e.parentElement) ancestry.unshift(e);
-    let painted = bounds([[255,255,255,1]]);
+    let painted = opaque([255,255,255]);
     for (const element of ancestry) {
       const css = getComputedStyle(element);
       if (Number(css.opacity) !== 1 || css.filter !== 'none' || css.mixBlendMode !== 'normal') throw new Error('Unmodelled opacity/filter/blend on ' + element.className);
-      painted = over(bounds([color(css.backgroundColor)]), painted);
-      for (const layer of layers(css.backgroundImage).reverse()) painted = over(await imageBounds(layer), painted);
+      painted = over([color(css.backgroundColor)], painted);
+      for (const layer of layers(css.backgroundImage).reverse()) painted = over(await imageSamples(layer), painted);
     }
     return painted;
   }
-  const luminance = rgb => rgb.slice(0,3).map(v => v/255).map(v => v <= .04045 ? v/12.92 : ((v+.055)/1.055)**2.4)
-    .reduce((sum, v, i) => sum + v * [.2126,.7152,.0722][i], 0);
   async function contrastOf(effect) {
-    const css = getComputedStyle(effect), bg = await paintedBackground(effect), fg = over(bounds([color(css.color)]), bg);
-    const f = [luminance(fg.min),luminance(fg.max)], b = [luminance(bg.min),luminance(bg.max)];
-    const minimum = f[0] > b[1] ? (f[0]+.05)/(b[1]+.05) : b[0] > f[1] ? (b[0]+.05)/(f[1]+.05) : 1;
+    const css = getComputedStyle(effect), bg = await paintedBackground(effect), fg = over([color(css.color)], bg);
+    const minimum = minimumContrast(fg,bg);
     return {minimum, foreground:css.color, background:css.backgroundColor, backgroundBounds:bg,
       cardBackground:getComputedStyle(effect.closest('.cm-vs2-shop__row')).background,
       text:effect.textContent, fontSize:parseFloat(css.fontSize)};
@@ -257,10 +320,10 @@ async function detailKeyboardChecks(page) {
   return {firstName,secondName,namedNonmodal:true,tabToBackground:true,escapeBeforeBack:true,liveOpenerRestored:true,closeClickable:true,buyIntentDelivered:true,hiddenBuyFocusVisible:true};
 }
 
-async function run() {
+async function run(mathChecks) {
   fs.mkdirSync(output,{recursive:true});
   const report = {schemaVersion:1,status:'RUNNING',generatedAt:new Date().toISOString(),scope:'CONTROLLED_SHOP_COMPONENT_BROWSER',
-    normalLoginHomeRoute:false,physicalDeviceAccepted:false,contrastMethod:'Computed paint-stack channel bounds; gradients and decoded background images included; not glyph-pixel sampling',
+    normalLoginHomeRoute:false,physicalDeviceAccepted:false,contrastMethod:'Computed paint stack; whole RGBA stops/pixels composited before RGB bounds; conservative, not glyph-pixel sampling',mathChecks,
     sourceHashes:Object.fromEntries(['championship.html','src/championship/app/vs4Screens.js','src/championship/app/ui/screenLayout.css'].map(file=>[file,createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex')])),
     styleOrder:styleHrefs,cases:[],locales:[],keyboard:[],screenshots:[],errors:[],missing:[],blockedExternal:[]};
   let server, browser, currentPage;
@@ -357,7 +420,8 @@ async function run() {
 
 if(require.main===module){
   checkSyntax();
-  if(process.argv.includes('--check-only'))console.log('UI audit outer/embedded syntax checked; browser not launched.');
-  else run().catch(error=>{console.error(error);process.exitCode=1;});
+  const mathChecks = checkContrastMath();
+  if(process.argv.includes('--check-only'))console.log(JSON.stringify({status:'PASS',syntax:'outer and embedded module checked',browserLaunched:false,mathChecks},null,2));
+  else run(mathChecks).catch(error=>{console.error(error);process.exitCode=1;});
 }
-module.exports={fixtureModule,styleHrefs};
+module.exports={fixtureModule,styleHrefs,createContrastMath};
