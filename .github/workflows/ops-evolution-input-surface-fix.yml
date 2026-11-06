@@ -1,0 +1,64 @@
+name: Prepare bounded evolution input-surface test correction
+on:
+  push:
+    branches: [ops/evolution-input-surface-fix-20261106]
+    paths: [.github/workflows/ops-evolution-input-surface-fix.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Create a reviewed single-file candidate; never update any ref
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {execFileSync} from 'node:child_process';
+          const repo='Orochi771127/championship-2026';
+          const parent='ff2972eb83f56f2019312f4d01271c585d673f9e';
+          const file='tests/championship-evolution-streaming-browser.cjs';
+          async function api(path,body){
+            const response=await fetch(`https://api.github.com/repos/${repo}/${path}`,{method:body?'POST':'GET',headers:{Authorization:`Bearer ${process.env.GH_TOKEN}`,Accept:'application/vnd.github+json','Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});
+            if(!response.ok)throw Error(`GitHub ${response.status} ${path}: ${await response.text()}`);
+            return response.json();
+          }
+          const original=await api(`contents/${file}?ref=${parent}`);
+          assert.equal(original.sha,'7de6b4b0413f376677ace0225953833ce91ffe55');
+          const before=Buffer.from(original.content,'base64').toString('utf8');
+          const old="     const canvas=page.locator('.int-rh2-field-host canvas').first();";
+          assert.equal(before.split(old).length,2);
+          const replacement=[
+            '     // Dispatch synthetic touch events to the input-owning Pixi canvas,',
+            '     // not whichever decorative Three.js canvas happens to be first.',
+            "     const canvas=page.locator('.int-rh2-field-host canvas.cm-raising-pixi-canvas');",
+            "     assert.equal(await canvas.count(),1,'Exactly one interactive raising canvas');",
+            "     evidence.inputSurfaces=await page.locator('.int-rh2-field-host canvas').evaluateAll(nodes=>nodes.map(node=>({className:node.className,pointerEvents:getComputedStyle(node).pointerEvents,inputOwner:node.classList.contains('cm-raising-pixi-canvas')})));"
+          ].join('\n');
+          const content=before.replace(old,replacement);
+          fs.writeFileSync('evidence/candidate-test.cjs',content);
+          execFileSync(process.execPath,['--check','evidence/candidate-test.cjs']);
+          const commit=await api(`git/commits/${parent}`);
+          const blob=await api('git/blobs',{content,encoding:'utf-8'});
+          const tree=await api('git/trees',{base_tree:commit.tree.sha,tree:[{path:file,mode:'100644',type:'blob',sha:blob.sha}]});
+          const candidate=await api('git/commits',{message:'test(evolution): target the interactive Pixi canvas for recovery gestures',tree:tree.sha,parents:[parent]});
+          const evidence={parent,candidate:candidate.sha,tree:tree.sha,path:file,beforeBlob:original.sha,afterBlob:blob.sha,changedFiles:[file],runtimeChanged:false,refsUpdated:false,replacement};
+          fs.writeFileSync('evidence/candidate.json',JSON.stringify(evidence,null,2)+'\n');
+          console.log(JSON.stringify(evidence));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evolution-input-surface-candidate-${{ github.run_id }}
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 14
