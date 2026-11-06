@@ -1,0 +1,44 @@
+name: Verify live public performance release
+on:
+  push:
+    branches: [ops/live-performance-smoke-20261106]
+    paths:
+      - .github/workflows/ops-live-performance-smoke.yml
+      - ops/live-performance-smoke.cjs
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    env:
+      EXPECTED_PUBLIC_COMMIT: 7312a31c2723d315517d5f64efbef0c1b7a4d1ce
+      EXPECTED_PUBLIC_BUILD: ''
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /package.json
+            /package-lock.json
+            /ops/live-performance-smoke.cjs
+            /scripts/lib/build-manifest-codec.mjs
+            /tests/championship-browser-opening.cjs
+            /qa/championship-full-qa-save.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node --check ops/live-performance-smoke.cjs
+      - run: npx playwright install --with-deps chromium
+      - name: Verify served receipt, runtime hashes, mobile and desktop UI
+        run: node ops/live-performance-smoke.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: live-performance-smoke-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .tmp/live-release-smoke/
+          if-no-files-found: error
+          retention-days: 14
