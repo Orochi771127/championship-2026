@@ -1,0 +1,59 @@
+name: Prepare conflict-safe performance and UI integration
+on:
+  push:
+    branches: [ops/evolution-input-surface-fix-20261106]
+    paths: [.github/workflows/ops-preserve-main-ui-merge.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preserve main verbatim except the eight reviewed performance paths; no refs updated
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p evidence
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {spawnSync} from 'node:child_process';
+          const repo='Orochi771127/championship-2026',base='7312a31c2723d315517d5f64efbef0c1b7a4d1ce',ours='770333843cc9f44d89299f980f1c87e043651c45',main='12ccdcd7ca65861069ff693b410ba526b9f88b10';
+          async function api(p,body,missing=false){const r=await fetch(`https://api.github.com/repos/${repo}/${p}`,{method:body?'POST':'GET',headers:{Authorization:`Bearer ${process.env.GH_TOKEN}`,Accept:'application/vnd.github+json','Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});if(missing&&r.status===404)return null;if(!r.ok)throw Error(`${r.status} ${p}: ${await r.text()}`);return r.json();}
+          const mainRef=await api('git/ref/heads/main');assert.equal(mainRef.object.sha,main);
+          const prRef=await api('git/ref/heads/fix/performance-release-20261106');assert.equal(prRef.object.sha,ours);
+          const comparison=await api(`compare/${base}...${ours}`);assert.equal(comparison.files.length,8);
+          const tree=[],details=[];
+          async function read(path,ref){const meta=await api(`contents/${path}?ref=${ref}`,undefined,true);if(!meta)return null;const blob=await api(`git/blobs/${meta.sha}`);return {sha:meta.sha,text:Buffer.from(blob.content,'base64').toString('utf8')};}
+          for(const file of comparison.files){
+            const p=file.filename;assert.ok(['added','modified'].includes(file.status));
+            const [before,current,candidate]=await Promise.all([read(p,base),read(p,main),read(p,ours)]);let content=candidate.text,method='exact reviewed branch blob';
+            if(p==='tests/ci-test-scope.v1.json'){
+              const old=JSON.parse(before.text),next=JSON.parse(candidate.text),live=JSON.parse(current.text);
+              const added=next.portable.filter(x=>!old.portable.includes(x));assert.deepEqual(added,['tests/championship-performance-release-cases.mjs']);
+              const stripped={...next,portable:next.portable.filter(x=>!added.includes(x))};assert.deepEqual(stripped,old);
+              assert.ok(!live.portable.includes(added[0]));const merged={...live,portable:[...live.portable,...added]};content=JSON.stringify(merged,null,2)+'\n';
+              assert.deepEqual({...merged,portable:merged.portable.filter(x=>!added.includes(x))},live);method='preserve every main test classification plus ten performance probes';
+            }else if(p.endsWith('/PUBLIC_RUNTIME_ALLOWLIST.v1.json')||p.endsWith('/WEB_BUILD_INPUTS.v1.json')){
+              fs.writeFileSync('evidence/main',current.text);fs.writeFileSync('evidence/base',before.text);fs.writeFileSync('evidence/ours',candidate.text);
+              const merge=spawnSync('git',['merge-file','-p','evidence/main','evidence/base','evidence/ours'],{encoding:'utf8',maxBuffer:30*1024*1024});assert.equal(merge.status,0,`${p}: unexpected overlapping approval conflict ${merge.stderr}`);content=merge.stdout;JSON.parse(content);method='clean three-way merge of both sets of approved hashes';
+            }else{assert.equal(current?.sha??null,before?.sha??null,`Unexpected concurrent edit: ${p}`);}
+            const blob=content===candidate.text?{sha:candidate.sha}:await api('git/blobs',{content,encoding:'utf-8'});
+            tree.push({path:p,mode:'100644',type:'blob',sha:blob.sha});details.push({path:p,baseBlob:before?.sha??null,mainBlob:current?.sha??null,performanceBlob:candidate.sha,mergedBlob:blob.sha,method});
+          }
+          const mainCommit=await api(`git/commits/${main}`),mergedTree=await api('git/trees',{base_tree:mainCommit.tree.sha,tree});
+          const commit=await api('git/commits',{message:'Merge current main UI fixes without losing performance tests or approval hashes',tree:mergedTree.sha,parents:[ours,main]});
+          for(const name of ['main','base','ours'])fs.rmSync(`evidence/${name}`,{force:true});
+          const result={base,main,ours,candidate:commit.sha,tree:mergedTree.sha,refsUpdated:false,files:details};fs.writeFileSync('evidence/merge.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: preserved-main-ui-merge-${{ github.run_id }}
+          path: evidence/
+          retention-days: 14
+          if-no-files-found: error
