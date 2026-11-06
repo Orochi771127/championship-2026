@@ -32,9 +32,21 @@ jobs:
           cache: npm
       - run: npm ci
       - run: node --check ops/live-performance-smoke.cjs
-      - run: npx playwright install --with-deps chromium
+      - name: Record the runner's installed Chrome; no apt mirror or browser download
+        run: |
+          command -v google-chrome
+          mkdir -p .tmp/live-release-smoke
+          google-chrome --version | tee .tmp/live-release-smoke/browser-environment.txt
       - name: Verify served receipt, runtime hashes, mobile and desktop UI
-        run: node ops/live-performance-smoke.cjs
+        run: |
+          node <<'JS'
+          // Only the actual browser channel changes. The live URLs, isolated
+          // profiles, response hashes and every gameplay assertion are unchanged.
+          const {chromium}=require('playwright');
+          const launch=chromium.launch.bind(chromium);
+          chromium.launch=options=>launch({...options,channel:'chrome'});
+          require('./ops/live-performance-smoke.cjs');
+          JS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
