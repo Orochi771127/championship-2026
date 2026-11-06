@@ -1,8 +1,11 @@
 # UIAudit 六項修復交付報告
 
-日期：2026-11-06  
-產品：Cyber Partner: Tournament／網線拍檔：錦標賽  
-分支：`fix/ui-audit-recovery-accessibility-20261106`  
+日期：2026-11-06
+
+產品：Cyber Partner: Tournament／網線拍檔：錦標賽
+
+分支：`fix/ui-audit-recovery-accessibility-20261106`
+
 比較基準：`7312a31c2723d315517d5f64efbef0c1b7a4d1ce`
 
 ## 交付狀態
