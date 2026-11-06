@@ -41,7 +41,8 @@ jobs:
             }else if(p.endsWith('/PUBLIC_RUNTIME_ALLOWLIST.v1.json')||p.endsWith('/WEB_BUILD_INPUTS.v1.json')){
               fs.writeFileSync('evidence/main',current.text);fs.writeFileSync('evidence/base',before.text);fs.writeFileSync('evidence/ours',candidate.text);
               const merge=spawnSync('git',['merge-file','-p','evidence/main','evidence/base','evidence/ours'],{encoding:'utf8',maxBuffer:30*1024*1024});assert.equal(merge.status,0,`${p}: unexpected overlapping approval conflict ${merge.stderr}`);content=merge.stdout;JSON.parse(content);method='clean three-way merge of both sets of approved hashes';
-            }else{assert.equal(current?.sha??null,before?.sha??null,`Unexpected concurrent edit: ${p}`);}
+            }else if(current?.sha===candidate.sha){method='byte-identical fix already present on main';}
+            else{assert.equal(current?.sha??null,before?.sha??null,`Unexpected concurrent edit: ${p}`);}
             const blob=content===candidate.text?{sha:candidate.sha}:await api('git/blobs',{content,encoding:'utf-8'});
             tree.push({path:p,mode:'100644',type:'blob',sha:blob.sha});details.push({path:p,baseBlob:before?.sha??null,mainBlob:current?.sha??null,performanceBlob:candidate.sha,mergedBlob:blob.sha,method});
           }
