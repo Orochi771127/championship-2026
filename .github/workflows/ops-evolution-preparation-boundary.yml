@@ -1,0 +1,68 @@
+name: Prepare evolution storage measurement boundary correction
+on:
+  push:
+    branches: [ops/evolution-input-surface-fix-20261106]
+    paths: [.github/workflows/ops-evolution-preparation-boundary.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare a single test-only commit without changing any ref
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p evidence
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {execFileSync} from 'node:child_process';
+          const repo='Orochi771127/championship-2026',parent='dbc0208f1fe8685403668ad71c09324caebc636b',file='tests/championship-evolution-streaming-browser.cjs';
+          async function api(path,body){
+            const r=await fetch(`https://api.github.com/repos/${repo}/${path}`,{method:body?'POST':'GET',headers:{Authorization:`Bearer ${process.env.GH_TOKEN}`,Accept:'application/vnd.github+json','Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});
+            if(!r.ok)throw Error(`GitHub ${r.status} ${path}: ${await r.text()}`);return r.json();
+          }
+          const original=await api(`contents/${file}?ref=${parent}`);
+          assert.equal(original.sha,'d79cceabd151ec9054bdd9185e48be0abe3ed65e');
+          const before=Buffer.from(original.content,'base64').toString('utf8');
+          const anchor="    mark('actual-home-ready');";
+          assert.equal(before.split(anchor).length,2);
+          const insertion=[
+            '    // First-entry hint persistence is preparation, not an evolution side effect.',
+            '    // Observe its real debounced write before taking the storage boundary;',
+            '    // do not flush, seed a key, sleep, or allow new keys during evolution.',
+            '    const preferenceReady=await page.waitForFunction(()=>{',
+            '      const events=globalThis.__freezeStorageQA?.snapshot().events||[];',
+            "      const hint=[...events].reverse().find(e=>e.type==='preference-change'&&e.raisingHintSeen===true&&e.changed?.includes('raisingHintSeen'));",
+            '      if(!hint)return false;',
+            "      const write=events.find(e=>e.type==='setItem'&&e.key==='championshipModernSave:preferences:v1'&&e.local&&e.succeeded===true&&e.sequence>hint.sequence);",
+            "      return write&&localStorage.getItem(write.key)!==null?{hintSequence:hint.sequence,writeSequence:write.sequence,hintTimeMs:hint.timeMs,writeTimeMs:write.timeMs,phase:write.phase}:false;",
+            '    },null,{timeout:15000});',
+            '    evidence.preparationPreferenceWrite=await preferenceReady.jsonValue();await preferenceReady.dispose();',
+            "    assert.equal(evidence.preparationPreferenceWrite.phase,'preparation','Initial hint preference must settle before the evolution measurement');",
+            anchor
+          ].join('\n');
+          const content=before.replace(anchor,insertion);
+          fs.writeFileSync('evidence/candidate-test.cjs',content);execFileSync(process.execPath,['--check','evidence/candidate-test.cjs']);
+          // The no-new-key and allowed-writer assertions must be byte-identical.
+          const boundary="    const storageAfter=await page.evaluate";
+          assert.ok(before.includes(boundary));assert.equal(content.slice(content.indexOf(boundary)),before.slice(before.indexOf(boundary)));
+          const baseCommit=await api(`git/commits/${parent}`);
+          const blob=await api('git/blobs',{content,encoding:'utf-8'});
+          const tree=await api('git/trees',{base_tree:baseCommit.tree.sha,tree:[{path:file,mode:'100644',type:'blob',sha:blob.sha}]});
+          const candidate=await api('git/commits',{message:'test(evolution): observe initial hint persistence before storage baseline',tree:tree.sha,parents:[parent]});
+          const evidence={parent,candidate:candidate.sha,tree:tree.sha,path:file,beforeBlob:original.sha,afterBlob:blob.sha,changedFiles:[file],runtimeChanged:false,refsUpdated:false,insertion};
+          fs.writeFileSync('evidence/candidate.json',JSON.stringify(evidence,null,2));console.log(JSON.stringify(evidence));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evolution-preparation-boundary-${{ github.run_id }}
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 14
