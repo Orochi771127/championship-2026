@@ -14,13 +14,13 @@ jobs:
     timeout-minutes: 25
     env:
       BASE_SHA: 7312a31c2723d315517d5f64efbef0c1b7a4d1ce
-      CANDIDATE_SHA: a48679402869d28618f655d2006ebbd9870cc465
+      CANDIDATE_SHA: 77dedc0565f4847574daace6cd7e054508f76d01
       CANDIDATE_BRANCH: fix/performance-release-20261106
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: a48679402869d28618f655d2006ebbd9870cc465
-          fetch-depth: 1
+          ref: 77dedc0565f4847574daace6cd7e054508f76d01
+          fetch-depth: 4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -31,7 +31,7 @@ jobs:
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
           test "$(git ls-remote origin "refs/heads/$CANDIDATE_BRANCH" | cut -f1)" = "$CANDIDATE_SHA"
-          git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          git cat-file -e "$BASE_SHA^{commit}" || git fetch --no-tags --depth=1 origin "$BASE_SHA"
           mkdir -p .tmp/performance-release
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
