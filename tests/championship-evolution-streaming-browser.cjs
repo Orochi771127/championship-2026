@@ -214,7 +214,11 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
        document.querySelector('.int-rh2-field-host')?.inert===false&&
        document.querySelector('.int-rh2-resident-assets--recovery')?.hidden===true);
      // Real browser pointer input after recovery, not a direct camera mutation.
-     const canvas=page.locator('.int-rh2-field-host canvas').first();
+     // Dispatch synthetic touch events to the input-owning Pixi canvas,
+     // not whichever decorative Three.js canvas happens to be first.
+     const canvas=page.locator('.int-rh2-field-host canvas.cm-raising-pixi-canvas');
+     assert.equal(await canvas.count(),1,'Exactly one interactive raising canvas');
+     evidence.inputSurfaces=await page.locator('.int-rh2-field-host canvas').evaluateAll(nodes=>nodes.map(node=>({className:node.className,pointerEvents:getComputedStyle(node).pointerEvents,inputOwner:node.classList.contains('cm-raising-pixi-canvas')})));
      const box=await canvas.boundingBox();assert.ok(box&&box.width>0&&box.height>0);
      const cameraBefore=await page.evaluate(()=>__freezeScene.getDiagnostics().cameraX);
      await page.mouse.move(box.x+box.width*.7,box.y+box.height*.65);await page.mouse.down();
