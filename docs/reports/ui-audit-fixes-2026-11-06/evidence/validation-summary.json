@@ -37,11 +37,16 @@
     "publicReleasePermitted": false
   },
   "publication": {
-    "status": "BLOCKED_PENDING_BATCH_AUTHORIZATION",
-    "error": "PUBLIC_PLAYTEST_NOT_APPROVED",
+    "status": "BATCH_AUTHORIZED_FINAL_RELEASE_GATES_PENDING",
     "changedApprovedHashes": 11,
-    "approvalListRefreshed": false,
+    "approvalListRefreshed": true,
     "merged": false,
-    "deployed": false
-  }
+    "deployed": false,
+    "historicalError": "PUBLIC_PLAYTEST_NOT_APPROVED",
+    "approvalRecord": "../PUBLICATION_APPROVAL.json",
+    "approvalTablesUpdated": 2,
+    "sameSourceHashesUpdatedPerTable": 11,
+    "latestReleaseStatus": "See PR #191 checks and publication receipt; this file records the prepublication snapshot."
+  },
+  "evidenceScope": "PREPUBLICATION_TEST_RECEIPTS_AT_SOURCE_COMMIT"
 }

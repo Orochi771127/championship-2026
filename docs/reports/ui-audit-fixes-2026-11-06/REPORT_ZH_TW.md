@@ -12,7 +12,7 @@
 
 **UIA-01 至 UIA-06 的修復已落入 [PR #191](https://github.com/Orochi771127/championship-2026/pull/191)；受控回歸、GitHub 乾淨環境的完整 3,494 項測試，以及 internal build／validate 已通過。Chromium 商店矩陣亦已全部通過，包含 54 組主題／尺寸／字級、15 組五語縮放與 3 組原生鍵盤流程。** 本報告依本批 diff 與執行結果整理，不沿用歷史版本的瀏覽器或發布驗收。
 
-公開試玩建置目前被專案的核准門阻擋：11 個來源檔的內容已不同於原先核准的 hash，產生 `PUBLIC_PLAYTEST_NOT_APPROVED`／`PLAYTEST_APPROVED_BYTES_CHANGED`。這是本批內容尚未取得發布核准，**不是程式編譯失敗**。本批未刷新核准 hash；程式、回歸、截圖與回條已形成可審查的 Draft PR，合併及部署須取得這批變更的明確授權。
+**使用者已於 2026-11-06 明確回覆「核准」**，授權本批 11 個來源 hash 更新，並在公開產物及正常瀏覽器流程關卡通過後合併 PR #191、部署及核對公開版本。核准紀錄與逐檔新舊 hash 見 [PUBLICATION_APPROVAL.json](PUBLICATION_APPROVAL.json)。兩份既有核准表僅同步相同 11 個來源 hash；各 8,190 個路徑及其非 hash 欄位不變，runtime allowlist 的 515 筆素材紀錄也不變。下列既有 CI 回條仍保留其實際執行時點的結果；最終公開建置、正常流程及部署以 PR 的後續同版本關卡為準。
 
 ## 六項修復與證據
 
@@ -45,9 +45,9 @@
 | 額外 owner／asset scope smoke | **PASS** | 使用實際 `createLoadAttempt` 與巢狀 `createPixiAssetScope`，底層 `Assets` 為受控替身；共享資源尚有持有者時不提早 unload，晚到資源只清理一次，最後引用釋放後可建立新世代。此為額外本機 smoke，不冒充已納入 CI 的瀏覽器測試。 |
 | `npm run build:internal` | **PASS，exit 0** | 本批 internal artifact 成功產生，共 **8,345 檔**。 |
 | `npm run validate:internal` | **PASS，exit 0** | 驗證同一 artifact，檔數與下列 build ID 一致。 |
-| GitHub 完整 `npm run test:ci` | **3,494／3,494 PASS，0 fail** | [乾淨 checkout、Node.js 22 的執行回條](https://github.com/Orochi771127/championship-2026/actions/runs/42195461366/job/127817518089)，來源提交 `487c88a9243ab5582c6742754889b3f5dbdafa3d`。先前本機 sparse checkout 缺檔問題已排除；這是獨立完整執行，不以拆分重跑拼成全綠。整個 workflow 的公開建置步驟仍受下述核准門阻擋。 |
+| GitHub 完整 `npm run test:ci` | **3,494／3,494 PASS，0 fail** | [乾淨 checkout、Node.js 22 的執行回條](https://github.com/Orochi771127/championship-2026/actions/runs/42195461366/job/127817518089)，來源提交 `487c88a9243ab5582c6742754889b3f5dbdafa3d`。先前本機 sparse checkout 缺檔問題已排除；這是獨立完整執行，不以拆分重跑拼成全綠。該歷史 workflow 隨後在公開建置核准門失敗；此紀錄不代表核准後的新一輪 workflow 狀態。 |
 | 實際 Chromium 商店矩陣 | **54＋15＋3 組全部 PASS** | [CI job](https://github.com/Orochi771127/championship-2026/actions/runs/42195461363/job/127817517756)，Chrome 151.0.7922.34；原始 JSON 與兩張目視核對過的截圖已保存於下列 evidence。 |
-| 公開試玩建置／發布 | **BLOCKED／未發布** | 11 個來源檔不符既有核准 hash；須完成本批核准程序。 |
+| 公開試玩建置／發布 | **本批已核准；最終發布關卡待完成** | 兩份核准表同步相同 11 個來源 hash；完成同版本公開產物及正常瀏覽器流程後才合併部署，最終結果見 PR #191 的後續回條。 |
 
 Internal build ID：
 
@@ -92,11 +92,11 @@ Internal build ID：
 1. Arena 取消後可以立即發起新 attempt，但底層 Pixi 同 URL 的下載、解碼或 unload 若仍被舊 Promise 阻塞，無法保證新 attempt 立即取得素材。本批確保可取消／返回／逾時，不宣稱底層作業全部可中斷或載入速度提升。
 2. Arena 新提示沿用既有繁中／英文兩份字典，其他語系使用英文 fallback；五語新增文案指的是教學恢復提示，沒有把 Arena 說成已完成五語翻譯。
 
-## 發布門與後續順序
+## 本批發布授權與驗收順序
 
-公開試玩使用[核准檢查](../../../scripts/lib/web-build-plan.mjs)對每個輸入檔比對核准 hash；[建置器](../../../scripts/lib/web-build-artifact.mjs)在核准失敗時回報 `PUBLIC_PLAYTEST_NOT_APPROVED`。本輪 11 個 `PLAYTEST_APPROVED_BYTES_CHANGED` 對應產品來源修改，是預期的核准阻擋。現有[公開試玩政策](../../../src/data/championship/public-playtest.r1.json)保持不動，沒有自行執行 refresh 把新內容偽裝成已核准版本。
+公開試玩使用[核准檢查](../../../scripts/lib/web-build-plan.mjs)比對輸入 hash，並由[編譯邊界](../../../scripts/lib/browser-bundle.mjs)再次核對 runtime allowlist。授權前，11 個 `PLAYTEST_APPROVED_BYTES_CHANGED` 正確阻擋公開建置；授權後，`WEB_BUILD_INPUTS.v1.json` 的 `publicPlaytest.files` 與 `PUBLIC_RUNTIME_ALLOWLIST.v1.json` 的 `files` 同步相同 11 個新 hash。核准表的檔案集合、順序、非 hash 欄位與所有 gate 實作保持不變。[公開試玩政策](../../../src/data/championship/public-playtest.r1.json)及既有外部角色固定版本也保持不變。
 
-六項修復、完整 deterministic 回歸與受控商店瀏覽器驗證已形成可審查的 PR。下一步須核准本批合併／部署及其 11 檔核准 hash 更新，再跑公開產物建置與既有正常流程瀏覽器關卡，成功後才合併發布。`main` 與現有發布目前保持原狀；既有快照的發布授權與這次 internal build 成功，均不替代本批核准。
+本批授權已完成，下一步依序為：公開 full／external artifact 建置與驗證、同一 PR 版本的完整 deterministic suite、Friends 六組正常流程及完整性聚合、external character delivery 正常 UI 關卡，通過後才合併部署。Pages 會在 main 更新後自動發布，因此合併前必須先確認上述關卡；公開站驗收須同時比對實際 merge SHA 與 external build ID。這份報告的證據表為發布前快照，後續關卡與部署狀態記錄於 [PR #191](https://github.com/Orochi771127/championship-2026/pull/191)。
 
 ### 重跑入口
 
