@@ -396,6 +396,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     return panel;
   }
   function renderCageBadges(badges,events=[]){
+    // Read layout once before writing any machine badge positions.
+    const fieldWidth=fieldHost.clientWidth||0;
     const live=new Set();
     for(const tag of badges){
       live.add(tag.id);let item=cageBadgeNodes.get(tag.id);
@@ -411,8 +413,11 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       const label=tag.noMeat?uiText('缺肉待補'):runClock(tag.seconds);
       if(item.time.textContent!==label)item.time.textContent=label;
       item.node.setAttribute('aria-label',uiText(tag.kind==='FEED'?'智慧自動餵食機 剩餘 {time}':'奈米掃地機器人 剩餘 {time}',{time:runClock(tag.seconds)}));
-      item.node.style.left=`${Math.round(tag.x)}px`;item.node.style.top=`${Math.round(tag.y)}px`;
-      const width=fieldHost.clientWidth||0;item.node.dataset.edge=tag.x<110?'left':width&&tag.x>width-110?'right':'';
+      const left=`${Math.round(tag.x)}px`,top=`${Math.round(tag.y)}px`;
+      if(item.node.style.left!==left)item.node.style.left=left;
+      if(item.node.style.top!==top)item.node.style.top=top;
+      const edge=tag.x<110?'left':fieldWidth&&tag.x>fieldWidth-110?'right':'';
+      if(item.node.dataset.edge!==edge)item.node.dataset.edge=edge;
       const open=openTag===tag.id,detailKey=open?`${tag.owned}:${tag.extendable}:${tag.noMeat}:${getLocale()}`:null;
       item.node.setAttribute('aria-expanded',String(open));
       if(item.detailKey!==detailKey){item.detail?.remove();item.detail=open?tagDetail(tag):null;if(item.detail)item.node.append(item.detail);item.detailKey=detailKey;}
