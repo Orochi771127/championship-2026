@@ -188,6 +188,7 @@ export const UI_COPY = Object.freeze({
   "FIELD_LOAD_RETRY": "重新載入牧場",
   "FIELD_LOAD_CANCEL": "取消載入",
   "FIELD_LOAD_RETURN": "保存並返回標題",
+  "BATTLE_LOAD_ERROR_TUTORIAL": "對戰場地載入失敗。請保存並返回標題，再選擇繼續遊戲。",
   "FIELD_LOAD_RELOAD": "保存並重新載入遊戲",
   "FIELD_LOAD_TIMEOUT": "載入時間過長。請重試，或保存並重新載入遊戲。",
   "FIELD_LOAD_CANCELLED": "載入已取消，遊戲進度仍保留。",

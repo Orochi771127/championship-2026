@@ -141,12 +141,12 @@ test("the screens import display copy and the clipboard UI helper without reachi
 });
 
 test("no screen offers a control that implies choosing an action mid-match", () => {
-  // VS5 is Auto Battle and no traced site reads input during a match, so the
-  // only button on the match screen is the one that leaves.
+  // Auto Battle keeps its exit; the other action is an error-only save route,
+  // not a combat command. The recovery gate exercises its hidden/ready/error
+  // states through the real view, app callback and tutorial persistence.
   const matchView = screens.slice(screens.indexOf("createBattleFieldView"), screens.indexOf("createBattleResultView"));
-  const buttons = matchView.match(/actionButton\(/g) ?? [];
-  assert.equal(buttons.length, 1, "exactly one control on the match screen");
-  assert.match(matchView, /actionButton\("離開對戰"\)/);
+  const buttons = [...matchView.matchAll(/actionButton\("([^"]+)"\)/g)].map(match=>match[1]);
+  assert.deepEqual(buttons.sort(), ["FIELD_LOAD_RETURN", "離開對戰"].sort(), "only exit and load-error recovery actions");
   const code = screens.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
   for (const forbidden of ["attack", "defend", "command", "skill", "accuracy", "damageNumber"]) {
     assert.equal(new RegExp(`\\b${forbidden}\\b`, "i").test(code), false, forbidden);

@@ -15,6 +15,7 @@ import { DATA_ARENA_KITS, DATA_ARENA_MATE, DATA_ARENA_MAX_STEPS_PER_FRAME, DATA_
   DATA_ARENA_TOURNAMENT } from "../modes/dataArena/dataArenaConfig.js";
 import { dataArenaUpgrade, previewDataArenaUpgrade } from "../modes/dataArena/dataArenaUpgrades.js";
 import { loadStylesheet } from './loadStylesheet.js';
+import { createLoadAttempt, LOAD_MAX_MS } from './loadWatchdog.js';
 import { gachaTicketImage } from "./cyberGachaIcons.js";
 import { createDataArenaRecordStore } from "../modes/dataArena/dataArenaSave.js";
 import { createChampionshipDataArenaPort } from "./ChampionshipPersistentSavePort.js";
@@ -251,7 +252,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     if (!GAME_KEYS.has(event.code)) return;
     const playing = root.dataset.state === "PLAY";
     if (event.code === "Escape" || event.code === "KeyP") {
-      if (root.dataset.state === "PLAY" || root.dataset.state === "PAUSE") { event.preventDefault(); togglePause(); }
+      if (event.code === "Escape" && root.dataset.state === "LOADING") { event.preventDefault(); cancelMatchLoad(); }
+      else if (root.dataset.state === "PLAY" || root.dataset.state === "PAUSE") { event.preventDefault(); togglePause(); }
       return;
     }
     if (root.dataset.state === "LEVEL" && /^Digit[123]$/.test(event.code)) {
@@ -978,25 +980,35 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   }
 
   // ------------------------------------------------------------------ assets
-  async function loadCast(selectedPartnerId) {
+  async function loadCast(selectedPartnerId, owner) {
+    owner.signal.throwIfAborted();
     const partner = cast.partners.find((p) => p.partnerId === selectedPartnerId);
     // A relay fighter's burst form (and each rival's) is drawn mid-match, so its art loads up front.
     const relayTeam = gameMode === 'RELAY' ? relayTeamIds(selectedPartnerId, relayReserveId, relayThirdId) : [];
     const rivalForms = gameMode === 'RELAY' ? cast.rivals.slice(0, 3).map(r => { const form = burstFormsFor(Number(String(r.speciesId).split('-').at(-1))).find(f => f.tier === 1)?.form;
       return form === undefined ? null : cast.partners.find(m => m.speciesId === `species-${String(form).padStart(3, '0')}`) ?? null; }) : [];
-    const wanted = (gameMode === 'RELAY' ? [...cast.partners.filter(p => relayTeam.includes(p.partnerId)), ...relayTeam.flatMap(relayBurstMembers), ...cast.rivals.slice(0, 3), ...rivalForms] : gameMode === "TOURNAMENT" ? [partner, ...cast.rivals] : [partner, cast.mate, cast.boss]).filter((member) => member?.art);
+    const candidates = (gameMode === 'RELAY' ? [...cast.partners.filter(p => relayTeam.includes(p.partnerId)), ...relayTeam.flatMap(relayBurstMembers), ...cast.rivals.slice(0, 3), ...rivalForms] : gameMode === "TOURNAMENT" ? [partner, ...cast.rivals] : [partner, cast.mate, cast.boss]).filter((member) => member?.art);
+    // A relay partner or burst form can also be a rival. Deduplicate before
+    // starting parallel loads so one species always has one owning bundle.
+    const wanted = [...new Map(candidates.map(member => [member.speciesId, member])).values()];
     bundleScope ??= createPixiAssetScope(stage.PIXI, href, { signal });
     let failed = false;
     // Release a partner no longer on the field.
     for (const [speciesId, bundle] of bundles) {
-      if (!wanted.some((member) => member.speciesId === speciesId)) { bundles.delete(speciesId); await bundle.dispose(); }
+      if (!wanted.some((member) => member.speciesId === speciesId)) {
+        bundles.delete(speciesId);
+        await owner.wait(releaseArenaResource(bundle));
+        owner.signal.throwIfAborted();
+      }
     }
     await Promise.all(wanted.filter((member) => !bundles.has(member.speciesId)).map(async (member) => {
       try {
-        const bundle = await loadDataArenaCharacter({PIXI:bundleScope,art:member.art,signal});
-        if (signal.aborted) { await bundle.dispose(); return; }
+        const bundle = await owner.own(loadDataArenaCharacter({PIXI:bundleScope,art:member.art,signal:owner.signal}));
+        owner.signal.throwIfAborted();
         bundles.set(member.speciesId, bundle);
+        owner.transfer(bundle);
       } catch (error) {
+        owner.signal.throwIfAborted();
         failed = true;
         if (!signal.aborted) console.warn("DATA_ARENA_ART_FALLBACK", member.speciesId, error?.message);
       }
@@ -1012,40 +1024,75 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   }
 
   let startingMatch = false;
+  let matchLoad = null;
   // Original remade effect cells (VFX_FIVE_LAYER_20261101), loaded once per screen and kept across matches.
-  let effectArt = null, effectArtLoading = null;
+  let effectArt = null;
+  const arenaDisposals = new WeakMap();
+  // Release display objects synchronously, then let their asynchronous asset
+  // cleanup finish independently. Recovery must not wait on a stuck unload.
+  function releaseArenaResource(resource) {
+    if (!resource) return Promise.resolve();
+    if (arenaDisposals.has(resource)) return arenaDisposals.get(resource);
+    let pending;
+    try { pending = Promise.resolve(resource.dispose?.()); }
+    catch (error) { pending = Promise.reject(error); }
+    const settled = pending.catch(error => console.error("DATA_ARENA_CLEANUP_FAILED", error));
+    arenaDisposals.set(resource, settled);
+    return settled;
+  }
+  function releaseMatch({ keepCast = false, keepEffects = false, keepAudio = false } = {}) {
+    const clean = action => { try { action(); } catch (error) { console.error("DATA_ARENA_CLEANUP_FAILED", error); } };
+    clean(() => { if (tickerCallback && stage) stage.app.ticker.remove(tickerCallback); });
+    tickerCallback = null;
+    const resources = [scene, environment, interactionArt];
+    scene = null; environment = null; interactionArt = null;
+    if (!keepAudio) { resources.push(audio); audio = null; }
+    if (!keepEffects) { resources.push(effectArt); effectArt = null; }
+    if (!keepCast) { resources.push(...bundles.values()); bundles.clear(); bundleScope = null; }
+    sim = null; result = null; paused = false; accumulator = 0; qaRecentEvents.length = 0;
+    clearTimeout(bannerTimer); clearTimeout(vignetteTimer);
+    clean(releaseInputs);
+    clean(() => stage?.setResolutionCap(resolutionCap));
+    return Promise.all(resources.map(releaseArenaResource));
+  }
+  function cancelMatchLoad() {
+    const owner = matchLoad;
+    if (!owner || signal.aborted) return;
+    // Retire the attempt before aborting it. A retry can start immediately;
+    // the old catch/finally must not clear that retry's state or resources.
+    matchLoad = null; startingMatch = false;
+    owner.cancel();
+    void releaseMatch();
+    showSelect();
+  }
+  async function optionalMatchArt(owner, pending, warning) {
+    try { return await owner.own(pending); }
+    catch (error) {
+      owner.signal.throwIfAborted();
+      console.warn(warning, error?.message);
+      return null;
+    }
+  }
   async function startMatch() {
     if (startingMatch || qualityReloading || signal.aborted) return;
     startingMatch = true;
+    const owner = matchLoad = createLoadAttempt({ timeoutMs: LOAD_MAX_MS });
+    const abort = () => owner.cancel(signal.reason);
+    signal.addEventListener("abort", abort, { once: true });
     try {
-      await startMatchBody();
+      await startMatchBody(owner);
     } catch (error) {
+      if (matchLoad !== owner || signal.aborted) return;
       // A failed asynchronous start must not strand the player in LOADING.
       // Report the original failure, but keep cleanup failures from hiding it.
       console.error("DATA_ARENA_START_FAILED", error);
-      const clean = (action) => {
-        try { action(); } catch (cleanupError) { console.error("DATA_ARENA_CLEANUP_FAILED", cleanupError); }
-      };
-      clean(() => { if (tickerCallback && stage) stage.app.ticker.remove(tickerCallback); });
-      tickerCallback = null;
-      clean(() => scene?.dispose()); scene = null;
-      try { await environment?.dispose(); } catch (cleanupError) { console.error("DATA_ARENA_CLEANUP_FAILED", cleanupError); }
-      environment = null;
-      try { await interactionArt?.dispose(); } catch (cleanupError) { console.error("DATA_ARENA_CLEANUP_FAILED", cleanupError); }
-      interactionArt=null;
-      clean(() => audio?.dispose()); audio = null;
-      sim = null; result = null; paused = false; accumulator = 0;
-      clearTimeout(bannerTimer); clearTimeout(vignetteTimer);
-      releaseInputs();
-      const releases = await Promise.allSettled([...bundles.values()].map((bundle) => Promise.resolve().then(() => bundle.dispose())));
-      bundles.clear(); bundleScope = null;
-      for (const release of releases) if (release.status === "rejected") console.error("DATA_ARENA_CLEANUP_FAILED", release.reason);
-      clean(() => stage?.setResolutionCap(resolutionCap));
-      if (signal.aborted) return;
+      owner.cancel(error);
+      void releaseMatch();
       root.dataset.state = "ERROR";
       const panel = el("div", "da-panel");
-      // Existing translated navigation labels; technical error uses textContent.
-      panel.append(el("h2", "da-title", t("mode.title")), el("p", "da-note", String(error?.message ?? error)));
+      const notice = el("p", "da-note", t(error?.message === "LOAD_TIMEOUT" ? "loading.timeout" : "loading.error"));
+      notice.setAttribute("role", "status");
+      panel.append(el("h2", "da-title", t("mode.title")), notice);
       const retry = button("da-btn da-btn--primary", t("result.retry"), () => void startMatch(), signal);
       retry.dataset.autofocus = "1";
       const actions = el("div", "da-actions");
@@ -1053,22 +1100,32 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       panel.appendChild(actions);
       showOverlay(panel);
     } finally {
-      startingMatch = false;
+      signal.removeEventListener("abort", abort);
+      owner.stopTimer();
+      if (matchLoad === owner) { matchLoad = null; startingMatch = false; }
     }
   }
 
-  async function startMatchBody() {
+  async function startMatchBody(owner) {
     root.dataset.state = "LOADING";
-    showOverlay(el("div", "da-panel da-panel--loading", t("loading")));
-    stage ??= await ensureStage(field, signal);
-    if (signal.aborted) return;
+    const panel = el("div", "da-panel da-panel--loading");
+    const notice = el("p", "da-note", t("loading"));
+    notice.setAttribute("role", "status");
+    const cancel = button("da-btn da-btn--primary", t("loading.cancel"), cancelMatchLoad, signal);
+    cancel.dataset.autofocus = "1";
+    const actions = el("div", "da-actions");
+    actions.append(cancel, button("da-btn", t("select.back"), () => close(), signal));
+    panel.append(notice, actions);
+    showOverlay(panel);
+    // The stage belongs to the application, not this attempt. Its existing
+    // signal gate prevents a late init from reattaching over another screen.
+    stage ??= await owner.wait(ensureStage(field, owner.signal));
+    owner.signal.throwIfAborted();
     // Drop the previous match's scene BEFORE loadCast releases bundles it may
     // still draw from (mode or partner change from the result screen).
-    scene?.dispose(); scene = null;
-    await environment?.dispose(); environment = null;
-    await interactionArt?.dispose();interactionArt=null;qaRecentEvents.length=0;
-    const ok = await loadCast(partnerId);
-    if (signal.aborted) return;
+    await owner.wait(releaseMatch({ keepCast: true, keepEffects: true, keepAudio: true }));
+    const ok = await owner.wait(loadCast(partnerId, owner));
+    owner.signal.throwIfAborted();
     matchId++;
     const matchSeed = seed ?? ((Date.now() ^ (matchId * 2654435761)) >>> 0);
     const relayBurstPlans = gameMode === "RELAY" ? Object.fromEntries(relayTeamIds(partnerId, relayReserveId, relayThirdId).map(id => [id, relayBurstPlanOf(id)]).filter(([, plan]) => plan !== undefined)) : {};
@@ -1077,18 +1134,19 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     // Harbor art is loaded on entry only; a failed pack keeps the playable
     // geometry and existing presentation available. No character texture changes.
     if (gameMode === 'HARBOR' || gameMode === 'TOURNAMENT' || gameMode === 'RELAY') {
-      try { environment = await loadDataArenaEnvironment({ PIXI: stage.PIXI, renderer:stage.app.renderer, map: sim.grid.map, quality, href, signal }); }
-      catch (error) { if (!signal.aborted) console.warn("DATA_ARENA_ENVIRONMENT_FALLBACK", error?.message); }
+      const next = await optionalMatchArt(owner, loadDataArenaEnvironment({ PIXI: stage.PIXI, renderer:stage.app.renderer, map: sim.grid.map, quality, href, signal:owner.signal }), "DATA_ARENA_ENVIRONMENT_FALLBACK");
+      owner.signal.throwIfAborted(); environment = next; owner.transfer(next);
     }
-    try{interactionArt=await loadDataArenaInteractionArt({PIXI:stage.PIXI,map:sim.grid.map,quality,href,signal});}
-    catch(error){if(!signal.aborted)console.warn("DATA_ARENA_INTERACTION_ART_FALLBACK",error?.message);}
-    if (signal.aborted) { await environment?.dispose(); environment = null;await interactionArt?.dispose();interactionArt=null; return; }
+    const nextInteraction = await optionalMatchArt(owner, loadDataArenaInteractionArt({PIXI:stage.PIXI,map:sim.grid.map,quality,href,signal:owner.signal}), "DATA_ARENA_INTERACTION_ART_FALLBACK");
+    owner.signal.throwIfAborted(); interactionArt = nextInteraction; owner.transfer(nextInteraction);
     // Controlled harnesses load this screen without its imports: no original cells there.
-    effectArtLoading ??= typeof loadOriginalVfxCellArt === "function"
-      ? loadOriginalVfxCellArt({ PIXI: stage.PIXI, href }).catch(error => { console.warn("DATA_ARENA_ORIGINAL_VFX_FALLBACK", error?.message); return null; })
-      : Promise.resolve(null);
-    effectArt ??= await effectArtLoading;
-    if (signal.aborted) return;
+    if (!effectArt && typeof loadOriginalVfxCellArt === "function") {
+      const next = await optionalMatchArt(owner, loadOriginalVfxCellArt({
+        PIXI: createPixiAssetScope(stage.PIXI, href, { signal: owner.signal }), href, fetchImpl: owner.fetch
+      }), "DATA_ARENA_ORIGINAL_VFX_FALLBACK");
+      owner.signal.throwIfAborted(); effectArt = next; owner.transfer(next);
+    }
+    owner.signal.throwIfAborted();
     root.dataset.seed = String(matchSeed);
     root.dataset.mode = gameMode;
     audio ??= createDataArenaAudio({ bus: audioBus });
@@ -1685,20 +1743,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   async function close() {
     if (closed) return;
     closed = true;
-    if (tickerCallback && stage) stage.app.ticker.remove(tickerCallback);
-    tickerCallback = null;
+    const owner = matchLoad; matchLoad = null; startingMatch = false;
+    owner?.cancel();
     lifetime.abort();
-    clearTimeout(bannerTimer); clearTimeout(vignetteTimer);
-    cutIn?.dispose();
-    audio?.dispose(); audio = null;
-    scene?.dispose(); scene = null;
-    sim = null;
-    await environment?.dispose(); environment = null;
-    await interactionArt?.dispose();interactionArt=null;qaRecentEvents.length=0;
-    await (effectArtLoading ?? Promise.resolve(null)).then(art => art?.dispose()); effectArt = null; effectArtLoading = null;
-    stage?.setResolutionCap(resolutionCap);
-    await Promise.allSettled([...bundles.values()].map((bundle) => bundle.dispose()));
-    bundles.clear();
+    void releaseArenaResource(cutIn);
+    void releaseMatch();
     root.remove();
     document.documentElement.classList.remove("da-open");
     if (qa) delete globalThis.__dataArenaQA;

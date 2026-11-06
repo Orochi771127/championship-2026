@@ -187,6 +187,7 @@ export const UI_COPY_JA = Object.freeze({
   "FIELD_LOAD_RETRY": "牧場を再読み込み",
   "FIELD_LOAD_CANCEL": "読み込みを中止",
   "FIELD_LOAD_RETURN": "保存してタイトルへ",
+  "BATTLE_LOAD_ERROR_TUTORIAL": "バトルアリーナを読み込めませんでした。保存してタイトルに戻り、ゲームを再開してください。",
   "FIELD_LOAD_RELOAD": "保存してゲームを再読み込み",
   "FIELD_LOAD_TIMEOUT": "読み込みに時間がかかっています。再試行するか、保存してゲームを再読み込みしてください。",
   "FIELD_LOAD_CANCELLED": "読み込みを中止しました。進行状況は保持されています。",
