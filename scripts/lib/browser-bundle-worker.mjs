@@ -2,11 +2,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import * as esbuild from 'esbuild';
+import {validateCharacterAssetDelivery} from '../../src/championship/presentation/characterAssetDelivery.js';
 
 // Build-only packaging of the existing application. Every source read must be
 // present in the already audited public input set; no new runtime authority.
 let raw='';for await(const chunk of process.stdin)raw+=chunk;
-const {root,files,recipe,importMap={}}=JSON.parse(raw),allowed=new Set(files);
+const {root,files,recipe,importMap={},characterAssetDelivery=null}=JSON.parse(raw),allowed=new Set(files);
+const delivery=validateCharacterAssetDelivery(characterAssetDelivery);
 if(recipe.version!==1||recipe.entry!=='src/championship/app/main.js'
   ||recipe.outputDirectory!=='src/championship/app/_bundled'||recipe.toolVersion!==esbuild.version)
   throw Error('BROWSER_BUNDLE_RECIPE_MISMATCH');
@@ -14,6 +16,7 @@ const outdir=path.join(root,recipe.outputDirectory),sources=new Map(),runtimeScr
 const result=await esbuild.build({absWorkingDir:root,entryPoints:[recipe.entry],outdir,
   entryNames:'main-[hash]',chunkNames:'chunk-[hash]',bundle:true,splitting:true,
   format:'esm',platform:'browser',target:'es2022',metafile:true,write:false,
+  define:{__CM_CHARACTER_DELIVERY__:JSON.stringify(delivery)},
   // DRACOLoader serializes decoder functions into a Worker blob. esbuild's
   // keepNames helper is otherwise inserted into those functions but omitted
   // from their toString() source, leaving a ReferenceError inside the Worker.
@@ -49,7 +52,12 @@ const result=await esbuild.build({absWorkingDir:root,entryPoints:[recipe.entry],
       return {contents,loader};
     });
   }}]});
-for(const file of Object.keys(result.metafile.inputs))if(!allowed.has(file))throw Error(`BROWSER_BUNDLE_UNAPPROVED_INPUT: ${file}`);
+for(const file of Object.keys(result.metafile.inputs)){
+  // esbuild represents an object-valued define as a virtual input. Its only
+  // content is the schema-checked delivery constant above, pinned by the build receipt.
+  if(delivery&&file==='<define:__CM_CHARACTER_DELIVERY__>')continue;
+  if(!allowed.has(file))throw Error(`BROWSER_BUNDLE_UNAPPROVED_INPUT: ${file}`);
+}
 const runtimeQueue=[...runtimeScripts];
 while(runtimeQueue.length){const file=runtimeQueue.pop();for(const item of result.metafile.inputs[file]?.imports??[])
   if(!item.external&&!runtimeScripts.has(item.path)){runtimeScripts.add(item.path);runtimeQueue.push(item.path);}}

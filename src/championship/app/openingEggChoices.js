@@ -1,5 +1,6 @@
 // Existing original production portraits. Public selection preserves exact RGBA; no gameplay stats.
 import {isApprovedOriginalPublicLocation} from "../presentation/originalRuntimeLocation.js";
+import {characterAssetSrc} from '../presentation/characterAssetDelivery.js';
 // Owner-confirmed original design-board names (OC225..232). These are species
 // labels, independent of the name the player gives their own companion.
 const FORMAL_NAMES=Object.freeze(['星絮蛋','焰脈蛋','潮環蛋','森芽蛋','雷紋蛋','月霧蛋','晶棘蛋','聖耀蛋']);
@@ -141,4 +142,10 @@ const PUBLIC_OPENING_EGG_CHOICES=Object.freeze([
     "height": 273
   }
 ].map(namedEgg));
-export function openingEggChoices(location=globalThis.location){return isApprovedOriginalPublicLocation(location)?PUBLIC_OPENING_EGG_CHOICES:OPENING_EGG_CHOICES;}
+export function openingEggChoices(location=globalThis.location){
+ if(!isApprovedOriginalPublicLocation(location))return OPENING_EGG_CHOICES;
+ return PUBLIC_OPENING_EGG_CHOICES.map(egg=>{
+  const src=characterAssetSrc(egg.src,location?.href??location);
+  return src===egg.src?egg:Object.freeze({...egg,src});
+ });
+}

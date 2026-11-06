@@ -42,8 +42,15 @@ const STORAGE_GUARD = "src/championship/app/championshipStorageGuard.js";
 const EXTERNAL_DEPENDENCY = /R:[\/]|https?:\/\/|(?:from|import\s*\()[^\n]*research[\/]/i;
 const HISTORICAL_NAMESPACE = /NexusLink|NEXUS_|nexus:/i;
 
-test("runtime has no external repository, CDN, or research import", () => {
+test("runtime has no unapproved external repository, CDN, or research import", () => {
   const offenders = runtimeText().filter(({ file, text }) => {
+    if(relative(file)==='src/championship/presentation/characterAssetDelivery.js'){
+      // Owner 2026-11-06: only the approved game origin may activate the pinned
+      // runtime-only host. Reject any second URL or remote program import.
+      const declaration="const GAME_ORIGIN = 'https://orochi771127.github.io';";
+      assert.equal(text.split(declaration).length,2);
+      return EXTERNAL_DEPENDENCY.test(text.replace(declaration,''));
+    }
     if(relative(file)==='src/data/championship/public-playtest-runtime.v1.json'){
       const policy=JSON.parse(text);assert.equal(policy.origin,'https://orochi771127.github.io');
       assert.equal(policy.basePath,'/championship-2026/');const {origin,...rest}=policy;

@@ -36,9 +36,9 @@ jobs:
       - name: Test
         run: npm run test:ci
       - name: Build static game
-        run: npm run build:playtest
+        run: npm run build:playtest -- --external-characters
       - name: Validate static game
-        run: npm run validate:playtest
+        run: npm run validate:playtest -- --external-characters
       - name: Validate the exact upload payload has no private authority or metadata
         run: node scripts/assert-public-payload.mjs dist/github-playtest
       - name: Configure Pages

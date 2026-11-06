@@ -21,6 +21,7 @@ import { speciesNameForId } from "../../text/zhHant.js";
 import { isOriginalRuntimeLocation } from "../originalRuntimeLocation.js";
 import {newArtPortrait} from '../newArtPortrait.js';
 import {animationHandoffEnabled} from '../animationHandoff.js';
+import {characterAssetUrl} from '../characterAssetDelivery.js';
 
 export const DATA_ARENA_SEQUENCES = Object.freeze({ STAND: 0, WALK: 2, ATTACK: 7, HIT: 6, DOWN: 15, WIN: 33 });
 
@@ -31,9 +32,9 @@ export function dataArenaArtRecord(speciesId, href = globalThis.location?.href) 
   if (!entry || !href || !isOriginalRuntimeLocation(href)) return null;
   return Object.freeze({
     speciesId, entityId: entry.entityId, runtimeSha256:entry.runtimeSha256, baseUrl:href,
-    runtimeUrl: new URL(entry.runtimePath, href).href,
+    runtimeUrl: characterAssetUrl(entry.runtimePath, href),
     // Owner 2026-10-30: the select card shows the current design (Dex illustration) when published.
-    portraitUrl: new URL(newArtPortrait(speciesId)?.src ?? entry.hudPath.replace('hud.render.json','main-cell_000.webp'), href).href
+    portraitUrl: characterAssetUrl(newArtPortrait(speciesId)?.src ?? entry.hudPath.replace('hud.render.json','main-cell_000.webp'), href)
   });
 }
 

@@ -325,6 +325,7 @@
     "src/championship/presentation/ceremony/ceremonyScenes.js",
     "src/championship/presentation/championshipPixiStage.js",
     "src/championship/presentation/characterAnimationTimeline.js",
+    "src/championship/presentation/characterAssetDelivery.js",
     "src/championship/presentation/characterAtlasQueue.js",
     "src/championship/presentation/characterRosterCore.js",
     "src/championship/presentation/cm07Ambient.js",
@@ -8454,6 +8455,7 @@
     "src/championship/presentation/ceremony/ceremonyScenes.js",
     "src/championship/presentation/championshipPixiStage.js",
     "src/championship/presentation/characterAnimationTimeline.js",
+    "src/championship/presentation/characterAssetDelivery.js",
     "src/championship/presentation/characterAtlasQueue.js",
     "src/championship/presentation/characterRosterCore.js",
     "src/championship/presentation/cm07Ambient.js",
@@ -39203,7 +39205,7 @@
       },
       {
         "path": "src/championship/app/openingEggChoices.js",
-        "sha256": "3833ea058650a22d51e111c294731c2a8bb823c083bb3cfaf6e8150677895012"
+        "sha256": "2cf3bab8a2677a265a2eb2d61bd82ca72caf1f3a5af17149a571e9a524a55cfd"
       },
       {
         "path": "src/championship/app/openingFilm.js",
@@ -39271,7 +39273,7 @@
       },
       {
         "path": "src/championship/app/ranchTitlePreload.js",
-        "sha256": "10b67a37c38e8c7f2c191cd47179e78598c6fd32c11e975e705a074f8e6c32da"
+        "sha256": "8d093143c2ae52f12fba798f50323f1ac15589d9f7c6f7541519285060888e94"
       },
       {
         "path": "src/championship/app/rankUnlocks.js",
@@ -39343,7 +39345,7 @@
       },
       {
         "path": "src/championship/app/titleParade.js",
-        "sha256": "0023457ca68617e5caa76690907ac89425fc878cc4b54e2f5642d3a147c7e140"
+        "sha256": "de316f43308aef0e271ff7457b76ce54e89a8c3498d619c63172c7ef6560167d"
       },
       {
         "path": "src/championship/app/trainingLabels.css",
@@ -40171,7 +40173,7 @@
       },
       {
         "path": "src/championship/presentation/acceptedDatabasePortraits.js",
-        "sha256": "19189cd561ea21abb6fed5022593c98c8c9c969de837d825177cd98e2354aea0"
+        "sha256": "187a3d1a74048f574713669259c9ab8294fa34bcf1567c696952336c74c5b60b"
       },
       {
         "path": "src/championship/presentation/aiChanGuide.js",
@@ -40274,6 +40276,10 @@
         "sha256": "a6c03f5c2964e6f054014f0aeffa512270d78ff45cc12c607625fc2822a75a01"
       },
       {
+        "path": "src/championship/presentation/characterAssetDelivery.js",
+        "sha256": "196139da41fa5a887635596f313d6d0d62df10962765b4afe1d7239ca5b06e2e"
+      },
+      {
         "path": "src/championship/presentation/characterAtlasQueue.js",
         "sha256": "fda258927d3ca550035b17a5a92bf2ab5541e7c9358613d0cb6ea513d3fe46fd"
       },
@@ -40335,7 +40341,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRoster.js",
-        "sha256": "f79196c1a69c6fc596c5b109f78f2100948e1c28e7f159a5d07f1335dddfaed3"
+        "sha256": "4f209c3ca188badb1d175b2e87cbaee218eb292efcf0c1f0664456f19e6ddd20"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaTextures.js",
@@ -40443,7 +40449,7 @@
       },
       {
         "path": "src/championship/presentation/juicy/spriteMotionPlayer.js",
-        "sha256": "923c4b894db2f2ff8433dc6b240728f0d3e5d57ddd37a084dd8e7bf38ab35a28"
+        "sha256": "ea4628f1645293d1bba7dfabdff8429202454f75038a45faf4b90a7b255c151e"
       },
       {
         "path": "src/championship/presentation/medals/medalFaceTexture.js",
@@ -40535,7 +40541,7 @@
       },
       {
         "path": "src/championship/presentation/publicCharacterHudArt.js",
-        "sha256": "73c8e5939d2ad52b3c10d5917cec30d6eb7e060dc34ea58b13b6c1dfcf6c5d3b"
+        "sha256": "3164bcc0147332436359e98655111880e60a0e644c074768a07f6de652bca226"
       },
       {
         "path": "src/championship/presentation/publicCharacterRenderContract.js",
@@ -40543,7 +40549,7 @@
       },
       {
         "path": "src/championship/presentation/publicCharacterRoster.js",
-        "sha256": "7e02db5d0cea5cffc9bc933c0411611a38b26e02df1c1492a1decaabca5011c7"
+        "sha256": "75a4937de84abece73eec1b9a3477dfb85d3c1b657e86dc3185ecfdaa57010a0"
       },
       {
         "path": "src/championship/presentation/publicHudManifestCache.js",
@@ -40639,11 +40645,11 @@
       },
       {
         "path": "src/championship/presentation/reviewedCharacterLoader.js",
-        "sha256": "a12a657af8f5aa9f8613995f925789c61a8f4a0051ef52b5bc1c9590ea73f4f2"
+        "sha256": "68fad684e666c3228132552f86b2d3563e9249ac67f6fd5ef4e753f8550eb6c6"
       },
       {
         "path": "src/championship/presentation/reviewedSelection.js",
-        "sha256": "31188ea207bb35131873accfd36f139590c03e325c5fe29f259773b540194b46"
+        "sha256": "58c7f28c95f38cbcf66518b08dd61b8dd33db01ac9729606878921555264bb82"
       },
       {
         "path": "src/championship/presentation/runtimeMapArtBundle.js",

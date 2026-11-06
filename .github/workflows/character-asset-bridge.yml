@@ -1,0 +1,53 @@
+name: Verify external character delivery
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/character-asset-bridge.yml
+      - docs/contracts/championship/EXTERNAL_CHARACTER_*.json
+      - scripts/**
+      - src/championship/**
+      - src/data/championship/**
+      - tests/championship-*character*.mjs
+      - tests/championship-external-character-browser.cjs
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: character-delivery-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Test the source and publication boundaries
+        run: npm run test:ci
+      - name: Build the reduced candidate (no publication)
+        run: npm run build:playtest -- --external-characters dist/character-bridge-external
+      - name: Validate the exact reduced candidate
+        run: |
+          npm run validate:playtest -- --external-characters dist/character-bridge-external
+          node scripts/assert-public-payload.mjs dist/character-bridge-external
+      - name: Install isolated Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Check normal UI and live pinned character responses
+        run: node tests/championship-external-character-browser.cjs
+      - name: Keep controlled browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: external-character-browser-${{ github.run_id }}
+          path: .tmp/external-character-browser
+          if-no-files-found: warn
+          retention-days: 14

@@ -2,6 +2,7 @@ import {createPixiAssetScope} from './pixiCharacterRuntimeBundle.js';
 import {reviewedNumericClip,sampleReviewedCharacterClip,createReviewedArenaPlayback,reviewedHuntMotionClip,HUNT_RUN_SEQUENCES,HUNT_RUN_RATE} from './reviewedCharacterAnimation.js';
 import {reviewedCharacterSelection,reviewedCharacterSelections,reviewedGeneralDisplayScale} from './reviewedSelection.js';
 import {reviewedDocumentRef,handoffOnlyArenaEntry} from './animationHandoff.js';
+import {characterAssetUrl} from './characterAssetDelivery.js';
 
 export {reviewedCharacterSelection,reviewedCharacterSelections};
 // The original atlas pages of these species are retired; only timing/geometry remain.
@@ -18,7 +19,7 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
   const entry=reviewedCharacterSelection(speciesId,baseUrl)??(usage==='arena'?await handoffOnlyArenaEntry(speciesId,baseUrl,fetchImpl):null);
   if(!entry)return bundle;
   // The QA handoff switch (animationHandoff.js) may pick the entry's alternative manifest.
-  const ref=await reviewedDocumentRef(entry,baseUrl,fetchImpl),url=new URL(ref.path,baseUrl).href;
+  const ref=await reviewedDocumentRef(entry,baseUrl,fetchImpl),url=characterAssetUrl(ref.path,baseUrl);
   let document;
   try{
     const response=await fetchImpl(url,{signal});

@@ -1,5 +1,18 @@
 # Championship Owner Direction
 
+<!-- record-id: CHARACTER_ASSET_REPOSITORY_MIGRATION_20261106 -->
+## 2026-11-06 — Inventory all character stages and move animation delivery out of the game-site payload
+
+After requesting a dedicated private character-animation repository, the Owner asks to inventory every stage, character number and animation and transfer them completely, referring to the earlier one-gigabyte publication-capacity problem and a separate repository connection. This batch preserves the existing game and its selected artwork while separating source production/archive storage from public runtime delivery.
+
+- Inventory and byte-preserving transfer use the game snapshot `63776034296faa32f3498f94396c0e825403a340`; canonical species/entity IDs, display aliases, original runtime sets, newer reviewed sets and loopback-only partial handoffs remain distinct.
+- `Orochi771127/cyber-partner-animation` is the private production/archive destination. Main illustrations, views, drafts and authoring/review records do not become public because they are copied there.
+- `Orochi771127/cyber-partner-runtime-assets` serves only the already-public, hash-selected `assets/production/characters/` files extracted from the validated game artifact. The initial immutable delivery directory is `v/63776034296faa32f3498f94396c0e825403a340/`; it does not publish the whole production archive or promote a QA-only animation.
+- The game bridge changes URL transport and the final upload partition only. Character pixels, frame rectangles, timing, geometry, game rules, saves and visible title design remain unchanged. Source files stay in the game checkout until the separate backup/removal decision is verified.
+- Default source/local and full builds remain available. External publication is explicit and requires a pinned manifest, identical selected source bytes, a verified endpoint, the normal release checks and normal browser verification. The existing public selection/rights gates remain in force.
+
+This records the bounded migration requested in the current session, not completion of new art, proof that every action is finished, a third-party rights grant, or authorization to rewrite repository history.
+
 <!-- record-id: ROYAL_NEW_MAPS_20261103 -->
 ## 2026-11-03 — The gachapon's royal ranch and stellar zoo become their own Blender maps
 
