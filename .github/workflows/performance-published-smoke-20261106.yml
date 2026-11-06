@@ -1,0 +1,54 @@
+name: Verify published performance release 20261106
+on:
+  push:
+    branches: [ops/performance-release-validation-20261106]
+    paths: [.github/workflows/performance-published-smoke-20261106.yml]
+permissions:
+  contents: read
+jobs:
+  published-smoke:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, webkit]
+    env:
+      EXPECTED_RELEASE_SHA: 7312a31c2723d315517d5f64efbef0c1b7a4d1ce
+      SMOKE_BROWSER: ${{ matrix.browser }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: 7312a31c2723d315517d5f64efbef0c1b7a4d1ce
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /package.json
+            /package-lock.json
+            /scripts/lib/build-manifest-codec.mjs
+            /docs/contracts/championship/WEB_BUILD_INPUTS.v1.json
+            /tests/championship-browser-opening.cjs
+            /qa/championship-full-qa-save.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install pinned dependencies and browser
+        run: |
+          npm ci
+          npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Verify exact public version and actual browser flow
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_RELEASE_SHA"
+          mkdir -p .github/validation .tmp/performance-postdeploy
+          curl --fail --silent --show-error --location --retry 2 https://raw.githubusercontent.com/Orochi771127/championship-2026/a6b5ef8dd30f64369186c168a6f931f37700b2ef/.github/validation/performance-postdeploy.cjs -o .github/validation/performance-postdeploy.cjs
+          node .github/validation/performance-postdeploy.cjs
+      - name: Retain screenshots, report and trace
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-performance-${{ matrix.browser }}-${{ github.run_id }}
+          path: .tmp/performance-postdeploy/
+          include-hidden-files: true
+          retention-days: 14
