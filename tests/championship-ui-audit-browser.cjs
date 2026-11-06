@@ -269,9 +269,21 @@ async function reachable(locator, {button = false} = {}) {
       if (/(hidden|clip|auto|scroll)/.test(css.overflowY)) {top=Math.max(top,p.top);bottom=Math.min(bottom,p.bottom);}
     }
     const hit = right > left && bottom > top ? document.elementFromPoint((left+right)/2,(top+bottom)/2) : null;
+    // Arcade's invisible, rotated shimmer pseudo-element expands scrollHeight.
+    // Measure actual text ranges instead of treating decorative overflow as text.
+    const textRects = [], walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+    let text;
+    while ((text = walker.nextNode())) {
+      if (!text.textContent.trim()) continue;
+      const range = document.createRange(); range.selectNodeContents(text);
+      for (const box of range.getClientRects()) textRects.push({left:box.left,right:box.right,top:box.top,bottom:box.bottom});
+    }
+    const css = getComputedStyle(node);
+    const textClip = {left:Math.max(left,r.left+parseFloat(css.borderLeftWidth)),right:Math.min(right,r.right-parseFloat(css.borderRightWidth)),
+      top:Math.max(top,r.top+parseFloat(css.borderTopWidth)),bottom:Math.min(bottom,r.bottom-parseFloat(css.borderBottomWidth))};
     return {text:node.innerText,box:{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height},
       whollyVisible:left<=r.left+2&&right>=r.right-2&&top<=r.top+2&&bottom>=r.bottom-2,
-      textFits:node.scrollWidth<=node.clientWidth+2&&node.scrollHeight<=node.clientHeight+2,
+      textFits:textRects.length>0&&textRects.every(box=>box.left>=textClip.left-2&&box.right<=textClip.right+2&&box.top>=textClip.top-2&&box.bottom<=textClip.bottom+2),textRects,textClip,
       receivesPointer:!!hit&&(node.contains(hit)||(!requireButtonHit&&hit.contains(node))),disabled:node.disabled ?? false};
   }, button);
   assert.ok(result.whollyVisible && result.textFits && result.receivesPointer, JSON.stringify(result));
