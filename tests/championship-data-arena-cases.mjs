@@ -796,23 +796,25 @@ test("duel camera keeps a fighter at the south edge clear of the bottom kit bar"
 // doubles. They do not claim browser/GPU acceptance.
 const { readFileSync: arenaReadSource } = await import('node:fs');
 const { runInNewContext: arenaRunSource } = await import('node:vm');
+const { createLoadAttempt, LOAD_MAX_MS } = await import('../src/championship/app/loadWatchdog.js');
 const arenaScreenSource = arenaReadSource(new URL('../src/championship/app/dataArenaScreen.js', import.meta.url), 'utf8');
 const arenaStartupSource = arenaScreenSource.slice(arenaScreenSource.indexOf('  let startingMatch = false;'), arenaScreenSource.indexOf('  // ------------------------------------------------------------------ overlays'));
 function arenaStartupHarness(failure) {
   const calls = { logs: [], disposed: 0, removed: 0, added: 0, panels: [] };
+  const lifetime = new AbortController();
   let failing = true;
   const fail = (where) => { if (failing && where === failure) throw new Error(`injected ${where}`); };
-  const makeNode = () => ({ dataset: {}, children: [], append(...nodes) { this.children.push(...nodes); }, appendChild(node) { this.children.push(node); } });
+  const makeNode = () => ({ dataset: {}, children: [], setAttribute() {}, append(...nodes) { this.children.push(...nodes); }, appendChild(node) { this.children.push(node); } });
   const ticker = { remove() { calls.removed++; }, add() { calls.added++; } };
   const shared = { app: { ticker }, setResolutionCap() {} };
   const env = {
-    selectDataArenaMusic,
-    signal: { aborted: false }, stage: null, scene: null, environment: null, interactionArt:null, qaRecentEvents:[], qa:false, URL, loadDataArenaEnvironment:async()=>null, loadDataArenaInteractionArt:async()=>null, audio: null, sim: null, result: null, paused: false, qualityReloading:false, accumulator: 1,
+    selectDataArenaMusic, createLoadAttempt, LOAD_MAX_MS, lifetime,
+    signal: lifetime.signal, stage: null, scene: null, environment: null, interactionArt:null, qaRecentEvents:[], qa:false, URL, loadDataArenaEnvironment:async()=>null, loadDataArenaInteractionArt:async()=>null, audio: null, sim: null, result: null, paused: false, qualityReloading:false, accumulator: 1,
     tickerCallback: null, bundles: new Map(), bundleScope: null, root: makeNode(), field: {}, bannerTimer: null, vignetteTimer: null,
     matchId: 0, seed: 1, partnerId: 'ember-lizard', partnerPower: {}, quality: 'low', gameMode: 'TOURNAMENT', audioBus: null, resolutionCap: 2, href:'http://localhost/championship.html',
     console: { error(...args) { calls.logs.push(args); },warn(...args){calls.logs.push(args);} }, clearTimeout,
     el: makeNode, t: (key) => key, button: (_class, label, onClick) => ({ label, onClick, dataset: {} }),
-    showOverlay: (panel) => calls.panels.push(panel), releaseInputs() {}, close() { calls.closed = true; },
+    showOverlay: (panel) => calls.panels.push(panel), showSelect() { env.root.dataset.state = 'SELECT'; }, releaseInputs() {}, close() { calls.closed = true; },
     ensureStage: async () => { fail('stage'); return shared; },
     loadCast: async () => { env.bundles.set('loaded', { dispose() { calls.disposed++; fail('cleanup'); } }); fail('cast'); return true; },
     createDataArenaSimulation: () => ({ grid:{map:{}},drainEvents: () => [] }),
@@ -865,7 +867,7 @@ test('arena startup is single-flight and an aborted failure never remounts an ov
   const first = h.env.startMatch();
   await h.env.startMatch();
   assert.equal(h.calls.panels.length, 1);
-  h.env.signal.aborted = true;
+  h.env.lifetime.abort();
   rejectStage(new Error('aborted during startup'));
   await first;
   assert.equal(h.calls.panels.length, 1);

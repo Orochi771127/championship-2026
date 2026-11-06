@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "487c88a9243ab5582c6742754889b3f5dbdafa3d",
+  "baseCommit": "7312a31c2723d315517d5f64efbef0c1b7a4d1ce",
+  "pullRequest": "https://github.com/Orochi771127/championship-2026/pull/191",
+  "deterministic": {
+    "tests": 3494,
+    "passed": 3494,
+    "failed": 0,
+    "durationMs": 105645.144322,
+    "runId": 42195461366,
+    "jobId": 127817518089,
+    "step": "PASS",
+    "workflow": "FAILURE_AT_PUBLIC_APPROVAL_GATE"
+  },
+  "browser": {
+    "status": "PASS",
+    "runId": 42195461363,
+    "jobId": 127817517756,
+    "artifactId": 13491058716,
+    "artifactZipSha256": "f1e89c235290ae6f8f069b9acc616554593ec63e389b0ac67c73c1ab3f6fb0af",
+    "scope": "CONTROLLED_SHOP_COMPONENT_BROWSER",
+    "themeViewportScaleCases": 54,
+    "arcadeLocale130Cases": 15,
+    "keyboardCases": 3,
+    "receipt": "browser-result.json",
+    "screenshotsVisuallyReviewed": true,
+    "physicalDeviceAccepted": false
+  },
+  "internalBuild": {
+    "build": "PASS",
+    "validate": "PASS",
+    "buildId": "16d53d7396dff71c56d3a6bd8138f4ed8a49fe0fe36c6eab16685ff908373076",
+    "files": 8345,
+    "modifiedProductFilesComparedToManifest": 11,
+    "allModifiedProductHashesMatch": true,
+    "publicReleasePermitted": false
+  },
+  "publication": {
+    "status": "BATCH_AUTHORIZED_FINAL_RELEASE_GATES_PENDING",
+    "changedApprovedHashes": 11,
+    "approvalListRefreshed": true,
+    "merged": false,
+    "deployed": false,
+    "historicalError": "PUBLIC_PLAYTEST_NOT_APPROVED",
+    "approvalRecord": "../PUBLICATION_APPROVAL.json",
+    "approvalTablesUpdated": 2,
+    "sameSourceHashesUpdatedPerTable": 11,
+    "latestReleaseStatus": "See PR #191 checks and publication receipt; this file records the prepublication snapshot."
+  },
+  "evidenceScope": "PREPUBLICATION_TEST_RECEIPTS_AT_SOURCE_COMMIT"
+}

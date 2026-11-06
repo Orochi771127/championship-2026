@@ -57,6 +57,7 @@ const CATEGORY_LABELS = Object.freeze({
 // How long a purchase line stays up, then how long it takes to fade (ui/screenLayout.css).
 const RECEIPT_TOAST_MS = 1600;
 const RECEIPT_TOAST_FADE_MS = 240;
+let shopDetailSequence = 0;
 
 const RECEIPT_COPY = Object.freeze({
   PURCHASED: "購買完成。",
@@ -161,6 +162,7 @@ export function createShopView({ root, source }) {
   const detailArt = element("div", "cm-vs2-shop__detail-art");
   const detailCopy = element("div", "cm-vs2-shop__detail-copy");
   const detailName = element("h2", "cm-vs2-shop__detail-name");
+  detailName.id = `cm-shop-detail-name-${++shopDetailSequence}`;
   const detailDescription = element("p", "cm-vs2-shop__detail-description");
   const detailMeta = element("p", "cm-vs2-shop__detail-meta");
   // Why Buy is unavailable, said beside the price rather than left to a grey
@@ -175,7 +177,9 @@ export function createShopView({ root, source }) {
   detailFamily.hidden = true;
   detailCopy.append(detailName, detailDescription, detailSynergy, detailMeta, detailState, detailFamily);
   detail.setAttribute("role", "dialog");
-  detail.setAttribute("aria-modal", "true");
+  // This sheet leaves the header and footer usable; it is deliberately nonmodal.
+  detail.setAttribute("aria-modal", "false");
+  detail.setAttribute("aria-labelledby", detailName.id);
   const detailActions = element("div", "cm-vs2-shop__detail-actions");
   const closeSheet = element("button", "cm-vs2-action cm-vs2-shop__close", "關閉");
   closeSheet.type = "button";
@@ -254,7 +258,7 @@ export function createShopView({ root, source }) {
     sheet.hidden = false;
     root.dataset.sheet = "open";
     arcadeFx(detail, "open");
-    (buy.disabled ? closeSheet : buy).focus?.({ preventScroll: true });
+    (buy.hidden || buy.disabled ? closeSheet : buy).focus?.({ preventScroll: true });
   }
   function closeDetail() {
     if (sheet.hidden) return;

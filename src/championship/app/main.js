@@ -1884,7 +1884,17 @@ async function mountBattleField() {
       battleRuntime?.dispose();
       battleRuntime = null;
       battleAttemptId = null;
-    }
+    },
+    // A failed tutorial load must not use leaveScreen (tutorial-locked) or
+    // exitInteractiveTutorial (marks it declined). Its save branch preserves
+    // the normal-game baseline and the current tutorial checkpoint for Continue.
+    onLoadErrorExit: tutorial ? async () => {
+      if (viewDisposed || app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_FIELD
+        || app.getInteractiveTutorialBattle()?.runtime !== activeRuntime) return false;
+      if (app.save()?.phase !== 'SAVED') return false;
+      await returnToTitle('tutorial-battle-load-return');
+      return true;
+    } : null
   });
   // Same optional-HUD deadline and cancellation owner as Raising.
   const hudLoad=createLoadAttempt({timeoutMs:20000});

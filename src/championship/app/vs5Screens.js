@@ -1028,7 +1028,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null, onBurst=null, fighterBadge=null }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,onLoadErrorExit=null,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null, onBurst=null, fighterBadge=null }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
   if(![0,1].includes(localTeamIndex))throw new TypeError('The Battle field view requires a local team');
@@ -1148,7 +1148,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   exit.classList.add("cm-vs5-exit");
   // Leaving a running match abandons it, and this build refunds no fee. One
   // stray tap in the record band used to do that without a word.
-  let viewDisposed = false, asking = false;
+  let viewDisposed = false, asking = false, loadingFailed = false, recoveryPending = false;
   if (typeof onExit === "function") exit.addEventListener("click", async () => {
     // The screens import display copy only; the app injects the dialog.
     if (section.dataset.ended === "true" || typeof askToLeave !== "function") { onExit(); return; }
@@ -1170,6 +1170,27 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
     if (choice === "leave" && !viewDisposed && section.dataset.ended !== "true") onExit();
   });
   log.band.append(exit);
+
+  // The tutorial keeps its ordinary exit locked. Failed presentation has a
+  // separate, app-owned save-and-title route so Continue can retry its checkpoint.
+  const recover = actionButton("FIELD_LOAD_RETURN");
+  recover.dataset.loadAction = 'return';
+  recover.hidden = true;
+  loading.append(recover);
+  recover.addEventListener('click', async () => {
+    if (viewDisposed || !loadingFailed || recoveryPending || typeof onLoadErrorExit !== 'function') return;
+    recoveryPending = true; recover.disabled = true;
+    try {
+      if (await onLoadErrorExit() === false && !viewDisposed)
+        loadingText.textContent = uiText('FIELD_LOAD_SAVE_FAILED');
+    } catch (error) {
+      if (!viewDisposed) loadingText.textContent = uiText('FIELD_LOAD_SAVE_FAILED');
+      console.warn('BATTLE_LOAD_RECOVERY', error);
+    } finally {
+      recoveryPending = false;
+      if (!viewDisposed) recover.disabled = false;
+    }
+  });
 
   // The five bands the contract declares, in its order: clock, the opponent's
   // three, the field, the player's three, the record.
@@ -1210,12 +1231,13 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   const sideNames = (mine) => frame.combatants.filter((c) => c.present !== false && (c.team === localTeamIndex) === mine)
     .map((c) => c.displayName ?? uiText(`SLOT ${c.slot + 1}`));
   const field = mountField({ host, progress, safeInsets: () => safeMeasured ? safe : measureSafe(),
-    onReady(){stopLoadingTrack();host.setAttribute('aria-busy','false');loading.remove();section.dataset.loading='false';measureSafe();
+    onReady(){if(viewDisposed)return;loadingFailed=false;stopLoadingTrack();host.setAttribute('aria-busy','false');loading.remove();section.dataset.loading='false';measureSafe();
       if(viewDisposed||versus)return;
       versus=ceremonies?.versus?.({host,playerLabel:uiText('我方'),playerNames:sideNames(true),
         opponentLabel:uiText('對手'),opponentNames:sideNames(false),onDone:()=>{versus=null;}})??null;},
-    onError(){stopLoadingTrack();progress?.fail();host.setAttribute('aria-busy','false');loading.dataset.state='error';section.dataset.loading='error';
-      loadingText.textContent=uiText('對戰場地載入失敗，請返回牧場後再試。');}
+    onError(){if(viewDisposed)return;loadingFailed=true;stopLoadingTrack();progress?.fail();host.setAttribute('aria-busy','false');loading.dataset.state='error';section.dataset.loading='error';
+      recover.hidden=typeof onLoadErrorExit!=='function';
+      loadingText.textContent=uiText(recover.hidden?'對戰場地載入失敗，請返回牧場後再試。':'BATTLE_LOAD_ERROR_TUTORIAL');}
   });
 
   return Object.freeze({
