@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "status": "TEST_HARNESS_CORRECTED_BROWSER_VALIDATION_PENDING",
+  "approvedProductCommit": "8f67443fb392f4c977212b13d79e913e3491dcee",
+  "affectedTest": "tests/championship-evolution-streaming-browser.cjs",
+  "failedRun": 42201443285,
+  "environmentTimeoutJob": 127837434094,
+  "pinchTargetFailureJob": 127848699039,
+  "testMergeCommit": "b8314a4b2d65dff0f8ecfa624b405f12370c82c0",
+  "failureArtifactId": 13496506446,
+  "failureArtifactSha256": "fb48eb1558b67a2b37ea9a3b2152df1a59b154c5e4ee544dfe9bca688cc958e1",
+  "reusedTestOnlyCorrections": [
+    "dbc0208f1fe8685403668ad71c09324caebc636b",
+    "770333843cc9f44d89299f980f1c87e043651c45"
+  ],
+  "changes": [
+    "Select exactly one existing input-owning cm-raising-pixi-canvas and record both canvas surfaces.",
+    "Observe the real debounced first-entry hint preference write during preparation, then begin the unchanged evolution storage measurement."
+  ],
+  "preservedRequirements": [
+    "Original 5000ms zoom timeout",
+    "Zoom decreases within allowed bounds",
+    "Actual pointer drag and HUD interaction",
+    "Historical baseline reproduction",
+    "Candidate delay and reject modes",
+    "No new/deleted storage keys during evolution",
+    "Page, network, console, ownership and asset assertions"
+  ],
+  "productSourceHashesChanged": false,
+  "publicSelectionChanged": false,
+  "buildGateCodeChanged": false,
+  "fullBuildId": "1dfefd0fc501e7115c3b50f2a7b9dc362f11a1fa5a7309562698aec9a03beaa3",
+  "externalBuildId": "d8fe69402646573793ecd1462a3299017adae8c0d4e23e9ea12a1037eee5eafc",
+  "latestResult": "See final PR191 checks and publication receipt; prior failed receipts retain FAIL."
+}

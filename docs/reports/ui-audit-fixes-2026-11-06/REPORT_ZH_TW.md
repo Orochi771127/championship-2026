@@ -94,9 +94,19 @@ Internal build ID：
 
 ## 本批發布授權與驗收順序
 
-公開試玩使用[核准檢查](../../../scripts/lib/web-build-plan.mjs)比對輸入 hash，並由[編譯邊界](../../../scripts/lib/browser-bundle.mjs)再次核對 runtime allowlist。授權前，11 個 `PLAYTEST_APPROVED_BYTES_CHANGED` 正確阻擋公開建置；授權後，`WEB_BUILD_INPUTS.v1.json` 的 `publicPlaytest.files` 與 `PUBLIC_RUNTIME_ALLOWLIST.v1.json` 的 `files` 同步相同 11 個新 hash。核准表的檔案集合、順序、非 hash 欄位與所有 gate 實作保持不變。[公開試玩政策](../../../src/data/championship/public-playtest.r1.json)及既有外部角色固定版本也保持不變。
+公開試玩使用[核准檢查](../../../scripts/lib/web-build-plan.mjs)比對輸入 hash，並由[編譯邊界](../../../scripts/lib/browser-bundle.mjs)再次核對 runtime allowlist。授權前，11 個 `PLAYTEST_APPROVED_BYTES_CHANGED` 正確阻擋公開建置；授權後，`WEB_BUILD_INPUTS.v1.json` 的 `publicPlaytest.files` 與 `PUBLIC_RUNTIME_ALLOWLIST.v1.json` 的 `files` 同步相同 11 個新 hash。核准表的檔案集合、順序、非 hash 欄位，以及公開內容核准／建置 gate 實作保持不變。[公開試玩政策](../../../src/data/championship/public-playtest.r1.json)及既有外部角色固定版本也保持不變。
 
 本批授權已完成，下一步依序為：公開 full／external artifact 建置與驗證、同一 PR 版本的完整 deterministic suite、Friends 六組正常流程及完整性聚合、external character delivery 正常 UI 關卡，通過後才合併部署。Pages 會在 main 更新後自動發布，因此合併前必須先確認上述關卡；公開站驗收須同時比對實際 merge SHA 與 external build ID。這份報告的證據表為發布前快照，後續關卡與部署狀態記錄於 [PR #191](https://github.com/Orochi771127/championship-2026/pull/191)。
+
+### 發布驗證中的測試接線補修
+
+候選 `8f67443` 的完整 CI、UIAudit、Friends 六組及完整性聚合、external character delivery、Dex 擷取、Raising 與 Scene music 已通過。Evolution 的 WebKit 首次因 Ubuntu 依賴下載過慢用完整個 job 上限；單組重跑通過安裝與公開建置後，在進化完成後的縮放檢查逾時，保留原失敗回條，不改判為成功。
+
+來源與實際失敗收據共同指出：既有 runner 用 `.int-rh2-field-host canvas.first()` 選到 `pointer-events:none` 的 Three 背景；WebKit 的合成 pinch 直接發往該節點，沒有送到真正綁定輸入的 Pixi canvas。真實拖曳依座標命中 Pixi，因此已成功。這個問題在 2026-11-04 的既有 run 也已出現，本批未修改牧場縮放或進化程式。
+
+本輪沿用同專案的兩筆純測試修正：[指定唯一 Pixi 輸入畫布](https://github.com/Orochi771127/championship-2026/commit/dbc0208f1fe8685403668ad71c09324caebc636b)、[觀察首次提示偏好寫入完成後再建立存檔監測邊界](https://github.com/Orochi771127/championship-2026/commit/770333843cc9f44d89299f980f1c87e043651c45)。保留 5 秒縮放期限、zoom 必須下降、實際拖曳、HUD、進化期間不得新增存檔鍵，以及 baseline／delay／reject 的原有要求；新增對真正準備完成的觀察，沒有預填偏好、直接改 zoom、擴大存檔鍵白名單或跳過斷言。
+
+這次只補修既有 browser runner 與記錄，已核准的 11 個產品來源、兩份核准表與 full／external 公開 build ID 都不變。修正後仍須重新完成實際瀏覽器關卡，再合併發布；回條索引見 [RELEASE_GATE_FOLLOWUP.json](RELEASE_GATE_FOLLOWUP.json)，最新結果見 PR #191。
 
 ### 重跑入口
 
