@@ -591,6 +591,24 @@
       "publicationAuthorized": true,
       "scope": "General53 and Arena32 core; all natural states and dedicatedKO/victory not claimed",
       "runtimeQaEvidence": "docs/reports/aw-ul-release-20261102/UL14_SPECIES196_RELEASE_VALIDATION.json"
+    },
+    {
+      "assetId": "art:characters:species218-snapshot-qa:v1",
+      "manifestPath": "assets/production/internal-character-review/species218-snapshot-qa-v1/manifest.json",
+      "manifestSha256": "11cf1e1d295176e648ab7e9da60929033d00680afac60952e139b901a5b18719",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "productionStatus": "ORIGINAL_REVIEW_CANDIDATE",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": false,
+      "reviewOnly": true,
+      "localOnly": true,
+      "runtimeScope": "LOOPBACK_REVIEW_ONLY",
+      "publicReleasePermitted": false,
+      "shippingReady": false,
+      "scope": "General Main native owner snapshots for candidate cells 009 and 011 only; provisional calibration, not accepted art.",
+      "publicTestPublicationAuthorized": true,
+      "publicationScope": "TWO_CANDIDATE_FRAMES_AND_INTEGRATION_DATA_ON_PUBLIC_TEST_BRANCH_ONLY"
     }
   ]
 }

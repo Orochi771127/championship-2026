@@ -1,0 +1,899 @@
+{
+  "schema": 1,
+  "identity": {
+    "species_id": 218,
+    "name": "天斬蒼龍",
+    "native_entity": "m535_slayerdramon"
+  },
+  "release_state": "HOLD_PUBLIC_TEST_BRANCH_ONLY",
+  "assets": [
+    {
+      "path": "images/c5c42ff7f67614e67c8ab079e9b81051065b181dd78894aa2a2a00d4b58c80f9.png",
+      "size": [
+        384,
+        256
+      ],
+      "bytes": 168755,
+      "sha256": "c5c42ff7f67614e67c8ab079e9b81051065b181dd78894aa2a2a00d4b58c80f9"
+    },
+    {
+      "path": "images/1c7c2b80767cbd01467ec588b871a209cc9ec551c76ea8806be0bf249cac033b.png",
+      "size": [
+        384,
+        256
+      ],
+      "bytes": 153957,
+      "sha256": "1c7c2b80767cbd01467ec588b871a209cc9ec551c76ea8806be0bf249cac033b"
+    }
+  ],
+  "candidate_records": [
+    {
+      "representative": "m535_slayerdramon/main/cell_009",
+      "asset_path": "images/c5c42ff7f67614e67c8ab079e9b81051065b181dd78894aa2a2a00d4b58c80f9.png",
+      "rect_xywh": [
+        0,
+        0,
+        384,
+        256
+      ],
+      "crop_rgba_sha256": "964e1e04fdac583c39b09c868ff88054f98fa093b68bc23f7012d5c73da27181",
+      "quality_status": "BODY_CANDIDATE_HOLD",
+      "final_accepted": false
+    },
+    {
+      "representative": "m535_slayerdramon/main/cell_011",
+      "asset_path": "images/1c7c2b80767cbd01467ec588b871a209cc9ec551c76ea8806be0bf249cac033b.png",
+      "rect_xywh": [
+        0,
+        0,
+        384,
+        256
+      ],
+      "crop_rgba_sha256": "21fd7c425fc1f74db12df2fc068546c167a9a4c3ee5d55f4ba1a6c2f5b453ad7",
+      "quality_status": "BODY_CANDIDATE_HOLD",
+      "final_accepted": false
+    }
+  ],
+  "sequences": [
+    {
+      "key": "main:00",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_000",
+          "ticks_raw": 31,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_001",
+          "ticks_raw": 22,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:01",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_002",
+          "ticks_raw": 37,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_003",
+          "ticks_raw": 28,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:02",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_004",
+          "ticks_raw": 15,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_005",
+          "ticks_raw": 12,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:03",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_006",
+          "ticks_raw": 7,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_007",
+          "ticks_raw": 7,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:04",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_008",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:05",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_009",
+          "ticks_raw": 7,
+          "candidate_record": "m535_slayerdramon/main/cell_009"
+        }
+      ]
+    },
+    {
+      "key": "main:06",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_010",
+          "ticks_raw": 7,
+          "candidate_record": "m535_slayerdramon/main/cell_009"
+        }
+      ]
+    },
+    {
+      "key": "main:07",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_011",
+          "ticks_raw": 15,
+          "candidate_record": "m535_slayerdramon/main/cell_011"
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_012",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:08",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_013",
+          "ticks_raw": 15,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_014",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:09",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_015",
+          "ticks_raw": 15,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_016",
+          "ticks_raw": 3,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 2,
+          "native_texture": "m535_slayerdramon/main/cell_017",
+          "ticks_raw": 3,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 3,
+          "native_texture": "m535_slayerdramon/main/cell_018",
+          "ticks_raw": 3,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 4,
+          "native_texture": "m535_slayerdramon/main/cell_019",
+          "ticks_raw": 3,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 5,
+          "native_texture": "m535_slayerdramon/main/cell_020",
+          "ticks_raw": 31,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:10",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_021",
+          "ticks_raw": 15,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_014",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:11",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_022",
+          "ticks_raw": 5,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_023",
+          "ticks_raw": 6,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:12",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_024",
+          "ticks_raw": 37,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_025",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:13",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_026",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:14",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_027",
+          "ticks_raw": 25,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_028",
+          "ticks_raw": 31,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:15",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_029",
+          "ticks_raw": 31,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:16",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_030",
+          "ticks_raw": 31,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_031",
+          "ticks_raw": 22,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:17",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_032",
+          "ticks_raw": 37,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_033",
+          "ticks_raw": 28,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:18",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_034",
+          "ticks_raw": 15,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_035",
+          "ticks_raw": 12,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:19",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_036",
+          "ticks_raw": 7,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_037",
+          "ticks_raw": 7,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:20",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_038",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:21",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_039",
+          "ticks_raw": 5,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_040",
+          "ticks_raw": 6,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:22",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_041",
+          "ticks_raw": 37,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_042",
+          "ticks_raw": 31,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:23",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_043",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:24",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_044",
+          "ticks_raw": 25,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_045",
+          "ticks_raw": 31,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:25",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_046",
+          "ticks_raw": 31,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:26",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_047",
+          "ticks_raw": 6,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_008",
+          "ticks_raw": 3,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 2,
+          "native_texture": "m535_slayerdramon/main/cell_047",
+          "ticks_raw": 9,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 3,
+          "native_texture": "m535_slayerdramon/main/cell_048",
+          "ticks_raw": 9,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:27",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_049",
+          "ticks_raw": 2,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:28",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_050",
+          "ticks_raw": 15,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_051",
+          "ticks_raw": 21,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:29",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_052",
+          "ticks_raw": 11,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_053",
+          "ticks_raw": 16,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:30",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_054",
+          "ticks_raw": 10,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_055",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:31",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_056",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:32",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_057",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:33",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_058",
+          "ticks_raw": 31,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/main/cell_059",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:34",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_060",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:35",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_061",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:36",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_062",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:37",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_063",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "main:38",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_064",
+          "ticks_raw": 7,
+          "candidate_record": "m535_slayerdramon/main/cell_009"
+        }
+      ]
+    },
+    {
+      "key": "main:39",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/main/cell_065",
+          "ticks_raw": 2,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "sub:00",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/sub/cell_000",
+          "ticks_raw": 31,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/sub/cell_001",
+          "ticks_raw": 22,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "sub:01",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/sub/cell_002",
+          "ticks_raw": 37,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/sub/cell_003",
+          "ticks_raw": 28,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "sub:02",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/sub/cell_004",
+          "ticks_raw": 7,
+          "candidate_record": "m535_slayerdramon/main/cell_009"
+        }
+      ]
+    },
+    {
+      "key": "sub:03",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/sub/cell_005",
+          "ticks_raw": 7,
+          "candidate_record": "m535_slayerdramon/main/cell_009"
+        }
+      ]
+    },
+    {
+      "key": "sub:04",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/sub/cell_006",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "sub:05",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/sub/cell_007",
+          "ticks_raw": 31,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "sub:06",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/sub/cell_008",
+          "ticks_raw": 2,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "sub:07",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/sub/cell_009",
+          "ticks_raw": 15,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/sub/cell_010",
+          "ticks_raw": 21,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "sub:08",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/sub/cell_011",
+          "ticks_raw": 11,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/sub/cell_012",
+          "ticks_raw": 16,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "sub:09",
+      "mode_raw": 2,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/sub/cell_013",
+          "ticks_raw": 10,
+          "candidate_record": null
+        },
+        {
+          "ordinal": 1,
+          "native_texture": "m535_slayerdramon/sub/cell_014",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "sub:10",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/sub/cell_015",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "sub:11",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/sub/cell_016",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    },
+    {
+      "key": "sub:12",
+      "mode_raw": 1,
+      "frames": [
+        {
+          "ordinal": 0,
+          "native_texture": "m535_slayerdramon/sub/cell_017",
+          "ticks_raw": 37,
+          "candidate_record": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "SPECIES218_SNAPSHOT_QA_CALIBRATION_TRIAL",
+  "status": "HOLD",
+  "runtimeApproved": false,
+  "speciesId": "species-218",
+  "entityId": "m535_slayerdramon",
+  "baseCommit": "63776034296faa32f3498f94396c0e825403a340",
+  "sourcePins": {
+    "assemblySha256": "0d5477878293de636a2d1b28f86636c6098b4baadca86a42cfc1c742db02b343",
+    "runtimeSha256": "d4c3d19d46db0c828995eabd61cbb43a071b87bfb3e466eb071a4c5ebbc6073c"
+  },
+  "timing": {
+    "authority": "EXISTING_OWNER_SNAPSHOT",
+    "localClock": false,
+    "hzConversion": false
+  },
+  "effects": "SEPARATE_UNBOUND",
+  "records": {
+    "m535_slayerdramon/main/cell_009": {
+      "rect": [
+        0,
+        0,
+        384,
+        256
+      ],
+      "assetPath": "images/c5c42ff7f67614e67c8ab079e9b81051065b181dd78894aa2a2a00d4b58c80f9.png",
+      "fileSha256": "c5c42ff7f67614e67c8ab079e9b81051065b181dd78894aa2a2a00d4b58c80f9",
+      "cropRgbaSha256": "964e1e04fdac583c39b09c868ff88054f98fa093b68bc23f7012d5c73da27181",
+      "origin": [
+        166.3554810543961,
+        242.52269726945065
+      ],
+      "density": 3.551494833017113,
+      "stageScale": 0.396,
+      "calibrationStatus": "PROVISIONAL_VISUAL_LANDMARK_FIT",
+      "calibrationReference": "m535_slayerdramon/main/cell_009",
+      "basis": "Three manually inspected anatomical landmarks; uniform least-squares fit",
+      "runtimePlacementVerified": false,
+      "accepted": false
+    },
+    "m535_slayerdramon/main/cell_011": {
+      "rect": [
+        0,
+        0,
+        384,
+        256
+      ],
+      "assetPath": "images/1c7c2b80767cbd01467ec588b871a209cc9ec551c76ea8806be0bf249cac033b.png",
+      "fileSha256": "1c7c2b80767cbd01467ec588b871a209cc9ec551c76ea8806be0bf249cac033b",
+      "cropRgbaSha256": "21fd7c425fc1f74db12df2fc068546c167a9a4c3ee5d55f4ba1a6c2f5b453ad7",
+      "origin": [
+        166.3554810543961,
+        242.52269726945065
+      ],
+      "density": 3.551494833017113,
+      "stageScale": 0.396,
+      "calibrationStatus": "PROVISIONAL_VISUAL_LANDMARK_FIT",
+      "calibrationReference": "m535_slayerdramon/main/cell_009",
+      "basis": "Same fixed family transform as 009; no per-frame grounding; diagnostic pose only",
+      "runtimePlacementVerified": false,
+      "accepted": false
+    }
+  },
+  "holds": [
+    "Manual body landmarks are estimates with the stated uncertainty; they are not original production anchor metadata.",
+    "The raised limb and pose 011 do not match the current artwork closely. Numeric fit is not pose equivalence.",
+    "Only records 009 and 011 are wired. All other frames must retain the native fallback.",
+    "Owner snapshots select events; there is no runtime Hz inference, autonomous timer or duration conversion.",
+    "No browser or Pixi playback has been observed. Cloud browser initialization failed before opening a page.",
+    "Weapon/effects remain separate and unbound. Preview-only 012/014 transforms are not applied.",
+    "Public test-branch disclosure is authorized for these two frames only. Runtime, art acceptance, merge and deployment remain unapproved."
+  ],
+  "publicTestPublicationAuthorized": true,
+  "publicationScope": "TWO_CANDIDATE_FRAMES_AND_INTEGRATION_DATA_ON_PUBLIC_TEST_BRANCH_ONLY"
+}
