@@ -14,7 +14,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Preserve evidence and cancel only long-stalled browser installation; never skip assertions
+      - name: Preserve five successful groups; recover only a proven pre-test installation stall
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -22,30 +22,21 @@ jobs:
           node --input-type=module <<'JS'
           import fs from 'node:fs';
           import assert from 'node:assert/strict';
-          const repo='Orochi771127/championship-2026',head='770333843cc9f44d89299f980f1c87e043651c45';
-          const pending=new Set([42205856102,42205856111,42205856114]);
+          const repo='Orochi771127/championship-2026',head='2a81596f0fb78fd94ad6bb6525a99c9bd3a80c28',id=42210741430,target=127868475153;
           async function api(path,method='GET'){
             const r=await fetch(`https://api.github.com/repos/${repo}/${path}`,{method,headers:{Authorization:`Bearer ${process.env.GH_TOKEN}`,Accept:'application/vnd.github+json'}});
             if(!r.ok)throw Error(`GitHub ${r.status} ${path}: ${await r.text()}`);
             return r.status===204?null:r.json();
           }
-          for(let round=0;round<4&&pending.size;round++){
-            for(const id of [...pending]){
-              const run=await api(`actions/runs/${id}`),list=await api(`actions/runs/${id}/jobs?filter=latest&per_page=100`);
-              assert.equal(run.head_sha,head);assert.equal(run.head_branch,'fix/performance-release-20261106');
-              const active=list.jobs.filter(j=>j.status==='in_progress');
-              const stalled=active.length>0&&active.every(j=>{
-                const s=j.steps.find(s=>s.status==='in_progress');
-                return s&&/install.*(chrom|webkit)/i.test(s.name)&&Date.now()-Date.parse(s.started_at)>10*60*1000;
-              });
-              const evidence={runId:id,head:run.head_sha,runStatus:run.status,jobs:list.jobs,stalledPreparation:stalled,action:'none'};
-              if(run.status==='in_progress'&&stalled){await api(`actions/runs/${id}/cancel`,'POST');evidence.action='cancel_requested_for_exact_same_commit_rerun';pending.delete(id);}
-              if(run.status==='completed')pending.delete(id);
-              fs.writeFileSync(`evidence/${id}-round${round}.json`,JSON.stringify(evidence,null,2));
-              console.log(JSON.stringify({runId:id,round,status:run.status,stalled,action:evidence.action,active:active.map(j=>({id:j.id,step:j.steps.find(s=>s.status==='in_progress')}))}));
-            }
-            if(round<3&&pending.size)await new Promise(resolve=>setTimeout(resolve,30000));
-          }
+          const run=await api(`actions/runs/${id}`),list=await api(`actions/runs/${id}/jobs?filter=latest&per_page=100`);
+          assert.equal(run.head_sha,head);assert.equal(run.head_branch,'fix/performance-release-20261106');
+          const active=list.jobs.filter(j=>j.status==='in_progress'),succeeded=list.jobs.filter(j=>j.conclusion==='success');
+          const step=active[0]?.steps.find(s=>s.status==='in_progress');
+          const stalled=active.length===1&&active[0].id===target&&succeeded.length===5&&step&&/install.*chromium/i.test(step.name)&&Date.now()-Date.parse(step.started_at)>10*60*1000;
+          const evidence={runId:id,head,runStatus:run.status,jobs:list.jobs,stalledPreparation:!!stalled,action:'none'};
+          if(run.status==='in_progress'&&stalled){await api(`actions/runs/${id}/cancel`,'POST');evidence.action='cancel_requested_for_same_commit_single_job_rerun';}
+          fs.writeFileSync('evidence/friends-install-stall.json',JSON.stringify(evidence,null,2));
+          console.log(JSON.stringify({runId:id,target,head,stalled,action:evidence.action,successfulGroups:succeeded.map(j=>j.name),activeStep:step}));
           JS
       - uses: actions/upload-artifact@v4
         if: always()
