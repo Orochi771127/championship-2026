@@ -1,0 +1,53 @@
+name: Recover stalled performance gate runners
+on:
+  push:
+    branches: [ops/evolution-input-surface-fix-20261106]
+    paths: [.github/workflows/ops-recover-stalled-performance-gates.yml]
+permissions:
+  actions: write
+  contents: read
+jobs:
+  recover:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preserve evidence and cancel only long-stalled preparation; never skip assertions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p evidence
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const repo='Orochi771127/championship-2026',head='dbc0208f1fe8685403668ad71c09324caebc636b';
+          const runs=[42201594489,42201594521,42201594505];
+          async function api(path,method='GET'){
+            const r=await fetch(`https://api.github.com/repos/${repo}/${path}`,{method,headers:{Authorization:`Bearer ${process.env.GH_TOKEN}`,Accept:'application/vnd.github+json'}});
+            if(!r.ok)throw Error(`GitHub ${r.status} ${path}: ${await r.text()}`);
+            return r.status===204?null:r.json();
+          }
+          for(const id of runs){
+            const run=await api(`actions/runs/${id}`),list=await api(`actions/runs/${id}/jobs?filter=latest&per_page=100`);
+            assert.equal(run.head_sha,head);assert.equal(run.head_branch,'fix/performance-release-20261106');
+            const active=list.jobs.filter(j=>j.status==='in_progress');
+            const stalled=active.length>0&&active.every(j=>{
+              const s=j.steps.find(s=>s.status==='in_progress');
+              return s&&/install.*(chromium|webkit)|Install isolated Chromium|Build and validate the approved public artifact/i.test(s.name)
+                &&Date.now()-Date.parse(s.started_at)>10*60*1000;
+            });
+            const evidence={runId:id,head:run.head_sha,runStatus:run.status,jobs:list.jobs,stalledPreparation:stalled,action:'none'};
+            if(run.status==='in_progress'&&stalled){await api(`actions/runs/${id}/cancel`,'POST');evidence.action='cancel_requested_for_exact_same_commit_rerun';}
+            fs.writeFileSync(`evidence/${id}.json`,JSON.stringify(evidence,null,2));
+            console.log(JSON.stringify({runId:id,status:run.status,stalled,action:evidence.action,active:active.map(j=>({id:j.id,step:j.steps.find(s=>s.status==='in_progress')}))}));
+          }
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stalled-performance-gates-${{ github.run_id }}
+          path: evidence/
+          retention-days: 14
+          if-no-files-found: error
