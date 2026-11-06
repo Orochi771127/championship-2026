@@ -604,6 +604,7 @@ async function ensureServer() {
 
     if (!BASELINE_ONLY) {
       assert.equal(pageErrors.length, 0, `Expected 0 pageErrors, got: ${JSON.stringify(pageErrors)}`);
+      assert.equal(unhandledRejections.length, 0, `Expected 0 unhandledRejections, got: ${JSON.stringify(unhandledRejections)}`);
       assert.equal(unexpectedTitleDrops.length, 0, `Expected 0 unexpectedTitleDrops, got: ${JSON.stringify(unexpectedTitleDrops)}`);
       assert.ok(report.maxCanvasDpr <= 1.76, `Expected mobile/iOS canvas DPR <= 1.75, got ${report.maxCanvasDpr}`);
       assert.ok(lastLoop.gpu.activeContexts <= 3, `Expected active WebGL contexts <= 3 after ${LOOPS} loops, got ${lastLoop.gpu.activeContexts}`);
