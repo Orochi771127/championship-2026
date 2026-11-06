@@ -1,16 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {characterAssetUrl} from '../src/championship/presentation/characterAssetDelivery.js';
 const read=path=>JSON.parse(fs.readFileSync(new URL(path,import.meta.url),'utf8'));
 const selection=read('../src/data/championship/public-character-catalog.v1.json');
 const policy=read('../src/data/championship/public-playtest.r1.json');
 const heroes=read('../src/data/championship/database-hero-portraits.public.v1.json');
 const source=fs.readFileSync(new URL('../src/championship/presentation/acceptedDatabasePortraits.js',import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
 const hero211=heroes.entries.find(e=>e.speciesIndex===211);
-const create=(hero,{runtimeReady=false,evolutionReady=false,assetReady=false}={})=>new Function('publicHudCharacterConfig','databaseHeroPortrait','getProductExtension',source+';return {acceptedDatabasePortraitConfig,acceptedDatabaseIllustrationPreview,loadAcceptedDatabasePortrait};')(id=>{
+const create=(hero,{runtimeReady=false,evolutionReady=false,assetReady=false}={})=>new Function('publicHudCharacterConfig','databaseHeroPortrait','getProductExtension','characterAssetUrl',source+';return {acceptedDatabasePortraitConfig,acceptedDatabaseIllustrationPreview,loadAcceptedDatabasePortrait};')(id=>{
  const value=selection.characters.find(c=>c.speciesId===id);
  return ['species-211','species-222','species-229','species-230'].includes(id)&&!assetReady?null:value??null;
-},hero??(id=>heroes.entries.find(e=>e.speciesIndex===id)),id=>[229,230].includes(id)?{runtimeReady,evolutionReady,entityId:`entity-${id}`}:null);
+},hero??(id=>heroes.entries.find(e=>e.speciesIndex===id)),id=>[229,230].includes(id)?{runtimeReady,evolutionReady,entityId:`entity-${id}`}:null,characterAssetUrl);
 const base='https://orochi771127.github.io/championship-2026/';
 test('211 missing accepted-animation config uses its already-public OC220 encyclopedia image only',async()=>{
  const api=create();assert.equal(api.acceptedDatabasePortraitConfig(211),null);let calls=0;

@@ -11,6 +11,7 @@ import {projectPublicMetadata} from './public-metadata-projection.mjs';
 import {publicCleanMedia} from './public-clean-media.mjs';
 import {publicProgramData} from './public-program-data.mjs';
 import {assertOpeningFilmPublication} from './opening-film-publication.mjs';
+import {assertExternalCharacterPartition} from './external-character-assets.mjs';
 
 export const PUBLIC_RUNTIME_INDEX_PATH='assets/production/PUBLIC_RUNTIME_INDEX.json';
 export const PUBLIC_RUNTIME_ALLOWLIST_PATH='docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json';
@@ -23,7 +24,7 @@ const selectedMedia=(file,hash,selection)=>/\.(?:png|webp|jpe?g|wav|mp3|mp4)$/i.
  &&selection?.get(file)===hash;
 const privateKey=/^(?:localOnly|reviewOnly|qaOnly|runtimeEligible|shippingReady|humanApproved|assistantReviewed|runtimeQaPassed|productionStatus|shippingStatus|artifactMaturity|rightsStatus|rightsEvidenceIds|ownerReply(?:Id)?|ownerInstruction|ownerDirection|scopeQuestionId|commitPushPublishInstructionId|approval.*|library(?:File)?Id|library_file_id|source(?:Reference.*|Review.*|Master.*|Archive.*|BankSha256|BindingEvidence)|prompt.*|artDirection|designRevision|selectedGenerationVersion|review|provenance|localPackagingProvenance|privateVaultReference|evidence_record)$/i;
 const privateValue=/(?:libfile_[a-z0-9]+|Sentinel_[a-f0-9]{32}\b|\bSentinel_[a-z0-9]+|\b[A-Za-z]:[\\/]+(?:Users|Projects|Workspace|Private|Temp)|YDIJ_PRIVATE_ROM_ART_PACK|ROM_COPYRIGHTED_REFERENCE|LOOPBACK_RESEARCH_ONLY|file:\/\/(?=[^\s\'"<>]*[a-z0-9]))/i;
-const manifestFields=['schemaVersion','target','buildId','commit','inputSha256','entry','publicReleasePermitted','loopbackOnly','sourcePayloadIncluded','faithfulInternalVfxIncluded','romDerivedBattleCatalogsIncluded','ownerSelectedReferenceArtIncluded','staticModuleClosure','checked','moduleCount','moduleEntries','importMap','browserBundle','version','tool','toolVersion','startupModules','generatedFiles','release','approved','publicPlaytest','ownerApproved','policyId','rightsDocumentVerified','commercialReleaseAccepted','fullOriginalParityAccepted','fileCount','fileTable','gzipBase64','columns','directories','rows','files','path','sha256','bytes','saveStorage'];
+const manifestFields=['schemaVersion','target','buildId','commit','inputSha256','entry','publicReleasePermitted','loopbackOnly','sourcePayloadIncluded','faithfulInternalVfxIncluded','romDerivedBattleCatalogsIncluded','ownerSelectedReferenceArtIncluded','staticModuleClosure','checked','moduleCount','moduleEntries','importMap','browserBundle','version','tool','toolVersion','startupModules','generatedFiles','release','approved','publicPlaytest','ownerApproved','policyId','rightsDocumentVerified','commercialReleaseAccepted','fullOriginalParityAccepted','fileCount','fileTable','gzipBase64','columns','directories','rows','files','path','sha256','bytes','saveStorage','externalCharacterAssets','assetPrefix','assetBaseUrl','sourceCommit','manifestUrl','manifestSha256','totalBytes'];
 
 export function forbiddenPublicPath(file){
   return !safePath(file)||file===INTERNAL_INDEX||privateExtension.test(file)
@@ -156,6 +157,7 @@ export function publicArtifactPlan({root,input,index}){
 // Inspect the actual upload directory, independently of a new JSON's contents.
 export function assertPublicArtifact({root,files,plan,manifestName='pages-build.json'}){
   assertOpeningFilmPublication(files);
+  assertExternalCharacterPartition(plan,files);
   const expected=new Set([...plan.files,...(plan.generatedFiles??[]),'index.html','.nojekyll',manifestName]);
   if(expected.size!==files.length||[...expected].some(file=>!files.includes(file)))throw Error('PUBLIC_PAYLOAD_FILE_SET');
   const actualSizes=[];
