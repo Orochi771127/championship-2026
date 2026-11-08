@@ -1,6 +1,6 @@
 # 全系統巡檢與第二批修正（2026-11-08）
 
-狀態：工作分支 `claude/inspiring-mayer-gyxhot`，草稿 PR #194，**未合併、未發布**。S1–S4 的雜湊都已由 Owner 核准並套用；S5（每份存檔固定 ID）改到的四個檔案待核准（見第 8 節）。
+狀態：工作分支 `claude/inspiring-mayer-gyxhot`，草稿 PR #194，**未合併、未發布**。S1–S5 的公開建置雜湊都已由 Owner 核准並套用（見第 8 節）；合併與部署不在核准範圍內。
 
 ## 1. 做法：用證據盤點，不靠逐檔閱讀
 
@@ -214,7 +214,7 @@ S1 時提出的 `b30e2cd0…` 已被 `66ea864e…` 取代。
 | `src/championship/app/main.js`（S4） | `991f8c32291b3d540a0a62074855d35636477efe8d9739da641e1ec759a823ad` | `d65efb6be5366a5902984804ab081b3af9983dad7f10b69fc7c194607d1e6068` |
 | `src/championship/online/championshipCloudService.js`（S4） | `11150dff66913de99ab736bc78831c2cc7bf771bb6f6a69c08624a627c0fdb83` | `c025b8b316153598915eb3e85cdb0cc7389b62df3a9d713581274b3ab48928fd` |
 
-**S5 待核准**（四個檔案）：
+**S5 的四列也已核准並套用**（[PUBLICATION_APPROVAL_S5.json](PUBLICATION_APPROVAL_S5.json)）：
 
 | 檔案 | 目前核准 | 本分支 |
 |---|---|---|

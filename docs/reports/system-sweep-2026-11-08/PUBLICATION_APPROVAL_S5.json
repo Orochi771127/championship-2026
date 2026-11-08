@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "recordedOn": "2026-11-08",
+  "timezone": "Asia/Taipei",
+  "approvalId": "SYSTEM_SWEEP_S5_SAVE_ID_HASHES_20261108",
+  "ownerReply": "核准",
+  "ownerReplyNote": "Answers the request to approve the four S5 public build hashes listed in REPORT_ZH_TW.md section 8 and on PR194 (comment 6722216478).",
+  "approvedQuestion": "核准 S5 的 4 個新雜湊（championshipStandaloneSave.js、ChampionshipPersistentSavePort.js、championshipStandaloneApp.js、main.js）。",
+  "reviewedCommit": "187b4ef6",
+  "pullRequest": "https://github.com/Orochi771127/championship-2026/pull/194",
+  "authorizedActions": [
+    "refresh these 4 approved source hashes",
+    "commit and push this bounded update"
+  ],
+  "notAuthorizedByThisReply": [
+    "merge PR194 into main",
+    "deploy through the GitHub Pages workflow"
+  ],
+  "selectionPathsOrderAndNonHashFieldsUnchanged": true,
+  "approvedChanges": [
+    {
+      "path": "src/championship/app/championshipStandaloneSave.js",
+      "previousSha256": "16ddc21be1570c51e87fb592635d5a5437ed25b9a8aeb660993f07494598b8c1",
+      "approvedSha256": "5c2ea82fa0d8af9192325fe88ec9c40a437ed3ead2044aed1de04b1ebbb82430"
+    },
+    {
+      "path": "src/championship/app/ChampionshipPersistentSavePort.js",
+      "previousSha256": "d5a5f21f245608e9a4f77e953feccc6fbc97ccb005d302a01e08dda120793dfa",
+      "approvedSha256": "1c9254662b1f9294937ee5154abb4efe78bc26c8d5b5abecb5c6d9b9ba600f75"
+    },
+    {
+      "path": "src/championship/app/championshipStandaloneApp.js",
+      "previousSha256": "66ea864ee9df77d14cc7922f787bcc331e1a36c4a8ad12d4587919453b86c3a9",
+      "approvedSha256": "124115f3b091b9500450a0dacebbc47e9869dd0b4fa8cc95a89b3c70f9a8afc5"
+    },
+    {
+      "path": "src/championship/app/main.js",
+      "previousSha256": "d65efb6be5366a5902984804ab081b3af9983dad7f10b69fc7c194607d1e6068",
+      "approvedSha256": "1340305d02178cd1875a76ec8b173979ca0557669fb24d74145e3715e01f46e4"
+    }
+  ],
+  "approvalTables": [
+    {
+      "path": "docs/contracts/championship/WEB_BUILD_INPUTS.v1.json",
+      "changedSourceHashes": 4
+    },
+    {
+      "path": "docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json",
+      "changedSourceHashes": 4
+    }
+  ],
+  "buildGates": {
+    "playtest": {
+      "buildId": "dd1af125c0d0e52c71c5cbf5f9174ee28c4d1dee0028cd599c23ca86e7616973",
+      "fileCount": 7718,
+      "validate": "PASS"
+    },
+    "playtestExternalCharacters": {
+      "buildId": "c1563db3b6b1f43893677cbfa1953f83fc9622f9a2d71d979daf70ea00906fc0",
+      "fileCount": 2285,
+      "validate": "PASS",
+      "note": "Identical buildId to the S5 candidate that completed the ranch-load browser flow with an id-less legacy save and no errors."
+    }
+  },
+  "doesNotAuthorizeNewAssetsOrGameplay": true,
+  "doesNotClaimPhysicalDeviceAcceptance": true,
+  "buildGateCodeUnchanged": true
+}
