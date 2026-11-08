@@ -239,8 +239,11 @@ const results={schemaVersion:1,label:LABEL,profile:PROFILE,scenario:SCENARIO,art
     await page.reload();const restored=await enterFromTitle('R-reload-after-evolution');
     const after=await residentsNow();
     results.saveCheck={mainSpecies:after.find(r=>r.creatureId===MAIN)?.speciesId??null,residentCount:after.length,
-      storedSpecies:await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).creature.speciesId,SAVE_KEY)};
+      storedSpecies:await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).creature.speciesId,SAVE_KEY),
+      storedMetals:await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).progression?.cyberGacha?.metals??{},SAVE_KEY)};
     assert.equal(results.saveCheck.mainSpecies,TARGET,'Evolved species restored from the save');
+    // The fixture holds two shards; the completed catalyst spends exactly one.
+    assert.equal(results.saveCheck.storedMetals['metal:chrono-ore-shard'],1,'One catalyst shard spent with the evolution');
     assert.equal(restored.allResidentsReadyMs!==null,true);
     results.errors=errors;results.warnings=warnings.slice(0,80);results.status=errors.length?'PAGE_ERRORS':'COMPLETE';
   }catch(error){
