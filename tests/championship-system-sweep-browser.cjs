@@ -30,7 +30,10 @@ const ENTRIES=[
   {menu:'quick',id:'shop'},{menu:'quick',id:'database'},{menu:'quick',id:'hunt'},{menu:'quick',id:'battle'},
   {menu:'system',id:'backpack'},{menu:'system',id:'journal'},{menu:'system',id:'story'},{menu:'system',id:'medals'},
   {menu:'system',id:'friends'},{menu:'system',id:'account'},{menu:'system',id:'help'},{menu:'system',id:'settings'},
-  {menu:'manage',id:'digimon'},{menu:'manage',id:'cageEdit'},{menu:'manage',id:'tamer'},{menu:'manage',id:'schedule'}];
+  {menu:'manage',id:'digimon'},{menu:'manage',id:'cageEdit'},{menu:'manage',id:'tamer'},{menu:'manage',id:'schedule'},
+  // Flows rather than entries: save & quit to the title and continue; the page
+  // hidden behind another tab and back; a double tap on one quick entry.
+  {flow:'title'},{flow:'background'},{flow:'doubleTap',id:'shop'}];
 
 function observers(save){
   try{if(!localStorage.getItem('championshipModernSave:v1'))localStorage.setItem('championshipModernSave:v1',save);}catch{}
@@ -156,6 +159,45 @@ function observers(save){
     }
     return await screen()==='RAISING_HOME'&&!await dialogOpen();
   }
+  async function enterFromTitle(){
+    await page.locator('#cm-login').waitFor({state:'attached'});
+    if(await page.locator('#cm-film-skip').isVisible().catch(()=>false))await page.locator('#cm-film-skip').click().catch(()=>{});
+    await page.waitForFunction(()=>document.querySelector('#cm-login')?.disabled===false);
+    if(await page.locator('#cm-login').isVisible())await page.locator('#cm-login').click();
+    await page.locator('#cm-continue').click();
+  }
+  async function runFlow(entry){
+    if(entry.flow==='title'){
+      await page.locator('.cm-toolbar__cell[data-icon="system"]').click();
+      await page.locator('[data-entry-id="saveQuit"]:not(.cm-toolbar__quick-entry)').first().click();
+      await page.waitForFunction(()=>!document.getElementById('cm-root')||document.getElementById('cm-root').hidden||document.querySelector('#cm-continue,#cm-login')?.getClientRects().length,null,{timeout:30000});
+      const opened='TITLE';await enterFromTitle();await ranchReady();return {opened,returned:true};
+    }
+    if(entry.flow==='background'){
+      // Headless Chromium keeps a page visible behind another tab, so the visibility
+      // handlers are driven with a labelled synthetic hidden/visible pair (as in the
+      // evolution streaming test). This is not iOS process suspension.
+      const toggle=state=>page.evaluate(state=>{
+        if(state==='hidden'){Object.defineProperty(document,'visibilityState',{configurable:true,get:()=>'hidden'});Object.defineProperty(document,'hidden',{configurable:true,get:()=>true});}
+        else{delete document.visibilityState;delete document.hidden;}
+        document.dispatchEvent(new Event('visibilitychange'));
+        if(state==='hidden')dispatchEvent(new PageTransitionEvent('pagehide',{persisted:true}));else dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));
+      },state);
+      await toggle('hidden');await page.waitForTimeout(2500);await toggle('visible');await page.waitForTimeout(1500);
+      await ranchReady();return {opened:'synthetic-hidden->visible',returned:await page.evaluate(()=>document.visibilityState==='visible')};
+    }
+    if(entry.flow==='doubleTap'){
+      await page.evaluate(()=>{const d=globalThis.__sweep;d.screens=[];const root=document.getElementById('cm-root');
+        d.screenObserver?.disconnect();d.screenObserver=new MutationObserver(()=>d.screens.push(root.dataset.activeScreen));
+        d.screenObserver.observe(root,{attributes:true,attributeFilter:['data-active-screen']});});
+      await page.evaluate(id=>{const el=document.querySelector(`.cm-toolbar__quick-entry[data-quick-id="${id}"]`);el.click();el.click();},entry.id);
+      await page.waitForTimeout(3000);const opened=await screen();
+      const returned=await leaveToRanch();if(returned)await ranchReady();
+      const screens=await page.evaluate(()=>{const d=globalThis.__sweep;d.screenObserver.disconnect();return d.screens;});
+      return {opened,returned,screens};
+    }
+    throw Error('UNKNOWN_FLOW');
+  }
   const results={schemaVersion:1,label:LABEL,buildId:build.buildId,artifactCommit:build.commit,timezoneId,cycles:CYCLES,
     measurement:'Loopback built artifact, Chromium SwiftShader, Pixel 7 emulation; not an iPhone measurement',baseline:null,cycleMetrics:[],entries:[],events};
   try{
@@ -168,9 +210,11 @@ function observers(save){
     console.log(JSON.stringify({baseline:results.baseline}));
     for(let cycle=1;cycle<=CYCLES;cycle++){
       for(const entry of ENTRIES){
-        current=`${entry.menu}:${entry.id}`;const before=events.length,t0=Date.now();
-        let opened=null,returned=false,error=null;
+        current=entry.flow?`flow:${entry.flow}`:`${entry.menu}:${entry.id}`;const before=events.length,t0=Date.now();
+        let opened=null,returned=false,error=null,extra={};
         try{
+          if(entry.flow){const r=await runFlow(entry);opened=r.opened;returned=r.returned;if(r.screens)extra.screens=r.screens;current='ranch';}
+          else{
           await openEntry(entry);
           await page.waitForFunction(()=>document.getElementById('cm-root')?.dataset.activeScreen!=='RAISING_HOME'
             ||[...document.querySelectorAll('[role=dialog],dialog[open],.cm-dialog')].some(e=>e.getClientRects().length),null,{timeout:15000}).catch(()=>{});
@@ -178,8 +222,9 @@ function observers(save){
           await page.screenshot({path:path.join(OUT,`c${cycle}-${entry.id}.png`)}).catch(()=>{});
           returned=await leaveToRanch();
           if(returned){current='ranch';await ranchReady();}
+          }
         }catch(e){error=String(e.message).split('\n')[0].slice(0,200);}
-        const row={cycle,entry:`${entry.menu}:${entry.id}`,opened,dialog:opened==='RAISING_HOME',returned,ms:Date.now()-t0,error,
+        const row={cycle,entry:entry.flow?`flow:${entry.flow}`:`${entry.menu}:${entry.id}`,opened,dialog:opened==='RAISING_HOME',returned,ms:Date.now()-t0,error,...extra,
           events:events.slice(before).map(e=>e.kind)};
         results.entries.push(row);console.log(JSON.stringify(row));
         if(!returned){
