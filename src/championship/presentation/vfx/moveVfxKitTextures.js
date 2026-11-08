@@ -424,7 +424,7 @@ const SHEETS = Object.freeze({
   crack: {width: 64, height: 32, frames: 1, fn(x, y) {
     const line = Math.abs(y - Math.sin(x * 7) * 0.25 - x * 0.1);
     const branch = x > -0.3 && x < 0.3 ? Math.abs(y + 0.4 - (x + 0.3) * 1.2) : 9;
-    return line < 0.1 || branch < 0.07 ? 0.45 : 0;
+    return line < 0.04 || branch < 0.03 ? 0.75 : line < 0.1 || branch < 0.07 ? 0.45 : 0;
   }},
   // A drifting cloud of mist or spores, its lobes rolling (looping).
   mist: {width: 64, height: 48, frames: 8, loop: true, smoke: true, fn(x, y, t, n) {
