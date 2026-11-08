@@ -1,6 +1,6 @@
 # 牧場與進化前「正在載入夥伴外觀…」：可重現診斷、根因與修正（2026-11-08）
 
-狀態：第一批修正已提交於工作分支 `claude/inspiring-mayer-gyxhot`，**未合併、未發布**。Owner 已於 2026-11-08 核准三個原始檔的公開建置雜湊更新（[PUBLICATION_APPROVAL.json](PUBLICATION_APPROVAL.json)）；合併與部署不在該次核准範圍內。
+狀態：第一批修正經 Owner 於 2026-11-08 核准三個原始檔的公開建置雜湊（[PUBLICATION_APPROVAL.json](PUBLICATION_APPROVAL.json)），並另行選擇「合併並部署」後，已合併（PR #193）並發布到正式站；正式站實測見 PR #193 的紀錄。第 10–11 節中「尚未部署」「仍需核准」等字句是當時的狀態，保留原文。後續的 S1 修正與全系統巡檢見 [system-sweep-2026-11-08](../system-sweep-2026-11-08/REPORT_ZH_TW.md)。
 
 ## 1. 基準與環境
 

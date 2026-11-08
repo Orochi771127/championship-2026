@@ -1,6 +1,8 @@
 # Cyber Partner: Tournament / 網線拍檔：錦標賽 — Documentation Hub
 
-- [2026-11-08 牧場與進化前「正在載入夥伴外觀…」：可重現診斷、根因、修正與待核准雜湊（工作分支，未發布）](reports/ranch-load-2026-11-08/REPORT_ZH_TW.md)
+- [2026-11-08 全系統巡檢與第二批修正：場景巡檢 bot、heap 鑑識、花費點崩潰一致性（S1 催化、S2 轉生、S3 照護圖洩漏；工作分支，待核准雜湊，未發布）](reports/system-sweep-2026-11-08/REPORT_ZH_TW.md)
+
+- [2026-11-08 牧場與進化前「正在載入夥伴外觀…」：可重現診斷、根因、修正（#193 已合併並發布）](reports/ranch-load-2026-11-08/REPORT_ZH_TW.md)
 
 - [2026-11-03 新遊戲開場故事與愛醬導覽（Owner 核准 layered v3，本機首版，未發布）](reports/onboarding-ai-chan-2026-11-03/REPORT_ZH_TW.md)
 
