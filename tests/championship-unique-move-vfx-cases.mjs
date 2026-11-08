@@ -173,6 +173,40 @@ test("a thrown object stays that object: the mushroom move plants a mushroom tha
   assert.match(layer, /planted: stage === 'body' && moveVfxArchetypeIsPlanted\(archetype\)/);
 });
 
+test("remade cells: every brief names real sequences and drawings, and a reference cell comes back remade", async () => {
+  const profiles = (await import("../src/data/championship/battleEffectProfiles.json", { with: { type: "json" } })).default;
+  const { REMADE_EFFECT_BRIEFS, BRIEF_PALETTES } = await import("../src/championship/presentation/vfx/remadeEffectBriefs.js");
+  const { DRAWN_VFX_SPRITES } = await import("../src/championship/presentation/vfx/drawnVfxSprites.js");
+  const { createRemadeEffectArt, remadeCellLook, REMADE_CELL_SOURCE, REMADE_CELL_SCALE } = await import("../src/championship/presentation/vfx/remadeEffectCells.js");
+  const families = new Map(profiles.banks.map((b, i) => [b.name.replace(/^e003_/, ""), i + 1]));
+  for (const [family, brief] of Object.entries(REMADE_EFFECT_BRIEFS)) {
+    const bankId = families.get(family);
+    assert.ok(bankId, `${family} is an effect family`);
+    assert.ok(brief.sequences.length <= profiles.banks[bankId - 1].sequences.length, `${family} has no extra sequences`);
+    for (const [sequence, s] of profiles.banks[bankId - 1].sequences.entries()) for (const { cell } of s.frames) {
+      const look = remadeCellLook(bankId, cell, { frame: [0, 0, 16, 16], origin: [8, 8], blank: false });
+      assert.ok(look, `${family} ${sequence}:${cell}`);
+      for (const layer of look.layers) if (layer.drawn) assert.ok(DRAWN_VFX_SPRITES[layer.drawn], `${family} draws ${layer.drawn}`);
+    }
+  }
+  for (const [name, s] of Object.entries(DRAWN_VFX_SPRITES)) assert.ok(s.rows.length === s.h && s.rows.every(r => r.length === s.w), `${name} grid`);
+  assert.ok(BRIEF_PALETTES.VIOLET && BRIEF_PALETTES.BLAST);
+  const mushroom = remadeCellLook(families.get("kinoko00"), 3, { frame: [0, 0, 16, 16], origin: [7, 15], blank: false });
+  assert.equal(mushroom.layers[0].drawn, "mushroom_tall", "孢子彈's springing frame is the drawn tall mushroom");
+
+  const PIXI = fakePixi();
+  const reference = { frame: [0, 0, 16, 16], origin: [7, 8], pixelsPerNativePixel: 1, blank: false, texture: {} };
+  const base = { assetId: "t", getCell: (bankId, cell) => bankId === 20 ? { ...reference, cell } : { ...reference, artSource: "ORIGINAL_SHARED_REVIEW" }, dispose: () => "base" };
+  const art = createRemadeEffectArt({ PIXI, base, doc });
+  const remade = art.getCell(20, 6);
+  assert.equal(remade.artSource, REMADE_CELL_SOURCE);
+  assert.equal(remade.pixelsPerNativePixel, REMADE_CELL_SCALE);
+  assert.deepEqual(remade.origin, [7 * REMADE_CELL_SCALE, 8 * REMADE_CELL_SCALE], "the native origin is kept, so the pool places it where the old cell stood");
+  assert.equal(art.getCell(1, 0).artSource, "ORIGINAL_SHARED_REVIEW", "an original cell passes through");
+  assert.equal(art.getCell(20, 6), remade, "cached");
+  art.releaseRemade();
+});
+
 test("the kit's sigil, burst and headless trail", () => {
   const PIXI = fakePixi(), front = new PIXI.Container(), ground = new PIXI.Container();
   const kit = createMoveVfxKit({ PIXI, front, ground, doc, quality: "saver" });

@@ -350,6 +350,38 @@ const SHEETS = Object.freeze({
     const spot = [[-0.25, -0.3, 0.16], [0.28, 0.1, 0.14], [-0.1, 0.45, 0.12]].some(([cx, cy, r]) => Math.hypot(x - cx, y - cy) < r);
     return inside ? (spot ? 0.95 : 0.5 + (1 - smooth(0, 0.5, Math.hypot(x + 0.25, y + 0.4))) * 0.3) : 0;
   }},
+  // An explosion built of several fireballs: they swell out from a hot core,
+  // then cool and break into fragments (8 frames across the blast).
+  blast: {width: 64, height: 64, frames: 8, fn(x, y, t, n) {
+    const g = 1 - (1 - Math.min(1, t * 1.8)) ** 3;
+    let v = 1 - Math.hypot(x, y + 0.05) / (0.18 + 0.32 * g);
+    for (let i = 0; i < 7; i++) {
+      const a = i * TAU / 7 + 0.4, r = (0.2 + 0.3 * g) * (0.8 + 0.2 * Math.sin(i * 2.3));
+      v = Math.max(v, 1 - Math.hypot(x - Math.cos(a) * 0.36 * g, y - Math.sin(a) * 0.3 * g + 0.05) / r);
+    }
+    if (v <= 0) return 0;
+    if (t > 0.5 && n(x * 44 + 64, y * 44 + 64) < (t - 0.5) * 1.9) return 0;
+    const hot = Math.hypot(x, y) < 0.3 * (1 - t) ? 0.3 : 0;
+    return Math.min(1, 0.45 + v * 0.55 + hot - t * 0.25);
+  }},
+  // A splash: drops thrown up and out from a low ring (6 frames).
+  splash: {width: 64, height: 48, frames: 6, fn(x, y, t) {
+    let v = 0;
+    for (let i = 0; i < 9; i++) {
+      const a = -Math.PI * (0.1 + 0.8 * i / 8), reach = 0.15 + 0.75 * t;
+      const cx = Math.cos(a) * reach, cy = 0.55 + Math.sin(a) * reach * 1.1 + t * t * 0.6, r = 0.15 * (1 - t * 0.45) * (i % 2 ? 0.8 : 1);
+      v = Math.max(v, 1 - Math.hypot(x - cx, y - cy) / r);
+    }
+    const ring = Math.abs(Math.hypot(x / (0.3 + 0.6 * t), (y - 0.7) / 0.18) - 1) < 0.25 && t < 0.7 ? 0.5 : 0;
+    return v > 0 ? 0.55 + v * 0.45 : ring;
+  }},
+  // The tail end of an effect: fragments drifting apart and thinning out (4 frames).
+  debris: {width: 48, height: 48, frames: 4, fn(x, y, t) {
+    const cell = 0.2, gx = Math.floor((x / (0.6 + 0.5 * t) + 1) / cell), gy = Math.floor((y / (0.6 + 0.5 * t) + 1) / cell);
+    let h = Math.imul(gx * 374761393 + gy * 668265263, 1274126177) >>> 0; h = ((h ^ (h >>> 13)) >>> 0) / 4294967296;
+    const lx = ((x / (0.6 + 0.5 * t) + 1) / cell) % 1, ly = ((y / (0.6 + 0.5 * t) + 1) / cell) % 1;
+    return h < 0.32 * (1 - t * 0.7) && lx > 0.2 && lx < 0.8 && ly > 0.2 && ly < 0.8 && Math.hypot(x, y) < 0.95 ? 0.55 + h : 0;
+  }},
   // A lightning bolt running right: a zigzag core with a halo and a fork, flickering (looping).
   bolt: {width: 64, height: 32, frames: 4, loop: true, fn(x, y, t) {
     const zig = u => { const v = u * 2.6 + t * 1.7; return (Math.abs(((v % 1) + 1) % 1 - 0.5) * 4 - 1) * 0.5 * Math.cos(u * 1.3); };
@@ -519,7 +551,24 @@ export function paintMoveVfxCell({width, height, layers, doc = globalThis.docume
   canvas.width = width; canvas.height = height;
   const context = canvas.getContext('2d');
   const image = context.createImageData(width, height), out = image.data;
-  for (const {name, palette, box, t = 0, light = false, alpha = 1, flipX = false} of layers) {
+  for (const {name, palette, box, t = 0, light = false, alpha = 1, flipX = false, drawn = null, at = [0, 0], fixed = {}, zoom = 1} of layers) {
+    // A hand-drawn sprite (drawnVfxSprites.js) lands pixel for pixel at `at`, tone keys in the palette's colours.
+    if (drawn) {
+      const tone = {o: rgb(palette.edge).map(v => v * 0.38), e: rgb(palette.edge), m: rgb(palette.main),
+        x: rgb(palette.main).map((v, i) => (v + rgb(palette.core)[i]) / 2), c: rgb(palette.core)};
+      // `zoom` (a whole number) doubles or triples every drawn pixel, so a big thing stays crisp.
+      for (let y = 0; y < drawn.h * zoom; y++) for (let x = 0; x < drawn.w * zoom; x++) {
+        const sx = Math.floor(x / zoom), key = drawn.rows[Math.floor(y / zoom)][flipX ? drawn.w - 1 - sx : sx];
+        const px = at[0] + x, py = at[1] + y;
+        if (key === '.' || px < 0 || py < 0 || px >= width || py >= height) continue;
+        const colour = tone[key] ?? (fixed[key] !== undefined ? rgb(fixed[key]) : null);
+        if (!colour) continue;
+        const o = (py * width + px) * 4, under = out[o + 3] / 255, total = alpha + under * (1 - alpha);
+        for (let i = 0; i < 3; i++) out[o + i] = (colour[i] * alpha + out[o + i] * under * (1 - alpha)) / total;
+        out[o + 3] = Math.round(total * 255);
+      }
+      continue;
+    }
     const sheet = SHEETS[name];
     if (!sheet) continue;
     const k = noise.size / Math.max(sheet.width, sheet.height), n = (u, v) => noise.at(u * k, v * k);

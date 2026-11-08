@@ -33,48 +33,56 @@ export const BRIEF_PALETTES = Object.freeze({
   TEAL: Object.freeze({core: 0xeafff8, main: 0x6ae0c8, edge: 0x1a8a80, smoke: 0xa0e0d0}),
   BOLTBLUE: Object.freeze({core: 0xffffff, main: 0x8c9cff, edge: 0x3436a6, smoke: 0x7a80c8}),
   BLUEFIRE: Object.freeze({core: 0xe8fbff, main: 0x4ab0ff, edge: 0x1840c0, smoke: 0x8ab8e8}),
-  GREENFIRE: Object.freeze({core: 0xf0ffd0, main: 0x5ad040, edge: 0x1a7a28, smoke: 0x70a060})
+  GREENFIRE: Object.freeze({core: 0xf0ffd0, main: 0x5ad040, edge: 0x1a7a28, smoke: 0x70a060}),
+  FISH: Object.freeze({core: 0xeef8ff, main: 0x7aa8d4, edge: 0x2a4a7a, smoke: 0x9ab8d8}),
+  // An explosion's own fire: a white-yellow heart, golden flame, a hot red rim.
+  BLAST: Object.freeze({core: 0xfffde8, main: 0xffb81c, edge: 0xd8280c, smoke: 0x5a3a2a})
 });
 
 // Shared lines.
-const BANG = 'burst grow 0.85 1.3 fade 0.3 palette fire';
+const BANG = '- drawn blast_0,blast_1,blast_2,blast_3,blast_4,blast_5 palette BLAST';
 const SPARK = c => `flare light scale 0.55 palette ${c}`;
-const SMOKE = c => [`mist grow 0.3 0.7 palette ${c}`, `mist grow 0.8 1 palette ${c}`, `mist grow 1 1.12 fade 0.2 palette ${c}`];
+const SMOKE = c => [`- drawn puff_0,puff_1 palette ${c}`, `- drawn puff_1,puff_2 palette ${c}`, `- drawn puff_2,puff_3 fade 0.4 palette ${c}`];
 const BEAM = c => [`beam light palette ${c}`, `glow light palette ${c}`, `beam light palette ${c}`, `orb palette ${c}`];
-const BALL = c => [`drop grow 0.4 1 palette ${c}`, `drop palette ${c}`, `burst grow 0.8 1.2 fade 0.2 palette ${c}`];
+const SPLASH = c => `- drawn splash_0,splash_1,splash_2 palette ${c}`;
+const BALL = c => [`drop grow 0.4 1 palette ${c}`, `drop palette ${c}`, SPLASH(c)];
 
 export const REMADE_EFFECT_BRIEFS = Object.freeze({
   // 孢子彈: a glowing spore is thrown, a mushroom pops out of the ground --
   // squashed flat, stretched tall, then standing -- and bursts into a cloud of spores.
   kinoko00: {palette: 'VIOLET', sequences: [
-    {sheet: 'orb', frames: [{box: [-4, -4, 9, 9], t: 0}, {box: [-5, -5, 11, 11], t: 0.5}]},
-    {sheet: 'mushroom', frames: [{box: [-8, -6, 17, 7]}, {box: [-4, -15, 9, 16]}, {box: [-7, -13, 15, 14]}]},
-    {sheet: 'mist', frames: [
-      {box: [-6, -6, 13, 12], t: 0},
-      {layers: [{sheet: 'mist', box: [-8, -8, 17, 16], t: 0.35}, {sheet: 'ball', box: [-2, -9, 4, 4]}]},
-      {layers: [{sheet: 'mist', box: [-8, -7, 17, 14], t: 0.7, alpha: 0.6}, {sheet: 'ball', box: [-8, -8, 3, 3]}, {sheet: 'ball', box: [5, -6, 3, 3]}, {sheet: 'ball', box: [-1, 4, 3, 3]}]}
-    ]}
+    {drawn: ['spore_0', 'spore_1']},
+    {drawn: ['mushroom_flat', 'mushroom_tall', 'mushroom'], anchor: 'bottom', at: [0, 1]},
+    {drawn: ['puff_1', 'puff_2', 'puff_3'], at: [0, -2]}
   ]},
-  battle_popup: {sequences: ['mist grow 0.4 1.2 fade 0.3 palette WHITE']},
+  battle_popup: {sequences: ['- drawn puff_0,puff_1,puff_2,puff_3 palette WHITE']},
   specialtime: {sequences: ['beam light palette ice', 'beam light palette ice', 'beam light fade 0.3 palette ice']},
-  banana00: {sequences: ['banana palette BANANA', 'mist grow 0.5 1.2 fade 0.2 palette CREAM']},
-  fish00: {sequences: ['crest grow 0.5 1 palette water', 'fish palette STEEL', 'burst grow 0.7 1.2 fade 0.2 palette water']},
+  banana00: {sequences: ['banana palette BANANA', '- drawn puff_0,puff_1,puff_2,puff_3 palette CREAM']},
+  // A shoal of little fish leaps out of a splash and arcs over, tails flapping.
+  fish00: {palette: 'FISH', sequences: [
+    {frames: [{drawn: 'splash_0', palette: 'water'},
+      {layers: [{drawn: 'splash_1', palette: 'water'}, {drawn: 'fish_0', at: [-1, -5]}]},
+      {layers: [{drawn: 'splash_1', palette: 'water'}, {drawn: 'fish_1', at: [2, -8]}, {drawn: 'fish_0', at: [-4, -4]}]},
+      {layers: [{drawn: 'splash_2', palette: 'water'}, {drawn: 'fish_0', at: [4, -9]}, {drawn: 'fish_1', at: [-3, -7]}, {drawn: 'fish_0', at: [0, -2]}]}]},
+    {frames: [{layers: [{drawn: 'fish_0', at: [-6, 0]}, {drawn: 'fish_1', at: [0, -5]}, {drawn: 'fish_0', at: [6, -1]}]},
+      {layers: [{drawn: 'fish_1', at: [-5, -4]}, {drawn: 'fish_0', at: [1, -1]}, {drawn: 'fish_1', at: [6, -5]}]}]},
+    SPLASH('water')]},
   cogwheel00: {sequences: ['gear palette GOLD', 'gear palette GOLD', 'shard grow 0.8 1.3 fade 0.2 palette GOLD']},
   airneedle00: {sequences: ['crescent grow 0.4 1 palette wind', 'streak light palette wind', 'ring light grow 0.6 1.2 fade 0.2 palette wind']},
   hasyuriken00: {sequences: ['leaf palette nature', 'leaf palette nature']},
-  missile00: {sequences: ['missile palette STEEL', 'missile palette STEEL', BANG]},
+  missile00: {sequences: ['- drawn missile palette fire', '- drawn missile palette fire', BANG]},
   pointer00: {sequences: ['arrow scale 0.6 palette STEEL', 'arrow palette STEEL', 'flare light grow 0.6 1.2 fade 0.2 palette light']},
   raiun00: {sequences: ['mist grow 0.9 1 palette GREY', 'bolt palette thunder', 'mist grow 1 1.2 fade 0.2 palette GREY']},
   syuriken00: {sequences: ['shuriken palette STEEL', 'shuriken palette STEEL']},
   tuno00: {sequences: [SPARK('fire'), 'drill palette PURPLEFLAME', BANG]},
-  tyusyaki00: {sequences: ['mist grow 0.4 1 palette WHITE', 'syringe palette STEEL', {sheet: 'syringe', palette: 'STEEL', frames: [{}, {}, {}, {}, {},
+  tyusyaki00: {sequences: ['- drawn puff_0,puff_1 palette WHITE', 'syringe palette STEEL', {sheet: 'syringe', palette: 'STEEL', frames: [{}, {}, {}, {}, {},
     {sheet: 'mist', palette: 'WHITE'}, {sheet: 'mist', palette: 'WHITE', alpha: 0.65}, {sheet: 'mist', palette: 'WHITE', alpha: 0.35}]}]},
   waterball00: {sequences: BALL('water')},
   toyfire00: {sequences: [SPARK('fire'), 'comet palette fire', BANG]},
-  bubble01: {sequences: ['bubble grow 0.4 0.8 palette water', 'bubble palette water', 'burst grow 0.7 1.1 fade 0.2 palette water']},
-  fireball_w00: {sequences: [SPARK('water'), 'comet palette BLUEFIRE', 'burst grow 0.8 1.25 fade 0.3 palette water']},
-  hart00: {sequences: ['heart grow 0.3 0.6 palette RED', 'heart palette RED', 'ring light grow 0.5 1.2 fade 0.2 palette RED']},
-  rocketpunch00: {sequences: ['mist grow 0.5 1 fade 0.3 palette GREY', 'missile palette STEEL', BANG]},
+  bubble01: {sequences: ['bubble grow 0.4 0.8 palette water', 'bubble palette water', SPLASH('water')]},
+  fireball_w00: {sequences: [SPARK('water'), 'comet palette BLUEFIRE', '- drawn blast_0,blast_1,blast_2,blast_3,blast_4,blast_5 palette BLUEFIRE']},
+  hart00: {sequences: ['heart grow 0.3 0.6 palette RED', '- drawn heart palette RED', 'ring light grow 0.5 1.2 fade 0.2 palette RED']},
+  rocketpunch00: {sequences: ['- drawn puff_0,puff_1 fade 0.4 palette GREY', '- drawn rocketfist palette fire', BANG]},
   catseye00: {sequences: [null, 'eye palette GOLD']},
   koenryu00: {sequences: ['bolt palette BOLTBLUE', 'bolt palette BOLTBLUE', BANG]},
   sumiburesu00: {sequences: BALL('INK')},
@@ -87,15 +95,15 @@ export const REMADE_EFFECT_BRIEFS = Object.freeze({
   magmaball00: {sequences: [SPARK('fire'), 'comet palette fire', BANG]},
   star00: {sequences: ['star grow 0.3 0.6 palette GOLD', 'star palette GOLD', 'flare light palette light']},
   firehurricane00: {sequences: [SPARK('fire'), 'comet palette fire', BANG]},
-  dirtysaucer00: {sequences: ['bomb palette OLIVE', 'bomb palette OLIVE', 'flare light grow 0.8 1.3 fade 0.2 palette thunder']},
+  dirtysaucer00: {sequences: ['- drawn bomb palette OLIVE', '- drawn bomb palette OLIVE', 'flare light grow 0.8 1.3 fade 0.2 palette thunder']},
   crescent00: {sequences: [SPARK('light'), 'crescent palette GOLD', 'flare light grow 0.8 1.3 fade 0.2 palette light']},
-  cherrybomb00: {sequences: ['flare light scale 0.4 palette fire', 'cherry palette RED', BANG]},
+  cherrybomb00: {sequences: ['flare light scale 0.4 palette fire', '- drawn cherry palette RED', BANG]},
   groundzero00: {sequences: ['arrow palette RED', 'arrow palette RED', BANG]},
   trident00: {sequences: ['arrow palette STEEL', 'arrow palette STEEL', 'flare light grow 0.8 1.3 fade 0.2 palette thunder']},
   spear00: {sequences: ['arrow palette STEEL', 'arrow palette STEEL', 'flare light grow 0.8 1.3 fade 0.2 palette thunder']},
-  bigsmileybomber00: {sequences: ['bomb palette RED', 'bomb palette INK', BANG]},
-  bitbomb00: {sequences: [SPARK('fire'), 'bomb palette INK', BANG]},
-  jetarrow00: {sequences: ['beam light palette water', 'beam light palette water', 'burst grow 0.8 1.2 fade 0.2 palette water']},
+  bigsmileybomber00: {sequences: ['- drawn bomb palette RED', '- drawn bomb palette INK', BANG]},
+  bitbomb00: {sequences: [SPARK('fire'), '- drawn bomb palette INK', BANG]},
+  jetarrow00: {sequences: ['beam light palette water', 'beam light palette water', SPLASH('water')]},
   blacksmoke00: {sequences: SMOKE('GREY')},
   blacksmoke01: {sequences: SMOKE('OLIVE')},
   blacksmoke02: {sequences: SMOKE('fire')},
@@ -106,11 +114,11 @@ export const REMADE_EFFECT_BRIEFS = Object.freeze({
   colorfulspark00: {sequences: [SPARK('psychic'), 'bolt palette psychic', 'bolt fade 0.2 palette thunder']},
   fraucanon00: {sequences: ['flare light scale 0.4 palette nature', 'beam light palette nature', BANG]},
   heavensgate00: {sequences: ['arch grow 0.4 1 palette GOLD', 'beam light palette wind', 'beam light palette wind', 'orb palette wind', 'arch palette GOLD', 'arch grow 1 0.4 fade 0.2 palette GOLD']},
-  genocideattack00: {sequences: ['missile palette LILAC', 'missile palette LILAC', BANG]},
-  smileybomb00: {sequences: ['bomb palette RED', 'bomb palette RED', BANG]},
+  genocideattack00: {sequences: ['- drawn missile_dart palette PURPLEFLAME', '- drawn missile_dart palette PURPLEFLAME', BANG]},
+  smileybomb00: {sequences: ['- drawn bomb palette RED', '- drawn bomb palette RED', BANG]},
   thunderjavelin00: {sequences: ['orb grow 0.5 1 palette thunder', 'bolt palette thunder', 'bolt fade 0.2 palette ice']},
   lightball01: {sequences: ['orb grow 0.3 1 palette thunder', 'orb palette thunder', 'comet palette thunder']},
-  gigadestroyer00: {sequences: ['missile palette STEEL', 'missile palette STEEL', BANG]},
+  gigadestroyer00: {sequences: ['- drawn missile_dart palette INK', '- drawn missile_dart palette INK', BANG]},
   haguro00: {sequences: ['slash palette INK', 'slash palette INK', 'slash fade 0.2 palette INK']},
   infinitiarrow00: {sequences: ['flare light palette fire', 'arrow palette fire', 'flare light grow 0.8 1.2 fade 0.2 palette thunder']},
   rose00: {sequences: ['rose palette RED', 'petal palette RED', 'flare light palette RED']},
@@ -129,15 +137,15 @@ export const REMADE_EFFECT_BRIEFS = Object.freeze({
   tatumaki01: {sequences: ['streak light palette ice', 'funnel palette ice', 'streak light fade 0.2 palette ice']},
   ropear01: {sequences: ['streak light palette ice', 'funnel palette ice', 'streak light fade 0.2 palette ice']},
   crashsymphony00: {sequences: [SPARK('light'), 'ring light palette GOLD', 'ring light grow 1 1.3 fade 0.2 palette GOLD']},
-  hartbreak00: {sequences: ['heart grow 0.3 0.6 palette INK', 'heart palette INK', 'ring light grow 0.5 1.2 fade 0.2 palette INK']},
+  hartbreak00: {sequences: ['heart grow 0.3 0.6 palette INK', '- drawn heart palette INK', 'ring light grow 0.5 1.2 fade 0.2 palette INK']},
   heaven00: {sequences: ['beam light palette wind', 'beam light palette wind', 'beam light palette wind', 'orb palette wind']},
   myorunirusanda00: {sequences: ['orb grow 0.5 1 palette TEAL', 'bolt palette TEAL', 'bolt fade 0.2 palette thunder']},
   soloblue00: {sequences: ['flare light scale 0.4 palette wind', 'ring light palette TEAL', 'ring light grow 1 1.3 fade 0.2 palette TEAL']},
   walaser01: {sequences: ['flare light scale 0.4 palette neutral', 'ring light palette GREY', 'ring light grow 1 1.3 fade 0.2 palette GREY']},
-  magmaball03: {sequences: [SPARK('water'), 'comet palette BLUEFIRE', 'burst grow 0.85 1.3 fade 0.3 palette water']},
-  magmaball04: {sequences: [SPARK('nature'), 'comet palette GREENFIRE', 'burst grow 0.85 1.3 fade 0.3 palette nature']},
+  magmaball03: {sequences: [SPARK('water'), 'comet palette BLUEFIRE', '- drawn blast_0,blast_1,blast_2,blast_3,blast_4,blast_5 palette BLUEFIRE']},
+  magmaball04: {sequences: [SPARK('nature'), 'comet palette GREENFIRE', '- drawn blast_0,blast_1,blast_2,blast_3,blast_4,blast_5 palette GREENFIRE']},
   magmaball06: {sequences: [SPARK('fire'), 'comet palette fire', BANG]},
-  foxfire00: {sequences: ['orb palette BLUEFIRE', 'comet palette BLUEFIRE', 'burst grow 0.9 1.35 fade 0.3 palette water']},
+  foxfire00: {sequences: ['orb palette BLUEFIRE', 'comet palette BLUEFIRE', '- drawn blast_0,blast_1,blast_2,blast_3,blast_4,blast_5 palette BLUEFIRE']},
   kiwimonsmall00: {sequences: [null, 'feather palette WOOD']},
   waterball01: {sequences: BALL('water')},
   firewing01: {sequences: [SPARK('dark'), 'comet palette PURPLEFLAME', 'flare light palette fire']},
@@ -158,9 +166,9 @@ export const REMADE_EFFECT_BRIEFS = Object.freeze({
   hammerspark: {sequences: ['bolt palette thunder', 'ring light palette thunder', 'streak light palette thunder']},
   kumo00: {sequences: ['mist grow 0.9 1.05 palette INK', 'mist grow 1 1.1 fade 0.2 palette INK']},
   kumo01: {sequences: ['mist grow 0.9 1.05 palette OLIVE', 'mist grow 1 1.1 fade 0.2 palette OLIVE']},
-  missile02: {sequences: ['missile palette water', 'missile palette water', BANG]},
-  missile04: {sequences: ['mist grow 0.5 1 fade 0.3 palette CREAM', 'missile palette STEEL', BANG]},
-  giantmissile00: {sequences: ['missile palette STEEL', 'mist grow 0.6 1.1 fade 0.2 palette GREY', BANG]},
+  missile02: {sequences: ['- drawn missile_finned palette water', '- drawn missile_finned palette water', BANG]},
+  missile04: {sequences: ['- drawn puff_0,puff_1 fade 0.4 palette CREAM', '- drawn missile_fat zoom 2 palette fire', BANG]},
+  giantmissile00: {sequences: ['- drawn missile_big palette GREENFIRE', '- drawn puff_1,puff_2,puff_3 palette GREY', BANG]},
   yukigumo00: {sequences: ['mist grow 0.4 0.8 palette LILAC', 'mist grow 0.9 1.05 palette LILAC', 'shard palette ice']},
   snowstorm: {sequences: [null, 'snowflake palette ice']},
   spiralbone00: {sequences: ['bone palette BONE', 'bolt palette thunder']},

@@ -432,6 +432,7 @@
     "src/championship/presentation/titleAssetVariant.js",
     "src/championship/presentation/titleImageLifecycle.js",
     "src/championship/presentation/vfx/captureStorageVfx.js",
+    "src/championship/presentation/vfx/drawnVfxSprites.js",
     "src/championship/presentation/vfx/elementVfxLayer.js",
     "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
     "src/championship/presentation/vfx/moveVfxKit.js",
@@ -442,6 +443,8 @@
     "src/championship/presentation/vfx/originalVfxCellArt.js",
     "src/championship/presentation/vfx/originalVfxSystemBindings.js",
     "src/championship/presentation/vfx/pixelateCanvas.js",
+    "src/championship/presentation/vfx/remadeEffectBriefs.js",
+    "src/championship/presentation/vfx/remadeEffectCells.js",
     "src/championship/presentation/vfx/unifiedMoveVfxResolver.js",
     "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
     "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
@@ -8563,6 +8566,7 @@
     "src/championship/presentation/titleAssetVariant.js",
     "src/championship/presentation/titleImageLifecycle.js",
     "src/championship/presentation/vfx/captureStorageVfx.js",
+    "src/championship/presentation/vfx/drawnVfxSprites.js",
     "src/championship/presentation/vfx/elementVfxLayer.js",
     "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
     "src/championship/presentation/vfx/moveVfxKit.js",
@@ -8573,6 +8577,8 @@
     "src/championship/presentation/vfx/originalVfxCellArt.js",
     "src/championship/presentation/vfx/originalVfxSystemBindings.js",
     "src/championship/presentation/vfx/pixelateCanvas.js",
+    "src/championship/presentation/vfx/remadeEffectBriefs.js",
+    "src/championship/presentation/vfx/remadeEffectCells.js",
     "src/championship/presentation/vfx/unifiedMoveVfxResolver.js",
     "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
     "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
@@ -40707,6 +40713,10 @@
         "sha256": "19c1d25f5019b5cf30c649def632af23484f6292fa02f6e534118f85b6be8026"
       },
       {
+        "path": "src/championship/presentation/vfx/drawnVfxSprites.js",
+        "sha256": "ab0546099175f4d99a1bd7271009a6c2a3ebd146b40e01a1ddcf05af078722c7"
+      },
+      {
         "path": "src/championship/presentation/vfx/elementVfxLayer.js",
         "sha256": "6983aa74f628433f49a987e7ce173c3b51f106bd63001933adf5eb4c41298233"
       },
@@ -40720,11 +40730,11 @@
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxKitTextures.js",
-        "sha256": "f458429083d2fd55e9b4c0863cda91e5098a2b1cff52987f9fdf942f7b0e6178"
+        "sha256": "e1c1a457741d2774c3ff9a2bdb745983e3074f678f58d1a1c4b8bebee4fa224d"
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxRecipes.js",
-        "sha256": "0fa0d0f9929f197e98ed1bb08d3acd4beaffbbf31ac00bd0f82cba2f4014871f"
+        "sha256": "3cb4893a6dc28f0f7352cc87f36ae2fd472e477c52f49d0c112004f0bf722d59"
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxSignatures.js",
@@ -40745,6 +40755,14 @@
       {
         "path": "src/championship/presentation/vfx/pixelateCanvas.js",
         "sha256": "ef9508f28929797c5cd9fee38f0465d9f590031cd31729012a2da41eee1b6345"
+      },
+      {
+        "path": "src/championship/presentation/vfx/remadeEffectBriefs.js",
+        "sha256": "2f2b7924187871f15beac563ab595311edba4e16df1277a1dbbc796b45ea8784"
+      },
+      {
+        "path": "src/championship/presentation/vfx/remadeEffectCells.js",
+        "sha256": "0ed748d686ccfd1ae87fdf2813d352e44bf3676dcd3e2849b398b4ff4ae8fde1"
       },
       {
         "path": "src/championship/presentation/vfx/unifiedMoveVfxResolver.js",
@@ -40876,7 +40894,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
-        "sha256": "0b33818878237462989e11a0b97e340dec25e05a45fe8051d4f01e9214b3fbbd"
+        "sha256": "f1072d3997b26514227367054370deb4fb19efecddf31595a0bdadbda6b1f762"
       },
       {
         "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
@@ -41472,7 +41490,7 @@
       },
       {
         "path": "src/data/championship/move-vfx-signatures.r1.json",
-        "sha256": "d1bbfbd2108c3bf9455dfcae8ec18acce19e85a8a73fdf042dbe72000d3b7a4f"
+        "sha256": "2af1fb544e43d538458506e88723ffdfe4e05964056b5dc6aec9fb90fac527bc"
       },
       {
         "path": "src/data/championship/move-vfx-themes.r1.json",

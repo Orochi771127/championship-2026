@@ -55,7 +55,39 @@
       y += ROW * 2 + 18;
     }
     $("evidence").textContent = `banks ${banks.length} · ${JSON.stringify(art.getRemadeDiagnostics())}`;
-    window.__remadeReview = {banks, diag: art.getRemadeDiagnostics()};
+    // Which way each family faces: the reference silhouette against the remake as drawn and mirrored
+    // (overlap of the two masks on the native grid). Review data only: it decides a brief's `flip`.
+    const mask = (c, w, h) => {
+      const r = app.renderer.extract.pixels(new PIXI.Sprite(c.texture)), k = c.pixelsPerNativePixel, m = new Uint8Array(w * h);
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) m[y * w + x] = r.pixels[((y * k) * r.width + x * k) * 4 + 3] > 64 ? 1 : 0;
+      return m;
+    };
+    const overlap = (a, b, w, h, flip) => { let both = 0, any = 0; for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const p = a[y * w + x], q = b[y * w + (flip ? w - 1 - x : x)]; both += p & q; any += p | q; } return any ? both / any : 0; };
+    // Where the bright, heavy end sits across the cell: -1 left .. +1 right (a fireball's head, a missile's flame, an arrowhead).
+    const lean = c => {
+      const r = app.renderer.extract.pixels(new PIXI.Sprite(c.texture)), w = r.width, h = r.height;
+      let sum = 0, at = 0, left = w, right = 0;
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+        const i = (y * w + x) * 4, a = r.pixels[i + 3] / 255; if (a < 0.25) continue;
+        const v = a * (r.pixels[i] + r.pixels[i + 1] + r.pixels[i + 2]) / 765; sum += v; at += v * x; left = Math.min(left, x); right = Math.max(right, x);
+      }
+      return sum && right > left ? ((at / sum - left) / (right - left)) * 2 - 1 : 0;
+    };
+    const facing = {};
+    for (const bankId of banks) {
+      let asIs = 0, mirrored = 0, agree = 0, disagree = 0;
+      for (const {cell} of cellsOf(bankId)) {
+        const ref = base.getCell(bankId, cell), own = art.getCell(bankId, cell);
+        if (!ref || ref.blank || !own || own === ref) continue;
+        const [, , w, h] = ref.frame, a = mask(ref, w, h), b = mask(own, w, h);
+        asIs += overlap(a, b, w, h, false); mirrored += overlap(a, b, w, h, true);
+        const p = lean(ref), q = lean(own);
+        if (Math.abs(p) > 0.12 && Math.abs(q) > 0.12) { if (Math.sign(p) === Math.sign(q)) agree += Math.abs(p); else disagree += Math.abs(p); }
+      }
+      facing[profiles.banks[bankId - 1].name.replace(/^e003_/, "")] = {asIs: +asIs.toFixed(2), mirrored: +mirrored.toFixed(2), agree: +agree.toFixed(2), disagree: +disagree.toFixed(2)};
+    }
+    window.__remadeReview = {banks, diag: art.getRemadeDiagnostics(), facing};
   </script>
 </body>
 </html>

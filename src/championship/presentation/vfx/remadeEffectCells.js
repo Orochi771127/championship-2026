@@ -21,9 +21,10 @@ import {battleFxFamilyForm, battleFxFamilyName, battleFxFamilyPalette, battleFxM
 import {createNoiseField, paintMoveVfxCell} from './moveVfxKitTextures.js';
 import {moveVfxObjectOfFamily} from './moveVfxRecipes.js';
 import {BRIEF_PALETTES, REMADE_EFFECT_BRIEFS} from './remadeEffectBriefs.js';
+import {DRAWN_VFX_FIXED, DRAWN_VFX_SPRITES} from './drawnVfxSprites.js';
 
-/** Texels per native pixel: the remade cells are drawn three times finer than the native grid. */
-export const REMADE_CELL_SCALE = 3;
+/** Texels per native pixel: remade cells are drawn twice as fine as the native grid, as the hand-drawn sprites are. */
+export const REMADE_CELL_SCALE = 2;
 export const REMADE_CELL_SOURCE = 'REMADE_PIXEL_KIT';
 
 // The stage each (bank, sequence) plays in the moves that name it: launch, body or hit.
@@ -62,8 +63,9 @@ function paletteOf(key) {
 }
 
 /**
- * A sequence written in words: "sheet [grow a b] [fade a] [scale k] [palette key] [light]",
- * e.g. "burst grow 0.4 1.2 fade 0.3 palette fire".
+ * A sequence written in words: "sheet [grow a b] [fade a] [scale k] [palette key] [light]
+ * [drawn a,b,c] [anchor bottom]", e.g. "burst grow 0.4 1.2 fade 0.3 palette fire" or
+ * "- drawn blast_1,blast_3,blast_5 palette fire" (a hand-drawn sprite per step).
  */
 function stageFromWords(words) {
   const w = words.trim().split(/\s+/), spec = {sheet: w[0]};
@@ -73,6 +75,9 @@ function stageFromWords(words) {
     else if (w[i] === 'scale') spec.scale = Number(w[++i]);
     else if (w[i] === 'palette') spec.palette = w[++i];
     else if (w[i] === 'light') spec.light = true;
+    else if (w[i] === 'drawn') spec.drawn = w[++i].split(',');
+    else if (w[i] === 'anchor') spec.anchor = w[++i];
+    else if (w[i] === 'zoom') spec.zoom = Number(w[++i]);
   }
   return spec;
 }
@@ -110,10 +115,19 @@ export function remadeCellLook(bankId, cell, reference) {
   const k = frame.scale ?? (spec.grow ? spec.grow[0] + (spec.grow[1] - spec.grow[0]) * progress : spec.scale ?? 1);
   const fadeAlpha = spec.fade !== undefined && progress > 0.5 ? 1 - (1 - spec.fade) * (progress - 0.5) * 2 : 1;
   const whole = [(-ox + 1) * k, (-oy + 1) * k, (fw - 2) * k, (fh - 2) * k];
+  // `rel: [x, y, w, h]` places a layer by fractions of the whole frame (a missile's flame behind its body).
+  const rel = r => [whole[0] + r[0] * whole[2], whole[1] + r[1] * whole[3], r[2] * whole[2], r[3] * whole[3]];
+  // A hand-drawn sprite: `drawn` names one (or, as a list, one per step of the sequence);
+  // `anchor` "bottom" stands it on the origin, otherwise it is centred there, moved by `at` native pixels.
+  const drawnName = list => Array.isArray(list) ? list[Math.min(list.length - 1, Math.round(progress * (list.length - 1)))] : list;
   const layers = (frame.layers ?? spec.layers ?? [{}]).map(layer => ({
-    sheet: layer.sheet ?? frame.sheet ?? spec.sheet, box: layer.box ?? frame.box ?? spec.box ?? whole,
+    drawn: drawnName(layer.drawn ?? frame.drawn ?? spec.drawn) ?? null, anchor: layer.anchor ?? frame.anchor ?? spec.anchor ?? 'center', at: layer.at ?? frame.at ?? [0, 0],
+    zoom: Math.max(1, Math.round(layer.zoom ?? frame.zoom ?? spec.zoom ?? 1)),
+    sheet: layer.sheet ?? frame.sheet ?? spec.sheet, box: layer.box ?? (layer.rel ? rel(layer.rel) : null) ?? frame.box ?? spec.box ?? whole,
     t: layer.t ?? t, alpha: (layer.alpha ?? frame.alpha ?? 1) * fadeAlpha, light: layer.light ?? spec.light ?? LIGHT.has(layer.sheet ?? frame.sheet ?? spec.sheet),
-    flipX: Boolean(layer.flipX ?? frame.flipX), palette: layer.palette ? paletteOf(layer.palette) : palette
+    // Native effect cells are drawn facing left (the pool mirrors them for the other side) and the
+    // kit's shapes face right, so a remade cell is mirrored unless its brief says `flipX: false`.
+    flipX: Boolean(layer.flipX ?? frame.flipX ?? spec.flipX ?? brief?.flipX ?? true), palette: layer.palette ? paletteOf(layer.palette) : palette
   }));
   return {family, stage, sequence: place.sequence, index: place.index, briefed: Boolean(brief), layers};
 }
@@ -133,9 +147,12 @@ export function createRemadeEffectArt({PIXI, base, doc = globalThis.document}) {
     const look = remadeCellLook(bankId, cell, reference);
     if (!look) return null;
     const [, , fw, fh] = reference.frame, [ox, oy] = reference.origin;
-    const canvas = paintMoveVfxCell({width: fw * S, height: fh * S, doc, noise, layers: look.layers.map(layer => ({
-      name: layer.sheet, palette: layer.palette, t: layer.t, light: layer.light, alpha: layer.alpha, flipX: layer.flipX,
-      box: [(ox + layer.box[0]) * S, (oy + layer.box[1]) * S, layer.box[2] * S, layer.box[3] * S]}))});
+    const canvas = paintMoveVfxCell({width: fw * S, height: fh * S, doc, noise, layers: look.layers.map(layer => {
+      const drawn = layer.drawn ? DRAWN_VFX_SPRITES[layer.drawn] ?? null : null, zoom = layer.zoom;
+      const at = drawn ? [Math.round((ox + layer.at[0]) * S - drawn.w * zoom / 2), Math.round((oy + layer.at[1]) * S - (layer.anchor === 'bottom' ? drawn.h * zoom : drawn.h * zoom / 2))] : [0, 0];
+      return {name: layer.sheet, palette: layer.palette, t: layer.t, light: layer.light, alpha: layer.alpha, flipX: layer.flipX, drawn, at, zoom, fixed: DRAWN_VFX_FIXED,
+        box: [(ox + layer.box[0]) * S, (oy + layer.box[1]) * S, layer.box[2] * S, layer.box[3] * S]};
+    })});
     if (!canvas) return null;
     const texture = PIXI.Texture.from(canvas);
     if (texture.source) texture.source.scaleMode = 'nearest';
