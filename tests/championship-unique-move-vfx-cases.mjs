@@ -201,10 +201,43 @@ test("remade cells: every brief names real sequences and drawings, and a referen
   const remade = art.getCell(20, 6);
   assert.equal(remade.artSource, REMADE_CELL_SOURCE);
   assert.equal(remade.pixelsPerNativePixel, REMADE_CELL_SCALE);
-  assert.deepEqual(remade.origin, [7 * REMADE_CELL_SCALE, 8 * REMADE_CELL_SCALE], "the native origin is kept, so the pool places it where the old cell stood");
+  // A drawing larger than the cell widens it evenly; the native origin moves with the padding.
+  const pad = (remade.frame[2] - 16 * REMADE_CELL_SCALE) / 2;
+  assert.equal(remade.frame[3] - 16 * REMADE_CELL_SCALE, pad * 2, "padded evenly");
+  assert.deepEqual(remade.origin, [7 * REMADE_CELL_SCALE + pad, 8 * REMADE_CELL_SCALE + pad], "the native origin is kept, so the pool places it where the old cell stood");
   assert.equal(art.getCell(1, 0).artSource, "ORIGINAL_SHARED_REVIEW", "an original cell passes through");
   assert.equal(art.getCell(20, 6), remade, "cached");
   art.releaseRemade();
+});
+
+test("the Dex preview plays the remade cells for a sequence only the reference atlas has", () => {
+  const source = fs.readFileSync("src/championship/presentation/juicy/showcaseBankCells.js", "utf8");
+  assert.match(source, /const source = covers\(shared\) \? shared : remake \? REMADE : base;/, "the Owner's remade atlas first, then the remade cells");
+  assert.match(source, /paintRemadedCell\(bankId, ref\.cell, ref, \{doc\}\)/, "the same painter as the battle");
+  assert.match(source, /holder\.dataset\.art = source === REMADE \? 'remade'/);
+});
+
+test("hit feel: short screen-sized filters on the camera, off on saver and reduced motion", async () => {
+  const { createBattleHitFeel } = await import("../src/championship/presentation/battleFx/battleHitFeel.js");
+  class Rectangle { constructor(x, y, w, h) { Object.assign(this, { x, y, width: w, height: h }); } }
+  const made = [];
+  const Filter = { from: ({ gl, resources }) => { const f = { gl, resources: { hitFeel: { uniforms: Object.fromEntries(Object.entries(resources.hitFeel).map(([k, v]) => [k, v.value])) } }, destroy() { this.destroyed = true; } }; made.push(f); return f; } };
+  const target = { filters: null, filterArea: null };
+  const feel = createBattleHitFeel({ PIXI: { Filter, Rectangle }, target, screen: () => ({ width: 390, height: 844 }) });
+  assert.equal(made.length, 3);
+  assert.ok(made.every(f => f.gl.preferredFragmentPrecision === "highp"), "both shader stages share a precision");
+  feel.shock(100, 200); feel.split(); feel.rush(50, 60);
+  feel.update(16);
+  assert.equal(target.filters.length, 3);
+  assert.deepEqual([target.filterArea.width, target.filterArea.height], [390, 844], "the filter area is the screen, never the map");
+  for (let i = 0; i < 30; i++) feel.update(16);
+  assert.equal(target.filters, null, "every filter comes off when its run ends");
+  assert.equal(feel.getDiagnostics().shocks, 1);
+  feel.dispose();
+  assert.equal(createBattleHitFeel({ PIXI: { Filter, Rectangle }, target, screen: () => ({}), quality: "saver" }), null);
+  assert.equal(createBattleHitFeel({ PIXI: { Filter, Rectangle }, target, screen: () => ({}), reducedMotion: true }), null);
+  const layer = fs.readFileSync("src/championship/presentation/battleFx/battleFxLayer.js", "utf8");
+  assert.match(layer, /hitFeel\?\.shock\(/); assert.match(layer, /if \(critical\) hitFeel\?\.split\(\);/); assert.match(layer, /hitFeel\?\.rush\(/);
 });
 
 test("the kit's sigil, burst and headless trail", () => {
