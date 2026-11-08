@@ -32,7 +32,7 @@ import { juicyPortrait, juicyPresentationEnabled } from "../presentation/juicy/j
 
 import { RELAY_ROSTER, relayPartner } from '../modes/dataArena/dataArenaRelayRoster.js';
 import { RELAY_MAP_IDS } from '../modes/dataArena/dataArenaRelayMaps.js';
-import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, RELAY_LOADOUTS, relayKit, relayMove, relayEffectStyle, relayMoveElement, relayDefaultBurstForm } from '../modes/dataArena/dataArenaRelay.js';
+import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, RELAY_LOADOUTS, relayKit, relayMove, relayEffectStyle, relayMoveElement } from '../modes/dataArena/dataArenaRelay.js';
 import { relayOwnMoveInfo, relayBasicRecord } from '../modes/dataArena/dataArenaRelayKits.js';
 import { battleMoveName } from '../text/battleMoveNames.js';
 import { speciesTaxonomyForId, elementMatchup, elementMultiplierPercent, factionResonance } from '../contracts/speciesTaxonomy.js';
@@ -141,17 +141,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     return base ?? RELAY_ROSTER.find(p => !relayBurstOnly(p))?.id ?? id;
   };
   // Awakening raising (Owner 2026-11-02): a relay entry raised on the ranch bursts into the form that partner
-  // learned (null: it learned none); a Dex-only entry keeps its first tier-1 form (undefined lets the simulation
-  // choose it).
+  // learned. Owner 2026-11-08: only that -- a Dex-only or rental entry, or a partner that learned no form, never
+  // bursts (null), as in the auto battle.
   const relayBurstPlanOf = id => {
     const instanceId = entryOf('RELAY', id)?.instanceId ?? null;
-    return instanceId && typeof burstPlanOf === 'function' ? burstPlanOf(instanceId) || undefined : undefined;
+    return instanceId && typeof burstPlanOf === 'function' ? burstPlanOf(instanceId) ?? null : null;
   };
   const relayBurstMembers = id => {
-    const own = relayBurstPlanOf(id);
-    const tier1 = burstFormsFor(relayIndexOf(id)).find(f => f.tier === 1) ?? null;
-    const fallbackForm = relayDefaultBurstForm(partnerElement(id));
-    const plan = own || tier1 || { tier: 1, form: fallbackForm };
+    const plan = relayBurstPlanOf(id);
     return [plan?.via, plan?.form].filter(Number.isInteger)
       .map(form => cast.partners.find(m => m.partnerId === `relay-species-${String(form).padStart(3, '0')}` || m.speciesId === `species-${String(form).padStart(3, '0')}`) ?? null);
   };
@@ -163,7 +160,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   // Entry rights (Owner 2026-11-02): partners raised on the ranch or lit in the
   // Dex fight; a thin save is lent practice partners. Tournament and harbor share three kits.
   const roster = (list) => list.map(({ id, speciesId }) => ({ id, speciesId }));
-  const entryLists = { TOURNAMENT: dataArenaEntries(roster(DATA_ARENA_PARTNERS), progress), RELAY: dataArenaEntries(roster(RELAY_ROSTER.filter((p) => !relayBurstOnly(p))), progress) };
+  // Owner 2026-11-08: of several held individuals of one species, the one that learned a burst form fights for it.
+  const learnedFirst = progress?.ownedInstances && typeof burstPlanOf === "function"
+    ? { ...progress, ownedInstances: [...progress.ownedInstances].sort((x, y) => Number(!burstPlanOf(x.instanceId)) - Number(!burstPlanOf(y.instanceId))) }
+    : progress;
+  const entryLists = { TOURNAMENT: dataArenaEntries(roster(DATA_ARENA_PARTNERS), learnedFirst), RELAY: dataArenaEntries(roster(RELAY_ROSTER.filter((p) => !relayBurstOnly(p))), learnedFirst) };
   entryLists.HARBOR = entryLists.TOURNAMENT;
   const entriesFor = (mode) => entryLists[mode] ?? entryLists.TOURNAMENT;
   const entryOf = (mode, id) => entriesFor(mode).find((row) => row.id === id) ?? null;

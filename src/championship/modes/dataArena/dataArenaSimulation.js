@@ -32,7 +32,7 @@ import { createArenaRandom, dataArenaUpgrade, drawUpgradeOffer, upgradeValue } f
 
 import { relayPartner, RELAY_ROSTER } from './dataArenaRelayRoster.js';
 import { relayBattleMap } from './dataArenaRelayMaps.js';
-import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, relayMove, relayFacing8, relayKit, relayMoveElement, relayDefaultBurstForm } from './dataArenaRelay.js';
+import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, relayMove, relayFacing8, relayKit, relayMoveElement } from './dataArenaRelay.js';
 import { createRelayArenaEvents } from './dataArenaRelayArena.js';
 import { speciesTaxonomyForId, elementMultiplierPercent, factionResonance, TAXONOMY_RESONANCE } from '../../contracts/speciesTaxonomy.js';
 import { BURST_RULES, BURST_BATTLE_RULES, BLOODLINE_BURST_PERKS, burstFormsFor, burstHpRatio, burstMultiplier } from '../../contracts/productBurstEvolution.js';
@@ -773,9 +773,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   // fighter's gauge fills from damage dealt (150 per foe max HP) and taken (200 per own max HP); full, it bursts once
   // per match for 20 s (dealt x1.4 / x1.7, taken divided by the same), then is weakened (x0.85) for 5 s. Switching
   // out ends a burst. Its form is drawn while it lasts. Awakening raising (2026-11-02): a ranch partner bursts into
-  // the form it learned (relayBurstPlans[partnerId], null for none) with its bloodline perk and bond; a Dex-only entry
-  // and a rival into their first tier-1 form. The player's fighter waits READY for the call when relayManualBurst
-  // until the player presses it (Owner 2026-11-08: never on a timer or a pinch); damage taken in a pinch fills the
+  // the form it learned (relayBurstPlans[partnerId]) with its bloodline perk and bond; Owner 2026-11-08: a fighter
+  // that learned none (Dex-only, rental, or a species with no form) never bursts. A rival bursts into its first tier-1
+  // form. The player's fighter waits READY for the call when relayManualBurst until the player presses it (Owner 2026-11-08: never on a timer or a pinch); damage taken in a pinch fills the
   // gauge faster. Burst true form (BURST_TRUE_FORM_20261108): while burst the fighter IS the form -- the player takes
   // the form's relay role (kit, basic attack, element, speed) and every fighter its species and HP curve -- and is
   // itself again when the burst ends or it is switched out. Damage dealt keeps the tier multiplier; damage taken is
@@ -786,11 +786,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if (plan === undefined) {
       const idx = Number(String(speciesId).split('-').at(-1));
       const form = burstFormsFor(idx).find(f => f.tier === 1);
-      if (form) plan = { form: form.form, tier: 1 };
-      else if (manual) {
-        const elem = rosterElement.get(speciesId) ?? speciesTaxonomyForId(speciesId)?.element?.toLowerCase() ?? 'fire';
-        plan = { form: relayDefaultBurstForm(elem), tier: 1 };
-      } else plan = null;
+      plan = form ? { form: form.form, tier: 1 } : null;
     }
     if (!plan || !Number.isInteger(plan.form)) return null;
     const tier = plan.tier === 2 ? 2 : 1, perk = BLOODLINE_BURST_PERKS[plan.bloodline] ?? {}, bond = Math.max(0, Math.min(100, Number(plan.bond) || 0));
@@ -2584,7 +2580,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         const p = relayPartner(id), hp = Math.round(p.hp * DATA_ARENA_RELAY.playerHpScale * powerOf(id));
         return { partnerId: id, speciesId: p.speciesId, hp, maxHp: hp, energy: DATA_ARENA_RELAY.tpMax, energySpentAt: -Infinity,
           cooldowns: Object.create(null), ult: 0, burn: 0, slow: 0, slowTimer: 0, root: 0, dashCharges: 1, dashRecharge: 0,
-          burst: arenaBurstPlan(p.speciesId, relayBurstPlans[id], relayManualBurst) };
+          burst: arenaBurstPlan(p.speciesId, relayBurstPlans[id] ?? null, relayManualBurst) };
       }) };
     // Faction resonance (Owner 2026-10-29) from the 3-partner relay squad plus any companions the caller names.
     const resonanceTeam = relayThirdId ? state.relay.team : state.relay.team.slice(0, 2);

@@ -374,7 +374,9 @@ test('arena relay: a ranch partner bursts into its own form, waits for the call,
   assert.notEqual(sim.getSnapshot().relay.burst.phase, 'BURST');
   assert.deepEqual([back.formPartnerId, back.speciesId, back.maxHp, [...back.kit.moves]], [null, ownSpecies, ownMax, ownKit], 'itself again afterwards');
   assert.equal(relay({'relay-species-087': null}).getSnapshot().relay.burst, null, 'a partner that learned no form does not burst');
-  assert.equal(relay({}).getSnapshot().relay.burst.form, t1.form, 'a Dex-only entry keeps its first tier-1 form');
+  // Owner 2026-11-08: only a form the partner learned on the ranch; a Dex-only or rental entry never bursts.
+  assert.equal(relay({}).getSnapshot().relay.burst, null, 'a Dex-only entry does not burst');
+  void t1;
 });
 
 
