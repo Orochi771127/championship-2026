@@ -7,19 +7,19 @@ const helpers=source.slice(source.indexOf('  function evolutionLoadFailed('),sou
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b});return {promise,resolve,reject};};
 const settle=()=>new Promise(r=>setImmediate(r));
 function fixture(){
- const states=[],failures=[],visuals=[],requests=[];
+ const states=[],failures=[],visuals=[],requests=[],speciesRequests=[];
  const controls={species:async()=>true,sequence:async()=>true,ready:false};
  const entry={root:{destroyed:false,children:[],addChildAt(s){this.children.push(s)}},evolutionActive:true,assetState:'ready'};
  const context={disposed:false,reportResidentAssets(){states.push(entry.evolutionAssetState)},onFallback(x){failures.push(x)},fieldArt:{field:{}},view:{},
  getRaisingNativeActorGeometry:()=>null,getRaisingNativePixelScale:()=>1,
- characterBundle:{ensureSpecies:id=>controls.species(id),createActor({speciesId}){
+ characterBundle:{ensureSpecies:(id,options)=>{speciesRequests.push({species:id,options});return controls.species(id);},createActor({speciesId}){
   const sprite={destroyed:false,scale:{set(){}},destroy(){this.destroyed=true}};
   const nativeFramePresenter={isFrameReady:()=>controls.ready,ensureFrame:frame=>{requests.push(frame.sequenceId);return controls.sequence(frame)}};
   const visual={sprite,nativeFramePresenter,entityId:speciesId};visuals.push(visual);return visual;
  }}};
  vm.runInNewContext(helpers+';Object.assign(globalThis,{loadEvolutionTarget,evolutionFrameReady,evolutionLoadFailed});',context);
  const event=(target=8,sequence=39)=>({target,targetFrame:{sequenceId:sequence,frameIndex:0}});
- return {context,entry,controls,states,failures,visuals,requests,event,load:(e=event())=>context.loadEvolutionTarget(entry,e)};
+ return {context,entry,controls,states,failures,visuals,requests,speciesRequests,event,load:(e=event())=>context.loadEvolutionTarget(entry,e)};
 }
 test('delayed sequence39 gates loading, attaches only after requested frame resolves',async()=>{
  const f=fixture(),d=deferred();f.controls.sequence=()=>d.promise;f.load();await settle();
@@ -101,4 +101,13 @@ test('externally ready shared sequence clears previous target error and pending 
  assert.equal(f.entry.evolutionAssetState,'error');assert.equal(f.entry.evolutionPendingFrame,frame);
  f.controls.ready=true;assert.equal(f.context.evolutionFrameReady(f.entry,frame),true);
  assert.equal(f.entry.evolutionAssetState,'ready');assert.equal(f.entry.evolutionAssetError,null);assert.equal(f.entry.evolutionPendingFrame,null);
+});
+// Ranch load diagnostics (docs/reports/ranch-load-2026-11-08/): the target species is requested with the
+// sequence it is revealed in, so a streaming roster loads that page with its
+// idle instead of the whole runtime (tests/championship-ranch-late-species-streaming-cases.mjs).
+test('the evolution target is requested with its reveal sequence',async()=>{
+ const f=fixture();f.load(f.event(96,39));await settle();
+ assert.deepEqual(JSON.parse(JSON.stringify(f.speciesRequests)),[{species:'championship:creature:species-096',options:{sequenceIds:[39]}}]);
+ const g=fixture();g.load({target:8,targetFrame:null});await settle();
+ assert.deepEqual(JSON.parse(JSON.stringify(g.speciesRequests[0].options)),{sequenceIds:[]});
 });
