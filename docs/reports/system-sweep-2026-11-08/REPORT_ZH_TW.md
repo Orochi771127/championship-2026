@@ -104,7 +104,10 @@
 | `src = ''` 或 `setAttribute('src','')` | 0（也不會多發請求） |
 
 - 修正：改用 `image.src = ''`，只改這一個檔案。
-- 驗證：`npm run test:browser:care-image-release` 用正式模組在真實 Chromium 跑 20 輪的載入、失敗、中止路徑。修改前留下 720 個節點，修改後 0；同一測試內的對照組（舊寫法）留下 120 個，證明這個瀏覽器確實有此行為，測試不是空轉。Node 單元測試也改成：一旦呼叫 `removeAttribute` 就失敗。
+- 驗證：
+  - `npm run test:browser:care-image-release` 用正式模組在真實 Chromium 跑 20 輪的載入、失敗、中止路徑。修改前留下 720 個節點，修改後 0；同一測試內的對照組（舊寫法）留下 120 個，證明這個瀏覽器確實有此行為，測試不是空轉。
+  - Node 單元測試改成：一旦呼叫 `removeAttribute` 就失敗。舊程式 6 項失敗。
+  - 整個遊戲：在隔離 worktree 中只換上候選雜湊，建置候選版（buildId `4d9ecfbd…`），跑同樣的狩獵往返並取 heap snapshot。heap 中殘留的照護圖：修改前第 4 趟 64 個、第 16 趟 256 個；修改後第 2 趟、第 6 趟都是 0。V8 heap 維持在 46.6–51.2 MB。WebGL context 物件仍然每趟多 2 個，符合第 6 節的 DFG_LUT（未修）。
 - 同樣寫法還出現在 `systemBackgrounds.js`（換背景時仍在載入的圖）、`titleImageLifecycle.js`、`skillCutIn.js`、`cyberMorphEvolutionRunner.js`、`codexShowcaseTheater.js`、`vs4Screens.js`。這次巡檢沒有在 heap 中看到它們留下的元素，所以依規則不改，列為下一批。
 
 ## 5. 已確認、未修改：首次綁定獎勵（需要你決定）
