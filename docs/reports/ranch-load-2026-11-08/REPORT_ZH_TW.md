@@ -61,10 +61,8 @@ npm run test:browser:ranch-load -- --label before --profile mobile-net --trace
 
 - 重現（`--scenario interrupt`，修改前產物）：催化後存檔立即寫入碎片 2→1；進化狀態只存在 `championshipStandaloneApp` 的記憶體 `raisingActors`，`nativeHome` 存檔不含；重新整理後主夥伴仍是 species-034，20 秒內未重新開始進化。
 - 與本次症狀的關係：修改前 20–28 秒的「正在載入夥伴外觀…」提示列上同時顯示「返回標題／重新載入」，玩家在等待時按下即觸發。自然進化依程式不會遺失：角色重建時 `evolutionChecked=false`，重新進入後條件重新判定、再次開始，並再次等待目標載入——與回報的「重新進入後可能再次等待，之後才開始進化演出」一致（此段為程式推論，本次只實測催化路徑）。
-- 方案（需 Owner 選擇，皆涉及存檔或規則）：
-  - A（建議）在 `progression.cyberGacha` 記錄待完成催化 `{instanceId,target,ruleIndex}`，Continue 時恢復、完成後清除。`normalizeCyberGacha` 會靜默丟棄未知欄位，舊版本讀新存檔不會失敗，但不會恢復該進化。
-  - B 道具改在進化完成時扣除：規則變更，需處理重複觸發與中途離開。
-  - C 進化期間隱藏提示列的離開按鈕：不能處理關閉分頁或當機，不建議單用。
+- **更正（2026-11-08）**：本節原稿寫「`normalizeCyberGacha` 會靜默丟棄未知欄位」，這是錯的。它是預設拒絕，遇到未知欄位會丟出 `UNKNOWN_CYBER_GACHA_KEY`，整份存檔會被判定為無法讀取。因此原本建議的方案 A（在存檔新增待完成記錄）有回退風險：回退到舊版，或玩家仍開著部署前的舊分頁時，含新欄位的存檔會無法讀取。
+- 採用的修正（Owner 回覆「要修」後實作，不改存檔格式）：催化當下只在記憶體保留金屬，進化寫入新形態時才扣除，兩者進入同一次存檔；保留期間背包顯示與所有金屬消耗入口都扣除保留量。中途重新整理時，存檔仍是「原物種＋金屬在」，可以再催化一次。回歸測試：`tests/championship-catalyst-evolution-crash-consistency-cases.mjs`。
 
 ## 7. 靜態風險與未證實假說
 
@@ -164,5 +162,5 @@ Owner 回覆「我核准公開建置雜湊的更」（訊息截斷，依內容�
 ## 13. 下一步
 
 1. 雜湊已核准；待 Owner 核准合併與部署 → 部署後 iPhone 實測（第 11 節）。
-2. Owner 決定 S1 方案後實作與回歸。
+2. S1 已以「完成時才扣除」修正（不改存檔格式），待 Owner 核准雜湊後隨下一批發布。
 3. 下一批候選：reviewed 圖片由已驗證 Blob 解碼（完整性＋Safari 風險）；標題預載對 reviewed 物種的範圍；同頁往返的保留策略（需記憶體預算）。

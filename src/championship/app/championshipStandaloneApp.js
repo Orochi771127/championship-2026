@@ -374,6 +374,13 @@ export function createChampionshipStandaloneApp({
   let battleTactics={};
   // OWNER_APPROVED_ADAPTATION 2026-10-29: Cyber Gachapon (tickets, chips, metals, bloodlines).
   let cyberGacha=null;
+  // A catalyst evolution holds its metal in memory and spends it when the new
+  // form is written, so both reach the save together (2026-11-08,
+  // docs/reports/ranch-load-2026-11-08/). Spending at the start saved the item
+  // loss while the running evolution lived only in memory: a reload or return
+  // to title mid-evolution kept the loss and dropped the evolution. Nothing new
+  // is saved: an interrupted evolution leaves partner and metal as they were.
+  let catalystReservation=null;
   // DIAMOND_ECONOMY_20261102: royal cages placed in the facility draft (instanceId -> edition),
   // the royal card picked in the tray, the last automation events and diamond rewards for the UI.
   let draftRoyalEditions=null;
@@ -1220,6 +1227,25 @@ export function createChampionshipStandaloneApp({
   function gachaReceipt(result){
     lastGachaResult=Object.freeze({...result,serial:++gachaSerial});publishScreens();return lastGachaResult;
   }
+  // The reservation is live only while its partner is still evolving; any path
+  // that ends or discards the evolution (session reset, title, release) frees it.
+  function liveCatalystReservation(){
+    if(catalystReservation&&!raisingActors.get(catalystReservation.instanceId)?.evolution)catalystReservation=null;
+    return catalystReservation;
+  }
+  /** Metals the player can still use: owned minus the one a running catalyst holds. */
+  function availableMetal(state,itemId){
+    return Math.max(0,(state.metals[itemId]??0)-(liveCatalystReservation()?.itemId===itemId?1:0));
+  }
+  // Called where the evolved form is written: the spend joins the same save.
+  function settleCatalystReservation(instanceId){
+    const held=catalystReservation;
+    if(!held||held.instanceId!==instanceId)return;
+    catalystReservation=null;
+    const spent=spendGachaItem(gachaState(),held.itemId,{instanceId,bloodline:held.bloodline});
+    if(spent.ok){cyberGacha=spent.state;savePort.markDirty();}
+    else console.warn('CHAMPIONSHIP_CATALYST_SPEND_FAILED',held.itemId,spent.reason);
+  }
   function gachaRefusal(reason){return gachaReceipt({ok:false,reason});}
 
   // ---- Ranch automation and diamonds (OWNER_APPROVED_ADAPTATION 2026-11-02, DIAMOND_ECONOMY_20261102) ----
@@ -1590,7 +1616,7 @@ export function createChampionshipStandaloneApp({
     const profile=partnerProfile(instanceId);if(!profile)return null;
     const state=burstState(),awakenings=partnerAwakenings(profile,state,instanceId);if(!awakenings.length)return null;
     const target=awakeningTargetOf(state,instanceId),focus=awakeningFocus(awakenings,target),plan=partnerBurstPlan(instanceId);
-    const learned=new Set(burstUnlocksOf(state,instanceId)),owned=id=>gachaState().metals[id]??0,rules=AWAKENING_RULES.transcendence;
+    const learned=new Set(burstUnlocksOf(state,instanceId)),owned=id=>availableMetal(gachaState(),id),rules=AWAKENING_RULES.transcendence;
     // Each button says what the item really adds now: items stop at the item cap, so a metal near it adds less.
     const room=Math.max(0,AWAKENING_RULES.itemCap-(focus?.energy??0));
     const feeds=GACHA_METALS.filter(m=>owned(m.id)>0).map(m=>{const {amount:nominal,fill}=focus?awakeningItemEnergy(m,focus.tier):{amount:0,fill:false};
@@ -2285,6 +2311,7 @@ export function createChampionshipStandaloneApp({
         }
         // Owner 2026-11-03: a new form stays up a while before any night nap, like a fresh hatch.
         if(result.evolved&&result.event.target>=8)realtimeWake.set(id,realNowMs()+REALTIME_WAKE_SECONDS*1000);
+        if(result.evolved)settleCatalystReservation(id);
         if(result.evolved){const event=result.event;raisingLifecycleMessage={kind:event.target<8?'REBORN':'EVOLVED',instanceId:id,target:event.target,
             // Display only: the persistent stats before and after the form write.
             oldSpecies:event.oldSpecies,stats:evolutionStatChange(profileBefore,result.profile)};
@@ -3762,7 +3789,7 @@ export function createChampionshipStandaloneApp({
         metals:GACHA_METALS.map(metal=>{const into=shardFusionTarget(metal.id);
           // What it does for an awakening (the bag explains 「催化進化」 on a 成熟期 from these numbers).
           const tier1=awakeningItemEnergy(metal,1),tier2=awakeningItemEnergy(metal,2);
-          return {...metal,owned:state.metals[metal.id]??0,awaken:{fill:tier1.fill,tier1:tier1.amount,tier2:tier2.amount,cap:AWAKENING_RULES.itemCap},
+          return {...metal,owned:availableMetal(state,metal.id),awaken:{fill:tier1.fill,tier1:tier1.amount,tier2:tier2.amount,cap:AWAKENING_RULES.itemCap},
             ...(into?{fusesInto:{id:into.id,name:into.name,rarity:into.rarity},fusionCost:GACHA_SHARD_FUSION_COST}:{})};}),
         goods:GACHA_GOODS,bloodlines:GACHA_BLOODLINES,autoFill:autoFillSynthesizer(state),
         armed:state.armed,partners,lastResult:lastGachaResult,
@@ -3876,7 +3903,7 @@ export function createChampionshipStandaloneApp({
       requireSession();
       const metal=getGachaMetal(itemId),state=gachaState();
       if(!metal)return gachaRefusal('UNKNOWN_ITEM');
-      if((state.metals[itemId]??0)<1)return gachaRefusal('NOT_OWNED');
+      if(availableMetal(state,itemId)<1)return gachaRefusal('NOT_OWNED');
       const profile=gachaProfile(instanceId);if(!profile)return gachaRefusal('UNKNOWN_INDIVIDUAL');
       const view=partnerAwakeningView(instanceId),focus=view?.forms.find(f=>f.form===view.focus)??null;
       if(!focus)return gachaRefusal('NO_AWAKENING_TARGET');
@@ -3906,7 +3933,7 @@ export function createChampionshipStandaloneApp({
       requireSession();
       const metal=getGachaMetal(itemId),state=gachaState(),rules=AWAKENING_RULES.transcendence;
       if(!metal||metal.id.endsWith('-shard')||!rules.metalRarities.includes(metal.rarity))return gachaRefusal('NOT_A_TRANSCEND_METAL');
-      if((state.metals[itemId]??0)<1)return gachaRefusal('NOT_OWNED');
+      if(availableMetal(state,itemId)<1)return gachaRefusal('NOT_OWNED');
       const profile=gachaProfile(instanceId);
       if(!profile||!burstFormsFor(profile.fields['000']).length)return gachaRefusal('NOT_AWAKENABLE');
       if((profile.fields['020']|0)<rules.bondMinimum)return gachaRefusal('BOND_TOO_LOW');
@@ -4017,7 +4044,7 @@ export function createChampionshipStandaloneApp({
       requireSession();
       const chip=getGachaChip(itemId),metal=getGachaMetal(itemId),state=gachaState();
       if(!chip&&!metal)return gachaRefusal('UNKNOWN_ITEM');
-      if(((chip?state.chips:state.metals)[itemId]??0)<1)return gachaRefusal('NOT_OWNED');
+      if((chip?state.chips[itemId]??0:availableMetal(state,itemId))<1)return gachaRefusal('NOT_OWNED');
       if(chip&&chip.kind!=='GROWTH'){
         const spent=spendGachaItem(state,itemId);
         if(!spent.ok)return gachaRefusal(spent.reason);
@@ -4039,9 +4066,8 @@ export function createChampionshipStandaloneApp({
         const rules=PRODUCT_GROWTH_RULES.rules[index-8]??[];
         const choices=rules.map((rule,ruleIndex)=>({rule,ruleIndex})).filter(({rule})=>rule.kind!==1);
         if(species.generation===0||species.generation>=4||!choices.length)return gachaRefusal('NO_EVOLUTION_ROUTE');
-        const spent=spendGachaItem(state,itemId,{instanceId,bloodline});
-        if(!spent.ok)return gachaRefusal(spent.reason);
-        if(!commitGacha({state:spent.state}))return gachaRefusal('SAVE_FAILED');
+        // Held, not spent: the metal leaves the bag in the save that writes the new form.
+        catalystReservation=Object.freeze({instanceId,itemId,bloodline});
         // The ranch plays it: the same native evolution its predicates would have started.
         const {rule,ruleIndex}=choices[0];
         beginNativeRaisingEvolution(actor,{target:rule.target,actor:{'1f4':ruleIndex,'1f0':Number(ruleIndex===rules.length-1),'464':0}},
@@ -4066,6 +4092,7 @@ export function createChampionshipStandaloneApp({
     /** Three shards of one family fuse into that family's metal (OWNER_APPROVED_ADAPTATION 2026-11-02). */
     gachaFuseShards(shardId){
       requireSession();
+      if(getGachaMetal(shardId)&&availableMetal(gachaState(),shardId)<GACHA_SHARD_FUSION_COST)return gachaRefusal('NOT_ENOUGH_SHARDS');
       const fused=fuseGachaShards(gachaState(),shardId);
       if(!fused.ok)return gachaRefusal(fused.reason);
       if(!commitGacha({state:fused.state}))return gachaRefusal('SAVE_FAILED');
