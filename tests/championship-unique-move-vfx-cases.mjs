@@ -217,6 +217,29 @@ test("the Dex preview plays the remade cells for a sequence only the reference a
   assert.match(source, /holder\.dataset\.art = source === REMADE \? 'remade'/);
 });
 
+test("hit feel: short screen-sized filters on the camera, off on saver and reduced motion", async () => {
+  const { createBattleHitFeel } = await import("../src/championship/presentation/battleFx/battleHitFeel.js");
+  class Rectangle { constructor(x, y, w, h) { Object.assign(this, { x, y, width: w, height: h }); } }
+  const made = [];
+  const Filter = { from: ({ gl, resources }) => { const f = { gl, resources: { hitFeel: { uniforms: Object.fromEntries(Object.entries(resources.hitFeel).map(([k, v]) => [k, v.value])) } }, destroy() { this.destroyed = true; } }; made.push(f); return f; } };
+  const target = { filters: null, filterArea: null };
+  const feel = createBattleHitFeel({ PIXI: { Filter, Rectangle }, target, screen: () => ({ width: 390, height: 844 }) });
+  assert.equal(made.length, 3);
+  assert.ok(made.every(f => f.gl.preferredFragmentPrecision === "highp"), "both shader stages share a precision");
+  feel.shock(100, 200); feel.split(); feel.rush(50, 60);
+  feel.update(16);
+  assert.equal(target.filters.length, 3);
+  assert.deepEqual([target.filterArea.width, target.filterArea.height], [390, 844], "the filter area is the screen, never the map");
+  for (let i = 0; i < 30; i++) feel.update(16);
+  assert.equal(target.filters, null, "every filter comes off when its run ends");
+  assert.equal(feel.getDiagnostics().shocks, 1);
+  feel.dispose();
+  assert.equal(createBattleHitFeel({ PIXI: { Filter, Rectangle }, target, screen: () => ({}), quality: "saver" }), null);
+  assert.equal(createBattleHitFeel({ PIXI: { Filter, Rectangle }, target, screen: () => ({}), reducedMotion: true }), null);
+  const layer = fs.readFileSync("src/championship/presentation/battleFx/battleFxLayer.js", "utf8");
+  assert.match(layer, /hitFeel\?\.shock\(/); assert.match(layer, /if \(critical\) hitFeel\?\.split\(\);/); assert.match(layer, /hitFeel\?\.rush\(/);
+});
+
 test("the kit's sigil, burst and headless trail", () => {
   const PIXI = fakePixi(), front = new PIXI.Container(), ground = new PIXI.Container();
   const kit = createMoveVfxKit({ PIXI, front, ground, doc, quality: "saver" });
