@@ -35,7 +35,8 @@ const ENTRIES=[
 function observers(save){
   try{if(!localStorage.getItem('championshipModernSave:v1'))localStorage.setItem('championshipModernSave:v1',save);}catch{}
   const d=globalThis.__sweep={gl:{texture:0,buffer:0,framebuffer:0,renderbuffer:0},contexts:0,listeners:new Map(),intervals:new Set(),
-    timeouts:new Set(),blobs:new Set(),raf:0,frames:0,storageWrites:0,storageBytes:0,rejections:[],workers:0,audio:0};
+    timeouts:new Set(),blobs:new Set(),raf:0,frames:0,storageWrites:0,storageBytes:0,storageKeys:{},rejections:[],workers:0,workersTerminated:0,
+    workerUrls:{},audio:0,contextList:[],contextLost:0};
   for(const proto of [globalThis.WebGLRenderingContext?.prototype,globalThis.WebGL2RenderingContext?.prototype].filter(Boolean)){
     for(const kind of ['Texture','Buffer','Framebuffer','Renderbuffer']){
       const create=proto['create'+kind],remove=proto['delete'+kind],key=kind.toLowerCase();
@@ -45,7 +46,8 @@ function observers(save){
   }
   const getContext=HTMLCanvasElement.prototype.getContext,seen=new WeakSet();
   HTMLCanvasElement.prototype.getContext=function(type,...a){const c=getContext.call(this,type,...a);
-    if(c&&/webgl/.test(type)&&!seen.has(c)){seen.add(c);d.contexts++;}return c;};
+    if(c&&/webgl/.test(type)&&!seen.has(c)){seen.add(c);d.contexts++;d.contextList.push(new WeakRef(this));
+      this.addEventListener('webglcontextlost',()=>d.contextLost++);}return c;};
   const watched=t=>t===globalThis||t===document||t===document.documentElement||t===document.body||t===globalThis.visualViewport;
   const name=t=>t===globalThis?'window':t===document?'document':t===globalThis.visualViewport?'visualViewport':'element';
   const live=new WeakMap(),add=EventTarget.prototype.addEventListener,rem=EventTarget.prototype.removeEventListener;
@@ -76,10 +78,14 @@ function observers(save){
   const cu=URL.createObjectURL,ru=URL.revokeObjectURL;
   URL.createObjectURL=function(o){const u=cu.call(this,o);d.blobs.add(u);return u;};
   URL.revokeObjectURL=function(u){d.blobs.delete(u);return ru.call(this,u);};
-  const W=globalThis.Worker;if(W)globalThis.Worker=new Proxy(W,{construct(t,a){d.workers++;return new t(...a);}});
+  const W=globalThis.Worker;
+  if(W){const terminate=W.prototype.terminate;W.prototype.terminate=function(){d.workersTerminated++;return terminate.call(this);};
+    globalThis.Worker=new Proxy(W,{construct(t,a){d.workers++;const src=String(a[0]).replace(/^blob:.*/,'blob:').replace(/^.*\//,'').slice(0,60);
+      d.workerUrls[src]=(d.workerUrls[src]??0)+1;return new t(...a);}});}
   const A=globalThis.AudioContext;if(A)globalThis.AudioContext=new Proxy(A,{construct(t,a){d.audio++;return new t(...a);}});
   const setItem=Storage.prototype.setItem;
-  Storage.prototype.setItem=function(k,v){if(this===globalThis.localStorage){d.storageWrites++;d.storageBytes+=String(v).length;}return setItem.call(this,k,v);};
+  Storage.prototype.setItem=function(k,v){if(this===globalThis.localStorage){d.storageWrites++;d.storageBytes+=String(v).length;
+    d.storageKeys[k]=(d.storageKeys[k]??0)+1;}return setItem.call(this,k,v);};
   addEventListener('unhandledrejection',e=>d.rejections.push(String(e.reason?.message??e.reason).slice(0,300)));
 }
 
@@ -95,10 +101,11 @@ function observers(save){
   await context.addInitScript(observers,SAVE);
   const page=await context.newPage();page.setDefaultTimeout(60000);
   const cdp=await context.newCDPSession(page);await cdp.send('HeapProfiler.enable');
-  const events=[];let current='boot';
+  const events=[];let current='boot';const taintedCycles=new Set();
   const note=(kind,detail)=>events.push({t:Date.now(),at:current,kind,...detail});
   page.on('pageerror',e=>note('pageerror',{message:e.message.slice(0,300)}));
-  page.on('console',m=>{if(m.type()==='error')note('console-error',{text:m.text().slice(0,300)});});
+  page.on('console',m=>{if(m.type()==='error')note('console-error',{text:m.text().slice(0,300)});
+    else if(m.type()==='warning'&&/WebGL|context/i.test(m.text())&&!/GL Driver Message/.test(m.text()))note('webgl-warning',{text:m.text().slice(0,300)});});
   page.on('requestfailed',r=>note('request-failed',{url:r.url().slice(0,200),error:r.failure()?.errorText}));
   page.on('response',r=>{if(r.status()>=400)note('http',{url:r.url().slice(0,200),status:r.status()});});
   const screen=()=>page.evaluate(()=>document.getElementById('cm-root')?.dataset.activeScreen??null);
@@ -111,7 +118,11 @@ function observers(save){
     return page.evaluate(async()=>{const d=globalThis.__sweep,r0=d.raf,f0=d.frames;await new Promise(r=>setTimeout(r,1000));
       return {gl:{...d.gl},contexts:d.contexts,canvases:document.querySelectorAll('canvas').length,
         listeners:Object.fromEntries([...d.listeners].filter(([,n])=>n)),listenerTotal:[...d.listeners.values()].reduce((a,b)=>a+b,0),
-        intervals:d.intervals.size,timeouts:d.timeouts.size,blobs:d.blobs.size,workers:d.workers,audio:d.audio,
+        intervals:d.intervals.size,timeouts:d.timeouts.size,blobs:d.blobs.size,workers:d.workers,workersTerminated:d.workersTerminated,
+        workerUrls:{...d.workerUrls},audio:d.audio,contextLost:d.contextLost,
+        // A context whose canvas left the DOM is garbage only once collected; count the ones still attached.
+        contextsAttached:d.contextList.map(r=>r.deref()).filter(c=>c?.isConnected).length,
+        contextsAlive:d.contextList.map(r=>r.deref()).filter(Boolean).length,storageKeys:{...d.storageKeys},
         rafPerFrame:Math.round((d.raf-r0)/Math.max(1,d.frames-f0)*100)/100,domNodes:document.getElementsByTagName('*').length,
         heapMB:performance.memory?Math.round(performance.memory.usedJSHeapSize/1048576*10)/10:null,
         storageWrites:d.storageWrites,storageBytes:d.storageBytes,rejections:d.rejections.length};});
@@ -125,9 +136,16 @@ function observers(save){
     for(let attempt=0;attempt<8;attempt++){
       if(await screen()==='RAISING_HOME'&&!await dialogOpen())return true;
       if(await dialogOpen()){
-        // Only visible buttons: the ranch keeps hidden role=dialog panels (day confirm, letters) in the DOM.
-        const close=page.locator('[role=dialog] button, dialog[open] button, .cm-dialog button').filter({visible:true}).filter({hasText:/^(關閉|知道了|返回|取消|完成|×)$/});
-        if(await close.count())await close.first().click({timeout:3000}).catch(()=>{});else await page.keyboard.press('Escape');
+        // Escape is every choice dialog's cancel. Playwright's actionability check
+        // misreads the top-layer <dialog> as covering its own buttons (a hit test at
+        // the button centre returns the button), so a DOM click is the fallback.
+        await page.keyboard.press('Escape');await page.waitForTimeout(600);
+        if(await dialogOpen()){
+          const clicked=await page.evaluate(()=>{const open=[...document.querySelectorAll('dialog[open],[role=dialog]')].filter(e=>e.getClientRects().length&&!e.closest('[hidden]'));
+            const d=open[open.length-1],b=d&&[...d.querySelectorAll('button')].filter(x=>x.getClientRects().length).find(x=>/^(關閉|知道了|返回|取消|完成|×)$/.test(x.textContent.trim()));
+            if(b){b.click();return b.textContent.trim();}return null;});
+          note('dom-close',{button:clicked});
+        }
       }else{
         const back=page.locator('.cm-vs2-footer .cm-vs2-action, button[aria-label="Return to Raising Home"], [data-action="back"], [data-action="exit"]').filter({visible:true});
         if(await back.count())await back.first().click({timeout:3000}).catch(()=>{});
@@ -165,15 +183,16 @@ function observers(save){
           events:events.slice(before).map(e=>e.kind)};
         results.entries.push(row);console.log(JSON.stringify(row));
         if(!returned){
-          // Recover the run without losing the evidence: reload into the ranch.
-          note('recover',{entry:row.entry});current='recover';
+          // Recover the run without losing the evidence: reload into the ranch. A
+          // reload resets page state, so this cycle's resource numbers are tainted.
+          note('recover',{entry:row.entry});current='recover';taintedCycles.add(cycle);
           await page.goto(base+'championship.html');await page.locator('#cm-login').waitFor({state:'attached'});
           if(await page.locator('#cm-film-skip').isVisible().catch(()=>false))await page.locator('#cm-film-skip').click().catch(()=>{});
           await page.waitForFunction(()=>document.querySelector('#cm-login')?.disabled===false);
           await page.locator('#cm-login').click();await page.locator('#cm-continue').click();current='ranch';await ranchReady();
         }
       }
-      const m=await metrics();results.cycleMetrics.push({cycle,...m});console.log(JSON.stringify({cycle,...m}));
+      const m=await metrics();results.cycleMetrics.push({cycle,tainted:taintedCycles.has(cycle),...m});console.log(JSON.stringify({cycle,...m}));
     }
     results.status=events.some(e=>e.kind==='pageerror')?'PAGE_ERRORS':'COMPLETE';
   }catch(error){results.status='FAILED';results.failure=String(error?.stack??error);await page.screenshot({path:path.join(OUT,'failure.png')}).catch(()=>{});process.exitCode=1;}
