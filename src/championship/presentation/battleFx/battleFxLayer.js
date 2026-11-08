@@ -170,7 +170,7 @@ export function battleHyperWrapStreaks({count = 18, phase = 0} = {}) {
 
 export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, quality = 'balanced', reducedMotion = false, responsiveLayout = false,
   flashScale = 1, describeMove = () => null, nameOfSlot = () => '', moveNameOf = () => '', text = value => value, seed = 0x51ed, juicy = false,
-  resolveMove = () => null, effectArt = null}) {
+  resolveMove = () => null, effectArt = null, hitFeel = null}) {
   const textures = createTextures(PIXI);
   if (!textures) return null;
   const random = battleFxRandom(seed);
@@ -601,6 +601,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           speed = reducedMotion ? 0 : 1;
           // Push in on the attacker, then pull out to show the whole path.
           director?.sequence([{slots: [event.slot], durationMs: 650, boost: 0.38}, {slots: [event.slot, ...ctx.opponentsOf(event.slot)], durationMs: 1100, boost: -0.05}]);
+          { const s = toScreen(ctx, info.x, info.top + info.height * 0.5); hitFeel?.rush(s.x, s.y); }
           director?.shake(0.18);
         } else {
           director?.sequence([{slots: [event.slot, ...ctx.opponentsOf(event.slot)], durationMs: 900, boost: 0.14}]);
@@ -659,6 +660,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           kitStats.bursts++;
         }
         if (critical) cue({type: 'CRIT', system: CRITICAL_VFX_SYSTEM, slot: event.slot, x: target.x, y: target.groundY});
+        if (critical) hitFeel?.split();
         // At the contact point: a flash and sparks that fall to the target's ground.
         spawnFlash({x: hit.x, y: hit.y, tint: palette.core, size: tier === 'heavy' ? 46 : 30, life: tier === 'heavy' ? 170 : 120});
         sparks({x: hit.x, y: hit.y, count: tier === 'heavy' ? (rich ? 22 : 10) : tier === 'medium' ? (rich ? 12 : 6) : 6, palette,
@@ -674,6 +676,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           debris({x: hit.x, y: hit.groundY, groundY: hit.groundY, count: rich ? 10 : 5, palette});
           if (!vfx) spawnScorch({x: hit.x, groundY: hit.groundY, size: target.width * 1.1});
           director?.impact('heavy', fx.knockDir);
+          { const s = toScreen(ctx, hit.x, hit.y); hitFeel?.shock(s.x, s.y, {reach: target.width * (ctx.camera?.zoom ?? 1) * 1.8}); }
           // A signature hit pushes the lens toward the contact (1.22x, 260 ms).
           if (look?.tier === 'ultimate') { director?.lens?.({x: hit.x, y: hit.y, amount: 0.22, ms: 260}); director?.slowMo?.(BATTLE_FX_JUICY.slowMoMs); }
           screenFlash = Math.max(screenFlash, 0.18);
@@ -1095,7 +1098,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       hitAnchors: {...anchors}, callout: callout ? {tier: callout.tier, age: callout.age} : null, banner: banner ? banner.node.text : null, dim: Boolean(dim),
       dimStrength: dim?.strength ?? null, juicy, hyperWrap: hyper ? {slot: hyper.slot, age: Math.round(hyper.age)} : null, quartet: {...quartet, numbersLive: numbers.length, capsulesLive: capsules.length, hitStop: Boolean(hitStop)},
       element: element?.getDiagnostics() ?? null, cuesPending: cues.length,
-      moveVfx: kit ? {...kitStats, kit: kit.getDiagnostics()} : null}),
+      moveVfx: kit ? {...kitStats, kit: kit.getDiagnostics()} : null, hitFeel: hitFeel?.getDiagnostics() ?? null}),
     /** Bounded 3D cues since the last call (buff, critical, signature weather), oldest first. */
     consumeCues: () => cues.splice(0),
     dispose() {

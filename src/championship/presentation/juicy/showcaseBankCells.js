@@ -15,6 +15,7 @@ import {loadPublicRenderDescriptor} from '../publicRenderDescriptors.js';
 import {isLocalBattleEffectPreview} from '../battleEffectArt.js';
 import {isApprovedOriginalPublicLocation} from '../originalRuntimeLocation.js';
 import {loadOriginalSharedVfxDescriptor, sharedVfxAtlasSources} from '../originalSharedVfxReview.js';
+import {paintRemadedCell} from '../vfx/remadeEffectCells.js';
 
 const TICK_MS = 1000 / 60;
 const loopback = href => { try { return ['localhost', '127.0.0.1', '[::1]'].includes(new URL(href).hostname); } catch { return false; } };
@@ -40,7 +41,7 @@ async function loadFirstImage(doc, sources) {
  * `play(bankId, sequenceId, host, options)` appends one sprite to `host`,
  * anchored at the host's (0, 0) like the battle anchors its sprite.
  */
-export function createShowcaseBankCells({doc = globalThis.document, href = globalThis.location?.href, fetchImpl = globalThis.fetch} = {}) {
+export function createShowcaseBankCells({doc = globalThis.document, href = globalThis.location?.href, fetchImpl = globalThis.fetch, remake = true} = {}) {
   let disposed = false, base = null, shared = null;
   const baseUrl = doc?.baseURI ?? href;
   const allowed = Boolean(doc && href && typeof fetchImpl === 'function' && isLocalBattleEffectPreview(href));
@@ -63,14 +64,31 @@ export function createShowcaseBankCells({doc = globalThis.document, href = globa
     } catch { base = null; return false; }
   })();
 
+  // UNIQUE_PIXEL_MOVE_VFX_20261108: a sequence only the reference atlas has plays its remade
+  // cells, as the battle does; each remade cell is its own small image.
+  const remadeCells = new Map();
+  const remadeCell = (bankId, ref) => {
+    const key = `${bankId}:${ref.cell}`;
+    if (!remadeCells.has(key)) {
+      const painted = ref.blank ? null : paintRemadedCell(bankId, ref.cell, ref, {doc});
+      remadeCells.set(key, painted ? {...ref, frame: painted.frame, origin: painted.origin, pixelsPerNativePixel: painted.pixelsPerNativePixel,
+        url: painted.canvas.toDataURL('image/png'), image: {width: painted.frame[2], height: painted.frame[3]}} : ref);
+    }
+    return remadeCells.get(key);
+  };
+  const REMADE = Object.freeze({remade: true});
+
   /** The frames of one native sequence with the atlas each cell comes from. */
   function frames(bankId, sequenceId) {
     const sequence = profiles.banks[(bankId | 0) - 1]?.sequences?.[sequenceId];
     if (!sequence || !base) return null;
     // The remakes replace whole sequences, so one sequence reads one atlas.
     const covers = sheet => sheet && sequence.frames.every(f => sheet.cells.has(`${bankId}:${f.cell}`));
-    const source = covers(shared) ? shared : base;
-    const list = sequence.frames.map(f => ({cell: source.cells.get(`${bankId}:${f.cell}`), ticks: Math.max(1, f.ticks)}));
+    const source = covers(shared) ? shared : remake ? REMADE : base;
+    const list = sequence.frames.map(f => {
+      const cell = source === REMADE ? base.cells.get(`${bankId}:${f.cell}`) : source.cells.get(`${bankId}:${f.cell}`);
+      return {cell: source === REMADE && cell ? remadeCell(bankId, cell) : cell, ticks: Math.max(1, f.ticks)};
+    });
     return list.every(f => f.cell) ? {source, list, loop: sequence.playbackMode === 2} : null;
   }
 
@@ -82,7 +100,7 @@ export function createShowcaseBankCells({doc = globalThis.document, href = globa
     const holder = doc.createElement('i');
     holder.className = 'cm-showcase__cell';
     holder.dataset.bank = String(bankId);
-    holder.dataset.art = source !== shared ? 'battle-effects' : shared.revision === 'WEB_ATLAS_292' ? 'original-shared-292' : 'original-shared';
+    holder.dataset.art = source === REMADE ? 'remade' : source !== shared ? 'battle-effects' : shared.revision === 'WEB_ATLAS_292' ? 'original-shared-292' : 'original-shared';
     if (flip) holder.style.transform = 'scaleX(-1)';
     // A name that contradicts the bank's colour turns its cells (unifiedMoveVfxResolver cellHue).
     if (hue) holder.style.filter = `hue-rotate(${Math.round(hue)}deg) saturate(1.15)`;
@@ -93,12 +111,15 @@ export function createShowcaseBankCells({doc = globalThis.document, href = globa
     const total = list.reduce((sum, f) => sum + f.ticks, 0);
     const look = ({cell}) => {
       const k = nativeScale / cell.pixelsPerNativePixel;
-      const [x, y, w, h] = cell.frame;
+      const [x, y, w, h] = cell.frame, image = cell.url ? cell.image : source.image ?? {width: w, height: h};
       return {left: `${-cell.origin[0] * k}px`, top: `${-cell.origin[1] * k}px`, width: `${w * k}px`, height: `${h * k}px`,
-        backgroundPosition: `${-x * k}px ${-y * k}px`, backgroundSize: `${source.image.width * k}px ${source.image.height * k}px`,
+        backgroundPosition: `${-x * k}px ${-y * k}px`, backgroundSize: `${image.width * k}px ${image.height * k}px`,
+        ...(source === REMADE ? {backgroundImage: cell.url ? `url("${cell.url}")` : 'none'} : {}),
         opacity: cell.blank ? 0 : 1};
     };
-    sprite.style.backgroundImage = `url("${source.url}")`;
+    // Pixel art stays crisp when the preview scales it.
+    sprite.style.imageRendering = 'pixelated';
+    if (source !== REMADE) sprite.style.backgroundImage = `url("${source.url}")`;
     Object.assign(sprite.style, look(list[0]));
     host.append(holder);
     if (typeof sprite.animate === 'function' && list.length > 1) {
@@ -118,6 +139,6 @@ export function createShowcaseBankCells({doc = globalThis.document, href = globa
     /** True once the atlases are in and the sequence resolves to cells. */
     has: (bankId, sequenceId) => Boolean(frames(bankId, sequenceId)),
     getDiagnostics: () => Object.freeze({allowed, base: Boolean(base), shared: Boolean(shared), revision: shared?.revision ?? null, sharedUrl: shared?.url ?? null}),
-    dispose() { disposed = true; base = null; shared = null; }
+    dispose() { disposed = true; base = null; shared = null; remadeCells.clear(); }
   });
 }

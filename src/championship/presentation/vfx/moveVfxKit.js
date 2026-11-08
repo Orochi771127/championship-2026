@@ -23,7 +23,9 @@
 // writes nothing back. Textures are baked on first use and destroyed on
 // dispose().
 import {BATTLE_FX_PALETTES} from '../battleFx/battleFxPalettes.js';
-import {bakeMoveVfxIntensity, createNoiseField, paintMoveVfxSheet, paintMoveVfxSigil} from './moveVfxKitTextures.js';
+import {bakeMoveVfxIntensity, createNoiseField, paintMoveVfxCell, paintMoveVfxSheet, paintMoveVfxSigil} from './moveVfxKitTextures.js';
+import {DRAWN_VFX_FIXED, DRAWN_VFX_SPRITES} from './drawnVfxSprites.js';
+import {BRIEF_PALETTES} from './remadeEffectBriefs.js';
 
 const TAU = Math.PI * 2;
 const STYLE_ARCHETYPE = Object.freeze({
@@ -107,6 +109,16 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     if (name.startsWith('sigil:')) {
       const canvas = paintMoveVfxSigil(Number(name.slice(6)), palettes(paletteKey), {doc});
       entry = {textures: [texture(canvas)], loop: false, width: canvas.width, height: canvas.height, smoke: false};
+      sheets.set(id, entry);
+      return entry;
+    }
+    // A hand-drawn sprite (drawnVfxSprites.js) in the move's palette; "drawn:bigblast" plays bigblast_0, _1, ... as frames.
+    if (name.startsWith('drawn:')) {
+      const key = name.slice(6), list = DRAWN_VFX_SPRITES[key] ? [key] : Object.keys(DRAWN_VFX_SPRITES).filter(n => n.startsWith(`${key}_`)).sort();
+      const sprites = list.map(n => DRAWN_VFX_SPRITES[n]);
+      const w = Math.max(...sprites.map(s => s.w)), h = Math.max(...sprites.map(s => s.h));
+      const frames = sprites.map(s => paintMoveVfxCell({width: w, height: h, doc, noise, layers: [{drawn: s, palette: palettes(paletteKey), at: [Math.floor((w - s.w) / 2), Math.floor((h - s.h) / 2)], fixed: DRAWN_VFX_FIXED}]}));
+      entry = {textures: frames.map(texture), loop: false, width: w, height: h, smoke: false};
       sheets.set(id, entry);
       return entry;
     }
@@ -270,8 +282,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     tree: {head: 'leaf', len: 1.3, spin: 8, glow: 2.0, every: 34, trail(p, at, size) {
       part({name: 'leaf', paletteKey: MATERIAL.foliage, x: at.x, y: at.y, px: size * 0.6, life: 600, rotation: random() * TAU, spin: spread(10), vx: spread(40), vy: 25, fadeOut: 0.5});
     }},
-    missile: {head: 'missile', material: 'steel', len: 3.2, anchor: [0.55, 0.5], glow: 0, every: 22,
-      riders: [{name: 'comet', paletteKey: 'fire', px: 2.2, back: 1.25, anchor: [0.78, 0.5], fps: 26}], trail(p, at, size) {
+    missile: {head: 'drawn:missile', material: 'fire', len: 3.2, anchor: [0.55, 0.5], glow: 0, every: 22, trail(p, at, size) {
       smoke(at.x - Math.cos(at.angle) * size * 1.6, at.y - Math.sin(at.angle) * size * 1.6, 'neutral', size * 0.95, 1, 12);
     }},
     gatling: {head: 'streak', len: 2.4, anchor: [0.85, 0.5], glow: 1.2, every: 16, trail(p, at, size) {
@@ -304,9 +315,6 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
       part({name: 'burst', paletteKey: p.paletteKey, x: at.x + spread(size * 0.3), y: at.y + spread(size * 0.3), px: size * 1.7, life: 420,
         vx: -Math.cos(at.angle) * 50, vy: -Math.sin(at.angle) * 50 - 20, rotation: random() * TAU, grow: [0.7, 1.25], fadeOut: 0.6, alpha: 0.85});
       if (random() < 0.35) sparks({x: at.x, y: at.y, paletteKey: p.paletteKey, count: 1, angle: at.angle + Math.PI, cone: 1.6, speed: [60, 160], life: 360, size: size * 0.45, gravity: 260});
-    }},
-    missile: {head: 'comet', len: 2.6, anchor: [0.78, 0.5], fps: 26, glow: 1.8, every: 26, trail(p, at, size) {
-      smoke(at.x - Math.cos(at.angle) * size * 0.5, at.y - Math.sin(at.angle) * size * 0.5, p.paletteKey, size * 0.9, 1, 14);
     }},
     bullet: {head: 'streak', len: 2.2, anchor: [0.8, 0.5], glow: 1.4, every: 18, trail(p, at, size) {
       part({name: 'streak', paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 2, life: 120, rotation: at.angle, anchor: [0.9, 0.5], alpha: 0.5, fadeOut: 1});
@@ -374,25 +382,25 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
       sparks({x: at.x, y: at.y, paletteKey: p.paletteKey, count: 1, angle: at.angle + Math.PI, cone: 1.2, speed: [80, 180], life: 260, size: size * 0.45, gravity: 300});
     }},
     // Thrown objects. A mushroom flies as a glowing spore and only stands up where it lands.
-    mushroom: {head: 'orb', len: 1.1, fps: 16, spin: 3, glow: 2.0, every: 36, trail(p, at, size) {
+    mushroom: {head: 'drawn:spore', len: 1.1, fps: 8, spin: 3, glow: 2.0, every: 36, trail(p, at, size) {
       part({name: 'mist', paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 0.9, life: 420, fps: 14, grow: [0.6, 1.1], alpha: 0.55, fadeOut: 0.6});
     }},
-    bomb: {head: 'bomb', material: 'iron', len: 1.3, spin: 7, glow: 0.8, every: 22, trail(p, at, size) {
+    bomb: {head: 'drawn:bomb', material: 'iron', len: 1.3, spin: 7, glow: 0.8, every: 22, trail(p, at, size) {
       sparks({x: at.x, y: at.y - size * 0.5, paletteKey: 'fire', count: 1, angle: -Math.PI / 2, cone: 1.4, speed: [40, 110], life: 220, size: size * 0.35, gravity: 200});
     }},
     banana: {head: 'banana', material: 'banana', len: 1.4, spin: 16, glow: 0.8, every: 40, trail(p, at, size) {
       part({name: 'banana', paletteKey: MATERIAL.banana, x: at.x, y: at.y, px: size * 1.3, life: 120, rotation: random() * TAU, alpha: 0.35, fadeOut: 1});
     }},
-    fish: {head: 'fish', len: 1.7, glow: 1.2, every: 34, trail(p, at, size) {
+    fish: {head: 'drawn:fish', len: 1.2, fps: 8, glow: 1.2, every: 34, trail(p, at, size) {
       part({name: 'drop', paletteKey: 'water', x: at.x, y: at.y, px: size * 0.4, life: 380, rotation: at.angle + Math.PI, vy: 80, vx: spread(40), gravity: 300, onUpdate: alignToVelocity, fadeOut: 0.5});
     }},
-    gear: {head: 'gear', material: 'steel', len: 1.3, spin: 14, glow: 0.8, every: 30, trail(p, at, size) {
+    gear: {head: 'drawn:gear', len: 1.3, spin: 14, glow: 0.8, every: 30, trail(p, at, size) {
       sparks({x: at.x, y: at.y, paletteKey: p.paletteKey, count: 1, angle: at.angle + Math.PI, cone: 1, speed: [60, 160], life: 220, size: size * 0.4, gravity: 260});
     }},
-    bone: {head: 'bone', material: 'bone', len: 1.5, spin: 14, glow: 0.6, every: 44, trail(p, at, size) {
+    bone: {head: 'drawn:bone', material: 'bone', len: 1.5, spin: 14, glow: 0.6, every: 44, trail(p, at, size) {
       smoke(at.x, at.y, MATERIAL.rock, size * 0.5, 1, 6);
     }},
-    heart: {head: 'heart', len: 1.2, glow: 1.8, every: 34, upright: true, trail(p, at, size) {
+    heart: {head: 'drawn:heart', len: 1.2, glow: 1.8, every: 34, upright: true, trail(p, at, size) {
       part({name: 'heart', paletteKey: p.paletteKey, x: at.x + spread(size * 0.6), y: at.y + spread(size * 0.4), px: size * 0.45, life: 600, vy: -50, fadeOut: 0.5});
     }},
     syringe: {head: 'syringe', len: 2.0, anchor: [0.6, 0.5], glow: 0.8, every: 30, trail(p, at, size) {
@@ -407,10 +415,10 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   });
   // The body stage of a planted thing in the AI battle: it stands where the battle put it.
   const STANDING = Object.freeze({
-    mushroom: {head: 'mushroom', len: 1.5, upright: true, anchor: [0.5, 0.95], glow: 0, every: 120, grow: true, trail(p, at, size) {
+    mushroom: {head: 'drawn:mushroom', len: 1.5, upright: true, anchor: [0.5, 0.95], glow: 0, every: 120, grow: true, trail(p, at, size) {
       part({name: 'mist', paletteKey: p.paletteKey, x: at.x + spread(size * 0.6), y: at.y - size * 0.4, px: size * 0.5, life: 520, fps: 12, vy: -30, alpha: 0.6, fadeOut: 0.6});
     }},
-    bomb: {head: 'bomb', material: 'iron', len: 1.3, upright: true, anchor: [0.5, 0.9], glow: 0, every: 90, grow: true, trail(p, at, size) {
+    bomb: {head: 'drawn:bomb', material: 'iron', len: 1.3, upright: true, anchor: [0.5, 0.9], glow: 0, every: 90, grow: true, trail(p, at, size) {
       sparks({x: at.x + size * 0.3, y: at.y - size * 1.2, paletteKey: 'fire', count: 2, angle: -Math.PI / 2, cone: 1.6, speed: [50, 120], life: 200, size: size * 0.35, gravity: 160});
     }}
   });
@@ -429,7 +437,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   function trailMotif(motif, p, at, size) {
     if (motif === 'sparkle') flare(at.x + spread(size * 0.7), at.y + spread(size * 0.7), p.paletteKey, size * 0.7, 220, random(), 0.85);
     else if (motif === 'ring') ring(at.x, at.y, p.paletteKey, size * 1.6, 260, 1, 0, 0.6).grow = [1, 0.3];
-    else if (motif === 'afterimage') part({name: p.look.head, paletteKey: p.look.material ? MATERIAL[p.look.material] : p.paletteKey, x: at.x, y: at.y,
+    else if (motif === 'afterimage') part({name: p.look.head, paletteKey: p.look.material ? MATERIAL[p.look.material] ?? p.look.material : p.paletteKey, x: at.x, y: at.y,
       px: size * p.look.len, life: 160, anchor: p.look.anchor ?? [0.5, 0.5], rotation: p.look.upright ? 0 : at.angle, flipY: Math.cos(at.angle) < 0, alpha: 0.4, fadeOut: 1});
     else if (motif === 'ember') sparks({x: at.x, y: at.y, paletteKey: p.paletteKey, count: 1, angle: Math.PI / 2, cone: 1.4, speed: [40, 120], life: 420, size: size * 0.4, gravity: 420});
     else if (motif === 'rune' && p.signature) part({name: `sigil:${p.signature.sigil}`, paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 0.9, life: 340, spin: 3, grow: [1, 0.4], alpha: 0.75, fadeOut: 0.6});
@@ -512,7 +520,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   }
   function head(p, follow, k) {
     const look = p.look;
-    return part({name: look.head, paletteKey: look.material ? MATERIAL[look.material] : p.paletteKey, px: p.size * look.len * k, life: 1e9, fps: look.fps ?? 0, frame: look.frame ?? null,
+    return part({name: look.head, paletteKey: look.material ? MATERIAL[look.material] ?? look.material : p.paletteKey, px: p.size * look.len * k, life: 1e9, fps: look.fps ?? 0, frame: look.frame ?? null,
       anchor: look.anchor ?? [0.5, 0.5], follow, fadeIn: 30});
   }
   /** The drawn offset of a path from the true line, across it (+ is to the left of the heading). */
@@ -584,9 +592,10 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     smoke(x, y, MATERIAL.root, R * 1.4, 3, 30);
   }
   function explosion(x, y, groundY, R) {
-    flare(x, y, 'fire', R * 3.4, 180, random());
-    part({name: 'burst', paletteKey: 'fire', x, y, px: R * 4.4, life: 600, rotation: random() * TAU, grow: [0.8, 1.3], fadeOut: 0.3});
-    part({name: 'burst', paletteKey: 'fire', x: x + spread(R), y: y - R * 0.4, px: R * 2.6, life: 520, delay: 80, rotation: random() * TAU, grow: [0.7, 1.2], fadeOut: 0.3});
+    flare(x, y, 'fire', R * 2.4, 160, random());
+    // The hand-drawn blast (drawnVfxSprites.js) plays its six frames: flash, fireballs, break-up, embers.
+    part({name: 'drawn:bigblast', paletteKey: BRIEF_PALETTES.BLAST, x, y, px: R * 4.6, life: 620, fadeOut: 0.15});
+    part({name: 'drawn:bigblast', paletteKey: BRIEF_PALETTES.BLAST, x: x + spread(R), y: y - R * 0.4, px: R * 2.6, life: 540, delay: 90, fadeOut: 0.15});
     ring(x, groundY, 'fire', R * 5, 420, 0.45);
     smoke(x, y - R * 0.3, 'neutral', R * 2.2, 5, 60);
     sparks({x, y, paletteKey: 'fire', count: 12, speed: [240, 560], life: 460, size: R * 0.9});
@@ -633,21 +642,29 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   }
   /** A mushroom pops up where the shot landed, breathes, then bursts into spores. */
   function mushroomAt(x, groundY, paletteKey, R, planted) {
+    // Mushrooms keep their own violet in every mode, as the AI battle draws them.
+    paletteKey = BRIEF_PALETTES.VIOLET;
     if (!planted) {
-      const q = part({name: 'mushroom', paletteKey, x, y: groundY, px: R * 1.6, life: 620, anchor: [0.5, 0.95], fadeIn: 10, fadeOut: 0.05});
-      q.onUpdate = p => { const r = Math.min(1, p.age / 200), pop = r < 1 ? 1 - (1 - r) ** 3 * (1 - 2.2 * r) : 1, b = Math.sin(p.age / 60) * 0.14 * Math.min(1, p.age / 250); p.stretch = [pop * (1 + b), pop * (1 - b)]; };
-      later(() => mushroomAt(x, groundY, paletteKey, R, true), 600);
+      // A ring of mushrooms around the spot, as the move plants them, each a beat after the last.
+      const count = rich ? 5 : 3;
+      for (let i = 0; i < count; i++) {
+        const a = i / count * TAU + 0.3, mx = x + Math.cos(a) * R * 1.4, my = groundY + Math.sin(a) * R * 0.55, wait = i * 70;
+        const q = part({name: 'drawn:mushroom', paletteKey, x: mx, y: my, px: R * 0.95, life: 600, delay: wait, anchor: [0.5, 0.95], fadeIn: 10, fadeOut: 0.05});
+        q.onUpdate = p => { const r = Math.min(1, p.age / 200), pop = r < 1 ? 1 - (1 - r) ** 3 * (1 - 2.2 * r) : 1, b = Math.sin(p.age / 60) * 0.14 * Math.min(1, p.age / 250); p.stretch = [pop * (1 + b), pop * (1 - b)]; };
+        later(() => mushroomAt(mx, my, paletteKey, R * 0.7, true), 600 + wait);
+      }
       return;
     }
-    flare(x, groundY - R * 0.8, paletteKey, R * 2.2, 160, random());
-    cloudBurst(x, groundY - R * 0.7, paletteKey, R);
-    scatter('ball', x, groundY - R * 0.8, paletteKey, 8, R, {speed: [120, 260], life: 700, gravity: 120, px: 0.18});
-    decal({x, y: groundY, paletteKey, px: R * 2.6});
+    flare(x, groundY - R * 0.8, paletteKey, R * 1.8, 160, random());
+    part({name: 'drawn:puff', paletteKey, x, y: groundY - R * 0.8, px: R * 2.3, life: 900, fadeOut: 0.3});
+    smoke(x, groundY - R * 0.6, paletteKey, R * 1.6, 3, 40);
+    scatter('ball', x, groundY - R * 0.8, paletteKey, 6, R, {speed: [120, 260], life: 700, gravity: 120, px: 0.18});
+    decal({x, y: groundY, paletteKey, px: R * 2.2});
   }
   /** A bomb sits, flashes twice, then goes off. */
   function bombAt(x, groundY, R, planted) {
     if (!planted) {
-      const q = part({name: 'bomb', paletteKey: MATERIAL.iron, x, y: groundY, px: R * 1.5, life: 420, anchor: [0.5, 0.9], fadeIn: 10, fadeOut: 0.05});
+      const q = part({name: 'drawn:bomb', paletteKey: MATERIAL.iron, x, y: groundY, px: R * 1.5, life: 420, anchor: [0.5, 0.9], fadeIn: 10, fadeOut: 0.05});
       q.onUpdate = p => { const s = 1 + (Math.floor(p.age / 105) % 2) * 0.15; p.stretch = [s, s]; };
       later(() => bombAt(x, groundY, R, true), 400);
       return;
