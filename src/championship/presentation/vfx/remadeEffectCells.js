@@ -147,17 +147,23 @@ export function createRemadeEffectArt({PIXI, base, doc = globalThis.document}) {
     const look = remadeCellLook(bankId, cell, reference);
     if (!look) return null;
     const [, , fw, fh] = reference.frame, [ox, oy] = reference.origin;
-    const canvas = paintMoveVfxCell({width: fw * S, height: fh * S, doc, noise, layers: look.layers.map(layer => {
+    const layers = look.layers.map(layer => {
       const drawn = layer.drawn ? DRAWN_VFX_SPRITES[layer.drawn] ?? null : null, zoom = layer.zoom;
       const at = drawn ? [Math.round((ox + layer.at[0]) * S - drawn.w * zoom / 2), Math.round((oy + layer.at[1]) * S - (layer.anchor === 'bottom' ? drawn.h * zoom : drawn.h * zoom / 2))] : [0, 0];
       return {name: layer.sheet, palette: layer.palette, t: layer.t, light: layer.light, alpha: layer.alpha, flipX: layer.flipX, drawn, at, zoom, fixed: DRAWN_VFX_FIXED,
         box: [(ox + layer.box[0]) * S, (oy + layer.box[1]) * S, layer.box[2] * S, layer.box[3] * S]};
-    })});
+    });
+    // A drawing larger than the cell (a big blast, a tall gate) widens the canvas instead of being cut;
+    // the origin moves with it, so the pool still places the cell where the old one stood.
+    const pad = Math.max(0, ...layers.filter(l => l.drawn).flatMap(l => [-l.at[0], -l.at[1], l.at[0] + l.drawn.w * l.zoom - fw * S, l.at[1] + l.drawn.h * l.zoom - fh * S]));
+    for (const l of layers) { l.at = [l.at[0] + pad, l.at[1] + pad]; l.box = [l.box[0] + pad, l.box[1] + pad, l.box[2], l.box[3]]; }
+    const width = fw * S + pad * 2, height = fh * S + pad * 2;
+    const canvas = paintMoveVfxCell({width, height, doc, noise, layers});
     if (!canvas) return null;
     const texture = PIXI.Texture.from(canvas);
     if (texture.source) texture.source.scaleMode = 'nearest';
     remade++; if (look.briefed) briefed++;
-    return {...reference, texture, frame: [0, 0, fw * S, fh * S], origin: [ox * S, oy * S], pixelsPerNativePixel: S,
+    return {...reference, texture, frame: [0, 0, width, height], origin: [ox * S + pad, oy * S + pad], pixelsPerNativePixel: S,
       artSource: REMADE_CELL_SOURCE, remade: {family: look.family, stage: look.stage, briefed: look.briefed}};
   }
   return {

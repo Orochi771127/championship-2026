@@ -38,6 +38,8 @@ sprite("spore_1", { w: 13, h: 13, outline: "o" }, circ(6, 6, 5, "m"), circ(6, 6,
 // ---------------------------------------------------------------- spore cloud
 // Lumpy puffs, lit from the top left, darker underneath.
 const puff = (w, h, lobes) => [ ...lobes.map(([x, y, r]) => circ(x, y, r, "m")), shade([0, Math.round(h * 0.62), w, h]),
+  // Smoke is granular: darker specks thicken towards the shaded underside.
+  noise(0, Math.round(h * 0.35), w, h, "e", 0.18, 7, "m"), noise(0, 0, w, Math.round(h * 0.5), "x", 0.08, 3, "m"),
   ...lobes.filter(([, y]) => y < h * 0.6).map(([x, y, r]) => circ(x - Math.ceil(r / 3), y - Math.ceil(r / 3), Math.max(1, Math.floor(r / 2)), "x")) ]
 sprite("puff_0", { w: 16, h: 13, outline: "o" }, ...puff(16, 13, [[5, 7, 4], [10, 6, 4], [8, 8, 4]]))
 sprite("puff_1", { w: 26, h: 20, outline: "o" }, ...puff(26, 20, [[6, 12, 5], [12, 8, 6], [19, 11, 5], [12, 13, 6], [20, 15, 4]]))
@@ -59,6 +61,34 @@ sprite("blast_4", { w: 32, h: 32, outline: "o" }, circ(9, 12, 6, "e"), circ(18, 
   circ(27, 4, 1, "m"), circ(3, 26, 1, "m"), px(29, 26, "x"))
 sprite("blast_5", { w: 32, h: 32 }, circ(6, 7, 2, "e"), circ(26, 6, 2, "e"), circ(4, 24, 1, "m"), circ(28, 25, 2, "e"), circ(16, 4, 1, "m"),
   circ(16, 28, 1, "e"), px(11, 14, "x"), px(21, 18, "x"), px(9, 22, "m"), px(23, 11, "m"))
+
+// Round two (Owner: 「照順序」): a bigger blast with no outline, ragged at the rim.
+const fb = (x, y, r) => [circ(x, y, r, "e"), circ(x - 1, y - 1, Math.max(1, r - 1), "m"), circ(x - 2, y - 2, Math.max(1, r - 3), "x")]
+const ring8 = (cx, cy, d, r, k = 8, a0 = 0.3) => Array.from({length: k}, (_, i) => fb(Math.round(cx + Math.cos(a0 + i * 6.283 / k) * d), Math.round(cy + Math.sin(a0 + i * 6.283 / k) * d * 0.9), r)).flat()
+sprite("bigblast_0", { w: 48, h: 48 }, circ(24, 24, 7, "x"), circ(24, 24, 4, "c"), line(24, 10, 24, 15, "x"), line(24, 33, 24, 38, "x"), line(10, 24, 15, 24, "x"), line(33, 24, 38, 24, "x"),
+  px(15, 15, "m"), px(33, 33, "m"), px(33, 15, "m"), px(15, 33, "m"))
+sprite("bigblast_1", { w: 48, h: 48 }, ...ring8(24, 24, 7, 6, 6), circ(24, 24, 7, "x"), circ(23, 23, 4, "c"))
+sprite("bigblast_2", { w: 48, h: 48 }, ...ring8(24, 24, 11, 8, 7), ...fb(24, 24, 10), circ(23, 23, 7, "x"), circ(22, 22, 4, "c"),
+  circ(8, 12, 1, "m"), circ(41, 34, 1, "m"))
+sprite("bigblast_3", { w: 48, h: 48 }, ...ring8(24, 25, 14, 9, 8), ...ring8(24, 24, 7, 7, 5, 1), circ(23, 23, 6, "x"), circ(22, 22, 3, "c"),
+  circ(4, 20, 2, "e"), circ(44, 28, 2, "e"), circ(20, 3, 1, "m"), circ(30, 45, 1, "m"))
+sprite("bigblast_4", { w: 48, h: 48 }, ...ring8(24, 25, 15, 8, 8), circ(24, 24, 9, "e"), circ(21, 21, 4, "m"), circ(29, 28, 3, "m"),
+  circ(24, 24, 5, "_"), circ(13, 30, 3, "_"), circ(34, 15, 2, "_"), circ(3, 12, 2, "e"), circ(45, 38, 2, "e"), px(22, 6, "x"))
+sprite("bigblast_5", { w: 48, h: 48 }, circ(7, 9, 3, "e"), circ(40, 8, 2, "e"), circ(5, 37, 2, "e"), circ(43, 39, 3, "e"), circ(24, 5, 2, "m"),
+  circ(24, 43, 2, "e"), circ(15, 22, 1, "m"), circ(34, 26, 1, "m"), px(12, 30, "x"), px(36, 17, "x"), px(26, 33, "m"), px(19, 14, "m"))
+
+// Lightning: a jagged channel with forks, three different strikes, bright core in a glow.
+const bolt = pts => { const out = []; for (let i = 2; i < pts.length; i += 2) out.push(line(pts[i - 2], pts[i - 1], pts[i], pts[i + 1], "x", 3)); for (let i = 2; i < pts.length; i += 2) out.push(line(pts[i - 2], pts[i - 1], pts[i], pts[i + 1], "c")); return out }
+sprite("bolt_0", { w: 34, h: 18 }, ...bolt([1, 9, 6, 4, 10, 11, 15, 6, 19, 13, 24, 5, 28, 10, 33, 8]), line(15, 6, 17, 1, "m"), line(24, 5, 22, 1, "m"), line(19, 13, 21, 17, "m"))
+sprite("bolt_1", { w: 34, h: 18 }, ...bolt([1, 8, 5, 12, 9, 5, 14, 10, 18, 3, 23, 12, 27, 7, 33, 10]), line(9, 5, 7, 1, "m"), line(23, 12, 26, 16, "m"), line(14, 10, 12, 15, "m"))
+sprite("bolt_2", { w: 34, h: 18 }, ...bolt([1, 10, 4, 6, 9, 9, 13, 3, 17, 11, 22, 6, 26, 13, 33, 7]), line(13, 3, 16, 1, "m"), line(26, 13, 24, 17, "m"), line(4, 6, 2, 2, "m"))
+
+// A hit of rays: thin lines thrown out from the contact, as an arrowhead strikes.
+const rays = (len, gap, k = 8) => Array.from({length: k}, (_, i) => { const a = i * 6.283 / k + 0.2, l = len * (i % 2 ? 0.7 : 1);
+  return line(Math.round(16 + Math.cos(a) * gap), Math.round(16 + Math.sin(a) * gap), Math.round(16 + Math.cos(a) * (gap + l)), Math.round(16 + Math.sin(a) * (gap + l)), i % 2 ? "x" : "c") })
+sprite("rays_0", { w: 32, h: 32 }, circ(16, 16, 3, "c"), ...rays(5, 3))
+sprite("rays_1", { w: 32, h: 32 }, circ(16, 16, 2, "x"), ...rays(9, 4))
+sprite("rays_2", { w: 32, h: 32 }, ...rays(5, 10), px(16, 16, "m"))
 
 // ---------------------------------------------------------------- bomb
 sprite("bomb", { w: 20, h: 22, outline: "o" }, circ(9, 13, 8, "e"), circ(8, 12, 6, "m"), circ(6, 9, 2, "x"), px(5, 8, "c"),
@@ -108,6 +138,22 @@ sprite("missile_big", { w: 32, h: 16, outline: "o" },
 // A small fish, two strokes of the tail; a shoal leaps in an arc.
 sprite("fish_0", { w: 12, h: 8, outline: "o" }, ellipse(6, 4, 4, 2, "m"), rect(3, 3, 6, 1, "x"), px(8, 3, "k"), poly([0, 1, 3, 4, 0, 7], "e"), px(5, 6, "e"))
 sprite("fish_1", { w: 12, h: 8, outline: "o" }, ellipse(6, 4, 4, 2, "m"), rect(3, 3, 6, 1, "x"), px(8, 3, "k"), poly([0, 2, 3, 4, 1, 6], "e"), px(5, 6, "e"))
+
+// ---------------------------------------------------------------- more things
+sprite("gear", { w: 24, h: 24, outline: "o" }, circ(12, 12, 8, "m"), ...Array.from({length: 8}, (_, i) => { const a = i * 0.785; return rect(Math.round(12 + Math.cos(a) * 9) - 2, Math.round(12 + Math.sin(a) * 9) - 2, 4, 4, "m") }),
+  circ(12, 12, 4, "e"), circ(12, 12, 2, "_"), light([4, 3, 8, 5]), shade([10, 14, 12, 8]))
+sprite("bone", { w: 24, h: 12, outline: "o" }, rect(5, 4, 14, 4, "m"), circ(4, 3, 3, "m"), circ(4, 8, 3, "m"), circ(19, 3, 3, "m"), circ(19, 8, 3, "m"), rect(5, 4, 14, 1, "x"), px(3, 2, "c"), px(18, 2, "c"), rect(5, 7, 14, 1, "e"))
+sprite("clock", { w: 22, h: 24, outline: "o" }, circ(5, 4, 3, "m"), circ(16, 4, 3, "m"), circ(11, 14, 9, "m"), circ(11, 14, 7, "W"), line(11, 14, 11, 9, "k"), line(11, 14, 15, 14, "k"),
+  px(11, 8, "D"), px(11, 20, "D"), px(5, 14, "D"), px(17, 14, "D"), line(6, 22, 4, 23, "e"), line(16, 22, 18, 23, "e"), px(4, 3, "c"))
+// A cat's eye: an almond of gold, a round iris and a black slit pupil with a glint.
+sprite("eye", { w: 30, h: 16, outline: "o" }, poly([0, 8, 6, 3, 15, 1, 24, 3, 30, 8, 24, 13, 15, 15, 6, 13], "x"), circ(15, 8, 6, "m"), circ(15, 8, 4, "e"),
+  rect(14, 2, 3, 13, "k"), px(12, 5, "c"), px(13, 5, "c"), px(12, 6, "c"), shade([2, 11, 26, 5]))
+sprite("ghost", { w: 24, h: 26, outline: "o" }, circ(12, 15, 9, "m"), rect(5, 18, 14, 6, "m"), circ(8, 14, 2, "k"), circ(16, 14, 2, "k"), rect(9, 20, 6, 2, "e"),
+  px(10, 20, "k"), px(13, 20, "k"), circ(6, 6, 3, "x"), circ(12, 3, 3, "x"), circ(18, 6, 3, "x"), circ(12, 7, 4, "m"), light([5, 8, 6, 4]))
+// A gate of light: a double outlined arch on two posts, the opening faintly lit.
+sprite("arch", { w: 24, h: 32 }, clip([0, 0, 24, 13], ellipse(12, 12, 11, 11, "x", true), ellipse(12, 12, 9, 9, "m", true)),
+  rect(1, 12, 2, 20, "x"), rect(21, 12, 2, 20, "x"), rect(3, 12, 1, 20, "m"), rect(20, 12, 1, 20, "m"),
+  dither(5, 6, 14, 26, "_", "c", 0.22), rect(0, 30, 4, 2, "m"), rect(20, 30, 4, 2, "m"))
 
 // ---------------------------------------------------------------- heart
 sprite("heart", { w: 16, h: 14, outline: "o", mx: true }, `

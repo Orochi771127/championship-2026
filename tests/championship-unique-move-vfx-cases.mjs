@@ -201,7 +201,10 @@ test("remade cells: every brief names real sequences and drawings, and a referen
   const remade = art.getCell(20, 6);
   assert.equal(remade.artSource, REMADE_CELL_SOURCE);
   assert.equal(remade.pixelsPerNativePixel, REMADE_CELL_SCALE);
-  assert.deepEqual(remade.origin, [7 * REMADE_CELL_SCALE, 8 * REMADE_CELL_SCALE], "the native origin is kept, so the pool places it where the old cell stood");
+  // A drawing larger than the cell widens it evenly; the native origin moves with the padding.
+  const pad = (remade.frame[2] - 16 * REMADE_CELL_SCALE) / 2;
+  assert.equal(remade.frame[3] - 16 * REMADE_CELL_SCALE, pad * 2, "padded evenly");
+  assert.deepEqual(remade.origin, [7 * REMADE_CELL_SCALE + pad, 8 * REMADE_CELL_SCALE + pad], "the native origin is kept, so the pool places it where the old cell stood");
   assert.equal(art.getCell(1, 0).artSource, "ORIGINAL_SHARED_REVIEW", "an original cell passes through");
   assert.equal(art.getCell(20, 6), remade, "cached");
   art.releaseRemade();
