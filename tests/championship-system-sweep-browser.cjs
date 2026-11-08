@@ -44,17 +44,20 @@ function observers(save){
   try{if(!localStorage.getItem('championshipModernSave:v1'))localStorage.setItem('championshipModernSave:v1',save);}catch{}
   const d=globalThis.__sweep={gl:{texture:0,buffer:0,framebuffer:0,renderbuffer:0},contexts:0,listeners:new Map(),intervals:new Set(),
     timeouts:new Set(),blobs:new Set(),raf:0,frames:0,storageWrites:0,storageBytes:0,storageKeys:{},rejections:[],workers:0,workersTerminated:0,
-    workerUrls:{},audio:0,contextList:[],contextLost:0};
+    workerUrls:{},audio:0,contextList:[],contextLost:0,perContext:new WeakMap()};
   for(const proto of [globalThis.WebGLRenderingContext?.prototype,globalThis.WebGL2RenderingContext?.prototype].filter(Boolean)){
     for(const kind of ['Texture','Buffer','Framebuffer','Renderbuffer']){
       const create=proto['create'+kind],remove=proto['delete'+kind],key=kind.toLowerCase();
-      proto['create'+kind]=function(...a){const v=create.apply(this,a);if(v)d.gl[key]++;return v;};
-      proto['delete'+kind]=function(o,...a){if(o)d.gl[key]--;return remove.call(this,o,...a);};
+      // Also per context: objects of a lost context die with it, so only the
+      // contexts still attached to the page say whether live GPU objects grow.
+      const per=c=>{let m=d.perContext.get(c);if(!m)d.perContext.set(c,m={texture:0,buffer:0,framebuffer:0,renderbuffer:0});return m;};
+      proto['create'+kind]=function(...a){const v=create.apply(this,a);if(v){d.gl[key]++;per(this)[key]++;}return v;};
+      proto['delete'+kind]=function(o,...a){if(o){d.gl[key]--;per(this)[key]--;}return remove.call(this,o,...a);};
     }
   }
   const getContext=HTMLCanvasElement.prototype.getContext,seen=new WeakSet();
   HTMLCanvasElement.prototype.getContext=function(type,...a){const c=getContext.call(this,type,...a);
-    if(c&&/webgl/.test(type)&&!seen.has(c)){seen.add(c);d.contexts++;d.contextList.push(new WeakRef(this));
+    if(c&&/webgl/.test(type)&&!seen.has(c)){seen.add(c);d.contexts++;d.contextList.push(new WeakRef(this));this.__sweepContext=c;
       this.addEventListener('webglcontextlost',()=>d.contextLost++);}return c;};
   const watched=t=>t===globalThis||t===document||t===document.documentElement||t===document.body||t===globalThis.visualViewport;
   const name=t=>t===globalThis?'window':t===document?'document':t===globalThis.visualViewport?'visualViewport':'element';
@@ -130,6 +133,7 @@ function observers(save){
         workerUrls:{...d.workerUrls},audio:d.audio,contextLost:d.contextLost,
         // A context whose canvas left the DOM is garbage only once collected; count the ones still attached.
         contextsAttached:d.contextList.map(r=>r.deref()).filter(c=>c?.isConnected).length,
+        attachedGl:d.contextList.map(r=>r.deref()).filter(c=>c?.isConnected).map(c=>({size:`${c.width}x${c.height}`,...(d.perContext.get(c.__sweepContext)??{})})),
         contextsAlive:d.contextList.map(r=>r.deref()).filter(Boolean).length,storageKeys:{...d.storageKeys},
         rafPerFrame:Math.round((d.raf-r0)/Math.max(1,d.frames-f0)*100)/100,domNodes:document.getElementsByTagName('*').length,
         heapMB:performance.memory?Math.round(performance.memory.usedJSHeapSize/1048576*10)/10:null,
