@@ -1,5 +1,22 @@
 # Championship Owner Direction
 
+<!-- record-id: UNIQUE_PIXEL_MOVE_VFX_20261108 -->
+## 2026-11-08 — One pixel style for move effects, and every move its own
+
+After a read-only comparison showed three move-effect looks side by side (enlarged low-resolution original cells, the remade 292-cell pixel atlas, and the Data Arena kit's smooth glow) and that 587 species moves shared about 200 looks, the Owner asked to unify the style and give every move a distinct effect, chose the plan to unify on the remade cells' pixel look, and said: 「那就讓你幫我自行規劃跟製作，總之我要每一招都獨特」.
+
+OWNER_APPROVED_ADAPTATION. This supersedes the 2026-11-05 MOVE_VFX_KIT_20261105 decision that each mode keeps its own look.
+
+- The move VFX kit paints with a pixel finish (flat tones, a one-texel dark outline, stepped light bands, nearest sampling). Every effect stays computed in code: no image file, no ROM pixel, no generated picture.
+- `src/data/championship/move-vfx-signatures.r1.json` (generator `scripts/build-move-vfx-signatures.mjs`) gives each of the 666 moves -- species and original-character moves, learnable support moves, Data Arena pool moves -- its own size, volley and path (or combo and swing), trail, closing burst and a sigil glyph drawn from its own seed. No two moves share a look; two moves of one archetype and palette differ in at least two choices; no sigil repeats (tests).
+- Nine thrown archetypes join the kit by name: shuriken, crescent, star, bubble, note, feather, petal, snowflake, drill.
+- First batch: the Data Arena draws every phase with the move's signature.
+- Second batch (Owner 「先做 AI 對戰」): in the AI battle a cell that only the reference atlas has is no longer drawn; the kit draws the move's own effect on that same live effect actor, so the native timing and path stay. Every move also opens its sigil on the ground (skills and signature moves), trails its original-cell shots with its own motif and closes each hit on its own burst. The Dex follows in a later batch.
+- Third batch (Owner: the mushroom move must plant mushrooms and burst into spores; 「表現方式也要一樣…每一招都要照著作為參考」; 「外觀盡量一樣但你幫我畫」 after declining a pixel-for-pixel copy of the reference cells, whose record is `ROM_COPYRIGHTED_REFERENCE`): every reference-only cell is remade (`remadeEffectCells.js`) from a written per-family brief (`remadeEffectBriefs.js`, 113 families) and handed back in its place, so the native pool keeps each move's count, positions, timing, turn, scale and fade. Remade cells face left as the native cells do. Concrete things are hand-drawn with the pxl tool in `docs/art/production/move-vfx-drawn-r1/drawn-vfx.px.js` (mushrooms, spore clouds, explosions, bombs, cherries, six missile shapes, a shoal of small fish, hearts, splashes) and generated into `drawnVfxSprites.js`; the Owner accepted the comparison sheets of this round (「這次的還可以」).
+- Presentation only: no power, element rule, range, timing, RNG, save or gameplay value changes.
+
+This records the direction and the first batch, not publication: commit, push, merge and deploy keep their own authorization.
+
 <!-- record-id: CHARACTER_ASSET_REPOSITORY_MIGRATION_20261106 -->
 ## 2026-11-06 — Inventory all character stages and move animation delivery out of the game-site payload
 
