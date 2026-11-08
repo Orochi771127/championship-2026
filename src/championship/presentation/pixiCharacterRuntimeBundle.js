@@ -155,7 +155,10 @@ export async function loadPixiCharacterRuntimeBundle({
     requireRecord(runtime.sides, "character runtime.sides");
     if(streamed){
       validateStreaming();
-      for(const id of new Set([0,...initialSequenceIds]))await ensureSequence(id);
+      // The idle and the caller's sequences (an evolution target's 39) are
+      // independent pages: request them together. The shared atlas queue still
+      // bounds concurrency at two pages; serial awaits only added round trips.
+      await Promise.all([...new Set([0,...initialSequenceIds])].map(ensureSequence));
     }
     const guardedAtlases = new Map();
     if (replacementGuard) {
