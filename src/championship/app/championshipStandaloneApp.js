@@ -381,6 +381,11 @@ export function createChampionshipStandaloneApp({
   // to title mid-evolution kept the loss and dropped the evolution. Nothing new
   // is saved: an interrupted evolution leaves partner and metal as they were.
   let catalystReservation=null;
+  // Rebirth has the same shape (2026-11-08 system sweep): the cycle count used
+  // to be written when the animation started while the egg only appeared at its
+  // end, so any save in between kept "cycle +1, still 成熟期" and the partner
+  // could be reborn again. The new count is held here and written with the egg.
+  let rebirthReservation=null;
   // DIAMOND_ECONOMY_20261102: royal cages placed in the facility draft (instanceId -> edition),
   // the royal card picked in the tray, the last automation events and diamond rewards for the UI.
   let draftRoyalEditions=null;
@@ -1232,6 +1237,16 @@ export function createChampionshipStandaloneApp({
   function liveCatalystReservation(){
     if(catalystReservation&&!raisingActors.get(catalystReservation.instanceId)?.evolution)catalystReservation=null;
     return catalystReservation;
+  }
+  function liveRebirthReservation(){
+    if(rebirthReservation&&!raisingActors.get(rebirthReservation.instanceId)?.evolution)rebirthReservation=null;
+    return rebirthReservation;
+  }
+  /** The profile the evolution builds its next form from: a held rebirth adds its cycle count. */
+  function evolutionSourceProfile(instanceId){
+    const profile=raisingNativeProfile(instanceId),held=liveRebirthReservation();
+    if(!profile||held?.instanceId!==instanceId)return profile;
+    const next=structuredClone(profile);next.narrowFields['03c']=held.cycles;return next;
   }
   /** Metals the player can still use: owned minus the one a running catalyst holds. */
   function availableMetal(state,itemId){
@@ -2298,10 +2313,10 @@ export function createChampionshipStandaloneApp({
       const entry=[...raisingActors].find(([,actor])=>actor.evolution);if(!entry)return false;
       const [id,actor]=entry;
       for(let i=0;i<frames&&actor.evolution;i++){
-        const profileBefore=raisingNativeProfile(id);
+        const profileBefore=evolutionSourceProfile(id);
         const result=stepNativeRaisingEvolution(actor,profileBefore,{next:nextGameplayRandom});
         if(!actor.evolution)raisingEvolutionRate=1;
-        if(result.changed)writeRaisingNativeProfile(id,result.profile);
+        if(result.changed){writeRaisingNativeProfile(id,result.profile);if(rebirthReservation?.instanceId===id)rebirthReservation=null;}
         if(result.disappeared){
           const prior=requireSession().getRaisingHomeSnapshot();
           if(prior.residents.some(r=>r.residentId===id))requireSession().commitRaisingResidentRelease([id],prior.revision);
@@ -3538,7 +3553,8 @@ export function createChampionshipStandaloneApp({
       if([...raisingActors.values()].some(a=>a.evolution))return Object.freeze({ok:false,reason:'EVOLUTION_RUNNING'});
       const rebirth=productRebirth(profile);
       if(!rebirth.ok)return Object.freeze({ok:false,reason:rebirth.reason});
-      writeRaisingNativeProfile(instanceId,rebirth.profile);
+      // Held until the egg is written (rebirthReservation): nothing is saved before it.
+      rebirthReservation=Object.freeze({instanceId,cycles:rebirth.profile.narrowFields['03c']});
       // Awakening raising (Owner 2026-11-02): a reborn partner keeps every form it learned; it bursts into them
       // again once it is a 成熟期 that can (awakeningDisplayFor and burstPlanFor read its current 成熟期).
       beginNativeRaisingEvolution(actor,{target:rebirth.target},{next:nextGameplayRandom},raisingFoods);
