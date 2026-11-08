@@ -132,20 +132,19 @@ export function remadeCellLook(bankId, cell, reference) {
   return {family, stage, sequence: place.sequence, index: place.index, briefed: Boolean(brief), layers};
 }
 
+let sharedNoise = null;
 /**
- * Wraps a loaded battle effect art (same getCell/dispose contract): a cell that
- * only the reference atlas has comes back remade; original cells pass through.
+ * Paint one remade cell: {canvas, frame, origin, pixelsPerNativePixel, look}, or
+ * null when it cannot be remade. Shared by the battle (as a texture) and the
+ * Dex preview (as a CSS image). `reference` needs the cell's frame, origin and blank.
  */
-export function createRemadeEffectArt({PIXI, base, doc = globalThis.document}) {
-  if (!base || !doc) return base;
-  const probe = doc.createElement?.('canvas')?.getContext?.('2d');
-  if (typeof probe?.createImageData !== 'function') return base;
-  const noise = createNoiseField(64, 0x5ce1);
-  const cells = new Map(), S = REMADE_CELL_SCALE;
-  let remade = 0, briefed = 0;
-  function remake(bankId, cell, reference) {
-    const look = remadeCellLook(bankId, cell, reference);
-    if (!look) return null;
+export function paintRemadedCell(bankId, cell, reference, {doc = globalThis.document} = {}) {
+  const S = REMADE_CELL_SCALE;
+  const look = remadeCellLook(bankId, cell, reference);
+  if (!look || !doc) return null;
+  sharedNoise ??= createNoiseField(64, 0x5ce1);
+  const noise = sharedNoise;
+  {
     const [, , fw, fh] = reference.frame, [ox, oy] = reference.origin;
     const layers = look.layers.map(layer => {
       const drawn = layer.drawn ? DRAWN_VFX_SPRITES[layer.drawn] ?? null : null, zoom = layer.zoom;
@@ -159,11 +158,28 @@ export function createRemadeEffectArt({PIXI, base, doc = globalThis.document}) {
     for (const l of layers) { l.at = [l.at[0] + pad, l.at[1] + pad]; l.box = [l.box[0] + pad, l.box[1] + pad, l.box[2], l.box[3]]; }
     const width = fw * S + pad * 2, height = fh * S + pad * 2;
     const canvas = paintMoveVfxCell({width, height, doc, noise, layers});
-    if (!canvas) return null;
+    return canvas ? {canvas, frame: [0, 0, width, height], origin: [ox * S + pad, oy * S + pad], pixelsPerNativePixel: S, look} : null;
+  }
+}
+
+/**
+ * Wraps a loaded battle effect art (same getCell/dispose contract): a cell that
+ * only the reference atlas has comes back remade; original cells pass through.
+ */
+export function createRemadeEffectArt({PIXI, base, doc = globalThis.document}) {
+  if (!base || !doc) return base;
+  const probe = doc.createElement?.('canvas')?.getContext?.('2d');
+  if (typeof probe?.createImageData !== 'function') return base;
+  const cells = new Map();
+  let remade = 0, briefed = 0;
+  function remake(bankId, cell, reference) {
+    const painted = paintRemadedCell(bankId, cell, reference, {doc});
+    if (!painted) return null;
+    const {canvas, frame, origin, pixelsPerNativePixel, look} = painted;
     const texture = PIXI.Texture.from(canvas);
     if (texture.source) texture.source.scaleMode = 'nearest';
     remade++; if (look.briefed) briefed++;
-    return {...reference, texture, frame: [0, 0, width, height], origin: [ox * S + pad, oy * S + pad], pixelsPerNativePixel: S,
+    return {...reference, texture, frame, origin, pixelsPerNativePixel,
       artSource: REMADE_CELL_SOURCE, remade: {family: look.family, stage: look.stage, briefed: look.briefed}};
   }
   return {

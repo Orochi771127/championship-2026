@@ -210,6 +210,13 @@ test("remade cells: every brief names real sequences and drawings, and a referen
   art.releaseRemade();
 });
 
+test("the Dex preview plays the remade cells for a sequence only the reference atlas has", () => {
+  const source = fs.readFileSync("src/championship/presentation/juicy/showcaseBankCells.js", "utf8");
+  assert.match(source, /const source = covers\(shared\) \? shared : remake \? REMADE : base;/, "the Owner's remade atlas first, then the remade cells");
+  assert.match(source, /paintRemadedCell\(bankId, ref\.cell, ref, \{doc\}\)/, "the same painter as the battle");
+  assert.match(source, /holder\.dataset\.art = source === REMADE \? 'remade'/);
+});
+
 test("the kit's sigil, burst and headless trail", () => {
   const PIXI = fakePixi(), front = new PIXI.Container(), ground = new PIXI.Container();
   const kit = createMoveVfxKit({ PIXI, front, ground, doc, quality: "saver" });
