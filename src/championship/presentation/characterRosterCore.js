@@ -24,6 +24,23 @@ export async function loadCharacterRosterCore({
     for(const id of ids)if(Number.isInteger(id))selected.add(id);
     sequencesByEntity.set(entity,selected);
   }
+  // A streaming roster (initialSequences given: the ranch) streams every
+  // species it loads, not only the residents named at creation. A species
+  // requested later -- an evolution target, a hatch, an awakening form -- used
+  // to get no sequence list and so fell back to loading every atlas page of its
+  // native runtime one after another before it could draw (2026-11-05: 10 pages
+  // and ~20-28 s of "loading partner appearance" before a catalyst evolution).
+  // It now starts from its idle plus the sequences its caller needs; the rest
+  // stream on demand through the same presenter readiness gate. Hunt/Battle
+  // rosters pass no initialSequences and keep their eager whole-runtime load.
+  const streamingRoster=initialSequences!==null;
+  function requestSequences(entityId,ids){
+    if(!streamingRoster)return;
+    const selected=sequencesByEntity.get(entityId)??new Set([0]);
+    for(const id of ids??[])if(Number.isInteger(id))selected.add(id);
+    sequencesByEntity.set(entityId,selected);
+  }
+  for(const entityId of wanted)requestSequences(entityId,[]);
   for (const entityId of wanted) {
     if (!validateRecordRuntime(records.get(entityId),entityId)) {
       throw new Error(`INVALID_CHARACTER_RUNTIME_PATH:${entityId}`);
@@ -114,10 +131,14 @@ export async function loadCharacterRosterCore({
     signal?.throwIfAborted();
   } catch (error) { await dispose(); throw error; }
   return Object.freeze({
-    ensureSpecies(speciesId) {
+    // sequenceIds: native sequences the caller will draw first (an evolution
+    // target's sequence 39). They join the species' initial pages when its load
+    // has not started yet; once started, later sequences stream on demand.
+    ensureSpecies(speciesId, { sequenceIds = null } = {}) {
       if (disposed) return Promise.reject(new Error("CHARACTER_ROSTER_DISPOSED"));
       const entityId = identities.get(canonicalSpeciesId(speciesId));
       if (!entityId) return Promise.resolve(false);
+      if (!bundles.has(entityId)) requestSequences(entityId, sequenceIds);
       return enqueue(entityId);
     },
     createActor({ speciesId, side = "main", reducedMotion = false, presentation = null } = {}) {

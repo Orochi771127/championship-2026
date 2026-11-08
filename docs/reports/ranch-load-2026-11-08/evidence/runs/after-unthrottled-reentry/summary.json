@@ -1,0 +1,118 @@
+{
+ "schemaVersion": 1,
+ "label": "after",
+ "profile": "unthrottled",
+ "scenario": "reentry",
+ "artifact": "../../../tmp/claude-0/-home-user-championship-2026/7e08b30d-f0d8-5b8f-b456-2416c881048b/scratchpad/candidate-wt/dist/github-playtest",
+ "generatedAt": "2026-11-08T08:58:05.159Z",
+ "measurement": "Loopback built artifact, GitHub-Pages-like cache headers, Chromium software WebGL; not an iPhone/Safari measurement",
+ "cases": [
+  {
+   "name": "environment",
+   "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Mobile Safari/537.36",
+   "webgl": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+  },
+  {
+   "name": "A-cold",
+   "startEpoch": 1794128286565,
+   "fieldReadyMs": 2106,
+   "allResidentsReadyMs": 2103,
+   "residentsReadyAfterFieldMs": -3,
+   "noticeMs": 0,
+   "noticeSpans": [],
+   "pendingKinds": [
+    "species-034:animation:loading"
+   ],
+   "requests": {
+    "count": 88,
+    "status200": 88,
+    "status304": 0,
+    "bytes200": 7121397,
+    "duplicates": [],
+    "reviewedImages": 7,
+    "reviewedImageDistinct": 7,
+    "reviewedImageBytes": 1298392
+   },
+   "digests": {
+    "count": 39,
+    "bytes": 5106421,
+    "ms": 8
+   },
+   "longTasks": {
+    "count": 6,
+    "maxMs": 1179,
+    "totalMs": 2025
+   },
+   "longFrames": {
+    "count": 6,
+    "maxMs": 1200
+   },
+   "tap": {
+    "inputToStateMs": 356,
+    "inputToPaintMs": 666
+   }
+  },
+  {
+   "name": "E-reentry-during-target-load",
+   "startEpoch": 1794128308653,
+   "fieldReadyMs": 17997,
+   "allResidentsReadyMs": 8213,
+   "residentsReadyAfterFieldMs": -9784,
+   "noticeMs": 5213,
+   "noticeSpans": [
+    {
+     "from": 2999.699951171875,
+     "ms": 5213.300048828125,
+     "text": "正在載入夥伴外觀…"
+    }
+   ],
+   "pendingKinds": [
+    "species-034:animation:loading",
+    "species-034:evolution:loading",
+    "species-096:animation:loading"
+   ],
+   "requests": {
+    "count": 57,
+    "status200": 57,
+    "status304": 0,
+    "bytes200": 4749067,
+    "duplicates": [],
+    "reviewedImages": 3,
+    "reviewedImageDistinct": 3,
+    "reviewedImageBytes": 825786
+   },
+   "digests": {
+    "count": 54,
+    "bytes": 6555475,
+    "ms": 11
+   },
+   "longTasks": {
+    "count": 54,
+    "maxMs": 1051,
+    "totalMs": 18153
+   },
+   "longFrames": {
+    "count": 58,
+    "maxMs": 1067
+   },
+   "reentryMs": 15470,
+   "receipt": {
+    "ok": "true",
+    "text": "催化完成：回到牧場看拍檔進化！"
+   },
+   "dialogClosedMs": 6837,
+   "evolutionTargetLoadMs": 5213,
+   "evolutionTargetLoadStartMs": 3000,
+   "newSpeciesReadyMs": 18210
+  }
+ ],
+ "buildId": "208f68243e1ff4ef5a1a97420639326134d7ee9b5b744f52a35860f75da46f5b",
+ "artifactCommit": "bd7209aa7cfe9d9f52abfe84186330d3a63ebbda",
+ "timezoneId": "Etc/GMT-5",
+ "localHourAtStart": 13,
+ "externalCharacterAssets": true,
+ "errors": [],
+ "warnings": [],
+ "status": "COMPLETE",
+ "serverLog": 320
+}
