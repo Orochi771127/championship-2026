@@ -48,6 +48,8 @@ const write = () => fs.writeFileSync(path.join(output,'validation.json'),JSON.st
    if(d.dash)await page.keyboard.press('Space');
    if(d.cast!==null)await page.keyboard.press(['2','3','4'][d.cast]);
    if(o.snap.kit.energy>=80&&o.snap.kit.ultimateCooldown<=0)await page.keyboard.press('r');
+   // Owner 2026-11-08: a full burst gauge waits for the player's press, so the bot presses it.
+   if(o.snap.relay.burst?.phase==='READY')await page.keyboard.press('b');
    if(!switched&&o.snap.time>12&&!o.snap.player.action){await page.keyboard.up('j');held.delete('j');await page.keyboard.press('x');}
    switched ||= o.snap.relay.active===1;
    if(!shot&&hits&&o.snap.time>15){await page.screenshot({path:path.join(output,'desktop-combat.png')});shot=true;}

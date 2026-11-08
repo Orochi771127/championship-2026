@@ -141,21 +141,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     return base ?? RELAY_ROSTER.find(p => !relayBurstOnly(p))?.id ?? id;
   };
   // Awakening raising (Owner 2026-11-02): a relay entry raised on the ranch bursts into the form that partner
-  // learned (null: it learned none); a Dex-only entry keeps its first tier-1 form (undefined lets the simulation
-  // choose it).
+  // learned. Owner 2026-11-08: only that -- a Dex-only or rental entry, or a partner that learned no form, never
+  // bursts (null), as in the auto battle.
   const relayBurstPlanOf = id => {
     const instanceId = entryOf('RELAY', id)?.instanceId ?? null;
-    return instanceId && typeof burstPlanOf === 'function' ? burstPlanOf(instanceId) || undefined : undefined;
+    return instanceId && typeof burstPlanOf === 'function' ? burstPlanOf(instanceId) ?? null : null;
   };
-  const DEFAULT_BURST_FORM_BY_ELEMENT = Object.freeze({
-    fire: 109, water: 110, frost: 112, nature: 111, earth: 113,
-    storm: 118, light: 119, shadow: 120, physical: 113
-  });
   const relayBurstMembers = id => {
-    const own = relayBurstPlanOf(id);
-    const tier1 = burstFormsFor(relayIndexOf(id)).find(f => f.tier === 1) ?? null;
-    const fallbackForm = DEFAULT_BURST_FORM_BY_ELEMENT[partnerElement(id)] ?? 109;
-    const plan = own || tier1 || { tier: 1, form: fallbackForm };
+    const plan = relayBurstPlanOf(id);
     return [plan?.via, plan?.form].filter(Number.isInteger)
       .map(form => cast.partners.find(m => m.partnerId === `relay-species-${String(form).padStart(3, '0')}` || m.speciesId === `species-${String(form).padStart(3, '0')}`) ?? null);
   };
@@ -167,7 +160,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   // Entry rights (Owner 2026-11-02): partners raised on the ranch or lit in the
   // Dex fight; a thin save is lent practice partners. Tournament and harbor share three kits.
   const roster = (list) => list.map(({ id, speciesId }) => ({ id, speciesId }));
-  const entryLists = { TOURNAMENT: dataArenaEntries(roster(DATA_ARENA_PARTNERS), progress), RELAY: dataArenaEntries(roster(RELAY_ROSTER.filter((p) => !relayBurstOnly(p))), progress) };
+  // Owner 2026-11-08: of several held individuals of one species, the one that learned a burst form fights for it.
+  const learnedFirst = progress?.ownedInstances && typeof burstPlanOf === "function"
+    ? { ...progress, ownedInstances: [...progress.ownedInstances].sort((x, y) => Number(!burstPlanOf(x.instanceId)) - Number(!burstPlanOf(y.instanceId))) }
+    : progress;
+  const entryLists = { TOURNAMENT: dataArenaEntries(roster(DATA_ARENA_PARTNERS), learnedFirst), RELAY: dataArenaEntries(roster(RELAY_ROSTER.filter((p) => !relayBurstOnly(p))), learnedFirst) };
   entryLists.HARBOR = entryLists.TOURNAMENT;
   const entriesFor = (mode) => entryLists[mode] ?? entryLists.TOURNAMENT;
   const entryOf = (mode, id) => entriesFor(mode).find((row) => row.id === id) ?? null;
@@ -474,7 +471,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     // Kit: three skills (energy + cooldown) and the ultimate (charge). The beam is the heat gauge.
     hudRefs.slots = [];
     const kit = el("div", "da-kit");
-    const currentPartner = sim?.getState().player.partnerId ?? partnerId;
+    // A burst fighter uses its form's relay role (Owner 2026-11-08, BURST_TRUE_FORM_20261108).
+    const currentPartner = sim?.getState().player.formPartnerId ?? sim?.getState().player.partnerId ?? partnerId;
     root.dataset.element = partnerElement(currentPartner);
     const activeKit = gameMode === "RELAY" ? relayKit(currentPartner, relayLoadouts[currentPartner]) : DATA_ARENA_KITS[currentPartner];
     const kitMoves = activeKit?.moves ?? [];
@@ -585,10 +583,10 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         });
       }
       put('tpFull', hudRefs.energy, (node, v) => node.classList.toggle('is-full', v), snap.kit.energy >= DATA_ARENA_RELAY.ultimateTp);
-      // The burst call: the button fills with the gauge, glows while READY and empties over the wait.
+      // The burst call: the button fills with the gauge and glows while READY until pressed (Owner 2026-11-08).
       const own = snap.relay.burst;
       const burstState = !own || own.phase === 'SPENT' || own.phase === 'WEAK' ? 'none' : own.phase;
-      const burstFill = own?.phase === 'CHARGING' ? Math.round(own.gauge / 5) * 5 / 100 : own?.phase === 'READY' ? Math.round((own.readyLeft ?? 0) / 0.25) * 0.25 / 6 : 1;
+      const burstFill = own?.phase === 'CHARGING' ? Math.round(own.gauge / 5) * 5 / 100 : 1;
       for (const [key, node] of [['burstBtn', hudRefs.burst], ['tburst', burstButton]])
         put(key, node, (n, value) => { const [phase, fill] = value.split('|'); n.dataset.burst = phase; n.hidden = phase === 'none'; n.style.setProperty('--burst', fill);
           n.classList.toggle('is-ready', phase === 'READY'); }, `${burstState}|${burstFill}`);
@@ -819,8 +817,10 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         // Awakening raising (2026-11-02): a full gauge waits for the player's call.
         case 'BURST_READY': if (event.side === 'player') { audio?.play('pickup'); tactical(t('relay.burst.readyCall'), { tone: 'good', key: 'burst-ready' }); } break;
         // Burst evolution (2026-11-02): the call-out names the form.
-        case 'BURST': audio?.play(event.side === 'player' ? 'pickup' : 'warn');
+        case 'BURST': audio?.play(event.side === 'player' ? 'pickup' : 'warn'); if (event.side === 'player' && gameMode === 'RELAY') { releaseInputs(); buildHud(); }
           banner(t(`relay.burst.${event.side}`, { name: speciesName(event.form) }), event.side === 'player' ? 'good' : 'warn', 1600); break;
+        // The form's kit leaves with it.
+        case 'BURST_END': if (event.side === 'player' && gameMode === 'RELAY') { releaseInputs(); buildHud(); } break;
         // Stage three arena zones and cover (2026-10-28).
         case 'ARENA_WARNING': audio?.play('warn'); tactical(t(`arena.${event.kind}.warn`), { tone: 'warn', ms: 2400 }); break;
         case 'ARENA_ACTIVE': tactical(t(`arena.${event.kind}.active`), { tone: 'good' }); break;
@@ -903,7 +903,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           break;
         }
         case "ULT_READY": audio?.play("level"); buttonFlag("ult", t("btn.ready"), { tone: "good" }); break;
-        case "CAST_RELEASE": if (event.team === "player") audio?.play(gameMode === 'RELAY' ? relayEffectStyle(event.moveId, relayPartner(sim.getState().player.partnerId)?.element).cue : event.moveType === 'LUNGE' ? 'dash' : 'burst'); break;
+        case "CAST_RELEASE": if (event.team === "player") audio?.play(gameMode === 'RELAY' ? relayEffectStyle(event.moveId, relayPartner(sim.getState().player.formPartnerId ?? sim.getState().player.partnerId)?.element).cue : event.moveType === 'LUNGE' ? 'dash' : 'burst'); break;
         case "ULT_CAST": audio?.play("roar"); ultCutIn(event); break;
         case "NOVA": case "ZONE_BURST": audio?.play("burst"); break;
         case "CANCEL": if (event.rule === "BARRIER_BLOCKS_SHOT") { audio?.play("block"); toast(t("fct.blocked"), { x: event.x, y: event.y - 40, tone: "good", key: "blocked", gap: 1200 }); } break;

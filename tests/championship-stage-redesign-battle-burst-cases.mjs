@@ -7,7 +7,8 @@ import {createChannelRng} from '../src/championship/battle/battleRngChannel.js';
 import {createNativeHuntIndividual} from '../src/championship/hunt/capture/nativeHuntIndividual.js';
 import {nativeHuntSpeciesByIndex} from '../src/championship/hunt/capture/nativeHuntSources.js';
 import {nativeIndividualProfile} from '../src/championship/raising/nativeIndividualProfile.js';
-import {burstBasesFor,burstFormsFor} from '../src/championship/contracts/productBurstEvolution.js';
+import {burstBasesFor,burstFormsFor,burstHpRatio} from '../src/championship/contracts/productBurstEvolution.js';
+import {BATTLE_SPECIES_ENTITIES} from '../src/data/championship/battleCharacterProfiles.js';
 
 const alive = () => ({currentHp: 100});
 
@@ -26,26 +27,32 @@ test('a full gauge wraps (battle held), bursts, reverts weakened, then is spent;
   assert.equal(burst.holding(), false);
   assert.equal(burst.display(0), 139);
   assert.equal(burst.scaleDamage({attackerSlot: 0, defenderSlot: 3, damage: 100}), 140);
-  assert.equal(burst.scaleDamage({attackerSlot: 3, defenderSlot: 0, damage: 140}), 100);
+  // Owner 2026-11-08: the form's own HP carries its toughness, so damage taken is not divided.
+  assert.equal(burst.scaleDamage({attackerSlot: 3, defenderSlot: 0, damage: 140}), 140);
+  assert.equal(burst.species(0), 139, 'it fights as the form');
   assert.deepEqual(burst.step(10 + BATTLE_BURST_FRAMES, slots).map(e => e.kind), ['REVERT']);
   assert.equal(burst.display(0), null);
   assert.equal(burst.scaleDamage({attackerSlot: 0, defenderSlot: 3, damage: 100}), 85);
+  assert.equal(burst.scaleDamage({attackerSlot: 3, defenderSlot: 0, damage: 85}), 100, 'weakened, it takes more');
+  assert.equal(burst.species(0), null, 'and is its own 成熟期 again');
   assert.deepEqual(burst.step(10 + BATTLE_BURST_FRAMES + BATTLE_BURST_WEAK_FRAMES, slots).map(e => e.kind), ['RECOVERED']);
   burst.onHit({attackerSlot: 3, defenderSlot: 0, damage: 100, defenderMaxHp: 100});
   assert.deepEqual(burst.step(99999, slots), [], 'once per battle');
   assert.deepEqual(burst.bursts().map(b => [b.slot, b.form]), [[0, 139]]);
 });
 
-test('a former 究極體 preset is shown as its 成熟期 and fights at its preset strength only after bursting', () => {
+test('a former 究極體 preset fights as its 成熟期 and at its preset strength only after bursting', () => {
   const base = burstBasesFor(211)[0];
   const burst = createBattleBurst({policy: 'BURST_V1', plans: [null, null, null, {form: 211, tier: 2, baseline: 1.7, base}, null, null]});
   assert.equal(burst.display(3), base);
+  assert.equal(burst.species(3), base, 'the 成熟期 species, not a costume');
   assert.equal(burst.scaleDamage({attackerSlot: 3, defenderSlot: 0, damage: 170}), 100);
-  assert.equal(burst.scaleDamage({attackerSlot: 0, defenderSlot: 3, damage: 100}), 170);
+  assert.equal(burst.scaleDamage({attackerSlot: 0, defenderSlot: 3, damage: 100}), 100, 'its lower HP, not a damage factor, makes it weaker');
   burst.onHit({attackerSlot: 0, defenderSlot: 3, damage: 60, defenderMaxHp: 100});
   burst.step(1, [alive(), null, null, alive(), null, null]);
   for (let i = 0; i < BATTLE_BURST_WRAP_FRAMES; i++) burst.hold(1);
   assert.equal(burst.display(3), null, 'after its burst it is its own preset species');
+  assert.equal(burst.species(3), null);
   assert.equal(burst.scaleDamage({attackerSlot: 3, defenderSlot: 0, damage: 170}), 170);
 });
 
@@ -61,7 +68,7 @@ test('OFF changes nothing and a down combatant never bursts', () => {
   assert.throws(() => createBattleBurst({policy: 'X'}), /BATTLE_BURST_POLICY_UNKNOWN/);
 });
 
-test('a real match holds the battle during the wrap, shows the burst form and reports it for the encyclopedia', () => {
+test('a real match holds the battle during the wrap, becomes the burst form and reports it for the encyclopedia', () => {
   const individual = (id, species) => ({instanceId: id, nativeProfile: nativeIndividualProfile(createNativeHuntIndividual({species: nativeHuntSpeciesByIndex(species), rng: {next: () => 50}}))});
   const playerBase = burstBasesFor(139)[0], form = burstFormsFor(playerBase).find(f => f.form === 139);
   const runtime = createBattleRuntime({mode: 3, battleType: 0, localTeamIndex: 0, rng: createChannelRng(0x2026),
@@ -70,24 +77,31 @@ test('a real match holds the battle during the wrap, shows the burst form and re
   try {
     runtime.chooseLinkBattle({arenaIndex: 0});
     const source = runtime.startMatch();
-    let wrapFrame = null, held = 0, shownForm = false;
+    let wrapFrame = null, held = 0, shownForm = false, trueForm = false, builtMax = null;
     for (let tick = 0; tick < 30000 && !source.getView().outcome.ended; tick++) {
       const before = source.getView().combatants[0];
       source.tick();
       const after = source.getView().combatants[0];
       if (after.burst?.phase === 'WRAP') {
         held++;
-        if (wrapFrame === null) wrapFrame = source.getView().clock.frames;
+        if (wrapFrame === null) { wrapFrame = source.getView().clock.frames; builtMax = after.hp.maximum; }
         assert.equal(after.speciesId, `species-${String(playerBase).padStart(3, '0')}`);
       }
       if (before.burst?.phase === 'WRAP' && after.burst?.phase === 'WRAP') assert.equal(source.getView().clock.frames, wrapFrame, 'the battle clock holds');
       if (after.burst?.phase === 'BURST') {
         shownForm ||= after.speciesId === `species-${String(form.form).padStart(3, '0')}`;
-        assert.equal(after.nativeAnimation, null, 'the burst form is drawn from its own art');
+        // Owner 2026-11-08 (BURST_TRUE_FORM_20261108): between actions the combatant becomes the form -- its own
+        // animation graph and cell boxes, and the form's HP curve over the partner's own maximum.
+        if (after.nativeAnimation) {
+          trueForm = true;
+          assert.ok(after.nativeAnimation.texture.startsWith(BATTLE_SPECIES_ENTITIES[form.form] + '/'), 'the form animates from its own cells');
+          assert.equal(after.hp.maximum, Math.round(builtMax * burstHpRatio(playerBase, form.form)), 'the form brings its own HP');
+        }
       }
     }
     assert.ok(held >= 1, 'the partner burst');
     assert.ok(shownForm, 'the burst form was shown');
+    assert.ok(trueForm, 'the partner fought as the burst form');
     const result = runtime.getSettlementResult();
     assert.deepEqual(result.bursts, [form.form]);
   } finally { runtime.dispose(); }
