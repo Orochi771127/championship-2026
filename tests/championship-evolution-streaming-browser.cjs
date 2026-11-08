@@ -232,25 +232,48 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
      assert.equal(await canvas.count(),1,'Exactly one interactive raising canvas');
      evidence.inputSurfaces=await page.locator('.int-rh2-field-host canvas').evaluateAll(nodes=>nodes.map(node=>({className:node.className,pointerEvents:getComputedStyle(node).pointerEvents,inputOwner:node.classList.contains('cm-raising-pixi-canvas')})));
      const box=await canvas.boundingBox();assert.ok(box&&box.width>0&&box.height>0);
+     // A camera swipe begins on open ground: a press on a partner picks it up
+     // instead (attachActorInput). From 22:00 to 07:00 device time the partners
+     // nap where they stand (time/realtimeClock.js); a lying partner is wider and
+     // covered the fixed 0.65 lane whenever the gate ran at night on a UTC
+     // runner. Take the first lane, 0.65 first, whose gesture points reach the
+     // input canvas clear of every partner box and crest the presenter itself
+     // reports; the gestures are otherwise unchanged. No clock is mocked.
+     const GESTURE_XS=[.7,.25,.5,.35,.65,.425,.575];
+     const lane=await page.evaluate(({fractions,xs,margin})=>{
+      const node=document.querySelector('.int-rh2-field-host canvas.cm-raising-pixi-canvas'),r=node.getBoundingClientRect();
+      const s=r.width/__freezeScene.getDiagnostics().viewport.width,ids=__freezeSource.getFrame().residents.map(x=>x.creatureId);
+      const boxes=ids.map(id=>{const a=__freezeScene.actorScreenRect(id);return a&&{id,x:r.left+a.x*s,y:r.top+a.y*s,width:a.width*s,height:a.height*s};}).filter(Boolean);
+      const crests=ids.map(id=>__freezeScene.awakeningCrestPoint?.(id)).filter(Boolean).map(p=>({x:p.x,y:p.y,radius:22*s}));
+      const clear=p=>boxes.every(b=>p.x<b.x-margin||p.x>b.x+b.width+margin||p.y<b.y-margin||p.y>b.y+b.height+margin)&&crests.every(c=>Math.hypot(p.x-c.x,p.y-c.y)>c.radius+margin);
+      for(const fraction of fractions){
+       const y=r.top+r.height*fraction,points=xs.map(x=>({x:r.left+r.width*x,y}));
+       if(points.every(p=>document.elementFromPoint(p.x,p.y)===node&&clear(p)))return {fraction,y,scale:s,boxes,crests};
+      }
+      return {fraction:null,scale:s,boxes,crests};
+     },{fractions:[.65,.6,.7,.55,.75,.5,.8,.45,.85,.4],xs:GESTURE_XS,margin:16});
+     evidence.gestureLane=lane;
+     assert.ok(Number.isFinite(lane.scale)&&lane.scale>0&&lane.boxes.length>0,'Partner hit boxes measured on the input canvas');
+     assert.ok(lane.fraction!==null,'An open ground lane for the camera swipe');
      const cameraBefore=await page.evaluate(()=>__freezeScene.getDiagnostics().cameraX);
-     await page.mouse.move(box.x+box.width*.7,box.y+box.height*.65);await page.mouse.down();
-     await page.mouse.move(box.x+box.width*.25,box.y+box.height*.65,{steps:12});await page.mouse.up();
+     await page.mouse.move(box.x+box.width*.7,lane.y);await page.mouse.down();
+     await page.mouse.move(box.x+box.width*.25,lane.y,{steps:12});await page.mouse.up();
      await delay(100);const cameraAfter=await page.evaluate(()=>__freezeScene.getDiagnostics().cameraX);
-     evidence.drag={cameraBefore,cameraAfter};assert.notEqual(cameraAfter,cameraBefore,'Recovered world responds to drag');
+     evidence.drag={cameraBefore,cameraAfter,lane:lane.fraction};assert.notEqual(cameraAfter,cameraBefore,'Recovered world responds to drag');
      const zoomBefore=await page.evaluate(()=>__freezeScene.getDiagnostics().zoom);
      // Current ranch input is continuous wheel/pinch zoom; the old button was
      // removed. Playwright cannot send wheel or multi-touch gestures in mobile
      // WebKit. Keep its mobile context and label the controlled pointer pinch;
      // real browser drag above and HUD clicks below still prove input recovery.
      const zoomInput=engine==='webkit'?'synthetic-pointer-pinch':'mouse-wheel';
-     if(engine==='webkit')await canvas.evaluate(node=>{
-      const r=node.getBoundingClientRect(),x=r.x+r.width*.5,y=r.y+r.height*.65,gap=r.width*.15;
+     if(engine==='webkit')await canvas.evaluate((node,fraction)=>{
+      const r=node.getBoundingClientRect(),x=r.x+r.width*.5,y=r.y+r.height*fraction,gap=r.width*.15;
       const fire=(type,id,clientX)=>node.dispatchEvent(new PointerEvent(type,{bubbles:true,cancelable:true,pointerType:'touch',pointerId:id,isPrimary:id===1,clientX,clientY:y,button:0,buttons:type==='pointerup'?0:1}));
       fire('pointerdown',1,x-gap);fire('pointerdown',2,x+gap);
       fire('pointermove',1,x-gap*.5);fire('pointermove',2,x+gap*.5);
       fire('pointerup',1,x-gap*.5);fire('pointerup',2,x+gap*.5);
-     });
-     else{await page.mouse.move(box.x+box.width*.5,box.y+box.height*.65);await page.mouse.wheel(0,120);}
+     },lane.fraction);
+     else{await page.mouse.move(box.x+box.width*.5,lane.y);await page.mouse.wheel(0,120);}
      await page.waitForFunction(before=>__freezeScene.getDiagnostics().zoom<before,zoomBefore,{timeout:5000});
      const zoomAfter=await page.evaluate(()=>__freezeScene.getDiagnostics().zoom);
      evidence.zoom={input:zoomInput,zoomBefore,zoomAfter};assert.ok(zoomAfter<zoomBefore&&zoomAfter>=.5,'Recovered continuous zoom responds within bounds');

@@ -1,0 +1,58 @@
+{
+  "id": "SAVE_ID_20261108",
+  "classification": "OWNER_APPROVED_ADAPTATION: every save carries its own fixed id, so the first-bind gift ledger can tell saves apart (its save reference used to be the constant session id shared by every save)",
+  "supersedes": {
+    "contract": "docs/contracts/championship/ROYAL_NEW_MAPS_20261103.json",
+    "sourceLock": "src/championship/app/championshipStandaloneSave.js"
+  },
+  "saveField": {
+    "path": "flags.saveId",
+    "shape": "\"sv1-\" + 32 lowercase hex digits (128 random bits from crypto.getRandomValues); any other value is refused as INVALID_SAVE_ID",
+    "lifecycle": "made once per new game; an older save is given one in memory when opened (Continue stays read-only) and every later write carries it; ensureSaveReference writes it before a first-bind claim names it, and hands out nothing while a battle, a hunt or the tutorial owns the save or when the write fails",
+    "compatibility": "lives in flags, where an older build drops an unknown entry instead of refusing the save; such a build would write the save back without it, and the next open gives it a new id",
+    "use": "the online layer sends only sha256(saveId) as claim_bind_reward's p_save_ref; the id itself never leaves the device"
+  },
+  "notChanged": [
+    "the save key and schemaVersion",
+    "every other save slice and its validation",
+    "the session id and the R2 raising home contract",
+    "claim_bind_reward and every other server function"
+  ],
+  "sourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "5c2ea82fa0d8af9192325fe88ec9c40a437ed3ead2044aed1de04b1ebbb82430"
+  },
+  "historicalSourceLocks": {
+    "ROYAL_NEW_MAPS_20261103": {
+      "src/championship/app/championshipStandaloneSave.js": "16ddc21be1570c51e87fb592635d5a5437ed25b9a8aeb660993f07494598b8c1"
+    },
+    "HUNT_TOOL_TIERS_20261103": {
+      "src/championship/app/championshipStandaloneSave.js": "798b838a72251d800b6feb989946e6a5feed1e6724bd5455a562ad55958b613a"
+    },
+    "DIAMOND_ECONOMY_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "15067ee0d3f47971a91a8189edaaa0c22ba3d43a831408b4f8bcc1e525b64c11"
+    },
+    "STAGE_REDESIGN_BURST_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "44b4ceec862776600a237a9cc54a160952f24305ed431a0b33a5addf4bba968d"
+    },
+    "ONLINE_BIND_REWARD_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c7abccc2403e3428e4754c87981a940db378dc4b1c17995363df6049ceeb680"
+    },
+    "CYBER_GACHA_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c4e7336e17e35099758cea84ff533e81c60c08bacbafef356afdbf55953b135"
+    },
+    "BATTLE_TACTICS_20261028": {
+      "src/championship/app/championshipStandaloneSave.js": "3a72fce7d38151f473f343fb8b9f59349daef1beb7cb09b6a0547c628d07ac8e"
+    },
+    "HEX_CAGE_WORLD_20261026": {
+      "src/championship/app/championshipStandaloneSave.js": "aaa72f6e08b150ac9bebb81fb2e6a8efefd532ab0ed7b7e24a7a0a9ae3d97f74"
+    }
+  },
+  "authorization": "Owner 2026-11-08, asked whether each save should get its own fixed id at the cost of a save format change that older builds or tabs would read without it: 「核准，要讓自己的存檔有固定ID」.",
+  "tests": [
+    "tests/championship-save-id-cases.mjs",
+    "tests/championship-bind-reward-recovery-cases.mjs",
+    "tests/championship-lion-display-correction-cases.mjs",
+    "tests/championship-interactive-tutorial-save-cases.mjs"
+  ],
+  "physicalDeviceAccepted": false
+}

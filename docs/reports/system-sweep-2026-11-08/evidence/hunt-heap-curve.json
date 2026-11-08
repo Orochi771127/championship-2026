@@ -1,0 +1,230 @@
+{
+ "schemaVersion": 1,
+ "label": "hunt-heap-curve",
+ "artifactCommit": "e7ea6bb92d1863968279e65c13057e93ec79b443",
+ "buildId": "208f68243e1ff4ef5a1a97420639326134d7ee9b5b744f52a35860f75da46f5b",
+ "measurement": "Loopback built artifact, Chromium 153 SwiftShader, Pixel 7 emulation, full QA save; after each hunt round trip: HeapProfiler.collectGarbage x3, then Runtime.getHeapUsage and Memory.getDOMCounters. No sweep instrumentation. Not an iPhone measurement.",
+ "note": "Memory.getDOMCounters.nodes includes nodes awaiting sweep and fluctuates; detached-node attribution used heap snapshots at trips 4 and 16.",
+ "snapshotDiffTrip4To16": {
+  "selfSizeMB": [
+   77.2,
+   81.4
+  ],
+  "codeMB": 1.67,
+  "devtoolsNetworkResourcesMB": 0.68,
+  "detachedCareImages": 192,
+  "retainedWebGL2RenderingContexts": 24
+ },
+ "samples": [
+  {
+   "trip": 0,
+   "usedMB": 27.31,
+   "totalMB": 28.61,
+   "documents": 11,
+   "nodes": 1126,
+   "jsEventListeners": 220
+  },
+  {
+   "trip": 1,
+   "usedMB": 45.23,
+   "totalMB": 50.61,
+   "documents": 13,
+   "nodes": 1798,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 2,
+   "usedMB": 47.41,
+   "totalMB": 51.86,
+   "documents": 13,
+   "nodes": 2114,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 3,
+   "usedMB": 47.47,
+   "totalMB": 56.36,
+   "documents": 13,
+   "nodes": 4092,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 4,
+   "usedMB": 49.11,
+   "totalMB": 56.61,
+   "documents": 13,
+   "nodes": 3630,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 5,
+   "usedMB": 47.96,
+   "totalMB": 57.61,
+   "documents": 13,
+   "nodes": 3374,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 6,
+   "usedMB": 48.88,
+   "totalMB": 58.61,
+   "documents": 13,
+   "nodes": 3351,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 7,
+   "usedMB": 48.5,
+   "totalMB": 57.86,
+   "documents": 13,
+   "nodes": 2823,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 8,
+   "usedMB": 48.23,
+   "totalMB": 50.11,
+   "documents": 13,
+   "nodes": 1923,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 9,
+   "usedMB": 50.63,
+   "totalMB": 54.36,
+   "documents": 13,
+   "nodes": 2243,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 10,
+   "usedMB": 49.92,
+   "totalMB": 54.61,
+   "documents": 13,
+   "nodes": 2133,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 11,
+   "usedMB": 51.23,
+   "totalMB": 55.36,
+   "documents": 13,
+   "nodes": 2867,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 12,
+   "usedMB": 49.82,
+   "totalMB": 59.36,
+   "documents": 13,
+   "nodes": 3328,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 13,
+   "usedMB": 49.55,
+   "totalMB": 51.86,
+   "documents": 13,
+   "nodes": 2414,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 14,
+   "usedMB": 49.79,
+   "totalMB": 51.36,
+   "documents": 13,
+   "nodes": 2513,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 15,
+   "usedMB": 49.6,
+   "totalMB": 51.86,
+   "documents": 13,
+   "nodes": 2615,
+   "jsEventListeners": 236
+  },
+  {
+   "trip": 16,
+   "usedMB": 51.59,
+   "totalMB": 55.36,
+   "documents": 13,
+   "nodes": 3608,
+   "jsEventListeners": 236
+  }
+ ],
+ "afterFix": {
+  "buildId": "4d9ecfbdf311a9515c0633f20f84cd1d52cd6fcc7e1466ebc1642a57b8b705e8",
+  "note": "Candidate built in an isolated worktree with only the two candidate hashes swapped in that copy; branch head 44cd79f1 sources. Same procedure, 6 trips.",
+  "careImagesInHeap": {
+   "beforeFixTrip4": 64,
+   "beforeFixTrip16": 256,
+   "afterFixTrip2": 0,
+   "afterFixTrip6": 0
+  },
+  "webgl2ContextsInHeap": {
+   "beforeFixTrip4": 13,
+   "beforeFixTrip16": 37,
+   "afterFixTrip2": 9,
+   "afterFixTrip6": 17
+  },
+  "samples": [
+   {
+    "trip": 0,
+    "usedMB": 27.57,
+    "totalMB": 29.61,
+    "documents": 11,
+    "nodes": 1078,
+    "jsEventListeners": 220
+   },
+   {
+    "trip": 1,
+    "usedMB": 49.23,
+    "totalMB": 54.36,
+    "documents": 13,
+    "nodes": 3274,
+    "jsEventListeners": 236
+   },
+   {
+    "trip": 2,
+    "usedMB": 47.16,
+    "totalMB": 55.61,
+    "documents": 13,
+    "nodes": 3922,
+    "jsEventListeners": 236
+   },
+   {
+    "trip": 3,
+    "usedMB": 46.57,
+    "totalMB": 48.11,
+    "documents": 13,
+    "nodes": 1146,
+    "jsEventListeners": 236
+   },
+   {
+    "trip": 4,
+    "usedMB": 51.2,
+    "totalMB": 57.11,
+    "documents": 13,
+    "nodes": 3651,
+    "jsEventListeners": 236
+   },
+   {
+    "trip": 5,
+    "usedMB": 50.02,
+    "totalMB": 58.36,
+    "documents": 13,
+    "nodes": 3989,
+    "jsEventListeners": 236
+   },
+   {
+    "trip": 6,
+    "usedMB": 48.04,
+    "totalMB": 49.61,
+    "documents": 13,
+    "nodes": 1150,
+    "jsEventListeners": 236
+   }
+  ]
+ }
+}

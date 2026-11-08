@@ -204,7 +204,8 @@ test("pure save preparation does not change storage/status, and invalid new-game
   const stored=saved(storage);
   const candidate=app.savePort.prepare({...stored.progression,snapshot:app.getSnapshot(),creature:stored.creature,
     sessionId:stored.sessionId,raising:stored.raising,shop:stored.shop,cageEdit:stored.cageEdit,
-    battleEconomy:stored.battleEconomy,instanceIdentity:stored.instanceIdentity,gameplayRng:stored.gameplayRng,huntHistory:stored.huntHistory});
+    battleEconomy:stored.battleEconomy,instanceIdentity:stored.instanceIdentity,gameplayRng:stored.gameplayRng,huntHistory:stored.huntHistory,
+    saveId:stored.flags.saveId});
   assert.deepEqual(progress(candidate.save),progress(stored));
   assert.throws(()=>app.savePort.prepare({}),/./);
   assert.equal(app.savePort.getStatus(),status);assert.equal(storage.getItem(KEY),bytes);
