@@ -5,7 +5,9 @@
 // tables, evaluates conditions on a native profile and keeps the per-partner unlock record.
 import table from '../../data/championship/product-burst-evolution.r1.json' with {type:'json'};
 import nativeSpecies from '../../data/championship/catalogs/creature-species.r1.json' with {type:'json'};
+import curveCatalog from '../../data/championship/catalogs/creature-stat-curve.r1.json' with {type:'json'};
 import {deepFreeze} from './championshipContracts.js';
+import {isKnownSpeciesIndex,productSpeciesRecord} from './productSpeciesData.js';
 
 export const BURST_RULES = deepFreeze(table.rules);
 // Awakening raising (OWNER_APPROVED_ADAPTATION 2026-11-02): a 成熟期 raises its forms on the ranch and learns
@@ -36,6 +38,17 @@ export function burstTierForRank(rank) {
 }
 /** Stat multiplier while burst (and while weakened afterwards). */
 export function burstMultiplier(tier) { return Number(BURST_RULES.tierMultiplier[tier] ?? 1); }
+
+// Owner 2026-11-08 (BURST_TRUE_FORM_20261108): a burst form fights with its own HP curve. The ratio of the two
+// species' native HP curve values (stats +0x30) scales the partner's own maximum, capped so a burst stays one
+// 20-second window rather than a second life bar. Unknown species keep their HP.
+export const BURST_HP_RATIO_CAP = 3;
+const curveHp = index => { const curve = isKnownSpeciesIndex(index) ? productSpeciesRecord(index)?.statCurveIndex : null; return Number.isInteger(curve) ? curveCatalog.rows[curve]?.[0] ?? null : null; };
+/** Maximum-HP ratio of a burst form over the 成熟期 it bursts from, in [1, BURST_HP_RATIO_CAP]. */
+export function burstHpRatio(baseSpeciesIndex, formSpeciesIndex) {
+  const base = curveHp(baseSpeciesIndex), form = curveHp(formSpeciesIndex);
+  return base > 0 && form > 0 ? Math.min(BURST_HP_RATIO_CAP, Math.max(1, form / base)) : 1;
+}
 
 // Native counters the evolution thresholds 0..10 read (OVL18 02112734, same order as nativeEvolutionRequirements).
 const COUNTERS = ['104', '108', '100', '10c', '110', '114', '118', '124', '120', '128', '11c'];

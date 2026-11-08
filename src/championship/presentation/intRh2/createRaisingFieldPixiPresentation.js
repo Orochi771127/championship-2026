@@ -729,7 +729,9 @@ export async function mountRaisingFieldPixiPresentation({
     entry.assetState='loading';entry.assetError=null;reportResidentAssets();
     try {
       if (characterBundle?.ensureSpecies) {
-        const ready = await characterBundle.ensureSpecies(resident.speciesId);
+        // A resident that arrives after mount (hatch, Continue) streams from the sequence it is
+        // playing now -- read as the mount's collectRaisingInitialSequences reads it.
+        const ready = await characterBundle.ensureSpecies(resident.speciesId,{sequenceIds:[source.getActorFrame?.(resident.creatureId)?.sequenceId]});
         if (disposed || token !== entry.loadToken) return;
         const actor = ready && characterBundle.createActor({speciesId:resident.speciesId,side:"main",presentation:"raising",reducedMotion:false});
         if (actor) {
@@ -1376,7 +1378,8 @@ export async function mountRaisingFieldPixiPresentation({
       let visual=null,attached=false;
       try{
         const speciesId=`championship:creature:species-${String(e.target).padStart(3,'0')}`;
-        const ready=await characterBundle?.ensureSpecies?.(speciesId);
+        // The target streams with the sequence it is shown in (39), not its whole runtime.
+        const ready=await characterBundle?.ensureSpecies?.(speciesId,{sequenceIds:e.targetFrame?[e.targetFrame.sequenceId]:[]});
         if(!active())return;
         if(!ready)throw Error(`RESIDENT_ART_UNAVAILABLE:${speciesId}`);
         visual=characterBundle.createActor({speciesId,side:'main',presentation:'raising',reducedMotion:false});

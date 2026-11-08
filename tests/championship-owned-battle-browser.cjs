@@ -18,7 +18,8 @@ const output=require('./browser-qa-output.cjs')('owned-battle');fs.mkdirSync(out
   await page.locator('.cm-vs5-match[data-record-index="0"] button').click();
   const party=page.locator('.cm-vs5-party');await party.locator('button[data-instance-id]').first().click();
   let hit,done;const intercepted=new Promise(r=>hit=r),handled=new Promise(r=>done=r);
-  const held=new Promise(r=>releaseLoading=r),match=/\/battle\/(?:licensed-runtime-v1|original-opus-v1)\/manifest\.json(?:\?.*)?$/;
+  // 2026-10-18: the arena loads its projected public metadata, not a pack manifest.
+  const held=new Promise(r=>releaseLoading=r),match=/\/public-runtime\/metadata\/battle-(?:original|baseline)\.v1\.json(?:\?.*)?$/;
   await page.route(match,async route=>{hit();await held;try{await route.continue();}finally{done();}});
   // 2026-09-28: a panel's primary action sits in the menu's sticky footer.
   await page.locator('.cm-vs5-footer').getByRole('button',{name:'決定',exact:true}).click();

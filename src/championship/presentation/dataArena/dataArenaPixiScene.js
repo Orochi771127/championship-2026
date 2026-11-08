@@ -814,7 +814,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   // Drawing only: hit-stop holds the fighters' drawn frames while the
   // simulation keeps stepping; charge orbs and impact bursts read events.
   const relayMode = state.gameMode === 'RELAY';
-  const relayElementOf = (team) => team === 'player' ? relayPartner(state.player.partnerId)?.element ?? null
+  const relayElementOf = (team) => team === 'player' ? relayPartner(state.player.formPartnerId ?? state.player.partnerId)?.element ?? null
     : RELAY_ROSTER.find(p => p.speciesId === (state.rivals.find(r => r.active && r.hp > 0) ?? state.rivals[0])?.speciesId)?.element ?? null;
   const relayLook = (moveId, team) => relayEffectStyle(moveId, relayElementOf(team === 'player' ? 'player' : 'rival'));
   const IMPACTS = {

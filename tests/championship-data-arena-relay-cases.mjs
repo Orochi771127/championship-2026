@@ -160,14 +160,13 @@ test('zone targeting cannot place an attack beyond cover or spend TP on a blocke
   assert.equal(p.energy,before);assert.equal(p.cast,null);
 });
 
-test('3v3 direct reserve tag-in shockwave, perfect switch and earned-only burst calls work',()=>{
+test('3v3 direct reserve tag-in shockwave, perfect switch, no burst without a learned form and combo tracking work',()=>{
   const sim=createDataArenaSimulation({mode:'RELAY',partnerId:'relay-species-037',relayReserveId:'relay-species-054',relayThirdId:'relay-species-034',relayManualBurst:true,seed:19});
   run(sim,2.1);
   const s=sim.getState(),p=s.player,r=s.rivals[0];
   assert.equal(s.relay.team.length,3);
-  // The burst call is earned (Owner 2026-11-04): members that learned no form have no burst and no button.
+  // Owner 2026-11-08: no ranch plan, no burst -- there is no generic fallback form.
   assert.ok(s.relay.team.every(m=>m.burst===null));
-  assert.equal(sim.getSnapshot().relay.burst,null);
   // Place rival right beside player and add a hostile telegraph on player to trigger Perfect Switch + Tag-In Shockwave.
   r.active=true;r.root=5;r.invulnerable=0;r.x=p.x+60;r.y=p.y;
   const rHpBefore=r.hp;

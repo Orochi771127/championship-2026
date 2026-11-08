@@ -1267,7 +1267,8 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
       burstReadySlot = ready?.slot ?? null;
       burstButton.hidden = !ready || view.outcome.ended;
       if (ready) {
-        burstButton.style.setProperty("--burst-left", String(Math.max(0, 1 - (ready.burst.readyFrame ?? 0) / Math.max(1, ready.burst.readyFrames ?? 1))));
+        // Owner 2026-11-08: READY waits for the player's press, so the ring stays full instead of counting down.
+        burstButton.style.setProperty("--burst-left", "1");
         if (ready.bloodline?.color) burstButton.style.setProperty("--bloodline", ready.bloodline.color); else burstButton.style.removeProperty("--bloodline");
         burstButton.setAttribute("aria-label", uiText("BATTLE_BURST_BUTTON_FOR", { name: ready.displayName ?? "" }));
       }

@@ -15,8 +15,13 @@ async function serveBuild(root){
   res.writeHead(200,{'Content-Type':MIME[path.extname(file)]||'application/octet-stream','Cache-Control':'no-store','Content-Length':fs.statSync(file).size});
   if(req.method==='HEAD')res.end();else fs.createReadStream(file).pipe(res);
  });
+ // Playwright's route.fetch reuses idle keep-alive sockets. Node closes them after 5 s by
+ // default, and a reuse racing that close fails one asset with ECONNRESET (seen 2026-11-08
+ // in the friends gate). Keep idle sockets open for the whole gate instead.
+ server.keepAliveTimeout=10*60*1000;server.headersTimeout=server.keepAliveTimeout+1000;
  await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
- return {origin:`http://127.0.0.1:${server.address().port}`,close:()=>new Promise(resolve=>server.close(resolve))};
+ // The gate is over when it closes, so end every socket instead of waiting them out.
+ return {origin:`http://127.0.0.1:${server.address().port}`,close:()=>new Promise(resolve=>{server.close(resolve);server.closeAllConnections();})};
 }
 function assertEvolved(assert,report,saved){
  assert.equal(report.qaOnly,true);assert.equal(report.namespace,'championshipAlternateFormsQA:r1:');assert.equal(report.saveSchema,7);
