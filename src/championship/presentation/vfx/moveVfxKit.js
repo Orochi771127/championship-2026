@@ -23,7 +23,7 @@
 // writes nothing back. Textures are baked on first use and destroyed on
 // dispose().
 import {BATTLE_FX_PALETTES} from '../battleFx/battleFxPalettes.js';
-import {bakeMoveVfxIntensity, createNoiseField, paintMoveVfxSheet} from './moveVfxKitTextures.js';
+import {bakeMoveVfxIntensity, createNoiseField, paintMoveVfxSheet, paintMoveVfxSigil} from './moveVfxKitTextures.js';
 
 const TAU = Math.PI * 2;
 const STYLE_ARCHETYPE = Object.freeze({
@@ -33,7 +33,9 @@ const STYLE_ARCHETYPE = Object.freeze({
   quake: 'quake', wind: 'wind', strike: 'strike', claw: 'claw', slash: 'slash', pierce: 'pierce'
 });
 // Archetypes a recipe picks by name or effect family (moveVfxRecipes.js); no style maps to them by default.
-const NAMED_ARCHETYPES = Object.freeze(['vine', 'roots', 'tree', 'gatling', 'cannon', 'meteor', 'pillar', 'spikes', 'tornado', 'arrows', 'blackhole', 'bite']);
+const NAMED_ARCHETYPES = Object.freeze(['vine', 'roots', 'tree', 'gatling', 'cannon', 'meteor', 'pillar', 'spikes', 'tornado', 'arrows', 'blackhole', 'bite',
+  // UNIQUE_PIXEL_MOVE_VFX_20261108
+  'shuriken', 'crescent', 'star', 'bubble', 'note', 'feather', 'petal', 'snowflake', 'drill']);
 export const MOVE_VFX_ARCHETYPES = Object.freeze([...new Set([...Object.values(STYLE_ARCHETYPE), ...NAMED_ARCHETYPES])]);
 const MELEE = new Set(['strike', 'claw', 'slash', 'pierce', 'bite']);
 // Material colours that do not follow the move's element: bark, roots, foliage, steel, rock.
@@ -56,8 +58,20 @@ const easeOut = t => 1 - (1 - t) ** 3;
 // sheets add, and nothing adds on the dark palette.
 const LIGHT_SHEETS = new Set(['glow', 'flare', 'ring', 'streak', 'beam']);
 
+// Pixel finish (UNIQUE_PIXEL_MOVE_VFX_20261108): bodies bake at half their
+// sheet size so a texel reads as a pixel of the remade cells; light sheets keep
+// full size with stepped bands, so a field-wide wash never turns into a mosaic.
+const PIXEL_BODY_SCALE = 0.5;
+
+/**
+ * `signature` (moveVfxSignatures.js), accepted by charge, launch, projectile,
+ * impact, melee and signature, is what makes a move its own: its size, the
+ * volley of heads and the path they weave, the trail they leave, the burst the
+ * hit closes on, the melee combo and swing, and its sigil. Without one a phase
+ * plays the archetype's plain look.
+ */
 export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanced', reducedMotion = false, seed = 0x51a5,
-  doc = globalThis.document, resolution = 1.5} = {}) {
+  doc = globalThis.document, resolution = 1.5, pixel = true} = {}) {
   if (!PIXI || !front || !doc) return null;
   const rich = quality !== 'saver';
   const budget = rich ? 260 : 110;
@@ -79,12 +93,27 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     const id = `${name}:${paletteId(paletteKey)}`;
     let entry = sheets.get(id);
     if (entry) return entry;
+    if (name.startsWith('sigil:')) {
+      const canvas = paintMoveVfxSigil(Number(name.slice(6)), palettes(paletteKey), {doc});
+      entry = {textures: [texture(canvas)], loop: false, width: canvas.width, height: canvas.height, smoke: false};
+      sheets.set(id, entry);
+      return entry;
+    }
     let intensity = intensities.get(name);
-    if (!intensity) { intensity = bakeMoveVfxIntensity(name, noise, {scale: rich ? resolution : 1}); intensities.set(name, intensity); }
-    const painted = paintMoveVfxSheet(intensity, palettes(paletteKey), {doc});
-    entry = {textures: painted.frames.map(canvas => PIXI.Texture.from(canvas)), loop: painted.loop, width: painted.width, height: painted.height, smoke: painted.smoke};
+    const light = LIGHT_SHEETS.has(name);
+    if (!intensity) {
+      intensity = bakeMoveVfxIntensity(name, noise, {scale: pixel ? (light ? 1 : PIXEL_BODY_SCALE) : rich ? resolution : 1});
+      intensities.set(name, intensity);
+    }
+    const painted = paintMoveVfxSheet(intensity, palettes(paletteKey), {doc, pixel, light});
+    entry = {textures: painted.frames.map(texture), loop: painted.loop, width: painted.width, height: painted.height, smoke: painted.smoke};
     sheets.set(id, entry);
     return entry;
+  }
+  function texture(canvas) {
+    const t = PIXI.Texture.from(canvas);
+    if (pixel && t.source) t.source.scaleMode = 'nearest';
+    return t;
   }
 
   const parts = [];
@@ -92,7 +121,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   // Delayed calls run on the kit's clock (the callers' one ticker), never a browser timer.
   const pending = [];
   const later = (fn, ms) => pending.push({fn, at: ms});
-  const created = {parts: 0, projectiles: 0, impacts: 0, beams: 0, bolts: 0, charges: 0, launches: 0, melees: 0, signatures: 0};
+  const created = {parts: 0, projectiles: 0, impacts: 0, beams: 0, bolts: 0, charges: 0, launches: 0, melees: 0, signatures: 0, sigils: 0, escorts: 0};
 
   /**
    * One sprite on a flipbook. `px` is its width in world px; `fps` loops a
@@ -155,8 +184,17 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   }
 
   /** Windup at the release point: the orb grows, sparks are drawn in, a ring closes. */
-  function charge({x, y, paletteKey, size = 36, ms = 320, follow = null}) {
+  function charge({x, y, paletteKey, size = 36, ms = 320, follow = null, signature = null}) {
     created.charges++;
+    size *= signature?.scale ?? 1;
+    // A skill or signature move opens its own sigil on the ground under the caster while it gathers,
+    // below the fighters so it never hides the body.
+    if (signature && signature.tier !== 'basic') {
+      const drop = size * 0.9, under = follow ? () => { const at = follow(); return at ? {x: at.x, y: at.y + drop} : null; } : null;
+      part({name: `sigil:${signature.sigil}`, paletteKey, x, y: y + drop, px: size * (signature.tier === 'ultimate' ? 3.6 : 2.6), life: ms + 160,
+        stretch: [1, 0.5], grow: [0.3, 1], fadeIn: 40, fadeOut: 0.3, alpha: 0.95, follow: under, layer: decalLayer});
+      created.sigils++;
+    }
     part({name: 'glow', paletteKey, x, y, px: size * 2.4, life: ms + 90, grow: [0.2, 1], fadeIn: 30, fadeOut: 0.25, follow});
     part({name: 'orb', paletteKey, x, y, px: size * 1.1, life: ms + 90, fps: 18, grow: [0.25, 0.9], spin: 4, fadeOut: 0.25, follow});
     ring(x, y, paletteKey, size * 3.2, ms, 1, 0, 0.55).grow = [1, 0.15];
@@ -169,9 +207,12 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   }
 
   /** Release: a flare at the muzzle, a shock ellipse across the shot and recoil sparks. */
-  function launch({x, y, angle = 0, paletteKey, archetype = 'fire', size = 30}) {
+  function launch({x, y, angle = 0, paletteKey, archetype = 'fire', size = 30, signature = null}) {
     created.launches++;
+    size *= signature?.scale ?? 1;
     flare(x, y, paletteKey, size * 2.6, 150, angle);
+    // A volley flashes once per head, fanned across the shot.
+    for (let i = 1; i < (signature?.volley ?? 1); i++) flare(x, y, paletteKey, size * 1.6, 130, angle + (i % 2 ? 1 : -1) * 0.5 * Math.ceil(i / 2), 0.8);
     ring(x, y, paletteKey, size * 2.2, 220, 0.38, angle + Math.PI / 2, 0.85);
     sparks({x, y, paletteKey, count: 7, angle, cone: 0.9, speed: [220, 520], life: 240, size: size * 0.9, gravity: 120});
     if (archetype === 'fire' || archetype === 'missile') smoke(x, y, paletteKey, size * 1.3, 2, 30);
@@ -263,8 +304,74 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     }},
     quake: {head: 'shard', len: 1.6, spin: 8, glow: 1.0, every: 36, trail(p, at, size) {
       smoke(at.x, at.y + size * 0.4, p.paletteKey, size * 0.8, 1, 10);
+    }},
+    // UNIQUE_PIXEL_MOVE_VFX_20261108: thrown things a move names.
+    shuriken: {head: 'shuriken', len: 1.3, spin: 22, glow: 1.2, every: 24, trail(p, at, size) {
+      part({name: 'shuriken', paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 1.2, life: 140, rotation: random() * TAU, alpha: 0.4, fadeOut: 1});
+    }},
+    crescent: {head: 'crescent', len: 1.9, glow: 1.6, every: 22, trail(p, at, size) {
+      part({name: 'crescent', paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 1.7, life: 150, rotation: at.angle, flipY: Math.cos(at.angle) < 0, alpha: 0.35, fadeOut: 1});
+    }},
+    star: {head: 'star', len: 1.4, spin: 6, glow: 2.2, every: 30, trail(p, at, size) {
+      part({name: 'star', paletteKey: p.paletteKey, x: at.x + spread(size * 0.6), y: at.y + spread(size * 0.6), px: size * 0.45, life: 520, spin: spread(8), vy: 60, fadeOut: 0.6});
+    }},
+    bubble: {head: 'bubble', len: 1.4, glow: 1.0, every: 40, trail(p, at, size) {
+      part({name: 'bubble', paletteKey: p.paletteKey, x: at.x + spread(size * 0.8), y: at.y + spread(size * 0.6), px: size * (0.3 + random() * 0.35), life: 620, vy: -50, vx: spread(30), grow: [1, 1.3], fadeOut: 0.4});
+    }},
+    note: {head: 'note', len: 1.3, upright: true, glow: 1.4, every: 44, trail(p, at, size) {
+      part({name: 'note', paletteKey: p.paletteKey, x: at.x + spread(size * 0.6), y: at.y, px: size * 0.6, life: 700, vy: -70, vx: spread(40), fadeOut: 0.5,
+        onUpdate: q => { q.rotation = Math.sin(q.age / 90) * 0.35; }});
+    }},
+    feather: {head: 'feather', len: 2.0, glow: 1.2, every: 32, trail(p, at, size) {
+      part({name: 'feather', paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 0.9, life: 760, rotation: random() * TAU, vx: spread(50), vy: 40, drag: 2,
+        fadeOut: 0.5, onUpdate: q => { q.rotation += Math.sin(q.age / 120) * 0.04; }});
+    }},
+    petal: {head: 'petal', len: 1.1, spin: 9, glow: 1.4, every: 24, trail(p, at, size) {
+      part({name: 'petal', paletteKey: p.paletteKey, x: at.x + spread(size * 0.5), y: at.y + spread(size * 0.5), px: size * 0.6, life: 640, rotation: random() * TAU, spin: spread(10), vy: 30, drag: 1.5, fadeOut: 0.5});
+    }},
+    snowflake: {head: 'snowflake', len: 1.4, spin: 3, glow: 2.0, every: 30, trail(p, at, size) {
+      part({name: 'snowflake', paletteKey: p.paletteKey, x: at.x + spread(size * 0.6), y: at.y + spread(size * 0.6), px: size * 0.4, life: 600, spin: spread(4), vy: 45, fadeOut: 0.5});
+    }},
+    drill: {head: 'drill', len: 2.2, anchor: [0.62, 0.5], fps: 20, glow: 1.0, every: 26, trail(p, at, size) {
+      sparks({x: at.x, y: at.y, paletteKey: p.paletteKey, count: 1, angle: at.angle + Math.PI, cone: 1.2, speed: [80, 180], life: 260, size: size * 0.45, gravity: 300});
     }}
   });
+
+  /** Things flung out from a point: a ring of `count` parts of one sheet. */
+  function scatter(name, x, y, paletteKey, count, R, {speed = [140, 320], life = 620, spin = 10, gravity = 120, drag = 1.8, px = 0.6, align = false} = {}) {
+    for (let i = 0; i < (rich ? count : Math.ceil(count / 2)); i++) {
+      const a = (i / count) * TAU + spread(0.5), v = speed[0] + random() * (speed[1] - speed[0]);
+      part({name, paletteKey, x, y, px: R * px * (0.8 + random() * 0.4), life: life * (0.8 + random() * 0.4), rotation: a, spin: align ? 0 : spread(spin),
+        vx: Math.cos(a) * v, vy: Math.sin(a) * v, gravity, drag, fadeOut: 0.45, onUpdate: align ? alignToVelocity : null});
+    }
+  }
+
+  // A signature's trail motif, laid every `TRAIL_EVERY` ms of flight on top of the archetype's own trail.
+  const TRAIL_EVERY = 46;
+  function trailMotif(motif, p, at, size) {
+    if (motif === 'sparkle') flare(at.x + spread(size * 0.7), at.y + spread(size * 0.7), p.paletteKey, size * 0.7, 220, random(), 0.85);
+    else if (motif === 'ring') ring(at.x, at.y, p.paletteKey, size * 1.6, 260, 1, 0, 0.6).grow = [1, 0.3];
+    else if (motif === 'afterimage') part({name: p.look.head, paletteKey: p.look.material ? MATERIAL[p.look.material] : p.paletteKey, x: at.x, y: at.y,
+      px: size * p.look.len, life: 160, anchor: p.look.anchor ?? [0.5, 0.5], rotation: p.look.upright ? 0 : at.angle, flipY: Math.cos(at.angle) < 0, alpha: 0.4, fadeOut: 1});
+    else if (motif === 'ember') sparks({x: at.x, y: at.y, paletteKey: p.paletteKey, count: 1, angle: Math.PI / 2, cone: 1.4, speed: [40, 120], life: 420, size: size * 0.4, gravity: 420});
+    else if (motif === 'rune' && p.signature) part({name: `sigil:${p.signature.sigil}`, paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 0.9, life: 340, spin: 3, grow: [1, 0.4], alpha: 0.75, fadeOut: 0.6});
+  }
+
+  /** A signature's closing burst on top of the archetype's impact. */
+  function burstMotif(motif, x, y, groundY, paletteKey, R, angle) {
+    if (motif === 'ring') for (let i = 0; i < 2; i++) ring(x, y, paletteKey, R * (3 + i * 1.4), 380 + i * 80, 1, 0, 0.75).delay = i * 90;
+    else if (motif === 'cross') for (const turn of [Math.PI / 4, -Math.PI / 4]) part({name: 'streak', paletteKey, x, y, px: R * 4.4, life: 240, rotation: angle + turn, stretch: [1, 1.4], grow: [0.4, 1.1], fadeOut: 0.6});
+    else if (motif === 'star') { for (let i = 0; i < 6; i++) part({name: 'streak', paletteKey, x, y, px: R * 2.8, life: 260, rotation: i * TAU / 6 + angle, anchor: [0, 0.5], grow: [0.3, 1.1], fadeOut: 0.6}); flare(x, y, paletteKey, R * 3.6, 220); }
+    else if (motif === 'pillar') {
+      const col = part({name: 'beam', paletteKey, x, y: groundY, px: R * 4.5, life: 420, fps: 30, anchor: [0, 0.5], rotation: -Math.PI / 2, fadeIn: 20, fadeOut: 0.4});
+      col.stretch = [1, R * 1.1 / (col.book.height * R * 4.5 / col.book.width)];
+    }
+    else if (motif === 'shatter') scatter('shard', x, y, paletteKey, 7, R, {gravity: 700, px: 0.55});
+    else if (motif === 'bloom') for (let i = 0; i < 6; i++) {
+      const a = i * TAU / 6;
+      part({name: 'glow', paletteKey, x, y, px: R * 1.3, life: 460, vx: Math.cos(a) * R * 4, vy: Math.sin(a) * R * 4, drag: 4, grow: [0.4, 1], fadeOut: 0.6, alpha: 0.85});
+    }
+  }
 
   /** A small lightning arc around a point (thunder shots). */
   function arc(x, y, paletteKey, radius) {
@@ -289,32 +396,70 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
    * A shot in flight. `follow()` returns {x, y, angle?} while the shot lives
    * and null once it is gone; without an angle the heading comes from motion.
    */
-  function projectile({follow, paletteKey, archetype = 'fire', size = 26}) {
+  function projectile({follow, paletteKey, archetype = 'fire', size = 26, signature = null}) {
     const look = HEADS[archetype] ?? HEADS.lance;
     const first = follow?.();
     if (!first) return null;
     created.projectiles++;
-    const p = {follow, paletteKey, look, size, x: first.x, y: first.y, angle: first.angle ?? 0, acc: 0, alive: true, spin: 0};
+    size *= signature?.scale ?? 1;
+    // x, y is where the shot is drawn; tx, ty where the game has it. A signature's path weaves the drawing round the true line.
+    const p = {follow, paletteKey, look, size, signature, x: first.x, y: first.y, tx: first.x, ty: first.y, angle: first.angle ?? 0, acc: 0, motifAcc: 0, age: 0, alive: true, spin: 0};
+    const at = () => p.alive ? p : null;
     p.riders = (look.riders ?? []).map(spec => rider(p, {...spec, px: size * spec.px}));
-    p.glow = look.glow ? part({name: 'glow', paletteKey, px: size * look.glow, life: 1e9, follow: () => p.alive ? p : null, alpha: 0.85}) : null;
-    p.head = part({name: look.head, paletteKey: look.material ? MATERIAL[look.material] : paletteKey, px: size * look.len, life: 1e9, fps: look.fps ?? 0, frame: look.frame ?? null,
-      anchor: look.anchor ?? [0.5, 0.5], follow: () => p.alive ? p : null, fadeIn: 30});
+    p.glow = look.glow ? part({name: 'glow', paletteKey, px: size * look.glow, life: 1e9, follow: at, alpha: 0.85}) : null;
+    p.head = head(p, at, 1);
+    // A volley: escort heads beside the first, fanned out at release and closing on the line as they fly.
+    p.escorts = Array.from({length: Math.max(0, (signature?.volley ?? 1) - 1)}, (_, i) => {
+      const side = (i % 2 ? -1 : 1) * Math.ceil((i + 1) / 2);
+      created.escorts++;
+      const escort = {side, x: p.x, y: p.y};
+      escort.part = head(p, () => p.alive ? escort : null, 0.7);
+      return escort;
+    });
     projectiles.push(p);
     return Object.freeze({stop() { p.alive = false; }});
+  }
+  function head(p, follow, k) {
+    const look = p.look;
+    return part({name: look.head, paletteKey: look.material ? MATERIAL[look.material] : p.paletteKey, px: p.size * look.len * k, life: 1e9, fps: look.fps ?? 0, frame: look.frame ?? null,
+      anchor: look.anchor ?? [0.5, 0.5], follow, fadeIn: 30});
+  }
+  /** The drawn offset of a path from the true line, across it (+ is to the left of the heading). */
+  function pathOffset(path, age, size) {
+    if (reducedMotion) return [0, 0];
+    if (path === 'wave') return [0, Math.sin(age / 55) * size * 0.55];
+    if (path === 'spiral') return [Math.cos(age / 40) * size * 0.45, Math.sin(age / 40) * size * 0.45];
+    if (path === 'arc') return [0, -Math.sin(Math.PI * Math.min(1, age / 520)) * size * 1.3];
+    return [0, 0];
   }
   function stepProjectile(p, dt) {
     const at = p.alive ? p.follow() : null;
     if (!at) { p.alive = false; return false; }
-    const dx = at.x - p.x, dy = at.y - p.y;
+    const dx = at.x - p.tx, dy = at.y - p.ty;
     if (Number.isFinite(at.angle)) p.angle = at.angle; else if (dx * dx + dy * dy > 0.25) p.angle = Math.atan2(dy, dx);
-    p.x = at.x; p.y = at.y;
+    p.tx = at.x; p.ty = at.y; p.age += dt;
+    const cos = Math.cos(p.angle), sin = Math.sin(p.angle);
+    const [along, across] = pathOffset(p.signature?.path, p.age, p.size);
+    p.x = p.tx + cos * along + sin * across; p.y = p.ty + sin * along - cos * across;
+    const close = Math.exp(-p.age / 520);
+    for (const e of p.escorts) {
+      const off = e.side * p.size * 1.1 * (0.25 + 0.75 * close);
+      e.x = p.x + sin * off - cos * Math.abs(e.side) * p.size * 0.5; e.y = p.y - cos * off - sin * Math.abs(e.side) * p.size * 0.5;
+    }
     p.spin += (p.look.spin ?? 0) * dt / 1000;
     // Shapes face right; a leftward heading mirrors top to bottom so nothing flies upside down.
-    p.head.rotation = p.look.upright ? 0 : p.look.spin ? p.spin : p.angle + (p.look.turn ?? 0);
-    p.head.flipY = !p.look.spin && !p.look.turn && !p.look.upright && Math.cos(p.angle) < 0;
+    for (const q of [p.head, ...p.escorts.map(e => e.part)]) {
+      q.rotation = p.look.upright ? 0 : p.look.spin ? p.spin : p.angle + (p.look.turn ?? 0);
+      q.flipY = !p.look.spin && !p.look.turn && !p.look.upright && Math.cos(p.angle) < 0;
+    }
     p.acc += dt;
     const every = p.look.every * (rich ? 1 : 2);
     while (p.acc >= every) { p.acc -= every; p.look.trail(p, {x: p.x, y: p.y, angle: p.angle}, p.size); }
+    const motif = p.signature?.trail;
+    if (motif && motif !== 'none') {
+      p.motifAcc += dt;
+      while (p.motifAcc >= TRAIL_EVERY * (rich ? 1 : 2)) { p.motifAcc -= TRAIL_EVERY * (rich ? 1 : 2); trailMotif(motif, p, {x: p.x, y: p.y, angle: p.angle}, p.size); }
+    }
     return true;
   }
 
@@ -385,9 +530,10 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   }
 
   /** A landed hit: the archetype's burst, a shock ring, sparks and a ground mark. */
-  function impact({x, y, groundY = y, angle = 0, paletteKey, archetype = 'strike', heavy = false, size = 30}) {
+  function impact({x, y, groundY = y, angle = 0, paletteKey, archetype = 'strike', heavy = false, size = 30, signature = null}) {
     created.impacts++;
-    const k = heavy ? 1.4 : 1, R = size * k;
+    const k = heavy ? 1.4 : 1, R = size * k * (signature?.scale ?? 1);
+    if (signature) burstMotif(signature.burst, x, y, groundY, paletteKey, R, angle);
     flare(x, y, paletteKey, R * 3, heavy ? 200 : 150, random());
     switch (archetype) {
       case 'fire':
@@ -499,6 +645,48 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
           vy: -side * R * 0.9 / 0.12, drag: 9, fadeOut: 0.4});
         sparks({x, y, paletteKey, count: 6, speed: [180, 360], life: 240, size: R * 0.7});
         break;
+      case 'shuriken':
+        scatter('shuriken', x, y, paletteKey, 4, R, {speed: [260, 420], life: 420, spin: 30, gravity: 0, px: 0.9});
+        sparks({x, y, paletteKey, count: 6, speed: [200, 420], life: 260, size: R * 0.7});
+        break;
+      case 'crescent':
+        part({name: 'crescent', paletteKey, x, y, px: R * 3.4, life: 360, rotation: angle, flipY: Math.cos(angle) < 0, grow: [0.6, 1.3], fadeOut: 0.5});
+        part({name: 'slash', paletteKey, x, y, px: R * 4, life: 300, rotation: angle - 0.5, fadeOut: 0.35});
+        ring(x, y, paletteKey, R * 3, 340, 0.6, angle);
+        break;
+      case 'star':
+        flare(x, y, paletteKey, R * 3.6, 220, random());
+        scatter('star', x, y, paletteKey, 7, R, {speed: [180, 380], gravity: 240, px: 0.7});
+        break;
+      case 'bubble':
+        ring(x, y, paletteKey, R * 2.6, 300);
+        scatter('bubble', x, y, paletteKey, 9, R, {speed: [90, 220], life: 700, spin: 0, gravity: -80, drag: 2.4, px: 0.6});
+        break;
+      case 'note':
+        for (let i = 0; i < 3; i++) ring(x, y, paletteKey, R * (2.4 + i * 1.2), 360, 1, 0, 0.7).delay = i * 110;
+        scatter('note', x, y, paletteKey, 6, R, {speed: [120, 240], life: 760, spin: 2, gravity: -60, drag: 2, px: 0.75});
+        break;
+      case 'feather':
+        scatter('feather', x, y, paletteKey, 8, R, {speed: [160, 320], life: 900, spin: 3, gravity: 90, drag: 3, px: 1});
+        ring(x, y, paletteKey, R * 2.6, 300, 0.7);
+        break;
+      case 'petal':
+        for (let i = 0; i < (rich ? 12 : 6); i++) {
+          const a0 = random() * TAU, r0 = R * (0.4 + random() * 0.6), w = (random() < 0.5 ? -1 : 1) * (5 + random() * 3);
+          const q = part({name: 'petal', paletteKey, x, y, px: R * 0.65, life: 820, rotation: a0, fadeOut: 0.45});
+          q.onUpdate = p => { const a = a0 + w * p.age / 1000, r = r0 + R * 1.8 * p.age / p.life; p.x = x + Math.cos(a) * r; p.y = y + Math.sin(a) * r * 0.6; p.rotation = a + Math.PI / 2; };
+        }
+        break;
+      case 'snowflake':
+        ring(x, y, paletteKey, R * 3, 380, 0.8);
+        scatter('snowflake', x, y, paletteKey, 6, R, {speed: [120, 260], life: 760, spin: 3, gravity: 60, drag: 2.2, px: 0.7});
+        scatter('shard', x, y, paletteKey, 5, R, {gravity: 600, px: 0.45, align: true});
+        break;
+      case 'drill':
+        part({name: 'drill', paletteKey, x, y, px: R * 2.6, life: 380, fps: 26, rotation: angle, anchor: [0.62, 0.5], flipY: Math.cos(angle) < 0, fadeOut: 0.3});
+        scatter('rock', x, y, MATERIAL.rock, 6, R, {gravity: 900, px: 0.4, speed: [200, 380]});
+        sparks({x, y, paletteKey, count: 10, angle: angle + Math.PI, cone: 2, speed: [220, 460], life: 300, size: R * 0.7});
+        break;
       default: // strike
         part({name: 'burst', paletteKey, x, y, px: R * 1.8, life: 260, rotation: random() * TAU, grow: [0.6, 1.1], fadeOut: 0.5});
         ring(x, y, paletteKey, R * 2.8, 280);
@@ -542,12 +730,21 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   }
 
   /** A swing at the caster: the archetype's slash on the facing side. */
-  function melee({x, y, angle = 0, paletteKey, archetype = 'strike', size = 30}) {
+  // A signature's swing: which way each blow of a combo turns.
+  const SWINGS = Object.freeze({down: [-0.4, 0.3, -0.7], up: [0.4, -0.3, 0.7], cross: [-0.6, 0.6, 0]});
+  function melee({x, y, angle = 0, paletteKey, archetype = 'strike', size = 30, signature = null}) {
     created.melees++;
+    size *= signature?.scale ?? 1;
     const reach = size * 0.9, cx = x + Math.cos(angle) * reach, cy = y + Math.sin(angle) * reach;
-    if (archetype === 'pierce') { part({name: 'streak', paletteKey, x: cx, y: cy, px: size * 4, life: 180, rotation: angle, anchor: [0.4, 0.5], stretch: [1, 1.4], fadeOut: 0.6}); return; }
-    if (archetype === 'strike') { ring(cx, cy, paletteKey, size * 1.8, 200, 0.4, angle + Math.PI / 2); return; }
-    part({name: 'slash', paletteKey, x: cx, y: cy, px: size * 3, life: 240, rotation: angle - 0.4, fadeOut: 0.4, flipY: Math.cos(angle) < 0});
+    const combo = signature?.combo ?? 1, turns = SWINGS[signature?.swing] ?? SWINGS.down;
+    for (let i = 0; i < combo; i++) {
+      const delay = i * 85, turn = turns[i % turns.length], alpha = i ? 0.85 : 1;
+      if (archetype === 'pierce') part({name: 'streak', paletteKey, x: cx, y: cy, px: size * 4, life: 180, delay, rotation: angle + turn * 0.3, anchor: [0.4, 0.5], stretch: [1, 1.4], fadeOut: 0.6, alpha});
+      else if (archetype === 'strike') ring(cx, cy, paletteKey, size * (1.8 + i * 0.4), 200, 0.4, angle + Math.PI / 2 + turn * 0.4, alpha).delay = delay;
+      else part({name: 'slash', paletteKey, x: cx, y: cy, px: size * 3, life: 240, delay, rotation: angle + turn, fadeOut: 0.4, flipY: (Math.cos(angle) < 0) !== (turn > 0), alpha});
+      // A trail motif on a blow: the swing leaves its sparkle, ring, embers or sigil at the reach.
+      if (signature?.trail && signature.trail !== 'none' && signature.trail !== 'afterimage') later(() => trailMotif(signature.trail, {paletteKey, signature, look: HEADS.lance}, {x: cx, y: cy, angle}, size), delay);
+    }
   }
 
   /**
@@ -564,11 +761,14 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   }
 
   /** The larger close of a signature move. */
-  function signature({x, y, groundY = y, angle = 0, paletteKey, archetype = 'fire', size = 40}) {
+  function signature({x, y, groundY = y, angle = 0, paletteKey, archetype = 'fire', size = 40, signature: own = null}) {
     created.signatures++;
-    impact({x, y, groundY, angle, paletteKey, archetype, heavy: true, size: size * 1.3});
+    impact({x, y, groundY, angle, paletteKey, archetype, heavy: true, size: size * 1.3, signature: own});
+    // The move's own sigil opens under the blow and fades out.
+    if (own) { part({name: `sigil:${own.sigil}`, paletteKey, x, y: groundY, px: size * 6, life: 900, stretch: [1, 0.45], grow: [0.4, 1.05], fadeIn: 60, fadeOut: 0.45, alpha: 0.9, layer: decalLayer}); created.sigils++; }
     for (let i = 0; i < 3; i++) ring(x, y, paletteKey, size * (5 + i * 1.6), 520 + i * 90, 1, 0, 0.7 - i * 0.18).delay = i * 70;
-    part({name: 'glow', paletteKey, x, y, px: size * 9, life: 420, fadeIn: 10, fadeOut: 0.8, alpha: 0.7});
+    // In pixel finish a field-sized glow reads as a white disc over the move's own shapes, so it stays faint.
+    part({name: 'glow', paletteKey, x, y, px: size * (pixel ? 7 : 9), life: 420, fadeIn: 10, fadeOut: 0.8, alpha: pixel ? 0.35 : 0.7});
     sparks({x, y, paletteKey, count: 16, speed: [300, 700], life: 520, size: size * 1.1, gravity: 260});
   }
 
@@ -578,7 +778,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     for (let i = projectiles.length - 1; i >= 0; i--) {
       const p = projectiles[i];
       if (stepProjectile(p, dt)) continue;
-      for (const q of [p.head, p.glow, ...p.riders]) if (q) q.age = q.life;
+      for (const q of [p.head, p.glow, ...p.riders, ...p.escorts.map(e => e.part)]) if (q) q.age = q.life;
       projectiles.splice(i, 1);
     }
     for (let i = parts.length - 1; i >= 0; i--) {

@@ -24,8 +24,20 @@ const NAME_RULES = Object.freeze([
   [/箭雨|星雨|光箭/, 'arrows'],
   [/黑洞|深淵|吞噬|侵蝕|虛空/, 'blackhole'],
   [/地刺|冰刺|岩刺|針山|劍山/, 'spikes'],
-  [/咬|牙|顎/, 'bite', ({style}) => moveVfxArchetypeIsMelee(moveVfxArchetype(style))]
+  [/咬|牙|顎/, 'bite', ({style}) => moveVfxArchetypeIsMelee(moveVfxArchetype(style))],
+  // UNIQUE_PIXEL_MOVE_VFX_20261108: the thing a ranged move throws, by name.
+  [/手裏劍|手里劍|飛刀|苦無|飛鏢/, 'shuriken', ranged],
+  [/鐮|新月|弦月|月刃|月輪/, 'crescent', ranged],
+  [/泡/, 'bubble', ranged],
+  [/歌|音|聲|鈴|曲|吟|詠|唱|鳴/, 'note', ranged],
+  [/羽|翼|翅/, 'feather', ranged],
+  [/花|瓣|櫻|薔薇|蕾/, 'petal', ranged],
+  [/雪|冰晶|霜晶/, 'snowflake', ranged],
+  [/鑽|螺旋|錐/, 'drill', ranged],
+  // 星 last: in 星糯泡泡 it only colours the bubbles.
+  [/星/, 'star', ranged]
 ]);
+function ranged({style}) { return !moveVfxArchetypeIsMelee(moveVfxArchetype(style)); }
 const FAMILY_RULES = Object.freeze([
   [/^rose/, 'vine'],
   [/missile|rocketpunch/, 'missile'],

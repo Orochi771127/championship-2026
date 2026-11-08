@@ -1,5 +1,20 @@
 # Championship Owner Direction
 
+<!-- record-id: UNIQUE_PIXEL_MOVE_VFX_20261108 -->
+## 2026-11-08 — One pixel style for move effects, and every move its own
+
+After a read-only comparison showed three move-effect looks side by side (enlarged low-resolution original cells, the remade 292-cell pixel atlas, and the Data Arena kit's smooth glow) and that 587 species moves shared about 200 looks, the Owner asked to unify the style and give every move a distinct effect, chose the plan to unify on the remade cells' pixel look, and said: 「那就讓你幫我自行規劃跟製作，總之我要每一招都獨特」.
+
+OWNER_APPROVED_ADAPTATION. This supersedes the 2026-11-05 MOVE_VFX_KIT_20261105 decision that each mode keeps its own look.
+
+- The move VFX kit paints with a pixel finish (flat tones, a one-texel dark outline, stepped light bands, nearest sampling). Every effect stays computed in code: no image file, no ROM pixel, no generated picture.
+- `src/data/championship/move-vfx-signatures.r1.json` (generator `scripts/build-move-vfx-signatures.mjs`) gives each of the 666 moves -- species and original-character moves, learnable support moves, Data Arena pool moves -- its own size, volley and path (or combo and swing), trail, closing burst and a sigil glyph drawn from its own seed. No two moves share a look; two moves of one archetype and palette differ in at least two choices; no sigil repeats (tests).
+- Nine thrown archetypes join the kit by name: shuriken, crescent, star, bubble, note, feather, petal, snowflake, drill.
+- First batch: the Data Arena draws every phase with the move's signature. The AI battle (original cells retiring) and the Dex follow in later batches of this direction.
+- Presentation only: no power, element rule, range, timing, RNG, save or gameplay value changes.
+
+This records the direction and the first batch, not publication: commit, push, merge and deploy keep their own authorization.
+
 <!-- record-id: CHARACTER_ASSET_REPOSITORY_MIGRATION_20261106 -->
 ## 2026-11-06 — Inventory all character stages and move animation delivery out of the game-site payload
 

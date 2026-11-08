@@ -4,9 +4,10 @@
 // Every texture is computed here from fractal noise and distance fields, then
 // coloured through the move's three-tone palette (edge -> main -> core) by
 // intensity. No image file, no ROM pixel and no generated picture enters: the
-// kit adds no download and no asset-rights question. Smooth, high-resolution
-// and additive by design, so it sits with the HD-2D fields and lighting
-// instead of enlarging 16 px cells.
+// kit adds no download and no asset-rights question. Since
+// UNIQUE_PIXEL_MOVE_VFX_20261108 the kit paints with the pixel finish below
+// (flat tones, dark outline, stepped light) so every mode shares the look of
+// the original remade cells; the smooth ramp stays for `pixel: false`.
 //
 // Shapes are drawn facing +x (right); the runtime turns them to their heading.
 // A sheet is baked the first time a palette asks for it and cached until
@@ -222,6 +223,67 @@ const SHEETS = Object.freeze({
     const bands = n(Math.asin(Math.max(-1, Math.min(1, (x - sway) / half))) * 30 + t * 128, up * 40);
     return (1 - smooth(0.7, 1, d)) * (0.3 + bands * 0.7) * smooth(0, 0.12, up) * (1 - smooth(0.92, 1, up));
   }},
+  // UNIQUE_PIXEL_MOVE_VFX_20261108: the things a named ranged move throws.
+  // A four-bladed throwing star (the kit spins it).
+  shuriken: {width: 48, height: 48, frames: 1, fn(x, y) {
+    const r = Math.hypot(x, y), edge = 0.3 + 0.62 * Math.abs(Math.cos(Math.atan2(y, x) * 2)) ** 6;
+    return r < 0.12 ? 0 : (1 - smooth(edge - 0.08, edge, r)) * (0.55 + (y < 0 ? 0.3 : 0));
+  }},
+  // A crescent blade, horns pointing back (left), bright on its cutting edge.
+  crescent: {width: 64, height: 64, frames: 1, fn(x, y) {
+    const outer = Math.hypot(x, y), inner = Math.hypot(x + 0.38, y * 1.05);
+    const body = (1 - smooth(0.78, 0.86, outer)) * smooth(0.62, 0.7, inner);
+    return body * (0.5 + 0.5 * smooth(0.2, 0.85, x + 0.3) + (outer > 0.72 ? 0.25 : 0));
+  }},
+  // A five-pointed star.
+  star: {width: 48, height: 48, frames: 1, fn(x, y) {
+    const r = Math.hypot(x, y), a = Math.atan2(y, x) + Math.PI / 2;
+    const edge = 0.42 + 0.5 * Math.abs(Math.cos(a * 2.5)) ** 3;
+    return (1 - smooth(edge - 0.08, edge, r)) * (0.6 + 0.4 * (1 - r)) + (1 - smooth(0, 0.3, r)) * 0.4;
+  }},
+  // A bubble: a thin shell with a highlight.
+  bubble: {width: 40, height: 40, frames: 1, fn(x, y) {
+    const r = Math.hypot(x, y);
+    return (1 - smooth(0, 0.14, Math.abs(r - 0.78))) * 0.75 + (1 - smooth(0, 0.22, Math.hypot(x + 0.32, y + 0.34))) * 0.95 + (1 - smooth(0.3, 0.8, r)) * 0.18;
+  }},
+  // A musical note: head, stem and flag, upright.
+  note: {width: 40, height: 56, frames: 1, fn(x, y) {
+    const head = 1 - smooth(0.3, 0.38, Math.hypot((x + 0.25) / 1.25, (y - 0.55) / 0.9));
+    const stem = x > 0.12 && x < 0.3 && y > -0.85 && y < 0.55 ? 1 : 0;
+    const flag = x > 0.25 && x < 0.75 && Math.abs(y + 0.62 - (x - 0.25) * 0.9) < 0.14 ? 1 : 0;
+    return Math.max(head * 0.85, stem * 0.75, flag * 0.7);
+  }},
+  // A feather pointing right: shaft and a vane that narrows to the tip.
+  feather: {width: 64, height: 24, frames: 1, fn(x, y) {
+    const w = 0.85 * Math.sin(Math.PI * clamp01((x + 0.9) / 1.85)) ** 0.7;
+    const vane = 1 - smooth(w * 0.8, w + 0.02, Math.abs(y));
+    const barbs = 0.75 + 0.25 * Math.sin((x - Math.abs(y) * 0.6) * 22);
+    const shaft = 1 - smooth(0, 0.1, Math.abs(y));
+    return Math.max(vane * 0.6 * barbs, shaft * 0.9 * smooth(-1, -0.7, x));
+  }},
+  // A petal pointing right.
+  petal: {width: 40, height: 28, frames: 1, fn(x, y) {
+    const w = 0.85 * Math.sqrt(clamp01((1 - x) / 2)) * smooth(-1, -0.6, x);
+    return (1 - smooth(w * 0.8, w + 0.01, Math.abs(y))) * (0.55 + 0.45 * (1 - Math.abs(y) / (w + 0.01)));
+  }},
+  // A six-armed snowflake.
+  snowflake: {width: 48, height: 48, frames: 1, fn(x, y) {
+    const r = Math.hypot(x, y);
+    let arm = 0;
+    for (let i = 0; i < 6; i++) {
+      const a = i * Math.PI / 3, along = x * Math.cos(a) + y * Math.sin(a), across = -x * Math.sin(a) + y * Math.cos(a);
+      if (along > 0 && along < 0.92) arm = Math.max(arm, 1 - smooth(0.05, 0.12, Math.abs(across)));
+      if (along > 0.45 && along < 0.75) arm = Math.max(arm, 1 - smooth(0.04, 0.1, Math.abs(Math.abs(across) - (along - 0.45) * 0.9)));
+    }
+    return Math.max(arm * 0.85, (1 - smooth(0.1, 0.22, r)) * 0.95);
+  }},
+  // A drill cone pointing right, its bands turning (looping).
+  drill: {width: 64, height: 40, frames: 6, loop: true, fn(x, y, t) {
+    const half = 0.85 * clamp01((0.95 - x) / 1.7);
+    if (Math.abs(y) > half || x < -0.8) return 0;
+    const band = 0.5 + 0.5 * Math.sin((x * 9 + y / (half + 0.01) * 2.2 - t * TAU) * 1.0);
+    return (0.45 + band * 0.45) * (y < 0 ? 1 : 0.8);
+  }},
   // A ground mark (normal blend, smoke colour), flattened by the caller.
   decal: {width: 128, height: 128, frames: 1, smoke: true, fn(x, y, t, n) {
     const r = Math.hypot(x, y), rough = n(x * 30 + 64, y * 30 + 64);
@@ -254,9 +316,28 @@ export function bakeMoveVfxIntensity(name, noise, {scale = 1} = {}) {
   return {name, frames, width, height, loop: Boolean(sheet.loop), smoke: Boolean(sheet.smoke), soft: Boolean(sheet.soft)};
 }
 
+/**
+ * Pixel finish (UNIQUE_PIXEL_MOVE_VFX_20261108: 「統一風格」, the look of the
+ * original remade 292 cells). Bodies take four flat tones -- edge, main, a
+ * main/core mix and core -- at full alpha with a one-texel dark outline; light
+ * sheets (`light`) keep three stepped alpha bands and no outline; smoke steps
+ * its alpha. Sample the result `nearest`.
+ */
+function pixelTable(palette, {smoke = false, light = false} = {}) {
+  const edge = rgb(palette.edge), main = rgb(palette.main), core = rgb(palette.core);
+  const mix = main.map((v, i) => (v + core[i]) / 2);
+  if (smoke) {
+    const base = rgb(palette.smoke ?? 0x606060), lit = base.map(v => v + (255 - v) * 0.2);
+    return Array.from({length: 256}, (_, i) => { const k = i / 255; return k < 0.12 ? [0, 0, 0, 0] : k < 0.45 ? [...base, 0.45] : k < 0.75 ? [...base, 0.7] : [...lit, 0.82]; });
+  }
+  if (light) return Array.from({length: 256}, (_, i) => { const k = i / 255; return k < 0.1 ? [0, 0, 0, 0] : k < 0.35 ? [...edge, 0.4] : k < 0.65 ? [...main, 0.7] : k < 0.88 ? [...mix, 1] : [...core, 1]; });
+  return Array.from({length: 256}, (_, i) => { const k = i / 255; return k < 0.12 ? [0, 0, 0, 0] : k < 0.4 ? [...edge, 1] : k < 0.68 ? [...main, 1] : k < 0.88 ? [...mix, 1] : [...core, 1]; });
+}
+
 /** Colour a baked sheet with one palette: one canvas per frame. `doc` supplies createElement. */
-export function paintMoveVfxSheet(intensity, palette, {doc = globalThis.document} = {}) {
+export function paintMoveVfxSheet(intensity, palette, {doc = globalThis.document, pixel = false, light = false} = {}) {
   if (!intensity || !doc) return null;
+  if (pixel) return paintPixelSheet(intensity, palette, {doc, light});
   const colour = intensity.smoke ? smokeRamp(palette) : ramp(palette, {soft: intensity.soft});
   const table = Array.from({length: 256}, (_, i) => colour(i / 255));
   const frames = intensity.frames.map(data => {
@@ -272,4 +353,81 @@ export function paintMoveVfxSheet(intensity, palette, {doc = globalThis.document
     return canvas;
   });
   return {name: intensity.name, frames, loop: intensity.loop, width: intensity.width, height: intensity.height, smoke: intensity.smoke};
+}
+
+function paintPixelSheet(intensity, palette, {doc, light}) {
+  const {width, height} = intensity;
+  const table = pixelTable(palette, {smoke: intensity.smoke, light});
+  const outline = !intensity.smoke && !light ? rgb(palette.edge).map(v => v * 0.38) : null;
+  const frames = intensity.frames.map(data => {
+    const canvas = doc.createElement('canvas');
+    canvas.width = width; canvas.height = height;
+    const context = canvas.getContext('2d');
+    const image = context.createImageData(width, height), out = image.data;
+    for (let i = 0; i < data.length; i++) {
+      const [r, g, b, a] = table[data[i]];
+      out[i * 4] = r; out[i * 4 + 1] = g; out[i * 4 + 2] = b; out[i * 4 + 3] = Math.round(a * 255);
+    }
+    // One texel of dark outline round every body, as the remade cells have.
+    if (outline) for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+      const i = y * width + x;
+      if (out[i * 4 + 3]) continue;
+      const solid = (u, v) => u >= 0 && v >= 0 && u < width && v < height && table[data[v * width + u]][3] === 1;
+      if (solid(x - 1, y) || solid(x + 1, y) || solid(x, y - 1) || solid(x, y + 1)) {
+        out[i * 4] = outline[0]; out[i * 4 + 1] = outline[1]; out[i * 4 + 2] = outline[2]; out[i * 4 + 3] = 255;
+      }
+    }
+    context.putImageData(image, 0, 0);
+    return canvas;
+  });
+  return {name: intensity.name, frames, loop: intensity.loop, width, height, smoke: intensity.smoke};
+}
+
+/**
+ * A move's own sigil (UNIQUE_PIXEL_MOVE_VFX_20261108: 「每一招都獨特」): a
+ * mirrored 11 x 11 glyph drawn from the move's seed inside a ring with eight
+ * ticks, 32 x 32 texels. No two seeds in the signature table share a glyph
+ * (tests). Returns {cells: Uint8Array of 0 empty / 1 ring / 2 glyph, size}.
+ */
+export function moveVfxSigilCells(seed) {
+  let s = seed >>> 0;
+  const random = () => { s = (s + 0x6d2b79f5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const size = 32, cells = new Uint8Array(size * size), c = (size - 1) / 2;
+  for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+    const r = Math.hypot(x - c, y - c), a = Math.atan2(y - c, x - c);
+    const tick = Math.abs(((a / TAU * 8) % 1 + 1) % 1 - 0.5) > 0.44 && r > 12.2 && r < 15.4;
+    if ((r > 13.2 && r < 14.6) || tick) cells[y * size + x] = 1;
+  }
+  // The glyph: a 6 x 11 half, mirrored, denser near the axis, always joined to it.
+  const half = Array.from({length: 11}, (_, row) => Array.from({length: 6}, (_, col) => random() < 0.62 - col * 0.07 + (row % 2 ? 0 : 0.05)));
+  for (let row = 0; row < 11; row++) half[row][0] ||= row > 0 && row < 10 && random() < 0.7;
+  const glyph = (gx, gy) => half[gy][gx < 6 ? 5 - gx : gx - 5];
+  for (let gy = 0; gy < 11; gy++) for (let gx = 0; gx < 11; gx++) if (glyph(gx, gy)) {
+    // Each glyph cell is 2 x 2 texels, centred: 22 texels across a 32 texel sigil.
+    for (const [dx, dy] of [[0, 0], [1, 0], [0, 1], [1, 1]]) cells[(5 + gy * 2 + dy) * size + 5 + gx * 2 + dx] = 2;
+  }
+  return {cells, size};
+}
+
+/** Paint a sigil: ring in the palette's main colour, glyph in its core, dark outline. */
+export function paintMoveVfxSigil(seed, palette, {doc = globalThis.document} = {}) {
+  if (!doc) return null;
+  const {cells, size} = moveVfxSigilCells(seed);
+  const canvas = doc.createElement('canvas');
+  canvas.width = size; canvas.height = size;
+  const context = canvas.getContext('2d');
+  const image = context.createImageData(size, size), out = image.data;
+  const colours = [null, rgb(palette.main), rgb(palette.core)], outline = rgb(palette.edge).map(v => v * 0.38);
+  for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+    const i = y * size + x, kind = cells[i];
+    let colour = colours[kind];
+    if (!colour) {
+      const near = [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => x + dx >= 0 && x + dx < size && y + dy >= 0 && y + dy < size && cells[(y + dy) * size + x + dx]);
+      if (!near) continue;
+      colour = outline;
+    }
+    out[i * 4] = colour[0]; out[i * 4 + 1] = colour[1]; out[i * 4 + 2] = colour[2]; out[i * 4 + 3] = 255;
+  }
+  context.putImageData(image, 0, 0);
+  return canvas;
 }

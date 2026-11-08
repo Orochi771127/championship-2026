@@ -437,6 +437,7 @@
     "src/championship/presentation/vfx/moveVfxKit.js",
     "src/championship/presentation/vfx/moveVfxKitTextures.js",
     "src/championship/presentation/vfx/moveVfxRecipes.js",
+    "src/championship/presentation/vfx/moveVfxSignatures.js",
     "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
     "src/championship/presentation/vfx/originalVfxCellArt.js",
     "src/championship/presentation/vfx/originalVfxSystemBindings.js",
@@ -8567,6 +8568,7 @@
     "src/championship/presentation/vfx/moveVfxKit.js",
     "src/championship/presentation/vfx/moveVfxKitTextures.js",
     "src/championship/presentation/vfx/moveVfxRecipes.js",
+    "src/championship/presentation/vfx/moveVfxSignatures.js",
     "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
     "src/championship/presentation/vfx/originalVfxCellArt.js",
     "src/championship/presentation/vfx/originalVfxSystemBindings.js",
@@ -8752,6 +8754,7 @@
     "src/data/championship/database-hero-silhouettes.v1.json",
     "src/data/championship/database-illustrations.r1.json",
     "src/data/championship/database-original-profiles.r1.json",
+    "src/data/championship/move-vfx-signatures.r1.json",
     "src/data/championship/move-vfx-themes.r1.json",
     "src/data/championship/nativeBookSpecies.js",
     "src/data/championship/online-service.v1.json",
@@ -40309,7 +40312,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaElementFx.js",
-        "sha256": "5a052318afae7c41019141ac0d0d00e6fa05864531ee0b24f01961e08f9f33b5"
+        "sha256": "1e5f9b18dffa517f680fd38f86b681f6b14a1853c9cb4d0e659dcd8db88c3134"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaEnvironment.js",
@@ -40713,15 +40716,19 @@
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxKit.js",
-        "sha256": "a73541021b18d3bf1ec7d6fe7b2d33953824a1038d2a799b3663862dd6c02eff"
+        "sha256": "5eb075a4a66eab1c60b0a563488549cfb89996fb80494e79309492212509ace9"
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxKitTextures.js",
-        "sha256": "7b900d8d3df6d124e41ea5dc8c0fcc5f8864bb08910160c0b76109d8df49b640"
+        "sha256": "5b05822d77e351c0e1e4da79689b3342d5b1d786a5b6c8635bec848af72bd8a9"
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxRecipes.js",
-        "sha256": "b01d7ddd144fdd60508c3376a1f5b51853aa16088d84560a952494b87208491d"
+        "sha256": "0556db8a0044f6cf4ba148d8d310674728b31d96615dc75d27717cf67842fb91"
+      },
+      {
+        "path": "src/championship/presentation/vfx/moveVfxSignatures.js",
+        "sha256": "316872205be087354084d9c50bc8a046fead9cf6e0219f69dbf7ba4a338bb226"
       },
       {
         "path": "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
@@ -41462,6 +41469,10 @@
       {
         "path": "src/data/championship/database-original-profiles.r1.json",
         "sha256": "445be1abb7972b443630d59c0db91269cfc03057768ca3782543cabbf7f1231c"
+      },
+      {
+        "path": "src/data/championship/move-vfx-signatures.r1.json",
+        "sha256": "505003465f6b48a491f408ce8681677587706d7a14f23dfb926f5d101516a62f"
       },
       {
         "path": "src/data/championship/move-vfx-themes.r1.json",
