@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>重製特效圖格｜內部審圖</title>
+  <style>
+    html, body { margin: 0; background: #1b2122; color: #f4f0df; font: 12px/1.3 system-ui, sans-serif; }
+    #evidence { position: fixed; right: 6px; top: 6px; padding: 4px 6px; background: rgb(0 0 0 / .7); font-family: ui-monospace, monospace; }
+  </style>
+</head>
+<body>
+  <output id="evidence">載入中</output>
+  <script type="module">
+    // Loopback review only (UNIQUE_PIXEL_MOVE_VFX_20261108): per effect family, the
+    // reference cells (top row, never published) above their remade cells (bottom row).
+    // ?banks=20,57 picks banks; ?from=0&count=12 pages through every bank with a remade cell.
+    import * as PIXI from "./node_modules/pixi.js/dist/pixi.mjs";
+    import {loadRegisteredBattleEffectArt} from "./src/championship/presentation/battleEffectArt.js";
+    import {createRemadeEffectArt, remadeCellLook} from "./src/championship/presentation/vfx/remadeEffectCells.js";
+    import profiles from "./src/data/championship/battleEffectProfiles.json" with {type: "json"};
+    const params = new URLSearchParams(location.search), $ = id => document.getElementById(id);
+    const base = await loadRegisteredBattleEffectArt({PIXI, baseUrl: location.href});
+    if (!base) { $("evidence").textContent = "reference art is loopback-only"; throw new Error("LOOPBACK_ONLY"); }
+    const art = createRemadeEffectArt({PIXI, base});
+    // Cells the original remade atlas already draws are not remade in the game: leave them out.
+    const covered = new Set((await (await fetch("assets/production/vfx/original-shared-review-292-r1/manifest.json")).json()).cells.map(c => `${c.bankId}:${c.cell}`));
+    const cellsOf = bankId => profiles.banks[bankId - 1].sequences.flatMap((s, sequence) => s.frames.map(f => ({cell: f.cell, sequence})))
+      .filter((c, i, all) => all.findIndex(o => o.cell === c.cell) === i && !covered.has(`${bankId}:${c.cell}`)).slice(0, Number(params.get("max") ?? 24));
+    const remakeable = bankId => cellsOf(bankId).some(({cell}) => { const ref = base.getCell(bankId, cell); return ref && !ref.blank && remadeCellLook(bankId, cell, ref); });
+    let banks = params.get("banks")?.split(",").map(Number) ?? profiles.banks.map((_, i) => i + 1).filter(remakeable);
+    if (!params.get("banks")) banks = banks.slice(Number(params.get("from") ?? 0), Number(params.get("from") ?? 0) + Number(params.get("count") ?? 12));
+    const Z = Number(params.get("zoom") ?? 4), PAD = 6, ROW = 16 * Z + PAD;
+    const width = Math.max(...banks.map(b => cellsOf(b).length)) * (16 * Z + PAD) + 170;
+    const app = new PIXI.Application();
+    await app.init({width, height: banks.length * (ROW * 2 + 18) + 10, backgroundColor: 0x263030, antialias: false});
+    document.body.append(app.canvas);
+    let y = 6;
+    for (const bankId of banks) {
+      const label = new PIXI.Text({text: `${bankId} ${profiles.banks[bankId - 1].name.replace(/^e003_/, "")}`, style: {fill: 0xf4f0df, fontSize: 13}});
+      label.position.set(6, y + ROW - 8); app.stage.addChild(label);
+      cellsOf(bankId).forEach(({cell, sequence}, i) => {
+        const x = 170 + i * (16 * Z + PAD);
+        for (const [row, source] of [[0, base], [1, art]]) {
+          const c = source.getCell(bankId, cell);
+          const slot = new PIXI.Graphics().rect(x, y + row * ROW, 16 * Z, 16 * Z).fill(sequence % 2 ? 0x34413c : 0x3b3a46);
+          app.stage.addChild(slot);
+          if (!c || c.blank) continue;
+          const s = new PIXI.Sprite(c.texture);
+          const k = Z / c.pixelsPerNativePixel;
+          s.scale.set(k); s.position.set(x + (16 * Z - c.frame[2] * k) / 2, y + row * ROW + (16 * Z - c.frame[3] * k) / 2);
+          app.stage.addChild(s);
+        }
+      });
+      y += ROW * 2 + 18;
+    }
+    $("evidence").textContent = `banks ${banks.length} · ${JSON.stringify(art.getRemadeDiagnostics())}`;
+    window.__remadeReview = {banks, diag: art.getRemadeDiagnostics()};
+  </script>
+</body>
+</html>

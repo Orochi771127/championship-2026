@@ -35,7 +35,12 @@ const STYLE_ARCHETYPE = Object.freeze({
 // Archetypes a recipe picks by name or effect family (moveVfxRecipes.js); no style maps to them by default.
 const NAMED_ARCHETYPES = Object.freeze(['vine', 'roots', 'tree', 'gatling', 'cannon', 'meteor', 'pillar', 'spikes', 'tornado', 'arrows', 'blackhole', 'bite',
   // UNIQUE_PIXEL_MOVE_VFX_20261108
-  'shuriken', 'crescent', 'star', 'bubble', 'note', 'feather', 'petal', 'snowflake', 'drill']);
+  'shuriken', 'crescent', 'star', 'bubble', 'note', 'feather', 'petal', 'snowflake', 'drill',
+  // Concrete things an original effect family threw (moveVfxRecipes.js FAMILY objects).
+  'mushroom', 'bomb', 'banana', 'fish', 'gear', 'bone', 'heart', 'syringe', 'egg', 'mist']);
+// Things that land and stand before they burst: in the AI battle their body stage is drawn planted.
+const PLANTED = new Set(['mushroom', 'bomb']);
+export function moveVfxArchetypeIsPlanted(archetype) { return PLANTED.has(archetype); }
 export const MOVE_VFX_ARCHETYPES = Object.freeze([...new Set([...Object.values(STYLE_ARCHETYPE), ...NAMED_ARCHETYPES])]);
 const MELEE = new Set(['strike', 'claw', 'slash', 'pierce', 'bite']);
 // Material colours that do not follow the move's element: bark, roots, foliage, steel, rock.
@@ -45,7 +50,10 @@ const MATERIAL = Object.freeze({
   foliage: Object.freeze({core: 0xd8ff9a, main: 0x58c23a, edge: 0x1d6428, smoke: 0x40602c}),
   steel: Object.freeze({core: 0xffffff, main: 0xc6cfdb, edge: 0x48505e, smoke: 0x8c8c8c}),
   iron: Object.freeze({core: 0x9aa4b4, main: 0x4a5160, edge: 0x1c2028, smoke: 0x6a6a6a}),
-  rock: Object.freeze({core: 0xe8d6b0, main: 0x9a7a54, edge: 0x4a3a28, smoke: 0x8a7458})
+  rock: Object.freeze({core: 0xe8d6b0, main: 0x9a7a54, edge: 0x4a3a28, smoke: 0x8a7458}),
+  banana: Object.freeze({core: 0xfff3a0, main: 0xf2cf3a, edge: 0x8a6a10, smoke: 0x9a8a50}),
+  bone: Object.freeze({core: 0xffffff, main: 0xe8e0c8, edge: 0x8a8068, smoke: 0x9a9480}),
+  egg: Object.freeze({core: 0x7ac0ff, main: 0xfff6e2, edge: 0x9a8a70, smoke: 0xb0a890})
 });
 
 /** The archetype a VFX style plays as; unknown styles strike. */
@@ -364,6 +372,46 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     }},
     drill: {head: 'drill', len: 2.2, anchor: [0.62, 0.5], fps: 20, glow: 1.0, every: 26, trail(p, at, size) {
       sparks({x: at.x, y: at.y, paletteKey: p.paletteKey, count: 1, angle: at.angle + Math.PI, cone: 1.2, speed: [80, 180], life: 260, size: size * 0.45, gravity: 300});
+    }},
+    // Thrown objects. A mushroom flies as a glowing spore and only stands up where it lands.
+    mushroom: {head: 'orb', len: 1.1, fps: 16, spin: 3, glow: 2.0, every: 36, trail(p, at, size) {
+      part({name: 'mist', paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 0.9, life: 420, fps: 14, grow: [0.6, 1.1], alpha: 0.55, fadeOut: 0.6});
+    }},
+    bomb: {head: 'bomb', material: 'iron', len: 1.3, spin: 7, glow: 0.8, every: 22, trail(p, at, size) {
+      sparks({x: at.x, y: at.y - size * 0.5, paletteKey: 'fire', count: 1, angle: -Math.PI / 2, cone: 1.4, speed: [40, 110], life: 220, size: size * 0.35, gravity: 200});
+    }},
+    banana: {head: 'banana', material: 'banana', len: 1.4, spin: 16, glow: 0.8, every: 40, trail(p, at, size) {
+      part({name: 'banana', paletteKey: MATERIAL.banana, x: at.x, y: at.y, px: size * 1.3, life: 120, rotation: random() * TAU, alpha: 0.35, fadeOut: 1});
+    }},
+    fish: {head: 'fish', len: 1.7, glow: 1.2, every: 34, trail(p, at, size) {
+      part({name: 'drop', paletteKey: 'water', x: at.x, y: at.y, px: size * 0.4, life: 380, rotation: at.angle + Math.PI, vy: 80, vx: spread(40), gravity: 300, onUpdate: alignToVelocity, fadeOut: 0.5});
+    }},
+    gear: {head: 'gear', material: 'steel', len: 1.3, spin: 14, glow: 0.8, every: 30, trail(p, at, size) {
+      sparks({x: at.x, y: at.y, paletteKey: p.paletteKey, count: 1, angle: at.angle + Math.PI, cone: 1, speed: [60, 160], life: 220, size: size * 0.4, gravity: 260});
+    }},
+    bone: {head: 'bone', material: 'bone', len: 1.5, spin: 14, glow: 0.6, every: 44, trail(p, at, size) {
+      smoke(at.x, at.y, MATERIAL.rock, size * 0.5, 1, 6);
+    }},
+    heart: {head: 'heart', len: 1.2, glow: 1.8, every: 34, upright: true, trail(p, at, size) {
+      part({name: 'heart', paletteKey: p.paletteKey, x: at.x + spread(size * 0.6), y: at.y + spread(size * 0.4), px: size * 0.45, life: 600, vy: -50, fadeOut: 0.5});
+    }},
+    syringe: {head: 'syringe', len: 2.0, anchor: [0.6, 0.5], glow: 0.8, every: 30, trail(p, at, size) {
+      part({name: 'drop', paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 0.35, life: 360, rotation: Math.PI / 2, vy: 60, gravity: 300, fadeOut: 0.5});
+    }},
+    egg: {head: 'egg', material: 'egg', len: 1.2, spin: 6, glow: 1.0, every: 50, trail(p, at, size) {
+      flare(at.x + spread(size * 0.5), at.y + spread(size * 0.5), p.paletteKey, size * 0.5, 200, random(), 0.7);
+    }},
+    mist: {head: 'mist', len: 2.0, fps: 12, upright: true, glow: 0.6, every: 30, trail(p, at, size) {
+      smoke(at.x, at.y, p.paletteKey, size * 0.9, 1, 14);
+    }}
+  });
+  // The body stage of a planted thing in the AI battle: it stands where the battle put it.
+  const STANDING = Object.freeze({
+    mushroom: {head: 'mushroom', len: 1.5, upright: true, anchor: [0.5, 0.95], glow: 0, every: 120, grow: true, trail(p, at, size) {
+      part({name: 'mist', paletteKey: p.paletteKey, x: at.x + spread(size * 0.6), y: at.y - size * 0.4, px: size * 0.5, life: 520, fps: 12, vy: -30, alpha: 0.6, fadeOut: 0.6});
+    }},
+    bomb: {head: 'bomb', material: 'iron', len: 1.3, upright: true, anchor: [0.5, 0.9], glow: 0, every: 90, grow: true, trail(p, at, size) {
+      sparks({x: at.x + size * 0.3, y: at.y - size * 1.2, paletteKey: 'fire', count: 2, angle: -Math.PI / 2, cone: 1.6, speed: [50, 120], life: 200, size: size * 0.35, gravity: 160});
     }}
   });
 
@@ -431,20 +479,28 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
    * `headless` draws only the signature's trail motif along the shot: the AI
    * battle keeps drawing an original cell as the head and adds the move's own trail.
    */
-  function projectile({follow, paletteKey, archetype = 'fire', size = 26, signature = null, headless = false}) {
-    const look = HEADS[archetype] ?? HEADS.lance;
+  function projectile({follow, paletteKey, archetype = 'fire', size = 26, signature = null, headless = false, planted = false}) {
+    // `planted`: the AI battle's body stage of a thing that lands and stands (a mushroom, a bomb) before it bursts.
+    const standing = planted ? STANDING[archetype] ?? null : null;
+    const look = standing ?? HEADS[archetype] ?? HEADS.lance;
     const first = follow?.();
     if (!first) return null;
     created.projectiles++;
     size *= signature?.scale ?? 1;
     // x, y is where the shot is drawn; tx, ty where the game has it. A signature's path weaves the drawing round the true line.
-    const p = {follow, paletteKey, look, size, signature, headless, x: first.x, y: first.y, tx: first.x, ty: first.y, angle: first.angle ?? 0, acc: 0, motifAcc: 0, age: 0, alive: true, spin: 0};
+    const p = {follow, paletteKey, look, size, signature, headless, planted: Boolean(standing), x: first.x, y: first.y, tx: first.x, ty: first.y, angle: first.angle ?? 0, acc: 0, motifAcc: 0, age: 0, alive: true, spin: 0};
     const at = () => p.alive ? p : null;
     p.riders = headless ? [] : (look.riders ?? []).map(spec => rider(p, {...spec, px: size * spec.px}));
     p.glow = look.glow && !headless ? part({name: 'glow', paletteKey, px: size * look.glow, life: 1e9, follow: at, alpha: 0.85}) : null;
     p.head = headless ? null : head(p, at, 1);
+    // A planted thing pops up out of the ground, then breathes in and out until it bursts.
+    if (p.head && look.grow) p.head.onUpdate = q => {
+      const rise = Math.min(1, q.age / 220), pop = rise < 1 ? 1 - (1 - rise) ** 3 * (1 - 2.2 * rise) : 1;
+      const breathe = reducedMotion ? 0 : Math.sin(q.age / 70) * 0.12 * Math.min(1, q.age / 300);
+      q.stretch = [pop * (1 + breathe), pop * (1 - breathe)];
+    };
     // A volley: escort heads beside the first, fanned out at release and closing on the line as they fly.
-    p.escorts = headless ? [] : Array.from({length: Math.max(0, (signature?.volley ?? 1) - 1)}, (_, i) => {
+    p.escorts = headless || p.planted ? [] : Array.from({length: Math.max(0, (signature?.volley ?? 1) - 1)}, (_, i) => {
       const side = (i % 2 ? -1 : 1) * Math.ceil((i + 1) / 2);
       created.escorts++;
       const escort = {side, x: p.x, y: p.y};
@@ -474,7 +530,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     if (Number.isFinite(at.angle)) p.angle = at.angle; else if (dx * dx + dy * dy > 0.25) p.angle = Math.atan2(dy, dx);
     p.tx = at.x; p.ty = at.y; p.age += dt;
     const cos = Math.cos(p.angle), sin = Math.sin(p.angle);
-    const [along, across] = p.headless ? [0, 0] : pathOffset(p.signature?.path, p.age, p.size);
+    const [along, across] = p.headless || p.planted ? [0, 0] : pathOffset(p.signature?.path, p.age, p.size);
     p.x = p.tx + cos * along + sin * across; p.y = p.ty + sin * along - cos * across;
     const close = Math.exp(-p.age / 520);
     for (const e of p.escorts) {
@@ -566,7 +622,40 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   }
 
   /** A landed hit: the archetype's burst, a shock ring, sparks and a ground mark. */
-  function impact({x, y, groundY = y, angle = 0, paletteKey, archetype = 'strike', heavy = false, size = 30, signature = null}) {
+  /** A cloud of spores or mist bursting out and drifting apart. */
+  function cloudBurst(x, y, paletteKey, R) {
+    part({name: 'mist', paletteKey, x, y, px: R * 3.4, life: 900, fps: 12, grow: [0.45, 1.5], fadeIn: 30, fadeOut: 0.45});
+    for (let i = 0; i < (rich ? 6 : 3); i++) {
+      const a = i / 6 * TAU + spread(0.4), v = 70 + random() * 90;
+      part({name: 'mist', paletteKey, x, y, px: R * (1 + random() * 0.6), life: 1100, delay: 60 + i * 30, fps: 12, vx: Math.cos(a) * v, vy: Math.sin(a) * v * 0.6 - 20, drag: 1.4, grow: [0.6, 1.4], fadeOut: 0.55, alpha: 0.85});
+    }
+    smoke(x, y, paletteKey, R * 2, 4, 40);
+  }
+  /** A mushroom pops up where the shot landed, breathes, then bursts into spores. */
+  function mushroomAt(x, groundY, paletteKey, R, planted) {
+    if (!planted) {
+      const q = part({name: 'mushroom', paletteKey, x, y: groundY, px: R * 1.6, life: 620, anchor: [0.5, 0.95], fadeIn: 10, fadeOut: 0.05});
+      q.onUpdate = p => { const r = Math.min(1, p.age / 200), pop = r < 1 ? 1 - (1 - r) ** 3 * (1 - 2.2 * r) : 1, b = Math.sin(p.age / 60) * 0.14 * Math.min(1, p.age / 250); p.stretch = [pop * (1 + b), pop * (1 - b)]; };
+      later(() => mushroomAt(x, groundY, paletteKey, R, true), 600);
+      return;
+    }
+    flare(x, groundY - R * 0.8, paletteKey, R * 2.2, 160, random());
+    cloudBurst(x, groundY - R * 0.7, paletteKey, R);
+    scatter('ball', x, groundY - R * 0.8, paletteKey, 8, R, {speed: [120, 260], life: 700, gravity: 120, px: 0.18});
+    decal({x, y: groundY, paletteKey, px: R * 2.6});
+  }
+  /** A bomb sits, flashes twice, then goes off. */
+  function bombAt(x, groundY, R, planted) {
+    if (!planted) {
+      const q = part({name: 'bomb', paletteKey: MATERIAL.iron, x, y: groundY, px: R * 1.5, life: 420, anchor: [0.5, 0.9], fadeIn: 10, fadeOut: 0.05});
+      q.onUpdate = p => { const s = 1 + (Math.floor(p.age / 105) % 2) * 0.15; p.stretch = [s, s]; };
+      later(() => bombAt(x, groundY, R, true), 400);
+      return;
+    }
+    explosion(x, groundY - R * 0.4, groundY, R * 1.1);
+  }
+
+  function impact({x, y, groundY = y, angle = 0, paletteKey, archetype = 'strike', heavy = false, size = 30, signature = null, planted = false}) {
     created.impacts++;
     const k = heavy ? 1.4 : 1, R = size * k * (signature?.scale ?? 1);
     if (signature) burstMotif(signature.burst, x, y, groundY, paletteKey, R, angle);
@@ -722,6 +811,42 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
         part({name: 'drill', paletteKey, x, y, px: R * 2.6, life: 380, fps: 26, rotation: angle, anchor: [0.62, 0.5], flipY: Math.cos(angle) < 0, fadeOut: 0.3});
         scatter('rock', x, y, MATERIAL.rock, 6, R, {gravity: 900, px: 0.4, speed: [200, 380]});
         sparks({x, y, paletteKey, count: 10, angle: angle + Math.PI, cone: 2, speed: [220, 460], life: 300, size: R * 0.7});
+        break;
+      case 'mushroom': mushroomAt(x, groundY, paletteKey, R, planted); break;
+      case 'bomb': bombAt(x, groundY, R, planted); break;
+      case 'mist':
+        cloudBurst(x, y, paletteKey, R * 1.2);
+        ring(x, groundY, paletteKey, R * 3.2, 460, 0.42);
+        break;
+      case 'banana':
+        scatter('banana', x, y, MATERIAL.banana, 3, R, {speed: [180, 320], life: 600, spin: 20, gravity: 600, px: 1});
+        part({name: 'burst', paletteKey, x, y, px: R * 1.8, life: 280, rotation: random() * TAU, grow: [0.6, 1.1], fadeOut: 0.5});
+        break;
+      case 'fish':
+        ring(x, groundY, 'water', R * 3, 380, 0.42);
+        scatter('drop', x, y, 'water', 9, R, {speed: [160, 320], life: 520, gravity: 900, px: 0.5, align: true});
+        part({name: 'fish', paletteKey, x, y, px: R * 1.6, life: 520, rotation: -1.2, spin: 6, vy: -260, vx: spread(80), gravity: 900, fadeOut: 0.3});
+        break;
+      case 'gear':
+        scatter('gear', x, y, MATERIAL.steel, 4, R, {speed: [180, 340], life: 560, spin: 18, gravity: 700, px: 0.6});
+        sparks({x, y, paletteKey, count: 10, speed: [220, 460], life: 300, size: R * 0.7});
+        break;
+      case 'bone':
+        scatter('bone', x, y, MATERIAL.bone, 3, R, {speed: [180, 300], life: 620, spin: 16, gravity: 800, px: 0.8});
+        smoke(x, groundY, MATERIAL.rock, R * 1.6, 3, 30);
+        break;
+      case 'heart':
+        part({name: 'heart', paletteKey, x, y, px: R * 2.2, life: 420, grow: [0.6, 1.3], fadeOut: 0.5});
+        scatter('heart', x, y, paletteKey, 7, R, {speed: [120, 260], life: 680, spin: 2, gravity: -40, drag: 2, px: 0.5});
+        break;
+      case 'syringe':
+        part({name: 'streak', paletteKey, x, y, px: R * 3.6, life: 200, rotation: angle, anchor: [0.75, 0.5], stretch: [1, 1.2], fadeOut: 0.5});
+        scatter('drop', x, y, paletteKey, 7, R, {speed: [140, 280], life: 480, gravity: 700, px: 0.45, align: true});
+        break;
+      case 'egg':
+        scatter('shard', x, y, MATERIAL.egg, 7, R, {speed: [160, 320], life: 520, spin: 16, gravity: 700, px: 0.5});
+        flare(x, y, paletteKey, R * 2.4, 220, random());
+        ring(x, y, paletteKey, R * 2.6, 320);
         break;
       default: // strike
         part({name: 'burst', paletteKey, x, y, px: R * 1.8, life: 260, rotation: random() * TAU, grow: [0.6, 1.1], fadeOut: 0.5});

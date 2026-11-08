@@ -49,12 +49,44 @@ const FAMILY_RULES = Object.freeze([
   [/magmaball/, 'meteor']
 ]);
 
+// UNIQUE_PIXEL_MOVE_VFX_20261108 (Owner: the mushroom move must still plant a
+// mushroom). When the original effect threw a concrete thing, that thing wins
+// over the name rules: the kit draws its own version of it, never the original pixels.
+const OBJECT_FAMILY_RULES = Object.freeze([
+  [/^kinoko/, 'mushroom'],
+  [/cherrybomb|smileybomb|bitbomb|bigsmileybomber/, 'bomb'],
+  [/^banana/, 'banana'],
+  [/^fish/, 'fish'],
+  [/cogwheel/, 'gear'],
+  [/^bone|spiralbone/, 'bone'],
+  [/^hart/, 'heart'],
+  [/tyusyaki/, 'syringe'],
+  [/egg/, 'egg'],
+  [/blacksmoke|dirtysaucer/, 'mist'],
+  [/^bubble/, 'bubble'],
+  [/^crescent|crescemonarrow/, 'crescent'],
+  [/^star0/, 'star'],
+  [/syuriken/, 'shuriken'],
+  [/^raiun|thunderjavelin|myorunirusanda|hammerspark/, 'thunder'],
+  [/^lightball/, 'orb'],
+  [/^tuno|koorituno/, 'drill'],
+  [/^rose/, 'petal']
+]);
+
+/** The concrete thing an original effect family throws (mushroom, bomb, ...), or null. */
+export function moveVfxObjectOfFamily(family) {
+  return OBJECT_FAMILY_RULES.find(([rule]) => rule.test(family ?? ''))?.[1] ?? null;
+}
+
 /**
  * {archetype, source} for one move. `families` are the record's effect bank
  * family names without the e003_ prefix (optional), `element` its effect element.
  */
 export function moveVfxRecipe({style = null, element = null, name = '', families = []} = {}) {
   const context = {style, element};
+  // The body bank first (it is what flies), then the others.
+  for (const family of families ?? []) for (const [rule, archetype] of OBJECT_FAMILY_RULES)
+    if (rule.test(family ?? '') && !moveVfxArchetypeIsMelee(moveVfxArchetype(style))) return Object.freeze({archetype, source: 'OBJECT'});
   for (const [rule, archetype, guard] of NAME_RULES) if (rule.test(name ?? '') && (!guard || guard(context))) return Object.freeze({archetype, source: 'NAME'});
   for (const family of families ?? []) for (const [rule, archetype] of FAMILY_RULES) if (rule.test(family ?? '')) return Object.freeze({archetype, source: 'FAMILY'});
   return Object.freeze({archetype: moveVfxArchetype(style), source: 'STYLE'});

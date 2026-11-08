@@ -71,7 +71,9 @@ function listMoves() {
     const name = BATTLE_MOVE_NAMES[move.recordIndex]?.[0] ?? '';
     const vfx = resolveMoveVfx(move, {speciesMoves: bySpecies.get(move.speciesId)});
     if (move.kind >= 2 || move.recordIndex <= 30) { rows.push([move.recordIndex, name, 'support', 'support', vfx.paletteKey]); continue; }
-    const families = battleFxMoveBanks(move).map(b => b.family).filter(Boolean);
+    // The body bank first: it is what flies, so an object it throws names the move's look.
+    const banks = battleFxMoveBanks(move), order = {body: 0, launch: 1, hit: 2, prepare: 3, extra: 4};
+    const families = [...banks].sort((a, b) => (order[a.role] ?? 9) - (order[b.role] ?? 9)).map(b => b.family).filter(Boolean);
     const {archetype} = moveVfxRecipe({style: vfx.style, element: vfx.element, name, families});
     rows.push([move.recordIndex, name, vfx.tier === 'ultimate' ? 'ultimate' : vfx.tier === 'basic' ? 'basic' : 'skill', archetype, vfx.paletteKey]);
   }

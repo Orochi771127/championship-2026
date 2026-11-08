@@ -21,7 +21,7 @@ import {BATTLE_FX_PALETTES, battleFxFamilyForm, battleFxFamilyPalette} from './b
 import {createElementVfxLayer} from '../vfx/elementVfxLayer.js';
 import {pixelateCanvas} from '../vfx/pixelateCanvas.js';
 import {CRITICAL_VFX_SYSTEM, supportVfxSystem} from '../vfx/unifiedMoveVfxResolver.js';
-import {createMoveVfxKit, moveVfxArchetypeIsMelee} from '../vfx/moveVfxKit.js';
+import {createMoveVfxKit, moveVfxArchetypeIsMelee, moveVfxArchetypeIsPlanted} from '../vfx/moveVfxKit.js';
 import {moveVfxSignature} from '../vfx/moveVfxSignatures.js';
 import {battleEffectCellIsOriginal} from '../battleEffectSprites.js';
 
@@ -474,7 +474,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const owner = launches.find(l => describeMove(l.ownerSlot, l.moveId)?.bankIds.includes(actor.bankId));
         const vfx = owner ? vfxOf(owner.ownerSlot, owner.moveId) : null;
         const signature = owner ? signatureOf(owner.moveId) : null;
-        entry = {form: battleFxFamilyForm(family), signature, alive: true, standIn: false, trail: false,
+        entry = {form: battleFxFamilyForm(family), signature, alive: true, standIn: false, trail: false, cells: vfx?.cells ?? [], stages: new Set(),
           paletteKey: signature?.paletteKey ?? vfx?.paletteKey ?? battleFxFamilyPalette(family) ?? 'neutral'};
         standIns.set(actor.id, entry);
       }
@@ -483,10 +483,28 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       if (!form) continue;
       const follow = () => entry.alive ? entry.at : null;
       const archetype = signature?.archetype ?? 'strike';
+      const shot = moveVfxArchetypeIsMelee(archetype) ? 'orb' : archetype;
+      // The stage the actor plays, from the owning move's own banks: launch, body (in flight or standing) or hit.
+      // One actor can step through several; each stage gets the move's own look once.
+      entry.stage = entry.cells.find(c => c.bankId === actor.bankId && c.sequence === actor.sequenceId)?.role ?? null;
+      const stage = entry.stage;
+      if (stage && signature && romCell(actor)) {
+        if (entry.stages.has(stage)) continue;
+        entry.stages.add(stage); entry.standIn = true; kitStats.standIns++;
+        const during = () => entry.alive && entry.stage === stage ? entry.at : null;
+        if (stage === 'hit' || stage === 'extra') {
+          const heavy = form === 'area' || form === 'character' || signature.tier === 'ultimate';
+          kit.impact({x: at.x, y: at.y, groundY: at.groundY, paletteKey, archetype, heavy, size: heavy ? size * 1.1 : size, planted: moveVfxArchetypeIsPlanted(archetype)});
+        } else if (stage === 'body' || form === 'projectile' || form === 'stream' || form === 'beam') {
+          // A body that lands and stands (a mushroom, a bomb) is drawn planted where the battle put it.
+          kit.projectile({follow: during, paletteKey, archetype: shot, size, signature, planted: stage === 'body' && moveVfxArchetypeIsPlanted(archetype)});
+        } else kit.launch({x: at.x, y: at.y, paletteKey, archetype, size, signature});
+        continue;
+      }
       if (!entry.standIn && romCell(actor)) {
         entry.standIn = true; kitStats.standIns++;
         if (form === 'projectile' || form === 'stream' || form === 'beam') {
-          kit.projectile({follow, paletteKey, archetype: moveVfxArchetypeIsMelee(archetype) ? 'orb' : archetype, size, signature});
+          kit.projectile({follow, paletteKey, archetype: shot, size, signature});
         } else if (form === 'smoke') {
           kit.puff({x: at.x, y: at.y, paletteKey: entry.signature ? paletteKey : 'dark', size});
         } else if (form === 'support') {

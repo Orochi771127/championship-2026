@@ -141,6 +141,38 @@ test("AI battle: reference-atlas cells retire and the kit draws over the same li
   assert.match(layer, /kit\.burst\(\{/, "a hit closes on the move's burst");
 });
 
+test("a thrown object stays that object: the mushroom move plants a mushroom that bursts into spores", () => {
+  // The original effect family names the thing; it wins over the name rules, never for a blow.
+  const cases = [["kinoko00", "mushroom"], ["cherrybomb00", "bomb"], ["smileybomb00", "bomb"], ["banana00", "banana"], ["fish00", "fish"],
+    ["cogwheel00", "gear"], ["bone00", "bone"], ["hart00", "heart"], ["tyusyaki00", "syringe"], ["delumonegg00", "egg"], ["blacksmoke03", "mist"]];
+  for (const [family, archetype] of cases) assert.equal(moveVfxRecipe({ style: "holy", element: "SUN", name: "星光", families: [family] }).archetype, archetype, family);
+  assert.equal(moveVfxRecipe({ style: "strike", element: "SUN", name: "", families: ["kinoko00"] }).archetype, "strike");
+  const spore = moveVfxSignature(126);
+  assert.equal(spore.archetype, "mushroom", "孢子彈 throws a mushroom");
+  for (const id of [74, 105, 124, 140, 276, 341, 408]) assert.equal(moveVfxSignature(id).archetype, "mist", `fog move ${id}`);
+  for (const id of [346, 382, 385, 404]) assert.equal(moveVfxSignature(id).archetype, "bomb", `bomb move ${id}`);
+
+  const PIXI = fakePixi(), front = new PIXI.Container(), ground = new PIXI.Container();
+  const kit = createMoveVfxKit({ PIXI, front, ground, doc, quality: "saver" });
+  const spot = { x: 0, y: 0, alive: true };
+  kit.projectile({ follow: () => spot.alive ? spot : null, paletteKey: "nature", archetype: "mushroom", signature: spore, planted: true });
+  for (let i = 0; i < 10; i++) kit.update(16);
+  assert.equal(kit.getDiagnostics().escorts, 0, "a planted mushroom stands alone");
+  spot.alive = false;
+  kit.impact({ x: 0, y: 0, paletteKey: "nature", archetype: "mushroom", signature: spore });
+  const before = kit.getDiagnostics().parts;
+  for (let i = 0; i < 50; i++) kit.update(16);
+  assert.ok(kit.getDiagnostics().parts > before + 5, "an unplanted mushroom pops up, then bursts into a cloud");
+  for (const archetype of ["bomb", "banana", "fish", "gear", "bone", "heart", "syringe", "egg", "mist"]) kit.impact({ x: 0, y: 0, paletteKey: "fire", archetype });
+  for (let i = 0; i < 500; i++) kit.update(16);
+  assert.equal(kit.getDiagnostics().live, 0);
+  kit.dispose();
+
+  const layer = fs.readFileSync("src/championship/presentation/battleFx/battleFxLayer.js", "utf8");
+  assert.match(layer, /entry\.stage = entry\.cells\.find\(c => c\.bankId === actor\.bankId && c\.sequence === actor\.sequenceId\)/, "the AI battle draws each stage of the original effect");
+  assert.match(layer, /planted: stage === 'body' && moveVfxArchetypeIsPlanted\(archetype\)/);
+});
+
 test("the kit's sigil, burst and headless trail", () => {
   const PIXI = fakePixi(), front = new PIXI.Container(), ground = new PIXI.Container();
   const kit = createMoveVfxKit({ PIXI, front, ground, doc, quality: "saver" });
