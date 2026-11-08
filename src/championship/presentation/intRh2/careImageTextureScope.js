@@ -1,9 +1,14 @@
 // Care-only candidate workaround: fresh HTML image resources, no worker bitmap cache.
+// These images are never inserted into the document. Chromium (verified on 153)
+// keeps a detached <img> alive for the life of the page once its src attribute
+// is removed; assigning an empty src releases the request and the element can
+// be collected (2026-11-08 system sweep).
+const releaseSource=image=>{image.src='';};
 export function createCareImageTextureScope(PIXI,{signal,createImage=()=>new Image()}={}) {
   const textures=new Set(),images=new Set(),pending=new Map();let disposed=false;
   const abortError=()=>signal?.reason??new DOMException('Care image scope disposed','AbortError');
   const requireLive=()=>{if(disposed||signal?.aborted)throw abortError();};
-  function dispose(){if(disposed)return;disposed=true;signal?.removeEventListener('abort',dispose);for(const cancel of pending.values())cancel();pending.clear();for(const texture of textures)texture.destroy(true);textures.clear();for(const image of images)image.removeAttribute('src');images.clear();}
+  function dispose(){if(disposed)return;disposed=true;signal?.removeEventListener('abort',dispose);for(const cancel of pending.values())cancel();pending.clear();for(const texture of textures)texture.destroy(true);textures.clear();for(const image of images)releaseSource(image);images.clear();}
   signal?.addEventListener('abort',dispose,{once:true});if(signal?.aborted)dispose();
   async function load(url){
     requireLive();const image=createImage();images.add(image);image.crossOrigin='anonymous';image.decoding='async';
@@ -12,7 +17,7 @@ export function createCareImageTextureScope(PIXI,{signal,createImage=()=>new Ima
       image.src=url;await Promise.race([image.decode(),cancelled]);requireLive();
       if(!image.complete||!(image.naturalWidth>0&&image.naturalHeight>0))throw Error('CARE_IMAGE_DECODE_NOT_READY');
       const texture=PIXI.Texture.from(image,true);textures.add(texture);return texture;
-    }catch(error){images.delete(image);image.removeAttribute('src');throw error;}
+    }catch(error){images.delete(image);releaseSource(image);throw error;}
     finally{pending.delete(image);}
   }
   return Object.freeze({load,dispose});

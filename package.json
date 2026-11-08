@@ -87,6 +87,7 @@
     "test:browser:full-qa-save": "node tests/championship-full-qa-save-browser.cjs",
     "test:browser:data-arena": "node tests/championship-data-arena-browser.cjs",
     "test:browser:ranch-load": "node tests/championship-ranch-load-diagnostics-browser.cjs",
+    "test:browser:care-image-release": "node tests/championship-care-image-release-browser.cjs",
     "qa:ranch-load-save:build": "node tests/fixtures/build-ranch-load-diagnostic-save.mjs",
     "qa:ranch-load-save:validate": "node tests/fixtures/build-ranch-load-diagnostic-save.mjs --check",
     "qa:full-save:build": "node scripts/create-full-qa-save.mjs",
