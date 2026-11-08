@@ -1,0 +1,356 @@
+{
+ "schemaVersion": 1,
+ "label": "before-r3",
+ "profile": "unthrottled",
+ "scenario": "full",
+ "artifact": "dist/github-playtest",
+ "generatedAt": "2026-11-08T09:11:53.134Z",
+ "measurement": "Loopback built artifact, GitHub-Pages-like cache headers, Chromium software WebGL; not an iPhone/Safari measurement",
+ "cases": [
+  {
+   "name": "environment",
+   "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Mobile Safari/537.36",
+   "webgl": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+  },
+  {
+   "name": "A-cold",
+   "startEpoch": 1794129114617,
+   "fieldReadyMs": 3154,
+   "allResidentsReadyMs": 3151,
+   "residentsReadyAfterFieldMs": -2,
+   "noticeMs": 0,
+   "noticeSpans": [],
+   "pendingKinds": [
+    "species-034:animation:loading"
+   ],
+   "requests": {
+    "count": 88,
+    "status200": 88,
+    "status304": 0,
+    "bytes200": 6750774,
+    "duplicates": [],
+    "reviewedImages": 6,
+    "reviewedImageDistinct": 6,
+    "reviewedImageBytes": 843648
+   },
+   "digests": {
+    "count": 40,
+    "bytes": 5127218,
+    "ms": 8
+   },
+   "longTasks": {
+    "count": 7,
+    "maxMs": 1022,
+    "totalMs": 2055
+   },
+   "longFrames": {
+    "count": 5,
+    "maxMs": 1033
+   },
+   "tap": {
+    "inputToStateMs": 348,
+    "inputToPaintMs": 687
+   }
+  },
+  {
+   "name": "C-roundtrip-1",
+   "startEpoch": 1794129137212,
+   "fieldReadyMs": 1812,
+   "allResidentsReadyMs": 1810,
+   "residentsReadyAfterFieldMs": -1,
+   "noticeMs": 0,
+   "noticeSpans": [],
+   "pendingKinds": [],
+   "requests": {
+    "count": 0,
+    "status200": 0,
+    "status304": 0,
+    "bytes200": 0,
+    "duplicates": [],
+    "reviewedImages": 0,
+    "reviewedImageDistinct": 0,
+    "reviewedImageBytes": 0
+   },
+   "digests": {
+    "count": 39,
+    "bytes": 5099725,
+    "ms": 10
+   },
+   "longTasks": {
+    "count": 4,
+    "maxMs": 1202,
+    "totalMs": 2128
+   },
+   "longFrames": {
+    "count": 8,
+    "maxMs": 1233
+   },
+   "tap": {
+    "inputToStateMs": 22,
+    "inputToPaintMs": 373
+   }
+  },
+  {
+   "name": "C-roundtrip-2",
+   "startEpoch": 1794129158622,
+   "fieldReadyMs": 1717,
+   "allResidentsReadyMs": 1715,
+   "residentsReadyAfterFieldMs": -1,
+   "noticeMs": 0,
+   "noticeSpans": [],
+   "pendingKinds": [
+    "species-036:animation:loading"
+   ],
+   "requests": {
+    "count": 0,
+    "status200": 0,
+    "status304": 0,
+    "bytes200": 0,
+    "duplicates": [],
+    "reviewedImages": 0,
+    "reviewedImageDistinct": 0,
+    "reviewedImageBytes": 0
+   },
+   "digests": {
+    "count": 38,
+    "bytes": 5100146,
+    "ms": 8
+   },
+   "longTasks": {
+    "count": 5,
+    "maxMs": 1503,
+    "totalMs": 2261
+   },
+   "longFrames": {
+    "count": 7,
+    "maxMs": 1517
+   },
+   "tap": {
+    "inputToStateMs": 18,
+    "inputToPaintMs": 808
+   }
+  },
+  {
+   "name": "C-roundtrip-3",
+   "startEpoch": 1794129185515,
+   "fieldReadyMs": 1620,
+   "allResidentsReadyMs": 1618,
+   "residentsReadyAfterFieldMs": -1,
+   "noticeMs": 0,
+   "noticeSpans": [],
+   "pendingKinds": [],
+   "requests": {
+    "count": 0,
+    "status200": 0,
+    "status304": 0,
+    "bytes200": 0,
+    "duplicates": [],
+    "reviewedImages": 0,
+    "reviewedImageDistinct": 0,
+    "reviewedImageBytes": 0
+   },
+   "digests": {
+    "count": 39,
+    "bytes": 5112202,
+    "ms": 8
+   },
+   "longTasks": {
+    "count": 5,
+    "maxMs": 1117,
+    "totalMs": 2536
+   },
+   "longFrames": {
+    "count": 5,
+    "maxMs": 1133
+   },
+   "tap": {
+    "inputToStateMs": 16,
+    "inputToPaintMs": 429
+   }
+  },
+  {
+   "name": "B-reload-warm-http-cache",
+   "startEpoch": 1794129204993,
+   "fieldReadyMs": 3061,
+   "allResidentsReadyMs": 3059,
+   "residentsReadyAfterFieldMs": -2,
+   "noticeMs": 0,
+   "noticeSpans": [],
+   "pendingKinds": [],
+   "requests": {
+    "count": 0,
+    "status200": 0,
+    "status304": 0,
+    "bytes200": 0,
+    "duplicates": [],
+    "reviewedImages": 0,
+    "reviewedImageDistinct": 0,
+    "reviewedImageBytes": 0
+   },
+   "digests": {
+    "count": 40,
+    "bytes": 5128207,
+    "ms": 10
+   },
+   "longTasks": {
+    "count": 4,
+    "maxMs": 1205,
+    "totalMs": 1909
+   },
+   "longFrames": {
+    "count": 6,
+    "maxMs": 1233
+   },
+   "tap": {
+    "inputToStateMs": 740,
+    "inputToPaintMs": 1522
+   }
+  },
+  {
+   "name": "E-catalyst-evolution",
+   "startEpoch": 1794129237911,
+   "fieldReadyMs": null,
+   "allResidentsReadyMs": 25119,
+   "residentsReadyAfterFieldMs": null,
+   "noticeMs": 20749,
+   "noticeSpans": [
+    {
+     "from": 4370.5,
+     "ms": 20748.599853515625,
+     "text": "正在載入夥伴外觀…"
+    }
+   ],
+   "pendingKinds": [
+    "species-034:animation:loading",
+    "species-034:evolution:loading"
+   ],
+   "requests": {
+    "count": 35,
+    "status200": 35,
+    "status304": 0,
+    "bytes200": 2988567,
+    "duplicates": [],
+    "reviewedImages": 3,
+    "reviewedImageDistinct": 3,
+    "reviewedImageBytes": 825786
+   },
+   "digests": {
+    "count": 10,
+    "bytes": 1043558,
+    "ms": 4
+   },
+   "longTasks": {
+    "count": 70,
+    "maxMs": 680,
+    "totalMs": 29416
+   },
+   "longFrames": {
+    "count": 70,
+    "maxMs": 700
+   },
+   "reentryMs": null,
+   "receipt": {
+    "ok": "true",
+    "text": "催化完成：回到牧場看拍檔進化！"
+   },
+   "dialogClosedMs": 9252,
+   "evolutionTargetLoadMs": 20749,
+   "evolutionTargetLoadStartMs": 4370,
+   "newSpeciesReadyMs": 28118
+  },
+  {
+   "name": "E2-roundtrip-after-evolution",
+   "startEpoch": 1794129273231,
+   "fieldReadyMs": 1888,
+   "allResidentsReadyMs": 1886,
+   "residentsReadyAfterFieldMs": -2,
+   "noticeMs": 0,
+   "noticeSpans": [],
+   "pendingKinds": [
+    "species-036:animation:loading"
+   ],
+   "requests": {
+    "count": 1,
+    "status200": 1,
+    "status304": 0,
+    "bytes200": 701,
+    "duplicates": [],
+    "reviewedImages": 0,
+    "reviewedImageDistinct": 0,
+    "reviewedImageBytes": 0
+   },
+   "digests": {
+    "count": 40,
+    "bytes": 5497128,
+    "ms": 10
+   },
+   "longTasks": {
+    "count": 7,
+    "maxMs": 1208,
+    "totalMs": 2573
+   },
+   "longFrames": {
+    "count": 9,
+    "maxMs": 1233
+   },
+   "tap": {
+    "inputToStateMs": 544,
+    "inputToPaintMs": 998
+   }
+  },
+  {
+   "name": "R-reload-after-evolution",
+   "startEpoch": 1794129296872,
+   "fieldReadyMs": 2840,
+   "allResidentsReadyMs": 2839,
+   "residentsReadyAfterFieldMs": -2,
+   "noticeMs": 0,
+   "noticeSpans": [],
+   "pendingKinds": [
+    "species-096:animation:loading"
+   ],
+   "requests": {
+    "count": 0,
+    "status200": 0,
+    "status304": 0,
+    "bytes200": 0,
+    "duplicates": [],
+    "reviewedImages": 0,
+    "reviewedImageDistinct": 0,
+    "reviewedImageBytes": 0
+   },
+   "digests": {
+    "count": 40,
+    "bytes": 5518772,
+    "ms": 10
+   },
+   "longTasks": {
+    "count": 4,
+    "maxMs": 1026,
+    "totalMs": 1740
+   },
+   "longFrames": {
+    "count": 5,
+    "maxMs": 1050
+   },
+   "tap": {
+    "inputToStateMs": 245,
+    "inputToPaintMs": 499
+   }
+  }
+ ],
+ "buildId": "3f2b4a6d28e8eafefe1c8e168e1c16e58b2065ceb3b43e303ff18673db902f12",
+ "artifactCommit": "bd7209aa7cfe9d9f52abfe84186330d3a63ebbda",
+ "timezoneId": "Etc/GMT-4",
+ "localHourAtStart": 13,
+ "externalCharacterAssets": true,
+ "saveCheck": {
+  "mainSpecies": "championship:creature:species-096",
+  "residentCount": 4,
+  "storedSpecies": "species-096"
+ },
+ "errors": [],
+ "warnings": [],
+ "status": "COMPLETE",
+ "serverLog": 370
+}
