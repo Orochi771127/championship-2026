@@ -2926,8 +2926,9 @@ async function runBindReward(provider) {
   try {
     const name = ONLINE_PROVIDER_NAMES[provider] ?? provider;
     if (app.getOnlineBindReward?.()) { await showChoiceDialog({ title: onlineText('rewardTitle'), message: onlineText('rewardAlready'), actions: [{ id: 'ok', label: onlineText('close'), tone: 'primary' }], cancelId: 'ok' }); return Object.freeze({ ok: false, reason: 'BIND_REWARD_ALREADY_CLAIMED' }); }
-    const sessionId = app.getSaveReference?.();
-    const out = await onlineService().claimBindReward({ saveRef: sessionId ? await sha256Hex(sessionId) : null });
+    // The save's own fixed id, stored before it names this claim (Owner 2026-11-08).
+    const saveId = app.ensureSaveReference?.();
+    const out = await onlineService().claimBindReward({ saveRef: saveId ? await sha256Hex(saveId) : null });
     if (!out?.ok) {
       if (out?.reason === 'BIND_REWARD_ALREADY_CLAIMED') await showChoiceDialog({ title: onlineText('rewardTitle'), message: onlineText('rewardAlready'), actions: [{ id: 'ok', label: onlineText('close'), tone: 'primary' }], cancelId: 'ok' });
       return out ?? Object.freeze({ ok: false });
@@ -2956,12 +2957,12 @@ async function recoverBindReward() {
   if (bindRewardRecoveryTried || bindRewardRunning || !onlineConfig.configured) return null;
   // One save slot per browser: an open save that already holds the gift settles whatever this device sent.
   if (app.getOnlineBindReward?.()) { bindRewardRecoveryTried = true; onlineService().settleBindReward(); return null; }
-  const sessionId = app.getSaveReference?.();
-  if (!sessionId) return null;
+  const saveId = app.ensureSaveReference?.();
+  if (!saveId) return null;
   bindRewardRecoveryTried = true;
   bindRewardRunning = true;
   try {
-    const out = await onlineService().recoverBindReward({ saveRef: await sha256Hex(sessionId) });
+    const out = await onlineService().recoverBindReward({ saveRef: await sha256Hex(saveId) });
     if (!out?.ok || out.preview) return out;
     // Refused now (a battle, a hunt, a failed write): nothing changed, and the next page asks again.
     const paid = app.claimOnlineBindReward({ provider: out.provider, rewardBits: out.rewardBits });

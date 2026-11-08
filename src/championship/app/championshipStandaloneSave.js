@@ -111,6 +111,24 @@ export function normalizeBattleTactics(value) {
   return out;
 }
 
+/**
+ * The save's own fixed id (Owner 2026-11-08). Made once per new game, or written
+ * once into an older save the first time it is opened, then carried unchanged by
+ * every write. It lives in `flags`, where an older build drops an unknown entry
+ * instead of refusing the save. The first-bind gift ledger keys on its hash: the
+ * session id it used before is the same constant for every save.
+ */
+const SAVE_ID_PATTERN = /^sv1-[0-9a-f]{32}$/;
+export function createChampionshipSaveId({ crypto = globalThis.crypto } = {}) {
+  if (typeof crypto?.getRandomValues !== "function") throw saveError("SAVE_ID_RANDOM_UNAVAILABLE");
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  return "sv1-" + Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+}
+export function normalizeChampionshipSaveId(value) {
+  if (typeof value !== "string" || !SAVE_ID_PATTERN.test(value)) throw saveError("INVALID_SAVE_ID");
+  return value;
+}
+
 export function saveError(message) {
   const error = new Error(message);
   error.name = "ChampionshipModernSaveError";
@@ -467,7 +485,8 @@ export function createChampionshipModernSave({
     },
     // onlineBindReward (Owner 2026-10-29) appears only once the first-bind gift is paid, so other saves keep their exact shape.
     flags: { newGameCompleted: flags.newGameCompleted === true, ...(flags.friendsPlaytest != null ? {friendsPlaytest:normalizeFriendsPlaytestState(flags.friendsPlaytest)} : {}),
-      ...(flags.onlineBindReward != null ? {onlineBindReward:normalizeOnlineBindReward(flags.onlineBindReward)} : {}) },
+      ...(flags.onlineBindReward != null ? {onlineBindReward:normalizeOnlineBindReward(flags.onlineBindReward)} : {}),
+      ...(flags.saveId != null ? {saveId:normalizeChampionshipSaveId(flags.saveId)} : {}) },
     updatedAt
   };
 

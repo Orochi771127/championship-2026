@@ -1,5 +1,17 @@
 # Championship Owner Direction
 
+<!-- record-id: SAVE_ID_20261108 -->
+## 2026-11-08 — First-bind gift recovery and a fixed id for every save
+
+After the system sweep reported that the first-bind gift could be lost between the cloud claim and the local payment, the Owner chose 「補發」 (re-issue). While implementing it, the save reference the gift ledger keys on turned out to be the app's constant session id, the same for every save. Asked whether each save should get its own fixed id at the cost of a save format change, the Owner answered 「核准，要讓自己的存檔有固定ID」.
+
+OWNER_APPROVED_ADAPTATION. Contract: `docs/contracts/championship/SAVE_ID_20261108.json`; report: `docs/reports/system-sweep-2026-11-08/REPORT_ZH_TW.md`.
+
+- `flags.saveId` (`sv1-` + 32 hex, 128 random bits) is made once per new game. An older save is given one in memory when opened (Continue stays read-only), every later write carries it, and it is written before a first-bind claim names it. Only its SHA-256 leaves the device, as `claim_bind_reward`'s save reference.
+- The gift is recovered only for a claim this device sent (a pending marker in the online session map), only for the same account, never signing anyone in; it is paid at most once per claim.
+- Older builds keep only the flags they know, so they still open the save and write it back without the id; the next open gives it a new one.
+- The shipped build has no cloud configured, so neither change affects players until Supabase is set up. Not verified against a real Supabase project or on a physical device.
+
 <!-- record-id: CHARACTER_ASSET_REPOSITORY_MIGRATION_20261106 -->
 ## 2026-11-06 — Inventory all character stages and move animation delivery out of the game-site payload
 

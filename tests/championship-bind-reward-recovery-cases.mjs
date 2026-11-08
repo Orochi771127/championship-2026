@@ -2,11 +2,12 @@
 // The cloud ledger records the claim first and the save is paid afterwards. If the
 // page closed in between, or the local write was refused or failed, the account
 // read "claimed" while the save had no Bits, and nothing ever asked again.
-// The ledger's save reference is the same for every save (the app's session id is
-// a constant), so the ledger repeats its answer for any save of the account: a
-// recovery keyed only on "linked and unpaid" would pay every new game again. The
-// recovery is therefore keyed on this device's pending marker, written just before
-// the claim and settled once the open save holds the gift. No network, no DOM.
+// The ledger repeats its answer only for the same save reference. That reference
+// used to be the app's constant session id, the same for every save, so the ledger
+// could not tell saves apart; it is now the hash of the save's own fixed id (S5,
+// stored before a claim names it). The recovery is also keyed on this device's
+// pending marker, written just before the claim and settled once the open save holds
+// the gift, so each claim is paid at most once. No network, no DOM.
 import assert from "node:assert/strict";
 import test from "node:test";
 import fs from "node:fs";
@@ -82,7 +83,8 @@ function payAndSettle(app, service, out) {
   if (paid?.ok || paid?.reason === "BIND_REWARD_ALREADY_CLAIMED") service.settleBindReward();
   return paid;
 }
-const refOf = async app => sha256Hex(app.getSaveReference());
+// main.js names a claim with the stored fixed id (ensureSaveReference).
+const refOf = async app => sha256Hex(app.ensureSaveReference());
 
 test("without this device's pending claim nothing is asked: no library, no sign-in, no request", async () => {
   const ledger = fakeLedger(), ref = "a".repeat(64);
@@ -95,12 +97,14 @@ test("without this device's pending claim nothing is asked: no library, no sign-
   assert.equal(ledger.requests, 0);
 });
 
-test("the save reference is shared by every save, so a recovery keyed on 'linked and unpaid' would pay each new game", async () => {
+test("every save names its own reference, so the ledger refuses a second save of the account", async () => {
   const a = await newSave(memoryStorage()), b = await newSave(memoryStorage());
-  assert.equal(await refOf(a), await refOf(b), "the app's session id is the constant STANDALONE_SESSION_ID");
+  assert.notEqual(await refOf(a), await refOf(b), "two new games never share a reference");
   const ledger = fakeLedger();
   assert.equal(ledger.claim("u-1", await refOf(a)).ok, true);
-  assert.equal(ledger.claim("u-1", await refOf(b)).repeat, true, "the ledger cannot tell the two saves apart");
+  assert.equal(ledger.claim("u-1", await refOf(a)).repeat, true, "the same save is answered again");
+  // Binding another provider on another unpaid save used to be answered "repeat" and paid again.
+  assert.equal(ledger.claim("u-1", await refOf(b)).reason, "BIND_REWARD_ALREADY_CLAIMED");
   await a.dispose(); await b.dispose();
 });
 
@@ -186,7 +190,10 @@ test("main.js asks once per page after the session opens, and settles when the s
   const body = source.slice(source.indexOf("async function recoverBindReward()"), source.indexOf("// OAuth return (Owner 2026-10-29)"));
   assert.match(body, /if \(bindRewardRecoveryTried \|\| bindRewardRunning \|\| !onlineConfig\.configured\) return null;/);
   assert.match(body, /if \(app\.getOnlineBindReward\?\.\(\)\) \{ bindRewardRecoveryTried = true; onlineService\(\)\.settleBindReward\(\); return null; \}/);
-  assert.match(body, /onlineService\(\)\.recoverBindReward\(\{ saveRef: await sha256Hex\(sessionId\) \}\)/);
+  assert.match(body, /const saveId = app\.ensureSaveReference\?\.\(\);\n  if \(!saveId\) return null;/);
+  assert.match(body, /onlineService\(\)\.recoverBindReward\(\{ saveRef: await sha256Hex\(saveId\) \}\)/);
+  assert.match(source, /const saveId = app\.ensureSaveReference\?\.\(\);\n    const out = await onlineService\(\)\.claimBindReward\(\{ saveRef: saveId \? await sha256Hex\(saveId\) : null \}\);/);
+  assert.ok(!/getSaveReference/.test(source), "claims never name an id that is not stored");
   assert.equal(source.match(/if \(paid\?\.ok \|\| paid\?\.reason === 'BIND_REWARD_ALREADY_CLAIMED'\) onlineService\(\)\.settleBindReward\(\);/g)?.length, 2, "both payers settle");
   assert.match(source, /if \(returned\) void handleOnlineAuthReturn\(returned\); else void recoverBindReward\(\);/);
   assert.match(source, /else if \(identity && identity\.isAnonymous === false\) await recoverBindReward\(\);/);

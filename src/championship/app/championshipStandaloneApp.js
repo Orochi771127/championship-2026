@@ -63,7 +63,7 @@ import {
   normalizeProductGivenName,
   renameEnclosedCreature
 } from "./championshipRaisingProduction.js";
-import { deserializeChampionshipModernSave, normalizeBattleTactics, BATTLE_TACTIC_DEFAULT } from "./championshipStandaloneSave.js";
+import { deserializeChampionshipModernSave, normalizeBattleTactics, BATTLE_TACTIC_DEFAULT, createChampionshipSaveId } from "./championshipStandaloneSave.js";
 import { createChampionshipPersistentSavePort } from "./ChampionshipPersistentSavePort.js";
 import {normalizeNativeIndividualProfile} from '../raising/nativeIndividualProfile.js';
 import { selectPhase1FirstCreature } from "./phase1ProductCreatures.js";
@@ -192,6 +192,8 @@ export function createChampionshipStandaloneApp({
   catalog,
   cages = [],
   sessionId = STANDALONE_SESSION_ID,
+  // The save's own fixed id (Owner 2026-11-08); tests pass a deterministic maker.
+  newSaveId = createChampionshipSaveId,
   slotId = STANDALONE_SLOT_ID,
   huntStartingInventory = HUNT_STARTING_INVENTORY,
   huntCaptureReplay = null,
@@ -381,6 +383,9 @@ export function createChampionshipStandaloneApp({
   // to title mid-evolution kept the loss and dropped the evolution. Nothing new
   // is saved: an interrupted evolution leaves partner and metal as they were.
   let catalystReservation=null;
+  // The open save's fixed id. An older save is given one in memory when opened (Continue stays
+  // read-only); every later write carries it, and ensureSaveReference writes it before a claim uses it.
+  let saveId=null,saveIdStored=false;
   // Rebirth has the same shape (2026-11-08 system sweep): the cycle count used
   // to be written when the animation started while the egg only appeared at its
   // end, so any save in between kept "cycle +1, still 成熟期" and the partner
@@ -1676,7 +1681,7 @@ export function createChampionshipStandaloneApp({
   function liveSaveRequest(nextRevision=revision) {
     return {
       snapshot:requireSession().getRaisingHomeSnapshot(),creature,sessionId,revision:nextRevision,
-      interactionCount,friendsPlaytest,onlineBindReward,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
+      interactionCount,friendsPlaytest,onlineBindReward,saveId,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
       championshipRun,freeBattleMenu,battleTactics,cyberGacha,burstEvolution,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
       raising,shop:shop?shop.toSave():null,cageEdit:cageEdit?cageEdit.toSave():null,battleEconomy,
       instanceIdentity,gameplayRng:gameplayRngSnapshot(),huntHistory:projectNativeHuntPersistentSave(huntPersistentState)
@@ -1685,7 +1690,7 @@ export function createChampionshipStandaloneApp({
 
   function requestFromSavedGame(saved,candidate) {
     return {
-      ...saved.progression,friendsPlaytest:saved.flags.friendsPlaytest??null,onlineBindReward:saved.flags.onlineBindReward??null,snapshot:candidate.snapshot,creature:saved.creature,sessionId,
+      ...saved.progression,friendsPlaytest:saved.flags.friendsPlaytest??null,onlineBindReward:saved.flags.onlineBindReward??null,saveId:saved.flags.saveId??null,snapshot:candidate.snapshot,creature:saved.creature,sessionId,
       raising:candidate.production,shop:saved.shop,cageEdit:saved.cageEdit,battleEconomy:saved.battleEconomy,
       instanceIdentity:candidate.identity,gameplayRng:saved.gameplayRng,huntHistory:saved.huntHistory
     };
@@ -1964,6 +1969,9 @@ export function createChampionshipStandaloneApp({
     selectedCreatureId = null;
     friendsPlaytest = saved.flags.friendsPlaytest ?? null;
     onlineBindReward = saved.flags.onlineBindReward ?? null;
+    // A stored id wins; an older save keeps the one this session gave it (a tutorial boundary re-applies data).
+    if (saved.flags.saveId != null) { saveId = saved.flags.saveId; saveIdStored = true; }
+    else if (saveId === null) { saveId = newSaveId(); saveIdStored = false; }
     openShopAndHunt({ shopSnapshot: saved.shop });
     // The welcome tickets ride the next save; an unsaved grant is simply granted again.
     // Restored before the cage editor: royal cages count as copies of their base cage (DIAMOND_ECONOMY_20261102).
@@ -2146,6 +2154,7 @@ export function createChampionshipStandaloneApp({
       selectedCreatureId = null;
       friendsPlaytest = null;
       onlineBindReward = null;
+      saveId = newSaveId(); saveIdStored = false;
       openShopAndHunt({newSave:true});
       cageEdit = createCageEditRuntime({ initializeOriginal: true, publicTestGrid: productLand, initialTamerRank: tamerRankValue });
       rebuildFreeBattleMenu();
@@ -2206,6 +2215,7 @@ export function createChampionshipStandaloneApp({
       tutorialOfferEligible=false;tutorialPendingOpening=null;
       tutorialBaseline=interactiveTutorialInProgress(read.save.progression.nativeOpening)
         ?retainTutorialBaseline(requestFromSavedGame(read.save,candidate)):null;
+      saveId=null;saveIdStored=false; // this save's id comes from it, or is given fresh
       await hydrateSavedGame(read.save,candidate,{tutorialBoundary:tutorialBaseline!==null});
       if(tutorialBaseline){
         if(tutorialHuntStep(nativeOpening.checkpoint)?.screen==='HUNT_FIELD'){
@@ -4999,7 +5009,7 @@ export function createChampionshipStandaloneApp({
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
-            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha, burstEvolution, raising: candidateRaising,
+            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, saveId, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha, burstEvolution, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: (bonusShop ?? shop) ? (bonusShop ?? shop).toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),
@@ -5152,8 +5162,24 @@ export function createChampionshipStandaloneApp({
 
     /** Owner 2026-10-29: this save's paid first-bind gift, or null. */
     getOnlineBindReward() { return onlineBindReward; },
-    /** The open save's own id; the online layer hashes it before it leaves the device (claim idempotency). */
-    getSaveReference() { return session ? sessionId : null; },
+    /** The open save's own fixed id (it may not be stored yet; see ensureSaveReference). */
+    getSaveReference() { return session ? saveId : null; },
+    /**
+     * The open save's fixed id, written to storage first if the stored save does not carry it yet,
+     * so a claim never names an id that a reload could replace. The online layer hashes it before it
+     * leaves the device (claim idempotency). Null when no session, a battle, a hunt or the tutorial
+     * owns the save right now, or when the write fails.
+     */
+    ensureSaveReference() {
+      if (!session) return null;
+      if (saveIdStored) return saveId;
+      if (tutorialBaseline || battleTransactionActive || huntCommitActive || battleEconomy.active) return null;
+      storeNativeRaisingPositions(); storeNativeRaisingHome();
+      const status = savePort.save(liveSaveRequest(revision + 1));
+      if (status.phase !== "SAVED") { savePort.discardPendingWrite(); return null; }
+      revision++; saveIdStored = true;
+      return saveId;
+    },
     /**
      * Pays the first-bind gift once the cloud ledger accepted the claim: the Bits
      * and the save's paid marker are one durable write; a failed save changes neither.

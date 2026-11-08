@@ -1,6 +1,6 @@
 # 全系統巡檢與第二批修正（2026-11-08）
 
-狀態：工作分支 `claude/inspiring-mayer-gyxhot`，草稿 PR #194，**未合併、未發布**。S1–S3 的兩個雜湊已由 Owner 核准；S4 改到的兩個檔案仍待核准（見第 8 節）。
+狀態：工作分支 `claude/inspiring-mayer-gyxhot`，草稿 PR #194，**未合併、未發布**。S1–S4 的雜湊都已由 Owner 核准並套用；S5（每份存檔固定 ID）改到的四個檔案待核准（見第 8 節）。
 
 ## 1. 做法：用證據盤點，不靠逐檔閱讀
 
@@ -137,11 +137,31 @@
   - `test:ci` 3521 項全過。
   - 隔離 worktree 中只在副本裡換上候選雜湊，建置候選版（buildId `6bb2cc83…`），在真實瀏覽器跑完牧場全流程，錯誤 0。
 - **還沒對真實 Supabase 驗證**（這裡沒有雲端）。用的假伺服器照 `supabase/migrations/001_championship_online.sql` 的 `claim_bind_reward` 規則寫成。
-- **既有、本次未修改的漏洞，需要你決定**：因為 `save_ref` 共用，原本的「綁定另一個登入方式」流程（`onProviderBound` → `runBindReward`）在同一帳號的另一份未付款存檔上，伺服器會回 `repeat`，於是再付一次。最多是每種登入方式一次（Google、Facebook、Discord、Email）。根治要讓每份存檔有自己固定的 ID，也就是在存檔裡加欄位，這會改存檔格式，舊版本或舊分頁會讀不到新存檔，所以依規則先停在這裡。
+- **既有漏洞（已由 S5 根治）**：因為 `save_ref` 共用，原本的「綁定另一個登入方式」流程（`onProviderBound` → `runBindReward`）在同一帳號的另一份未付款存檔上，伺服器會回 `repeat`，於是再付一次，每種登入方式最多一次。Owner 同意改存檔格式之後，由 S5 讓每份存檔有自己固定的 ID，見下一節。
 - 證據：
   - `src/championship/app/main.js`（`runBindReward`、`recoverBindReward`、`takeOnlineAuthReturn`、`handleOnlineAuthReturn`）
   - `src/championship/online/championshipCloudService.js`（`claimBindReward`、`recoverBindReward`、`settleBindReward`）
   - `championshipStandaloneApp.js`：`STANDALONE_SESSION_ID`、`getSaveReference`
+
+## 5b. S5 每份存檔有自己固定的 ID（Owner 2026-11-08 核准改存檔格式；已修正）
+
+- 欄位與做法：
+  - 新欄位是 `flags.saveId`，格式為 `sv1-` 加 32 個小寫十六進位字元（`crypto.getRandomValues` 產生的 128 位元亂數），其他格式一律以 `INVALID_SAVE_ID` 拒絕。
+  - 伺服器只收到它的 SHA-256，當作 `claim_bind_reward` 的 `save_ref`；ID 本身不會離開裝置。
+- 生命週期：
+  - 新遊戲時產生一次。
+  - 舊存檔打開時先在記憶體裡配一個。**繼續遊戲仍然是唯讀**，既有測試「打開舊存檔不改存檔內容」照樣通過。之後每一次寫入都帶著同一個 ID。
+  - 送出領獎請求前，`ensureSaveReference()` 會先把 ID 寫進存檔，寫入成功才交出 ID，所以請求裡的 ID 不會因為重新載入而變掉。對戰、狩獵、教學進行中，或寫入失敗時，不交出 ID。
+  - 每次開新 session 都清空記憶體裡的 ID，避免把上一份存檔的 ID 寫進別份存檔。
+- 相容性：
+  - 放在 `flags` 而不是存檔頂層。頂層是嚴格白名單，未知欄位會讓舊版完全讀不到存檔。`flags` 的未知欄位只會被舊版丟掉，所以舊版本或舊分頁仍打得開存檔，只是寫回時會少了 ID；新版下次打開會再配一個新的。
+  - 存檔 key 與 `schemaVersion` 都不變。
+- 依 repo 慣例新增合約 `docs/contracts/championship/SAVE_ID_20261108.json`，取代 `ROYAL_NEW_MAPS_20261103` 對存檔模組的雜湊鎖定，舊的鎖定移到歷史紀錄。`docs/coordination/OWNER_DIRECTION.md` 也補了這筆 Owner 指示。
+- 驗證：
+  - `tests/championship-save-id-cases.mjs` 5 項：格式；新遊戲各有不同 ID 且每次寫入都保留；舊存檔唯讀打開後，領獎前寫入一次、重開仍是同一個；寫入失敗時不交出 ID；格式錯誤會拒絕，未知 flag 會被丟棄。
+  - 綁定獎勵測試改為證明漏洞已封住：兩份新遊戲的 `save_ref` 不同，同帳號的第二份存檔會被伺服器拒絕。
+  - `test:ci` 3526 項全過。
+  - 在隔離 worktree 中只換上候選雜湊，建置候選版（buildId `c1563db3…`）並跑完牧場全流程（用無 ID 的舊格式存檔、途中有存檔與重新載入），錯誤 0。
 
 ## 6. 已量測、未修改（附理由）
 
@@ -177,16 +197,25 @@
 
 S1 時提出的 `b30e2cd0…` 已被 `66ea864e…` 取代。
 
-**上面兩列 Owner 已於 2026-11-08 核准並套用**（[PUBLICATION_APPROVAL.json](PUBLICATION_APPROVAL.json)）。S4 又改了兩個受管制的檔案，需要另外核准：
+**上面兩列 Owner 已於 2026-11-08 核准並套用**（[PUBLICATION_APPROVAL.json](PUBLICATION_APPROVAL.json)）。S4 的兩列也已核准並套用（[PUBLICATION_APPROVAL_S4.json](PUBLICATION_APPROVAL_S4.json)）：
 
 | 檔案 | 目前核准 | 本分支 |
 |---|---|---|
 | `src/championship/app/main.js`（S4） | `991f8c32291b3d540a0a62074855d35636477efe8d9739da641e1ec759a823ad` | `d65efb6be5366a5902984804ab081b3af9983dad7f10b69fc7c194607d1e6068` |
 | `src/championship/online/championshipCloudService.js`（S4） | `11150dff66913de99ab736bc78831c2cc7bf771bb6f6a69c08624a627c0fdb83` | `c025b8b316153598915eb3e85cdb0cc7389b62df3a9d713581274b3ab48928fd` |
 
+**S5 待核准**（四個檔案）：
+
+| 檔案 | 目前核准 | 本分支 |
+|---|---|---|
+| `src/championship/app/championshipStandaloneSave.js` | `16ddc21be1570c51e87fb592635d5a5437ed25b9a8aeb660993f07494598b8c1` | `5c2ea82fa0d8af9192325fe88ec9c40a437ed3ead2044aed1de04b1ebbb82430` |
+| `src/championship/app/ChampionshipPersistentSavePort.js` | `d5a5f21f245608e9a4f77e953feccc6fbc97ccb005d302a01e08dda120793dfa` | `1c9254662b1f9294937ee5154abb4efe78bc26c8d5b5abecb5c6d9b9ba600f75` |
+| `src/championship/app/championshipStandaloneApp.js` | `66ea864ee9df77d14cc7922f787bcc331e1a36c4a8ad12d4587919453b86c3a9` | `124115f3b091b9500450a0dacebbc47e9869dd0b4fa8cc95a89b3c70f9a8afc5` |
+| `src/championship/app/main.js` | `d65efb6be5366a5902984804ab081b3af9983dad7f10b69fc7c194607d1e6068` | `1340305d02178cd1875a76ec8b173979ca0557669fb24d74145e3715e01f46e4` |
+
 ## 9. 下一批建議（依使用者影響 × 證據強度 × 修改風險排序）
 
-1. **每份存檔固定的 ID**（第 5 節）：讓 `save_ref` 真正分得出存檔，才能根治綁定另一個登入方式時的重複發放。這會改存檔格式，需要你決定。
+1. **Friends playtest 偶發失敗**（`source-wrap-desktop`，PR #194 留言）：拍照前一刻有夥伴正在串流載入下一段動作（圖一直顯示著）。可以讓測試把「圖已顯示、只在載入下一段動作」視為可拍照，或讓產品在閒置時預先排入其餘動作片段。兩者都需要你決定。
 2. **巡檢補上對戰場內與捕捉流程**：打完一場到結算再返回，量相同的不變量；並把「精確 heap 曲線＋snapshot 比對」納入巡檢報告。
 3. 其餘 `removeAttribute('src')` 呼叫點：逐一確認圖是否不在文件中，有證據再改。
 4. 量測牧場重入成本的組成（Draco worker、GLB 解析、角色解碼）後，再決定是否共用 DRACOLoader；DFG_LUT 向 Three.js 上游回報。
@@ -211,7 +240,7 @@ npm run test:browser:care-image-release
 ```
 
 ```bash
-node --test tests/championship-rebirth-crash-consistency-cases.mjs tests/championship-catalyst-evolution-crash-consistency-cases.mjs tests/championship-bind-reward-recovery-cases.mjs
+node --test tests/championship-rebirth-crash-consistency-cases.mjs tests/championship-catalyst-evolution-crash-consistency-cases.mjs tests/championship-bind-reward-recovery-cases.mjs tests/championship-save-id-cases.mjs
 ```
 
 證據：`evidence/` 內為各次巡檢的 `summary.json` 與狩獵 16 趟的 heap 曲線（`hunt-heap-curve.json`）。heap snapshot 每份約 130 MB，沒有放進 repo。
