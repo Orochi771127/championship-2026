@@ -33,7 +33,12 @@ const ENTRIES=[
   {menu:'manage',id:'digimon'},{menu:'manage',id:'cageEdit'},{menu:'manage',id:'tamer'},{menu:'manage',id:'schedule'},
   // Flows rather than entries: save & quit to the title and continue; the page
   // hidden behind another tab and back; a double tap on one quick entry.
-  {flow:'title'},{flow:'background'},{flow:'doubleTap',id:'shop'}];
+  {flow:'title'},{flow:'background'},{flow:'doubleTap',id:'shop'},
+  // Into a hunt field (gate -> loadout -> field) and back: the heaviest scene.
+  {flow:'hunt'}];
+// --only shop,flow:hunt restricts a run to some entries (e.g. a hunt-only leak run).
+const ONLY=arg('only',null)?.split(',')??null;
+const SELECTED=ONLY?ENTRIES.filter(e=>ONLY.includes(e.flow?`flow:${e.flow}`:e.id)):ENTRIES;
 
 function observers(save){
   try{if(!localStorage.getItem('championshipModernSave:v1'))localStorage.setItem('championshipModernSave:v1',save);}catch{}
@@ -196,6 +201,20 @@ function observers(save){
       const screens=await page.evaluate(()=>{const d=globalThis.__sweep;d.screenObserver.disconnect();return d.screens;});
       return {opened,returned,screens};
     }
+    if(entry.flow==='hunt'){
+      await page.locator('.cm-toolbar__quick-entry[data-quick-id="hunt"]').click();
+      await page.waitForFunction(()=>document.getElementById('cm-root')?.dataset.activeScreen==='GATE_SELECT');
+      const gate=page.locator('.cm-vs2-gate[data-gate-id]:not([disabled])').first();await gate.scrollIntoViewIfNeeded();await gate.click();
+      await page.locator('button',{hasText:'前往狩獵設定'}).click();
+      await page.waitForFunction(()=>document.getElementById('cm-root')?.dataset.activeScreen==='HUNT_LOADOUT');
+      await page.locator('button',{hasText:'開始狩獵'}).click();
+      await page.waitForFunction(()=>document.getElementById('cm-root')?.dataset.activeScreen==='HUNT_FIELD',null,{timeout:60000});
+      await page.locator('.cm-vs2-hud__exit').waitFor({state:'visible',timeout:120000});await page.waitForTimeout(4000);
+      const opened='HUNT_FIELD';
+      await page.locator('.cm-vs2-hud__exit').click();await page.waitForTimeout(1500);
+      const returned=await leaveToRanch();if(returned)await ranchReady();
+      return {opened,returned};
+    }
     throw Error('UNKNOWN_FLOW');
   }
   const results={schemaVersion:1,label:LABEL,buildId:build.buildId,artifactCommit:build.commit,timezoneId,cycles:CYCLES,
@@ -209,7 +228,7 @@ function observers(save){
     current='ranch';await ranchReady();results.baseline=await metrics();
     console.log(JSON.stringify({baseline:results.baseline}));
     for(let cycle=1;cycle<=CYCLES;cycle++){
-      for(const entry of ENTRIES){
+      for(const entry of SELECTED){
         current=entry.flow?`flow:${entry.flow}`:`${entry.menu}:${entry.id}`;const before=events.length,t0=Date.now();
         let opened=null,returned=false,error=null,extra={};
         try{
