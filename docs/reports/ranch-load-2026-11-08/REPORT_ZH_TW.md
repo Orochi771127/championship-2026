@@ -1,6 +1,6 @@
 # 牧場與進化前「正在載入夥伴外觀…」：可重現診斷、根因與修正（2026-11-08）
 
-狀態：第一批修正已提交於工作分支 `claude/inspiring-mayer-gyxhot`，**未合併、未發布**。三個被修改的原始檔在 Owner 公開試玩核准雜湊清單內，`build:playtest` 會依設計拒絕，需 Owner 核准（見〈Owner 核准需求〉）。
+狀態：第一批修正已提交於工作分支 `claude/inspiring-mayer-gyxhot`，**未合併、未發布**。Owner 已於 2026-11-08 核准三個原始檔的公開建置雜湊更新（[PUBLICATION_APPROVAL.json](PUBLICATION_APPROVAL.json)）；合併與部署不在該次核准範圍內。
 
 ## 1. 基準與環境
 
@@ -128,9 +128,9 @@ npm run test:browser:ranch-load -- --label before --profile mobile-net --trace
 
 reentry／interrupt 的修改後與修改前第二輪、以及 before-r3／after-r3 會在完成後追加到 `evidence/`，不改變上述方向判斷時只更新表格數值。
 
-## 10. Owner 核准需求
+## 10. Owner 核准（已核准雜湊更新）
 
-公開試玩建置雜湊（`WEB_BUILD_INPUTS.v1.json`、`PUBLIC_RUNTIME_ALLOWLIST.v1.json`）需更新以下三檔；本 PR 不自行修改核准清單：
+Owner 回覆「我核准公開建置雜湊的更」（訊息截斷，依內容記為核准雜湊更新），紀錄於 [PUBLICATION_APPROVAL.json](PUBLICATION_APPROVAL.json)。兩張核准表（`WEB_BUILD_INPUTS.v1.json`、`PUBLIC_RUNTIME_ALLOWLIST.v1.json`）各只改以下三列，8190 列的路徑、順序與其他欄位不變：
 
 | 檔案 | 核准中 SHA-256 | 候選 SHA-256 |
 |---|---|---|
@@ -138,7 +138,9 @@ reentry／interrupt 的修改後與修改前第二輪、以及 before-r3／after
 | `src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js` | `704322c77c5cfa6f1bab59a831f49c8097ac575cad6e668d58bacfa28ed19272` | `54f8e693db1e52675b7e765f18169999a2dd23604d658ee564eeda5f0a0b9899` |
 | `src/championship/presentation/pixiCharacterRuntimeBundle.js` | `8a28dfd284c0ed96f4137ef9d9561d094acd22a9030c452d54288e804c0ecc60` | `4c12bf5431b999c79b7b07f55102c7d23fc55ec68712d6cf28415eb430a874b9` |
 
-建議核准問題：「是否核准本 PR 三個檔案更新公開建置雜湊，並在公開產物與正常瀏覽器流程關卡通過後合併並部署？」本機候選產物（僅更新隔離副本的雜湊）buildId 見 `evidence/`，`validate:playtest` 通過。
+更新後 `build:playtest`／`validate:playtest` 通過（buildId `164a8b53…`，7718 檔）；`--external-characters`（正式 Pages 流程）通過，buildId `208f68243e1ff4ef5a1a97420639326134d7ee9b5b744f52a35860f75da46f5b`，與第 9 節量測的修改後候選**完全相同**。讀取核准表的 21 個可攜測試模組 134 項全過。
+
+**仍需 Owner 另行核准**：合併 PR 到 main 與部署正式站（本次回覆未涵蓋）。
 
 ## 11. 待 iPhone 驗證步驟（實體裝置）
 
@@ -162,6 +164,6 @@ reentry／interrupt 的修改後與修改前第二輪、以及 before-r3／after
 
 ## 13. 下一步
 
-1. Owner 核准雜湊 → 正式建置／正常瀏覽器關卡 → 部署 → iPhone 實測（第 11 節）。
+1. 雜湊已核准；待 Owner 核准合併與部署 → 部署後 iPhone 實測（第 11 節）。
 2. Owner 決定 S1 方案後實作與回歸。
 3. 下一批候選：reviewed 圖片由已驗證 Blob 解碼（完整性＋Safari 風險）；標題預載對 reviewed 物種的範圍；同頁往返的保留策略（需記憶體預算）。
