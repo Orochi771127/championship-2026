@@ -1,12 +1,12 @@
 # 全系統巡檢與第二批修正（2026-11-08）
 
-狀態：工作分支 `claude/inspiring-mayer-gyxhot`，草稿 PR #194，**未合併、未發布**。本批修改了兩個受公開建置雜湊管制的檔案，需 Owner 核准（見第 8 節）。
+狀態：工作分支 `claude/inspiring-mayer-gyxhot`，草稿 PR #194，**未合併、未發布**。S1–S3 的兩個雜湊已由 Owner 核准；S4 改到的兩個檔案仍待核准（見第 8 節）。
 
 ## 1. 做法：用證據盤點，不靠逐檔閱讀
 
 依網頁遊戲團隊常見的穩定性做法，本批分四層：
 
-1. **崩潰一致性（crash consistency）**：在「花費／獲得」的交易點逐步存檔、中途重新載入，驗證存檔永遠處在一致狀態。S1、S2 屬此類。
+1. **崩潰一致性（crash consistency）**：在「花費／獲得」的交易點逐步存檔、中途重新載入，驗證存檔永遠處在一致狀態。S1、S2、S4 屬此類。
 2. **自動化場景巡檢 bot**（`tests/championship-system-sweep-browser.cjs`）：在未修改的正式建置產物上，用完整 QA 存檔遍歷牧場能到達的每個入口並返回，多輪重複；每輪回到閒置牧場後量測生命週期不變量。
 3. **記憶體鑑識**：看到成長趨勢時，不直接改程式。先用精確的 heap 量測畫曲線，再比對兩份 heap snapshot：找出兩次快照之間新增、而且還活著的物件，並追出是誰保留了它們。
 4. **依證據分級修正**：只修「已重現」的問題；看起來可疑、但沒有證據的項目只記錄，不改。
@@ -110,14 +110,38 @@
   - 整個遊戲：在隔離 worktree 中只換上候選雜湊，建置候選版（buildId `4d9ecfbd…`），跑同樣的狩獵往返並取 heap snapshot。heap 中殘留的照護圖：修改前第 4 趟 64 個、第 16 趟 256 個；修改後第 2 趟、第 6 趟都是 0。V8 heap 維持在 46.6–51.2 MB。WebGL context 物件仍然每趟多 2 個，符合第 6 節的 DFG_LUT（未修）。
 - 同樣寫法還出現在 `systemBackgrounds.js`（換背景時仍在載入的圖）、`titleImageLifecycle.js`、`skillCutIn.js`、`cyberMorphEvolutionRunner.js`、`codexShowcaseTheater.js`、`vs4Screens.js`。這次巡檢沒有在 heap 中看到它們留下的元素，所以依規則不改，列為下一批。
 
-## 5. 已確認、未修改：首次綁定獎勵（需要你決定）
+## 5. S4 首次綁定獎勵補發（Owner 2026-11-08 要求；已修正，屬預防性）
 
-- 流程：伺服器先記帳（`claim_bind_reward` 寫入領取紀錄，並把帳號標成已領），本機再付 5000 Bits 並存檔。
-- 缺口：如果兩步之間分頁被關掉，或本機那一步失敗（存檔失敗、另一個分頁先寫入造成衝突、教學／對戰／狩獵進行中），帳號會顯示已領，本機卻沒有錢。之後客戶端不會再問：自動領取只在 OAuth 回來時、而且帳號未領時才執行。
-- 伺服器其實已支援補發：同一份存檔（相同 `save_ref`）再次領取，會回傳 `repeat: true` 和原本的金額。
-- 建議方案：繼續遊戲時，若帳號已綁定、帳號標成已領、而本機存檔沒有付款紀錄，就靜默再問一次伺服器。回 `repeat` 就補付；回「已被別的存檔領走」就不顯示任何訊息。不會重複發放：伺服器一個帳號只有一筆，本機的付款紀錄也只允許一次。
-- 為何這次沒做：這會改到線上帳號流程，在已綁定的帳號上，「繼續遊戲」時會多一次網路請求。這裡也無法對真實 Supabase 驗證。依規則先提出方案、停在這裡。
-- 證據：`src/championship/app/main.js`（`runBindReward`、`handleOnlineAuthReturn`），`supabase/migrations/001_championship_online.sql`（`claim_bind_reward`），`championshipStandaloneApp.js`（`claimOnlineBindReward`）。這一項只有讀程式碼的證據，沒有對雲端實測。
+**目前不影響正式站**：`src/data/championship/online-service.v1.json` 的 Supabase 設定是空的，正式站也沒有執行期注入（`__CHAMPIONSHIP_SUPABASE_CONFIG__`），所以線上功能都是本機模擬，綁定獎勵只會「預覽」，不會真的付款。這個修正等雲端啟用後才會起作用。
+
+- 原本的缺口：伺服器先記帳（`claim_bind_reward` 寫入領取紀錄，並把帳號標成已領），本機再付 5000 Bits 並存檔。兩步之間如果分頁被關、網路斷，或本機那一步失敗（存檔失敗、另一個分頁先寫入、教學／對戰／狩獵進行中），帳號就顯示已領，本機卻沒有錢，之後也不會再問。
+- **實作途中發現更根本的問題**：伺服器用 `save_ref` 判斷「同一份存檔才可重發」，但 `save_ref` 是 app 的 `sessionId` 的雜湊。正式版的 `sessionId` 是常數 `championship-modern-home`（`STANDALONE_SESSION_ID`），**所有玩家、所有存檔都一樣**。所以伺服器分不出存檔。
+  - 原本提的方案（帳號已綁定、本機沒付款紀錄就去問）會讓同一帳號每開一份新遊戲都能再領 5000，等於重複發放，所以**沒有照原案做**。測試裡用兩份新存檔直接證明了這一點。
+- 實際做法：用這台裝置的「待付款」標記當閘門，存檔格式不變。
+  - 送出領取請求前，在線上 session 區（已核准的儲存鍵 `championshipModernSave:onlineSession:v1`）寫入 `championship-bind-reward-pending`，記下帳號 ID。
+  - 本機付款成功，或這份存檔原本就已付過，就清掉標記。伺服器明確拒絕（被別的存檔領走、帳號未綁定）也清掉。
+  - 每次開啟頁面、進入存檔後最多問一次，而且只在有標記、帳號就是當初送出的那個時才問。
+  - 補發時不會登入任何人、不建立匿名帳號；沒有標記的裝置不會載入雲端函式庫，也不發任何請求。
+  - 只有真的補付時才顯示獎勵視窗。
+- 每個瀏覽器只有一個存檔欄位，所以「目前開著的存檔」就是要付款的那一份。開新遊戲覆蓋存檔之後，沒有標記就不會再付。
+- 驗證：`tests/championship-bind-reward-recovery-cases.mjs` 共 6 項，涵蓋：
+  - 沒有標記時完全不連線。
+  - `save_ref` 共用的證明。
+  - 伺服器已記帳、網路中斷後，下次繼續遊戲補付一次；之後的新遊戲不會再付。
+  - 存檔寫入失敗時保留標記，下次補付。
+  - 伺服器明確拒絕或換了帳號時清掉標記。
+  - 本機模擬不留標記。
+  - `main.js` 的接線。
+- 其他驗證：
+  - 既有的線上、綁定獎勵、儲存防護測試 46 項全過。
+  - `test:ci` 3521 項全過。
+  - 隔離 worktree 中只在副本裡換上候選雜湊，建置候選版（buildId `6bb2cc83…`），在真實瀏覽器跑完牧場全流程，錯誤 0。
+- **還沒對真實 Supabase 驗證**（這裡沒有雲端）。用的假伺服器照 `supabase/migrations/001_championship_online.sql` 的 `claim_bind_reward` 規則寫成。
+- **既有、本次未修改的漏洞，需要你決定**：因為 `save_ref` 共用，原本的「綁定另一個登入方式」流程（`onProviderBound` → `runBindReward`）在同一帳號的另一份未付款存檔上，伺服器會回 `repeat`，於是再付一次。最多是每種登入方式一次（Google、Facebook、Discord、Email）。根治要讓每份存檔有自己固定的 ID，也就是在存檔裡加欄位，這會改存檔格式，舊版本或舊分頁會讀不到新存檔，所以依規則先停在這裡。
+- 證據：
+  - `src/championship/app/main.js`（`runBindReward`、`recoverBindReward`、`takeOnlineAuthReturn`、`handleOnlineAuthReturn`）
+  - `src/championship/online/championshipCloudService.js`（`claimBindReward`、`recoverBindReward`、`settleBindReward`）
+  - `championshipStandaloneApp.js`：`STANDALONE_SESSION_ID`、`getSaveReference`
 
 ## 6. 已量測、未修改（附理由）
 
@@ -153,9 +177,16 @@
 
 S1 時提出的 `b30e2cd0…` 已被 `66ea864e…` 取代。
 
+**上面兩列 Owner 已於 2026-11-08 核准並套用**（[PUBLICATION_APPROVAL.json](PUBLICATION_APPROVAL.json)）。S4 又改了兩個受管制的檔案，需要另外核准：
+
+| 檔案 | 目前核准 | 本分支 |
+|---|---|---|
+| `src/championship/app/main.js`（S4） | `991f8c32291b3d540a0a62074855d35636477efe8d9739da641e1ec759a823ad` | `d65efb6be5366a5902984804ab081b3af9983dad7f10b69fc7c194607d1e6068` |
+| `src/championship/online/championshipCloudService.js`（S4） | `11150dff66913de99ab736bc78831c2cc7bf771bb6f6a69c08624a627c0fdb83` | `c025b8b316153598915eb3e85cdb0cc7389b62df3a9d713581274b3ab48928fd` |
+
 ## 9. 下一批建議（依使用者影響 × 證據強度 × 修改風險排序）
 
-1. **首次綁定獎勵的補發**（第 5 節）：你同意方案後實作，用本機模擬模式與伺服器假件測「中途關頁、存檔衝突、被別的存檔領走」三種情境。
+1. **每份存檔固定的 ID**（第 5 節）：讓 `save_ref` 真正分得出存檔，才能根治綁定另一個登入方式時的重複發放。這會改存檔格式，需要你決定。
 2. **巡檢補上對戰場內與捕捉流程**：打完一場到結算再返回，量相同的不變量；並把「精確 heap 曲線＋snapshot 比對」納入巡檢報告。
 3. 其餘 `removeAttribute('src')` 呼叫點：逐一確認圖是否不在文件中，有證據再改。
 4. 量測牧場重入成本的組成（Draco worker、GLB 解析、角色解碼）後，再決定是否共用 DRACOLoader；DFG_LUT 向 Three.js 上游回報。
@@ -180,7 +211,7 @@ npm run test:browser:care-image-release
 ```
 
 ```bash
-node --test tests/championship-rebirth-crash-consistency-cases.mjs tests/championship-catalyst-evolution-crash-consistency-cases.mjs
+node --test tests/championship-rebirth-crash-consistency-cases.mjs tests/championship-catalyst-evolution-crash-consistency-cases.mjs tests/championship-bind-reward-recovery-cases.mjs
 ```
 
 證據：`evidence/` 內為各次巡檢的 `summary.json` 與狩獵 16 趟的 heap 曲線（`hunt-heap-curve.json`）。heap snapshot 每份約 130 MB，沒有放進 repo。

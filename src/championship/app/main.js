@@ -2934,6 +2934,8 @@ async function runBindReward(provider) {
     }
     if (out.preview) { await showBindRewardPopup({ showChoiceDialog, bits: out.rewardBits, provider: out.provider ?? provider, simulated: true, fx: requestArcadeFx }); return out; }
     const paid = app.claimOnlineBindReward({ provider: out.provider ?? provider, rewardBits: out.rewardBits });
+    // Paid now, or this save already holds the gift: this device's claim is settled. Otherwise the next page asks again.
+    if (paid?.ok || paid?.reason === 'BIND_REWARD_ALREADY_CLAIMED') onlineService().settleBindReward();
     if (!paid?.ok) {
       if (paid?.reason !== 'BIND_REWARD_ALREADY_CLAIMED') await showChoiceDialog({ title: onlineText('rewardTitle'), message: onlineText('rewardSaveFailed', { reason: onlineReasonText(paid?.reason) }), actions: [{ id: 'ok', label: onlineText('close'), tone: 'primary' }], cancelId: 'ok' });
       return paid;
@@ -2943,6 +2945,34 @@ async function runBindReward(provider) {
     await showBindRewardPopup({ showChoiceDialog, bits: paid.credited, provider: out.provider ?? provider, simulated: false, fx: requestArcadeFx });
     return paid;
   } finally { bindRewardRunning = false; }
+}
+
+// First-bind gift recovery (Owner 2026-11-08): a claim this device sent may be in the ledger while no save was
+// paid (the page closed mid-claim, or the local write was refused or failed). Once per page, after the session
+// opens, the cloud service asks again only while this device's pending marker is set. Silent unless it pays;
+// the marker is settled when the open save holds the gift, so each claim is paid at most once.
+let bindRewardRecoveryTried = false;
+async function recoverBindReward() {
+  if (bindRewardRecoveryTried || bindRewardRunning || !onlineConfig.configured) return null;
+  // One save slot per browser: an open save that already holds the gift settles whatever this device sent.
+  if (app.getOnlineBindReward?.()) { bindRewardRecoveryTried = true; onlineService().settleBindReward(); return null; }
+  const sessionId = app.getSaveReference?.();
+  if (!sessionId) return null;
+  bindRewardRecoveryTried = true;
+  bindRewardRunning = true;
+  try {
+    const out = await onlineService().recoverBindReward({ saveRef: await sha256Hex(sessionId) });
+    if (!out?.ok || out.preview) return out;
+    // Refused now (a battle, a hunt, a failed write): nothing changed, and the next page asks again.
+    const paid = app.claimOnlineBindReward({ provider: out.provider, rewardBits: out.rewardBits });
+    if (paid?.ok || paid?.reason === 'BIND_REWARD_ALREADY_CLAIMED') onlineService().settleBindReward();
+    if (!paid?.ok) return paid;
+    refreshStatusBar();
+    recoveryDiagnostics.record('BIND_REWARD_RECOVERED', { provider: ONLINE_PROVIDER_NAMES[out.provider] ?? out.provider, credited: paid.credited, repeat: out.repeat === true });
+    await showBindRewardPopup({ showChoiceDialog, bits: paid.credited, provider: out.provider, simulated: false, fx: requestArcadeFx });
+    return paid;
+  } catch (error) { console.warn(`CHAMPIONSHIP_BIND_REWARD_RECOVERY: ${error?.message ?? error}`); return null; }
+  finally { bindRewardRunning = false; }
 }
 
 // OAuth return (Owner 2026-10-29): only with a configured cloud, and only when
@@ -2959,7 +2989,7 @@ function readOnlineAuthReturn(locationLike = location) {
 }
 // Read once at start-up; handled after Continue / New Game opens the session the gift is paid into.
 let pendingOnlineAuthReturn = onlineConfig.configured ? readOnlineAuthReturn() : null;
-function takeOnlineAuthReturn() { const returned = pendingOnlineAuthReturn; pendingOnlineAuthReturn = null; if (returned) void handleOnlineAuthReturn(returned); }
+function takeOnlineAuthReturn() { const returned = pendingOnlineAuthReturn; pendingOnlineAuthReturn = null; if (returned) void handleOnlineAuthReturn(returned); else void recoverBindReward(); }
 async function handleOnlineAuthReturn(returned) {
   if (!returned || !onlineConfig.configured) return;
   try {
@@ -2980,6 +3010,7 @@ async function handleOnlineAuthReturn(returned) {
     }
     // A linked account: pay the first-bind gift once, then compare this device with the account's cloud copy.
     if (identity && identity.isAnonymous === false && !identity.bindRewardClaimed) await runBindReward(returned.provider ?? identity.providers?.[0] ?? 'google');
+    else if (identity && identity.isAnonymous === false) await recoverBindReward();
     if (identity && identity.isAnonymous === false) await accountPanel().reconcile();
   } catch (error) { console.warn(`CHAMPIONSHIP_AUTH_RETURN: ${error?.message ?? error}`); }
 }
