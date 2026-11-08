@@ -2,6 +2,7 @@
 import {publicHudCharacterConfig} from './publicCharacterCatalog.js';
 import {databaseHeroPortrait} from './databaseHeroPortraits.js';
 import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
+import {characterAssetUrl} from './characterAssetDelivery.js';
 
 export function acceptedDatabasePortraitConfig(speciesIndex){
  const extension=getProductExtension(speciesIndex);
@@ -47,9 +48,9 @@ export async function loadAcceptedDatabasePortrait(speciesIndex,{
  signal?.throwIfAborted();
  const config=acceptedDatabasePortraitConfig(speciesIndex);
  if(!config){const illustration=acceptedDatabaseIllustrationPreview(speciesIndex);if(!illustration)return null;signal?.throwIfAborted();return Object.freeze({...illustration,src:new URL(illustration.src,baseUrl).href});}
- const response=await fetchImpl(new URL(config.hudPath,baseUrl),{signal});if(!response.ok)throw Error('DATABASE_PORTRAIT_UNAVAILABLE');
+ const response=await fetchImpl(new URL(characterAssetUrl(config.hudPath,baseUrl)),{signal});if(!response.ok)throw Error('DATABASE_PORTRAIT_UNAVAILABLE');
  const text=await response.text();const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));
  if(Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('')!==config.hudSha256)throw Error('DATABASE_PORTRAIT_HASH');
  const portrait=validateAcceptedDatabasePortrait(JSON.parse(text),config);signal?.throwIfAborted();
- return Object.freeze({...portrait,src:new URL(portrait.src,baseUrl).href});
+ return Object.freeze({...portrait,src:characterAssetUrl(portrait.src,baseUrl)});
 }

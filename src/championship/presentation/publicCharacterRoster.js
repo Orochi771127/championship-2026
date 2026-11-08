@@ -7,6 +7,7 @@ import {PUBLIC_CHARACTER_RENDER_KIND,canonicalRenderValue} from './publicCharact
 import {attachReviewedCharacterAnimation,reviewedSpeciesForEntity,reviewedReplacesOriginal} from './reviewedCharacterLoader.js';
 import {isOriginalLoopbackLocation} from './originalRuntimeLocation.js';
 import {stageBodyScale,scaleNativeGeometry} from './stageBodySize.js';
+import {characterAssetUrl} from './characterAssetDelivery.js';
 
 const configs=new Map(catalog.characters.map(c=>[c.entityId,c]));
 const hash=async value=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))),b=>b.toString(16).padStart(2,'0')).join('');
@@ -40,7 +41,7 @@ export async function loadPublicCharacterRoster({PIXI,speciesIds,sides=['main'],
    const config=fromUrl.get(args.runtimeUrl);if(!config)throw Error('PUBLIC_CHARACTER_IDENTITY');
    const packed=battleAtlas&&config.battleRuntimePath;
    const file=packed?config.battleRuntimePath:config.runtimePath,expected=packed?config.battleRuntimeSha256:config.runtimeSha256;
-   const runtimeUrl=new URL(file,baseUrl).href,response=await fetchImpl(runtimeUrl,{signal});
+   const runtimeUrl=characterAssetUrl(file,baseUrl),response=await fetchImpl(runtimeUrl,{signal});
    if(!response.ok)throw Error('PUBLIC_CHARACTER_HTTP_'+response.status);
    const text=await response.text();if(await hash(text)!==expected)throw Error('PUBLIC_CHARACTER_RUNTIME_HASH');
    const runtime=JSON.parse(text);await validatePublicCharacterRender(runtime,config);

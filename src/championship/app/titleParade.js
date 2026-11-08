@@ -17,6 +17,7 @@ import { isOriginalRuntimeLocation } from "../presentation/originalRuntimeLocati
 import { speciesNameForId } from "../text/zhHant.js";
 import { loadReviewedDomFrames } from "../presentation/reviewedSelection.js";
 import { stageBodyScale } from "../presentation/stageBodySize.js";
+import {characterAssetUrl} from '../presentation/characterAssetDelivery.js';
 import { raisingNativeScreenPixels, initialRaisingReferenceViewport } from "../presentation/intRh2/raisingFieldViewport.js";
 
 /** The in-game walk request (Data Arena and Battle sequence id 2). */
@@ -70,7 +71,7 @@ export async function loadParadeWalker(speciesId, { href, fetchImpl = globalThis
   // Species drawn with reviewed artwork walk with it (their original pages are retired).
   const reviewed = await loadReviewedDomFrames(speciesId, { href, fetchImpl, signal, sequences: [TITLE_PARADE_WALK_SEQUENCE] });
   if (reviewed) return reviewedParadeWalker(speciesId, reviewed, { signal, loadImage });
-  const runtimeUrl = new URL(config.runtimePath, href);
+  const runtimeUrl = new URL(characterAssetUrl(config.runtimePath, href));
   const response = await fetchImpl(runtimeUrl.href, { signal });
   if (!response.ok) return null;
   const text = await response.text();

@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "boundary": "CI verifies repository-contained engineering tests; local reference/art acceptance remains required separately. npm test continues to run the full suite. New test files require explicit classification.",
   "portable": [
+    "tests/championship-data-arena-loading-cases.mjs",
+    "tests/championship-shop-accessibility-cases.mjs",
+    "tests/championship-tutorial-battle-recovery-cases.mjs",
+    "tests/championship-character-asset-delivery-cases.mjs",
+    "tests/championship-external-character-build-cases.mjs",
     "tests/championship-ranch-load-repair-cases.mjs",
     "tests/championship-ranch-reviewed-clock-cases.mjs",
     "tests/championship-rank-launch-readiness-cases.mjs",
@@ -452,7 +457,8 @@
     "tests/championship-accepted-scopes-cases.mjs",
     "tests/raising-appearance-frame.test.mjs",
     "tests/championship-hunt-four-fixes-cases.mjs",
-    "tests/championship-move-vfx-kit-cases.mjs"
+    "tests/championship-move-vfx-kit-cases.mjs",
+    "tests/championship-performance-release-cases.mjs"
   ],
   "localReference": {
     "tests/championship-scene-music-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Scene music actual-browser workflow with native media decoding, production Settings/transport, and controlled normal-game Raising/Battle/Data Arena flows.",

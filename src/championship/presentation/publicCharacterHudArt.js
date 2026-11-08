@@ -4,6 +4,7 @@ import {originalCageLocationArt} from './originalCageLocationArt.js';
 import {nativeAnimationCellAt} from './characterAnimationTimeline.js';
 import {readPublicHudManifest} from './publicHudManifestCache.js';
 import {newArtPortrait,newArtPortraitLike} from './newArtPortrait.js';
+import {characterAssetUrl,characterAssetSrc} from './characterAssetDelivery.js';
 
 const canonical=id=>id?.replace(/^championship:creature:/,'');
 export async function loadPublicCharacterHudArt({baseUrl,fetchImpl=globalThis.fetch,speciesIds=[]}){
@@ -18,10 +19,11 @@ export async function loadPublicCharacterHudArt({baseUrl,fetchImpl=globalThis.fe
    if(records.has(config.entityId))return;
    if(pending.has(config.entityId))return pending.get(config.entityId);
    const task=inMetadataSlot(async()=>{
-    const data=await readPublicHudManifest(new URL(config.hudPath,baseUrl),config.hudSha256,fetchImpl);
+    const data=await readPublicHudManifest(new URL(characterAssetUrl(config.hudPath,baseUrl)),config.hudSha256,fetchImpl);
     if(data.schemaVersion!==1||data.entityId!==config.entityId||!data.portrait||!data.battle?.cells||!data.battle?.sequences)throw Error('PUBLIC_HUD_SCHEMA');
     for(const cell of [data.portrait,...data.battle.cells])if(!cell.src?.startsWith('assets/production/characters/')||cell.src.includes('..')||!/^[a-f0-9]{64}$/.test(cell.sha256))throw Error('PUBLIC_HUD_CELL');
-    records.set(config.entityId,{portrait:data.portrait,battle:{sequences:data.battle.sequences,cells:new Map(data.battle.cells.map(c=>[c.cell,c]))}});
+    const delivered=cell=>({...cell,src:characterAssetSrc(cell.src,baseUrl)});
+    records.set(config.entityId,{portrait:delivered(data.portrait),battle:{sequences:data.battle.sequences,cells:new Map(data.battle.cells.map(c=>[c.cell,delivered(c)]))}});
     for(const listener of [...listeners])listener();
    }).finally(()=>pending.delete(config.entityId));pending.set(config.entityId,task);return task;
   }));

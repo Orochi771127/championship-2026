@@ -6,6 +6,7 @@ import {isOriginalLoopbackLocation} from './originalRuntimeLocation.js';
 import {reviewedNumericClip} from './reviewedCharacterAnimation.js';
 import {stageBodyScale} from './stageBodySize.js';
 import {reviewedDocumentRef} from './animationHandoff.js';
+import {characterAssetUrl} from './characterAssetDelivery.js';
 
 const selected=new Map(selection.characters.map(c=>[c.speciesId,c]));
 export function reviewedCharacterSelection(speciesId,href=globalThis.location?.href){
@@ -35,7 +36,7 @@ const sha256=async text=>Array.from(new Uint8Array(await crypto.subtle.digest('S
 export async function loadReviewedDomFrames(speciesId,{href=globalThis.location?.href,fetchImpl=(...a)=>globalThis.fetch(...a),signal,sequences}){
   const entry=href?reviewedCharacterSelection(speciesId,href):null;
   if(!entry)return null;
-  const ref=await reviewedDocumentRef(entry,href,fetchImpl),url=new URL(ref.path,href);
+  const ref=await reviewedDocumentRef(entry,href,fetchImpl),url=new URL(characterAssetUrl(ref.path,href));
   const response=await fetchImpl(url.href,{signal});
   if(!response.ok)throw Error('REVIEWED_DOM_HTTP_'+response.status);
   const text=await response.text();

@@ -52,6 +52,11 @@ const rows=new Map(allow.files.map(row=>[row.path,row]));
 for(const file of rows.keys())if(file.startsWith('assets/production/opening-film-ns33-r1/')){rows.delete(file);excluded.push(file);}
 for(const row of openingFilmPublicationFiles())rows.set(row.path,{...row});
 const refreshed=['src/data/championship/database-hero-portraits.public.v1.json','src/championship/presentation/publicRenderDescriptors.js',
+ // Character asset delivery changes transport only; source/hash selection remains complete.
+ 'src/championship/presentation/characterAssetDelivery.js','src/championship/presentation/publicCharacterRoster.js',
+ 'src/championship/presentation/reviewedCharacterLoader.js','src/championship/presentation/reviewedSelection.js',
+ 'src/championship/presentation/juicy/spriteMotionPlayer.js','src/championship/app/titleParade.js',
+ 'src/championship/app/ranchTitlePreload.js','src/championship/app/openingEggChoices.js',
  'championship.html','src/data/championship/public-character-catalog.v1.json','src/championship/presentation/publicAlternateFormBindings.js',
  'src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js',
  ...['battleCharacterGeometry.js','battleCharacterProfiles.js','characterNativeSizing.js'].map(name=>'src/data/championship/'+name),

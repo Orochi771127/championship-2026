@@ -187,6 +187,7 @@ export const UI_COPY_TH = Object.freeze({
   "FIELD_LOAD_RETRY": "โหลดพื้นที่เลี้ยงใหม่",
   "FIELD_LOAD_CANCEL": "ยกเลิกการโหลด",
   "FIELD_LOAD_RETURN": "บันทึกและกลับหน้าหลัก",
+  "BATTLE_LOAD_ERROR_TUTORIAL": "โหลดสนามต่อสู้ไม่สำเร็จ โปรดบันทึกและกลับหน้าหลัก แล้วเลือกเล่นต่อ",
   "FIELD_LOAD_RELOAD": "บันทึกแล้วโหลดเกมใหม่",
   "FIELD_LOAD_TIMEOUT": "โหลดนานเกินไป โปรดลองอีกครั้ง หรือบันทึกแล้วโหลดเกมใหม่",
   "FIELD_LOAD_CANCELLED": "ยกเลิกการโหลดแล้ว ความคืบหน้าของคุณยังอยู่",

@@ -1,5 +1,6 @@
 import selection from '../../data/championship/ranch-render-selection.v1.json' with {type:'json'};
 import reviewed from '../../data/championship/reviewed-animation-selection.v1.json' with {type:'json'};
+import {characterAssetUrl} from '../presentation/characterAssetDelivery.js';
 
 // Species drawn with reviewed artwork no longer have original atlas pages
 // (retired 2026-10-28), so there is nothing of theirs to prefetch here.
@@ -31,7 +32,7 @@ export function createRanchTitlePreloader({baseUrl,characters=selection.characte
         const selected=species.map(id=>characters.find(c=>c.speciesId===id)).filter(Boolean);owner.residents=selected.length;report();
         const groups=[];
         for(const c of selected){
-          signal.throwIfAborted();const url=new URL(c.runtimePath,baseUrl).href;
+          signal.throwIfAborted();const url=characterAssetUrl(c.runtimePath,baseUrl);
           const response=await fetchImpl(url,{signal,priority:'low'});if(!response.ok)continue;
           const text=await response.text(),hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
           if(hash!==c.runtimeSha256)continue;

@@ -7,6 +7,7 @@ import {assertPagesModuleClosure} from './pages-module-closure.mjs';
 import {compileBrowserBundle,bundledBrowserHtml,compiledPublicArtifactPlan} from './browser-bundle.mjs';
 import {publicArtifactPlan,assertPublicBytes,assertPublicArtifact,PUBLIC_RUNTIME_INDEX_PATH} from './public-runtime-boundary.mjs';
 import {encodePublicBuildManifest,decodeBuildManifest} from './build-manifest-codec.mjs';
+import {readExternalCharacterRelease,externalCharacterPublicationPlan} from './external-character-assets.mjs';
 export const INTERNAL_TARGET='LOCAL_INTERNAL_REVIEW';
 export const PUBLIC_TARGET='GITHUB_PAGES_STATIC';
 export const PLAYTEST_TARGET='GITHUB_PAGES_OWNER_PLAYTEST';
@@ -37,9 +38,10 @@ export function collectArtifactFiles(root){
   }}
   visit(root);return files.sort();
 }
-export function buildWebArtifact({root,output,target}){
+export function buildWebArtifact({root,output,target,externalCharacters=false}){
   if(![INTERNAL_TARGET,PUBLIC_TARGET,PLAYTEST_TARGET].includes(target))throw Error('UNKNOWN_BUILD_TARGET');
   const internal=target===INTERNAL_TARGET,playtest=target===PLAYTEST_TARGET;
+  if(externalCharacters&&internal)throw Error('EXTERNAL_CHARACTERS_PUBLIC_BUILD_ONLY');
   // All public targets use the same boundary; playtest is never a privacy bypass.
   const plan=internal?null:publicArtifactPlan({root,input:readBuildInputs(root),index:JSON.parse(fs.readFileSync(checkedInput(root,ART_INDEX_PATH),'utf8'))});
   const audit=auditWebBuild(root);
@@ -49,11 +51,13 @@ export function buildWebArtifact({root,output,target}){
     const counts={};for(const row of audit.release.issues)counts[row.kind]=(counts[row.kind]??0)+1;
     throw Error('PUBLIC_RELEASE_NOT_APPROVED (previous output preserved): '+JSON.stringify(counts));
   }
+  const external=externalCharacters?readExternalCharacterRelease(root,plan):null;
+  if(external&&!audit.input.browserBundle)throw Error('EXTERNAL_CHARACTERS_REQUIRE_BROWSER_BUNDLE');
   const out=checkedOutput(root,output,target);
   // Capture bytes before replacing a previous artifact.
   const sources=(internal?audit.input.files:plan.files).map(file=>({file,bytes:!internal&&file===PUBLIC_RUNTIME_INDEX_PATH?plan.indexBytes:fs.readFileSync(checkedInput(root,file))}));
-  const bundle=compileBrowserBundle(root,internal?audit.input:{...audit.input,files:plan.files,moduleEntries:plan.moduleEntries});
-  const publication=internal?null:compiledPublicArtifactPlan(plan,bundle),published=new Set(publication?.files??[]);
+  const bundle=compileBrowserBundle(root,internal?audit.input:{...audit.input,files:plan.files,moduleEntries:plan.moduleEntries,characterAssetDelivery:external?.runtime??null});
+  const publication=internal?null:externalCharacterPublicationPlan(compiledPublicArtifactPlan(plan,bundle),external),published=new Set(publication?.files??[]);
   const entrySource=sources.find(r=>r.file==='championship.html').bytes;
   const entryBytes=bundle?Buffer.from(bundledBrowserHtml(entrySource.toString('utf8'),bundle.metadata,publication?.importMap)):entrySource;
   if(!internal){
@@ -82,7 +86,8 @@ export function buildWebArtifact({root,output,target}){
   const closure=assertPagesModuleClosure({root:out,files:rows.map(row=>row.path),entries:moduleEntries,importMap});
   const inputSha256=sha256(fs.readFileSync(path.join(root,BUILD_INPUT_PATH)));
   const commit=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8',windowsHide:true}).trim();
-  const buildId=sha256(JSON.stringify({target,inputSha256,files:rows}));
+  const externalReceipt=external?{externalCharacterAssets:external.receipt}:{};
+  const buildId=sha256(JSON.stringify({target,inputSha256,files:rows,...externalReceipt}));
   const manifest={schemaVersion:2,target,buildId,commit,inputSha256,entry:'index.html',
     publicReleasePermitted:!internal,loopbackOnly:internal,sourcePayloadIncluded:false,
     faithfulInternalVfxIncluded:internal&&rows.some(r=>isPrivateRepositoryPath(r.path)),
@@ -90,6 +95,7 @@ export function buildWebArtifact({root,output,target}){
     ...(playtest?{ownerSelectedReferenceArtIncluded:rows.some(r=>isPrivateRepositoryPath(r.path))}:{}),
     staticModuleClosure:{checked:true,moduleCount:closure.visited.length},moduleEntries,importMap,
     ...(bundle?{browserBundle:internal?bundle.metadata:publicBundleMetadata(bundle.metadata)}:{}),
+    ...externalReceipt,
     release:{approved:!internal&&!playtest,...(internal?{scope:audit.input.release}:{})},
     ...(playtest?{publicPlaytest:{ownerApproved:true,policyId:audit.input.publicPlaytest.policyId,
       rightsDocumentVerified:false,commercialReleaseAccepted:false,fullOriginalParityAccepted:false}}:{}),
@@ -99,9 +105,11 @@ export function buildWebArtifact({root,output,target}){
   if(!internal)assertPublicArtifact({root:out,files:collectArtifactFiles(out),plan:publication});
   return {root:out,manifest};
 }
-export function validateWebArtifact({root,output,target}){
+export function validateWebArtifact({root,output,target,externalCharacters=null}){
   const out=checkedOutput(root,output,target),name=manifestName(target),internal=target===INTERNAL_TARGET,playtest=target===PLAYTEST_TARGET;
   const m=decodeBuildManifest(JSON.parse(fs.readFileSync(path.join(out,name),'utf8')));
+  const hasExternal=Boolean(m.externalCharacterAssets);
+  if(internal&&hasExternal||externalCharacters!==null&&externalCharacters!==hasExternal)throw Error('EXTERNAL_CHARACTER_BUILD_MODE');
   if(![2,3].includes(m.schemaVersion)||(internal&&m.schemaVersion!==2)||m.target!==target||m.publicReleasePermitted!==!internal||m.loopbackOnly!==internal
     ||m.release?.approved!==(!internal&&!playtest)||m.sourcePayloadIncluded!==false||!Array.isArray(m.files))throw Error('BUILD_BOUNDARY_INVALID');
   if(playtest&&(m.publicPlaytest?.ownerApproved!==true||m.publicPlaytest.rightsDocumentVerified!==false
@@ -114,7 +122,7 @@ export function validateWebArtifact({root,output,target}){
     if(row.sha256!==sha256(bytes)||row.bytes!==bytes.length)throw Error('BUILD_HASH_MISMATCH: '+row.path);
     if(!internal&&!playtest&&isPrivateRepositoryPath(row.path))throw Error('BUILD_PRIVATE_INPUT');
   }
-  if(m.buildId!==sha256(JSON.stringify({target,inputSha256:m.inputSha256,files:m.files})))throw Error('BUILD_ID_MISMATCH');
+  if(m.buildId!==sha256(JSON.stringify({target,inputSha256:m.inputSha256,files:m.files,...(hasExternal?{externalCharacterAssets:m.externalCharacterAssets}:{})})))throw Error('BUILD_ID_MISMATCH');
   if(sha256(fs.readFileSync(path.join(out,'index.html')))!==sha256(fs.readFileSync(path.join(out,'championship.html'))))throw Error('BUILD_ENTRY_MISMATCH');
   assertPagesModuleClosure({root:out,files,entries:m.moduleEntries,importMap:m.importMap});
   if(!internal){
@@ -122,8 +130,11 @@ export function validateWebArtifact({root,output,target}){
     if(!audit.technical.ok||(!playtest&&!audit.release.ok)||m.inputSha256!==sha256(fs.readFileSync(path.join(root,BUILD_INPUT_PATH))))throw Error('PUBLIC_RELEASE_NOT_APPROVED');
     if(playtest){const check=auditOwnerPlaytest(root,audit);if(!check.ok||m.publicPlaytest.policyId!==check.policy.id)throw Error('PUBLIC_PLAYTEST_NOT_APPROVED');}
     const plan=publicArtifactPlan({root,input:audit.input,index:audit.index});
-    const bundle=compileBrowserBundle(root,{...audit.input,files:plan.files,moduleEntries:plan.moduleEntries}),generated=bundle?.metadata.generatedFiles??[];
-    const publication=compiledPublicArtifactPlan(plan,bundle);
+    const external=hasExternal?readExternalCharacterRelease(root,plan):null;
+    if(JSON.stringify(m.externalCharacterAssets??null)!==JSON.stringify(external?.receipt??null))throw Error('EXTERNAL_CHARACTER_RECEIPT_MISMATCH');
+    if(external&&!audit.input.browserBundle)throw Error('EXTERNAL_CHARACTERS_REQUIRE_BROWSER_BUNDLE');
+    const bundle=compileBrowserBundle(root,{...audit.input,files:plan.files,moduleEntries:plan.moduleEntries,characterAssetDelivery:external?.runtime??null}),generated=bundle?.metadata.generatedFiles??[];
+    const publication=externalCharacterPublicationPlan(compiledPublicArtifactPlan(plan,bundle),external);
     if(JSON.stringify(m.browserBundle??null)!==JSON.stringify(bundle?publicBundleMetadata(bundle.metadata):null))throw Error('PUBLIC_BUNDLE_RECIPE_MISMATCH');
     if(JSON.stringify([...publication.files,...generated,'index.html','.nojekyll'].sort())!==JSON.stringify(m.files.map(r=>r.path).sort()))throw Error('PUBLIC_INPUT_LIST_MISMATCH');
     if(JSON.stringify(m.importMap)!==JSON.stringify(publication.importMap))throw Error('PUBLIC_BUNDLE_IMPORT_MAP_CHANGED');

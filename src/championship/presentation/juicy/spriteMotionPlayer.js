@@ -14,6 +14,7 @@ import { publicCharacterConfig } from "../publicCharacterCatalog.js";
 import { isOriginalRuntimeLocation } from "../originalRuntimeLocation.js";
 import { monsterVisualAnchor } from "../../data/monsterVisualAnchors218.js";
 import { loadReviewedDomFrames } from "../reviewedSelection.js";
+import {characterAssetUrl} from '../characterAssetDelivery.js';
 
 /** Showcase actions -> native sequences (the Data Arena's audited ids). */
 export const SHOWCASE_ACTIONS = Object.freeze([
@@ -83,7 +84,7 @@ export async function loadShowcaseMotion(speciesId, { signal = null, baseUrl = g
   // Species drawn with reviewed artwork show it (their original pages are retired).
   const reviewed = await loadReviewedDomFrames(speciesId, { href: baseUrl, fetchImpl, signal, sequences });
   if (reviewed) return reviewedShowcaseMotion(speciesId, reviewed);
-  const runtimeUrl = new URL(config.runtimePath, baseUrl).href;
+  const runtimeUrl = characterAssetUrl(config.runtimePath, baseUrl);
   const response = await fetchImpl(runtimeUrl, { signal });
   if (!response.ok) throw new Error(`SHOWCASE_MOTION_HTTP_${response.status}`);
   const text = await response.text();

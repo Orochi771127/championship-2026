@@ -1164,7 +1164,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     }
 
     // Cells: fire flicker and ice states.
-    if (frameCount % 2 === 0 || !rich) syncCells();
+    // Keep cell visual-state synchronization bounded in both quality modes.
+    // Low quality must not double the full-grid scan rate.
+    if (frameCount % 2 === 0) syncCells();
     for (const [i, flame] of fireSprites) {
       const prop=grid.propAtCell(i),floorY=(Math.floor(i/grid.cols)+.5)*cell;
       // Sort burning timber with its actual cover. A floor-only layer hides

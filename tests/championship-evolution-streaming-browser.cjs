@@ -146,6 +146,18 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
     assert.equal(await page.evaluate(()=>Object.getOwnPropertyDescriptor(globalThis,'__freezeApp')?.get instanceof Function),true,'Exact main.js test seam installed (including cache query)');
     await page.locator('#cm-login').click();await page.locator('#cm-continue').click();
     await page.waitForFunction(()=>globalThis.__freezeScene?.isPlayable===true&&document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready');
+    // First-entry hint persistence is preparation, not an evolution side effect.
+    // Observe its real debounced write before taking the storage boundary;
+    // do not flush, seed a key, sleep, or allow new keys during evolution.
+    const preferenceReady=await page.waitForFunction(()=>{
+      const events=globalThis.__freezeStorageQA?.snapshot().events||[];
+      const hint=[...events].reverse().find(e=>e.type==='preference-change'&&e.raisingHintSeen===true&&e.changed?.includes('raisingHintSeen'));
+      if(!hint)return false;
+      const write=events.find(e=>e.type==='setItem'&&e.key==='championshipModernSave:preferences:v1'&&e.local&&e.succeeded===true&&e.sequence>hint.sequence);
+      return write&&localStorage.getItem(write.key)!==null?{hintSequence:hint.sequence,writeSequence:write.sequence,hintTimeMs:hint.timeMs,writeTimeMs:write.timeMs,phase:write.phase}:false;
+    },null,{timeout:15000});
+    evidence.preparationPreferenceWrite=await preferenceReady.jsonValue();await preferenceReady.dispose();
+    assert.equal(evidence.preparationPreferenceWrite.phase,'preparation','Initial hint preference must settle before the evolution measurement');
     mark('actual-home-ready');
     evidence.before=await snapshot();assert.equal(evidence.before.life.evolution,null);
     const ownedId=evidence.before.residents[0].id;assert.equal(evidence.before.residents.length,2);
@@ -214,7 +226,11 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
        document.querySelector('.int-rh2-field-host')?.inert===false&&
        document.querySelector('.int-rh2-resident-assets--recovery')?.hidden===true);
      // Real browser pointer input after recovery, not a direct camera mutation.
-     const canvas=page.locator('.int-rh2-field-host canvas').first();
+     // Dispatch synthetic touch events to the input-owning Pixi canvas,
+     // not whichever decorative Three.js canvas happens to be first.
+     const canvas=page.locator('.int-rh2-field-host canvas.cm-raising-pixi-canvas');
+     assert.equal(await canvas.count(),1,'Exactly one interactive raising canvas');
+     evidence.inputSurfaces=await page.locator('.int-rh2-field-host canvas').evaluateAll(nodes=>nodes.map(node=>({className:node.className,pointerEvents:getComputedStyle(node).pointerEvents,inputOwner:node.classList.contains('cm-raising-pixi-canvas')})));
      const box=await canvas.boundingBox();assert.ok(box&&box.width>0&&box.height>0);
      const cameraBefore=await page.evaluate(()=>__freezeScene.getDiagnostics().cameraX);
      await page.mouse.move(box.x+box.width*.7,box.y+box.height*.65);await page.mouse.down();

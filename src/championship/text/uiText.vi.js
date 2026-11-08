@@ -187,6 +187,7 @@ export const UI_COPY_VI = Object.freeze({
   "FIELD_LOAD_RETRY": "Tải lại khu nuôi",
   "FIELD_LOAD_CANCEL": "Hủy tải",
   "FIELD_LOAD_RETURN": "Lưu và về màn hình chính",
+  "BATTLE_LOAD_ERROR_TUTORIAL": "Không thể tải đấu trường. Hãy lưu và về màn hình chính, rồi chọn Tiếp tục.",
   "FIELD_LOAD_RELOAD": "Lưu và tải lại trò chơi",
   "FIELD_LOAD_TIMEOUT": "Tải quá lâu. Hãy thử lại hoặc lưu và tải lại trò chơi.",
   "FIELD_LOAD_CANCELLED": "Đã hủy tải. Tiến trình của bạn vẫn được giữ.",
