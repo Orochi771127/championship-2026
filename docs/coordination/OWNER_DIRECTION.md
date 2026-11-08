@@ -11,6 +11,41 @@ OWNER_APPROVED_ADAPTATION. Contract: `docs/contracts/championship/SAVE_ID_202611
 - The gift is recovered only for a claim this device sent (a pending marker in the online session map), only for the same account, never signing anyone in; it is paid at most once per claim.
 - Older builds keep only the flags they know, so they still open the save and write it back without the id; the next open gives it a new one.
 - The shipped build has no cloud configured, so neither change affects players until Supabase is set up. Not verified against a real Supabase project or on a physical device.
+<!-- record-id: BURST_TRUE_FORM_20261108 -->
+## 2026-11-08 — Burst evolution goes only on the player's press and the burst form fights as itself
+
+The Owner reports that in both the auto battle and the Data Arena manual battle the partner bursts by itself, and asks that it always wait for the player's press; after the burst, its battle moves, element and stats should change with the form instead of only its appearance. Asked to decide the details, the session chose the rules below and the Owner approved them (「照你建議的方式去調整」).
+
+OWNER_APPROVED_ADAPTATION over STAGE_REDESIGN_BURST_20261102; parity runs (burst policy OFF) are unchanged.
+
+- Trigger: the player's partners wait READY until pressed or knocked out. The six-second fallback and the below-30 % automatic burst are removed in the auto battle and in RELAY. The AI side still bursts when its gauge fills.
+- True form, auto battle: between actions the combatant becomes the form species: its move list, prelude and movement, its native animation graph and cell boxes, and its taxonomy element. Faction resonance stays the team that started. Its maximum HP follows the form's native HP curve over the partner's own maximum (`burstHpRatio`, capped at 3×, current share kept). Level-based stats stay the individual's. It returns to its 成熟期 the same way after the burst, and the saved HP is always in the partner's own scale.
+- True form, RELAY: the active fighter takes the form's relay role (kit, basic attack, element and speed) and its species and HP curve. It keeps its seat, partner power and swimming ability, and is itself again when the burst ends or it is switched out. A rival changes species, element and HP; its kit stays, because the rival AI reads it.
+- Which form (Owner follow-up the same day: forms differ per character and per raising; Owner chose 「1」): a partner bursts only into a form it learned on the ranch, chosen as before by `burstPlanFor` (tamer-rank tier, the player's preferred form, else the highest tier). In RELAY a Dex-only or rental fighter, or one that learned no form, never bursts; the generic per-element fallback form is removed. Of several held individuals of one species, the one that learned a form takes the seat. The Dex and both battles read the same table, `product-burst-evolution.r1.json`.
+- Balance: damage dealt keeps the tier multiplier (×1.4 / ×1.7). Damage taken is no longer divided, because the form's own HP now carries its toughness. Weakness after the burst is unchanged. A former 覺醒體/究極體 preset fights as its 成熟期 species with the lower HP and reaches its preset strength only after bursting.
+
+Verified by the unit cases in `tests/championship-stage-redesign-battle-burst-cases.mjs` and `tests/championship-awakening-raising-cases.mjs`, including a real auto-battle match and a RELAY match.
+
+Publication: after PR #197 passed CI the Owner directed 「合併並發佈上線」 (merge and publish). This authorizes merging #196 and #197 to main and publishing this batch through the existing Pages playtest workflow, with the approval hashes of its changed sources restated. It does not widen the asset set, and it is not a physical-device acceptance.
+
+<!-- record-id: UNIQUE_PIXEL_MOVE_VFX_20261108 -->
+## 2026-11-08 — One pixel style for move effects, and every move its own
+
+After a read-only comparison showed three move-effect looks side by side (enlarged low-resolution original cells, the remade 292-cell pixel atlas, and the Data Arena kit's smooth glow) and that 587 species moves shared about 200 looks, the Owner asked to unify the style and give every move a distinct effect, chose the plan to unify on the remade cells' pixel look, and said: 「那就讓你幫我自行規劃跟製作，總之我要每一招都獨特」.
+
+OWNER_APPROVED_ADAPTATION. This supersedes the 2026-11-05 MOVE_VFX_KIT_20261105 decision that each mode keeps its own look.
+
+- The move VFX kit paints with a pixel finish (flat tones, a one-texel dark outline, stepped light bands, nearest sampling). Every effect stays computed in code: no image file, no ROM pixel, no generated picture.
+- `src/data/championship/move-vfx-signatures.r1.json` (generator `scripts/build-move-vfx-signatures.mjs`) gives each of the 666 moves -- species and original-character moves, learnable support moves, Data Arena pool moves -- its own size, volley and path (or combo and swing), trail, closing burst and a sigil glyph drawn from its own seed. No two moves share a look; two moves of one archetype and palette differ in at least two choices; no sigil repeats (tests).
+- Nine thrown archetypes join the kit by name: shuriken, crescent, star, bubble, note, feather, petal, snowflake, drill.
+- First batch: the Data Arena draws every phase with the move's signature.
+- Second batch (Owner 「先做 AI 對戰」): in the AI battle a cell that only the reference atlas has is no longer drawn; the kit draws the move's own effect on that same live effect actor, so the native timing and path stay. Every move also opens its sigil on the ground (skills and signature moves), trails its original-cell shots with its own motif and closes each hit on its own burst. The Dex follows in a later batch.
+- Third batch (Owner: the mushroom move must plant mushrooms and burst into spores; 「表現方式也要一樣…每一招都要照著作為參考」; 「外觀盡量一樣但你幫我畫」 after declining a pixel-for-pixel copy of the reference cells, whose record is `ROM_COPYRIGHTED_REFERENCE`): every reference-only cell is remade (`remadeEffectCells.js`) from a written per-family brief (`remadeEffectBriefs.js`, 113 families) and handed back in its place, so the native pool keeps each move's count, positions, timing, turn, scale and fade. Remade cells face left as the native cells do. Concrete things are hand-drawn with the pxl tool in `docs/art/production/move-vfx-drawn-r1/drawn-vfx.px.js` (mushrooms, spore clouds, explosions, bombs, cherries, six missile shapes, a shoal of small fish, hearts, splashes) and generated into `drawnVfxSprites.js`; the Owner accepted the comparison sheets of this round (「這次的還可以」).
+- Fourth batch (Owner 「照順序幫我處理呀，然後要合併」): round two of the drawings (48 px explosions without outline, smoke grain, hand-drawn forked lightning, ray hits, gear, bone, alarm clock, cat's eye, ghost, light gate; remade cells widen for larger drawings); the Dex special preview plays the remade cells; the Data Arena kit draws the hand-drawn sprites (a ring of violet mushrooms that burst into spore clouds, explosions, bombs, missiles, fish); hit feel (`battleHitFeel.js`): a shock ring on heavy hits, an RGB split on criticals and a radial rush on signature releases, written on Pixi's own Filter in the manner of pixi-filters (no new package), screen-sized and only while running, off on saver and reduced motion. iPhone-sized battles measured 93–104 MB WebGL against 96–103 MB before this direction; no physical device was available.
+- Presentation only: no power, element rule, range, timing, RNG, save or gameplay value changes.
+
+This records the direction and the first batch, not publication: commit, push, merge and deploy keep their own authorization.
+
 
 <!-- record-id: CHARACTER_ASSET_REPOSITORY_MIGRATION_20261106 -->
 ## 2026-11-06 — Inventory all character stages and move animation delivery out of the game-site payload

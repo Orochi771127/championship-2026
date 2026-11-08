@@ -18,7 +18,15 @@ export function projectBattleEffectSprite(effect, cell, rect, nativeScale, brigh
 
 const multiply = (a, b) => [16, 8, 0].reduce((out, shift) => out | (Math.round(((a >> shift) & 255) * ((b >> shift) & 255) / 255) << shift), 0);
 
-export function createBattleEffectSprites({PIXI, parent, art}) {
+/** True when a cell is original art (the remade shared atlas or its text sets), not the base reference atlas. */
+export function battleEffectCellIsOriginal(cell) { return Boolean(cell?.artSource); }
+
+/**
+ * `retireRom` (UNIQUE_PIXEL_MOVE_VFX_20261108): a cell that only the base
+ * reference atlas has is not drawn; the battle FX layer draws the move's own
+ * kit effect over the same live actor instead, so the native timing and path stay.
+ */
+export function createBattleEffectSprites({PIXI, parent, art, retireRom = false}) {
   const actors = new Map(), missing = new Set(), seenCells = new Set();
   // Element recolour of a bank whose move's name states another element
   // (VFX_FIVE_LAYER_20261101): one shared hue filter per angle, or a multiply tint.
@@ -30,6 +38,7 @@ export function createBattleEffectSprites({PIXI, parent, art}) {
   };
   let recoloured = 0;
   let created = 0, released = 0, disposed = false;
+  const retired = new Set();
   function remove(id) {
     const entry = actors.get(id);
     parent.removeChild(entry.sprite);
@@ -45,6 +54,7 @@ export function createBattleEffectSprites({PIXI, parent, art}) {
         const key = `${effect.bankId}:${effect.cell}`;
         const cell = art.getCell(effect.bankId, effect.cell);
         if (!cell) { missing.add(key); continue; }
+        if (retireRom && !battleEffectCellIsOriginal(cell)) { retired.add(key); continue; }
         live.add(effect.id); seenCells.add(key);
         let entry = actors.get(effect.id);
         if (!entry) {
@@ -69,7 +79,7 @@ export function createBattleEffectSprites({PIXI, parent, art}) {
       }
       for (const id of actors.keys()) if (!live.has(id)) remove(id);
     },
-    getDiagnostics:() => ({assetId:art.assetId, active:actors.size, created, released, recoloured,
+    getDiagnostics:() => ({assetId:art.assetId, active:actors.size, created, released, recoloured, retireRom, retiredCells:[...retired],
       visible:[...actors.values()].filter(e=>e.sprite.visible).length,
       missingCells:[...missing], seenCells:[...seenCells], sprites:[...actors.values()].map(e => ({...e.sample}))}),
     dispose() {

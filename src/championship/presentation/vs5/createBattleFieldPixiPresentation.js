@@ -62,6 +62,8 @@ import {createBm03GroundShadows} from '../bm03GroundShadows.js';
 import {createBattleFxCamera,clampBattleCameraToMap} from '../battleFx/battleFxCamera.js';
 import {createBattleFxEventTracker} from '../battleFx/battleFxEvents.js';
 import {createBattleFxLayer} from '../battleFx/battleFxLayer.js';
+import {createRemadeEffectArt} from '../vfx/remadeEffectCells.js';
+import {createBattleHitFeel} from '../battleFx/battleHitFeel.js';
 import {createBattleBurstShell} from './battleBurstShell.js';
 import {GACHA_BLOODLINES} from '../../gacha/cyberGacha.js';
 
@@ -270,11 +272,17 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   }
   // Optional art foreground (e.g. palm canopies) draws over the fighters.
   if (fieldArt?.foregroundObject) world.addChildAt(fieldArt.foregroundObject, world.getChildIndex(fxFront));
-  const effectSprites = effectArt ? createBattleEffectSprites({PIXI:stage.PIXI, parent:actorLayer, art:effectArt}) : null;
-  const fxLayer = dynamicFx ? createBattleFxLayer({PIXI:stage.PIXI, worldBack:fxBack, worldFront:fxFront, screen:fxScreen,
+  // UNIQUE_PIXEL_MOVE_VFX_20261108: cells only the reference atlas has come back
+  // remade in the kit's pixel style, played by the native pool where and when the old ones were.
+  const shownArt = dynamicFx && effectArt ? createRemadeEffectArt({PIXI:stage.PIXI, base:effectArt}) : effectArt;
+  // Hit feel (UNIQUE_PIXEL_MOVE_VFX_20261108): short screen-sized filters on the camera for heavy hits, criticals and signature releases.
+  const hitFeel = dynamicFx ? createBattleHitFeel({PIXI:stage.PIXI, target:world, screen:() => lastViewport, quality:currentQualityTier(), reducedMotion}) : null;
+  const fxLayer = dynamicFx ? createBattleFxLayer({PIXI:stage.PIXI, worldBack:fxBack, worldFront:fxFront, screen:fxScreen, hitFeel,
     quality:currentQualityTier(), reducedMotion, responsiveLayout, flashScale:currentFlashScale(),
     describeMove:fx?.describeMove, nameOfSlot:fx?.nameOfSlot, moveNameOf:fx?.moveNameOf, text:fx?.text, juicy,
-    resolveMove:fx?.resolveMove, effectArt}) : null;
+    resolveMove:fx?.resolveMove, effectArt:shownArt}) : null;
+  // A reference cell that could not be remade retires; the FX layer's kit then draws it on its actor.
+  const effectSprites = shownArt ? createBattleEffectSprites({PIXI:stage.PIXI, parent:actorLayer, art:shownArt, retireRom:Boolean(fxLayer)}) : null;
   // A failed FX probe starts from contain-fit art coordinates; the final
   // unconditional map clamp below still cover-fits even without a director.
   responsiveLayout = responsiveLayout && Boolean(fxLayer);
@@ -606,6 +614,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
         opponentsOf:slot => view.combatants.filter(c => c.present && !c.down && c.team !== view.combatants[slot]?.team).map(c => c.slot),
         camera:{...camera, director}};
       fxLayer.update(view, fxContext, dtMs, events);
+      hitFeel?.update(dtMs);
       for (const event of events) fx?.onEvent?.(event);
     }
     // During a juicy hit-stop the move's own effect cells hold their frame too.
@@ -772,6 +781,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       if (scene.parent) scene.parent.removeChild(scene);
       effectSprites?.dispose();
       fxLayer?.dispose();
+      if (shownArt !== effectArt) shownArt?.releaseRemade?.();
+      hitFeel?.dispose();
       burstShell.dispose();
       if (debugHook && globalThis.__championshipBattleDiagnostics) delete globalThis.__championshipBattleDiagnostics;
       if (debugHook && globalThis.__championshipBattleState) delete globalThis.__championshipBattleState;

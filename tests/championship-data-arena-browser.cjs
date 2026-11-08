@@ -62,6 +62,10 @@ function raisingGameplay(text) {
   const home = JSON.parse(value.raisingHome);
   delete home.revision;
   value.raisingHome = home;
+  // The ranch discovery clock follows wall time while any screen is open; its
+  // finds (sequence, pending, collected) still have to match.
+  const discoveries = value.raising?.nativeHome?.discoveries;
+  if (discoveries) { delete discoveries.lastAt; delete discoveries.carryMs; }
   return value;
 }
 /** LOGIN as a player does (the shared helper's networkidle wait is unreliable while title media streams). */
@@ -420,6 +424,13 @@ async function autopilotMatch(page, { prefix, maxSeconds = 520, shotsOn = true }
     const saveAfter = await page.evaluate((key) => localStorage.getItem(key), SAVE_KEY);
     const arenaRecord = await page.evaluate((key) => JSON.parse(localStorage.getItem(key) ?? 'null'), ARENA_KEY);
     const beforeGameplay = raisingGameplay(saveBefore), afterGameplay = raisingGameplay(saveAfter);
+    // Owner 2026-10-29 (Cyber Gachapon): wins drop gacha tickets, arena wins included.
+    // Tickets may only rise, and only after an arena win; everything else must match.
+    const ticketsOf = save => save.progression?.cyberGacha?.tickets ?? 0;
+    const ticketGain = ticketsOf(afterGameplay) - ticketsOf(beforeGameplay);
+    report.arenaTicketGain = ticketGain;
+    check('arena tickets come only from arena wins', ticketGain === 0 || (ticketGain > 0 && arenaRecord?.wins > 0), { ticketGain, wins: arenaRecord?.wins });
+    for (const save of [beforeGameplay, afterGameplay]) if (save.progression?.cyberGacha) delete save.progression.cyberGacha.tickets;
     report.raisingSaveChangedFields = Object.keys(beforeGameplay).filter(key => JSON.stringify(beforeGameplay[key]) !== JSON.stringify(afterGameplay[key]));
     check('arena play preserves all raising gameplay, RNG, wallet, inventory and progress across normal background saves', report.raisingSaveChangedFields.length === 0, report.raisingSaveChangedFields);
     check('arena records live under their own key', arenaRecord?.schema === 'dataArena.v1', arenaRecord && { runs: arenaRecord.runs, wins: arenaRecord.wins, best: arenaRecord.bestScore });

@@ -4,11 +4,11 @@ import assert from 'node:assert/strict';
 import { createDataArenaSimulation } from '../src/championship/modes/dataArena/dataArenaSimulation.js';
 import { burstFormsFor } from '../src/championship/contracts/productBurstEvolution.js';
 
-const relay = (partnerId, reserveId = 'relay-species-096') => createDataArenaSimulation({ mode: 'RELAY', partnerId, relayReserveId: reserveId, relayArenaId: 'field_bm02_01', seed: 5 });
+const relay = (partnerId, reserveId = 'relay-species-096', relayBurstPlans = {}) => createDataArenaSimulation({ mode: 'RELAY', partnerId, relayReserveId: reserveId, relayArenaId: 'field_bm02_01', seed: 5, relayBurstPlans });
 
-test('a 成熟期 fighter bursts once into its first one-stage form, is drawn as it, and returns weakened', () => {
-  const sim = relay('relay-species-087');
+test('a 成熟期 fighter bursts once into the form it learned, is drawn as it, and returns weakened', () => {
   const form = burstFormsFor(87).find(f => f.tier === 1).form;
+  const sim = relay('relay-species-087', 'relay-species-096', { 'relay-species-087': { form, tier: 1 } });
   assert.equal(sim.getSnapshot().relay.burst.phase, 'CHARGING');
   assert.equal(sim.getSnapshot().relay.burst.form, form);
   const events = [];
@@ -26,6 +26,11 @@ test('a 成熟期 fighter bursts once into its first one-stage form, is drawn as
   assert.ok(events.some(e => e.type === 'BURST_END' && e.side === 'player'));
   assert.equal(sim.getState().player.burstPartnerId, null);
   assert.equal(events.filter(e => e.type === 'BURST' && e.side === 'player').length, 1, 'once per match');
+});
+
+// Owner 2026-11-08: only a form learned on the ranch; a 成熟期 that learned none (a Dex-only entry) never bursts.
+test('a 成熟期 that learned no form never bursts', () => {
+  assert.equal(relay('relay-species-087').getSnapshot().relay.burst, null);
 });
 
 test('a 成長期 has no burst, and the rival that is a 成熟期 has its own', () => {

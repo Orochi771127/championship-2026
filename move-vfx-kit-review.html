@@ -18,7 +18,9 @@
 </head>
 <body>
   <header>
-    <h1>招式特效套件 v1</h1>
+    <h1>招式特效套件 v2</h1>
+    <select id="move" aria-label="招式"></select>
+    <button id="nextMove" type="button">下一招</button>
     <select id="style" aria-label="展演風格"></select>
     <select id="palette" aria-label="屬性色"></select>
     <button id="ultimate" type="button" aria-pressed="false">必殺</button>
@@ -29,6 +31,9 @@
   <script type="module">
     import * as PIXI from "./node_modules/pixi.js/dist/pixi.mjs";
     import {createMoveVfxKit, moveVfxArchetype, moveVfxArchetypeIsMelee} from "./src/championship/presentation/vfx/moveVfxKit.js";
+    import {moveVfxSignature} from "./src/championship/presentation/vfx/moveVfxSignatures.js";
+    import {BATTLE_MOVE_NAMES} from "./src/championship/text/battleMoveNames.js";
+    import table from "./src/data/championship/move-vfx-signatures.r1.json" with {type: "json"};
 
     // Each style with the element colour a typical move of it carries.
     const STYLES = [["fireball", "fire", "火球"], ["flame", "fire", "火焰"], ["missile", "metal", "飛彈"], ["gatling", "metal", "機槍"],
@@ -43,6 +48,13 @@
     const PALETTES = ["fire", "water", "ice", "light", "dark", "thunder", "nature", "metal", "earth", "toxic", "psychic", "wind", "neutral"];
     const params = new URLSearchParams(location.search);
     const $ = id => document.getElementById(id);
+    // Every move by its signature (UNIQUE_PIXEL_MOVE_VFX_20261108); "" plays the style menu instead.
+    const TIER = {basic: "普攻", skill: "技能", ultimate: "必殺", support: "輔助"};
+    const MOVES = table.moves.map(([key]) => moveVfxSignature(key)).filter(s => s.tier !== "support");
+    $("move").append(new Option("（依風格）", ""));
+    for (const s of MOVES) $("move").append(new Option(`${BATTLE_MOVE_NAMES[s.key]?.[0] ?? s.key}｜${TIER[s.tier]}｜${s.archetype}`, String(s.key)));
+    if (params.get("move")) $("move").value = params.get("move");
+    $("nextMove").onclick = () => { const i = $("move").selectedIndex; $("move").selectedIndex = i + 1 < $("move").options.length ? i + 1 : 1; next = time + 150; };
     for (const [key, , label] of STYLES) $("style").append(new Option(`${label}（${key}）`, key));
     $("palette").append(new Option("依風格", ""));
     for (const key of PALETTES) $("palette").append(new Option(key, key));
@@ -64,7 +76,7 @@
     drawField(); app.renderer.on("resize", drawField);
     const groundLayer = new PIXI.Container(), actorLayer = new PIXI.Container(), front = new PIXI.Container();
     app.stage.addChild(field, groundLayer, actorLayer, front);
-    const kit = createMoveVfxKit({PIXI, front, ground: groundLayer, quality: params.get("quality") ?? "balanced"});
+    const kit = createMoveVfxKit({PIXI, front, ground: groundLayer, quality: params.get("quality") ?? "balanced", pixel: params.get("pixel") !== "0"});
     // Two stand-ins: a shadow and a body, so the shots have somewhere to go.
     const actor = tint => { const g = new PIXI.Graphics(); g.ellipse(0, 0, 26, 9).fill({color: 0x000000, alpha: 0.3}); g.roundRect(-16, -48, 32, 44, 12).fill(tint); actorLayer.addChild(g); return g; };
     const caster = actor(0x6fd0ff), target = actor(0xff8a7a);
@@ -72,10 +84,13 @@
     const shots = [];
     let time = 0, next = 400, round = 0;
     const look = () => {
+      const raw = $("move").value, signature = raw ? moveVfxSignature(/^\d+$/.test(raw) ? Number(raw) : raw) : null;
+      if (signature) return {style: signature.key, archetype: signature.archetype, paletteKey: $("palette").value || signature.paletteKey, signature};
       const entry = STYLES.find(([key]) => key === $("style").value) ?? STYLES[0];
       const archetype = entry[0].startsWith("@") ? entry[0].slice(1) : moveVfxArchetype(entry[0]);
-      return {style: entry[0], archetype, paletteKey: $("palette").value || entry[1]};
+      return {style: entry[0], archetype, paletteKey: $("palette").value || entry[1], signature: null};
     };
+    const ultimateNow = () => look().signature ? look().signature.tier === "ultimate" : state.ultimate;
     function place() {
       // Each round fires a new direction, so a shot's turn is visible.
       const w = app.screen.width, h = app.screen.height, a = round * 2.39996;
@@ -84,51 +99,53 @@
       target.position.set(cx - Math.cos(a) * r * 0.9, cy - Math.sin(a) * r * 0.7);
     }
     function fire() {
-      const {archetype, paletteKey} = look();
+      const {archetype, paletteKey, signature} = look(), ultimate = ultimateNow();
       place(); round++;
       const hand = {x: caster.x, y: caster.y - 30}, hit = {x: target.x, y: target.y - 26};
       const angle = Math.atan2(hit.y - hand.y, hit.x - hand.x);
-      kit.charge({x: hand.x, y: hand.y, paletteKey, size: state.ultimate ? 44 : 32, ms: state.ultimate ? 520 : 320});
-      const after = state.ultimate ? 520 : 320;
+      kit.charge({x: hand.x, y: hand.y, paletteKey, size: ultimate ? 44 : 32, ms: ultimate ? 520 : 320, signature});
+      const after = ultimate ? 520 : 320;
       setTimeout(() => {
         if (moveVfxArchetypeIsMelee(archetype)) {
-          kit.melee({x: hand.x, y: hand.y, angle, paletteKey, archetype});
-          setTimeout(() => land(archetype, paletteKey, hit, angle), 120);
+          kit.melee({x: hand.x, y: hand.y, angle, paletteKey, archetype, signature});
+          setTimeout(() => land(archetype, paletteKey, hit, angle, signature, ultimate), 120 + 85 * ((signature?.combo ?? 1) - 1));
           return;
         }
-        kit.launch({x: hand.x, y: hand.y, angle, paletteKey, archetype});
-        if (archetype === "lance" && state.ultimate) {
+        kit.launch({x: hand.x, y: hand.y, angle, paletteKey, archetype, signature});
+        if (archetype === "lance" && ultimate) {
           kit.beam({x0: hand.x, y0: hand.y, x1: hit.x, y1: hit.y, paletteKey, ms: 520, width: 30});
-          setTimeout(() => land(archetype, paletteKey, hit, angle), 360);
+          setTimeout(() => land(archetype, paletteKey, hit, angle, signature, ultimate), 360);
           return;
         }
-        const shot = {x: hand.x, y: hand.y, vx: Math.cos(angle) * 560, vy: Math.sin(angle) * 560, alive: true, archetype, paletteKey, hit, angle};
-        shot.handle = kit.projectile({follow: () => shot.alive ? shot : null, paletteKey, archetype, size: state.ultimate ? 38 : 30});
+        const shot = {x: hand.x, y: hand.y, vx: Math.cos(angle) * 560, vy: Math.sin(angle) * 560, alive: true, archetype, paletteKey, hit, angle, signature, ultimate};
+        shot.handle = kit.projectile({follow: () => shot.alive ? shot : null, paletteKey, archetype, size: ultimate ? 38 : 30, signature});
         shots.push(shot);
       }, after);
     }
-    function land(archetype, paletteKey, hit, angle) {
-      const args = {x: hit.x, y: hit.y, groundY: target.y, angle, paletteKey, archetype};
-      if (state.ultimate) kit.signature(args); else kit.impact({...args, heavy: round % 3 === 0});
+    function land(archetype, paletteKey, hit, angle, signature = null, ultimate = state.ultimate) {
+      const args = {x: hit.x, y: hit.y, groundY: target.y, angle, paletteKey, archetype, signature};
+      if (ultimate) kit.signature(args); else kit.impact({...args, heavy: round % 3 === 0});
     }
     app.ticker.add(ticker => {
       const dt = ticker.deltaMS; time += dt;
       for (const shot of shots) {
         if (!shot.alive) continue;
         shot.x += shot.vx * dt / 1000; shot.y += shot.vy * dt / 1000;
-        if ((shot.hit.x - shot.x) * shot.vx + (shot.hit.y - shot.y) * shot.vy <= 0) { shot.alive = false; land(shot.archetype, shot.paletteKey, shot.hit, shot.angle); }
+        if ((shot.hit.x - shot.x) * shot.vx + (shot.hit.y - shot.y) * shot.vy <= 0) { shot.alive = false; land(shot.archetype, shot.paletteKey, shot.hit, shot.angle, shot.signature, shot.ultimate); }
       }
       for (let i = shots.length - 1; i >= 0; i--) if (!shots[i].alive) shots.splice(i, 1);
       kit.update(dt);
       if (state.auto && time >= next) { next = time + 1900; fire(); }
       const d = kit.getDiagnostics();
-      $("evidence").textContent = `${look().style} → ${look().archetype} · ${look().paletteKey} · live ${d.live} · sheets ${d.sheets} · fps ${Math.round(app.ticker.FPS)}`;
+      const s = look().signature;
+      const own = s ? ` · ${s.tier} ${s.melee ? `combo ${s.combo} ${s.swing}` : `volley ${s.volley} ${s.path}`} · ×${s.scale} · ${s.trail} · ${s.burst} · sigil ${s.sigil.toString(16)}` : "";
+      $("evidence").textContent = `${look().style} → ${look().archetype} · ${look().paletteKey}${own} · live ${d.live} · sheets ${d.sheets} · fps ${Math.round(app.ticker.FPS)}`;
     });
     $("auto").onclick = () => { state.auto = !state.auto; $("auto").setAttribute("aria-pressed", String(state.auto)); };
     $("ultimate").onclick = () => { state.ultimate = !state.ultimate; $("ultimate").setAttribute("aria-pressed", String(state.ultimate)); };
     app.canvas.addEventListener("pointerdown", () => fire());
-    for (const id of ["style", "palette"]) $(id).onchange = () => { next = time + 200; };
-    window.__moveVfxKit = {kit, fire, state, look};
+    for (const id of ["move", "style", "palette"]) $(id).onchange = () => { next = time + 200; };
+    window.__moveVfxKit = {kit, fire, state, look, app};
   </script>
 </body>
 </html>

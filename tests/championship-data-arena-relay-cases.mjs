@@ -160,13 +160,13 @@ test('zone targeting cannot place an attack beyond cover or spend TP on a blocke
   assert.equal(p.energy,before);assert.equal(p.cast,null);
 });
 
-test('3v3 direct reserve tag-in shockwave, perfect switch, manual burst fallback and combo tracking work',()=>{
+test('3v3 direct reserve tag-in shockwave, perfect switch, no burst without a learned form and combo tracking work',()=>{
   const sim=createDataArenaSimulation({mode:'RELAY',partnerId:'relay-species-037',relayReserveId:'relay-species-054',relayThirdId:'relay-species-034',relayManualBurst:true,seed:19});
   run(sim,2.1);
   const s=sim.getState(),p=s.player,r=s.rivals[0];
   assert.equal(s.relay.team.length,3);
-  // Every member has a burst state (manual burst fallback even for species without a ranch plan).
-  assert.ok(s.relay.team.every(m=>m.burst&&m.burst.form>0));
+  // Owner 2026-11-08: no ranch plan, no burst -- there is no generic fallback form.
+  assert.ok(s.relay.team.every(m=>m.burst===null));
   // Place rival right beside player and add a hostile telegraph on player to trigger Perfect Switch + Tag-In Shockwave.
   r.active=true;r.root=5;r.invulnerable=0;r.x=p.x+60;r.y=p.y;
   const rHpBefore=r.hp;
@@ -182,4 +182,27 @@ test('3v3 direct reserve tag-in shockwave, perfect switch, manual burst fallback
   assert.ok(p.energy>=65,'Perfect switch restores +25 TP');
   assert.ok(r.hp<rHpBefore,'Tag-in shockwave damages nearby rival');
   assert.ok(p.tagShield>1.0,'Tag-in grants 1.2s damage reduction shield');
+});
+
+test('a relay rival throws its species basic attack when the player is in reach (Owner 2026-11-04)',()=>{
+  const sim=createDataArenaSimulation({mode:'RELAY',partnerId:'relay-species-037',relayReserveId:'relay-species-054',seed:7});
+  run(sim,2.1);
+  const rival=sim.getState().rivals.find(r=>r.active);
+  assert.equal(rival.basic,'relaySweep');
+  const casts={};
+  for(let i=0;i<60*30;i++){const st=sim.getState(),r=st.rivals.find(q=>q.active&&q.hp>0);if(r&&i%30===0&&!r.cast){r.x=st.player.x+70;r.y=st.player.y;}
+    sim.step({});for(const e of sim.drainEvents())if(e.type==='CAST'&&e.team==='rival')casts[e.moveId]=(casts[e.moveId]||0)+1;}
+  assert.ok((casts.relaySweep??0)>0,JSON.stringify(casts));
+});
+
+test('a pointed touch cast goes where it was pointed, each time',()=>{
+  const sim=createDataArenaSimulation({mode:'RELAY',partnerId:'relay-species-037',relayReserveId:'relay-species-054',seed:7});
+  run(sim,2.2);const p=sim.getState().player;p.energy=100;
+  sim.step({cast:0,autoAim:false,aimX:p.x,aimY:p.y-300});
+  assert.equal(Math.round(sim.getState().player.cast.angle*180/Math.PI),-90);
+  run(sim,1.5);p.energy=100;sim.step({cast:1,autoAim:false,aimX:p.x-300,aimY:p.y});
+  run(sim,2);
+  const angles=sim.drainEvents().filter(e=>e.type==='CAST'&&e.team==='player').map(e=>Math.round(Math.abs(e.angle)*180/Math.PI));
+  assert.ok(angles.includes(180),JSON.stringify(angles));
+  assert.equal(sim.moveInfo('relaySweep').type,'NOVA');
 });

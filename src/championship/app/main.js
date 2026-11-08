@@ -220,7 +220,7 @@ const loadBattleRuntime = async () => {
   // Cyber Gachapon: an owned partner's metal bloodline badge rides its battle plate.
   return options => create({ aiPolicy: BATTLE_AI_POLICY, taxonomyPolicy: BATTLE_TAXONOMY_POLICY, getBloodline: id => app?.getPartnerBloodline?.(id) ?? null,
     burstPolicy: options.mode === 3 ? "OFF" : BATTLE_BURST_POLICY,
-    // Awakening raising (2026-11-02): the player calls a partner's burst (with a six-second automatic fallback).
+    // Awakening raising (2026-11-02): the player calls a partner's burst; Owner 2026-11-08: only on the press.
     burstManual: true,
     burstPlans: [...team(options.playerIndividuals), ...team(options.opponentIndividuals)], ...options });
 };
