@@ -229,7 +229,7 @@ export function createBattlePresentationSource({ session, step, arenaIndex = 0, 
       ...(burst ? {burst:{phase:burst.phase,gauge:burst.gauge,gaugeMax:burst.gaugeMax,tier:burst.tier,form:burst.form,base:burst.base,
         wrapFrame:burst.wrapFrame,wrapFrames:burst.wrapFrames,phaseFrame:burst.phaseFrame,burstFrames:burst.burstFrames,weakFrames:burst.weakFrames,
         // Awakening raising (2026-11-02): the player's call window, the opponent warning, the tier-2 chain.
-        via:burst.via??null,manual:burst.manual===true,readyFrame:burst.readyFrame??null,readyFrames:burst.readyFrames??null,warn:burst.warn===true,
+        via:burst.via??null,manual:burst.manual===true,readyFrame:burst.readyFrame??null,warn:burst.warn===true,
         bloodline:burst.bloodline??null}} : {}),
       ...(native ? {stand:native.stand,nativeMotion:native.motion,nativeAnimation:displayed?null:native.nativeAnimation} : {}),
       animationRequest:focusRequest ?? native?.animationRequest ?? {...projected.animationRequest,

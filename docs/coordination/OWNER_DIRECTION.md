@@ -1,5 +1,19 @@
 # Championship Owner Direction
 
+<!-- record-id: BURST_TRUE_FORM_20261108 -->
+## 2026-11-08 — Burst evolution goes only on the player's press and the burst form fights as itself
+
+The Owner reports that in both the auto battle and the Data Arena manual battle the partner bursts by itself, and asks that it always wait for the player's press; after the burst, its battle moves, element and stats should change with the form instead of only its appearance. Asked to decide the details, the session chose the rules below and the Owner approved them (「照你建議的方式去調整」).
+
+OWNER_APPROVED_ADAPTATION over STAGE_REDESIGN_BURST_20261102; parity runs (burst policy OFF) are unchanged.
+
+- Trigger: the player's partners wait READY until pressed or knocked out. The six-second fallback and the below-30 % automatic burst are removed in the auto battle and in RELAY. The AI side still bursts when its gauge fills.
+- True form, auto battle: between actions the combatant becomes the form species: its move list, prelude and movement, its native animation graph and cell boxes, and its taxonomy element. Faction resonance stays the team that started. Its maximum HP follows the form's native HP curve over the partner's own maximum (`burstHpRatio`, capped at 3×, current share kept). Level-based stats stay the individual's. It returns to its 成熟期 the same way after the burst, and the saved HP is always in the partner's own scale.
+- True form, RELAY: the active fighter takes the form's relay role (kit, basic attack, element and speed) and its species and HP curve. It keeps its seat, partner power and swimming ability, and is itself again when the burst ends or it is switched out. A rival changes species, element and HP; its kit stays, because the rival AI reads it.
+- Balance: damage dealt keeps the tier multiplier (×1.4 / ×1.7). Damage taken is no longer divided, because the form's own HP now carries its toughness. Weakness after the burst is unchanged. A former 覺醒體/究極體 preset fights as its 成熟期 species with the lower HP and reaches its preset strength only after bursting.
+
+Verified by the unit cases in `tests/championship-stage-redesign-battle-burst-cases.mjs` and `tests/championship-awakening-raising-cases.mjs`, including a real auto-battle match and a RELAY match. Push and deployment are not authorized by this record.
+
 <!-- record-id: CHARACTER_ASSET_REPOSITORY_MIGRATION_20261106 -->
 ## 2026-11-06 — Inventory all character stages and move animation delivery out of the game-site payload
 

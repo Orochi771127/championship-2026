@@ -31,10 +31,14 @@ export function createBattleTaxonomyAdaptation({policy = BATTLE_TAXONOMY_ORIGINA
   speciesBySlot.forEach((species, slot) => { if (species !== null && species !== undefined) { const t = teamOf(slot); teams.set(t, [...(teams.get(t) ?? []), species]); } });
   const resonanceOf = new Map([...teams].map(([team, list]) => [team, on ? factionResonance([...list, ...(companions[team] ?? [])].map(s => speciesTaxonomy(s)?.faction)) : []]));
   const has = (slot, key) => resonanceOf.get(teamOf(slot))?.includes(key) ?? false;
-  const elementOf = slot => speciesTaxonomy(speciesBySlot[slot])?.element ?? null;
+  // A burst form fights with its own element (Owner 2026-11-08); faction resonance stays the team that started.
+  const current = [...speciesBySlot];
+  const elementOf = slot => speciesTaxonomy(current[slot])?.element ?? null;
   return Object.freeze({
     policy,
     resonance(team) { return resonanceOf.get(team) ?? []; },
+    /** The species a slot now fights as (its element for matchups). */
+    setSpecies(slot, species) { current[slot] = species; },
     /** Black Iron teams open with 120% TP. */
     applyStart(slots) {
       if (!on) return;

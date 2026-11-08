@@ -34,7 +34,7 @@ import {
 } from "../battle/battleSession.js";
 import { BATTLE_STATE_COOLDOWN_GATE } from "../battle/battleStateMachine.js";
 import { BATTLE_RNG_TRACED_MASTER_SEED, createChannelRng } from "../battle/battleRngChannel.js";
-import { getBattleCatalogRecord, listMoveRecordsForCombatant } from "../battle/battleCatalogs.js";
+import { getBattleCatalogRecord, listMoveRecordsForSpecies } from "../battle/battleCatalogs.js";
 import { damageInputsFor } from "../battle/battleDamageInputs.js";
 import { resolveBattleDamage } from "../battle/battleDamageResolver.js";
 import {
@@ -65,7 +65,7 @@ import {createBattleSoundEvents} from '../battle/battleSoundEvents.js';
 import {beginBattlePresentationEngagement,endBattlePresentationEngagement,writeBattleHitTiming,advanceBattlePresentationTiming} from '../battle/battlePresentationHost.js';
 import { createBattleHitRuntime } from '../battle/battleHitRuntime.js';
 import {createBattleBurst,BATTLE_BURST_OFF} from '../battle/battleBurst.js';
-import {burstBasesFor,burstFormTier,burstMultiplier} from '../contracts/productBurstEvolution.js';
+import {burstBasesFor,burstFormTier,burstHpRatio,burstMultiplier} from '../contracts/productBurstEvolution.js';
 import {createBattleNormalRuntime} from '../battle/battleNormalRuntime.js';
 import {normalBattleStands,normalBattleLaunchGuard} from '../battle/battleNormalFlow.js';
 import { battleHitEligible } from '../battle/battleHitState.js';
@@ -434,6 +434,41 @@ export function createBattleRuntime(options = {}) {
   let builtRoster = null;
   // Per slot: the record index of its costliest move, the taxonomy adaptation's signature move.
   let signatureMoves = [];
+  const signatureMoveOf=speciesId=>listMoveRecordsForSpecies(speciesId).filter(m=>m.actionCost>0)
+    .sort((x,y)=>y.actionCost-x.actionCost)[0]?.recordIndex??null;
+  // Burst true form (OWNER_APPROVED_ADAPTATION 2026-11-08, BURST_TRUE_FORM_20261108). A burst combatant IS its
+  // form: the move ladder, the prelude, movement and element read session speciesId, the native actor carries
+  // the form's animation graph and cell boxes, and its maximum follows the form's HP curve (burstHpRatio, the
+  // current share kept). builtForm[slot] is the species and maximum it was built with; level-based stats stay
+  // the individual's own. Only BURST_V1 plans ever change species, so parity runs are untouched.
+  let builtForm=[];
+  function maxHpAs(slot,speciesId){
+    const built=builtForm[slot],ref=burst.planned(slot)?.base??built.speciesId;
+    return Math.max(1,Math.round(built.maxHp*burstHpRatio(ref,speciesId)/burstHpRatio(ref,built.speciesId)));
+  }
+  function becomeSpecies(slot,speciesId){
+    const c=session.slots[slot];
+    if(!c||c.speciesId===speciesId)return;
+    const maxHp=maxHpAs(slot,speciesId);
+    c.currentHp=c.currentHp>0?Math.min(maxHp,Math.max(1,Math.round(c.currentHp*maxHp/c.maxHp))):0;
+    c.maxHp=maxHp;c.speciesId=speciesId;
+    taxonomy.setSpecies?.(slot,speciesId);
+    if(signatureMoves.length)signatureMoves[slot]=signatureMoveOf(speciesId);
+    if(nativeActors){nativeActors.swapSpecies(slot,speciesId);nativeActors.syncCombatants();}
+  }
+  // Between actions only: waiting at the cooldown gate, nothing in flight, standing (not hit, down or recovering).
+  const BURST_SWAP_STANDING=new Set([0,1,8,9,10,11,12]);
+  const swappable=c=>c.currentHp>0&&c.state===BATTLE_STATE_COOLDOWN_GATE&&!c.field94&&BURST_SWAP_STANDING.has(c.field17C);
+  function settleBurstSpecies(liveSession){
+    liveSession.slots.forEach((c,slot)=>{
+      if(!c||!burst.planned(slot))return;
+      const target=burst.species(slot)??builtForm[slot].speciesId;
+      if(c.speciesId!==target&&swappable(c))becomeSpecies(slot,target);
+    });
+  }
+  // HP in the scale the slot was built with (the saved individual never carries a burst form's maximum).
+  const builtScaleHp=slot=>{const c=session.slots[slot],built=builtForm[slot];
+    return !c||!built||c.maxHp===built.maxHp||c.currentHp<=0?c?.currentHp??0:Math.min(built.maxHp,Math.max(1,Math.round(c.currentHp*built.maxHp/c.maxHp)));};
   let chosen = null;
   let source = null;
   let roster = null;
@@ -502,7 +537,7 @@ export function createBattleRuntime(options = {}) {
     nativeActors?.advance();
     effectActors?.advance();
     if(!liveSession.ended&&taxonomy.regen(liveSession.frame,liveSession.slots).length)nativeActors?.syncCombatants();
-    if(!liveSession.ended)burst.step(liveSession.frame,liveSession.slots);
+    if(!liveSession.ended){burst.step(liveSession.frame,liveSession.slots);settleBurstSpecies(liveSession);}
     if(arenaHazards&&!liveSession.ended){
       // After the native step, outside AI dispatch: read positions, write HP only.
       const changed=arenaHazards.step({slots:liveSession.slots,positionOf:s=>nativeActors.position(s),
@@ -666,7 +701,7 @@ export function createBattleRuntime(options = {}) {
         ...(playerIndividuals&&session.ended&&![3,4].includes(mode)?{individualResults:roster.slice(0,chosen.practice?6:3).flatMap((creature,i)=>creature?[{
           instanceId:creature.instanceId,nativeProfile:settleOwnedBattleIndividual(creature.nativeProfile,{
             // Black Iron's opening TP may exceed the maximum during the match; the saved TP never does.
-            currentHp:session.slots[i].currentHp,metricLimit:Math.min(session.slots[i].metricLimit,session.slots[i].metricBase),
+            currentHp:builtScaleHp(i),metricLimit:Math.min(session.slots[i].metricLimit,session.slots[i].metricBase),
             verdict:session.verdict,mode,teamIndex:Math.floor(i/3),rewardPercent:taxonomy.rewardPercent(Math.floor(i/3)),...(chosen.championship?{event:chosen.recordIndex,cursor:chosen.cursor+1,totalRounds:chosen.totalRounds}:{})})}]:[])}:{}),
         ...(taxonomy.rewardPercent(localTeamIndex)!==100?{rewardPercent:taxonomy.rewardPercent(localTeamIndex)}:{}),
         // Burst forms the local team took this match (encyclopedia registration).
@@ -769,10 +804,6 @@ export function createBattleRuntime(options = {}) {
           return run?.started && !run.active && !run.error ? {hits:[],terminal:true} : null;
         }
       });
-      // Taxonomy adaptation (Owner 2026-10-29): both teams, before the actors copy the opening stats.
-      taxonomy=createBattleTaxonomyAdaptation({policy:taxonomyPolicy,speciesBySlot:session.slots.map(c=>c?.speciesId??null),teamOf:battleTeamOfSlot});
-      signatureMoves=session.slots.map(c=>{if(!c)return null;const costliest=listMoveRecordsForCombatant(c).filter(m=>m.actionCost>0).sort((x,y)=>y.actionCost-x.actionCost)[0];return costliest?.recordIndex??null;});
-      taxonomy.applyStart(session.slots);
       // Owned partners bring their plan; a preset that was a former 覺醒體/究極體 starts as the 成熟期 that
       // bursts into it, at the form's strength.
       burst=createBattleBurst({policy:burstPolicy,plans:session.slots.map((c,slot)=>{
@@ -782,11 +813,24 @@ export function createBattleRuntime(options = {}) {
         const tier=burstFormTier(c.speciesId),bases=burstBasesFor(c.speciesId);
         return tier&&bases.length?{form:c.speciesId,tier,baseline:burstMultiplier(tier),base:bases[0]}:null;
       })});
+      // Burst true form (Owner 2026-11-08): each slot remembers the species and maximum it was built with; a
+      // preset's 成熟期 becomes that species (moves, element, HP) before anything copies the opening stats.
+      builtForm=session.slots.map(c=>c?{speciesId:c.speciesId,maxHp:c.maxHp}:null);
+      session.slots.forEach((c,slot)=>{const target=burst.species(slot);if(c&&target!==null)becomeSpecies(slot,target);});
+      // Taxonomy adaptation (Owner 2026-10-29): both teams, before the actors copy the opening stats.
+      taxonomy=createBattleTaxonomyAdaptation({policy:taxonomyPolicy,speciesBySlot:session.slots.map(c=>c?.speciesId??null),teamOf:battleTeamOfSlot});
+      signatureMoves=session.slots.map(c=>c?signatureMoveOf(c.speciesId):null);
+      taxonomy.applyStart(session.slots);
       nativeActors=createBattleNativeActors({slots:session.slots,creatures:roster,stands:normalBattleStands(session.slots)});
       soundEvents.attach(nativeActors.memory);
       // Use the same species move list as current normal selection. Appended
-      // resident moves remain outside this roster adapter until connected.
-      const demand=battleEffectBankDemand(session.slots.map(c=>c?listMoveRecordsForCombatant(c):[]));
+      // resident moves remain outside this roster adapter until connected. A slot that may burst (or revert) also
+      // brings the moves of every species it can become, so their effect banks are loaded from the start.
+      const demand=battleEffectBankDemand(session.slots.map((c,slot)=>{
+        if(!c)return [];
+        const plan=burst.planned(slot),forms=[builtForm[slot].speciesId,c.speciesId,...(plan?[plan.form,plan.base]:[])];
+        return [...new Set(forms.filter(Number.isInteger))].flatMap(id=>listMoveRecordsForSpecies(id));
+      }));
       effectActors=createBattleEffectActors({memory:nativeActors.memory,worldAddress:nativeActors.worldAddress,
         loadedBankIds:demand.flatMap((n,id)=>id&&n?[id]:[])});
       demand.forEach((n,id)=>nativeActors.memory.writeU16(effectActors.base,4+id*2,n));

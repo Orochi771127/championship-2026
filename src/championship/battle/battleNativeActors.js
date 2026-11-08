@@ -47,13 +47,28 @@ export function createBattleNativeActors({ slots, stands, creatures=[] }) {
     // with the exact cell-box natives, never derived from trimmed atlas size.
     entry.sample=sample;
   }
+  function entryFor(slot,entity,profile,standEvidence){
+    return {slot,entity,standEvidence,sequences:profile.sequences.map(s=>({...s,
+      frames:s.frames.map(f=>({...f,texture:`${entity}/main/cell_${String(f.cell).padStart(3,'0')}`}))}))};
+  }
+  function writeCells(actor,profile){
+    const holder=actor+0x1000,ref=actor+0x1010,bank=actor+0x1020,data=actor+0x2000;
+    w(actor,0xc8,holder);w(holder,4,ref);w(ref,0,bank);
+    w(actor,0x70,actor+0x10f0);w(actor+0x10f0,0,actor+0x1100);
+    // Gameplay reads the NCER CELL box, not the visible-pixel alpha bounds.
+    // Even a transparent animation cell has a valid original collision record.
+    const frames=Object.entries(profile.cells);h(bank,0,frames.length);h(bank,2,1);w(bank,4,data);
+    frames.forEach(([key,bounds])=>{
+      const index=Number(key),[lx,ly,hx,hy]=bounds;
+      [hx,hy,lx,ly].forEach((v,j)=>h(data,index*16+8+j*2,v));
+    });
+  }
   slots.forEach((c,i)=>{
     if (!c) return;
     const wrapper=wrappers[i],actor=wrapper+0x400,entity=BATTLE_SPECIES_ENTITIES[c.speciesId];
     const profile=BATTLE_CHARACTER_PROFILES[entity],geometry=BATTLE_CHARACTER_GEOMETRY[entity];
     if (!profile || !geometry) return;
-    const stand=stands[i], entry={slot:i,entity,standEvidence:stand.evidence,sequences:profile.sequences.map(s=>({...s,
-      frames:s.frames.map(f=>({...f,texture:`${entity}/main/cell_${String(f.cell).padStart(3,'0')}`}))}))};
+    const stand=stands[i], entry=entryFor(i,entity,profile,stand.evidence);
     actors.set(actor,entry);w(wrapper,0,actor-4);w(wrapper,4,actor);w(wrapper,0x2c,wrapper+0x300);
     const stats=wrapper+0x18000;w(wrapper,0x10,stats);w(stats,0,c.speciesId);
     for(const [key,value] of Object.entries(creatures[i]?.stats??{})){
@@ -65,16 +80,7 @@ export function createBattleNativeActors({ slots, stands, creatures=[] }) {
     w(actor,0x6dc,stand.facing===1?1:0);memory.writeU8(actor,0x14,stand.facing===1?0:1);
     memory.writeU8(actor,0x15,31);h(actor,0x18,32767);
     memory.writeU8(actor,0x5b,1);
-    const holder=actor+0x1000,ref=actor+0x1010,bank=actor+0x1020,data=actor+0x2000;
-    w(actor,0xc8,holder);w(holder,4,ref);w(ref,0,bank);
-    w(actor,0x70,actor+0x10f0);w(actor+0x10f0,0,actor+0x1100);
-    // Gameplay reads the NCER CELL box, not the visible-pixel alpha bounds.
-    // Even a transparent animation cell has a valid original collision record.
-    const frames=Object.entries(profile.cells);h(bank,0,frames.length);h(bank,2,1);w(bank,4,data);
-    frames.forEach(([key,bounds])=>{
-      const index=Number(key),[lx,ly,hx,hy]=bounds;
-      [hx,hy,lx,ly].forEach((v,j)=>h(data,index*16+8+j*2,v));
-    });
+    writeCells(actor,profile);
     select(actor,0,0,true);
   });
   const initialRequestCount=requestSerial;
@@ -114,6 +120,19 @@ export function createBattleNativeActors({ slots, stands, creatures=[] }) {
       const p=memory.readU32(address(slot),0x2c),[x,y,z]=[0,4,8].map(o=>memory.readU32(p,o)|0);
       return launchPosition({x,y,z},cellBoxToLaunchCell(b));},
     setFrame(value){frame=value;},
+    // Burst evolution (Owner 2026-11-08, BURST_TRUE_FORM_20261108): an idle combatant becomes another species in
+    // place -- its animation graph, cell boxes and stats +0x00 -- keeping its world point and facing. The runtime
+    // calls this only between actions, so no running sequence loses its frames.
+    swapSpecies(slot,speciesId){
+      const actor=actorOf(slot),old=actors.get(actor),entity=BATTLE_SPECIES_ENTITIES[speciesId];
+      const profile=BATTLE_CHARACTER_PROFILES[entity];
+      if(!old||!profile||!BATTLE_CHARACTER_GEOMETRY[entity])return false;
+      actors.set(actor,entryFor(slot,entity,profile,old.standEvidence));
+      w(memory.readU32(address(slot),0x10),0,speciesId);
+      writeCells(actor,profile);
+      select(actor,0,0,true);
+      return true;
+    },
     advance(onlySlot=null){syncCombatants();for(const [actor,entry] of actors){
       const p=memory.readU32(wrappers[entry.slot],0x2c);
       [0,4,8].forEach(o=>w(actor,0x24+o,memory.readU32(p,o)));

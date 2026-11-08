@@ -166,6 +166,15 @@ function relayLegacyStyle(id) {
   if(/tide|foam|surf|vortex/.test(id))return styles.water;
   return /sun|Light|dawn|relayRay|radiant|halo/.test(id)?styles.light:styles.fire;
 }
+// The form a fighter with no learned or tier-1 burst form takes, by element. One table for the rules and for the
+// art the arena loads (2026-11-08: the screen kept its own table and loaded forms the fighter never became).
+export const RELAY_DEFAULT_BURST_FORM_BY_ELEMENT = Object.freeze({
+  fire: 139, water: 138, frost: 140, ice: 140, nature: 144, light: 145,
+  storm: 143, thunder: 143, wind: 146, earth: 181, shadow: 148, dark: 148,
+  metal: 147, physical: 147, toxic: 144
+});
+export const relayDefaultBurstForm = element => RELAY_DEFAULT_BURST_FORM_BY_ELEMENT[element] ?? 139;
+
 export function relayTeamIds(firstId, reserveId = null, thirdId = null) {
   if (!relayPartner(firstId)) throw new RangeError('RELAY_UNKNOWN_PARTNER');
   const team = [firstId];

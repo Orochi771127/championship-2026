@@ -17,8 +17,9 @@ import {CHAMPIONSHIP_MODERN_SAVE_KEY} from '../src/championship/app/championship
 import {createFullQaSaveText} from '../scripts/lib/championshipFullQaSave.mjs';
 import {createNativeRaisingStarter} from '../src/championship/raising/nativeRaisingStarter.js';
 import {restoreChannelRng} from '../src/championship/battle/battleRngChannel.js';
+import {relayKit} from '../src/championship/modes/dataArena/dataArenaRelay.js';
 import {createDataArenaSimulation} from '../src/championship/modes/dataArena/dataArenaSimulation.js';
-import {createBattleBurst,BATTLE_BURST_V1,BATTLE_BURST_FRAMES,BATTLE_BURST_WRAP_FRAMES,BATTLE_BURST_CHAIN_FRAMES,BATTLE_BURST_MANUAL_FRAMES,
+import {createBattleBurst,BATTLE_BURST_V1,BATTLE_BURST_FRAMES,BATTLE_BURST_WRAP_FRAMES,BATTLE_BURST_CHAIN_FRAMES,
   BATTLE_BURST_WEAK_FRAMES} from '../src/championship/battle/battleBurst.js';
 
 const read = p => JSON.parse(readFileSync(p, 'utf8'));
@@ -265,7 +266,8 @@ const slot = (hp = 100, maxHp = 100) => ({currentHp: hp, maxHp, field28: 50});
 function fill(burst, slots, frame = 1) { burst.onHit({attackerSlot: 0, defenderSlot: 1, damage: 100, defenderMaxHp: 100, defenderHp: 50}); return burst.step(frame, slots); }
 function run(burst, slots, from, frames) { const events = []; for (let f = from; f < from + frames; f++) { if (burst.holding()) events.push(...burst.hold(f)); else events.push(...burst.step(f, slots)); } return events; }
 
-test('battle: a manual plan waits READY for the call, at most six seconds, and goes at once in a pinch', () => {
+// Owner 2026-11-08 (BURST_TRUE_FORM_20261108): the player's burst goes only on the player's press.
+test('battle: a manual plan waits READY for the call, never bursting by itself on a timer or in a pinch', () => {
   const slots = [slot(), slot()];
   let burst = createBattleBurst({policy: BATTLE_BURST_V1, plans: [{form: 137, tier: 1, manual: true}, null]});
   assert.deepEqual(fill(burst, slots).map(e => e.kind), ['READY']);
@@ -275,12 +277,14 @@ test('battle: a manual plan waits READY for the call, at most six seconds, and g
   assert.equal(burst.step(2, slots)[0].kind, 'WRAP', 'the call starts the wrap');
   burst = createBattleBurst({policy: BATTLE_BURST_V1, plans: [{form: 137, tier: 1, manual: true}, null]});
   fill(burst, slots);
-  assert.equal(run(burst, slots, 2, BATTLE_BURST_MANUAL_FRAMES - 2).some(e => e.kind === 'WRAP'), false);
-  assert.equal(run(burst, slots, BATTLE_BURST_MANUAL_FRAMES, 2).some(e => e.kind === 'WRAP'), true, 'six seconds later it bursts by itself');
+  assert.equal(run(burst, slots, 2, 60 * 60).some(e => e.kind === 'WRAP'), false, 'a minute later it still waits');
+  assert.equal(burst.snapshot(0, 3600).phase, 'READY');
   burst = createBattleBurst({policy: BATTLE_BURST_V1, plans: [{form: 137, tier: 1, manual: true}, null]});
   fill(burst, slots);
   slots[0].currentHp = 20;
-  assert.equal(burst.step(3, slots)[0].kind, 'WRAP', 'below 30 % HP it bursts at once');
+  assert.deepEqual(burst.step(3, slots), [], 'below 30 % HP it still waits for the call');
+  slots[0].currentHp = 0;
+  assert.equal(burst.step(4, slots)[0].kind, 'REVERT_DOWN', 'a partner that goes down never bursts');
   const auto = createBattleBurst({policy: BATTLE_BURST_V1, plans: [{form: 137, tier: 1}, null]});
   assert.equal(fill(auto, [slot(), slot()])[0].kind, 'WRAP', 'opponents and headless runs burst at once');
 });
@@ -345,13 +349,30 @@ test('arena relay: a ranch partner bursts into its own form, waits for the call,
   for (let i = 0; i < 60 * 150 && !ready; i++) { sim.step({}); ready = sim.drainEvents().some(e => e.type === 'BURST_READY' && e.side === 'player'); }
   assert.ok(ready, 'the gauge fills and waits for the call');
   assert.equal(sim.getSnapshot().relay.burst.phase, 'READY');
-  assert.ok(sim.getSnapshot().relay.burst.readyLeft > 0);
+  // Owner 2026-11-08: no countdown -- it still waits ten seconds later, even in a pinch.
+  const before = sim.getState().player;
+  const ownKit = [...before.kit.moves], ownMax = before.maxHp, ownSpecies = before.speciesId;
+  for (let i = 0; i < 600; i++) sim.step({});
+  assert.equal(sim.getSnapshot().relay.burst.phase, 'READY');
+  assert.equal(sim.getState().player.formPartnerId, null);
   sim.step({burst: true});
   const burst = sim.drainEvents().find(e => e.type === 'BURST' && e.side === 'player');
   assert.ok(burst, 'the call bursts at once');
   assert.equal(burst.bloodline, 'chronoMetal');
   assert.equal(burst.via, plan.via ?? null, 'a tier-2 form plays through its tier-1 form');
   assert.equal(sim.getSnapshot().relay.burst.phase, 'BURST');
+  // Burst true form (BURST_TRUE_FORM_20261108): it fights as the form, not in its costume.
+  const formId = `relay-species-${String(plan.form).padStart(3, '0')}`, fighter = sim.getState().player;
+  assert.equal(fighter.formPartnerId, formId);
+  assert.equal(fighter.speciesId, `species-${String(plan.form).padStart(3, '0')}`);
+  assert.deepEqual(fighter.kit.moves, relayKit(formId, undefined).moves, 'the form brings its own moves');
+  assert.notDeepEqual(fighter.kit.moves, ownKit);
+  assert.ok(fighter.maxHp > ownMax, 'and its own HP');
+  assert.equal(fighter.partnerId, 'relay-species-087', 'the seat is still the ranch partner');
+  for (let i = 0; i < 60 * 40 && sim.getSnapshot().relay.burst.phase === 'BURST'; i++) sim.step({});
+  const back = sim.getState().player;
+  assert.notEqual(sim.getSnapshot().relay.burst.phase, 'BURST');
+  assert.deepEqual([back.formPartnerId, back.speciesId, back.maxHp, [...back.kit.moves]], [null, ownSpecies, ownMax, ownKit], 'itself again afterwards');
   assert.equal(relay({'relay-species-087': null}).getSnapshot().relay.burst, null, 'a partner that learned no form does not burst');
   assert.equal(relay({}).getSnapshot().relay.burst.form, t1.form, 'a Dex-only entry keeps its first tier-1 form');
 });
