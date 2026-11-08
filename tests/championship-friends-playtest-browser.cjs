@@ -210,8 +210,7 @@ function friendsCaptureSnapshotReady(state){
   &&state.residents.length>0&&state.residents.some(friendsStreamingResident)&&state.residents.every(row=>row.state==='ready'||friendsStreamingResident(row));
 }
 function friendsFieldCaptureReady(state){
- assert.equal(state.overlay?.kind,'canvas','Raw phase capture is not unobstructed field evidence');assert.ok(state.three);assert.equal(friendsCaptureSnapshotReady(state.three),true,'Raw phase capture field must be actually ready');
- return state.three.residents.filter(friendsStreamingResident).map(row=>row.entityId);
+ assert.equal(state.overlay?.kind,'canvas','Raw phase capture is not unobstructed field evidence');assert.ok(state.three);assert.equal(friendsCaptureSnapshotReady(state.three),true,'Raw phase capture field must be actually ready');return true;
 }
 function friendsMakeFieldObservation(){return new Function('selector',`return {overlay:(${ordinaryRanchOverlayState.toString()})(selector),three:(${friendsThreeSnapshot.toString()})()};`);}
 
@@ -294,7 +293,8 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   await boundary('screenshot:'+label,()=>shot(label));row.rawPngRetained=true;write();
   row.after=await boundary('capture-observe-after:'+label,()=>page.evaluate(friendsMakeFieldObservation(),ranchCanvasSelector));write();
   // Preserve raw screenshot before rejecting invalid/covered evidence. Never auto-recapture.
-  const streaming=[...friendsFieldCaptureReady(row.before),...friendsFieldCaptureReady(row.after)];if(streaming.length)row.streamingAtCapture=[...new Set(streaming)];row.validFieldBoundary=true;write();
+  friendsFieldCaptureReady(row.before);friendsFieldCaptureReady(row.after);
+  const streaming=[...new Set([row.before,row.after].flatMap(s=>s.three.residents.filter(friendsStreamingResident).map(r=>r.entityId)))];if(streaming.length)row.streamingAtCapture=streaming;row.validFieldBoundary=true;write();
  };
 
  async function login(){
