@@ -199,8 +199,19 @@ async function friendsToolTransaction(api){
   }catch(error){if(error.name!=='TimeoutError')throw error;const after=await api.observe();left();api.record({kind:'tool-click-timeout',tool:api.tool,observation:after,error:String(error)});assert.ok(friendsRecognizedOverlay(after.overlay),'Unclassified tool timeout remains fatal');}
  }
 }
+// Owner 2026-11-08 (PR #194): residents stream their next animation sequence on demand
+// (#193). One that keeps its visible sprite while that sequence loads is still valid field
+// evidence at the capture instant. Fallbacks, duplicate canvases, errors, a resident without
+// a visible sprite, or any other loading state still fail. Every readiness WAIT stays strict.
+function friendsStreamingResident(row){return row.state==='loading'&&row.loadKind==='animation'&&row.hasVisibleSprite===true;}
+function friendsCaptureSnapshotReady(state){
+ if(friendsThreeSnapshotReady(state))return true;
+ return state.canvasCount===1&&state.loadState==='ready'&&state.visible&&state.width>0&&state.height>0&&Number.isSafeInteger(state.frames)&&state.frames>0
+  &&state.residents.length>0&&state.residents.some(friendsStreamingResident)&&state.residents.every(row=>row.state==='ready'||friendsStreamingResident(row));
+}
 function friendsFieldCaptureReady(state){
- assert.equal(state.overlay?.kind,'canvas','Raw phase capture is not unobstructed field evidence');assert.ok(state.three);assert.equal(friendsThreeSnapshotReady(state.three),true,'Raw phase capture field must be actually ready');return true;
+ assert.equal(state.overlay?.kind,'canvas','Raw phase capture is not unobstructed field evidence');assert.ok(state.three);assert.equal(friendsCaptureSnapshotReady(state.three),true,'Raw phase capture field must be actually ready');
+ return state.three.residents.filter(friendsStreamingResident).map(row=>row.entityId);
 }
 function friendsMakeFieldObservation(){return new Function('selector',`return {overlay:(${ordinaryRanchOverlayState.toString()})(selector),three:(${friendsThreeSnapshot.toString()})()};`);}
 
@@ -283,7 +294,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   await boundary('screenshot:'+label,()=>shot(label));row.rawPngRetained=true;write();
   row.after=await boundary('capture-observe-after:'+label,()=>page.evaluate(friendsMakeFieldObservation(),ranchCanvasSelector));write();
   // Preserve raw screenshot before rejecting invalid/covered evidence. Never auto-recapture.
-  friendsFieldCaptureReady(row.before);friendsFieldCaptureReady(row.after);row.validFieldBoundary=true;write();
+  const streaming=[...friendsFieldCaptureReady(row.before),...friendsFieldCaptureReady(row.after)];if(streaming.length)row.streamingAtCapture=[...new Set(streaming)];row.validFieldBoundary=true;write();
  };
 
  async function login(){
