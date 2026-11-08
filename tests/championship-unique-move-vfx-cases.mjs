@@ -134,6 +134,8 @@ test("AI battle: reference-atlas cells retire and the kit draws over the same li
   assert.match(scene, /retireRom:Boolean\(fxLayer\)/, "cells retire only where the kit is there to draw them");
   const layer = fs.readFileSync("src/championship/presentation/battleFx/battleFxLayer.js", "utf8");
   assert.match(layer, /if \(!entry\.standIn && romCell\(actor\)\)/, "a retired cell gets a stand-in on its own actor");
+  assert.match(layer, /if \(!form\) continue;/, "every form gets a stand-in, smoke and pop-ups included");
+  assert.match(layer, /kit\.puff\(/); assert.match(layer, /kit\.glint\(/);
   assert.match(layer, /kit\.projectile\(\{follow, paletteKey, archetype, size, signature, headless: true\}\)/, "an original shot gets the move's trail");
   assert.match(layer, /kit\.sigil\(\{/, "a skill opens its sigil");
   assert.match(layer, /kit\.burst\(\{/, "a hit closes on the move's burst");
@@ -145,6 +147,8 @@ test("the kit's sigil, burst and headless trail", () => {
   const signature = moveVfxSignature(table.moves.find(row => row[1] === 2)[0]);
   kit.sigil({ x: 0, y: 0, paletteKey: signature.paletteKey, signature });
   kit.burst({ x: 0, y: 0, paletteKey: signature.paletteKey, signature, heavy: true });
+  kit.puff({ x: 0, y: 0, paletteKey: "dark" });
+  kit.glint({ x: 0, y: 0, paletteKey: "light" });
   const shot = { x: 0, y: 0, alive: true };
   kit.projectile({ follow: () => shot.alive ? shot : null, paletteKey: "fire", archetype: "fire", signature: { ...signature, trail: "sparkle" }, headless: true });
   const before = kit.getDiagnostics();

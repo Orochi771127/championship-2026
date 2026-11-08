@@ -198,6 +198,15 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     created.sigils++;
   }
 
+  /** A rising cloud of smoke in the palette's smoke colour (stands in for a retired smoke cell). */
+  function puff({x, y, paletteKey, size = 30}) { smoke(x, y, paletteKey, size * 1.6, 4, 36); }
+  /** A small glint and ring above a fighter (stands in for a retired pop-up cell). */
+  function glint({x, y, paletteKey, size = 30}) {
+    flare(x, y, paletteKey, size * 1.4, 220, random());
+    ring(x, y, paletteKey, size * 1.6, 300, 1, 0, 0.7);
+    sparks({x, y, paletteKey, count: 4, speed: [80, 180], life: 300, size: size * 0.5, gravity: 0});
+  }
+
   /** A signature's own closing burst at a hit drawn by someone else (the AI battle's cells). */
   function burst({x, y, groundY = y, angle = 0, paletteKey, signature, size = 30, heavy = false}) {
     if (!signature) return;
@@ -824,7 +833,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   }
 
   return Object.freeze({
-    charge, launch, projectile, impact, beam, bolt, melee, signature, wash, decal, sigil, burst, update,
+    charge, launch, projectile, impact, beam, bolt, melee, signature, wash, decal, sigil, burst, puff, glint, update,
     /** Bake a palette's sheets ahead of a fight so the first shot does not wait. */
     warm(paletteKeys, names = ['comet', 'burst', 'flare', 'ring', 'streak', 'glow', 'smoke', 'decal']) {
       for (const key of paletteKeys) for (const name of names) sheet(name, key);

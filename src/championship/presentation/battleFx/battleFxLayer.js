@@ -480,13 +480,17 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       }
       entry.at = at;
       const {form, signature, paletteKey} = entry;
-      if (!form || form === 'support' || form === 'smoke') continue;
+      if (!form) continue;
       const follow = () => entry.alive ? entry.at : null;
       const archetype = signature?.archetype ?? 'strike';
       if (!entry.standIn && romCell(actor)) {
         entry.standIn = true; kitStats.standIns++;
         if (form === 'projectile' || form === 'stream' || form === 'beam') {
           kit.projectile({follow, paletteKey, archetype: moveVfxArchetypeIsMelee(archetype) ? 'orb' : archetype, size, signature});
+        } else if (form === 'smoke') {
+          kit.puff({x: at.x, y: at.y, paletteKey: entry.signature ? paletteKey : 'dark', size});
+        } else if (form === 'support') {
+          kit.glint({x: at.x, y: at.y, paletteKey, size: size * 0.8});
         } else {
           // A hit mark, an area or a summoned figure: the move's own impact where the cell stood.
           const heavy = form === 'area' || form === 'character';
