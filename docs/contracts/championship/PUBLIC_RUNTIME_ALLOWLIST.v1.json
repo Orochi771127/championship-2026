@@ -122351,7 +122351,7 @@
     },
     {
       "path": "src/championship/presentation/battleEffectSprites.js",
-      "sha256": "0945d39496d542446642b97247bf2f16afaeb78e56f5d141d7e68188f5280abc"
+      "sha256": "d581e387955cd1c2c4613177e6e422ac478ec5f46efd8c22b2192a6443c61ec4"
     },
     {
       "path": "src/championship/presentation/battleFieldAmbient.js",
@@ -122371,7 +122371,7 @@
     },
     {
       "path": "src/championship/presentation/battleFx/battleFxLayer.js",
-      "sha256": "b88775ec45b0c20b76dd23cd1fc371185cd72e7d54546ba6f652d4eb06410433"
+      "sha256": "8769abb0f4515688bdbda39e15105377161c45b0887c2c2fa5fb4340182bd67c"
     },
     {
       "path": "src/championship/presentation/battleFx/battleFxPalettes.js",
@@ -122459,7 +122459,7 @@
     },
     {
       "path": "src/championship/presentation/dataArena/dataArenaElementFx.js",
-      "sha256": "5a052318afae7c41019141ac0d0d00e6fa05864531ee0b24f01961e08f9f33b5"
+      "sha256": "1e5f9b18dffa517f680fd38f86b681f6b14a1853c9cb4d0e659dcd8db88c3134"
     },
     {
       "path": "src/championship/presentation/dataArena/dataArenaEnvironment.js",
@@ -122854,6 +122854,10 @@
       "sha256": "19c1d25f5019b5cf30c649def632af23484f6292fa02f6e534118f85b6be8026"
     },
     {
+      "path": "src/championship/presentation/vfx/drawnVfxSprites.js",
+      "sha256": "ab0546099175f4d99a1bd7271009a6c2a3ebd146b40e01a1ddcf05af078722c7"
+    },
+    {
       "path": "src/championship/presentation/vfx/elementVfxLayer.js",
       "sha256": "6983aa74f628433f49a987e7ce173c3b51f106bd63001933adf5eb4c41298233"
     },
@@ -122863,15 +122867,19 @@
     },
     {
       "path": "src/championship/presentation/vfx/moveVfxKit.js",
-      "sha256": "a73541021b18d3bf1ec7d6fe7b2d33953824a1038d2a799b3663862dd6c02eff"
+      "sha256": "c13b720c1e2736ec1b9f34f3a0401443acc7e418e8779a3ce2a258523ee0861a"
     },
     {
       "path": "src/championship/presentation/vfx/moveVfxKitTextures.js",
-      "sha256": "7b900d8d3df6d124e41ea5dc8c0fcc5f8864bb08910160c0b76109d8df49b640"
+      "sha256": "e1c1a457741d2774c3ff9a2bdb745983e3074f678f58d1a1c4b8bebee4fa224d"
     },
     {
       "path": "src/championship/presentation/vfx/moveVfxRecipes.js",
-      "sha256": "b01d7ddd144fdd60508c3376a1f5b51853aa16088d84560a952494b87208491d"
+      "sha256": "3cb4893a6dc28f0f7352cc87f36ae2fd472e477c52f49d0c112004f0bf722d59"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxSignatures.js",
+      "sha256": "316872205be087354084d9c50bc8a046fead9cf6e0219f69dbf7ba4a338bb226"
     },
     {
       "path": "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
@@ -122888,6 +122896,14 @@
     {
       "path": "src/championship/presentation/vfx/pixelateCanvas.js",
       "sha256": "ef9508f28929797c5cd9fee38f0465d9f590031cd31729012a2da41eee1b6345"
+    },
+    {
+      "path": "src/championship/presentation/vfx/remadeEffectBriefs.js",
+      "sha256": "2f2b7924187871f15beac563ab595311edba4e16df1277a1dbbc796b45ea8784"
+    },
+    {
+      "path": "src/championship/presentation/vfx/remadeEffectCells.js",
+      "sha256": "0ed748d686ccfd1ae87fdf2813d352e44bf3676dcd3e2849b398b4ff4ae8fde1"
     },
     {
       "path": "src/championship/presentation/vfx/unifiedMoveVfxResolver.js",
@@ -123019,7 +123035,7 @@
     },
     {
       "path": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
-      "sha256": "d23972d5869136ededb12cc172d0185388d29ef9bb934046c2e9783efe75334e"
+      "sha256": "f1072d3997b26514227367054370deb4fb19efecddf31595a0bdadbda6b1f762"
     },
     {
       "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
@@ -124874,6 +124890,19 @@
         "th",
         "vi",
         "zh-Hant"
+      ]
+    },
+    {
+      "path": "src/data/championship/move-vfx-signatures.r1.json",
+      "sha256": "2af1fb544e43d538458506e88723ffdfe4e05964056b5dc6aec9fb90fac527bc",
+      "jsonFields": [
+        "authority",
+        "generator",
+        "kind",
+        "melee",
+        "moves",
+        "note",
+        "schemaVersion"
       ]
     },
     {
