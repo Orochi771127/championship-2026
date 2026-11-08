@@ -114,6 +114,51 @@ test("the pixel finish: flat tones, full alpha, a dark outline, nearest sampling
   kit.dispose();
 });
 
+test("AI battle: reference-atlas cells retire and the kit draws over the same live actor", async () => {
+  const { createBattleEffectSprites, battleEffectCellIsOriginal } = await import("../src/championship/presentation/battleEffectSprites.js");
+  const PIXI = fakePixi(), parent = new PIXI.Container();
+  const cell = original => ({ texture: {}, origin: [4, 4], frame: [0, 0, 8, 8], pixelsPerNativePixel: 1, blank: false, ...(original ? { artSource: "ORIGINAL_SHARED_REVIEW" } : {}) });
+  const art = { assetId: "t", getCell: (bankId) => cell(bankId === 81) };
+  const actor = (id, bankId) => ({ id, bankId, cell: 0, point: [0, 0, 0], scaleX: 4096, scaleY: 4096, flip: 0, sin: 0, cos: 4096, alpha: 31, tint: 0x7fff });
+  const rect = { x: 0, y: 0 };
+  const retiring = createBattleEffectSprites({ PIXI, parent, art, retireRom: true });
+  retiring.update([actor(1, 81), actor(2, 39)], rect, 4);
+  assert.equal(retiring.getDiagnostics().active, 1, "only the original cell is drawn");
+  assert.deepEqual(retiring.getDiagnostics().retiredCells, ["39:0"]);
+  const keeping = createBattleEffectSprites({ PIXI, parent: new PIXI.Container(), art });
+  keeping.update([actor(1, 81), actor(2, 39)], rect, 4);
+  assert.equal(keeping.getDiagnostics().active, 2, "without retireRom nothing changes");
+  assert.equal(battleEffectCellIsOriginal({ artSource: "ORIGINAL_SHARED_TEXT" }), true);
+
+  const scene = fs.readFileSync("src/championship/presentation/vs5/createBattleFieldPixiPresentation.js", "utf8");
+  assert.match(scene, /retireRom:Boolean\(fxLayer\)/, "cells retire only where the kit is there to draw them");
+  const layer = fs.readFileSync("src/championship/presentation/battleFx/battleFxLayer.js", "utf8");
+  assert.match(layer, /if \(!entry\.standIn && romCell\(actor\)\)/, "a retired cell gets a stand-in on its own actor");
+  assert.match(layer, /kit\.projectile\(\{follow, paletteKey, archetype, size, signature, headless: true\}\)/, "an original shot gets the move's trail");
+  assert.match(layer, /kit\.sigil\(\{/, "a skill opens its sigil");
+  assert.match(layer, /kit\.burst\(\{/, "a hit closes on the move's burst");
+});
+
+test("the kit's sigil, burst and headless trail", () => {
+  const PIXI = fakePixi(), front = new PIXI.Container(), ground = new PIXI.Container();
+  const kit = createMoveVfxKit({ PIXI, front, ground, doc, quality: "saver" });
+  const signature = moveVfxSignature(table.moves.find(row => row[1] === 2)[0]);
+  kit.sigil({ x: 0, y: 0, paletteKey: signature.paletteKey, signature });
+  kit.burst({ x: 0, y: 0, paletteKey: signature.paletteKey, signature, heavy: true });
+  const shot = { x: 0, y: 0, alive: true };
+  kit.projectile({ follow: () => shot.alive ? shot : null, paletteKey: "fire", archetype: "fire", signature: { ...signature, trail: "sparkle" }, headless: true });
+  const before = kit.getDiagnostics();
+  for (let i = 0; i < 10; i++) { shot.x += 10; kit.update(16); }
+  assert.equal(before.escorts, 0, "a headless trail flies no heads");
+  assert.ok(kit.getDiagnostics().sigils >= 2, "the sigil and the signature's ground sigil");
+  shot.alive = false;
+  for (let i = 0; i < 400; i++) kit.update(16);
+  assert.equal(kit.getDiagnostics().live, 0);
+  // A canvas that cannot paint pixels gets no kit at all.
+  assert.equal(createMoveVfxKit({ PIXI, front, ground, doc: { createElement: () => ({ getContext: () => ({}) }) } }), null);
+  kit.dispose();
+});
+
 test("Data Arena hands every phase its move's signature", () => {
   const fx = fs.readFileSync("src/championship/presentation/dataArena/dataArenaElementFx.js", "utf8");
   for (const call of ["charge", "launch", "melee", "projectile", "impact", "signature"])

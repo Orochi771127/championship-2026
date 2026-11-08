@@ -73,6 +73,9 @@ const PIXEL_BODY_SCALE = 0.5;
 export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanced', reducedMotion = false, seed = 0x51a5,
   doc = globalThis.document, resolution = 1.5, pixel = true} = {}) {
   if (!PIXI || !front || !doc) return null;
+  // No kit where a canvas cannot be painted pixel by pixel (Node scene tests, stripped canvases).
+  const probe = doc.createElement?.('canvas')?.getContext?.('2d');
+  if (typeof probe?.createImageData !== 'function' || typeof probe.putImageData !== 'function') return null;
   const rich = quality !== 'saver';
   const budget = rich ? 260 : 110;
   let s = seed >>> 0;
@@ -183,18 +186,36 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     part({name: 'decal', paletteKey, x, y, px, life: 4000, stretch: [1, 0.42], rotation: spread(0.4), fadeIn: 60, fadeOut: 0.3, alpha: 0.55});
   }
 
+  /**
+   * A skill or signature move opens its own sigil flat on the ground at (x, y)
+   * while it gathers -- under the fighters, so it never hides a body. Flat
+   * sigils never spin: a squashed sprite that turns tumbles instead.
+   */
+  function sigil({x, y, paletteKey, signature, size = 30, ms = 320, follow = null}) {
+    if (!signature) return;
+    part({name: `sigil:${signature.sigil}`, paletteKey, x, y, px: size * (signature.tier === 'ultimate' ? 3.6 : 2.6), life: ms + 160,
+      stretch: [1, 0.5], grow: [0.3, 1], fadeIn: 40, fadeOut: 0.3, alpha: 0.95, follow, layer: decalLayer});
+    created.sigils++;
+  }
+
+  /** A signature's own closing burst at a hit drawn by someone else (the AI battle's cells). */
+  function burst({x, y, groundY = y, angle = 0, paletteKey, signature, size = 30, heavy = false}) {
+    if (!signature) return;
+    const R = size * (heavy ? 1.4 : 1) * signature.scale;
+    burstMotif(signature.burst, x, y, groundY, paletteKey, R, angle);
+    if (signature.tier === 'ultimate') groundSigil(x, groundY, paletteKey, signature, size, 3.4, 0.75);
+  }
+  function groundSigil(x, groundY, paletteKey, own, size, k = 6, alpha = 0.9) {
+    part({name: `sigil:${own.sigil}`, paletteKey, x, y: groundY, px: size * k, life: 900, stretch: [1, 0.45], grow: [0.4, 1.05], fadeIn: 60, fadeOut: 0.45, alpha, layer: decalLayer});
+    created.sigils++;
+  }
+
   /** Windup at the release point: the orb grows, sparks are drawn in, a ring closes. */
   function charge({x, y, paletteKey, size = 36, ms = 320, follow = null, signature = null}) {
     created.charges++;
     size *= signature?.scale ?? 1;
-    // A skill or signature move opens its own sigil on the ground under the caster while it gathers,
-    // below the fighters so it never hides the body.
-    if (signature && signature.tier !== 'basic') {
-      const drop = size * 0.9, under = follow ? () => { const at = follow(); return at ? {x: at.x, y: at.y + drop} : null; } : null;
-      part({name: `sigil:${signature.sigil}`, paletteKey, x, y: y + drop, px: size * (signature.tier === 'ultimate' ? 3.6 : 2.6), life: ms + 160,
-        stretch: [1, 0.5], grow: [0.3, 1], fadeIn: 40, fadeOut: 0.3, alpha: 0.95, follow: under, layer: decalLayer});
-      created.sigils++;
-    }
+    if (signature && signature.tier !== 'basic') sigil({x, y: y + size * 0.9, paletteKey, signature, size, ms,
+      follow: follow ? () => { const at = follow(); return at ? {x: at.x, y: at.y + size * 0.9} : null; } : null});
     part({name: 'glow', paletteKey, x, y, px: size * 2.4, life: ms + 90, grow: [0.2, 1], fadeIn: 30, fadeOut: 0.25, follow});
     part({name: 'orb', paletteKey, x, y, px: size * 1.1, life: ms + 90, fps: 18, grow: [0.25, 0.9], spin: 4, fadeOut: 0.25, follow});
     ring(x, y, paletteKey, size * 3.2, ms, 1, 0, 0.55).grow = [1, 0.15];
@@ -361,7 +382,8 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   function burstMotif(motif, x, y, groundY, paletteKey, R, angle) {
     if (motif === 'ring') for (let i = 0; i < 2; i++) ring(x, y, paletteKey, R * (3 + i * 1.4), 380 + i * 80, 1, 0, 0.75).delay = i * 90;
     else if (motif === 'cross') for (const turn of [Math.PI / 4, -Math.PI / 4]) part({name: 'streak', paletteKey, x, y, px: R * 4.4, life: 240, rotation: angle + turn, stretch: [1, 1.4], grow: [0.4, 1.1], fadeOut: 0.6});
-    else if (motif === 'star') { for (let i = 0; i < 6; i++) part({name: 'streak', paletteKey, x, y, px: R * 2.8, life: 260, rotation: i * TAU / 6 + angle, anchor: [0, 0.5], grow: [0.3, 1.1], fadeOut: 0.6}); flare(x, y, paletteKey, R * 3.6, 220); }
+    // The rays carry the star; its flare stays a small core so a close camera never fills the screen with it.
+    else if (motif === 'star') { for (let i = 0; i < 6; i++) part({name: 'streak', paletteKey, x, y, px: R * 2.8, life: 260, rotation: i * TAU / 6 + angle, anchor: [0, 0.5], grow: [0.3, 1.1], fadeOut: 0.6}); flare(x, y, paletteKey, R * 1.8, 200); }
     else if (motif === 'pillar') {
       const col = part({name: 'beam', paletteKey, x, y: groundY, px: R * 4.5, life: 420, fps: 30, anchor: [0, 0.5], rotation: -Math.PI / 2, fadeIn: 20, fadeOut: 0.4});
       col.stretch = [1, R * 1.1 / (col.book.height * R * 4.5 / col.book.width)];
@@ -396,20 +418,24 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
    * A shot in flight. `follow()` returns {x, y, angle?} while the shot lives
    * and null once it is gone; without an angle the heading comes from motion.
    */
-  function projectile({follow, paletteKey, archetype = 'fire', size = 26, signature = null}) {
+  /**
+   * `headless` draws only the signature's trail motif along the shot: the AI
+   * battle keeps drawing an original cell as the head and adds the move's own trail.
+   */
+  function projectile({follow, paletteKey, archetype = 'fire', size = 26, signature = null, headless = false}) {
     const look = HEADS[archetype] ?? HEADS.lance;
     const first = follow?.();
     if (!first) return null;
     created.projectiles++;
     size *= signature?.scale ?? 1;
     // x, y is where the shot is drawn; tx, ty where the game has it. A signature's path weaves the drawing round the true line.
-    const p = {follow, paletteKey, look, size, signature, x: first.x, y: first.y, tx: first.x, ty: first.y, angle: first.angle ?? 0, acc: 0, motifAcc: 0, age: 0, alive: true, spin: 0};
+    const p = {follow, paletteKey, look, size, signature, headless, x: first.x, y: first.y, tx: first.x, ty: first.y, angle: first.angle ?? 0, acc: 0, motifAcc: 0, age: 0, alive: true, spin: 0};
     const at = () => p.alive ? p : null;
-    p.riders = (look.riders ?? []).map(spec => rider(p, {...spec, px: size * spec.px}));
-    p.glow = look.glow ? part({name: 'glow', paletteKey, px: size * look.glow, life: 1e9, follow: at, alpha: 0.85}) : null;
-    p.head = head(p, at, 1);
+    p.riders = headless ? [] : (look.riders ?? []).map(spec => rider(p, {...spec, px: size * spec.px}));
+    p.glow = look.glow && !headless ? part({name: 'glow', paletteKey, px: size * look.glow, life: 1e9, follow: at, alpha: 0.85}) : null;
+    p.head = headless ? null : head(p, at, 1);
     // A volley: escort heads beside the first, fanned out at release and closing on the line as they fly.
-    p.escorts = Array.from({length: Math.max(0, (signature?.volley ?? 1) - 1)}, (_, i) => {
+    p.escorts = headless ? [] : Array.from({length: Math.max(0, (signature?.volley ?? 1) - 1)}, (_, i) => {
       const side = (i % 2 ? -1 : 1) * Math.ceil((i + 1) / 2);
       created.escorts++;
       const escort = {side, x: p.x, y: p.y};
@@ -439,7 +465,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     if (Number.isFinite(at.angle)) p.angle = at.angle; else if (dx * dx + dy * dy > 0.25) p.angle = Math.atan2(dy, dx);
     p.tx = at.x; p.ty = at.y; p.age += dt;
     const cos = Math.cos(p.angle), sin = Math.sin(p.angle);
-    const [along, across] = pathOffset(p.signature?.path, p.age, p.size);
+    const [along, across] = p.headless ? [0, 0] : pathOffset(p.signature?.path, p.age, p.size);
     p.x = p.tx + cos * along + sin * across; p.y = p.ty + sin * along - cos * across;
     const close = Math.exp(-p.age / 520);
     for (const e of p.escorts) {
@@ -449,12 +475,13 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     p.spin += (p.look.spin ?? 0) * dt / 1000;
     // Shapes face right; a leftward heading mirrors top to bottom so nothing flies upside down.
     for (const q of [p.head, ...p.escorts.map(e => e.part)]) {
+      if (!q) continue;
       q.rotation = p.look.upright ? 0 : p.look.spin ? p.spin : p.angle + (p.look.turn ?? 0);
       q.flipY = !p.look.spin && !p.look.turn && !p.look.upright && Math.cos(p.angle) < 0;
     }
     p.acc += dt;
     const every = p.look.every * (rich ? 1 : 2);
-    while (p.acc >= every) { p.acc -= every; p.look.trail(p, {x: p.x, y: p.y, angle: p.angle}, p.size); }
+    while (!p.headless && p.acc >= every) { p.acc -= every; p.look.trail(p, {x: p.x, y: p.y, angle: p.angle}, p.size); }
     const motif = p.signature?.trail;
     if (motif && motif !== 'none') {
       p.motifAcc += dt;
@@ -765,7 +792,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     created.signatures++;
     impact({x, y, groundY, angle, paletteKey, archetype, heavy: true, size: size * 1.3, signature: own});
     // The move's own sigil opens under the blow and fades out.
-    if (own) { part({name: `sigil:${own.sigil}`, paletteKey, x, y: groundY, px: size * 6, life: 900, stretch: [1, 0.45], grow: [0.4, 1.05], fadeIn: 60, fadeOut: 0.45, alpha: 0.9, layer: decalLayer}); created.sigils++; }
+    if (own) groundSigil(x, groundY, paletteKey, own, size);
     for (let i = 0; i < 3; i++) ring(x, y, paletteKey, size * (5 + i * 1.6), 520 + i * 90, 1, 0, 0.7 - i * 0.18).delay = i * 70;
     // In pixel finish a field-sized glow reads as a white disc over the move's own shapes, so it stays faint.
     part({name: 'glow', paletteKey, x, y, px: size * (pixel ? 7 : 9), life: 420, fadeIn: 10, fadeOut: 0.8, alpha: pixel ? 0.35 : 0.7});
@@ -797,7 +824,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   }
 
   return Object.freeze({
-    charge, launch, projectile, impact, beam, bolt, melee, signature, wash, decal, update,
+    charge, launch, projectile, impact, beam, bolt, melee, signature, wash, decal, sigil, burst, update,
     /** Bake a palette's sheets ahead of a fight so the first shot does not wait. */
     warm(paletteKeys, names = ['comet', 'burst', 'flare', 'ring', 'streak', 'glow', 'smoke', 'decal']) {
       for (const key of paletteKeys) for (const name of names) sheet(name, key);

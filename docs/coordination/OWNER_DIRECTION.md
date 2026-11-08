@@ -10,7 +10,8 @@ OWNER_APPROVED_ADAPTATION. This supersedes the 2026-11-05 MOVE_VFX_KIT_20261105 
 - The move VFX kit paints with a pixel finish (flat tones, a one-texel dark outline, stepped light bands, nearest sampling). Every effect stays computed in code: no image file, no ROM pixel, no generated picture.
 - `src/data/championship/move-vfx-signatures.r1.json` (generator `scripts/build-move-vfx-signatures.mjs`) gives each of the 666 moves -- species and original-character moves, learnable support moves, Data Arena pool moves -- its own size, volley and path (or combo and swing), trail, closing burst and a sigil glyph drawn from its own seed. No two moves share a look; two moves of one archetype and palette differ in at least two choices; no sigil repeats (tests).
 - Nine thrown archetypes join the kit by name: shuriken, crescent, star, bubble, note, feather, petal, snowflake, drill.
-- First batch: the Data Arena draws every phase with the move's signature. The AI battle (original cells retiring) and the Dex follow in later batches of this direction.
+- First batch: the Data Arena draws every phase with the move's signature.
+- Second batch (Owner 「先做 AI 對戰」): in the AI battle a cell that only the reference atlas has is no longer drawn; the kit draws the move's own effect on that same live effect actor, so the native timing and path stay. Every move also opens its sigil on the ground (skills and signature moves), trails its original-cell shots with its own motif and closes each hit on its own burst. The Dex follows in a later batch.
 - Presentation only: no power, element rule, range, timing, RNG, save or gameplay value changes.
 
 This records the direction and the first batch, not publication: commit, push, merge and deploy keep their own authorization.

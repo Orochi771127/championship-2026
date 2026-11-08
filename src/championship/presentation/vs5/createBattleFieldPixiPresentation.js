@@ -270,11 +270,12 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   }
   // Optional art foreground (e.g. palm canopies) draws over the fighters.
   if (fieldArt?.foregroundObject) world.addChildAt(fieldArt.foregroundObject, world.getChildIndex(fxFront));
-  const effectSprites = effectArt ? createBattleEffectSprites({PIXI:stage.PIXI, parent:actorLayer, art:effectArt}) : null;
   const fxLayer = dynamicFx ? createBattleFxLayer({PIXI:stage.PIXI, worldBack:fxBack, worldFront:fxFront, screen:fxScreen,
     quality:currentQualityTier(), reducedMotion, responsiveLayout, flashScale:currentFlashScale(),
     describeMove:fx?.describeMove, nameOfSlot:fx?.nameOfSlot, moveNameOf:fx?.moveNameOf, text:fx?.text, juicy,
     resolveMove:fx?.resolveMove, effectArt}) : null;
+  // Reference-atlas cells retire (UNIQUE_PIXEL_MOVE_VFX_20261108) only when the FX layer's kit is there to draw those moves.
+  const effectSprites = effectArt ? createBattleEffectSprites({PIXI:stage.PIXI, parent:actorLayer, art:effectArt, retireRom:Boolean(fxLayer)}) : null;
   // A failed FX probe starts from contain-fit art coordinates; the final
   // unconditional map clamp below still cover-fits even without a director.
   responsiveLayout = responsiveLayout && Boolean(fxLayer);
