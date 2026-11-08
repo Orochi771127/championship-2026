@@ -13,7 +13,9 @@ OWNER_APPROVED_ADAPTATION over STAGE_REDESIGN_BURST_20261102; parity runs (burst
 - Which form (Owner follow-up the same day: forms differ per character and per raising; Owner chose 「1」): a partner bursts only into a form it learned on the ranch, chosen as before by `burstPlanFor` (tamer-rank tier, the player's preferred form, else the highest tier). In RELAY a Dex-only or rental fighter, or one that learned no form, never bursts; the generic per-element fallback form is removed. Of several held individuals of one species, the one that learned a form takes the seat. The Dex and both battles read the same table, `product-burst-evolution.r1.json`.
 - Balance: damage dealt keeps the tier multiplier (×1.4 / ×1.7). Damage taken is no longer divided, because the form's own HP now carries its toughness. Weakness after the burst is unchanged. A former 覺醒體/究極體 preset fights as its 成熟期 species with the lower HP and reaches its preset strength only after bursting.
 
-Verified by the unit cases in `tests/championship-stage-redesign-battle-burst-cases.mjs` and `tests/championship-awakening-raising-cases.mjs`, including a real auto-battle match and a RELAY match. Push and deployment are not authorized by this record.
+Verified by the unit cases in `tests/championship-stage-redesign-battle-burst-cases.mjs` and `tests/championship-awakening-raising-cases.mjs`, including a real auto-battle match and a RELAY match.
+
+Publication: after PR #197 passed CI the Owner directed 「合併並發佈上線」 (merge and publish). This authorizes merging #196 and #197 to main and publishing this batch through the existing Pages playtest workflow, with the approval hashes of its changed sources restated. It does not widen the asset set, and it is not a physical-device acceptance.
 
 <!-- record-id: UNIQUE_PIXEL_MOVE_VFX_20261108 -->
 ## 2026-11-08 — One pixel style for move effects, and every move its own
