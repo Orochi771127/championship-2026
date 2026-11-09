@@ -2076,13 +2076,16 @@ async function mountBattleResult() {
   });
   characterHostNode = resultView.getCharacterHost();
   // The stage light fills in with optional art without rebuilding result panels.
+  // The light is placed on the stage, so the characters' fractions (of their own
+  // host, which a landscape screen narrows to the left column) are mapped onto it.
   const updateStageLight=()=>{
     const box = characterHostNode.getBoundingClientRect?.();
     const light = box && heroSlots.length ? resultStageLight({ width: box.width, height: box.height, slots: heroSlots, layout: resultLayout }) : null;
-    const stageNode = characterHostNode.parentElement;
-    if (light && stageNode?.style) {
-      stageNode.style.setProperty("--result-light-x", `${(light.x * 100).toFixed(2)}%`);
-      stageNode.style.setProperty("--result-light-w", `${(light.width * 100).toFixed(2)}%`);
+    const stageNode = characterHostNode.parentElement, stageBox = stageNode?.getBoundingClientRect?.();
+    if (light && stageNode?.style && stageBox?.width > 0) {
+      const x = (box.left - stageBox.left + light.x * box.width) / stageBox.width, w = light.width * box.width / stageBox.width;
+      stageNode.style.setProperty("--result-light-x", `${(x * 100).toFixed(2)}%`);
+      stageNode.style.setProperty("--result-light-w", `${(w * 100).toFixed(2)}%`);
     }
   };
   // Owner 2026-11-09 (spotlight): the light follows the party when the screen turns.
@@ -3072,7 +3075,7 @@ function syncGainPanelFor(record) {
 }
 
 function battleResultBrag({ participants, matchTitle }) {
-  return { label: socialText('bragButton'), onOpen: button => openTamerBragCard({ trigger: button, winner: bragWinnerFrom(participants), victory: { matchTitle } }) };
+  return { label: socialText('bragButton'), shortLabel: socialText('bragShort'), onOpen: button => openTamerBragCard({ trigger: button, winner: bragWinnerFrom(participants), victory: { matchTitle } }) };
 }
 const bragButton = (onClick) => {
   const button = document.createElement('button'); button.type = 'button';

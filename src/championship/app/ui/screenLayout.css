@@ -2778,8 +2778,10 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
   position: absolute;
   z-index: 1;
   display: block;
-  left: calc(var(--result-light-x, 50%) - 31%);
-  width: 62%;
+  /* As wide as the party standing in it: one partner a narrow cone, three a broad one. */
+  --spot-w: clamp(40%, calc(var(--result-light-w, 52%) + 12%), 96%);
+  left: calc(var(--result-light-x, 50%) - var(--spot-w) / 2);
+  width: var(--spot-w);
   top: -2cqh;
   height: calc(72cqh + 20cqw);
   overflow: hidden;
@@ -3865,3 +3867,70 @@ body:not([data-desktop-raising]):has(#cm-root[data-active-screen="RAISING_HOME"]
 @keyframes cm-plan-open { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
 :root[data-motion="reduced"] .cm-vs5-party-card__plan { animation: none; }
 @media (prefers-reduced-motion: reduce) { :root:not([data-motion]) .cm-vs5-party-card__plan { animation: none; } }
+
+/* Result layout (Owner 2026-11-09: too many boxes, all too big; in landscape the
+   party left the light and a three-letter key took a whole row). One action row
+   under the stage: the brag key small on the left, the next / leave key on the
+   right. The EXP list loses its inner frames; landscape keeps the party in the
+   left column and the card, compact and scrollable, in the right. */
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell {
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr) auto;
+  column-gap: 10px;
+}
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell > .cm-vs5-result__stage { grid-column: 1 / -1; grid-row: 1; }
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-vs5-action.cm-vs5-action--primary {
+  grid-column: 2; grid-row: 2; justify-self: end; align-self: center;
+  width: auto; min-width: 9em; min-height: 50px;
+  margin: 8px max(16px, var(--safe-right, 0px)) max(12px, var(--safe-bottom)) 0;
+  padding: 0 22px 0 26px;
+  font-size: calc(17px * var(--text-scale, 1));
+}
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-vs5-action.cm-vs5-action--primary:not(.cm-vs5-exit)::after { content: "›"; margin-left: 10px; font-size: 1.3em; line-height: 0.8; }
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-brag-cta--result {
+  grid-column: 1; grid-row: 2; justify-self: start; align-self: center;
+  width: auto; min-width: 0; min-height: 44px;
+  margin: 8px 0 max(12px, var(--safe-bottom)) max(16px, var(--safe-left, 0px));
+  padding: 6px 14px; border-radius: 999px; font-size: calc(14px * var(--text-scale, 1));
+}
+/* The EXP list: rows divided by a hairline, no box in a box. */
+.cm-vs5-result__body .cm-sync-panel { gap: 0; }
+.cm-vs5-result__body .cm-sync-row { padding: 8px 2px; border: 0; border-radius: 0; background: none; }
+.cm-vs5-result__body .cm-sync-row + .cm-sync-row { border-top: 1px dashed rgba(20, 20, 31, 0.22); }
+.cm-vs5-result__body .cm-sync-row__face { width: 44px; height: 44px; }
+@media (orientation: landscape) and (max-height: 520px) {
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body {
+    max-height: calc(100% - 16px); overflow-y: auto; overscroll-behavior: contain;
+    padding: 10px 14px 12px; gap: 4px;
+  }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body .cm-vs5-title { font-size: calc(24px * var(--text-scale, 1)); line-height: 1.15; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body .cm-vs5-kicker { font-size: 12px; }
+  .cm-vs5-result__body .cm-sync-row { padding-block: 5px; }
+  .cm-vs5-result__body .cm-sync-row__face { width: 36px; height: 36px; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-vs5-action.cm-vs5-action--primary { min-height: 44px; margin-block: 6px max(8px, var(--safe-bottom)); }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-brag-cta--result { min-height: 40px; margin-block: 6px max(8px, var(--safe-bottom)); }
+}
+/* Short landscape: the stage is far wider than tall, so width units would push
+   the light's floor out of the stage. The party's feet stand near 85 % of the
+   height there; the pool, the beam's landing and the falloff follow in height units. */
+@media (orientation: landscape) and (max-height: 520px) {
+  :root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__stage::before { top: 76cqh; height: 17cqh; }
+  :root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__stage::after {
+    background: radial-gradient(48% 70% at var(--result-light-x, 50%) 84cqh, transparent 0 42%, rgba(10, 5, 30, 0.38) 82%, rgba(10, 5, 30, 0.55) 100%);
+  }
+  :root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__spot {
+    height: 104cqh;
+    -webkit-mask: linear-gradient(180deg, #000 0, #000 80cqh, transparent 88cqh),
+      radial-gradient(50% 9cqh at 50% 86cqh, #000 0, rgba(0, 0, 0, 0.8) 40%, transparent 100%);
+    mask: linear-gradient(180deg, #000 0, #000 80cqh, transparent 88cqh),
+      radial-gradient(50% 9cqh at 50% 86cqh, #000 0, rgba(0, 0, 0, 0.8) 40%, transparent 100%);
+  }
+}
+@media (orientation: landscape) and (max-height: 520px) {
+  /* The prize plate and the EXP rows fit the short card: smaller figure, no
+     separate number line (the bar already shows the share). */
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body { grid-auto-rows: max-content; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body .cm-vs5-result__settlement { padding-block: 6px; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body .cm-vs5-result__amount { font-size: calc(26px * var(--text-scale, 1)); }
+  .cm-vs5-result__body .cm-sync-row__numbers { display: none; }
+}

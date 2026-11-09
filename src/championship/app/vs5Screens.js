@@ -1558,7 +1558,9 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
   if (!tutorial && outcome.winningTeam === 0 && typeof brag?.onOpen === "function") {
     const share = document.createElement("button");
     share.type = "button"; share.className = "cm-brag-cta cm-brag-cta--result cm-arcade-key"; share.dataset.onlineAction = "brag-card";
-    share.textContent = brag.label ?? "";
+    // Owner 2026-11-09: a short key in the result's action row; the full sentence is its accessible name.
+    share.textContent = brag.shortLabel ?? brag.label ?? "";
+    if (brag.shortLabel && brag.label) share.setAttribute("aria-label", brag.label);
     share.addEventListener("click", () => { brag.onOpen(share); });
     section.insertBefore(share, advance);
   }
