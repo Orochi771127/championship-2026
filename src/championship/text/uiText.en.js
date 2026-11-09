@@ -1899,7 +1899,8 @@ export const TEXT_EN = Object.freeze({
   "成長期以前": "up to Rookie",
   "牧場容量不足：放生一隻、提升馴獸師階級或擴充土地後再帶回家。": "Ranch capacity is full: release a partner, raise your tamer rank or expand the land, then bring it home.",
   "大賽報名容量 +{n} G（部分大賽的報名條件，不改變重量）": "Tournament capacity +{n} G (an entry condition of some tournaments; weight unchanged)",
-  "放置": "Place"
+  "放置": "Place",
+  "時鐘 +{n} 秒（{owned}）": "Clock +{n} s ({owned})"
 });
 
 // Proper nouns with no approved English form. English shows their approved

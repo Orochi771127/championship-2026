@@ -247,7 +247,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   // Partner life (2026-10-28) pays random stroll finds into the shop inventory on a
   // wall-clock schedule; this gate asserts byte-exact shop state across swipes and
   // reloads, so it runs the product with that layer off (the switch main.js honours).
-  await context.addInitScript(()=>{globalThis.__CHAMPIONSHIP_PARTNER_LIFE__=false;});
+  await context.addInitScript(()=>{globalThis.__CHAMPIONSHIP_PARTNER_LIFE__=false;globalThis.__CHAMPIONSHIP_FRIENDS_PLAYTEST__=true;});
   await context.tracing.start({screenshots:true,snapshots:true,sources:true});
   await context.route('**/*',async route=>friendsGuardedRoute(async()=>{
    const url=route.request().url();

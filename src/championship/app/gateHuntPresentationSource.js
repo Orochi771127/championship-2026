@@ -244,7 +244,9 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
         // The cartridges this hunt started with, and the partner the rare lure called.
         gacha:{ boosts:(app.getHuntGachaBoosts?.() ?? []).map(getGachaChip).filter(Boolean)
           .map(chip => ({ id:chip.id, name:chip.name, shopRecordIndex:chip.shopRecordIndex })),
-          rareLure:(lure => lure ? { speciesId:lure.speciesId, name:speciesNameForId(lure.speciesId) } : null)(app.getHuntRareLure?.()) },
+          rareLure:(lure => lure ? { speciesId:lure.speciesId, name:speciesNameForId(lure.speciesId) } : null)(app.getHuntRareLure?.()),
+          // Owner 2026-11-10: a chrono cartridge from the bag can join the running hunt.
+          chrono:app.getHuntChronoState?.() ?? null },
         gateName: gate?.tutorial ? "教學關卡" : gate?.displayName ?? null,
         // Presentation mood only (ambience colour, particles); never a rule.
         biomeId: gate?.tutorial ? null : gate?.biomeId ?? null,
@@ -619,6 +621,10 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
     requestHuntResultRelease(key) { app.requestHuntResultRelease(key); return commit(); },
     cancelHuntResultRelease() { app.cancelHuntResultRelease(); return commit(); },
     confirmHuntResultRelease() { app.confirmHuntResultRelease(); return commit(); },
+    useHuntChrono() {
+      app.useHuntChrono?.();
+      return commit();
+    },
     exitHunt() {
       app.exitHunt();
       return commit();

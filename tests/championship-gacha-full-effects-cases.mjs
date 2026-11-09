@@ -278,3 +278,67 @@ test('capacity (Owner 2026-11-09 「連牧場一起調」): partners weigh 18-24
   assert.equal(Math.floor(ranks.at(-1) / 22), 12);
   assert.ok(Math.floor((ranks.at(-1) + 64) / 22) <= 16, 'with the whole land it stays within the 16 native slots');
 });
+
+// ---- Owner 2026-11-10: chrono inside the hunt, a one-minute real-time hunt, Data Arena beacons, friends switch ----
+
+test('a chrono cartridge joins the running hunt; the real-time hunt itself is one minute', async () => {
+  const {REALTIME_HUNT_BASE_MINUTES} = await import('../src/championship/app/championshipStandaloneApp.js');
+  const {huntMinutesToSeconds} = await import('../src/championship/gacha/cyberGacha.js');
+  assert.equal(huntMinutesToSeconds(REALTIME_HUNT_BASE_MINUTES), 60);
+  const {app, saved} = await qaApp({chips: {'chip:chrono': 2}});
+  try {
+    assert.equal(app.useHuntChrono().reason, 'NOT_IN_HUNT');
+    app.openGate(); app.selectGate(app.getGates().find(gate => gate.biomeId === 'Grass').gateId); app.confirmGate();
+    await app.beginHunt();
+    const before = app.getHuntTimeState();
+    assert.deepEqual({...app.getHuntChronoState()}, {owned: 2, used: 0, seconds: 120});
+    const used = app.useHuntChrono();
+    assert.equal(used.ok, true, used.reason);
+    assert.ok(used.time.deadlineMinute > before.deadlineMinute, 'the deadline moved');
+    assert.deepEqual([app.getHuntChronoState().owned, app.getHuntChronoState().used], [1, 1]);
+    assert.ok(app.getHuntGachaBoosts().includes('chip:chrono'), 'the HUD shows it');
+    assert.equal(app.useHuntChrono().ok, true, 'a one-minute hunt may take several');
+    assert.equal(app.useHuntChrono().reason, 'NOT_OWNED');
+    app.save();
+    assert.equal(saved().progression.cyberGacha.chips['chip:chrono'], undefined, 'spent cartridges are saved');
+  } finally { await app.dispose(); }
+});
+
+test('a Data Arena win spends an armed beacon: tickets 60% of the time, battles on the party, no purse', async () => {
+  const {app, saved} = await qaApp({chips: {'chip:bounty-beta': 1}}, seq([0.1]));
+  try {
+    assert.equal(app.gachaUseItem('chip:bounty-beta').kind, 'ARMED');
+    const partner = app.getCyberGachaFrame().partners.find(p => p.stats);
+    const before = partner.stats.battleCount;
+    const win = app.settleDataArenaWin({tournament: false, partyIds: [partner.instanceId]});
+    assert.equal(win.ok, true, win.reason);
+    assert.deepEqual([win.granted, win.beacon, win.battles], [1 + 2, 'chip:bounty-beta', 2]);
+    assert.equal(app.getCyberGachaFrame().partners.find(p => p.instanceId === partner.instanceId).stats.battleCount, before + 2);
+    assert.equal(saved().progression.cyberGacha.armed.bounty, undefined, 'the beacon is used up and saved');
+    const plain = app.settleDataArenaWin({tournament: true, partyIds: []});
+    assert.equal(plain.beacon, null);
+    assert.ok(plain.granted >= 1 + 2 && plain.granted <= 1 + 4, 'a cup adds 2-4');
+  } finally { await app.dispose(); }
+});
+
+test('the friends mode is off on the public site and a remembered hidden switch elsewhere', async () => {
+  const {resolveFriendsPlaytestPolicy} = await import('../src/championship/app/friendsPlaytestPolicy.js');
+  const {createChampionshipFriendsSwitchPort, CHAMPIONSHIP_FRIENDS_SWITCH_KEY: FRIENDS_PLAYTEST_SWITCH_KEY} = await import('../src/championship/app/ChampionshipPersistentSavePort.js');
+  const raw = () => { const data = new Map(); return {data, getItem: k => data.get(k) ?? null, setItem: (k, v) => data.set(k, v), removeItem: k => data.delete(k)}; };
+  const store = (backing = raw()) => ({...createChampionshipFriendsSwitchPort({storage: backing}), data: backing.data});
+  const pub = 'orochi771127.github.io';
+  assert.equal(resolveFriendsPlaytestPolicy({hostname: pub, remembered: store()}).enabled, false, 'public default: off');
+  assert.equal(resolveFriendsPlaytestPolicy({hostname: pub, remembered: store()}).shopOpen, false);
+  assert.equal(resolveFriendsPlaytestPolicy({hostname: '127.0.0.1', remembered: store()}).enabled, true, 'loopback default: on');
+  const s = store();
+  assert.equal(resolveFriendsPlaytestPolicy({hostname: pub, search: '?friends=1', remembered: s}).enabled, true);
+  assert.equal(s.data.get(FRIENDS_PLAYTEST_SWITCH_KEY), '1');
+  assert.equal(resolveFriendsPlaytestPolicy({hostname: pub, remembered: s}).enabled, true, 'remembered on this device');
+  assert.equal(resolveFriendsPlaytestPolicy({hostname: pub, search: '?friends=0', remembered: s}).enabled, false);
+  assert.equal(resolveFriendsPlaytestPolicy({hostname: '127.0.0.1', remembered: s}).enabled, false, 'a remembered choice wins on loopback too');
+  const blocked = createChampionshipFriendsSwitchPort({storage: {getItem() { throw new Error('blocked'); }, setItem() { throw new Error('blocked'); }}});
+  assert.equal(resolveFriendsPlaytestPolicy({hostname: pub, search: '?friends=1', remembered: blocked}).enabled, true, 'blocked storage: the URL still works');
+  assert.equal(resolveFriendsPlaytestPolicy({hostname: pub, remembered: blocked}).enabled, false);
+  assert.equal(resolveFriendsPlaytestPolicy({hostname: pub, search: '?friends=0', remembered: store(), forced: true}).enabled, true,
+    'a browser gate under the public origin forces it on');
+});
