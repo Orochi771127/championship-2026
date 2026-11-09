@@ -2,6 +2,7 @@
 // ARM arithmetic shifts and Nitro normalization. Stepped by the resident owner.
 import {nativeNormalizeQ12 as normalize,nativeVectorLengthQ12 as length} from '../hunt/capture/nativeCapturePhases.js';
 import {findRanchRaisingOpenTile as findNativeRaisingOpenTile} from './nativeRaisingRanchRing.js';
+import {PRODUCT_RANCH_GRID} from '../cage/productRanchGrid.js';
 
 export function nativeCarryPosition({x,y},height,ground=null){
   return [Math.trunc(x)*4096,(Math.min(Math.trunc(y),ground?.pixelHeight ? ground.pixelHeight-1 : 150)+2*Math.trunc(height/3))*4096,20*4096];
@@ -34,7 +35,10 @@ export function stepNativeRaisingFlight(input,ground,{rng,poolSlot=0,cameraX=0,f
   if(contact){p[2]=0;v[2]=-(v[2]>>1);
     if(v.some(Boolean)){const n=normalize(v);v[0]-=n[0]>>1;v[1]-=n[1]>>1;}}
   if(p[2]<81920){const x=tile(p[0]),y=tile(p[1]);
-    if(phase===1&&ownerAt(ground,x,y)!==-1)phase=2;
+    // Native owned cells are always open. The product grid's 3D model contacts
+    // also own blocked cells (prop hulls): reaching one must not end the hop,
+    // or the actor bounces in place there instead of reaching open ground.
+    if(phase===1&&ownerAt(ground,x,y)!==-1&&(ground.layoutVersion!==PRODUCT_RANCH_GRID||ground.readTerrain(x,y)!==1))phase=2;
     if(ground.readTerrain(x,y)===1){
       if(phase===0||phase===2){v[0]=-(v[0]>>1);v[1]=-(v[1]>>1);p[0]=old[0];p[1]=old[1];}
       if(p[2]<=0){const open=findOpenTile(ground,tile(old[0]),tile(old[1]),{centralBand:true,rng,poolSlot});

@@ -1,5 +1,16 @@
 # Championship Owner Direction
 
+<!-- record-id: CM27_ARENA_RING_AND_DROP_HOP_20261109 -->
+## 2026-11-09 — The arena keeps its full-size ring, walkable on top with stairs down, and a dropped partner always hops to open ground
+
+The Owner reports that a partner dropped onto the arena (擂台) ring bounces in place and cannot be put there, and that on many cage maps a partner dropped where it does not fit bounces in place instead of hopping to the nearest open spot. The Owner asks for a ring partners can be dropped on and walk down from by its stairs, the original placement (a full-size ring, not a small ring in an empty hall), a large area for partners to stroll, a better floor, and the shop and facility-editor pictures to match.
+
+OWNER_APPROVED_ADAPTATION over OWNER_APPROVED_3D_CAGE_MODEL_CONTACTS_20261021 (definition 26 only) and the product-grid landing hop; the native ring layout and `raising-ground.r1.json` are unchanged.
+
+- Landing hop (product grid only): a partner hopping toward open ground no longer stops on a 3D prop hull (an owned but blocked cell); it continues to the open cell it was sent to. Native owned cells are always open, so native layouts behave as before.
+- Arena walk grid (`ranch-three-ground.r1.json`, definition 26): the ring top is open, the rope line around it is blocked, the two stairs are the only way between the ring and the floor, and the floor in front of the ring is open except the ringside table and chairs; 160 open cells (was 66).
+- Arena art: the original-size ring stays; the floor is maple parquet with a crimson ring carpet and gold border; a ringside table with bell and belt and two judges' chairs stand on blocked cells. Walk surfaces give the ring top 0.32 and the stairs a ramp, so partners stand on the canvas. The shop and facility-editor pictures are re-rendered from the new model.
+
 <!-- record-id: BURST_TRUE_FORM_20261108 -->
 ## 2026-11-08 — Burst evolution goes only on the player's press and the burst form fights as itself
 
