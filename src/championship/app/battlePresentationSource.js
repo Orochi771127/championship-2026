@@ -230,7 +230,9 @@ export function createBattlePresentationSource({ session, step, arenaIndex = 0, 
         wrapFrame:burst.wrapFrame,wrapFrames:burst.wrapFrames,phaseFrame:burst.phaseFrame,burstFrames:burst.burstFrames,weakFrames:burst.weakFrames,
         // Awakening raising (2026-11-02): the player's call window, the opponent warning, the tier-2 chain.
         via:burst.via??null,manual:burst.manual===true,readyFrame:burst.readyFrame??null,warn:burst.warn===true,
-        bloodline:burst.bloodline??null}} : {}),
+        bloodline:burst.bloodline??null,
+        // Over-limit burst (AWAKENING_OVERDRIVE_20261109): its 10 s window and the exhaustion that may follow.
+        ...(burst.overLimit?{overLimit:true}:{}),...(burst.phase==='EXHAUSTED'?{exhaustFrames:burst.exhaustFrames}:{})}} : {}),
       ...(native ? {stand:native.stand,nativeMotion:native.motion,nativeAnimation:displayed?null:native.nativeAnimation} : {}),
       animationRequest:focusRequest ?? native?.animationRequest ?? {...projected.animationRequest,
         sequenceStartFrame:animationStarts.get(slot)?.frame??null}});

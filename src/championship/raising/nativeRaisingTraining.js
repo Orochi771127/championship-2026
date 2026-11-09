@@ -31,6 +31,19 @@ export function applyNativeTrainingCommand(profile,{kind,delta,season,level=0,fi
   } else {const k=['050','01c','020','024','040'][kind-23],lo=kind===23?1:0,hi=kind===23?f['058']:kind===26?999:100;f[k]=clamp(f[k]+delta,lo,hi);}
   return {profile:normalizeNativeIndividualProfile(p),kind,delta,outcome};
 }
+// Product gains on top of a training (AWAKENING_OVERDRIVE_20261109): point kinds 0..10 add as they are, stat kinds
+// 11..21 stop at their native upper bound. Returns {profile, commands} with the applied rows.
+export function applyProductTrainingGains(profile,gains){
+  const p=structuredClone(profile),f=p.fields,commands=[];
+  for(const {kind,delta} of gains){
+    if(!Number.isInteger(kind)||kind<0||kind>21||!Number.isInteger(delta)||delta<=0)continue;
+    if(kind<11){const k=key(0x100+kind*4);f[k]=(f[k]+delta)>>>0;commands.push({kind,delta,outcome:'APPLIED'});continue;}
+    const offset=[0x70,0x74,0x80,0x7c,0x78,0x58,0x5c,0x60,0x64,0x68,0x6c][kind-11];
+    const k=key(offset),upper=f[key(0xa8+(offset-0x58)*2)]|0,before=f[k]|0,after=Math.min(upper,before+delta);
+    if(after>before){f[k]=after>>>0;commands.push({kind,delta:after-before,outcome:'APPLIED'});}
+  }
+  return {profile:normalizeNativeIndividualProfile(p),commands};
+}
 export function applyNativeCageEntryConditions(profile,{definition,season,level=0},rng){
   let p=profile;for(const [kind,delta] of rules.cages[definition].commands)if(kind!==6)p=applyNativeTrainingCommand(p,{kind:22+kind,delta,season,level},rng).profile;
   return p;

@@ -572,6 +572,25 @@ export function takeArmedHuntChips(state) {
   return { state: normalizeCyberGacha(next), chips: [...chips] };
 }
 
+// Awakening overdrive (AWAKENING_OVERDRIVE_20261109): an ancestral wild partner arrives with a bloodline, and a
+// sponsor contract can pay a metal. Both are written the same way spending a metal writes them.
+/** Inscribe a bloodline without a metal (an ancestral wild partner). */
+export function inscribeGachaBloodline(state, instanceId, family) {
+  const current = normalizeCyberGacha(state);
+  if (!instanceId || !Object.hasOwn(GACHA_BLOODLINES, family)) throw gachaError("INVALID_BLOODLINE");
+  const next = plain(current);
+  next.bloodlines[instanceId] = family;
+  return normalizeCyberGacha(next);
+}
+/** Metals (shards included) into the bag, up to the stack cap. */
+export function grantGachaMetal(state, metalId, quantity = 1) {
+  const current = normalizeCyberGacha(state);
+  if (!METAL_BY_ID.has(metalId) || !Number.isSafeInteger(quantity) || quantity < 1) throw gachaError("INVALID_METAL_GRANT");
+  const next = plain(current);
+  next.metals[metalId] = Math.min(GACHA_STACK_CAP, (next.metals[metalId] ?? 0) + quantity);
+  return normalizeCyberGacha(next);
+}
+
 export function gachaBloodlineOf(state, instanceId) {
   const family = state?.bloodlines?.[instanceId];
   return family && GACHA_BLOODLINES[family] ? Object.freeze({ family, ...GACHA_BLOODLINES[family] }) : null;

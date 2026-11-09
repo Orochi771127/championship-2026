@@ -18,7 +18,7 @@ import { GACHA_TICKET_ART, gachaCurrencyImage, gachaIcon, gachaKindIconName, gac
 import { GACHA_CAPSULE_RADIUS, crankTurn, settleCapsules, simulateTumble } from "./cyberGachaPhysics.js";
 import { GACHA_PERSONALITY_CHOICES, GACHA_AUTOMATION_SHARE, gachaChipEffectLines, gachaChipTiming } from "../gacha/cyberGacha.js";
 import { automationEffectLines, automationTiming, coreRunSeconds, formatRunClock } from "../gacha/ranchAutomation.js";
-import { cageName, personalityName } from "../text/zhHant.js";
+import { cageName, personalityName, raisingDisplayName, speciesNameForId } from "../text/zhHant.js";
 
 const UI_ART = "assets/production/ui/cyber-gacha-r1/";
 export const CYBER_GACHA_ART = Object.freeze({
@@ -1077,6 +1077,14 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
 }
 
 /** `[紅蓮] 名字` style plate: the bloodline badge in front of a partner's name. */
+/** A partner's name as the rest of the game shows it, in the current language (never its raw native name). */
+export function partnerLabel(partner) {
+  return partner?.speciesId ? raisingDisplayName(partner) : partner?.name ?? "";
+}
+/** Its species and stage under the name, for lists. */
+export function partnerSpeciesLine(partner) {
+  return partner?.speciesId ? speciesNameForId(partner.speciesId) ?? "" : "";
+}
 export function partnerNameplate(partner) {
   const plate = element("span", "cm-gacha-nameplate");
   if (partner.bloodline) {
@@ -1085,6 +1093,6 @@ export function partnerNameplate(partner) {
     plate.dataset.bloodline = partner.bloodline.family;
     plate.append(badge);
   }
-  plate.append(element("span", "cm-gacha-nameplate__name", partner.name ?? ""));
+  plate.append(element("span", "cm-gacha-nameplate__name", partnerLabel(partner)));
   return plate;
 }
