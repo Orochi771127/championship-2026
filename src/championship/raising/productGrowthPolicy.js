@@ -33,8 +33,16 @@ export function productLifeThreshold(profile, nativeThreshold) {
 }
 
 /** Native evaluation over the product growth tables. */
-export function evaluateProductEvolution(profile, context, rng) {
-  return evaluateNativeEvolution(profile, {...context, table: PRODUCT_GROWTH_RULES}, rng);
+// GACHA_FULL_EFFECTS_20261109: land expansion adds capacityBonusG to every rank's ranch capacity.
+const bonusTables = new Map();
+function growthTableWithBonus(bonus) {
+  if (!Number.isSafeInteger(bonus) || bonus <= 0) return PRODUCT_GROWTH_RULES;
+  if (!bonusTables.has(bonus)) bonusTables.set(bonus, Object.freeze({...PRODUCT_GROWTH_RULES,
+    ranks: Object.freeze(PRODUCT_GROWTH_RULES.ranks.map(rank => Object.freeze({...rank, capacity: rank.capacity + bonus})))}));
+  return bonusTables.get(bonus);
+}
+export function evaluateProductEvolution(profile, {capacityBonusG = 0, ...context}, rng) {
+  return evaluateNativeEvolution(profile, {...context, table: growthTableWithBonus(capacityBonusG)}, rng);
 }
 
 /**
