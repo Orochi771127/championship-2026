@@ -523,9 +523,13 @@
 :root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-title::after {
   content: "";
   display: block;
+  /* Painted above the title's stroke and drop shadow, and spaced clear of them,
+   * so iOS fonts that sit lower no longer cover the slab's top edge. */
+  position: relative;
+  z-index: 1;
   width: 64px;
   height: 7px;
-  margin-top: 6px;
+  margin-top: 11px;
   border: 2px solid var(--ax-ink);
   border-radius: 2px 8px 2px 8px;
   background: linear-gradient(90deg, var(--ax-yellow), var(--ax-orange));

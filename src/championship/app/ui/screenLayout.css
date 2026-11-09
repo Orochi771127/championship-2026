@@ -1316,6 +1316,10 @@
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header .cm-vs2-kicker,
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header .cm-vs2-subtitle { display: none; }
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header .cm-vs2-title { margin: 0; font-size: 22px; line-height: 1.15; }
+/* The tight 1.15 line box let the arcade title's 6 px stroke and 4 px drop shadow
+ * cover the teal link line (only its lit node showed). Extra padding drops the line
+ * below the shadow, with room for iOS fonts that sit lower. */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header .cm-vs2-title { padding-bottom: 15px; }
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
