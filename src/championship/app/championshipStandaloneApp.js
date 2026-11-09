@@ -22,6 +22,8 @@ import {normalizeBurstEvolution,createBurstEvolutionState,withBurstMigrated,lega
   AWAKENING_RULES,partnerAwakenings,awakeningFocus,awakeningTargetOf,awakeningAppearanceOf,transcendStarsOf,feedAwakeningEnergy,
   addTranscendStar,setAwakeningTarget,setAwakeningAppearance,clearAwakeningShown,learnAwakening,awakeningDisplayFor,awakeningItemEnergy} from '../contracts/productBurstEvolution.js';
 import {REALTIME_TRAINING_POLICY,recommendedCages} from '../raising/productTrainingPolicy.js';
+import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattleExp,grantSyncExp,feedSyncCrystals,reconcileSyncRebirth,
+  boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX} from '../contracts/productSyncLevel.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
@@ -387,6 +389,8 @@ export function createChampionshipStandaloneApp({
   let lastLandExpansion=null;
   // OWNER_APPROVED_ADAPTATION 2026-11-02: burst evolution unlocks per partner (STAGE_REDESIGN_BURST_20261102).
   let burstEvolution=null;
+  // OWNER_APPROVED_ADAPTATION 2026-11-09: Sync Level per partner (BATTLE_MODE_PRISM_AND_JOURNEY_20261109).
+  let syncLevels=null,lastSyncGains=null;
   let nativeMessages=createNativeRaisingMessages();
   let nativeOpening=null;
   // Immutable rollback data, never another live session/store or storage key.
@@ -1142,7 +1146,8 @@ export function createChampionshipStandaloneApp({
       ||(transientMode
         ?(passwordMode?JSON.stringify(passwords)!==JSON.stringify(prepared.passwords):linkKey!==prepared.linkKey)
         :JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals.map(p=>p.instanceId)))
-      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(raisingNativeProfile(p.instanceId))!==JSON.stringify(p.nativeProfile))))
+      // A Sync-boosted copy is checked against the same boost of the saved individual.
+      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(boostSyncNativeProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1))!==JSON.stringify(p.nativeProfile))))
       return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇。'};
     const result=applyBattleTransaction(beginBattleAttempt(battleEconomy,{attemptId,matchIndex:-1,mode,battleType:0,
       entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng);
@@ -1180,6 +1185,37 @@ export function createChampionshipStandaloneApp({
     const huntHistory = restoreNativeHuntPersistentSave(save.huntHistory);
     return { snapshot, identity, production, rng, huntHistory };
   }
+
+  // ---- Sync Level (OWNER_APPROVED_ADAPTATION 2026-11-09) -----------------
+  // The level is read from the save and, once per rebirth, cut to 30 %. A
+  // battle copy of the individual carries the boost; finishMatch takes it off.
+  function syncState(){return syncLevels??(syncLevels=createSyncLevelState());}
+  function syncProfileOf(instanceId){return instanceId===creature?.creatureId?creature.nativeProfile??null:raisingNativeProfile(instanceId);}
+  function syncLevelOf(instanceId){
+    const rebirths=Math.max(0,((syncProfileOf(instanceId)?.narrowFields?.['03c']??0)<<24)>>24);
+    const seen=normalizeSyncLevels(syncLevels).partners[instanceId]?.rebirths??0;
+    if(rebirths>seen)syncLevels=reconcileSyncRebirth(syncLevels,instanceId,rebirths);
+    return syncOf(syncLevels,instanceId);
+  }
+  /** Level a battle reads: capped by tamer rank in title matches and championships. */
+  function syncBattleLevel(instanceId,sync){
+    if(!sync)return 1;
+    const lv=syncLevelOf(instanceId).level;
+    return sync.capped?Math.min(lv,syncCapForRank(tamerRankValue)):lv;
+  }
+  /** Pay one settled battle's Sync EXP to the partners that fought it. */
+  function grantBattleSync(instanceIds,{kind,won,attemptId=null}){
+    const gains=[];
+    for(const instanceId of instanceIds){
+      const amount=syncBattleExp(syncLevelOf(instanceId).level,{kind,won});
+      if(amount<=0)continue;
+      const granted=grantSyncExp(syncState(),instanceId,amount);
+      syncLevels=granted.state;gains.push(granted.gain);
+    }
+    lastSyncGains=gains.length?Object.freeze({attemptId,kind,won,gains:Object.freeze(gains)}):null;
+    return lastSyncGains;
+  }
+  const SYNC_KIND_BY_MODE=Object.freeze({0:'CHAMPIONSHIP',1:'TITLE',2:'FREE',5:'PRACTICE'});
 
   // Free Battle and Practice read the plan (they run the original personality
   // wiring); the individuals carry it to buildOwnedBattleCreature.
@@ -1636,7 +1672,7 @@ export function createChampionshipStandaloneApp({
     return {
       snapshot:requireSession().getRaisingHomeSnapshot(),creature,sessionId,revision:nextRevision,
       interactionCount,friendsPlaytest,onlineBindReward,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
-      championshipRun,freeBattleMenu,battleTactics,cyberGacha,burstEvolution,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
+      championshipRun,freeBattleMenu,battleTactics,cyberGacha,burstEvolution,syncLevels,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
       raising,shop:shop?shop.toSave():null,cageEdit:cageEdit?cageEdit.toSave():null,battleEconomy,
       instanceIdentity,gameplayRng:gameplayRngSnapshot(),huntHistory:projectNativeHuntPersistentSave(huntPersistentState)
     };
@@ -1909,6 +1945,7 @@ export function createChampionshipStandaloneApp({
     huntPersistentState = candidate.huntHistory;
     raising = repairStrollLogNames(candidate.production);
     burstEvolution = normalizeBurstEvolution(saved.progression.burstEvolution ?? null);
+    syncLevels = saved.progression.syncLevels===undefined?null:normalizeSyncLevels(saved.progression.syncLevels);lastSyncGains=null;
     migrateLegacyBurstPartners();
     if (realtime) {
       // Up to twelve hours of growth while the game was closed, then the clock shows the device's time.
@@ -1953,6 +1990,7 @@ export function createChampionshipStandaloneApp({
     const beforeBadges = battleBadgesValue;
     const beforeRank=tamerRankValue,beforeTitles=nativeTitles,beforeMessages=nativeMessages,beforeRun=championshipRun;
     const beforeGacha=cyberGacha,beforeGachaDrop=lastBattleGachaDrop,beforeBurst=burstEvolution,beforeBurstUnlocks=lastBurstUnlocks;
+    const beforeSync=syncLevels,beforeSyncGains=lastSyncGains;
     const expectedBits = requireShop().getBits();
     // One rollback for both ways this can fail. The wallet is committed last, so
     // until it succeeds every one of these is still the pre-transaction value.
@@ -1963,6 +2001,7 @@ export function createChampionshipStandaloneApp({
       battleBadgesValue = beforeBadges;
       tamerRankValue=beforeRank;nativeTitles=beforeTitles;nativeMessages=beforeMessages;championshipRun=beforeRun;
       cyberGacha=beforeGacha;lastBattleGachaDrop=beforeGachaDrop;burstEvolution=beforeBurst;lastBurstUnlocks=beforeBurstUnlocks;
+      syncLevels=beforeSync;lastSyncGains=beforeSyncGains;
     };
     battleTransactionActive = true;
     try {
@@ -1971,6 +2010,10 @@ export function createChampionshipStandaloneApp({
       battleEconomy = result.state;
       if(preparedRng)gameplayRng=preparedRng;
       for(const entry of individualResults)writeRaisingNativeProfile(entry.instanceId,entry.nativeProfile,{markDirty:false});
+      // Sync EXP for the partners that fought a settled owned-party match (never password or link battles).
+      const syncKind=SYNC_KIND_BY_MODE[result.receipt?.mode];
+      if(result.receipt?.status==="SETTLED"&&syncKind&&individualResults.length)
+        grantBattleSync(individualResults.map(entry=>entry.instanceId),{kind:syncKind,won:result.receipt.won===true,attemptId:result.receipt.attemptId??null});
       // Battles and wins are awakening conditions; the ranch partners also train once after the match.
       queueRanchTraining();refreshAwakeningSigns(individualResults.map(entry=>entry.instanceId),{publish:false});
       // A form the player's partner burst into this match is registered in the encyclopedia.
@@ -2092,6 +2135,7 @@ export function createChampionshipStandaloneApp({
       nativeOpening=opening;
       cyberGacha=grantGachaWelcome(null).state;
       burstEvolution=withBurstMigrated(createBurstEvolutionState());
+      syncLevels=null;lastSyncGains=null;
       tutorialBaseline=null;tutorialPendingOpening=null;tutorialOfferEligible=opening!==null;
       registeredSpeciesValue = Object.freeze([]);
       battleEconomy = createBattleEconomyState();
@@ -3959,6 +4003,37 @@ export function createChampionshipStandaloneApp({
 
     /** Tickets (and beacon bonus) the last won match dropped, for the result podium. */
     getLastBattleGachaDrop(){return lastBattleGachaDrop;},
+    /** Sync Level of one partner: { level, exp, next } (OWNER_APPROVED_ADAPTATION 2026-11-09). */
+    getSyncLevel(instanceId){return syncLevelOf(instanceId);},
+    /** The cap a title match or championship applies at the current tamer rank. */
+    getSyncCap(){return syncCapForRank(tamerRankValue);},
+    getSyncCrystals(){return normalizeSyncLevels(syncLevels).crystals;},
+    getLastSyncGains(){return lastSyncGains;},
+    /** Data Arena partner power from Sync Level, by instance. */
+    getSyncArenaPower(instanceId){return syncArenaPower(syncLevelOf(instanceId).level);},
+    /** A finished Data Arena match pays Sync EXP to the ranch partners that fought it. */
+    grantArenaSync({instanceIds=[],won=false,attemptId=null}={}){
+      if(tutorialBaseline)return null;
+      const ids=[...new Set(instanceIds.filter(id=>typeof id==='string'&&syncProfileOf(id)))];
+      if(!ids.length)return null;
+      const gains=grantBattleSync(ids,{kind:'ARENA',won:won===true,attemptId});
+      savePort.markDirty();publishRaising();return gains;
+    },
+    /** Add crystal points (tower chests, patrol, QA). */
+    grantSyncCrystals(amount){
+      const value=Number.isSafeInteger(amount)&&amount>0?amount:0;
+      if(!value||tutorialBaseline)return {ok:false,reason:'NOTHING_TO_GRANT'};
+      const state=normalizeSyncLevels(syncState());
+      syncLevels={...state,crystals:Math.min(1e9,state.crystals+value)};savePort.markDirty();return {ok:true,crystals:syncLevels.crystals};
+    },
+    /** Spend crystal points on one partner. */
+    feedSyncCrystals(instanceId,amount){
+      if(!syncProfileOf(instanceId))return {ok:false,reason:'UNKNOWN_INDIVIDUAL'};
+      syncLevelOf(instanceId);
+      const fed=feedSyncCrystals(syncState(),instanceId,amount);
+      if(!fed)return {ok:false,reason:'NO_CRYSTALS'};
+      syncLevels=fed.state;savePort.markDirty();publishRaising();return {ok:true,gain:fed.gain};
+    },
     getGachaTickets(){return session?gachaState().tickets:0;},
     /** Cartridges this hunt started with (the field readout names them). */
     getHuntGachaBoosts(){return screens.current()===CHAMPIONSHIP_SCREENS.HUNT_FIELD?lastHuntGachaBoosts:Object.freeze([]);},
@@ -4174,7 +4249,7 @@ export function createChampionshipStandaloneApp({
     async prepareFreeBattle(matchId,instanceIds,selectedArena=null){
       const match=this.getFreeBattleMatches().find(row=>row.id===matchId);
       if(!match)return {ok:false,reason:'MATCH_NOT_AVAILABLE'};
-      const party=withBattleTactics(await this.prepareBattleParty(null,instanceIds));
+      const party=withBattleTactics(await this.prepareBattleParty(null,instanceIds,{sync:{capped:false}}));
       if(!party.ok)return party;
       if(instanceIds.length>match.slots)return {ok:false,reason:'PARTY_SIZE',message:uiText('這場對戰最多 {count} 隻。',{count:match.slots})};
       const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
@@ -4189,7 +4264,7 @@ export function createChampionshipStandaloneApp({
       if(!Array.isArray(teams)||teams.length!==2||teams.some(ids=>!Array.isArray(ids)||ids.length<1||ids.length>3))return {ok:false,reason:'TWO_PARTIES_REQUIRED'};
       const ids=teams.flat();if(new Set(ids).size!==ids.length)return {ok:false,reason:'DUPLICATE_PARTICIPANT',message:'同一隻拍檔只能加入一隊。'};
       const parties=[];
-      for(const team of teams){const party=withBattleTactics(await this.prepareBattleParty(null,team));if(!party.ok)return party;parties.push(party.individuals);}
+      for(const team of teams){const party=withBattleTactics(await this.prepareBattleParty(null,team,{sync:{capped:false}}));if(!party.ok)return party;parties.push(party.individuals);}
       if(selectedArena!==null&&!FREE_BATTLE_ARENAS.includes(selectedArena))return {ok:false,reason:'ARENA_UNAVAILABLE'};
       const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
       const drawnArena=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
@@ -4415,7 +4490,7 @@ export function createChampionshipStandaloneApp({
         if(!prepared||prepared.session!==session||prepared.base!==JSON.stringify(gameplayRngSnapshot())
           ||prepared.championshipRun!==JSON.stringify(championshipRun)
           ||JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals?.map(p=>p.instanceId))
-          ||prepared.individuals.some(p=>JSON.stringify(raisingNativeProfile(p.instanceId))!==JSON.stringify(p.nativeProfile)))
+          ||prepared.individuals.some(p=>JSON.stringify(boostSyncNativeProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1))!==JSON.stringify(p.nativeProfile)))
           return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇參賽隊伍。'};
         opponent=prepared.opponent;
       }
@@ -4506,7 +4581,7 @@ export function createChampionshipStandaloneApp({
     async prepareChampionshipBattle(instanceIds) {
       const run=championshipRun;
       if(!run||!nativeChampionshipContinues(run))return {ok:false,reason:'NO_CHAMPIONSHIP_ROUND'};
-      const party=await this.prepareBattleParty(null,instanceIds);
+      const party=await this.prepareBattleParty(null,instanceIds,{sync:{capped:true}});
       if(!party.ok)return party;
       if(championshipRun!==run)return {ok:false,reason:'BATTLE_PREPARATION_STALE'};
       const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
@@ -4516,7 +4591,7 @@ export function createChampionshipStandaloneApp({
       return {ok:true,individuals:party.individuals,opponent,rngPreparation};
     },
 
-    async prepareBattleParty(recordIndex,instanceIds) {
+    async prepareBattleParty(recordIndex,instanceIds,{sync=null}={}) {
       const {battlePartyCondition,buildOwnedBattleCreature,nativeBattleQualification,burstFormFitting}=await loadBattleParty();
       const condition=battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C);
       const limit=battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C).slots;
@@ -4531,7 +4606,8 @@ export function createChampionshipStandaloneApp({
         buildOwnedBattleCreature({instanceId,nativeProfile});
         // A 成熟期 admitted to a 覺醒體/究極體 match bursts into the form that admitted it.
         const fitting=nativeBattleQualification(nativeProfile,condition)?null:burstFormFitting(nativeProfile,condition,partnerBurstForms(instanceId));
-        individuals.push({instanceId,nativeProfile:structuredClone(nativeProfile),
+        const syncLevel=syncBattleLevel(instanceId,sync);
+        individuals.push({instanceId,nativeProfile:boostSyncNativeProfile(nativeProfile,syncLevel),syncLevel,
           ...(fitting!==null?{burst:battleBurstPlanOf(instanceId,Object.freeze({form:fitting,tier:burstFormTier(fitting)}))}:{})});
       }
       return {ok:true,individuals};
@@ -4599,8 +4675,10 @@ export function createChampionshipStandaloneApp({
         if(!Array.isArray(individualResults)||individualResults.length!==battlePartyIds.length||
           individualResults.some((entry,i)=>entry.instanceId!==battlePartyIds[i]))
           return {ok:false,reason:'BATTLE_PARTY_RESULT_MISMATCH'};
-        updates=individualResults.map(entry=>({instanceId:entry.instanceId,nativeProfile:normalizeNativeIndividualProfile(
-          entry.nativeProfile,this.resolveRaisingInstance(entry.instanceId).speciesId)}));
+        // The battle fought a Sync-boosted copy; the saved individual keeps its own vitals and curve steps.
+        updates=individualResults.map(entry=>{const saved=syncProfileOf(entry.instanceId);
+          return {instanceId:entry.instanceId,nativeProfile:normalizeNativeIndividualProfile(
+            saved?restoreSyncNativeProfile(entry.nativeProfile,saved):entry.nativeProfile,this.resolveRaisingInstance(entry.instanceId).speciesId)};});
       }
       const result = applyBattleTransaction(settleBattleAttempt(battleEconomy, { attemptId, outcomeEntries, ...(rewardPercent===undefined?{}:{rewardPercent}) }, requireShop().getBits()),updates,null,
         Array.isArray(bursts)?bursts.filter(form=>Number.isSafeInteger(form)&&burstFormTier(form)!==null):[]);
@@ -4956,7 +5034,7 @@ export function createChampionshipStandaloneApp({
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
-            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha, burstEvolution, raising: candidateRaising,
+            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha, burstEvolution, syncLevels, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: (bonusShop ?? shop) ? (bonusShop ?? shop).toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),

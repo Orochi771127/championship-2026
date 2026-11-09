@@ -331,6 +331,7 @@ export function createChampionshipPersistentSavePort({
         ...(request.battleTactics!==undefined?{battleTactics:request.battleTactics}:{}),
         ...(request.cyberGacha!=null?{cyberGacha:request.cyberGacha}:{}),
         ...(request.burstEvolution!=null?{burstEvolution:request.burstEvolution}:{}),
+        ...(request.syncLevels!=null?{syncLevels:request.syncLevels}:{}),
         ...(request.nativeTitles!==undefined?{nativeTitles:request.nativeTitles}:{}),
         ...(request.championshipRun!==undefined?{championshipRun:request.championshipRun}:{}),
         ...(request.nativeMessages!==undefined?{nativeMessages:request.nativeMessages}:{}),

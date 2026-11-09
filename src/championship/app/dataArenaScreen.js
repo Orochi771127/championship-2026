@@ -118,7 +118,7 @@ function ensureStylesheet() {
  */
 export async function openDataArena({ ensureStage, audioBus = null, music = null, storage = null, reducedMotion = false,
   resolutionCap = 2, onExit = () => {}, onVictory = null, href = globalThis.location?.href, qa = false, seed = null, progress = null,
-  burstPlanOf = null }) {
+  burstPlanOf = null, syncPowerOf = null, onSyncResult = null, syncPanelFor = null }) {
   await ensureStylesheet();
   const lifetime = new AbortController();
   const { signal } = lifetime;
@@ -169,6 +169,15 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   const entriesFor = (mode) => entryLists[mode] ?? entryLists.TOURNAMENT;
   const entryOf = (mode, id) => entriesFor(mode).find((row) => row.id === id) ?? null;
   let partnerPower = {};
+  // Sync Level (Owner 2026-11-09): a ranch partner's level multiplies its entry power.
+  const withSyncPower = (power) => {
+    if (typeof syncPowerOf !== "function") return power;
+    const next = { ...power };
+    for (const row of entriesFor(gameMode)) if (row.instanceId && next[row.id] !== undefined) next[row.id] *= syncPowerOf(row.instanceId) ?? 1;
+    return Object.freeze(next);
+  };
+  const fighterInstances = () => [...new Set((gameMode === "RELAY" ? [partnerId, relayReserveId, relayThirdId] : [partnerId])
+    .map((id) => entryOf(gameMode, id)?.instanceId ?? null).filter(Boolean))];
 
   // ------------------------------------------------------------------ DOM skeleton
   const root = el("div", "da-root");
@@ -1590,7 +1599,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     }
     const actions = el("div", "da-actions");
     const start = button("da-btn da-btn--primary", t("select.start"), () => {
-      partnerPower = dataArenaPartnerPower(entriesFor(gameMode));
+      partnerPower = withSyncPower(dataArenaPartnerPower(entriesFor(gameMode)));
       records.setLastPartner(partnerId); records.setLastMode(gameMode); if(gameMode==="RELAY")records.setRelayTeam(relayReserveId,relayArenaId,relayThirdId); audio?.play?.("ui"); showBriefing();
     }, signal);
     start.dataset.autofocus = "1";
@@ -1739,6 +1748,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     if (result.outcome === "VICTORY" && typeof onVictory === "function") {
       try { gachaTickets = onVictory({ tournament: Boolean(result.tournament) })?.granted ?? 0; } catch { gachaTickets = 0; }
     }
+    // Sync EXP for the ranch partners that fought; the host settles it into the save.
+    let syncPanel = null;
+    if (typeof onSyncResult === "function") {
+      try {
+        const record = onSyncResult({ instanceIds: fighterInstances(), won: result.outcome === "VICTORY", attemptId: `arena:${matchId}` });
+        syncPanel = record && typeof syncPanelFor === "function" ? syncPanelFor(record) : null;
+      } catch { syncPanel = null; }
+    }
     const best = records.get().modes[result.mode]?.bestScore ?? records.get().bestScore;
     music?.setScene(result.outcome === "VICTORY" ? "victory" : "defeat", `arena-result:${matchId}`);
     const panel = el("div", `da-panel da-panel--result da-result--${result.outcome.toLowerCase()}`);
@@ -1767,13 +1784,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       drop.dataset.gachaTickets = String(gachaTickets);
       panel.append(drop);
     }
+    if (syncPanel) { panel.append(syncPanel.node); signal.addEventListener("abort", () => syncPanel.dispose(), { once: true }); }
     const actions = el("div", "da-actions");
-    const retry = button("da-btn da-btn--primary", t("result.retry"), () => void startMatch(), signal);
+    const retry = button("da-btn da-btn--primary", t("result.retry"), () => { syncPanel?.dispose(); void startMatch(); }, signal);
     retry.dataset.autofocus = "1";
     actions.append(retry, button("da-btn", t("result.change"), () => showSelect(), signal), button("da-btn da-btn--quiet", t("result.exit"), () => close(), signal));
     panel.append(actions, el("p", "da-fineprint", t(saved ? "result.recordNote" : "result.recordOff")));
     // A short beat so the crowd reaction and the last hit read before the panel.
-    setTimeout(() => { if (!signal.aborted && root.dataset.state === "RESULT") showOverlay(panel); }, 900);
+    setTimeout(() => { if (!signal.aborted && root.dataset.state === "RESULT") { showOverlay(panel); syncPanel?.play(); } }, 900);
   }
 
   // ------------------------------------------------------------------ teardown

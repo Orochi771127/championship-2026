@@ -30,6 +30,7 @@ import { normalizeCyberGacha } from '../gacha/cyberGacha.js';
 import { royalCopiesByDefinition } from '../gacha/ranchAutomation.js';
 import { migrateRoyalCagePlacements } from '../cage/royalCageMigration.js';
 import { normalizeBurstEvolution } from '../contracts/productBurstEvolution.js';
+import { normalizeSyncLevels } from '../contracts/productSyncLevel.js';
 import { RANCH_DECKS_LAYOUT, normalizeRanchExpansion } from "../cage/ranchExpansion.js";
 
 import { getCageDefinitionByModuleId } from "../cage/productCageCatalog.js";
@@ -60,7 +61,7 @@ const ALLOWED_TOP_LEVEL_KEYS_V4 = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V3, "
 const ALLOWED_TOP_LEVEL_KEYS = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V4, "huntHistory"]);
 
 const ALLOWED_CREATURE_KEYS = Object.freeze(["creatureId", "speciesId", "displayName", "nativeProfile"]);
-const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun", "freeBattleMenu", "battleTactics", "cyberGacha", "burstEvolution"]);
+const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun", "freeBattleMenu", "battleTactics", "cyberGacha", "burstEvolution", "syncLevels"]);
 // toolTiers / ropeWear: hunt tool families (HUNT_TOOL_TIERS_20261103); a save without them is migrated by the shop.
 const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "cageOwned", "cageQuantities", "toolTiers", "ropeWear"]);
 // `expansion` exists only beside layoutVersion NATIVE_DECKS_V1 (2026-10-05):
@@ -445,6 +446,8 @@ export function createChampionshipModernSave({
       ...(progression.cyberGacha!==undefined?{cyberGacha:normalizeCyberGacha(progression.cyberGacha)}:{}),
       // OWNER_APPROVED_ADAPTATION 2026-11-02: burst evolution unlocks per partner.
       ...(progression.burstEvolution!==undefined?{burstEvolution:normalizeBurstEvolution(progression.burstEvolution)}:{}),
+      // OWNER_APPROVED_ADAPTATION 2026-11-09: Sync Level and EXP per partner, plus crystal points.
+      ...(progression.syncLevels!==undefined?{syncLevels:normalizeSyncLevels(progression.syncLevels)}:{}),
       ...(progression.nativeTitles!==undefined?{nativeTitles:normalizeNativeTitleProgress(progression.nativeTitles)}:{}),
       // A tournament runs over several rounds, and a browser tab can close
       // between them, so the run is carried. Whether the original's own save

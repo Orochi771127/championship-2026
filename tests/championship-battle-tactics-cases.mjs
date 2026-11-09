@@ -128,10 +128,15 @@ test('Practice rows and chosen Free Battle partners offer the three plans in ROM
 
   globalThis.__select('FREE_BATTLE');await new Promise(r=>setTimeout(r,0));
   byClass(root,'cm-vs5-match__enter')[0].click();await new Promise(r=>setTimeout(r,0));
-  const box=byClass(root,'cm-vs5-tactics')[0];
-  assert.equal(box.hidden,true,'no plan rows before a partner is chosen');
+  // Owner 2026-11-09: the plan opens inside the chosen partner's own card.
+  const party=byClass(root,'cm-vs5-party')[0];
+  assert.equal(byClass(party,'cm-vs5-tactic').length,0,'no plan before a partner is chosen');
   all(root).find(node=>node.dataset.instanceId==='p2').click();
-  assert.equal(box.hidden,false);
-  assert.deepEqual(byClass(box,'cm-vs5-tactic').map(g=>g.dataset.value),['2']);
+  const card=byClass(party,'cm-vs5-party-card').find(node=>node.children[0].dataset.instanceId==='p2');
+  assert.equal(card.dataset.picked,'true');
+  assert.deepEqual(byClass(card,'cm-vs5-tactic').map(g=>g.dataset.value),['2']);
+  assert.equal(byClass(party,'cm-vs5-tactic').length,1);
+  all(root).find(node=>node.dataset.instanceId==='p2').click();
+  assert.equal(byClass(party,'cm-vs5-tactic').length,0,'dropping the partner folds its plan away');
   view.dispose();delete globalThis.__select;
 });

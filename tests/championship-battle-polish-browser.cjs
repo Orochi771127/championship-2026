@@ -57,7 +57,7 @@ const seconds = Number(process.env.BATTLE_POLISH_SECONDS || 150);
     }
     assert.ok(await page.locator('.cm-vs5-arena-chip').count() >= 2, 'the arena row is chips');
     assert.ok(await page.locator('.cm-vs5-party-row .cm-vs5-member__portrait img').count() >= 3, 'roster rows show portraits');
-    await page.evaluate(() => document.querySelector('.cm-vs5-tactics')?.scrollIntoView({block: 'center'}));
+    await page.evaluate(() => document.querySelector('.cm-vs5-party-card[data-picked="true"]')?.scrollIntoView({block: 'center'}));
     await page.screenshot({path: path.join(out, '1-prebattle.png')});
     await page.locator('.cm-vs5-footer .cm-vs5-action--primary').click();
 

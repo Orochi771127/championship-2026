@@ -160,6 +160,8 @@ import { formatDateTime, formatList, onLocaleChange, getLocale } from '../text/l
 import { retranslate, setLabel, setText, uiText } from '../text/uiText.js';
 import { paintGachaTicketBadge } from './cyberGachaIcons.js';
 import { gachaChipEffectLines, getGachaMetal } from '../gacha/cyberGacha.js';
+import { buildSyncGainPanel } from './ui/syncGainPanel.js';
+import { syncText } from '../text/syncLevelText.js';
 
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
 // fetched the first time that view asks for one. The wrappers keep the same
@@ -1616,7 +1618,10 @@ async function mountBattleSelect() {
     arenaChoices:battleRuntime.listSelectableArenas(),
     // Owner 2026-11-03: each roster row shows the partner's Database thumbnail and its three-axis badges.
     describeMember:entry=>{const index=juicySpeciesIndex(entry?.speciesId);const hero=index===null?null:databaseHeroPortrait(index);
-      return {portrait:hero?.thumbnail??null,badges:entry?.speciesId?taxonomyBadgeRow(speciesTaxonomyForId(entry.speciesId)):null};},
+      // Owner 2026-11-09: the Sync Level rides in the stage slot.
+      const sync=entry?.instanceId?app.getSyncLevel?.(entry.instanceId):null;
+      return {portrait:hero?.thumbnail??null,stage:sync?(sync.next>0?syncText('level',{level:sync.level}):syncText('level.max')):null,
+        badges:entry?.speciesId?taxonomyBadgeRow(speciesTaxonomyForId(entry.speciesId)):null};},
     getPracticeSelection:async()=>({candidates:await app.getBattlePartyCandidates(null)}),
     setBattleTactic:(instanceId,tactic)=>app.setBattleTactic(instanceId,tactic),
     getPasswordSelection:async()=>({maxLength:PRODUCT_BATTLE_CODE_MAX_LENGTH,candidates:await app.getPasswordTeamCandidates(),
@@ -1684,7 +1689,8 @@ async function mountBattleSelect() {
           return await enterPreparedBattle(prepared,attemptId,()=>app.enterLinkBattle({attemptId,linkKey:party.linkKey,rngPreparation:party.rngPreparation}));
         }catch(error){prepared.dispose();console.warn(`LINK_BATTLE_PREPARE: ${error.message}`);return {ok:false,reason:'BATTLE_NOT_READY'};}
       }
-      const party=await app.prepareBattleParty(recordIndex,playerInstanceIds);
+      // Title matches read Sync Level under the tamer-rank cap (Owner 2026-11-09).
+      const party=await app.prepareBattleParty(recordIndex,playerInstanceIds,{sync:{capped:true}});
       if(!party.ok)return party;
       const rngPreparation=app.prepareBattleRng();
       const prepared = (await loadBattleRuntime())({ schedule: app.getBattleSchedule(), mode:1, battleType:0,playerIndividuals:party.individuals,rng:rngPreparation.rng });
@@ -2028,6 +2034,9 @@ async function mountBattleResult() {
     return box && heroSlots.length ? resultHeroAnchor({ width: box.width, height: box.height, slots: heroSlots, layout: resultLayout }) : null;
   };
   const {createBattleResultView} = await import('./vs5Screens.js');
+  // Sync EXP from this attempt's own settlement (Owner 2026-11-09).
+  const syncGains=tutorial?null:(gains=>gains&&receipt&&gains.attemptId===(receipt.attemptId??null)?gains:null)(app.getLastSyncGains?.());
+  const syncPanel=syncGains?syncGainPanelFor(syncGains):null;
   const matchTitle = chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
     :chosen?.championship?uiText('{event} 第 {round} 戰',{event:uiText(chosen.recordIndex===0?'冠軍大會':'世界大會'),round:chosen.cursor+1})
     :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null;
@@ -2054,6 +2063,7 @@ async function mountBattleResult() {
     progression,
     // Owner 2026-10-29: 📸 brag card for a won battle, starring the winning partner.
     brag: battleResultBrag({ participants, matchTitle }),
+    syncPanel,
     gachaDrop:tutorial?null:(drop=>drop&&receipt&&drop.attemptId===(receipt.attemptId??null)
       ?{...drop,metalNames:(drop.metals??[]).map(id=>getGachaMetal(id)?.name??id)}:null)(app.getLastBattleGachaDrop?.()),
     onExit() {
@@ -2075,6 +2085,9 @@ async function mountBattleResult() {
       stageNode.style.setProperty("--result-light-w", `${(light.width * 100).toFixed(2)}%`);
     }
   };
+  // Owner 2026-11-09 (spotlight): the light follows the party when the screen turns.
+  const lightResize=typeof ResizeObserver==='function'?new ResizeObserver(()=>{if(!disposed)updateStageLight();}):null;
+  lightResize?.observe(characterHostNode);
   const artLoading=new AbortController(),hudLoad=createLoadAttempt({timeoutMs:20000});
   stageReady=ensurePixiStage(characterHostNode,artLoading.signal);
   hudReady=hudLoad.wait(loadRegisteredCharacterHudArt({baseUrl:location.href,
@@ -2092,7 +2105,7 @@ async function mountBattleResult() {
     if(disposed)void characters.dispose();else resultCharacters=characters;
   }).catch(error=>{if(!disposed)console.warn('Battle result character reference unavailable',error);});
   return {...resultView,dispose(){
-    if(disposed)return;disposed=true;hudLoad.cancel();artLoading.abort();
+    if(disposed)return;disposed=true;hudLoad.cancel();artLoading.abort();lightResize?.disconnect();
     resultCharacters?.dispose();resultCharacters=null;hudArt=null;resultView.dispose();
   }};
 }
@@ -2383,6 +2396,9 @@ async function openGameplay() {
   // stage and the synthesizer can be checked on an isolated QA save. Public hosts never bind it.
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("gachaQa"))
     globalThis.__championshipGachaQa = { grantTickets: (amount) => app.grantGachaTickets(amount, 'QA'), frame: () => app.getCyberGachaFrame() };
+  // Loopback review only (?syncQa): crystal points and feeding, so the level-up panel can be checked.
+  if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("syncQa"))
+    globalThis.__championshipSyncQa = { grant: (n) => app.grantSyncCrystals(n), feed: (id, n) => app.feedSyncCrystals(id, n), level: (id) => app.getSyncLevel(id), partners: () => app.getBattlePartyCandidates(null) };
   // Loopback review only (?diamondQa): automation items into the bag, and the land / badge readouts.
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("diamondQa"))
     globalThis.__championshipDiamondQa = { grant: (id, n = 1) => app.grantAutomationItem(id, n, 'QA'), cage: () => app.getCageEditFrame(),
@@ -3040,6 +3056,21 @@ function bragWinnerFrom(participants) {
   return null;
 }
 /** The victory screen's 📸 key: the winning partner on the card, the match as its ribbon. */
+/** The post-battle Sync EXP panel for a settled gain record (auto battle and Data Arena). */
+function syncGainPanelFor(record) {
+  const nameOf = (id) => {
+    const entry = app.resolveRaisingInstance(id), index = juicySpeciesIndex(entry?.speciesId);
+    return entry?.displayName || (index === null ? id : speciesName(index));
+  };
+  const portraitOf = (id) => {
+    const index = juicySpeciesIndex(app.resolveRaisingInstance(id)?.speciesId);
+    return index === null ? null : databaseHeroPortrait(index)?.thumbnail?.src ?? null;
+  };
+  const panel = buildSyncGainPanel({ gains: record.gains, nameOf, portraitOf, reducedMotion: prefersReducedMotion(),
+    cap: ['TITLE', 'CHAMPIONSHIP'].includes(record.kind) ? app.getSyncCap() : null });
+  return { ...panel, kicker: syncText('panel.kicker'), title: syncText('panel.title') };
+}
+
 function battleResultBrag({ participants, matchTitle }) {
   return { label: socialText('bragButton'), onOpen: button => openTamerBragCard({ trigger: button, winner: bragWinnerFrom(participants), victory: { matchTitle } }) };
 }
@@ -3282,6 +3313,10 @@ async function enterDataArena(dataArenaButton) {
       progress: app.getDataArenaProgress?.() ?? null,
       // Awakening raising (2026-11-02): a relay entry from the ranch bursts into the form its partner learned.
       burstPlanOf: (instanceId) => app.getBattleBurstPlan?.(instanceId) ?? null,
+      // Sync Level (Owner 2026-11-09): ranch partners fight at their level and earn Sync EXP.
+      syncPowerOf: (instanceId) => app.getSyncArenaPower?.(instanceId) ?? 1,
+      onSyncResult: (match) => app.grantArenaSync?.(match) ?? null,
+      syncPanelFor: (record) => syncGainPanelFor(record),
       onExit: restoreBattle,
       // Cyber Gachapon: a manual-battle win pays 1-3 tickets, a cup 3-10, into the one save.
       onVictory: ({ tournament }) => app?.grantGachaTickets?.(tournament ? 3 + Math.floor(Math.random() * 8) : 1 + Math.floor(Math.random() * 3), 'DATA_ARENA')
