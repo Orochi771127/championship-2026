@@ -145,11 +145,12 @@ export function createSponsorContractStrip(source, busy = () => false) {
     const view = source.read();
     strip.hidden = !view;
     if (!view) return;
-    const { contracts, stakes, armed, bits } = view;
+    const { contracts, stakes, armed, bits, today = null } = view;
     stake = armed?.stake ?? stake ?? stakes.defaultStake;
     strip.dataset.armed = String(Boolean(armed));
     const head = element("div", "cm-vs5-sponsors__head");
     head.append(element("span", "cm-vs5-sponsors__label", uiText(armed ? "SPONSOR_ARMED" : "SPONSOR_TITLE"), false));
+    if (today) head.append(element("span", "cm-vs5-sponsors__today", uiText("SPONSOR_TODAY", { left: today.left, limit: today.limit }), false));
     const stepper = element("div", "cm-vs5-sponsors__stake");
     const minus = element("button", "cm-vs5-sponsors__step", "−", false), plus = element("button", "cm-vs5-sponsors__step", "+", false);
     minus.type = plus.type = "button";
@@ -172,13 +173,20 @@ export function createSponsorContractStrip(source, busy = () => false) {
       const on = armed?.contractId === contract.id;
       key.setAttribute("aria-pressed", String(on));
       key.disabled = !on && bits < stake;
-      key.append(element("span", "cm-vs5-sponsor__name", uiText(`SPONSOR_${contract.id}_NAME`), false),
+      // The game's own faction glyph (the caller draws it), the same one the partner badges use.
+      const title = element("span", "cm-vs5-sponsor__name");
+      const glyph = source.icon?.(contract.faction);
+      if (glyph) title.append(glyph);
+      title.append(element("span", "", uiText(`SPONSOR_${contract.id}_NAME`), false));
+      key.append(title,
         element("span", "cm-vs5-sponsor__rule", uiText(`SPONSOR_${contract.id}_RULE`), false),
         element("span", "cm-vs5-sponsor__pay", uiText(`SPONSOR_${contract.id}_PAY`, { payout: contract.payout, bits: Math.floor(stake * contract.payout) }), false));
       key.addEventListener("click", () => { if (busy()) return; source.arm(on ? null : contract.id, stake); paint(); });
       keys.append(key);
     }
-    const note = element("p", "cm-vs5-sponsors__note", uiText(bits < stakes.minimum ? "SPONSOR_NEED_BITS" : "SPONSOR_NOTE", { bits: stakes.minimum }), false);
+    const caps = view.caps ?? {};
+    const note = element("p", "cm-vs5-sponsors__note", uiText(bits < stakes.minimum ? "SPONSOR_NEED_BITS" : "SPONSOR_NOTE", { bits: stakes.minimum,
+      free: caps.FREE ?? 0, title: caps.TITLE ?? 0, cup: caps.CHAMPIONSHIP ?? 0 }), false);
     strip.replaceChildren(head, keys, note);
   };
   paint();

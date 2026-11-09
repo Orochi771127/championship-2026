@@ -1,0 +1,35 @@
+{
+  "id": "art:gacha:prize-icons:r1",
+  "rightsStatus": "ORIGINAL_GENERATED",
+  "provenance": "Generated 2026-11-09 by Codex (codex.exe exec, gpt-6.1-sol, built-in image tool) from the written briefs below, for the original game Cyber Partner: Tournament. References given to the model were this project's own shipped item icons only (digital-metals-r1, the cyber-gacha-r1 ticket). The ticket pack was redrawn once with an original hexagonal data-core emblem so it reads as no other company's mark.",
+  "briefs": [
+    "BRIEF.md",
+    "BRIEF2.md"
+  ],
+  "files": [
+    {
+      "path": "assets/production/items/gacha-prizes-r1/hunt_supply_crate_160.webp",
+      "use": "pack:hunt (狩獵戰備補給箱)",
+      "size": [
+        160,
+        160
+      ],
+      "sha256": "648f3e2ed58ae4eea11a01ca8d5fb8f300328b53013355971bfe27ebc87ccfd0",
+      "masterSha256": "c964ae166f12dd5ed5175bead05e0f5195f709ad1c31bed6c7b45b80d5066a8c"
+    },
+    {
+      "path": "assets/production/items/gacha-prizes-r1/ticket_pack_160.webp",
+      "use": "ticket:pack (幸運轉蛋券禮包)",
+      "size": [
+        160,
+        160
+      ],
+      "sha256": "4c1e85e5dacaa7964c7314b291e0f0e79981b761731d58c420172a7906600cbc",
+      "masterSha256": "a6eefa80c7f09895a37277fa43e12fb5e44e702654771f5ad9cbeb7c00480437"
+    }
+  ],
+  "masters": "1254x1254 RGBA PNG masters kept outside the repository (local art workpack gacha-full-effects-art-20261109); runtime files are alpha-trimmed, padded to 92% and resized to 160x160 WebP q88.",
+  "humanApproved": false,
+  "runtimeEligible": true,
+  "shippingReady": false
+}

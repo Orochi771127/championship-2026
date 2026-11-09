@@ -1467,3 +1467,8 @@ body[data-day-period="NIGHT"] .int-rh2-field-host::after { background-color: rgb
 .cm-awakening__note, .cm-awakening__label { font-size: var(--fs-label); color: var(--c-text-3); }
 .cm-awakening__planned { color: var(--c-accent); font-weight: var(--fw-strong); }
 
+/* Short landscape phones: the open partner card sits at the upper left, so the floating title-match notice moves to
+   the right, under the wallet, while the card is open (it covered the card at 568x320). */
+@media (orientation: landscape) and (max-height: 500px) and (max-width: 600px) {
+  body:has(.int-rh2-companion[data-open="true"]) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__matches { left: auto; right: max(10px, var(--safe-right)); }
+}

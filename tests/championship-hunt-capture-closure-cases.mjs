@@ -195,7 +195,8 @@ test("card release has an explicit cancellable choice and never resurrects the f
 });
 
 test("full Home can replace an exact collection individual; failed save preserves both it and the card", async () => {
-  const store = storage(), app = appFor(store); await app.newGame();
+  // The 16 native slots are the limit under test, so the ranch's G capacity is lifted (GACHA_FULL_EFFECTS_20261109).
+  const store = storage(), app = appFor(store, { ranchCapacityOverrideG: 9999 }); await app.newGame();
   while (app.getRaisingInstances().length < 16) await restoreLegacyIndividual(app, store);
   app.save(); const saved = store.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY);
   const old = app.getRaisingState(), first = old.collection[0], second = old.collection[1];
@@ -258,4 +259,23 @@ test("starter release removes canonical resident membership and survives save/Co
   assert.equal(restored.getSnapshot().selectedResidentId, null);
   restored.advanceClock({ units: 400 }); assert.equal(restored.save().phase, "SAVED");
   await restored.dispose();
+});
+
+test("the ranch's capacity in G decides who comes home; the catch waits on the card (GACHA_FULL_EFFECTS_20261109)", async () => {
+  const store = storage(), app = appFor(store, { ranchCapacityOverrideG: 20 }); await app.newGame(); app.save();
+  const before = app.getRaisingState(), saved = store.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY);
+  await enter(app); const { runtime } = card(app);
+  assert.equal(runtime.getOnCardEntries().length, 1);
+  app.exitHunt(); app.confirmHuntResult();
+  assert.equal(app.getHuntResult().commitError, "RANCH_CAPACITY_FULL");
+  // The starter egg and the catch weigh 18 G or more each (product weights), over the 20 G ranch.
+  assert.ok(app.getHuntResult().ranchG.used >= 36 && app.getHuntResult().ranchG.max === 20);
+  assert.equal(app.getRaisingState(), before, 'nothing came home');
+  assert.equal(store.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY), saved, 'and nothing was saved');
+  await app.dispose();
+  const roomy = appFor(storage(), { ranchCapacityOverrideG: 200 }); await roomy.newGame();
+  await enter(roomy); card(roomy); roomy.exitHunt(); roomy.confirmHuntResult();
+  assert.equal(roomy.getScreen(), "RAISING_HOME", 'with room the catch comes home');
+  assert.equal(roomy.getRaisingInstances().length, 2);
+  await roomy.dispose();
 });

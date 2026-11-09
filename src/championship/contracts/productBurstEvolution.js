@@ -70,7 +70,16 @@ function winPercent(f) {
  * Rows: {id, operator, value, current, met}.
  */
 export function evaluateBurstConditions(profile, form) {
-  return deepFreeze(conditionRows(profile, form?.thresholds));
+  return deepFreeze(conditionRows(profile, scaledThresholds(form)));
+}
+// GACHA_FULL_EFFECTS_20261109: point and battle thresholds of a form, scaled by its tier (thresholdScale).
+const SCALED = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 22];
+function scaledThresholds(form) {
+  const t = form?.thresholds, scale = BURST_RULES.awakening.thresholdScale?.[form?.tier] ?? 1;
+  if (!Array.isArray(t) || scale === 1) return t;
+  const out = [...t];
+  for (const i of SCALED) if (out[i]) out[i] = Math.ceil(out[i] * scale);
+  return out;
 }
 function conditionRows(profile, t) {
   const f = profile?.fields, n = profile?.narrowFields;
@@ -96,8 +105,8 @@ function conditionRows(profile, t) {
 // the overdrive training switch and core heat (written at `at`, epoch ms), seed {id: percent} an ancestral wild
 // partner's head start on its tier-1 awakening, contract {contractId, stake} the sponsor contract armed for the next
 // match and escrow {contractId, stake, attemptId, foeBoostPercent} the stake held by the match being fought.
-const OPTIONAL_KEYS = ['preferred', 'energy', 'waived', 'stars', 'target', 'appearance', 'shown', 'memory', 'overdrive', 'seed', 'contract', 'escrow'];
-const ACCOUNT_KEYS = ['memory', 'contract', 'escrow'];
+const OPTIONAL_KEYS = ['preferred', 'energy', 'waived', 'stars', 'target', 'appearance', 'shown', 'memory', 'overdrive', 'seed', 'contract', 'escrow', 'contractDay'];
+const ACCOUNT_KEYS = ['memory', 'contract', 'escrow', 'contractDay'];
 const CONTRACT_IDS = ['HEART_GUARD', 'IRON_RUSH', 'RIFT_GAMBIT'];
 const stakeOf = value => { if (!Number.isSafeInteger(value) || value < 1 || value > 1_000_000) invalid(); return value; };
 const invalid = () => { throw new TypeError('INVALID_BURST_EVOLUTION'); };
@@ -167,9 +176,16 @@ export function normalizeBurstEvolution(value) {
     out.contract = {contractId, stake: stakeOf(stake)};
   }
   if (value.escrow !== undefined) {
-    const {contractId, stake, attemptId, foeBoostPercent} = objectOf(value.escrow);
-    if (!CONTRACT_IDS.includes(contractId) || typeof attemptId !== 'string' || !attemptId || !Number.isSafeInteger(foeBoostPercent)) invalid();
-    out.escrow = {contractId, stake: stakeOf(stake), attemptId, foeBoostPercent};
+    const {contractId, stake, attemptId, foeBoostPercent, oddsBonus} = objectOf(value.escrow);
+    if (!CONTRACT_IDS.includes(contractId) || typeof attemptId !== 'string' || !attemptId || !Number.isSafeInteger(foeBoostPercent)
+      || (oddsBonus !== undefined && typeof oddsBonus !== 'boolean')) invalid();
+    out.escrow = {contractId, stake: stakeOf(stake), attemptId, foeBoostPercent, ...(oddsBonus ? {oddsBonus: true} : {})};
+  }
+  // Contracts signed on one local day (the daily limit).
+  if (value.contractDay !== undefined) {
+    const {day, count} = objectOf(value.contractDay);
+    if (!Number.isSafeInteger(day) || !Number.isSafeInteger(count) || count < 0 || count > 100) invalid();
+    out.contractDay = {day, count};
   }
   return deepFreeze(out);
 }
@@ -242,6 +258,13 @@ export function withSponsorContract(state, contract) {
   const {contract: dropped, ...rest} = normalizeBurstEvolution(state);
   return normalizeBurstEvolution(contract ? {...rest, contract} : rest);
 }
+/** Contracts signed on local day `day` (0 on any other day). */
+export function sponsorContractsSignedOn(state, day) { return state?.contractDay?.day === day ? state.contractDay.count : 0; }
+/** One more contract signed on local day `day`. */
+export function withSponsorSigned(state, day) {
+  const current = normalizeBurstEvolution(state);
+  return normalizeBurstEvolution({...current, contractDay: {day, count: sponsorContractsSignedOn(current, day) + 1}});
+}
 /** The stake held by the match being fought (null releases it). */
 export function withSponsorEscrow(state, escrow) {
   const {escrow: dropped, ...rest} = normalizeBurstEvolution(state);
@@ -250,8 +273,8 @@ export function withSponsorEscrow(state, escrow) {
 
 /** A form's thresholds for one partner: a form the account remembers halves its point and battle thresholds. */
 function thresholdsFor(form, remembered) {
-  if (!remembered) return form.thresholds;
-  const t = [...form.thresholds], keep = AWAKENING_RULES.memoryThresholdPercent / 100;
+  if (!remembered) return scaledThresholds(form);
+  const t = [...scaledThresholds(form)], keep = AWAKENING_RULES.memoryThresholdPercent / 100;
   for (const i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 22]) if (t[i]) t[i] = Math.max(1, Math.ceil(t[i] * keep));
   return t;
 }
