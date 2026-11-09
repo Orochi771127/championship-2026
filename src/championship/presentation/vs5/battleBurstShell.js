@@ -128,6 +128,96 @@ export function createBattleBurstShell({PIXI, layer, reducedMotion = false}) {
     }
   }
 
+  // The tactile awakening cocoon (AWAKENING_OVERDRIVE_20261109): the closed shell holds while the player cracks it.
+  // crack 0: closed and breathing; 1: one fracture with light leaking through; 2: cracks over the whole
+  // shell and the six bloodline light pillars bursting from them. `frame` counts frames since the last crack.
+  const PILLARS = [0xa070ff, 0x40d880, 0x4a9cff, 0x40e0e0, 0xff7ac8, 0xffd34d];
+  // Real fractures (Owner 2026-11-09: cracks, not straight lines; more 3D). Each crack runs from an impact point in
+  // short jagged steps, forks now and then and thins to a hair. It is laid out on the flat disc, then wrapped onto
+  // the shell's sphere, so it bends round the ball and narrows toward the rim. Drawn as a sunken groove: a dark lower
+  // edge, a lit lip on the light side (upper left), the light leaking through, then a hot core.
+  function fracture(seed, ox, oy, angle, length, width, depth, out) {
+    let px = ox, py = oy, a = angle;
+    const steps = 9, points = [{x: px, y: py, w: width}];
+    for (let i = 0; i < steps; i++) {
+      a += (hash(seed, i * 5 + 1) - 0.5) * 1.05;
+      const step = length / steps * (0.55 + hash(seed, i * 5 + 2) * 0.9);
+      px += Math.cos(a) * step; py += Math.sin(a) * step;
+      if (Math.hypot(px, py) > 0.97) break;
+      const w = width * Math.max(0.12, 1 - (i + 1) / (steps + 1));
+      points.push({x: px, y: py, w});
+      if (depth < 2 && i > 0 && hash(seed, i * 5 + 3) < 0.3)
+        fracture(seed * 31 + i + 7, px, py, a + (hash(seed, i * 5 + 4) < 0.5 ? -1 : 1) * (0.55 + hash(seed, i + 90) * 0.6), length * 0.42, w * 0.72, depth + 1, out);
+    }
+    out.push(points);
+    return out;
+  }
+  // Impact points and headings (unit disc). Stage 1 is one strike on the upper shell; stage 2 lengthens it and adds four.
+  const STRIKES = [[0.08, -0.12, 2.3], [0.1, -0.1, -0.75], [-0.5, 0.05, 1.25], [0.52, 0.12, 1.95], [-0.2, 0.55, -2.4], [0.25, -0.6, 2.5]];
+  function cocoonCracks(crack) {
+    const out = [];
+    STRIKES.slice(0, crack === 1 ? 2 : STRIKES.length).forEach(([sx, sy, heading], i) =>
+      fracture(1013 + i * 97, sx, sy, heading, (crack === 1 ? 0.62 : 0.95) * (i < 2 ? 1 : 0.85), i < 2 ? (crack === 1 ? 0.05 : 0.06) : 0.035, 0, out));
+    return out;
+  }
+  // The disc-to-sphere wrap the plates use (onSphere), with the foreshortening at that point.
+  function wrap(point) {
+    const d = Math.min(0.999, Math.hypot(point.x, point.y)), curve = Math.sin(d * Math.PI / 2) / Math.max(d, 1e-6);
+    const x = point.x * curve, y = point.y * curve;
+    return {x, y, z: Math.sqrt(Math.max(0, 1 - x * x - y * y))};
+  }
+  function drawCracks(g, {x, y, radius}, colors, crack, frame, glow) {
+    const grow = reducedMotion ? 1 : Math.min(1, frame / 7);
+    const passes = [
+      // sunken lower edge, lit upper lip, light inside, white-hot core
+      {dx: 0.55, dy: 0.7, width: 2.2, color: 0x05060d, alpha: 0.75},
+      {dx: -0.5, dy: -0.65, width: 1.5, color: 0xffffff, alpha: 0.4},
+      {dx: 0, dy: 0, width: 2.4, color: colors.seam, alpha: 0.38 * glow},
+      {dx: 0, dy: 0, width: 1.3, color: 0xfff4c2, alpha: 0.95 * glow},
+      {dx: 0, dy: 0, width: 0.5, color: 0xffffff, alpha: glow}
+    ];
+    const paths = cocoonCracks(crack).map(points => points.slice(0, Math.max(2, Math.ceil(points.length * grow))).map(point => ({...wrap(point), w: point.w})));
+    for (const pass of passes) {
+      for (const points of paths) {
+        for (let i = 1; i < points.length; i++) {
+          const a = points[i - 1], b = points[i], depth = 0.35 + 0.65 * Math.min(a.z, b.z);
+          const width = Math.max(0.8, b.w * radius * pass.width * depth), lift = b.w * radius * depth * 0.6;
+          g.moveTo(x + a.x * radius + pass.dx * lift, y + a.y * radius + pass.dy * lift)
+            .lineTo(x + b.x * radius + pass.dx * lift, y + b.y * radius + pass.dy * lift);
+          g.stroke({width, color: pass.color, alpha: pass.alpha * (0.55 + 0.45 * depth), cap: 'round', join: 'round'});
+        }
+      }
+    }
+  }
+  function drawCocoon(g, shape, crack, frame) {
+    const {x, y, radius, tier, color} = shape, colors = paletteFor(tier, color);
+    const kick = reducedMotion ? 0 : Math.max(0, 1 - frame / 10);
+    const breathe = reducedMotion ? 0 : Math.sin(frame / 9) * 0.012;
+    // The finished shell: the wrap's closed pose, nudged outward on each crack.
+    drawWrap(g, {...shape, radius: radius * (1 + breathe + 0.05 * kick)}, WRAP_END - 1);
+    if (crack <= 0) {
+      g.circle(x, y, radius * 1.04);
+      g.stroke({width: Math.max(1, radius * 0.03), color: colors.seam, alpha: 0.25 + 0.2 * Math.sin(frame / 7) ** 2});
+      return;
+    }
+    const glow = 0.7 + 0.3 * Math.sin(frame / (crack === 1 ? 6 : 3)) ** 2;
+    // Light leaks out of the shell where it is struck.
+    g.circle(x + radius * 0.08, y - radius * 0.12, radius * (crack === 1 ? 0.3 : 0.62)).fill({color: colors.seam, alpha: (crack === 1 ? 0.18 : 0.26) * glow});
+    drawCracks(g, shape, colors, crack, frame, glow);
+    if (crack >= 2) {
+      // Six bloodline pillars shoot up out of the cracks.
+      PILLARS.forEach((pillar, i) => {
+        const a = -Math.PI / 2 + (i - 2.5) * 0.32, reach = radius * (1.6 + 0.9 * glow) * (reducedMotion ? 1 : Math.min(1, frame / 8 + 0.3));
+        const bx = x + Math.cos(a) * radius * 0.6, by = y + Math.sin(a) * radius * 0.6, half = radius * 0.08;
+        const ex = bx + Math.cos(a) * reach, ey = by + Math.sin(a) * reach, nx = -Math.sin(a) * half, ny = Math.cos(a) * half;
+        g.poly([bx - nx, by - ny, bx + nx, by + ny, ex + nx * 2.4, ey + ny * 2.4, ex - nx * 2.4, ey - ny * 2.4]);
+        g.fill({color: pillar, alpha: 0.42 * glow});
+      });
+      g.circle(x, y, radius * (1.08 + 0.06 * glow));
+      g.stroke({width: Math.max(1, radius * 0.05), color: colors.seam, alpha: 0.6 * glow});
+    }
+  }
+
   // The chain's middle: the tier-1 form stands in a ring of light, then a second flash grows over it.
   function drawChain(g, {x, y, radius, tier, color}, wrapFrame, wrapFrames) {
     const colors = paletteFor(tier, color), t = clamp01((wrapFrame - CHAIN_START) / Math.max(1, wrapFrames - CHAIN_START));
@@ -161,6 +251,34 @@ export function createBattleBurstShell({PIXI, layer, reducedMotion = false}) {
     }
   }
 
+  // Over-limit burst (AWAKENING_OVERDRIVE_20261109): twin bloodline flames lick up from the feet while it lasts;
+  // an exhausted core circles three dim stars over the head. Poses read the burst's phaseFrame only.
+  function drawOverLimit(g, {x, y, radius, tier, color}, frame) {
+    const colors = paletteFor(tier, color), feet = y + radius * 0.78, flicker = reducedMotion ? 0.5 : (Math.sin(frame / 3) + 1) / 2;
+    for (const [hue, scale, alpha] of [[0xff3b2f, 1.25, 0.42], [colors.plate, 1, 0.6], [0xfff1b8, 0.55, 0.85]]) {
+      for (let i = 0; i < 7; i++) {
+        const t = (i - 3) / 3, sway = reducedMotion ? 0 : Math.sin(frame / 5 + i * 1.7) * radius * 0.05;
+        const height = radius * scale * (0.55 + 0.45 * hash(i, 77) + 0.18 * flicker) * (1 - Math.abs(t) * 0.45);
+        const base = radius * 0.12 * scale, cx = x + t * radius * 0.62;
+        g.poly([cx - base, feet, cx + base, feet, cx + sway, feet - height]);
+        g.fill({color: hue, alpha});
+      }
+    }
+    g.ellipse(x, feet, radius * 0.85, radius * 0.18);
+    g.stroke({width: Math.max(1, radius * 0.04), color: 0xff3b2f, alpha: 0.5 + 0.4 * flicker});
+  }
+  function drawExhausted(g, {x, y, radius}, frame) {
+    const head = y - radius * 0.95;
+    for (let i = 0; i < 3; i++) {
+      const a = (reducedMotion ? 0 : frame / 14) + i * Math.PI * 2 / 3;
+      const sx = x + Math.cos(a) * radius * 0.42, sy = head + Math.sin(a) * radius * 0.12, r = radius * 0.09;
+      const points = [];
+      for (let k = 0; k < 10; k++) { const b = -Math.PI / 2 + k * Math.PI / 5, d = k % 2 ? r * 0.45 : r; points.push(sx + Math.cos(b) * d, sy + Math.sin(b) * d); }
+      g.poly(points);
+      g.fill({color: 0xb8c0cc, alpha: 0.85});
+    }
+  }
+
   return Object.freeze({
     /**
      * One combatant's shell for this frame. `burst` is the published combatant.burst; x/y is the body centre in
@@ -177,10 +295,13 @@ export function createBattleBurstShell({PIXI, layer, reducedMotion = false}) {
       if (burst.phase === 'WRAP' && Number.isFinite(burst.wrapFrame) && burst.wrapFrames > CHAIN_START && burst.wrapFrame >= CHAIN_START)
         drawChain(g, shape, burst.wrapFrame, burst.wrapFrames);
       else if (burst.phase === 'WRAP' && Number.isFinite(burst.wrapFrame)) drawWrap(g, shape, burst.wrapFrame);
+      else if (burst.phase === 'COCOON') drawCocoon(g, shape, burst.crack | 0, Math.max(0, burst.crackFrame | 0));
       else if (burst.phase === 'BURST' && Number.isFinite(burst.phaseFrame)) {
         if (entry.lastPhase !== 'BURST') cue = 'BURST';
+        if (burst.overLimit) drawOverLimit(g, shape, burst.phaseFrame);
         drawScatter(g, shape, burst.phaseFrame, SCATTER_FRAMES);
       } else if (burst.phase === 'WEAK' && Number.isFinite(burst.phaseFrame)) drawScatter(g, shape, burst.phaseFrame, SHATTER_FRAMES, 0.7);
+      else if (burst.phase === 'EXHAUSTED' && Number.isFinite(burst.phaseFrame)) { drawScatter(g, shape, burst.phaseFrame, SHATTER_FRAMES, 0.7); drawExhausted(g, shape, burst.phaseFrame); }
       entry.lastPhase = burst.phase;
       g.visible = !g.destroyed;
       return cue;
@@ -197,3 +318,5 @@ export function createBattleBurstShell({PIXI, layer, reducedMotion = false}) {
 }
 
 export const BATTLE_BURST_SHELL_CELLS = CELLS.length;
+/** The wrap frame at which the shell has closed (the cocoon holds this pose). */
+export const BATTLE_BURST_SHELL_CLOSED_FRAME = WRAP_END - 1;

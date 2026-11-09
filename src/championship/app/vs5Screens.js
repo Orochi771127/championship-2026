@@ -135,7 +135,57 @@ function shell(root, screen, label) {
  * Mode identity is now traced through OVL10 0210F88C's help-bank dispatch.
  * The application supplies each mode's entries; this view holds only selection.
  */
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null }) {
+/** The pre-match sponsor contract picker: three contract keys and the stake stepper. */
+export function createSponsorContractStrip(source, busy = () => false) {
+  const strip = element("div", "cm-vs5-sponsors");
+  strip.setAttribute("role", "group");
+  strip.setAttribute("aria-label", uiText("SPONSOR_TITLE"));
+  let stake = null;
+  const paint = () => {
+    const view = source.read();
+    strip.hidden = !view;
+    if (!view) return;
+    const { contracts, stakes, armed, bits } = view;
+    stake = armed?.stake ?? stake ?? stakes.defaultStake;
+    strip.dataset.armed = String(Boolean(armed));
+    const head = element("div", "cm-vs5-sponsors__head");
+    head.append(element("span", "cm-vs5-sponsors__label", uiText(armed ? "SPONSOR_ARMED" : "SPONSOR_TITLE"), false));
+    const stepper = element("div", "cm-vs5-sponsors__stake");
+    const minus = element("button", "cm-vs5-sponsors__step", "−", false), plus = element("button", "cm-vs5-sponsors__step", "+", false);
+    minus.type = plus.type = "button";
+    minus.setAttribute("aria-label", uiText("SPONSOR_STAKE_DOWN")); plus.setAttribute("aria-label", uiText("SPONSOR_STAKE_UP"));
+    minus.disabled = stake <= stakes.minimum; plus.disabled = stake + stakes.step > Math.min(stakes.maximum, bits);
+    const shift = (delta) => {
+      if (busy()) return;
+      stake = Math.max(stakes.minimum, Math.min(stakes.maximum, stake + delta));
+      if (armed) source.arm(armed.contractId, stake);
+      paint();
+    };
+    minus.addEventListener("click", () => shift(-stakes.step)); plus.addEventListener("click", () => shift(stakes.step));
+    stepper.append(minus, element("span", "cm-vs5-sponsors__amount", uiText("SPONSOR_STAKE", { bits: stake }), false), plus);
+    head.append(stepper);
+    const keys = element("div", "cm-vs5-sponsors__keys");
+    for (const contract of contracts) {
+      const key = element("button", "cm-vs5-sponsor");
+      key.type = "button";
+      key.dataset.contract = contract.id; key.dataset.faction = contract.faction;
+      const on = armed?.contractId === contract.id;
+      key.setAttribute("aria-pressed", String(on));
+      key.disabled = !on && bits < stake;
+      key.append(element("span", "cm-vs5-sponsor__name", uiText(`SPONSOR_${contract.id}_NAME`), false),
+        element("span", "cm-vs5-sponsor__rule", uiText(`SPONSOR_${contract.id}_RULE`), false),
+        element("span", "cm-vs5-sponsor__pay", uiText(`SPONSOR_${contract.id}_PAY`, { payout: contract.payout, bits: Math.floor(stake * contract.payout) }), false));
+      key.addEventListener("click", () => { if (busy()) return; source.arm(on ? null : contract.id, stake); paint(); });
+      keys.append(key);
+    }
+    const note = element("p", "cm-vs5-sponsors__note", uiText(bits < stakes.minimum ? "SPONSOR_NEED_BITS" : "SPONSOR_NOTE", { bits: stakes.minimum }), false);
+    strip.replaceChildren(head, keys, note);
+  };
+  paint();
+  return strip;
+}
+
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null, sponsorContracts=null }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -260,6 +310,9 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     paintBeacons();
     header.append(strip);
   }
+  // Sponsor stake contracts (AWAKENING_OVERDRIVE_20261109): at most one rides the next AI title match, free battle or
+  // tournament round. `read()` gives {contracts, stakes, armed, bits}; `arm(id, stake)` (null id disarms).
+  if (sponsorContracts) header.append(createSponsorContractStrip(sponsorContracts, () => entering));
   async function selectMode(id){
     if(cubeDisposed||entering)return;
     if(id==='CHAMPIONSHIP'){onOpenChampionship?.();return;}
@@ -1028,7 +1081,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit,onLoadErrorExit=null,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null, onBurst=null, fighterBadge=null }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,onLoadErrorExit=null,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null, onBurst=null, fighterBadge=null, bindBurstPress=null }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
   if(![0,1].includes(localTeamIndex))throw new TypeError('The Battle field view requires a local team');
@@ -1079,9 +1132,21 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
   burstButton.type = "button";
   burstButton.hidden = true;
   burstButton.append(element("span", "cm-vs5-burst-button__label", uiText("BATTLE_BURST_BUTTON")));
+  const burstHint = element("span", "cm-vs5-burst-hint", uiText("BATTLE_OVER_LIMIT_HINT"), false);
+  burstHint.hidden = true;
+  burstHint.setAttribute("aria-hidden", "true");
   let burstReadySlot = null;
-  burstButton.addEventListener("click", () => { if (burstReadySlot !== null) onBurst?.(burstReadySlot); });
-  if (onBurst) host.append(burstButton);
+  // Over-limit burst (AWAKENING_OVERDRIVE_20261109): a long press or a double tap goes over the limit. The caller
+  // hands over the press binding; without one the key keeps its single tap.
+  const call = (overLimit) => { if (burstReadySlot !== null) onBurst?.(burstReadySlot, { overLimit }); };
+  if (bindBurstPress) bindBurstPress(burstButton, { ready: () => burstReadySlot !== null, onStandard: () => call(false), onOverLimit: () => call(true) });
+  else burstButton.addEventListener("click", () => call(false));
+  if (onBurst) host.append(burstButton, burstHint);
+  // The over-limit countdown and the exhaustion that may follow it, over the field.
+  const overLimitBadge = element("p", "cm-vs5-over-limit");
+  overLimitBadge.hidden = true;
+  overLimitBadge.setAttribute("role", "status");
+  host.append(overLimitBadge);
   host.setAttribute('aria-busy','true');
   // 2026-10-12: real progress while the arena loads -- steps finish with their
   // loads, bytes are what the network delivered, nothing moves on a timer.
@@ -1264,8 +1329,17 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
         cards.get(combatant.slot)?.update(combatant,view.animationFrame??0,view.outcome,actingSlot);
       }
       const ready = view.combatants.find((c) => c.present && c.team === localTeamIndex && c.burst?.phase === "READY") ?? null;
+      const over = view.combatants.find((c) => c.present && c.team === localTeamIndex && ((c.burst?.phase === "BURST" && c.burst.overLimit) || c.burst?.phase === "EXHAUSTED")) ?? null;
+      overLimitBadge.hidden = !over || view.outcome.ended;
+      if (over) {
+        const exhausted = over.burst.phase === "EXHAUSTED";
+        const left = Math.max(0, Math.ceil(((exhausted ? over.burst.exhaustFrames : over.burst.burstFrames) - (over.burst.phaseFrame ?? 0)) / 60));
+        overLimitBadge.dataset.state = exhausted ? "exhausted" : "over";
+        overLimitBadge.textContent = uiText(exhausted ? "BATTLE_EXHAUSTED" : "BATTLE_OVER_LIMIT_LEFT", { name: over.displayName ?? "", seconds: left });
+      }
       burstReadySlot = ready?.slot ?? null;
       burstButton.hidden = !ready || view.outcome.ended;
+      burstHint.hidden = burstButton.hidden;
       if (ready) {
         // Owner 2026-11-08: READY waits for the player's press, so the ring stays full instead of counting down.
         burstButton.style.setProperty("--burst-left", "1");
@@ -1356,7 +1430,7 @@ function resultSummary(summary, winningTeam) {
   return box;
 }
 
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null, sponsor=null }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
   let disposed=false;
 
@@ -1458,6 +1532,18 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     }
   });
 
+  // The sponsor contract this match carried (AWAKENING_OVERDRIVE_20261109): paid out, or the stake kept.
+  if (sponsor) {
+    panels.push({ id: "SPONSOR", scene: "result_sub_prize_scene", build() {
+      const frag = document.createDocumentFragment(), head = element("header", "cm-vs5-header cm-vs5-result__sponsor");
+      head.dataset.met = String(sponsor.met);
+      head.append(element("span", "cm-vs5-kicker", uiText(`SPONSOR_${sponsor.contractId}_NAME`), false),
+        element("h1", "cm-vs5-title", sponsor.met ? uiText("SPONSOR_WON", { bits: sponsor.payout }) : uiText("SPONSOR_LOST", { bits: sponsor.stake }), false));
+      frag.append(head);
+      for (const line of sponsor.lines ?? []) frag.append(element("p", "cm-vs5-result__detail", line, false));
+      return frag;
+    } });
+  }
   if(credited&&receipt.won&&Number.isInteger(progression?.rankBefore)&&Number.isInteger(progression?.rankAfter)&&progression.rankAfter>progression.rankBefore){
     panels.push({id:'RANK',scene:'result_sub_rankup_scene',build(){
       const frag=document.createDocumentFragment();frag.append(element('span','cm-vs5-kicker','馴獸師升階'),

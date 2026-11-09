@@ -1,5 +1,5 @@
 import {readRaisingGroundSupport} from './raisingGroundSupport.js';
-import {habitatMatch} from '../contracts/speciesTaxonomy.js';
+import {habitatMatch,speciesTaxonomy} from '../contracts/speciesTaxonomy.js';
 import {GACHA_CHIPS,GACHA_METALS,GACHA_GOODS,GACHA_PITY_MAX,GACHA_MACHINES,GACHA_BLOODLINES,getGachaChip,getGachaMetal,getGachaGoods,gachaRarityRank,
   grantGachaWelcome,grantGachaTickets,pullCyberGacha,claimGachaPity,autoFillSynthesizer,synthesizeGachaMetal,applyGachaBoost,metalBoostEffect,
   inscribesBloodline,catalystRarityForGeneration,spendGachaItem,fuseGachaShards,shardFusionTarget,GACHA_SHARD_FUSION_COST,settleGachaBattleWin,takeArmedHuntChips,gachaBloodlineOf,claimGachaReward} from '../gacha/cyberGacha.js';
@@ -24,7 +24,14 @@ import {normalizeBurstEvolution,createBurstEvolutionState,withBurstMigrated,lega
   burstUnlocksOf,burstFormsFor,evaluateBurstConditions,preferBurstForm,preferredBurstForm,burstPlanFor,burstTierForRank,burstFormTier,
   AWAKENING_RULES,partnerAwakenings,awakeningFocus,awakeningTargetOf,awakeningAppearanceOf,transcendStarsOf,feedAwakeningEnergy,
   addTranscendStar,setAwakeningTarget,setAwakeningAppearance,clearAwakeningShown,learnAwakening,awakeningDisplayFor,awakeningItemEnergy} from '../contracts/productBurstEvolution.js';
-import {REALTIME_TRAINING_POLICY,recommendedCages} from '../raising/productTrainingPolicy.js';
+import {overdriveOf,withOverdrive,awakeningSeedOf,withAwakeningSeed,sponsorContractOf,sponsorEscrowOf,withSponsorContract,withSponsorEscrow,
+  BURST_CONDITION_IDS,BURST_CONDITION_FIELDS} from '../contracts/productBurstEvolution.js';
+import {OVERDRIVE_RULES,overdriveHeatAt,overdriveCooling,resolveOverdriveTraining,instinctNoise,
+  SPONSOR_CONTRACTS,SPONSOR_STAKES,sponsorContract,validSponsorStake,settleSponsorContract,WILD_INSTINCT_BLOODLINES,wildInstinct,
+  rollWildInstinct,ownPointCondition} from '../contracts/productAwakeningOverdrive.js';
+import {applyProductTrainingGains} from '../raising/nativeRaisingTraining.js';
+import {inscribeGachaBloodline,grantGachaMetal} from '../gacha/cyberGacha.js';
+import {REALTIME_TRAINING_POLICY,recommendedCages,TRAINING_KIND_OF_CONDITION} from '../raising/productTrainingPolicy.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
 import {assertPlayableProductSaveData,PRODUCT_RAISING_LIFECYCLE_RULES,productPartnerG} from '../contracts/productSpeciesData.js';
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
@@ -307,6 +314,8 @@ export function createChampionshipStandaloneApp({
   let selectedGateId = null;
   let confirmedGateId = null;
   let huntRuntime = null;
+  // Wild instinct of this hunt's wild partners by wildId (AWAKENING_OVERDRIVE_20261109); cleared at the Home commit.
+  let huntInstincts = new Map();
   let huntDeadlineMinute = null;
   let huntEntryError = null;
   // The Shop owns the inventory; the loadout only reads it.
@@ -968,7 +977,7 @@ export function createChampionshipStandaloneApp({
         const residents=[...raisingActors].filter(([,other])=>!other.detached&&(other.cageInstanceId??other.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).sort((a,b)=>a[1].poolSlot-b[1].poolSlot);
         let ageDelta=age.ageDelta;
         if(realtime){
-          ageDelta=takeAgeUnits(realtimeAge,id,realtimeAgeRate(nativeHuntSpeciesByIndex(actor.speciesIndex).generation)/60);
+          ageDelta=takeAgeUnits(realtimeAge,id,realtimeAgeRate(nativeHuntSpeciesByIndex(actor.speciesIndex).generation,{starterEgg:isStarterEgg(id,raisingNativeProfile(id))})/60);
           if(night&&!((realtimeWake.get(id)??0)>nowMs)){
             const napped=beginNativeRaisingNap(actor,raisingNativeProfile(id),{next:nextGameplayRandom});
             if(napped){writeRaisingNativeProfile(id,napped);changed=true;}
@@ -979,6 +988,7 @@ export function createChampionshipStandaloneApp({
           // The playtest lifts the rank's evolution ceiling and cage capacity (Owner 2026-11-04).
           lifecycle:raisingGround?{rank:playtestPolicy?.enabled===true?9:Math.min(9,tamerRankValue),minute:before.clockMinutes+minutes,season:before.season,
             training:realtime?REALTIME_TRAINING_POLICY:null,trainingBonus:royalTrainingBonus(actor),capacityBonusG:ranchLandBonusG(),
+            overdrive:realtime?training=>overdriveTraining(id,training):null,
             cageEffects:realtime&&REALTIME_RECOVERY_CAGES.includes(actor.cageDefinitionIndex)?[]:undefined,
             onJoin:()=>notifyNativeRaisingResidentAdded(actor,[...raisingActors.values()].filter(a=>!a.detached),{next:nextGameplayRandom}),
             getResidents:()=>[...raisingActors].filter(([,a])=>!a.detached&&(a.cageInstanceId??a.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).sort((a,b)=>a[1].poolSlot-b[1].poolSlot).map(([key])=>raisingNativeProfile(key)),
@@ -1039,7 +1049,7 @@ export function createChampionshipStandaloneApp({
       const generation=index<8?0:nativeHuntSpeciesByIndex(index).generation;
       if(generation>=4||(index>=8&&!rule))continue;
       const life=index<8?60:profile.fields['04c']?NATIVE_RAISING_LIFECYCLE_RULES.extendedLife[generation]:rule.life;
-      const age=profile.fields['18c']>>>0,grown=Math.min(Math.max(age,life),age+Math.floor(realtimeAgeRate(generation)*seconds));
+      const age=profile.fields['18c']>>>0,grown=Math.min(Math.max(age,life),age+Math.floor(realtimeAgeRate(generation,{starterEgg:isStarterEgg(id,profile)})*seconds));
       if(grown>age){const next=structuredClone(profile);next.fields['18c']=grown>>>0;writeRaisingNativeProfile(id,next,{markDirty:false});}
     }
   }
@@ -1150,7 +1160,7 @@ export function createChampionshipStandaloneApp({
       ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(raisingNativeProfile(p.instanceId))!==JSON.stringify(p.nativeProfile))))
       return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇。'};
     const result=applyBattleTransaction(beginBattleAttempt(battleEconomy,{attemptId,matchIndex:-1,mode,battleType:0,
-      entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng);
+      entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng,[],mode===2?{begin:attemptId}:null);
     if(!result.ok||result.duplicate)return result;
     battleRngPreparations.delete(rngPreparation);battlePartyIds=transientMode?null:[...playerInstanceIds];
     screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);publishScreens();return result;
@@ -1563,6 +1573,8 @@ export function createChampionshipStandaloneApp({
   // saved under progression.burstEvolution. A partner saved as a former 覺醒體/究極體 returns to its 成熟期.
   function burstState(){return burstEvolution??(burstEvolution=withBurstMigrated(createBurstEvolutionState()));}
   function partnerProfile(instanceId){return instanceId===creature?.creatureId?creature.nativeProfile??null:raisingNativeProfile(instanceId);}
+  /** The egg a new game starts with, before it is ever reborn (it hatches in 30 s; time/realtimeClock.js). */
+  function isStarterEgg(id,profile){return id===creature?.creatureId&&(profile?.fields?.['000']??8)<8&&((((profile.narrowFields?.['03c']??0)<<24)>>24)===0);}
   function partnerIds(){return [...new Set([...(creature?.creatureId?[creature.creatureId]:[]),...(raising?.collection??[]).map(e=>e.instanceId)])];}
   // Every load scans: a partner can only be a 覺醒體/究極體 in a save written before the redesign (or a fixture
   // built on one), and after this pass none is, so the scan is idempotent.
@@ -1620,9 +1632,71 @@ export function createChampionshipStandaloneApp({
     return deepFreeze({instanceId,base:profile.fields['000'],focus:focus?.form??null,target,appearance:awakeningAppearanceOf(state,instanceId),
       bloodline:gachaBloodlineOf(cyberGacha,instanceId)?.family??null,bond,stars,maxStars:rules.maxStars,bondMinimum:rules.bondMinimum,
       canTranscend:stars<rules.maxStars&&bond>=rules.bondMinimum&&transcendItems.length>0,transcendItems,feeds,itemCap:AWAKENING_RULES.itemCap,
+      overdrive:overdriveView(instanceId),seed:awakeningSeedOf(state,instanceId),
       forms:awakenings.map(a=>({...a,rows:a.rows.map(row=>({...row,cages:recommendedCages(row.id)})),
         planned:plan&&[a.form,...a.alternates].includes(plan.form)?plan.form:null,alternatesUnlocked:a.alternates.filter(x=>learned.has(x))}))});
   }
+  // ---- Awakening overdrive (OWNER_APPROVED_ADAPTATION 2026-11-09, AWAKENING_OVERDRIVE_20261109) ----
+  // Overdrive cage training on the real-time ranch: a few bits per training multiply its awakening points, a core
+  // heat builds and backfires past backlashAbove; a recovery cage next door (or the partner inside one) cools it.
+  const overdriveEvents=[];let overdriveSerial=0,productRollSerial=0;
+  // Product rolls never read the gameplay RNG, so native draws stay where they were.
+  const productRoll=(...keys)=>instinctNoise(Math.floor(realNowMs()),++productRollSerial,...keys);
+  /** Recovery-cage cooling where the partner stands: 'inside', 'adjacent' or 'base'. */
+  function overdriveCoolingOf(instanceId){
+    const actor=raisingActors.get(instanceId),placements=raisingGround?.placements??[];
+    const own=actor?.cageInstanceId?placements.find(p=>p.instanceId===actor.cageInstanceId):null;
+    const neighbours=[];
+    if(own)for(const edge of raisingGround?.navigation?.boundaries??[]){
+      const other=edge.left===own.ownerIndex?edge.right:edge.right===own.ownerIndex?edge.left:null;
+      const definition=other===null?null:getCageDefinitionByModuleId(placements[other]?.moduleId)?.cageDefinitionIndex;
+      if(Number.isInteger(definition))neighbours.push(definition);
+    }
+    return overdriveCooling(actor?.cageDefinitionIndex??null,neighbours);
+  }
+  function overdriveHeatNow(instanceId,record=overdriveOf(burstState(),instanceId)){
+    return record?overdriveHeatAt(record,realNowMs(),OVERDRIVE_RULES.coolPerMinute[overdriveCoolingOf(instanceId)]):0;
+  }
+  function overdriveView(instanceId){
+    const record=overdriveOf(burstState(),instanceId),now=realNowMs(),heat=Math.round(overdriveHeatNow(instanceId,record));
+    return Object.freeze({on:record?.on===true,heat,cooling:overdriveCoolingOf(instanceId),costBits:OVERDRIVE_RULES.costBits,
+      backlashAbove:OVERDRIVE_RULES.backlashAbove,danger:heat>OVERDRIVE_RULES.backlashAbove,
+      fatigueSeconds:record?.fatigueUntil>now?Math.ceil((record.fatigueUntil-now)/1000):0,
+      multiplier:OVERDRIVE_RULES.multiplier,available:Boolean(realtime)});
+  }
+  /** The actor's training hook: null keeps the plain training. */
+  function overdriveTraining(instanceId,{before,after,commands}){
+    const state=burstState(),record=overdriveOf(state,instanceId);
+    if(!record?.on||!burstFormsFor(after.fields['000']).length||!shop)return null;
+    const now=realNowMs();
+    if(record.fatigueUntil>now)return null;
+    const bits=shop.getBits(),cost=OVERDRIVE_RULES.costBits;
+    if(bits<cost){pushOverdriveEvent({instanceId,kind:'NO_BITS'});return null;}
+    const heat=overdriveHeatNow(instanceId,record);
+    const outcome=resolveOverdriveTraining({commands,heat,roll:()=>productRoll(0x0d)});
+    if(!shop.applyBitsTransaction({expectedBits:bits,bits:bits-cost}).ok)return null;
+    if(outcome.backlash){
+      // Core backlash: the training gives nothing and the partner tires for a short while.
+      const tired=structuredClone(before);tired.fields['040']=Math.min(100,(tired.fields['040']|0)+OVERDRIVE_RULES.backlashFatigue);
+      burstEvolution=withOverdrive(state,instanceId,{on:true,heat:Math.round(heat),at:now,fatigueUntil:now+OVERDRIVE_RULES.backlashSeconds*1000});
+      pushOverdriveEvent({instanceId,kind:'BACKLASH',heat:Math.round(heat)});
+      savePort.markDirty();
+      return {profile:normalizeNativeIndividualProfile(tired),commands:[]};
+    }
+    const gained=applyProductTrainingGains(after,outcome.extra);
+    burstEvolution=withOverdrive(state,instanceId,{on:true,heat:Math.round(outcome.heat),at:now});
+    pushOverdriveEvent({instanceId,kind:outcome.epiphany?'EPIPHANY':'BOOST',multiplier:outcome.multiplier,heat:Math.round(outcome.heat)});
+    savePort.markDirty();
+    // The rising labels show each point row at its overdrive total, then the epiphany's stat rows.
+    const extraByKind=new Map();for(const row of gained.commands)if(row.kind<11)extraByKind.set(row.kind,(extraByKind.get(row.kind)??0)+row.delta);
+    const shown=commands.map(c=>extraByKind.has(c.kind)?{...c,delta:c.delta+extraByKind.get(c.kind)}:c);
+    return {profile:gained.profile,commands:[...shown,...gained.commands.filter(row=>row.kind>=11)]};
+  }
+  function pushOverdriveEvent(event){
+    overdriveEvents.push(Object.freeze({serial:++overdriveSerial,...event}));
+    while(overdriveEvents.length>12)overdriveEvents.shift();
+  }
+
   /** The battle plan with what the battle reads besides the form: its tier-1 form (tier 2), bloodline and bond. */
   function battleBurstPlanOf(instanceId,plan=partnerBurstPlan(instanceId)){
     const profile=partnerProfile(instanceId);if(!plan||!profile)return plan??null;
@@ -1964,7 +2038,35 @@ export function createChampionshipStandaloneApp({
     applySavedGameData(saved,candidate,options);
   }
 
-  function applyBattleTransaction(result, individualResults=[], preparedRng=null, burstForms=[]) {
+  // Sponsor stake contracts (OWNER_APPROVED_ADAPTATION 2026-11-09, AWAKENING_OVERDRIVE_20261109). The armed contract
+  // takes its stake with the match's own entry (`sponsor.begin`) and pays at its settlement (`sponsor.settle`), in
+  // the same wallet commit; a match left unfinished keeps the stake.
+  let lastSponsorSettlement=null;
+  function sponsorReward(reward,partyIds){
+    const gains=[];
+    for(const instanceId of partyIds??[]){
+      const view=partnerAwakeningView(instanceId),focus=view?.forms.find(f=>f.form===view.focus)??null,profile=partnerProfile(instanceId);
+      if(!focus||!profile)continue;
+      if(reward.awakeningPoints>0){
+        // The point row furthest behind on the focus form takes the points.
+        const row=[...focus.rows].filter(r=>BURST_CONDITION_IDS.includes(r.id)).sort((a,b)=>a.current/a.value-b.current/b.value)[0];
+        if(row){const next=structuredClone(profile),field=BURST_CONDITION_FIELDS[BURST_CONDITION_IDS.indexOf(row.id)];
+          next.fields[field]=((next.fields[field]>>>0)+reward.awakeningPoints)>>>0;
+          writeRaisingNativeProfile(instanceId,normalizeNativeIndividualProfile(next),{markDirty:false});
+          gains.push(Object.freeze({instanceId,points:reward.awakeningPoints,condition:row.id}));}
+      }
+      if(reward.awakeningPercent>0){
+        const fed=feedAwakeningEnergy(burstState(),instanceId,focus.form,{amount:reward.awakeningPercent});
+        if(fed){burstEvolution=fed;gains.push(Object.freeze({instanceId,percent:reward.awakeningPercent,form:focus.form}));}
+      }
+    }
+    if(reward.shard){
+      const shard=['metal:emma-shard','metal:beta-shard'][Math.floor(productRoll(0x51)*2)];
+      cyberGacha=grantGachaMetal(gachaState(),shard,1);gains.push(Object.freeze({metal:shard}));
+    }
+    return Object.freeze(gains);
+  }
+  function applyBattleTransaction(result, individualResults=[], preparedRng=null, burstForms=[], sponsor=null) {
     if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
     if (!result.ok || result.duplicate) return result;
     const before = battleEconomy;
@@ -1972,7 +2074,7 @@ export function createChampionshipStandaloneApp({
     const beforeRng=gameplayRng;
     const beforeBadges = battleBadgesValue;
     const beforeRank=tamerRankValue,beforeTitles=nativeTitles,beforeMessages=nativeMessages,beforeRun=championshipRun;
-    const beforeGacha=cyberGacha,beforeGachaDrop=lastBattleGachaDrop,beforeBurst=burstEvolution,beforeBurstUnlocks=lastBurstUnlocks;
+    const beforeGacha=cyberGacha,beforeGachaDrop=lastBattleGachaDrop,beforeBurst=burstEvolution,beforeBurstUnlocks=lastBurstUnlocks,beforeSponsor=lastSponsorSettlement;
     const expectedBits = requireShop().getBits();
     // One rollback for both ways this can fail. The wallet is committed last, so
     // until it succeeds every one of these is still the pre-transaction value.
@@ -1982,7 +2084,7 @@ export function createChampionshipStandaloneApp({
       gameplayRng=beforeRng;
       battleBadgesValue = beforeBadges;
       tamerRankValue=beforeRank;nativeTitles=beforeTitles;nativeMessages=beforeMessages;championshipRun=beforeRun;
-      cyberGacha=beforeGacha;lastBattleGachaDrop=beforeGachaDrop;burstEvolution=beforeBurst;lastBurstUnlocks=beforeBurstUnlocks;
+      cyberGacha=beforeGacha;lastBattleGachaDrop=beforeGachaDrop;burstEvolution=beforeBurst;lastBurstUnlocks=beforeBurstUnlocks;lastSponsorSettlement=beforeSponsor;
     };
     battleTransactionActive = true;
     try {
@@ -2023,6 +2125,20 @@ export function createChampionshipStandaloneApp({
         }
         lastBattleGachaDrop=Object.freeze({attemptId:result.receipt.attemptId??null,tickets:drop.tickets,bonusBits:wallet-result.wallet,beacon:drop.beacon,metals:drop.metals,
           battles:drop.battles,exp:drop.exp});
+      }
+      const armed=sponsorContractOf(burstState());
+      if(sponsor?.begin&&armed&&wallet>=armed.stake){
+        wallet-=armed.stake;
+        burstEvolution=withSponsorEscrow(withSponsorContract(burstState(),null),{...armed,attemptId:sponsor.begin,
+          foeBoostPercent:sponsorContract(armed.contractId)?.condition.foeBoostPercent??0});
+      }
+      const escrow=sponsorEscrowOf(burstState());
+      if(sponsor?.settle&&escrow&&escrow.attemptId===result.receipt?.attemptId){
+        const settled=settleSponsorContract(escrow,{won:result.receipt.won===true,...(sponsor.settle.stats??{}),foeBoostPercent:escrow.foeBoostPercent});
+        wallet=Math.min(BITS_WALLET_CAP,wallet+settled.payout);
+        burstEvolution=withSponsorEscrow(burstState(),null);
+        const gains=settled.met?sponsorReward(settled.reward,sponsor.settle.partyIds):Object.freeze([]);
+        lastSponsorSettlement=Object.freeze({attemptId:escrow.attemptId,contractId:escrow.contractId,stake:escrow.stake,met:settled.met,payout:settled.payout,gains});
       }
       const committed = requireShop().applyBitsTransaction({ expectedBits, bits: wallet });
       if (!committed.ok) {
@@ -3222,6 +3338,7 @@ export function createChampionshipStandaloneApp({
         ...(huntRuntime?.getOnCardEntries() ?? []).map((entry) => Object.freeze({
           key: `card:${entry.wildId}`, kind: "CARD", id: entry.wildId, speciesId: entry.speciesId,
           displayName: entry.displayName ?? speciesDisplayName(entry.speciesId), canRelease: true,
+          instinct: huntInstincts.get(entry.wildId) ?? 'NORMAL',
           selected: entry.wildId === huntResult.wildId })),
         ...listRaisingInstances(instanceSources()).filter((entry) => !released.has(entry.instanceId)).map((entry) => Object.freeze({
           key: `home:${entry.instanceId}`, kind: "HOME", id: entry.instanceId, speciesId: entry.speciesId,
@@ -3778,7 +3895,9 @@ export function createChampionshipStandaloneApp({
       const partners=this.getRaisingInstances().map(entry=>{
         const profile=gachaProfile(entry.instanceId),index=profile?.fields['000']??null;
         const species=Number.isInteger(index)?nativeHuntSpeciesByIndex(index):null;
+        // displayName/speciesId/source let the views show the partner as everywhere else (raisingDisplayName), not its raw native name.
         return Object.freeze({instanceId:entry.instanceId,name:profile?.name||entry.displayName,speciesIndex:index,
+          displayName:entry.displayName??null,speciesId:entry.speciesId??null,source:entry.source??null,
           generation:species?.generation??null,inRanch:raisingActors.has(entry.instanceId),
           stats:profile?projectNativeIndividualStats(profile):null,bloodline:gachaBloodlineOf(state,entry.instanceId),
           // GACHA_FULL_EFFECTS_20261109: each evolution route with what it still lacks (the catalyst picks one).
@@ -3884,6 +4003,71 @@ export function createChampionshipStandaloneApp({
     getBattleBurstPlan(instanceId){return battleBurstPlanOf(instanceId);},
     /** Awakening raising (OWNER_APPROVED_ADAPTATION 2026-11-02): the partner's awakening path, or null. */
     getPartnerAwakening(instanceId){return partnerAwakeningView(instanceId);},
+    /** Sponsor stake contracts (AWAKENING_OVERDRIVE_20261109): the three, the stakes, the armed one and the wallet. */
+    getSponsorContracts(){
+      if(!session)return null;
+      return Object.freeze({contracts:SPONSOR_CONTRACTS,stakes:SPONSOR_STAKES,armed:sponsorContractOf(burstState()),
+        escrow:sponsorEscrowOf(burstState()),bits:shop?.getBits()??0});
+    },
+    /** Arm one contract for the next AI title match, free battle or tournament round (null contractId disarms). */
+    armSponsorContract(contractId,stake=SPONSOR_STAKES.defaultStake){
+      requireSession();
+      if(contractId===null){burstEvolution=withSponsorContract(burstState(),null);savePort.markDirty();return Object.freeze({ok:true,armed:null});}
+      if(!sponsorContract(contractId))return Object.freeze({ok:false,reason:'UNKNOWN_CONTRACT'});
+      if(!validSponsorStake(stake))return Object.freeze({ok:false,reason:'INVALID_STAKE'});
+      if((shop?.getBits()??0)<stake)return Object.freeze({ok:false,reason:'NOT_ENOUGH_BITS'});
+      burstEvolution=withSponsorContract(burstState(),{contractId,stake});savePort.markDirty();
+      return Object.freeze({ok:true,armed:sponsorContractOf(burstEvolution)});
+    },
+    getSponsorEscrow(){return session?sponsorEscrowOf(burstState()):null;},
+    /** Data Arena: the armed contract takes its stake as a tournament or relay starts. Returns {ok, foeBoostPercent}. */
+    beginArenaSponsorContract(){
+      requireSession();
+      const armed=sponsorContractOf(burstState()),bits=shop?.getBits()??0;
+      // A stake still held by an arena match that never reached its result stays with the sponsor.
+      const stale=sponsorEscrowOf(burstState());
+      if(stale?.attemptId.startsWith('arena:')){burstEvolution=withSponsorEscrow(burstState(),null);
+        lastSponsorSettlement=Object.freeze({attemptId:stale.attemptId,contractId:stale.contractId,stake:stale.stake,met:false,payout:0,gains:Object.freeze([]),forfeited:true});}
+      if(!armed||bits<armed.stake||sponsorEscrowOf(burstState())){savePort.markDirty();return Object.freeze({ok:false,reason:armed?'NOT_ENOUGH_BITS':'NO_CONTRACT'});}
+      if(!shop.applyBitsTransaction({expectedBits:bits,bits:bits-armed.stake}).ok)return Object.freeze({ok:false,reason:'WALLET_CHANGED'});
+      const foeBoostPercent=sponsorContract(armed.contractId)?.condition.foeBoostPercent??0;
+      burstEvolution=withSponsorEscrow(withSponsorContract(burstState(),null),{...armed,attemptId:`arena:${realNowMs()}`,foeBoostPercent});
+      savePort.markDirty();
+      return Object.freeze({ok:true,contractId:armed.contractId,stake:armed.stake,foeBoostPercent});
+    },
+    /** Data Arena: settle the staked contract on the match result ({won, partnerDowns, seconds, partyIds}). */
+    settleArenaSponsorContract({won=false,partnerDowns=0,seconds=Infinity,partyIds=[]}={}){
+      requireSession();
+      const escrow=sponsorEscrowOf(burstState());
+      if(!escrow?.attemptId.startsWith('arena:'))return Object.freeze({ok:false,reason:'NO_ESCROW'});
+      const settled=settleSponsorContract(escrow,{won:won===true,partnerDowns,seconds,foeBoostPercent:escrow.foeBoostPercent});
+      const before={creature,raising,burst:burstEvolution,gacha:cyberGacha},bits=shop.getBits();
+      burstEvolution=withSponsorEscrow(burstState(),null);
+      const gains=settled.met?sponsorReward(settled.reward,partyIds.filter(id=>partnerProfile(id))):Object.freeze([]);
+      if(settled.payout>0&&!shop.applyBitsTransaction({expectedBits:bits,bits:Math.min(BITS_WALLET_CAP,bits+settled.payout)}).ok){
+        creature=before.creature;raising=before.raising;burstEvolution=before.burst;cyberGacha=before.gacha;
+        return Object.freeze({ok:false,reason:'WALLET_CHANGED'});
+      }
+      lastSponsorSettlement=Object.freeze({attemptId:escrow.attemptId,contractId:escrow.contractId,stake:escrow.stake,met:settled.met,payout:settled.payout,gains});
+      savePort.markDirty();publishRaising();
+      return Object.freeze({ok:true,...lastSponsorSettlement});
+    },
+    /** The last settled (or forfeited) contract, for the result screen. */
+    getLastSponsorSettlement(){return lastSponsorSettlement;},
+    /** Overdrive training switch for one awakening partner (AWAKENING_OVERDRIVE_20261109). */
+    setPartnerOverdrive(instanceId,on){
+      requireSession();
+      const view=partnerAwakeningView(instanceId);if(!view)return Object.freeze({ok:false,reason:'NOT_AWAKENABLE'});
+      if(!realtime)return Object.freeze({ok:false,reason:'REALTIME_ONLY'});
+      const record=overdriveOf(burstState(),instanceId),now=realNowMs();
+      const heat=Math.round(overdriveHeatNow(instanceId,record));
+      const next={on:on===true,heat,at:now,...(record?.fatigueUntil>now?{fatigueUntil:record.fatigueUntil}:{})};
+      burstEvolution=withOverdrive(burstState(),instanceId,next.on||next.heat>0||next.fatigueUntil?next:null);
+      savePort.markDirty();publishRaising();
+      return Object.freeze({ok:true,on:next.on,heat});
+    },
+    /** Overdrive training results since the last read (boosts, epiphanies, backlashes, no bits). */
+    takeOverdriveEvents(){return Object.freeze(overdriveEvents.splice(0));},
     /** Ranch signs of partners still raising a form: {instanceId: {form, tier, percent, glow, ready}}. */
     getAwakeningSigns(){return Object.freeze(Object.fromEntries(awakeningSigns));},
     /** The learned form a 成熟期 shows on the ranch now (its ceremony's display, or its chosen look), or null. */
@@ -4483,7 +4667,7 @@ export function createChampionshipStandaloneApp({
       const result = applyBattleTransaction(beginBattleAttempt(battleEconomy, {
         attemptId, matchIndex: championshipRun.category, mode: 0, battleType: 0,
         entryFee: 0, payout: 0, expectedRounds: 1
-      }, requireShop().getBits()),[],prepared?.rng??null);
+      }, requireShop().getBits()),[],prepared?.rng??null,[],{begin:attemptId});
       if (!result.ok || result.duplicate) return result;
       if(rngPreparation)battleRngPreparations.delete(rngPreparation);
       championshipAttemptId = attemptId;
@@ -4618,7 +4802,7 @@ export function createChampionshipStandaloneApp({
       const result = applyBattleTransaction(beginBattleAttempt(battleEconomy, {
         attemptId, matchIndex: recordIndex, mode, battleType,
         entryFee: matchEntryFee(recordIndex), payout: matchPayout(recordIndex), expectedRounds: 1
-      }, requireShop().getBits()),[],preparedRng?.rng);
+      }, requireShop().getBits()),[],preparedRng?.rng,[],{begin:attemptId});
       if (!result.ok || result.duplicate) return result;
       if(rngPreparation)battleRngPreparations.delete(rngPreparation);
       battlePartyIds=playerInstanceIds===null?null:[...playerInstanceIds];
@@ -4628,7 +4812,7 @@ export function createChampionshipStandaloneApp({
     },
 
     /** The battle judges itself; nothing else may push the result screen. */
-    finishMatch({ attemptId, ended, mode, battleType, matchIndex, outcomeEntries, individualResults=[], rewardPercent, bursts=[] } = {}) {
+    finishMatch({ attemptId, ended, mode, battleType, matchIndex, outcomeEntries, individualResults=[], rewardPercent, bursts=[], contractStats=null } = {}) {
       requireSession();
       if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
       if (battleTransactionActive) return Object.freeze({ ok: false, reason: "TRANSACTION_ACTIVE" });
@@ -4660,7 +4844,9 @@ export function createChampionshipStandaloneApp({
           entry.nativeProfile,this.resolveRaisingInstance(entry.instanceId).speciesId)}));
       }
       const result = applyBattleTransaction(settleBattleAttempt(battleEconomy, { attemptId, outcomeEntries, ...(rewardPercent===undefined?{}:{rewardPercent}) }, requireShop().getBits()),updates,null,
-        Array.isArray(bursts)?bursts.filter(form=>Number.isSafeInteger(form)&&burstFormTier(form)!==null):[]);
+        Array.isArray(bursts)?bursts.filter(form=>Number.isSafeInteger(form)&&burstFormTier(form)!==null):[],
+        {settle:{stats:{partnerDowns:Number(contractStats?.partnerDowns)||0,seconds:Number.isFinite(contractStats?.seconds)?contractStats.seconds:Infinity},
+          partyIds:battlePartyIds??[]}});
       if (!result.ok || result.duplicate) return result;
       for(const entry of updates)raisingActors.delete(entry.instanceId);
       battlePartyIds=null;
@@ -4690,10 +4876,18 @@ export function createChampionshipStandaloneApp({
       if (battleEconomy.active) {
         // Preserve the existing LEAVE seam without inventing a fee refund.
         // Original cancellation/refund semantics remain a separate trace gate.
+        const abandoned = battleEconomy.active.attemptId;
         const result = applyBattleTransaction(abandonBattleAttempt(battleEconomy, {
-          attemptId: battleEconomy.active.attemptId
+          attemptId: abandoned
         }, requireShop().getBits()));
         if (!result.ok) return screens.current();
+        // A sponsor contract's stake stays with the sponsor when the match is left unfinished.
+        const escrow = sponsorEscrowOf(burstState());
+        if (escrow?.attemptId === abandoned) {
+          burstEvolution = withSponsorEscrow(burstState(), null);
+          lastSponsorSettlement = Object.freeze({ attemptId: abandoned, contractId: escrow.contractId, stake: escrow.stake, met: false, payout: 0, gains: Object.freeze([]), forfeited: true });
+          savePort.markDirty();
+        }
       }
       battlePartyIds = null;
       championshipAttemptId = null;
@@ -4821,8 +5015,17 @@ export function createChampionshipStandaloneApp({
           clock:requireSession().getRaisingHomeSnapshot(),
           rngSnapshot:gameplayRngSnapshot(), persistentState:lurePersistent, resolvePool:resolveProductHuntPoolSources }) : null;
         // It also calls one more partner, this field's rarest (2026-11-02), from the same product pool.
-        const entry = lured && boosts.rareLure ? appendNativeRareLureActor({ ...lured, persistentState:{ ...lured.persistentState,
+        const luredEntry = lured && boosts.rareLure ? appendNativeRareLureActor({ ...lured, persistentState:{ ...lured.persistentState,
           modifiers:structuredClone(huntPersistentState.modifiers) } }) : lured;
+        // Wild awakening instinct (AWAKENING_OVERDRIVE_20261109): each wild partner rolls a hidden instinct from a product
+        // roll (the native RNG is never read); a veteran elite moves faster, an ancestral one stands larger.
+        const entry = luredEntry ? { ...luredEntry, encounter: { ...luredEntry.encounter, actors: luredEntry.encounter.actors.map((actor, i) => {
+          // Keyed by the individual's own native values, so a retried entry rolls the same instincts.
+          const f = actor.individual.fields;
+          const instinct = rollWildInstinct(instinctNoise(0x4e, i, actor.speciesIndex, f['058'], f['060'], f['064'], f['068'], f['06c'], f['018'])), rule = wildInstinct(instinct);
+          return { ...actor, instinct, ...(rule.speedMultiplier ? { ai: { ...actor.ai, speedQ12: Math.round(actor.ai.speedQ12 * rule.speedMultiplier) } } : {}) };
+        }) } } : null;
+        huntInstincts = new Map((entry?.encounter.actors ?? []).map((actor, i) => [`${gate.gateId}:native-wild:${i}`, actor.instinct]));
         lastHuntRareLure = entry?.rareLure ? Object.freeze({ speciesId:`species-${String(entry.rareLure.speciesIndex).padStart(3, "0")}` }) : null;
         const world = createHuntWorld(gate, entry);
         const factory = huntRuntimeFactory
@@ -4999,15 +5202,31 @@ export function createChampionshipStandaloneApp({
           huntResult = Object.freeze({ ...huntResult, commitError: "RANCH_CAPACITY_FULL", ranchG: Object.freeze({ used: ranchUsedG, max: ranchCapacityG() }) });
           publishScreens(); return screens.current();
         }
+        let candidateBurst = burstState(), candidateGacha = cyberGacha;
         for (const entry of entries) {
           const allocation = allocateRaisingInstanceIdentity(candidateIdentity, { ...sources, collection: candidateRaising.collection,
             assignments: candidateRaising.assignments });
           candidateIdentity = allocation.state;
+          // A caught elite brings its own-race awakening points and stronger stats; an ancestral one a head start on its
+          // first awakening and a natural bloodline (AWAKENING_OVERDRIVE_20261109).
+          const instinct = huntInstincts.get(entry.wildId) ?? 'NORMAL', rule = wildInstinct(instinct);
+          let nativeProfile = entry.nativeProfile;
+          if (instinct === 'ELITE') {
+            const condition = ownPointCondition(speciesTaxonomy(nativeProfile.fields['000']));
+            const kind = condition ? TRAINING_KIND_OF_CONDITION[condition] : null;
+            nativeProfile = applyProductTrainingGains(nativeProfile, [...(Number.isInteger(kind) ? [{ kind, delta: rule.awakeningPoints }] : []),
+              ...[18, 19, 20, 21].map((stat) => ({ kind: stat, delta: rule.statGain }))]).profile;
+          }
+          if (instinct === 'ANCESTOR') {
+            candidateBurst = withAwakeningSeed(candidateBurst, allocation.instanceId, rule.awakeningPercent);
+            const family = WILD_INSTINCT_BLOODLINES[Math.floor(productRoll(0x4f) * WILD_INSTINCT_BLOODLINES.length)];
+            candidateGacha = inscribeGachaBloodline(candidateGacha ?? gachaState(), allocation.instanceId, family);
+          }
           candidateRaising = recordCapturedCardCreature(candidateRaising, { instanceId: allocation.instanceId,
             speciesId: entry.speciesId, displayName: entry.displayName, enclosedAt: now(), originGateId: confirmedGateId,
             cageId: Object.values(candidateRaising.assignments)[0] ?? cageIds[0],
             capturedVitals: { ...entry.sourceVitals, traceId: entry.traceId },
-            nativeProfile: entry.nativeProfile });
+            nativeProfile });
         }
         const candidateBook = retainOwnedBookSpecies(registeredSpeciesValue, creature, candidateRaising.collection);
         // OWNER_APPROVED_ADAPTATION 2026-10-28: a lure -> disable -> rope chain
@@ -5020,7 +5239,7 @@ export function createChampionshipStandaloneApp({
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
-            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha, burstEvolution, raising: candidateRaising,
+            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha: candidateGacha, burstEvolution: candidateBurst, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: (bonusShop ?? shop) ? (bonusShop ?? shop).toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),
@@ -5032,6 +5251,7 @@ export function createChampionshipStandaloneApp({
               applyMappedHuntInventoryFromShop(shop, huntInventory); bindShopRuntime();
             }
             raising = candidateRaising; instanceIdentity = candidateIdentity; revision += 1;
+            burstEvolution = candidateBurst; cyberGacha = candidateGacha; huntInstincts = new Map();
             registeredSpeciesValue = candidateBook;
             if (releasedHomeIds.includes(selectedCreatureId)) selectedCreatureId = null;
             if (releasedResidents.length) requireSession().commitRaisingResidentRelease(releasedResidents, beforeSnapshot.revision);

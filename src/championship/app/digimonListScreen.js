@@ -125,6 +125,30 @@ export function awakeningHints(form, { formName = speciesName, cageLabel = (defi
   return hints.slice(0, 2);
 }
 
+/** The overdrive training switch with its core heat meter and one plain note. */
+export function overdriveBlock(overdrive, onToggle, enabled = true) {
+  const block = element("div", "cm-awakening__overdrive");
+  block.dataset.on = String(overdrive.on);
+  block.dataset.danger = String(overdrive.danger);
+  const toggle = element("button", "cm-awakening__btn cm-awakening__overdrive-toggle", overdrive.on ? "OVERDRIVE_ON" : "OVERDRIVE_OFF");
+  toggle.type = "button";
+  toggle.setAttribute("aria-pressed", String(overdrive.on));
+  if (enabled) toggle.addEventListener("click", () => onToggle(!overdrive.on)); else toggle.disabled = true;
+  const heat = element("div", "cm-awakening__heat");
+  heat.setAttribute("role", "meter"); heat.setAttribute("aria-valuemin", "0"); heat.setAttribute("aria-valuemax", "100");
+  heat.setAttribute("aria-valuenow", String(overdrive.heat));
+  heat.setAttribute("aria-label", uiText("OVERDRIVE_HEAT"));
+  heat.style.setProperty("--heat", `${overdrive.heat}%`);
+  heat.style.setProperty("--limit", `${overdrive.backlashAbove}%`);
+  heat.append(element("span", "cm-awakening__heat-fill"), element("span", "cm-awakening__heat-text", uiText("OVERDRIVE_HEAT_VALUE", { heat: overdrive.heat }), false));
+  const note = overdrive.fatigueSeconds > 0 ? uiText("OVERDRIVE_FATIGUED", { seconds: overdrive.fatigueSeconds })
+    : overdrive.danger ? uiText("OVERDRIVE_DANGER", { limit: overdrive.backlashAbove })
+    : uiText(overdrive.cooling === "inside" ? "OVERDRIVE_COOLING_INSIDE" : overdrive.cooling === "adjacent" ? "OVERDRIVE_COOLING_ADJACENT" : "OVERDRIVE_COOLING_BASE");
+  block.append(toggle, heat, element("p", "cm-awakening__note cm-awakening__overdrive-note",
+    `${uiText("OVERDRIVE_ABOUT", { cost: overdrive.costBits, low: overdrive.multiplier.minimum, high: overdrive.multiplier.maximum })} ${note}`, false));
+  return block;
+}
+
 // The awakening path on a 成熟期's card: each form with one progress bar, a plain state and at most two hints;
 // energy items, the core-transcendence star, the battle form and the ranch look are one tap each.
 function appendAwakening(detail, entry, onAwakening) {
@@ -196,6 +220,8 @@ function appendAwakening(detail, entry, onAwakening) {
     }
     cell.append(row);
   }
+  // Overdrive training (AWAKENING_OVERDRIVE_20261109): one switch, the core heat and where it cools.
+  if (view.overdrive?.available && view.forms.some((form) => !form.learned)) cell.append(overdriveBlock(view.overdrive, (on) => act("overdrive", on), Boolean(onAwakening)));
   // The ranch look: the usual 成熟期 or any learned form, switched at any time.
   const learned = view.forms.filter((form) => form.learned).flatMap((form) => [form.form, ...(form.alternatesUnlocked ?? [])]);
   if (learned.length) {
@@ -312,7 +338,7 @@ export function appendCreatureDetail(detail, entry, { onBurstForm = null, onAwak
  * @param {(instanceId: string, name: string) => ({ok: boolean, entries?: Array<object>})} [options.onRename]
  * @param {(instanceId: string) => ({ok: boolean, reason?: string, entries?: Array<object>})} [options.onRebirth]
  */
-export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null, onBurstForm = null, onAwakening = null } = {}) {
+export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null, onBurstForm = null, onAwakening = null, initialInstanceId = null } = {}) {
   if (!root) throw new TypeError("The Digimon list requires a root element");
 
   root.replaceChildren();
@@ -326,7 +352,9 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
   const list = element("ul", "cm-digimon-list");
   const detail = element("dl", "cm-digimon-detail");
 
-  let selectedIndex = entries.length > 0 ? 0 : -1;
+  // The ranch card's › opens the roster on its own partner (Owner 2026-11-09: one partner page, not two).
+  const initial = initialInstanceId === null ? -1 : entries.findIndex((entry) => entry.instanceId === initialInstanceId);
+  let selectedIndex = initial >= 0 ? initial : entries.length > 0 ? 0 : -1;
 
   function renderDetail() {
     detail.replaceChildren();

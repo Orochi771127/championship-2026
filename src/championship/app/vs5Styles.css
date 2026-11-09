@@ -889,6 +889,21 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 .cm-vs5-burst-button[hidden] { display: none; }
 .cm-vs5-fighter[data-burst-warn="true"] .cm-vs5-burst-gauge__fill { background: linear-gradient(90deg, #f43f5e, #fb923c); animation: cm-vs5-burst-ready .35s ease-in-out infinite alternate; }
 @keyframes cm-vs5-burst-button { from { filter: brightness(.9); transform: scale(1); } to { filter: brightness(1.15); transform: scale(1.06); } }
+/* Over-limit burst (AWAKENING_OVERDRIVE_20261109): holding the key heats it red over the hold time; a small plate
+   under it names the long press; a badge counts the over-limit seconds down, then the exhaustion. */
+.cm-vs5-burst-button.is-charging { animation: none; transform: scale(1.1); }
+.cm-vs5-burst-button.is-charging::before { animation: cm-vs5-burst-charge var(--hold-ms, 600ms) linear forwards; }
+@keyframes cm-vs5-burst-charge { from { background: radial-gradient(circle at 50% 35%, #ff9a3c, #c2410c 70%, #7c2d12); }
+  to { background: radial-gradient(circle at 50% 35%, #fff4f0, #ff2d2d 55%, #7f1d1d); } }
+.cm-vs5-burst-hint { position: absolute; left: calc(max(12px, env(safe-area-inset-left)) + 62px); bottom: calc(18% + 18px); z-index: 7; padding: 2px 8px;
+  border-radius: 999px; font-size: 11px; font-weight: 900; line-height: 1.2; white-space: nowrap; color: #fff; pointer-events: none;
+  background: linear-gradient(90deg, rgba(127, 29, 29, .92), rgba(220, 38, 38, .85)); box-shadow: 0 0 8px rgba(239, 68, 68, .6); }
+.cm-vs5-field > .cm-vs5-burst-hint { bottom: calc(var(--battle-safe-bottom, 18%) + 30px); }
+.cm-vs5-burst-hint[hidden], .cm-vs5-over-limit[hidden] { display: none; }
+.cm-vs5-over-limit { position: absolute; left: 50%; top: 36%; z-index: 9; margin: 0; padding: 4px 14px; transform: translateX(-50%); border-radius: 999px;
+  font-weight: 900; font-size: 15px; letter-spacing: .04em; color: #fff; white-space: nowrap; pointer-events: none;
+  background: linear-gradient(90deg, #7f1d1d, #dc2626, #7f1d1d); box-shadow: 0 0 14px rgba(239, 68, 68, .8); }
+.cm-vs5-over-limit[data-state="exhausted"] { background: linear-gradient(90deg, #334155, #64748b, #334155); box-shadow: none; }
 @keyframes cm-vs5-burst-ready { from { opacity: .55; } to { opacity: 1; } }
 @keyframes cm-vs5-burst-call-fade { 0%, 100% { opacity: 0; } 10%, 85% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
@@ -896,3 +911,29 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
   .cm-vs5-fighter[data-burst-ready="true"] .cm-vs5-burst-gauge__fill { animation: none; }
   .cm-vs5-burst-button, .cm-vs5-fighter[data-burst-warn="true"] .cm-vs5-burst-gauge__fill { animation: none; }
 }
+/* Sponsor stake contracts (AWAKENING_OVERDRIVE_20261109): three faction keys and the stake stepper over the menu. */
+.cm-vs5-sponsors { display: grid; gap: 6px; margin-top: 8px; padding: 8px; border-radius: 12px; border: 1px solid rgba(255, 211, 77, .35);
+  background: linear-gradient(160deg, rgba(30, 27, 18, .82), rgba(15, 23, 42, .82)); }
+.cm-vs5-sponsors[hidden] { display: none; }
+.cm-vs5-sponsors[data-armed="true"] { border-color: #ffd34d; box-shadow: 0 0 12px rgba(255, 211, 77, .35); }
+.cm-vs5-sponsors__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; }
+.cm-vs5-sponsors__label { font-size: 12px; font-weight: 800; letter-spacing: .06em; color: #ffd34d; }
+.cm-vs5-sponsors__stake { display: flex; align-items: center; gap: 6px; }
+.cm-vs5-sponsors__step { min-width: 32px; min-height: 32px; border-radius: 8px; border: 1px solid rgba(255, 211, 77, .55); background: rgba(255, 211, 77, .12);
+  color: #ffd34d; font: inherit; font-weight: 900; }
+.cm-vs5-sponsors__step:disabled { opacity: .4; }
+.cm-vs5-sponsors__amount { min-width: 8.5em; text-align: center; font-weight: 900; color: #fff; font-variant-numeric: tabular-nums; }
+.cm-vs5-sponsors__keys { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); gap: 6px; }
+.cm-vs5-sponsor { display: grid; align-content: start; gap: 2px; min-height: 76px; padding: 6px; border-radius: 10px; text-align: left; font: inherit; color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, .2); background: rgba(15, 23, 42, .7); }
+.cm-vs5-sponsor[data-faction="LUMEN"] { --sponsor: #4ade80; } .cm-vs5-sponsor[data-faction="IRON"] { --sponsor: #94a3b8; } .cm-vs5-sponsor[data-faction="RIFT"] { --sponsor: #c084fc; }
+.cm-vs5-sponsor__name { font-size: 12px; font-weight: 900; color: var(--sponsor, #ffd34d); }
+.cm-vs5-sponsor__rule, .cm-vs5-sponsor__pay { font-size: 11px; line-height: 1.3; }
+.cm-vs5-sponsor__pay { color: #ffd34d; font-weight: 700; }
+.cm-vs5-sponsor[aria-pressed="true"] { border-color: var(--sponsor, #ffd34d); box-shadow: inset 0 0 0 1px var(--sponsor, #ffd34d), 0 0 12px var(--sponsor, #ffd34d);
+  background: linear-gradient(160deg, rgba(15, 23, 42, .9), rgba(60, 45, 10, .9)); }
+.cm-vs5-sponsor:disabled { opacity: .45; }
+.cm-vs5-sponsors__note { margin: 0; font-size: 11px; color: #cbd5e1; }
+.cm-vs5-result__sponsor[data-met="true"] .cm-vs5-title { color: #ffd34d; }
+.cm-vs5-result__sponsor[data-met="false"] .cm-vs5-title { color: #fca5a5; }
+@media (max-width: 380px) { .cm-vs5-sponsors__keys { grid-template-columns: 1fr; } .cm-vs5-sponsor { min-height: 0; } }

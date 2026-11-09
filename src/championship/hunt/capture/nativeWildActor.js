@@ -36,7 +36,9 @@ export function createNativeWildActor(record, wildId) {
     movementRestricted:0, restrictedTicks:0, pull13:0, pull11:0, escapeCounter:0, distanceAccumulatorQ12:0,
     boundIdleTicks:0, stuckTicks:0,
     terrainPose:7, counter:0, expired:0, events:[], cardState:null, displayName:null, handController:null,
-    animator:null, sequenceId:null, foodTarget:null, seekingFood:0, decoyCenter:null };
+    animator:null, sequenceId:null, foodTarget:null, seekingFood:0, decoyCenter:null,
+    // Product wild instinct (AWAKENING_OVERDRIVE_20261109): NORMAL / ELITE / ANCESTOR, read by presentation and capture.
+    instinct:record.instinct ?? null };
   nativeWildRequest(a,0);
   return a;
 }
