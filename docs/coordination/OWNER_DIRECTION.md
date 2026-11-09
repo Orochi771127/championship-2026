@@ -1,5 +1,14 @@
 # Championship Owner Direction
 
+<!-- record-id: AWAKENING_OVERDRIVE_20261109 -->
+## 2026-11-09 — Awakening overdrive: starter egg, tactile cocoon, overdrive training, over-limit burst, sponsor contracts, wild instinct
+
+The Owner asks that the new game's egg hatch in 30 seconds and every later (reborn) egg in three minutes, and to add four upgrades to the awakening raising plan: a three-tap cocoon for the first awakening, overdrive cage training with core heat, a long-press over-limit burst with pre-match sponsor stake contracts, and a hidden wild instinct in the hunt. Same day follow-ups: no automatic burst (「我不要自動爆裂」), real jagged cracks with depth and no eyes in the cocoon, battle team rings replaced by ground shadows only (「就不能給他們個影子就好了嗎？」), the ranch card's › opens the roster on that partner instead of a second sheet, the backpack partner picker is a list with localized names and a lit selection, and the ranch look switch must actually redraw.
+
+OWNER_APPROVED_ADAPTATION over AWAKENING_RAISING (STAGE_REDESIGN_BURST_20261102) and BURST_TRUE_FORM_20261108. Rules and numbers: `docs/contracts/championship/AWAKENING_OVERDRIVE_20261109_ZH_TW.md`.
+
+Publication: the Owner directed 「改好後，如果你自審沒有問題，就commit 跟push並合併到main公開」 (2026-11-10). This authorizes committing, pushing and merging this batch to main and publishing it through the existing Pages playtest workflow, with its two new modules listed and changed source hashes restated. It is not a physical-device acceptance.
+
 <!-- record-id: CM27_ARENA_RING_AND_DROP_HOP_20261109 -->
 ## 2026-11-09 — The arena keeps its full-size ring, walkable on top with stairs down, and a dropped partner always hops to open ground
 
