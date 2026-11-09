@@ -64,6 +64,7 @@ export const GATE_NAMES_EN = Object.freeze({
 });
 
 export const BATTLE_FACE_LABELS_EN = Object.freeze({
+  JOURNEY: "Journey",
   CHAMPIONSHIP: "Championship",
   TITLE_MATCH: "Title Match",
   FREE_BATTLE: "Free Battle",
@@ -80,6 +81,7 @@ export const BATTLE_MENU_LABELS_EN = Object.freeze({
 });
 
 export const BATTLE_FACE_TAGLINES_EN = Object.freeze({
+  JOURNEY: "Tower, patrol and zones",
   CHAMPIONSHIP: "Multi-round cups for medals",
   TITLE_MATCH: "Calendar fixtures for titles",
   FREE_BATTLE: "Pick any rival and fight",

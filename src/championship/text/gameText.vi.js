@@ -51,6 +51,7 @@ export const GATE_NAMES_VI = Object.freeze({
 });
 
 export const BATTLE_FACE_LABELS_VI = Object.freeze({
+  JOURNEY: "Hành trình",
   CHAMPIONSHIP: "Giải vô địch",
   TITLE_MATCH: "Trận đấu danh hiệu",
   FREE_BATTLE: "Đấu tự do",
@@ -67,6 +68,7 @@ export const BATTLE_MENU_LABELS_VI = Object.freeze({
 });
 
 export const BATTLE_FACE_TAGLINES_VI = Object.freeze({
+  JOURNEY: "Tháp, tuần tra, chiến khu",
   CHAMPIONSHIP: "Cúp nhiều vòng, giành huy chương",
   TITLE_MATCH: "Giải theo lịch, giành danh hiệu",
   FREE_BATTLE: "Tự chọn đối thủ để đấu",

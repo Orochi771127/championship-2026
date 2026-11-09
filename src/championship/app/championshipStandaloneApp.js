@@ -24,6 +24,8 @@ import {normalizeBurstEvolution,createBurstEvolutionState,withBurstMigrated,lega
 import {REALTIME_TRAINING_POLICY,recommendedCages} from '../raising/productTrainingPolicy.js';
 import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattleExp,grantSyncExp,feedSyncCrystals,reconcileSyncRebirth,
   boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX} from '../contracts/productSyncLevel.js';
+import {normalizeJourney,createJourneyState,TOWER_FLOORS,towerBand,towerOpponents,towerOpponentSpecies,towerRewards,towerNextFloor,
+  clearTowerFloor,patrolStatus,claimPatrol,quickPatrol} from '../contracts/productJourney.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
@@ -391,6 +393,8 @@ export function createChampionshipStandaloneApp({
   let burstEvolution=null;
   // OWNER_APPROVED_ADAPTATION 2026-11-09: Sync Level per partner (BATTLE_MODE_PRISM_AND_JOURNEY_20261109).
   let syncLevels=null,lastSyncGains=null;
+  // OWNER_APPROVED_ADAPTATION 2026-11-10: Journey (tower and patrol pod).
+  let journey=null,pendingTower=null,lastTowerResult=null;
   let nativeMessages=createNativeRaisingMessages();
   let nativeOpening=null;
   // Immutable rollback data, never another live session/store or storage key.
@@ -1217,6 +1221,38 @@ export function createChampionshipStandaloneApp({
   }
   const SYNC_KIND_BY_MODE=Object.freeze({0:'CHAMPIONSHIP',1:'TITLE',2:'FREE',5:'PRACTICE'});
 
+  // ---- Journey: tower and patrol (OWNER_APPROVED_ADAPTATION 2026-11-10) ----
+  function journeyState(){return journey??(journey=createJourneyState());}
+  function journeyNow(){return Date.now();}
+  function journeyLocalDay(){const d=new Date(journeyNow());return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+  function addSyncCrystals(amount){
+    if(!(amount>0))return;
+    const state=normalizeSyncLevels(syncState());syncLevels={...state,crystals:Math.min(1e9,state.crystals+amount)};
+  }
+  /** A finished tower floor: the climb, and on a first clear its crystals, tickets and guardian diamonds. */
+  function settleTowerFloor(attemptId,won){
+    const tower=pendingTower;
+    if(!tower||tower.attemptId!==attemptId)return null;
+    pendingTower=null;
+    if(!won){lastTowerResult=Object.freeze({attemptId,floor:tower.floor,won:false,rewards:null,next:tower.floor,team:tower.team});return lastTowerResult;}
+    const cleared=clearTowerFloor(journeyState(),tower.floor,tower.team);
+    journey=cleared.state;
+    const rewards=cleared.rewards;
+    let tickets=0,diamonds=0;
+    if(rewards){
+      addSyncCrystals(rewards.crystals);
+      let gacha=gachaState();
+      if(rewards.tickets){const grant=grantGachaTickets(gacha,rewards.tickets);gacha=grant.state;tickets=grant.granted;}
+      const paid=rewards.diamonds?payDiamondRewards([Object.freeze({key:`dia:tower:${rewards.floor}`,kind:'TOWER',value:rewards.floor,amount:rewards.diamonds})],{state:gacha}):null;
+      if(paid?.ok&&paid.granted)diamonds=paid.granted;
+      else if(tickets&&!commitGacha({state:gacha}))tickets=0;
+    }
+    savePort.markDirty();
+    lastTowerResult=Object.freeze({attemptId,floor:tower.floor,won:true,team:tower.team,
+      rewards:rewards?Object.freeze({...rewards,tickets,diamonds}):null,next:tower.floor<TOWER_FLOORS?tower.floor+1:null});
+    return lastTowerResult;
+  }
+
   // Free Battle and Practice read the plan (they run the original personality
   // wiring); the individuals carry it to buildOwnedBattleCreature.
   function withBattleTactics(party) {
@@ -1672,7 +1708,7 @@ export function createChampionshipStandaloneApp({
     return {
       snapshot:requireSession().getRaisingHomeSnapshot(),creature,sessionId,revision:nextRevision,
       interactionCount,friendsPlaytest,onlineBindReward,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
-      championshipRun,freeBattleMenu,battleTactics,cyberGacha,burstEvolution,syncLevels,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
+      championshipRun,freeBattleMenu,battleTactics,cyberGacha,burstEvolution,syncLevels,journey,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
       raising,shop:shop?shop.toSave():null,cageEdit:cageEdit?cageEdit.toSave():null,battleEconomy,
       instanceIdentity,gameplayRng:gameplayRngSnapshot(),huntHistory:projectNativeHuntPersistentSave(huntPersistentState)
     };
@@ -1946,6 +1982,7 @@ export function createChampionshipStandaloneApp({
     raising = repairStrollLogNames(candidate.production);
     burstEvolution = normalizeBurstEvolution(saved.progression.burstEvolution ?? null);
     syncLevels = saved.progression.syncLevels===undefined?null:normalizeSyncLevels(saved.progression.syncLevels);lastSyncGains=null;
+    journey = saved.progression.journey===undefined?null:normalizeJourney(saved.progression.journey);pendingTower=null;lastTowerResult=null;
     migrateLegacyBurstPartners();
     if (realtime) {
       // Up to twelve hours of growth while the game was closed, then the clock shows the device's time.
@@ -2135,7 +2172,7 @@ export function createChampionshipStandaloneApp({
       nativeOpening=opening;
       cyberGacha=grantGachaWelcome(null).state;
       burstEvolution=withBurstMigrated(createBurstEvolutionState());
-      syncLevels=null;lastSyncGains=null;
+      syncLevels=null;lastSyncGains=null;journey=null;pendingTower=null;lastTowerResult=null;
       tutorialBaseline=null;tutorialPendingOpening=null;tutorialOfferEligible=opening!==null;
       registeredSpeciesValue = Object.freeze([]);
       battleEconomy = createBattleEconomyState();
@@ -4019,6 +4056,54 @@ export function createChampionshipStandaloneApp({
       const gains=grantBattleSync(ids,{kind:'ARENA',won:won===true,attemptId});
       savePort.markDirty();publishRaising();return gains;
     },
+    /** Journey: the tower's floors and the patrol pod, display-ready. */
+    getJourneyFrame(){
+      const state=journeyState(),next=towerNextFloor(state),pod=patrolStatus(state,journeyNow());
+      return deepFreeze({best:state.tower.best,next,floors:TOWER_FLOORS,team:[...state.tower.team],
+        crystals:normalizeSyncLevels(syncLevels).crystals,patrol:{...pod,quickAvailable:state.patrol.quickDay!==journeyLocalDay()}});
+    },
+    /** One tower floor for display: its band, opponents' species and first-clear rewards. */
+    getTowerFloor(floor){
+      const value=Math.max(1,Math.min(TOWER_FLOORS,floor|0)),state=journeyState();
+      return deepFreeze({floor:value,stage:towerBand(value).stage,species:[...towerOpponentSpecies(value)],rewards:{...towerRewards(value)},
+        cleared:value<=state.tower.best,open:value<=towerNextFloor(state)});
+    },
+    getLastTowerResult(){return lastTowerResult;},
+    /** Collect the patrol pod (the first collect starts it). */
+    claimPatrol(){
+      if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+      const claimed=claimPatrol(journeyState(),journeyNow());
+      journey=claimed.state;addSyncCrystals(claimed.crystals);savePort.markDirty();
+      return {ok:true,crystals:claimed.crystals};
+    },
+    quickPatrol(){
+      if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+      const quick=quickPatrol(journeyState(),journeyLocalDay());
+      if(!quick)return {ok:false,reason:'QUICK_PATROL_USED'};
+      journey=quick.state;addSyncCrystals(quick.crystals);savePort.markDirty();
+      return {ok:true,crystals:quick.crystals};
+    },
+    /** Prepare a tower floor like a Free Battle against that floor's presets, Sync uncapped. */
+    async prepareTowerBattle(floor,instanceIds){
+      const state=journeyState(),value=floor|0;
+      if(value<1||value>towerNextFloor(state))return {ok:false,reason:'FLOOR_LOCKED'};
+      const party=withBattleTactics(await this.prepareBattleParty(null,instanceIds,{sync:{capped:false}}));
+      if(!party.ok)return party;
+      if(!freeBattleMenu)rebuildFreeBattleMenu();
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      const presetIndices=[...towerOpponents(value)];
+      prepared.localMode=2;prepared.freeMenu=freeBattleMenu;prepared.individuals=party.individuals;
+      prepared.freeMatch=Object.freeze({id:`tower:${value}`,kind:'TOWER',presetIndices,slots:3,entryFee:0,payout:0});
+      prepared.towerFloor=value;
+      const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
+      return {ok:true,floor:value,presetIndices,arenaIndex,individuals:party.individuals,rngPreparation};
+    },
+    enterTowerBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
+      const prepared=battleRngPreparations.get(rngPreparation),floor=prepared?.towerFloor;
+      const result=enterPreparedLocalBattle({mode:2,attemptId,playerInstanceIds,rngPreparation});
+      if(result.ok&&!result.duplicate&&Number.isInteger(floor))pendingTower=Object.freeze({attemptId,floor,team:[...playerInstanceIds]});
+      return result;
+    },
     /** Add crystal points (tower chests, patrol, QA). */
     grantSyncCrystals(amount){
       const value=Number.isSafeInteger(amount)&&amount>0?amount:0;
@@ -4685,6 +4770,7 @@ export function createChampionshipStandaloneApp({
       if (!result.ok || result.duplicate) return result;
       for(const entry of updates)raisingActors.delete(entry.instanceId);
       battlePartyIds=null;
+      settleTowerFloor(attemptId,result.receipt?.won===true);
       // A round fought under a run writes its flag here, from the same verdict
       // the economy just settled on, so nothing judges the round twice.
       if(championshipAttemptId===attemptId){
@@ -5034,7 +5120,7 @@ export function createChampionshipStandaloneApp({
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
-            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha, burstEvolution, syncLevels, raising: candidateRaising,
+            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha, burstEvolution, syncLevels, journey, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: (bonusShop ?? shop) ? (bonusShop ?? shop).toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),

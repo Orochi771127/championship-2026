@@ -51,6 +51,7 @@ export const GATE_NAMES_TH = Object.freeze({
 });
 
 export const BATTLE_FACE_LABELS_TH = Object.freeze({
+  JOURNEY: "การเดินทาง",
   CHAMPIONSHIP: "แชมเปียนชิป",
   TITLE_MATCH: "การแข่งชิงตำแหน่ง",
   FREE_BATTLE: "การต่อสู้อิสระ",
@@ -67,6 +68,7 @@ export const BATTLE_MENU_LABELS_TH = Object.freeze({
 });
 
 export const BATTLE_FACE_TAGLINES_TH = Object.freeze({
+  JOURNEY: "หอคอย ลาดตระเวน เขตสงคราม",
   CHAMPIONSHIP: "ถ้วยหลายรอบ ชิงเหรียญรางวัล",
   TITLE_MATCH: "แข่งตามปฏิทิน ชิงตำแหน่ง",
   FREE_BATTLE: "เลือกคู่ต่อสู้ได้อย่างอิสระ",

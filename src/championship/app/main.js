@@ -161,6 +161,8 @@ import { retranslate, setLabel, setText, uiText } from '../text/uiText.js';
 import { paintGachaTicketBadge } from './cyberGachaIcons.js';
 import { gachaChipEffectLines, getGachaMetal } from '../gacha/cyberGacha.js';
 import { buildSyncGainPanel } from './ui/syncGainPanel.js';
+import { loadStylesheet } from './loadStylesheet.js';
+import { journeyText } from '../text/journeyText.js';
 import { syncText } from '../text/syncLevelText.js';
 
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
@@ -446,6 +448,8 @@ let mounting = null;
 let pixiStage = null;
 let clockDriver = null;
 let dataArenaSession = null;
+// Journey (Owner 2026-11-10): the open 征途 overlay, and the floor to open on after a won/lost tower match.
+let journeyView = null, pendingJourney = null;
 let tutorialPreview = null;
 let unsubscribeTutorialTools = null;
 
@@ -1605,7 +1609,7 @@ async function mountBattleSelect() {
   battleAttemptId = null;
   battleProgressBefore = null;
   const { shopGoodsPresentation } = await import('../presentation/shopGoodsUiArt.js');
-  return createBattleSelectView({
+  const view = createBattleSelectView({
     root,
     // Cyber Gachapon bounty beacons, display-ready (Owner 2026-11-02).
     gachaBeacons:{
@@ -1644,6 +1648,7 @@ async function mountBattleSelect() {
     prefill: (() => { const spar = pendingSpar; pendingSpar = null; return spar; })(),
     onOpenChampionship() { app.openChampionship(); },
     onOpenDataArena: enterDataArena,
+    onOpenJourney: () => void openJourney(),
     async onEnter(recordIndex,playerInstanceIds,mode,selectedArena=null) {
       // Battle simulation uses this existing Application's ticker. Do not
       // charge for a session that cannot start advancing on the shared stage.
@@ -1716,6 +1721,55 @@ async function mountBattleSelect() {
     onExit() { app.leaveScreen(); },
     mountCube: mountBattleSelectThreePresentation
   });
+  // "Press on" from a tower result comes back here and opens the next floor at once.
+  if (pendingJourney) { const prefill = pendingJourney; pendingJourney = null; queueMicrotask(() => void openJourney(prefill)); }
+  return view;
+}
+
+/** The Journey overlay over the battle menu (Owner 2026-11-10). */
+async function openJourney(prefill = null) {
+  if (journeyView || app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) return;
+  journeyView = 'OPENING';
+  try {
+    await loadStylesheet(new URL('./ui/journey.css', import.meta.url).href);
+    const { createJourneyScreen } = await import('./journeyScreen.js');
+    if (app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) { journeyView = null; return; }
+    const describe = (entry) => {
+      const index = juicySpeciesIndex(entry?.speciesId);
+      return { name: entry?.displayName || (index === null ? '' : speciesName(index)), portrait: index === null ? null : databaseHeroPortrait(index)?.thumbnail?.src ?? null };
+    };
+    root.inert = true;
+    journeyView = createJourneyScreen({
+      parent: document.body, prefill,
+      frame: () => app.getJourneyFrame(), floor: (n) => app.getTowerFloor(n),
+      candidates: () => app.getBattlePartyCandidates(null), describe,
+      speciesPortrait: (index) => databaseHeroPortrait(index)?.thumbnail?.src ?? null,
+      syncOf: (id) => app.getSyncLevel(id),
+      claimPatrol: () => app.claimPatrol(), quickPatrol: () => app.quickPatrol(),
+      feed: (id, amount) => app.feedSyncCrystals(id, amount),
+      challenge: (floor, ids) => startTowerFloor(floor, ids),
+      onClose: closeJourney
+    });
+  } catch (error) { console.warn('Journey unavailable', error); closeJourney(); }
+}
+function closeJourney() {
+  if (journeyView && journeyView !== 'OPENING') journeyView.dispose();
+  journeyView = null; root.inert = false;
+}
+/** A tower floor, fought like a Free Battle against that floor's original presets. */
+async function startTowerFloor(floor, ids) {
+  if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started)
+    return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回牧場後重試。" };
+  const party = await app.prepareTowerBattle(floor, ids);
+  if (!party.ok) return party;
+  const prepared = (await loadBattleRuntime())({ mode: 2, battleType: 0, playerIndividuals: party.individuals, rng: party.rngPreparation.rng,
+    personalityPolicy: FREE_PRACTICE_PERSONALITY_POLICY, arenaHazards: await loadArenaHazards() });
+  try {
+    prepared.chooseFreeBattle({ presetIndices: party.presetIndices, arenaIndex: party.arenaIndex }); prepared.startMatch(); exposeArenaHazardsQa(prepared);
+    const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
+    closeJourney();
+    return await enterPreparedBattle(prepared, attemptId, () => app.enterTowerBattle({ attemptId, playerInstanceIds: ids, rngPreparation: party.rngPreparation }));
+  } catch (error) { prepared.dispose(); console.warn(`TOWER_BATTLE_PREPARE: ${error.message}`); return { ok: false, reason: 'BATTLE_NOT_READY' }; }
 }
 
 async function mountBattleField() {
@@ -2037,7 +2091,17 @@ async function mountBattleResult() {
   // Sync EXP from this attempt's own settlement (Owner 2026-11-09).
   const syncGains=tutorial?null:(gains=>gains&&receipt&&gains.attemptId===(receipt.attemptId??null)?gains:null)(app.getLastSyncGains?.());
   const syncPanel=syncGains?syncGainPanelFor(syncGains):null;
-  const matchTitle = chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
+  // Journey tower (Owner 2026-11-10): this attempt's floor, and a key to the next one (or a retry).
+  const tower=tutorial?null:(entry=>entry&&receipt&&entry.attemptId===(receipt.attemptId??null)?entry:null)(app.getLastTowerResult?.());
+  const leaveToJourney=(prefill)=>{
+    pendingJourney=Object.freeze(prefill);
+    battleRuntime?.dispose();battleRuntime=null;battleAttemptId=null;
+    app.leaveScreen();
+    if(app.getScreen()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT){if(app.getScreen()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)app.leaveScreen();app.openBattle();}
+  };
+  const followUp=!tower?null:tower.won&&tower.next?{label:journeyText('result.next',{floor:tower.next}),onClick:()=>leaveToJourney({floor:tower.next,team:tower.team,autoStart:true})}
+    :!tower.won?{label:journeyText('result.retry',{floor:tower.floor}),onClick:()=>leaveToJourney({floor:tower.floor,team:tower.team,autoStart:true})}:null;
+  const matchTitle = tower?journeyText(tower.won?'result.clear':'result.fail',{floor:tower.floor}):chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
     :chosen?.championship?uiText('{event} 第 {round} 戰',{event:uiText(chosen.recordIndex===0?'冠軍大會':'世界大會'),round:chosen.cursor+1})
     :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null;
   const resultView=createBattleResultView({
@@ -2064,6 +2128,7 @@ async function mountBattleResult() {
     // Owner 2026-10-29: 📸 brag card for a won battle, starring the winning partner.
     brag: battleResultBrag({ participants, matchTitle }),
     syncPanel,
+    followUp,
     gachaDrop:tutorial?null:(drop=>drop&&receipt&&drop.attemptId===(receipt.attemptId??null)
       ?{...drop,metalNames:(drop.metals??[]).map(id=>getGachaMetal(id)?.name??id)}:null)(app.getLastBattleGachaDrop?.()),
     onExit() {

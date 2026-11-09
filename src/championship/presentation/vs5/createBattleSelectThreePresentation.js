@@ -37,6 +37,8 @@ import { bindBattlePrismSpin, prismFrontIndex, prismSettleTurn, prismShape, pris
  * the mode buttons used, so a returning player finds each mode in its colour.
  */
 export const BATTLE_CUBE_FACES = Object.freeze([
+  // Owner 2026-11-10: the product's progression lives behind one face (no new menu modes).
+  Object.freeze({ id: "JOURNEY", node: "product_journey", label: BATTLE_FACE_LABELS.JOURNEY, accent: "#6ff7ff", glyph: "tower" }),
   Object.freeze({ id: "CHAMPIONSHIP", node: "_02_champ", label: BATTLE_FACE_LABELS.CHAMPIONSHIP, helpTopic: 72, accent: "#ffd23f", glyph: "crown" }),
   Object.freeze({ id: "TITLE_MATCH", node: "_03_title", label: BATTLE_FACE_LABELS.TITLE_MATCH, helpTopic: 71, accent: "#ff9f1c", glyph: "medal" }),
   Object.freeze({ id: "FREE_BATTLE", node: "_04_free", label: BATTLE_FACE_LABELS.FREE_BATTLE, helpTopic: 70, accent: "#3ddc84", glyph: "swords" }),
@@ -106,6 +108,13 @@ const glyphs = {
     for (const [x1, y1, x2, y2] of [[50, 2, 50, 16], [50, 88, 50, 102], [0, 52, 14, 52], [86, 52, 100, 52]]) {
       c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2, y2); c.stroke();
     }
+  },
+  tower(c) {
+    c.beginPath(); c.moveTo(50, 4); c.lineTo(64, 22); c.lineTo(36, 22); c.closePath(); c.fill();
+    c.fillRect(38, 24, 24, 20); c.fillRect(33, 46, 34, 22); c.fillRect(27, 70, 46, 24);
+    c.save(); c.globalCompositeOperation = "destination-out";
+    for (const [x, y, w, h] of [[46, 29, 8, 9], [44, 52, 12, 10], [42, 76, 16, 18]]) c.fillRect(x, y, w, h);
+    c.restore();
   },
   hexagon(c) {
     c.beginPath();

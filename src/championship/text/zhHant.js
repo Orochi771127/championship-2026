@@ -174,6 +174,7 @@ export const GATE_NAMES = deepFreeze({
 
 /** Original battle mode identities; native dispatch is traced separately. */
 export const BATTLE_FACE_LABELS = deepFreeze({
+  JOURNEY: "征途",
   CHAMPIONSHIP: "冠軍賽",
   TITLE_MATCH: "頭銜賽",
   FREE_BATTLE: "自由對戰",
@@ -184,6 +185,7 @@ export const BATTLE_FACE_LABELS = deepFreeze({
 
 /** One line under each battle-menu prism face (Owner 2026-11-09). */
 export const BATTLE_FACE_TAGLINES = deepFreeze({
+  JOURNEY: "同步之塔・巡航・戰區",
   CHAMPIONSHIP: "多輪盃賽・奪取獎牌",
   TITLE_MATCH: "依行事曆開賽・贏得頭銜",
   FREE_BATTLE: "挑選對手・自由開戰",

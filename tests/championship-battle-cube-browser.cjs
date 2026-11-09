@@ -5,11 +5,12 @@ const { chromium } = require("playwright");
 const { startGame } = require("./championship-browser-opening.cjs");
 const ORIGIN = process.env.CHAMPIONSHIP_QA_ORIGIN || "http://127.0.0.1:8732";
 const OUTPUT = require("./browser-qa-output.cjs")("battle-cube-v1");
-// The battle menu is a prism with one face per mode (Owner 2026-11-09): six
-// modes, six faces. Its faces are the mode keys; the face buttons stay in the
+// The battle menu is a prism with one face per mode (Owner 2026-11-09): seven
+// faces since Journey joined it in front (2026-11-10). Its faces are the mode keys; the face buttons stay in the
 // page, undrawn, for keyboards and screen readers.
-const FACE_COUNT = 6;
-const ORDER = ['CHAMPIONSHIP','TITLE_MATCH','FREE_BATTLE','LINK_BATTLE','PASSWORD_BATTLE','PRACTICE_BATTLE'];
+const FACE_COUNT = 7;
+const STEP = Math.PI * 2 / FACE_COUNT;
+const ORDER = ['JOURNEY','CHAMPIONSHIP','TITLE_MATCH','FREE_BATTLE','LINK_BATTLE','PASSWORD_BATTLE','PRACTICE_BATTLE'];
 const VIEWPORTS = [ {width:360,height:800}, {width:390,height:844}, {width:393,height:852}, {width:412,height:915}, {width:430,height:932} ];
 fs.mkdirSync(OUTPUT, {recursive:true});
 
@@ -41,7 +42,7 @@ async function tapCanvas(page, fx, fy = 0.45) {
     await remount(page);
     const first = await diagnostics(page);
     assert.equal(first.shape,'PRISM'); assert.equal(first.faceCount,FACE_COUNT); assert.equal(first.textureCount,FACE_COUNT);
-    assert.equal(first.frontFace,'CHAMPIONSHIP'); assert.equal(first.settleDriver,'IMMEDIATE');
+    assert.equal(first.frontFace,'JOURNEY'); assert.equal(first.settleDriver,'IMMEDIATE');
     assert.equal(await page.getAttribute('#host','data-prism-sides'),String(FACE_COUNT));
     for (const viewport of VIEWPORTS) {
       await page.setViewportSize(viewport);
@@ -56,14 +57,14 @@ async function tapCanvas(page, fx, fy = 0.45) {
       assert.equal(info.overflow,false); assert.equal(info.faces,FACE_COUNT);
       assert.ok(info.overlay.width<=1&&info.overlay.height<=1, JSON.stringify(info.overlay));
       assert.equal(info.turns.length,2); assert.ok(info.turns.every(b=>b.width>=40&&b.height>=40));
-      assert.equal(info.caption,'冠軍賽');
+      assert.equal(info.caption,'征途');
       report.viewports.push({ ...viewport, ...info });
     }
     await page.screenshot({path:path.join(OUTPUT,'prism-front.png')});
     // Keyboard: arrows step one face, Enter presses the face in front.
     await page.focus('canvas');
     await page.keyboard.press('ArrowRight');
-    assert.equal((await diagnostics(page)).frontFace,'TITLE_MATCH');
+    assert.equal((await diagnostics(page)).frontFace,'CHAMPIONSHIP');
     await page.keyboard.press('ArrowLeft'); await page.keyboard.press('ArrowLeft');
     assert.equal((await diagnostics(page)).frontFace,'PRACTICE_BATTLE');
     assert.equal(await page.evaluate(()=>window.selectionCalls.length),0);
@@ -81,14 +82,14 @@ async function tapCanvas(page, fx, fy = 0.45) {
     // A tap on a side face turns it to the front and presses it: the face is the key.
     await remount(page);
     await tapCanvas(page,0.79);
-    assert.deepEqual(await page.evaluate(()=>window.selectionCalls),['TITLE_MATCH']);
-    assert.equal((await diagnostics(page)).frontFace,'TITLE_MATCH');
+    assert.deepEqual(await page.evaluate(()=>window.selectionCalls),['CHAMPIONSHIP']);
+    assert.equal((await diagnostics(page)).frontFace,'CHAMPIONSHIP');
     await tapCanvas(page,0.21);
-    assert.deepEqual(await page.evaluate(()=>window.selectionCalls),['TITLE_MATCH','CHAMPIONSHIP']);
+    assert.deepEqual(await page.evaluate(()=>window.selectionCalls),['CHAMPIONSHIP','JOURNEY']);
     await tapCanvas(page,0.5);
-    assert.deepEqual(await page.evaluate(()=>window.selectionCalls),['TITLE_MATCH','CHAMPIONSHIP','CHAMPIONSHIP']);
+    assert.deepEqual(await page.evaluate(()=>window.selectionCalls),['CHAMPIONSHIP','JOURNEY','JOURNEY']);
     await page.click('.cm-vs5-prism__turn--next');
-    assert.equal((await diagnostics(page)).frontFace,'TITLE_MATCH');
+    assert.equal((await diagnostics(page)).frontFace,'CHAMPIONSHIP');
     assert.equal(await page.evaluate(()=>window.selectionCalls.length),3);
     report.sideTaps=true;
     // A swipe turns the prism, settles on a face and never presses one.
@@ -99,7 +100,7 @@ async function tapCanvas(page, fx, fy = 0.45) {
     await page.mouse.move(box.x+box.width*.62,y,{steps:10});await page.waitForTimeout(250);await page.mouse.up();
     const swiped=await diagnostics(page);
     assert.equal(swiped.frontFace,'PRACTICE_BATTLE');
-    assert.ok(Math.abs(swiped.turn-Math.PI/3)<1e-9, `settled turn ${swiped.turn}`);
+    assert.ok(Math.abs(swiped.turn-STEP)<1e-9, `settled turn ${swiped.turn}`);
     assert.equal(await page.evaluate(()=>window.selectionCalls.length),0);
     // Vertical travel is the page's to scroll; it never turns the prism.
     await page.mouse.move(box.x+box.width*.5,box.y+box.height*.3);await page.mouse.down();
@@ -141,11 +142,11 @@ async function tapCanvas(page, fx, fy = 0.45) {
     await page.click('.cm-vs5-prism__turn--next');
     const moving=await page.evaluate(()=>({...window.cube.getDiagnostics(),listeners:window.ticker.listeners.size}));
     assert.equal(moving.settleDriver,'INJECTED_TICKER'); assert.equal(moving.settling,true); assert.equal(moving.listeners,1);
-    assert.equal(moving.frontFace,'CHAMPIONSHIP');
+    assert.equal(moving.frontFace,'JOURNEY');
     await page.evaluate(()=>window.ticker.step(90));
     const rested=await page.evaluate(()=>({...window.cube.getDiagnostics(),listeners:window.ticker.listeners.size}));
-    assert.equal(rested.settling,false); assert.equal(rested.listeners,0); assert.equal(rested.frontFace,'TITLE_MATCH');
-    assert.ok(Math.abs(rested.turn+Math.PI/3)<1e-9);
+    assert.equal(rested.settling,false); assert.equal(rested.listeners,0); assert.equal(rested.frontFace,'CHAMPIONSHIP');
+    assert.ok(Math.abs(rested.turn+STEP)<1e-9);
     // Disposing mid-settle leaves the ticker clean.
     await page.click('.cm-vs5-prism__turn--next');
     assert.equal(await page.evaluate(()=>window.ticker.listeners.size),1);
@@ -155,7 +156,7 @@ async function tapCanvas(page, fx, fy = 0.45) {
     await page.emulateMedia({reducedMotion:'reduce'});
     await remount(page,{ticker:true});
     await page.click('.cm-vs5-prism__turn--next');
-    assert.deepEqual(await page.evaluate(()=>({front:window.cube.getDiagnostics().frontFace,listeners:window.ticker.listeners.size})),{front:'TITLE_MATCH',listeners:0});
+    assert.deepEqual(await page.evaluate(()=>({front:window.cube.getDiagnostics().frontFace,listeners:window.ticker.listeners.size})),{front:'CHAMPIONSHIP',listeners:0});
     await page.emulateMedia({reducedMotion:'no-preference'});
     report.tickerSettle=true;
     // Disposal releases the canvas and every node the prism added.

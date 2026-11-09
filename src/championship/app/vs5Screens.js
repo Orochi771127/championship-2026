@@ -135,7 +135,7 @@ function shell(root, screen, label) {
  * Mode identity is now traced through OVL10 0210F88C's help-bank dispatch.
  * The application supplies each mode's entries; this view holds only selection.
  */
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, onOpenJourney=null, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -263,6 +263,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   async function selectMode(id){
     if(cubeDisposed||entering)return;
     if(id==='CHAMPIONSHIP'){onOpenChampionship?.();return;}
+    if(id==='JOURNEY'){onOpenJourney?.();return;}
     if(id==='PRACTICE_BATTLE'&&getPracticeSelection){modeRequest++;await choosePractice();return;}
     if(id==='PASSWORD_BATTLE'&&getPasswordSelection){modeRequest++;await choosePassword();return;}
     if(id==='LINK_BATTLE'&&getLinkSelection){modeRequest++;await chooseLink();return;}
@@ -284,7 +285,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     section.append(stage);
     const mounted = mountCube({
       host: stage,
-      available: new Set(['TITLE_MATCH',...(onOpenChampionship?['CHAMPIONSHIP']:[]),...(getModeMatches?['FREE_BATTLE']:[]),...(getLinkSelection?['LINK_BATTLE']:[]),...(getPasswordSelection?['PASSWORD_BATTLE']:[]),...(getPracticeSelection?['PRACTICE_BATTLE']:[])]),
+      available: new Set([...(onOpenJourney?['JOURNEY']:[]),'TITLE_MATCH',...(onOpenChampionship?['CHAMPIONSHIP']:[]),...(getModeMatches?['FREE_BATTLE']:[]),...(getLinkSelection?['LINK_BATTLE']:[]),...(getPasswordSelection?['PASSWORD_BATTLE']:[]),...(getPracticeSelection?['PRACTICE_BATTLE']:[])]),
       onSelect:id=>{void selectMode(id);}
     });
     if (mounted && typeof mounted.then === "function") {
@@ -1360,7 +1361,7 @@ function resultSummary(summary, winningTeam) {
   return box;
 }
 
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, syncPanel=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, syncPanel=null, followUp=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
   let disposed=false;
 
@@ -1503,6 +1504,13 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
   }});}
   const advance = actionButton("下一頁", { primary: true });
   const exit = actionButton(exitLabel, { primary: true });
+  // Owner 2026-11-10: a Journey tower result offers the next floor (or a retry) beside the way out.
+  const follow = followUp ? actionButton(followUp.label, { primary: true }) : null;
+  if (follow) {
+    follow.classList.add("cm-vs5-result__follow");
+    exit.classList.remove("cm-vs5-action--primary");
+    follow.addEventListener("click", () => { if (!disposed) followUp.onClick(); });
+  }
   exit.classList.add("cm-vs5-exit");
   if (typeof onExit === "function") exit.addEventListener("click", () => onExit());
 
@@ -1540,6 +1548,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     const last = index === panels.length - 1;
     advance.hidden = last;
     exit.hidden = !last;
+    if (follow) follow.hidden = !last;
   }
 
   let entrance = null;
@@ -1553,7 +1562,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     if (index < panels.length - 1) { index += 1; paint(); }
   });
 
-  section.append(resultStage, advance, exit);
+  section.append(resultStage, advance, exit, ...(follow ? [follow] : []));
   // Owner 2026-10-29: a won battle can be shared as a brag card (product-authored; not a result scene).
   if (!tutorial && outcome.winningTeam === 0 && typeof brag?.onOpen === "function") {
     const share = document.createElement("button");

@@ -3934,3 +3934,24 @@ body:not([data-desktop-raising]):has(#cm-root[data-active-screen="RAISING_HOME"]
   :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body .cm-vs5-result__amount { font-size: calc(26px * var(--text-scale, 1)); }
   .cm-vs5-result__body .cm-sync-row__numbers { display: none; }
 }
+
+/* A Journey tower result (Owner 2026-11-10): the press-on key takes its own full row
+   (it is the screen's main action); the brag key and the way out share the row under it. */
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell:has(> .cm-vs5-result__follow:not([hidden])) { grid-template-rows: minmax(0, 1fr) auto auto; }
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-vs5-action.cm-vs5-result__follow {
+  grid-column: 1 / -1; grid-row: 2; justify-self: stretch; margin: 8px max(16px, var(--safe-right, 0px)) 0 max(16px, var(--safe-left, 0px));
+  --key-face: #6ff7ff; --key-shade: #10739a; --key-ink: #08212a;
+}
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell:has(> .cm-vs5-result__follow:not([hidden])) > .cm-brag-cta--result { grid-row: 3; }
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-vs5-action.cm-vs5-exit:not(.cm-vs5-action--primary) {
+  grid-column: 2; grid-row: 3; justify-self: end; align-self: center; width: auto; min-height: 44px;
+  margin: 8px max(16px, var(--safe-right, 0px)) max(12px, var(--safe-bottom)) 0; padding: 0 16px; font-size: 14px;
+}
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-vs5-action:is(.cm-vs5-result__follow, .cm-vs5-exit)[hidden] { display: none; }
+@media (orientation: landscape) and (max-height: 520px) {
+  /* Wide and short: brag | way out | press on stay one row, each as wide as its words. */
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell:has(> .cm-vs5-result__follow:not([hidden])) { grid-template-columns: minmax(0, 1fr) auto auto; grid-template-rows: minmax(0, 1fr) auto; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-vs5-action.cm-vs5-result__follow { grid-column: 3; grid-row: 2; justify-self: end; margin: 6px max(16px, var(--safe-right, 0px)) max(8px, var(--safe-bottom)) 0; padding: 0 22px; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell:has(> .cm-vs5-result__follow:not([hidden])) > .cm-brag-cta--result { grid-row: 2; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell:has(> .cm-vs5-result__follow:not([hidden])) > .cm-vs5-action.cm-vs5-exit { grid-row: 2; margin-right: 0; margin-block: 6px max(8px, var(--safe-bottom)); }
+}

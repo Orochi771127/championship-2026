@@ -51,6 +51,7 @@ export const GATE_NAMES_JA = Object.freeze({
 });
 
 export const BATTLE_FACE_LABELS_JA = Object.freeze({
+  JOURNEY: "征途",
   CHAMPIONSHIP: "チャンピオンシップ",
   TITLE_MATCH: "タイトルマッチ",
   FREE_BATTLE: "フリーバトル",
@@ -67,6 +68,7 @@ export const BATTLE_MENU_LABELS_JA = Object.freeze({
 });
 
 export const BATTLE_FACE_TAGLINES_JA = Object.freeze({
+  JOURNEY: "塔・巡航・戦区",
   CHAMPIONSHIP: "連戦カップでメダル獲得",
   TITLE_MATCH: "日程の大会で称号を獲得",
   FREE_BATTLE: "好きな相手と自由に対戦",
