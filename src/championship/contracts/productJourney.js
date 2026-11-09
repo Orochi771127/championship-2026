@@ -11,8 +11,8 @@
 //           (crystals + a gacha ticket), every 10th a guardian prize (diamonds
 //           + tickets). The tower never pays Bits, which stay the title
 //           matches' (integration report C7).
-//   Patrol  the 深網巡航 pod makes crystal points per hour from the best floor
-//           (120 + 38 x F). Up to 12 hours collect while away, as the real-time
+//   Patrol  the 深網巡航 pod makes crystal points per hour from Journey
+//           progress F = best floor + half the zone stars (120 + 38 x F). Up to 12 hours collect while away, as the real-time
 //           ranch counts growth; a clock set backwards restarts the count.
 //           One free two-hour quick patrol per local day.
 //
@@ -20,6 +20,7 @@
 
 import catalog from "../../data/championship/catalogs/free-battle.r1.json" with { type: "json" };
 import { deepFreeze } from "./championshipContracts.js";
+import { normalizeCampaign, totalStars } from "./productCampaign.js";
 
 export const TOWER_FLOORS = 100;
 export const PATROL_CAP_HOURS = 12;
@@ -88,7 +89,7 @@ export function towerRewards(floor) {
 }
 
 export function createJourneyState() {
-  return { version: 1, tower: { best: 0, team: [] }, patrol: { since: null, quickDay: null } };
+  return { version: 1, tower: { best: 0, team: [] }, patrol: { since: null, quickDay: null }, campaign: normalizeCampaign(null) };
 }
 
 export function normalizeJourney(value) {
@@ -99,12 +100,18 @@ export function normalizeJourney(value) {
     ? [...new Set(value.tower.team.filter((id) => typeof id === "string" && id.length > 0 && id.length <= 120))].slice(0, 3) : [];
   const since = Number.isSafeInteger(value.patrol?.since) && value.patrol.since > 0 ? value.patrol.since : null;
   const quickDay = typeof value.patrol?.quickDay === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value.patrol.quickDay) ? value.patrol.quickDay : null;
-  return { version: 1, tower: { best, team }, patrol: { since, quickDay } };
+  return { version: 1, tower: { best, team }, patrol: { since, quickDay }, campaign: normalizeCampaign(value.campaign) };
 }
 
-/** Patrol output per hour from Journey progress (the best tower floor). */
+/** Journey progress for the patrol pod: the best floor plus half the zone stars. */
+export function journeyProgress(state) {
+  const journey = normalizeJourney(state);
+  return journey.tower.best + Math.floor(totalStars(journey.campaign) / 2);
+}
+
+/** Patrol output per hour from Journey progress. */
 export function patrolRate(state) {
-  return 120 + 38 * normalizeJourney(state).tower.best;
+  return 120 + 38 * journeyProgress(state);
 }
 
 /** What the pod holds now: points, hours counted, and whether it is full. */

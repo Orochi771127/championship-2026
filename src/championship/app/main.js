@@ -1748,6 +1748,10 @@ async function openJourney(prefill = null) {
       claimPatrol: () => app.claimPatrol(), quickPatrol: () => app.quickPatrol(),
       feed: (id, amount) => app.feedSyncCrystals(id, amount),
       challenge: (floor, ids) => startTowerFloor(floor, ids),
+      campaign: () => app.getCampaignFrame(),
+      sweep: (zone, stage) => app.sweepCampaignStage(zone, stage),
+      challengeZone: (zone, stage) => void startZoneStage(zone, stage),
+      openStory: () => openStoryFromJourney(),
       onClose: closeJourney
     });
   } catch (error) { console.warn('Journey unavailable', error); closeJourney(); }
@@ -1755,6 +1759,42 @@ async function openJourney(prefill = null) {
 function closeJourney() {
   if (journeyView && journeyView !== 'OPENING') journeyView.dispose();
   journeyView = null; root.inert = false;
+}
+/** The story map plays on the ranch: leave the battle menu, then open it once the ranch stage is up. */
+function openStoryFromJourney() {
+  closeJourney();
+  app.leaveScreen();
+  let tries = 0;
+  const attempt = () => {
+    if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME && view?.storyStage) {
+      document.dispatchEvent(new CustomEvent(STORY_CHAPTER_OPEN_EVENT, { detail: { source: 'journey' } }));
+      return;
+    }
+    if (++tries < 40) setTimeout(attempt, 150);
+  };
+  setTimeout(attempt, 150);
+}
+/** A Journey zone stage, fought in the Data Arena relay; leaving the arena reopens the zone. */
+async function startZoneStage(zone, stage) {
+  const begun = app.beginCampaignStage(zone, stage);
+  if (!begun.ok) return begun;
+  const arenaButton = document.getElementById('cm-data-arena');
+  if (!arenaButton) return { ok: false, reason: 'DATA_ARENA_UNAVAILABLE' };
+  closeJourney();
+  const title = journeyText('stage.title', { zone, stage, name: journeyText(`zone.${zone}`) });
+  return enterDataArena(arenaButton, {
+    campaign: Object.freeze({ field: begun.field, rivals: begun.rivals, title }),
+    onCampaignResult: (result) => {
+      const settled = app.settleCampaignStage(result);
+      if (!settled) return null;
+      const lines = [journeyText('campaign.best', { stars: settled.best })];
+      if (settled.firstClear) lines.push(journeyText('campaign.first', { crystals: settled.crystals.toLocaleString() }));
+      if (settled.tickets) lines.push(journeyText('campaign.tickets', { n: settled.tickets }));
+      if (settled.diamonds) lines.push(journeyText('campaign.chest', { diamonds: settled.diamonds }));
+      return { stars: settled.stars, lines };
+    },
+    reopen: { tab: 'ZONES', zone }
+  });
 }
 /** A tower floor, fought like a Free Battle against that floor's original presets. */
 async function startTowerFloor(floor, ids) {
@@ -3347,7 +3387,7 @@ function relabelChrome() {
 // ---- Data Arena entry (OWNER_APPROVED_ADAPTATION 2026-10-15) ----------------
 // Battle owns the entry; the existing arena temporarily borrows the shared
 // stage. Its close callback restores the same menu and its keyboard focus.
-async function enterDataArena(dataArenaButton) {
+async function enterDataArena(dataArenaButton, { campaign = null, onCampaignResult = null, reopen = null } = {}) {
   stopRanchTitlePreload();
   if (dataArenaSession || app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT || !dataArenaButton?.isConnected) return;
   dataArenaButton.disabled = true;
@@ -3363,6 +3403,8 @@ async function enterDataArena(dataArenaButton) {
     if (app) recordSessionScreenMounted(app.getScreen());
     syncMusic();
     dataArenaButton.focus({ preventScroll: true });
+    // A Journey zone stage returns to its zone.
+    if (reopen) queueMicrotask(() => void openJourney(reopen));
   };
   let storage = null;
   try { storage = window.localStorage; } catch { storage = null; }
@@ -3385,6 +3427,7 @@ async function enterDataArena(dataArenaButton) {
       syncPowerOf: (instanceId) => app.getSyncArenaPower?.(instanceId) ?? 1,
       onSyncResult: (match) => app.grantArenaSync?.(match) ?? null,
       syncPanelFor: (record) => syncGainPanelFor(record),
+      campaign, onCampaignResult,
       onExit: restoreBattle,
       // Cyber Gachapon: a manual-battle win pays 1-3 tickets, a cup 3-10, into the one save.
       onVictory: ({ tournament }) => app?.grantGachaTickets?.(tournament ? 3 + Math.floor(Math.random() * 8) : 1 + Math.floor(Math.random() * 3), 'DATA_ARENA')

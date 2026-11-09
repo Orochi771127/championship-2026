@@ -98,6 +98,6 @@ test('the quick patrol is two hours, once per local day', () => {
 
 test('a broken record falls back field by field', () => {
   assert.deepEqual(normalizeJourney({ version: 1, tower: { best: 999, team: ['a', 'a', 7, 'b', 'c', 'd'] }, patrol: { since: -5, quickDay: 'x' } }),
-    { version: 1, tower: { best: 100, team: ['a', 'b', 'c'] }, patrol: { since: null, quickDay: null } });
+    { version: 1, tower: { best: 100, team: ['a', 'b', 'c'] }, patrol: { since: null, quickDay: null }, campaign: { stars: {}, sweepDay: null, sweeps: 0, chests: [] } });
   assert.deepEqual(normalizeJourney('nope').tower, { best: 0, team: [] });
 });

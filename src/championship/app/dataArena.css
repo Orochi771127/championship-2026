@@ -933,3 +933,7 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 @media (prefers-reduced-motion: reduce) { :is(.da-tbtn--burst,.da-relay-burst).is-ready { animation:none; } }
 /* A call-out never breaks inside a Chinese or Japanese word (爆裂進化！冰砲狼 breaks after the mark). */
 .da-banner { word-break: keep-all; }
+/* Journey zone stage result (Owner 2026-11-10): the stars it earned. */
+.da-result__stars { margin: 4px 0; color: #ffd23f; font-size: 30px; letter-spacing: 6px; text-align: center; text-shadow: 0 2px 0 #3a2400, 0 0 12px rgba(255, 210, 63, 0.6); }
+.da-result__campaign { color: #b9fbff; text-align: center; }
+.da-modes[hidden], .da-maps[hidden] { display: none; }

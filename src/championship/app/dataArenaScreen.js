@@ -118,7 +118,7 @@ function ensureStylesheet() {
  */
 export async function openDataArena({ ensureStage, audioBus = null, music = null, storage = null, reducedMotion = false,
   resolutionCap = 2, onExit = () => {}, onVictory = null, href = globalThis.location?.href, qa = false, seed = null, progress = null,
-  burstPlanOf = null, syncPowerOf = null, onSyncResult = null, syncPanelFor = null }) {
+  burstPlanOf = null, syncPowerOf = null, onSyncResult = null, syncPanelFor = null, campaign = null, onCampaignResult = null }) {
   await ensureStylesheet();
   const lifetime = new AbortController();
   const { signal } = lifetime;
@@ -156,7 +156,12 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   const relayLoadouts = records.get().relayLoadouts ?? {};
   let relayReserveId=relayPickable(records.get().relayReserveId),relayThirdId=relayPickable(records.get().relayThirdId),relayArenaId=records.get().relayArenaId;
   let gameMode = MODES.includes(records.get().lastMode) ? records.get().lastMode : "TOURNAMENT";
-  const rivalName = (rivalId) => cast.rivals.find((rival) => rival.rivalId === rivalId)?.name ?? "";
+  // Journey zone stage (Owner 2026-11-10): RELAY on its own field against its own three rivals, with
+  // buff picks between waves; mode and field are fixed and the arena's own records keep their choices.
+  if (campaign) { gameMode = "RELAY"; relayArenaId = campaign.field; }
+  const campaignCast = campaign ? campaign.rivals.map((r) => cast.partners.find((p) => p.speciesId === r.speciesId) ?? null) : null;
+  const rivalName = (rivalId) => cast.rivals.find((rival) => rival.rivalId === rivalId)?.name
+    ?? campaignCast?.[campaign.rivals.findIndex((r) => r.id === rivalId)]?.name ?? "";
   // Entry rights (Owner 2026-11-02): partners raised on the ranch or lit in the
   // Dex fight; a thin save is lent practice partners. Tournament and harbor share three kits.
   const roster = (list) => list.map(({ id, speciesId }) => ({ id, speciesId }));
@@ -1032,9 +1037,10 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const partner = cast.partners.find((p) => p.partnerId === selectedPartnerId);
     // A relay fighter's burst form (and each rival's) is drawn mid-match, so its art loads up front.
     const relayTeam = gameMode === 'RELAY' ? relayTeamIds(selectedPartnerId, relayReserveId, relayThirdId) : [];
-    const rivalForms = gameMode === 'RELAY' ? cast.rivals.slice(0, 3).map(r => { const form = burstFormsFor(Number(String(r.speciesId).split('-').at(-1))).find(f => f.tier === 1)?.form;
+    const rivalCast = campaignCast ? campaignCast.filter(Boolean) : cast.rivals.slice(0, 3);
+    const rivalForms = gameMode === 'RELAY' ? rivalCast.map(r => { const form = burstFormsFor(Number(String(r.speciesId).split('-').at(-1))).find(f => f.tier === 1)?.form;
       return form === undefined ? null : cast.partners.find(m => m.speciesId === `species-${String(form).padStart(3, '0')}`) ?? null; }) : [];
-    const candidates = (gameMode === 'RELAY' ? [...cast.partners.filter(p => relayTeam.includes(p.partnerId)), ...relayTeam.flatMap(relayBurstMembers), ...cast.rivals.slice(0, 3), ...rivalForms] : gameMode === "TOURNAMENT" ? [partner, ...cast.rivals] : [partner, cast.mate, cast.boss]).filter((member) => member?.art);
+    const candidates = (gameMode === 'RELAY' ? [...cast.partners.filter(p => relayTeam.includes(p.partnerId)), ...relayTeam.flatMap(relayBurstMembers), ...rivalCast, ...rivalForms] : gameMode === "TOURNAMENT" ? [partner, ...cast.rivals] : [partner, cast.mate, cast.boss]).filter((member) => member?.art);
     // A relay partner or burst form can also be a rival. Deduplicate before
     // starting parallel loads so one species always has one owning bundle.
     const wanted = [...new Map(candidates.map(member => [member.speciesId, member])).values()];
@@ -1177,7 +1183,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const matchSeed = seed ?? ((Date.now() ^ (matchId * 2654435761)) >>> 0);
     const relayBurstPlans = gameMode === "RELAY" ? Object.fromEntries(relayTeamIds(partnerId, relayReserveId, relayThirdId).map(id => [id, relayBurstPlanOf(id)]).filter(([, plan]) => plan !== undefined)) : {};
     sim = createDataArenaSimulation({ seed: matchSeed, partnerId, quality, mode: gameMode, partnerPower, ...(gameMode==="RELAY"?{relayLoadouts,relayReserveId,relayThirdId,relayArenaId,portrait:globalThis.innerHeight>globalThis.innerWidth,
-      relayBurstPlans, relayManualBurst: true}:{}) });
+      relayBurstPlans, relayManualBurst: true, relayRivals: campaign?.rivals ?? null, relayBuffPicks: Boolean(campaign)}:{}) });
     // Harbor art is loaded on entry only; a failed pack keeps the playable
     // geometry and existing presentation available. No character texture changes.
     if (gameMode === 'HARBOR' || gameMode === 'TOURNAMENT' || gameMode === 'RELAY') {
@@ -1276,9 +1282,10 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const panel = el("div", "da-panel da-panel--select");
     const head = el("header", "da-panel__head");
     const eyebrow = el("p", "da-eyebrow");
-    head.append(eyebrow, el("h2", "da-title", t("mode.title")));
+    head.append(eyebrow, el("h2", "da-title", campaign ? campaign.title : t("mode.title")));
     // Mode: three cartridges side by side; the picked one names its rules on the intel line below.
     const modes = el("div", "da-modes");
+    if (campaign) modes.hidden = true;
     modes.setAttribute("role", "radiogroup");
     modes.setAttribute("aria-label", t("mode.heading"));
     for (const id of MODES) {
@@ -1292,6 +1299,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const intel = el("p", "da-intel");
     intel.setAttribute("aria-live", "polite");
     const maps = el("div", "da-maps");
+    if (campaign) maps.hidden = true;
     maps.setAttribute("role", "radiogroup");
     maps.setAttribute("aria-label", t("relay.map"));
     RELAY_MAP_IDS.forEach((id, index) => {
@@ -1600,7 +1608,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const actions = el("div", "da-actions");
     const start = button("da-btn da-btn--primary", t("select.start"), () => {
       partnerPower = withSyncPower(dataArenaPartnerPower(entriesFor(gameMode)));
-      records.setLastPartner(partnerId); records.setLastMode(gameMode); if(gameMode==="RELAY")records.setRelayTeam(relayReserveId,relayArenaId,relayThirdId); audio?.play?.("ui"); showBriefing();
+      records.setLastPartner(partnerId); if (!campaign) { records.setLastMode(gameMode); if(gameMode==="RELAY")records.setRelayTeam(relayReserveId,relayArenaId,relayThirdId); } audio?.play?.("ui"); showBriefing();
     }, signal);
     start.dataset.autofocus = "1";
     actions.append(start, button("da-btn", t("select.back"), () => close(), signal));
@@ -1635,7 +1643,19 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     releaseInputs();
     const panel = el("div", "da-panel da-panel--level");
     const tournament = sim.getSnapshot().tournament;
-    if (tournament) {
+    if (campaign) {
+      // A Journey zone stage: its own guards and lead, the next one up after this pick.
+      panel.append(el("h2", "da-title", t("bracket.heading")));
+      const bracket = el("ol", "da-bracket"), current = sim.getState().relay?.enemyIndex ?? 0;
+      campaign.rivals.forEach((rival, index) => {
+        const name = campaignCast[index]?.name ?? "";
+        const item = el("li", `da-bracket__step${index < current ? " is-done" : ""}${index === current ? " is-next" : ""}`,
+          index < current ? t("bracket.done", { name }) : index === current ? t("bracket.next", { name }) : name);
+        if (index === campaign.rivals.length - 1) item.appendChild(el("span", "da-bracket__tag", t("bracket.final")));
+        bracket.appendChild(item);
+      });
+      panel.appendChild(bracket);
+    } else if (tournament) {
       panel.append(el("h2", "da-title", t("bracket.heading")));
       const bracket = el("ol", "da-bracket");
       tournament.order.forEach((rivalId, index) => {
@@ -1745,7 +1765,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const { newBest, saved } = records.recordResult(result);
     // Cyber Gachapon: the host pays a manual-battle win in tickets (1-3; a cup 3-10).
     let gachaTickets = 0;
-    if (result.outcome === "VICTORY" && typeof onVictory === "function") {
+    let campaignOutcome = null;
+    if (campaign && typeof onCampaignResult === "function") {
+      try { campaignOutcome = onCampaignResult({ outcome: result.outcome, timeSeconds: result.timeSeconds, fainted: result.relayFainted ?? 0 }); } catch { campaignOutcome = null; }
+    }
+    if (!campaign && result.outcome === "VICTORY" && typeof onVictory === "function") {
       try { gachaTickets = onVictory({ tournament: Boolean(result.tournament) })?.granted ?? 0; } catch { gachaTickets = 0; }
     }
     // Sync EXP for the ranch partners that fought; the host settles it into the save.
@@ -1783,6 +1807,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       drop.prepend(gachaTicketImage("cm-gacha-drop-ticket"));
       drop.dataset.gachaTickets = String(gachaTickets);
       panel.append(drop);
+    }
+    if (campaignOutcome) {
+      const stars = el("p", "da-result__stars", "★".repeat(campaignOutcome.stars) + "☆".repeat(3 - campaignOutcome.stars));
+      stars.dataset.stars = String(campaignOutcome.stars);
+      panel.append(stars, ...(campaignOutcome.lines ?? []).map((line) => el("p", "da-result__line da-result__campaign", line)));
     }
     if (syncPanel) { panel.append(syncPanel.node); signal.addEventListener("abort", () => syncPanel.dispose(), { once: true }); }
     const actions = el("div", "da-actions");
@@ -1822,6 +1851,10 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           arenaUpdateMs: sorted.length ? { median: sorted[Math.floor(sorted.length / 2)], p95: sorted[Math.floor(sorted.length * 0.95)] } : null };
       },
       worldToScreen: (x, y) => (scene ? scene.worldToScreen(x, y) : null),
+      // Loopback review only (Journey zones, 2026-11-10): end the current relay wave so the
+      // between-wave buff pick and the stage result can be checked. Public hosts never get it.
+      ...(["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname) ? { endRelayWave: () => {
+        const state = sim?.getState(); if (!state?.relay || !state.rivals[0]) return false; state.rivals[0].hp = 0; return true; } } : {}),
       entities: () => {
         if (!sim) return null;
         const state = sim.getState();

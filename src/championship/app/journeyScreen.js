@@ -46,14 +46,18 @@ const portrait = (src, className = "cm-journey__face") => {
  * @param {(id: string, amount: number) => object} host.feed
  * @param {(floor: number, ids: string[]) => Promise<object>} host.challenge
  * @param {() => void} host.onClose
- * @param {{floor?: number, team?: string[], autoStart?: boolean}} [host.prefill]
+ * @param {() => object} host.campaign                     app.getCampaignFrame()
+ * @param {(zone: number, stage: number) => void} host.challengeZone   opens the Data Arena stage
+ * @param {(zone: number, stage: number) => object} host.sweep
+ * @param {{floor?: number, team?: string[], autoStart?: boolean, tab?: string, zone?: number}} [host.prefill]
  */
 export function createJourneyScreen(host) {
   const root = el("section", "cm-journey");
   root.dataset.palette = "arcade";
   root.setAttribute("role", "dialog");
   root.setAttribute("aria-label", t("title"));
-  let tab = "TOWER", candidates = [], selectedFloor = null, team = [], busy = false, disposed = false;
+  let tab = host.prefill?.tab ?? "TOWER", candidates = [], selectedFloor = null, team = [], busy = false, disposed = false;
+  let selectedZone = host.prefill?.zone ?? null, selectedStage = null;
 
   const head = el("header", "cm-journey__head");
   const back = button("cm-journey__back cm-arcade-key", t("close"), () => close());
@@ -202,6 +206,74 @@ export function createJourneyScreen(host) {
     body.replaceChildren(panel);
   }
 
+  function stars(n) { return "★".repeat(n) + "☆".repeat(3 - n); }
+
+  function paintZones() {
+    const frame = host.campaign();
+    if (selectedZone === null) selectedZone = [...frame.zones].reverse().find((z) => z.open)?.zone ?? 1;
+    const zone = frame.zones[selectedZone - 1];
+    if (selectedStage === null || !zone.stages[selectedStage - 1]?.open) selectedStage = [...zone.stages].reverse().find((st) => st.open)?.stage ?? 1;
+    const panel = el("div", "cm-journey__zones");
+    const strip = el("div", "cm-journey__zone-strip");
+    strip.setAttribute("role", "tablist");
+    for (const z of frame.zones) {
+      const chip = button("cm-journey__zone-chip", "", () => { selectedZone = z.zone; selectedStage = null; paint(); });
+      chip.dataset.zone = String(z.zone);
+      chip.setAttribute("aria-selected", String(z.zone === selectedZone));
+      chip.disabled = !z.open;
+      chip.append(el("span", "cm-journey__zone-no", t("zone.label", { zone: z.zone })), el("strong", "", t(`zone.${z.zone}`)),
+        el("span", "cm-journey__zone-stars", t("zone.stars", { stars: z.stars, total: frame.chestStars })));
+      strip.append(chip);
+    }
+    panel.append(strip, el("p", "cm-journey__hint", t("zone.rule")));
+    // Story chapters ride along the zones instead of a menu mode of their own.
+    if (typeof host.openStory === "function") {
+      const story = el("div", "cm-journey__story");
+      const text = el("div", "cm-journey__story-text");
+      text.append(el("strong", "", t("story.title")), el("span", "", t("story.hint")));
+      const open = button("cm-journey__key cm-arcade-key", t("story.open"), () => host.openStory());
+      open.dataset.journeyAction = "story";
+      story.append(text, open);
+      panel.append(story);
+    }
+    const path = el("div", "cm-journey__path");
+    for (const st of zone.stages) {
+      const node = button("cm-journey__stage", "", () => { selectedStage = st.stage; paint(); });
+      node.dataset.stage = `${zone.zone}-${st.stage}`;
+      node.dataset.stars = String(st.stars);
+      node.setAttribute("aria-pressed", String(st.stage === selectedStage));
+      node.disabled = !st.open;
+      if (st.boss) node.dataset.boss = st.stage === 6 ? "zone" : "mid";
+      node.append(el("span", "cm-journey__stage-no", `${zone.zone}-${st.stage}`), portrait(host.speciesPortrait(Number(st.lead.slice(8))), "cm-journey__face"),
+        el("span", "cm-journey__stage-stars", stars(st.stars)));
+      if (st.boss) node.append(el("b", "cm-journey__mark cm-journey__mark--guardian", t(st.stage === 6 ? "stage.boss" : "stage.mid")));
+      path.append(node);
+    }
+    panel.append(path);
+    const st = zone.stages[selectedStage - 1];
+    const detail = el("div", "cm-journey__detail");
+    const rewards = el("div", "cm-journey__rewards");
+    rewards.append(el("span", "cm-journey__rewards-title", t("tower.rewards")), el("span", "cm-journey__reward", t("tower.crystals", { value: st.rewards.crystals.toLocaleString() })));
+    if (st.rewards.tickets) rewards.append(el("span", "cm-journey__reward", t("tower.tickets", { value: st.rewards.tickets })));
+    if (st.stars > 0) rewards.dataset.claimed = "true";
+    detail.append(rewards, el("p", "cm-journey__team-title", zone.chest ? t("zone.chestOpen") : t("zone.chest", { diamonds: 150, tickets: 2 })));
+    const actions = el("div", "cm-journey__pod-actions");
+    const go = button("cm-journey__go cm-arcade-key", t("stage.challenge", { zone: zone.zone, stage: st.stage }), () => host.challengeZone(zone.zone, st.stage));
+    go.dataset.journeyAction = "zone";
+    go.disabled = !st.open;
+    const sweep = button("cm-journey__key cm-arcade-key", `${t("stage.sweep")}・${t("stage.sweepLeft", { n: frame.sweepsLeft })}`, () => {
+      const result = host.sweep(zone.zone, st.stage);
+      if (result?.ok) say(t("sweep.got", { value: result.crystals.toLocaleString() }));
+      paint();
+    });
+    sweep.dataset.journeyAction = "sweep";
+    sweep.disabled = st.stars < 3 || frame.sweepsLeft <= 0;
+    actions.append(go, sweep);
+    detail.append(actions);
+    panel.append(detail);
+    body.replaceChildren(panel);
+  }
+
   function paint() {
     if (disposed) return;
     root.dataset.tab = tab;
@@ -209,7 +281,7 @@ export function createJourneyScreen(host) {
     paintTabs();
     if (tab === "TOWER") paintTower();
     else if (tab === "FEED") paintFeed();
-    else body.replaceChildren(el("p", "cm-journey__hint", t("zonesSoon")));
+    else paintZones();
   }
 
   async function start(floor) {

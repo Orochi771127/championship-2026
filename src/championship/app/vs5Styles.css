@@ -988,3 +988,7 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 .cm-sync-panel__cap { text-align: center; }
 /* Sync Level on a roster row (stage slot). */
 .cm-vs5-member__stage { padding: 0 7px; border-radius: 999px; background: #2a1d5e; color: #ffe27a; font: 800 var(--fs-label)/1.5 var(--font-ui); letter-spacing: 0.04em; }
+/* The Data Arena result lists Sync EXP the same frameless way (Owner 2026-11-09). */
+.da-panel .cm-sync-panel { gap: 0; }
+.da-panel .cm-sync-row { padding: 8px 2px; border: 0; border-radius: 0; background: none; }
+.da-panel .cm-sync-row + .cm-sync-row { border-top: 1px dashed rgba(20, 20, 31, 0.22); }

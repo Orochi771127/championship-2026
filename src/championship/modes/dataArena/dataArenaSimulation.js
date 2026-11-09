@@ -63,7 +63,7 @@ export function pointSegmentDistance(px, py, ax, ay, bx, by) {
 const NEUTRAL_INPUT = Object.freeze({ moveX: 0, moveY: 0, aimX: null, aimY: null, fire: false, dash: false, surge: false, ride: false, cast: null, ult: false, autoAim: false });
 export const DATA_ARENA_MODES = Object.freeze(["TOURNAMENT", "HARBOR", "RELAY"]);
 
-export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PARTNERS[0].id, quality = "high", mode = "HARBOR", relayLoadouts = {}, relayReserveId = null, relayThirdId = null, relayCompanionSpecies = [], relayArenaId = null, portrait = false, partnerPower = {}, relayBurstPlans = {}, relayManualBurst = false } = {}) {
+export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PARTNERS[0].id, quality = "high", mode = "HARBOR", relayLoadouts = {}, relayReserveId = null, relayThirdId = null, relayCompanionSpecies = [], relayArenaId = null, portrait = false, partnerPower = {}, relayBurstPlans = {}, relayManualBurst = false, relayRivals = null, relayBuffPicks = false } = {}) {
   if (!DATA_ARENA_MODES.includes(mode)) throw new RangeError(`DATA_ARENA_UNKNOWN_MODE:${mode}`);
   const relayMode = mode === "RELAY";
   const tournamentMode = mode === "TOURNAMENT" || relayMode;
@@ -2270,7 +2270,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       }
       const rival = state.rivals[0];
       const shockRadius = (DATA_ARENA_RELAY.tagShockwaveRadius ?? 135) + (perfectSwitch ? 35 : 0);
-      const shockDamage = (DATA_ARENA_RELAY.tagShockwaveDamage ?? 28) * (perfectSwitch ? 2 : 1);
+      const shockDamage = (DATA_ARENA_RELAY.tagShockwaveDamage ?? 28) * (perfectSwitch ? 2 : 1) * (1 + upgradeValue(upgrades, "tagShock"));
       if (rival && rival.active && rival.hp > 0) {
         const d0 = distance(rival.x, rival.y, player.x, player.y) || 1;
         if (d0 > 58) moveBody(player, ((rival.x - player.x) / d0) * 26, ((rival.y - player.y) / d0) * 26, movementKind(player));
@@ -2307,7 +2307,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     });
   }
   function relayRival(index) {
-    const definition = DATA_ARENA_RIVALS[index % DATA_ARENA_RIVALS.length];
+    // Journey zones (2026-11-10) bring their own three rivals; otherwise the arena's.
+    const definition = relayRivals?.[index] ?? DATA_ARENA_RIVALS[index % DATA_ARENA_RIVALS.length];
     const rival = createRival({ ...definition, hp: Math.round(definition.hp * DATA_ARENA_RELAY.rivalHpScale) }, Math.min(index, 1));
     rival.basic = RELAY_ACTION_PROFILES[RELAY_ROSTER.find(p => p.speciesId === definition.speciesId)?.id]?.basic ?? 'relaySlash';
     rival.active = true; rival.burst = arenaBurstPlan(definition.speciesId); rival.burstSpeciesId = null; rival.koCounted = false; return rival;
@@ -2330,6 +2331,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const rival = state.rivals[0];
     stepArenaBurst(player, burstOfBody(player), 'player'); stepArenaBurst(rival, rival.burst, 'rival');
     if (player.hp <= 0) {
+      if (relay.playerDownAt === null) relay.fainted = (relay.fainted ?? 0) + 1;
       relay.playerDownAt ??= state.time;
       player.cast = player.lunge = player.action = null; removeTelegraph(`cast:${player.id}`);
       if (state.time - relay.playerDownAt >= DATA_ARENA_RELAY.knockoutSeconds) switchRelayPlayer(true);
@@ -2344,6 +2346,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         nextRival.active = true; nextRival.invulnerable = 0.5;
         state.rivals = [nextRival];
         state.score += 1000; emit({ type: 'RELAY_RIVAL', rivalId: nextRival.definitionId, speciesId: nextRival.speciesId, enemyIndex: nextRivalIdx, x: nextRival.x, y: nextRival.y });
+        // A Journey zone stage offers a three-choice buff between waves; the relay pauses on it.
+        if (relayBuffPicks) { state.pendingLevels++; openOffer(); }
       }
     } else if (t.roundTime > 14 && relay.rivalSwitchCooldown <= 0 && rival.hp < rival.maxHp * 0.36 && !rival.cast && !rival.lunge && rival.hitFlash > 0) {
       // Tactical AI switch: preserves the wounded rival's remaining HP on the bench without counting as a KO!
@@ -2434,6 +2438,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     state.result = Object.freeze({ outcome, timeSeconds: Math.round(state.time * 100) / 100, score: total, breakdown: Object.freeze(breakdown),
       kills: state.kills, level: state.level, upgrades: Object.freeze({ ...upgrades }), cheers: state.cheers,
       stats: Object.freeze({ ...state.stats }), partnerId, seed, mode,
+      relayFainted: relayMode ? state.relay?.fainted ?? 0 : 0,
       tournament: state.tournament && !relayMode ? Object.freeze({ roundsWon: state.stats.roundsWon, rounds: DATA_ARENA_TOURNAMENT.rounds,
         reachedRound: state.tournament.round + 1, results: state.tournament.results.map((r) => ({ ...r })) }) : null });
     state.mode = "ENDED";

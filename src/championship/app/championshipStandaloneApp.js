@@ -26,6 +26,8 @@ import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattl
   boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX} from '../contracts/productSyncLevel.js';
 import {normalizeJourney,createJourneyState,TOWER_FLOORS,towerBand,towerOpponents,towerOpponentSpecies,towerRewards,towerNextFloor,
   clearTowerFloor,patrolStatus,claimPatrol,quickPatrol} from '../contracts/productJourney.js';
+import {CAMPAIGN_ZONES,CAMPAIGN_STAGES,CAMPAIGN_ZONE_CHEST,campaignRivals,campaignStars,campaignRewards,recordCampaignStage,sweepCampaignStage,
+  sweepsLeft,stageOpen,starsOf,zoneStars,totalStars} from '../contracts/productCampaign.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
 import {assertPlayableProductSaveData} from '../contracts/productSpeciesData.js';
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
@@ -394,7 +396,7 @@ export function createChampionshipStandaloneApp({
   // OWNER_APPROVED_ADAPTATION 2026-11-09: Sync Level per partner (BATTLE_MODE_PRISM_AND_JOURNEY_20261109).
   let syncLevels=null,lastSyncGains=null;
   // OWNER_APPROVED_ADAPTATION 2026-11-10: Journey (tower and patrol pod).
-  let journey=null,pendingTower=null,lastTowerResult=null;
+  let journey=null,pendingTower=null,lastTowerResult=null,pendingCampaign=null;
   let nativeMessages=createNativeRaisingMessages();
   let nativeOpening=null;
   // Immutable rollback data, never another live session/store or storage key.
@@ -4069,6 +4071,52 @@ export function createChampionshipStandaloneApp({
         cleared:value<=state.tower.best,open:value<=towerNextFloor(state)});
     },
     getLastTowerResult(){return lastTowerResult;},
+    /** Journey zones: every stage's stars and whether it is open, display-ready. */
+    getCampaignFrame(){
+      const campaign=journeyState().campaign,day=journeyLocalDay();
+      return deepFreeze({totalStars:totalStars(campaign),sweepsLeft:sweepsLeft(campaign,day),chestStars:CAMPAIGN_ZONE_CHEST.stars,
+        zones:CAMPAIGN_ZONES.map(zone=>({zone:zone.zone,map:zone.map,field:zone.field,midBoss:zone.midBoss,boss:zone.boss,
+          stars:zoneStars(campaign,zone.zone),chest:campaign.chests.includes(zone.zone),open:stageOpen(campaign,zone.zone,1),
+          stages:Array.from({length:CAMPAIGN_STAGES},(_,i)=>{const stage=i+1;
+            return {stage,stars:starsOf(campaign,zone.zone,stage),open:stageOpen(campaign,zone.zone,stage),boss:stage===3||stage===6,
+              lead:campaignRivals(zone.zone,stage)[2].speciesId,rewards:{...campaignRewards(zone.zone,stage)}};})}))});
+    },
+    /** The Data Arena set-up for one open zone stage; the next arena result settles it. */
+    beginCampaignStage(zone,stage){
+      if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+      if(!stageOpen(journeyState().campaign,zone,stage))return {ok:false,reason:'STAGE_LOCKED'};
+      const info=CAMPAIGN_ZONES[zone-1];
+      pendingCampaign=Object.freeze({zone,stage});
+      return {ok:true,zone,stage,field:info.field,map:info.map,rivals:campaignRivals(zone,stage)};
+    },
+    /** A finished zone stage: stars, its first-clear prize and, at 18 stars, the zone chest. */
+    settleCampaignStage({outcome,timeSeconds,fainted}={}){
+      const pending=pendingCampaign;pendingCampaign=null;
+      if(!pending)return null;
+      const stars=campaignStars({outcome,timeSeconds,fainted});
+      const recorded=recordCampaignStage(journeyState().campaign,pending.zone,pending.stage,stars);
+      journey={...journeyState(),campaign:recorded.campaign};
+      let tickets=0,diamonds=0;
+      const crystals=recorded.firstClear?.crystals??0;
+      addSyncCrystals(crystals);
+      let gacha=gachaState();
+      const ticketCount=(recorded.firstClear?.tickets??0)+(recorded.chest?.tickets??0);
+      if(ticketCount){const grant=grantGachaTickets(gacha,ticketCount);gacha=grant.state;tickets=grant.granted;}
+      const paid=recorded.chest?payDiamondRewards([Object.freeze({key:`dia:zone:${pending.zone}`,kind:'ZONE',value:pending.zone,amount:recorded.chest.diamonds})],{state:gacha}):null;
+      if(paid?.ok&&paid.granted)diamonds=paid.granted;
+      else if(tickets&&!commitGacha({state:gacha}))tickets=0;
+      savePort.markDirty();publishRaising();
+      return Object.freeze({zone:pending.zone,stage:pending.stage,stars,best:starsOf(recorded.campaign,pending.zone,pending.stage),
+        firstClear:Boolean(recorded.firstClear),crystals,tickets,diamonds,chest:Boolean(recorded.chest)});
+    },
+    /** Sweep a three-star stage for crystal points (ten a day). */
+    sweepCampaignStage(zone,stage){
+      if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+      const swept=sweepCampaignStage(journeyState().campaign,zone,stage,journeyLocalDay());
+      if(!swept)return {ok:false,reason:'SWEEP_UNAVAILABLE'};
+      journey={...journeyState(),campaign:swept.campaign};addSyncCrystals(swept.crystals);savePort.markDirty();
+      return {ok:true,crystals:swept.crystals};
+    },
     /** Collect the patrol pod (the first collect starts it). */
     claimPatrol(){
       if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};

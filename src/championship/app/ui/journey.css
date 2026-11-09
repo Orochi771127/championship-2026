@@ -105,3 +105,37 @@
 }
 :root[data-motion="reduced"] .cm-journey { animation: none; }
 @media (prefers-reduced-motion: reduce) { :root:not([data-motion]) .cm-journey { animation: none; } }
+
+/* Zones: a strip of six zones and a stage path that snakes in two rows. */
+.cm-journey__zones { display: grid; gap: 10px; }
+.cm-journey__zone-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(118px, 1fr); gap: 6px; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; }
+.cm-journey__zone-chip { display: grid; gap: 2px; justify-items: start; padding: 8px 10px; border: 0; border-radius: 12px; background: rgba(20, 14, 48, 0.8); color: #fff; font: inherit; text-align: left; cursor: pointer; scroll-snap-align: start;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
+.cm-journey__zone-chip > strong { font-size: 13px; font-weight: 900; white-space: nowrap; }
+.cm-journey__zone-chip[aria-selected="true"] { background: linear-gradient(180deg, rgba(111, 247, 255, 0.3), rgba(162, 89, 255, 0.32)); box-shadow: inset 0 0 0 2px #6ff7ff; }
+.cm-journey__zone-chip:disabled { opacity: 0.45; cursor: default; }
+.cm-journey__zone-no { color: #c9c3ff; font-size: 11px; font-weight: 800; }
+.cm-journey__zone-stars { color: #ffe27a; font-size: 11px; font-weight: 800; }
+.cm-journey__path { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 10px; padding: 12px 8px; border-radius: 16px;
+  background: radial-gradient(80% 60% at 50% 50%, rgba(111, 247, 255, 0.1), transparent 70%), rgba(255, 255, 255, 0.04); }
+/* Second row runs right to left, so the path snakes 1-2-3 / 6-5-4. */
+.cm-journey__path > .cm-journey__stage:nth-child(4) { grid-column: 3; grid-row: 2; }
+.cm-journey__path > .cm-journey__stage:nth-child(5) { grid-column: 2; grid-row: 2; }
+.cm-journey__path > .cm-journey__stage:nth-child(6) { grid-column: 1; grid-row: 2; }
+.cm-journey__path::before { content: ""; position: absolute; inset: 30% 14% 30% 14%; border: 2px dashed rgba(111, 247, 255, 0.3); border-left: 0; border-radius: 0 40px 40px 0; pointer-events: none; }
+.cm-journey__stage { position: relative; display: grid; justify-items: center; gap: 3px; padding: 8px 4px; border: 0; border-radius: 14px; background: rgba(20, 14, 48, 0.85); color: #fff; font: inherit; cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(162, 89, 255, 0.35); }
+.cm-journey__stage:disabled { opacity: 0.4; cursor: default; }
+.cm-journey__stage[aria-pressed="true"] { box-shadow: inset 0 0 0 2px #ffe27a, 0 0 16px rgba(255, 226, 122, 0.35); }
+.cm-journey__stage[data-boss] { background: linear-gradient(180deg, rgba(255, 111, 181, 0.28), rgba(20, 14, 48, 0.9)); }
+.cm-journey__stage-no { font-size: 13px; font-weight: 900; }
+.cm-journey__stage-stars { color: #ffd23f; font-size: 13px; letter-spacing: 1px; text-shadow: 0 0 6px rgba(255, 210, 63, 0.5); }
+.cm-journey__stage[data-stars="0"] .cm-journey__stage-stars { color: rgba(255, 255, 255, 0.35); text-shadow: none; }
+.cm-journey__stage > .cm-journey__mark { position: absolute; top: -8px; right: -4px; }
+
+/* Story chapters card on the zones tab. */
+.cm-journey__story { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255, 111, 181, 0.2), rgba(162, 89, 255, 0.18)); box-shadow: inset 0 0 0 1px rgba(255, 111, 181, 0.35); }
+.cm-journey__story-text { display: grid; gap: 2px; min-width: 0; }
+.cm-journey__story-text > strong { font-size: 14px; font-weight: 900; }
+.cm-journey__story-text > span { color: #e6dcff; font-size: 12px; }
