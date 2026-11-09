@@ -937,3 +937,44 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-result__stars { margin: 4px 0; color: #ffd23f; font-size: 30px; letter-spacing: 6px; text-align: center; text-shadow: 0 2px 0 #3a2400, 0 0 12px rgba(255, 210, 63, 0.6); }
 .da-result__campaign { color: #b9fbff; text-align: center; }
 .da-modes[hidden], .da-maps[hidden] { display: none; }
+
+/* Owner 2026-11-10: the level-up pick is a bottom sheet over the paused field, not a
+   full-screen page. Three compact cards share one row on every screen; the field stays
+   visible above, so the player still sees the fight they are choosing for. */
+.da-root[data-state="LEVEL"] .da-overlay.da-overlay {
+  place-items: end center; overflow: hidden;
+  padding: 10px max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+  background: linear-gradient(180deg, transparent 0 30%, rgba(14, 8, 32, 0.38) 58%, rgba(14, 8, 32, 0.72) 100%);
+}
+.da-root[data-state="LEVEL"] .da-panel--level {
+  width: min(780px, 100%); max-height: min(62dvh, 460px); overflow-y: auto; overscroll-behavior: contain;
+  padding: 12px 14px 14px; animation: da-sheet-up 200ms cubic-bezier(.2, .9, .3, 1.15) both;
+}
+@keyframes da-sheet-up { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+.da-root[data-state="LEVEL"] .da-panel--level .da-title { margin: 0 0 6px; font-size: 18px; line-height: 1.2; }
+.da-root[data-state="LEVEL"] .da-panel--level .da-note { margin: 0 0 4px; font-size: 12px; }
+.da-root[data-state="LEVEL"] .da-panel--level .da-bracket { margin: 0 0 4px; gap: 5px; justify-content: flex-start; }
+.da-root[data-state="LEVEL"] .da-panel--level .da-bracket__step { padding: 2px 9px; font-size: 11px; }
+.da-root[data-state="LEVEL"] .da-panel--level .da-bracket__tag { font-size: 10px; padding: 0 5px; }
+.da-root[data-state="LEVEL"] .da-panel--level .da-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 6px; }
+.da-root[data-state="LEVEL"] .da-panel--level .da-card { min-height: 0; padding: 9px 9px 10px; gap: 3px; }
+.da-root[data-state="LEVEL"] .da-panel--level .da-card__key { top: 6px; right: 8px; font-size: 11px; }
+.da-root[data-state="LEVEL"] .da-panel--level .da-card__track { font-size: 10px; letter-spacing: 0; }
+.da-root[data-state="LEVEL"] .da-panel--level .da-card__name { font-size: 15px; line-height: 1.2; }
+.da-root[data-state="LEVEL"] .da-panel--level .da-card__effect { font-size: 12px; line-height: 1.35; }
+.da-root[data-state="LEVEL"] .da-panel--level .da-card__rank { font-size: 11px; }
+/* The running-total line only where there is room for it; the fine print never. */
+.da-root[data-state="LEVEL"] .da-panel--level .da-card__preview { gap: 2px; padding-top: 5px; font-size: 11px; line-height: 1.35; }
+.da-root[data-state="LEVEL"] .da-panel--level .da-card__preview small { display: none; }
+@media (max-width: 699px), (max-height: 520px) {
+  .da-root[data-state="LEVEL"] .da-panel--level .da-card__preview { display: none; }
+}
+@media (max-width: 420px) {
+  .da-root[data-state="LEVEL"] .da-panel--level { padding: 10px 10px 12px; }
+  .da-root[data-state="LEVEL"] .da-panel--level .da-cards { gap: 6px; }
+  .da-root[data-state="LEVEL"] .da-panel--level .da-card { padding: 8px 7px 9px; }
+  .da-root[data-state="LEVEL"] .da-panel--level .da-card__name { font-size: 14px; }
+  .da-root[data-state="LEVEL"] .da-panel--level .da-card__effect { font-size: 11.5px; }
+}
+@media (prefers-reduced-motion: reduce) { .da-root[data-state="LEVEL"] .da-panel--level { animation: none; } }
+:root[data-motion="reduced"] .da-root[data-state="LEVEL"] .da-panel--level { animation: none; }

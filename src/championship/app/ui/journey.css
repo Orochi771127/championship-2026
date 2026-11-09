@@ -139,3 +139,6 @@
 .cm-journey__story-text { display: grid; gap: 2px; min-width: 0; }
 .cm-journey__story-text > strong { font-size: 14px; font-weight: 900; }
 .cm-journey__story-text > span { color: #e6dcff; font-size: 12px; }
+
+/* Desktop and wide tablets: the Journey reads as one centred column, not a page-wide strip. */
+.cm-journey > * { width: min(100%, 880px); justify-self: center; }

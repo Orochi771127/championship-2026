@@ -1542,7 +1542,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       eyebrow.textContent = t(`mode.${gameMode}`);
       for (const node of modes.children) node.setAttribute("aria-checked", String(node.dataset.mode === gameMode));
       intel.textContent = t(`intel.${gameMode}`);
-      maps.hidden = gameMode !== "RELAY";
+      maps.hidden = Boolean(campaign) || gameMode !== "RELAY";
       for (const node of maps.children) node.setAttribute("aria-checked", String(node.dataset.map === relayArenaId));
       // The dock: one ace seat in the tournament, the partner plus the fixed harbor mate, or the relay pair.
       const seats = el("div", "da-dock__seats");

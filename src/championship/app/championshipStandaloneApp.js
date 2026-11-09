@@ -4091,7 +4091,8 @@ export function createChampionshipStandaloneApp({
     },
     /** A finished zone stage: stars, its first-clear prize and, at 18 stars, the zone chest. */
     settleCampaignStage({outcome,timeSeconds,fainted}={}){
-      const pending=pendingCampaign;pendingCampaign=null;
+      // The stage stays armed until another begins: the arena's retry key fights it again.
+      const pending=pendingCampaign;
       if(!pending)return null;
       const stars=campaignStars({outcome,timeSeconds,fainted});
       const recorded=recordCampaignStage(journeyState().campaign,pending.zone,pending.stage,stars);
