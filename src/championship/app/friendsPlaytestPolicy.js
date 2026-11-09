@@ -5,6 +5,24 @@ export const FRIENDS_PLAYTEST_POLICY = Object.freeze({
   enabled: true, version: 1, grantId: 'friends-playtest:coins:v1', grantCoins: 8000000,
   initialTestDiamonds: 20000, shopOpen: true, huntOpen: true, fullDexView: true, lateMedalPreview: true
 });
+/**
+ * Owner 2026-11-10: the public site plays the real economy (no grant, rank-gated shop and hunt, Dex records
+ * only); the friends mode stays as a hidden switch for testing. `?friends=1` turns it on for this device and
+ * `?friends=0` off (remembered through the save port's friends switch); without a remembered choice loopback hosts --
+ * local play and every browser gate -- keep it on and public hosts keep it off. The grant only ever reaches a
+ * save started while it is on.
+ */
+export const FRIENDS_PLAYTEST_OFF_POLICY = Object.freeze({ ...FRIENDS_PLAYTEST_POLICY, enabled: false,
+  shopOpen: false, huntOpen: false, fullDexView: false, lateMedalPreview: false });
+const LOOPBACK_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
+export function resolveFriendsPlaytestPolicy({ hostname = '', search = '', remembered = null } = {}) {
+  let choice = null;
+  try { choice = new URLSearchParams(search).get('friends'); } catch { choice = null; }
+  if (choice === '1' || choice === '0') remembered?.write?.(choice);
+  else choice = remembered?.read?.() ?? null;
+  const on = choice === '1' ? true : choice === '0' ? false : LOOPBACK_HOSTS.has(String(hostname).toLowerCase());
+  return on ? FRIENDS_PLAYTEST_POLICY : FRIENDS_PLAYTEST_OFF_POLICY;
+}
 // DIAMOND_ECONOMY_20261102: this wallet is the public build's diamond balance. Story,
 // rank and encyclopedia rewards add to it, so it may grow past the starting grant.
 export const DIAMOND_WALLET_CAP = 9999999;

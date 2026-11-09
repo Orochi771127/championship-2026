@@ -2,7 +2,11 @@ import {createResidentAssetNotice,collectRaisingInitialSequences} from './reside
 import { resonanceStrip, taxonomyBadgeRow, taxonomyGlyph } from '../presentation/taxonomyBadgeArt.js';
 import { speciesTaxonomyForId } from '../contracts/speciesTaxonomy.js';
 import {huntThreeProductionRequest} from '../presentation/vs2/huntThree/manifestBindings.mjs';
-import { FRIENDS_PLAYTEST_POLICY } from './friendsPlaytestPolicy.js';
+import { resolveFriendsPlaytestPolicy } from './friendsPlaytestPolicy.js';
+// Owner 2026-11-10: the friends mode is off on the public site and a hidden switch elsewhere (friendsPlaytestPolicy.js).
+const FRIENDS_PLAYTEST_POLICY = resolveFriendsPlaytestPolicy({ hostname: globalThis.location?.hostname ?? '',
+  search: globalThis.location?.search ?? '',
+  remembered: createChampionshipFriendsSwitchPort({ storage: (() => { try { return globalThis.localStorage ?? null; } catch { return null; } })() }) });
 import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../contracts/productBattleTransport.js';
 import {isOriginalRuntimeLocation,isApprovedOriginalPublicLocation,isOriginalLoopbackLocation} from '../presentation/originalRuntimeLocation.js';
 import { finalHuntArtManifestUrl } from '../presentation/finalHuntArt20261008.js';
@@ -123,6 +127,7 @@ import {
   CHAMPIONSHIP_PREFERENCES_KEY,
   CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS,
   createChampionshipPreferencePort,
+  createChampionshipFriendsSwitchPort,
   createChampionshipSessionCheckpointPort,
   createChampionshipGuestIdentityPort,
   createChampionshipOnlineSessionPort
@@ -3376,8 +3381,8 @@ async function enterDataArena(dataArenaButton) {
       // Sponsor stake contracts (AWAKENING_OVERDRIVE_20261109): the one armed in the battle menu rides the next cup or relay.
       sponsor: { begin: () => app.beginArenaSponsorContract?.() ?? null, settle: (stats) => app.settleArenaSponsorContract?.(stats) ?? null },
       onExit: restoreBattle,
-      // Cyber Gachapon: a manual-battle win pays 1-3 tickets, a cup 3-10, into the one save.
-      onVictory: ({ tournament }) => app?.grantGachaTickets?.(tournament ? 3 + Math.floor(Math.random() * 8) : 1 + Math.floor(Math.random() * 3), 'DATA_ARENA')
+      // Cyber Gachapon: a manual-battle win settles like an AI win (tickets, and an armed beacon), into the one save.
+      onVictory: ({ tournament, partyIds }) => app?.settleDataArenaWin?.({ tournament, partyIds })
     });
     dataArenaSession = session;
     root.hidden = true;

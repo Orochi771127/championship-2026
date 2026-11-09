@@ -1,5 +1,20 @@
 # Championship Owner Direction
 
+<!-- record-id: CHRONO_ARENA_FRIENDS_SWITCH_20261110 -->
+## 2026-11-10 — One-minute hunt with chrono cartridges in the field, Data Arena beacons, friends mode off on the public site
+
+After GACHA_FULL_EFFECTS_20261109 went live the Owner decided (2026-11-10): old test saves simply restart (no migration buffer for the ranch-capacity rule); use the chrono cartridge inside a running hunt and let Data Arena wins use the bounty beacon (「就把三跟四也都做好」); 「狩獵本身的時間現在也改成1分鐘就好，其他都要用加時間的那個」; and for the friends playtest mode chose 「公開版關閉，保留隱藏開關」.
+
+OWNER_APPROVED_ADAPTATION on top of GACHA_FULL_EFFECTS_20261109.
+
+- Hunt: a real-time hunt lasts one real minute (`REALTIME_HUNT_BASE_MINUTES` 144 hunt minutes). The HUD shows a 「時鐘 +120 秒」 key while a chrono cartridge sits in the bag; each use takes one from the bag and adds its 288 hunt minutes to the live countdown at once; several may be used. An armed chrono still adds its time at entry. The native (non-real-time) clock keeps its traced 480-minute deadline. The real-time hunt HUD and its loading card show the remaining time in real minutes and seconds (「限時 01:00」), amber under 30 s and red at 10 s.
+- Data Arena: a win settles like an AI win without a purse — one ticket 60% of the time, a cup 2–4 more — and spends an armed beacon (its tickets, the Ω shard, and battles/wins or race/faction points on the relay party). An AI tournament title now also pays 2–4 tickets (was 3–10), matching the 2026-11-09 balance.
+- Friends playtest: the public site defaults to the real economy (no 8,000,000 bits or 20,000 diamonds, rank-gated shop and hunt, Dex by records). `?friends=1` turns the friends mode on for that device and `?friends=0` off, remembered through the save port (`championshipModernSave:friendsPlaytest:v1`); without a choice, loopback hosts (local play and every browser gate) keep it on. The grant only reaches a save started while it is on.
+
+Verified by `tests/championship-gacha-full-effects-cases.mjs` and a phone-portrait run of the in-hunt chrono key on an isolated port.
+
+Publication: asked whether to commit, open a PR, merge to main and publish, the Owner chose 「是，合併並公開發佈」 (2026-11-10). This authorizes this batch only.
+
 <!-- record-id: GACHA_FULL_EFFECTS_20261109 -->
 ## 2026-11-09 — Gachapon items act on the partner's own words, and both machines pay a fuller pool
 
