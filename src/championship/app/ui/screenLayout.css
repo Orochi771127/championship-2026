@@ -1316,6 +1316,10 @@
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header .cm-vs2-kicker,
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header .cm-vs2-subtitle { display: none; }
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header .cm-vs2-title { margin: 0; font-size: 22px; line-height: 1.15; }
+/* The tight 1.15 line box let the arcade title's 6 px stroke and 4 px drop shadow
+ * cover the teal link line (only its lit node showed). Extra padding drops the line
+ * below the shadow, with room for iOS fonts that sit lower. */
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-header .cm-vs2-title { padding-bottom: 15px; }
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -3963,3 +3967,16 @@ body:not([data-desktop-raising]):has(#cm-root[data-active-screen="RAISING_HOME"]
     align-self: center; grid-auto-rows: max-content; align-content: start;
   }
 }
+/* Backpack partner list (Owner 2026-11-09): one row per partner, the chosen one lit with a check. */
+.cm-backpack__partners { display: grid; gap: 6px; max-height: min(46vh, 320px); overflow-y: auto; overscroll-behavior: contain; padding: 2px; }
+.cm-backpack__partner { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 6px 12px; text-align: left; font: inherit; cursor: pointer;
+  color: #1f2433; background: #fffaf0; border: 2px solid #1f2433; border-radius: 12px; box-shadow: 0 2px 0 #1f2433; }
+.cm-backpack__partner[aria-checked="true"] { background: #ffe38a; border-color: #b45309; box-shadow: 0 0 0 3px rgba(245, 158, 11, .45), 0 2px 0 #b45309; }
+.cm-backpack__partner[data-away="true"] { opacity: .55; }
+.cm-backpack__partner-text { display: grid; flex: 1 1 auto; min-width: 0; }
+.cm-backpack__partner-name { display: flex; align-items: center; gap: 6px; font-weight: 900; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cm-backpack__partner-species { font-size: 12px; color: #5b6275; }
+.cm-backpack__partner-check { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 2px solid #1f2433;
+  font-weight: 900; color: #fff; background: transparent; }
+.cm-backpack__partner[aria-checked="true"] .cm-backpack__partner-check { background: #16a34a; border-color: #14532d; }
+.cm-backpack__partners > .cm-backpack__partner[aria-checked="true"] { background: #ffe38a !important; border-color: #b45309 !important; }

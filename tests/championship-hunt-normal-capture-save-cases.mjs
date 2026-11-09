@@ -68,10 +68,12 @@ assert.equal(target?.bound,true);if(target?.bound){
  app.exitHunt();
  assert.deepEqual(app.getGameplayRngState(),{version:1,...rng.snapshot()},'repeated exit cannot rerun the native return writer');
  assert.deepEqual(runtime.getOnCardEntries()[0].nativeProfile,nativeAfter);
+ // A veteran elite catch (AWAKENING_OVERDRIVE_20261109) arrives with +6 to its four stats, up to their native bound.
+ const instinct=app.getHuntResult().rows.find(row=>row.kind==='CARD').instinct;
  await app.confirmHuntResult();const captured=app.getRaisingInstances().filter(r=>!before.includes(r.instanceId));assert.equal(captured.length,1);
  assert.equal(captured[0].profile.currentHp,nativeAfter.fields['050']);
  assert.equal(captured[0].profile.maxTp,nativeAfter.fields['05c']);
- assert.equal(captured[0].profile.stats.field60,nativeAfter.fields['060']);
+ assert.equal(captured[0].profile.stats.field60,instinct==='ELITE'?Math.min(nativeAfter.fields['0b8']|0,(nativeAfter.fields['060']|0)+6):nativeAfter.fields['060']);
  assert.equal(captured[0].source.successAuthority,'NATIVE_NORMAL_HUNT_CONTROLLER');
  assert.equal(app.getDatabaseFrame().entries.find(row=>row.speciesId===captured[0].speciesId).state,'REGISTERED');
  await app.confirmHuntResult();assert.deepEqual(app.getRaisingInstances().filter(r=>!before.includes(r.instanceId)),captured,'repeated result confirmation cannot duplicate a resident');

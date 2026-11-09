@@ -38,6 +38,9 @@ import { battleMoveName } from '../text/battleMoveNames.js';
 import { speciesTaxonomyForId, elementMatchup, elementMultiplierPercent, factionResonance } from '../contracts/speciesTaxonomy.js';
 import { burstBasesFor, burstFormsFor, isBurstForm } from '../contracts/productBurstEvolution.js';
 import { speciesName } from '../text/zhHant.js';
+import { uiText } from '../text/uiText.js';
+import { bindOverLimitPress } from './ui/overLimitPress.js';
+import { OVER_LIMIT_RULES } from '../contracts/productAwakeningOverdrive.js';
 import { taxonomyText } from '../text/taxonomyText.js';
 import { taxonomyBadgeRow, resonanceStrip, taxonomyGlyph, TAXONOMY_COLORS, svgElement } from '../presentation/taxonomyBadgeArt.js';
 import { elementChartButton } from './elementChartModal.js';
@@ -118,7 +121,7 @@ function ensureStylesheet() {
  */
 export async function openDataArena({ ensureStage, audioBus = null, music = null, storage = null, reducedMotion = false,
   resolutionCap = 2, onExit = () => {}, onVictory = null, href = globalThis.location?.href, qa = false, seed = null, progress = null,
-  burstPlanOf = null, syncPowerOf = null, onSyncResult = null, syncPanelFor = null, campaign = null, onCampaignResult = null }) {
+  burstPlanOf = null, sponsor = null, syncPowerOf = null, onSyncResult = null, syncPanelFor = null, campaign = null, onCampaignResult = null }) {
   await ensureStylesheet();
   const lifetime = new AbortController();
   const { signal } = lifetime;
@@ -222,11 +225,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   let paused = false;
   let qualityReloading = false;
   let matchId = 0;
-  let result = null;
+  let result = null, staked = null;
 
   // ------------------------------------------------------------------ input
   const keys = new Set();
-  const latch = { dash: false, surge: false, ride: false, cast: null, ult: false, castAuto: false, castAim: null, switchPartner: false, burst: false };
+  const latch = { dash: false, surge: false, ride: false, cast: null, ult: false, castAuto: false, castAim: null, switchPartner: false, burst: false, overLimit: false };
   const pointer = { x: null, y: null, fire: false };
   const sticks = { move: null, aim: null };
   let aimVector = { x: 1, y: 0 };
@@ -276,9 +279,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     // Without a mouse (keyboard, or a tapped touch button) skills auto-aim; the aim stick or mouse aims by hand.
     const manualTouch = touchActive && (pointed || (sticks.aim?.vector && Math.hypot(sticks.aim.vector.x, sticks.aim.vector.y) > 0.28));
     const autoAim = latch.castAuto || (!pointer.mouse && !manualTouch);
-    const input = { moveX: mx, moveY: my, aimX, aimY, fire, dash: latch.dash, surge: latch.surge, ride: latch.ride, cast: latch.cast, ult: latch.ult, autoAim, switchPartner: latch.switchPartner, burst: latch.burst };
+    const input = { moveX: mx, moveY: my, aimX, aimY, fire, dash: latch.dash, surge: latch.surge, ride: latch.ride, cast: latch.cast, ult: latch.ult, autoAim, switchPartner: latch.switchPartner, burst: latch.burst, overLimit: latch.overLimit };
     latch.dash = latch.surge = latch.ride = latch.ult = latch.castAuto = false;
-    latch.cast = null; latch.castAim = null; latch.switchPartner = false; latch.burst = false;
+    latch.cast = null; latch.castAim = null; latch.switchPartner = false; latch.burst = false; latch.overLimit = false;
     return input;
   }
 
@@ -303,14 +306,19 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     if (event.code in SKILL_KEYS) latch.cast = SKILL_KEYS[event.code];
     if (event.code === "KeyR") latch.ult = true;
     if (event.code === "KeyX") latch.switchPartner = gameMode === "RELAY" ? "first" : true;
-    if (event.code === "KeyB") latch.burst = true;
+    // B taps the burst; holding it for the over-limit time calls the over-limit burst (AWAKENING_OVERDRIVE_20261109).
+    if (event.code === "KeyB") { clearTimeout(burstKeyTimer); burstKeyTimer = setTimeout(() => { burstKeyTimer = null; latch.overLimit = true; }, OVER_LIMIT_RULES.holdMs); }
     if (event.code === "KeyF") latch.surge = true;
     if (event.code === "KeyC") { if (gameMode === "RELAY") latch.switchPartner = "second"; else latch.ride = true; }
   }, { signal, capture: true });
-  window.addEventListener("keyup", (event) => keys.delete(event.code), { signal, capture: true });
+  let burstKeyTimer = null;
+  window.addEventListener("keyup", (event) => {
+    keys.delete(event.code);
+    if (event.code === "KeyB" && burstKeyTimer) { clearTimeout(burstKeyTimer); burstKeyTimer = null; latch.burst = true; }
+  }, { signal, capture: true });
   window.addEventListener("blur", releaseInputs, { signal });
   function releaseInputs() {
-    keys.clear(); Object.assign(latch, { dash:false, surge:false, ride:false, cast:null, ult:false, castAuto:false, castAim:null, switchPartner:false, burst:false }); held = basicOrigin = basicAim = null; pointer.fire = false; sticks.move = sticks.aim = null;
+    keys.clear(); clearTimeout(burstKeyTimer); burstKeyTimer = null; Object.assign(latch, { dash:false, surge:false, ride:false, cast:null, ult:false, castAuto:false, castAim:null, switchPartner:false, burst:false, overLimit:false }); held = basicOrigin = basicAim = null; pointer.fire = false; sticks.move = sticks.aim = null;
     basicPointerId = null;
     for (const node of touch.querySelectorAll('.is-pressed')) node.classList.remove('is-pressed');
     for (const knob of touch.querySelectorAll(".da-stick")) knob.hidden = true;
@@ -377,7 +385,10 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   };
   for (const [node, key] of [[switchButton, "switch1"], [switchButton2, "switch2"], [burstButton, "burst"], [dashButton, "dash"], [surgeButton, "surge"], [rideButton, "ride"], [ultButton, "ult"], ...skillButtons.map((node, slot) => [node, slot])]) {
     const fire = press(key), aimed = key === "ult" || typeof key === "number";
-    node.addEventListener("pointerdown", (event) => { event.preventDefault(); event.stopPropagation(); if (root.dataset.state === "PLAY") {
+    // The burst key: a tap bursts, a long press or a double tap goes over the limit (AWAKENING_OVERDRIVE_20261109).
+    if (key === "burst") bindOverLimitPress(node, { holdMs: OVER_LIMIT_RULES.holdMs, doubleTapMs: OVER_LIMIT_RULES.doubleTapMs,
+      ready: () => root.dataset.state === "PLAY", onStandard: () => { latch.burst = true; tick(); }, onOverLimit: () => { latch.overLimit = true; tick(); } });
+    else node.addEventListener("pointerdown", (event) => { event.preventDefault(); event.stopPropagation(); if (root.dataset.state === "PLAY") {
       if (aimed) held = { key, id: event.pointerId, ox: event.clientX, oy: event.clientY, aim: null }; else { fire(); tick(); }
       node.setPointerCapture?.(event.pointerId); node.classList.add("is-pressed"); } }, { signal });
     if (aimed) {
@@ -544,7 +555,12 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     hudRefs.surge = el("div", "da-chip da-chip--harbor", t("hud.surge"));
     hudRefs.ride = el("div", "da-chip da-chip--harbor", t("hud.ride"));
     hudRefs.switch = button('da-relay-switch', t('relay.switch'), () => { if (root.dataset.state === 'PLAY') latch.switchPartner = true; }, signal);
-    hudRefs.burst = button('da-relay-burst', t('relay.burst.button'), () => { if (root.dataset.state === 'PLAY') latch.burst = true; }, signal);
+    hudRefs.burst = button('da-relay-burst', t('relay.burst.button'), () => {}, signal);
+    bindOverLimitPress(hudRefs.burst, { holdMs: OVER_LIMIT_RULES.holdMs, doubleTapMs: OVER_LIMIT_RULES.doubleTapMs,
+      ready: () => root.dataset.state === 'PLAY', onStandard: () => { latch.burst = true; }, onOverLimit: () => { latch.overLimit = true; } });
+    hudRefs.overLimit = el('p', 'da-over-limit');
+    hudRefs.overLimit.hidden = true;
+    hudRefs.overLimit.setAttribute('role', 'status');
     hudRefs.team = el('div', 'da-relay-team');
     // Mini tags for seats 1, 2 and 3 (number, name, a health sliver) and the trio's
     // faction resonance as one small badge on the same row, inside the top bar.
@@ -566,6 +582,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     tacticalLast = null;
     hudRefs.vignette = el("div", "da-vignette");
     hud.append(hudRefs.vignette, top, hudRefs.boss, hudRefs.tactical, hudRefs.banner, bottom);
+    if (hudRefs.overLimit) hud.append(hudRefs.overLimit);
     hudCache.clear();
   }
   const hudCache = new Map();
@@ -641,6 +658,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       for (const [key, node] of [['burstBtn', hudRefs.burst], ['tburst', burstButton]])
         put(key, node, (n, value) => { const [phase, fill] = value.split('|'); n.dataset.burst = phase; n.hidden = phase === 'none'; n.style.setProperty('--burst', fill);
           n.classList.toggle('is-ready', phase === 'READY'); }, `${burstState}|${burstFill}`);
+      // The over-limit countdown, then the exhaustion it may end in.
+      const overState = own?.phase === 'BURST' && own.overLimit ? 'over' : own?.phase === 'EXHAUSTED' ? 'exhausted' : 'none';
+      const overLeft = overState === 'none' || !Number.isFinite(own.until) ? 0 : Math.max(0, Math.ceil(own.until - snap.time));
+      put('overLimit', hudRefs.overLimit, (n, value) => { const [state, left] = value.split('|'); n.hidden = state === 'none'; n.dataset.state = state;
+        n.textContent = state === 'none' ? '' : uiText(state === 'exhausted' ? 'BATTLE_EXHAUSTED' : 'BATTLE_OVER_LIMIT_LEFT', { name: '', seconds: Number(left) }); }, `${overState}|${overLeft}`);
       if (snap.relay.rivalBurst?.warn && !rivalBurstWarned) { rivalBurstWarned = true; audio?.play('warn'); tactical(t('relay.burst.rivalWarn'), { tone: 'warn', key: 'burst-warn' }); }
       if (!snap.relay.rivalBurst?.warn) rivalBurstWarned = false;
       const cooldown = snap.relay.switchCooldown;
@@ -1182,7 +1204,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     matchId++;
     const matchSeed = seed ?? ((Date.now() ^ (matchId * 2654435761)) >>> 0);
     const relayBurstPlans = gameMode === "RELAY" ? Object.fromEntries(relayTeamIds(partnerId, relayReserveId, relayThirdId).map(id => [id, relayBurstPlanOf(id)]).filter(([, plan]) => plan !== undefined)) : {};
-    sim = createDataArenaSimulation({ seed: matchSeed, partnerId, quality, mode: gameMode, partnerPower, ...(gameMode==="RELAY"?{relayLoadouts,relayReserveId,relayThirdId,relayArenaId,portrait:globalThis.innerHeight>globalThis.innerWidth,
+    // A Journey zone stage carries no contract: it pays its own stars and prizes.
+    // A sponsor contract armed in the battle menu takes its stake as a tournament or relay starts (AWAKENING_OVERDRIVE_20261109).
+    staked = !campaign && (gameMode === "RELAY" || gameMode === "TOURNAMENT") ? sponsor?.begin?.() ?? null : null;
+    sim = createDataArenaSimulation({ seed: matchSeed, partnerId, quality, mode: gameMode, partnerPower, rivalBoostPercent: staked?.foeBoostPercent ?? 0,
+      ...(gameMode==="RELAY"?{relayLoadouts,relayReserveId,relayThirdId,relayArenaId,portrait:globalThis.innerHeight>globalThis.innerWidth,
       relayBurstPlans, relayManualBurst: true, relayRivals: campaign?.rivals ?? null, relayBuffPicks: Boolean(campaign)}:{}) });
     // Harbor art is loaded on entry only; a failed pack keeps the playable
     // geometry and existing presentation available. No character texture changes.
@@ -1780,6 +1806,17 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         syncPanel = record && typeof syncPanelFor === "function" ? syncPanelFor(record) : null;
       } catch { syncPanel = null; }
     }
+    // The staked contract settles on this result: downs are relay partners left at 0 HP.
+    let sponsorResult = null;
+    if (staked?.ok) {
+      const snap = sim.getSnapshot?.() ?? null;
+      const downs = (snap?.relay?.team ?? []).filter((member) => member.hp <= 0).length;
+      // The ranch partners behind the relay seats (by species) take the contract's awakening rewards.
+      const held = progress?.ownedInstances ?? [];
+      const partyIds = [...new Set((snap?.relay?.team ?? [{ speciesId: partnerId }]).map((member) => held.find((entry) => entry.speciesId === String(member.speciesId ?? '').replace(/^relay-/, ''))?.instanceId).filter(Boolean))];
+      try { sponsorResult = sponsor.settle({ won: result.outcome === "VICTORY", partnerDowns: downs, seconds: result.timeSeconds, partyIds }); } catch { sponsorResult = null; }
+      staked = null;
+    }
     const best = records.get().modes[result.mode]?.bestScore ?? records.get().bestScore;
     music?.setScene(result.outcome === "VICTORY" ? "victory" : "defeat", `arena-result:${matchId}`);
     const panel = el("div", `da-panel da-panel--result da-result--${result.outcome.toLowerCase()}`);
@@ -1814,6 +1851,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       panel.append(stars, ...(campaignOutcome.lines ?? []).map((line) => el("p", "da-result__line da-result__campaign", line)));
     }
     if (syncPanel) { panel.append(syncPanel.node); signal.addEventListener("abort", () => syncPanel.dispose(), { once: true }); }
+    if (sponsorResult?.ok) {
+      const line = el("p", "da-result__line da-result__sponsor", sponsorResult.met ? uiText("SPONSOR_WON", { bits: sponsorResult.payout }) : uiText("SPONSOR_LOST", { bits: sponsorResult.stake }));
+      line.dataset.met = String(sponsorResult.met);
+      panel.append(line);
+    }
     const actions = el("div", "da-actions");
     const retry = button("da-btn da-btn--primary", t("result.retry"), () => { syncPanel?.dispose(); void startMatch(); }, signal);
     retry.dataset.autofocus = "1";

@@ -36,6 +36,7 @@ import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, relayMove, relay
 import { createRelayArenaEvents } from './dataArenaRelayArena.js';
 import { speciesTaxonomyForId, elementMultiplierPercent, factionResonance, TAXONOMY_RESONANCE } from '../../contracts/speciesTaxonomy.js';
 import { BURST_RULES, BURST_BATTLE_RULES, BLOODLINE_BURST_PERKS, burstFormsFor, burstHpRatio, burstMultiplier } from '../../contracts/productBurstEvolution.js';
+import { OVER_LIMIT_RULES } from '../../contracts/productAwakeningOverdrive.js';
 
 const DT = DATA_ARENA_STEP_SECONDS;
 const TAU = Math.PI * 2;
@@ -63,7 +64,9 @@ export function pointSegmentDistance(px, py, ax, ay, bx, by) {
 const NEUTRAL_INPUT = Object.freeze({ moveX: 0, moveY: 0, aimX: null, aimY: null, fire: false, dash: false, surge: false, ride: false, cast: null, ult: false, autoAim: false });
 export const DATA_ARENA_MODES = Object.freeze(["TOURNAMENT", "HARBOR", "RELAY"]);
 
-export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PARTNERS[0].id, quality = "high", mode = "HARBOR", relayLoadouts = {}, relayReserveId = null, relayThirdId = null, relayCompanionSpecies = [], relayArenaId = null, portrait = false, partnerPower = {}, relayBurstPlans = {}, relayManualBurst = false, relayRivals = null, relayBuffPicks = false } = {}) {
+export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PARTNERS[0].id, quality = "high", mode = "HARBOR", relayLoadouts = {}, relayReserveId = null, relayThirdId = null, relayCompanionSpecies = [], relayArenaId = null, portrait = false, partnerPower = {}, relayBurstPlans = {}, relayManualBurst = false, rivalBoostPercent = 0, relayRivals = null, relayBuffPicks = false } = {}) {
+  // A sponsor contract's rift gambit (AWAKENING_OVERDRIVE_20261109): every rival has this much more HP and damage.
+  const rivalBoost = 1 + (Number.isSafeInteger(rivalBoostPercent) && rivalBoostPercent > 0 && rivalBoostPercent <= 100 ? rivalBoostPercent : 0) / 100;
   if (!DATA_ARENA_MODES.includes(mode)) throw new RangeError(`DATA_ARENA_UNKNOWN_MODE:${mode}`);
   const relayMode = mode === "RELAY";
   const tournamentMode = mode === "TOURNAMENT" || relayMode;
@@ -664,7 +667,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       // A burst 時輪 bloodline shortens its cooldowns (awakening raising, 2026-11-02).
       const castBurst = relayMode && caster === player ? burstOfBody(player) : null;
       const scale = caster === player ? stat.cooldownScale * (resonant('IRON') ? TAXONOMY_RESONANCE.IRON.cooldownPercent / 100 : 1)
-        * (castBurst?.phase === 'BURST' ? castBurst.cooldownScale : 1) : 1;
+        * (castBurst?.phase === 'BURST' ? castBurst.cooldownScale / (castBurst.overLimit ? 1 + OVER_LIMIT_RULES.speedBonus : 1) : 1) : 1;
       caster.cooldowns[moveId] = (move.cooldown ?? 0) * scale;
     }
     caster.cast = { actionId: nextActionId++, moveId, move, t: 0, windup: move.windup ?? 0, angle, aimX: targetX, aimY: targetY, ultimate };
@@ -795,12 +798,16 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       charge: (1 + BURST_BATTLE_RULES.bondChargeBonus * bond / 100) * (perk.chargeMultiplier ?? 1),
       multiplier: burstMultiplier(tier) + (perk.multiplierBonus ?? 0), seconds: BURST_RULES.durationSeconds + (perk.extraSeconds ?? 0),
       weak: perk.noWeakness !== true, heal: perk.healPercent ?? 0, cooldownScale: perk.cooldownMultiplier ?? 1,
-      gauge: 0, phase: 'CHARGING', until: 0, startedAt: null, readyAt: null, requested: false };
+      gauge: 0, phase: 'CHARGING', until: 0, startedAt: null, readyAt: null, requested: false, overLimit: false, foe: null };
   };
   const arenaPinched = body => body && body.hp > 0 && body.hp * 100 < (body.maxHp || 1) * BURST_BATTLE_RULES.pinchHpPercent;
   const burstOfBody = body => !relayMode || !body ? null : body === player ? state.relay?.team?.[state.relay.active]?.burst ?? null : body.burst ?? null;
-  const burstFactor = b => !b ? 1 : b.phase === 'BURST' ? b.multiplier : b.phase === 'WEAK' ? BURST_RULES.weaknessMultiplier : 1;
-  const burstTakenFactor = b => b?.phase === 'WEAK' ? BURST_RULES.weaknessMultiplier : 1;
+  // Over-limit burst (AWAKENING_OVERDRIVE_20261109): the player's long press -- cooldowns reset, damage +50 %,
+  // cooldowns run 1.5x faster, 10 s; if the rival it faced still stands at the end, 3 s of exhaustion (no move or
+  // cast, damage taken x1.3), unless the fighter carries the beta bloodline.
+  const burstFactor = b => !b ? 1 : b.phase === 'BURST' ? b.multiplier * (b.overLimit ? 1 + OVER_LIMIT_RULES.damageBonus : 1)
+    : b.phase === 'WEAK' ? BURST_RULES.weaknessMultiplier : 1;
+  const burstTakenFactor = b => b?.phase === 'WEAK' ? BURST_RULES.weaknessMultiplier : b?.phase === 'EXHAUSTED' ? 1 / OVER_LIMIT_RULES.exhaustTakenMultiplier : 1;
   const burstAttackerOf = target => target === player ? state.rivals[0] ?? null : isRival(target) ? player : null;
   function scaleArenaBurst(target, amount) {
     if (!relayMode) return amount;
@@ -842,12 +849,13 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const down = !body || body.hp <= 0, display = body === player ? 'burstPartnerId' : 'burstSpeciesId';
     const formId = `species-${String(b.form).padStart(3, '0')}`;
     const begin = () => {
-      b.phase = 'BURST'; b.until = state.time + b.seconds; b.startedAt = state.time;
+      b.phase = 'BURST'; b.until = state.time + (b.overLimit ? OVER_LIMIT_RULES.seconds : b.seconds); b.startedAt = state.time;
+      if (b.overLimit) { b.foe = burstAttackerOf(body); if (body?.cooldowns) body.cooldowns = {}; }
       // A bloodline that heals at the burst (時鋼) restores HP as the shell opens.
       becomeArenaForm(body, b);
       if (b.heal > 0 && body.hp > 0) body.hp = Math.min(body.maxHp, body.hp + body.maxHp * b.heal / 100);
       if (!silent) { body[display] = body === player ? `relay-${formId}` : formId;
-        emit({ type: 'BURST', side, form: b.form, tier: b.tier, via: b.via, bloodline: b.bloodline, x: body.x, y: body.y }); }
+        emit({ type: 'BURST', side, form: b.form, tier: b.tier, via: b.via, bloodline: b.bloodline, overLimit: b.overLimit, x: body.x, y: body.y }); }
     };
     if (b.phase === 'CHARGING' && !down && b.gauge >= BURST_RULES.gaugeMaximum) {
       if (b.manual) { b.phase = 'READY'; b.readyAt = state.time; b.requested = false; if (!silent) emit({ type: 'BURST_READY', side, form: b.form }); }
@@ -856,13 +864,16 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if (down) b.phase = 'SPENT';
       else if (b.requested) begin();
     } else if (b.phase === 'BURST' && (down || state.time >= b.until)) {
-      b.phase = down || !b.weak ? 'SPENT' : 'WEAK'; b.until = state.time + BURST_RULES.weaknessSeconds;
+      const exhausted = b.overLimit && !down && b.foe && b.foe.hp > 0 && b.bloodline !== OVER_LIMIT_RULES.immuneBloodline;
+      b.phase = down ? 'SPENT' : exhausted ? 'EXHAUSTED' : b.overLimit || !b.weak ? 'SPENT' : 'WEAK';
+      b.until = state.time + (exhausted ? OVER_LIMIT_RULES.exhaustSeconds : BURST_RULES.weaknessSeconds);
       revertArenaForm(body, b);
-      if (!silent && body) { body[display] = null; emit({ type: 'BURST_END', side, form: b.form, x: body.x, y: body.y }); }
-    } else if (b.phase === 'WEAK' && (down || state.time >= b.until)) b.phase = 'SPENT';
+      if (!silent && body) { body[display] = null; emit({ type: 'BURST_END', side, form: b.form, exhausted, x: body.x, y: body.y }); }
+    } else if ((b.phase === 'WEAK' || b.phase === 'EXHAUSTED') && (down || state.time >= b.until)) b.phase = 'SPENT';
   }
   const burstSnapshot = b => b ? { phase: b.phase, gauge: Math.round(b.gauge), tier: b.tier, form: b.form, startedAt: b.startedAt, via: b.via,
-    bloodline: b.bloodline, manual: b.manual, warn: b.phase === 'CHARGING' && b.gauge >= BURST_BATTLE_RULES.warnGauge } : null;
+    bloodline: b.bloodline, manual: b.manual, warn: b.phase === 'CHARGING' && b.gauge >= BURST_BATTLE_RULES.warnGauge,
+    overLimit: b.overLimit, until: b.phase === 'BURST' || b.phase === 'EXHAUSTED' ? b.until : null } : null;
   const playerTakenScale = () => (resonant('LUMEN') ? TAXONOMY_RESONANCE.LUMEN.damageTakenPercent / 100 : 1) * (resonant('TRI') ? 100 / TAXONOMY_RESONANCE.TRI.defensePercent : 1);
   const playerDealtScale = ultimate => (resonant('TRI') ? TAXONOMY_RESONANCE.TRI.attackPercent / 100 : 1) * (ultimate && resonant('RIFT') ? TAXONOMY_RESONANCE.RIFT.signaturePercent / 100 : 1);
   // The taxonomy element an elemental hit from this caster carries; physical hits carry none.
@@ -1954,8 +1965,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const spawn = at(map.rivalSpawn ?? map.bossSpawn);
     const tierRule = DATA_ARENA_TOURNAMENT.tiers[tier] ?? DATA_ARENA_TOURNAMENT.tiers[0];
     return { id: nextId++, rival: true, canSwim:definition.canSwim===true, definitionId: definition.id, speciesId: definition.speciesId, team: "rival", kit: DATA_ARENA_KITS[definition.kit],
-      x: spawn.x, y: spawn.y, vx: 0, vy: 0, kbx: 0, kby: 0, radius: definition.radius, hp: definition.hp, maxHp: definition.hp,
-      speed: definition.speed, preferredRange: definition.preferredRange, tier: tierRule, damageScale: tierRule.damage,
+      x: spawn.x, y: spawn.y, vx: 0, vy: 0, kbx: 0, kby: 0, radius: definition.radius, hp: Math.round(definition.hp * rivalBoost), maxHp: Math.round(definition.hp * rivalBoost),
+      speed: definition.speed, preferredRange: definition.preferredRange, tier: tierRule, damageScale: tierRule.damage * rivalBoost,
       energy: DATA_ARENA_ENERGY.max, energySpentAt: -Infinity, cooldowns: Object.create(null), ult: 0, cast: null, lunge: null,
       barrier: 0, slow: 0, slowTimer: 0, root: 0, burn: 0, hitFlash: 0, facing: -1, active: false, invulnerable: 0,
       goal: null, goalTimer: 0, strafe: 1, strafeTimer: 1.2, dodge: null, dashTimer: 0, dashCooldown: 0, dashX: 0, dashY: 0,
@@ -2455,7 +2466,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       switchRelayPlayer(false, targetSlot);
     }
     // The player's call for a READY burst.
-    if (relayMode && input.burst) { const ready = burstOfBody(player); if (ready?.phase === 'READY') ready.requested = true; }
+    if (relayMode && (input.burst || input.overLimit)) { const ready = burstOfBody(player); if (ready?.phase === 'READY') { ready.requested = true; ready.overLimit = input.overLimit; } }
+    // An exhausted core cannot move or cast (over-limit burst, AWAKENING_OVERDRIVE_20261109).
+    if (relayMode && burstOfBody(player)?.phase === 'EXHAUSTED') input = { ...normalizeInput(NEUTRAL_INPUT), aimX: input.aimX, aimY: input.aimY };
     if (tournamentMode && state.tournament?.status !== "FIGHT") input = { ...normalizeInput(NEUTRAL_INPUT), aimX: input.aimX, aimY: input.aimY };
     state.time += DT;
     if (state.combo.timer > 0) {
@@ -2538,7 +2551,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     return { moveX, moveY, aimX: aim ? input.aimX : null, aimY: aim ? input.aimY : null,
       fire: Boolean(input.fire), dash: Boolean(input.dash), surge: Boolean(input.surge), ride: Boolean(input.ride),
       cast: Number.isInteger(input.cast) ? input.cast : null, ult: Boolean(input.ult), autoAim: Boolean(input.autoAim), switchPartner,
-      burst: Boolean(input.burst) };
+      burst: Boolean(input.burst), overLimit: Boolean(input.overLimit) };
   }
 
   function choose(id) {

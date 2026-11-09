@@ -15,7 +15,43 @@ The same day the Owner pasted a four-phase brief (Sync Level 1–50 with a post-
 - D5: no new menu modes. A seventh prism face, 征途 (Journey), holds the campaign, the tower, story chapters and the patrol pod. The tower is not named 「裂隙」, which is a faction name.
 - Sync Level is a modifier applied when a battle is built; it never rewrites the ROM individual fields, save words or battle codes.
 
-Not authorized: push, merge or publication. Batch plan and conflicts: workspace report `對戰模式整合盤點_20261109/REPORT_ZH_TW.md`.
+Batch plan and conflicts: workspace report `對戰模式整合盤點_20261109/REPORT_ZH_TW.md`.
+
+Merged with main after the awakening overdrive batch: a Journey zone stage never takes a sponsor contract (its stake, foe boost or payout); the stage pays only its own stars and prizes, and the contract waits for the next cup or relay.
+
+Publication: on 2026-11-10 the Owner directed 「好啊，整批一起推送，然後確認沒問題就公開發佈」. This authorizes pushing the whole batch, merging it to main once its checks pass, and publishing it through the existing Pages playtest workflow, with the new modules listed and the changed source hashes restated. It does not widen to any other batch.
+
+<!-- record-id: HUNT_BATTLE_TITLE_UNDERLINE_20261110 -->
+## 2026-11-10 — The hunt and battle titles show their underline in full
+
+The Owner reports, with iPhone screenshots, that the underline under 選擇狩獵場 is covered, and that the one under 選擇對戰 seems covered too.
+
+Presentation fix only (arcade theme), no gameplay or save change:
+
+- 選擇狩獵場 (GATE_SELECT, HOLO_NAV_R1): the title's tight 1.15 line box let its stroke and drop shadow cover the teal link line, so only the lit node showed. The title gains bottom padding so the whole line sits below the shadow.
+- 選擇對戰 (BATTLE_SELECT): the amber slab sits 11 px under the title instead of 6 px and paints above the title's text, so the lower-sitting iOS glyph shadow no longer covers its top edge.
+
+Publication: the Owner directed 「合併並發佈到正式站」 for PR #202. This authorizes merging #202 to main and publishing it through the existing Pages playtest workflow, with the approval hashes of the two changed stylesheets restated. It does not widen the asset set, and it is not a physical-device acceptance.
+
+<!-- record-id: AWAKENING_OVERDRIVE_20261109 -->
+## 2026-11-09 — Awakening overdrive: starter egg, tactile cocoon, overdrive training, over-limit burst, sponsor contracts, wild instinct
+
+The Owner asks that the new game's egg hatch in 30 seconds and every later (reborn) egg in three minutes, and to add four upgrades to the awakening raising plan: a three-tap cocoon for the first awakening, overdrive cage training with core heat, a long-press over-limit burst with pre-match sponsor stake contracts, and a hidden wild instinct in the hunt. Same day follow-ups: no automatic burst (「我不要自動爆裂」), real jagged cracks with depth and no eyes in the cocoon, battle team rings replaced by ground shadows only (「就不能給他們個影子就好了嗎？」), the ranch card's › opens the roster on that partner instead of a second sheet, the backpack partner picker is a list with localized names and a lit selection, and the ranch look switch must actually redraw.
+
+OWNER_APPROVED_ADAPTATION over AWAKENING_RAISING (STAGE_REDESIGN_BURST_20261102) and BURST_TRUE_FORM_20261108. Rules and numbers: `docs/contracts/championship/AWAKENING_OVERDRIVE_20261109_ZH_TW.md`.
+
+Publication: the Owner directed 「改好後，如果你自審沒有問題，就commit 跟push並合併到main公開」 (2026-11-10). This authorizes committing, pushing and merging this batch to main and publishing it through the existing Pages playtest workflow, with its two new modules listed and changed source hashes restated. It is not a physical-device acceptance.
+
+<!-- record-id: CM27_ARENA_RING_AND_DROP_HOP_20261109 -->
+## 2026-11-09 — The arena keeps its full-size ring, walkable on top with stairs down, and a dropped partner always hops to open ground
+
+The Owner reports that a partner dropped onto the arena (擂台) ring bounces in place and cannot be put there, and that on many cage maps a partner dropped where it does not fit bounces in place instead of hopping to the nearest open spot. The Owner asks for a ring partners can be dropped on and walk down from by its stairs, the original placement (a full-size ring, not a small ring in an empty hall), a large area for partners to stroll, a better floor, and the shop and facility-editor pictures to match.
+
+OWNER_APPROVED_ADAPTATION over OWNER_APPROVED_3D_CAGE_MODEL_CONTACTS_20261021 (definition 26 only) and the product-grid landing hop; the native ring layout and `raising-ground.r1.json` are unchanged.
+
+- Landing hop (product grid only): a partner hopping toward open ground no longer stops on a 3D prop hull (an owned but blocked cell); it continues to the open cell it was sent to. Native owned cells are always open, so native layouts behave as before.
+- Arena walk grid (`ranch-three-ground.r1.json`, definition 26): the ring top is open, the rope line around it is blocked, the two stairs are the only way between the ring and the floor, and the floor in front of the ring is open except the ringside table and chairs; 160 open cells (was 66).
+- Arena art: the original-size ring stays; the floor is maple parquet with a crimson ring carpet and gold border; a ringside table with bell and belt and two judges' chairs stand on blocked cells. Walk surfaces give the ring top 0.32 and the stairs a ramp, so partners stand on the canvas. The shop and facility-editor pictures are re-rendered from the new model.
 
 <!-- record-id: BURST_TRUE_FORM_20261108 -->
 ## 2026-11-08 — Burst evolution goes only on the player's press and the burst form fights as itself

@@ -104,7 +104,9 @@ import { assetPrefetcher, createAssetPrefetcher, withPrefetchedTextures } from '
 import { createLoadWatchdog, createLoadAttempt, LOAD_MAX_MS } from './loadWatchdog.js';
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
-import { configureCeremonyAudio, playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
+import { configureCeremonyAudio, playCeremony, playCeremonySound } from '../presentation/ceremony/ceremonyRunner.js';
+import { bindOverLimitPress } from './ui/overLimitPress.js';
+import { OVER_LIMIT_RULES } from '../contracts/productAwakeningOverdrive.js';
 import { createSkillCutInLayer } from '../presentation/juicy/skillCutIn.js';
 import { juicyPortrait, juicyPresentationEnabled, juicySpeciesIndex } from '../presentation/juicy/juicyArt.js';
 import { installArcadeFx, requestArcadeFx } from './ui/arcadeFx.js';
@@ -526,6 +528,75 @@ function showBurstUnlockToast() {
   clearTimeout(showStrollToast.timer);
   showStrollToast.timer = setTimeout(() => toast.classList.remove('is-shown'), 3200);
 }
+// Overdrive training (AWAKENING_OVERDRIVE_20261109): each boosted, inspired or backfired training says so once.
+function showOverdriveToast() {
+  const events = app?.takeOverdriveEvents?.() ?? [];
+  if (app?.getScreen?.() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
+  const latest = events.at(-1);
+  if (!latest) return;
+  const entry = app.getRaisingInstances().find((e) => e.instanceId === latest.instanceId);
+  let toast = document.querySelector('.cm-stroll-toast');
+  if (!toast) { toast = document.createElement('div'); toast.className = 'cm-stroll-toast'; toast.setAttribute('role', 'status'); document.body.append(toast); }
+  toast.dataset.overdrive = latest.kind;
+  toast.textContent = uiText(`OVERDRIVE_TOAST_${latest.kind}`, { name: entry ? raisingDisplayName(entry) : '', multiplier: latest.multiplier ?? '' });
+  toast.classList.remove('is-shown'); void toast.offsetWidth; toast.classList.add('is-shown');
+  clearTimeout(showStrollToast.timer);
+  showStrollToast.timer = setTimeout(() => { toast.classList.remove('is-shown'); delete toast.dataset.overdrive; }, 3200);
+}
+// Tactile cocoon (AWAKENING_OVERDRIVE_20261109): the ranch's closed awakening shell waits for the resonance key.
+// Each tap cracks it (shake, sound); the third shatters it with a white/black flash. 4 s without a tap and the
+// field finishes it alone. The key only sends cm-cocoon-tap back to the canvas; the field owns the ceremony.
+const COCOON_CUES = Object.freeze(['cocoonCrack', 'cocoonSpread', 'cocoonShatter']);
+function cocoonReduced() { return document.documentElement.dataset.motion === 'reduced' || matchMedia('(prefers-reduced-motion: reduce)').matches; }
+function shakeCocoonStage(canvas, strength) {
+  if (!canvas?.animate || cocoonReduced()) return;
+  const frames = Array.from({ length: 7 }, (_, i) => { const k = (1 - i / 6) * strength, x = i % 2 ? k : -k, y = i % 3 === 1 ? k * 0.6 : -k * 0.4;
+    return { transform: i === 6 ? 'translate(0, 0)' : `translate(${x}px, ${y}px)` }; });
+  canvas.animate(frames, { duration: 260 + strength * 12, easing: 'ease-out' });
+}
+function flashCocoonShatter() {
+  if (cocoonReduced()) return;
+  const flash = document.createElement('div');
+  flash.className = 'cm-cocoon-flash'; flash.setAttribute('aria-hidden', 'true');
+  document.body.append(flash);
+  flash.addEventListener('animationend', () => flash.remove(), { once: true });
+  setTimeout(() => flash.remove(), 1200);
+}
+function handleCocoonEvent(event) {
+  const detail = event.detail ?? {}, canvas = event.target;
+  let key = document.querySelector('.cm-cocoon-key');
+  if (detail.state === 'OPEN') {
+    key?.remove();
+    // The "ready to awaken" toast has done its job once the cocoon closes.
+    document.querySelector('.cm-stroll-toast')?.classList.remove('is-shown');
+    const taps = detail.taps ?? 3;
+    key = document.createElement('button');
+    key.type = 'button'; key.className = 'cm-cocoon-key'; key.dataset.crack = '0';
+    if (detail.color) key.style.setProperty('--bloodline', detail.color);
+    const label = document.createElement('span'); label.className = 'cm-cocoon-key__label'; label.textContent = uiText('COCOON_KEY');
+    const hint = document.createElement('span'); hint.className = 'cm-cocoon-key__hint'; hint.textContent = uiText('COCOON_KEY_HINT', { taps });
+    const pips = document.createElement('span'); pips.className = 'cm-cocoon-key__pips'; pips.setAttribute('aria-hidden', 'true');
+    for (let i = 0; i < taps; i++) pips.append(document.createElement('i'));
+    key.append(label, hint, pips);
+    key.setAttribute('aria-label', `${uiText('COCOON_KEY')} ${uiText('COCOON_KEY_HINT', { taps })}`);
+    const tap = () => canvas?.dispatchEvent(new CustomEvent('cm-cocoon-tap'));
+    key.addEventListener('pointerdown', (down) => { down.preventDefault(); tap(); });
+    key.addEventListener('keydown', (press) => { if (press.key === 'Enter' || press.key === ' ') { press.preventDefault(); tap(); } });
+    document.body.append(key);
+    key.focus({ preventScroll: true });
+    shakeCocoonStage(canvas, 2);
+    return;
+  }
+  if (detail.state === 'CRACK' || detail.state === 'SHATTER') {
+    const crack = Math.max(1, Math.min(3, detail.crack | 0));
+    if (key) { key.dataset.crack = String(crack); key.classList.remove('is-hit'); void key.offsetWidth; key.classList.add('is-hit'); }
+    playCeremonySound(COCOON_CUES[crack - 1]);
+    shakeCocoonStage(canvas, [4, 7, 12][crack - 1]);
+    if (detail.state === 'SHATTER') { flashCocoonShatter(); setTimeout(() => key?.remove(), 180); }
+    return;
+  }
+  if (detail.state === 'CLOSED') key?.remove();
+}
 // The ranch's first awakening ends with this card: the form, its stage, what it does now and its bloodline's perk.
 function showAwakeningCard(detail) {
   if (!detail?.form) return;
@@ -547,8 +618,10 @@ function listenPartnerFinds() {
   if (partnerFindListening) return;
   partnerFindListening = true;
   setInterval(showBurstUnlockToast, 2000);
+  setInterval(showOverdriveToast, 1000);
   // The card follows a moment after the form stands, so the player sees the form first.
   document.addEventListener('cm-awakening', (event) => setTimeout(() => showAwakeningCard(event.detail), 650));
+  document.addEventListener('cm-cocoon', handleCocoonEvent);
   app.subscribePartnerLife?.((event) => {
     // Night disturbance (2026-11-02): say who was woken and that it counts as 育成妨礙.
     if (event.kind === 'disturbed' && app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) {
@@ -1118,7 +1191,7 @@ async function mountRaisingHome() {
     evolutionCinematic: await loadRaisingEvolutionCinematic(),
     getRosterEntry: creatureId => projectRoster().find(entry => entry.instanceId === creatureId) ?? null,
     renderCreatureDetail: appendCreatureDetail,
-    openRoster: () => runToolbarMenuEntry({ id: "digimon", screen: CHAMPIONSHIP_SCREENS.DIGIMON_LIST }),
+    openRoster: (instanceId = null) => { rosterOpenOn = instanceId; runToolbarMenuEntry({ id: "digimon", screen: CHAMPIONSHIP_SCREENS.DIGIMON_LIST }); },
     firstRunHint: true, // UI entry guidance; its first-use preference is not calendar/save state.
     nextHintDuration: () => consumeRaisingHintDuration(settings.store),
     storySeen: () => settings.store.get().storyRiftChapter1Seen === true,
@@ -1543,6 +1616,8 @@ let battleProgressBefore = null;
 // Entry publishes BATTLE_FIELD synchronously, before an async enterMatch
 // resolves. Its subscriber must already see the prepared simulation and ID.
 // Keep the previous runtime alive until entry accepts; a refusal restores it.
+// The partner the ranch card asked the roster to open on (consumed when the roster mounts).
+let rosterOpenOn = null;
 async function enterPreparedBattle(prepared, attemptId, enter) {
   const previous = { runtime: battleRuntime, attemptId: battleAttemptId, progress: battleProgressBefore };
   battleRuntime = prepared;
@@ -1554,6 +1629,9 @@ async function enterPreparedBattle(prepared, attemptId, enter) {
     const result = await enter();
     accepted = result.ok && !result.duplicate;
     if (accepted) previous.runtime?.dispose();
+    // A sponsor contract that took its stake with this match may strengthen the foe (AWAKENING_OVERDRIVE_20261109).
+    const escrow = accepted ? app.getSponsorEscrow?.() : null;
+    if (escrow?.attemptId === attemptId && escrow.foeBoostPercent > 0) prepared.setFoeBoostPercent?.(escrow.foeBoostPercent);
     return result;
   } finally {
     if (!accepted) {
@@ -1612,6 +1690,7 @@ async function mountBattleSelect() {
   const view = createBattleSelectView({
     root,
     // Cyber Gachapon bounty beacons, display-ready (Owner 2026-11-02).
+    sponsorContracts:{read:()=>app.getSponsorContracts?.()??null,arm:(id,stake)=>app.armSponsorContract?.(id,stake)},
     gachaBeacons:{
       read:()=>(app.getGachaTacticalSlots?.('BOUNTY')??[]).map(slot=>({...slot,art:shopGoodsPresentation(slot.shopRecordIndex)?.src??null,
         effectText:gachaChipEffectLines(slot).map(line=>uiText(line.text,line.params)).join('・')})),
@@ -1831,7 +1910,8 @@ async function mountBattleField() {
     frame: { ...source.getFrame(), rosterEvidence: activeRuntime.rosterEvidence() },
     localTeamIndex:activeRuntime.localTeamIndex(),
     hudArt:hudProxy,
-    onBurst: slot => activeRuntime.requestBurst?.(slot) ?? false,
+    onBurst: (slot, options) => activeRuntime.requestBurst?.(slot, options) ?? false,
+    bindBurstPress: (button, calls) => bindOverLimitPress(button, { holdMs: OVER_LIMIT_RULES.holdMs, doubleTapMs: OVER_LIMIT_RULES.doubleTapMs, ...calls }),
     resonance: (()=>{const t=activeRuntime.taxonomy?.(),local=activeRuntime.localTeamIndex();return t?{player:t.resonance[local],opponent:t.resonance[1-local],render:keys=>resonanceStrip(keys,{hint:false})}:null;})(),
     dynamicFx: BATTLE_DYNAMIC_FX,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
@@ -2096,6 +2176,16 @@ function playResultHighlight(request, getStage, getAnchor = null) {
 }
 
 async function mountBattleResult() {
+  /** The result screen's sponsor panel: what the contract paid, or that it kept the stake (AWAKENING_OVERDRIVE_20261109). */
+  function sponsorResultLines(settled, receipt) {
+    if (!settled || !receipt || settled.attemptId !== (receipt.attemptId ?? null)) return null;
+    const name = (id) => { const entry = app.getRaisingInstances().find((e) => e.instanceId === id); return entry ? raisingDisplayName(entry) : ''; };
+    const lines = settled.gains.map((gain) => gain.metal ? uiText('SPONSOR_GAIN_METAL', { item: uiText(getGachaMetal(gain.metal)?.name ?? gain.metal) })
+      : gain.points ? uiText('SPONSOR_GAIN_POINTS', { name: name(gain.instanceId), points: gain.points })
+      : uiText('SPONSOR_GAIN_PERCENT', { name: name(gain.instanceId), percent: gain.percent, form: speciesName(gain.form) }));
+    if (!settled.met) lines.push(uiText(`SPONSOR_${settled.contractId}_RULE`));
+    return { ...settled, lines };
+  }
   const tutorial=app.getInteractiveTutorialBattle();
   if(tutorial)battleRuntime=tutorial.runtime;
   // The result consumes the app's actual receipt, including loss and clamping.
@@ -2171,6 +2261,7 @@ async function mountBattleResult() {
     followUp,
     gachaDrop:tutorial?null:(drop=>drop&&receipt&&drop.attemptId===(receipt.attemptId??null)
       ?{...drop,metalNames:(drop.metals??[]).map(id=>getGachaMetal(id)?.name??id)}:null)(app.getLastBattleGachaDrop?.()),
+    sponsor:tutorial?null:sponsorResultLines(app.getLastSponsorSettlement?.(),receipt),
     onExit() {
       if(tutorial){app.endInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
       battleRuntime?.dispose();
@@ -2264,6 +2355,7 @@ async function mountCurrentScreen() {
     else if (target === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) view = createDigimonListView({
       root,
       entries: projectRoster(),
+      initialInstanceId: (() => { const id = rosterOpenOn; rosterOpenOn = null; return id; })(),
       onRename(instanceId, name) {
         const result = app.renameRosterInstance(instanceId, name);
         if (result.ok) autosave?.request('rename');
@@ -2285,7 +2377,8 @@ async function mountCurrentScreen() {
           : action === 'feed' ? app.feedAwakening(instanceId, value)
           : action === 'transcend' ? app.transcendPartner(instanceId, value)
           : action === 'battle' ? app.setPartnerBurstForm(instanceId, value)
-          : action === 'look' ? app.setPartnerAppearance(instanceId, value) : { ok: false, reason: 'UNKNOWN_ACTION' };
+          : action === 'look' ? app.setPartnerAppearance(instanceId, value)
+          : action === 'overdrive' ? app.setPartnerOverdrive(instanceId, value) : { ok: false, reason: 'UNKNOWN_ACTION' };
         if (result?.ok) autosave?.request(`awakening-${action}`);
         return { ...result, entries: projectRoster() };
       },
@@ -3428,6 +3521,8 @@ async function enterDataArena(dataArenaButton, { campaign = null, onCampaignResu
       onSyncResult: (match) => app.grantArenaSync?.(match) ?? null,
       syncPanelFor: (record) => syncGainPanelFor(record),
       campaign, onCampaignResult,
+      // Sponsor stake contracts (AWAKENING_OVERDRIVE_20261109): the one armed in the battle menu rides the next cup or relay.
+      sponsor: { begin: () => app.beginArenaSponsorContract?.() ?? null, settle: (stats) => app.settleArenaSponsorContract?.(stats) ?? null },
       onExit: restoreBattle,
       // Cyber Gachapon: a manual-battle win pays 1-3 tickets, a cup 3-10, into the one save.
       onVictory: ({ tournament }) => app?.grantGachaTickets?.(tournament ? 3 + Math.floor(Math.random() * 8) : 1 + Math.floor(Math.random() * 3), 'DATA_ARENA')

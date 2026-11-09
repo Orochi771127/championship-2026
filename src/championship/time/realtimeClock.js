@@ -22,9 +22,15 @@ export const REALTIME_WAKE_SECONDS = 600;
 export const REALTIME_DISTURBANCE = Object.freeze({careMistakes: 1, careMistakeMaximum: 7, affectionLoss: 5});
 export const REALTIME_OFFLINE_CAP_SECONDS = 12 * 3600;
 // Native age units per real second by generation (egg, 幼年期 I, 幼年期 II, 成長期, 成熟期, 覺醒體, 究極體).
-// With the native lifespans 60 / 1440 / 5760 / 11520 that is about 2 min / 30 min / 3 h / 32 h per stage.
+// With the native lifespans 60 / 1440 / 5760 / 11520 that is about 3 min / 30 min / 3 h / 32 h per stage.
 // 成熟期 and later never age out; their rate only paces hunger, rest and care.
-export const REALTIME_AGE_UNITS_PER_SECOND = Object.freeze([0.5, 0.8, 5760 / 10800, 0.1, 0.05, 0.05, 0.05]);
+export const REALTIME_AGE_UNITS_PER_SECOND = Object.freeze([61 / 180, 0.8, 5760 / 10800, 0.1, 0.05, 0.05, 0.05]);
+// Egg hatch times (Owner 2026-11-09): the egg a new game starts with hatches in 30 seconds; every later egg
+// (a partner reborn as an egg) takes the three minutes above. An egg starts to crack once its age passes 60
+// units (nativeRaisingActor.js), so both paces reach unit 61 on the second.
+export const REALTIME_STARTER_EGG_SECONDS = 30;
+export const REALTIME_EGG_SECONDS = 180;
+export const REALTIME_STARTER_EGG_UNITS_PER_SECOND = 61 / REALTIME_STARTER_EGG_SECONDS;
 // Food left out spoils at the 成長期 pace.
 export const REALTIME_FOOD_UNITS_PER_SECOND = 0.1;
 
@@ -76,7 +82,9 @@ export function realtimeRecoveryEffect(effect, maxHp) {
   return {...effect, delta: Math.sign(effect.delta) * Math.max(1, Math.ceil((maxHp >>> 0) * Math.abs(effect.delta) / 2400))};
 }
 
-export function realtimeAgeRate(generation) {
+/** `starterEgg`: the new game's own egg, never reborn (it hatches in REALTIME_STARTER_EGG_SECONDS). */
+export function realtimeAgeRate(generation, {starterEgg = false} = {}) {
+  if (generation === 0 && starterEgg) return REALTIME_STARTER_EGG_UNITS_PER_SECOND;
   return REALTIME_AGE_UNITS_PER_SECOND[generation] ?? REALTIME_AGE_UNITS_PER_SECOND[4];
 }
 

@@ -91,6 +91,26 @@ export const CEREMONY_CUES = Object.freeze({
     [0.12, "square", 196, 147, 0.16, 0.1],
     [0.12, "triangle", N.G5, null, 0.3, 0.14]
   ]),
+  // The tactile awakening cocoon (AWAKENING_OVERDRIVE_20261109): a low resonance thump on the first crack, a
+  // rising sweep as the cracks spread and the light pillars burst out, then the shell shatters on a bright chord.
+  cocoonCrack: Object.freeze([
+    [0, "noise", 260, 90, 0.34, 0.34],
+    [0, "sine", 65.41, 55, 0.7, 0.3],
+    [0.04, "triangle", 130.81, null, 0.5, 0.12]
+  ]),
+  cocoonSpread: Object.freeze([
+    [0, "sawtooth", 196, 880, 0.55, 0.12],
+    [0, "noise", 900, 4200, 0.45, 0.14],
+    [0.32, "triangle", N.G5, N.C6, 0.4, 0.16],
+    [0.32, "sine", 98, 82.41, 0.6, 0.22]
+  ]),
+  cocoonShatter: Object.freeze([
+    [0, "noise", 1800, 9800, 0.7, 0.36],
+    [0, "square", 98, 49, 0.4, 0.18],
+    [0.06, "triangle", N.C6, null, 1.1, 0.24],
+    [0.06, "triangle", N.G6, null, 1.1, 0.16],
+    [0.06, "sine", N.C7, null, 1.4, 0.08]
+  ]),
   // A showcase hit on the training dummy.
   impact: Object.freeze([
     [0, "noise", 900, 180, 0.22, 0.32],

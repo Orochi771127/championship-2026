@@ -16,7 +16,7 @@ import { GACHA_PERSONALITY_CHOICES, gachaChipEffectLines } from '../gacha/cyberG
 import { automationEffectLines, coreRunSeconds, formatRunClock } from '../gacha/ranchAutomation.js';
 import { gachaIcon } from './cyberGachaIcons.js';
 import { huntFamilyBadge, huntFamilyName } from './huntToolFamilyCards.js';
-import { awakeningEnergySummary, enhanceSummary, gachaItemArt, gachaMetalNote, gachaRefusalText, partnerNameplate } from './cyberGachaView.js';
+import { awakeningEnergySummary, enhanceSummary, gachaItemArt, gachaMetalNote, gachaRefusalText, partnerLabel, partnerSpeciesLine } from './cyberGachaView.js';
 
 export const BACKPACK_SECTIONS = Object.freeze([
   Object.freeze({ category: 'TRAINING_GOODS', title: '養成用品' }),
@@ -243,17 +243,31 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
     body.querySelector('.cm-backpack__receipt')?.dispatchEvent(new CustomEvent('cm-fx', { bubbles: true, detail: { kind: result?.ok ? 'purchase' : 'denied' } }));
   }
 
+  // Owner 2026-11-09: a scrolling list of partners (name in the current language, species beneath, bloodline badge),
+  // and the chosen row lit with a check, instead of a wall of name keys.
   function partnerPicker(gacha, item) {
-    const grid = el(doc, 'div', 'cm-backpack__choices');
+    const grid = el(doc, 'div', 'cm-backpack__partners');
     grid.setAttribute('role', 'radiogroup');
     grid.setAttribute('aria-label', uiText('選擇拍檔'));
     for (const partner of gacha?.partners ?? []) {
-      const pick = el(doc, 'button', 'cm-backpack__choice');
+      const pick = el(doc, 'button', 'cm-backpack__partner');
       pick.type = 'button';
       pick.dataset.instanceId = partner.instanceId;
       pick.setAttribute('role', 'radio');
-      pick.setAttribute('aria-checked', String(state.partner === partner.instanceId));
-      pick.append(partnerNameplate(partner));
+      const chosen = state.partner === partner.instanceId;
+      pick.setAttribute('aria-checked', String(chosen));
+      const name = partnerLabel(partner), species = partnerSpeciesLine(partner);
+      const text = el(doc, 'span', 'cm-backpack__partner-text');
+      const title = el(doc, 'span', 'cm-backpack__partner-name');
+      if (partner.bloodline) {
+        const badge = el(doc, 'span', 'cm-gacha-badge', `[${partner.bloodline.title}]`);
+        badge.style.setProperty('--bloodline', partner.bloodline.color);
+        title.append(badge);
+      }
+      title.append(el(doc, 'span', 'cm-backpack__partner-label', name));
+      text.append(title);
+      if (species && species !== name) text.append(el(doc, 'span', 'cm-backpack__partner-species', species));
+      pick.append(text, el(doc, 'span', 'cm-backpack__partner-check', chosen ? '✓' : ''));
       if (item.kind === 'METAL' && !partner.inRanch) pick.dataset.away = 'true';
       pick.addEventListener('click', () => { state.partner = partner.instanceId; state.personality = null; paint(); });
       grid.append(pick);

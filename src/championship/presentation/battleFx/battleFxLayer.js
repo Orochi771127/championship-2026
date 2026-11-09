@@ -865,22 +865,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       groundGfx.ellipse(r.x, r.y, radius, radius * 0.34).stroke({width: r.width * 3 * (1 - k * 0.5), color: r.tint, alpha: 0.35 * fade});
       groundGfx.ellipse(r.x, r.y, radius, radius * 0.34).stroke({width: Math.max(1, r.width * 0.8 * (1 - k * 0.6)), color: mixColor(r.tint, 0xffffff, 0.65), alpha: fade});
     }
-    // Team rings at each fighter's feet (Owner 2026-10-28): green / cyan for the
-    // local side, red / orange for the other, so a clinch still reads as two
-    // teams. Drawn on the existing ground layer; a fallen fighter's ring fades.
-    // Owner 2026-11-03: a soft lit disc with one bright rim, not stroked target
-    // rings; a fallen fighter's ring goes out instead of lingering as a grey disc.
-    for (const combatant of view.combatants ?? []) {
-      if (!combatant.present || combatant.down) continue;
-      const info = ctx.slotInfo?.(combatant.slot);
-      if (!info) continue;
-      const mine = combatant.team === ctx.localTeam;
-      const rx = Math.max(14, info.width * 0.6), ry = rx * 0.32;
-      const core = mine ? 0x3ddc84 : 0xff3b5c, edge = mine ? 0x8ff7ff : 0xffc27a;
-      for (const [k, alpha] of [[1.18, 0.07], [1, 0.1], [0.72, 0.12]]) groundGfx.ellipse(info.x, info.groundY, rx * k, ry * k).fill({color: core, alpha});
-      groundGfx.ellipse(info.x, info.groundY, rx, ry).stroke({width: 3.5, color: core, alpha: 0.35});
-      groundGfx.ellipse(info.x, info.groundY, rx, ry).stroke({width: 1.5, color: edge, alpha: 0.9});
-    }
+    // Team rings at each fighter's feet were removed (Owner 2026-11-09: 「就不能給他們個影子就好了嗎？」): each fighter
+    // stands on its own ground shadow only (battleGroundShadows), and the cards above and below say which side it is.
     drawHyperWrap(view, ctx, realMs);
     for (let i = scorches.length - 1; i >= 0; i--) {
       const s = scorches[i];

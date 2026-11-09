@@ -978,3 +978,11 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 }
 @media (prefers-reduced-motion: reduce) { .da-root[data-state="LEVEL"] .da-panel--level { animation: none; } }
 :root[data-motion="reduced"] .da-root[data-state="LEVEL"] .da-panel--level { animation: none; }
+/* Over-limit burst (AWAKENING_OVERDRIVE_20261109): the held burst key heats red; a badge counts the over-limit
+   seconds down, then the exhaustion. */
+.da-root .da-relay-burst.is-charging, .da-root .da-tbtn--burst.is-charging { animation: none; filter: brightness(1.25) saturate(1.4); box-shadow: 0 0 0 3px #ff2d2d, 0 0 18px #ff2d2d; }
+.da-over-limit { position: absolute; left: 50%; top: 16%; z-index: 8; margin: 0; padding: 4px 14px; transform: translateX(-50%); border-radius: 999px;
+  font-weight: 900; font-size: 15px; letter-spacing: .04em; color: #fff; white-space: nowrap; pointer-events: none;
+  background: linear-gradient(90deg, #7f1d1d, #dc2626, #7f1d1d); box-shadow: 0 0 14px rgba(239, 68, 68, .8); }
+.da-over-limit[data-state="exhausted"] { background: linear-gradient(90deg, #334155, #64748b, #334155); box-shadow: none; }
+.da-over-limit[hidden] { display: none; }
