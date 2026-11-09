@@ -184,7 +184,7 @@ test('sponsor contracts: stakes, conditions and payouts', () => {
 
 test('sponsor contract wiring: the stake rides the match transaction, the rift gambit boosts the foe', () => {
   const app = readFileSync('src/championship/app/championshipStandaloneApp.js', 'utf8');
-  assert.match(app, /sponsor\?\.begin&&armed&&wallet>=armed\.stake/);
+  assert.match(app, /sponsorAdmission\(armed,sponsor\.kind,odds,wallet\)/);
   assert.match(app, /settleSponsorContract\(escrow/);
   const runtime = readFileSync('src/championship/app/battleRuntime.js', 'utf8');
   assert.match(runtime, /setFoeBoostPercent/); assert.match(runtime, /contractStats/);
@@ -237,4 +237,33 @@ test('over-limit key: hold 0.6 s or double tap', () => {
       assert.deepEqual(calls, ['over', 'standard', 'over']);
     } finally { globalThis.setTimeout = realSet; globalThis.clearTimeout = realClear; }
   });
+});
+
+test('no easy money: odds by both teams\' power, stake caps by match kind, three contracts a day (Owner 2026-11-10)', async () => {
+  const {sponsorOdds, SPONSOR_ODDS, SPONSOR_STAKE_CAPS, SPONSOR_DAILY_LIMIT} = await import('../src/championship/contracts/productAwakeningOverdrive.js');
+  const {sponsorContractsSignedOn, withSponsorSigned} = await import('../src/championship/contracts/productBurstEvolution.js');
+  assert.deepEqual({...sponsorOdds(3000, 300)}, {ratio: 0.1, accepted: false, bonus: false}, 'a mature team against a baby: refused');
+  assert.equal(sponsorOdds(3000, 2400).accepted, true);
+  assert.equal(sponsorOdds(3000, 2400).bonus, false);
+  assert.equal(sponsorOdds(3000, 3600).bonus, true, 'a stronger foe pays more');
+  assert.equal(sponsorOdds(0, 0).accepted, true, 'unknown power keeps plain odds');
+  assert.equal(SPONSOR_ODDS.refuseBelow, 0.7);
+  assert.ok(SPONSOR_STAKE_CAPS.FREE < SPONSOR_STAKE_CAPS.TITLE && SPONSOR_STAKE_CAPS.TITLE < SPONSOR_STAKE_CAPS.CHAMPIONSHIP);
+  assert.equal(SPONSOR_STAKE_CAPS.FREE, 15000);
+  assert.equal(SPONSOR_DAILY_LIMIT, 3);
+  assert.equal(settleSponsorContract({contractId: 'HEART_GUARD', stake: 20000, oddsBonus: true}, {won: true, partnerDowns: 0}).payout, 50000, 'x2 + 0.5');
+  let state = createBurstEvolutionState();
+  for (let i = 0; i < 3; i++) state = withSponsorSigned(state, 20400);
+  assert.equal(sponsorContractsSignedOn(state, 20400), 3);
+  assert.equal(sponsorContractsSignedOn(state, 20401), 0, 'a new local day starts over');
+  assert.equal(sponsorContractsSignedOn(normalizeBurstEvolution(JSON.parse(JSON.stringify(state))), 20400), 3);
+  const app = readFileSync('src/championship/app/championshipStandaloneApp.js', 'utf8');
+  for (const kind of ['FREE', 'TITLE', 'CHAMPIONSHIP']) assert.match(app, new RegExp(`kind:'${kind}'`));
+  assert.match(app, /reason:'FOE_TOO_WEAK'/); assert.match(app, /reason:'OVER_CAP'/); assert.match(app, /reason:'DAILY_LIMIT'/);
+  const screens = readFileSync('src/championship/app/vs5Screens.js', 'utf8');
+  assert.match(screens, /source\.icon\?\.\(contract\.faction\)/, 'contract keys use the game faction glyph');
+  for (const lang of ['', '.en', '.ja', '.th', '.vi']) {
+    const text = readFileSync(`src/championship/text/uiText${lang}.js`, 'utf8');
+    assert.doesNotMatch(text, /"SPONSOR_(HEART_GUARD|IRON_RUSH|RIFT_GAMBIT)_NAME": "[🌿⚙🌀]/u, 'no emoji in contract names');
+  }
 });

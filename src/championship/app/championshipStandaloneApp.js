@@ -21,11 +21,12 @@ import {normalizeBurstEvolution,createBurstEvolutionState,withBurstMigrated,lega
   burstUnlocksOf,burstFormsFor,evaluateBurstConditions,preferBurstForm,preferredBurstForm,burstPlanFor,burstTierForRank,burstFormTier,
   AWAKENING_RULES,partnerAwakenings,awakeningFocus,awakeningTargetOf,awakeningAppearanceOf,transcendStarsOf,feedAwakeningEnergy,
   addTranscendStar,setAwakeningTarget,setAwakeningAppearance,clearAwakeningShown,learnAwakening,awakeningDisplayFor,awakeningItemEnergy} from '../contracts/productBurstEvolution.js';
-import {overdriveOf,withOverdrive,awakeningSeedOf,withAwakeningSeed,sponsorContractOf,sponsorEscrowOf,withSponsorContract,withSponsorEscrow,
+import {overdriveOf,withOverdrive,awakeningSeedOf,withAwakeningSeed,sponsorContractOf,sponsorEscrowOf,withSponsorContract,withSponsorEscrow,sponsorContractsSignedOn,withSponsorSigned,
   BURST_CONDITION_IDS,BURST_CONDITION_FIELDS} from '../contracts/productBurstEvolution.js';
 import {OVERDRIVE_RULES,overdriveHeatAt,overdriveCooling,resolveOverdriveTraining,instinctNoise,
   SPONSOR_CONTRACTS,SPONSOR_STAKES,sponsorContract,validSponsorStake,settleSponsorContract,WILD_INSTINCT_BLOODLINES,wildInstinct,
-  rollWildInstinct,ownPointCondition} from '../contracts/productAwakeningOverdrive.js';
+  rollWildInstinct,ownPointCondition,sponsorOdds,SPONSOR_STAKE_CAPS,SPONSOR_DAILY_LIMIT,SPONSOR_ODDS} from '../contracts/productAwakeningOverdrive.js';
+import {localDayNumber} from '../time/realtimeClock.js';
 import {applyProductTrainingGains} from '../raising/nativeRaisingTraining.js';
 import {inscribeGachaBloodline,grantGachaMetal} from '../gacha/cyberGacha.js';
 import {REALTIME_TRAINING_POLICY,recommendedCages,TRAINING_KIND_OF_CONDITION} from '../raising/productTrainingPolicy.js';
@@ -1155,7 +1156,7 @@ export function createChampionshipStandaloneApp({
       ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(raisingNativeProfile(p.instanceId))!==JSON.stringify(p.nativeProfile))))
       return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇。'};
     const result=applyBattleTransaction(beginBattleAttempt(battleEconomy,{attemptId,matchIndex:-1,mode,battleType:0,
-      entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng,[],mode===2?{begin:attemptId}:null);
+      entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng,[],mode===2?{begin:attemptId,kind:'FREE'}:null);
     if(!result.ok||result.duplicate)return result;
     battleRngPreparations.delete(rngPreparation);battlePartyIds=transientMode?null:[...playerInstanceIds];
     screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);publishScreens();return result;
@@ -2021,7 +2022,23 @@ export function createChampionshipStandaloneApp({
   // Sponsor stake contracts (OWNER_APPROVED_ADAPTATION 2026-11-09, AWAKENING_OVERDRIVE_20261109). The armed contract
   // takes its stake with the match's own entry (`sponsor.begin`) and pays at its settlement (`sponsor.settle`), in
   // the same wallet commit; a match left unfinished keeps the stake.
-  let lastSponsorSettlement=null;
+  let lastSponsorSettlement=null,sponsorMatchOdds=null,lastSponsorRefusal=null;
+  /**
+   * Whether the armed contract may ride a match of `kind` (FREE / TITLE / CHAMPIONSHIP / ARENA) at these odds:
+   * {ok, odds} or {ok:false, reason, cap?}. The contract stays armed when it is refused.
+   */
+  function sponsorAdmission(armed,kind,odds,bits){
+    if(!armed)return {ok:false,reason:'NO_CONTRACT'};
+    const cap=SPONSOR_STAKE_CAPS[kind]??SPONSOR_STAKE_CAPS.FREE;
+    if(armed.stake>cap)return {ok:false,reason:'OVER_CAP',cap};
+    if(sponsorContractsSignedOn(burstState(),localDayNumber(realNowMs()))>=SPONSOR_DAILY_LIMIT)return {ok:false,reason:'DAILY_LIMIT'};
+    if(odds&&!odds.accepted)return {ok:false,reason:'FOE_TOO_WEAK'};
+    if(bits<armed.stake)return {ok:false,reason:'NOT_ENOUGH_BITS'};
+    return {ok:true};
+  }
+  function refuseSponsor(armed,admission){
+    lastSponsorRefusal=armed&&admission.reason!=='NO_CONTRACT'?Object.freeze({contractId:armed.contractId,stake:armed.stake,reason:admission.reason,cap:admission.cap??null}):null;
+  }
   function sponsorReward(reward,partyIds){
     const gains=[];
     for(const instanceId of partyIds??[]){
@@ -2100,11 +2117,16 @@ export function createChampionshipStandaloneApp({
         lastBattleGachaDrop=Object.freeze({attemptId:result.receipt.attemptId??null,tickets:drop.tickets,bonusBits:wallet-result.wallet,beacon:drop.beacon,metals:drop.metals});
       }
       const armed=sponsorContractOf(burstState());
-      if(sponsor?.begin&&armed&&wallet>=armed.stake){
-        wallet-=armed.stake;
-        burstEvolution=withSponsorEscrow(withSponsorContract(burstState(),null),{...armed,attemptId:sponsor.begin,
-          foeBoostPercent:sponsorContract(armed.contractId)?.condition.foeBoostPercent??0});
+      if(sponsor?.begin&&armed){
+        const odds=sponsorMatchOdds,admission=sponsorAdmission(armed,sponsor.kind,odds,wallet);
+        if(admission.ok){
+          wallet-=armed.stake;
+          burstEvolution=withSponsorSigned(withSponsorEscrow(withSponsorContract(burstState(),null),{...armed,attemptId:sponsor.begin,
+            foeBoostPercent:sponsorContract(armed.contractId)?.condition.foeBoostPercent??0,...(odds?.bonus?{oddsBonus:true}:{})}),localDayNumber(realNowMs()));
+          lastSponsorRefusal=null;
+        } else refuseSponsor(armed,admission);
       }
+      if(sponsor?.begin)sponsorMatchOdds=null;
       const escrow=sponsorEscrowOf(burstState());
       if(sponsor?.settle&&escrow&&escrow.attemptId===result.receipt?.attemptId){
         const settled=settleSponsorContract(escrow,{won:result.receipt.won===true,...(sponsor.settle.stats??{}),foeBoostPercent:escrow.foeBoostPercent});
@@ -3973,8 +3995,10 @@ export function createChampionshipStandaloneApp({
     /** Sponsor stake contracts (AWAKENING_OVERDRIVE_20261109): the three, the stakes, the armed one and the wallet. */
     getSponsorContracts(){
       if(!session)return null;
+      const used=sponsorContractsSignedOn(burstState(),localDayNumber(realNowMs()));
       return Object.freeze({contracts:SPONSOR_CONTRACTS,stakes:SPONSOR_STAKES,armed:sponsorContractOf(burstState()),
-        escrow:sponsorEscrowOf(burstState()),bits:shop?.getBits()??0});
+        escrow:sponsorEscrowOf(burstState()),bits:shop?.getBits()??0,caps:SPONSOR_STAKE_CAPS,odds:SPONSOR_ODDS,
+        today:Object.freeze({used,limit:SPONSOR_DAILY_LIMIT,left:Math.max(0,SPONSOR_DAILY_LIMIT-used)})});
     },
     /** Arm one contract for the next AI title match, free battle or tournament round (null contractId disarms). */
     armSponsorContract(contractId,stake=SPONSOR_STAKES.defaultStake){
@@ -3987,20 +4011,26 @@ export function createChampionshipStandaloneApp({
       return Object.freeze({ok:true,armed:sponsorContractOf(burstEvolution)});
     },
     getSponsorEscrow(){return session?sponsorEscrowOf(burstState()):null;},
+    /** Both teams' power for the match about to start (total maximum HP); the next begin reads the odds. */
+    setSponsorMatchOdds(playerPower,foePower){sponsorMatchOdds=sponsorOdds(playerPower,foePower);return sponsorMatchOdds;},
+    /** Why the armed contract did not ride the last match, once (null when it did or none was armed). */
+    takeSponsorRefusal(){const refusal=lastSponsorRefusal;lastSponsorRefusal=null;return refusal;},
     /** Data Arena: the armed contract takes its stake as a tournament or relay starts. Returns {ok, foeBoostPercent}. */
-    beginArenaSponsorContract(){
+    beginArenaSponsorContract({playerPower=0,foePower=0}={}){
       requireSession();
-      const armed=sponsorContractOf(burstState()),bits=shop?.getBits()??0;
+      const armed=sponsorContractOf(burstState()),bits=shop?.getBits()??0,odds=sponsorOdds(playerPower,foePower);
       // A stake still held by an arena match that never reached its result stays with the sponsor.
       const stale=sponsorEscrowOf(burstState());
       if(stale?.attemptId.startsWith('arena:')){burstEvolution=withSponsorEscrow(burstState(),null);
         lastSponsorSettlement=Object.freeze({attemptId:stale.attemptId,contractId:stale.contractId,stake:stale.stake,met:false,payout:0,gains:Object.freeze([]),forfeited:true});}
-      if(!armed||bits<armed.stake||sponsorEscrowOf(burstState())){savePort.markDirty();return Object.freeze({ok:false,reason:armed?'NOT_ENOUGH_BITS':'NO_CONTRACT'});}
+      const admission=armed&&!sponsorEscrowOf(burstState())?sponsorAdmission(armed,'ARENA',odds,bits):{ok:false,reason:'NO_CONTRACT'};
+      if(!admission.ok){refuseSponsor(armed,admission);savePort.markDirty();return Object.freeze({ok:false,reason:admission.reason,cap:admission.cap??null});}
       if(!shop.applyBitsTransaction({expectedBits:bits,bits:bits-armed.stake}).ok)return Object.freeze({ok:false,reason:'WALLET_CHANGED'});
       const foeBoostPercent=sponsorContract(armed.contractId)?.condition.foeBoostPercent??0;
-      burstEvolution=withSponsorEscrow(withSponsorContract(burstState(),null),{...armed,attemptId:`arena:${realNowMs()}`,foeBoostPercent});
+      burstEvolution=withSponsorSigned(withSponsorEscrow(withSponsorContract(burstState(),null),{...armed,attemptId:`arena:${realNowMs()}`,foeBoostPercent,
+        ...(odds.bonus?{oddsBonus:true}:{})}),localDayNumber(realNowMs()));
       savePort.markDirty();
-      return Object.freeze({ok:true,contractId:armed.contractId,stake:armed.stake,foeBoostPercent});
+      return Object.freeze({ok:true,contractId:armed.contractId,stake:armed.stake,foeBoostPercent,oddsBonus:odds.bonus});
     },
     /** Data Arena: settle the staked contract on the match result ({won, partnerDowns, seconds, partyIds}). */
     settleArenaSponsorContract({won=false,partnerDowns=0,seconds=Infinity,partyIds=[]}={}){
@@ -4610,7 +4640,7 @@ export function createChampionshipStandaloneApp({
       const result = applyBattleTransaction(beginBattleAttempt(battleEconomy, {
         attemptId, matchIndex: championshipRun.category, mode: 0, battleType: 0,
         entryFee: 0, payout: 0, expectedRounds: 1
-      }, requireShop().getBits()),[],prepared?.rng??null,[],{begin:attemptId});
+      }, requireShop().getBits()),[],prepared?.rng??null,[],{begin:attemptId,kind:'CHAMPIONSHIP'});
       if (!result.ok || result.duplicate) return result;
       if(rngPreparation)battleRngPreparations.delete(rngPreparation);
       championshipAttemptId = attemptId;
@@ -4745,7 +4775,7 @@ export function createChampionshipStandaloneApp({
       const result = applyBattleTransaction(beginBattleAttempt(battleEconomy, {
         attemptId, matchIndex: recordIndex, mode, battleType,
         entryFee: matchEntryFee(recordIndex), payout: matchPayout(recordIndex), expectedRounds: 1
-      }, requireShop().getBits()),[],preparedRng?.rng,[],{begin:attemptId});
+      }, requireShop().getBits()),[],preparedRng?.rng,[],{begin:attemptId,kind:'TITLE'});
       if (!result.ok || result.duplicate) return result;
       if(rngPreparation)battleRngPreparations.delete(rngPreparation);
       battlePartyIds=playerInstanceIds===null?null:[...playerInstanceIds];
