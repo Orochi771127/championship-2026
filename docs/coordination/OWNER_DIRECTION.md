@@ -25,6 +25,18 @@ Balance, same day. The Owner found awakening too easy and asked for partners to 
 
 Verified by `tests/championship-gacha-full-effects-cases.mjs`, `tests/championship-cyber-gacha-cases.mjs`, `tests/championship-diamond-economy-cases.mjs`, `tests/championship-awakening-raising-cases.mjs` and `tests/championship-hunt-capture-closure-cases.mjs`. Not published: the Owner asked for no push or deploy in this batch.
 
+<!-- record-id: HUNT_BATTLE_TITLE_UNDERLINE_20261110 -->
+## 2026-11-10 — The hunt and battle titles show their underline in full
+
+The Owner reports, with iPhone screenshots, that the underline under 選擇狩獵場 is covered, and that the one under 選擇對戰 seems covered too.
+
+Presentation fix only (arcade theme), no gameplay or save change:
+
+- 選擇狩獵場 (GATE_SELECT, HOLO_NAV_R1): the title's tight 1.15 line box let its stroke and drop shadow cover the teal link line, so only the lit node showed. The title gains bottom padding so the whole line sits below the shadow.
+- 選擇對戰 (BATTLE_SELECT): the amber slab sits 11 px under the title instead of 6 px and paints above the title's text, so the lower-sitting iOS glyph shadow no longer covers its top edge.
+
+Publication: the Owner directed 「合併並發佈到正式站」 for PR #202. This authorizes merging #202 to main and publishing it through the existing Pages playtest workflow, with the approval hashes of the two changed stylesheets restated. It does not widen the asset set, and it is not a physical-device acceptance.
+
 <!-- record-id: AWAKENING_OVERDRIVE_20261109 -->
 ## 2026-11-09 — Awakening overdrive: starter egg, tactile cocoon, overdrive training, over-limit burst, sponsor contracts, wild instinct
 
