@@ -191,7 +191,7 @@ async function alternateAwaitReady(api){
   const reloadedSaved=await page.evaluate(key=>JSON.parse(sessionStorage.getItem(key)),qaKey);
   assertMigrated(assert,reloaded,reloadedSaved,burstBase);assert.deepEqual(reloadedSaved.shop?.cageQuantities,saved.shop.cageQuantities,'Reload must retain exact fixture-owned quantities');const beforeBattleReportCount=reloaded.actualLoaderReports.length;evidence.assertions.push('NORMAL_SAVE_EXIT_RELOAD_BURST_FORMS_PASS');
   await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="battle"]').click();
-  await page.locator('[data-face-id="PRACTICE_BATTLE"]').click();
+  await page.locator('[data-face-id="PRACTICE_BATTLE"]').dispatchEvent('click');
   for(const [id,team]of [[211,'A'],[229,'A'],[222,'B'],[230,'B']]){
    const name=fixture.raising.collection.find(i=>i.speciesId===`species-${id}`).displayName;
    await page.getByRole('button',{name:`${name} ${team} 隊`,exact:true}).click();

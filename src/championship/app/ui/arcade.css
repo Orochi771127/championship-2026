@@ -612,6 +612,19 @@
     radial-gradient(ellipse 40% 8% at 50% 96%, rgba(14, 16, 26, 0.55), rgba(14, 16, 26, 0) 72%);
   pointer-events: none;
 }
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-prism__name {
+  color: #fff;
+  text-shadow: 0 2px 0 var(--ax-ink), 0 0 14px color-mix(in srgb, var(--prism-accent) 70%, transparent);
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-prism__tagline { color: #ddd6ff; }
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-prism__turn {
+  border: 3px solid var(--ax-ink);
+  background: color-mix(in srgb, var(--prism-accent) 85%, #fff);
+  color: var(--ax-ink);
+  box-shadow: var(--ax-hl), 0 4px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-prism__turn:active { translate: 0 calc(-50% + 3px); box-shadow: var(--ax-hl), 0 1px 0 var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-prism__hint { border: 2px solid var(--ax-ink); --prism-hint-drop: 0 3px 0 var(--ax-ink); }
 :root[data-theme="arcade"] .cm-vs5-root .cm-vs5-cube__face {
   box-shadow: var(--ax-hl), 0 5px 0 var(--key-shade);
 }

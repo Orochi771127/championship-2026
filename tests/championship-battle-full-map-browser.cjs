@@ -37,7 +37,7 @@ try{
  await page.goto(base+'championship.html?'+entryQuery,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#cm-login')?.disabled===false);await page.locator('#cm-login').click();await page.locator('#cm-continue').click();await page.waitForFunction(()=>document.querySelector('.int-rh2-field-host')?.dataset.loadState==='ready');
  await page.clock.install();await page.clock.pauseAt(new Date(Date.now()+1000));
  async function step(ms=67){await page.waitForTimeout(40);await page.clock.runFor(ms);}
- await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="battle"]').click();await page.locator('.cm-vs5-cube__face[data-face-id="PRACTICE_BATTLE"]').click();
+ await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="battle"]').click();await page.locator('.cm-vs5-cube__face[data-face-id="PRACTICE_BATTLE"]').dispatchEvent('click');
  await page.locator('.cm-vs5-arena-choice .cm-vs5-arena-chip').first().waitFor();
  // Owner 2026-11-03: the arena and the battle plans are tap chips; no native <select> remains.
  assert.equal(await page.locator('.cm-vs5-root select').count(),0);

@@ -653,24 +653,34 @@ async function slice4(run, { repo }) {
       await run.tap('.cm-toolbar__quick-entry[data-quick-id="battle"]', { state: 'battle-menu', what: '對戰' });
       await run.waitScreen('BATTLE_SELECT');
     }
-    await page.locator('.cm-vs5-cube__face').first().waitFor({ state: 'visible', timeout: 15000 });
+    await page.locator('.cm-vs5-cube__canvas').first().waitFor({ state: 'visible', timeout: 15000 });
+  };
+  // The mode prism (2026-11-09) has no key row: turn it with its arrow keys until the
+  // mode faces the player, then tap the prism, as a player does.
+  const battleFace = async (face, state, what) => {
+    for (let turn = 0; turn < 8; turn++) {
+      if (await page.locator('.cm-vs5-prism__caption').getAttribute('data-face-id') === face) break;
+      await run.tap('.cm-vs5-prism__turn--next', { state, what: '下一個模式' });
+      await run.settle(450);
+    }
+    await run.tap('.cm-vs5-cube__canvas', { state, what });
   };
   const battleSpec = (extra = {}) => ({
     groups: { status: STATUS, title: '.cm-vs5-header, .cm-vs2-header', footer: '.cm-vs5-footer, .cm-screen-footer', ...(extra.groups ?? {}) },
-    primary: ['.cm-vs5-cube__face', '.cm-vs5-exit', '.cm-vs5-action--primary', ...(extra.primary ?? [])],
+    primary: ['.cm-vs5-prism__turn', '.cm-vs5-exit', '.cm-vs5-action--primary', ...(extra.primary ?? [])],
     mustSee: extra.mustSee ?? [{ selector: '.cm-vs5-exit', role: 'exit' }],
     lists: extra.lists ?? [], exclude: extra.exclude ?? [] });
   await run.step('battle-menu', async () => {
     await battleMenu();
     await run.check('battle-menu', battleSpec({ mustSee: [{ selector: '.cm-vs5-exit', role: 'exit' }, { selector: '#cm-data-arena' }, { selector: '.cm-vs5-match__enter' }] }));
-    await run.tap('.cm-vs5-cube__face[data-face-id="FREE_BATTLE"]', { state: 'battle-free', what: '自由對戰' });
+    await battleFace('FREE_BATTLE', 'battle-free', '自由對戰');
     await run.check('battle-free', battleSpec({ lists: [{ container: '.cm-vs5-root, .cm-vs5-shell', item: '.cm-vs5-match__enter', covers: ['.cm-vs5-footer', '.cm-screen-footer'] }] }));
   });
   for (const face of ['LINK_BATTLE', 'PASSWORD_BATTLE']) {
     const state = face === 'LINK_BATTLE' ? 'battle-link-lobby' : 'battle-password-lobby';
     await run.step(state, async () => {
       await battleMenu();
-      await run.tap(`.cm-vs5-cube__face[data-face-id="${face}"]`, { state, what: face === 'LINK_BATTLE' ? '通訊對戰' : '密碼對戰' });
+      await battleFace(face, state, face === 'LINK_BATTLE' ? '通訊對戰' : '密碼對戰');
       await run.settle(800);
       const enter = page.locator('.cm-vs5-match__enter').first();
       if (await enter.isVisible().catch(() => false)) { await enter.click(); await run.settle(1200); }
@@ -682,7 +692,7 @@ async function slice4(run, { repo }) {
   }
   await run.step('battle-team', async () => {
     await battleMenu();
-    await run.tap('.cm-vs5-cube__face[data-face-id="FREE_BATTLE"]', { state: 'battle-team', what: '自由對戰' });
+    await battleFace('FREE_BATTLE', 'battle-team', '自由對戰');
     await run.tap('.cm-vs5-match__enter', { state: 'battle-team', what: '第一場賽事' });
     await page.locator('.cm-vs5-action--primary').first().waitFor({ state: 'visible', timeout: 10000 });
     const member = page.locator('.cm-vs5-action:not(.cm-vs5-action--primary)').filter({ hasText: 'HP' }).first();

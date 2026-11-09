@@ -74,9 +74,26 @@ export const BATTLE_FACE_LABELS_EN = Object.freeze({
 
 export const BATTLE_MENU_LABELS_EN = Object.freeze({
   menu: "Battle menu", kicker: "Battle", chooseMatch: "Choose a match",
-  faceNotice: "Drag the cube or use the left and right arrow keys to pick a mode, then choose a match to enter.",
+  faceNotice: "Swipe to turn the prism, then tap any face to enter that mode.",
   availableMatches: "Available matches", noMatch: "No matches are open right now.",
   match: "Match", noPayout: "No prize", returnHome: "Back to ranch", conference: "Multi-round events"
+});
+
+export const BATTLE_FACE_TAGLINES_EN = Object.freeze({
+  CHAMPIONSHIP: "Multi-round cups for medals",
+  TITLE_MATCH: "Calendar fixtures for titles",
+  FREE_BATTLE: "Pick any rival and fight",
+  LINK_BATTLE: "Swap link codes with a friend",
+  PASSWORD_BATTLE: "Challenge a team password",
+  PRACTICE_BATTLE: "Spar between your own partners"
+});
+
+export const BATTLE_PRISM_LABELS_EN = Object.freeze({
+  canvas: "Battle mode prism: swipe to turn it, tap a face to enter that mode",
+  enter: "Tap to enter",
+  current: "Selected",
+  previous: "Previous mode",
+  next: "Next mode"
 });
 
 export const UNKNOWN_DIGIMON_EN = "Unknown partner";

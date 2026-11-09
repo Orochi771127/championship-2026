@@ -61,9 +61,26 @@ export const BATTLE_FACE_LABELS_TH = Object.freeze({
 
 export const BATTLE_MENU_LABELS_TH = Object.freeze({
   menu: "เมนูการต่อสู้", kicker: "การต่อสู้", chooseMatch: "เลือกการแข่งขัน",
-  faceNotice: "ลากลูกบาศก์หรือใช้ปุ่มลูกศรซ้ายขวาเพื่อเลือกโหมด จากนั้นเลือกการแข่งขันที่ต้องการเข้าร่วม",
+  faceNotice: "ปัดซ้ายขวาเพื่อหมุนปริซึม แล้วแตะหน้าใดก็ได้เพื่อเข้าสู่โหมดนั้น",
   availableMatches: "การแข่งขันที่เข้าร่วมได้", noMatch: "ไม่มีการแข่งขันที่เปิดอยู่ในขณะนี้",
   match: "การแข่งขัน", noPayout: "ไม่มีเงินรางวัล", returnHome: "กลับสู่ฟาร์ม", conference: "ทัวร์นาเมนต์หลายรอบ"
+});
+
+export const BATTLE_FACE_TAGLINES_TH = Object.freeze({
+  CHAMPIONSHIP: "ถ้วยหลายรอบ ชิงเหรียญรางวัล",
+  TITLE_MATCH: "แข่งตามปฏิทิน ชิงตำแหน่ง",
+  FREE_BATTLE: "เลือกคู่ต่อสู้ได้อย่างอิสระ",
+  LINK_BATTLE: "แลกโค้ดลิงก์ สู้กับเพื่อน",
+  PASSWORD_BATTLE: "ท้าสู้ด้วยรหัสทีม",
+  PRACTICE_BATTLE: "ซ้อมระหว่างคู่หูของคุณเอง"
+});
+
+export const BATTLE_PRISM_LABELS_TH = Object.freeze({
+  canvas: "ปริซึมโหมดการต่อสู้: ปัดเพื่อหมุน แตะหน้าเพื่อเข้าโหมดนั้น",
+  enter: "แตะเพื่อเข้า",
+  current: "เลือกอยู่",
+  previous: "โหมดก่อนหน้า",
+  next: "โหมดถัดไป"
 });
 
 export const UNKNOWN_DIGIMON_TH = "สิ่งมีชีวิตที่ไม่รู้จัก";

@@ -3385,9 +3385,11 @@ body:not([data-desktop-raising]):has(#cm-root[data-active-screen="RAISING_HOME"]
 }
 
 /* Battle selection on a short portrait phone (375x667): the cube took the room of the
-   first match, which sat under the back key. A smaller cube keeps it in view. */
+   first match, which sat under the back key. A smaller cube keeps it in view. The mode
+   prism (2026-11-09) has no key row under it, so it keeps more of the width. */
 @media (orientation: portrait) and (max-height: 700px) {
   body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__canvas { max-width: 168px; margin-inline: auto; }
+  body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube[data-prism-sides] .cm-vs5-cube__canvas { max-width: 232px; }
 }
 
 /* Battle selection on short landscape phones (844x390, 667x375): the title block and the
@@ -3405,6 +3407,9 @@ body:not([data-desktop-raising]):has(#cm-root[data-active-screen="RAISING_HOME"]
   }
   :root[data-theme="arcade"] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-data-arena > span:first-child { font-size: 19px; }
   body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__canvas { max-width: 120px; margin-inline: auto; }
+  /* The prism has no key row under it: it draws larger and drops its tagline and dots instead. */
+  body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube[data-prism-sides] .cm-vs5-cube__canvas { max-width: 164px; }
+  body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] :is(.cm-vs5-prism__tagline, .cm-vs5-prism__dots) { display: none; }
 }
 
 /* Dialogs in the game: on a short screen the answer keys scrolled out of reach (探索手帳 on

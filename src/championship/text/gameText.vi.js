@@ -61,9 +61,26 @@ export const BATTLE_FACE_LABELS_VI = Object.freeze({
 
 export const BATTLE_MENU_LABELS_VI = Object.freeze({
   menu: "Menu chiến đấu", kicker: "Chiến đấu", chooseMatch: "Chọn trận đấu",
-  faceNotice: "Kéo khối lập phương hoặc dùng phím mũi tên trái/phải để chọn chế độ, sau đó chọn trận đấu tham gia.",
+  faceNotice: "Vuốt trái phải để xoay lăng trụ, rồi chạm vào một mặt để vào chế độ đó.",
   availableMatches: "Các trận đấu khả dụng", noMatch: "Hiện không có trận đấu nào mở.",
   match: "Trận đấu", noPayout: "Không có tiền thưởng", returnHome: "Về trang trại", conference: "Giải đấu nhiều vòng"
+});
+
+export const BATTLE_FACE_TAGLINES_VI = Object.freeze({
+  CHAMPIONSHIP: "Cúp nhiều vòng, giành huy chương",
+  TITLE_MATCH: "Giải theo lịch, giành danh hiệu",
+  FREE_BATTLE: "Tự chọn đối thủ để đấu",
+  LINK_BATTLE: "Đổi mã liên kết, đấu với bạn",
+  PASSWORD_BATTLE: "Thách đấu bằng mật mã đội",
+  PRACTICE_BATTLE: "Luyện tập giữa các cộng sự"
+});
+
+export const BATTLE_PRISM_LABELS_VI = Object.freeze({
+  canvas: "Lăng trụ chế độ chiến đấu: vuốt để xoay, chạm một mặt để vào chế độ đó",
+  enter: "Chạm để vào",
+  current: "Đang chọn",
+  previous: "Chế độ trước",
+  next: "Chế độ sau"
 });
 
 export const UNKNOWN_DIGIMON_VI = "Sinh vật chưa biết";

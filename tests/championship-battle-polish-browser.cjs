@@ -39,7 +39,7 @@ const seconds = Number(process.env.BATTLE_POLISH_SECONDS || 150);
     const decline = page.locator('dialog.cm-dialog [data-action="decline"]'); if (await decline.count()) await decline.first().click().catch(() => {});
     await page.locator('button[data-menu-id="SYSTEM"]').click(); await page.locator('[data-entry-id="battle"]').click();
     await page.waitForSelector('#cm-root[data-active-screen="BATTLE_SELECT"]');
-    await page.locator('.cm-vs5-cube__face[data-face-id="FREE_BATTLE"]').click(); await page.waitForTimeout(300);
+    await page.locator('.cm-vs5-cube__face[data-face-id="FREE_BATTLE"]').dispatchEvent('click'); await page.waitForTimeout(300);
     const three = page.locator('.cm-vs5-match__enter:not(:disabled)', {hasText: '三隻對戰'});
     assert.ok(await three.count(), 'the QA save offers a three-a-side Free Battle');
     await three.first().click();

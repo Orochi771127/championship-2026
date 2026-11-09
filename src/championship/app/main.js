@@ -166,8 +166,10 @@ import { gachaChipEffectLines, getGachaMetal } from '../gacha/cyberGacha.js';
 // signature and return the same value the views already await.
 const mountBattleVfxThreeOverlay = async (options) =>
   (await import("../presentation/vs5/createBattleVfxThreeOverlay.js")).mountBattleVfxThreeOverlay(options);
+// The mode prism settles on the app's one Pixi ticker, never a loop of its own.
 const mountBattleSelectThreePresentation = async (options) =>
-  (await import("../presentation/vs5/createBattleSelectThreePresentation.js")).mountBattleSelectThreePresentation(options);
+  (await import("../presentation/vs5/createBattleSelectThreePresentation.js")).mountBattleSelectThreePresentation({
+    ...options, ticker: pixiStage?.app?.ticker ?? null });
 const mountGateSelectThreePresentation = async (options) =>
   (await import("../presentation/vs2/createGateSelectThreePresentation.js")).mountGateSelectThreePresentation(options);
 const mountHighlightBurstThree = async (options) =>

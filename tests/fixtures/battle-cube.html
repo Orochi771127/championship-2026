@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="../../src/championship/app/vs5Styles.css">
 <style>body{margin:0;background:#102732;color:#e2edf0;font-family:system-ui,sans-serif}#host{margin:20px auto;width:calc(100% - 32px);max-width:380px}</style>
 <div id="host" class="cm-vs5-cube"></div>
-<button id="cycle">檢查 20 次立方體建立與釋放</button>
+<button id="cycle">檢查 20 次稜柱建立與釋放</button>
 <output id="contexts" role="status">尚未檢查 context</output>
 <script type="module">
 import { mountBattleSelectThreePresentation } from "../../src/championship/presentation/vs5/createBattleSelectThreePresentation.js";
@@ -16,6 +16,10 @@ window.mountCube = (options = {}) => window.cube = mountBattleSelectThreePresent
   host: document.querySelector("#host"), available: new Set(), onSelect: id => window.selectionCalls.push(id), ...options
 });
 window.makeTexture = () => new Texture();
+// A hand-cranked stand-in for the app's Pixi ticker: the gate steps it.
+window.makeTicker = () => ({ listeners: new Set(), deltaMS: 1000 / 60,
+  add(fn) { this.listeners.add(fn); }, remove(fn) { this.listeners.delete(fn); },
+  step(frames = 1) { for (let i = 0; i < frames; i++) for (const fn of [...this.listeners]) fn(this); } });
 window.mountCube();
 document.querySelector('#cycle').addEventListener('click', async () => {
   const button = document.querySelector('#cycle');

@@ -2,12 +2,14 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
-const { openFreshGame, startGame } = require("./championship-browser-opening.cjs");
+const { startGame } = require("./championship-browser-opening.cjs");
 const ORIGIN = process.env.CHAMPIONSHIP_QA_ORIGIN || "http://127.0.0.1:8732";
 const OUTPUT = require("./browser-qa-output.cjs")("battle-cube-v1");
-// Six mode faces since the 2026-09-15 password/practice wiring; the texture
-// pack still covers the four side faces.
+// The battle menu is a prism with one face per mode (Owner 2026-11-09): six
+// modes, six faces. Its faces are the mode keys; the face buttons stay in the
+// page, undrawn, for keyboards and screen readers.
 const FACE_COUNT = 6;
+const ORDER = ['CHAMPIONSHIP','TITLE_MATCH','FREE_BATTLE','LINK_BATTLE','PASSWORD_BATTLE','PRACTICE_BATTLE'];
 const VIEWPORTS = [ {width:360,height:800}, {width:390,height:844}, {width:393,height:852}, {width:412,height:915}, {width:430,height:932} ];
 fs.mkdirSync(OUTPUT, {recursive:true});
 
@@ -16,62 +18,103 @@ async function fixture(page) {
   await page.waitForFunction(() => window.cube);
   await page.evaluate(() => window.cube.ready);
 }
+const diagnostics = page => page.evaluate(() => window.cube.getDiagnostics());
+const remount = (page, options = {}) => page.evaluate(async options => {
+  window.cube.dispose(); window.selectionCalls = [];
+  window.ticker = options.ticker ? window.makeTicker() : null;
+  window.mountCube({ available: options.available ? new Set(options.available) : null, ticker: window.ticker });
+  await window.cube.ready;
+}, options);
+async function tapCanvas(page, fx, fy = 0.45) {
+  const box = await page.locator('canvas').boundingBox();
+  await page.mouse.click(box.x + box.width * fx, box.y + box.height * fy);
+}
 
 (async () => {
   const browser = await chromium.launch({headless:true, executablePath:process.env.CHAMPIONSHIP_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe"});
-  const report = { viewports:[], failureFallback:false, disposalRace:false, webglFallback:false, realAppFlow:false };
+  const report = { viewports:[], keyboard:false, sideTaps:false, swipe:false, tickerSettle:false, disposalRace:false, webglFallback:false, realAppFlow:false };
   try {
     const context = await browser.newContext({viewport:VIEWPORTS[1],deviceScaleFactor:2});
     const page = await context.newPage();
     const errors=[]; page.on("pageerror",e=>errors.push(e.message));
     await fixture(page);
-    assert.equal(await page.evaluate(()=>window.cube.getDiagnostics().textureCount),4);
+    await remount(page);
+    const first = await diagnostics(page);
+    assert.equal(first.shape,'PRISM'); assert.equal(first.faceCount,FACE_COUNT); assert.equal(first.textureCount,FACE_COUNT);
+    assert.equal(first.frontFace,'CHAMPIONSHIP'); assert.equal(first.settleDriver,'IMMEDIATE');
+    assert.equal(await page.getAttribute('#host','data-prism-sides'),String(FACE_COUNT));
     for (const viewport of VIEWPORTS) {
       await page.setViewportSize(viewport);
-      await page.waitForFunction(()=>Math.abs(document.querySelector('canvas').width-document.querySelector('#host').clientWidth*2)<3);
-      const info=await page.evaluate(()=>({
-        diagnostics:window.cube.getDiagnostics(),overflow:document.documentElement.scrollWidth>innerWidth,
-        buttons:[...document.querySelectorAll('.cm-vs5-cube__face')].map(b=>({text:b.textContent,disabled:b.disabled,height:b.getBoundingClientRect().height}))
-      }));
-      assert.equal(info.overflow,false); assert.equal(info.diagnostics.textureCount,4);
-      assert.equal(info.buttons.length,FACE_COUNT);
-      assert.ok(info.buttons.every(b=>b.height>=44&&b.disabled));
+      await page.waitForTimeout(80);
+      const info=await page.evaluate(()=>{
+        const box=node=>{const r=node.getBoundingClientRect();return {width:r.width,height:r.height};};
+        return {overflow:document.documentElement.scrollWidth>innerWidth, faces:document.querySelectorAll('.cm-vs5-cube__face').length,
+          overlay:box(document.querySelector('.cm-vs5-cube__faces')), turns:[...document.querySelectorAll('.cm-vs5-prism__turn')].map(box),
+          caption:document.querySelector('.cm-vs5-prism__name').textContent};
+      });
+      // No key row: the face buttons are undrawn, the two turn keys are full-size targets.
+      assert.equal(info.overflow,false); assert.equal(info.faces,FACE_COUNT);
+      assert.ok(info.overlay.width<=1&&info.overlay.height<=1, JSON.stringify(info.overlay));
+      assert.equal(info.turns.length,2); assert.ok(info.turns.every(b=>b.width>=40&&b.height>=40));
+      assert.equal(info.caption,'冠軍賽');
       report.viewports.push({ ...viewport, ...info });
     }
-    const canvas=page.locator('canvas');
-    await canvas.focus(); const before=await page.evaluate(()=>window.cube.getDiagnostics().rotationQuaternion);
+    await page.screenshot({path:path.join(OUTPUT,'prism-front.png')});
+    // Keyboard: arrows step one face, Enter presses the face in front.
+    await page.focus('canvas');
     await page.keyboard.press('ArrowRight');
-    const after=await page.evaluate(()=>window.cube.getDiagnostics().rotationQuaternion);
-    const angle=2*Math.acos(Math.min(1,Math.abs(before.reduce((dot,value,i)=>dot+value*after[i],0))));
-    assert.ok(Math.abs(angle-Math.PI/12)<1e-6);
-    assert.equal(await page.evaluate(()=>window.cube.getDiagnostics().uiLabelTextureCount),2);
-    const rect=await canvas.boundingBox();
-    await page.mouse.move(rect.x+rect.width*.4,rect.y+rect.height*.4);await page.mouse.down();await page.mouse.move(rect.x+rect.width*.7,rect.y+rect.height*.4,{steps:8});await page.mouse.up();
+    assert.equal((await diagnostics(page)).frontFace,'TITLE_MATCH');
+    await page.keyboard.press('ArrowLeft'); await page.keyboard.press('ArrowLeft');
+    assert.equal((await diagnostics(page)).frontFace,'PRACTICE_BATTLE');
     assert.equal(await page.evaluate(()=>window.selectionCalls.length),0);
-    await page.screenshot({path:path.join(OUTPUT,'cube-rotated.png')});
-    // Vertical and diagonal motion retain an arbitrary orientation after release.
-    for (const [dx,dy] of [[0,70],[65,-55]]) {
-      const old=await page.evaluate(()=>window.cube.getDiagnostics().rotationQuaternion);
-      const x=rect.x+rect.width*.5,y=rect.y+rect.height*.5;
-      await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+dx,y+dy,{steps:8});await page.mouse.up();
-      const changed=await page.evaluate(()=>window.cube.getDiagnostics().rotationQuaternion);
-      assert.notDeepEqual(changed,old);
-      await page.waitForTimeout(100);
-      assert.deepEqual(await page.evaluate(()=>window.cube.getDiagnostics().rotationQuaternion),changed);
-    }
+    await page.keyboard.press('Enter');
+    assert.deepEqual(await page.evaluate(()=>window.selectionCalls),['PRACTICE_BATTLE']);
+    assert.equal(await page.evaluate(()=>window.cube.getSelected()),'PRACTICE_BATTLE');
+    assert.equal(await page.locator('.cm-vs5-prism__hint').textContent(),'目前選擇');
+    // Focusing an undrawn face button turns its face to the front; pressing it selects.
+    await page.focus('[data-face-id="LINK_BATTLE"]');
+    assert.equal((await diagnostics(page)).frontFace,'LINK_BATTLE');
+    assert.equal(await page.getAttribute('#host','data-prism-focus'),'true');
+    await page.keyboard.press('Enter');
+    assert.deepEqual(await page.evaluate(()=>window.selectionCalls),['PRACTICE_BATTLE','LINK_BATTLE']);
+    report.keyboard=true;
+    // A tap on a side face turns it to the front and presses it: the face is the key.
+    await remount(page);
+    await tapCanvas(page,0.79);
+    assert.deepEqual(await page.evaluate(()=>window.selectionCalls),['TITLE_MATCH']);
+    assert.equal((await diagnostics(page)).frontFace,'TITLE_MATCH');
+    await tapCanvas(page,0.21);
+    assert.deepEqual(await page.evaluate(()=>window.selectionCalls),['TITLE_MATCH','CHAMPIONSHIP']);
+    await tapCanvas(page,0.5);
+    assert.deepEqual(await page.evaluate(()=>window.selectionCalls),['TITLE_MATCH','CHAMPIONSHIP','CHAMPIONSHIP']);
+    await page.click('.cm-vs5-prism__turn--next');
+    assert.equal((await diagnostics(page)).frontFace,'TITLE_MATCH');
+    assert.equal(await page.evaluate(()=>window.selectionCalls.length),3);
+    report.sideTaps=true;
+    // A swipe turns the prism, settles on a face and never presses one.
+    await remount(page);
+    const box=await page.locator('canvas').boundingBox();
+    const y=box.y+box.height*.45;
+    await page.mouse.move(box.x+box.width*.3,y);await page.mouse.down();
+    await page.mouse.move(box.x+box.width*.62,y,{steps:10});await page.waitForTimeout(250);await page.mouse.up();
+    const swiped=await diagnostics(page);
+    assert.equal(swiped.frontFace,'PRACTICE_BATTLE');
+    assert.ok(Math.abs(swiped.turn-Math.PI/3)<1e-9, `settled turn ${swiped.turn}`);
     assert.equal(await page.evaluate(()=>window.selectionCalls.length),0);
-    // 15-degree arrow steps, including top/bottom faces; no fixed 90-degree snap.
-    for (const key of ['ArrowRight','ArrowRight','ArrowUp','ArrowDown']) {
-      for(let step=0;step<6;step++)await page.keyboard.press(key);
-      await page.screenshot({path:path.join(OUTPUT,`cube-orientation-${key}-${Date.now()}.png`)});
-    }
-    // Both cancellation paths release their pointer and never become a tap.
+    // Vertical travel is the page's to scroll; it never turns the prism.
+    await page.mouse.move(box.x+box.width*.5,box.y+box.height*.3);await page.mouse.down();
+    await page.mouse.move(box.x+box.width*.5,box.y+box.height*.8,{steps:8});await page.mouse.up();
+    assert.equal((await diagnostics(page)).turn,swiped.turn);
+    assert.equal(await page.evaluate(()=>window.selectionCalls.length),0);
+    await page.screenshot({path:path.join(OUTPUT,'prism-swiped.png')});
+    report.swipe=true;
+    // Both cancellation paths release their pointer and never become a press.
     for (const cancel of ['pointercancel','touchcancel']) {
       const result=await page.evaluate(cancel=>{
         const canvas=document.querySelector('canvas'),rect=canvas.getBoundingClientRect();
         const event={pointerId:77,pointerType:'touch',isPrimary:true,button:0,buttons:1,clientX:rect.x+rect.width/2,clientY:rect.y+rect.height/2};
         // Synthetic pointers cannot own browser capture. Replace only in this
-        // targeted cancellation check; real pointer drag coverage is above.
+        // targeted cancellation check; real pointer coverage is above.
         const set=canvas.setPointerCapture,release=canvas.releasePointerCapture;
         canvas.setPointerCapture=()=>{};canvas.releasePointerCapture=()=>{};
         try {
@@ -84,45 +127,42 @@ async function fixture(page) {
       },cancel);
       assert.deepEqual(result,{started:true,dragging:false,calls:0});
     }
-    await page.evaluate(()=>{
-      window.cube.dispose();window.cube.dispose();
-      window.mountCube({available:new Set(['FREE_BATTLE'])});
-    });
-    await page.evaluate(()=>window.cube.ready);
-    await page.click('[data-face-id="FREE_BATTLE"]');
+    // Closed modes: their faces refuse, their buttons are disabled, open ones work.
+    await remount(page,{available:['FREE_BATTLE']});
+    await tapCanvas(page,0.5);
+    assert.equal(await page.evaluate(()=>window.selectionCalls.length),0);
+    assert.equal(await page.locator('.cm-vs5-cube__face:disabled').count(),FACE_COUNT-1);
+    assert.equal(await page.locator('.cm-vs5-prism__hint').isHidden(),true);
+    await page.locator('[data-face-id="FREE_BATTLE"]').dispatchEvent('click');
     assert.deepEqual(await page.evaluate(()=>window.selectionCalls),['FREE_BATTLE']);
-    // Canvas tap selects a mode once; dragging it never dispatches a mode.
-    await page.evaluate(()=>{window.cube.dispose();window.selectionCalls=[];window.mountCube({available:null});});
-    await page.evaluate(()=>window.cube.ready);
-    const activeRect=await page.locator('canvas').boundingBox();
-    const cx=activeRect.x+activeRect.width/2,cy=activeRect.y+activeRect.height/2;
-    await page.mouse.click(cx,cy);
-    assert.equal(await page.evaluate(()=>window.selectionCalls.length),1);
-    assert.ok(['CHAMPIONSHIP','TITLE_MATCH','FREE_BATTLE','LINK_BATTLE','PASSWORD_BATTLE','PRACTICE_BATTLE'].includes(await page.evaluate(()=>window.cube.getSelected())));
-    await page.mouse.move(cx,cy);await page.mouse.down();await page.mouse.move(cx+50,cy+40,{steps:10});await page.mouse.up();
-    assert.equal(await page.evaluate(()=>window.selectionCalls.length),1);
-    // Reduced motion has no inertia or deferred rotation either.
+    assert.equal((await diagnostics(page)).frontFace,'FREE_BATTLE');
+    // The settle runs on the injected ticker only while the prism moves.
+    await remount(page,{ticker:true});
+    await page.click('.cm-vs5-prism__turn--next');
+    const moving=await page.evaluate(()=>({...window.cube.getDiagnostics(),listeners:window.ticker.listeners.size}));
+    assert.equal(moving.settleDriver,'INJECTED_TICKER'); assert.equal(moving.settling,true); assert.equal(moving.listeners,1);
+    assert.equal(moving.frontFace,'CHAMPIONSHIP');
+    await page.evaluate(()=>window.ticker.step(90));
+    const rested=await page.evaluate(()=>({...window.cube.getDiagnostics(),listeners:window.ticker.listeners.size}));
+    assert.equal(rested.settling,false); assert.equal(rested.listeners,0); assert.equal(rested.frontFace,'TITLE_MATCH');
+    assert.ok(Math.abs(rested.turn+Math.PI/3)<1e-9);
+    // Disposing mid-settle leaves the ticker clean.
+    await page.click('.cm-vs5-prism__turn--next');
+    assert.equal(await page.evaluate(()=>window.ticker.listeners.size),1);
+    await page.evaluate(()=>window.cube.dispose());
+    assert.equal(await page.evaluate(()=>window.ticker.listeners.size),0);
+    // Reduced motion lands at once, without the ticker.
     await page.emulateMedia({reducedMotion:'reduce'});
-    const stable=await page.evaluate(()=>window.cube.getDiagnostics().rotationQuaternion);
-    await page.waitForTimeout(150);
-    assert.deepEqual(await page.evaluate(()=>window.cube.getDiagnostics().rotationQuaternion),stable);
-    // Late successful and rejected loads must not resurrect a disposed presenter.
-    await page.evaluate(()=>{
-      window.cube.dispose();window.pending=[];window.disposals=0;
-      window.mountCube({textureLoader:{loadAsync(){return new Promise((resolve,reject)=>window.pending.push({resolve,reject}));}}});
-      window.cube.dispose();
-      window.pending.forEach((p,i)=>{if(i===3)p.reject(new Error('late failure'));else{const t=window.makeTexture();t.addEventListener('dispose',()=>window.disposals++);p.resolve(t);}});
-    });
-    await page.evaluate(()=>window.cube.ready);
-    assert.deepEqual(await page.evaluate(()=>({released:window.disposals,canvases:document.querySelectorAll('canvas').length,attribute:document.querySelector('#host').hasAttribute('data-cube-textures')})),{released:3,canvases:0,attribute:false});
+    await remount(page,{ticker:true});
+    await page.click('.cm-vs5-prism__turn--next');
+    assert.deepEqual(await page.evaluate(()=>({front:window.cube.getDiagnostics().frontFace,listeners:window.ticker.listeners.size})),{front:'TITLE_MATCH',listeners:0});
+    await page.emulateMedia({reducedMotion:'no-preference'});
+    report.tickerSettle=true;
+    // Disposal releases the canvas and every node the prism added.
+    await page.evaluate(()=>{window.cube.dispose();window.cube.dispose();});
+    assert.deepEqual(await page.evaluate(()=>({canvases:document.querySelectorAll('canvas').length,nodes:document.querySelector('#host').children.length,
+      attributes:['data-cube-textures','data-prism-sides','data-prism-focus'].filter(name=>document.querySelector('#host').hasAttribute(name))})),{canvases:0,nodes:0,attributes:[]});
     report.disposalRace=true;
-    await page.route('**/menu-cube-v1/title-match.png',route=>route.abort());
-    await fixture(page);
-    const failed=await page.evaluate(()=>window.cube.getDiagnostics());
-    assert.equal(failed.textureCount,3);assert.equal(failed.textureStates.TITLE_MATCH,'FALLBACK_COLOUR');
-    assert.equal(await page.locator('.cm-vs5-cube__face').count(),FACE_COUNT);report.failureFallback=true;
-    await page.screenshot({path:path.join(OUTPUT,'texture-failure.png')});
-    await page.unroute('**/menu-cube-v1/title-match.png');
     assert.deepEqual(errors,[]);
     await context.close();
     const fallbackContext=await browser.newContext({viewport:VIEWPORTS[1]});
@@ -135,7 +175,7 @@ async function fixture(page) {
     const appContext=await browser.newContext({viewport:VIEWPORTS[1],deviceScaleFactor:2});
     const app=await appContext.newPage();const appErrors=[];app.on('pageerror',e=>appErrors.push(e.message));
     // Use the repository's isolated QA save: new games now intentionally lock
-    // SYSTEM during the onboarding tutorial, which is outside this cube gate.
+    // SYSTEM during the onboarding tutorial, which is outside this gate.
     await app.goto(`${ORIGIN}/full-qa-save.html`,{waitUntil:'networkidle'});
     await app.click('#install');await app.waitForURL(`${ORIGIN}/championship.html`);
     await startGame(app,{continueGame:true});
@@ -143,22 +183,27 @@ async function fixture(page) {
     report.homeMenus=await app.locator('[data-menu-id]').evaluateAll(nodes=>nodes.map(n=>n.dataset.menuId));
     await app.locator('button[data-menu-id="SYSTEM"]').click();
     await app.click('[data-entry-id="battle"]');
-    await app.waitForSelector('[data-screen="BATTLE_SELECT"] [data-cube-textures="4"]');
+    await app.waitForSelector(`[data-screen="BATTLE_SELECT"] [data-cube-textures="${FACE_COUNT}"]`);
     for(const viewport of VIEWPORTS){
       await app.setViewportSize(viewport);
       await app.screenshot({path:path.join(OUTPUT,`app-${viewport.width}x${viewport.height}.png`),fullPage:true});
       assert.equal(await app.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
     }
-    // Every mode is wired in the real application, so no face stays disabled.
+    // Every mode is wired in the real application, so no face stays closed.
     assert.equal(await app.locator('.cm-vs5-cube__face').count(),FACE_COUNT);
     assert.equal(await app.locator('.cm-vs5-cube__face:disabled').count(),0);
+    // Turn to Free Battle with the turn key and tap the prism, as a player does.
+    for(let turn=0;turn<ORDER.indexOf('FREE_BATTLE');turn++){await app.click('.cm-vs5-prism__turn--next');await app.waitForTimeout(450);}
+    assert.equal(await app.getAttribute('.cm-vs5-prism__caption','data-face-id'),'FREE_BATTLE');
+    await app.locator('.cm-vs5-cube__canvas').click();
+    await app.waitForSelector('[data-battle-mode="FREE_BATTLE"] .cm-vs5-match__enter');
     await app.click('.cm-vs5-exit');await app.waitForSelector('[data-screen="RAISING_HOME"]');
     assert.equal(await app.locator('canvas[data-renderer="THREE_BOUNDED_BATTLE_SELECT"]').count(),0);
     await app.locator('button[data-menu-id="SYSTEM"]').click();await app.click('[data-entry-id="battle"]');
-    await app.waitForSelector('[data-cube-textures="4"]');
+    await app.waitForSelector(`[data-cube-textures="${FACE_COUNT}"]`);
     assert.equal(await app.locator('canvas[data-renderer="THREE_BOUNDED_BATTLE_SELECT"]').count(),1);
     assert.deepEqual(appErrors,[]);report.realAppFlow=true;await appContext.close();
     report.status='PASS';fs.writeFileSync(path.join(OUTPUT,'browser-qa.json'),JSON.stringify(report,null,2)+'\n');
-    console.log('BATTLE_CUBE_BROWSER_PASS viewports=5 textures=4 failure_fallback=PASS late_dispose=PASS webgl_fallback=PASS app_reentry=PASS');
+    console.log(`BATTLE_CUBE_BROWSER_PASS viewports=5 faces=${FACE_COUNT} keyboard=PASS side_taps=PASS swipe=PASS ticker_settle=PASS dispose=PASS webgl_fallback=PASS app_reentry=PASS`);
   } finally {await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

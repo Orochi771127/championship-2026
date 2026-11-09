@@ -143,7 +143,7 @@ async function checkHunt(page,label,checks){
 
 async function checkBattle(page,label,checks){
  await menu(page,'battle');await screen(page,'BATTLE_SELECT');
- await page.locator('.cm-vs5-cube__face').filter({hasText:'練習對戰'}).click();
+ await page.locator('.cm-vs5-cube__face').filter({hasText:'練習對戰'}).dispatchEvent('click');
  const rows=page.locator('.cm-vs5-practice-member');await rows.first().waitFor();let first=false,second=false;
  for(let i=0;i<await rows.count()&&!(first&&second);i++){
   const buttons=rows.nth(i).locator('button');
