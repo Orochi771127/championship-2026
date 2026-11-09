@@ -67,6 +67,18 @@ export const SPONSOR_CONTRACTS = deepFreeze([
   {id: 'RIFT_GAMBIT', faction: 'RIFT', payout: 3, condition: {foeBoostPercent: 20}, reward: {awakeningPercent: 25}}
 ]);
 export const SPONSOR_STAKES = deepFreeze({minimum: 15000, maximum: 80000, step: 5000, defaultStake: 15000});
+// No easy money (Owner 2026-11-10: a strong team against a weak foe must not farm contracts). The sponsor reads the
+// odds from both teams' total maximum HP before the match: a foe under refuseBelow of the player's power is refused
+// (the contract stays armed), a foe at or over bonusAbove pays bonusPayout more. Each kind of match caps the stake,
+// and the account signs at most dailyLimit contracts a local day.
+export const SPONSOR_ODDS = deepFreeze({refuseBelow: 0.7, bonusAbove: 1.15, bonusPayout: 0.5});
+export const SPONSOR_STAKE_CAPS = deepFreeze({FREE: 15000, TITLE: 40000, CHAMPIONSHIP: 80000, ARENA: 80000});
+export const SPONSOR_DAILY_LIMIT = 3;
+/** {accepted, bonus, ratio} for a foe of `foePower` against the player's `playerPower` (unknown power: plain odds). */
+export function sponsorOdds(playerPower, foePower) {
+  const ratio = playerPower > 0 && foePower > 0 ? foePower / playerPower : 1;
+  return deepFreeze({ratio: Math.round(ratio * 1000) / 1000, accepted: ratio >= SPONSOR_ODDS.refuseBelow, bonus: ratio >= SPONSOR_ODDS.bonusAbove});
+}
 export function sponsorContract(id) { return SPONSOR_CONTRACTS.find(contract => contract.id === id) ?? null; }
 export function validSponsorStake(stake) {
   return Number.isSafeInteger(stake) && stake >= SPONSOR_STAKES.minimum && stake <= SPONSOR_STAKES.maximum
@@ -81,11 +93,12 @@ export function sponsorContractMet(contract, {won = false, partnerDowns = 0, sec
   if (Number.isFinite(c.foeBoostPercent) && foeBoostPercent < c.foeBoostPercent) return false;
   return true;
 }
-/** {met, payout} bits for a settled contract (payout 0 when it failed). */
-export function settleSponsorContract({contractId, stake}, result) {
+/** {met, payout} bits for a settled contract (payout 0 when it failed); oddsBonus: the foe was stronger. */
+export function settleSponsorContract({contractId, stake, oddsBonus = false}, result) {
   const contract = sponsorContract(contractId);
   const met = Boolean(contract) && validSponsorStake(stake) && sponsorContractMet(contract, result);
-  return deepFreeze({met, contractId, stake, payout: met ? Math.floor(stake * contract.payout) : 0, reward: met ? contract.reward : null});
+  const rate = contract ? contract.payout + (oddsBonus ? SPONSOR_ODDS.bonusPayout : 0) : 0;
+  return deepFreeze({met, contractId, stake, payout: met ? Math.floor(stake * rate) : 0, reward: met ? contract.reward : null});
 }
 
 // ---- 4. wild awakening instinct ----

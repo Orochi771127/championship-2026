@@ -93,7 +93,10 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
    const root=path.resolve(process.env.CHAMPIONSHIP_QA_ARTIFACT),publicBase='https://orochi771127.github.io/championship-2026/';
    evidence.commit=process.env.GITHUB_SHA||null;evidence.build=JSON.parse(fs.readFileSync(path.join(root,'pages-build.json'),'utf8'));
    publicServer=await serveBuild(root);context=await browser.newContext({viewport:{width:430,height:932},hasTouch:true,locale:'zh-TW',serviceWorkers:'block'});
-   await context.route('**/*',async route=>{const u=route.request().url();if(u.startsWith('blob:'+new URL(publicBase).origin+'/'))return route.continue();if(u.startsWith(publicServer.origin+'/'))return route.continue();if(u.startsWith(publicBase)){const relative=new URL(u).pathname.slice(new URL(publicBase).pathname.length);if(resolveAsset(root,'/'+relative)){const response=await route.fetch({url:publicServer.origin+'/'+relative,maxRedirects:0});return route.fulfill({response});}}return route.abort();});
+   await context.route('**/*',async route=>{const u=route.request().url();if(u.startsWith('blob:'+new URL(publicBase).origin+'/'))return route.continue();if(u.startsWith(publicServer.origin+'/'))return route.continue();if(u.startsWith(publicBase)){const relative=new URL(u).pathname.slice(new URL(publicBase).pathname.length);if(resolveAsset(root,'/'+relative)){const response=await route.fetch({url:publicServer.origin+'/'+relative,maxRedirects:0});return route.fulfill({response});}
+    // TEST ONLY: the controlled HUD projection below imports the status bar module by its source path. The public build ships
+    // bundled chunks instead, so a source module the artifact no longer carries comes from this candidate's own src/.
+    const source=path.join(repo,relative);if(/^src\/[\w/.-]+\.(js|json)$/.test(relative)&&fs.existsSync(source))return route.fulfill({status:200,contentType:relative.endsWith('.json')?'application/json':'text/javascript',body:fs.readFileSync(source)});}return route.abort();});
    const page=normalPage=await context.newPage();page.setDefaultTimeout(90000);page.on('console',m=>evidence.console.push({type:m.type(),text:m.text()}));page.on('pageerror',e=>evidence.errors.push('normal: '+e.message));
    await page.goto(publicBase+'championship.html',{waitUntil:'domcontentloaded'});
    await page.locator('#cm-login').waitFor({state:'visible'});await page.waitForFunction(()=>document.querySelector('#cm-login')?.disabled===false);
@@ -123,7 +126,14 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
     }
     await page.setViewportSize({width:430,height:932});await page.waitForTimeout(500);
    };
-   const before=await save();assert.equal(before.shop.bits,100000);assert.equal(before.flags.friendsPlaytest.diamonds,10000);
+   // The new game's wallet is whatever the friends playtest grants today (policy file), not a pinned figure:
+   // the grant moved from 100,000 / 10,000 to 8,000,000 / 20,000 and this gate stayed red. What it checks is that
+   // a new game holds that grant and that entering and leaving the tutorial leaves the wallet untouched.
+   const {FRIENDS_PLAYTEST_POLICY:friends}=await import(require('node:url').pathToFileURL(path.join(repo,'src/championship/app/friendsPlaytestPolicy.js')).href);
+   const {BITS_WALLET_CAP}=await import(require('node:url').pathToFileURL(path.join(repo,'src/championship/shop/shopCatalog.js')).href);
+   const wallet=s=>({bits:s.shop.bits,diamonds:s.flags?.friendsPlaytest?.diamonds??null});
+   const before=await save();
+   if(friends.enabled)assert.deepEqual(wallet(before),{bits:Math.min(BITS_WALLET_CAP,friends.grantCoins),diamonds:friends.initialTestDiamonds},'A new game holds the friends playtest grant');
    await captureNormal('tutorial-on');
    const exitDeadline=Date.now()+90000;
    while(await page.locator('.cm-tutorial-guidance').isVisible()){
@@ -133,11 +143,11 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
     if(await target.isVisible()&&await target.isEnabled()){try{await target.click({timeout:1500});}catch(error){if(!/Timeout|detached/.test(error.message))throw error;}}
     await page.waitForTimeout(100);
    }await page.locator('.cm-tutorial-guidance').waitFor({state:'hidden'});
-   const after=await save();assert.equal(after.shop.bits,100000);assert.equal(after.flags.friendsPlaytest.diamonds,10000);await captureNormal('tutorial-off');
+   const after=await save();assert.deepEqual(wallet(after),wallet(before),'The tutorial leaves the wallet untouched');await captureNormal('tutorial-off');
    if(!diagnostic){assert.equal(evidence.normal[0].geometry.bar.h,evidence.normal[1].geometry.bar.h);assert.equal(evidence.normal[0].geometry.parts.currencies.y,evidence.normal[1].geometry.parts.currencies.y);}
    // Explicit controlled HUD projection over the fully loaded real scene.
    // This is not a real save or match schedule; the actual wallet is never edited.
-   const realWallet=await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('championshipModernSave:v1'));return {bits:s.shop.bits,diamonds:s.flags.friendsPlaytest.diamonds};});
+   const realWallet=await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('championshipModernSave:v1'));return {bits:s.shop.bits,diamonds:s.flags?.friendsPlaytest?.diamonds??null};});
    await page.evaluate(async()=>{const {createChampionshipStatusBar}=await import('./src/championship/app/championshipStatusBar.js');document.querySelector('.cm-status-bar').remove();window.mountedMatchesOpened=0;window.mountedHudProjection=createChampionshipStatusBar({root:document.body,onOpenMatches:()=>window.mountedMatchesOpened++});});
    let hintAnchor;
    for(const matches of [0,1,0]){
@@ -149,7 +159,9 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
     await page.screenshot({path:path.join(out,`mounted-hint-430-matches-${matches}.png`)});
    }
    const actor=await page.locator('.int-rh2-field-host').evaluate(h=>{const p=JSON.parse(h.dataset.residentScreenPositions||'[]').find(p=>p.x>0&&p.x<h.clientWidth&&p.bodyTop>60&&p.footY<h.clientHeight-90);return p?{x:p.x,y:(p.bodyTop+p.footY)/2}:null;});
-   assert.ok(actor,'Mounted overlap evidence requires a visible resident');await page.locator('#cm-root[data-active-screen="RAISING_HOME"] canvas').first().click({position:actor});
+   assert.ok(actor,'Mounted overlap evidence requires a visible resident');
+   // The 3D ranch draws under the Pixi field, so the resident is clicked where it stands on screen (the top canvas takes it).
+   {const box=await page.locator('.int-rh2-field-host').boundingBox();await page.mouse.click(box.x+actor.x,box.y+actor.y);}
    await page.locator('.int-rh2-companion[data-open="true"]').waitFor({state:'visible'});
    for(const width of [320,390,430,568,844]){
     await page.setViewportSize({width,height:width>=568?320:932});await page.waitForTimeout(500);let walletAnchor;
@@ -164,7 +176,7 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
     }
    }
    assert.equal(await page.evaluate(()=>window.mountedMatchesOpened),5);
-   assert.deepEqual(await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('championshipModernSave:v1'));return {bits:s.shop.bits,diamonds:s.flags.friendsPlaytest.diamonds};}),realWallet);
+   assert.deepEqual(await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('championshipModernSave:v1'));return {bits:s.shop.bits,diamonds:s.flags?.friendsPlaytest?.diamonds??null};}),realWallet);
 
   }
   assert.deepEqual(evidence.errors,[]);assert.equal(evidence.violations.length,0,JSON.stringify(evidence.violations.slice(0,3)));evidence.status='PASS';write();
