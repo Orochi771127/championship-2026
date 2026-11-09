@@ -585,7 +585,12 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   detail.addEventListener("click", (event) => { if (event.target === detail) closeDetail(); });
   detailClose.addEventListener("click", closeDetail);
   collapse.addEventListener("click", closeDetail);
-  details.addEventListener("click", openDetail);
+  // Owner 2026-11-09: the card's › goes straight to the partner's page in the roster (one page, not a second sheet);
+  // the sheet stays only where no roster can open.
+  details.addEventListener("click", () => {
+    const resident = selectedResident(presentation.getFrame());
+    if (resident && typeof openRoster === "function") openRoster(resident.creatureId); else openDetail();
+  });
   close.addEventListener("click", () => presentation.intents.selectCreature(null));
 
   // Step through the residents in the order the habitat lists them, and

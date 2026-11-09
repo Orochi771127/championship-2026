@@ -131,7 +131,7 @@ test('bag: gachapon chips, metals and cores all appear in the four tabs, each wi
     if(metal){
       const before=app.getCyberGachaFrame().metals.find(m=>m.id===metal.id).owned;
       panel.element.querySelector(`.cm-backpack__use[data-use="${metal.id}"]`).click();
-      panel.element.querySelector('.cm-backpack__choice').click();
+      panel.element.querySelector('.cm-backpack__partner').click();
       panel.element.querySelector('.cm-backpack__key[data-use-mode="ENHANCE"]').click();
       assert.equal(app.getCyberGachaFrame().metals.find(m=>m.id===metal.id).owned,before-1);
     }

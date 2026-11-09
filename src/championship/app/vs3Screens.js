@@ -191,6 +191,13 @@ export function createHuntResultView({ root, source, hudArt = null }) {
       }
       line.append(thumbnail);
       line.append(element("span", "", label));
+      // Wild instinct (AWAKENING_OVERDRIVE_20261109): a veteran elite or ancestral catch says so on its row.
+      if (row.kind === "CARD" && (row.instinct === "ELITE" || row.instinct === "ANCESTOR")) {
+        const badge = element("span", "cm-vs2-result__instinct", `WILD_INSTINCT_${row.instinct}`);
+        badge.dataset.instinct = row.instinct;
+        badge.title = uiText(`WILD_INSTINCT_${row.instinct}_NOTE`);
+        line.append(badge);
+      }
       if (row.kind === "CARD" && catches > 1) {
         const pick = element("button", "cm-vs2-action cm-vs2-result__pick", row.selected ? "NAMING" : "NAME THIS ONE");
         pick.type = "button";
