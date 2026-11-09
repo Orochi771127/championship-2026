@@ -339,4 +339,6 @@ test('the friends mode is off on the public site and a remembered hidden switch 
   const blocked = createChampionshipFriendsSwitchPort({storage: {getItem() { throw new Error('blocked'); }, setItem() { throw new Error('blocked'); }}});
   assert.equal(resolveFriendsPlaytestPolicy({hostname: pub, search: '?friends=1', remembered: blocked}).enabled, true, 'blocked storage: the URL still works');
   assert.equal(resolveFriendsPlaytestPolicy({hostname: pub, remembered: blocked}).enabled, false);
+  assert.equal(resolveFriendsPlaytestPolicy({hostname: pub, search: '?friends=0', remembered: store(), forced: true}).enabled, true,
+    'a browser gate under the public origin forces it on');
 });

@@ -15,7 +15,9 @@ export const FRIENDS_PLAYTEST_POLICY = Object.freeze({
 export const FRIENDS_PLAYTEST_OFF_POLICY = Object.freeze({ ...FRIENDS_PLAYTEST_POLICY, enabled: false,
   shopOpen: false, huntOpen: false, fullDexView: false, lateMedalPreview: false });
 const LOOPBACK_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
-export function resolveFriendsPlaytestPolicy({ hostname = '', search = '', remembered = null } = {}) {
+export function resolveFriendsPlaytestPolicy({ hostname = '', search = '', remembered = null, forced = null } = {}) {
+  // Browser gates that serve the build under the public origin say so before the page runs (an init script).
+  if (forced === true) return FRIENDS_PLAYTEST_POLICY;
   let choice = null;
   try { choice = new URLSearchParams(search).get('friends'); } catch { choice = null; }
   if (choice === '1' || choice === '0') remembered?.write?.(choice);

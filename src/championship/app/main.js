@@ -5,7 +5,7 @@ import {huntThreeProductionRequest} from '../presentation/vs2/huntThree/manifest
 import { resolveFriendsPlaytestPolicy } from './friendsPlaytestPolicy.js';
 // Owner 2026-11-10: the friends mode is off on the public site and a hidden switch elsewhere (friendsPlaytestPolicy.js).
 const FRIENDS_PLAYTEST_POLICY = resolveFriendsPlaytestPolicy({ hostname: globalThis.location?.hostname ?? '',
-  search: globalThis.location?.search ?? '',
+  search: globalThis.location?.search ?? '', forced: globalThis.__CHAMPIONSHIP_FRIENDS_PLAYTEST__ === true,
   remembered: createChampionshipFriendsSwitchPort({ storage: (() => { try { return globalThis.localStorage ?? null; } catch { return null; } })() }) });
 import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../contracts/productBattleTransport.js';
 import {isOriginalRuntimeLocation,isApprovedOriginalPublicLocation,isOriginalLoopbackLocation} from '../presentation/originalRuntimeLocation.js';
