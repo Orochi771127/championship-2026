@@ -794,6 +794,9 @@
     overflow-y: auto; overflow-wrap: anywhere;
   }
 }
+/* The spotlight (screenLayout.css, arcade theme) is decoration over the stage: hidden by default and never a
+   grid cell, so a page without the arcade sheet keeps the party and the card in their own columns. */
+.cm-vs5-result__spot { display: none; position: absolute; pointer-events: none; }
 /* Beat the existing desktop result 720px selector as well as its phone cap. */
 body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell[data-responsive-battle="candidate"] { width: 100%; max-width: none; }
 
