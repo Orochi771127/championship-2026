@@ -3781,3 +3781,5 @@ body:not([data-desktop-raising]):has(#cm-root[data-active-screen="RAISING_HOME"]
   font-weight: 900; color: #fff; background: transparent; }
 .cm-backpack__partner[aria-checked="true"] .cm-backpack__partner-check { background: #16a34a; border-color: #14532d; }
 .cm-backpack__partners > .cm-backpack__partner[aria-checked="true"] { background: #ffe38a !important; border-color: #b45309 !important; }
+/* Wallet keys keep a 44 px touch target at every width, even for a short figure such as "0" (844x390 landscape). */
+:root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__bits, .cm-status-bar__diamond) { min-width: 44px; justify-content: center; }

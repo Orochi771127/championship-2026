@@ -132,7 +132,10 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
    // The new game's wallet is whatever the friends playtest grants today (policy file), not a pinned figure:
    // the grant moved from 100,000 / 10,000 to 8,000,000 / 20,000 and this gate stayed red. What it checks is that
    // a new game holds that grant and that entering and leaving the tutorial leaves the wallet untouched.
-   const {FRIENDS_PLAYTEST_POLICY:friends}=await import(require('node:url').pathToFileURL(path.join(repo,'src/championship/app/friendsPlaytestPolicy.js')).href);
+   // Owner 2026-11-10: the friends mode is off on the public host by default; this page runs there, so the game's own
+   // resolver says which policy it plays under (a grant only when the friends mode is on).
+   const {resolveFriendsPlaytestPolicy}=await import(require('node:url').pathToFileURL(path.join(repo,'src/championship/app/friendsPlaytestPolicy.js')).href);
+   const friends=resolveFriendsPlaytestPolicy({hostname:new URL(publicBase).hostname,search:''});
    const {BITS_WALLET_CAP}=await import(require('node:url').pathToFileURL(path.join(repo,'src/championship/shop/shopCatalog.js')).href);
    const wallet=s=>({bits:s.shop.bits,diamonds:s.flags?.friendsPlaytest?.diamonds??null});
    const before=await save();
