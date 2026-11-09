@@ -1615,6 +1615,18 @@ let battleProgressBefore = null;
 // Keep the previous runtime alive until entry accepts; a refusal restores it.
 // The partner the ranch card asked the roster to open on (consumed when the roster mounts).
 let rosterOpenOn = null;
+/** One line as a match starts: the contract rode it (and at better odds), or why the sponsor refused it. */
+function showSponsorNotice(escrow, refusal) {
+  const text = escrow ? (escrow.oddsBonus ? uiText('SPONSOR_STARTED_BONUS', { bits: escrow.stake }) : uiText('SPONSOR_STARTED', { bits: escrow.stake }))
+    : refusal ? uiText(`SPONSOR_REFUSED_${refusal.reason}`, { cap: refusal.cap ?? 0, limit: 3 }) : null;
+  if (!text) return;
+  let toast = document.querySelector('.cm-stroll-toast');
+  if (!toast) { toast = document.createElement('div'); toast.className = 'cm-stroll-toast'; toast.setAttribute('role', 'status'); document.body.append(toast); }
+  toast.textContent = text;
+  toast.classList.remove('is-shown'); void toast.offsetWidth; toast.classList.add('is-shown');
+  clearTimeout(showStrollToast.timer);
+  showStrollToast.timer = setTimeout(() => toast.classList.remove('is-shown'), 3600);
+}
 async function enterPreparedBattle(prepared, attemptId, enter) {
   const previous = { runtime: battleRuntime, attemptId: battleAttemptId, progress: battleProgressBefore };
   battleRuntime = prepared;
@@ -1623,12 +1635,19 @@ async function enterPreparedBattle(prepared, attemptId, enter) {
     shopIds: app.getShopFrame().listings.map(item => item.shopRecordIndex) };
   let accepted = false;
   try {
+    // The sponsor reads the odds from both teams' total maximum HP before the stake is taken (Owner 2026-11-10).
+    try {
+      const local = prepared.localTeamIndex?.() ?? 0, combatants = prepared.startMatch().getFrame?.()?.combatants ?? [];
+      const power = (mine) => combatants.filter((c) => c.present !== false && (c.team === local) === mine).reduce((sum, c) => sum + (c.hp?.maximum ?? 0), 0);
+      app.setSponsorMatchOdds?.(power(true), power(false));
+    } catch { app.setSponsorMatchOdds?.(0, 0); }
     const result = await enter();
     accepted = result.ok && !result.duplicate;
     if (accepted) previous.runtime?.dispose();
     // A sponsor contract that took its stake with this match may strengthen the foe (AWAKENING_OVERDRIVE_20261109).
     const escrow = accepted ? app.getSponsorEscrow?.() : null;
     if (escrow?.attemptId === attemptId && escrow.foeBoostPercent > 0) prepared.setFoeBoostPercent?.(escrow.foeBoostPercent);
+    if (accepted) showSponsorNotice(escrow?.attemptId === attemptId ? escrow : null, app.takeSponsorRefusal?.() ?? null);
     return result;
   } finally {
     if (!accepted) {
@@ -1687,7 +1706,8 @@ async function mountBattleSelect() {
   return createBattleSelectView({
     root,
     // Cyber Gachapon bounty beacons, display-ready (Owner 2026-11-02).
-    sponsorContracts:{read:()=>app.getSponsorContracts?.()??null,arm:(id,stake)=>app.armSponsorContract?.(id,stake)},
+    sponsorContracts:{read:()=>app.getSponsorContracts?.()??null,arm:(id,stake)=>app.armSponsorContract?.(id,stake),
+      icon:faction=>taxonomyGlyph(`faction.${faction}`,18)},
     gachaBeacons:{
       read:()=>(app.getGachaTacticalSlots?.('BOUNTY')??[]).map(slot=>({...slot,art:shopGoodsPresentation(slot.shopRecordIndex)?.src??null,
         effectText:gachaChipEffectLines(slot).map(line=>uiText(line.text,line.params)).join('・')})),
@@ -3379,7 +3399,9 @@ async function enterDataArena(dataArenaButton) {
       // Awakening raising (2026-11-02): a relay entry from the ranch bursts into the form its partner learned.
       burstPlanOf: (instanceId) => app.getBattleBurstPlan?.(instanceId) ?? null,
       // Sponsor stake contracts (AWAKENING_OVERDRIVE_20261109): the one armed in the battle menu rides the next cup or relay.
-      sponsor: { begin: () => app.beginArenaSponsorContract?.() ?? null, settle: (stats) => app.settleArenaSponsorContract?.(stats) ?? null },
+      sponsor: { begin: (power) => { const result = app.beginArenaSponsorContract?.(power) ?? null;
+          showSponsorNotice(result?.ok ? result : null, result?.ok ? null : app.takeSponsorRefusal?.() ?? null); return result; },
+        settle: (stats) => app.settleArenaSponsorContract?.(stats) ?? null },
       onExit: restoreBattle,
       // Cyber Gachapon: a manual-battle win settles like an AI win (tickets, and an armed beacon), into the one save.
       onVictory: ({ tournament, partyIds }) => app?.settleDataArenaWin?.({ tournament, partyIds })

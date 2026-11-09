@@ -1190,10 +1190,17 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const matchSeed = seed ?? ((Date.now() ^ (matchId * 2654435761)) >>> 0);
     const relayBurstPlans = gameMode === "RELAY" ? Object.fromEntries(relayTeamIds(partnerId, relayReserveId, relayThirdId).map(id => [id, relayBurstPlanOf(id)]).filter(([, plan]) => plan !== undefined)) : {};
     // A sponsor contract armed in the battle menu takes its stake as a tournament or relay starts (AWAKENING_OVERDRIVE_20261109).
-    staked = (gameMode === "RELAY" || gameMode === "TOURNAMENT") ? sponsor?.begin?.() ?? null : null;
-    sim = createDataArenaSimulation({ seed: matchSeed, partnerId, quality, mode: gameMode, partnerPower, rivalBoostPercent: staked?.foeBoostPercent ?? 0,
+    const makeSim = (rivalBoostPercent) => createDataArenaSimulation({ seed: matchSeed, partnerId, quality, mode: gameMode, partnerPower, rivalBoostPercent,
       ...(gameMode==="RELAY"?{relayLoadouts,relayReserveId,relayThirdId,relayArenaId,portrait:globalThis.innerHeight>globalThis.innerWidth,
       relayBurstPlans, relayManualBurst: true}:{}) });
+    sim = makeSim(0);
+    staked = null;
+    if ((gameMode === "RELAY" || gameMode === "TOURNAMENT") && sponsor?.begin) {
+      // Arena rivals are a fixed bracket built tougher than any seat, so the sponsor keeps plain odds here; the stake
+      // cap and the daily limit still hold (Owner 2026-11-10).
+      staked = sponsor.begin({});
+      if (staked?.ok && staked.foeBoostPercent > 0) sim = makeSim(staked.foeBoostPercent);
+    }
     // Harbor art is loaded on entry only; a failed pack keeps the playable
     // geometry and existing presentation available. No character texture changes.
     if (gameMode === 'HARBOR' || gameMode === 'TOURNAMENT' || gameMode === 'RELAY') {
