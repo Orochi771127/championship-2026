@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import species from '../src/data/championship/catalogs/creature-species.r1.json' with {type: 'json'};
 import lifecycle from '../src/data/championship/catalogs/raising-lifecycle.r1.json' with {type: 'json'};
-import {REALTIME_AGE_UNITS_PER_SECOND,REALTIME_OFFLINE_CAP_SECONDS,isNightNap,localMinuteOfDay,offlineGrowthSeconds,
+import {REALTIME_AGE_UNITS_PER_SECOND,REALTIME_OFFLINE_CAP_SECONDS,realtimeAgeRate,isNightNap,localMinuteOfDay,offlineGrowthSeconds,
   realtimeClockAdvance,realtimeDayPeriod,realtimeRecoveryEffect,takeAgeUnits} from '../src/championship/time/realtimeClock.js';
 import {nativeCageConditionEffects} from '../src/championship/raising/nativeRaisingOvernight.js';
 import {SHOP_DESCRIPTIONS_ZH} from '../src/championship/text/catalogs.zhHant.js';
@@ -36,6 +36,16 @@ test('the night nap is 22:00-07:00; four parts of the day; offline growth counts
   assert.equal(offlineGrowthSeconds(at(8), at(10)), 7200);
   assert.equal(offlineGrowthSeconds(at(8), at(8, 0, 2)), REALTIME_OFFLINE_CAP_SECONDS);
   assert.equal(offlineGrowthSeconds(at(10), at(8)), 0);
+});
+
+test('egg hatch times (Owner 2026-11-09): the new game egg in 30 s, a reborn egg in 3 min', () => {
+  assert.equal(61 / realtimeAgeRate(0, {starterEgg: true}), 30, 'the crack starts once the age passes 60');
+  assert.equal(61 / realtimeAgeRate(0), 180);
+  assert.equal(realtimeAgeRate(1, {starterEgg: true}), REALTIME_AGE_UNITS_PER_SECOND[1], 'only an egg takes the starter pace');
+  const acc = new Map();
+  let units = 0;
+  for (let frame = 0; frame < 30 * 60; frame++) units += takeAgeUnits(acc, 'starter', realtimeAgeRate(0, {starterEgg: true}) / 60);
+  assert.equal(units, 61, 'thirty seconds of frames pass the egg lifespan of 60 units');
 });
 
 test('growth pace: an egg reaches 成熟期 in about a day and a half of real time', () => {

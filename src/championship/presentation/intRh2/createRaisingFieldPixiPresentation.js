@@ -25,7 +25,8 @@ import { createNativeCharacterAnimationTimeline } from "../characterAnimationTim
 import { prefersReducedMotion } from '../presentationPreferences.js';
 import { uiText } from '../../text/uiText.js';
 import {bindRaisingZoomInput} from './raisingZoomInput.js';
-import {createBattleBurstShell} from '../vs5/battleBurstShell.js';
+import {createBattleBurstShell,BATTLE_BURST_SHELL_CLOSED_FRAME} from '../vs5/battleBurstShell.js';
+import {COCOON_RULES} from '../../contracts/productAwakeningOverdrive.js';
 import {BATTLE_BURST_WRAP_FRAMES,BATTLE_BURST_CHAIN_FRAMES} from '../../battle/battleBurst.js';
 import {zoomRaisingCamera} from './raisingFieldViewport.js';
 import { initialRaisingReferenceViewport, sampleRaisingReferenceViewport, desktopRaisingViewportWidth, centerRaisingNativeY, raisingFieldViewport, resizeRaisingCamera, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingCarryEdgeScroll, raisingFoldBand } from "./raisingFieldViewport.js";
@@ -225,6 +226,8 @@ export async function mountRaisingFieldPixiPresentation({
   // over its head (lit from 80 %, flashing when ready). Tapping a ready partner or its crest plays the first
   // awakening here: the battle's hex shell wraps it and blows open, and the learned form stands in its place
   // (through its tier-1 form for a tier-2 form); the DOM shell then shows the learned card (cm-awakening).
+  // Tactile cocoon (AWAKENING_OVERDRIVE_20261109): the closed shell waits for the player's three taps (the DOM key
+  // sends cm-cocoon-tap; each crack is announced as cm-cocoon), and finishes by itself after 4 s without a tap.
   const crestLayer=new PIXI.Container({label:'awakening crests'});crestLayer.eventMode='passive';fxLayer.addChild(crestLayer);
   const awakeningShell=createBattleBurstShell({PIXI:stage.PIXI,layer:fxLayer,reducedMotion});
   const crests=new Map(),ceremonies=new Map();
@@ -240,7 +243,7 @@ export async function mountRaisingFieldPixiPresentation({
     if(ceremonies.has(creatureId)||typeof source.intents.awaken!=='function')return false;
     const resident=source.getFrame().residents.find(r=>r.creatureId===creatureId);
     if(!resident?.awakening?.ready)return false;
-    const ceremony={frame:0,held:resident.speciesId,pending:true,revealed:false,showVia:false};
+    const ceremony={frame:0,held:resident.speciesId,pending:true,revealed:false,showVia:false,cocoon:null};
     ceremonies.set(creatureId,ceremony);
     const result=source.intents.awaken(creatureId);
     if(!result?.ok){ceremonies.delete(creatureId);sync(source.getFrame(),{force:true});return false;}
@@ -276,10 +279,30 @@ export async function mountRaisingFieldPixiPresentation({
     }
     for(const [id,g] of crests)if(!live.has(id)){g.destroy();crests.delete(id);}
   }
+  const cocoonEvent=(id,c,state)=>app.canvas?.dispatchEvent(new CustomEvent('cm-cocoon',{bubbles:true,
+    detail:{state,creatureId:id,crack:c.cocoon?.crack??0,taps:COCOON_RULES.taps,tier:c.tier,color:c.color,form:c.result?.form??null}}));
+  function crackCocoon(id,c,auto=false){
+    const cocoon=c?.cocoon;if(!cocoon||cocoon.crack>=COCOON_RULES.taps)return false;
+    cocoon.crack+=1;cocoon.frame=0;cocoon.at=performance.now();cocoon.auto=cocoon.auto||auto;
+    if(cocoon.crack>=COCOON_RULES.taps){c.frame=BATTLE_BURST_WRAP_FRAMES-9;cocoonEvent(id,c,'SHATTER');}
+    else cocoonEvent(id,c,'CRACK');
+    return true;
+  }
+  /** One tap on the cocoon key: cracks the oldest waiting cocoon. */
+  function tapCocoon(){for(const [id,c] of ceremonies)if(c.cocoon&&c.cocoon.crack<COCOON_RULES.taps)return crackCocoon(id,c);return false;}
+  const onCocoonTap=()=>{tapCocoon();};
+  app.canvas?.addEventListener('cm-cocoon-tap',onCocoonTap);
   function stepAwakeningCeremonies(){
     for(const [id,c] of ceremonies){
       if(c.pending)continue;
-      c.frame+=1;
+      // The shell closes, then holds as a cocoon until it is cracked open.
+      if(!c.cocoon&&c.frame>=BATTLE_BURST_SHELL_CLOSED_FRAME){c.cocoon={crack:0,frame:0,at:performance.now(),auto:false};cocoonEvent(id,c,'OPEN');}
+      const cocoon=c.cocoon;
+      if(cocoon&&cocoon.crack<COCOON_RULES.taps){
+        cocoon.frame+=1;
+        const idle=performance.now()-cocoon.at;
+        if(idle>=(cocoon.auto?COCOON_RULES.autoStepMs:COCOON_RULES.idleAutoMs))crackCocoon(id,c,true);
+      } else c.frame+=1;
       if(c.via&&!c.showVia&&c.frame>=BATTLE_BURST_WRAP_FRAMES-9){c.showVia=true;sync(source.getFrame(),{force:true});}
       if(!c.revealed&&c.frame>=c.wrapFrames){
         c.revealed=true;sync(source.getFrame(),{force:true});
@@ -289,7 +312,8 @@ export async function mountRaisingFieldPixiPresentation({
       if(entry){
         const a=fxLayer.toLocal(entry.root.toGlobal({x:visible?visible.x:-30,y:visible?visible.y:-90}));
         const b=fxLayer.toLocal(entry.root.toGlobal({x:visible?visible.x+visible.width:30,y:visible?visible.y+visible.height:0}));
-        const burst=c.frame<c.wrapFrames?{phase:'WRAP',tier:c.tier,wrapFrame:c.frame,wrapFrames:c.wrapFrames}
+        const burst=cocoon&&cocoon.crack<COCOON_RULES.taps?{phase:'COCOON',tier:c.tier,crack:cocoon.crack,crackFrame:cocoon.frame}
+          :c.frame<c.wrapFrames?{phase:'WRAP',tier:c.tier,wrapFrame:c.frame,wrapFrames:c.wrapFrames}
           :{phase:'BURST',tier:c.tier,phaseFrame:c.frame-c.wrapFrames};
         awakeningShell.update(id,{x:(a.x+b.x)/2,y:(a.y+b.y)/2,width:Math.abs(b.x-a.x),height:Math.abs(b.y-a.y),zIndex:1e6,burst,color:c.color});
       }
@@ -352,7 +376,7 @@ export async function mountRaisingFieldPixiPresentation({
   const carePose=()=>reducedMotion?0:Math.floor(careElapsed/NATIVE_POSE_MS)%2;
   const sheets = new Set();
   let latestFrame = null;
-  let latestRevision = -1;
+  let latestRevision = -1, latestLooks = '';
   let drag = null;
   let cameraX = 0;
   // Screen-pixel vertical translation. A fitting board has signed bounded
@@ -893,7 +917,11 @@ export async function mountRaisingFieldPixiPresentation({
   }
 
   function sync(frame, { force = false } = {}) {
-    if (disposed || !frame || (!force && frame.revision === latestRevision)) return;
+    // A ranch look (awakening appearance, its ceremony display ending) changes what a partner shows without moving
+    // the save revision, so the shown species are compared too (Owner 2026-11-09: the look switch did nothing).
+    const looks = (frame?.residents ?? []).map((resident) => `${resident.creatureId}:${resident.speciesId}`).join('|');
+    if (disposed || !frame || (!force && frame.revision === latestRevision && looks === latestLooks)) return;
+    latestLooks = looks;
     // Completing the tutorial restores the owned resident on this same scene.
     // Reuse the normal entry camera instead of leaving the egg off-screen at
     // the demonstration's last training cage.
@@ -1896,6 +1924,8 @@ export async function mountRaisingFieldPixiPresentation({
     dispose() {
       if (disposed) return;
       disposed = true;
+      app.canvas?.removeEventListener('cm-cocoon-tap',onCocoonTap);
+      for(const [id,c] of ceremonies)if(c.cocoon&&c.cocoon.crack<COCOON_RULES.taps)cocoonEvent(id,c,'CLOSED');
       awakeningShell.dispose();for(const g of crests.values())g.destroy();crests.clear();ceremonies.clear();appearanceFrames.clear();
       lifetime.abort(); signal?.removeEventListener('abort', abort);
       cancelInput();

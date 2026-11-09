@@ -1405,6 +1405,41 @@ body[data-day-period="NIGHT"] .int-rh2-field-host::after { background-color: rgb
 @keyframes cm-awakening-card { from { opacity: 0; transform: translateX(-50%) scale(1.25); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
 @media (prefers-reduced-motion: reduce) { .cm-awakening-card { animation: none; } }
 
+/* Tactile cocoon (AWAKENING_OVERDRIVE_20261109): the armoured resonance key, its three crack pips, the shatter flash
+   and the learned card as a stamped metal nameplate. */
+.cm-cocoon-key { position: fixed; left: 50%; bottom: max(14%, calc(env(safe-area-inset-bottom) + 96px)); z-index: 61; transform: translateX(-50%);
+  display: grid; justify-items: center; gap: 2px; min-width: min(300px, calc(100vw - 32px)); min-height: 76px; padding: 10px 18px 12px;
+  border: 3px solid var(--bloodline, #ffd34d); border-radius: 18px; color: #fff; font: inherit; cursor: pointer; touch-action: manipulation;
+  background: linear-gradient(180deg, #3b4254 0%, #1b2030 46%, #0d111b 100%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .28), inset 0 -4px 0 rgba(0, 0, 0, .45), 0 6px 0 #05070c, 0 0 24px var(--bloodline, #ffb52e);
+  animation: cm-cocoon-key-pulse .9s ease-in-out infinite alternate; }
+.cm-cocoon-key:active, .cm-cocoon-key.is-hit { transform: translateX(-50%) translateY(4px) scale(.97); box-shadow: inset 0 2px 0 rgba(255, 255, 255, .2), 0 2px 0 #05070c, 0 0 34px var(--bloodline, #ffb52e); }
+.cm-cocoon-key__label { font-size: 20px; font-weight: 900; letter-spacing: .06em; text-shadow: 0 0 10px var(--bloodline, #ffd34d); }
+.cm-cocoon-key__hint { font-size: 13px; font-weight: 700; color: var(--bloodline, #ffd34d); }
+.cm-cocoon-key__pips { display: flex; gap: 8px; margin-top: 4px; }
+.cm-cocoon-key__pips i { width: 22px; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, .16); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3); }
+.cm-cocoon-key[data-crack="1"] .cm-cocoon-key__pips i:nth-child(-n+1), .cm-cocoon-key[data-crack="2"] .cm-cocoon-key__pips i:nth-child(-n+2),
+.cm-cocoon-key[data-crack="3"] .cm-cocoon-key__pips i { background: var(--bloodline, #ffd34d); box-shadow: 0 0 10px var(--bloodline, #ffd34d); }
+@keyframes cm-cocoon-key-pulse { from { filter: brightness(1); } to { filter: brightness(1.28); } }
+.cm-cocoon-flash { position: fixed; inset: 0; z-index: 62; pointer-events: none; animation: cm-cocoon-flash .72s linear both; }
+@keyframes cm-cocoon-flash { 0% { background: #fff; opacity: 1; } 17% { background: #fff; opacity: 1; } 18% { background: #000; opacity: .92; }
+  36% { background: #000; opacity: .92; } 37% { background: #fff; opacity: .95; } 54% { background: #fff; opacity: .8; } 100% { background: #fff; opacity: 0; } }
+.cm-awakening-card { background: linear-gradient(170deg, #59606e 0%, #2a2f3a 22%, #4b5260 48%, #1d212a 74%, #3a404c 100%);
+  border-width: 3px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), inset 0 -2px 0 rgba(0, 0, 0, .5), 0 0 0 4px rgba(0, 0, 0, .25), 0 0 26px var(--bloodline, #ffb52e); }
+.cm-awakening-card__title { text-shadow: 0 1px 0 rgba(0, 0, 0, .6), 0 0 8px var(--bloodline, #ffd34d); }
+@media (prefers-reduced-motion: reduce) { .cm-cocoon-key { animation: none; } }
+
+/* Overdrive training on the awakening path (AWAKENING_OVERDRIVE_20261109): the switch and the core heat meter. */
+.cm-awakening__overdrive { display: grid; gap: 5px; padding: 8px 10px; border-radius: var(--r-control); border: 1px dashed rgba(255, 140, 60, .55); background: rgba(255, 120, 40, .06); }
+.cm-awakening__overdrive[data-on="true"] { border-style: solid; border-color: #ff8a3d; box-shadow: 0 0 10px rgba(255, 138, 61, .35); }
+.cm-awakening__overdrive-toggle { justify-self: start; font-weight: var(--fw-strong); }
+.cm-awakening__overdrive-toggle[aria-pressed="true"] { border-color: #ff8a3d; color: #2a1200; background: linear-gradient(#ffd08a, #ff9a3d); }
+.cm-awakening__heat { position: relative; height: 14px; border-radius: 7px; background: rgba(120, 120, 140, .22); overflow: hidden; }
+.cm-awakening__heat::after { content: ""; position: absolute; top: 0; bottom: 0; left: var(--limit, 80%); width: 2px; background: #ff4d4d; }
+.cm-awakening__heat-fill { position: absolute; inset: 0 auto 0 0; width: var(--heat, 0%); border-radius: inherit; background: linear-gradient(90deg, #ffd34d, #ff8a3d 60%, #ff3d3d); }
+.cm-awakening__heat-text { position: relative; display: block; text-align: center; font-size: 11px; line-height: 14px; font-weight: 800; }
+.cm-awakening__overdrive[data-danger="true"] .cm-awakening__overdrive-note { color: #ff6b6b; font-weight: var(--fw-strong); }
+
 /* Awakening path on a 成熟期's roster card (OWNER_APPROVED_ADAPTATION 2026-11-02): one bar and plain hints per form. */
 .cm-awakening__head { display: flex; align-items: center; gap: 8px; }
 .cm-awakening__stars { color: #ffd34d; letter-spacing: 1px; }

@@ -533,8 +533,11 @@ export async function mountHuntFieldPixiPresentation({
       const nativeFrame = node.nativeFramePresenter?.apply(wild.nativeAnimation ?? null);
       const placed = node.characterSprite ? applyNativeCharacterCellGeometry(node.characterSprite,nativeFrame,2) : false;
       syncMotion(node, wild, nativeFrame, placed, deltaMs, now);
-      node.scale.x = nativeFrame ? (nativeFrame.flipX ? -1 : 1) : (wild.facing === "left" ? -1 : 1);
-      node.scale.y = nativeFrame?.flipY ? -1 : 1;
+      // Wild instinct (AWAKENING_OVERDRIVE_20261109): an ancestral partner stands 1.15x as tall.
+      const size = wild.instinct === "ANCESTOR" ? 1.15 : 1;
+      node.scale.x = (nativeFrame ? (nativeFrame.flipX ? -1 : 1) : (wild.facing === "left" ? -1 : 1)) * size;
+      node.scale.y = (nativeFrame?.flipY ? -1 : 1) * size;
+      drawInstinctAura(node, wild.instinct ?? null, now);
       const contact = huntContactShadow(wild.speciesId, nativeFrame, wild.worldZ ?? 0, node.contactShadowArt);
       if (contact) {
         const key = JSON.stringify(contact.ellipses);
@@ -559,6 +562,37 @@ export async function mountHuntFieldPixiPresentation({
         .ellipse(0, 3, 13, 6)
         .stroke({ color: tethered ? TERRAIN.gold : TERRAIN.cyan, alpha: tethered ? 0.9 : 0.16, width: tethered ? 2 : 1.2 });
       syncStamina(node, wild, tethered);
+    }
+  }
+
+  // Wild instinct marks (AWAKENING_OVERDRIVE_20261109): a veteran elite crackles with small element arcs; an ancestral
+  // partner stands in a faint gold and violet bloodline glow at its feet. Only the eye tells them apart.
+  function drawInstinctAura(node, instinct, now) {
+    if (!instinct || instinct === "NORMAL") { if (node.instinctAura) { node.instinctAura.destroy(); node.instinctAura = null; } return; }
+    if (!node.instinctAura) {
+      node.instinctAura = new PIXI.Graphics(); node.instinctAura.eventMode = "none"; node.instinctAura.label = "wild instinct";
+      node.addChildAt(node.instinctAura, 0);
+    }
+    const g = node.instinctAura.clear(), reduced = reducedFx(), t = reduced ? 0 : now / 1000;
+    if (instinct === "ANCESTOR") {
+      const pulse = reduced ? 0.5 : (Math.sin(t * 2.4) + 1) / 2;
+      g.ellipse(0, 4, 18 + 3 * pulse, 7 + pulse).fill({ color: 0x8b5cf6, alpha: 0.18 + 0.1 * pulse });
+      g.ellipse(0, 4, 13 + 2 * pulse, 5).fill({ color: 0xffd34d, alpha: 0.22 + 0.12 * pulse });
+      g.ellipse(0, 4, 17 + 3 * pulse, 6.5 + pulse).stroke({ color: 0xffe9a8, width: 1.2, alpha: 0.5 + 0.3 * pulse });
+      for (let i = 0; i < 5; i++) {
+        const a = t * 0.9 + i * Math.PI * 2 / 5, rise = reduced ? 4 : (t * 9 + i * 7) % 18;
+        g.circle(Math.cos(a) * 12, 4 - rise, 1.1).fill({ color: i % 2 ? 0xc4b5fd : 0xffd34d, alpha: 0.8 * (1 - rise / 18) });
+      }
+      return;
+    }
+    // ELITE: three short zigzag arcs that jump between frames.
+    const beat = reduced ? 0 : Math.floor(now / 90);
+    for (let i = 0; i < 3; i++) {
+      const seed = (beat * 3 + i) * 2654435761 >>> 0, a = (seed % 628) / 100, r = 10 + (seed >> 9) % 6;
+      let x = Math.cos(a) * r, y = -14 + Math.sin(a) * r * 0.9;
+      g.moveTo(x, y);
+      for (let k = 0; k < 3; k++) { x += ((seed >> (k * 4)) % 7) - 3; y += ((seed >> (k * 5 + 2)) % 7) - 3; g.lineTo(x, y); }
+      g.stroke({ color: i % 2 ? 0x7dd3fc : 0xfef08a, width: 1.3, alpha: 0.85 });
     }
   }
 

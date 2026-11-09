@@ -596,9 +596,14 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
     actor.trainingPending=false;actor.state=11;
     if(policy)beginRealtimeTraining(actor,policy);
     const growthPercent=habitatMatch(next.fields['000'],actor.cageDefinitionIndex)?TAXONOMY_HABITAT_BONUS.growthPercent:100;
+    const untrained=next;
     const trained=enterNativeRaisingTraining(next,{definition:actor.cageDefinitionIndex,season:context.season,level:context.cageLevel??0,stressed:a['404']===1,growthPercent,
       pointScale:policy?.pointScale??null,programs:policy?.cagePrograms?.[actor.cageDefinitionIndex]??null},rng);
     next=trained.profile;
+    // Overdrive training (AWAKENING_OVERDRIVE_20261109): the app may multiply the points, add an epiphany or, on a
+    // core backlash, keep the profile from before the training. It returns {profile, commands} or null.
+    const boosted=policy&&trained.commands?.length&&typeof context.overdrive==='function'?context.overdrive({before:untrained,after:next,commands:trained.commands}):null;
+    if(boosted){next=boosted.profile;trained.commands=boosted.commands;}
     // A royal cage (DIAMOND_ECONOMY_20261102) adds its points on top, shown as one more rising label.
     const bonus=policy?context.trainingBonus:null;
     if(bonus?.points>0&&trained.commands?.length){

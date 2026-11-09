@@ -132,6 +132,17 @@ export function createBattleRuntime(options = {}) {
   // player's call (requestBurst); headless runs and replays burst at once as before.
   const burstManual=options.burstManual===true;
   let burst=createBattleBurst({policy:BATTLE_BURST_OFF});
+  // Sponsor stake contract (AWAKENING_OVERDRIVE_20261109): the rift gambit fights a foe 20 % stronger -- its damage
+  // dealt is multiplied and its damage taken divided by the same factor, after every other rule.
+  let foeBoostPercent=0;
+  const foeScaled=(slot,targetSlot,damage)=>{
+    if(!(foeBoostPercent>0)||!(damage>0))return damage;
+    const factor=1+foeBoostPercent/100,foe=team=>team!==localTeamIndex;
+    let scaled=damage;
+    if(foe(battleTeamOfSlot(slot)))scaled*=factor;
+    if(foe(battleTeamOfSlot(targetSlot)))scaled/=factor;
+    return Math.max(1,Math.trunc(scaled));
+  };
   // Owner-approved arena hazards (2026-10-18) are opt-in per battle. Off keeps
   // every parity fixture and replay byte-for-byte on the original rules.
   // Arena hazards are injected (createBattleArenaHazards), never imported here,
@@ -406,9 +417,9 @@ export function createBattleRuntime(options = {}) {
       });
       if (!inputs) continue;
       const resolvedNative = resolveBattleDamage({ ...inputs, rng, critBonus: taxonomy.critBonus(slot) });
-      const resolved = {...resolvedNative, damage: burst.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
+      const resolved = {...resolvedNative, damage: foeScaled(slot, targetSlot, burst.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
         damage: taxonomy.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
-          elementSelector: move.elementSelect ?? 0, damage: resolvedNative.damage, signature: signatureMoves[slot] === move.recordIndex})})};
+          elementSelector: move.elementSelect ?? 0, damage: resolvedNative.damage, signature: signatureMoves[slot] === move.recordIndex})}))};
       const result=hitRuntime.apply(targetSlot,{move,damage:resolved.damage,critical:resolved.critical,nativeKind,
         sourcePoint:parameters?effectActors.position(parameters):nativeActors.position(slot),statusInputs:{attackerIndex:inputs.statusAttackerIndex,
           selectedDefenseIndex:inputs.statusDefenderIndex,
@@ -580,10 +591,12 @@ export function createBattleRuntime(options = {}) {
   return Object.freeze({
     listMatches,
 
-    /** The player calls a local partner's READY burst (awakening raising, Owner 2026-11-02). */
-    requestBurst(slot) {
+    /** A sponsor contract's foe boost for the match about to start (percent; 0 clears it). */
+    setFoeBoostPercent(percent){foeBoostPercent=Number.isSafeInteger(percent)&&percent>0&&percent<=100?percent:0;return foeBoostPercent;},
+    /** The player calls a local partner's READY burst (awakening raising, Owner 2026-11-02); overLimit: the long press. */
+    requestBurst(slot,{overLimit=false}={}) {
       if(!session||battleTeamOfSlot(slot)!==localTeamIndex)return false;
-      return burst.request(slot);
+      return burst.request(slot,{overLimit});
     },
 
     prepareOpening() {
@@ -704,6 +717,9 @@ export function createBattleRuntime(options = {}) {
             currentHp:builtScaleHp(i),metricLimit:Math.min(session.slots[i].metricLimit,session.slots[i].metricBase),
             verdict:session.verdict,mode,teamIndex:Math.floor(i/3),rewardPercent:taxonomy.rewardPercent(Math.floor(i/3)),...(chosen.championship?{event:chosen.recordIndex,cursor:chosen.cursor+1,totalRounds:chosen.totalRounds}:{})})}]:[])}:{}),
         ...(taxonomy.rewardPercent(localTeamIndex)!==100?{rewardPercent:taxonomy.rewardPercent(localTeamIndex)}:{}),
+        // What a sponsor contract judges: local partners down, the match length and the foe boost it fought.
+        ...(session.ended?{contractStats:{partnerDowns:session.slots.filter((c,slot)=>c&&battleTeamOfSlot(slot)===localTeamIndex&&c.currentHp<=0).length,
+          seconds:Math.round(session.frame/60*10)/10,foeBoostPercent}}:{}),
         // Burst forms the local team took this match (encyclopedia registration).
         ...(burst.bursts().some(b=>battleTeamOfSlot(b.slot)===localTeamIndex)
           ?{bursts:burst.bursts().filter(b=>battleTeamOfSlot(b.slot)===localTeamIndex).map(b=>b.form)}:{})
