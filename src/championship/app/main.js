@@ -2285,7 +2285,11 @@ async function mountBattleResult() {
     }
   };
   // Owner 2026-11-09 (spotlight): the light follows the party when the screen turns.
-  const lightResize=typeof ResizeObserver==='function'?new ResizeObserver(()=>{if(!disposed)updateStageLight();}):null;
+  // The light is moved on the next frame: setting it inside the observer callback would resize the
+  // stage again in the same pass ("ResizeObserver loop completed with undelivered notifications").
+  let lightFrame=0;
+  const lightResize=typeof ResizeObserver==='function'?new ResizeObserver(()=>{if(disposed||lightFrame)return;
+    lightFrame=requestAnimationFrame(()=>{lightFrame=0;if(!disposed)updateStageLight();});}):null;
   lightResize?.observe(characterHostNode);
   const artLoading=new AbortController(),hudLoad=createLoadAttempt({timeoutMs:20000});
   stageReady=ensurePixiStage(characterHostNode,artLoading.signal);
@@ -2304,7 +2308,7 @@ async function mountBattleResult() {
     if(disposed)void characters.dispose();else resultCharacters=characters;
   }).catch(error=>{if(!disposed)console.warn('Battle result character reference unavailable',error);});
   return {...resultView,dispose(){
-    if(disposed)return;disposed=true;hudLoad.cancel();artLoading.abort();lightResize?.disconnect();
+    if(disposed)return;disposed=true;hudLoad.cancel();artLoading.abort();lightResize?.disconnect();if(lightFrame)cancelAnimationFrame(lightFrame);
     resultCharacters?.dispose();resultCharacters=null;hudArt=null;resultView.dispose();
   }};
 }
