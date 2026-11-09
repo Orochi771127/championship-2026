@@ -12,6 +12,10 @@ import { BATTLE_CHARACTER_PROFILES } from "../../../data/championship/battleChar
 import { createNativeCharacterAnimationTimeline } from "../../presentation/characterAnimationTimeline.js";
 import { resolveNativeHuntCharacterSequence, NATIVE_HUNT_CHARACTER_FRAME_CONTRACT } from "../../presentation/nativeHuntCharacterAction.js";
 import { nativeIndividualProfile } from "../../raising/nativeIndividualProfile.js";
+import { productPartnerG } from "../../contracts/productSpeciesData.js";
+// GACHA_FULL_EFFECTS_20261109: a partner's card weight is its product weight; the scripted tutorial catches keep the
+// native weight, so the starting 32 G card still takes both of them.
+const partnerCardG = a => (a.tutorialScripted ? nativeHuntToolSpecies(a.speciesIndex).capacityG : productPartnerG(a.speciesIndex));
 const Q12 = 4096;
 const distanceSq = (a,b) => a.slice(0,2).reduce((sum,n,i) => sum + ((n >> 12) - (b[i] >> 12)) ** 2, 0);
 
@@ -187,7 +191,7 @@ function decide(a, events, host) {
     return a.returnAiState;
   } else if (a.aiState===11) {
     if (has(0x16)) {
-      if (host.usedG()+nativeHuntToolSpecies(a.speciesIndex).capacityG>host.maxCardG) host.emit("OVER_CAPACITY");
+      if (host.usedG()+partnerCardG(a)>host.maxCardG) host.emit("OVER_CAPACITY");
       else return 12;
     }
     if (a.currentHp>=Math.trunc(a.maxHp/10)*5) return 1;
@@ -216,7 +220,7 @@ export function stepNativeWildActor(a, host) {
     } else if(a.tutorialDown===1 && a.shake?.ticks===0) {
       a.tutorialDown=2;a.aiState=11;a.handReady=true;
     } else if(a.tutorialDown===2 && events.some(e=>e.code===0x16)) {
-      if(host.usedG()+nativeHuntToolSpecies(a.speciesIndex).capacityG>host.maxCardG)host.emit('OVER_CAPACITY');
+      if(host.usedG()+partnerCardG(a)>host.maxCardG)host.emit('OVER_CAPACITY');
       else enterNativeWildState(a,12,host);
     }
     a.shotShakeTicks=a.tutorialShot?(a.shake?.ticks??0):0;
@@ -262,7 +266,7 @@ export function stepNativeWildActor(a, host) {
 
 export function nativeWildCaptureSnapshot(a) {
   return Object.freeze({wildId:a.wildId,speciesId:a.speciesId,currentHp:a.currentHp,maxHp:a.maxHp,
-    sourceVitals:Object.freeze({...a.sourceVitals}),gCost:nativeHuntToolSpecies(a.speciesIndex).capacityG,
+    sourceVitals:Object.freeze({...a.sourceVitals}),gCost:partnerCardG(a),
     state:a.cardState ?? (a.aiState===11||a.aiState===16&&a.trapReady?"HAND_READY":a.aiState===10?"DOWN_ANIMATION":a.bound?"TETHERED":"WILD"),
     displayName:a.displayName,traceId:"HUNT_NORMAL_NATIVE_CONTROLLER",nativePhase:{wildHidden:a.hidden,handController:a.handController},
     ...(a.cardState === "ON_CARD" ? {nativeProfile:nativeIndividualProfile(a.individual, a.speciesId)} : {}),

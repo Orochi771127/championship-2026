@@ -48,7 +48,10 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   // for this hunt only -- stun x2, wilds at half speed, a rope that never wears.
   const stunRate=Number.isFinite(boosts?.stunRate)&&boosts.stunRate>1?boosts.stunRate:1;
   const slow=Number.isFinite(boosts?.slow)&&boosts.slow>0&&boosts.slow<1?boosts.slow:0;
-  const sureCapture=boosts?.sureCapture===true;
+  // GACHA_FULL_EFFECTS_20261109: the sure wire is one charge -- the first partner it ropes this hunt drops at
+  // once and keeps +captureStatPercent on its four stats; after that the rope is an ordinary rope.
+  let sureCharges=boosts?.sureCapture===true?1:0;
+  const sureStatPercent=Number.isSafeInteger(boosts?.captureStatPercent)&&boosts.captureStatPercent>0?boosts.captureStatPercent:0;
   const ages=Array(20).fill(0);
   const nextChannel=channel=>rng.next(channel), wildRandom=max=>nativeWildRandom(max,nextChannel);
   const emit=value=>{notice=value;onChange();};
@@ -268,9 +271,15 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
       const before=rope.state;
       rope.state=huntRopeWear(before,next.rope,{movementBlocked:!!a.movementRestricted,overstretched,groupHold:tactics.groupHold(a,actors),
         terrainCrossed:next.rope.band!=="SLACK"&&huntRopeCrossesBlocked(anchor,pointer.q12,blockedPixel)});
-      if(sureCapture&&rope.state.controllerState!==6)rope.state=Object.freeze({...rope.state,durability:before.durability});
+      const sure=sureCharges>0&&!a.tutorialScripted&&rope.state.controllerState!==6;
+      if(sure)rope.state=Object.freeze({...rope.state,durability:before.durability});
       if(rope.state.controllerState!==6&&!a.tutorialScripted)ropeLedger?.setWear?.(rope.itemId,rope.state.durability/rope.full);
-      a.currentHp=sureCapture?Math.max(0,a.currentHp-2*Math.max(0,a.currentHp-next.currentHp)):next.currentHp;tactics.syncHp(a);
+      if(sure){
+        sureCharges=0;a.currentHp=0;a.gachaSureCaught=true;
+        if(sureStatPercent)for(const field of ['060','064','068','06c'])a.individual.fields[field]=Math.min(999,(a.individual.fields[field]|0)+Math.round((a.individual.fields[field]|0)*sureStatPercent/100))>>>0;
+        emit("SURE_CAPTURE");
+      } else a.currentHp=next.currentHp;
+      tactics.syncHp(a);
       if(a.currentHp<=0)tactics.ropeDowned(a,before.role);
       if(next.events.includes(0x11))a.destinationQ12=[...nativeStrongPullDestination(a.positionQ12,pointer.q12)];
       for(const code of next.events)a.events.push({code});

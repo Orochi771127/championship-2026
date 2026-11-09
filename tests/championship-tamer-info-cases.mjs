@@ -3,6 +3,7 @@ import test from "node:test";
 import {readFileSync} from 'node:fs';
 import {nativeBattleWinPercent} from '../src/championship/battle/nativeTitleProgression.js';
 import {NATIVE_RAISING_LIFECYCLE_RULES} from '../src/championship/raising/nativeRaisingLifecycle.js';
+import {PRODUCT_CAPACITY} from '../src/championship/contracts/productSpeciesData.js';
 import {slotCountForTamerRank} from '../src/championship/cage/cageCatalog.js';
 
 import {
@@ -23,7 +24,8 @@ test('Tamer counters and rank limits match original OVL4 CPU across every rank',
     assert.equal(tamerCompletionPercent(row.titleCount,61),row.actual.title);
     assert.equal(tamerCompletionPercent(row.registeredCount,216),row.actual.guid);
     assert.equal(nativeBattleWinPercent(row.record),row.actual.win);
-    assert.equal(NATIVE_RAISING_LIFECYCLE_RULES.ranks[row.rank].capacity,row.actual.have);
+    // GACHA_FULL_EFFECTS_20261109: the product scales the ROM rank capacity ×1.375 (even G) along with partner weights.
+    assert.equal(NATIVE_RAISING_LIFECYCLE_RULES.ranks[row.rank].capacity,Math.round(row.actual.have*PRODUCT_CAPACITY.rankScale/2)*2);
     assert.equal(slotCountForTamerRank(row.rank),row.actual.cage);
   }
 });

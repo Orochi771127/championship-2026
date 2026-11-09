@@ -16,9 +16,9 @@ import { prefersReducedMotion } from "../presentation/presentationPreferences.js
 import { shopGoodsPresentation } from "../presentation/shopGoodsUiArt.js";
 import { GACHA_TICKET_ART, gachaCurrencyImage, gachaIcon, gachaKindIconName, gachaTicketImage } from "./cyberGachaIcons.js";
 import { GACHA_CAPSULE_RADIUS, crankTurn, settleCapsules, simulateTumble } from "./cyberGachaPhysics.js";
-import { GACHA_PERSONALITY_CHOICES, GACHA_AUTOMATION_SHARE, gachaChipEffectLines, gachaChipTiming } from "../gacha/cyberGacha.js";
+import { GACHA_PERSONALITY_CHOICES, GACHA_AUTOMATION_SHARE, gachaChipEffectLines, gachaChipTiming, gachaMetalEffectLines } from "../gacha/cyberGacha.js";
 import { automationEffectLines, automationTiming, coreRunSeconds, formatRunClock } from "../gacha/ranchAutomation.js";
-import { cageName, personalityName } from "../text/zhHant.js";
+import { cageName, personalityName, speciesName } from "../text/zhHant.js";
 
 const UI_ART = "assets/production/ui/cyber-gacha-r1/";
 export const CYBER_GACHA_ART = Object.freeze({
@@ -50,6 +50,8 @@ const REFUSALS = Object.freeze({
   EVOLUTION_RUNNING: "牧場裡正有拍檔在進化，請稍候。",
   NO_EVOLUTION_ROUTE: "這隻拍檔目前沒有可以催化的進化路線。",
   METAL_TOO_WEAK: "這塊金屬的等級不足以催化這個世代的進化。",
+  TOO_MANY_UNMET: "碎片最多免除 2 項未達成的條件；這條路線差太多了，換一條或改用完整金屬。",
+  UNKNOWN_TIER: "這個稀有度不能升階熔煉。",
   ALREADY_ARMED: "已經裝填同類晶片，請先使用。",
   NOT_ARMED: "這個晶片沒有裝填。",
   CHOOSE_PERSONALITY: "請先選擇新的性格。",
@@ -74,7 +76,7 @@ const REFUSALS = Object.freeze({
 export function gachaRefusalText(reason) { return uiText(REFUSALS[reason] ?? "無法完成。"); }
 // Premium-machine rates of the automation items (their tier's rate x the automation share, split evenly).
 const AUTOMATION_RATES = Object.freeze({ SR: 0.28, SSR: 0.1, UR: 0.02 });
-const AUTOMATION_PER_TIER = Object.freeze({ SR: 2, SSR: 2, UR: 1 });
+const AUTOMATION_PER_TIER = Object.freeze({ SR: 2, SSR: 1, UR: 2 });
 const ratePercent = (rarity) => (((AUTOMATION_RATES[rarity] ?? 0) * GACHA_AUTOMATION_SHARE * 100) / (AUTOMATION_PER_TIER[rarity] ?? 1)).toFixed(1);
 
 // The machine squashes and rattles while the crank turns (origin: its feet).
@@ -146,7 +148,10 @@ export function gachaMetalNote(item) {
   const enhance = RARITY_ORDER[item.rarity] >= 2
     ? uiText("強化：全能力 +{n}，並銘刻金屬血統「{perk}」與腳底流光。", { n: item.boost, perk: uiText(`BLOODLINE_PERK_${item.family}`) })
     : uiText("強化：全能力 +{n}。", { n: item.boost });
-  const early = uiText(item.rarity === "R" ? "催化：幼年期無視不足條件，強制進化。" : "催化：成長期以前無視不足條件，強制進化。");
+  // GACHA_FULL_EFFECTS_20261109: a shard waives at most two unmet conditions of the route picked, a whole metal any.
+  const stage = item.rarity === "R" ? "幼年期" : "成長期以前";
+  const early = uiText(item.id?.endsWith("-shard") ? "催化：{stage}選一條差 1～2 項條件的路線，當場突破進化。" : "催化：{stage}無視不足條件，強制進化。",
+    { stage: uiText(stage) });
   const mature = awaken.fill ? uiText("成熟期：覺醒能量一次充滿，並免除轉生條件。")
     : awaken.tier2 && awaken.tier2 !== awaken.tier1
       ? uiText("成熟期：注入覺醒能量 +{n}%（二段 +{m}%），道具最多補到 {cap}%。", { n: awaken.tier1, m: awaken.tier2, cap: awaken.cap })
@@ -207,7 +212,7 @@ function itemIcon(item, className = "cm-gacha-icon") {
   const host = element("span", className);
   host.dataset.rarity = item.rarity ?? "R";
   // A coin bag wears the status bar's bits coin; the ticket prize the one ticket picture.
-  if (item.kind === "BITS" || item.kind === "TICKETS") {
+  if (item.kind === "BITS" || (item.kind === "TICKETS" && !item.art)) {
     host.dataset.family = item.kind;
     host.append(item.kind === "BITS" ? gachaCurrencyImage("bits", "cm-gacha-icon__img") : gachaTicketImage("cm-gacha-icon__img"));
     return host;
@@ -392,6 +397,9 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   let bagSelection = null;
   let partnerSelection = null;
   let personalitySelection = null;
+  let routeSelection = null;
+  let lastUse = null;
+  let popAfter = null;
 
   // ---- Reveal stage: deep space, light rays, the capsule, then the cards -------
   const revealStage = element("div", "cm-gacha__reveal");
@@ -657,14 +665,16 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   }
 
   async function run(action) {
-    if (busy) return;
+    if (busy) return null;
     busy = true;
+    let outcome = null;
     skipping = false;
     root.dataset.busy = "true";
     try {
       const machineId = root.dataset.machine;
       const receipt = action.call();
       const result = receipt?.shop?.gacha?.lastResult ?? null;
+      outcome = result;
       if (result && result.serial !== shownSerial) {
         shownSerial = result.serial;
         if (!result.ok) { fx(root, "denied", uiText(REFUSALS[result.reason] ?? "無法完成。")); onRefusal(result.reason); }
@@ -684,6 +694,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
       delete root.dataset.busy;
       paint(lastFrame);
     }
+    return outcome;
   }
 
   function pull(count, trigger = count === 10 ? ten : single) {
@@ -738,7 +749,9 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     fx(pityPicker, "open");
   }
 
-  function chipTile(item, { count = item.owned, onClick, selected = false, locked = false } = {}) {
+  const useLabel = (item) => (item.kind === "HUNT" || item.kind === "BOUNTY" ? "裝填"
+    : item.kind === "AUTOMATION" ? (item.automationKind === "CORE" ? "部署" : "放置") : "使用");
+  function chipTile(item, { count = item.owned, onClick, selected = false, locked = false, useFace = false } = {}) {
     const tile = button("cm-gacha__tile");
     tile.dataset.rarity = item.rarity;
     tile.dataset.itemId = item.id;
@@ -748,11 +761,14 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     tile.append(element("span", "cm-gacha__tile-rarity", item.rarity), itemIcon(item),
       element("span", "cm-gacha__tile-name", uiText(item.name)),
       element("span", "cm-gacha__tile-count", uiText("持有 {n} 個", { n: count })));
-    // A chip's first effect line, so the grid reads without opening each tile.
-    const effect = CHIP_FAMILIES.has(item.kind) ? gachaChipEffectLines(item)[0]
-      : item.kind === "AUTOMATION" ? automationEffectLines(item)[item.edition ? 1 : 0] : null;
-    if (effect) tile.append(element("span", "cm-gacha__tile-effect", uiText(effect.text, effect.params)));
+    // The effect in brief (a chip's or metal's first two lines), so the grid reads without opening each tile.
+    const lines = CHIP_FAMILIES.has(item.kind) ? gachaChipEffectLines(item).slice(0, 2)
+      : item.kind === "METAL" ? gachaMetalEffectLines(item).slice(0, 2)
+      : item.kind === "AUTOMATION" ? [automationEffectLines(item)[item.edition ? 1 : 0]].filter(Boolean) : [];
+    if (lines.length) tile.append(element("span", "cm-gacha__tile-effect", lines.map((line) => uiText(line.text, line.params)).join("・")));
     if (item.armed) tile.append(element("span", "cm-gacha__tile-flag", uiText("已裝填")));
+    // The key face of the tile: what a tap on it leads to (Owner 2026-11-09).
+    if (useFace && count > 0) tile.append(element("span", "cm-gacha__tile-use", uiText(useLabel(item))));
     if (locked) tile.append(gachaIcon("lock", "cm-gacha__tile-lock"));
     tile.addEventListener("click", onClick);
     return tile;
@@ -793,6 +809,78 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     for (const line of gachaChipEffectLines(chip)) list.append(element("li", "", uiText(line.text, line.params)));
     list.append(element("li", "cm-gacha__effects-when", uiText(gachaChipTiming(chip))));
     return list;
+  }
+
+  /** A metal's enhancement lines (its catalyst rule is in the note above). */
+  function metalEffectList(metal) {
+    const list = element("ul", "cm-gacha__effects");
+    for (const line of gachaMetalEffectLines(metal)) list.append(element("li", "", uiText(line.text, line.params)));
+    return list;
+  }
+
+  const STAT_ROW = Object.freeze([["maxHp", "HP"], ["attack", "攻"], ["defense", "防"], ["wisdom", "智"], ["speed", "速"]]);
+  function partnerStatLine(partner) {
+    const row = element("span", "cm-gacha__partner-stats");
+    for (const [stat, label] of STAT_ROW) {
+      const cell = element("span", "cm-gacha__partner-stat");
+      cell.dataset.stat = stat;
+      cell.append(element("span", "", uiText(label)), element("strong", "", fmt(partner.stats?.[stat] ?? 0)));
+      row.append(cell);
+    }
+    return row;
+  }
+  const partnerStats = (instanceId) => lastFrame?.partners.find((partner) => partner.instanceId === instanceId)?.stats ?? null;
+
+  /** Number pops over the chosen partner's stat cells after a use (Owner 2026-11-09 picture 3). */
+  function popStats(before, after) {
+    if (!before || !after) return;
+    const card = usePanel.querySelector(`.cm-gacha__partner[data-selected="true"]`) ?? usePanel;
+    for (const [stat] of STAT_ROW) {
+      const delta = (after[stat] ?? 0) - (before[stat] ?? 0);
+      if (!delta) continue;
+      const cell = card.querySelector?.(`.cm-gacha__partner-stat[data-stat="${stat}"]`) ?? card;
+      const pop = element("span", "cm-gacha__stat-pop", `${delta > 0 ? "+" : ""}${delta}`);
+      cell.append(pop);
+      void settled(play(pop, [{ transform: "translate(-50%, 4px) scale(.7)", opacity: 0 }, { transform: "translate(-50%, -14px) scale(1.15)", opacity: 1, offset: 0.25 },
+        { transform: "translate(-50%, -26px) scale(1)", opacity: 0 }], { duration: 1500, easing: "cubic-bezier(.2,.9,.3,1)" })).then(() => pop.remove());
+    }
+  }
+
+  /** What one saved use did, for the line under the roster. */
+  function useResultText(result) {
+    if (result.kind === "CATALYST") return uiText("突破進化：{name}（免除 {n} 項條件）", { name: speciesName(result.target) ?? "", n: result.waived ?? 0 });
+    if (result.kind === "AWAKEN_ENERGY") return awakeningEnergySummary(result);
+    const stats = enhanceSummary(result);
+    const points = Object.values(result.counters ?? {}).reduce((sum, n) => sum + n, 0);
+    const parts = [stats, ...(points ? [uiText("進化經驗 +{n}", { n: points })] : []),
+      ...(result.evolutionReady ? [uiText("已達進化條件，拍檔即將進化")] : [])].filter(Boolean);
+    return parts.join("・");
+  }
+
+  /** The catalyst's routes for the chosen partner: each target, what it lacks, and the waiver it needs. */
+  function routePicker(frame, metal) {
+    const partner = frame.partners.find((entry) => entry.instanceId === partnerSelection);
+    const box = element("div", "cm-gacha__routes");
+    if (!partner) return box;
+    if (!partner.routes?.length) {
+      box.append(element("p", "cm-gacha__use-note", uiText(partner.generation === 4 ? "成熟期：催化進化會注入覺醒能量。" : "這隻拍檔目前沒有可以催化的進化路線。")));
+      return box;
+    }
+    box.append(element("strong", "cm-gacha__routes-title", uiText("進化候選路線")));
+    const shard = metal.id.endsWith("-shard");
+    for (const route of partner.routes) {
+      const row = button("cm-gacha__route");
+      row.dataset.target = String(route.target);
+      if (routeSelection === route.target) row.dataset.selected = "true";
+      const tooFar = shard && route.unmetCount > 2;
+      row.disabled = tooFar;
+      row.append(element("span", "cm-gacha__route-name", speciesName(route.target) ?? `#${route.target}`),
+        element("span", "cm-gacha__route-gap", route.unmetCount ? uiText("差 {n} 項條件", { n: route.unmetCount }) : uiText("條件已達成")));
+      if (!tooFar) row.append(element("span", "cm-gacha__route-go", uiText("投入金屬催化")));
+      row.addEventListener("click", () => { routeSelection = route.target; fx(row, "toggle"); paint(lastFrame); });
+      box.append(row);
+    }
+    return box;
   }
 
   /** The reshape chip's choice: eight personalities, the partner's own one shown and not selectable. */
@@ -866,6 +954,27 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
       list.append(row);
     }
     forge.append(list);
+    // GACHA_FULL_EFFECTS_20261109: three shards of one rarity rise one tier.
+    const tiers = frame.tierSmelt ?? [];
+    if (!tiers.length) return;
+    forge.append(element("h3", "cm-gacha__pool-title", uiText("碎片升階熔煉")),
+      element("p", "cm-gacha__plate cm-gacha__note", uiText("任意 3 個同階碎片：R 熔成時之合金碎片，SR 熔成完整時之合金。")));
+    const smeltList = element("div", "cm-gacha__forge-list");
+    for (const tier of tiers) {
+      const row = element("div", "cm-gacha__forge-row");
+      row.dataset.rarity = tier.target.rarity;
+      row.dataset.tier = tier.rarity;
+      const copy = element("div", "cm-gacha__pool-copy");
+      copy.append(element("strong", "cm-gacha__pool-name", uiText(tier.target.name)),
+        element("span", "cm-gacha__pool-rate", uiText("{rarity} 碎片 ×{n}", { rarity: tier.rarity, n: tier.cost })));
+      const make = key("cm-gacha__action cm-gacha__forge-key", uiText("熔煉"), gachaIcon("furnace", "cm-gacha-key__icon"));
+      make.disabled = !tier.ready;
+      make.dataset.tierSmelt = tier.rarity;
+      make.addEventListener("click", () => { returnFocus = make; again = null; void run({ call: () => intents.gachaSmeltShardTier(tier.rarity) }); });
+      row.append(itemIcon({ ...tier.target, kind: "METAL" }), copy, make);
+      smeltList.append(row);
+    }
+    forge.append(smeltList);
   }
 
   /** Diamond rewards waiting to be claimed, and the founder box. */
@@ -933,7 +1042,8 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     for (const item of items) {
       const installed = item.kind === "AUTOMATION" && item.placed > 0;
       if (item.owned < 1 && !item.armed && !installed) continue;
-      const tile = chipTile(item, { selected: bagSelection === item.id, onClick: () => { bagSelection = item.id; fx(bagGrid, "toggle"); paint(lastFrame); } });
+      const tile = chipTile(item, { selected: bagSelection === item.id, useFace: true,
+        onClick: () => { bagSelection = item.id; fx(bagGrid, "toggle"); paint(lastFrame); usePanel.scrollIntoView?.({ block: "nearest", behavior: "smooth" }); } });
       // A mounted core or a placed royal cage stays selectable (to take it back off).
       if (installed) { tile.disabled = false; tile.append(element("span", "cm-gacha__tile-flag", uiText(item.edition ? "已放置 {n}" : "已掛載 {n}", { n: item.placed }))); }
       bagGrid.append(tile);
@@ -948,7 +1058,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     const describe = metal ? gachaMetalNote(item)
       : uiText("{kind}・原「{origin}」", { kind: uiText(KIND_LABEL[item.kind] ?? ""), origin: uiText(item.origin) });
     usePanel.append(element("p", "cm-gacha__use-note", describe));
-    if (!metal) usePanel.append(chipEffectList(item));
+    usePanel.append(metal ? metalEffectList(item) : chipEffectList(item));
     const needsPartner = metal || item.kind === "GROWTH";
     if (needsPartner) {
       const roster = element("div", "cm-gacha__partners");
@@ -956,30 +1066,64 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
         const pick = button("cm-gacha__partner");
         pick.dataset.instanceId = partner.instanceId;
         if (partnerSelection === partner.instanceId) pick.dataset.selected = "true";
-        pick.append(partnerNameplate(partner));
-        pick.addEventListener("click", () => { partnerSelection = partner.instanceId; personalitySelection = null; fx(pick, "toggle"); paint(lastFrame); });
+        pick.append(partnerNameplate(partner), partnerStatLine(partner));
+        const near = partner.routes?.[0];
+        if (near) pick.append(element("span", "cm-gacha__partner-gap", near.unmetCount
+          ? uiText("距離進化：差 {n} 項", { n: near.unmetCount }) : uiText("已達進化條件")));
+        pick.addEventListener("click", () => { partnerSelection = partner.instanceId; personalitySelection = null; routeSelection = null; fx(pick, "toggle"); paint(lastFrame); });
         roster.append(pick);
       }
       usePanel.append(roster);
       if (item.id === "chip:personality") usePanel.append(personalityPicker(frame));
+      if (metal) usePanel.append(routePicker(frame, item));
+      if (lastUse?.itemId === item.id && lastUse.instanceId === partnerSelection && lastUse.text) {
+        usePanel.append(element("p", "cm-gacha__plate cm-gacha__use-result", lastUse.text));
+      }
+    } else {
+      // A loaded cartridge or beacon waits for the next hunt / won match; it can be taken out, or the player
+      // can go there straight away.
+      usePanel.append(element("p", "cm-gacha__plate cm-gacha__use-armed", uiText(item.armed ? "已裝填（下一場自動生效）" : "未裝填")));
     }
     const actions = element("div", "cm-gacha__actions");
     const use = (mode, label, icon) => {
       const action = key(`cm-gacha__action${mode === "ENHANCE" || !metal ? " cm-gacha__action--primary" : ""}`, uiText(label), icon ? gachaIcon(icon, "cm-gacha-key__icon") : undefined);
       // The reshape chip writes the personality picked above.
       const reshape = item.id === "chip:personality";
-      action.disabled = (needsPartner && !partnerSelection) || (reshape && personalitySelection === null);
+      action.disabled = (needsPartner && !partnerSelection) || (reshape && personalitySelection === null)
+        || (!needsPartner && item.armed && mode === "USE");
       action.dataset.useMode = mode;
       action.addEventListener("click", () => {
         returnFocus = action; again = null;
-        void run({ call: () => (reshape ? intents.gachaReshapePersonality(partnerSelection, personalitySelection)
-          : intents.gachaUseItem(item.id, needsPartner ? partnerSelection : null, { mode })) })
-          .then(() => { if (reshape) { personalitySelection = null; paint(lastFrame); } });
+        const target = partnerSelection, before = partnerStats(target);
+        void run({ call: () => (reshape ? intents.gachaReshapePersonality(target, personalitySelection)
+          : intents.gachaUseItem(item.id, needsPartner ? target : null, { mode, ...(mode === "CATALYST" && routeSelection !== null ? { form: routeSelection } : {}) })) })
+          .then((result) => {
+            if (result?.ok && needsPartner) {
+              lastUse = { itemId: item.id, instanceId: target, text: useResultText(result) };
+              popAfter = { before, after: result.after ?? null, instanceId: target };
+            }
+            if (reshape) personalitySelection = null;
+            routeSelection = null;
+            paint(lastFrame);
+          });
       });
       actions.append(action);
     };
     if (metal) { use("ENHANCE", "強化銘刻", "spark"); use("CATALYST", "催化進化", "evolve"); }
-    else use("USE", item.kind === "GROWTH" ? "使用" : "裝填");
+    else if (!item.armed) use("USE", item.kind === "GROWTH" ? "使用" : "裝填");
+    if (!needsPartner && item.armed) {
+      const out = key("cm-gacha__action", uiText("取回"));
+      out.dataset.useMode = "DISARM";
+      out.addEventListener("click", () => { returnFocus = out; again = null; void run({ call: () => intents.gachaDisarmItem(item.id) }); });
+      actions.append(out);
+    }
+    if (!needsPartner) {
+      const go = key("cm-gacha__action cm-gacha__action--go", uiText(item.kind === "HUNT" ? "前往狩獵場" : "前往對戰大廳"),
+        gachaIcon(item.kind === "HUNT" ? "bolt" : "spark", "cm-gacha-key__icon"));
+      go.dataset.useMode = item.kind === "HUNT" ? "GO_HUNT" : "GO_BATTLE";
+      go.addEventListener("click", () => { fx(go, "toggle"); (item.kind === "HUNT" ? intents.gachaGoHunt : intents.gachaGoLobby)?.(); });
+      actions.append(go);
+    }
     if (metal && item.fusesInto) {
       const fuse = key("cm-gacha__action", uiText("熔合 {count}→1", { count: item.fusionCost }), gachaIcon("spark", "cm-gacha-key__icon"));
       fuse.disabled = item.owned < item.fusionCost;
@@ -988,6 +1132,11 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
       actions.append(fuse);
     }
     usePanel.append(actions);
+    if (popAfter && popAfter.instanceId === partnerSelection) {
+      const { before, after } = popAfter;
+      popAfter = null;
+      popStats(before, after ?? partnerStats(partnerSelection));
+    }
   }
 
   /** A core deploys on a placed cage for one hour, or adds an hour to its running machine; a royal cage is placed in the facility editor. */
@@ -1046,7 +1195,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     crank.dataset.ready = String(!single.disabled);
     rates.textContent = uiText(premium
       ? "機率 R 60%・SR 28%・SSR 10%・UR 2%｜十連必出 SR 以上進化金屬或 Ω 晶片"
-      : "培育補給與狩獵道具 45%・R 晶片 27%・位元幣袋 20%・基礎進化金屬 7%・轉蛋券 1%");
+      : "補給箱 45%・位元幣袋／基礎晶片／卡匣／信標 α 35%・暴富金箱／性格／記憶體晶片／基礎碎片 16%・轉蛋券／時之礦石碎片／核心 β 4%");
     paintPool(frame, premium);
     pityLabel.textContent = `${fmt(frame.pity)} / ${fmt(frame.pityMax)}`;
     pity.setAttribute("aria-label", uiText("核心熔煉值：{n} / {max}", { n: frame.pity, max: frame.pityMax }));

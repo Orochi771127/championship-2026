@@ -1101,7 +1101,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     ROPE_TOO_HEAVY:"繩索出力過大，請換用輕型捕捉繩！",ROPE_TOO_WEAK:"這條繩索拉不動這個階段，請換用更高階的繩索",
     ROPE_FRAGILE:"克隆繩：清醒的夥伴容易掙斷，先用陷阱、睡眠彈或肉餌",RAGE_GUARD:"狂暴警戒中：先用連發槍、肉餌或陷阱破防",
     GUARD_BROKEN:"狂暴警戒已解除！",ROPE_OVERHEATED:"繩索纏繞冷卻中 · 切換備用繩索或稍候",PERFECT_COMBO:"完美連攜捕獲！",
-    GOOD_COMBO:"連攜捕獲！",DATA_IMPRINT:"數據拓印成功！",ROPE_SWITCHED:"已切換繩索",
+    GOOD_COMBO:"連攜捕獲！",DATA_IMPRINT:"數據拓印成功！",ROPE_SWITCHED:"已切換繩索",SURE_CAPTURE:"量子必中鋼索：一擊捕獲！",
     // Counted ropes (HUNT_TOOL_TIERS_20261103).
     ROPE_REPLACED:"啪嚓！繩索拉斷了 · 已換上新繩索（剩 {n} 根）",ROPE_EXHAUSTED:"繩索耗盡 · 點繩索鍵緊急補充 5 根（{bits} 位元幣）"};
   const INSTRUCTIONS={ROPE:"快速畫圈綑綁：{item} · 按住目標拉動繩索",SHOT:"按住目標射擊：{item}",WIRE:"拖曳拉出鋼索：{item} · 放手完成",

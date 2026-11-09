@@ -169,7 +169,8 @@ export function createHuntResultView({ root, source, hudArt = null }) {
     presentedName = next.displayName ?? "";
     error.textContent = uiText(next.commitError === "SAVE_FAILED"
       ? "Save failed. Your partner is still on the memory card. Return Home again to retry."
-      : next.commitError === "HOME_ROSTER_FULL" ? "Your home roster is full. Your partner remains on the memory card." : "");
+      : next.commitError === "HOME_ROSTER_FULL" ? "Your home roster is full. Your partner remains on the memory card."
+      : next.commitError === "RANCH_CAPACITY_FULL" ? "牧場容量不足：放生一隻、提升馴獸師階級或擴充土地後再帶回家。" : "");
     error.hidden = !error.textContent;
     roster.replaceChildren();
     // With more than one catch, each one on the card can take the name plate

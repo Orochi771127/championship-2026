@@ -224,6 +224,7 @@
     "src/championship/field/index.js",
     "src/championship/gacha/cyberGacha.js",
     "src/championship/gacha/diamondRewards.js",
+    "src/championship/gacha/gachaItemExecutor.js",
     "src/championship/gacha/ranchAutomation.js",
     "src/championship/gate/gateAdmission.js",
     "src/championship/gate/gateCatalog.js",
@@ -7640,6 +7641,8 @@
     "assets/production/items/digital-metals-r1/tactical_bomb_160.webp",
     "assets/production/items/digital-metals-r1/training_meat_160.webp",
     "assets/production/items/digital-metals-r1/wound_medicine_160.webp",
+    "assets/production/items/gacha-prizes-r1/hunt_supply_crate_160.webp",
+    "assets/production/items/gacha-prizes-r1/ticket_pack_160.webp",
     "assets/production/items/ranch-automation-r1/auto_clean_core_160.webp",
     "assets/production/items/ranch-automation-r1/auto_feed_core_160.webp",
     "assets/production/items/ranch-automation-r1/auto_royal_core_160.webp",
@@ -8359,6 +8362,7 @@
     "src/championship/field/index.js",
     "src/championship/gacha/cyberGacha.js",
     "src/championship/gacha/diamondRewards.js",
+    "src/championship/gacha/gachaItemExecutor.js",
     "src/championship/gacha/ranchAutomation.js",
     "src/championship/gate/gateAdmission.js",
     "src/championship/gate/gateCatalog.js",
@@ -37007,6 +37011,14 @@
         "sha256": "77d52393d5fece2f08f1376a2e5527d3c2790b5488e274751d9308e03327d6e7"
       },
       {
+        "path": "assets/production/items/gacha-prizes-r1/hunt_supply_crate_160.webp",
+        "sha256": "648f3e2ed58ae4eea11a01ca8d5fb8f300328b53013355971bfe27ebc87ccfd0"
+      },
+      {
+        "path": "assets/production/items/gacha-prizes-r1/ticket_pack_160.webp",
+        "sha256": "4c1e85e5dacaa7964c7314b291e0f0e79981b761731d58c420172a7906600cbc"
+      },
+      {
         "path": "assets/production/items/ranch-automation-r1/auto_clean_core_160.webp",
         "sha256": "d6642c7bbf6096ead96fad8121e7dd0bc8c26bda7e9e8a34e4b0c0f0a130ca8a"
       },
@@ -39000,7 +39012,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "6045de73bfe0cca817e31f7eb3519b3a5f33df40c7ab23a06d5cec03947ad971"
+        "sha256": "3bef0c7ed7ea347c8d0ce9a653a349ef13fbd7e354aa3bc36671a697f7590aef"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -39028,7 +39040,7 @@
       },
       {
         "path": "src/championship/app/cyberGacha.css",
-        "sha256": "8281ad3d4e568721af5a86bf183821c51919cf802950fc2fe814781d515d36a2"
+        "sha256": "a94208fce9bf2a9e9e1913cfe87db616f3bf883ea1d1245afb5b209be3d3fcd1"
       },
       {
         "path": "src/championship/app/cyberGachaIcons.js",
@@ -39040,7 +39052,7 @@
       },
       {
         "path": "src/championship/app/cyberGachaView.js",
-        "sha256": "7386e50c2643bb0bd58af5641fc14fa0b7d080986fef29d8a6ae848f617a18d0"
+        "sha256": "855f34c8ddbdd53b12d4f368b13e906dad3eadb71e2093da82b67b3034828ade"
       },
       {
         "path": "src/championship/app/dataArena.css",
@@ -39056,7 +39068,7 @@
       },
       {
         "path": "src/championship/app/digimonListScreen.js",
-        "sha256": "b79f033df9140707043dd1c6e267cd1bf6bef130100e1a6e0154ba3f1f38929c"
+        "sha256": "006fe771238db18137744dbf3f6cf31c165dd40bf7182cbbdf6c7c05db0daba7"
       },
       {
         "path": "src/championship/app/downloadSaveBackup.js",
@@ -39084,7 +39096,7 @@
       },
       {
         "path": "src/championship/app/gateHuntPresentationSource.js",
-        "sha256": "535af1fc40b65063c0f2b49dccd8a4e604157d09a1382cac9eb74e0af4e1098e"
+        "sha256": "ff04a9f9d31e7a68d3e606266173e8e9b0ab9120913cef5408b23a9a9312099c"
       },
       {
         "path": "src/championship/app/helpScreen.js",
@@ -39444,7 +39456,7 @@
       },
       {
         "path": "src/championship/app/vs2Screens.js",
-        "sha256": "a77d511d6b3c9792602a3db2c22db6f8c6e77c2c58e951b0c5b0ee497a5ec9a0"
+        "sha256": "47024d406b322313dea2d6b0bf00eab9c4652b80030e316b39c76ad1605e81cf"
       },
       {
         "path": "src/championship/app/vs2Styles.css",
@@ -39452,7 +39464,7 @@
       },
       {
         "path": "src/championship/app/vs3Screens.js",
-        "sha256": "036492fb81bf0b327feed751642e604c24e24051ea10ad180fe6e878a527cab5"
+        "sha256": "82e4db70b69acd36a62bcc7bdd12517b34a600843fd2b003de36cb0b924c1e1e"
       },
       {
         "path": "src/championship/app/vs4Screens.js",
@@ -39772,7 +39784,7 @@
       },
       {
         "path": "src/championship/contracts/productBurstEvolution.js",
-        "sha256": "33ffb2692b8421d697a3df0658c16eb1de8e2817afa77dc08e66ff3bf22f5af8"
+        "sha256": "bac3587f3f766c9fd39a51a519f43e7d372337c5ec2046a43975614213214d05"
       },
       {
         "path": "src/championship/contracts/productGrowthRules.js",
@@ -39788,7 +39800,7 @@
       },
       {
         "path": "src/championship/contracts/productSpeciesData.js",
-        "sha256": "8466a3cd1fd33cbd0b8b2c73f63ec4242e866ae37913ca0d3b43d569367fc519"
+        "sha256": "6cbd48da0b664e93821d5271e6dd673d14c81fa867bbea1b456f878655f7f72f"
       },
       {
         "path": "src/championship/contracts/productSpeciesExtensions.js",
@@ -39876,15 +39888,19 @@
       },
       {
         "path": "src/championship/gacha/cyberGacha.js",
-        "sha256": "c1d092548c6700b4a1f9fb2bba29fac70ccd6bab2d62058a8f34cf6b0a9fb8e6"
+        "sha256": "040efa933a88a7364048f00a52cc5a5d8f9f68a3d34e460a8783171e0bc8f61f"
       },
       {
         "path": "src/championship/gacha/diamondRewards.js",
         "sha256": "c648f10681c2a76c9895f38436eed39a4002970b2802b2afc63fbe7713dcfa07"
       },
       {
+        "path": "src/championship/gacha/gachaItemExecutor.js",
+        "sha256": "13f6a327ebae38551fefb49584a0aded5562b07c4dfd9ce16c60cc1395c8bf73"
+      },
+      {
         "path": "src/championship/gacha/ranchAutomation.js",
-        "sha256": "06608ca277cb795829986e5f7c7e66b13e62b573da3247e439dfaf50b063997c"
+        "sha256": "3df655a44705f9cfda2093024202c72ec2a90f7b58a584583e61f72cc7155484"
       },
       {
         "path": "src/championship/gate/gateAdmission.js",
@@ -39944,7 +39960,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntFieldControls.js",
-        "sha256": "f0420bdf2038d2ada55c4b47e361a69fbc3317b930001a861800c5218231be1b"
+        "sha256": "fbf53dc332c1ef9b5997d177d448e4549dbb8e4f5cf317b13062dce82378cfc8"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntGateVariant.js",
@@ -39972,7 +39988,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntLures.js",
-        "sha256": "91f3a24a77478721a635cc6d8488a6774c7c62012e30649ed4912d19b93f8e44"
+        "sha256": "f9f8cad6e85e4c7025b2783afba25494f6c1a310389a6a30613f9666a387724d"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntMovement.js",
@@ -40016,7 +40032,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeWildActor.js",
-        "sha256": "e1538ed778424b21cbd89e6b558dea7535315ed8ad8523e8bd16630aa81085f8"
+        "sha256": "a0ebdd387d719d8192ebf2d332669f988e9bc2f817552081ea66d1765441846d"
       },
       {
         "path": "src/championship/hunt/capture/nativeWildSpatial.js",
@@ -40944,7 +40960,7 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingActor.js",
-        "sha256": "c5be5d04fab0d8c13b52b45997997422a1e5490bbd4f8cbff6ec36c42cb82724"
+        "sha256": "2ef1ef0e5aa9a1f99a506c6a2b861bdca1b51bd93afec3e184f202d8e0505102"
       },
       {
         "path": "src/championship/raising/nativeRaisingCalendar.js",
@@ -41032,7 +41048,7 @@
       },
       {
         "path": "src/championship/raising/productGrowthPolicy.js",
-        "sha256": "17461df25b74c70ad9792f008ff77b95ed77529f1dcb6361403e7af9399d04d8"
+        "sha256": "226cdfe79d08e72c70f328e507af5f280b04e1e127f8db2bab93f97ba7e2dcd8"
       },
       {
         "path": "src/championship/raising/productTrainingPolicy.js",
@@ -41252,11 +41268,11 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "1db9506d07fb69fd561ff931d98c5003c3a9b2288a46c7c0657980d5813cc4c1"
+        "sha256": "ac6c145a4dd149c272e179ab93ded46daae0837a8877415b1dff580efca1c6f9"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "ab02694ed9e2e1d4aa7326109f064cd6d826bc3a7f50d8b55e255f4119f143ea"
+        "sha256": "a7014482a0b479b46fe6c6671a33d6017efde614a5fffdbf07310a88cf588063"
       },
       {
         "path": "src/championship/text/uiText.js",
@@ -41264,11 +41280,11 @@
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "e36c65305d81e3186b88dc3454f149eec56e1698e311abea0caa694ce042264d"
+        "sha256": "fc3f2a28faaf862722e3e9a57250b376edf747b8be2831e6823f28a61d4f4fe5"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "882fed1fad744fba3cbb984ef3a8a80b1c039c26db5a2a3104b4f732c293d772"
+        "sha256": "8c029a10f6bc142f0b941f0ddba31a6646caf4fbaa1ec5c8e016f63f1aaac87e"
       },
       {
         "path": "src/championship/text/zhHant.js",
@@ -41512,7 +41528,7 @@
       },
       {
         "path": "src/data/championship/product-burst-evolution.r1.json",
-        "sha256": "8df55eae524b2e6b05ffe8e50136ec391ba4c1e4ababae3629563a403a4ac1d0"
+        "sha256": "7856ee8416ff4c99da78c260352bc2f365bc41bad23d44188207a08d6c92a864"
       },
       {
         "path": "src/data/championship/product-growth-adaptations.r1.json",

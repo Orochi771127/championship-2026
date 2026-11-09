@@ -33,24 +33,31 @@ export const GACHA_MACHINES = deepFreeze({
 // kind GROWTH is used on a partner, HUNT arms the next hunt, BOUNTY arms the next win.
 // `locked` chips are never offered to the synthesizer's one-tap fill.
 export const GACHA_CHIPS = deepFreeze([
-  { id: "chip:hp", shopRecordIndex: 56, kind: "GROWTH", rarity: "R", name: "生命超頻晶片", origin: "生命值分析器", effect: { hp: 120 } },
-  { id: "chip:attack", shopRecordIndex: 55, kind: "GROWTH", rarity: "R", name: "攻擊超頻晶片", origin: "屬性分析器", effect: { attack: 8 } },
-  { id: "chip:defense", shopRecordIndex: 54, kind: "GROWTH", rarity: "R", name: "防禦超頻晶片", origin: "種族分析器", effect: { defense: 8 } },
-  { id: "chip:speed", shopRecordIndex: 53, kind: "GROWTH", rarity: "R", name: "速度超頻晶片", origin: "世代分析器", effect: { speed: 8 } },
+  // GACHA_FULL_EFFECTS_20261109 (Owner 2026-11-09): the growth numbers, the race/faction points (raceExp /
+  // factionExp go to the partner's own evolution counters), fatigue, growth age and care mistakes follow the
+  // Owner's sheet. The capacity chip keeps raising +0x10: that word is a tournament entry minimum, so more is better.
+  { id: "chip:hp", shopRecordIndex: 56, kind: "GROWTH", rarity: "R", name: "生命超頻晶片", origin: "生命值分析器", effect: { hp: 120, fatigue: true } },
+  { id: "chip:attack", shopRecordIndex: 55, kind: "GROWTH", rarity: "R", name: "攻擊超頻晶片", origin: "屬性分析器", effect: { attack: 18, raceExp: 15 } },
+  { id: "chip:defense", shopRecordIndex: 54, kind: "GROWTH", rarity: "R", name: "防禦超頻晶片", origin: "種族分析器", effect: { defense: 18, factionExp: 15 } },
+  { id: "chip:speed", shopRecordIndex: 53, kind: "GROWTH", rarity: "R", name: "速度超頻晶片", origin: "世代分析器", effect: { speed: 18, wisdom: 12, age: 0.15 } },
   { id: "chip:personality", shopRecordIndex: 57, kind: "GROWTH", rarity: "SR", name: "性格重塑晶片", origin: "性格分析器", effect: { personality: 1 }, locked: true },
   { id: "chip:memory", shopRecordIndex: 58, kind: "GROWTH", rarity: "SR", name: "記憶體擴充晶片", origin: "容量分析器", effect: { capacity: 2 } },
-  { id: "chip:core-alpha", shopRecordIndex: 59, kind: "GROWTH", rarity: "SR", name: "全能超頻核心 α", origin: "綜合分析器 α", effect: { all: 6, hp: 60, bond: 10 } },
-  { id: "chip:core-beta", shopRecordIndex: 60, kind: "GROWTH", rarity: "SSR", name: "全能超頻核心 β", origin: "綜合分析器 β", effect: { all: 12, hp: 120, bond: 20 } },
-  { id: "chip:core-omega", shopRecordIndex: 61, kind: "GROWTH", rarity: "UR", name: "全能超頻核心 Ω", origin: "綜合分析器 Ω", effect: { all: 25, hp: 250, bond: 40 }, locked: true, omega: true },
+  { id: "chip:core-alpha", shopRecordIndex: 59, kind: "GROWTH", rarity: "SR", name: "全能超頻核心 α", origin: "綜合分析器 α", effect: { all: 12, hp: 80, bond: 10 } },
+  { id: "chip:core-beta", shopRecordIndex: 60, kind: "GROWTH", rarity: "SSR", name: "全能超頻核心 β", origin: "綜合分析器 β", effect: { all: 25, hp: 180, bond: 25, careMistakes: -1 } },
+  { id: "chip:core-omega", shopRecordIndex: 61, kind: "GROWTH", rarity: "UR", name: "全能超頻核心 Ω", origin: "綜合分析器 Ω", effect: { all: 50, hp: 350, bond: 100, careMistakes: "CLEAR", everyExp: 20 }, locked: true, omega: true },
+  // The sure wire downs the first partner it ropes this hunt, and that partner keeps +15% on its four stats.
   { id: "chip:stun-mag", shopRecordIndex: 62, kind: "HUNT", rarity: "R", name: "高壓麻痺彈匣", origin: "射擊檢查器", effect: { stunRate: 2 } },
-  { id: "chip:sure-wire", shopRecordIndex: 63, kind: "HUNT", rarity: "SR", name: "量子必中鋼索晶片", origin: "鋼索檢查器", effect: { sureCapture: true } },
+  { id: "chip:sure-wire", shopRecordIndex: 63, kind: "HUNT", rarity: "SR", name: "量子必中鋼索晶片", origin: "鋼索檢查器", effect: { sureCapture: true, captureStatPercent: 15 } },
   { id: "chip:rare-bait", shopRecordIndex: 64, kind: "HUNT", rarity: "R", name: "高純度異色誘餌", origin: "誘引道具檢查器", effect: { rareLure: true } },
   { id: "chip:gravity", shopRecordIndex: 65, kind: "HUNT", rarity: "R", name: "重力緩速力場匣", origin: "傷害陷阱檢查器", effect: { slow: 0.5 } },
-  { id: "chip:chrono", shopRecordIndex: 66, kind: "HUNT", rarity: "SSR", name: "次元時鐘擴充匣", origin: "全道具檢查器", effect: { extraSeconds: 120 } },
-  { id: "chip:bounty-alpha", shopRecordIndex: 67, kind: "BOUNTY", rarity: "R", name: "強敵賞金信標 α", origin: "世代雷達 α", effect: { bitsRate: 1.5, extraTickets: 1 } },
-  { id: "chip:bounty-beta", shopRecordIndex: 68, kind: "BOUNTY", rarity: "SR", name: "強敵賞金信標 β", origin: "世代雷達 β", effect: { bitsRate: 2, extraTickets: 2 } },
-  { id: "chip:bounty-gamma", shopRecordIndex: 69, kind: "BOUNTY", rarity: "SSR", name: "強敵賞金信標 γ", origin: "世代雷達 γ", effect: { bitsRate: 3, extraTickets: 3 } },
-  { id: "chip:bounty-omega", shopRecordIndex: 70, kind: "BOUNTY", rarity: "UR", name: "強敵賞金信標 Ω", origin: "世代雷達 Ω", effect: { bitsRate: 5, extraTickets: 5, shards: 1 }, locked: true, omega: true }
+  // `extraSeconds` is hunt-clock minutes (the field keeps its name): 288 minutes are 120 real seconds of the
+  // 200-second real-time hunt (16 clock units a frame, 400 a minute).
+  { id: "chip:chrono", shopRecordIndex: 66, kind: "HUNT", rarity: "SSR", name: "次元時鐘擴充匣", origin: "全道具檢查器", effect: { extraSeconds: 288 } },
+  // battles: extra won battles on every partner who fought; exp: race and faction points on each of them.
+  { id: "chip:bounty-alpha", shopRecordIndex: 67, kind: "BOUNTY", rarity: "R", name: "強敵賞金信標 α", origin: "世代雷達 α", effect: { bitsRate: 1.5, extraTickets: 1, exp: 8 } },
+  { id: "chip:bounty-beta", shopRecordIndex: 68, kind: "BOUNTY", rarity: "SR", name: "強敵賞金信標 β", origin: "世代雷達 β", effect: { bitsRate: 2, extraTickets: 2, battles: 2 } },
+  { id: "chip:bounty-gamma", shopRecordIndex: 69, kind: "BOUNTY", rarity: "SSR", name: "強敵賞金信標 γ", origin: "世代雷達 γ", effect: { bitsRate: 3, extraTickets: 3, battles: 3 } },
+  { id: "chip:bounty-omega", shopRecordIndex: 70, kind: "BOUNTY", rarity: "UR", name: "強敵賞金信標 Ω", origin: "世代雷達 Ω", effect: { bitsRate: 5, extraTickets: 5, battles: 5, shards: 1 }, locked: true, omega: true }
 ]);
 export const GACHA_PERSONALITY_COUNT = 9;
 // The reshape chip offers the eight traced personalities; 8 (？？？) has no battle table.
@@ -70,8 +77,10 @@ export const GACHA_BLOODLINES = deepFreeze({
 // with the art (艾瑪/貝塔/時之 families); supernova is the Codex-made completion.
 const METAL_ART = "assets/production/items/digital-metals-r1/";
 export const GACHA_METALS = deepFreeze([
-  { id: "metal:emma-shard", family: "emma", rarity: "R", name: "艾瑪金屬碎片", art: `${METAL_ART}emma_shard_160.webp`, boost: 5 },
-  { id: "metal:beta-shard", family: "beta", rarity: "R", name: "貝塔礦石碎片", art: `${METAL_ART}beta_shard_160.webp`, boost: 5 },
+  // GACHA_FULL_EFFECTS_20261109: the two basic shards add 25 points to the counter the partner's next
+  // evolution lacks most (gapExp) on top of every stat +10.
+  { id: "metal:emma-shard", family: "emma", rarity: "R", name: "艾瑪金屬碎片", art: `${METAL_ART}emma_shard_160.webp`, boost: 10, gapExp: 25 },
+  { id: "metal:beta-shard", family: "beta", rarity: "R", name: "貝塔礦石碎片", art: `${METAL_ART}beta_shard_160.webp`, boost: 10, gapExp: 25 },
   { id: "metal:chrono-ore-shard", family: "chronoOre", rarity: "SR", name: "時之礦石碎片", art: `${METAL_ART}chrono_ore_shard_160.webp`, boost: 10 },
   { id: "metal:chrono-metal-shard", family: "chronoMetal", rarity: "SR", name: "時之金屬碎片", art: `${METAL_ART}chrono_metal_shard_160.webp`, boost: 10 },
   { id: "metal:chrono-alloy-shard", family: "chronoAlloy", rarity: "SR", name: "時之合金碎片", art: `${METAL_ART}chrono_alloy_shard_160.webp`, boost: 10 },
@@ -103,24 +112,44 @@ export const GACHA_GOODS = deepFreeze([
 ]);
 
 // Coin prizes go straight into the shop wallet; the ticket prize into this state.
+// GACHA_FULL_EFFECTS_20261109: rarities follow the Owner's sheet, and the vault also brings protein x5.
 export const GACHA_BITS_BAGS = deepFreeze([
   { id: "bits:pouch", rarity: "R", name: "位元幣小錢袋", bits: 30_000 },
-  { id: "bits:purse", rarity: "SR", name: "位元幣回本金袋", bits: 60_000 },
-  { id: "bits:chest", rarity: "SSR", name: "位元幣暴富金箱", bits: 150_000 },
-  { id: "bits:vault", rarity: "UR", name: "皇家位元幣金庫", bits: 500_000 }
+  { id: "bits:purse", rarity: "R", name: "位元幣回本金袋", bits: 60_000 },
+  { id: "bits:chest", rarity: "SR", name: "位元幣暴富金箱", bits: 150_000 },
+  { id: "bits:vault", rarity: "SSR", name: "皇家位元幣金庫", bits: 500_000, bonus: ["goods:protein", 5] }
 ]);
 export const GACHA_TICKET_PRIZE = deepFreeze({ id: "ticket:gacha", rarity: "SSR", name: "數碼轉蛋券" });
+// The premium machine's ticket jackpot: 2-3 tickets at SSR, 4-5 at UR.
+export const GACHA_TICKET_PACK = deepFreeze({ id: "ticket:pack", rarity: "SSR", name: "幸運轉蛋券禮包", quantity: { SSR: [2, 3], UR: [4, 5] },
+  art: "assets/production/items/gacha-prizes-r1/ticket_pack_160.webp" });
+
+// GACHA_FULL_EFFECTS_20261109: the two prize icons Codex drew for this batch (provenance in the folder's manifest).
+const PRIZE_ART = "assets/production/items/gacha-prizes-r1/";
+
+// The Bits machine's supply boxes: fixed amounts of one shop row, straight into the shop stacks the ranch
+// toolbar and the hunt loadout read. The hunt box picks one of its rows (bomb, meat bait, mine) at random.
+export const GACHA_SUPPLY_PACKS = deepFreeze([
+  { id: "pack:feed", name: "特選飼料補給箱", shopRecordIndex: 0, quantity: 10, art: `${GOODS_ART}training_meat_160.webp` },
+  { id: "pack:protein", name: "高濃縮蛋白質禮盒", shopRecordIndex: 1, quantity: 3, art: `${GOODS_ART}protein_booster_160.webp` },
+  { id: "pack:wound", name: "急救傷藥組", shopRecordIndex: 2, quantity: 5, art: `${GOODS_ART}wound_medicine_160.webp` },
+  { id: "pack:medicine", name: "特效醫療藥品組", shopRecordIndex: 3, quantity: 3, art: `${GOODS_ART}medicine_capsule_160.webp` },
+  { id: "pack:hunt", name: "狩獵戰備補給箱", shopRecordIndices: [42, 34, 46], quantity: 3, art: `${PRIZE_ART}hunt_supply_crate_160.webp` }
+]);
 
 const CHIP_BY_ID = new Map(GACHA_CHIPS.map((chip) => [chip.id, chip]));
 const METAL_BY_ID = new Map(GACHA_METALS.map((metal) => [metal.id, metal]));
 const GOODS_BY_ID = new Map(GACHA_GOODS.map((goods) => [goods.id, goods]));
 const BITS_BAG_BY_ID = new Map(GACHA_BITS_BAGS.map((bag) => [bag.id, bag]));
+const PACK_BY_ID = new Map(GACHA_SUPPLY_PACKS.map((pack) => [pack.id, pack]));
 const RANK = Object.freeze({ R: 0, SR: 1, SSR: 2, UR: 3 });
 
 export const getGachaChip = (id) => CHIP_BY_ID.get(id) ?? null;
 export const getGachaMetal = (id) => METAL_BY_ID.get(id) ?? null;
 export const getGachaGoods = (id) => GOODS_BY_ID.get(id) ?? null;
 export const getGachaBitsBag = (id) => BITS_BAG_BY_ID.get(id) ?? null;
+export const getGachaSupplyPack = (id) => PACK_BY_ID.get(id) ?? null;
+export const getGachaTicketPrize = (id) => (id === GACHA_TICKET_PACK.id ? GACHA_TICKET_PACK : id === GACHA_TICKET_PRIZE.id ? GACHA_TICKET_PRIZE : null);
 export const gachaRarityRank = (rarity) => RANK[rarity] ?? -1;
 
 /**
@@ -137,26 +166,42 @@ export function gachaChipEffectLines(chip) {
     if (e.attack) line("攻擊 +{n}", { n: e.attack });
     if (e.defense) line("防禦 +{n}", { n: e.defense });
     if (e.speed) line("速度 +{n}", { n: e.speed });
+    if (e.wisdom) line("智力 +{n}", { n: e.wisdom });
     if (e.hp) line("最大 HP +{n}", { n: e.hp });
     if (e.all) line("最大 TP +{n}", { n: Math.round(e.all * 2) });
-    if (e.bond) line("親密度 +{n}", { n: e.bond });
-    if (e.capacity) line("容量 +{n} G（部分大賽的報名條件）", { n: e.capacity });
+    if (e.bond >= 100) line("親密度全滿");
+    else if (e.bond) line("親密度 +{n}", { n: e.bond });
+    if (e.raceExp) line("所屬種族的進化經驗 +{n}", { n: e.raceExp });
+    if (e.factionExp) line("所屬陣營的進化經驗 +{n}", { n: e.factionExp });
+    if (e.everyExp) line("八種族與三陣營的進化經驗各 +{n}", { n: e.everyExp });
+    if (e.age) line("目前階段的成長年齡推進 {n}%", { n: Math.round(e.age * 100) });
+    if (e.careMistakes === "CLEAR") line("照顧失誤歸零");
+    else if (e.careMistakes) line("照顧失誤 -{n}", { n: -e.careMistakes });
+    if (e.capacity) line("大賽報名容量 +{n} G（部分大賽的報名條件，不改變重量）", { n: e.capacity });
     if (e.personality) line("自己選拍檔的新性格");
+    if (e.fatigue) line("訓練疲勞歸零");
     line("HP／TP 回滿");
+    line("跨過進化門檻時，當場開始進化");
   } else if (chip?.kind === "HUNT") {
     if (e.stunRate) line("射擊造成的暈眩時間 ×{n}", { n: e.stunRate });
-    if (e.sureCapture) line("鋼索不會磨損，拉扯傷害 ×2");
+    if (e.sureCapture) line("本場第一隻被鋼索套住的拍檔立即倒地，必定捕獲");
+    if (e.captureStatPercent) line("這隻拍檔的攻擊・防禦・智力・速度 +{n}%", { n: e.captureStatPercent });
     if (e.rareLure) line("引來 1 隻本區最稀有的拍檔，出現率也不再因捕獲次數下降");
     if (e.slow) line("野生拍檔移動速度 -{n}%", { n: Math.round(e.slow * 100) });
-    // Despite its name the field is hunt-clock minutes: 120 is two of the eight hours.
-    if (e.extraSeconds) line("狩獵限時 +{n} 小時", { n: e.extraSeconds / 60 });
+    // Despite its name the field is hunt-clock minutes; the line shows the real seconds they last.
+    if (e.extraSeconds) line("狩獵限時 +{n} 秒", { n: huntMinutesToSeconds(e.extraSeconds) });
   } else if (chip?.kind === "BOUNTY") {
     line("位元幣獎金 ×{n}", { n: e.bitsRate });
     line("轉蛋券 +{n}", { n: e.extraTickets });
+    if (e.battles) line("參戰拍檔的戰鬥與勝場各 +{n} 場", { n: e.battles });
+    if (e.exp) line("參戰拍檔的種族與陣營進化經驗 +{n}", { n: e.exp });
     if (e.shards) line("隨機金屬碎片 ×{n}", { n: e.shards });
   }
   return Object.freeze(lines);
 }
+
+/** Real seconds of hunt-clock minutes in the real-time hunt: 400 clock units a minute, 16 a frame at 60 fps. */
+export const huntMinutesToSeconds = (minutes) => Math.round((minutes * 400) / 16 / 60);
 
 /** When a chip acts: on a partner now, on the next hunt, or on the next won AI match. */
 export const gachaChipTiming = (chip) => (chip?.kind === "HUNT" ? "裝填後，下一次狩獵生效"
@@ -295,6 +340,26 @@ const PREMIUM_RATES = Object.freeze([["R", 0.6], ["SR", 0.28], ["SSR", 0.1], ["U
 // metals split the rest as before. The same two draws decide every prize.
 export const GACHA_AUTOMATION_SHARE = 0.15;
 
+// GACHA_FULL_EFFECTS_20261109: below automation, this share of the SR/SSR/UR tiers is the jackpot slot:
+// the coin chest (SR), the coin vault (SSR, half) or the ticket pack (SSR half, UR). Supplies never enter
+// the premium main slot.
+export const GACHA_PREMIUM_JACKPOT_SHARE = 0.1;
+
+function premiumJackpot(rarity, random) {
+  if (rarity === "SR" || (rarity === "SSR" && random() < 0.5)) return bitsBagPrize(getGachaBitsBag(rarity === "SR" ? "bits:chest" : "bits:vault"));
+  return { kind: "TICKETS", id: GACHA_TICKET_PACK.id, rarity, quantity: between(GACHA_TICKET_PACK.quantity[rarity], random) };
+}
+
+function bitsBagPrize(bag) {
+  const prize = { kind: "BITS", id: bag.id, rarity: bag.rarity, quantity: 1, bits: bag.bits };
+  if (bag.bonus) prize.bonus = goodsPrize(bag.bonus[0], bag.bonus[1]);
+  return prize;
+}
+
+function goodsPrize(id, quantity) {
+  return { kind: "GOODS", id, rarity: "R", quantity, shopRecordIndex: getGachaGoods(id).shopRecordIndex };
+}
+
 function premiumPrize(rarity, random) {
   const chips = GACHA_CHIPS.filter((chip) => chip.rarity === rarity);
   const metals = GACHA_METALS.filter((metal) => metal.rarity === rarity);
@@ -305,31 +370,40 @@ function premiumPrize(rarity, random) {
     return { kind: "AUTOMATION", id: pick(automation, random).id, rarity, quantity: 1 };
   }
   if (automation.length) roll /= 1 - GACHA_AUTOMATION_SHARE;
+  if (rarity !== "R" && roll >= 1 - GACHA_PREMIUM_JACKPOT_SHARE) return premiumJackpot(rarity, random);
+  if (rarity !== "R") roll /= 1 - GACHA_PREMIUM_JACKPOT_SHARE;
   // Metals are the point of the premium machine: they take half of every tier.
   const metal = metals.length && (!chips.length || roll < 0.5);
   const entry = metal ? pick(metals, random) : pick(chips, random);
   return { kind: metal ? "METAL" : "CHIP", id: entry.id, rarity, quantity: 1 };
 }
 
-// Bits machine slots (Owner 2026-11-02): supplies 45%, R chips 27%, coin bags
-// 20%, one ticket 1%. The metal share is unchanged at R 6% and SR 1%.
-export const GACHA_BITS_MACHINE_RATES = Object.freeze([
-  ["GOODS", 0.45], ["CHIP", 0.27], ["bits:pouch", 0.12], ["bits:purse", 0.06], ["METAL_R", 0.06],
-  ["bits:chest", 0.018], ["METAL_SR", 0.01], ["TICKETS", 0.01], ["bits:vault", 0.002]
+// Bits machine (Owner 2026-11-09, GACHA_FULL_EFFECTS_20261109): supplies 45%; coin pouch, coin purse, basic
+// chip, hunt cartridge and the α beacon 35%; coin chest, reshape chip, capacity chip and the two basic shards
+// 16%; one ticket, a 時之礦石 shard and the β core 4%. Each tier splits evenly between its slots.
+export const GACHA_BITS_MACHINE_TIERS = deepFreeze([
+  [0.45, ["pack:feed", "pack:protein", "pack:wound", "pack:medicine", "pack:hunt"]],
+  [0.35, ["bits:pouch", "bits:purse", "CHIP_BASIC", "CHIP_HUNT", "chip:bounty-alpha"]],
+  [0.16, ["bits:chest", "chip:personality", "chip:memory", "metal:beta-shard", "metal:emma-shard"]],
+  [0.04, ["TICKETS", "metal:chrono-ore-shard", "chip:core-beta"]]
 ]);
+export const GACHA_BITS_MACHINE_RATES = Object.freeze(GACHA_BITS_MACHINE_TIERS.flatMap(([weight, slots]) => slots.map((slot) => Object.freeze([slot, weight / slots.length]))));
 
 function bitsPrize(random) {
   const slot = rollRarity(GACHA_BITS_MACHINE_RATES, random);
-  if (slot === "GOODS") {
-    const goods = pick(GACHA_GOODS, random);
-    return { kind: "GOODS", id: goods.id, rarity: "R", quantity: between(goods.quantity, random), shopRecordIndex: goods.shopRecordIndex };
+  const pack = getGachaSupplyPack(slot);
+  if (pack) {
+    const shopRecordIndex = pack.shopRecordIndices ? pick(pack.shopRecordIndices, random) : pack.shopRecordIndex;
+    return { kind: "GOODS", id: pack.id, rarity: "R", quantity: pack.quantity, shopRecordIndex };
   }
-  if (slot === "CHIP") return { kind: "CHIP", id: pick(GACHA_CHIPS.filter((c) => c.rarity === "R"), random).id, rarity: "R", quantity: 1 };
-  if (slot === "METAL_R") return { kind: "METAL", id: pick(GACHA_METALS.filter((m) => m.rarity === "R"), random).id, rarity: "R", quantity: 1 };
-  if (slot === "METAL_SR") return { kind: "METAL", id: pick(GACHA_METALS.filter((m) => m.rarity === "SR"), random).id, rarity: "SR", quantity: 1 };
+  if (slot === "CHIP_BASIC" || slot === "CHIP_HUNT") {
+    const kind = slot === "CHIP_BASIC" ? "GROWTH" : "HUNT";
+    return { kind: "CHIP", id: pick(GACHA_CHIPS.filter((c) => c.rarity === "R" && c.kind === kind), random).id, rarity: "R", quantity: 1 };
+  }
   if (slot === "TICKETS") return { kind: "TICKETS", id: GACHA_TICKET_PRIZE.id, rarity: GACHA_TICKET_PRIZE.rarity, quantity: 1 };
-  const bag = getGachaBitsBag(slot);
-  return { kind: "BITS", id: bag.id, rarity: bag.rarity, quantity: 1, bits: bag.bits };
+  const chip = getGachaChip(slot), metal = getGachaMetal(slot);
+  if (chip || metal) return { kind: chip ? "CHIP" : "METAL", id: slot, rarity: (chip ?? metal).rarity, quantity: 1 };
+  return bitsBagPrize(getGachaBitsBag(slot));
 }
 
 // An R chip from the premium machine never comes alone: feed x5 or protein x1
@@ -337,7 +411,7 @@ function bitsPrize(random) {
 const PREMIUM_R_BONUS = Object.freeze([["goods:feed", 5], ["goods:protein", 1]]);
 function premiumBonus(index) {
   const [id, quantity] = PREMIUM_R_BONUS[index % PREMIUM_R_BONUS.length];
-  return { kind: "GOODS", id, rarity: "R", quantity, shopRecordIndex: getGachaGoods(id).shopRecordIndex };
+  return goodsPrize(id, quantity);
 }
 
 /** Ten-pull guarantee: an SR-or-better metal or an Ω chip. */
@@ -442,6 +516,30 @@ export function fuseGachaShards(state, shardId) {
     prize: { kind: "METAL", id: target.id, rarity: target.rarity, quantity: 1 }, state: normalizeCyberGacha(next) });
 }
 
+// GACHA_FULL_EFFECTS_20261109: tier smelting. Any three shards of one rarity rise one step: three R shards
+// (艾瑪/貝塔) become a 時之合金碎片, three SR shards (時之) the whole 時之合金. Spare copies go first, then the
+// largest stacks; the 星核 family stays out, like the forge.
+export const GACHA_TIER_SMELT = deepFreeze({ R: "metal:chrono-alloy-shard", SR: "metal:chrono-alloy" });
+export const GACHA_TIER_SMELT_COST = 3;
+export function shardTierSmeltPlan(state, rarity) {
+  const current = normalizeCyberGacha(state);
+  const target = getGachaMetal(GACHA_TIER_SMELT[rarity]);
+  if (!target) return deepFreeze({ ok: false, reason: "UNKNOWN_TIER" });
+  const shards = forgeUnits(forgeShardPool().filter((metal) => metal.rarity === rarity)
+    .map((metal) => ({ id: metal.id, owned: current.metals[metal.id] ?? 0, rank: RANK[metal.rarity] })), GACHA_TIER_SMELT_COST);
+  if (!shards) return deepFreeze({ ok: false, reason: "NOT_ENOUGH_SHARDS", target: target.id });
+  return deepFreeze({ ok: true, rarity, target: target.id, shards });
+}
+export function smeltGachaShardTier(state, rarity) {
+  const plan = shardTierSmeltPlan(state, rarity);
+  if (!plan.ok) return plan;
+  const next = plain(normalizeCyberGacha(state));
+  for (const id of plan.shards) next.metals[id] -= 1;
+  const target = getGachaMetal(plan.target);
+  addPrize(next, { kind: "METAL", id: target.id, quantity: 1 });
+  return deepFreeze({ ok: true, consumed: plan.shards, prize: { kind: "METAL", id: target.id, rarity: target.rarity, quantity: 1 }, state: normalizeCyberGacha(next) });
+}
+
 /** Five chips in, one metal out; better chips raise the odds of an SSR/UR critical. */
 export function synthesizeGachaMetal(state, chipIds, { random }) {
   const current = normalizeCyberGacha(state);
@@ -466,6 +564,10 @@ export function synthesizeGachaMetal(state, chipIds, { random }) {
 }
 
 const STAT_FIELDS = Object.freeze({ attack: "060", defense: "064", wisdom: "068", speed: "06c" });
+// The eleven native evolution counters (OVL18 02112734): factions vaccine/data/virus, then the eight races.
+export const GACHA_COUNTER_FIELDS = Object.freeze(["104", "108", "100", "10c", "110", "114", "118", "124", "120", "128", "11c"]);
+export const GACHA_COUNTER_CAP = 9999;
+export const GACHA_BATTLE_CAP = 9999;
 
 /**
  * A growth chip or a metal's enhancement on one individual's persistent words.
@@ -480,6 +582,16 @@ export function applyGachaBoost(profile, effect) {
     const amount = (effect[key] ?? 0) + (effect.all ?? 0);
     if (amount) add(field, amount, 999);
   }
+  // Percent growth of the four stats (the sure wire's catch).
+  if (effect.statPercent) for (const field of Object.values(STAT_FIELDS)) add(field, Math.round(((f[field] | 0) * effect.statPercent) / 100), 999);
+  // Evolution counters resolved by the caller ({field: points}), training fatigue, growth age, care mistakes.
+  for (const [field, points] of Object.entries(effect.counters ?? {})) if (GACHA_COUNTER_FIELDS.includes(field)) add(field, points, GACHA_COUNTER_CAP);
+  if (effect.fatigue) f["040"] = 0;
+  if (Number.isSafeInteger(effect.ageMinutes) && effect.ageMinutes > 0) add("18c", effect.ageMinutes, 0xffffffff);
+  if (effect.careMistakes && p.narrowFields) {
+    const n = p.narrowFields;
+    n["03d"] = effect.careMistakes === "CLEAR" ? 0 : Math.max(0, Math.min(255, (n["03d"] | 0) + effect.careMistakes));
+  }
   if (effect.all) add("05c", Math.round(effect.all * 2), 9999);
   if (effect.bond) add("020", effect.bond, 100);
   if (effect.capacity) add("010", effect.capacity, 99);
@@ -493,6 +605,17 @@ export function applyGachaBoost(profile, effect) {
 
 /** Metal used as an enhancement: every stat by its boost; SSR+ also inscribes the bloodline. */
 export const metalBoostEffect = (metal) => ({ all: metal.boost, hp: metal.boost * 10, bond: Math.round(metal.boost / 2) });
+
+/** What a metal does when used as an enhancement, one line each (the basic shards also name their gap points). */
+export function gachaMetalEffectLines(metal) {
+  const e = metalBoostEffect(metal), lines = [];
+  const line = (text, params) => lines.push(Object.freeze(params ? { text, params: Object.freeze(params) } : { text }));
+  line("攻擊・防禦・智力・速度 +{n}", { n: e.all });
+  line("最大 HP +{n}", { n: e.hp });
+  if (metal.gapExp) line("下一次進化最缺的種族或陣營經驗 +{n}", { n: metal.gapExp });
+  if (inscribesBloodline(metal)) line("銘刻{title}血統", { title: GACHA_BLOODLINES[metal.family]?.title ?? "" });
+  return Object.freeze(lines);
+}
 export const inscribesBloodline = (metal) => RANK[metal.rarity] >= RANK.SSR;
 
 /** Minimum metal rarity that may force an evolution out of a given generation. */
@@ -542,8 +665,10 @@ export function disarmGachaItem(state, itemId) {
   return deepFreeze({ ok: true, state: normalizeCyberGacha(next) });
 }
 
+export const GACHA_WIN_TICKET_CHANCE = 0.6;
+
 /**
- * Win settlement: tickets drop 1-3; an armed beacon multiplies the purse, adds
+ * Win settlement: one ticket 60% of the time; an armed beacon multiplies the purse, adds
  * tickets (the Ω beacon also a random metal shard) and is used up.
  */
 export function settleGachaBattleWin(state, { bits = 0, tournamentChampion = false, random }) {
@@ -551,15 +676,19 @@ export function settleGachaBattleWin(state, { bits = 0, tournamentChampion = fal
   if (typeof random !== "function") throw gachaError("RANDOM_REQUIRED");
   const beacon = current.armed.bounty ? getGachaChip(current.armed.bounty) : null;
   const bonusBits = beacon && Number.isSafeInteger(bits) && bits > 0 ? Math.round(bits * (beacon.effect.bitsRate - 1)) : 0;
-  let tickets = 1 + Math.floor(random() * 3) + (beacon?.effect.extraTickets ?? 0);
-  if (tournamentChampion) tickets += 3 + Math.floor(random() * 8);
+  // GACHA_FULL_EFFECTS_20261109 (Owner 2026-11-09 balance): a win drops one ticket 60% of the time (was 1-3),
+  // a tournament title 2-4 more (was 3-10); a beacon's tickets come on top.
+  let tickets = (random() < GACHA_WIN_TICKET_CHANCE ? 1 : 0) + (beacon?.effect.extraTickets ?? 0);
+  if (tournamentChampion) tickets += 2 + Math.floor(random() * 3);
   const shardPool = GACHA_METALS.filter((metal) => metal.id.endsWith("-shard"));
   const metals = Array.from({ length: beacon?.effect.shards ?? 0 }, () => pick(shardPool, random).id);
   const next = plain(current);
   next.tickets = Math.min(GACHA_TICKET_CAP, next.tickets + tickets);
   for (const id of metals) addPrize(next, { kind: "METAL", id, quantity: 1 });
   delete next.armed.bounty;
-  return deepFreeze({ state: normalizeCyberGacha(next), tickets, bonusBits, beacon: beacon?.id ?? null, metals });
+  // The caller writes these onto every partner who fought: extra battles and wins, race and faction points.
+  return deepFreeze({ state: normalizeCyberGacha(next), tickets, bonusBits, beacon: beacon?.id ?? null, metals,
+    battles: beacon?.effect.battles ?? 0, exp: beacon?.effect.exp ?? 0 });
 }
 
 /** The next hunt takes every armed cartridge at once. */

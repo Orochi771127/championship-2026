@@ -1,5 +1,30 @@
 # Championship Owner Direction
 
+<!-- record-id: GACHA_FULL_EFFECTS_20261109 -->
+## 2026-11-09 — Gachapon items act on the partner's own words, and both machines pay a fuller pool
+
+With the five-phase sheet pasted again, the Owner asks (2026-11-09) 「請你先盤點目前遊戲專案中的轉蛋機系統，然後確認這些項目都有新增到轉單及系統中，並且這些道具的作用都有實裝了，轉到以後也都有跟背包連動會加入到背包中」, and mid-batch 「皇家牧場從SsR品項改成UR，跟星際動物園是同樣等級的」. This decides the four items GACHA_ITEM_EFFECTS_20261102 left for the Owner: they are now in, including their effect on awakening conditions (race/faction counters and battle counts are what `evaluateBurstConditions` reads).
+
+OWNER_APPROVED_ADAPTATION on top of CYBER_GACHA_20261029 and GACHA_ITEM_EFFECTS_20261102. No save field, ROM table or native writer changes; items adjust a partner's persistent words, a hunt's inputs or a won match's settlement.
+
+- Growth chips follow the sheet: HP +120 and training fatigue (0x40) cleared; attack +18 and the partner's race counter +15; defense +18 and its faction counter +15; speed +18, wisdom +12 and growth age (0x18C) +15% of its life threshold (never past it; 成熟期 has none); cores α +12/HP +80/affection +10, β +25/HP +180/+25/care mistakes −1, Ω +50/HP +350/affection full/care mistakes 0/all eleven counters +20. Counters come from the three-axis taxonomy (faction = ROM attribute, race = ROM family), so they are the ones evolution reads. After any use the ranch checks evolution again on the partner's next idle step.
+- Kept against the sheet: the capacity chip still raises 0x10 by 2 G, because that word is a tournament entry minimum (`battleParty.js`), so lowering it would hurt; individual capacity does not decide ranch room.
+- Hunt: the sure wire is one charge — the first partner it ropes this hunt drops at once (a sure capture) and keeps +15% on its four stats. The chrono cartridge gives 288 hunt-clock minutes, which is +120 real seconds of the 200-second real-time hunt.
+- Beacons: α also gives every fighter +8 race and faction points; β/γ/Ω also give every fighter +2/+3/+5 battles and wins. Their ticket drops stay at +1/+2/+3/+5, above the sheet's minimum.
+- Metals: 艾瑪/貝塔 shards give every stat +10 and +25 on the counter the next evolution lacks most. A catalyst takes the route the player picks; a shard waives at most two unmet conditions (product routes ask for one or two), a whole metal any number; a 時之 catalyst inscribes its family. Tier smelting: any three R shards make a 時之合金碎片, any three SR shards a 時之合金. 成熟期 metals keep feeding awakening as STAGE_REDESIGN_BURST_20261102 decided.
+- Bits machine: supply boxes 45% (feed ×10, protein ×3, wound ×5, medicine ×3, a hunt box of bomb, meat bait or mine ×3) into the shop stacks the ranch toolbar and the hunt loadout read; coin pouch 30,000, coin purse 60,000, a basic chip, a hunt cartridge and the α beacon 35%; coin chest 150,000, reshape chip, capacity chip and the two basic shards 16%; one ticket, a 時之礦石 shard and the β core 4%. Stacks stay capped at the shop's 99, the rest paid back at shop price.
+- Premium machine: below automation, 10% of each SR/SSR/UR roll is the jackpot slot — coin chest (SR), coin vault 500,000 with protein ×5 or a ticket pack ×2–3 (SSR), a ticket pack ×4–5 (UR). Supplies never enter its main slot; an R chip still brings feed ×5 or protein ×1.
+- The royal ranch is UR, like the stellar zoo, with the same forging recipe (5 chips + 10 shards).
+- The bag: every tile shows two effect lines and a use/load key; the partner list shows HP/attack/defense/wisdom/speed and how far evolution is; uses pop the stat changes; loaded cartridges and beacons show 「已裝填（下一場自動生效）」 with take-out and go-to-hunt / go-to-battle keys.
+
+Balance, same day. The Owner found awakening too easy and asked for partners to weigh 18–24 G so memory-card upgrades matter, with the ranch adjusted too (「連牧場一起調」), mindful that many partners make phones lag and that the ranch holds 16. After a pace model (one AI match ≈ 3 min: +1 battle, one training of +10 points, 70% wins) showed tier 1 at 8 matches and both tiers at 16 without items (half that with items), the Owner chose 「照提案全部實作」:
+
+- Awakening thresholds are scaled per tier (`awakening.thresholdScale` {1: 2.5, 2: 3}; points and battle counts only, remembered forms still halve): natural pace about 20 matches for tier 1 and 48 in all for tier 2.
+- Item energy: shards R 5 / SR 10 / SSR 15, SSR metals 30 (tier 1) / 20 (tier 2), cap 40%; a UR metal still fills. A won AI match drops one ticket 60% of the time (was 1–3), a title 2–4 more (was 3–10); beacons' tickets come on top. With items the model gives tier 1 in about 12 matches and both tiers in about 27.
+- Partner weight (`PRODUCT_CAPACITY.partnerBonusG` 6): 18–24 G up to 成熟期, used on the hunt memory card and in the ranch. Rank capacity ×1.375 (88…276 G, about 4 to 12 成熟期), plus 8 G per land expansion tier (up to +64 G), never past the 16 native slots. A hunt's catches come home only within that capacity (`RANCH_CAPACITY_FULL`, release or grow first); the scripted tutorial catches keep their native weight.
+
+Verified by `tests/championship-gacha-full-effects-cases.mjs`, `tests/championship-cyber-gacha-cases.mjs`, `tests/championship-diamond-economy-cases.mjs`, `tests/championship-awakening-raising-cases.mjs` and `tests/championship-hunt-capture-closure-cases.mjs`. Not published: the Owner asked for no push or deploy in this batch.
+
 <!-- record-id: BURST_TRUE_FORM_20261108 -->
 ## 2026-11-08 — Burst evolution goes only on the player's press and the burst form fights as itself
 

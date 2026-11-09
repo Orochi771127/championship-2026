@@ -70,7 +70,16 @@ function winPercent(f) {
  * Rows: {id, operator, value, current, met}.
  */
 export function evaluateBurstConditions(profile, form) {
-  return deepFreeze(conditionRows(profile, form?.thresholds));
+  return deepFreeze(conditionRows(profile, scaledThresholds(form)));
+}
+// GACHA_FULL_EFFECTS_20261109: point and battle thresholds of a form, scaled by its tier (thresholdScale).
+const SCALED = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 22];
+function scaledThresholds(form) {
+  const t = form?.thresholds, scale = BURST_RULES.awakening.thresholdScale?.[form?.tier] ?? 1;
+  if (!Array.isArray(t) || scale === 1) return t;
+  const out = [...t];
+  for (const i of SCALED) if (out[i]) out[i] = Math.ceil(out[i] * scale);
+  return out;
 }
 function conditionRows(profile, t) {
   const f = profile?.fields, n = profile?.narrowFields;
@@ -200,8 +209,8 @@ export function awakeningShownOf(state, instanceId) { return state?.shown?.[inst
 
 /** A form's thresholds for one partner: a form the account remembers halves its point and battle thresholds. */
 function thresholdsFor(form, remembered) {
-  if (!remembered) return form.thresholds;
-  const t = [...form.thresholds], keep = AWAKENING_RULES.memoryThresholdPercent / 100;
+  if (!remembered) return scaledThresholds(form);
+  const t = [...scaledThresholds(form)], keep = AWAKENING_RULES.memoryThresholdPercent / 100;
   for (const i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 22]) if (t[i]) t[i] = Math.max(1, Math.ceil(t[i] * keep));
   return t;
 }

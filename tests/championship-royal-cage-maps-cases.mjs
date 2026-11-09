@@ -174,11 +174,11 @@ test('app: the royal maps come only from the shop\'s gachapon; the facility edit
     assert.ok(!frame.tray.some(t => [ROYAL, STELLAR].includes(t.moduleId)));
     assert.notEqual(app.selectCageModule(ROYAL).selectedModuleId, ROYAL, 'an unowned royal map cannot be picked');
     app.leaveScreen();
-    // One premium pull lands on SSR, then on the automation slice, then on its last item (the royal ranch, after
-    // the royal dual core); the next on UR: the stellar zoo.
+    // One premium pull lands on UR, then on the automation slice, then on its first item (the royal ranch, UR since
+    // Owner 2026-11-09); the next on its last item: the stellar zoo.
     app.grantGachaTickets(2, 'TEST');
     app.openShop();
-    rolls.push(0.9, 0.95, 0.99);
+    rolls.push(0.99, 0.95, 0);
     assert.deepEqual(app.gachaPull('PREMIUM', 1).prizes.map(p => p.id), ['auto:royal-ranch']);
     app.leaveScreen();
     app.openCageEdit();
@@ -186,7 +186,7 @@ test('app: the royal maps come only from the shop\'s gachapon; the facility edit
     assert.deepEqual(frame.royalTray.map(r => [r.id, r.moduleId, r.available]), [['auto:royal-ranch', ROYAL, 1]]);
     app.leaveScreen();
     app.openShop();
-    rolls.push(0.99, 0.95, 0);
+    rolls.push(0.99, 0.95, 0.99);
     app.gachaPull('PREMIUM', 1);
     app.leaveScreen();
     app.openCageEdit();

@@ -6,6 +6,7 @@ import {taxonomyText} from '../text/taxonomyText.js';
 import {taxonomyBadgeRow} from '../presentation/taxonomyBadgeArt.js';
 import {elementChartButton} from './elementChartModal.js';
 import { databaseHeroPortrait } from "../presentation/databaseHeroPortraits.js";
+import {isKnownSpeciesIndex,productPartnerG} from '../contracts/productSpeciesData.js';
 // The Digimon roster -- the original's ui/digimon_list_* scenes.
 //
 // STRUCTURE COMES FROM THE ROM SCENES, NOT FROM TASTE
@@ -47,7 +48,9 @@ const TRACED_DETAIL_ROWS = Object.freeze([
   { id: "species", label: "SPECIES", read: (entry) => entry.identity?.speciesName ?? null },
   { id: "HP", label: "HP", read: (entry) => vital(entry.stats?.currentHp,entry.stats?.maxHp) },
   { id: "TP", label: "TP", read: (entry) => vital(entry.stats?.currentTp,entry.stats?.maxTp) },
-  { id: "size", label: "容量", read: (entry) => entry.stats?.capacityG == null ? null : `${entry.stats.capacityG} G` },
+  // GACHA_FULL_EFFECTS_20261109: the partner's weight, the G it takes on the memory card and in the ranch.
+  { id: "size", label: "容量", read: (entry) => isKnownSpeciesIndex(entry.stats?.speciesIndex) ? `${productPartnerG(entry.stats.speciesIndex)} G`
+    : entry.stats?.capacityG == null ? null : `${entry.stats.capacityG} G` },
   { id: "attack", label: "攻擊", read: (entry) => entry.stats?.attack ?? null },
   { id: "def", label: "防禦", read: (entry) => entry.stats?.defense ?? null },
   { id: "wiz", label: "智力", read: (entry) => entry.stats?.wisdom ?? null },

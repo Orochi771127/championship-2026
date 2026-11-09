@@ -64,7 +64,8 @@ test('conditions read the partner itself; tier 2 needs its tier-1 form; metals u
   const base = 72, [t1] = burstFormsFor(base).filter(f => f.tier === 1), t2 = burstFormsFor(base).find(f => f.tier === 2);
   const empty = evaluateBurstConditions(profileOf(base, {'024': 0, '028': 0, '114': 0}), t1);
   assert.equal(empty.met, false);
-  const ready = profileOf(base, {'024': 40, '028': 30, '114': 99, '110': 99, '10c': 99});
+  // GACHA_FULL_EFFECTS_20261109: awakening thresholds are scaled by tier (×2.5 / ×3), so the ready profile is generous.
+  const ready = profileOf(base, {'024': 99, '028': 70, '114': 999, '110': 999, '10c': 999});
   assert.equal(evaluateBurstConditions(ready, t1).met, true);
   const earned = earnedBurstForms(ready, []);
   assert.ok(earned.includes(t1.form));
@@ -173,11 +174,11 @@ test('a save holding 究極體 partners loads them as 成熟期 with those forms
     assert.equal(used.ok, true, used.reason);
     assert.equal(used.kind, 'AWAKEN_ENERGY');
     assert.equal(used.tier, 1);
-    assert.equal(used.amount, 50);
+    assert.equal(used.amount, 30, 'an SSR metal adds 30 to a tier-1 form (GACHA_FULL_EFFECTS_20261109)');
     assert.ok(!app.getPartnerBurst(target.instanceId).some(f => f.form === used.target && f.unlocked), 'energy alone does not teach the form');
     const stored = JSON.parse(data.get(CHAMPIONSHIP_MODERN_SAVE_KEY)).progression.burstEvolution;
     assert.equal(stored.migrated, true);
     assert.equal(stored.version, 2);
-    assert.equal(stored.energy[target.instanceId][used.target], 50);
+    assert.equal(stored.energy[target.instanceId][used.target], 30);
   } finally { await app.dispose(); }
 });
