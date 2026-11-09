@@ -61,7 +61,8 @@ test('the eight with motion art are known, registrable and playable; the six wit
     if(playable){
       assert.equal(getDatabaseSlot(id).speciesIndex,id);assert.deepEqual(normalizeRegisteredSpecies([id]),[id]);
       assert.deepEqual(databaseVerifiedData(id).moves.map(m=>m.name),e.moves.map(m=>m.nameByLocale['zh-Hant']));
-      assert.deepEqual(PRODUCT_RAISING_LIFECYCLE_RULES.species[id],{...e.lifecycle});
+      // GACHA_FULL_EFFECTS_20261109: every partner weighs 6 G more on the product layer.
+      assert.deepEqual(PRODUCT_RAISING_LIFECYCLE_RULES.species[id],{...e.lifecycle,capacity:e.lifecycle.capacity+6});
     }else{
       assert.throws(()=>getDatabaseSlot(id),/UNKNOWN_DATABASE_SLOT/);assert.throws(()=>normalizeRegisteredSpecies([id]));
       assert.equal(PRODUCT_RAISING_LIFECYCLE_RULES.species[id],undefined);

@@ -489,3 +489,34 @@
 /* Four mode keys (DIAMOND_ECONOMY_20261102): the icon sits over the label so every label stays whole on a phone. */
 .cm-gacha__mode { flex-direction: column; gap: 2px; padding: 3px 4px; min-height: 50px; font-size: 12.5px; }
 .cm-gacha__mode .cm-gacha-key__icon { width: 20px; height: 20px; }
+
+/* ---- Bag actions (Owner 2026-11-09, GACHA_FULL_EFFECTS_20261109) ------------------------
+   Each tile's key face, the partner cards' stats and evolution gap, number pops, the catalyst's
+   routes and the armed state with its shortcuts. */
+.cm-gacha__tile-use { margin-top: 3px; padding: 2px 12px; border: 2px solid var(--g-ink); border-radius: 999px; background: var(--g-yellow);
+  color: var(--g-ink); font-size: 11px; font-weight: 900; line-height: 1.4; box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .18), 0 2px 0 var(--g-ink); }
+.cm-gacha__tile[data-selected="true"] .cm-gacha__tile-use { background: #3ddc84; }
+.cm-gacha__partner { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; border-radius: 14px; min-width: 132px; padding: 5px 10px; }
+.cm-gacha__partner-stats { display: flex; gap: 6px; font-size: 10.5px; font-weight: 800; color: #cfe2f5; font-variant-numeric: tabular-nums; }
+.cm-gacha__partner-stat { position: relative; display: inline-flex; gap: 2px; }
+.cm-gacha__partner-stat > strong { color: #fff; }
+.cm-gacha__partner[data-selected="true"] .cm-gacha__partner-stats, .cm-gacha__partner[data-selected="true"] .cm-gacha__partner-gap { color: var(--g-ink); }
+.cm-gacha__partner[data-selected="true"] .cm-gacha__partner-stat > strong { color: var(--g-ink); }
+.cm-gacha__partner-gap { font-size: 10.5px; font-weight: 800; color: var(--g-yellow); }
+.cm-gacha__stat-pop { position: absolute; left: 50%; bottom: 100%; z-index: 3; pointer-events: none; color: #3ddc84; font-size: 13px; font-weight: 900;
+  text-shadow: var(--g-outline); white-space: nowrap; }
+.cm-gacha__routes { display: grid; gap: 6px; }
+.cm-gacha__routes-title { font-size: 13px; }
+.cm-gacha__route { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 8px; padding: 6px 10px; border: 2.5px solid var(--g-ink);
+  border-radius: 12px; background: var(--g-slate-2); color: #fff; font: inherit; text-align: left; cursor: pointer; box-shadow: 0 3px 0 var(--g-ink); }
+.cm-gacha__route[data-selected="true"] { background: var(--g-cyan); }
+.cm-gacha__route:disabled { opacity: .5; cursor: default; }
+.cm-gacha__route-name { font-size: 13px; font-weight: 900; }
+.cm-gacha__route-gap { font-size: 11px; font-weight: 800; color: var(--g-yellow); }
+.cm-gacha__route[data-selected="true"] .cm-gacha__route-gap { color: var(--g-ink); }
+.cm-gacha__route-go { grid-column: 1 / -1; font-size: 10.5px; font-weight: 800; color: #8ff2ff; }
+.cm-gacha__route[data-selected="true"] .cm-gacha__route-go { color: var(--g-ink); }
+.cm-gacha__use-result, .cm-gacha__use-armed { margin: 0; font-size: 12.5px; font-weight: 900; text-align: center; }
+.cm-gacha__use-armed { color: #3ddc84; }
+.cm-gacha__use > .cm-gacha__actions { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cm-gacha__use > .cm-gacha__actions > :only-child, .cm-gacha__use > .cm-gacha__actions > :nth-child(3):last-child { grid-column: 1 / -1; }

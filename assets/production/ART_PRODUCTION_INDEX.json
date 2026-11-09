@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 47,
+    "registeredRuntimeBundles": 48,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -591,6 +591,20 @@
       "publicationAuthorized": true,
       "scope": "General53 and Arena32 core; all natural states and dedicatedKO/victory not claimed",
       "runtimeQaEvidence": "docs/reports/aw-ul-release-20261102/UL14_SPECIES196_RELEASE_VALIDATION.json"
+    },
+    {
+      "assetId": "art:gacha:prize-icons:r1",
+      "manifestPath": "assets/production/items/gacha-prizes-r1/manifest.json",
+      "manifestSha256": "638ac439bbd2c96c8a0e0b763909738b1b4583696b960a9b6c161302a2c27097",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "assistantReviewed": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "scope": "Two gachapon prize icons (hunt supply crate, lucky ticket pack), GACHA_FULL_EFFECTS_20261109; no gameplay or commercial-rights claim",
+      "count": 2
     }
   ]
 }

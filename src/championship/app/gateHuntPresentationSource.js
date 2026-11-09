@@ -510,6 +510,22 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
       if (app.gachaFuseShards?.(shardId)?.ok) committed("purchase");
       return commit();
     },
+    gachaSmeltShardTier(rarity) {
+      if (app.gachaSmeltShardTier?.(rarity)?.ok) committed("purchase");
+      return commit();
+    },
+    // The bag's shortcuts (Owner 2026-11-09): out of the shop, then into the hunt gates or the match lobby.
+    // (Intent names never say battle/capture: the VS2 surface pins that.)
+    gachaGoHunt() {
+      app.leaveScreen();
+      app.openGate();
+      return commit();
+    },
+    gachaGoLobby() {
+      app.leaveScreen();
+      app.openBattle();
+      return commit();
+    },
     gachaForgeAutomation(itemId) {
       if (app.gachaForgeAutomation?.(itemId)?.ok) committed("purchase");
       return commit();
