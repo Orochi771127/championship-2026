@@ -88,3 +88,29 @@ test('total-open count does not unlock native rank-gated columns',()=>{
  const g=createRanchRaisingGround(f);
  for(const slot of [14,15,16,17,18,19,40,49]){const c=productGridCell(slot);assert.equal(g.readTerrain((c.x+48)/8,(c.y+32)/8),1);}
 });
+test('a partner dropped on a 3D prop hull hops to open ground on every cage, never bouncing in place (Owner 2026-11-09)',()=>{
+ let hulls=0;
+ for(const d of listCageDefinitions()){
+  if(d.moduleId===WAITING_ROOM_MODULE)continue;
+  let p=null;for(let slotIndex=0;slotIndex<PRODUCT_RANCH_SLOT_COUNT&&!p;slotIndex++)if(validateProductRanch([waiting,{moduleId:d.moduleId,slotIndex}]))p={moduleId:d.moduleId,slotIndex};
+  const g=createRanchRaisingGround(frame([waiting,p]));
+  for(let ty=0;ty<g.height;ty++)for(let tx=0;tx<g.width;tx++){
+   if(g.owners[ty*g.width+tx]!==1||g.readTerrain(tx,ty)!==1)continue;hulls++;
+   let s={positionQ12:[(tx*8+4)*4096,(ty*8+4)*4096,20*4096],velocityQ12:[0,0,0],phase:0};
+   for(let i=0;i<200&&!s.settled;i++)s=stepNativeRaisingFlight(s,g,{rng:{next:()=>51}});
+   assert.ok(s.settled,`definition ${d.cageDefinitionIndex} tile ${tx},${ty} still bouncing`);
+   assert.notEqual(g.readTerrain(Math.trunc((s.positionQ12[0]>>12)/8),Math.trunc((s.positionQ12[1]>>12)/8)),1);
+   assert.equal(g.cageAt(s.positionQ12[0]>>12,s.positionQ12[1]>>12)?.ownerIndex,1);
+  }
+ }
+ assert.ok(hulls>1000);
+});
+test('the arena ring top is open ground reached from the floor only by its two stairs (Owner 2026-11-09)',()=>{
+ const d=listCageDefinitions().find(d=>d.cageDefinitionIndex===26);
+ let p=null;for(let slotIndex=0;slotIndex<PRODUCT_RANCH_SLOT_COUNT&&!p;slotIndex++)if(validateProductRanch([waiting,{moduleId:d.moduleId,slotIndex}]))p={moduleId:d.moduleId,slotIndex};
+ const g=createRanchRaisingGround(frame([waiting,p])),[ox,oy]=g.origin(26).map(v=>v/8);
+ const open=(x,y)=>g.readTerrain(ox+x,oy+y)!==1&&g.cageAt((ox+x)*8,(oy+y)*8)?.ownerIndex===1;
+ for(const [x,y] of [[12,14],[8,13],[16,13],[12,11],[12,17]])assert.ok(open(x,y),`ring top ${x},${y}`);
+ for(const [x,y] of [[6,15],[17,15]])assert.ok(open(x,y),`stair ${x},${y}`);
+ assert.ok(!open(5,14)&&!open(18,14),'rope barrier at the side corners');
+});
