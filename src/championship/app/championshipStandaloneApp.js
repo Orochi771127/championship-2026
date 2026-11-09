@@ -12,7 +12,7 @@ import {AUTO_CARE_RULES,createCleanerBot,stepCleanerBot,cleanerCuriosity,stepCle
 import {LAND_EXPANSION,DIAMOND_REWARDS,FOUNDER_PACK,diamondRewardKey,dueDiamondMilestones,landExpansionTier,landExpansionPrice,landMemoryBonusG,
   founderPackUnlocked} from '../gacha/diamondRewards.js';
 import { planOnlineBindReward } from './onlineBindRewardPolicy.js';
-import {GACHA_PERSONALITY_CHOICES,GACHA_TICKET_PRIZE,getGachaBitsBag,disarmGachaItem} from '../gacha/cyberGacha.js';
+import {GACHA_PERSONALITY_CHOICES,GACHA_TICKET_PRIZE,getGachaBitsBag,disarmGachaItem,useGachaChipNow,huntMinutesToSeconds} from '../gacha/cyberGacha.js';
 import {getGachaSupplyPack,getGachaTicketPrize,gachaChipEffectLines,gachaMetalEffectLines,shardTierSmeltPlan,smeltGachaShardTier,
   GACHA_TIER_SMELT,GACHA_TIER_SMELT_COST} from '../gacha/cyberGacha.js';
 import {resolveGachaEffect,evolutionRouteGaps,beaconBattleWords,SHARD_CATALYST_WAIVER} from '../gacha/gachaItemExecutor.js';
@@ -191,6 +191,9 @@ export function evolutionStatChange(before, after) {
       .map(([key, field]) => Object.freeze({key, before: a[field] | 0, after: b[field] | 0})));
   } catch { return null; }
 }
+
+// Owner 2026-11-10: a real-time hunt lasts one real minute; chrono cartridges add the rest.
+export const REALTIME_HUNT_BASE_MINUTES = 144;
 
 export function createChampionshipStandaloneApp({
   storage,
@@ -4209,6 +4212,29 @@ export function createChampionshipStandaloneApp({
     getGachaTickets(){return session?gachaState().tickets:0;},
     /** Cartridges this hunt started with (the field readout names them). */
     getHuntGachaBoosts(){return screens.current()===CHAMPIONSHIP_SCREENS.HUNT_FIELD?lastHuntGachaBoosts:Object.freeze([]);},
+    /** The chrono cartridges in the bag and how many ran this hunt (the HUD's key reads it). */
+    getHuntChronoState(){
+      if(screens.current()!==CHAMPIONSHIP_SCREENS.HUNT_FIELD||huntDeadlineMinute===null||tutorialBaseline||!session)return null;
+      return Object.freeze({owned:gachaState().chips['chip:chrono']??0,used:lastHuntGachaBoosts.filter(id=>id==='chip:chrono').length,
+        seconds:huntMinutesToSeconds(getGachaChip('chip:chrono').effect.extraSeconds)});
+    },
+    /**
+     * Owner 2026-11-10: use a chrono cartridge inside the running hunt -- its minutes join the live deadline at
+     * once; the hunt is one minute, so several may be used. Kept in memory like the armed cartridges; the next
+     * save writes it.
+     */
+    useHuntChrono(){
+      const chrono=this.getHuntChronoState();
+      if(!chrono)return Object.freeze({ok:false,reason:'NOT_IN_HUNT'});
+      const spent=useGachaChipNow(gachaState(),'chip:chrono');
+      if(!spent.ok)return Object.freeze({ok:false,reason:spent.reason});
+      cyberGacha=spent.state;
+      if(huntRealtime)huntRealtime.limitMinutes+=spent.minutes;
+      huntDeadlineMinute=Math.min(huntDeadlineMinute+spent.minutes,DAY_END_MINUTES);
+      lastHuntGachaBoosts=Object.freeze([...lastHuntGachaBoosts,'chip:chrono']);
+      savePort.markDirty();publishScreens();
+      return Object.freeze({ok:true,minutes:spent.minutes,time:this.getHuntTimeState()});
+    },
 
     gachaPull(machine,count=1){
       if(screens.current()!==CHAMPIONSHIP_SCREENS.SHOP)throw new Error('CHAMPIONSHIP_SHOP_NOT_ACTIVE');
@@ -4361,6 +4387,27 @@ export function createChampionshipStandaloneApp({
       if(!commitGacha({state:result.state}))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
       publishScreens();
       return Object.freeze({ok:true,granted:result.granted,tickets:result.state.tickets,key});
+    },
+
+    /**
+     * A Data Arena win (Owner 2026-11-10): the same settlement as an AI win without a purse -- a ticket 60% of the
+     * time, a cup 2-4 more, and an armed beacon is spent (its tickets, shard, and battles/points on the party).
+     */
+    settleDataArenaWin({tournament=false,partyIds=[]}={}){
+      requireSession();
+      const drop=settleGachaBattleWin(gachaState(),{bits:0,tournamentChampion:tournament===true,random:gachaRandom});
+      const before={creature,raising,registered:registeredSpeciesValue};
+      if(drop.battles||drop.exp)for(const id of new Set(partyIds)){
+        const profile=typeof id==='string'?gachaProfile(id):null;
+        if(profile)writeRaisingNativeProfile(id,normalizeNativeIndividualProfile(beaconBattleWords(profile,drop)),{markDirty:false});
+      }
+      if(!commitGacha({state:drop.state})){
+        creature=before.creature;raising=before.raising;registeredSpeciesValue=before.registered;
+        return Object.freeze({ok:false,reason:'SAVE_FAILED',granted:0});
+      }
+      lastBattleGachaDrop=Object.freeze({attemptId:'DATA_ARENA',tickets:drop.tickets,bonusBits:0,beacon:drop.beacon,metals:drop.metals,battles:drop.battles,exp:drop.exp});
+      publishScreens();
+      return Object.freeze({ok:true,granted:drop.tickets,beacon:drop.beacon,metals:drop.metals,battles:drop.battles,exp:drop.exp});
     },
 
     /** Arena wins: tickets straight into the save. */
@@ -4756,9 +4803,9 @@ export function createChampionshipStandaloneApp({
       }
       championshipRun=null;
       if(battleBadgesValue!==beforeBadges)applyProgression();
-      // A paid tournament is a title won: 3-10 gacha tickets beside the prize.
+      // A paid tournament is a title won: 2-4 gacha tickets beside the prize (GACHA_FULL_EFFECTS_20261109 balance).
       let championTickets=0;
-      if(payable){const grant=grantGachaTickets(gachaState(),3+Math.floor(gachaRandom()*8));cyberGacha=grant.state;championTickets=grant.granted;}
+      if(payable){const grant=grantGachaTickets(gachaState(),2+Math.floor(gachaRandom()*3));cyberGacha=grant.state;championTickets=grant.granted;}
       savePort.markDirty();
       return Object.freeze({ok:true,payable,prize:payable?run.prize:0,bits:wallet,gachaTickets:championTickets,
         flags:Object.freeze([...run.flags]),rank:tamerRankValue,
@@ -5078,8 +5125,9 @@ export function createChampionshipStandaloneApp({
         if (entry) { gameplayRng = entry.rng; huntPersistentState = entry.persistentState; }
         huntRuntime = candidateRuntime;
         huntDeadlineMinute = entry ? Math.min(requireSession().getRaisingHomeSnapshot().clockMinutes + 480 + (boosts.extraSeconds ?? 0), DAY_END_MINUTES) : null;
-        // Real time: the hunt's own countdown, 480 hunt minutes (+ an armed chrono cartridge's), no 22:00 cut.
-        huntRealtime = realtime && entry ? { elapsedUnits: 0, limitMinutes: 480 + (boosts.extraSeconds ?? 0) } : null;
+        // Real time: the hunt's own countdown, no 22:00 cut. Owner 2026-11-10: one real minute (144 hunt minutes at
+        // 400 units a minute, 16 a frame); more time only from chrono cartridges (armed, or used during the hunt).
+        huntRealtime = realtime && entry ? { elapsedUnits: 0, limitMinutes: REALTIME_HUNT_BASE_MINUTES + (boosts.extraSeconds ?? 0) } : null;
         if (armed.chips.length) { cyberGacha = armed.state; lastHuntGachaBoosts = Object.freeze([...armed.chips]); }
         // Hunt resume discards the prior scene's raw sub-minute remainder.
         if (entry) requireSession().advanceRaisingClock({ units: 0, divisor: 400, clearElapsed: true,
@@ -5110,6 +5158,8 @@ export function createChampionshipStandaloneApp({
       if (huntDeadlineMinute === null || screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD) return null;
       if (huntRealtime) return Object.freeze({ deadlineMinute: huntRealtime.limitMinutes,
         remainingMinutes: Math.max(0, huntRealtime.limitMinutes - Math.floor(huntRealtime.elapsedUnits / 400)),
+        // Owner 2026-11-10: the real-time hunt is shown in real seconds (16 clock units a frame at 60 fps).
+        remainingSeconds: Math.max(0, Math.ceil((huntRealtime.limitMinutes * 400 - huntRealtime.elapsedUnits) / 16 / 60)),
         evidence: "PRODUCT_REALTIME_HUNT_COUNTDOWN" });
       return Object.freeze({ deadlineMinute: huntDeadlineMinute,
         remainingMinutes: Math.max(0, huntDeadlineMinute - requireSession().getRaisingHomeSnapshot().clockMinutes),

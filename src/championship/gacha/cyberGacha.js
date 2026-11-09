@@ -650,6 +650,20 @@ export function spendGachaItem(state, itemId, { instanceId = null, bloodline = n
   return deepFreeze({ ok: true, state: normalizeCyberGacha(next) });
 }
 
+/**
+ * Owner 2026-11-10: the chrono cartridge can also be used inside a running hunt. One copy leaves the bag at
+ * once (nothing is armed); the caller adds its minutes to the live hunt clock.
+ */
+export function useGachaChipNow(state, itemId) {
+  const current = normalizeCyberGacha(state);
+  const chip = getGachaChip(itemId);
+  if (!chip?.effect?.extraSeconds) return deepFreeze({ ok: false, reason: "NOT_USABLE_IN_HUNT" });
+  if ((current.chips[itemId] ?? 0) < 1) return deepFreeze({ ok: false, reason: "NOT_OWNED" });
+  const next = plain(current);
+  next.chips[itemId] -= 1;
+  return deepFreeze({ ok: true, minutes: chip.effect.extraSeconds, state: normalizeCyberGacha(next) });
+}
+
 /** Take a loaded hunt cartridge or beacon back out before it is used; it returns to the bag. */
 export function disarmGachaItem(state, itemId) {
   const current = normalizeCyberGacha(state);

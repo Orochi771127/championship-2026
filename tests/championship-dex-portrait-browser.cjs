@@ -385,7 +385,9 @@ async function main() {
         imageResponses.set(expected.speciesIndex, observed);
       })().catch(error => evidence.networkErrors.push({ url: response.url(), error: String(error) })));
     });
-    await page.goto(PUBLIC_BASE + 'championship.html', { waitUntil: 'domcontentloaded' });
+    // The public origin plays the real economy since 2026-11-10; this gate reads the friends mode's full Dex
+    // through its own hidden URL switch.
+    await page.goto(PUBLIC_BASE + 'championship.html?friends=1', { waitUntil: 'domcontentloaded' });
     await page.locator('#cm-login').waitFor({ state: 'visible' });
     await page.waitForFunction(() => document.querySelector('#cm-login')?.disabled === false);
     if (await page.locator('#cm-film-skip').isVisible()) {
