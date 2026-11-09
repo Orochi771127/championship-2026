@@ -16,7 +16,8 @@ import {mountInteractiveTutorialPreview} from './src/championship/app/interactiv
 import {mountPortraitFrame} from './src/championship/app/portraitFrame.js';
 import {setLocale,formatNumber} from './src/championship/text/locale.js';
 import {uiText} from './src/championship/text/uiText.js';
-document.documentElement.dataset.theme='arena';
+// The shipped default theme (arcade since 2026-10-26); the retired arena theme pinned a fixed-width wallet.
+document.documentElement.dataset.theme='arcade';
 let tutorial={finished:true,checkpoint:{stage:'raising',message:0}},listeners=[];
 const fixtureApp={getSession:()=>({}),getInteractiveTutorial:()=>tutorial,subscribeRaising:f=>{listeners.push(f);return()=>{}},exitInteractiveTutorial:async()=>{tutorial={...tutorial,finished:true};listeners.forEach(f=>f())}};
 window.saveOpens=0;window.matchOpens=0;
@@ -70,9 +71,11 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
       if(width===430&&locale==='zh-Hant'&&!matches)assert.ok(Math.abs((g.parts.currencies.y+g.parts.currencies.h/2)-(g.parts.season.y+g.parts.season.h/2))<2,'Working 430px normal one-row HUD must stay one row');
       assert.equal(g.parts.bits.label,labels.bitsLabel);assert.equal(g.parts.diamond.label,labels.diamondLabel);
       if(width<=600){assert.ok(g.font>=14);assert.ok(g.parts.diamond.h>=44);if(g.parts.save)assert.ok(g.parts.save.w>=44&&g.parts.save.h>=44);if(phase==='SAVE_FAILED'){assert.ok(g.parts.save?.label,'Save failure remains visible with an accessible explanation');assert.equal(await page.locator('.cm-status-bar__save').getAttribute('data-state'),'SAVE_FAILED');}assert.ok(g.parts.bits.scroll<=g.parts.bits.client+1);assert.ok(g.parts.diamond.scroll<=g.parts.diamond.client+1);
-       const matchKey=JSON.stringify({locale,bits,diamonds,tutorialOn,phase}),wallet=[g.bar.h,g.parts.currencies.y,g.parts.currencies.w];if(matches)assert.deepEqual(wallet,matchAnchors.get(matchKey),'Match badge must never move the wallet');else matchAnchors.set(matchKey,wallet);
+       const matchKey=JSON.stringify({locale,bits,diamonds,tutorialOn,phase}),wallet=[g.bar.h,g.parts.currencies.y,Math.round(g.parts.currencies.right)];if(matches)assert.deepEqual(wallet,matchAnchors.get(matchKey),'Match badge must never move the wallet');else matchAnchors.set(matchKey,wallet);
        if(g.parts.matches){assert.ok(g.parts.matches.h>=44&&g.parts.matches.w>=44);assert.equal(await page.locator('.cm-status-bar__matches-word').evaluate(e=>getComputedStyle(e).clipPath),'none','Match title stays visibly named on small phones');}
-       const key=[g.bar.h,g.parts.currencies.y,g.parts.currencies.w];if(baseline)assert.deepEqual(key,baseline,'Wallet/save/tutorial must not change mobile row geometry');else baseline=key;
+       // Arcade wallet: its width follows the figure (9.9M+), but the row never grows or drops and the wallet keeps its
+       // right edge whatever the balance, save state or tutorial.
+       const key=[g.bar.h,g.parts.currencies.y,Math.round(g.parts.currencies.right)];if(baseline)assert.deepEqual(key,baseline,'Wallet/save/tutorial must not change mobile row geometry');else baseline=key;
       }
      }catch(error){evidence.violations.push({width,height,params,message:error.message});}}
      if(locale==='zh-Hant'&&bits===15900&&!tutorialOn&&phase==='DIRTY')await page.screenshot({path:path.join(out,`${width}-owner-balance-matches-${matches}.png`)});
