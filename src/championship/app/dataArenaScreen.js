@@ -1766,19 +1766,20 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     releaseInputs();
     audio?.suspend();
     const { newBest, saved } = records.recordResult(result);
-    // Cyber Gachapon: the host pays a manual-battle win in tickets (1-3; a cup 3-10).
+    // The ranch partners behind the relay seats (by species): a beacon's and a contract's rewards land on them.
+    const snap = sim.getSnapshot?.() ?? null;
+    const held = progress?.ownedInstances ?? [];
+    const partyIds = [...new Set((snap?.relay?.team ?? [{ speciesId: partnerId }]).map((member) => held.find((entry) => entry.speciesId === String(member.speciesId ?? '').replace(/^relay-/, ''))?.instanceId).filter(Boolean))];
+    // Cyber Gachapon: the host settles a win like an AI match (a ticket 60% of the time, a cup 2-4 more) and
+    // spends an armed bounty beacon on it (Owner 2026-11-10).
     let gachaTickets = 0;
     if (result.outcome === "VICTORY" && typeof onVictory === "function") {
-      try { gachaTickets = onVictory({ tournament: Boolean(result.tournament) })?.granted ?? 0; } catch { gachaTickets = 0; }
+      try { gachaTickets = onVictory({ tournament: Boolean(result.tournament), partyIds })?.granted ?? 0; } catch { gachaTickets = 0; }
     }
     // The staked contract settles on this result: downs are relay partners left at 0 HP.
     let sponsorResult = null;
     if (staked?.ok) {
-      const snap = sim.getSnapshot?.() ?? null;
       const downs = (snap?.relay?.team ?? []).filter((member) => member.hp <= 0).length;
-      // The ranch partners behind the relay seats (by species) take the contract's awakening rewards.
-      const held = progress?.ownedInstances ?? [];
-      const partyIds = [...new Set((snap?.relay?.team ?? [{ speciesId: partnerId }]).map((member) => held.find((entry) => entry.speciesId === String(member.speciesId ?? '').replace(/^relay-/, ''))?.instanceId).filter(Boolean))];
       try { sponsorResult = sponsor.settle({ won: result.outcome === "VICTORY", partnerDowns: downs, seconds: result.timeSeconds, partyIds }); } catch { sponsorResult = null; }
       staked = null;
     }

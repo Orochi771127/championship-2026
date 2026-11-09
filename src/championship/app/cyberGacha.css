@@ -520,3 +520,7 @@
 .cm-gacha__use-armed { color: #3ddc84; }
 .cm-gacha__use > .cm-gacha__actions { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .cm-gacha__use > .cm-gacha__actions > :only-child, .cm-gacha__use > .cm-gacha__actions > :nth-child(3):last-child { grid-column: 1 / -1; }
+.cm-vs2-hud__chrono { pointer-events: auto; position: relative; z-index: 2; flex: none; margin-left: 4px; padding: 1px 8px; border: 2px solid #14141f; border-radius: 999px; background: #ffd23f;
+  color: #14141f; font: inherit; font-size: 11px; font-weight: 900; line-height: 1.5; cursor: pointer; box-shadow: 0 2px 0 #14141f; touch-action: manipulation; }
+.cm-vs2-hud__chrono[hidden] { display: none; }
+.cm-vs2-hud__chrono:active { transform: translateY(1px); box-shadow: 0 1px 0 #14141f; }

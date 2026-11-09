@@ -2130,7 +2130,8 @@ export const TEXT_VI = Object.freeze({
   "成長期以前": "đến giai đoạn trưởng thành sớm",
   "牧場容量不足：放生一隻、提升馴獸師階級或擴充土地後再帶回家。": "Sức chứa nông trại đã đầy: thả một bạn đồng hành, nâng hạng huấn luyện viên hoặc mở rộng đất rồi hãy đưa về.",
   "大賽報名容量 +{n} G（部分大賽的報名條件，不改變重量）": "Dung lượng đăng ký giải +{n} G (điều kiện của một số giải; trọng lượng không đổi)",
-  "放置": "Đặt"
+  "放置": "Đặt",
+  "時鐘 +{n} 秒（{owned}）": "Đồng hồ +{n} giây ({owned})"
 });
 
 export const UNTRANSLATED_PROPER_NOUNS_VI = Object.freeze(new Set([

@@ -727,12 +727,20 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     gachaIcons.hidden = gachaIcons.childElementCount === 0;
     gachaLure.textContent = gacha?.rareLure ? uiText("誘餌引來：{name}", { name: uiText(gacha.rareLure.name ?? "") }) : "";
     gachaLure.hidden = !gacha?.rareLure;
+    // Owner 2026-11-10: the chrono key, while one sits in the bag.
+    const chrono = gacha?.chrono;
+    chronoKey.hidden = !chrono || chrono.owned < 1;
+    chronoKey.textContent = chrono ? uiText("時鐘 +{n} 秒（{owned}）", { n: chrono.seconds, owned: chrono.owned }) : "";
   }
+  const chronoKey = element("button", "cm-vs2-hud__chrono");
+  chronoKey.type = "button";
+  chronoKey.hidden = true;
+  chronoKey.addEventListener("click", (event) => { event.stopPropagation(); source.intents.useHuntChrono?.(); });
   paintGachaLine(block.hud.gacha);
   const gateRow = element("span", "cm-vs2-hud__row");
   const clockRow = element("span", "cm-vs2-hud__row");
   gateRow.append(gateName, gachaIcons);
-  clockRow.append(companion, gachaLure);
+  clockRow.append(companion, gachaLure, chronoKey);
   hudCopy.append(gateRow, clockRow);
   const exit = actionButton("返回牧場");
   exit.classList.add("cm-vs2-hud__exit");
@@ -783,15 +791,17 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   const entryEnv = ceremonyEnvironment();
   const entryStarted = performance.now();
   let entryTimer = null;
+  // mm:ss of real seconds in a real-time hunt, hh:mm of the hunt clock otherwise (Owner 2026-11-10).
+  const clockText = (n) => `${String(Math.floor(n / 60)).padStart(2, '0')}:${String(n % 60).padStart(2, '0')}`;
   const remainingText = (minutes) => minutes == null ? '' : uiText('限時 {time}', {
     time: `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}` });
   const entryGate = uiText(block.hud.gateName ?? '');
   loadingGate.textContent = entryGate;
-  loadingLimit.textContent = remainingText(block.hud.time?.remainingMinutes);
+  loadingLimit.textContent = remainingText(block.hud.time?.remainingSeconds ?? block.hud.time?.remainingMinutes);
   let entry = frame.tutorial ? null : playCeremony({ host: viewport, kind: 'gate-entry', cue: 'gate', autoDismiss: false,
     label: uiText('傳送門連線：{gate}', { gate: entryGate }),
     build: (stage, env) => buildGateEntry(stage, env, { kicker: uiText('傳送門連線'), gateName: entryGate,
-      meta: remainingText(block.hud.time?.remainingMinutes), hint: uiText('輕觸略過') }) });
+      meta: remainingText(block.hud.time?.remainingSeconds ?? block.hud.time?.remainingMinutes), hint: uiText('輕觸略過') }) });
   const closeEntry = () => { clearTimeout(entryTimer); entryTimer = null; entry?.dispose(); entry = null; walker?.dispose(); };
   const replay = (node, key) => { node.dataset[key] = 'false'; void node.offsetWidth; node.dataset[key] = 'true'; };
   // The orb is the portal: the download charges it (its rings speed up and draw
@@ -1135,11 +1145,12 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     exit.disabled = !next.hud.exitAvailable;
     gateName.textContent = uiText(next.hud.gateName ?? "");
     paintGachaLine(next.hud.gacha);
-    const remaining=next.hud.time?.remainingMinutes;
+    const remaining=next.hud.time?.remainingMinutes, seconds=next.hud.time?.remainingSeconds;
     companion.textContent = uiText(remaining == null ? next.hud.companionName ?? "" :
-      uiText('剩餘 {time}', { time: `${String(Math.floor(remaining/60)).padStart(2,'0')}:${String(remaining%60).padStart(2,'0')}` }));
-    // The last hour of the field's clock beats amber, then red.
-    hud.dataset.urgent = remaining == null ? 'false' : remaining <= 15 ? 'critical' : remaining < 60 ? 'warning' : 'false';
+      uiText('剩餘 {time}', { time: clockText(seconds ?? remaining) }));
+    // The last hour of the field's clock (the last 30 s of a real-time hunt) beats amber, then red.
+    hud.dataset.urgent = remaining == null ? 'false' : seconds != null ? (seconds <= 10 ? 'critical' : seconds < 30 ? 'warning' : 'false')
+      : remaining <= 15 ? 'critical' : remaining < 60 ? 'warning' : 'false';
     const onCard = next.hud.onCard ?? [];
     for (const caught of onCard) {
       if (seenCaptures.has(caught.wildId)) continue;
