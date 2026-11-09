@@ -1,5 +1,17 @@
 # Championship Owner Direction
 
+<!-- record-id: HUNT_BATTLE_TITLE_UNDERLINE_20261110 -->
+## 2026-11-10 — The hunt and battle titles show their underline in full
+
+The Owner reports, with iPhone screenshots, that the underline under 選擇狩獵場 is covered, and that the one under 選擇對戰 seems covered too.
+
+Presentation fix only (arcade theme), no gameplay or save change:
+
+- 選擇狩獵場 (GATE_SELECT, HOLO_NAV_R1): the title's tight 1.15 line box let its stroke and drop shadow cover the teal link line, so only the lit node showed. The title gains bottom padding so the whole line sits below the shadow.
+- 選擇對戰 (BATTLE_SELECT): the amber slab sits 11 px under the title instead of 6 px and paints above the title's text, so the lower-sitting iOS glyph shadow no longer covers its top edge.
+
+Publication: the Owner directed 「合併並發佈到正式站」 for PR #202. This authorizes merging #202 to main and publishing it through the existing Pages playtest workflow, with the approval hashes of the two changed stylesheets restated. It does not widen the asset set, and it is not a physical-device acceptance.
+
 <!-- record-id: CM27_ARENA_RING_AND_DROP_HOP_20261109 -->
 ## 2026-11-09 — The arena keeps its full-size ring, walkable on top with stairs down, and a dropped partner always hops to open ground
 
