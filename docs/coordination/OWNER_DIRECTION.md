@@ -15,6 +15,8 @@ OWNER_APPROVED_ADAPTATION, presentation and story content. No new save field, no
 
 Verified by `tests/championship-story-vn-cases.mjs`, the updated chart cases, the locale gate, and a QA save on an isolated port (8943) at 1366 × 768, 390 × 844 and 844 × 390, including a real lost battle that resumed on the losing branch and paid the first-clear reward.
 
+Publication: the Owner said 「講完這句，其他的就交給你去處理了，我就不介入了」 (2026-11-11), handing the rest of this batch over, merge and publication included. This authorizes this batch only.
+
 <!-- record-id: HUNT_SPAWN_SPREAD_20261110 -->
 ## 2026-11-10 — Hunt partners spread out: loose same-species groups, a third of a screen apart
 

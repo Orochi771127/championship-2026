@@ -61,7 +61,7 @@ export function loadStoryVnMotion(speciesIndex, { href = globalThis.location?.hr
  * placed at (0.5, headY) of the frame, `headSpan` frame widths across, and the
  * art is mirrored so the head turns toward the middle of the screen.
  */
-export function storyVnBustLayout(portrait, { frameWidth, frameHeight, side = "left", headY = 0.3, headSpan = 0.5, faceRight = null } = {}) {
+export function storyVnBustLayout(portrait, { frameWidth, frameHeight, side = "left", headY = 0.3, headSpan = 0.44, faceRight = null } = {}) {
   if (!portrait?.width || !portrait?.height || !frameWidth || !frameHeight) return null;
   const face = Array.isArray(portrait.face) && portrait.face[2] > 0 ? portrait.face
     : [portrait.width * 0.5, portrait.height * 0.32, Math.min(portrait.width, portrait.height) * 0.42];
