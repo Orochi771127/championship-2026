@@ -28,7 +28,7 @@ import {overdriveOf,withOverdrive,awakeningSeedOf,withAwakeningSeed,sponsorContr
   BURST_CONDITION_IDS,BURST_CONDITION_FIELDS} from '../contracts/productBurstEvolution.js';
 import {OVERDRIVE_RULES,overdriveHeatAt,overdriveCooling,resolveOverdriveTraining,instinctNoise,
   SPONSOR_CONTRACTS,SPONSOR_STAKES,sponsorContract,validSponsorStake,settleSponsorContract,WILD_INSTINCT_BLOODLINES,wildInstinct,
-  rollWildInstinct,ownPointCondition,sponsorOdds,SPONSOR_STAKE_CAPS,SPONSOR_DAILY_LIMIT,SPONSOR_ODDS} from '../contracts/productAwakeningOverdrive.js';
+  settleWildInstincts,ownPointCondition,sponsorOdds,SPONSOR_STAKE_CAPS,SPONSOR_DAILY_LIMIT,SPONSOR_ODDS} from '../contracts/productAwakeningOverdrive.js';
 import {localDayNumber} from '../time/realtimeClock.js';
 import {applyProductTrainingGains} from '../raising/nativeRaisingTraining.js';
 import {inscribeGachaBloodline,grantGachaMetal} from '../gacha/cyberGacha.js';
@@ -219,6 +219,8 @@ export function createChampionshipStandaloneApp({
   huntCaptureReplay = null,
   // Local review only: async (gate) => expansion catalogue or null.
   huntExpansionLoader = null,
+  // Local review only (?huntInstinctQa, HUNT_INSTINCT_VFX_20261110): (index) => an instinct id that replaces the roll.
+  huntInstinctOverride = null,
   // Null means the built-in one, fetched when a hunt starts. Its subtree is
   // the field controls, the wild actors and their tables, which nothing before
   // the field reads. A caller that supplies its own factory never fetches it.
@@ -5338,10 +5340,16 @@ export function createChampionshipStandaloneApp({
           modifiers:structuredClone(huntPersistentState.modifiers) } }) : lured;
         // Wild awakening instinct (AWAKENING_OVERDRIVE_20261109): each wild partner rolls a hidden instinct from a product
         // roll (the native RNG is never read); a veteran elite moves faster, an ancestral one stands larger.
+        // HUNT_INSTINCT_RARITY_20261110: rolled for the whole hunt at once, so the per-hunt caps and the
+        // premium radars (boosts.eliteCall / boosts.ancestorCall) see every partner.
+        const instincts = luredEntry ? (huntInstinctOverride ? luredEntry.encounter.actors.map((_, i) => huntInstinctOverride(i))
+          : settleWildInstincts(luredEntry.encounter.actors.map((actor, i) => {
+            // Keyed by the individual's own native values, so a retried entry rolls the same instincts.
+            const f = actor.individual.fields;
+            return instinctNoise(0x4e, i, actor.speciesIndex, f['058'], f['060'], f['064'], f['068'], f['06c'], f['018']);
+          }), boosts)) : [];
         const entry = luredEntry ? { ...luredEntry, encounter: { ...luredEntry.encounter, actors: luredEntry.encounter.actors.map((actor, i) => {
-          // Keyed by the individual's own native values, so a retried entry rolls the same instincts.
-          const f = actor.individual.fields;
-          const instinct = rollWildInstinct(instinctNoise(0x4e, i, actor.speciesIndex, f['058'], f['060'], f['064'], f['068'], f['06c'], f['018'])), rule = wildInstinct(instinct);
+          const instinct = instincts[i], rule = wildInstinct(instinct);
           return { ...actor, instinct, ...(rule.speedMultiplier ? { ai: { ...actor.ai, speedQ12: Math.round(actor.ai.speedQ12 * rule.speedMultiplier) } } : {}) };
         }) } } : null;
         huntInstincts = new Map((entry?.encounter.actors ?? []).map((actor, i) => [`${gate.gateId}:native-wild:${i}`, actor.instinct]));

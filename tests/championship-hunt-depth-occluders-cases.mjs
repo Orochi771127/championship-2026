@@ -5,6 +5,11 @@ import test from 'node:test';
 import { loadHuntDepthOccluders, validateHuntDepthPieces, withHuntDepthOccluders } from '../src/championship/presentation/vs2/huntDepthOccluders.js';
 import { validateRuntimeMapArtBundle } from '../src/championship/presentation/runtimeMapArtBundle.js';
 
+// The original-opus and cave-clearance bundles are private review art that never enters Git (tests/ci-test-scope.v1.json
+// keeps this file local-reference). A checkout without them skips those two cases by name instead of failing on ENOENT.
+const privateBundle = (...dirs) => dirs.every((dir) => fs.existsSync(`assets/production/hunt/${dir}/manifest.json`))
+  ? false : `private review art absent: assets/production/hunt/{${dirs.join(',')}} (local-only, never committed)`;
+
 function fakePixi() {
   const log = [];
   class Rectangle { constructor(x, y, w, h) { Object.assign(this, { x, y, width: w, height: h }); } }
@@ -88,7 +93,7 @@ test('pieces sort with actors by world y and leave the layer cleanly', async () 
   assert.equal(withHuntDepthOccluders(art, null), art);
 });
 
-test('the original hunt bundle keeps licensed frame timing and ships consistent occluders', () => {
+test('the original hunt bundle keeps licensed frame timing and ships consistent occluders', { skip: privateBundle('original-opus-v1') }, () => {
   const sha = (p) => crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex').toUpperCase();
   const original = validateRuntimeMapArtBundle(JSON.parse(fs.readFileSync('assets/production/hunt/original-opus-v1/manifest.json', 'utf8')));
   const licensed = JSON.parse(fs.readFileSync('assets/production/hunt/licensed-runtime-v1/manifest.json', 'utf8'));
@@ -216,7 +221,7 @@ test('dither keeps piece depth, excludes solid/back/equal rows, unions overlappi
 });
 
 
-test('r11 local map uses its exact two atlases/all pieces and leaves every other h1 field unchanged', async () => {
+test('r11 local map uses its exact two atlases/all pieces and leaves every other h1 field unchanged', { skip: privateBundle('cave-clearance-natural-r11', 'original-opus-v1') }, async () => {
   const root='assets/production/hunt/cave-clearance-natural-r11/';
   const candidate=validateRuntimeMapArtBundle(JSON.parse(fs.readFileSync(root+'manifest.json','utf8')));
   const baseline=JSON.parse(fs.readFileSync('assets/production/hunt/original-opus-v1/manifest.json','utf8'));

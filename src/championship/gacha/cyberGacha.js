@@ -52,6 +52,11 @@ export const GACHA_CHIPS = deepFreeze([
   { id: "chip:gravity", shopRecordIndex: 65, kind: "HUNT", rarity: "R", name: "重力緩速力場匣", origin: "傷害陷阱檢查器", effect: { slow: 0.5 } },
   // `extraSeconds` is hunt-clock minutes (the field keeps its name): 288 minutes are 120 real seconds of the
   // 200-second real-time hunt (16 clock units a frame, 400 a minute).
+  // HUNT_INSTINCT_RARITY_20261110 (Owner): veteran elites and ancestral partners are rare; these two radars call
+  // them. They reuse two radar plugins' rows and art (龍族雷達 74, 星靈族雷達 78) that no chip used, so nothing new
+  // is drawn. SR / SSR, so only the premium machine pays them.
+  { id: "chip:elite-radar", shopRecordIndex: 74, kind: "HUNT", rarity: "SR", name: "歷戰菁英雷達", origin: "龍族雷達", effect: { eliteCall: true } },
+  { id: "chip:ancestor-radar", shopRecordIndex: 78, kind: "HUNT", rarity: "SSR", name: "祖靈血脈雷達", origin: "星靈族雷達", effect: { ancestorCall: true } },
   { id: "chip:chrono", shopRecordIndex: 66, kind: "HUNT", rarity: "SSR", name: "次元時鐘擴充匣", origin: "全道具檢查器", effect: { extraSeconds: 288 } },
   // battles: extra won battles on every partner who fought; exp: race and faction points on each of them.
   { id: "chip:bounty-alpha", shopRecordIndex: 67, kind: "BOUNTY", rarity: "R", name: "強敵賞金信標 α", origin: "世代雷達 α", effect: { bitsRate: 1.5, extraTickets: 1, exp: 8 } },
@@ -188,6 +193,8 @@ export function gachaChipEffectLines(chip) {
     if (e.captureStatPercent) line("這隻拍檔的攻擊・防禦・智力・速度 +{n}%", { n: e.captureStatPercent });
     if (e.rareLure) line("引來 1 隻本區最稀有的拍檔，出現率也不再因捕獲次數下降");
     if (e.slow) line("野生拍檔移動速度 -{n}%", { n: Math.round(e.slow * 100) });
+    if (e.eliteCall) line("本場必定出現 1 隻歷戰菁英，最多 2 隻");
+    if (e.ancestorCall) line("本場必定出現 1 隻祖靈");
     // Despite its name the field is hunt-clock minutes; the line shows the real seconds they last.
     if (e.extraSeconds) line("狩獵限時 +{n} 秒", { n: huntMinutesToSeconds(e.extraSeconds) });
   } else if (chip?.kind === "BOUNTY") {

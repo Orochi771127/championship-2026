@@ -1374,7 +1374,7 @@ export const TEXT_EN = Object.freeze({
   "輕觸放置炸彈": "Tap to place a bomb",
   "輕觸放置地雷 · 目標經過時引爆": "Tap to place a mine · It goes off when a target passes",
   "拖曳地面移動視野 · 目標倒地後輕觸抓取": "Drag the ground to look around · Tap a downed target to grab it",
-  "手": "Hand",
+  "捕獲移動": "Grab & Move",
 
   // Hunt gear names (loadout).
   "基礎捕捉繩 α": "Basic Capture Rope α", "基礎捕捉繩 β": "Basic Capture Rope β", "基礎捕捉繩 γ": "Basic Capture Rope γ",
@@ -1790,6 +1790,10 @@ export const TEXT_EN = Object.freeze({
   "量子必中鋼索晶片": "Quantum sure-hit wire chip",
   "鋼索檢查器": "Wire Checker",
   "高純度異色誘餌": "Pure rare-colour bait",
+  "歷戰菁英雷達": "Veteran elite radar",
+  "祖靈血脈雷達": "Ancestral bloodline radar",
+  "本場必定出現 1 隻歷戰菁英，最多 2 隻": "At least 1 veteran elite this hunt, up to 2",
+  "本場必定出現 1 隻祖靈": "At least 1 ancestral partner this hunt",
   "誘引道具檢查器": "Lure Checker",
   "重力緩速力場匣": "Gravity slow-field cartridge",
   "傷害陷阱檢查器": "Damage Trap Checker",

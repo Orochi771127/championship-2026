@@ -554,6 +554,8 @@ export async function mountHuntFieldPixiPresentation({
         node.contactShadowKey = null;
       }
       node.threeContactEllipses = contact?.ellipses ?? [{x:0,y:4,radiusX:11,radiusY:4}];
+      // The 3D scene uses a measured profile as is; without one it lays the footprint (HUNT_GROUNDING_20261110).
+      node.threeContactMeasured = Boolean(contact);
       const ground = contact ?? huntShadowGroundTransform(nativeFrame, wild.worldZ ?? 0);
       node.contactShadow.y = ground.localY;
       node.contactShadow.scale.y = ground.scaleY;
@@ -565,35 +567,27 @@ export async function mountHuntFieldPixiPresentation({
     }
   }
 
-  // Wild instinct marks (AWAKENING_OVERDRIVE_20261109): a veteran elite crackles with small element arcs; an ancestral
-  // partner stands in a faint gold and violet bloodline glow at its feet. Only the eye tells them apart.
+  // Wild instinct mark, 2D fallback (HUNT_INSTINCT_VFX_20261110). Owner 2026-11-10: not fancy -- the ground under
+  // the feet glows in the tier's colour (veteran elite red-orange, ancestral violet), like the 3D scene's footprint.
+  const INSTINCT_GLOW = { ELITE: 0xff2a10, ANCESTOR: 0x9a5cff };
   function drawInstinctAura(node, instinct, now) {
-    if (!instinct || instinct === "NORMAL") { if (node.instinctAura) { node.instinctAura.destroy(); node.instinctAura = null; } return; }
+    const color = INSTINCT_GLOW[instinct];
+    if (!color) { if (node.instinctAura) { node.instinctAura.destroy(); node.instinctAura = null; } return; }
     if (!node.instinctAura) {
       node.instinctAura = new PIXI.Graphics(); node.instinctAura.eventMode = "none"; node.instinctAura.label = "wild instinct";
       node.addChildAt(node.instinctAura, 0);
     }
-    const g = node.instinctAura.clear(), reduced = reducedFx(), t = reduced ? 0 : now / 1000;
-    if (instinct === "ANCESTOR") {
-      const pulse = reduced ? 0.5 : (Math.sin(t * 2.4) + 1) / 2;
-      g.ellipse(0, 4, 18 + 3 * pulse, 7 + pulse).fill({ color: 0x8b5cf6, alpha: 0.18 + 0.1 * pulse });
-      g.ellipse(0, 4, 13 + 2 * pulse, 5).fill({ color: 0xffd34d, alpha: 0.22 + 0.12 * pulse });
-      g.ellipse(0, 4, 17 + 3 * pulse, 6.5 + pulse).stroke({ color: 0xffe9a8, width: 1.2, alpha: 0.5 + 0.3 * pulse });
-      for (let i = 0; i < 5; i++) {
-        const a = t * 0.9 + i * Math.PI * 2 / 5, rise = reduced ? 4 : (t * 9 + i * 7) % 18;
-        g.circle(Math.cos(a) * 12, 4 - rise, 1.1).fill({ color: i % 2 ? 0xc4b5fd : 0xffd34d, alpha: 0.8 * (1 - rise / 18) });
-      }
-      return;
+    const g = node.instinctAura.clear(), sprite = node.characterSprite, tex = sprite?.texture;
+    let x0 = -12, x1 = 12, y1 = 0;
+    if (tex?.orig) {
+      const r = tex.trim ?? { x: 0, y: 0, width: tex.orig.width, height: tex.orig.height };
+      x0 = (r.x - sprite.anchor.x * tex.orig.width) * sprite.scale.x + sprite.x; x1 = x0 + r.width * sprite.scale.x;
+      y1 = Math.max((r.y - sprite.anchor.y * tex.orig.height) * sprite.scale.y + sprite.y,
+        (r.y + r.height - sprite.anchor.y * tex.orig.height) * sprite.scale.y + sprite.y);
+      if (x1 < x0) [x0, x1] = [x1, x0];
     }
-    // ELITE: three short zigzag arcs that jump between frames.
-    const beat = reduced ? 0 : Math.floor(now / 90);
-    for (let i = 0; i < 3; i++) {
-      const seed = (beat * 3 + i) * 2654435761 >>> 0, a = (seed % 628) / 100, r = 10 + (seed >> 9) % 6;
-      let x = Math.cos(a) * r, y = -14 + Math.sin(a) * r * 0.9;
-      g.moveTo(x, y);
-      for (let k = 0; k < 3; k++) { x += ((seed >> (k * 4)) % 7) - 3; y += ((seed >> (k * 5 + 2)) % 7) - 3; g.lineTo(x, y); }
-      g.stroke({ color: i % 2 ? 0x7dd3fc : 0xfef08a, width: 1.3, alpha: 0.85 });
-    }
+    const rx = Math.max((x1 - x0) * 0.42, 8), ry = Math.max(rx * 0.5, 3), cx = (x0 + x1) / 2, cy = Math.max(y1, 0) - ry * 0.35;
+    for (const k of [1, 0.75, 0.5]) g.ellipse(cx, cy, rx * k, ry * k).fill({ color, alpha: 0.28 });
   }
 
   // Rope lasso VFX (Owner 2026-10-27): a glowing rope follows the finger, a
@@ -965,7 +959,7 @@ export async function mountHuntFieldPixiPresentation({
           x: (view.viewportOffset?.x ?? 0) + (wild.worldX - (view.viewRect ?? view.camera).left) * view.transform.scale,
           y: (view.viewportOffset?.y ?? 0) + (wild.worldY - (view.viewRect ?? view.camera).top) * view.transform.scale,
           state: wild.state ?? null, moving: wild.moving === true,
-          currentHp: wild.currentHp ?? null, maxHp: wild.maxHp ?? null
+          currentHp: wild.currentHp ?? null, maxHp: wild.maxHp ?? null, instinct: wild.instinct ?? null
         }))),
         selectedWildId: view?.selectedWildId ?? null,
         captureAvailability: view?.captureAvailability ?? null,
