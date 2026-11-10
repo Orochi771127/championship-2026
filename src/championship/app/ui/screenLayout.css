@@ -1850,9 +1850,13 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
     flex: 0 0 auto; padding: 3px 9px; font-size: calc(13px * var(--sb-scale)); line-height: 1.35; white-space: nowrap;
   }
   :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__day :is(.cm-status-bar__day-word, .cm-status-bar__day-number) { font-size: inherit; }
-  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__extras { flex: 0 1 auto; min-width: 0; margin-inline-start: auto; flex-wrap: nowrap; }
-  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__currencies { flex: 0 1 auto; width: auto; min-width: 0; gap: 6px; padding: 0 10px 0 4px; }
-  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__bits, .cm-status-bar__diamond) { flex: 0 1 auto; width: auto; min-width: 0; min-height: 44px; gap: 3px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__extras { flex: 0 0 auto; min-width: 0; margin-inline-start: auto; flex-wrap: nowrap; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__currencies { flex: 0 0 auto; width: auto; min-width: 0; gap: 6px; padding: 0 10px 0 4px; }
+  /* The wallet never gives way; a long season word does (Thai "ฤดูใบไม้ผลิ" on a Linux font pushed the diamond 4 px off a 430 px screen). */
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__season { display: inline-block; flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; line-height: 20px; }
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__season::before { display: inline-block; margin-inline-end: 5px; vertical-align: 1px; }
+  /* Never squeezed under their figure (Vietnamese "100.000" was clipped) nor under a 44px touch target ("8M" at 568x320). */
+  :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__bits, .cm-status-bar__diamond) { flex: 0 0 auto; width: auto; min-width: 44px; min-height: 44px; gap: 3px; }
   :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__compact-value { font-size: max(14px, calc(13px * var(--sb-scale))); }
   :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__currency-icon { flex-basis: 18px; width: 18px; height: 18px; }
   :root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save-slot { position: absolute; right: max(10px, var(--safe-right)); top: calc(100% + 6px); width: 44px; }
@@ -3980,3 +3984,5 @@ body:not([data-desktop-raising]):has(#cm-root[data-active-screen="RAISING_HOME"]
   font-weight: 900; color: #fff; background: transparent; }
 .cm-backpack__partner[aria-checked="true"] .cm-backpack__partner-check { background: #16a34a; border-color: #14532d; }
 .cm-backpack__partners > .cm-backpack__partner[aria-checked="true"] { background: #ffe38a !important; border-color: #b45309 !important; }
+/* Wallet keys keep a 44 px touch target at every width, even for a short figure such as "0" (844x390 landscape). */
+:root body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__bits, .cm-status-bar__diamond) { min-width: 44px; justify-content: center; }

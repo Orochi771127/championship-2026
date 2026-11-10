@@ -248,6 +248,10 @@ export function createChampionshipStandaloneApp({
   let realtimeLastMs = null, realtimeSyncAt = -Infinity, huntRealtime = null;
   const realtimeAge = new Map(), realtimeWake = new Map();
   const realNowMs = () => { const ms = Date.parse(now()); return Number.isFinite(ms) ? ms : Date.now(); };
+  // The original clock runs 02:00-23:59 and its field lighting is undefined at 00:xx/01:xx (negative trig index).
+  // The real-time clock does reach those hours, where every hunt entry threw and the loadout's Start did nothing;
+  // a hunt then uses the earliest defined night hour, 02:00. The native clock never gets there and is unchanged.
+  const huntSceneClock = clock => realtime && clock.clockMinutes < 120 ? { ...clock, clockMinutes: 120 } : clock;
   let session = null;
   let creature = null;
   let revision = 0;
@@ -5302,7 +5306,7 @@ export function createChampionshipStandaloneApp({
         const lurePersistent = boosts.rareLure ? { ...huntPersistentState,
           modifiers: huntPersistentState.modifiers.map(row => row.map(() => 0)) } : huntPersistentState;
         const lured = huntCaptureReplay === null ? prepareNativeHuntEntry({ biomeId:gate.biomeId, expansion,
-          clock:requireSession().getRaisingHomeSnapshot(),
+          clock:huntSceneClock(requireSession().getRaisingHomeSnapshot()),
           rngSnapshot:gameplayRngSnapshot(), persistentState:lurePersistent, resolvePool:resolveProductHuntPoolSources }) : null;
         // It also calls one more partner, this field's rarest (2026-11-02), from the same product pool.
         const luredEntry = lured && boosts.rareLure ? appendNativeRareLureActor({ ...lured, persistentState:{ ...lured.persistentState,

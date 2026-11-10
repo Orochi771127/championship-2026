@@ -13,6 +13,13 @@ const TARGET=36,TARGET_ID=`species-${String(TARGET).padStart(3,'0')}`;
 assert.ok(['localhost','127.0.0.1','[::1]'].includes(new URL(base).hostname));
 const exactReplace=(s,a,b)=>{assert.equal(s.split(a).length,2,`Unique test seam: ${a}`);return s.replace(a,b);};
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
+/** An Etc/GMT zone (whole hours, no daylight saving) where the local hour is about 12 right now. */
+function middayTimeZone(now=new Date()){
+  let offset=12-now.getUTCHours();
+  if(offset>12)offset-=24;if(offset<-12)offset+=24;
+  // Etc/GMT names invert the sign: Etc/GMT-8 is UTC+8.
+  return offset===0?'Etc/GMT':`Etc/GMT${offset>0?'-':'+'}${Math.abs(offset)}`;
+}
 // Test-only bounded writer history survives the preparation/window boundary.
 // No stored values are copied; preference change records contain only IDs and
 // the known boolean hint flag. Stack capture adds overhead, not a timing control.
@@ -74,7 +81,10 @@ const writeSummary=(status,failure)=>fs.writeFile(summaryPath,JSON.stringify({st
  const browser=await ({chromium,webkit}[engine]).launch({headless:true});
  try{
   for(const mode of baseline?['baseline']:['delay','reject']){
-   const context=await browser.newContext({viewport:engine==='webkit'?{width:390,height:844}:{width:320,height:712},deviceScaleFactor:engine==='webkit'?3:1,isMobile:true,hasTouch:true,locale:'zh-TW'});
+   // The ranch runs on the device's local time and partners sleep from 22:00; a drag at night lands on a sleeping
+   // partner's card. Pick a whole-hour time zone whose local time is now about noon, so the gate is daytime at any
+   // hour the CI runs. The clock itself is real and unmocked.
+   const context=await browser.newContext({viewport:engine==='webkit'?{width:390,height:844}:{width:320,height:712},deviceScaleFactor:engine==='webkit'?3:1,isMobile:true,hasTouch:true,locale:'zh-TW',timezoneId:middayTimeZone()});
    const page=await context.newPage();page.setDefaultTimeout(120000);
    const evidence={mode,engine,target:TARGET,targetEntity:config.entityId,targetPaths:[...targetPaths],errors:[],console:[],network:[],httpFailures:[],requestFailures:[],writes:[]};
    let release,blocked=0,allow=false,baselinePresenterRequests=0;const injectedRequests=new WeakSet();
