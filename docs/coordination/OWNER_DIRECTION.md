@@ -1,5 +1,18 @@
 # Championship Owner Direction
 
+<!-- record-id: HUNT_INSTINCT_VFX_RARITY_20261110 -->
+## 2026-11-10 — Hunt: rare veteran elites with premium radars, an instinct glow underfoot, partners that stand on the ground, and 捕獲移動
+
+After a hunt audit the Owner found the 歷戰體 effect ugly, shadows drifting, and friends not knowing what the 手 tool did: 「那些特別的立戰體或者是其他的那些比較不一樣的生物體的特效請重做，以及工具列那個手請改成補獲移動的文字」. On the result: 「他看起來就不像貼地感，就是沒有踩在那個地板上的感覺」. Then: 「這種強大的歷戰體，應該不能常常出現……要用那個道具才可以比較容易出現」, choosing 非常稀有 and the premium machine only, and asking to reuse existing items rather than draw new ones.
+
+OWNER_APPROVED_ADAPTATION, presentation and product rules only; the native hunt generation, RNG and positions are unchanged.
+
+- Instinct mark: after seeing a pixel outline, ground sigil and sparks, the Owner chose the plain look (「你像這樣子就很好啊，就是不要太花俏」): a special partner's feathered footprint shadow glows in its tier's colour instead of black — veteran elite red-orange (0xff2a10), ancestral violet (0x9a5cff), 0.9 opacity, no other layer (HUNT_INSTINCT_GLOW in huntThree/actorShadows.mjs). The 2D fallback draws the same coloured ellipse. The old random zigzags are gone.
+- Grounding (huntThree/actorFootprint.mjs): measured in the browser the drawn feet already sit on the foot point. The contact shadow and sigil now lie on the ranch footprint table at the map's pitch, 60 % ahead of the nearest foot; a small dark core hugs the feet (the soft ellipse stays at ≤ 0.45); the idle 2D cyan ring is hidden over the 3D scene (the tethered gold ring stays).
+- The hand tool reads 捕獲移動 (en Grab & Move, ja 捕獲移動, th จับ/ย้าย, vi Bắt & dời); its slot is 60 px and a long name wraps.
+- Rarity: ELITE 1.5 %, ANCESTOR 0.3 % per partner, at most one of each per hunt (≈ 1 elite hunt in 6, 1 ancestral in 30). Two HUNT cartridges reuse the idle 龍族雷達 (row 74) and 星靈族雷達 (row 78) plugin rows and art: 歷戰菁英雷達 (SR: elite ×10, at least 1, at most 2) and 祖靈血脈雷達 (SSR: ancestral ×10, exactly 1). SR/SSR, so only the premium machine pays them.
+- Loopback review only: `?huntInstinctQa=ELITE|ANCESTOR|mix`.
+
 <!-- record-id: JOURNEY_RIVAL_ART_GROUND_CRATER_SHADOWS_20261110 -->
 ## 2026-11-10 — Journey rivals show their art, ground marks become craters, and every battle body stands on a shadow
 

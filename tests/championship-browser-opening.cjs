@@ -315,7 +315,7 @@ async function captureOneWild(page, box, { attempts = 12, controlledClock = fals
     let pick = nearest(onScreen(available))??nearest(available);
     if (!pick) { await advance(300); continue; }
     if (pick.distance > 90) {
-      await tool("手");
+      await tool("捕獲移動");
       await panToward(pick.wild);
       pick = nearest(onScreen(await liveWilds(page)));
       if (!pick) continue;
@@ -332,7 +332,7 @@ async function captureOneWild(page, box, { attempts = 12, controlledClock = fals
       // the target running and the player does not follow, so without this the
       // second and later loops are drawn at a creature that has already left.
       if (Math.hypot(target.x - centre.x, target.y - centre.y) > 60) {
-        await tool("手");
+        await tool("捕獲移動");
         await panToward(target);
         target = await find(pick.wild.wildId);
         if (!target) break;
@@ -368,7 +368,7 @@ async function captureOneWild(page, box, { attempts = 12, controlledClock = fals
     if(onBound)await onBound(bound);
     if(process.env.CHAMPIONSHIP_QA_TRACE)console.log('BOUND',JSON.stringify(bound));
     if(bound.y<200||bound.y>box.height-100||bound.x<30||bound.x>box.width-110) {
-      await tool('手');await panToward(bound);await tool('繩索');
+      await tool('捕獲移動');await panToward(bound);await tool('繩索');
       bound=await find(bound.wildId);
       if(!bound||bound.state!=='TETHERED'||bound.x<30||bound.x>box.width-110||bound.y<200||bound.y>box.height-100)continue;
     }
@@ -407,7 +407,7 @@ async function captureOneWild(page, box, { attempts = 12, controlledClock = fals
     await page.mouse.up();
     if (!down) continue;
 
-    await tool("手");
+    await tool("捕獲移動");
     for (let tap = 1; tap <= 10; tap += 1) {
       const now = await find(bound.wildId);
       if (!now) return bound.wildId;                     // on the card, off the live list

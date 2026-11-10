@@ -9,7 +9,8 @@ import {installSharedPass} from './sharedPass.mjs';
 import {installFlatGroundDepthCandidate} from './supportDepth.mjs';
 import {loadAuthoredMapAssets,configureAuthoredLighting} from './authoredMapAssets.mjs';
 import {hd2dLook,applyHd2dLighting,createHd2dPost} from './hd2dLook.mjs';
-import {HUNT_ACTOR_SHADOW,huntContactEnvelope,huntSoftContactVertices,huntCastShadowReach,huntCastShadowVertices,createHuntCastShadowMaterial} from './actorShadows.mjs';
+import {huntActorFootprint} from './actorFootprint.mjs';
+import {HUNT_INSTINCT_GLOW,HUNT_ACTOR_SHADOW,huntContactEnvelope,huntSoftContactVertices,huntCastShadowReach,huntCastShadowVertices,createHuntCastShadowMaterial} from './actorShadows.mjs';
 
 // Caller provides a hash-verified manifest and an explicit appearance approval,
 // authored actor support resolver and already-owned Pixi nodes. No gameplay API.
@@ -56,7 +57,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
     cleanup('abort listener',()=>signal?.removeEventListener('abort',onAbort));
     cleanup('shared pass',()=>pass?.dispose());cleanup('borrowed nodes',restore);
     cleanup('context listener',()=>offLost?.());
-    for(const a of actors.values())for(const owned of [a.geometry,a.material,a.userData.shadow?.geometry,a.userData.shadow?.material,a.userData.cast?.geometry,a.userData.cast?.material])resourceDisposer.once(owned);
+    for(const a of actors.values())for(const owned of [a.geometry,a.material,a.userData.shadow?.geometry,a.userData.shadow?.material,a.userData.cast?.geometry,a.userData.cast?.material,a.userData.core?.geometry,a.userData.core?.material])resourceDisposer.once(owned);
     actors.clear();cleanup('actor textures',()=>textures.dispose());
     for(const batch of batches)resourceDisposer.once(batch);batches.clear();
     cleanup('scene',()=>resourceDisposer.gltf(gltf));cleanup('prototypes',()=>resourceDisposer.gltf(prototypeGltf));cleanup('external assets',releaseExternal);
@@ -187,9 +188,9 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
         });
         textures.beginFrame(records.filter(r=>!r.support.offscreen).map(r=>r.sprite.texture));
         view=next;const live=new Set();
-        for(const {wild,node,sprite,support,quad,opacity} of records){
+        for(const {wild,node,sprite,frame,support,quad,opacity} of records){
           live.add(wild.wildId);let actor=actors.get(wild.wildId);
-          if(support.offscreen){if(actor){actor.visible=false;actor.material.map=null;if(actor.userData.shadow)actor.userData.shadow.visible=false;if(actor.userData.cast){actor.userData.cast.visible=false;actor.userData.cast.material.map=null;}}hide(sprite);hide(node.body);hide(node.contactShadow);continue;}
+          if(support.offscreen){if(actor){actor.visible=false;actor.material.map=null;if(actor.userData.shadow)actor.userData.shadow.visible=false;if(actor.userData.core)actor.userData.core.visible=false;if(actor.userData.cast){actor.userData.cast.visible=false;actor.userData.cast.material.map=null;}const aura=actor.userData.instinct;if(aura)for(const o of [aura.halo,aura.sigil,aura.sparks])o.visible=false;}hide(sprite);hide(node.body);hide(node.contactShadow);hide(node.instinctAura);continue;}
           if(!actor){const geometry=new THREE.BufferGeometry();geometry.setIndex([0,1,2,0,2,3]);geometry.setAttribute('position',new THREE.Float32BufferAttribute(new Float32Array(12),3));geometry.setAttribute('uv',new THREE.Float32BufferAttribute([0,1,0,0,1,0,1,1],2));
             const material=new THREE.MeshBasicMaterial({alphaTest:0,transparent:true,depthTest:true,depthWrite:true,side:THREE.DoubleSide});installFlatGroundDepthCandidate(material,{THREE,groundHeight:support.groundHeight,eyeDirection:map.eye});
             actor=new THREE.Mesh(geometry,material);actor.userData.supportHeight=support.groundHeight;actors.set(wild.wildId,actor);scene.add(actor);}
@@ -205,14 +206,37 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
           // transparent actors, keeping the opaque foreground depth test.
           // Layer 1: a feathered contact shadow around the measured soles.
           let shadow=actor.userData.shadow;
-          if(!shadow){shadow=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial({color:0x02070a,vertexColors:true,transparent:true,opacity:HUNT_ACTOR_SHADOW.contactOpacity,depthTest:true,depthWrite:false,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1}));
+          if(!shadow){shadow=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial({color:0x02070a,vertexColors:true,transparent:true,opacity:HUNT_ACTOR_SHADOW.contactOpacity,depthTest:true,depthWrite:false,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-3}));
             shadow.renderOrder=-1;actor.userData.shadow=shadow;scene.add(shadow);}
-          const envelope=huntContactEnvelope(ellipses,node.motionShadowScale);
+          // Grounding (HUNT_GROUNDING_20261110): the body stands behind its nearest foot, so the contact
+          // shadow and any aura sit on the measured footprint, not on the foot point. The five pixel-measured
+          // sole profiles keep their own ellipses.
+          const footprint=huntActorFootprint({speciesId:wild.speciesId,sequenceId:frame?.sequenceId,quad,elevationSin:map.s??Math.sin(52*Math.PI/180),worldZ:wild.worldZ??0});
+          const motionScale=Number.isFinite(node.motionShadowScale)&&node.motionShadowScale>0?node.motionShadowScale:1;
+          const measured=node.threeContactMeasured===true||!footprint;
+          const envelope=measured?huntContactEnvelope(ellipses,node.motionShadowScale)
+            :{x:footprint.x,y:footprint.y,radiusX:footprint.radiusX*HUNT_ACTOR_SHADOW.contactFeather*motionScale,radiusY:footprint.radiusY*HUNT_ACTOR_SHADOW.contactFeather*motionScale};
           if(!envelope)throw new Error('HM02_EXISTING_SHADOW_BINDING_REQUIRED');
-          const soft=huntSoftContactVertices(envelope,(x,y)=>map.ground(...nativeShadowPoint(wild,node,x,y),support.groundHeight+.0001));
+          const soft=huntSoftContactVertices(envelope,measured?(x,y)=>map.ground(...nativeShadowPoint(wild,node,x,y),support.groundHeight+.002)
+            :(x,y)=>map.ground(wild.worldX+x,wild.worldY+y,support.groundHeight+.002));
           writeAttributes(shadow,{position:[soft.positions,3],color:[soft.colors,4]});
           const fade=(node.alpha??wild.passageAlpha??1)*(node.contactShadow.alpha??1);
-          shadow.visible=actor.visible&&node.contactShadow.visible!==false;shadow.material.opacity=HUNT_ACTOR_SHADOW.contactOpacity*fade;
+          shadow.visible=actor.visible&&node.contactShadow.visible!==false;
+          // Layer 1b: the dark core where the feet meet the ground (HUNT_GROUNDING_20261110).
+          let core=actor.userData.core;
+          if(!core){core=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial({color:0x02070a,vertexColors:true,transparent:true,opacity:HUNT_ACTOR_SHADOW.coreOpacity,depthTest:true,depthWrite:false,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-4}));
+            core.renderOrder=-0.9;actor.userData.core=core;scene.add(core);}
+          if(footprint&&!measured){
+            const feet=Math.max(...quad.map(q=>q[1]),0),cx=footprint.radiusX*HUNT_ACTOR_SHADOW.coreScaleX*motionScale,cy=footprint.radiusY*HUNT_ACTOR_SHADOW.coreScaleY*motionScale;
+            const tight=huntSoftContactVertices({x:footprint.x,y:feet-cy*0.55,radiusX:cx,radiusY:cy},(x,y)=>map.ground(wild.worldX+x,wild.worldY+y,support.groundHeight+.0025));
+            writeAttributes(core,{position:[tight.positions,3],color:[tight.colors,4]});
+            core.visible=shadow.visible;core.material.opacity=HUNT_ACTOR_SHADOW.coreOpacity*fade*footprint.alpha;
+          }else core.visible=false;shadow.material.opacity=HUNT_ACTOR_SHADOW.contactOpacity*fade*(measured?1:footprint.alpha);
+          // Wild instinct (Owner 2026-11-10, HUNT_INSTINCT_VFX_20261110): no outline, sigil or sparks -- the
+          // footprint itself glows in the tier's colour (veteran elite red-orange, ancestral violet).
+          const glow=HUNT_INSTINCT_GLOW[wild.instinct];
+          shadow.material.color.setHex(glow?glow.color:0x02070a);
+          if(glow){shadow.material.opacity=glow.opacity*fade*(measured?1:footprint.alpha);core.visible=false;}
           // Layer 2: the current frame cast along the map's sun, like its props.
           let cast=actor.userData.cast;
           if(!cast){const geometry=new THREE.BufferGeometry();geometry.setIndex([0,1,2,0,2,3]);geometry.setAttribute('uv',new THREE.Float32BufferAttribute([0,1,0,0,1,0,1,1],2));
@@ -221,9 +245,12 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
           if(!cast.material.map)cast.material.needsUpdate=true;cast.material.map=actor.material.map;
           cast.material.opacity=(fieldId.endsWith('_02')?HUNT_ACTOR_SHADOW.castNightOpacity:HUNT_ACTOR_SHADOW.castOpacity)*fade;
           cast.visible=shadow.visible;
-          hide(sprite);hide(node.body);hide(node.contactShadow);
+          hide(sprite);hide(node.body);hide(node.contactShadow);hide(node.instinctAura);
+          // The idle 2D ring floats over the 3D scene ahead of the feet and frames the partner like a sticker;
+          // the 3D ground layers replace it. The gold ring of a tethered partner stays (HUNT_GROUNDING_20261110).
+          if(next.selectedWildId!==wild.wildId)hide(node.ring);
         }
-        for(const [id,a]of actors)if(!live.has(id)){scene.remove(a);for(const layer of [a.userData.shadow,a.userData.cast])if(layer){scene.remove(layer);layer.geometry.dispose();layer.material.dispose();}a.geometry.dispose();a.material.dispose();actors.delete(id);}
+        for(const [id,a]of actors)if(!live.has(id)){scene.remove(a);for(const layer of [a.userData.shadow,a.userData.core,a.userData.cast])if(layer){scene.remove(layer);layer.geometry.dispose();layer.material.dispose();}a.geometry.dispose();a.material.dispose();actors.delete(id);}
         for(const n of backgroundNodes)hide(n);
         // Keep native UI/rings/stamina/tools and pointer mapping on existing Pixi.
         if(!baked&&!authored){const night=fieldId.endsWith('_02');ambient.intensity=night?.55:1.6;sun.intensity=night?.65:2.2;sun.color.set(night?0x9eb8ff:0xffe3b0);}

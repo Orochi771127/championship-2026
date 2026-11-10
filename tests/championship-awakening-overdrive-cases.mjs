@@ -194,14 +194,14 @@ test('sponsor contract wiring: the stake rides the match transaction, the rift g
   if (hp(plain) !== null) assert.equal(hp(sim), Math.round(hp(plain) * 1.2));
 });
 
-test('wild instinct: 65 / 27 / 8, elite faster, ancestral larger, and their capture bonuses', () => {
-  assert.deepEqual(WILD_INSTINCTS.map(w => [w.id, w.weight]), [['NORMAL', 65], ['ELITE', 27], ['ANCESTOR', 8]]);
-  assert.equal(rollWildInstinct(0), 'NORMAL'); assert.equal(rollWildInstinct(0.649), 'NORMAL');
-  assert.equal(rollWildInstinct(0.65), 'ELITE'); assert.equal(rollWildInstinct(0.919), 'ELITE');
-  assert.equal(rollWildInstinct(0.92), 'ANCESTOR'); assert.equal(rollWildInstinct(0.9999), 'ANCESTOR');
+test('wild instinct: 98.2 / 1.5 / 0.3 (HUNT_INSTINCT_RARITY_20261110), elite faster, ancestral larger, and their capture bonuses', () => {
+  assert.deepEqual(WILD_INSTINCTS.map(w => [w.id, w.weight]), [['NORMAL', 98.2], ['ELITE', 1.5], ['ANCESTOR', 0.3]]);
+  assert.equal(rollWildInstinct(0), 'NORMAL'); assert.equal(rollWildInstinct(0.9819), 'NORMAL');
+  assert.equal(rollWildInstinct(0.9821), 'ELITE'); assert.equal(rollWildInstinct(0.9969), 'ELITE');
+  assert.equal(rollWildInstinct(0.9971), 'ANCESTOR'); assert.equal(rollWildInstinct(0.9999), 'ANCESTOR');
   const counts = {NORMAL: 0, ELITE: 0, ANCESTOR: 0};
-  for (let i = 0; i < 20000; i++) counts[rollWildInstinct(instinctNoise(2026, i, 40))]++;
-  assert.ok(Math.abs(counts.NORMAL / 200 - 65) < 2 && Math.abs(counts.ELITE / 200 - 27) < 2 && Math.abs(counts.ANCESTOR / 200 - 8) < 1.2, JSON.stringify(counts));
+  for (let i = 0; i < 100000; i++) counts[rollWildInstinct(instinctNoise(2026, i, 40))]++;
+  assert.ok(Math.abs(counts.ELITE / 1000 - 1.5) < 0.3 && Math.abs(counts.ANCESTOR / 1000 - 0.3) < 0.12, JSON.stringify(counts));
   assert.equal(WILD_INSTINCTS[1].speedMultiplier, 1.2); assert.equal(WILD_INSTINCTS[1].awakeningPoints, 15);
   assert.equal(WILD_INSTINCTS[2].scale, 1.15); assert.equal(WILD_INSTINCTS[2].awakeningPercent, 40);
   assert.equal(ownPointCondition(speciesTaxonomy(40)), 'DRAGON_ATTRIBUTE', 'Gabumon is of the dragon race');

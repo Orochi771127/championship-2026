@@ -1,34 +1,8 @@
 name: Friends playtest real browser acceptance
+# Owner 2026-11-10: the friends mode is off on the public site; this acceptance no longer runs on every
+# pull request (「不需要再浪費流量在好友模式的驗收」). Run it by hand from the Actions tab when needed.
 on:
   workflow_dispatch:
-  pull_request:
-    paths:
-      - '.github/workflows/friends-playtest-browser.yml'
-      - 'tests/championship-friends-playtest-browser.cjs'
-      - 'tests/friends-playtest-groups.cjs'
-      - 'tests/friends-playtest-groups-cases.cjs'
-      - 'tests/friends-installer-fixture-support.cjs'
-      - 'tests/friends-installer-fixture-cases.mjs'
-      - 'tests/alternate-form-browser-support.cjs'
-      - 'src/championship/app/**'
-      - 'src/championship/cage/**'
-      - 'src/championship/raising/**'
-      - 'src/championship/presentation/**'
-      - 'src/championship/shop/**'
-      - 'src/championship/gate/**'
-      - 'src/championship/hunt/**'
-      - 'src/championship/database/**'
-      - 'src/championship/text/**'
-      - 'src/data/championship/**'
-      - 'qa/championship-full-qa-save.json'
-      - 'full-qa-save.html'
-      - 'championship.html'
-      - 'scripts/build-github-pages.mjs'
-      - 'scripts/validate-github-pages.mjs'
-      - 'scripts/lib/**'
-      - 'docs/contracts/championship/WEB_BUILD_INPUTS.v1.json'
-      - 'package.json'
-      - 'package-lock.json'
 permissions:
   contents: read
 jobs:
