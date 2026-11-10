@@ -34,7 +34,7 @@ async function menu(page,id){await page.locator('button[data-menu-id="SYSTEM"]')
  await page.locator('.cm-vs2-gate3d__toggle').click();await page.locator('.cm-vs2-gate[data-availability="AVAILABLE"]').first().click();await page.locator('.cm-vs2-footer .cm-vs2-action--primary').click();await screen(page,'HUNT_LOADOUT');
  await page.locator('.cm-vs2-loadout__option').first().click();await page.locator('.cm-vs2-footer .cm-vs2-action--primary').click();await screen(page,'HUNT_FIELD');
  await page.locator('.cm-vs2-field__loading').waitFor({state:'detached'});await sameCanvas();await page.locator('.cm-vs2-hud__exit').click();await screen(page,'RAISING_HOME');await sameCanvas();report.checks.push('deferred Gate -> Loadout -> Hunt field -> Raising');
- await menu(page,'battle');await screen(page,'BATTLE_SELECT');await page.locator('.cm-vs5-cube__face').filter({hasText:'練習對戰'}).click();
+ await menu(page,'battle');await screen(page,'BATTLE_SELECT');await page.locator('.cm-vs5-cube__face').filter({hasText:'練習對戰'}).dispatchEvent('click');
  const rows=page.locator('.cm-vs5-practice-member');await rows.first().waitFor();let a=false,b=false;
  for(let i=0;i<await rows.count()&&!(a&&b);i++){const buttons=rows.nth(i).locator('button');if(!a&&!(await buttons.nth(0).isDisabled())){await buttons.nth(0).click();a=true;continue;}if(!b&&!(await buttons.nth(1).isDisabled())){await buttons.nth(1).click();b=true;}}
  assert.ok(a&&b);await page.getByRole('button',{name:'開始練習',exact:true}).click();await screen(page,'BATTLE_FIELD');await sameCanvas();

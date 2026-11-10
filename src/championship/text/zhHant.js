@@ -29,22 +29,22 @@ import { deepFreeze } from "../contracts/championshipContracts.js";
 import { SPECIES_NAMES_ZH, SPECIAL_SPECIES_NAMES_ZH, HELP_ZH, TITLE_EVENTS_ZH, SHOP_NAMES_ZH, SHOP_DESCRIPTIONS_ZH } from "./catalogs.zhHant.js";
 import { getLocale, isEnglish } from "./locale.js";
 import {
-  BATTLE_FACE_LABELS_EN, BATTLE_MENU_LABELS_EN, CAGE_EFFECT_LABELS_EN, CAGE_NAMES_EN, DIGI_EGG_EN,
+  BATTLE_FACE_LABELS_EN, BATTLE_FACE_TAGLINES_EN, BATTLE_MENU_LABELS_EN, BATTLE_PRISM_LABELS_EN, CAGE_EFFECT_LABELS_EN, CAGE_NAMES_EN, DIGI_EGG_EN,
   FAMILY_LABELS_EN, GATE_NAMES_EN, GENERATIONS_EN, PERSONALITIES_EN, RESIST_LABELS_EN, ROSTER_FAMILIES_EN,
   SPECIAL_SKILLS_EN, TAMER_RANK_NAMES_EN, UNKNOWN_DIGIMON_EN
 } from "./gameText.en.js";
 import {
-  BATTLE_FACE_LABELS_JA, BATTLE_MENU_LABELS_JA, CAGE_EFFECT_LABELS_JA, CAGE_NAMES_JA, DIGI_EGG_JA,
+  BATTLE_FACE_LABELS_JA, BATTLE_FACE_TAGLINES_JA, BATTLE_MENU_LABELS_JA, BATTLE_PRISM_LABELS_JA, CAGE_EFFECT_LABELS_JA, CAGE_NAMES_JA, DIGI_EGG_JA,
   FAMILY_LABELS_JA, GATE_NAMES_JA, GENERATIONS_JA, PERSONALITIES_JA, RESIST_LABELS_JA, ROSTER_FAMILIES_JA,
   SPECIAL_SKILLS_JA, TAMER_RANK_NAMES_JA, UNKNOWN_DIGIMON_JA
 } from "./gameText.ja.js";
 import {
-  BATTLE_FACE_LABELS_TH, BATTLE_MENU_LABELS_TH, CAGE_EFFECT_LABELS_TH, CAGE_NAMES_TH, DIGI_EGG_TH,
+  BATTLE_FACE_LABELS_TH, BATTLE_FACE_TAGLINES_TH, BATTLE_MENU_LABELS_TH, BATTLE_PRISM_LABELS_TH, CAGE_EFFECT_LABELS_TH, CAGE_NAMES_TH, DIGI_EGG_TH,
   FAMILY_LABELS_TH, GATE_NAMES_TH, GENERATIONS_TH, PERSONALITIES_TH, RESIST_LABELS_TH, ROSTER_FAMILIES_TH,
   SPECIAL_SKILLS_TH, TAMER_RANK_NAMES_TH, UNKNOWN_DIGIMON_TH
 } from "./gameText.th.js";
 import {
-  BATTLE_FACE_LABELS_VI, BATTLE_MENU_LABELS_VI, CAGE_EFFECT_LABELS_VI, CAGE_NAMES_VI, DIGI_EGG_VI,
+  BATTLE_FACE_LABELS_VI, BATTLE_FACE_TAGLINES_VI, BATTLE_MENU_LABELS_VI, BATTLE_PRISM_LABELS_VI, CAGE_EFFECT_LABELS_VI, CAGE_NAMES_VI, DIGI_EGG_VI,
   FAMILY_LABELS_VI, GATE_NAMES_VI, GENERATIONS_VI, PERSONALITIES_VI, RESIST_LABELS_VI, ROSTER_FAMILIES_VI,
   SPECIAL_SKILLS_VI, TAMER_RANK_NAMES_VI, UNKNOWN_DIGIMON_VI
 } from "./gameText.vi.js";
@@ -174,6 +174,7 @@ export const GATE_NAMES = deepFreeze({
 
 /** Original battle mode identities; native dispatch is traced separately. */
 export const BATTLE_FACE_LABELS = deepFreeze({
+  JOURNEY: "征途",
   CHAMPIONSHIP: "冠軍賽",
   TITLE_MATCH: "頭銜賽",
   FREE_BATTLE: "自由對戰",
@@ -182,10 +183,30 @@ export const BATTLE_FACE_LABELS = deepFreeze({
   PRACTICE_BATTLE: "練習對戰"
 });
 
+/** One line under each battle-menu prism face (Owner 2026-11-09). */
+export const BATTLE_FACE_TAGLINES = deepFreeze({
+  JOURNEY: "同步之塔・巡航・戰區",
+  CHAMPIONSHIP: "多輪盃賽・奪取獎牌",
+  TITLE_MATCH: "依行事曆開賽・贏得頭銜",
+  FREE_BATTLE: "挑選對手・自由開戰",
+  LINK_BATTLE: "交換通訊碼・與好友對戰",
+  PASSWORD_BATTLE: "輸入隊伍密碼・挑戰隊伍",
+  PRACTICE_BATTLE: "自家拍檔互相對練"
+});
+
+/** The battle-menu prism's own copy. */
+export const BATTLE_PRISM_LABELS = deepFreeze({
+  canvas: "對戰模式稜柱：左右滑動旋轉，點選任一面進入該模式",
+  enter: "點擊進入",
+  current: "目前選擇",
+  previous: "上一個模式",
+  next: "下一個模式"
+});
+
 /** Copy for the bounded battle-menu panel; match titles keep their source text. */
 export const BATTLE_MENU_LABELS = deepFreeze({
   menu: "對戰選單", kicker: "對戰", chooseMatch: "選擇對戰",
-  faceNotice: "拖曳立方體或使用左右方向鍵選擇模式，再選擇參加的對戰。",
+  faceNotice: "左右滑動旋轉稜柱，點選任一面直接進入該模式。",
   availableMatches: "目前可用的對戰", noMatch: "目前沒有開放的對戰。",
   match: "對戰", noPayout: "無獎金", returnHome: "返回牧場", conference: "多輪賽事"
 });
@@ -197,6 +218,12 @@ function lookup(table, key, fallback) {
 
 const BATTLE_MENU_LABELS_BY_LOCALE = {
   "zh-Hant": BATTLE_MENU_LABELS, "en": BATTLE_MENU_LABELS_EN, "ja": BATTLE_MENU_LABELS_JA, "th": BATTLE_MENU_LABELS_TH, "vi": BATTLE_MENU_LABELS_VI
+};
+const BATTLE_FACE_TAGLINES_BY_LOCALE = {
+  "zh-Hant": BATTLE_FACE_TAGLINES, "en": BATTLE_FACE_TAGLINES_EN, "ja": BATTLE_FACE_TAGLINES_JA, "th": BATTLE_FACE_TAGLINES_TH, "vi": BATTLE_FACE_TAGLINES_VI
+};
+const BATTLE_PRISM_LABELS_BY_LOCALE = {
+  "zh-Hant": BATTLE_PRISM_LABELS, "en": BATTLE_PRISM_LABELS_EN, "ja": BATTLE_PRISM_LABELS_JA, "th": BATTLE_PRISM_LABELS_TH, "vi": BATTLE_PRISM_LABELS_VI
 };
 const BATTLE_FACE_LABELS_BY_LOCALE = {
   "zh-Hant": BATTLE_FACE_LABELS, "en": BATTLE_FACE_LABELS_EN, "ja": BATTLE_FACE_LABELS_JA, "th": BATTLE_FACE_LABELS_TH, "vi": BATTLE_FACE_LABELS_VI
@@ -247,6 +274,18 @@ export function battleFaceLabel(id) {
   const loc = getLocale();
   const table = BATTLE_FACE_LABELS_BY_LOCALE[loc] ?? BATTLE_FACE_LABELS;
   return table[id] ?? BATTLE_FACE_LABELS[id] ?? id;
+}
+
+/** A battle mode's one-line description in the display language. */
+export function battleFaceTagline(id) {
+  const table = BATTLE_FACE_TAGLINES_BY_LOCALE[getLocale()] ?? BATTLE_FACE_TAGLINES;
+  return table[id] ?? BATTLE_FACE_TAGLINES[id] ?? "";
+}
+
+/** The battle-menu prism's own copy in the display language. */
+export function battlePrismLabel(key) {
+  const table = BATTLE_PRISM_LABELS_BY_LOCALE[getLocale()] ?? BATTLE_PRISM_LABELS;
+  return table[key] ?? BATTLE_PRISM_LABELS[key] ?? "";
 }
 
 /** Name for a cage, falling back to the cartridge's Japanese. */

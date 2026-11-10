@@ -1,5 +1,26 @@
 # Championship Owner Direction
 
+<!-- record-id: BATTLE_MODE_PRISM_AND_JOURNEY_20261109 -->
+## 2026-11-09 — The battle menu becomes a mode prism; levels, tower and campaign go into one Journey face
+
+The Owner sent a phone screenshot of 選擇對戰 and asked for a commercial-grade redesign of the cube: a polygon that turns like the cube, whose faces replace the six mode buttons under it (「點方塊就等於點下面的按鍵」), shaped by the number of modes so a later mode only adds a face (「現在就是只有六個也可以做成六面」). After seeing the result the Owner accepted it (「多邊形柱是可以啦」).
+
+The same day the Owner pasted a four-phase brief (Sync Level 1–50 with a post-battle level-up panel, a 100-floor tower with idle patrol, a 6×6 star campaign in the Data Arena with three-choice buffs) and then said 「不希望開太多模式，而是把這些模式都整合在一起」. A read-only inventory found 18 conflicts with current rules; the Owner delegated the open decisions (「我就相信你的決定好嗎？你幫我」). The session decided:
+
+- Prism (presentation only): one face per battle mode, procedural original panels, turn keys and caption; tap a face to press it, swipe to turn, settle on the app's one Pixi ticker. Face buttons stay in the page undrawn for keyboards and screen readers. The four-face texture pack stays for the no-WebGL fallback.
+- D1: Sync Level bonuses apply in title matches and championships under a level cap by tamer rank (Lv.10 at rank 0, +5 per rank, at most 50). OWNER_APPROVED_ADAPTATION over the ROM_VERIFIED match tables, which are unchanged.
+- D2: the Data Arena grants Sync EXP and reads Sync bonuses in Journey and practice play. This amends the 2026-10-15 isolation rule for that one purpose.
+- D3: password, link and online battles ignore Sync bonuses and grant no Sync EXP.
+- D4: Sync Level stays through evolution; rebirth keeps 30 %.
+- D5: no new menu modes. A seventh prism face, 征途 (Journey), holds the campaign, the tower, story chapters and the patrol pod. The tower is not named 「裂隙」, which is a faction name.
+- Sync Level is a modifier applied when a battle is built; it never rewrites the ROM individual fields, save words or battle codes.
+
+Batch plan and conflicts: workspace report `對戰模式整合盤點_20261109/REPORT_ZH_TW.md`.
+
+Merged with main after the awakening overdrive batch: a Journey zone stage never takes a sponsor contract (its stake, foe boost or payout); the stage pays only its own stars and prizes, and the contract waits for the next cup or relay.
+
+Publication: on 2026-11-10 the Owner directed 「好啊，整批一起推送，然後確認沒問題就公開發佈」. This authorizes pushing the whole batch, merging it to main once its checks pass, and publishing it through the existing Pages playtest workflow, with the new modules listed and the changed source hashes restated. It does not widen to any other batch.
+
 <!-- record-id: CHRONO_ARENA_FRIENDS_SWITCH_20261110 -->
 ## 2026-11-10 — One-minute hunt with chrono cartridges in the field, Data Arena beacons, friends mode off on the public site
 

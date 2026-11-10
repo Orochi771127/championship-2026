@@ -30,8 +30,16 @@ export const DATA_ARENA_UPGRADES = deepFreeze([
   { id: "surgePlus", track: "TIDE", max: 2, effect: { surgeRadius: 0.3, surgeCooldown: -0.15 }, modes: ["HARBOR"] },
   { id: "cryoStability", track: "TIDE", max: 2, effect: { iceDuration: 0.5 } },
   { id: "guardianFin", track: "TIDE", max: 2, effect: { mateHp: 0.4, reviveSpeed: 0.35 }, modes: ["HARBOR"] },
-  { id: "showmanship", track: "TIDE", max: 1, effect: { hypeGain: 0.25 } }
+  { id: "showmanship", track: "TIDE", max: 1, effect: { hypeGain: 0.25 } },
+  // Journey zone buffs (Owner 2026-11-10): relay-only, picked between waves.
+  { id: "relayBarrage", track: "SKILL", max: 2, effect: { skillDamage: 0.25 }, modes: ["RELAY"] },
+  { id: "relayRapid", track: "SKILL", max: 2, effect: { cooldown: -0.2 }, modes: ["RELAY"] },
+  { id: "relayThunder", track: "TIDE", max: 2, effect: { tagShock: 1 }, modes: ["RELAY"] },
+  { id: "relayGale", track: "DASH", max: 2, effect: { speed: 0.15 }, modes: ["RELAY"] }
 ]);
+
+// The laser, harbor and crowd upgrades do nothing in a relay; these do.
+const RELAY_FIT = new Set(["skillAmp", "coolingChip", "swiftStep", "phaseDash"]);
 
 export const DATA_ARENA_PATCH = deepFreeze({ id: "patch", track: "NONE", max: Infinity, effect: { heal: 0.3 } });
 
@@ -72,7 +80,8 @@ export function previewDataArenaUpgrade(levels, id) {
  * simulation's seeded stream.
  */
 export function drawUpgradeOffer(levels, random, size = 3, mode = "HARBOR") {
-  const available = DATA_ARENA_UPGRADES.filter((upgrade) => (levels[upgrade.id] ?? 0) < upgrade.max && (!upgrade.modes || upgrade.modes.includes(mode)));
+  const available = DATA_ARENA_UPGRADES.filter((upgrade) => (levels[upgrade.id] ?? 0) < upgrade.max
+    && (upgrade.modes ? upgrade.modes.includes(mode) : mode !== "RELAY" || RELAY_FIT.has(upgrade.id)));
   const offer = [];
   const tracks = [...DATA_ARENA_TRACKS];
   // Shuffle track order so the first slot is not always LASER.
