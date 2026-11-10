@@ -1309,7 +1309,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const viewKey = formMember ? `${rival.id}:${rival.burstSpeciesId}` : rival.id;
       let actorView = rivalViews.get(viewKey);
       if (!actorView) {
-        const member = formMember ? { ...formMember, role: 'RIVAL' } : cast.rivals?.find((entry) => entry.rivalId === rival.definitionId);
+        // A Journey zone stage brings its own rivals (Owner 2026-11-10): they are not in the arena's rival
+        // list, so they are drawn as the roster partner of their species.
+        const rosterMember = cast.partners?.find((entry) => entry.speciesId === rival.speciesId);
+        const member = formMember ? { ...formMember, role: 'RIVAL' }
+          : cast.rivals?.find((entry) => entry.rivalId === rival.definitionId) ?? (rosterMember ? { ...rosterMember, role: 'RIVAL' } : null);
         actorView = createActorView(member?.role ?? "RIVAL", member, rival);
         rivalViews.set(viewKey, actorView);
       }
