@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict'),path=require('node:path');
 module.exports=async function battle(page,{enabled,theme,report,out,size,step,readyHome,matrix,afterMount}){
  await size(page,844,390);await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="battle"]').click();
- await page.locator('.cm-vs5-cube__face[data-face-id="PRACTICE_BATTLE"]').click();
+ await page.locator('.cm-vs5-cube__face[data-face-id="PRACTICE_BATTLE"]').dispatchEvent('click');
  const rows=page.locator('.cm-vs5-party [class*="party-row"]');
  const a=page.locator('.cm-vs5-practice-member button:nth-of-type(1)'),b=page.locator('.cm-vs5-practice-member button:nth-of-type(2)');
  const availableA=a.and(page.locator('button:enabled')),availableB=b.and(page.locator('button:enabled'));

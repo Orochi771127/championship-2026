@@ -1,0 +1,59 @@
+{
+  "id": "SYNC_LEVEL_20261109",
+  "classification": "OWNER_APPROVED_ADAPTATION: every partner carries a Sync Level 1..50 and Sync EXP (BATTLE_MODE_PRISM_AND_JOURNEY_20261109); a battle reads it as a modifier on a copy of the individual and never writes it into the native fields",
+  "supersedes": {
+    "contract": "docs/contracts/championship/ROYAL_NEW_MAPS_20261103.json",
+    "sourceLock": "src/championship/app/championshipStandaloneSave.js"
+  },
+  "saveField": {
+    "path": "progression.syncLevels = { version: 1, partners: { [instanceId]: { level, exp, rebirths } }, crystals }",
+    "migration": "none: a save without it reads every partner as Lv.1 with no EXP; unknown or broken entries normalize field by field (productSyncLevel.normalizeSyncLevels)"
+  },
+  "rules": {
+    "curve": "EXP to the next level = round(80 x level^1.35); Lv.50 is the cap and overflow EXP becomes crystal points",
+    "battle": "auto battle: max HP / TP +0.6 % a level and one native curve step per breakthrough (Lv.10/20/30/40/50) on a copy; finishMatch restores the saved vitals and steps",
+    "caps": "title matches and championships cap the level at 10 + 5 x tamer rank (at most 50); password, link and online battles ignore it and pay no EXP",
+    "arena": "Data Arena partner power x (1 + 0.004 per level + 0.02 per breakthrough)",
+    "rebirth": "a rebirth keeps 30 % of the level; evolution keeps all of it"
+  },
+  "notChanged": [
+    "the native individual fields, battle codes and match tables",
+    "the save key and schemaVersion"
+  ],
+  "sourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "eaf8df4ab8f0329f2337afe19d7d34f703065e1ec3ce30f54b4b8a09d1d1c1c5"
+  },
+  "historicalSourceLocks": {
+    "ROYAL_NEW_MAPS_20261103": {
+      "src/championship/app/championshipStandaloneSave.js": "16ddc21be1570c51e87fb592635d5a5437ed25b9a8aeb660993f07494598b8c1"
+    },
+    "HUNT_TOOL_TIERS_20261103": {
+      "src/championship/app/championshipStandaloneSave.js": "798b838a72251d800b6feb989946e6a5feed1e6724bd5455a562ad55958b613a"
+    },
+    "DIAMOND_ECONOMY_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "15067ee0d3f47971a91a8189edaaa0c22ba3d43a831408b4f8bcc1e525b64c11"
+    },
+    "STAGE_REDESIGN_BURST_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "44b4ceec862776600a237a9cc54a160952f24305ed431a0b33a5addf4bba968d"
+    },
+    "ONLINE_BIND_REWARD_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c7abccc2403e3428e4754c87981a940db378dc4b1c17995363df6049ceeb680"
+    },
+    "CYBER_GACHA_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c4e7336e17e35099758cea84ff533e81c60c08bacbafef356afdbf55953b135"
+    },
+    "BATTLE_TACTICS_20261028": {
+      "src/championship/app/championshipStandaloneSave.js": "3a72fce7d38151f473f343fb8b9f59349daef1beb7cb09b6a0547c628d07ac8e"
+    },
+    "HEX_CAGE_WORLD_20261026": {
+      "src/championship/app/championshipStandaloneSave.js": "aaa72f6e08b150ac9bebb81fb2e6a8efefd532ab0ed7b7e24a7a0a9ae3d97f74"
+    }
+  },
+  "authorization": "Owner 2026-11-09: pasted the Sync Level / tower / campaign brief, asked to merge modes rather than add them, and delegated the decisions (「我就相信你的決定好嗎？你幫我」). Commit only; no push, merge or publication.",
+  "tests": [
+    "tests/championship-sync-level-cases.mjs",
+    "tests/championship-battle-owned-party-cases.mjs",
+    "tests/championship-lion-display-correction-cases.mjs"
+  ],
+  "physicalDeviceAccepted": false
+}

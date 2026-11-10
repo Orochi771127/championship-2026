@@ -1,0 +1,144 @@
+/* Journey (征途), Owner 2026-11-10: the patrol pod, the Sync Tower and crystal
+   feeding behind one prism face. A dark tower shaft with the next floor lit,
+   arcade keys, no box inside a box. Loaded on first open. */
+.cm-journey {
+  position: fixed; inset: 0; z-index: 60;
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+  padding: max(10px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  background:
+    radial-gradient(60% 40% at 50% 0%, rgba(111, 247, 255, 0.16), transparent 70%),
+    linear-gradient(180deg, #1b1442 0%, #120d2e 55%, #0b1a2a 100%);
+  color: #f3f0ff;
+  font-family: var(--font-ui);
+  animation: cm-journey-in 220ms ease-out both;
+}
+@keyframes cm-journey-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.cm-journey__head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding-bottom: 8px; }
+.cm-journey__back { min-height: 40px; padding: 0 14px; border-radius: 999px; font-size: 14px; }
+.cm-journey__title { margin: 0; text-align: center; font-size: 24px; font-weight: 900; letter-spacing: 0.12em; color: #fff;
+  text-shadow: 0 2px 0 #14141f, 0 0 16px rgba(111, 247, 255, 0.55); }
+.cm-journey__crystals { padding: 4px 10px; border-radius: 999px; background: rgba(111, 247, 255, 0.14); color: #b9fbff; font-size: 12px; font-weight: 800; white-space: nowrap; }
+.cm-journey__scroll { min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: grid; align-content: start; gap: 12px; padding-bottom: 12px; }
+
+/* Patrol pod */
+.cm-journey__pod { display: grid; gap: 6px; padding: 12px 14px; border-radius: 16px;
+  background: linear-gradient(135deg, rgba(111, 247, 255, 0.16), rgba(162, 89, 255, 0.14)); box-shadow: inset 0 0 0 1px rgba(111, 247, 255, 0.35); }
+.cm-journey__pod-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 10px; }
+.cm-journey__pod-title { font-size: 15px; font-weight: 900; }
+.cm-journey__pod-rate { color: #b9fbff; font-size: 12px; font-weight: 700; }
+.cm-journey__gauge { position: relative; height: 8px; overflow: hidden; border-radius: 4px; background: rgba(0, 0, 0, 0.35); }
+.cm-journey__gauge-fill { position: absolute; inset: 0; transform-origin: left; background: linear-gradient(90deg, #6ff7ff, #a259ff); box-shadow: 0 0 10px rgba(111, 247, 255, 0.6); }
+.cm-journey__pod-held { color: #d9d2ff; font-size: 12px; }
+.cm-journey__pod-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Keys */
+.cm-journey__key { min-height: 40px; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 900; }
+.cm-journey__key--primary { --key-face: #6ff7ff; --key-shade: #10739a; --key-ink: #08212a; }
+.cm-journey__key:disabled { opacity: 0.55; }
+
+/* Tabs */
+.cm-journey__tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 999px; background: rgba(0, 0, 0, 0.3); }
+.cm-journey__tab { min-height: 36px; border: 0; border-radius: 999px; background: none; color: #c9c3ff; font: 800 13px/1 var(--font-ui); cursor: pointer; }
+.cm-journey__tab[aria-selected="true"] { background: linear-gradient(180deg, #fff, #dfe7fb); color: #14141f; box-shadow: 0 2px 0 #14141f; }
+
+/* Tower */
+.cm-journey__tower { display: grid; gap: 10px; }
+.cm-journey__best { margin: 0; color: #ffe27a; font-size: 13px; font-weight: 800; text-align: center; }
+.cm-journey__floors { position: relative; display: grid; gap: 4px; padding: 6px 10px; border-radius: 14px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03)); }
+.cm-journey__floors::before { content: ""; position: absolute; inset: 0 auto 0 50%; width: 2px; translate: -1px 0; background: linear-gradient(180deg, transparent, rgba(111, 247, 255, 0.4), transparent); pointer-events: none; }
+.cm-journey__floor {
+  position: relative; display: grid; grid-template-columns: 52px auto minmax(0, 1fr) auto; align-items: center; gap: 8px;
+  min-height: 48px; padding: 4px 10px; border: 0; border-radius: 10px;
+  background: rgba(20, 14, 48, 0.75); color: #e9e4ff; text-align: left; font: inherit; cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(162, 89, 255, 0.25);
+}
+.cm-journey__floor:disabled { cursor: default; opacity: 0.45; }
+.cm-journey__floor[data-state="cleared"] { box-shadow: inset 0 0 0 1px rgba(61, 220, 132, 0.4); }
+.cm-journey__floor[data-current="true"] { background: linear-gradient(90deg, rgba(111, 247, 255, 0.28), rgba(162, 89, 255, 0.3)); box-shadow: inset 0 0 0 2px #6ff7ff, 0 0 18px rgba(111, 247, 255, 0.35); }
+.cm-journey__floor[aria-pressed="true"] { outline: 2px solid #ffe27a; outline-offset: 1px; }
+.cm-journey__floor-no { font-size: 18px; font-weight: 900; color: #fff; font-variant-numeric: tabular-nums; }
+.cm-journey__floor-stage { padding: 2px 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); font-size: 11px; font-weight: 800; white-space: nowrap; }
+.cm-journey__floor-foes { display: flex; gap: 2px; min-width: 0; }
+.cm-journey__floor-marks { display: flex; gap: 4px; }
+.cm-journey__mark { padding: 2px 6px; border-radius: 6px; background: rgba(255, 210, 63, 0.2); color: #ffe27a; font-size: 10px; font-weight: 900; white-space: nowrap; }
+.cm-journey__mark--guardian { background: rgba(255, 111, 181, 0.25); color: #ffc2e0; }
+.cm-journey__mark--done { background: rgba(61, 220, 132, 0.22); color: #a6f5c6; }
+.cm-journey__foe, .cm-journey__face { position: relative; display: inline-block; flex: 0 0 auto; overflow: hidden; border-radius: 8px; background: radial-gradient(circle at 50% 35%, #fff, #c9d4f0); }
+.cm-journey__foe { width: 30px; height: 30px; }
+.cm-journey__face { width: 40px; height: 40px; }
+.cm-journey__foe > img, .cm-journey__face > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 24%; }
+
+.cm-journey__detail { display: grid; gap: 8px; padding: 12px; border-radius: 16px; background: rgba(255, 255, 255, 0.06); }
+.cm-journey__rewards { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.cm-journey__rewards[data-claimed="true"] { opacity: 0.55; }
+.cm-journey__rewards-title { font-size: 12px; font-weight: 800; color: #c9c3ff; }
+.cm-journey__reward { padding: 3px 8px; border-radius: 999px; background: rgba(111, 247, 255, 0.16); color: #b9fbff; font-size: 12px; font-weight: 800; }
+.cm-journey__reward--gem { background: rgba(255, 111, 181, 0.2); color: #ffc2e0; }
+.cm-journey__team-title { margin: 2px 0 0; font-size: 12px; font-weight: 800; color: #c9c3ff; }
+.cm-journey__team { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; }
+.cm-journey__member { display: grid; justify-items: center; gap: 2px; padding: 6px 4px; border: 0; border-radius: 12px; background: rgba(20, 14, 48, 0.8); color: #fff; font: inherit; cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
+.cm-journey__member[aria-pressed="true"] { background: linear-gradient(180deg, rgba(111, 247, 255, 0.35), rgba(162, 89, 255, 0.35)); box-shadow: inset 0 0 0 2px #6ff7ff; }
+.cm-journey__member-name { max-width: 100%; overflow: hidden; font-size: 12px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+.cm-journey__member-lv { padding: 0 6px; border-radius: 999px; background: #2a1d5e; color: #ffe27a; font-size: 11px; font-weight: 800; }
+.cm-journey__go { justify-self: stretch; min-height: 52px; border-radius: 999px; font-size: 17px; font-weight: 900; --key-face: #ffd23f; --key-shade: #a98400; --key-ink: #2a1900; }
+.cm-journey__go:disabled { opacity: 0.55; }
+
+/* Feed */
+.cm-journey__feed { display: grid; gap: 6px; }
+.cm-journey__hint { margin: 0; color: #c9c3ff; font-size: 13px; text-align: center; }
+.cm-journey__feed-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 4px; border-bottom: 1px dashed rgba(255, 255, 255, 0.14); }
+.cm-journey__feed-text { display: grid; grid-template-columns: minmax(0, auto) auto; align-items: center; gap: 4px 8px; min-width: 0; }
+.cm-journey__feed-text > strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cm-journey__feed-text > .cm-journey__member-lv { justify-self: start; }
+.cm-journey__feed-bar { grid-column: 1 / -1; position: relative; height: 6px; overflow: hidden; border-radius: 3px; background: rgba(0, 0, 0, 0.35); }
+.cm-journey__feed-bar > i { position: absolute; inset: 0; transform-origin: left; background: linear-gradient(90deg, #ffd23f, #6ff7ff); }
+
+.cm-journey__notice { min-height: 0; margin: 0; text-align: center; color: #a6f5c6; font-size: 13px; font-weight: 800; }
+.cm-journey__notice[data-shown="false"] { visibility: hidden; }
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .cm-journey__scroll { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); align-items: start; }
+  .cm-journey__pod, .cm-journey__tabs { grid-column: 1; }
+  .cm-journey__body { grid-column: 2; grid-row: 1 / span 3; }
+}
+:root[data-motion="reduced"] .cm-journey { animation: none; }
+@media (prefers-reduced-motion: reduce) { :root:not([data-motion]) .cm-journey { animation: none; } }
+
+/* Zones: a strip of six zones and a stage path that snakes in two rows. */
+.cm-journey__zones { display: grid; gap: 10px; }
+.cm-journey__zone-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(118px, 1fr); gap: 6px; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; }
+.cm-journey__zone-chip { display: grid; gap: 2px; justify-items: start; padding: 8px 10px; border: 0; border-radius: 12px; background: rgba(20, 14, 48, 0.8); color: #fff; font: inherit; text-align: left; cursor: pointer; scroll-snap-align: start;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
+.cm-journey__zone-chip > strong { font-size: 13px; font-weight: 900; white-space: nowrap; }
+.cm-journey__zone-chip[aria-selected="true"] { background: linear-gradient(180deg, rgba(111, 247, 255, 0.3), rgba(162, 89, 255, 0.32)); box-shadow: inset 0 0 0 2px #6ff7ff; }
+.cm-journey__zone-chip:disabled { opacity: 0.45; cursor: default; }
+.cm-journey__zone-no { color: #c9c3ff; font-size: 11px; font-weight: 800; }
+.cm-journey__zone-stars { color: #ffe27a; font-size: 11px; font-weight: 800; }
+.cm-journey__path { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 10px; padding: 12px 8px; border-radius: 16px;
+  background: radial-gradient(80% 60% at 50% 50%, rgba(111, 247, 255, 0.1), transparent 70%), rgba(255, 255, 255, 0.04); }
+/* Second row runs right to left, so the path snakes 1-2-3 / 6-5-4. */
+.cm-journey__path > .cm-journey__stage:nth-child(4) { grid-column: 3; grid-row: 2; }
+.cm-journey__path > .cm-journey__stage:nth-child(5) { grid-column: 2; grid-row: 2; }
+.cm-journey__path > .cm-journey__stage:nth-child(6) { grid-column: 1; grid-row: 2; }
+.cm-journey__path::before { content: ""; position: absolute; inset: 30% 14% 30% 14%; border: 2px dashed rgba(111, 247, 255, 0.3); border-left: 0; border-radius: 0 40px 40px 0; pointer-events: none; }
+.cm-journey__stage { position: relative; display: grid; justify-items: center; gap: 3px; padding: 8px 4px; border: 0; border-radius: 14px; background: rgba(20, 14, 48, 0.85); color: #fff; font: inherit; cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(162, 89, 255, 0.35); }
+.cm-journey__stage:disabled { opacity: 0.4; cursor: default; }
+.cm-journey__stage[aria-pressed="true"] { box-shadow: inset 0 0 0 2px #ffe27a, 0 0 16px rgba(255, 226, 122, 0.35); }
+.cm-journey__stage[data-boss] { background: linear-gradient(180deg, rgba(255, 111, 181, 0.28), rgba(20, 14, 48, 0.9)); }
+.cm-journey__stage-no { font-size: 13px; font-weight: 900; }
+.cm-journey__stage-stars { color: #ffd23f; font-size: 13px; letter-spacing: 1px; text-shadow: 0 0 6px rgba(255, 210, 63, 0.5); }
+.cm-journey__stage[data-stars="0"] .cm-journey__stage-stars { color: rgba(255, 255, 255, 0.35); text-shadow: none; }
+.cm-journey__stage > .cm-journey__mark { position: absolute; top: -8px; right: -4px; }
+
+/* Story chapters card on the zones tab. */
+.cm-journey__story { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255, 111, 181, 0.2), rgba(162, 89, 255, 0.18)); box-shadow: inset 0 0 0 1px rgba(255, 111, 181, 0.35); }
+.cm-journey__story-text { display: grid; gap: 2px; min-width: 0; }
+.cm-journey__story-text > strong { font-size: 14px; font-weight: 900; }
+.cm-journey__story-text > span { color: #e6dcff; font-size: 12px; }
+
+/* Desktop and wide tablets: the Journey reads as one centred column, not a page-wide strip. */
+.cm-journey > * { width: min(100%, 880px); justify-self: center; }

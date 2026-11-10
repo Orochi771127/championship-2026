@@ -2752,25 +2752,99 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
    over a face: the characters sit above the highlight's back layer. */
 :root:not([data-theme="classic"]) .cm-vs5-result__characters { z-index: 2; }
 :root:not([data-theme="classic"]) .cm-vs5-result__stage .cm-highlight__stairs { left: calc(var(--hl-ax) + 96px); top: calc(var(--hl-ay) - 132px); }
-:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__stage::before {
-  top: calc(70cqh + 2cqw);
-  height: 17cqw;
-  background:
-    radial-gradient(closest-side, rgba(255, 226, 140, 0.6), rgba(255, 226, 140, 0.18) 52%, transparent 54%,
-      transparent 62%, rgba(111, 247, 255, 0.75) 63%, rgba(111, 247, 255, 0) 67%,
-      transparent 80%, rgba(111, 247, 255, 0.4) 81%, transparent 85%);
-}
+/* Spotlight (Owner 2026-11-09: the flat trapezoid read as a pasted picture). A real
+   light from above: a hot source at the top, a cone whose edges fade out (two
+   half-width masks, so the cone fits any stage size), light brightening toward
+   the floor, a few slow shafts, dust drifting up through the beam, a warm pool
+   under the feet and the rest of the stage pushed into shadow. Light adds with
+   screen; motion is transform and opacity only, and stops under reduced motion. */
 :root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__stage::after {
+  /* The shadow around the light. */
   content: "";
   position: absolute;
+  inset: 0;
   z-index: 0;
-  left: calc(var(--result-light-x, 50%) - 26%);
-  width: 52%;
-  top: 0;
-  height: calc(70cqh + 11cqw);
-  background: linear-gradient(180deg, rgba(255, 244, 200, 0) 0, rgba(255, 244, 200, 0.16) 70%, rgba(255, 244, 200, 0.28) 100%);
-  clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
+  background: radial-gradient(48% 46% at var(--result-light-x, 50%) calc(70cqh + 8cqw), transparent 0 42%, rgba(10, 5, 30, 0.38) 82%, rgba(10, 5, 30, 0.55) 100%);
+  /* No box: the shadow fades in from the stage top and out toward its foot. */
+  -webkit-mask: linear-gradient(180deg, transparent 0, #000 16%, #000 78%, transparent 100%);
+  mask: linear-gradient(180deg, transparent 0, #000 16%, #000 78%, transparent 100%);
   pointer-events: none;
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__stage::before {
+  /* The pool where the light lands, with the podium's ring kept faint. */
+  z-index: 1;
+  top: calc(70cqh + 1cqw);
+  height: 18cqw;
+  background:
+    radial-gradient(closest-side, rgba(255, 249, 228, 0.85), rgba(255, 230, 160, 0.42) 28%, rgba(255, 214, 120, 0.14) 60%, transparent 100%),
+    radial-gradient(closest-side, transparent 76%, rgba(111, 247, 255, 0.42) 79%, transparent 84%);
+  mix-blend-mode: screen;
+  animation: cm-spot-pool 900ms 260ms ease-out both;
+}
+.cm-vs5-result__spot { display: none; }
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__spot {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  /* As wide as the party standing in it: one partner a narrow cone, three a broad one. */
+  --spot-w: clamp(40%, calc(var(--result-light-w, 52%) + 12%), 96%);
+  left: calc(var(--result-light-x, 50%) - var(--spot-w) / 2);
+  width: var(--spot-w);
+  top: -2cqh;
+  height: calc(72cqh + 20cqw);
+  overflow: hidden;
+  /* The light does not stop on a line: above the feet it is all beam, and on
+     the floor it spreads into an ellipse that fades out on every side. */
+  -webkit-mask: linear-gradient(180deg, #000 0, #000 calc(72cqh + 3cqw), transparent calc(72cqh + 9.5cqw)),
+    radial-gradient(50% 8cqw at 50% calc(72cqh + 9.5cqw), #000 0, rgba(0, 0, 0, 0.8) 40%, transparent 100%);
+  mask: linear-gradient(180deg, #000 0, #000 calc(72cqh + 3cqw), transparent calc(72cqh + 9.5cqw)),
+    radial-gradient(50% 8cqw at 50% calc(72cqh + 9.5cqw), #000 0, rgba(0, 0, 0, 0.8) 40%, transparent 100%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.cm-vs5-result__cone { position: absolute; inset: 0; display: block; pointer-events: none; }
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__cone {
+  background:
+    radial-gradient(16% 7% at 50% 0, rgba(255, 252, 238, 0.95), rgba(255, 238, 190, 0.35) 55%, transparent 100%),
+    linear-gradient(90deg, transparent 34%, rgba(255, 246, 214, 0.12) 50%, transparent 66%),
+    linear-gradient(180deg, rgba(255, 242, 205, 0.06) 0%, rgba(255, 238, 192, 0.16) 52%, rgba(255, 230, 172, 0.34) 100%);
+  /* Two half-width masks: each half's 50 % line runs from the apex to a bottom corner. */
+  -webkit-mask: linear-gradient(to bottom right, transparent 46%, #000 54%) left / calc(50% + 1px) 100% no-repeat,
+    linear-gradient(to bottom left, transparent 46%, #000 54%) right / calc(50% + 1px) 100% no-repeat;
+  mask: linear-gradient(to bottom right, transparent 46%, #000 54%) left / calc(50% + 1px) 100% no-repeat,
+    linear-gradient(to bottom left, transparent 46%, #000 54%) right / calc(50% + 1px) 100% no-repeat;
+  transform-origin: 50% 0;
+  animation: cm-spot-open 760ms 120ms cubic-bezier(.2, .8, .2, 1) both;
+}
+.cm-vs5-result__shafts, .cm-vs5-result__dust, .cm-vs5-result__motes { position: absolute; display: block; pointer-events: none; }
+.cm-vs5-result__dust { inset: 0; overflow: hidden; }
+.cm-vs5-result__shafts {
+  inset: 0 -12%;
+  background:
+    repeating-linear-gradient(94deg, transparent 0 7%, rgba(255, 246, 220, 0.10) 9% 11%, transparent 13% 21%);
+  animation: cm-spot-shafts 7s ease-in-out infinite alternate;
+}
+.cm-vs5-result__motes {
+  inset: 0 0 -60% 0;
+  opacity: 0.7;
+  background:
+    radial-gradient(circle, rgba(255, 252, 240, 0.95) 0 1px, transparent 1.8px) 12px 40px / 58px 86px,
+    radial-gradient(circle, rgba(255, 244, 210, 0.75) 0 1.4px, transparent 2.2px) 31px 10px / 83px 121px,
+    radial-gradient(circle, rgba(255, 255, 255, 0.6) 0 0.8px, transparent 1.4px) 5px 70px / 41px 67px;
+  animation: cm-spot-motes 22s linear infinite;
+}
+@keyframes cm-spot-open {
+  0% { opacity: 0; transform: scaleX(0.35) scaleY(0.6); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes cm-spot-pool { 0% { opacity: 0; transform: scale(0.6); } 100% { opacity: 1; transform: none; } }
+@keyframes cm-spot-shafts { 0% { opacity: 0.55; transform: translateX(-3%); } 100% { opacity: 1; transform: translateX(3%); } }
+@keyframes cm-spot-motes { 0% { transform: translateY(0); } 100% { transform: translateY(-37.5%); } }
+:root[data-motion="reduced"] .cm-vs5-root[data-screen="BATTLE_RESULT"] :is(.cm-vs5-result__cone, .cm-vs5-result__shafts, .cm-vs5-result__motes) { animation: none; }
+:root[data-motion="reduced"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__stage::before { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion]) .cm-vs5-root[data-screen="BATTLE_RESULT"] :is(.cm-vs5-result__cone, .cm-vs5-result__shafts, .cm-vs5-result__motes) { animation: none; }
+  :root:not([data-motion]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__stage::before { animation: none; }
 }
 :root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body {
   border: 3px solid var(--ax-ink);
@@ -3393,9 +3467,11 @@ body:not([data-desktop-raising]):has(#cm-root[data-active-screen="RAISING_HOME"]
 }
 
 /* Battle selection on a short portrait phone (375x667): the cube took the room of the
-   first match, which sat under the back key. A smaller cube keeps it in view. */
+   first match, which sat under the back key. A smaller cube keeps it in view. The mode
+   prism (2026-11-09) has no key row under it, so it keeps more of the width. */
 @media (orientation: portrait) and (max-height: 700px) {
   body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__canvas { max-width: 168px; margin-inline: auto; }
+  body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube[data-prism-sides] .cm-vs5-cube__canvas { max-width: 232px; }
 }
 
 /* Battle selection on short landscape phones (844x390, 667x375): the title block and the
@@ -3413,6 +3489,9 @@ body:not([data-desktop-raising]):has(#cm-root[data-active-screen="RAISING_HOME"]
   }
   :root[data-theme="arcade"] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-data-arena > span:first-child { font-size: 19px; }
   body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__canvas { max-width: 120px; margin-inline: auto; }
+  /* The prism has no key row under it: it draws larger and drops its tagline and dots instead. */
+  body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube[data-prism-sides] .cm-vs5-cube__canvas { max-width: 164px; }
+  body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] :is(.cm-vs5-prism__tagline, .cm-vs5-prism__dots) { display: none; }
 }
 
 /* Dialogs in the game: on a short screen the answer keys scrolled out of reach (探索手帳 on
@@ -3771,6 +3850,127 @@ body:not([data-desktop-raising]):has(#cm-root[data-active-screen="RAISING_HOME"]
 .cm-vs5-result__row[data-down="true"] .cm-vs5-result__row-name { opacity: 0.6; }
 .cm-vs5-result__mvp { display: inline-block; margin-right: 3px; padding: 0 4px; border: 1.5px solid #14141f; border-radius: 999px; background: #ffd23f; font-size: 9px; line-height: 1.3; letter-spacing: 0.04em; vertical-align: 1px; }
 .cm-vs5-result__stat { font-weight: 800; white-space: nowrap; text-align: right; color: #3a4258; }
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__stage {
+  background:
+    radial-gradient(70% 38% at 50% 26%, color-mix(in srgb, var(--c-accent-hi) 16%, transparent), transparent 72%),
+    linear-gradient(180deg, transparent 0 calc(70cqh + 2cqw), color-mix(in srgb, var(--c-accent) 9%, transparent) calc(70cqh + 12cqw), transparent 100%);
+}
+/* Battle plan inside the partner's card (Owner 2026-11-09: the roster and a
+   separate plan box below it read as two cluttered parts). A chosen partner's
+   card opens a drawer under its row with the three capsules; dropping the
+   partner folds it away. */
+.cm-vs5-party-card { display: grid; min-width: 0; }
+.cm-vs5-party-card > .cm-vs5-party-row { position: relative; z-index: 1; }
+.cm-vs5-party-card__plan[hidden] { display: none; }
+.cm-vs5-party-card__plan {
+  position: relative; z-index: 0; display: grid; gap: 6px;
+  margin: -12px 8px 4px; padding: 20px 10px 10px;
+  border: 2px solid #14141f; border-top: 0; border-radius: 0 0 14px 14px;
+  background: linear-gradient(180deg, #e9eefc, #d9e2f8);
+  box-shadow: 0 4px 0 #14141f;
+  animation: cm-plan-open 220ms ease-out both;
+}
+.cm-vs5-party-card__plan .cm-vs5-tactic { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; }
+.cm-vs5-party-card__plan .cm-vs5-tactic > .cm-vs5-tactic__label { display: block; grid-column: 1 / -1; color: #3a4258; font-size: 12px; letter-spacing: 0.06em; text-shadow: none; }
+@keyframes cm-plan-open { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+:root[data-motion="reduced"] .cm-vs5-party-card__plan { animation: none; }
+@media (prefers-reduced-motion: reduce) { :root:not([data-motion]) .cm-vs5-party-card__plan { animation: none; } }
+
+/* Result layout (Owner 2026-11-09: too many boxes, all too big; in landscape the
+   party left the light and a three-letter key took a whole row). One action row
+   under the stage: the brag key small on the left, the next / leave key on the
+   right. The EXP list loses its inner frames; landscape keeps the party in the
+   left column and the card, compact and scrollable, in the right. */
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell {
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr) auto;
+  column-gap: 10px;
+}
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell > .cm-vs5-result__stage { grid-column: 1 / -1; grid-row: 1; }
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-vs5-action.cm-vs5-action--primary {
+  grid-column: 2; grid-row: 2; justify-self: end; align-self: center;
+  width: auto; min-width: 9em; min-height: 50px;
+  margin: 8px max(16px, var(--safe-right, 0px)) max(12px, var(--safe-bottom)) 0;
+  padding: 0 22px 0 26px;
+  font-size: calc(17px * var(--text-scale, 1));
+}
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-vs5-action.cm-vs5-action--primary:not(.cm-vs5-exit)::after { content: "›" / ""; margin-left: 10px; font-size: 1.3em; line-height: 0.8; }
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-brag-cta--result {
+  grid-column: 1; grid-row: 2; justify-self: start; align-self: center;
+  width: auto; min-width: 0; min-height: 44px;
+  margin: 8px 0 max(12px, var(--safe-bottom)) max(16px, var(--safe-left, 0px));
+  padding: 6px 14px; border-radius: 999px; font-size: calc(14px * var(--text-scale, 1));
+}
+/* The EXP list: rows divided by a hairline, no box in a box. */
+.cm-vs5-result__body .cm-sync-panel { gap: 0; }
+.cm-vs5-result__body .cm-sync-row { padding: 8px 2px; border: 0; border-radius: 0; background: none; }
+.cm-vs5-result__body .cm-sync-row + .cm-sync-row { border-top: 1px dashed rgba(20, 20, 31, 0.22); }
+.cm-vs5-result__body .cm-sync-row__face { width: 44px; height: 44px; }
+@media (orientation: landscape) and (max-height: 520px) {
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body {
+    max-height: calc(100% - 16px); overflow-y: auto; overscroll-behavior: contain;
+    padding: 10px 14px 12px; gap: 4px;
+  }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body .cm-vs5-title { font-size: calc(24px * var(--text-scale, 1)); line-height: 1.15; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body .cm-vs5-kicker { font-size: 12px; }
+  .cm-vs5-result__body .cm-sync-row { padding-block: 5px; }
+  .cm-vs5-result__body .cm-sync-row__face { width: 36px; height: 36px; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-vs5-action.cm-vs5-action--primary { min-height: 44px; margin-block: 6px max(8px, var(--safe-bottom)); }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-brag-cta--result { min-height: 40px; margin-block: 6px max(8px, var(--safe-bottom)); }
+}
+/* Short landscape: the stage is far wider than tall, so width units would push
+   the light's floor out of the stage. The party's feet stand near 85 % of the
+   height there; the pool, the beam's landing and the falloff follow in height units. */
+@media (orientation: landscape) and (max-height: 520px) {
+  :root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__stage::before { top: 76cqh; height: 17cqh; }
+  :root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__stage::after {
+    background: radial-gradient(48% 70% at var(--result-light-x, 50%) 84cqh, transparent 0 42%, rgba(10, 5, 30, 0.38) 82%, rgba(10, 5, 30, 0.55) 100%);
+  }
+  :root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__spot {
+    height: 104cqh;
+    -webkit-mask: linear-gradient(180deg, #000 0, #000 80cqh, transparent 88cqh),
+      radial-gradient(50% 9cqh at 50% 86cqh, #000 0, rgba(0, 0, 0, 0.8) 40%, transparent 100%);
+    mask: linear-gradient(180deg, #000 0, #000 80cqh, transparent 88cqh),
+      radial-gradient(50% 9cqh at 50% 86cqh, #000 0, rgba(0, 0, 0, 0.8) 40%, transparent 100%);
+  }
+}
+@media (orientation: landscape) and (max-height: 520px) {
+  /* The prize plate and the EXP rows fit the short card: smaller figure, no
+     separate number line (the bar already shows the share). */
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body { grid-auto-rows: max-content; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body .cm-vs5-result__settlement { padding-block: 6px; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body .cm-vs5-result__amount { font-size: calc(26px * var(--text-scale, 1)); }
+  .cm-vs5-result__body .cm-sync-row__numbers { display: none; }
+}
+
+/* A Journey tower result (Owner 2026-11-10): the press-on key takes its own full row
+   (it is the screen's main action); the brag key and the way out share the row under it. */
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell:has(> .cm-vs5-result__follow:not([hidden])) { grid-template-rows: minmax(0, 1fr) auto auto; }
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-vs5-action.cm-vs5-result__follow {
+  grid-column: 1 / -1; grid-row: 2; justify-self: stretch; margin: 8px max(16px, var(--safe-right, 0px)) 0 max(16px, var(--safe-left, 0px));
+  --key-face: #6ff7ff; --key-shade: #10739a; --key-ink: #08212a;
+}
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell:has(> .cm-vs5-result__follow:not([hidden])) > .cm-brag-cta--result { grid-row: 3; }
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-vs5-action.cm-vs5-exit:not(.cm-vs5-action--primary) {
+  grid-column: 2; grid-row: 3; justify-self: end; align-self: center; width: auto; min-height: 44px;
+  margin: 8px max(16px, var(--safe-right, 0px)) max(12px, var(--safe-bottom)) 0; padding: 0 16px; font-size: 14px;
+}
+:root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-vs5-action:is(.cm-vs5-result__follow, .cm-vs5-exit)[hidden] { display: none; }
+@media (orientation: landscape) and (max-height: 520px), (orientation: landscape) and (min-width: 900px) {
+  /* Wide screens: brag | way out | press on stay one row, each as wide as its words. */
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell:has(> .cm-vs5-result__follow:not([hidden])) { grid-template-columns: minmax(0, 1fr) auto auto; grid-template-rows: minmax(0, 1fr) auto; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell > .cm-vs5-action.cm-vs5-result__follow { grid-column: 3; grid-row: 2; justify-self: end; margin: 6px max(16px, var(--safe-right, 0px)) max(8px, var(--safe-bottom)) 0; padding: 0 22px; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell:has(> .cm-vs5-result__follow:not([hidden])) > .cm-brag-cta--result { grid-row: 2; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell.cm-vs5-shell:has(> .cm-vs5-result__follow:not([hidden])) > .cm-vs5-action.cm-vs5-exit { grid-row: 2; margin-right: 0; margin-block: 6px max(8px, var(--safe-bottom)); }
+}
+
+/* Landscape and desktop: the card is as tall as its rows and sits mid-stage beside the
+   party, instead of stretching the full stage height with its rows spread apart. */
+@media (orientation: landscape) {
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell[data-responsive-battle="candidate"] .cm-vs5-result__body {
+    align-self: center; grid-auto-rows: max-content; align-content: start;
+  }
+}
 /* Backpack partner list (Owner 2026-11-09): one row per partner, the chosen one lit with a check. */
 .cm-backpack__partners { display: grid; gap: 6px; max-height: min(46vh, 320px); overflow-y: auto; overscroll-behavior: contain; padding: 2px; }
 .cm-backpack__partner { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 6px 12px; text-align: left; font: inherit; cursor: pointer;

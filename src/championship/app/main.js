@@ -167,14 +167,20 @@ import { formatDateTime, formatList, onLocaleChange, getLocale } from '../text/l
 import { retranslate, setLabel, setText, uiText } from '../text/uiText.js';
 import { paintGachaTicketBadge } from './cyberGachaIcons.js';
 import { gachaChipEffectLines, getGachaMetal } from '../gacha/cyberGacha.js';
+import { buildSyncGainPanel } from './ui/syncGainPanel.js';
+import { loadStylesheet } from './loadStylesheet.js';
+import { journeyText } from '../text/journeyText.js';
+import { syncText } from '../text/syncLevelText.js';
 
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
 // fetched the first time that view asks for one. The wrappers keep the same
 // signature and return the same value the views already await.
 const mountBattleVfxThreeOverlay = async (options) =>
   (await import("../presentation/vs5/createBattleVfxThreeOverlay.js")).mountBattleVfxThreeOverlay(options);
+// The mode prism settles on the app's one Pixi ticker, never a loop of its own.
 const mountBattleSelectThreePresentation = async (options) =>
-  (await import("../presentation/vs5/createBattleSelectThreePresentation.js")).mountBattleSelectThreePresentation(options);
+  (await import("../presentation/vs5/createBattleSelectThreePresentation.js")).mountBattleSelectThreePresentation({
+    ...options, ticker: pixiStage?.app?.ticker ?? null });
 const mountGateSelectThreePresentation = async (options) =>
   (await import("../presentation/vs2/createGateSelectThreePresentation.js")).mountGateSelectThreePresentation(options);
 const mountHighlightBurstThree = async (options) =>
@@ -449,6 +455,8 @@ let mounting = null;
 let pixiStage = null;
 let clockDriver = null;
 let dataArenaSession = null;
+// Journey (Owner 2026-11-10): the open 征途 overlay, and the floor to open on after a won/lost tower match.
+let journeyView = null, pendingJourney = null;
 let tutorialPreview = null;
 let unsubscribeTutorialTools = null;
 
@@ -1703,7 +1711,7 @@ async function mountBattleSelect() {
   battleAttemptId = null;
   battleProgressBefore = null;
   const { shopGoodsPresentation } = await import('../presentation/shopGoodsUiArt.js');
-  return createBattleSelectView({
+  const view = createBattleSelectView({
     root,
     // Cyber Gachapon bounty beacons, display-ready (Owner 2026-11-02).
     sponsorContracts:{read:()=>app.getSponsorContracts?.()??null,arm:(id,stake)=>app.armSponsorContract?.(id,stake),
@@ -1718,7 +1726,10 @@ async function mountBattleSelect() {
     arenaChoices:battleRuntime.listSelectableArenas(),
     // Owner 2026-11-03: each roster row shows the partner's Database thumbnail and its three-axis badges.
     describeMember:entry=>{const index=juicySpeciesIndex(entry?.speciesId);const hero=index===null?null:databaseHeroPortrait(index);
-      return {portrait:hero?.thumbnail??null,badges:entry?.speciesId?taxonomyBadgeRow(speciesTaxonomyForId(entry.speciesId)):null};},
+      // Owner 2026-11-09: the Sync Level rides in the stage slot.
+      const sync=entry?.instanceId?app.getSyncLevel?.(entry.instanceId):null;
+      return {portrait:hero?.thumbnail??null,stage:sync?(sync.next>0?syncText('level',{level:sync.level}):syncText('level.max')):null,
+        badges:entry?.speciesId?taxonomyBadgeRow(speciesTaxonomyForId(entry.speciesId)):null};},
     getPracticeSelection:async()=>({candidates:await app.getBattlePartyCandidates(null)}),
     setBattleTactic:(instanceId,tactic)=>app.setBattleTactic(instanceId,tactic),
     getPasswordSelection:async()=>({maxLength:PRODUCT_BATTLE_CODE_MAX_LENGTH,candidates:await app.getPasswordTeamCandidates(),
@@ -1741,6 +1752,7 @@ async function mountBattleSelect() {
     prefill: (() => { const spar = pendingSpar; pendingSpar = null; return spar; })(),
     onOpenChampionship() { app.openChampionship(); },
     onOpenDataArena: enterDataArena,
+    onOpenJourney: () => void openJourney(),
     async onEnter(recordIndex,playerInstanceIds,mode,selectedArena=null) {
       // Battle simulation uses this existing Application's ticker. Do not
       // charge for a session that cannot start advancing on the shared stage.
@@ -1786,7 +1798,8 @@ async function mountBattleSelect() {
           return await enterPreparedBattle(prepared,attemptId,()=>app.enterLinkBattle({attemptId,linkKey:party.linkKey,rngPreparation:party.rngPreparation}));
         }catch(error){prepared.dispose();console.warn(`LINK_BATTLE_PREPARE: ${error.message}`);return {ok:false,reason:'BATTLE_NOT_READY'};}
       }
-      const party=await app.prepareBattleParty(recordIndex,playerInstanceIds);
+      // Title matches read Sync Level under the tamer-rank cap (Owner 2026-11-09).
+      const party=await app.prepareBattleParty(recordIndex,playerInstanceIds,{sync:{capped:true}});
       if(!party.ok)return party;
       const rngPreparation=app.prepareBattleRng();
       const prepared = (await loadBattleRuntime())({ schedule: app.getBattleSchedule(), mode:1, battleType:0,playerIndividuals:party.individuals,rng:rngPreparation.rng });
@@ -1812,6 +1825,95 @@ async function mountBattleSelect() {
     onExit() { app.leaveScreen(); },
     mountCube: mountBattleSelectThreePresentation
   });
+  // "Press on" from a tower result comes back here and opens the next floor at once.
+  if (pendingJourney) { const prefill = pendingJourney; pendingJourney = null; queueMicrotask(() => void openJourney(prefill)); }
+  return view;
+}
+
+/** The Journey overlay over the battle menu (Owner 2026-11-10). */
+async function openJourney(prefill = null) {
+  if (journeyView || app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) return;
+  journeyView = 'OPENING';
+  try {
+    await loadStylesheet(new URL('./ui/journey.css', import.meta.url).href);
+    const { createJourneyScreen } = await import('./journeyScreen.js');
+    if (app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) { journeyView = null; return; }
+    const describe = (entry) => {
+      const index = juicySpeciesIndex(entry?.speciesId);
+      return { name: entry?.displayName || (index === null ? '' : speciesName(index)), portrait: index === null ? null : databaseHeroPortrait(index)?.thumbnail?.src ?? null };
+    };
+    root.inert = true;
+    journeyView = createJourneyScreen({
+      parent: document.body, prefill,
+      frame: () => app.getJourneyFrame(), floor: (n) => app.getTowerFloor(n),
+      candidates: () => app.getBattlePartyCandidates(null), describe,
+      speciesPortrait: (index) => databaseHeroPortrait(index)?.thumbnail?.src ?? null,
+      syncOf: (id) => app.getSyncLevel(id),
+      claimPatrol: () => app.claimPatrol(), quickPatrol: () => app.quickPatrol(),
+      feed: (id, amount) => app.feedSyncCrystals(id, amount),
+      challenge: (floor, ids) => startTowerFloor(floor, ids),
+      campaign: () => app.getCampaignFrame(),
+      sweep: (zone, stage) => app.sweepCampaignStage(zone, stage),
+      challengeZone: (zone, stage) => void startZoneStage(zone, stage),
+      openStory: () => openStoryFromJourney(),
+      onClose: closeJourney
+    });
+  } catch (error) { console.warn('Journey unavailable', error); closeJourney(); }
+}
+function closeJourney() {
+  if (journeyView && journeyView !== 'OPENING') journeyView.dispose();
+  journeyView = null; root.inert = false;
+}
+/** The story map plays on the ranch: leave the battle menu, then open it once the ranch stage is up. */
+function openStoryFromJourney() {
+  closeJourney();
+  app.leaveScreen();
+  let tries = 0;
+  const attempt = () => {
+    if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME && view?.storyStage) {
+      document.dispatchEvent(new CustomEvent(STORY_CHAPTER_OPEN_EVENT, { detail: { source: 'journey' } }));
+      return;
+    }
+    if (++tries < 40) setTimeout(attempt, 150);
+  };
+  setTimeout(attempt, 150);
+}
+/** A Journey zone stage, fought in the Data Arena relay; leaving the arena reopens the zone. */
+async function startZoneStage(zone, stage) {
+  const begun = app.beginCampaignStage(zone, stage);
+  if (!begun.ok) return begun;
+  const arenaButton = document.getElementById('cm-data-arena');
+  if (!arenaButton) return { ok: false, reason: 'DATA_ARENA_UNAVAILABLE' };
+  closeJourney();
+  const title = journeyText('stage.title', { zone, stage, name: journeyText(`zone.${zone}`) });
+  return enterDataArena(arenaButton, {
+    campaign: Object.freeze({ field: begun.field, rivals: begun.rivals, title }),
+    onCampaignResult: (result) => {
+      const settled = app.settleCampaignStage(result);
+      if (!settled) return null;
+      const lines = [journeyText('campaign.best', { stars: settled.best })];
+      if (settled.firstClear) lines.push(journeyText('campaign.first', { crystals: settled.crystals.toLocaleString() }));
+      if (settled.tickets) lines.push(journeyText('campaign.tickets', { n: settled.tickets }));
+      if (settled.diamonds) lines.push(journeyText('campaign.chest', { diamonds: settled.diamonds }));
+      return { stars: settled.stars, lines };
+    },
+    reopen: { tab: 'ZONES', zone }
+  });
+}
+/** A tower floor, fought like a Free Battle against that floor's original presets. */
+async function startTowerFloor(floor, ids) {
+  if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started)
+    return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回牧場後重試。" };
+  const party = await app.prepareTowerBattle(floor, ids);
+  if (!party.ok) return party;
+  const prepared = (await loadBattleRuntime())({ mode: 2, battleType: 0, playerIndividuals: party.individuals, rng: party.rngPreparation.rng,
+    personalityPolicy: FREE_PRACTICE_PERSONALITY_POLICY, arenaHazards: await loadArenaHazards() });
+  try {
+    prepared.chooseFreeBattle({ presetIndices: party.presetIndices, arenaIndex: party.arenaIndex }); prepared.startMatch(); exposeArenaHazardsQa(prepared);
+    const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
+    closeJourney();
+    return await enterPreparedBattle(prepared, attemptId, () => app.enterTowerBattle({ attemptId, playerInstanceIds: ids, rngPreparation: party.rngPreparation }));
+  } catch (error) { prepared.dispose(); console.warn(`TOWER_BATTLE_PREPARE: ${error.message}`); return { ok: false, reason: 'BATTLE_NOT_READY' }; }
 }
 
 async function mountBattleField() {
@@ -2141,7 +2243,20 @@ async function mountBattleResult() {
     return box && heroSlots.length ? resultHeroAnchor({ width: box.width, height: box.height, slots: heroSlots, layout: resultLayout }) : null;
   };
   const {createBattleResultView} = await import('./vs5Screens.js');
-  const matchTitle = chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
+  // Sync EXP from this attempt's own settlement (Owner 2026-11-09).
+  const syncGains=tutorial?null:(gains=>gains&&receipt&&gains.attemptId===(receipt.attemptId??null)?gains:null)(app.getLastSyncGains?.());
+  const syncPanel=syncGains?syncGainPanelFor(syncGains):null;
+  // Journey tower (Owner 2026-11-10): this attempt's floor, and a key to the next one (or a retry).
+  const tower=tutorial?null:(entry=>entry&&receipt&&entry.attemptId===(receipt.attemptId??null)?entry:null)(app.getLastTowerResult?.());
+  const leaveToJourney=(prefill)=>{
+    pendingJourney=Object.freeze(prefill);
+    battleRuntime?.dispose();battleRuntime=null;battleAttemptId=null;
+    app.leaveScreen();
+    if(app.getScreen()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT){if(app.getScreen()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)app.leaveScreen();app.openBattle();}
+  };
+  const followUp=!tower?null:tower.won&&tower.next?{label:journeyText('result.next',{floor:tower.next}),onClick:()=>leaveToJourney({floor:tower.next,team:tower.team,autoStart:true})}
+    :!tower.won?{label:journeyText('result.retry',{floor:tower.floor}),onClick:()=>leaveToJourney({floor:tower.floor,team:tower.team,autoStart:true})}:null;
+  const matchTitle = tower?journeyText(tower.won?'result.clear':'result.fail',{floor:tower.floor}):chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
     :chosen?.championship?uiText('{event} 第 {round} 戰',{event:uiText(chosen.recordIndex===0?'冠軍大會':'世界大會'),round:chosen.cursor+1})
     :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null;
   const resultView=createBattleResultView({
@@ -2167,6 +2282,8 @@ async function mountBattleResult() {
     progression,
     // Owner 2026-10-29: 📸 brag card for a won battle, starring the winning partner.
     brag: battleResultBrag({ participants, matchTitle }),
+    syncPanel,
+    followUp,
     gachaDrop:tutorial?null:(drop=>drop&&receipt&&drop.attemptId===(receipt.attemptId??null)
       ?{...drop,metalNames:(drop.metals??[]).map(id=>getGachaMetal(id)?.name??id)}:null)(app.getLastBattleGachaDrop?.()),
     sponsor:tutorial?null:sponsorResultLines(app.getLastSponsorSettlement?.(),receipt),
@@ -2180,15 +2297,25 @@ async function mountBattleResult() {
   });
   characterHostNode = resultView.getCharacterHost();
   // The stage light fills in with optional art without rebuilding result panels.
+  // The light is placed on the stage, so the characters' fractions (of their own
+  // host, which a landscape screen narrows to the left column) are mapped onto it.
   const updateStageLight=()=>{
     const box = characterHostNode.getBoundingClientRect?.();
     const light = box && heroSlots.length ? resultStageLight({ width: box.width, height: box.height, slots: heroSlots, layout: resultLayout }) : null;
-    const stageNode = characterHostNode.parentElement;
-    if (light && stageNode?.style) {
-      stageNode.style.setProperty("--result-light-x", `${(light.x * 100).toFixed(2)}%`);
-      stageNode.style.setProperty("--result-light-w", `${(light.width * 100).toFixed(2)}%`);
+    const stageNode = characterHostNode.parentElement, stageBox = stageNode?.getBoundingClientRect?.();
+    if (light && stageNode?.style && stageBox?.width > 0) {
+      const x = (box.left - stageBox.left + light.x * box.width) / stageBox.width, w = light.width * box.width / stageBox.width;
+      stageNode.style.setProperty("--result-light-x", `${(x * 100).toFixed(2)}%`);
+      stageNode.style.setProperty("--result-light-w", `${(w * 100).toFixed(2)}%`);
     }
   };
+  // Owner 2026-11-09 (spotlight): the light follows the party when the screen turns.
+  // The light is moved on the next frame: setting it inside the observer callback would resize the
+  // stage again in the same pass ("ResizeObserver loop completed with undelivered notifications").
+  let lightFrame=0;
+  const lightResize=typeof ResizeObserver==='function'?new ResizeObserver(()=>{if(disposed||lightFrame)return;
+    lightFrame=requestAnimationFrame(()=>{lightFrame=0;if(!disposed)updateStageLight();});}):null;
+  lightResize?.observe(characterHostNode);
   const artLoading=new AbortController(),hudLoad=createLoadAttempt({timeoutMs:20000});
   stageReady=ensurePixiStage(characterHostNode,artLoading.signal);
   hudReady=hudLoad.wait(loadRegisteredCharacterHudArt({baseUrl:location.href,
@@ -2206,7 +2333,7 @@ async function mountBattleResult() {
     if(disposed)void characters.dispose();else resultCharacters=characters;
   }).catch(error=>{if(!disposed)console.warn('Battle result character reference unavailable',error);});
   return {...resultView,dispose(){
-    if(disposed)return;disposed=true;hudLoad.cancel();artLoading.abort();
+    if(disposed)return;disposed=true;hudLoad.cancel();artLoading.abort();lightResize?.disconnect();if(lightFrame)cancelAnimationFrame(lightFrame);
     resultCharacters?.dispose();resultCharacters=null;hudArt=null;resultView.dispose();
   }};
 }
@@ -2499,6 +2626,9 @@ async function openGameplay() {
   // stage and the synthesizer can be checked on an isolated QA save. Public hosts never bind it.
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("gachaQa"))
     globalThis.__championshipGachaQa = { grantTickets: (amount) => app.grantGachaTickets(amount, 'QA'), frame: () => app.getCyberGachaFrame() };
+  // Loopback review only (?syncQa): crystal points and feeding, so the level-up panel can be checked.
+  if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("syncQa"))
+    globalThis.__championshipSyncQa = { grant: (n) => app.grantSyncCrystals(n), feed: (id, n) => app.feedSyncCrystals(id, n), level: (id) => app.getSyncLevel(id), partners: () => app.getBattlePartyCandidates(null) };
   // Loopback review only (?diamondQa): automation items into the bag, and the land / badge readouts.
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("diamondQa"))
     globalThis.__championshipDiamondQa = { grant: (id, n = 1) => app.grantAutomationItem(id, n, 'QA'), cage: () => app.getCageEditFrame(),
@@ -3156,8 +3286,23 @@ function bragWinnerFrom(participants) {
   return null;
 }
 /** The victory screen's 📸 key: the winning partner on the card, the match as its ribbon. */
+/** The post-battle Sync EXP panel for a settled gain record (auto battle and Data Arena). */
+function syncGainPanelFor(record) {
+  const nameOf = (id) => {
+    const entry = app.resolveRaisingInstance(id), index = juicySpeciesIndex(entry?.speciesId);
+    return entry?.displayName || (index === null ? id : speciesName(index));
+  };
+  const portraitOf = (id) => {
+    const index = juicySpeciesIndex(app.resolveRaisingInstance(id)?.speciesId);
+    return index === null ? null : databaseHeroPortrait(index)?.thumbnail?.src ?? null;
+  };
+  const panel = buildSyncGainPanel({ gains: record.gains, nameOf, portraitOf, reducedMotion: prefersReducedMotion(),
+    cap: ['TITLE', 'CHAMPIONSHIP'].includes(record.kind) ? app.getSyncCap() : null });
+  return { ...panel, kicker: syncText('panel.kicker'), title: syncText('panel.title') };
+}
+
 function battleResultBrag({ participants, matchTitle }) {
-  return { label: socialText('bragButton'), onOpen: button => openTamerBragCard({ trigger: button, winner: bragWinnerFrom(participants), victory: { matchTitle } }) };
+  return { label: socialText('bragButton'), shortLabel: socialText('bragShort'), onOpen: button => openTamerBragCard({ trigger: button, winner: bragWinnerFrom(participants), victory: { matchTitle } }) };
 }
 const bragButton = (onClick) => {
   const button = document.createElement('button'); button.type = 'button';
@@ -3364,7 +3509,7 @@ function relabelChrome() {
 // ---- Data Arena entry (OWNER_APPROVED_ADAPTATION 2026-10-15) ----------------
 // Battle owns the entry; the existing arena temporarily borrows the shared
 // stage. Its close callback restores the same menu and its keyboard focus.
-async function enterDataArena(dataArenaButton) {
+async function enterDataArena(dataArenaButton, { campaign = null, onCampaignResult = null, reopen = null } = {}) {
   stopRanchTitlePreload();
   if (dataArenaSession || app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT || !dataArenaButton?.isConnected) return;
   dataArenaButton.disabled = true;
@@ -3380,6 +3525,8 @@ async function enterDataArena(dataArenaButton) {
     if (app) recordSessionScreenMounted(app.getScreen());
     syncMusic();
     dataArenaButton.focus({ preventScroll: true });
+    // A Journey zone stage returns to its zone.
+    if (reopen) queueMicrotask(() => void openJourney(reopen));
   };
   let storage = null;
   try { storage = window.localStorage; } catch { storage = null; }
@@ -3398,6 +3545,11 @@ async function enterDataArena(dataArenaButton) {
       progress: app.getDataArenaProgress?.() ?? null,
       // Awakening raising (2026-11-02): a relay entry from the ranch bursts into the form its partner learned.
       burstPlanOf: (instanceId) => app.getBattleBurstPlan?.(instanceId) ?? null,
+      // Sync Level (Owner 2026-11-09): ranch partners fight at their level and earn Sync EXP.
+      syncPowerOf: (instanceId) => app.getSyncArenaPower?.(instanceId) ?? 1,
+      onSyncResult: (match) => app.grantArenaSync?.(match) ?? null,
+      syncPanelFor: (record) => syncGainPanelFor(record),
+      campaign, onCampaignResult,
       // Sponsor stake contracts (AWAKENING_OVERDRIVE_20261109): the one armed in the battle menu rides the next cup or relay.
       sponsor: { begin: (power) => { const result = app.beginArenaSponsorContract?.(power) ?? null;
           showSponsorNotice(result?.ok ? result : null, result?.ok ? null : app.takeSponsorRefusal?.() ?? null); return result; },

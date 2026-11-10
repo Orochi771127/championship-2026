@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { restoreSyncNativeProfile } from '../src/championship/contracts/productSyncLevel.js';
 import {burstBasesFor} from '../src/championship/contracts/productBurstEvolution.js';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -154,8 +155,12 @@ test('owned championship rounds use arena 10, one committed draw and native roun
       const expected=settleOwnedBattleIndividual(prepared.individuals[0].nativeProfile,{currentHp:final.hp.current,
         metricLimit:final.resource.current,verdict:result.verdict,mode:0,event:0,cursor:round+1,totalRounds:3});
       assert.deepEqual(result.individualResults[0].nativeProfile,expected);
+      // Sync Level (2026-11-09): the battle fought a boosted copy; the saved partner keeps its own vitals.
+      const savedBefore=structuredClone(app.getCreature().nativeProfile),syncBefore=app.getSyncLevel(id);
       assert.equal(app.finishMatch({...result,attemptId}).ok,true);assert.equal(app.getChampionshipRun().cursor,round+1);
-      assert.deepEqual(app.getCreature().nativeProfile,expected);
+      assert.deepEqual(app.getCreature().nativeProfile,restoreSyncNativeProfile(expected,savedBefore));
+      const syncAfter=app.getSyncLevel(id);
+      assert.ok(syncAfter.level>syncBefore.level||syncAfter.exp>syncBefore.exp,'a won round pays Sync EXP');
       app.exitBattle();runtime.dispose();runtime=null;
     }
     assert.equal(app.settleChampionship().prize,50000);assert.equal(app.getShopFrame().bits,wallet+50000);

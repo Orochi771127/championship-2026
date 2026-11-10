@@ -51,6 +51,7 @@ export const GATE_NAMES_JA = Object.freeze({
 });
 
 export const BATTLE_FACE_LABELS_JA = Object.freeze({
+  JOURNEY: "征途",
   CHAMPIONSHIP: "チャンピオンシップ",
   TITLE_MATCH: "タイトルマッチ",
   FREE_BATTLE: "フリーバトル",
@@ -61,9 +62,27 @@ export const BATTLE_FACE_LABELS_JA = Object.freeze({
 
 export const BATTLE_MENU_LABELS_JA = Object.freeze({
   menu: "バトルメニュー", kicker: "バトル", chooseMatch: "対戦を選択",
-  faceNotice: "キューブをドラッグするか左右キーでモードを選び、参加する対戦を選択してください。",
+  faceNotice: "左右にスワイプしてプリズムを回し、面をタップするとそのモードに入ります。",
   availableMatches: "参加可能な対戦", noMatch: "現在開催中の対戦はありません。",
   match: "対戦", noPayout: "賞金なし", returnHome: "牧場に戻る", conference: "トーナメント大会"
+});
+
+export const BATTLE_FACE_TAGLINES_JA = Object.freeze({
+  JOURNEY: "塔・巡航・戦区",
+  CHAMPIONSHIP: "連戦カップでメダル獲得",
+  TITLE_MATCH: "日程の大会で称号を獲得",
+  FREE_BATTLE: "好きな相手と自由に対戦",
+  LINK_BATTLE: "通信コードでフレンド対戦",
+  PASSWORD_BATTLE: "チームパスワードに挑戦",
+  PRACTICE_BATTLE: "自分のパートナー同士で練習"
+});
+
+export const BATTLE_PRISM_LABELS_JA = Object.freeze({
+  canvas: "バトルモードのプリズム：スワイプで回転、面をタップでモードに入ります",
+  enter: "タップで入る",
+  current: "選択中",
+  previous: "前のモード",
+  next: "次のモード"
 });
 
 export const UNKNOWN_DIGIMON_JA = "未知の個体";
