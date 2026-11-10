@@ -58,6 +58,7 @@ import contract from "../../../../docs/contracts/championship/battle-field-prese
 import { prefersReducedMotion, currentQualityTier, flashScale as currentFlashScale } from '../presentationPreferences.js';
 import {battleFocusViewport,drawBattleDigitalCurtain} from '../battleFocusViewport.js';
 import {createBattleEffectSprites} from '../battleEffectSprites.js';
+import {createBattleStatusAilmentFx, multiplyTint} from '../battleFx/battleStatusAilmentFx.js';
 import {createBm03GroundShadows} from '../bm03GroundShadows.js';
 import {createBattleFxCamera,clampBattleCameraToMap} from '../battleFx/battleFxCamera.js';
 import {createBattleFxEventTracker} from '../battleFx/battleFxEvents.js';
@@ -281,6 +282,12 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     quality:currentQualityTier(), reducedMotion, responsiveLayout, flashScale:currentFlashScale(),
     describeMove:fx?.describeMove, nameOfSlot:fx?.nameOfSlot, moveNameOf:fx?.moveNameOf, text:fx?.text, juicy,
     resolveMove:fx?.resolveMove, effectArt:shownArt}) : null;
+  // Status ailments (STATUS_AILMENT_VFX_20261110): a loop round each fighter whose
+  // negative-status slot is set, and a tint / glow on its own frame. Display only.
+  const statusFx = fxLayer ? createBattleStatusAilmentFx({PIXI:stage.PIXI, layer:actorLayer, reducedMotion, quality:currentQualityTier()}) : null;
+  // Loopback review only: ?statusFxQa=7,9,14 shows those codes on slots 0, 1, 2... (display only, the battle is untouched).
+  const statusQa = statusFx && ['localhost', '127.0.0.1', '[::1]'].includes(globalThis.location?.hostname)
+    ? (new URLSearchParams(String(globalThis.location?.search ?? '')).get('statusFxQa') ?? '').split(',').filter(Boolean).map(Number) : [];
   // A reference cell that could not be remade retires; the FX layer's kit then draws it on its actor.
   const effectSprites = shownArt ? createBattleEffectSprites({PIXI:stage.PIXI, parent:actorLayer, art:shownArt, retireRom:Boolean(fxLayer)}) : null;
   // A failed FX probe starts from contain-fit art coordinates; the final
@@ -355,12 +362,16 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       .filter(c => c.present && !c.down && c.speciesId)
       .map(c => ({slot:c.slot, team:c.team, x:rect.x + c.stand.x * rect.width, y:rect.y + c.stand.y * rect.height})), 34 * nativeScale, 14 * nativeScale) : null;
     const ease = Math.min(1, layoutDtMs / 140);
+    statusFx?.update(layoutDtMs);
+    const statusShown = new Set();
     for (const combatant of view.combatants) {
       let entry = actors.get(combatant.slot);
       if (entry && (!combatant.present || entry.speciesId !== combatant.speciesId)) {
         actorLayer.removeChild(entry.actor.sprite);
         entry.actor.sprite.destroy();
         entry.flashSprite?.destroy();
+        entry.statusGlow?.destroy();
+        statusFx?.retire(combatant.slot);
         actors.delete(combatant.slot);
         entry = null;
       }
@@ -383,7 +394,9 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
         nativeRequest:combatant.animationRequest?.nativeRequest===true,
         specialPrelude:Boolean(focus)});
       if (motion?.geometry.blank) {
-        sprite.visible=false;if(entry.flashSprite)entry.flashSprite.visible=false;rendered.add(combatant.slot);continue;
+        sprite.visible=false;if(entry.flashSprite)entry.flashSprite.visible=false;if(entry.statusGlow)entry.statusGlow.visible=false;
+        if(statusFx&&(statusQa[combatant.slot]||combatant.status?.code)){statusFx.hide(combatant.slot);statusShown.add(combatant.slot);}
+        rendered.add(combatant.slot);continue;
       }
       const texture = sprite.texture;
       const packedScale = motion?.geometry.scale ?? nativeSizing?.packedPixelsPerNativePixel;
@@ -505,6 +518,29 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
           top:y-lift-bodyHeight, height:bodyHeight, width:bodyWidth,
           facing:combatant.stand.facing, team:combatant.team, down:combatant.down, engaged:combatant.engaged,framingBounds,
           left:x-bodyWidth/2, right:x+bodyWidth/2, bottom:y, spread:entry.spreadX});
+        // Status ailment: the loop round the body, then the body's own tint and glow.
+        const statusCode = statusQa[combatant.slot] || (combatant.status?.code ?? 0);
+        if (statusFx && statusCode && !held) {
+          statusFx.place(combatant.slot, statusCode, {x, y:y-lift, top:y-lift-bodyHeight, width:bodyWidth, height:bodyHeight, zIndex:sprite.zIndex, unit:nativeScale},
+            {visible:!combatant.down && sprite.visible, alpha:sprite.alpha});
+          statusShown.add(combatant.slot);
+        } else if (statusFx && statusCode && held) statusShown.add(combatant.slot);
+        const statusBody = statusShown.has(combatant.slot) && !combatant.down ? statusFx.body(combatant.slot) : null;
+        if (statusBody) sprite.tint = multiplyTint(sprite.tint, statusBody.tint);
+        if (statusBody?.glow && !entry.statusGlow) {
+          entry.statusGlow = new stage.PIXI.Sprite(sprite.texture);
+          entry.statusGlow.blendMode = 'add'; entry.statusGlow.eventMode = 'none'; entry.statusGlow.label = 'battle status body glow';
+          actorLayer.addChild(entry.statusGlow);
+        }
+        if (entry.statusGlow) {
+          const glow = entry.statusGlow;
+          glow.visible = Boolean(statusBody?.glow) && sprite.visible;
+          if (glow.visible) {
+            glow.texture = sprite.texture; glow.anchor.copyFrom(sprite.anchor); glow.scale.copyFrom(sprite.scale);
+            glow.position.copyFrom(sprite.position); glow.rotation = sprite.rotation; glow.zIndex = sprite.zIndex + 0.005;
+            glow.tint = statusBody.glow; glow.alpha = statusBody.glowAlpha * sprite.alpha;
+          }
+        }
       }
       if (fxLayer) {
         // Field interaction from the fighter's own native motion (never the
@@ -542,6 +578,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     }
     groundShadows?.end();
     burstShell.retireExcept(shellSlots);
+    statusFx?.retireExcept(statusShown);
     return rendered;
   }
 
@@ -743,7 +780,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
           bodies:[...slotInfos.values()].map(b=>Object.freeze({slot:b.slot,x:Math.round(b.x),groundY:Math.round(b.groundY),top:Math.round(b.top),width:Math.round(b.width),down:Boolean(b.down),
             // The declared display separation; the body is otherwise on its stand.
             spread:Math.round((b.spread ?? 0)*100)/100})),
-          director:director.getState(), insets:lastInsets,
+          director:director.getState(), insets:lastInsets, statusAilments:statusFx?.getDiagnostics() ?? null,
           world:fieldPlacement ? Object.freeze({zoom:fieldPlacement.zoom, x:fieldPlacement.x, y:fieldPlacement.y}) : null}) : null,
         groundShadows:groundShadows?.getDiagnostics() ?? null,
         characters: Object.freeze([...actors].map(([slot, entry]) => Object.freeze({
@@ -781,6 +818,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       if (scene.parent) scene.parent.removeChild(scene);
       effectSprites?.dispose();
       fxLayer?.dispose();
+      statusFx?.dispose();
       if (shownArt !== effectArt) shownArt?.releaseRemade?.();
       hitFeel?.dispose();
       burstShell.dispose();
