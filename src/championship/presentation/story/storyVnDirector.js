@@ -16,7 +16,7 @@ import { createStoryVnTheater } from "./storyVnTheater.js";
 const INTERACTIVE = new Set(["choice", "tap", "battle"]);
 
 export function createStoryVnDirector({
-  doc = globalThis.document, host = doc.body, locale = "zh-Hant", reducedMotion = false,
+  doc = globalThis.document, host = doc.body, locale = "zh-Hant", reducedMotion = false, motionPlates = true,
   speciesName = () => "", runBattle = null, claim = null,
   createStage = createStoryVnStage, createTheater = createStoryVnTheater
 } = {}) {
@@ -30,7 +30,7 @@ export function createStoryVnDirector({
     const params = { tamer, partner };
     const t = (key, extra = {}) => storyVnText(key, locale, { ...params, ...extra }) ?? key;
     const theater = createTheater({ doc, host, text: key => t(key), reducedMotion });
-    const stage = createStage({ host: theater.stageHost, doc, reducedMotion });
+    const stage = createStage({ host: theater.stageHost, doc, reducedMotion, motionPlates });
     const life = new AbortController();
     let skipping = false;
     const tags = new Map(); // cast key -> "contestant" while overwritten
@@ -60,7 +60,7 @@ export function createStoryVnDirector({
       const side = beat.speaker === "partner" ? "right" : "left";
       if (!narrator) {
         if (castKey === "navi") stage.setBust("left", { navi: true });
-        else { const species = speciesOf(castKey); if (species !== null) stage.setBust(side, { species }, { key: castKey }); }
+        else { const species = speciesOf(castKey); if (species !== null) stage.setBust(side, { species }, { key: castKey, mood: beat.mood ?? "calm" }); }
       }
       // A speaker whose name plate is overwritten speaks as "【contestant】".
       const overwritten = castKey && tags.get(castKey) === "contestant";
@@ -115,6 +115,9 @@ export function createStoryVnDirector({
     async function run(beats) {
       const index = new Map(beats.map((beat, i) => [beat.label, i]).filter(([label]) => label));
       let i = from && index.has(from) ? index.get(from) : 0;
+      // Starting mid-chapter (review): the scene that beat stands in comes up first.
+      const scene = i > 0 ? beats.slice(0, i).reverse().find(beat => beat.type === "bg") : null;
+      if (scene) { await stage.setPlate(scene.id, { instant: true }); theater.location(scene.titleKey ? t(scene.titleKey) : null); }
       while (i < beats.length) {
         guard();
         const beat = beats[i];

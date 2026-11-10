@@ -50,20 +50,22 @@ const freezeDeep = value => {
 };
 
 /**
- * Painted scene plates (original art, 2026-11-11). Side view, ground band from
+ * Living scene plates (original art, 2026-11-11). Side view, ground band from
  * `ground` (fraction of the height) down; `focus` is the horizontal point a
- * narrow (portrait) screen keeps in view.
+ * narrow (portrait) screen keeps in view. `src` is the still (also the poster
+ * under reduced motion and the saver tier), `motion` a seamless 2.5D parallax
+ * loop whose focus plane is the ground band, `ambient` the drifting motes.
  */
 export const STORY_VN_BACKGROUNDS = freezeDeep({
-  habitat: { src: "assets/production/story/vn-backgrounds-v1/habitat.84b43b3c18dd6347.webp", ground: 0.8, focus: 0.58 },
-  plaza: { src: "assets/production/story/vn-backgrounds-v1/plaza.4bb72ba0d7c4e290.webp", ground: 0.8, focus: 0.6 },
-  arena: { src: "assets/production/story/vn-backgrounds-v1/arena.d91d6b024b83d272.webp", ground: 0.8, focus: 0.55 },
-  town: { src: "assets/production/story/vn-backgrounds-v1/town.907172f9f728257d.webp", ground: 0.8, focus: 0.6 },
-  grid: { src: "assets/production/story/vn-backgrounds-v1/grid.a6567cf2a41f140c.webp", ground: 0.8, focus: 0.62 },
-  lotus: { src: "assets/production/story/vn-backgrounds-v1/lotus.be7793d0fd6acbf4.webp", ground: 0.8, focus: 0.58 },
-  vault: { src: "assets/production/story/vn-backgrounds-v1/vault.44846f132c4aabf1.webp", ground: 0.8, focus: 0.52 },
-  safezone: { src: "assets/production/story/vn-backgrounds-v1/safezone.e50c4af776f3c912.webp", ground: 0.8, focus: 0.55 },
-  void: { src: "assets/production/story/vn-backgrounds-v1/void.3204cec44f4ab6e8.webp", ground: 0.8, focus: 0.55 }
+  habitat: { src: "assets/production/story/vn-backgrounds-v2/habitat.cf2beca88e5e8a24.webp", motion: "assets/production/story/vn-backgrounds-v2/habitat.9da50f44606a900b.mp4", ambient: "leaves", ground: 0.8, focus: 0.58 },
+  plaza: { src: "assets/production/story/vn-backgrounds-v2/plaza.f12972526bf251c0.webp", motion: "assets/production/story/vn-backgrounds-v2/plaza.a86b9322315f1847.mp4", ambient: "confetti", ground: 0.8, focus: 0.6 },
+  arena: { src: "assets/production/story/vn-backgrounds-v2/arena.88c052817c8f310b.webp", motion: "assets/production/story/vn-backgrounds-v2/arena.05853a915c2cc7c7.mp4", ambient: "dust", ground: 0.8, focus: 0.55 },
+  town: { src: "assets/production/story/vn-backgrounds-v2/town.816b0dd6b46815e3.webp", motion: "assets/production/story/vn-backgrounds-v2/town.033a97a34dbc7bab.mp4", ambient: "fireflies", ground: 0.8, focus: 0.6 },
+  grid: { src: "assets/production/story/vn-backgrounds-v2/grid.3b996755ec684c99.webp", motion: "assets/production/story/vn-backgrounds-v2/grid.ec3c2966b3eb17ca.mp4", ambient: "data", ground: 0.8, focus: 0.62 },
+  lotus: { src: "assets/production/story/vn-backgrounds-v2/lotus.c9b267dff44c05bb.webp", motion: "assets/production/story/vn-backgrounds-v2/lotus.95dc28f3e29284d2.mp4", ambient: "petals", ground: 0.8, focus: 0.58 },
+  vault: { src: "assets/production/story/vn-backgrounds-v2/vault.c15e52ec75eeee08.webp", motion: "assets/production/story/vn-backgrounds-v2/vault.e47068fdef606163.mp4", ambient: "dust", ground: 0.8, focus: 0.52 },
+  safezone: { src: "assets/production/story/vn-backgrounds-v2/safezone.d1fc2a444f02962e.webp", motion: "assets/production/story/vn-backgrounds-v2/safezone.4b09f36d99163e05.mp4", ambient: "sparks", ground: 0.8, focus: 0.55 },
+  void: { src: "assets/production/story/vn-backgrounds-v2/void.cf751a51984f8cf8.webp", motion: "assets/production/story/vn-backgrounds-v2/void.8318fb0b26958986.mp4", ambient: "shards", ground: 0.8, focus: 0.55 }
 });
 
 /**
@@ -139,7 +141,7 @@ export const STORY_VN_CHAPTERS = freezeDeep({
       { type: "enter", who: "registrarMon", x: 0.82, face: "left" },
       { type: "enter", who: "partner", x: 0.52, from: "warp", face: "right" },
       { type: "line", speaker: "narrator", key: "V1_N_AVATAR" },
-      { type: "line", speaker: "registrar", key: "C1_REG1", mood: "calm" },
+      { type: "line", speaker: "registrar", key: "C1_REG1", mood: "happy" },
       { type: "form", label: "sign" },
       { type: "line", speaker: "registrar", key: "C1_REG2", mood: "shock" },
       { type: "line", speaker: "partner", key: "C1_P_NAME", mood: "serious" },
@@ -158,7 +160,7 @@ export const STORY_VN_CHAPTERS = freezeDeep({
       { type: "act", who: "partner", action: "cheer", label: "lost" },
       { type: "bubble", who: "partner", glyph: "heart" },
       { type: "line", speaker: "partner", key: "C1_P_LOSE", mood: "happy" },
-      { type: "line", speaker: "rival", key: "C1_RIN_LOSE", mood: "calm" },
+      { type: "line", speaker: "rival", key: "C1_RIN_LOSE", mood: "happy" },
       { type: "line", speaker: "narrator", key: "C1_N_END", label: "after" },
       { type: "end" }
     ]
@@ -203,7 +205,7 @@ export const STORY_VN_CHAPTERS = freezeDeep({
       { type: "jump", next: "rejoin" },
       { type: "line", speaker: "rival", key: "C2_RIN_PICK", mood: "serious", label: "iron" },
       { type: "line", speaker: "partner", key: "C2_P3", mood: "think", label: "rejoin" },
-      { type: "line", speaker: "envoy", key: "C2_EI2", mood: "calm" },
+      { type: "line", speaker: "envoy", key: "C2_EI2", mood: "serious" },
       { type: "line", speaker: "navi", key: "V2_NAVI_TRUCE", mood: "think" },
       { type: "act", who: "partner", action: "cheer" },
       { type: "line", speaker: "partner", key: "C2_P4", mood: "happy" },
@@ -238,7 +240,7 @@ export const STORY_VN_CHAPTERS = freezeDeep({
       { type: "enter", who: "resident", x: 0.82, face: "left" },
       { type: "enter", who: "caretakerMon", x: 0.66, face: "left" },
       { type: "enter", who: "partner", x: 0.42, from: "warp", face: "right" },
-      { type: "line", speaker: "caretaker", key: "C3_SHIZU1", mood: "calm" },
+      { type: "line", speaker: "caretaker", key: "C3_SHIZU1", mood: "happy" },
       { type: "bubble", who: "resident", glyph: "sad" },
       { type: "line", speaker: "resident", key: "C3_RES_TRUE", mood: "sad", overwrite: "C3_RES_FORCED", label: "overwrite" },
       { type: "bubble", who: "partner", glyph: "!" },
@@ -274,7 +276,7 @@ export const STORY_VN_CHAPTERS = freezeDeep({
       { type: "tap", promptKey: "TASK_IDENTIFY", targets: [{ who: "residentB" }, { who: "resident" }, { who: "residentC" }], restore: true },
       { type: "act", who: "partner", action: "cheer" },
       { type: "line", speaker: "partner", key: "C4_P2", mood: "happy" },
-      { type: "line", speaker: "rival", key: "C4_RIN2", mood: "calm" },
+      { type: "line", speaker: "rival", key: "C4_RIN2", mood: "serious" },
       { type: "choice", key: "C4_CHOICE", options: [{ key: "C4_OPT_DONE", next: "done" }, { key: "C4_OPT_SWAP", next: "swap" }] },
       { type: "line", speaker: "rival", key: "C4_RIN_DONE", mood: "happy", label: "done" },
       { type: "jump", next: "rejoin" },
@@ -293,7 +295,7 @@ export const STORY_VN_CHAPTERS = freezeDeep({
       { type: "enter", who: "envoyMon", x: 0.28, from: "warp", face: "right" },
       { type: "line", speaker: "navi", key: "V5_NAVI_ALERT", mood: "shock" },
       { type: "enter", who: "hushMon", x: 0.8, from: "rift", face: "left" },
-      { type: "line", speaker: "hush", key: "C5_HUSH1", mood: "calm" },
+      { type: "line", speaker: "hush", key: "C5_HUSH1", mood: "serious" },
       { type: "line", speaker: "hush", key: "C5_HUSH2", mood: "glitch" },
       { type: "tag", who: ["envoyMon"], to: "contestant" },
       { type: "line", speaker: "hush", key: "C5_HUSH3", mood: "serious" },
@@ -331,7 +333,7 @@ export const STORY_VN_CHAPTERS = freezeDeep({
       { type: "exit", who: "envoyMon", to: "warp" },
       { type: "objectives", done: 2 },
       { type: "enter", who: "caretakerMon", x: 0.28, from: "warp", face: "right" },
-      { type: "line", speaker: "caretaker", key: "C6_SHIZU1", mood: "calm" },
+      { type: "line", speaker: "caretaker", key: "C6_SHIZU1", mood: "serious" },
       { type: "exit", who: "caretakerMon", to: "warp" },
       { type: "fx", kind: "noise", on: true },
       { type: "exit", who: "rivalMonAwake", to: "right" },

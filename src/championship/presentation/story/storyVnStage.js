@@ -15,6 +15,7 @@ import { createSpriteMotion, loadShowcaseMotion, showcaseFitScale, showcaseMotio
 import { juicyPortrait } from "../juicy/juicyArt.js";
 import { monsterVisualAnchor } from "../../data/monsterVisualAnchors218.js";
 import { STORY_VN_SEQUENCES, storyVnBackground } from "../../data/storyVnCampaign.js";
+import { storyVnExpression } from "../../data/storyVnExpressions.js";
 
 const WALK_SPEED = Object.freeze({ light: 0.32, heavy: 0.2, boss: 0.16 }); // stage widths per second
 /** Where the ground line sits in the scene box (fraction of its height). */
@@ -97,19 +98,35 @@ export function storyVnPlateLayout({ naturalWidth, naturalHeight, ground = 0.78,
 
 export function createStoryVnStage({
   host, doc = host?.ownerDocument ?? globalThis.document, reducedMotion = false,
-  loadMotion = loadStoryVnMotion, portraitOf = juicyPortrait, setTimer = globalThis.setTimeout, clearTimer = globalThis.clearTimeout
+  loadMotion = loadStoryVnMotion, portraitOf = juicyPortrait, expressionOf = storyVnExpression, motionPlates = true,
+  setTimer = globalThis.setTimeout, clearTimer = globalThis.clearTimeout
 } = {}) {
   if (!host) throw new TypeError("STORY_VN_STAGE_HOST");
   const motionOk = !reducedMotion;
+  // Living plates: a looping 2.5D parallax clip over its still (the still shows until the clip
+  // plays, and alone under reduced motion or the saver tier).
+  const playClips = motionOk && motionPlates;
   const scene = el(doc, "div", "cm-vn-scene");
   scene.setAttribute("aria-hidden", "true");
-  const plates = [el(doc, "img", "cm-vn-scene__plate"), el(doc, "img", "cm-vn-scene__plate")];
-  for (const plate of plates) { plate.alt = ""; plate.decoding = "async"; plate.draggable = false; plate.dataset.on = "false"; }
+  const makeSlot = () => {
+    const slot = el(doc, "div", "cm-vn-scene__plate"); slot.dataset.on = "false";
+    const img = el(doc, "img", "cm-vn-scene__still"); img.alt = ""; img.decoding = "async"; img.draggable = false;
+    const video = el(doc, "video", "cm-vn-scene__clip");
+    video.muted = true; video.defaultMuted = true; video.loop = true; video.playsInline = true; video.preload = "auto";
+    for (const flag of ["muted", "playsinline", "loop", "disablepictureinpicture"]) video.setAttribute(flag, "");
+    video.dataset.live = "false";
+    video.addEventListener("playing", () => { video.dataset.live = "true"; });
+    slot.append(img, video);
+    return { slot, img, video };
+  };
+  const plates = [makeSlot(), makeSlot()];
+  const ambient = el(doc, "div", "cm-vn-ambient");
+  for (let i = 0; i < (reducedMotion ? 0 : 18); i++) { const mote = el(doc, "i", "cm-vn-ambient__mote"); mote.style.setProperty("--i", String(i)); ambient.append(mote); }
   const shade = el(doc, "div", "cm-vn-scene__shade");
   const ground = el(doc, "div", "cm-vn-scene__ground");
   const fx = el(doc, "div", "cm-vn-fx", '<i class="cm-vn-fx__noise"></i><i class="cm-vn-fx__scan"></i><i class="cm-vn-fx__flash"></i><i class="cm-vn-fx__glow"></i>');
   const taps = el(doc, "div", "cm-vn-taps");
-  scene.append(...plates, shade, ground, fx, taps);
+  scene.append(...plates.map(plate => plate.slot), ambient, shade, ground, fx, taps);
   const busts = { left: el(doc, "figure", "cm-vn-bust"), right: el(doc, "figure", "cm-vn-bust") };
   for (const [side, figure] of Object.entries(busts)) { figure.dataset.side = side; figure.hidden = true; figure.setAttribute("aria-hidden", "true"); }
   host.append(scene, busts.left, busts.right);
@@ -125,18 +142,18 @@ export function createStoryVnStage({
   function box() { return { w: Math.max(240, scene.clientWidth || host.clientWidth || 390), h: Math.max(200, scene.clientHeight || host.clientHeight || 560) }; }
   function placePlate(plate) {
     const { w, h } = box();
-    const layout = plateSpec && storyVnPlateLayout({ naturalWidth: plate.naturalWidth, naturalHeight: plate.naturalHeight, ground: plateSpec.ground, focus: plateSpec.focus }, { width: w, height: h });
+    const layout = plateSpec && storyVnPlateLayout({ naturalWidth: plate.img.naturalWidth, naturalHeight: plate.img.naturalHeight, ground: plateSpec.ground, focus: plateSpec.focus }, { width: w, height: h });
     plateLayout = layout;
-    if (!layout) { plate.removeAttribute("style"); groundY = h * STORY_VN_GROUND_IN_BOX; }
+    if (!layout) { plate.slot.removeAttribute("style"); groundY = h * STORY_VN_GROUND_IN_BOX; }
     else {
-      Object.assign(plate.style, { width: `${Math.round(layout.width)}px`, height: `${Math.round(layout.height)}px`, transform: `translate(${Math.round(layout.left)}px, ${Math.round(layout.top)}px)` });
+      Object.assign(plate.slot.style, { width: `${Math.round(layout.width)}px`, height: `${Math.round(layout.height)}px`, transform: `translate(${Math.round(layout.left)}px, ${Math.round(layout.top)}px)` });
       groundY = layout.groundY;
     }
     ground.style.transform = `translateY(${Math.round(groundY)}px)`;
   }
   function relayout() {
     const live = plates[plateIndex];
-    if (live?.dataset.on === "true") placePlate(live); else groundY = box().h * STORY_VN_GROUND_IN_BOX;
+    if (live?.slot.dataset.on === "true") placePlate(live); else groundY = box().h * STORY_VN_GROUND_IN_BOX;
     for (const actor of actors.values()) if (!actor.runs.size) placeActor(actor);
     for (const side of ["left", "right"]) layoutBust(side);
   }
@@ -148,18 +165,31 @@ export function createStoryVnStage({
     const next = plates[1 - plateIndex], prev = plates[plateIndex];
     plateSpec = spec;
     scene.dataset.plate = id;
+    scene.dataset.ambient = spec.ambient ?? "none";
     await new Promise(resolve => {
       let done = false; const finish = () => { if (!done) { done = true; resolve(); } };
-      next.onload = finish; next.onerror = finish;
-      next.src = spec.src;
-      if (next.complete && next.naturalWidth) finish();
+      next.img.onload = finish; next.img.onerror = finish;
+      next.img.src = spec.src;
+      if (next.img.complete && next.img.naturalWidth) finish();
       later(finish, 2500);
     });
     if (disposed) return;
     placePlate(next);
+    next.video.dataset.live = "false";
+    if (playClips && spec.motion) {
+      next.video.src = spec.motion;
+      try { next.video.play()?.catch?.(() => {}); } catch { /* autoplay refused: the still stays */ }
+    }
     if (!instant && motionOk && cut === "glitch") { scene.dataset.cut = "glitch"; await wait(240); }
-    next.dataset.on = "true"; prev.dataset.on = "false";
+    next.slot.dataset.on = "true"; prev.slot.dataset.on = "false";
     plateIndex = 1 - plateIndex;
+    // The old clip stops once its fade is over and lets go of its file.
+    later(() => {
+      if (prev.slot.dataset.on !== "false") return;
+      try { prev.video.pause(); } catch { /* gone */ }
+      prev.video.removeAttribute("src"); prev.video.dataset.live = "false";
+      try { prev.video.load(); } catch { /* gone */ }
+    }, 700);
     if (scene.dataset.cut) later(() => { delete scene.dataset.cut; }, 360);
   }
 
@@ -308,22 +338,43 @@ export function createStoryVnStage({
       transformOrigin: `${Math.round(layout.width / 2)}px 0`,
       transform: `translate(${Math.round(layout.left)}px, ${Math.round(layout.top)}px)${layout.mirror ? " scaleX(-1)" : ""}` });
   }
-  /** Show a bust: { species } or { navi: true }; null hides the side. */
-  function setBust(side, who, { key = null } = {}) {
+  /**
+   * Show a bust: { species } or { navi: true }; null hides the side. A mood with its own
+   * drawn expression swaps the art in place with a short cross-fade.
+   */
+  function setBust(side, who, { key = null, mood = "calm" } = {}) {
     const figure = busts[side];
     if (!who) { figure.hidden = true; bustState[side] = null; delete figure.dataset.key; return; }
     const id = who.navi ? "navi" : `species-${who.species}`;
+    const state = bustState[side];
+    if (figure.dataset.key === `${id}:${key ?? ""}` && !figure.hidden && !who.navi && state?.img) {
+      const art = expressionOf(who.species, mood) ?? portraitOf(who.species);
+      if (art?.src && art.src !== state.portrait.src) {
+        const frame = figure.querySelector(".cm-vn-bust__frame");
+        const img = el(doc, "img", "cm-vn-bust__art"); img.alt = ""; img.decoding = "async"; img.draggable = false; img.src = art.src;
+        const old = state.img;
+        bustState[side] = { portrait: art, img, faceRight: state.faceRight };
+        layoutBust(side);
+        img.classList.add("is-swapping"); frame.append(img);
+        old.classList.add("is-leaving"); later(() => old.remove(), 260);
+        figure.dataset.expression = art.expression ?? "base";
+      }
+      return;
+    }
     if (figure.dataset.key !== `${id}:${key ?? ""}` || figure.hidden) {
       figure.dataset.key = `${id}:${key ?? ""}`;
       figure.replaceChildren();
       const frame = el(doc, "div", "cm-vn-bust__frame");
       if (who.navi) { frame.innerHTML = NAVI_SVG; figure.dataset.kind = "navi"; bustState[side] = { portrait: null }; }
       else {
-        const portrait = portraitOf(who.species);
+        const base = portraitOf(who.species);
+        const portrait = expressionOf(who.species, mood) ?? base;
         if (!portrait?.src) { figure.hidden = true; bustState[side] = null; return; }
+        figure.dataset.expression = portrait.expression ?? "base";
         const img = el(doc, "img", "cm-vn-bust__art"); img.alt = ""; img.decoding = "async"; img.draggable = false; img.src = portrait.src;
         frame.append(img); figure.dataset.kind = "hero";
-        bustState[side] = { portrait, img, faceRight: heroFacesRight(who.species, portrait) };
+        // Facing comes from the Database art the expressions were drawn from.
+        bustState[side] = { portrait, img, faceRight: heroFacesRight(who.species, base) };
       }
       figure.append(frame);
       figure.hidden = false;
@@ -335,6 +386,10 @@ export function createStoryVnStage({
     const figure = busts[side]; if (figure.hidden) return;
     figure.dataset.active = String(active);
     figure.dataset.mood = active ? mood : "calm";
+    // Comic beat: a shocked or angry line pushes the camera in for a moment.
+    if (active && motionOk && (mood === "shock" || mood === "angry")) {
+      scene.dataset.punch = mood; later(() => { if (scene.dataset.punch === mood) delete scene.dataset.punch; }, 520);
+    }
     if (active) { figure.classList.remove("is-speaking"); void figure.offsetWidth; figure.classList.add("is-speaking"); }
   }
 
@@ -409,6 +464,7 @@ export function createStoryVnStage({
       resizer?.disconnect();
       for (const t of timers) clearTimer(t); timers.clear();
       clearActors();
+      for (const plate of plates) { try { plate.video.pause(); } catch { /* gone */ } plate.video.removeAttribute("src"); }
       scene.remove(); busts.left.remove(); busts.right.remove();
     }
   });

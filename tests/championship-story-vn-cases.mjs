@@ -16,6 +16,7 @@ import { STORY_RIFT_MAP_NODES } from "../src/championship/data/storyRiftMap.js";
 import { storyVnBustLayout, storyVnPlateLayout } from "../src/championship/presentation/story/storyVnStage.js";
 import { createStoryVnDirector } from "../src/championship/presentation/story/storyVnDirector.js";
 import { databaseHeroPortrait } from "../src/championship/presentation/databaseHeroPortraits.js";
+import { STORY_VN_EXPRESSIONS, STORY_VN_MOOD_EXPRESSION, storyVnExpression } from "../src/championship/data/storyVnExpressions.js";
 
 const read = path => fs.readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 
@@ -73,22 +74,57 @@ test("the chart carries chapters 2-7 and the two side stories, each playing its 
 });
 
 // ---- art ----------------------------------------------------------------------
-test("the nine scene plates are on disk, hashed, recorded in their manifest and in the art index", () => {
-  const manifest = JSON.parse(read("assets/production/story/vn-backgrounds-v1/manifest.json"));
+test("the nine living scene plates (still + parallax loop) are on disk, hashed, light, and recorded", () => {
+  const manifest = JSON.parse(read("assets/production/story/vn-backgrounds-v2/manifest.json"));
   assert.equal(manifest.rightsStatus, "ORIGINAL_GENERATED");
   assert.match(manifest.generation.inputs, /Text brief only/);
-  const byPath = new Map(manifest.assets.map(asset => [asset.runtime.path, asset]));
+  assert.match(manifest.generation.motion, /Depth Anything V2 Small/, "only the commercial-safe depth model");
+  const byId = new Map(manifest.assets.map(asset => [asset.id, asset]));
+  const ambients = new Set(["leaves", "petals", "confetti", "dust", "fireflies", "data", "shards", "sparks"]);
+  let total = 0;
   for (const [id, plate] of Object.entries(STORY_VN_BACKGROUNDS)) {
-    const asset = byPath.get(plate.src); assert.ok(asset, id);
-    const bytes = fs.readFileSync(new URL(`../${plate.src}`, import.meta.url));
-    const sha = crypto.createHash("sha256").update(bytes).digest("hex");
-    assert.equal(sha, asset.runtime.sha256, id); assert.ok(plate.src.includes(sha.slice(0, 16)), id);
-    assert.ok(bytes.length < 260_000, `${id} stays a light plate`);
+    const asset = byId.get(id); assert.ok(asset, id);
+    for (const [path, record, limit] of [[plate.src, asset.still, 120_000], [plate.motion, asset.clip, 260_000]]) {
+      assert.equal(path, record.path, id);
+      const bytes = fs.readFileSync(new URL(`../${path}`, import.meta.url));
+      const sha = crypto.createHash("sha256").update(bytes).digest("hex");
+      assert.equal(sha, record.sha256, path); assert.ok(path.includes(sha.slice(0, 16)), path);
+      assert.ok(bytes.length < limit, `${path} stays light`); total += bytes.length;
+    }
+    assert.match(plate.motion, /\.mp4$/); assert.ok(ambients.has(plate.ambient), id);
     assert.ok(plate.ground > 0.7 && plate.ground < 0.9, id);
   }
+  assert.ok(total < 2_400_000, `the nine scenes stay under 2.4 MB (${total})`);
   const index = JSON.parse(read("assets/production/ART_PRODUCTION_INDEX.json"));
-  const record = index.entries.find(entry => entry.manifestPath === "assets/production/story/vn-backgrounds-v1/manifest.json");
+  const record = index.entries.find(entry => entry.manifestPath === "assets/production/story/vn-backgrounds-v2/manifest.json");
   assert.ok(record, "art index record"); assert.equal(record.rightsStatus, "ORIGINAL_GENERATED"); assert.equal(record.runtimeEligible, true);
+});
+
+test("drawn expressions: every file is on disk and hashed, frames its head, stays light, and is reached by a line mood", () => {
+  const manifest = JSON.parse(read("assets/production/story/vn-expressions-v1/manifest.json"));
+  assert.equal(manifest.rightsStatus, "ORIGINAL_GENERATED");
+  assert.match(manifest.generation.inputs, /own Database hero art/);
+  const byPath = new Map(manifest.assets.map(asset => [asset.path, asset]));
+  let total = 0, count = 0;
+  for (const [species, moods] of Object.entries(STORY_VN_EXPRESSIONS)) {
+    assert.ok(databaseHeroPortrait(Number(species)), `${species} is a Database partner`);
+    for (const [expression, art] of Object.entries(moods)) {
+      const asset = byPath.get(art.src); assert.ok(asset, art.src);
+      const bytes = fs.readFileSync(new URL(`../${art.src}`, import.meta.url));
+      assert.equal(crypto.createHash("sha256").update(bytes).digest("hex"), asset.sha256, art.src);
+      assert.ok(bytes.length < 90_000, `${art.src} stays light`); total += bytes.length; count++;
+      const [cx, cy, size] = art.face;
+      assert.ok(cx > 0 && cx < art.width && cy > 0 && cy < art.height && size > art.width * 0.15, `${art.src} head inside the art`);
+      assert.ok(Object.values(STORY_VN_MOOD_EXPRESSION).includes(expression), expression);
+    }
+  }
+  assert.ok(count >= 30, `${count} drawn expressions`);
+  assert.ok(total < 2_400_000, `expressions stay under 2.4 MB (${total})`);
+  // The recurring rival speaks with drawn faces; a mood with no drawing keeps the Database art.
+  assert.equal(storyVnExpression(50, "angry").expression, "angry");
+  assert.equal(storyVnExpression(50, "think").expression, "serious");
+  assert.equal(storyVnExpression(50, "calm"), null);
+  assert.equal(storyVnExpression(21, "happy"), null, "the player's partner keeps its own art");
 });
 
 test("every speaking cast member and every actor has Database hero art for its bust", () => {

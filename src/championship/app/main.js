@@ -3145,6 +3145,8 @@ async function playVnChapter(chapterId, { source = 'map', from = null } = {}) {
   const partnerSpecies = speciesIndexOf(partner.resident.speciesId);
   const director = createStoryVnDirector({
     locale: getLocale(), reducedMotion: prefersReducedMotion(), speciesName,
+    // Living scene clips everywhere but the saver tier, which keeps the stills.
+    motionPlates: currentQualityTier() !== 'saver',
     runBattle: request => runStoryBattle({ ...request, partnerInstanceId: partner.resident.creatureId }),
     claim: id => {
       const key = storyVnRewardKey(id);

@@ -1,0 +1,740 @@
+{
+  "schemaVersion": 1,
+  "id": "story-vn-expressions-v1",
+  "purpose": "Story mode bust expressions of recurring partners, drawn from each partner's own Database hero art.",
+  "rightsStatus": "ORIGINAL_GENERATED",
+  "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+  "generation": {
+    "tool": "Codex CLI image generation (codex-cli 0.167, model gpt-6.1-sol)",
+    "generatedOn": "2026-11-11",
+    "inputs": "Text brief plus the product's own Database hero art of the same partner as the identity reference (no ROM pixels, no third-party art); brief in workspace story-vn-art-20261111/expressions/BRIEF.md",
+    "originals": "R:/Projects/Championship2026/story-vn-art-20261111/expressions/out (workspace, not shipped)"
+  },
+  "review": {
+    "assistant": "Accepted 2026-11-11: identity, palette and outline match the Database art; transparent",
+    "owner": "PENDING",
+    "browserAcceptance": "PENDING"
+  },
+  "assets": [
+    {
+      "species": 18,
+      "expression": "happy",
+      "path": "assets/production/story/vn-expressions-v1/species-018-happy.203fb7a48f663b3b.webp",
+      "bytes": 51090,
+      "sha256": "203fb7a48f663b3bbd326f06409a2405135db0fe1afa902acf47dcd9241228e8",
+      "width": 588,
+      "height": 431,
+      "face": [
+        210,
+        344,
+        394
+      ],
+      "original": {
+        "file": "species-018-happy.png",
+        "sha256": "176e9d1a33487d8a0d5fca88867903d9c686ababcf776f6174d108c8869c364a"
+      }
+    },
+    {
+      "species": 25,
+      "expression": "happy",
+      "path": "assets/production/story/vn-expressions-v1/species-025-happy.7c27929287f98d5d.webp",
+      "bytes": 43984,
+      "sha256": "7c27929287f98d5d599c8128be5a51abd44c18b6204cb4788ad2051ad11d6b52",
+      "width": 591,
+      "height": 342,
+      "face": [
+        203,
+        326,
+        233
+      ],
+      "original": {
+        "file": "species-025-happy.png",
+        "sha256": "26b1f9458019ba7b2b1b22bb935529acedf2680ec860bf06a060fa71e6c5a6e2"
+      }
+    },
+    {
+      "species": 25,
+      "expression": "sad",
+      "path": "assets/production/story/vn-expressions-v1/species-025-sad.91552329a8be6148.webp",
+      "bytes": 30680,
+      "sha256": "91552329a8be61489dffbb4bf927a424775ac80f8e1d3faaab649d8edd3f9643",
+      "width": 573,
+      "height": 334,
+      "face": [
+        196,
+        318,
+        228
+      ],
+      "original": {
+        "file": "species-025-sad.png",
+        "sha256": "e17a89cf0f41af5ce818682acac559b4418a21abea8ddbcaaa0576fa757054f6"
+      }
+    },
+    {
+      "species": 50,
+      "expression": "angry",
+      "path": "assets/production/story/vn-expressions-v1/species-050-angry.12577dd4ef78de15.webp",
+      "bytes": 55998,
+      "sha256": "12577dd4ef78de15a9285f645aa97c7a22ef715c5aa4a8a7068088e4c2fdb29d",
+      "width": 540,
+      "height": 410,
+      "face": [
+        420,
+        156,
+        188
+      ],
+      "original": {
+        "file": "species-050-angry.png",
+        "sha256": "cc70bb4895868d38ff9fef8e34a7429f0a4fb2739e76dabc31814dca4e7c3611"
+      }
+    },
+    {
+      "species": 50,
+      "expression": "happy",
+      "path": "assets/production/story/vn-expressions-v1/species-050-happy.fd4f59b8dc2b5c2c.webp",
+      "bytes": 53986,
+      "sha256": "fd4f59b8dc2b5c2ce084c52c67d2d0c291d46bdcc6e5f05971af10c20146fb6e",
+      "width": 566,
+      "height": 413,
+      "face": [
+        434,
+        157,
+        190
+      ],
+      "original": {
+        "file": "species-050-happy.png",
+        "sha256": "28c19690f43f3118f080e12a95b91c36440421e9f1c3c5d119d3a893573e0e8a"
+      }
+    },
+    {
+      "species": 50,
+      "expression": "sad",
+      "path": "assets/production/story/vn-expressions-v1/species-050-sad.36421ebafc0d6bc2.webp",
+      "bytes": 48884,
+      "sha256": "36421ebafc0d6bc24439372463ec7e4ab37f5633f200b8226680f72ea69792c0",
+      "width": 533,
+      "height": 410,
+      "face": [
+        417,
+        156,
+        189
+      ],
+      "original": {
+        "file": "species-050-sad.png",
+        "sha256": "4ee5c6eddd54e5e7d4b29633e4e2871918a099abdd6ba5a54ec376eddf22d8b8"
+      }
+    },
+    {
+      "species": 50,
+      "expression": "serious",
+      "path": "assets/production/story/vn-expressions-v1/species-050-serious.b05cfd7a2ba10f7d.webp",
+      "bytes": 52266,
+      "sha256": "b05cfd7a2ba10f7d3bebc52277e6b07c0e5228ef49df56711da7a65b03807535",
+      "width": 518,
+      "height": 426,
+      "face": [
+        415,
+        162,
+        196
+      ],
+      "original": {
+        "file": "species-050-serious.png",
+        "sha256": "fcd64d927f0c3f4c5c5805567f859ddca54c3aa433c531366f81c51d0d78a9b9"
+      }
+    },
+    {
+      "species": 50,
+      "expression": "shock",
+      "path": "assets/production/story/vn-expressions-v1/species-050-shock.8af0062737717258.webp",
+      "bytes": 55562,
+      "sha256": "8af0062737717258cad6b5340efe655fbbb3e9b7803a1eab9f680bf176668c87",
+      "width": 540,
+      "height": 435,
+      "face": [
+        430,
+        166,
+        200
+      ],
+      "original": {
+        "file": "species-050-shock.png",
+        "sha256": "fbe10dd873a9511385b881bb37c46f673413b690a682765f960654eaacce2d1f"
+      }
+    },
+    {
+      "species": 51,
+      "expression": "sad",
+      "path": "assets/production/story/vn-expressions-v1/species-051-sad.55a30f9fa5d51b55.webp",
+      "bytes": 41966,
+      "sha256": "55a30f9fa5d51b551145fe87693a53f77aef4e36a8675519d832beb7af363bb3",
+      "width": 554,
+      "height": 324,
+      "face": [
+        374,
+        187,
+        197
+      ],
+      "original": {
+        "file": "species-051-sad.png",
+        "sha256": "8c9d2e2a0e74608f081702dc323eedb981a73d5fe1b207e7459cb004ceb7f461"
+      }
+    },
+    {
+      "species": 52,
+      "expression": "happy",
+      "path": "assets/production/story/vn-expressions-v1/species-052-happy.e7b0cd335b6aba00.webp",
+      "bytes": 49940,
+      "sha256": "e7b0cd335b6aba004b6c0c93869f0032023d95028b2288e8fee91a82726c388a",
+      "width": 555,
+      "height": 434,
+      "face": [
+        346,
+        259,
+        219
+      ],
+      "original": {
+        "file": "species-052-happy.png",
+        "sha256": "f0f9de3fa93a3a574ae9db6db24b015dd9c3359a1988a4f81a84342e7a3f89da"
+      }
+    },
+    {
+      "species": 52,
+      "expression": "shock",
+      "path": "assets/production/story/vn-expressions-v1/species-052-shock.d5bbdf9e476b9245.webp",
+      "bytes": 47232,
+      "sha256": "d5bbdf9e476b924543259c0a079a2f0f8812e674864e11993d3ce9ec5964bca5",
+      "width": 548,
+      "height": 438,
+      "face": [
+        344,
+        262,
+        221
+      ],
+      "original": {
+        "file": "species-052-shock.png",
+        "sha256": "8e1df8b983dcba5702a749fa652c7d04b167e827c3e16117f5e008d8d8fcd71c"
+      }
+    },
+    {
+      "species": 65,
+      "expression": "happy",
+      "path": "assets/production/story/vn-expressions-v1/species-065-happy.e709ab147b3695a8.webp",
+      "bytes": 65446,
+      "sha256": "e709ab147b3695a8654ed523fe7a8a39173876c8fbdc3e1b4e199086f1ab1973",
+      "width": 573,
+      "height": 441,
+      "face": [
+        326,
+        201,
+        366
+      ],
+      "original": {
+        "file": "species-065-happy.png",
+        "sha256": "f7e9e6a8a89804700172140445b8a0828f4506786c7daa027387b6717eea56fa"
+      }
+    },
+    {
+      "species": 65,
+      "expression": "sad",
+      "path": "assets/production/story/vn-expressions-v1/species-065-sad.5515631c652b2208.webp",
+      "bytes": 62364,
+      "sha256": "5515631c652b2208d0f6ef3552cb6f22187c0f43870ffdddc67497b437747b11",
+      "width": 558,
+      "height": 409,
+      "face": [
+        316,
+        187,
+        339
+      ],
+      "original": {
+        "file": "species-065-sad.png",
+        "sha256": "9132bc66dce87b1dcbe394f69a44586675ee6f5dafd6476befe32144db00bb3d"
+      }
+    },
+    {
+      "species": 88,
+      "expression": "angry",
+      "path": "assets/production/story/vn-expressions-v1/species-088-angry.7a0fcf9065699920.webp",
+      "bytes": 66640,
+      "sha256": "7a0fcf90656999204363bdd5ccd50f74212e208b7bed5e4b78a53a858b8e652b",
+      "width": 591,
+      "height": 437,
+      "face": [
+        380,
+        138,
+        208
+      ],
+      "original": {
+        "file": "species-088-angry.png",
+        "sha256": "d8ade084bc398f89942b0b4af3f32610d7ce2b79bac19bf53418794bb4102518"
+      }
+    },
+    {
+      "species": 88,
+      "expression": "happy",
+      "path": "assets/production/story/vn-expressions-v1/species-088-happy.23852c78ce91e07d.webp",
+      "bytes": 62972,
+      "sha256": "23852c78ce91e07d2bdd768f8e6085a77bddd78cd96959bf49651af94ffc9c77",
+      "width": 592,
+      "height": 450,
+      "face": [
+        383,
+        142,
+        214
+      ],
+      "original": {
+        "file": "species-088-happy.png",
+        "sha256": "bfea5863c78a915e43b611d71c630e200e8a337ee1f3f4a33638f71eed42c4e3"
+      }
+    },
+    {
+      "species": 88,
+      "expression": "sad",
+      "path": "assets/production/story/vn-expressions-v1/species-088-sad.21a87a230a1e840f.webp",
+      "bytes": 44976,
+      "sha256": "21a87a230a1e840fd8553f5211135f42d93ae55c144579098ba71b15bafdbe45",
+      "width": 455,
+      "height": 451,
+      "face": [
+        315,
+        143,
+        214
+      ],
+      "original": {
+        "file": "species-088-sad.png",
+        "sha256": "5e6203d16865de6383998136a20b2ee8fa3a27eeacbefda12e3237ee66d6b44c"
+      }
+    },
+    {
+      "species": 88,
+      "expression": "serious",
+      "path": "assets/production/story/vn-expressions-v1/species-088-serious.b30a2cc755eace12.webp",
+      "bytes": 53020,
+      "sha256": "b30a2cc755eace1248d7f7bc61d2108b43339c86759f2bd4906db769f8390272",
+      "width": 570,
+      "height": 456,
+      "face": [
+        373,
+        144,
+        217
+      ],
+      "original": {
+        "file": "species-088-serious.png",
+        "sha256": "9d705b081e5eb42e4f5f911e47a2c4ec5f84dc052504cb6bac6592b0908a3897"
+      }
+    },
+    {
+      "species": 88,
+      "expression": "shock",
+      "path": "assets/production/story/vn-expressions-v1/species-088-shock.43a8d962cd22a439.webp",
+      "bytes": 62044,
+      "sha256": "43a8d962cd22a439179ab6f1f776a4517e7e036eaec66c4846012e9969002460",
+      "width": 562,
+      "height": 461,
+      "face": [
+        370,
+        146,
+        219
+      ],
+      "original": {
+        "file": "species-088-shock.png",
+        "sha256": "3c418912b71ccc673612370c83c7a611d4d88e2a7d30106f616cbd1afb5aa89b"
+      }
+    },
+    {
+      "species": 92,
+      "expression": "angry",
+      "path": "assets/production/story/vn-expressions-v1/species-092-angry.faa371db8deced33.webp",
+      "bytes": 66070,
+      "sha256": "faa371db8deced33cb4df39f1535371ac057e7e106e98ab4939a3b71d8baf46a",
+      "width": 557,
+      "height": 458,
+      "face": [
+        194,
+        133,
+        269
+      ],
+      "original": {
+        "file": "species-092-angry.png",
+        "sha256": "6ae564ad753b1b54172389dfd86c8efcd1e043f3432b1d8bd393903f12a77c25"
+      }
+    },
+    {
+      "species": 92,
+      "expression": "happy",
+      "path": "assets/production/story/vn-expressions-v1/species-092-happy.52300ceeb0cb8e46.webp",
+      "bytes": 58458,
+      "sha256": "52300ceeb0cb8e46550be68612a668072f053b7c76c050c99bb91ef157d11a19",
+      "width": 507,
+      "height": 457,
+      "face": [
+        169,
+        133,
+        269
+      ],
+      "original": {
+        "file": "species-092-happy.png",
+        "sha256": "33f73253f725639f0087f2c4bca884d5f97ee32cbbac5f09c5c63202c347ab55"
+      }
+    },
+    {
+      "species": 92,
+      "expression": "sad",
+      "path": "assets/production/story/vn-expressions-v1/species-092-sad.c01a239e161732e5.webp",
+      "bytes": 57044,
+      "sha256": "c01a239e161732e5811ae164fba1f02fc8e639bc9642be7a458931bcaab58557",
+      "width": 520,
+      "height": 454,
+      "face": [
+        176,
+        132,
+        267
+      ],
+      "original": {
+        "file": "species-092-sad.png",
+        "sha256": "15657aa1b59828ec5281008832413d1f36bc44630a3b16838ae5a22adb41a698"
+      }
+    },
+    {
+      "species": 92,
+      "expression": "serious",
+      "path": "assets/production/story/vn-expressions-v1/species-092-serious.cd58c8798286865d.webp",
+      "bytes": 56368,
+      "sha256": "cd58c8798286865d553aa9adccba389854028cb9ce1264a6b7ec8225c660cb2d",
+      "width": 507,
+      "height": 463,
+      "face": [
+        168,
+        135,
+        273
+      ],
+      "original": {
+        "file": "species-092-serious.png",
+        "sha256": "dc245ceea80af8d2cb5c1a1513072154e3f498916022538a5970521042252e22"
+      }
+    },
+    {
+      "species": 92,
+      "expression": "shock",
+      "path": "assets/production/story/vn-expressions-v1/species-092-shock.ceebc8326cac8d68.webp",
+      "bytes": 58610,
+      "sha256": "ceebc8326cac8d68b1e5b8b2ecb584e2abe6603fdf44effe87174a22e884e02e",
+      "width": 509,
+      "height": 459,
+      "face": [
+        169,
+        133,
+        270
+      ],
+      "original": {
+        "file": "species-092-shock.png",
+        "sha256": "41df49126733f0d67e7b67666e8770c0dd7a15a993f7cb61459a9869bfc45ed9"
+      }
+    },
+    {
+      "species": 169,
+      "expression": "angry",
+      "path": "assets/production/story/vn-expressions-v1/species-169-angry.e1ba29b5d7047904.webp",
+      "bytes": 67560,
+      "sha256": "e1ba29b5d7047904f56c5db3ec7d17ee9144701d75a6d148db69fa939efa665b",
+      "width": 579,
+      "height": 413,
+      "face": [
+        299,
+        95,
+        205
+      ],
+      "original": {
+        "file": "species-169-angry.png",
+        "sha256": "4cea8fa9b8dec95ccca05890e6049b79ee1c9eefd42fe80df1b577525d0bff94"
+      }
+    },
+    {
+      "species": 169,
+      "expression": "happy",
+      "path": "assets/production/story/vn-expressions-v1/species-169-happy.5b834bbea5520807.webp",
+      "bytes": 71796,
+      "sha256": "5b834bbea552080777395f8c69e28a45abe6d4e091f6ffe8bbbe403c96ca236a",
+      "width": 590,
+      "height": 446,
+      "face": [
+        305,
+        102,
+        222
+      ],
+      "original": {
+        "file": "species-169-happy.png",
+        "sha256": "e5437f1a6a0e10edc67dabab314652a045b21fe9c3fd909b53a347896b692248"
+      }
+    },
+    {
+      "species": 169,
+      "expression": "sad",
+      "path": "assets/production/story/vn-expressions-v1/species-169-sad.785bd75cbcda34dc.webp",
+      "bytes": 58338,
+      "sha256": "785bd75cbcda34dcd531dd52642a3bd452cb648095b843807c6fef5ff6454e4c",
+      "width": 574,
+      "height": 431,
+      "face": [
+        297,
+        99,
+        214
+      ],
+      "original": {
+        "file": "species-169-sad.png",
+        "sha256": "fb303f5695bd0dd341d078ae971974c0baa95be61dc3dfdf95838341a01c3948"
+      }
+    },
+    {
+      "species": 169,
+      "expression": "serious",
+      "path": "assets/production/story/vn-expressions-v1/species-169-serious.35ea1e9c06e2ea6f.webp",
+      "bytes": 70224,
+      "sha256": "35ea1e9c06e2ea6fad1dfcdb488f0957410ffcedf54c56db55f07386aceb707f",
+      "width": 591,
+      "height": 448,
+      "face": [
+        306,
+        103,
+        222
+      ],
+      "original": {
+        "file": "species-169-serious.png",
+        "sha256": "ff313ba957e266408e02323261dc01ed3adbb38907a945f2c4111cf038efccfc"
+      }
+    },
+    {
+      "species": 169,
+      "expression": "shock",
+      "path": "assets/production/story/vn-expressions-v1/species-169-shock.54db3b9d08c517da.webp",
+      "bytes": 71634,
+      "sha256": "54db3b9d08c517da64bf8d1f12f56306258c3f4c4273bd88104939a7c699e53d",
+      "width": 584,
+      "height": 458,
+      "face": [
+        302,
+        105,
+        227
+      ],
+      "original": {
+        "file": "species-169-shock.png",
+        "sha256": "1ed33fa4660ddb8c498125907d7999f741c6061b836c05f5ccc25d5752838622"
+      }
+    },
+    {
+      "species": 175,
+      "expression": "angry",
+      "path": "assets/production/story/vn-expressions-v1/species-175-angry.83a6657c3648e423.webp",
+      "bytes": 44108,
+      "sha256": "83a6657c3648e42368a3e6c46935c7e3e65348bc60c850c7ce4cab7b65b9c2ad",
+      "width": 403,
+      "height": 460,
+      "face": [
+        271,
+        177,
+        240
+      ],
+      "original": {
+        "file": "species-175-angry.png",
+        "sha256": "f067c3d9b0af41fa4b03553d949564a2f6d1fcf3e186059412f3e55924f739e6"
+      }
+    },
+    {
+      "species": 175,
+      "expression": "happy",
+      "path": "assets/production/story/vn-expressions-v1/species-175-happy.2fe224b3639331a4.webp",
+      "bytes": 47324,
+      "sha256": "2fe224b3639331a490e9c6e97264104848fb24ed7a38b07ebd5c302c30f4a744",
+      "width": 397,
+      "height": 452,
+      "face": [
+        267,
+        174,
+        236
+      ],
+      "original": {
+        "file": "species-175-happy.png",
+        "sha256": "758853d06a80d2911bbafb3994c52133c69a8f1b660787ac963f0f481bab8aef"
+      }
+    },
+    {
+      "species": 175,
+      "expression": "sad",
+      "path": "assets/production/story/vn-expressions-v1/species-175-sad.c6d4ebcd5ac79e1a.webp",
+      "bytes": 43334,
+      "sha256": "c6d4ebcd5ac79e1a43f569c05537ea7a59bbe2734897a026eb9396a5b1498de0",
+      "width": 352,
+      "height": 457,
+      "face": [
+        245,
+        176,
+        238
+      ],
+      "original": {
+        "file": "species-175-sad.png",
+        "sha256": "fa00c5d2a6363e9d14814d90bcfe610f4d5dce0fde05438ea4e5bf9cbf276ebc"
+      }
+    },
+    {
+      "species": 175,
+      "expression": "serious",
+      "path": "assets/production/story/vn-expressions-v1/species-175-serious.5e7be262ea570488.webp",
+      "bytes": 44728,
+      "sha256": "5e7be262ea570488d96813cabc66afb1a2113ef92dc0ef00fde81764a0aeeba2",
+      "width": 354,
+      "height": 456,
+      "face": [
+        246,
+        176,
+        238
+      ],
+      "original": {
+        "file": "species-175-serious.png",
+        "sha256": "2ad7d3c0a9f5987358498db8a37dded2101312e8a0713d23b7af78d73ca8dfcf"
+      }
+    },
+    {
+      "species": 175,
+      "expression": "shock",
+      "path": "assets/production/story/vn-expressions-v1/species-175-shock.b50e447ddfa22c4f.webp",
+      "bytes": 45036,
+      "sha256": "b50e447ddfa22c4f1f5b2f041dc27a2a7f319a0fb8ff293e98ddfa2ca747ec80",
+      "width": 371,
+      "height": 456,
+      "face": [
+        254,
+        175,
+        237
+      ],
+      "original": {
+        "file": "species-175-shock.png",
+        "sha256": "24c8d4dfee1465518ed286ebf0ce5adf0babb1a20966476d77639599bd826880"
+      }
+    },
+    {
+      "species": 176,
+      "expression": "angry",
+      "path": "assets/production/story/vn-expressions-v1/species-176-angry.770d10c8b442c1be.webp",
+      "bytes": 53594,
+      "sha256": "770d10c8b442c1be0cedcc73294540ddb51e828deab45ea996343562455ef247",
+      "width": 461,
+      "height": 462,
+      "face": [
+        250,
+        89,
+        178
+      ],
+      "original": {
+        "file": "species-176-angry.png",
+        "sha256": "c3071a7f4cbcb1a0d05277242cff89feb80a8371ad5b3b965840ffac06113da4"
+      }
+    },
+    {
+      "species": 176,
+      "expression": "happy",
+      "path": "assets/production/story/vn-expressions-v1/species-176-happy.47b3462185823a59.webp",
+      "bytes": 51172,
+      "sha256": "47b3462185823a5936d32d0609adc7427167487dfcfd5ff1e1f1d5310c5dc528",
+      "width": 406,
+      "height": 461,
+      "face": [
+        223,
+        88,
+        178
+      ],
+      "original": {
+        "file": "species-176-happy.png",
+        "sha256": "cdfe244a7e077f9bbacd0b654c9a974e82aae530d5f973ab5510af1d4f2bad97"
+      }
+    },
+    {
+      "species": 176,
+      "expression": "sad",
+      "path": "assets/production/story/vn-expressions-v1/species-176-sad.e368d5398a1d3069.webp",
+      "bytes": 48240,
+      "sha256": "e368d5398a1d3069500d1996e5ee775da89d86925978fff794c701685fa09fa2",
+      "width": 378,
+      "height": 460,
+      "face": [
+        209,
+        88,
+        177
+      ],
+      "original": {
+        "file": "species-176-sad.png",
+        "sha256": "aaed47b3ffaa1179b26ccc433f7776c576a659815cec64cd06788bcd8b0a0814"
+      }
+    },
+    {
+      "species": 176,
+      "expression": "serious",
+      "path": "assets/production/story/vn-expressions-v1/species-176-serious.c9993dea037f4903.webp",
+      "bytes": 49316,
+      "sha256": "c9993dea037f4903b46ce5d6d9bf5278d09058e61ad2f2baeff0919ae9453387",
+      "width": 388,
+      "height": 463,
+      "face": [
+        214,
+        89,
+        178
+      ],
+      "original": {
+        "file": "species-176-serious.png",
+        "sha256": "3fce6b5610fee1fe6a61d150c921a3b9276dedceadac0564b3422da1c8610db3"
+      }
+    },
+    {
+      "species": 176,
+      "expression": "shock",
+      "path": "assets/production/story/vn-expressions-v1/species-176-shock.0c746f982ad999d2.webp",
+      "bytes": 57774,
+      "sha256": "0c746f982ad999d2ccef082bb96ed8b440ff79d495acac44f165e6003efbb4a1",
+      "width": 408,
+      "height": 461,
+      "face": [
+        224,
+        88,
+        178
+      ],
+      "original": {
+        "file": "species-176-shock.png",
+        "sha256": "90d7d43d52abbdf3ad4a8da613f71993930503a50239682849dfcc7249832a6f"
+      }
+    },
+    {
+      "species": 177,
+      "expression": "happy",
+      "path": "assets/production/story/vn-expressions-v1/species-177-happy.8340374e23a6a064.webp",
+      "bytes": 55286,
+      "sha256": "8340374e23a6a064d97d7db40e1516118e5b00a8ceba0acd7c8704c15d13d177",
+      "width": 518,
+      "height": 440,
+      "face": [
+        203,
+        173,
+        207
+      ],
+      "original": {
+        "file": "species-177-happy.png",
+        "sha256": "7a78131dea9e1e3152ec80dd6c9759be17c4aa1e6b49c77f2c502defe8d42008"
+      }
+    },
+    {
+      "species": 177,
+      "expression": "sad",
+      "path": "assets/production/story/vn-expressions-v1/species-177-sad.4c8229823e7b10fe.webp",
+      "bytes": 40166,
+      "sha256": "4c8229823e7b10feee76ef15e59cacc3e2a0307535a8103e1da02d79189a880b",
+      "width": 381,
+      "height": 419,
+      "face": [
+        137,
+        165,
+        197
+      ],
+      "original": {
+        "file": "species-177-sad.png",
+        "sha256": "c68b8b46b88fa36b6a83f2412871037306db96293232639562647f0fca66c890"
+      }
+    }
+  ]
+}
