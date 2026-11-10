@@ -323,6 +323,7 @@
     "src/championship/presentation/battleFx/battleFxPalettes.js",
     "src/championship/presentation/battleFx/battleFxRecipes.js",
     "src/championship/presentation/battleFx/battleHitFeel.js",
+    "src/championship/presentation/battleFx/battleStatusAilmentFx.js",
     "src/championship/presentation/battleFx/moveVfxThemes.js",
     "src/championship/presentation/battleResultCharacters.js",
     "src/championship/presentation/bm03GroundShadows.js",
@@ -452,8 +453,11 @@
     "src/championship/presentation/vfx/originalVfxCellArt.js",
     "src/championship/presentation/vfx/originalVfxSystemBindings.js",
     "src/championship/presentation/vfx/pixelateCanvas.js",
+    "src/championship/presentation/vfx/pixelHitBursts.js",
+    "src/championship/presentation/vfx/pixelHitBurstSprites.js",
     "src/championship/presentation/vfx/remadeEffectBriefs.js",
     "src/championship/presentation/vfx/remadeEffectCells.js",
+    "src/championship/presentation/vfx/statusAilmentSprites.js",
     "src/championship/presentation/vfx/unifiedMoveVfxResolver.js",
     "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
     "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
@@ -581,9 +585,12 @@
     "src/championship/text/uiText.js",
     "src/championship/text/uiText.th.js",
     "src/championship/text/uiText.vi.js",
+    "src/championship/text/weeklyScheduleText.js",
     "src/championship/text/zhHant.js",
     "src/championship/time/championshipWorldClock.js",
+    "src/championship/time/monthlyCalendar.js",
     "src/championship/time/realtimeClock.js",
+    "src/championship/time/weeklyTitleSchedule.js",
     "src/data/championship/battleCharacterGeometry.js",
     "src/data/championship/battleCharacterProfiles.js",
     "src/data/championship/battleNativeMathTables.js",
@@ -8498,6 +8505,7 @@
     "src/championship/presentation/battleFx/battleFxPalettes.js",
     "src/championship/presentation/battleFx/battleFxRecipes.js",
     "src/championship/presentation/battleFx/battleHitFeel.js",
+    "src/championship/presentation/battleFx/battleStatusAilmentFx.js",
     "src/championship/presentation/battleFx/moveVfxThemes.js",
     "src/championship/presentation/battleResultCharacters.js",
     "src/championship/presentation/bm03GroundShadows.js",
@@ -8627,8 +8635,11 @@
     "src/championship/presentation/vfx/originalVfxCellArt.js",
     "src/championship/presentation/vfx/originalVfxSystemBindings.js",
     "src/championship/presentation/vfx/pixelateCanvas.js",
+    "src/championship/presentation/vfx/pixelHitBursts.js",
+    "src/championship/presentation/vfx/pixelHitBurstSprites.js",
     "src/championship/presentation/vfx/remadeEffectBriefs.js",
     "src/championship/presentation/vfx/remadeEffectCells.js",
+    "src/championship/presentation/vfx/statusAilmentSprites.js",
     "src/championship/presentation/vfx/unifiedMoveVfxResolver.js",
     "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
     "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
@@ -8756,12 +8767,12 @@
     "src/championship/text/uiText.js",
     "src/championship/text/uiText.th.js",
     "src/championship/text/uiText.vi.js",
+    "src/championship/text/weeklyScheduleText.js",
     "src/championship/text/zhHant.js",
     "src/championship/time/championshipWorldClock.js",
-    "src/championship/time/realtimeClock.js",
-    "src/championship/text/weeklyScheduleText.js",
-    "src/championship/time/weeklyTitleSchedule.js",
     "src/championship/time/monthlyCalendar.js",
+    "src/championship/time/realtimeClock.js",
+    "src/championship/time/weeklyTitleSchedule.js",
     "src/data/championship/battleCharacterGeometry.js",
     "src/data/championship/battleCharacterProfiles.js",
     "src/data/championship/battleEffectProfiles.json",
@@ -40437,7 +40448,7 @@
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxLayer.js",
-        "sha256": "b145136f68c12863b4a32b4269b17c5c42f3cde8875f28875aebfd09f963f8c2"
+        "sha256": "d5ad4059709d2049e48c4bbd7ad9012f16184da0348b9155d2c8c59fc6331c20"
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxPalettes.js",
@@ -40450,6 +40461,10 @@
       {
         "path": "src/championship/presentation/battleFx/battleHitFeel.js",
         "sha256": "a6de765184385e3e99b0c2871f5777556ae68f308aa64e60ccea07f32d658b1f"
+      },
+      {
+        "path": "src/championship/presentation/battleFx/battleStatusAilmentFx.js",
+        "sha256": "f1e7b88ac7d4c6b8eb254d9751f13d811aa545315d0bca144464d8491c572115"
       },
       {
         "path": "src/championship/presentation/battleFx/moveVfxThemes.js",
@@ -40529,7 +40544,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaElementFx.js",
-        "sha256": "1e5f9b18dffa517f680fd38f86b681f6b14a1853c9cb4d0e659dcd8db88c3134"
+        "sha256": "8684c941efa16febeb2f7e21d6346063aabdea5ac6ad8034fb5693664bcd9b79"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaEnvironment.js",
@@ -40545,7 +40560,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-        "sha256": "9f0b7bad1a0dc29e954c38c9a8381be9c0e47afdb0362cf6d5cfcff41b016526"
+        "sha256": "f6d5c463f2e0400bb37e55747448abab707835ddce3bd922dee3110bda8d2077"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
@@ -40968,12 +40983,24 @@
         "sha256": "ef9508f28929797c5cd9fee38f0465d9f590031cd31729012a2da41eee1b6345"
       },
       {
+        "path": "src/championship/presentation/vfx/pixelHitBursts.js",
+        "sha256": "23c88c4b2fb8c0b12cb5d41dbe3abf4912a73d0a77e390319a044e5e9b2d9411"
+      },
+      {
+        "path": "src/championship/presentation/vfx/pixelHitBurstSprites.js",
+        "sha256": "cb735229e7fb4f33650a7df0571145eaaf6774e6c8cedc686ada4ff34754d89a"
+      },
+      {
         "path": "src/championship/presentation/vfx/remadeEffectBriefs.js",
         "sha256": "9fee80676a8f6fffe9be3b6de439b5e9c7dc9be160c22ac0435a85412df20da3"
       },
       {
         "path": "src/championship/presentation/vfx/remadeEffectCells.js",
         "sha256": "e094ead40653be6d1d5849c9953e6fcc0d279fedc946d0efeedd7d72d93c151e"
+      },
+      {
+        "path": "src/championship/presentation/vfx/statusAilmentSprites.js",
+        "sha256": "3387de3b96af75ad6d9343e8bcea72f8df1463197cffe37081426c2a9f5ab55b"
       },
       {
         "path": "src/championship/presentation/vfx/unifiedMoveVfxResolver.js",
@@ -41105,7 +41132,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
-        "sha256": "49589b59984b19fe60003788bebb66f9db632714eac0b207f0c78067f9369b3b"
+        "sha256": "2b32acc73c69a48fd4908f643b371ec492b8519cc1687c56e1df11c2dafcfb52"
       },
       {
         "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
@@ -41484,6 +41511,10 @@
         "sha256": "388fbf182fbc2bef1a157aa244fb19f39343478dd65c8109fbc90af3d25e8212"
       },
       {
+        "path": "src/championship/text/weeklyScheduleText.js",
+        "sha256": "d36b19c15a8b468c77ac838a78aaa95e018d08a3438a45200d06dffd72f21cc0"
+      },
+      {
         "path": "src/championship/text/zhHant.js",
         "sha256": "158ec08e645bfa1474bc9909fb665b49707fd93f332861e9e7128e26715f3e97"
       },
@@ -41492,20 +41523,16 @@
         "sha256": "31415bd07ea05d784b85192be8d3602307d89f41e7542a4772a76f28118791c0"
       },
       {
+        "path": "src/championship/time/monthlyCalendar.js",
+        "sha256": "ebe7d67398967f7dfa6b501701f4e8f9160431711bf3e1b4368c93d67b35f49c"
+      },
+      {
         "path": "src/championship/time/realtimeClock.js",
         "sha256": "8dcd4fc56218b6f37166a06b0cf7e5cefb0a9661933c1c266dcb2b32674572fc"
       },
       {
-        "path": "src/championship/text/weeklyScheduleText.js",
-        "sha256": "d36b19c15a8b468c77ac838a78aaa95e018d08a3438a45200d06dffd72f21cc0"
-      },
-      {
         "path": "src/championship/time/weeklyTitleSchedule.js",
         "sha256": "ddba8231c58a40dfde919886daa7e5b4bcce7379d6f137b121b2ce0931b9aed6"
-      },
-      {
-        "path": "src/championship/time/monthlyCalendar.js",
-        "sha256": "ebe7d67398967f7dfa6b501701f4e8f9160431711bf3e1b4368c93d67b35f49c"
       },
       {
         "path": "src/data/championship/battleCharacterGeometry.js",
