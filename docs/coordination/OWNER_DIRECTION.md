@@ -1,5 +1,17 @@
 # Championship Owner Direction
 
+<!-- record-id: HUNT_WIRE_VFX_20261111 -->
+## 2026-11-11 — Hunt wires look like gear: pixel steel cable, one look per wire kind, hit feedback
+
+After the rope, the Owner said the hunt-tool wires were the same cheap line: 「包含狩獵道具這些鋼索，拉出來的線也就是一個很便宜的線的感覺一點都沒有那種特效感」.
+
+OWNER_APPROVED_ADAPTATION, presentation only (`presentation/vs2/huntWireVfx.js`), in the rope's HD-pixel language: an 8×8 twisted steel texture bent with Pixi `MeshRope` (nearest filtering), an additive glow under it, square pixel posts and sparks.
+- 標準鋼索 (BLOCK, items 0–1): cool cyan steel; a partner that meets it makes it hum and throw sparks.
+- 磁力鋼索 (BIND, items 2–3): violet field rings run along the cable with orbiting motes; a held partner sends out pulse rings.
+- 電擊鋼索 (DAMAGE, items 4–5): crackling pixel lightning along the cable; a partner that meets it is struck by a bolt.
+- Dragging: a holographic dashed line in the kind's colour, red while too short. Placing: the cable shoots out from its first post. Last 2 s: it flickers. Removed: it fades.
+- The wire rules (`nativeHuntWire.js`) are unchanged; it only publishes `slot`, `remaining` and a 14-tick `hit`/`hitPoint` for display. Reduced motion keeps the kinds readable without bolts, hum or sparks. The old bare line is removed.
+
 <!-- record-id: HUNT_ROPE_VFX_20261111 -->
 ## 2026-11-11 — The hunt rope looks like a rope: braided pixel cord, cinch, coil, tension and snap
 

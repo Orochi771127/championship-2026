@@ -23,6 +23,7 @@ import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.j
 import {huntTrapLayers} from '../huntFeedbackArt.js';
 import { captureStorageTarget, captureStorageVfxFrame } from '../vfx/captureStorageVfx.js';
 import { createHuntRopeVfx } from './huntRopeVfx.js';
+import { createHuntWireVfx } from './huntWireVfx.js';
 const ACTOR_BODY_RADIUS = 8;
 const TEMPORARY_ART_ID = "art:hunt_field:vs2:temporary-signal-grove-kit";
 
@@ -191,6 +192,8 @@ export async function mountHuntFieldPixiPresentation({
   strokeLayer.addChild(strokeGraphic);
   // The rope: drawing, cinch, bound coil, tether and snap (HUNT_ROPE_VFX_20261111).
   const ropeVfx = createHuntRopeVfx({ PIXI, layer: strokeLayer });
+  // Wires: steel / magnetic / electric cables (HUNT_WIRE_VFX_20261111).
+  const wireVfx = createHuntWireVfx({ PIXI, layer: strokeLayer });
   strokeLayer.addChild(tutorialGuide);
   if (fieldArt) productionArtLayer.addChild(fieldArt.displayObject);
   fieldArt?.occluders?.configureFoliageDither?.(app.renderer);
@@ -602,7 +605,7 @@ export async function mountHuntFieldPixiPresentation({
     toolGraphic.clear();flashGraphic.clear();
     if(view.tools){
       for(const o of (view.tools.objects??[]).flatMap(huntTrapLayers)){
-        if(o.visible===false)continue;
+        if(o.visible===false||o.kind==='WIRE')continue; // wires: huntWireVfx below
         const frame=feedbackArt?.getFrame(o);
         if(frame){
           const sprite=toolSprites[nativeCount]??new PIXI.Sprite(frame.texture);
@@ -616,11 +619,7 @@ export async function mountHuntFieldPixiPresentation({
           sprite.scale.set(frame.displayScale??2);sprite.position.set(o.x,o.y);sprite.visible=true;continue;
         }
         const g=toolGraphic,x=o.x,y=o.y;
-        if(o.kind==='WIRE'){
-          const color=o.state===5?([0x53ced6,0x53ced6,0xaf85ee,0xaf85ee,0xffe36c,0xffe36c][o.itemIndex]):o.valid?0x6cd9ba:0xf08a74;
-          g.moveTo(...o.from).lineTo(...o.to).stroke({color,width:3});
-          for(const p of [o.from,o.to])g.circle(...p,4).fill(0xfff4d2).stroke({color,width:2});
-        }else if(o.kind==='MEAT'){
+        if(o.kind==='MEAT'){
           g.ellipse(x,y+2,12,4).fill({color:0x153b3d,alpha:.2});
           g.moveTo(x-9,y+4).lineTo(x+9,y-4).stroke({color:0xfff4d5,width:5});
           g.ellipse(x,y-2,7+o.tier,6+o.tier).fill([0xdc9162,0xdc9162,0xa684c5,0x7daecc][o.itemIndex]).stroke({color:0x6b4944,width:1});
@@ -645,10 +644,12 @@ export async function mountHuntFieldPixiPresentation({
         // The flash-intensity preference scales only how bright it looks.
         }else if(o.kind==='FLASH')flashGraphic.rect(0,0,app.screen.width,app.screen.height).fill({color:0xffffe6,alpha:o.alpha*flashScale()});
       }
+      wireVfx.update({objects:view.tools.objects??[],now:performance.now(),reduced:reducedFx()});
       ropeVfx.update({tools:view.tools,wilds:view.wildCreatures??[],now:performance.now(),reduced:reducedFx()});
       return;
     }
     ropeVfx.update({ tools: null, wilds: [], now: performance.now(), reduced: reducedFx() });
+    wireVfx.update({ objects: [], now: performance.now(), reduced: reducedFx() });
     const points = view.enclosure?.points;
     if (!Array.isArray(points) || points.length === 0) return;
     strokeGraphic.moveTo(points[0].x, points[0].y);
@@ -949,6 +950,7 @@ export async function mountHuntFieldPixiPresentation({
       unobserveContextLost();
       threePilot?.dispose();
       ropeVfx.destroy();
+      wireVfx.destroy();
       app.ticker.remove(advance);
       app.stage.off("pointerdown", onPointerDown);
       app.stage.off("globalpointermove", onPointerMove);
