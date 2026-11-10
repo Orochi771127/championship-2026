@@ -16,7 +16,8 @@ import {mountInteractiveTutorialPreview} from './src/championship/app/interactiv
 import {mountPortraitFrame} from './src/championship/app/portraitFrame.js';
 import {setLocale,formatNumber} from './src/championship/text/locale.js';
 import {uiText} from './src/championship/text/uiText.js';
-document.documentElement.dataset.theme='arena';
+// The shipped default theme (arcade since 2026-10-26); the retired arena theme pinned a fixed-width wallet.
+document.documentElement.dataset.theme='arcade';
 let tutorial={finished:true,checkpoint:{stage:'raising',message:0}},listeners=[];
 const fixtureApp={getSession:()=>({}),getInteractiveTutorial:()=>tutorial,subscribeRaising:f=>{listeners.push(f);return()=>{}},exitInteractiveTutorial:async()=>{tutorial={...tutorial,finished:true};listeners.forEach(f=>f())}};
 window.saveOpens=0;window.matchOpens=0;
@@ -70,9 +71,11 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
       if(width===430&&locale==='zh-Hant'&&!matches)assert.ok(Math.abs((g.parts.currencies.y+g.parts.currencies.h/2)-(g.parts.season.y+g.parts.season.h/2))<2,'Working 430px normal one-row HUD must stay one row');
       assert.equal(g.parts.bits.label,labels.bitsLabel);assert.equal(g.parts.diamond.label,labels.diamondLabel);
       if(width<=600){assert.ok(g.font>=14);assert.ok(g.parts.diamond.h>=44);if(g.parts.save)assert.ok(g.parts.save.w>=44&&g.parts.save.h>=44);if(phase==='SAVE_FAILED'){assert.ok(g.parts.save?.label,'Save failure remains visible with an accessible explanation');assert.equal(await page.locator('.cm-status-bar__save').getAttribute('data-state'),'SAVE_FAILED');}assert.ok(g.parts.bits.scroll<=g.parts.bits.client+1);assert.ok(g.parts.diamond.scroll<=g.parts.diamond.client+1);
-       const matchKey=JSON.stringify({locale,bits,diamonds,tutorialOn,phase}),wallet=[g.bar.h,g.parts.currencies.y,g.parts.currencies.w];if(matches)assert.deepEqual(wallet,matchAnchors.get(matchKey),'Match badge must never move the wallet');else matchAnchors.set(matchKey,wallet);
+       const matchKey=JSON.stringify({locale,bits,diamonds,tutorialOn,phase}),wallet=[g.bar.h,g.parts.currencies.y,Math.round(g.parts.currencies.right)];if(matches)assert.deepEqual(wallet,matchAnchors.get(matchKey),'Match badge must never move the wallet');else matchAnchors.set(matchKey,wallet);
        if(g.parts.matches){assert.ok(g.parts.matches.h>=44&&g.parts.matches.w>=44);assert.equal(await page.locator('.cm-status-bar__matches-word').evaluate(e=>getComputedStyle(e).clipPath),'none','Match title stays visibly named on small phones');}
-       const key=[g.bar.h,g.parts.currencies.y,g.parts.currencies.w];if(baseline)assert.deepEqual(key,baseline,'Wallet/save/tutorial must not change mobile row geometry');else baseline=key;
+       // Arcade wallet: its width follows the figure (9.9M+), but the row never grows or drops and the wallet keeps its
+       // right edge whatever the balance, save state or tutorial.
+       const key=[g.bar.h,g.parts.currencies.y,Math.round(g.parts.currencies.right)];if(baseline)assert.deepEqual(key,baseline,'Wallet/save/tutorial must not change mobile row geometry');else baseline=key;
       }
      }catch(error){evidence.violations.push({width,height,params,message:error.message});}}
      if(locale==='zh-Hant'&&bits===15900&&!tutorialOn&&phase==='DIRTY')await page.screenshot({path:path.join(out,`${width}-owner-balance-matches-${matches}.png`)});
@@ -129,7 +132,10 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
    // The new game's wallet is whatever the friends playtest grants today (policy file), not a pinned figure:
    // the grant moved from 100,000 / 10,000 to 8,000,000 / 20,000 and this gate stayed red. What it checks is that
    // a new game holds that grant and that entering and leaving the tutorial leaves the wallet untouched.
-   const {FRIENDS_PLAYTEST_POLICY:friends}=await import(require('node:url').pathToFileURL(path.join(repo,'src/championship/app/friendsPlaytestPolicy.js')).href);
+   // Owner 2026-11-10: the friends mode is off on the public host by default; this page runs there, so the game's own
+   // resolver says which policy it plays under (a grant only when the friends mode is on).
+   const {resolveFriendsPlaytestPolicy}=await import(require('node:url').pathToFileURL(path.join(repo,'src/championship/app/friendsPlaytestPolicy.js')).href);
+   const friends=resolveFriendsPlaytestPolicy({hostname:new URL(publicBase).hostname,search:''});
    const {BITS_WALLET_CAP}=await import(require('node:url').pathToFileURL(path.join(repo,'src/championship/shop/shopCatalog.js')).href);
    const wallet=s=>({bits:s.shop.bits,diamonds:s.flags?.friendsPlaytest?.diamonds??null});
    const before=await save();
@@ -140,7 +146,9 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
     if(Date.now()>exitDeadline)throw Error('Normal tutorial exit did not finish');
     const dialogExit=page.locator('dialog[open] [data-action="exit"]'),bannerExit=page.locator('.cm-tutorial-guidance [data-tutorial-action="exit"]');
     const target=await dialogExit.isVisible()?dialogExit:bannerExit;
-    if(await target.isVisible()&&await target.isEnabled()){try{await target.click({timeout:1500});}catch(error){if(!/Timeout|detached/.test(error.message))throw error;}}
+    // A modal dialog's button gets a direct click event: on CI's software GL the dialog never reads as "stable"
+    // to Playwright, so pointer clicks timed out until the 90 s deadline (seen at 430x932, chromium).
+    if(await target.isVisible()&&await target.isEnabled()){try{if(target===dialogExit)await target.dispatchEvent('click',{},{timeout:1500});else await target.click({timeout:1500});}catch(error){if(!/Timeout|detached/.test(error.message))throw error;}}
     await page.waitForTimeout(100);
    }await page.locator('.cm-tutorial-guidance').waitFor({state:'hidden'});
    const after=await save();assert.deepEqual(wallet(after),wallet(before),'The tutorial leaves the wallet untouched');await captureNormal('tutorial-off');

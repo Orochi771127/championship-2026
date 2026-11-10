@@ -315,3 +315,17 @@ test('night: a partner fresh out of its egg stays up for the wake window, then n
     assert.equal(app.getRaisingActorFrame(id).state, 4, 'naps once the wake window has passed');
   } finally { await app.dispose(); }
 });
+
+test('REALTIME_V1: a hunt starts at 00:41 and 01:59, before the original 02:00 day (CI found Start doing nothing then)', async () => {
+  for (const [hour, minute] of [[0, 41], [1, 59], [13, 0]]) {
+    const clock = {ms: at(hour, minute)};
+    const {make} = harness(clock);
+    const app = make('REALTIME_V1');
+    await app.newGame();
+    try {
+      app.openGate(); app.selectGate(app.getGates().find(g => g.biomeId === 'Grass').gateId); app.confirmGate();
+      assert.equal(await app.beginHunt(), 'HUNT_FIELD', `${hour}:${minute}`);
+      assert.equal(app.getHuntEntryError(), null);
+    } finally { await app.dispose(); }
+  }
+});
