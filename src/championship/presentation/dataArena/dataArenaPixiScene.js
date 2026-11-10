@@ -27,6 +27,7 @@ import { reviewedReleasePoint, releaseOffset, reviewedIdleBreath, reviewedWinHop
 import { RELAY_ACTION_PROFILES, relaySequence, relayEffectStyle } from '../../modes/dataArena/dataArenaRelay.js';
 import { RELAY_ROSTER, relayPartner } from '../../modes/dataArena/dataArenaRelayRoster.js';
 import { createBattleBurstShell } from '../vs5/battleBurstShell.js';
+import { createBattleStatusAilmentFx, dataArenaStatusLook, multiplyTint } from '../battleFx/battleStatusAilmentFx.js';
 import { GACHA_BLOODLINES } from '../../gacha/cyberGacha.js';
 import { arenaText as t } from '../../text/dataArenaText.js';
 // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): the hex shell closes over the 成熟期 for this long before
@@ -119,6 +120,41 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   world.addChild(groundChunks, tactical, water, cellFx, bridge, marks, objects, shotGlow, shots, beams, particles, lights, numberLayer);
   const burstShell = createBattleBurstShell({ PIXI, layer: objects, reducedMotion });
   rollback.push(() => burstShell.dispose());
+  // Status ailments (STATUS_AILMENT_VFX_20261110): the battle's pixel loops on a
+  // rooted, burning or slowed fighter, plus its body tint and glow. Display only.
+  const statusFx = typeof createBattleStatusAilmentFx === 'function'
+    ? createBattleStatusAilmentFx({ PIXI, layer: objects, reducedMotion, quality: quality === 'low' ? 'saver' : 'balanced' }) : null;
+  if (statusFx) rollback.push(() => statusFx.dispose());
+  const statusShown = new Set();
+  // Loopback review only: ?statusFxQa=frozen,burning shows those looks on the player, then each rival (display only).
+  const statusQa = statusFx && ['localhost', '127.0.0.1', '[::1]'].includes(globalThis.location?.hostname)
+    ? (new URLSearchParams(String(globalThis.location?.search ?? '')).get('statusFxQa') ?? '').split(',') : [];
+  /** One fighter's condition: the loop round its body, its tint, and an additive glow copy of its frame. */
+  function drawArenaStatus(key, body, view, role, qaIndex = -1) {
+    const look = statusFx && body && body.hp > 0 ? (statusQa[qaIndex] || dataArenaStatusLook(body)) : null;
+    if (look) {
+      const height = ROLE_HEIGHT[role] ?? 80, feet = body.y - floorOffset(body.x, body.y);
+      // The grain keeps the battle's ratio: one texel is a fortieth of the role height over 0.35.
+      statusFx.place(key, look, { x: body.x, y: feet, top: feet - height, width: height * 0.8, height, zIndex: body.y, unit: height / 40 },
+        { visible: view.container.visible !== false, alpha: view.sprite.alpha });
+      statusShown.add(key);
+    }
+    const dress = look ? statusFx.body(key) : null;
+    if (dress) view.sprite.tint = multiplyTint(view.sprite.tint, dress.tint);
+    if (dress?.glow && !view.statusGlow) {
+      view.statusGlow = new PIXI.Sprite(view.sprite.texture);
+      view.statusGlow.blendMode = 'add'; view.statusGlow.eventMode = 'none'; view.statusGlow.label = 'arena status body glow';
+      view.container.addChild(view.statusGlow);
+    }
+    if (view.statusGlow) {
+      const glow = view.statusGlow, sprite = view.sprite;
+      glow.visible = Boolean(dress?.glow) && sprite.visible !== false;
+      if (glow.visible) {
+        glow.texture = sprite.texture; glow.anchor.copyFrom(sprite.anchor); glow.scale.copyFrom(sprite.scale);
+        glow.position.copyFrom(sprite.position); glow.rotation = sprite.rotation; glow.tint = dress.glow; glow.alpha = dress.glowAlpha * sprite.alpha;
+      }
+    }
+  }
   /** The shell for one fighter from its burst record (relay): wrap, then scatter; a short shatter when it ends. */
   function drawArenaBurstShell(key, body, burst, role) {
     const height = ROLE_HEIGHT[role] ?? 80, centerY = body.y - floorOffset(body.x, body.y) - height * 0.5;
@@ -528,6 +564,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   let bossView = null;
   const rivalViews = new Map();
   function statusTint(body, base) {
+    // With the status layer the body takes its look's tint in drawArenaStatus instead.
+    if (statusFx) return base;
     if (body.root > 0) return 0xc8f4ff;
     if (body.slow > 0) return mixColor(base, 0x7fc8ff, 0.45);
     if (body.burn > 0 && Math.floor(elapsed * 12) % 2 === 0) return mixColor(base, 0xff8a3c, 0.5);
@@ -1134,7 +1172,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if(!ambientPaused)fpsWindow.push(observedFrameMs); if (fpsWindow.length > 120) fpsWindow.shift();
     if (hitStop > 0) hitStop = Math.max(0, hitStop - Math.min(0.1, observedFrameMs / 1000));
     elementFx?.update(dt * 1000);
-    if (relayMode && dt > 0 && (statusTick += dt) >= 0.14) {
+    statusFx?.update(dt * 1000);
+    if (relayMode && !statusFx && dt > 0 && (statusTick += dt) >= 0.14) {
       statusTick = 0;
       // Status reads on the body: burn embers rise, a root rings the feet, slow trails mist.
       for (const body of [state.player, ...state.rivals.filter(r => r.active && r.hp > 0)]) {
@@ -1285,11 +1324,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         : rival.cast || rival.lunge || rival.recovery > 0 ? DATA_ARENA_SEQUENCES.ATTACK : Math.hypot(rival.vx, rival.vy) > 30 || rival.dashTimer > 0 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
       actorView.update(dtMs, { x: rival.x, y: rival.y, facing: rival.facing, flash: rival.hitFlash, alpha: rival.invulnerable > 0 ? 0.55 : 1, seq });
       actorView.sprite.tint = statusTint(rival, rival.hitFlash > 0 ? 0xff9a9a : 0xffffff);
+      if (state.gameMode === 'RELAY') drawArenaStatus(`rival:${rival.id}`, rival, actorView, actorView.role ?? 'RIVAL', state.rivals.indexOf(rival) + 1);
       actorView.setHealth(rival.active === false ? 0 : rival.hp / rival.maxHp);
     }
     for (const [id, view] of rivalViews) if (!state.rivals.some((rival) => String(rival.id) === String(id).split(':')[0])) { view.container.destroy({ children: true }); rivalViews.delete(id); burstShell.retire(`rival:${String(id).split(':')[0]}`); }
     if (!(state.mate.state === "ABSENT")) mateView.container.visible = true; else mateView.container.visible = false;
     playerView.sprite.tint = statusTint(state.player, playerView.sprite.tint);
+    if (state.gameMode === 'RELAY') drawArenaStatus('player', state.player, playerView, 'PLAYER', 0);
+    statusFx?.retireExcept(statusShown); statusShown.clear();
 
     // Enemies.
     const seen = new Set();
@@ -1543,7 +1585,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const half = (self.barrierArc ?? 2) / 2;
       arcPath(g, self.x, self.y - 16, self.barrierRadius ?? 64, self.barrierAngle - half, self.barrierAngle + half).stroke({ width: 7, color: 0xffe066, alpha: 0.85 });
     }
-    for (const body of [self, ...state.rivals]) if (body.root > 0) g.ellipse(body.x, body.y, 30, 12).stroke({ width: 4, color: 0xc8f4ff, alpha: 0.9 });
+    if (!statusFx) for (const body of [self, ...state.rivals]) if (body.root > 0) g.ellipse(body.x, body.y, 30, 12).stroke({ width: 4, color: 0xc8f4ff, alpha: 0.9 });
     for (const scan of state.scans) {
       if (scan.telegraph <= 0) continue;
       const p = 1 - scan.telegraph / DATA_ARENA_SCAN.telegraph;
