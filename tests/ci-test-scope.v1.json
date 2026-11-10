@@ -463,7 +463,8 @@
     "tests/championship-unique-move-vfx-cases.mjs",
     "tests/championship-performance-release-cases.mjs",
     "tests/championship-awakening-overdrive-cases.mjs",
-    "tests/championship-aw12-full-source-cases.mjs"
+    "tests/championship-aw12-full-source-cases.mjs",
+    "tests/championship-aw32-release-cases.mjs"
   ],
   "localReference": {
     "tests/championship-scene-music-browser.mjs": "Requires real Playwright Chromium and a same-job loopback server; explicitly runs the Scene music actual-browser workflow with native media decoding, production Settings/transport, and controlled normal-game Raising/Battle/Data Arena flows.",
