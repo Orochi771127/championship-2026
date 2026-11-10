@@ -177,3 +177,100 @@ sprite("splash_1", { w: 28, h: 20, outline: "o" }, ellipse(14, 16, 12, 3, "m"), 
   circ(23, 8, 2, "x"), px(11, 3, "c"), px(23, 7, "c"))
 sprite("splash_2", { w: 30, h: 22, outline: "o" }, ellipse(15, 19, 13, 2, "e"), circ(3, 13, 1, "m"), circ(9, 7, 2, "m"), circ(21, 6, 2, "m"),
   circ(27, 13, 1, "m"), px(15, 3, "x"), px(9, 6, "c"))
+
+// ================================================================ set pieces (BESPOKE_MOVE_VFX_PROGRAM_20261111)
+// Bespoke contact pieces a move's choreography animates (moveVfxSetPieces.js). Tone keys take the move's palette;
+// W stays white (fangs, a horn's glint).
+
+// Flame jaws: the upper jaw, a burning arch with four white fangs hanging from it; the lower jaw is its flip.
+sprite("jaw_top", { w: 44, h: 22, outline: "o" },
+  // an arched jaw: a band between two arcs, hotter along its crown
+  clip((x, y) => ((x - 22) / 22) ** 2 + ((y - 20) / 20) ** 2 <= 1 && ((x - 22) / 16) ** 2 + ((y - 21) / 13) ** 2 > 1 && y <= 18,
+    rect(0, 0, 44, 22, "m")),
+  clip((x, y) => ((x - 22) / 21) ** 2 + ((y - 20) / 19) ** 2 <= 1 && ((x - 22) / 19) ** 2 + ((y - 21) / 17) ** 2 > 1 && y <= 12,
+    rect(0, 0, 44, 22, "x")),
+  hline(15, 1, 14, "c"),
+  // fangs hang from the inner arc and lean in toward the bite
+  poly([6, 13, 9, 11, 9, 20], "W"), poly([12, 9, 15, 8, 15, 19], "W"), poly([29, 8, 32, 9, 29, 19], "W"), poly([35, 11, 38, 13, 35, 20], "W"),
+  px(8, 12, "L"), px(14, 9, "L"), px(30, 9, "L"), px(36, 12, "L"))
+sprite("jaw_bottom", { base: "jaw_top", flip: "y" })
+
+// One claw mark: a long tapered gash, hot at its heart; the choreography rakes three in a row.
+sprite("claw_mark", { w: 12, h: 40, outline: "o" },
+  poly([10, 0, 11, 2, 3, 39, 1, 37], "m"), poly([9, 3, 10, 5, 4, 34, 3, 33], "x"), line(9, 6, 5, 28, "c"))
+
+// A horn spear tip pointing right: a ridged horn with a hot glint along its top edge.
+sprite("horn_tip", { w: 36, h: 14, outline: "o" },
+  poly([0, 2, 6, 0, 35, 7, 6, 13, 0, 11], "m"), poly([6, 2, 30, 7, 6, 6], "x"), line(8, 3, 28, 6, "c"),
+  vline(10, 2, 9, "e"), vline(17, 3, 7, "e"), px(33, 7, "W"))
+
+// A molten core: a cracked round ember, darker in its cracks, white-hot inside.
+sprite("core", { w: 18, h: 18, outline: "o" },
+  circ(9, 9, 8, "m"), circ(8, 8, 5, "x"), circ(7, 7, 2, "c"), line(3, 12, 8, 9, "e"), line(13, 4, 10, 8, "e"), line(14, 13, 10, 10, "e"))
+
+// A cannon's muzzle ring: a thick ring with four notches, the shot's breath at its centre.
+sprite("muzzle", { w: 26, h: 26, outline: "o" },
+  circ(13, 13, 12, "m"), circ(13, 13, 9, "_"), ring(13, 13, 10, "x"), circ(13, 13, 4, "c"),
+  rect(12, 0, 3, 3, "e"), rect(12, 23, 3, 3, "e"), rect(0, 12, 3, 3, "e"), rect(23, 12, 3, 3, "e"))
+
+// ---------------------------------------------------------------- set pieces, batch 2 (strike and slash signatures)
+// A fist driving right: four knuckles, a thumb folded under, a hot rim on the striking face.
+sprite("fist", { w: 26, h: 24, outline: "o" },
+  rect(2, 5, 14, 15, "m"), rect(0, 8, 4, 9, "e"),
+  // four knuckles stacked on the striking face, each lit on top
+  rect(14, 4, 6, 17, "m"), circ(20, 6, 2, "m"), circ(21, 10, 2, "m"), circ(21, 14, 2, "m"), circ(20, 18, 2, "m"),
+  // dark grooves between the knuckles so each reads on its own
+  hline(18, 8, 6, "o"), hline(18, 12, 6, "o"), hline(18, 16, 6, "o"),
+  px(20, 5, "c"), px(21, 9, "c"), px(21, 13, "c"), px(20, 17, "c"),
+  // finger seams and the thumb folded under
+  hline(10, 8, 7, "e"), hline(10, 12, 8, "e"), hline(10, 16, 7, "e"), rect(5, 18, 10, 4, "x"), hline(6, 18, 8, "c"))
+// The star of a blow landing: eight points, white at its heart.
+sprite("impact_star", { w: 30, h: 30, outline: "o" },
+  poly([15, 0, 18, 11, 29, 15, 18, 19, 15, 29, 12, 19, 1, 15, 12, 11], "m"),
+  poly([4, 4, 13, 12, 12, 13], "x"), poly([26, 4, 17, 12, 18, 13], "x"), poly([4, 26, 13, 18, 12, 17], "x"), poly([26, 26, 17, 18, 18, 17], "x"),
+  circ(15, 15, 4, "x"), circ(15, 15, 2, "c"))
+// A ground crack seen from the side: a jagged split with chips thrown up.
+sprite("crack", { w: 48, h: 14, outline: "o" },
+  poly([0, 10, 10, 8, 16, 11, 24, 7, 31, 10, 38, 8, 47, 11, 38, 12, 30, 13, 22, 11, 14, 13, 6, 12], "e"),
+  line(6, 11, 40, 10, "k"), poly([12, 6, 14, 2, 16, 6], "m"), poly([28, 5, 31, 0, 33, 5], "m"), poly([40, 6, 41, 3, 43, 6], "m"), px(31, 1, "x"))
+// A blade arc: a crescent of light, white along its cutting edge.
+sprite("blade_arc", { w: 40, h: 40, outline: "o" },
+  clip((x, y) => (x - 6) ** 2 + (y - 20) ** 2 <= 33 ** 2 && (x + 2) ** 2 + (y - 20) ** 2 > 30 ** 2, rect(0, 0, 40, 40, "m")),
+  clip((x, y) => (x - 6) ** 2 + (y - 20) ** 2 <= 33 ** 2 && (x - 1) ** 2 + (y - 20) ** 2 > 31 ** 2, rect(0, 0, 40, 40, "x")),
+  clip((x, y) => (x - 6) ** 2 + (y - 20) ** 2 <= 33 ** 2 && (x - 4) ** 2 + (y - 20) ** 2 > 32 ** 2, rect(0, 0, 40, 40, "c")))
+// Speed streaks behind a rush: three lines of falling length.
+sprite("streaks", { w: 40, h: 14, outline: "o" },
+  hline(2, 2, 36, "x"), hline(10, 6, 28, "m"), hline(4, 11, 32, "x"), px(37, 2, "c"), px(37, 11, "c"))
+// A thrown knife, point right.
+sprite("knife", { w: 22, h: 8, outline: "o" },
+  poly([6, 2, 20, 4, 6, 6], "x"), hline(7, 4, 12, "c"), rect(0, 2, 6, 4, "e"), px(5, 4, "m"))
+
+// ---------------------------------------------------------------- set pieces, batch 3 (fire, orb, lance, pierce, missile, claw)
+// A flame tongue standing on its base: three licks, white-hot at the root.
+sprite("flame", { w: 20, h: 30, outline: "o" },
+  poly([10, 0, 14, 9, 18, 6, 17, 18, 19, 29, 1, 29, 3, 18, 2, 8, 6, 12], "m"),
+  poly([10, 7, 13, 15, 15, 13, 14, 23, 6, 28, 5, 20, 7, 15], "x"), poly([10, 16, 12, 22, 11, 28, 8, 28, 8, 22], "c"))
+// A lance of light pointing right: a long shaft that narrows to a hot point.
+sprite("lance_beam", { w: 64, h: 12, outline: "o" },
+  poly([0, 3, 50, 3, 63, 6, 50, 9, 0, 9], "m"), poly([0, 5, 52, 5, 60, 6, 52, 7, 0, 7], "x"), hline(4, 6, 54, "c"), px(62, 6, "W"))
+// A toxic blob mid-splash: a lumpy body with two drips and bubbles.
+sprite("blob", { w: 28, h: 24, outline: "o" },
+  ellipse(14, 12, 12, 8, "m"), circ(6, 8, 4, "m"), circ(21, 7, 4, "m"), rect(8, 18, 3, 5, "m"), rect(18, 17, 2, 6, "m"),
+  ellipse(12, 10, 6, 3, "x"), circ(19, 6, 1, "c"), circ(9, 9, 1, "c"), circ(16, 13, 2, "e"), px(16, 13, "x"))
+
+// ---------------------------------------------------------------- set pieces, batch 4 (the remaining signatures)
+// Small things a flurry throws, each lit from the top left.
+sprite("note", { w: 12, h: 16, outline: "o" }, ellipse(4, 12, 3, 2, "m"), vline(7, 1, 11, "m"), poly([7, 1, 11, 4, 11, 6, 7, 4], "m"), px(3, 11, "c"), px(8, 2, "x"))
+sprite("leaf", { w: 14, h: 10, outline: "o" }, poly([0, 5, 6, 0, 13, 4, 7, 9], "m"), line(1, 5, 12, 4, "e"), poly([3, 4, 6, 1, 9, 3], "x"))
+sprite("feather_sm", { w: 16, h: 8, outline: "o" }, poly([0, 4, 12, 1, 15, 4, 12, 7], "m"), hline(1, 4, 13, "c"), poly([4, 3, 11, 2, 13, 4], "x"))
+sprite("bubble_sm", { w: 12, h: 12, outline: "o" }, circ(6, 6, 5, "m"), circ(6, 6, 3, "_"), ring(6, 6, 4, "x"), px(4, 4, "c"), px(3, 5, "c"))
+sprite("shard", { w: 10, h: 16, outline: "o" }, poly([5, 0, 9, 7, 5, 15, 1, 7], "m"), poly([5, 1, 7, 7, 5, 12], "x"), vline(5, 2, 8, "c"))
+// A vortex: three arms coiling into a dark eye.
+sprite("vortex", { w: 34, h: 34, outline: "o" },
+  (c) => { for (let a = 0; a < 3; a++) for (let t = 0; t < 1; t += 0.01) { const ang = a * 2.094 + t * 5.5, r = 2 + t * 14;
+    c.px(Math.round(17 + Math.cos(ang) * r), Math.round(17 + Math.sin(ang) * r), t > 0.6 ? "m" : t > 0.3 ? "x" : "c"); } },
+  circ(17, 17, 3, "e"), px(17, 17, "o"))
+// A vine rising and curling over at the top, with two leaves.
+sprite("vine", { w: 16, h: 40, outline: "o" },
+  (c) => { for (let y = 39; y > 6; y--) { const x = Math.round(7 + Math.sin(y / 5) * 3); c.px(x, y, "m"); c.px(x + 1, y, "e"); } },
+  circ(11, 5, 3, "m"), circ(11, 5, 1, "_"), poly([2, 24, 7, 21, 6, 26], "x"), poly([13, 15, 9, 13, 10, 18], "x"))

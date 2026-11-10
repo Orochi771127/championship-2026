@@ -447,9 +447,11 @@
     "src/championship/presentation/vfx/elementVfxLayer.js",
     "src/championship/presentation/vfx/groundCrater.js",
     "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
+    "src/championship/presentation/vfx/moveVfxChoreography.js",
     "src/championship/presentation/vfx/moveVfxKit.js",
     "src/championship/presentation/vfx/moveVfxKitTextures.js",
     "src/championship/presentation/vfx/moveVfxRecipes.js",
+    "src/championship/presentation/vfx/moveVfxSetPieces.js",
     "src/championship/presentation/vfx/moveVfxSignatures.js",
     "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
     "src/championship/presentation/vfx/originalVfxCellArt.js",
@@ -8635,9 +8637,11 @@
     "src/championship/presentation/vfx/elementVfxLayer.js",
     "src/championship/presentation/vfx/groundCrater.js",
     "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
+    "src/championship/presentation/vfx/moveVfxChoreography.js",
     "src/championship/presentation/vfx/moveVfxKit.js",
     "src/championship/presentation/vfx/moveVfxKitTextures.js",
     "src/championship/presentation/vfx/moveVfxRecipes.js",
+    "src/championship/presentation/vfx/moveVfxSetPieces.js",
     "src/championship/presentation/vfx/moveVfxSignatures.js",
     "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
     "src/championship/presentation/vfx/originalVfxCellArt.js",
@@ -40464,7 +40468,7 @@
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxLayer.js",
-        "sha256": "dbe7fd560c2636c38bca11ecb91b3862b3cf65133a7748b850e4ddc45949ae15"
+        "sha256": "779a7c54cb51a4824433ea4022f82c0d0f7d5f2c7e2c472980c96d7a961dca24"
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxPalettes.js",
@@ -40560,7 +40564,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaElementFx.js",
-        "sha256": "fcfa7fe4796cdb757f579eaf01671a2a58a14f2d1e36f223b11f0c8897f8cfa4"
+        "sha256": "18cb6c219ac3366c391a0d77a0b5a9b0cbd5bdde50f92342a14bc18e2dc36ca9"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaEnvironment.js",
@@ -40956,7 +40960,7 @@
       },
       {
         "path": "src/championship/presentation/vfx/drawnVfxSprites.js",
-        "sha256": "7393cfec3aa0e6cccebc1ad795964169e4bd4d4a00560306ed56c114cb8feb8b"
+        "sha256": "8c7ebc98dec83b84ed320fb5a43dbe169705b95306dc67be8e7d7f472552e71b"
       },
       {
         "path": "src/championship/presentation/vfx/elementVfxLayer.js",
@@ -40971,6 +40975,10 @@
         "sha256": "e16aa1f34421037624bdcc116f674082d99057895234760f1fbbe264d75d7045"
       },
       {
+        "path": "src/championship/presentation/vfx/moveVfxChoreography.js",
+        "sha256": "43f7752f2d796c96c4f16bd4d98e7c62f1051a06646ff735e947fb9a3f3217bc"
+      },
+      {
         "path": "src/championship/presentation/vfx/moveVfxKit.js",
         "sha256": "dd29cfadd9e70ada1752c8756c8cf7f98292260db64f6fc2fcc6b0e9104508e0"
       },
@@ -40981,6 +40989,10 @@
       {
         "path": "src/championship/presentation/vfx/moveVfxRecipes.js",
         "sha256": "3cb4893a6dc28f0f7352cc87f36ae2fd472e477c52f49d0c112004f0bf722d59"
+      },
+      {
+        "path": "src/championship/presentation/vfx/moveVfxSetPieces.js",
+        "sha256": "f11598f459e2f98e30a0302ae7017783e5d9468fee499f4794b16fcf6442d713"
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxSignatures.js",
