@@ -52,8 +52,14 @@ const PIECE_SPRITES = Object.freeze({
   splat: ['blob', 'core'], eye: ['eye', 'muzzle'], lance: ['lance_beam', 'impact_star'], rain: ['missile', 'missile', 'missile', 'missile', 'impact_star'],
   clock: ['clock', 'impact_star'],
   flurry: null, drop: null, bolt: ['bolt_0', 'bolt_1', 'bolt_2', 'impact_star'], vortex: ['vortex', 'impact_star'],
-  vines: ['vine', 'vine', 'vine'], mist: ['puff_1', 'puff_2', 'puff_3', 'puff_2'], wave: ['splash_0', 'splash_1', 'splash_2']
+  vines: ['vine', 'vine', 'vine'], mist: ['puff_1', 'puff_2', 'puff_3', 'puff_2'], wave: ['splash_0', 'splash_1', 'splash_2'],
+  // Support moves (batch 7), played on the body that receives them.
+  heal: ['plus', 'plus', 'plus', 'plus', 'plus', 'muzzle'], cleanse: ['shard', 'shard', 'shard', 'shard', 'shard', 'shard', 'muzzle', 'muzzle'],
+  'buff-atk': ['arrow_up', 'arrow_up', 'arrow_up', 'impact_star'], 'buff-def': ['shield', 'muzzle'],
+  'buff-spd': ['streaks', 'streaks', 'streaks', 'arrow_up'], 'buff-hit': ['reticle', 'impact_star'], 'buff-tol': ['shield', 'shard', 'shard', 'shard', 'shard']
 });
+/** Support pieces: the cast on the receiving body, not a blow. */
+export const MOVE_VFX_SUPPORT_PIECES = Object.freeze(['heal', 'cleanse', 'buff-atk', 'buff-def', 'buff-spd', 'buff-hit', 'buff-tol']);
 /** Sprites of a piece; flurry and drop take the choreography's own drawing. */
 function piecesOf(piece, drawing) {
   if (piece === 'flurry') return [...Array(8).fill(drawing ?? 'leaf'), 'impact_star'];
@@ -66,7 +72,8 @@ export const MOVE_VFX_PIECE_DRAWINGS = Object.freeze(['note', 'leaf', 'feather_s
 const DURATION = Object.freeze({jaws: 420, 'jaws-horn': 560, horn: 380, claws: 440, core: 420, muzzle: 300, 'muzzle-spiral': 460,
   fist: 400, rush: 420, quake: 520, spin: 520, roar: 480, cross: 420, slash: 340, scissor: 420, iai: 460, knives: 520,
   stream: 520, wisps: 620, orb: 560, splat: 460, eye: 600, lance: 420, rain: 640, clock: 620,
-  flurry: 640, drop: 560, bolt: 500, vortex: 660, vines: 620, mist: 700, wave: 560});
+  flurry: 640, drop: 560, bolt: 500, vortex: 660, vines: 620, mist: 700, wave: 560,
+  heal: 820, cleanse: 760, 'buff-atk': 720, 'buff-def': 760, 'buff-spd': 620, 'buff-hit': 700, 'buff-tol': 800});
 
 const rgb = c => [(c >> 16) & 255, (c >> 8) & 255, c & 255];
 const easeIn = t => t * t * t;
@@ -312,6 +319,51 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
         w.anchor.set(0.5, 1);
         set(w, x, y + 20 * s, 1.6 + t * 0.4, 1.6 + t * 0.3, on ? (i === 2 ? stepFade(t) : 1) : 0);
       });
+    } else if (p.piece === 'heal') {
+      // pluses well up from the feet and drift above the head; a ring blooms flat on the ground
+      const pluses = p.sprites.slice(0, 5), ring = p.sprites[5];
+      pluses.forEach((b, i) => {
+        const t = clamp01((k - i * 0.1) / 0.6), lift = easeOut(t), sway = Math.sin(t * Math.PI * 2 + i) * 4;
+        set(b, x + ((i * 37) % 5 - 2) * 11 * s + sway * s, y + (30 - lift * 80) * s, 0.8 + (t < 0.15 ? t * 3 : 0.45), 0.8 + (t < 0.15 ? t * 3 : 0.45), t > 0 ? (t < 0.6 ? 1 : stepFade((t - 0.6) / 0.4)) : 0);
+      });
+      const bloom = clamp01(k / 0.5);
+      set(ring, x, y + 30 * s, 0.6 + easeOut(bloom) * 2.2, (0.6 + easeOut(bloom) * 2.2) * 0.32, stepFade(bloom));
+    } else if (p.piece === 'cleanse') {
+      // two rings sweep outward and the shards of what was cleared rise and spin away
+      const shards = p.sprites.slice(0, 6), rings = p.sprites.slice(6);
+      rings.forEach((ring, i) => { const t = clamp01((k - i * 0.2) / 0.55); set(ring, x, y + 20 * s, 0.5 + easeOut(t) * 2.6, (0.5 + easeOut(t) * 2.6) * 0.34, t > 0 ? stepFade(t) : 0); });
+      shards.forEach((b, i) => {
+        const t = clamp01((k - 0.15 - i * 0.05) / 0.7), ang = i / 6 * Math.PI * 2;
+        set(b, x + Math.cos(ang) * (16 + easeOut(t) * 20) * s, y + (10 - easeOut(t) * 70) * s, 0.9, 0.9, t > 0 ? stepFade(t) : 0, t * 6 + i);
+      });
+    } else if (p.piece === 'buff-atk' || p.piece === 'buff-spd') {
+      // a power climb: three arrows (or speed streaks) shoot up the body, then a flash above the head
+      const spd = p.piece === 'buff-spd', cols = p.sprites.slice(0, 3), top = p.sprites[3];
+      cols.forEach((b, i) => {
+        const t = clamp01((k - [0.1, 0, 0.2][i] * (spd ? 0.6 : 1)) / (spd ? 0.4 : 0.55)), rise = (spd ? easeIn : easeOut)(t);
+        set(b, x + (i - 1) * 20 * s, y + (34 - rise * 74) * s, spd ? 1.1 : 1.1, spd ? 0.9 : 1.1, t > 0 && t < 1 ? (t < 0.7 ? 1 : 0.6) : 0, spd ? -Math.PI / 2 : 0);
+      });
+      const pop = clamp01((k - 0.5) / 0.5);
+      if (spd) set(top, x, y + (24 - easeOut(clamp01(k / 0.6)) * 70) * s, 1.4, 1.4, k < 0.6 ? 1 : stepFade(pop));
+      else set(top, x, y - 46 * s, 0.4 + easeOut(pop) * 1.1, 0.4 + easeOut(pop) * 1.1, k < 0.5 ? 0 : stepFade(pop));
+    } else if (p.piece === 'buff-def' || p.piece === 'buff-tol') {
+      // a guard shield slams up in front of the body, overshoots, settles, glints and fades;
+      // a resist guard also keeps four shards circling it
+      const [shield, ...rest] = p.sprites, popIn = clamp01(k / 0.2), hold = clamp01((k - 0.65) / 0.35);
+      const sc = popIn < 1 ? easeOut(popIn) * 1.5 : 1.5 - Math.min(1, (k - 0.2) / 0.12) * 0.3;
+      set(shield, x + facing * 10 * s, y - 4 * s, sc * (k > 0.45 && k < 0.5 ? 1.08 : 1), sc, k < 0.65 ? 1 : stepFade(hold));
+      if (p.piece === 'buff-def') {
+        const t = clamp01((k - 0.15) / 0.5);
+        set(rest[0], x, y + 28 * s, 0.6 + easeOut(t) * 2, (0.6 + easeOut(t) * 2) * 0.32, k < 0.15 ? 0 : stepFade(t));
+      } else rest.forEach((b, i) => {
+        const ang = i / 4 * Math.PI * 2 + k * 9;
+        set(b, x + Math.cos(ang) * 34 * s, y + Math.sin(ang) * 14 * s - 4 * s, 0.9, 0.9, k < 0.15 ? 0 : k < 0.7 ? 1 : stepFade(hold), ang);
+      });
+    } else if (p.piece === 'buff-hit') {
+      // a reticle spins in from wide and locks on the body, then a flash at the lock
+      const [ret, star] = p.sprites, close = easeOut(clamp01(k / 0.45)), lock = clamp01((k - 0.45) / 0.55);
+      set(ret, x, y - 6 * s, 2.4 - close * 1.3, 2.4 - close * 1.3, k < 0.45 ? 0.6 + close * 0.4 : stepFade(lock), (1 - close) * Math.PI);
+      set(star, x, y - 6 * s, 0.3 + easeOut(lock) * 0.9, 0.3 + easeOut(lock) * 0.9, k < 0.45 ? 0 : stepFade(lock));
     } else {
       // muzzle / muzzle-spiral: rings pop and spin out
       p.sprites.forEach((ring, i) => {

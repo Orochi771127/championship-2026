@@ -192,3 +192,28 @@ test("every signature move has its own choreography, and every drawing it names 
     if (sprite) { assert.ok(MOVE_VFX_PIECE_DRAWINGS.includes(sprite), `${key} ${sprite}`); assert.ok(DRAWN_VFX_SPRITES[sprite], `${key} ${sprite} drawn`); }
   }
 });
+
+test("every move has a cast: blows by record, support moves by the effect they apply", async () => {
+  const { moveVfxSignature } = await import("../src/championship/presentation/vfx/moveVfxSignatures.js");
+  const { moveVfxSupportChoreography } = await import("../src/championship/presentation/vfx/moveVfxChoreography.js");
+  const { MOVE_VFX_SUPPORT_PIECES, createMoveVfxSetPieces } = await import("../src/championship/presentation/vfx/moveVfxSetPieces.js");
+  const { BATTLE_FX_PALETTES } = await import("../src/championship/presentation/battleFx/battleFxPalettes.js");
+  const blows = battleMoves.records.filter(m => moveVfxSignature(m.recordIndex) && moveVfxSignature(m.recordIndex).tier !== "support");
+  assert.deepEqual(blows.filter(m => !MOVE_VFX_CHOREOGRAPHY[m.recordIndex]).map(m => m.recordIndex), []);
+  // Every support record that applies an effect (kind 2) has its own piece in a known palette.
+  for (const m of battleMoves.records.filter(r => r.kind === 2 && r.statusCode !== 0)) {
+    const s = moveVfxSupportChoreography(m.statusCode);
+    assert.ok(s && MOVE_VFX_SUPPORT_PIECES.includes(s.piece), `support ${m.recordIndex}`);
+    assert.ok(BATTLE_FX_PALETTES[s.palette], `support ${m.recordIndex} palette`);
+  }
+  assert.equal(moveVfxSupportChoreography(0), null);
+  // Each support piece plays and recycles.
+  const point = () => ({ x: 0, y: 0, set(x, y = x) { this.x = x; this.y = y; } });
+  class Sprite { constructor(t) { Object.assign(this, { texture: t, position: point(), scale: point(), anchor: point(), visible: true, alpha: 1, rotation: 0, parent: null }); } destroy() {} }
+  const layer = { children: [], addChild(s) { this.children.push(s); }, removeChild() {} };
+  const doc = { createElement: () => ({ width: 0, height: 0, getContext: () => ({ createImageData: (w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }), putImageData() {} }) }) };
+  const pieces = createMoveVfxSetPieces({ PIXI: { Sprite, Texture: { from: () => ({ source: {}, destroy() {} }) } }, layer, doc });
+  for (const piece of MOVE_VFX_SUPPORT_PIECES) assert.equal(pieces.play(piece, { x: 0, y: 0, palette: BATTLE_FX_PALETTES.nature, size: 70 }), true, piece);
+  pieces.update(2000);
+  assert.equal(pieces.getDiagnostics().live, 0);
+});

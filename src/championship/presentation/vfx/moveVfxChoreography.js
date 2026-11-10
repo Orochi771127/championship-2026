@@ -1172,3 +1172,25 @@ export function moveVfxChoreography(moveId) {
   const key = typeof moveId === 'string' && moveId.startsWith('own-') ? Number(moveId.slice(4)) : moveId;
   return MOVE_VFX_CHOREOGRAPHY[key] ?? null;
 }
+
+/**
+ * Batch 7: the support moves (records 2-27), keyed by the effect they apply
+ * (record statusCode, as SUPPORT_APPLIED reports it). 14-16 heal one body
+ * (small, medium, large), 17-19 heal the whole team, 20 clears a status,
+ * 21 attack up, 22 defence up, 23 speed up, 24 accuracy up, 25-29 resist up.
+ * The piece plays on each body that receives the effect; a team heal plays a
+ * little smaller on each. Code 0 (records 1 and 28-30 apply nothing) has no piece.
+ */
+const SUPPORT = Object.freeze({
+  14: {piece: 'heal', scale: 0.9, palette: 'nature'}, 15: {piece: 'heal', scale: 1.05, palette: 'nature'}, 16: {piece: 'heal', scale: 1.2, palette: 'nature'},
+  17: {piece: 'heal', scale: 0.8, palette: 'nature'}, 18: {piece: 'heal', scale: 0.92, palette: 'nature'}, 19: {piece: 'heal', scale: 1.05, palette: 'nature'},
+  20: {piece: 'cleanse', scale: 1, palette: 'light'},
+  21: {piece: 'buff-atk', scale: 1, palette: 'fire'}, 22: {piece: 'buff-def', scale: 1, palette: 'metal'},
+  23: {piece: 'buff-spd', scale: 1, palette: 'ice'}, 24: {piece: 'buff-hit', scale: 1, palette: 'thunder'},
+  25: {piece: 'buff-tol', scale: 1, palette: 'fire'}, 26: {piece: 'buff-tol', scale: 1, palette: 'water'}, 27: {piece: 'buff-tol', scale: 1, palette: 'thunder'},
+  28: {piece: 'buff-tol', scale: 1, palette: 'nature'}, 29: {piece: 'buff-tol', scale: 1, palette: 'dark'}
+});
+/** The support piece for an applied effect code, or null. */
+export function moveVfxSupportChoreography(statusCode) {
+  return SUPPORT[statusCode | 0] ?? null;
+}
