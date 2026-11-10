@@ -4,22 +4,6 @@
  "reviewedOn": "2026-10-29",
  "entries": [
   {
-   "displayCode": "AW32",
-   "usage": "general",
-   "clip": "main:21",
-   "frame": "general/body/G35",
-   "verdict": "ART_ISSUE_REPORTED",
-   "note": "G39 and G35 struggle keys face each other. Reported to the art owner; left as drawn."
-  },
-  {
-   "displayCode": "AW32",
-   "usage": "general",
-   "clip": "main:21",
-   "frame": "general/body/G39",
-   "verdict": "ART_ISSUE_REPORTED",
-   "note": "G39 and G35 struggle keys face each other. Reported to the art owner; left as drawn."
-  },
-  {
    "displayCode": "GR06",
    "usage": "general",
    "clip": "main:bound_recover",
@@ -274,6 +258,14 @@
    "frame": "assets/ARENA_R_UR16/cell_00.png",
    "verdict": "NOT_A_FACING_ERROR",
    "note": "Front-on neutral key closing the shot."
+  },
+  {
+   "displayCode": "AW32",
+   "usage": "arena",
+   "clip": "aw32-r10:arena:UL:idle",
+   "frame": "aw32-r10-A26_+0_+0_empty_UpLeft",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "R12 direct visual comparison of approved A26/A27: both show back armor, the magenta spine and left-pointing head crest; A27 spreads both arms while A26 folds them, biasing silhouette similarity. No image mirroring or direction substitution. Evidence docs/reports/aw32-release-20261110/UL-idle-review.png."
   }
  ]
 }
