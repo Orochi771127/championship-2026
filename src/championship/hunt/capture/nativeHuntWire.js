@@ -74,7 +74,7 @@ export function createNativeHuntWire(host,{consume,request}){
     tick(pointer){
       for(const w of wires){
         if(!w)continue;
-        if(w.state===5){if(--w.remaining<0)w.state=0;continue;}
+        if(w.state===5){if(w.hitTicks>0)w.hitTicks--;if(--w.remaining<0)w.state=0;continue;}
         if(w.state===4){
           if(consume(w.item)){w.state=5;w.remaining=600;lastCommitted=w.slot;}else w.state=0;
           continue;
@@ -105,6 +105,8 @@ export function createNativeHuntWire(host,{consume,request}){
         const [lx,ly,hx,hy]=box(w),[x,y]=p;
         if(x+(width>>1)<=lx||x-(width>>1)>=hx||y<=ly||y-height>=hy)continue;
         if(!battleNativeSegmentContact(px(w.start),px(w.end),[(x-(width>>1))>>12,y>>12],[(x+(width>>1))>>12,y>>12]))continue;
+        // Presentation only (HUNT_WIRE_VFX_20261111): where and how recently a partner met this wire.
+        w.hitTicks=14;w.hitPoint=[x/2048,y/2048];
         if(parameters.kind==='BLOCK'){
           // ARM9 02066AA8 = (B-A) cross ((P-A) cross (B-A)),
           // returned reversed by 02123794. Preserve the Q12 cross stages.
@@ -140,6 +142,7 @@ export function createNativeHuntWire(host,{consume,request}){
       return wires.some(w=>w?.state===5)?-1:1;
     },
     getObjects:()=>wires.filter(w=>w&&w.state>=3).map(w=>({kind:'WIRE',from:w.start.slice(0,2).map(n=>n/2048),
-      to:w.end.slice(0,2).map(n=>n/2048),state:w.state,valid:w.valid,itemIndex:w.item.nativeItemIndex}))
+      to:w.end.slice(0,2).map(n=>n/2048),state:w.state,valid:w.valid,itemIndex:w.item.nativeItemIndex,
+      slot:w.slot,remaining:w.remaining??null,hit:(w.hitTicks??0)>0,hitPoint:w.hitPoint??null}))
   };
 }

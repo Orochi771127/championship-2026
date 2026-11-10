@@ -64,7 +64,7 @@ test("temporary Hunt renderer preserves the shared Pixi/runtime authority bounda
   assert.deepEqual(imports, [
     "./huntContactShadow.js", "./huntFactoryShutters.js", "./huntFoliageDither.js", "./huntFieldPointer.js",
     "./huntActorMotion.js", "../presentationPreferences.js", "../nativeHuntCharacterAction.js",
-    "../huntFeedbackArt.js", "../vfx/captureStorageVfx.js"
+    "../huntFeedbackArt.js", "../vfx/captureStorageVfx.js", "./huntRopeVfx.js", "./huntWireVfx.js"
   ]);
   // The motion layer (hunt four fixes) reads the published actor only.
   const motion = fs.readFileSync("src/championship/presentation/vs2/huntActorMotion.js", "utf8");
