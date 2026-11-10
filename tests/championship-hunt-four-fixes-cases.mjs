@@ -19,8 +19,10 @@ const ROPE=HUNT_EQUIPMENT_ITEMS.find(i=>i.equipmentClass==='ROPE');
 
 async function huntWithRope(){
   const saved=new Map(),storage={getItem:k=>saved.get(k)??null,setItem:(k,v)=>saved.set(k,v),removeItem:k=>saved.delete(k)};
+  // These cases script one lassoed partner; HUNT_SPAWN_SPREAD_20261110 groups same-species partners close enough
+  // for one loop to bind two, so the fixture keeps the native entry positions.
   const app=createChampionshipStandaloneApp({storage,catalog,cages,rngClock:()=>({hour:13,minute:20,second:50}),
-    huntStartingInventory:[{itemId:ROPE.itemId,quantity:1},{itemId:HUNT_MEMORY_CARDS[0].itemId,quantity:1}]});
+    huntStartingInventory:[{itemId:ROPE.itemId,quantity:1},{itemId:HUNT_MEMORY_CARDS[0].itemId,quantity:1}],huntSpawnSpread:false});
   await app.newGame();app.openGate();app.selectGate(app.getGates().find(g=>g.biomeId==='Grass').gateId);app.confirmGate();
   app.selectHuntEquipment('ROPE',ROPE.itemId);await app.beginHunt();
   const runtime=app.getHuntRuntime();assert.equal(runtime.selectTool('ROPE'),true);
