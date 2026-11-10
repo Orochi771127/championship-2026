@@ -37,7 +37,7 @@ export const GACHA_CHIPS = deepFreeze([
   // factionExp go to the partner's own evolution counters), fatigue, growth age and care mistakes follow the
   // Owner's sheet. The capacity chip keeps raising +0x10: that word is a tournament entry minimum, so more is better.
   { id: "chip:hp", shopRecordIndex: 56, kind: "GROWTH", rarity: "R", name: "生命超頻晶片", origin: "生命值分析器", effect: { hp: 120, fatigue: true } },
-  { id: "chip:attack", shopRecordIndex: 55, kind: "GROWTH", rarity: "R", name: "攻擊超頻晶片", origin: "屬性分析器", effect: { attack: 18, raceExp: 15 } },
+  { id: "chip:attack", shopRecordIndex: 55, kind: "GROWTH", rarity: "R", name: "攻擊超頻晶片", origin: "陣營分析器", effect: { attack: 18, raceExp: 15 } },
   { id: "chip:defense", shopRecordIndex: 54, kind: "GROWTH", rarity: "R", name: "防禦超頻晶片", origin: "種族分析器", effect: { defense: 18, factionExp: 15 } },
   { id: "chip:speed", shopRecordIndex: 53, kind: "GROWTH", rarity: "R", name: "速度超頻晶片", origin: "世代分析器", effect: { speed: 18, wisdom: 12, age: 0.15 } },
   { id: "chip:personality", shopRecordIndex: 57, kind: "GROWTH", rarity: "SR", name: "性格重塑晶片", origin: "性格分析器", effect: { personality: 1 }, locked: true },

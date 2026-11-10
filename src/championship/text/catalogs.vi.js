@@ -60,7 +60,7 @@ export const SHOP_NAMES_VI = Object.freeze([
   "Thẻ nhớ 96G",
   "Máy phân tích thế hệ",
   "Máy phân tích chủng tộc",
-  "Máy phân tích thuộc tính",
+  "Máy phân tích phe",
   "Máy phân tích HP",
   "Máy phân tích tính cách",
   "Máy phân tích dung lượng",
@@ -76,17 +76,17 @@ export const SHOP_NAMES_VI = Object.freeze([
   "Radar thế hệ β",
   "Radar thế hệ γ",
   "Radar thế hệ Ω",
-  "Tìm kiếm dữ liệu",
-  "Tìm kiếm vaccine",
-  "Tìm kiếm virus",
+  "Tìm kiếm Hắc Thiết",
+  "Tìm kiếm Tâm Huy",
+  "Tìm kiếm Khe Nứt",
   "Radar rồng",
   "Radar thú",
-  "Radar chim",
-  "Radar thủy sinh",
-  "Radar thánh thần",
-  "Radar hắc ám",
-  "Radar côn trùng & cây cỏ",
-  "Radar máy móc",
+  "Radar Vũ Dực tộc",
+  "Radar Hải Uyên tộc",
+  "Radar Tinh Linh tộc",
+  "Radar U Minh tộc",
+  "Radar Sâm La tộc",
+  "Radar Cơ Xảo tộc",
   "Máy kiểm tra thẻ nhớ",
   "Khu đất trống",
   "Sân vận động nhỏ",
@@ -181,12 +181,12 @@ export const SHOP_DESCRIPTIONS_VI = Object.freeze([
   "Lúc đi săn có thể chứa tối đa 96G đối tác.",
   "Hiển thị chủng loại và thế hệ của đối tác.",
   "Hiển thị chủng loại và chủng tộc của đối tác.",
-  "Hiển thị chủng loại và thuộc tính của đối tác.",
+  "Hiển thị chủng loại và phe của đối tác.",
   "Hiển thị chủng loại và lượng máu tối đa của đối tác.",
   "Hiển thị chủng loại và tính cách của đối tác.",
   "Hiển thị dung lượng của thẻ nhớ.",
   "Hiển thị chủng loại, thế hệ và chủng tộc của đối tác.",
-  "Hiển thị chủng loại, thế hệ, chủng tộc và thuộc tính của đối tác.",
+  "Hiển thị chủng loại, thế hệ, chủng tộc và phe của đối tác.",
   "Hiển thị dung lượng của thẻ nhớ.",
   "Hiển thị số lượng 顯示射擊道具的持有 đang nắm giữ.",
   "Hiển thị số lượng 顯示鋼索道具的持有 đang nắm giữ.",
@@ -197,17 +197,17 @@ export const SHOP_DESCRIPTIONS_VI = Object.freeze([
   "Hiển thị đối tác thời kỳ tăng trưởng trên radar.",
   "Hiển thị đối tác thời kỳ thành thục trên radar.",
   `Hiển thị đối tác ${AWAKENED_FORM_NAMES.vi.toLowerCase()} trên radar.`,
-  "Hiển thị đối tác thuộc tính dữ liệu hoặc tự do trên radar.",
-  "Hiển thị đối tác thuộc tính vắc-xin trên radar.",
-  "Hiển thị đối tác thuộc tính vi-rút trên radar.",
-  "Hiển thị đối tác tộc rồng trên radar.",
-  "Hiển thị đối tác tộc thú trên radar.",
-  "Hiển thị đối tác tộc chim trên radar.",
-  "Hiển thị đối tác tộc thủy sinh trên radar.",
-  "Hiển thị đối tác tộc thánh trên radar.",
-  "Hiển thị đối tác tộc bóng tối trên radar.",
-  "Hiển thị đối tác tộc trùng thảo trên radar.",
-  "Hiển thị đối tác tộc cơ khí trên radar.",
+  "Hiển thị đối tác phe Hắc Thiết trên radar.",
+  "Hiển thị đối tác phe Tâm Huy trên radar.",
+  "Hiển thị đối tác phe Khe Nứt trên radar.",
+  "Hiển thị đối tác Long tộc trên radar.",
+  "Hiển thị đối tác Thú tộc trên radar.",
+  "Hiển thị đối tác Vũ Dực tộc trên radar.",
+  "Hiển thị đối tác Hải Uyên tộc trên radar.",
+  "Hiển thị đối tác Tinh Linh tộc trên radar.",
+  "Hiển thị đối tác U Minh tộc trên radar.",
+  "Hiển thị đối tác Sâm La tộc trên radar.",
+  "Hiển thị đối tác Cơ Xảo tộc trên radar.",
   "Hiển thị dung lượng của thẻ nhớ.",
   "Khu đất trống. Giúp tăng phòng thủ. Khuyến nghị 2 cá thể.",
   "Sân vận động nhỏ. Giúp tăng HP. Khuyến nghị 2 cá thể.",
@@ -217,32 +217,32 @@ export const SHOP_DESCRIPTIONS_VI = Object.freeze([
   "Phòng gym nhỏ. Giúp tăng tấn công. Khuyến nghị 2 cá thể.",
   "Phòng gym. Giúp tăng tấn công. Khuyến nghị 8 cá thể.",
   "Ngôi đền. Giúp tăng trí tuệ. Khuyến nghị 2 cá thể.",
-  "Đồng cỏ. Giúp tăng chủng tộc dã thú. Khuyến nghị 6 cá thể.",
-  "Núi lửa nhỏ. Giúp tăng chủng tộc rồng. Khuyến nghị 2 cá thể.",
-  "Núi lửa. Giúp tăng chủng tộc rồng. Khuyến nghị 8 cá thể.",
-  "Bãi biển nhỏ. Giúp tăng chủng tộc thủy sinh. Khuyến nghị 2 cá thể.",
-  "Bãi biển. Giúp tăng chủng tộc thủy sinh. Khuyến nghị 8 cá thể.",
-  "Núi nhỏ. Giúp tăng chủng tộc chim. Khuyến nghị 2 cá thể.",
-  "Núi cao. Giúp tăng chủng tộc chim. Khuyến nghị 8 cá thể.",
-  "Rừng rậm. Giúp tăng chủng tộc côn trùng & cây cỏ. Khuyến nghị 6 cá thể.",
-  "Rừng nhiệt đới. Giúp tăng chủng tộc côn trùng & cây cỏ. Khuyến nghị 6 cá thể.",
-  "Nhà máy. Giúp tăng chủng tộc máy móc. Khuyến nghị 6 cá thể.",
-  "Vườn nhỏ. Giúp tăng chủng tộc thánh thần. Khuyến nghị 2 cá thể.",
-  "Vườn hoa. Giúp tăng chủng tộc thánh thần. Khuyến nghị 4 cá thể.",
-  "Nghĩa địa. Giúp tăng chủng tộc hắc ám. Khuyến nghị 6 cá thể.",
+  "Đồng cỏ. Giúp tăng điểm Thú tộc. Khuyến nghị 6 cá thể.",
+  "Núi lửa nhỏ. Giúp tăng điểm Long tộc. Khuyến nghị 2 cá thể.",
+  "Núi lửa. Giúp tăng điểm Long tộc. Khuyến nghị 8 cá thể.",
+  "Bãi biển nhỏ. Giúp tăng điểm Hải Uyên tộc. Khuyến nghị 2 cá thể.",
+  "Bãi biển. Giúp tăng điểm Hải Uyên tộc. Khuyến nghị 8 cá thể.",
+  "Núi nhỏ. Giúp tăng điểm Vũ Dực tộc. Khuyến nghị 2 cá thể.",
+  "Núi cao. Giúp tăng điểm Vũ Dực tộc. Khuyến nghị 8 cá thể.",
+  "Rừng rậm. Giúp tăng điểm Sâm La tộc. Khuyến nghị 6 cá thể.",
+  "Rừng nhiệt đới. Giúp tăng điểm Sâm La tộc. Khuyến nghị 6 cá thể.",
+  "Nhà máy. Giúp tăng điểm Cơ Xảo tộc. Khuyến nghị 6 cá thể.",
+  "Vườn nhỏ. Giúp tăng điểm Tinh Linh tộc. Khuyến nghị 2 cá thể.",
+  "Vườn hoa. Giúp tăng điểm Tinh Linh tộc. Khuyến nghị 4 cá thể.",
+  "Nghĩa địa. Giúp tăng điểm U Minh tộc. Khuyến nghị 6 cá thể.",
   "Sa mạc. Giúp tăng kháng nhiệt. Khuyến nghị 6 cá thể.",
   "Cánh đồng băng. Giúp tăng kháng lạnh. Khuyến nghị 8 cá thể.",
   "Nhà máy điện. Giúp tăng kháng sét. Khuyến nghị 6 cá thể.",
   "Thánh điện. Giúp tăng kháng quang. Khuyến nghị 6 cá thể.",
   "Hang động. Giúp tăng kháng ám. Khuyến nghị 2 cá thể.",
-  "Viện nghiên cứu. Giúp tăng thuộc tính dữ liệu. Khuyến nghị 8 cá thể.",
-  "Bệnh viện. Giúp tăng thuộc tính vắc-xin. Khuyến nghị 6 cá thể.",
-  "Phòng khí độc. Giúp tăng thuộc tính vi-rút. Khuyến nghị 4 cá thể.",
+  "Viện nghiên cứu. Giúp tăng danh vọng phe Hắc Thiết. Khuyến nghị 8 cá thể.",
+  "Bệnh viện. Giúp tăng danh vọng phe Tâm Huy. Khuyến nghị 6 cá thể.",
+  "Phòng khí độc. Giúp tăng danh vọng phe Khe Nứt. Khuyến nghị 4 cá thể.",
   "Trạm xá nhỏ. Hồi HP và giảm căng thẳng. Khuyến nghị 2 cá thể.",
   "Trạm xá. Hồi HP và giảm căng thẳng. Khuyến nghị 4 cá thể.",
   "Suối nước nóng. Hồi HP và giảm căng thẳng. Khuyến nghị 8 cá thể.",
-  "Vườn thú. Giúp tăng chủng tộc dã thú. Khuyến nghị 4 cá thể.",
-  "Trang trại. Giúp tăng chủng tộc dã thú. Khuyến nghị 8 cá thể.",
+  "Vườn thú. Giúp tăng điểm Thú tộc. Khuyến nghị 4 cá thể.",
+  "Trang trại. Giúp tăng điểm Thú tộc. Khuyến nghị 8 cá thể.",
   "Võ đài. Giúp tăng số trận đấu. Khuyến nghị 6 cá thể."
 ]);
 
@@ -292,7 +292,7 @@ const HELP_ROWS = [
   ],
   [
     "Môi trường sống",
-    "A day in the Digital World lasts about ten minutes of real time. There are no weeks or months: eight days make a season, and four seasons make a year."
+    "Thời gian ở Thế giới Số trùng với thời gian thực. Ngày 1–7 hằng tháng là mùa xuân, 8–14 mùa hạ, 15–21 mùa thu, từ ngày 22 đến cuối tháng là mùa đông; mỗi tháng là một năm và mọi trận tranh danh hiệu diễn ra một vòng mỗi tháng."
   ],
   [
     "Thả tự do",
@@ -352,8 +352,8 @@ const HELP_ROWS = [
     "Trứng"
   ],
   [
-    "Thuộc tính",
-    "Phần lớn bạn đồng hành mang một trong ba thuộc tính: Vaccine, Virus hoặc Data. Ngoài ra còn có dạng Tự do không thuộc tính."
+    "Phe",
+    "Từ giai đoạn Trưởng thành trở đi, mỗi bạn đồng hành thuộc một trong ba phe: Tâm Huy, Hắc Thiết hoặc Khe Nứt. Nơi ở giúp tăng danh vọng phe, ảnh hưởng đến hướng tiến hóa."
   ],
   [
     "Chủng tộc",
@@ -625,11 +625,11 @@ const EVENT_ROWS = [
   ],
   [
     "Dragon Lord",
-    "A battle to master the strongest dragons! A title match that every tamer is watching!\nChỉ giới hạn chủng tộc Rồng, Trận đấu 3 chọi 3."
+    "A battle to master the strongest dragons! A title match that every tamer is watching!\nChỉ giới hạn Long tộc, Trận đấu 3 chọi 3."
   ],
   [
     "Beast Champion",
-    "Master wild power and make your way to king of the beasts!\nChỉ giới hạn chủng tộc Dã thú, Trận đấu 3 chọi 3."
+    "Master wild power and make your way to king of the beasts!\nChỉ giới hạn Thú tộc, Trận đấu 3 chọi 3."
   ],
   [
     "Aqua Centurion",
@@ -637,7 +637,7 @@ const EVENT_ROWS = [
   ],
   [
     "Wing Master",
-    "In a battle in the sky, the one who uses the wind wins the upper hand.\nChỉ giới hạn chủng tộc Chim, Trận đấu 1 chọi 1."
+    "In a battle in the sky, the one who uses the wind wins the upper hand.\nChỉ giới hạn Vũ Dực tộc, Trận đấu 1 chọi 1."
   ],
   [
     "King of Nature",
@@ -645,7 +645,7 @@ const EVENT_ROWS = [
   ],
   [
     "Sanctuary Warrior",
-    "In a battle between Holy bạn đồng hành, fighting fair and square is everything.\nChỉ giới hạn chủng tộc Thánh, Trận đấu 3 chọi 3."
+    "In a battle between Astral bạn đồng hành, fighting fair and square is everything.\nChỉ giới hạn Tinh Linh tộc, Trận đấu 3 chọi 3."
   ],
   [
     "Nightmare Leader",
@@ -653,15 +653,15 @@ const EVENT_ROWS = [
   ],
   [
     "Steel Emperor",
-    "Sparks fly as Machine bạn đồng hành fight for ever greater power.\nChỉ giới hạn chủng tộc Máy móc, Trận đấu 3 chọi 3."
+    "Sparks fly as Mechanoid bạn đồng hành fight for ever greater power.\nChỉ giới hạn Cơ Xảo tộc, Trận đấu 3 chọi 3."
   ],
   [
     "Sky Walker",
-    "bạn đồng hành battle fiercely for rule of the skies.\nDragon or Chỉ giới hạn chủng tộc Chim, Trận đấu 3 chọi 3."
+    "bạn đồng hành battle fiercely for rule of the skies.\nChỉ giới hạn Long tộc hoặc Vũ Dực tộc, Trận đấu 3 chọi 3."
   ],
   [
     "Dark Warrior",
-    "A tournament only the Dark and Machine families can enter. Hand-picked warriors of darkness clash!\nMachine or Dark family only, Trận đấu 3 chọi 3."
+    "A tournament only the Nether and Mechanoid races can enter. Hand-picked warriors of darkness clash!\nChỉ giới hạn Cơ Xảo tộc hoặc U Minh tộc, Trận đấu 3 chọi 3."
   ],
   [
     "Wild Hunter",
@@ -688,28 +688,28 @@ const EVENT_ROWS = [
     "A title match that every tamer is watching! Face it with your strongest line-up!\nChỉ giới hạn Tối hậu, Trận đấu 3 chọi 3."
   ],
   [
-    "Virus Slayer",
-    "The Virus-type bạn đồng hành they call invaders are about to unleash their power!\nChỉ giới hạn thuộc tính Virus, Trận đấu 3 chọi 3."
+    "Rift Slayer",
+    "The Rift bạn đồng hành they call invaders are about to unleash their power!\nChỉ giới hạn phe Khe Nứt, Trận đấu 3 chọi 3."
   ],
   [
     "Gene Guardian",
     "Your opponents are three Baby II bạn đồng hành, and you must face them alone! You're outnumbered, but none of them is that strong!\nTrận đấu 1 chọi 3."
   ],
   [
-    "Data Killer",
-    "To master battle, you must understand data!\nChỉ giới hạn thuộc tính Data, Trận đấu 3 chọi 3."
+    "Black Iron Killer",
+    "To master battle, you must understand Black Iron discipline!\nChỉ giới hạn phe Hắc Thiết, Trận đấu 3 chọi 3."
   ],
   [
     "Noise Divider",
-    "Bạn có thể đánh bại đội tinh nhuệ của đối thủ không?\nChỉ thuộc tính Virus và giai đoạn Tối hậu, trận đấu 3 chọi 3."
+    "Bạn có thể đánh bại đội tinh nhuệ của đối thủ không?\nChỉ phe Khe Nứt và giai đoạn Tối hậu, trận đấu 3 chọi 3."
   ],
   [
     "Security Line Decider",
-    "The title match that decides the strongest Vaccine attribute bạn đồng hành!\nVaccine attribute and Chỉ giới hạn Tối hậu, Trận đấu 3 chọi 3."
+    "The title match that decides the strongest Lumen bạn đồng hành!\nChỉ giới hạn phe Tâm Huy và Tối hậu, Trận đấu 3 chọi 3."
   ],
   [
     "Giant Gatekeeper",
-    "A one-on-one duel to decide the strongest Data attribute bạn đồng hành!\nData attribute and Chỉ giới hạn Tối hậu, Trận đấu 1 chọi 1."
+    "A one-on-one duel to decide the strongest Black Iron bạn đồng hành!\nChỉ giới hạn phe Hắc Thiết và Tối hậu, Trận đấu 1 chọi 1."
   ],
   [
     "Aqua Crusher",

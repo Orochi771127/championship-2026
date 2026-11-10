@@ -51,11 +51,11 @@ test('invalid, coercible and tutorial IDs do not create medals', () => {
 });
 
 test('specific restrictions reflect individual qualification, with OR family choices and separate arenas', () => localeWork('zh-Hant', () => {
-  assert.match(fact(describeMedalDetails(21), 'participation'), /鳥.*龍.*其中一種/);
-  assert.match(fact(describeMedalDetails(22), 'participation'), /機械.*暗黑.*其中一種/);
-  assert.match(fact(describeMedalDetails(32), 'participation'), /覺醒體・二段\n限定病毒屬性/);
+  assert.match(fact(describeMedalDetails(21), 'participation'), /羽翼族.*龍族.*其中一種/);
+  assert.match(fact(describeMedalDetails(22), 'participation'), /機巧族.*幽冥族.*其中一種/);
+  assert.match(fact(describeMedalDetails(32), 'participation'), /覺醒體・二段\n限定裂隙陣營/);
   assert.match(fact(describeMedalDetails(34), 'teamSize'), /最多 1/);
-  assert.match(fact(describeMedalDetails(34), 'participation'), /覺醒體・二段\n限定資料屬性/);
+  assert.match(fact(describeMedalDetails(34), 'participation'), /覺醒體・二段\n限定黑鐵陣營/);
   for (const id of [15, 35, 36, 37, 38, 39]) {
     assert.equal(fact(describeMedalDetails(id), 'participation'), '無額外隊員限制');
     assert.ok(fact(describeMedalDetails(id), 'arena'));

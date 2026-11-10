@@ -68,20 +68,20 @@ export const SEQUENTIAL = Object.freeze([
 ]);
 
 export const SEASONS = Object.freeze([
-  "Thế giới có 4 mùa, mỗi mùa kéo dài trong 8 ngày.",
+  "Thế giới có 4 mùa, mỗi mùa kéo dài một tuần thực: ngày 1–7 hằng tháng là mùa xuân, 8–14 mùa hạ, 15–21 mùa thu, từ ngày 22 đến cuối tháng là mùa đông.",
   "Mùa hè rất thích hợp để huấn luyện, các chỉ số sẽ dễ dàng tăng cao hơn bình thường.",
   "Mùa thu là mùa của chiến đấu, có đặc biệt nhiều trận đấu danh hiệu diễn ra.",
   "Huấn luyện vào mùa đông cần chú ý thể trạng, gắng gượng tập luyện quá sức sẽ dễ bị thương.",
   "Khi các mùa thay đổi, môi trường sống và các cá thể xuất hiện cũng sẽ thay đổi theo.",
   "Mùa xuân và mùa thu rất thích hợp để săn bắt, ngoài tự nhiên có rất nhiều sinh vật.",
-  "Mùa thu và mùa đông sẽ xuất hiện nhiều cá thể thuộc tính hắc ám.",
+  "Mùa thu và mùa đông sẽ xuất hiện nhiều cá thể U Minh tộc.",
   "Vào mùa đông, bạn cũng có thể bắt gặp những cá thể quý hiếm hiếm khi xuất hiện.",
   "Mùa xuân đã đến, những sinh vật hoạt bát sẽ xuất hiện nhiều hơn ở bên ngoài hoang dã.",
   "Mùa hè nóng bức lại đến rồi, hãy sẵn sàng tập luyện thôi nào!",
   "Mùa thu bạn đồng hành ăn rất khỏe, hãy nhớ dự trữ đầy đủ thức ăn nhé.",
   "Mùa đông có thể tranh thủ bổ sung đạo cụ để chuẩn bị cho mùa xuân sắp tới.",
-  "Mùa xuân lại về rồi, đây là thời điểm tuyệt vời để săn bắt chủng tộc dã thú và chim chóc.",
-  "Mùa hè ít cá thể ra ngoài hơn, nhưng chủng tộc côn trùng và cây cỏ lại dễ tìm thấy hơn.",
+  "Mùa xuân lại về rồi, đây là thời điểm tuyệt vời để săn bắt Thú tộc và Vũ Dực tộc.",
+  "Mùa hè ít cá thể ra ngoài hơn, nhưng Sâm La tộc lại dễ tìm thấy hơn.",
   "Ngoài giải vô địch, mùa thu còn có rất nhiều trận đấu danh hiệu đang chờ đón bạn khiêu chiến.",
   "Những gì có thể dạy ta đều đã truyền đạt hết rồi, mong chờ cậu trở thành một huấn luyện viên xuất sắc!"
 ]);
@@ -91,7 +91,7 @@ export const RANDOM = Object.freeze([
   "Hãy nhớ ăn uống đầy đủ nhé, giữ gìn sức khỏe thật tốt.",
   "Nuôi trong rừng rậm một thời gian, không ngờ lại biến thành một chú bọ cánh cứng to lớn!",
   "Khi chăm sóc quá mệt mỏi, bạn cũng có thể cân nhắc để bạn đồng hành trở về với tự nhiên.",
-  "Tiếp xúc với nhiều virus xong, không ngờ bạn ấy lại chuyển sang hình thái màu bạc!",
+  "Tiếp xúc với nhiều năng lượng Khe Nứt xong, không ngờ bạn ấy lại chuyển sang hình thái màu bạc!",
   "Sau khi tham gia chiến đấu và tăng thuộc tính hắc ám, tính cách dường như đã thay đổi rồi.",
   "Dáng vẻ đáng yêu và thơm ngát như bông hoa, nhìn thôi cũng thấy dễ chịu.",
   "Nhiều bạn đồng hành có tên gọi na ná nhau, thật dễ bị nhầm lẫn quá đi!",

@@ -108,7 +108,7 @@ test("Shop uses the existing equipment identities for all 118 rows, including lo
   assert.match(shopItemDescription(frame.shop.listings[2]), /受傷.*傷藥/);
   assert.match(shopItemDescription(frame.shop.listings[3]), /生病.*藥品/);
   const fullAnalyzer = frame.shop.listings.find(row => row.category === "PLUGINS" && row.subcategory === "ANALYZER" && row.itemIndex === 8);
-  assert.match(shopItemDescription(fullAnalyzer), /世代、種族、屬性、生命值、性格、所需容量/);
+  assert.match(shopItemDescription(fullAnalyzer), /世代、種族、陣營、生命值、性格、所需容量/);
   const bought = [];
   const view = createShopView({ root, source: { getFrame: () => frame, intents: { buyShopItem: (...args) => bought.push(args) } } });
   assert.deepEqual(view.inspect(), { layout: "ARCADE_GRID_R1", sheetOpen: false, activeCategory: "TRAINING_GOODS", selectedShopRecordIndex: 0, listingCount: 118 });

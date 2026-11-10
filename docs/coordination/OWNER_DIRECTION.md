@@ -1,5 +1,21 @@
 # Championship Owner Direction
 
+<!-- record-id: WEEKLY_SEASON_FACTIONS_20261110 -->
+## 2026-11-10 — One real week per season, title matches by time slot, and faction / race words everywhere
+
+The Owner asked (2026-11-10) to inventory the title schedule, medals and copy that still said 疫苗／資料／病毒, and: 「文案中如果有寫疫苗資料病毒的……就可以改成增加心輝的陣營聲望，依此類推」; 「現實一個月有四個禮拜，每個禮拜就是一季……每個月就會輪迴一次所有的徽章比賽」; 「一個禮拜是七天要分配完這八天的賽程……把一天的賽程改成時段開放，所以交給你去盤點跟分配」. Choices made the same day: 全改「陣營聲望」 (Dex labels too), race names change with it, the calendar 對齊每月 1 號, and the world championship 每 4 個月一次.
+
+OWNER_APPROVED_ADAPTATION; the NATIVE clock policy (parity fixtures, 4 × 8 days, all-day titles) is unchanged.
+
+- Calendar (real-time clock only, `time/monthlyCalendar.js`): days 1–7 spring, 8–14 summer, 15–21 autumn, 22–28 winter; 29–31 are winter overtime and replay winter's last day. Each calendar month is one championship year (months since 2026-01, wrapping at 96), so the world championship (`year % 4 === 3`) comes every fourth month. The stored season/day/year follow the device date on every sync (`advanceRaisingHomeClock` `calendar` option), also for a save from the eight-day clock.
+- Title schedule (`time/weeklyTitleSchedule.js`): days 1–7 keep their native day; the ten native day-8 titles move to the lightest day of the same season. Slots: one title a day is 全天 07–22; two split into 日場 07–17 (lower rank tier) and 晚場 17–22 (higher); three take 早場 07–12 / 午場 12–17 / 晚場 17–22; on a four-title day the two lowest share 早場. The championship stays on autumn day 5 (the 19th), all day. The rank-tier gate and the five-title cap are native. The schedule board, the medal date and the day-change calendar show the weekly day and slot.
+- Copy: the three ROM attributes read as factions with 陣營聲望 (心輝／黑鐵／裂隙; Dex 心輝聲望), the eight families as the taxonomy races with 點數 (龍族、獸族、羽翼族、森羅族、海淵族、機巧族、星靈族、幽冥族) across zh-Hant, en, ja, th and vi: habitat descriptions and effect labels, hunt radars and analyzers, title restrictions (病毒獵殺者 → 裂隙獵殺者, 資料殺手 → 黑鐵殺手), the glossary entry 屬性 → 陣營, medal conditions, the brag card, Dex stories and the training float labels. The three alignment radars now find factions from the taxonomy, so the former free partners show up under the faction they were given.
+- Self-review additions: the mentor letter on seasons and the glossary entry 時間 describe the weekly calendar instead of 「八天為一季」 / ten-minute days; the seasonal letters use the race names; on the real-time clock the sixteen season letters come round every four months (`year % 4`), because a month-year would otherwise skip them for good.
+
+Verified by `tests/championship-weekly-season-cases.mjs`, the full `test:ci` against a main baseline, `build:playtest` / `validate:playtest`, and a phone-portrait New Game on an isolated port (status bar 夏季 第3日 on 2026-11-10; at 08:33 only the morning title 水域百夫長 is open).
+
+Publication: the Owner said 「請你自我審查一次沒有問題就提交、開 PR、合併並發佈」 (2026-11-10). This authorizes this batch only.
+
 <!-- record-id: CHRONO_ARENA_FRIENDS_SWITCH_20261110 -->
 ## 2026-11-10 — One-minute hunt with chrono cartridges in the field, Data Arena beacons, friends mode off on the public site
 

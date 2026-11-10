@@ -61,7 +61,7 @@ export const TEXT_SOURCE_LANGUAGE = "ja";
 // ARM9 02088480 and OVL4 0210BB9C (2026-09-13). Unknown indices stay absent.
 const GENERATIONS = Object.freeze(['培育蛋','幼年期Ⅰ','幼年期Ⅱ','成長期','成熟期',AWAKENED_FORM_NAMES['zh-Hant'],AWAKENED_SECOND_TIER_NAMES['zh-Hant']]);
 const PERSONALITIES = Object.freeze(['坦率','任性','急躁','悠閒','熱血','冷靜','大膽','膽小','？？？']);
-const ROSTER_FAMILIES = Object.freeze(['無','獸','機械','昆蟲植物','鳥','龍','水','聖','暗黑']);
+const ROSTER_FAMILIES = Object.freeze(['無','獸族','機巧族','森羅族','羽翼族','龍族','海淵族','星靈族','幽冥族']);
 const TAMER_RANK_NAMES = Object.freeze(['綠階','藍階','紅階','白階','青銅','白銀','黃金','白金','冠軍','大師']);
 const SPECIAL_SKILLS = Object.freeze(['無','挑釁','治癒 α','治癒 β','治癒 γ','全體治癒 α','全體治癒 β','全體治癒 γ',
   '淨化','全體淨化','強化攻擊','全體強化攻擊','防護','全體防護','加速','全體加速','感知','全體感知',
@@ -123,17 +123,17 @@ export const RESIST_LABELS = deepFreeze({
 
 /** The ten families (text bank entries 20..29). */
 export const FAMILY_LABELS = deepFreeze({
-  ワクチン: "疫苗",
-  データ: "資料",
-  リュウ: "龍",
-  ケモノ: "獸",
-  ミズ: "水",
-  トリ: "鳥",
-  キカイ: "機械",
-  セイ: "聖",
-  ムシクサ: "蟲草",
-  アンコク: "暗黑",
-  ウイルス: "病毒"
+  ワクチン: "心輝",
+  データ: "黑鐵",
+  リュウ: "龍族",
+  ケモノ: "獸族",
+  ミズ: "海淵族",
+  トリ: "羽翼族",
+  キカイ: "機巧族",
+  セイ: "星靈族",
+  ムシクサ: "森羅族",
+  アンコク: "幽冥族",
+  ウイルス: "裂隙"
 });
 
 /** Cage names, keyed by CageDefinition index 0..35. */
@@ -368,12 +368,15 @@ export function cageEffectLabel(kind, target) {
   const direct = CAGE_EFFECT_LABELS_BY_LOCALE[loc]?.[key] ?? CAGE_EFFECT_LABELS[key];
   if (direct) return direct;
   if (kind === "FAMILY_UP") {
+    // Owner 2026-11-10: the three ROM attributes are factions (陣營聲望); the eight families are races (點數).
     const fam = FAMILY_LABELS_BY_LOCALE[loc]?.[target] ?? FAMILY_LABELS[target];
-    if (loc === "en") return `${fam} up`;
-    if (loc === "ja") return `${fam}上昇`;
-    if (loc === "th") return `เพิ่มพลังเผ่า${fam}`;
-    if (loc === "vi") return `Tăng tộc ${fam}`;
-    return fam ? `${fam}屬性上升` : null;
+    const faction = ["ワクチン", "データ", "ウイルス"].includes(target);
+    if (!fam) return null;
+    if (loc === "en") return faction ? `${fam} reputation up` : `${fam} points up`;
+    if (loc === "ja") return faction ? `${fam}陣営の名声上昇` : `${fam}ポイント上昇`;
+    if (loc === "th") return faction ? `เพิ่มชื่อเสียงฝ่าย${fam}` : `เพิ่มแต้ม${fam}`;
+    if (loc === "vi") return faction ? `Tăng danh vọng phe ${fam}` : `Tăng điểm ${fam}`;
+    return faction ? `${fam}陣營聲望上升` : `${fam}點數上升`;
   }
   if (kind === "RESIST_UP") {
     return RESIST_LABELS_BY_LOCALE[loc]?.[target] ?? RESIST_LABELS[target] ?? null;

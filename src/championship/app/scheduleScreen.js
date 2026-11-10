@@ -38,8 +38,11 @@ import {
   TITLE_EVENT_SCAN_LIMIT,
   TITLE_EVENT_UNLOCK_COUNTER_EVIDENCE,
   TITLE_EVENT_UNLOCK_COUNTER_SITE,
+  titleEventAt,
   titleEventYearGrid
 } from "../battle/titleEventSchedule.js";
+import { weeklyTitleGrid } from "../time/weeklyTitleSchedule.js";
+import { WEEKLY_SLOT_NAMES, weeklyDayText, weeklySlotText } from "../text/weeklyScheduleText.js";
 import { WORLD_SEASONS } from "../time/championshipWorldClock.js";
 import { matchEntryFee, matchPayout } from "../battle/battleMatchSelection.js";
 
@@ -63,7 +66,7 @@ function element(tag, className, text) {
  * @param {() => void} [options.onExit]
  */
 export function createScheduleView({ root, bits = null, calendar = null, season = calendar?.season ?? null,
-  dayOfSeason = calendar?.dayOfSeason ?? null, eligibleRecordIndices = [], progress=null,
+  dayOfSeason = calendar?.dayOfSeason ?? null, eligibleRecordIndices = [], progress=null, calendarKind = "NATIVE",
   onToggleRegistration,onToggleChampionship,onExit } = {}) {
   if (!root) throw new TypeError("The schedule requires a root element");
 
@@ -73,14 +76,22 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
   root.dataset.sourceTable = "ARM9:0x020CD004";
   root.dataset.scanSite = "ARM9:0x02089230";
 
-  const grid = titleEventYearGrid();
+  // WEEKLY_SEASON_20261110 (Owner 2026-11-10): on the real-time clock the board is 4 weeks x 7 days and each
+  // title carries its time slot (time/weeklyTitleSchedule.js). The native board stays 4 x 8, all day.
+  const weekly = calendarKind === "WEEKLY";
+  root.dataset.calendar = weekly ? "WEEKLY" : "NATIVE";
+  const grid = weekly
+    ? weeklyTitleGrid().map((days) => days.map((entries) => entries.map((entry) => Object.freeze({
+      ...titleEventAt(entry.recordIndex), season: entry.season, dayOfSeason: entry.dayOfSeason, slot: entry.slot }))))
+    : titleEventYearGrid();
   const developer = new URLSearchParams(globalThis.location?.search ?? "").get("presentation") === "developer";
 
   const shell = element("section", "cm-schedule-shell");
   shell.append(
     element("p", "cm-schedule-kicker", "管理"),
     element("h1", "cm-schedule-title", "SCHEDULE"),
-    element("p", "cm-screen-lede", "點選賽事查看報名費、獎金與參賽階級。今天可參加的賽事會標示出來。")
+    element("p", "cm-screen-lede", weekly ? "每週一季、每月一輪。每場賽事只在標示的時段開放，點選可查看報名費、獎金與參賽階級。"
+      : "點選賽事查看報名費、獎金與參賽階級。今天可參加的賽事會標示出來。")
   );
 
   // Selection starts on today when the caller knows it, else on the first
@@ -120,8 +131,9 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
       return;
     }
     detail.append(element("h2", "cm-schedule-detail__name", titleEventText(selected.recordIndex, "name", selected.name ?? `Record ${selected.recordIndex}`)));
-    detail.append(element("p", "cm-schedule-detail__when",
-      `${WORLD_SEASONS[selected.season]} — Day ${selected.dayOfSeason + 1}`));
+    detail.append(element("p", "cm-schedule-detail__when", weekly
+      ? uiText("{day}・{slot}", { day: weeklyDayText(selected.season, selected.dayOfSeason), slot: weeklySlotText(selected.slot) })
+      : `${WORLD_SEASONS[selected.season]} — Day ${selected.dayOfSeason + 1}`));
 
     if (selected.description) {
       const blurb = element("p", "cm-schedule-detail__blurb");
@@ -189,7 +201,10 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
 
   grid.forEach((seasonDays, seasonIndex) => {
     const row = element("div", "cm-schedule-season");
-    row.append(element("h2", "cm-schedule-season__name", WORLD_SEASONS[seasonIndex]));
+    row.append(element("h2", "cm-schedule-season__name", weekly
+      ? uiText("{season}（{from}–{to} 日）", { season: uiText(["春季", "夏季", "秋季", "冬季"][seasonIndex]), from: seasonIndex * 7 + 1,
+        to: seasonIndex === 3 ? 31 : seasonIndex * 7 + 7 })
+      : WORLD_SEASONS[seasonIndex]));
     const days = element("div", "cm-schedule-days");
 
     seasonDays.forEach((events, dayIndex) => {
@@ -212,6 +227,10 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
           button.setAttribute("aria-pressed", String(event.recordIndex === selected?.recordIndex));
           if (event.unlockThreshold > 0) button.dataset.gated = String(event.unlockThreshold);
           button.append(element("span", "cm-schedule-fixture__name", titleEventText(event.recordIndex, "name", event.name ?? `#${event.recordIndex}`)));
+          if (weekly) {
+            button.dataset.slot = event.slot;
+            button.append(element("span", "cm-schedule-fixture__slot", WEEKLY_SLOT_NAMES[event.slot]));
+          }
           button.addEventListener("click", () => select(event, button));
           cell.append(button);
         }
@@ -223,7 +242,9 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
     board.append(row);
   });
 
-  const footer = element("p", "cm-schedule-footer", uiText("四季共 {count} 場預定賽事。", { count: TITLE_EVENT_SCAN_LIMIT }));
+  const footer = element("p", "cm-schedule-footer", weekly
+    ? uiText("每月一輪，共 {count} 場預定賽事。早場 07–12 時、午場 12–17 時、晚場 17–22 時；29–31 日重播冬季最後一天。", { count: TITLE_EVENT_SCAN_LIMIT })
+    : uiText("四季共 {count} 場預定賽事。", { count: TITLE_EVENT_SCAN_LIMIT }));
 
   // Leave on the left, the screen's one other action on the right.
   const actionBar = element("footer", "cm-screen-footer");
@@ -295,6 +316,7 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
         fixtureCount: grid.flat(2).length,
         seasons: grid.length,
         daysPerSeason: grid[0].length,
+        calendarKind: weekly ? "WEEKLY" : "NATIVE",
         selectedRecordIndex: selected?.recordIndex ?? null,
         today: Object.freeze({ season, dayOfSeason }),
         untracedColumns: SCHEDULE_UNTRACED_COLUMNS,

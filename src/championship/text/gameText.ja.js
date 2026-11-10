@@ -3,7 +3,7 @@ import { AWAKENED_FORM_NAMES, AWAKENED_SECOND_TIER_NAMES } from "./growthStageTe
 
 export const GENERATIONS_JA = Object.freeze(["タマゴ", "幼年期Ⅰ", "幼年期Ⅱ", "成長期", "成熟期", AWAKENED_FORM_NAMES.ja, AWAKENED_SECOND_TIER_NAMES.ja]);
 export const PERSONALITIES_JA = Object.freeze(["すなお", "わがまま", "せっかち", "のんき", "ねっけつ", "れいせい", "たいだん", "おくびょう", "？？？"]);
-export const ROSTER_FAMILIES_JA = Object.freeze(["なし", "ケモノ", "キカイ", "ムシクサ", "トリ", "リュウ", "ミズ", "セイ", "アンコク"]);
+export const ROSTER_FAMILIES_JA = Object.freeze(["なし", "獣族", "機巧族", "森羅族", "羽翼族", "竜族", "海淵族", "星霊族", "幽冥族"]);
 export const TAMER_RANK_NAMES_JA = Object.freeze(["グリーン", "ブルー", "レッド", "ホワイト", "ブロンズ", "シルバー", "ゴールド", "プラチナ", "チャンピオン", "マスター"]);
 export const SPECIAL_SKILLS_JA = Object.freeze(["なし", "挑発", "ヒール α", "ヒール β", "ヒール γ", "全体ヒール α", "全体ヒール β", "全体ヒール γ",
   "クレンズ", "全体クレンズ", "パワーアップ", "全体パワーアップ", "ガード", "全体ガード", "スピードアップ", "全体スピードアップ", "センス", "全体センス",
@@ -13,8 +13,8 @@ export const MODE_LABELS_JA = Object.freeze({ RAISING: "育成", BATTLE: "バト
 export const STAT_LABELS_JA = Object.freeze({ HP: "HP", TP: "TP", ATTACK: "こうげき", DEFENSE: "ぼうぎょ", WISDOM: "かしこさ", SPEED: "すばやさ" });
 export const RESIST_LABELS_JA = Object.freeze({ ねつ: "耐熱", さむさ: "耐寒", かみなり: "耐雷", ひかり: "耐光", やみ: "耐暗" });
 export const FAMILY_LABELS_JA = Object.freeze({
-  ワクチン: "ワクチン", データ: "データ", リュウ: "竜", ケモノ: "獣", ミズ: "水", トリ: "鳥",
-  キカイ: "機械", セイ: "聖", ムシクサ: "虫草", アンコク: "暗黒", ウイルス: "ウイルス"
+  ワクチン: "心輝", データ: "黒鉄", リュウ: "竜族", ケモノ: "獣族", ミズ: "海淵族", トリ: "羽翼族",
+  キカイ: "機巧族", セイ: "星霊族", ムシクサ: "森羅族", アンコク: "幽冥族", ウイルス: "裂隙"
 });
 
 export const CAGE_NAMES_JA = Object.freeze({

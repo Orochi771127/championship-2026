@@ -14,7 +14,7 @@ test('analyzers preserve maximum HP, individual personality and least-significan
   const target={speciesIndex:34,personalityIndex:7,currentHp:90,maxHp:270};
   assert.deepEqual(nativeHuntAnalyzedFields(target,[]),{generation:'???',family:'???',alignment:'???',hp:'???',personality:'???',capacity:'???'});
   assert.deepEqual(nativeHuntAnalyzedFields(target,['GENERATION','FAMILY','ALIGNMENT','HP','PERSONALITY','CAPACITY']),
-    {generation:'成長期',family:'龍',alignment:'疫苗',hp:'270',personality:'膽小',capacity:'14 G'});
+    {generation:'成長期',family:'龍族',alignment:'心輝',hp:'270',personality:'膽小',capacity:'14 G'});
 });
 test('wire clipping intersections match 400 original ARM calls including collinear points',()=>{
   for(const row of cpu.wireIntersections)assert.deepEqual(nativeWireIntersection(...row.points),row.result,JSON.stringify(row.points));

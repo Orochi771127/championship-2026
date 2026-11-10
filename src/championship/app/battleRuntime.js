@@ -573,7 +573,8 @@ export function createBattleRuntime(options = {}) {
 
   function listMatches() {
     if (!schedule) return deepFreeze([]);
-    const resolved = resolveMatchList(schedule);
+    // WEEKLY_SEASON_20261110 (real-time clock): the caller's weekly schedule already chose the open titles.
+    const resolved = Array.isArray(schedule.weeklyRecords) ? { source: "WEEKLY_SCHEDULE", records: schedule.weeklyRecords } : resolveMatchList(schedule);
     return deepFreeze(resolved.records.slice(0, BATTLE_RUNTIME_MATCH_CAP).map((recordIndex) => {
       const record = getMatchRecord(recordIndex);
       return deepFreeze({

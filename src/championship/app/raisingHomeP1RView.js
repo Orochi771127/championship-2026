@@ -362,12 +362,15 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
 
   const trainingLayer=node('div','int-rh2-training-labels');trainingLayer.setAttribute('aria-hidden','true');fieldHost.append(trainingLayer);
   // Ordered by the native command table, corroborated by Cage descriptions.
-  const trainingNames=['病毒','疫苗','資料','龍','獸','水','鳥','機械','聖','昆蟲植物','暗','耐熱','耐寒','耐雷','耐暗','耐光','HP','TP','攻擊','防禦','智力','速度','飽足','HP','壓力','親密','友情','疲勞'];
+  // Owner 2026-11-10: kinds 0-2 are faction reputation (裂隙 / 心輝 / 黑鐵), 3-10 race points, in the taxonomy's words.
+  const trainingTaxonomy=['faction.RIFT','faction.LUMEN','faction.IRON','race.DRAGON','race.BEAST','race.AQUATIC','race.AVIAN','race.MECHANOID','race.ASTRAL','race.SYLVAN','race.NETHER'];
+  const trainingName=kind=>kind<3?taxonomyText('label.reputation',{faction:taxonomyText(trainingTaxonomy[kind])}):kind<11?taxonomyText(trainingTaxonomy[kind]):uiText(trainingNames[kind]);
+  const trainingNames=['','','','','','','','','','','','耐熱','耐寒','耐雷','耐暗','耐光','HP','TP','攻擊','防禦','智力','速度','飽足','HP','壓力','親密','友情','疲勞'];
   const trainingNodes=new Map();
   function renderTrainingLabels(labels){
     const live=new Set();for(const label of labels){live.add(label.id);let text=trainingNodes.get(label.id);
       if(!text){text=node('span','int-rh2-training-label');trainingLayer.append(text);trainingNodes.set(label.id,text);}
-      const c=label.command;text.textContent=`${uiText(trainingNames[c.kind])} ${c.outcome==='MAX'?'MAX':c.outcome==='MIN'?'MIN':c.delta>0?'＋'+c.delta:String(c.delta)}`;
+      const c=label.command;text.textContent=`${trainingName(c.kind)} ${c.outcome==='MAX'?'MAX':c.outcome==='MIN'?'MIN':c.delta>0?'＋'+c.delta:String(c.delta)}`;
       text.dataset.positive=String(c.delta>=0);text.style.left=`${label.x}px`;text.style.top=`${label.y}px`;text.style.opacity=String(label.alpha);text.style.fontSize=`${Math.max(12,12*label.scale)}px`;
     }
     for(const [id,n] of trainingNodes)if(!live.has(id)){n.remove();trainingNodes.delete(id);}

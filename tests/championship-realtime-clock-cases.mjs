@@ -280,7 +280,7 @@ test('REALTIME_V1: a partner at HP 57 in the mini infirmary heals fully and calm
 test('cage shop descriptions name the cage effect in every locale (no stray 防御力 copy)', () => {
   const defense = {ja: /防御力/, th: /พลังป้องกัน/, vi: /phòng thủ/};
   const tables = {ja: SHOP_DESCRIPTIONS_JA, th: SHOP_DESCRIPTIONS_TH, vi: SHOP_DESCRIPTIONS_VI};
-  const beast = {zh: /獸種族上升/, en: /Raises the Beast family/, ja: /獣族適性/, th: /เผ่าสัตว์ป่า/, vi: /chủng tộc dã thú/};
+  const beast = {zh: /獸族點數上升/, en: /Raises Beast points/, ja: /獣族ポイント/, th: /แต้มเผ่าสัตว์ป่า/, vi: /điểm Thú tộc/}; // WEEKLY_SEASON_FACTIONS_20261110
   const recover = {zh: /回復生命值/, en: /Recovers HP/, ja: /HPが回復/, th: /ฟื้นฟู HP/, vi: /Hồi HP/};
   for (const cage of cageDefinitions.records.filter(c => c.playerFacing && Number.isInteger(c.shopRecordIndex))) {
     const isDefense = cage.effect.kind === 'STAT_UP' && cage.effect.target === 'DEFENSE';

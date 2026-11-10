@@ -17,7 +17,7 @@ export const SOCIAL_COPY = Object.freeze({
     inviteText: "我在《{title}》養拍檔、打錦標賽！加我好友：{code}{room}\n一起來玩 ▶ {url}", inviteRoom: "｜⚔️ 對戰房號：{room}", shareTitle: "{name} 的馴獸師名片",
     cardTamer: "馴獸師", cardRank: "階級", cardLicense: "育成執照", cardWinRate: "勝率", cardBattles: "對戰次數", cardDex: "圖鑑完成度", cardBits: "持有位元幣",
     cardFriendCode: "👥 好友邀請碼", cardRoomCode: "⚔️ 對戰房號", cardPlay: "▶ 立即遊玩", cardAce: "王牌拍檔", cardWinner: "勝利拍檔", cardVictory: "對戰勝利",
-    cardNoPartner: "拍檔培育中", cardTamerFallback: "無名馴獸師", attr0: "無屬性", attr1: "疫苗", attr2: "病毒", attr3: "資料", attr4: "自由"
+    cardNoPartner: "拍檔培育中", cardTamerFallback: "無名馴獸師", attr0: "無陣營", attr1: "心輝", attr2: "裂隙", attr3: "黑鐵", attr4: "未定"
   }),
   en: Object.freeze({
     dockTitle: "🌐 Partner community dock", dockHint: "Join the official community: find rivals, swap friend codes, get news first.",
@@ -32,7 +32,7 @@ export const SOCIAL_COPY = Object.freeze({
     inviteText: "I'm raising partners in {title}! Add me as a friend: {code}{room}\nCome play ▶ {url}", inviteRoom: " | ⚔️ Battle room: {room}", shareTitle: "{name}'s tamer card",
     cardTamer: "Tamer", cardRank: "Rank", cardLicense: "Raising licence", cardWinRate: "Win rate", cardBattles: "Battles", cardDex: "Dex", cardBits: "Bits",
     cardFriendCode: "👥 Friend code", cardRoomCode: "⚔️ Battle room", cardPlay: "▶ Play now", cardAce: "Ace partner", cardWinner: "Winning partner", cardVictory: "Battle won",
-    cardNoPartner: "Partner in training", cardTamerFallback: "Nameless tamer", attr0: "No attribute", attr1: "Vaccine", attr2: "Virus", attr3: "Data", attr4: "Free"
+    cardNoPartner: "Partner in training", cardTamerFallback: "Nameless tamer", attr0: "No faction", attr1: "Lumen", attr2: "Rift", attr3: "Black Iron", attr4: "Unaligned"
   }),
   ja: Object.freeze({
     dockTitle: "🌐 パートナーコミュニティドック", dockHint: "公式コミュニティに参加：対戦相手探し、フレンドコード交換、最新情報をいち早く。",
@@ -47,7 +47,7 @@ export const SOCIAL_COPY = Object.freeze({
     inviteText: "『{title}』でパートナーを育てて大会に挑戦中！フレンド登録してね：{code}{room}\n一緒に遊ぼう ▶ {url}", inviteRoom: "｜⚔️ 対戦ルーム：{room}", shareTitle: "{name} のテイマーカード",
     cardTamer: "テイマー", cardRank: "ランク", cardLicense: "育成ライセンス", cardWinRate: "勝率", cardBattles: "対戦数", cardDex: "図鑑完成度", cardBits: "所持ビット",
     cardFriendCode: "👥 フレンドコード", cardRoomCode: "⚔️ 対戦ルーム", cardPlay: "▶ 今すぐプレイ", cardAce: "エースパートナー", cardWinner: "勝利パートナー", cardVictory: "対戦勝利",
-    cardNoPartner: "パートナー育成中", cardTamerFallback: "名無しのテイマー", attr0: "属性なし", attr1: "ワクチン", attr2: "ウイルス", attr3: "データ", attr4: "フリー"
+    cardNoPartner: "パートナー育成中", cardTamerFallback: "名無しのテイマー", attr0: "陣営なし", attr1: "心輝", attr2: "裂隙", attr3: "黒鉄", attr4: "未定"
   }),
   th: Object.freeze({
     dockTitle: "🌐 ท่าเรือชุมชนพาร์ทเนอร์", dockHint: "เข้าร่วมชุมชนทางการ: หาคู่ต่อสู้ แลกรหัสเพื่อน รับข่าวก่อนใคร",
@@ -62,7 +62,7 @@ export const SOCIAL_COPY = Object.freeze({
     inviteText: "ฉันกำลังเลี้ยงพาร์ทเนอร์ใน {title}! เพิ่มเพื่อนกันนะ: {code}{room}\nมาเล่นด้วยกัน ▶ {url}", inviteRoom: " | ⚔️ ห้องต่อสู้: {room}", shareTitle: "นามบัตรเทมเมอร์ของ {name}",
     cardTamer: "เทมเมอร์", cardRank: "ระดับ", cardLicense: "ใบอนุญาตเลี้ยง", cardWinRate: "อัตราชนะ", cardBattles: "จำนวนการต่อสู้", cardDex: "สมุดภาพ", cardBits: "บิตที่มี",
     cardFriendCode: "👥 รหัสเพื่อน", cardRoomCode: "⚔️ ห้องต่อสู้", cardPlay: "▶ เล่นเลย", cardAce: "พาร์ทเนอร์ตัวเอก", cardWinner: "พาร์ทเนอร์ผู้ชนะ", cardVictory: "ชนะการต่อสู้",
-    cardNoPartner: "พาร์ทเนอร์กำลังฝึก", cardTamerFallback: "เทมเมอร์นิรนาม", attr0: "ไม่มีคุณสมบัติ", attr1: "วัคซีน", attr2: "ไวรัส", attr3: "ข้อมูล", attr4: "อิสระ"
+    cardNoPartner: "พาร์ทเนอร์กำลังฝึก", cardTamerFallback: "เทมเมอร์นิรนาม", attr0: "ไม่สังกัดฝ่าย", attr1: "ลูเมน", attr2: "รอยแยก", attr3: "เหล็กดำ", attr4: "ไม่สังกัด"
   }),
   vi: Object.freeze({
     dockTitle: "🌐 Bến cộng đồng bạn đồng hành", dockHint: "Tham gia cộng đồng chính thức: tìm đối thủ, đổi mã bạn bè, xem tin sớm nhất.",
@@ -77,7 +77,7 @@ export const SOCIAL_COPY = Object.freeze({
     inviteText: "Mình đang nuôi bạn đồng hành trong {title}! Kết bạn nhé: {code}{room}\nCùng chơi ▶ {url}", inviteRoom: " | ⚔️ Phòng đấu: {room}", shareTitle: "Thẻ tamer của {name}",
     cardTamer: "Tamer", cardRank: "Hạng", cardLicense: "Giấy phép nuôi", cardWinRate: "Tỉ lệ thắng", cardBattles: "Số trận", cardDex: "Bách khoa", cardBits: "Bit đang có",
     cardFriendCode: "👥 Mã bạn bè", cardRoomCode: "⚔️ Phòng đấu", cardPlay: "▶ Chơi ngay", cardAce: "Bạn đồng hành át chủ bài", cardWinner: "Bạn đồng hành thắng trận", cardVictory: "Thắng trận",
-    cardNoPartner: "Bạn đồng hành đang luyện", cardTamerFallback: "Tamer vô danh", attr0: "Không thuộc tính", attr1: "Vắc-xin", attr2: "Vi-rút", attr3: "Dữ liệu", attr4: "Tự do"
+    cardNoPartner: "Bạn đồng hành đang luyện", cardTamerFallback: "Tamer vô danh", attr0: "Không phe", attr1: "Tâm Huy", attr2: "Khe Nứt", attr3: "Hắc Thiết", attr4: "Chưa định"
   })
 });
 
