@@ -25,6 +25,10 @@ import {createMoveVfxKit, moveVfxArchetypeIsMelee, moveVfxArchetypeIsPlanted} fr
 import {moveVfxSignature} from '../vfx/moveVfxSignatures.js';
 import {battleEffectCellIsOriginal} from '../battleEffectSprites.js';
 import {createPixelHitBursts} from '../vfx/pixelHitBursts.js';
+import {createPixelMotes} from '../vfx/pixelMotes.js';
+/** Palette key -> the element its motes wear (as unifiedMoveVfxResolver reads a bank's family colour). */
+const PALETTE_ELEMENT = Object.freeze({fire: 'FIRE', water: 'WATER', ice: 'ICE', thunder: 'THUNDER', metal: 'METAL', nature: 'WOOD',
+  earth: 'EARTH', wind: 'WIND', light: 'SUN', dark: 'MOON'});
 
 const TAU = Math.PI * 2;
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
@@ -151,7 +155,10 @@ const FOLLOW_FORMS = new Set(['projectile', 'stream', 'beam']);
  * the DOM cut-in strip, dim the field 35 % for about half a second and close
  * a charge ring on the caster; ordinary skills get a slanted name capsule.
  */
-export const BATTLE_FX_JUICY = Object.freeze({windupMs: 120, hitStopMs: 65, capsuleMs: 550, dimStrength: 0.35, dimMs: 520,
+export const BATTLE_FX_JUICY = Object.freeze({windupMs: 120, hitStopMs: 65,
+  // MOVE_VFX_QUALITY_20261110: the hold scales with the blow -- a heavy hit keeps 65 ms, a medium one a lighter 45 ms,
+  // a critical or a signature hit 95 ms; a light hit never holds. Drawing only: the battle keeps stepping.
+  hitStopByTier: Object.freeze({light: 0, medium: 45, heavy: 65, ultimate: 95}), capsuleMs: 550, dimStrength: 0.35, dimMs: 520,
   knockPx: Object.freeze({light: 14, medium: 22, heavy: 30}), knockMs: 200, slowMoMs: 180, numberMs: 820, criticalScale: 1.4, numberPool: 6});
 
 /**
@@ -209,6 +216,9 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   const kit = createMoveVfxKit({PIXI, front: worldFront, ground: worldBack, quality: rich ? 'balanced' : 'saver', reducedMotion, seed: seed ^ 0x5163});
   // Pixel hit bursts (STATUS_AILMENT_VFX_20261110): the element's pixel burst at every landed move, over the move's own cells.
   const pixelHits = typeof createPixelHitBursts === 'function' ? createPixelHitBursts({PIXI, layer: worldFront, quality: rich ? 'balanced' : 'saver', reducedMotion}) : null;
+  // Pixel motes (MOVE_VFX_QUALITY_20261110): element particles trailing every live move effect and scattering from every hit.
+  const burstAt = new Map(); // slot -> elapsed ms of its last pixel hit burst
+  const motes = typeof createPixelMotes === 'function' ? createPixelMotes({PIXI, layer: worldFront, quality: rich ? 'balanced' : 'saver', reducedMotion, seed: seed ^ 0x6d07}) : null;
   const standIns = new Map(); // live effect actor id -> {at, alive, standIn, trail, ...}
   const kitStats = {standIns: 0, trails: 0, sigils: 0, bursts: 0, size: 0};
   const signatureOf = moveId => Number.isSafeInteger(moveId) ? moveVfxSignature(moveId) : null;
@@ -427,18 +437,23 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const look = owner ? describeMove(owner.ownerSlot, owner.moveId) : null;
         const vfx = owner ? vfxOf(owner.ownerSlot, owner.moveId) : null;
         const palette = vfx?.palette ?? BATTLE_FX_PALETTES[look?.palette ?? battleFxFamilyPalette(family) ?? 'neutral'] ?? BATTLE_FX_PALETTES.neutral;
-        entry = {form, palette, owner: owner?.ownerSlot ?? null, tier: look?.tier ?? 'skill', points: [], ageMs: 0, origin: {x: at.x, y: at.y}};
+        entry = {form, palette, owner: owner?.ownerSlot ?? null, tier: look?.tier ?? 'skill', points: [], ageMs: 0, origin: {x: at.x, y: at.y},
+          element: vfx?.element ?? PALETTE_ELEMENT[look?.palette ?? battleFxFamilyPalette(family)] ?? 'NEUTRAL'};
         tracked.set(actor.id, entry);
         // The real launch point: where the move's own effect first appears.
         if (MOVING_FORMS.has(form)) {
           const ownerInfo = owner ? ctx.slotInfo?.(owner.ownerSlot) : null;
           element?.muzzle({x: at.x, y: at.y, angle: ownerInfo && ownerInfo.facing < 0 ? Math.PI : 0, palette, size: form === 'area' ? 34 : 22});
           spawnFlash({x: at.x, y: at.y, tint: palette.core, size: 26, life: 120});
-          sparks({x: at.x, y: at.y, count: rich ? 5 : 3, palette, speed: 90, life: 260, scale: 0.8});
+          // The launch throws the move's own motes (or, without them, the old generic sparks).
+          if (motes) motes.burst({element: entry.element, x: at.x, y: at.y, groundY: at.groundY, unit: ctx.nativeScale, weight: 'light'});
+          else sparks({x: at.x, y: at.y, count: rich ? 5 : 3, palette, speed: 90, life: 260, scale: 0.8});
           if (at.heightNative < 10) dust({x: at.x, groundY: at.groundY, count: rich ? 3 : 2, spread: 6, life: 520, scale: 0.8});
         }
       }
       entry.ageMs += dtMs;
+      // Only what flies trails motes: projectiles and streams. A beam or an area is already a full shape.
+      if (FOLLOW_FORMS.has(form) && form !== 'beam') motes?.trail(actor.id, {element: entry.element, x: at.x, y: at.y, groundY: at.groundY, unit: ctx.nativeScale});
       entry.points.push({x: at.x, y: at.y});
       if (entry.points.length > 6) entry.points.shift();
       entry.last = at;
@@ -633,9 +648,10 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           fx.flashTint = palette.main; fx.knock = 1; fx.knockPx = BATTLE_FX_JUICY.knockPx[tier];
           // Contact: a saturated halo under a white-hot core (additive), readable on dark and pale floors.
           spawnFlash({x: hit.x, y: hit.y, tint: palette.main, size: (tier === 'heavy' ? 46 : 30) * 1.9, life: tier === 'heavy' ? 210 : 150});
-          if (tier !== 'light' && !reducedMotion) {
-            hitStop = {ms: BATTLE_FX_JUICY.hitStopMs, slots: new Set([event.slot, event.attackerSlot].filter(s => s !== null && s !== undefined))};
-            element?.hold(BATTLE_FX_JUICY.hitStopMs);
+          const holdMs = BATTLE_FX_JUICY.hitStopByTier[critical || look?.tier === 'ultimate' ? (tier === 'light' ? 'medium' : 'ultimate') : tier] ?? 0;
+          if (holdMs > 0 && !reducedMotion) {
+            hitStop = {ms: holdMs, slots: new Set([event.slot, event.attackerSlot].filter(s => s !== null && s !== undefined))};
+            element?.hold(holdMs);
             quartet.hitStops++;
           }
           const p = toScreen(ctx, hit.x, target.top);
@@ -662,13 +678,21 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
             paletteKey: signature.paletteKey, signature, size: target.width * (tier === 'light' ? 0.18 : 0.24), heavy: tier === 'heavy'});
           kitStats.bursts++;
         }
-        pixelHits?.spawn({element: vfx?.element ?? 'NEUTRAL', x: hit.x, y: hit.y, groundY: hit.groundY, size: target.width * (tier === 'light' ? 0.8 : 1),
-          unit: ctx.nativeScale, heavy: tier === 'heavy', flip: (fx.knockDir || 1) < 0});
+        // One kind of particle at the contact (MOVE_VFX_QUALITY_20261110, Owner: 「很雜亂」): the element's motes,
+        // sized by the blow, replace the old generic sparks; a run of light hits on one target shows its burst once.
+        const weight = critical || look?.tier === 'ultimate' ? (tier === 'light' ? 'medium' : 'ultimate') : tier;
+        motes?.burst({element: vfx?.element ?? 'NEUTRAL', x: hit.x, y: hit.y, groundY: hit.groundY, unit: ctx.nativeScale, weight, dir: fx.knockDir || 0});
+        const lastBurst = burstAt.get(event.slot) ?? -Infinity;
+        if (tier !== 'light' || elapsed - lastBurst > 220) {
+          pixelHits?.spawn({element: vfx?.element ?? 'NEUTRAL', x: hit.x, y: hit.y, groundY: hit.groundY, size: target.width * (tier === 'light' ? 0.8 : 1),
+            unit: ctx.nativeScale, heavy: tier === 'heavy', flip: (fx.knockDir || 1) < 0});
+          burstAt.set(event.slot, elapsed);
+        }
         if (critical) cue({type: 'CRIT', system: CRITICAL_VFX_SYSTEM, slot: event.slot, x: target.x, y: target.groundY});
         if (critical) hitFeel?.split();
         // At the contact point: a flash and sparks that fall to the target's ground.
         spawnFlash({x: hit.x, y: hit.y, tint: palette.core, size: tier === 'heavy' ? 46 : 30, life: tier === 'heavy' ? 170 : 120});
-        sparks({x: hit.x, y: hit.y, count: tier === 'heavy' ? (rich ? 22 : 10) : tier === 'medium' ? (rich ? 12 : 6) : 6, palette,
+        if (!motes) sparks({x: hit.x, y: hit.y, count: tier === 'heavy' ? (rich ? 22 : 10) : tier === 'medium' ? (rich ? 12 : 6) : 6, palette,
           speed: tier === 'heavy' ? 210 : 150, groundY: hit.groundY, scale: tier === 'heavy' ? 1.2 : 1});
         // On the ground beneath it: the shock ring, dust and, for heavy hits, debris and scorch.
         if (tier !== 'light') {
@@ -818,6 +842,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     element?.update(dtMs);
     kit?.update(hitStop ? 0 : dtMs);
     pixelHits?.update(hitStop ? 0 : dtMs);
+    motes?.update(hitStop ? 0 : dtMs);
     if (hitStop) dtMs = 0;
     const dt = dtMs / 1000;
     for (let i = particles.length - 1; i >= 0; i--) {
@@ -1090,7 +1115,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       hitAnchors: {...anchors}, callout: callout ? {tier: callout.tier, age: callout.age} : null, banner: banner ? banner.node.text : null, dim: Boolean(dim),
       dimStrength: dim?.strength ?? null, juicy, hyperWrap: hyper ? {slot: hyper.slot, age: Math.round(hyper.age)} : null, quartet: {...quartet, numbersLive: numbers.length, capsulesLive: capsules.length, hitStop: Boolean(hitStop)},
       element: element?.getDiagnostics() ?? null, cuesPending: cues.length,
-      moveVfx: kit ? {...kitStats, kit: kit.getDiagnostics()} : null, pixelHits: pixelHits?.getDiagnostics() ?? null, hitFeel: hitFeel?.getDiagnostics() ?? null}),
+      moveVfx: kit ? {...kitStats, kit: kit.getDiagnostics()} : null, pixelHits: pixelHits?.getDiagnostics() ?? null, motes: motes?.getDiagnostics() ?? null, hitFeel: hitFeel?.getDiagnostics() ?? null}),
     /** Bounded 3D cues since the last call (buff, critical, signature weather), oldest first. */
     consumeCues: () => cues.splice(0),
     dispose() {
@@ -1102,7 +1127,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       hitStop = null;
       element?.dispose();
       kit?.dispose(); standIns.clear();
-      pixelHits?.dispose();
+      pixelHits?.dispose(); motes?.dispose(); burstAt.clear();
       cues.length = 0;
       for (const sprite of [...particlePool, ...flashPool, ...ghostPool]) if (!sprite.destroyed) sprite.destroy();
       for (const texture of [textures.flash, textures.dust, textures.spark, textures.dot, textures.scorch, ...textures.debris]) texture.destroy(true);
