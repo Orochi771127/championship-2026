@@ -24,6 +24,7 @@ import {CRITICAL_VFX_SYSTEM, supportVfxSystem} from '../vfx/unifiedMoveVfxResolv
 import {createMoveVfxKit, moveVfxArchetypeIsMelee, moveVfxArchetypeIsPlanted} from '../vfx/moveVfxKit.js';
 import {moveVfxSignature} from '../vfx/moveVfxSignatures.js';
 import {battleEffectCellIsOriginal} from '../battleEffectSprites.js';
+import {createPixelHitBursts} from '../vfx/pixelHitBursts.js';
 
 const TAU = Math.PI * 2;
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
@@ -206,6 +207,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   // has (battleEffectSprites retires those) -- the move's whole kit effect on
   // that actor, so its native timing and path stay.
   const kit = createMoveVfxKit({PIXI, front: worldFront, ground: worldBack, quality: rich ? 'balanced' : 'saver', reducedMotion, seed: seed ^ 0x5163});
+  // Pixel hit bursts (STATUS_AILMENT_VFX_20261110): the element's pixel burst at every landed move, over the move's own cells.
+  const pixelHits = typeof createPixelHitBursts === 'function' ? createPixelHitBursts({PIXI, layer: worldFront, quality: rich ? 'balanced' : 'saver', reducedMotion}) : null;
   const standIns = new Map(); // live effect actor id -> {at, alive, standIn, trail, ...}
   const kitStats = {standIns: 0, trails: 0, sigils: 0, bursts: 0, size: 0};
   const signatureOf = moveId => Number.isSafeInteger(moveId) ? moveVfxSignature(moveId) : null;
@@ -659,6 +662,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
             paletteKey: signature.paletteKey, signature, size: target.width * (tier === 'light' ? 0.18 : 0.24), heavy: tier === 'heavy'});
           kitStats.bursts++;
         }
+        pixelHits?.spawn({element: vfx?.element ?? 'NEUTRAL', x: hit.x, y: hit.y, groundY: hit.groundY, size: target.width * (tier === 'light' ? 0.8 : 1),
+          unit: ctx.nativeScale, heavy: tier === 'heavy', flip: (fx.knockDir || 1) < 0});
         if (critical) cue({type: 'CRIT', system: CRITICAL_VFX_SYSTEM, slot: event.slot, x: target.x, y: target.groundY});
         if (critical) hitFeel?.split();
         // At the contact point: a flash and sparks that fall to the target's ground.
@@ -812,6 +817,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     const realMs = dtMs;
     element?.update(dtMs);
     kit?.update(hitStop ? 0 : dtMs);
+    pixelHits?.update(hitStop ? 0 : dtMs);
     if (hitStop) dtMs = 0;
     const dt = dtMs / 1000;
     for (let i = particles.length - 1; i >= 0; i--) {
@@ -1084,7 +1090,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       hitAnchors: {...anchors}, callout: callout ? {tier: callout.tier, age: callout.age} : null, banner: banner ? banner.node.text : null, dim: Boolean(dim),
       dimStrength: dim?.strength ?? null, juicy, hyperWrap: hyper ? {slot: hyper.slot, age: Math.round(hyper.age)} : null, quartet: {...quartet, numbersLive: numbers.length, capsulesLive: capsules.length, hitStop: Boolean(hitStop)},
       element: element?.getDiagnostics() ?? null, cuesPending: cues.length,
-      moveVfx: kit ? {...kitStats, kit: kit.getDiagnostics()} : null, hitFeel: hitFeel?.getDiagnostics() ?? null}),
+      moveVfx: kit ? {...kitStats, kit: kit.getDiagnostics()} : null, pixelHits: pixelHits?.getDiagnostics() ?? null, hitFeel: hitFeel?.getDiagnostics() ?? null}),
     /** Bounded 3D cues since the last call (buff, critical, signature weather), oldest first. */
     consumeCues: () => cues.splice(0),
     dispose() {
@@ -1096,6 +1102,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       hitStop = null;
       element?.dispose();
       kit?.dispose(); standIns.clear();
+      pixelHits?.dispose();
       cues.length = 0;
       for (const sprite of [...particlePool, ...flashPool, ...ghostPool]) if (!sprite.destroyed) sprite.destroy();
       for (const texture of [textures.flash, textures.dust, textures.spark, textures.dot, textures.scorch, ...textures.debris]) texture.destroy(true);
