@@ -31,7 +31,10 @@ function drawCover(g, prop, w, h, fraction, showBar) {
     return;
   }
   const face = prop.charred ? 0x4a3a2c : look.face, alpha = look.alpha ?? 1;
-  g.ellipse(w / 2, h - 2, w * .52, 9).fill({ color: 0x07101c, alpha: .35 });
+  // The shadow sits at the block's base (bottom of its side at h - 16) and spills forward from
+  // under it; the old one hung 14 px lower, so blocks looked as if they floated (Owner 2026-11-10).
+  g.ellipse(w / 2, h - 13, w * .56, 9).fill({ color: 0x07101c, alpha: .3 });
+  g.ellipse(w / 2, h - 15, w * .48, 4.5).fill({ color: 0x07101c, alpha: .3 });
   g.rect(2, 4 - rise + 12, w - 4, h - 6).fill({ color: look.edge, alpha });
   g.rect(3, -rise, w - 6, h - 10).fill({ color: face, alpha }).stroke({ color: look.edge, width: 2 });
   g.rect(3, -rise, w - 6, 12).fill({ color: prop.charred ? 0x66503b : look.top, alpha });
