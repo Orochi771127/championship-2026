@@ -142,7 +142,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   const ropeTool=()=>{
     const item=equipped("ROPE"),spares=ownedRopes().filter(entry=>entry.itemId!==item?.itemId).length,stock=ropeLeft(item);
     return {id:"ROPE",label:"繩索",enabled:!!item&&stock>0,itemId:item?.itemId??null,shopRecordIndex:item?.shopRecordIndex??null,
-      ropeName:item?.displayName??null,role:item?huntRopeRole(item.nativeItemIndex):null,
+      ropeName:item?.displayName??null,role:item?huntRopeRole(item.nativeItemIndex):null,ropeItemIndex:item?.nativeItemIndex??null,
       // Tying on the next rope after a snap is a flash, not a cooldown to count down.
       overheatSeconds:item&&tactics.overheatTicks(item.itemId)>HUNT_ROPE_TACTICS.ropeSwapTicks?Math.ceil(tactics.overheatTicks(item.itemId)/60):0,
       stock,wear:item&&stock>0?Math.max(0,Math.min(1,wearOf(item.itemId))):0,swapping:!!item&&tactics.overheatTicks(item.itemId)>0,

@@ -1,5 +1,14 @@
 # Championship Owner Direction
 
+<!-- record-id: HUNT_ROPE_TIERS_20261111 -->
+## 2026-11-11 — The rope and wire you equipped are the ones you see: family colour, tier detail
+
+Asked whether ropes and wires should look different by family and tier, the agent recommended family by colour and tier by a quiet detail (a higher tier looks sturdier, not flashier); the Owner answered 「都做好一起發佈」.
+
+OWNER_APPROVED_ADAPTATION, presentation only (`huntRopeVfx.js`, `huntWireVfx.js`); hunt rules unchanged. The controls publish the equipped rope's `ropeItemIndex`.
+- Ropes (native items 0–11): the braid takes the shop icon's colour per family — 基礎 blue, 強化 green, 高階 gold, 頂級 red — with the drawing glow, cinch and bind burst in that colour. α is a plain braid; β adds a silver tracer strand and a silver knot; γ has a gold knot, a slow light running along the rope and a glint round the coil. Pull tension stays on the outer glow (cyan slack, amber pull, red strong).
+- Wires (native items 0–5): the kind colours stay (cyan 阻擋, violet 磁力, yellow 電擊). β runs as a twin cable with a second lamp on each post and a stronger effect (six field rings instead of four, a third bolt, twice the hit sparks).
+
 <!-- record-id: HUNT_WIRE_VFX_20261111 -->
 ## 2026-11-11 — Hunt wires look like gear: pixel steel cable, one look per wire kind, hit feedback
 

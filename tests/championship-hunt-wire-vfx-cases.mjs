@@ -3,7 +3,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { HUNT_WIRE_VFX, wireKind, lightningPath } from '../src/championship/presentation/vs2/huntWireVfx.js';
+import { HUNT_WIRE_VFX, wireKind, wireTier, lightningPath } from '../src/championship/presentation/vs2/huntWireVfx.js';
 import { createNativeHuntWire } from '../src/championship/hunt/capture/nativeHuntWire.js';
 
 const read = (path) => readFileSync(path, 'utf8');
@@ -52,4 +52,12 @@ test('the hunt field draws wires through the VFX module, not a bare line', () =>
   assert.match(field, /wireVfx\.update\(\{objects:view\.tools\.objects\?\?\[\]/);
   assert.match(field, /wireVfx\.destroy\(\)/);
   assert.match(field, /o\.kind==='WIRE'/);
+});
+
+test('a β wire runs as a twin cable; α is the single cable', () => {
+  assert.deepEqual([0, 1, 2, 3, 4, 5].map(wireTier), [0, 1, 0, 1, 0, 1]);
+  assert.ok(HUNT_WIRE_VFX.twinGap > 0);
+  const source = read('src/championship/presentation/vs2/huntWireVfx.js');
+  assert.match(source, /twin: twin \? rope\(steel/);
+  assert.match(source, /entry\.tier !== tier/, 'a wire laid with another tier is rebuilt');
 });

@@ -13,6 +13,11 @@
 //               under a strong pull (red); a worn rope flickers and frays;
 //   snap     -- the rope breaks at the middle, both halves whip back, sparks burst.
 // World units: the hunt world (2 per native pixel). Reduced motion keeps every state readable, still.
+//
+// HUNT_ROPE_TIERS_20261111 (Owner: 都做好): the rope you equipped is the rope you see. Its family takes the
+// shop icon's colour (基礎 blue, 強化 green, 高階 gold, 頂級 red); its tier is a quiet detail -- α a plain
+// braid, β a silver tracer strand and a silver knot, γ a gold knot and a slow light running along it.
+// The pull's tension stays on the outer glow (cyan slack, amber pull, red strong), never on the rope body.
 
 const TRAIL_POINTS = 64, LOOP_POINTS = 48, TETHER_POINTS = 28;
 const FRAME_MS = 1000 / 60;
@@ -27,21 +32,40 @@ export const HUNT_ROPE_VFX = Object.freeze({
     BROKEN: Object.freeze({ glow: 0xff4a24, alpha: 0.85, sag: 0 })
   }),
   drawGlow: 0x6fe3ff, cinchGlow: 0xffd34d, missGlow: 0x9aa7b0,
-  worn: 0.3               // durability share below which the rope flickers and frays
+  worn: 0.3,              // durability share below which the rope flickers and frays
+  // Rope families in native item order (items 0-2, 3-5, 6-8, 9-11), coloured after their shop icons.
+  families: Object.freeze([
+    Object.freeze({ id: 'BASIC', light: '#a8d4ff', mid: '#2f6ff0', dark: '#163fa8', deep: '#0a1d55', glow: 0x6fb8ff }),
+    Object.freeze({ id: 'REINFORCED', light: '#c4ffa4', mid: '#38c41e', dark: '#1b7c12', deep: '#0b3a07', glow: 0x8dff6a }),
+    Object.freeze({ id: 'ADVANCED', light: '#fff4a8', mid: '#f0c400', dark: '#a87a00', deep: '#4a3200', glow: 0xffe14a }),
+    Object.freeze({ id: 'TOP', light: '#ffb4a4', mid: '#e8221c', dark: '#9c0e0c', deep: '#4a0606', glow: 0xff6a50 })
+  ]),
+  knots: Object.freeze([null, 0xc9d3dc, 0xffd34d]),   // α keeps the rope colour, β silver, γ gold
+  tracer: '#e8f0f6',
+  pulseMs: 1400           // γ: one light run from end to end
 });
 
-/** An 8x8 two-strand braid; the colours run along x so MeshRope repeats it down the rope. */
-function braidCanvas() {
+/** Native rope item index (0-11) -> its family (0-3) and tier (0 α, 1 β, 2 γ); null = the basic α rope. */
+export function ropeLook(itemIndex) {
+  const i = Number.isInteger(itemIndex) && itemIndex >= 0 && itemIndex < 12 ? itemIndex : 0;
+  return Object.freeze({ family: Math.floor(i / 3), tier: i % 3 });
+}
+const hex = (css) => parseInt(css.slice(1), 16);
+
+/** An 8x8 two-strand braid in a family's colours; the colours run along x so MeshRope repeats it.
+ *  From β on, one strand carries a silver tracer. */
+function braidCanvas(family, tier) {
   const c = document.createElement('canvas'); c.width = 8; c.height = 8;
   const g = c.getContext('2d');
   const put = (x, y, col) => { g.fillStyle = col; g.fillRect(x, y, 1, 1); };
   for (let x = 0; x < 8; x++) for (let y = 0; y < 8; y++) {
-    if (y === 0 || y === 7) { put(x, y, '#3b1f10'); continue; }
+    if (y === 0 || y === 7) { put(x, y, family.deep); continue; }
     const strandA = ((x + y) % 8) < 4;
-    let col = strandA ? '#e9a24a' : '#a95a24';
-    if (strandA && y <= 2) col = '#ffe2a0';            // lit top edge of the light strand
-    if (!strandA && y >= 5) col = '#6d3416';           // shaded underside of the dark strand
-    if (((x + y) % 8) === 0) col = '#4a2612';          // the groove between strands
+    let col = strandA ? family.mid : family.dark;
+    if (strandA && y <= 2) col = family.light;           // lit top edge of the light strand
+    if (!strandA && y >= 5) col = family.deep;           // shaded underside of the dark strand
+    if (((x + y) % 8) === 0) col = family.deep;          // the groove between strands
+    if (tier >= 1 && !strandA && ((x + y) % 8) === 5 && y >= 2 && y <= 5) col = HUNT_ROPE_VFX.tracer;
     put(x, y, col);
   }
   return c;
@@ -90,11 +114,25 @@ export function tetherCurve(from, to, { sag = 0, hum = 0, phase = 0, count = TET
 }
 
 export function createHuntRopeVfx({ PIXI, layer }) {
+  // Headless renderers (tests, a stubbed PIXI) have no canvas or MeshRope: draw nothing, keep the API.
+  if (typeof document === 'undefined' || !PIXI?.MeshRope || !PIXI?.Texture?.from) {
+    return Object.freeze({ update() {}, getDiagnostics: () => ({ disabled: true }), destroy() {} });
+  }
   const root = new PIXI.Container({ label: 'hunt rope vfx' });
   root.eventMode = 'none';
   layer.addChild(root);
-  const ropeTexture = PIXI.Texture.from(braidCanvas());
-  ropeTexture.source.scaleMode = 'nearest';
+  const braids = new Map();   // "family-tier" -> texture, made on first use
+  const braid = ({ family, tier }) => {
+    const key = `${family}-${tier}`;
+    if (!braids.has(key)) {
+      const texture = PIXI.Texture.from(braidCanvas(HUNT_ROPE_VFX.families[family], tier));
+      // MeshRope only sets repeat on the texture it was built with; a swapped-in braid needs it too.
+      texture.source.scaleMode = 'nearest'; texture.source.style.addressMode = 'repeat';
+      braids.set(key, texture);
+    }
+    return braids.get(key);
+  };
+  const ropeTexture = braid(ropeLook(0));
   const glowTexture = PIXI.Texture.from(glowCanvas());
   const makeRope = (count, texture, scale, glow) => {
     const points = Array.from({ length: count }, () => new PIXI.Point(0, 0));
@@ -125,11 +163,12 @@ export function createHuntRopeVfx({ PIXI, layer }) {
   let lastPath = null, fizzle = null, cinch = null, snap = null, snapSerial = null, closureSerial = null;
   let boundBefore = new Set();
   const spark = (x, y, vx, vy, color, life, size = 2) => { if (sparks.length < 160) sparks.push({ x, y, vx, vy, color, life, age: 0, size }); };
-  const burst = (x, y, kind, now, reduced) => {
-    bursts.push({ x, y, kind, start: now });
+  const burst = (x, y, kind, now, reduced, family = null) => {
+    bursts.push({ x, y, kind, start: now, color: family?.glow ?? null });
     if (reduced) return;
     const n = kind === 'BIND' ? 12 : kind === 'SNAP' ? 14 : 8;
-    const colors = kind === 'MISS' ? [0xb7c0c6, 0x8b969e] : kind === 'SNAP' ? [0xfff0c0, 0xff9a3c, 0xff4a24] : [0xfff3b0, 0xffd34d, 0xff9a3c];
+    const colors = kind === 'MISS' ? [0xb7c0c6, 0x8b969e] : kind === 'SNAP' ? [0xfff0c0, 0xff9a3c, 0xff4a24]
+      : family ? [0xffffff, hex(family.light), family.glow] : [0xfff3b0, 0xffd34d, 0xff9a3c];
     for (let i = 0; i < n; i++) {
       const a = i / n * Math.PI * 2 + Math.random() * 0.4, v = (kind === 'MISS' ? 0.8 : 2.2) * (0.6 + Math.random() * 0.6);
       spark(x, y, Math.cos(a) * v, Math.sin(a) * v * (kind === 'MISS' ? 0.4 : 0.8) - (kind === 'MISS' ? 0.4 : 0.6),
@@ -137,28 +176,51 @@ export function createHuntRopeVfx({ PIXI, layer }) {
     }
   };
 
+  let lookKey = '0-0';
+  const ropes = [trailRope, loopRope, tetherRope, snapA, snapB];
+  // γ: a short bright run travelling along the rope's points.
+  const pulseRun = (pts, now, reduced, color) => {
+    if (reduced || !pts || pts.length < 4) return;
+    const k = (now % HUNT_ROPE_VFX.pulseMs) / HUNT_ROPE_VFX.pulseMs, at = k * (pts.length - 1);
+    for (let j = -2; j <= 2; j++) {
+      const p = pts[Math.round(at) + j]; if (!p) continue;
+      const a = 1 - Math.abs(j) / 3;
+      over.rect(Math.round(p.x) - 2, Math.round(p.y) - 2, 4, 4).fill({ color, alpha: 0.35 * a });
+      over.rect(Math.round(p.x) - 1, Math.round(p.y) - 1, 2, 2).fill({ color: 0xffffff, alpha: 0.9 * a });
+    }
+  };
+
   function update({ tools, wilds = [], now = performance.now(), reduced = false } = {}) {
     under.clear(); over.clear();
     const t = now / 1000;
+    // ---- the equipped rope's look
+    const look = ropeLook(tools?.tools?.find?.((tool) => tool.id === 'ROPE')?.ropeItemIndex);
+    const family = HUNT_ROPE_VFX.families[look.family], knot = HUNT_ROPE_VFX.knots[look.tier] ?? hex(family.mid);
+    if (`${look.family}-${look.tier}` !== lookKey) {
+      lookKey = `${look.family}-${look.tier}`;
+      const texture = braid(look);
+      for (const r of ropes) r.mesh.texture = texture;
+    }
     // ---- drawing
     const path = tools?.lassoPath?.length > 1 ? tools.lassoPath : null;
     const trail = path ? resamplePath(path, TRAIL_POINTS) : null;
     setRope(trailRope, trail?.points); setRope(trailGlow, trail?.points);
     if (trail) {
-      trailGlow.mesh.tint = HUNT_ROPE_VFX.drawGlow; trailGlow.mesh.alpha = 0.5 + (reduced ? 0 : 0.15 * Math.sin(t * 9));
+      trailGlow.mesh.tint = family.glow; trailGlow.mesh.alpha = 0.5 + (reduced ? 0 : 0.15 * Math.sin(t * 9));
       trailRope.mesh.alpha = 1;
       const head = path.at(-1), start = path[0];
-      over.circle(head.x, head.y, 9).fill({ color: 0x6fe3ff, alpha: 0.25 });
+      over.circle(head.x, head.y, 9).fill({ color: family.glow, alpha: 0.25 });
       over.rect(head.x - 4, head.y - 1, 8, 2).fill({ color: 0xffffff, alpha: 0.95 });
       over.rect(head.x - 1, head.y - 4, 2, 8).fill({ color: 0xffffff, alpha: 0.95 });
       if (!reduced && Math.random() < 0.7) spark(head.x + (Math.random() - 0.5) * 6, head.y + (Math.random() - 0.5) * 6,
-        (Math.random() - 0.5) * 0.6, 0.4 + Math.random() * 0.5, Math.random() < 0.5 ? 0x9ff0ff : 0xffe2a0, 320);
+        (Math.random() - 0.5) * 0.6, 0.4 + Math.random() * 0.5, Math.random() < 0.5 ? family.glow : hex(family.light), 320);
       // The start point calls the finger home once the stroke has gone a fair way round.
       if (trail.length > 80 && Math.hypot(head.x - start.x, head.y - start.y) < 46) {
         const pulse = reduced ? 0.5 : Math.sin(t * 12) * 0.5 + 0.5;
         over.circle(start.x, start.y, 10 + pulse * 5).stroke({ color: 0xffffff, width: 2, alpha: 0.5 + pulse * 0.45 });
         over.rect(start.x - 3, start.y - 3, 6, 6).fill({ color: 0xffd34d, alpha: 0.95 });
       }
+      if (look.tier === 2) pulseRun(trail.points, now, reduced, family.glow);
       lastPath = path; fizzle = null;
     } else if (lastPath) {
       // The finger lifted: a recognised loop becomes a cinch below; anything else drops and fades.
@@ -183,7 +245,7 @@ export function createHuntRopeVfx({ PIXI, layer }) {
         cinch.resolved = true; cinch.resolvedAt = now;
         const caught = wilds.filter((w) => w.bound && !boundBefore.has(w.wildId));
         cinch.hit = caught.length > 0;
-        for (const w of caught) burst(w.worldX, w.worldY - (w.worldZ ?? 0) - 10, 'BIND', now, reduced);
+        for (const w of caught) burst(w.worldX, w.worldY - (w.worldZ ?? 0) - 10, 'BIND', now, reduced, family);
         if (!caught.length) burst(cinch.cx, cinch.cy, 'MISS', now, reduced);
       }
       const after = cinch.resolved ? Math.min(1, (now - cinch.resolvedAt) / 260) : 0;
@@ -193,7 +255,7 @@ export function createHuntRopeVfx({ PIXI, layer }) {
       setRope(loopRope, pts); setRope(loopGlow, pts);
       const fade = 1 - after;
       loopRope.mesh.alpha = fade; loopGlow.mesh.alpha = (0.45 + 0.4 * ease) * fade;
-      loopGlow.mesh.tint = cinch.resolved && !cinch.hit ? HUNT_ROPE_VFX.missGlow : HUNT_ROPE_VFX.cinchGlow;
+      loopGlow.mesh.tint = cinch.resolved && !cinch.hit ? HUNT_ROPE_VFX.missGlow : family.glow;
       if (cinch.resolved && after >= 1) { cinch = null; setRope(loopRope, null); setRope(loopGlow, null); }
     } else { setRope(loopRope, null); setRope(loopGlow, null); }
     // ---- a stroke that was not a loop drops away
@@ -207,11 +269,15 @@ export function createHuntRopeVfx({ PIXI, layer }) {
     for (const w of wilds) {
       if (!w.bound || w.state === 'ON_CARD' || w.cardState) continue;
       const x = w.worldX, y = w.worldY - (w.worldZ ?? 0) - 3, pulse = reduced ? 0.5 : Math.sin(t * 5 + x) * 0.5 + 0.5;
-      under.ellipse(x, y, 20, 8).fill({ color: 0xffd34d, alpha: 0.12 + 0.08 * pulse });
-      under.ellipse(x, y, 15, 6).stroke({ color: 0x3b1f10, width: 4.5, alpha: 0.9 });
-      under.ellipse(x, y, 15, 6).stroke({ color: 0xe9a24a, width: 2.5, alpha: 0.95 });
-      under.ellipse(x, y - 0.8, 15, 6).stroke({ color: 0xffe2a0, width: 0.9, alpha: 0.6 + 0.3 * pulse });
-      under.rect(x + 13, y - 3, 5, 5).fill({ color: 0xe9a24a }).stroke({ color: 0x3b1f10, width: 1 });   // the knot
+      under.ellipse(x, y, 20, 8).fill({ color: family.glow, alpha: 0.12 + 0.08 * pulse });
+      under.ellipse(x, y, 15, 6).stroke({ color: hex(family.deep), width: 4.5, alpha: 0.9 });
+      under.ellipse(x, y, 15, 6).stroke({ color: hex(family.mid), width: 2.5, alpha: 0.95 });
+      under.ellipse(x, y - 0.8, 15, 6).stroke({ color: hex(family.light), width: 0.9, alpha: 0.6 + 0.3 * pulse });
+      under.rect(x + 13, y - 3, 5, 5).fill({ color: knot }).stroke({ color: hex(family.deep), width: 1 });   // the knot
+      if (look.tier === 2 && !reduced) {   // γ: a glint runs round the coil
+        const a = t * 3 + x;
+        under.rect(Math.round(x + Math.cos(a) * 15) - 1, Math.round(y + Math.sin(a) * 6) - 1, 3, 3).fill({ color: 0xffffff, alpha: 0.9 });
+      }
     }
     // ---- the tether
     const rope = tools?.rope ?? null;
@@ -229,6 +295,8 @@ export function createHuntRopeVfx({ PIXI, layer }) {
       over.circle(rope.to[0], rope.to[1], 7).fill({ color: band.glow, alpha: 0.3 });
       over.rect(rope.to[0] - 3, rope.to[1] - 3, 6, 6).fill({ color: 0xfff3d0 }).stroke({ color: 0x3b1f10, width: 1 });
       over.circle(rope.from[0], rope.from[1], 5).fill({ color: band.glow, alpha: 0.35 });
+      over.rect(rope.from[0] - 3, rope.from[1] - 3, 6, 6).fill({ color: knot }).stroke({ color: hex(family.deep), width: 1 });
+      if (look.tier === 2) pulseRun(pts, now, reduced, family.glow);
       if (!reduced && (rope.band === 'STRONG' || worn) && Math.random() < (worn ? 0.6 : 0.4)) {
         const p = pts[Math.floor(Math.random() * pts.length)];
         spark(p.x, p.y, (Math.random() - 0.5) * 1.2, -0.3 - Math.random() * 0.6, worn ? 0xffb090 : 0xffd34d, 260);
@@ -257,7 +325,7 @@ export function createHuntRopeVfx({ PIXI, layer }) {
     for (let i = bursts.length - 1; i >= 0; i--) {
       const b = bursts[i], k = (now - b.start) / (b.kind === 'MISS' ? 420 : 340);
       if (k >= 1) { bursts.splice(i, 1); continue; }
-      const color = b.kind === 'MISS' ? 0xc9d1d6 : b.kind === 'SNAP' ? 0xffb340 : 0xffd34d;
+      const color = b.kind === 'MISS' ? 0xc9d1d6 : b.kind === 'SNAP' ? 0xffb340 : b.color ?? 0xffd34d;
       over.ellipse(b.x, b.y + (b.kind === 'BIND' ? 8 : 0), 10 + 30 * k, (10 + 30 * k) * 0.45).stroke({ color, width: 3 * (1 - k), alpha: 1 - k });
       if (b.kind !== 'MISS' && k < 0.35) over.circle(b.x, b.y, 12 * (1 - k / 0.35)).fill({ color: 0xffffff, alpha: 0.8 * (1 - k / 0.35) });
     }
@@ -273,10 +341,11 @@ export function createHuntRopeVfx({ PIXI, layer }) {
   return Object.freeze({
     update,
     getDiagnostics: () => ({ trail: trailRope.mesh.visible, loop: loopRope.mesh.visible, tether: tetherRope.mesh.visible,
-      snap: snapA.mesh.visible, sparks: sparks.length, bursts: bursts.length }),
+      snap: snapA.mesh.visible, sparks: sparks.length, bursts: bursts.length, look: lookKey }),
     destroy() {
       root.destroy({ children: true });
-      ropeTexture.destroy(true); glowTexture.destroy(true);
+      for (const texture of braids.values()) texture.destroy(true);
+      glowTexture.destroy(true);
     }
   });
 }
