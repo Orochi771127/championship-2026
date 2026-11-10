@@ -10,6 +10,8 @@ Presentation only; no gameplay, save or ROM table changes.
 - Journey zone rivals are not in the Data Arena's own rival list, so they were drawn as the placeholder; they are now drawn as the roster partner of their species.
 - Ground marks of kind scorch and crack (UNIQUE_PIXEL_MOVE_VFX_20261108 HD-pixel style) are drawn as pixel craters: a bowl lit from above, a raised lip casting a shadow forward, jagged cracks with a light bevel and two-tone rock chips; a fire hit adds an additive ember layer (molten pit floor, hot seams) that cools within about 1.7 s; the crater lands with a short pop. Other marks are unchanged.
 - The battle result screen gives each body a contact shadow; the Data Arena contact shadow gets a defined core so it shows on bright floors.
+- Data Arena cover blocks: the shadow sits at the block's base instead of 14 px below it, so blocks no longer look as if they float.
+- Inventory note: Hunt wilds render with their contact and cast shadows (night casts are dimmer by design); on entry the camera can start away from the herd, so a player may see no wild until they drag the view. Not changed here.
 
 Not authorized: push, merge or publication.
 
