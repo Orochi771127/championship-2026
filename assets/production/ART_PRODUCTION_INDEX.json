@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 49,
+    "registeredRuntimeBundles": 50,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -619,6 +619,20 @@
       "publicationAuthorized": true,
       "scope": "General R5 53 callers / 83 events, Arena R3 65 source sequences / 506 events; authored presentation alignment to existing CAST_RELEASE. No commercial-rights or source hit-marker parity claim.",
       "runtimeQaEvidence": "docs/reports/aw12-release-20261110/VALIDATION.json"
+    },
+    {
+      "assetId": "art:characters:aw32-two-set-r12-20261110",
+      "manifestPath": "assets/production/characters/aw32-web-r11-directed-20261110/animation.public-v1.json",
+      "manifestSha256": "23876e5d0b11dce9c5a05aadcdfd87463b9236da11d9a9a78699c8d0119d3349",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "OWNER_ART_APPROVED_RUNTIME_CHECKED",
+      "shippingStatus": "OWNER_PUBLIC_PLAYTEST",
+      "humanApproved": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "publicationAuthorized": true,
+      "scope": "Owner-approved General R1 / Arena final86; 53 General callers, 65 Arena source sequences. R12 support roots, fixed whole-canvas half-size Arena derivative. No commercial-rights claim.",
+      "runtimeQaEvidence": "docs/reports/aw32-release-20261110/VALIDATION.json"
     }
   ]
 }
