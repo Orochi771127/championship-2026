@@ -120958,7 +120958,7 @@
     },
     {
       "path": "championship.html",
-      "sha256": "4dff3d2eee80e4185dfe97da95f70453947fd7dfb1693d3b50b56e6cef0a3dcc"
+      "sha256": "9e60e93032f242f0c237a5152138f301f388a139fb44e5954a612b37ba699c5f"
     },
     {
       "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -121366,7 +121366,7 @@
     },
     {
       "path": "src/championship/app/championshipStandaloneApp.js",
-      "sha256": "34375ab968ade177372b91149f4c327b92d2f27c018809a95148e5e7119ee980"
+      "sha256": "34918c490c528c6df7f04a988d0a5996f1971386f7f84aeb1cf07eef2097f70a"
     },
     {
       "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -121526,7 +121526,7 @@
     },
     {
       "path": "src/championship/app/main.js",
-      "sha256": "d9bc782d143ead4321af267571678fe49f18ed45ac53cbb7fa3cdd8b99aa921b"
+      "sha256": "dd7064219ede202c8cf6caa2fe32fe5d476e68caa09293f2742ef76208287159"
     },
     {
       "path": "src/championship/app/medalCollection.css",
@@ -121710,7 +121710,7 @@
     },
     {
       "path": "src/championship/app/storyChapterMap.js",
-      "sha256": "d84c2f94214827078b9df302b7a85e4e0888b9aa44d7acd4c025799e11d5b0a2"
+      "sha256": "fa5dd35906f8c7286a2795b2b21ce17df8e7ec497f93472ad90e02125297f473"
     },
     {
       "path": "src/championship/app/storyCutsceneStage.js",
@@ -121798,7 +121798,7 @@
     },
     {
       "path": "src/championship/app/ui/storyTheater.css",
-      "sha256": "1f3ea13a94e653dca452bfbc81f341dc10049ebad72ef291ee1e8729cd298539"
+      "sha256": "8ad3051fbd18b8b3f33ca191d62952a75cb4a234e3a0897b570e9d312bba6c47"
     },
     {
       "path": "src/championship/app/ui/syncGainPanel.js",
@@ -122206,7 +122206,7 @@
     },
     {
       "path": "src/championship/data/storyRiftMap.js",
-      "sha256": "b8aa8227daa6ab25ac887142dd3134b1d6188602c63a4dfa7f463fca1b1f9a53"
+      "sha256": "5e075f1d1a5bd88e7dc48444f3c7ad897a26499814a1467fced853c504e2b1d1"
     },
     {
       "path": "src/championship/database/databaseBodyStats.js",
@@ -125653,6 +125653,66 @@
         "schemaVersion",
         "sizeClass"
       ]
+    },
+    {
+      "path": "src/championship/app/ui/storyVn.css",
+      "sha256": "42f220a0177da6e732ade92bddf37b2cb143df38731743625700908acebecc34"
+    },
+    {
+      "path": "src/championship/data/storyVnCampaign.js",
+      "sha256": "2525b9e41b4ed31c6dfd0b746be93690b9a693a7f99b26773df7f6e531d4610b"
+    },
+    {
+      "path": "src/championship/presentation/story/storyVnDirector.js",
+      "sha256": "e729af7f72b8b52d0ec6cb912e655c7626d416434fa079c5f44a9bca02fc24ab"
+    },
+    {
+      "path": "src/championship/presentation/story/storyVnStage.js",
+      "sha256": "2d6104cb96edc78ca88bef81cdb10fbff1a51f68fcc3559e19d1056135350992"
+    },
+    {
+      "path": "src/championship/presentation/story/storyVnTheater.js",
+      "sha256": "1993a0dd29c79daf060da369196c327838a43a56919d02d121cfc28f18034556"
+    },
+    {
+      "path": "src/championship/text/storyVnText.js",
+      "sha256": "021c83e51d9e11171cf3c35ff3cb18a5cdc82425898f02d0a8f894712b0dc646"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v1/arena.d91d6b024b83d272.webp",
+      "sha256": "d91d6b024b83d272dbac3a77ac8173332ab2fd0d17199b1688b0e72bbcc2076e"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v1/grid.a6567cf2a41f140c.webp",
+      "sha256": "a6567cf2a41f140c85ae7008869b6cad69e6f8011c05c4aab2134fdbaa9eb220"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v1/habitat.84b43b3c18dd6347.webp",
+      "sha256": "84b43b3c18dd6347e8f1355140e2c3fcccbc457807894e33c1018865942f83c2"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v1/lotus.be7793d0fd6acbf4.webp",
+      "sha256": "be7793d0fd6acbf44e76996f53a0e3e485cadd2af9996b7d2170558ef60c58fd"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v1/plaza.4bb72ba0d7c4e290.webp",
+      "sha256": "4bb72ba0d7c4e29012e15dc6d67522afb77fd25114bb0392a83043b4b3a12581"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v1/safezone.e50c4af776f3c912.webp",
+      "sha256": "e50c4af776f3c91224b34d3dac5f41c9424b3536c1e3f93c6c21bfd4bb2e9c9c"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v1/town.907172f9f728257d.webp",
+      "sha256": "907172f9f728257d9c5d483eba88a93108a62c664ee065f6a76db129c7ce515a"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v1/vault.44846f132c4aabf1.webp",
+      "sha256": "44846f132c4aabf1f0a09ec1535fa1460eb4f87e407e133a5a6afd834012f9cf"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v1/void.3204cec44f4ab6e8.webp",
+      "sha256": "3204cec44f4ab6e804dee050bf279c2da3f026221a936b04f62019f4eaa5e969"
     }
   ],
   "assets": [
