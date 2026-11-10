@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 50,
+    "registeredRuntimeBundles": 51,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -633,6 +633,20 @@
       "publicationAuthorized": true,
       "scope": "Owner-approved General R1 / Arena final86; 53 General callers, 65 Arena source sequences. R12 support roots, fixed whole-canvas half-size Arena derivative. No commercial-rights claim.",
       "runtimeQaEvidence": "docs/reports/aw32-release-20261110/VALIDATION.json"
+    },
+    {
+      "assetId": "art:characters:aw14-two-set-r1-20261110",
+      "manifestPath": "assets/production/characters/aw14-two-set-r1-20261110/animation.public-v1.json",
+      "manifestSha256": "b71d0f764a54d03c76da922542040439ccfce7c8c0d9a0626a7f6ef7d2342279",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "OWNER_ART_APPROVED_RUNTIME_CHECKED",
+      "shippingStatus": "OWNER_PUBLIC_PLAYTEST",
+      "humanApproved": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "publicationAuthorized": true,
+      "scope": "Owner-approved General R8 / Arena R6. Original illustration pixels, native event metadata preserved. Public playtest authorization for AW01-AW53; no new commercial-rights claim.",
+      "runtimeQaEvidence": "docs/reports/aw14-release-20261110/VALIDATION.json"
     }
   ]
 }

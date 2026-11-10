@@ -5,7 +5,8 @@ const aw23Release=read('docs/reports/aw-ul-release-20261102/AW23_SELECTION.json'
 const ul14Release=read('docs/reports/aw-ul-release-20261102/UL14_SELECTION.json');
 const aw12Release=read('docs/reports/aw12-release-20261110/SELECTION.json');
 const aw32Release=read('docs/reports/aw32-release-20261110/SELECTION.json');
-const releases={AW23:aw23Release,UL14:ul14Release,AW12:aw12Release,AW32:aw32Release};
+const aw14Release=read('docs/reports/aw14-release-20261110/SELECTION.json');
+const releases={AW14:aw14Release,AW23:aw23Release,UL14:ul14Release,AW12:aw12Release,AW32:aw32Release};
 // Owner 2026-11-03 「Fix now with existing art」: a role may leave the baseline only through its named patch, whose
 // recorded parents are exactly the baseline entry; only the clips it lists change, from frames the role already has.
 const PATCH_FILE='animation.web-patch-20261103.json';
