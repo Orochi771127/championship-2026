@@ -390,8 +390,8 @@
 @media (hover: hover) and (pointer: fine) { :root[data-theme="arcade"] .cm-vs2-database__chip:hover { transform: translateY(-2px) rotate(-1deg); } }
 :root[data-theme="arcade"] .cm-vs2-database__sheet-scrim { background: rgba(20, 20, 31, 0.5) var(--ax-dots); }
 :root[data-theme="arcade"] .cm-vs2-database__sheet-panel { border: var(--ax-border); background: var(--ax-paper); box-shadow: var(--ax-hl), 0 8px 0 var(--ax-ink); animation: ax-pop 380ms var(--ax-spring) both; }
-:root[data-theme="arcade"] .cm-vs2-database__row .cm-dex-list-thumb,
-:root[data-theme="arcade"] .cm-vs2-database__row:not(.cm-vs2-database__row--thumb)::before { border: 2px solid var(--ax-ink); background: #e9f6ff; }
+:root[data-theme="arcade"] .cm-vs2-database__row :is(.cm-dex-list-thumb, .cm-dex-list-shadow),
+:root[data-theme="arcade"] .cm-vs2-database__row:not(.cm-vs2-database__row--thumb, .cm-vs2-database__row--shadow)::before { border: 2px solid var(--ax-ink); background: #e9f6ff; }
 
 /* Shop tabs wear the rebuild's category faces. */
 :root[data-theme="arcade"] .cm-vs2-shop__tab[data-category="TRAINING_GOODS"] { --key-face: var(--ax-orange); --key-shade: var(--ax-orange-sh); }

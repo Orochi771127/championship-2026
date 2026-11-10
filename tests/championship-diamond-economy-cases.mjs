@@ -50,7 +50,7 @@ test('the Bits shop zoo and ranch no longer feed or clean: the product shows and
     assert.deepEqual(PRODUCT_CAGE_CHANNEL_OVERRIDES[definition].map(c => c.id), ['FAMILY_BEAST']);
     const summary = cageUiSummary(moduleOf(definition));
     assert.doesNotMatch(summary, /自動餵食|清潔/, summary);
-    assert.match(summary, /獸屬性上升/);
+    assert.match(summary, /獸族點數上升/); // WEEKLY_SEASON_FACTIONS_20261110 race wording
     assert.ok(PRODUCT_CAGE_PROGRAMS[definition].every(p => p.commands.some(([kind]) => kind === 4)) || PRODUCT_CAGE_PROGRAMS[definition].some(p => p.commands[0][0] === 4));
     assert.equal(REALTIME_TRAINING_POLICY.cagePrograms[definition], PRODUCT_CAGE_PROGRAMS[definition]);
   }

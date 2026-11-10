@@ -45,7 +45,7 @@ import { isDesktopBrowseLayout } from './portraitFrame.js';
 import { createCyberGachaPanel } from './cyberGachaView.js';
 import { gachaCurrencyImage, gachaIcon, paintGachaTicketBadge } from './cyberGachaIcons.js';
 import { landExpansionPrice } from '../gacha/diamondRewards.js';
-import { huntFamilyActions, huntFamilyBadge, huntFamilyDescription, huntFamilyEntries, huntFamilyLadder, huntFamilyMeta, huntFamilyName, huntFamilyReceiptText } from './huntToolFamilyCards.js';
+import { huntFamilyActions, huntFamilyBadge, huntFamilyDescription, huntFamilyEntries, huntFamilyLadder, huntFamilyMeta, huntFamilyName, huntFamilyReceiptText, shopUnlockText } from './huntToolFamilyCards.js';
 
 const CATEGORY_LABELS = Object.freeze({
   TRAINING_GOODS: "養成用品",
@@ -323,9 +323,23 @@ export function createShopView({ root, source }) {
   }
 
   // One card per listing, except a hunt tool family, which is one card for all its tiers.
+  // Owner 2026-11-10: locked goods follow, greyed with what opens them; a family
+  // shows locked only while its first tier is (later tiers say so on the upgrade key).
   function cardEntries(shop) {
     const rows = shop?.listings.filter((row) => row.category === activeCategory) ?? [];
-    return huntFamilyEntries(rows, (shop?.huntFamilies ?? []).filter((family) => family.visible));
+    const entries = huntFamilyEntries(rows, (shop?.huntFamilies ?? []).filter((family) => family.visible));
+    const families = new Map((shop?.huntFamilies ?? []).map((family) => [family.familyId, family]));
+    const lockedFamilies = new Set();
+    for (const row of shop?.lockedListings ?? []) {
+      if (row.category !== activeCategory || !row.unlock) continue;
+      const family = row.familyId ? families.get(row.familyId) : null;
+      if (family) {
+        if (family.visible || lockedFamilies.has(family.familyId) || family.shopRecordIndex !== row.shopRecordIndex) continue;
+        lockedFamilies.add(family.familyId);
+      }
+      entries.push({ key: `locked:${row.shopRecordIndex}`, row, family: null, locked: true });
+    }
+    return entries;
   }
   function moveSelection(offset) {
     const entries = cardEntries(source.getFrame()?.shop);
@@ -487,6 +501,7 @@ export function createShopView({ root, source }) {
     const selectedEntry = entries.find((entry) => entry.key === requested) ?? entries[0];
     selectedRow = selectedEntry.row;
     selectedFamily = selectedEntry.family;
+    const selectedLocked = Boolean(selectedEntry.locked);
     selectedByCategory.set(activeCategory, selectedEntry.key);
     const selectedIndex = entries.indexOf(selectedEntry);
     const selectedName = selectedFamily ? huntFamilyName(selectedFamily) : productName(selectedRow);
@@ -506,14 +521,18 @@ export function createShopView({ root, source }) {
       detailFamily.append(huntFamilyLadder(document, selectedFamily),
         huntFamilyActions(document, selectedFamily, { bits: shop.bits, diamonds: shop.testDiamonds ?? null, intents: source.intents }));
     }
-    const full = selectedRow.owned >= selectedRow.maxOwned;
-    const shortBits = full ? 0 : Math.max(0, selectedRow.unitPriceBits - shop.bits);
-    buy.textContent = uiText(full ? (selectedRow.maxOwned === 1 ? "已持有" : "已達上限") : "購買");
-    buy.disabled = full || shortBits > 0;
-    buy.setAttribute("aria-label", full ? uiText("{item}已達持有上限", { item: selectedName }) : uiText("購買{item}", { item: selectedName }));
-    detailState.hidden = !buy.disabled || Boolean(selectedFamily);
-    detailState.textContent = full
-      ? (selectedRow.maxOwned === 1 ? uiText("已經持有，無法再購買。") : uiText("已達持有上限 {max}。", { max: selectedRow.maxOwned }))
+    const full = !selectedLocked && selectedRow.owned >= selectedRow.maxOwned;
+    const shortBits = full || selectedLocked ? 0 : Math.max(0, selectedRow.unitPriceBits - shop.bits);
+    buy.textContent = uiText(selectedLocked ? "尚未開放" : full ? (selectedRow.maxOwned === 1 ? "已持有" : "已達上限") : "購買");
+    buy.disabled = selectedLocked || full || shortBits > 0;
+    buy.setAttribute("aria-label", selectedLocked ? uiText("{item}尚未開放", { item: selectedName })
+      : full ? uiText("{item}已達持有上限", { item: selectedName }) : uiText("購買{item}", { item: selectedName }));
+    // A family whose next tier is locked names what opens it here; its key only has room for a word.
+    const familyLock = selectedFamily?.next && !selectedFamily.next.unlocked ? shopUnlockText(selectedFamily.next.unlock) : null;
+    detailState.hidden = selectedFamily ? !familyLock : !buy.disabled;
+    detailState.textContent = selectedLocked ? shopUnlockText(selectedRow.unlock)
+      : familyLock ? familyLock
+      : full ? (selectedRow.maxOwned === 1 ? uiText("已經持有，無法再購買。") : uiText("已達持有上限 {max}。", { max: selectedRow.maxOwned }))
       : shortBits > 0 ? uiText("持有金額不足，還差 {bits} 位元幣。", { bits: shortBits }) : "";
     previous.disabled = selectedIndex <= 0;
     next.disabled = selectedIndex >= rows.length - 1;
@@ -548,6 +567,14 @@ export function createShopView({ root, source }) {
       name.append(meta);
       const cage = row.category === "CAGES" ? cageByShopRecord.get(row.shopRecordIndex) : null;
       if (cage) decorateShopCageCard(item, art, name, cage.moduleId);
+      if (entry.locked) {
+        item.dataset.locked = "true";
+        meta.textContent = uiText("{bits} 位元幣", { bits: row.unitPriceBits });
+        const lock = element("span", "cm-vs2-shop__lock", shopUnlockText(row.unlock, { short: true }));
+        lock.dataset.unlockKind = row.unlock?.kind ?? "";
+        name.append(lock);
+        item.setAttribute("aria-label", `${displayName} · ${shopUnlockText(row.unlock)}`);
+      }
       item.addEventListener("click", () => {
         selectedByCategory.set(activeCategory, entry.key);
         paint(source.getFrame());
@@ -906,11 +933,16 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
         const name = element("div", "cm-vs2-shop__name");
         name.append(element("strong", "", (!row.viewable && row.state === 'UNDISCOVERED') ? '????' : visibleName));
         name.append(element("span", "cm-vs2-shop__meta", row.displayCode));
-        const thumbnail = (row.viewable || row.state === 'REGISTERED') && databaseHeroPortrait(row.speciesIndex)?.thumbnail;
+        // Owner 2026-11-04: a partner not yet raised or caught shows as a black silhouette with "?".
+        const known = row.viewable || row.state === 'REGISTERED';
+        const thumbnail = row.kind !== 'EGG' && databaseHeroPortrait(row.speciesIndex)?.thumbnail;
         if(thumbnail){
-          const image=element('img','cm-dex-list-thumb');
+          // The silhouette is its own class, so the registered-thumbnail contract stays as it was.
+          const image=element('img',known?'cm-dex-list-thumb':'cm-dex-list-shadow');
           image.setAttribute('loading','lazy');image.decoding='async';image.alt='';image.width=32;image.height=32;
-          image.src=thumbnail.src;item.classList.add('cm-vs2-database__row--thumb');item.append(image);
+          image.src=thumbnail.src;item.classList.add(known?'cm-vs2-database__row--thumb':'cm-vs2-database__row--shadow');
+          item.append(image);
+          if (!known) { const mystery = element('span','cm-dex-list-mystery','?'); mystery.setAttribute('aria-hidden','true'); item.append(mystery); }
         }
         item.append(name);
         item.addEventListener("click", () => openRow(row, true));
@@ -971,6 +1003,24 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       detail.append(element("p", "cm-vs2-evidence", `${selected.speciesId} · ${book.unlockEvidence}`));
     }
     if (!selected.viewable && selected.state !== "REGISTERED") {
+      // Its body reads only as a black silhouette (Owner 2026-11-04).
+      const shadowHero = selected.kind !== 'ILLUSTRATION' ? databaseHeroPortrait(selected.speciesIndex) : null;
+      if (shadowHero) {
+        // Its own classes: the registered portrait stage (.cm-dex-hero) stays absent, as the masking contracts expect.
+        const holder = element('div','cm-dex-shadow');
+        holder.dataset.art = 'loading';
+        holder.setAttribute('aria-hidden', 'true');
+        const image = element('img','cm-dex-shadow__image');
+        image.alt = ''; image.decoding = 'async'; image.hidden = true;
+        image.width = shadowHero.width; image.height = shadowHero.height;
+        const generation = detailGeneration;
+        image.onload = () => { if (alive && generation === detailGeneration) { holder.dataset.art = 'ready'; image.hidden = false; } };
+        image.onerror = () => { if (alive && generation === detailGeneration) holder.dataset.art = 'missing'; };
+        portraitImages.push(image);
+        holder.append(image, element('span','cm-dex-shadow__mystery','?'));
+        detail.append(holder);
+        image.src = shadowHero.src;
+      }
       // An unregistered partner previews as an encrypted signal: the move's
       // energy and colour, never its body, name or move name.
       const signature = showcaseOn() && selected.kind !== 'ILLUSTRATION' ? juicySignatureMove(databaseVerifiedData(selected.speciesIndex)?.moves) : null;

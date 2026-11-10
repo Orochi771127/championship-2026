@@ -112,6 +112,8 @@ import {NATIVE_RAISING_LIFECYCLE_RULES} from '../raising/nativeRaisingLifecycle.
 import {CLOCK_POLICIES,CLOCK_POLICY_NATIVE,CLOCK_POLICY_REALTIME,REALTIME_FOOD_UNITS_PER_SECOND,REALTIME_WAKE_SECONDS,REALTIME_DISTURBANCE,isNightNap,offlineGrowthSeconds,
   realtimeAgeRate,realtimeClockAdvance,realtimeDayPeriod,takeAgeUnits,REALTIME_RECOVERY_CAGES,REALTIME_RECOVERY_TICKS_PER_SECOND,
   realtimeRecoveryEffect} from '../time/realtimeClock.js';
+import {monthlyCalendarFor,monthlyCalendarMatches} from '../time/monthlyCalendar.js';
+import {selectWeeklyEligibleMatches,projectWeeklyRaisingCalendar} from '../time/weeklyTitleSchedule.js';
 import {applyNativeRaisingCondition} from '../raising/nativeRaisingCare.js';
 // The ranch ground for either layout: the original board, or (expansion
 // prototype) the same ring continued into its annex.
@@ -1044,10 +1046,15 @@ export function createChampionshipStandaloneApp({
     const active=requireSession(),before=active.getRaisingHomeSnapshot();
     // A device clock set back: the world clock waits for it to catch up.
     if(realtimeLastMs!==null&&nowMs<realtimeLastMs)return 0;
-    const minutes=realtimeClockAdvance({clockMinutes:before.clockMinutes,lastMs:realtimeLastMs??nowMs,nowMs,rollForward});
+    const advance=realtimeClockAdvance({clockMinutes:before.clockMinutes,lastMs:realtimeLastMs??nowMs,nowMs,rollForward});
     realtimeLastMs=nowMs;
-    if(minutes<=0)return 0;
-    active.advanceRaisingClock({units:minutes*400,divisor:400,clearElapsed:true,expectedClockRevision:before.clockRevision});
+    // WEEKLY_SEASON_20261110 (Owner 2026-11-10): one real week per season, one month per championship year
+    // (time/monthlyCalendar.js). The season and day follow the device date, also for a save from the old clock.
+    const target=monthlyCalendarFor(nowMs),realign=Boolean(target)&&!monthlyCalendarMatches(before,target);
+    if(advance<=0&&!realign)return 0;
+    const minutes=Math.max(0,advance);
+    active.advanceRaisingClock({units:minutes*400,divisor:400,clearElapsed:true,expectedClockRevision:before.clockRevision,
+      ...(target?{calendar:{year:target.year,season:target.season,dayOfSeason:target.dayOfSeason}}:{})});
     const after=active.getRaisingHomeSnapshot();
     if(after.season!==before.season||after.dayOfSeason!==before.dayOfSeason)rebuildFreeBattleMenu();
     nativeMessages=ageNativeRaisingMessages(nativeMessages,minutes);
@@ -1153,7 +1160,11 @@ export function createChampionshipStandaloneApp({
       entryMode: 0,
       scheduleSlotA: snapshot.season,
       scheduleSlotB: snapshot.dayOfSeason,
-      progressCounter: tamerRankValue
+      progressCounter: tamerRankValue,
+      // WEEKLY_SEASON_20261110: on the real-time clock the open list is the weekly schedule's current slot
+      // (time/weeklyTitleSchedule.js); battleRuntime.listMatches takes it instead of the native filter.
+      ...(realtime ? { weeklyRecords: selectWeeklyEligibleMatches({ season: snapshot.season, dayOfSeason: snapshot.dayOfSeason,
+        minute: snapshot.clockMinutes, progressCounter: tamerRankValue }) } : {})
     });
   }
 
@@ -2472,7 +2483,7 @@ export function createChampionshipStandaloneApp({
     getRaisingLifecycleFrame(){
       const evolving=[...raisingActors].find(([,actor])=>actor.evolution);
       return Object.freeze({confirmation:raisingDayConfirmation,day:raisingDayTransition?Object.freeze({...raisingDayTransition,
-        calendar:projectNativeRaisingCalendar({...requireSession().getRaisingHomeSnapshot(),progressCounter:tamerRankValue,
+        calendar:(realtime?projectWeeklyRaisingCalendar:projectNativeRaisingCalendar)({...requireSession().getRaisingHomeSnapshot(),progressCounter:tamerRankValue,
           won:battleBadgesValue,registered:nativeTitles.registered,championship:nativeTitles.championship})}):null,
         evolution:evolving?Object.freeze({instanceId:evolving[0],...projectNativeRaisingActor(evolving[1]).evolution}):null,
         mailbox:nativeMessages,message:raisingLifecycleMessage});
@@ -3100,7 +3111,9 @@ export function createChampionshipStandaloneApp({
       if(!nativeMessages.morningPending)return false;
       const c=this.getCalendar(),roster=this.getRaisingInstances(),birthday=deviceBirthday(),date=new Date(now());
       const match=!!birthday&&birthday.month===date.getMonth()+1&&birthday.day===date.getDate();
-      const selection=selectNativeMorningMessages({...c,cursor:nativeMessages.cursor,birthday:match,
+      // WEEKLY_SEASON_20261110: on the real-time clock a year is a calendar month, so the sixteen season letters
+      // (four seasons x four years) come round every four months instead of stopping after the first four years.
+      const selection=selectNativeMorningMessages({...c,year:realtime&&Number.isInteger(c.year)?c.year%4:c.year,cursor:nativeMessages.cursor,birthday:match,
         birthdayClaimed:nativeMessages.birthdayClaimed,rosterCount:roster.length},{next:nextGameplayRandom});
       nativeMessages=normalizeNativeRaisingMessages({...nativeMessages,cursor:selection.cursor,morningPending:false});
       for(const id of selection.ids)nativeMessages=enqueueNativeRaisingMessage(nativeMessages,id,{subjectName:selection.selected===null?'':raisingNativeProfile(roster[selection.selected].instanceId)?.name??''});
@@ -3152,8 +3165,20 @@ export function createChampionshipStandaloneApp({
 
     getAvailableBattleRecordIndices() {
       const schedule = battleSchedule();
-      return schedule ? resolveMatchList(schedule).records : Object.freeze([]);
+      if (!schedule) return Object.freeze([]);
+      // WEEKLY_SEASON_20261110: on the real-time clock today's titles open by time slot (time/weeklyTitleSchedule.js).
+      return schedule.weeklyRecords ?? resolveMatchList(schedule).records;
     },
+    /** Every title on today's calendar, whatever its slot (the native list on the native clock). */
+    getTodayBattleRecordIndices() {
+      const schedule = battleSchedule();
+      if (!schedule) return Object.freeze([]);
+      if (realtime) return selectWeeklyEligibleMatches({ season: schedule.scheduleSlotA, dayOfSeason: schedule.scheduleSlotB,
+        minute: null, progressCounter: schedule.progressCounter });
+      return resolveMatchList(schedule).records;
+    },
+    /** NATIVE (4 x 8 days, all day) or WEEKLY (4 x 7 days with time slots, real-time clock). */
+    getTitleCalendarKind() { return realtime ? 'WEEKLY' : 'NATIVE'; },
 
     // A narrow pure-clock seam, not a raising action. It consumes no player
     // command IDs and never invokes the old ADVANCE resident side effects.
@@ -3261,7 +3286,7 @@ export function createChampionshipStandaloneApp({
       this.deliverRaisingFeast();
       if(!nativeMessages.entryChecked&&c.clockMinutes>=420&&c.clockMinutes<900){
         const championship=c.season===2&&c.dayOfSeason===4&&nativeTitles.championship[c.year%4===3?'worldEntry':'entry'];
-        const registered=this.getAvailableBattleRecordIndices().some(id=>nativeTitles.registered.includes(id)&&!battleBadgesValue.includes(id));
+        const registered=this.getTodayBattleRecordIndices().some(id=>nativeTitles.registered.includes(id)&&!battleBadgesValue.includes(id));
         if(championship||registered){nativeMessages=enqueueNativeRaisingMessage(nativeMessages,null,{system:true,textId:94,minutes:900-c.clockMinutes,required:false});}
         nativeMessages=normalizeNativeRaisingMessages({...nativeMessages,entryChecked:true});
       }

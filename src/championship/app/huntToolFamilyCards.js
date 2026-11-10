@@ -7,7 +7,7 @@
 // the presentation source's intents; nothing here owns stock or money.
 
 import { uiText } from "../text/uiText.js";
-import { shopItemName } from "../text/zhHant.js";
+import { shopItemName, tamerRankName, titleEventText } from "../text/zhHant.js";
 import { getHuntCatalogItem } from "../hunt/loadout/huntEquipmentCatalog.js";
 
 export const HUNT_TOOL_TIER_LABELS = Object.freeze(["α", "β", "γ"]);
@@ -73,12 +73,34 @@ export function huntFamilyDescription(family, fallback) {
   return fallback;
 }
 
+/**
+ * What opens a locked shop row (Owner 2026-11-10): a tamer rank or a title badge.
+ * `short` fits a card line or a key; the full sentence is for the detail sheet.
+ */
+export function shopUnlockText(unlock, { short = false } = {}) {
+  if (!unlock) return null;
+  if (unlock.kind === "TAMER_RANK_THRESHOLD") {
+    const rank = tamerRankName(unlock.parameter) ?? String(unlock.parameter);
+    return short ? uiText("{rank}開放", { rank }) : uiText("尚未開放：馴獸師階級達到「{rank}」後即可購買。", { rank });
+  }
+  if (unlock.kind === "BATTLE_BADGE_ID_0_BASED") {
+    const title = titleEventText(unlock.parameter, "name", uiText("徽章 {number}", { number: unlock.parameter + 1 }));
+    return short ? uiText("贏得「{title}」開放", { title }) : uiText("尚未開放：在頭銜賽贏得「{title}」徽章後即可購買。", { title });
+  }
+  return short ? uiText("尚未開放") : uiText("尚未開放。");
+}
+
 /** What the upgrade key says and whether it can be pressed. */
 function upgradeKey(family, bits) {
   const next = family.next;
   if (!next) return { label: family.kind === "MEMORY" ? uiText("已達最大 256 G") : uiText("已達最高 {tier} 階", { tier: HUNT_TOOL_TIER_LABELS[family.tier] ?? "" }), disabled: true, max: true };
   const to = family.kind === "MEMORY" ? `${next.capacityG} G` : HUNT_TOOL_TIER_LABELS[next.tier];
-  if (!next.unlocked) return { label: uiText("{to} 尚未開放", { to }), disabled: true, locked: true };
+  if (!next.unlocked) {
+    // A rank fits on the key; a badge's name is long, so the key says "badge" and the sheet names it.
+    const when = next.unlock?.kind === "TAMER_RANK_THRESHOLD" ? shopUnlockText(next.unlock, { short: true })
+      : next.unlock?.kind === "BATTLE_BADGE_ID_0_BASED" ? uiText("徽章開放") : null;
+    return { label: when ? `${to} · ${when}` : uiText("{to} 尚未開放", { to }), disabled: true, locked: true };
+  }
   const verb = family.kind === "ROPE" && family.tier < 0 ? uiText("購買 {to}", { to }) : uiText("升級 {to}", { to });
   return { label: `${verb} · ${num(next.bits)}`, disabled: next.bits > bits, short: next.bits > bits };
 }

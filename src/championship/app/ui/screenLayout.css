@@ -98,6 +98,23 @@
   justify-self: stretch; min-width: 0; margin-top: 2px; padding: 3px 8px; border-radius: 10px;
   background: var(--c-accent-soft); color: var(--c-text-1); font-size: var(--fs-label); font-weight: 800; line-height: 1.35;
 }
+/* Owner 2026-11-10: locked goods stay on the shelf, greyed, with what opens them. */
+.cm-vs2-shop__row[data-locked="true"] .cm-vs2-shop__card-art > :not(.cm-vs2-shop__cells) { filter: grayscale(1) brightness(0.72); opacity: 0.7; }
+.cm-vs2-shop__row[data-locked="true"] .cm-vs2-shop__name strong { color: var(--c-text-2, #5d5a6e); }
+.cm-vs2-shop__row[data-locked="true"] :is(.cm-vs2-shop__series, .cm-vs2-shop__effect) { opacity: 0.6; }
+.cm-vs2-shop__lock {
+  justify-self: stretch; display: flex; align-items: center; gap: 6px; min-width: 0; margin-top: 2px; padding: 3px 8px;
+  border-radius: 10px; background: #2b2540; color: #fff; font-size: var(--fs-label, 12px); font-weight: 800; line-height: 1.35;
+}
+.cm-vs2-shop__lock::before {
+  content: ""; flex: 0 0 12px; width: 12px; height: 14px;
+  /* A padlock from two gradients: the shackle ring, half covered by the body. */
+  background:
+    linear-gradient(#ffd23f, #ffd23f) bottom / 100% 58% no-repeat,
+    radial-gradient(circle at 50% 42%, transparent 0 2.4px, #ffd23f 2.6px 4.4px, transparent 4.6px) top / 100% 70% no-repeat;
+  border-radius: 2px;
+}
+.cm-vs2-shop__lock[data-unlock-kind="BATTLE_BADGE_ID_0_BASED"] { background: #5b3fd1; }
 .cm-vs2-shop__effect > span { display: inline-block; white-space: normal; overflow-wrap: anywhere; margin-inline-end: .35em; }
 :root[data-theme="arcade"] .cm-vs2-shop__row[data-cage-card="true"] { border-width: 3px; background-image: linear-gradient(180deg, #fffaf0 0%, #fff3d6 100%); }
 :root[data-theme="arcade"] .cm-vs2-shop__row[data-cage-card="true"] .cm-vs2-shop__series { border: 2px solid var(--ax-ink, #14141f); }
@@ -236,8 +253,8 @@
   min-height: 0;
   padding: 7px 7px 9px;
 }
-:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row .cm-dex-list-thumb,
-:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row:not(.cm-vs2-database__row--thumb)::before {
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row :is(.cm-dex-list-thumb, .cm-dex-list-shadow),
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row:not(.cm-vs2-database__row--thumb, .cm-vs2-database__row--shadow)::before {
   display: block;
   flex: none;
   /* A fixed height: a percentage-wide square would let the grid size rows from the
@@ -251,8 +268,25 @@
   image-rendering: auto;
 }
 /* An entry without a portrait still keeps the card's picture well. */
-:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row:not(.cm-vs2-database__row--thumb)::before { content: "?"; display: grid; place-items: center; color: var(--c-text-disabled); font-size: 34px; font-weight: var(--fw-heavy); }
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row:not(.cm-vs2-database__row--thumb, .cm-vs2-database__row--shadow)::before { content: "?"; display: grid; place-items: center; color: var(--c-text-disabled); font-size: 34px; font-weight: var(--fw-heavy); }
 :root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row .cm-vs2-shop__name { justify-items: center; }
+/* Owner 2026-11-04: a partner not yet raised or caught is a black silhouette with "?". */
+.cm-vs2-database__row--shadow { position: relative; }
+/* Only the drawn body goes black: the picture well's own background is dropped, not darkened. */
+:root body .cm-vs2-root[data-screen][data-database-layout] .cm-vs2-database__row.cm-vs2-database__row--shadow .cm-dex-list-shadow, .cm-dex-list-shadow { background: transparent; filter: brightness(0); opacity: 0.8; }
+.cm-dex-list-mystery { display: none; }
+:root body .cm-vs2-root[data-screen][data-database-layout="ARCADE_GRID_R1"] .cm-vs2-database__row--shadow .cm-dex-list-mystery {
+  position: absolute; top: 7px; left: 7px; right: 7px; height: var(--dex-thumb, 112px); z-index: 1;
+  display: grid; place-items: center; color: #fff; font-size: 34px; font-weight: var(--fw-heavy, 900);
+  text-shadow: 0 2px 0 rgba(20, 20, 31, 0.55); pointer-events: none;
+}
+.cm-dex-shadow { position: relative; justify-self: center; width: min(100%, 260px); height: 220px; max-height: 34dvh; padding: 18px; box-sizing: border-box; }
+.cm-dex-shadow__image { display: block; width: 100%; height: 100%; object-fit: contain; filter: brightness(0); opacity: 0.85; }
+.cm-dex-shadow__image[hidden] { display: none; }
+.cm-dex-shadow__mystery {
+  position: absolute; inset: 0; display: grid; place-items: center; color: #fff;
+  font-size: 72px; font-weight: 900; text-shadow: 0 3px 0 rgba(20, 20, 31, 0.6); pointer-events: none;
+}
 
 .cm-vs2-database__sheet { position: fixed; inset: 0; z-index: var(--z-dialog); display: grid; place-items: center; padding: 16px; }
 .cm-vs2-database__sheet[hidden] { display: none; }

@@ -1270,6 +1270,8 @@ dialog.cm-dialog::backdrop {
   body:not([data-portrait-frame]) :is(.cm-help-shell) { width: min(100%, 760px); }
   body:not([data-portrait-frame]) .cm-schedule-shell { width: min(100%, 980px); }
   body:not([data-portrait-frame]) .cm-schedule-root .cm-schedule-days { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  /* WEEKLY_SEASON_20261110: the real-time board is seven days a week. */
+  body:not([data-portrait-frame]) .cm-schedule-root[data-calendar="WEEKLY"] .cm-schedule-days { grid-template-columns: repeat(7, minmax(0, 1fr)); }
   body:not([data-portrait-frame]) .cm-tamer-root .cm-tamer-fields { grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr); column-gap: 16px; }
 
   /* Roster: the list beside the detail, as a two-pane book. */

@@ -52,7 +52,7 @@ test("all 118 Shop descriptions are translated from the verified source catalog"
   assert.equal(SHOP_NAMES_ZH[4], "捕捉繩 α");
   assert.equal(SHOP_NAMES_ZH[96], "小高山");
   assert.match(SHOP_DESCRIPTIONS_ZH[32], /長度 24.*威力 10/);
-  assert.match(SHOP_DESCRIPTIONS_ZH[61], /世代、種族、屬性、生命值、性格、所需容量/);
+  assert.match(SHOP_DESCRIPTIONS_ZH[61], /世代、種族、陣營、生命值、性格、所需容量/);
   assert.match(SHOP_DESCRIPTIONS_ZH[112], /回復生命值與壓力.*2 隻/);
 });
 

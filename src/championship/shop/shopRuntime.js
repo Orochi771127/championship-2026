@@ -129,6 +129,9 @@ export function createShopRuntime({
   }
   const tierOf = family => toolTiers[family.familyId] ?? -1;
   const unlockedRow = index => allItemsVisible || visibility[index] !== SHOP_VISIBILITY.HIDDEN;
+  // Owner 2026-11-10: a locked row is shown with what opens it (rank or badge); it still cannot be bought.
+  const unlockOf = index => unlockedRow(index) ? null
+    : { kind: records[index].unlockKind, parameter: records[index].unlockParameter };
 
   function ownedOf(record) {
     if (record.purchaseDomain === SHOP_PURCHASE_DOMAIN.CAGE_OWNERSHIP) {
@@ -165,11 +168,11 @@ export function createShopRuntime({
       const row = family.records[next];
       return { tier: next, bits: family.priceBits[next], diamonds: family.priceDiamonds[next],
         capacityG: family.capacityG[next], unlocked: row === undefined ? tier >= family.records.length - 1 : unlockedRow(row),
-        shopRecordIndex: row ?? null };
+        unlock: row === undefined ? null : unlockOf(row), shopRecordIndex: row ?? null };
     }
     const row = family.records[next];
     return { tier: next, bits: family.kind === "GEAR" && next > 0 ? family.upgradeBits : records[row].unitPriceBits,
-      diamonds: null, unlocked: unlockedRow(row), shopRecordIndex: row };
+      diamonds: null, unlocked: unlockedRow(row), unlock: unlockOf(row), shopRecordIndex: row };
   }
 
   function familyView(family) {
@@ -180,6 +183,7 @@ export function createShopRuntime({
       shopRecordIndex: row, productItemId: records[row].productItemId ?? null, owned,
       maxOwned: family.kind === "MEMORY" ? 1 : HUNT_TOOL_STOCK_CAP,
       visible: tier >= 0 || unlockedRow(family.records[0]), next: nextTierOf(family) };
+    view.unlock = view.visible ? null : unlockOf(family.records[0]);
     if (family.kind === "ROPE") {
       view.refillBits = family.refillBits[Math.max(0, tier)];
       view.wear = (ropeWear[family.familyId] ?? ROPE_WEAR_FULL) / ROPE_WEAR_FULL;
@@ -190,10 +194,19 @@ export function createShopRuntime({
   }
 
   function getFrame() {
-    const listings = [];
+    const listings = [], lockedListings = [];
     for (const record of records) {
       const vis = visibility[record.shopRecordIndex];
-      if (!allItemsVisible && vis === SHOP_VISIBILITY.HIDDEN) continue;
+      if (!allItemsVisible && vis === SHOP_VISIBILITY.HIDDEN) {
+        lockedListings.push({
+          shopRecordIndex: record.shopRecordIndex, category: record.category, subcategory: record.subcategory,
+          displayName: record.displayName, unitPriceBits: record.unitPriceBits, maxOwned: maxOwnedOf(record),
+          owned: 0, purchaseDomain: record.purchaseDomain, productItemId: record.productItemId ?? null,
+          unlock: unlockOf(record.shopRecordIndex),
+          ...(huntToolFamilyOfRecord(record.shopRecordIndex) ? { familyId: huntToolFamilyOfRecord(record.shopRecordIndex).family.familyId } : {})
+        });
+        continue;
+      }
       const owned = ownedOf(record);
       listings.push({
         shopRecordIndex: record.shopRecordIndex,
@@ -214,6 +227,7 @@ export function createShopRuntime({
       bitsCap: BITS_WALLET_CAP,
       bitsEvidence: STARTING_BITS_EVIDENCE,
       listings,
+      lockedListings,
       huntFamilies: HUNT_TOOL_FAMILIES.map(familyView)
     });
   }

@@ -42,19 +42,19 @@ const FIELD_LABELS = Object.freeze({
 });
 
 const FAMILIES_BY_LOCALE = Object.freeze({
-  'zh-Hant': Object.freeze(['無','獸','機械','昆蟲植物','鳥','龍','水','聖','暗黑']),
-  en: Object.freeze(['None','Beast','Machine','Insect & Plant','Bird','Dragon','Aquatic','Holy','Dark']),
-  ja: Object.freeze(['無','獣','機械','虫植物','鳥','竜','水','聖','暗黒']),
+  'zh-Hant': Object.freeze(['無','獸族','機巧族','森羅族','羽翼族','龍族','海淵族','星靈族','幽冥族']),
+  en: Object.freeze(['None','Beast','Mechanoid','Sylvan','Avian','Dragon','Aquatic','Astral','Nether']),
+  ja: Object.freeze(['無','獣族','機巧族','森羅族','羽翼族','竜族','海淵族','星霊族','幽冥族']),
   th: Object.freeze(['ไม่มี','สัตว์ป่า','เครื่องจักร','แมลงและพืช','นก','มังกร','สัตว์น้ำ','ศักดิ์สิทธิ์','ความมืด']),
-  vi: Object.freeze(['Không','Thú','Máy móc','Côn trùng & Cây cỏ','Chim','Rồng','Thủy sinh','Thần thánh','Hắc ám'])
+  vi: Object.freeze(['Không','Thú tộc','Cơ Xảo tộc','Sâm La tộc','Vũ Dực tộc','Long tộc','Hải Uyên tộc','Tinh Linh tộc','U Minh tộc'])
 });
 
 const ATTRIBUTES_BY_LOCALE = Object.freeze({
-  'zh-Hant': Object.freeze(['無', '疫苗', '病毒', '資料', '自由']),
-  en: Object.freeze(['None', 'Vaccine', 'Virus', 'Data', 'Free']),
-  ja: Object.freeze(['無', 'ワクチン', 'ウイルス', 'データ', 'フリー']),
-  th: Object.freeze(['ไม่มี', 'วัคซีน', 'ไวรัส', 'ข้อมูล', 'อิสระ']),
-  vi: Object.freeze(['Không', 'Vắc-xin', 'Vi-rút', 'Dữ liệu', 'Tự do'])
+  'zh-Hant': Object.freeze(['無', '心輝', '裂隙', '黑鐵', '未定']),
+  en: Object.freeze(['None', 'Lumen', 'Rift', 'Black Iron', 'Unaligned']),
+  ja: Object.freeze(['無', '心輝', '裂隙', '黒鉄', '未定']),
+  th: Object.freeze(['ไม่มี', 'ลูเมน', 'รอยแยก', 'เหล็กดำ', 'ไม่สังกัด']),
+  vi: Object.freeze(['Không', 'Tâm Huy', 'Khe Nứt', 'Hắc Thiết', 'Chưa định'])
 });
 
 const MOVE_KINDS_BY_LOCALE = Object.freeze({

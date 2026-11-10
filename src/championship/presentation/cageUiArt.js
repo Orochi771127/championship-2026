@@ -45,7 +45,7 @@ export function shopCageUiName(shopRecordIndex, fallback) {
   const definition = listCageDefinitions().find((entry) => entry.shopRecordIndex === shopRecordIndex);
   return cageName(definition?.cageDefinitionIndex, fallback);
 }
-const channelNames = { DEFENSE:'防禦上升', HP:'生命值上升', TP:'技力上升', ATTACK:'攻擊上升', SPEED:'速度上升', WISDOM:'智力上升', RECOVER_HP_STRESS:'回復生命值與壓力', AUTO_CARE:'自動餵食與清潔', BATTLE_COUNT:'對戰次數上升', FAMILY_DATA:'資料屬性上升', FAMILY_DRAGON:'龍屬性上升', FAMILY_BEAST:'獸屬性上升', FAMILY_WATER:'水棲屬性上升', FAMILY_BIRD:'鳥屬性上升', FAMILY_INSECT_PLANT:'蟲草屬性上升', FAMILY_DARK:'暗黑屬性上升', FAMILY_MACHINE:'機械屬性上升', FAMILY_VACCINE:'疫苗屬性上升', FAMILY_HOLY:'聖屬性上升', FAMILY_VIRUS:'病毒屬性上升', RESIST_LIGHT:'光耐性上升', RESIST_HEAT:'熱耐性上升', RESIST_COLD:'冷耐性上升', RESIST_THUNDER:'雷耐性上升', RESIST_DARK:'闇耐性上升' };
+const channelNames = { DEFENSE:'防禦上升', HP:'生命值上升', TP:'技力上升', ATTACK:'攻擊上升', SPEED:'速度上升', WISDOM:'智力上升', RECOVER_HP_STRESS:'回復生命值與壓力', AUTO_CARE:'自動餵食與清潔', BATTLE_COUNT:'對戰次數上升', FAMILY_DATA:'黑鐵陣營聲望上升', FAMILY_DRAGON:'龍族點數上升', FAMILY_BEAST:'獸族點數上升', FAMILY_WATER:'海淵族點數上升', FAMILY_BIRD:'羽翼族點數上升', FAMILY_INSECT_PLANT:'森羅族點數上升', FAMILY_DARK:'幽冥族點數上升', FAMILY_MACHINE:'機巧族點數上升', FAMILY_VACCINE:'心輝陣營聲望上升', FAMILY_HOLY:'星靈族點數上升', FAMILY_VIRUS:'裂隙陣營聲望上升', RESIST_LIGHT:'光耐性上升', RESIST_HEAT:'熱耐性上升', RESIST_COLD:'冷耐性上升', RESIST_THUNDER:'雷耐性上升', RESIST_DARK:'闇耐性上升' };
 export function cageUiSummary(moduleId, fallback = '') {
   const definition = getCageDefinitionByModuleId(moduleId);
   if (!definition) return fallback;

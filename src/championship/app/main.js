@@ -2379,7 +2379,7 @@ async function mountCurrentScreen() {
     if (target === CHAMPIONSHIP_SCREENS.RAISING_HOME) view = await mountRaisingHome();
     else if (target === CHAMPIONSHIP_SCREENS.SHOP) view = await createShopView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.DATABASE) view = await createDatabaseView({ root, source: expeditionSource, isWideLayout: () => portraitFrame.isBrowseWide('DATABASE') });
-    else if (target === CHAMPIONSHIP_SCREENS.MEDALS) view = createMedalCollectionView({root, playtestPolicy: FRIENDS_PLAYTEST_POLICY, battleBadges:app.getBattleBadges(), unlockText:badgeUnlockText, onExit(){app.leaveScreen();}});
+    else if (target === CHAMPIONSHIP_SCREENS.MEDALS) view = createMedalCollectionView({root, playtestPolicy: FRIENDS_PLAYTEST_POLICY, battleBadges:app.getBattleBadges(), unlockText:badgeUnlockText, calendarKind: app.getTitleCalendarKind?.() ?? 'NATIVE', onExit(){app.leaveScreen();}});
     else if (target === CHAMPIONSHIP_SCREENS.CAGE_EDIT) view = await createCageEditView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) view = createDigimonListView({
       root,
@@ -2435,6 +2435,7 @@ async function mountCurrentScreen() {
         bits: app.getShopFrame()?.bits ?? null,
         calendar: app.getCalendar(),
         eligibleRecordIndices: app.getAvailableBattleRecordIndices(),
+        calendarKind: app.getTitleCalendarKind?.() ?? "NATIVE",
         progress:app.getTitleProgress(),
         onToggleRegistration(recordIndex){app.toggleTitleRegistration(recordIndex);autosave?.request('registration');return app.getTitleProgress();},
         onToggleChampionship(){app.toggleChampionshipRegistration();autosave?.request('registration');return app.getTitleProgress();},
@@ -3240,12 +3241,21 @@ function startProviderBind(provider) {
 // 📸 Brag card (Owner 2026-10-29): the tamer licence as a shareable poster.
 let bragRunning = false;
 function speciesIdentityOf(speciesId) { try { return lookupSpeciesIdentity(productEntities, speciesId); } catch { return null; } }
+// Owner 2026-11-10: the card names the partner's faction; a former free partner (attribute 4) shows the faction the
+// taxonomy gave it (attr1 心輝 / attr2 裂隙 / attr3 黑鐵).
+const CARD_FACTION_ATTRIBUTE = Object.freeze({ LUMEN: 1, RIFT: 2, IRON: 3 });
+function cardAttributeIndex(identity, speciesId) {
+  const index = identity?.attributeIndex ?? 0;
+  if (index !== 4) return index;
+  const id = speciesId ?? (Number.isInteger(identity?.recordIndex) ? `species-${identity.recordIndex}` : '');
+  return CARD_FACTION_ATTRIBUTE[speciesTaxonomyForId(id)?.faction] ?? index;
+}
 function acePartnerForCard() {
   // The most evolved partner that has Database art; the first partner otherwise.
   const roster = projectRoster().map(entry => ({ entry, portrait: juicyPortrait(entry.identity?.recordIndex ?? null) }));
   const ranked = [...roster].sort((a, b) => (Number(Boolean(b.portrait)) - Number(Boolean(a.portrait))) || ((b.entry.identity?.generationIndex ?? 0) - (a.entry.identity?.generationIndex ?? 0)));
   const pick = ranked[0];
-  return pick ? { name: pick.entry.displayName ?? null, attributeIndex: pick.entry.identity?.attributeIndex ?? 0, portraitSrc: pick.portrait?.src ?? null, role: 'ace' } : null;
+  return pick ? { name: pick.entry.displayName ?? null, attributeIndex: cardAttributeIndex(pick.entry.identity, null), portraitSrc: pick.portrait?.src ?? null, role: 'ace' } : null;
 }
 async function bragCardInput({ winner = null, victory = null } = {}) {
   const record = app.getTitleProgress?.().record ?? null;
@@ -3281,7 +3291,7 @@ function bragWinnerFrom(participants) {
     const identity = speciesIdentityOf(participant.speciesId);
     const portrait = juicyPortrait(participant.speciesId);
     const member = roster.find(entry => entry.instanceId === participant.instanceId);
-    if (portrait || identity) return { name: member?.displayName ?? identity?.speciesName ?? null, attributeIndex: identity?.attributeIndex ?? 0, portraitSrc: portrait?.src ?? null, role: 'winner' };
+    if (portrait || identity) return { name: member?.displayName ?? identity?.speciesName ?? null, attributeIndex: cardAttributeIndex(identity, participant.speciesId), portraitSrc: portrait?.src ?? null, role: 'winner' };
   }
   return null;
 }

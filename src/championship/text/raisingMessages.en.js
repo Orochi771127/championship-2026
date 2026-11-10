@@ -66,26 +66,26 @@ export const SEQUENTIAL_EN = Object.freeze([
   "An easygoing partner that falls asleep may be hard to wake with a tap.",
   "Raising through several generations is another way to get stronger. Don't rush if it sometimes fails.",
   "Every partner has cage preferences. Some like dark, damp places.",
-  "Dragon and Beast, Aquatic and Bird, Insect & Plant and Machine, Holy and Dark: each pair opposes the other.",
+  "Dragon and Beast, Aquatic and Avian, Sylvan and Mechanoid, Astral and Nether: each pair opposes the other.",
   "When a partner won't listen, in the original you could hold L or R and tap to help pick it up.",
   "Partners that get along sing together, happily relieving their stress."
 ]);
 
 export const SEASONS_EN = Object.freeze([
-  "The world has four seasons, and each lasts eight days.",
+  "The world has four seasons, each one real week: days 1–7 of the month are spring, 8–14 summer, 15–21 autumn, and the 22nd to the end of the month winter.",
   "Summer is good for training. Stats rise more easily than usual.",
   "Autumn is the battle season, with plenty of title matches.",
   "Watch your partners' condition when training in winter. Pushing too hard leads to injuries.",
   "When the season changes, so do the places creatures live.",
   "Spring and autumn are good for hunting. More wild creatures are about.",
-  "Dark partners appear in autumn and winter.",
+  "Nether partners appear in autumn and winter.",
   "In winter you may meet creatures that are rarely seen otherwise.",
   "Spring is here, and lively creatures are showing up in the wild more often.",
   "Hot summer is back. Get ready to train!",
   "Appetites are big in autumn. Keep plenty of food in stock.",
   "Use the winter to stock up on items and prepare for spring.",
-  "Spring again: a good time to hunt the Beast and Bird families.",
-  "Fewer creatures go out in summer, but the Insect family is still fairly easy to find.",
+  "Spring again: a good time to hunt Beast and Avian partners.",
+  "Fewer creatures go out in summer, but Sylvan partners are still fairly easy to find.",
   "Besides the Championship, autumn has plenty of title matches to take on.",
   "That's everything I can teach you. I look forward to seeing you become a great tamer!"
 ]);
@@ -95,7 +95,7 @@ export const RANDOM_EN = Object.freeze([
   "Eat properly, or you'll end up looking like 鼻涕獸.",
   "I raised 古尼獸 in the jungle, and it became 大甲蟲!",
   "If looking after them wears you out, you could also think about letting a partner return to the wild.",
-  "After 猿猴獸 was exposed to lots of viruses, it turned silver!",
+  "After 猿猴獸 was exposed to lots of Rift energy, it turned silver!",
   "After 達爾克獸 battled and raised its dark attribute, its personality seemed to change.",
   "花拉獸 is cute and smells lovely. It puts you at ease.",
   "加奧加獸, 加魯魯獸, 古魯魯獸: such easy names to mix up!",
