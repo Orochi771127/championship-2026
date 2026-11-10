@@ -1,5 +1,20 @@
 # Championship Owner Direction
 
+<!-- record-id: JOURNEY_RIVAL_ART_GROUND_CRATER_SHADOWS_20261110 -->
+## 2026-11-10 — Journey rivals show their art, ground marks become craters, and every battle body stands on a shadow
+
+The Owner reports, with an iPhone screenshot of a Journey zone stage, that the rival is not shown, asks for an inventory of every mode's characters, shadows and depth, and, with a circled screenshot, that the floor-break effect under a move is ugly and should look like a commercial game.
+
+Presentation only; no gameplay, save or ROM table changes.
+
+- Journey zone rivals are not in the Data Arena's own rival list, so they were drawn as the placeholder; they are now drawn as the roster partner of their species.
+- Ground marks of kind scorch and crack (UNIQUE_PIXEL_MOVE_VFX_20261108 HD-pixel style) are drawn as pixel craters: a bowl lit from above, a raised lip casting a shadow forward, jagged cracks with a light bevel and two-tone rock chips; a fire hit adds an additive ember layer (molten pit floor, hot seams) that cools within about 1.7 s; the crater lands with a short pop. Other marks are unchanged.
+- The battle result screen gives each body a contact shadow; the Data Arena contact shadow gets a defined core so it shows on bright floors.
+- Data Arena cover blocks: the shadow sits at the block's base instead of 14 px below it, so blocks no longer look as if they float.
+- Hunt: wilds render with their contact and cast shadows (night casts are dimmer by design). On entry the camera can start away from the herd; the Owner keeps it that way (「不用啊，因為我們就是要讓玩家自己去找角色」): finding the wilds is part of the hunt.
+
+Publication: the Owner asked 「要不要都修完再一起上線？」 and, once the remaining items were done, kept the Hunt camera as it is. This authorizes pushing this batch, merging it to main and publishing it through the existing Pages playtest workflow, with the new module listed and the changed source hashes restated. It does not widen to any other batch.
+
 <!-- record-id: STATUS_AILMENT_VFX_20261110 -->
 ## 2026-11-10 — Battle status ailments get their own pixel loops
 
