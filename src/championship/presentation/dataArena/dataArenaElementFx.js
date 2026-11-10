@@ -13,6 +13,8 @@ import {createElementVfxLayer} from '../vfx/elementVfxLayer.js';
 import {createMoveVfxKit} from '../vfx/moveVfxKit.js';
 import {createPixelHitBursts} from '../vfx/pixelHitBursts.js';
 import {createPixelMotes} from '../vfx/pixelMotes.js';
+import {moveVfxChoreography} from '../vfx/moveVfxChoreography.js';
+import {createMoveVfxSetPieces} from '../vfx/moveVfxSetPieces.js';
 import {DATA_ARENA_POOL_ARCHETYPE, moveVfxRecipe} from '../vfx/moveVfxRecipes.js';
 import {moveVfxSignature} from '../vfx/moveVfxSignatures.js';
 import {battleMoveName} from '../../text/battleMoveNames.js';
@@ -68,6 +70,9 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
   const motes = typeof createPixelMotes === 'function'
     ? createPixelMotes({PIXI, layer: front, quality: quality === 'low' ? 'saver' : 'balanced', reducedMotion, seed: 0xda7c}) : null;
   const moteTrails = [];
+  // Each move's own moment (BESPOKE_MOVE_VFX_PROGRAM_20261111), as in the AI battle.
+  const setPieces = typeof createMoveVfxSetPieces === 'function' ? createMoveVfxSetPieces({PIXI, layer: front, reducedMotion}) : null;
+  const pieceAt = (moveId, phase, at) => { const c = moveVfxChoreography(moveId)?.[phase]; if (c && setPieces) setPieces.play(c.piece, {...at, size: BODY, scale: c.scale ?? 1, fast: c.fast, sprite: c.sprite}); };
   let moteClock = 0, moteSeq = 0;
   // Kit effects read at phone size under that wide camera (Owner 2026-11-05: they looked small).
   const KIT = 1.4;
@@ -106,6 +111,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     /** Release: perpendicular Muzzle Ring + 7 recoil sparks + the style's 292-frame HD launch cell. */
     release({x, y, angle = 0, moveId, speciesId, melee = false}) {
       const v = look(moveId, speciesId);
+      pieceAt(moveId, 'release', {x, y, angle, palette: v.palette});
       if (kit) {
         const archetype = v.archetype;
         if (melee) kit.melee({x, y, angle, paletteKey: v.paletteKey, archetype, size: 34 * KIT, signature: v.signature});
@@ -140,6 +146,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
       const v = look(moveId, speciesId);
       pixelHits?.spawn({element: v.element, x, y, groundY, size: BODY, unit: SCALE, heavy, flip: Math.cos(angle) < 0});
       motes?.burst({element: v.element, x, y, groundY, unit: SCALE * 0.5, weight: heavy ? 'heavy' : 'light', dir: Math.sign(Math.cos(angle))});
+      pieceAt(moveId, 'contact', {x, y, angle, palette: v.palette});
       if (kit) {
         kit.impact({x, y, groundY, angle, paletteKey: v.paletteKey, archetype: v.archetype, heavy, size: size * KIT, signature: v.signature});
         if (heavy) layer.hold(55);
@@ -200,9 +207,12 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
         }
         motes.update(layer.holding() ? 0 : dtMs);
       }
+      if (setPieces) {
+        setPieces.update(layer.holding() ? 0 : dtMs);
+      }
     },
     holding: () => layer.holding(),
     getDiagnostics: () => Object.freeze({...layer.getDiagnostics(), ...stats, originalCells: art?.getDiagnostics?.() ?? null, kit: kit?.getDiagnostics() ?? null, pixelHits: pixelHits?.getDiagnostics() ?? null, motes: motes?.getDiagnostics() ?? null}),
-    dispose() { pixelHits?.dispose(); motes?.dispose(); moteTrails.length = 0; kit?.dispose(); layer.dispose(); }
+    dispose() { setPieces?.dispose(); pixelHits?.dispose(); motes?.dispose(); moteTrails.length = 0; kit?.dispose(); layer.dispose(); }
   });
 }

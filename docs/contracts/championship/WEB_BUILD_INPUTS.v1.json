@@ -447,9 +447,11 @@
     "src/championship/presentation/vfx/elementVfxLayer.js",
     "src/championship/presentation/vfx/groundCrater.js",
     "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
+    "src/championship/presentation/vfx/moveVfxChoreography.js",
     "src/championship/presentation/vfx/moveVfxKit.js",
     "src/championship/presentation/vfx/moveVfxKitTextures.js",
     "src/championship/presentation/vfx/moveVfxRecipes.js",
+    "src/championship/presentation/vfx/moveVfxSetPieces.js",
     "src/championship/presentation/vfx/moveVfxSignatures.js",
     "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
     "src/championship/presentation/vfx/originalVfxCellArt.js",
@@ -8633,9 +8635,11 @@
     "src/championship/presentation/vfx/elementVfxLayer.js",
     "src/championship/presentation/vfx/groundCrater.js",
     "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
+    "src/championship/presentation/vfx/moveVfxChoreography.js",
     "src/championship/presentation/vfx/moveVfxKit.js",
     "src/championship/presentation/vfx/moveVfxKitTextures.js",
     "src/championship/presentation/vfx/moveVfxRecipes.js",
+    "src/championship/presentation/vfx/moveVfxSetPieces.js",
     "src/championship/presentation/vfx/moveVfxSignatures.js",
     "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
     "src/championship/presentation/vfx/originalVfxCellArt.js",
@@ -39363,7 +39367,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "dd7064219ede202c8cf6caa2fe32fe5d476e68caa09293f2742ef76208287159"
+        "sha256": "7ea82fe1e3334da6747c8f2676a3e23eed597d67561e4b95ce19ec92b2f9a440"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -40475,7 +40479,7 @@
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxLayer.js",
-        "sha256": "0cc3d4208f3f7f8d835a1901c6e53e1ea451e1afbbbbfa9c0f7ab5de13062465"
+        "sha256": "779a7c54cb51a4824433ea4022f82c0d0f7d5f2c7e2c472980c96d7a961dca24"
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxPalettes.js",
@@ -40571,7 +40575,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaElementFx.js",
-        "sha256": "fcfa7fe4796cdb757f579eaf01671a2a58a14f2d1e36f223b11f0c8897f8cfa4"
+        "sha256": "18cb6c219ac3366c391a0d77a0b5a9b0cbd5bdde50f92342a14bc18e2dc36ca9"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaEnvironment.js",
@@ -40967,7 +40971,7 @@
       },
       {
         "path": "src/championship/presentation/vfx/drawnVfxSprites.js",
-        "sha256": "7393cfec3aa0e6cccebc1ad795964169e4bd4d4a00560306ed56c114cb8feb8b"
+        "sha256": "8c7ebc98dec83b84ed320fb5a43dbe169705b95306dc67be8e7d7f472552e71b"
       },
       {
         "path": "src/championship/presentation/vfx/elementVfxLayer.js",
@@ -40982,6 +40986,10 @@
         "sha256": "e16aa1f34421037624bdcc116f674082d99057895234760f1fbbe264d75d7045"
       },
       {
+        "path": "src/championship/presentation/vfx/moveVfxChoreography.js",
+        "sha256": "43f7752f2d796c96c4f16bd4d98e7c62f1051a06646ff735e947fb9a3f3217bc"
+      },
+      {
         "path": "src/championship/presentation/vfx/moveVfxKit.js",
         "sha256": "dd29cfadd9e70ada1752c8756c8cf7f98292260db64f6fc2fcc6b0e9104508e0"
       },
@@ -40992,6 +41000,10 @@
       {
         "path": "src/championship/presentation/vfx/moveVfxRecipes.js",
         "sha256": "3cb4893a6dc28f0f7352cc87f36ae2fd472e477c52f49d0c112004f0bf722d59"
+      },
+      {
+        "path": "src/championship/presentation/vfx/moveVfxSetPieces.js",
+        "sha256": "f11598f459e2f98e30a0302ae7017783e5d9468fee499f4794b16fcf6442d713"
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxSignatures.js",
@@ -41159,7 +41171,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/battleBurstShell.js",
-        "sha256": "a3503ce925d2524747aa1effd1945673cc72de03be8ecc9f39825d1188748366"
+        "sha256": "4ed237a5b5c417e48baf93a71cd69f0be37b88dcaa638f2bc801f4550bf79004"
       },
       {
         "path": "src/championship/presentation/vs5/battleCubeArt.js",
@@ -41171,7 +41183,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
-        "sha256": "2b32acc73c69a48fd4908f643b371ec492b8519cc1687c56e1df11c2dafcfb52"
+        "sha256": "30addfade2bde0bea5f91e130baf97b123b9a9f6976307de081d0c411c09a5ec"
       },
       {
         "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
@@ -41179,7 +41191,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
-        "sha256": "4b57c4d059bfc9b58a7c3a4205b9af809cb6a1e7a4feb889d82e29426dc3370e"
+        "sha256": "03381f0237decc2ddbe6c71b5f8cb1fccd849e8ddaec5015f3d69e9222fda4dc"
       },
       {
         "path": "src/championship/presentation/vs5/prepareBattleVfxGpu.js",

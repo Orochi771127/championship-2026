@@ -17,6 +17,42 @@ Verified by `tests/championship-story-vn-cases.mjs`, the updated chart cases, th
 
 Publication: the Owner said 「講完這句，其他的就交給你去處理了，我就不介入了」 (2026-11-11), handing the rest of this batch over, merge and publication included. This authorizes this batch only.
 
+<!-- record-id: BESPOKE_MOVE_VFX_PROGRAM_20261111 -->
+## 2026-11-11 — Every move gets its own animated effect; the Owner hands the programme over
+
+The Owner asked (2026-11-11): 「我可以交給你，讓你自己幫我去把每一個特效都做好嗎？幫我依照我的招式，然後幫我把每個特效都做出專屬那個招式的特效的動畫，有打擊感，然後要商業遊戲的水準」. After a tiered, batched plan was offered, the Owner answered: 「就是都交給你自己去處理自己去分批我不介入」.
+
+OWNER_APPROVED_ADAPTATION, presentation only, standing for this programme:
+
+- Every move gets its own choreography: wind-up, release, travel, contact (with hit-stop, shake and knock scaled by its weight) and aftermath. It is drawn in the one pixel style and plays the same in the AI battle, the Data Arena and the Dex preview.
+- Tiers: signature (ultimate) moves are designed one by one; skills get their own shot and contact over shared parts; basic moves are distinct parameter sets over the shared library, and no two look alike.
+- The original structure stays the skeleton: the native effect pool's timing, positions and counts (UNIQUE_PIXEL_MOVE_VFX_20261108). Battle rules, RNG and the battle clock never change.
+- The agent picks the batches, the order and the review itself. Each batch is checked with tests, the full `test:ci`, the Pages build and real battles on an isolated port, then committed, merged and published without waiting for the Owner. A batch that fails its checks is fixed or held, never published.
+- Rights: only the project's own drawings and code-made effects, plus MIT-licensed code with its notice kept. No ROM pixels and no third-party characters.
+
+Batch 1 (2026-11-11): the Owner's main team, 角暴龍 (193 裂顎咬, 194 熔核彈, 195 裂顎貫角), 熔岩龍 (213 暴牙咬, 214 地炎熔岩彈, 215 焚天炎砲, 216 地炎角刺) and 黑暴龍 (226 夜獄掠爪, 227 夜獄焚焰砲). It adds the per-move table `presentation/vfx/moveVfxChoreography.js` and the animator `presentation/vfx/moveVfxSetPieces.js`, with seven pieces: jaws, jaws-horn, horn, claws, core, muzzle, muzzle-spiral. The pieces are new pxl drawings in `drawn-vfx.px.js`: an arched flame jaw with inward fangs, a claw mark, a horn tip, a molten core and a muzzle ring. Each move sets its own hit-stop, shake and knock. The AI battle plays the pieces on LAUNCH and HIT; the Data Arena plays them on release and hit.
+
+Batch 2 (2026-11-11): all 46 strike and slash signatures, plus 咬衣豆 (43, 44) and 跳跳蕾 (45, 46). There are ten new pieces: fist, rush, quake, spin, roar, cross, slash, scissor, iai and knives. They use new pxl drawings: a fist with grooved knuckles, an eight-point impact star, a ground crack, a blade crescent, speed streaks and a knife. Each move's piece follows what its name does: 拳/掌 fist, 衝/俯/天墜/翔 rush, 錘/鎚/重擊/踏/墜擊 quake, 迴旋/旋衝 spin, 吼/嘯 roar, 十字 cross; 斬/刃/裁 slash, 剪/鋏 scissor, 一閃 iai, 飛刀 knives. The hold, shake and knock follow the move's power.
+
+Batch 3 (2026-11-11): the remaining 75 fire, orb, lance, pierce, missile and claw signatures. There are eight new pieces: stream, wisps, orb, splat, eye, lance, rain and clock. They use new pxl drawings (a flame tongue, a lance of light, a toxic blob) and reuse the earlier eye, missile and clock drawings. The name decides the piece: 嘯/吼 roar, 飛牙 jaws, 鬼火/神火/妖火 wisps, 邪瞳 eye, 時鋼 clock, 毒/泥/孢 splat, 彈雨/全彈/釘雨 rain, 轟爆/核焰/天爆 quake, 焰流/焰息/奔流/射線 stream, 爪 claws, 槍/矛/光/砲 lance, 刺/喙/突 horn, 珠/彈 orb, 火球 core. Strength scales with power: 1x, 1.15x or 1.25x, with a hold of 80, 88 or 95 ms.
+
+Batch 4 (2026-11-11): every remaining signature, so all 204 signatures now have their own choreography. There are seven new pieces: flurry and drop, which take a drawing named by the move, plus bolt, vortex, vines, mist and wave. New pxl drawings: a note, a leaf, a feather, a bubble, an ice shard, a vortex and a vine. The earlier bomb, mushroom, gear, bone, fish, heart, lightning, cloud and splash drawings are reused. The piece follows the move's archetype: notes, bubbles, leaves, petals, feathers, shards and fish flurry; bombs, mushrooms, gears and bones drop; thunder bolts; black holes, tornadoes and wind become vortices; vines, trees and spikes become vines; water waves; mist rolls.
+
+<!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
+## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
+
+The Owner asked: 「必殺技的青色六角形也幫我整理一下，看看可以整理什麼」. A frozen-frame probe showed the cyan hexagons are not drawn by Pixi. They are the original game's two hit-spark families (`battle-hitspark_small`, `battle-hitspark_big`), which the Three.js battle overlay draws at every native impact in a fixed cyan, whatever the move's element. They overlap the pixel hit bursts (STATUS_AILMENT_VFX_20261110) and motes (MOVE_VFX_QUALITY_20261110). Three plans were offered: shrink and fade, hand the contact to the pixel bursts, or recolour (rejected: tinting cyan models gives a muddy colour). The Owner chose 「用B」.
+
+OWNER_APPROVED_ADAPTATION, presentation only. The native impact pools, their timing and positions, and the `s_impact` and `earth_hit` families are unchanged.
+
+- `createBattleVfxThreeOverlay.js` leaves the two hit-spark families out while `pixelHitsOwnSparks()` is true. That holds when the dynamic layer draws a pixel hit burst at every contact (`battleFxLayer.ownsHitSparks`, exposed by the battle scene and passed in by `app/main.js`). The classic presentation still draws them. The overlay reports `handedToPixelHits` in its `data-impacts` record.
+- Burst evolution scatter (`battleBurstShell.js`): every other plate crumbles in place in the first third. The rest fly 0.8–1.8 radii instead of 1.4–3.2, shrink to a third, darken toward the edge colour and fade in steps. The timing is unchanged.
+- A shot that ends without a hit throws a few of its element's motes instead of eight generic sparks.
+
+Measured on the same QA Free Battle: cyan battlefield pixels at the peak fell from about 3,800 to under 50.
+
+Publication: covered by BESPOKE_MOVE_VFX_PROGRAM_20261111 below (the Owner hands the whole move-effect work over, publication included).
+
 <!-- record-id: HUNT_SPAWN_SPREAD_20261110 -->
 ## 2026-11-10 — Hunt partners spread out: loose same-species groups, a third of a screen apart
 
