@@ -1,5 +1,20 @@
 # Championship Owner Direction
 
+<!-- record-id: MOVE_VFX_QUALITY_20261110 -->
+## 2026-11-10 — Move effects gain pixel motes and a hold that follows the blow
+
+After STATUS_AILMENT_VFX_20261110 shipped, the Owner chose the plan 「骨架照原作，品質手法學 pixelfx」 for move effects. Under that plan every move keeps its original structure and gains the small things that sell it. The Owner then said 「想做」 (2026-11-10).
+
+OWNER_APPROVED_ADAPTATION, presentation only. The native effect pool keeps each move's cells, count, place and timing (UNIQUE_PIXEL_MOVE_VFX_20261108). Battle rules, RNG and the battle clock are unchanged.
+
+- `presentation/vfx/pixelMotes.js`: element particles drawn here as tiny outlined pixel sprites in the element's own palette (no image file, no reference pixel). Fire throws embers, water drops, ice glints, thunder sparks, wood leaves, earth pebbles, wind streaks, sun motes, moon wisps, metal sparks, and neutral chips. They trail live projectiles and streams and scatter from every landed hit, thrown along the blow (amounts in the decluttering note below). The simulation is seeded and stepped by the owner's frame delta. It has no ticker of its own and holds during a hit-stop. Reduced motion drops trails and throws a third of a burst. It plays in the AI battle (`battleFxLayer.js`) and the Data Arena (`dataArenaElementFx.js` projectiles, hits and areas).
+- Decluttered before shipping: the first cut looked 「很雜亂」 to the Owner, who then said 「要交給你去判斷」. The motes now replace the battle's old generic hit and launch sparks instead of adding to them. A hit throws motes by weight: light 3, medium 6, heavy the recipe, signature 1.3x. Only projectiles and streams trail, at 1.6x the cadence, and trails stop once the field is half full. A crowded field takes fewer new motes. Caps are saver 30, balanced 80. A run of light hits on one target shows its pixel hit burst once per 220 ms. In the same QA Free Battle, peak particles fell from about 214 on production to about 137 plus at most 33 motes. Particles spawned fell from about 470 to about 373, roughly 20% fewer.
+- Hit-stop by weight (`BATTLE_FX_JUICY.hitStopByTier`): a light hit never holds, a medium hit 45 ms, a heavy hit 65 ms (as before), a critical or signature hit 95 ms. It is drawing only; the battle keeps stepping.
+
+Verified by `tests/championship-move-vfx-quality-cases.mjs`, the updated juicy quartet case, an offline per-element mote sheet, and real Free Battles on an isolated port (8926).
+
+Publication: the Owner said 「好啊，提交發佈到合併到正式站」 (2026-11-10).
+
 <!-- record-id: STATUS_AILMENT_VFX_20261110 -->
 ## 2026-11-10 — Battle status ailments get their own pixel loops
 

@@ -12,6 +12,7 @@ import {speciesTaxonomyForId} from '../../contracts/speciesTaxonomy.js';
 import {createElementVfxLayer} from '../vfx/elementVfxLayer.js';
 import {createMoveVfxKit} from '../vfx/moveVfxKit.js';
 import {createPixelHitBursts} from '../vfx/pixelHitBursts.js';
+import {createPixelMotes} from '../vfx/pixelMotes.js';
 import {DATA_ARENA_POOL_ARCHETYPE, moveVfxRecipe} from '../vfx/moveVfxRecipes.js';
 import {moveVfxSignature} from '../vfx/moveVfxSignatures.js';
 import {battleMoveName} from '../../text/battleMoveNames.js';
@@ -63,6 +64,11 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
   const pixelHits = typeof createPixelHitBursts === 'function'
     ? createPixelHitBursts({PIXI, layer: front, quality: quality === 'low' ? 'saver' : 'balanced', reducedMotion}) : null;
   const BODY = 78; // a relay fighter's body width in world px (ROLE_HEIGHT 96 x 0.8)
+  // Pixel motes (MOVE_VFX_QUALITY_20261110): the AI battle's element particles on shots in flight and on every hit.
+  const motes = typeof createPixelMotes === 'function'
+    ? createPixelMotes({PIXI, layer: front, quality: quality === 'low' ? 'saver' : 'balanced', reducedMotion, seed: 0xda7c}) : null;
+  const moteTrails = [];
+  let moteClock = 0, moteSeq = 0;
   // Kit effects read at phone size under that wide camera (Owner 2026-11-05: they looked small).
   const KIT = 1.4;
   const pick = (style, role) => {
@@ -114,6 +120,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     },
     /** Attach a looping 292-frame 4x HD Web Atlas sequence to a live projectile in flight. */
     projectile({follow, moveId, speciesId, angle = 0, lifeMs = 950, scale = SCALE * 0.82, size = 26}) {
+      if (motes && typeof follow === 'function') moteTrails.push({id: `p${moteSeq++}`, follow, element: look(moveId, speciesId).element, until: moteClock + lifeMs});
       if (kit) {
         const v = look(moveId, speciesId);
         const ok = Boolean(kit.projectile({follow, paletteKey: v.paletteKey, archetype: v.archetype, size: size * KIT, signature: v.signature}));
@@ -132,6 +139,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     hit({x, y, groundY = y, moveId, speciesId, heavy = false, follow = null, angle = 0, size = 30}) {
       const v = look(moveId, speciesId);
       pixelHits?.spawn({element: v.element, x, y, groundY, size: BODY, unit: SCALE, heavy, flip: Math.cos(angle) < 0});
+      motes?.burst({element: v.element, x, y, groundY, unit: SCALE * 0.5, weight: heavy ? 'heavy' : 'light', dir: Math.sign(Math.cos(angle))});
       if (kit) {
         kit.impact({x, y, groundY, angle, paletteKey: v.paletteKey, archetype: v.archetype, heavy, size: size * KIT, signature: v.signature});
         if (heavy) layer.hold(55);
@@ -160,6 +168,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
       if (!kit) return false;
       const v = look(moveId, speciesId);
       pixelHits?.spawn({element: v.element, x, y, groundY: y, size: Math.max(BODY, radius * 0.9), unit: SCALE, heavy: true});
+      motes?.burst({element: v.element, x, y, groundY: y, unit: SCALE * 0.5, weight: 'heavy'});
       kit.impact({x, y, groundY: y, paletteKey: v.paletteKey, archetype: v.archetype, heavy: true, size: Math.max(20 * KIT, radius * 0.31), signature: v.signature});
       stats.hits++;
       return true;
@@ -180,9 +189,20 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     },
     /** True when the kit draws the shots, so the scene hides its own vector heads. */
     drawsShots: () => Boolean(kit),
-    update(dtMs) { layer.update(dtMs); kit?.update(layer.holding() ? 0 : dtMs); pixelHits?.update(layer.holding() ? 0 : dtMs); },
+    update(dtMs) {
+      layer.update(dtMs); kit?.update(layer.holding() ? 0 : dtMs); pixelHits?.update(layer.holding() ? 0 : dtMs);
+      if (motes) {
+        moteClock += dtMs;
+        for (let i = moteTrails.length - 1; i >= 0; i--) {
+          const t = moteTrails[i], at = moteClock < t.until ? t.follow() : null;
+          if (!at) { moteTrails.splice(i, 1); continue; }
+          motes.trail(t.id, {element: t.element, x: at.x, y: at.y, groundY: at.groundY ?? null, unit: SCALE * 0.5});
+        }
+        motes.update(layer.holding() ? 0 : dtMs);
+      }
+    },
     holding: () => layer.holding(),
-    getDiagnostics: () => Object.freeze({...layer.getDiagnostics(), ...stats, originalCells: art?.getDiagnostics?.() ?? null, kit: kit?.getDiagnostics() ?? null, pixelHits: pixelHits?.getDiagnostics() ?? null}),
-    dispose() { pixelHits?.dispose(); kit?.dispose(); layer.dispose(); }
+    getDiagnostics: () => Object.freeze({...layer.getDiagnostics(), ...stats, originalCells: art?.getDiagnostics?.() ?? null, kit: kit?.getDiagnostics() ?? null, pixelHits: pixelHits?.getDiagnostics() ?? null, motes: motes?.getDiagnostics() ?? null}),
+    dispose() { pixelHits?.dispose(); motes?.dispose(); moteTrails.length = 0; kit?.dispose(); layer.dispose(); }
   });
 }
