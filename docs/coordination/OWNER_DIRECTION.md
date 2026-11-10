@@ -1,5 +1,19 @@
 # Championship Owner Direction
 
+<!-- record-id: LOCKED_SHOP_DEX_SHADOW_20261110 -->
+## 2026-11-10 — Locked shop goods stay on the shelf, and unrecorded Dex partners are silhouettes
+
+With the friends mode off on the public site, the Owner saw the Dex as plain 「?」 boxes and the shop's hunt tools and cages hidden until their rank (2026-11-10), and asked: 「圖鑑要不要改成用影子的方式顯示有誰」 and 「商店裡的道具要不要也都開放然後只是先鎖起來……要什麼樣的條件才會開啟才可以購買」, then 「把這個階段做好再一起推送」.
+
+OWNER_APPROVED_ADAPTATION; it carries out the launch rule of 2026-11-04 (a partner the player has not raised or caught is a black silhouette with 「?」).
+
+- Dex: every unrecorded partner with Dex art shows its thumbnail filled black with a white 「?」 and the name 「????」; its detail shows the same silhouette, still without name, profile, data or moves. The silhouette uses its own classes (`cm-dex-list-shadow`, `cm-dex-shadow`), so the registered portrait stage stays absent as the masking contracts expect. Eggs keep their own card.
+- Shop: the frame adds `lockedListings` (each hidden row with its `unlock` — tamer rank or title badge) and an `unlock` on hidden hunt tool families and locked next tiers. The view lists them after the open goods, greyed, with a lock line 「{rank}開放」 or 「贏得「{title}」開放」; the sheet says 「尚未開放：馴獸師階級達到「{rank}」後即可購買。」 or the badge sentence and the buy key reads 尚未開放. A family's locked next tier shows the rank on its key and the full sentence in the sheet. Buying a locked row is still refused (`UNAVAILABLE`). The gacha tab is unchanged.
+
+Verified by `tests/championship-locked-shop-dex-shadow-cases.mjs`, the full `test:ci`, and a phone-portrait New Game with `?friends=0` on an isolated port (226 silhouettes; locked cages and tools with their rank or badge).
+
+Publication: shipped together with WEEKLY_SEASON_FACTIONS_20261110 under the Owner's 「請你自我審查一次沒有問題就提交、開 PR、合併並發佈」 and 「把這個階段做好再一起推送」 (2026-11-10).
+
 <!-- record-id: WEEKLY_SEASON_FACTIONS_20261110 -->
 ## 2026-11-10 — One real week per season, title matches by time slot, and faction / race words everywhere
 
