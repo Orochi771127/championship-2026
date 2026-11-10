@@ -1,5 +1,10 @@
 // Rope roles, item combos and rope overheat for Normal Hunt.
 //
+// HUNT_ROPE_ORIGINAL_20261111 (Owner, 2026-11-11): the role bonuses described below are switched off.
+// Every rope binds, pulls and wears exactly as the native rope (no +30 %, faster cinch or wider catch,
+// no half wear, no two-partner hold, no 克隆繩 tolerance cut or imprint, no 究極繩 repel or rage guard).
+// What stays: each role's extra reach rows (huntRopeCoefficient), counted ropes and the lure chain bonus.
+//
 // OWNER_APPROVED_ADAPTATION 2026-10-28 (docs/coordination/OWNER_DIRECTION.md,
 // MOVE_VFX_THEMES_HUNT_ROPE_TACTICS_20261028). The Owner found the top rope made
 // every other tool pointless: one 究極繩 γ caught everything. The native rope
@@ -66,8 +71,7 @@ export function huntRopeCoefficient(ropeRow, species) {
 
 /** Can this rope bind this partner at all? ULTIMATE throws off the small ones. */
 export function huntRopeBindRule(nativeItemIndex, generation) {
-  const role = huntRopeRole(nativeItemIndex);
-  if (role === 'ULTIMATE' && generation <= HUNT_ROPE_TACTICS.ultimateRepelMaxGeneration) return 'REPEL';
+  // HUNT_ROPE_ORIGINAL_20261111 (Owner): no role throws a partner off; every rope binds as the original does.
   return 'BIND';
 }
 
@@ -77,45 +81,22 @@ export function huntRopeBindRule(nativeItemIndex, generation) {
  */
 export function huntTacticalRope(native, { nativeItemIndex, generation, maxHp, coefficient, pacified, rage }) {
   const role = huntRopeRole(nativeItemIndex);
-  let { damageQ12, durability, maxDurability, baseDurability } = native;
+  let { damageQ12 } = native;
+  // A role's added coefficient row (no ROM row) still needs the native damage formula.
   if (damageQ12 === 0 && coefficient > 0) damageQ12 = Math.floor(maxHp * Q12 / (coefficient * (generation === 1 ? 3 : 6)) + 0.5);
-  if (role === 'SWIFT') damageQ12 = Math.round(damageQ12 * HUNT_ROPE_TACTICS.swiftDamageScale);
-  if (role === 'CLONE' && !pacified) {
-    const scaled = n => Math.max(60, Math.trunc(n * HUNT_ROPE_TACTICS.cloneAwakeTolerance));
-    durability = scaled(durability); maxDurability = scaled(maxDurability); baseDurability = scaled(baseDurability);
-  }
-  return Object.freeze({ ...native, damageQ12, durability, maxDurability, baseDurability, role,
-    rage: role === 'ULTIMATE' && Boolean(rage), fragile: role === 'CLONE' && !pacified, wearCarry: 0 });
+  // HUNT_ROPE_ORIGINAL_20261111 (Owner): no role bonus -- damage and durability are the native rope's own
+  // (no 捕捉繩 +30 %, no 克隆繩 tolerance cut, no 究極繩 rage guard).
+  return Object.freeze({ ...native, damageQ12, role, rage: false, fragile: false, wearCarry: 0 });
 }
 
 /**
- * Re-weigh one native pull tick's wear. `previous` and `next` are the rope
- * before and after stepNativeRopeController; the native writer decided bands,
- * damage and events, this only scales the durability it removed.
+ * One native pull tick's wear. `previous` and `next` are the rope before and after
+ * stepNativeRopeController; since HUNT_ROPE_ORIGINAL_20261111 the native writer's wear stands as is.
  */
-export function huntRopeWear(previous, next, { movementBlocked = false, terrainCrossed = false, overstretched = false, groupHold = false } = {}) {
-  if (overstretched) return next;
-  const role = previous.role;
-  const nativeLoss = previous.durability - next.durability;
-  const pulling = next.band !== 'SLACK';
-  const crossWear = pulling && terrainCrossed ? HUNT_ROPE_TACTICS.terrainCrossWear : 0;
-  if (nativeLoss <= 0 && crossWear === 0) return next.band === 'BROKEN' ? next : Object.freeze({ ...next, wearCarry: previous.wearCarry ?? 0 });
-  // Terrain part: the native extra point for a blocked strong pull, plus the crossing.
-  const blockedPart = movementBlocked && next.band === 'STRONG' ? 1 : 0;
-  const terrain = Math.min(Math.max(nativeLoss, 0), blockedPart) + crossWear;
-  const plain = Math.max(nativeLoss, 0) - Math.min(Math.max(nativeLoss, 0), blockedPart);
-  let loss = plain + terrain * (role === 'TOUGH' ? HUNT_ROPE_TACTICS.toughTerrainWearScale : 1);
-  if (previous.rage) loss *= HUNT_ROPE_TACTICS.rageWearScale;
-  loss += previous.wearCarry ?? 0;
-  const whole = Math.floor(loss);
-  let durability = previous.durability - whole;
-  let band = next.band, controllerState = next.controllerState;
-  if (durability <= 0 && role === 'TOUGH' && groupHold) { durability = 1; if (band === 'BROKEN') { band = 'STRONG'; controllerState = 5; } }
-  else if (durability <= 0) { durability = 0; band = 'BROKEN'; controllerState = 6; }
-  else if (band === 'BROKEN') { band = 'STRONG'; controllerState = 5; }
-  // A tick kept from breaking takes the strong band's cap, as the controller would.
-  const maxDurability = controllerState === 5 && next.controllerState === 6 ? 2 * Math.trunc(previous.baseDurability / 5) : next.maxDurability;
-  return Object.freeze({ ...next, durability, band, controllerState, maxDurability, wearCarry: loss - whole });
+// HUNT_ROPE_ORIGINAL_20261111 (Owner): wear is the native controller's alone -- no 強力繩 half wear, no
+// two-partner hold, no rage doubling, no extra wear for a rope line crossing rocks. Callers' context is ignored.
+export function huntRopeWear(previous, next) {
+  return next;
 }
 
 /** Does the segment a->b (Q12 world points) cross blocked terrain? */
@@ -143,7 +124,8 @@ export function createHuntRopeTactics({ generationOf }) {
     let row = memory.get(actor.wildId);
     if (!row) {
       const generation = generationOf(actor.speciesIndex);
-      row = { generation, guard: generation >= HUNT_ROPE_TACTICS.rageMinGeneration ? HUNT_ROPE_TACTICS.guardMax : 0,
+      // HUNT_ROPE_ORIGINAL_20261111: no rage guard on 完全體 / 究極體.
+      row = { generation, guard: 0,
         lured: false, disabled: false, lastPacified: -Infinity, lastAi: actor.aiState, lastHp: actor.currentHp,
         ropeDowned: false, ropeRole: null, combo: null, groupSerial: 0 };
       memory.set(actor.wildId, row);
@@ -195,7 +177,7 @@ export function createHuntRopeTactics({ generationOf }) {
       const row = entry(actor);
       if (row.combo) return row.combo;
       const rank = row.ropeDowned && row.lured && row.disabled ? 'PERFECT' : row.ropeDowned && (row.lured || row.disabled) ? 'GOOD' : null;
-      const imprint = row.ropeDowned && row.ropeRole === 'CLONE';
+      const imprint = false; // HUNT_ROPE_ORIGINAL_20261111: no 克隆繩 data imprint bonus
       const base = rank ? HUNT_ROPE_TACTICS.comboBitsPerGeneration[rank] * Math.max(1, row.generation) : 0;
       row.combo = Object.freeze({ rank, imprint, bits: base * (imprint ? HUNT_ROPE_TACTICS.imprintScale : 1) + (imprint && !rank ? 40 * Math.max(1, row.generation) : 0) });
       return row.combo;

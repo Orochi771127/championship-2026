@@ -36,7 +36,7 @@ export function separateNativeHuntGroundActors(actors,environment){
 export function createNativeHuntFieldControls({ records,wildIds,environment,rng,loadout,consumeItem,maxCardG,night=false,onChange=()=>{},boosts=null,ropeLedger=null }) {
   if (!rng?.next || !loadout?.getSelectedEquipment || typeof consumeItem!=="function") throw Error("NATIVE_HUNT_CONTROL_AUTHORITIES_REQUIRED");
   const actors=records.map((r,i)=>createNativeWildActor(r,wildIds[i]));
-  let activeTool="HAND", pointer=null, stroke=null, closure=null, rope=null, selectedWildId=null;
+  let activeTool="HAND", pointer=null, stroke=null, closure=null, rope=null, selectedWildId=null, strokePending=false, ropeTrail=[], ropeSnap=null;
   // OWNER_APPROVED_ADAPTATION 2026-10-27: the drawn loop itself (ropeLassoGesture.js)
   // decides who is caught; the native sampler still runs for its RNG and fallback.
   const lasso=createLassoTracker();let closureSerial=0,lassoClosed=false;
@@ -73,7 +73,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   const equipped=kind=>{const slot=loadout.getSelectedEquipment().find(s=>s.equipmentClass===kind);return slot?.itemId?{...getHuntCatalogItem(slot.itemId),quantity:slot.quantity}:null;};
   const stopRope=a=>{if(rope?.actor===a)rope=null;};
   const ropeRole=()=>{const item=equipped("ROPE");return item?huntRopeRole(item.nativeItemIndex):null;};
-  const cinchTicks=()=>ropeRole()==="SWIFT"?HUNT_ROPE_TACTICS.swiftCinchTicks:18;
+  const cinchTicks=()=>18; // native cinch for every rope (HUNT_ROPE_ORIGINAL_20261111)
   const catchMargin=()=>ropeRole()==="SWIFT"?HUNT_ROPE_TACTICS.swiftCatchMargin:LASSO_RULES.catchMargin;
   // Trees, rocks and water: ground a partner cannot stand on (native 8 px cells).
   const blockedPixel=(x,y)=>{
@@ -85,17 +85,6 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     if(typeof environment?.readTerrain!=="function")return true;
     const terrain=environment.readTerrain(x,y);
     return Number.isInteger(terrain)&&terrain>=0&&terrain<=4&&terrain!==1;
-  };
-  // A bound partner the finger did not land on: the nearest one still on the
-  // field. Scripted tutorial partners keep the exact native hit test.
-  const nearestBound=p=>{
-    let best=null,bestD=Infinity;
-    for(const a of actors){
-      if(!a.bound||!a.actorActive||a.hidden||a.passage||a.cardState||a.tutorialScripted)continue;
-      const d=Math.hypot((a.positionQ12[0]-p[0])/Q12,(a.positionQ12[1]-p[1])/Q12);
-      if(d<bestD){bestD=d;best=a;}
-    }
-    return best;
   };
   const restoreFinite=(a,before)=>{
     if(a.positionQ12.every(Number.isFinite))return;
@@ -153,7 +142,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   const ropeTool=()=>{
     const item=equipped("ROPE"),spares=ownedRopes().filter(entry=>entry.itemId!==item?.itemId).length,stock=ropeLeft(item);
     return {id:"ROPE",label:"繩索",enabled:!!item&&stock>0,itemId:item?.itemId??null,shopRecordIndex:item?.shopRecordIndex??null,
-      ropeName:item?.displayName??null,role:item?huntRopeRole(item.nativeItemIndex):null,
+      ropeName:item?.displayName??null,role:item?huntRopeRole(item.nativeItemIndex):null,ropeItemIndex:item?.nativeItemIndex??null,
       // Tying on the next rope after a snap is a flash, not a cooldown to count down.
       overheatSeconds:item&&tactics.overheatTicks(item.itemId)>HUNT_ROPE_TACTICS.ropeSwapTicks?Math.ceil(tactics.overheatTicks(item.itemId)/60):0,
       stock,wear:item&&stock>0?Math.max(0,Math.min(1,wearOf(item.itemId))):0,swapping:!!item&&tactics.overheatTicks(item.itemId)>0,
@@ -162,6 +151,10 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   };
   // The rope in hand snapped: spend it, and tie on the next one (0.25 s), or another colour.
   const snapRope=a=>{
+    // Where it broke, for the snap VFX only (HUNT_ROPE_VFX_20261111).
+    const finger=pointer?.finger??pointer?.q12;
+    ropeSnap={serial:(ropeSnap?.serial??0)+1,from:[a.positionQ12[0]/2048,a.positionQ12[1]/2048-20],
+      to:finger?[finger[0]/2048,finger[1]/2048]:[a.positionQ12[0]/2048+60,a.positionQ12[1]/2048-20]};
     const itemId=rope.itemId;rope=null;a.events.push({code:0x14});
     if(a.tutorialScripted){emit("ROPE_BROKEN");return;}
     ropeLedger?.setWear?.(itemId,1);
@@ -204,7 +197,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   function submitStroke() {
     if(stroke) {
       const shape=recognizeNativeRopeStroke(stroke);
-      if(shape)closure={...shape,ticks:cinchTicks(),serial:++closureSerial};
+      if(shape)closure={...shape,ticks:cinchTicks(),serial:++closureSerial,trail:ropeTrail.slice()};
     }
     stroke=null;ages.fill(0);
   }
@@ -241,7 +234,10 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     }
     if(pointer?.kind==="ROPE_STROKE") {
       sample();
-      const loop=closure?null:lasso.add(pointer.pixels[0],pointer.pixels[1]);
+      strokePending=false;
+      // HUNT_ROPE_ORIGINAL_20261111: no mid-stroke lasso -- the original reads the
+      // shape when the finger lifts (02114718) and binds round the loop's centre.
+      const loop=null;
       if(loop){
         closure={centerQ12:[Math.round(loop.centroid.x*Q12),Math.round(loop.centroid.y*Q12)],polygon:loop.polygon,ticks:cinchTicks(),
           serial:++closureSerial,caught:lassoCaught(loop.polygon).map(a=>a.wildId)};
@@ -314,13 +310,11 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
         if(ropeLeft(item)<=0){emit("ROPE_EXHAUSTED");return true;}
         // The next rope is still being tied on (0.25 s after a snap).
         if(tactics.overheatTicks(item.itemId)>0)return true;
-        // OWNER_APPROVED_ADAPTATION 2026-11-03: once a loop is on a partner, a
-        // press anywhere is a pull. The drag is read from the press point, as if
-        // the finger had landed on the partner's rope anchor.
-        const held=a?.bound?a:nearestBound(p);
-        if(held)selectedWildId=held.wildId;
-        if(held&&huntRopeBindRule(item.nativeItemIndex,tactics.generation(held))==="REPEL"){repel(held,p);onChange();return true;}
-        const offset=held&&held!==a?[held.positionQ12[0]-p[0],held.positionQ12[1]-10*Q12-p[1]]:null;
+        // HUNT_ROPE_ORIGINAL_20261111 (Owner): as in the original, a pull starts by
+        // touching the bound partner itself; a press elsewhere draws a new loop.
+        // (Replaces the 2026-11-03 press-anywhere pull.)
+        const held=a?.bound?a:null;
+        const offset=null;
         pointer={kind:held?"ROPE_PULL":"ROPE_STROKE",q12:offset?[p[0]+offset[0],p[1]+offset[1],0]:p,finger:p,offset,
           pixels:p.slice(0,2).map(n=>n>>12),released:false};
         if(held){
@@ -334,7 +328,8 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
           if(left<1)rope.state=Object.freeze({...rope.state,durability:Math.max(1,Math.round(rope.state.durability*left))});
           if(rope.state.rage)notice="RAGE_GUARD";else if(rope.state.fragile)notice="ROPE_FRAGILE";
         }
-        else {stroke=createNativeRopeStroke();ages.fill(0);lasso.reset({x:p[0]>>12,y:p[1]>>12});lassoClosed=false;}
+        else {stroke=createNativeRopeStroke();ages.fill(0);lasso.reset({x:p[0]>>12,y:p[1]>>12});lassoClosed=false;
+          ropeTrail=[{x:p[0]>>12,y:p[1]>>12}];} // the drawn path, for the rope VFX only (HUNT_ROPE_VFX_20261111)
         onChange();return true;
       }
       if(consumables.canUse(activeTool)) {
@@ -346,8 +341,16 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     pointerMove(x,y){
       if(!pointer)return false;if(!Number.isFinite(x)||!Number.isFinite(y))return true;
       const finger=[Math.floor(x/2)*Q12,Math.floor(y/2)*Q12,0];
+      // HUNT_ROPE_ORIGINAL_20261111: the DS sampled the stylus once per 60 Hz frame. A slow browser frame can
+      // bring several moves between two ticks; the position a newer move replaces is sampled first, so a
+      // loop is not lost to frame rate. One move per tick samples exactly as before (once, on the tick).
+      if(pointer.kind==="ROPE_STROKE"&&stroke&&strokePending)sample();
       pointer.finger=finger;pointer.q12=pointer.offset?[finger[0]+pointer.offset[0],finger[1]+pointer.offset[1],0]:finger;
-      pointer.pixels=finger.slice(0,2).map(n=>n>>12);return true;},
+      pointer.pixels=finger.slice(0,2).map(n=>n>>12);
+      if(pointer.kind==="ROPE_STROKE"){strokePending=true;
+        const head={x:finger[0]>>12,y:finger[1]>>12},last=ropeTrail.at(-1);
+        if(!last||Math.hypot(head.x-last.x,head.y-last.y)>=2){ropeTrail.push(head);if(ropeTrail.length>240)ropeTrail.shift();}}
+      return true;},
     pointerUp(x,y){if(!pointer)return false;this.pointerMove(x,y);pointer.released=true;return true;},
     cancel(){if(rope)rope.actor.events.push({code:0x12});consumables.cancel();pointer=null;stroke=null;rope=null;ages.fill(0);lasso.reset();},
     /** Swap to the next owned rope, skipping overheated ones when another is ready. */
@@ -398,8 +401,10 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
         role:rope.state.role,rage:rope.state.rage,fragile:rope.state.fragile,guard:tactics.guard(rope.actor)}:null,
       points:stroke?.slots.filter(Boolean).map(s=>({x:s.positionQ12[0]/2048,y:s.positionQ12[1]/2048}))??[],
       closure:closure?{x:closure.centerQ12[0]/2048,y:closure.centerQ12[1]/2048,ticks:closure.ticks,serial:closure.serial,
-        polygon:closure.polygon?.map(p=>({x:p.x*2,y:p.y*2}))??null,caught:closure.caught?.length??null}:null,
-      lassoPath:pointer?.kind==="ROPE_STROKE"?lasso.points.map(p=>({x:p.x*2,y:p.y*2})):[],
+        polygon:closure.polygon?.map(p=>({x:p.x*2,y:p.y*2}))??null,caught:closure.caught?.length??null,
+        trail:closure.trail?.map(p=>({x:p.x*2,y:p.y*2}))??null}:null,
+      snap:ropeSnap,
+      lassoPath:pointer?.kind==="ROPE_STROKE"?ropeTrail.map(p=>({x:p.x*2,y:p.y*2})):[],
       captureEffects:captureEffects(),
       usedG:usedG(),maxG:maxCardG}),
     getAvailability(){const a=actors.find(a=>a.wildId===selectedWildId);return {state:a?nativeWildCaptureSnapshot(a).state:"NO_TARGET",canCollect:a?.aiState===11||a?.aiState===16&&a.trapReady,targetWildId:selectedWildId,currentHp:a?.currentHp??null};}

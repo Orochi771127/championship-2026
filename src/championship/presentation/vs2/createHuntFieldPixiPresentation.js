@@ -22,6 +22,8 @@ import { flashScale } from '../presentationPreferences.js';
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import {huntTrapLayers} from '../huntFeedbackArt.js';
 import { captureStorageTarget, captureStorageVfxFrame } from '../vfx/captureStorageVfx.js';
+import { createHuntRopeVfx } from './huntRopeVfx.js';
+import { createHuntWireVfx } from './huntWireVfx.js';
 const ACTOR_BODY_RADIUS = 8;
 const TEMPORARY_ART_ID = "art:hunt_field:vs2:temporary-signal-grove-kit";
 
@@ -188,6 +190,10 @@ export async function mountHuntFieldPixiPresentation({
   strokeLayer.addChild(toolGraphic);
   strokeLayer.addChild(nativeTools);
   strokeLayer.addChild(strokeGraphic);
+  // The rope: drawing, cinch, bound coil, tether and snap (HUNT_ROPE_VFX_20261111).
+  const ropeVfx = createHuntRopeVfx({ PIXI, layer: strokeLayer });
+  // Wires: steel / magnetic / electric cables (HUNT_WIRE_VFX_20261111).
+  const wireVfx = createHuntWireVfx({ PIXI, layer: strokeLayer });
   strokeLayer.addChild(tutorialGuide);
   if (fieldArt) productionArtLayer.addChild(fieldArt.displayObject);
   fieldArt?.occluders?.configureFoliageDither?.(app.renderer);
@@ -590,62 +596,7 @@ export async function mountHuntFieldPixiPresentation({
     for (const k of [1, 0.75, 0.5]) g.ellipse(cx, cy, rx * k, ry * k).fill({ color, alpha: 0.28 });
   }
 
-  // Rope lasso VFX (Owner 2026-10-27): a glowing rope follows the finger, a
-  // pulsing ring marks where the loop closes, and a closed loop flashes then
-  // cinches toward the partner (a knot burst on a catch, a coral fade on a miss).
-  const lassoFx={serial:null,start:0,polygon:null,caught:null,cx:0,cy:0};
   const reducedFx=()=>globalThis.document?.documentElement?.dataset.motion==='reduced';
-  function drawLassoTrail(path){
-    if(path.length<2)return;
-    const g=strokeGraphic,n=path.length,chunk=6;
-    for(const [width,color,weight] of [[11,0xffa928,.26],[4.5,0xffd75e,1],[1.6,0xfff7d6,.9]]){
-      for(let i=0;i<n-1;i+=chunk){
-        const end=Math.min(n-1,i+chunk),alpha=(.22+.78*(end/(n-1)))*weight;
-        g.moveTo(path[i].x,path[i].y);
-        for(let k=i+1;k<=end;k++)g.lineTo(path[k].x,path[k].y);
-        g.stroke({color,width,alpha,cap:'round',join:'round'});
-      }
-    }
-    // Rope fibres: short twists across the core every few points.
-    for(let i=2;i<n-1;i+=3){
-      const a=path[i-1],b=path[i+1],dx=b.x-a.x,dy=b.y-a.y,l=Math.hypot(dx,dy)||1,s=i%6?2.2:-2.2;
-      g.moveTo(path[i].x-dy/l*s-dx/l*1.2,path[i].y+dx/l*s-dy/l*1.2).lineTo(path[i].x+dy/l*s+dx/l*1.2,path[i].y-dx/l*s+dy/l*1.2)
-        .stroke({color:0xb86a1c,width:1.2,alpha:.35+.5*(i/n)});
-    }
-    const head=path[n-1],start=path[0],t=performance.now()/1000;
-    g.circle(head.x,head.y,9).fill({color:0xffe27a,alpha:.3}).stroke({color:0xffffff,width:2,alpha:.95});
-    // The closing point: pulses once the head is coming back round.
-    if(n>10&&Math.hypot(head.x-start.x,head.y-start.y)<80){
-      const pulse=reducedFx()?0:Math.sin(t*10)*.5+.5;
-      g.circle(start.x,start.y,10+pulse*4).stroke({color:0xffffff,width:2.5,alpha:.55+pulse*.4});
-      g.circle(start.x,start.y,4).fill({color:0xffd23f,alpha:.9});
-    }
-  }
-  function drawLassoClosure(closure){
-    if(closure&&closure.serial!==undefined&&closure.serial!==lassoFx.serial){
-      const polygon=closure.polygon??Array.from({length:24},(_,i)=>({x:closure.x+48*Math.cos(i/24*Math.PI*2),y:closure.y+32*Math.sin(i/24*Math.PI*2)}));
-      Object.assign(lassoFx,{serial:closure.serial,start:performance.now(),polygon,caught:closure.caught,
-        cx:polygon.reduce((s,p)=>s+p.x,0)/polygon.length,cy:polygon.reduce((s,p)=>s+p.y,0)/polygon.length});
-    }
-    if(!lassoFx.polygon)return;
-    const duration=reducedFx()?300:650,t=Math.min(1,(performance.now()-lassoFx.start)/duration);
-    if(t>=1){lassoFx.polygon=null;return;}
-    const g=strokeGraphic,miss=lassoFx.caught===0,ease=1-(1-t)**3;
-    const squeeze=reducedFx()?0:(miss?.08:.42)*ease;
-    const at=p=>[lassoFx.cx+(p.x-lassoFx.cx)*(1-squeeze),lassoFx.cy+(p.y-lassoFx.cy)*(1-squeeze)];
-    const outline=()=>{const [x0,y0]=at(lassoFx.polygon[0]);g.moveTo(x0,y0);for(const p of lassoFx.polygon.slice(1))g.lineTo(...at(p));g.closePath();};
-    if(t<.3){outline();g.fill({color:miss?0xff8a74:0xffe27a,alpha:.34*(1-t/.3)});}
-    const color=miss?0xff8a74:0xffd23f,alpha=1-t*t;
-    outline();g.stroke({color:0xffa928,width:11,alpha:.25*alpha,join:'round'});
-    outline();g.stroke({color,width:4.5,alpha,join:'round'});
-    outline();g.stroke({color:0xfff7d6,width:1.6,alpha:.9*alpha,join:'round'});
-    // The knot: a burst at the centre as the rope cinches.
-    if(!miss&&t>.45&&!reducedFx()){
-      const k=(t-.45)/.55,r=8+k*26;
-      g.star(lassoFx.cx,lassoFx.cy,8,r,r*.38).fill({color:0xfff2b0,alpha:.85*(1-k)});
-      g.circle(lassoFx.cx,lassoFx.cy,6+k*10).stroke({color:0xffd23f,width:3,alpha:1-k});
-    }
-  }
 
   function syncEnclosure(view) {
     let nativeCount=0;
@@ -654,7 +605,7 @@ export async function mountHuntFieldPixiPresentation({
     toolGraphic.clear();flashGraphic.clear();
     if(view.tools){
       for(const o of (view.tools.objects??[]).flatMap(huntTrapLayers)){
-        if(o.visible===false)continue;
+        if(o.visible===false||o.kind==='WIRE')continue; // wires: huntWireVfx below
         const frame=feedbackArt?.getFrame(o);
         if(frame){
           const sprite=toolSprites[nativeCount]??new PIXI.Sprite(frame.texture);
@@ -668,11 +619,7 @@ export async function mountHuntFieldPixiPresentation({
           sprite.scale.set(frame.displayScale??2);sprite.position.set(o.x,o.y);sprite.visible=true;continue;
         }
         const g=toolGraphic,x=o.x,y=o.y;
-        if(o.kind==='WIRE'){
-          const color=o.state===5?([0x53ced6,0x53ced6,0xaf85ee,0xaf85ee,0xffe36c,0xffe36c][o.itemIndex]):o.valid?0x6cd9ba:0xf08a74;
-          g.moveTo(...o.from).lineTo(...o.to).stroke({color,width:3});
-          for(const p of [o.from,o.to])g.circle(...p,4).fill(0xfff4d2).stroke({color,width:2});
-        }else if(o.kind==='MEAT'){
+        if(o.kind==='MEAT'){
           g.ellipse(x,y+2,12,4).fill({color:0x153b3d,alpha:.2});
           g.moveTo(x-9,y+4).lineTo(x+9,y-4).stroke({color:0xfff4d5,width:5});
           g.ellipse(x,y-2,7+o.tier,6+o.tier).fill([0xdc9162,0xdc9162,0xa684c5,0x7daecc][o.itemIndex]).stroke({color:0x6b4944,width:1});
@@ -697,15 +644,12 @@ export async function mountHuntFieldPixiPresentation({
         // The flash-intensity preference scales only how bright it looks.
         }else if(o.kind==='FLASH')flashGraphic.rect(0,0,app.screen.width,app.screen.height).fill({color:0xffffe6,alpha:o.alpha*flashScale()});
       }
-      drawLassoTrail(view.tools.lassoPath??[]);
-      drawLassoClosure(view.tools.closure);
-      const rope=view.tools.rope;
-      if(rope){
-        const color=rope.band==="STRONG"?0xf2ab45:0xffed96;
-        strokeGraphic.moveTo(...rope.from).lineTo(...rope.to).stroke({color,width:3,cap:"round"});
-      }
+      wireVfx.update({objects:view.tools.objects??[],now:performance.now(),reduced:reducedFx()});
+      ropeVfx.update({tools:view.tools,wilds:view.wildCreatures??[],now:performance.now(),reduced:reducedFx()});
       return;
     }
+    ropeVfx.update({ tools: null, wilds: [], now: performance.now(), reduced: reducedFx() });
+    wireVfx.update({ objects: [], now: performance.now(), reduced: reducedFx() });
     const points = view.enclosure?.points;
     if (!Array.isArray(points) || points.length === 0) return;
     strokeGraphic.moveTo(points[0].x, points[0].y);
@@ -1005,6 +949,8 @@ export async function mountHuntFieldPixiPresentation({
       unobserveResize();
       unobserveContextLost();
       threePilot?.dispose();
+      ropeVfx.destroy();
+      wireVfx.destroy();
       app.ticker.remove(advance);
       app.stage.off("pointerdown", onPointerDown);
       app.stage.off("globalpointermove", onPointerMove);
