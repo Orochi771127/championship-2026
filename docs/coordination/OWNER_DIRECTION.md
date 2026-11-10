@@ -1,5 +1,33 @@
 # Championship Owner Direction
 
+<!-- record-id: BESPOKE_MOVE_VFX_PROGRAM_20261111 -->
+## 2026-11-11 — Every move gets its own animated effect; the Owner hands the programme over
+
+The Owner asked (2026-11-11): 「我可以交給你，讓你自己幫我去把每一個特效都做好嗎？幫我依照我的招式，然後幫我把每個特效都做出專屬那個招式的特效的動畫，有打擊感，然後要商業遊戲的水準」. After a tiered, batched plan was offered, the Owner answered: 「就是都交給你自己去處理自己去分批我不介入」.
+
+OWNER_APPROVED_ADAPTATION, presentation only, standing for this programme:
+
+- Every move gets its own choreography: wind-up, release, travel, contact (with hit-stop, shake and knock scaled by its weight) and aftermath. It is drawn in the one pixel style and plays the same in the AI battle, the Data Arena and the Dex preview.
+- Tiers: signature (ultimate) moves are designed one by one; skills get their own shot and contact over shared parts; basic moves are distinct parameter sets over the shared library, and no two look alike.
+- The original structure stays the skeleton: the native effect pool's timing, positions and counts (UNIQUE_PIXEL_MOVE_VFX_20261108). Battle rules, RNG and the battle clock never change.
+- The agent picks the batches, the order and the review itself. Each batch is checked with tests, the full `test:ci`, the Pages build and real battles on an isolated port, then committed, merged and published without waiting for the Owner. A batch that fails its checks is fixed or held, never published.
+- Rights: only the project's own drawings and code-made effects, plus MIT-licensed code with its notice kept. No ROM pixels and no third-party characters.
+
+<!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
+## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
+
+The Owner asked: 「必殺技的青色六角形也幫我整理一下，看看可以整理什麼」. A frozen-frame probe showed the cyan hexagons are not drawn by Pixi. They are the original game's two hit-spark families (`battle-hitspark_small`, `battle-hitspark_big`), which the Three.js battle overlay draws at every native impact in a fixed cyan, whatever the move's element. They overlap the pixel hit bursts (STATUS_AILMENT_VFX_20261110) and motes (MOVE_VFX_QUALITY_20261110). Three plans were offered: shrink and fade, hand the contact to the pixel bursts, or recolour (rejected: tinting cyan models gives a muddy colour). The Owner chose 「用B」.
+
+OWNER_APPROVED_ADAPTATION, presentation only. The native impact pools, their timing and positions, and the `s_impact` and `earth_hit` families are unchanged.
+
+- `createBattleVfxThreeOverlay.js` leaves the two hit-spark families out while `pixelHitsOwnSparks()` is true. That holds when the dynamic layer draws a pixel hit burst at every contact (`battleFxLayer.ownsHitSparks`, exposed by the battle scene and passed in by `app/main.js`). The classic presentation still draws them. The overlay reports `handedToPixelHits` in its `data-impacts` record.
+- Burst evolution scatter (`battleBurstShell.js`): every other plate crumbles in place in the first third. The rest fly 0.8–1.8 radii instead of 1.4–3.2, shrink to a third, darken toward the edge colour and fade in steps. The timing is unchanged.
+- A shot that ends without a hit throws a few of its element's motes instead of eight generic sparks.
+
+Measured on the same QA Free Battle: cyan battlefield pixels at the peak fell from about 3,800 to under 50.
+
+Publication: covered by BESPOKE_MOVE_VFX_PROGRAM_20261111 below (the Owner hands the whole move-effect work over, publication included).
+
 <!-- record-id: HUNT_SPAWN_SPREAD_20261110 -->
 ## 2026-11-10 — Hunt partners spread out: loose same-species groups, a third of a screen apart
 

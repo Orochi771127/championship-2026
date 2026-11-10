@@ -461,7 +461,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     endings = [];
     for (const [id, entry] of tracked) {
       if (live.has(id)) continue;
-      if (entry.last && MOVING_FORMS.has(entry.form)) endings.push({...entry.last, palette: entry.palette, form: entry.form, tier: entry.tier, used: false});
+      if (entry.last && MOVING_FORMS.has(entry.form)) endings.push({...entry.last, palette: entry.palette, element: entry.element, form: entry.form, tier: entry.tier, used: false});
       tracked.delete(id);
     }
     // Native impact sparks that appeared since the last view: real contact points.
@@ -546,7 +546,10 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       if (end.used) continue;
       const near = end.heightNative < 18;
       spawnFlash({x: end.x, y: end.y, tint: end.palette.core, size: 30, life: 140});
-      sparks({x: end.x, y: end.y, count: rich ? 8 : 4, palette: end.palette, speed: 120, life: 300, groundY: end.groundY});
+      // A shot that ends without a hit throws a few of its element's motes (SPECIAL_HEX_DECLUTTER_20261111): a volley
+      // of five used to throw forty generic sparks at once, the cyan cluster over every special.
+      if (motes) motes.burst({element: end.element ?? 'NEUTRAL', x: end.x, y: end.y, groundY: end.groundY, unit: lastCtx?.nativeScale ?? 1, weight: 'light'});
+      else sparks({x: end.x, y: end.y, count: rich ? 8 : 4, palette: end.palette, speed: 120, life: 300, groundY: end.groundY});
       if (near) {
         spawnRing({x: end.x, groundY: end.groundY, radius: 16, tint: end.palette.main, life: 300});
         dust({x: end.x, groundY: end.groundY, count: rich ? 4 : 2, spread: 8});
@@ -1102,6 +1105,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     /** True while this layer draws the hyper ring round its caster. */
     hyperWrapActive: () => Boolean(hyper),
     hitStopActive: () => Boolean(hitStop),
+    /** True when a pixel hit burst marks every contact, so the 3D overlay leaves its hit sparks out (SPECIAL_HEX_DECLUTTER_20261111). */
+    ownsHitSparks: () => Boolean(pixelHits),
     /** Afterimage colour while a melee move's dash is live (juicy), else null. */
     ghostTint(slot) { const fx = actorFx.get(slot); return juicy && fx?.dashMs > 0 ? fx.dashTint : null; },
     /** Brightness 0..1 the scene multiplies into a slot (null: background). */

@@ -127,3 +127,16 @@ test("the hold follows the blow: light never, medium 45, heavy 65, critical or s
   assert.deepEqual({ ...BATTLE_FX_JUICY.hitStopByTier }, { light: 0, medium: 45, heavy: 65, ultimate: 95 });
   assert.equal(BATTLE_FX_JUICY.hitStopMs, BATTLE_FX_JUICY.hitStopByTier.heavy);
 });
+
+test("the 3D overlay leaves the two hit-spark families to the pixel hit bursts, nothing else", async () => {
+  const fs = await import("node:fs");
+  const overlay = fs.readFileSync("src/championship/presentation/vs5/createBattleVfxThreeOverlay.js", "utf8");
+  assert.match(overlay, /HIT_SPARK_TYPES = new Set\(\[0, 1\]\)/);
+  assert.match(overlay, /pixelHitsOwnSparks = \(\) => false/, "off unless the scene says its pixel bursts own the contact");
+  const { BATTLE_IMPACT_FAMILIES } = await import("../src/championship/battle/battleImpactEffects.js");
+  assert.deepEqual([0, 1].map(t => BATTLE_IMPACT_FAMILIES[t].systemId), ["battle-hitspark_small", "battle-hitspark_big"]);
+  const layer = fs.readFileSync("src/championship/presentation/battleFx/battleFxLayer.js", "utf8");
+  assert.match(layer, /ownsHitSparks: \(\) => Boolean\(pixelHits\)/);
+  const main = fs.readFileSync("src/championship/app/main.js", "utf8");
+  assert.match(main, /scene\?\.pixelHitsOwnSparks\?\.\(\)/);
+});

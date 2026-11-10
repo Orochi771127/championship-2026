@@ -42,7 +42,11 @@ export async function mountBattleVfxThreeOverlay({
   fetchImpl = globalThis.fetch,
   recordDiagnostic = () => {},
   isActive = () => true,
-  getCues = () => []
+  getCues = () => [],
+  // SPECIAL_HEX_DECLUTTER_20261111 (Owner chose plan B): while the 2D layer's pixel hit bursts mark every contact
+  // in the move's element colour, the two hit-spark families (fixed cyan hex shards) are not drawn over them.
+  // The native pools, their timing and the impact and ground-impact families are unchanged.
+  pixelHitsOwnSparks = () => false
 }) {
   if (!host || typeof host.appendChild !== "function") fail("HOST_REQUIRED");
   if (!stage?.app?.ticker || typeof stage.onResize !== "function") fail("PIXI_STAGE_TICKER_REQUIRED");
@@ -127,6 +131,7 @@ export async function mountBattleVfxThreeOverlay({
   const cueSystems = new Map(); // systemId -> {fx, container, until, loop, span, ready}
   const CUE_COMPANION = Object.freeze({'common-snowstome': 'common-snow', 'common-rain': 'common-mist'});
   const WEATHER_MS = 1500, BUFF_MS = 1100, IMPACT_MAX_MS = 1500;
+  const HIT_SPARK_TYPES = new Set([0, 1]); // battle-hitspark_small, battle-hitspark_big (BATTLE_IMPACT_FAMILIES order)
   function cueSystem(systemId) {
     if (!runtime.resolveSystemId(systemId)) return null;
     let entry = cueSystems.get(systemId);
@@ -198,7 +203,7 @@ export async function mountBattleVfxThreeOverlay({
     const effectiveDeltaMS = wasHidden ? 0 : Math.min(50, Math.max(0, ticker?.deltaMS ?? 0));
     wasHidden = false;
     const view = live ? source.getView() : null;
-    let visibleImpacts = 0;
+    let visibleImpacts = 0, handedSparks = 0;
     if (live) {
       const focus = view.specialPrelude;
       const placement = getFocusPlacement();
@@ -226,7 +231,8 @@ export async function mountBattleVfxThreeOverlay({
         // record lingers in the published view (Owner 2026-11-03: orphan bar).
         if(!effect||item.effectId!==effect.id){item.effectId=effect?.id??null;item.shownMs=0;}
         else item.shownMs=(item.shownMs??0)+effectiveDeltaMS;
-        item.container.visible=Boolean(effect&&field&&item.shownMs<IMPACT_MAX_MS);
+        item.container.visible=Boolean(effect&&field&&item.shownMs<IMPACT_MAX_MS)&&!(HIT_SPARK_TYPES.has(item.type)&&pixelHitsOwnSparks());
+        if(effect&&!item.container.visible&&HIT_SPARK_TYPES.has(item.type))handedSparks++;
         if(!item.container.visible)continue;
         visibleImpacts++;
         item.fx.sampleNativeFrame(field.reducedMotion?0:effect.frame);
@@ -258,7 +264,7 @@ export async function mountBattleVfxThreeOverlay({
       }
       setData('cues', JSON.stringify([...cueSystems].map(([id, e]) => ({id, ready: e.ready, visible: e.container.visible, cue: e.cue ?? null}))));
       setData('impacts', JSON.stringify({active:active.length,
-        visible:visibleImpacts,
+        visible:visibleImpacts,handedToPixelHits:handedSparks,
         instances:active.map(e=>({id:e.id,type:e.type,slot:e.slot,frame:e.frame,systemId:e.systemId}))}));
     } else instance.update(effectiveDeltaMS);
     // Original one-frame hit flash, adapted to the unified phone battlefield.
