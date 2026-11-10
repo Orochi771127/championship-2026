@@ -36,7 +36,7 @@ export function separateNativeHuntGroundActors(actors,environment){
 export function createNativeHuntFieldControls({ records,wildIds,environment,rng,loadout,consumeItem,maxCardG,night=false,onChange=()=>{},boosts=null,ropeLedger=null }) {
   if (!rng?.next || !loadout?.getSelectedEquipment || typeof consumeItem!=="function") throw Error("NATIVE_HUNT_CONTROL_AUTHORITIES_REQUIRED");
   const actors=records.map((r,i)=>createNativeWildActor(r,wildIds[i]));
-  let activeTool="HAND", pointer=null, stroke=null, closure=null, rope=null, selectedWildId=null;
+  let activeTool="HAND", pointer=null, stroke=null, closure=null, rope=null, selectedWildId=null, strokePending=false;
   // OWNER_APPROVED_ADAPTATION 2026-10-27: the drawn loop itself (ropeLassoGesture.js)
   // decides who is caught; the native sampler still runs for its RNG and fallback.
   const lasso=createLassoTracker();let closureSerial=0,lassoClosed=false;
@@ -230,6 +230,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     }
     if(pointer?.kind==="ROPE_STROKE") {
       sample();
+      strokePending=false;
       // HUNT_ROPE_ORIGINAL_20261111: no mid-stroke lasso -- the original reads the
       // shape when the finger lifts (02114718) and binds round the loop's centre.
       const loop=null;
@@ -335,8 +336,14 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     pointerMove(x,y){
       if(!pointer)return false;if(!Number.isFinite(x)||!Number.isFinite(y))return true;
       const finger=[Math.floor(x/2)*Q12,Math.floor(y/2)*Q12,0];
+      // HUNT_ROPE_ORIGINAL_20261111: the DS sampled the stylus once per 60 Hz frame. A slow browser frame can
+      // bring several moves between two ticks; the position a newer move replaces is sampled first, so a
+      // loop is not lost to frame rate. One move per tick samples exactly as before (once, on the tick).
+      if(pointer.kind==="ROPE_STROKE"&&stroke&&strokePending)sample();
       pointer.finger=finger;pointer.q12=pointer.offset?[finger[0]+pointer.offset[0],finger[1]+pointer.offset[1],0]:finger;
-      pointer.pixels=finger.slice(0,2).map(n=>n>>12);return true;},
+      pointer.pixels=finger.slice(0,2).map(n=>n>>12);
+      if(pointer.kind==="ROPE_STROKE")strokePending=true;
+      return true;},
     pointerUp(x,y){if(!pointer)return false;this.pointerMove(x,y);pointer.released=true;return true;},
     cancel(){if(rope)rope.actor.events.push({code:0x12});consumables.cancel();pointer=null;stroke=null;rope=null;ages.fill(0);lasso.reset();},
     /** Swap to the next owned rope, skipping overheated ones when another is ready. */

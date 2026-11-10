@@ -16,6 +16,7 @@ OWNER_APPROVED_ADAPTATION reversal (back toward ROM behaviour):
 - The 2026-11-03 press-anywhere pull is gone: a pull starts only on a bound partner under the finger (native hit test, front-most first); a press elsewhere draws a new loop. The 3-second slip watchdog stays.
 - The 2026-10-28 rope role bonuses are off: no 捕捉繩 +30 % damage, faster cinch or wider catch; no 強力繩 half wear or two-partner hold; no 克隆繩 awake tolerance cut or doubled imprint; no 究極繩 repel or rage guard; no extra wear for a rope line crossing rocks.
 - Kept: each role's extra reach rows (so every rope can still bind the stages it is sold for), counted ropes and wear (HUNT_TOOL_TIERS_20261103), the lure → disable → rope chain bonus.
+- Web input: the DS sampled the stylus once per 60 Hz frame. When a slow browser frame brings several pointer moves between two ticks, the position each newer move replaces is sampled first, so a loop is not lost to frame rate; one move per tick samples exactly as the native tick did. Measured in Chromium: a quick loop (about 0.4–0.5 s) binds; a touch on the bound partner dragged about 52 native px wears it down to the hand; a press 300 px away does nothing.
 
 <!-- record-id: HUNT_SPAWN_SPREAD_20261110 -->
 ## 2026-11-10 — Hunt partners spread out: loose same-species groups, a third of a screen apart

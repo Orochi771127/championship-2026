@@ -174,3 +174,15 @@ test("a live hunt: the ultimate rope binds a small partner too, and a snapped ro
   tool = runtime.getToolState().tools.find(t => t.id === "ROPE");
   assert.equal(tool.role, "SWIFT"); assert.equal(tool.overheatSeconds, 0);
 });
+
+test("HUNT_ROPE_ORIGINAL_20261111: a loop drawn between two ticks is still read -- every pointer move is a sample", async () => {
+  const { runtime } = await huntWith([0], 0);
+  const target = runtime.getWildCreatures().find(w => nativeHuntToolSpecies(w.speciesIndex).generation <= 3) ?? runtime.getWildCreatures()[0];
+  const cx = target.worldX, cy = target.worldY - 10;
+  // A slow browser frame: the whole loop arrives as pointer moves with no tick in between.
+  runtime.toolPointerDown(cx + 70, cy);
+  for (let i = 1; i <= 18; i++) { const a = (i / 16) * Math.PI * 2; runtime.toolPointerMove(cx + 70 * Math.cos(a), cy + 70 * Math.sin(a)); }
+  runtime.toolPointerUp(cx + 70, cy);
+  for (let i = 0; i < 40; i++) runtime.tick(FRAME);
+  assert.equal(runtime.getWildCreatures().find(w => w.wildId === target.wildId).bound, true);
+});
