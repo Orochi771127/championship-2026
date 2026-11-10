@@ -107,3 +107,14 @@ test('every public character loading boundary uses the pinned transport without 
  const result=spawnSync(process.execPath,['--input-type=module'],{cwd:repo,input:script,encoding:'utf8',env:{...process.env,TEST_CHARACTER_DELIVERY:JSON.stringify(delivery)}});
  assert.equal(result.status,0,result.stderr||result.stdout);assert.match(result.stdout,/CHARACTER_DELIVERY_BOUNDARIES_PASS/);
 });
+
+
+test('exact incremental files stay on game origin while historical files stay immutable',()=>{
+ const local='assets/production/characters/new-batch/animation.public-v1.json';
+ const resolve=createCharacterAssetResolver({...delivery,localPaths:[local]});
+ assert.equal(resolve(local,game),local);assert.equal(resolve(new URL(local,game).href,game),new URL(local,game).href);
+ assert.equal(resolve(file,game),assetBaseUrl+file);
+ for(const paths of [[local,local],['assets/production/characters/../private.json'],['assets/production/characters/new-batch/'],['assets/private.json']])
+  assert.throws(()=>validateCharacterAssetDelivery({...delivery,localPaths:paths}),/LOCAL_PATHS/);
+ assert.throws(()=>resolve(local+'?forged=1',game),/SOURCE_PATH/);
+});
