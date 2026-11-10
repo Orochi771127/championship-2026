@@ -17,6 +17,10 @@ Batch 1 (2026-11-11): the Owner's main team, 角暴龍 (193 裂顎咬, 194 熔�
 
 Batch 2 (2026-11-11): all 46 strike and slash signatures, plus 咬衣豆 (43, 44) and 跳跳蕾 (45, 46). There are ten new pieces: fist, rush, quake, spin, roar, cross, slash, scissor, iai and knives. They use new pxl drawings: a fist with grooved knuckles, an eight-point impact star, a ground crack, a blade crescent, speed streaks and a knife. Each move's piece follows what its name does: 拳/掌 fist, 衝/俯/天墜/翔 rush, 錘/鎚/重擊/踏/墜擊 quake, 迴旋/旋衝 spin, 吼/嘯 roar, 十字 cross; 斬/刃/裁 slash, 剪/鋏 scissor, 一閃 iai, 飛刀 knives. The hold, shake and knock follow the move's power.
 
+Batch 3 (2026-11-11): the remaining 75 fire, orb, lance, pierce, missile and claw signatures. There are eight new pieces: stream, wisps, orb, splat, eye, lance, rain and clock. They use new pxl drawings (a flame tongue, a lance of light, a toxic blob) and reuse the earlier eye, missile and clock drawings. The name decides the piece: 嘯/吼 roar, 飛牙 jaws, 鬼火/神火/妖火 wisps, 邪瞳 eye, 時鋼 clock, 毒/泥/孢 splat, 彈雨/全彈/釘雨 rain, 轟爆/核焰/天爆 quake, 焰流/焰息/奔流/射線 stream, 爪 claws, 槍/矛/光/砲 lance, 刺/喙/突 horn, 珠/彈 orb, 火球 core. Strength scales with power: 1x, 1.15x or 1.25x, with a hold of 80, 88 or 95 ms.
+
+Batch 4 (2026-11-11): every remaining signature, so all 204 signatures now have their own choreography. There are seven new pieces: flurry and drop, which take a drawing named by the move, plus bolt, vortex, vines, mist and wave. New pxl drawings: a note, a leaf, a feather, a bubble, an ice shard, a vortex and a vine. The earlier bomb, mushroom, gear, bone, fish, heart, lightning, cloud and splash drawings are reused. The piece follows the move's archetype: notes, bubbles, leaves, petals, feathers, shards and fish flurry; bombs, mushrooms, gears and bones drop; thunder bolts; black holes, tornadoes and wind become vortices; vines, trees and spikes become vines; water waves; mist rolls.
+
 <!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
 ## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
 

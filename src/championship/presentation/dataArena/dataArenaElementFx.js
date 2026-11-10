@@ -72,7 +72,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
   const moteTrails = [];
   // Each move's own moment (BESPOKE_MOVE_VFX_PROGRAM_20261111), as in the AI battle.
   const setPieces = typeof createMoveVfxSetPieces === 'function' ? createMoveVfxSetPieces({PIXI, layer: front, reducedMotion}) : null;
-  const pieceAt = (moveId, phase, at) => { const c = moveVfxChoreography(moveId)?.[phase]; if (c && setPieces) setPieces.play(c.piece, {...at, size: BODY, scale: c.scale ?? 1, fast: c.fast}); };
+  const pieceAt = (moveId, phase, at) => { const c = moveVfxChoreography(moveId)?.[phase]; if (c && setPieces) setPieces.play(c.piece, {...at, size: BODY, scale: c.scale ?? 1, fast: c.fast, sprite: c.sprite}); };
   let moteClock = 0, moteSeq = 0;
   // Kit effects read at phone size under that wide camera (Owner 2026-11-05: they looked small).
   const KIT = 1.4;

@@ -244,3 +244,33 @@ sprite("streaks", { w: 40, h: 14, outline: "o" },
 // A thrown knife, point right.
 sprite("knife", { w: 22, h: 8, outline: "o" },
   poly([6, 2, 20, 4, 6, 6], "x"), hline(7, 4, 12, "c"), rect(0, 2, 6, 4, "e"), px(5, 4, "m"))
+
+// ---------------------------------------------------------------- set pieces, batch 3 (fire, orb, lance, pierce, missile, claw)
+// A flame tongue standing on its base: three licks, white-hot at the root.
+sprite("flame", { w: 20, h: 30, outline: "o" },
+  poly([10, 0, 14, 9, 18, 6, 17, 18, 19, 29, 1, 29, 3, 18, 2, 8, 6, 12], "m"),
+  poly([10, 7, 13, 15, 15, 13, 14, 23, 6, 28, 5, 20, 7, 15], "x"), poly([10, 16, 12, 22, 11, 28, 8, 28, 8, 22], "c"))
+// A lance of light pointing right: a long shaft that narrows to a hot point.
+sprite("lance_beam", { w: 64, h: 12, outline: "o" },
+  poly([0, 3, 50, 3, 63, 6, 50, 9, 0, 9], "m"), poly([0, 5, 52, 5, 60, 6, 52, 7, 0, 7], "x"), hline(4, 6, 54, "c"), px(62, 6, "W"))
+// A toxic blob mid-splash: a lumpy body with two drips and bubbles.
+sprite("blob", { w: 28, h: 24, outline: "o" },
+  ellipse(14, 12, 12, 8, "m"), circ(6, 8, 4, "m"), circ(21, 7, 4, "m"), rect(8, 18, 3, 5, "m"), rect(18, 17, 2, 6, "m"),
+  ellipse(12, 10, 6, 3, "x"), circ(19, 6, 1, "c"), circ(9, 9, 1, "c"), circ(16, 13, 2, "e"), px(16, 13, "x"))
+
+// ---------------------------------------------------------------- set pieces, batch 4 (the remaining signatures)
+// Small things a flurry throws, each lit from the top left.
+sprite("note", { w: 12, h: 16, outline: "o" }, ellipse(4, 12, 3, 2, "m"), vline(7, 1, 11, "m"), poly([7, 1, 11, 4, 11, 6, 7, 4], "m"), px(3, 11, "c"), px(8, 2, "x"))
+sprite("leaf", { w: 14, h: 10, outline: "o" }, poly([0, 5, 6, 0, 13, 4, 7, 9], "m"), line(1, 5, 12, 4, "e"), poly([3, 4, 6, 1, 9, 3], "x"))
+sprite("feather_sm", { w: 16, h: 8, outline: "o" }, poly([0, 4, 12, 1, 15, 4, 12, 7], "m"), hline(1, 4, 13, "c"), poly([4, 3, 11, 2, 13, 4], "x"))
+sprite("bubble_sm", { w: 12, h: 12, outline: "o" }, circ(6, 6, 5, "m"), circ(6, 6, 3, "_"), ring(6, 6, 4, "x"), px(4, 4, "c"), px(3, 5, "c"))
+sprite("shard", { w: 10, h: 16, outline: "o" }, poly([5, 0, 9, 7, 5, 15, 1, 7], "m"), poly([5, 1, 7, 7, 5, 12], "x"), vline(5, 2, 8, "c"))
+// A vortex: three arms coiling into a dark eye.
+sprite("vortex", { w: 34, h: 34, outline: "o" },
+  (c) => { for (let a = 0; a < 3; a++) for (let t = 0; t < 1; t += 0.01) { const ang = a * 2.094 + t * 5.5, r = 2 + t * 14;
+    c.px(Math.round(17 + Math.cos(ang) * r), Math.round(17 + Math.sin(ang) * r), t > 0.6 ? "m" : t > 0.3 ? "x" : "c"); } },
+  circ(17, 17, 3, "e"), px(17, 17, "o"))
+// A vine rising and curling over at the top, with two leaves.
+sprite("vine", { w: 16, h: 40, outline: "o" },
+  (c) => { for (let y = 39; y > 6; y--) { const x = Math.round(7 + Math.sin(y / 5) * 3); c.px(x, y, "m"); c.px(x + 1, y, "e"); } },
+  circ(11, 5, 3, "m"), circ(11, 5, 1, "_"), poly([2, 24, 7, 21, 6, 26], "x"), poly([13, 15, 9, 13, 10, 18], "x"))

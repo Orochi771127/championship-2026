@@ -584,7 +584,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (info && choreo?.release && setPieces) {
           const releasePalette = vfx?.palette ?? BATTLE_FX_PALETTES[look?.palette] ?? BATTLE_FX_PALETTES.neutral;
           setPieces.play(choreo.release.piece, {...muzzleOf(info), angle: info.facing < 0 ? Math.PI : 0, palette: releasePalette,
-            size: info.width, scale: choreo.release.scale ?? 1});
+            size: info.width, scale: choreo.release.scale ?? 1, sprite: choreo.release.sprite});
         }
         if (!info || !look || look.tier === 'basic' || look.tier === 'support') continue;
         const palette = vfx?.palette ?? BATTLE_FX_PALETTES[look.palette] ?? BATTLE_FX_PALETTES.neutral;
@@ -698,7 +698,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         motes?.burst({element: vfx?.element ?? 'NEUTRAL', x: hit.x, y: hit.y, groundY: hit.groundY, unit: ctx.nativeScale, weight, dir: fx.knockDir || 0});
         if (choreo?.contact && setPieces) setPieces.play(choreo.contact.piece, {x: hit.x, y: hit.y,
           angle: attacker ? Math.atan2(target.groundY - attacker.groundY, target.x - attacker.x) : 0, palette, size: target.width,
-          scale: choreo.contact.scale ?? 1, fast: choreo.contact.fast});
+          scale: choreo.contact.scale ?? 1, fast: choreo.contact.fast, sprite: choreo.contact.sprite});
         const lastBurst = burstAt.get(event.slot) ?? -Infinity;
         if (tier !== 'light' || elapsed - lastBurst > 220) {
           pixelHits?.spawn({element: vfx?.element ?? 'NEUTRAL', x: hit.x, y: hit.y, groundY: hit.groundY, size: target.width * (tier === 'light' ? 0.8 : 1),

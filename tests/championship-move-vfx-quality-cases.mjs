@@ -180,3 +180,15 @@ test("set pieces paint in the move's palette, play once on the owner's delta and
   pieces.dispose();
   assert.equal(layer.children.length, 0);
 });
+
+test("every signature move has its own choreography, and every drawing it names exists", async () => {
+  const { moveVfxSignature } = await import("../src/championship/presentation/vfx/moveVfxSignatures.js");
+  const { MOVE_VFX_PIECE_DRAWINGS } = await import("../src/championship/presentation/vfx/moveVfxSetPieces.js");
+  const { DRAWN_VFX_SPRITES } = await import("../src/championship/presentation/vfx/drawnVfxSprites.js");
+  const missing = battleMoves.records.filter(m => moveVfxSignature(m.recordIndex)?.tier === "ultimate" && !MOVE_VFX_CHOREOGRAPHY[m.recordIndex]).map(m => m.recordIndex);
+  assert.deepEqual(missing, []);
+  for (const [key, c] of Object.entries(MOVE_VFX_CHOREOGRAPHY)) for (const phase of ["release", "contact"]) {
+    const sprite = c[phase]?.sprite;
+    if (sprite) { assert.ok(MOVE_VFX_PIECE_DRAWINGS.includes(sprite), `${key} ${sprite}`); assert.ok(DRAWN_VFX_SPRITES[sprite], `${key} ${sprite} drawn`); }
+  }
+});

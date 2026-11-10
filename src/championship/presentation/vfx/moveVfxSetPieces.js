@@ -20,6 +20,22 @@
 //   scissor        two blade arcs close like shears
 //   iai            a single white line flashes, then the cut shows
 //   knives         five knives fly in one after another
+//   stream         a stream of flame tongues runs along the blow into a core
+//   wisps          three spirit flames circle the target, then dive in
+//   orb            a sphere of light swells, pulses twice and bursts
+//   splat          a toxic blob slaps on and drips
+//   eye            an evil eye opens over the target and stares
+//   lance          a lance of light drives through the target
+//   rain           missiles fall on the target one after another
+//   clock          a clock face spins its hands, then the blow lands
+//   flurry         a swarm of one small drawing (notes, leaves, feathers,
+//                  bubbles, shards: the choreography's `sprite`) spirals in and scatters
+//   drop           one object (bomb, mushroom, gear...: `sprite`) falls and bursts
+//   bolt           three lightning strikes fall on the target
+//   vortex         a black vortex spins down into the target and implodes
+//   vines          three vines rise round the target and curl over
+//   mist           clouds of mist roll out and thin away
+//   wave           a splash rises, crests and falls over the target
 //
 // Presentation only: no clock of its own (the owner calls update with its frame
 // delta, 0 during a hit-stop), textures baked once per piece and palette, pooled
@@ -31,11 +47,26 @@ const PIECE_SPRITES = Object.freeze({
   claws: ['claw_mark', 'claw_mark', 'claw_mark'], core: ['core'], muzzle: ['muzzle'], 'muzzle-spiral': ['muzzle', 'muzzle', 'muzzle'],
   fist: ['fist', 'impact_star'], rush: ['streaks', 'streaks', 'impact_star'], quake: ['crack', 'impact_star', 'muzzle'],
   spin: ['muzzle', 'muzzle', 'impact_star'], roar: ['muzzle', 'muzzle', 'muzzle'], cross: ['blade_arc', 'blade_arc'],
-  slash: ['blade_arc'], scissor: ['blade_arc', 'blade_arc'], iai: ['streaks', 'blade_arc'], knives: ['knife', 'knife', 'knife', 'knife', 'knife']
+  slash: ['blade_arc'], scissor: ['blade_arc', 'blade_arc'], iai: ['streaks', 'blade_arc'], knives: ['knife', 'knife', 'knife', 'knife', 'knife'],
+  stream: ['flame', 'flame', 'flame', 'flame', 'core'], wisps: ['flame', 'flame', 'flame', 'impact_star'], orb: ['core', 'muzzle', 'muzzle'],
+  splat: ['blob', 'core'], eye: ['eye', 'muzzle'], lance: ['lance_beam', 'impact_star'], rain: ['missile', 'missile', 'missile', 'missile', 'impact_star'],
+  clock: ['clock', 'impact_star'],
+  flurry: null, drop: null, bolt: ['bolt_0', 'bolt_1', 'bolt_2', 'impact_star'], vortex: ['vortex', 'impact_star'],
+  vines: ['vine', 'vine', 'vine'], mist: ['puff_1', 'puff_2', 'puff_3', 'puff_2'], wave: ['splash_0', 'splash_1', 'splash_2']
 });
+/** Sprites of a piece; flurry and drop take the choreography's own drawing. */
+function piecesOf(piece, drawing) {
+  if (piece === 'flurry') return [...Array(8).fill(drawing ?? 'leaf'), 'impact_star'];
+  if (piece === 'drop') return [drawing ?? 'bomb', 'impact_star', 'muzzle'];
+  return PIECE_SPRITES[piece];
+}
 export const MOVE_VFX_SET_PIECES = Object.freeze(Object.keys(PIECE_SPRITES));
+/** Drawings a flurry or a drop may take. */
+export const MOVE_VFX_PIECE_DRAWINGS = Object.freeze(['note', 'leaf', 'feather_sm', 'bubble_sm', 'shard', 'heart', 'bomb', 'mushroom', 'gear', 'bone', 'cherry', 'fish_0', 'ghost']);
 const DURATION = Object.freeze({jaws: 420, 'jaws-horn': 560, horn: 380, claws: 440, core: 420, muzzle: 300, 'muzzle-spiral': 460,
-  fist: 400, rush: 420, quake: 520, spin: 520, roar: 480, cross: 420, slash: 340, scissor: 420, iai: 460, knives: 520});
+  fist: 400, rush: 420, quake: 520, spin: 520, roar: 480, cross: 420, slash: 340, scissor: 420, iai: 460, knives: 520,
+  stream: 520, wisps: 620, orb: 560, splat: 460, eye: 600, lance: 420, rain: 640, clock: 620,
+  flurry: 640, drop: 560, bolt: 500, vortex: 660, vines: 620, mist: 700, wave: 560});
 
 const rgb = c => [(c >> 16) & 255, (c >> 8) & 255, c & 255];
 const easeIn = t => t * t * t;
@@ -92,9 +123,9 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
      * (or casting) body's width in world px, `palette` {core, main, edge}.
      * Returns false when the piece is unknown or cannot be painted.
      */
-    play(piece, {x, y, angle = 0, palette, size = 80, scale = 1, fast = false}) {
+    play(piece, {x, y, angle = 0, palette, size = 80, scale = 1, fast = false, sprite: drawing = null}) {
       if (!DURATION[piece] || !palette) return false;
-      const names = PIECE_SPRITES[piece];
+      const names = piecesOf(piece, drawing);
       const sprites = names.map(name => sprite(name, palette));
       if (sprites.some(s => !s)) { sprites.forEach(release); return false; }
       // World px per texel: a jaw (44 texels) spans about 0.73 of the body.
@@ -191,6 +222,95 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
         const start = i * 0.1, t = clamp01((k - start) / 0.22), land = clamp01((k - start - 0.22) / 0.5);
         const lane = (i - 2) * 9 * s;
         set(knife, x + facing * (-70 + easeOut(t) * 62) * s, y + lane * 1.4, facing * 1.8, 1.8, t > 0 ? (land > 0 ? stepFade(land) : 1) : 0, 0);
+      });
+    } else if (p.piece === 'stream') {
+      const flames = p.sprites.slice(0, 4), core = p.sprites[4];
+      flames.forEach((f, i) => {
+        const start = i * 0.08, t = clamp01((k - start) / 0.3), fade = clamp01((k - start - 0.3) / 0.4);
+        f.anchor.set(0.5, 1);
+        set(f, x + facing * (-60 + i * 16 + t * 12) * s, y + 10 * s, facing * (0.7 + t * 0.4), 0.6 + t * 0.6, t > 0 ? (fade > 0 ? stepFade(fade) : 1) : 0, facing * 1.2);
+      });
+      const hit = clamp01((k - 0.35) / 0.65);
+      set(core, x, y, 0.5 + easeOut(hit) * 1.1, 0.5 + easeOut(hit) * 1.1, k < 0.35 ? 0 : stepFade(hit));
+    } else if (p.piece === 'wisps') {
+      const [a, b, c, star] = p.sprites, dive = clamp01((k - 0.55) / 0.2), after = clamp01((k - 0.75) / 0.25);
+      [a, b, c].forEach((f, i) => {
+        const ang = (k * 3.2 + i / 3) * Math.PI * 2, r = (1 - easeIn(dive)) * 34 * s;
+        f.anchor.set(0.5, 0.6);
+        set(f, x + Math.cos(ang) * r, y + Math.sin(ang) * r * 0.45 - (1 - dive) * 10 * s, 0.7, 0.7, k < 0.75 ? 1 : 0);
+      });
+      set(star, x, y, 0.4 + easeOut(after) * 1.2, 0.4 + easeOut(after) * 1.2, k < 0.75 ? 0 : stepFade(after));
+    } else if (p.piece === 'orb') {
+      const [core, r1, r2] = p.sprites, grow = easeOut(clamp01(k / 0.3)), pulse = 1 + Math.sin(clamp01((k - 0.3) / 0.4) * Math.PI * 2) * 0.12;
+      const burst = clamp01((k - 0.7) / 0.3);
+      set(core, x, y, (0.4 + grow * 1.1) * pulse + burst * 0.8, (0.4 + grow * 1.1) * pulse + burst * 0.8, k < 0.7 ? 1 : stepFade(burst));
+      [r1, r2].forEach((ring, i) => { const t = clamp01((k - 0.3 - i * 0.18) / 0.5); set(ring, x, y, 0.6 + easeOut(t) * 1.8, 0.6 + easeOut(t) * 1.8, t > 0 ? stepFade(t) : 0); });
+    } else if (p.piece === 'splat') {
+      const [blob, core] = p.sprites, slap = easeOut(clamp01(k / 0.15)), drip = clamp01((k - 0.15) / 0.85);
+      set(blob, x, y + drip * 10 * s, 0.4 + slap * 1.0 + (k < 0.2 ? 0.25 : 0), (0.4 + slap * 1.0) * (k < 0.2 ? 0.8 : 1 + drip * 0.15), k < 0.55 ? 1 : stepFade((k - 0.55) / 0.45));
+      set(core, x, y, 0.4 + drip * 1.2, 0.3 + drip * 0.6, k < 0.15 ? 0 : stepFade(drip));
+    } else if (p.piece === 'eye') {
+      const [eye, ring] = p.sprites, open = easeOut(clamp01(k / 0.25)), stare = clamp01((k - 0.25) / 0.45), close = clamp01((k - 0.7) / 0.3);
+      set(eye, x, y - 34 * s, 1.3, 1.3 * open * (1 - close * 0.9), 1);
+      set(ring, x, y, 0.6 + easeOut(stare) * 1.6, 0.6 + easeOut(stare) * 1.6, stare > 0 && close < 1 ? stepFade(stare) : 0);
+    } else if (p.piece === 'lance') {
+      const [lance, star] = p.sprites, thrust = easeIn(clamp01(k / 0.25)), after = clamp01((k - 0.25) / 0.75);
+      lance.anchor.set(1, 0.5);
+      set(lance, x + facing * (-40 + thrust * 70) * s, y, facing * (0.8 + thrust * 0.6), 1, k < 0.45 ? 1 : stepFade((k - 0.45) / 0.55));
+      set(star, x, y, 0.5 + easeOut(after) * 1.1, 0.5 + easeOut(after) * 1.1, k < 0.25 ? 0 : stepFade(after));
+    } else if (p.piece === 'rain') {
+      const shells = p.sprites.slice(0, 4), star = p.sprites[4];
+      shells.forEach((m, i) => {
+        const start = i * 0.12, t = clamp01((k - start) / 0.25);
+        set(m, x + (i - 1.5) * 14 * s, y - (1 - easeIn(t)) * 80 * s, 1, 1, t > 0 && t < 1 ? 1 : 0, Math.PI / 2);
+      });
+      const boom = clamp01((k - 0.25) / 0.75);
+      set(star, x, y, 0.5 + easeOut(boom) * 1.3, 0.5 + easeOut(boom) * 1.3, k < 0.25 ? 0 : stepFade(boom), boom * 0.8);
+    } else if (p.piece === 'clock') {
+      const [clock, star] = p.sprites, show = easeOut(clamp01(k / 0.2)), strike = clamp01((k - 0.6) / 0.4);
+      set(clock, x, y - 30 * s, show * 1.2, show * 1.2, k < 0.6 ? 1 : stepFade(strike), Math.sin(k * 30) * 0.08 * (1 - strike));
+      set(star, x, y, 0.5 + easeOut(strike) * 1.3, 0.5 + easeOut(strike) * 1.3, k < 0.6 ? 0 : stepFade(strike));
+    } else if (p.piece === 'flurry') {
+      const bits = p.sprites.slice(0, 8), star = p.sprites[8], hit = clamp01((k - 0.55) / 0.45);
+      bits.forEach((b, i) => {
+        const ang = i / 8 * Math.PI * 2 + k * 5, r = (k < 0.55 ? (1 - easeOut(k / 0.55)) * 56 + 6 : 6 + easeOut(hit) * 40) * s;
+        set(b, x + Math.cos(ang) * r, y + Math.sin(ang) * r * 0.7, 1.1, 1.1, k < 0.55 ? 1 : stepFade(hit), ang);
+      });
+      set(star, x, y, 0.4 + easeOut(hit) * 1.1, 0.4 + easeOut(hit) * 1.1, k < 0.55 ? 0 : stepFade(hit));
+    } else if (p.piece === 'drop') {
+      const [obj, star, ring] = p.sprites, fall = easeIn(clamp01(k / 0.35)), boom = clamp01((k - 0.35) / 0.65);
+      set(obj, x, y - (1 - fall) * 90 * s, k < 0.35 ? 1.3 : 1.3 + boom * 0.5, k < 0.35 ? 1.3 : (1.3 - boom * 0.6), k < 0.35 ? 1 : stepFade(boom * 1.4));
+      set(star, x, y, 0.5 + easeOut(boom) * 1.3, 0.5 + easeOut(boom) * 1.3, k < 0.35 ? 0 : stepFade(boom));
+      set(ring, x, y + 14 * s, 0.6 + easeOut(boom) * 2, (0.6 + easeOut(boom) * 2) * 0.35, k < 0.35 ? 0 : stepFade(boom));
+    } else if (p.piece === 'bolt') {
+      const bolts = p.sprites.slice(0, 3), star = p.sprites[3];
+      bolts.forEach((b, i) => {
+        const at = i * 0.18, on = k >= at && k < at + 0.14;
+        b.anchor.set(0, 0.5);
+        set(b, x + (i - 1) * 12 * s, y, 1.6, 1.2, on ? 1 : 0, -Math.PI / 2 + (i - 1) * 0.15);
+      });
+      const hit = clamp01((k - 0.1) / 0.9);
+      set(star, x, y, 0.5 + easeOut(hit) * 1.2, 0.5 + easeOut(hit) * 1.2, k < 0.1 ? 0 : stepFade(hit), hit * 2);
+    } else if (p.piece === 'vortex') {
+      const [v, star] = p.sprites, spin = clamp01(k / 0.7), imp = clamp01((k - 0.7) / 0.3);
+      set(v, x, y, (1.6 - spin * 0.9) * (1 - imp), (1.6 - spin * 0.9) * (1 - imp) * 0.8, 1, -k * 14);
+      set(star, x, y, 0.3 + easeOut(imp) * 1.4, 0.3 + easeOut(imp) * 1.4, k < 0.7 ? 0 : stepFade(imp));
+    } else if (p.piece === 'vines') {
+      p.sprites.forEach((v, i) => {
+        const start = i * 0.12, rise = easeOut(clamp01((k - start) / 0.3)), fade = clamp01((k - 0.7) / 0.3);
+        v.anchor.set(0.5, 1);
+        set(v, x + (i - 1) * 20 * s, y + 24 * s, (i === 2 ? -1 : 1), rise, rise > 0 ? (fade > 0 ? stepFade(fade) : 1) : 0, (i - 1) * 0.25);
+      });
+    } else if (p.piece === 'mist') {
+      p.sprites.forEach((m, i) => {
+        const t = clamp01((k - i * 0.1) / 0.75), ang = i / 4 * Math.PI * 2;
+        set(m, x + Math.cos(ang) * easeOut(t) * 30 * s, y + Math.sin(ang) * easeOut(t) * 14 * s, 0.8 + t * 1.2, 0.8 + t * 1.2, t > 0 ? stepFade(t) : 0);
+      });
+    } else if (p.piece === 'wave') {
+      p.sprites.forEach((w, i) => {
+        const on = k >= i * 0.28 && k < i * 0.28 + 0.36, t = clamp01((k - i * 0.28) / 0.36);
+        w.anchor.set(0.5, 1);
+        set(w, x, y + 20 * s, 1.6 + t * 0.4, 1.6 + t * 0.3, on ? (i === 2 ? stepFade(t) : 1) : 0);
       });
     } else {
       // muzzle / muzzle-spiral: rings pop and spin out
