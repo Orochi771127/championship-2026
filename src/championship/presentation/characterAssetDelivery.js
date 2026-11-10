@@ -11,19 +11,24 @@ const safePath = value => typeof value === 'string' && /^[A-Za-z0-9_.\/-]+$/.tes
 export function validateCharacterAssetDelivery(value) {
   if (value === null) return null;
   if (!value || value.schemaVersion !== 1 || value.assetPrefix !== CHARACTER_ASSET_PREFIX
-    || Object.keys(value).some(key => !['schemaVersion', 'assetPrefix', 'assetBaseUrl'].includes(key)))
+    || Object.keys(value).some(key => !['schemaVersion', 'assetPrefix', 'assetBaseUrl', 'localPaths'].includes(key)))
     throw Error('CHARACTER_ASSET_DELIVERY_SCHEMA');
   let base;
   try { base = new URL(value.assetBaseUrl); } catch { throw Error('CHARACTER_ASSET_DELIVERY_URL'); }
   if (base.origin !== GAME_ORIGIN || base.username || base.password || base.search || base.hash
     || !/^\/cyber-partner-runtime-assets\/v\/[a-f0-9]{40}\/$/.test(base.pathname)
     || base.href !== value.assetBaseUrl) throw Error('CHARACTER_ASSET_DELIVERY_URL');
-  return Object.freeze({...value});
+  if (value.localPaths !== undefined && (!Array.isArray(value.localPaths)
+    || new Set(value.localPaths).size !== value.localPaths.length
+    || value.localPaths.some(file => !safePath(file) || !file.startsWith(CHARACTER_ASSET_PREFIX)
+      || !/\.(?:json|png|webp|jpe?g|gif|svg)$/.test(file)))) throw Error('CHARACTER_ASSET_LOCAL_PATHS');
+  return Object.freeze({...value,...(value.localPaths ? {localPaths:Object.freeze([...value.localPaths])} : {})});
 }
 
 /** Maps only character paths on the approved game page; local/QA paths stay local. */
 export function createCharacterAssetResolver(value) {
   const delivery = validateCharacterAssetDelivery(value);
+  const local = new Set(delivery?.localPaths ?? []);
   return function resolveCharacterAssetSrc(src, pageUrl = globalThis.location?.href) {
     if (!delivery || !pageUrl) return src;
     let page;
@@ -42,7 +47,9 @@ export function createCharacterAssetResolver(value) {
     const relative = url.pathname.slice(GAME_BASE_PATH.length);
     if (!safePath(relative) || url.search || url.hash || url.username || url.password)
       throw Error('CHARACTER_ASSET_SOURCE_PATH');
-    return new URL(relative, delivery.assetBaseUrl).href;
+    // A release may add exact hash-selected files on the game site while keeping
+    // the already published immutable library intact. No wildcard fallback.
+    return local.has(relative) ? src : new URL(relative, delivery.assetBaseUrl).href;
   };
 }
 
