@@ -111,3 +111,17 @@ test('default full build preserves assets; explicit external build omits only ve
  const contract=JSON.parse(f.read(EXTERNAL_CHARACTER_CONTRACT));f.write(EXTERNAL_CHARACTER_CONTRACT,{...contract,status:'PENDING_ENDPOINT_VERIFICATION'});
  assert.throws(()=>validateWebArtifact({root:f.root,output:external,target:PLAYTEST_TARGET}),/NOT_VERIFIED/);
 });
+
+
+test('incremental game files require exact closure and selected hashes without replacing the immutable release',t=>{
+ const f=fixture(t),local=prefix+'new-batch/new.png';f.write(local,png);
+ f.sourcePlan.files.push(local);f.allowlist.files.push({path:local,sha256:sha(png)});
+ const contract=JSON.parse(f.read(EXTERNAL_CHARACTER_CONTRACT));contract.localPaths=[local];f.write(EXTERNAL_CHARACTER_CONTRACT,contract);
+ const release=readExternalCharacterRelease(f.root,f.sourcePlan),plan=externalCharacterPublicationPlan(f.sourcePlan,release);
+ assert.equal(release.files.length,2);assert.ok(plan.files.includes(local));assert.ok(!plan.files.includes(f.image));
+ assert.doesNotThrow(()=>assertExternalCharacterPartition(plan,plan.files));
+ assert.throws(()=>assertExternalCharacterPartition(plan,plan.files.filter(p=>p!==local)),/LOCAL_CLOSURE/);
+ assert.throws(()=>assertExternalCharacterPartition(plan,[...plan.files,f.image]),/STILL_IN_GAME_ARTIFACT/);
+ f.write(local,Buffer.concat([png,Buffer.from('drift')]));assert.throws(()=>readExternalCharacterRelease(f.root,f.sourcePlan),/LOCAL_HASH/);f.write(local,png);
+ f.write(EXTERNAL_CHARACTER_CONTRACT,{...contract,localPaths:[local,f.image]});assert.throws(()=>readExternalCharacterRelease(f.root,f.sourcePlan),/LOCAL_CLOSURE/);
+});

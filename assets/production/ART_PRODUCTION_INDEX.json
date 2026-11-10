@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 48,
+    "registeredRuntimeBundles": 49,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -605,6 +605,20 @@
       "shippingReady": false,
       "scope": "Two gachapon prize icons (hunt supply crate, lucky ticket pack), GACHA_FULL_EFFECTS_20261109; no gameplay or commercial-rights claim",
       "count": 2
+    },
+    {
+      "assetId": "art:characters:aw12-two-set-r7-20261110",
+      "manifestPath": "assets/production/characters/aw12-two-set-r6-20261110/animation.public-v1.json",
+      "manifestSha256": "847f4e448bc12c35e4fa8e1dcac962e10de3fd58a7b3e93d18f2963ee19f0c6b",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "OWNER_ART_APPROVED_RUNTIME_CHECKED",
+      "shippingStatus": "OWNER_PUBLIC_PLAYTEST",
+      "humanApproved": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "publicationAuthorized": true,
+      "scope": "General R5 53 callers / 83 events, Arena R3 65 source sequences / 506 events; authored presentation alignment to existing CAST_RELEASE. No commercial-rights or source hit-marker parity claim.",
+      "runtimeQaEvidence": "docs/reports/aw12-release-20261110/VALIDATION.json"
     }
   ]
 }

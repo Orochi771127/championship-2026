@@ -27,12 +27,12 @@ test('107 canonical growth/mature selections plus Owner-directed awakened pilots
  // Owner 2026-10-30: UL42 Arena set added display-only (option A, not playable).
  // Owner 2026-11-02: MA28 returns to its reviewed set (「Ma28換新的」, #114 set chosen).
  // Owner 2026-11-03: AW23 and species196 (UL14) join from the Codex release Claude took over.
- assert.equal(selection.characters.length,117);assert.equal(selection.errors.length,0);
+ assert.equal(selection.characters.length,118);assert.equal(selection.errors.length,0);
  assert.equal(selection.characters.filter(c=>c.displayCode.startsWith('GR')).length,38);
  assert.equal(selection.characters.filter(c=>c.displayCode.startsWith('MA')).length,69);
- assert.deepEqual(selection.characters.filter(c=>c.displayCode.startsWith('AW')).map(c=>c.displayCode),['AW29','AW25','AW28','AW32','AW26','AW27','AW31','AW23']);
+ assert.deepEqual(selection.characters.filter(c=>c.displayCode.startsWith('AW')).map(c=>c.displayCode),['AW29','AW25','AW28','AW32','AW26','AW27','AW31','AW23','AW12']);
  assert.deepEqual(selection.excluded,['GR04','GR13','GR32']);
- assert.equal(new Set(selection.characters.map(c=>c.speciesId)).size,117);
+ assert.equal(new Set(selection.characters.map(c=>c.speciesId)).size,118);
  for(const entry of selection.characters){assert.ok(!selection.excluded.includes(entry.displayCode));
   assert.equal(read(entry.displayCode).speciesId,entry.speciesId);}
 });
@@ -112,7 +112,7 @@ test('actions listed as nativeFallback keep the original route: no clip, no alia
 
 test('Owner 2026-10-28 replacement: 103 fully covered roles retire the original atlas; KO without approval holds the hurt key',async()=>{
  const flagged=selection.characters.filter(c=>c.replacesOriginal===true).map(c=>c.displayCode);
- assert.equal(flagged.length,103);
+ assert.equal(flagged.length,104);
  for(const code of ['GR01','MA33','MA34','GR39','MA65'])assert.ok(!flagged.includes(code),code);
  for(const code of flagged){const d=read(code);assert.equal(d.nativeFallback,undefined,code);
   for(const [side,n] of [['main',40],['sub',13]])for(let id=0;id<n;id++)assert.ok(reviewedNumericClip(d,side,id),code+' '+side+id);}
