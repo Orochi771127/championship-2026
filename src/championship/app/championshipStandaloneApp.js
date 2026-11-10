@@ -30,6 +30,7 @@ import {OVERDRIVE_RULES,overdriveHeatAt,overdriveCooling,resolveOverdriveTrainin
   SPONSOR_CONTRACTS,SPONSOR_STAKES,sponsorContract,validSponsorStake,settleSponsorContract,WILD_INSTINCT_BLOODLINES,wildInstinct,
   settleWildInstincts,ownPointCondition,sponsorOdds,SPONSOR_STAKE_CAPS,SPONSOR_DAILY_LIMIT,SPONSOR_ODDS} from '../contracts/productAwakeningOverdrive.js';
 import {localDayNumber} from '../time/realtimeClock.js';
+import {spreadHuntActors} from '../hunt/capture/productHuntSpawnSpread.js';
 import {applyProductTrainingGains} from '../raising/nativeRaisingTraining.js';
 import {inscribeGachaBloodline,grantGachaMetal} from '../gacha/cyberGacha.js';
 import {REALTIME_TRAINING_POLICY,recommendedCages,TRAINING_KIND_OF_CONDITION} from '../raising/productTrainingPolicy.js';
@@ -221,6 +222,8 @@ export function createChampionshipStandaloneApp({
   huntExpansionLoader = null,
   // Local review only (?huntInstinctQa, HUNT_INSTINCT_VFX_20261110): (index) => an instinct id that replaces the roll.
   huntInstinctOverride = null,
+  // HUNT_SPAWN_SPREAD_20261110: false keeps the native entry positions (a test that scripts one partner's path).
+  huntSpawnSpread = true,
   // Null means the built-in one, fetched when a hunt starts. Its subtree is
   // the field controls, the wild actors and their tables, which nothing before
   // the field reads. A caller that supplies its own factory never fetches it.
@@ -5348,10 +5351,14 @@ export function createChampionshipStandaloneApp({
             const f = actor.individual.fields;
             return instinctNoise(0x4e, i, actor.speciesIndex, f['058'], f['060'], f['064'], f['068'], f['06c'], f['018']);
           }), boosts)) : [];
-        const entry = luredEntry ? { ...luredEntry, encounter: { ...luredEntry.encounter, actors: luredEntry.encounter.actors.map((actor, i) => {
+        const rolled = luredEntry ? { ...luredEntry, encounter: { ...luredEntry.encounter, actors: luredEntry.encounter.actors.map((actor, i) => {
           const instinct = instincts[i], rule = wildInstinct(instinct);
           return { ...actor, instinct, ...(rule.speedMultiplier ? { ai: { ...actor.ai, speedQ12: Math.round(actor.ai.speedQ12 * rule.speedMultiplier) } } : {}) };
         }) } } : null;
+        // HUNT_SPAWN_SPREAD_20261110: positions only, after the native generation and without its RNG -- loose
+        // same-species groups, a third of a screen between groups, one or two partners in the opening view.
+        const entry = rolled && huntCaptureReplay === null && huntSpawnSpread ? { ...rolled, encounter: { ...rolled.encounter,
+          actors: spreadHuntActors(rolled.encounter.actors, rolled.scene.environment) } } : rolled;
         huntInstincts = new Map((entry?.encounter.actors ?? []).map((actor, i) => [`${gate.gateId}:native-wild:${i}`, actor.instinct]));
         lastHuntRareLure = entry?.rareLure ? Object.freeze({ speciesId:`species-${String(entry.rareLure.speciesIndex).padStart(3, "0")}` }) : null;
         const world = createHuntWorld(gate, entry);
