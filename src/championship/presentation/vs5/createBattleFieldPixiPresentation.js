@@ -763,6 +763,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     getFieldPlacement:()=>fieldPlacement ? Object.freeze({...fieldPlacement,artRect:{...fieldPlacement.artRect}}) : null,
     /** Bounded 3D cues from the dynamic layer since the last call (VFX_FIVE_LAYER_20261101). */
     consumeVfxCues:()=>fxLayer?.consumeCues?.() ?? [],
+    /** True while the dynamic layer draws a pixel hit burst at every contact (SPECIAL_HEX_DECLUTTER_20261111). */
+    pixelHitsOwnSparks:()=>Boolean(fxLayer?.ownsHitSparks?.()),
 
     getDiagnostics() {
       return Object.freeze({
