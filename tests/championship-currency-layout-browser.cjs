@@ -146,7 +146,9 @@ const intersects=(a,b)=>a&&b&&Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Mat
     if(Date.now()>exitDeadline)throw Error('Normal tutorial exit did not finish');
     const dialogExit=page.locator('dialog[open] [data-action="exit"]'),bannerExit=page.locator('.cm-tutorial-guidance [data-tutorial-action="exit"]');
     const target=await dialogExit.isVisible()?dialogExit:bannerExit;
-    if(await target.isVisible()&&await target.isEnabled()){try{await target.click({timeout:1500});}catch(error){if(!/Timeout|detached/.test(error.message))throw error;}}
+    // A modal dialog's button gets a direct click event: on CI's software GL the dialog never reads as "stable"
+    // to Playwright, so pointer clicks timed out until the 90 s deadline (seen at 430x932, chromium).
+    if(await target.isVisible()&&await target.isEnabled()){try{if(target===dialogExit)await target.dispatchEvent('click',{},{timeout:1500});else await target.click({timeout:1500});}catch(error){if(!/Timeout|detached/.test(error.message))throw error;}}
     await page.waitForTimeout(100);
    }await page.locator('.cm-tutorial-guidance').waitFor({state:'hidden'});
    const after=await save();assert.deepEqual(wallet(after),wallet(before),'The tutorial leaves the wallet untouched');await captureNormal('tutorial-off');
