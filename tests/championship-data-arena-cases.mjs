@@ -811,7 +811,7 @@ function arenaStartupHarness(failure) {
     selectDataArenaMusic, createLoadAttempt, LOAD_MAX_MS, lifetime,
     signal: lifetime.signal, stage: null, scene: null, environment: null, interactionArt:null, qaRecentEvents:[], qa:false, URL, loadDataArenaEnvironment:async()=>null, loadDataArenaInteractionArt:async()=>null, audio: null, sim: null, result: null, paused: false, qualityReloading:false, accumulator: 1,
     tickerCallback: null, bundles: new Map(), bundleScope: null, root: makeNode(), field: {}, bannerTimer: null, vignetteTimer: null,
-    matchId: 0, seed: 1, partnerId: 'ember-lizard', partnerPower: {}, quality: 'low', gameMode: 'TOURNAMENT', audioBus: null, resolutionCap: 2, href:'http://localhost/championship.html', sponsor: null, staked: null,
+    matchId: 0, seed: 1, partnerId: 'ember-lizard', partnerPower: {}, quality: 'low', gameMode: 'TOURNAMENT', audioBus: null, resolutionCap: 2, href:'http://localhost/championship.html', sponsor: null, staked: null, campaign: null,
     console: { error(...args) { calls.logs.push(args); },warn(...args){calls.logs.push(args);} }, clearTimeout,
     el: makeNode, t: (key) => key, button: (_class, label, onClick) => ({ label, onClick, dataset: {} }),
     showOverlay: (panel) => calls.panels.push(panel), showSelect() { env.root.dataset.state = 'SELECT'; }, releaseInputs() {}, close() { calls.closed = true; },

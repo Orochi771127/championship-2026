@@ -33,6 +33,12 @@ import {localDayNumber} from '../time/realtimeClock.js';
 import {applyProductTrainingGains} from '../raising/nativeRaisingTraining.js';
 import {inscribeGachaBloodline,grantGachaMetal} from '../gacha/cyberGacha.js';
 import {REALTIME_TRAINING_POLICY,recommendedCages,TRAINING_KIND_OF_CONDITION} from '../raising/productTrainingPolicy.js';
+import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattleExp,grantSyncExp,feedSyncCrystals,reconcileSyncRebirth,
+  boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX} from '../contracts/productSyncLevel.js';
+import {normalizeJourney,createJourneyState,TOWER_FLOORS,towerBand,towerOpponents,towerOpponentSpecies,towerRewards,towerNextFloor,
+  clearTowerFloor,patrolStatus,claimPatrol,quickPatrol} from '../contracts/productJourney.js';
+import {CAMPAIGN_ZONES,CAMPAIGN_STAGES,CAMPAIGN_ZONE_CHEST,campaignRivals,campaignStars,campaignRewards,recordCampaignStage,sweepCampaignStage,
+  sweepsLeft,stageOpen,starsOf,zoneStars,totalStars} from '../contracts/productCampaign.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
 import {assertPlayableProductSaveData,PRODUCT_RAISING_LIFECYCLE_RULES,productPartnerG} from '../contracts/productSpeciesData.js';
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
@@ -411,6 +417,10 @@ export function createChampionshipStandaloneApp({
   let lastLandExpansion=null;
   // OWNER_APPROVED_ADAPTATION 2026-11-02: burst evolution unlocks per partner (STAGE_REDESIGN_BURST_20261102).
   let burstEvolution=null;
+  // OWNER_APPROVED_ADAPTATION 2026-11-09: Sync Level per partner (BATTLE_MODE_PRISM_AND_JOURNEY_20261109).
+  let syncLevels=null,lastSyncGains=null;
+  // OWNER_APPROVED_ADAPTATION 2026-11-10: Journey (tower and patrol pod).
+  let journey=null,pendingTower=null,lastTowerResult=null,pendingCampaign=null;
   let nativeMessages=createNativeRaisingMessages();
   let nativeOpening=null;
   // Immutable rollback data, never another live session/store or storage key.
@@ -1176,7 +1186,8 @@ export function createChampionshipStandaloneApp({
       ||(transientMode
         ?(passwordMode?JSON.stringify(passwords)!==JSON.stringify(prepared.passwords):linkKey!==prepared.linkKey)
         :JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals.map(p=>p.instanceId)))
-      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(raisingNativeProfile(p.instanceId))!==JSON.stringify(p.nativeProfile))))
+      // A Sync-boosted copy is checked against the same boost of the saved individual.
+      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(boostSyncNativeProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1))!==JSON.stringify(p.nativeProfile))))
       return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇。'};
     const result=applyBattleTransaction(beginBattleAttempt(battleEconomy,{attemptId,matchIndex:-1,mode,battleType:0,
       entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng,[],mode===2?{begin:attemptId,kind:'FREE'}:null);
@@ -1213,6 +1224,69 @@ export function createChampionshipStandaloneApp({
     const rng = save.gameplayRng === null ? null : restoreChannelRng(save.gameplayRng);
     const huntHistory = restoreNativeHuntPersistentSave(save.huntHistory);
     return { snapshot, identity, production, rng, huntHistory };
+  }
+
+  // ---- Sync Level (OWNER_APPROVED_ADAPTATION 2026-11-09) -----------------
+  // The level is read from the save and, once per rebirth, cut to 30 %. A
+  // battle copy of the individual carries the boost; finishMatch takes it off.
+  function syncState(){return syncLevels??(syncLevels=createSyncLevelState());}
+  function syncProfileOf(instanceId){return instanceId===creature?.creatureId?creature.nativeProfile??null:raisingNativeProfile(instanceId);}
+  function syncLevelOf(instanceId){
+    const rebirths=Math.max(0,((syncProfileOf(instanceId)?.narrowFields?.['03c']??0)<<24)>>24);
+    const seen=normalizeSyncLevels(syncLevels).partners[instanceId]?.rebirths??0;
+    if(rebirths>seen)syncLevels=reconcileSyncRebirth(syncLevels,instanceId,rebirths);
+    return syncOf(syncLevels,instanceId);
+  }
+  /** Level a battle reads: capped by tamer rank in title matches and championships. */
+  function syncBattleLevel(instanceId,sync){
+    if(!sync)return 1;
+    const lv=syncLevelOf(instanceId).level;
+    return sync.capped?Math.min(lv,syncCapForRank(tamerRankValue)):lv;
+  }
+  /** Pay one settled battle's Sync EXP to the partners that fought it. */
+  function grantBattleSync(instanceIds,{kind,won,attemptId=null}){
+    const gains=[];
+    for(const instanceId of instanceIds){
+      const amount=syncBattleExp(syncLevelOf(instanceId).level,{kind,won});
+      if(amount<=0)continue;
+      const granted=grantSyncExp(syncState(),instanceId,amount);
+      syncLevels=granted.state;gains.push(granted.gain);
+    }
+    lastSyncGains=gains.length?Object.freeze({attemptId,kind,won,gains:Object.freeze(gains)}):null;
+    return lastSyncGains;
+  }
+  const SYNC_KIND_BY_MODE=Object.freeze({0:'CHAMPIONSHIP',1:'TITLE',2:'FREE',5:'PRACTICE'});
+
+  // ---- Journey: tower and patrol (OWNER_APPROVED_ADAPTATION 2026-11-10) ----
+  function journeyState(){return journey??(journey=createJourneyState());}
+  function journeyNow(){return Date.now();}
+  function journeyLocalDay(){const d=new Date(journeyNow());return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+  function addSyncCrystals(amount){
+    if(!(amount>0))return;
+    const state=normalizeSyncLevels(syncState());syncLevels={...state,crystals:Math.min(1e9,state.crystals+amount)};
+  }
+  /** A finished tower floor: the climb, and on a first clear its crystals, tickets and guardian diamonds. */
+  function settleTowerFloor(attemptId,won){
+    const tower=pendingTower;
+    if(!tower||tower.attemptId!==attemptId)return null;
+    pendingTower=null;
+    if(!won){lastTowerResult=Object.freeze({attemptId,floor:tower.floor,won:false,rewards:null,next:tower.floor,team:tower.team});return lastTowerResult;}
+    const cleared=clearTowerFloor(journeyState(),tower.floor,tower.team);
+    journey=cleared.state;
+    const rewards=cleared.rewards;
+    let tickets=0,diamonds=0;
+    if(rewards){
+      addSyncCrystals(rewards.crystals);
+      let gacha=gachaState();
+      if(rewards.tickets){const grant=grantGachaTickets(gacha,rewards.tickets);gacha=grant.state;tickets=grant.granted;}
+      const paid=rewards.diamonds?payDiamondRewards([Object.freeze({key:`dia:tower:${rewards.floor}`,kind:'TOWER',value:rewards.floor,amount:rewards.diamonds})],{state:gacha}):null;
+      if(paid?.ok&&paid.granted)diamonds=paid.granted;
+      else if(tickets&&!commitGacha({state:gacha}))tickets=0;
+    }
+    savePort.markDirty();
+    lastTowerResult=Object.freeze({attemptId,floor:tower.floor,won:true,team:tower.team,
+      rewards:rewards?Object.freeze({...rewards,tickets,diamonds}):null,next:tower.floor<TOWER_FLOORS?tower.floor+1:null});
+    return lastTowerResult;
   }
 
   // Free Battle and Practice read the plan (they run the original personality
@@ -1749,7 +1823,7 @@ export function createChampionshipStandaloneApp({
     return {
       snapshot:requireSession().getRaisingHomeSnapshot(),creature,sessionId,revision:nextRevision,
       interactionCount,friendsPlaytest,onlineBindReward,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
-      championshipRun,freeBattleMenu,battleTactics,cyberGacha,burstEvolution,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
+      championshipRun,freeBattleMenu,battleTactics,cyberGacha,burstEvolution,syncLevels,journey,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
       raising,shop:shop?shop.toSave():null,cageEdit:cageEdit?cageEdit.toSave():null,battleEconomy,
       instanceIdentity,gameplayRng:gameplayRngSnapshot(),huntHistory:projectNativeHuntPersistentSave(huntPersistentState)
     };
@@ -2022,6 +2096,8 @@ export function createChampionshipStandaloneApp({
     huntPersistentState = candidate.huntHistory;
     raising = repairStrollLogNames(candidate.production);
     burstEvolution = normalizeBurstEvolution(saved.progression.burstEvolution ?? null);
+    syncLevels = saved.progression.syncLevels===undefined?null:normalizeSyncLevels(saved.progression.syncLevels);lastSyncGains=null;
+    journey = saved.progression.journey===undefined?null:normalizeJourney(saved.progression.journey);pendingTower=null;lastTowerResult=null;
     migrateLegacyBurstPartners();
     if (realtime) {
       // Up to twelve hours of growth while the game was closed, then the clock shows the device's time.
@@ -2110,6 +2186,7 @@ export function createChampionshipStandaloneApp({
     const beforeBadges = battleBadgesValue;
     const beforeRank=tamerRankValue,beforeTitles=nativeTitles,beforeMessages=nativeMessages,beforeRun=championshipRun;
     const beforeGacha=cyberGacha,beforeGachaDrop=lastBattleGachaDrop,beforeBurst=burstEvolution,beforeBurstUnlocks=lastBurstUnlocks,beforeSponsor=lastSponsorSettlement;
+    const beforeSync=syncLevels,beforeSyncGains=lastSyncGains;
     const expectedBits = requireShop().getBits();
     // One rollback for both ways this can fail. The wallet is committed last, so
     // until it succeeds every one of these is still the pre-transaction value.
@@ -2120,6 +2197,7 @@ export function createChampionshipStandaloneApp({
       battleBadgesValue = beforeBadges;
       tamerRankValue=beforeRank;nativeTitles=beforeTitles;nativeMessages=beforeMessages;championshipRun=beforeRun;
       cyberGacha=beforeGacha;lastBattleGachaDrop=beforeGachaDrop;burstEvolution=beforeBurst;lastBurstUnlocks=beforeBurstUnlocks;lastSponsorSettlement=beforeSponsor;
+      syncLevels=beforeSync;lastSyncGains=beforeSyncGains;
     };
     battleTransactionActive = true;
     try {
@@ -2128,6 +2206,10 @@ export function createChampionshipStandaloneApp({
       battleEconomy = result.state;
       if(preparedRng)gameplayRng=preparedRng;
       for(const entry of individualResults)writeRaisingNativeProfile(entry.instanceId,entry.nativeProfile,{markDirty:false});
+      // Sync EXP for the partners that fought a settled owned-party match (never password or link battles).
+      const syncKind=SYNC_KIND_BY_MODE[result.receipt?.mode];
+      if(result.receipt?.status==="SETTLED"&&syncKind&&individualResults.length)
+        grantBattleSync(individualResults.map(entry=>entry.instanceId),{kind:syncKind,won:result.receipt.won===true,attemptId:result.receipt.attemptId??null});
       // Battles and wins are awakening conditions; the ranch partners also train once after the match.
       queueRanchTraining();refreshAwakeningSigns(individualResults.map(entry=>entry.instanceId),{publish:false});
       // A form the player's partner burst into this match is registered in the encyclopedia.
@@ -2275,6 +2357,7 @@ export function createChampionshipStandaloneApp({
       nativeOpening=opening;
       cyberGacha=grantGachaWelcome(null).state;
       burstEvolution=withBurstMigrated(createBurstEvolutionState());
+      syncLevels=null;lastSyncGains=null;journey=null;pendingTower=null;lastTowerResult=null;
       tutorialBaseline=null;tutorialPendingOpening=null;tutorialOfferEligible=opening!==null;
       registeredSpeciesValue = Object.freeze([]);
       battleEconomy = createBattleEconomyState();
@@ -4238,6 +4321,132 @@ export function createChampionshipStandaloneApp({
 
     /** Tickets (and beacon bonus) the last won match dropped, for the result podium. */
     getLastBattleGachaDrop(){return lastBattleGachaDrop;},
+    /** Sync Level of one partner: { level, exp, next } (OWNER_APPROVED_ADAPTATION 2026-11-09). */
+    getSyncLevel(instanceId){return syncLevelOf(instanceId);},
+    /** The cap a title match or championship applies at the current tamer rank. */
+    getSyncCap(){return syncCapForRank(tamerRankValue);},
+    getSyncCrystals(){return normalizeSyncLevels(syncLevels).crystals;},
+    getLastSyncGains(){return lastSyncGains;},
+    /** Data Arena partner power from Sync Level, by instance. */
+    getSyncArenaPower(instanceId){return syncArenaPower(syncLevelOf(instanceId).level);},
+    /** A finished Data Arena match pays Sync EXP to the ranch partners that fought it. */
+    grantArenaSync({instanceIds=[],won=false,attemptId=null}={}){
+      if(tutorialBaseline)return null;
+      const ids=[...new Set(instanceIds.filter(id=>typeof id==='string'&&syncProfileOf(id)))];
+      if(!ids.length)return null;
+      const gains=grantBattleSync(ids,{kind:'ARENA',won:won===true,attemptId});
+      savePort.markDirty();publishRaising();return gains;
+    },
+    /** Journey: the tower's floors and the patrol pod, display-ready. */
+    getJourneyFrame(){
+      const state=journeyState(),next=towerNextFloor(state),pod=patrolStatus(state,journeyNow());
+      return deepFreeze({best:state.tower.best,next,floors:TOWER_FLOORS,team:[...state.tower.team],
+        crystals:normalizeSyncLevels(syncLevels).crystals,patrol:{...pod,quickAvailable:state.patrol.quickDay!==journeyLocalDay()}});
+    },
+    /** One tower floor for display: its band, opponents' species and first-clear rewards. */
+    getTowerFloor(floor){
+      const value=Math.max(1,Math.min(TOWER_FLOORS,floor|0)),state=journeyState();
+      return deepFreeze({floor:value,stage:towerBand(value).stage,species:[...towerOpponentSpecies(value)],rewards:{...towerRewards(value)},
+        cleared:value<=state.tower.best,open:value<=towerNextFloor(state)});
+    },
+    getLastTowerResult(){return lastTowerResult;},
+    /** Journey zones: every stage's stars and whether it is open, display-ready. */
+    getCampaignFrame(){
+      const campaign=journeyState().campaign,day=journeyLocalDay();
+      return deepFreeze({totalStars:totalStars(campaign),sweepsLeft:sweepsLeft(campaign,day),chestStars:CAMPAIGN_ZONE_CHEST.stars,
+        zones:CAMPAIGN_ZONES.map(zone=>({zone:zone.zone,map:zone.map,field:zone.field,midBoss:zone.midBoss,boss:zone.boss,
+          stars:zoneStars(campaign,zone.zone),chest:campaign.chests.includes(zone.zone),open:stageOpen(campaign,zone.zone,1),
+          stages:Array.from({length:CAMPAIGN_STAGES},(_,i)=>{const stage=i+1;
+            return {stage,stars:starsOf(campaign,zone.zone,stage),open:stageOpen(campaign,zone.zone,stage),boss:stage===3||stage===6,
+              lead:campaignRivals(zone.zone,stage)[2].speciesId,rewards:{...campaignRewards(zone.zone,stage)}};})}))});
+    },
+    /** The Data Arena set-up for one open zone stage; the next arena result settles it. */
+    beginCampaignStage(zone,stage){
+      if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+      if(!stageOpen(journeyState().campaign,zone,stage))return {ok:false,reason:'STAGE_LOCKED'};
+      const info=CAMPAIGN_ZONES[zone-1];
+      pendingCampaign=Object.freeze({zone,stage});
+      return {ok:true,zone,stage,field:info.field,map:info.map,rivals:campaignRivals(zone,stage)};
+    },
+    /** A finished zone stage: stars, its first-clear prize and, at 18 stars, the zone chest. */
+    settleCampaignStage({outcome,timeSeconds,fainted}={}){
+      // The stage stays armed until another begins: the arena's retry key fights it again.
+      const pending=pendingCampaign;
+      if(!pending)return null;
+      const stars=campaignStars({outcome,timeSeconds,fainted});
+      const recorded=recordCampaignStage(journeyState().campaign,pending.zone,pending.stage,stars);
+      journey={...journeyState(),campaign:recorded.campaign};
+      let tickets=0,diamonds=0;
+      const crystals=recorded.firstClear?.crystals??0;
+      addSyncCrystals(crystals);
+      let gacha=gachaState();
+      const ticketCount=(recorded.firstClear?.tickets??0)+(recorded.chest?.tickets??0);
+      if(ticketCount){const grant=grantGachaTickets(gacha,ticketCount);gacha=grant.state;tickets=grant.granted;}
+      const paid=recorded.chest?payDiamondRewards([Object.freeze({key:`dia:zone:${pending.zone}`,kind:'ZONE',value:pending.zone,amount:recorded.chest.diamonds})],{state:gacha}):null;
+      if(paid?.ok&&paid.granted)diamonds=paid.granted;
+      else if(tickets&&!commitGacha({state:gacha}))tickets=0;
+      savePort.markDirty();publishRaising();
+      return Object.freeze({zone:pending.zone,stage:pending.stage,stars,best:starsOf(recorded.campaign,pending.zone,pending.stage),
+        firstClear:Boolean(recorded.firstClear),crystals,tickets,diamonds,chest:Boolean(recorded.chest)});
+    },
+    /** Sweep a three-star stage for crystal points (ten a day). */
+    sweepCampaignStage(zone,stage){
+      if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+      const swept=sweepCampaignStage(journeyState().campaign,zone,stage,journeyLocalDay());
+      if(!swept)return {ok:false,reason:'SWEEP_UNAVAILABLE'};
+      journey={...journeyState(),campaign:swept.campaign};addSyncCrystals(swept.crystals);savePort.markDirty();
+      return {ok:true,crystals:swept.crystals};
+    },
+    /** Collect the patrol pod (the first collect starts it). */
+    claimPatrol(){
+      if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+      const claimed=claimPatrol(journeyState(),journeyNow());
+      journey=claimed.state;addSyncCrystals(claimed.crystals);savePort.markDirty();
+      return {ok:true,crystals:claimed.crystals};
+    },
+    quickPatrol(){
+      if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+      const quick=quickPatrol(journeyState(),journeyLocalDay());
+      if(!quick)return {ok:false,reason:'QUICK_PATROL_USED'};
+      journey=quick.state;addSyncCrystals(quick.crystals);savePort.markDirty();
+      return {ok:true,crystals:quick.crystals};
+    },
+    /** Prepare a tower floor like a Free Battle against that floor's presets, Sync uncapped. */
+    async prepareTowerBattle(floor,instanceIds){
+      const state=journeyState(),value=floor|0;
+      if(value<1||value>towerNextFloor(state))return {ok:false,reason:'FLOOR_LOCKED'};
+      const party=withBattleTactics(await this.prepareBattleParty(null,instanceIds,{sync:{capped:false}}));
+      if(!party.ok)return party;
+      if(!freeBattleMenu)rebuildFreeBattleMenu();
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      const presetIndices=[...towerOpponents(value)];
+      prepared.localMode=2;prepared.freeMenu=freeBattleMenu;prepared.individuals=party.individuals;
+      prepared.freeMatch=Object.freeze({id:`tower:${value}`,kind:'TOWER',presetIndices,slots:3,entryFee:0,payout:0});
+      prepared.towerFloor=value;
+      const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
+      return {ok:true,floor:value,presetIndices,arenaIndex,individuals:party.individuals,rngPreparation};
+    },
+    enterTowerBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
+      const prepared=battleRngPreparations.get(rngPreparation),floor=prepared?.towerFloor;
+      const result=enterPreparedLocalBattle({mode:2,attemptId,playerInstanceIds,rngPreparation});
+      if(result.ok&&!result.duplicate&&Number.isInteger(floor))pendingTower=Object.freeze({attemptId,floor,team:[...playerInstanceIds]});
+      return result;
+    },
+    /** Add crystal points (tower chests, patrol, QA). */
+    grantSyncCrystals(amount){
+      const value=Number.isSafeInteger(amount)&&amount>0?amount:0;
+      if(!value||tutorialBaseline)return {ok:false,reason:'NOTHING_TO_GRANT'};
+      const state=normalizeSyncLevels(syncState());
+      syncLevels={...state,crystals:Math.min(1e9,state.crystals+value)};savePort.markDirty();return {ok:true,crystals:syncLevels.crystals};
+    },
+    /** Spend crystal points on one partner. */
+    feedSyncCrystals(instanceId,amount){
+      if(!syncProfileOf(instanceId))return {ok:false,reason:'UNKNOWN_INDIVIDUAL'};
+      syncLevelOf(instanceId);
+      const fed=feedSyncCrystals(syncState(),instanceId,amount);
+      if(!fed)return {ok:false,reason:'NO_CRYSTALS'};
+      syncLevels=fed.state;savePort.markDirty();publishRaising();return {ok:true,gain:fed.gain};
+    },
     getGachaTickets(){return session?gachaState().tickets:0;},
     /** Cartridges this hunt started with (the field readout names them). */
     getHuntGachaBoosts(){return screens.current()===CHAMPIONSHIP_SCREENS.HUNT_FIELD?lastHuntGachaBoosts:Object.freeze([]);},
@@ -4521,7 +4730,7 @@ export function createChampionshipStandaloneApp({
     async prepareFreeBattle(matchId,instanceIds,selectedArena=null){
       const match=this.getFreeBattleMatches().find(row=>row.id===matchId);
       if(!match)return {ok:false,reason:'MATCH_NOT_AVAILABLE'};
-      const party=withBattleTactics(await this.prepareBattleParty(null,instanceIds));
+      const party=withBattleTactics(await this.prepareBattleParty(null,instanceIds,{sync:{capped:false}}));
       if(!party.ok)return party;
       if(instanceIds.length>match.slots)return {ok:false,reason:'PARTY_SIZE',message:uiText('這場對戰最多 {count} 隻。',{count:match.slots})};
       const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
@@ -4536,7 +4745,7 @@ export function createChampionshipStandaloneApp({
       if(!Array.isArray(teams)||teams.length!==2||teams.some(ids=>!Array.isArray(ids)||ids.length<1||ids.length>3))return {ok:false,reason:'TWO_PARTIES_REQUIRED'};
       const ids=teams.flat();if(new Set(ids).size!==ids.length)return {ok:false,reason:'DUPLICATE_PARTICIPANT',message:'同一隻拍檔只能加入一隊。'};
       const parties=[];
-      for(const team of teams){const party=withBattleTactics(await this.prepareBattleParty(null,team));if(!party.ok)return party;parties.push(party.individuals);}
+      for(const team of teams){const party=withBattleTactics(await this.prepareBattleParty(null,team,{sync:{capped:false}}));if(!party.ok)return party;parties.push(party.individuals);}
       if(selectedArena!==null&&!FREE_BATTLE_ARENAS.includes(selectedArena))return {ok:false,reason:'ARENA_UNAVAILABLE'};
       const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
       const drawnArena=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
@@ -4762,7 +4971,7 @@ export function createChampionshipStandaloneApp({
         if(!prepared||prepared.session!==session||prepared.base!==JSON.stringify(gameplayRngSnapshot())
           ||prepared.championshipRun!==JSON.stringify(championshipRun)
           ||JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals?.map(p=>p.instanceId))
-          ||prepared.individuals.some(p=>JSON.stringify(raisingNativeProfile(p.instanceId))!==JSON.stringify(p.nativeProfile)))
+          ||prepared.individuals.some(p=>JSON.stringify(boostSyncNativeProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1))!==JSON.stringify(p.nativeProfile)))
           return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇參賽隊伍。'};
         opponent=prepared.opponent;
       }
@@ -4853,7 +5062,7 @@ export function createChampionshipStandaloneApp({
     async prepareChampionshipBattle(instanceIds) {
       const run=championshipRun;
       if(!run||!nativeChampionshipContinues(run))return {ok:false,reason:'NO_CHAMPIONSHIP_ROUND'};
-      const party=await this.prepareBattleParty(null,instanceIds);
+      const party=await this.prepareBattleParty(null,instanceIds,{sync:{capped:true}});
       if(!party.ok)return party;
       if(championshipRun!==run)return {ok:false,reason:'BATTLE_PREPARATION_STALE'};
       const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
@@ -4863,7 +5072,7 @@ export function createChampionshipStandaloneApp({
       return {ok:true,individuals:party.individuals,opponent,rngPreparation};
     },
 
-    async prepareBattleParty(recordIndex,instanceIds) {
+    async prepareBattleParty(recordIndex,instanceIds,{sync=null}={}) {
       const {battlePartyCondition,buildOwnedBattleCreature,nativeBattleQualification,burstFormFitting}=await loadBattleParty();
       const condition=battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C);
       const limit=battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C).slots;
@@ -4878,7 +5087,8 @@ export function createChampionshipStandaloneApp({
         buildOwnedBattleCreature({instanceId,nativeProfile});
         // A 成熟期 admitted to a 覺醒體/究極體 match bursts into the form that admitted it.
         const fitting=nativeBattleQualification(nativeProfile,condition)?null:burstFormFitting(nativeProfile,condition,partnerBurstForms(instanceId));
-        individuals.push({instanceId,nativeProfile:structuredClone(nativeProfile),
+        const syncLevel=syncBattleLevel(instanceId,sync);
+        individuals.push({instanceId,nativeProfile:boostSyncNativeProfile(nativeProfile,syncLevel),syncLevel,
           ...(fitting!==null?{burst:battleBurstPlanOf(instanceId,Object.freeze({form:fitting,tier:burstFormTier(fitting)}))}:{})});
       }
       return {ok:true,individuals};
@@ -4946,8 +5156,10 @@ export function createChampionshipStandaloneApp({
         if(!Array.isArray(individualResults)||individualResults.length!==battlePartyIds.length||
           individualResults.some((entry,i)=>entry.instanceId!==battlePartyIds[i]))
           return {ok:false,reason:'BATTLE_PARTY_RESULT_MISMATCH'};
-        updates=individualResults.map(entry=>({instanceId:entry.instanceId,nativeProfile:normalizeNativeIndividualProfile(
-          entry.nativeProfile,this.resolveRaisingInstance(entry.instanceId).speciesId)}));
+        // The battle fought a Sync-boosted copy; the saved individual keeps its own vitals and curve steps.
+        updates=individualResults.map(entry=>{const saved=syncProfileOf(entry.instanceId);
+          return {instanceId:entry.instanceId,nativeProfile:normalizeNativeIndividualProfile(
+            saved?restoreSyncNativeProfile(entry.nativeProfile,saved):entry.nativeProfile,this.resolveRaisingInstance(entry.instanceId).speciesId)};});
       }
       const result = applyBattleTransaction(settleBattleAttempt(battleEconomy, { attemptId, outcomeEntries, ...(rewardPercent===undefined?{}:{rewardPercent}) }, requireShop().getBits()),updates,null,
         Array.isArray(bursts)?bursts.filter(form=>Number.isSafeInteger(form)&&burstFormTier(form)!==null):[],
@@ -4956,6 +5168,7 @@ export function createChampionshipStandaloneApp({
       if (!result.ok || result.duplicate) return result;
       for(const entry of updates)raisingActors.delete(entry.instanceId);
       battlePartyIds=null;
+      settleTowerFloor(attemptId,result.receipt?.won===true);
       // A round fought under a run writes its flag here, from the same verdict
       // the economy just settled on, so nothing judges the round twice.
       if(championshipAttemptId===attemptId){
@@ -5348,7 +5561,7 @@ export function createChampionshipStandaloneApp({
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
-            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha: candidateGacha, burstEvolution: candidateBurst, raising: candidateRaising,
+            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha: candidateGacha, burstEvolution: candidateBurst, syncLevels, journey, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: (bonusShop ?? shop) ? (bonusShop ?? shop).toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),

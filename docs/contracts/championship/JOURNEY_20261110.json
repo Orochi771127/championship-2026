@@ -1,0 +1,60 @@
+{
+  "id": "JOURNEY_20261110",
+  "classification": "OWNER_APPROVED_ADAPTATION: Journey (征途) -- the Sync Tower climb and the patrol pod behind one battle-menu prism face (BATTLE_MODE_PRISM_AND_JOURNEY_20261109, D5)",
+  "supersedes": {
+    "contract": "docs/contracts/championship/SYNC_LEVEL_20261109.json",
+    "sourceLock": "src/championship/app/championshipStandaloneSave.js"
+  },
+  "saveField": {
+    "path": "progression.journey = { version: 1, tower: { best, team[<=3] }, patrol: { since, quickDay } }",
+    "migration": "none: a save without it starts at floor 0 with the pod not yet started (productJourney.normalizeJourney)"
+  },
+  "rules": {
+    "tower": "100 floors on the original ten free-battle preset tiers, opponents picked from the floor number alone (no RNG), climbed in order; first clears pay crystal points, a chest every 5th floor (crystals + 1 ticket), a guardian prize every 10th (+2 tickets, 100 diamonds via the dia:tower:N ledger key); never Bits",
+    "patrol": "120 + 38 x best floor crystal points an hour, up to 12 hours; the first collect starts it; a clock set backwards restarts it unpaid; one free two-hour quick patrol per local day",
+    "battle": "a floor is a Free Battle (mode 2) against its presets with no entry fee or payout; Sync bonuses uncapped; Sync EXP as a Free Battle"
+  },
+  "notChanged": [
+    "the free-battle catalog and its menu",
+    "the save key and schemaVersion"
+  ],
+  "sourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "9881b49c9f9a322bceb7bded5aa8b03a2a0fb08982ebb5693ac719f17ef426d7"
+  },
+  "historicalSourceLocks": {
+    "SYNC_LEVEL_20261109": {
+      "src/championship/app/championshipStandaloneSave.js": "eaf8df4ab8f0329f2337afe19d7d34f703065e1ec3ce30f54b4b8a09d1d1c1c5"
+    },
+    "ROYAL_NEW_MAPS_20261103": {
+      "src/championship/app/championshipStandaloneSave.js": "16ddc21be1570c51e87fb592635d5a5437ed25b9a8aeb660993f07494598b8c1"
+    },
+    "HUNT_TOOL_TIERS_20261103": {
+      "src/championship/app/championshipStandaloneSave.js": "798b838a72251d800b6feb989946e6a5feed1e6724bd5455a562ad55958b613a"
+    },
+    "DIAMOND_ECONOMY_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "15067ee0d3f47971a91a8189edaaa0c22ba3d43a831408b4f8bcc1e525b64c11"
+    },
+    "STAGE_REDESIGN_BURST_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "44b4ceec862776600a237a9cc54a160952f24305ed431a0b33a5addf4bba968d"
+    },
+    "ONLINE_BIND_REWARD_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c7abccc2403e3428e4754c87981a940db378dc4b1c17995363df6049ceeb680"
+    },
+    "CYBER_GACHA_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c4e7336e17e35099758cea84ff533e81c60c08bacbafef356afdbf55953b135"
+    },
+    "BATTLE_TACTICS_20261028": {
+      "src/championship/app/championshipStandaloneSave.js": "3a72fce7d38151f473f343fb8b9f59349daef1beb7cb09b6a0547c628d07ac8e"
+    },
+    "HEX_CAGE_WORLD_20261026": {
+      "src/championship/app/championshipStandaloneSave.js": "aaa72f6e08b150ac9bebb81fb2e6a8efefd532ab0ed7b7e24a7a0a9ae3d97f74"
+    }
+  },
+  "authorization": "Owner 2026-11-10: 「好，可以開始下一步」 after the Journey plan (tower + patrol first, zones and story next). Commit only; no push, merge or publication.",
+  "tests": [
+    "tests/championship-journey-cases.mjs",
+    "tests/championship-battle-cube-browser.cjs",
+    "tests/championship-lion-display-correction-cases.mjs"
+  ],
+  "physicalDeviceAccepted": false
+}

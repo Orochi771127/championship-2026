@@ -193,7 +193,7 @@ export function createSponsorContractStrip(source, busy = () => false) {
   return strip;
 }
 
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null, sponsorContracts=null }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, onOpenJourney=null, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null, sponsorContracts=null }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -324,6 +324,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   async function selectMode(id){
     if(cubeDisposed||entering)return;
     if(id==='CHAMPIONSHIP'){onOpenChampionship?.();return;}
+    if(id==='JOURNEY'){onOpenJourney?.();return;}
     if(id==='PRACTICE_BATTLE'&&getPracticeSelection){modeRequest++;await choosePractice();return;}
     if(id==='PASSWORD_BATTLE'&&getPasswordSelection){modeRequest++;await choosePassword();return;}
     if(id==='LINK_BATTLE'&&getLinkSelection){modeRequest++;await chooseLink();return;}
@@ -345,7 +346,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     section.append(stage);
     const mounted = mountCube({
       host: stage,
-      available: new Set(['TITLE_MATCH',...(onOpenChampionship?['CHAMPIONSHIP']:[]),...(getModeMatches?['FREE_BATTLE']:[]),...(getLinkSelection?['LINK_BATTLE']:[]),...(getPasswordSelection?['PASSWORD_BATTLE']:[]),...(getPracticeSelection?['PRACTICE_BATTLE']:[])]),
+      available: new Set([...(onOpenJourney?['JOURNEY']:[]),'TITLE_MATCH',...(onOpenChampionship?['CHAMPIONSHIP']:[]),...(getModeMatches?['FREE_BATTLE']:[]),...(getLinkSelection?['LINK_BATTLE']:[]),...(getPasswordSelection?['PASSWORD_BATTLE']:[]),...(getPracticeSelection?['PRACTICE_BATTLE']:[])]),
       onSelect:id=>{void selectMode(id);}
     });
     if (mounted && typeof mounted.then === "function") {
@@ -461,15 +462,17 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     const arena=mode==='FREE_BATTLE'?arenaSelector():null;if(arena)partyPanel.append(arena.node);
     const controls=[];
     const confirm=actionButton('決定',{primary:true});confirm.disabled=true;
-    // One plan per chosen partner, below the roster.
-    const tacticsBox=element('div','cm-vs5-tactics');tacticsBox.hidden=true;
+    // Owner 2026-11-09: the plan lives in the partner's own card. Choosing a partner
+    // opens its three plan capsules under its row; dropping it folds them away.
     // Only Free Battle and Practice read the plan; a title match would not.
     const renderTactics=()=>{
-      if(mode!=='FREE_BATTLE')return;
-      const rows=selectedIds.map(id=>candidates.find(c=>c.instanceId===id)).filter(Boolean)
-        .map(entry=>{const row=element('div','cm-vs5-tactics__row'),name=memberName(entry);const picker=tacticPicker(entry,name);
-          if(!picker)return null;const label=element('span','cm-vs5-tactics__name');label.append(memberFace(entry,name));row.append(label,picker);return row;}).filter(Boolean);
-      tacticsBox.replaceChildren(...(rows.length?[element('h3','cm-vs5-tactics__title','作戰方針'),...rows]:[]));tacticsBox.hidden=rows.length===0;
+      for(const [entry,,card,plan] of controls){
+        const picked=selectedIds.includes(entry.instanceId);
+        card.dataset.picked=String(picked);
+        if(picked&&mode==='FREE_BATTLE'&&!plan.firstChild){const picker=tacticPicker(entry,memberName(entry));if(picker)plan.append(picker);}
+        if(!picked)plan.replaceChildren();
+        plan.hidden=!plan.firstChild;
+      }
     };
     for(const entry of candidates){
       // The name stays the button's own text (its accessible name); the face,
@@ -491,9 +494,11 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
         for(const [c,b] of controls){const picked=selectedIds.includes(c.instanceId);b.setAttribute('aria-pressed',String(picked));b.disabled=!c.admission.ok||(!picked&&selectedIds.length>=limit);}
         confirm.disabled=selectedIds.length===0;renderTactics();
       });
-      controls.push([entry,button]);partyPanel.append(button);
+      const card=element('div','cm-vs5-party-card');card.dataset.picked='false';
+      const plan=element('div','cm-vs5-party-card__plan');plan.hidden=true;
+      card.append(button,plan);
+      controls.push([entry,button,card,plan]);partyPanel.append(card);
     }
-    partyPanel.append(tacticsBox);
     if(!candidates.some(c=>c.admission.ok))partyPanel.append(element('p','cm-vs5-entry-notice','目前沒有符合這場比賽條件的拍檔。'));
     confirm.addEventListener('click',async()=>{if(confirm.disabled||entering)return;confirm.disabled=true;entering=true;back.disabled=true;
       try{showRefusal(await onEnter(match.recordIndex,[...selectedIds],mode,...(arena?[arena.value()]:[])),match);}
@@ -1438,7 +1443,7 @@ function resultSummary(summary, winningTeam) {
   return box;
 }
 
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null, sponsor=null }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, syncPanel=null, followUp=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null, sponsor=null }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
   let disposed=false;
 
@@ -1540,6 +1545,17 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     }
   });
 
+  // Sync EXP (OWNER_APPROVED_ADAPTATION 2026-11-09): the app builds the panel from its settled gains.
+  if(syncPanel?.node){
+    panels.push({id:'SYNC',scene:'product_sync_exp',build(){
+      const frag=document.createDocumentFragment();
+      const head=element('header','cm-vs5-header');
+      head.append(element('span','cm-vs5-kicker',syncPanel.kicker,false),element('h1','cm-vs5-title',syncPanel.title,false));
+      frag.append(head,syncPanel.node);
+      queueMicrotask(()=>{if(!disposed)syncPanel.play();});
+      return frag;
+    }});
+  }
   // The sponsor contract this match carried (AWAKENING_OVERDRIVE_20261109): paid out, or the stake kept.
   if (sponsor) {
     panels.push({ id: "SPONSOR", scene: "result_sub_prize_scene", build() {
@@ -1582,13 +1598,25 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
   }});}
   const advance = actionButton("下一頁", { primary: true });
   const exit = actionButton(exitLabel, { primary: true });
+  // Owner 2026-11-10: a Journey tower result offers the next floor (or a retry) beside the way out.
+  const follow = followUp ? actionButton(followUp.label, { primary: true }) : null;
+  if (follow) {
+    follow.classList.add("cm-vs5-result__follow");
+    exit.classList.remove("cm-vs5-action--primary");
+    follow.addEventListener("click", () => { if (!disposed) followUp.onClick(); });
+  }
   exit.classList.add("cm-vs5-exit");
   if (typeof onExit === "function") exit.addEventListener("click", () => onExit());
 
   const body = element("div", "cm-vs5-result__body");
   const characterHost=element('div','cm-vs5-result__characters');
   characterHost.setAttribute('aria-label',uiText('參賽拍檔'));
-  const resultStage=element('div','cm-vs5-result__stage');resultStage.append(characterHost,body);
+  // Owner 2026-11-09: a spotlight from above -- cone, light shafts and drifting dust -- drawn
+  // behind the characters in CSS (screenLayout.css); decoration only.
+  const spot=element('div','cm-vs5-result__spot');spot.setAttribute('aria-hidden','true');
+  const dust=element('i','cm-vs5-result__dust');dust.append(element('i','cm-vs5-result__motes'));
+  const cone=element('i','cm-vs5-result__cone');cone.append(element('i','cm-vs5-result__shafts'),dust);spot.append(cone);
+  const resultStage=element('div','cm-vs5-result__stage');resultStage.append(spot,characterHost,body);
   let index = 0;
   // Ceremony (2026-10-15): the first time the title page (result_sub_titleget)
   // is reached, the medal is presented before the page settles under it. The
@@ -1614,6 +1642,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     const last = index === panels.length - 1;
     advance.hidden = last;
     exit.hidden = !last;
+    if (follow) follow.hidden = !last;
   }
 
   let entrance = null;
@@ -1627,12 +1656,14 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     if (index < panels.length - 1) { index += 1; paint(); }
   });
 
-  section.append(resultStage, advance, exit);
+  section.append(resultStage, advance, exit, ...(follow ? [follow] : []));
   // Owner 2026-10-29: a won battle can be shared as a brag card (product-authored; not a result scene).
   if (!tutorial && outcome.winningTeam === 0 && typeof brag?.onOpen === "function") {
     const share = document.createElement("button");
     share.type = "button"; share.className = "cm-brag-cta cm-brag-cta--result cm-arcade-key"; share.dataset.onlineAction = "brag-card";
-    share.textContent = brag.label ?? "";
+    // Owner 2026-11-09: a short key in the result's action row; the full sentence is its accessible name.
+    share.textContent = brag.shortLabel ?? brag.label ?? "";
+    if (brag.shortLabel && brag.label) share.setAttribute("aria-label", brag.label);
     share.addEventListener("click", () => { brag.onOpen(share); });
     section.insertBefore(share, advance);
   }
@@ -1679,6 +1710,6 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         outOfScope: Object.freeze(["result_sub_net_scene"])
       });
     },
-    dispose() { if(disposed)return;disposed=true;entrance?.dispose?.(); entrance = null;medalCeremony?.dispose();medalCeremony=null;hudArt=null; }
+    dispose() { if(disposed)return;disposed=true;entrance?.dispose?.(); entrance = null;medalCeremony?.dispose();medalCeremony=null;hudArt=null;syncPanel?.dispose?.(); }
   });
 }

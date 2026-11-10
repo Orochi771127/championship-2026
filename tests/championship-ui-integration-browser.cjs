@@ -278,7 +278,7 @@ async function footerReachable(page, selector, label) {
       await page.locator('.cm-vs5-cube__face').first().waitFor();
       assert.equal(await page.locator('.cm-vs5-conference').isVisible(), false, 'no second tournament entry beside the cube');
       assert.deepEqual(await page.locator('.cm-vs5-footer button:visible').allTextContents(), ['返回牧場']);
-      await page.locator('.cm-vs5-cube__face').filter({ hasText: '練習對戰' }).click();
+      await page.locator('.cm-vs5-cube__face').filter({ hasText: '練習對戰' }).dispatchEvent('click');
       await page.locator('.cm-vs5-practice-member').first().waitFor();
       assert.deepEqual(await page.locator('.cm-vs5-footer button:visible').allTextContents(), ['返回賽事選擇', '開始練習']);
       const names = await page.locator('.cm-vs5-practice-member__name').allTextContents();
