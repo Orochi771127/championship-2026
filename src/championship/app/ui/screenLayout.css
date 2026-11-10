@@ -3340,6 +3340,21 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
   background: linear-gradient(180deg, rgba(255, 248, 231, 0.3), rgba(60, 50, 120, 0.55));
 }
 :root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools[data-dock="tactical"] > .cm-vs2-action[data-slot="hand"] .cm-hunt-dock__tag { display: none; }
+/* HUNT_INSTINCT_VFX_20261110: the hand reads 捕獲移動 (friends did not know what 手 did). The whole name
+   shows, never an ellipsis; a longer translation wraps to a second line under the glove. */
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools[data-dock="tactical"] > .cm-vs2-action[data-slot="hand"] {
+  width: 60px;
+  padding-top: 6px;
+  grid-template-rows: 26px auto;
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools[data-dock="tactical"] .cm-vs2-action[data-slot="hand"][data-tool] .cm-hunt-tools__label {
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+  font-size: 11px;
+  line-height: 11px;
+  text-align: center;
+}
 :root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools[data-dock="tactical"] > .cm-vs2-action[data-slot="hand"][data-ready="true"] {
   border-color: #3ddc84;
   animation: cm-dock-hand-ready 800ms cubic-bezier(0.37, 0, 0.63, 1) infinite;

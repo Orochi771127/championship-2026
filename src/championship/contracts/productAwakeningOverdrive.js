@@ -7,7 +7,8 @@
 //   3. in battle a long press (0.6 s) or a double tap calls an over-limit burst: cooldowns reset, damage and
 //      action speed +50 % for 10 s, then a 3 s exhaustion unless the current foe fell (beta bloodline: immune);
 //      and sponsor stake contracts on a match (stake 15,000-80,000 bits, paid back x2 / x2.5 / x3 on success);
-//   4. wild partners in the hunt roll a hidden instinct: normal 65 %, veteran elite 27 %, ancestral 8 %.
+//   4. wild partners in the hunt roll a hidden instinct. Owner 2026-11-10 (HUNT_INSTINCT_RARITY_20261110): very rare --
+//      veteran elite 1.5 %, ancestral 0.3 %, at most one of each per hunt -- and two premium-machine radars call them.
 // This module is pure: tables plus functions over plain values. The app owns wallets, saves and timing.
 import {deepFreeze} from './championshipContracts.js';
 
@@ -103,10 +104,43 @@ export function settleSponsorContract({contractId, stake, oddsBonus = false}, re
 
 // ---- 4. wild awakening instinct ----
 export const WILD_INSTINCTS = deepFreeze([
-  {id: 'NORMAL', weight: 65},
-  {id: 'ELITE', weight: 27, speedMultiplier: 1.2, awakeningPoints: 15, statGain: 6},
-  {id: 'ANCESTOR', weight: 8, scale: 1.15, awakeningPercent: 40}
+  {id: 'NORMAL', weight: 98.2},
+  {id: 'ELITE', weight: 1.5, speedMultiplier: 1.2, awakeningPoints: 15, statGain: 6},
+  {id: 'ANCESTOR', weight: 0.3, scale: 1.15, awakeningPercent: 40}
 ]);
+// HUNT_INSTINCT_RARITY_20261110: a hunt holds at most this many of each; partners past the cap stay normal.
+export const WILD_INSTINCT_LIMITS = deepFreeze({ELITE: 1, ANCESTOR: 1});
+// The two premium-machine hunt radars (gacha chips `effect` keys). Each multiplies its instinct's rate,
+// guarantees that many in the hunt and raises the cap.
+export const WILD_INSTINCT_CALLS = deepFreeze({
+  eliteCall: {id: 'ELITE', multiplier: 10, guarantee: 1, limit: 2},
+  ancestorCall: {id: 'ANCESTOR', multiplier: 10, guarantee: 1, limit: 1}
+});
+/**
+ * Every wild partner's instinct for one hunt, from each partner's own noise in [0, 1): the (boosted) rates,
+ * then the per-hunt caps, then a radar's guarantee, given to the normal partners whose noise lies closest
+ * to the special band. Pure: the same noises and radars always give the same hunt.
+ */
+export function settleWildInstincts(noises, boosts = {}) {
+  const weight = Object.fromEntries(WILD_INSTINCTS.map(entry => [entry.id, entry.weight]));
+  const limit = {...WILD_INSTINCT_LIMITS}, guarantee = {ELITE: 0, ANCESTOR: 0};
+  for (const [key, call] of Object.entries(WILD_INSTINCT_CALLS)) {
+    if (!boosts?.[key]) continue;
+    weight[call.id] *= call.multiplier; limit[call.id] = call.limit; guarantee[call.id] = call.guarantee;
+  }
+  const normal = 100 - weight.ELITE - weight.ANCESTOR, count = {ELITE: 0, ANCESTOR: 0};
+  const out = noises.map(noise => {
+    const at = noise * 100;
+    const id = at < normal ? 'NORMAL' : at < normal + weight.ELITE ? 'ELITE' : 'ANCESTOR';
+    if (id === 'NORMAL' || count[id] >= limit[id]) return 'NORMAL';
+    count[id]++; return id;
+  });
+  for (const id of ['ANCESTOR', 'ELITE']) {
+    const order = noises.map((noise, i) => [noise, i]).filter(([, i]) => out[i] === 'NORMAL').sort((a, b) => b[0] - a[0] || a[1] - b[1]);
+    while (count[id] < guarantee[id] && order.length) { out[order.shift()[1]] = id; count[id]++; }
+  }
+  return out;
+}
 export const WILD_INSTINCT_BLOODLINES = Object.freeze(['emma', 'beta', 'chronoOre', 'chronoMetal', 'chronoAlloy', 'supernova']);
 export function wildInstinct(id) { return WILD_INSTINCTS.find(entry => entry.id === id) ?? WILD_INSTINCTS[0]; }
 // Deterministic noise in [0, 1) from integer keys (product-side; the native hunt RNG is never read).

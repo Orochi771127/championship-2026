@@ -297,6 +297,14 @@ const importLocalReviewModule = (relative, options) => import(new URL(relative, 
 const loadHuntExpansionReview = HUNT_EXPANSION_REVIEW
   ? async () => (await import("../../data/championship/catalogs/hunt-art-expansions-20261023.json", { with: { type: "json" } })).default
   : null;
+// Loopback review only (?huntInstinctQa=ELITE|ANCESTOR|mix, HUNT_INSTINCT_VFX_20261110): every wild partner
+// takes that instinct (mix: elite, ancestral, normal in turn) so the auras can be reviewed. Public hosts never bind it.
+const HUNT_INSTINCT_QA = (() => {
+  if (!["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname)) return null;
+  const value = new URLSearchParams(globalThis.location?.search ?? "").get("huntInstinctQa");
+  if (value === "mix") return (i) => ["ELITE", "ANCESTOR", "NORMAL"][i % 3];
+  return ["ELITE", "ANCESTOR", "NORMAL"].includes(value) ? () => value : null;
+})();
 const HUNT_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("huntArt");
 const CAGE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("cageArt");
 // Owner 2026-10-27 diorama review: ?ranchPitch=35|40|45 compares camera pitches.
@@ -3664,6 +3672,7 @@ function boot() {
       // before this script runs; players never see that switch.
       partnerLife: globalThis.__CHAMPIONSHIP_PARTNER_LIFE__ !== false,
       huntExpansionLoader: loadHuntExpansionReview,
+      huntInstinctOverride: HUNT_INSTINCT_QA,
       catalog: productEntities,
       cages: RAISING_CAGES,
       // Owner 2026-11-02: the ranch runs on the device's local time (no fast-forward, a night nap 22:00-07:00,

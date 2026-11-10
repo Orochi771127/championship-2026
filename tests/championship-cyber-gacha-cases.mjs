@@ -20,9 +20,10 @@ import {GACHA_SUPPLY_PACKS, GACHA_TICKET_PACK, GACHA_BITS_MACHINE_TIERS, GACHA_P
 const read = path => JSON.parse(readFileSync(new URL(`../${path}`, import.meta.url), 'utf8'));
 const seq = values => { let i = 0; return () => values[i++ % values.length]; };
 
-test('eighteen plugin rows come back as stackable chips; metals and goods carry real art', () => {
-  assert.equal(GACHA_CHIPS.length, 18);
-  assert.deepEqual(GACHA_CHIPS.map(c => c.shopRecordIndex).sort((a, b) => a - b), Array.from({length: 18}, (_, i) => 53 + i));
+test('eighteen plugin rows come back as stackable chips (+ two radars); metals and goods carry real art', () => {
+  // HUNT_INSTINCT_RARITY_20261110: the 龍族 / 星靈族 radar rows (74, 78) return as the elite and ancestral radars.
+  assert.equal(GACHA_CHIPS.length, 20);
+  assert.deepEqual(GACHA_CHIPS.map(c => c.shopRecordIndex).sort((a, b) => a - b), [...Array.from({length: 18}, (_, i) => 53 + i), 74, 78]);
   for (const chip of GACHA_CHIPS) assert.equal(getShopRecord(chip.shopRecordIndex).category, 'PLUGINS');
   assert.equal(GACHA_METALS.length, 12);
   for (const entry of [...GACHA_METALS, ...GACHA_GOODS]) {

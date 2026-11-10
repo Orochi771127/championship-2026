@@ -4,8 +4,18 @@
 //    along the map's sun, so it moves with every drawing the partner shows.
 // Presentation only. The native footprint ellipses and frame stay the inputs.
 
+// Wild instinct glow (Owner 2026-11-10: 「這樣就很好……不要太花俏」): a special partner's contact shadow is
+// drawn in its tier's colour instead of black, the same feathered footprint, nothing else.
+export const HUNT_INSTINCT_GLOW = Object.freeze({
+  ELITE: Object.freeze({color: 0xff2a10, opacity: 0.9}),
+  ANCESTOR: Object.freeze({color: 0x9a5cff, opacity: 0.9})
+});
+
 export const HUNT_ACTOR_SHADOW = Object.freeze({
-  contactOpacity: 0.45, contactFeather: 1.3, segments: 24, midRing: 0.55, midAlpha: 0.62,
+  contactOpacity: 0.45, contactFeather: 1.3, segments: 24, midRing: 0.55, midAlpha: 0.75,
+  // A small dark core hugging the feet (HUNT_GROUNDING_20261110): the soft ellipse stays light, this
+  // is where paw meets floor. Fraction of the footprint, and its own opacity on top of the ellipse.
+  coreOpacity: 0.32, coreScaleX: 0.7, coreScaleY: 0.42,
   castColor: 0x120e1a, castOpacity: 0.30, castNightOpacity: 0.16, castMaxReach: 1.1
 });
 
