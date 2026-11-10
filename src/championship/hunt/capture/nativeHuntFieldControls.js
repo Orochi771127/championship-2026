@@ -73,7 +73,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   const equipped=kind=>{const slot=loadout.getSelectedEquipment().find(s=>s.equipmentClass===kind);return slot?.itemId?{...getHuntCatalogItem(slot.itemId),quantity:slot.quantity}:null;};
   const stopRope=a=>{if(rope?.actor===a)rope=null;};
   const ropeRole=()=>{const item=equipped("ROPE");return item?huntRopeRole(item.nativeItemIndex):null;};
-  const cinchTicks=()=>ropeRole()==="SWIFT"?HUNT_ROPE_TACTICS.swiftCinchTicks:18;
+  const cinchTicks=()=>18; // native cinch for every rope (HUNT_ROPE_ORIGINAL_20261111)
   const catchMargin=()=>ropeRole()==="SWIFT"?HUNT_ROPE_TACTICS.swiftCatchMargin:LASSO_RULES.catchMargin;
   // Trees, rocks and water: ground a partner cannot stand on (native 8 px cells).
   const blockedPixel=(x,y)=>{
@@ -85,17 +85,6 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     if(typeof environment?.readTerrain!=="function")return true;
     const terrain=environment.readTerrain(x,y);
     return Number.isInteger(terrain)&&terrain>=0&&terrain<=4&&terrain!==1;
-  };
-  // A bound partner the finger did not land on: the nearest one still on the
-  // field. Scripted tutorial partners keep the exact native hit test.
-  const nearestBound=p=>{
-    let best=null,bestD=Infinity;
-    for(const a of actors){
-      if(!a.bound||!a.actorActive||a.hidden||a.passage||a.cardState||a.tutorialScripted)continue;
-      const d=Math.hypot((a.positionQ12[0]-p[0])/Q12,(a.positionQ12[1]-p[1])/Q12);
-      if(d<bestD){bestD=d;best=a;}
-    }
-    return best;
   };
   const restoreFinite=(a,before)=>{
     if(a.positionQ12.every(Number.isFinite))return;
@@ -241,7 +230,9 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     }
     if(pointer?.kind==="ROPE_STROKE") {
       sample();
-      const loop=closure?null:lasso.add(pointer.pixels[0],pointer.pixels[1]);
+      // HUNT_ROPE_ORIGINAL_20261111: no mid-stroke lasso -- the original reads the
+      // shape when the finger lifts (02114718) and binds round the loop's centre.
+      const loop=null;
       if(loop){
         closure={centerQ12:[Math.round(loop.centroid.x*Q12),Math.round(loop.centroid.y*Q12)],polygon:loop.polygon,ticks:cinchTicks(),
           serial:++closureSerial,caught:lassoCaught(loop.polygon).map(a=>a.wildId)};
@@ -314,13 +305,11 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
         if(ropeLeft(item)<=0){emit("ROPE_EXHAUSTED");return true;}
         // The next rope is still being tied on (0.25 s after a snap).
         if(tactics.overheatTicks(item.itemId)>0)return true;
-        // OWNER_APPROVED_ADAPTATION 2026-11-03: once a loop is on a partner, a
-        // press anywhere is a pull. The drag is read from the press point, as if
-        // the finger had landed on the partner's rope anchor.
-        const held=a?.bound?a:nearestBound(p);
-        if(held)selectedWildId=held.wildId;
-        if(held&&huntRopeBindRule(item.nativeItemIndex,tactics.generation(held))==="REPEL"){repel(held,p);onChange();return true;}
-        const offset=held&&held!==a?[held.positionQ12[0]-p[0],held.positionQ12[1]-10*Q12-p[1]]:null;
+        // HUNT_ROPE_ORIGINAL_20261111 (Owner): as in the original, a pull starts by
+        // touching the bound partner itself; a press elsewhere draws a new loop.
+        // (Replaces the 2026-11-03 press-anywhere pull.)
+        const held=a?.bound?a:null;
+        const offset=null;
         pointer={kind:held?"ROPE_PULL":"ROPE_STROKE",q12:offset?[p[0]+offset[0],p[1]+offset[1],0]:p,finger:p,offset,
           pixels:p.slice(0,2).map(n=>n>>12),released:false};
         if(held){

@@ -1,5 +1,22 @@
 # Championship Owner Direction
 
+<!-- record-id: HUNT_ROPE_ORIGINAL_20261111 -->
+## 2026-11-11 — Hunt rope back to the original: loop read on release, a touch on the partner to pull, no rope role bonuses
+
+The Owner felt the lasso-and-pull play had drifted (「這個好像有點跑掉了」) and first asked for one partner per loop. The evidence was checked before changing anything:
+
+- OVL0 `0x021148CC` (research-only `DISASM_capture_handlers.txt` lines 194–301): after the shape test it queries a ±48 px box round the loop's centre (`0x02066538`) and loops over **every** hit (`0x021149A0..0x02114A04`), sending each the bind event `0x23`. The query keeps native slot order and appends only a partner lower on screen than the last, so one loop can bind more than one partner but not necessarily all of them.
+- The shape is read when the finger lifts (`02114718`, predicate `02114388`: at least 6 samples, four extremes in order, width over 25 px, width about equal to or twice the height within 15 px).
+- The pull (`02114F54`, CPU-replayed over 198 updates, unchanged): under 40 px slack (no damage, +10 durability), 40–80 px ×1, 80 px or more ×2 with the partner dragged toward the finger, over 160 px the rope breaks; damage is max HP over the rope coefficient, no capture roll. In the original the pull starts by touching the bound partner.
+
+Told that one-per-loop is not original, the Owner chose 照原作 and asked to restore the loop reading, the touch-to-pull and the rope roles: 「圈的判定方式, 要按在怪身上才能拉, 四種繩子的特殊加成」.
+
+OWNER_APPROVED_ADAPTATION reversal (back toward ROM behaviour):
+- The 2026-10-27 mid-stroke polygon lasso no longer binds; the native shape test on release and the ±48 px centre query bind, after the native 18-tick cinch, for every rope.
+- The 2026-11-03 press-anywhere pull is gone: a pull starts only on a bound partner under the finger (native hit test, front-most first); a press elsewhere draws a new loop. The 3-second slip watchdog stays.
+- The 2026-10-28 rope role bonuses are off: no 捕捉繩 +30 % damage, faster cinch or wider catch; no 強力繩 half wear or two-partner hold; no 克隆繩 awake tolerance cut or doubled imprint; no 究極繩 repel or rage guard; no extra wear for a rope line crossing rocks.
+- Kept: each role's extra reach rows (so every rope can still bind the stages it is sold for), counted ropes and wear (HUNT_TOOL_TIERS_20261103), the lure → disable → rope chain bonus.
+
 <!-- record-id: HUNT_SPAWN_SPREAD_20261110 -->
 ## 2026-11-10 — Hunt partners spread out: loose same-species groups, a third of a screen apart
 

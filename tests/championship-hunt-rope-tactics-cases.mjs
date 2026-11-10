@@ -1,5 +1,6 @@
-// Hunt rope roles, combos and overheat (Owner direction 2026-10-28). The
-// native rope writer stays as traced; these check the adaptation around it.
+// Hunt rope roles, combos and overheat (Owner direction 2026-10-28). The native rope writer stays as
+// traced. HUNT_ROPE_ORIGINAL_20261111: the Owner took the role bonuses back out -- every rope binds,
+// pulls and wears exactly as the native rope; reach rows, counted ropes and the lure chain remain.
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -32,24 +33,21 @@ test("ROM rows stay; each role adds only its own reach", () => {
   assert.equal(huntRopeCoefficient(nativeRopeRow(8), species(6)), 0);
 });
 
-test("究極繩 throws off 幼年期 and 成長期", () => {
-  for (const generation of [1, 2, 3]) assert.equal(huntRopeBindRule(10, generation), "REPEL");
-  for (const generation of [4, 5, 6]) assert.equal(huntRopeBindRule(10, generation), "BIND");
-  for (const rope of [0, 4, 7]) assert.equal(huntRopeBindRule(rope, 1), "BIND");
+test("every rope binds: no role throws a partner off (HUNT_ROPE_ORIGINAL_20261111)", () => {
+  for (let rope = 0; rope < 12; rope++) for (let generation = 1; generation <= 6; generation++) assert.equal(huntRopeBindRule(rope, generation), "BIND");
 });
 
-test("role adjustments: swift pulls harder, clone is fragile awake, ultimate rages", () => {
+test("no role bonus: damage and durability are the native rope's own", () => {
   const row = speciesOfGeneration(2);
   const native = nativeRopeParameters(1, row.speciesIndex, 120);
   const swift = huntTacticalRope(native, { nativeItemIndex: 1, generation: 2, maxHp: 120, coefficient: 1, pacified: false, rage: false });
-  assert.equal(swift.damageQ12, Math.round(native.damageQ12 * T.swiftDamageScale));
+  assert.equal(swift.damageQ12, native.damageQ12, "捕捉繩 pulls no harder than the native rope");
   const cloneNative = nativeRopeParameters(7, row.speciesIndex, 120);
   const awake = huntTacticalRope(cloneNative, { nativeItemIndex: 7, generation: 2, maxHp: 120, coefficient: 1, pacified: false, rage: false });
-  const calm = huntTacticalRope(cloneNative, { nativeItemIndex: 7, generation: 2, maxHp: 120, coefficient: 1, pacified: true, rage: false });
-  assert.equal(awake.baseDurability, Math.trunc(cloneNative.baseDurability * T.cloneAwakeTolerance));
-  assert.equal(calm.baseDurability, cloneNative.baseDurability);
-  assert.equal(awake.fragile, true);
-  // A role's extra row fills a zero native rate with the same formula.
+  assert.equal(awake.baseDurability, cloneNative.baseDurability, "克隆繩 keeps its full durability awake");
+  assert.equal(awake.durability, cloneNative.durability);
+  assert.equal(awake.fragile, false);
+  // A role's extra reach row still fills a zero native rate with the native formula.
   const rookie = speciesOfGeneration(3);
   const zero = nativeRopeParameters(0, rookie.speciesIndex, 200);
   assert.equal(zero.damageQ12, 0);
@@ -58,38 +56,25 @@ test("role adjustments: swift pulls harder, clone is fragile awake, ultimate rag
   assert.ok(reach.damageQ12 > 0);
   const ultimate = huntTacticalRope(nativeRopeParameters(11, speciesOfGeneration(5).speciesIndex, 300),
     { nativeItemIndex: 11, generation: 5, maxHp: 300, coefficient: 50, pacified: false, rage: true });
-  assert.equal(ultimate.rage, true);
+  assert.equal(ultimate.rage, false, "no rage guard");
 });
 
 function pull(rope, { dx = 90, blocked = false } = {}) {
   return stepNativeRopeController(rope, 100, { dxQ12: dx * 4096, dyQ12: 0, movementBlocked: blocked }).rope;
 }
 
-test("wear: tough halves terrain, rage doubles, a two-partner loop never snaps", () => {
+test("wear is the native controller's alone: no terrain, rage or two-partner rules", () => {
   const row = speciesOfGeneration(2);
-  const make = (index, extra = {}) => huntTacticalRope(nativeRopeParameters(index, row.speciesIndex, 100),
-    { nativeItemIndex: index, generation: 2, maxHp: 100, coefficient: 50, pacified: true, rage: false, ...extra });
-  const run = (rope, ticks, options) => {
-    let current = rope;
-    for (let i = 0; i < ticks && current.band !== "BROKEN"; i++) current = huntRopeWear(current, pull(current, options), options);
-    return current;
-  };
-  const swift = run(make(2), 30, { terrainCrossed: true });
-  const tough = run(make(5), 30, { terrainCrossed: true });
-  const swiftLoss = make(2).durability - swift.durability, toughLoss = make(5).durability - tough.durability;
-  assert.ok(toughLoss < swiftLoss, `tough ${toughLoss} < swift ${swiftLoss}`);
-  // Same state, one pull: a raging partner tears twice the native wear (the
-  // native over-cap decay depends on durability, so compare tick by tick).
-  const settled = run(make(11), 3, {});
-  const calmTick = settled.durability - huntRopeWear(settled, pull(settled), {}).durability;
-  const ragingState = { ...settled, rage: true };
-  assert.equal(ragingState.durability - huntRopeWear(ragingState, pull(ragingState), {}).durability, 2 * calmTick);
-  let held = { ...make(3), durability: 2 };
-  for (let i = 0; i < 20; i++) held = huntRopeWear(held, pull(held), { groupHold: true });
-  assert.notEqual(held.band, "BROKEN");
-  assert.equal(held.durability >= 1, true);
-  const snapped = huntRopeWear(make(3), pull(make(3), { dx: 200 }), { overstretched: true, groupHold: true });
-  assert.equal(snapped.band, "BROKEN", "pulling past the snap distance still breaks it");
+  for (const index of [2, 5, 8, 11]) {
+    const rope = huntTacticalRope(nativeRopeParameters(index, row.speciesIndex, 100),
+      { nativeItemIndex: index, generation: 2, maxHp: 100, coefficient: 50, pacified: true, rage: false });
+    for (const options of [{}, { terrainCrossed: true }, { movementBlocked: true }, { groupHold: true }, { overstretched: true }]) {
+      const next = pull(rope, { blocked: !!options.movementBlocked });
+      assert.equal(huntRopeWear({ ...rope, rage: true }, next, options), next, `rope ${index} ${JSON.stringify(options)}`);
+    }
+  }
+  const snapped = pull(nativeRopeParameters(3, row.speciesIndex, 100), { dx: 200 });
+  assert.equal(huntRopeWear(snapped, snapped, { groupHold: true }).band, "BROKEN", "past the snap distance a rope breaks");
 });
 
 test("the rope line reads blocked ground", () => {
@@ -101,20 +86,19 @@ function actor(id, generation, extra = {}) {
   return { wildId: id, speciesIndex: generation, actorActive: true, aiState: 1, currentHp: 100, bound: 0, ...extra };
 }
 
-test("guard, chain and overheat memory", () => {
+test("chain and overheat memory; no rage guard to break", () => {
   const tactics = createHuntRopeTactics({ generationOf: index => index });
   const boss = actor("boss", 5), small = actor("small", 2);
   tactics.observe([boss, small]);
-  assert.equal(tactics.guard(boss), T.guardMax);
-  assert.equal(tactics.rage(small), false, "only 完全體 / 究極體 rage");
+  assert.equal(tactics.guard(boss), 0, "完全體 / 究極體 start without a guard");
+  assert.equal(tactics.rage(boss), false);
   let broke = [];
   for (let i = 0; i < 3; i++) {
     boss.aiState = 9; broke = broke.concat(tactics.observe([boss], { shotItemIndex: 2 }));
     boss.aiState = 1; tactics.observe([boss]);
   }
-  assert.equal(tactics.guard(boss), 0, "three rapid shots break the guard");
-  assert.deepEqual(broke.map(e => e.kind), ["GUARD_BROKEN"]);
-  // Lure, trap, rope: a perfect chain, doubled by a clone imprint.
+  assert.deepEqual(broke, [], "nothing to break");
+  // Lure, trap, rope: a perfect chain; no clone imprint doubles it any more.
   const target = actor("target", 3);
   target.aiState = 5; tactics.observe([target]);
   target.aiState = 16; tactics.observe([target]);
@@ -122,7 +106,8 @@ test("guard, chain and overheat memory", () => {
   tactics.ropeDowned(target, "CLONE");
   const combo = tactics.settle(target);
   assert.equal(combo.rank, "PERFECT");
-  assert.equal(combo.bits, T.comboBitsPerGeneration.PERFECT * 3 * T.imprintScale);
+  assert.equal(combo.imprint, false);
+  assert.equal(combo.bits, T.comboBitsPerGeneration.PERFECT * 3);
   assert.equal(tactics.settle(target), combo, "a chain pays once");
   const plain = actor("plain", 2);
   tactics.observe([plain]);
@@ -163,21 +148,16 @@ function lasso(runtime, wildId, notices) {
   return at();
 }
 
-test("a live hunt: the ultimate rope throws off a small partner, a spare rope binds it, a snapped rope is replaced", async () => {
+test("a live hunt: the ultimate rope binds a small partner too, and a snapped rope is replaced", async () => {
   const { runtime } = await huntWith([0, 11], 11);
   const small = runtime.getWildCreatures().find(w => nativeHuntToolSpecies(w.speciesIndex).generation <= 3);
   assert.ok(small, "the grass gate has a 幼年期 / 成長期 partner");
   let tool = runtime.getToolState().tools.find(t => t.id === "ROPE");
   assert.equal(tool.role, "ULTIMATE"); assert.equal(tool.spares, 1);
   const notices = new Set();
-  assert.equal(lasso(runtime, small.wildId, notices).bound, false, "too much force: no bind");
-  assert.ok(notices.has("ROPE_TOO_HEAVY"));
-  assert.equal(runtime.cycleRope(), true);
-  tool = runtime.getToolState().tools.find(t => t.id === "ROPE");
-  assert.equal(tool.role, "SWIFT");
-  for (let i = 0; i < 200; i++) runtime.tick(FRAME); // let the startled partner settle
-  const caught = lasso(runtime, small.wildId, new Set());
-  assert.equal(caught.bound, true, "the light rope binds it");
+  const caught = lasso(runtime, small.wildId, notices);
+  assert.equal(caught.bound, true, "HUNT_ROPE_ORIGINAL_20261111: no rope throws a partner off");
+  assert.equal(notices.has("ROPE_TOO_HEAVY"), false);
   // Pull far past the snap distance: the rope snaps. Since HUNT_TOOL_TIERS_20261103 ropes
   // are counted, so the snapped one is spent and the next is tied on in 0.25 s.
   runtime.toolPointerDown(caught.worldX, caught.worldY - 10); runtime.tick(FRAME);
@@ -192,5 +172,5 @@ test("a live hunt: the ultimate rope throws off a small partner, a spare rope bi
   assert.equal(runtime.getToolState().tools.find(t => t.id === "ROPE").swapping, false);
   assert.equal(runtime.cycleRope(), true, "a spare can be swapped in at once");
   tool = runtime.getToolState().tools.find(t => t.id === "ROPE");
-  assert.equal(tool.role, "ULTIMATE"); assert.equal(tool.overheatSeconds, 0);
+  assert.equal(tool.role, "SWIFT"); assert.equal(tool.overheatSeconds, 0);
 });
