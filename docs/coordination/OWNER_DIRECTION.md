@@ -1,5 +1,18 @@
 # Championship Owner Direction
 
+<!-- record-id: HUNT_ROPE_VFX_20261111 -->
+## 2026-11-11 — The hunt rope looks like a rope: braided pixel cord, cinch, coil, tension and snap
+
+The Owner asked for commercial-quality lasso and pull effects: 「現在就好像一個很便宜的線」.
+
+OWNER_APPROVED_ADAPTATION, presentation only (`presentation/vs2/huntRopeVfx.js`); it reads the published tool state and never writes the hunt. One HD-pixel look: an 8×8 two-strand braid bent along the path with Pixi `MeshRope` (nearest filtering), an additive glow rope under it, square pixel sparks.
+- Drawing: the rope follows the finger with a bright head and shed sparks; the start point pulses once the head comes back round. The drawn path is published for display only (`lassoPath` from the finger trail, `closure.trail`); binding is unchanged (HUNT_ROPE_ORIGINAL_20261111).
+- Release: the drawn loop pulls tight toward its centre in gold; a hit bursts (shock ring, flash, shards) on every partner it bound, a miss lets the loop drop grey and puff.
+- Bound: a glowing rope coil with a knot at the partner's feet.
+- Pull: the tether sags and glows cyan when slack, nearly straight in amber under pull, taut red and humming under a strong pull; below 30 % durability it flickers and frays.
+- Snap: the rope breaks at the middle, both halves whip back, sparks burst (`snap` event from the controls).
+- Reduced motion keeps every state readable without hum, jitter or sparks. The old line-and-star drawing is removed.
+
 <!-- record-id: HUNT_ROPE_ORIGINAL_20261111 -->
 ## 2026-11-11 — Hunt rope back to the original: loop read on release, a touch on the partner to pull, no rope role bonuses
 

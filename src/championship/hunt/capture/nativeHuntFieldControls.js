@@ -36,7 +36,7 @@ export function separateNativeHuntGroundActors(actors,environment){
 export function createNativeHuntFieldControls({ records,wildIds,environment,rng,loadout,consumeItem,maxCardG,night=false,onChange=()=>{},boosts=null,ropeLedger=null }) {
   if (!rng?.next || !loadout?.getSelectedEquipment || typeof consumeItem!=="function") throw Error("NATIVE_HUNT_CONTROL_AUTHORITIES_REQUIRED");
   const actors=records.map((r,i)=>createNativeWildActor(r,wildIds[i]));
-  let activeTool="HAND", pointer=null, stroke=null, closure=null, rope=null, selectedWildId=null, strokePending=false;
+  let activeTool="HAND", pointer=null, stroke=null, closure=null, rope=null, selectedWildId=null, strokePending=false, ropeTrail=[], ropeSnap=null;
   // OWNER_APPROVED_ADAPTATION 2026-10-27: the drawn loop itself (ropeLassoGesture.js)
   // decides who is caught; the native sampler still runs for its RNG and fallback.
   const lasso=createLassoTracker();let closureSerial=0,lassoClosed=false;
@@ -151,6 +151,10 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   };
   // The rope in hand snapped: spend it, and tie on the next one (0.25 s), or another colour.
   const snapRope=a=>{
+    // Where it broke, for the snap VFX only (HUNT_ROPE_VFX_20261111).
+    const finger=pointer?.finger??pointer?.q12;
+    ropeSnap={serial:(ropeSnap?.serial??0)+1,from:[a.positionQ12[0]/2048,a.positionQ12[1]/2048-20],
+      to:finger?[finger[0]/2048,finger[1]/2048]:[a.positionQ12[0]/2048+60,a.positionQ12[1]/2048-20]};
     const itemId=rope.itemId;rope=null;a.events.push({code:0x14});
     if(a.tutorialScripted){emit("ROPE_BROKEN");return;}
     ropeLedger?.setWear?.(itemId,1);
@@ -193,7 +197,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   function submitStroke() {
     if(stroke) {
       const shape=recognizeNativeRopeStroke(stroke);
-      if(shape)closure={...shape,ticks:cinchTicks(),serial:++closureSerial};
+      if(shape)closure={...shape,ticks:cinchTicks(),serial:++closureSerial,trail:ropeTrail.slice()};
     }
     stroke=null;ages.fill(0);
   }
@@ -324,7 +328,8 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
           if(left<1)rope.state=Object.freeze({...rope.state,durability:Math.max(1,Math.round(rope.state.durability*left))});
           if(rope.state.rage)notice="RAGE_GUARD";else if(rope.state.fragile)notice="ROPE_FRAGILE";
         }
-        else {stroke=createNativeRopeStroke();ages.fill(0);lasso.reset({x:p[0]>>12,y:p[1]>>12});lassoClosed=false;}
+        else {stroke=createNativeRopeStroke();ages.fill(0);lasso.reset({x:p[0]>>12,y:p[1]>>12});lassoClosed=false;
+          ropeTrail=[{x:p[0]>>12,y:p[1]>>12}];} // the drawn path, for the rope VFX only (HUNT_ROPE_VFX_20261111)
         onChange();return true;
       }
       if(consumables.canUse(activeTool)) {
@@ -342,7 +347,9 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
       if(pointer.kind==="ROPE_STROKE"&&stroke&&strokePending)sample();
       pointer.finger=finger;pointer.q12=pointer.offset?[finger[0]+pointer.offset[0],finger[1]+pointer.offset[1],0]:finger;
       pointer.pixels=finger.slice(0,2).map(n=>n>>12);
-      if(pointer.kind==="ROPE_STROKE")strokePending=true;
+      if(pointer.kind==="ROPE_STROKE"){strokePending=true;
+        const head={x:finger[0]>>12,y:finger[1]>>12},last=ropeTrail.at(-1);
+        if(!last||Math.hypot(head.x-last.x,head.y-last.y)>=2){ropeTrail.push(head);if(ropeTrail.length>240)ropeTrail.shift();}}
       return true;},
     pointerUp(x,y){if(!pointer)return false;this.pointerMove(x,y);pointer.released=true;return true;},
     cancel(){if(rope)rope.actor.events.push({code:0x12});consumables.cancel();pointer=null;stroke=null;rope=null;ages.fill(0);lasso.reset();},
@@ -394,8 +401,10 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
         role:rope.state.role,rage:rope.state.rage,fragile:rope.state.fragile,guard:tactics.guard(rope.actor)}:null,
       points:stroke?.slots.filter(Boolean).map(s=>({x:s.positionQ12[0]/2048,y:s.positionQ12[1]/2048}))??[],
       closure:closure?{x:closure.centerQ12[0]/2048,y:closure.centerQ12[1]/2048,ticks:closure.ticks,serial:closure.serial,
-        polygon:closure.polygon?.map(p=>({x:p.x*2,y:p.y*2}))??null,caught:closure.caught?.length??null}:null,
-      lassoPath:pointer?.kind==="ROPE_STROKE"?lasso.points.map(p=>({x:p.x*2,y:p.y*2})):[],
+        polygon:closure.polygon?.map(p=>({x:p.x*2,y:p.y*2}))??null,caught:closure.caught?.length??null,
+        trail:closure.trail?.map(p=>({x:p.x*2,y:p.y*2}))??null}:null,
+      snap:ropeSnap,
+      lassoPath:pointer?.kind==="ROPE_STROKE"?ropeTrail.map(p=>({x:p.x*2,y:p.y*2})):[],
       captureEffects:captureEffects(),
       usedG:usedG(),maxG:maxCardG}),
     getAvailability(){const a=actors.find(a=>a.wildId===selectedWildId);return {state:a?nativeWildCaptureSnapshot(a).state:"NO_TARGET",canCollect:a?.aiState===11||a?.aiState===16&&a.trapReady,targetWildId:selectedWildId,currentHp:a?.currentHp??null};}
