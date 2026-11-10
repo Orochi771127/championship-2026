@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 51,
+    "registeredRuntimeBundles": 53,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -647,6 +647,32 @@
       "publicationAuthorized": true,
       "scope": "Owner-approved General R8 / Arena R6. Original illustration pixels, native event metadata preserved. Public playtest authorization for AW01-AW53; no new commercial-rights claim.",
       "runtimeQaEvidence": "docs/reports/aw14-release-20261110/VALIDATION.json"
+    },
+    {
+      "assetId": "art:story:vn-backgrounds:original:v2",
+      "manifestPath": "assets/production/story/vn-backgrounds-v2/manifest.json",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "assistantReviewed": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "maturity": "STORY_LIVING_SCENE_PLATES_ORIGINAL_WEBP_STILLS_H264_PARALLAX_LOOPS",
+      "scope": "Story mode scene plates (half-body story theater) only: stills plus 2.5D parallax loops; no title, WorldCanvas, gameplay or commercial-rights change"
+    },
+    {
+      "assetId": "art:story:vn-expressions:original:v1",
+      "manifestPath": "assets/production/story/vn-expressions-v1/manifest.json",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "assistantReviewed": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "maturity": "STORY_BUST_EXPRESSIONS_ORIGINAL_LOSSY_WEBP",
+      "scope": "Story mode bust expressions of recurring partners only, drawn from the product's own Database art; no Dex, battle, gameplay or commercial-rights change"
     }
   ]
 }

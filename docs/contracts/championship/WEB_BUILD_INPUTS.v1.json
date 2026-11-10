@@ -8860,7 +8860,72 @@
     "src/data/championship/ranch-render-selection.v1.json",
     "src/data/championship/reviewed-animation-selection.v1.json",
     "src/data/championship/species-taxonomy.v1.json",
-    "src/data/championship/stage-body-size.v1.json"
+    "src/data/championship/stage-body-size.v1.json",
+    "src/championship/app/ui/storyVn.css",
+    "src/championship/data/storyVnCampaign.js",
+    "src/championship/data/storyVnExpressions.js",
+    "src/championship/presentation/story/storyVnDirector.js",
+    "src/championship/presentation/story/storyVnStage.js",
+    "src/championship/presentation/story/storyVnTheater.js",
+    "src/championship/text/storyVnText.js",
+    "assets/production/story/vn-backgrounds-v2/arena.05853a915c2cc7c7.mp4",
+    "assets/production/story/vn-backgrounds-v2/arena.88c052817c8f310b.webp",
+    "assets/production/story/vn-backgrounds-v2/grid.3b996755ec684c99.webp",
+    "assets/production/story/vn-backgrounds-v2/grid.ec3c2966b3eb17ca.mp4",
+    "assets/production/story/vn-backgrounds-v2/habitat.9da50f44606a900b.mp4",
+    "assets/production/story/vn-backgrounds-v2/habitat.cf2beca88e5e8a24.webp",
+    "assets/production/story/vn-backgrounds-v2/lotus.95dc28f3e29284d2.mp4",
+    "assets/production/story/vn-backgrounds-v2/lotus.c9b267dff44c05bb.webp",
+    "assets/production/story/vn-backgrounds-v2/plaza.a86b9322315f1847.mp4",
+    "assets/production/story/vn-backgrounds-v2/plaza.f12972526bf251c0.webp",
+    "assets/production/story/vn-backgrounds-v2/safezone.4b09f36d99163e05.mp4",
+    "assets/production/story/vn-backgrounds-v2/safezone.d1fc2a444f02962e.webp",
+    "assets/production/story/vn-backgrounds-v2/town.033a97a34dbc7bab.mp4",
+    "assets/production/story/vn-backgrounds-v2/town.816b0dd6b46815e3.webp",
+    "assets/production/story/vn-backgrounds-v2/vault.c15e52ec75eeee08.webp",
+    "assets/production/story/vn-backgrounds-v2/vault.e47068fdef606163.mp4",
+    "assets/production/story/vn-backgrounds-v2/void.8318fb0b26958986.mp4",
+    "assets/production/story/vn-backgrounds-v2/void.cf751a51984f8cf8.webp",
+    "assets/production/story/vn-expressions-v1/species-018-happy.203fb7a48f663b3b.webp",
+    "assets/production/story/vn-expressions-v1/species-025-happy.7c27929287f98d5d.webp",
+    "assets/production/story/vn-expressions-v1/species-025-sad.91552329a8be6148.webp",
+    "assets/production/story/vn-expressions-v1/species-050-angry.12577dd4ef78de15.webp",
+    "assets/production/story/vn-expressions-v1/species-050-happy.fd4f59b8dc2b5c2c.webp",
+    "assets/production/story/vn-expressions-v1/species-050-sad.36421ebafc0d6bc2.webp",
+    "assets/production/story/vn-expressions-v1/species-050-serious.b05cfd7a2ba10f7d.webp",
+    "assets/production/story/vn-expressions-v1/species-050-shock.8af0062737717258.webp",
+    "assets/production/story/vn-expressions-v1/species-051-sad.55a30f9fa5d51b55.webp",
+    "assets/production/story/vn-expressions-v1/species-052-happy.e7b0cd335b6aba00.webp",
+    "assets/production/story/vn-expressions-v1/species-052-shock.d5bbdf9e476b9245.webp",
+    "assets/production/story/vn-expressions-v1/species-065-happy.e709ab147b3695a8.webp",
+    "assets/production/story/vn-expressions-v1/species-065-sad.5515631c652b2208.webp",
+    "assets/production/story/vn-expressions-v1/species-088-angry.7a0fcf9065699920.webp",
+    "assets/production/story/vn-expressions-v1/species-088-happy.23852c78ce91e07d.webp",
+    "assets/production/story/vn-expressions-v1/species-088-sad.21a87a230a1e840f.webp",
+    "assets/production/story/vn-expressions-v1/species-088-serious.b30a2cc755eace12.webp",
+    "assets/production/story/vn-expressions-v1/species-088-shock.43a8d962cd22a439.webp",
+    "assets/production/story/vn-expressions-v1/species-092-angry.faa371db8deced33.webp",
+    "assets/production/story/vn-expressions-v1/species-092-happy.52300ceeb0cb8e46.webp",
+    "assets/production/story/vn-expressions-v1/species-092-sad.c01a239e161732e5.webp",
+    "assets/production/story/vn-expressions-v1/species-092-serious.cd58c8798286865d.webp",
+    "assets/production/story/vn-expressions-v1/species-092-shock.ceebc8326cac8d68.webp",
+    "assets/production/story/vn-expressions-v1/species-169-angry.e1ba29b5d7047904.webp",
+    "assets/production/story/vn-expressions-v1/species-169-happy.5b834bbea5520807.webp",
+    "assets/production/story/vn-expressions-v1/species-169-sad.785bd75cbcda34dc.webp",
+    "assets/production/story/vn-expressions-v1/species-169-serious.35ea1e9c06e2ea6f.webp",
+    "assets/production/story/vn-expressions-v1/species-169-shock.54db3b9d08c517da.webp",
+    "assets/production/story/vn-expressions-v1/species-175-angry.83a6657c3648e423.webp",
+    "assets/production/story/vn-expressions-v1/species-175-happy.2fe224b3639331a4.webp",
+    "assets/production/story/vn-expressions-v1/species-175-sad.c6d4ebcd5ac79e1a.webp",
+    "assets/production/story/vn-expressions-v1/species-175-serious.5e7be262ea570488.webp",
+    "assets/production/story/vn-expressions-v1/species-175-shock.b50e447ddfa22c4f.webp",
+    "assets/production/story/vn-expressions-v1/species-176-angry.770d10c8b442c1be.webp",
+    "assets/production/story/vn-expressions-v1/species-176-happy.47b3462185823a59.webp",
+    "assets/production/story/vn-expressions-v1/species-176-sad.e368d5398a1d3069.webp",
+    "assets/production/story/vn-expressions-v1/species-176-serious.c9993dea037f4903.webp",
+    "assets/production/story/vn-expressions-v1/species-176-shock.0c746f982ad999d2.webp",
+    "assets/production/story/vn-expressions-v1/species-177-happy.8340374e23a6a064.webp",
+    "assets/production/story/vn-expressions-v1/species-177-sad.4c8229823e7b10fe.webp"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -39080,7 +39145,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "4dff3d2eee80e4185dfe97da95f70453947fd7dfb1693d3b50b56e6cef0a3dcc"
+        "sha256": "9e60e93032f242f0c237a5152138f301f388a139fb44e5954a612b37ba699c5f"
       },
       {
         "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -39196,7 +39261,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "34375ab968ade177372b91149f4c327b92d2f27c018809a95148e5e7119ee980"
+        "sha256": "34918c490c528c6df7f04a988d0a5996f1971386f7f84aeb1cf07eef2097f70a"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -39356,7 +39421,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "3430cd45b5d48a94b6aee0601bbe50bb5e1688153e1c4f2329d04834dedbd7bb"
+        "sha256": "160413c97ac8d3a58b29a1dce4928a6492dbd9456f07629ecb9af4d6653a34f9"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -39540,7 +39605,7 @@
       },
       {
         "path": "src/championship/app/storyChapterMap.js",
-        "sha256": "d84c2f94214827078b9df302b7a85e4e0888b9aa44d7acd4c025799e11d5b0a2"
+        "sha256": "fa5dd35906f8c7286a2795b2b21ce17df8e7ec497f93472ad90e02125297f473"
       },
       {
         "path": "src/championship/app/storyCutsceneStage.js",
@@ -39628,7 +39693,7 @@
       },
       {
         "path": "src/championship/app/ui/storyTheater.css",
-        "sha256": "1f3ea13a94e653dca452bfbc81f341dc10049ebad72ef291ee1e8729cd298539"
+        "sha256": "8ad3051fbd18b8b3f33ca191d62952a75cb4a234e3a0897b570e9d312bba6c47"
       },
       {
         "path": "src/championship/app/ui/syncGainPanel.js",
@@ -40036,7 +40101,7 @@
       },
       {
         "path": "src/championship/data/storyRiftMap.js",
-        "sha256": "b8aa8227daa6ab25ac887142dd3134b1d6188602c63a4dfa7f463fca1b1f9a53"
+        "sha256": "5e075f1d1a5bd88e7dc48444f3c7ad897a26499814a1467fced853c504e2b1d1"
       },
       {
         "path": "src/championship/database/databaseBodyStats.js",
@@ -41869,6 +41934,266 @@
       {
         "path": "src/data/championship/stage-body-size.v1.json",
         "sha256": "956a246d432e6956b31ac9e13f8c7ca20c2e0903136ee2ae065c2ab919f79076"
+      },
+      {
+        "path": "src/championship/app/ui/storyVn.css",
+        "sha256": "0c0caf2b4d7355f4a6784a2d4bb3791f08cb3b483ebcfc830a25020c1ea25ff5"
+      },
+      {
+        "path": "src/championship/data/storyVnCampaign.js",
+        "sha256": "966928e47a1e71aeef36dff33265a4a1745ce2b07a0d0bede0c6139c44516e5b"
+      },
+      {
+        "path": "src/championship/data/storyVnExpressions.js",
+        "sha256": "13a5429db23483f297b8e3f40fab780b6576e1c34dee389dd64dd4c302aa7998"
+      },
+      {
+        "path": "src/championship/presentation/story/storyVnDirector.js",
+        "sha256": "65fa3322c0ba3c19071a244519b14d7a606747c59d4256f4a24e72d1a457d37f"
+      },
+      {
+        "path": "src/championship/presentation/story/storyVnStage.js",
+        "sha256": "c634f9b243b17b3ce66d476456e6a44ec184bb01e81459656026a217d88ebb95"
+      },
+      {
+        "path": "src/championship/presentation/story/storyVnTheater.js",
+        "sha256": "1993a0dd29c79daf060da369196c327838a43a56919d02d121cfc28f18034556"
+      },
+      {
+        "path": "src/championship/text/storyVnText.js",
+        "sha256": "021c83e51d9e11171cf3c35ff3cb18a5cdc82425898f02d0a8f894712b0dc646"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/arena.05853a915c2cc7c7.mp4",
+        "sha256": "05853a915c2cc7c7e2f0a5fc6325b7ea1c21b18f9f0b114d2fc1a5b4ffb650fa"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/arena.88c052817c8f310b.webp",
+        "sha256": "88c052817c8f310bdffd59e1b792c8b80e39494fcfd8fcf19f71f0bb404059c6"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/grid.3b996755ec684c99.webp",
+        "sha256": "3b996755ec684c996239e65e0540f9df1f3873c2810d670d92f0550ef1101bcb"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/grid.ec3c2966b3eb17ca.mp4",
+        "sha256": "ec3c2966b3eb17caa3b38d2aad89ed5a65ef87a2aa91060472d0190917252b4f"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/habitat.9da50f44606a900b.mp4",
+        "sha256": "9da50f44606a900b47c407c395341494724cae941dc1d64a8c95958c326d32f8"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/habitat.cf2beca88e5e8a24.webp",
+        "sha256": "cf2beca88e5e8a24c4c3c9d1e8037342314b0647b00f3f8b5b31fe6b640674d0"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/lotus.95dc28f3e29284d2.mp4",
+        "sha256": "95dc28f3e29284d2ea17785f2a4b250bd879428fa9aa621f8013251c663e5c41"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/lotus.c9b267dff44c05bb.webp",
+        "sha256": "c9b267dff44c05bb49646c20ec1a13022fc36e7d74de9238e0a97f91186cd80a"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/plaza.a86b9322315f1847.mp4",
+        "sha256": "a86b9322315f1847e8be8006f2a286d22f62a87970e294b50a433758a548ce78"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/plaza.f12972526bf251c0.webp",
+        "sha256": "f12972526bf251c095e3b9fcb7d841dbf9cb47bd529cc01e7504e706776e4e6c"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/safezone.4b09f36d99163e05.mp4",
+        "sha256": "4b09f36d99163e059b326f38c42ed03156f19bca517ff6585223f29d6d71ff7d"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/safezone.d1fc2a444f02962e.webp",
+        "sha256": "d1fc2a444f02962e1ff65616b8bd0ffa554a0118a58bb8ff7b1d33081cbd990e"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/town.033a97a34dbc7bab.mp4",
+        "sha256": "033a97a34dbc7bab386a5166924620e6b27c77c280ca41f75c1ac792256692c7"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/town.816b0dd6b46815e3.webp",
+        "sha256": "816b0dd6b46815e3ed0ebb6adf4671fc845c781e27bceccc4a099be85349e9f0"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/vault.c15e52ec75eeee08.webp",
+        "sha256": "c15e52ec75eeee08290a17ad3f38e79fd6ebd8850e5693a5aba0370f45b0a87d"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/vault.e47068fdef606163.mp4",
+        "sha256": "e47068fdef60616307838f5156ed11866fdf257058fb772e99ca787e72ed2970"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/void.8318fb0b26958986.mp4",
+        "sha256": "8318fb0b269589862069450e90ec7e021853bb744e7e7445c9de074ef6aecaf0"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v2/void.cf751a51984f8cf8.webp",
+        "sha256": "cf751a51984f8cf80993b14f3d976a011327fc3e6dfeff86a396e5d89dfc6f7d"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-018-happy.203fb7a48f663b3b.webp",
+        "sha256": "203fb7a48f663b3bbd326f06409a2405135db0fe1afa902acf47dcd9241228e8"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-025-happy.7c27929287f98d5d.webp",
+        "sha256": "7c27929287f98d5d599c8128be5a51abd44c18b6204cb4788ad2051ad11d6b52"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-025-sad.91552329a8be6148.webp",
+        "sha256": "91552329a8be61489dffbb4bf927a424775ac80f8e1d3faaab649d8edd3f9643"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-050-angry.12577dd4ef78de15.webp",
+        "sha256": "12577dd4ef78de15a9285f645aa97c7a22ef715c5aa4a8a7068088e4c2fdb29d"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-050-happy.fd4f59b8dc2b5c2c.webp",
+        "sha256": "fd4f59b8dc2b5c2ce084c52c67d2d0c291d46bdcc6e5f05971af10c20146fb6e"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-050-sad.36421ebafc0d6bc2.webp",
+        "sha256": "36421ebafc0d6bc24439372463ec7e4ab37f5633f200b8226680f72ea69792c0"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-050-serious.b05cfd7a2ba10f7d.webp",
+        "sha256": "b05cfd7a2ba10f7d3bebc52277e6b07c0e5228ef49df56711da7a65b03807535"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-050-shock.8af0062737717258.webp",
+        "sha256": "8af0062737717258cad6b5340efe655fbbb3e9b7803a1eab9f680bf176668c87"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-051-sad.55a30f9fa5d51b55.webp",
+        "sha256": "55a30f9fa5d51b551145fe87693a53f77aef4e36a8675519d832beb7af363bb3"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-052-happy.e7b0cd335b6aba00.webp",
+        "sha256": "e7b0cd335b6aba004b6c0c93869f0032023d95028b2288e8fee91a82726c388a"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-052-shock.d5bbdf9e476b9245.webp",
+        "sha256": "d5bbdf9e476b924543259c0a079a2f0f8812e674864e11993d3ce9ec5964bca5"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-065-happy.e709ab147b3695a8.webp",
+        "sha256": "e709ab147b3695a8654ed523fe7a8a39173876c8fbdc3e1b4e199086f1ab1973"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-065-sad.5515631c652b2208.webp",
+        "sha256": "5515631c652b2208d0f6ef3552cb6f22187c0f43870ffdddc67497b437747b11"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-088-angry.7a0fcf9065699920.webp",
+        "sha256": "7a0fcf90656999204363bdd5ccd50f74212e208b7bed5e4b78a53a858b8e652b"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-088-happy.23852c78ce91e07d.webp",
+        "sha256": "23852c78ce91e07d2bdd768f8e6085a77bddd78cd96959bf49651af94ffc9c77"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-088-sad.21a87a230a1e840f.webp",
+        "sha256": "21a87a230a1e840fd8553f5211135f42d93ae55c144579098ba71b15bafdbe45"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-088-serious.b30a2cc755eace12.webp",
+        "sha256": "b30a2cc755eace1248d7f7bc61d2108b43339c86759f2bd4906db769f8390272"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-088-shock.43a8d962cd22a439.webp",
+        "sha256": "43a8d962cd22a439179ab6f1f776a4517e7e036eaec66c4846012e9969002460"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-092-angry.faa371db8deced33.webp",
+        "sha256": "faa371db8deced33cb4df39f1535371ac057e7e106e98ab4939a3b71d8baf46a"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-092-happy.52300ceeb0cb8e46.webp",
+        "sha256": "52300ceeb0cb8e46550be68612a668072f053b7c76c050c99bb91ef157d11a19"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-092-sad.c01a239e161732e5.webp",
+        "sha256": "c01a239e161732e5811ae164fba1f02fc8e639bc9642be7a458931bcaab58557"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-092-serious.cd58c8798286865d.webp",
+        "sha256": "cd58c8798286865d553aa9adccba389854028cb9ce1264a6b7ec8225c660cb2d"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-092-shock.ceebc8326cac8d68.webp",
+        "sha256": "ceebc8326cac8d68b1e5b8b2ecb584e2abe6603fdf44effe87174a22e884e02e"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-169-angry.e1ba29b5d7047904.webp",
+        "sha256": "e1ba29b5d7047904f56c5db3ec7d17ee9144701d75a6d148db69fa939efa665b"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-169-happy.5b834bbea5520807.webp",
+        "sha256": "5b834bbea552080777395f8c69e28a45abe6d4e091f6ffe8bbbe403c96ca236a"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-169-sad.785bd75cbcda34dc.webp",
+        "sha256": "785bd75cbcda34dcd531dd52642a3bd452cb648095b843807c6fef5ff6454e4c"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-169-serious.35ea1e9c06e2ea6f.webp",
+        "sha256": "35ea1e9c06e2ea6fad1dfcdb488f0957410ffcedf54c56db55f07386aceb707f"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-169-shock.54db3b9d08c517da.webp",
+        "sha256": "54db3b9d08c517da64bf8d1f12f56306258c3f4c4273bd88104939a7c699e53d"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-175-angry.83a6657c3648e423.webp",
+        "sha256": "83a6657c3648e42368a3e6c46935c7e3e65348bc60c850c7ce4cab7b65b9c2ad"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-175-happy.2fe224b3639331a4.webp",
+        "sha256": "2fe224b3639331a490e9c6e97264104848fb24ed7a38b07ebd5c302c30f4a744"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-175-sad.c6d4ebcd5ac79e1a.webp",
+        "sha256": "c6d4ebcd5ac79e1a43f569c05537ea7a59bbe2734897a026eb9396a5b1498de0"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-175-serious.5e7be262ea570488.webp",
+        "sha256": "5e7be262ea570488d96813cabc66afb1a2113ef92dc0ef00fde81764a0aeeba2"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-175-shock.b50e447ddfa22c4f.webp",
+        "sha256": "b50e447ddfa22c4f1f5b2f041dc27a2a7f319a0fb8ff293e98ddfa2ca747ec80"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-176-angry.770d10c8b442c1be.webp",
+        "sha256": "770d10c8b442c1be0cedcc73294540ddb51e828deab45ea996343562455ef247"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-176-happy.47b3462185823a59.webp",
+        "sha256": "47b3462185823a5936d32d0609adc7427167487dfcfd5ff1e1f1d5310c5dc528"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-176-sad.e368d5398a1d3069.webp",
+        "sha256": "e368d5398a1d3069500d1996e5ee775da89d86925978fff794c701685fa09fa2"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-176-serious.c9993dea037f4903.webp",
+        "sha256": "c9993dea037f4903b46ce5d6d9bf5278d09058e61ad2f2baeff0919ae9453387"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-176-shock.0c746f982ad999d2.webp",
+        "sha256": "0c746f982ad999d2ccef082bb96ed8b440ff79d495acac44f165e6003efbb4a1"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-177-happy.8340374e23a6a064.webp",
+        "sha256": "8340374e23a6a064d97d7db40e1516118e5b00a8ceba0acd7c8704c15d13d177"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-177-sad.4c8229823e7b10fe.webp",
+        "sha256": "4c8229823e7b10feee76ef15e59cacc3e2a0307535a8103e1da02d79189a880b"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",

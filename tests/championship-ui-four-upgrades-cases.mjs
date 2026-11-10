@@ -12,6 +12,7 @@ import { normalizeNativeRaisingHome } from "../src/championship/raising/nativeRa
 import { strollLogLine } from "../src/championship/app/ranchDiscoveryJournal.js";
 import { mountHuntTacticalDock, huntDockDeployable, HUNT_DOCK_TOOL_TAGS, HUNT_DOCK_DEPLOY_DISTANCE } from "../src/championship/app/huntTacticalDock.js";
 import { STORY_RIFT_MAP_NODES, STORY_RIFT_MAP_COPY, STORY_RIFT_MAP_LOCALES, storyRiftMapStates, storyRiftMapText } from "../src/championship/data/storyRiftMap.js";
+import { STORY_VN_CHAPTERS } from "../src/championship/data/storyVnCampaign.js";
 import { STORY_RIFT_CHAPTERS } from "../src/championship/data/storyRiftChapters.js";
 import { createStoryChapterMap } from "../src/championship/app/storyChapterMap.js";
 import { createPortraitVnOverlay, STORY_VN_TEXT_KEYS } from "../src/championship/presentation/story/portraitVnOverlay.js";
@@ -206,20 +207,27 @@ test("the chart data is pure, every node's copy exists in five locales, and chap
   const keys = Object.keys(STORY_RIFT_MAP_COPY["zh-Hant"]).sort();
   for (const locale of STORY_RIFT_MAP_LOCALES) assert.deepEqual(Object.keys(STORY_RIFT_MAP_COPY[locale]).sort(), keys, locale);
   for (const node of STORY_RIFT_MAP_NODES) {
-    for (const key of [node.titleKey, node.summaryKey, node.sigilKey]) assert.ok(keys.includes(key), `${node.id}: ${key}`);
+    // Story-theater nodes (2026-11-11) read their titles from the story-theater copy.
+    if (node.vnChapterId) assert.ok(STORY_VN_CHAPTERS[node.vnChapterId], node.vnChapterId);
+    else for (const key of [node.titleKey, node.summaryKey, node.sigilKey]) assert.ok(keys.includes(key), `${node.id}: ${key}`);
     if (node.chapterId) assert.ok(STORY_RIFT_CHAPTERS[node.chapterId], node.chapterId);
     assert.ok(node.x >= 5 && node.x <= 95 && node.y >= 5 && node.y <= 95, node.id);
   }
-  assert.deepEqual(STORY_RIFT_MAP_NODES.filter(n => n.kind === "chapter").map(n => n.number), [1, 2, 3, 4]);
+  assert.deepEqual(STORY_RIFT_MAP_NODES.filter(n => n.kind === "chapter").map(n => n.number), [1, 2, 3, 4, 5, 6, 7]);
   assert.equal(storyRiftMapText("NUM_CHAPTER", "en", { n: 2 }), "Chapter 2");
 });
 
 test("node states: the opening's chapters are watched, chapter 1 is in progress until seen, unwritten ones stay locked", () => {
   const seen = new Set();
   const isSeen = node => node.seenWith === "opening" || seen.has(node.seenKey);
-  assert.deepEqual(storyRiftMapStates(isSeen).map(s => s.state), ["seen", "seen", "current", "locked", "locked", "locked", "locked"]);
+  const locked = n => Array(n).fill("locked");
+  assert.deepEqual(storyRiftMapStates(isSeen).map(s => s.state), ["seen", "seen", "current", ...locked(9)]);
   seen.add("storyRiftChapter1Seen");
-  assert.deepEqual(storyRiftMapStates(isSeen).map(s => s.state), ["seen", "seen", "seen", "locked", "locked", "locked", "locked"]);
+  assert.deepEqual(storyRiftMapStates(isSeen).map(s => s.state), ["seen", "seen", "seen", ...locked(9)]);
+  // Story-theater chapters follow their own ledger states: the first open one is current.
+  const vn = { "vn1-c1": "cleared", "vn1-c2": "open", "vn1-s1": "open" };
+  assert.deepEqual(storyRiftMapStates(isSeen, undefined, node => vn[node.vnChapterId] ?? "locked").map(s => s.state),
+    ["seen", "seen", "seen", "seen", "current", "locked", "locked", "locked", "locked", "open", "locked", "locked"]);
 });
 
 test("the chart opens on the chapter, shows a locked coordinate, plays a chapter and comes back with its sigil lit", async () => {
@@ -239,7 +247,7 @@ test("the chart opens on the chapter, shows a locked coordinate, plays a chapter
   const castNames = findAll(root, n => n.className === "cm-story-map__cast-name").map(n => n.textContent);
   assert.deepEqual(castNames, ["雜訊殘響", "亞古獸", "大會導覽 NAVI"]);
   click(byId("chapter2"));
-  assert.equal(play().disabled, true); assert.equal(textOf(find(root, n => n.className === "cm-story-map__detail-title")), "運動場的殘響");
+  assert.equal(play().disabled, true); assert.equal(textOf(find(root, n => n.className === "cm-story-map__detail-title")), "牠把自己的名字寫了上去");
   click(byId("chapter1"));
   click(play()); assert.equal(root.hidden, true, "the chart steps aside while the chapter plays");
   await new Promise(resolve => setTimeout(resolve, 0));

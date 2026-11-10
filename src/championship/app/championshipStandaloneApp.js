@@ -154,7 +154,7 @@ import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from ".
 import { NATIVE_CHAMPIONSHIP_CATEGORIES, CHAMPIONSHIP_ARENA_INDEX, createNativeChampionshipRun,
   normalizeNativeChampionshipRun, recordNativeChampionshipRound, nativeChampionshipContinues,
   nativeChampionshipFinalRound, nativeChampionshipPayable, selectNativeChampionshipOpponent } from "../battle/nativeChampionshipRounds.js";
-import {generateNativeFreeBattleMenu,listNativeFreeBattleMatches,FREE_BATTLE_ARENAS} from '../battle/nativeFreeBattle.js';
+import {generateNativeFreeBattleMenu,listNativeFreeBattleMatches,FREE_BATTLE_ARENAS,freeBattlePreset} from '../battle/nativeFreeBattle.js';
 import { DAY_END_MINUTES, projectWorldClockDisplay } from "../time/championshipWorldClock.js";
 import { NATIVE_CLOCK_CADENCE } from "./championshipClockDriver.js";
 import { createClockChannelRng, restoreChannelRng } from "../battle/battleRngChannel.js";
@@ -4431,6 +4431,25 @@ export function createChampionshipStandaloneApp({
       const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
       return {ok:true,floor:value,presetIndices,arenaIndex,individuals:party.individuals,rngPreparation};
     },
+    /**
+     * Story battle (OWNER_APPROVED_ADAPTATION 2026-11-11): an ordinary free battle against
+     * fixed native presets (the chapter's opponent), no entry fee and no purse -- the
+     * chapter pays its own first-clear reward. Entered with enterFreeBattle.
+     */
+    async prepareStoryBattle(presetIndices,instanceIds){
+      if(!Array.isArray(presetIndices)||!presetIndices.length||presetIndices.length>3)return {ok:false,reason:'STORY_PRESETS_REQUIRED'};
+      try{for(const id of presetIndices)freeBattlePreset(id);}catch{return {ok:false,reason:'STORY_PRESET_UNKNOWN'};}
+      const party=withBattleTactics(await this.prepareBattleParty(null,instanceIds,{sync:{capped:false}}));
+      if(!party.ok)return party;
+      if(!freeBattleMenu)rebuildFreeBattleMenu();
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      prepared.localMode=2;prepared.freeMenu=freeBattleMenu;prepared.individuals=party.individuals;
+      prepared.freeMatch=Object.freeze({id:'story',kind:'STORY',presetIndices:[...presetIndices],slots:3,entryFee:0,payout:0});
+      const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
+      return {ok:true,presetIndices:[...presetIndices],arenaIndex,individuals:party.individuals,rngPreparation};
+    },
+    /** The once-only reward keys already claimed (read only; story progress reads its own prefix). */
+    getGachaClaimedRewards(){requireSession();return Object.freeze([...gachaState().claimed]);},
     enterTowerBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
       const prepared=battleRngPreparations.get(rngPreparation),floor=prepared?.towerFloor;
       const result=enterPreparedLocalBattle({mode:2,attemptId,playerInstanceIds,rngPreparation});

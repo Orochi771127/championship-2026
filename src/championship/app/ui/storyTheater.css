@@ -381,3 +381,5 @@ body[data-story-stage="playing"] #cm-root .int-rh2-field-host > :not(canvas, .cm
 @keyframes cm-map-pulse { 0%, 100% { box-shadow: 0 0 0 4px rgba(255, 42, 109, 0.22), 0 0 16px rgba(255, 42, 109, 0.6); } 50% { box-shadow: 0 0 0 8px rgba(255, 42, 109, 0.1), 0 0 28px rgba(255, 42, 109, 0.9); } }
 @keyframes cm-map-burst { from { transform: scale(0.8); opacity: 1; } to { transform: scale(2.1); opacity: 0; } }
 @keyframes cm-map-notice { 0% { opacity: 0; transform: translate(-50%, -6px); } 12%, 82% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, 0); } }
+/* Side stories hang off their chapter on a dashed branch (storyChapterMap.js, 2026-11-11). */
+.cm-story-map__lane--side { stroke-dasharray: 3 2.4; }

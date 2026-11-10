@@ -1,0 +1,318 @@
+{
+  "schemaVersion": 1,
+  "id": "story-vn-backgrounds-v2",
+  "purpose": "Story mode living scene plates: a still poster plus a seamless 2.5D parallax loop per scene. The ground band (where actors stand) is the parallax focus plane, so footing never slides.",
+  "rightsStatus": "ORIGINAL_GENERATED",
+  "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+  "generation": {
+    "tool": "Codex CLI image generation (codex-cli 0.167, model gpt-6.1-sol)",
+    "generatedOn": "2026-11-11",
+    "inputs": "Text brief only (no image references, no ROM pixels, no third-party art); brief kept in workspace story-vn-art-20261111/BRIEF.md",
+    "motion": "DepthFlow 1.0.1 with Depth Anything V2 Small (the commercial-safe size), focus plane on the ground band, 8 s cycle; script story-vn-art-20261111/motion/render_story_parallax.py",
+    "originals": "R:/Projects/Championship2026/story-vn-art-20261111 (workspace, not shipped)"
+  },
+  "review": {
+    "assistant": "Accepted 2026-11-11: one coherent HD pixel set; parallax keeps edges and footing",
+    "owner": "PENDING",
+    "browserAcceptance": "PENDING"
+  },
+  "assets": [
+    {
+      "id": "habitat",
+      "nameZh": "拍檔棲地・清晨",
+      "ambient": "leaves",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 2164794,
+        "sha256": "304d3310efbe7bead81badda3d38703747f00669797d3d2b4d2dc7bb2bcd4285",
+        "file": "bg-01-habitat-morning.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v2/habitat.cf2beca88e5e8a24.webp",
+        "bytes": 79794,
+        "sha256": "cf2beca88e5e8a24c4c3c9d1e8037342314b0647b00f3f8b5b31fe6b640674d0",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v2/habitat.9da50f44606a900b.mp4",
+        "bytes": 221702,
+        "sha256": "9da50f44606a900b47c407c395341494724cae941dc1d64a8c95958c326d32f8",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 30, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    },
+    {
+      "id": "plaza",
+      "nameZh": "錦標賽廣場",
+      "ambient": "confetti",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 2227490,
+        "sha256": "095519a9a23eae251c69857cd203de2aabeb0061a579812c35b22fc46f79df80",
+        "file": "bg-02-tournament-plaza.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v2/plaza.f12972526bf251c0.webp",
+        "bytes": 81158,
+        "sha256": "f12972526bf251c095e3b9fcb7d841dbf9cb47bd529cc01e7504e706776e4e6c",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v2/plaza.a86b9322315f1847.mp4",
+        "bytes": 225055,
+        "sha256": "a86b9322315f1847e8be8006f2a286d22f62a87970e294b50a433758a548ce78",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 30, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    },
+    {
+      "id": "arena",
+      "nameZh": "賽場",
+      "ambient": "dust",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 1967556,
+        "sha256": "4a71635c926d67e522a7e82dc022b5a2ee3c6ae14d5c9a165b140bf8def84b2d",
+        "file": "bg-03-arena-field.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v2/arena.88c052817c8f310b.webp",
+        "bytes": 46022,
+        "sha256": "88c052817c8f310bdffd59e1b792c8b80e39494fcfd8fcf19f71f0bb404059c6",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v2/arena.05853a915c2cc7c7.mp4",
+        "bytes": 151122,
+        "sha256": "05853a915c2cc7c7e2f0a5fc6325b7ea1c21b18f9f0b114d2fc1a5b4ffb650fa",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 30, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    },
+    {
+      "id": "town",
+      "nameZh": "工匠街・黃昏",
+      "ambient": "fireflies",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 2198945,
+        "sha256": "140fa0f7516ba2eba0e7b7e8455bc5e08058679aa28edab264612178ae25cdd7",
+        "file": "bg-04-town-dusk.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v2/town.816b0dd6b46815e3.webp",
+        "bytes": 68604,
+        "sha256": "816b0dd6b46815e3ed0ebb6adf4671fc845c781e27bceccc4a099be85349e9f0",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v2/town.033a97a34dbc7bab.mp4",
+        "bytes": 206513,
+        "sha256": "033a97a34dbc7bab386a5166924620e6b27c77c280ca41f75c1ac792256692c7",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 30, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    },
+    {
+      "id": "grid",
+      "nameZh": "網格底層",
+      "ambient": "data",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 1700517,
+        "sha256": "29faa72a6cfa4330df1e77630a37543443d90ecea4ef3d6b8461d2745795b4a5",
+        "file": "bg-05-grid-depths.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v2/grid.3b996755ec684c99.webp",
+        "bytes": 27068,
+        "sha256": "3b996755ec684c996239e65e0540f9df1f3873c2810d670d92f0550ef1101bcb",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v2/grid.ec3c2966b3eb17ca.mp4",
+        "bytes": 115809,
+        "sha256": "ec3c2966b3eb17caa3b38d2aad89ed5a65ef87a2aa91060472d0190917252b4f",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 30, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    },
+    {
+      "id": "lotus",
+      "nameZh": "黑蓮休養區",
+      "ambient": "petals",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 2460620,
+        "sha256": "5df8e37058f6b1f6089dc90cb87d0c34bd6ca5876a68e11b7611be859abb26c7",
+        "file": "bg-06-lotus-sanctuary.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v2/lotus.c9b267dff44c05bb.webp",
+        "bytes": 80208,
+        "sha256": "c9b267dff44c05bb49646c20ec1a13022fc36e7d74de9238e0a97f91186cd80a",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v2/lotus.95dc28f3e29284d2.mp4",
+        "bytes": 219824,
+        "sha256": "95dc28f3e29284d2ea17785f2a4b250bd879428fa9aa621f8013251c663e5c41",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 30, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    },
+    {
+      "id": "vault",
+      "nameZh": "舊終端機室",
+      "ambient": "dust",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 2234661,
+        "sha256": "f68fe2d97538052ff0191d1af37cbf1d783f97ca863ffa7900a187fea0e290d1",
+        "file": "bg-07-archive-vault.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v2/vault.c15e52ec75eeee08.webp",
+        "bytes": 54392,
+        "sha256": "c15e52ec75eeee08290a17ad3f38e79fd6ebd8850e5693a5aba0370f45b0a87d",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v2/vault.e47068fdef606163.mp4",
+        "bytes": 178962,
+        "sha256": "e47068fdef60616307838f5156ed11866fdf257058fb772e99ca787e72ed2970",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 30, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    },
+    {
+      "id": "safezone",
+      "nameZh": "黑鐵安全區",
+      "ambient": "sparks",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 1876204,
+        "sha256": "5b0e2f6a54396334772dff30497e8b529b5faa3fec7100e265d28183c5de5177",
+        "file": "bg-08-iron-safezone.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v2/safezone.d1fc2a444f02962e.webp",
+        "bytes": 31994,
+        "sha256": "d1fc2a444f02962e1ff65616b8bd0ffa554a0118a58bb8ff7b1d33081cbd990e",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v2/safezone.4b09f36d99163e05.mp4",
+        "bytes": 122018,
+        "sha256": "4b09f36d99163e059b326f38c42ed03156f19bca517ff6585223f29d6d71ff7d",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 30, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    },
+    {
+      "id": "void",
+      "nameZh": "螺旋虛空",
+      "ambient": "shards",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 1919657,
+        "sha256": "9fd5cf06cb9f2aaa84e760a0c164bcf1008b2de44481725e9f9a4ac48b62ebd4",
+        "file": "bg-09-spiral-void.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v2/void.cf751a51984f8cf8.webp",
+        "bytes": 42822,
+        "sha256": "cf751a51984f8cf80993b14f3d976a011327fc3e6dfeff86a396e5d89dfc6f7d",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v2/void.8318fb0b26958986.mp4",
+        "bytes": 147633,
+        "sha256": "8318fb0b269589862069450e90ec7e021853bb744e7e7445c9de074ef6aecaf0",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 30, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    }
+  ]
+}

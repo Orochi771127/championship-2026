@@ -8,7 +8,9 @@
 // Node schema:
 //   id          stable node id
 //   chapterId   a STORY_RIFT_CHAPTERS id, or null for a reserved coordinate
-//   kind        'prologue' | 'interlude' | 'chapter' | 'unknown'
+//   vnChapterId a STORY_VN_CHAPTERS id (the half-body story theater), played instead of chapterId
+//   branchOf    a side story's main node; it hangs off that node instead of the main lane
+//   kind        'prologue' | 'interlude' | 'chapter' | 'side' | 'unknown'
 //   number      chapter number for kind 'chapter'
 //   x, y        position on the chart, in percent of its width and height
 //   seenKey     preference id that turns true once the chapter was watched or skipped
@@ -32,13 +34,17 @@ export const STORY_RIFT_MAP_NODES = freezeDeep([
     titleKey: "NODE_RESONANCE_TITLE", summaryKey: "NODE_RESONANCE_SUMMARY", sigilKey: "SIGIL_RESONANCE" },
   { id: "chapter1", chapterId: "chapter1-first-rift", kind: "chapter", number: 1, x: 32, y: 62, seenKey: "storyRiftChapter1Seen", theme: "ranch",
     titleKey: "NODE_C1_TITLE", summaryKey: "NODE_C1_SUMMARY", sigilKey: "SIGIL_C1" },
-  { id: "chapter2", chapterId: null, kind: "chapter", number: 2, x: 70, y: 47, seenKey: null, theme: "track",
-    titleKey: "NODE_C2_TITLE", summaryKey: "NODE_C2_SUMMARY", sigilKey: "SIGIL_RESERVED" },
-  { id: "chapter3", chapterId: null, kind: "chapter", number: 3, x: 28, y: 33, seenKey: null, theme: "oasis",
-    titleKey: "NODE_C3_TITLE", summaryKey: "NODE_C3_SUMMARY", sigilKey: "SIGIL_RESERVED" },
-  { id: "chapter4", chapterId: null, kind: "chapter", number: 4, x: 64, y: 19, seenKey: null, theme: "core",
-    titleKey: "NODE_C4_TITLE", summaryKey: "NODE_C4_SUMMARY", sigilKey: "SIGIL_RESERVED" },
-  { id: "beyond", chapterId: null, kind: "unknown", number: 0, x: 38, y: 7, seenKey: null, theme: "void",
+  // Part one "Unheard Echoes" (OWNER_APPROVED_ADAPTATION 2026-11-11): played in the half-body
+  // story theater (data/storyVnCampaign.js); titles and summaries read its copy.
+  { id: "chapter2", chapterId: null, vnChapterId: "vn1-c1", kind: "chapter", number: 2, x: 70, y: 62, seenKey: null, theme: "track" },
+  { id: "chapter3", chapterId: null, vnChapterId: "vn1-c2", kind: "chapter", number: 3, x: 34, y: 52, seenKey: null, theme: "track" },
+  { id: "chapter4", chapterId: null, vnChapterId: "vn1-c3", kind: "chapter", number: 4, x: 68, y: 41, seenKey: null, theme: "core" },
+  { id: "chapter5", chapterId: null, vnChapterId: "vn1-c4", kind: "chapter", number: 5, x: 30, y: 30, seenKey: null, theme: "oasis" },
+  { id: "chapter6", chapterId: null, vnChapterId: "vn1-c5", kind: "chapter", number: 6, x: 66, y: 20, seenKey: null, theme: "void" },
+  { id: "chapter7", chapterId: null, vnChapterId: "vn1-c6", kind: "chapter", number: 7, x: 38, y: 10, seenKey: null, theme: "void" },
+  { id: "side1", chapterId: null, vnChapterId: "vn1-s1", kind: "side", branchOf: "chapter3", number: 0, x: 11, y: 60, seenKey: null, theme: "ranch" },
+  { id: "side2", chapterId: null, vnChapterId: "vn1-s2", kind: "side", branchOf: "chapter3", number: 0, x: 88, y: 50, seenKey: null, theme: "ranch" },
+  { id: "beyond", chapterId: null, kind: "unknown", number: 0, x: 80, y: 6, seenKey: null, theme: "void",
     titleKey: "NODE_BEYOND_TITLE", summaryKey: "NODE_BEYOND_SUMMARY", sigilKey: "SIGIL_RESERVED" }
 ]);
 
@@ -89,7 +95,10 @@ export const STORY_RIFT_MAP_COPY = freezeDeep({
     "SIGIL_PROLOGUE": "觀測徽記「網線之海」",
     "SIGIL_RESONANCE": "觀測徽記「初次共鳴」",
     "SIGIL_C1": "觀測徽記「第一道裂縫」",
-    "SIGIL_RESERVED": "待公開"
+    "SIGIL_RESERVED": "待公開",
+    "NUM_SIDE": "支線",
+    "MAP_UNLOCK_PREV": "完成上一章後解鎖。",
+    "MAP_SIDE_BRANCH": "完成第 {n} 章後開放的支線故事。"
   },
   "en": {
     "MAP_KICKER": "Rift watch",
@@ -137,7 +146,10 @@ export const STORY_RIFT_MAP_COPY = freezeDeep({
     "SIGIL_PROLOGUE": "Sigil: The Sea of Wires",
     "SIGIL_RESONANCE": "Sigil: First Resonance",
     "SIGIL_C1": "Sigil: The First Rift",
-    "SIGIL_RESERVED": "To be revealed"
+    "SIGIL_RESERVED": "To be revealed",
+    "NUM_SIDE": "Side story",
+    "MAP_UNLOCK_PREV": "Clear the chapter before it to unlock.",
+    "MAP_SIDE_BRANCH": "A side story that opens after chapter {n}."
   },
   "ja": {
     "MAP_KICKER": "裂け目観測",
@@ -185,7 +197,10 @@ export const STORY_RIFT_MAP_COPY = freezeDeep({
     "SIGIL_PROLOGUE": "観測の紋章「ネットワイヤーの海」",
     "SIGIL_RESONANCE": "観測の紋章「はじめての共鳴」",
     "SIGIL_C1": "観測の紋章「最初の裂け目」",
-    "SIGIL_RESERVED": "近日公開"
+    "SIGIL_RESERVED": "近日公開",
+    "NUM_SIDE": "サイド",
+    "MAP_UNLOCK_PREV": "前の章をクリアすると解放されます。",
+    "MAP_SIDE_BRANCH": "第{n}章クリア後に解放されるサイドストーリー。"
   },
   "th": {
     "MAP_KICKER": "เฝ้าดูรอยแยก",
@@ -233,7 +248,10 @@ export const STORY_RIFT_MAP_COPY = freezeDeep({
     "SIGIL_PROLOGUE": "ตราสังเกต “ทะเลแห่งสายเน็ต”",
     "SIGIL_RESONANCE": "ตราสังเกต “การสั่นพ้องครั้งแรก”",
     "SIGIL_C1": "ตราสังเกต “รอยแยกแรก”",
-    "SIGIL_RESERVED": "รอเปิดเผย"
+    "SIGIL_RESERVED": "รอเปิดเผย",
+    "NUM_SIDE": "เรื่องเสริม",
+    "MAP_UNLOCK_PREV": "ผ่านบทก่อนหน้าเพื่อปลดล็อก",
+    "MAP_SIDE_BRANCH": "เรื่องเสริมที่เปิดหลังจบบทที่ {n}"
   },
   "vi": {
     "MAP_KICKER": "Quan sát khe nứt",
@@ -281,7 +299,10 @@ export const STORY_RIFT_MAP_COPY = freezeDeep({
     "SIGIL_PROLOGUE": "Ấn quan sát “Biển dây mạng”",
     "SIGIL_RESONANCE": "Ấn quan sát “Lần cộng hưởng đầu tiên”",
     "SIGIL_C1": "Ấn quan sát “Khe nứt đầu tiên”",
-    "SIGIL_RESERVED": "Sắp công bố"
+    "SIGIL_RESERVED": "Sắp công bố",
+    "NUM_SIDE": "Truyện phụ",
+    "MAP_UNLOCK_PREV": "Hoàn thành chương trước để mở khóa.",
+    "MAP_SIDE_BRANCH": "Truyện phụ mở sau khi hoàn thành chương {n}."
   }
 });
 
@@ -299,9 +320,17 @@ export function storyRiftMapText(key, locale = "zh-Hant", params = {}) {
  * seen is `current`; other playable nodes are `open`; a reserved coordinate
  * is `locked`.
  */
-export function storyRiftMapStates(isSeen = () => false, nodes = STORY_RIFT_MAP_NODES) {
+export function storyRiftMapStates(isSeen = () => false, nodes = STORY_RIFT_MAP_NODES, vnStateOf = () => "locked") {
   let current = null;
   return Object.freeze(nodes.map(node => {
+    // A story-theater chapter: cleared -> seen; open -> current (the first) or open; else locked.
+    if (node.vnChapterId) {
+      const vn = vnStateOf(node);
+      if (vn === "cleared") return Object.freeze({ id: node.id, state: "seen" });
+      if (vn !== "open") return Object.freeze({ id: node.id, state: "locked" });
+      if (current === null && node.kind !== "side") { current = node.id; return Object.freeze({ id: node.id, state: "current" }); }
+      return Object.freeze({ id: node.id, state: "open" });
+    }
     if (!node.chapterId) return Object.freeze({ id: node.id, state: "locked" });
     if (isSeen(node)) return Object.freeze({ id: node.id, state: "seen" });
     if (current === null) { current = node.id; return Object.freeze({ id: node.id, state: "current" }); }
