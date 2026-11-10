@@ -51,8 +51,11 @@ const CROWD_TINT = Object.freeze({ PERFECT_DODGE: 0x7fe9ff, ELEMENT_CHAIN: 0xff9
 
 // One scale per body keeps authored canvas/pivot intact across poses and KO; the
 // loader's per-role reference height (its down-facing walk) maps the body to roleHeight.
+export function reviewedArenaGeometryScale(geometry,roleHeight,{partial=false,nativeScale=1}={}){
+  return partial?nativeScale*4/(geometry?.scale??4):roleHeight/(geometry?.referenceHeight??64)/(geometry?.scale??4);
+}
 export function applyReviewedArenaPoseScale(sprite,sample,roleHeight,sink=0){
- const scale=roleHeight/(sample?.geometry?.referenceHeight??64)/(sample?.geometry?.scale??4);
+  const scale=reviewedArenaGeometryScale(sample?.geometry,roleHeight);
  sprite.scale.set(scale*(sample?.mirrorX?-1:1),scale*(1-sink*.5));
  return scale;
 }
@@ -409,8 +412,15 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         if (shown > 0) healthGfx.rect(-25, 10, 50, 7).fill({ color: 0x05060d, alpha: 0.78 }).rect(-24, 11, 48 * shown, 5).fill(0xff4a6a);
       },
       // Where this body's move is drawn leaving it; null keeps the default hand offset.
-      releasePoint(angle){
-        if(!reviewedArena||(partial&&!onReviewed))return null;
+      releasePoint(angle,event=null){
+        if(!reviewedArena)return null;
+        const source=reviewedArena.castAttachment?.(event);
+        if(source?.geometry){
+          const g=source.geometry,scale=reviewedArenaGeometryScale(g,ROLE_HEIGHT[role],{partial,nativeScale});
+          return reviewedReleasePoint({x:container.position.x,y:container.position.y,angle,roleHeight:ROLE_HEIGHT[role],
+            release:source.release,scaleX:scale*(source.mirrorX?-1:1),scaleY:scale,groundShift:g.groundShift??0,density:g.scale});
+        }
+        if(partial&&!onReviewed)return null;
         const g=motion?.geometry;
         return reviewedReleasePoint({x:container.position.x+sprite.x,y:container.position.y+sprite.y,angle,roleHeight:ROLE_HEIGHT[role],
           release:motion?.release,scaleX:sprite.scale.x,scaleY:sprite.scale.y,groundShift:g?.groundShift??0,density:g?.scale??1});
@@ -440,7 +450,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           const vx=body.vx??0,vy=body.vy??0;
           const sample=reviewedArena.sample({time:state.time,hp:seq===DATA_ARENA_SEQUENCES.DOWN?0:body.hp,
             vx,vy,facing,hit:seq===DATA_ARENA_SEQUENCES.HIT,
-            attack:seq===DATA_ARENA_SEQUENCES.ATTACK,castId:body.cast?.actionId??null,angle:body.cast?.angle??null,
+              attack:seq===DATA_ARENA_SEQUENCES.ATTACK,castId:body.cast?.actionId??null,sourceCastId:body.action?.id??null,angle:body.cast?.angle??null,
             moveRate:reviewedMoveRate(vx,vy),victory:seq===DATA_ARENA_SEQUENCES.WIN});
           reviewedSample=sample;
           if(partial&&!sample?.geometry){
@@ -450,7 +460,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           } else if(partial){
             // Covered: the reviewed frame at the native world size (native cells are density 4).
             onReviewed=true; motion=sample;
-            scale=nativeScale*4/(sample.geometry?.scale??4);
+            scale=reviewedArenaGeometryScale(sample.geometry,ROLE_HEIGHT[role],{partial,nativeScale});
             sprite.scale.set(scale*(sample.mirrorX?-1:1),scale*(1-sink*.5));
           } else {
           motion=sample;
@@ -479,7 +489,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         // Stage four: a staggered fighter shudders for its hitstun.
         if (body.hitstun > 0 && !reducedMotion) sprite.x += Math.sin(elapsed * 90) * 2.5;
         if (Math.hypot(body.kbx ?? 0, body.kby ?? 0) > 80 && !reducedMotion && frameCount % 2 === 0) puff(x, y, 0xc8b89a, 1, 0.7);
-        if (motion && relayProfile && !reducedMotion) {
+        if (motion && relayProfile && !reducedMotion && !motion.preserveAuthoredPose) {
           const a = body.action;
           // No action in progress means no lunge; a null action used to throw here and stop the HUD.
           const pulse = !a ? 0 : a.releasedAt === null ? Math.min(1, (state.time - a.startedAt) / a.windup) : Math.max(0, 1 - (state.time - a.releasedAt) / a.recovery);
@@ -488,7 +498,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           if (a && a.releasedAt === null) { sprite.scale.x *= 1 - 0.07 * pulse; sprite.scale.y *= 1 + 0.08 * pulse; }
           else if (a && state.time - a.releasedAt < 0.12) { sprite.scale.x *= 1.12; sprite.scale.y *= 0.89; }
         }
-        if (flash > 0.1 && !reducedMotion) { sprite.scale.x *= 1.1; sprite.scale.y *= 0.9; }
+        if (flash > 0.1 && !reducedMotion && !motion?.preserveAuthoredPose) { sprite.scale.x *= 1.1; sprite.scale.y *= 0.9; }
         sprite.alpha = alpha;
         sprite.tint = flash > 0.14 ? 0xffffff : flash > 0 ? 0xff7a7a : 0xffffff;
         shadow.alpha = (0.75 - sink * 0.6) * (lift > 0 ? 0.6 : 1);
@@ -509,7 +519,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   // Release point of a cast: a reviewed body's mouth or hand, else the default hand offset.
   const releaseOrigins = new Map();
   function releaseAt(event) {
-    const point = casterView(event.casterId)?.releasePoint(event.angle);
+    const point = casterView(event.casterId)?.releasePoint(event.angle,event);
     return point ? { ...point, reviewed: true }
       : { x: event.x + Math.cos(event.angle) * 26, y: event.y - BEAM_ELEVATION + Math.sin(event.angle) * 26, reviewed: false };
   }

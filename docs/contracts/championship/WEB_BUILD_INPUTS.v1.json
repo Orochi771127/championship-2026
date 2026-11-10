@@ -5763,6 +5763,12 @@
     "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/main-01.json",
     "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/main-01.png",
     "assets/production/characters/alternate-forms-20261015/oc_crownbrass_mandrill-oc211-r1/runtime.render.json",
+    "assets/production/characters/aw12-two-set-r6-20261110/animation.public-v1.json",
+    "assets/production/characters/aw12-two-set-r6-20261110/web-atlas-v2/2d839adb780b4402c959d1c34739b2a38eeebcd88843b89385aa6379c8fcea42.webp",
+    "assets/production/characters/aw12-two-set-r6-20261110/web-atlas-v2/648c612c67aae9eea8982cd6e8f23457e06d74f0f74d676cf821f0446a6c2565.webp",
+    "assets/production/characters/aw12-two-set-r6-20261110/web-atlas-v2/7d83cb355b098d86acd9e7d76330c5d236dcbe6b906a326136d158db01fd93a6.webp",
+    "assets/production/characters/aw12-two-set-r6-20261110/web-atlas-v2/eb537138a3c7120f80b5855932275b90e68bd70a87995a73618dc923c54d4449.webp",
+    "assets/production/characters/aw12-two-set-r6-20261110/web-atlas-v2/f995e40b4f4a852b805d75e3060d458f72c4c3ebf714ea052b9d9af7722d99a6.webp",
     "assets/production/characters/original-roster-20261103/oc_astral_jelly/hud.render.json",
     "assets/production/characters/original-roster-20261103/oc_astral_jelly/runtime.render.json",
     "assets/production/characters/original-roster-20261103/oc_aurora_shark/hud.render.json",
@@ -29495,6 +29501,30 @@
         "sha256": "6fb593ab3a6b8f78946f80e4a032490b371b7e127c91ae828db0fa5d917a3dd3"
       },
       {
+        "path": "assets/production/characters/aw12-two-set-r6-20261110/animation.public-v1.json",
+        "sha256": "847f4e448bc12c35e4fa8e1dcac962e10de3fd58a7b3e93d18f2963ee19f0c6b"
+      },
+      {
+        "path": "assets/production/characters/aw12-two-set-r6-20261110/web-atlas-v2/2d839adb780b4402c959d1c34739b2a38eeebcd88843b89385aa6379c8fcea42.webp",
+        "sha256": "2d839adb780b4402c959d1c34739b2a38eeebcd88843b89385aa6379c8fcea42"
+      },
+      {
+        "path": "assets/production/characters/aw12-two-set-r6-20261110/web-atlas-v2/648c612c67aae9eea8982cd6e8f23457e06d74f0f74d676cf821f0446a6c2565.webp",
+        "sha256": "648c612c67aae9eea8982cd6e8f23457e06d74f0f74d676cf821f0446a6c2565"
+      },
+      {
+        "path": "assets/production/characters/aw12-two-set-r6-20261110/web-atlas-v2/7d83cb355b098d86acd9e7d76330c5d236dcbe6b906a326136d158db01fd93a6.webp",
+        "sha256": "7d83cb355b098d86acd9e7d76330c5d236dcbe6b906a326136d158db01fd93a6"
+      },
+      {
+        "path": "assets/production/characters/aw12-two-set-r6-20261110/web-atlas-v2/eb537138a3c7120f80b5855932275b90e68bd70a87995a73618dc923c54d4449.webp",
+        "sha256": "eb537138a3c7120f80b5855932275b90e68bd70a87995a73618dc923c54d4449"
+      },
+      {
+        "path": "assets/production/characters/aw12-two-set-r6-20261110/web-atlas-v2/f995e40b4f4a852b805d75e3060d458f72c4c3ebf714ea052b9d9af7722d99a6.webp",
+        "sha256": "f995e40b4f4a852b805d75e3060d458f72c4c3ebf714ea052b9d9af7722d99a6"
+      },
+      {
         "path": "assets/production/characters/original-roster-20261103/oc_astral_jelly/hud.render.json",
         "sha256": "984dd8bee1dd108c89ffaf1b93d99b926a3189161dbf88b1cd2be52ef5c1d4b0"
       },
@@ -40320,7 +40350,7 @@
       },
       {
         "path": "src/championship/presentation/characterAssetDelivery.js",
-        "sha256": "196139da41fa5a887635596f313d6d0d62df10962765b4afe1d7239ca5b06e2e"
+        "sha256": "efe8b17b782ad5aa8e21997b682da7325fdb78322272bba4c39bd474ff1bba96"
       },
       {
         "path": "src/championship/presentation/characterAtlasQueue.js",
@@ -40368,7 +40398,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-        "sha256": "b4bb85a266bf853d1bec87c35f7b902196f83f997f5fbbc2ec24bead85a1bc43"
+        "sha256": "9f0b7bad1a0dc29e954c38c9a8381be9c0e47afdb0362cf6d5cfcff41b016526"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
@@ -40684,11 +40714,11 @@
       },
       {
         "path": "src/championship/presentation/reviewedCharacterAnimation.js",
-        "sha256": "57b18ab444a373f9805547bbba4eff9cbab1466bf775b55003185b10f47f7238"
+        "sha256": "131dcfe174cde0c3f1a12681759ce9e8673923ac56e86274620741e6192b8c8f"
       },
       {
         "path": "src/championship/presentation/reviewedCharacterLoader.js",
-        "sha256": "68fad684e666c3228132552f86b2d3563e9249ac67f6fd5ef4e753f8550eb6c6"
+        "sha256": "5d25e31f3c1bde24bf8bf84be94bb30fcfee6574327d29f26046fc5ea7a8cb74"
       },
       {
         "path": "src/championship/presentation/reviewedSelection.js",
@@ -41588,7 +41618,7 @@
       },
       {
         "path": "src/data/championship/reviewed-animation-selection.v1.json",
-        "sha256": "b9fea814be3fa07b742aa5f9217b5653a4afa984ef720ea066a8c1db664d0eef"
+        "sha256": "d86ea03b525bb7f51f5da8c8f9d4abcaf24a61e98ff98ffe0ae39aa220c021e1"
       },
       {
         "path": "src/data/championship/species-taxonomy.v1.json",

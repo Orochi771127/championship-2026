@@ -125,9 +125,13 @@ export function sampleReviewedClip(clip, elapsedMs, {holdFirst=false,terminal=fa
   if(clip.neutralReturn && elapsedMs>=clip.neutralReturn.afterHoldMs && !terminal)
     return {assetId:clip.neutralReturn.assetId,frameIndex:clip.frames.length,clipId:clip.id,complete:true,totalMs:total,neutralHold:true};
   let t=holdFirst||terminal?0:clip.loop?elapsedMs%total:Math.min(elapsedMs,total-0.000001);
+  // Tick-to-ms division and modulo can land a few ulps below an exact boundary.
+  // Keep Q12 sub-ticks intact while selecting the new drawing on that boundary.
+  const epsilon=Number.EPSILON*Math.max(1,elapsedMs,total)*8;
+  if(clip.loop&&total-t<=epsilon)t=0;
   let index=0;
   for (;index<clip.frames.length-1;index++) {
-    if (t<clip.frames[index].durationMs) break;
+    if (t<clip.frames[index].durationMs-epsilon) break;
     t-=clip.frames[index].durationMs;
   }
   return {...clip.frames[index],frameIndex:index,clipId:clip.id,complete:!clip.loop&&elapsedMs>=total,totalMs:total};
@@ -164,6 +168,17 @@ export function reviewedDirection(x,y,previous='D') {
 // animation, and a release from an older cast cannot replace a newer cast.
 export function createReviewedArenaPlayback(document,{reducedMotion=false,nativeFallback=true}={}) {
   const terminalClip=reviewedArenaKoClip(document);
+  // A supplied Arena faint timeline is a separate source contract from the
+  // legacy approval for reusing one General down pose. Only explicit source
+  // sets opt in; existing characters retain their current KO behavior.
+  const sourceStates=document.arenaSourcePlayback?.version===1;
+  const sourceFaint=heading=>{
+    if(!sourceStates||document.arenaSourcePlayback.faint!==true)return null;
+    const clip=reviewedArenaClip(document,'faint',heading);
+    // The selected public document contains presentation fields only. Source
+    // research metadata is checked offline and must not be needed at runtime.
+    return clip?.action==='faint'&&clip.loop===false&&clip.frames.length>0?clip:null;
+  };
   // With the original atlas retired there is no native sequence 15 to fall back
   // to: an unapproved KO holds the last hurt key of the current heading instead.
   const hurtHold=direction=>{
@@ -171,25 +186,51 @@ export function createReviewedArenaPlayback(document,{reducedMotion=false,native
     const last=hurt.frames.length-1;
     return {...hurt.frames[last],frameIndex:last,clipId:hurt.id,complete:true,terminal:true,action:'ko',phase:'KO_HURT_HOLD_NO_APPROVED_KO',direction,actionId:null};
   };
-  let cast=null,lastId=-1,direction='D',stateKey=null,start=0,ko=false,hurtStarted=null,hurtDirection='D',wasHurt=false;
+  let cast=null,lastId=-1,direction='D',stateKey=null,start=0,ko=false,koStarted=null,hurtStarted=null,hurtDirection='D',wasHurt=false;
   // Walking advances on an accumulated phase so a cadence (moveRate) change never jumps frames.
   let movePhaseMs=0,lastTime=null;
-  // An authored release key reports its emitter point only while that key is on screen.
-  const withRelease=(clip,sample)=>({...sample,release:clip.release&&sample.frameIndex===clip.release.frameIndex
-    ?{frameIndex:clip.release.frameIndex,point:clip.release.point}:null});
+  // Source-event clips keep the attachment available during windup: the scene
+  // consumes CAST_RELEASE before its next actor update. This is a position, not
+  // a second damage/FX event. Existing clips retain their single-key behavior.
+  const sourceBoundary=clip=>clip?.release?.alignSourceEvent===true&&Number.isSafeInteger(clip.release.frameIndex)
+    &&clip.release.frameIndex>0&&clip.release.frameIndex<clip.frames.length;
+  // Calibrated source poses may have different pivots. Their per-event socket
+  // is measured from that pivot, including authored event translation. Keep
+  // this opt-in: legacy clips continue to use the single clip-relative point.
+  const releaseFor=(clip,index)=>{
+    const frame=clip.frames[index],point=frame?.releasePoint;
+    return {frameIndex:clip.release.frameIndex,point:sourceBoundary(clip)&&frame?.preserveAuthoredPose
+      &&Array.isArray(point)&&point.length===2&&point.every(Number.isFinite)?point:clip.release.point};
+  };
+  const withRelease=(clip,sample)=>({...sample,release:clip.release&&(sourceBoundary(clip)||sample.frameIndex===clip.release.frameIndex)
+    ?releaseFor(clip,sample.frameIndex):null});
   return Object.freeze({
+    // CAST effects are consumed before the next actor sample. Read the new
+    // heading's authored socket without advancing or replacing playback state.
+    castAttachment(event) {
+      if(event?.type!=='CAST'||!Number.isFinite(event.angle))return null;
+      const heading=reviewedDirection(Math.cos(event.angle),Math.sin(event.angle));
+      const clip=reviewedArenaClip(document,['LUNGE','MELEE'].includes(event.moveType)?'melee':'ranged',heading);
+      if(!sourceBoundary(clip)||!clip.frames[0]?.preserveAuthoredPose)return null;
+      return {assetId:clip.frames[0].assetId,release:releaseFor(clip,0)};
+    },
     observe(event) {
       if (!['CAST','ULT_CAST','CAST_RELEASE'].includes(event?.type)||!Number.isSafeInteger(event.actionId)||!Number.isFinite(event.t)) return;
       if (event.actionId<lastId) return;
       if(event.actionId>lastId) {lastId=event.actionId;cast={id:lastId,startedAt:event.t,releasedAt:null,angle:event.angle,moveId:event.moveId,moveType:event.moveType};}
       if(event.type==='CAST_RELEASE'&&cast?.releasedAt===null) cast.releasedAt=event.t;
     },
-    reset() {cast=null;lastId=-1;stateKey=null;ko=false;hurtStarted=null;wasHurt=false;movePhaseMs=0;lastTime=null;},
-    sample({time,hp,vx=0,vy=0,facing=1,hit=false,attack=false,castId=null,angle=null,moveRate=1,victory=false}) {
+    reset() {cast=null;lastId=-1;stateKey=null;ko=false;koStarted=null;hurtStarted=null;wasHurt=false;movePhaseMs=0;lastTime=null;},
+    sample({time,hp,vx=0,vy=0,facing=1,hit=false,attack=false,castId=null,sourceCastId=null,angle=null,moveRate=1,victory=false}) {
       if(!Number.isFinite(time))throw Error('REVIEWED_ARENA_TIME');
       const dt=lastTime===null?0:Math.max(0,time-lastTime);lastTime=time;
-      if(hp<=0){ko=true;cast=null;}
-      else if(ko){ko=false;stateKey=null;} // only actual simulation liveness clears KO
+      if(hp<=0){if(!ko)koStarted=time;ko=true;cast=null;}
+      else if(ko){ko=false;koStarted=null;stateKey=null;} // only actual simulation liveness clears KO
+      if(ko&&sourceFaint(direction)){
+        const clip=sourceFaint(direction),elapsed=Math.max(0,(time-koStarted)*1000);
+        const sample=sampleReviewedClip(clip,reducedMotion?Number.MAX_SAFE_INTEGER:elapsed);
+        return {...sample,terminal:sample.complete,action:'ko',phase:sample.complete?'KO_SOURCE_HOLD':'KO_SOURCE_TRANSITION',direction,actionId:null};
+      }
       if(ko)return terminalClip?{...sampleReviewedClip(terminalClip,0,{terminal:true}),terminal:true,action:'ko',phase:'KO_STATIC_HOLD',direction,
         authoredHeading:terminalClip.direction,actionId:null}:hurtHold(direction)??{fallbackSequenceId:15,terminal:true,direction,actionId:null};
       // Victory faces the camera and plays a 'win' clip once (else the ranged clip), holding its last key.
@@ -212,24 +253,33 @@ export function createReviewedArenaPlayback(document,{reducedMotion=false,native
       if(hurtStarted!==null && ((time-hurtStarted)*1000<hurtDuration||hit&&hurt?.neutralReturn)){
         direction=hurtDirection;action='hurt';elapsed=(time-hurtStarted)*1000;holdFirst=false;
       } else if(cast) {
-        if(cast.releasedAt===null && castId!==cast.id){cast=null;}
+        const sourceCast=sourceBoundary(reviewedArenaClip(document,['LUNGE','MELEE'].includes(cast.moveType)?'melee':'ranged',direction));
+        if(cast.releasedAt===null && castId!==cast.id && !(sourceCast&&sourceCastId===cast.id)){cast=null;}
         else {
           action=['LUNGE','MELEE'].includes(cast.moveType)?'melee':'ranged';
           const clip=reviewedArenaClip(document,action,direction);
-          const first=clip?.frames[0]?.durationMs??0;
-          elapsed=cast.releasedAt===null?0:first+(time-cast.releasedAt)*1000;
-          holdFirst=cast.releasedAt===null;
+          const aligned=sourceBoundary(clip);
+          const releaseStart=aligned?clip.frames.slice(0,clip.release.frameIndex).reduce((n,f)=>n+f.durationMs,0):clip?.frames[0]?.durationMs??0;
+          // The simulation owns release time. Play source windup in order, hold
+          // its last key if necessary, and start the declared event on release.
+          elapsed=cast.releasedAt===null?(aligned?Math.min(Math.max(0,time-cast.startedAt)*1000,Math.max(0,releaseStart-1e-6)):0)
+            :releaseStart+(time-cast.releasedAt)*1000+(aligned?1e-7:0);
+          holdFirst=cast.releasedAt===null&&!aligned;
           if(cast.releasedAt!==null && elapsed>=(clip?.frames.reduce((n,f)=>n+f.durationMs,0)??0))cast=null;
         }
       } else if(attack) {action='ranged';holdFirst=false;}
-      if(!cast&&action!=='hurt'&&!attack){action='move';}
+      if(!cast&&action!=='hurt'&&!attack){
+        action=sourceStates&&document.arenaSourcePlayback.idle===true&&holdFirst
+          &&reviewedArenaClip(document,'idle',direction)?'idle':'move';
+        if(action==='idle')holdFirst=false;
+      }
       const key=action+'/'+direction;
       if(stateKey!==key){stateKey=key;start=time;movePhaseMs=0;}
       else if(action==='move')movePhaseMs+=dt*1000*(Number.isFinite(moveRate)&&moveRate>0?moveRate:1);
       const clip=reviewedArenaClip(document,action,direction);
       if(!clip)return {missing:`arena/${direction}/${action}`,direction,actionId:cast?.id??null};
       if(action==='move')elapsed=movePhaseMs;
-      else if(!cast&&attack)elapsed=(time-start)*1000;
+      else if(action==='idle'||!cast&&attack)elapsed=(time-start)*1000;
       const sample=sampleReviewedClip(clip,reducedMotion?0:Math.max(0,elapsed),{holdFirst});
       return {...withRelease(clip,sample),direction,action,actionId:cast?.id??null,phase:cast?(cast.releasedAt===null?'WINDUP':'RELEASE'):action.toUpperCase()};
     }

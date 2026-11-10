@@ -71,7 +71,10 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
     // generalMirrorFrames lists single frames drawn facing opposite to the rest of
     // their set (by-eye review 2026-10-29); each is mirrored relative to the set.
     const mirrorFrames=new Set(usage==='general'?entry.generalMirrorFrames??[]:[]);
-    const mirrorOf=key=>usage==='general'&&(entry.generalMirror===true)!==mirrorFrames.has(key);
+    // An exact-base, loopback candidate can have a different authored facing
+    // from its retired predecessor. Public selection keeps its own policy.
+    const generalMirror=ref.handoff&&typeof ref.generalMirror==='boolean'?ref.generalMirror:entry.generalMirror;
+    const mirrorOf=key=>usage==='general'&&(generalMirror===true)!==mirrorFrames.has(key);
     // Stage body size on General screens: generalDisplayScale (selection) draws a set
     // larger or smaller in native units by changing its effective density only.
     const displayScale=usage==='general'?reviewedGeneralDisplayScale(entry):1;
@@ -101,7 +104,11 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
       const walk=document.clips.find(c=>c.mode==='arena'&&c.direction==='D'&&['move','walk'].includes(c.action))
         ??document.clips.find(c=>c.mode==='arena'&&['move','walk'].includes(c.action));
       const heights=(walk?.frames??[]).map(f=>geometry.get(f.assetId)?.nativeBounds).filter(Boolean).map(b=>b[3]-b[1]).sort((a,b)=>a-b);
-      const referenceHeight=heights.length?heights[heights.length>>1]:64;
+      const authoredReference=document.arenaSourcePlayback?.referenceHeight;
+      // A uniform web raster derivative retains the calibrated world reference;
+      // antialiasing at its crop edge must not resize the entire character.
+      const referenceHeight=Number.isFinite(authoredReference)&&authoredReference>0&&authoredReference<=4096
+        ?authoredReference:heights.length?heights[heights.length>>1]:64;
       for(const g of geometry.values())g.referenceHeight=referenceHeight;
       // arenaGroundFromWalk (selection): a set whose Arena pivots sit inside the body
       // gets one ground correction per direction (median feet of that direction's
@@ -220,6 +227,7 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
         nativeFramePresenter:actor.nativeFramePresenter?{...actor.nativeFramePresenter,apply:nativeApply,
           getSnapshot:()=>current??actor.nativeFramePresenter.getSnapshot()}:null,
         battleAnimator,reviewedArena:{referenceHeight:[...geometry.values()][0]?.referenceHeight??null,partial:entry.partialArena===true,
+          castAttachment(event){const socket=arenaPlayback.castAttachment(event);return socket?{...socket,geometry:geometry.get(socket.assetId),mirrorX:document.frames[socket.assetId]?.mirrorX===true}:null;},
           observe:event=>arenaPlayback.observe(event),reset:()=>arenaPlayback.reset(),sample(state){
           const sample=arenaPlayback.sample(state);if(sample.fallbackSequenceId!==undefined){
             current=null;actor.controller?.setAnimation(sample.fallbackSequenceId);restoreBaselineAnchor();return sample;
