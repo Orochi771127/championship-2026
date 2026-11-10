@@ -26,7 +26,7 @@ import {moveVfxSignature} from '../vfx/moveVfxSignatures.js';
 import {battleEffectCellIsOriginal} from '../battleEffectSprites.js';
 import {createPixelHitBursts} from '../vfx/pixelHitBursts.js';
 import {createPixelMotes} from '../vfx/pixelMotes.js';
-import {moveVfxChoreography} from '../vfx/moveVfxChoreography.js';
+import {moveVfxChoreography, moveVfxSupportChoreography} from '../vfx/moveVfxChoreography.js';
 import {createMoveVfxSetPieces} from '../vfx/moveVfxSetPieces.js';
 /** Palette key -> the element its motes wear (as unifiedMoveVfxResolver reads a bank's family colour). */
 const PALETTE_ELEMENT = Object.freeze({fire: 'FIRE', water: 'WATER', ice: 'ICE', thunder: 'THUNDER', metal: 'METAL', nature: 'WOOD',
@@ -741,6 +741,10 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const info = slot(event.slot);
         if (!info) continue;
         if (event.type === 'SUPPORT') cue({type: 'BUFF', system: supportVfxSystem(event.statusCode), slot: event.slot, x: info.x, y: info.groundY});
+        // Batch 7: the support move's own cast on the body that receives it.
+        const support = event.type === 'SUPPORT' && typeof moveVfxSupportChoreography === 'function' ? moveVfxSupportChoreography(event.statusCode) : null;
+        if (support && setPieces) setPieces.play(support.piece, {x: info.x, y: info.top + info.height * 0.5, angle: info.facing < 0 ? Math.PI : 0,
+          palette: BATTLE_FX_PALETTES[support.palette] ?? BATTLE_FX_PALETTES.light, size: info.width, scale: support.scale});
         const palette = event.type === 'HEAL' ? BATTLE_FX_PALETTES.nature : BATTLE_FX_PALETTES.light;
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.9, tint: palette.main, life: 560});
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.6, tint: palette.core, life: 480, delay: 120});

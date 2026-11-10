@@ -274,3 +274,19 @@ sprite("vortex", { w: 34, h: 34, outline: "o" },
 sprite("vine", { w: 16, h: 40, outline: "o" },
   (c) => { for (let y = 39; y > 6; y--) { const x = Math.round(7 + Math.sin(y / 5) * 3); c.px(x, y, "m"); c.px(x + 1, y, "e"); } },
   circ(11, 5, 3, "m"), circ(11, 5, 1, "_"), poly([2, 24, 7, 21, 6, 26], "x"), poly([13, 15, 9, 13, 10, 18], "x"))
+
+// ---------------------------------------------------------------- set pieces, batch 7 (support moves)
+// A healing plus: a fat cross, lit on its upper arms, a bright heart at the crossing.
+sprite("plus", { w: 14, h: 14, outline: "o" },
+  rect(5, 0, 4, 14, "m"), rect(0, 5, 14, 4, "m"), rect(6, 1, 2, 4, "x"), rect(1, 6, 4, 2, "x"), rect(6, 6, 2, 2, "c"))
+// A rising chevron arrow: a stat going up.
+sprite("arrow_up", { w: 16, h: 18, outline: "o" },
+  poly([8, 0, 15, 8, 11, 8, 11, 17, 5, 17, 5, 8, 1, 8], "m"), poly([8, 2, 12, 7, 8, 7], "x"), vline(7, 3, 15, "x"), px(8, 1, "c"))
+// A front-on guard shield: a heater shape, rim lit, a bright boss in the middle.
+sprite("shield", { w: 26, h: 30, outline: "o" },
+  poly([1, 2, 13, 0, 25, 2, 25, 14, 13, 29, 1, 14], "m"), poly([4, 4, 13, 3, 22, 4, 22, 13, 13, 25, 4, 13], "e"),
+  poly([6, 6, 13, 5, 20, 6, 20, 12, 13, 22, 6, 12], "m"), line(2, 3, 12, 1, "x"), circ(13, 12, 3, "x"), circ(13, 12, 1, "c"))
+// A target reticle: a broken ring with four ticks, a dot at the centre.
+sprite("reticle", { w: 30, h: 30, outline: "o" },
+  clip((x, y) => !(Math.abs(x - 15) < 4 || Math.abs(y - 15) < 4), ring(15, 15, 12, "m"), ring(15, 15, 11, "x")),
+  rect(14, 0, 2, 7, "m"), rect(14, 23, 2, 7, "m"), rect(0, 14, 7, 2, "m"), rect(23, 14, 7, 2, "m"), rect(14, 14, 2, 2, "c"))

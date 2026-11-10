@@ -23,6 +23,8 @@ Batch 4 (2026-11-11): every remaining signature, so all 204 signatures now have 
 
 Batches 5 and 6 (2026-11-11): every skill move (154) and every basic move (199) without a signature also gets its own row, for 565 rows in all. The name picks the piece first, as in batches 2–4, with more verbs: 翻滾 spin, 抱擊 jaws, 穿/舌彈 horn, 拂/尾擊 slash, 踢/頭槌/敲/杖 quake, 撞/撲 rush; otherwise the move's archetype decides. Skills are a medium blow (scale 0.85–1.05, hold 55–70 ms, medium shake) and basics a light one (scale 0.70–0.82, hold 35–50 ms, light shake), stepped by power. Shot-type skills also play a muzzle flash on release.
 
+Batch 7 (2026-11-11): the support moves. Each one plays its own cast on every body that receives it, keyed by the effect it applies. There are seven new pieces: heal (pluses well up from a ground ring, bigger for 300/900/2100 HP, a little smaller per body for a team heal), cleanse (rings sweep out, shards of the cleared status rise), attack up (three arrows climb, a flash over the head), speed up (streaks shoot up), defence up (a shield slams up, overshoots and settles), accuracy up (a reticle spins in and locks) and resist up (a shield with four circling shards, in the resisted element's colour). New pxl drawings: a plus, an up-arrow, a shield and a reticle. Records 1 and 28-30 apply no effect and keep the shared cue. The Data Arena has no support moves.
+
 <!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
 ## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
 
