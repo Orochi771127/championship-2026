@@ -102,6 +102,9 @@ import { createStoryStagePuppeteer } from '../presentation/story/storyStagePuppe
 import { createPortraitVnOverlay } from '../presentation/story/portraitVnOverlay.js';
 import { createStoryChapterMap } from './storyChapterMap.js';
 import { storyRiftMapText } from '../data/storyRiftMap.js';
+// Story mode part one (Owner 2026-11-11): the half-body story theater.
+import { createStoryVnDirector } from '../presentation/story/storyVnDirector.js';
+import { STORY_VN_CHAPTERS, storyVnChapterStates, storyVnRewardKey } from '../data/storyVnCampaign.js';
 import { mountAmbience } from './ui/ambienceLayer.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, createAssetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
@@ -446,6 +449,9 @@ const openingPresentation=createOpeningPresentation({host:document.getElementByI
 
 let app = null;
 let view = null;
+// Story theater run and its battle (declared early: the screen subscription reads them).
+let vnRun = null;
+let storyBattle = null;
 let raisingSource = null;
 let expeditionSource = null;
 let unsubscribeScreen = null;
@@ -2574,7 +2580,9 @@ async function openGameplay() {
     }
   }
   unsubscribeScreen = app.subscribeScreen(() => {
-    if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) closeStoryMap();
+    // A story-theater chapter keeps its chart while its battle runs on the battle screens.
+    if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME && !vnRun) closeStoryMap();
+    followStoryBattle();
     syncMusic(); refreshStatusBar(); refreshToolbarMode(); void refreshCalendarViews(); void mountCurrentScreen();
   });
   let calendarSession=null,stopCalendarSession=null;
@@ -3106,13 +3114,129 @@ async function openStoryMap({ chapterId = null, source = 'menu' } = {}) {
   const partner = storyPartner(view.storyStage.getFrame());
   storyMap?.dispose();
   storyMap = createStoryChapterMap({ locale: getLocale(), reducedMotion: prefersReducedMotion(), isSeen: storyNodeSeen,
+    vnStateOf: node => storyVnStates().find(state => state.id === node.vnChapterId)?.state ?? 'locked',
+    castPortrait: species => { const hero = databaseHeroPortrait(species); return hero?.thumbnail ?? hero ?? null; },
     partner: { name: partner?.name ?? '', portrait: partner?.portrait ?? null },
-    onPlay: next => playStoryChapter(next, { source: 'map' }),
+    onPlay: (next, node) => node?.vnChapterId ? playVnChapter(node.vnChapterId, { source: 'map' }) : playStoryChapter(next, { source: 'map' }),
     onClose: () => { recoveryDiagnostics.record('STORY', { source, stage: 'map-closed' }); } });
   recoveryDiagnostics.record('STORY', { source, stage: 'map' });
   return storyMap.open({ chapterId });
 }
 function closeStoryMap() { storyMap?.dispose(); storyMap = null; }
+
+// Story mode part one (OWNER_APPROVED_ADAPTATION 2026-11-11): the half-body story theater.
+// Chapters open in order once the rift chapter one was watched; progress is the
+// once-only reward ledger (story:vn1:cN / sN), so no new save field. The clock
+// pauses for the chapter; a battle runs as the game's own free battle and the
+// chapter resumes on its win or loss branch.
+function storyVnStates() {
+  let claimed = [];
+  try { claimed = app?.getGachaClaimedRewards?.() ?? []; } catch { claimed = []; }
+  const entryOpen = settings.store.get().storyRiftChapter1Seen === true || claimed.some(key => key.startsWith('story:vn1:'));
+  return storyVnChapterStates(claimed, { entryOpen });
+}
+async function playVnChapter(chapterId, { source = 'map', from = null } = {}) {
+  if (vnRun || storyRun) return Object.freeze({ outcome: 'busy', chapterId });
+  const chapter = STORY_VN_CHAPTERS[chapterId];
+  if (!chapter) return Object.freeze({ outcome: 'refused', reason: 'UNKNOWN_CHAPTER', chapterId });
+  if (storyVnStates().find(state => state.id === chapterId)?.state === 'locked') return Object.freeze({ outcome: 'refused', reason: 'CHAPTER_LOCKED', chapterId });
+  const partner = storyPartner(view?.storyStage?.getFrame?.() ?? null);
+  if (!partner) return Object.freeze({ outcome: 'refused', reason: 'NO_PARTNER', chapterId });
+  const partnerSpecies = speciesIndexOf(partner.resident.speciesId);
+  const director = createStoryVnDirector({
+    locale: getLocale(), reducedMotion: prefersReducedMotion(), speciesName,
+    runBattle: request => runStoryBattle({ ...request, partnerInstanceId: partner.resident.creatureId }),
+    claim: id => {
+      const key = storyVnRewardKey(id);
+      const claimedBefore = (app.getGachaClaimedRewards?.() ?? []).includes(key);
+      try {
+        const reward = app.claimGachaReward?.(key, STORY_VN_CHAPTERS[id]?.reward?.tickets ?? 0);
+        const lines = reward?.diamonds ? [uiText('鑽石 +{n}', { n: reward.diamonds })] : [];
+        return { granted: reward?.granted ?? 0, claimedBefore, lines };
+      } catch { return { granted: 0, claimedBefore, lines: [] }; }
+    }
+  });
+  recoveryDiagnostics.record('STORY', { chapterId, source, stage: 'vn-start' });
+  clockDriver?.setActive(false);
+  document.body.dataset.storyStage = 'playing';
+  root.dataset.storyPlaying = chapterId;
+  vnRun = director;
+  try {
+    const result = await director.play(chapterId, { tamer: app.getOpeningState()?.trainerName ?? '', partner: partner.name, partnerSpecies, from });
+    recoveryDiagnostics.record('STORY', { chapterId, source, stage: `vn-${result.outcome}` });
+    if (result.reward?.granted) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: uiText('轉蛋券 +{n}', { n: result.reward.granted }) } }));
+    return result;
+  } finally {
+    vnRun = null;
+    delete root.dataset.storyPlaying;
+    delete document.body.dataset.storyStage;
+    clockDriver?.setActive(!root.hidden);
+    refreshStatusBar();
+  }
+}
+async function waitForScreen(target, timeoutMs = 15000) {
+  const started = Date.now();
+  while (Date.now() - started < timeoutMs) {
+    if (app.getScreen() === target && mountedScreen === target) return true;
+    await new Promise(resolve => setTimeout(resolve, 120));
+  }
+  return false;
+}
+/** A story battle: the free battle against the chapter's presets; resolves {ok, won} once the result screen is left. */
+async function runStoryBattle({ presetIndices, partnerInstanceId = null, signal = null }) {
+  if (storyBattle) return { ok: false, reason: 'BATTLE_BUSY' };
+  if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started) return { ok: false, reason: 'BATTLE_NOT_READY' };
+  const previousStage = document.body.dataset.storyStage;
+  delete document.body.dataset.storyStage;
+  try {
+    if (app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) { if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen(); app.openBattle(); }
+    if (!(await waitForScreen(CHAMPIONSHIP_SCREENS.BATTLE_SELECT))) return { ok: false, reason: 'BATTLE_SELECT_NOT_READY' };
+    const candidates = (await app.getBattlePartyCandidates(null)).filter(c => !c.admission || c.admission.ok);
+    const lead = candidates.find(c => c.instanceId === partnerInstanceId) ?? candidates[0];
+    if (!lead) return { ok: false, reason: 'TEAM_REQUIRED' };
+    const party = await app.prepareStoryBattle(presetIndices, [lead.instanceId]);
+    if (!party.ok) return party;
+    const prepared = (await loadBattleRuntime())({ mode: 2, battleType: 0, playerIndividuals: party.individuals, rng: party.rngPreparation.rng,
+      personalityPolicy: FREE_PRACTICE_PERSONALITY_POLICY, arenaHazards: await loadArenaHazards() });
+    const finished = new Promise(resolve => { storyBattle = { resolve, outcome: null, seenResult: false }; });
+    try { prepared.chooseFreeBattle({ presetIndices: party.presetIndices, arenaIndex: party.arenaIndex }); prepared.startMatch(); }
+    catch (error) { prepared.dispose(); storyBattle = null; return { ok: false, reason: error?.message ?? 'BATTLE_NOT_READY' }; }
+    const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
+    const entered = await enterPreparedBattle(prepared, attemptId, () => app.enterFreeBattle({ attemptId, playerInstanceIds: [lead.instanceId], rngPreparation: party.rngPreparation }));
+    if (!entered?.ok) { storyBattle = null; return { ok: false, reason: entered?.reason ?? 'BATTLE_NOT_READY' }; }
+    signal?.addEventListener?.('abort', () => storyBattle?.resolve({ ok: false, reason: 'STORY_ABORTED' }), { once: true });
+    return await finished;
+  } finally {
+    storyBattle = null;
+    if (app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_SELECT) app.leaveScreen();
+    await waitForScreen(CHAMPIONSHIP_SCREENS.RAISING_HOME, 8000);
+    if (previousStage) document.body.dataset.storyStage = previousStage;
+  }
+}
+// Follows the battle screens for a running story battle: the result screen records the
+// outcome; leaving it (back to the battle menu or home) settles the battle.
+function followStoryBattle() {
+  if (!storyBattle) return;
+  const screen = app.getScreen();
+  if (screen === CHAMPIONSHIP_SCREENS.BATTLE_RESULT && !storyBattle.seenResult) {
+    storyBattle.seenResult = true;
+    try { storyBattle.outcome = battleRuntime?.outcome?.() ?? null; } catch { storyBattle.outcome = null; }
+  } else if (storyBattle.seenResult && screen !== CHAMPIONSHIP_SCREENS.BATTLE_RESULT && screen !== CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
+    const outcome = storyBattle.outcome;
+    storyBattle.resolve({ ok: true, won: outcome?.winningTeam === 0, outcome });
+  }
+}
+// Loopback review only (?storyVnQa): play a chapter (optionally from a beat label), read its
+// state, stop it, mark chapters cleared. Public hosts never bind it.
+if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("storyVnQa"))
+  globalThis.__championshipStoryVnQa = {
+    play: (chapterId, options = {}) => playVnChapter(chapterId, { source: 'qa', ...options }),
+    state: () => vnRun?.state() ?? null,
+    stop: () => vnRun?.stop(),
+    states: () => storyVnStates(),
+    map: (chapterId = null) => openStoryMap({ chapterId, source: 'qa' }),
+    claim: ids => ids.map(id => app.claimGachaReward(storyVnRewardKey(id), 0))
+  };
 document.addEventListener(STORY_CHAPTER_OPEN_EVENT, event => { openStoryMap({ chapterId: event.detail?.chapterId ?? STORY_FIRST_CHAPTER_ID, source: event.detail?.source ?? 'badge' }); });
 
 // Online service (Owner 2026-10-28). One facade for the account panel, the

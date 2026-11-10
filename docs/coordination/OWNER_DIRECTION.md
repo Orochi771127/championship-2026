@@ -1,5 +1,20 @@
 # Championship Owner Direction
 
+<!-- record-id: STORY_VN_PART_ONE_20261111 -->
+## 2026-11-11 — The story mode becomes a half-body story theater; part one 「未被聽見的回聲」 plays as chapters 2–7
+
+The Owner asked for an inventory of the story mode and handed it over: 「交給你自己處理，幫我把故事模式給做好，可以用附圖的這種半身的講故事的模式，然後有很多角色資料夾的動作或表情高清圖可以選用，但是還是要用網頁遊戲適合的圖檔跟格式」, then 「故事模式就交給你去製作我不介入，除非你有需要可能故事走向啊，那些可以問我」 and 「可能要找一下之前做故事模式的那個任務」. The reference screenshot (another game) was used for layout only: a painted side-view scene, small characters on its ground, one large bust, a name-plate tab over a framed dialogue box, Skip/Esc in the corner.
+
+OWNER_APPROVED_ADAPTATION, presentation and story content. No new save field, no battle rule, RNG or clock change.
+
+- Content: the original six-chapter script first written 2026-10-29 (feat/story-unheard-echoes-20261029, never merged) and its two chapter-two side stories (uncommitted in that worktree's archive) are restaged in `data/storyVnCampaign.js`, with a few new lines (NAVI as the guide, the "tamers appear through their partners" rule). The Digimon Story Moonlight ROM (`moonlight-japan.zip`, the same archive unpacked research-only on 2026-10-29) informed structure and pacing only; no text, names, art or layout from it.
+- Entry: the existing rift observation chart. Its reserved chapters 2–4 become chapters 2–7 of part one plus two side stories hanging off chapter 3; they open in order once the rift chapter 1 was watched. Progress is the once-only reward ledger (`story:vn1:c1…c6`, `s1`, `s2`); first clears pay 6/6/7/7/8/12 and 3/3 gacha tickets.
+- Theater (`presentation/story/storyVnStage.js`, `storyVnTheater.js`, `storyVnDirector.js`, `app/ui/storyVn.css`): DOM only, no canvas or second ticker. Busts are each partner's Database hero art (232 species, ~864 px WebP), head-framed by the cut-in calibration and mirrored toward the screen; only the speaker's bust shows; moods move and light the bust. Partners on the ground play their own motion cells (idle, walk, attack, hit, cheer). Tamers speak through their partners' figures with a "partner · species" caption.
+- Battles: chapters 2, 6 and 7 fight the game's own auto battle (free battle against native presets 491, 515, 542; no fee, no purse) and resume on the win or loss branch; a battle that cannot start carries on.
+- Art: nine original scene plates (`assets/production/story/vn-backgrounds-v1/`, 1536 × 1024 lossy WebP, 1.46 MB in all), text-only image generation; ART_PRODUCTION_INDEX record `art:story:vn-backgrounds:original:v1`, not shipping-ready until Owner review.
+
+Verified by `tests/championship-story-vn-cases.mjs`, the updated chart cases, the locale gate, and a QA save on an isolated port (8943) at 1366 × 768, 390 × 844 and 844 × 390, including a real lost battle that resumed on the losing branch and paid the first-clear reward.
+
 <!-- record-id: HUNT_SPAWN_SPREAD_20261110 -->
 ## 2026-11-10 — Hunt partners spread out: loose same-species groups, a third of a screen apart
 
