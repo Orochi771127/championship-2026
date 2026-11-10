@@ -140,3 +140,43 @@ test("the 3D overlay leaves the two hit-spark families to the pixel hit bursts, 
   const main = fs.readFileSync("src/championship/app/main.js", "utf8");
   assert.match(main, /scene\?\.pixelHitsOwnSparks\?\.\(\)/);
 });
+
+// BESPOKE_MOVE_VFX_PROGRAM_20261111: per-move choreography and its set pieces.
+import { MOVE_VFX_CHOREOGRAPHY, moveVfxChoreography } from "../src/championship/presentation/vfx/moveVfxChoreography.js";
+import { MOVE_VFX_SET_PIECES, createMoveVfxSetPieces, paintSetPieceSprite } from "../src/championship/presentation/vfx/moveVfxSetPieces.js";
+import battleMoves from "../src/data/championship/catalogs/battle-moves.r1.json" with { type: "json" };
+
+test("every choreographed move exists and names only known set pieces", () => {
+  const records = new Set(battleMoves.records.map(m => m.recordIndex));
+  for (const [key, c] of Object.entries(MOVE_VFX_CHOREOGRAPHY)) {
+    assert.ok(records.has(Number(key)), `record ${key}`);
+    for (const phase of ["release", "contact"]) if (c[phase]) assert.ok(MOVE_VFX_SET_PIECES.includes(c[phase].piece), `${key} ${phase}`);
+    if (c.hitStopMs !== undefined) assert.ok(c.hitStopMs >= 0 && c.hitStopMs <= 120, `${key} hit-stop stays short`);
+    if (c.shake) assert.ok(["light", "medium", "heavy"].includes(c.shake));
+  }
+  assert.equal(moveVfxChoreography("own-195"), moveVfxChoreography(195), "a partner's own Data Arena move reads its record");
+  assert.equal(moveVfxChoreography(999999), null);
+  // batch 1: the main team's nine moves, each with its own moment
+  for (const id of [193, 194, 195, 213, 214, 215, 216, 226, 227]) assert.ok(MOVE_VFX_CHOREOGRAPHY[id]?.contact, `record ${id}`);
+});
+
+test("set pieces paint in the move's palette, play once on the owner's delta and recycle", () => {
+  const palette = { core: 0xfff4c2, main: 0xff8a1c, edge: 0xd8360f };
+  const jaw = paintSetPieceSprite("jaw_top", palette);
+  assert.ok(jaw && jaw.w >= 44 && jaw.h >= 20, "the jaw is drawn");
+  const colours = new Set(); for (let i = 0; i < jaw.data.length; i += 4) if (jaw.data[i + 3]) colours.add(jaw.data.slice(i, i + 3).join());
+  assert.ok(colours.has("255,138,28"), "main tone is the palette's main");
+  assert.ok(colours.has("255,255,255"), "fangs stay white");
+  const PIXI = fakePixi(), layer = new PIXI.Container();
+  const pieces = createMoveVfxSetPieces({ PIXI, layer, doc });
+  for (const piece of MOVE_VFX_SET_PIECES) assert.equal(pieces.play(piece, { x: 0, y: 0, palette, size: 120 }), true, piece);
+  assert.equal(pieces.play("nope", { x: 0, y: 0, palette }), false);
+  const before = pieces.getDiagnostics().live;
+  pieces.update(0);
+  assert.equal(pieces.getDiagnostics().live, before, "a hit-stop holds them");
+  pieces.update(2000);
+  assert.equal(pieces.getDiagnostics().live, 0);
+  assert.ok(layer.children.every(s => !s.visible), "finished pieces go back to the pool");
+  pieces.dispose();
+  assert.equal(layer.children.length, 0);
+});

@@ -13,6 +13,10 @@ OWNER_APPROVED_ADAPTATION, presentation only, standing for this programme:
 - The agent picks the batches, the order and the review itself. Each batch is checked with tests, the full `test:ci`, the Pages build and real battles on an isolated port, then committed, merged and published without waiting for the Owner. A batch that fails its checks is fixed or held, never published.
 - Rights: only the project's own drawings and code-made effects, plus MIT-licensed code with its notice kept. No ROM pixels and no third-party characters.
 
+Batch 1 (2026-11-11): the Owner's main team, 角暴龍 (193 裂顎咬, 194 熔核彈, 195 裂顎貫角), 熔岩龍 (213 暴牙咬, 214 地炎熔岩彈, 215 焚天炎砲, 216 地炎角刺) and 黑暴龍 (226 夜獄掠爪, 227 夜獄焚焰砲). It adds the per-move table `presentation/vfx/moveVfxChoreography.js` and the animator `presentation/vfx/moveVfxSetPieces.js`, with seven pieces: jaws, jaws-horn, horn, claws, core, muzzle, muzzle-spiral. The pieces are new pxl drawings in `drawn-vfx.px.js`: an arched flame jaw with inward fangs, a claw mark, a horn tip, a molten core and a muzzle ring. Each move sets its own hit-stop, shake and knock. The AI battle plays the pieces on LAUNCH and HIT; the Data Arena plays them on release and hit.
+
+Batch 2 (2026-11-11): all 46 strike and slash signatures, plus 咬衣豆 (43, 44) and 跳跳蕾 (45, 46). There are ten new pieces: fist, rush, quake, spin, roar, cross, slash, scissor, iai and knives. They use new pxl drawings: a fist with grooved knuckles, an eight-point impact star, a ground crack, a blade crescent, speed streaks and a knife. Each move's piece follows what its name does: 拳/掌 fist, 衝/俯/天墜/翔 rush, 錘/鎚/重擊/踏/墜擊 quake, 迴旋/旋衝 spin, 吼/嘯 roar, 十字 cross; 斬/刃/裁 slash, 剪/鋏 scissor, 一閃 iai, 飛刀 knives. The hold, shake and knock follow the move's power.
+
 <!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
 ## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
 
