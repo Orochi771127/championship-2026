@@ -54,7 +54,8 @@ export function createDataArenaTextures(PIXI) {
     soft: radial(64, [[0, "rgba(255,255,255,0.7)"], [0.6, "rgba(255,255,255,0.25)"], [1, "rgba(255,255,255,0)"]]),
     shadow: make(64, 32, (ctx) => {
       const g = ctx.createRadialGradient(32, 16, 2, 32, 16, 32);
-      g.addColorStop(0, "rgba(0,0,0,0.55)"); g.addColorStop(1, "rgba(0,0,0,0)");
+      // A defined contact core with a soft rim (Owner 2026-11-10: the plain fade vanished on bright floors).
+      g.addColorStop(0, "rgba(6,4,14,0.62)"); g.addColorStop(0.5, "rgba(6,4,14,0.52)"); g.addColorStop(0.78, "rgba(6,4,14,0.26)"); g.addColorStop(1, "rgba(6,4,14,0)");
       ctx.save(); ctx.scale(1, 0.5); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(32, 32, 32, 0, TAU); ctx.fill(); ctx.restore();
     }),
     dot: make(4, 4, (ctx) => { ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, 4, 4); }, { nearest: true }),
