@@ -43,6 +43,8 @@ Batch 3 (2026-11-11): the remaining 75 fire, orb, lance, pierce, missile and cla
 
 Batch 4 (2026-11-11): every remaining signature, so all 204 signatures now have their own choreography. There are seven new pieces: flurry and drop, which take a drawing named by the move, plus bolt, vortex, vines, mist and wave. New pxl drawings: a note, a leaf, a feather, a bubble, an ice shard, a vortex and a vine. The earlier bomb, mushroom, gear, bone, fish, heart, lightning, cloud and splash drawings are reused. The piece follows the move's archetype: notes, bubbles, leaves, petals, feathers, shards and fish flurry; bombs, mushrooms, gears and bones drop; thunder bolts; black holes, tornadoes and wind become vortices; vines, trees and spikes become vines; water waves; mist rolls.
 
+Batches 5 and 6 (2026-11-11): every skill move (154) and every basic move (199) without a signature also gets its own row, for 565 rows in all. The name picks the piece first, as in batches 2–4, with more verbs: 翻滾 spin, 抱擊 jaws, 穿/舌彈 horn, 拂/尾擊 slash, 踢/頭槌/敲/杖 quake, 撞/撲 rush; otherwise the move's archetype decides. Skills are a medium blow (scale 0.85–1.05, hold 55–70 ms, medium shake) and basics a light one (scale 0.70–0.82, hold 35–50 ms, light shake), stepped by power. Shot-type skills also play a muzzle flash on release.
+
 <!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
 ## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
 
