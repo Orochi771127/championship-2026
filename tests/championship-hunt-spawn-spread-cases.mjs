@@ -1,5 +1,5 @@
-// HUNT_SPAWN_SPREAD_20261110 (Owner): loose same-species groups, a third of a screen between groups,
-// one or two partners in the opening view -- positions only, after the native entry and without its RNG.
+// HUNT_SPAWN_SPREAD_20261110 (Owner): loose same-species groups and a third of a screen between groups --
+// positions only, after the native entry and without its RNG. Finding them is still the player's job.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { listChampionshipGates } from '../src/championship/gate/gateCatalog.js';
@@ -9,10 +9,9 @@ import { resolveProductHuntPoolSources } from '../src/championship/hunt/capture/
 import { createChannelRng } from '../src/championship/battle/battleRngChannel.js';
 import { spreadHuntActors, HUNT_SPAWN_SPREAD } from '../src/championship/hunt/capture/productHuntSpawnSpread.js';
 
-const centre = [516, 516];
 const px = actor => [actor.positionQ12[0] / 4096, actor.positionQ12[1] / 4096];
 
-test('every gate: nobody stacked, groups a third of a screen apart, one or two in the opening view, no blocked or dock spawns', () => {
+test('every gate: nobody stacked, groups a third of a screen apart, no blocked or dock spawns', () => {
   for (const gate of listChampionshipGates()) for (let k = 0; k < 12; k++) {
     const rng = createChannelRng(0x77 + k * 104729);
     const entry = prepareNativeHuntEntry({ biomeId: gate.biomeId, clock: { clockMinutes: (k % 2 ? 13 : 22) * 60, season: k % 4 },
@@ -35,8 +34,12 @@ test('every gate: nobody stacked, groups a third of a screen apart, one or two i
       const sameSpecies = after[i].speciesIndex === after[j].speciesIndex;
       assert.ok(d >= (sameSpecies ? HUNT_SPAWN_SPREAD.memberGap - 1 : 32), `${gate.biomeId} #${k}: ${i}/${j} ${d.toFixed(0)} px apart`);
     }
-    const opening = points.filter(([x, y]) => Math.abs(x - centre[0]) <= 128 && Math.abs(y - centre[1]) <= 260).length;
-    assert.ok(opening >= 1 && opening <= HUNT_SPAWN_SPREAD.openingCount, `${gate.biomeId} #${k}: ${opening} in the opening view`);
+    // Groups: the nearest partner of another species is at least three quarters of the gap away.
+    for (let i = 0; i < points.length; i++) {
+      const other = points.filter((_, j) => j !== i && after[j].speciesIndex !== after[i].speciesIndex)
+        .reduce((d, q) => Math.min(d, Math.hypot(points[i][0] - q[0], points[i][1] - q[1])), Infinity);
+      assert.ok(other >= HUNT_SPAWN_SPREAD.minGap * 0.75 - 1, `${gate.biomeId} #${k}: ${other.toFixed(0)} px to another species`);
+    }
   }
 });
 

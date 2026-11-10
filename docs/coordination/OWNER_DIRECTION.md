@@ -1,16 +1,16 @@
 # Championship Owner Direction
 
 <!-- record-id: HUNT_SPAWN_SPREAD_20261110 -->
-## 2026-11-10 — Hunt partners spread out: loose same-species groups, a third of a screen apart, one or two in the opening view
+## 2026-11-10 — Hunt partners spread out: loose same-species groups, a third of a screen apart
 
-The 2026-11-10 hunt audit measured that 24–39 % of partners entered within 32 native px of another on every gate (an even spread gives 5–7 %): the native entry groups same-species pairs 30 % of the time within 31 px and pushes blocked spawns to the first open tile on the right. Asked again, the Owner chose 保留成鬆散小群, 約 1/3 個畫面寬 and 保證 1～2 隻 in the opening view.
+The 2026-11-10 hunt audit measured that 24–39 % of partners entered within 32 native px of another on every gate (an even spread gives 5–7 %): the native entry groups same-species pairs 30 % of the time within 31 px and pushes blocked spawns to the first open tile on the right. Asked again, the Owner chose 保留成鬆散小群 and 約 1/3 個畫面寬. A guarantee of one or two partners in the opening view was built and then withdrawn by the Owner: 「拖動地圖才找得到怪這個是沒關係吧因為本來就是讓玩家去找怪」.
 
 OWNER_APPROVED_ADAPTATION, positions only (`hunt/capture/productHuntSpawnSpread.js`). It runs after the native entry, never reads or advances the native RNG, and changes no other actor field; its own stream is seeded from the partners' native values, so a retried entry spreads the same.
 
 - Partners stand only on open tiles with open ground on four sides, two tiles from the edge and above the dock band (bottom 10 tiles).
 - Same species form loose groups of 1–3 (members 48–80 px from their leader, at least 36 px apart); groups keep about 96 native px (a third of the 256 px view) between them.
-- One or two partners stand inside the opening view round the camera centre (tile 64, 64); everyone else stays off the opening screen.
-- Measured over 150 entries on each of the 16 gates: partners within 32 px of another 24–39 % → 0 %; openings with nobody in view about 25 % → 0 %; spawns on blocked ground or in the dock band → 0.
+- Nothing is placed in the opening view on purpose: about 1.9 partners stand in it on average and about 15 % of entries open on an empty screen, left for the player to search.
+- Measured over 150 entries on each of the 16 gates: partners within 32 px of another 24–39 % → 0 %; partners of different species at least 72 px apart; spawns on blocked ground or in the dock band → 0.
 - `huntSpawnSpread: false` (app option) keeps the native positions for a test that scripts one partner's path.
 
 <!-- record-id: HUNT_INSTINCT_VFX_RARITY_20261110 -->
