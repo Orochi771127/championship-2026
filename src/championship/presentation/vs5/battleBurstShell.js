@@ -239,15 +239,23 @@ export function createBattleBurstShell({PIXI, layer, reducedMotion = false}) {
       g.circle(x, y, radius * (1.1 + k * 1.6) * scale);
       g.stroke({width: Math.max(1, radius * 0.08 * (1 - t)), color: colors.seam, alpha: 0.8 * (1 - t)});
     }
+    // SPECIAL_HEX_DECLUTTER_20261111 (Owner: 「必殺技的青色六角形也幫我整理一下」): the burst used to throw all
+    // seventy plates 1.4-3.2 radii out at full colour, a cyan spray over the neighbours. Now every other plate
+    // crumbles where it sat in the first third, the rest fly 0.8-1.8 radii and stay round their own fighter,
+    // they shrink to a third, darken toward the edge colour and fade in steps. Timing is unchanged.
     for (const cell of CELLS) {
       if (scale < 1 && cell.index % 2) continue;
+      const crumbles = cell.index % 2 === 1;
+      const life = crumbles ? clamp01(t * 3) : t;
+      if (life >= 1) continue;
       const seat = onSphere(cell), dir = Math.atan2(seat.y || 0.001, seat.x || 0.001) + (hash(cell.index, slot + 5) - 0.5) * 0.6;
-      const travel = reducedMotion ? 0 : k * (1.4 + hash(cell.index, 11) * 1.8) * scale;
-      const px = seat.x * scale + Math.cos(dir) * travel, py = seat.y * scale + Math.sin(dir) * travel + (reducedMotion ? 0 : k * k * 0.6);
-      hexPath(g, x + px * radius, y + py * radius, cell.size * radius * 0.94 * scale * (1 - 0.4 * t),
+      const travel = reducedMotion || crumbles ? 0 : k * (0.8 + hash(cell.index, 11) * 1.0) * scale;
+      const px = seat.x * scale + Math.cos(dir) * travel, py = seat.y * scale + Math.sin(dir) * travel + (reducedMotion ? 0 : k * k * 0.35);
+      hexPath(g, x + px * radius, y + py * radius, cell.size * radius * 0.94 * scale * (1 - 0.67 * life),
         reducedMotion ? 0 : k * (hash(cell.index, 13) - 0.5) * 9, seat.squash);
-      g.fill({color: mix(colors.edge, colors.plate, seat.shade), alpha: 0.96 * (1 - t)});
-      g.stroke({width: 1, color: colors.seam, alpha: 0.6 * (1 - t)});
+      const fade = life < 0.45 ? 0.92 : life < 0.75 ? 0.55 : 0.25;
+      g.fill({color: mix(colors.edge, colors.plate, seat.shade * (1 - 0.45 * life)), alpha: fade});
+      if (life < 0.5) g.stroke({width: 1, color: colors.seam, alpha: 0.45 * (1 - life * 2)});
     }
   }
 
