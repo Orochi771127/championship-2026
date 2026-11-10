@@ -474,6 +474,7 @@
     "src/championship/presentation/vs2/huntFactoryShutters.js",
     "src/championship/presentation/vs2/huntFieldPointer.js",
     "src/championship/presentation/vs2/huntFoliageDither.js",
+    "src/championship/presentation/vs2/huntRopeVfx.js",
     "src/championship/presentation/vs2/huntThree/actorBounds.mjs",
     "src/championship/presentation/vs2/huntThree/actorFootprint.mjs",
     "src/championship/presentation/vs2/huntThree/actorShadows.mjs",
@@ -493,6 +494,7 @@
     "src/championship/presentation/vs2/huntThree/sharedGLState.mjs",
     "src/championship/presentation/vs2/huntThree/sharedPass.mjs",
     "src/championship/presentation/vs2/huntThree/supportDepth.mjs",
+    "src/championship/presentation/vs2/huntWireVfx.js",
     "src/championship/presentation/vs5/battleBurstShell.js",
     "src/championship/presentation/vs5/battleCubeArt.js",
     "src/championship/presentation/vs5/battlePrismSpin.js",
@@ -8662,6 +8664,7 @@
     "src/championship/presentation/vs2/huntFactoryShutters.js",
     "src/championship/presentation/vs2/huntFieldPointer.js",
     "src/championship/presentation/vs2/huntFoliageDither.js",
+    "src/championship/presentation/vs2/huntRopeVfx.js",
     "src/championship/presentation/vs2/huntThree/actorBounds.mjs",
     "src/championship/presentation/vs2/huntThree/actorFootprint.mjs",
     "src/championship/presentation/vs2/huntThree/actorShadows.mjs",
@@ -8681,6 +8684,7 @@
     "src/championship/presentation/vs2/huntThree/sharedGLState.mjs",
     "src/championship/presentation/vs2/huntThree/sharedPass.mjs",
     "src/championship/presentation/vs2/huntThree/supportDepth.mjs",
+    "src/championship/presentation/vs2/huntWireVfx.js",
     "src/championship/presentation/vs5/battleBurstShell.js",
     "src/championship/presentation/vs5/battleCubeArt.js",
     "src/championship/presentation/vs5/battlePrismSpin.js",
@@ -40201,7 +40205,7 @@
       },
       {
         "path": "src/championship/hunt/capture/huntRopeTactics.js",
-        "sha256": "7fe854a3722ee58f17a510aa339ade17ea2fe653a009be7c9a32ff5d9399fa4e"
+        "sha256": "17cd285b678cfcc9b7c1db5187458ca1787c6dda6637fffeb774df195caa8b4d"
       },
       {
         "path": "src/championship/hunt/capture/memoryCardCapacity.js",
@@ -40237,7 +40241,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntFieldControls.js",
-        "sha256": "07dbe22906769ca488328683f54bca6a0732411e24495f433fab1df671c34285"
+        "sha256": "3b6e289a6f5459467ff3abc3b306fa580970a34805067a90c1d59992373c8e1e"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntGateVariant.js",
@@ -40293,7 +40297,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntWire.js",
-        "sha256": "2a94f3db28848c460ef60187219b213d156dbb08b8677c5244b7a9a3c61300d8"
+        "sha256": "c4860a227cd2596da25044aff77938af92f129a6965972da6ac8ce1d5250eea5"
       },
       {
         "path": "src/championship/hunt/capture/nativeRopeStroke.js",
@@ -41109,7 +41113,7 @@
       },
       {
         "path": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
-        "sha256": "adf0f8230b7ed3827fb14bcea936cd9ae32aa165832f205638da76599cf16a08"
+        "sha256": "4aa3fa96ee1ebc3234e04d3f21483c32ef4573656e5ffb0334ed44f6ad1d3ca2"
       },
       {
         "path": "src/championship/presentation/vs2/gateFocusTween.js",
@@ -41142,6 +41146,10 @@
       {
         "path": "src/championship/presentation/vs2/huntFoliageDither.js",
         "sha256": "cc059747c5a0c727d30bf23d20f2daa6e1f9f837378632cb03d5f55358a133b2"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntRopeVfx.js",
+        "sha256": "dc039ad68b8e0310542cc881741e7cb9cc56e10f2224e2d083dfe44bbc925849"
       },
       {
         "path": "src/championship/presentation/vs2/huntThree/actorBounds.mjs",
@@ -41218,6 +41226,10 @@
       {
         "path": "src/championship/presentation/vs2/huntThree/supportDepth.mjs",
         "sha256": "08f0adc3d068790d15d5c8f44cb00e182c4afb20d39876082a8306a180694515"
+      },
+      {
+        "path": "src/championship/presentation/vs2/huntWireVfx.js",
+        "sha256": "8e426fd7d06cb383efab0f343f830205e025ab9f6f5721630ddf3ea8800e72c4"
       },
       {
         "path": "src/championship/presentation/vs5/battleBurstShell.js",

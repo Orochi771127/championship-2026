@@ -57,24 +57,33 @@ test('the hunt screen builds no ??? target card and no tap-to-inspect capsule',(
     assert.equal(fs.readFileSync(file,'utf8').includes('cm-vs2-target'),false,file);
 });
 
-test('a bound partner is pulled from anywhere on the field until it is down and ready for the hand',async()=>{
-  const {app,runtime,wildId}=await boundPartner();
+test('the original pull: a press away from the bound partner does not pull; a touch on it pulls it down for the hand',async()=>{
+  // HUNT_ROPE_ORIGINAL_20261111 (Owner): replaces the 2026-11-03 press-anywhere pull.
+  const {app,runtime,wildId:first}=await boundPartner();
+  let wildId=first;
   try{
-    const start=wild(runtime,wildId);assert.equal(start.bound,true);
+    let start=wild(runtime,wildId);assert.equal(start.bound,true);
+    const fx=start.worldX+300,fy=start.worldY+120;
+    runtime.toolPointerDown(fx,fy);
+    assert.notEqual(runtime.getToolState().rope?.wildId,wildId,'a press 300 px away takes no hold');
+    runtime.toolPointerUp(fx,fy);tick(runtime,2);
     let pulls=0;
     while(wild(runtime,wildId)?.currentHp>0&&pulls<20){
       const now=wild(runtime,wildId);if(!now)break;
       if(!now.bound){lasso(runtime,now);continue;}
-      // Far from the partner's body: 300 world px to the side of it.
-      const fx=now.worldX+300,fy=now.worldY+120;
-      assert.equal(runtime.toolPointerDown(fx,fy),true);
-      assert.equal(runtime.getToolState().rope?.wildId,wildId,'the press took hold of the bound partner');
-      for(let i=0;i<60&&runtime.getToolState().rope;i++){runtime.toolPointerMove(fx+80,fy+60);tick(runtime);}
-      runtime.toolPointerUp(fx+80,fy+60);tick(runtime,20);pulls++;
+      assert.equal(runtime.toolPointerDown(now.worldX,now.worldY-10),true);
+      // One loop can bind two partners standing together (the original's +-48 px box); a touch takes the
+      // front one under the finger, as the native hit test does, so follow whichever bound partner it holds.
+      const held=runtime.getToolState().rope?.wildId;
+      assert.ok(held&&wild(runtime,held)?.bound,'a touch on a bound partner takes hold of it');
+      if(held!==wildId){wildId=held;start=wild(runtime,wildId);}
+      // 120 world px = 60 native px from its rope anchor: the original's 40-80 px pull band.
+      for(let i=0;i<60&&runtime.getToolState().rope;i++){const q=wild(runtime,wildId);runtime.toolPointerMove(q.worldX+120,q.worldY-10);tick(runtime);}
+      const q=wild(runtime,wildId);runtime.toolPointerUp(q.worldX+120,q.worldY-10);tick(runtime,20);pulls++;
     }
     for(let i=0;i<600&&wild(runtime,wildId)?.state!=='HAND_READY';i++)tick(runtime);
     const end=wild(runtime,wildId);
-    assert.ok(end.currentHp<start.currentHp,'pulling from afar wears the partner down');
+    assert.ok(end.currentHp<start.currentHp,'pulling wears the partner down');
     assert.equal(end.state,'HAND_READY',`downed after ${pulls} pulls`);
   }finally{await app.dispose();}
 });

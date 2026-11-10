@@ -22,6 +22,58 @@ Verified by `tests/championship-story-vn-cases.mjs`, the updated chart cases, th
 
 Publication: the Owner said 「講完這句，其他的就交給你去處理了，我就不介入了」 (2026-11-11), handing the rest of this batch over, merge and publication included. This authorizes this batch only.
 
+<!-- record-id: HUNT_ROPE_TIERS_20261111 -->
+## 2026-11-11 — The rope and wire you equipped are the ones you see: family colour, tier detail
+
+Asked whether ropes and wires should look different by family and tier, the agent recommended family by colour and tier by a quiet detail (a higher tier looks sturdier, not flashier); the Owner answered 「都做好一起發佈」.
+
+OWNER_APPROVED_ADAPTATION, presentation only (`huntRopeVfx.js`, `huntWireVfx.js`); hunt rules unchanged. The controls publish the equipped rope's `ropeItemIndex`.
+- Ropes (native items 0–11): the braid takes the shop icon's colour per family — 基礎 blue, 強化 green, 高階 gold, 頂級 red — with the drawing glow, cinch and bind burst in that colour. α is a plain braid; β adds a silver tracer strand and a silver knot; γ has a gold knot, a slow light running along the rope and a glint round the coil. Pull tension stays on the outer glow (cyan slack, amber pull, red strong).
+- Wires (native items 0–5): the kind colours stay (cyan 阻擋, violet 磁力, yellow 電擊). β runs as a twin cable with a second lamp on each post and a stronger effect (six field rings instead of four, a third bolt, twice the hit sparks).
+
+<!-- record-id: HUNT_WIRE_VFX_20261111 -->
+## 2026-11-11 — Hunt wires look like gear: pixel steel cable, one look per wire kind, hit feedback
+
+After the rope, the Owner said the hunt-tool wires were the same cheap line: 「包含狩獵道具這些鋼索，拉出來的線也就是一個很便宜的線的感覺一點都沒有那種特效感」.
+
+OWNER_APPROVED_ADAPTATION, presentation only (`presentation/vs2/huntWireVfx.js`), in the rope's HD-pixel language: an 8×8 twisted steel texture bent with Pixi `MeshRope` (nearest filtering), an additive glow under it, square pixel posts and sparks.
+- 標準鋼索 (BLOCK, items 0–1): cool cyan steel; a partner that meets it makes it hum and throw sparks.
+- 磁力鋼索 (BIND, items 2–3): violet field rings run along the cable with orbiting motes; a held partner sends out pulse rings.
+- 電擊鋼索 (DAMAGE, items 4–5): crackling pixel lightning along the cable; a partner that meets it is struck by a bolt.
+- Dragging: a holographic dashed line in the kind's colour, red while too short. Placing: the cable shoots out from its first post. Last 2 s: it flickers. Removed: it fades.
+- The wire rules (`nativeHuntWire.js`) are unchanged; it only publishes `slot`, `remaining` and a 14-tick `hit`/`hitPoint` for display. Reduced motion keeps the kinds readable without bolts, hum or sparks. The old bare line is removed.
+
+<!-- record-id: HUNT_ROPE_VFX_20261111 -->
+## 2026-11-11 — The hunt rope looks like a rope: braided pixel cord, cinch, coil, tension and snap
+
+The Owner asked for commercial-quality lasso and pull effects: 「現在就好像一個很便宜的線」.
+
+OWNER_APPROVED_ADAPTATION, presentation only (`presentation/vs2/huntRopeVfx.js`); it reads the published tool state and never writes the hunt. One HD-pixel look: an 8×8 two-strand braid bent along the path with Pixi `MeshRope` (nearest filtering), an additive glow rope under it, square pixel sparks.
+- Drawing: the rope follows the finger with a bright head and shed sparks; the start point pulses once the head comes back round. The drawn path is published for display only (`lassoPath` from the finger trail, `closure.trail`); binding is unchanged (HUNT_ROPE_ORIGINAL_20261111).
+- Release: the drawn loop pulls tight toward its centre in gold; a hit bursts (shock ring, flash, shards) on every partner it bound, a miss lets the loop drop grey and puff.
+- Bound: a glowing rope coil with a knot at the partner's feet.
+- Pull: the tether sags and glows cyan when slack, nearly straight in amber under pull, taut red and humming under a strong pull; below 30 % durability it flickers and frays.
+- Snap: the rope breaks at the middle, both halves whip back, sparks burst (`snap` event from the controls).
+- Reduced motion keeps every state readable without hum, jitter or sparks. The old line-and-star drawing is removed.
+
+<!-- record-id: HUNT_ROPE_ORIGINAL_20261111 -->
+## 2026-11-11 — Hunt rope back to the original: loop read on release, a touch on the partner to pull, no rope role bonuses
+
+The Owner felt the lasso-and-pull play had drifted (「這個好像有點跑掉了」) and first asked for one partner per loop. The evidence was checked before changing anything:
+
+- OVL0 `0x021148CC` (research-only `DISASM_capture_handlers.txt` lines 194–301): after the shape test it queries a ±48 px box round the loop's centre (`0x02066538`) and loops over **every** hit (`0x021149A0..0x02114A04`), sending each the bind event `0x23`. The query keeps native slot order and appends only a partner lower on screen than the last, so one loop can bind more than one partner but not necessarily all of them.
+- The shape is read when the finger lifts (`02114718`, predicate `02114388`: at least 6 samples, four extremes in order, width over 25 px, width about equal to or twice the height within 15 px).
+- The pull (`02114F54`, CPU-replayed over 198 updates, unchanged): under 40 px slack (no damage, +10 durability), 40–80 px ×1, 80 px or more ×2 with the partner dragged toward the finger, over 160 px the rope breaks; damage is max HP over the rope coefficient, no capture roll. In the original the pull starts by touching the bound partner.
+
+Told that one-per-loop is not original, the Owner chose 照原作 and asked to restore the loop reading, the touch-to-pull and the rope roles: 「圈的判定方式, 要按在怪身上才能拉, 四種繩子的特殊加成」.
+
+OWNER_APPROVED_ADAPTATION reversal (back toward ROM behaviour):
+- The 2026-10-27 mid-stroke polygon lasso no longer binds; the native shape test on release and the ±48 px centre query bind, after the native 18-tick cinch, for every rope.
+- The 2026-11-03 press-anywhere pull is gone: a pull starts only on a bound partner under the finger (native hit test, front-most first); a press elsewhere draws a new loop. The 3-second slip watchdog stays.
+- The 2026-10-28 rope role bonuses are off: no 捕捉繩 +30 % damage, faster cinch or wider catch; no 強力繩 half wear or two-partner hold; no 克隆繩 awake tolerance cut or doubled imprint; no 究極繩 repel or rage guard; no extra wear for a rope line crossing rocks.
+- Kept: each role's extra reach rows (so every rope can still bind the stages it is sold for), counted ropes and wear (HUNT_TOOL_TIERS_20261103), the lure → disable → rope chain bonus.
+- Web input: the DS sampled the stylus once per 60 Hz frame. When a slow browser frame brings several pointer moves between two ticks, the position each newer move replaces is sampled first, so a loop is not lost to frame rate; one move per tick samples exactly as the native tick did. Measured in Chromium: a quick loop (about 0.4–0.5 s) binds; a touch on the bound partner dragged about 52 native px wears it down to the hand; a press 300 px away does nothing.
+
 <!-- record-id: BESPOKE_MOVE_VFX_PROGRAM_20261111 -->
 ## 2026-11-11 — Every move gets its own animated effect; the Owner hands the programme over
 
