@@ -28,23 +28,30 @@ const freezeDeep = value => {
 };
 
 export const STORY_RIFT_MAP_NODES = freezeDeep([
-  { id: "prologue", chapterId: "prologue", kind: "prologue", number: 0, x: 22, y: 86, seenKey: null, seenWith: "opening", theme: "sea",
+  // Rows bottom to top, a fixed band each (the chart scrolls); part one = chapters 2-7, part two = 8-13 (storyVnPartTwo.js).
+  { id: "prologue", chapterId: "prologue", kind: "prologue", number: 0, x: 30, y: 95.0, seenKey: null, seenWith: "opening", theme: "sea",
     titleKey: "NODE_PROLOGUE_TITLE", summaryKey: "NODE_PROLOGUE_SUMMARY", sigilKey: "SIGIL_PROLOGUE" },
-  { id: "first-resonance", chapterId: "first-resonance", kind: "interlude", number: 0, x: 66, y: 76, seenKey: null, seenWith: "opening", theme: "ranch",
+  { id: "first-resonance", chapterId: "first-resonance", kind: "interlude", number: 0, x: 70, y: 90.3, seenKey: null, seenWith: "opening", theme: "ranch",
     titleKey: "NODE_RESONANCE_TITLE", summaryKey: "NODE_RESONANCE_SUMMARY", sigilKey: "SIGIL_RESONANCE" },
-  { id: "chapter1", chapterId: "chapter1-first-rift", kind: "chapter", number: 1, x: 32, y: 62, seenKey: "storyRiftChapter1Seen", theme: "ranch",
+  { id: "chapter1", chapterId: "chapter1-first-rift", kind: "chapter", number: 1, x: 30, y: 85.5, seenKey: "storyRiftChapter1Seen", theme: "ranch",
     titleKey: "NODE_C1_TITLE", summaryKey: "NODE_C1_SUMMARY", sigilKey: "SIGIL_C1" },
-  // Part one "Unheard Echoes" (OWNER_APPROVED_ADAPTATION 2026-11-11): played in the half-body
-  // story theater (data/storyVnCampaign.js); titles and summaries read its copy.
-  { id: "chapter2", chapterId: null, vnChapterId: "vn1-c1", kind: "chapter", number: 2, x: 70, y: 62, seenKey: null, theme: "track" },
-  { id: "chapter3", chapterId: null, vnChapterId: "vn1-c2", kind: "chapter", number: 3, x: 34, y: 52, seenKey: null, theme: "track" },
-  { id: "chapter4", chapterId: null, vnChapterId: "vn1-c3", kind: "chapter", number: 4, x: 68, y: 41, seenKey: null, theme: "core" },
-  { id: "chapter5", chapterId: null, vnChapterId: "vn1-c4", kind: "chapter", number: 5, x: 30, y: 30, seenKey: null, theme: "oasis" },
-  { id: "chapter6", chapterId: null, vnChapterId: "vn1-c5", kind: "chapter", number: 6, x: 66, y: 20, seenKey: null, theme: "void" },
-  { id: "chapter7", chapterId: null, vnChapterId: "vn1-c6", kind: "chapter", number: 7, x: 38, y: 10, seenKey: null, theme: "void" },
-  { id: "side1", chapterId: null, vnChapterId: "vn1-s1", kind: "side", branchOf: "chapter3", number: 0, x: 11, y: 60, seenKey: null, theme: "ranch" },
-  { id: "side2", chapterId: null, vnChapterId: "vn1-s2", kind: "side", branchOf: "chapter3", number: 0, x: 88, y: 50, seenKey: null, theme: "ranch" },
-  { id: "beyond", chapterId: null, kind: "unknown", number: 0, x: 80, y: 6, seenKey: null, theme: "void",
+  { id: "chapter2", chapterId: null, vnChapterId: "vn1-c1", kind: "chapter", number: 2, x: 70, y: 80.8, seenKey: null, theme: "track" },
+  { id: "chapter3", chapterId: null, vnChapterId: "vn1-c2", kind: "chapter", number: 3, x: 30, y: 76.1, seenKey: null, theme: "track" },
+  { id: "chapter4", chapterId: null, vnChapterId: "vn1-c3", kind: "chapter", number: 4, x: 70, y: 61.8, seenKey: null, theme: "core" },
+  { id: "chapter5", chapterId: null, vnChapterId: "vn1-c4", kind: "chapter", number: 5, x: 30, y: 57.1, seenKey: null, theme: "oasis" },
+  { id: "chapter6", chapterId: null, vnChapterId: "vn1-c5", kind: "chapter", number: 6, x: 70, y: 52.4, seenKey: null, theme: "void" },
+  { id: "chapter7", chapterId: null, vnChapterId: "vn1-c6", kind: "chapter", number: 7, x: 30, y: 47.6, seenKey: null, theme: "void" },
+  { id: "side1", chapterId: null, vnChapterId: "vn1-s1", kind: "side", branchOf: "chapter3", number: 0, x: 16, y: 71.3, seenKey: null, theme: "ranch" },
+  { id: "side2", chapterId: null, vnChapterId: "vn1-s2", kind: "side", branchOf: "chapter3", number: 0, x: 84, y: 66.6, seenKey: null, theme: "ranch" },
+  { id: "chapter8", chapterId: null, vnChapterId: "vn2-c1", kind: "chapter", number: 8, x: 70, y: 42.9, seenKey: null, theme: "sea" },
+  { id: "chapter9", chapterId: null, vnChapterId: "vn2-c2", kind: "chapter", number: 9, x: 30, y: 33.4, seenKey: null, theme: "track" },
+  { id: "chapter10", chapterId: null, vnChapterId: "vn2-c3", kind: "chapter", number: 10, x: 70, y: 28.7, seenKey: null, theme: "core" },
+  { id: "chapter11", chapterId: null, vnChapterId: "vn2-c4", kind: "chapter", number: 11, x: 30, y: 19.2, seenKey: null, theme: "track" },
+  { id: "chapter12", chapterId: null, vnChapterId: "vn2-c5", kind: "chapter", number: 12, x: 70, y: 14.5, seenKey: null, theme: "void" },
+  { id: "chapter13", chapterId: null, vnChapterId: "vn2-c6", kind: "chapter", number: 13, x: 30, y: 9.7, seenKey: null, theme: "void" },
+  { id: "side3", chapterId: null, vnChapterId: "vn2-s1", kind: "side", branchOf: "chapter8", number: 0, x: 16, y: 38.2, seenKey: null, theme: "sea" },
+  { id: "side4", chapterId: null, vnChapterId: "vn2-s2", kind: "side", branchOf: "chapter10", number: 0, x: 16, y: 23.9, seenKey: null, theme: "track" },
+  { id: "beyond", chapterId: null, kind: "unknown", number: 0, x: 50, y: 5.0, seenKey: null, theme: "void",
     titleKey: "NODE_BEYOND_TITLE", summaryKey: "NODE_BEYOND_SUMMARY", sigilKey: "SIGIL_RESERVED" }
 ]);
 
