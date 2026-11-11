@@ -20,6 +20,8 @@
 //
 // Batches are listed by record; the comment names the move.
 
+import {moveVfxSignature} from './moveVfxSignatures.js';
+
 const entry = value => Object.freeze({...value, release: value.release ? Object.freeze(value.release) : null,
   contact: value.contact ? Object.freeze(value.contact) : null});
 
@@ -1170,7 +1172,25 @@ export const MOVE_VFX_CHOREOGRAPHY = Object.freeze({
 export function moveVfxChoreography(moveId) {
   if (moveId === null || moveId === undefined) return null;
   const key = typeof moveId === 'string' && moveId.startsWith('own-') ? Number(moveId.slice(4)) : moveId;
-  return MOVE_VFX_CHOREOGRAPHY[key] ?? null;
+  const raw = MOVE_VFX_CHOREOGRAPHY[key] ?? null;
+  if (!raw) return null;
+  if (!presence.has(key)) presence.set(key, withPresence(raw, moveVfxSignature(key)?.tier));
+  return presence.get(key);
+}
+
+/**
+ * Refinement pass 1 (2026-11-11): an ultimate's own pieces take the screen.
+ * Its contact plays 1.55x (release 1.3x) the table's scale, and an impact
+ * frame -- a white star of the blow, two frames under the hit-stop -- opens
+ * the contact. Other tiers read as the table says.
+ */
+export const MOVE_VFX_TIER_PRESENCE = Object.freeze({ultimate: Object.freeze({release: 1.3, contact: 1.55, impactFrame: true})});
+const presence = new Map();
+function withPresence(raw, tier) {
+  const p = MOVE_VFX_TIER_PRESENCE[tier];
+  if (!p) return raw;
+  const grow = (phase, k) => phase ? Object.freeze({...phase, scale: Math.round((phase.scale ?? 1) * k * 100) / 100}) : null;
+  return Object.freeze({...raw, release: grow(raw.release, p.release), contact: grow(raw.contact, p.contact), impactFrame: p.impactFrame});
 }
 
 /**

@@ -3,7 +3,8 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {auditPagesModuleClosure} from './pages-module-closure.mjs';
 import {assertPublicRanchStreaming} from './public-ranch-streaming-boundary.mjs';
-import {assertPagesPayloadSize} from './pages-payload-size.mjs';
+import {assertPagesPayloadSize,deployedPagesRows} from './pages-payload-size.mjs';
+import {CHARACTER_ASSET_PREFIX} from '../../src/championship/presentation/characterAssetDelivery.js';
 import {assertPublicCharacterSelection} from './public-character-boundary.mjs';
 import {projectPublicRenderSources,PUBLIC_RENDER_FIELDS} from './public-render-projection.mjs';
 import {selectedMapProjections,PUBLIC_MAP_FIELDS} from './public-map-projection.mjs';
@@ -12,7 +13,6 @@ import {publicCleanMedia} from './public-clean-media.mjs';
 import {publicProgramData} from './public-program-data.mjs';
 import {assertOpeningFilmPublication} from './opening-film-publication.mjs';
 import {assertExternalCharacterPartition} from './external-character-assets.mjs';
-import {CHARACTER_ASSET_PREFIX} from '../../src/championship/presentation/characterAssetDelivery.js';
 
 export const PUBLIC_RUNTIME_INDEX_PATH='assets/production/PUBLIC_RUNTIME_INDEX.json';
 export const PUBLIC_RUNTIME_ALLOWLIST_PATH='docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json';
@@ -171,9 +171,6 @@ export function assertPublicArtifact({root,files,plan,manifestName='pages-build.
   if(files.some(file=>file===INTERNAL_INDEX))throw Error('PUBLIC_AUTHORITY_INDEX_INCLUDED');
   if(!files.includes(PUBLIC_RUNTIME_INDEX_PATH))throw Error('PUBLIC_RUNTIME_INDEX_MISSING');
   if(!fs.readFileSync(path.join(root,PUBLIC_RUNTIME_INDEX_PATH)).equals(plan.indexBytes))throw Error('PUBLIC_RUNTIME_INDEX_CHANGED');
-  // The Pages limit is for what the main site uploads. A build that still carries the character art
-  // (CI and local test builds) is never uploaded as is: the deploy moves that art to the character
-  // host, which checks its own limit (scripts/validate-character-asset-release.mjs).
-  assertPagesPayloadSize(plan.externalCharacterAssets?actualSizes:actualSizes.filter(row=>!row.path.startsWith(CHARACTER_ASSET_PREFIX)));
+  assertPagesPayloadSize(deployedPagesRows(actualSizes,{external:Boolean(plan.externalCharacterAssets),characterPrefix:CHARACTER_ASSET_PREFIX}));
   return {checkedFiles:files.length,authorityIndexIncluded:false,allowlist:true};
 }

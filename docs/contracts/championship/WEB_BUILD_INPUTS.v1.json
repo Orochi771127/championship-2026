@@ -213,6 +213,8 @@
     "src/championship/data/monsterVisualAnchors218.js",
     "src/championship/data/storyRiftChapters.js",
     "src/championship/data/storyRiftMap.js",
+    "src/championship/data/storyVnCampaign.js",
+    "src/championship/data/storyVnExpressions.js",
     "src/championship/database/databaseBodyStats.js",
     "src/championship/database/databaseBurstEvolution.js",
     "src/championship/database/databaseCatalog.js",
@@ -437,6 +439,9 @@
     "src/championship/presentation/story/HybridStoryDirector.js",
     "src/championship/presentation/story/portraitVnOverlay.js",
     "src/championship/presentation/story/storyStagePuppeteer.js",
+    "src/championship/presentation/story/storyVnDirector.js",
+    "src/championship/presentation/story/storyVnStage.js",
+    "src/championship/presentation/story/storyVnTheater.js",
     "src/championship/presentation/systemBackgrounds.js",
     "src/championship/presentation/tamerBragCardGenerator.js",
     "src/championship/presentation/taxonomyBadgeArt.js",
@@ -450,6 +455,7 @@
     "src/championship/presentation/vfx/moveVfxChoreography.js",
     "src/championship/presentation/vfx/moveVfxKit.js",
     "src/championship/presentation/vfx/moveVfxKitTextures.js",
+    "src/championship/presentation/vfx/moveVfxPieceSprites.js",
     "src/championship/presentation/vfx/moveVfxRecipes.js",
     "src/championship/presentation/vfx/moveVfxSetPieces.js",
     "src/championship/presentation/vfx/moveVfxSignatures.js",
@@ -581,6 +587,7 @@
     "src/championship/text/raisingMessages.vi.js",
     "src/championship/text/raisingMessages.zhHant.js",
     "src/championship/text/socialText.js",
+    "src/championship/text/storyVnText.js",
     "src/championship/text/syncLevelText.js",
     "src/championship/text/taxonomyText.js",
     "src/championship/text/tutorialMessages.en.js",
@@ -8043,6 +8050,46 @@
     "assets/production/scene-music-r1/opening/hexagon_cradles.mp3",
     "assets/production/scene-music-r1/raising/a_quiet_evening_training.mp3",
     "assets/production/scene-music-r1/system/podium_geometry.mp3",
+    "assets/production/story/vn-expressions-v1/species-018-happy.203fb7a48f663b3b.webp",
+    "assets/production/story/vn-expressions-v1/species-025-happy.7c27929287f98d5d.webp",
+    "assets/production/story/vn-expressions-v1/species-025-sad.91552329a8be6148.webp",
+    "assets/production/story/vn-expressions-v1/species-050-angry.12577dd4ef78de15.webp",
+    "assets/production/story/vn-expressions-v1/species-050-happy.fd4f59b8dc2b5c2c.webp",
+    "assets/production/story/vn-expressions-v1/species-050-sad.36421ebafc0d6bc2.webp",
+    "assets/production/story/vn-expressions-v1/species-050-serious.b05cfd7a2ba10f7d.webp",
+    "assets/production/story/vn-expressions-v1/species-050-shock.8af0062737717258.webp",
+    "assets/production/story/vn-expressions-v1/species-051-sad.55a30f9fa5d51b55.webp",
+    "assets/production/story/vn-expressions-v1/species-052-happy.e7b0cd335b6aba00.webp",
+    "assets/production/story/vn-expressions-v1/species-052-shock.d5bbdf9e476b9245.webp",
+    "assets/production/story/vn-expressions-v1/species-065-happy.e709ab147b3695a8.webp",
+    "assets/production/story/vn-expressions-v1/species-065-sad.5515631c652b2208.webp",
+    "assets/production/story/vn-expressions-v1/species-088-angry.7a0fcf9065699920.webp",
+    "assets/production/story/vn-expressions-v1/species-088-happy.23852c78ce91e07d.webp",
+    "assets/production/story/vn-expressions-v1/species-088-sad.21a87a230a1e840f.webp",
+    "assets/production/story/vn-expressions-v1/species-088-serious.b30a2cc755eace12.webp",
+    "assets/production/story/vn-expressions-v1/species-088-shock.43a8d962cd22a439.webp",
+    "assets/production/story/vn-expressions-v1/species-092-angry.faa371db8deced33.webp",
+    "assets/production/story/vn-expressions-v1/species-092-happy.52300ceeb0cb8e46.webp",
+    "assets/production/story/vn-expressions-v1/species-092-sad.c01a239e161732e5.webp",
+    "assets/production/story/vn-expressions-v1/species-092-serious.cd58c8798286865d.webp",
+    "assets/production/story/vn-expressions-v1/species-092-shock.ceebc8326cac8d68.webp",
+    "assets/production/story/vn-expressions-v1/species-169-angry.e1ba29b5d7047904.webp",
+    "assets/production/story/vn-expressions-v1/species-169-happy.5b834bbea5520807.webp",
+    "assets/production/story/vn-expressions-v1/species-169-sad.785bd75cbcda34dc.webp",
+    "assets/production/story/vn-expressions-v1/species-169-serious.35ea1e9c06e2ea6f.webp",
+    "assets/production/story/vn-expressions-v1/species-169-shock.54db3b9d08c517da.webp",
+    "assets/production/story/vn-expressions-v1/species-175-angry.83a6657c3648e423.webp",
+    "assets/production/story/vn-expressions-v1/species-175-happy.2fe224b3639331a4.webp",
+    "assets/production/story/vn-expressions-v1/species-175-sad.c6d4ebcd5ac79e1a.webp",
+    "assets/production/story/vn-expressions-v1/species-175-serious.5e7be262ea570488.webp",
+    "assets/production/story/vn-expressions-v1/species-175-shock.b50e447ddfa22c4f.webp",
+    "assets/production/story/vn-expressions-v1/species-176-angry.770d10c8b442c1be.webp",
+    "assets/production/story/vn-expressions-v1/species-176-happy.47b3462185823a59.webp",
+    "assets/production/story/vn-expressions-v1/species-176-sad.e368d5398a1d3069.webp",
+    "assets/production/story/vn-expressions-v1/species-176-serious.c9993dea037f4903.webp",
+    "assets/production/story/vn-expressions-v1/species-176-shock.0c746f982ad999d2.webp",
+    "assets/production/story/vn-expressions-v1/species-177-happy.8340374e23a6a064.webp",
+    "assets/production/story/vn-expressions-v1/species-177-sad.4c8229823e7b10fe.webp",
     "assets/production/system-backgrounds-r1/glory-result-v1.thumb.webp",
     "assets/production/system-backgrounds-r1/glory-result-v1.webp",
     "assets/production/system-backgrounds-r1/growth-record-v1.thumb.webp",
@@ -8301,6 +8348,7 @@
     "src/championship/app/ui/settings.css",
     "src/championship/app/ui/social.css",
     "src/championship/app/ui/storyTheater.css",
+    "src/championship/app/ui/storyVn.css",
     "src/championship/app/ui/syncGainPanel.js",
     "src/championship/app/ui/systemBackgrounds.css",
     "src/championship/app/ui/taxonomy.css",
@@ -8403,6 +8451,8 @@
     "src/championship/data/monsterVisualAnchors218.js",
     "src/championship/data/storyRiftChapters.js",
     "src/championship/data/storyRiftMap.js",
+    "src/championship/data/storyVnCampaign.js",
+    "src/championship/data/storyVnExpressions.js",
     "src/championship/database/databaseBodyStats.js",
     "src/championship/database/databaseBurstEvolution.js",
     "src/championship/database/databaseCatalog.js",
@@ -8627,6 +8677,9 @@
     "src/championship/presentation/story/HybridStoryDirector.js",
     "src/championship/presentation/story/portraitVnOverlay.js",
     "src/championship/presentation/story/storyStagePuppeteer.js",
+    "src/championship/presentation/story/storyVnDirector.js",
+    "src/championship/presentation/story/storyVnStage.js",
+    "src/championship/presentation/story/storyVnTheater.js",
     "src/championship/presentation/systemBackgrounds.js",
     "src/championship/presentation/tamerBragCardGenerator.js",
     "src/championship/presentation/taxonomyBadgeArt.js",
@@ -8640,6 +8693,7 @@
     "src/championship/presentation/vfx/moveVfxChoreography.js",
     "src/championship/presentation/vfx/moveVfxKit.js",
     "src/championship/presentation/vfx/moveVfxKitTextures.js",
+    "src/championship/presentation/vfx/moveVfxPieceSprites.js",
     "src/championship/presentation/vfx/moveVfxRecipes.js",
     "src/championship/presentation/vfx/moveVfxSetPieces.js",
     "src/championship/presentation/vfx/moveVfxSignatures.js",
@@ -8771,6 +8825,7 @@
     "src/championship/text/raisingMessages.vi.js",
     "src/championship/text/raisingMessages.zhHant.js",
     "src/championship/text/socialText.js",
+    "src/championship/text/storyVnText.js",
     "src/championship/text/syncLevelText.js",
     "src/championship/text/taxonomyText.js",
     "src/championship/text/tutorialMessages.en.js",
@@ -8861,73 +8916,7 @@
     "src/data/championship/reviewed-animation-selection.v1.json",
     "src/data/championship/species-taxonomy.v1.json",
     "src/data/championship/stage-body-size.v1.json",
-    "src/championship/app/ui/storyVn.css",
-    "src/championship/data/storyVnCampaign.js",
-    "src/championship/data/storyVnExpressions.js",
-    "src/championship/presentation/story/storyVnDirector.js",
-    "src/championship/presentation/story/storyVnStage.js",
-    "src/championship/presentation/story/storyVnTheater.js",
-    "src/championship/text/storyVnText.js",
-    "assets/production/story/vn-expressions-v1/species-018-happy.203fb7a48f663b3b.webp",
-    "assets/production/story/vn-expressions-v1/species-025-happy.7c27929287f98d5d.webp",
-    "assets/production/story/vn-expressions-v1/species-025-sad.91552329a8be6148.webp",
-    "assets/production/story/vn-expressions-v1/species-050-angry.12577dd4ef78de15.webp",
-    "assets/production/story/vn-expressions-v1/species-050-happy.fd4f59b8dc2b5c2c.webp",
-    "assets/production/story/vn-expressions-v1/species-050-sad.36421ebafc0d6bc2.webp",
-    "assets/production/story/vn-expressions-v1/species-050-serious.b05cfd7a2ba10f7d.webp",
-    "assets/production/story/vn-expressions-v1/species-050-shock.8af0062737717258.webp",
-    "assets/production/story/vn-expressions-v1/species-051-sad.55a30f9fa5d51b55.webp",
-    "assets/production/story/vn-expressions-v1/species-052-happy.e7b0cd335b6aba00.webp",
-    "assets/production/story/vn-expressions-v1/species-052-shock.d5bbdf9e476b9245.webp",
-    "assets/production/story/vn-expressions-v1/species-065-happy.e709ab147b3695a8.webp",
-    "assets/production/story/vn-expressions-v1/species-065-sad.5515631c652b2208.webp",
-    "assets/production/story/vn-expressions-v1/species-088-angry.7a0fcf9065699920.webp",
-    "assets/production/story/vn-expressions-v1/species-088-happy.23852c78ce91e07d.webp",
-    "assets/production/story/vn-expressions-v1/species-088-sad.21a87a230a1e840f.webp",
-    "assets/production/story/vn-expressions-v1/species-088-serious.b30a2cc755eace12.webp",
-    "assets/production/story/vn-expressions-v1/species-088-shock.43a8d962cd22a439.webp",
-    "assets/production/story/vn-expressions-v1/species-092-angry.faa371db8deced33.webp",
-    "assets/production/story/vn-expressions-v1/species-092-happy.52300ceeb0cb8e46.webp",
-    "assets/production/story/vn-expressions-v1/species-092-sad.c01a239e161732e5.webp",
-    "assets/production/story/vn-expressions-v1/species-092-serious.cd58c8798286865d.webp",
-    "assets/production/story/vn-expressions-v1/species-092-shock.ceebc8326cac8d68.webp",
-    "assets/production/story/vn-expressions-v1/species-169-angry.e1ba29b5d7047904.webp",
-    "assets/production/story/vn-expressions-v1/species-169-happy.5b834bbea5520807.webp",
-    "assets/production/story/vn-expressions-v1/species-169-sad.785bd75cbcda34dc.webp",
-    "assets/production/story/vn-expressions-v1/species-169-serious.35ea1e9c06e2ea6f.webp",
-    "assets/production/story/vn-expressions-v1/species-169-shock.54db3b9d08c517da.webp",
-    "assets/production/story/vn-expressions-v1/species-175-angry.83a6657c3648e423.webp",
-    "assets/production/story/vn-expressions-v1/species-175-happy.2fe224b3639331a4.webp",
-    "assets/production/story/vn-expressions-v1/species-175-sad.c6d4ebcd5ac79e1a.webp",
-    "assets/production/story/vn-expressions-v1/species-175-serious.5e7be262ea570488.webp",
-    "assets/production/story/vn-expressions-v1/species-175-shock.b50e447ddfa22c4f.webp",
-    "assets/production/story/vn-expressions-v1/species-176-angry.770d10c8b442c1be.webp",
-    "assets/production/story/vn-expressions-v1/species-176-happy.47b3462185823a59.webp",
-    "assets/production/story/vn-expressions-v1/species-176-sad.e368d5398a1d3069.webp",
-    "assets/production/story/vn-expressions-v1/species-176-serious.c9993dea037f4903.webp",
-    "assets/production/story/vn-expressions-v1/species-176-shock.0c746f982ad999d2.webp",
-    "assets/production/story/vn-expressions-v1/species-177-happy.8340374e23a6a064.webp",
-    "assets/production/story/vn-expressions-v1/species-177-sad.4c8229823e7b10fe.webp",
     "src/championship/data/storyVnPartTwo.js",
-    "assets/production/story/vn-expressions-v1/species-099-happy.33473b7eb2f6be6a.webp",
-    "assets/production/story/vn-expressions-v1/species-099-sad.b99fffbbe017f8b1.webp",
-    "assets/production/story/vn-expressions-v1/species-153-angry.76ea5896cfde00b7.webp",
-    "assets/production/story/vn-expressions-v1/species-153-happy.c72ae57c4d3666ea.webp",
-    "assets/production/story/vn-expressions-v1/species-153-sad.ff7308b9aa20c7e3.webp",
-    "assets/production/story/vn-expressions-v1/species-153-serious.9e15d24e103969c5.webp",
-    "assets/production/story/vn-expressions-v1/species-153-shock.07f2a0494a29ec6f.webp",
-    "assets/production/story/vn-expressions-v1/species-157-happy.d13961dc53341c84.webp",
-    "assets/production/story/vn-expressions-v1/species-157-sad.0c3fb78522004db9.webp",
-    "assets/production/story/vn-expressions-v1/species-200-angry.922b78a5a77e744f.webp",
-    "assets/production/story/vn-expressions-v1/species-200-happy.354c57fce4131f35.webp",
-    "assets/production/story/vn-expressions-v1/species-200-sad.658157cf685ef1bb.webp",
-    "assets/production/story/vn-expressions-v1/species-200-serious.1a522939c8c16861.webp",
-    "assets/production/story/vn-expressions-v1/species-200-shock.3fee49dde74211e4.webp",
-    "assets/production/story/vn-expressions-v1/species-205-happy.98235fdd6433de11.webp",
-    "assets/production/story/vn-expressions-v1/species-205-serious.086bd5d25a0736f2.webp",
-    "assets/production/story/vn-expressions-v1/species-205-shock.082aaf968b14c078.webp",
-    "assets/production/story/vn-expressions-v1/species-211-angry.f8d9b8045c380713.webp",
-    "assets/production/story/vn-expressions-v1/species-211-serious.c01bf097eeed7948.webp",
     "assets/production/story/vn-backgrounds-v3/arena.678ee4ff309838da.mp4",
     "assets/production/story/vn-backgrounds-v3/arena.8cfe45f0f0ce8fec.webp",
     "assets/production/story/vn-backgrounds-v3/grid.7e2266bfbf10c5e5.webp",
@@ -8967,7 +8956,26 @@
     "assets/production/story/vn-expressions-v1/aichan-catgirl-sad.ff116021d97b94cf.webp",
     "assets/production/story/vn-expressions-v1/aichan-catgirl-serious.9edc83b5caf53d8c.webp",
     "assets/production/story/vn-expressions-v1/aichan-catgirl-shock.85757d6282b0435e.webp",
-    "assets/production/story/vn-expressions-v1/aichan-catgirl-talk.bac920362b696441.webp"
+    "assets/production/story/vn-expressions-v1/aichan-catgirl-talk.bac920362b696441.webp",
+    "assets/production/story/vn-expressions-v1/species-099-happy.33473b7eb2f6be6a.webp",
+    "assets/production/story/vn-expressions-v1/species-099-sad.b99fffbbe017f8b1.webp",
+    "assets/production/story/vn-expressions-v1/species-153-angry.76ea5896cfde00b7.webp",
+    "assets/production/story/vn-expressions-v1/species-153-happy.c72ae57c4d3666ea.webp",
+    "assets/production/story/vn-expressions-v1/species-153-sad.ff7308b9aa20c7e3.webp",
+    "assets/production/story/vn-expressions-v1/species-153-serious.9e15d24e103969c5.webp",
+    "assets/production/story/vn-expressions-v1/species-153-shock.07f2a0494a29ec6f.webp",
+    "assets/production/story/vn-expressions-v1/species-157-happy.d13961dc53341c84.webp",
+    "assets/production/story/vn-expressions-v1/species-157-sad.0c3fb78522004db9.webp",
+    "assets/production/story/vn-expressions-v1/species-200-angry.922b78a5a77e744f.webp",
+    "assets/production/story/vn-expressions-v1/species-200-happy.354c57fce4131f35.webp",
+    "assets/production/story/vn-expressions-v1/species-200-sad.658157cf685ef1bb.webp",
+    "assets/production/story/vn-expressions-v1/species-200-serious.1a522939c8c16861.webp",
+    "assets/production/story/vn-expressions-v1/species-200-shock.3fee49dde74211e4.webp",
+    "assets/production/story/vn-expressions-v1/species-205-happy.98235fdd6433de11.webp",
+    "assets/production/story/vn-expressions-v1/species-205-serious.086bd5d25a0736f2.webp",
+    "assets/production/story/vn-expressions-v1/species-205-shock.082aaf968b14c078.webp",
+    "assets/production/story/vn-expressions-v1/species-211-angry.f8d9b8045c380713.webp",
+    "assets/production/story/vn-expressions-v1/species-211-serious.c01bf097eeed7948.webp"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -38706,6 +38714,166 @@
         "sha256": "79ca5e940c2f273877762aaf99fd4cf2c6b39683b67e92425e732185a4d3b9ab"
       },
       {
+        "path": "assets/production/story/vn-expressions-v1/species-018-happy.203fb7a48f663b3b.webp",
+        "sha256": "203fb7a48f663b3bbd326f06409a2405135db0fe1afa902acf47dcd9241228e8"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-025-happy.7c27929287f98d5d.webp",
+        "sha256": "7c27929287f98d5d599c8128be5a51abd44c18b6204cb4788ad2051ad11d6b52"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-025-sad.91552329a8be6148.webp",
+        "sha256": "91552329a8be61489dffbb4bf927a424775ac80f8e1d3faaab649d8edd3f9643"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-050-angry.12577dd4ef78de15.webp",
+        "sha256": "12577dd4ef78de15a9285f645aa97c7a22ef715c5aa4a8a7068088e4c2fdb29d"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-050-happy.fd4f59b8dc2b5c2c.webp",
+        "sha256": "fd4f59b8dc2b5c2ce084c52c67d2d0c291d46bdcc6e5f05971af10c20146fb6e"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-050-sad.36421ebafc0d6bc2.webp",
+        "sha256": "36421ebafc0d6bc24439372463ec7e4ab37f5633f200b8226680f72ea69792c0"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-050-serious.b05cfd7a2ba10f7d.webp",
+        "sha256": "b05cfd7a2ba10f7d3bebc52277e6b07c0e5228ef49df56711da7a65b03807535"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-050-shock.8af0062737717258.webp",
+        "sha256": "8af0062737717258cad6b5340efe655fbbb3e9b7803a1eab9f680bf176668c87"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-051-sad.55a30f9fa5d51b55.webp",
+        "sha256": "55a30f9fa5d51b551145fe87693a53f77aef4e36a8675519d832beb7af363bb3"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-052-happy.e7b0cd335b6aba00.webp",
+        "sha256": "e7b0cd335b6aba004b6c0c93869f0032023d95028b2288e8fee91a82726c388a"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-052-shock.d5bbdf9e476b9245.webp",
+        "sha256": "d5bbdf9e476b924543259c0a079a2f0f8812e674864e11993d3ce9ec5964bca5"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-065-happy.e709ab147b3695a8.webp",
+        "sha256": "e709ab147b3695a8654ed523fe7a8a39173876c8fbdc3e1b4e199086f1ab1973"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-065-sad.5515631c652b2208.webp",
+        "sha256": "5515631c652b2208d0f6ef3552cb6f22187c0f43870ffdddc67497b437747b11"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-088-angry.7a0fcf9065699920.webp",
+        "sha256": "7a0fcf90656999204363bdd5ccd50f74212e208b7bed5e4b78a53a858b8e652b"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-088-happy.23852c78ce91e07d.webp",
+        "sha256": "23852c78ce91e07d2bdd768f8e6085a77bddd78cd96959bf49651af94ffc9c77"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-088-sad.21a87a230a1e840f.webp",
+        "sha256": "21a87a230a1e840fd8553f5211135f42d93ae55c144579098ba71b15bafdbe45"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-088-serious.b30a2cc755eace12.webp",
+        "sha256": "b30a2cc755eace1248d7f7bc61d2108b43339c86759f2bd4906db769f8390272"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-088-shock.43a8d962cd22a439.webp",
+        "sha256": "43a8d962cd22a439179ab6f1f776a4517e7e036eaec66c4846012e9969002460"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-092-angry.faa371db8deced33.webp",
+        "sha256": "faa371db8deced33cb4df39f1535371ac057e7e106e98ab4939a3b71d8baf46a"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-092-happy.52300ceeb0cb8e46.webp",
+        "sha256": "52300ceeb0cb8e46550be68612a668072f053b7c76c050c99bb91ef157d11a19"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-092-sad.c01a239e161732e5.webp",
+        "sha256": "c01a239e161732e5811ae164fba1f02fc8e639bc9642be7a458931bcaab58557"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-092-serious.cd58c8798286865d.webp",
+        "sha256": "cd58c8798286865d553aa9adccba389854028cb9ce1264a6b7ec8225c660cb2d"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-092-shock.ceebc8326cac8d68.webp",
+        "sha256": "ceebc8326cac8d68b1e5b8b2ecb584e2abe6603fdf44effe87174a22e884e02e"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-169-angry.e1ba29b5d7047904.webp",
+        "sha256": "e1ba29b5d7047904f56c5db3ec7d17ee9144701d75a6d148db69fa939efa665b"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-169-happy.5b834bbea5520807.webp",
+        "sha256": "5b834bbea552080777395f8c69e28a45abe6d4e091f6ffe8bbbe403c96ca236a"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-169-sad.785bd75cbcda34dc.webp",
+        "sha256": "785bd75cbcda34dcd531dd52642a3bd452cb648095b843807c6fef5ff6454e4c"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-169-serious.35ea1e9c06e2ea6f.webp",
+        "sha256": "35ea1e9c06e2ea6fad1dfcdb488f0957410ffcedf54c56db55f07386aceb707f"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-169-shock.54db3b9d08c517da.webp",
+        "sha256": "54db3b9d08c517da64bf8d1f12f56306258c3f4c4273bd88104939a7c699e53d"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-175-angry.83a6657c3648e423.webp",
+        "sha256": "83a6657c3648e42368a3e6c46935c7e3e65348bc60c850c7ce4cab7b65b9c2ad"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-175-happy.2fe224b3639331a4.webp",
+        "sha256": "2fe224b3639331a490e9c6e97264104848fb24ed7a38b07ebd5c302c30f4a744"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-175-sad.c6d4ebcd5ac79e1a.webp",
+        "sha256": "c6d4ebcd5ac79e1a43f569c05537ea7a59bbe2734897a026eb9396a5b1498de0"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-175-serious.5e7be262ea570488.webp",
+        "sha256": "5e7be262ea570488d96813cabc66afb1a2113ef92dc0ef00fde81764a0aeeba2"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-175-shock.b50e447ddfa22c4f.webp",
+        "sha256": "b50e447ddfa22c4f1f5b2f041dc27a2a7f319a0fb8ff293e98ddfa2ca747ec80"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-176-angry.770d10c8b442c1be.webp",
+        "sha256": "770d10c8b442c1be0cedcc73294540ddb51e828deab45ea996343562455ef247"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-176-happy.47b3462185823a59.webp",
+        "sha256": "47b3462185823a5936d32d0609adc7427167487dfcfd5ff1e1f1d5310c5dc528"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-176-sad.e368d5398a1d3069.webp",
+        "sha256": "e368d5398a1d3069500d1996e5ee775da89d86925978fff794c701685fa09fa2"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-176-serious.c9993dea037f4903.webp",
+        "sha256": "c9993dea037f4903b46ce5d6d9bf5278d09058e61ad2f2baeff0919ae9453387"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-176-shock.0c746f982ad999d2.webp",
+        "sha256": "0c746f982ad999d2ccef082bb96ed8b440ff79d495acac44f165e6003efbb4a1"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-177-happy.8340374e23a6a064.webp",
+        "sha256": "8340374e23a6a064d97d7db40e1516118e5b00a8ceba0acd7c8704c15d13d177"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-177-sad.4c8229823e7b10fe.webp",
+        "sha256": "4c8229823e7b10feee76ef15e59cacc3e2a0307535a8103e1da02d79189a880b"
+      },
+      {
         "path": "assets/production/system-backgrounds-r1/glory-result-v1.thumb.webp",
         "sha256": "d507f10033e1c27b19226b03aba273349c413de0f07a4bca2c71ac022909f468"
       },
@@ -39738,6 +39906,10 @@
         "sha256": "87cd586a6c3a30e14e60a11d577783f1c20cf93a752a5441b0f25d87c61d99f6"
       },
       {
+        "path": "src/championship/app/ui/storyVn.css",
+        "sha256": "0aa984b80524b601e3a22e1368c285a051da6bd452ba6b2ed9cf598df54d1f73"
+      },
+      {
         "path": "src/championship/app/ui/syncGainPanel.js",
         "sha256": "ad8fdb83b258a2b7d63804024451ef555e432c31684b80c807d37df5ee6b7267"
       },
@@ -40144,6 +40316,14 @@
       {
         "path": "src/championship/data/storyRiftMap.js",
         "sha256": "18c5f694a22ccc58b38481819843ec13578f49d8e880a8f1a857a70fc6a2cf31"
+      },
+      {
+        "path": "src/championship/data/storyVnCampaign.js",
+        "sha256": "48dc207687efa2db1f9ad3538ab7d4cb55a3275f82cb5410c3941d0492d6f4b5"
+      },
+      {
+        "path": "src/championship/data/storyVnExpressions.js",
+        "sha256": "bca80489b8ee73f5e2fb95d101cb67cfd3502f8ce3160cd3b7b26134da94caba"
       },
       {
         "path": "src/championship/database/databaseBodyStats.js",
@@ -40575,7 +40755,7 @@
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxLayer.js",
-        "sha256": "254081077310bfe80a426b3ea3057f689a231dfd8477f00f1c873eec4ded4ffd"
+        "sha256": "1fd496bc8b6b90390925a329a3cec51f3ddf9b8bca41e55ed55c74b09a5e2148"
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxPalettes.js",
@@ -40671,7 +40851,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaElementFx.js",
-        "sha256": "18cb6c219ac3366c391a0d77a0b5a9b0cbd5bdde50f92342a14bc18e2dc36ca9"
+        "sha256": "1913fd414e7ee45c619012796f2fe3edcfc6ce8b79fc9ef5ca92b42e6067fe3a"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaEnvironment.js",
@@ -41042,6 +41222,18 @@
         "sha256": "a96ea8cfa33879bdcba3fb7f173d804a446446c66c1d751494e3f98f04b0ce6d"
       },
       {
+        "path": "src/championship/presentation/story/storyVnDirector.js",
+        "sha256": "de28e1231303f95757ea9da4bddc876ece979f16c44f677a802677ea089b0a28"
+      },
+      {
+        "path": "src/championship/presentation/story/storyVnStage.js",
+        "sha256": "4d7f35ddf58502a3feb817e669b7f06ccaff162466fdeae77d101924ed6d289f"
+      },
+      {
+        "path": "src/championship/presentation/story/storyVnTheater.js",
+        "sha256": "1993a0dd29c79daf060da369196c327838a43a56919d02d121cfc28f18034556"
+      },
+      {
         "path": "src/championship/presentation/systemBackgrounds.js",
         "sha256": "5b34b475298ee2005e7fcc33911bf05701817295bd8e7bcad5be6d6ca6a511dc"
       },
@@ -41083,7 +41275,7 @@
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxChoreography.js",
-        "sha256": "a17f937f41c793129d8947703f945eaab57ddec57ad70a3f15ccdc1ac78190f7"
+        "sha256": "7ad48cab910aed48fc02da4c616a1f7ec61eaf4ae997ade7febf502728d9a42d"
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxKit.js",
@@ -41094,12 +41286,16 @@
         "sha256": "e1c1a457741d2774c3ff9a2bdb745983e3074f678f58d1a1c4b8bebee4fa224d"
       },
       {
+        "path": "src/championship/presentation/vfx/moveVfxPieceSprites.js",
+        "sha256": "d7eaf52e1e743151bfe10a22e0d842c15d9f2a470b2d3218dee57d272b1a214a"
+      },
+      {
         "path": "src/championship/presentation/vfx/moveVfxRecipes.js",
         "sha256": "3cb4893a6dc28f0f7352cc87f36ae2fd472e477c52f49d0c112004f0bf722d59"
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxSetPieces.js",
-        "sha256": "a2b71147f737052a43c5ed16bdc04329fbb57685949fbbdac43a887a76ae38c9"
+        "sha256": "60804d033eb10a31819211f7165a068e3484f1676a19a37acb2cadb5ba66513f"
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxSignatures.js",
@@ -41287,7 +41483,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
-        "sha256": "30addfade2bde0bea5f91e130baf97b123b9a9f6976307de081d0c411c09a5ec"
+        "sha256": "34e2162039c26422da1c42904a21fa4237fc9d947212935b47512c254effd01a"
       },
       {
         "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
@@ -41616,6 +41812,10 @@
       {
         "path": "src/championship/text/socialText.js",
         "sha256": "679561f5a9b9333b0a61f2ff187db0b391573a48cc9019815fc0f0a1acc26122"
+      },
+      {
+        "path": "src/championship/text/storyVnText.js",
+        "sha256": "661fab27673c76421cdd5d5f8f082bcc4a00c512ef48d8ee265e7cfa662ffa9a"
       },
       {
         "path": "src/championship/text/syncLevelText.js",
@@ -41978,272 +42178,8 @@
         "sha256": "956a246d432e6956b31ac9e13f8c7ca20c2e0903136ee2ae065c2ab919f79076"
       },
       {
-        "path": "src/championship/app/ui/storyVn.css",
-        "sha256": "0aa984b80524b601e3a22e1368c285a051da6bd452ba6b2ed9cf598df54d1f73"
-      },
-      {
-        "path": "src/championship/data/storyVnCampaign.js",
-        "sha256": "48dc207687efa2db1f9ad3538ab7d4cb55a3275f82cb5410c3941d0492d6f4b5"
-      },
-      {
-        "path": "src/championship/data/storyVnExpressions.js",
-        "sha256": "bca80489b8ee73f5e2fb95d101cb67cfd3502f8ce3160cd3b7b26134da94caba"
-      },
-      {
-        "path": "src/championship/presentation/story/storyVnDirector.js",
-        "sha256": "de28e1231303f95757ea9da4bddc876ece979f16c44f677a802677ea089b0a28"
-      },
-      {
-        "path": "src/championship/presentation/story/storyVnStage.js",
-        "sha256": "4d7f35ddf58502a3feb817e669b7f06ccaff162466fdeae77d101924ed6d289f"
-      },
-      {
-        "path": "src/championship/presentation/story/storyVnTheater.js",
-        "sha256": "1993a0dd29c79daf060da369196c327838a43a56919d02d121cfc28f18034556"
-      },
-      {
-        "path": "src/championship/text/storyVnText.js",
-        "sha256": "661fab27673c76421cdd5d5f8f082bcc4a00c512ef48d8ee265e7cfa662ffa9a"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-018-happy.203fb7a48f663b3b.webp",
-        "sha256": "203fb7a48f663b3bbd326f06409a2405135db0fe1afa902acf47dcd9241228e8"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-025-happy.7c27929287f98d5d.webp",
-        "sha256": "7c27929287f98d5d599c8128be5a51abd44c18b6204cb4788ad2051ad11d6b52"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-025-sad.91552329a8be6148.webp",
-        "sha256": "91552329a8be61489dffbb4bf927a424775ac80f8e1d3faaab649d8edd3f9643"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-050-angry.12577dd4ef78de15.webp",
-        "sha256": "12577dd4ef78de15a9285f645aa97c7a22ef715c5aa4a8a7068088e4c2fdb29d"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-050-happy.fd4f59b8dc2b5c2c.webp",
-        "sha256": "fd4f59b8dc2b5c2ce084c52c67d2d0c291d46bdcc6e5f05971af10c20146fb6e"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-050-sad.36421ebafc0d6bc2.webp",
-        "sha256": "36421ebafc0d6bc24439372463ec7e4ab37f5633f200b8226680f72ea69792c0"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-050-serious.b05cfd7a2ba10f7d.webp",
-        "sha256": "b05cfd7a2ba10f7d3bebc52277e6b07c0e5228ef49df56711da7a65b03807535"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-050-shock.8af0062737717258.webp",
-        "sha256": "8af0062737717258cad6b5340efe655fbbb3e9b7803a1eab9f680bf176668c87"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-051-sad.55a30f9fa5d51b55.webp",
-        "sha256": "55a30f9fa5d51b551145fe87693a53f77aef4e36a8675519d832beb7af363bb3"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-052-happy.e7b0cd335b6aba00.webp",
-        "sha256": "e7b0cd335b6aba004b6c0c93869f0032023d95028b2288e8fee91a82726c388a"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-052-shock.d5bbdf9e476b9245.webp",
-        "sha256": "d5bbdf9e476b924543259c0a079a2f0f8812e674864e11993d3ce9ec5964bca5"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-065-happy.e709ab147b3695a8.webp",
-        "sha256": "e709ab147b3695a8654ed523fe7a8a39173876c8fbdc3e1b4e199086f1ab1973"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-065-sad.5515631c652b2208.webp",
-        "sha256": "5515631c652b2208d0f6ef3552cb6f22187c0f43870ffdddc67497b437747b11"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-088-angry.7a0fcf9065699920.webp",
-        "sha256": "7a0fcf90656999204363bdd5ccd50f74212e208b7bed5e4b78a53a858b8e652b"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-088-happy.23852c78ce91e07d.webp",
-        "sha256": "23852c78ce91e07d2bdd768f8e6085a77bddd78cd96959bf49651af94ffc9c77"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-088-sad.21a87a230a1e840f.webp",
-        "sha256": "21a87a230a1e840fd8553f5211135f42d93ae55c144579098ba71b15bafdbe45"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-088-serious.b30a2cc755eace12.webp",
-        "sha256": "b30a2cc755eace1248d7f7bc61d2108b43339c86759f2bd4906db769f8390272"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-088-shock.43a8d962cd22a439.webp",
-        "sha256": "43a8d962cd22a439179ab6f1f776a4517e7e036eaec66c4846012e9969002460"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-092-angry.faa371db8deced33.webp",
-        "sha256": "faa371db8deced33cb4df39f1535371ac057e7e106e98ab4939a3b71d8baf46a"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-092-happy.52300ceeb0cb8e46.webp",
-        "sha256": "52300ceeb0cb8e46550be68612a668072f053b7c76c050c99bb91ef157d11a19"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-092-sad.c01a239e161732e5.webp",
-        "sha256": "c01a239e161732e5811ae164fba1f02fc8e639bc9642be7a458931bcaab58557"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-092-serious.cd58c8798286865d.webp",
-        "sha256": "cd58c8798286865d553aa9adccba389854028cb9ce1264a6b7ec8225c660cb2d"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-092-shock.ceebc8326cac8d68.webp",
-        "sha256": "ceebc8326cac8d68b1e5b8b2ecb584e2abe6603fdf44effe87174a22e884e02e"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-169-angry.e1ba29b5d7047904.webp",
-        "sha256": "e1ba29b5d7047904f56c5db3ec7d17ee9144701d75a6d148db69fa939efa665b"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-169-happy.5b834bbea5520807.webp",
-        "sha256": "5b834bbea552080777395f8c69e28a45abe6d4e091f6ffe8bbbe403c96ca236a"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-169-sad.785bd75cbcda34dc.webp",
-        "sha256": "785bd75cbcda34dcd531dd52642a3bd452cb648095b843807c6fef5ff6454e4c"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-169-serious.35ea1e9c06e2ea6f.webp",
-        "sha256": "35ea1e9c06e2ea6fad1dfcdb488f0957410ffcedf54c56db55f07386aceb707f"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-169-shock.54db3b9d08c517da.webp",
-        "sha256": "54db3b9d08c517da64bf8d1f12f56306258c3f4c4273bd88104939a7c699e53d"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-175-angry.83a6657c3648e423.webp",
-        "sha256": "83a6657c3648e42368a3e6c46935c7e3e65348bc60c850c7ce4cab7b65b9c2ad"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-175-happy.2fe224b3639331a4.webp",
-        "sha256": "2fe224b3639331a490e9c6e97264104848fb24ed7a38b07ebd5c302c30f4a744"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-175-sad.c6d4ebcd5ac79e1a.webp",
-        "sha256": "c6d4ebcd5ac79e1a43f569c05537ea7a59bbe2734897a026eb9396a5b1498de0"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-175-serious.5e7be262ea570488.webp",
-        "sha256": "5e7be262ea570488d96813cabc66afb1a2113ef92dc0ef00fde81764a0aeeba2"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-175-shock.b50e447ddfa22c4f.webp",
-        "sha256": "b50e447ddfa22c4f1f5b2f041dc27a2a7f319a0fb8ff293e98ddfa2ca747ec80"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-176-angry.770d10c8b442c1be.webp",
-        "sha256": "770d10c8b442c1be0cedcc73294540ddb51e828deab45ea996343562455ef247"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-176-happy.47b3462185823a59.webp",
-        "sha256": "47b3462185823a5936d32d0609adc7427167487dfcfd5ff1e1f1d5310c5dc528"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-176-sad.e368d5398a1d3069.webp",
-        "sha256": "e368d5398a1d3069500d1996e5ee775da89d86925978fff794c701685fa09fa2"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-176-serious.c9993dea037f4903.webp",
-        "sha256": "c9993dea037f4903b46ce5d6d9bf5278d09058e61ad2f2baeff0919ae9453387"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-176-shock.0c746f982ad999d2.webp",
-        "sha256": "0c746f982ad999d2ccef082bb96ed8b440ff79d495acac44f165e6003efbb4a1"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-177-happy.8340374e23a6a064.webp",
-        "sha256": "8340374e23a6a064d97d7db40e1516118e5b00a8ceba0acd7c8704c15d13d177"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-177-sad.4c8229823e7b10fe.webp",
-        "sha256": "4c8229823e7b10feee76ef15e59cacc3e2a0307535a8103e1da02d79189a880b"
-      },
-      {
         "path": "src/championship/data/storyVnPartTwo.js",
         "sha256": "8e27fe698d599ebd4a53758ac1b6d71aabb47404cc7afa6a1d7e5e06d4245121"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-099-happy.33473b7eb2f6be6a.webp",
-        "sha256": "33473b7eb2f6be6accc8d9a0bed06aa17a7fdc20ad03dc694dc88e9b09d1c304"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-099-sad.b99fffbbe017f8b1.webp",
-        "sha256": "b99fffbbe017f8b168c7b8c6cfdeae8b19a6edd22f8978c8fbedfc589539e664"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-153-angry.76ea5896cfde00b7.webp",
-        "sha256": "76ea5896cfde00b7abd2dc23a46cf47eebd95b8208847e026aeef0bdeedc9792"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-153-happy.c72ae57c4d3666ea.webp",
-        "sha256": "c72ae57c4d3666ea0946c0d2e2efbf029d8b61bc8658598ae8e8fb214f050e71"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-153-sad.ff7308b9aa20c7e3.webp",
-        "sha256": "ff7308b9aa20c7e3d11ca1a796403c83604bdc5050e1770c82ebb6ce851a1c83"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-153-serious.9e15d24e103969c5.webp",
-        "sha256": "9e15d24e103969c5a2923e4234e31959dfffa027e953ba96c9178e2326219d29"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-153-shock.07f2a0494a29ec6f.webp",
-        "sha256": "07f2a0494a29ec6f1588ff119817164d846d797353b75e98a47d1b9e43e14c66"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-157-happy.d13961dc53341c84.webp",
-        "sha256": "d13961dc53341c841da7b3062b0b0d36f2b804e55365e9a138509ebaf9360f73"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-157-sad.0c3fb78522004db9.webp",
-        "sha256": "0c3fb78522004db9dc4edcb9c8c2935af1a8e180eb82543317572478cdf43028"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-200-angry.922b78a5a77e744f.webp",
-        "sha256": "922b78a5a77e744fbda7efa1773a86ab392566c8cb440d1c7243ebe6d9316e4d"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-200-happy.354c57fce4131f35.webp",
-        "sha256": "354c57fce4131f355aa5d31417046f57363bf61a760b7cf0c1f25be17d6f0808"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-200-sad.658157cf685ef1bb.webp",
-        "sha256": "658157cf685ef1bb5292b8d7d6f9e63625d0e8e0fed1bacbf0c6f0c6aeb52877"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-200-serious.1a522939c8c16861.webp",
-        "sha256": "1a522939c8c16861cc2b69b779d89a614406e891d2a24102a81fceec0f266479"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-200-shock.3fee49dde74211e4.webp",
-        "sha256": "3fee49dde74211e4aebe45ce7be2d27bd8a896039d27c3fe7c1e463cf2616336"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-205-happy.98235fdd6433de11.webp",
-        "sha256": "98235fdd6433de116457b9574cffbcaa51047825a0c59f582abb0d8e6f5d1a4a"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-205-serious.086bd5d25a0736f2.webp",
-        "sha256": "086bd5d25a0736f2ecaa9a2cc78702e6000c806368f73fb491404348ee9fbc55"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-205-shock.082aaf968b14c078.webp",
-        "sha256": "082aaf968b14c0783d975b77c6030388ced0bab97f8dd86fbd5ff56b1d1ee691"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-211-angry.f8d9b8045c380713.webp",
-        "sha256": "f8d9b8045c380713079e88a8d387a4fdda17cc74513d8305dccc611a6736e702"
-      },
-      {
-        "path": "assets/production/story/vn-expressions-v1/species-211-serious.c01bf097eeed7948.webp",
-        "sha256": "c01bf097eeed7948c9b0df4dc00d23ad102baa1e5ab284d676594c3539f0bd68"
       },
       {
         "path": "assets/production/story/vn-backgrounds-v3/arena.678ee4ff309838da.mp4",
@@ -42404,6 +42340,82 @@
       {
         "path": "assets/production/story/vn-expressions-v1/aichan-catgirl-talk.bac920362b696441.webp",
         "sha256": "bac920362b6964416a05612ac7572401db5111aa4fa6a2871ebbf8e1a14ba47b"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-099-happy.33473b7eb2f6be6a.webp",
+        "sha256": "33473b7eb2f6be6accc8d9a0bed06aa17a7fdc20ad03dc694dc88e9b09d1c304"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-099-sad.b99fffbbe017f8b1.webp",
+        "sha256": "b99fffbbe017f8b168c7b8c6cfdeae8b19a6edd22f8978c8fbedfc589539e664"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-153-angry.76ea5896cfde00b7.webp",
+        "sha256": "76ea5896cfde00b7abd2dc23a46cf47eebd95b8208847e026aeef0bdeedc9792"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-153-happy.c72ae57c4d3666ea.webp",
+        "sha256": "c72ae57c4d3666ea0946c0d2e2efbf029d8b61bc8658598ae8e8fb214f050e71"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-153-sad.ff7308b9aa20c7e3.webp",
+        "sha256": "ff7308b9aa20c7e3d11ca1a796403c83604bdc5050e1770c82ebb6ce851a1c83"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-153-serious.9e15d24e103969c5.webp",
+        "sha256": "9e15d24e103969c5a2923e4234e31959dfffa027e953ba96c9178e2326219d29"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-153-shock.07f2a0494a29ec6f.webp",
+        "sha256": "07f2a0494a29ec6f1588ff119817164d846d797353b75e98a47d1b9e43e14c66"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-157-happy.d13961dc53341c84.webp",
+        "sha256": "d13961dc53341c841da7b3062b0b0d36f2b804e55365e9a138509ebaf9360f73"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-157-sad.0c3fb78522004db9.webp",
+        "sha256": "0c3fb78522004db9dc4edcb9c8c2935af1a8e180eb82543317572478cdf43028"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-200-angry.922b78a5a77e744f.webp",
+        "sha256": "922b78a5a77e744fbda7efa1773a86ab392566c8cb440d1c7243ebe6d9316e4d"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-200-happy.354c57fce4131f35.webp",
+        "sha256": "354c57fce4131f355aa5d31417046f57363bf61a760b7cf0c1f25be17d6f0808"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-200-sad.658157cf685ef1bb.webp",
+        "sha256": "658157cf685ef1bb5292b8d7d6f9e63625d0e8e0fed1bacbf0c6f0c6aeb52877"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-200-serious.1a522939c8c16861.webp",
+        "sha256": "1a522939c8c16861cc2b69b779d89a614406e891d2a24102a81fceec0f266479"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-200-shock.3fee49dde74211e4.webp",
+        "sha256": "3fee49dde74211e4aebe45ce7be2d27bd8a896039d27c3fe7c1e463cf2616336"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-205-happy.98235fdd6433de11.webp",
+        "sha256": "98235fdd6433de116457b9574cffbcaa51047825a0c59f582abb0d8e6f5d1a4a"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-205-serious.086bd5d25a0736f2.webp",
+        "sha256": "086bd5d25a0736f2ecaa9a2cc78702e6000c806368f73fb491404348ee9fbc55"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-205-shock.082aaf968b14c078.webp",
+        "sha256": "082aaf968b14c0783d975b77c6030388ced0bab97f8dd86fbd5ff56b1d1ee691"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-211-angry.f8d9b8045c380713.webp",
+        "sha256": "f8d9b8045c380713079e88a8d387a4fdda17cc74513d8305dccc611a6736e702"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-211-serious.c01bf097eeed7948.webp",
+        "sha256": "c01bf097eeed7948c9b0df4dc00d23ad102baa1e5ab284d676594c3539f0bd68"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",
