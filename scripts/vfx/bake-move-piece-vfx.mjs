@@ -75,7 +75,8 @@ export const MOVE_PIECE_BAKE = Object.freeze({
   muzzle: {fx: 'projectiles/muzzle-shotgun', until: 0.4, fit: 1.0, noSmoke: true},
   'muzzle-spiral': {fx: 'arcane/spell-charge', until: 0.8, fit: 1.2, grey: true},
   // ---- the impact frame
-  'impact-frame': {fx: 'impacts/crit-hit', until: 0.2, fit: 1.8, grey: true},
+  // pass 7: the flash alone (its tick-mark ring came in by the fourth frame and stamped every ultimate alike)
+  'impact-frame': {fx: 'impacts/crit-hit', until: 0.07, fit: 1.4, grey: true},
   // ---- floor circles (refinement pass 2: the kit's drawn hexagram sigils)
   'sigil-cast': {fx: 'arcane/magic-circle-cast', until: 1.2, fit: 1.6, anchor: 'ground', grey: true},
   'sigil-rune': {fx: 'arcane/rune-circle', until: 1.2, fit: 1.6, anchor: 'ground', grey: true},

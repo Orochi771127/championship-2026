@@ -184,6 +184,8 @@ Refinement pass 6 (2026-11-12). A real Data Arena round, played by the QA autopi
 - Fire cores and bomb drops now burst as pixelfx's plasma explosion (a white-hot core and energy rings) instead of red balls.
 - A fist lands pixelfx's firework burst, radial rays from a white core, as the original's knuckle hit does.
 
+Refinement pass 7 (2026-11-12). All 204 ultimates were recaptured on the review page, which mirrors the AI battle's hit layers. Every contact opened with the same large white flare and its ring of tick marks, so for the first beat every ultimate looked alike. The impact frame is now only the first two frames of the flash, before the ring forms, at 0.7 of the move's contact scale. Each move's own shape reads from the contact frame: a pillar of light and notes, a black hole, an energy ring, fire tongues, an ice lance.
+
 <!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
 ## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
 

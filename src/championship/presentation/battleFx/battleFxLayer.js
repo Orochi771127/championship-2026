@@ -701,7 +701,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         // An ultimate opens its contact with an impact frame: the blow's star in white, held by the hit-stop.
         if ((choreo?.impactFrame || critical) && setPieces) setPieces.play('impact-frame', {x: hit.x, y: hit.y,
           angle: attacker ? Math.atan2(target.groundY - attacker.groundY, target.x - attacker.x) : 0,
-          palette: {core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true}, size: target.width, unit: ctx.nativeScale, groundY: hit.groundY, scale: choreo?.contact?.scale ?? 1});
+          palette: {core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true}, size: target.width, unit: ctx.nativeScale, groundY: hit.groundY, scale: (choreo?.contact?.scale ?? 1) * 0.7});
         if (choreo?.contact && setPieces) setPieces.play(choreo.contact.piece, {x: hit.x, y: hit.y,
           angle: attacker ? Math.atan2(target.groundY - attacker.groundY, target.x - attacker.x) : 0, palette, size: target.width,
           unit: ctx.nativeScale, groundY: hit.groundY, scale: choreo.contact.scale ?? 1, fast: choreo.contact.fast, sprite: choreo.contact.sprite, at: 'contact'});
