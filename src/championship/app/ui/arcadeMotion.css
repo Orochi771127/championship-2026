@@ -11,7 +11,7 @@
   left: 0;
   top: 0;
   color: #fff;
-  font-size: 26px;
+  font-size: calc(26px * var(--text-scale, 1));
   font-weight: 900;
   line-height: 1;
   white-space: nowrap;
@@ -20,9 +20,9 @@
   text-shadow: 0 4px 0 #14141f;
   will-change: transform, opacity;
 }
-.cm-arcade-float__num.is-crit { font-size: 52px; color: #ffe14d; -webkit-text-stroke-width: 8px; text-shadow: 0 6px 0 #14141f; }
+.cm-arcade-float__num.is-crit { font-size: calc(52px * var(--text-scale, 1)); color: #ffe14d; -webkit-text-stroke-width: 8px; text-shadow: 0 6px 0 #14141f; }
 .cm-arcade-float__num:is(.is-heal, .is-stat) { color: #7dff9e; }
-.cm-arcade-float__num.is-info { font-size: 20px; color: #bfefff; }
+.cm-arcade-float__num.is-info { font-size: calc(20px * var(--text-scale, 1)); color: #bfefff; }
 .cm-arcade-toasts {
   position: fixed;
   left: 50%;

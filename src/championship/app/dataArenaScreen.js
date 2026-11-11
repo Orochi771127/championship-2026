@@ -326,8 +326,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
 
   field.addEventListener("pointermove", (event) => {
     if (event.pointerType === "mouse" || event.pointerType === "pen") {
-      const rect = field.getBoundingClientRect();
-      pointer.x = event.clientX - rect.left; pointer.y = event.clientY - rect.top; pointer.mouse = true;
+      // Screen pixels to the field's own pixels (they differ by the desktop interface zoom).
+      const rect = field.getBoundingClientRect(), k = rect.width / (field.offsetWidth || rect.width || 1) || 1;
+      pointer.x = (event.clientX - rect.left) / k; pointer.y = (event.clientY - rect.top) / k; pointer.mouse = true;
       // A press that began over HUD chrome still fires once it drags onto the field.
       if (root.dataset.state === "PLAY") pointer.fire = (event.buttons & 1) === 1;
     }
@@ -335,8 +336,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   field.addEventListener("pointerdown", (event) => {
     if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
     if (root.dataset.state !== "PLAY") return;
-    const rect = field.getBoundingClientRect();
-    pointer.x = event.clientX - rect.left; pointer.y = event.clientY - rect.top; pointer.mouse = true;
+    const rect = field.getBoundingClientRect(), k = rect.width / (field.offsetWidth || rect.width || 1) || 1;
+    pointer.x = (event.clientX - rect.left) / k; pointer.y = (event.clientY - rect.top) / k; pointer.mouse = true;
     if (touchActive) { touchActive = false; touch.hidden = true; root.dataset.input = 'mouse'; }
     if (event.button === 0) pointer.fire = true;
     if (event.button === 2) latch.cast = 0;

@@ -82,7 +82,7 @@
 .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__detail-name {
   margin: 0;
   color: #fff4bd;
-  font-size: clamp(0.88rem, 3.8vw, 1.08rem);
+  font-size: clamp(0.88rem, calc(3.8 * var(--cm-vw, 1vw)), 1.08rem);
   line-height: 1.25;
   text-shadow: 0 2px 0 #001638;
 }
@@ -91,7 +91,7 @@
   margin: 0;
   overflow: auto;
   color: #d9efff;
-  font-size: clamp(0.7rem, 2.9vw, 0.84rem);
+  font-size: clamp(0.7rem, calc(2.9 * var(--cm-vw, 1vw)), 0.84rem);
   font-weight: 650;
   line-height: 1.55;
   text-shadow: 0 1px 0 #001331;

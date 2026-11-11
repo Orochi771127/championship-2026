@@ -185,7 +185,7 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
 .int-rh2-companion__portrait[hidden] { display: none; }
 /* Owner 2026-11-03: chips and metals are used straight from the partner card. */
 .int-rh2-companion__boost { grid-area: boost; min-height: 40px; padding: 6px 14px; border: 2px solid #14141f; border-radius: 999px;
-  background: #ffd23f; color: #14141f; font: inherit; font-size: 14px; font-weight: 900; box-shadow: 0 3px 0 #14141f; cursor: pointer; }
+  background: #ffd23f; color: #14141f; font: inherit; font-size: calc(14px * var(--text-scale, 1)); font-weight: 900; box-shadow: 0 3px 0 #14141f; cursor: pointer; }
 .int-rh2-companion__boost { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
 /* A four-point spark drawn in CSS (no system emoji, no image URL). */
 .int-rh2-companion__boost-icon { width: 16px; height: 16px; flex: none; background: #14141f;
@@ -267,10 +267,10 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
   border-radius: var(--r-control);
   background: transparent;
   color: var(--c-text-2);
-  font-size: 22px;
+  font-size: calc(22px * var(--text-scale, 1));
   line-height: 1;
 }
-.int-rh2-companion__close { font-size: 24px; }
+.int-rh2-companion__close { font-size: calc(24px * var(--text-scale, 1)); }
 @media (hover: hover) {
   .int-rh2-companion__nav:hover,
   .int-rh2-companion__close:hover { background: var(--c-surface-3); color: var(--c-text-1); }
@@ -416,7 +416,7 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
 .int-rh2-cage-badges { position: absolute; inset: 0; z-index: 4; overflow: hidden; pointer-events: none; }
 .int-rh2-care-tag { position: absolute; display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 7px 0 4px;
   border: 1px solid rgba(255, 255, 255, .28); border-radius: 999px; transform: translate(-50%, -100%);
-  background: rgba(12, 16, 34, .58); color: #f2fbff; font: 800 11px/1 system-ui, sans-serif; font-variant-numeric: tabular-nums;
+  background: rgba(12, 16, 34, .58); color: #f2fbff; font: 800 calc(11px * var(--text-scale, 1))/1 system-ui, sans-serif; font-variant-numeric: tabular-nums;
   white-space: nowrap; pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent;
   backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); transition: transform 160ms cubic-bezier(.23, 1, .32, 1); }
 .int-rh2-care-tag:active { transform: translate(-50%, -100%) scale(.96); }
@@ -440,12 +440,12 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
 /* Near a screen edge the card opens inwards from the tag instead of centring on it. */
 .int-rh2-care-tag[data-edge="left"] .int-rh2-care-tag__detail { left: -4px; transform: none; transform-origin: 12% 100%; }
 .int-rh2-care-tag[data-edge="right"] .int-rh2-care-tag__detail { left: auto; right: -4px; transform: none; transform-origin: 88% 100%; }
-.int-rh2-care-tag__name { font-size: 12.5px; font-weight: 1000; }
-.int-rh2-care-tag__left { font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums; }
-.int-rh2-care-tag__hint { font-size: 11px; font-weight: 700; color: #9a5a00; }
+.int-rh2-care-tag__name { font-size: calc(12.5px * var(--text-scale, 1)); font-weight: 1000; }
+.int-rh2-care-tag__left { font-size: calc(12px * var(--text-scale, 1)); font-weight: 800; font-variant-numeric: tabular-nums; }
+.int-rh2-care-tag__hint { font-size: calc(11px * var(--text-scale, 1)); font-weight: 700; color: #9a5a00; }
 .int-rh2-care-tag__battery { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 30px; padding: 4px 10px;
   border: 2px solid #14141f; border-radius: 10px; background: linear-gradient(180deg, #8ff7c0, #34d17d); color: #06281a;
-  font: 900 12px/1.1 system-ui, sans-serif; box-shadow: 0 2px 0 #14141f; cursor: pointer; transition: transform 140ms ease-out; }
+  font: 900 calc(12px * var(--text-scale, 1))/1.1 system-ui, sans-serif; box-shadow: 0 2px 0 #14141f; cursor: pointer; transition: transform 140ms ease-out; }
 .int-rh2-care-tag__battery:active { transform: scale(.97); }
 .int-rh2-care-tag__battery:disabled { background: #d5dbe2; color: #5b6570; cursor: not-allowed; }
 /* A battery cell, drawn. */
@@ -453,11 +453,11 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
 .int-rh2-care-tag__cell::before { content: ""; position: absolute; inset: 1px 5px 1px 1px; background: currentColor; }
 .int-rh2-care-tag__cell::after { content: ""; position: absolute; right: -4px; top: 1px; width: 2px; height: 2px; background: currentColor; }
 .int-rh2-auto-pop { position: absolute; display: inline-flex; align-items: center; transform: translate(-50%, -100%); padding: 1px 7px; border: 2px solid #14141f; border-radius: 999px;
-  background: #fff465; color: #14141f; font-size: 12px; font-weight: 1000; white-space: nowrap; box-shadow: 0 2px 0 #14141f;
+  background: #fff465; color: #14141f; font-size: calc(12px * var(--text-scale, 1)); font-weight: 1000; white-space: nowrap; box-shadow: 0 2px 0 #14141f;
   animation: int-rh2-auto-pop 1.6s cubic-bezier(.2, .9, .3, 1) both; }
 .int-rh2-auto-pop[data-kind="FEED"] { background: #ffd0e4; }
 .int-rh2-auto-pop[data-kind="MEAT"] { background: #fff1e6; color: #8c2c1c; }
-.int-rh2-auto-pop[data-kind="LOCK"] { min-width: 18px; justify-content: center; background: #46ff86; font-size: 13px; }
+.int-rh2-auto-pop[data-kind="LOCK"] { min-width: 18px; justify-content: center; background: #46ff86; font-size: calc(13px * var(--text-scale, 1)); }
 .int-rh2-auto-pop[data-kind="EXPIRE"] { background: #dfe6ee; color: #3c4652; }
 @keyframes int-rh2-auto-pop { 0% { opacity: 0; translate: 0 6px; } 15% { opacity: 1; translate: 0 0; } 80% { opacity: 1; translate: 0 -22px; }
   100% { opacity: 0; translate: 0 -30px; } }
@@ -471,7 +471,7 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
   inset: auto 0 0;
   width: 100%;
   max-width: none;
-  max-height: min(82vh, 720px);
+  max-height: min(calc(82 * var(--cm-vh, 1vh)), 720px);
   margin: 0;
   padding: 0;
   display: none;
@@ -520,7 +520,7 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
   border-radius: var(--r-control);
   background: var(--c-surface-2);
   color: var(--c-text-1);
-  font-size: 24px;
+  font-size: calc(24px * var(--text-scale, 1));
   line-height: 1;
 }
 .int-rh2-detail__body {
@@ -555,7 +555,7 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
 @media (min-width: 768px) {
   body:not([data-portrait-frame]) .int-rh2-detail {
     inset: 0 0 0 auto;
-    width: min(420px, 46vw);
+    width: min(420px, calc(46 * var(--cm-vw, 1vw)));
     height: 100%;
     max-height: none;
     border-bottom: 1px solid var(--c-line-2);
@@ -590,7 +590,7 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--sp-2);
-  width: min(calc(100vw - 32px), 340px);
+  width: min(calc(calc(100 * var(--cm-vw, 1vw)) - 32px), 340px);
   padding: var(--sp-5);
   transform: translate(-50%, -50%);
   border: 1px solid var(--c-line-2);
@@ -638,7 +638,7 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 6px;
-  width: min(calc(100vw - 32px), 400px);
+  width: min(calc(calc(100 * var(--cm-vw, 1vw)) - 32px), 400px);
   padding: var(--sp-3);
   border: 1px solid var(--c-line-2);
   border-radius: var(--r-card);
@@ -703,7 +703,7 @@ body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="
   left: 50%;
   top: 50%;
   display: grid;
-  width: min(calc(100vw - 32px), 440px);
+  width: min(calc(calc(100 * var(--cm-vw, 1vw)) - 32px), 440px);
   transform: translate(-50%, -50%);
   overflow: hidden;
   border-radius: var(--r-card);
@@ -791,19 +791,19 @@ body[data-desktop-raising] .int-rh2-companion__name { white-space: normal; overf
 .int-rh2-discoveries {
   position:absolute;top:calc(60px + env(safe-area-inset-top));right:12px;z-index:12;
   min-height:44px;padding:8px 14px;border:1px solid #b9cbb5;border-radius:14px;
-  background:#f6faedee;color:#304b3d;font-family:inherit;font-size:14px;font-weight:600;line-height:1.25;
+  background:#f6faedee;color:#304b3d;font-family:inherit;font-size:calc(14px * var(--text-scale, 1));font-weight:600;line-height:1.25;
   box-shadow:0 3px 10px #1c392014;cursor:pointer;max-width:calc(100% - 24px);
 }
 .int-rh2-discoveries[hidden]{display:none;}
 .int-rh2-discoveries:focus-visible{outline:3px solid #398c85;outline-offset:2px;}
-.int-rh2-discovery-list{max-height:40dvh;overflow:auto;overscroll-behavior:contain;}
+.int-rh2-discovery-list{max-height:calc(40 * var(--cm-dvh, 1dvh));overflow:auto;overscroll-behavior:contain;}
 .int-rh2-discovery-item{padding:8px 10px;border-radius:10px;background:#edf4e9;color:#304b3d;}
 @media (max-height:450px){.int-rh2-discoveries{right:8px;padding:6px 10px;}}
 .cm-ranch-zoom {
   position:absolute;right:12px;
   bottom:calc(var(--cm-toolbar-height, 74px) + var(--cm-raising-dock-gap, 12px) + 12px);z-index:4;
   min-width:44px;min-height:44px;border:1px solid #8eb2bb;border-radius:14px;
-  background:rgba(244,252,255,.92);color:#244b57;font:600 14px system-ui;
+  background:rgba(244,252,255,.92);color:#244b57;font:600 calc(14px * var(--text-scale, 1)) system-ui;
   touch-action:manipulation;cursor:pointer;box-shadow:0 2px 8px #16344120;
 }
 .cm-ranch-zoom:focus-visible {outline:3px solid #008e8e;outline-offset:2px;}
@@ -813,7 +813,7 @@ body[data-desktop-raising] .int-rh2-companion__name { white-space: normal; overf
    over it instead of reserving a sidebar. Keep the existing DOM/input owners
    and native zoom adapter; these are CSS pixels, never device pixels. */
 body[data-responsive-raising][data-desktop-raising] {
-  --cm-raising-card: clamp(256px, 28vw, 340px);
+  --cm-raising-card: clamp(256px, calc(28 * var(--cm-vw, 1vw)), 340px);
 }
 body[data-responsive-raising][data-desktop-raising][data-status-bar="on"][data-tutorial-guide] {
   --cm-screen-top: var(--cm-status-bar-height, var(--hud-height));
@@ -842,7 +842,7 @@ body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .
 body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .cm-toolbar__tool-hint {
   position: static; order: -1; transform: none; animation: none;
   width: 100%; max-width: none; margin: 0;
-  max-height: 22dvh; overflow-y: auto; flex: 0 0 auto;
+  max-height: calc(22 * var(--cm-dvh, 1dvh)); overflow-y: auto; flex: 0 0 auto;
 }
 body[data-responsive-raising][data-desktop-raising] .cm-toolbar[data-mode="1"] .cm-toolbar__tool-text {
   white-space: normal; overflow: visible; overflow-wrap: anywhere;
@@ -895,7 +895,7 @@ body[data-responsive-raising][data-desktop-raising] .int-rh2-companion > .int-rh
 /* Guidance takes the opposite corner, never a permanent field column. */
 body[data-responsive-raising][data-desktop-raising] .cm-tutorial-guidance {
   left: calc(8px + var(--safe-left)); right: auto; top: calc(var(--cm-screen-top) + 8px);
-  width: min(360px, 45vw); max-height: calc(var(--cm-screen-height) - 16px);
+  width: min(360px, calc(45 * var(--cm-vw, 1vw))); max-height: calc(var(--cm-screen-height) - 16px);
   overflow-y: auto; overscroll-behavior: contain; flex-wrap: wrap;
   box-sizing: border-box;
 }
@@ -912,7 +912,7 @@ body[data-responsive-raising][data-desktop-raising] .int-rh2-root .int-rh2-notic
 }
 body[data-responsive-raising][data-desktop-raising] .int-rh2-detail {
   inset: var(--safe-top) var(--safe-right) var(--safe-bottom) auto;
-  width: min(420px, 50vw); height: auto; max-height: none;
+  width: min(420px, calc(50 * var(--cm-vw, 1vw))); height: auto; max-height: none;
 }
 body[data-responsive-raising][data-desktop-raising] .int-rh2-letter {
   max-height: calc(var(--cm-screen-height) - 16px); overflow-y: auto;
@@ -968,7 +968,7 @@ body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[
   position: absolute; left: 50%; right: auto; bottom: calc(100% + 8px);
   order: initial; transform: translateX(-50%); animation: none;
   width: max-content; max-width: min(560px, calc(100% - 12px)); margin: 0;
-  max-height: min(22dvh, 120px); overflow-y: auto;
+  max-height: min(calc(22 * var(--cm-dvh, 1dvh)), 120px); overflow-y: auto;
   padding: 4px 4px 4px 12px; pointer-events: none;
 }
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar__tool-text {
@@ -992,7 +992,7 @@ body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-tutorial
   top: calc(var(--cm-status-bar-height, var(--hud-height)) + var(--cm-match-notice-offset, 0px) + 8px); bottom: auto;
 }
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-tutorial-guidance {
-  max-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-match-notice-offset, 0px) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 32px);
+  max-height: calc(var(--cm-viewport-height, calc(100 * var(--cm-dvh, 1dvh))) - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-match-notice-offset, 0px) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 32px);
 }
 /* Entry guidance uses a lower-left lane above the centered tool instruction.
    Its measured, wrapped height reserves a second lane only while visible;
@@ -1026,7 +1026,7 @@ body[data-desktop-raising][data-tool]:has(#cm-root[data-active-screen="RAISING_H
 
 /* Menus must remain reachable on short phones and at enlarged text sizes. */
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] .cm-toolbar__menu {
-  max-height: max(44px, calc(var(--cm-viewport-height, 100dvh) - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-match-notice-offset, 0px) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 24px));
+  max-height: max(44px, calc(var(--cm-viewport-height, calc(100 * var(--cm-dvh, 1dvh))) - var(--cm-status-bar-height, var(--hud-height)) - var(--cm-match-notice-offset, 0px) - var(--cm-toolbar-height, var(--dock-height)) - var(--cm-raising-dock-gap) - 24px));
   overflow-y: auto; overscroll-behavior: contain;
 }
 /* The tutorial already carries the first-run instruction. Avoid two bubbles
@@ -1036,7 +1036,7 @@ body[data-tutorial-guide]:has(#cm-root[data-active-screen="RAISING_HOME"]:not([h
    region receives the gesture, not the empty overlay surrounding it.
    Its viewport uses the card's same 120px cap, minus 16px for insets. */
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar__tool-text {
-  max-height: max(32px, min(104px, calc(22dvh - 16px))); overflow-y: auto;
+  max-height: max(32px, min(104px, calc(calc(22 * var(--cm-dvh, 1dvh)) - 16px))); overflow-y: auto;
   pointer-events: auto; overscroll-behavior: contain;
 }
 
@@ -1068,8 +1068,8 @@ body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-status-b
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--sp-3);
-  width: min(calc(100vw - 32px), 560px);
-  max-height: calc(100dvh - 32px);
+  width: min(calc(calc(100 * var(--cm-vw, 1vw)) - 32px), 560px);
+  max-height: calc(calc(100 * var(--cm-dvh, 1dvh)) - 32px);
   overflow: auto;
   padding: var(--sp-5);
   border: 1px solid var(--c-line-2);

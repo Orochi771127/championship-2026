@@ -26,7 +26,7 @@
   background: linear-gradient(#fff, #e5f4f5);
   color: #22657b;
   box-shadow: inset 0 0 0 1px #fff, 0 2px #a6c7c9;
-  font-size: 10px;
+  font-size: calc(10px * var(--text-scale-hud, 1));
   letter-spacing: .025em;
 }
 .int-rh2-system-button::before { width: 22px; height: 22px; }
@@ -46,14 +46,14 @@
   background: linear-gradient(#effffc, #c5ebee);
   border-bottom: 2px solid #dca333;
   box-shadow: inset 0 -1px #fff4b3;
-  font-size: 10px;
+  font-size: calc(10px * var(--text-scale-hud, 1));
 }
 .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__season {
   padding: 4px 7px;
   border: 1px solid #95b985;
   border-radius: 2px 8px 2px 8px;
   background: linear-gradient(#f7ffd7, #d4edb1);
-  font-size: 10px;
+  font-size: calc(10px * var(--text-scale-hud, 1));
 }
 .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__mode {
   align-self: stretch;
@@ -61,7 +61,7 @@
   align-items: center;
   justify-content: center;
   padding: 3px 12px;
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale-hud, 1));
   font-weight: 800;
 }
 .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__time {
@@ -70,7 +70,7 @@
   border-radius: 2px 7px 2px 2px;
   background: #f1fff8;
   color: #175867;
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale-hud, 1));
   letter-spacing: .06em;
 }
 
@@ -91,7 +91,7 @@
   background: linear-gradient(#fffff9, #e8f1e6);
   color: #285c62;
   box-shadow: inset 0 0 0 1px #ffffff;
-  font-size: 8px;
+  font-size: calc(8px * var(--text-scale-hud, 1));
   transition: background .12s, border-color .12s;
 }
 .cm-toolbar[data-mode="1"] .cm-toolbar__cell::before { width: 30px; height: 30px; }
@@ -124,7 +124,7 @@
 .cm-toolbar[data-mode="1"] .cm-toolbar__entry:hover:not(:disabled) { background: #d8f2e5; }
 @media (max-width: 374px) {
   .int-rh2-field-frame { margin-inline: 6px; }
-  .cm-toolbar[data-mode="1"] .cm-toolbar__cell { font-size: 7px; min-height: 58px; }
+  .cm-toolbar[data-mode="1"] .cm-toolbar__cell { font-size: calc(7px * var(--text-scale-hud, 1)); min-height: 58px; }
   .cm-toolbar[data-mode="1"] .cm-toolbar__cell::before { width: 27px; height: 27px; }
 }
 @media (prefers-reduced-motion: reduce) {
