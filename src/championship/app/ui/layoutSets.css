@@ -376,3 +376,8 @@ body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen] .
 /* Facility editor: the 22px title's outline and drop shadow reach 4px below the letters and
    covered the underline (same cause as the hunt and battle titles, 2026-11-10). */
 :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-title { padding-bottom: 15px; }
+
+/* Settings, theme cards: each card previews its own stage behind a panel (the three themes
+   share the paper ground token, which would make the three previews look alike). */
+:root[data-theme="arcade"] .cm-theme-preview[data-palette] { background: var(--ax-stage); border: 2px solid var(--ax-ink); }
+:root[data-theme="arcade"] .cm-theme-preview[data-palette] .cm-theme-preview__button { background: var(--ax-yellow); box-shadow: 0 2px 0 var(--ax-ink); }

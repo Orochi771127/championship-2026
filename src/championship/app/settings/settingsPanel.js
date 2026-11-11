@@ -35,12 +35,8 @@ const CATEGORY_TITLES = Object.freeze({
 
 const THEME_CHOICES = Object.freeze([
   { value: "arcade", name: "街機拍檔", desc: "粗黑框實體按鈕、網點紫底與鮮豔色塊的街機風格（預設）。" },
-  { value: "arena", name: "晴空競技", desc: "明亮的天空與競技場配色，青綠連結線與金色獎勵。" },
-  { value: "night", name: "深色夜景", desc: "深色背景，適合夜間與長時間遊玩。" },
-  { value: "clear", name: "藍白清爽", desc: "明亮的藍白配色，適合白天與戶外。" },
-  { value: "warm", name: "經典暖黃", desc: "米黃紙色與琥珀色，柔和的暖色調。" },
-  { value: "classic", name: "復古藍金", desc: "深藍底、金色緞帶與框線，搭配六角網格的復古風格。" },
-  { value: "system", name: "跟隨系統", desc: "系統深色時用深色夜景，淺色時用晴空競技。" }
+  { value: "cyber", name: "電子生命", desc: "深色的網路空間：液晶薄荷面板、霓虹按鍵，適合夜間與長時間遊玩。" },
+  { value: "breeze", name: "晴空清新", desc: "晴朗的藍天與海水：白色面板、海軍藍線條，適合白天與戶外。" }
 ]);
 const SYSTEM_BACKGROUND_CHOICES = Object.freeze([
   { value: "default", name: "SYSTEM_BACKGROUND_DEFAULT", desc: "SYSTEM_BACKGROUND_DEFAULT_HINT" },
@@ -223,16 +219,6 @@ export function createSettingsPanel({
   function themePreview(choice) {
     const swatch = node("span", "cm-theme-preview");
     swatch.setAttribute("aria-hidden", "true");
-    if (choice.value === "system") {
-      swatch.dataset.split = "true";
-      const left = node("span", "cm-theme-preview__half");
-      left.dataset.palette = "night";
-      const right = node("span", "cm-theme-preview__half");
-      right.dataset.palette = "arena";
-      for (const half of [left, right]) half.append(node("span", "cm-theme-preview__bar"), node("span", "cm-theme-preview__card"), node("span", "cm-theme-preview__button"));
-      swatch.append(left, right);
-      return swatch;
-    }
     swatch.dataset.palette = choice.value;
     const bar = node("span", "cm-theme-preview__bar");
     bar.append(node("span", "cm-theme-preview__bits"));
@@ -327,11 +313,6 @@ export function createSettingsPanel({
         hint: "只改變介面顏色，不會改變角色與場景的原圖。", render: themePreview
       }));
       const resolved = environment?.resolved?.() ?? {};
-      if (store.get().theme === "system") {
-        section.append(note("目前系統為{mode}，使用「{theme}」。", {
-          mode: uiText(resolved.prefersDark ? "深色" : "淺色"), theme: uiText(choiceName(THEME_CHOICES, resolved.theme))
-        }));
-      }
       section.append(radioGroup("systemBackgroundMode", "SYSTEM_BACKGROUND_LABEL", SYSTEM_BACKGROUND_CHOICES, {
         hint: "SYSTEM_BACKGROUND_HINT"
       }));

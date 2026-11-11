@@ -33,9 +33,8 @@
         } catch (error) { p = {}; }
         function query(text) { try { return window.matchMedia(text).matches === true; } catch (error) { return false; } }
         function pick(value, allowed, fallback) { return allowed.indexOf(value) >= 0 ? value : fallback; }
-        var choice = pick(p.theme, ["arcade", "arena", "night", "clear", "warm", "classic", "system"], "arcade");
-        var dark = typeof window.matchMedia === "function" ? query("(prefers-color-scheme: dark)") : true;
-        var theme = choice === "system" ? (dark ? "night" : "arena") : choice;
+        var legacy = { night: "cyber", classic: "cyber", arena: "breeze", clear: "breeze", warm: "breeze", system: "arcade" };
+        var choice = pick(legacy[p.theme] || p.theme, ["arcade", "cyber", "breeze"], "arcade");
         var motion = pick(p.reducedMotion, ["system", "on", "off"], "system");
         var quality = pick(p.quality, ["auto", "saver", "balanced", "high"], "auto");
         var nav = window.navigator || {};
@@ -44,7 +43,8 @@
             || (nav.deviceMemory > 0 && nav.deviceMemory <= 2)
             || (nav.hardwareConcurrency > 0 && nav.hardwareConcurrency <= 2) ? "saver" : "balanced";
         }
-        root.dataset.theme = theme;
+        root.dataset.theme = "arcade";
+        root.dataset.themeTone = choice;
         root.dataset.themeChoice = choice;
         root.dataset.textScale = String(pick(p.textScale, [100, 115, 130], 100));
         root.dataset.hud = pick(p.hudDensity, ["standard", "compact"], "standard");
@@ -54,9 +54,9 @@
         root.dataset.quality = quality;
         root.lang = pick(p.locale, ["zh-Hant", "en", "ja", "th", "vi"], "zh-Hant");
         var color = document.querySelector('meta[name="theme-color"]');
-        if (color) color.setAttribute("content", { arcade: "#2b1d4a", arena: "#eef5fa", night: "#080b0a", clear: "#eef3f8", warm: "#f7efd6", classic: "#072f5e" }[theme]);
+        if (color) color.setAttribute("content", { arcade: "#2b1d4a", cyber: "#10233a", breeze: "#1d66c9" }[choice]);
         var scheme = document.querySelector('meta[name="color-scheme"]');
-        if (scheme) scheme.setAttribute("content", theme === "night" || theme === "classic" ? "dark" : "light");
+        if (scheme) scheme.setAttribute("content", "light");
       })();
     </script>
     <!-- 2026-09-29 redesign: design tokens first, then one sheet per game area.

@@ -49,7 +49,7 @@ const DEFINITIONS = {
   // "arcade" is the default from 2026-10-26 (Owner: the whole game takes the arcade
   // rebuild's UI). A saved explicit choice is kept as it is; only players who never
   // chose see it first. "arena" (default 2026-10-15) stays selectable.
-  theme: { category: "appearance", scope: "account", type: "enum", values: ["arcade", "arena", "night", "clear", "warm", "classic", "system"], default: "arcade" },
+  theme: { category: "appearance", scope: "account", type: "enum", values: ["arcade", "cyber", "breeze"], default: "arcade" },
   systemBackgroundMode: { category: "appearance", scope: "account", type: "enum", values: ["default", "custom", "random"], default: "default" },
   // Empty / unrecognized stored IDs show the original theme, never an arbitrary image.
   systemBackgroundId: { category: "appearance", scope: "account", type: "enum", values: ["", ...SYSTEM_BACKGROUND_IDS], default: "" },
@@ -86,6 +86,11 @@ const DEFINITIONS = {
   highlightMode: { category: "access", scope: "account", type: "enum", values: ["full", "compact"], default: "full" }
 };
 
+export const THEME_TONES = Object.freeze(["arcade", "cyber", "breeze"]);
+// A choice saved before 2026-11-11 moves to the nearest of the three: the dark ones to 電子生命,
+// the light ones to 清新; "follow the system" had no single palette and returns to the default.
+export const LEGACY_THEMES = Object.freeze({ night: "cyber", classic: "cyber", arena: "breeze", clear: "breeze", warm: "breeze", system: "arcade" });
+
 export const PREFERENCE_DEFINITIONS = Object.freeze(Object.fromEntries(
   Object.entries(DEFINITIONS).map(([id, definition]) => [id, Object.freeze({
     id,
@@ -115,6 +120,7 @@ export function coercePreference(id, value) {
     const clamped = Math.min(definition.max, Math.max(definition.min, value));
     return Math.round(clamped / definition.step) * definition.step;
   }
+  if (id === "theme" && Object.hasOwn(LEGACY_THEMES, value)) return LEGACY_THEMES[value];
   return definition.values.includes(value) ? value : undefined;
 }
 
@@ -190,10 +196,17 @@ export function parsePreferences(text) {
 
 // ---- Resolution: a preference plus the environment gives what is applied ----
 
-/** night | clear | warm. "system" follows the OS: dark reads as night, light as clear. */
-export function resolveTheme(theme, { prefersDark = true } = {}) {
-  if (theme === "system") return prefersDark ? "night" : "arena";
-  return ["arcade", "arena", "night", "clear", "warm", "classic"].includes(theme) ? theme : "arcade";
+/**
+ * Owner 2026-11-11: three themes, 街機 / 電子生命 (dark) / 清新 (bright). All three are the arcade
+ * interface in a different palette, so <html data-theme> is always "arcade" (every layout and
+ * component rule applies to all of them) and the palette is <html data-theme-tone>.
+ */
+export function resolveTheme() {
+  return "arcade";
+}
+export function resolveThemeTone(theme) {
+  const current = Object.hasOwn(LEGACY_THEMES, theme) ? LEGACY_THEMES[theme] : theme;
+  return THEME_TONES.includes(current) ? current : "arcade";
 }
 
 /** Whether motion is reduced: the explicit choice wins, else the OS setting. */

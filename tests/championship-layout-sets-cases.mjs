@@ -180,3 +180,24 @@ test('the audit sheet loads last and leaves the title alone', () => {
   // The partner list's element row has its own line (it was a 75px column at phone width).
   assert.match(sheet, /\.cm-digimon-stat\[data-row="taxonomy"\] \{ grid-column: 1 \/ -1; \}/);
 });
+
+test('the two new palettes keep words legible on their panels (電子生命, 晴空清新)', () => {
+  const css = fs.readFileSync('src/championship/app/ui/tokens.css', 'utf8');
+  const block = selector => { const start = css.indexOf(selector + ' {'); assert.ok(start >= 0, selector); return css.slice(start, css.indexOf('\n}\n', start)); };
+  const tokens = text => Object.fromEntries([...text.matchAll(/(--[\w-]+):\s*(#[0-9a-fA-F]{6})\s*;/g)].map(m => [m[1], m[2]]));
+  const base = tokens(block(':root[data-theme="arcade"], [data-palette="arcade"]'));
+  const lum = hex => { const [r, g, b] = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(c => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+  const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
+  for (const tone of ['cyber', 'breeze']) {
+    const p = { ...base, ...tokens(block(`:root[data-theme="arcade"][data-theme-tone="${tone}"], [data-palette="${tone}"]`)) };
+    for (const surface of ['--c-ground', '--c-surface-1', '--c-surface-2', '--ax-paper', '--ax-paper-2']) {
+      for (const text of ['--c-text-1', '--c-text-2', '--c-text-3', '--ax-ink']) assert.ok(contrast(p[text], p[surface]) >= 4.5, `${tone}: ${text} on ${surface} is ${contrast(p[text], p[surface]).toFixed(2)}`);
+      assert.ok(contrast(p['--c-text-disabled'], p[surface]) >= 2.5, `${tone}: disabled text on ${surface} is ${contrast(p['--c-text-disabled'], p[surface]).toFixed(2)}`);
+    }
+    for (const status of ['--c-success', '--c-warning', '--c-danger', '--c-info', '--c-rare', '--c-gold-strong', '--c-accent-strong', '--c-stat-hp', '--c-stat-tp'])
+      assert.ok(contrast(p[status], p['--c-surface-1']) >= 4.5, `${tone}: ${status} on a panel is ${contrast(p[status], p['--c-surface-1']).toFixed(2)}`);
+    assert.ok(contrast('#ffffff', p['--c-accent']) >= 4.5, `${tone}: a primary key's words`);
+    // The ink outline and slab must still read against the stage behind the panels.
+    assert.ok(contrast(p['--ax-ink'], p['--c-void']) >= 1.15, `${tone}: ink against the stage is ${contrast(p['--ax-ink'], p['--c-void']).toFixed(2)}`);
+  }
+});
