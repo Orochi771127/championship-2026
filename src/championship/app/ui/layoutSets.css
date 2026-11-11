@@ -399,3 +399,9 @@ body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen] .
   :root body[data-landscape-entry] #cm-title .cm-title__actions { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
 }
 @media (max-height: 420px) { :root body[data-landscape-entry] #cm-title .cm-title__walker canvas { height: 76px; } }
+
+/* Partner list, phone held upright: a four-digit gauge ("1560/1560") broke onto two lines
+   inside its 83px pill. */
+@media (max-width: 520px) {
+  :root[data-theme] body .cm-digimon-root .cm-digimon-stat[data-group="vital"] .cm-digimon-detail__value { padding-inline: 3px; font-size: calc(12px * var(--text-scale, 1)); letter-spacing: -0.02em; white-space: nowrap; text-align: center; }
+}
