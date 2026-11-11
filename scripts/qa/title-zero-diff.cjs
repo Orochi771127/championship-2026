@@ -21,6 +21,7 @@
 'use strict';
 
 const { chromium } = require('playwright');
+const opening = require('../../tests/championship-browser-opening.cjs');
 const { VIEWPORTS: HEALTH_VIEWPORTS } = require('./viewport-health-rules.cjs');
 
 const safeAreaOf = id => HEALTH_VIEWPORTS.find(v => v.id === id).safeArea;
@@ -98,10 +99,9 @@ async function walk(browser, origin, viewport) {
     await page.click('#cm-new-game');
     await page.locator('.cm-opening-story').first().waitFor({ state: 'visible', timeout: 20000 });
     await take('story');
-    for (let i = 0; i < 40 && !(await page.locator('.cm-opening__envelope').count()); i += 1) {
-      await page.locator('.cm-opening-story').click({ force: true }).catch(() => {});
-      await page.waitForTimeout(250);
-    }
+    // Since 2026-11-03 the story stops at Ai-chan's cat / catgirl choice: play it the way
+    // the gates do (tests/championship-browser-opening.cjs), choice included.
+    await opening.playStory(page, { story: 'skip', guideAppearance: 'cat' });
     await page.click('.cm-opening__envelope');
     await take('letter');
     await page.click('.cm-opening__letter button');
