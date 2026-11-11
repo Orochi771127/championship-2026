@@ -30,7 +30,10 @@ function makeCanvas(width, height) {
   const element = globalThis.document?.createElement?.('canvas');
   if (!element) return null;
   element.width = width; element.height = height;
-  return element.getContext?.('2d') ? element : null;
+  // These canvases are read back once (pixelateCanvas) and then become a texture. As a GPU canvas
+  // that read stalled the battle for 0.1-0.2 s the first time a move's storm or mark was needed
+  // (profiled 2026-11-11); kept in memory, the read is a plain copy.
+  return element.getContext?.('2d', {willReadFrequently: true}) ? element : null;
 }
 function seeded(seed) {
   let s = seed >>> 0;

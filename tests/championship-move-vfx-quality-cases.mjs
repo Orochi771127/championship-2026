@@ -287,7 +287,8 @@ test("refinement pass 6: a move's own contact piece is not stacked under a secon
   const arena = fs.readFileSync("src/championship/presentation/dataArena/dataArenaElementFx.js", "utf8");
   assert.match(arena, /piece: ownPiece === true/);
   const battle = fs.readFileSync("src/championship/presentation/battleFx/battleFxLayer.js", "utf8");
-  assert.match(battle, /piece: Boolean\(owner && moveVfxChoreography\(owner\.moveId\)\?\.contact\)/);
+  // 2026-11-11: read from the stand-in's entry. `owner` is out of scope at the hit stage; as written it threw and that frame was not drawn through.
+  assert.match(battle, /piece: Boolean\(entry\.moveId !== null && moveVfxChoreography\(entry\.moveId\)\?\.contact\)/);
   const bake = fs.readFileSync("scripts/vfx/bake-move-piece-vfx.mjs", "utf8");
   assert.match(bake, /core: \{fx: 'explosions\/plasma-explosion'/, "fire lands a plasma burst, not red balls");
 });

@@ -121,7 +121,7 @@ export async function mountBattleResultCharacters({stage,hudArt,participants,won
         shadow.ellipse(0,0,footWidth*0.32,footWidth*0.075).fill({color:0x0a0618,alpha:0.34});
         shadow.label='result contact shadow';scene.addChildAt(shadow,0);
       }
-      const sprite=new stage.PIXI.Sprite();scene.addChild(sprite);actors.push({sprite,shadow,speciesId:p.speciesId,anchor:anchors[i],sequence:seq});}
+      const sprite=new stage.PIXI.Sprite();scene.addChild(sprite);actors.push({sprite,shadow,speciesId:p.speciesId,anchor:anchors[i],sequence:seq,cells});}
     const {loadReviewedResultSub}=actors.length?await import('./reviewedCharacterLoader.js'):{loadReviewedResultSub:null};
     await wait(Promise.all(actors.map(async actor=>{
       const bundle=await loadReviewedResultSub({PIXI,sprite:actor.sprite,speciesId:actor.speciesId,sequenceId:actor.sequence,signal:loadSignal});
@@ -134,7 +134,12 @@ export async function mountBattleResultCharacters({stage,hudArt,participants,won
   }catch(error){dispose();throw error;}
   function apply(){for(const actor of actors){
     if(actor.reviewed){const frame=actor.reviewed.sample(elapsed);if(frame?.geometry){actor.sprite.scale.set(frameScale/frame.geometry.scale);continue;}}
-    const cell=hudArt.getBattleFrame(actor.speciesId,actor.sequence,elapsed);if(!cell)continue;
+    // Owner 2026-11-11 (「結算畫面看不到角色」): the HUD's getBattleFrame hands back the partner's
+    // illustration where one exists (the card portrait, 2026-10-30). It has no foot origin and was never
+    // loaded here, so on the public build one such partner threw and emptied the whole podium. The
+    // podium asks for the animation cell itself and, failing that, stands the body on a loaded cell.
+    const live=hudArt.getBattleCell?hudArt.getBattleCell(actor.speciesId,actor.sequence,elapsed):hudArt.getBattleFrame(actor.speciesId,actor.sequence,elapsed);
+    const cell=live?.origin&&loaded.has(live.src)?live:actor.cells.find(c=>c?.origin&&loaded.has(c.src));if(!cell)continue;
     const texture=loaded.get(cell.src);actor.sprite.texture=texture;
     actor.sprite.anchor.set(cell.origin[0]/cell.width,cell.origin[1]/cell.height);
     // Use logical cell size for both HD and legacy 1x textures.

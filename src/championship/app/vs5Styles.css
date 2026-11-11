@@ -852,10 +852,13 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 }
 .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter::before { display: none; }
 .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter[data-down="true"] { opacity: 1; filter: none; }
+/* Owner 2026-11-11: the fallen label sits over the fallen card's own TP row. As a fourth grid row it
+   made the whole card row taller the moment someone fell, which pushed the camera's safe window. */
 .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter[data-down="true"]::after {
-  position: static; grid-column: 1; justify-self: start; background: transparent;
-  color: var(--battle-hud-ink); padding: 0; line-height: 1.2;
+  position: static; grid-area: tp; justify-self: center; align-self: center; z-index: 2; background: transparent;
+  color: var(--battle-hud-ink); padding: 0; line-height: 1.2; pointer-events: none;
 }
+.cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter[data-down="true"] .cm-vs5-meter--resource .cm-vs5-meter__value { visibility: hidden; }
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter {
   display: grid; position: relative; grid-column: 1; height: auto; min-height: calc(16px * var(--text-scale, 1)); border-radius: 5px;
   background: rgb(12 42 48 / 34%); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 12%);

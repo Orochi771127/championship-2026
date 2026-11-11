@@ -92,7 +92,8 @@ function makeCanvas(width, height) {
   if (typeof doc?.createElement !== 'function') return null;
   const canvas = doc.createElement('canvas');
   canvas.width = width; canvas.height = height;
-  return canvas.getContext?.('2d') ? canvas : null;
+  // Read back once by pixelateCanvas: kept in memory so that read does not stall a frame (2026-11-11).
+  return canvas.getContext?.('2d', {willReadFrequently: true}) ? canvas : null;
 }
 
 /** Generated textures; null when no 2D canvas exists (Node tests). */
@@ -496,7 +497,9 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const owner = launches.find(l => describeMove(l.ownerSlot, l.moveId)?.bankIds.includes(actor.bankId));
         const vfx = owner ? vfxOf(owner.ownerSlot, owner.moveId) : null;
         const signature = owner ? signatureOf(owner.moveId) : null;
-        entry = {form: battleFxFamilyForm(family), signature, alive: true, standIn: false, trail: false, cells: vfx?.cells ?? [], stages: new Set(),
+        // moveId: the owning move, kept on the entry. The hit stage below read a block-scoped `owner` that no longer
+        // existed there, so that frame's redraw stopped half way and the move's contact piece never played (2026-11-11).
+        entry = {form: battleFxFamilyForm(family), signature, moveId: owner?.moveId ?? null, alive: true, standIn: false, trail: false, cells: vfx?.cells ?? [], stages: new Set(),
           paletteKey: signature?.paletteKey ?? vfx?.paletteKey ?? battleFxFamilyPalette(family) ?? 'neutral'};
         standIns.set(actor.id, entry);
       }
@@ -518,7 +521,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           const heavy = form === 'area' || form === 'character' || signature.tier === 'ultimate';
           // the HIT plays this move's own contact piece; the stand-in keeps only its flare and motif (pass 6)
           kit.impact({x: at.x, y: at.y, groundY: at.groundY, paletteKey, archetype, heavy, size: heavy ? size * 1.1 : size, planted: moveVfxArchetypeIsPlanted(archetype),
-            piece: Boolean(owner && moveVfxChoreography(owner.moveId)?.contact)});
+            piece: Boolean(entry.moveId !== null && moveVfxChoreography(entry.moveId)?.contact)});
         } else if (stage === 'body' || form === 'projectile' || form === 'stream' || form === 'beam') {
           // A body that lands and stands (a mushroom, a bomb) is drawn planted where the battle put it.
           kit.projectile({follow: during, paletteKey, archetype: shot, size, signature, planted: stage === 'body' && moveVfxArchetypeIsPlanted(archetype)});
@@ -632,13 +635,14 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           dim = juicy ? {focus: new Set([event.slot]), age: 0, life: BATTLE_FX_JUICY.dimMs, strength: BATTLE_FX_JUICY.dimStrength}
             : {focus: new Set([event.slot]), age: 0, life: 1150, strength: 0.45};
           speed = reducedMotion ? 0 : 1;
-          // Push in on the attacker, then pull out to show the whole path.
-          director?.sequence([{slots: [event.slot], durationMs: 650, boost: 0.38}, {slots: [event.slot, ...ctx.opponentsOf(event.slot)], durationMs: 1100, boost: -0.05}]);
+          // Push in on the attacker, then pull out to show the whole path. The original prelude zoom
+          // already closes on the caster, so this push stays gentle (calm shot, Owner 2026-11-11).
+          director?.sequence([{slots: [event.slot], durationMs: 650, boost: 0.26}, {slots: [event.slot, ...ctx.opponentsOf(event.slot)], durationMs: 1100, boost: -0.05}]);
           { const s = toScreen(ctx, info.x, info.top + info.height * 0.5); hitFeel?.rush(s.x, s.y); }
           director?.shake(0.18);
-        } else {
-          director?.sequence([{slots: [event.slot, ...ctx.opponentsOf(event.slot)], durationMs: 900, boost: 0.14}]);
         }
+        // An ordinary attack does not re-aim the shot (calm shot, Owner 2026-11-11): six fighters
+        // launching in turn re-aimed it several times a second. The standing framing shows it.
         continue;
       }
       if (event.type === 'HIT') {
@@ -729,8 +733,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           if (!vfx) spawnScorch({x: hit.x, groundY: hit.groundY, size: target.width * 1.1});
           director?.impact(choreo?.shake ?? 'heavy', fx.knockDir);
           { const s = toScreen(ctx, hit.x, hit.y); hitFeel?.shock(s.x, s.y, {reach: target.width * (ctx.camera?.zoom ?? 1) * 1.8}); }
-          // A signature hit pushes the lens toward the contact (1.22x, 260 ms).
-          if (look?.tier === 'ultimate') { director?.lens?.({x: hit.x, y: hit.y, amount: 0.22, ms: 260}); director?.slowMo?.(BATTLE_FX_JUICY.slowMoMs); }
+          // A signature hit pushes the lens toward the contact (1.12x, 300 ms).
+          if (look?.tier === 'ultimate') { director?.lens?.({x: hit.x, y: hit.y, amount: 0.12, ms: 300}); director?.slowMo?.(BATTLE_FX_JUICY.slowMoMs); }
           screenFlash = Math.max(screenFlash, 0.18);
         } else if (tier === 'medium') { director?.impact(choreo?.shake ?? 'medium', fx.knockDir); }
         else if (choreo?.shake && choreo.shake !== 'light') director?.impact(choreo.shake, fx.knockDir);
@@ -779,8 +783,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         debris({x: info.x, y: info.groundY, groundY: info.groundY, count: rich ? 12 : 6, palette: BATTLE_FX_PALETTES.earth, power: 1.1});
         spawnScorch({x: info.x, groundY: info.groundY, size: info.width * 1.4, life: 3200});
         // Hold on the knockout, then pull back out to the remaining fighters.
-        ctx.camera?.director?.sequence([{slots: [event.slot], durationMs: 1200, boost: 0.3, includeDown: true}, {slots: null, durationMs: 900, boost: -0.08}]);
-        ctx.camera?.director?.shake(0.6);
+        ctx.camera?.director?.sequence([{slots: [event.slot], durationMs: 900, boost: 0.26, includeDown: true}, {slots: null, durationMs: 700, boost: -0.08}]);
+        ctx.camera?.director?.shake(0.45);
         screenFlash = Math.max(screenFlash, 0.45);
         if (event.teamDown) { showBanner('K.O.!', {size: 44, fill: 0xffe36a, life: 1500}); ctx.camera?.director?.slowMo?.(BATTLE_FX_JUICY.slowMoMs); }
         else { const p = toScreen(ctx, info.x, info.top); word({screenX: p.x, screenY: p.y - 8, content: text('倒下！'), size: 20, fill: 0xffb4a0}); }

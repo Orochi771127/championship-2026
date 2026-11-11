@@ -35,5 +35,7 @@ export async function loadPublicCharacterHudArt({baseUrl,fetchImpl=globalThis.fe
   getPortrait:id=>newArtPortraitLike(canonical(id),get(id)?.portrait??null),
   getMedal:id=>originalMedalArt(id,baseUrl),getCageThumbnail(id){const src=originalCageLocationArt(id,baseUrl);return src?{src}:null;},
   getBattleCells(id,sequenceId){const bank=get(id)?.battle,sequence=bank?.sequences.find(s=>s.id===sequenceId);return sequence?[...new Set(sequence.frames.map(f=>f.cell))].map(cell=>bank.cells.get(cell)):[];},
-  getBattleFrame(id,sequenceId,elapsed){const bank=get(id)?.battle,art=bank?newArtPortrait(canonical(id)):null;if(art)return art;const sequence=bank?.sequences.find(s=>s.id===sequenceId);return bank?.cells.get(nativeAnimationCellAt(sequence,elapsed))??null;}});
+  getBattleFrame(id,sequenceId,elapsed){const bank=get(id)?.battle,art=bank?newArtPortrait(canonical(id)):null;if(art)return art;const sequence=bank?.sequences.find(s=>s.id===sequenceId);return bank?.cells.get(nativeAnimationCellAt(sequence,elapsed))??null;},
+  // The animation cell itself (foot origin, logical size), never the illustration: for a body drawn on a stage.
+  getBattleCell(id,sequenceId,elapsed){const bank=get(id)?.battle,sequence=bank?.sequences.find(s=>s.id===sequenceId);return bank?.cells.get(nativeAnimationCellAt(sequence,elapsed))??null;}});
 }

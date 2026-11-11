@@ -84,13 +84,17 @@ test('the director keeps every standing fighter in the window through a focus, a
   assert.ok(worst >= -1, `a standing fighter left the safe window by ${-worst}px`);
 });
 
-test('a hit pushes the shot in about 8 % with a kick along the blow, then settles', () => {
+// Owner 2026-11-11 (calm shot): a medium hit only shakes lightly; a heavy hit pushes in about 5 %.
+test('a heavy hit pushes the shot in about 5 % with a kick along the blow, then settles; a medium hit only shakes', () => {
   const director = createBattleFxCamera({boundedMap: true, wideCover: false});
   const subjects = [body(0, 400, 330), body(3, 480, 330)];
   for (let i = 0; i < 40; i++) director.update({dtMs: 16, viewport, art, subjects, insets});
   assert.equal(director.impact('medium', 1), true);
+  assert.equal(director.getState().punch, 0, 'a medium hit does not zoom');
+  assert.ok(director.getState().trauma > 0 && director.getState().trauma <= 0.1, 'a medium hit shakes lightly');
+  assert.equal(director.impact('heavy', 1), true, 'a heavy hit overrides a medium one');
   const state = director.getState();
-  assert.ok(state.punch >= 0.079 && state.punch <= 0.14, `punch ${state.punch}`);
+  assert.ok(state.punch >= 0.049 && state.punch <= 0.14, `punch ${state.punch}`);
   for (let i = 0; i < 20; i++) director.update({dtMs: 16, viewport, art, subjects, insets});
   assert.ok(director.getState().punch < 0.02, 'the push settles within about 300 ms');
 });

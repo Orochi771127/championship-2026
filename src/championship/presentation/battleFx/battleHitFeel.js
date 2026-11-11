@@ -8,7 +8,11 @@
 //   rush(x, y)    a radial blur toward a signature move's caster (~220 ms)
 // A filter sits on the camera container only while one runs, and its area is
 // the screen, never the map: a filter over the whole map is what once ran the
-// iPhone out of GPU memory (2026-11-04). Off on the saver tier and with reduced
+// iPhone out of GPU memory (2026-11-04). Pixi maps a filter area through its
+// container's own transform, so the screen rectangle is handed over in the
+// camera's local space (frame(), Owner 2026-11-11): written as plain screen
+// pixels it slid off the screen with every pan and zoom, and the field went
+// black for the length of the effect. Off on the saver tier and with reduced
 // motion. Presentation only; it owns no clock (the scene passes the ticker's dt).
 
 const VERTEX = `in vec2 aPosition;
@@ -85,6 +89,13 @@ export function createBattleHitFeel({PIXI, target, screen, quality = 'balanced',
   const runs = {shock: null, split: null, rush: null};
   const stats = {shocks: 0, splits: 0, rushes: 0, peakActive: 0};
   let attached = false;
+  // The camera the container is drawn with this frame: screen = local * zoom + (x, y).
+  let camera = {zoom: 1, x: 0, y: 0};
+  /** The screen rectangle in the camera container's local space. */
+  function screenArea() {
+    const {width, height} = screen(), zoom = camera.zoom > 0 ? camera.zoom : 1;
+    return new PIXI.Rectangle(-camera.x / zoom, -camera.y / zoom, Math.max(1, width) / zoom, Math.max(1, height) / zoom);
+  }
 
   function update(dtMs) {
     const active = [];
@@ -101,8 +112,7 @@ export function createBattleHitFeel({PIXI, target, screen, quality = 'balanced',
     }
     stats.peakActive = Math.max(stats.peakActive, active.length);
     if (active.length) {
-      const {width, height} = screen();
-      target.filterArea = new PIXI.Rectangle(0, 0, Math.max(1, width), Math.max(1, height));
+      target.filterArea = screenArea();
       target.filters = active; attached = true;
     } else if (attached) { target.filters = null; target.filterArea = null; attached = false; }
   }
@@ -115,8 +125,19 @@ export function createBattleHitFeel({PIXI, target, screen, quality = 'balanced',
     /** A signature move's release: the scene rushes toward its caster. */
     rush(x, y, {strength = 0.12} = {}) { if (filters.rush) { runs.rush = {x, y, strength, age: 0, life: RUSH_MS}; stats.rushes++; } },
     update,
+    /** Called once the camera transform of this frame is set, so the filter covers exactly the screen. */
+    frame({zoom = 1, x = 0, y = 0} = {}) {
+      if (!Number.isFinite(zoom) || !Number.isFinite(x) || !Number.isFinite(y)) return;
+      camera = {zoom, x, y};
+      if (attached) target.filterArea = screenArea();
+    },
     active: () => attached,
-    getDiagnostics: () => Object.freeze({...stats, active: attached}),
+    getDiagnostics: () => {
+      const area = attached ? target.filterArea : null;
+      // Where the filter lands on screen: with the camera applied it must be the whole screen.
+      return Object.freeze({...stats, active: attached, screenArea: area ? Object.freeze({x: area.x * camera.zoom + camera.x, y: area.y * camera.zoom + camera.y,
+        width: area.width * camera.zoom, height: area.height * camera.zoom}) : null});
+    },
     dispose() {
       if (attached) { target.filters = null; target.filterArea = null; }
       for (const filter of Object.values(filters)) filter?.destroy?.();
