@@ -48,7 +48,7 @@
 
 .int-rh2-root .int-rh2-companion__name {
   color: #10405c;
-  font-size: clamp(14px, 4.4vw, 17px);
+  font-size: clamp(14px, calc(4.4 * var(--cm-vw, 1vw)), 17px);
   text-shadow: none;
 }
 .int-rh2-root .int-rh2-companion__place {
@@ -56,7 +56,7 @@
   background: rgba(255, 255, 255, 0.82);
   box-shadow: inset 0 0 0 1px rgba(98, 170, 205, 0.5);
 }
-.int-rh2-root .int-rh2-companion__location { color: #17506e; font-size: 11px; text-shadow: none; }
+.int-rh2-root .int-rh2-companion__location { color: #17506e; font-size: calc(11px * var(--text-scale, 1)); text-shadow: none; }
 
 /* One row per readout: icon and label, then a meter with its number inside. */
 .int-rh2-root .int-rh2-vitals {
@@ -69,7 +69,7 @@
   align-items: center;
   gap: 5px;
   color: #2b6484;
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale, 1));
   font-weight: 800;
   text-shadow: none;
 }
@@ -116,7 +116,7 @@
 .int-rh2-root .int-rh2-vitals__num {
   position: relative;
   color: #0e3f5c;
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale, 1));
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.72);
@@ -130,7 +130,7 @@
   background: rgba(255, 255, 255, 0.86);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9), 0 6px 14px rgba(10, 52, 80, 0.22);
   color: #17506e;
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale, 1));
   font-weight: 700;
   text-shadow: none;
 }
@@ -209,7 +209,7 @@
 /* ---- 16.3 The tool rail: rounded pills with their names showing -------- */
 .cm-toolbar[data-mode] .cm-toolbar__rail {
   gap: 6px;
-  padding: 7px clamp(6px, 2vw, 12px) calc(7px + env(safe-area-inset-bottom, 0px));
+  padding: 7px clamp(6px, calc(2 * var(--cm-vw, 1vw)), 12px) calc(7px + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.52), rgba(220, 242, 255, 0.34));
   backdrop-filter: blur(16px) saturate(1.2);
   -webkit-backdrop-filter: blur(16px) saturate(1.2);
@@ -249,7 +249,7 @@
   overflow: visible;
   clip-path: none;
   color: #2a6b8c;
-  font-size: 10px;
+  font-size: calc(10px * var(--text-scale, 1));
   font-weight: 700;
   letter-spacing: 0.02em;
   line-height: 1;
@@ -309,7 +309,7 @@
   background: rgba(255, 255, 255, 0.92);
   box-shadow: inset 0 0 0 1px rgba(98, 170, 205, 0.5);
   color: #16506e;
-  font-size: 9px;
+  font-size: calc(9px * var(--text-scale, 1));
   font-weight: 800;
   text-shadow: none;
 }
@@ -824,7 +824,7 @@
 
 /* ---- 5.1 The confirmation dialog (uiDialog.js) ------------------------ */
 dialog.cm-dialog {
-  width: min(92vw, 380px);
+  width: min(calc(92 * var(--cm-vw, 1vw)), 380px);
   max-width: none;
   margin: auto;
   padding: 0;
@@ -1230,7 +1230,7 @@ dialog.cm-dialog::backdrop {
   box-shadow: inset 3px 0 0 #2fa9e0, inset 0 0 0 1px rgba(122, 190, 224, 0.6);
   color: #0f3f5c;
   font: inherit;
-  font-size: 16px;
+  font-size: calc(16px * var(--text-scale, 1));
 }
 .cm-digimon-rename__message { margin: 0; min-height: 1em; color: #b3321d; font-size: 0.78rem; font-weight: 700; }
 .cm-digimon-rename__actions { display: flex; gap: 10px; }

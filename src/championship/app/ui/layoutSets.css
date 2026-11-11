@@ -1,0 +1,418 @@
+/* Three layout sets — phone upright, phone sideways, desktop (Owner 2026-11-11).
+ *
+ * The full-game audit of 2026-11-11 walked every page in six windows (1920x1080, 1366x768,
+ * 844x390, 667x375, 390x844, 375x667). This sheet holds what that audit changed, grouped by
+ * page, and loads last so each rule states its layout set once instead of being threaded
+ * through the page's own sheet.
+ *
+ *   upright   body without [data-landscape-menu], [data-desktop-*] or [data-cage-landscape]
+ *   sideways  body[data-landscape-menu] / [data-cage-landscape] / (orientation: landscape) and (max-height: 520px)
+ *   desktop   body[data-desktop-raising] / [data-desktop-menu] / [data-desktop-browse]; a window
+ *             larger than 1366x768 shows the same desktop set zoomed (portraitFrame.js,
+ *             <html data-ui-zoom>), so nothing here is sized for a particular monitor.
+ *
+ * Rules keep every id, class and data hook the browser gates use. Nothing here touches the
+ * title, the logo, the main menu or the opening (#cm-title and its descendants).
+ * Report: docs/reports/ui-three-layouts-2026-11-11/REPORT_ZH_TW.md
+ */
+
+/* ==== Partner list (管理 → 夥伴名單) ===================================================== *
+ * The element badges and the chart key shared a row of three with 世代 and 性格: at phone
+ * width that left them a 75px column, so the badges stacked, the chart key wrapped one
+ * character per line and the two neighbours stretched to match. Two facts per row, the
+ * element row on its own line. */
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-group="identity"] { grid-column: span 6; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="taxonomy"] { grid-column: 1 / -1; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="taxonomy"] .cm-taxonomy-detail { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+:root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-stat[data-row="taxonomy"] .cm-element-chart-button { flex: 0 0 auto; white-space: nowrap; margin-inline-start: auto; }
+
+/* ==== Battle selection (對戰) ============================================================= *
+ * The sponsor contract panel lives in the header. Upright it pushed the mode prism (the one
+ * control this page is for) below the fold on a 667px phone; sideways it took the header
+ * grid's first column and squeezed the Data Arena key into a 34px strip at the screen edge.
+ * The header stops being a box, so its parts take their places in the page's own flow:
+ * title, Data Arena, prism, matches or team, and the optional contract last. */
+@media (max-width: 699px) {
+  body:not([data-desktop-menu]):not([data-landscape-menu]):not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header { display: contents; }
+  body:not([data-desktop-menu]):not([data-landscape-menu]):not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > * { margin-inline: 16px; }
+  body:not([data-desktop-menu]):not([data-landscape-menu]):not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-kicker { align-self: flex-start; margin-top: 12px; }
+  body:not([data-desktop-menu]):not([data-landscape-menu]):not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-sponsors { order: 8; margin-block: 4px 12px; }
+  body:not([data-desktop-menu]):not([data-landscape-menu]):not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer { order: 9; }
+}
+/* Tablets and desktop: the header row (title, Data Arena and the contract) was 409px of a
+   720px page, so the prism began below the fold on a 1366x768 laptop (its caption and enter
+   key under the footer) and the team list had 328px. The prism has the left column to
+   itself; the right column reads top to bottom: Data Arena, the matches or the team, then
+   the optional contract. */
+@media (min-width: 700px) and (min-height: 521px) {
+  body:not([data-portrait-frame]):not([data-landscape-menu]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-shell {
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    grid-template-areas: "title arena" "cube list" "cube sponsors" "footer footer";
+    row-gap: var(--sp-3);
+  }
+  body:not([data-portrait-frame]):not([data-landscape-menu]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-shell:has(.cm-vs5-cube[hidden]) {
+    grid-template-areas: "title arena" "list list" "sponsors sponsors" "footer footer";
+  }
+  body:not([data-portrait-frame]):not([data-landscape-menu]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header { display: contents; }
+  body:not([data-portrait-frame]):not([data-landscape-menu]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-kicker { display: none; }
+  body:not([data-portrait-frame]):not([data-landscape-menu]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-title { grid-area: title; align-self: center; margin: var(--sp-4) 0 0; }
+  body:not([data-portrait-frame]):not([data-landscape-menu]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-data-arena:not([hidden]) { grid-area: arena; align-self: center; margin: var(--sp-4) 0 0; }
+  body:not([data-portrait-frame]):not([data-landscape-menu]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-sponsors { grid-area: sponsors; margin: 0; }
+  body:not([data-portrait-frame]):not([data-landscape-menu]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube {
+    grid-area: cube; align-self: center; justify-self: center;
+    /* As wide as the column allows while prism and caption (about 0.82 of the width plus 100px) fit the page. */
+    max-width: min(400px, 100%, calc((calc(100 * var(--cm-dvh, 1dvh)) - 380px) / 0.82));
+  }
+  body:not([data-portrait-frame]):not([data-landscape-menu]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__note { display: none; }
+  body:not([data-portrait-frame]):not([data-landscape-menu]) .cm-vs5-root[data-screen="BATTLE_SELECT"] :is(.cm-vs5-matches, .cm-vs5-party, .cm-vs5-entry-notice) { grid-row: 2; }
+  /* Choosing the team: the prism has stepped aside, so the list takes both columns. */
+  body:not([data-portrait-frame]):not([data-landscape-menu]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-shell:has(.cm-vs5-cube[hidden]) :is(.cm-vs5-party, .cm-vs5-entry-notice) { grid-column: 1 / -1; }
+}
+@media (min-width: 700px) and (max-width: 1023px) and (min-height: 521px) {
+  body:not([data-portrait-frame]):not([data-landscape-menu]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-shell:not(:has(.cm-vs5-cube[hidden])) .cm-vs5-sponsors__keys { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  :root[data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-shell {
+    grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.4fr); grid-template-rows: none; grid-auto-rows: auto; row-gap: 8px;
+  }
+  :root[data-theme][data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header { display: contents; }
+  :root[data-theme][data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-kicker { display: none; }
+  :root[data-theme][data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-title {
+    grid-column: 1; grid-row: 1; align-self: center; margin: 8px 0 0; font-size: calc(24px * var(--text-scale, 1));
+  }
+  :root[data-theme][data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-data-arena:not([hidden]) {
+    grid-column: 2; grid-row: 1; margin-top: 8px; min-height: 48px; padding: 5px 12px 6px 16px;
+  }
+  :root[data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube { grid-column: 1; grid-row: 2; justify-self: center; }
+  :root[data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__note { display: none; }
+  :root[data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] :is(.cm-vs5-matches, .cm-vs5-party, .cm-vs5-entry-notice) { grid-column: 2; }
+  :root[data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-sponsors { grid-column: 1 / -1; order: 8; margin-top: 0; }
+  :root[data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer { grid-area: auto; grid-column: 1 / -1; order: 9; }
+}
+/* The stake steppers were 32px keys. */
+.cm-vs5-sponsors__step { min-width: 40px; min-height: 40px; }
+
+/* ==== Ranch menus, sideways ============================================================== *
+ * With the notch insets the four-across tiles were about 95px wide and still carried their
+ * hint line: every label broke after two characters (探索／手帳). Sideways the tiles are
+ * one line of label, like the 系統 group already was. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root body .cm-toolbar__menu .cm-toolbar__entry-hint { display: none; }
+  :root body .cm-toolbar__menu .cm-toolbar__entry { min-height: 48px; align-content: center; }
+  :root body .cm-toolbar__menu .cm-toolbar__entry-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  :root body .cm-toolbar__menu .cm-toolbar__group { row-gap: 6px; }
+}
+
+/* ==== Shop: Cyber Gachapon, sideways ===================================================== *
+ * The prize-pool preview joined the machine pane after the sideways layout was drawn: it took
+ * a row of the two-row grid, the cabinet collapsed to 44px, the odds plate sat on the pull
+ * keys and the pity gauge ran over the pool. The cabinet row has its own height again and the
+ * pool is a full-width row to scroll to. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .cm-gacha[data-mode="MACHINE"] .cm-gacha__pane--machine { grid-template-rows: auto auto auto; align-content: start; overflow-y: auto; }
+  .cm-gacha__pane--machine > .cm-gacha__deck { grid-column: 1; grid-row: 1 / span 2; height: 138px; min-height: 138px; }
+  .cm-gacha__pane--machine > .cm-gacha__pulls { grid-column: 2; grid-row: 1; }
+  .cm-gacha__pane--machine > .cm-gacha__rates { grid-column: 2; grid-row: 2; align-self: start; }
+  .cm-gacha__pane--machine > .cm-gacha__pool { grid-column: 1 / -1; grid-row: 3; }
+  /* Furnace: the directed-forge list (added later too) sat under the keys in a pane that
+     does not scroll, so everything past its title was out of reach. The pane scrolls; the
+     chip list keeps its own height beside the keys and the forge is a full-width row. */
+  .cm-gacha[data-mode="SYNTH"] .cm-gacha__pane--synth { grid-template-rows: auto auto auto; align-content: start; overflow-y: auto; overscroll-behavior: contain; }
+  .cm-gacha__pane--synth > .cm-gacha__chip-grid { grid-row: 2; height: 168px; }
+  .cm-gacha__pane--synth > .cm-gacha__forge { grid-column: 1 / -1; grid-row: 3; }
+}
+
+/* ==== Facility editor (設施配置) ========================================================= *
+ * The land key moved into the top toolbar, so the older "land key steps aside while a cage
+ * is selected" rule no longer reached it: on a 667px phone the selection panel (three rows
+ * of keys) rose over the land counter and the land key. The land key steps aside again, the
+ * panel's keys sit two by two, and the toolbar stops short of the corner keys so the two
+ * never share a row sideways (844x390). */
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld:has(.cm-hexworld__selection:not([hidden])) .cm-hexworld__toolbar .cm-cage-row-lock { display: none; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__toolbar { max-width: calc(100% - 20px - 56px); pointer-events: none; }
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__toolbar > * { pointer-events: auto; }
+@media (max-width: 600px), (max-height: 500px) and (orientation: landscape) {
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__selection:not([hidden]) { padding: 6px 8px; gap: 4px; }
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__selected { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: calc(13px * var(--text-scale, 1)); }
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__actions > .cm-vs2-action { min-width: 0; min-height: 40px; padding: 2px 8px; font-size: calc(13px * var(--text-scale, 1)); white-space: nowrap; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  :root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__actions { grid-template-columns: repeat(4, minmax(0, auto)); justify-content: start; }
+}
+
+/* ==== Page footers, sideways ============================================================= *
+ * The shop, hunt and facility pages closed with a cream slab across the whole screen while
+ * the other pages (partner list, licence, schedule) close with the dark dock. One dock. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root[data-theme="arcade"] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen] .cm-vs2-footer,
+  :root[data-theme="arcade"] body[data-cage-landscape]:not([data-portrait-frame]) .cm-vs2-root[data-screen] .cm-vs2-footer {
+    padding-top: 8px;
+    background: linear-gradient(180deg, rgba(14, 16, 26, 0) 0, rgba(14, 16, 26, 0.88) 8px, #16142a 18px);
+  }
+  /* A product's sheet: with 16px of padding the card was 20px short of its own content, so
+     the price line sat under the pinned 關閉／購買 keys. */
+  .cm-vs2-shop__sheet { padding: 6px 16px; }
+  :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__sheet .cm-vs2-shop__detail { --shop-detail-art: 104px; max-height: 100%; padding-block: 10px; }
+}
+
+/* ==== Hunt field, sideways and desktop ==================================================== *
+ * The side panel is a paper card that stretched the full height of the field: on a desktop
+ * it was a tall empty slab beside the map. The card is as tall as what it holds. */
+body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-panel { align-self: start; max-height: 100%; margin-top: 8px; padding-inline: 8px; }
+
+/* ==== Data Arena, sideways =============================================================== *
+ * Relay: the two partner-switch keys were stacked up the left edge and the upper one reached
+ * the resonance chips under the vitals (心輝守護 was covered on 667x375). Sideways the two
+ * keys sit side by side above the move pad. */
+@media (orientation: landscape) and (max-height: 520px) {
+  /* dataArena.css loads with the arena, after this sheet: the doubled class outranks it. */
+  .da-root.da-root[data-mode="RELAY"] .da-tbtn.da-tbtn--switch2 { bottom: calc(var(--da-control-bottom) + 148px); left: calc(max(16px, env(safe-area-inset-left)) + 80px); }
+}
+
+/* ==== Journey (征途) ====================================================================== *
+ * The three tabs were 36px keys. */
+/* journey.css loads with the page, after this sheet: the parent class outranks it. */
+.cm-journey .cm-journey__tab { min-height: 44px; }
+
+/* ==== Badge detail (徽章收藏) ============================================================= *
+ * The close key was the last row of a long sheet: upright and on a laptop it was below the
+ * fold, and sideways (where it was pinned) the badge's name showed under it through the
+ * sheet's lower padding. The key stays pinned in every set over a solid foot; sideways the
+ * badge turns on the left and its record reads on the right. */
+.cm-medal-dialog { padding-bottom: 0; }
+/* (The arcade key style sets position: relative with more weight; this outranks it.) */
+:root:root body .cm-medal-dialog > .cm-vs2-action { position: sticky; bottom: var(--sp-5); z-index: 2; margin-top: var(--sp-3); }
+.cm-medal-dialog::after { content: ""; display: block; position: sticky; bottom: 0; z-index: 1; height: var(--sp-5); margin-top: calc(-1 * var(--sp-5)); background: inherit; pointer-events: none; }
+.cm-medal-dialog > .cm-vs2-action { box-shadow: 0 calc(-1 * var(--sp-3)) 0 0 var(--c-surface-1), 0 4px 0 var(--ax-ink, transparent); }
+@media (max-height: 500px) and (orientation: landscape) {
+  .cm-medal-dialog[open] { display: grid; grid-template-columns: minmax(200px, 240px) minmax(0, 1fr); column-gap: 16px; align-content: start; width: min(760px, calc(100% - 32px - env(safe-area-inset-left) - env(safe-area-inset-right))); padding-top: var(--sp-3); }
+  .cm-medal-dialog[open] > * { grid-column: 2; }
+  .cm-medal-dialog[open] > .cm-medal-display { grid-column: 1; grid-row: 1 / span 12; align-self: start; position: sticky; top: 0; }
+  .cm-medal-dialog[open] > .cm-vs2-action, .cm-medal-dialog[open]::after { grid-column: 1 / -1; }
+}
+
+/* ==== Backpack (背包) ===================================================================== *
+ * Sideways the note, the wallet line and the tabs left room for one item. The note steps
+ * aside there and the items sit two across; a desktop window shows two across as well
+ * instead of one 320px column beside an empty ranch. */
+@media (max-height: 500px) and (orientation: landscape) {
+  dialog.cm-dialog:has(.cm-backpack) .cm-dialog__message { display: none; }
+  dialog.cm-dialog:has(.cm-backpack) .cm-dialog__panel { gap: 6px; padding-block: 12px; }
+  dialog.cm-dialog:has(.cm-backpack) .cm-backpack { gap: 8px; max-height: calc(72 * var(--cm-dvh, 1dvh)); }
+  :where(body:has(#cm-root:not([hidden]))) dialog.cm-dialog:has(.cm-backpack) { width: min(760px, calc(calc(100 * var(--cm-vw, 1vw)) - 32px - var(--safe-left) - var(--safe-right))); }
+  dialog.cm-dialog:has(.cm-backpack) .cm-backpack__list { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+}
+@media (min-width: 1024px) and (min-height: 600px) {
+  dialog.cm-dialog:has(.cm-backpack) { width: min(760px, calc(calc(100 * var(--cm-vw, 1vw)) - 64px)); max-width: none; }
+  dialog.cm-dialog:has(.cm-backpack) .cm-backpack__list { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+}
+
+/* ==== Schedule (賽程) ===================================================================== *
+ * Two days share a row upright, so six-character titles ended in an ellipsis (百萬孤身…).
+ * A title may take a second line there. */
+@media (max-width: 600px) {
+  :root[data-theme="arcade"] body .cm-schedule-root .cm-schedule-fixture__name { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; line-height: 1.2; }
+}
+
+/* ==== Shop: 5-in-1 furnace, desktop ====================================================== *
+ * Five square slots across an 1100px column were 210px tall: the two keys under them and the
+ * recipe list sat below the fold on a 768px window. A slot is at most 96px. */
+@media (min-width: 700px) and (min-height: 521px) {
+  .cm-gacha__pane--synth > .cm-gacha__slots { grid-template-columns: repeat(5, minmax(0, 96px)); justify-content: center; gap: 12px; }
+}
+
+/* ==== Sheets and briefings, sideways ===================================================== *
+ * A fixture's sheet (賽程) was 3px taller than a 375px screen: 關閉 and the entry key were cut
+ * at the bottom edge. The Data Arena briefing ended 12px below its panel, so 開始挑戰 needed a
+ * scroll nobody expects. Both fit the screen; a sheet's keys stay pinned while its copy scrolls. */
+@media (max-height: 500px) and (orientation: landscape) {
+  body:not([data-portrait-frame]) .cm-sheet > .cm-sheet__panel { max-height: 100%; gap: 8px; padding-block: 14px; }
+  body:not([data-portrait-frame]) .cm-sheet > .cm-sheet__panel > .cm-sheet__actions { position: sticky; bottom: -14px; margin: 0 0 -14px; padding: 8px 0 14px; background: inherit; }
+  .da-root .da-overlay .da-panel.da-panel--brief { padding: 12px 18px; }
+  .da-root .da-overlay .da-panel--brief .da-controls { margin: 6px 0; line-height: 1.5; }
+  .da-root .da-overlay .da-panel--brief :is(.da-goal, .da-tips) { margin-block: 4px; }
+}
+
+/* ==== Reading size: the last holdouts ==================================================== *
+ * 設定 → 文字大小 now reaches every game sheet (scripts/qa/apply-text-scale.mjs). The licence's
+ * code strip is styled by the opening's sheet, which keeps its sizes as typed, so it is
+ * restated here; a shop title gets the line height its larger size needs. */
+.cm-tamer-root .cm-tamer-code { font-size: calc(12px * var(--text-scale, 1)); }
+.cm-tamer-root .cm-tamer-code__value { font-size: calc(16px * var(--text-scale, 1)); }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__name strong { line-height: 1.3; }
+
+/* ==== Help (說明) ========================================================================= *
+ * The category headings were dark ink on the page's dark purple (1.5:1) and the topic last
+ * read was a see-through tint with dark ink on that same purple: both were unreadable in
+ * every layout set. Headings take the page's own lede colours; the read topic is a solid tile. */
+:root[data-theme="arcade"] body .cm-help-root .cm-help-heading { color: #fff; text-shadow: 0 1px 0 #0e101a; font-size: calc(13px * var(--text-scale, 1)); opacity: 0.92; }
+:root[data-theme="arcade"] body .cm-help-root .cm-help-heading::before { opacity: 1; filter: brightness(0) invert(1); }
+:root[data-theme="arcade"] body .cm-help-root .cm-help-topic[aria-pressed="true"] { background: #e6d9ff; box-shadow: inset 0 0 0 2px var(--ax-purple, #a259ff), 0 4px 0 var(--ax-ink, #14141f); }
+
+/* ==== Badge collection (徽章收藏) ========================================================= *
+ * A badge that unlocks something carries a key mark on the art's upper left, which is where
+ * the tile prints its number: on a phone the mark covered it (01 read as 0). The mark sits on
+ * the upper right; the lower right keeps the earned tick. */
+.cm-medals__artwork > .cm-medals__key { left: auto; right: -2px; }
+
+/* ==== Battle result, small upright phones ================================================ *
+ * At 375px the two score tables left the partner's name a 34px column: the MVP mark broke
+ * in two (MV / P) and a three-character name lost its last character. The mark takes its
+ * own line above the name, the number columns are as wide as their figures, and the card
+ * spends less of its height on padding so the tables are in view without a scroll. */
+@media (max-width: 400px) {
+  :root .cm-vs5-root .cm-vs5-result__row { grid-template-columns: minmax(0, 1fr) minmax(2.6em, auto) minmax(1.8em, auto); font-size: calc(11px * var(--text-scale, 1)); }
+  .cm-vs5-result__row-name { display: grid; justify-items: start; gap: 1px; }
+  .cm-vs5-result__mvp { margin-right: 0; white-space: nowrap; }
+  .cm-vs5-result__side { padding: 5px 7px 6px; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body { padding: 12px 12px 10px; gap: 6px; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body .cm-vs5-title { font-size: calc(26px * var(--text-scale, 1)); line-height: 1.15; }
+  :root:not([data-theme="classic"]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body .cm-vs5-result__settlement { padding-block: 6px; }
+}
+
+/* ==== Data Arena lobby, desktop ========================================================== *
+ * Relay's three seats were laid three across, but the swap key between seat one and seat two
+ * took a full row: seat one stood alone in a third of the panel and every move name on its
+ * 50px tiles ended in an ellipsis (焰…). The three seats share one row with the swap key
+ * under them, and the lobby may use 1080px of a desktop window instead of 760. */
+@media (min-width: 720px) {
+  .da-root.da-root[data-mode="RELAY"] .da-dock__seats > .da-dock__swap { order: 9; }
+}
+@media (min-width: 1024px) and (min-height: 600px) {
+  .da-root .da-overlay .da-panel.da-panel--select { width: min(1080px, 100%); }
+}
+
+/* ==== Ranch partner card, small sideways phones ========================================== *
+ * The catalyst key joined the card after its width was set: with the meters open the card
+ * left 53% of a 667x375 stage in view (the audit's floor is 55%). It is 40px narrower there. */
+@media (max-height: 500px) and (orientation: landscape) and (max-width: 700px) {
+  :root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden]))[data-desktop-raising] .int-rh2-root .int-rh2-companion { width: 196px; }
+}
+
+/* ==== Match cards in a narrow column ====================================================== *
+ * An upright tablet's two-column battle page gives the matches about 350px: the fee and the
+ * prize pill overlapped there, as they did on narrow phones before 2026-11-01. Same answer. */
+@media (min-width: 700px) and (max-width: 900px) and (min-height: 521px) {
+  :root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match > .cm-vs5-match__enter {
+    grid-template-columns: 58px minmax(0, 1fr) 14px;
+    grid-template-areas: "crest name arrow" "crest fee arrow" "crest payout arrow";
+  }
+  :root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match__enter > .cm-vs5-match__payout { justify-self: start; }
+}
+
+/* ==== Gachapon single result, 375px-high phones ========================================== *
+ * When a pull overflows a full stock the result adds a notice line; on a 667x375 phone that
+ * line pushed 確定收下 and 再抽一次 15px past the bottom edge. The single card is a little
+ * smaller there, so title, card, notice and both keys share the screen. */
+@media (max-height: 400px) and (orientation: landscape) {
+  .cm-gacha__cards[data-count="1"] { grid-template-columns: minmax(0, 108px); }
+  .cm-gacha__reveal-inner { gap: 6px; }
+}
+
+/* ==== Page exits, sideways: no footer row (Owner 2026-11-11) ============================= *
+ * 「那兩塊就又大又厚，然後佔了很多空間」: on a phone held sideways the back row took 57–63px
+ * of a 375–390px screen on every page. Sideways the row has no height and no band: the
+ * page's keys float together in the lower right corner (the right thumb's reach; the lower
+ * left belongs to panels such as the editor's selection and the gate preview), over the
+ * page, which now runs to the bottom edge. Lists end with room to scroll clear of the keys.
+ * Keys, ids and order are unchanged. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-root[data-screen] .cm-vs2-footer, .cm-screen-footer, .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer) {
+    position: sticky; bottom: 0; z-index: 6;
+    display: flex; align-items: flex-end; justify-content: flex-end; gap: 8px;
+    height: 0; min-height: 0; padding-block: 0; border: 0; background: none; box-shadow: none;
+    overflow: visible; pointer-events: none;
+  }
+  :root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-root[data-screen] .cm-vs2-footer, .cm-screen-footer, .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer)::before,
+  :root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-root[data-screen] .cm-vs2-footer, .cm-screen-footer, .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer)::after { content: none; }
+  :root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-root[data-screen] .cm-vs2-footer, .cm-screen-footer, .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer) > * {
+    pointer-events: auto; flex: 0 1 auto; width: auto; min-width: 0; min-height: 40px; margin: 0; padding: 2px 16px;
+    white-space: nowrap; translate: 0 calc(-8px - var(--safe-bottom));
+  }
+  /* The last row of a page scrolls clear of the floating keys. */
+  body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-shop__list, .cm-vs2-database__sheet, .cm-gacha__pane, .cm-vs2-cage-tray, .cm-digimon-shell, .cm-schedule-shell, .cm-tamer-shell, .cm-help-shell, .cm-championship-shell, .cm-vs5-shell, .cm-vs2-body) { scroll-padding-bottom: 60px; }
+  body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-shop__list, .cm-gacha__pane, .cm-digimon-shell, .cm-schedule-shell, .cm-tamer-shell, .cm-help-shell, .cm-championship-shell)::after { content: ""; display: block; flex: none; grid-column: 1 / -1; height: 56px; }
+}
+
+/* ==== Key sizes, desktop (Owner 2026-11-11) =============================================== *
+ * 「有一些模式下有一些按鈕就會特別大」: a key that fills its row is right on a phone held
+ * upright, where the row is the thumb's reach. On a desktop window the same rule made keys
+ * as wide as the page: 確認配置 1022px, 決定 752px, 關閉 712px, 十連狂轉 621px, 立即出戰 519px.
+ * In the desktop set a key is as wide as a key (at most 320px) and a page's main key sits at
+ * the right end of its row; rows that are lists (matches, partners) are not keys and keep
+ * their width. <html data-layout-set> names the set (portraitFrame.js). */
+:root[data-layout-set="desktop"] :is(.cm-vs2-footer, .cm-vs5-footer, .cm-screen-footer) > :is(.cm-vs2-action--primary, .cm-vs5-action--primary, .cm-screen-primary) {
+  justify-self: end; width: min(100%, 320px);
+}
+:root[data-layout-set="desktop"] .cm-gacha__pulls { width: min(100%, 600px); justify-self: center; margin-inline: auto; }
+:root[data-layout-set="desktop"] .cm-gacha__pane--synth > .cm-gacha__actions { width: min(100%, 640px); justify-self: center; margin-inline: auto; }
+:root[data-layout-set="desktop"] dialog.cm-dialog:has(.cm-backpack) .cm-dialog__actions { grid-template-columns: minmax(0, 240px); justify-content: end; }
+:root[data-layout-set="desktop"] .cm-tamer-shell > .cm-brag-cta { width: min(100%, 360px); justify-self: start; }
+:root[data-layout-set="desktop"] .cm-tamer-shell .cm-passport__providers { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* (dataArena.css loads with the arena, after this sheet.) */
+:root[data-layout-set="desktop"] .da-root.da-root .da-panel--select .da-actions { justify-content: flex-end; }
+:root[data-layout-set="desktop"] .da-root.da-root .da-panel--select .da-actions > .da-btn { flex: 0 1 280px; max-width: 280px; }
+
+/* ---- Owner review 2026-11-11 (second round) ---- */
+/* Partner list on a phone held upright: three badges and the chart key do not fit one line
+   (206 + 107px in 310px), and the key fell to a line of its own. The key now sits at the end
+   of the heading line, so the block is heading + badges exactly as on desktop. */
+@media (max-width: 520px) {
+  :root[data-theme] body .cm-digimon-root .cm-digimon-stat[data-row="taxonomy"] { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 8px; }
+  :root[data-theme] body .cm-digimon-root .cm-digimon-stat[data-row="taxonomy"] .cm-taxonomy-detail { display: contents; }
+  :root[data-theme] body .cm-digimon-root .cm-digimon-stat[data-row="taxonomy"] .cm-digimon-detail__label { grid-area: 1 / 1; }
+  :root[data-theme] body .cm-digimon-root .cm-digimon-stat[data-row="taxonomy"] .cm-element-chart-button { grid-area: 1 / 2; margin: 0; }
+  :root[data-theme] body .cm-digimon-root .cm-digimon-stat[data-row="taxonomy"] .cm-tax-row { grid-area: 2 / 1 / 3 / -1; }
+}
+
+/* Shop categories, phone held sideways: the row was a sideways scroller, which clips whatever
+   reaches outside it (the raised active key, the key shadows, the ticket badge). Four
+   categories always fit as four equal keys, so nothing scrolls and nothing is clipped. */
+body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen] .cm-vs2-shop__tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; overflow: visible; max-width: 560px; padding-block: 6px 2px; }
+body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen] .cm-vs2-shop__tab { flex: none; min-width: 0; max-width: none; padding-inline: 4px; white-space: normal; overflow-wrap: anywhere; line-height: 1.15; }
+
+/* Facility editor: the 22px title's outline and drop shadow reach 4px below the letters and
+   covered the underline (same cause as the hunt and battle titles, 2026-11-10). */
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-title { padding-bottom: 15px; }
+
+/* Settings, theme cards: each card previews its own stage behind a panel (the three themes
+   share the paper ground token, which would make the three previews look alike). */
+:root[data-theme="arcade"] .cm-theme-preview[data-palette] { background: var(--ax-stage); border: 2px solid var(--ax-ink); }
+:root[data-theme="arcade"] .cm-theme-preview[data-palette] .cm-theme-preview__button { background: var(--ax-yellow); box-shadow: 0 2px 0 var(--ax-ink); }
+
+/* ---- Title (Owner 2026-11-11: 「第二個問題要一起調整」) ---------------------------------- */
+/* 1. A large desktop window: the logo, the keys and the strolling partners grow by
+      --cm-title-scale (portraitFrame: the scale the game itself will have). At 1920x1080 the
+      logo was 520px in a 1920px picture and the key 348px. */
+:root body[data-landscape-entry] #cm-title {
+  --cm-entry-logo-width: clamp(260px, calc(40 * var(--cm-vw, 1vw)), calc(520px * var(--cm-title-scale, 1)));
+  --cm-entry-action-width: min(calc(80 * var(--cm-vw, 1vw)), calc(360px * var(--cm-title-scale, 1)));
+}
+:root[style*="--cm-title-scale"] body[data-landscape-entry] #cm-title :is(.cm-title__entry, .cm-title__boot-status, .cm-title__background-feedback, .cm-title__note, .cm-title__settings, .cm-title__film-watch) { zoom: var(--cm-title-scale, 1); }
+:root[style*="--cm-title-scale"] body[data-landscape-entry] #cm-title .cm-title__walker canvas { height: calc(128px * var(--cm-title-scale, 1)); }
+/* 2. A phone held sideways: 繼續遊戲 and 開始新遊戲 were stacked and the second ended on the
+      last pixel row (its slab below the screen). They now stand side by side; 進入遊戲 keeps its width. */
+@media (max-height: 480px) {
+  :root body[data-landscape-entry] #cm-title { --cm-entry-action-width: min(calc(86 * var(--cm-vw, 1vw)), 460px); }
+  :root body[data-landscape-entry] #cm-title .cm-title__actions { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+}
+@media (max-height: 420px) { :root body[data-landscape-entry] #cm-title .cm-title__walker canvas { height: 76px; } }
+
+/* Partner list, phone held upright: a four-digit gauge ("1560/1560") broke onto two lines
+   inside its 83px pill. */
+@media (max-width: 520px) {
+  :root[data-theme] body .cm-digimon-root .cm-digimon-stat[data-group="vital"] .cm-digimon-detail__value { padding-inline: 3px; font-size: calc(12px * var(--text-scale, 1)); letter-spacing: -0.02em; white-space: nowrap; text-align: center; }
+}
+
+/* Ranch on a phone: the partner card opens under the status bar, the corner the 探索手帳 key
+   also uses, and covered it (found by the 2026-11-11 run with the wider interface font). The
+   key steps aside while the card is open, like the hint and the notice do. */
+body:not([data-desktop-raising]) .int-rh2-root:has(.int-rh2-companion[data-open="true"]) .int-rh2-discoveries { visibility: hidden; }
+
+/* Multi-round events, sideways: the page is shorter than the screen, so its floating key sat
+   at the end of the page (over the second card's prize) instead of the screen's corner. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root:root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) .cm-championship-shell > .cm-screen-footer.cm-championship-footer { position: fixed; inset: auto max(16px, var(--safe-right)) 0 auto; }
+}

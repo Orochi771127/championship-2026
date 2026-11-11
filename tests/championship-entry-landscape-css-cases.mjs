@@ -50,7 +50,7 @@ test('existing title art bounds, device-size controls and horizontal actions rem
 
 test('all ordinary confirmations scroll within the viewport-height budget, retaining actions and expansion override', () => {
   const dialog = block(shared, 'dialog.cm-dialog');
-  property(dialog, 'max-height', 'calc(100dvh - 32px)');
+  property(dialog, 'max-height', 'calc(calc(100 * var(--cm-dvh, 1dvh)) - 32px)');
   property(dialog, 'overflow-y', 'auto');
   property(dialog, 'overscroll-behavior', 'contain');
   property(block(shared, '.cm-dialog__action'), 'min-height', 'var(--control)');

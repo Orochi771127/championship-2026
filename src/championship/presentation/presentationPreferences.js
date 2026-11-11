@@ -101,8 +101,19 @@ export function isMobileOrStandaloneEnvironment(win = globalThis.window) {
   return false;
 }
 
+/** The interface zoom (portraitFrame puts it on <html>; below 1 on a small phone), 1 when there is none. */
+export function uiZoom(doc = globalThis.document) {
+  const zoom = Number(rootData("uiZoom", doc));
+  return Number.isFinite(zoom) && zoom > 0 ? zoom : 1;
+}
+
+/** Device pixels per CSS pixel of the page: the screen's ratio times the interface zoom. */
+export function effectiveDevicePixelRatio(doc = globalThis.document) {
+  return (Number(globalThis.devicePixelRatio) || 1) * uiZoom(doc);
+}
+
 /** Device pixel ratio held to the tier's cap (and <= 1.75 on mobile/standalone), never below 1. */
-export function cappedPixelRatio(cap, devicePixelRatio = globalThis.devicePixelRatio) {
+export function cappedPixelRatio(cap, devicePixelRatio = effectiveDevicePixelRatio()) {
   const ratio = Number(devicePixelRatio) || 1;
   const effectiveCap = isMobileOrStandaloneEnvironment() ? Math.min(cap, MOBILE_STANDALONE_VRAM_PIXEL_RATIO_CAP) : cap;
   return Math.max(1, Math.min(effectiveCap, ratio));

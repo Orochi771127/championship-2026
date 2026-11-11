@@ -774,7 +774,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (entry.ghost) { entry.ghost.visible = false; wordPool.push(entry.ghost); }
   }
   function makeText(word) {
-    const text = new PIXI.Text({ text: "", style: { fontFamily: '"Noto Sans TC","Arial Black",system-ui,sans-serif', fontSize: word ? 22 : 26, fontWeight: "900",
+    const text = new PIXI.Text({ text: "", style: { fontFamily: '"Cyber Partner Rounded","Noto Sans TC","Arial Black",system-ui,sans-serif', fontSize: word ? 22 : 26, fontWeight: "900",
       fontStyle: word ? "italic" : "normal", fill: 0xffffff, stroke: { color: 0x05060d, width: 5, join: "round" },
       dropShadow: { color: 0x000000, alpha: 0.45, blur: 0, distance: 2, angle: Math.PI / 2 } } });
     text.anchor.set(0.5);

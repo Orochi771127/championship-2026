@@ -22,7 +22,7 @@ import {loadEvolutionGlyphArt, createEvolutionGlyphBand} from '../evolutionGlyph
 import {EVOLUTION_TEXT_ROWS, EVOLUTION_WRITING_COLOR, evolutionWritingY} from '../../text/evolutionPresentationText.js';
 import { BATTLE_CHARACTER_PROFILES } from "../../../data/championship/battleCharacterProfiles.js";
 import { createNativeCharacterAnimationTimeline } from "../characterAnimationTimeline.js";
-import { prefersReducedMotion } from '../presentationPreferences.js';
+import { prefersReducedMotion, uiZoom as pageZoom } from '../presentationPreferences.js';
 import { uiText } from '../../text/uiText.js';
 import {bindRaisingZoomInput} from './raisingZoomInput.js';
 import {createBattleBurstShell,BATTLE_BURST_SHELL_CLOSED_FRAME} from '../vs5/battleBurstShell.js';
@@ -1051,7 +1051,8 @@ export async function mountRaisingFieldPixiPresentation({
     if(raisingReference?.pending)raisingReference={...raisingReference,pending:null};
     if(fieldArt?.field?.presentationMode==='NATIVE_RANCH')scene.hitArea=new PIXI.Rectangle(0,0,app.screen.width,app.screen.height);
     if(!raisingReference)raisingReference={reference:initialRaisingReferenceViewport({
-      width:globalThis.window?.innerWidth??view.width,height:globalThis.window?.innerHeight??view.height
+      // The window in the page's own pixels (the desktop interface zoom enlarges each one).
+      width:(globalThis.window?.innerWidth??view.width)/pageZoom(),height:(globalThis.window?.innerHeight??view.height)/pageZoom()
     }),measured:false,pending:null};
     const nextViewport = { width: view.width, height: view.height, desktopRaising: view.desktopRaising,
       referenceViewport:raisingReference.reference, zoom };

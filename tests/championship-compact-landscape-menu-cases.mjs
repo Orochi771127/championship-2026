@@ -86,7 +86,7 @@ test('loaded candidate stylesheet gives bounded scrolling and reachable controls
  const html=readFileSync(new URL('../championship.html',import.meta.url),'utf8');
  assert.match(html,/<link rel="stylesheet" href="\.\/src\/championship\/app\/vs2Styles\.css/);
  assert.match(candidate,/#cm-root \{\s*top: calc\(var\(--cm-menu-viewport-top, 0px\) \+ var\(--cm-screen-top\)\)/);
- assert.match(candidate,/--cm-screen-height: max\(0px, calc\(var\(--cm-menu-viewport-height, 100dvh\) - var\(--cm-screen-top\) - var\(--cm-screen-bottom\)\)\)/);
+ assert.match(candidate,/--cm-screen-height: max\(0px, calc\(var\(--cm-menu-viewport-height, calc\(100 \* var\(--cm-dvh, 1dvh\)\)\) - var\(--cm-screen-top\) - var\(--cm-screen-bottom\)\)\)/);
  assert.match(candidate,/grid-template-rows: auto minmax\(88px, 1fr\) auto/);
  assert.match(candidate,/\.cm-vs2-footer \{ position: sticky; bottom: 0/);
  assert.match(candidate,/\.cm-vs2-shop__detail \{ align-self: stretch; overflow-y: auto/);

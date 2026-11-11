@@ -157,7 +157,7 @@ test("the stylesheet retains the field aspect and fits the available app height"
   // styles.css is claimed by both manifests, so this lane adds a file rather
   // than editing a contested one.
   assert.match(styles, /aspect-ratio: 3 \/ 2/);
-  assert.match(styles, /max-width: min\(100%, calc\(var\(--cm-screen-height, 100dvh\) \* 9 \/ 16\)\)/);
+  assert.match(styles, /max-width: min\(100%, calc\(var\(--cm-screen-height, calc\(100 \* var\(--cm-dvh, 1dvh\)\)\) \* 9 \/ 16\)\)/);
   assert.match(styles, /max-height: 100%/);
   const html = fs.readFileSync(path.join(root, "championship.html"), "utf8");
   assert.match(html, /vs5Styles\.css/);

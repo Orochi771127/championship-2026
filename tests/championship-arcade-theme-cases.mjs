@@ -167,9 +167,11 @@ test("arcade is the default theme, applied before the first paint", () => {
   assert.equal(DEFAULT_PREFERENCES.theme, "arcade");
   assert.equal(resolveTheme("arcade"), "arcade");
   const html = fs.readFileSync("championship.html", "utf8");
-  assert.match(html, /pick\(p\.theme, \["arcade", "arena", "night", "clear", "warm", "classic", "system"\], "arcade"\)/);
+  assert.ok(html.includes('pick(legacy[p.theme] || p.theme, ["arcade", "cyber", "breeze"], "arcade")'), "three themes, arcade the default");
   const sheets = [...html.matchAll(/<link rel="stylesheet" href="([^"?]+)/g)].map((m) => m[1]);
-  assert.equal(sheets.at(-1), "./src/championship/app/ui/arcade.css", "the arcade sheet loads last");
+  // The arcade sheet is the last theme sheet; only the three-layout audit sheet (2026-11-11) follows it.
+  assert.equal(sheets.at(-1), "./src/championship/app/ui/layoutSets.css", "the layout-set sheet loads last");
+  assert.equal(sheets.at(-2), "./src/championship/app/ui/arcade.css", "the arcade sheet is the last theme sheet");
 });
 
 test("the arcade sheet keeps the iron rules and never un-hides a hidden element", () => {
