@@ -733,6 +733,8 @@ function bootSettings() {
     if (changed.some((id) => id === "muted" || id === "masterVolume" || id === "sfxVolume" || id === "musicVolume")) audio.setLevels(levels());
   });
   quality.subscribe((described) => { pixiStage?.setResolutionCap(described.parameters.pixiResolutionCap); });
+  // The desktop interface zoom changed (portraitFrame): the field's backing store follows it.
+  window.addEventListener("cm-ui-zoom", () => { pixiStage?.setResolutionCap(quality.describe().parameters.pixiResolutionCap); });
   // Another tab changed the settings: follow it, without writing back.
   window.addEventListener("storage", (event) => { if (event.key === CHAMPIONSHIP_PREFERENCES_KEY) store.reload(); });
   const flush = () => { try { store.flush(); } catch { /* reported by the store */ } };

@@ -56,8 +56,8 @@ test('public responsive defaults on; only explicit legacy rolls back without byp
  assert.match(main,/enabled: RESPONSIVE_LAYOUT_CANDIDATE/);
 });
 test('entry threshold excludes portrait tablets and the legacy 568px fallback',()=>{
- for(const [width,height] of [[720,320],[844,390],[932,430],[1366,480],[1366,768]])assert.ok(isLandscapeEntryLayout({width,height}));
- for(const [width,height] of [[568,320],[719,390],[844,319],[390,844],[1024,1366],[720,561],[NaN,390],[844,Infinity]])assert.equal(isLandscapeEntryLayout({width,height}),false);
+ for(const [width,height] of [[640,320],[667,375],[720,320],[844,390],[932,430],[1366,480],[1366,768]])assert.ok(isLandscapeEntryLayout({width,height}));
+ for(const [width,height] of [[568,320],[639,390],[844,319],[390,844],[1024,1366],[720,561],[NaN,390],[844,Infinity]])assert.equal(isLandscapeEntryLayout({width,height}),false);
  assert.equal(isLandscapeEntryLayout({width:1366,height:768,hidden:true}),false);
 });
 test('entry visibility and route transitions clean up without remounting title controls',()=>{

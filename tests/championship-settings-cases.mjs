@@ -10,7 +10,7 @@ import vm from "node:vm";
 
 import {
   DEFAULT_PREFERENCES, PREFERENCE_CATEGORIES, PREFERENCE_DEFINITIONS, PREFERENCE_IDS, PREFERENCES_VERSION,
-  coercePreference, createPreferencesDocument, normalizePreferences, parsePreferences, preferenceIdsIn, resolveReducedMotion, resolveTheme
+  coercePreference, createPreferencesDocument, normalizePreferences, parsePreferences, preferenceIdsIn, resolveReducedMotion, resolveTheme, resolveThemeTone
 } from "../src/championship/app/settings/preferenceSchema.js";
 import { createPreferenceStore, PREFERENCE_WRITE_DELAY_MS } from "../src/championship/app/settings/preferenceStore.js";
 import { createPreferenceEnvironment, THEME_COLORS } from "../src/championship/app/settings/preferenceEnvironment.js";
@@ -137,36 +137,36 @@ test("invalid values fall back to the default and numbers snap to the slider ste
 });
 
 test("the stored document keeps only non-defaults, split by scope", () => {
-  const document = createPreferencesDocument({ ...DEFAULT_PREFERENCES, theme: "warm", masterVolume: 60, locale: "en" }, { updatedAt: "t" });
+  const document = createPreferencesDocument({ ...DEFAULT_PREFERENCES, theme: "cyber", masterVolume: 60, locale: "en" }, { updatedAt: "t" });
   assert.deepEqual(document, { schemaVersion: 1, kind: "CHAMPIONSHIP_PREFERENCES", updatedAt: "t",
-    device: { masterVolume: 60 }, account: { theme: "warm", locale: "en" } });
+    device: { masterVolume: 60 }, account: { theme: "cyber", locale: "en" } });
 });
 
 test("reading: absent, current, older flat map, unreadable and newer versions", () => {
   assert.equal(parsePreferences(null).status, "ABSENT");
-  const current = parsePreferences(JSON.stringify({ schemaVersion: 1, device: { textScale: 130 }, account: { theme: "clear" } }));
+  const current = parsePreferences(JSON.stringify({ schemaVersion: 1, device: { textScale: 130 }, account: { theme: "breeze" } }));
   assert.equal(current.status, "OK");
   assert.equal(current.preferences.textScale, 130);
-  assert.equal(current.preferences.theme, "clear");
-  const flat = parsePreferences(JSON.stringify({ theme: "warm", locale: "en" }));
+  assert.equal(current.preferences.theme, "breeze");
+  const flat = parsePreferences(JSON.stringify({ theme: "cyber", locale: "en" }));
   assert.equal(flat.status, "MIGRATED");
   assert.equal(flat.migratedFrom, 0);
-  assert.equal(flat.preferences.theme, "warm");
+  assert.equal(flat.preferences.theme, "cyber");
   assert.equal(parsePreferences("{not json").status, "UNREADABLE");
   assert.equal(parsePreferences("[]").status, "UNREADABLE");
-  const newer = parsePreferences(JSON.stringify({ schemaVersion: 9, account: { theme: "warm" } }));
+  const newer = parsePreferences(JSON.stringify({ schemaVersion: 9, account: { theme: "cyber" } }));
   assert.equal(newer.status, "NEWER");
   assert.equal(newer.preferences.theme, "arcade", "a newer document is not guessed at");
 });
 
-test("theme and motion resolution: the explicit choice wins, system follows the OS", () => {
-  assert.equal(resolveTheme("system", { prefersDark: true }), "night");
-  assert.equal(resolveTheme("system", { prefersDark: false }), "arena");
-  assert.equal(resolveTheme("clear", { prefersDark: true }), "clear", "an explicit choice is kept");
-  assert.equal(resolveTheme("neon"), "arcade", "an unknown theme shows the default");
-  assert.equal(resolveTheme("arcade"), "arcade");
-  assert.equal(resolveTheme("warm", { prefersDark: true }), "warm", "warm is only ever chosen by hand");
-  assert.equal(resolveTheme("classic", { prefersDark: false }), "classic", "and so is the retro blue & gold");
+test("theme and motion resolution: three palettes on one interface; older choices move to the nearest", () => {
+  for (const theme of ["arcade", "cyber", "breeze", "night", "system", "neon", undefined]) assert.equal(resolveTheme(theme), "arcade", "the interface is always the arcade one");
+  assert.deepEqual(["arcade", "cyber", "breeze"].map(resolveThemeTone), ["arcade", "cyber", "breeze"]);
+  assert.deepEqual(["night", "classic", "arena", "clear", "warm", "system"].map(resolveThemeTone), ["cyber", "cyber", "breeze", "breeze", "breeze", "arcade"], "a choice saved before 2026-11-11");
+  assert.equal(resolveThemeTone("neon"), "arcade", "an unknown theme shows the default");
+  assert.deepEqual(PREFERENCE_DEFINITIONS.theme.values, ["arcade", "cyber", "breeze"]);
+  assert.equal(normalizePreferences({ theme: "night" }).theme, "cyber", "and is stored as the new choice from then on");
+  assert.equal(normalizePreferences({ theme: "system" }).theme, "arcade");
   assert.equal(resolveReducedMotion("system", { systemReduced: true }), true);
   assert.equal(resolveReducedMotion("off", { systemReduced: true }), false);
   assert.equal(resolveReducedMotion("on", { systemReduced: false }), true);
@@ -207,27 +207,27 @@ test("a change applies at once and is written once, after the burst", () => {
 test("a failed write is reported honestly and can be retried; the settings stay in effect", () => {
   const storage = memoryStorage({ failWrites: true });
   const { store, timers } = storeOn(storage);
-  store.set("theme", "clear");
+  store.set("theme", "breeze");
   timers.runAll();
   assert.equal(store.status().phase, "SAVE_FAILED");
   assert.match(store.status().error, /Quota/);
-  assert.equal(store.get().theme, "clear", "the choice still applies this session");
+  assert.equal(store.get().theme, "breeze", "the choice still applies this session");
   storage.failWrites = false;
   store.retry();
   assert.equal(store.status().phase, "SAVED");
-  assert.equal(JSON.parse(storage.getItem(CHAMPIONSHIP_PREFERENCES_KEY)).account.theme, "clear");
+  assert.equal(JSON.parse(storage.getItem(CHAMPIONSHIP_PREFERENCES_KEY)).account.theme, "breeze");
 });
 
 test("a document from a newer version is never overwritten", () => {
   const storage = memoryStorage();
-  const newer = JSON.stringify({ schemaVersion: 7, account: { theme: "warm" }, future: true });
+  const newer = JSON.stringify({ schemaVersion: 7, account: { theme: "cyber" }, future: true });
   storage.data.set(CHAMPIONSHIP_PREFERENCES_KEY, newer);
   const { store, timers } = storeOn(storage);
   assert.equal(store.status().phase, "READ_ONLY");
-  store.set("theme", "clear");
+  store.set("theme", "breeze");
   timers.runAll();
   store.flush();
-  assert.equal(store.get().theme, "clear", "the session may still change it");
+  assert.equal(store.get().theme, "breeze", "the session may still change it");
   assert.equal(storage.getItem(CHAMPIONSHIP_PREFERENCES_KEY), newer, "but the newer document is untouched");
   assert.equal(storage.writes.length, 0);
 });
@@ -236,12 +236,12 @@ test("resetting a category or everything touches preferences only", () => {
   const storage = memoryStorage();
   storage.data.set(CHAMPIONSHIP_MODERN_SAVE_KEY, "THE-SAVE");
   const { store, timers } = storeOn(storage);
-  store.set("theme", "warm");
+  store.set("theme", "cyber");
   store.set("textScale", 130);
   store.set("masterVolume", 40);
   store.resetCategory("sound");
   assert.equal(store.get().masterVolume, 100);
-  assert.equal(store.get().theme, "warm", "another category is left alone");
+  assert.equal(store.get().theme, "cyber", "another category is left alone");
   store.resetAll();
   assert.deepEqual(store.get(), DEFAULT_PREFERENCES);
   timers.runAll();
@@ -258,14 +258,14 @@ test("settings writes and game saves never overwrite each other", async () => {
   const { store, timers } = storeOn(storage);
   assert.equal(app.save().phase, "SAVED");
   const saved = storage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY);
-  store.set("theme", "clear");
+  store.set("theme", "breeze");
   timers.runAll();
   assert.equal(storage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY), saved, "a settings write leaves the save byte for byte");
   // The save port checks its own key for a stale baseline; a settings write
   // in between must not read as another tab's save.
   app.creditBits(5);
   assert.equal(app.save().phase, "SAVED", "the next autosave still succeeds");
-  assert.equal(JSON.parse(storage.getItem(CHAMPIONSHIP_PREFERENCES_KEY)).account.theme, "clear", "and does not touch the settings");
+  assert.equal(JSON.parse(storage.getItem(CHAMPIONSHIP_PREFERENCES_KEY)).account.theme, "breeze", "and does not touch the settings");
   await app.dispose();
 });
 
@@ -278,14 +278,14 @@ test("the environment writes one resolved attribute per preference", () => {
   const quality = createQualityController({ doc, preference: "auto", signals: {} });
   const environment = createPreferenceEnvironment({ store, doc, matchMedia: media.matchMedia, quality });
   const root = doc.documentElement;
-  assert.deepEqual({ ...root.dataset }, { quality: "balanced", theme: "arcade", themeChoice: "arcade", textScale: "100", hud: "standard", motion: "reduced", flash: "standard", highlight: "full" });
+  assert.deepEqual({ ...root.dataset }, { quality: "balanced", theme: "arcade", themeTone: "arcade", themeChoice: "arcade", textScale: "100", hud: "standard", motion: "reduced", flash: "standard", highlight: "full" });
   assert.equal(root.lang, "zh-Hant");
-  store.set("theme", "system");
-  assert.equal(root.dataset.theme, "arena", "a light system reads as the arena palette");
-  assert.equal(doc.metas.color.getAttribute("content"), THEME_COLORS.arena);
+  store.set("theme", "cyber");
+  assert.deepEqual([root.dataset.theme, root.dataset.themeTone, root.dataset.themeChoice], ["arcade", "cyber", "cyber"], "a palette of the arcade interface");
+  assert.equal(doc.metas.color.getAttribute("content"), THEME_COLORS.cyber);
   assert.equal(doc.metas.scheme.getAttribute("content"), "light");
   media.state.dark = true; media.queries["(prefers-color-scheme: dark)"].fire();
-  assert.equal(root.dataset.theme, "night", "and follows the system when it changes");
+  assert.equal(root.dataset.themeTone, "cyber", "the system's dark mode no longer picks the theme");
   store.set("reducedMotion", "off");
   assert.equal(root.dataset.motion, "full", "an explicit off beats the system setting");
   store.set("textScale", 130); store.set("hudDensity", "compact"); store.set("flashIntensity", "soft"); store.set("highlightMode", "compact"); store.set("quality", "saver");

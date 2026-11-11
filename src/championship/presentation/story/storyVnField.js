@@ -195,9 +195,10 @@ export function createStoryVnField({
 
   root.addEventListener("pointerdown", event => {
     if (paused || disposed || event.target.closest?.(".cm-vn-field__spot")) return;
-    const rect = root.getBoundingClientRect();
-    const x = (event.clientX - rect.left - cam) / (layout?.width ?? rect.width);
-    const y = (event.clientY - rect.top - (layout?.top ?? 0)) / (layout?.height ?? rect.height);
+    // Screen pixels to the hall's own pixels (they differ by the desktop interface zoom).
+    const rect = root.getBoundingClientRect(), k = rect.width / (root.offsetWidth || rect.width || 1) || 1;
+    const x = ((event.clientX - rect.left) / k - cam) / (layout?.width ?? rect.width / k);
+    const y = ((event.clientY - rect.top) / k - (layout?.top ?? 0)) / (layout?.height ?? rect.height / k);
     onGround?.([x, y]);
     void walkTo([x, y]);
   });

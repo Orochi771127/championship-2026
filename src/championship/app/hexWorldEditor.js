@@ -169,15 +169,19 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
   const sizeWatch = typeof View?.ResizeObserver === 'function'
     ? new View.ResizeObserver(() => { if (!userMoved && cage) fitted = fitTo(occupiedSlots()); }) : null;
   sizeWatch?.observe(viewport);
-  zoomIn.addEventListener('click', () => { userMoved = true; const r = viewport.getBoundingClientRect(); zoomAt(1.25, r.width / 2, r.height / 2); });
-  zoomOut.addEventListener('click', () => { userMoved = true; const r = viewport.getBoundingClientRect(); zoomAt(0.8, r.width / 2, r.height / 2); });
+  // Pointer positions arrive in screen pixels; the board is laid out in the page's own pixels.
+  // The two differ by the desktop interface zoom (portraitFrame.js), so every screen distance
+  // is divided by the viewport's on-screen scale before it moves or zooms the board.
+  const screenScale = (r = viewport.getBoundingClientRect()) => r.width / (viewport.offsetWidth || r.width || 1) || 1;
+  zoomIn.addEventListener('click', () => { userMoved = true; zoomAt(1.25, viewport.clientWidth / 2, viewport.clientHeight / 2); });
+  zoomOut.addEventListener('click', () => { userMoved = true; zoomAt(0.8, viewport.clientWidth / 2, viewport.clientHeight / 2); });
   fit.addEventListener('click', () => fitTo(occupiedSlots()));
   revert.addEventListener('click', () => { if (!revert.disabled) { select(null); source.intents.revertCageEdit?.(); } });
   viewport.addEventListener('wheel', e => {
     e.preventDefault();
     userMoved = true;
-    const r = viewport.getBoundingClientRect();
-    zoomAt(e.deltaY < 0 ? 1.12 : 1 / 1.12, e.clientX - r.left, e.clientY - r.top);
+    const r = viewport.getBoundingClientRect(), k = screenScale(r);
+    zoomAt(e.deltaY < 0 ? 1.12 : 1 / 1.12, (e.clientX - r.left) / k, (e.clientY - r.top) / k);
   }, { passive: false });
 
   // Drag pans; a press that does not move is a tap. Two fingers pinch-zoom.
@@ -198,9 +202,9 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
   viewport.addEventListener('pointermove', e => {
     if (pointers.has(e.pointerId)) pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pinch && pointers.size === 2) {
-      const [a, b] = [...pointers.values()], r = viewport.getBoundingClientRect();
+      const [a, b] = [...pointers.values()], r = viewport.getBoundingClientRect(), k = screenScale(r);
       const factor = (pinch.zoom * Math.hypot(a.x - b.x, a.y - b.y) / pinch.distance) / view.zoom;
-      zoomAt(factor, (a.x + b.x) / 2 - r.left, (a.y + b.y) / 2 - r.top);
+      zoomAt(factor, ((a.x + b.x) / 2 - r.left) / k, ((a.y + b.y) / 2 - r.top) / k);
       suppressClick = true; userMoved = true;
       return;
     }
@@ -208,7 +212,8 @@ export function createHexWorldBoard({ source, openLandPurchase, doc = globalThis
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
       if (!drag.moved && Math.hypot(dx, dy) < 8) return;
       if (!drag.moved) { drag.moved = true; userMoved = true; viewport.setPointerCapture?.(e.pointerId); viewport.dataset.panning = 'true'; }
-      view = { ...view, x: drag.vx + dx, y: drag.vy + dy };
+      const k = screenScale();
+      view = { ...view, x: drag.vx + dx / k, y: drag.vy + dy / k };
       apply();
     }
   });
