@@ -83,7 +83,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     const choreo = moveVfxChoreography(moveId), c = choreo?.[phase];
     if (!c || !setPieces) return false;
     // An ultimate opens its contact with an impact frame, held by the layer's hit-stop.
-    if (phase === 'contact' && choreo.impactFrame) setPieces.play('impact-frame', {...at, palette: {core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true}, size: BODY, unit: SCALE * 0.5, groundY: at.y + BODY * 0.5, scale: c.scale ?? 1});
+    if (phase === 'contact' && choreo.impactFrame) setPieces.play('impact-frame', {...at, palette: {core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true}, size: BODY, unit: SCALE * 0.5, groundY: at.y + BODY * 0.5, scale: (c.scale ?? 1) * 0.7});
     return setPieces.play(c.piece, {...at, size: BODY, unit: SCALE * 0.5, groundY: at.y + BODY * 0.5, scale: c.scale ?? 1, fast: c.fast, sprite: c.sprite, at: phase === 'contact' ? 'contact' : null});
   };
   let moteClock = 0, moteSeq = 0;

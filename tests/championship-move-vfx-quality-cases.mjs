@@ -291,3 +291,12 @@ test("refinement pass 6: a move's own contact piece is not stacked under a secon
   const bake = fs.readFileSync("scripts/vfx/bake-move-piece-vfx.mjs", "utf8");
   assert.match(bake, /core: \{fx: 'explosions\/plasma-explosion'/, "fire lands a plasma burst, not red balls");
 });
+
+test("refinement pass 7: the impact frame is two frames of flash, smaller than the move's own piece", async () => {
+  const fs = await import("node:fs");
+  const { MOVE_VFX_PIECE_SPRITES } = await import("../src/championship/presentation/vfx/moveVfxPieceSprites.js");
+  assert.ok(MOVE_VFX_PIECE_SPRITES["impact-frame"].frames.length <= 2, "the flash alone, before any ring forms");
+  for (const file of ["src/championship/presentation/battleFx/battleFxLayer.js", "src/championship/presentation/dataArena/dataArenaElementFx.js"]) {
+    assert.match(fs.readFileSync(file, "utf8"), /scale \?\? 1\) \* 0\.7\}\);/, `${file} plays it at 0.7 of the contact`);
+  }
+});
