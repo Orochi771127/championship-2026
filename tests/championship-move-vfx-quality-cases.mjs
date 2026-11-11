@@ -278,3 +278,16 @@ test("refinement pass 5: more baked heads, and the Dex preview lands each move's
     if (c.contact) assert.ok(MOVE_VFX_PIECE_SPRITES[showcasePieceLook(c.contact)], `${c.contact.piece} has a baked look for the Dex`);
   }
 });
+
+test("refinement pass 6: a move's own contact piece is not stacked under a second burst of the same kind", async () => {
+  const fs = await import("node:fs");
+  const kit = fs.readFileSync("src/championship/presentation/vfx/moveVfxKit.js", "utf8");
+  assert.match(kit, /planted = false, piece = false\}\) \{/);
+  assert.match(kit, /if \(piece\) return;\n    if \(bakedImpact\(/, "the kit keeps only its flare and motif when the move's piece plays");
+  const arena = fs.readFileSync("src/championship/presentation/dataArena/dataArenaElementFx.js", "utf8");
+  assert.match(arena, /piece: ownPiece === true/);
+  const battle = fs.readFileSync("src/championship/presentation/battleFx/battleFxLayer.js", "utf8");
+  assert.match(battle, /piece: Boolean\(owner && moveVfxChoreography\(owner\.moveId\)\?\.contact\)/);
+  const bake = fs.readFileSync("scripts/vfx/bake-move-piece-vfx.mjs", "utf8");
+  assert.match(bake, /core: \{fx: 'explosions\/plasma-explosion'/, "fire lands a plasma burst, not red balls");
+});

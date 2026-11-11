@@ -516,7 +516,9 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const during = () => entry.alive && entry.stage === stage ? entry.at : null;
         if (stage === 'hit' || stage === 'extra') {
           const heavy = form === 'area' || form === 'character' || signature.tier === 'ultimate';
-          kit.impact({x: at.x, y: at.y, groundY: at.groundY, paletteKey, archetype, heavy, size: heavy ? size * 1.1 : size, planted: moveVfxArchetypeIsPlanted(archetype)});
+          // the HIT plays this move's own contact piece; the stand-in keeps only its flare and motif (pass 6)
+          kit.impact({x: at.x, y: at.y, groundY: at.groundY, paletteKey, archetype, heavy, size: heavy ? size * 1.1 : size, planted: moveVfxArchetypeIsPlanted(archetype),
+            piece: Boolean(owner && moveVfxChoreography(owner.moveId)?.contact)});
         } else if (stage === 'body' || form === 'projectile' || form === 'stream' || form === 'beam') {
           // A body that lands and stands (a mushroom, a bomb) is drawn planted where the battle put it.
           kit.projectile({follow: during, paletteKey, archetype: shot, size, signature, planted: stage === 'body' && moveVfxArchetypeIsPlanted(archetype)});

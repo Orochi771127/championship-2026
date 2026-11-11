@@ -120485,6 +120485,14 @@
       "sha256": "8cfe45f0f0ce8fec9f191db9d2881c46a18aab40baf6d8ec905fb72187a929bc"
     },
     {
+      "path": "assets/production/story/vn-backgrounds-v3/forest.00e31d9cef53e5cb.webp",
+      "sha256": "00e31d9cef53e5cb115af4360bb9e7e796b75926c23dd66a36d9c55dc4b244fb"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/forest.ba98a1ca7ff0e8bb.mp4",
+      "sha256": "ba98a1ca7ff0e8bba900a4bacd87b1fc4abd3e988835d94319ad2fe6ac413e0f"
+    },
+    {
       "path": "assets/production/story/vn-backgrounds-v3/grid.7e2266bfbf10c5e5.webp",
       "sha256": "7e2266bfbf10c5e5009ef33e3217f08862f1281d394ee996e10a9ad7ead30470"
     },
@@ -120499,6 +120507,14 @@
     {
       "path": "assets/production/story/vn-backgrounds-v3/habitat.ac18c42592126494.webp",
       "sha256": "ac18c42592126494d853362888098e4235f3173974a7f91e788914546bd9b4f0"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/lobby.209770b2be1568ed.mp4",
+      "sha256": "209770b2be1568edc534ddc5bddd26919bf1fae7e8dbf6b359d35e0da41a29a1"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/lobby.2c367b4820a17a00.webp",
+      "sha256": "2c367b4820a17a006aadb5d17a4a067ead9679a5ff29216cdc9fdcc897a122fb"
     },
     {
       "path": "assets/production/story/vn-backgrounds-v3/locker.54beadabc9dd6a2f.webp",
@@ -120523,6 +120539,22 @@
     {
       "path": "assets/production/story/vn-backgrounds-v3/night.af94500326a8324c.mp4",
       "sha256": "af94500326a8324c6dccb17402bcd85fa9bd2c8a6c1616fcaa9d4177524bb837"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/oldstreet.11178d526f1574c1.mp4",
+      "sha256": "11178d526f1574c141a3f5d39519f3bf1e3d4d78df3d9116221081a1efddb253"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/oldstreet.4fda664e2deb7d20.webp",
+      "sha256": "4fda664e2deb7d2042faea58bf3434919250b32b1f29a8bed5bcbfe0e5d56490"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/origin.97894bac68efbd6e.webp",
+      "sha256": "97894bac68efbd6ecc7abc188bee0d122c394298c4ed06658fb9f27a6daa4180"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/origin.ab2c3a7b12ae3fa6.mp4",
+      "sha256": "ab2c3a7b12ae3fa6e1bdbadb6254e90f3a741d10716f8d85cb12b4649e93019b"
     },
     {
       "path": "assets/production/story/vn-backgrounds-v3/plaza.e77fcfd7b6933b7b.webp",
@@ -121922,7 +121954,7 @@
     },
     {
       "path": "src/championship/app/main.js",
-      "sha256": "d94ad51637b2875a8875e521da2254cfe2bf4a66ef9e399850a632a2bde8347b"
+      "sha256": "b499b5778e3240dea4e606d10613bf82e2fa053a652913ab8d24064f9c69834f"
     },
     {
       "path": "src/championship/app/medalCollection.css",
@@ -122610,11 +122642,15 @@
     },
     {
       "path": "src/championship/data/storyVnCampaign.js",
-      "sha256": "e682dac657d3cfc648162ab46ec46a0b0f1237e21dff9ce791d7cdd93f185104"
+      "sha256": "f18d2197d72ad79f0fe5f572a4c29fac3e6063fe3aa0ff8abedaa43518904c44"
     },
     {
       "path": "src/championship/data/storyVnExpressions.js",
       "sha256": "bca80489b8ee73f5e2fb95d101cb67cfd3502f8ce3160cd3b7b26134da94caba"
+    },
+    {
+      "path": "src/championship/data/storyVnPartThree.js",
+      "sha256": "b6486229bf671e487200dcdc6a04a7566f67827ed013638c98a644dc2722da0b"
     },
     {
       "path": "src/championship/data/storyVnPartTwo.js",
@@ -123050,7 +123086,7 @@
     },
     {
       "path": "src/championship/presentation/battleFx/battleFxLayer.js",
-      "sha256": "1fd496bc8b6b90390925a329a3cec51f3ddf9b8bca41e55ed55c74b09a5e2148"
+      "sha256": "b4eb20407969cf776784d29c4fbf0656e21395b245f96b81c17a5757abb51c18"
     },
     {
       "path": "src/championship/presentation/battleFx/battleFxPalettes.js",
@@ -123146,7 +123182,7 @@
     },
     {
       "path": "src/championship/presentation/dataArena/dataArenaElementFx.js",
-      "sha256": "a53a9121505e135325b48f99ef1015bec63851e4015a98095038dee0fc75887d"
+      "sha256": "8b01a1c7e67318fe109b7bf55a0683e15b60fafce398595eb80c5ffc2a61b02b"
     },
     {
       "path": "src/championship/presentation/dataArena/dataArenaEnvironment.js",
@@ -123521,8 +123557,16 @@
       "sha256": "a96ea8cfa33879bdcba3fb7f173d804a446446c66c1d751494e3f98f04b0ce6d"
     },
     {
+      "path": "src/championship/presentation/story/storyVnAudio.js",
+      "sha256": "031f94afbdfb2c41b7f69e56af9931031ca91aade761f5c7aa5902edd4849f3a"
+    },
+    {
       "path": "src/championship/presentation/story/storyVnDirector.js",
       "sha256": "15d78373bc1b1243c2f407235af639ea14a535464dad025bf1ee97105fd13a16"
+    },
+    {
+      "path": "src/championship/presentation/story/storyVnField.js",
+      "sha256": "47789d0b7fdd9d4cf1181bea4d2171c5e4d026eab40cbc2d7703f01a8e299163"
     },
     {
       "path": "src/championship/presentation/story/storyVnStage.js",
@@ -123578,7 +123622,7 @@
     },
     {
       "path": "src/championship/presentation/vfx/moveVfxKit.js",
-      "sha256": "6c390ff791b31a03d4c9648d892a35d10eeeb9e0420db4fff42dffc3acb2c444"
+      "sha256": "973ccfa16f746e7c7c10387159260151b7030b9d943f4ef7e859068d6506dfb0"
     },
     {
       "path": "src/championship/presentation/vfx/moveVfxKitTextures.js",
@@ -123586,7 +123630,7 @@
     },
     {
       "path": "src/championship/presentation/vfx/moveVfxPieceSprites.js",
-      "sha256": "2fb8bbbdf419f732b57941cbda641cd58a6e7fc8c2a34166b101884ba1cf3038"
+      "sha256": "fb5e7f4183844c1311f693de254384039d60caa885a39042b3cd4e3f3675c98a"
     },
     {
       "path": "src/championship/presentation/vfx/moveVfxRecipes.js",
@@ -124114,7 +124158,7 @@
     },
     {
       "path": "src/championship/text/storyVnText.js",
-      "sha256": "224596806c140b559cc89a67dfe8a3665409aef90f833550016b3e2cecfd31f9"
+      "sha256": "41a39a86f71c954c78a88718f2280bbe6fc87a310a649045b69048e26af40bbd"
     },
     {
       "path": "src/championship/text/syncLevelText.js",
@@ -126107,48 +126151,40 @@
       ]
     },
     {
-      "path": "src/championship/data/storyVnPartThree.js",
-      "sha256": "b6486229bf671e487200dcdc6a04a7566f67827ed013638c98a644dc2722da0b"
+      "path": "src/championship/data/storyVnPartFour.js",
+      "sha256": "25b8938be8aaa877442c299572f2d331f128981ac944da849a32d8f04b20e6a2"
     },
     {
-      "path": "src/championship/presentation/story/storyVnField.js",
-      "sha256": "47789d0b7fdd9d4cf1181bea4d2171c5e4d026eab40cbc2d7703f01a8e299163"
+      "path": "assets/production/story/vn-backgrounds-v3/capital.d039f79766631957.webp",
+      "sha256": "d039f79766631957fa575de0ce2e27bcd55dc1c88589068a6b33b3dfc78a387c"
     },
     {
-      "path": "src/championship/presentation/story/storyVnAudio.js",
-      "sha256": "031f94afbdfb2c41b7f69e56af9931031ca91aade761f5c7aa5902edd4849f3a"
+      "path": "assets/production/story/vn-backgrounds-v3/capital.e9b58eb93fa7f317.mp4",
+      "sha256": "e9b58eb93fa7f3177742ad1559caf9c2f3b9fa8ee366b65586c03be10fa11c46"
     },
     {
-      "path": "assets/production/story/vn-backgrounds-v3/forest.00e31d9cef53e5cb.webp",
-      "sha256": "00e31d9cef53e5cb115af4360bb9e7e796b75926c23dd66a36d9c55dc4b244fb"
+      "path": "assets/production/story/vn-backgrounds-v3/final.5efa21a42e4cac59.webp",
+      "sha256": "5efa21a42e4cac59666de355b9892268719fc390bc99b23efbc553e7889889e9"
     },
     {
-      "path": "assets/production/story/vn-backgrounds-v3/forest.ba98a1ca7ff0e8bb.mp4",
-      "sha256": "ba98a1ca7ff0e8bba900a4bacd87b1fc4abd3e988835d94319ad2fe6ac413e0f"
+      "path": "assets/production/story/vn-backgrounds-v3/final.b06dc2a34b495ab0.mp4",
+      "sha256": "b06dc2a34b495ab066286277dc1d7e11c5fa46dbd8daf70e8e9c16202608ee6e"
     },
     {
-      "path": "assets/production/story/vn-backgrounds-v3/lobby.209770b2be1568ed.mp4",
-      "sha256": "209770b2be1568edc534ddc5bddd26919bf1fae7e8dbf6b359d35e0da41a29a1"
+      "path": "assets/production/story/vn-backgrounds-v3/tower.1d1fe25c515bd6fe.webp",
+      "sha256": "1d1fe25c515bd6feacbd6f94e5e4eb606aa958cde95401fe8a7977ac85595b03"
     },
     {
-      "path": "assets/production/story/vn-backgrounds-v3/lobby.2c367b4820a17a00.webp",
-      "sha256": "2c367b4820a17a006aadb5d17a4a067ead9679a5ff29216cdc9fdcc897a122fb"
+      "path": "assets/production/story/vn-backgrounds-v3/tower.db577bef3655529b.mp4",
+      "sha256": "db577bef3655529b0bc5cbe013c8d92f29994ce8a8ec090acd41972f95050ba1"
     },
     {
-      "path": "assets/production/story/vn-backgrounds-v3/oldstreet.11178d526f1574c1.mp4",
-      "sha256": "11178d526f1574c141a3f5d39519f3bf1e3d4d78df3d9116221081a1efddb253"
+      "path": "assets/production/story/vn-backgrounds-v3/village.16ef9783e84b81fd.mp4",
+      "sha256": "16ef9783e84b81fd4ad3a6a14a5f2dfdb23fa6bb6a373598b6056c2803a006c2"
     },
     {
-      "path": "assets/production/story/vn-backgrounds-v3/oldstreet.4fda664e2deb7d20.webp",
-      "sha256": "4fda664e2deb7d2042faea58bf3434919250b32b1f29a8bed5bcbfe0e5d56490"
-    },
-    {
-      "path": "assets/production/story/vn-backgrounds-v3/origin.97894bac68efbd6e.webp",
-      "sha256": "97894bac68efbd6ecc7abc188bee0d122c394298c4ed06658fb9f27a6daa4180"
-    },
-    {
-      "path": "assets/production/story/vn-backgrounds-v3/origin.ab2c3a7b12ae3fa6.mp4",
-      "sha256": "ab2c3a7b12ae3fa6e1bdbadb6254e90f3a741d10716f8d85cb12b4649e93019b"
+      "path": "assets/production/story/vn-backgrounds-v3/village.f92baef41e6c8589.webp",
+      "sha256": "f92baef41e6c858913698c726bc9b83879684a52218d8ae9205e7d0a313a88d0"
     }
   ],
   "assets": [
