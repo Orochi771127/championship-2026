@@ -76,6 +76,12 @@ export const MOVE_PIECE_BAKE = Object.freeze({
   'muzzle-spiral': {fx: 'arcane/spell-charge', until: 0.8, fit: 1.2, grey: true},
   // ---- the impact frame
   'impact-frame': {fx: 'impacts/crit-hit', until: 0.2, fit: 1.8, grey: true},
+  // ---- floor circles (refinement pass 2: the kit's drawn hexagram sigils)
+  'sigil-cast': {fx: 'arcane/magic-circle-cast', until: 1.2, fit: 1.6, anchor: 'ground', grey: true},
+  'sigil-rune': {fx: 'arcane/rune-circle', until: 1.2, fit: 1.6, anchor: 'ground', grey: true},
+  // ---- the arena's cover (refinement pass 2): a chip off a struck block, a block breaking
+  'prop-chip': {fx: 'impacts/bullet-impact', until: 0.5, fit: 0.8, grey: true},
+  'prop-dust': {fx: 'explosions/dirt-explosion', until: 1.0, fit: 1.6, anchor: 'ground', grey: true},
   // ---- support (on the receiving body)
   heal: {fx: 'holy/heal-aoe', until: 1.2, fit: 1.4, anchor: 'ground', grey: true},
   cleanse: {fx: 'holy/blessing', until: 1.2, fit: 1.6, anchor: 'ground', grey: true},

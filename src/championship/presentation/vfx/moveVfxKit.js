@@ -25,6 +25,7 @@
 import {BATTLE_FX_PALETTES} from '../battleFx/battleFxPalettes.js';
 import {bakeMoveVfxIntensity, createNoiseField, paintMoveVfxCell, paintMoveVfxSheet, paintMoveVfxSigil} from './moveVfxKitTextures.js';
 import {DRAWN_VFX_FIXED, DRAWN_VFX_SPRITES} from './drawnVfxSprites.js';
+import {bakedPieceLook, paintBakedPieceFrames, loadMoveVfxPieceSprites} from './moveVfxSetPieces.js';
 import {BRIEF_PALETTES} from './remadeEffectBriefs.js';
 
 const TAU = Math.PI * 2;
@@ -83,6 +84,8 @@ const PIXEL_BODY_SCALE = 0.5;
 export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanced', reducedMotion = false, seed = 0x51a5,
   doc = globalThis.document, resolution = 1.5, pixel = true} = {}) {
   if (!PIXI || !front || !doc) return null;
+  // The baked pieces (floor circles among them) load once, off the first frame.
+  if (typeof loadMoveVfxPieceSprites === 'function') loadMoveVfxPieceSprites();
   // No kit where a canvas cannot be painted pixel by pixel (Node scene tests, stripped canvases).
   const probe = doc.createElement?.('canvas')?.getContext?.('2d');
   if (typeof probe?.createImageData !== 'function' || typeof probe.putImageData !== 'function') return null;
@@ -106,11 +109,21 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     const id = `${name}:${paletteId(paletteKey)}`;
     let entry = sheets.get(id);
     if (entry) return entry;
-    if (name.startsWith('sigil:')) {
-      const canvas = paintMoveVfxSigil(Number(name.slice(6)), palettes(paletteKey), {doc});
-      entry = {textures: [texture(canvas)], loop: false, width: canvas.width, height: canvas.height, smoke: false};
-      sheets.set(id, entry);
-      return entry;
+    // Floor circles (refinement pass 2, Owner: 「地板的六芒星那些也可以重做嗎」): once the baked
+    // pieces are in, a move's sigil is a pixelfx casting or rune circle -- already drawn flat on
+    // the ground, with its light layer as a second, added part -- instead of the drawn hexagram.
+    if (name.startsWith('sigil:') || name.startsWith('sigilglow:')) {
+      const glow = name.startsWith('sigilglow:'), n = Number(name.slice(glow ? 10 : 6)), circle = n % 2 ? 'sigil-rune' : 'sigil-cast';
+      const painted = bakedPieceLook(circle) ? paintBakedPieceFrames(circle, palettes(paletteKey), {doc, glow}) : null;
+      if (painted) {
+        entry = {textures: painted.frames.map(texture), loop: false, width: painted.w, height: painted.h, smoke: false, additive: glow,
+          anchor: [painted.ox / painted.w, painted.oy / painted.h]};
+        sheets.set(id, entry);
+        return entry;
+      }
+      if (glow) return null;
+      const canvas = paintMoveVfxSigil(n, palettes(paletteKey), {doc});
+      return {textures: [texture(canvas)], loop: false, width: canvas.width, height: canvas.height, smoke: false};
     }
     // A hand-drawn sprite (drawnVfxSprites.js) in the move's palette; "drawn:bigblast" plays bigblast_0, _1, ... as frames.
     if (name.startsWith('drawn:')) {
@@ -157,9 +170,10 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     if (reducedMotion && (vx || vy || spin)) { vx *= 0.3; vy *= 0.3; spin = 0; }
     while (parts.length >= budget) { const old = parts.shift(); old.sprite.destroy(); }
     const book = sheet(name, paletteKey);
+    if (!book) return null;
     const sprite = new PIXI.Sprite(book.textures[frame ?? 0]);
-    sprite.anchor.set(anchor[0], anchor[1]);
-    sprite.blendMode = !book.smoke && LIGHT_SHEETS.has(name) && paletteId(paletteKey) !== 'dark' ? 'add' : 'normal';
+    sprite.anchor.set(...(book.anchor ?? anchor));
+    sprite.blendMode = book.additive || (!book.smoke && LIGHT_SHEETS.has(name) && paletteId(paletteKey) !== 'dark') ? 'add' : 'normal';
     sprite.visible = false;
     (layer ?? (book.smoke ? (name === 'decal' ? decalLayer : smokeLayer) : lightLayer)).addChild(sprite);
     const p = {sprite, book, x, y, px, life, delay, fps, frame, rotation, spin, vx, vy, gravity, drag, grow, stretch, alpha, fadeIn, fadeOut,
@@ -211,10 +225,14 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
    * while it gathers -- under the fighters, so it never hides a body. Flat
    * sigils never spin: a squashed sprite that turns tumbles instead.
    */
+  /** A baked floor circle stands in perspective already; the drawn hexagram is flattened. */
+  const circleBaked = () => Boolean(bakedPieceLook('sigil-cast'));
   function sigil({x, y, paletteKey, signature, size = 30, ms = 320, follow = null}) {
     if (!signature) return;
-    part({name: `sigil:${signature.sigil}`, paletteKey, x, y, px: size * (signature.tier === 'ultimate' ? 3.6 : 2.6), life: ms + 160,
-      stretch: [1, 0.5], grow: [0.3, 1], fadeIn: 40, fadeOut: 0.3, alpha: 0.95, follow, layer: decalLayer});
+    const baked = circleBaked(), args = {paletteKey, x, y, px: size * (signature.tier === 'ultimate' ? 3.6 : 2.6), life: ms + 160,
+      stretch: baked ? [1, 1] : [1, 0.5], grow: [0.3, 1], fadeIn: 40, fadeOut: 0.3, alpha: 0.95, follow, layer: decalLayer};
+    part({name: `sigil:${signature.sigil}`, ...args});
+    if (baked) part({name: `sigilglow:${signature.sigil}`, ...args, alpha: 0.85, layer: null});
     created.sigils++;
   }
 
@@ -235,7 +253,9 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     if (signature.tier === 'ultimate') groundSigil(x, groundY, paletteKey, signature, size, 3.4, 0.75);
   }
   function groundSigil(x, groundY, paletteKey, own, size, k = 6, alpha = 0.9) {
-    part({name: `sigil:${own.sigil}`, paletteKey, x, y: groundY, px: size * k, life: 900, stretch: [1, 0.45], grow: [0.4, 1.05], fadeIn: 60, fadeOut: 0.45, alpha, layer: decalLayer});
+    const baked = circleBaked(), args = {paletteKey, x, y: groundY, px: size * k, life: 900, stretch: baked ? [1, 1] : [1, 0.45], grow: [0.4, 1.05], fadeIn: 60, fadeOut: 0.45, alpha, layer: decalLayer};
+    part({name: `sigil:${own.sigil}`, ...args});
+    if (baked) part({name: `sigilglow:${own.sigil}`, ...args, alpha: alpha * 0.9, layer: null});
     created.sigils++;
   }
 
@@ -440,7 +460,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     else if (motif === 'afterimage') part({name: p.look.head, paletteKey: p.look.material ? MATERIAL[p.look.material] ?? p.look.material : p.paletteKey, x: at.x, y: at.y,
       px: size * p.look.len, life: 160, anchor: p.look.anchor ?? [0.5, 0.5], rotation: p.look.upright ? 0 : at.angle, flipY: Math.cos(at.angle) < 0, alpha: 0.4, fadeOut: 1});
     else if (motif === 'ember') sparks({x: at.x, y: at.y, paletteKey: p.paletteKey, count: 1, angle: Math.PI / 2, cone: 1.4, speed: [40, 120], life: 420, size: size * 0.4, gravity: 420});
-    else if (motif === 'rune' && p.signature) part({name: `sigil:${p.signature.sigil}`, paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 0.9, life: 340, spin: 3, grow: [1, 0.4], alpha: 0.75, fadeOut: 0.6});
+    else if (motif === 'rune' && p.signature) part({name: `sigil:${p.signature.sigil}`, paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 0.9, life: 340, spin: circleBaked() ? 0 : 3, grow: [1, 0.4], alpha: 0.75, fadeOut: 0.6});
   }
 
   /** A signature's closing burst on top of the archetype's impact. */
