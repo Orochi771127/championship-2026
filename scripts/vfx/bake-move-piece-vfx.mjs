@@ -111,6 +111,9 @@ export const MOVE_PIECE_BAKE = Object.freeze({
   'mark-roots': {fx: 'nature/root-snare', until: 1.4, fit: 1.6, anchor: 'ground'},
   // ---- the special prelude's aura round its caster (pass 8: the vector ring and light streaks)
   'hyper-ring': {fx: 'arcane/rune-circle', loop: true, fps: 20, fit: 1.4, anchor: 'ground', grey: true},
+  // ---- the Data Arena's event rings (refinement pass 10): an energy shockwave and a small pop, seen from above
+  'ring-burst': {fx: 'arcane/mana-burst', from: 0.2, until: 0.75, fit: 1.0, anchor: 'centre', grey: true},
+  'ring-pop': {fx: 'impacts/parry', until: 0.55, fit: 1.0, anchor: 'centre', grey: true},
   // ---- support (on the receiving body)
   heal: {fx: 'holy/heal-aoe', until: 1.2, fit: 1.4, anchor: 'ground', grey: true},
   cleanse: {fx: 'holy/blessing', until: 1.2, fit: 1.6, anchor: 'ground', grey: true},

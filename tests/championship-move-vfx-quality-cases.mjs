@@ -325,3 +325,13 @@ test("refinement pass 9: the kit's wind-up, release and close, and the battle la
   assert.match(layer, /function pillar\([^)]*\) \{\n    if \(piecesBaked\(\)\) return;/, "the drawn light pillar stands down");
   assert.match(layer, /setPieces\.play\('prop-dust'/, "a fall bursts as a dirt explosion");
 });
+
+test("refinement pass 10: the Data Arena's event rings are baked energy rings and a fire hit is a ring of fire", async () => {
+  const fs = await import("node:fs");
+  const { MOVE_VFX_PIECE_SPRITES } = await import("../src/championship/presentation/vfx/moveVfxPieceSprites.js");
+  for (const name of ["ring-burst", "ring-pop"]) assert.ok(MOVE_VFX_PIECE_SPRITES[name]?.anchor === "centre", name);
+  const scene = fs.readFileSync("src/championship/presentation/dataArena/dataArenaPixiScene.js", "utf8");
+  assert.match(scene, /function ring\(x, y, radius, tint, life = 0\.4, alpha = 0\.9\) \{\n[^\n]*\n    if \(typeof elementFx\?\.eventRing === 'function' && elementFx\.eventRing/, "every scene ring goes through the baked ring first");
+  const { PIXEL_HIT_BURST_SPRITES } = await import("../src/championship/presentation/vfx/pixelHitBurstSprites.js");
+  assert.equal(PIXEL_HIT_BURST_SPRITES.FIRE.source, "fire/fire-ring");
+});

@@ -72,6 +72,7 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
   const moteTrails = [];
   // Each move's own moment (BESPOKE_MOVE_VFX_PROGRAM_20261111), as in the AI battle.
   const setPieces = typeof createMoveVfxSetPieces === 'function' ? createMoveVfxSetPieces({PIXI, layer: front, reducedMotion}) : null;
+  const ringRecent = [];
   // Cover materials as piece palettes (core lit top, main face, edge shadow); basalt burns inside.
   const COVER_PALETTE = Object.freeze({
     STONE: {core: 0xe4e8ea, main: 0xb7bec2, edge: 0x5e666e}, WOOD: {core: 0xe0b07a, main: 0xb07b48, edge: 0x553620},
@@ -223,6 +224,22 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
       }
       stats.props = (stats.props ?? 0) + 1;
       return true;
+    },
+    /**
+     * Refinement pass 10: the scene's event rings (shockwaves, recoveries, splashes, zone bursts) as a
+     * baked energy ring in the event's tint, seen from above. Returns false before the pieces load, so the
+     * scene keeps its drawn ring then. Rings fired together at one spot play once.
+     */
+    eventRing({x, y, radius = 60, tint = 0xffffff}) {
+      if (!setPieces) return false;
+      const now = (globalThis.performance?.now?.() ?? Date.now());
+      while (ringRecent.length && now - ringRecent[0].at > 140) ringRecent.shift();
+      if (ringRecent.some(r => Math.hypot(r.x - x, r.y - y) < 40)) return true;
+      const ch = s => (tint >> s) & 255, mixTo = (k, to) => ((Math.round(ch(16) + (to - ch(16)) * k) << 16) | (Math.round(ch(8) + (to - ch(8)) * k) << 8) | Math.round(ch(0) + (to - ch(0)) * k));
+      const palette = {core: mixTo(0.65, 255), main: tint, edge: mixTo(0.55, 0)};
+      const ok = setPieces.play(radius < 50 ? 'ring-pop' : 'ring-burst', {x, y, palette, size: Math.max(40, radius * 1.8)});
+      if (ok) ringRecent.push({x, y, at: now});
+      return ok;
     },
     /** True when the kit draws the shots, so the scene hides its own vector heads. */
     drawsShots: () => Boolean(kit),

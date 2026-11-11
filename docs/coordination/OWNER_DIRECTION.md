@@ -213,6 +213,11 @@ Refinement pass 9 (2026-11-12). Owner:「全部階段都要做好以後推上去
 - The Data Arena 80 TP close: pixelfx's ground slam replaces three drawn rings and sparks.
 - Battle layer: its drawn ground rings (launch, hit, ending, ultimate implode, heal, status, KO) and the heal light pillar stand down, since each of those moments already plays a baked piece. A heal that no support move cast shows the baked heal. A fall bursts as pixelfx's dirt explosion.
 
+Refinement pass 10 (2026-11-12): the Data Arena's events.
+- Every event ring the scene draws (about 45 call sites: shockwaves, recoveries, splashes, zone bursts, barrier, relay switches and so on) goes through one `ring()`. Once the baked pieces are in, that is an energy ring in the event's tint, seen from above: pixelfx's mana burst, or its parry pop for a small ring. Rings fired together at one spot play once. Before the pieces load the drawn ring stays.
+- The fire element's pixel hit burst was a heap of red balls (pixelfx's small explosion). It is now pixelfx's ring of fire bursting out at the feet, starting on its burst frame.
+- The arena's own floor markings (the centre ring and start marks) and the gameplay telegraphs stay as they are.
+
 <!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
 ## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
 
