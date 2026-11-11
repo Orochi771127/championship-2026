@@ -312,3 +312,16 @@ test("refinement pass 8: the hyper aura and the hit ground marks are baked pixel
   const layer = fs.readFileSync("src/championship/presentation/battleFx/battleFxLayer.js", "utf8");
   assert.match(layer, /if \(aura\) \{[\s\S]*?return;\n    \}/, "a baked aura replaces the vector ring and streaks");
 });
+
+test("refinement pass 9: the kit's wind-up, release and close, and the battle layer's rings, play baked pieces", async () => {
+  const fs = await import("node:fs");
+  const kit = fs.readFileSync("src/championship/presentation/vfx/moveVfxKit.js", "utf8");
+  assert.match(kit, /name: 'pfxhit:muzzle-spiral'/, "the wind-up gathers as a spell charge");
+  assert.match(kit, /name: 'pfxhit:muzzle', paletteKey, x, y, px: size \* 3\.2/, "the release flashes as a muzzle");
+  assert.match(kit, /name: 'pfxhit:quake', paletteKey, x, y: groundY, px: size \* 6/, "the close shocks as a ground slam");
+  assert.match(kit, /if \(signature && !\(piece && bakedPieceLook\('impact-frame'\)\)\) burstMotif/, "no motif rings over a move's own piece");
+  const layer = fs.readFileSync("src/championship/presentation/battleFx/battleFxLayer.js", "utf8");
+  assert.match(layer, /function spawnRing\([^)]*\) \{\n    if \(piecesBaked\(\)\) return;/, "the drawn rings stand down");
+  assert.match(layer, /function pillar\([^)]*\) \{\n    if \(piecesBaked\(\)\) return;/, "the drawn light pillar stands down");
+  assert.match(layer, /setPieces\.play\('prop-dust'/, "a fall bursts as a dirt explosion");
+});

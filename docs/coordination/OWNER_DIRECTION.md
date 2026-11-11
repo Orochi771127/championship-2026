@@ -206,6 +206,13 @@ Refinement pass 8 (2026-11-12). The Owner sent a phone recording of 阿花仔's 
 - The caster's dark red tint in the prelude is the original's own tint (nativeMotion.tintRgb) and stays.
 The full audit of the effects still drawn as strokes, circles and gradients follows in later passes: the shared element and battle layers, then the Data Arena's event effects, then ambient, hunt and ranch.
 
+Refinement pass 9 (2026-11-12). Owner:「全部階段都要做好以後推上去正式服，其他我不介入」. The kit's shared parts and the AI battle layer's drawn rings now play baked pieces once those are loaded; before that, they draw as before.
+- Wind-up: pixelfx's spell charge at the hand replaces the orb, the thin ring and the drawn streaks.
+- Release: pixelfx's muzzle flash along the shot replaces the flare, the shock ellipse and the sparks.
+- Contact: no signature-motif rings or crosses over a move's own piece; only a small flare stays.
+- The Data Arena 80 TP close: pixelfx's ground slam replaces three drawn rings and sparks.
+- Battle layer: its drawn ground rings (launch, hit, ending, ultimate implode, heal, status, KO) and the heal light pillar stand down, since each of those moments already plays a baked piece. A heal that no support move cast shows the baked heal. A fall bursts as pixelfx's dirt explosion.
+
 <!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
 ## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
 
