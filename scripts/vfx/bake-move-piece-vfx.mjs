@@ -95,6 +95,15 @@ export const MOVE_PIECE_BAKE = Object.freeze({
   'shot-ice': {fx: 'ice/ice-lance', loop: true, fps: 20, fit: 1.1, anchor: 'origin', grey: true},
   'shot-rocket': {fx: 'projectiles/rocket', loop: true, fps: 20, fit: 1.4, anchor: 'origin', noSmoke: true},
   'shot-disc': {fx: 'projectiles/energy-disc', loop: true, fps: 24, fit: 0.9, anchor: 'origin', grey: true},
+  // more flying heads (refinement pass 5)
+  'shot-leaf': {fx: 'nature/leaf-storm', loop: true, fps: 12, fit: 1.0, skyOnly: 10},
+  'shot-tornado': {fx: 'nature/tornado', loop: true, fps: 12, fit: 1.2, anchor: 'origin', grey: true, noSmoke: true},
+  'shot-arrow': {fx: 'projectiles/arrow', loop: true, fps: 20, fit: 1.0, anchor: 'origin'},
+  'shot-xp': {fx: 'pickups/xp-orb', loop: true, fps: 12, fit: 0.6, grey: true, skyOnly: 6},
+  'shot-heart': {fx: 'pickups/heart-pickup', loop: true, fps: 12, fit: 0.6, grey: true, skyOnly: 6},
+  'shot-star': {fx: 'pickups/power-star', loop: true, fps: 12, fit: 0.7, grey: true, skyOnly: 6},
+  'shot-fish': {fx: 'critters/fish-school', loop: true, fps: 12, fit: 1.0, grey: true},
+  'shot-wisp': {fx: 'critters/wisp', loop: true, fps: 12, fit: 0.8, grey: true, skyOnly: 10},
   // ---- support (on the receiving body)
   heal: {fx: 'holy/heal-aoe', until: 1.2, fit: 1.4, anchor: 'ground', grey: true},
   cleanse: {fx: 'holy/blessing', until: 1.2, fit: 1.6, anchor: 'ground', grey: true},

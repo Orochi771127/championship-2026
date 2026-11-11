@@ -249,7 +249,7 @@ test("refinement pass 3: flying shots carry baked heads and the arena's ground z
   assert.ok(MOVE_VFX_PIECE_SPRITES["zone-sigil"]?.frames.length > 3);
   const kit = fs.readFileSync("src/championship/presentation/vfx/moveVfxKit.js", "utf8");
   assert.match(kit, /BAKED_HEAD = Object\.freeze\(\{fire: \['shot-fire'/, "the fire shot flies a fireball");
-  assert.match(kit, /q\.rotation = q\.baked \? p\.angle/, "a baked head points along its flight");
+  assert.match(kit, /q\.rotation = q\.baked \? \(q\.upright \? 0 : p\.angle\)/, "a baked head points along its flight unless it stands upright");
   const scene = fs.readFileSync("src/championship/presentation/dataArena/dataArenaPixiScene.js", "utf8");
   assert.match(scene, /if \(!zoneSigil\(zone, color, p\) && pts\.length === 12\)/, "the drawn hexagram is only the fallback");
 });
@@ -263,4 +263,18 @@ test("refinement pass 4: the kit's impacts land baked hits and a baked head drop
   for (const [, look] of table.matchAll(/\['([a-z-]+)', [0-9.]+/g)) assert.ok(MOVE_VFX_PIECE_SPRITES[look], `${look} is baked`);
   for (const archetype of ["fire", "water", "claw", "slash", "missile", "bite"]) assert.ok(table.includes(" " + archetype + ": [") || table.startsWith(archetype + ": ["), archetype);
   assert.match(kit, /if \(p\.head\?\.baked\) p\.acc = 0;/);
+});
+
+test("refinement pass 5: more baked heads, and the Dex preview lands each move's own baked piece", async () => {
+  const fs = await import("node:fs");
+  const { MOVE_VFX_PIECE_SPRITES } = await import("../src/championship/presentation/vfx/moveVfxPieceSprites.js");
+  for (const name of ["shot-leaf", "shot-tornado", "shot-arrow", "shot-xp", "shot-heart", "shot-star", "shot-fish", "shot-wisp"]) assert.ok(MOVE_VFX_PIECE_SPRITES[name]?.loop, name);
+  const kit = fs.readFileSync("src/championship/presentation/vfx/moveVfxKit.js", "utf8");
+  assert.match(kit, /tornado: \['shot-tornado', 2\.2, true\]/, "a tornado stands upright");
+  const { showcasePieceLook } = await import("../src/championship/presentation/juicy/codexShowcaseTheater.js");
+  assert.equal(showcasePieceLook({ piece: "flurry", sprite: "feather_sm" }), "flurry-feather");
+  assert.equal(showcasePieceLook({ piece: "jaws-horn" }), "jaws");
+  for (const c of Object.values((await import("../src/championship/presentation/vfx/moveVfxChoreography.js")).MOVE_VFX_CHOREOGRAPHY)) {
+    if (c.contact) assert.ok(MOVE_VFX_PIECE_SPRITES[showcasePieceLook(c.contact)], `${c.contact.piece} has a baked look for the Dex`);
+  }
 });
