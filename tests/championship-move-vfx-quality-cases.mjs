@@ -239,3 +239,17 @@ test("refinement pass 2: floor circles, cover chips and breaks, and heavy-hit gr
   const scene = fs.readFileSync("src/championship/presentation/dataArena/dataArenaPixiScene.js", "utf8");
   assert.equal((scene.match(/elementFx\.prop\(/g) ?? []).length, 3, "relay cover and timber hits and breaks reach it");
 });
+
+test("refinement pass 3: flying shots carry baked heads and the arena's ground zones a baked sigil", async () => {
+  const fs = await import("node:fs");
+  const { MOVE_VFX_PIECE_SPRITES } = await import("../src/championship/presentation/vfx/moveVfxPieceSprites.js");
+  for (const name of ["shot-fire", "shot-water", "shot-arcane", "shot-void", "shot-laser", "shot-plasma", "shot-ice", "shot-rocket", "shot-disc"]) {
+    assert.ok(MOVE_VFX_PIECE_SPRITES[name]?.loop && MOVE_VFX_PIECE_SPRITES[name].frames.length > 3, `${name} loops`);
+  }
+  assert.ok(MOVE_VFX_PIECE_SPRITES["zone-sigil"]?.frames.length > 3);
+  const kit = fs.readFileSync("src/championship/presentation/vfx/moveVfxKit.js", "utf8");
+  assert.match(kit, /BAKED_HEAD = Object\.freeze\(\{fire: \['shot-fire'/, "the fire shot flies a fireball");
+  assert.match(kit, /q\.rotation = q\.baked \? p\.angle/, "a baked head points along its flight");
+  const scene = fs.readFileSync("src/championship/presentation/dataArena/dataArenaPixiScene.js", "utf8");
+  assert.match(scene, /if \(!zoneSigil\(zone, color, p\) && pts\.length === 12\)/, "the drawn hexagram is only the fallback");
+});

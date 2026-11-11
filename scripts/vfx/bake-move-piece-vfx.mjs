@@ -79,9 +79,22 @@ export const MOVE_PIECE_BAKE = Object.freeze({
   // ---- floor circles (refinement pass 2: the kit's drawn hexagram sigils)
   'sigil-cast': {fx: 'arcane/magic-circle-cast', until: 1.2, fit: 1.6, anchor: 'ground', grey: true},
   'sigil-rune': {fx: 'arcane/rune-circle', until: 1.2, fit: 1.6, anchor: 'ground', grey: true},
+  // the Data Arena's delayed ground zones: a round sigil seen from above that draws itself in as the zone charges
+  'zone-sigil': {fx: 'shadow/hex-sigil', until: 1.0, fit: 1.0, anchor: 'centre', grey: true},
   // ---- the arena's cover (refinement pass 2): a chip off a struck block, a block breaking
   'prop-chip': {fx: 'impacts/bullet-impact', until: 0.5, fit: 0.8, grey: true},
   'prop-dust': {fx: 'explosions/dirt-explosion', until: 1.0, fit: 1.6, anchor: 'ground', grey: true},
+  // ---- flying shots (refinement pass 3): looping heads the kit carries along the shot.
+  // anchor 'origin': the effect's own head point (the tip of a right-facing shot).
+  'shot-fire': {fx: 'fire/fireball', loop: true, fps: 20, fit: 1.0, anchor: 'origin'},
+  'shot-water': {fx: 'water/water-orb', loop: true, fps: 12, fit: 0.8, grey: true, skyOnly: 22},
+  'shot-arcane': {fx: 'arcane/arcane-orb', loop: true, fps: 12, fit: 0.8, grey: true, skyOnly: 30},
+  'shot-void': {fx: 'shadow/void-orb', loop: true, fps: 12, fit: 0.9, grey: true, skyOnly: 34},
+  'shot-laser': {fx: 'projectiles/laser-bolt', loop: true, fps: 24, fit: 1.0, anchor: 'origin', grey: true},
+  'shot-plasma': {fx: 'projectiles/plasma-shot', loop: true, fps: 20, fit: 1.0, anchor: 'origin', grey: true},
+  'shot-ice': {fx: 'ice/ice-lance', loop: true, fps: 20, fit: 1.1, anchor: 'origin', grey: true},
+  'shot-rocket': {fx: 'projectiles/rocket', loop: true, fps: 20, fit: 1.4, anchor: 'origin', noSmoke: true},
+  'shot-disc': {fx: 'projectiles/energy-disc', loop: true, fps: 24, fit: 0.9, anchor: 'origin', grey: true},
   // ---- support (on the receiving body)
   heal: {fx: 'holy/heal-aoe', until: 1.2, fit: 1.4, anchor: 'ground', grey: true},
   cleanse: {fx: 'holy/blessing', until: 1.2, fit: 1.6, anchor: 'ground', grey: true},
@@ -97,7 +110,10 @@ async function bakePiece(home, name, spec) {
   const fx = await loadEffect(spec.fx);
   const margin = 16;
   const r = renderFrames(fx, {fps: FPS, actor: false, margin, bg: 'none', seed: 7, options: spec.grey ? {palette: GREY} : {}});
-  let src = r.frames.slice(Math.round((spec.from ?? 0) * FPS), Math.max(1, Math.round((spec.until ?? 1) * FPS)));
+  const fps = spec.fps ?? FPS;
+  // a loop keeps its whole cycle (seamless), at its own frame rate
+  const rr = spec.loop ? renderFrames(fx, {fps, actor: false, margin, bg: 'none', seed: 7, options: spec.grey ? {palette: GREY} : {}}) : r;
+  let src = spec.loop ? rr.frames : r.frames.slice(Math.round((spec.from ?? 0) * FPS), Math.max(1, Math.round((spec.until ?? 1) * FPS)));
   const [OX, OY] = fx.meta.origin, w = r.w, h = r.h;
   let frames = src.map(f => finish(f, w, h, () => false, {noSmoke: spec.noSmoke, outline: false}));
   // dropDark: an effect's own backdrop (a storm's dark sky, a water body) goes; the game has its own arena
@@ -105,11 +121,20 @@ async function bakePiece(home, name, spec) {
   const count = d => { let n = 0; for (let j = 3; j < d.length; j += 4) if (d[j]) n++; return n; };
   // the wind-up (almost nothing lit) and the empty tail go -- the light layer keeps the same frames
   const peak = Math.max(...frames.map(count));
-  while (frames.length > 1 && count(frames[0]) < peak * 0.04) { frames.shift(); src = src.slice(1); }
-  while (frames.length > 1 && count(frames[frames.length - 1]) === 0) { frames.pop(); src = src.slice(0, -1); }
+  if (!spec.loop) {
+    while (frames.length > 1 && count(frames[0]) < peak * 0.04) { frames.shift(); src = src.slice(1); }
+    while (frames.length > 1 && count(frames[frames.length - 1]) === 0) { frames.pop(); src = src.slice(0, -1); }
+  }
   // The light layer: pixelfx's own bloom (its light buffer), the soft halo the colour layer drops.
   const lightOf = f => { const out = new Float32Array(w * h); for (let i = 0; i < w * h; i++) { const l = f.light[i]; out[i] = Math.max(l & 255, (l >>> 8) & 255, (l >>> 16) & 255) / 255; } return out; };
   const lights = spec.noGlow ? [] : src.map(lightOf);
+  // skyOnly: a floating orb keeps only what is more than that many texels above its own ground
+  // (its shadow and ground glow would trail behind a shot)
+  if (spec.skyOnly) {
+    const cut = OY + margin - spec.skyOnly;
+    for (const d of frames) for (let i = cut * w; i < w * h; i++) d[i * 4 + 3] = 0;
+    for (const L of lights) for (let i = cut * w; i < w * h; i++) L[i] = 0;
+  }
   let x0 = w, y0 = h, x1 = -1, y1 = -1;
   const grow = i => { const x = i % w, y = (i / w) | 0; x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); };
   for (const d of frames) for (let i = 0; i < w * h; i++) if (d[i * 4 + 3]) grow(i);
@@ -117,7 +142,8 @@ async function bakePiece(home, name, spec) {
   if (x1 < 0) throw new Error(`${name}: empty`);
   // contact: centred on the light of the first strong frame (where the blow lands); ground: the effect's feet line
   let ox, oy;
-  if ((spec.anchor ?? 'contact') === 'ground') { ox = OX + margin - x0; oy = OY + margin - y0; }
+  if ((spec.anchor ?? 'contact') === 'ground' || spec.anchor === 'origin') { ox = OX + margin - x0; oy = OY + margin - y0; }
+  else if (spec.anchor === 'centre') { ox = Math.round((x1 - x0) / 2); oy = Math.round((y1 - y0) / 2); }
   else {
     const first = frames.find(d => count(d) >= peak * 0.35) ?? frames[0];
     let sx = 0, sy = 0, n = 0;
@@ -151,7 +177,7 @@ async function bakePiece(home, name, spec) {
     }
     return lines.join('/');
   });
-  return {name, source: spec.fx, fps: FPS, anchor: spec.anchor ?? 'contact', fit: spec.fit ?? 1.4, w: cw, h: ch, ox, oy,
+  return {name, source: spec.fx, fps, ...(spec.loop ? {loop: true} : {}), anchor: spec.anchor ?? 'contact', fit: spec.fit ?? 1.4, w: cw, h: ch, ox, oy,
     palette: palette.map(([r0, g0, b0, a0]) => [r0, g0, b0, +(a0 / 255).toFixed(2)]), frames: rows, glow, gw, gh,
     finished: frames.map((d, k) => ({d, x0, y0, w, L: lights[k]}))};
 }
@@ -171,7 +197,7 @@ ${notice} */
 const piece = (meta, frames, glow) => Object.freeze({...meta, palette: Object.freeze(meta.palette.map(c => Object.freeze(c))), frames: Object.freeze(frames), glow: Object.freeze(glow)});
 export const MOVE_VFX_PIECE_KEYS = ${JSON.stringify(KEYS)};
 export const MOVE_VFX_PIECE_SPRITES = Object.freeze({
-${looks.map(l => `  ${JSON.stringify(l.name)}: piece(${JSON.stringify({source: l.source, fps: l.fps, anchor: l.anchor, fit: l.fit, w: l.w, h: l.h, ox: l.ox, oy: l.oy, gw: l.gw, gh: l.gh, palette: l.palette})},\n    ${JSON.stringify(l.frames)},\n    ${JSON.stringify(l.glow)})`).join(',\n')}
+${looks.map(l => `  ${JSON.stringify(l.name)}: piece(${JSON.stringify({source: l.source, fps: l.fps, ...(l.loop ? {loop: true} : {}), anchor: l.anchor, fit: l.fit, w: l.w, h: l.h, ox: l.ox, oy: l.oy, gw: l.gw, gh: l.gh, palette: l.palette})},\n    ${JSON.stringify(l.frames)},\n    ${JSON.stringify(l.glow)})`).join(',\n')}
 });
 `;
 }

@@ -134,6 +134,11 @@ Refinement pass 2 (2026-11-11), Owner:「那個地板的六芒星那些也可以
 - Struck cover throws a baked chip burst in its own material's colours. Broken cover bursts into debris and dust, leaves a crater under its rubble and holds the layer for 45 ms. These run on top of the scene's existing rock particles and camera trauma.
 Next: the kit's flying shots and drawn heads (water blobs, missiles, bombs...).
 
+Refinement pass 3 (2026-11-11): the flying shots and the Data Arena's floor hexagram.
+- Shots: once the baked pieces are in, the kit's fire, water, bubble, orb, pillar, black-hole, thunder, lance, arrow, bullet, gatling, shard, snowflake, missile, crescent and shuriken shots fly a looping pixelfx head (a fireball, a water orb, an arcane or void orb, a plasma or laser bolt, an ice lance, a rocket, an energy disc). The head is recoloured to the move and points along its flight; the kit's trails and escorts stay.
+- Zones: the Data Arena's delayed ground zones drew a hexagram of two crossed triangles. That is now a baked pixelfx sigil, seen from above, that draws itself in as the zone charges. It takes the zone's colour, with crisp lines and an added glow. The zone's circle and fill stay as the gameplay warning.
+Next: the kit's impact shapes (water drops and crests and other drawn bursts).
+
 <!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
 ## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
 
