@@ -27,7 +27,7 @@ import {battleEffectCellIsOriginal} from '../battleEffectSprites.js';
 import {createPixelHitBursts} from '../vfx/pixelHitBursts.js';
 import {createPixelMotes} from '../vfx/pixelMotes.js';
 import {moveVfxChoreography, moveVfxSupportChoreography} from '../vfx/moveVfxChoreography.js';
-import {createMoveVfxSetPieces} from '../vfx/moveVfxSetPieces.js';
+import {createMoveVfxSetPieces, bakedPieceLook, paintBakedPieceFrames} from '../vfx/moveVfxSetPieces.js';
 /** Palette key -> the element its motes wear (as unifiedMoveVfxResolver reads a bank's family colour). */
 const PALETTE_ELEMENT = Object.freeze({fire: 'FIRE', water: 'WATER', ice: 'ICE', thunder: 'THUNDER', metal: 'METAL', nature: 'WOOD',
   earth: 'EARTH', wind: 'WIND', light: 'SUN', dark: 'MOON'});
@@ -224,7 +224,12 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   const ghostLayer = new PIXI.Container({label: 'battle fx dash afterimages'});
   const hyperBack = new PIXI.Graphics(); hyperBack.label = 'battle fx hyper ring (behind)'; hyperBack.blendMode = 'add';
   const stasisBack = new PIXI.Graphics(); stasisBack.label = 'battle fx stasis rings';
-  worldBack.addChild(scorchLayer, groundGfx, stasisBack, hyperBack, ghostLayer);
+  // Refinement pass 8: the hyper aura as a baked pixelfx rune circle (colour + light), behind the caster.
+  const hyperBaked = new PIXI.Container(); hyperBaked.label = 'battle fx hyper aura (baked)';
+  worldBack.addChild(scorchLayer, groundGfx, hyperBack, hyperBaked, ghostLayer);
+  // The stasis rings lie on the ground, under the hyper aura.
+  if (typeof worldBack.addChildAt === 'function' && typeof worldBack.getChildIndex === 'function') worldBack.addChildAt(stasisBack, worldBack.getChildIndex(hyperBack));
+  else worldBack.addChild(stasisBack);
   const trailGfx = new PIXI.Graphics(); trailGfx.blendMode = 'add'; trailGfx.label = 'battle fx motion streaks';
   const particleLayer = new PIXI.Container({label: 'battle fx particles'});
   const flashLayer = new PIXI.Container({label: 'battle fx contact flashes'});
@@ -902,15 +907,45 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     }
   }
 
+  /** The hyper aura's baked frames (gold), painted once; null until the pieces are in. */
+  let hyperSheet = null;
+  function hyperAura() {
+    if (hyperSheet) return hyperSheet;
+    if (typeof bakedPieceLook !== 'function' || !bakedPieceLook('hyper-ring')) return null;
+    const palette = {core: 0xfff6c8, main: 0xffd23f, edge: 0xb8741a}, look = bakedPieceLook('hyper-ring');
+    const paint = glow => { const sheet = paintBakedPieceFrames('hyper-ring', palette, {glow}); if (!sheet) return null;
+      return {...sheet, textures: sheet.frames.map(c => { const t = PIXI.Texture.from(c); t.source.scaleMode = glow ? 'linear' : 'nearest'; return t; })}; };
+    const body = paint(false);
+    if (!body) return null;
+    const make = (sheet, add) => { const sp = new PIXI.Sprite(sheet.textures[0]); sp.anchor.set(sheet.ox / sheet.w, sheet.oy / sheet.h); if (add) sp.blendMode = 'add'; sp.visible = false; hyperBaked.addChild(sp); return sp; };
+    const light = paint(true);
+    hyperSheet = {look, body, light, bodySprite: make(body, false), lightSprite: light ? make(light, true) : null};
+    return hyperSheet;
+  }
   /** The special prelude's ring, split in depth round the caster. */
   function drawHyperWrap(view, ctx, dtMs) {
     hyperBack.clear(); hyperFront.clear();
     const focus = view.specialPrelude;
+    const aura = hyperAura();
+    if (aura) { aura.bodySprite.visible = false; if (aura.lightSprite) aura.lightSprite.visible = false; }
     if (!focus?.hyperVisible) { hyper = null; return; }
     const info = ctx.slotInfo?.(focus.slot);
     if (!info) return;
     if (!hyper || hyper.slot !== focus.slot) hyper = {slot: focus.slot, age: 0};
     hyper.age += dtMs;
+    if (aura) {
+      // The caster stands in a gold rune circle with its rising light (pixelfx), in place of the vector ring.
+      const grow = reducedMotion ? 1 : easeOut(clamp(hyper.age / 220, 0, 1));
+      const n = aura.body.textures.length, index = Math.floor(hyper.age / 1000 * aura.look.fps) % n;
+      const k = Math.max(40, info.width * 1.5) / aura.body.w * (0.6 + 0.4 * grow);
+      aura.bodySprite.texture = aura.body.textures[index]; aura.bodySprite.scale.set(k);
+      aura.bodySprite.position.set(Math.round(info.x), Math.round(info.groundY)); aura.bodySprite.visible = true;
+      if (aura.lightSprite) {
+        aura.lightSprite.texture = aura.light.textures[Math.min(index, aura.light.textures.length - 1)]; aura.lightSprite.scale.set(k * 2);
+        aura.lightSprite.position.set(Math.round(info.x), Math.round(info.groundY)); aura.lightSprite.visible = true; aura.lightSprite.alpha = 0.85;
+      }
+      return;
+    }
     const grow = reducedMotion ? 1 : easeOut(clamp(hyper.age / 220, 0, 1));
     const rx = Math.max(20, info.width * 0.68) * (0.6 + 0.4 * grow), ry = rx * 0.34;
     const height = (info.height * 0.9 + 12) * grow, x = info.x, y = info.groundY;

@@ -200,6 +200,12 @@ Refinement pass 6 (2026-11-12). A real Data Arena round, played by the QA autopi
 
 Refinement pass 7 (2026-11-12). All 204 ultimates were recaptured on the review page, which mirrors the AI battle's hit layers. Every contact opened with the same large white flare and its ring of tick marks, so for the first beat every ultimate looked alike. The impact frame is now only the first two frames of the flash, before the ring forms, at 0.7 of the move's contact scale. Each move's own shape reads from the contact frame: a pillar of light and notes, a black hole, an energy ring, fire tongues, an ice lance.
 
+Refinement pass 8 (2026-11-12). The Owner sent a phone recording of 阿花仔's 花藤纏縛 and then said:「我想要你把目前遊戲中還是用舊的那種廉價感的方式的特效都升級」. The recording showed two vector drawings:
+- The special prelude's hyper ring: a gold ellipse with white light streaks, drawn as strokes round the caster. Once the baked pieces are in, it is a gold pixelfx rune circle with its rising light, colour plus glow, looping for the whole prelude. The strokes stay as the fallback.
+- The hit ground marks other than the crater and scorch: a spiral of roots, frost spokes, ripple rings, sun rays, shade blots, all canvas strokes. They are now still frames of baked pixelfx ground effects (ripples, a frost ring of ice spikes, root snares, a low cloud, a light ring, a hex sigil), each its fullest frame. A thunder mark scorches the floor as a fire crater does.
+- The caster's dark red tint in the prelude is the original's own tint (nativeMotion.tintRgb) and stays.
+The full audit of the effects still drawn as strokes, circles and gradients follows in later passes: the shared element and battle layers, then the Data Arena's event effects, then ambient, hunt and ranch.
+
 <!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
 ## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
 

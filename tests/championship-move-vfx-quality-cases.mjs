@@ -301,3 +301,15 @@ test("refinement pass 7: the impact frame is two frames of flash, smaller than t
     assert.match(fs.readFileSync(file, "utf8"), /scale \?\? 1\) \* 0\.7\}\);/, `${file} plays it at 0.7 of the contact`);
   }
 });
+
+test("refinement pass 8: the hyper aura and the hit ground marks are baked pixelfx, not vector strokes", async () => {
+  const fs = await import("node:fs");
+  const { MOVE_VFX_PIECE_SPRITES } = await import("../src/championship/presentation/vfx/moveVfxPieceSprites.js");
+  for (const name of ["mark-ripple", "mark-frost", "mark-roots", "hyper-ring"]) assert.ok(MOVE_VFX_PIECE_SPRITES[name]?.frames.length > 3, name);
+  assert.ok(MOVE_VFX_PIECE_SPRITES["hyper-ring"].loop, "the aura loops for the whole prelude");
+  const { ELEMENT_DECAL_BAKED, ELEMENT_DECAL_AS_CRATER } = await import("../src/championship/presentation/vfx/elementVfxLayer.js");
+  for (const kind of ["puddle", "frost", "roots", "swirl", "sunburst", "shade"]) assert.ok(MOVE_VFX_PIECE_SPRITES[ELEMENT_DECAL_BAKED[kind]], `${kind} leaves a baked mark`);
+  assert.equal(ELEMENT_DECAL_AS_CRATER.static, "scorch", "a thunder mark scorches the floor");
+  const layer = fs.readFileSync("src/championship/presentation/battleFx/battleFxLayer.js", "utf8");
+  assert.match(layer, /if \(aura\) \{[\s\S]*?return;\n    \}/, "a baked aura replaces the vector ring and streaks");
+});

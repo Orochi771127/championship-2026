@@ -17,6 +17,18 @@
 import profiles from '../../../data/championship/battleEffectProfiles.json' with {type: 'json'};
 import {pixelateCanvas} from './pixelateCanvas.js';
 import {paintCraterBase, paintCraterEmbers, CRATER_KINDS, emberWeight, craterPop} from './groundCrater.js';
+import {bakedPieceLook, paintBakedPieceFrames} from './moveVfxSetPieces.js';
+
+/**
+ * Refinement pass 8 (BESPOKE_MOVE_VFX_PROGRAM_20261111): the ground marks drawn as vector strokes --
+ * a spiral of roots, frost spokes, sun rays -- read as cheap next to the craters. Once the baked
+ * pieces are in, each kind leaves a still frame of a pixelfx ground effect instead (its fullest
+ * frame); a thunder mark scorches the floor as a fire crater does. The canvas drawings stay as the
+ * fallback before the bake loads.
+ */
+export const ELEMENT_DECAL_BAKED = Object.freeze({puddle: 'mark-ripple', frost: 'mark-frost', roots: 'mark-roots', swirl: 'mist',
+  sunburst: 'heal', shade: 'eye'});
+export const ELEMENT_DECAL_AS_CRATER = Object.freeze({static: 'scorch'});
 
 const TAU = Math.PI * 2;
 const TICK_MS = 1000 / 60;
@@ -316,13 +328,47 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
 
   /** A four-second ground mark at a ground point, with the element's own ground cells. */
   function decal({x, y, kind, palette, paletteKey = 'neutral', size = 40, scale = 0}) {
+    if (ELEMENT_DECAL_AS_CRATER[kind] && bakedPieceLook('mark-ripple')) kind = ELEMENT_DECAL_AS_CRATER[kind];
     if (CRATER_KINDS.has(kind)) return crater({x, y, kind, palette, paletteKey, size, scale});
+    const baked = bakedMark(kind, palette);
+    if (baked) return bakedDecal({x, y, kind, baked, size, scale});
     const look = decalTexture(kind, paletteKey, palette, 1 + (created.decals % 3));
     if (!look) return;
     if (decals.length >= (rich ? 16 : 6)) { const old = decals.shift(); old.sprite.destroy(); old.ember?.destroy(); }
     const sprite = new PIXI.Sprite(look);
     sprite.anchor.set(0.5); sprite.position.set(x, y); sprite.scale.set(Math.max(18, size) / 128 * 2.1, Math.max(18, size) / 128 * 1.9);
     sprite.rotation = (random() - 0.5) * 0.12; sprite.alpha = 0;
+    decalLayer.addChild(sprite);
+    decals.push({sprite, age: 0, life: ELEMENT_DECAL_MS});
+    created.decals++;
+    if (scale > 0) for (const [bankId, sequence] of (rich ? ELEMENT_GROUND_CELLS[kind] ?? [] : (ELEMENT_GROUND_CELLS[kind] ?? []).slice(0, 1)))
+      cell({bankId, sequence, x, y, scale: scale * 0.9, ground: true});
+  }
+  /** The fullest frame of a baked ground look in a palette, cached per kind and palette. */
+  const bakedMarks = new Map();
+  function bakedMark(kind, palette) {
+    const name = ELEMENT_DECAL_BAKED[kind];
+    if (!name || !palette || typeof bakedPieceLook !== 'function' || !bakedPieceLook(name)) return null;
+    const key = `${name}:${palette.main}:${palette.core}:${palette.edge}`;
+    if (bakedMarks.has(key)) return bakedMarks.get(key);
+    const painted = paintBakedPieceFrames(name, palette, {doc: globalThis.document});
+    let best = null, most = -1;
+    for (const canvas of painted?.frames ?? []) {
+      const data = canvas.getContext?.('2d')?.getImageData?.(0, 0, canvas.width, canvas.height)?.data;
+      if (!data) continue;
+      let n = 0; for (let i = 3; i < data.length; i += 4) if (data[i]) n++;
+      if (n > most) { most = n; best = canvas; }
+    }
+    const value = best ? {texture: PIXI.Texture.from(best), w: painted.w, h: painted.h, ox: painted.ox, oy: painted.oy} : null;
+    if (value) value.texture.source.scaleMode = 'nearest';
+    bakedMarks.set(key, value);
+    return value;
+  }
+  function bakedDecal({x, y, kind, baked, size, scale}) {
+    if (decals.length >= (rich ? 16 : 6)) { const old = decals.shift(); old.sprite.destroy(); old.ember?.destroy(); }
+    const sprite = new PIXI.Sprite(baked.texture), k = Math.max(18, size) * 1.5 / baked.w;
+    sprite.anchor.set(baked.ox / baked.w, baked.oy / baked.h); sprite.position.set(Math.round(x), Math.round(y));
+    sprite.scale.set(k * (random() < 0.5 ? -1 : 1), k); sprite.alpha = 0;
     decalLayer.addChild(sprite);
     decals.push({sprite, age: 0, life: ELEMENT_DECAL_MS});
     created.decals++;

@@ -116,7 +116,8 @@ test('the hyper ring splits its streaks behind and in front of the caster', () =
   assert.ok(back.length >= 8 && front.length >= 8, 'both halves carry streaks');
   for (const s of back) assert.ok(Math.sin(s.angle) < 0, 'far half (up the screen) draws behind the body');
   const layer = fs.readFileSync(new URL('../src/championship/presentation/battleFx/battleFxLayer.js', import.meta.url), 'utf8');
-  assert.match(layer, /worldBack\.addChild\(scorchLayer, groundGfx, hyperBack, ghostLayer\)/, 'the far half lives under the actors');
+  // the far half (and, refinement pass 8, the baked aura that replaces it once loaded) lives under the actors
+  assert.match(layer, /worldBack\.addChild\(scorchLayer, groundGfx, hyperBack, hyperBaked, ghostLayer\)/, 'the far half lives under the actors');
   assert.match(layer, /worldFront\.addChild\(hyperFront,/, 'the near half lives over the actors');
   const overlay = fs.readFileSync(new URL('../src/championship/presentation/vs5/createBattleVfxThreeOverlay.js', import.meta.url), 'utf8');
   assert.match(overlay, /!placement\.hyperWrap/, 'the flat 3D copy stays off while the ring is wrapped');
