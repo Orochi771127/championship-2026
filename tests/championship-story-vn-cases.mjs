@@ -25,8 +25,11 @@ const read = path => fs.readFileSync(new URL(`../${path}`, import.meta.url), "ut
 test("three parts of main chapters, side stories, requests and the part-three hub validate and end", () => {
   const p3 = ["vn3-c1", "vn3-c2", "vn3-c3", "vn3-c4", "vn3-c5", "vn3-c6"];
   const p4 = ["vn4-c1", "vn4-c2", "vn4-c3", "vn4-c4", "vn4-c5", "vn4-c6"];
-  assert.deepEqual(STORY_VN_MAIN_IDS, ["vn1-c1", "vn1-c2", "vn1-c3", "vn1-c4", "vn1-c5", "vn1-c6", "vn2-c1", "vn2-c2", "vn2-c3", "vn2-c4", "vn2-c5", "vn2-c6", ...p3, ...p4]);
-  assert.deepEqual(STORY_VN_SIDE_IDS, ["vn1-s1", "vn1-s2", "vn2-s1", "vn2-s2", "vn3-r1", "vn3-r2", "vn3-r3", "vn3-r4", "vn3-r5", "vn3-r6", "vn4-r1", "vn4-r2", "vn4-r3", "vn4-r4"]);
+  const p5 = ["vn5-c1", "vn5-c2", "vn5-c3", "vn5-c4", "vn5-c5", "vn5-c6"];
+  assert.deepEqual(STORY_VN_MAIN_IDS, ["vn1-c1", "vn1-c2", "vn1-c3", "vn1-c4", "vn1-c5", "vn1-c6", "vn2-c1", "vn2-c2", "vn2-c3", "vn2-c4", "vn2-c5", "vn2-c6", ...p3, ...p4, ...p5]);
+  assert.deepEqual(STORY_VN_SIDE_IDS, ["vn1-s1", "vn1-s2", "vn2-s1", "vn2-s2", "vn3-r1", "vn3-r2", "vn3-r3", "vn3-r4", "vn3-r5", "vn3-r6", "vn4-r1", "vn4-r2", "vn4-r3", "vn4-r4", "vn5-r1", "vn5-r2", "vn5-r3", "vn5-r4"]);
+  assert.deepEqual(p5.map(id => STORY_VN_CHAPTERS[id].mapNumber), [26, 27, 28, 29, 30, 31]);
+  assert.deepEqual(p5.map(id => STORY_VN_CHAPTERS[id].needs ?? 0), [0, 1, 1, 2, 3, 4], "part five opens on its own requests");
   assert.deepEqual(p4.map(id => STORY_VN_CHAPTERS[id].mapNumber), [20, 21, 22, 23, 24, 25]);
   assert.deepEqual(p4.map(id => STORY_VN_CHAPTERS[id].needs ?? 0), [0, 1, 1, 2, 3, 4], "part four opens on its own requests");
   for (const id of STORY_VN_CHAPTER_IDS) {
@@ -36,22 +39,24 @@ test("three parts of main chapters, side stories, requests and the part-three hu
     else assert.equal(STORY_VN_CHAPTERS[id].reward.tickets, 1, `${id}: one ticket per chapter (Owner 2026-11-11)`);
   }
   // Part three is walked: every chapter and request but the sparring one explores a field.
-  for (const id of [...p3, "vn3-r1", "vn3-r2", "vn3-r3", "vn3-r5", "vn3-r6", "vn3-hub", "vn4-c1", "vn4-c2", "vn4-c3", "vn4-c4", "vn4-r1", "vn4-r3"]) assert.ok(STORY_VN_CHAPTERS[id].beats.some(beat => beat.type === "explore"), id);
+  for (const id of [...p3, "vn3-r1", "vn3-r2", "vn3-r3", "vn3-r5", "vn3-r6", "vn3-hub", "vn4-c1", "vn4-c2", "vn4-c3", "vn4-c4", "vn4-r1", "vn4-r3", "vn5-c1", "vn5-c2", "vn5-c3", "vn5-c5", "vn5-r1", "vn5-r4"]) assert.ok(STORY_VN_CHAPTERS[id].beats.some(beat => beat.type === "explore"), id);
   // A spot never stages actors over the field, and every field has a way out.
   assert.deepEqual(validateStoryVnChapter("x", { beats: [{ type: "explore", field: "lobby", spots: [{ id: "a", kind: "inspect", at: [10, 10], beats: [{ type: "enter", who: "partner" }] }] }, { type: "end" }] }),
     ["x#0.a#0: enter inside a spot", "x#0: no way out"]);
   // Every main chapter but the last pair has at least one real battle in the arc; the first, fifth and sixth fight.
   const battles = STORY_VN_MAIN_IDS.filter(id => STORY_VN_CHAPTERS[id].beats.some(beat => beat.type === "battle"));
-  assert.deepEqual(battles, ["vn1-c1", "vn1-c5", "vn1-c6", "vn2-c1", "vn2-c2", "vn2-c3", "vn2-c4", "vn2-c5", "vn2-c6", "vn3-c6", "vn4-c2", "vn4-c5", "vn4-c6"]);
+  assert.deepEqual(battles, ["vn1-c1", "vn1-c5", "vn1-c6", "vn2-c1", "vn2-c2", "vn2-c3", "vn2-c4", "vn2-c5", "vn2-c6", "vn3-c6", "vn4-c2", "vn4-c5", "vn4-c6", "vn5-c4", "vn5-c6"]);
   const battleBeats = beats => beats.flatMap(beat => [beat, ...(beat.spots ?? []).flatMap(spot => battleBeats(spot.beats ?? []))]).filter(beat => beat.type === "battle");
   const presets = STORY_VN_MAIN_IDS.flatMap(id => battleBeats(STORY_VN_CHAPTERS[id].beats).flatMap(beat => beat.presets));
-  assert.deepEqual(presets, [491, 515, 542, 530, 563, 551, 530, 568, 574, 515, 563, 542, 566, 562, 570, 569]);
+  assert.deepEqual(presets, [491, 515, 542, 530, 563, 551, 530, 568, 574, 515, 563, 542, 566, 562, 570, 569, 559, 561, 565]);
   // Every story battle is a native free-battle preset whose partner the story shows.
   for (const [key, cast] of Object.entries(STORY_VN_CAST)) if (cast.preset) assert.ok(presets.includes(cast.preset) || key === "rivalMon", key);
   const data = read("src/championship/data/storyVnCampaign.js");
   assert.deepEqual(data.match(/^import .*$/gm), ['import { STORY_VN_PART_TWO_BACKGROUNDS, STORY_VN_PART_TWO_CAST, STORY_VN_PART_TWO_CHAPTERS, STORY_VN_PART_TWO_SPEAKERS } from "./storyVnPartTwo.js";',
     'import { STORY_VN_PART_THREE_BACKGROUNDS, STORY_VN_PART_THREE_CAST, STORY_VN_PART_THREE_CHAPTERS, STORY_VN_PART_THREE_SPEAKERS } from "./storyVnPartThree.js";',
-    'import { STORY_VN_PART_FOUR_BACKGROUNDS, STORY_VN_PART_FOUR_CAST, STORY_VN_PART_FOUR_CHAPTERS, STORY_VN_PART_FOUR_SPEAKERS } from "./storyVnPartFour.js";'], "pure data, the later parts only");
+    'import { STORY_VN_PART_FOUR_BACKGROUNDS, STORY_VN_PART_FOUR_CAST, STORY_VN_PART_FOUR_CHAPTERS, STORY_VN_PART_FOUR_SPEAKERS } from "./storyVnPartFour.js";',
+    'import { STORY_VN_PART_FIVE_BACKGROUNDS, STORY_VN_PART_FIVE_CAST, STORY_VN_PART_FIVE_CHAPTERS, STORY_VN_PART_FIVE_SPEAKERS } from "./storyVnPartFive.js";'], "pure data, the later parts only");
+  assert.equal(read("src/championship/data/storyVnPartFive.js").match(/^import /m), null, "part five is pure data");
   assert.equal(read("src/championship/data/storyVnPartFour.js").match(/^import /m), null, "part four is pure data");
   assert.equal(read("src/championship/data/storyVnPartThree.js").match(/^import /m), null, "part three is pure data");
   assert.doesNotMatch(data, /https?:|localStorage|fetch\(|Math\.random/);
@@ -78,7 +83,8 @@ test("progress rides the once-only reward ledger: chapters open in order, side s
     "story:vn2:c1", "story:vn2:c2", "story:vn2:c3", "story:vn2:c4", "story:vn2:c5", "story:vn2:c6", "story:vn2:s1", "story:vn2:s2",
     "story:vn3:c0", "story:vn3:c1", "story:vn3:c2", "story:vn3:c3", "story:vn3:c4", "story:vn3:c5", "story:vn3:c6",
     "story:vn3:s1", "story:vn3:s2", "story:vn3:s3", "story:vn3:s4", "story:vn3:s5", "story:vn3:s6",
-    "story:vn4:c1", "story:vn4:c2", "story:vn4:c3", "story:vn4:c4", "story:vn4:c5", "story:vn4:c6", "story:vn4:s1", "story:vn4:s2", "story:vn4:s3", "story:vn4:s4"]);
+    "story:vn4:c1", "story:vn4:c2", "story:vn4:c3", "story:vn4:c4", "story:vn4:c5", "story:vn4:c6", "story:vn4:s1", "story:vn4:s2", "story:vn4:s3", "story:vn4:s4",
+    "story:vn5:c1", "story:vn5:c2", "story:vn5:c3", "story:vn5:c4", "story:vn5:c5", "story:vn5:c6", "story:vn5:s1", "story:vn5:s2", "story:vn5:s3", "story:vn5:s4"]);
   const view = (claimed, options) => storyVnChapterStates(claimed, options).map(s => `${s.id}:${s.state}`).join(" ");
   const states = (claimed, options) => Object.fromEntries(storyVnChapterStates(claimed, options).map(s => [s.id, s.state]));
   assert.ok(Object.values(states([], { entryOpen: false })).every(state => state === "locked"));
@@ -144,8 +150,8 @@ test("the living scene plates (still + parallax loop) are on disk, hashed, light
     assert.match(plate.motion, /\.mp4$/); assert.ok(ambients.has(plate.ambient), id);
     assert.ok(plate.ground > 0.7 && plate.ground < 0.9, id);
   }
-  assert.equal(Object.keys(STORY_VN_BACKGROUNDS).length, 23);
-  assert.ok(total < 6_400_000, `the twenty-three scenes stay under 6.4 MB (${total})`);
+  assert.equal(Object.keys(STORY_VN_BACKGROUNDS).length, 27);
+  assert.ok(total < 7_600_000, `the twenty-seven scenes stay under 7.6 MB (${total})`);
   const index = JSON.parse(read("assets/production/ART_PRODUCTION_INDEX.json"));
   const record = index.entries.find(entry => entry.manifestPath === "assets/production/story/vn-backgrounds-v3/manifest.json");
   assert.ok(record, "art index record"); assert.equal(record.rightsStatus, "ORIGINAL_GENERATED"); assert.equal(record.runtimeEligible, true);

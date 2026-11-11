@@ -775,6 +775,138 @@
         "encoding": "H.264 High, CRF 32, yuv420p, faststart, no audio"
       },
       "groundLine": 0.72
+    },
+    {
+      "id": "ruins",
+      "nameZh": "沉默伺服器",
+      "ambient": "petals",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 2856759,
+        "sha256": "aa605c217508260a0221efbe81ad701ce87ddf1ec84fe00043aab83db84652e8",
+        "file": "p5/p5-ruins.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v3/ruins.3a3aff7e732620a4.webp",
+        "bytes": 77050,
+        "sha256": "3a3aff7e732620a424a6c836e6e43393fdf784ff29228dc5743ccd2e63d40fb4",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v3/ruins.d870a74cbe66acb7.mp4",
+        "bytes": 182567,
+        "sha256": "d870a74cbe66acb7c7bd96f8bc52b5338e35ef6ac819dff4496797df2ad7183d",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 32, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    },
+    {
+      "id": "rift",
+      "nameZh": "最初的裂縫",
+      "ambient": "shards",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 2549305,
+        "sha256": "0f7c2b66a856b952b2952519a3021ed6799e746738f97e6784eba36c27cca79d",
+        "file": "p5/p5-rift.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v3/rift.ff095b72b578e5c3.webp",
+        "bytes": 63134,
+        "sha256": "ff095b72b578e5c39905606d0f28f47cc353a3bca04fdac6bc140afcaf1c6ca4",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v3/rift.e950fa5ba1a1c059.mp4",
+        "bytes": 153790,
+        "sha256": "e950fa5ba1a1c0592863ac372a364549974d3da5a83fedfdb9ec37a7fba4e839",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 32, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    },
+    {
+      "id": "archive",
+      "nameZh": "封存世界的書庫",
+      "ambient": "dust",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 2879298,
+        "sha256": "f6edbf87eb1ee08701d30a77e24545dd61176b12465178b2d7de56262b6f0feb",
+        "file": "p5/p5-archive.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v3/archive.b2a531d692e51265.webp",
+        "bytes": 95358,
+        "sha256": "b2a531d692e51265c88e9b367b479ce30b5a4f6e65bd74b39f298338a189dc0a",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v3/archive.4da297874d1317cc.mp4",
+        "bytes": 238771,
+        "sha256": "4da297874d1317cc1e0d8b021ef91dc4dfcd9dc7e99bfb082feb3e94b60e22e6",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 32, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    },
+    {
+      "id": "core",
+      "nameZh": "螺旋的中心",
+      "ambient": "shards",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 2705154,
+        "sha256": "affcfe9a9410ba7ace7d3e3afa7265d316d4ba61b33ac2d0ed35e3d5a4b6325e",
+        "file": "p5/p5-core.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v3/core.19675bf6b4640a3e.webp",
+        "bytes": 67506,
+        "sha256": "19675bf6b4640a3e10493521fa7e54462c466e371e43a9a1fb2d1f793eff3286",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v3/core.3ca264c9d44e33ed.mp4",
+        "bytes": 159063,
+        "sha256": "3ca264c9d44e33ed51401fa1a512d552510caa9ef5ae51df86b09866084153c2",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 32, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
     }
   ]
 }

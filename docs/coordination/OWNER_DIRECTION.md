@@ -1,5 +1,24 @@
 # Championship Owner Direction
 
+<!-- record-id: STORY_VN_PART_FIVE_20261111 -->
+## 2026-11-11 — Story part five 「回聲之源」 (chapters 26–31), the finale — held until the Owner releases it
+
+The Owner chose this direction after part three: 「回聲之源篇：回到第一部的「未被聽見的回聲」，追查最早的那道裂縫是誰造成的。」 They then said 「第四部跟第五部做完以後先不要上線」, so this part ships only together with part four, when the Owner says so. The Owner also asked to turn the whole Moonlight ROM story into ours. That was declined: its plot belongs to its owner and the ROM is research-only. Moonlight's scale and structure are used instead, as in parts three and four.
+
+OWNER_APPROVED_ADAPTATION, story content. No new save field. No battle rule, RNG, clock or reward-amount change.
+
+- Plot (original):
+  - Hush's coordinates lead to the Silent Server, the ruins of the first world, where a service-ending notice still stands.
+  - At the First Rift, an old guardian reveals that the rift was torn from the inside, by a voice.
+  - In the Archive of Closed Worlds the partner learns about Zero. Zero was the first partner, and was still waiting at the gate when its world was switched off. Its unstopped cry took in the other unheard echoes and became the Spiral, the force behind every part so far. Its aim: if all voices were one, no one would ever wait unanswered again.
+  - The Spiral throws the partner out. The partner then gathers a "welcome back" from everyone met so far: Rin, Subaru, Frost, the Twins, Shizu and Oran.
+  - The partner wins at the heart of the Spiral. Ai-chan, who was made from the same kind of unanswered greeting, says "welcome back, Zero", and Zero answers "I'm back". The rifts close, and Zero becomes a trainee receptionist.
+- Data `data/storyVnPartFive.js`:
+  - Chapters 26–31 (`story:vn5:c*`) need 0, 1, 1, 2, 3 and 4 of part five's own requests.
+  - Four requests (`story:vn5:s*`): the lost journals, tea at the Black Lotus, Rin and Frost, and Ai-chan's day off. Each pays one ticket.
+  - Battles use native presets: guardian (196, 559), herald (197, 561), the Spiral's true form (202, 565). Zero is species 203.
+- Four new hand-painted scenes with living loops: ruins, rift, archive and Spiral core. The copy is in five locales (187 new keys, 1,081 in all).
+
 <!-- record-id: STORY_VN_PART_FOUR_20261111 -->
 ## 2026-11-11 — Story part four 「群星的全國大賽」 (chapters 20–25)
 

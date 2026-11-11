@@ -35,6 +35,7 @@
 import { STORY_VN_PART_TWO_BACKGROUNDS, STORY_VN_PART_TWO_CAST, STORY_VN_PART_TWO_CHAPTERS, STORY_VN_PART_TWO_SPEAKERS } from "./storyVnPartTwo.js";
 import { STORY_VN_PART_THREE_BACKGROUNDS, STORY_VN_PART_THREE_CAST, STORY_VN_PART_THREE_CHAPTERS, STORY_VN_PART_THREE_SPEAKERS } from "./storyVnPartThree.js";
 import { STORY_VN_PART_FOUR_BACKGROUNDS, STORY_VN_PART_FOUR_CAST, STORY_VN_PART_FOUR_CHAPTERS, STORY_VN_PART_FOUR_SPEAKERS } from "./storyVnPartFour.js";
+import { STORY_VN_PART_FIVE_BACKGROUNDS, STORY_VN_PART_FIVE_CAST, STORY_VN_PART_FIVE_CHAPTERS, STORY_VN_PART_FIVE_SPEAKERS } from "./storyVnPartFive.js";
 
 export const STORY_VN_SCHEMA_VERSION = 1;
 export const STORY_VN_REWARD_PREFIX = "story:vn1:";
@@ -73,7 +74,8 @@ export const STORY_VN_BACKGROUNDS = freezeDeep({
   void: { src: "assets/production/story/vn-backgrounds-v3/void.f59472dc564e3802.webp", motion: "assets/production/story/vn-backgrounds-v3/void.b59128efe8a73669.mp4", ambient: "shards", ground: 0.8, focus: 0.55 },
   ...STORY_VN_PART_TWO_BACKGROUNDS,
   ...STORY_VN_PART_THREE_BACKGROUNDS,
-  ...STORY_VN_PART_FOUR_BACKGROUNDS
+  ...STORY_VN_PART_FOUR_BACKGROUNDS,
+  ...STORY_VN_PART_FIVE_BACKGROUNDS
 });
 
 /**
@@ -103,7 +105,8 @@ export const STORY_VN_CAST = freezeDeep({
   vessel: { species: 148, tagKey: "TAG_VESSEL", overwritten: true, scale: 1.6, preset: 542 },
   ...STORY_VN_PART_TWO_CAST,
   ...STORY_VN_PART_THREE_CAST,
-  ...STORY_VN_PART_FOUR_CAST
+  ...STORY_VN_PART_FOUR_CAST,
+  ...STORY_VN_PART_FIVE_CAST
 });
 
 /** Speakers: name-plate key, the cast member whose bust and body speak, and the human behind it (if any). */
@@ -125,7 +128,8 @@ export const STORY_VN_SPEAKERS = freezeDeep({
   residentB: { nameKey: "TAG_RESIDENT_B", cast: "residentB" },
   ...STORY_VN_PART_TWO_SPEAKERS,
   ...STORY_VN_PART_THREE_SPEAKERS,
-  ...STORY_VN_PART_FOUR_SPEAKERS
+  ...STORY_VN_PART_FOUR_SPEAKERS,
+  ...STORY_VN_PART_FIVE_SPEAKERS
 });
 
 export const STORY_VN_CHAPTERS = freezeDeep({
@@ -437,7 +441,8 @@ export const STORY_VN_CHAPTERS = freezeDeep({
   },
   ...STORY_VN_PART_TWO_CHAPTERS,
   ...STORY_VN_PART_THREE_CHAPTERS,
-  ...STORY_VN_PART_FOUR_CHAPTERS
+  ...STORY_VN_PART_FOUR_CHAPTERS,
+  ...STORY_VN_PART_FIVE_CHAPTERS
 });
 
 export const STORY_VN_CHAPTER_IDS = Object.freeze(Object.keys(STORY_VN_CHAPTERS));

@@ -9001,7 +9001,16 @@
     "assets/production/story/vn-backgrounds-v3/tower.1d1fe25c515bd6fe.webp",
     "assets/production/story/vn-backgrounds-v3/tower.db577bef3655529b.mp4",
     "assets/production/story/vn-backgrounds-v3/village.16ef9783e84b81fd.mp4",
-    "assets/production/story/vn-backgrounds-v3/village.f92baef41e6c8589.webp"
+    "assets/production/story/vn-backgrounds-v3/village.f92baef41e6c8589.webp",
+    "src/championship/data/storyVnPartFive.js",
+    "assets/production/story/vn-backgrounds-v3/archive.4da297874d1317cc.mp4",
+    "assets/production/story/vn-backgrounds-v3/archive.b2a531d692e51265.webp",
+    "assets/production/story/vn-backgrounds-v3/core.19675bf6b4640a3e.webp",
+    "assets/production/story/vn-backgrounds-v3/core.3ca264c9d44e33ed.mp4",
+    "assets/production/story/vn-backgrounds-v3/rift.e950fa5ba1a1c059.mp4",
+    "assets/production/story/vn-backgrounds-v3/rift.ff095b72b578e5c3.webp",
+    "assets/production/story/vn-backgrounds-v3/ruins.3a3aff7e732620a4.webp",
+    "assets/production/story/vn-backgrounds-v3/ruins.d870a74cbe66acb7.mp4"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -40613,7 +40622,7 @@
       },
       {
         "path": "src/championship/data/storyVnCampaign.js",
-        "sha256": "f18d2197d72ad79f0fe5f572a4c29fac3e6063fe3aa0ff8abedaa43518904c44"
+        "sha256": "5495b7a5a2621341b29d5fa1c8fac06b4e8262dd4d9ec9a9f5dc695b85c5ea5d"
       },
       {
         "path": "src/championship/data/storyVnExpressions.js",
@@ -42129,7 +42138,7 @@
       },
       {
         "path": "src/championship/text/storyVnText.js",
-        "sha256": "41a39a86f71c954c78a88718f2280bbe6fc87a310a649045b69048e26af40bbd"
+        "sha256": "d7e9ee0e4e510bf0714e94e71b7b61c37554870caf6adcab4282e0283d67123b"
       },
       {
         "path": "src/championship/text/syncLevelText.js",
@@ -42526,6 +42535,42 @@
       {
         "path": "assets/production/story/vn-backgrounds-v3/village.f92baef41e6c8589.webp",
         "sha256": "f92baef41e6c858913698c726bc9b83879684a52218d8ae9205e7d0a313a88d0"
+      },
+      {
+        "path": "src/championship/data/storyVnPartFive.js",
+        "sha256": "415a5fa8e4d816991c7ee41cb922f220115993b649aa7d21a3b7d309f2c307fd"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/archive.4da297874d1317cc.mp4",
+        "sha256": "4da297874d1317cc1e0d8b021ef91dc4dfcd9dc7e99bfb082feb3e94b60e22e6"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/archive.b2a531d692e51265.webp",
+        "sha256": "b2a531d692e51265c88e9b367b479ce30b5a4f6e65bd74b39f298338a189dc0a"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/core.19675bf6b4640a3e.webp",
+        "sha256": "19675bf6b4640a3e10493521fa7e54462c466e371e43a9a1fb2d1f793eff3286"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/core.3ca264c9d44e33ed.mp4",
+        "sha256": "3ca264c9d44e33ed51401fa1a512d552510caa9ef5ae51df86b09866084153c2"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/rift.e950fa5ba1a1c059.mp4",
+        "sha256": "e950fa5ba1a1c0592863ac372a364549974d3da5a83fedfdb9ec37a7fba4e839"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/rift.ff095b72b578e5c3.webp",
+        "sha256": "ff095b72b578e5c39905606d0f28f47cc353a3bca04fdac6bc140afcaf1c6ca4"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/ruins.3a3aff7e732620a4.webp",
+        "sha256": "3a3aff7e732620a424a6c836e6e43393fdf784ff29228dc5743ccd2e63d40fb4"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/ruins.d870a74cbe66acb7.mp4",
+        "sha256": "d870a74cbe66acb7c7bd96f8bc52b5338e35ef6ac819dff4496797df2ad7183d"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",
