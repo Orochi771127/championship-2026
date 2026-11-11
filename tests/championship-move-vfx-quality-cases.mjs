@@ -312,3 +312,36 @@ test("refinement pass 8: the hyper aura and the hit ground marks are baked pixel
   const layer = fs.readFileSync("src/championship/presentation/battleFx/battleFxLayer.js", "utf8");
   assert.match(layer, /if \(aura\) \{[\s\S]*?return;\n    \}/, "a baked aura replaces the vector ring and streaks");
 });
+
+test("refinement pass 9: the kit's wind-up, release and close, and the battle layer's rings, play baked pieces", async () => {
+  const fs = await import("node:fs");
+  const kit = fs.readFileSync("src/championship/presentation/vfx/moveVfxKit.js", "utf8");
+  assert.match(kit, /name: 'pfxhit:muzzle-spiral'/, "the wind-up gathers as a spell charge");
+  assert.match(kit, /name: 'pfxhit:muzzle', paletteKey, x, y, px: size \* 3\.2/, "the release flashes as a muzzle");
+  assert.match(kit, /name: 'pfxhit:quake', paletteKey, x, y: groundY, px: size \* 6/, "the close shocks as a ground slam");
+  assert.match(kit, /if \(signature && !\(piece && bakedPieceLook\('impact-frame'\)\)\) burstMotif/, "no motif rings over a move's own piece");
+  const layer = fs.readFileSync("src/championship/presentation/battleFx/battleFxLayer.js", "utf8");
+  assert.match(layer, /function spawnRing\([^)]*\) \{\n    if \(piecesBaked\(\)\) return;/, "the drawn rings stand down");
+  assert.match(layer, /function pillar\([^)]*\) \{\n    if \(piecesBaked\(\)\) return;/, "the drawn light pillar stands down");
+  assert.match(layer, /setPieces\.play\('prop-dust'/, "a fall bursts as a dirt explosion");
+});
+
+test("refinement pass 10: the Data Arena's event rings are baked energy rings and a fire hit is a ring of fire", async () => {
+  const fs = await import("node:fs");
+  const { MOVE_VFX_PIECE_SPRITES } = await import("../src/championship/presentation/vfx/moveVfxPieceSprites.js");
+  for (const name of ["ring-burst", "ring-pop"]) assert.ok(MOVE_VFX_PIECE_SPRITES[name]?.anchor === "centre", name);
+  const scene = fs.readFileSync("src/championship/presentation/dataArena/dataArenaPixiScene.js", "utf8");
+  assert.match(scene, /function ring\(x, y, radius, tint, life = 0\.4, alpha = 0\.9\) \{\n[^\n]*\n    if \(typeof elementFx\?\.eventRing === 'function' && elementFx\.eventRing/, "every scene ring goes through the baked ring first");
+  const { PIXEL_HIT_BURST_SPRITES } = await import("../src/championship/presentation/vfx/pixelHitBurstSprites.js");
+  assert.equal(PIXEL_HIT_BURST_SPRITES.FIRE.source, "fire/fire-ring");
+});
+
+test("refinement pass 11: the field's hazard events and charged-water arcs play baked pieces", async () => {
+  const fs = await import("node:fs");
+  const { AMBIENT_EVENT_PIECES } = await import("../src/championship/presentation/battleFieldAmbient.js");
+  const { MOVE_VFX_PIECE_SPRITES } = await import("../src/championship/presentation/vfx/moveVfxPieceSprites.js");
+  for (const [type, spec] of Object.entries(AMBIENT_EVENT_PIECES)) assert.ok(MOVE_VFX_PIECE_SPRITES[spec.piece], `${type} plays a baked ${spec.piece}`);
+  const ambient = fs.readFileSync("src/championship/presentation/battleFieldAmbient.js", "utf8");
+  assert.match(ambient, /if \(eventPiece\(e\.type, x, y\)\) continue;/, "a baked event replaces the drawn burst and its rings");
+  assert.match(ambient, /pieces\.play\("ring-pop"/, "charged water pops instead of drawn zigzags");
+});

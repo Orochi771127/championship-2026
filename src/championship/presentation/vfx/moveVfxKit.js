@@ -275,6 +275,13 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     size *= signature?.scale ?? 1;
     if (signature && signature.tier !== 'basic') sigil({x, y: y + size * 0.9, paletteKey, signature, size, ms,
       follow: follow ? () => { const at = follow(); return at ? {x: at.x, y: at.y + size * 0.9} : null; } : null});
+    // Refinement pass 9 (Owner: 「把目前遊戲中還是用舊的那種廉價感的方式的特效都升級」): once the baked pieces
+    // are in, the wind-up gathers as pixelfx's spell charge instead of the orb, thin ring and drawn streaks.
+    if (bakedPieceLook('muzzle-spiral')) {
+      const look = bakedPieceLook('muzzle-spiral');
+      part({name: 'pfxhit:muzzle-spiral', paletteKey, x, y, px: size * 2.6, life: Math.max(ms + 90, look.frames.length / look.fps * 1000), fadeIn: 20, fadeOut: 0.1, follow});
+      return;
+    }
     part({name: 'glow', paletteKey, x, y, px: size * 2.4, life: ms + 90, grow: [0.2, 1], fadeIn: 30, fadeOut: 0.25, follow});
     part({name: 'orb', paletteKey, x, y, px: size * 1.1, life: ms + 90, fps: 18, grow: [0.25, 0.9], spin: 4, fadeOut: 0.25, follow});
     ring(x, y, paletteKey, size * 3.2, ms, 1, 0, 0.55).grow = [1, 0.15];
@@ -290,6 +297,12 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   function launch({x, y, angle = 0, paletteKey, archetype = 'fire', size = 30, signature = null}) {
     created.launches++;
     size *= signature?.scale ?? 1;
+    // Refinement pass 9: the release is pixelfx's muzzle flash along the shot, in place of the flare, shock ellipse and sparks.
+    if (bakedPieceLook('muzzle')) {
+      const look = bakedPieceLook('muzzle');
+      part({name: 'pfxhit:muzzle', paletteKey, x, y, px: size * 3.2, life: look.frames.length / look.fps * 1000, rotation: angle, flipY: Math.cos(angle) < 0, fadeIn: 0, fadeOut: 0.05});
+      return;
+    }
     flare(x, y, paletteKey, size * 2.6, 150, angle);
     // A volley flashes once per head, fanned across the shot.
     for (let i = 1; i < (signature?.volley ?? 1); i++) flare(x, y, paletteKey, size * 1.6, 130, angle + (i % 2 ? 1 : -1) * 0.5 * Math.ceil(i / 2), 0.8);
@@ -744,8 +757,9 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   function impact({x, y, groundY = y, angle = 0, paletteKey, archetype = 'strike', heavy = false, size = 30, signature = null, planted = false, piece = false}) {
     created.impacts++;
     const k = heavy ? 1.4 : 1, R = size * k * (signature?.scale ?? 1);
-    if (signature) burstMotif(signature.burst, x, y, groundY, paletteKey, R, angle);
-    flare(x, y, paletteKey, R * 3, heavy ? 200 : 150, random());
+    // Refinement pass 9: a move whose own contact piece plays keeps only a small flare -- the motif's rings and crosses were vector shapes.
+    if (signature && !(piece && bakedPieceLook('impact-frame'))) burstMotif(signature.burst, x, y, groundY, paletteKey, R, angle);
+    flare(x, y, paletteKey, R * (piece ? 1.8 : 3), heavy ? 200 : 150, random());
     // Refinement pass 4 (Owner: the drawn shapes looked「很像卡通」): once the baked pieces are in, the
     // archetypes below land a pixelfx hit instead of their drawn drops, crests, stems and crescents.
     // Refinement pass 6: a move whose own contact piece plays here keeps only the flare and its
@@ -1019,6 +1033,12 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     impact({x, y, groundY, angle, paletteKey, archetype, heavy: true, size: size * 1.3, signature: own});
     // The move's own sigil opens under the blow and fades out.
     if (own) groundSigil(x, groundY, paletteKey, own, size);
+    // Refinement pass 9: the close's shock is pixelfx's ground slam, not three drawn rings and sparks.
+    if (bakedPieceLook('quake')) {
+      const look = bakedPieceLook('quake');
+      part({name: 'pfxhit:quake', paletteKey, x, y: groundY, px: size * 6, life: look.frames.length / look.fps * 1000, fadeIn: 0, fadeOut: 0.05});
+      return;
+    }
     for (let i = 0; i < 3; i++) ring(x, y, paletteKey, size * (5 + i * 1.6), 520 + i * 90, 1, 0, 0.7 - i * 0.18).delay = i * 70;
     // In pixel finish a field-sized glow reads as a white disc over the move's own shapes, so it stays faint.
     part({name: 'glow', paletteKey, x, y, px: size * (pixel ? 7 : 9), life: 420, fadeIn: 10, fadeOut: 0.8, alpha: pixel ? 0.35 : 0.7});

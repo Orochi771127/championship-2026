@@ -72,7 +72,8 @@ export const STATUS_AILMENT_BAKE = Object.freeze({
  * 'contact' at the hit point. A palette recolours an effect to its element.
  */
 export const PIXEL_HIT_BAKE = Object.freeze({
-  FIRE: {fx: 'explosions/small-explosion', until: 0.9, anchor: 'contact', noSmoke: true},
+  // refinement pass 10: a ring of fire bursting out at the feet, not a heap of red balls
+  FIRE: {fx: 'fire/fire-ring', from: 0.28, until: 1.0, anchor: 'ground'},
   WATER: {fx: 'water/splash', from: 0.25, until: 1.0, anchor: 'ground'},
   ICE: {fx: 'ice/frost-nova', from: 0.45, until: 1.2, anchor: 'ground'},
   THUNDER: {fx: 'lightning/zap-hit', until: 0.8, anchor: 'contact'},
