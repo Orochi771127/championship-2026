@@ -286,7 +286,27 @@ body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-pa
 
 /* ==== Ranch partner card, small sideways phones ========================================== *
  * The catalyst key joined the card after its width was set: with the meters open the card
- * left 53% of a 667x375 stage in view (the audit's floor is 55%). It is 32px narrower there. */
+ * left 53% of a 667x375 stage in view (the audit's floor is 55%). It is 40px narrower there. */
 @media (max-height: 500px) and (orientation: landscape) and (max-width: 700px) {
-  :root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden]))[data-desktop-raising] .int-rh2-root .int-rh2-companion { width: 204px; }
+  :root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden]))[data-desktop-raising] .int-rh2-root .int-rh2-companion { width: 196px; }
+}
+
+/* ==== Match cards in a narrow column ====================================================== *
+ * An upright tablet's two-column battle page gives the matches about 350px: the fee and the
+ * prize pill overlapped there, as they did on narrow phones before 2026-11-01. Same answer. */
+@media (min-width: 700px) and (max-width: 900px) and (min-height: 521px) {
+  :root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match > .cm-vs5-match__enter {
+    grid-template-columns: 58px minmax(0, 1fr) 14px;
+    grid-template-areas: "crest name arrow" "crest fee arrow" "crest payout arrow";
+  }
+  :root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match__enter > .cm-vs5-match__payout { justify-self: start; }
+}
+
+/* ==== Gachapon single result, 375px-high phones ========================================== *
+ * When a pull overflows a full stock the result adds a notice line; on a 667x375 phone that
+ * line pushed 確定收下 and 再抽一次 15px past the bottom edge. The single card is a little
+ * smaller there, so title, card, notice and both keys share the screen. */
+@media (max-height: 400px) and (orientation: landscape) {
+  .cm-gacha__cards[data-count="1"] { grid-template-columns: minmax(0, 108px); }
+  .cm-gacha__reveal-inner { gap: 6px; }
 }
