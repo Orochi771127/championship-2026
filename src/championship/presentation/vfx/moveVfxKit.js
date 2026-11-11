@@ -112,6 +112,15 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     // Floor circles (refinement pass 2, Owner: 「地板的六芒星那些也可以重做嗎」): once the baked
     // pieces are in, a move's sigil is a pixelfx casting or rune circle -- already drawn flat on
     // the ground, with its light layer as a second, added part -- instead of the drawn hexagram.
+    // Flying shots (refinement pass 3): a baked pixelfx head, looping, recoloured to the move.
+    if (name.startsWith('pfx:')) {
+      const look = bakedPieceLook(name.slice(4)), painted = look ? paintBakedPieceFrames(name.slice(4), palettes(paletteKey), {doc}) : null;
+      if (!painted) return null;
+      entry = {textures: painted.frames.map(texture), loop: true, fps: look.fps, width: painted.w, height: painted.h, smoke: false,
+        anchor: [painted.ox / painted.w, painted.oy / painted.h]};
+      sheets.set(id, entry);
+      return entry;
+    }
     if (name.startsWith('sigil:') || name.startsWith('sigilglow:')) {
       const glow = name.startsWith('sigilglow:'), n = Number(name.slice(glow ? 10 : 6)), circle = n % 2 ? 'sigil-rune' : 'sigil-cast';
       const painted = bakedPieceLook(circle) ? paintBakedPieceFrames(circle, palettes(paletteKey), {doc, glow}) : null;
@@ -516,7 +525,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     created.projectiles++;
     size *= signature?.scale ?? 1;
     // x, y is where the shot is drawn; tx, ty where the game has it. A signature's path weaves the drawing round the true line.
-    const p = {follow, paletteKey, look, size, signature, headless, planted: Boolean(standing), x: first.x, y: first.y, tx: first.x, ty: first.y, angle: first.angle ?? 0, acc: 0, motifAcc: 0, age: 0, alive: true, spin: 0};
+    const p = {follow, paletteKey, look, archetype, size, signature, headless, planted: Boolean(standing), x: first.x, y: first.y, tx: first.x, ty: first.y, angle: first.angle ?? 0, acc: 0, motifAcc: 0, age: 0, alive: true, spin: 0};
     const at = () => p.alive ? p : null;
     p.riders = headless ? [] : (look.riders ?? []).map(spec => rider(p, {...spec, px: size * spec.px}));
     p.glow = look.glow && !headless ? part({name: 'glow', paletteKey, px: size * look.glow, life: 1e9, follow: at, alpha: 0.85}) : null;
@@ -540,9 +549,22 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   }
   function head(p, follow, k) {
     const look = p.look;
+    // Refinement pass 3 (Owner: the shots looked「很像卡通」): once the baked pieces are in, the
+    // archetypes below fly a pixelfx head -- a fireball, a water orb, an arcane or void orb, a
+    // plasma or laser bolt, an ice lance, a rocket, an energy disc -- instead of the drawn one.
+    const baked = !p.planted && BAKED_HEAD[p.archetype];
+    if (baked && bakedPieceLook(baked[0])) {
+      const q = part({name: `pfx:${baked[0]}`, paletteKey: p.paletteKey, px: p.size * baked[1] * k, life: 1e9, fps: bakedPieceLook(baked[0]).fps, follow, fadeIn: 30});
+      if (q) { q.baked = true; return q; }
+    }
     return part({name: look.head, paletteKey: look.material ? MATERIAL[look.material] ?? look.material : p.paletteKey, px: p.size * look.len * k, life: 1e9, fps: look.fps ?? 0, frame: look.frame ?? null,
       anchor: look.anchor ?? [0.5, 0.5], follow, fadeIn: 30});
   }
+  /** Archetype -> [baked head, its drawn width in shot sizes]. */
+  const BAKED_HEAD = Object.freeze({fire: ['shot-fire', 3.6], water: ['shot-water', 1.6], bubble: ['shot-water', 1.3], orb: ['shot-arcane', 1.7],
+    pillar: ['shot-arcane', 1.7], blackhole: ['shot-void', 2.2], thunder: ['shot-plasma', 2.6], lance: ['shot-laser', 3.6], arrows: ['shot-laser', 3.6],
+    bullet: ['shot-laser', 2.8], gatling: ['shot-laser', 2.8], shard: ['shot-ice', 3.8], snowflake: ['shot-ice', 3.2], missile: ['shot-rocket', 3.8],
+    crescent: ['shot-disc', 2.2], shuriken: ['shot-disc', 2.0]});
   /** The drawn offset of a path from the true line, across it (+ is to the left of the heading). */
   function pathOffset(path, age, size) {
     if (reducedMotion) return [0, 0];
@@ -569,7 +591,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     // Shapes face right; a leftward heading mirrors top to bottom so nothing flies upside down.
     for (const q of [p.head, ...p.escorts.map(e => e.part)]) {
       if (!q) continue;
-      q.rotation = p.look.upright ? 0 : p.look.spin ? p.spin : p.angle + (p.look.turn ?? 0);
+      q.rotation = q.baked ? p.angle : p.look.upright ? 0 : p.look.spin ? p.spin : p.angle + (p.look.turn ?? 0);
       q.flipY = !p.look.spin && !p.look.turn && !p.look.upright && Math.cos(p.angle) < 0;
     }
     p.acc += dt;

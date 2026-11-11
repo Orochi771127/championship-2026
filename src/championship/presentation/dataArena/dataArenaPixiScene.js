@@ -23,6 +23,7 @@ import { mountDataArenaInteractionView } from "./dataArenaInteractionView.js";
 
 import { createDataArenaRelayEffects } from './dataArenaRelayEffects.js';
 import { createDataArenaElementFx } from './dataArenaElementFx.js';
+import { bakedPieceLook, paintBakedPieceFrames, loadMoveVfxPieceSprites } from '../vfx/moveVfxSetPieces.js';
 import { reviewedReleasePoint, releaseOffset, reviewedIdleBreath, reviewedWinHop, reviewedMoveRate } from './dataArenaReviewedMotion.js';
 import { RELAY_ACTION_PROFILES, relaySequence, relayEffectStyle } from '../../modes/dataArena/dataArenaRelay.js';
 import { RELAY_ROSTER, relayPartner } from '../../modes/dataArena/dataArenaRelayRoster.js';
@@ -117,7 +118,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   // in the world so they ride the camera. Since 2026-11-01 heavy hits hold the
   // drawn fighters 55 ms (drawing only; the simulation and input keep running).
   const numberLayer = new PIXI.Container({ label: "arena damage numbers" });
-  world.addChild(groundChunks, tactical, water, cellFx, bridge, marks, objects, shotGlow, shots, beams, particles, lights, numberLayer);
+  // Refinement pass 2: the delayed ground zones' baked sigils, drawn just over the telegraph lines.
+  const zoneSigils = new PIXI.Container(); zoneSigils.label = "arena zone sigils";
+  world.addChild(groundChunks, tactical, water, cellFx, bridge, marks, zoneSigils, objects, shotGlow, shots, beams, particles, lights, numberLayer);
   const burstShell = createBattleBurstShell({ PIXI, layer: objects, reducedMotion });
   rollback.push(() => burstShell.dispose());
   // Status ailments (STATUS_AILMENT_VFX_20261110): the battle's pixel loops on a
@@ -1501,8 +1504,43 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (aimGuide.radius > 0) g.circle(ex, ey, aimGuide.radius).fill({ color: 0x6ff7ff, alpha: 0.12 }).stroke({ width: 2.5, color: 0x6ff7ff, alpha: 0.85 });
     else g.poly([ex + c * 16, ey + s * 16, ex - s * 10, ey + c * 10, ex + s * 10, ey - c * 10]).fill({ color: 0xffffff, alpha: 0.9 });
   }
+  // Zone sigils: one sheet per colour (colour and light frames), one pair of sprites per live zone.
+  const sigilSheets = new Map(), sigilSprites = new Map(), sigilSeen = new Set();
+  if (typeof loadMoveVfxPieceSprites === 'function') loadMoveVfxPieceSprites();
+  function sigilSheet(color) {
+    if (sigilSheets.has(color)) return sigilSheets.get(color);
+    if (typeof bakedPieceLook !== 'function' || !bakedPieceLook('zone-sigil')) return null;
+    const dark = ((((color >> 16) & 255) * 0.45) << 16) | ((((color >> 8) & 255) * 0.45) << 8) | ((color & 255) * 0.45);
+    // the zone's own colour, its core only a little lighter: white lines vanish on the pale zone fill
+    const lift = c => Math.min(255, Math.round(c + (255 - c) * 0.3));
+    const core = (lift((color >> 16) & 255) << 16) | (lift((color >> 8) & 255) << 8) | lift(color & 255);
+    const palette = { core, main: color, edge: dark };
+    const paint = glow => { const sheet = paintBakedPieceFrames('zone-sigil', palette, { glow }); if (!sheet) return null;
+      return { ...sheet, textures: sheet.frames.map(c => { const t = PIXI.Texture.from(c); t.source.scaleMode = glow ? 'linear' : 'nearest'; return t; }) }; };
+    const value = paint(false) ? { body: paint(false), light: paint(true) } : null;
+    sigilSheets.set(color, value);
+    return value;
+  }
+  function zoneSigil(zone, color, p) {
+    const sheet = sigilSheet(color);
+    if (!sheet) return false;
+    let pair = sigilSprites.get(zone);
+    if (!pair) {
+      pair = { body: new PIXI.Sprite(sheet.body.textures[0]), light: sheet.light ? new PIXI.Sprite(sheet.light.textures[0]) : null };
+      pair.body.anchor.set(sheet.body.ox / sheet.body.w, sheet.body.oy / sheet.body.h);
+      if (pair.light) { pair.light.anchor.set(sheet.light.ox / sheet.light.w, sheet.light.oy / sheet.light.h); pair.light.blendMode = 'add'; zoneSigils.addChild(pair.light); }
+      zoneSigils.addChild(pair.body); sigilSprites.set(zone, pair);
+    }
+    const n = sheet.body.textures.length, index = Math.min(n - 1, Math.floor(p * (n - 1)));
+    const k = zone.radius * 1.7 / sheet.body.w;
+    pair.body.texture = sheet.body.textures[index]; pair.body.scale.set(k); pair.body.position.set(zone.x, zone.y);
+    if (pair.light) { pair.light.texture = sheet.light.textures[Math.min(sheet.light.textures.length - 1, index)]; pair.light.scale.set(k * 2); pair.light.position.set(zone.x, zone.y); pair.light.alpha = 0.8; }
+    sigilSeen.add(zone);
+    return true;
+  }
   function drawMarks() {
     const g = marks;
+    sigilSeen.clear();
     g.blendMode = "add";
     g.clear();
     drawAimGuide(g);
@@ -1575,7 +1613,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         arcPath(g, zone.x, zone.y, zone.radius - 6, a0, a0 + 0.32).stroke({ width: 3, color, alpha: 0.9 });
         pts.push(zone.x + Math.cos(a0) * (zone.radius * 0.72), zone.y + Math.sin(a0) * (zone.radius * 0.72));
       }
-      if (pts.length === 12) {
+      // Refinement pass 2 (Owner: 「地板的六芒星那些也可以重做嗎」): once the baked pieces are in, the zone's
+      // sigil is a pixelfx one that draws itself in as the zone charges; the drawn hexagram is the fallback.
+      if (!zoneSigil(zone, color, p) && pts.length === 12) {
         g.poly([pts[0], pts[1], pts[4], pts[5], pts[8], pts[9]]).stroke({ width: 1.8, color, alpha: 0.75 });
         g.poly([pts[2], pts[3], pts[6], pts[7], pts[10], pts[11]]).stroke({ width: 1.8, color: 0xffffff, alpha: 0.55 });
       }
@@ -1584,6 +1624,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         spawn({ x: zone.x + Math.cos(a) * r, y: zone.y + Math.sin(a) * r, vy: -48, texture: textures.spark, tint: color, scale: 0.7, scaleTo: 0.15, life: 0.45, alpha: 0.85 });
       }
     }
+    for (const [zone, pair] of sigilSprites) if (!sigilSeen.has(zone)) { pair.body.destroy(); pair.light?.destroy(); sigilSprites.delete(zone); }
     const self = state.player;
     if (self.barrier > 0) {
       const half = (self.barrierArc ?? 2) / 2;
