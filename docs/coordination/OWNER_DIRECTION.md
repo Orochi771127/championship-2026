@@ -1,5 +1,19 @@
 # Championship Owner Direction
 
+<!-- record-id: STORY_VN_HOSTED_HANDPAINTED_20261111 -->
+## 2026-11-11 — Ai-chan hosts the story, a bond moment every chapter, and the scenes redrawn in a Japanese hand-painted style
+
+After playing part two the Owner wrote: 「我也沒有感覺到有什麼吸引人的，我都是點過點過點過我都沒有認真在看故事」, 「我之前還有做了一個導覽員叫做愛醬，愛醬也都沒有出現在故事中，牠才是接待員，你可以找一下訓練任務那邊」, 「我的風格想要那種日系手繪風格」 and 「接下來就交給你去處理了，我不介入」.
+
+OWNER_APPROVED_ADAPTATION, presentation and story content. No new save field, no reward, battle, RNG or clock change.
+
+- Ai-chan replaces NAVI as the story's guide and speaks in the form the player chose for her (preference `guideAppearance`, cat or catgirl). Ten drawn expressions (happy, shock, sad, serious, talk, per form) are made from her own approved portraits.
+- Every main chapter (2–13) is hosted: Ai-chan opens with a "last time" recap once the first scene is up and closes with a "next time" teaser. Side stories stay unhosted. The copy is in five locales.
+- A bond moment before each teaser: the player answers the partner (pat its head / high five / cheer together), the partner reacts by name, a "Bond ♥ +1" toast shows, and the clear card records it. Nothing is saved; it is a scene beat.
+- The chart's cast chips show Ai-chan's face. The speaker's bust breathes between lines (reduced motion off).
+- All fifteen scenes are redrawn in a Japanese hand-painted anime style, with the approved opening art as the style reference and each v2 plate as the layout reference (`assets/production/story/vn-backgrounds-v3`). They are re-rendered as living loops (same DepthFlow / Depth Anything V2 Small pipeline). v2 is retired. Two tap targets moved to the new art: the vault's lock rings and the throne room's right-hand stands.
+- Size gate: the deploy builds with external characters (main site ~385 MB). The test build that keeps the character art (ci.yml and the browser jobs, never uploaded) reached 1,001.9 MB and failed `PUBLIC_PAGES_SITE_SIZE`. The gate now counts only files outside `assets/production/characters/` when a build has no external character receipt. The character host keeps its own limit check.
+
 <!-- record-id: STORY_VN_PART_TWO_20261111 -->
 ## 2026-11-11 — Story part two 「螺旋之冠」 (chapters 8–13), a phone layout that stands the bust on the dialogue box, and one ticket per chapter
 

@@ -89,16 +89,16 @@ test("the chart carries chapters 2-7 and the two side stories, each playing its 
 
 // ---- art ----------------------------------------------------------------------
 test("the fifteen living scene plates (still + parallax loop) are on disk, hashed, light, and recorded", () => {
-  const manifest = JSON.parse(read("assets/production/story/vn-backgrounds-v2/manifest.json"));
+  const manifest = JSON.parse(read("assets/production/story/vn-backgrounds-v3/manifest.json"));
   assert.equal(manifest.rightsStatus, "ORIGINAL_GENERATED");
-  assert.match(manifest.generation.inputs, /Text brief only/);
+  assert.match(manifest.generation.inputs, /approved opening art/, "style comes from the game's own art");
   assert.match(manifest.generation.motion, /Depth Anything V2 Small/, "only the commercial-safe depth model");
   const byId = new Map(manifest.assets.map(asset => [asset.id, asset]));
   const ambients = new Set(["leaves", "petals", "confetti", "dust", "fireflies", "data", "shards", "sparks"]);
   let total = 0;
   for (const [id, plate] of Object.entries(STORY_VN_BACKGROUNDS)) {
     const asset = byId.get(id); assert.ok(asset, id);
-    for (const [path, record, limit] of [[plate.src, asset.still, 120_000], [plate.motion, asset.clip, 260_000]]) {
+    for (const [path, record, limit] of [[plate.src, asset.still, 120_000], [plate.motion, asset.clip, 300_000]]) {
       assert.equal(path, record.path, id);
       const bytes = fs.readFileSync(new URL(`../${path}`, import.meta.url));
       const sha = crypto.createHash("sha256").update(bytes).digest("hex");
@@ -109,9 +109,9 @@ test("the fifteen living scene plates (still + parallax loop) are on disk, hashe
     assert.ok(plate.ground > 0.7 && plate.ground < 0.9, id);
   }
   assert.equal(Object.keys(STORY_VN_BACKGROUNDS).length, 15);
-  assert.ok(total < 3_800_000, `the fifteen scenes stay under 3.8 MB (${total})`);
+  assert.ok(total < 4_000_000, `the fifteen scenes stay under 4 MB (${total})`);
   const index = JSON.parse(read("assets/production/ART_PRODUCTION_INDEX.json"));
-  const record = index.entries.find(entry => entry.manifestPath === "assets/production/story/vn-backgrounds-v2/manifest.json");
+  const record = index.entries.find(entry => entry.manifestPath === "assets/production/story/vn-backgrounds-v3/manifest.json");
   assert.ok(record, "art index record"); assert.equal(record.rightsStatus, "ORIGINAL_GENERATED"); assert.equal(record.runtimeEligible, true);
 });
 
@@ -122,7 +122,8 @@ test("drawn expressions: every file is on disk and hashed, frames its head, stay
   const byPath = new Map(manifest.assets.map(asset => [asset.path, asset]));
   let total = 0, count = 0;
   for (const [species, moods] of Object.entries(STORY_VN_EXPRESSIONS)) {
-    assert.ok(databaseHeroPortrait(Number(species)), `${species} is a Database partner`);
+    // Ai-chan (the guide) is drawn from her own approved portraits; every other key is a Database partner.
+    if (!/^aichan-(cat|catgirl)$/.test(species)) assert.ok(databaseHeroPortrait(Number(species)), `${species} is a Database partner`);
     for (const [expression, art] of Object.entries(moods)) {
       const asset = byPath.get(art.src); assert.ok(asset, art.src);
       const bytes = fs.readFileSync(new URL(`../${art.src}`, import.meta.url));
@@ -134,7 +135,8 @@ test("drawn expressions: every file is on disk and hashed, frames its head, stay
     }
   }
   assert.ok(count >= 30, `${count} drawn expressions`);
-  assert.ok(total < 3_400_000, `expressions stay under 3.4 MB (${total})`);
+  assert.ok(total < 3_600_000, `expressions stay under 3.6 MB (${total})`);
+  for (const form of ["aichan-cat", "aichan-catgirl"]) for (const mood of ["happy", "shock", "sad", "serious", "talk"]) assert.ok(storyVnExpression(form, mood), `${form} ${mood}`);
   // The recurring rival speaks with drawn faces; a mood with no drawing keeps the Database art.
   assert.equal(storyVnExpression(50, "angry").expression, "angry");
   assert.equal(storyVnExpression(50, "think").expression, "serious");
@@ -177,7 +179,7 @@ function fakes({ choose = () => 0 } = {}) {
   const stage = {
     setPlate: async id => calls.push(["plate", id]), enter: async key => calls.push(["enter", key]), exit: async key => calls.push(["exit", key]),
     move: async () => {}, act: async () => {}, clearActors: () => {}, has: () => true, keys: () => [], bubble: () => {}, setTag: async (key, text) => calls.push(["tag", key, text]),
-    speaking: () => {}, setBust: (side, who) => calls.push(["bust", side, who?.species ?? (who?.navi ? "navi" : null)]), bustMood: () => {}, bustKey: () => null, dropBustOf: () => {},
+    speaking: () => {}, setBust: (side, who) => calls.push(["bust", side, who?.species ?? (who?.guide ? "aichan" : who?.navi ? "navi" : null)]), bustMood: () => {}, bustKey: () => null, dropBustOf: () => {},
     fx: kind => calls.push(["fx", kind]), tapTarget: () => ({ done: Promise.resolve(true) }), dispose: () => calls.push(["stage-dispose"])
   };
   const theater = {
@@ -201,7 +203,14 @@ test("a chapter plays to its clear card, claims once, and shows the partner sign
   assert.ok(!f.calls.some(c => c[0] === "say" && c[2] === "沒關係！輸掉的是這一場，不是我們。"), "lose branch skipped");
   assert.ok(f.calls.some(c => c[0] === "say" && c[1] === "黑鐵駭客・凜"));
   assert.ok(f.calls.some(c => c[0] === "bust" && c[1] === "right" && c[2] === 21), "the partner speaks from the right");
-  assert.deepEqual(f.calls.find(c => c[0] === "clear")[1], ["首通獎勵　數碼轉蛋券 ×6"]);
+  assert.deepEqual(f.calls.find(c => c[0] === "clear")[1], ["首通獎勵　數碼轉蛋券 ×6", "與小紅的羈絆 ♥ +1"]);
+  // Ai-chan hosts: a recap after the first scene, the bond moment and a teaser before the clear card.
+  const said = f.calls.filter(c => c[0] === "say");
+  assert.equal(said[0][1], "愛醬"); assert.ok(said[0][2].startsWith("上回"));
+  assert.equal(result.bond, "BOND_OPT_PAT");
+  assert.ok(said.some(c => c[2] === "嘿嘿……阿凱的手，暖暖的。"), "the partner answers the bond moment");
+  assert.ok(said.at(-1)[1] === "愛醬" && said.at(-1)[2].startsWith("下回預告"));
+  assert.ok(f.calls.some(c => c[0] === "bust" && c[1] === "left" && c[2] === "aichan"), "Ai-chan speaks from the left");
   assert.ok(f.calls.some(c => c[0] === "stage-dispose") && f.calls.some(c => c[0] === "theater-dispose"));
 });
 

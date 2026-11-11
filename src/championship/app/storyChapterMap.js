@@ -16,6 +16,7 @@ import { STORY_RIFT_CHAPTERS, storyRiftSpeakerName } from "../data/storyRiftChap
 import { STORY_RIFT_MAP_NODES, storyRiftMapText, storyRiftMapStates } from "../data/storyRiftMap.js";
 import { STORY_VN_CAST, STORY_VN_CHAPTERS, STORY_VN_SPEAKERS } from "../data/storyVnCampaign.js";
 import { storyVnText } from "../text/storyVnText.js";
+import { AI_CHAN_PORTRAITS, resolveGuideAppearance } from "../presentation/aiChanGuide.js";
 
 export const STORY_MAP_STAR_COUNT = 46;
 
@@ -76,7 +77,7 @@ const NAVI_MARK = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l
 
 export function createStoryChapterMap({
   doc = globalThis.document, host = doc.body, locale = "zh-Hant", reducedMotion = false,
-  nodes = STORY_RIFT_MAP_NODES, isSeen = () => false, vnStateOf = () => "locked", castPortrait = () => null, partner = { name: "", portrait: null },
+  nodes = STORY_RIFT_MAP_NODES, isSeen = () => false, vnStateOf = () => "locked", castPortrait = () => null, partner = { name: "", portrait: null }, guideForm = "cat",
   onPlay = async () => null, onClose = () => {}
 } = {}) {
   const t = (key, params) => storyRiftMapText(key, locale, params) ?? key;
@@ -157,7 +158,14 @@ export function createStoryChapterMap({
     const chip = doc.createElement("span"); chip.className = "cm-story-map__cast"; chip.dataset.speaker = member.speaker;
     const face = doc.createElement("span"); face.className = "cm-story-map__cast-face"; face.setAttribute("aria-hidden", "true");
     const art = Number.isSafeInteger(member.species) ? castPortrait(member.species) : null;
-    if (member.speaker === "navi") face.innerHTML = NAVI_MARK;
+    if (member.speaker === "aichan") {
+      // Ai-chan's face, framed from her approved idle portrait in the player's chosen form.
+      const guide = AI_CHAN_PORTRAITS[resolveGuideAppearance(guideForm)], img = doc.createElement("img");
+      img.src = guide.src; img.alt = ""; img.decoding = "async"; img.draggable = false; img.className = "cm-story-map__cast-guide";
+      const k = 100 / guide.face.size;
+      img.style.width = `${guide.width * k}%`; img.style.left = `${(0.5 - guide.face.cx / guide.face.size) * 100}%`; img.style.top = `${(0.5 - guide.face.cy / guide.face.size) * 100}%`;
+      face.append(img);
+    } else if (member.speaker === "navi") face.innerHTML = NAVI_MARK;
     else if (art?.src) { const img = doc.createElement("img"); img.src = art.src; img.alt = ""; img.decoding = "async"; img.draggable = false; face.append(img); }
     else if (partner.portrait?.src) { const img = doc.createElement("img"); img.src = partner.portrait.src; img.alt = ""; img.decoding = "async"; img.draggable = false; face.append(img); }
     else face.textContent = "?";

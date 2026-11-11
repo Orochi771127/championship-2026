@@ -152,6 +152,11 @@
 .cm-vn-bust[data-active="false"] { opacity: 0; filter: brightness(0.6) saturate(0.6); }
 .cm-vn-bust[data-active="false"][data-side="left"] { translate: -28px 0; }
 .cm-vn-bust[data-active="false"][data-side="right"] { translate: 28px 0; }
+/* The speaker breathes between lines, so a held portrait never reads as a still picture. */
+@media (prefers-reduced-motion: no-preference) {
+  .cm-vn-bust:not([data-active="false"]):not([data-mood="glitch"]) .cm-vn-bust__art:not(.is-swapping):not(.is-leaving) { animation: cm-vn-breathe 3.8s ease-in-out infinite; transform-origin: 50% 100%; }
+}
+@keyframes cm-vn-breathe { 0%, 100% { scale: 1 1; } 50% { scale: 1.006 1.014; } }
 .cm-vn-bust.is-speaking .cm-vn-bust__frame { animation: cm-vn-talk 420ms var(--vn-ease); }
 .cm-vn-bust[data-mood="happy"].is-speaking .cm-vn-bust__frame { animation: cm-vn-hop 520ms var(--vn-ease); }
 .cm-vn-bust[data-mood="happy"] { filter: brightness(1.06) saturate(1.1); }

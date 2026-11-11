@@ -16,6 +16,7 @@ import { juicyPortrait } from "../juicy/juicyArt.js";
 import { monsterVisualAnchor } from "../../data/monsterVisualAnchors218.js";
 import { STORY_VN_SEQUENCES, storyVnBackground } from "../../data/storyVnCampaign.js";
 import { storyVnExpression } from "../../data/storyVnExpressions.js";
+import { AI_CHAN_PORTRAITS, resolveGuideAppearance } from "../aiChanGuide.js";
 
 const WALK_SPEED = Object.freeze({ light: 0.32, heavy: 0.2, boss: 0.16 }); // stage widths per second
 /** Where the ground line sits in the scene box (fraction of its height). */
@@ -81,6 +82,12 @@ export function storyVnBustLayout(portrait, { frameWidth, frameHeight, side = "l
     // then the art stands on the foot, slightly past it, where the dialogue box covers it.
     top: Math.max(frameHeight * headY - face[1] * scale, frameHeight - portrait.height * scale + 8)
   });
+}
+
+/** Ai-chan's approved idle portrait in a form, shaped like a hero portrait (face = [cx, cy, size]). */
+export function guidePortrait(form) {
+  const art = AI_CHAN_PORTRAITS[resolveGuideAppearance(form)];
+  return Object.freeze({ src: art.src, width: art.width, height: art.height, face: [art.face.cx, art.face.cy, art.face.size] });
 }
 
 /** Whether the hero art's head sits right of centre (the art then faces right). */
@@ -353,10 +360,12 @@ export function createStoryVnStage({
   function setBust(side, who, { key = null, mood = "calm" } = {}) {
     const figure = busts[side];
     if (!who) { figure.hidden = true; bustState[side] = null; delete figure.dataset.key; return; }
-    const id = who.navi ? "navi" : `species-${who.species}`;
+    const id = who.guide ? `aichan-${resolveGuideAppearance(who.guide)}` : who.navi ? "navi" : `species-${who.species}`;
     const state = bustState[side];
+    // Ai-chan talks with an open mouth on her ordinary lines.
+    const artOf = () => (who.guide ? expressionOf(id, mood === "calm" ? "talk" : mood) ?? guidePortrait(who.guide) : expressionOf(who.species, mood) ?? portraitOf(who.species));
     if (figure.dataset.key === `${id}:${key ?? ""}` && !figure.hidden && !who.navi && state?.img) {
-      const art = expressionOf(who.species, mood) ?? portraitOf(who.species);
+      const art = artOf();
       if (art?.src && art.src !== state.portrait.src) {
         const frame = figure.querySelector(".cm-vn-bust__frame");
         const img = el(doc, "img", "cm-vn-bust__art"); img.alt = ""; img.decoding = "async"; img.draggable = false; img.src = art.src;
@@ -375,14 +384,14 @@ export function createStoryVnStage({
       const frame = el(doc, "div", "cm-vn-bust__frame");
       if (who.navi) { frame.innerHTML = NAVI_SVG; figure.dataset.kind = "navi"; bustState[side] = { portrait: null }; }
       else {
-        const base = portraitOf(who.species);
-        const portrait = expressionOf(who.species, mood) ?? base;
+        const base = who.guide ? guidePortrait(who.guide) : portraitOf(who.species);
+        const portrait = artOf();
         if (!portrait?.src) { figure.hidden = true; bustState[side] = null; return; }
         figure.dataset.expression = portrait.expression ?? "base";
         const img = el(doc, "img", "cm-vn-bust__art"); img.alt = ""; img.decoding = "async"; img.draggable = false; img.src = portrait.src;
         frame.append(img); figure.dataset.kind = "hero";
         // Facing comes from the Database art the expressions were drawn from.
-        bustState[side] = { portrait, img, faceRight: heroFacesRight(who.species, base) };
+        bustState[side] = { portrait, img, faceRight: who.guide ? true : heroFacesRight(who.species, base) };
       }
       figure.append(frame);
       figure.hidden = false;

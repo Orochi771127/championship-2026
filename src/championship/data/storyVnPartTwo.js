@@ -10,12 +10,12 @@
 // Black Lotus extremist of part one, begins to doubt him.
 
 export const STORY_VN_PART_TWO_BACKGROUNDS = {
-  train: { src: "assets/production/story/vn-backgrounds-v2/train.c1b8aa9918c19eea.webp", motion: "assets/production/story/vn-backgrounds-v2/train.4cbd56a627a8165c.mp4", ambient: "dust", ground: 0.8, focus: 0.55 },
-  skycity: { src: "assets/production/story/vn-backgrounds-v2/skycity.94237e61376c3d95.webp", motion: "assets/production/story/vn-backgrounds-v2/skycity.123624f9fcc5ebb4.mp4", ambient: "confetti", ground: 0.8, focus: 0.58 },
-  locker: { src: "assets/production/story/vn-backgrounds-v2/locker.53f6ae4eca0c6a1b.webp", motion: "assets/production/story/vn-backgrounds-v2/locker.0608c55079a212b4.mp4", ambient: "dust", ground: 0.8, focus: 0.55 },
-  undercroft: { src: "assets/production/story/vn-backgrounds-v2/undercroft.570ed9c00f721b8a.webp", motion: "assets/production/story/vn-backgrounds-v2/undercroft.1948cae6b97b4cc5.mp4", ambient: "data", ground: 0.8, focus: 0.6 },
-  night: { src: "assets/production/story/vn-backgrounds-v2/night.24242366af9eaf34.webp", motion: "assets/production/story/vn-backgrounds-v2/night.81500fcf15c06bf4.mp4", ambient: "confetti", ground: 0.8, focus: 0.55 },
-  throne: { src: "assets/production/story/vn-backgrounds-v2/throne.ff202a95a60f15c0.webp", motion: "assets/production/story/vn-backgrounds-v2/throne.1ab7dcd5a6cc7b4b.mp4", ambient: "shards", ground: 0.8, focus: 0.6 }
+  train: { src: "assets/production/story/vn-backgrounds-v3/train.239eb5789b918932.webp", motion: "assets/production/story/vn-backgrounds-v3/train.4481f864d59c1934.mp4", ambient: "dust", ground: 0.8, focus: 0.55 },
+  skycity: { src: "assets/production/story/vn-backgrounds-v3/skycity.3fa7b089d1565e6c.webp", motion: "assets/production/story/vn-backgrounds-v3/skycity.03e026474e335430.mp4", ambient: "confetti", ground: 0.8, focus: 0.58 },
+  locker: { src: "assets/production/story/vn-backgrounds-v3/locker.54beadabc9dd6a2f.webp", motion: "assets/production/story/vn-backgrounds-v3/locker.779f636597f3d126.mp4", ambient: "dust", ground: 0.8, focus: 0.55 },
+  undercroft: { src: "assets/production/story/vn-backgrounds-v3/undercroft.37a478300027ec26.webp", motion: "assets/production/story/vn-backgrounds-v3/undercroft.0dd7b7803f931ca6.mp4", ambient: "data", ground: 0.8, focus: 0.6 },
+  night: { src: "assets/production/story/vn-backgrounds-v3/night.a6ce723af630c629.webp", motion: "assets/production/story/vn-backgrounds-v3/night.af94500326a8324c.mp4", ambient: "confetti", ground: 0.8, focus: 0.55 },
+  throne: { src: "assets/production/story/vn-backgrounds-v3/throne.8c7ccbb613c3b918.webp", motion: "assets/production/story/vn-backgrounds-v3/throne.76f769cce0b7b18f.mp4", ambient: "shards", ground: 0.8, focus: 0.6 }
 };
 
 export const STORY_VN_PART_TWO_CAST = {
@@ -48,7 +48,7 @@ export const STORY_VN_PART_TWO_CHAPTERS = {
       { type: "enter", who: "partner", x: 0.5, from: "left", face: "right" },
       { type: "bubble", who: "partner", glyph: "spark" },
       { type: "line", speaker: "partner", key: "P2C1_P1", mood: "happy" },
-      { type: "line", speaker: "navi", key: "P2C1_NAVI1", mood: "serious" },
+      { type: "line", speaker: "aichan", key: "P2C1_NAVI1", mood: "serious" },
       { type: "enter", who: "subaruMon", x: 0.82, from: "right", face: "left" },
       { type: "line", speaker: "subaru", key: "P2C1_S1", mood: "happy" },
       { type: "line", speaker: "subaru", key: "P2C1_S2", mood: "happy" },
@@ -87,7 +87,7 @@ export const STORY_VN_PART_TWO_CHAPTERS = {
       { type: "enter", who: "partner", x: 0.4, from: "left", face: "right" },
       { type: "bubble", who: "partner", glyph: "?" },
       { type: "line", speaker: "partner", key: "P2C2_P1", mood: "sad" },
-      { type: "line", speaker: "navi", key: "P2C2_NAVI1", mood: "serious" },
+      { type: "line", speaker: "aichan", key: "P2C2_NAVI1", mood: "serious" },
       { type: "enter", who: "rivalMon", x: 0.22, from: "left", face: "right" },
       { type: "line", speaker: "rival", key: "P2C2_R1", mood: "serious" },
       { type: "line", speaker: "rival", key: "P2C2_R2", mood: "happy" },
@@ -111,7 +111,7 @@ export const STORY_VN_PART_TWO_CHAPTERS = {
       { type: "line", speaker: "narrator", key: "P2C3_N1" },
       { type: "enter", who: "partner", x: 0.4, from: "warp", face: "right" },
       { type: "enter", who: "rivalMon", x: 0.22, from: "warp", face: "right" },
-      { type: "line", speaker: "navi", key: "P2C3_NAVI1", mood: "serious" },
+      { type: "line", speaker: "aichan", key: "P2C3_NAVI1", mood: "serious" },
       { type: "enter", who: "axleMon", x: 0.82, from: "right", face: "left" },
       { type: "tag", who: ["axleMon"], to: "contestant", quiet: true },
       { type: "line", speaker: "axle", key: "P2C3_A1", mood: "glitch" },
@@ -210,7 +210,7 @@ export const STORY_VN_PART_TWO_CHAPTERS = {
       { type: "enter", who: "subaruMon", x: 0.58, from: "warp", face: "right" },
       { type: "line", speaker: "rival", key: "P2C6_R1", mood: "serious", alt: true },
       { type: "line", speaker: "subaru", key: "P2C6_S1", mood: "serious" },
-      { type: "tap", promptKey: "TASK_CHEER", targets: [{ at: [16, 50] }, { at: [34, 56] }, { at: [86, 52] }] },
+      { type: "tap", promptKey: "TASK_CHEER", targets: [{ at: [16, 50] }, { at: [34, 56] }, { at: [92, 40] }] },
       { type: "objectives", done: 1 },
       { type: "line", speaker: "host", key: "P2C6_H1", mood: "shock" },
       { type: "objectives", done: 2 },

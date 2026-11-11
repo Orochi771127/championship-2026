@@ -11,7 +11,7 @@
 
 /** Which drawn expression a line's mood shows. */
 export const STORY_VN_MOOD_EXPRESSION = Object.freeze({
-  happy: "happy", angry: "angry", sad: "sad", shock: "shock", serious: "serious", think: "serious"
+  happy: "happy", angry: "angry", sad: "sad", shock: "shock", serious: "serious", think: "serious", talk: "talk"
 });
 
 const freezeDeep = value => {
@@ -19,7 +19,7 @@ const freezeDeep = value => {
   return value;
 };
 
-/** species index -> expression -> { src, width, height, face }. */
+/** species index (or "aichan-cat" / "aichan-catgirl" for the guide) -> expression -> { src, width, height, face }. */
 export const STORY_VN_EXPRESSIONS = freezeDeep({
   18: { happy: { src: "assets/production/story/vn-expressions-v1/species-018-happy.203fb7a48f663b3b.webp", width: 588, height: 431, face: [210, 344, 394] } },
   25: { happy: { src: "assets/production/story/vn-expressions-v1/species-025-happy.7c27929287f98d5d.webp", width: 591, height: 342, face: [203, 326, 233] }, sad: { src: "assets/production/story/vn-expressions-v1/species-025-sad.91552329a8be6148.webp", width: 573, height: 334, face: [196, 318, 228] } },
@@ -38,7 +38,9 @@ export const STORY_VN_EXPRESSIONS = freezeDeep({
   177: { happy: { src: "assets/production/story/vn-expressions-v1/species-177-happy.8340374e23a6a064.webp", width: 518, height: 440, face: [203, 173, 207] }, sad: { src: "assets/production/story/vn-expressions-v1/species-177-sad.4c8229823e7b10fe.webp", width: 381, height: 419, face: [137, 165, 197] } },
   200: { angry: { src: "assets/production/story/vn-expressions-v1/species-200-angry.922b78a5a77e744f.webp", width: 390, height: 463, face: [182, 172, 250] }, happy: { src: "assets/production/story/vn-expressions-v1/species-200-happy.354c57fce4131f35.webp", width: 396, height: 463, face: [185, 173, 251] }, sad: { src: "assets/production/story/vn-expressions-v1/species-200-sad.658157cf685ef1bb.webp", width: 373, height: 463, face: [173, 172, 250] }, serious: { src: "assets/production/story/vn-expressions-v1/species-200-serious.1a522939c8c16861.webp", width: 370, height: 461, face: [172, 172, 249] }, shock: { src: "assets/production/story/vn-expressions-v1/species-200-shock.3fee49dde74211e4.webp", width: 392, height: 463, face: [183, 173, 251] } },
   205: { happy: { src: "assets/production/story/vn-expressions-v1/species-205-happy.98235fdd6433de11.webp", width: 584, height: 431, face: [382, 302, 380] }, serious: { src: "assets/production/story/vn-expressions-v1/species-205-serious.086bd5d25a0736f2.webp", width: 583, height: 435, face: [382, 305, 384] }, shock: { src: "assets/production/story/vn-expressions-v1/species-205-shock.082aaf968b14c078.webp", width: 569, height: 413, face: [370, 290, 365] } },
-  211: { angry: { src: "assets/production/story/vn-expressions-v1/species-211-angry.f8d9b8045c380713.webp", width: 562, height: 453, face: [270, 105, 198] }, serious: { src: "assets/production/story/vn-expressions-v1/species-211-serious.c01bf097eeed7948.webp", width: 564, height: 456, face: [271, 106, 199] } }
+  211: { angry: { src: "assets/production/story/vn-expressions-v1/species-211-angry.f8d9b8045c380713.webp", width: 562, height: 453, face: [270, 105, 198] }, serious: { src: "assets/production/story/vn-expressions-v1/species-211-serious.c01bf097eeed7948.webp", width: 564, height: 456, face: [271, 106, 199] } },
+  "aichan-cat": { happy: { src: "assets/production/story/vn-expressions-v1/aichan-cat-happy.20fc617414cc5e9f.webp", width: 389, height: 441, face: [239, 162, 231] }, sad: { src: "assets/production/story/vn-expressions-v1/aichan-cat-sad.ddfabd4244b737b5.webp", width: 409, height: 409, face: [262, 150, 214] }, serious: { src: "assets/production/story/vn-expressions-v1/aichan-cat-serious.b47089981032d5a7.webp", width: 399, height: 445, face: [251, 163, 233] }, shock: { src: "assets/production/story/vn-expressions-v1/aichan-cat-shock.61b1863365faef1e.webp", width: 400, height: 445, face: [247, 163, 233] }, talk: { src: "assets/production/story/vn-expressions-v1/aichan-cat-talk.70caec0732eac6eb.webp", width: 455, height: 447, face: [248, 164, 235] } },
+  "aichan-catgirl": { happy: { src: "assets/production/story/vn-expressions-v1/aichan-catgirl-happy.27fded96bc52c40e.webp", width: 373, height: 439, face: [156, 115, 203] }, sad: { src: "assets/production/story/vn-expressions-v1/aichan-catgirl-sad.ff116021d97b94cf.webp", width: 320, height: 417, face: [114, 109, 193] }, serious: { src: "assets/production/story/vn-expressions-v1/aichan-catgirl-serious.9edc83b5caf53d8c.webp", width: 350, height: 450, face: [138, 118, 208] }, shock: { src: "assets/production/story/vn-expressions-v1/aichan-catgirl-shock.85757d6282b0435e.webp", width: 341, height: 439, face: [144, 115, 203] }, talk: { src: "assets/production/story/vn-expressions-v1/aichan-catgirl-talk.bac920362b696441.webp", width: 468, height: 452, face: [243, 118, 209] } }
 });
 
 /** The drawn expression for a species and a line mood, or null to keep the Database art. */
