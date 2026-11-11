@@ -556,7 +556,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     const baked = !p.planted && BAKED_HEAD[p.archetype];
     if (baked && bakedPieceLook(baked[0])) {
       const q = part({name: `pfx:${baked[0]}`, paletteKey: p.paletteKey, px: p.size * baked[1] * k, life: 1e9, fps: bakedPieceLook(baked[0]).fps, follow, fadeIn: 30});
-      if (q) { q.baked = true; return q; }
+      if (q) { q.baked = true; q.upright = Boolean(baked[2]); return q; }
     }
     return part({name: look.head, paletteKey: look.material ? MATERIAL[look.material] ?? look.material : p.paletteKey, px: p.size * look.len * k, life: 1e9, fps: look.fps ?? 0, frame: look.frame ?? null,
       anchor: look.anchor ?? [0.5, 0.5], follow, fadeIn: 30});
@@ -585,7 +585,11 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   const BAKED_HEAD = Object.freeze({fire: ['shot-fire', 3.6], water: ['shot-water', 1.6], bubble: ['shot-water', 1.3], orb: ['shot-arcane', 1.7],
     pillar: ['shot-arcane', 1.7], blackhole: ['shot-void', 2.2], thunder: ['shot-plasma', 2.6], lance: ['shot-laser', 3.6], arrows: ['shot-laser', 3.6],
     bullet: ['shot-laser', 2.8], gatling: ['shot-laser', 2.8], shard: ['shot-ice', 3.8], snowflake: ['shot-ice', 3.2], missile: ['shot-rocket', 3.8],
-    crescent: ['shot-disc', 2.2], shuriken: ['shot-disc', 2.0]});
+    crescent: ['shot-disc', 2.2], shuriken: ['shot-disc', 2.0],
+    // refinement pass 5: the drawn leaves, feathers, notes, hearts, stars, fish and spores too (true: stays upright)
+    leaf: ['shot-leaf', 1.8], petal: ['shot-leaf', 1.6], roots: ['shot-leaf', 1.6], tree: ['shot-leaf', 1.8], tornado: ['shot-tornado', 2.2, true],
+    feather: ['shot-arrow', 2.6], note: ['shot-xp', 1.3], heart: ['shot-heart', 1.1, true], star: ['shot-star', 1.4], fish: ['shot-fish', 2.2],
+    mushroom: ['shot-wisp', 1.6], meteor: ['shot-fire', 3.8]});
   /** The drawn offset of a path from the true line, across it (+ is to the left of the heading). */
   function pathOffset(path, age, size) {
     if (reducedMotion) return [0, 0];
@@ -612,7 +616,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     // Shapes face right; a leftward heading mirrors top to bottom so nothing flies upside down.
     for (const q of [p.head, ...p.escorts.map(e => e.part)]) {
       if (!q) continue;
-      q.rotation = q.baked ? p.angle : p.look.upright ? 0 : p.look.spin ? p.spin : p.angle + (p.look.turn ?? 0);
+      q.rotation = q.baked ? (q.upright ? 0 : p.angle) : p.look.upright ? 0 : p.look.spin ? p.spin : p.angle + (p.look.turn ?? 0);
       q.flipY = !p.look.spin && !p.look.turn && !p.look.upright && Math.cos(p.angle) < 0;
     }
     p.acc += dt;

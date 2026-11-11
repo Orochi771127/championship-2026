@@ -33,10 +33,14 @@ import { applyJuicyPalette, juicyNode, juicyPortrait } from "./juicyArt.js";
 import { playCyberMorphEvolution } from "./cyberMorphEvolutionRunner.js";
 import { createSkillCutInLayer } from "./skillCutIn.js";
 import { createShowcaseBankCells } from "./showcaseBankCells.js";
+import { playShowcaseBakedPiece, preloadShowcaseBakedPieces } from "./showcaseBakedPiece.js";
+import { moveVfxChoreography } from "../vfx/moveVfxChoreography.js";
 import { SHOWCASE_CARRIER_STYLES, SHOWCASE_STREAM_STYLES, playShowcaseStyle, showcaseStyleIsMelee } from "./showcaseMoveVfx.js";
 import { SHOWCASE_ACTIONS, SHOWCASE_ATTACK_SEQUENCE, createSpriteMotion, loadShowcaseMotionShared, showcaseFitScale,
   showcaseMotionAvailable } from "./spriteMotionPlayer.js";
 
+// The baked move pieces (about 3.7 MB of text) start loading with the Dex, ahead of the first preview's hit.
+if (typeof preloadShowcaseBakedPieces === "function" && typeof document !== "undefined") preloadShowcaseBakedPieces();
 const moveRecords = new Map([...(movesCatalog.records ?? []), ...listProductOriginalMoveRecords()].map(record => [record.recordIndex, record]));
 
 /**
@@ -44,6 +48,17 @@ const moveRecords = new Map([...(movesCatalog.records ?? []), ...listProductOrig
  * moveVfxThemes.js), the palette that element names, the battle form, and the
  * effect banks the battle plays for it.
  */
+/** The baked look a contact piece plays in the Dex (flurry and drop by their drawing; the first layer of a pair). */
+const SHOWCASE_FLURRY = Object.freeze({ leaf: "flurry-leaf", feather_sm: "flurry-feather", shard: "flurry-shard", bubble_sm: "flurry-bubble", note: "flurry-note",
+  heart: "flurry-heart", fish_0: "flurry-bubble", mushroom: "flurry-spore", ghost: "flurry-note", cherry: "flurry-leaf" });
+const SHOWCASE_DROP = Object.freeze({ bomb: "drop-bomb", mushroom: "flurry-spore", gear: "drop-rock", bone: "drop-rock", cherry: "drop-rock" });
+export function showcasePieceLook({ piece, sprite = null } = {}) {
+  if (piece === "flurry") return SHOWCASE_FLURRY[sprite] ?? "flurry-leaf";
+  if (piece === "drop") return SHOWCASE_DROP[sprite] ?? "drop";
+  if (piece === "jaws-horn") return "jaws";
+  if (piece === "scissor") return "slash";
+  return piece;
+}
 export function showcaseMoveLook(recordIndex) {
   const record = moveRecords.get(recordIndex);
   const look = record ? describeBattleFxMove(record) : null;
@@ -85,6 +100,7 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
   const ensureBankCells = () => {
     if (!bankCells) {
       bankCells = createShowcaseBankCells({ doc, fetchImpl });
+      if (typeof preloadShowcaseBakedPieces === "function") preloadShowcaseBakedPieces();
       const own = bankCells;
       own.ready.then(() => { if (bankCells === own) cellsReady = true; }, () => { if (bankCells === own) cellsReady = true; });
     }
@@ -584,6 +600,15 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
       animate(core, [{ opacity: 1, transform: "translate(-50%, -50%) scale(0.3)" }, { opacity: 0.9, offset: 0.3, transform: "translate(-50%, -50%) scale(1)" },
         { opacity: 0, transform: "translate(-50%, -50%) scale(1.6)" }], { duration: 300, easing: "ease-out" });
       playShowcaseStyle("impact", payload.look.style, styleContext());
+      // The move's own piece (refinement pass 5): the same baked contact as in battle (the Dex keeps
+      // its own impact flash), so the Dex shows each move as it lands in a fight.
+      const choreo = typeof moveVfxChoreography === "function" ? moveVfxChoreography(payload.move?.recordIndex) : null;
+      if (choreo?.contact && typeof playShowcaseBakedPiece === "function") {
+        const body = point(dummy.body, 1), palette = BATTLE_FX_PALETTES[payload.look.palette] ?? BATTLE_FX_PALETTES.neutral;
+        // sized to the stage, not the dummy's thin post: a fighter is about a quarter of the stage wide
+        const width = Math.max(110, stage.getBoundingClientRect().width * 0.3), groundY = body.top + body.h;
+        playShowcaseBakedPiece({ doc, layer: fx, name: showcasePieceLook(choreo.contact), palette, x: to.x, y: to.y, groundY, width, scale: choreo.contact.scale ?? 1 });
+      }
       const carried = SHOWCASE_CARRIER_STYLES.includes(payload.look.style) || SHOWCASE_STREAM_STYLES[payload.look.style];
       if (!carried) playCell("body", to.x, to.y);
       playCell("hit", to.x, to.y);
