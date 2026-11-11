@@ -167,6 +167,11 @@ Refinement pass 5 (2026-11-11). Owner: 「請繼續下一步，這邊交給你�
 - The Dex "Preview special" now lands each move's own baked contact piece at its impact. It plays on a DOM canvas (`presentation/juicy/showcaseBakedPiece.js`) with the colour and light layers in the move's palette, the same piece as in battle. The Dex keeps its own impact flash.
 - Objects with no pixelfx counterpart (bombs, gears, bones, bananas, eggs, syringes, drills) keep their drawings.
 
+Refinement pass 6 (2026-11-12). A real Data Arena round, played by the QA autopilot on an isolated port, confirmed the cover chips and breaks (10 hits, 2 breaks), the craters left under broken cover and after heavy hits, and the zone sigils. It also showed a fire hit stacking three red-ball explosions -- the move's contact piece, the kit's baked impact and the element hit burst -- into one blob a third of the screen wide. Fixes:
+- When a move's own contact piece plays, the kit's impact keeps only its flare and the move's signature motif. This applies in the Data Arena and to the AI battle's stand-ins.
+- Fire cores and bomb drops now burst as pixelfx's plasma explosion (a white-hot core and energy rings) instead of red balls.
+- A fist lands pixelfx's firework burst, radial rays from a white core, as the original's knuckle hit does.
+
 <!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
 ## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
 
