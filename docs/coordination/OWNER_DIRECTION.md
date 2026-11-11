@@ -146,6 +146,11 @@ Refinement pass 4 (2026-11-11): the kit's impact shapes. Once the baked pieces a
 - A shot that flies a baked head no longer drops the kit's drawn trail, because the head carries its own.
 - The 292 original-style frames, such as the tsunami, stay as they are.
 
+Refinement pass 5 (2026-11-11). Owner: 「請繼續下一步，這邊交給你處理」.
+- More baked heads replace the kit's drawn ones. Leaves, petals, roots and trees fly a leaf swirl; a tornado flies a pixelfx tornado (upright); a feather flies an arrow; a note a glowing orb; a heart a glowing heart; a star a power star; a fish a fish school; a spore a wisp; a meteor a fireball.
+- The Dex "Preview special" now lands each move's own baked contact piece at its impact. It plays on a DOM canvas (`presentation/juicy/showcaseBakedPiece.js`) with the colour and light layers in the move's palette, the same piece as in battle. The Dex keeps its own impact flash.
+- Objects with no pixelfx counterpart (bombs, gears, bones, bananas, eggs, syringes, drills) keep their drawings.
+
 <!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
 ## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
 
