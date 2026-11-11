@@ -1,16 +1,9 @@
 # Championship Owner Direction
 
-<!-- record-id: STORY_VN_PART_FOUR_20261111 -->
-## 2026-11-11 — Story part four 「群星的全國大賽」 (chapters 20–25)
+<!-- record-id: STORY_VN_PARTS_FOUR_FIVE_HELD_20261111 -->
+## 2026-11-11 — Story parts four and five are held back until both are done
 
-Asked which direction comes after part three, the Owner chose two of the offered directions and kept the rest delegated: 「全國大賽篇：延續比賽主線，對手更強，螺旋勢力在幕後操控整個大會。回聲之源篇：回到第一部的「未被聽見的回聲」，追查最早的那道裂縫是誰造成的。」, then 「這兩部有要做嗎？」. Part four is the national championship. Part five, the origin of the echoes, follows as the series finale.
-
-OWNER_APPROVED_ADAPTATION, story content. No new save field. No battle rule, RNG, clock or reward-amount change.
-
-- Plot (original): the National Championship in the capital. Committee chair Celine runs a "perfect schedule": results are written before the matches and contestants get scripts telling them when to lose. Frost of the north and the Southern Port Twins got scripts too. Rin hacks the committee tower and finds a spiral directive. In the semi-final the partner and Frost tear up their scripts and fight for real, and the crowd cheers with its own voice. In the final, under an eclipse, everyone beats the Script King and the schedule goes blank. Hush then brings the coordinates of the first rift, which leads into part five.
-- Data `data/storyVnPartFour.js`: chapters 20–25 (`story:vn4:c*`) need 0, 1, 1, 2, 3 and 4 of part four's own requests. There are four requests (`story:vn4:s*`): a lost ticket, a reporter's interview with choices, cheer banners, and Frost's training. Each pays one ticket. All are taken at the Tamer Union hall's counter, which now lists every part from three on, playable first.
-- Stronger rivals from the native free-battle presets: Frost (212, 570), the Twins (190, 566), the tower guard (188, 562) and the Script King (198, 569).
-- Four new hand-painted scenes with living loops: the nationals gate, the athletes' village, the committee tower top floor and the eclipse final. Copy is in five locales (204 new keys, 894 in all).
+The Owner: 「第四部跟第五部做完以後先不要上線」. Part four had already gone live through #231 (dd170550) before this was said. Asked whether to take it down, the Owner chose to take it down. #231 is reverted on main. Part four stays complete on `feat/story-vn-part4-20261111`. Part five is built on top of it and neither ships until the Owner says so; re-releasing means reverting this revert together with part five. Parts one to three stay live.
 
 <!-- record-id: STORY_VN_PART_THREE_20261111 -->
 ## 2026-11-11 — Story part three 「愛醬的報名表」: a walkable reception hall, exploration, requests that open chapters, and story sounds
