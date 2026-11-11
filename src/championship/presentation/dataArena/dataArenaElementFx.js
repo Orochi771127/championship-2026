@@ -81,10 +81,10 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     METAL: {core: 0xffffff, main: 0x9aa8b6, edge: 0x3f4a56}});
   const pieceAt = (moveId, phase, at) => {
     const choreo = moveVfxChoreography(moveId), c = choreo?.[phase];
-    if (!c || !setPieces) return;
+    if (!c || !setPieces) return false;
     // An ultimate opens its contact with an impact frame, held by the layer's hit-stop.
     if (phase === 'contact' && choreo.impactFrame) setPieces.play('impact-frame', {...at, palette: {core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true}, size: BODY, unit: SCALE * 0.5, groundY: at.y + BODY * 0.5, scale: c.scale ?? 1});
-    setPieces.play(c.piece, {...at, size: BODY, unit: SCALE * 0.5, groundY: at.y + BODY * 0.5, scale: c.scale ?? 1, fast: c.fast, sprite: c.sprite, at: phase === 'contact' ? 'contact' : null});
+    return setPieces.play(c.piece, {...at, size: BODY, unit: SCALE * 0.5, groundY: at.y + BODY * 0.5, scale: c.scale ?? 1, fast: c.fast, sprite: c.sprite, at: phase === 'contact' ? 'contact' : null});
   };
   let moteClock = 0, moteSeq = 0;
   // Kit effects read at phone size under that wide camera (Owner 2026-11-05: they looked small).
@@ -159,12 +159,12 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
       const v = look(moveId, speciesId);
       pixelHits?.spawn({element: v.element, x, y, groundY, size: BODY, unit: SCALE, heavy, flip: Math.cos(angle) < 0});
       motes?.burst({element: v.element, x, y, groundY, unit: SCALE * 0.5, weight: heavy ? 'heavy' : 'light', dir: Math.sign(Math.cos(angle))});
-      pieceAt(moveId, 'contact', {x, y, angle, palette: v.palette});
+      const ownPiece = pieceAt(moveId, 'contact', {x, y, angle, palette: v.palette});
       // Refinement pass 2 (Owner: 場地破壞 at the AI battle's level): a heavy hit marks the floor with its
       // element's ground mark -- a crater, scorch, frost or puddle -- as the AI battle does; the kit path used to skip it.
       if (kit && heavy) layer.decal({x, y: groundY, kind: v.decal, palette: v.palette, paletteKey: v.paletteKey, size: 116, scale: SCALE});
       if (kit) {
-        kit.impact({x, y, groundY, angle, paletteKey: v.paletteKey, archetype: v.archetype, heavy, size: size * KIT, signature: v.signature});
+        kit.impact({x, y, groundY, angle, paletteKey: v.paletteKey, archetype: v.archetype, heavy, size: size * KIT, signature: v.signature, piece: ownPiece === true});
         if (heavy) layer.hold(55);
         stats.hits++;
         return;

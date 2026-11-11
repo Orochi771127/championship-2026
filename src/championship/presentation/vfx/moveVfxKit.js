@@ -741,13 +741,16 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     explosion(x, groundY - R * 0.4, groundY, R * 1.1);
   }
 
-  function impact({x, y, groundY = y, angle = 0, paletteKey, archetype = 'strike', heavy = false, size = 30, signature = null, planted = false}) {
+  function impact({x, y, groundY = y, angle = 0, paletteKey, archetype = 'strike', heavy = false, size = 30, signature = null, planted = false, piece = false}) {
     created.impacts++;
     const k = heavy ? 1.4 : 1, R = size * k * (signature?.scale ?? 1);
     if (signature) burstMotif(signature.burst, x, y, groundY, paletteKey, R, angle);
     flare(x, y, paletteKey, R * 3, heavy ? 200 : 150, random());
     // Refinement pass 4 (Owner: the drawn shapes looked「很像卡通」): once the baked pieces are in, the
     // archetypes below land a pixelfx hit instead of their drawn drops, crests, stems and crescents.
+    // Refinement pass 6: a move whose own contact piece plays here keeps only the flare and its
+    // signature motif -- a second burst of the same kind stacked into one blob (Owner: 「很雜亂」).
+    if (piece) return;
     if (bakedImpact({x, y, groundY, angle, paletteKey, archetype, R})) return;
     switch (archetype) {
       case 'fire':
