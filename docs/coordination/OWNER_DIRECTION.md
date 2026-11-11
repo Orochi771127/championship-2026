@@ -1,5 +1,18 @@
 # Championship Owner Direction
 
+<!-- record-id: STORY_VN_PART_TWO_20261111 -->
+## 2026-11-11 — Story part two 「螺旋之冠」 (chapters 8–13), a phone layout that stands the bust on the dialogue box, and one ticket per chapter
+
+After part one shipped (#219), the Owner asked to make the next part: 「我是指把故事模式，接下來的做好」, and chose the direction 錦標賽晉級篇 (regional cup, a new rival Subaru, Rin back as a rival, the sponsor Victor harvesting cheers so the Spiral Void Lord can crown a "perfect champion"). From an iPhone the Owner then reported: 「這種直立式的除了角色都擋在一起，然後地圖整個都擋在一起，角色也沒有因為半身而出現在對話框上整個配置都亂掉了」 and 「每一關的獎勵都太多可能一關就給個10鑽石吧，如果是轉蛋卷就一張」, and is considering a map you walk on that triggers scenes later (not built now).
+
+OWNER_APPROVED_ADAPTATION, presentation, story content and story rewards.
+
+- Part two (`data/storyVnPartTwo.js`): six chapters and two side stories (the lost little star on the train; Rin's night practice) on the chart as chapters 8–13. They open after chapter 7. Progress uses `story:vn2:*`. New cast: Subaru (153, preset 530), Victor (200, 568), the puppet troupe (201, 563), Axle (157, 551), the announcer Charlotte (205), Twinkle (99), the Spiral Crown (211, 574). Every story battle is a native free-battle preset whose partner the story shows. Five-locale copy now holds 390 keys.
+- Six new living scenes: train, sky arena city, players' lounge, undercroft, regional arena at night, spiral throne. 19 new drawn expressions for the new cast, made from their own Database art.
+- Phones upright: the scene is a cinema window in the top half. The speaker's bust stands on the dialogue box below it, over a blurred copy of the scene, and never covers the actors. The box is shorter. A bust always reaches down behind the box, so a cropped expression shows no cut. Only the speaker's bust shows; an entrance animation no longer holds an idle bust visible.
+- Chart: it scrolls with a fixed band per coordinate, so labels no longer pile up. Contour rings are hidden on the tall canvas, and a cast list longer than four shows "+N".
+- Rewards: every story chapter's first clear pays one gacha ticket (the rift chapters too, which paid 3–5). The story diamond reward is 10 (`DIAMOND_REWARDS.storyChapter`, was 300).
+
 <!-- record-id: STORY_VN_PART_ONE_20261111 -->
 ## 2026-11-11 — The story mode becomes a half-body story theater; part one 「未被聽見的回聲」 plays as chapters 2–7
 

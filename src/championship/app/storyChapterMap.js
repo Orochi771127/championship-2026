@@ -110,7 +110,11 @@ export function createStoryChapterMap({
   const chart = doc.createElement("div"); chart.className = "cm-story-map__chart";
   const art = doc.createElement("div"); art.className = "cm-story-map__art";
   const nodeLayer = doc.createElement("div"); nodeLayer.className = "cm-story-map__nodes"; nodeLayer.setAttribute("role", "group"); nodeLayer.setAttribute("aria-label", t("MAP_TITLE"));
-  chart.append(art, nodeLayer);
+  // A scrolling canvas: every coordinate gets a fixed band of height, so labels never pile up on a phone.
+  const canvas = doc.createElement("div"); canvas.className = "cm-story-map__canvas";
+  canvas.style.setProperty("--rows", String(nodes.length));
+  canvas.append(art, nodeLayer);
+  chart.append(canvas);
 
   const detail = doc.createElement("aside"); detail.className = "cm-story-map__detail"; detail.setAttribute("aria-live", "polite");
   const notice = doc.createElement("p"); notice.className = "cm-story-map__notice"; notice.hidden = true; notice.setAttribute("role", "status");
@@ -183,7 +187,11 @@ export function createStoryChapterMap({
     meterText.textContent = !playableNode(node) ? t("MAP_PROGRESS_SIGNAL") : state === "seen" ? `${t("MAP_PROGRESS_DONE")} · 100%` : `${t("MAP_PROGRESS_NONE")} · 0%`;
     facts.append(row(t("MAP_LABEL_PROGRESS"), meter, meterText));
     const members = cast(node), castList = doc.createElement("span"); castList.className = "cm-story-map__cast-list";
-    if (members.length) castList.append(...members.map(castChip));
+    // Four faces at most, then "+N": a long cast never pushes the start key off the panel.
+    if (members.length) {
+      castList.append(...members.slice(0, 4).map(castChip));
+      if (members.length > 4) { const more = doc.createElement("span"); more.className = "cm-story-map__cast cm-story-map__cast--more"; more.textContent = `+${members.length - 4}`; castList.append(more); }
+    }
     else { const unknown = doc.createElement("span"); unknown.className = "cm-story-map__cast cm-story-map__cast--unknown"; unknown.textContent = t("MAP_CAST_UNKNOWN"); castList.append(unknown); }
     facts.append(row(t("MAP_LABEL_CAST"), castList));
     const sigil = doc.createElement("span"); sigil.className = "cm-story-map__sigil"; sigil.dataset.lit = String(state === "seen");
@@ -209,7 +217,11 @@ export function createStoryChapterMap({
     selected = node.id;
     for (const [nodeId, button] of buttons) button.setAttribute("aria-pressed", String(nodeId === node.id));
     paintDetail(node);
-    if (focus) { try { buttons.get(node.id)?.focus({ preventScroll: true }); } catch { /* not focusable yet */ } }
+    if (focus) {
+      const button = buttons.get(node.id);
+      try { button?.focus({ preventScroll: true }); } catch { /* not focusable yet */ }
+      try { button?.scrollIntoView?.({ block: "center", behavior: reducedMotion ? "auto" : "smooth" }); } catch { /* no layout */ }
+    }
   }
 
   function paint() {

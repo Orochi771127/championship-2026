@@ -186,7 +186,7 @@ export function createStoryVnDirector({
     });
     let outcome = "completed";
     try {
-      if (!from) await until(theater.titleCard({ kicker: chapter.side ? t("VN_SIDE_LABEL") : t("PART_ONE"), title: t(chapter.titleKey), sub: chapter.side ? "" : label }));
+      if (!from) await until(theater.titleCard({ kicker: chapter.side ? t("VN_SIDE_LABEL") : t(chapter.partKey ?? "PART_ONE"), title: t(chapter.titleKey), sub: chapter.side ? "" : label }));
       await run(chapter.beats);
       fastForward(false);
       theater.hideBox(); theater.objectives({ items: [] });

@@ -22,20 +22,22 @@ const read = path => fs.readFileSync(new URL(`../${path}`, import.meta.url), "ut
 
 // ---- data -------------------------------------------------------------------
 test("six main chapters and two side stories validate and end", () => {
-  assert.deepEqual(STORY_VN_MAIN_IDS, ["vn1-c1", "vn1-c2", "vn1-c3", "vn1-c4", "vn1-c5", "vn1-c6"]);
-  assert.deepEqual(STORY_VN_SIDE_IDS, ["vn1-s1", "vn1-s2"]);
+  assert.deepEqual(STORY_VN_MAIN_IDS, ["vn1-c1", "vn1-c2", "vn1-c3", "vn1-c4", "vn1-c5", "vn1-c6", "vn2-c1", "vn2-c2", "vn2-c3", "vn2-c4", "vn2-c5", "vn2-c6"]);
+  assert.deepEqual(STORY_VN_SIDE_IDS, ["vn1-s1", "vn1-s2", "vn2-s1", "vn2-s2"]);
   for (const id of STORY_VN_CHAPTER_IDS) {
     assert.deepEqual(validateStoryVnChapter(id), [], id);
     assert.equal(STORY_VN_CHAPTERS[id].beats.at(-1).type, "end", id);
-    assert.ok(STORY_VN_CHAPTERS[id].reward.tickets > 0, id);
+    assert.equal(STORY_VN_CHAPTERS[id].reward.tickets, 1, `${id}: one ticket per chapter (Owner 2026-11-11)`);
   }
   // Every main chapter but the last pair has at least one real battle in the arc; the first, fifth and sixth fight.
   const battles = STORY_VN_MAIN_IDS.filter(id => STORY_VN_CHAPTERS[id].beats.some(beat => beat.type === "battle"));
-  assert.deepEqual(battles, ["vn1-c1", "vn1-c5", "vn1-c6"]);
+  assert.deepEqual(battles, ["vn1-c1", "vn1-c5", "vn1-c6", "vn2-c1", "vn2-c2", "vn2-c3", "vn2-c4", "vn2-c5", "vn2-c6"]);
   const presets = STORY_VN_MAIN_IDS.flatMap(id => STORY_VN_CHAPTERS[id].beats.filter(beat => beat.type === "battle").flatMap(beat => beat.presets));
-  assert.deepEqual(presets, [491, 515, 542]);
+  assert.deepEqual(presets, [491, 515, 542, 530, 563, 551, 530, 568, 574]);
+  // Every story battle is a native free-battle preset whose partner the story shows.
+  for (const [key, cast] of Object.entries(STORY_VN_CAST)) if (cast.preset) assert.ok(presets.includes(cast.preset) || key === "rivalMon", key);
   const data = read("src/championship/data/storyVnCampaign.js");
-  assert.doesNotMatch(data, /^\s*import\s/m, "pure data");
+  assert.deepEqual(data.match(/^import .*$/gm), ['import { STORY_VN_PART_TWO_BACKGROUNDS, STORY_VN_PART_TWO_CAST, STORY_VN_PART_TWO_CHAPTERS, STORY_VN_PART_TWO_SPEAKERS } from "./storyVnPartTwo.js";'], "pure data, part two only");
   assert.doesNotMatch(data, /https?:|localStorage|fetch\(|Math\.random/);
 });
 
@@ -56,25 +58,37 @@ test("every key a chapter reads exists in all five locales, with the tamer and p
 });
 
 test("progress rides the once-only reward ledger: chapters open in order, side stories after chapter two", () => {
-  assert.deepEqual(STORY_VN_CHAPTER_IDS.map(storyVnRewardKey), ["story:vn1:c1", "story:vn1:c2", "story:vn1:c3", "story:vn1:c4", "story:vn1:c5", "story:vn1:c6", "story:vn1:s1", "story:vn1:s2"]);
+  assert.deepEqual(STORY_VN_CHAPTER_IDS.map(storyVnRewardKey), ["story:vn1:c1", "story:vn1:c2", "story:vn1:c3", "story:vn1:c4", "story:vn1:c5", "story:vn1:c6", "story:vn1:s1", "story:vn1:s2",
+    "story:vn2:c1", "story:vn2:c2", "story:vn2:c3", "story:vn2:c4", "story:vn2:c5", "story:vn2:c6", "story:vn2:s1", "story:vn2:s2"]);
   const view = (claimed, options) => storyVnChapterStates(claimed, options).map(s => `${s.id}:${s.state}`).join(" ");
-  assert.equal(view([], { entryOpen: false }), "vn1-c1:locked vn1-c2:locked vn1-c3:locked vn1-c4:locked vn1-c5:locked vn1-c6:locked vn1-s1:locked vn1-s2:locked");
-  assert.equal(view([]), "vn1-c1:open vn1-c2:locked vn1-c3:locked vn1-c4:locked vn1-c5:locked vn1-c6:locked vn1-s1:locked vn1-s2:locked");
-  assert.equal(view(["story:vn1:c1", "story:vn1:c2"]), "vn1-c1:cleared vn1-c2:cleared vn1-c3:open vn1-c4:locked vn1-c5:locked vn1-c6:locked vn1-s1:open vn1-s2:open");
+  const states = (claimed, options) => Object.fromEntries(storyVnChapterStates(claimed, options).map(s => [s.id, s.state]));
+  assert.ok(Object.values(states([], { entryOpen: false })).every(state => state === "locked"));
+  assert.deepEqual([states([])["vn1-c1"], states([])["vn1-c2"], states([])["vn1-s1"]], ["open", "locked", "locked"]);
+  const two = states(["story:vn1:c1", "story:vn1:c2"]);
+  assert.deepEqual([two["vn1-c3"], two["vn1-c4"], two["vn1-s1"], two["vn1-s2"]], ["open", "locked", "open", "open"]);
+  // Part two follows part one: chapter 8 opens once chapter 7 (vn1-c6) is cleared; its keys are story:vn2:*.
+  const all1 = ["c1", "c2", "c3", "c4", "c5", "c6"].map(c => `story:vn1:${c}`);
+  assert.equal(states(all1.slice(0, 5))["vn2-c1"], "locked");
+  assert.equal(states(all1)["vn2-c1"], "open");
+  assert.equal(storyVnRewardKey("vn2-s2"), "story:vn2:s2");
+  assert.equal(states([...all1, "story:vn2:c1"])["vn2-s1"], "open");
   // A side story never gates the main line.
-  assert.equal(view(["story:vn1:c1", "story:vn1:c2", "story:vn1:c3"]).includes("vn1-c4:open"), true);
+  assert.equal(states(["story:vn1:c1", "story:vn1:c2", "story:vn1:c3"])["vn1-c4"], "open");
 });
 
 test("the chart carries chapters 2-7 and the two side stories, each playing its story-theater chapter", () => {
   const vnNodes = STORY_RIFT_MAP_NODES.filter(node => node.vnChapterId);
   assert.deepEqual(vnNodes.map(node => node.vnChapterId), STORY_VN_CHAPTER_IDS);
-  assert.deepEqual(vnNodes.filter(n => n.kind === "chapter").map(n => n.number), [2, 3, 4, 5, 6, 7]);
-  for (const node of vnNodes.filter(n => n.kind === "side")) assert.equal(STORY_VN_CHAPTERS[node.vnChapterId].after, "vn1-c2");
+  assert.deepEqual(vnNodes.filter(n => n.kind === "chapter").map(n => n.number), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
+  for (const node of vnNodes.filter(n => n.kind === "side")) {
+    const branch = STORY_RIFT_MAP_NODES.find(n => n.id === node.branchOf);
+    assert.equal(STORY_VN_CHAPTERS[node.vnChapterId].after, branch.vnChapterId, node.id);
+  }
   for (const node of vnNodes) if (!node.side) assert.equal(STORY_VN_CHAPTERS[node.vnChapterId].mapNumber ?? null, node.kind === "side" ? null : node.number);
 });
 
 // ---- art ----------------------------------------------------------------------
-test("the nine living scene plates (still + parallax loop) are on disk, hashed, light, and recorded", () => {
+test("the fifteen living scene plates (still + parallax loop) are on disk, hashed, light, and recorded", () => {
   const manifest = JSON.parse(read("assets/production/story/vn-backgrounds-v2/manifest.json"));
   assert.equal(manifest.rightsStatus, "ORIGINAL_GENERATED");
   assert.match(manifest.generation.inputs, /Text brief only/);
@@ -94,7 +108,8 @@ test("the nine living scene plates (still + parallax loop) are on disk, hashed, 
     assert.match(plate.motion, /\.mp4$/); assert.ok(ambients.has(plate.ambient), id);
     assert.ok(plate.ground > 0.7 && plate.ground < 0.9, id);
   }
-  assert.ok(total < 2_400_000, `the nine scenes stay under 2.4 MB (${total})`);
+  assert.equal(Object.keys(STORY_VN_BACKGROUNDS).length, 15);
+  assert.ok(total < 3_800_000, `the fifteen scenes stay under 3.8 MB (${total})`);
   const index = JSON.parse(read("assets/production/ART_PRODUCTION_INDEX.json"));
   const record = index.entries.find(entry => entry.manifestPath === "assets/production/story/vn-backgrounds-v2/manifest.json");
   assert.ok(record, "art index record"); assert.equal(record.rightsStatus, "ORIGINAL_GENERATED"); assert.equal(record.runtimeEligible, true);
@@ -119,7 +134,7 @@ test("drawn expressions: every file is on disk and hashed, frames its head, stay
     }
   }
   assert.ok(count >= 30, `${count} drawn expressions`);
-  assert.ok(total < 2_400_000, `expressions stay under 2.4 MB (${total})`);
+  assert.ok(total < 3_400_000, `expressions stay under 3.4 MB (${total})`);
   // The recurring rival speaks with drawn faces; a mood with no drawing keeps the Database art.
   assert.equal(storyVnExpression(50, "angry").expression, "angry");
   assert.equal(storyVnExpression(50, "think").expression, "serious");
@@ -149,7 +164,11 @@ test("plate layout covers the box, keeps the ground line low, and the bust turns
   assert.equal(right.mirror, true);
   assert.equal(Math.round(left.left + 600 * left.scale), 200, "head centred in the frame");
   assert.equal(Math.round(right.left + (800 - 600) * right.scale), 200, "mirrored head centred too");
-  assert.equal(Math.round(left.top + 240 * left.scale), 180);
+  // The art always reaches the frame's foot (its crop edge hides behind the dialogue box), and stays within 1.35 frame widths.
+  assert.ok(left.top + left.height >= 600, "art reaches the foot");
+  assert.ok(left.width <= 400 * 1.35 + 0.5);
+  const short = storyVnBustLayout({ width: 600, height: 300, face: [300, 120, 120] }, { frameWidth: 400, frameHeight: 600, side: "left" });
+  assert.ok(short.top + short.height >= 600 && short.top + short.height <= 612, "a short (cropped) figure stands on the foot");
 });
 
 // ---- director -------------------------------------------------------------------

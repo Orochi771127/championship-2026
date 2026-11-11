@@ -3079,10 +3079,10 @@ async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = '
     if (result.outcome === 'completed' || result.outcome === 'skipped') {
       if (chapterId === STORY_FIRST_CHAPTER_ID) { try { settings.store.set('storyRiftChapter1Seen', true); } catch { /* read-only store */ } }
       document.querySelector('.int-rh2-story')?.setAttribute('data-new', 'false');
-      // Cyber Gachapon: a chapter sealed for the first time pays 3-5 tickets into the save.
+      // Cyber Gachapon: a chapter sealed for the first time pays one ticket into the save.
       if (result.outcome === 'completed') {
         try {
-          const reward = app.claimGachaReward?.(`story:${chapterId}`, 3 + Math.floor(Math.random() * 3));
+          const reward = app.claimGachaReward?.(`story:${chapterId}`, 1); // Owner 2026-11-11: one ticket per chapter
           if (reward?.granted) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: uiText('轉蛋券 +{n}', { n: reward.granted }) } }));
           // DIAMOND_ECONOMY_20261102: a chapter's first clear also pays diamonds.
           if (reward?.diamonds) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: uiText('鑽石 +{n}', { n: reward.diamonds }) } }));

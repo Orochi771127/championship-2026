@@ -18,7 +18,7 @@ export const LAND_EXPANSION = deepFreeze({
 });
 
 export const DIAMOND_REWARDS = deepFreeze({
-  storyChapter: 300,
+  storyChapter: 10, // Owner 2026-11-11: a story chapter pays 10 diamonds (was 300)
   // First time the tamer rank reaches 1..9.
   rank: [0, 300, 300, 300, 400, 400, 400, 500, 500, 500],
   // Registered species in the encyclopedia.

@@ -194,14 +194,14 @@ test('auto-feed is +2.4 affection carried in tenths; royal sleep recovers 30% fa
 
 // ---------------------------------------------------------------- diamonds: rewards, land, founder box
 
-test('diamond rewards: rank 1-9 and encyclopedia 10/25/50/100 pay 200-500 once; story chapters pay 300', () => {
+test('diamond rewards: rank 1-9 and encyclopedia 10/25/50/100 pay 200-500 once; story chapters pay 10', () => {
   assert.deepEqual(dueDiamondMilestones({rank: 0, registeredCount: 9}), []);
   const due = dueDiamondMilestones({rank: 3, registeredCount: 26});
   assert.deepEqual(due.map(d => [d.key, d.amount]), [['dia:rank:1', 300], ['dia:rank:2', 300], ['dia:rank:3', 300], ['dia:dex:10', 200], ['dia:dex:25', 300]]);
   assert.deepEqual(dueDiamondMilestones({rank: 3, registeredCount: 26, claimed: due.map(d => d.key)}), []);
   assert.ok(Object.values(DIAMOND_REWARDS.rank).every(n => n === 0 || (n >= 200 && n <= 500)));
   assert.ok(DIAMOND_REWARDS.dex.every(([, n]) => n >= 200 && n <= 500));
-  assert.equal(DIAMOND_REWARDS.storyChapter, 300);
+  assert.equal(DIAMOND_REWARDS.storyChapter, 10);
   const claims = recordGachaClaims(normalizeCyberGacha({version: 1}), ['dia:rank:1', 'dia:rank:1']);
   assert.deepEqual(claims.recorded, ['dia:rank:1']);
   // The wallet holds earned diamonds past the playtest grant.
@@ -430,9 +430,9 @@ test('app: story chapters, rank and the encyclopedia pay diamonds once; the foun
     const before = app.getCageEditFrame().testDiamonds;
     const story = app.claimGachaReward('story:test-chapter', 3);
     assert.equal(story.ok, true);
-    assert.equal(story.diamonds, 300);
+    assert.equal(story.diamonds, 10);
     assert.equal(app.claimGachaReward('story:test-chapter', 3).granted, 0, 'once');
-    assert.equal(app.getCageEditFrame().testDiamonds, before + 300);
+    assert.equal(app.getCageEditFrame().testDiamonds, before + 10);
     app.setTamerRank(2);
     const pending = app.getDiamondRewards().pending;
     assert.deepEqual(pending.filter(p => p.kind === 'RANK').map(p => p.key), ['dia:rank:1', 'dia:rank:2']);
@@ -441,7 +441,7 @@ test('app: story chapters, rank and the encyclopedia pay diamonds once; the foun
     assert.equal(paid.granted, pending.reduce((s, p) => s + p.amount, 0));
     assert.deepEqual(app.getDiamondRewards().pending, []);
     assert.equal(app.claimDiamondRewards().granted, 0);
-    assert.equal(h.saved().flags.friendsPlaytest.diamonds, before + 300 + paid.granted, 'saved at once');
+    assert.equal(h.saved().flags.friendsPlaytest.diamonds, before + 10 + paid.granted, 'saved at once');
     // Founder box: locked until a tournament medal, then once.
     assert.equal(app.getFounderPack().unlocked, false);
     assert.equal(app.claimFounderPack().reason, 'FOUNDER_PACK_LOCKED');

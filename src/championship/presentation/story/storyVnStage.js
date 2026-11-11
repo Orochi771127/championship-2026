@@ -66,7 +66,9 @@ export function storyVnBustLayout(portrait, { frameWidth, frameHeight, side = "l
   if (!portrait?.width || !portrait?.height || !frameWidth || !frameHeight) return null;
   const face = Array.isArray(portrait.face) && portrait.face[2] > 0 ? portrait.face
     : [portrait.width * 0.5, portrait.height * 0.32, Math.min(portrait.width, portrait.height) * 0.42];
-  const scale = (frameWidth * headSpan) / face[2];
+  // The art fills at least 68 % of the frame's height (a short figure or a cropped expression must
+  // still reach down behind the dialogue box), but never grows past 1.35 frame widths.
+  const scale = Math.min(Math.max((frameWidth * headSpan) / face[2], (frameHeight * 0.68) / portrait.height), (frameWidth * 1.35) / portrait.width);
   const right = faceRight ?? face[0] / portrait.width >= 0.5;
   // A left bust looks right (into the screen), a right bust looks left.
   const mirror = side === "left" ? !right : right;
@@ -74,7 +76,10 @@ export function storyVnBustLayout(portrait, { frameWidth, frameHeight, side = "l
   return Object.freeze({
     scale, mirror,
     width: portrait.width * scale, height: portrait.height * scale,
-    left: frameWidth * 0.5 - cx * scale, top: frameHeight * headY - face[1] * scale
+    left: frameWidth * 0.5 - cx * scale,
+    // Head at headY, unless that leaves the art's bottom edge (a crop line) above the frame's foot:
+    // then the art stands on the foot, slightly past it, where the dialogue box covers it.
+    top: Math.max(frameHeight * headY - face[1] * scale, frameHeight - portrait.height * scale + 8)
   });
 }
 
@@ -166,6 +171,9 @@ export function createStoryVnStage({
     plateSpec = spec;
     scene.dataset.plate = id;
     scene.dataset.ambient = spec.ambient ?? "none";
+    // Phones upright show a blurred copy of the scene behind the bust band (ui/storyVn.css).
+    // Absolute: a relative url() in a custom property would resolve against the stylesheet's folder.
+    host.style?.setProperty?.("--vn-backdrop", `url("${new URL(spec.src, doc.baseURI ?? globalThis.location?.href).href}")`);
     await new Promise(resolve => {
       let done = false; const finish = () => { if (!done) { done = true; resolve(); } };
       next.img.onload = finish; next.img.onerror = finish;

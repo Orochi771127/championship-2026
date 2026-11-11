@@ -27,9 +27,12 @@
 //   objectives{keys?, done}
 //   battle    {presets:[n], titleKey, win, lose}   the game's own auto battle; branches on the result
 //   wait      {ms}   jump {next}   end
+// Part two lives in storyVnPartTwo.js (chapters 8-13) and keys its progress `story:vn2:*`.
 // x runs 0 (left edge) .. 1 (right edge) along the ground line; tap `at` is in
 // plate percent [x, y] (of the scene picture). `label` on any beat is a jump target.
 // Text keys resolve in STORY_VN_COPY (text/storyVnText.js).
+
+import { STORY_VN_PART_TWO_BACKGROUNDS, STORY_VN_PART_TWO_CAST, STORY_VN_PART_TWO_CHAPTERS, STORY_VN_PART_TWO_SPEAKERS } from "./storyVnPartTwo.js";
 
 export const STORY_VN_SCHEMA_VERSION = 1;
 export const STORY_VN_REWARD_PREFIX = "story:vn1:";
@@ -65,7 +68,8 @@ export const STORY_VN_BACKGROUNDS = freezeDeep({
   lotus: { src: "assets/production/story/vn-backgrounds-v2/lotus.c9b267dff44c05bb.webp", motion: "assets/production/story/vn-backgrounds-v2/lotus.95dc28f3e29284d2.mp4", ambient: "petals", ground: 0.8, focus: 0.58 },
   vault: { src: "assets/production/story/vn-backgrounds-v2/vault.c15e52ec75eeee08.webp", motion: "assets/production/story/vn-backgrounds-v2/vault.e47068fdef606163.mp4", ambient: "dust", ground: 0.8, focus: 0.52 },
   safezone: { src: "assets/production/story/vn-backgrounds-v2/safezone.d1fc2a444f02962e.webp", motion: "assets/production/story/vn-backgrounds-v2/safezone.4b09f36d99163e05.mp4", ambient: "sparks", ground: 0.8, focus: 0.55 },
-  void: { src: "assets/production/story/vn-backgrounds-v2/void.cf751a51984f8cf8.webp", motion: "assets/production/story/vn-backgrounds-v2/void.8318fb0b26958986.mp4", ambient: "shards", ground: 0.8, focus: 0.55 }
+  void: { src: "assets/production/story/vn-backgrounds-v2/void.cf751a51984f8cf8.webp", motion: "assets/production/story/vn-backgrounds-v2/void.8318fb0b26958986.mp4", ambient: "shards", ground: 0.8, focus: 0.55 },
+  ...STORY_VN_PART_TWO_BACKGROUNDS
 });
 
 /**
@@ -91,7 +95,8 @@ export const STORY_VN_CAST = freezeDeep({
   guide: { species: 51, tagKey: "TAG_GUIDE" },
   vanguard: { species: 78, overwritten: true, preset: 515 },
   vanguardB: { species: 78, overwritten: true },
-  vessel: { species: 148, tagKey: "TAG_VESSEL", overwritten: true, scale: 1.6, preset: 542 }
+  vessel: { species: 148, tagKey: "TAG_VESSEL", overwritten: true, scale: 1.6, preset: 542 },
+  ...STORY_VN_PART_TWO_CAST
 });
 
 /** Speakers: name-plate key, the cast member whose bust and body speak, and the human behind it (if any). */
@@ -110,12 +115,13 @@ export const STORY_VN_SPEAKERS = freezeDeep({
   vessel: { nameKey: "SPEAKER_VESSEL", cast: "vessel" },
   neighborA: { nameKey: "TAG_NEIGHBOR_A", cast: "neighborA" },
   neighborB: { nameKey: "TAG_NEIGHBOR_B", cast: "neighborB" },
-  residentB: { nameKey: "TAG_RESIDENT_B", cast: "residentB" }
+  residentB: { nameKey: "TAG_RESIDENT_B", cast: "residentB" },
+  ...STORY_VN_PART_TWO_SPEAKERS
 });
 
 export const STORY_VN_CHAPTERS = freezeDeep({
   "vn1-c1": {
-    number: 1, mapNumber: 2, titleKey: "C1_TITLE", summaryKey: "C1_SUMMARY", echoKey: "C1_ECHO", reward: { tickets: 6 },
+    number: 1, mapNumber: 2, titleKey: "C1_TITLE", summaryKey: "C1_SUMMARY", echoKey: "C1_ECHO", reward: { tickets: 1 },
     beats: [
       { type: "bg", id: "habitat", titleKey: "LOC_HABITAT" },
       { type: "line", speaker: "narrator", key: "C1_N1" },
@@ -166,7 +172,7 @@ export const STORY_VN_CHAPTERS = freezeDeep({
     ]
   },
   "vn1-c2": {
-    number: 2, mapNumber: 3, titleKey: "C2_TITLE", summaryKey: "C2_SUMMARY", echoKey: "C2_ECHO", reward: { tickets: 6 },
+    number: 2, mapNumber: 3, titleKey: "C2_TITLE", summaryKey: "C2_SUMMARY", echoKey: "C2_ECHO", reward: { tickets: 1 },
     beats: [
       { type: "bg", id: "arena", titleKey: "LOC_ARENA" },
       { type: "enter", who: "registrarMon", x: 0.82, face: "left" },
@@ -213,7 +219,7 @@ export const STORY_VN_CHAPTERS = freezeDeep({
     ]
   },
   "vn1-c3": {
-    number: 3, mapNumber: 4, titleKey: "C3_TITLE", summaryKey: "C3_SUMMARY", echoKey: "C3_ECHO", reward: { tickets: 7 },
+    number: 3, mapNumber: 4, titleKey: "C3_TITLE", summaryKey: "C3_SUMMARY", echoKey: "C3_ECHO", reward: { tickets: 1 },
     beats: [
       { type: "bg", id: "grid", titleKey: "LOC_GRID" },
       { type: "line", speaker: "narrator", key: "C3_N1" },
@@ -252,7 +258,7 @@ export const STORY_VN_CHAPTERS = freezeDeep({
     ]
   },
   "vn1-c4": {
-    number: 4, mapNumber: 5, titleKey: "C4_TITLE", summaryKey: "C4_SUMMARY", echoKey: "C4_ECHO", reward: { tickets: 7 },
+    number: 4, mapNumber: 5, titleKey: "C4_TITLE", summaryKey: "C4_SUMMARY", echoKey: "C4_ECHO", reward: { tickets: 1 },
     beats: [
       { type: "bg", id: "vault", titleKey: "LOC_VAULT" },
       { type: "enter", who: "envoyMon", x: 0.3, face: "right" },
@@ -286,7 +292,7 @@ export const STORY_VN_CHAPTERS = freezeDeep({
     ]
   },
   "vn1-c5": {
-    number: 5, mapNumber: 6, titleKey: "C5_TITLE", summaryKey: "C5_SUMMARY", echoKey: "C5_ECHO", reward: { tickets: 8 },
+    number: 5, mapNumber: 6, titleKey: "C5_TITLE", summaryKey: "C5_SUMMARY", echoKey: "C5_ECHO", reward: { tickets: 1 },
     beats: [
       { type: "bg", id: "void", cut: "glitch", titleKey: "LOC_VOID" },
       { type: "fx", kind: "noise", on: true },
@@ -318,7 +324,7 @@ export const STORY_VN_CHAPTERS = freezeDeep({
     ]
   },
   "vn1-c6": {
-    number: 6, mapNumber: 7, titleKey: "C6_TITLE", summaryKey: "C6_SUMMARY", echoKey: "C6_ECHO", reward: { tickets: 12 },
+    number: 6, mapNumber: 7, titleKey: "C6_TITLE", summaryKey: "C6_SUMMARY", echoKey: "C6_ECHO", reward: { tickets: 1 },
     beats: [
       { type: "bg", id: "void", titleKey: "LOC_VOID" },
       { type: "objectives", keys: ["OBJ_CUT", "OBJ_CONTEXT", "OBJ_CHOICE"], done: 0 },
@@ -372,7 +378,7 @@ export const STORY_VN_CHAPTERS = freezeDeep({
   },
   // Side stories (first written 2026-10-29 for chapter two): open once chapter two is cleared; never gate the main line.
   "vn1-s1": {
-    number: 1, side: true, after: "vn1-c2", titleKey: "S21_TITLE", summaryKey: "S21_SUMMARY", echoKey: "S21_ECHO", reward: { tickets: 3 },
+    number: 1, side: true, after: "vn1-c2", titleKey: "S21_TITLE", summaryKey: "S21_SUMMARY", echoKey: "S21_ECHO", reward: { tickets: 1 },
     beats: [
       { type: "bg", id: "town", titleKey: "LOC_TOWN" },
       { type: "enter", who: "residentB", x: 0.78, face: "left" },
@@ -397,7 +403,7 @@ export const STORY_VN_CHAPTERS = freezeDeep({
     ]
   },
   "vn1-s2": {
-    number: 2, side: true, after: "vn1-c2", titleKey: "S22_TITLE", summaryKey: "S22_SUMMARY", echoKey: "S22_ECHO", reward: { tickets: 3 },
+    number: 2, side: true, after: "vn1-c2", titleKey: "S22_TITLE", summaryKey: "S22_SUMMARY", echoKey: "S22_ECHO", reward: { tickets: 1 },
     beats: [
       { type: "bg", id: "plaza", titleKey: "LOC_PLAZA" },
       { type: "enter", who: "partner", x: 0.5, from: "warp", face: "right" },
@@ -419,7 +425,8 @@ export const STORY_VN_CHAPTERS = freezeDeep({
       { type: "line", speaker: "neighborB", key: "S22_NEI2", mood: "happy" },
       { type: "end" }
     ]
-  }
+  },
+  ...STORY_VN_PART_TWO_CHAPTERS
 });
 
 export const STORY_VN_CHAPTER_IDS = Object.freeze(Object.keys(STORY_VN_CHAPTERS));
@@ -429,7 +436,7 @@ export const STORY_VN_SIDE_IDS = Object.freeze(STORY_VN_CHAPTER_IDS.filter(id =>
 
 export const storyVnChapter = id => STORY_VN_CHAPTERS[id] ?? null;
 /** `story:vn1:c3` for the main line, `story:vn1:s1` for a side story. */
-export const storyVnRewardKey = id => `${STORY_VN_REWARD_PREFIX}${STORY_VN_CHAPTERS[id]?.side ? "s" : "c"}${STORY_VN_CHAPTERS[id]?.number ?? 0}`;
+export const storyVnRewardKey = id => `story:vn${STORY_VN_CHAPTERS[id]?.part ?? 1}:${STORY_VN_CHAPTERS[id]?.side ? "s" : "c"}${STORY_VN_CHAPTERS[id]?.number ?? 0}`;
 export const storyVnBackground = id => STORY_VN_BACKGROUNDS[id] ?? null;
 
 /**
