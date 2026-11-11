@@ -218,6 +218,18 @@ Refinement pass 10 (2026-11-12): the Data Arena's events.
 - The fire element's pixel hit burst was a heap of red balls (pixelfx's small explosion). It is now pixelfx's ring of fire bursting out at the feet, starting on its burst frame.
 - The arena's own floor markings (the centre ring and start marks) and the gameplay telegraphs stay as they are.
 
+Refinement pass 11 (2026-11-12): the battle field's hazard events. Once the baked pieces are in, each plays a pixelfx piece instead of the circles and ellipses drawn per frame:
+- a shock charge: a lightning strike
+- a shock: an electric pop
+- a fall into water: a splash
+- a recovery: a dust burst
+- ice heated or lava cooled: steam
+- a lava burn: a plasma burst
+- a resisted shock or burn: a guard shield
+Charged water shows electric pops on its tiles instead of drawn zigzag arcs. The terrain overlays that tell the player where a hazard is stay: charged-tile frames, ice and crust states. These events show in the AI battle and in the Data Arena's relay maps, both of which use this module.
+
+Audit close: what still draws as vector shapes after passes 8-11 is interface or a gameplay sign, not a move effect -- telegraphs and danger zones, HP and TP bars, the ranch's selection rings, crests, mood and emote icons, the arena floor markings, the Data Arena's relay projectile heads and Tide Surge wave (only when the kit cannot draw a shot), and the hunt's tools (redone from the original at the Owner's request).
+
 <!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
 ## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
 

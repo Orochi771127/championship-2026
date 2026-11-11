@@ -335,3 +335,13 @@ test("refinement pass 10: the Data Arena's event rings are baked energy rings an
   const { PIXEL_HIT_BURST_SPRITES } = await import("../src/championship/presentation/vfx/pixelHitBurstSprites.js");
   assert.equal(PIXEL_HIT_BURST_SPRITES.FIRE.source, "fire/fire-ring");
 });
+
+test("refinement pass 11: the field's hazard events and charged-water arcs play baked pieces", async () => {
+  const fs = await import("node:fs");
+  const { AMBIENT_EVENT_PIECES } = await import("../src/championship/presentation/battleFieldAmbient.js");
+  const { MOVE_VFX_PIECE_SPRITES } = await import("../src/championship/presentation/vfx/moveVfxPieceSprites.js");
+  for (const [type, spec] of Object.entries(AMBIENT_EVENT_PIECES)) assert.ok(MOVE_VFX_PIECE_SPRITES[spec.piece], `${type} plays a baked ${spec.piece}`);
+  const ambient = fs.readFileSync("src/championship/presentation/battleFieldAmbient.js", "utf8");
+  assert.match(ambient, /if \(eventPiece\(e\.type, x, y\)\) continue;/, "a baked event replaces the drawn burst and its rings");
+  assert.match(ambient, /pieces\.play\("ring-pop"/, "charged water pops instead of drawn zigzags");
+});
