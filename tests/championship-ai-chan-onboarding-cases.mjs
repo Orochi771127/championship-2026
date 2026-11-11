@@ -38,7 +38,7 @@ test('stored form survives a write and read, and illegal or legacy documents fal
   assert.equal(back.status,'OK');assert.equal(back.preferences.guideAppearance,'catgirl');assert.equal(back.preferences.openingStoryResume,'ai-choose');
   // A document written before this field existed reads as "not chosen yet", keeping every other choice.
   const legacy=parsePreferences(JSON.stringify({schemaVersion:1,kind:'CHAMPIONSHIP_PREFERENCES',account:{theme:'night'},device:{musicVolume:40}}));
-  assert.deepEqual([legacy.preferences.guideAppearance,legacy.preferences.theme,legacy.preferences.musicVolume],['','night',40]);
+  assert.deepEqual([legacy.preferences.guideAppearance,legacy.preferences.theme,legacy.preferences.musicVolume],['','cyber',40]); // 深色夜景 is 電子生命 since 2026-11-11
   // Version 0 (a flat map) migrates; illegal values become defaults.
   const flat=parsePreferences(JSON.stringify({guideAppearance:'catgirl',openingStoryResume:'nope'}));
   assert.deepEqual([flat.status,flat.preferences.guideAppearance,flat.preferences.openingStoryResume],['MIGRATED','catgirl','']);

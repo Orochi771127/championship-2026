@@ -405,3 +405,14 @@ body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen] .
 @media (max-width: 520px) {
   :root[data-theme] body .cm-digimon-root .cm-digimon-stat[data-group="vital"] .cm-digimon-detail__value { padding-inline: 3px; font-size: calc(12px * var(--text-scale, 1)); letter-spacing: -0.02em; white-space: nowrap; text-align: center; }
 }
+
+/* Ranch on a phone: the partner card opens under the status bar, the corner the 探索手帳 key
+   also uses, and covered it (found by the 2026-11-11 run with the wider interface font). The
+   key steps aside while the card is open, like the hint and the notice do. */
+body:not([data-desktop-raising]) .int-rh2-root:has(.int-rh2-companion[data-open="true"]) .int-rh2-discoveries { visibility: hidden; }
+
+/* Multi-round events, sideways: the page is shorter than the screen, so its floating key sat
+   at the end of the page (over the second card's prize) instead of the screen's corner. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root:root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) .cm-championship-shell > .cm-screen-footer.cm-championship-footer { position: fixed; inset: auto max(16px, var(--safe-right)) 0 auto; }
+}
