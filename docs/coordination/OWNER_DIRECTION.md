@@ -1,5 +1,23 @@
 # Championship Owner Direction
 
+<!-- record-id: UI_THREE_LAYOUT_SETS_20261111 -->
+## 2026-11-11 — Three layout sets (phone upright, phone sideways, desktop): full-game page audit, desktop interface zoom, reading size and quality settings audit
+
+Owner brief (2026-11-11): 「請你盤點這個遊戲的所有頁面，還有盤點在電腦版，手機直立，手機橫式的所有UI配置看有沒有互相擋住或者是擺放不OK，幫我全遊戲、全系統檢查，然後做UI的配置優化H U D的配置優化調整成適當的位置跟大小，因為目前是網頁遊戲，但是可以用網頁遊戲App化，在手機跟電腦遊玩，所以要有三套的UI跟Hud 的配置。請調整成符合商業遊戲的水準跟品質。我不介入，就讓你自己去做，都請你自行去判定跟規劃還有調整」. Added the same day: 「可以的話也可以幫我研究一下字體字型幫我找個比較適合的字體字型，然後設定中的配置是否都有正確實裝，字型的大小會不會造成頁面跑掉啊？高畫質低畫質省電那些設定的內容是不是也都可以使用是否有差別啊就是幫我全系統全遊戲都檢查」.
+
+OWNER_APPROVED_ADAPTATION, layout, sizing and display-preference wiring only. No gameplay value, save field, reward, clock, RNG or art change. Report: `docs/reports/ui-three-layouts-2026-11-11/REPORT_ZH_TW.md`.
+
+- Three named sets (`layoutSetFor` in `app/portraitFrame.js`, published as `<html data-layout-set>`): `upright`, `sideways` (wider than tall and at most 520px high) and `desktop` (from 1024x600).
+- Desktop interface zoom: the desktop set is drawn for 1366x768; a larger desktop window shows that layout zoomed in steps of 0.05 up to 2 (`desktopUiZoom`, CSS `zoom` on `<html>`, `data-ui-zoom`). Touch devices never zoom. Canvases back each page pixel with the device ratio times the zoom, viewport units in the game's sheets go through `--cm-vw` / `--cm-dvh` (`scripts/qa/apply-viewport-units.mjs`), and pointer math in the facility editor, the Data Arena and the story hall divides by the on-screen scale.
+- The title, logo, main menu and opening stay as main shipped them (Owner 2026-10-27): they are not zoomed and `ui/layoutSets.css` has no title selector. Three title observations are reported for a decision, not changed (report section 8).
+- Page fixes live in `app/ui/layoutSets.css`, loaded last: battle selection in all three sets (the sponsor contract no longer displaces the mode prism), Cyber Gachapon and furnace sideways, the facility editor's selection panel, the partner list's element row, Data Arena lobby and relay keys, badge detail, backpack, schedule, help contrast, battle result on 375px phones, page footers sideways.
+- Reading size (設定 → 文字大小): 672 literal pixel font sizes in 23 sheets now follow `--text-scale`; live HUD sheets follow `--text-scale-hud` (half the step). At 100% every computed value is unchanged.
+- Quality: the 3D ranch re-rates its pixel ratio and shadows on the next frame after the tier changes (it needed a re-entry). Antialiasing still applies at the next launch, as the settings page says.
+- Font: research and a recommendation only (report section 6). No font file was downloaded or bundled; the typeface is the Owner's choice.
+- The audit runner gained a sixth slice (title menu, partner list, schedule, help, badges, settings, backpack, Journey, championship, end of day) and `scripts/qa/settings-audit.cjs`.
+
+This entry records the brief and what was built. It does not record a merge or publication authorization: those are asked of the Owner separately.
+
 <!-- record-id: STORY_VN_PART_FOUR_20261111 -->
 ## 2026-11-11 — Story part four 「群星的全國大賽」 (chapters 20–25)
 
