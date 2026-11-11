@@ -105,6 +105,12 @@ export const MOVE_PIECE_BAKE = Object.freeze({
   'shot-star': {fx: 'pickups/power-star', loop: true, fps: 12, fit: 0.7, grey: true, skyOnly: 6},
   'shot-fish': {fx: 'critters/fish-school', loop: true, fps: 12, fit: 1.0, grey: true},
   'shot-wisp': {fx: 'critters/wisp', loop: true, fps: 12, fit: 0.8, grey: true, skyOnly: 10},
+  // ---- ground marks (refinement pass 8: the hit decals drawn as vector strokes) -- a still frame each
+  'mark-ripple': {fx: 'water/ripples', loop: true, fps: 12, fit: 1.6, anchor: 'ground', grey: true},
+  'mark-frost': {fx: 'ice/frost-nova', from: 0.3, until: 1.4, fit: 1.6, anchor: 'ground', grey: true},
+  'mark-roots': {fx: 'nature/root-snare', until: 1.4, fit: 1.6, anchor: 'ground'},
+  // ---- the special prelude's aura round its caster (pass 8: the vector ring and light streaks)
+  'hyper-ring': {fx: 'arcane/rune-circle', loop: true, fps: 20, fit: 1.4, anchor: 'ground', grey: true},
   // ---- support (on the receiving body)
   heal: {fx: 'holy/heal-aoe', until: 1.2, fit: 1.4, anchor: 'ground', grey: true},
   cleanse: {fx: 'holy/blessing', until: 1.2, fit: 1.6, anchor: 'ground', grey: true},
