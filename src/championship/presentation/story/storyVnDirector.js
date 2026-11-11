@@ -8,17 +8,21 @@
 // or a battle). Leave aborts: nothing is claimed. The director writes nothing
 // itself; the only state change is the host's claim at the end.
 
-import { STORY_VN_CAST, STORY_VN_SPEAKERS, storyVnChapter, validateStoryVnChapter } from "../../data/storyVnCampaign.js";
+import { STORY_VN_CAST, STORY_VN_SPEAKERS, storyVnBackground, storyVnChapter, validateStoryVnChapter } from "../../data/storyVnCampaign.js";
 import { storyVnText } from "../../text/storyVnText.js";
-import { createStoryVnStage } from "./storyVnStage.js";
+import { createStoryVnStage, guidePortrait } from "./storyVnStage.js";
+import { createStoryVnField } from "./storyVnField.js";
 import { createStoryVnTheater } from "./storyVnTheater.js";
 
-const INTERACTIVE = new Set(["choice", "tap", "battle"]);
+const INTERACTIVE = new Set(["choice", "tap", "battle", "explore", "board"]);
 
 export function createStoryVnDirector({
   doc = globalThis.document, host = doc.body, locale = "zh-Hant", reducedMotion = false, motionPlates = true, guideForm = "cat",
   speciesName = () => "", runBattle = null, claim = null,
-  createStage = createStoryVnStage, createTheater = createStoryVnTheater
+  // Optional host hooks: a sound cue by name, the request board's rows, and the bond ledger
+  // (records a chapter's bond and returns the running total).
+  cue = () => {}, boardItems = null, recordBond = null,
+  createStage = createStoryVnStage, createTheater = createStoryVnTheater, createField = createStoryVnField
 } = {}) {
   let running = null;
 
@@ -36,6 +40,8 @@ export function createStoryVnDirector({
     const tags = new Map(); // cast key -> "contestant" while overwritten
     const choices = [], battles = [];
     let objectiveItems = [];
+    let field = null, picked = null;
+    const sound = name => { try { cue(name); } catch { /* a cue never stops the story */ } };
 
     const speciesOf = key => key === "partner" ? partnerSpecies : STORY_VN_CAST[key]?.species ?? null;
     const castTag = key => {
@@ -112,6 +118,67 @@ export function createStoryVnDirector({
       theater.prompt(null);
     }
 
+    // ---- exploration (storyVnField.js): walk the partner, talk to people, look at things ----
+    const castName = key => {
+      const speaker = Object.values(STORY_VN_SPEAKERS).find(s => s.cast === key && s.nameKey);
+      return speaker ? t(speaker.nameKey) : castTag(key) ?? "";
+    };
+    function spotState(spot, done) {
+      if (spot.after && !spot.after.every(id => done.has(id))) return "hidden";
+      if (done.has(spot.id) && !spot.repeat) return "done";
+      return spot.goal && (spot.requires ?? []).every(id => done.has(id)) ? "goal" : "open";
+    }
+    async function explore(beat) {
+      fastForward(false);
+      theater.hideBox(); stage.setBust("left", null); stage.setBust("right", null);
+      const plate = storyVnBackground(beat.field);
+      if (!field) field = createField({ host: stage.fieldHost?.() ?? theater.stageHost, doc, reducedMotion });
+      field.hidden(false);
+      await field.open({ id: beat.field, src: plate?.src, walk: plate?.walk ?? beat.walk }, {
+        partnerSpecies, start: (beat.start ?? [30, 86]).map(v => v / 100),
+        spotList: beat.spots.map(spot => ({
+          id: spot.id, kind: spot.kind, at: spot.at, face: spot.face, reach: spot.reach,
+          label: spot.labelKey ? t(spot.labelKey) : spot.who ? castName(spot.who) : "",
+          species: spot.who && spot.who !== "aichan" ? speciesOf(spot.who) : null,
+          image: spot.who === "aichan" ? guidePortrait(guideForm || "cat").src : null, height: spot.who === "aichan" ? 0.3 : spot.height
+        }))
+      });
+      guard();
+      if (beat.titleKey) theater.location(t(beat.titleKey));
+      const done = new Set();
+      const counted = beat.count ?? [];
+      const refresh = () => { for (const spot of beat.spots) field.setSpotState(spot.id, spotState(spot, done)); };
+      const goal = () => (beat.goalKey ? t(beat.goalKey, { n: counted.filter(id => done.has(id)).length, total: counted.length }) : null);
+      refresh();
+      for (;;) {
+        guard();
+        theater.prompt(goal());
+        const id = await until(new Promise(resolve => field.listen({ onSpot: resolve })));
+        field.pause(true); theater.prompt(null);
+        const spot = beat.spots.find(entry => entry.id === id);
+        if (!spot) continue;
+        sound(spot.kind === "npc" ? "talk" : spot.kind === "exit" ? "step" : "discover");
+        if (!(spot.requires ?? []).every(need => done.has(need))) {
+          await line({ speaker: spot.lockedSpeaker ?? "partner", key: spot.lockedKey ?? "FIELD_NOT_YET", mood: "think" });
+        } else if (done.has(spot.id) && spot.doneKey) {
+          await line({ speaker: spot.doneSpeaker ?? "partner", key: spot.doneKey, mood: "calm" });
+        } else {
+          if (spot.beats?.length) await run(spot.beats);
+          if (picked) return null;
+          done.add(spot.id);
+          if (spot.end) { theater.hideBox(); stage.setBust("left", null); stage.setBust("right", null); field.hidden(true); return spot.next ?? null; }
+        }
+        theater.hideBox(); stage.setBust("left", null); stage.setBust("right", null);
+        refresh();
+      }
+    }
+    async function board() {
+      fastForward(false);
+      sound("choice");
+      const items = typeof boardItems === "function" ? boardItems() : [];
+      return until(theater.board({ title: t("BOARD_TITLE"), close: t("BOARD_CLOSE"), items }));
+    }
+
     async function run(beats) {
       const index = new Map(beats.map((beat, i) => [beat.label, i]).filter(([label]) => label));
       let i = from && index.has(from) ? index.get(from) : 0;
@@ -125,6 +192,7 @@ export function createStoryVnDirector({
         let next = null;
         switch (beat.type) {
           case "bg":
+            field?.hidden(true);
             if (!beat.keep) stage.clearActors();
             theater.hideBox();
             stage.setBust("left", null); stage.setBust("right", null);
@@ -142,19 +210,22 @@ export function createStoryVnDirector({
           case "bubble": if (!skipping) stage.bubble(beat.who, beat.glyph); break;
           case "line": await line(beat); break;
           case "choice": {
-            const picked = await until(theater.choose({ prompt: t(beat.key), options: beat.options.map(option => t(option.key)) }));
-            choices.push({ key: beat.key, option: beat.options[picked].key });
-            next = beat.options[picked].next;
+            sound("choice");
+            const option = await until(theater.choose({ prompt: t(beat.key), options: beat.options.map(entry => t(entry.key)) }));
+            choices.push({ key: beat.key, option: beat.options[option].key });
+            next = beat.options[option].next;
             break;
           }
           case "fx":
-            if (beat.kind === "warning") await until(theater.warning({ title: t("WARNING"), sub: t(beat.subKey) }));
+            if (beat.kind === "warning") { sound("warning"); await until(theater.warning({ title: t("WARNING"), sub: t(beat.subKey) })); }
             else stage.fx(beat.kind, { on: beat.on !== false });
             if (beat.kind === "resonance" && !instant()) await pause(900);
             break;
           case "file": await until(theater.card({ title: t(beat.key), body: t(`${beat.key}_BODY`), close: t("FILE_CLOSE") })); break;
           case "form":
-            await until(theater.form({ title: t("FORM_TITLE"), tamerLabel: t("FORM_TAMER"), tamer, partnerLabel: t("FORM_PARTNER"), partner, hint: t("FORM_HINT"), done: t("FORM_DONE") }));
+            // The entry form; a beat may fill other rows (part three: Ai-chan signs as the receptionist).
+            await until(theater.form({ title: t(beat.titleKey ?? "FORM_TITLE"), tamerLabel: t(beat.tamerLabelKey ?? "FORM_TAMER"), tamer: beat.tamerKey ? t(beat.tamerKey) : tamer,
+              partnerLabel: t(beat.nameLabelKey ?? "FORM_PARTNER"), partner: beat.nameKey ? t(beat.nameKey) : partner, hint: t(beat.hintKey ?? "FORM_HINT"), done: t("FORM_DONE") }));
             break;
           case "tag":
             for (const who of beat.who) {
@@ -168,6 +239,8 @@ export function createStoryVnDirector({
             theater.objectives({ title: t("OBJ_TITLE"), items: objectiveItems, done: beat.done ?? 0 });
             break;
           case "battle": next = await battle(beat); break;
+          case "explore": next = await explore(beat); if (picked) return; break;
+          case "board": { const pick = await board(); if (pick) { picked = pick; return; } break; }
           case "wait": if (!instant()) await pause(beat.ms); break;
           case "jump": next = beat.next; break;
           case "end": return;
@@ -179,7 +252,10 @@ export function createStoryVnDirector({
 
     // Ai-chan hosts every main chapter: a "last time" recap once the first scene is up,
     // a bond moment with the partner and a "next time" teaser before the clear card.
-    const hosted = !chapter.side && storyVnText(`AIR_${chapter.mapNumber}`, locale) !== null;
+    const bonded = !chapter.side && !chapter.hub;
+    // host: false (no Ai-chan at all) or "teaser" (no recap: she is away when it opens).
+    const teased = bonded && chapter.host !== false && storyVnText(`AIN_${chapter.mapNumber}`, locale) !== null;
+    const hosted = teased && chapter.host !== "teaser" && storyVnText(`AIR_${chapter.mapNumber}`, locale) !== null;
     function hostBeats(beats) {
       if (!hosted || from) return beats;
       const first = beats.findIndex(beat => beat.type === "bg");
@@ -192,16 +268,18 @@ export function createStoryVnDirector({
       fastForward(false);
       if (partnerSpecies !== null) stage.setBust("right", { species: partnerSpecies }, { key: "partner", mood: "happy" });
       stage.bustMood("left", { active: false, mood: "calm" }); stage.bustMood("right", { active: true, mood: "happy" });
-      const picked = await until(theater.choose({ prompt: t("BOND_PROMPT"), options: BOND.map(([key]) => t(key)) }));
-      bond = BOND[picked][0];
+      sound("choice");
+      const choice = await until(theater.choose({ prompt: t("BOND_PROMPT"), options: BOND.map(([key]) => t(key)) }));
+      bond = BOND[choice][0];
+      sound("bond");
       if (stage.has("partner") && !instant()) stage.act("partner", "cheer").catch(() => {});
       if (!instant()) stage.fx("resonance");
-      await line({ speaker: "partner", key: BOND[picked][1], mood: "happy" });
+      await line({ speaker: "partner", key: BOND[choice][1], mood: "happy" });
       await until(theater.toast(t("BOND_TOAST"), 1100));
     }
 
     const label = chapter.side ? t("VN_SIDE_LABEL") : t("VN_CHAPTER_NUM", { n: chapter.mapNumber });
-    running = { chapterId, theater, stage, life };
+    running = { chapterId, theater, stage, life, field: () => field };
     theater.open({
       label: `${label}　${t(chapter.titleKey)}`,
       onSkip: () => { if (!skipping) fastForward(true); },
@@ -209,12 +287,14 @@ export function createStoryVnDirector({
     });
     let outcome = "completed";
     try {
-      if (!from) await until(theater.titleCard({ kicker: chapter.side ? t("VN_SIDE_LABEL") : t(chapter.partKey ?? "PART_ONE"), title: t(chapter.titleKey), sub: chapter.side ? "" : label }));
+      if (!from && !chapter.hub) await until(theater.titleCard({ kicker: chapter.side ? t("VN_SIDE_LABEL") : t(chapter.partKey ?? "PART_ONE"), title: t(chapter.titleKey), sub: chapter.side ? "" : label }));
       await run(hostBeats(chapter.beats));
-      if (hosted) {
-        await bondMoment();
-        await line({ speaker: "aichan", key: `AIN_${chapter.mapNumber}`, mood: "talk" });
+      if (chapter.hub) {
+        fastForward(false);
+        return picked ? { outcome: "picked", chapterId, pick: picked, log: theater.log() } : { outcome: "left", chapterId, log: theater.log() };
       }
+      if (bonded) await bondMoment();
+      if (teased) await line({ speaker: "aichan", key: `AIN_${chapter.mapNumber}`, mood: "talk" });
       fastForward(false);
       theater.hideBox(); theater.objectives({ items: [] });
       const reward = (typeof claim === "function" ? await claim(chapterId) : null) ?? null;
@@ -222,7 +302,13 @@ export function createStoryVnDirector({
       if (reward?.granted) lines.push(`${t(chapter.side ? "VN_SIDE_REWARD" : "VN_REWARD")}　${t("VN_REWARD_TICKETS", { n: reward.granted })}`);
       else if (reward?.claimedBefore) lines.push(t("VN_REWARD_DONE"));
       for (const extra of reward?.lines ?? []) lines.push(extra);
-      if (bond) lines.push(t("VN_BOND_LINE"));
+      if (bond) {
+        lines.push(t("VN_BOND_LINE"));
+        let total = null;
+        try { total = typeof recordBond === "function" ? recordBond(chapterId, bond) : null; } catch { total = null; }
+        if (Number.isSafeInteger(total) && total > 0) lines.push(t("VN_BOND_TOTAL", { n: total }));
+      }
+      sound("clear");
       await Promise.race([
         theater.clearCard({ kicker: t("VN_CLEAR"), title: t(chapter.titleKey), echo: t(chapter.echoKey), lines, back: t("VN_BACK") }),
         new Promise(resolve => life.signal.addEventListener("abort", resolve, { once: true }))
@@ -233,7 +319,7 @@ export function createStoryVnDirector({
       if (outcome === "failed") console.warn(`STORY_VN_FAILED: ${error?.message ?? error}`);
       return { outcome, chapterId, choices, battles, log: theater.log() };
     } finally {
-      theater.close(); stage.dispose(); theater.dispose();
+      field?.dispose(); theater.close(); stage.dispose(); theater.dispose();
       running = null;
     }
   }
@@ -244,8 +330,12 @@ export function createStoryVnDirector({
     /** Loopback QA: the live chapter's state. */
     state() {
       if (!running) return null;
-      return { chapterId: running.chapterId, actors: running.stage.keys(), left: running.stage.bustKey("left"), right: running.stage.bustKey("right"), log: running.theater.log().length };
+      const field = running.field();
+      return { chapterId: running.chapterId, actors: running.stage.keys(), left: running.stage.bustKey("left"), right: running.stage.bustKey("right"), log: running.theater.log().length,
+        field: field && !field.element.hidden ? { at: field.position(), state: field.element.dataset.state } : null };
     },
+    /** Loopback QA: walk to an exploration spot and use it, as a tap would. */
+    spot(id) { return running?.field()?.activate(id) ?? null; },
     stop() { running?.life.abort(); }
   });
 }

@@ -121762,7 +121762,7 @@
     },
     {
       "path": "src/championship/app/championshipStandaloneApp.js",
-      "sha256": "34918c490c528c6df7f04a988d0a5996f1971386f7f84aeb1cf07eef2097f70a"
+      "sha256": "0537df26c980b75066f2733f6d289f326c65f7638463c606bac6f6028f03b6eb"
     },
     {
       "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -121922,7 +121922,7 @@
     },
     {
       "path": "src/championship/app/main.js",
-      "sha256": "6c768b18aaa3bec4d89d268b8a6312b01bae50cd741374449eac59c915db7bd1"
+      "sha256": "d94ad51637b2875a8875e521da2254cfe2bf4a66ef9e399850a632a2bde8347b"
     },
     {
       "path": "src/championship/app/medalCollection.css",
@@ -122198,7 +122198,7 @@
     },
     {
       "path": "src/championship/app/ui/storyVn.css",
-      "sha256": "0aa984b80524b601e3a22e1368c285a051da6bd452ba6b2ed9cf598df54d1f73"
+      "sha256": "40c9f70ba82edec611870246dbedd9e06fdd2f2c22e551628fd625bb59d19274"
     },
     {
       "path": "src/championship/app/ui/syncGainPanel.js",
@@ -122606,11 +122606,11 @@
     },
     {
       "path": "src/championship/data/storyRiftMap.js",
-      "sha256": "18c5f694a22ccc58b38481819843ec13578f49d8e880a8f1a857a70fc6a2cf31"
+      "sha256": "dc20818b97dd0129dce7a391d0b6a328d31d2d883f005ad6a05825c1137122e1"
     },
     {
       "path": "src/championship/data/storyVnCampaign.js",
-      "sha256": "48dc207687efa2db1f9ad3538ab7d4cb55a3275f82cb5410c3941d0492d6f4b5"
+      "sha256": "e682dac657d3cfc648162ab46ec46a0b0f1237e21dff9ce791d7cdd93f185104"
     },
     {
       "path": "src/championship/data/storyVnExpressions.js",
@@ -123094,7 +123094,7 @@
     },
     {
       "path": "src/championship/presentation/ceremony/ceremonyAudio.js",
-      "sha256": "100e7bb0aa2e00a48a7e220fdaccbffc825ee4c692c1135a2b5c70afaa394c2f"
+      "sha256": "0b66f32ac4ca0523ec235a3c558948178d942037f1512d6899a09eaf2b5e0d2a"
     },
     {
       "path": "src/championship/presentation/ceremony/ceremonyRunner.js",
@@ -123518,15 +123518,15 @@
     },
     {
       "path": "src/championship/presentation/story/storyVnDirector.js",
-      "sha256": "de28e1231303f95757ea9da4bddc876ece979f16c44f677a802677ea089b0a28"
+      "sha256": "15d78373bc1b1243c2f407235af639ea14a535464dad025bf1ee97105fd13a16"
     },
     {
       "path": "src/championship/presentation/story/storyVnStage.js",
-      "sha256": "4d7f35ddf58502a3feb817e669b7f06ccaff162466fdeae77d101924ed6d289f"
+      "sha256": "05ff2e0f8c42c1af037ee4f75ea212403e04f6c5b19e8b409f4bf9a1e7d9cf68"
     },
     {
       "path": "src/championship/presentation/story/storyVnTheater.js",
-      "sha256": "1993a0dd29c79daf060da369196c327838a43a56919d02d121cfc28f18034556"
+      "sha256": "8de2bccd5cd274cc688a525ef5b479a3ebf2ae1f4186e39c5fa22dae0e791c49"
     },
     {
       "path": "src/championship/presentation/systemBackgrounds.js",
@@ -124110,7 +124110,7 @@
     },
     {
       "path": "src/championship/text/storyVnText.js",
-      "sha256": "661fab27673c76421cdd5d5f8f082bcc4a00c512ef48d8ee265e7cfa662ffa9a"
+      "sha256": "224596806c140b559cc89a67dfe8a3665409aef90f833550016b3e2cecfd31f9"
     },
     {
       "path": "src/championship/text/syncLevelText.js",
@@ -126101,6 +126101,50 @@
         "schemaVersion",
         "sizeClass"
       ]
+    },
+    {
+      "path": "src/championship/data/storyVnPartThree.js",
+      "sha256": "b6486229bf671e487200dcdc6a04a7566f67827ed013638c98a644dc2722da0b"
+    },
+    {
+      "path": "src/championship/presentation/story/storyVnField.js",
+      "sha256": "47789d0b7fdd9d4cf1181bea4d2171c5e4d026eab40cbc2d7703f01a8e299163"
+    },
+    {
+      "path": "src/championship/presentation/story/storyVnAudio.js",
+      "sha256": "031f94afbdfb2c41b7f69e56af9931031ca91aade761f5c7aa5902edd4849f3a"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/forest.00e31d9cef53e5cb.webp",
+      "sha256": "00e31d9cef53e5cb115af4360bb9e7e796b75926c23dd66a36d9c55dc4b244fb"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/forest.ba98a1ca7ff0e8bb.mp4",
+      "sha256": "ba98a1ca7ff0e8bba900a4bacd87b1fc4abd3e988835d94319ad2fe6ac413e0f"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/lobby.209770b2be1568ed.mp4",
+      "sha256": "209770b2be1568edc534ddc5bddd26919bf1fae7e8dbf6b359d35e0da41a29a1"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/lobby.2c367b4820a17a00.webp",
+      "sha256": "2c367b4820a17a006aadb5d17a4a067ead9679a5ff29216cdc9fdcc897a122fb"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/oldstreet.11178d526f1574c1.mp4",
+      "sha256": "11178d526f1574c141a3f5d39519f3bf1e3d4d78df3d9116221081a1efddb253"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/oldstreet.4fda664e2deb7d20.webp",
+      "sha256": "4fda664e2deb7d2042faea58bf3434919250b32b1f29a8bed5bcbfe0e5d56490"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/origin.97894bac68efbd6e.webp",
+      "sha256": "97894bac68efbd6ecc7abc188bee0d122c394298c4ed06658fb9f27a6daa4180"
+    },
+    {
+      "path": "assets/production/story/vn-backgrounds-v3/origin.ab2c3a7b12ae3fa6.mp4",
+      "sha256": "ab2c3a7b12ae3fa6e1bdbadb6254e90f3a741d10716f8d85cb12b4649e93019b"
     }
   ],
   "assets": [

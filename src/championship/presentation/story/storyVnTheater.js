@@ -203,6 +203,34 @@ export function createStoryVnTheater({ doc = globalThis.document, host = doc.bod
         try { shut.focus({ preventScroll: true }); } catch { /* not focusable */ }
       });
     },
+    /**
+     * The request board (part three's reception counter): one row per chapter or request,
+     * {id, kind: "main"|"request", title, sub, state: "open"|"cleared"|"locked", note}.
+     * Resolves with the picked id, or null when closed.
+     */
+    board({ title = "", close = "", items = [] } = {}) {
+      box.hidden = true;
+      const card = el(doc, "article", "cm-vn-board");
+      card.append(el(doc, "h3", "cm-vn-board__title", title));
+      const list = el(doc, "div", "cm-vn-board__list");
+      const shut = button(doc, "cm-vn-card__close cm-arcade-key", close, "board-close");
+      return new Promise(resolve => {
+        const done = id => { layer.hidden = true; layer.replaceChildren(); delete layer.dataset.kind; resolve(id); };
+        for (const item of items) {
+          const row = button(doc, "cm-vn-board__item", "", "board-pick");
+          row.dataset.kind = item.kind ?? "request"; row.dataset.state = item.state ?? "open"; row.dataset.id = item.id;
+          row.disabled = item.state === "locked";
+          row.append(el(doc, "span", "cm-vn-board__tag", item.tag ?? ""), el(doc, "span", "cm-vn-board__name", item.title ?? item.id),
+            el(doc, "span", "cm-vn-board__sub", item.state === "locked" ? item.note ?? "" : item.sub ?? ""));
+          row.addEventListener("click", () => { if (!row.disabled) done(item.id); });
+          list.append(row);
+        }
+        shut.addEventListener("click", () => done(null), { once: true });
+        card.append(list, shut);
+        layer.replaceChildren(card); layer.hidden = false; layer.dataset.kind = "board";
+        try { (list.querySelector("button:not([disabled])") ?? shut).focus({ preventScroll: true }); } catch { /* not focusable */ }
+      });
+    },
     /** The entry form: the tamer row is filled, the partner writes its own name, the stamp lands. */
     async form({ title = "", tamerLabel = "", tamer = "", partnerLabel = "", partner = "", hint = "", done = "" } = {}) {
       box.hidden = true;

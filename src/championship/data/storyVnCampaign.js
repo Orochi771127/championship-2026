@@ -33,17 +33,18 @@
 // Text keys resolve in STORY_VN_COPY (text/storyVnText.js).
 
 import { STORY_VN_PART_TWO_BACKGROUNDS, STORY_VN_PART_TWO_CAST, STORY_VN_PART_TWO_CHAPTERS, STORY_VN_PART_TWO_SPEAKERS } from "./storyVnPartTwo.js";
+import { STORY_VN_PART_THREE_BACKGROUNDS, STORY_VN_PART_THREE_CAST, STORY_VN_PART_THREE_CHAPTERS, STORY_VN_PART_THREE_SPEAKERS } from "./storyVnPartThree.js";
 
 export const STORY_VN_SCHEMA_VERSION = 1;
 export const STORY_VN_REWARD_PREFIX = "story:vn1:";
-export const STORY_VN_BEAT_TYPES = Object.freeze(["bg", "enter", "exit", "move", "act", "bubble", "line", "choice", "fx", "file", "form", "tag",
+export const STORY_VN_BEAT_TYPES = Object.freeze(["bg", "explore", "board", "enter", "exit", "move", "act", "bubble", "line", "choice", "fx", "file", "form", "tag",
   "tap", "objectives", "battle", "wait", "jump", "end"]);
 export const STORY_VN_ACTIONS = Object.freeze(["idle", "walk", "attack", "hit", "cheer"]);
 /** Native sequences the stage loads for every actor (the Data Arena's audited ids). */
 export const STORY_VN_SEQUENCES = Object.freeze({ idle: 0, walk: 2, attack: 7, hit: 6, cheer: 33 });
 export const STORY_VN_BUBBLES = Object.freeze(["!", "?", "...", "heart", "note", "sad", "spark", "anger"]);
 /** Portrait moods: how the speaking bust moves and is lit (ui/storyVn.css). */
-export const STORY_VN_MOODS = Object.freeze(["calm", "happy", "angry", "sad", "shock", "think", "serious", "glitch"]);
+export const STORY_VN_MOODS = Object.freeze(["talk", "calm", "happy", "angry", "sad", "shock", "think", "serious", "glitch"]);
 export const STORY_VN_FX = Object.freeze(["noise", "shake", "flash", "warning", "resonance"]);
 
 const freezeDeep = value => {
@@ -69,7 +70,8 @@ export const STORY_VN_BACKGROUNDS = freezeDeep({
   vault: { src: "assets/production/story/vn-backgrounds-v3/vault.066aa589ff8d1ca0.webp", motion: "assets/production/story/vn-backgrounds-v3/vault.671e7a1dce072a50.mp4", ambient: "dust", ground: 0.8, focus: 0.52 },
   safezone: { src: "assets/production/story/vn-backgrounds-v3/safezone.c886661d4193e544.webp", motion: "assets/production/story/vn-backgrounds-v3/safezone.74a8512d30cf878d.mp4", ambient: "sparks", ground: 0.8, focus: 0.55 },
   void: { src: "assets/production/story/vn-backgrounds-v3/void.f59472dc564e3802.webp", motion: "assets/production/story/vn-backgrounds-v3/void.b59128efe8a73669.mp4", ambient: "shards", ground: 0.8, focus: 0.55 },
-  ...STORY_VN_PART_TWO_BACKGROUNDS
+  ...STORY_VN_PART_TWO_BACKGROUNDS,
+  ...STORY_VN_PART_THREE_BACKGROUNDS
 });
 
 /**
@@ -97,7 +99,8 @@ export const STORY_VN_CAST = freezeDeep({
   vanguard: { species: 78, overwritten: true, preset: 515 },
   vanguardB: { species: 78, overwritten: true },
   vessel: { species: 148, tagKey: "TAG_VESSEL", overwritten: true, scale: 1.6, preset: 542 },
-  ...STORY_VN_PART_TWO_CAST
+  ...STORY_VN_PART_TWO_CAST,
+  ...STORY_VN_PART_THREE_CAST
 });
 
 /** Speakers: name-plate key, the cast member whose bust and body speak, and the human behind it (if any). */
@@ -117,7 +120,8 @@ export const STORY_VN_SPEAKERS = freezeDeep({
   neighborA: { nameKey: "TAG_NEIGHBOR_A", cast: "neighborA" },
   neighborB: { nameKey: "TAG_NEIGHBOR_B", cast: "neighborB" },
   residentB: { nameKey: "TAG_RESIDENT_B", cast: "residentB" },
-  ...STORY_VN_PART_TWO_SPEAKERS
+  ...STORY_VN_PART_TWO_SPEAKERS,
+  ...STORY_VN_PART_THREE_SPEAKERS
 });
 
 export const STORY_VN_CHAPTERS = freezeDeep({
@@ -427,13 +431,16 @@ export const STORY_VN_CHAPTERS = freezeDeep({
       { type: "end" }
     ]
   },
-  ...STORY_VN_PART_TWO_CHAPTERS
+  ...STORY_VN_PART_TWO_CHAPTERS,
+  ...STORY_VN_PART_THREE_CHAPTERS
 });
 
 export const STORY_VN_CHAPTER_IDS = Object.freeze(Object.keys(STORY_VN_CHAPTERS));
 /** The main line, in order (side stories excluded). */
-export const STORY_VN_MAIN_IDS = Object.freeze(STORY_VN_CHAPTER_IDS.filter(id => !STORY_VN_CHAPTERS[id].side));
+export const STORY_VN_MAIN_IDS = Object.freeze(STORY_VN_CHAPTER_IDS.filter(id => !STORY_VN_CHAPTERS[id].side && !STORY_VN_CHAPTERS[id].hub));
 export const STORY_VN_SIDE_IDS = Object.freeze(STORY_VN_CHAPTER_IDS.filter(id => STORY_VN_CHAPTERS[id].side));
+/** Hubs: walkable places (part three's reception hall) that hand out chapters; never claimed. */
+export const STORY_VN_HUB_IDS = Object.freeze(STORY_VN_CHAPTER_IDS.filter(id => STORY_VN_CHAPTERS[id].hub));
 
 export const storyVnChapter = id => STORY_VN_CHAPTERS[id] ?? null;
 /** `story:vn1:c3` for the main line, `story:vn1:s1` for a side story. */
@@ -448,30 +455,39 @@ export const storyVnBackground = id => STORY_VN_BACKGROUNDS[id] ?? null;
 export function storyVnChapterStates(claimedKeys = [], { entryOpen = true } = {}) {
   const claimed = new Set(Array.isArray(claimedKeys) ? claimedKeys : []);
   const cleared = id => claimed.has(storyVnRewardKey(id));
+  // Requests cleared per part: a chapter with `needs` opens only once that many of its part's requests are done
+  // (the story / side-job rhythm of the Moonlight research brief).
+  const requestsDone = part => STORY_VN_SIDE_IDS.filter(id => STORY_VN_CHAPTERS[id].request && (STORY_VN_CHAPTERS[id].part ?? 1) === part && cleared(id)).length;
   let previousCleared = Boolean(entryOpen);
   const main = STORY_VN_MAIN_IDS.map(id => {
-    const state = cleared(id) ? "cleared" : previousCleared ? "open" : "locked";
+    const chapter = STORY_VN_CHAPTERS[id];
+    const need = chapter.needs ?? 0, have = need ? requestsDone(chapter.part ?? 1) : 0;
+    const state = cleared(id) ? "cleared" : previousCleared && have >= need ? "open" : "locked";
+    const lock = state === "locked" && previousCleared ? "requests" : state === "locked" ? "previous" : null;
     previousCleared = cleared(id);
-    return Object.freeze({ id, number: STORY_VN_CHAPTERS[id].number, side: false, state });
+    return Object.freeze({ id, number: chapter.number, side: false, state, ...(need ? { need, have } : {}), ...(lock ? { lock } : {}) });
   });
+  const hubs = STORY_VN_HUB_IDS.map(id => Object.freeze({ id, number: 0, side: false, hub: true,
+    state: cleared(STORY_VN_CHAPTERS[id].after) ? "open" : "locked" }));
   // A side story opens once the chapter it follows is cleared.
   const side = STORY_VN_SIDE_IDS.map(id => Object.freeze({ id, number: STORY_VN_CHAPTERS[id].number, side: true,
     state: cleared(id) ? "cleared" : cleared(STORY_VN_CHAPTERS[id].after) ? "open" : "locked" }));
-  return Object.freeze([...main, ...side]);
+  return Object.freeze([...main, ...side, ...hubs]);
 }
 
 /** The structural problems of a chapter (empty when it is playable). */
-export function validateStoryVnChapter(id, chapter = STORY_VN_CHAPTERS[id]) {
-  const problems = [];
-  if (!chapter) return [`${id}: missing`];
-  const labels = new Set(chapter.beats.map(beat => beat.label).filter(Boolean));
-  const onStage = new Set();
-  chapter.beats.forEach((beat, index) => {
+// Beats an exploration spot may play (the field stays up behind them, so nothing enters or moves on the stage).
+export const STORY_VN_SPOT_BEAT_TYPES = Object.freeze(["line", "choice", "file", "fx", "battle", "wait", "jump", "board", "form", "objectives"]);
+export const STORY_VN_SPOT_KINDS = Object.freeze(["npc", "inspect", "exit"]);
+
+function checkBeats(problems, id, beats, { spot = false } = {}) {
+  const labels = new Set(beats.map(beat => beat.label).filter(Boolean));
+  beats.forEach((beat, index) => {
     const at = `${id}#${index}`;
     if (!STORY_VN_BEAT_TYPES.includes(beat.type)) problems.push(`${at}: type ${beat.type}`);
+    if (spot && !STORY_VN_SPOT_BEAT_TYPES.includes(beat.type)) problems.push(`${at}: ${beat.type} inside a spot`);
     if (beat.type === "bg" && !STORY_VN_BACKGROUNDS[beat.id]) problems.push(`${at}: background ${beat.id}`);
     if (["enter", "exit", "move", "act", "bubble"].includes(beat.type) && !STORY_VN_CAST[beat.who]) problems.push(`${at}: cast ${beat.who}`);
-    if (beat.type === "enter") onStage.add(beat.who);
     if (beat.type === "line") {
       if (!STORY_VN_SPEAKERS[beat.speaker]) problems.push(`${at}: speaker ${beat.speaker}`);
       if (beat.mood && !STORY_VN_MOODS.includes(beat.mood)) problems.push(`${at}: mood ${beat.mood}`);
@@ -484,23 +500,51 @@ export function validateStoryVnChapter(id, chapter = STORY_VN_CHAPTERS[id]) {
     if (beat.type === "battle" && (!beat.presets?.length || !labels.has(beat.win) || !labels.has(beat.lose))) problems.push(`${at}: battle branches`);
     if (beat.type === "jump" && !labels.has(beat.next)) problems.push(`${at}: jump ${beat.next}`);
     if (beat.type === "choice" && beat.options.some(option => !labels.has(option.next))) problems.push(`${at}: choice target`);
+    if (beat.type === "explore") {
+      if (!STORY_VN_BACKGROUNDS[beat.field]) problems.push(`${at}: field ${beat.field}`);
+      const ids = new Set();
+      for (const s of beat.spots ?? []) {
+        if (ids.has(s.id)) problems.push(`${at}: spot ${s.id} twice`); ids.add(s.id);
+        if (!STORY_VN_SPOT_KINDS.includes(s.kind)) problems.push(`${at}: spot ${s.id} kind ${s.kind}`);
+        if (!Array.isArray(s.at) || s.at.length !== 2 || s.at.some(v => !(v >= 0 && v <= 100))) problems.push(`${at}: spot ${s.id} at`);
+        if (s.kind === "npc" && !STORY_VN_CAST[s.who]) problems.push(`${at}: spot ${s.id} cast ${s.who}`);
+        if (s.next && !labels.has(s.next)) problems.push(`${at}: spot ${s.id} next ${s.next}`);
+        checkBeats(problems, `${at}.${s.id}`, s.beats ?? [], { spot: true });
+      }
+      for (const s of beat.spots ?? []) for (const need of [...(s.requires ?? []), ...(s.after ?? [])]) if (!ids.has(need)) problems.push(`${at}: spot ${s.id} needs ${need}`);
+      if (!(beat.spots ?? []).some(s => s.end)) problems.push(`${at}: no way out`);
+      for (const need of beat.count ?? []) if (!ids.has(need)) problems.push(`${at}: count ${need}`);
+    }
   });
+}
+
+/** The structural problems of a chapter (empty when it is playable). */
+export function validateStoryVnChapter(id, chapter = STORY_VN_CHAPTERS[id]) {
+  const problems = [];
+  if (!chapter) return [`${id}: missing`];
+  checkBeats(problems, id, chapter.beats);
   if (chapter.beats.at(-1)?.type !== "end") problems.push(`${id}: no end`);
   return problems;
 }
 
-/** Every text key a chapter reads (for the locale gate and the tests). */
+function* allBeats(beats) {
+  for (const beat of beats) {
+    yield beat;
+    for (const spot of beat.spots ?? []) yield* allBeats(spot.beats ?? []);
+  }
+}
 export function storyVnChapterKeys(id) {
   const chapter = STORY_VN_CHAPTERS[id];
   if (!chapter) return [];
   const keys = new Set([chapter.titleKey, chapter.summaryKey, chapter.echoKey]);
-  for (const beat of chapter.beats) {
-    for (const field of ["key", "titleKey", "subKey", "promptKey", "overwrite"]) if (typeof beat[field] === "string") keys.add(beat[field]);
+  for (const beat of allBeats(chapter.beats)) {
+    for (const field of ["key", "titleKey", "subKey", "promptKey", "overwrite", "goalKey", "tamerKey", "tamerLabelKey", "nameKey", "nameLabelKey", "hintKey"]) if (typeof beat[field] === "string") keys.add(beat[field]);
     if (beat.type === "file") keys.add(`${beat.key}_BODY`);
     if (beat.type === "line") { const name = STORY_VN_SPEAKERS[beat.speaker]?.nameKey; if (name) keys.add(name); }
     for (const option of beat.options ?? []) keys.add(option.key);
     for (const key of beat.keys ?? []) keys.add(key);
     for (const key of beat.labels ?? []) keys.add(key);
+    for (const spot of beat.spots ?? []) for (const field of ["labelKey", "lockedKey", "doneKey"]) if (typeof spot[field] === "string") keys.add(spot[field]);
   }
   return [...keys];
 }

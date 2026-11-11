@@ -1,5 +1,21 @@
 # Championship Owner Direction
 
+<!-- record-id: STORY_VN_PART_THREE_20261111 -->
+## 2026-11-11 — Story part three 「愛醬的報名表」: a walkable reception hall, exploration, requests that open chapters, and story sounds
+
+After part two and the Ai-chan hosting shipped, the Owner asked for the next step and handed all of it over, plot included: 「都交給你我不介入，請你依照故事劇情還有數碼寶貝月光來幫我做」. The proposed next steps were all taken on: part three, walking on a map to trigger scenes (the Owner's own idea from the part-two round), a bond that counts, and sound.
+
+OWNER_APPROVED_ADAPTATION, presentation, story content and story structure. No new save field. No battle rule, RNG, clock or reward-amount change.
+
+- Moonlight (the research-only design briefs of 2026-10-29) informed structure only. Each place is one composed picture, with the walkable area as data and the people, clues and exits as a list. Story chapters open after a number of side jobs. A hub counter hands out the work. No text, names, art, maps or layouts were taken from it.
+- Plot (original): the reception moves into the new Tamer Union hall. A request with no sender, signed "AI-00", leads through an abandoned channel street, the old records and the Echo Forest to Ai-chan's origin. She was put together from the "welcome back" of a partner whose tamer never came back. The Recycler, a spiral remnant, gathers unheard echoes for scrap. Ai-chan goes alone to the forgotten ranch she came from, and the partner and friends follow her there. She signs an entry form with her own name.
+- Exploration (`presentation/story/storyVnField.js`): the partner walks a painted plate where the player taps (DOM and Web Animations, no frame loop), and the camera pans on phones. Tapping a person, a glinting clue or an exit walks there and plays that spot's beats. Goals show in the prompt bar with counts. New beats: `explore` (spots with requires / after / end) and `board`.
+- Part three (`data/storyVnPartThree.js`): six chapters (14–19), six requests, and the hub `vn3-hub`. On the chart it is one node in place of the reserved "beyond" coordinate. Ai-chan's counter opens the request board; a picked chapter plays, then the player is back in the hall. Chapters 15–19 need 1, 2, 3, 4 and 5 cleared requests. Ledger keys are `story:vn3:c*` and `story:vn3:s*`, and every chapter and request pays one ticket.
+- Four new hand-painted scenes (reception hall, old channel street, Echo Forest, origin ranch), with the opening art as the style reference, in `vn-backgrounds-v3` with living loops.
+- Bond: the clear card shows the running bond total, which is the number of main chapters cleared, because every main chapter ends with a bond moment. Nothing new is saved.
+- Story sounds (`presentation/story/storyVnAudio.js`) are synthesized by the ceremony synth through the sfx bus: talk, clue, step, choice, bond, warning, clear.
+- Fix: `claimGachaReward` now saves a key recorded for the first time even when it pays no ticket. At the ticket cap, a story chapter's clear was not saved before this fix.
+
 <!-- record-id: STORY_VN_HOSTED_HANDPAINTED_20261111 -->
 ## 2026-11-11 — Ai-chan hosts the story, a bond moment every chapter, and the scenes redrawn in a Japanese hand-painted style
 
