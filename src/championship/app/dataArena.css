@@ -15,7 +15,7 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
   --da-ink: #eaf6ff; --da-dim: #9fb4cc; --da-panel: rgba(9, 16, 30, 0.92); --da-edge: rgba(111, 247, 255, 0.35);
   --da-accent: #6ff7ff; --da-warn: #ffb347; --da-bad: #ff4a6a; --da-good: #8dffb0; --da-gold: #ffd34d;
   position: fixed; inset: 0; z-index: 60; background: #070b14; color: var(--da-ink);
-  font-family: system-ui, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  font-family: "Cyber Partner Rounded", system-ui, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; overflow: hidden;
 }
 .da-field { position: absolute; inset: 0; outline: none; overflow:hidden; }
@@ -564,7 +564,7 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
    the panel carries data-palette="arcade" so they resolve under any theme. */
 .da-panel--select { --ink:var(--ax-ink, #14141f); --paper:var(--ax-white, #fffdf6); --paper-2:var(--ax-paper, #fff8e7); --lip:var(--ax-white-sh, #b9ad8f);
   --hl:var(--ax-hl, inset 0 3px 0 rgba(255,255,255,.45)); --line:3px solid var(--ink);
-  font-family:"PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", "Noto Sans CJK TC", "Source Han Sans TC", system-ui, sans-serif; }
+  font-family:"Cyber Partner Rounded", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", "Noto Sans CJK TC", "Source Han Sans TC", system-ui, sans-serif; }
 .da-root[data-state="SELECT"] .da-overlay { padding:0; place-items:stretch center; overflow:hidden;
   background:var(--ax-stage, radial-gradient(rgba(255,255,255,.1) 1.2px, transparent 1.6px) 0 0 / 8px 8px, linear-gradient(180deg, #3b2468 0%, #4a2f7f 42%, #2f5a86 78%, #2a8a8f 100%)); }
 .da-panel--select { position:relative; width:min(760px, 100%); height:calc(100 * var(--cm-dvh, 1dvh)); max-height:none; padding:0; border:0; border-radius:0; background:none; box-shadow:none; color:var(--ink); }
@@ -892,7 +892,7 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
   --hl:var(--ax-hl, inset 0 3px 0 rgba(255,255,255,.45)); --line:3px solid var(--ink);
   border:var(--line); border-radius:8px 22px 8px 22px; background:linear-gradient(180deg, #fffdf4, #fff8e7); color:var(--ink);
   box-shadow:var(--hl), 0 6px 0 var(--ink), 0 20px 50px rgba(10, 6, 24, .45);
-  font-family:"PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", "Noto Sans CJK TC", "Source Han Sans TC", system-ui, sans-serif; }
+  font-family:"Cyber Partner Rounded", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", "Noto Sans CJK TC", "Source Han Sans TC", system-ui, sans-serif; }
 .da-overlay[data-palette="arcade"] .da-panel:not(.da-panel--select) .da-title { color:var(--ink); font-weight:900; }
 .da-overlay[data-palette="arcade"] .da-panel:not(.da-panel--select) :is(.da-note, .da-tips, .da-fineprint, .da-result__label, .da-card__track, .da-card__key) { color:#4a4458; font-weight:700; }
 .da-overlay[data-palette="arcade"] .da-panel:not(.da-panel--select) :is(.da-goal, .da-card__rank) { color:#8c5a00; }

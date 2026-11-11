@@ -382,7 +382,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   }
 
   function makeText(content, {size, fill = 0xffffff, stroke = 0x101418, weight = '900', letterSpacing = 1}) {
-    return new PIXI.Text({text: content, style: {fontFamily: '"Noto Sans TC","Arial Black",system-ui,sans-serif', fontSize: size,
+    return new PIXI.Text({text: content, style: {fontFamily: '"Cyber Partner Rounded","Noto Sans TC","Arial Black",system-ui,sans-serif', fontSize: size,
       fontWeight: weight, fill, letterSpacing, stroke: {color: stroke, width: Math.max(3, size * 0.16), join: 'round'},
       dropShadow: {color: 0x000000, alpha: 0.45, distance: Math.max(1, size * 0.06), blur: 0, angle: Math.PI / 2}}});
   }

@@ -26,6 +26,27 @@
  */
 
 /* ---- Palette: night (A) ------------------------------------------------ */
+/* ---- Interface font (Owner 2026-11-11) ------------------------------------ *
+ * 源泉圓體 GenSenRounded2 TW (SIL Open Font License 1.1, see fonts/OFL.txt), cut down to the
+ * characters the game's own text uses (scripts/build-ui-font-subset.py). Two weights cover
+ * the arcade interface: Bold for running text, Heavy for keys, titles and numbers. A
+ * character outside the subset (a typed name, Thai, Vietnamese accents) falls through to the
+ * system faces after it in --font-ui. "swap": the page never waits for the font. */
+@font-face {
+  font-family: "Cyber Partner Rounded";
+  src: url("./fonts/CyberPartnerRounded-Bold.woff2") format("woff2");
+  font-weight: 100 799;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cyber Partner Rounded";
+  src: url("./fonts/CyberPartnerRounded-Heavy.woff2") format("woff2");
+  font-weight: 800 1000;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root, [data-palette="night"] {
   color-scheme: dark;
 
@@ -817,7 +838,7 @@
   --text-scale: 1;
   /* Live HUD (a fight or a hunt in progress) takes half the step: 100 / 107.5 / 115 %. */
   --text-scale-hud: 1;
-  --font-ui: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", "Noto Sans CJK TC", "Source Han Sans TC", system-ui, sans-serif;
+  --font-ui: "Cyber Partner Rounded", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", "Noto Sans CJK TC", "Source Han Sans TC", system-ui, sans-serif;
   --font-numeric: var(--font-ui);
   --fs-display: calc(28px * var(--text-scale));  --lh-display: calc(36px * var(--text-scale));
   --fs-title-1: calc(22px * var(--text-scale));  --lh-title-1: calc(30px * var(--text-scale));
@@ -957,19 +978,19 @@
 :root[data-text-scale="115"] { --text-scale: 1.15; --text-scale-hud: 1.075; }
 :root[data-text-scale="130"] { --text-scale: 1.3; --text-scale-hud: 1.15; }
 
-/* English: a Latin face first; CJK faces stay as the fallback. */
+/* English: the rounded face, then a Latin face; CJK faces stay as the fallback. */
 :root:lang(en) {
-  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Noto Sans CJK TC", sans-serif;
+  --font-ui: "Cyber Partner Rounded", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Noto Sans CJK TC", sans-serif;
 }
 
 /* Japanese: system Gothic faces */
 :root:lang(ja) {
-  --font-ui: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", "Noto Sans JP", "Noto Sans CJK JP", system-ui, sans-serif;
+  --font-ui: "Cyber Partner Rounded", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", "Noto Sans JP", "Noto Sans CJK JP", system-ui, sans-serif;
 }
 
 /* Thai: Leelawadee UI / Thonburi / Noto Sans Thai; line-height leaves space for diacritics and tone marks */
 :root:lang(th) {
-  --font-ui: "Leelawadee UI", "Leelawadee", "Thonburi", "Sukhumvit Set", "Noto Sans Thai", "Noto Sans Thai UI", system-ui, sans-serif;
+  --font-ui: "Cyber Partner Rounded", "Leelawadee UI", "Leelawadee", "Thonburi", "Sukhumvit Set", "Noto Sans Thai", "Noto Sans Thai UI", system-ui, sans-serif;
   --lh-body: calc(24px * var(--text-scale));
   --lh-body-sm: calc(22px * var(--text-scale));
   --lh-label: calc(18px * var(--text-scale));
@@ -978,7 +999,7 @@
 
 /* Vietnamese: system Latin faces with full diacritic coverage */
 :root:lang(vi) {
-  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-ui: "Cyber Partner Rounded", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 }
 
 /* ---- Quality: the "saver" tier drops the costly decoration ------------- *
