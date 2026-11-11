@@ -10,3 +10,14 @@ export function assertPagesPayloadSize(files,limit=PAGES_SITE_BYTE_LIMIT){
  }
  return bytes;
 }
+/**
+ * The rows that count toward the published site. The deploy builds with
+ * --external-characters, so character art (CHARACTER_ASSET_PREFIX) lives on its
+ * own host, which validate-character-asset-release.mjs sizes on its own. A plain
+ * build (CI and browser jobs) still copies that art locally for its tests; it is
+ * left out of this count so the gate measures the site that is actually deployed.
+ */
+export function deployedPagesRows(rows,{external=false,characterPrefix}={}){
+ if(external||!characterPrefix)return rows;
+ return rows.filter(row=>!row.path.startsWith(characterPrefix));
+}

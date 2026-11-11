@@ -288,6 +288,34 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   // Loopback review only: ?statusFxQa=7,9,14 shows those codes on slots 0, 1, 2... (display only, the battle is untouched).
   const statusQa = statusFx && ['localhost', '127.0.0.1', '[::1]'].includes(globalThis.location?.hostname)
     ? (new URLSearchParams(String(globalThis.location?.search ?? '')).get('statusFxQa') ?? '').split(',').filter(Boolean).map(Number) : [];
+  // Loopback review only: ?moveFxQa=193,194 replays those moves' release and contact, one every 2.6 s,
+  // from the first local fighter onto the first opponent (BESPOKE_MOVE_VFX_PROGRAM_20261111). Display only.
+  const moveQa = fxLayer && ['localhost', '127.0.0.1', '[::1]'].includes(globalThis.location?.hostname)
+    ? (new URLSearchParams(String(globalThis.location?.search ?? '')).get('moveFxQa') ?? '').split(',').filter(Boolean).map(Number) : [];
+  const moveQaState = {ms: -1200, index: -1, hit: false, from: null, to: null};
+  function moveQaEvents(view, dtMs) {
+    if (!moveQa.length || !view?.combatants) return [];
+    const out = [];
+    moveQaState.ms += dtMs;
+    const live = view.combatants.filter(c => c?.present && !c.down);
+    if (moveQaState.ms >= 0 && moveQaState.hit && moveQaState.ms < 2600) return out;
+    if (moveQaState.ms >= 2600 || moveQaState.index < 0) {
+      if (moveQaState.ms < 0) return out;
+      moveQaState.ms = 0; moveQaState.index = (moveQaState.index + 1) % moveQa.length; moveQaState.hit = false;
+      const from = live.find(c => c.team === localTeam) ?? live[0], to = live.find(c => c.team !== from?.team);
+      if (!from || !to) return out;
+      moveQaState.from = from.slot; moveQaState.to = to.slot;
+      const moveId = moveQa[moveQaState.index];
+      globalThis.__championshipMoveFxQa = {moveId, at: performance.now(), index: moveQaState.index};
+      out.push(Object.freeze({type: 'LAUNCH', frame: view.animationFrame ?? 0, slot: from.slot, moveId}));
+    } else if (!moveQaState.hit && moveQaState.ms >= 420) {
+      moveQaState.hit = true;
+      const moveId = moveQa[moveQaState.index], maxHp = Math.max(1, view.combatants[moveQaState.to]?.hp?.maximum ?? 1000);
+      out.push(Object.freeze({type: 'HIT', frame: view.animationFrame ?? 0, slot: moveQaState.to, attackerSlot: moveQaState.from, moveId,
+        damage: Math.round(maxHp * 0.18), hpBefore: maxHp, hpAfter: Math.round(maxHp * 0.82), maxHp, ratio: 0.18}));
+    }
+    return out;
+  }
   // A reference cell that could not be remade retires; the FX layer's kit then draws it on its actor.
   const effectSprites = shownArt ? createBattleEffectSprites({PIXI:stage.PIXI, parent:actorLayer, art:shownArt, retireRom:Boolean(fxLayer)}) : null;
   // A failed FX probe starts from contain-fit art coordinates; the final
@@ -643,7 +671,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     const insets = fxLayer && fieldArt ? readInsets() : null;
     lastInsets = insets;
     if (fxLayer && fieldArt) {
-      const events = [...tracker.consume(view), ...motionEvents];
+      const events = [...tracker.consume(view), ...motionEvents, ...moveQaEvents(view, dtMs)];
       camera = director.update({dtMs, viewport:{width:rect.width, height:rect.height}, art:artRect,
         subjects:[...slotInfos.values()], points:fxLayer.projectilePoints(), insets});
       fxContext = {artRect, nativeScale, localTeam, opening:view.opening, viewport:{width:rect.width, height:rect.height}, insets,

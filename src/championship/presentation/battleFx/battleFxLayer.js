@@ -584,7 +584,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (info && choreo?.release && setPieces) {
           const releasePalette = vfx?.palette ?? BATTLE_FX_PALETTES[look?.palette] ?? BATTLE_FX_PALETTES.neutral;
           setPieces.play(choreo.release.piece, {...muzzleOf(info), angle: info.facing < 0 ? Math.PI : 0, palette: releasePalette,
-            size: info.width, scale: choreo.release.scale ?? 1, sprite: choreo.release.sprite});
+            size: info.width, unit: ctx.nativeScale, groundY: info.groundY, scale: choreo.release.scale ?? 1, sprite: choreo.release.sprite});
         }
         if (!info || !look || look.tier === 'basic' || look.tier === 'support') continue;
         const palette = vfx?.palette ?? BATTLE_FX_PALETTES[look.palette] ?? BATTLE_FX_PALETTES.neutral;
@@ -696,9 +696,13 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         // sized by the blow, replace the old generic sparks; a run of light hits on one target shows its burst once.
         const weight = critical || look?.tier === 'ultimate' ? (tier === 'light' ? 'medium' : 'ultimate') : tier;
         motes?.burst({element: vfx?.element ?? 'NEUTRAL', x: hit.x, y: hit.y, groundY: hit.groundY, unit: ctx.nativeScale, weight, dir: fx.knockDir || 0});
+        // An ultimate opens its contact with an impact frame: the blow's star in white, held by the hit-stop.
+        if ((choreo?.impactFrame || critical) && setPieces) setPieces.play('impact-frame', {x: hit.x, y: hit.y,
+          angle: attacker ? Math.atan2(target.groundY - attacker.groundY, target.x - attacker.x) : 0,
+          palette: {core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true}, size: target.width, unit: ctx.nativeScale, groundY: hit.groundY, scale: choreo?.contact?.scale ?? 1});
         if (choreo?.contact && setPieces) setPieces.play(choreo.contact.piece, {x: hit.x, y: hit.y,
           angle: attacker ? Math.atan2(target.groundY - attacker.groundY, target.x - attacker.x) : 0, palette, size: target.width,
-          scale: choreo.contact.scale ?? 1, fast: choreo.contact.fast, sprite: choreo.contact.sprite});
+          unit: ctx.nativeScale, groundY: hit.groundY, scale: choreo.contact.scale ?? 1, fast: choreo.contact.fast, sprite: choreo.contact.sprite, at: 'contact'});
         const lastBurst = burstAt.get(event.slot) ?? -Infinity;
         if (tier !== 'light' || elapsed - lastBurst > 220) {
           pixelHits?.spawn({element: vfx?.element ?? 'NEUTRAL', x: hit.x, y: hit.y, groundY: hit.groundY, size: target.width * (tier === 'light' ? 0.8 : 1),
@@ -744,7 +748,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         // Batch 7: the support move's own cast on the body that receives it.
         const support = event.type === 'SUPPORT' && typeof moveVfxSupportChoreography === 'function' ? moveVfxSupportChoreography(event.statusCode) : null;
         if (support && setPieces) setPieces.play(support.piece, {x: info.x, y: info.top + info.height * 0.5, angle: info.facing < 0 ? Math.PI : 0,
-          palette: BATTLE_FX_PALETTES[support.palette] ?? BATTLE_FX_PALETTES.light, size: info.width, scale: support.scale});
+          palette: BATTLE_FX_PALETTES[support.palette] ?? BATTLE_FX_PALETTES.light, size: info.width, unit: ctx.nativeScale, groundY: info.groundY, scale: support.scale});
         const palette = event.type === 'HEAL' ? BATTLE_FX_PALETTES.nature : BATTLE_FX_PALETTES.light;
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.9, tint: palette.main, life: 560});
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.6, tint: palette.core, life: 480, delay: 120});
