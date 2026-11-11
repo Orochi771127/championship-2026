@@ -253,3 +253,14 @@ test("refinement pass 3: flying shots carry baked heads and the arena's ground z
   const scene = fs.readFileSync("src/championship/presentation/dataArena/dataArenaPixiScene.js", "utf8");
   assert.match(scene, /if \(!zoneSigil\(zone, color, p\) && pts\.length === 12\)/, "the drawn hexagram is only the fallback");
 });
+
+test("refinement pass 4: the kit's impacts land baked hits and a baked head drops the drawn trail", async () => {
+  const fs = await import("node:fs");
+  const kit = fs.readFileSync("src/championship/presentation/vfx/moveVfxKit.js", "utf8");
+  assert.match(kit, /if \(bakedImpact\(\{x, y, groundY, angle, paletteKey, archetype, R\}\)\) return;/);
+  const table = kit.match(/const BAKED_IMPACT = Object\.freeze\(\{([\s\S]*?)\}\);/)[1];
+  const { MOVE_VFX_PIECE_SPRITES } = await import("../src/championship/presentation/vfx/moveVfxPieceSprites.js");
+  for (const [, look] of table.matchAll(/\['([a-z-]+)', [0-9.]+/g)) assert.ok(MOVE_VFX_PIECE_SPRITES[look], `${look} is baked`);
+  for (const archetype of ["fire", "water", "claw", "slash", "missile", "bite"]) assert.ok(table.includes(" " + archetype + ": [") || table.startsWith(archetype + ": ["), archetype);
+  assert.match(kit, /if \(p\.head\?\.baked\) p\.acc = 0;/);
+});
