@@ -8050,24 +8050,6 @@
     "assets/production/scene-music-r1/opening/hexagon_cradles.mp3",
     "assets/production/scene-music-r1/raising/a_quiet_evening_training.mp3",
     "assets/production/scene-music-r1/system/podium_geometry.mp3",
-    "assets/production/story/vn-backgrounds-v2/arena.05853a915c2cc7c7.mp4",
-    "assets/production/story/vn-backgrounds-v2/arena.88c052817c8f310b.webp",
-    "assets/production/story/vn-backgrounds-v2/grid.3b996755ec684c99.webp",
-    "assets/production/story/vn-backgrounds-v2/grid.ec3c2966b3eb17ca.mp4",
-    "assets/production/story/vn-backgrounds-v2/habitat.9da50f44606a900b.mp4",
-    "assets/production/story/vn-backgrounds-v2/habitat.cf2beca88e5e8a24.webp",
-    "assets/production/story/vn-backgrounds-v2/lotus.95dc28f3e29284d2.mp4",
-    "assets/production/story/vn-backgrounds-v2/lotus.c9b267dff44c05bb.webp",
-    "assets/production/story/vn-backgrounds-v2/plaza.a86b9322315f1847.mp4",
-    "assets/production/story/vn-backgrounds-v2/plaza.f12972526bf251c0.webp",
-    "assets/production/story/vn-backgrounds-v2/safezone.4b09f36d99163e05.mp4",
-    "assets/production/story/vn-backgrounds-v2/safezone.d1fc2a444f02962e.webp",
-    "assets/production/story/vn-backgrounds-v2/town.033a97a34dbc7bab.mp4",
-    "assets/production/story/vn-backgrounds-v2/town.816b0dd6b46815e3.webp",
-    "assets/production/story/vn-backgrounds-v2/vault.c15e52ec75eeee08.webp",
-    "assets/production/story/vn-backgrounds-v2/vault.e47068fdef606163.mp4",
-    "assets/production/story/vn-backgrounds-v2/void.8318fb0b26958986.mp4",
-    "assets/production/story/vn-backgrounds-v2/void.cf751a51984f8cf8.webp",
     "assets/production/story/vn-expressions-v1/species-018-happy.203fb7a48f663b3b.webp",
     "assets/production/story/vn-expressions-v1/species-025-happy.7c27929287f98d5d.webp",
     "assets/production/story/vn-expressions-v1/species-025-sad.91552329a8be6148.webp",
@@ -8933,7 +8915,67 @@
     "src/data/championship/ranch-render-selection.v1.json",
     "src/data/championship/reviewed-animation-selection.v1.json",
     "src/data/championship/species-taxonomy.v1.json",
-    "src/data/championship/stage-body-size.v1.json"
+    "src/data/championship/stage-body-size.v1.json",
+    "src/championship/data/storyVnPartTwo.js",
+    "assets/production/story/vn-backgrounds-v3/arena.678ee4ff309838da.mp4",
+    "assets/production/story/vn-backgrounds-v3/arena.8cfe45f0f0ce8fec.webp",
+    "assets/production/story/vn-backgrounds-v3/grid.7e2266bfbf10c5e5.webp",
+    "assets/production/story/vn-backgrounds-v3/grid.db1aac2f0cda870d.mp4",
+    "assets/production/story/vn-backgrounds-v3/habitat.5ba46142beab8349.mp4",
+    "assets/production/story/vn-backgrounds-v3/habitat.ac18c42592126494.webp",
+    "assets/production/story/vn-backgrounds-v3/locker.54beadabc9dd6a2f.webp",
+    "assets/production/story/vn-backgrounds-v3/locker.779f636597f3d126.mp4",
+    "assets/production/story/vn-backgrounds-v3/lotus.0cddec5eb7970877.mp4",
+    "assets/production/story/vn-backgrounds-v3/lotus.2122af8e198a8728.webp",
+    "assets/production/story/vn-backgrounds-v3/night.a6ce723af630c629.webp",
+    "assets/production/story/vn-backgrounds-v3/night.af94500326a8324c.mp4",
+    "assets/production/story/vn-backgrounds-v3/plaza.e77fcfd7b6933b7b.webp",
+    "assets/production/story/vn-backgrounds-v3/plaza.f1808d09df1eaf60.mp4",
+    "assets/production/story/vn-backgrounds-v3/safezone.74a8512d30cf878d.mp4",
+    "assets/production/story/vn-backgrounds-v3/safezone.c886661d4193e544.webp",
+    "assets/production/story/vn-backgrounds-v3/skycity.03e026474e335430.mp4",
+    "assets/production/story/vn-backgrounds-v3/skycity.3fa7b089d1565e6c.webp",
+    "assets/production/story/vn-backgrounds-v3/throne.76f769cce0b7b18f.mp4",
+    "assets/production/story/vn-backgrounds-v3/throne.8c7ccbb613c3b918.webp",
+    "assets/production/story/vn-backgrounds-v3/town.525e90baf9d592ee.mp4",
+    "assets/production/story/vn-backgrounds-v3/town.a9715e4472f4abf5.webp",
+    "assets/production/story/vn-backgrounds-v3/train.239eb5789b918932.webp",
+    "assets/production/story/vn-backgrounds-v3/train.4481f864d59c1934.mp4",
+    "assets/production/story/vn-backgrounds-v3/undercroft.0dd7b7803f931ca6.mp4",
+    "assets/production/story/vn-backgrounds-v3/undercroft.37a478300027ec26.webp",
+    "assets/production/story/vn-backgrounds-v3/vault.066aa589ff8d1ca0.webp",
+    "assets/production/story/vn-backgrounds-v3/vault.671e7a1dce072a50.mp4",
+    "assets/production/story/vn-backgrounds-v3/void.b59128efe8a73669.mp4",
+    "assets/production/story/vn-backgrounds-v3/void.f59472dc564e3802.webp",
+    "assets/production/story/vn-expressions-v1/aichan-cat-happy.20fc617414cc5e9f.webp",
+    "assets/production/story/vn-expressions-v1/aichan-cat-sad.ddfabd4244b737b5.webp",
+    "assets/production/story/vn-expressions-v1/aichan-cat-serious.b47089981032d5a7.webp",
+    "assets/production/story/vn-expressions-v1/aichan-cat-shock.61b1863365faef1e.webp",
+    "assets/production/story/vn-expressions-v1/aichan-cat-talk.70caec0732eac6eb.webp",
+    "assets/production/story/vn-expressions-v1/aichan-catgirl-happy.27fded96bc52c40e.webp",
+    "assets/production/story/vn-expressions-v1/aichan-catgirl-sad.ff116021d97b94cf.webp",
+    "assets/production/story/vn-expressions-v1/aichan-catgirl-serious.9edc83b5caf53d8c.webp",
+    "assets/production/story/vn-expressions-v1/aichan-catgirl-shock.85757d6282b0435e.webp",
+    "assets/production/story/vn-expressions-v1/aichan-catgirl-talk.bac920362b696441.webp",
+    "assets/production/story/vn-expressions-v1/species-099-happy.33473b7eb2f6be6a.webp",
+    "assets/production/story/vn-expressions-v1/species-099-sad.b99fffbbe017f8b1.webp",
+    "assets/production/story/vn-expressions-v1/species-153-angry.76ea5896cfde00b7.webp",
+    "assets/production/story/vn-expressions-v1/species-153-happy.c72ae57c4d3666ea.webp",
+    "assets/production/story/vn-expressions-v1/species-153-sad.ff7308b9aa20c7e3.webp",
+    "assets/production/story/vn-expressions-v1/species-153-serious.9e15d24e103969c5.webp",
+    "assets/production/story/vn-expressions-v1/species-153-shock.07f2a0494a29ec6f.webp",
+    "assets/production/story/vn-expressions-v1/species-157-happy.d13961dc53341c84.webp",
+    "assets/production/story/vn-expressions-v1/species-157-sad.0c3fb78522004db9.webp",
+    "assets/production/story/vn-expressions-v1/species-200-angry.922b78a5a77e744f.webp",
+    "assets/production/story/vn-expressions-v1/species-200-happy.354c57fce4131f35.webp",
+    "assets/production/story/vn-expressions-v1/species-200-sad.658157cf685ef1bb.webp",
+    "assets/production/story/vn-expressions-v1/species-200-serious.1a522939c8c16861.webp",
+    "assets/production/story/vn-expressions-v1/species-200-shock.3fee49dde74211e4.webp",
+    "assets/production/story/vn-expressions-v1/species-205-happy.98235fdd6433de11.webp",
+    "assets/production/story/vn-expressions-v1/species-205-serious.086bd5d25a0736f2.webp",
+    "assets/production/story/vn-expressions-v1/species-205-shock.082aaf968b14c078.webp",
+    "assets/production/story/vn-expressions-v1/species-211-angry.f8d9b8045c380713.webp",
+    "assets/production/story/vn-expressions-v1/species-211-serious.c01bf097eeed7948.webp"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -38672,78 +38714,6 @@
         "sha256": "79ca5e940c2f273877762aaf99fd4cf2c6b39683b67e92425e732185a4d3b9ab"
       },
       {
-        "path": "assets/production/story/vn-backgrounds-v2/arena.05853a915c2cc7c7.mp4",
-        "sha256": "05853a915c2cc7c7e2f0a5fc6325b7ea1c21b18f9f0b114d2fc1a5b4ffb650fa"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/arena.88c052817c8f310b.webp",
-        "sha256": "88c052817c8f310bdffd59e1b792c8b80e39494fcfd8fcf19f71f0bb404059c6"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/grid.3b996755ec684c99.webp",
-        "sha256": "3b996755ec684c996239e65e0540f9df1f3873c2810d670d92f0550ef1101bcb"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/grid.ec3c2966b3eb17ca.mp4",
-        "sha256": "ec3c2966b3eb17caa3b38d2aad89ed5a65ef87a2aa91060472d0190917252b4f"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/habitat.9da50f44606a900b.mp4",
-        "sha256": "9da50f44606a900b47c407c395341494724cae941dc1d64a8c95958c326d32f8"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/habitat.cf2beca88e5e8a24.webp",
-        "sha256": "cf2beca88e5e8a24c4c3c9d1e8037342314b0647b00f3f8b5b31fe6b640674d0"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/lotus.95dc28f3e29284d2.mp4",
-        "sha256": "95dc28f3e29284d2ea17785f2a4b250bd879428fa9aa621f8013251c663e5c41"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/lotus.c9b267dff44c05bb.webp",
-        "sha256": "c9b267dff44c05bb49646c20ec1a13022fc36e7d74de9238e0a97f91186cd80a"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/plaza.a86b9322315f1847.mp4",
-        "sha256": "a86b9322315f1847e8be8006f2a286d22f62a87970e294b50a433758a548ce78"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/plaza.f12972526bf251c0.webp",
-        "sha256": "f12972526bf251c095e3b9fcb7d841dbf9cb47bd529cc01e7504e706776e4e6c"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/safezone.4b09f36d99163e05.mp4",
-        "sha256": "4b09f36d99163e059b326f38c42ed03156f19bca517ff6585223f29d6d71ff7d"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/safezone.d1fc2a444f02962e.webp",
-        "sha256": "d1fc2a444f02962e1ff65616b8bd0ffa554a0118a58bb8ff7b1d33081cbd990e"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/town.033a97a34dbc7bab.mp4",
-        "sha256": "033a97a34dbc7bab386a5166924620e6b27c77c280ca41f75c1ac792256692c7"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/town.816b0dd6b46815e3.webp",
-        "sha256": "816b0dd6b46815e3ed0ebb6adf4671fc845c781e27bceccc4a099be85349e9f0"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/vault.c15e52ec75eeee08.webp",
-        "sha256": "c15e52ec75eeee08290a17ad3f38e79fd6ebd8850e5693a5aba0370f45b0a87d"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/vault.e47068fdef606163.mp4",
-        "sha256": "e47068fdef60616307838f5156ed11866fdf257058fb772e99ca787e72ed2970"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/void.8318fb0b26958986.mp4",
-        "sha256": "8318fb0b269589862069450e90ec7e021853bb744e7e7445c9de074ef6aecaf0"
-      },
-      {
-        "path": "assets/production/story/vn-backgrounds-v2/void.cf751a51984f8cf8.webp",
-        "sha256": "cf751a51984f8cf80993b14f3d976a011327fc3e6dfeff86a396e5d89dfc6f7d"
-      },
-      {
         "path": "assets/production/story/vn-expressions-v1/species-018-happy.203fb7a48f663b3b.webp",
         "sha256": "203fb7a48f663b3bbd326f06409a2405135db0fe1afa902acf47dcd9241228e8"
       },
@@ -39661,7 +39631,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "160413c97ac8d3a58b29a1dce4928a6492dbd9456f07629ecb9af4d6653a34f9"
+        "sha256": "6c768b18aaa3bec4d89d268b8a6312b01bae50cd741374449eac59c915db7bd1"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -39845,7 +39815,7 @@
       },
       {
         "path": "src/championship/app/storyChapterMap.js",
-        "sha256": "fa5dd35906f8c7286a2795b2b21ce17df8e7ec497f93472ad90e02125297f473"
+        "sha256": "c06f1cd78c59e81c4da2c0d25d86834ab71ac3ea07986336d51dac7b6f2a2801"
       },
       {
         "path": "src/championship/app/storyCutsceneStage.js",
@@ -39933,11 +39903,11 @@
       },
       {
         "path": "src/championship/app/ui/storyTheater.css",
-        "sha256": "8ad3051fbd18b8b3f33ca191d62952a75cb4a234e3a0897b570e9d312bba6c47"
+        "sha256": "87cd586a6c3a30e14e60a11d577783f1c20cf93a752a5441b0f25d87c61d99f6"
       },
       {
         "path": "src/championship/app/ui/storyVn.css",
-        "sha256": "0c0caf2b4d7355f4a6784a2d4bb3791f08cb3b483ebcfc830a25020c1ea25ff5"
+        "sha256": "0aa984b80524b601e3a22e1368c285a051da6bd452ba6b2ed9cf598df54d1f73"
       },
       {
         "path": "src/championship/app/ui/syncGainPanel.js",
@@ -40345,15 +40315,15 @@
       },
       {
         "path": "src/championship/data/storyRiftMap.js",
-        "sha256": "5e075f1d1a5bd88e7dc48444f3c7ad897a26499814a1467fced853c504e2b1d1"
+        "sha256": "18c5f694a22ccc58b38481819843ec13578f49d8e880a8f1a857a70fc6a2cf31"
       },
       {
         "path": "src/championship/data/storyVnCampaign.js",
-        "sha256": "966928e47a1e71aeef36dff33265a4a1745ce2b07a0d0bede0c6139c44516e5b"
+        "sha256": "48dc207687efa2db1f9ad3538ab7d4cb55a3275f82cb5410c3941d0492d6f4b5"
       },
       {
         "path": "src/championship/data/storyVnExpressions.js",
-        "sha256": "13a5429db23483f297b8e3f40fab780b6576e1c34dee389dd64dd4c302aa7998"
+        "sha256": "bca80489b8ee73f5e2fb95d101cb67cfd3502f8ce3160cd3b7b26134da94caba"
       },
       {
         "path": "src/championship/database/databaseBodyStats.js",
@@ -40425,7 +40395,7 @@
       },
       {
         "path": "src/championship/gacha/diamondRewards.js",
-        "sha256": "c648f10681c2a76c9895f38436eed39a4002970b2802b2afc63fbe7713dcfa07"
+        "sha256": "678988ec3ce7d0e8031ba0b689e7bcb8a76e2c66f2a02a425def1803103404ef"
       },
       {
         "path": "src/championship/gacha/gachaItemExecutor.js",
@@ -41253,11 +41223,11 @@
       },
       {
         "path": "src/championship/presentation/story/storyVnDirector.js",
-        "sha256": "65fa3322c0ba3c19071a244519b14d7a606747c59d4256f4a24e72d1a457d37f"
+        "sha256": "de28e1231303f95757ea9da4bddc876ece979f16c44f677a802677ea089b0a28"
       },
       {
         "path": "src/championship/presentation/story/storyVnStage.js",
-        "sha256": "c634f9b243b17b3ce66d476456e6a44ec184bb01e81459656026a217d88ebb95"
+        "sha256": "4d7f35ddf58502a3feb817e669b7f06ccaff162466fdeae77d101924ed6d289f"
       },
       {
         "path": "src/championship/presentation/story/storyVnTheater.js",
@@ -41845,7 +41815,7 @@
       },
       {
         "path": "src/championship/text/storyVnText.js",
-        "sha256": "021c83e51d9e11171cf3c35ff3cb18a5cdc82425898f02d0a8f894712b0dc646"
+        "sha256": "661fab27673c76421cdd5d5f8f082bcc4a00c512ef48d8ee265e7cfa662ffa9a"
       },
       {
         "path": "src/championship/text/syncLevelText.js",
@@ -42206,6 +42176,246 @@
       {
         "path": "src/data/championship/stage-body-size.v1.json",
         "sha256": "956a246d432e6956b31ac9e13f8c7ca20c2e0903136ee2ae065c2ab919f79076"
+      },
+      {
+        "path": "src/championship/data/storyVnPartTwo.js",
+        "sha256": "8e27fe698d599ebd4a53758ac1b6d71aabb47404cc7afa6a1d7e5e06d4245121"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/arena.678ee4ff309838da.mp4",
+        "sha256": "678ee4ff309838da3e8e396ddeacf018c87641d4317b7d627a27a083f795b040"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/arena.8cfe45f0f0ce8fec.webp",
+        "sha256": "8cfe45f0f0ce8fec9f191db9d2881c46a18aab40baf6d8ec905fb72187a929bc"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/grid.7e2266bfbf10c5e5.webp",
+        "sha256": "7e2266bfbf10c5e5009ef33e3217f08862f1281d394ee996e10a9ad7ead30470"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/grid.db1aac2f0cda870d.mp4",
+        "sha256": "db1aac2f0cda870df01868a32de0d21ba760b0f82088713ccdefcdbc4d7df8ca"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/habitat.5ba46142beab8349.mp4",
+        "sha256": "5ba46142beab834914d6aa3fe1bb785393ae025ff0f73900bcfab43ded7270fe"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/habitat.ac18c42592126494.webp",
+        "sha256": "ac18c42592126494d853362888098e4235f3173974a7f91e788914546bd9b4f0"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/locker.54beadabc9dd6a2f.webp",
+        "sha256": "54beadabc9dd6a2f33886aa515fb186f263589e79fa1a86639e09053f3f3d132"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/locker.779f636597f3d126.mp4",
+        "sha256": "779f636597f3d1269371e9909bd41efa5505b20250bb13f031bd2a01f092d632"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/lotus.0cddec5eb7970877.mp4",
+        "sha256": "0cddec5eb7970877094f3d1d33e870212db8db027b33b23666095e2de0a26c56"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/lotus.2122af8e198a8728.webp",
+        "sha256": "2122af8e198a87281b9e916312533d6ac144fbb51eeabe9d8ad60ef0704a5b83"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/night.a6ce723af630c629.webp",
+        "sha256": "a6ce723af630c6295f1e9f122790a0f4fd122eb82c82dccbeba602b12c4cb322"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/night.af94500326a8324c.mp4",
+        "sha256": "af94500326a8324c6dccb17402bcd85fa9bd2c8a6c1616fcaa9d4177524bb837"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/plaza.e77fcfd7b6933b7b.webp",
+        "sha256": "e77fcfd7b6933b7b8cdec14346225e2265a7443ac64d5600d68d7f4a6022b150"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/plaza.f1808d09df1eaf60.mp4",
+        "sha256": "f1808d09df1eaf607d136fcb462125f489ab0d09b946f0f2b32def5b2cb16c76"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/safezone.74a8512d30cf878d.mp4",
+        "sha256": "74a8512d30cf878d4caefec44e086187b38c608d48e121adfcb27cc2663c4171"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/safezone.c886661d4193e544.webp",
+        "sha256": "c886661d4193e5446d7fe7819a587bad81eb378a154102a48705c33a7142dcaa"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/skycity.03e026474e335430.mp4",
+        "sha256": "03e026474e335430ee31bca251ae518b749ee6a76371513646e26bfbfffc4e5e"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/skycity.3fa7b089d1565e6c.webp",
+        "sha256": "3fa7b089d1565e6c721c467d98ab3f0e006f010c42da8b666ec6e6b3abb68e51"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/throne.76f769cce0b7b18f.mp4",
+        "sha256": "76f769cce0b7b18fec3b128327f0b570f947a8d4917813367fadc5ef62af3926"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/throne.8c7ccbb613c3b918.webp",
+        "sha256": "8c7ccbb613c3b918375e4a9233dbda9da4461260c4c89555094820b023f83ec7"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/town.525e90baf9d592ee.mp4",
+        "sha256": "525e90baf9d592ee7521c071658986d54e9ee1e27d03f89973d5f1fdee4e3236"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/town.a9715e4472f4abf5.webp",
+        "sha256": "a9715e4472f4abf5f5a086083da0a969a1a2eae207cb7b6ac1e420cb400f6580"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/train.239eb5789b918932.webp",
+        "sha256": "239eb5789b9189329f3351aa4ff41fcab59c64ffa26fd2e0075219b39e336fb6"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/train.4481f864d59c1934.mp4",
+        "sha256": "4481f864d59c1934c49dda3d73891784a9f3e463825125408ae4bd6013538bf2"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/undercroft.0dd7b7803f931ca6.mp4",
+        "sha256": "0dd7b7803f931ca68649f1b4e7f1838d32d06dcca6ff6b7d079f569f5d11d407"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/undercroft.37a478300027ec26.webp",
+        "sha256": "37a478300027ec26a80c6ebdc180accff3a5dbb87332b2da2523cb6825169867"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/vault.066aa589ff8d1ca0.webp",
+        "sha256": "066aa589ff8d1ca0f88f41591258845f5497059021c408384c1348e5e7f6ebc5"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/vault.671e7a1dce072a50.mp4",
+        "sha256": "671e7a1dce072a5047f17687978ffc1af290613349ff52dfc6c399acacc00c10"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/void.b59128efe8a73669.mp4",
+        "sha256": "b59128efe8a73669809d8f701fed765752eb706eba929483d0fd5492f5a1a044"
+      },
+      {
+        "path": "assets/production/story/vn-backgrounds-v3/void.f59472dc564e3802.webp",
+        "sha256": "f59472dc564e3802c81646a6f944933df980d1bbab4028bbfb93ad94daef3719"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/aichan-cat-happy.20fc617414cc5e9f.webp",
+        "sha256": "20fc617414cc5e9fc3142a0eba902a11cd9f7a5842763fc6bd64e79de56126ae"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/aichan-cat-sad.ddfabd4244b737b5.webp",
+        "sha256": "ddfabd4244b737b55272ccee5c2a94444ef283c1618154b95935a65e85a92d17"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/aichan-cat-serious.b47089981032d5a7.webp",
+        "sha256": "b47089981032d5a7324e434a5aac8dda8df679909a1e5d02b6a034a3d6e81e03"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/aichan-cat-shock.61b1863365faef1e.webp",
+        "sha256": "61b1863365faef1ee38764d77928121aee9c8436a1e14312948ea41fcc47d6b4"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/aichan-cat-talk.70caec0732eac6eb.webp",
+        "sha256": "70caec0732eac6ebceb40300a2312a41a22d313ff2a94d6e397a1b1bedb908d9"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/aichan-catgirl-happy.27fded96bc52c40e.webp",
+        "sha256": "27fded96bc52c40e8cfb4f535ecbdcf6f06111f58f59f4243376ffef4a38353d"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/aichan-catgirl-sad.ff116021d97b94cf.webp",
+        "sha256": "ff116021d97b94cf490d8b3b4f21ba53e57d2596fbb43225ee9caf98388be189"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/aichan-catgirl-serious.9edc83b5caf53d8c.webp",
+        "sha256": "9edc83b5caf53d8c10c0f72959542bc8494230fd39f187481953363501442215"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/aichan-catgirl-shock.85757d6282b0435e.webp",
+        "sha256": "85757d6282b0435e4cf5e5cc4fa969215c8a10519c8dc86a2daf24bec07130b2"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/aichan-catgirl-talk.bac920362b696441.webp",
+        "sha256": "bac920362b6964416a05612ac7572401db5111aa4fa6a2871ebbf8e1a14ba47b"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-099-happy.33473b7eb2f6be6a.webp",
+        "sha256": "33473b7eb2f6be6accc8d9a0bed06aa17a7fdc20ad03dc694dc88e9b09d1c304"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-099-sad.b99fffbbe017f8b1.webp",
+        "sha256": "b99fffbbe017f8b168c7b8c6cfdeae8b19a6edd22f8978c8fbedfc589539e664"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-153-angry.76ea5896cfde00b7.webp",
+        "sha256": "76ea5896cfde00b7abd2dc23a46cf47eebd95b8208847e026aeef0bdeedc9792"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-153-happy.c72ae57c4d3666ea.webp",
+        "sha256": "c72ae57c4d3666ea0946c0d2e2efbf029d8b61bc8658598ae8e8fb214f050e71"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-153-sad.ff7308b9aa20c7e3.webp",
+        "sha256": "ff7308b9aa20c7e3d11ca1a796403c83604bdc5050e1770c82ebb6ce851a1c83"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-153-serious.9e15d24e103969c5.webp",
+        "sha256": "9e15d24e103969c5a2923e4234e31959dfffa027e953ba96c9178e2326219d29"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-153-shock.07f2a0494a29ec6f.webp",
+        "sha256": "07f2a0494a29ec6f1588ff119817164d846d797353b75e98a47d1b9e43e14c66"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-157-happy.d13961dc53341c84.webp",
+        "sha256": "d13961dc53341c841da7b3062b0b0d36f2b804e55365e9a138509ebaf9360f73"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-157-sad.0c3fb78522004db9.webp",
+        "sha256": "0c3fb78522004db9dc4edcb9c8c2935af1a8e180eb82543317572478cdf43028"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-200-angry.922b78a5a77e744f.webp",
+        "sha256": "922b78a5a77e744fbda7efa1773a86ab392566c8cb440d1c7243ebe6d9316e4d"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-200-happy.354c57fce4131f35.webp",
+        "sha256": "354c57fce4131f355aa5d31417046f57363bf61a760b7cf0c1f25be17d6f0808"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-200-sad.658157cf685ef1bb.webp",
+        "sha256": "658157cf685ef1bb5292b8d7d6f9e63625d0e8e0fed1bacbf0c6f0c6aeb52877"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-200-serious.1a522939c8c16861.webp",
+        "sha256": "1a522939c8c16861cc2b69b779d89a614406e891d2a24102a81fceec0f266479"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-200-shock.3fee49dde74211e4.webp",
+        "sha256": "3fee49dde74211e4aebe45ce7be2d27bd8a896039d27c3fe7c1e463cf2616336"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-205-happy.98235fdd6433de11.webp",
+        "sha256": "98235fdd6433de116457b9574cffbcaa51047825a0c59f582abb0d8e6f5d1a4a"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-205-serious.086bd5d25a0736f2.webp",
+        "sha256": "086bd5d25a0736f2ecaa9a2cc78702e6000c806368f73fb491404348ee9fbc55"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-205-shock.082aaf968b14c078.webp",
+        "sha256": "082aaf968b14c0783d975b77c6030388ced0bab97f8dd86fbd5ff56b1d1ee691"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-211-angry.f8d9b8045c380713.webp",
+        "sha256": "f8d9b8045c380713079e88a8d387a4fdda17cc74513d8305dccc611a6736e702"
+      },
+      {
+        "path": "assets/production/story/vn-expressions-v1/species-211-serious.c01bf097eeed7948.webp",
+        "sha256": "c01bf097eeed7948c9b0df4dc00d23ad102baa1e5ab284d676594c3539f0bd68"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",

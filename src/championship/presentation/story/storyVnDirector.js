@@ -16,7 +16,7 @@ import { createStoryVnTheater } from "./storyVnTheater.js";
 const INTERACTIVE = new Set(["choice", "tap", "battle"]);
 
 export function createStoryVnDirector({
-  doc = globalThis.document, host = doc.body, locale = "zh-Hant", reducedMotion = false, motionPlates = true,
+  doc = globalThis.document, host = doc.body, locale = "zh-Hant", reducedMotion = false, motionPlates = true, guideForm = "cat",
   speciesName = () => "", runBattle = null, claim = null,
   createStage = createStoryVnStage, createTheater = createStoryVnTheater
 } = {}) {
@@ -59,21 +59,21 @@ export function createStoryVnDirector({
       const castKey = beat.alt && speaker.alt ? speaker.alt : speaker.cast;
       const side = beat.speaker === "partner" ? "right" : "left";
       if (!narrator) {
-        if (castKey === "navi") stage.setBust("left", { navi: true });
+        if (castKey === "aichan") stage.setBust("left", { guide: guideForm || "cat" }, { key: "aichan", mood: beat.mood ?? "calm" });
         else { const species = speciesOf(castKey); if (species !== null) stage.setBust(side, { species }, { key: castKey, mood: beat.mood ?? "calm" }); }
       }
       // A speaker whose name plate is overwritten speaks as "【contestant】".
       const overwritten = castKey && tags.get(castKey) === "contestant";
       const name = narrator ? "" : overwritten ? t("CONTESTANT") : t(speaker.nameKey);
-      const species = castKey && castKey !== "navi" ? speciesOf(castKey) : null;
+      const species = castKey && castKey !== "aichan" ? speciesOf(castKey) : null;
       const caption = speaker.tamer && species !== null ? t("VN_PARTNER_OF", { name: speciesName(species) }) : "";
-      for (const s of ["left", "right"]) stage.bustMood(s, { active: !narrator && s === (castKey === "navi" ? "left" : side), mood: beat.mood ?? "calm" });
+      for (const s of ["left", "right"]) stage.bustMood(s, { active: !narrator && s === (castKey === "aichan" ? "left" : side), mood: beat.mood ?? "calm" });
       stage.speaking(castKey && stage.has(castKey) ? castKey : null);
       if (castKey && stage.has(castKey) && !skipping) {
         if (beat.mood === "shock") stage.bubble(castKey, "!");
         else if (beat.mood === "angry") stage.bubble(castKey, "anger");
       }
-      await until(theater.say({ name, sub: caption, side: castKey === "navi" ? "left" : side, faction: speaker.faction ?? "", narrator,
+      await until(theater.say({ name, sub: caption, side: castKey === "aichan" ? "left" : side, faction: speaker.faction ?? "", narrator,
         text: t(beat.key), overwrite: beat.overwrite ? t(beat.overwrite) : null }));
     }
 
@@ -177,6 +177,29 @@ export function createStoryVnDirector({
       }
     }
 
+    // Ai-chan hosts every main chapter: a "last time" recap once the first scene is up,
+    // a bond moment with the partner and a "next time" teaser before the clear card.
+    const hosted = !chapter.side && storyVnText(`AIR_${chapter.mapNumber}`, locale) !== null;
+    function hostBeats(beats) {
+      if (!hosted || from) return beats;
+      const first = beats.findIndex(beat => beat.type === "bg");
+      const recap = { type: "line", speaker: "aichan", key: `AIR_${chapter.mapNumber}`, mood: "happy" };
+      return first < 0 ? [recap, ...beats] : [...beats.slice(0, first + 1), recap, ...beats.slice(first + 1)];
+    }
+    const BOND = [["BOND_OPT_PAT", "BOND_REACT_PAT"], ["BOND_OPT_FIVE", "BOND_REACT_FIVE"], ["BOND_OPT_CHEER", "BOND_REACT_CHEER"]];
+    let bond = null;
+    async function bondMoment() {
+      fastForward(false);
+      if (partnerSpecies !== null) stage.setBust("right", { species: partnerSpecies }, { key: "partner", mood: "happy" });
+      stage.bustMood("left", { active: false, mood: "calm" }); stage.bustMood("right", { active: true, mood: "happy" });
+      const picked = await until(theater.choose({ prompt: t("BOND_PROMPT"), options: BOND.map(([key]) => t(key)) }));
+      bond = BOND[picked][0];
+      if (stage.has("partner") && !instant()) stage.act("partner", "cheer").catch(() => {});
+      if (!instant()) stage.fx("resonance");
+      await line({ speaker: "partner", key: BOND[picked][1], mood: "happy" });
+      await until(theater.toast(t("BOND_TOAST"), 1100));
+    }
+
     const label = chapter.side ? t("VN_SIDE_LABEL") : t("VN_CHAPTER_NUM", { n: chapter.mapNumber });
     running = { chapterId, theater, stage, life };
     theater.open({
@@ -186,8 +209,12 @@ export function createStoryVnDirector({
     });
     let outcome = "completed";
     try {
-      if (!from) await until(theater.titleCard({ kicker: chapter.side ? t("VN_SIDE_LABEL") : t("PART_ONE"), title: t(chapter.titleKey), sub: chapter.side ? "" : label }));
-      await run(chapter.beats);
+      if (!from) await until(theater.titleCard({ kicker: chapter.side ? t("VN_SIDE_LABEL") : t(chapter.partKey ?? "PART_ONE"), title: t(chapter.titleKey), sub: chapter.side ? "" : label }));
+      await run(hostBeats(chapter.beats));
+      if (hosted) {
+        await bondMoment();
+        await line({ speaker: "aichan", key: `AIN_${chapter.mapNumber}`, mood: "talk" });
+      }
       fastForward(false);
       theater.hideBox(); theater.objectives({ items: [] });
       const reward = (typeof claim === "function" ? await claim(chapterId) : null) ?? null;
@@ -195,11 +222,12 @@ export function createStoryVnDirector({
       if (reward?.granted) lines.push(`${t(chapter.side ? "VN_SIDE_REWARD" : "VN_REWARD")}　${t("VN_REWARD_TICKETS", { n: reward.granted })}`);
       else if (reward?.claimedBefore) lines.push(t("VN_REWARD_DONE"));
       for (const extra of reward?.lines ?? []) lines.push(extra);
+      if (bond) lines.push(t("VN_BOND_LINE"));
       await Promise.race([
         theater.clearCard({ kicker: t("VN_CLEAR"), title: t(chapter.titleKey), echo: t(chapter.echoKey), lines, back: t("VN_BACK") }),
         new Promise(resolve => life.signal.addEventListener("abort", resolve, { once: true }))
       ]);
-      return { outcome: "completed", chapterId, choices, battles, reward, log: theater.log() };
+      return { outcome: "completed", chapterId, choices, battles, bond, reward, log: theater.log() };
     } catch (error) {
       outcome = error?.name === "AbortError" ? "aborted" : "failed";
       if (outcome === "failed") console.warn(`STORY_VN_FAILED: ${error?.message ?? error}`);

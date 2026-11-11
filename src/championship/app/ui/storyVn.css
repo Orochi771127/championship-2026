@@ -143,7 +143,8 @@
 @keyframes cm-vn-swap-in { 0% { opacity: 0; } 100% { opacity: 1; } }
 @keyframes cm-vn-swap-out { 0% { opacity: 1; } 100% { opacity: 0; } }
 .cm-vn-bust__navi { position: absolute; left: 50%; top: 18%; width: 46%; translate: -50% 0; filter: drop-shadow(0 0 14px rgba(86, 227, 194, 0.7)); }
-.cm-vn-bust.is-in { animation: cm-vn-bust-in 420ms var(--vn-ease) both; }
+/* backwards, not both: a held end state would override the hidden idle bust below. */
+.cm-vn-bust.is-in { animation: cm-vn-bust-in 420ms var(--vn-ease) backwards; }
 .cm-vn-bust[data-side="right"].is-in { animation-name: cm-vn-bust-in-r; }
 @keyframes cm-vn-bust-in { 0% { opacity: 0; translate: -40px 0; } 100% { opacity: 1; translate: 0 0; } }
 @keyframes cm-vn-bust-in-r { 0% { opacity: 0; translate: 40px 0; } 100% { opacity: 1; translate: 0 0; } }
@@ -151,6 +152,11 @@
 .cm-vn-bust[data-active="false"] { opacity: 0; filter: brightness(0.6) saturate(0.6); }
 .cm-vn-bust[data-active="false"][data-side="left"] { translate: -28px 0; }
 .cm-vn-bust[data-active="false"][data-side="right"] { translate: 28px 0; }
+/* The speaker breathes between lines, so a held portrait never reads as a still picture. */
+@media (prefers-reduced-motion: no-preference) {
+  .cm-vn-bust:not([data-active="false"]):not([data-mood="glitch"]) .cm-vn-bust__art:not(.is-swapping):not(.is-leaving) { animation: cm-vn-breathe 3.8s ease-in-out infinite; transform-origin: 50% 100%; }
+}
+@keyframes cm-vn-breathe { 0%, 100% { scale: 1 1; } 50% { scale: 1.006 1.014; } }
 .cm-vn-bust.is-speaking .cm-vn-bust__frame { animation: cm-vn-talk 420ms var(--vn-ease); }
 .cm-vn-bust[data-mood="happy"].is-speaking .cm-vn-bust__frame { animation: cm-vn-hop 520ms var(--vn-ease); }
 .cm-vn-bust[data-mood="happy"] { filter: brightness(1.06) saturate(1.1); }
@@ -287,13 +293,27 @@
 
 /* ---- portrait phones: the scene is the top, the bust smaller, one bust at a time ---- */
 @media (orientation: portrait) {
-  .cm-vn { --vn-box-h: clamp(136px, 20vh, 196px); }
-  .cm-vn-scene { bottom: calc(var(--vn-box-h) + var(--vn-safe-b) - 10px); }
-  .cm-vn-bust { width: 66vw; height: 46vh; bottom: calc(var(--vn-box-h) * 0.72 + var(--vn-safe-b)); }
+  /* Phones upright (Owner 2026-11-11: busts sat on top of the actors and the map): the scene is a
+     cinema window in the top half, the speaker's bust stands on the dialogue box below it, and a
+     blurred copy of the scene fills the band between them. Nothing overlaps the actors. */
+  .cm-vn { --vn-box-h: clamp(112px, 15vh, 150px); --vn-scene-h: min(52vh, 118vw); }
+  .cm-vn__stage::before { content: ""; position: absolute; inset: -40px; background: var(--vn-backdrop, none) center / cover no-repeat;
+    filter: blur(22px) brightness(0.32) saturate(1.2); pointer-events: none; }
+  .cm-vn-scene { bottom: auto; height: var(--vn-scene-h);
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 86%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, #000 86%, transparent 100%); }
+  .cm-vn::after { display: none; }
+  .cm-vn-bust { width: 60vw; bottom: calc(var(--vn-box-h) + var(--vn-safe-b) - 14px);
+    height: max(160px, calc(100vh - var(--vn-scene-h) - var(--vn-box-h) - var(--vn-safe-b) + 46px)); }
+  .cm-vn-bust__frame { -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 82%, transparent 100%); mask-image: linear-gradient(90deg, #000 0%, #000 82%, transparent 100%); }
+  .cm-vn-bust[data-side="right"] .cm-vn-bust__frame { -webkit-mask-image: linear-gradient(270deg, #000 0%, #000 82%, transparent 100%); mask-image: linear-gradient(270deg, #000 0%, #000 82%, transparent 100%); }
+  .cm-vn__box { padding: 22px 18px 12px; }
+  .cm-vn__line { font-size: 15px; line-height: 1.55; }
+  .cm-vn__prompt { bottom: auto; top: calc(var(--vn-scene-h) - 46px); }
+  .cm-vn__choices { bottom: calc(var(--vn-box-h) + var(--vn-safe-b) + 12px); }
   .cm-vn__chapter { max-width: 40vw; }
   .cm-vn__key { padding: 4px 9px; font-size: 12px; }
   .cm-vn__key--skip .cm-vn__kbd { display: none; }
-  .cm-vn__objectives { top: auto; bottom: calc(var(--vn-box-h) + var(--vn-safe-b) + 26px); right: var(--vn-safe-x); min-width: 0; max-width: 52vw; }
+  .cm-vn__objectives { top: calc(var(--vn-scene-h) - 8px); right: var(--vn-safe-x); min-width: 0; max-width: 52vw; z-index: 4; }
 }
 /* short landscape (phones on their side) */
 @media (orientation: landscape) and (max-height: 480px) {
