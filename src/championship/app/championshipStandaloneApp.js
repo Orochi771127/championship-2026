@@ -4645,7 +4645,10 @@ export function createChampionshipStandaloneApp({
         publishScreens();
         return Object.freeze({ok:true,granted:result.granted,tickets:cyberGacha.tickets,diamonds:paid.granted,key});
       }
-      if(!result.granted)return Object.freeze({ok:true,granted:0,key});
+      // A key recorded for the first time is saved even when it pays nothing (ticket cap, a bond mark),
+      // so story progress never depends on the ticket count.
+      const recorded=!gachaState().claimed.includes(key)&&result.state.claimed.includes(key);
+      if(!result.granted&&!recorded)return Object.freeze({ok:true,granted:0,key});
       if(!commitGacha({state:result.state}))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
       publishScreens();
       return Object.freeze({ok:true,granted:result.granted,tickets:result.state.tickets,key});

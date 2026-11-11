@@ -104,6 +104,8 @@ import { createStoryChapterMap } from './storyChapterMap.js';
 import { storyRiftMapText } from '../data/storyRiftMap.js';
 // Story mode part one (Owner 2026-11-11): the half-body story theater.
 import { createStoryVnDirector } from '../presentation/story/storyVnDirector.js';
+import { playStoryVnCue } from '../presentation/story/storyVnAudio.js';
+import { storyVnText } from '../text/storyVnText.js';
 import { STORY_VN_CHAPTERS, storyVnChapterStates, storyVnRewardKey } from '../data/storyVnCampaign.js';
 import { mountAmbience } from './ui/ambienceLayer.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
@@ -3118,7 +3120,7 @@ async function openStoryMap({ chapterId = null, source = 'menu' } = {}) {
     castPortrait: species => { const hero = databaseHeroPortrait(species); return hero?.thumbnail ?? hero ?? null; },
     partner: { name: partner?.name ?? '', portrait: partner?.portrait ?? null },
     guideForm: resolveGuideAppearance(settings.store.get().guideAppearance),
-    onPlay: (next, node) => node?.vnChapterId ? playVnChapter(node.vnChapterId, { source: 'map' }) : playStoryChapter(next, { source: 'map' }),
+    onPlay: (next, node) => node?.vnChapterId === 'vn3-hub' ? openUnionHub({ source: 'map' }) : node?.vnChapterId ? playVnChapter(node.vnChapterId, { source: 'map' }) : playStoryChapter(next, { source: 'map' }),
     onClose: () => { recoveryDiagnostics.record('STORY', { source, stage: 'map-closed' }); } });
   recoveryDiagnostics.record('STORY', { source, stage: 'map' });
   return storyMap.open({ chapterId });
@@ -3151,6 +3153,10 @@ async function playVnChapter(chapterId, { source = 'map', from = null } = {}) {
     // Ai-chan speaks in the form the player chose for her (preference guideAppearance).
     guideForm: resolveGuideAppearance(settings.store.get().guideAppearance),
     runBattle: request => runStoryBattle({ ...request, partnerInstanceId: partner.resident.creatureId }),
+    cue: name => playStoryVnCue(name, settings.audio.output('sfx')),
+    boardItems: unionBoardItems,
+    // Every main chapter ends with a bond moment, so the bond total is the main chapters cleared (no new save key).
+    recordBond: () => storyVnStates().filter(state => !state.side && !state.hub && state.state === 'cleared').length,
     claim: id => {
       const key = storyVnRewardKey(id);
       const claimedBefore = (app.getGachaClaimedRewards?.() ?? []).includes(key);
@@ -3178,6 +3184,29 @@ async function playVnChapter(chapterId, { source = 'map', from = null } = {}) {
     clockDriver?.setActive(!root.hidden);
     refreshStatusBar();
   }
+}
+// Part three: the Tamer Union hall (a walkable hub). Ai-chan's counter hands out chapters 14-19 and the
+// requests that open them; after each one the player is back in the hall until they walk out.
+function unionBoardItems() {
+  const t = (key, params) => storyVnText(key, getLocale(), params) ?? key;
+  return storyVnStates().filter(state => state.id.startsWith('vn3-') && !state.hub).map(state => {
+    const chapter = STORY_VN_CHAPTERS[state.id], main = !chapter.side;
+    return {
+      id: state.id, kind: main ? 'main' : 'request', state: state.state,
+      tag: main ? `${t('BOARD_TAG_MAIN')} ${chapter.mapNumber}` : t('BOARD_TAG_REQ'),
+      title: t(chapter.titleKey), sub: state.state === 'cleared' ? t('BOARD_CLEARED') : t(chapter.summaryKey),
+      note: state.lock === 'requests' ? t('BOARD_NEED', { n: state.need - state.have, have: state.have, need: state.need }) : t('BOARD_LOCKED')
+    };
+  });
+}
+async function openUnionHub({ source = 'map' } = {}) {
+  let result = null;
+  for (let round = 0; round < 64; round += 1) {
+    result = await playVnChapter('vn3-hub', { source });
+    if (result?.outcome !== 'picked') return result;
+    await playVnChapter(result.pick, { source: 'hub' });
+  }
+  return result;
 }
 async function waitForScreen(target, timeoutMs = 15000) {
   const started = Date.now();
@@ -3236,6 +3265,8 @@ function followStoryBattle() {
 if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("storyVnQa"))
   globalThis.__championshipStoryVnQa = {
     play: (chapterId, options = {}) => playVnChapter(chapterId, { source: 'qa', ...options }),
+    hub: () => openUnionHub({ source: 'qa' }),
+    spot: id => vnRun?.spot(id) ?? null,
     state: () => vnRun?.state() ?? null,
     stop: () => vnRun?.stop(),
     states: () => storyVnStates(),

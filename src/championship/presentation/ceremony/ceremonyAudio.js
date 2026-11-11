@@ -122,8 +122,9 @@ export const CEREMONY_CUES = Object.freeze({
  * Play one cue through the bus output, or return null when it cannot.
  * @param {{context: AudioContext, destination: AudioNode}|null} output
  */
-export function playCeremonyCue(name, output, { gain = 0.5 } = {}) {
-  const voices = CEREMONY_CUES[name];
+export function playCeremonyCue(name, output, { gain = 0.5, cues = CEREMONY_CUES } = {}) {
+  // `cues`: another table of the same shape (the story mode's cues, story/storyVnAudio.js).
+  const voices = cues[name];
   const context = output?.context;
   if (!voices || !context || !output.destination || !(gain > 0)) return null;
   if (context.state !== "running") {

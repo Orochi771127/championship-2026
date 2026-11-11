@@ -476,6 +476,8 @@ export function createStoryVnStage({
       return { node, done, cancel: () => { node.remove(); finish(false); } };
     },
     relayout,
+    /** The scene box: the exploration field (storyVnField.js) lives in it, under the busts and the box. */
+    fieldHost: () => scene,
     dispose() {
       if (disposed) return; disposed = true;
       resizer?.disconnect();

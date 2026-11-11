@@ -51,8 +51,8 @@ export const STORY_RIFT_MAP_NODES = freezeDeep([
   { id: "chapter13", chapterId: null, vnChapterId: "vn2-c6", kind: "chapter", number: 13, x: 30, y: 9.7, seenKey: null, theme: "void" },
   { id: "side3", chapterId: null, vnChapterId: "vn2-s1", kind: "side", branchOf: "chapter8", number: 0, x: 16, y: 38.2, seenKey: null, theme: "sea" },
   { id: "side4", chapterId: null, vnChapterId: "vn2-s2", kind: "side", branchOf: "chapter10", number: 0, x: 16, y: 23.9, seenKey: null, theme: "track" },
-  { id: "beyond", chapterId: null, kind: "unknown", number: 0, x: 50, y: 5.0, seenKey: null, theme: "void",
-    titleKey: "NODE_BEYOND_TITLE", summaryKey: "NODE_BEYOND_SUMMARY", sigilKey: "SIGIL_RESERVED" }
+  // Part three: the Tamer Union reception hall, a walkable hub whose counter hands out chapters 14-19 and requests.
+  { id: "union", chapterId: null, vnChapterId: "vn3-hub", kind: "chapter", number: 14, x: 70, y: 5.0, seenKey: null, theme: "ranch" }
 ]);
 
 export const STORY_RIFT_MAP_COPY = freezeDeep({

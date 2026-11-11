@@ -511,6 +511,138 @@
         "encoding": "H.264 High, CRF 32, yuv420p, faststart, no audio"
       },
       "groundLine": 0.72
+    },
+    {
+      "id": "lobby",
+      "nameZh": "拍檔聯盟・接待大廳",
+      "ambient": "dust",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 2567191,
+        "sha256": "d9ab410e103b019cd19a3d5202dda8a6e1a297d4687759dc0c22d1c25ceec389",
+        "file": "p3/p3-lobby.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v3/lobby.2c367b4820a17a00.webp",
+        "bytes": 68406,
+        "sha256": "2c367b4820a17a006aadb5d17a4a067ead9679a5ff29216cdc9fdcc897a122fb",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v3/lobby.209770b2be1568ed.mp4",
+        "bytes": 173819,
+        "sha256": "209770b2be1568edc534ddc5bddd26919bf1fae7e8dbf6b359d35e0da41a29a1",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 32, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    },
+    {
+      "id": "oldstreet",
+      "nameZh": "舊頻道街・黃昏",
+      "ambient": "leaves",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 2769909,
+        "sha256": "257cc797db5d4a477711028f8f3b53ee7e19f07295553dacb6b09b3352d16721",
+        "file": "p3/p3-oldstreet.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v3/oldstreet.4fda664e2deb7d20.webp",
+        "bytes": 73612,
+        "sha256": "4fda664e2deb7d2042faea58bf3434919250b32b1f29a8bed5bcbfe0e5d56490",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v3/oldstreet.11178d526f1574c1.mp4",
+        "bytes": 185789,
+        "sha256": "11178d526f1574c141a3f5d39519f3bf1e3d4d78df3d9116221081a1efddb253",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 32, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    },
+    {
+      "id": "forest",
+      "nameZh": "回聲森林",
+      "ambient": "fireflies",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 2686702,
+        "sha256": "4d23a124d519ca23b95e7ec5d2878fe6aded48cdcfa022349fa7f0bde66e6c4b",
+        "file": "p3/p3-forest.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v3/forest.00e31d9cef53e5cb.webp",
+        "bytes": 71630,
+        "sha256": "00e31d9cef53e5cb115af4360bb9e7e796b75926c23dd66a36d9c55dc4b244fb",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v3/forest.ba98a1ca7ff0e8bb.mp4",
+        "bytes": 177099,
+        "sha256": "ba98a1ca7ff0e8bba900a4bacd87b1fc4abd3e988835d94319ad2fe6ac413e0f",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 32, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
+    },
+    {
+      "id": "origin",
+      "nameZh": "最初的頻道",
+      "ambient": "petals",
+      "original": {
+        "format": "PNG",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 2854294,
+        "sha256": "eccc5836f317352b3e3cc9cce5ac87544361dd4216a18ead8a1d1af8b0179037",
+        "file": "p3/p3-origin.png"
+      },
+      "still": {
+        "path": "assets/production/story/vn-backgrounds-v3/origin.97894bac68efbd6e.webp",
+        "bytes": 78790,
+        "sha256": "97894bac68efbd6ecc7abc188bee0d122c394298c4ed06658fb9f27a6daa4180",
+        "width": 960,
+        "height": 640,
+        "encoding": "WebP lossy q72 method 6"
+      },
+      "clip": {
+        "path": "assets/production/story/vn-backgrounds-v3/origin.ab2c3a7b12ae3fa6.mp4",
+        "bytes": 195655,
+        "sha256": "ab2c3a7b12ae3fa6e1bdbadb6254e90f3a741d10716f8d85cb12b4649e93019b",
+        "width": 960,
+        "height": 640,
+        "fps": 15,
+        "seconds": 8,
+        "loop": "seamless",
+        "encoding": "H.264 High, CRF 32, yuv420p, faststart, no audio"
+      },
+      "groundLine": 0.72
     }
   ]
 }
