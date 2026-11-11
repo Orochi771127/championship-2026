@@ -1,5 +1,32 @@
 # Championship Owner Direction
 
+<!-- record-id: STORY_VN_HOSTED_HANDPAINTED_20261111 -->
+## 2026-11-11 — Ai-chan hosts the story, a bond moment every chapter, and the scenes redrawn in a Japanese hand-painted style
+
+After playing part two the Owner wrote: 「我也沒有感覺到有什麼吸引人的，我都是點過點過點過我都沒有認真在看故事」, 「我之前還有做了一個導覽員叫做愛醬，愛醬也都沒有出現在故事中，牠才是接待員，你可以找一下訓練任務那邊」, 「我的風格想要那種日系手繪風格」 and 「接下來就交給你去處理了，我不介入」.
+
+OWNER_APPROVED_ADAPTATION, presentation and story content. No new save field, no reward, battle, RNG or clock change.
+
+- Ai-chan replaces NAVI as the story's guide and speaks in the form the player chose for her (preference `guideAppearance`, cat or catgirl). Ten drawn expressions (happy, shock, sad, serious, talk, per form) are made from her own approved portraits.
+- Every main chapter (2–13) is hosted: Ai-chan opens with a "last time" recap once the first scene is up and closes with a "next time" teaser. Side stories stay unhosted. The copy is in five locales.
+- A bond moment before each teaser: the player answers the partner (pat its head / high five / cheer together), the partner reacts by name, a "Bond ♥ +1" toast shows, and the clear card records it. Nothing is saved; it is a scene beat.
+- The chart's cast chips show Ai-chan's face. The speaker's bust breathes between lines (reduced motion off).
+- All fifteen scenes are redrawn in a Japanese hand-painted anime style, with the approved opening art as the style reference and each v2 plate as the layout reference (`assets/production/story/vn-backgrounds-v3`). They are re-rendered as living loops (same DepthFlow / Depth Anything V2 Small pipeline). v2 is retired. Two tap targets moved to the new art: the vault's lock rings and the throne room's right-hand stands.
+- Size gate: the test build that keeps the character art (ci.yml and the browser jobs, never uploaded) reached 1,001.9 MB and failed `PUBLIC_PAGES_SITE_SIZE`; the deploy build is ~385 MB. Main fixed the same gate in #224 (`deployedPagesRows`), which this batch takes as is.
+
+<!-- record-id: STORY_VN_PART_TWO_20261111 -->
+## 2026-11-11 — Story part two 「螺旋之冠」 (chapters 8–13), a phone layout that stands the bust on the dialogue box, and one ticket per chapter
+
+After part one shipped (#219), the Owner asked to make the next part: 「我是指把故事模式，接下來的做好」, and chose the direction 錦標賽晉級篇 (regional cup, a new rival Subaru, Rin back as a rival, the sponsor Victor harvesting cheers so the Spiral Void Lord can crown a "perfect champion"). From an iPhone the Owner then reported: 「這種直立式的除了角色都擋在一起，然後地圖整個都擋在一起，角色也沒有因為半身而出現在對話框上整個配置都亂掉了」 and 「每一關的獎勵都太多可能一關就給個10鑽石吧，如果是轉蛋卷就一張」, and is considering a map you walk on that triggers scenes later (not built now).
+
+OWNER_APPROVED_ADAPTATION, presentation, story content and story rewards.
+
+- Part two (`data/storyVnPartTwo.js`): six chapters and two side stories (the lost little star on the train; Rin's night practice) on the chart as chapters 8–13. They open after chapter 7. Progress uses `story:vn2:*`. New cast: Subaru (153, preset 530), Victor (200, 568), the puppet troupe (201, 563), Axle (157, 551), the announcer Charlotte (205), Twinkle (99), the Spiral Crown (211, 574). Every story battle is a native free-battle preset whose partner the story shows. Five-locale copy now holds 390 keys.
+- Six new living scenes: train, sky arena city, players' lounge, undercroft, regional arena at night, spiral throne. 19 new drawn expressions for the new cast, made from their own Database art.
+- Phones upright: the scene is a cinema window in the top half. The speaker's bust stands on the dialogue box below it, over a blurred copy of the scene, and never covers the actors. The box is shorter. A bust always reaches down behind the box, so a cropped expression shows no cut. Only the speaker's bust shows; an entrance animation no longer holds an idle bust visible.
+- Chart: it scrolls with a fixed band per coordinate, so labels no longer pile up. Contour rings are hidden on the tall canvas, and a cast list longer than four shows "+N".
+- Rewards: every story chapter's first clear pays one gacha ticket (the rift chapters too, which paid 3–5). The story diamond reward is 10 (`DIAMOND_REWARDS.storyChapter`, was 300).
+
 <!-- record-id: STORY_VN_PART_ONE_20261111 -->
 ## 2026-11-11 — The story mode becomes a half-body story theater; part one 「未被聽見的回聲」 plays as chapters 2–7
 

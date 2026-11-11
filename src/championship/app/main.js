@@ -163,7 +163,7 @@ import { createAudioBus } from '../presentation/audioBus.js';
 import { createMusicPresentation } from '../presentation/musicPresentation.js';
 import { resolveSceneMusic } from '../presentation/sceneMusicCatalog.js';
 import { ORIGINAL_MUSIC_CUES, selectOriginalMusic } from '../presentation/originalMusicCatalog.js';
-import { setGuideAppearance } from '../presentation/aiChanGuide.js';
+import { resolveGuideAppearance, setGuideAppearance } from '../presentation/aiChanGuide.js';
 import { cappedPixelRatio, currentQuality, currentQualityTier, highlightMode, prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { resultHeroAnchor, resultStageLight } from '../presentation/battleResultCharacters.js';
 import { formatDateTime, formatList, onLocaleChange, getLocale } from '../text/locale.js';
@@ -3079,10 +3079,10 @@ async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = '
     if (result.outcome === 'completed' || result.outcome === 'skipped') {
       if (chapterId === STORY_FIRST_CHAPTER_ID) { try { settings.store.set('storyRiftChapter1Seen', true); } catch { /* read-only store */ } }
       document.querySelector('.int-rh2-story')?.setAttribute('data-new', 'false');
-      // Cyber Gachapon: a chapter sealed for the first time pays 3-5 tickets into the save.
+      // Cyber Gachapon: a chapter sealed for the first time pays one ticket into the save.
       if (result.outcome === 'completed') {
         try {
-          const reward = app.claimGachaReward?.(`story:${chapterId}`, 3 + Math.floor(Math.random() * 3));
+          const reward = app.claimGachaReward?.(`story:${chapterId}`, 1); // Owner 2026-11-11: one ticket per chapter
           if (reward?.granted) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: uiText('轉蛋券 +{n}', { n: reward.granted }) } }));
           // DIAMOND_ECONOMY_20261102: a chapter's first clear also pays diamonds.
           if (reward?.diamonds) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: uiText('鑽石 +{n}', { n: reward.diamonds }) } }));
@@ -3117,6 +3117,7 @@ async function openStoryMap({ chapterId = null, source = 'menu' } = {}) {
     vnStateOf: node => storyVnStates().find(state => state.id === node.vnChapterId)?.state ?? 'locked',
     castPortrait: species => { const hero = databaseHeroPortrait(species); return hero?.thumbnail ?? hero ?? null; },
     partner: { name: partner?.name ?? '', portrait: partner?.portrait ?? null },
+    guideForm: resolveGuideAppearance(settings.store.get().guideAppearance),
     onPlay: (next, node) => node?.vnChapterId ? playVnChapter(node.vnChapterId, { source: 'map' }) : playStoryChapter(next, { source: 'map' }),
     onClose: () => { recoveryDiagnostics.record('STORY', { source, stage: 'map-closed' }); } });
   recoveryDiagnostics.record('STORY', { source, stage: 'map' });
@@ -3147,6 +3148,8 @@ async function playVnChapter(chapterId, { source = 'map', from = null } = {}) {
     locale: getLocale(), reducedMotion: prefersReducedMotion(), speciesName,
     // Living scene clips everywhere but the saver tier, which keeps the stills.
     motionPlates: currentQualityTier() !== 'saver',
+    // Ai-chan speaks in the form the player chose for her (preference guideAppearance).
+    guideForm: resolveGuideAppearance(settings.store.get().guideAppearance),
     runBattle: request => runStoryBattle({ ...request, partnerInstanceId: partner.resident.creatureId }),
     claim: id => {
       const key = storyVnRewardKey(id);

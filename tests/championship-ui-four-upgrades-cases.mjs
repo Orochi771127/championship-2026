@@ -213,7 +213,7 @@ test("the chart data is pure, every node's copy exists in five locales, and chap
     if (node.chapterId) assert.ok(STORY_RIFT_CHAPTERS[node.chapterId], node.chapterId);
     assert.ok(node.x >= 5 && node.x <= 95 && node.y >= 5 && node.y <= 95, node.id);
   }
-  assert.deepEqual(STORY_RIFT_MAP_NODES.filter(n => n.kind === "chapter").map(n => n.number), [1, 2, 3, 4, 5, 6, 7]);
+  assert.deepEqual(STORY_RIFT_MAP_NODES.filter(n => n.kind === "chapter").map(n => n.number), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
   assert.equal(storyRiftMapText("NUM_CHAPTER", "en", { n: 2 }), "Chapter 2");
 });
 
@@ -221,13 +221,13 @@ test("node states: the opening's chapters are watched, chapter 1 is in progress 
   const seen = new Set();
   const isSeen = node => node.seenWith === "opening" || seen.has(node.seenKey);
   const locked = n => Array(n).fill("locked");
-  assert.deepEqual(storyRiftMapStates(isSeen).map(s => s.state), ["seen", "seen", "current", ...locked(9)]);
+  assert.deepEqual(storyRiftMapStates(isSeen).map(s => s.state), ["seen", "seen", "current", ...locked(STORY_RIFT_MAP_NODES.length - 3)]);
   seen.add("storyRiftChapter1Seen");
-  assert.deepEqual(storyRiftMapStates(isSeen).map(s => s.state), ["seen", "seen", "seen", ...locked(9)]);
+  assert.deepEqual(storyRiftMapStates(isSeen).map(s => s.state), ["seen", "seen", "seen", ...locked(STORY_RIFT_MAP_NODES.length - 3)]);
   // Story-theater chapters follow their own ledger states: the first open one is current.
   const vn = { "vn1-c1": "cleared", "vn1-c2": "open", "vn1-s1": "open" };
-  assert.deepEqual(storyRiftMapStates(isSeen, undefined, node => vn[node.vnChapterId] ?? "locked").map(s => s.state),
-    ["seen", "seen", "seen", "seen", "current", "locked", "locked", "locked", "locked", "open", "locked", "locked"]);
+  const byId = Object.fromEntries(storyRiftMapStates(isSeen, undefined, node => vn[node.vnChapterId] ?? "locked").map(s => [s.id, s.state]));
+  assert.deepEqual([byId.chapter2, byId.chapter3, byId.chapter4, byId.side1, byId.side2, byId.chapter8, byId.beyond], ["seen", "current", "locked", "open", "locked", "locked", "locked"]);
 });
 
 test("the chart opens on the chapter, shows a locked coordinate, plays a chapter and comes back with its sigil lit", async () => {

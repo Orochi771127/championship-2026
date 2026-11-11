@@ -258,6 +258,9 @@ body[data-story-stage="playing"] #cm-root .int-rh2-field-host > :not(canvas, .cm
 .cm-story-map__progress { justify-self: end; margin: 6px 0 0; padding: 3px 10px; border-radius: 999px; background: rgba(255, 209, 102, 0.14); border: 1px solid rgba(255, 209, 102, 0.55); color: #ffd166; font-size: 11px; font-weight: 900; white-space: nowrap; }
 
 .cm-story-map__chart { grid-area: chart; position: relative; z-index: 1; min-height: 0; margin: 0 -4px; }
+/* The chart scrolls: the canvas grants each coordinate a 74 px band (2026-11-11, labels crowded on phones). */
+.cm-story-map__chart { overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: thin; }
+.cm-story-map__canvas { position: relative; width: 100%; height: max(100%, calc(var(--rows, 10) * 74px)); }
 .cm-story-map__art, .cm-story-map__svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .cm-story-map__grid path { stroke: rgba(120, 140, 255, 0.13); stroke-width: 1; fill: none; vector-effect: non-scaling-stroke; }
 .cm-story-map__contours path { fill: none; stroke-width: 1.2; vector-effect: non-scaling-stroke; opacity: 0.42; stroke: #8a7dff; }
@@ -325,6 +328,9 @@ body[data-story-stage="playing"] #cm-root .int-rh2-field-host > :not(canvas, .cm
 .cm-story-map__cast--unknown { padding: 2px 10px; color: #b8aee6; }
 .cm-story-map__cast-face { display: grid; place-items: center; width: 24px; height: 24px; overflow: hidden; border-radius: 50%; background: radial-gradient(circle, rgba(86, 227, 194, 0.35), rgba(12, 10, 30, 0.9)); }
 .cm-story-map__cast-face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; filter: brightness(0) drop-shadow(0 0 3px #56e3c2); }
+.cm-story-map__cast-face { position: relative; }
+.cm-story-map__cast-face img.cm-story-map__cast-guide { position: absolute; height: auto; max-width: none; object-fit: fill; filter: none; }
+.cm-story-map__cast[data-speaker="aichan"] .cm-story-map__cast-face { background: radial-gradient(circle, rgba(255, 214, 236, 0.9), rgba(255, 166, 205, 0.75)); }
 .cm-story-map__cast[data-speaker="echo"] .cm-story-map__cast-face { background: radial-gradient(circle, rgba(255, 42, 109, 0.45), rgba(20, 6, 20, 0.92)); }
 .cm-story-map__cast[data-speaker="echo"] .cm-story-map__cast-face img { filter: brightness(0) drop-shadow(0 0 3px #ff2a6d); transform: scaleX(-1); }
 .cm-story-map__cast-face svg { width: 20px; height: 20px; }
@@ -383,3 +389,9 @@ body[data-story-stage="playing"] #cm-root .int-rh2-field-host > :not(canvas, .cm
 @keyframes cm-map-notice { 0% { opacity: 0; transform: translate(-50%, -6px); } 12%, 82% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, 0); } }
 /* Side stories hang off their chapter on a dashed branch (storyChapterMap.js, 2026-11-11). */
 .cm-story-map__lane--side { stroke-dasharray: 3 2.4; }
+/* On the tall scrolling canvas the round contour rings would stretch into strings: the lanes carry the chart. */
+.cm-story-map__canvas .cm-story-map__contours { display: none; }
+.cm-story-map__cast--more { justify-content: center; min-width: 40px; font-weight: 900; color: #ffd166; }
+/* The sticky start key keeps a solid backing so nothing reads through it; the last row scrolls clear of it. */
+.cm-story-map__facts { padding-bottom: 6px; }
+.cm-story-map__play { box-shadow: 0 -14px 18px 6px rgba(22, 14, 52, 0.96); }
