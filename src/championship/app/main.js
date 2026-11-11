@@ -3185,11 +3185,13 @@ async function playVnChapter(chapterId, { source = 'map', from = null } = {}) {
     refreshStatusBar();
   }
 }
-// Part three: the Tamer Union hall (a walkable hub). Ai-chan's counter hands out chapters 14-19 and the
-// requests that open them; after each one the player is back in the hall until they walk out.
+// Parts three and on: the Tamer Union hall (a walkable hub). Ai-chan's counter hands out the chapters (14 on)
+// and the requests that open them; after each one the player is back in the hall until they walk out.
+// The board lists what can be played first, then what is locked, then what is cleared.
 function unionBoardItems() {
   const t = (key, params) => storyVnText(key, getLocale(), params) ?? key;
-  return storyVnStates().filter(state => state.id.startsWith('vn3-') && !state.hub).map(state => {
+  const order = { open: 0, locked: 1, cleared: 2 };
+  return storyVnStates().filter(state => (STORY_VN_CHAPTERS[state.id]?.part ?? 1) >= 3 && !state.hub).sort((a, b) => order[a.state] - order[b.state]).map(state => {
     const chapter = STORY_VN_CHAPTERS[state.id], main = !chapter.side;
     return {
       id: state.id, kind: main ? 'main' : 'request', state: state.state,

@@ -24,8 +24,11 @@ const read = path => fs.readFileSync(new URL(`../${path}`, import.meta.url), "ut
 // ---- data -------------------------------------------------------------------
 test("three parts of main chapters, side stories, requests and the part-three hub validate and end", () => {
   const p3 = ["vn3-c1", "vn3-c2", "vn3-c3", "vn3-c4", "vn3-c5", "vn3-c6"];
-  assert.deepEqual(STORY_VN_MAIN_IDS, ["vn1-c1", "vn1-c2", "vn1-c3", "vn1-c4", "vn1-c5", "vn1-c6", "vn2-c1", "vn2-c2", "vn2-c3", "vn2-c4", "vn2-c5", "vn2-c6", ...p3]);
-  assert.deepEqual(STORY_VN_SIDE_IDS, ["vn1-s1", "vn1-s2", "vn2-s1", "vn2-s2", "vn3-r1", "vn3-r2", "vn3-r3", "vn3-r4", "vn3-r5", "vn3-r6"]);
+  const p4 = ["vn4-c1", "vn4-c2", "vn4-c3", "vn4-c4", "vn4-c5", "vn4-c6"];
+  assert.deepEqual(STORY_VN_MAIN_IDS, ["vn1-c1", "vn1-c2", "vn1-c3", "vn1-c4", "vn1-c5", "vn1-c6", "vn2-c1", "vn2-c2", "vn2-c3", "vn2-c4", "vn2-c5", "vn2-c6", ...p3, ...p4]);
+  assert.deepEqual(STORY_VN_SIDE_IDS, ["vn1-s1", "vn1-s2", "vn2-s1", "vn2-s2", "vn3-r1", "vn3-r2", "vn3-r3", "vn3-r4", "vn3-r5", "vn3-r6", "vn4-r1", "vn4-r2", "vn4-r3", "vn4-r4"]);
+  assert.deepEqual(p4.map(id => STORY_VN_CHAPTERS[id].mapNumber), [20, 21, 22, 23, 24, 25]);
+  assert.deepEqual(p4.map(id => STORY_VN_CHAPTERS[id].needs ?? 0), [0, 1, 1, 2, 3, 4], "part four opens on its own requests");
   for (const id of STORY_VN_CHAPTER_IDS) {
     assert.deepEqual(validateStoryVnChapter(id), [], id);
     assert.equal(STORY_VN_CHAPTERS[id].beats.at(-1).type, "end", id);
@@ -33,21 +36,23 @@ test("three parts of main chapters, side stories, requests and the part-three hu
     else assert.equal(STORY_VN_CHAPTERS[id].reward.tickets, 1, `${id}: one ticket per chapter (Owner 2026-11-11)`);
   }
   // Part three is walked: every chapter and request but the sparring one explores a field.
-  for (const id of [...p3, "vn3-r1", "vn3-r2", "vn3-r3", "vn3-r5", "vn3-r6", "vn3-hub"]) assert.ok(STORY_VN_CHAPTERS[id].beats.some(beat => beat.type === "explore"), id);
+  for (const id of [...p3, "vn3-r1", "vn3-r2", "vn3-r3", "vn3-r5", "vn3-r6", "vn3-hub", "vn4-c1", "vn4-c2", "vn4-c3", "vn4-c4", "vn4-r1", "vn4-r3"]) assert.ok(STORY_VN_CHAPTERS[id].beats.some(beat => beat.type === "explore"), id);
   // A spot never stages actors over the field, and every field has a way out.
   assert.deepEqual(validateStoryVnChapter("x", { beats: [{ type: "explore", field: "lobby", spots: [{ id: "a", kind: "inspect", at: [10, 10], beats: [{ type: "enter", who: "partner" }] }] }, { type: "end" }] }),
     ["x#0.a#0: enter inside a spot", "x#0: no way out"]);
   // Every main chapter but the last pair has at least one real battle in the arc; the first, fifth and sixth fight.
   const battles = STORY_VN_MAIN_IDS.filter(id => STORY_VN_CHAPTERS[id].beats.some(beat => beat.type === "battle"));
-  assert.deepEqual(battles, ["vn1-c1", "vn1-c5", "vn1-c6", "vn2-c1", "vn2-c2", "vn2-c3", "vn2-c4", "vn2-c5", "vn2-c6", "vn3-c6"]);
+  assert.deepEqual(battles, ["vn1-c1", "vn1-c5", "vn1-c6", "vn2-c1", "vn2-c2", "vn2-c3", "vn2-c4", "vn2-c5", "vn2-c6", "vn3-c6", "vn4-c2", "vn4-c5", "vn4-c6"]);
   const battleBeats = beats => beats.flatMap(beat => [beat, ...(beat.spots ?? []).flatMap(spot => battleBeats(spot.beats ?? []))]).filter(beat => beat.type === "battle");
   const presets = STORY_VN_MAIN_IDS.flatMap(id => battleBeats(STORY_VN_CHAPTERS[id].beats).flatMap(beat => beat.presets));
-  assert.deepEqual(presets, [491, 515, 542, 530, 563, 551, 530, 568, 574, 515, 563, 542]);
+  assert.deepEqual(presets, [491, 515, 542, 530, 563, 551, 530, 568, 574, 515, 563, 542, 566, 562, 570, 569]);
   // Every story battle is a native free-battle preset whose partner the story shows.
   for (const [key, cast] of Object.entries(STORY_VN_CAST)) if (cast.preset) assert.ok(presets.includes(cast.preset) || key === "rivalMon", key);
   const data = read("src/championship/data/storyVnCampaign.js");
   assert.deepEqual(data.match(/^import .*$/gm), ['import { STORY_VN_PART_TWO_BACKGROUNDS, STORY_VN_PART_TWO_CAST, STORY_VN_PART_TWO_CHAPTERS, STORY_VN_PART_TWO_SPEAKERS } from "./storyVnPartTwo.js";',
-    'import { STORY_VN_PART_THREE_BACKGROUNDS, STORY_VN_PART_THREE_CAST, STORY_VN_PART_THREE_CHAPTERS, STORY_VN_PART_THREE_SPEAKERS } from "./storyVnPartThree.js";'], "pure data, the later parts only");
+    'import { STORY_VN_PART_THREE_BACKGROUNDS, STORY_VN_PART_THREE_CAST, STORY_VN_PART_THREE_CHAPTERS, STORY_VN_PART_THREE_SPEAKERS } from "./storyVnPartThree.js";',
+    'import { STORY_VN_PART_FOUR_BACKGROUNDS, STORY_VN_PART_FOUR_CAST, STORY_VN_PART_FOUR_CHAPTERS, STORY_VN_PART_FOUR_SPEAKERS } from "./storyVnPartFour.js";'], "pure data, the later parts only");
+  assert.equal(read("src/championship/data/storyVnPartFour.js").match(/^import /m), null, "part four is pure data");
   assert.equal(read("src/championship/data/storyVnPartThree.js").match(/^import /m), null, "part three is pure data");
   assert.doesNotMatch(data, /https?:|localStorage|fetch\(|Math\.random/);
 });
@@ -72,7 +77,8 @@ test("progress rides the once-only reward ledger: chapters open in order, side s
   assert.deepEqual(STORY_VN_CHAPTER_IDS.map(storyVnRewardKey), ["story:vn1:c1", "story:vn1:c2", "story:vn1:c3", "story:vn1:c4", "story:vn1:c5", "story:vn1:c6", "story:vn1:s1", "story:vn1:s2",
     "story:vn2:c1", "story:vn2:c2", "story:vn2:c3", "story:vn2:c4", "story:vn2:c5", "story:vn2:c6", "story:vn2:s1", "story:vn2:s2",
     "story:vn3:c0", "story:vn3:c1", "story:vn3:c2", "story:vn3:c3", "story:vn3:c4", "story:vn3:c5", "story:vn3:c6",
-    "story:vn3:s1", "story:vn3:s2", "story:vn3:s3", "story:vn3:s4", "story:vn3:s5", "story:vn3:s6"]);
+    "story:vn3:s1", "story:vn3:s2", "story:vn3:s3", "story:vn3:s4", "story:vn3:s5", "story:vn3:s6",
+    "story:vn4:c1", "story:vn4:c2", "story:vn4:c3", "story:vn4:c4", "story:vn4:c5", "story:vn4:c6", "story:vn4:s1", "story:vn4:s2", "story:vn4:s3", "story:vn4:s4"]);
   const view = (claimed, options) => storyVnChapterStates(claimed, options).map(s => `${s.id}:${s.state}`).join(" ");
   const states = (claimed, options) => Object.fromEntries(storyVnChapterStates(claimed, options).map(s => [s.id, s.state]));
   assert.ok(Object.values(states([], { entryOpen: false })).every(state => state === "locked"));
@@ -98,12 +104,17 @@ test("progress rides the once-only reward ledger: chapters open in order, side s
   assert.equal(states([...p3, "story:vn3:s2", "story:vn3:c2"])["vn3-c3"], "locked", "chapter 16 needs two requests");
   assert.equal(states([...p3, "story:vn3:s1", "story:vn3:s2", "story:vn3:c2"])["vn3-c3"], "open");
   assert.ok(!storyVnChapterStates(all2).some(s => s.id === "vn3-hub" && s.state === "cleared"), "a hub is never cleared");
+  // Part four follows chapter 19 and counts only its own requests.
+  const all3 = [...all2, ...["c1", "c2", "c3", "c4", "c5", "c6"].map(c => `story:vn3:${c}`), ...["s1", "s2", "s3", "s4", "s5", "s6"].map(c => `story:vn3:${c}`)];
+  assert.equal(states(all3)["vn4-c1"], "open");
+  assert.equal(states([...all3, "story:vn4:c1"])["vn4-c2"], "locked", "part three's requests do not count for part four");
+  assert.equal(states([...all3, "story:vn4:c1", "story:vn4:s1"])["vn4-c2"], "open");
 });
 
 test("the chart carries chapters 2-7 and the two side stories, each playing its story-theater chapter", () => {
   const vnNodes = STORY_RIFT_MAP_NODES.filter(node => node.vnChapterId);
   // Parts one and two sit on the chart chapter by chapter; part three is one node, its hall.
-  assert.deepEqual(vnNodes.map(node => node.vnChapterId), [...STORY_VN_CHAPTER_IDS.filter(id => !id.startsWith("vn3")), "vn3-hub"]);
+  assert.deepEqual(vnNodes.map(node => node.vnChapterId), [...STORY_VN_CHAPTER_IDS.filter(id => (STORY_VN_CHAPTERS[id].part ?? 1) <= 2), "vn3-hub"]);
   assert.deepEqual(vnNodes.filter(n => n.kind === "chapter").map(n => n.number), [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
   for (const node of vnNodes.filter(n => n.kind === "side")) {
     const branch = STORY_RIFT_MAP_NODES.find(n => n.id === node.branchOf);
@@ -113,7 +124,7 @@ test("the chart carries chapters 2-7 and the two side stories, each playing its 
 });
 
 // ---- art ----------------------------------------------------------------------
-test("the nineteen living scene plates (still + parallax loop) are on disk, hashed, light, and recorded", () => {
+test("the living scene plates (still + parallax loop) are on disk, hashed, light, and recorded", () => {
   const manifest = JSON.parse(read("assets/production/story/vn-backgrounds-v3/manifest.json"));
   assert.equal(manifest.rightsStatus, "ORIGINAL_GENERATED");
   assert.match(manifest.generation.inputs, /approved opening art/, "style comes from the game's own art");
@@ -133,8 +144,8 @@ test("the nineteen living scene plates (still + parallax loop) are on disk, hash
     assert.match(plate.motion, /\.mp4$/); assert.ok(ambients.has(plate.ambient), id);
     assert.ok(plate.ground > 0.7 && plate.ground < 0.9, id);
   }
-  assert.equal(Object.keys(STORY_VN_BACKGROUNDS).length, 19);
-  assert.ok(total < 5_200_000, `the nineteen scenes stay under 5.2 MB (${total})`);
+  assert.equal(Object.keys(STORY_VN_BACKGROUNDS).length, 23);
+  assert.ok(total < 6_400_000, `the twenty-three scenes stay under 6.4 MB (${total})`);
   const index = JSON.parse(read("assets/production/ART_PRODUCTION_INDEX.json"));
   const record = index.entries.find(entry => entry.manifestPath === "assets/production/story/vn-backgrounds-v3/manifest.json");
   assert.ok(record, "art index record"); assert.equal(record.rightsStatus, "ORIGINAL_GENERATED"); assert.equal(record.runtimeEligible, true);
@@ -281,7 +292,7 @@ test("the app wires the theater into the chart, the real battle and the reward l
   assert.match(main, /onPlay: \(next, node\) => node\?\.vnChapterId === 'vn3-hub' \? openUnionHub\(\{ source: 'map' \}\) : node\?\.vnChapterId \? playVnChapter\(node\.vnChapterId/);
   // Part three's hall: picked chapters play and the player comes back to the hall; the board lists part three only.
   assert.match(main, /if \(result\?\.outcome !== 'picked'\) return result;\n\s+await playVnChapter\(result\.pick, \{ source: 'hub' \}\);/);
-  assert.match(main, /storyVnStates\(\)\.filter\(state => state\.id\.startsWith\('vn3-'\) && !state\.hub\)/);
+  assert.match(main, /storyVnStates\(\)\.filter\(state => \(STORY_VN_CHAPTERS\[state\.id\]\?\.part \?\? 1\) >= 3 && !state\.hub\)\.sort/);
   assert.match(main, /app\.prepareStoryBattle\(presetIndices, \[lead\.instanceId\]\)/);
   assert.match(main, /app\.claimGachaReward\?\.\(key, STORY_VN_CHAPTERS\[id\]\?\.reward\?\.tickets \?\? 0\)/);
   assert.match(main, /CHAMPIONSHIP_SCREENS\.RAISING_HOME && !vnRun\) closeStoryMap\(\);\n\s*followStoryBattle\(\);/);
