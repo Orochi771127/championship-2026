@@ -88,7 +88,7 @@
   :root[data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__note { display: none; }
   :root[data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] :is(.cm-vs5-matches, .cm-vs5-party, .cm-vs5-entry-notice) { grid-column: 2; }
   :root[data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-sponsors { grid-column: 1 / -1; order: 8; margin-top: 0; }
-  :root[data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer { grid-column: 1 / -1; order: 9; }
+  :root[data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer { grid-area: auto; grid-column: 1 / -1; order: 9; }
 }
 /* The stake steppers were 32px keys. */
 .cm-vs5-sponsors__step { min-width: 40px; min-height: 40px; }
@@ -310,3 +310,47 @@ body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-pa
   .cm-gacha__cards[data-count="1"] { grid-template-columns: minmax(0, 108px); }
   .cm-gacha__reveal-inner { gap: 6px; }
 }
+
+/* ==== Page exits, sideways: no footer row (Owner 2026-11-11) ============================= *
+ * 「那兩塊就又大又厚，然後佔了很多空間」: on a phone held sideways the back row took 57–63px
+ * of a 375–390px screen on every page. Sideways the row has no height and no band: the
+ * page's keys float together in the lower right corner (the right thumb's reach; the lower
+ * left belongs to panels such as the editor's selection and the gate preview), over the
+ * page, which now runs to the bottom edge. Lists end with room to scroll clear of the keys.
+ * Keys, ids and order are unchanged. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-root[data-screen] .cm-vs2-footer, .cm-screen-footer, .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer) {
+    position: sticky; bottom: 0; z-index: 6;
+    display: flex; align-items: flex-end; justify-content: flex-end; gap: 8px;
+    height: 0; min-height: 0; padding-block: 0; border: 0; background: none; box-shadow: none;
+    overflow: visible; pointer-events: none;
+  }
+  :root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-root[data-screen] .cm-vs2-footer, .cm-screen-footer, .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer)::before,
+  :root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-root[data-screen] .cm-vs2-footer, .cm-screen-footer, .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer)::after { content: none; }
+  :root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-root[data-screen] .cm-vs2-footer, .cm-screen-footer, .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer) > * {
+    pointer-events: auto; flex: 0 1 auto; width: auto; min-width: 0; min-height: 40px; margin: 0; padding: 2px 16px;
+    white-space: nowrap; translate: 0 calc(-8px - var(--safe-bottom));
+  }
+  /* The last row of a page scrolls clear of the floating keys. */
+  body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-shop__list, .cm-vs2-database__sheet, .cm-gacha__pane, .cm-vs2-cage-tray, .cm-digimon-shell, .cm-schedule-shell, .cm-tamer-shell, .cm-help-shell, .cm-championship-shell, .cm-vs5-shell, .cm-vs2-body) { scroll-padding-bottom: 60px; }
+  body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-shop__list, .cm-gacha__pane, .cm-digimon-shell, .cm-schedule-shell, .cm-tamer-shell, .cm-help-shell, .cm-championship-shell)::after { content: ""; display: block; flex: none; grid-column: 1 / -1; height: 56px; }
+}
+
+/* ==== Key sizes, desktop (Owner 2026-11-11) =============================================== *
+ * 「有一些模式下有一些按鈕就會特別大」: a key that fills its row is right on a phone held
+ * upright, where the row is the thumb's reach. On a desktop window the same rule made keys
+ * as wide as the page: 確認配置 1022px, 決定 752px, 關閉 712px, 十連狂轉 621px, 立即出戰 519px.
+ * In the desktop set a key is as wide as a key (at most 320px) and a page's main key sits at
+ * the right end of its row; rows that are lists (matches, partners) are not keys and keep
+ * their width. <html data-layout-set> names the set (portraitFrame.js). */
+:root[data-layout-set="desktop"] :is(.cm-vs2-footer, .cm-vs5-footer, .cm-screen-footer) > :is(.cm-vs2-action--primary, .cm-vs5-action--primary, .cm-screen-primary) {
+  justify-self: end; width: min(100%, 320px);
+}
+:root[data-layout-set="desktop"] .cm-gacha__pulls { width: min(100%, 600px); justify-self: center; margin-inline: auto; }
+:root[data-layout-set="desktop"] .cm-gacha__pane--synth > .cm-gacha__actions { width: min(100%, 640px); justify-self: center; margin-inline: auto; }
+:root[data-layout-set="desktop"] dialog.cm-dialog:has(.cm-backpack) .cm-dialog__actions { grid-template-columns: minmax(0, 240px); justify-content: end; }
+:root[data-layout-set="desktop"] .cm-tamer-shell > .cm-brag-cta { width: min(100%, 360px); justify-self: start; }
+:root[data-layout-set="desktop"] .cm-tamer-shell .cm-passport__providers { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* (dataArena.css loads with the arena, after this sheet.) */
+:root[data-layout-set="desktop"] .da-root.da-root .da-panel--select .da-actions { justify-content: flex-end; }
+:root[data-layout-set="desktop"] .da-root.da-root .da-panel--select .da-actions > .da-btn { flex: 0 1 280px; max-width: 280px; }

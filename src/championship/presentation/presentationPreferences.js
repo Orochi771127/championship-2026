@@ -101,10 +101,10 @@ export function isMobileOrStandaloneEnvironment(win = globalThis.window) {
   return false;
 }
 
-/** The desktop interface zoom (portraitFrame puts it on <html>), 1 when there is none. */
+/** The interface zoom (portraitFrame puts it on <html>; below 1 on a small phone), 1 when there is none. */
 export function uiZoom(doc = globalThis.document) {
   const zoom = Number(rootData("uiZoom", doc));
-  return Number.isFinite(zoom) && zoom >= 1 ? zoom : 1;
+  return Number.isFinite(zoom) && zoom > 0 ? zoom : 1;
 }
 
 /** Device pixels per CSS pixel of the page: the screen's ratio times the interface zoom. */

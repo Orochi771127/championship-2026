@@ -64,6 +64,30 @@ export function layoutSetFor({width,height}={}) {
   if(width>height&&height<=520)return 'sideways';
   return width>=1024&&height>=600?'desktop':'upright';
 }
+// One rule for every screen (Owner 2026-11-11: 「以後有不同大小的螢幕寬比…讓他自適應」). Each set is
+// drawn for one reference window, and the two ends of the range show their set scaled as a
+// whole:
+//   desktop   1366x768   a larger desktop window shows it larger (desktopUiZoom)
+//   upright   390x667    a phone narrower or shorter than about 350x600 shows it smaller
+//   sideways  667x390    a phone shorter than about 350px held sideways shows it smaller
+// Between the ends the sheets' own breakpoints do the adapting (two columns from 700px,
+// compact rows under 520px high, and so on). Phones and tablets are never scaled up: CSS
+// media queries read the real window, so a tablet zoomed to a 512px layout would still get
+// the rules written for 768px (measured: the tool rail's captions turned on their side).
+// Scaling down is safe in that respect: the narrow-window rules it also triggers only
+// compact further. The phones the sets were drawn on (360px and wider) are exactly as before.
+export const UPRIGHT_UI_REFERENCE = Object.freeze({width:390,height:667});
+export const SIDEWAYS_UI_REFERENCE = Object.freeze({width:667,height:390});
+export const UI_ZOOM_MIN = 0.8;
+export function interfaceZoom({width,height,touch=false,gameVisible=true}={}) {
+  if(!gameVisible||!Number.isFinite(width)||!Number.isFinite(height)||!(width>0&&height>0))return 1;
+  const set=layoutSetFor({width,height});
+  if(set==='desktop')return desktopUiZoom({width,height,touch,gameVisible});
+  const reference=set==='sideways'?SIDEWAYS_UI_REFERENCE:UPRIGHT_UI_REFERENCE;
+  const raw=Math.min(width/reference.width,height/reference.height);
+  if(raw>0.9)return 1;
+  return Math.floor(Math.max(UI_ZOOM_MIN,raw)*20+1e-6)/20;
+}
 function touchDevice(win) {
   try{
     if(win.matchMedia?.('(pointer: coarse)')?.matches===true&&win.matchMedia?.('(any-pointer: fine)')?.matches!==true)return true;
@@ -134,13 +158,13 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     ? inputBaseline.height : win.innerHeight/uiZoom);
   const titleRoot=doc.getElementById?.('cm-title');
   function applyUiZoom(){
-    const next=desktopUiZoom({width:win.innerWidth,height:win.innerHeight,touch:touchDevice(win),
+    const next=interfaceZoom({width:win.innerWidth,height:win.innerHeight,touch:touchDevice(win),
       gameVisible:!!root&&!root.hidden&&(!titleRoot||titleRoot.hidden)});
     if(next===uiZoom)return;
     uiZoom=next;
     const html=doc.documentElement;
     if(!html)return;
-    if(next>1){html.style.zoom=String(next);html.style.setProperty('--cm-ui-zoom',String(next));html.dataset.uiZoom=String(next);}
+    if(next!==1){html.style.zoom=String(next);html.style.setProperty('--cm-ui-zoom',String(next));html.dataset.uiZoom=String(next);}
     else{html.style.removeProperty?.('zoom');html.style.removeProperty?.('--cm-ui-zoom');delete html.dataset.uiZoom;}
     // Canvases size their backing store from the device pixel ratio times this zoom.
     win.dispatchEvent?.(new (win.Event??Event)('cm-ui-zoom'));
@@ -294,7 +318,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     screenOrientation?.removeEventListener?.('change',orientationChanged);
     doc.removeEventListener('focusin',update);doc.removeEventListener('focusout',update);
     if(doc.documentElement?.dataset)delete doc.documentElement.dataset.layoutSet;
-    if(uiZoom>1){doc.documentElement?.style.removeProperty?.('zoom');doc.documentElement?.style.removeProperty?.('--cm-ui-zoom');delete doc.documentElement?.dataset.uiZoom;uiZoom=1;}
+    if(uiZoom!==1){doc.documentElement?.style.removeProperty?.('zoom');doc.documentElement?.style.removeProperty?.('--cm-ui-zoom');delete doc.documentElement?.dataset.uiZoom;uiZoom=1;}
     body.removeAttribute('data-portrait-frame');
     body.removeAttribute('data-landscape-entry');
     body.removeAttribute('data-title-standalone');

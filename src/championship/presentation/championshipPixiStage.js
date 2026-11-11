@@ -37,7 +37,7 @@ function clamp(value, minimum, maximum) {
 // so the backing store follows it: the field stays as sharp as at 100%.
 function pagePixelRatio() {
   const zoom = Number(globalThis.document?.documentElement?.dataset?.uiZoom);
-  return (Number(globalThis.devicePixelRatio) || 1) * (Number.isFinite(zoom) && zoom >= 1 ? zoom : 1);
+  return (Number(globalThis.devicePixelRatio) || 1) * (Number.isFinite(zoom) && zoom > 0 ? zoom : 1);
 }
 
 /** Renderer resolution: the device pixel ratio, held between 1 and the cap (and <= 1.75 on mobile/standalone). */

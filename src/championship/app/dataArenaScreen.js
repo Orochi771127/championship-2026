@@ -440,7 +440,10 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const visual = left ? moveStick : aimStick;
     sticks[slot] = { id: event.pointerId, ox: event.clientX, oy: event.clientY, vector: { x: 0, y: 0 }, visual };
     visual.base.hidden = false;
-    visual.base.style.transform = `translate(${event.clientX - rect.left - 56}px, ${event.clientY - rect.top - 56}px)`;
+    // Screen pixels to the arena's own pixels (they differ by the interface zoom).
+    const k = rect.width / (root.offsetWidth || rect.width || 1) || 1;
+    sticks[slot].k = k;
+    visual.base.style.transform = `translate(${(event.clientX - rect.left) / k - 56}px, ${(event.clientY - rect.top) / k - 56}px)`;
     visual.knob.style.transform = "translate(0px, 0px)";
     root.setPointerCapture?.(event.pointerId);
   }, { signal, passive: false });
@@ -450,7 +453,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       const stick = sticks[slot];
       if (!stick || stick.id !== event.pointerId) continue;
       event.preventDefault();
-      let dx = event.clientX - stick.ox, dy = event.clientY - stick.oy;
+      let dx = (event.clientX - stick.ox) / (stick.k || 1), dy = (event.clientY - stick.oy) / (stick.k || 1);
       const length = Math.hypot(dx, dy), max = 52;
       if (length > max) { dx = (dx / length) * max; dy = (dy / length) * max; }
       stick.vector = { x: dx / max, y: dy / max };

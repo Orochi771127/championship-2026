@@ -238,7 +238,8 @@ export async function createGateSelectView({ root, source, mountWorld }) {
   });
   list.addEventListener?.("pointermove", (event) => {
     if (!carouselDrag) return;
-    const dx = event.clientX - carouselDrag.x;
+    const rect = list.getBoundingClientRect(), k = rect.width / (list.offsetWidth || rect.width || 1) || 1;
+    const dx = (event.clientX - carouselDrag.x) / k;
     if (!carouselDrag.moved && Math.abs(dx) < 6) return;
     carouselDrag.moved = true;
     list.dataset.dragging = "true";

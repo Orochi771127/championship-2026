@@ -9,7 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { desktopUiZoom, DESKTOP_UI_REFERENCE, DESKTOP_UI_ZOOM_MAX, LAYOUT_SETS, layoutSetFor, mountPortraitFrame } from '../src/championship/app/portraitFrame.js';
+import { desktopUiZoom, interfaceZoom, UI_ZOOM_MIN, DESKTOP_UI_REFERENCE, DESKTOP_UI_ZOOM_MAX, LAYOUT_SETS, layoutSetFor, mountPortraitFrame } from '../src/championship/app/portraitFrame.js';
 import { cappedPixelRatio, effectiveDevicePixelRatio, uiZoom } from '../src/championship/presentation/presentationPreferences.js';
 import { resolutionFor } from '../src/championship/presentation/championshipPixiStage.js';
 import { READING_SHEETS, HUD_SHEETS, literalSizes, scaleSheet } from '../scripts/qa/apply-text-scale.mjs';
@@ -54,6 +54,22 @@ test('phones, tablets, the title and a hidden game are never zoomed', () => {
   assert.equal(desktopUiZoom({}), 1);
 });
 
+test('small phones show their set smaller; phones and tablets are never scaled up', () => {
+  // Unchanged: the six audit windows, the common phones between them, tablets and foldables.
+  for (const [width, height] of [[390, 844], [375, 667], [360, 780], [393, 852], [412, 915], [430, 932], [844, 390], [667, 375], [932, 430], [852, 393],
+    [768, 1024], [820, 1180], [600, 960], [1180, 500], [1180, 820], [1366, 768]])
+    assert.equal(interfaceZoom({ width, height, touch: width < 1300 }), 1, `${width}x${height}`);
+  // Smaller than the reference by more than a tenth: scaled down in steps of 0.05, same set.
+  for (const [width, height, zoom, set] of [[320, 568, 0.8, 'upright'], [340, 720, 0.85, 'upright'], [360, 560, 0.8, 'upright'], [568, 320, 0.8, 'sideways'], [740, 340, 0.85, 'sideways']]) {
+    assert.equal(interfaceZoom({ width, height, touch: true }), zoom, `${width}x${height}`);
+    assert.equal(layoutSetFor({ width: width / zoom, height: height / zoom }), set, `${width}x${height} stays ${set}`);
+  }
+  assert.equal(interfaceZoom({ width: 1920, height: 1080 }), 1.4, 'desktop follows desktopUiZoom');
+  assert.equal(interfaceZoom({ width: 280, height: 500, touch: true }), UI_ZOOM_MIN, 'never below the floor');
+  assert.equal(interfaceZoom({ width: 320, height: 568, gameVisible: false }), 1, 'the title is never scaled');
+  assert.equal(interfaceZoom({}), 1);
+});
+
 function frameFixture({ width, height, userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)', coarse = false, titleHidden = true } = {}) {
   const attrs = new Set(), styles = new Map(), htmlStyles = new Map(), listeners = new Map(), events = [];
   const html = { dataset: {}, clientWidth: width, clientHeight: height,
@@ -95,7 +111,12 @@ test('the frame puts the zoom on <html>, tells the canvases, and judges layouts 
 test('the title screen, a touch device and a phone-sized window keep their own size', () => {
   assert.ok(!frameFixture({ width: 1920, height: 1080, titleHidden: false }).htmlStyles.has('zoom'), 'title showing');
   assert.ok(!frameFixture({ width: 1920, height: 1080, coarse: true }).htmlStyles.has('zoom'), 'touch screen');
-  assert.ok(!frameFixture({ width: 2732, height: 2048, userAgent: 'Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X)' }).htmlStyles.has('zoom'), 'tablet');
+  assert.ok(!frameFixture({ width: 1366, height: 1024, userAgent: 'Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X)' }).htmlStyles.has('zoom'), 'tablet held sideways');
+  const tablet = frameFixture({ width: 768, height: 1024, coarse: true, userAgent: 'Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X)' });
+  assert.ok(!tablet.htmlStyles.has('zoom'), 'a tablet held upright keeps its pixels (its rules are written for 768px)');
+  assert.equal(tablet.html.dataset.layoutSet, 'upright');
+  const small = frameFixture({ width: 320, height: 568, coarse: true, userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X)' });
+  assert.equal(small.htmlStyles.get('zoom'), '0.8', 'a 320px phone shows the upright set smaller');
   const sideways = frameFixture({ width: 844, height: 390 });
   assert.ok(!sideways.htmlStyles.has('zoom'), 'phone sideways');
   assert.equal(sideways.html.dataset.layoutSet, 'sideways');
