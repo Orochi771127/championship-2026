@@ -171,12 +171,18 @@ test('every game sheet measures the window in zoom-aware units; the opening keep
   }
 });
 
-test('the audit sheet loads last and leaves the title alone', () => {
+test('the audit sheet loads last; the title only gets the three fixes the Owner asked for', () => {
   const html = source('championship.html');
   const links = [...html.matchAll(/<link rel="stylesheet" href="\.\/([^"?]+)/g)].map(match => match[1]);
   assert.equal(links.at(-1), 'src/championship/app/ui/layoutSets.css');
   const sheet = source('src/championship/app/ui/layoutSets.css');
-  assert.ok(!/#cm-title|\.cm-title|#cm-opening|\.cm-opening/.test(sheet.replace(/\/\*[\s\S]*?\*\//g, '')), 'no title or opening selector');
+  const rules = sheet.replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.ok(!/#cm-opening|\.cm-opening/.test(rules), 'no opening selector');
+  // Title (Owner 2026-11-11): scale on a large desktop, two keys side by side when held sideways.
+  const titleRules = rules.split('
+').filter(line => /#cm-title|\.cm-title/.test(line));
+  assert.ok(titleRules.length > 0 && titleRules.every(line => line.includes('body[data-landscape-entry] #cm-title')), 'title rules only touch the landscape entry');
+  assert.match(rules, /--cm-entry-logo-width: clamp\(260px, calc\(40 \* var\(--cm-vw, 1vw\)\), calc\(520px \* var\(--cm-title-scale, 1\)\)\)/);
   // The partner list's element row has its own line (it was a 75px column at phone width).
   assert.match(sheet, /\.cm-digimon-stat\[data-row="taxonomy"\] \{ grid-column: 1 \/ -1; \}/);
 });

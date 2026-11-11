@@ -37,7 +37,9 @@ export function isCageLandscapeLayout({width,height,activeScreen,hidden=false}) 
 }
 // Entry owns a dedicated art-and-controls composition, not a stretched scene.
 export function isLandscapeEntryLayout({width,height,hidden=false}) {
-  return Number.isFinite(width)&&Number.isFinite(height)&&width>=720&&height>=320
+  // 640 (was 720 until 2026-11-11): a 667x375 phone held sideways fell back to the upright
+  // poster scaled into the middle of the screen, with its key hanging off the bottom.
+  return Number.isFinite(width)&&Number.isFinite(height)&&width>=640&&height>=320
     &&width>=height+160&&!hidden;
 }
 // Three layout sets (Owner 2026-11-11): phone upright, phone sideways, desktop. The desktop
@@ -151,7 +153,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
   const titleProperties=['--cm-title-viewport-height','--cm-title-viewport-top'];
   const appProperties=['--cm-app-viewport-height'];
   const properties=['--cm-frame-scale','--cm-viewport-height','--cm-frame-center-x','--cm-frame-center-y'];
-  let sideways=null,inputBaseline=null,disposed=false,uiZoom=1;
+  let sideways=null,inputBaseline=null,disposed=false,uiZoom=1,titleScale=1;
   // Layout sizes are the window's size in the page's own (zoomed) CSS pixels.
   const layoutWidth=()=>win.innerWidth/uiZoom;
   const layoutHeight=()=>(inputBaseline&&Math.abs(win.innerWidth/uiZoom-inputBaseline.width)<=1&&win.innerHeight/uiZoom<inputBaseline.height
@@ -160,9 +162,19 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
   function applyUiZoom(){
     const next=interfaceZoom({width:win.innerWidth,height:win.innerHeight,touch:touchDevice(win),
       gameVisible:!!root&&!root.hidden&&(!titleRoot||titleRoot.hidden)});
+    const html=doc.documentElement;
+    // The title keeps its own full-bleed picture (no page zoom), but on a large desktop
+    // window its logo, keys and strolling partners take the scale the game will have, so
+    // entering the game does not jump from a small menu to a large one (Owner 2026-11-11).
+    const titleShown=!!titleRoot&&!titleRoot.hidden;
+    const nextTitle=titleShown?desktopUiZoom({width:win.innerWidth,height:win.innerHeight,touch:touchDevice(win),gameVisible:true}):1;
+    if(html&&nextTitle!==titleScale){
+      titleScale=nextTitle;
+      if(nextTitle!==1)html.style.setProperty('--cm-title-scale',String(nextTitle));
+      else html.style.removeProperty?.('--cm-title-scale');
+    }
     if(next===uiZoom)return;
     uiZoom=next;
-    const html=doc.documentElement;
     if(!html)return;
     if(next!==1){html.style.zoom=String(next);html.style.setProperty('--cm-ui-zoom',String(next));html.dataset.uiZoom=String(next);}
     else{html.style.removeProperty?.('zoom');html.style.removeProperty?.('--cm-ui-zoom');delete html.dataset.uiZoom;}

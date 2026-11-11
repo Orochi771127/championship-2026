@@ -381,3 +381,21 @@ body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen] .
    share the paper ground token, which would make the three previews look alike). */
 :root[data-theme="arcade"] .cm-theme-preview[data-palette] { background: var(--ax-stage); border: 2px solid var(--ax-ink); }
 :root[data-theme="arcade"] .cm-theme-preview[data-palette] .cm-theme-preview__button { background: var(--ax-yellow); box-shadow: 0 2px 0 var(--ax-ink); }
+
+/* ---- Title (Owner 2026-11-11: 「第二個問題要一起調整」) ---------------------------------- */
+/* 1. A large desktop window: the logo, the keys and the strolling partners grow by
+      --cm-title-scale (portraitFrame: the scale the game itself will have). At 1920x1080 the
+      logo was 520px in a 1920px picture and the key 348px. */
+:root body[data-landscape-entry] #cm-title {
+  --cm-entry-logo-width: clamp(260px, calc(40 * var(--cm-vw, 1vw)), calc(520px * var(--cm-title-scale, 1)));
+  --cm-entry-action-width: min(calc(80 * var(--cm-vw, 1vw)), calc(360px * var(--cm-title-scale, 1)));
+}
+:root[style*="--cm-title-scale"] body[data-landscape-entry] #cm-title :is(.cm-title__entry, .cm-title__boot-status, .cm-title__background-feedback, .cm-title__note, .cm-title__settings, .cm-title__film-watch) { zoom: var(--cm-title-scale, 1); }
+:root[style*="--cm-title-scale"] body[data-landscape-entry] #cm-title .cm-title__walker canvas { height: calc(128px * var(--cm-title-scale, 1)); }
+/* 2. A phone held sideways: 繼續遊戲 and 開始新遊戲 were stacked and the second ended on the
+      last pixel row (its slab below the screen). They now stand side by side; 進入遊戲 keeps its width. */
+@media (max-height: 480px) {
+  :root body[data-landscape-entry] #cm-title { --cm-entry-action-width: min(calc(86 * var(--cm-vw, 1vw)), 460px); }
+  :root body[data-landscape-entry] #cm-title .cm-title__actions { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+}
+@media (max-height: 420px) { :root body[data-landscape-entry] #cm-title .cm-title__walker canvas { height: 76px; } }
