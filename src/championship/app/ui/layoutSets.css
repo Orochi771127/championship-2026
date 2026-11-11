@@ -354,3 +354,25 @@ body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-pa
 /* (dataArena.css loads with the arena, after this sheet.) */
 :root[data-layout-set="desktop"] .da-root.da-root .da-panel--select .da-actions { justify-content: flex-end; }
 :root[data-layout-set="desktop"] .da-root.da-root .da-panel--select .da-actions > .da-btn { flex: 0 1 280px; max-width: 280px; }
+
+/* ---- Owner review 2026-11-11 (second round) ---- */
+/* Partner list on a phone held upright: three badges and the chart key do not fit one line
+   (206 + 107px in 310px), and the key fell to a line of its own. The key now sits at the end
+   of the heading line, so the block is heading + badges exactly as on desktop. */
+@media (max-width: 520px) {
+  :root[data-theme] body .cm-digimon-root .cm-digimon-stat[data-row="taxonomy"] { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 8px; }
+  :root[data-theme] body .cm-digimon-root .cm-digimon-stat[data-row="taxonomy"] .cm-taxonomy-detail { display: contents; }
+  :root[data-theme] body .cm-digimon-root .cm-digimon-stat[data-row="taxonomy"] .cm-digimon-detail__label { grid-area: 1 / 1; }
+  :root[data-theme] body .cm-digimon-root .cm-digimon-stat[data-row="taxonomy"] .cm-element-chart-button { grid-area: 1 / 2; margin: 0; }
+  :root[data-theme] body .cm-digimon-root .cm-digimon-stat[data-row="taxonomy"] .cm-tax-row { grid-area: 2 / 1 / 3 / -1; }
+}
+
+/* Shop categories, phone held sideways: the row was a sideways scroller, which clips whatever
+   reaches outside it (the raised active key, the key shadows, the ticket badge). Four
+   categories always fit as four equal keys, so nothing scrolls and nothing is clipped. */
+body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen] .cm-vs2-shop__tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; overflow: visible; max-width: 560px; padding-block: 6px 2px; }
+body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen] .cm-vs2-shop__tab { flex: none; min-width: 0; max-width: none; padding-inline: 4px; white-space: normal; overflow-wrap: anywhere; line-height: 1.15; }
+
+/* Facility editor: the 22px title's outline and drop shadow reach 4px below the letters and
+   covered the underline (same cause as the hunt and battle titles, 2026-11-10). */
+:root body .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-vs2-title { padding-bottom: 15px; }
