@@ -72,6 +72,13 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
   const moteTrails = [];
   // Each move's own moment (BESPOKE_MOVE_VFX_PROGRAM_20261111), as in the AI battle.
   const setPieces = typeof createMoveVfxSetPieces === 'function' ? createMoveVfxSetPieces({PIXI, layer: front, reducedMotion}) : null;
+  // Cover materials as piece palettes (core lit top, main face, edge shadow); basalt burns inside.
+  const COVER_PALETTE = Object.freeze({
+    STONE: {core: 0xe4e8ea, main: 0xb7bec2, edge: 0x5e666e}, WOOD: {core: 0xe0b07a, main: 0xb07b48, edge: 0x553620},
+    TIMBER: {core: 0xe0b07a, main: 0xb07b48, edge: 0x553620}, BASALT: {core: 0xffb070, main: 0xff8a3c, edge: 0x241c1f},
+    CORAL: {core: 0xfbe2d8, main: 0xf2c7b8, edge: 0xa96f62}, ICE: {core: 0xffffff, main: 0xd6f3fb, edge: 0x5fa4c4},
+    SANDSTONE: {core: 0xf2dcae, main: 0xe0c08a, edge: 0x8e6d3e}, CRYSTAL: {core: 0xe0ffff, main: 0x8ff3ff, edge: 0x1b3a4f},
+    METAL: {core: 0xffffff, main: 0x9aa8b6, edge: 0x3f4a56}});
   const pieceAt = (moveId, phase, at) => {
     const choreo = moveVfxChoreography(moveId), c = choreo?.[phase];
     if (!c || !setPieces) return;
@@ -153,6 +160,9 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
       pixelHits?.spawn({element: v.element, x, y, groundY, size: BODY, unit: SCALE, heavy, flip: Math.cos(angle) < 0});
       motes?.burst({element: v.element, x, y, groundY, unit: SCALE * 0.5, weight: heavy ? 'heavy' : 'light', dir: Math.sign(Math.cos(angle))});
       pieceAt(moveId, 'contact', {x, y, angle, palette: v.palette});
+      // Refinement pass 2 (Owner: 場地破壞 at the AI battle's level): a heavy hit marks the floor with its
+      // element's ground mark -- a crater, scorch, frost or puddle -- as the AI battle does; the kit path used to skip it.
+      if (kit && heavy) layer.decal({x, y: groundY, kind: v.decal, palette: v.palette, paletteKey: v.paletteKey, size: 116, scale: SCALE});
       if (kit) {
         kit.impact({x, y, groundY, angle, paletteKey: v.paletteKey, archetype: v.archetype, heavy, size: size * KIT, signature: v.signature});
         if (heavy) layer.hold(55);
@@ -199,6 +209,20 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
       }
       layer.hold(65);
       stats.ults++;
+    },
+    /**
+     * The arena's cover (refinement pass 2): a struck block throws a chip of its own material,
+     * a broken one bursts into debris and dust and leaves a crater under its rubble.
+     */
+    prop({x, y, material = 'STONE', broken = false, weak = false}) {
+      const palette = COVER_PALETTE[material] ?? COVER_PALETTE.STONE;
+      if (setPieces) setPieces.play(broken ? 'prop-dust' : 'prop-chip', {x, y: y - BODY * 0.28, groundY: y, palette, size: BODY * (broken ? 1.3 : weak ? 1 : 0.8), unit: SCALE * 0.5});
+      if (broken) {
+        layer.decal({x, y, kind: 'crack', palette, paletteKey: 'earth', size: 120, scale: SCALE});
+        layer.hold(45);
+      }
+      stats.props = (stats.props ?? 0) + 1;
+      return true;
     },
     /** True when the kit draws the shots, so the scene hides its own vector heads. */
     drawsShots: () => Boolean(kit),

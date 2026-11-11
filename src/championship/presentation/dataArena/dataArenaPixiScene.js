@@ -886,6 +886,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     burst(event.x, event.y - 22, { count: broken ? 16 : event.weak ? 8 : 4, speed: broken ? 240 : 140, tint, texture: textures.relayRock ?? textures.shard,
       scale: broken ? 0.3 : 0.2, gravity: 520, life: broken ? 0.8 : 0.45, spin: 6 });
     if (event.weak) ring(event.x, event.y - 20, 40, 0xffe066, 0.25);
+    // Refinement pass 2: the block's own baked chip / break burst over the rock particles.
+    if (typeof elementFx?.prop === 'function') elementFx.prop({x: event.x, y: event.y, material: event.material, broken, weak: event.weak});
     if (broken) { puff(event.x, event.y - 10, tint, 4, 1.4); camera.addTrauma(0.32); }
     else camera.addTrauma(event.weak ? 0.12 : 0.05);
   }
@@ -992,8 +994,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "ICE_MELT": ring(event.x, event.y, 30, 0x7fd8ff, 0.4, 0.6);spawn({x:event.x,y:event.y,texture:textures.iceMelt,scale:1,scaleTo:.8,life:.35,alpha:.7,add:false});break;
         case "ICE_MELT_HIT": puff(event.x,event.y,0xc6edf5,2,.6);break;
         case "PROP_HIT": if (relayMode && event.material !== 'TIMBER') { relayCoverHit(event, false); break; }
+          if(typeof elementFx?.prop==='function')elementFx.prop({x:event.x,y:event.y,material:'TIMBER',broken:false});
           burst(event.x,event.y-22,{count:3,speed:100,tint:event.cause==="FIRE"?0x8b6948:0xffffff,texture:textures.timberChip,life:.35,gravity:180});break;
         case "PROP_DESTROYED": if (relayMode && event.material !== 'TIMBER') { relayCoverHit(event, true); break; }
+          if(typeof elementFx?.prop==='function')elementFx.prop({x:event.x,y:event.y,material:'TIMBER',broken:true});
           burst(event.x,event.y-20,{count:rich?14:7,speed:180,tint:event.charred?0x504033:0xffffff,texture:textures.timberChip,life:.7,gravity:220});puff(event.x,event.y-15,event.charred?0x6a645d:0xa88c64,3,.9);break;
         case "FELL_IN_WATER": ring(event.x, event.y, 60, 0x9fe8ff, 0.5); burst(event.x, event.y, { count: 12, speed: 220, tint: 0xbff4ff, gravity: 500, life: 0.55 }); camera.addTrauma(0.2); break;
         case "RECOVERED": ring(event.x, event.y, 50, 0x7fffd4, 0.4); burst(event.x, event.y - 30, { count: 10, speed: 160, tint: 0x7fffd4, gravity: -100 }); break;

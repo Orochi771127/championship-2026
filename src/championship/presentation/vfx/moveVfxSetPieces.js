@@ -120,6 +120,41 @@ export function loadMoveVfxPieceSprites() {
   return bakedPromise;
 }
 
+/** A baked look once the sheets are in (null before): the kit reads its floor circles from here. */
+export function bakedPieceLook(name) { return baked?.[name] ?? null; }
+/**
+ * One baked look as canvases in a palette: `glow` false gives the colour
+ * frames (w x h), true the light layer (gw x gh, to be drawn 2x and added).
+ */
+export function paintBakedPieceFrames(name, palette, {doc = globalThis.document, glow = false} = {}) {
+  const look = baked?.[name];
+  if (!look || (glow && !look.glow?.length)) return null;
+  const tinted = glow ? null : {...look, palette: recolourPiecePalette(look.palette, palette)};
+  const M = rgb(palette.main), C = rgb(palette.core), w = glow ? look.gw : look.w, h = glow ? look.gh : look.h;
+  const frames = [];
+  for (let i = 0; i < (glow ? look.glow : look.frames).length; i++) {
+    const canvas = doc?.createElement?.('canvas'), context = canvas?.getContext?.('2d');
+    if (typeof context?.createImageData !== 'function' || typeof context.putImageData !== 'function') return null;
+    canvas.width = w; canvas.height = h;
+    const image = context.createImageData(w, h);
+    if (!glow) image.data.set(decodeStatusAilmentFrame(tinted, i));
+    else {
+      const rows = look.glow[i].split('/');
+      for (let y = 0; y < h; y++) {
+        let x = 0;
+        for (const [, k, count] of (rows[y] ?? '').matchAll(/([^0-9])(\d*)/g)) {
+          const run = count ? Number(count) : 1;
+          if (k !== '.') { const v = ('abcdefgh'.indexOf(k) + 0.5) / 8, c = mix(M, C, v); for (let q = 0; q < run; q++) image.data.set([c[0], c[1], c[2], Math.round(v * 255)], (y * w + x + q) * 4); }
+          x += run;
+        }
+      }
+    }
+    context.putImageData(image, 0, 0);
+    frames.push(canvas);
+  }
+  return {frames, w, h, ox: glow ? look.ox / 2 : look.ox, oy: glow ? look.oy / 2 : look.oy};
+}
+
 export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc = globalThis.document, sprites: given = null}) {
   if (given) baked = given; else loadMoveVfxPieceSprites();
   const sheets = new Map(), live = [], pool = [];

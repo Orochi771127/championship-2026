@@ -223,3 +223,19 @@ test("every move has a cast: blows by record, support moves by the effect they a
   pieces.update(2000);
   assert.equal(pieces.getDiagnostics().live, 0);
 });
+
+test("refinement pass 2: floor circles, cover chips and breaks, and heavy-hit ground marks in the Data Arena", async () => {
+  const fs = await import("node:fs");
+  const { MOVE_VFX_PIECE_SPRITES } = await import("../src/championship/presentation/vfx/moveVfxPieceSprites.js");
+  for (const name of ["sigil-cast", "sigil-rune", "prop-chip", "prop-dust"]) assert.ok(MOVE_VFX_PIECE_SPRITES[name]?.frames.length > 3, name);
+  const { paintBakedPieceFrames } = await import("../src/championship/presentation/vfx/moveVfxSetPieces.js");
+  const painted = paintBakedPieceFrames("sigil-cast", { core: 0xffffff, main: 0x66ccff, edge: 0x2266aa }, { doc });
+  assert.ok(painted && painted.frames.length === MOVE_VFX_PIECE_SPRITES["sigil-cast"].frames.length, "the kit can paint a baked circle");
+  const kit = fs.readFileSync("src/championship/presentation/vfx/moveVfxKit.js", "utf8");
+  assert.match(kit, /sigilglow:/, "a baked circle carries its light layer");
+  const fx = fs.readFileSync("src/championship/presentation/dataArena/dataArenaElementFx.js", "utf8");
+  assert.match(fx, /if \(kit && heavy\) layer\.decal\(/, "a heavy hit marks the floor in the kit path too");
+  assert.match(fx, /prop\(\{x, y, material/, "the element layer bursts cover");
+  const scene = fs.readFileSync("src/championship/presentation/dataArena/dataArenaPixiScene.js", "utf8");
+  assert.equal((scene.match(/elementFx\.prop\(/g) ?? []).length, 3, "relay cover and timber hits and breaks reach it");
+});
