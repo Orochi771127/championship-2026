@@ -3,7 +3,8 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {auditPagesModuleClosure} from './pages-module-closure.mjs';
 import {assertPublicRanchStreaming} from './public-ranch-streaming-boundary.mjs';
-import {assertPagesPayloadSize} from './pages-payload-size.mjs';
+import {assertPagesPayloadSize,deployedPagesRows} from './pages-payload-size.mjs';
+import {CHARACTER_ASSET_PREFIX} from '../../src/championship/presentation/characterAssetDelivery.js';
 import {assertPublicCharacterSelection} from './public-character-boundary.mjs';
 import {projectPublicRenderSources,PUBLIC_RENDER_FIELDS} from './public-render-projection.mjs';
 import {selectedMapProjections,PUBLIC_MAP_FIELDS} from './public-map-projection.mjs';
@@ -170,6 +171,6 @@ export function assertPublicArtifact({root,files,plan,manifestName='pages-build.
   if(files.some(file=>file===INTERNAL_INDEX))throw Error('PUBLIC_AUTHORITY_INDEX_INCLUDED');
   if(!files.includes(PUBLIC_RUNTIME_INDEX_PATH))throw Error('PUBLIC_RUNTIME_INDEX_MISSING');
   if(!fs.readFileSync(path.join(root,PUBLIC_RUNTIME_INDEX_PATH)).equals(plan.indexBytes))throw Error('PUBLIC_RUNTIME_INDEX_CHANGED');
-  assertPagesPayloadSize(actualSizes);
+  assertPagesPayloadSize(deployedPagesRows(actualSizes,{external:Boolean(plan.externalCharacterAssets),characterPrefix:CHARACTER_ASSET_PREFIX}));
   return {checkedFiles:files.length,authorityIndexIncluded:false,allowlist:true};
 }

@@ -17,7 +17,10 @@ function fakePixi() {
   }
   class Sprite extends Container { constructor(texture) { super(); this.texture = texture; } }
   const made = [];
-  return { Container, Sprite, made, Texture: { from: canvas => { const t = { canvas, source: { scaleMode: "linear" }, destroyed: false, destroy() { this.destroyed = true; } }; made.push(t); return t; } } };
+  class Texture { constructor({ source, frame } = {}) { Object.assign(this, { source, frame, destroyed: false }); } destroy() { this.destroyed = true; } }
+  Texture.from = canvas => { const t = { canvas, source: { scaleMode: "linear" }, destroyed: false, destroy() { this.destroyed = true; } }; made.push(t); return t; };
+  class Rectangle { constructor(x, y, w, h) { Object.assign(this, { x, y, width: w, height: h }); } }
+  return { Container, Sprite, made, Texture, Rectangle };
 }
 const doc = { createElement: () => ({ width: 0, height: 0, getContext: () => ({ createImageData: (w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }), putImageData() {} }) }) };
 
@@ -143,7 +146,8 @@ test("the 3D overlay leaves the two hit-spark families to the pixel hit bursts, 
 
 // BESPOKE_MOVE_VFX_PROGRAM_20261111: per-move choreography and its set pieces.
 import { MOVE_VFX_CHOREOGRAPHY, moveVfxChoreography } from "../src/championship/presentation/vfx/moveVfxChoreography.js";
-import { MOVE_VFX_SET_PIECES, createMoveVfxSetPieces, paintSetPieceSprite } from "../src/championship/presentation/vfx/moveVfxSetPieces.js";
+import { MOVE_VFX_SET_PIECES, createMoveVfxSetPieces, recolourPiecePalette, loadMoveVfxPieceSprites } from "../src/championship/presentation/vfx/moveVfxSetPieces.js";
+import { MOVE_VFX_PIECE_SPRITES } from "../src/championship/presentation/vfx/moveVfxPieceSprites.js";
 import battleMoves from "../src/data/championship/catalogs/battle-moves.r1.json" with { type: "json" };
 
 test("every choreographed move exists and names only known set pieces", () => {
@@ -160,15 +164,18 @@ test("every choreographed move exists and names only known set pieces", () => {
   for (const id of [193, 194, 195, 213, 214, 215, 216, 226, 227]) assert.ok(MOVE_VFX_CHOREOGRAPHY[id]?.contact, `record ${id}`);
 });
 
-test("set pieces paint in the move's palette, play once on the owner's delta and recycle", () => {
+test("set pieces are baked energy effects recoloured to the move, played once on the owner's delta and recycled", async () => {
   const palette = { core: 0xfff4c2, main: 0xff8a1c, edge: 0xd8360f };
-  const jaw = paintSetPieceSprite("jaw_top", palette);
-  assert.ok(jaw && jaw.w >= 44 && jaw.h >= 20, "the jaw is drawn");
-  const colours = new Set(); for (let i = 0; i < jaw.data.length; i += 4) if (jaw.data[i + 3]) colours.add(jaw.data.slice(i, i + 3).join());
-  assert.ok(colours.has("255,138,28"), "main tone is the palette's main");
-  assert.ok(colours.has("255,255,255"), "fangs stay white");
+  // Refinement pass 1 (Owner: 「很像卡通」「很廉價」): baked energy, no dark outline, no drawn object.
+  const fist = MOVE_VFX_PIECE_SPRITES.fist;
+  assert.ok(fist && fist.frames.length > 3 && fist.palette.length > 3, "the fist is a baked burst");
+  const tinted = recolourPiecePalette([[255, 255, 255, 1], [128, 128, 128, 1], [200, 120, 40, 1], [20, 20, 20, 1]], palette);
+  assert.ok(tinted[0].slice(0, 3).every(v => v >= 230), "white-hot stays near white");
+  assert.deepEqual(tinted[2].slice(0, 3), [255, 138, 28], "a mid tone takes the move's main");
+  assert.ok(recolourPiecePalette([[200, 0, 0, 1]], { ...palette, flat: true })[0].slice(0, 3).every(v => v === 255), "the impact frame is flat white");
+  assert.ok(await loadMoveVfxPieceSprites(), "the sheets load on demand");
   const PIXI = fakePixi(), layer = new PIXI.Container();
-  const pieces = createMoveVfxSetPieces({ PIXI, layer, doc });
+  const pieces = createMoveVfxSetPieces({ PIXI, layer, doc, sprites: MOVE_VFX_PIECE_SPRITES });
   for (const piece of MOVE_VFX_SET_PIECES) assert.equal(pieces.play(piece, { x: 0, y: 0, palette, size: 120 }), true, piece);
   assert.equal(pieces.play("nope", { x: 0, y: 0, palette }), false);
   const before = pieces.getDiagnostics().live;
@@ -184,12 +191,11 @@ test("set pieces paint in the move's palette, play once on the owner's delta and
 test("every signature move has its own choreography, and every drawing it names exists", async () => {
   const { moveVfxSignature } = await import("../src/championship/presentation/vfx/moveVfxSignatures.js");
   const { MOVE_VFX_PIECE_DRAWINGS } = await import("../src/championship/presentation/vfx/moveVfxSetPieces.js");
-  const { DRAWN_VFX_SPRITES } = await import("../src/championship/presentation/vfx/drawnVfxSprites.js");
   const missing = battleMoves.records.filter(m => moveVfxSignature(m.recordIndex)?.tier === "ultimate" && !MOVE_VFX_CHOREOGRAPHY[m.recordIndex]).map(m => m.recordIndex);
   assert.deepEqual(missing, []);
   for (const [key, c] of Object.entries(MOVE_VFX_CHOREOGRAPHY)) for (const phase of ["release", "contact"]) {
     const sprite = c[phase]?.sprite;
-    if (sprite) { assert.ok(MOVE_VFX_PIECE_DRAWINGS.includes(sprite), `${key} ${sprite}`); assert.ok(DRAWN_VFX_SPRITES[sprite], `${key} ${sprite} drawn`); }
+    if (sprite) assert.ok(MOVE_VFX_PIECE_DRAWINGS.includes(sprite), `${key} ${sprite}`);
   }
 });
 
@@ -212,7 +218,7 @@ test("every move has a cast: blows by record, support moves by the effect they a
   class Sprite { constructor(t) { Object.assign(this, { texture: t, position: point(), scale: point(), anchor: point(), visible: true, alpha: 1, rotation: 0, parent: null }); } destroy() {} }
   const layer = { children: [], addChild(s) { this.children.push(s); }, removeChild() {} };
   const doc = { createElement: () => ({ width: 0, height: 0, getContext: () => ({ createImageData: (w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }), putImageData() {} }) }) };
-  const pieces = createMoveVfxSetPieces({ PIXI: { Sprite, Texture: { from: () => ({ source: {}, destroy() {} }) } }, layer, doc });
+  const PIXI = fakePixi(), pieces = createMoveVfxSetPieces({ PIXI, layer: new PIXI.Container(), doc, sprites: MOVE_VFX_PIECE_SPRITES });
   for (const piece of MOVE_VFX_SUPPORT_PIECES) assert.equal(pieces.play(piece, { x: 0, y: 0, palette: BATTLE_FX_PALETTES.nature, size: 70 }), true, piece);
   pieces.update(2000);
   assert.equal(pieces.getDiagnostics().live, 0);
