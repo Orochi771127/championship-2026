@@ -359,7 +359,14 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     flashes.push({sprite, size, life, age: 0});
   }
   /** A ground shock ring: an ellipse on the arena's floor plane. */
+  /**
+   * Refinement pass 9: once the baked pieces are in, the layer's drawn rings and light pillar stand down --
+   * each moment already plays a baked piece (the move's contact, the support cast, the hyper aura) -- and a
+   * fall bursts as pixelfx's dirt explosion. Before the pieces load the rings still draw.
+   */
+  const piecesBaked = () => Boolean(setPieces && typeof bakedPieceLook === 'function' && bakedPieceLook('heal'));
   function spawnRing({x, groundY, radius, tint, life = 340, width = 2.5, alpha = 0.95, delay = 0, implode = false}) {
+    if (piecesBaked()) return;
     rings.push({x, y: groundY, radius, tint, life, age: -delay, width, alpha, implode});
   }
   /** A short-lived scorch on the ground. */
@@ -452,6 +459,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   }
   /** Support/heal: a vertical light pillar and rising geometric motes (juicy). */
   function pillar({x, groundY, height, palette}) {
+    if (piecesBaked()) return;
     const sprite = flashPool.pop() ?? new PIXI.Sprite(textures.flash);
     sprite.texture = textures.flash; sprite.anchor.set(0.5, 1); sprite.blendMode = 'add'; sprite.tint = palette.main; sprite.visible = true;
     sprite.position.set(x, groundY);
@@ -833,6 +841,9 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const info = slot(event.slot);
         if (!info) continue;
         if (event.type === 'SUPPORT') cue({type: 'BUFF', system: supportVfxSystem(event.statusCode), slot: event.slot, x: info.x, y: info.groundY});
+        // A heal that no support move cast (a regen, an item) shows the baked heal on the body.
+        if (event.type === 'HEAL' && piecesBaked()) setPieces.play('heal', {x: info.x, y: info.top + info.height * 0.5, groundY: info.groundY,
+          palette: BATTLE_FX_PALETTES.nature, size: info.width, unit: lastCtx?.nativeScale ?? 1, scale: 0.9});
         // Batch 7: the support move's own cast on the body that receives it.
         const support = event.type === 'SUPPORT' && typeof moveVfxSupportChoreography === 'function' ? moveVfxSupportChoreography(event.statusCode) : null;
         if (support && setPieces) setPieces.play(support.piece, {x: info.x, y: info.top + info.height * 0.5, angle: info.facing < 0 ? Math.PI : 0,
@@ -860,6 +871,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (!info) continue;
         // The fall: a dust burst, two rings, debris and scorch where it lands.
         dust({x: info.x, groundY: info.groundY, count: rich ? 10 : 5, spread: info.width * 0.7, scale: 1.3, life: 900});
+        if (piecesBaked()) setPieces.play('prop-dust', {x: info.x, y: info.groundY, groundY: info.groundY, palette: BATTLE_FX_PALETTES.earth,
+          size: info.width, unit: lastCtx?.nativeScale ?? 1, scale: 1.3});
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 1.8, tint: 0xffffff, life: 520});
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 1.1, tint: BATTLE_FX_PALETTES.light.edge, life: 420, delay: 90});
         debris({x: info.x, y: info.groundY, groundY: info.groundY, count: rich ? 12 : 6, palette: BATTLE_FX_PALETTES.earth, power: 1.1});

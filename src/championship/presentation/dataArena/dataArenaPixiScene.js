@@ -755,6 +755,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     }
   }
   function ring(x, y, radius, tint, life = 0.4, alpha = 0.9) {
+    // Refinement pass 10: a baked energy ring once the pieces are in; the drawn ring before.
+    if (typeof elementFx?.eventRing === 'function' && elementFx.eventRing({ x, y, radius, tint })) return;
     spawn({ x, y, texture: textures.ring, tint, scale: 0.1, scaleTo: radius / 58, life, alpha, add: true });
   }
   // Track one of the combat telemetry (Owner 2026-11-02): numbers and short
