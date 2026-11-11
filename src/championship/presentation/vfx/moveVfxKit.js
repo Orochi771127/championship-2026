@@ -113,10 +113,11 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     // pieces are in, a move's sigil is a pixelfx casting or rune circle -- already drawn flat on
     // the ground, with its light layer as a second, added part -- instead of the drawn hexagram.
     // Flying shots (refinement pass 3): a baked pixelfx head, looping, recoloured to the move.
-    if (name.startsWith('pfx:')) {
-      const look = bakedPieceLook(name.slice(4)), painted = look ? paintBakedPieceFrames(name.slice(4), palettes(paletteKey), {doc}) : null;
+    if (name.startsWith('pfx:') || name.startsWith('pfxhit:')) {
+      const hit = name.startsWith('pfxhit:'), key = name.slice(hit ? 7 : 4);
+      const look = bakedPieceLook(key), painted = look ? paintBakedPieceFrames(key, palettes(paletteKey), {doc}) : null;
       if (!painted) return null;
-      entry = {textures: painted.frames.map(texture), loop: true, fps: look.fps, width: painted.w, height: painted.h, smoke: false,
+      entry = {textures: painted.frames.map(texture), loop: !hit, fps: look.fps, width: painted.w, height: painted.h, smoke: false,
         anchor: [painted.ox / painted.w, painted.oy / painted.h]};
       sheets.set(id, entry);
       return entry;
@@ -560,6 +561,26 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     return part({name: look.head, paletteKey: look.material ? MATERIAL[look.material] ?? look.material : p.paletteKey, px: p.size * look.len * k, life: 1e9, fps: look.fps ?? 0, frame: look.frame ?? null,
       anchor: look.anchor ?? [0.5, 0.5], follow, fadeIn: 30});
   }
+  /** Archetype -> baked hits [look, width in impact radii, flipped top to bottom], played in place of the drawn impact. */
+  const BAKED_IMPACT = Object.freeze({fire: [['core', 4.2]], water: [['flurry-bubble', 4.4]], bubble: [['flurry-bubble', 3.6]], shard: [['flurry-shard', 4]],
+    snowflake: [['flurry-shard', 4]], quake: [['quake', 5.2]], orb: [['rush', 4.2]], thunder: [['bolt', 3.4]], leaf: [['flurry-leaf', 4]], petal: [['flurry-leaf', 3.6]],
+    wind: [['spin', 4.4]], claw: [['claws', 3.2]], slash: [['slash', 4]], crescent: [['slash', 4]], pierce: [['horn', 4.4]], lance: [['horn', 4.4]],
+    bullet: [['fist', 3]], gatling: [['fist', 3]], vine: [['vines', 4]], missile: [['drop-bomb', 5.4]], cannon: [['drop-bomb', 6]], meteor: [['drop-bomb', 6]],
+    arrows: [['rain', 4.6]], blackhole: [['vortex', 4.4]], shuriken: [['knives', 4]], strike: [['fist', 3.6]], feather: [['flurry-feather', 4]],
+    note: [['flurry-note', 4]], heart: [['flurry-heart', 3.6]], mist: [['mist', 5]],
+    bite: [['jaws', 3, false, -0.5], ['jaws', 3, true, 0.5]]});
+  function bakedImpact({x, y, groundY, angle, paletteKey, archetype, R}) {
+    const plan = BAKED_IMPACT[archetype];
+    if (!plan || !plan.every(([name]) => bakedPieceLook(name))) return false;
+    const facing = Math.cos(angle) < 0 ? -1 : 1;
+    for (const [name, width, flip = false, dy = 0] of plan) {
+      const look = bakedPieceLook(name), ground = look.anchor === 'ground';
+      part({name: `pfxhit:${name}`, paletteKey, x, y: (ground ? groundY : y) + dy * R, px: R * width, life: look.frames.length / look.fps * 1000,
+        stretch: [facing, 1], flipY: flip, fadeIn: 0, fadeOut: 0.05});
+    }
+    created.bakedImpacts = (created.bakedImpacts ?? 0) + 1;
+    return true;
+  }
   /** Archetype -> [baked head, its drawn width in shot sizes]. */
   const BAKED_HEAD = Object.freeze({fire: ['shot-fire', 3.6], water: ['shot-water', 1.6], bubble: ['shot-water', 1.3], orb: ['shot-arcane', 1.7],
     pillar: ['shot-arcane', 1.7], blackhole: ['shot-void', 2.2], thunder: ['shot-plasma', 2.6], lance: ['shot-laser', 3.6], arrows: ['shot-laser', 3.6],
@@ -596,6 +617,8 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     }
     p.acc += dt;
     const every = p.look.every * (rich ? 1 : 2);
+    // A baked head carries its own trail (a fireball's flames, a bolt's tail): the drawn trail stands down.
+    if (p.head?.baked) p.acc = 0;
     while (!p.headless && p.acc >= every) { p.acc -= every; p.look.trail(p, {x: p.x, y: p.y, angle: p.angle}, p.size); }
     const motif = p.signature?.trail;
     if (motif && motif !== 'none') {
@@ -719,6 +742,9 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     const k = heavy ? 1.4 : 1, R = size * k * (signature?.scale ?? 1);
     if (signature) burstMotif(signature.burst, x, y, groundY, paletteKey, R, angle);
     flare(x, y, paletteKey, R * 3, heavy ? 200 : 150, random());
+    // Refinement pass 4 (Owner: the drawn shapes looked「很像卡通」): once the baked pieces are in, the
+    // archetypes below land a pixelfx hit instead of their drawn drops, crests, stems and crescents.
+    if (bakedImpact({x, y, groundY, angle, paletteKey, archetype, R})) return;
     switch (archetype) {
       case 'fire':
         part({name: 'burst', paletteKey, x, y, px: R * 4, life: 560, rotation: random() * TAU, grow: [0.8, 1.25], fadeOut: 0.3});

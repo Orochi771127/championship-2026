@@ -112,6 +112,13 @@ Refinement pass 3 (2026-11-11): the flying shots and the Data Arena's floor hexa
 - Zones: the Data Arena's delayed ground zones drew a hexagram of two crossed triangles. That is now a baked pixelfx sigil, seen from above, that draws itself in as the zone charges. It takes the zone's colour, with crisp lines and an added glow. The zone's circle and fill stay as the gameplay warning.
 Next: the kit's impact shapes (water drops and crests and other drawn bursts).
 
+Refinement pass 4 (2026-11-11): the kit's impact shapes. Once the baked pieces are in, the kit's impact for each mapped archetype lands a baked pixelfx hit instead of its drawn shape.
+- Mapped archetypes: fire, water, bubble, shard, snowflake, quake, orb, thunder, leaf, petal, wind, claw, slash, crescent, pierce, lance, bullet, gatling, vine, missile, cannon, meteor, arrows, black hole, shuriken, strike, feather, note, heart, mist, bite.
+- Shapes replaced: the water drops and crest, the stems, the crescents and similar drawings. The kit's flare and the move's signature motif stay.
+- The same impact plays in the AI battle (kit stand-ins) and the Data Arena.
+- A shot that flies a baked head no longer drops the kit's drawn trail, because the head carries its own.
+- The 292 original-style frames, such as the tsunami, stay as they are.
+
 <!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
 ## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
 
