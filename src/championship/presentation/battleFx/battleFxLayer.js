@@ -34,6 +34,37 @@ const PALETTE_ELEMENT = Object.freeze({fire: 'FIRE', water: 'WATER', ice: 'ICE',
 
 const TAU = Math.PI * 2;
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+
+// Time-stop dressing (Owner 2026-11-12: 「全場凍結，那應該有凍結特效啊。這樣看起來才不會是站著不動」).
+//
+// The original stops the battle in two ways: its pause counter (world +0x1F134)
+// holds everyone for 48..60 frames at a knockout, and a signature move runs
+// alone while every fighter it has not engaged waits. Both are kept. What was
+// missing is the picture: a held fighter looked like one that had stopped
+// working. While time is stopped for a fighter it now takes a cold tint, a
+// broken ring turns slowly backwards at its feet, pixel motes hang around it
+// instead of falling, and the edges of the screen cool in steps. Display only:
+// it reads the published view and writes nothing.
+export const BATTLE_FX_STASIS = Object.freeze({pauseFrames: 12, inMs: 80, outMs: 170, tint: 0x8ab4ff, ring: 0x9fe8ff, edge: 0x0b2147, motes: 5});
+/** The fighters time has stopped for in this published view and why, or null while the battle runs. */
+export function battleFxStasisOf(view) {
+  const pause = Number(view?.nativeLifecycle?.timing?.pause) || 0, signature = view?.specialPrelude ?? null;
+  const kind = signature ? 'signature' : pause > BATTLE_FX_STASIS.pauseFrames ? 'knockout' : null;
+  if (!kind) return null;
+  const slots = [];
+  for (const c of view.combatants ?? []) {
+    if (!c?.present || c.down || !((c.hp?.current ?? 1) > 0)) continue;
+    // The caster and whoever its move has engaged keep moving; everyone else is held.
+    if (kind === 'signature' && (c.slot === signature.slot || c.engaged)) continue;
+    slots.push(c.slot);
+  }
+  return {kind, slots};
+}
+/** The tint a held body is multiplied by at stasis level k (0 = none, 1 = full). */
+export function battleFxStasisTint(k) {
+  const t = clamp(k, 0, 1), c = BATTLE_FX_STASIS.tint, mix = shift => Math.round(255 + ((c >> shift & 255) - 255) * t);
+  return (mix(16) << 16) | (mix(8) << 8) | mix(0);
+}
 const lerp = (a, b, t) => a + (b - a) * t;
 const easeOut = t => 1 - (1 - t) * (1 - t);
 
@@ -192,19 +223,65 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   const groundGfx = new PIXI.Graphics(); groundGfx.label = 'battle fx ground shock rings';
   const ghostLayer = new PIXI.Container({label: 'battle fx dash afterimages'});
   const hyperBack = new PIXI.Graphics(); hyperBack.label = 'battle fx hyper ring (behind)'; hyperBack.blendMode = 'add';
-  worldBack.addChild(scorchLayer, groundGfx, hyperBack, ghostLayer);
+  const stasisBack = new PIXI.Graphics(); stasisBack.label = 'battle fx stasis rings';
+  worldBack.addChild(scorchLayer, groundGfx, stasisBack, hyperBack, ghostLayer);
   const trailGfx = new PIXI.Graphics(); trailGfx.blendMode = 'add'; trailGfx.label = 'battle fx motion streaks';
   const particleLayer = new PIXI.Container({label: 'battle fx particles'});
   const flashLayer = new PIXI.Container({label: 'battle fx contact flashes'});
   const hyperFront = new PIXI.Graphics(); hyperFront.label = 'battle fx hyper ring (in front)'; hyperFront.blendMode = 'add';
-  worldFront.addChild(hyperFront, trailGfx, particleLayer, flashLayer);
+  const stasisFront = new PIXI.Graphics(); stasisFront.label = 'battle fx stasis motes'; stasisFront.blendMode = 'add';
+  worldFront.addChild(hyperFront, trailGfx, particleLayer, flashLayer, stasisFront);
+  const stasisEdge = new PIXI.Graphics(); stasisEdge.label = 'battle fx stasis screen edge';
+  // Time stopped: how far in (0..1), why, for whom, and the clock its ring and motes turn on.
+  const stasis = {level: 0, kind: null, slots: new Set(), age: 0};
+  const stasisNoise = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+  function updateStasis(view, ctx, dtMs) {
+    const now = battleFxStasisOf(view);
+    if (now) { stasis.kind = now.kind; stasis.slots = new Set(now.slots); }
+    stasis.level += ((now ? 1 : 0) - stasis.level) * (1 - Math.exp(-Math.max(0, dtMs) / (now ? BATTLE_FX_STASIS.inMs : BATTLE_FX_STASIS.outMs)));
+    if (!now && stasis.level < 0.02) { stasis.level = 0; stasis.slots.clear(); stasis.kind = null; }
+    stasis.age += dtMs;
+    stasisBack.clear(); stasisFront.clear();
+    if (!(stasis.level > 0)) return;
+    const k = stasis.level, unit = Math.max(0.5, ctx.nativeScale ?? 1), dot = Math.max(2, Math.round(unit * 1.5));
+    let ringed = false;
+    for (const slot of stasis.slots) {
+      const info = ctx.slotInfo?.(slot);
+      if (!info) continue;
+      // At the feet: a broken ellipse that turns slowly backwards.
+      const rx = Math.max(10, info.width * 0.62), ry = rx * 0.34, segments = 14, turn = reducedMotion ? 0 : stasis.age * 0.0007;
+      for (let i = 0; i < segments; i += 2) {
+        const a0 = i / segments * TAU - turn, a1 = a0 + TAU / segments * 0.82;
+        stasisBack.moveTo(info.x + Math.cos(a0) * rx, info.groundY + Math.sin(a0) * ry).lineTo(info.x + Math.cos(a1) * rx, info.groundY + Math.sin(a1) * ry);
+        ringed = true;
+      }
+      // Around the body: motes that hang where they are and twinkle; nothing falls while time is stopped.
+      for (let m = 0; m < BATTLE_FX_STASIS.motes; m++) {
+        const x = info.x + (stasisNoise(slot * 13 + m) - 0.5) * info.width * 1.5, y = info.top + stasisNoise(slot * 29 + m * 7 + 3) * info.height * 0.95;
+        const twinkle = reducedMotion ? 0.7 : 0.4 + 0.6 * Math.abs(Math.sin(stasis.age * 0.004 + m * 1.9 + slot));
+        stasisFront.rect(Math.round(x - dot / 2), Math.round(y - dot / 2), dot, dot).fill({color: m % 2 ? 0xffffff : BATTLE_FX_STASIS.ring, alpha: 0.85 * k * twinkle});
+      }
+    }
+    if (ringed) stasisBack.stroke({width: Math.max(1.5, unit * 0.9), color: BATTLE_FX_STASIS.ring, alpha: 0.7 * k});
+  }
+  /** The edges of the screen cool in three steps (a pixel vignette), under the bars and words. */
+  function drawStasisEdge(viewport) {
+    stasisEdge.clear();
+    if (!(stasis.level > 0)) return;
+    const {width: w, height: h} = viewport, k = stasis.level;
+    for (const [share, alpha] of [[0.03, 0.2], [0.07, 0.14], [0.12, 0.09]]) {
+      const tx = Math.round(w * share * 1.3), ty = Math.round(h * share);
+      stasisEdge.rect(0, 0, w, ty).rect(0, h - ty, w, ty).rect(0, ty, tx, h - ty * 2).rect(w - tx, ty, tx, h - ty * 2)
+        .fill({color: BATTLE_FX_STASIS.edge, alpha: alpha * k});
+    }
+  }
   const speedGfx = new PIXI.Graphics(); speedGfx.label = 'battle fx speed lines';
   const barGfx = new PIXI.Graphics(); barGfx.label = 'battle fx overhead bars';
   const wordLayer = new PIXI.Container({label: 'battle fx words'});
   const calloutLayer = new PIXI.Container({label: 'battle fx callout'});
   const numberLayer = new PIXI.Container({label: 'battle fx damage numbers'});
   const flashGfx = new PIXI.Graphics(); flashGfx.label = 'battle fx screen flash';
-  screen.addChild(speedGfx, barGfx, wordLayer, numberLayer, calloutLayer, flashGfx);
+  screen.addChild(stasisEdge, speedGfx, barGfx, wordLayer, numberLayer, calloutLayer, flashGfx);
   // Five-layer element dressing (VFX_FIVE_LAYER_20261101): charge orbs, muzzle
   // rings, signature storms, four-second ground marks, struck-body overlays and
   // the fallback cells of records that name no effect bank. resolveMove(slot,
@@ -865,6 +942,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     lastCtx = ctx;
     elapsed += dtMs;
     observe(view, ctx, dtMs);
+    updateStasis(view, ctx, dtMs);
     handle(events, ctx);
     settleEndings();
     drawStreaks();
@@ -1084,6 +1162,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     }
     flashGfx.clear();
     if (screenFlash > 0 && !reducedMotion) flashGfx.rect(0, 0, viewport.width, viewport.height).fill({color: 0xffffff, alpha: screenFlash * flashScale});
+    drawStasisEdge(viewport);
   }
 
   /** A fading copy of a fast-moving body: the dash afterimage. */
@@ -1139,6 +1218,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     ownsHitSparks: () => Boolean(pixelHits),
     /** Afterimage colour while a melee move's dash is live (juicy), else null. */
     ghostTint(slot) { const fx = actorFx.get(slot); return juicy && fx?.dashMs > 0 ? fx.dashTint : null; },
+    /** How far time is stopped for this slot, 0..1 (0: it is moving, or nothing is stopped). */
+    stasisFor: slot => stasis.level > 0 && stasis.slots.has(slot) ? stasis.level : 0,
     /** Brightness 0..1 the scene multiplies into a slot (null: background). */
     brightnessFor(slot) {
       if (!dim) return 1;
@@ -1147,6 +1228,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     },
     getDiagnostics: () => Object.freeze({particles: particles.length, peakParticles: peak, created, cap, flashes: flashes.length,
       rings: rings.length, scorches: scorches.length, words: words.length, ghosts: ghosts.length, tracked: tracked.size, eventsHandled,
+      stasis: {level: Math.round(stasis.level * 100) / 100, kind: stasis.kind, slots: [...stasis.slots]},
       hitAnchors: {...anchors}, callout: callout ? {tier: callout.tier, age: callout.age} : null, banner: banner ? banner.node.text : null, dim: Boolean(dim),
       dimStrength: dim?.strength ?? null, juicy, hyperWrap: hyper ? {slot: hyper.slot, age: Math.round(hyper.age)} : null, quartet: {...quartet, numbersLive: numbers.length, capsulesLive: capsules.length, hitStop: Boolean(hitStop)},
       element: element?.getDiagnostics() ?? null, cuesPending: cues.length,
@@ -1154,7 +1236,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     /** Bounded 3D cues since the last call (buff, critical, signature weather), oldest first. */
     consumeCues: () => cues.splice(0),
     dispose() {
-      for (const node of [scorchLayer, groundGfx, hyperBack, ghostLayer, hyperFront, trailGfx, particleLayer, flashLayer, speedGfx, barGfx, wordLayer, numberLayer, calloutLayer, flashGfx]) {
+      for (const node of [stasisBack, stasisFront, stasisEdge, scorchLayer, groundGfx, hyperBack, ghostLayer, hyperFront, trailGfx, particleLayer, flashLayer, speedGfx, barGfx, wordLayer, numberLayer, calloutLayer, flashGfx]) {
         node.parent?.removeChild(node);
         node.destroy({children: true});
       }

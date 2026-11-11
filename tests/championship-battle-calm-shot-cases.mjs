@@ -318,6 +318,35 @@ test('the public HUD offers the animation cell itself beside the card portrait',
   assert.match(read('src/championship/presentation/battleResultCharacters.js'), /hudArt\.getBattleCell\?hudArt\.getBattleCell\(/);
 });
 
+// ---------------------------------------------------------------- 6b. time stopped is shown
+// Owner 2026-11-12: 「全場凍結，那應該有凍結特效啊。這樣看起來才不會是站著不動」.
+test('a held fighter is marked as held: who is frozen in a signature move and in a knockout freeze', async () => {
+  const {BATTLE_FX_STASIS, battleFxStasisOf, battleFxStasisTint} = await import('../src/championship/presentation/battleFx/battleFxLayer.js');
+  const fighter = (slot, extra = {}) => ({slot, present: true, down: false, engaged: false, hp: {current: 100}, ...extra});
+  const view = ({pause = 0, prelude = null, combatants}) => ({nativeLifecycle: {timing: {pause, slowdown: 0}}, specialPrelude: prelude, combatants});
+  // The battle runs, or only a hit-stop holds it: nobody is marked.
+  assert.equal(battleFxStasisOf(view({combatants: [fighter(0), fighter(3)]})), null);
+  assert.equal(battleFxStasisOf(view({pause: BATTLE_FX_STASIS.pauseFrames, combatants: [fighter(0), fighter(3)]})), null, 'a hit-stop is not a time stop');
+  // A signature move: the caster and whoever it has engaged move; the rest are held. A fallen fighter is never marked.
+  const signature = battleFxStasisOf(view({prelude: {slot: 1, active: true}, combatants: [fighter(0), fighter(1, {engaged: true}), fighter(2, {down: true, hp: {current: 0}}), fighter(3, {engaged: true}), fighter(4), fighter(5)]}));
+  assert.deepEqual(signature, {kind: 'signature', slots: [0, 4, 5]});
+  // The original's long pause at a knockout: everyone still standing is held.
+  const knockout = battleFxStasisOf(view({pause: 48, combatants: [fighter(0), fighter(1), fighter(3, {down: true, hp: {current: 0}}), fighter(4)]}));
+  assert.deepEqual(knockout, {kind: 'knockout', slots: [0, 1, 4]});
+  assert.equal(battleFxStasisOf(null), null);
+  // The cold tint: none at 0, the stasis colour at 1, and it only ever cools (red falls the most).
+  assert.equal(battleFxStasisTint(0), 0xffffff);
+  assert.equal(battleFxStasisTint(1), BATTLE_FX_STASIS.tint);
+  const half = battleFxStasisTint(0.5);
+  assert.ok((half >> 16 & 255) < (half >> 8 & 255) && (half >> 8 & 255) < (half & 255), 'cold: red below green below blue');
+  const layer = read('src/championship/presentation/battleFx/battleFxLayer.js'), scene = read('src/championship/presentation/vs5/createBattleFieldPixiPresentation.js');
+  assert.match(layer, /updateStasis\(view, ctx, dtMs\);/, 'the layer draws the ring and motes every frame');
+  assert.match(layer, /drawStasisEdge\(viewport\);/, 'and cools the edges of the screen');
+  assert.match(layer, /stasisFor: slot => stasis\.level > 0 && stasis\.slots\.has\(slot\) \? stasis\.level : 0/);
+  assert.match(scene, /sprite\.tint = multiplyTint\(sprite\.tint, battleFxStasisTint\(chill\)\)/, 'the scene tints the held body');
+  assert.match(scene, /Math\.max\(litBrightness,164\)/, 'and keeps it readable');
+});
+
 // ---------------------------------------------------------------- 7. the fallen label
 test('the fallen label sits in the card\'s TP row and adds no row of its own', () => {
   const css = read('src/championship/app/vs5Styles.css');

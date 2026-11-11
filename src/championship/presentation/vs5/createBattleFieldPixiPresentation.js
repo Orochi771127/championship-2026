@@ -62,7 +62,7 @@ import {createBattleStatusAilmentFx, multiplyTint} from '../battleFx/battleStatu
 import {createBm03GroundShadows} from '../bm03GroundShadows.js';
 import {createBattleFxCamera,clampBattleCameraToMap,battleFxFreezePace,battleFxApproach,createBattleFxSteadyInsets} from '../battleFx/battleFxCamera.js';
 import {createBattleFxEventTracker} from '../battleFx/battleFxEvents.js';
-import {createBattleFxLayer} from '../battleFx/battleFxLayer.js';
+import {createBattleFxLayer, battleFxStasisTint} from '../battleFx/battleFxLayer.js';
 import {createRemadeEffectArt} from '../vfx/remadeEffectCells.js';
 import {createBattleHitFeel} from '../battleFx/battleHitFeel.js';
 import {createBattleBurstShell} from './battleBurstShell.js';
@@ -502,11 +502,16 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       if(fall)sprite.alpha*=1-0.85*sink;
       else if(view.arenaHazards?.grace?.[combatant.slot]>0&&!reducedMotion)sprite.alpha*=Math.floor(view.arenaHazards.frame/7)%2?0.45:1;
       const fxBrightness = fxLayer?.brightnessFor(combatant.slot) ?? 1;
-      const brightness=Math.round((focus ? 255 : 255*(view.specialPrelude?.brightnessQ12 ?? 4096)/4096)*fxBrightness);
+      // Time stopped for this fighter (a knockout freeze, a signature move it is not part of): it is held
+      // in a cold tint and stays readable (never darker than 64 %), so it reads as frozen, not as switched off.
+      const chill = fxLayer?.stasisFor?.(combatant.slot) ?? 0;
+      const litBrightness=Math.round((focus ? 255 : 255*(view.specialPrelude?.brightnessQ12 ?? 4096)/4096)*fxBrightness);
+      const brightness=chill>0 ? Math.round(litBrightness+(Math.max(litBrightness,164)-litBrightness)*chill) : litBrightness;
       const nativeTint=combatant.nativeMotion?.tintRgb;
       sprite.tint=nativeTint === undefined ? brightness*0x010101
         : ((Math.round((nativeTint>>16&255)*brightness/255)<<16)
           |(Math.round((nativeTint>>8&255)*brightness/255)<<8)|Math.round((nativeTint&255)*brightness/255));
+      if (chill > 0) sprite.tint = multiplyTint(sprite.tint, battleFxStasisTint(chill));
       if (fxLayer) {
         // The brief hit flash: an additive white copy of the same frame.
         const glow = dress?.flash ?? 0;
