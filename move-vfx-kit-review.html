@@ -155,7 +155,7 @@
       const choreo = signature ? moveVfxChoreography(signature.key) : null;
       if (choreo?.contact) {
         const pal = BATTLE_FX_PALETTES[paletteKey] ?? BATTLE_FX_PALETTES.neutral;
-        if (choreo.impactFrame) pieces.play("impact-frame", {x: hit.x, y: hit.y, angle, palette: {core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true}, size: BODY, unit: UNIT, groundY: target.y, scale: choreo.contact.scale ?? 1});
+        if (choreo.impactFrame) pieces.play("impact-frame", {x: hit.x, y: hit.y, angle, palette: {core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true}, size: BODY, unit: UNIT, groundY: target.y, scale: (choreo.contact.scale ?? 1) * 0.7});
         pieces.play(choreo.contact.piece, {x: hit.x, y: hit.y, angle, palette: BATTLE_FX_PALETTES[paletteKey] ?? BATTLE_FX_PALETTES.neutral, size: BODY, unit: UNIT, groundY: target.y,
           scale: choreo.contact.scale ?? 1, fast: choreo.contact.fast, sprite: choreo.contact.sprite ?? null, at: "contact"});
         feel.holdMs = choreo.hitStopMs ?? 0; feel.shakeMs = 220; feel.shakePx = SHAKE[choreo.shake] ?? 0;
