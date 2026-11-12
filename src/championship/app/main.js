@@ -1475,6 +1475,10 @@ async function mountHuntField() {
         return art;
       });
       signal.addEventListener('abort', releaseArt, { once: true });
+      // Owner 2026-11-12: a Hunt entry leaves its own steps in the diagnostics, so a page that is
+      // killed part-way shows which step it reached (the battle entry already does).
+      const huntLoad = (stage, phase, extra) => recoveryDiagnostics.record('LOAD', { area: 'hunt', stage, ...(phase ? { phase } : {}), ...extra });
+      huntLoad('engine', 'start');
       try {
         const stage = await ensurePixiStage(host, signal);
         huntLayoutLease.setStage(() => ({ width: stage.app.screen.width, height: stage.app.screen.height }));
@@ -1492,6 +1496,7 @@ async function mountHuntField() {
         ]);
         [characterBundle, fieldArt, feedbackArt] = loaded.map((result) =>
           result.status === 'fulfilled' ? result.value : null);
+        huntLoad('partners', loaded.some(result => result.status === 'rejected') ? 'error' : 'done');
         let feedbackFallbackNotice = null;
         let activeScene = null;
 
@@ -1559,6 +1564,7 @@ async function mountHuntField() {
         }
         let threePilot = null;
         if (huntThreeProductionRequest(location, fieldArt?.getDiagnostics?.().fieldId)) {
+          huntLoad('arena', 'start');
           try {
             const {loadHuntThreeMap} = await import('../presentation/vs2/huntThree/loadHuntThreeMap.mjs');
             signal.throwIfAborted();
@@ -1567,8 +1573,10 @@ async function mountHuntField() {
           } catch(error) {
             if (!signal.aborted) console.warn('HUNT_THREE_ENTRY_FALLBACK',error);
           }
+          huntLoad('arena', threePilot ? 'done' : 'error', { map: threePilot ? 'THREE' : 'FLAT' });
         }
         signal.throwIfAborted();
+        huntLoad('scene', 'start');
         const scene = await mountHuntFieldPixiPresentation({
           threePilot,
           onActorFrame,
@@ -1583,6 +1591,7 @@ async function mountHuntField() {
           }
         });
         activeScene = scene;
+        huntLoad('ready');
         // The mounted scene now owns these bundles and releases them on exit.
         owned.clear();
         return {
@@ -3923,7 +3932,7 @@ function boot() {
   if (activeCheckpoint && Number.isFinite(activeCheckpoint.updatedAtMs)
     && Date.now() - activeCheckpoint.updatedAtMs <= CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS
     && app.canContinue().loadable) {
-    recoveryDiagnostics.record("LOAD", { area: "standalone-auto-resume", stage: activeCheckpoint.screen });
+    recoveryDiagnostics.record("AUTO_RESUME", { target: activeCheckpoint.screen });
     void (async () => {
       try {
         openingFilm?.stop?.();
