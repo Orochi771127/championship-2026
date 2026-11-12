@@ -85,6 +85,38 @@ export function stepBattleAiApproach(c, h, memo) {
   return aim.mirrored ? 'WALK_MIRRORED' : 'WALK';
 }
 
+// OWNER_APPROVED_ADAPTATION 2026-11-11 (「角色打到一半會突然站在原地不動」).
+//
+// A second stand-still the original rule can hold, found by running the
+// improved battles headless: launch states 14 and 15 abort on their entry
+// frame while the combatant still carries an attack notification (8..11,
+// OVL19 02116B68 / 02116D68). The pose has finished playing, but nothing sets
+// the notification back until the fighter walks or is hit. A fighter whose
+// decision keeps choosing a move that needs no walk (the wait-for-slot states
+// 6 / 7, then 15) therefore re-selects and aborts every three frames; one case
+// stood for twelve seconds.
+//
+// After BATTLE_AI_POSE_ABORTS such aborts in a row, with the pose finished, no
+// action of its own in the script VM and no negative status, this layer issues
+// the original standing notification (1), exactly what a finished pose is. The
+// original launch handler then runs unchanged on the next entry. It draws no
+// random number and changes no stat, timer, cooldown, resource or target.
+export const BATTLE_AI_POSE_ABORTS = 8;
+const HELD_ATTACK_POSE = new Set([8, 9, 10, 11]);
+
+/** Called on every frame of launch states 14 / 15, before the original handler. */
+export function stepBattleAiLaunchPose(c, h, memo) {
+  if (![14, 15].includes(c.state) || c.stateCounter !== 0) return null;
+  // The entry frame would launch, or aborts for the other reason (+0x180 < 0): not this stall.
+  if (!HELD_ATTACK_POSE.has(c.field17C) || c.field180 < 0) { memo.poseAborts = 0; return null; }
+  if (c.field154 || c.statusCode || !h.finished()) return null;
+  memo.poseAborts = (memo.poseAborts ?? 0) + 1;
+  if (memo.poseAborts < BATTLE_AI_POSE_ABORTS) return null;
+  memo.poseAborts = 0;
+  h.notify(1);
+  return 'POSE_RELEASED';
+}
+
 // OWNER_APPROVED_ADAPTATION 2026-10-22: menus' improved AI may use its first
 // skill after five ACTIVE combat seconds, rather than waiting for reserve
 // tiers (900 ticks each). The owning session clock excludes READY/FIGHT,

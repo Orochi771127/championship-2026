@@ -56,13 +56,13 @@
 
 import contract from "../../../../docs/contracts/championship/battle-field-presentation.v1.json" with { type: "json" };
 import { prefersReducedMotion, currentQualityTier, flashScale as currentFlashScale } from '../presentationPreferences.js';
-import {battleFocusViewport,drawBattleDigitalCurtain} from '../battleFocusViewport.js';
+import {battleFocusViewport,drawBattleDigitalCurtain,BATTLE_PRELUDE_ZOOM_SHARE} from '../battleFocusViewport.js';
 import {createBattleEffectSprites} from '../battleEffectSprites.js';
 import {createBattleStatusAilmentFx, multiplyTint} from '../battleFx/battleStatusAilmentFx.js';
 import {createBm03GroundShadows} from '../bm03GroundShadows.js';
-import {createBattleFxCamera,clampBattleCameraToMap} from '../battleFx/battleFxCamera.js';
+import {createBattleFxCamera,clampBattleCameraToMap,battleFxFreezePace,battleFxApproach,createBattleFxSteadyInsets} from '../battleFx/battleFxCamera.js';
 import {createBattleFxEventTracker} from '../battleFx/battleFxEvents.js';
-import {createBattleFxLayer} from '../battleFx/battleFxLayer.js';
+import {createBattleFxLayer, battleFxStasisTint} from '../battleFx/battleFxLayer.js';
 import {createRemadeEffectArt} from '../vfx/remadeEffectCells.js';
 import {createBattleHitFeel} from '../battleFx/battleHitFeel.js';
 import {createBattleBurstShell} from './battleBurstShell.js';
@@ -340,6 +340,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     try { const value = safeInsets(); return value && (value.top > 0 || value.bottom > 0) ? value : null; } catch { return null; }
   };
   let lastInsets = null;
+  const steadyInsets = createBattleFxSteadyInsets({reducedMotion});
 
   let groundShadows = null;
   try { groundShadows = await createBm03GroundShadows({PIXI:stage.PIXI,parent:shadowLayer,fieldArt}); }
@@ -359,6 +360,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   const actors = new Map();
   let focusPlacement = null;
   let fieldPlacement = null;
+  // The followed prelude zoom (1 = level) and the stand it closes on.
+  let preludeZoom = 1, preludeAnchor = null;
 
   // Banks of live launches whose move name states another element: recolour
   // their cells (unifiedMoveVfxResolver cellHue / cellTint). Display only.
@@ -499,11 +502,16 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       if(fall)sprite.alpha*=1-0.85*sink;
       else if(view.arenaHazards?.grace?.[combatant.slot]>0&&!reducedMotion)sprite.alpha*=Math.floor(view.arenaHazards.frame/7)%2?0.45:1;
       const fxBrightness = fxLayer?.brightnessFor(combatant.slot) ?? 1;
-      const brightness=Math.round((focus ? 255 : 255*(view.specialPrelude?.brightnessQ12 ?? 4096)/4096)*fxBrightness);
+      // Time stopped for this fighter (a knockout freeze, a signature move it is not part of): it is held
+      // in a cold tint and stays readable (never darker than 64 %), so it reads as frozen, not as switched off.
+      const chill = fxLayer?.stasisFor?.(combatant.slot) ?? 0;
+      const litBrightness=Math.round((focus ? 255 : 255*(view.specialPrelude?.brightnessQ12 ?? 4096)/4096)*fxBrightness);
+      const brightness=chill>0 ? Math.round(litBrightness+(Math.max(litBrightness,164)-litBrightness)*chill) : litBrightness;
       const nativeTint=combatant.nativeMotion?.tintRgb;
       sprite.tint=nativeTint === undefined ? brightness*0x010101
         : ((Math.round((nativeTint>>16&255)*brightness/255)<<16)
           |(Math.round((nativeTint>>8&255)*brightness/255)<<8)|Math.round((nativeTint&255)*brightness/255));
+      if (chill > 0) sprite.tint = multiplyTint(sprite.tint, battleFxStasisTint(chill));
       if (fxLayer) {
         // The brief hit flash: an additive white copy of the same frame.
         const glow = dress?.flash ?? 0;
@@ -668,12 +676,13 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     // Dynamic presentation: events from this view, then the camera for it.
     let camera = {zoom:1, x:0, y:0};
     let fxContext = null;
-    const insets = fxLayer && fieldArt ? readInsets() : null;
+    // Steady insets: a signature move's banner makes the record row taller for a moment; the safe window does not follow that.
+    const insets = fxLayer && fieldArt ? steadyInsets(readInsets(), dtMs, rect) : null;
     lastInsets = insets;
     if (fxLayer && fieldArt) {
       const events = [...tracker.consume(view), ...motionEvents, ...moveQaEvents(view, dtMs)];
       camera = director.update({dtMs, viewport:{width:rect.width, height:rect.height}, art:artRect,
-        subjects:[...slotInfos.values()], points:fxLayer.projectilePoints(), insets});
+        subjects:[...slotInfos.values()], points:fxLayer.projectilePoints(), insets, prelude:Boolean(view.specialPrelude)});
       fxContext = {artRect, nativeScale, localTeam, opening:view.opening, viewport:{width:rect.width, height:rect.height}, insets,
         slotInfo:slot => slotInfos.get(slot) ?? null,
         opponentsOf:slot => view.combatants.filter(c => c.present && !c.down && c.team !== view.combatants[slot]?.team).map(c => c.slot),
@@ -688,17 +697,29 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     const focus=view.specialPrelude;
     const actor=focus ? view.combatants[focus.slot] : null;
     // The original prelude zoom composes over the camera in screen space.
-    const anchorLocalX=artRect.x+(actor?.stand.x??.5)*artRect.width, anchorLocalY=artRect.y+(actor?.stand.y??.5)*artRect.height;
+    // Calm shot (Owner 2026-11-11): at BATTLE_PRELUDE_ZOOM_SHARE of its depth, and followed rather
+    // than copied frame for frame. The original curve is a square root: a third of its depth lands in
+    // the first frame, in and out, which on a phone is a jolt of the whole field. The scene follows
+    // that curve with a 90 ms lag, around the caster's stand until the zoom has settled back.
+    const preludeWanted=focus&&!reducedMotion ? 1+((focus.zoomQ12??4096)/4096-1)*BATTLE_PRELUDE_ZOOM_SHARE : 1;
+    preludeZoom=fxLayer&&dtMs>0 ? preludeZoom+(preludeWanted-preludeZoom)*battleFxApproach(dtMs,90) : fxLayer ? preludeZoom : preludeWanted;
+    if(preludeWanted===1&&Math.abs(preludeZoom-1)<0.002)preludeZoom=1;
+    if(actor)preludeAnchor={x:artRect.x+actor.stand.x*artRect.width,y:artRect.y+actor.stand.y*artRect.height};
+    else if(preludeZoom===1)preludeAnchor=null;
+    const anchorLocalX=preludeAnchor?.x??artRect.x+.5*artRect.width, anchorLocalY=preludeAnchor?.y??artRect.y+.5*artRect.height;
     const prelude=battleFocusViewport({width:rect.width,height:rect.height,
       anchorX:camera.zoom*anchorLocalX+camera.x, anchorY:camera.zoom*anchorLocalY+camera.y,
-      zoomQ12:focus?.zoomQ12,reducedMotion});
+      zoomQ12:preludeZoom*4096,reducedMotion});
     const composed=Object.freeze({zoom:prelude.zoom*camera.zoom, x:prelude.zoom*camera.x+prelude.x, y:prelude.zoom*camera.y+prelude.y,
       anchorX:prelude.anchorX, anchorY:prelude.anchorY});
     const transform=fieldArt ? clampBattleCameraToMap({viewport:rect,art:artRect,transform:composed,
-      // The original special prelude keeps framing its own focus, as before the HUD-aware shot.
-      anchor:{x:anchorLocalX,y:anchorLocalY},box:(focus ? camera.focusBox ?? camera.framingBox : camera.framingBox)??null,insets}) : composed;
+      // The original special prelude keeps framing its own focus, as before the HUD-aware shot; the
+      // director hands that box over already eased (clampBox), so the clamp never leaps.
+      anchor:{x:anchorLocalX,y:anchorLocalY},box:camera.clampBox??(focus ? camera.focusBox ?? camera.framingBox : camera.framingBox)??null,insets}) : composed;
     world.scale.set(transform.zoom);
     world.position.set(transform.x,transform.y);
+    // The hit-feel filter covers the screen through this frame's camera.
+    hitFeel?.frame({zoom:transform.zoom,x:transform.x,y:transform.y});
     lastCamera = fxLayer ? {...camera, total:transform.zoom} : null;
     const backdrop=fxLayer?.brightnessFor(null) ?? 1;
     const brightness=Math.round(255*(focus?.brightnessQ12??4096)/4096*backdrop);
@@ -733,7 +754,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       const elapsed=ticker?.deltaMS??nativeFrameMs;
       if(!Number.isFinite(elapsed)||elapsed<0)throw new TypeError('BATTLE_INVALID_FRAME_ELAPSED');
       // Slow motion (signature hit, final K.O.) paces the same frames more slowly; none is skipped.
-      pendingFrames += elapsed/nativeFrameMs*(director?.timeScale?.() ?? 1);
+      // The original's long knockout freeze plays its same frames faster (battleFxFreezePace); a hit-stop keeps its length.
+      pendingFrames += elapsed/nativeFrameMs*(director?.timeScale?.() ?? 1)*(fxLayer ? battleFxFreezePace(current,reducedMotion) : 1);
       while(pendingFrames+1e-9>=1 && !disposed && !source.getFrame().outcome.ended){
         pendingFrames=Math.max(0,pendingFrames-1);
         const beforeOpening=(current ?? source.getView()).opening;

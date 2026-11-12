@@ -7,7 +7,7 @@ import {normalBattleSpeedScalar,normalBattleTargetSelector,normalBattlePersonali
 import {getBattleCatalogRecord} from './battleCatalogs.js';
 import {buildMoveBucketsForCombatant} from './battleMoveBuckets.js';
 import {negativeStatusActionGate} from './battleStatus.js';
-import {BATTLE_AI_ADAPTATION_V1,stepBattleAiApproach} from './battleAiAdaptation.js';
+import {BATTLE_AI_ADAPTATION_V1,stepBattleAiApproach,stepBattleAiLaunchPose} from './battleAiAdaptation.js';
 import {battleAngleIndex} from './battleNativeMath.js';
 import {BATTLE_SPECIES_MOVEMENT} from '../../data/championship/battleCharacterProfiles.js';
 
@@ -22,7 +22,7 @@ export function createBattleNormalRuntime({session,actors,creatures,initialize,a
   const setState=(c,s)=>{c.state=s;c.stateCounter=-255;};
   let geometry;
   // Improved-AI bookkeeping (OWNER_APPROVED_ADAPTATION 2026-10-13); unused in ORIGINAL.
-  const aiMemo=session.slots.map(()=>({idleSince:null,kicks:0}));
+  const aiMemo=session.slots.map(()=>({idleSince:null,kicks:0,poseAborts:0}));
   function updateGeometry(){
     const points=session.slots.map((c,i)=>c?point(i):[0,0,0]);
     geometry=updateNormalBattleGeometry(points);
@@ -137,6 +137,7 @@ export function createBattleNormalRuntime({session,actors,creatures,initialize,a
       if(c.state===3)stepNormalBattlePosition(c,h);
       else if([4,5].includes(c.state)){
         stepNormalBattleApproach(c,h);
+        aiMemo[slot].poseAborts=0;
         if(session.aiPolicy===BATTLE_AI_ADAPTATION_V1&&[4,5].includes(c.state)){
           const action=stepBattleAiApproach(c,{...h,frame:session.clock,
             walkSpeed:()=>BATTLE_SPECIES_MOVEMENT[c.speciesId]?.walkQ12??0,
@@ -146,7 +147,14 @@ export function createBattleNormalRuntime({session,actors,creatures,initialize,a
       }
       else if([6,7].includes(c.state))stepNormalBattleWait(c,h);
       else if(c.state===8)stepBattlePursuit(c,h);
-      else stepNormalBattleLaunch(c,h);
+      else{
+        // Improved AI only: a finished attack pose that keeps aborting the launch is let go (2026-11-11).
+        if(session.aiPolicy===BATTLE_AI_ADAPTATION_V1){
+          const action=stepBattleAiLaunchPose(c,h,aiMemo[slot]);
+          if(action)emit(slot,'AI_ADAPTATION',{action,policy:BATTLE_AI_ADAPTATION_V1,targetSlot:index,state:c.state});
+        }
+        stepNormalBattleLaunch(c,h);
+      }
       // The approach launch carries the matrix distance/angle it was decided on.
       if(c.state!==before)emit(slot,'STATE_CHANGED',{from:before,to:c.state,...([4,5].includes(before)?{distance:h.distance,angle:h.angle}:{})});
       return true;

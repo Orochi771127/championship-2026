@@ -2,8 +2,15 @@
  * Q12 zoom is retained; focus centre adapts to this single field viewport.
  * This is not the unported DS world-camera/approach coordinate transform.
  */
-export function battleFocusViewport({width,height,anchorX,anchorY,zoomQ12=4096,reducedMotion=false}) {
-  const zoom = reducedMotion ? 1 : zoomQ12/4096;
+// Calm shot (OWNER_APPROVED_ADAPTATION 2026-11-11, 「畫面都會一直跳動」): the
+// original prelude doubles the picture on a 256 x 192 screen. On a phone, over
+// a camera that already follows the fight, the same factor threw the whole
+// field in and out several times in ten seconds. The phone scene keeps the
+// original timing and curve and takes this share of its depth (2x -> 1.45x).
+export const BATTLE_PRELUDE_ZOOM_SHARE = 0.45;
+
+export function battleFocusViewport({width,height,anchorX,anchorY,zoomQ12=4096,reducedMotion=false,share=1}) {
+  const zoom = reducedMotion ? 1 : 1+(zoomQ12/4096-1)*share;
   const weight = zoom-1;
   const x = (width*.5-anchorX)*weight + anchorX*(1-zoom);
   const y = (height*.65-anchorY)*weight + anchorY*(1-zoom);

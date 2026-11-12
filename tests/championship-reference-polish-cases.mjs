@@ -118,6 +118,9 @@ test('dense hits cannot stack camera shake, heavy hit overrides medium, calm mod
   assert.equal(camera.impact('medium'),true);
   for(let i=0;i<12;i++)assert.equal(camera.impact('medium'),false);
   assert.equal(camera.impact('heavy'),true); assert.equal(camera.impact('heavy'),false);
+  // Owner 2026-11-11 (calm shot): the camera answers hits at most once in BATTLE_FX_IMPACT_GAP_MS (380 ms).
+  camera.update({dtMs:200,viewport:{width:390,height:400},art:{x:0,y:0,width:390,height:400},subjects:[]});
+  assert.equal(camera.impact('medium'),false);
   camera.update({dtMs:200,viewport:{width:390,height:400},art:{x:0,y:0,width:390,height:400},subjects:[]});
   assert.equal(camera.impact('medium'),true);
   const calm=createBattleFxCamera({reducedMotion:true});
