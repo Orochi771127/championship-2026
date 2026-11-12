@@ -10,6 +10,7 @@ import { appendOriginalCaptureFrame } from '../presentation/originalCaptureFrame
 import { PRODUCT_GIVEN_NAME_MAX_LENGTH } from "./championshipRaisingProduction.js";
 import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from "./vs2PresentationAuthority.js";
 import { playReveal } from "../presentation/ceremony/ceremonyRunner.js";
+import { createActionPortrait } from "../presentation/juicy/actionPortrait.js";
 
 const RESULT_TITLE = "HUNT RESULT";
 const RESULT_OUTCOME = "BROUGHT HOME";
@@ -80,14 +81,15 @@ export function createHuntResultView({ root, source, hudArt = null }) {
 
   // A missing or unregistered portrait hides the image rather than leaving a
   // broken one: the screen still has to name and rename the catch.
+  // Owner 2026-11-12: the catch stands as itself, in its idle animation, not as a Database illustration.
+  let catchBody = null;
   function paintPortrait(speciesId) {
-    const image = hudArt?.getPortrait(speciesId) ?? null;
-    portrait.hidden = !image;
-    if (!image) return;
-    if (portrait.getAttribute("src") !== image.src) portrait.src = image.src;
-    const scale = image.nativeScale * PORTRAIT_DISPLAY_SCALE;
-    portrait.style.width = `${image.width * scale}px`;
-    portrait.style.height = `${image.height * scale}px`;
+    portrait.hidden = true;
+    const key = String(speciesId ?? "").match(/species-\d+$/)?.[0] ?? null;
+    if (catchBody && key && catchBody.speciesId === key) return;
+    catchBody?.dispose();
+    catchBody = speciesId ? createActionPortrait({ species: speciesId, width: 120, height: 104, className: "cm-vs2-catch__body", lazy: false }) : null;
+    if (catchBody) portrait.parentNode?.insertBefore?.(catchBody.element, portrait.nextSibling ?? null);
   }
   paintPortrait(block.speciesId);
   const nameField = element("label", "cm-vs2-result__name");
@@ -183,13 +185,9 @@ export function createHuntResultView({ root, source, hudArt = null }) {
       line.style.setProperty("--row", String(Math.min(rowIndex, 6)));
       if (row.selected) line.dataset.selected = "true";
       const label = `${uiText(row.kind === "CARD" ? "MEMORY CARD" : "HOME")} — ${row.displayName}`;
-      const image = hudArt?.getPortrait(row.speciesId);
       const thumbnail = element('span', 'cm-vs2-result__thumbnail');
-      if (image) {
-        const img = element('img');
-        img.src = image.src; img.alt = ''; img.decoding = 'async';
-        thumbnail.append(img);
-      }
+      // The partner itself, held on its first idle cell (Owner 2026-11-12).
+      if (row.speciesId) thumbnail.append(createActionPortrait({ species: row.speciesId, width: 40, height: 40, still: true }).element);
       line.append(thumbnail);
       line.append(element("span", "", label));
       // Wild instinct (AWAKENING_OVERDRIVE_20261109): a veteran elite or ancestral catch says so on its row.

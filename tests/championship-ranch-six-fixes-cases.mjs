@@ -143,7 +143,8 @@ test('the partner card, the bag and the facility editor each reach the gachapon 
   assert.match(card,/使用晶片／進化金屬催化/);
   for (const line of card.split('\n').filter(l=>/companion__boost|使用晶片/.test(l)))
     assert.doesNotMatch(line,/\p{Extended_Pictographic}/u,'no system emoji on the boost key');
-  assert.match(card,/portraitFallback/,'the portrait falls back to the encyclopedia thumbnail');
+  // Owner 2026-11-12: the card's well shows the partner's own idle animation, not the encyclopedia art.
+  assert.match(card,/actionPortraits\?\.set\?\.\(portraitSlot,resident\?\.speciesId/,'the portrait is the partner itself');
   assert.match(card,/cm-open-backpack/);
   const main=source('src/championship/app/main.js');
   assert.match(main,/addEventListener\('cm-open-backpack'/);

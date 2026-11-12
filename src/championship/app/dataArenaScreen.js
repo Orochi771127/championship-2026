@@ -46,6 +46,7 @@ import { taxonomyBadgeRow, resonanceStrip, taxonomyGlyph, TAXONOMY_COLORS, svgEl
 import { elementChartButton } from './elementChartModal.js';
 import { loadOriginalVfxCellArt } from '../presentation/vfx/originalVfxCellArt.js';
 import { dataArenaEntries, dataArenaEntryUsable, dataArenaPartnerPower } from '../modes/dataArena/dataArenaEligibility.js';
+import { createActionPortrait, setActionPortrait, warmActionPortraits } from "../presentation/juicy/actionPortrait.js";
 
 const STEP_MS = DATA_ARENA_STEP_SECONDS * 1000;
 const MOVE_KEYS = Object.freeze({ KeyW: [0, -1], ArrowUp: [0, -1], KeyS: [0, 1], ArrowDown: [0, 1], KeyA: [-1, 0], ArrowLeft: [-1, 0], KeyD: [1, 0], ArrowRight: [1, 0] });
@@ -410,7 +411,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   }
   // Dual reserve tag buttons show each reserve partner's portrait, element ring, advantage badge and HP gauge.
   for (const btn of [switchButton, switchButton2]) {
-    const avatar = el('img', 'da-tbtn__avatar');
+    const avatar = el('span', 'da-tbtn__avatar');
     avatar.alt = ''; avatar.decoding = 'async';
     const adv = el('span', 'da-tbtn__adv', t('relay.touch.advantage'));
     adv.setAttribute('aria-hidden', 'true');
@@ -686,7 +687,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         btn.hidden = false;
         const { member, index } = entry;
         const slotNo = index + 1;
-        const pArt = partnerArt(member.partnerId)?.portraitUrl ?? '';
+        const pArt = partnerArt(member.partnerId)?.speciesId ?? '';
         const pName = member.burst?.phase === 'BURST' ? speciesName(member.burst.form) : (cast.partners.find(cp => cp.partnerId === member.partnerId)?.name ?? t('relay.touch.switch'));
         const elKey = partnerElement(member.partnerId);
         const memberTaxElement = speciesTaxonomyForId(member.speciesId)?.element ?? null;
@@ -705,8 +706,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           node.firstChild.textContent = nameStr;
           node.querySelector('.da-tbtn__meta').textContent = metaStr;
           node.querySelector('.da-tbtn__reserve')?.style.setProperty('--reserve-hp', hpStr);
-          const img = node.querySelector('.da-tbtn__avatar');
-          if (img && artUrl && img.getAttribute('src') !== artUrl) img.src = artUrl;
+          // The switch key's round avatar: the partner's own body (artUrl carries its species).
+          const avatar = node.querySelector('.da-tbtn__avatar');
+          if (avatar && artUrl) setActionPortrait(avatar, artUrl, { still: true, lazy: false, floor: 0 });
         }, `${slotNo}|${pName}|${metaText}|${hpShare}|${down ? 1 : 0}|${counters ? 1 : 0}|${elKey}|${pArt}`);
         put(`tswitchCool_${btnIdx}`, btn, (node, value) => setCool(node, value), coolShare);
       });
@@ -1009,7 +1011,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const casterName = activeBurstForm?.phase === "BURST" && activeBurstForm.form
       ? speciesName(activeBurstForm.form)
       : (mine ? cast.partners.find((p) => p.speciesId === speciesId)?.name ?? "" : rivalName(rival?.definitionId ?? rival?.id));
-    cutIn.play({ team: mine ? "ally" : "enemy", portrait: juicyPortrait(speciesId), moveName: moveName(event.moveId),
+    cutIn.play({ team: mine ? "ally" : "enemy", species: speciesId, moveName: moveName(event.moveId),
       casterName, palette: element ?? (mine ? "light" : "dark"), focus });
   }
   let vignetteTimer = null;
@@ -1280,6 +1282,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   function portrait(id, className = "da-partner__art") {
     const art = partnerArt(id);
     if (!art) return el("span", `${className} da-partner__art--fallback`);
+    // The partner itself on its first idle cell (Owner 2026-11-12: the Database illustration stays in the Database).
+    if (art.speciesId) return createActionPortrait({ species: art.speciesId, still: true, className: `${className} da-partner__body` }).element;
     const img = el("img", className);
     img.alt = ""; img.decoding = "async"; img.loading = "lazy";
     img.addEventListener("error", () => img.replaceWith(el("span", `${className} da-partner__art--fallback`)), { once: true, signal });
@@ -1588,7 +1592,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       else if (gameMode === "HARBOR") {
         const mate = el("article", "da-seat da-seat--mate");
         mate.dataset.seat = "mate";
-        const art = el("div", "da-seat__art"); art.appendChild(cast.mate.art ? Object.assign(el("img", "da-seat__img"), { alt: "", src: cast.mate.art.portraitUrl }) : el("span", "da-seat__img da-partner__art--fallback"));
+        const art = el("div", "da-seat__art"); art.appendChild(cast.mate.art?.speciesId ? createActionPortrait({ species: cast.mate.art.speciesId, className: "da-seat__img da-partner__body", lazy: false }).element
+          : cast.mate.art ? Object.assign(el("img", "da-seat__img"), { alt: "", src: cast.mate.art.portraitUrl }) : el("span", "da-seat__img da-partner__art--fallback"));
         const body = el("div", "da-seat__body");
         body.append(el("span", "da-seat__label", t("seat.mate")), el("strong", "da-seat__name", cast.mate.name), el("p", "da-matchup", t("seat.mateNote")));
         mate.append(art, body);
