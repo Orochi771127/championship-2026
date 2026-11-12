@@ -43,7 +43,8 @@ test('public render hash/motion/geometry failures cannot load pixels or fall bac
 test('HUD loads only requested entities with bounded metadata work and preserves native result sequences and medal identities',async()=>{
  const f=fixture(),configs=catalog.characters.slice(0,16),hud=await loadPublicCharacterHudArt({baseUrl:base,fetchImpl:f.fetchImpl,speciesIds:configs.map(c=>c.speciesId)});
  assert.equal(f.calls.length,16);assert.ok(f.peak<=6);assert.ok(!f.calls.some(forbidden));
- for(const c of configs){const data=read(c.hudPath);assert.deepEqual(hud.getPortrait(c.speciesId),newArtPortraitLike(c.speciesId,data.portrait));for(const seq of data.battle.sequences)assert.deepEqual(hud.getBattleCells(c.speciesId,seq.id).map(cell=>cell.cell),[...new Set(seq.frames.map(frame=>frame.cell))]);}
+ for(const c of configs){const data=read(c.hudPath);// Owner 2026-11-12: the HUD record keeps its own cell; the Database illustration is for the Database only.
+ assert.deepEqual(hud.getPortrait(c.speciesId),data.portrait);assert.doesNotMatch(hud.getPortrait(c.speciesId).src,/database-/);for(const seq of data.battle.sequences)assert.deepEqual(hud.getBattleCells(c.speciesId,seq.id).map(cell=>cell.cell),[...new Set(seq.frames.map(frame=>frame.cell))]);}
  for(let id=0;id<61;id++)assert.equal(hud.getMedal(id).titleId,id);
  const c=configs[0],before=f.calls.length;await hud.ensureSpecies([c.speciesId,c.speciesId]);assert.equal(f.calls.length,before);
 });

@@ -27,13 +27,31 @@ test('in place of a HUD record: same longest side, the illustration aspect, othe
   assert.equal(newArtPortraitLike('species-159', null), null, 'no HUD record yet: still not ready');
 });
 
-test('HUD art, Dex route cards and the Data Arena select read the illustration', () => {
+// Owner 2026-11-12 (supersedes 2026-10-30 for every screen outside the Database): 「圖鑑插畫就請讓他出現在圖鑑就好
+// ... 其他都可以用成角色的動作動畫」. The Dex keeps the illustration; the HUD art, the Data Arena select and
+// every other partner portrait draw the character's own action animation (presentation/juicy/actionPortrait.js).
+test('the Dex keeps the illustration; HUD art and the Data Arena select no longer substitute it', () => {
   const hud = source('src/championship/presentation/publicCharacterHudArt.js');
-  assert.match(hud, /getPortrait:id=>newArtPortraitLike\(canonical\(id\),get\(id\)\?\.portrait\?\?null\)/);
-  assert.match(hud, /art=bank\?newArtPortrait\(canonical\(id\)\):null;if\(art\)return art;/);
+  assert.doesNotMatch(hud, /newArtPortrait/, 'the HUD record never hands out the Database illustration');
+  assert.match(hud, /getPortrait:id=>get\(id\)\?\.portrait\?\?null/);
   const dex = source('src/championship/app/vs4Screens.js');
   assert.match(dex, /const hero = databaseHeroPortrait\(speciesIndex\);\s*if \(hero\) \{\s*holder\.dataset\.source = 'illustration';/);
   const art = dataArenaArtRecord('species-159', 'http://127.0.0.1:8768/championship.html');
-  assert.equal(new URL(art.portraitUrl).pathname, '/' + databaseHeroPortrait(159).src);
+  assert.notEqual(new URL(art.portraitUrl).pathname, '/' + databaseHeroPortrait(159).src);
+  assert.match(art.portraitUrl, /main-cell_000\.webp$/);
+  assert.equal(art.speciesId, 'species-159', 'the select card draws the body from the species');
+  // Outside the Database, the screens that showed a partner now stand its animated body.
+  for (const [file, pattern] of [
+    ['src/championship/app/raisingHomeP1RView.js', /actionPortraits\?\.set\?\.\(portraitSlot,resident\?\.speciesId/],
+    ['src/championship/app/vs5Screens.js', /speciesBody\(\{species,still:true\}\)/],
+    ['src/championship/app/vs5Screens.js', /hudArt\?\.setActionPortrait\?\.\(miniImage,next\.speciesId/],
+    ['src/championship/app/digimonListScreen.js', /createActionPortrait\(\{ species: entry\.identity\.recordIndex, still: true \}\)/],
+    ['src/championship/app/dataArenaScreen.js', /createActionPortrait\(\{ species: art\.speciesId, still: true/],
+    ['src/championship/app/journeyScreen.js', /createActionPortrait\(\{ species: src\.species, still: true \}\)/],
+    ['src/championship/app/ui/syncGainPanel.js', /createActionPortrait\(\{ species: portrait\.species/],
+    ['src/championship/presentation/juicy/skillCutIn.js', /sequence: ACTION_PORTRAIT_SEQUENCES\.attack/],
+    ['src/championship/presentation/ceremony/ceremonyScenes.js', /sequence: ACTION_PORTRAIT_SEQUENCES\.cheer/]]) assert.match(source(file), pattern, file);
+  for (const file of ['src/championship/app/main.js', 'src/championship/app/digimonListScreen.js'])
+    assert.doesNotMatch(source(file), /databaseHeroPortrait\(/, `${file} no longer reaches for the Database illustration`);
   assert.match(source('src/championship/app/styles.css'), /img\[src\*="\/production\/database-"\]\[src\] \{ image-rendering: auto; \}/);
 });

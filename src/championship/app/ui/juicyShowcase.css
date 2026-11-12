@@ -424,6 +424,27 @@
 .cm-sprite--footed { position: absolute; left: calc(var(--foot-x, 50%) - var(--cm-sprite-ax, 0px)); bottom: calc(var(--foot-y, 0px) - var(--cm-sprite-below, 0px)); }
 .cm-sprite__body { position: absolute; left: 0; top: 0; image-rendering: pixelated; background-repeat: no-repeat; }
 
+/* A partner shown by its own action animation (actionPortrait.js, Owner 2026-11-12: the Database
+   illustration stays in the Database). The box fills its slot; the body stands on the box's floor. */
+.cm-action-portrait { position: relative; display: block; width: 100%; height: 100%; overflow: hidden; pointer-events: none; }
+img + .cm-action-portrait, .cm-action-portrait:only-child { flex: none; }
+.cm-action-portrait[data-state="none"] { visibility: hidden; }
+/* Round and square frames that used to crop an illustration's face now show the whole body. */
+.cm-vs5-member__portrait > .cm-action-portrait, .cm-journey__face > .cm-action-portrait, .cm-journey__foe > .cm-action-portrait,
+.cm-vs2-result__thumbnail > .cm-action-portrait, .cm-digimon-item__thumb > .cm-action-portrait { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cm-digimon-item__thumb:has(> .cm-action-portrait) { position: relative; overflow: hidden; }
+.cm-vs5-fighter__mini-body { position: absolute; inset: 0; display: block; }
+.cm-vs5-fighter__mini-body > .cm-action-portrait { width: 100%; height: 100%; }
+.cm-sync-row__face.cm-action-portrait { flex: none; border-radius: 12px; background: var(--c-surface-2, rgb(255 255 255 / 10%)); }
+.cm-vs5-match__crest-body { position: absolute; inset: 0; filter: brightness(0) drop-shadow(0 0 2px rgb(255 255 255 / 55%)); }
+.cm-story-map__cast-body { position: absolute; inset: 0; filter: brightness(0) drop-shadow(0 0 3px #56e3c2); }
+.cm-story-map__cast[data-speaker="echo"] .cm-story-map__cast-body { filter: brightness(0) drop-shadow(0 0 3px #ff2a6d); transform: scaleX(-1); }
+.cm-story-vn__portrait-body { width: 100%; height: 100%; }
+/* The cut-in's close-up: the caster's own attack, scaled up from the chest; its pixels keep their colours. */
+.cm-cutin__face-body { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cm-cer-evolve__body { position: relative; margin: 0 auto; }
+.cm-vs2-catch__body { margin: 0 auto; }
+
 /* ---- Dex showcase: preview buttons --------------------------------------- */
 .cm-showcase-cta {
   display: inline-flex;

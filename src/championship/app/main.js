@@ -59,7 +59,6 @@ import { mountBattleAudioPresentation } from '../presentation/battleAudioPresent
 // The battle menu box. Its four faces are ROM_VERIFIED from launcher13.nsbmd;
 // the geometry is original-created, exactly as the Gate world sphere is.
 import { battleMenuLabels, speciesName, raisingDisplayName, starterName, titleEventText, tamerRankName } from "../text/zhHant.js";
-import { databaseHeroPortrait } from "../presentation/databaseHeroPortraits.js";
 import { loadPixiCharacterRuntimeBundle, createPixiAssetScope, onPixiAssetSettled } from "../presentation/pixiCharacterRuntimeBundle.js";
 import { applyQaUnlock, qaUnlockRequested } from "./qaUnlock.js";
 import { listChampionshipGates } from "../gate/gateCatalog.js";
@@ -117,7 +116,11 @@ import { configureCeremonyAudio, playCeremony, playCeremonySound } from '../pres
 import { bindOverLimitPress } from './ui/overLimitPress.js';
 import { OVER_LIMIT_RULES } from '../contracts/productAwakeningOverdrive.js';
 import { createSkillCutInLayer } from '../presentation/juicy/skillCutIn.js';
-import { juicyPortrait, juicyPresentationEnabled, juicySpeciesIndex } from '../presentation/juicy/juicyArt.js';
+import { juicyPresentationEnabled, juicySpeciesIndex } from '../presentation/juicy/juicyArt.js';
+import { createActionPortrait, setActionPortrait, clearActionPortrait, warmActionPortraits } from '../presentation/juicy/actionPortrait.js';
+// Owner 2026-11-12: partners outside the Database are drawn as their own animated bodies.
+const ACTION_PORTRAITS = Object.freeze({ set: setActionPortrait, clear: clearActionPortrait });
+const speciesBody = options => createActionPortrait(options).element;
 import { installArcadeFx, requestArcadeFx } from './ui/arcadeFx.js';
 import { installTitleParade } from './titleParade.js';
 import { buildMedal, buildVersus } from '../presentation/ceremony/ceremonyScenes.js';
@@ -1209,7 +1212,8 @@ async function mountRaisingHome() {
   const p1r = await createRaisingHomeP1RView({
     root, hudArt: null, source,
     // Owner 2026-11-03: the partner card's portrait is the encyclopedia's own thumbnail (every published species has one).
-    portraitFallback: speciesIndex => { const hero = databaseHeroPortrait(speciesIndex); return hero?.thumbnail ?? hero ?? null; },
+    // Owner 2026-11-12: the partner card shows the partner's own idle animation (raisingHomeP1RView).
+    actionPortraits: ACTION_PORTRAITS,
     // Arcade evolution (Owner 2026-10-28); null keeps the original sequence.
     evolutionCinematic: await loadRaisingEvolutionCinematic(),
     getRosterEntry: creatureId => projectRoster().find(entry => entry.instanceId === creatureId) ?? null,
@@ -1719,7 +1723,7 @@ async function mountBattleSelect() {
   if(tutorial){
     if(battleRuntime!==tutorial.runtime)battleRuntime?.dispose();
     battleRuntime=tutorial.runtime;battleAttemptId=null;battleProgressBefore=null;
-    return createBattleSelectView({root,matches:battleRuntime.listMatches(),menuCopy:battleMenuLabels(),onEnter:()=>false,
+    return createBattleSelectView({speciesBody,root,matches:battleRuntime.listMatches(),menuCopy:battleMenuLabels(),onEnter:()=>false,
       tutorial:{read:()=>app.getInteractiveTutorialBattle(),checkpoint:()=>app.getInteractiveTutorial().checkpoint,
         blocked:()=>{const t=app.getInteractiveTutorial();return t.pendingSave||t.restoring;},
         subscribe:listener=>app.subscribeRaising(listener),input:(action,value,cp)=>app.interactiveBattleInput(action,value,cp)}});
@@ -1729,7 +1733,7 @@ async function mountBattleSelect() {
   battleAttemptId = null;
   battleProgressBefore = null;
   const { shopGoodsPresentation } = await import('../presentation/shopGoodsUiArt.js');
-  const view = createBattleSelectView({
+  const view = createBattleSelectView({speciesBody,
     root,
     // Cyber Gachapon bounty beacons, display-ready (Owner 2026-11-02).
     sponsorContracts:{read:()=>app.getSponsorContracts?.()??null,arm:(id,stake)=>app.armSponsorContract?.(id,stake),
@@ -1743,10 +1747,11 @@ async function mountBattleSelect() {
     matches: battleRuntime.listMatches(),
     arenaChoices:battleRuntime.listSelectableArenas(),
     // Owner 2026-11-03: each roster row shows the partner's Database thumbnail and its three-axis badges.
-    describeMember:entry=>{const index=juicySpeciesIndex(entry?.speciesId);const hero=index===null?null:databaseHeroPortrait(index);
+    // Owner 2026-11-12: the row's portrait is the partner's own body (vs5Screens memberFace), not the Database art.
+    describeMember:entry=>{
       // Owner 2026-11-09: the Sync Level rides in the stage slot.
       const sync=entry?.instanceId?app.getSyncLevel?.(entry.instanceId):null;
-      return {portrait:hero?.thumbnail??null,stage:sync?(sync.next>0?syncText('level',{level:sync.level}):syncText('level.max')):null,
+      return {speciesId:entry?.speciesId??null,stage:sync?(sync.next>0?syncText('level',{level:sync.level}):syncText('level.max')):null,
         badges:entry?.speciesId?taxonomyBadgeRow(speciesTaxonomyForId(entry.speciesId)):null};},
     getPracticeSelection:async()=>({candidates:await app.getBattlePartyCandidates(null)}),
     setBattleTactic:(instanceId,tactic)=>app.setBattleTactic(instanceId,tactic),
@@ -1763,7 +1768,7 @@ async function mountBattleSelect() {
       ?{candidates:await app.getBattlePartyCandidates(null),limit:app.getFreeBattleMatches().find(m=>m.id===recordIndex)?.slots??3}
       :{candidates:await app.getBattlePartyCandidates(recordIndex),limit:await app.getBattlePartyLimit(recordIndex)},
     getModeMatches:async mode=>mode==='TITLE_MATCH'?battleRuntime.listMatches():app.openFreeBattle().map(match=>({
-      ...match,recordIndex:match.id,crest:databaseHeroPortrait(match.speciesIndices[0])?.thumbnail?.src??null,
+      ...match,recordIndex:match.id,crestSpecies:Number.isSafeInteger(match.speciesIndices?.[0])?match.speciesIndices[0]:null,
       title:uiText('{kind} — {species}',{kind:uiText(match.kind==='SINGLE'?'單隻對戰':'三隻對戰'),species:formatList(match.speciesIndices.map(index=>speciesName(index)))})})),
     menuCopy: battleMenuLabels(),
     onlineLobby: onlineLobbies(),
@@ -1858,14 +1863,14 @@ async function openJourney(prefill = null) {
     if (app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) { journeyView = null; return; }
     const describe = (entry) => {
       const index = juicySpeciesIndex(entry?.speciesId);
-      return { name: entry?.displayName || (index === null ? '' : speciesName(index)), portrait: index === null ? null : databaseHeroPortrait(index)?.thumbnail?.src ?? null };
+      return { name: entry?.displayName || (index === null ? '' : speciesName(index)), portrait: index === null ? null : { species: index } };
     };
     root.inert = true;
     journeyView = createJourneyScreen({
       parent: document.body, prefill,
       frame: () => app.getJourneyFrame(), floor: (n) => app.getTowerFloor(n),
       candidates: () => app.getBattlePartyCandidates(null), describe,
-      speciesPortrait: (index) => databaseHeroPortrait(index)?.thumbnail?.src ?? null,
+      speciesPortrait: (index) => Number.isSafeInteger(index) ? { species: index } : null,
       syncOf: (id) => app.getSyncLevel(id),
       claimPatrol: () => app.claimPatrol(), quickPatrol: () => app.quickPatrol(),
       feed: (id, amount) => app.feedSyncCrystals(id, amount),
@@ -1945,7 +1950,11 @@ async function mountBattleField() {
   let hudArt=null,viewDisposed=false;
   // Optional portraits must not hold the screen/navigation owner hostage.
   // Cards already read their art on render, so this proxy can fill in later.
-  const hudProxy={getBattleFrame:(...args)=>hudArt?.getBattleFrame?.(...args)??null};
+  const hudProxy={getBattleFrame:(...args)=>hudArt?.getBattleFrame?.(...args)??null,
+    // The plate's mini portrait is the fighter's own body (Owner 2026-11-12).
+    setActionPortrait};
+  // The cut-in draws its caster from these motion records; load them with the battle (Owner 2026-11-12).
+  warmActionPortraits(source.getFrame()?.combatants?.filter(c=>c?.present!==false).map(c=>c.speciesId)??[]);
   const {createBattleFieldView} = await import('./vs5Screens.js');
   const view = createBattleFieldView({
     ceremonies: tutorial ? null : battleCeremonies,
@@ -2031,7 +2040,7 @@ async function mountBattleField() {
           // the overlay: no frame may render between the two.
           const fxLookups = fxLookupsModule
             ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),onFeed:(line,cue)=>view.feed?.(line,cue),onTally:tallyBattleEvent,
-              onCutIn:juicy?cue=>cutIn?.play({team:cue.team===activeRuntime.localTeamIndex()?'ally':'enemy',portrait:juicyPortrait(cue.speciesId),
+              onCutIn:juicy?cue=>cutIn?.play({team:cue.team===activeRuntime.localTeamIndex()?'ally':'enemy',species:cue.speciesId,
                 moveName:cue.moveName,casterName:cue.casterName,palette:cue.palette}):null,
               // Local acceptance shows stable skill IDs; players see approved names only.
               showIds:String(location.search??'').includes('battleFxDebug')&&['localhost','127.0.0.1','[::1]'].includes(location.hostname)}) : null;
@@ -3045,7 +3054,7 @@ function storyPartner(frame) {
     ?? frame?.residents.find(r => (speciesIndexOf(r.speciesId) ?? 0) >= 8) ?? frame?.residents[0] ?? null;
   if (!resident) return null;
   const speciesIndex = speciesIndexOf(resident.speciesId);
-  return { resident, name: resident.displayName ?? (speciesIndex !== null ? speciesName(speciesIndex) : ''), portrait: speciesIndex !== null ? databaseHeroPortrait(speciesIndex) : null };
+  return { resident, name: resident.displayName ?? (speciesIndex !== null ? speciesName(speciesIndex) : ''), portrait: speciesIndex !== null ? { species: speciesIndex } : null };
 }
 async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = 'menu' } = {}) {
   if (storyRun) return storyRun;
@@ -3119,7 +3128,7 @@ async function openStoryMap({ chapterId = null, source = 'menu' } = {}) {
   storyMap?.dispose();
   storyMap = createStoryChapterMap({ locale: getLocale(), reducedMotion: prefersReducedMotion(), isSeen: storyNodeSeen,
     vnStateOf: node => storyVnStates().find(state => state.id === node.vnChapterId)?.state ?? 'locked',
-    castPortrait: species => { const hero = databaseHeroPortrait(species); return hero?.thumbnail ?? hero ?? null; },
+    castPortrait: species => Number.isSafeInteger(species) ? { species } : null,
     partner: { name: partner?.name ?? '', portrait: partner?.portrait ?? null },
     guideForm: resolveGuideAppearance(settings.store.get().guideAppearance),
     onPlay: (next, node) => node?.vnChapterId === 'vn3-hub' ? openUnionHub({ source: 'map' }) : node?.vnChapterId ? playVnChapter(node.vnChapterId, { source: 'map' }) : playStoryChapter(next, { source: 'map' }),
@@ -3421,11 +3430,11 @@ function cardAttributeIndex(identity, speciesId) {
   return CARD_FACTION_ATTRIBUTE[speciesTaxonomyForId(id)?.faction] ?? index;
 }
 function acePartnerForCard() {
-  // The most evolved partner that has Database art; the first partner otherwise.
-  const roster = projectRoster().map(entry => ({ entry, portrait: juicyPortrait(entry.identity?.recordIndex ?? null) }));
-  const ranked = [...roster].sort((a, b) => (Number(Boolean(b.portrait)) - Number(Boolean(a.portrait))) || ((b.entry.identity?.generationIndex ?? 0) - (a.entry.identity?.generationIndex ?? 0)));
+  // The most evolved hatched partner, drawn as its own body (Owner 2026-11-12); the first partner otherwise.
+  const speciesOf = entry => Number.isSafeInteger(entry.identity?.recordIndex) && entry.identity.recordIndex >= 8 ? `species-${String(entry.identity.recordIndex).padStart(3, '0')}` : null;
+  const ranked = [...projectRoster()].sort((a, b) => (Number(Boolean(speciesOf(b))) - Number(Boolean(speciesOf(a)))) || ((b.identity?.generationIndex ?? 0) - (a.identity?.generationIndex ?? 0)));
   const pick = ranked[0];
-  return pick ? { name: pick.entry.displayName ?? null, attributeIndex: cardAttributeIndex(pick.entry.identity, null), portraitSrc: pick.portrait?.src ?? null, role: 'ace' } : null;
+  return pick ? { name: pick.displayName ?? null, attributeIndex: cardAttributeIndex(pick.identity, null), portraitSpecies: speciesOf(pick), role: 'ace' } : null;
 }
 async function bragCardInput({ winner = null, victory = null } = {}) {
   const record = app.getTitleProgress?.().record ?? null;
@@ -3459,9 +3468,9 @@ function bragWinnerFrom(participants) {
   for (const participant of participants ?? []) {
     if (!participant?.speciesId) continue;
     const identity = speciesIdentityOf(participant.speciesId);
-    const portrait = juicyPortrait(participant.speciesId);
+    const species = /species-\d{3}$/.exec(participant.speciesId)?.[0] ?? null;
     const member = roster.find(entry => entry.instanceId === participant.instanceId);
-    if (portrait || identity) return { name: member?.displayName ?? identity?.speciesName ?? null, attributeIndex: cardAttributeIndex(identity, participant.speciesId), portraitSrc: portrait?.src ?? null, role: 'winner' };
+    if (species || identity) return { name: member?.displayName ?? identity?.speciesName ?? null, attributeIndex: cardAttributeIndex(identity, participant.speciesId), portraitSpecies: species, role: 'winner' };
   }
   return null;
 }
@@ -3474,7 +3483,7 @@ function syncGainPanelFor(record) {
   };
   const portraitOf = (id) => {
     const index = juicySpeciesIndex(app.resolveRaisingInstance(id)?.speciesId);
-    return index === null ? null : databaseHeroPortrait(index)?.thumbnail?.src ?? null;
+    return index === null ? null : { species: index };
   };
   const panel = buildSyncGainPanel({ gains: record.gains, nameOf, portraitOf, reducedMotion: prefersReducedMotion(),
     cap: ['TITLE', 'CHAMPIONSHIP'].includes(record.kind) ? app.getSyncCap() : null });

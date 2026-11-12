@@ -9,6 +9,7 @@
 // on the final state at once; skip() does the same mid-way.
 
 import { syncText } from "../../text/syncLevelText.js";
+import { createActionPortrait } from "../../presentation/juicy/actionPortrait.js";
 
 const element = (tag, className, text) => {
   const node = document.createElement(tag);
@@ -35,7 +36,10 @@ export function buildSyncGainPanel({ gains = [], nameOf = (id) => id, portraitOf
     row.dataset.instanceId = gain.instanceId;
     row.dataset.leveled = String(gain.after.level > gain.before.level);
     const portrait = portraitOf(gain.instanceId);
-    if (portrait) {
+    if (portrait && typeof portrait === "object" && portrait.species !== undefined) {
+      // The partner itself, idle (Owner 2026-11-12).
+      row.append(createActionPortrait({ species: portrait.species, className: "cm-sync-row__face", lazy: false }).element);
+    } else if (portrait) {
       const face = element("img", "cm-sync-row__face");
       Object.assign(face, { src: portrait, alt: "", decoding: "async" });
       face.addEventListener("error", () => face.remove(), { once: true });

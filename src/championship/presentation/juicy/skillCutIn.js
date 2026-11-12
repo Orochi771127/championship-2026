@@ -2,8 +2,9 @@
 //
 // A special move gets a diagonal anime strip for 650 ms: the band slides in at
 // -8 degrees from the caster's side (ally from the left in cyan/gold, enemy
-// from the right in red/violet), carries the caster's own Database portrait
-// cropped to a close-up and the move name in large metal letters, then leaves
+// from the right in red/violet), carries the caster itself -- its own attack
+// animation in a close-up (Owner 2026-11-12: the Database illustration stays in
+// the Database) -- and the move name in large metal letters, then leaves
 // the way it was going. An optional spotlight dims everything but the caster
 // by 35 % for about half a second. An ordinary skill only gets a small slanted
 // name capsule (550 ms).
@@ -14,6 +15,7 @@
 import { ceremonyEnvironment, playCeremonySound } from "../ceremony/ceremonyRunner.js";
 import { juicyText } from "../../text/juicyShowcaseText.js";
 import { applyJuicyPalette, juicyMoveTitle, juicyNode } from "./juicyArt.js";
+import { createActionPortrait, ACTION_PORTRAIT_SEQUENCES } from "./actionPortrait.js";
 
 export const SKILL_CUT_IN_TIMING = Object.freeze({ length: 650, enter: 170, leave: 520, dimHold: 450, dimEnd: 560, capsule: 550, dimStrength: 0.35 });
 
@@ -56,6 +58,7 @@ export function createSkillCutInLayer({ host, doc = host?.ownerDocument ?? globa
   let played = 0, capsulesShown = 0, disposed = false;
 
   function clear(entry) {
+    entry.body?.dispose(); entry.body = null;
     for (const animation of entry.animations) { try { animation.cancel(); } catch { /* gone */ } }
     entry.animations.length = 0;
     entry.image?.removeAttribute("src");
@@ -63,7 +66,7 @@ export function createSkillCutInLayer({ host, doc = host?.ownerDocument ?? globa
   }
 
   /** The 650 ms special strip. A newer special replaces one still showing. */
-  function play({ team = "ally", portrait = null, silhouette = false, moveName = "", casterName = "", palette = "neutral", focus = null } = {}) {
+  function play({ team = "ally", portrait = null, species = null, silhouette = false, moveName = "", casterName = "", palette = "neutral", focus = null } = {}) {
     if (disposed) return false;
     if (strip) { clear(strip); strip = null; }
     const env = ceremonyEnvironment(doc);
@@ -95,8 +98,14 @@ export function createSkillCutInLayer({ host, doc = host?.ownerDocument ?? globa
       for (const [key, value] of Object.entries(frame.vars)) face.style.setProperty(key, value);
       face.dataset.framing = frame.source;
     }
-    let image = null;
-    if (portrait?.src && silhouette) {
+    let image = null, body = null;
+    if (species && !silhouette) {
+      // The caster's own body, mid-attack, filling the face box from the chest up; it faces the words.
+      body = createActionPortrait({ doc, species, sequence: ACTION_PORTRAIT_SEQUENCES.attack, crop: 1.9, lazy: false,
+        facing: team === "enemy" ? -1 : 1, className: "cm-cutin__face-body", reducedMotion: env.motion === "reduced" });
+      face.dataset.framing = "body";
+      face.append(body.element);
+    } else if (portrait?.src && silhouette) {
       // Encrypted signal: the caster's outline only, never its colours.
       const body = juicyNode(doc, "i", "cm-cutin__face-sil");
       const url = `url("${String(portrait.src).replace(/"/g, "%22")}")`;
@@ -135,6 +144,7 @@ export function createSkillCutInLayer({ host, doc = host?.ownerDocument ?? globa
       const mirror = node.dataset.team === "enemy" ? " scaleX(-1)" : "";
       const art = image ?? face.querySelector(".cm-cutin__face-sil");
       if (art) animate(art, [{ transform: `scale(1.1)${mirror}` }, { transform: `scale(1)${mirror}` }], { duration: T.length, easing: "ease-out" });
+      if (body) animate(body.element, [{ transform: "scale(1.12)" }, { transform: "scale(1)" }], { duration: T.length, easing: "ease-out" });
       animate(words.lastChild, [
         { opacity: 0, transform: "scale(1.7)" }, { opacity: 0, offset: 110 / T.length, transform: "scale(1.7)" },
         { opacity: 1, offset: 240 / T.length, transform: "scale(0.96)" }, { opacity: 1, offset: 300 / T.length, transform: "scale(1)" },
@@ -142,7 +152,7 @@ export function createSkillCutInLayer({ host, doc = host?.ownerDocument ?? globa
       ], { duration: T.length, easing: "ease-out" });
     }
     if (env.motion !== "reduced") playCeremonySound("cutin", doc);
-    const entry = { node, animations, image };
+    const entry = { node, animations, image, body };
     strip = entry;
     played++;
     const finished = animations[animations.length - 1]?.finished;

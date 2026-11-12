@@ -93,7 +93,7 @@ function cageName(frame, cageId) {
  */
 export async function createRaisingHomeP1RView({ root, source, mountField, hudArt=null, getRosterEntry=null,
   renderCreatureDetail=null, openRoster=null, firstRunHint=false, nextHintDuration=consumeRaisingHintDuration, storySeen=null,
-  evolutionCinematic=null, portraitFallback=null } = {}) {
+  evolutionCinematic=null, actionPortraits=null } = {}) {
   if (!root) throw new TypeError("INT-RH2 P1R view requires a root element");
   const presentation = assertPresentationSource(source);
   if (typeof mountField !== "function") {
@@ -644,16 +644,12 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     const ranchImage = originalCageLocationArt(resident?.nativeCageMapDefinition ?? resident?.nativeCageDefinition);
     ranchIcon.hidden = !ranchImage;
     if (ranchImage && ranchIcon.getAttribute('src') !== ranchImage) ranchIcon.src = ranchImage;
-    // The HUD portrait art is local-only; the public build falls back to the encyclopedia's own
-    // thumbnail (every published species has one), so the well never stands empty (Owner 2026-11-03).
+    // The partner stands in the well as itself: its own idle animation (Owner 2026-11-12: the
+    // Database illustration is for the Database only). No motion here, no well.
     const speciesIndex=Number(/species-(\d{3})$/.exec(resident?.speciesId??'')?.[1]??NaN);
-    const hud=hudArt?.getPortrait(resident?.speciesId)??null,dex=hud?null:portraitFallback?.(speciesIndex)??null;
-    const image=hud??dex;
-    portraitSlot.dataset.source=hud?'hud':dex?'dex':'none';
-    portrait.hidden=!image;
-    // No picture, no well.
-    portraitSlot.hidden=!image;
-    if(image&&portrait.getAttribute('src')!==image.src)portrait.src=image.src;
+    const shown=actionPortraits?.set?.(portraitSlot,resident?.speciesId??null,{lazy:false})??null;
+    portraitSlot.dataset.source=shown?'action':'none';
+    portraitSlot.hidden=!shown;
     if (resident && companion.dataset.open !== "true") { openedAt = Date.now(); pressedSinceOpen = false; }
     companion.dataset.open = resident ? "true" : "false";
     if (resident) companion.dataset.creatureId = resident.creatureId; else delete companion.dataset.creatureId;
@@ -790,7 +786,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
           label:uiText('{name} 進化成了{species}。',{name:member.displayName,species}),
           build:(stage,env)=>buildEvolve(stage,env,{kicker:uiText('進化'),title:species,
             meta:uiText('{name} 進化成了{species}。',{name:member.displayName,species}),
-            portrait:hudArt?.getPortrait(member.speciesId)??null,hint:uiText('輕觸繼續')}),
+            species:member.speciesId,hint:uiText('輕觸繼續')}),
           onDone:()=>{evolutionCeremony=null;}});
       }
     }
@@ -848,6 +844,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     dispose() {
       if (disposed) return;
       disposed = true;
+      actionPortraits?.clear?.(portraitSlot);
       discoveryJournal.dispose();
       storyBadge.dispose();
       hintTimer.dispose();

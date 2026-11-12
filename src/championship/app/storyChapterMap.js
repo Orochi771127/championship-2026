@@ -17,6 +17,7 @@ import { STORY_RIFT_MAP_NODES, storyRiftMapText, storyRiftMapStates } from "../d
 import { STORY_VN_CAST, STORY_VN_CHAPTERS, STORY_VN_SPEAKERS } from "../data/storyVnCampaign.js";
 import { storyVnText } from "../text/storyVnText.js";
 import { AI_CHAN_PORTRAITS, resolveGuideAppearance } from "../presentation/aiChanGuide.js";
+import { createActionPortrait } from "../presentation/juicy/actionPortrait.js";
 
 export const STORY_MAP_STAR_COUNT = 46;
 
@@ -166,6 +167,8 @@ export function createStoryChapterMap({
       img.style.width = `${guide.width * k}%`; img.style.left = `${(0.5 - guide.face.cx / guide.face.size) * 100}%`; img.style.top = `${(0.5 - guide.face.cy / guide.face.size) * 100}%`;
       face.append(img);
     } else if (member.speaker === "navi") face.innerHTML = NAVI_MARK;
+    else if (art?.species !== undefined) face.append(createActionPortrait({ doc, species: art.species, still: true, className: "cm-story-map__cast-body" }).element);
+    else if (partner.portrait?.species !== undefined) face.append(createActionPortrait({ doc, species: partner.portrait.species, still: true, className: "cm-story-map__cast-body" }).element);
     else if (art?.src) { const img = doc.createElement("img"); img.src = art.src; img.alt = ""; img.decoding = "async"; img.draggable = false; face.append(img); }
     else if (partner.portrait?.src) { const img = doc.createElement("img"); img.src = partner.portrait.src; img.alt = ""; img.decoding = "async"; img.draggable = false; face.append(img); }
     else face.textContent = "?";

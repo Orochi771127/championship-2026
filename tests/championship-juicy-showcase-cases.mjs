@@ -592,9 +592,15 @@ test("the cut-in frames the caster's measured head, the same in the Dex and in b
   assert.match(css, /\.cm-cutin__face \{[^}]*container-type: size/);
   assert.match(css, /--cutin-k: min\(calc\(62cqw \/ var\(--cutin-head\)\), calc\(90cqh \/ var\(--cutin-head\)\)\)/, "the head square fits the clear middle");
   assert.doesNotMatch(css, /scale\(1\.7\)/, "no blind 1.7x zoom");
+  // Owner 2026-11-12: in battle and in the Data Arena the strip carries the caster's own body (its attack,
+  // close up); the measured illustration framing above stays for the Database's own showcase.
   for (const file of ["src/championship/app/dataArenaScreen.js", "src/championship/app/main.js"]) {
-    assert.match(fs.readFileSync(file, "utf8"), /portrait: ?juicyPortrait\(/, `${file} hands the measured portrait to the same strip`);
+    assert.doesNotMatch(fs.readFileSync(file, "utf8"), /cutIn\??\.play\(\{[^}]*portrait: ?juicyPortrait\(/, `${file} no longer hands an illustration to the strip`);
+    assert.match(fs.readFileSync(file, "utf8"), /cutIn\??\.play\(\{ ?team:[^}]*species: ?(cue\.)?speciesId/, `${file} hands the caster's species to the strip`);
   }
+  const body = createSkillCutInLayer({ host: doc.createElement("div"), doc });
+  body.play({ team: "ally", species: "species-034", moveName: "烈鎧焰砲" });
+  body.dispose();
 });
 
 test("every published Dex illustration has a measured head inside the picture", () => {
