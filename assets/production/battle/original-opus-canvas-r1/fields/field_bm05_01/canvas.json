@@ -1,0 +1,70 @@
+{
+  "fieldId": "field_bm05_01",
+  "canvasNativePx": [
+    576,
+    560
+  ],
+  "playOffsetNativePx": [
+    80,
+    144
+  ],
+  "worldScale": 4,
+  "canvasWorldPx": [
+    2304,
+    2240
+  ],
+  "playOffsetWorldPx": [
+    320,
+    576
+  ],
+  "frame": {
+    "src": "frame-00.webp",
+    "sha256": "38205decdda1be690d465db1f1b090c231bd4eec128e2d21d7909ac04136ea86",
+    "bytes": 271270,
+    "encoding": "WEBP lossy quality 92"
+  },
+  "centreSource": "bm05-southpole-polish-r2/base.webp",
+  "centreSourceSha256": "7af187cf2eeed9229ca71d9abf96f783a82ab904420732e446c1fba5e821370a",
+  "centreDiff": 0,
+  "centreDiffNote": "The lossless master (canvas.png, not committed) carries the live picture's pixels unchanged. frame-00.webp is lossy, so re-encoding moves centre pixels slightly (centreDiffEncoded); drawing base.webp over the centre at playOffsetWorldPx restores them exactly.",
+  "centreDiffEncoded": {
+    "mean": 0.4153,
+    "max": 18
+  },
+  "camera": {
+    "elevationDegrees": 52,
+    "nativePixelsPerUnit": 16,
+    "renderScale": 4,
+    "orthoScale": 36.0,
+    "centreNative": [
+      208,
+      136
+    ]
+  },
+  "seaMask": {
+    "src": "sea-mask-canvas.webp",
+    "sha256": "2f4b46c5e4c08578b4627223269b87408eead272883132c5057b5a0a0f2b5b34",
+    "x": 0,
+    "y": 0,
+    "width": 2304,
+    "height": 2240,
+    "note": "Half size, white with alpha = open sea in the ring only; the play area is empty here and keeps its own mask."
+  },
+  "sourceBlend": "assets/production/battle/original-opus-canvas-r1/fields/field_bm05_01/master-canvas.blend",
+  "sourceBlendSha256": "36a9096517ab04c799ef7070a662d06193a067239f93a06f6625e9a4fe65c589",
+  "producers": {
+    "scripts/battle-canvas-bm05/layout.py": "e12eb464d28e12dc4d57eeedf0be11606843820c941f7ac585176a0c99f35ac2",
+    "scripts/battle-canvas-bm05/sea_map.py": "0a30c581796b74a050b212b0f2c2df2e17eda055fe73f225cdb2599926a4d3b1",
+    "scripts/battle-canvas-bm05/build_scene.py": "a3db9ba1a89c5ef921e360fe0168a44f73730c3a50b9c43ba9b455917786ed0f",
+    "scripts/battle-canvas-bm05/compose.py": "2884bd45b77317a9aab9de15156825f2ae5d91acc957760aafc287dd297c220d"
+  },
+  "join": {
+    "toneReachWorldPx": 176.0,
+    "weldWorldPx": 32.0,
+    "grainStd": 0.215
+  },
+  "rightsStatus": "PROJECT_ORIGINAL",
+  "romDerivedPixels": false,
+  "generativeAi": null,
+  "status": "LOCAL_PILOT_NOT_WIRED_NOT_PUBLISHED"
+}
