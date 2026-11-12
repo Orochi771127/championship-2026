@@ -28,7 +28,7 @@ import { selectDataArenaMusic } from "../presentation/originalMusicCatalog.js";
 import { createPixiAssetScope, loadPixiCharacterRuntimeBundle } from "../presentation/pixiCharacterRuntimeBundle.js";
 import { arenaText as t } from "../text/dataArenaText.js";
 import { createSkillCutInLayer } from "../presentation/juicy/skillCutIn.js";
-import { juicyPortrait, juicyPresentationEnabled } from "../presentation/juicy/juicyArt.js";
+import { juicyPresentationEnabled } from "../presentation/juicy/juicyArt.js";
 
 import { RELAY_ROSTER, relayPartner } from '../modes/dataArena/dataArenaRelayRoster.js';
 import { RELAY_MAP_IDS } from '../modes/dataArena/dataArenaRelayMaps.js';

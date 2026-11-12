@@ -61,3 +61,17 @@ test('one portrait per slot: the same species keeps the running one, another rep
   assert.equal(slot.dataset.portrait, 'none');
   clearActionPortrait(slot);
 });
+
+test('the brag card carries the partner species and draws its action frame, never the illustration', async () => {
+  const {normalizeBragCardData, loadBragCardPartnerFrame} = await import('../src/championship/presentation/tamerBragCardGenerator.js');
+  const data = normalizeBragCardData({tamerName: 'A', partner: {name: '角暴龍', attributeIndex: 1, portraitSpecies: 'species-159', role: 'winner'}}, 'zh-Hant');
+  assert.equal(data.partner.portraitSpecies, 'species-159');
+  assert.equal(normalizeBragCardData({partner: {name: 'x', portraitSpecies: 'database/hero.webp'}}, 'zh-Hant').partner.portraitSpecies, null);
+  // No motion at this location: no frame (the card then draws its crest), and no image is fetched.
+  let fetched = 0;
+  assert.equal(await loadBragCardPartnerFrame('species-159', {baseUrl: 'https://example.invalid/', loadImage: async () => { fetched++; return null; }}), null);
+  assert.equal(fetched, 0);
+  const main = (await import('node:fs')).readFileSync(new URL('../src/championship/app/main.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(main, /juicyPortrait\(/, 'main.js hands no illustration to any screen');
+  assert.match(main, /portraitSpecies: speciesOf\(pick\)/);
+});

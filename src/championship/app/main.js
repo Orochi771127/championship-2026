@@ -116,7 +116,7 @@ import { configureCeremonyAudio, playCeremony, playCeremonySound } from '../pres
 import { bindOverLimitPress } from './ui/overLimitPress.js';
 import { OVER_LIMIT_RULES } from '../contracts/productAwakeningOverdrive.js';
 import { createSkillCutInLayer } from '../presentation/juicy/skillCutIn.js';
-import { juicyPortrait, juicyPresentationEnabled, juicySpeciesIndex } from '../presentation/juicy/juicyArt.js';
+import { juicyPresentationEnabled, juicySpeciesIndex } from '../presentation/juicy/juicyArt.js';
 import { createActionPortrait, setActionPortrait, clearActionPortrait, warmActionPortraits } from '../presentation/juicy/actionPortrait.js';
 // Owner 2026-11-12: partners outside the Database are drawn as their own animated bodies.
 const ACTION_PORTRAITS = Object.freeze({ set: setActionPortrait, clear: clearActionPortrait });
@@ -3430,11 +3430,11 @@ function cardAttributeIndex(identity, speciesId) {
   return CARD_FACTION_ATTRIBUTE[speciesTaxonomyForId(id)?.faction] ?? index;
 }
 function acePartnerForCard() {
-  // The most evolved partner that has Database art; the first partner otherwise.
-  const roster = projectRoster().map(entry => ({ entry, portrait: juicyPortrait(entry.identity?.recordIndex ?? null) }));
-  const ranked = [...roster].sort((a, b) => (Number(Boolean(b.portrait)) - Number(Boolean(a.portrait))) || ((b.entry.identity?.generationIndex ?? 0) - (a.entry.identity?.generationIndex ?? 0)));
+  // The most evolved hatched partner, drawn as its own body (Owner 2026-11-12); the first partner otherwise.
+  const speciesOf = entry => Number.isSafeInteger(entry.identity?.recordIndex) && entry.identity.recordIndex >= 8 ? `species-${String(entry.identity.recordIndex).padStart(3, '0')}` : null;
+  const ranked = [...projectRoster()].sort((a, b) => (Number(Boolean(speciesOf(b))) - Number(Boolean(speciesOf(a)))) || ((b.identity?.generationIndex ?? 0) - (a.identity?.generationIndex ?? 0)));
   const pick = ranked[0];
-  return pick ? { name: pick.entry.displayName ?? null, attributeIndex: cardAttributeIndex(pick.entry.identity, null), portraitSrc: pick.portrait?.src ?? null, role: 'ace' } : null;
+  return pick ? { name: pick.displayName ?? null, attributeIndex: cardAttributeIndex(pick.identity, null), portraitSpecies: speciesOf(pick), role: 'ace' } : null;
 }
 async function bragCardInput({ winner = null, victory = null } = {}) {
   const record = app.getTitleProgress?.().record ?? null;
@@ -3468,9 +3468,9 @@ function bragWinnerFrom(participants) {
   for (const participant of participants ?? []) {
     if (!participant?.speciesId) continue;
     const identity = speciesIdentityOf(participant.speciesId);
-    const portrait = juicyPortrait(participant.speciesId);
+    const species = /species-\d{3}$/.exec(participant.speciesId)?.[0] ?? null;
     const member = roster.find(entry => entry.instanceId === participant.instanceId);
-    if (portrait || identity) return { name: member?.displayName ?? identity?.speciesName ?? null, attributeIndex: cardAttributeIndex(identity, participant.speciesId), portraitSrc: portrait?.src ?? null, role: 'winner' };
+    if (species || identity) return { name: member?.displayName ?? identity?.speciesName ?? null, attributeIndex: cardAttributeIndex(identity, participant.speciesId), portraitSpecies: species, role: 'winner' };
   }
   return null;
 }
