@@ -70,3 +70,9 @@ test('generalMirrorFrames: single frames drawn facing opposite to their set are 
  }
  assert.ok(dom.sequences.get(7).some(f=>f.mirror)&&dom.sequences.get(2).every(f=>!f.mirror));
 });
+
+test('sets drawn facing right walk forward: GR28, GR29 and MA57 carry generalMirror (2026-11-12 moonwalk fix)',()=>{
+ // Their walk drawings face right (face on the right of the head, hair/flower/pompom on the left), so without
+ // generalMirror the ranch drew them backwards: moving right while the face pointed left.
+ for(const code of ['GR28','GR29','MA57'])assert.equal(selection.characters.find(c=>c.displayCode===code)?.generalMirror,true,code);
+});

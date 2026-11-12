@@ -7,8 +7,8 @@
   "motionErrors": [],
   "art": {
    "atlas": 48,
-   "reviewed": 138,
-   "reviewed-right": 40
+   "reviewed": 135,
+   "reviewed-right": 43
   },
   "maxCellAspect": 2.02,
   "multiCellPages": 226,
@@ -4903,7 +4903,7 @@
    "speciesId": "species-054",
    "motion": {
     "entityId": "m228_palmon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4.938271604938271,
     "bounds": {
      "left": -58,
@@ -4966,11 +4966,11 @@
      "visualHeight": 100
     },
     "muzzleSocket": {
-     "x": -37,
-     "y": -80,
-     "heightRatio": 0.87,
-     "releaseIndex": 3,
-     "releaseMs": 550
+     "x": 65,
+     "y": -50,
+     "heightRatio": 0.53,
+     "releaseIndex": 2,
+     "releaseMs": 367
     }
    },
    "cutinHeadFrame": {
@@ -4995,7 +4995,7 @@
    "speciesId": "species-055",
    "motion": {
     "entityId": "m229_picodevimon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 3.469210754553339,
     "bounds": {
      "left": -52,
@@ -5058,11 +5058,11 @@
      "visualHeight": 84
     },
     "muzzleSocket": {
-     "x": -42,
-     "y": -58,
+     "x": 38,
+     "y": -55,
      "heightRatio": 0.81,
-     "releaseIndex": 2,
-     "releaseMs": 250
+     "releaseIndex": 0,
+     "releaseMs": 0
     }
    },
    "cutinHeadFrame": {
@@ -11067,7 +11067,7 @@
    "speciesId": "species-116",
    "motion": {
     "entityId": "m356_yukidarumon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 3.8910505836575875,
     "bounds": {
      "left": -74,
@@ -11130,11 +11130,11 @@
      "visualHeight": 169
     },
     "muzzleSocket": {
-     "x": -24,
-     "y": -120,
-     "heightRatio": 0.75,
-     "releaseIndex": 0,
-     "releaseMs": 0
+     "x": 56,
+     "y": -139,
+     "heightRatio": 0.87,
+     "releaseIndex": 1,
+     "releaseMs": 167
     }
    },
    "cutinHeadFrame": {
