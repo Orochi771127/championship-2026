@@ -30,7 +30,8 @@ function fixture({beforeImage=null}={}){
 const config=entityId=>catalog.characters.find(c=>c.entityId===entityId);
 // A native-art resident and a native-art evolution-class target (no reviewed artwork):
 // ten streamed pages, idle on page 0 and the evolution reveal (sequence 39) on page 9.
-const RESIDENT=config('m503_warglaymon'),TARGET=config('m541_dukemon');
+// (m541_dukemon moved to its two-set reviewed art on 2026-11-12; m505_grankuwagamon keeps native art.)
+const RESIDENT=config('m503_warglaymon'),TARGET=config('m505_grankuwagamon');
 const targetRuntime=read(TARGET.runtimePath),targetFolder=TARGET.runtimePath.slice(0,TARGET.runtimePath.lastIndexOf('/')+1);
 const pagesOf=seq=>new Set(targetRuntime.sides.main.animations.find(a=>a.id===seq).frames.map(f=>targetRuntime.streaming.texturePages[f.texture]));
 const targetImages=f=>f.calls.filter(p=>p.startsWith(targetFolder)&&/\.webp$/.test(p));

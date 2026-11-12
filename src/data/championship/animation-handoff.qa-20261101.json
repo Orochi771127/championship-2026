@@ -3,7 +3,7 @@
   "kind": "ANIMATION_HANDOFF_QA_REGISTRY",
   "version": "20261101",
   "loopbackOnly": true,
-  "note": "QA alternative manifests for owner-accepted scopes; never shipped, never used on public hosts.",
+  "note": "QA alternative manifests for owner-accepted scopes; never shipped, never used on public hosts. 2026-11-12: the UL11/UL12 north-walk partial sets are retired; the complete two-set selection (docs/reports/two-set-intake-20261112) draws every heading. Their files are kept.",
   "entries": [
     {
       "displayCode": "GR02",
@@ -42,34 +42,6 @@
       "runtimeApproved": false,
       "scopes": [
         "Walk:Down,DownRight,Right,UpRight,Up,UpLeft,Left,DownLeft"
-      ]
-    },
-    {
-      "displayCode": "UL11",
-      "speciesId": "species-194",
-      "basePath": null,
-      "baseSha256": null,
-      "partialArena": true,
-      "path": "assets/production/characters/handoff-qa-20261101/UL11/animation.handoff-20261101.json",
-      "sha256": "c64b8377b83479028ea913c5b0a848b1c9972c08446480e685b97be507c2cd8f",
-      "status": "OWNER_ACCEPTED_EXACT_N_WALK_QA_ONLY_PARTIAL",
-      "runtimeApproved": false,
-      "scopes": [
-        "Walk:N"
-      ]
-    },
-    {
-      "displayCode": "UL12",
-      "speciesId": "species-195",
-      "basePath": null,
-      "baseSha256": null,
-      "partialArena": true,
-      "path": "assets/production/characters/handoff-qa-20261101/UL12/animation.handoff-20261101.json",
-      "sha256": "3f14f363efcf0dc949bf5416f561066f2217ce70f4e41e821aa289d8ff063345",
-      "status": "OWNER_ACCEPTED_EXACT_N_WALK_QA_ONLY_PARTIAL",
-      "runtimeApproved": false,
-      "scopes": [
-        "Walk:N"
       ]
     }
   ]

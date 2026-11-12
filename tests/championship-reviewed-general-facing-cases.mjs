@@ -39,7 +39,7 @@ test('generalMirrorFrames: single frames drawn facing opposite to their set are 
  // Clip-by-clip re-check the same day: GR38 blink/exhale (MA_02/03) added; BD_06/07 and MB_10 already
  // faced like their clips; MA50/MA63 sleep cells were right as stored; MA53 pleased cells 12-13 added.
  assert.deepEqual(Object.fromEntries(selection.characters.filter(c=>c.generalMirrorFrames).map(c=>[c.displayCode,c.generalMirrorFrames.length])),
-  {GR05:2,GR38:8,MA03:1,MA20:2,MA43:1,MA53:2,MA54:1,MA64:4,AW28:1,AW27:2,UL14:3});
+  {GR05:2,GR38:8,MA03:1,MA20:2,MA43:1,MA53:2,MA54:1,MA64:4});
  for(const entry of selection.characters.filter(c=>c.generalMirrorFrames)){const d=read(entry.displayCode);
   const frames=Array.isArray(d.frames)?Object.fromEntries(d.frames.map(f=>[f.id,f])):d.frames;
   for(const id of entry.generalMirrorFrames)assert.ok(frames[id],entry.displayCode+' '+id);}

@@ -1,0 +1,59 @@
+{
+  "status": "LOCAL_ACCEPTANCE_PUBLIC_BUILD_PENDING",
+  "sourceReadback": {
+    "role": "AW02",
+    "bytes": 39190759,
+    "sha256": "afc761ff4c2d5979480ae715c225d34cdf29ce863d81f649c2c70e678170acfd",
+    "crc": "PASS",
+    "members": 21,
+    "originalsModified": false
+  },
+  "sourceIntegrity": {
+    "memberSHAs": 20,
+    "errors": [],
+    "innerCRCs": "PASS",
+    "sourceFiles": 131
+  },
+  "sourceEventCount": 502,
+  "sourceEventErrors": [],
+  "focusedTests": "5/5 passed before public promotion",
+  "normal": [
+    "Main2 two drawings with world movement",
+    "Main3 fast movement",
+    "Arena walk plus all eight BOLT directions through recovery",
+    "16 player CAST_RELEASE observations match frame3 and rendered socket with zero arithmetic error"
+  ],
+  "visualReview": [
+    "General81 and Arena50 original cells inspected at fixed review magnification",
+    "Sleep48/49 eyes closed, distinct from open-eyed walk",
+    "Body root: landmark head-shell/tail-fan midpoint; General source-origin proposal checked in normal ranch",
+    "One density8 across General and Arena; authored double-size sleep batch density16, no per-frame scaling"
+  ],
+  "runtimeAtlasBytes": 10051482,
+  "runtimeAtlases": 5,
+  "format": "lossless WebP, max2048, source PNG unchanged, separate mode pages",
+  "fullCI": "PENDING",
+  "production": "NOT_DEPLOYED",
+  "physicalDeviceTested": false,
+  "rareNaturalStatesExhaustivelyTested": false,
+  "rearSocketLimit": "Rear projected head contact is occluded; source-art tolerance +/-12px; front mouth +/-6px. Runtime coordinate equality is not anatomical zero error.",
+  "AW01": "HOLD: direction-scale calibration and attack validation incomplete; excluded from selection.",
+  "packing": {
+    "pass": true,
+    "frameRecords": 583,
+    "atlasCount": 5,
+    "maxAtlasDimension": 2048,
+    "atlasBytes": 10051482,
+    "RGBAChanges": 0,
+    "decodedPixelBytesAllPages": 57785600,
+    "memoryMetric": "Upper bound decoded RGBA pixels, not measured GPU residency",
+    "generalDensity": 8,
+    "arenaDensity": 8,
+    "sleepBatchDensity": 16,
+    "perFrameBBoxFitting": false
+  },
+  "naturalMain3": {
+    "samples": 12,
+    "observed": true
+  }
+}
