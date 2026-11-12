@@ -354,3 +354,30 @@ test('the fallen label sits in the card\'s TP row and adds no row of its own', (
   assert.match(rule, /grid-area: tp;/);
   assert.doesNotMatch(rule, /grid-column: 1;/);
 });
+
+// ---------------------------------------------------------------- batch three: readability
+test('the record names a side only when both sides field the same name', async () => {
+  const {createBattleFxLookups} = await import('../src/championship/app/battleFxLookups.js');
+  // The view's combatants are indexed by slot.
+  const view = {combatants: [
+    {slot: 0, team: 0, present: true, displayName: '阿花仔'}, {slot: 1, team: 0, present: true, displayName: '小火芯'}, null,
+    {slot: 3, team: 1, present: true, displayName: '阿花仔'}, {slot: 4, team: 1, present: true, displayName: '咬衣豆'}, null]};
+  const fed = [];
+  const lookups = createBattleFxLookups({getView: () => view, localTeam: () => 0, onFeed: line => fed.push(line), now: (() => { let t = 0; return () => (t += 5000); })()});
+  lookups.onEvent({type: 'HIT', slot: 3, attackerSlot: 0, damage: 37});
+  lookups.onEvent({type: 'HIT', slot: 4, attackerSlot: 1, damage: 18});
+  lookups.onEvent({type: 'KO', slot: 3});
+  assert.match(fed[0], /^我方・阿花仔攻擊對手・阿花仔/);
+  assert.match(fed[1], /^小火芯攻擊咬衣豆/, 'unique names stay as they are');
+  assert.ok(fed.some(line => /^對手・阿花仔倒下了/.test(line)));
+});
+
+test('whole-screen light is held back when signature moves and knockouts follow each other', async () => {
+  const {BATTLE_FX_COMFORT} = await import('../src/championship/presentation/battleFx/battleFxLayer.js');
+  assert.ok(BATTLE_FX_COMFORT.stormGapMs >= 2000 && BATTLE_FX_COMFORT.flashGapMs >= 1200);
+  const layer = read('src/championship/presentation/battleFx/battleFxLayer.js');
+  assert.match(layer, /if \(stormFree\) element\?\.storm\(/, 'a second backdrop inside the gap is skipped');
+  assert.match(layer, /elapsed - lastStrongFlashAt >= BATTLE_FX_COMFORT\.flashGapMs \? 0\.45 : 0\.12/, 'a second knockout only flickers');
+  assert.match(layer, /n\.node\.position\.set\(clamp\(n\.x, halfW, Math\.max\(halfW, viewport\.width - halfW\)\)/, 'numbers keep their whole width on screen');
+  assert.match(layer, /\(ctx\.insets\?\.top \?\? 0\) \+ halfH/, 'and stay off the card rows');
+});

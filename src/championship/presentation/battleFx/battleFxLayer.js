@@ -45,6 +45,8 @@ const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 // broken ring turns slowly backwards at its feet, pixel motes hang around it
 // instead of falling, and the edges of the screen cool in steps. Display only:
 // it reads the published view and writes nothing.
+/** Comfort limits for whole-screen light: one signature backdrop per 2.4 s, one white knockout flash per 1.6 s. */
+export const BATTLE_FX_COMFORT = Object.freeze({stormGapMs: 2400, flashGapMs: 1600});
 export const BATTLE_FX_STASIS = Object.freeze({pauseFrames: 12, inMs: 80, outMs: 170, tint: 0x8ab4ff, ring: 0x9fe8ff, edge: 0x0b2147, motes: 5});
 /** The fighters time has stopped for in this published view and why, or null while the battle runs. */
 export function battleFxStasisOf(view) {
@@ -328,6 +330,9 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   const seenImpacts = new Set();
   let freshImpacts = [], endings = [];
   let callout = null, dim = null, speed = 0, screenFlash = 0, banner = null;
+  // Comfort limits (Owner 2026-11-11 recordings): signature backdrops and white knockout flashes that
+  // follow each other closely are held back, so a run of specials never strobes the whole screen.
+  let lastStormAt = -Infinity, lastStrongFlashAt = -Infinity;
   let elapsed = 0, created = 0, peak = 0, eventsHandled = 0;
   // Arcade quartet state (juicy only).
   const numbers = [], numberPool = [];
@@ -716,7 +721,10 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (look.tier === 'ultimate') {
           // The signature backdrop: a ~0.53 s element storm behind the fighters.
           const foe = ctx.opponentsOf(event.slot).map(s => slot(s)).find(Boolean);
-          element?.storm({kind: vfx?.storm ?? 'burst', palette, paletteKey: vfx?.paletteKey ?? look.palette, rect: ctx.artRect,
+          // The backdrop paints the whole field: at most one every BATTLE_FX_COMFORT.stormGapMs.
+          const stormFree = elapsed - lastStormAt >= BATTLE_FX_COMFORT.stormGapMs;
+          if (stormFree) lastStormAt = elapsed;
+          if (stormFree) element?.storm({kind: vfx?.storm ?? 'burst', palette, paletteKey: vfx?.paletteKey ?? look.palette, rect: ctx.artRect,
             center: foe ? {x: (info.x + foe.x) / 2, y: (info.groundY + foe.groundY) / 2 - info.height * 0.4} : {x: info.x, y: info.groundY}});
           if (vfx?.weather) cue({type: 'WEATHER', system: vfx.weather, slot: event.slot, x: info.x, y: info.groundY, element: vfx.element});
           spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 1.3, tint: palette.core, life: 560, delay: 140});
@@ -880,7 +888,9 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         // Hold on the knockout, then pull back out to the remaining fighters.
         ctx.camera?.director?.sequence([{slots: [event.slot], durationMs: 900, boost: 0.26, includeDown: true}, {slots: null, durationMs: 700, boost: -0.08}]);
         ctx.camera?.director?.shake(0.45);
-        screenFlash = Math.max(screenFlash, 0.45);
+        // A knockout flashes white once; another inside the comfort gap only flickers.
+        screenFlash = Math.max(screenFlash, elapsed - lastStrongFlashAt >= BATTLE_FX_COMFORT.flashGapMs ? 0.45 : 0.12);
+        if (screenFlash >= 0.45) lastStrongFlashAt = elapsed;
         if (event.teamDown) { showBanner('K.O.!', {size: 44, fill: 0xffe36a, life: 1500}); ctx.camera?.director?.slowMo?.(BATTLE_FX_JUICY.slowMoMs); }
         else { const p = toScreen(ctx, info.x, info.top); word({screenX: p.x, screenY: p.y - 8, content: text('倒下！'), size: 20, fill: 0xffb4a0}); }
       }
@@ -1089,7 +1099,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (n.age >= n.life) { n.node.visible = false; numberPool.push(n.node); numbers.splice(i, 1); continue; }
         n.vy += 640 * dt; n.x += n.vx * dt; n.y += n.vy * dt;
         const k = n.age / n.life, pop = reducedMotion ? 1 : n.age < 110 ? lerp(1.7, 1, n.age / 110) : 1;
-        n.node.position.set(clamp(n.x, 18, viewport.width - 18), clamp(reducedMotion ? n.y - n.age * 0.03 : n.y, 18, viewport.height - 12));
+        // The whole number stays on screen and off the HUD card rows (it used to be clipped at an edge or sit on a card's HP).
+        const halfW = Math.max(18, (n.node.width || 0) / 2 + 4), halfH = Math.max(12, (n.node.height || 0) / 2 + 2);
+        const topLimit = Math.max(halfH, (ctx.insets?.top ?? 0) + halfH), bottomLimit = Math.min(viewport.height - halfH, viewport.height - (ctx.insets?.bottom ?? 0) - halfH);
+        n.node.position.set(clamp(n.x, halfW, Math.max(halfW, viewport.width - halfW)),
+          clamp(reducedMotion ? n.y - n.age * 0.03 : n.y, topLimit, Math.max(topLimit, bottomLimit)));
         n.node.scale.set(n.base * pop);
         n.node.alpha = k > 0.7 ? (1 - k) / 0.3 : 1;
         if (n.node.star.visible) n.node.star.rotation += dt * 2.4;

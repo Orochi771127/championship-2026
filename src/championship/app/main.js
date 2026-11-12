@@ -2048,7 +2048,7 @@ async function mountBattleField() {
           // Resolved with the art, so the scene still mounts in the same task as
           // the overlay: no frame may render between the two.
           const fxLookups = fxLookupsModule
-            ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),onFeed:(line,cue)=>view.feed?.(line,cue),onTally:tallyBattleEvent,
+            ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),localTeam:()=>activeRuntime.localTeamIndex(),onFeed:(line,cue)=>view.feed?.(line,cue),onTally:tallyBattleEvent,
               onCutIn:juicy?cue=>cutIn?.play({team:cue.team===activeRuntime.localTeamIndex()?'ally':'enemy',species:cue.speciesId,
                 moveName:cue.moveName,casterName:cue.casterName,palette:cue.palette}):null,
               // Local acceptance shows stable skill IDs; players see approved names only.
