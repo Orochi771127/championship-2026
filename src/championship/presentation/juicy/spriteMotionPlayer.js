@@ -46,7 +46,8 @@ export function showcaseSpeciesId(ref) {
 // One load per species and page: the Dex hero, the special and the evolution
 // previews share it (a handful of small JSON files and one atlas page each).
 const motionCache = new Map();
-const MOTION_CACHE_LIMIT = 8;
+// A partner list or a battle roster shows a few dozen partners; their motion records are small.
+const MOTION_CACHE_LIMIT = 48;
 
 /**
  * The species' showcase motion, loaded once and shared. A failed or aborted

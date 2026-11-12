@@ -5,8 +5,8 @@ import {speciesTaxonomy,TAXONOMY_RESISTANCE_AXES} from '../contracts/speciesTaxo
 import {taxonomyText} from '../text/taxonomyText.js';
 import {taxonomyBadgeRow} from '../presentation/taxonomyBadgeArt.js';
 import {elementChartButton} from './elementChartModal.js';
-import { databaseHeroPortrait } from "../presentation/databaseHeroPortraits.js";
 import {isKnownSpeciesIndex,productPartnerG} from '../contracts/productSpeciesData.js';
+import { createActionPortrait } from "../presentation/juicy/actionPortrait.js";
 // The Digimon roster -- the original's ui/digimon_list_* scenes.
 //
 // STRUCTURE COMES FROM THE ROM SCENES, NOT FROM TASTE
@@ -387,11 +387,11 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
       button.type = "button";
       button.dataset.index = String(index);
       button.setAttribute("aria-pressed", String(index === selectedIndex));
-      // A thumbnail of the partner (the encyclopedia's own art) leads the name.
-      const art = databaseHeroPortrait(entry.identity?.recordIndex)?.thumbnail;
-      const thumb = element(art ? "img" : "span", "cm-digimon-item__thumb");
+      // The partner itself leads the name, held on its first idle cell (Owner 2026-11-12: the
+      // encyclopedia's illustration stays in the encyclopedia). Loaded as the row scrolls in.
+      const thumb = element("span", "cm-digimon-item__thumb");
       thumb.setAttribute("aria-hidden", "true");
-      if (art) { thumb.alt = ""; thumb.decoding = "async"; thumb.src = art.src; }
+      if (Number.isSafeInteger(entry.identity?.recordIndex)) thumb.append(createActionPortrait({ species: entry.identity.recordIndex, still: true }).element);
       const nameNode = element("span", "cm-digimon-item__name", entry.displayName, false);
       if (entry.bloodline) {
         // Cyber Gachapon metal bloodline badge before the name.

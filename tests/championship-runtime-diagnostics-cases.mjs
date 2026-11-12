@@ -137,3 +137,45 @@ test('first-use GPU boundaries retain bounded counts without raw errors or a fal
  assert.doesNotMatch(h.journal.exportText(),/PRIVATE_BROWSER_DETAIL/);
  h.journal.record('LOAD',{stage:'gpu-warmup',gpuWarmupGroups:83});assert.equal(h.events().at(-1).gpuWarmupGroups,undefined);h.journal.dispose();
 });
+
+// Owner 2026-11-12 (iPhone home-screen app): the page was ended while entering a Hunt. The export
+// showed three battles and nothing of the Hunt: its steps were never written, and the next
+// document's BOOT evicted the one SCREEN row that said where the old page had been.
+test('a page ended inside a Hunt entry leaves its steps and its last screen for the next document',()=>{
+  const a=fixture();
+  for(let i=0;i<40;i++){a.advance();a.journal.record('LOAD',{area:'battle',stage:i%2?'ready':'scene',phase:i%2?undefined:'start'});}
+  a.setScreen('GATE_SELECT');a.advance();a.journal.record('SCREEN');
+  a.setScreen('HUNT_LOADOUT');a.advance();a.journal.record('SCREEN');
+  a.setScreen('HUNT_FIELD');
+  for(const [stage,phase,extra]of [['engine','start'],['partners','done'],['arena','start'],['arena','done',{map:'THREE'}],['scene','start']]){
+    a.advance();a.journal.record('LOAD',{area:'hunt',stage,phase,...extra});
+  }
+  // No pagehide: the page is simply gone. The next document boots, resumes and loads the ranch.
+  const b=fixture('00000002',a.data);send(b.win,'pageshow',{persisted:false});
+  b.journal.record('AUTO_RESUME',{target:'HUNT_FIELD'});
+  b.setScreen('RAISING_HOME');
+  for(let i=0;i<30;i++){b.advance();b.journal.record('LOAD',{area:'raising',stage:i%2?'engine':'partners',phase:'done'});}
+  b.advance();b.journal.record('SCREEN');b.setScreen('HUNT_LOADOUT');b.advance();b.journal.record('SCREEN');
+  const events=b.events(),old=events.filter(e=>e.document==='00000001');
+  assert.deepEqual(old.filter(e=>e.area==='hunt').map(e=>[e.stage,e.phase,e.map]),
+    [['engine','start',undefined],['partners','done',undefined],['arena','start',undefined],['arena','done','THREE'],['scene','start',undefined]]);
+  assert.equal(old.some(e=>e.area==='hunt'&&e.stage==='ready'),false,'the entry never finished');
+  assert.deepEqual(old.filter(e=>e.type==='SCREEN').map(e=>e.screen),['HUNT_LOADOUT'],'only the last screen of the ended page is kept');
+  assert.equal(old.some(e=>e.type==='PAGE_HIDE'),false);
+  assert.deepEqual(events.filter(e=>e.type==='AUTO_RESUME').map(e=>[e.document,e.target]),[['00000002','HUNT_FIELD']]);
+  assert.deepEqual(events.filter(e=>e.document==='00000002'&&e.type==='SCREEN').map(e=>e.screen),['HUNT_LOADOUT']);
+  assert.ok(events.length<=DIAGNOSTIC_LIMIT.entries);assert.ok(Buffer.byteLength(b.journal.exportText())<=DIAGNOSTIC_LIMIT.bytes);
+  a.journal.dispose();b.journal.dispose();
+});
+
+test('resume targets and the Hunt map kind are closed sets; anything else is dropped',()=>{
+  const h=fixture();
+  h.journal.record('AUTO_RESUME',{target:'DATA_ARENA'});h.advance();
+  h.journal.record('AUTO_RESUME',{target:'https://example.test/?name=secret'});h.advance();
+  h.journal.record('LOAD',{area:'hunt',stage:'arena',phase:'error',map:'FLAT'});h.advance();
+  h.journal.record('LOAD',{area:'hunt',stage:'arena',phase:'done',map:'species-037'});
+  const events=h.events().slice(1);
+  assert.deepEqual(events.map(e=>[e.type,e.target,e.map]),[['AUTO_RESUME','DATA_ARENA',undefined],['AUTO_RESUME',undefined,undefined],
+    ['LOAD',undefined,'FLAT'],['LOAD',undefined,undefined]]);
+  assert.doesNotMatch(h.journal.exportText(),/secret|species-037/);h.journal.dispose();
+});

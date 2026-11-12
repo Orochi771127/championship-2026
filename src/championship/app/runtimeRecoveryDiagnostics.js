@@ -2,7 +2,7 @@ import {createChampionshipDiagnosticPort} from './ChampionshipPersistentSavePort
 
 export const DIAGNOSTIC_LIMIT = Object.freeze({entries:32,bytes:8192});
 const TYPES=new Set(['BOOT','PAGE_SHOW','PAGE_HIDE','VISIBILITY','SCREEN','LOAD','LOAD_FAILED','ASSET_FAILED',
-  'TITLE_RETURN','DOCUMENT_RELOAD','CONTEXT_LOST','CONTEXT_RESTORED','ERROR','REJECTION','CONTINUE_FAILED','RANCH_REPAIRED']);
+  'TITLE_RETURN','DOCUMENT_RELOAD','CONTEXT_LOST','CONTEXT_RESTORED','ERROR','REJECTION','CONTINUE_FAILED','RANCH_REPAIRED','AUTO_RESUME']);
 const SCREENS=new Set(['TITLE','RAISING_HOME','HUNT_FIELD','HUNT_RESULT','HUNT_LOADOUT','GATE_SELECT','BATTLE_SELECT',
   'BATTLE_FIELD','BATTLE_RESULT','CHAMPIONSHIP','SHOP','DATABASE','MEDALS','CAGE_EDIT','DIGIMON_LIST','SCHEDULE','HELP','TAMER_INFO']);
 const STAGES=new Set(['engine','facilities','partners','scene','arena','fighters','effects','overlay','loading','ready','error','cancelled',
@@ -35,6 +35,9 @@ function sanitize(row) {
   if(['navigate','reload','back_forward'].includes(row.navigation))out.navigation=row.navigation;
   if(['hidden','visible'].includes(row.visibility))out.visibility=row.visibility;
   if(['PIXI','OTHER'].includes(row.renderer))out.renderer=row.renderer;
+  // Where the home-screen app resumed to after an unannounced reload, and how the Hunt map was drawn.
+  if(SCREENS.has(row.target)||row.target==='DATA_ARENA')out.target=row.target;
+  if(['THREE','FLAT'].includes(row.map))out.map=row.map;
   if(typeof row.module==='string'&&/^src\/championship\/[a-zA-Z0-9_/-]+\.js:\d+:\d+$/.test(row.module))out.module=row.module.slice(0,200);
   if(typeof row.asset==='string'&&/^assets\/production\/[a-zA-Z0-9_/-]+(?:\/[a-zA-Z0-9_.-]+)*\.(png|webp|json|svg|glb)$/.test(row.asset)
     &&!row.asset.split('/').some(p=>p==='..'||p==='.')&&row.asset.length<=200)out.asset=row.asset;
@@ -47,12 +50,16 @@ function read(text) {
   }catch{return [];}
 }
 
-// Drop routine progress before document/lifecycle/failure and battle-boundary
+// Drop routine progress before document/lifecycle/failure and battle/hunt-boundary
 // evidence. Keep chronological order and the newest event within the same cap.
+// Owner 2026-11-12 (iPhone): the page was killed entering a Hunt, and the next
+// document's BOOT evicted the only row that said where it had been. Each
+// document's last SCREEN and the Hunt entry steps now outlive routine progress.
 function evict(events) {
-  let index=events.findIndex((e,i)=>i<events.length-1&&e.type==='LOAD'
+  const lastScreen=new Map();events.forEach((e,i)=>{if(e.type==='SCREEN')lastScreen.set(e.document,i);});
+  let index=events.findIndex((e,i)=>i<events.length-1&&e.type==='LOAD'&&e.area!=='hunt'
     &&!(e.area==='battle'&&['overlay','scene','ready','loading-card','first-render','audio','gpu-warmup','first-vfx-render'].includes(e.stage)));
-  if(index<0)index=events.findIndex((e,i)=>i<events.length-1&&e.type==='SCREEN');
+  if(index<0)index=events.findIndex((e,i)=>i<events.length-1&&e.type==='SCREEN'&&lastScreen.get(e.document)!==i);
   events.splice(index<0?0:index,1);
 }
 

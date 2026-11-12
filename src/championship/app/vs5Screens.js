@@ -193,7 +193,7 @@ export function createSponsorContractStrip(source, busy = () => false) {
   return strip;
 }
 
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, onOpenJourney=null, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null, sponsorContracts=null }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, onOpenJourney=null, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null, speciesBody=null, sponsorContracts=null }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -417,8 +417,9 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     const look=typeof describeMember==='function'?describeMember(entry):null;
     const face=element('span','cm-vs5-member');
     const frame=element('span','cm-vs5-member__portrait');
-    if(look?.portrait?.src){const image=document.createElement('img');image.alt='';image.decoding='async';image.loading='lazy';image.src=look.portrait.src;
-      image.addEventListener('error',()=>image.remove(),{once:true});frame.append(image);}
+    // The partner itself on its first idle cell (Owner 2026-11-12: the Database illustration is for the Database).
+    const species=entry?.speciesId??look?.speciesId??null,body=species&&typeof speciesBody==='function'?speciesBody({species,still:true}):null;
+    if(body)frame.append(body);
     else frame.dataset.empty='true';
     const text=element('span','cm-vs5-member__text');
     text.append(element('span','cm-vs5-member__name',name,false));
@@ -805,7 +806,11 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       // knows it, otherwise the VS mark alone. Decoration only.
       const crest = element("span", "cm-vs5-match__crest");
       crest.setAttribute("aria-hidden", "true");
-      if (typeof match.crest === "string" && match.crest) {
+      const crestBody = Number.isSafeInteger(match.crestSpecies) && typeof speciesBody === "function"
+        ? speciesBody({ species: match.crestSpecies, still: true, className: "cm-vs5-match__crest-art cm-vs5-match__crest-body" }) : null;
+      if (crestBody) {
+        crest.append(crestBody);
+      } else if (typeof match.crest === "string" && match.crest) {
         const art = element("img", "cm-vs5-match__crest-art");
         art.alt = ""; art.decoding = "async"; art.src = match.crest;
         crest.append(art);
@@ -1004,10 +1009,10 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
   card.append(portrait);
   // Floating HUD (Owner 2026-11-03): a round mini portrait on the plate's
   // corner and the element glyph beside it; neither changes the plate's size.
-  let mini=null,miniImage=null;
+  let mini=null,miniImage=null,miniSpecies=null;
   if(floatingHud){
     mini=element('span','cm-vs5-fighter__mini');mini.hidden=true;mini.setAttribute('aria-hidden','true');
-    miniImage=element('img','');miniImage.alt='';mini.append(miniImage);card.append(mini);
+    miniImage=element('span','cm-vs5-fighter__mini-body');mini.append(miniImage);card.append(mini);
     if(badge){const holder=element('span','cm-vs5-fighter__badge');holder.setAttribute('aria-hidden','true');holder.append(badge);card.append(holder);}
   }
   card.append(name, hp.wrap);
@@ -1062,7 +1067,8 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
       const image=hudArt?.getBattleFrame(next.speciesId,sequenceId,Math.max(0,frame-sequenceStart));
       portrait.hidden=floatingHud||!image;
       if(image){if(portrait.getAttribute('src')!==image.src)portrait.src=image.src;}
-      if(mini){mini.hidden=!image;if(image&&miniImage.getAttribute('src')!==image.src)miniImage.src=image.src;}
+      // The plate's round mini portrait: the fighter's own body (Owner 2026-11-12), not an illustration.
+      if(mini){if(miniSpecies!==next.speciesId){miniSpecies=next.speciesId;mini.hidden=!hudArt?.setActionPortrait?.(miniImage,next.speciesId,{still:true,lazy:false,floor:0});}}
       hp.fill.style.width = `${Math.round(next.hp.ratio * 100)}%`;
       // The arcade rebuild's hit feel: the bar drops at once and a white ghost
       // (the meter's ::before, CSS-delayed) follows after a beat.

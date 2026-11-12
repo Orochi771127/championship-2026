@@ -107,8 +107,8 @@ export function configureDraco({THREE,GLTFLoader,DRACOLoader,decoderPath,baseUrl
   return {loader:new GLTFLoader(manager).setDRACOLoader(draco),draco};
 }
 export async function loadExternalMapAssets({THREE,GLTFLoader,DRACOLoader,dracoDecoderPath,manifest,fieldId,baseUrl,signal,disposer}){
-  const field=validateExternalManifest(manifest,fieldId),textures=[];
-  let gltf=null,draco=null;const stats={downloadBytes:0,decodedTextureBytes:0};
+  const field=validateExternalManifest(manifest,fieldId),textures=[],decoded=new Map();
+  let gltf=null,draco=null;const stats={downloadBytes:0,decodedTextureBytes:0,releasedDecodedBytes:0};
   const read=async asset=>{const bytes=await verifiedExternalBytes(asset,baseUrl,signal);stats.downloadBytes+=bytes.byteLength;return bytes;};
   try{
     const bytes=await read(manifest.glb);validateGeometryOnlyGlb(bytes,manifest);
@@ -128,7 +128,7 @@ export async function loadExternalMapAssets({THREE,GLTFLoader,DRACOLoader,dracoD
       if(signal?.aborted){bitmap.close?.();signal.throwIfAborted();}
       if(bitmap.width!==field.frames[0].width||bitmap.height!==field.frames[0].height){bitmap.close?.();throw new Error('HUNT_THREE_FRAME_SIZE');}
       let texture;try{texture=new THREE.Texture(bitmap);}catch(error){bitmap.close?.();throw error;}
-      textures.push(texture);texture.flipY=false;texture.premultiplyAlpha=false;texture.unpackAlignment=4;
+      textures.push(texture);decoded.set(texture,bitmap);texture.flipY=false;texture.premultiplyAlpha=false;texture.unpackAlignment=4;
       texture.colorSpace=colour?THREE.SRGBColorSpace:THREE.NoColorSpace;texture.generateMipmaps=false;
       texture.minFilter=THREE.LinearFilter;texture.magFilter=THREE.LinearFilter;texture.needsUpdate=true;
       stats.decodedTextureBytes+=bitmap.width*bitmap.height*4;
@@ -156,7 +156,19 @@ export async function loadExternalMapAssets({THREE,GLTFLoader,DRACOLoader,dracoD
       });
       if(count!==manifest.glb.meshes.length)throw new Error('HUNT_THREE_MESH_CONTRACT');
     }catch(error){for(const m of materialOwners)disposer.once(m);throw error;}
-    return {gltf,textures,materialOwners,field,stats,resolveSupport,
+    // Owner 2026-11-12 (iPhone home-screen app, 戴納草原): each 2880 x 2880 frame stayed decoded
+    // (31.6 MB apiece, 95 MB for the day field) beside its uploaded copy for the whole hunt. Once a
+    // texture is on the GPU nothing reads its bitmap again: a lost context retires the whole map
+    // to 2D rather than re-uploading. The caller proves the upload per texture; an unproven one
+    // keeps its bitmap, and release on exit still closes whatever is left.
+    const releaseDecodedFrames=uploaded=>{
+      for(const [texture,bitmap] of decoded){
+        if(uploaded(texture)!==true)continue;
+        stats.releasedDecodedBytes+=bitmap.width*bitmap.height*4;decoded.delete(texture);bitmap.close?.();
+      }
+      return decoded.size;
+    };
+    return {gltf,textures,materialOwners,field,stats,resolveSupport,releaseDecodedFrames,
       selectPhase(index){if(!Number.isInteger(index)||!colours[index])throw new Error('HUNT_THREE_NATIVE_PHASE_OUT_OF_RANGE');ground.map=colours[index];foreground.map=colours[index];foreground.alphaMap=masks[index];}};
   }catch(error){disposer.gltf(gltf);for(const t of textures)disposer.texture(t);throw error;}
   finally{draco?.dispose();}

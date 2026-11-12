@@ -15,6 +15,7 @@
 import { getActiveGameTitle } from "../text/brandTerms.js";
 import { socialText } from "../text/socialText.js";
 import { getLocale } from "../text/locale.js";
+import { loadShowcaseMotionShared, showcaseMotionAvailable } from "./juicy/spriteMotionPlayer.js";
 
 export const BRAG_CARD_SIZES = Object.freeze({
   landscape: Object.freeze({ width: 1200, height: 675 }),
@@ -54,6 +55,8 @@ export function normalizeBragCardData(input = {}, locale = getLocale()) {
       name: clip(partner.name, 20) || null,
       attributeIndex: int(partner.attributeIndex, 0, 4) ?? 0,
       portraitSrc: typeof partner.portraitSrc === "string" && partner.portraitSrc ? partner.portraitSrc : null,
+      // Owner 2026-11-12: the card shows the partner's own body (an action frame), not the Database illustration.
+      portraitSpecies: typeof partner.portraitSpecies === "string" && /^species-\d{3}$/.test(partner.portraitSpecies) ? partner.portraitSpecies : null,
       role: partner.role === "winner" ? "winner" : "ace"
     }) : null,
     victory: input.victory ? Object.freeze({ matchTitle: clip(input.victory.matchTitle, 28) || null }) : null
@@ -211,10 +214,17 @@ function drawHero(ctx, L, data, portrait) {
   // The partner: bottom-anchored on the base, glowing in its attribute colour.
   if (portrait) {
     const box = { w: H.w * 0.92, h: H.h * 0.96 };
-    const ratio = Math.min(box.w / portrait.width, box.h / portrait.height);
-    const dw = portrait.width * ratio, dh = portrait.height * ratio;
+    let ratio = Math.min(box.w / portrait.width, box.h / portrait.height);
+    // A pixel body is enlarged by whole pixels with no smoothing (art production rule).
+    if (portrait.crop && ratio >= 1) ratio = Math.floor(ratio);
+    const dw = portrait.width * ratio, dh = portrait.height * ratio, top = H.platformY - H.ry * 0.25 - dh;
     ctx.save(); ctx.shadowColor = alpha(aura, 0.85); ctx.shadowBlur = 42;
-    ctx.drawImage(portrait.image, H.cx - dw / 2, H.platformY - H.ry * 0.25 - dh, dw, dh);
+    if (portrait.crop) {
+      const c = portrait.crop;
+      ctx.imageSmoothingEnabled = false;
+      if (portrait.mirror) { ctx.translate(H.cx, 0); ctx.scale(-1, 1); ctx.translate(-H.cx, 0); }
+      ctx.drawImage(portrait.image, c.x, c.y, c.w, c.h, H.cx - dw / 2, top, dw, dh);
+    } else ctx.drawImage(portrait.image, H.cx - dw / 2, top, dw, dh);
     ctx.restore();
   } else {
     // No art yet: a crest with the partner's initial, never a stand-in character.
@@ -340,6 +350,25 @@ export function loadBragCardImage(src, { doc = globalThis.document, timeoutMs = 
   });
 }
 
+/**
+ * The partner's own body for the card: its cheer (or idle) pose, one frame,
+ * cropped from the same reviewed / public runtime page the game plays. Null
+ * when the species has no motion here; never rejects.
+ */
+export async function loadBragCardPartnerFrame(species, { loadImage = src => loadBragCardImage(src), baseUrl = globalThis.location?.href } = {}) {
+  try {
+    if (!showcaseMotionAvailable(species, baseUrl)) return null;
+    const motion = await loadShowcaseMotionShared(species, { baseUrl });
+    const frames = motion.sequences.get(33) ?? motion.sequences.get(0) ?? null, frame = frames?.[0];
+    if (!frame) return null;
+    const loaded = await loadImage(frame.url);
+    if (!loaded) return null;
+    // Art faces left; a set drawn facing right is flipped back, and a mirrored frame flips again.
+    const mirror = Boolean(motion.facesRight) !== Boolean(frame.mirror);
+    return { image: loaded.image, width: frame.w, height: frame.h, crop: { x: frame.x, y: frame.y, w: frame.w, h: frame.h }, mirror };
+  } catch { return null; }
+}
+
 function isTainted(ctx) {
   try { ctx.getImageData(0, 0, 1, 1); return false; } catch { return true; }
 }
@@ -349,13 +378,15 @@ function isTainted(ctx) {
  * would taint the canvas, the card is drawn again without it.
  */
 export async function renderTamerBragCard(input, { doc = globalThis.document, orientation = "landscape", scale = BRAG_CARD_SCALE, locale = getLocale(),
-  createCanvas = (w, h) => { const canvas = doc.createElement("canvas"); canvas.width = w; canvas.height = h; return canvas; }, loadImage = src => loadBragCardImage(src, { doc }) } = {}) {
+  createCanvas = (w, h) => { const canvas = doc.createElement("canvas"); canvas.width = w; canvas.height = h; return canvas; }, loadImage = src => loadBragCardImage(src, { doc }),
+  loadPartnerFrame = (species, load) => loadBragCardPartnerFrame(species, { loadImage: load }) } = {}) {
   const data = normalizeBragCardData(input, locale);
   const size = BRAG_CARD_SIZES[orientation] ?? BRAG_CARD_SIZES.landscape;
   const canvas = createCanvas(Math.round(size.width * scale), Math.round(size.height * scale));
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("BRAG_CARD_CANVAS_UNAVAILABLE");
-  const portrait = data.partner?.portraitSrc ? await loadImage(data.partner.portraitSrc) : null;
+  const portrait = data.partner?.portraitSpecies ? await loadPartnerFrame(data.partner.portraitSpecies, loadImage)
+    : data.partner?.portraitSrc ? await loadImage(data.partner.portraitSrc) : null;
   const paint = image => { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.setTransform(scale, 0, 0, scale, 0, 0); drawTamerBragCard(ctx, data, { orientation, portrait: image }); };
   paint(portrait);
   let portraitDrawn = Boolean(portrait);

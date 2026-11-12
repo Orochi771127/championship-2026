@@ -1,5 +1,18 @@
 # Championship Owner Direction
 
+<!-- record-id: IOS_HUNT_ENTRY_RELOAD_20261112 -->
+## 2026-11-12 — iPhone home-screen app reloads on entering 戴納草原: decoded map frames freed after upload, Hunt entry steps in the diagnostics
+
+Owner report (2026-11-12, iPhone 15 Pro Max, home-screen app, with the downloaded diagnostics file): 「我剛剛要從遊戲進入狩獵地圖，結果馬上跳回首頁出錯」; then 「他就直接閃白，然後跳回主頁以後又跳回到狩獵地圖，出發前在選道具那邊」 on 戴納草原. Delegation: 「我可以交給你去做判斷跟修嗎？」. Publication: 「好啊，合併都發佈做完自我審查沒問題就發」 (PR #241 only).
+
+Engineering repair and diagnostics only. No gameplay value, save field, reward, clock, RNG, art or map picture change.
+
+- Reading of the export: the old document ends with no `PAGE_HIDE` and the next one boots as `back_forward` with no `wasDiscarded` field (WebKit), so iOS ended the page; no script error was recorded for the Hunt. The three `ERROR / OTHER` rows before it are on the battle selection and their messages are not kept.
+- Measured on the published build (390x844, DPR 3): the hm01 day field kept three decoded 2880 x 2880 bitmaps (102 MB) beside their uploaded textures for the whole hunt; other maps keep 8-21 MB. `externalMapAssets.mjs` now closes each bitmap once `createHuntThreeMap.mjs` proves its texture is uploaded (102 MB -> 8 MB; WebGL bytes and the picture unchanged).
+- Battles were checked and left alone: two Free Battles leave about 4 MB of small cached canvases each, no large leak.
+- Diagnostics: a Hunt entry records `engine / partners / arena / scene / ready`; each document's last `SCREEN` survives the next `BOOT`; the home-screen auto-resume writes `AUTO_RESUME` with its target screen.
+- Open: no iPhone was available to the agent. On an 8 GB device total memory alone is a weak explanation, so the Owner's retest decides; if it recurs, the new Hunt rows show the step reached. A single-channel coverage mask (16-25 MB less GPU memory) was not done because it cannot be checked on WebKit here.
+
 <!-- record-id: UI_THREE_LAYOUT_SETS_20261111 -->
 ## 2026-11-11 — Three layout sets (phone upright, phone sideways, desktop): full-game page audit, desktop interface zoom, reading size and quality settings audit
 

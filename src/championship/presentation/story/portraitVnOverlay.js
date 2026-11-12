@@ -14,6 +14,7 @@
 // lines seen so far. The app hides the ranch HUD while the overlay is open.
 
 import { uiText, setText } from "../../text/uiText.js";
+import { createActionPortrait } from "../juicy/actionPortrait.js";
 
 export const VN_TYPEWRITER_MS = 28;
 export const VN_AUTO_BASE_MS = 900;
@@ -99,11 +100,14 @@ export function createPortraitVnOverlay({ doc = globalThis.document, host = doc.
   function paintPortrait(side, portrait, motion, name, active) {
     const figure = portraits[side];
     // No picture, no box: a missing hero portrait never leaves a blank card over the stage.
-    if (!portrait || (portrait.kind !== "navi" && !portrait.src)) { figure.hidden = true; return; }
+    const hasSpecies = portrait?.species !== null && portrait?.species !== undefined;
+    if (!portrait || (portrait.kind !== "navi" && !portrait.src && !hasSpecies)) { figure.hidden = true; return; }
     figure.hidden = false; figure.dataset.kind = portrait.kind; figure.dataset.active = String(active);
-    if (figure.dataset.key !== `${portrait.kind}:${portrait.src ?? ""}`) {
-      figure.dataset.key = `${portrait.kind}:${portrait.src ?? ""}`; figure.replaceChildren();
+    const key = `${portrait.kind}:${hasSpecies ? `species:${portrait.species}` : portrait.src ?? ""}`;
+    if (figure.dataset.key !== key) {
+      figure.dataset.key = key; figure.replaceChildren();
       if (portrait.kind === "navi") figure.innerHTML = NAVI_SVG;
+      else if (hasSpecies) figure.append(createActionPortrait({ doc, species: portrait.species, lazy: false, className: "cm-story-vn__portrait-body" }).element);
       else if (portrait.src) { const img = doc.createElement("img"); img.src = portrait.src; img.alt = portrait.alt ?? ""; img.decoding = "async"; img.draggable = false; figure.append(img); }
       else { const blank = doc.createElement("div"); blank.className = "cm-story-vn__portrait-blank"; blank.textContent = (name ?? "?").slice(0, 1); figure.append(blank); }
     }

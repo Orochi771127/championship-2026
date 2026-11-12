@@ -25,7 +25,7 @@ export function battleFxApprovedMoveName(moveId) {
 /** Ordinary hits feed the record at most this often, so it keeps moving without flickering. */
 export const BATTLE_FEED_HIT_INTERVAL_MS = 900;
 
-export function createBattleFxLookups({getView, onFeed = null, onCutIn = null, onTally = null, showIds = false, now = () => globalThis.performance?.now?.() ?? Date.now()}) {
+export function createBattleFxLookups({getView, localTeam = () => 0, onFeed = null, onCutIn = null, onTally = null, showIds = false, now = () => globalThis.performance?.now?.() ?? Date.now()}) {
   const looks = new Map();
   let lastSkillFeedAt = -Infinity, lastHitFeedAt = -Infinity;
   function describeMove(slot, moveId) {
@@ -56,6 +56,14 @@ export function createBattleFxLookups({getView, onFeed = null, onCutIn = null, o
     return resolved.get(moveId);
   }
   const nameOfSlot = slot => getView()?.combatants?.[slot]?.displayName ?? '';
+  // The record names a side when both sides field the same name (Owner 2026-11-11 recording:
+  // 「阿花仔攻擊阿花仔」 could not be read). A unique name is left as it is.
+  function feedName(slot) {
+    const combatants = getView()?.combatants ?? [], self = combatants[slot], name = self?.displayName ?? '';
+    if (!self || !name) return name;
+    const shared = combatants.some(c => c && c.present !== false && c.slot !== slot && c.team !== self.team && c.displayName === name);
+    return shared ? `${uiText(self.team === localTeam() ? '我方' : '對手')}・${name}` : name;
+  }
   /** Callout title: the approved name, the skill ID in local acceptance, else ''. */
   function moveNameOf(moveId) {
     const name = battleFxApprovedMoveName(moveId);
@@ -78,7 +86,7 @@ export function createBattleFxLookups({getView, onFeed = null, onCutIn = null, o
         const template = move ? (ultimate ? '{name}發動絕招「{move}」！' : '{name}使出「{move}」！')
           : (ultimate ? '{name}發動絕招！' : '{name}使出技能！');
         // The cue tells the record band which line is a signature move, and whose.
-        onFeed(uiText(template, {name: nameOfSlot(event.slot), move}), {tier: look.tier, slot: event.slot});
+        onFeed(uiText(template, {name: feedName(event.slot), move}), {tier: look.tier, slot: event.slot});
         lastSkillFeedAt = now();
         // Arcade cut-in (2026-10-28): a signature move's strip, decoration only.
         if (ultimate && typeof onCutIn === 'function') {
@@ -87,7 +95,7 @@ export function createBattleFxLookups({getView, onFeed = null, onCutIn = null, o
             casterName: nameOfSlot(event.slot), moveName: move, palette: look.palette});
         }
       } else if (event.type === 'KO') {
-        onFeed(uiText('{name}倒下了！', {name: nameOfSlot(event.slot)}));
+        onFeed(uiText('{name}倒下了！', {name: feedName(event.slot)}));
         lastSkillFeedAt = now();
       } else if (event.type === 'HIT' && event.damage > 0) {
         // Owner 2026-11-03: the record kept a knockout line for the rest of the
@@ -96,11 +104,11 @@ export function createBattleFxLookups({getView, onFeed = null, onCutIn = null, o
         const at = now();
         if (at - lastSkillFeedAt < 1200 || at - lastHitFeedAt < BATTLE_FEED_HIT_INTERVAL_MS) return;
         lastHitFeedAt = at;
-        const attacker = Number.isInteger(event.attackerSlot) ? nameOfSlot(event.attackerSlot) : '';
-        onFeed(attacker ? uiText('{name}攻擊{target}，造成 {damage} 傷害', {name: attacker, target: nameOfSlot(event.slot), damage: event.damage})
-          : uiText('{target}受到 {damage} 傷害', {target: nameOfSlot(event.slot), damage: event.damage}), {tier: 'basic', slot: event.attackerSlot ?? event.slot});
+        const attacker = Number.isInteger(event.attackerSlot) ? feedName(event.attackerSlot) : '';
+        onFeed(attacker ? uiText('{name}攻擊{target}，造成 {damage} 傷害', {name: attacker, target: feedName(event.slot), damage: event.damage})
+          : uiText('{target}受到 {damage} 傷害', {target: feedName(event.slot), damage: event.damage}), {tier: 'basic', slot: event.attackerSlot ?? event.slot});
       } else if (event.type === 'HEAL' && event.amount > 0) {
-        onFeed(uiText('{name}回復了 {amount} 生命值', {name: nameOfSlot(event.slot), amount: event.amount}), {tier: 'support', slot: event.slot});
+        onFeed(uiText('{name}回復了 {amount} 生命值', {name: feedName(event.slot), amount: event.amount}), {tier: 'support', slot: event.slot});
         lastSkillFeedAt = now();
       }
     }

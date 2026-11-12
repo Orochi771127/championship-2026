@@ -137,7 +137,11 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
       renderer.shadowMap.enabled=authored;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
       renderer.autoClear=true;renderer.setClearColor(external?.field.clearColor??0x0a222a,1);renderer.outputColorSpace=THREE.SRGBColorSpace;
       shaderGuard=shaderFailureGuard(renderer);
-      if(external)withSharedUnpackState(app.renderer.gl,()=>{for(const texture of external.textures)renderer.initTexture(texture);});
+      if(external){
+        withSharedUnpackState(app.renderer.gl,()=>{for(const texture of external.textures)renderer.initTexture(texture);});
+        // Uploaded means Three holds a GL texture at this texture's current version.
+        external.releaseDecodedFrames?.(texture=>{const held=renderer.properties.get(texture);return Boolean(held.__webglTexture)&&held.__version===texture.version;});
+      }
       if(look)hd2d=createHd2dPost({THREE,renderer,look});
     } finally {app.renderer.resetState();}
     // Export is already Y-up; never double-rotate or rescale.

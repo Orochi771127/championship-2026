@@ -46,8 +46,10 @@ export function createHybridStoryDirector({
   const sleep = ms => storySleep(ms, { signal: controller?.signal, doc, setTimer, clearTimer });
 
   function portraitFor(speaker, params) {
-    if (speaker === "partner") return { kind: "image", src: params.partnerPortrait?.src ?? null, alt: params.partner ?? "" };
-    if (speaker === "echo") return { kind: "silhouette", src: params.partnerPortrait?.src ?? null, alt: "" };
+    // The partner speaks as itself: its own animated body (Owner 2026-11-12), or an image where one is given.
+    const species = params.partnerPortrait?.species ?? null;
+    if (speaker === "partner") return { kind: "image", species, src: params.partnerPortrait?.src ?? null, alt: params.partner ?? "" };
+    if (speaker === "echo") return { kind: "silhouette", species, src: params.partnerPortrait?.src ?? null, alt: "" };
     if (speaker === "navi") return { kind: "navi" };
     return null;
   }

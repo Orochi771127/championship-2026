@@ -8,6 +8,7 @@
 
 import { journeyText as t } from "../text/journeyText.js";
 import { syncText } from "../text/syncLevelText.js";
+import { createActionPortrait } from "../presentation/juicy/actionPortrait.js";
 
 const el = (tag, className, text) => {
   const node = document.createElement(tag);
@@ -23,7 +24,9 @@ const button = (className, text, onClick) => {
 };
 const portrait = (src, className = "cm-journey__face") => {
   const frame = el("span", className);
-  if (src) {
+  // A species ({species}) stands as its own body on its first idle cell (Owner 2026-11-12).
+  if (src && typeof src === "object" && src.species !== undefined) frame.append(createActionPortrait({ species: src.species, still: true }).element);
+  else if (src) {
     const image = el("img");
     Object.assign(image, { src, alt: "", decoding: "async", loading: "lazy" });
     image.addEventListener("error", () => image.remove(), { once: true });
