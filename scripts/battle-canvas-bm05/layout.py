@@ -159,10 +159,10 @@ MOUNDS = [
 
 # --------------------------------------------------------------------------- rocks
 
-# Dark slate lumps with snow on top: (x, y, radius, height, seed).
+# Dark slate lumps with snow on top: (x, y, radius, height, seed[, 'bare' = no snow]).
 ROCKS = [
-    (992, 1094, 32, 0.5, 1),             # continues the rock the bottom edge cuts
-    (-120, 500, 30, 0.6, 2), (-270, 820, 34, 0.7, 3), (-60, 1150, 26, 0.5, 4), (1790, 560, 30, 0.6, 5),
+    (992, 1092, 32, 0.45, 1, 'bare'),    # the foot of the rock the bottom edge cuts (its snow is in the play area)
+    (-120, 500, 30, 0.6, 2), (-150, 1090, 34, 0.7, 3), (-60, 1150, 26, 0.5, 4), (1790, 560, 30, 0.6, 5),
     (1940, 1010, 32, 0.65, 6), (1760, 1180, 26, 0.5, 7), (420, 1190, 30, 0.6, 8), (700, 1230, 24, 0.5, 9),
     (1040, 1400, 34, 0.7, 10), (1600, 1230, 28, 0.55, 11), (-300, 1300, 30, 0.6, 12), (1960, 1420, 28, 0.55, 13),
 ]
@@ -234,15 +234,17 @@ def free_ice(row):
     name, kind, z0, gx, gy, radius, hc, ha, seed = row
     berg = kind == 'berg'
     count = (9 if berg else 14) + int(hash01(seed, 'n') * 4)
+    p2, p3 = hash01(seed, 'p2') * math.tau, hash01(seed, 'p3') * math.tau
     spokes = []
     for k in range(count):
         a = (k + hash01(seed, k, 'a') * .6) * 360 / count
         if berg:      # wide gentle skirt, cap well inside it
             rw = radius * (.78 + .5 * hash01(seed, k, 'w'))
             rc = rw * (.42 + .2 * hash01(seed, k, 'c'))
-        else:         # a ragged wall with the snow cone reaching its rim
-            rw = radius * (.62 + .76 * hash01(seed, k, 'w'))
-            rc = rw * (.84 + .14 * hash01(seed, k, 'c'))
+        else:         # a chunky wall (a few broad corners, not a star) with the snow cone reaching its rim
+            t = math.radians(a)
+            rw = radius * (1 + .17 * math.sin(2 * t + p2) + .09 * math.sin(3 * t + p3) + .05 * (hash01(seed, k, 'w') - .5))
+            rc = rw * (.86 + .1 * hash01(seed, k, 'c'))
         spokes.append((a, rw, rc))
     return dict(name=name, kind=kind, z0=z0, G=(gx, gy), hc=hc, ha=ha, spokes=spokes, fix_water=[], fix_cap=[])
 

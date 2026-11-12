@@ -19,8 +19,8 @@
   ],
   "frame": {
     "src": "frame-00.webp",
-    "sha256": "38205decdda1be690d465db1f1b090c231bd4eec128e2d21d7909ac04136ea86",
-    "bytes": 271270,
+    "sha256": "800b70afb696a405bd4d0e0f84e37ba275fb8a5b4b265465f805bca189e086b7",
+    "bytes": 266440,
     "encoding": "WEBP lossy quality 92"
   },
   "centreSource": "bm05-southpole-polish-r2/base.webp",
@@ -28,7 +28,7 @@
   "centreDiff": 0,
   "centreDiffNote": "The lossless master (canvas.png, not committed) carries the live picture's pixels unchanged. frame-00.webp is lossy, so re-encoding moves centre pixels slightly (centreDiffEncoded); drawing base.webp over the centre at playOffsetWorldPx restores them exactly.",
   "centreDiffEncoded": {
-    "mean": 0.4153,
+    "mean": 0.4076,
     "max": 18
   },
   "camera": {
@@ -51,12 +51,12 @@
     "note": "Half size, white with alpha = open sea in the ring only; the play area is empty here and keeps its own mask."
   },
   "sourceBlend": "assets/production/battle/original-opus-canvas-r1/fields/field_bm05_01/master-canvas.blend",
-  "sourceBlendSha256": "36a9096517ab04c799ef7070a662d06193a067239f93a06f6625e9a4fe65c589",
-  "producers": {
-    "scripts/battle-canvas-bm05/layout.py": "e12eb464d28e12dc4d57eeedf0be11606843820c941f7ac585176a0c99f35ac2",
+  "sourceBlendSha256": "0e5acfa2832b050383b75fa373967568fd752e03f62eeb0423d9a70d586f8f4e",
+  "producersLfSha256": {
+    "scripts/battle-canvas-bm05/layout.py": "bda89579843b11f36a4e5ea8862ff3353a3e3b945e818a068b371db979eda276",
     "scripts/battle-canvas-bm05/sea_map.py": "0a30c581796b74a050b212b0f2c2df2e17eda055fe73f225cdb2599926a4d3b1",
-    "scripts/battle-canvas-bm05/build_scene.py": "a3db9ba1a89c5ef921e360fe0168a44f73730c3a50b9c43ba9b455917786ed0f",
-    "scripts/battle-canvas-bm05/compose.py": "2884bd45b77317a9aab9de15156825f2ae5d91acc957760aafc287dd297c220d"
+    "scripts/battle-canvas-bm05/build_scene.py": "2a86fe6556ae6b0dbe29d07875ea9869a9256649e5af96dc9735232260ac5b0b",
+    "scripts/battle-canvas-bm05/compose.py": "ef5838ec0bfbe61ac80140be57a38eab23976d7d9443588fe8bcb07db7b729a8"
   },
   "join": {
     "toneReachWorldPx": 176.0,

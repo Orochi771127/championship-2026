@@ -35,7 +35,7 @@ BASE_REL = 'assets/production/battle/bm05-southpole-polish-r2/base.webp'
 FIELD_ID = 'field_bm05_01'
 CELL = 4            # tone match is solved on native pixels (4 canvas pixels)
 REACH = 44.0        # cells over which the tone offset fades (176 canvas pixels)
-TONE_CAP = 22.0     # largest tone offset (8-bit levels) applied to anything but sea
+TONE_CAP = 32.0     # largest tone offset (8-bit levels) applied to anything but sea
 WELD = 32.0         # canvas pixels over which the centre's edge colours fade into the ring
 WELD_SHORT = 9.0    # ... cut to this where ring and centre disagree strongly
 SLOPE_DEPTH = 8     # rows between the two bands that measure how lines cross an edge
@@ -46,6 +46,11 @@ GRAIN_SEED = 20261112
 
 def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def sha_text(path):
+    """Hash of a text file with LF line ends, so a CRLF checkout gives the same value."""
+    return hashlib.sha256(Path(path).read_bytes().replace(b'\r\n', b'\n')).hexdigest()
 
 
 def seam_fields():
@@ -144,7 +149,9 @@ def edge_slopes(inner, far):
         err = np.abs(moved - inner).sum(axis=1).astype(np.float32)
         cost[k] = np.convolve(err, kernel, mode='same') + 2.0 * abs(int(s))      # flat areas prefer no drift
     best = shifts[np.argmin(cost, axis=0)].astype(np.float32)
-    best = cv2.medianBlur(best.reshape(1, -1), 5).ravel() if n >= 5 else best
+    # Neighbouring columns must drift together, or the carried colours comb: median, then smooth.
+    best = cv2.medianBlur(best.reshape(1, -1), 5).ravel()
+    best = cv2.GaussianBlur(best.reshape(1, -1), (0, 0), 5.0).ravel()
     return best / SLOPE_DEPTH
 
 
@@ -190,8 +197,8 @@ def weld(ring, base, dist):
         carried[ys, xs] = fb[cy, cx]
     # Where the carried colour and the ring disagree strongly (an outline a few pixels off) a long
     # fade would leave a ghost, so the fade is cut short there.
-    clash = cv2.GaussianBlur(np.abs(carried - ring).max(axis=2), (0, 0), 2.0)
-    span = WELD - (WELD - WELD_SHORT) * np.clip((clash - 24.0) / 48.0, 0, 1)
+    clash = cv2.GaussianBlur(np.abs(carried - ring).max(axis=2), (0, 0), 3.0)
+    span = WELD - (WELD - WELD_SHORT) * np.clip((clash - 118.0) / 40.0, 0, 1)
     t = np.clip(1 - dist / span, 0, 1)
     weight = (t * t * (3 - 2 * t))[..., None]
     return carried * weight + ring * (1 - weight)
@@ -278,7 +285,7 @@ def main():
             'note': 'Half size, white with alpha = open sea in the ring only; the play area is empty here and keeps its own mask.'},
         'sourceBlend': args.blend,
         'sourceBlendSha256': sha(ROOT / args.blend) if args.blend and (ROOT / args.blend).exists() else None,
-        'producers': {p: sha(ROOT / p) for p in (
+        'producersLfSha256': {p: sha_text(ROOT / p) for p in (
             'scripts/battle-canvas-bm05/layout.py', 'scripts/battle-canvas-bm05/sea_map.py',
             'scripts/battle-canvas-bm05/build_scene.py', 'scripts/battle-canvas-bm05/compose.py')},
         'join': {'toneReachWorldPx': REACH * CELL, 'weldWorldPx': WELD, 'grainStd': round(strength, 3)},

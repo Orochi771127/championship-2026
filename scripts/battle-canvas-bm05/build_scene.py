@@ -271,12 +271,13 @@ def rock_material():
 
 def make_materials(sea_image):
     # Snow: level ground stays fully lit; a mound's far flank greys toward blue as in the play area.
-    faceted_material('snow', (127, 138, 150), (210, 226, 239), ramp=(.25, .84), mottle=.03, mottle_scale=1.1, grain=.012,
+    faceted_material('snow', (127, 138, 150), (210, 226, 239), ramp=(.12, .78), mottle=.03, mottle_scale=1.1, grain=.012,
                      own=.15, share=.95, smooth=True)
     faceted_material('cap', (174, 196, 220), (229, 237, 242), ramp=(.48, .92), mottle=.02, mottle_scale=3.0, grain=.015)
-    faceted_material('ice-berg', (48, 118, 168), (172, 209, 238), ramp=(-.3, .35), mottle=.11, mottle_scale=4.0, grain=.05)
-    faceted_material('ice-crag', (44, 130, 190), (120, 172, 200), ramp=(-.25, .45), mottle=.16, mottle_scale=2.4, grain=.05)
+    faceted_material('ice-berg', (48, 118, 168), (172, 209, 238), ramp=(-.3, .35), mottle=.07, mottle_scale=5.0, grain=.05)
+    faceted_material('ice-crag', (40, 128, 194), (104, 164, 208), ramp=(-.25, .45), mottle=.16, mottle_scale=2.4, grain=.05)
     material('slab', (.125, .165, .195), mottle=.06, mottle_scale=4.0)
+    material('rock-bare', (.035, .060, .085), mottle=.10, mottle_scale=5.0)
     rock_material()
     sea_material(sea_image)
 
@@ -442,7 +443,7 @@ def build_sea():
     return obj
 
 
-def build_rock(x, y, radius, height, seed):
+def build_rock(x, y, radius, height, seed, kind='snowy'):
     bm = bmesh.new()
     made = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=1.0)
     centre = P(x, y, L.H_LAND)
@@ -452,7 +453,7 @@ def build_rock(x, y, radius, height, seed):
     mesh = bpy.data.meshes.new(f'rock-{seed}')
     bm.to_mesh(mesh)
     bm.free()
-    mesh.materials.append(MATS['rock'])
+    mesh.materials.append(MATS['rock-bare' if kind == 'bare' else 'rock'])
     obj = bpy.data.objects.new(f'rock-{seed}', mesh)
     bpy.context.collection.objects.link(obj)
     obj['canvasLayer'] = 'ring'
