@@ -5,7 +5,7 @@ import threeFallbackManifest from '../../../assets/production/public-runtime/hun
 // Read-only projections for the continuous mobile Hunt screen.
 // Daytime field thumbnails are previews, never the original field_image_icon.
 import { validateRuntimeMapArtBundle } from './runtimeMapArtBundle.js';
-import {nativeHuntAnalyzedFields,nativeHuntRadarMask,nativeHuntRadarMatches} from '../hunt/loadout/nativeHuntPluginRules.js';
+import {nativeHuntAnalyzedFields,nativeHuntRadarMask,productHuntRadarMatches} from '../hunt/loadout/nativeHuntPluginRules.js';
 import {SPECIES_NAMES_ZH} from '../text/catalogs.zhHant.js';
 
 const threeFallbackArt = validateRuntimeMapArtBundle(threeFallbackManifest);
@@ -41,7 +41,7 @@ export function huntPluginReadout(runtime,capabilities={}){
   return {
     counters:(state?.tools??[]).filter(t=>capabilities.itemCounters?.includes(t.id)).map(t=>({id:t.id,quantity:t.quantity})),
     memory:capabilities.memoryReadout&&state?{usedG:state.usedG,maxG:state.maxG}:null,
-    radar:capabilities.radar?runtime.getWildCreatures().filter(a=>Number.isInteger(a.speciesIndex)&&nativeHuntRadarMatches(a.speciesIndex,mask))
+    radar:capabilities.radar?runtime.getWildCreatures().filter(a=>Number.isInteger(a.speciesIndex)&&productHuntRadarMatches(a.speciesIndex,mask))
       .slice(0,24).map(a=>({wildId:a.wildId,x:a.worldX/runtime.world.worldWidthPx,y:a.worldY/runtime.world.worldHeightPx})):null
   };
 }

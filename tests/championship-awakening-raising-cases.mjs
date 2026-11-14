@@ -35,22 +35,23 @@ const rebirthBase = (() => {
   return null;
 })();
 
-test('progress: raised share plus item energy (shards and SSR at most 60, a UR fills); gates hold on their own', () => {
+test('progress: raised share plus item energy (shards and SSR at most 40, a UR fills); gates hold on their own', () => {
   const base = 72, t1 = burstFormsFor(base).find(f => f.tier === 1), t2 = burstFormsFor(base).find(f => f.tier === 2);
   const empty = profileOf(base, {'024': 0, '028': 0, '104': 0, '108': 0, '100': 0, '10c': 0, '110': 0, '114': 0, '118': 0, '11c': 0, '120': 0, '124': 0, '128': 0});
   const none = awakeningProgress(empty, t1);
   assert.equal(none.percent, 0);
   assert.equal(none.ready, false);
-  assert.equal(awakeningProgress(empty, t1, {energy: 50}).percent, 50);
+  assert.equal(awakeningProgress(empty, t1, {energy: 30}).percent, 30);
   assert.equal(awakeningProgress(empty, t1, {energy: 90}).percent, AWAKENING_RULES.itemCap, 'items stop at the cap');
   const filled = awakeningProgress(empty, t1, {energy: 100});
   assert.equal(filled.percent, 100);
   assert.equal(filled.ready, true, 'a UR metal fills a tier-1 form');
   assert.equal(filled.glow, true);
-  const raised = awakeningProgress(profileOf(base, {'024': 40, '028': 30, '114': 99, '110': 99, '10c': 99}), t1);
+  // GACHA_FULL_EFFECTS_20261109: tier-1 thresholds are scaled ×2.5 (40 points → 100, 8 battles → 20).
+  const raised = awakeningProgress(profileOf(base, {'024': 40, '028': 30, '114': 999, '110': 999, '10c': 999}), t1);
   assert.equal(raised.percent, 100);
   assert.equal(raised.ready, true, 'raised by its own conditions');
-  assert.equal(awakeningProgress(profileOf(base, {'024': 40, '028': 30, '114': 99, '110': 99, '10c': 99}), t1, {learned: [t1.form]}).ready, false, 'a learned form is not ready again');
+  assert.equal(awakeningProgress(profileOf(base, {'024': 40, '028': 30, '114': 999, '110': 999, '10c': 999}), t1, {learned: [t1.form]}).ready, false, 'a learned form is not ready again');
   if (t2) {
     const tier2 = awakeningProgress(empty, t2, {energy: 100});
     assert.equal(tier2.viaMet, false);
@@ -82,7 +83,7 @@ test('memory halves point and battle thresholds; win rate and rebirths stay', ()
   const base = 72, t1 = burstFormsFor(base).find(f => f.tier === 1 && f.thresholds.slice(0, 11).some(Boolean));
   const point = t1.thresholds.slice(0, 11).findIndex(Boolean);
   const field = ['104', '108', '100', '10c', '110', '114', '118', '124', '120', '128', '11c'][point];
-  const half = Math.ceil(t1.thresholds[point] / 2);
+  const half = Math.ceil(Math.ceil(t1.thresholds[point] * AWAKENING_RULES.thresholdScale[1]) / 2);
   const profile = profileOf(base, {[field]: half, '024': 99, '028': 99});
   assert.ok(awakeningProgress(profile, t1).percent < 100);
   const remembered = awakeningProgress(profile, t1, {remembered: true});
@@ -92,7 +93,7 @@ test('memory halves point and battle thresholds; win rate and rebirths stay', ()
 
 test('energy, learning, display, appearance and the record round trip', () => {
   const base = 72, [t1] = burstFormsFor(base).filter(f => f.tier === 1);
-  let state = feedAwakeningEnergy(createBurstEvolutionState(), 'p', t1.form, {amount: 50});
+  let state = feedAwakeningEnergy(createBurstEvolutionState(), 'p', t1.form, {amount: 30});
   state = feedAwakeningEnergy(state, 'p', t1.form, {amount: 25});
   assert.equal(state.energy.p[t1.form], AWAKENING_RULES.itemCap);
   assert.equal(feedAwakeningEnergy(state, 'p', t1.form, {amount: 8}), null, 'full');
@@ -196,15 +197,16 @@ test('the app: feed shards and metals, the ceremony teaches the form, the look s
     const focus = view.focus;
     let fed = app.feedAwakening(id, 'metal:beta-shard');
     assert.equal(fed.ok, true, fed.reason);
-    assert.equal(fed.amount, 8);
+    // GACHA_FULL_EFFECTS_20261109 balance: R shard 5, SSR metal 30 / 20, items stop at 40.
+    assert.equal(fed.amount, 5);
     fed = app.feedAwakening(id, 'metal:emma');
-    assert.equal(fed.amount, 50);
-    assert.equal(app.getPartnerAwakening(id).feeds.find(f => f.itemId === 'metal:emma').amount, 2, 'near the cap the button says what it really adds');
+    assert.equal(fed.amount, 30);
+    assert.equal(app.getPartnerAwakening(id).feeds.find(f => f.itemId === 'metal:emma').amount, 5, 'near the cap the button says what it really adds');
     fed = app.feedAwakening(id, 'metal:emma');
-    assert.equal(fed.amount, 2, 'and so does the receipt');
-    assert.deepEqual({...app.getCyberGachaFrame().metals.find(m => m.id === 'metal:emma').awaken}, {fill: false, tier1: 50, tier2: 30, cap: 60});
-    assert.deepEqual({...app.getCyberGachaFrame().metals.find(m => m.id === 'metal:supernova').awaken}, {fill: true, tier1: 100, tier2: 100, cap: 60});
-    assert.equal(app.getPartnerAwakening(id).forms.find(f => f.form === focus).energy, AWAKENING_RULES.itemCap, 'shards and SSR stop at 60');
+    assert.equal(fed.amount, 5, 'and so does the receipt');
+    assert.deepEqual({...app.getCyberGachaFrame().metals.find(m => m.id === 'metal:emma').awaken}, {fill: false, tier1: 30, tier2: 20, cap: 40});
+    assert.deepEqual({...app.getCyberGachaFrame().metals.find(m => m.id === 'metal:supernova').awaken}, {fill: true, tier1: 100, tier2: 100, cap: 40});
+    assert.equal(app.getPartnerAwakening(id).forms.find(f => f.form === focus).energy, AWAKENING_RULES.itemCap, 'shards and SSR stop at 40');
     assert.equal(app.feedAwakening(id, 'metal:beta-shard').reason, 'AWAKENING_ENERGY_FULL');
     assert.equal(app.getPartnerBloodline(id)?.family, 'emma', 'an SSR metal inscribes its bloodline');
     // A UR metal fills the form; the partner waits for the player to tap its sign.
@@ -392,10 +394,10 @@ test('the bag explains each metal by the current rules: awakening energy on a �
   assert.match(ur, /星核：爆裂威力更強/, 'the bloodline is named with its perk');
   assert.match(ur, /一次充滿，並免除轉生條件/);
   for (const id of GACHA_METALS.map(m => m.id)) assert.doesNotMatch(gachaMetalNote(item(id)), /解鎖/, `${id}: no stale unlock wording`);
-  assert.match(gachaMetalNote(item('metal:emma')), /\+50%（二段 \+30%），道具最多補到 60%/);
-  assert.match(gachaMetalNote(item('metal:supernova-shard')), /星核.*\+25%，道具最多補到 60%/);
+  assert.match(gachaMetalNote(item('metal:emma')), /\+30%（二段 \+20%），道具最多補到 40%/);
+  assert.match(gachaMetalNote(item('metal:supernova-shard')), /星核.*\+15%，道具最多補到 40%/);
   const shard = gachaMetalNote(item('metal:emma-shard'));
-  assert.match(shard, /幼年期.*\+8%/);
+  assert.match(shard, /幼年期選一條差 1～2 項條件的路線.*成熟期：注入覺醒能量 \+5%/, 'GACHA_FULL_EFFECTS_20261109: a shard waives up to two');
   assert.doesNotMatch(shard, /銘刻/, 'an R shard inscribes no bloodline');
   assert.equal(awakeningEnergySummary({kind: 'AWAKEN_ENERGY', amount: 2, percent: 60}), '覺醒能量 +2%（目前 60%）');
   assert.match(awakeningEnergySummary({kind: 'AWAKEN_ENERGY', amount: 100, fill: true, ready: true}), /到牧場點拍檔/);

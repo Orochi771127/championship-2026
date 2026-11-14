@@ -82,12 +82,13 @@ test('the playtest keeps its grant on top of the same wallet', async () => {
   } finally { await app.dispose(); }
 });
 
-test('launch growth: 成熟期 from rank 1 (藍階); rank 0 still stops at 成長期; capacity unchanged', () => {
+test('launch growth: 成熟期 from rank 1 (藍階); rank 0 still stops at 成長期; capacity scaled with partner weights', () => {
   const ranks = PRODUCT_RAISING_LIFECYCLE_RULES.ranks;
   assert.equal(ranks[0].generation, nativeLifecycle.ranks[0].generation, 'rank 0: 成長期 is the ceiling');
   assert.equal(ranks[1].generation, nativeLifecycle.ranks[2].generation, 'rank 1 reaches 成熟期, as rank 2 did');
-  assert.deepEqual(ranks.map(r => r.capacity), nativeLifecycle.ranks.map(r => r.capacity));
-  assert.deepEqual(ranks.slice(2), nativeLifecycle.ranks.slice(2));
+  // GACHA_FULL_EFFECTS_20261109: partners weigh 6 G more and each rank's capacity grows ×1.375 with them.
+  assert.deepEqual(ranks.map(r => r.capacity), [88, 102, 132, 154, 220, 232, 248, 264, 276, 276]);
+  assert.deepEqual(ranks.slice(2).map(r => r.generation), nativeLifecycle.ranks.slice(2).map(r => r.generation));
 });
 
 test('the playtest lifts the rank ceiling; a full cage is named on the partner card', () => {

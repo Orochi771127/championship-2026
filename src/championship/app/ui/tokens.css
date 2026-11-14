@@ -26,6 +26,27 @@
  */
 
 /* ---- Palette: night (A) ------------------------------------------------ */
+/* ---- Interface font (Owner 2026-11-11) ------------------------------------ *
+ * 源泉圓體 GenSenRounded2 TW (SIL Open Font License 1.1, see fonts/OFL.txt), cut down to the
+ * characters the game's own text uses (scripts/build-ui-font-subset.py). Two weights cover
+ * the arcade interface: Bold for running text, Heavy for keys, titles and numbers. A
+ * character outside the subset (a typed name, Thai, Vietnamese accents) falls through to the
+ * system faces after it in --font-ui. "swap": the page never waits for the font. */
+@font-face {
+  font-family: "Cyber Partner Rounded";
+  src: url("./fonts/CyberPartnerRounded-Bold.woff2") format("woff2");
+  font-weight: 100 799;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cyber Partner Rounded";
+  src: url("./fonts/CyberPartnerRounded-Heavy.woff2") format("woff2");
+  font-weight: 800 1000;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root, [data-palette="night"] {
   color-scheme: dark;
 
@@ -655,6 +676,133 @@
   --btn-primary-hover: saturate(1.12) brightness(1.04);
 }
 
+/* ---- 電子生命 and 晴空清新 (Owner 2026-11-11: three themes) ------------------- *
+ * Both are the arcade interface in another palette: <html data-theme="arcade"> stays, so every
+ * layout and component rule applies, and data-theme-tone swaps the colours below. The contract
+ * of the arcade skin is kept in both: a dark ink for outlines, slabs and words, and a light
+ * panel under them, so the ink literals in the component sheets stay right. */
+:root[data-theme="arcade"][data-theme-tone="cyber"], [data-palette="cyber"] {
+  /* A dark net space; the panels are the mint of a handheld LCD, the keys are neon. */
+  --ax-ink: #070b14;
+  --ax-ink-2: #1c2a3f;
+  --ax-paper: #d9f0e8;
+  --ax-paper-2: #b6d9cd;
+  --ax-red: #ff4d6d;     --ax-red-sh: #a3192f;
+  --ax-yellow: #f9e04c;  --ax-yellow-sh: #9a8400;
+  --ax-green: #2dffa0;   --ax-green-sh: #0f8f58;
+  --ax-cyan: #29e0ff;    --ax-cyan-sh: #0b7d94;
+  --ax-blue: #4d8dff;    --ax-blue-sh: #2349a8;
+  --ax-purple: #b06bff;  --ax-purple-sh: #5f2fae;
+  --ax-pink: #ff6fd0;    --ax-pink-sh: #a32a80;
+  --ax-white: #f0fff9;   --ax-white-sh: #7fa89b;
+  --ax-dots-light: radial-gradient(rgba(41, 224, 255, 0.16) 1.2px, transparent 1.6px) 0 0 / 6px 6px;
+  --ax-stage: radial-gradient(rgba(41, 224, 255, 0.13) 1.2px, transparent 1.6px) 0 0 / 8px 8px,
+    linear-gradient(180deg, #10233a 0%, #122e44 42%, #0f3a44 78%, #0f4a48 100%);
+
+  --c-void: #10233a;
+  --c-ground: #b6d9cd;
+  --c-ground-raised: #a9cfc2;
+  --c-stage-light: #1f6f7a;
+  --c-stage-glow: rgba(41, 224, 255, 0.3);
+  --c-backdrop-top: #10233a;
+  --c-backdrop-bottom: #0f4a48;
+  --c-scene-backdrop: #0a1622;
+
+  --c-surface-1: #d9f0e8;
+  --c-surface-2: #f0fff9;
+  --c-surface-3: #b6d9cd;
+  --c-surface-glass: #d9f0e8;
+  --c-surface-hud: #d9f0e8;
+  --c-surface-bar: #d9f0e8;
+  --c-scrim: rgba(4, 8, 14, 0.62);
+  --c-selection: rgba(45, 255, 160, 0.42);
+
+  --c-line-1: rgba(7, 11, 20, 0.18);
+  --c-line-2: rgba(7, 11, 20, 0.45);
+  --c-line-3: #070b14;
+
+  --c-text-1: #070b14;
+  --c-text-2: #1c2a3f;
+  --c-text-3: #35485a;
+  --c-text-disabled: #5f7774;
+
+  --c-accent: #0b6b7d;
+  --c-accent-strong: #084c5a;
+  --c-accent-deep: #06323b;
+  --c-accent-soft: rgba(41, 224, 255, 0.2);
+  --c-accent-line: #070b14;
+  --c-accent-hi: #2dffa0;
+
+  --c-success: #0d6233;
+  --c-warning: #7d4400;
+  --c-danger: #b0182c;
+  --c-info: #1f3a99;
+  --c-rare: #532699;
+  --c-gold-strong: #665000;
+  --c-stat-hp: #0f6a35;
+  --c-stat-tp: #1f47b5;
+
+  --shadow-card: 0 4px 0 #070b14;
+  --shadow-float: 0 6px 0 #070b14;
+  --shadow-lift: 0 8px 0 #070b14;
+  --shadow-frame: 0 8px 0 #070b14;
+  --glow-accent: 0 0 0 3px #070b14, 0 0 0 6px #2dffa0;
+  --bg-pattern: radial-gradient(rgba(41, 224, 255, 0.13) 1.2px, transparent 1.6px);
+}
+:root[data-theme="arcade"][data-theme-tone="breeze"], [data-palette="breeze"] {
+  /* A clear day: sky to sea behind white panels, navy for the ink. */
+  --ax-ink: #16243f;
+  --ax-ink-2: #2b3d5e;
+  --ax-paper: #fbfeff;
+  --ax-paper-2: #e3f1fb;
+  --ax-white: #ffffff;   --ax-white-sh: #9fb7cc;
+  --ax-cyan: #37c8f5;    --ax-cyan-sh: #12789c;
+  --ax-green: #45dd8d;   --ax-green-sh: #1b8a4d;
+  --ax-dots: radial-gradient(rgba(22, 36, 63, 0.05) 1.2px, transparent 1.6px) 0 0 / 6px 6px;
+  --ax-dots-light: radial-gradient(rgba(255, 255, 255, 0.22) 1.2px, transparent 1.6px) 0 0 / 6px 6px;
+  --ax-stage: radial-gradient(rgba(255, 255, 255, 0.16) 1.2px, transparent 1.6px) 0 0 / 8px 8px,
+    linear-gradient(180deg, #1d66c9 0%, #2a8fe0 42%, #32b4dc 78%, #3cc9b0 100%);
+
+  --c-void: #1d66c9;
+  --c-ground: #e3f1fb;
+  --c-ground-raised: #d3e7f6;
+  --c-stage-light: #7cc4ff;
+  --c-stage-glow: rgba(124, 196, 255, 0.4);
+  --c-backdrop-top: #1d66c9;
+  --c-backdrop-bottom: #3cc9b0;
+  --c-scene-backdrop: #1a4f9c;
+
+  --c-surface-1: #fbfeff;
+  --c-surface-2: #ffffff;
+  --c-surface-3: #e3f1fb;
+  --c-surface-glass: #fbfeff;
+  --c-surface-hud: #fbfeff;
+  --c-surface-bar: #fbfeff;
+  --c-scrim: rgba(22, 36, 63, 0.5);
+
+  --c-line-1: rgba(22, 36, 63, 0.18);
+  --c-line-2: rgba(22, 36, 63, 0.45);
+  --c-line-3: #16243f;
+
+  --c-text-1: #16243f;
+  --c-text-2: #2b3d5e;
+  --c-text-3: #48597a;
+  --c-text-disabled: #7f8fab;
+
+  --c-accent: #1f5fd6;
+  --c-accent-strong: #17479f;
+  --c-accent-deep: #0f2f6e;
+  --c-accent-soft: rgba(77, 124, 255, 0.16);
+  --c-accent-line: #16243f;
+
+  --shadow-card: 0 4px 0 #16243f;
+  --shadow-float: 0 6px 0 #16243f;
+  --shadow-lift: 0 8px 0 #16243f;
+  --shadow-frame: 0 8px 0 #16243f;
+  --glow-accent: 0 0 0 3px #16243f, 0 0 0 6px #ffd23f;
+  --bg-pattern: radial-gradient(rgba(255, 255, 255, 0.16) 1.2px, transparent 1.6px);
+}
+
 /* ---- Everything that does not change with the palette ------------------ */
 :root {
   /* Paper: letters are the one warm surface in every theme. The opening
@@ -682,8 +830,15 @@
    *
    * --text-scale is the reading-size preference (100 / 115 / 130 %). Every
    * text size and line height below follows it; layouts grow with it. */
+  /* Viewport units that follow the desktop interface zoom (portraitFrame.js, <html
+     data-ui-zoom>). CSS viewport units ignore `zoom`, so the game's sheets size themselves
+     with these instead (scripts/qa/apply-viewport-units.mjs keeps them that way). */
+  --cm-ui-zoom: 1;
+  --cm-vw: 1vw; --cm-vh: 1vh; --cm-dvh: 1dvh; --cm-lvh: 1lvh; --cm-vmin: 1vmin; --cm-vmax: 1vmax;
   --text-scale: 1;
-  --font-ui: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", "Noto Sans CJK TC", "Source Han Sans TC", system-ui, sans-serif;
+  /* Live HUD (a fight or a hunt in progress) takes half the step: 100 / 107.5 / 115 %. */
+  --text-scale-hud: 1;
+  --font-ui: "Cyber Partner Rounded", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", "Noto Sans CJK TC", "Source Han Sans TC", system-ui, sans-serif;
   --font-numeric: var(--font-ui);
   --fs-display: calc(28px * var(--text-scale));  --lh-display: calc(36px * var(--text-scale));
   --fs-title-1: calc(22px * var(--text-scale));  --lh-title-1: calc(30px * var(--text-scale));
@@ -813,22 +968,29 @@
 }
 
 /* ---- Reading size ------------------------------------------------------ */
-:root[data-text-scale="115"] { --text-scale: 1.15; }
-:root[data-text-scale="130"] { --text-scale: 1.3; }
+/* ---- Desktop interface zoom -------------------------------------------- */
+:root[data-ui-zoom] {
+  --cm-vw: calc(1vw / var(--cm-ui-zoom)); --cm-vh: calc(1vh / var(--cm-ui-zoom));
+  --cm-dvh: calc(1dvh / var(--cm-ui-zoom)); --cm-lvh: calc(1lvh / var(--cm-ui-zoom));
+  --cm-vmin: calc(1vmin / var(--cm-ui-zoom)); --cm-vmax: calc(1vmax / var(--cm-ui-zoom));
+}
 
-/* English: a Latin face first; CJK faces stay as the fallback. */
+:root[data-text-scale="115"] { --text-scale: 1.15; --text-scale-hud: 1.075; }
+:root[data-text-scale="130"] { --text-scale: 1.3; --text-scale-hud: 1.15; }
+
+/* English: the rounded face, then a Latin face; CJK faces stay as the fallback. */
 :root:lang(en) {
-  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Noto Sans CJK TC", sans-serif;
+  --font-ui: "Cyber Partner Rounded", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Noto Sans CJK TC", sans-serif;
 }
 
 /* Japanese: system Gothic faces */
 :root:lang(ja) {
-  --font-ui: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", "Noto Sans JP", "Noto Sans CJK JP", system-ui, sans-serif;
+  --font-ui: "Cyber Partner Rounded", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", "Noto Sans JP", "Noto Sans CJK JP", system-ui, sans-serif;
 }
 
 /* Thai: Leelawadee UI / Thonburi / Noto Sans Thai; line-height leaves space for diacritics and tone marks */
 :root:lang(th) {
-  --font-ui: "Leelawadee UI", "Leelawadee", "Thonburi", "Sukhumvit Set", "Noto Sans Thai", "Noto Sans Thai UI", system-ui, sans-serif;
+  --font-ui: "Cyber Partner Rounded", "Leelawadee UI", "Leelawadee", "Thonburi", "Sukhumvit Set", "Noto Sans Thai", "Noto Sans Thai UI", system-ui, sans-serif;
   --lh-body: calc(24px * var(--text-scale));
   --lh-body-sm: calc(22px * var(--text-scale));
   --lh-label: calc(18px * var(--text-scale));
@@ -837,7 +999,7 @@
 
 /* Vietnamese: system Latin faces with full diacritic coverage */
 :root:lang(vi) {
-  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-ui: "Cyber Partner Rounded", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 }
 
 /* ---- Quality: the "saver" tier drops the costly decoration ------------- *

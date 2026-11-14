@@ -25,6 +25,7 @@
 import {BATTLE_FX_PALETTES} from '../battleFx/battleFxPalettes.js';
 import {bakeMoveVfxIntensity, createNoiseField, paintMoveVfxCell, paintMoveVfxSheet, paintMoveVfxSigil} from './moveVfxKitTextures.js';
 import {DRAWN_VFX_FIXED, DRAWN_VFX_SPRITES} from './drawnVfxSprites.js';
+import {bakedPieceLook, paintBakedPieceFrames, loadMoveVfxPieceSprites} from './moveVfxSetPieces.js';
 import {BRIEF_PALETTES} from './remadeEffectBriefs.js';
 
 const TAU = Math.PI * 2;
@@ -83,6 +84,8 @@ const PIXEL_BODY_SCALE = 0.5;
 export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanced', reducedMotion = false, seed = 0x51a5,
   doc = globalThis.document, resolution = 1.5, pixel = true} = {}) {
   if (!PIXI || !front || !doc) return null;
+  // The baked pieces (floor circles among them) load once, off the first frame.
+  if (typeof loadMoveVfxPieceSprites === 'function') loadMoveVfxPieceSprites();
   // No kit where a canvas cannot be painted pixel by pixel (Node scene tests, stripped canvases).
   const probe = doc.createElement?.('canvas')?.getContext?.('2d');
   if (typeof probe?.createImageData !== 'function' || typeof probe.putImageData !== 'function') return null;
@@ -106,11 +109,31 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     const id = `${name}:${paletteId(paletteKey)}`;
     let entry = sheets.get(id);
     if (entry) return entry;
-    if (name.startsWith('sigil:')) {
-      const canvas = paintMoveVfxSigil(Number(name.slice(6)), palettes(paletteKey), {doc});
-      entry = {textures: [texture(canvas)], loop: false, width: canvas.width, height: canvas.height, smoke: false};
+    // Floor circles (refinement pass 2, Owner: 「地板的六芒星那些也可以重做嗎」): once the baked
+    // pieces are in, a move's sigil is a pixelfx casting or rune circle -- already drawn flat on
+    // the ground, with its light layer as a second, added part -- instead of the drawn hexagram.
+    // Flying shots (refinement pass 3): a baked pixelfx head, looping, recoloured to the move.
+    if (name.startsWith('pfx:') || name.startsWith('pfxhit:')) {
+      const hit = name.startsWith('pfxhit:'), key = name.slice(hit ? 7 : 4);
+      const look = bakedPieceLook(key), painted = look ? paintBakedPieceFrames(key, palettes(paletteKey), {doc}) : null;
+      if (!painted) return null;
+      entry = {textures: painted.frames.map(texture), loop: !hit, fps: look.fps, width: painted.w, height: painted.h, smoke: false,
+        anchor: [painted.ox / painted.w, painted.oy / painted.h]};
       sheets.set(id, entry);
       return entry;
+    }
+    if (name.startsWith('sigil:') || name.startsWith('sigilglow:')) {
+      const glow = name.startsWith('sigilglow:'), n = Number(name.slice(glow ? 10 : 6)), circle = n % 2 ? 'sigil-rune' : 'sigil-cast';
+      const painted = bakedPieceLook(circle) ? paintBakedPieceFrames(circle, palettes(paletteKey), {doc, glow}) : null;
+      if (painted) {
+        entry = {textures: painted.frames.map(texture), loop: false, width: painted.w, height: painted.h, smoke: false, additive: glow,
+          anchor: [painted.ox / painted.w, painted.oy / painted.h]};
+        sheets.set(id, entry);
+        return entry;
+      }
+      if (glow) return null;
+      const canvas = paintMoveVfxSigil(n, palettes(paletteKey), {doc});
+      return {textures: [texture(canvas)], loop: false, width: canvas.width, height: canvas.height, smoke: false};
     }
     // A hand-drawn sprite (drawnVfxSprites.js) in the move's palette; "drawn:bigblast" plays bigblast_0, _1, ... as frames.
     if (name.startsWith('drawn:')) {
@@ -157,9 +180,10 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     if (reducedMotion && (vx || vy || spin)) { vx *= 0.3; vy *= 0.3; spin = 0; }
     while (parts.length >= budget) { const old = parts.shift(); old.sprite.destroy(); }
     const book = sheet(name, paletteKey);
+    if (!book) return null;
     const sprite = new PIXI.Sprite(book.textures[frame ?? 0]);
-    sprite.anchor.set(anchor[0], anchor[1]);
-    sprite.blendMode = !book.smoke && LIGHT_SHEETS.has(name) && paletteId(paletteKey) !== 'dark' ? 'add' : 'normal';
+    sprite.anchor.set(...(book.anchor ?? anchor));
+    sprite.blendMode = book.additive || (!book.smoke && LIGHT_SHEETS.has(name) && paletteId(paletteKey) !== 'dark') ? 'add' : 'normal';
     sprite.visible = false;
     (layer ?? (book.smoke ? (name === 'decal' ? decalLayer : smokeLayer) : lightLayer)).addChild(sprite);
     const p = {sprite, book, x, y, px, life, delay, fps, frame, rotation, spin, vx, vy, gravity, drag, grow, stretch, alpha, fadeIn, fadeOut,
@@ -211,10 +235,14 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
    * while it gathers -- under the fighters, so it never hides a body. Flat
    * sigils never spin: a squashed sprite that turns tumbles instead.
    */
+  /** A baked floor circle stands in perspective already; the drawn hexagram is flattened. */
+  const circleBaked = () => Boolean(bakedPieceLook('sigil-cast'));
   function sigil({x, y, paletteKey, signature, size = 30, ms = 320, follow = null}) {
     if (!signature) return;
-    part({name: `sigil:${signature.sigil}`, paletteKey, x, y, px: size * (signature.tier === 'ultimate' ? 3.6 : 2.6), life: ms + 160,
-      stretch: [1, 0.5], grow: [0.3, 1], fadeIn: 40, fadeOut: 0.3, alpha: 0.95, follow, layer: decalLayer});
+    const baked = circleBaked(), args = {paletteKey, x, y, px: size * (signature.tier === 'ultimate' ? 3.6 : 2.6), life: ms + 160,
+      stretch: baked ? [1, 1] : [1, 0.5], grow: [0.3, 1], fadeIn: 40, fadeOut: 0.3, alpha: 0.95, follow, layer: decalLayer};
+    part({name: `sigil:${signature.sigil}`, ...args});
+    if (baked) part({name: `sigilglow:${signature.sigil}`, ...args, alpha: 0.85, layer: null});
     created.sigils++;
   }
 
@@ -235,7 +263,9 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     if (signature.tier === 'ultimate') groundSigil(x, groundY, paletteKey, signature, size, 3.4, 0.75);
   }
   function groundSigil(x, groundY, paletteKey, own, size, k = 6, alpha = 0.9) {
-    part({name: `sigil:${own.sigil}`, paletteKey, x, y: groundY, px: size * k, life: 900, stretch: [1, 0.45], grow: [0.4, 1.05], fadeIn: 60, fadeOut: 0.45, alpha, layer: decalLayer});
+    const baked = circleBaked(), args = {paletteKey, x, y: groundY, px: size * k, life: 900, stretch: baked ? [1, 1] : [1, 0.45], grow: [0.4, 1.05], fadeIn: 60, fadeOut: 0.45, alpha, layer: decalLayer};
+    part({name: `sigil:${own.sigil}`, ...args});
+    if (baked) part({name: `sigilglow:${own.sigil}`, ...args, alpha: alpha * 0.9, layer: null});
     created.sigils++;
   }
 
@@ -245,6 +275,13 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     size *= signature?.scale ?? 1;
     if (signature && signature.tier !== 'basic') sigil({x, y: y + size * 0.9, paletteKey, signature, size, ms,
       follow: follow ? () => { const at = follow(); return at ? {x: at.x, y: at.y + size * 0.9} : null; } : null});
+    // Refinement pass 9 (Owner: 「把目前遊戲中還是用舊的那種廉價感的方式的特效都升級」): once the baked pieces
+    // are in, the wind-up gathers as pixelfx's spell charge instead of the orb, thin ring and drawn streaks.
+    if (bakedPieceLook('muzzle-spiral')) {
+      const look = bakedPieceLook('muzzle-spiral');
+      part({name: 'pfxhit:muzzle-spiral', paletteKey, x, y, px: size * 2.6, life: Math.max(ms + 90, look.frames.length / look.fps * 1000), fadeIn: 20, fadeOut: 0.1, follow});
+      return;
+    }
     part({name: 'glow', paletteKey, x, y, px: size * 2.4, life: ms + 90, grow: [0.2, 1], fadeIn: 30, fadeOut: 0.25, follow});
     part({name: 'orb', paletteKey, x, y, px: size * 1.1, life: ms + 90, fps: 18, grow: [0.25, 0.9], spin: 4, fadeOut: 0.25, follow});
     ring(x, y, paletteKey, size * 3.2, ms, 1, 0, 0.55).grow = [1, 0.15];
@@ -260,6 +297,12 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   function launch({x, y, angle = 0, paletteKey, archetype = 'fire', size = 30, signature = null}) {
     created.launches++;
     size *= signature?.scale ?? 1;
+    // Refinement pass 9: the release is pixelfx's muzzle flash along the shot, in place of the flare, shock ellipse and sparks.
+    if (bakedPieceLook('muzzle')) {
+      const look = bakedPieceLook('muzzle');
+      part({name: 'pfxhit:muzzle', paletteKey, x, y, px: size * 3.2, life: look.frames.length / look.fps * 1000, rotation: angle, flipY: Math.cos(angle) < 0, fadeIn: 0, fadeOut: 0.05});
+      return;
+    }
     flare(x, y, paletteKey, size * 2.6, 150, angle);
     // A volley flashes once per head, fanned across the shot.
     for (let i = 1; i < (signature?.volley ?? 1); i++) flare(x, y, paletteKey, size * 1.6, 130, angle + (i % 2 ? 1 : -1) * 0.5 * Math.ceil(i / 2), 0.8);
@@ -440,7 +483,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     else if (motif === 'afterimage') part({name: p.look.head, paletteKey: p.look.material ? MATERIAL[p.look.material] ?? p.look.material : p.paletteKey, x: at.x, y: at.y,
       px: size * p.look.len, life: 160, anchor: p.look.anchor ?? [0.5, 0.5], rotation: p.look.upright ? 0 : at.angle, flipY: Math.cos(at.angle) < 0, alpha: 0.4, fadeOut: 1});
     else if (motif === 'ember') sparks({x: at.x, y: at.y, paletteKey: p.paletteKey, count: 1, angle: Math.PI / 2, cone: 1.4, speed: [40, 120], life: 420, size: size * 0.4, gravity: 420});
-    else if (motif === 'rune' && p.signature) part({name: `sigil:${p.signature.sigil}`, paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 0.9, life: 340, spin: 3, grow: [1, 0.4], alpha: 0.75, fadeOut: 0.6});
+    else if (motif === 'rune' && p.signature) part({name: `sigil:${p.signature.sigil}`, paletteKey: p.paletteKey, x: at.x, y: at.y, px: size * 0.9, life: 340, spin: circleBaked() ? 0 : 3, grow: [1, 0.4], alpha: 0.75, fadeOut: 0.6});
   }
 
   /** A signature's closing burst on top of the archetype's impact. */
@@ -496,7 +539,7 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     created.projectiles++;
     size *= signature?.scale ?? 1;
     // x, y is where the shot is drawn; tx, ty where the game has it. A signature's path weaves the drawing round the true line.
-    const p = {follow, paletteKey, look, size, signature, headless, planted: Boolean(standing), x: first.x, y: first.y, tx: first.x, ty: first.y, angle: first.angle ?? 0, acc: 0, motifAcc: 0, age: 0, alive: true, spin: 0};
+    const p = {follow, paletteKey, look, archetype, size, signature, headless, planted: Boolean(standing), x: first.x, y: first.y, tx: first.x, ty: first.y, angle: first.angle ?? 0, acc: 0, motifAcc: 0, age: 0, alive: true, spin: 0};
     const at = () => p.alive ? p : null;
     p.riders = headless ? [] : (look.riders ?? []).map(spec => rider(p, {...spec, px: size * spec.px}));
     p.glow = look.glow && !headless ? part({name: 'glow', paletteKey, px: size * look.glow, life: 1e9, follow: at, alpha: 0.85}) : null;
@@ -520,9 +563,46 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
   }
   function head(p, follow, k) {
     const look = p.look;
+    // Refinement pass 3 (Owner: the shots looked「很像卡通」): once the baked pieces are in, the
+    // archetypes below fly a pixelfx head -- a fireball, a water orb, an arcane or void orb, a
+    // plasma or laser bolt, an ice lance, a rocket, an energy disc -- instead of the drawn one.
+    const baked = !p.planted && BAKED_HEAD[p.archetype];
+    if (baked && bakedPieceLook(baked[0])) {
+      const q = part({name: `pfx:${baked[0]}`, paletteKey: p.paletteKey, px: p.size * baked[1] * k, life: 1e9, fps: bakedPieceLook(baked[0]).fps, follow, fadeIn: 30});
+      if (q) { q.baked = true; q.upright = Boolean(baked[2]); return q; }
+    }
     return part({name: look.head, paletteKey: look.material ? MATERIAL[look.material] ?? look.material : p.paletteKey, px: p.size * look.len * k, life: 1e9, fps: look.fps ?? 0, frame: look.frame ?? null,
       anchor: look.anchor ?? [0.5, 0.5], follow, fadeIn: 30});
   }
+  /** Archetype -> baked hits [look, width in impact radii, flipped top to bottom], played in place of the drawn impact. */
+  const BAKED_IMPACT = Object.freeze({fire: [['core', 4.2]], water: [['flurry-bubble', 4.4]], bubble: [['flurry-bubble', 3.6]], shard: [['flurry-shard', 4]],
+    snowflake: [['flurry-shard', 4]], quake: [['quake', 5.2]], orb: [['rush', 4.2]], thunder: [['bolt', 3.4]], leaf: [['flurry-leaf', 4]], petal: [['flurry-leaf', 3.6]],
+    wind: [['spin', 4.4]], claw: [['claws', 3.2]], slash: [['slash', 4]], crescent: [['slash', 4]], pierce: [['horn', 4.4]], lance: [['horn', 4.4]],
+    bullet: [['fist', 3]], gatling: [['fist', 3]], vine: [['vines', 4]], missile: [['drop-bomb', 5.4]], cannon: [['drop-bomb', 6]], meteor: [['drop-bomb', 6]],
+    arrows: [['rain', 4.6]], blackhole: [['vortex', 4.4]], shuriken: [['knives', 4]], strike: [['fist', 3.6]], feather: [['flurry-feather', 4]],
+    note: [['flurry-note', 4]], heart: [['flurry-heart', 3.6]], mist: [['mist', 5]],
+    bite: [['jaws', 3, false, -0.5], ['jaws', 3, true, 0.5]]});
+  function bakedImpact({x, y, groundY, angle, paletteKey, archetype, R}) {
+    const plan = BAKED_IMPACT[archetype];
+    if (!plan || !plan.every(([name]) => bakedPieceLook(name))) return false;
+    const facing = Math.cos(angle) < 0 ? -1 : 1;
+    for (const [name, width, flip = false, dy = 0] of plan) {
+      const look = bakedPieceLook(name), ground = look.anchor === 'ground';
+      part({name: `pfxhit:${name}`, paletteKey, x, y: (ground ? groundY : y) + dy * R, px: R * width, life: look.frames.length / look.fps * 1000,
+        stretch: [facing, 1], flipY: flip, fadeIn: 0, fadeOut: 0.05});
+    }
+    created.bakedImpacts = (created.bakedImpacts ?? 0) + 1;
+    return true;
+  }
+  /** Archetype -> [baked head, its drawn width in shot sizes]. */
+  const BAKED_HEAD = Object.freeze({fire: ['shot-fire', 3.6], water: ['shot-water', 1.6], bubble: ['shot-water', 1.3], orb: ['shot-arcane', 1.7],
+    pillar: ['shot-arcane', 1.7], blackhole: ['shot-void', 2.2], thunder: ['shot-plasma', 2.6], lance: ['shot-laser', 3.6], arrows: ['shot-laser', 3.6],
+    bullet: ['shot-laser', 2.8], gatling: ['shot-laser', 2.8], shard: ['shot-ice', 3.8], snowflake: ['shot-ice', 3.2], missile: ['shot-rocket', 3.8],
+    crescent: ['shot-disc', 2.2], shuriken: ['shot-disc', 2.0],
+    // refinement pass 5: the drawn leaves, feathers, notes, hearts, stars, fish and spores too (true: stays upright)
+    leaf: ['shot-leaf', 1.8], petal: ['shot-leaf', 1.6], roots: ['shot-leaf', 1.6], tree: ['shot-leaf', 1.8], tornado: ['shot-tornado', 2.2, true],
+    feather: ['shot-arrow', 2.6], note: ['shot-xp', 1.3], heart: ['shot-heart', 1.1, true], star: ['shot-star', 1.4], fish: ['shot-fish', 2.2],
+    mushroom: ['shot-wisp', 1.6], meteor: ['shot-fire', 3.8]});
   /** The drawn offset of a path from the true line, across it (+ is to the left of the heading). */
   function pathOffset(path, age, size) {
     if (reducedMotion) return [0, 0];
@@ -549,11 +629,13 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     // Shapes face right; a leftward heading mirrors top to bottom so nothing flies upside down.
     for (const q of [p.head, ...p.escorts.map(e => e.part)]) {
       if (!q) continue;
-      q.rotation = p.look.upright ? 0 : p.look.spin ? p.spin : p.angle + (p.look.turn ?? 0);
+      q.rotation = q.baked ? (q.upright ? 0 : p.angle) : p.look.upright ? 0 : p.look.spin ? p.spin : p.angle + (p.look.turn ?? 0);
       q.flipY = !p.look.spin && !p.look.turn && !p.look.upright && Math.cos(p.angle) < 0;
     }
     p.acc += dt;
     const every = p.look.every * (rich ? 1 : 2);
+    // A baked head carries its own trail (a fireball's flames, a bolt's tail): the drawn trail stands down.
+    if (p.head?.baked) p.acc = 0;
     while (!p.headless && p.acc >= every) { p.acc -= every; p.look.trail(p, {x: p.x, y: p.y, angle: p.angle}, p.size); }
     const motif = p.signature?.trail;
     if (motif && motif !== 'none') {
@@ -672,11 +754,18 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     explosion(x, groundY - R * 0.4, groundY, R * 1.1);
   }
 
-  function impact({x, y, groundY = y, angle = 0, paletteKey, archetype = 'strike', heavy = false, size = 30, signature = null, planted = false}) {
+  function impact({x, y, groundY = y, angle = 0, paletteKey, archetype = 'strike', heavy = false, size = 30, signature = null, planted = false, piece = false}) {
     created.impacts++;
     const k = heavy ? 1.4 : 1, R = size * k * (signature?.scale ?? 1);
-    if (signature) burstMotif(signature.burst, x, y, groundY, paletteKey, R, angle);
-    flare(x, y, paletteKey, R * 3, heavy ? 200 : 150, random());
+    // Refinement pass 9: a move whose own contact piece plays keeps only a small flare -- the motif's rings and crosses were vector shapes.
+    if (signature && !(piece && bakedPieceLook('impact-frame'))) burstMotif(signature.burst, x, y, groundY, paletteKey, R, angle);
+    flare(x, y, paletteKey, R * (piece ? 1.8 : 3), heavy ? 200 : 150, random());
+    // Refinement pass 4 (Owner: the drawn shapes looked「很像卡通」): once the baked pieces are in, the
+    // archetypes below land a pixelfx hit instead of their drawn drops, crests, stems and crescents.
+    // Refinement pass 6: a move whose own contact piece plays here keeps only the flare and its
+    // signature motif -- a second burst of the same kind stacked into one blob (Owner: 「很雜亂」).
+    if (piece) return;
+    if (bakedImpact({x, y, groundY, angle, paletteKey, archetype, R})) return;
     switch (archetype) {
       case 'fire':
         part({name: 'burst', paletteKey, x, y, px: R * 4, life: 560, rotation: random() * TAU, grow: [0.8, 1.25], fadeOut: 0.3});
@@ -944,6 +1033,12 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
     impact({x, y, groundY, angle, paletteKey, archetype, heavy: true, size: size * 1.3, signature: own});
     // The move's own sigil opens under the blow and fades out.
     if (own) groundSigil(x, groundY, paletteKey, own, size);
+    // Refinement pass 9: the close's shock is pixelfx's ground slam, not three drawn rings and sparks.
+    if (bakedPieceLook('quake')) {
+      const look = bakedPieceLook('quake');
+      part({name: 'pfxhit:quake', paletteKey, x, y: groundY, px: size * 6, life: look.frames.length / look.fps * 1000, fadeIn: 0, fadeOut: 0.05});
+      return;
+    }
     for (let i = 0; i < 3; i++) ring(x, y, paletteKey, size * (5 + i * 1.6), 520 + i * 90, 1, 0, 0.7 - i * 0.18).delay = i * 70;
     // In pixel finish a field-sized glow reads as a white disc over the move's own shapes, so it stays faint.
     part({name: 'glow', paletteKey, x, y, px: size * (pixel ? 7 : 9), life: 420, fadeIn: 10, fadeOut: 0.8, alpha: pixel ? 0.35 : 0.7});

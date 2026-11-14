@@ -131,7 +131,7 @@ test('bag: gachapon chips, metals and cores all appear in the four tabs, each wi
     if(metal){
       const before=app.getCyberGachaFrame().metals.find(m=>m.id===metal.id).owned;
       panel.element.querySelector(`.cm-backpack__use[data-use="${metal.id}"]`).click();
-      panel.element.querySelector('.cm-backpack__choice').click();
+      panel.element.querySelector('.cm-backpack__partner').click();
       panel.element.querySelector('.cm-backpack__key[data-use-mode="ENHANCE"]').click();
       assert.equal(app.getCyberGachaFrame().metals.find(m=>m.id===metal.id).owned,before-1);
     }
@@ -143,7 +143,8 @@ test('the partner card, the bag and the facility editor each reach the gachapon 
   assert.match(card,/使用晶片／進化金屬催化/);
   for (const line of card.split('\n').filter(l=>/companion__boost|使用晶片/.test(l)))
     assert.doesNotMatch(line,/\p{Extended_Pictographic}/u,'no system emoji on the boost key');
-  assert.match(card,/portraitFallback/,'the portrait falls back to the encyclopedia thumbnail');
+  // Owner 2026-11-12: the card's well shows the partner's own idle animation, not the encyclopedia art.
+  assert.match(card,/actionPortraits\?\.set\?\.\(portraitSlot,resident\?\.speciesId/,'the portrait is the partner itself');
   assert.match(card,/cm-open-backpack/);
   const main=source('src/championship/app/main.js');
   assert.match(main,/addEventListener\('cm-open-backpack'/);

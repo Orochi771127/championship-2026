@@ -65,7 +65,7 @@ test('safe-area is for floating controls, not canvas; short-screen menu is scrol
   assert.match(dock,/left: calc\(50% \+ \(var\(--safe-left\) - var\(--safe-right\)\) \/ 2\)/);
   assert.match(dock,/bottom: var\(--cm-raising-dock-gap\)/);
   const menu=block('.cm-toolbar[data-mode="1"] .cm-toolbar__menu');
-  assert.match(menu,/max-height: max\(44px, calc\(var\(--cm-viewport-height, 100dvh\)/);
+  assert.match(menu,/max-height: max\(44px, calc\(var\(--cm-viewport-height, calc\(100 \* var\(--cm-dvh, 1dvh\)\)\)/);
   assert.match(menu,/--cm-status-bar-height/);assert.match(menu,/--cm-toolbar-height/);
   assert.match(menu,/--cm-raising-dock-gap/);assert.match(menu,/overflow-y: auto; overscroll-behavior: contain/);
   for(const selector of ['.int-rh2-mail-icon','.int-rh2-notice','.int-rh2-companion','.cm-tutorial-guidance'])assert.match(block(selector),/--cm-raising-dock-gap/);

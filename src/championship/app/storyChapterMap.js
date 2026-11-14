@@ -14,6 +14,10 @@
 
 import { STORY_RIFT_CHAPTERS, storyRiftSpeakerName } from "../data/storyRiftChapters.js";
 import { STORY_RIFT_MAP_NODES, storyRiftMapText, storyRiftMapStates } from "../data/storyRiftMap.js";
+import { STORY_VN_CAST, STORY_VN_CHAPTERS, STORY_VN_SPEAKERS } from "../data/storyVnCampaign.js";
+import { storyVnText } from "../text/storyVnText.js";
+import { AI_CHAN_PORTRAITS, resolveGuideAppearance } from "../presentation/aiChanGuide.js";
+import { createActionPortrait } from "../presentation/juicy/actionPortrait.js";
 
 export const STORY_MAP_STAR_COUNT = 46;
 
@@ -45,8 +49,15 @@ function contour(cx, cy, r, wobble, phase) {
   return `M${pts.join(" L")} Z`;
 }
 
-function chartMarkup(nodes, states) {
+function chartMarkup(allNodes, states) {
   const stateOf = id => states.find(s => s.id === id)?.state ?? "locked";
+  // The main lane runs through the main nodes; a side story hangs off its chapter on a dashed branch.
+  const nodes = allNodes.filter(node => node.kind !== "side");
+  const branches = allNodes.filter(node => node.kind === "side").map(node => {
+    const from = allNodes.find(n => n.id === node.branchOf);
+    if (!from) return "";
+    return `<path class="cm-story-map__lane cm-story-map__lane--side" data-lit="${stateOf(node.id) !== "locked"}" d="M${from.x} ${from.y} L${node.x} ${node.y}" pathLength="100" />`;
+  });
   const grid = [];
   for (let v = 10; v < 100; v += 10) grid.push(`<path d="M${v} 0V100M0 ${v}H100" />`);
   const rings = nodes.flatMap((node, n) => [0, 1, 2].map(k => `<path data-theme="${node.theme}" d="${contour(node.x, node.y, 5 + k * 3.4, 0.08 + k * 0.02, n * 1.7 + k)}" />`));
@@ -59,7 +70,7 @@ function chartMarkup(nodes, states) {
   return `<svg class="cm-story-map__svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
     <g class="cm-story-map__grid">${grid.join("")}</g>
     <g class="cm-story-map__contours">${rings.join("")}</g>
-    <g class="cm-story-map__lanes">${segments.join("")}</g>
+    <g class="cm-story-map__lanes">${segments.join("")}${branches.join("")}</g>
   </svg>`;
 }
 
@@ -67,10 +78,15 @@ const NAVI_MARK = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l
 
 export function createStoryChapterMap({
   doc = globalThis.document, host = doc.body, locale = "zh-Hant", reducedMotion = false,
-  nodes = STORY_RIFT_MAP_NODES, isSeen = () => false, partner = { name: "", portrait: null },
+  nodes = STORY_RIFT_MAP_NODES, isSeen = () => false, vnStateOf = () => "locked", castPortrait = () => null, partner = { name: "", portrait: null }, guideForm = "cat",
   onPlay = async () => null, onClose = () => {}
 } = {}) {
   const t = (key, params) => storyRiftMapText(key, locale, params) ?? key;
+  const vt = (key, params) => storyVnText(key, locale, { partner: partner.name, ...params }) ?? key;
+  const vnChapter = node => (node.vnChapterId ? STORY_VN_CHAPTERS[node.vnChapterId] ?? null : null);
+  const titleOf = node => (vnChapter(node) ? vt(vnChapter(node).titleKey) : t(node.titleKey));
+  const summaryOf = node => (vnChapter(node) ? vt(vnChapter(node).summaryKey) : t(node.summaryKey));
+  const playableNode = node => Boolean(node.chapterId || vnChapter(node));
   const root = doc.createElement("section");
   root.className = "cm-story-map"; root.hidden = true; root.dataset.storyTheater = "map";
   root.setAttribute("role", "dialog"); root.setAttribute("aria-modal", "true"); root.setAttribute("aria-labelledby", "cm-story-map-title");
@@ -96,7 +112,11 @@ export function createStoryChapterMap({
   const chart = doc.createElement("div"); chart.className = "cm-story-map__chart";
   const art = doc.createElement("div"); art.className = "cm-story-map__art";
   const nodeLayer = doc.createElement("div"); nodeLayer.className = "cm-story-map__nodes"; nodeLayer.setAttribute("role", "group"); nodeLayer.setAttribute("aria-label", t("MAP_TITLE"));
-  chart.append(art, nodeLayer);
+  // A scrolling canvas: every coordinate gets a fixed band of height, so labels never pile up on a phone.
+  const canvas = doc.createElement("div"); canvas.className = "cm-story-map__canvas";
+  canvas.style.setProperty("--rows", String(nodes.length));
+  canvas.append(art, nodeLayer);
+  chart.append(canvas);
 
   const detail = doc.createElement("aside"); detail.className = "cm-story-map__detail"; detail.setAttribute("aria-live", "polite");
   const notice = doc.createElement("p"); notice.className = "cm-story-map__notice"; notice.hidden = true; notice.setAttribute("role", "status");
@@ -111,6 +131,7 @@ export function createStoryChapterMap({
   function numberLabel(node) {
     if (node.kind === "prologue") return t("NUM_PROLOGUE");
     if (node.kind === "interlude") return t("NUM_INTERLUDE");
+    if (node.kind === "side") return t("NUM_SIDE");
     if (node.kind === "chapter") return t("NUM_CHAPTER", { n: node.number });
     return t("NUM_UNKNOWN");
   }
@@ -119,6 +140,15 @@ export function createStoryChapterMap({
 
   // Who speaks in the chapter, in order of entrance; the narrator is not an echo.
   function cast(node) {
+    const vn = vnChapter(node);
+    if (vn) {
+      const seen = [];
+      for (const beat of vn.beats) if (beat.type === "line" && beat.speaker !== "narrator" && !seen.includes(beat.speaker)) seen.push(beat.speaker);
+      return seen.map(speaker => {
+        const spec = STORY_VN_SPEAKERS[speaker];
+        return { speaker, name: vt(spec.nameKey), species: spec.cast === "partner" ? null : STORY_VN_CAST[spec.cast]?.species ?? null };
+      });
+    }
     const chapter = node.chapterId ? STORY_RIFT_CHAPTERS[node.chapterId] : null;
     if (!chapter) return [];
     const seen = [];
@@ -128,7 +158,18 @@ export function createStoryChapterMap({
   function castChip(member) {
     const chip = doc.createElement("span"); chip.className = "cm-story-map__cast"; chip.dataset.speaker = member.speaker;
     const face = doc.createElement("span"); face.className = "cm-story-map__cast-face"; face.setAttribute("aria-hidden", "true");
-    if (member.speaker === "navi") face.innerHTML = NAVI_MARK;
+    const art = Number.isSafeInteger(member.species) ? castPortrait(member.species) : null;
+    if (member.speaker === "aichan") {
+      // Ai-chan's face, framed from her approved idle portrait in the player's chosen form.
+      const guide = AI_CHAN_PORTRAITS[resolveGuideAppearance(guideForm)], img = doc.createElement("img");
+      img.src = guide.src; img.alt = ""; img.decoding = "async"; img.draggable = false; img.className = "cm-story-map__cast-guide";
+      const k = 100 / guide.face.size;
+      img.style.width = `${guide.width * k}%`; img.style.left = `${(0.5 - guide.face.cx / guide.face.size) * 100}%`; img.style.top = `${(0.5 - guide.face.cy / guide.face.size) * 100}%`;
+      face.append(img);
+    } else if (member.speaker === "navi") face.innerHTML = NAVI_MARK;
+    else if (art?.species !== undefined) face.append(createActionPortrait({ doc, species: art.species, still: true, className: "cm-story-map__cast-body" }).element);
+    else if (partner.portrait?.species !== undefined) face.append(createActionPortrait({ doc, species: partner.portrait.species, still: true, className: "cm-story-map__cast-body" }).element);
+    else if (art?.src) { const img = doc.createElement("img"); img.src = art.src; img.alt = ""; img.decoding = "async"; img.draggable = false; face.append(img); }
     else if (partner.portrait?.src) { const img = doc.createElement("img"); img.src = partner.portrait.src; img.alt = ""; img.decoding = "async"; img.draggable = false; face.append(img); }
     else face.textContent = "?";
     const name = doc.createElement("span"); name.className = "cm-story-map__cast-name"; name.textContent = member.name;
@@ -142,29 +183,40 @@ export function createStoryChapterMap({
   }
 
   function paintDetail(node) {
-    const state = stateOf(node.id), playable = Boolean(node.chapterId) && state !== "locked";
+    const state = stateOf(node.id), playable = playableNode(node) && state !== "locked", vn = vnChapter(node);
     detail.dataset.state = state; detail.dataset.nodeId = node.id; detail.dataset.theme = node.theme;
     const top = doc.createElement("p"); top.className = "cm-story-map__detail-top";
     const num = doc.createElement("span"); num.className = "cm-story-map__detail-num"; num.textContent = numberLabel(node);
     const pill = doc.createElement("span"); pill.className = "cm-story-map__pill"; pill.dataset.state = state; pill.textContent = stateLabel(state);
     top.append(num, pill);
-    const heading = doc.createElement("h3"); heading.className = "cm-story-map__detail-title"; heading.textContent = t(node.titleKey);
-    const summary = doc.createElement("p"); summary.className = "cm-story-map__summary"; summary.textContent = t(node.summaryKey);
+    const heading = doc.createElement("h3"); heading.className = "cm-story-map__detail-title"; heading.textContent = titleOf(node);
+    const summary = doc.createElement("p"); summary.className = "cm-story-map__summary"; summary.textContent = summaryOf(node);
     const facts = doc.createElement("dl"); facts.className = "cm-story-map__facts";
     const meter = doc.createElement("span"); meter.className = "cm-story-map__meter"; meter.dataset.value = state === "seen" ? "100" : "0";
     const meterFill = doc.createElement("span"); meterFill.className = "cm-story-map__meter-fill"; meter.append(meterFill);
     const meterText = doc.createElement("span"); meterText.className = "cm-story-map__meter-text";
-    meterText.textContent = !node.chapterId ? t("MAP_PROGRESS_SIGNAL") : state === "seen" ? `${t("MAP_PROGRESS_DONE")} · 100%` : `${t("MAP_PROGRESS_NONE")} · 0%`;
+    meterText.textContent = !playableNode(node) ? t("MAP_PROGRESS_SIGNAL") : state === "seen" ? `${t("MAP_PROGRESS_DONE")} · 100%` : `${t("MAP_PROGRESS_NONE")} · 0%`;
     facts.append(row(t("MAP_LABEL_PROGRESS"), meter, meterText));
     const members = cast(node), castList = doc.createElement("span"); castList.className = "cm-story-map__cast-list";
-    if (members.length) castList.append(...members.map(castChip));
+    // Four faces at most, then "+N": a long cast never pushes the start key off the panel.
+    if (members.length) {
+      castList.append(...members.slice(0, 4).map(castChip));
+      if (members.length > 4) { const more = doc.createElement("span"); more.className = "cm-story-map__cast cm-story-map__cast--more"; more.textContent = `+${members.length - 4}`; castList.append(more); }
+    }
     else { const unknown = doc.createElement("span"); unknown.className = "cm-story-map__cast cm-story-map__cast--unknown"; unknown.textContent = t("MAP_CAST_UNKNOWN"); castList.append(unknown); }
     facts.append(row(t("MAP_LABEL_CAST"), castList));
     const sigil = doc.createElement("span"); sigil.className = "cm-story-map__sigil"; sigil.dataset.lit = String(state === "seen");
-    sigil.textContent = t(node.sigilKey);
-    const sigilNote = doc.createElement("span"); sigilNote.className = "cm-story-map__sigil-note"; sigilNote.textContent = node.chapterId ? t("MAP_REWARD_NOTE") : "";
+    // A story-theater chapter pays gacha tickets on its first clear; its echo line stands for the sigil.
+    sigil.textContent = vn ? vt("VN_REWARD_TICKETS", { n: vn.reward?.tickets ?? 0 }) : t(node.sigilKey);
+    const sigilNote = doc.createElement("span"); sigilNote.className = "cm-story-map__sigil-note";
+    sigilNote.textContent = vn ? `「${vt(vn.echoKey)}」` : node.chapterId ? t("MAP_REWARD_NOTE") : "";
     facts.append(row(t("MAP_LABEL_REWARD"), sigil, sigilNote));
-    if (!node.chapterId) { const unlock = doc.createElement("span"); unlock.textContent = t("MAP_UNLOCK_NEXT"); facts.append(row(t("MAP_LABEL_UNLOCK"), unlock)); }
+    if (!playableNode(node) || state === "locked") {
+      const unlock = doc.createElement("span");
+      const branch = node.branchOf ? nodes.find(n => n.id === node.branchOf) : null;
+      unlock.textContent = !playableNode(node) ? t("MAP_UNLOCK_NEXT") : branch ? t("MAP_SIDE_BRANCH", { n: branch.number }) : t("MAP_UNLOCK_PREV");
+      facts.append(row(t("MAP_LABEL_UNLOCK"), unlock));
+    }
     const play = doc.createElement("button"); play.type = "button"; play.className = "cm-story-map__play"; play.dataset.storyMapAction = "play";
     play.disabled = !playable || busy; play.textContent = playable ? t(state === "seen" ? "MAP_REPLAY" : "MAP_PLAY") : t("MAP_LOCKED_ACTION");
     play.addEventListener("click", () => { if (playable) void start(node); });
@@ -176,11 +228,15 @@ export function createStoryChapterMap({
     selected = node.id;
     for (const [nodeId, button] of buttons) button.setAttribute("aria-pressed", String(nodeId === node.id));
     paintDetail(node);
-    if (focus) { try { buttons.get(node.id)?.focus({ preventScroll: true }); } catch { /* not focusable yet */ } }
+    if (focus) {
+      const button = buttons.get(node.id);
+      try { button?.focus({ preventScroll: true }); } catch { /* not focusable yet */ }
+      try { button?.scrollIntoView?.({ block: "center", behavior: reducedMotion ? "auto" : "smooth" }); } catch { /* no layout */ }
+    }
   }
 
   function paint() {
-    states = storyRiftMapStates(isSeen, nodes);
+    states = storyRiftMapStates(isSeen, nodes, vnStateOf);
     art.innerHTML = chartMarkup(nodes, states);
     buttons.clear();
     nodeLayer.replaceChildren(...nodes.map((node, index) => {
@@ -188,11 +244,11 @@ export function createStoryChapterMap({
       const button = doc.createElement("button"); button.type = "button"; button.className = "cm-story-map__node";
       button.dataset.nodeId = node.id; button.dataset.state = state; button.dataset.kind = node.kind; button.dataset.theme = node.theme;
       button.style.setProperty("--x", `${node.x}%`); button.style.setProperty("--y", `${node.y}%`); button.style.setProperty("--i", String(index));
-      button.setAttribute("aria-label", `${numberLabel(node)} ${t(node.titleKey)} · ${stateLabel(state)}`);
+      button.setAttribute("aria-label", `${numberLabel(node)} ${titleOf(node)} · ${stateLabel(state)}`);
       const core = doc.createElement("span"); core.className = "cm-story-map__core"; core.setAttribute("aria-hidden", "true");
       const label = doc.createElement("span"); label.className = "cm-story-map__label";
       const num = doc.createElement("span"); num.className = "cm-story-map__num"; num.textContent = numberLabel(node);
-      const name = doc.createElement("span"); name.className = "cm-story-map__name"; name.textContent = t(node.titleKey);
+      const name = doc.createElement("span"); name.className = "cm-story-map__name"; name.textContent = titleOf(node);
       label.append(num, name);
       if (state === "current") { const tag = doc.createElement("span"); tag.className = "cm-story-map__tag"; tag.textContent = stateLabel(state); label.append(tag); }
       button.append(core, label);
@@ -208,7 +264,7 @@ export function createStoryChapterMap({
     if (busy || disposed) return;
     busy = true; hide();
     let result = null;
-    try { result = await onPlay(node.chapterId, node); }
+    try { result = await onPlay(node.chapterId ?? node.vnChapterId, node); }
     catch { result = { outcome: "aborted" }; }
     finally { busy = false; }
     if (disposed) return;
@@ -252,7 +308,7 @@ export function createStoryChapterMap({
     open({ focus = null, chapterId = null } = {}) {
       if (disposed || busy) return false;
       if (root.hidden) previousFocus = doc.activeElement;
-      const fromChapter = chapterId ? nodes.find(n => n.chapterId === chapterId)?.id ?? null : null;
+      const fromChapter = chapterId ? nodes.find(n => n.chapterId === chapterId || n.vnChapterId === chapterId)?.id ?? null : null;
       show({ focus: focus ?? fromChapter });
       return true;
     },

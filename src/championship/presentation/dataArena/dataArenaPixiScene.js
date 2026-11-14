@@ -23,10 +23,12 @@ import { mountDataArenaInteractionView } from "./dataArenaInteractionView.js";
 
 import { createDataArenaRelayEffects } from './dataArenaRelayEffects.js';
 import { createDataArenaElementFx } from './dataArenaElementFx.js';
+import { bakedPieceLook, paintBakedPieceFrames, loadMoveVfxPieceSprites } from '../vfx/moveVfxSetPieces.js';
 import { reviewedReleasePoint, releaseOffset, reviewedIdleBreath, reviewedWinHop, reviewedMoveRate } from './dataArenaReviewedMotion.js';
 import { RELAY_ACTION_PROFILES, relaySequence, relayEffectStyle } from '../../modes/dataArena/dataArenaRelay.js';
 import { RELAY_ROSTER, relayPartner } from '../../modes/dataArena/dataArenaRelayRoster.js';
 import { createBattleBurstShell } from '../vs5/battleBurstShell.js';
+import { createBattleStatusAilmentFx, dataArenaStatusLook, multiplyTint } from '../battleFx/battleStatusAilmentFx.js';
 import { GACHA_BLOODLINES } from '../../gacha/cyberGacha.js';
 import { arenaText as t } from '../../text/dataArenaText.js';
 // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): the hex shell closes over the 成熟期 for this long before
@@ -51,8 +53,11 @@ const CROWD_TINT = Object.freeze({ PERFECT_DODGE: 0x7fe9ff, ELEMENT_CHAIN: 0xff9
 
 // One scale per body keeps authored canvas/pivot intact across poses and KO; the
 // loader's per-role reference height (its down-facing walk) maps the body to roleHeight.
+export function reviewedArenaGeometryScale(geometry,roleHeight,{partial=false,nativeScale=1}={}){
+  return partial?nativeScale*4/(geometry?.scale??4):roleHeight/(geometry?.referenceHeight??64)/(geometry?.scale??4);
+}
 export function applyReviewedArenaPoseScale(sprite,sample,roleHeight,sink=0){
- const scale=roleHeight/(sample?.geometry?.referenceHeight??64)/(sample?.geometry?.scale??4);
+  const scale=reviewedArenaGeometryScale(sample?.geometry,roleHeight);
  sprite.scale.set(scale*(sample?.mirrorX?-1:1),scale*(1-sink*.5));
  return scale;
 }
@@ -113,9 +118,46 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   // in the world so they ride the camera. Since 2026-11-01 heavy hits hold the
   // drawn fighters 55 ms (drawing only; the simulation and input keep running).
   const numberLayer = new PIXI.Container({ label: "arena damage numbers" });
-  world.addChild(groundChunks, tactical, water, cellFx, bridge, marks, objects, shotGlow, shots, beams, particles, lights, numberLayer);
+  // Refinement pass 2: the delayed ground zones' baked sigils, drawn just over the telegraph lines.
+  const zoneSigils = new PIXI.Container(); zoneSigils.label = "arena zone sigils";
+  world.addChild(groundChunks, tactical, water, cellFx, bridge, marks, zoneSigils, objects, shotGlow, shots, beams, particles, lights, numberLayer);
   const burstShell = createBattleBurstShell({ PIXI, layer: objects, reducedMotion });
   rollback.push(() => burstShell.dispose());
+  // Status ailments (STATUS_AILMENT_VFX_20261110): the battle's pixel loops on a
+  // rooted, burning or slowed fighter, plus its body tint and glow. Display only.
+  const statusFx = typeof createBattleStatusAilmentFx === 'function'
+    ? createBattleStatusAilmentFx({ PIXI, layer: objects, reducedMotion, quality: quality === 'low' ? 'saver' : 'balanced' }) : null;
+  if (statusFx) rollback.push(() => statusFx.dispose());
+  const statusShown = new Set();
+  // Loopback review only: ?statusFxQa=frozen,burning shows those looks on the player, then each rival (display only).
+  const statusQa = statusFx && ['localhost', '127.0.0.1', '[::1]'].includes(globalThis.location?.hostname)
+    ? (new URLSearchParams(String(globalThis.location?.search ?? '')).get('statusFxQa') ?? '').split(',') : [];
+  /** One fighter's condition: the loop round its body, its tint, and an additive glow copy of its frame. */
+  function drawArenaStatus(key, body, view, role, qaIndex = -1) {
+    const look = statusFx && body && body.hp > 0 ? (statusQa[qaIndex] || dataArenaStatusLook(body)) : null;
+    if (look) {
+      const height = ROLE_HEIGHT[role] ?? 80, feet = body.y - floorOffset(body.x, body.y);
+      // The grain keeps the battle's ratio: one texel is a fortieth of the role height over 0.35.
+      statusFx.place(key, look, { x: body.x, y: feet, top: feet - height, width: height * 0.8, height, zIndex: body.y, unit: height / 40 },
+        { visible: view.container.visible !== false, alpha: view.sprite.alpha });
+      statusShown.add(key);
+    }
+    const dress = look ? statusFx.body(key) : null;
+    if (dress) view.sprite.tint = multiplyTint(view.sprite.tint, dress.tint);
+    if (dress?.glow && !view.statusGlow) {
+      view.statusGlow = new PIXI.Sprite(view.sprite.texture);
+      view.statusGlow.blendMode = 'add'; view.statusGlow.eventMode = 'none'; view.statusGlow.label = 'arena status body glow';
+      view.container.addChild(view.statusGlow);
+    }
+    if (view.statusGlow) {
+      const glow = view.statusGlow, sprite = view.sprite;
+      glow.visible = Boolean(dress?.glow) && sprite.visible !== false;
+      if (glow.visible) {
+        glow.texture = sprite.texture; glow.anchor.copyFrom(sprite.anchor); glow.scale.copyFrom(sprite.scale);
+        glow.position.copyFrom(sprite.position); glow.rotation = sprite.rotation; glow.tint = dress.glow; glow.alpha = dress.glowAlpha * sprite.alpha;
+      }
+    }
+  }
   /** The shell for one fighter from its burst record (relay): wrap, then scatter; a short shatter when it ends. */
   function drawArenaBurstShell(key, body, burst, role) {
     const height = ROLE_HEIGHT[role] ?? 80, centerY = body.y - floorOffset(body.x, body.y) - height * 0.5;
@@ -409,8 +451,15 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         if (shown > 0) healthGfx.rect(-25, 10, 50, 7).fill({ color: 0x05060d, alpha: 0.78 }).rect(-24, 11, 48 * shown, 5).fill(0xff4a6a);
       },
       // Where this body's move is drawn leaving it; null keeps the default hand offset.
-      releasePoint(angle){
-        if(!reviewedArena||(partial&&!onReviewed))return null;
+      releasePoint(angle,event=null){
+        if(!reviewedArena)return null;
+        const source=reviewedArena.castAttachment?.(event);
+        if(source?.geometry){
+          const g=source.geometry,scale=reviewedArenaGeometryScale(g,ROLE_HEIGHT[role],{partial,nativeScale});
+          return reviewedReleasePoint({x:container.position.x,y:container.position.y,angle,roleHeight:ROLE_HEIGHT[role],
+            release:source.release,scaleX:scale*(source.mirrorX?-1:1),scaleY:scale,groundShift:g.groundShift??0,density:g.scale});
+        }
+        if(partial&&!onReviewed)return null;
         const g=motion?.geometry;
         return reviewedReleasePoint({x:container.position.x+sprite.x,y:container.position.y+sprite.y,angle,roleHeight:ROLE_HEIGHT[role],
           release:motion?.release,scaleX:sprite.scale.x,scaleY:sprite.scale.y,groundShift:g?.groundShift??0,density:g?.scale??1});
@@ -440,7 +489,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           const vx=body.vx??0,vy=body.vy??0;
           const sample=reviewedArena.sample({time:state.time,hp:seq===DATA_ARENA_SEQUENCES.DOWN?0:body.hp,
             vx,vy,facing,hit:seq===DATA_ARENA_SEQUENCES.HIT,
-            attack:seq===DATA_ARENA_SEQUENCES.ATTACK,castId:body.cast?.actionId??null,angle:body.cast?.angle??null,
+              attack:seq===DATA_ARENA_SEQUENCES.ATTACK,castId:body.cast?.actionId??null,sourceCastId:body.action?.id??null,angle:body.cast?.angle??null,
             moveRate:reviewedMoveRate(vx,vy),victory:seq===DATA_ARENA_SEQUENCES.WIN});
           reviewedSample=sample;
           if(partial&&!sample?.geometry){
@@ -450,7 +499,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           } else if(partial){
             // Covered: the reviewed frame at the native world size (native cells are density 4).
             onReviewed=true; motion=sample;
-            scale=nativeScale*4/(sample.geometry?.scale??4);
+            scale=reviewedArenaGeometryScale(sample.geometry,ROLE_HEIGHT[role],{partial,nativeScale});
             sprite.scale.set(scale*(sample.mirrorX?-1:1),scale*(1-sink*.5));
           } else {
           motion=sample;
@@ -479,7 +528,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         // Stage four: a staggered fighter shudders for its hitstun.
         if (body.hitstun > 0 && !reducedMotion) sprite.x += Math.sin(elapsed * 90) * 2.5;
         if (Math.hypot(body.kbx ?? 0, body.kby ?? 0) > 80 && !reducedMotion && frameCount % 2 === 0) puff(x, y, 0xc8b89a, 1, 0.7);
-        if (motion && relayProfile && !reducedMotion) {
+        if (motion && relayProfile && !reducedMotion && !motion.preserveAuthoredPose) {
           const a = body.action;
           // No action in progress means no lunge; a null action used to throw here and stop the HUD.
           const pulse = !a ? 0 : a.releasedAt === null ? Math.min(1, (state.time - a.startedAt) / a.windup) : Math.max(0, 1 - (state.time - a.releasedAt) / a.recovery);
@@ -488,7 +537,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           if (a && a.releasedAt === null) { sprite.scale.x *= 1 - 0.07 * pulse; sprite.scale.y *= 1 + 0.08 * pulse; }
           else if (a && state.time - a.releasedAt < 0.12) { sprite.scale.x *= 1.12; sprite.scale.y *= 0.89; }
         }
-        if (flash > 0.1 && !reducedMotion) { sprite.scale.x *= 1.1; sprite.scale.y *= 0.9; }
+        if (flash > 0.1 && !reducedMotion && !motion?.preserveAuthoredPose) { sprite.scale.x *= 1.1; sprite.scale.y *= 0.9; }
         sprite.alpha = alpha;
         sprite.tint = flash > 0.14 ? 0xffffff : flash > 0 ? 0xff7a7a : 0xffffff;
         shadow.alpha = (0.75 - sink * 0.6) * (lift > 0 ? 0.6 : 1);
@@ -509,7 +558,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   // Release point of a cast: a reviewed body's mouth or hand, else the default hand offset.
   const releaseOrigins = new Map();
   function releaseAt(event) {
-    const point = casterView(event.casterId)?.releasePoint(event.angle);
+    const point = casterView(event.casterId)?.releasePoint(event.angle,event);
     return point ? { ...point, reviewed: true }
       : { x: event.x + Math.cos(event.angle) * 26, y: event.y - BEAM_ELEVATION + Math.sin(event.angle) * 26, reviewed: false };
   }
@@ -518,6 +567,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   let bossView = null;
   const rivalViews = new Map();
   function statusTint(body, base) {
+    // With the status layer the body takes its look's tint in drawArenaStatus instead.
+    if (statusFx) return base;
     if (body.root > 0) return 0xc8f4ff;
     if (body.slow > 0) return mixColor(base, 0x7fc8ff, 0.45);
     if (body.burn > 0 && Math.floor(elapsed * 12) % 2 === 0) return mixColor(base, 0xff8a3c, 0.5);
@@ -704,6 +755,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     }
   }
   function ring(x, y, radius, tint, life = 0.4, alpha = 0.9) {
+    // Refinement pass 10: a baked energy ring once the pieces are in; the drawn ring before.
+    if (typeof elementFx?.eventRing === 'function' && elementFx.eventRing({ x, y, radius, tint })) return;
     spawn({ x, y, texture: textures.ring, tint, scale: 0.1, scaleTo: radius / 58, life, alpha, add: true });
   }
   // Track one of the combat telemetry (Owner 2026-11-02): numbers and short
@@ -723,7 +776,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (entry.ghost) { entry.ghost.visible = false; wordPool.push(entry.ghost); }
   }
   function makeText(word) {
-    const text = new PIXI.Text({ text: "", style: { fontFamily: '"Noto Sans TC","Arial Black",system-ui,sans-serif', fontSize: word ? 22 : 26, fontWeight: "900",
+    const text = new PIXI.Text({ text: "", style: { fontFamily: '"Cyber Partner Rounded","Noto Sans TC","Arial Black",system-ui,sans-serif', fontSize: word ? 22 : 26, fontWeight: "900",
       fontStyle: word ? "italic" : "normal", fill: 0xffffff, stroke: { color: 0x05060d, width: 5, join: "round" },
       dropShadow: { color: 0x000000, alpha: 0.45, blur: 0, distance: 2, angle: Math.PI / 2 } } });
     text.anchor.set(0.5);
@@ -838,6 +891,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     burst(event.x, event.y - 22, { count: broken ? 16 : event.weak ? 8 : 4, speed: broken ? 240 : 140, tint, texture: textures.relayRock ?? textures.shard,
       scale: broken ? 0.3 : 0.2, gravity: 520, life: broken ? 0.8 : 0.45, spin: 6 });
     if (event.weak) ring(event.x, event.y - 20, 40, 0xffe066, 0.25);
+    // Refinement pass 2: the block's own baked chip / break burst over the rock particles.
+    if (typeof elementFx?.prop === 'function') elementFx.prop({x: event.x, y: event.y, material: event.material, broken, weak: event.weak});
     if (broken) { puff(event.x, event.y - 10, tint, 4, 1.4); camera.addTrauma(0.32); }
     else camera.addTrauma(event.weak ? 0.12 : 0.05);
   }
@@ -944,8 +999,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "ICE_MELT": ring(event.x, event.y, 30, 0x7fd8ff, 0.4, 0.6);spawn({x:event.x,y:event.y,texture:textures.iceMelt,scale:1,scaleTo:.8,life:.35,alpha:.7,add:false});break;
         case "ICE_MELT_HIT": puff(event.x,event.y,0xc6edf5,2,.6);break;
         case "PROP_HIT": if (relayMode && event.material !== 'TIMBER') { relayCoverHit(event, false); break; }
+          if(typeof elementFx?.prop==='function')elementFx.prop({x:event.x,y:event.y,material:'TIMBER',broken:false});
           burst(event.x,event.y-22,{count:3,speed:100,tint:event.cause==="FIRE"?0x8b6948:0xffffff,texture:textures.timberChip,life:.35,gravity:180});break;
         case "PROP_DESTROYED": if (relayMode && event.material !== 'TIMBER') { relayCoverHit(event, true); break; }
+          if(typeof elementFx?.prop==='function')elementFx.prop({x:event.x,y:event.y,material:'TIMBER',broken:true});
           burst(event.x,event.y-20,{count:rich?14:7,speed:180,tint:event.charred?0x504033:0xffffff,texture:textures.timberChip,life:.7,gravity:220});puff(event.x,event.y-15,event.charred?0x6a645d:0xa88c64,3,.9);break;
         case "FELL_IN_WATER": ring(event.x, event.y, 60, 0x9fe8ff, 0.5); burst(event.x, event.y, { count: 12, speed: 220, tint: 0xbff4ff, gravity: 500, life: 0.55 }); camera.addTrauma(0.2); break;
         case "RECOVERED": ring(event.x, event.y, 50, 0x7fffd4, 0.4); burst(event.x, event.y - 30, { count: 10, speed: 160, tint: 0x7fffd4, gravity: -100 }); break;
@@ -1124,7 +1181,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if(!ambientPaused)fpsWindow.push(observedFrameMs); if (fpsWindow.length > 120) fpsWindow.shift();
     if (hitStop > 0) hitStop = Math.max(0, hitStop - Math.min(0.1, observedFrameMs / 1000));
     elementFx?.update(dt * 1000);
-    if (relayMode && dt > 0 && (statusTick += dt) >= 0.14) {
+    statusFx?.update(dt * 1000);
+    if (relayMode && !statusFx && dt > 0 && (statusTick += dt) >= 0.14) {
       statusTick = 0;
       // Status reads on the body: burn embers rise, a root rings the feet, slow trails mist.
       for (const body of [state.player, ...state.rivals.filter(r => r.active && r.hp > 0)]) {
@@ -1260,7 +1318,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const viewKey = formMember ? `${rival.id}:${rival.burstSpeciesId}` : rival.id;
       let actorView = rivalViews.get(viewKey);
       if (!actorView) {
-        const member = formMember ? { ...formMember, role: 'RIVAL' } : cast.rivals?.find((entry) => entry.rivalId === rival.definitionId);
+        // A Journey zone stage brings its own rivals (Owner 2026-11-10): they are not in the arena's rival
+        // list, so they are drawn as the roster partner of their species.
+        const rosterMember = cast.partners?.find((entry) => entry.speciesId === rival.speciesId);
+        const member = formMember ? { ...formMember, role: 'RIVAL' }
+          : cast.rivals?.find((entry) => entry.rivalId === rival.definitionId) ?? (rosterMember ? { ...rosterMember, role: 'RIVAL' } : null);
         actorView = createActorView(member?.role ?? "RIVAL", member, rival);
         rivalViews.set(viewKey, actorView);
       }
@@ -1271,11 +1333,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         : rival.cast || rival.lunge || rival.recovery > 0 ? DATA_ARENA_SEQUENCES.ATTACK : Math.hypot(rival.vx, rival.vy) > 30 || rival.dashTimer > 0 ? DATA_ARENA_SEQUENCES.WALK : DATA_ARENA_SEQUENCES.STAND;
       actorView.update(dtMs, { x: rival.x, y: rival.y, facing: rival.facing, flash: rival.hitFlash, alpha: rival.invulnerable > 0 ? 0.55 : 1, seq });
       actorView.sprite.tint = statusTint(rival, rival.hitFlash > 0 ? 0xff9a9a : 0xffffff);
+      if (state.gameMode === 'RELAY') drawArenaStatus(`rival:${rival.id}`, rival, actorView, actorView.role ?? 'RIVAL', state.rivals.indexOf(rival) + 1);
       actorView.setHealth(rival.active === false ? 0 : rival.hp / rival.maxHp);
     }
     for (const [id, view] of rivalViews) if (!state.rivals.some((rival) => String(rival.id) === String(id).split(':')[0])) { view.container.destroy({ children: true }); rivalViews.delete(id); burstShell.retire(`rival:${String(id).split(':')[0]}`); }
     if (!(state.mate.state === "ABSENT")) mateView.container.visible = true; else mateView.container.visible = false;
     playerView.sprite.tint = statusTint(state.player, playerView.sprite.tint);
+    if (state.gameMode === 'RELAY') drawArenaStatus('player', state.player, playerView, 'PLAYER', 0);
+    statusFx?.retireExcept(statusShown); statusShown.clear();
 
     // Enemies.
     const seen = new Set();
@@ -1427,14 +1492,65 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     for (; w < waves.length; w++) if (waves[w]?.sprite) waves[w].sprite.visible = false;
   }
 
+  // Owner 2026-11-04: the player's own relay moves draw no range circles or arrays (the game judges the hit), only the
+  // short direction chevrons; while a thumb points a move, one guide shows its direction and where it lands. Rival
+  // warnings stay.
+  let aimGuide = null;
+  function drawAimGuide(g) {
+    const body = state.player.state === "RIDING" && state.mate ? state.mate : state.player;
+    if (!aimGuide || !body) return;
+    if (aimGuide.angle === null) { g.circle(body.x, body.y, aimGuide.radius).stroke({ width: 3, color: 0x6ff7ff, alpha: 0.8 }); return; }
+    const c = Math.cos(aimGuide.angle), s = Math.sin(aimGuide.angle), ex = body.x + c * aimGuide.length, ey = body.y + s * aimGuide.length;
+    g.moveTo(body.x + c * 26, body.y + s * 26).lineTo(ex, ey).stroke({ width: 8, color: 0x6ff7ff, alpha: 0.28 });
+    g.moveTo(body.x + c * 26, body.y + s * 26).lineTo(ex, ey).stroke({ width: 2.5, color: 0xffffff, alpha: 0.85 });
+    if (aimGuide.radius > 0) g.circle(ex, ey, aimGuide.radius).fill({ color: 0x6ff7ff, alpha: 0.12 }).stroke({ width: 2.5, color: 0x6ff7ff, alpha: 0.85 });
+    else g.poly([ex + c * 16, ey + s * 16, ex - s * 10, ey + c * 10, ex + s * 10, ey - c * 10]).fill({ color: 0xffffff, alpha: 0.9 });
+  }
+  // Zone sigils: one sheet per colour (colour and light frames), one pair of sprites per live zone.
+  const sigilSheets = new Map(), sigilSprites = new Map(), sigilSeen = new Set();
+  if (typeof loadMoveVfxPieceSprites === 'function') loadMoveVfxPieceSprites();
+  function sigilSheet(color) {
+    if (sigilSheets.has(color)) return sigilSheets.get(color);
+    if (typeof bakedPieceLook !== 'function' || !bakedPieceLook('zone-sigil')) return null;
+    const dark = ((((color >> 16) & 255) * 0.45) << 16) | ((((color >> 8) & 255) * 0.45) << 8) | ((color & 255) * 0.45);
+    // the zone's own colour, its core only a little lighter: white lines vanish on the pale zone fill
+    const lift = c => Math.min(255, Math.round(c + (255 - c) * 0.3));
+    const core = (lift((color >> 16) & 255) << 16) | (lift((color >> 8) & 255) << 8) | lift(color & 255);
+    const palette = { core, main: color, edge: dark };
+    const paint = glow => { const sheet = paintBakedPieceFrames('zone-sigil', palette, { glow }); if (!sheet) return null;
+      return { ...sheet, textures: sheet.frames.map(c => { const t = PIXI.Texture.from(c); t.source.scaleMode = glow ? 'linear' : 'nearest'; return t; }) }; };
+    const value = paint(false) ? { body: paint(false), light: paint(true) } : null;
+    sigilSheets.set(color, value);
+    return value;
+  }
+  function zoneSigil(zone, color, p) {
+    const sheet = sigilSheet(color);
+    if (!sheet) return false;
+    let pair = sigilSprites.get(zone);
+    if (!pair) {
+      pair = { body: new PIXI.Sprite(sheet.body.textures[0]), light: sheet.light ? new PIXI.Sprite(sheet.light.textures[0]) : null };
+      pair.body.anchor.set(sheet.body.ox / sheet.body.w, sheet.body.oy / sheet.body.h);
+      if (pair.light) { pair.light.anchor.set(sheet.light.ox / sheet.light.w, sheet.light.oy / sheet.light.h); pair.light.blendMode = 'add'; zoneSigils.addChild(pair.light); }
+      zoneSigils.addChild(pair.body); sigilSprites.set(zone, pair);
+    }
+    const n = sheet.body.textures.length, index = Math.min(n - 1, Math.floor(p * (n - 1)));
+    const k = zone.radius * 1.7 / sheet.body.w;
+    pair.body.texture = sheet.body.textures[index]; pair.body.scale.set(k); pair.body.position.set(zone.x, zone.y);
+    if (pair.light) { pair.light.texture = sheet.light.textures[Math.min(sheet.light.textures.length - 1, index)]; pair.light.scale.set(k * 2); pair.light.position.set(zone.x, zone.y); pair.light.alpha = 0.8; }
+    sigilSeen.add(zone);
+    return true;
+  }
   function drawMarks() {
     const g = marks;
+    sigilSeen.clear();
     g.blendMode = "add";
     g.clear();
+    drawAimGuide(g);
     // Telegraphs: dual-layer additive energy arrays with rotating rune ticks.
     for (const t of state.telegraphs) {
       const p = clamp(t.t / t.duration, 0, 1);
       const mine = t.team === "player";
+      if (mine && relayMode && t.kind !== "LINE" && t.kind !== "CONE") continue; // relay: own direction chevrons only, no circles
       if ((t.kind === "LINE" || t.kind === "CONE") && mine) {
         // Own aim: short chevrons near the feet instead of a line across the field (Owner 2026-11-05).
         const rays = t.kind === "CONE" ? Array.from({ length: t.count }, (_, i) => t.angle - t.spread / 2 + (t.spread * i) / Math.max(1, t.count - 1)) : [t.angle];
@@ -1499,7 +1615,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         arcPath(g, zone.x, zone.y, zone.radius - 6, a0, a0 + 0.32).stroke({ width: 3, color, alpha: 0.9 });
         pts.push(zone.x + Math.cos(a0) * (zone.radius * 0.72), zone.y + Math.sin(a0) * (zone.radius * 0.72));
       }
-      if (pts.length === 12) {
+      // Refinement pass 2 (Owner: 「地板的六芒星那些也可以重做嗎」): once the baked pieces are in, the zone's
+      // sigil is a pixelfx one that draws itself in as the zone charges; the drawn hexagram is the fallback.
+      if (!zoneSigil(zone, color, p) && pts.length === 12) {
         g.poly([pts[0], pts[1], pts[4], pts[5], pts[8], pts[9]]).stroke({ width: 1.8, color, alpha: 0.75 });
         g.poly([pts[2], pts[3], pts[6], pts[7], pts[10], pts[11]]).stroke({ width: 1.8, color: 0xffffff, alpha: 0.55 });
       }
@@ -1508,12 +1626,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         spawn({ x: zone.x + Math.cos(a) * r, y: zone.y + Math.sin(a) * r, vy: -48, texture: textures.spark, tint: color, scale: 0.7, scaleTo: 0.15, life: 0.45, alpha: 0.85 });
       }
     }
+    for (const [zone, pair] of sigilSprites) if (!sigilSeen.has(zone)) { pair.body.destroy(); pair.light?.destroy(); sigilSprites.delete(zone); }
     const self = state.player;
     if (self.barrier > 0) {
       const half = (self.barrierArc ?? 2) / 2;
       arcPath(g, self.x, self.y - 16, self.barrierRadius ?? 64, self.barrierAngle - half, self.barrierAngle + half).stroke({ width: 7, color: 0xffe066, alpha: 0.85 });
     }
-    for (const body of [self, ...state.rivals]) if (body.root > 0) g.ellipse(body.x, body.y, 30, 12).stroke({ width: 4, color: 0xc8f4ff, alpha: 0.9 });
+    if (!statusFx) for (const body of [self, ...state.rivals]) if (body.root > 0) g.ellipse(body.x, body.y, 30, 12).stroke({ width: 4, color: 0xc8f4ff, alpha: 0.9 });
     for (const scan of state.scans) {
       if (scan.telegraph <= 0) continue;
       const p = 1 - scan.telegraph / DATA_ARENA_SCAN.telegraph;
@@ -1581,6 +1700,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     floatText,
     damageNumber,
     setShake(enabled) { camera.setShake(enabled); },
+    setAimGuide(guide) { aimGuide = guide; },
     getDiagnostics() {
       const sorted = [...fpsWindow].sort((a, b) => a - b);
       return {

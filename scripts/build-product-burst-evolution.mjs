@@ -199,8 +199,10 @@ const document = {
   // it); remembered forms halve their point and battle thresholds; transcendence stars count as rebirths.
   rules: {tierMultiplier: {1: 1.4, 2: 1.7}, oncePerBattle: true, durationSeconds: 20, durationRounds: 3, weaknessSeconds: 5,
     weaknessMultiplier: 0.85, minimumTamerRank: {1: 0, 2: 0}, unlockMetalRarity: {1: 'SSR', 2: 'UR'}, gaugeMaximum: 100,
-    awakening: {shardEnergy: {R: 8, SR: 15, SSR: 25}, metalEnergy: {SSR: {1: 50, 2: 30}}, itemCap: 60, fillRarity: 'UR',
-      memoryThresholdPercent: 50, glowPercent: 80, ceremonyDisplaySeconds: 600,
+    // GACHA_FULL_EFFECTS_20261109 (Owner 2026-11-09 balance): awakening point and battle thresholds are scaled
+    // per tier (natural pace about 20 matches for tier 1 and 48 in all for tier 2), and item energy is smaller.
+    awakening: {shardEnergy: {R: 5, SR: 10, SSR: 15}, metalEnergy: {SSR: {1: 30, 2: 20}}, itemCap: 40, fillRarity: 'UR',
+      thresholdScale: {1: 2.5, 2: 3}, memoryThresholdPercent: 50, glowPercent: 80, ceremonyDisplaySeconds: 600,
       transcendence: {bondMinimum: 80, maxStars: 5, metalRarities: ['SSR', 'UR']}},
     battle: {manualSeconds: 6, pinchHpPercent: 30, pinchTakenMultiplier: 1.5, bondChargeBonus: 0.2, warnGauge: 80, chainFrames: 18},
     bloodlinePerks: {emma: {chargeMultiplier: 1.2}, beta: {noWeakness: true}, chronoOre: {extraSeconds: 4},

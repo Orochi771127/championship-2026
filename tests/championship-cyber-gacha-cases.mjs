@@ -12,15 +12,18 @@ import {CYBER_GACHA_ART} from '../src/championship/app/cyberGachaView.js';
 import {GACHA_BITS_BAGS, GACHA_BITS_MACHINE_RATES, GACHA_PERSONALITY_COUNT, GACHA_PERSONALITY_CHOICES, gachaChipEffectLines,
   gachaChipTiming, disarmGachaItem} from '../src/championship/gacha/cyberGacha.js';
 import {enhanceSummary} from '../src/championship/app/cyberGachaView.js';
+import {GACHA_SUPPLY_PACKS, GACHA_TICKET_PACK, GACHA_BITS_MACHINE_TIERS, GACHA_PREMIUM_JACKPOT_SHARE, getGachaChip,
+  gachaMetalEffectLines} from '../src/championship/gacha/cyberGacha.js';
 
 // Cyber Gachapon, OWNER_APPROVED_ADAPTATION 2026-10-29: the Shop's third tab.
 
 const read = path => JSON.parse(readFileSync(new URL(`../${path}`, import.meta.url), 'utf8'));
 const seq = values => { let i = 0; return () => values[i++ % values.length]; };
 
-test('eighteen plugin rows come back as stackable chips; metals and goods carry real art', () => {
-  assert.equal(GACHA_CHIPS.length, 18);
-  assert.deepEqual(GACHA_CHIPS.map(c => c.shopRecordIndex).sort((a, b) => a - b), Array.from({length: 18}, (_, i) => 53 + i));
+test('eighteen plugin rows come back as stackable chips (+ two radars); metals and goods carry real art', () => {
+  // HUNT_INSTINCT_RARITY_20261110: the 龍族 / 星靈族 radar rows (74, 78) return as the elite and ancestral radars.
+  assert.equal(GACHA_CHIPS.length, 20);
+  assert.deepEqual(GACHA_CHIPS.map(c => c.shopRecordIndex).sort((a, b) => a - b), [...Array.from({length: 18}, (_, i) => 53 + i), 74, 78]);
   for (const chip of GACHA_CHIPS) assert.equal(getShopRecord(chip.shopRecordIndex).category, 'PLUGINS');
   assert.equal(GACHA_METALS.length, 12);
   for (const entry of [...GACHA_METALS, ...GACHA_GOODS]) {
@@ -61,7 +64,7 @@ test('tickets are spent before diamonds and a ten-pull always holds an SR+ metal
 test('the Bits machine charges 50,000 / 450,000 and pays shop goods', () => {
   const state = grantGachaWelcome(null).state;
   assert.equal(pullCyberGacha(state, {machine: 'BITS', count: 10, bits: 449_999, random: Math.random}).reason, 'INSUFFICIENT_FUNDS');
-  const pull = pullCyberGacha(state, {machine: 'BITS', count: 10, bits: 450_000, random: seq([0.2, 0.5, 0.5])});
+  const pull = pullCyberGacha(state, {machine: 'BITS', count: 10, bits: 450_000, random: seq([0.2])});
   assert.equal(pull.charge.bits, 450_000);
   assert.ok(pull.prizes.every(p => p.kind === 'GOODS' && Number.isSafeInteger(p.shopRecordIndex) && p.quantity > 0));
 });
@@ -299,18 +302,24 @@ test('arcade armour keys, a whole tab badge and plates that read on any skin', (
 test('every chip spells out its effect from its own numbers, in every locale', async () => {
   const lines = id => gachaChipEffectLines(GACHA_CHIPS.find(chip => chip.id === id));
   for (const chip of GACHA_CHIPS) assert.ok(gachaChipEffectLines(chip).length > 0, chip.id);
-  assert.deepEqual(lines('chip:attack').map(line => [line.text, line.params?.n]), [['攻擊 +{n}', 8], ['HP／TP 回滿', undefined]]);
-  assert.deepEqual(lines('chip:core-beta')[0], {text: '攻擊・防禦・智力・速度 +{n}', params: {n: 12}});
-  assert.ok(lines('chip:core-beta').some(line => line.text === '最大 TP +{n}' && line.params.n === 24));
-  assert.deepEqual(lines('chip:chrono'), [{text: '狩獵限時 +{n} 小時', params: {n: 2}}]);
+  assert.deepEqual(lines('chip:attack').map(line => [line.text, line.params?.n]),
+    [['攻擊 +{n}', 18], ['所屬種族的進化經驗 +{n}', 15], ['HP／TP 回滿', undefined], ['跨過進化門檻時，當場開始進化', undefined]]);
+  assert.deepEqual(lines('chip:core-beta')[0], {text: '攻擊・防禦・智力・速度 +{n}', params: {n: 25}});
+  assert.ok(lines('chip:core-beta').some(line => line.text === '最大 TP +{n}' && line.params.n === 50));
+  assert.ok(lines('chip:core-beta').some(line => line.text === '照顧失誤 -{n}' && line.params.n === 1));
+  assert.ok(lines('chip:core-omega').some(line => line.text === '照顧失誤歸零'));
+  assert.deepEqual(lines('chip:chrono'), [{text: '狩獵限時 +{n} 秒', params: {n: 120}}]);
   assert.deepEqual(lines('chip:gravity'), [{text: '野生拍檔移動速度 -{n}%', params: {n: 50}}]);
   assert.deepEqual(lines('chip:bounty-omega').map(line => [line.text, line.params.n]),
-    [['位元幣獎金 ×{n}', 5], ['轉蛋券 +{n}', 5], ['隨機金屬碎片 ×{n}', 1]]);
+    [['位元幣獎金 ×{n}', 5], ['轉蛋券 +{n}', 5], ['參戰拍檔的戰鬥與勝場各 +{n} 場', 5], ['隨機金屬碎片 ×{n}', 1]]);
   const keys = new Set([...GACHA_CHIPS.flatMap(chip => [...gachaChipEffectLines(chip).map(line => line.text), gachaChipTiming(chip)]),
     ...GACHA_BITS_BAGS.map(bag => bag.name), '附贈 {item} ×{n}', '補給已滿的部分換成 {bits} 位元幣', '已取回',
     '性格：{name}', '選擇新的性格', '請先選擇新的性格。', '拍檔已經是這個性格了。', '這個晶片沒有裝填。', '最大 HP', '最大 TP',
     '轉蛋卡匣', '誘餌引來：{name}', '賞金信標', '下一場勝利生效', '賞金信標掉落：{item}',
-    '培育補給與狩獵道具 45%・R 晶片 27%・位元幣袋 20%・基礎進化金屬 7%・轉蛋券 1%']);
+    ...GACHA_SUPPLY_PACKS.map(pack => pack.name), GACHA_TICKET_PACK.name,
+    ...GACHA_METALS.flatMap(metal => gachaMetalEffectLines(metal).map(line => line.text)),
+    '補給箱 45%・位元幣袋／基礎晶片／卡匣／信標 α 35%・暴富金箱／性格／記憶體晶片／基礎碎片 16%・轉蛋券／時之礦石碎片／核心 β 4%',
+    '前往狩獵場', '前往對戰大廳', '已裝填（下一場自動生效）', '進化候選路線', '投入金屬催化', '碎片升階熔煉', '量子必中鋼索：一擊捕獲！']);
   for (const locale of ['en', 'ja', 'th', 'vi']) {
     const TEXT = (await import(`../src/championship/text/uiText.${locale}.js`))[`TEXT_${locale.toUpperCase()}`];
     for (const key of keys) {
@@ -321,23 +330,48 @@ test('every chip spells out its effect from its own numbers, in every locale', a
   }
 });
 
-test('the Bits machine pays coin bags and a ticket; its metal share stays R 6% and SR 1%', () => {
-  const rate = slot => GACHA_BITS_MACHINE_RATES.find(([id]) => id === slot)[1];
+test('the Bits machine follows the Owner sheet: supplies 45%, coins/basic chips 35%, chest/rare chips/shards 16%, top 4%', () => {
+  const rate = slot => GACHA_BITS_MACHINE_RATES.find(([id]) => id === slot)?.[1] ?? 0;
   assert.ok(Math.abs(GACHA_BITS_MACHINE_RATES.reduce((sum, [, weight]) => sum + weight, 0) - 1) < 1e-9);
-  assert.equal(rate('METAL_R'), 0.06);
-  assert.equal(rate('METAL_SR'), 0.01);
-  assert.equal(GACHA_BITS_BAGS.reduce((sum, bag) => sum + rate(bag.id), 0).toFixed(3), '0.200');
+  assert.deepEqual(GACHA_BITS_MACHINE_TIERS.map(([weight]) => weight), [0.45, 0.35, 0.16, 0.04]);
+  assert.equal(rate('bits:vault'), 0, 'the vault is a premium jackpot now');
+  assert.equal((rate('metal:beta-shard') + rate('metal:emma-shard')).toFixed(3), '0.064');
   const state = normalizeCyberGacha({version: 1});
-  const pull = roll => pullCyberGacha(state, {machine: 'BITS', count: 1, bits: 50_000, random: seq([roll, 0.5])});
-  assert.deepEqual(pull(0.8).prizes[0], {kind: 'BITS', id: 'bits:pouch', rarity: 'R', quantity: 1, bits: 30_000});
-  assert.equal(pull(0.87).prizes[0].bits, 60_000);
-  assert.equal(pull(0.97).prizes[0].bits, 150_000);
-  assert.equal(pull(0.999).prizes[0].bits, 500_000);
-  const ticket = pull(0.99);
+  const pull = (...rolls) => pullCyberGacha(state, {machine: 'BITS', count: 1, bits: 50_000, random: seq(rolls)});
+  assert.deepEqual(pull(0.01).prizes[0], {kind: 'GOODS', id: 'pack:feed', rarity: 'R', quantity: 10, shopRecordIndex: 0});
+  assert.deepEqual(pull(0.1).prizes[0], {kind: 'GOODS', id: 'pack:protein', rarity: 'R', quantity: 3, shopRecordIndex: 1});
+  assert.deepEqual(pull(0.2).prizes[0], {kind: 'GOODS', id: 'pack:wound', rarity: 'R', quantity: 5, shopRecordIndex: 2});
+  assert.deepEqual(pull(0.3).prizes[0], {kind: 'GOODS', id: 'pack:medicine', rarity: 'R', quantity: 3, shopRecordIndex: 3});
+  assert.deepEqual([0, 0.5, 0.99].map(pick => pull(0.4, pick).prizes[0].shopRecordIndex), [42, 34, 46], 'the hunt box: bomb, meat bait or mine, x3');
+  assert.deepEqual(pull(0.47).prizes[0], {kind: 'BITS', id: 'bits:pouch', rarity: 'R', quantity: 1, bits: 30_000});
+  assert.equal(pull(0.55).prizes[0].bits, 60_000);
+  assert.equal(getGachaChip(pull(0.62, 0).prizes[0].id).kind, 'GROWTH');
+  assert.equal(getGachaChip(pull(0.7, 0).prizes[0].id).kind, 'HUNT');
+  assert.equal(pull(0.77).prizes[0].id, 'chip:bounty-alpha');
+  assert.equal(pull(0.81).prizes[0].bits, 150_000);
+  assert.equal(pull(0.85).prizes[0].id, 'chip:personality');
+  assert.equal(pull(0.88).prizes[0].id, 'chip:memory');
+  assert.equal(pull(0.91).prizes[0].id, 'metal:beta-shard');
+  assert.equal(pull(0.95).prizes[0].id, 'metal:emma-shard');
+  const ticket = pull(0.965);
   assert.equal(ticket.prizes[0].kind, 'TICKETS');
   assert.equal(ticket.state.tickets, 1, 'the ticket prize lands in the save');
-  assert.equal(pull(0.93).prizes[0].kind, 'METAL');
-  assert.equal(pull(0.2).prizes[0].kind, 'GOODS');
+  assert.equal(pull(0.975).prizes[0].id, 'metal:chrono-ore-shard');
+  assert.equal(pull(0.995).prizes[0].id, 'chip:core-beta');
+});
+
+test('the premium jackpot: coin chest at SR, vault (with protein x5) or a ticket pack at SSR, a ticket pack at UR', () => {
+  const state = normalizeCyberGacha({version: 1, tickets: 10});
+  const pull = (...rolls) => pullCyberGacha(state, {machine: 'PREMIUM', count: 1, random: seq(rolls)});
+  // rarity roll, then the category roll: 0.8 sits above the chip/metal share and below automation.
+  assert.deepEqual(pull(0.7, 0.8).prizes[0], {kind: 'BITS', id: 'bits:chest', rarity: 'SR', quantity: 1, bits: 150_000});
+  const vault = pull(0.9, 0.8, 0.1).prizes[0];
+  assert.deepEqual([vault.id, vault.bits, vault.bonus.id, vault.bonus.quantity], ['bits:vault', 500_000, 'goods:protein', 5]);
+  const pack = pull(0.9, 0.8, 0.9, 0);
+  assert.deepEqual([pack.prizes[0].id, pack.prizes[0].quantity, pack.state.tickets], ['ticket:pack', 2, 9 + 2]);
+  assert.deepEqual([pull(0.99, 0.8, 0.99).prizes[0].id, pull(0.99, 0.8, 0.99).prizes[0].quantity], ['ticket:pack', 5]);
+  assert.equal(pull(0.1, 0.99).prizes[0].kind, 'CHIP', 'R has no jackpot and no supplies');
+  assert.equal(GACHA_PREMIUM_JACKPOT_SHARE, 0.1);
 });
 
 test('an R chip from the premium machine brings feed x5 or protein x1, alternating by pull position', () => {
@@ -419,7 +453,7 @@ async function qaApp(chips, random = Math.random) {
 }
 
 test('the app loads and takes back cartridges, reshapes a personality and pays coin bags, saving each step', async () => {
-  const {app, saved} = await qaApp({'chip:gravity': 1, 'chip:personality': 1, 'chip:bounty-alpha': 1}, seq([0.8]));
+  const {app, saved} = await qaApp({'chip:gravity': 1, 'chip:personality': 1, 'chip:bounty-alpha': 1}, seq([0.47]));
   try {
     const slots = kind => app.getGachaTacticalSlots(kind).map(slot => [slot.id, slot.owned, slot.armed]);
     assert.deepEqual(slots('HUNT'), [['chip:gravity', 1, false]]);

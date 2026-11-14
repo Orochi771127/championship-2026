@@ -56,12 +56,13 @@
 
 import contract from "../../../../docs/contracts/championship/battle-field-presentation.v1.json" with { type: "json" };
 import { prefersReducedMotion, currentQualityTier, flashScale as currentFlashScale } from '../presentationPreferences.js';
-import {battleFocusViewport,drawBattleDigitalCurtain} from '../battleFocusViewport.js';
+import {battleFocusViewport,drawBattleDigitalCurtain,BATTLE_PRELUDE_ZOOM_SHARE} from '../battleFocusViewport.js';
 import {createBattleEffectSprites} from '../battleEffectSprites.js';
+import {createBattleStatusAilmentFx, multiplyTint} from '../battleFx/battleStatusAilmentFx.js';
 import {createBm03GroundShadows} from '../bm03GroundShadows.js';
-import {createBattleFxCamera,clampBattleCameraToMap} from '../battleFx/battleFxCamera.js';
+import {createBattleFxCamera,clampBattleCameraToMap,battleFxFreezePace,battleFxApproach,createBattleFxSteadyInsets} from '../battleFx/battleFxCamera.js';
 import {createBattleFxEventTracker} from '../battleFx/battleFxEvents.js';
-import {createBattleFxLayer} from '../battleFx/battleFxLayer.js';
+import {createBattleFxLayer, battleFxStasisTint} from '../battleFx/battleFxLayer.js';
 import {createRemadeEffectArt} from '../vfx/remadeEffectCells.js';
 import {createBattleHitFeel} from '../battleFx/battleHitFeel.js';
 import {createBattleBurstShell} from './battleBurstShell.js';
@@ -281,6 +282,40 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     quality:currentQualityTier(), reducedMotion, responsiveLayout, flashScale:currentFlashScale(),
     describeMove:fx?.describeMove, nameOfSlot:fx?.nameOfSlot, moveNameOf:fx?.moveNameOf, text:fx?.text, juicy,
     resolveMove:fx?.resolveMove, effectArt:shownArt}) : null;
+  // Status ailments (STATUS_AILMENT_VFX_20261110): a loop round each fighter whose
+  // negative-status slot is set, and a tint / glow on its own frame. Display only.
+  const statusFx = fxLayer ? createBattleStatusAilmentFx({PIXI:stage.PIXI, layer:actorLayer, reducedMotion, quality:currentQualityTier()}) : null;
+  // Loopback review only: ?statusFxQa=7,9,14 shows those codes on slots 0, 1, 2... (display only, the battle is untouched).
+  const statusQa = statusFx && ['localhost', '127.0.0.1', '[::1]'].includes(globalThis.location?.hostname)
+    ? (new URLSearchParams(String(globalThis.location?.search ?? '')).get('statusFxQa') ?? '').split(',').filter(Boolean).map(Number) : [];
+  // Loopback review only: ?moveFxQa=193,194 replays those moves' release and contact, one every 2.6 s,
+  // from the first local fighter onto the first opponent (BESPOKE_MOVE_VFX_PROGRAM_20261111). Display only.
+  const moveQa = fxLayer && ['localhost', '127.0.0.1', '[::1]'].includes(globalThis.location?.hostname)
+    ? (new URLSearchParams(String(globalThis.location?.search ?? '')).get('moveFxQa') ?? '').split(',').filter(Boolean).map(Number) : [];
+  const moveQaState = {ms: -1200, index: -1, hit: false, from: null, to: null};
+  function moveQaEvents(view, dtMs) {
+    if (!moveQa.length || !view?.combatants) return [];
+    const out = [];
+    moveQaState.ms += dtMs;
+    const live = view.combatants.filter(c => c?.present && !c.down);
+    if (moveQaState.ms >= 0 && moveQaState.hit && moveQaState.ms < 2600) return out;
+    if (moveQaState.ms >= 2600 || moveQaState.index < 0) {
+      if (moveQaState.ms < 0) return out;
+      moveQaState.ms = 0; moveQaState.index = (moveQaState.index + 1) % moveQa.length; moveQaState.hit = false;
+      const from = live.find(c => c.team === localTeam) ?? live[0], to = live.find(c => c.team !== from?.team);
+      if (!from || !to) return out;
+      moveQaState.from = from.slot; moveQaState.to = to.slot;
+      const moveId = moveQa[moveQaState.index];
+      globalThis.__championshipMoveFxQa = {moveId, at: performance.now(), index: moveQaState.index};
+      out.push(Object.freeze({type: 'LAUNCH', frame: view.animationFrame ?? 0, slot: from.slot, moveId}));
+    } else if (!moveQaState.hit && moveQaState.ms >= 420) {
+      moveQaState.hit = true;
+      const moveId = moveQa[moveQaState.index], maxHp = Math.max(1, view.combatants[moveQaState.to]?.hp?.maximum ?? 1000);
+      out.push(Object.freeze({type: 'HIT', frame: view.animationFrame ?? 0, slot: moveQaState.to, attackerSlot: moveQaState.from, moveId,
+        damage: Math.round(maxHp * 0.18), hpBefore: maxHp, hpAfter: Math.round(maxHp * 0.82), maxHp, ratio: 0.18}));
+    }
+    return out;
+  }
   // A reference cell that could not be remade retires; the FX layer's kit then draws it on its actor.
   const effectSprites = shownArt ? createBattleEffectSprites({PIXI:stage.PIXI, parent:actorLayer, art:shownArt, retireRom:Boolean(fxLayer)}) : null;
   // A failed FX probe starts from contain-fit art coordinates; the final
@@ -305,6 +340,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     try { const value = safeInsets(); return value && (value.top > 0 || value.bottom > 0) ? value : null; } catch { return null; }
   };
   let lastInsets = null;
+  const steadyInsets = createBattleFxSteadyInsets({reducedMotion});
 
   let groundShadows = null;
   try { groundShadows = await createBm03GroundShadows({PIXI:stage.PIXI,parent:shadowLayer,fieldArt}); }
@@ -324,6 +360,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   const actors = new Map();
   let focusPlacement = null;
   let fieldPlacement = null;
+  // The followed prelude zoom (1 = level) and the stand it closes on.
+  let preludeZoom = 1, preludeAnchor = null;
 
   // Banks of live launches whose move name states another element: recolour
   // their cells (unifiedMoveVfxResolver cellHue / cellTint). Display only.
@@ -355,12 +393,16 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       .filter(c => c.present && !c.down && c.speciesId)
       .map(c => ({slot:c.slot, team:c.team, x:rect.x + c.stand.x * rect.width, y:rect.y + c.stand.y * rect.height})), 34 * nativeScale, 14 * nativeScale) : null;
     const ease = Math.min(1, layoutDtMs / 140);
+    statusFx?.update(layoutDtMs);
+    const statusShown = new Set();
     for (const combatant of view.combatants) {
       let entry = actors.get(combatant.slot);
       if (entry && (!combatant.present || entry.speciesId !== combatant.speciesId)) {
         actorLayer.removeChild(entry.actor.sprite);
         entry.actor.sprite.destroy();
         entry.flashSprite?.destroy();
+        entry.statusGlow?.destroy();
+        statusFx?.retire(combatant.slot);
         actors.delete(combatant.slot);
         entry = null;
       }
@@ -383,7 +425,9 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
         nativeRequest:combatant.animationRequest?.nativeRequest===true,
         specialPrelude:Boolean(focus)});
       if (motion?.geometry.blank) {
-        sprite.visible=false;if(entry.flashSprite)entry.flashSprite.visible=false;rendered.add(combatant.slot);continue;
+        sprite.visible=false;if(entry.flashSprite)entry.flashSprite.visible=false;if(entry.statusGlow)entry.statusGlow.visible=false;
+        if(statusFx&&(statusQa[combatant.slot]||combatant.status?.code)){statusFx.hide(combatant.slot);statusShown.add(combatant.slot);}
+        rendered.add(combatant.slot);continue;
       }
       const texture = sprite.texture;
       const packedScale = motion?.geometry.scale ?? nativeSizing?.packedPixelsPerNativePixel;
@@ -458,11 +502,16 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       if(fall)sprite.alpha*=1-0.85*sink;
       else if(view.arenaHazards?.grace?.[combatant.slot]>0&&!reducedMotion)sprite.alpha*=Math.floor(view.arenaHazards.frame/7)%2?0.45:1;
       const fxBrightness = fxLayer?.brightnessFor(combatant.slot) ?? 1;
-      const brightness=Math.round((focus ? 255 : 255*(view.specialPrelude?.brightnessQ12 ?? 4096)/4096)*fxBrightness);
+      // Time stopped for this fighter (a knockout freeze, a signature move it is not part of): it is held
+      // in a cold tint and stays readable (never darker than 64 %), so it reads as frozen, not as switched off.
+      const chill = fxLayer?.stasisFor?.(combatant.slot) ?? 0;
+      const litBrightness=Math.round((focus ? 255 : 255*(view.specialPrelude?.brightnessQ12 ?? 4096)/4096)*fxBrightness);
+      const brightness=chill>0 ? Math.round(litBrightness+(Math.max(litBrightness,164)-litBrightness)*chill) : litBrightness;
       const nativeTint=combatant.nativeMotion?.tintRgb;
       sprite.tint=nativeTint === undefined ? brightness*0x010101
         : ((Math.round((nativeTint>>16&255)*brightness/255)<<16)
           |(Math.round((nativeTint>>8&255)*brightness/255)<<8)|Math.round((nativeTint&255)*brightness/255));
+      if (chill > 0) sprite.tint = multiplyTint(sprite.tint, battleFxStasisTint(chill));
       if (fxLayer) {
         // The brief hit flash: an additive white copy of the same frame.
         const glow = dress?.flash ?? 0;
@@ -505,6 +554,29 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
           top:y-lift-bodyHeight, height:bodyHeight, width:bodyWidth,
           facing:combatant.stand.facing, team:combatant.team, down:combatant.down, engaged:combatant.engaged,framingBounds,
           left:x-bodyWidth/2, right:x+bodyWidth/2, bottom:y, spread:entry.spreadX});
+        // Status ailment: the loop round the body, then the body's own tint and glow.
+        const statusCode = statusQa[combatant.slot] || (combatant.status?.code ?? 0);
+        if (statusFx && statusCode && !held) {
+          statusFx.place(combatant.slot, statusCode, {x, y:y-lift, top:y-lift-bodyHeight, width:bodyWidth, height:bodyHeight, zIndex:sprite.zIndex, unit:nativeScale},
+            {visible:!combatant.down && sprite.visible, alpha:sprite.alpha});
+          statusShown.add(combatant.slot);
+        } else if (statusFx && statusCode && held) statusShown.add(combatant.slot);
+        const statusBody = statusShown.has(combatant.slot) && !combatant.down ? statusFx.body(combatant.slot) : null;
+        if (statusBody) sprite.tint = multiplyTint(sprite.tint, statusBody.tint);
+        if (statusBody?.glow && !entry.statusGlow) {
+          entry.statusGlow = new stage.PIXI.Sprite(sprite.texture);
+          entry.statusGlow.blendMode = 'add'; entry.statusGlow.eventMode = 'none'; entry.statusGlow.label = 'battle status body glow';
+          actorLayer.addChild(entry.statusGlow);
+        }
+        if (entry.statusGlow) {
+          const glow = entry.statusGlow;
+          glow.visible = Boolean(statusBody?.glow) && sprite.visible;
+          if (glow.visible) {
+            glow.texture = sprite.texture; glow.anchor.copyFrom(sprite.anchor); glow.scale.copyFrom(sprite.scale);
+            glow.position.copyFrom(sprite.position); glow.rotation = sprite.rotation; glow.zIndex = sprite.zIndex + 0.005;
+            glow.tint = statusBody.glow; glow.alpha = statusBody.glowAlpha * sprite.alpha;
+          }
+        }
       }
       if (fxLayer) {
         // Field interaction from the fighter's own native motion (never the
@@ -542,6 +614,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     }
     groundShadows?.end();
     burstShell.retireExcept(shellSlots);
+    statusFx?.retireExcept(statusShown);
     return rendered;
   }
 
@@ -603,12 +676,13 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     // Dynamic presentation: events from this view, then the camera for it.
     let camera = {zoom:1, x:0, y:0};
     let fxContext = null;
-    const insets = fxLayer && fieldArt ? readInsets() : null;
+    // Steady insets: a signature move's banner makes the record row taller for a moment; the safe window does not follow that.
+    const insets = fxLayer && fieldArt ? steadyInsets(readInsets(), dtMs, rect) : null;
     lastInsets = insets;
     if (fxLayer && fieldArt) {
-      const events = [...tracker.consume(view), ...motionEvents];
+      const events = [...tracker.consume(view), ...motionEvents, ...moveQaEvents(view, dtMs)];
       camera = director.update({dtMs, viewport:{width:rect.width, height:rect.height}, art:artRect,
-        subjects:[...slotInfos.values()], points:fxLayer.projectilePoints(), insets});
+        subjects:[...slotInfos.values()], points:fxLayer.projectilePoints(), insets, prelude:Boolean(view.specialPrelude)});
       fxContext = {artRect, nativeScale, localTeam, opening:view.opening, viewport:{width:rect.width, height:rect.height}, insets,
         slotInfo:slot => slotInfos.get(slot) ?? null,
         opponentsOf:slot => view.combatants.filter(c => c.present && !c.down && c.team !== view.combatants[slot]?.team).map(c => c.slot),
@@ -623,17 +697,29 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     const focus=view.specialPrelude;
     const actor=focus ? view.combatants[focus.slot] : null;
     // The original prelude zoom composes over the camera in screen space.
-    const anchorLocalX=artRect.x+(actor?.stand.x??.5)*artRect.width, anchorLocalY=artRect.y+(actor?.stand.y??.5)*artRect.height;
+    // Calm shot (Owner 2026-11-11): at BATTLE_PRELUDE_ZOOM_SHARE of its depth, and followed rather
+    // than copied frame for frame. The original curve is a square root: a third of its depth lands in
+    // the first frame, in and out, which on a phone is a jolt of the whole field. The scene follows
+    // that curve with a 90 ms lag, around the caster's stand until the zoom has settled back.
+    const preludeWanted=focus&&!reducedMotion ? 1+((focus.zoomQ12??4096)/4096-1)*BATTLE_PRELUDE_ZOOM_SHARE : 1;
+    preludeZoom=fxLayer&&dtMs>0 ? preludeZoom+(preludeWanted-preludeZoom)*battleFxApproach(dtMs,90) : fxLayer ? preludeZoom : preludeWanted;
+    if(preludeWanted===1&&Math.abs(preludeZoom-1)<0.002)preludeZoom=1;
+    if(actor)preludeAnchor={x:artRect.x+actor.stand.x*artRect.width,y:artRect.y+actor.stand.y*artRect.height};
+    else if(preludeZoom===1)preludeAnchor=null;
+    const anchorLocalX=preludeAnchor?.x??artRect.x+.5*artRect.width, anchorLocalY=preludeAnchor?.y??artRect.y+.5*artRect.height;
     const prelude=battleFocusViewport({width:rect.width,height:rect.height,
       anchorX:camera.zoom*anchorLocalX+camera.x, anchorY:camera.zoom*anchorLocalY+camera.y,
-      zoomQ12:focus?.zoomQ12,reducedMotion});
+      zoomQ12:preludeZoom*4096,reducedMotion});
     const composed=Object.freeze({zoom:prelude.zoom*camera.zoom, x:prelude.zoom*camera.x+prelude.x, y:prelude.zoom*camera.y+prelude.y,
       anchorX:prelude.anchorX, anchorY:prelude.anchorY});
     const transform=fieldArt ? clampBattleCameraToMap({viewport:rect,art:artRect,transform:composed,
-      // The original special prelude keeps framing its own focus, as before the HUD-aware shot.
-      anchor:{x:anchorLocalX,y:anchorLocalY},box:(focus ? camera.focusBox ?? camera.framingBox : camera.framingBox)??null,insets}) : composed;
+      // The original special prelude keeps framing its own focus, as before the HUD-aware shot; the
+      // director hands that box over already eased (clampBox), so the clamp never leaps.
+      anchor:{x:anchorLocalX,y:anchorLocalY},box:camera.clampBox??(focus ? camera.focusBox ?? camera.framingBox : camera.framingBox)??null,insets}) : composed;
     world.scale.set(transform.zoom);
     world.position.set(transform.x,transform.y);
+    // The hit-feel filter covers the screen through this frame's camera.
+    hitFeel?.frame({zoom:transform.zoom,x:transform.x,y:transform.y});
     lastCamera = fxLayer ? {...camera, total:transform.zoom} : null;
     const backdrop=fxLayer?.brightnessFor(null) ?? 1;
     const brightness=Math.round(255*(focus?.brightnessQ12??4096)/4096*backdrop);
@@ -668,7 +754,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       const elapsed=ticker?.deltaMS??nativeFrameMs;
       if(!Number.isFinite(elapsed)||elapsed<0)throw new TypeError('BATTLE_INVALID_FRAME_ELAPSED');
       // Slow motion (signature hit, final K.O.) paces the same frames more slowly; none is skipped.
-      pendingFrames += elapsed/nativeFrameMs*(director?.timeScale?.() ?? 1);
+      // The original's long knockout freeze plays its same frames faster (battleFxFreezePace); a hit-stop keeps its length.
+      pendingFrames += elapsed/nativeFrameMs*(director?.timeScale?.() ?? 1)*(fxLayer ? battleFxFreezePace(current,reducedMotion) : 1);
       while(pendingFrames+1e-9>=1 && !disposed && !source.getFrame().outcome.ended){
         pendingFrames=Math.max(0,pendingFrames-1);
         const beforeOpening=(current ?? source.getView()).opening;
@@ -726,6 +813,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     getFieldPlacement:()=>fieldPlacement ? Object.freeze({...fieldPlacement,artRect:{...fieldPlacement.artRect}}) : null,
     /** Bounded 3D cues from the dynamic layer since the last call (VFX_FIVE_LAYER_20261101). */
     consumeVfxCues:()=>fxLayer?.consumeCues?.() ?? [],
+    /** True while the dynamic layer draws a pixel hit burst at every contact (SPECIAL_HEX_DECLUTTER_20261111). */
+    pixelHitsOwnSparks:()=>Boolean(fxLayer?.ownsHitSparks?.()),
 
     getDiagnostics() {
       return Object.freeze({
@@ -743,7 +832,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
           bodies:[...slotInfos.values()].map(b=>Object.freeze({slot:b.slot,x:Math.round(b.x),groundY:Math.round(b.groundY),top:Math.round(b.top),width:Math.round(b.width),down:Boolean(b.down),
             // The declared display separation; the body is otherwise on its stand.
             spread:Math.round((b.spread ?? 0)*100)/100})),
-          director:director.getState(), insets:lastInsets,
+          director:director.getState(), insets:lastInsets, statusAilments:statusFx?.getDiagnostics() ?? null,
           world:fieldPlacement ? Object.freeze({zoom:fieldPlacement.zoom, x:fieldPlacement.x, y:fieldPlacement.y}) : null}) : null,
         groundShadows:groundShadows?.getDiagnostics() ?? null,
         characters: Object.freeze([...actors].map(([slot, entry]) => Object.freeze({
@@ -781,6 +870,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       if (scene.parent) scene.parent.removeChild(scene);
       effectSprites?.dispose();
       fxLayer?.dispose();
+      statusFx?.dispose();
       if (shownArt !== effectArt) shownArt?.releaseRemade?.();
       hitFeel?.dispose();
       burstShell.dispose();

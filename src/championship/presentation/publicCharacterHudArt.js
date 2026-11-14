@@ -3,7 +3,6 @@ import {originalMedalArt} from './completedOriginalUi20261007.js';
 import {originalCageLocationArt} from './originalCageLocationArt.js';
 import {nativeAnimationCellAt} from './characterAnimationTimeline.js';
 import {readPublicHudManifest} from './publicHudManifestCache.js';
-import {newArtPortrait,newArtPortraitLike} from './newArtPortrait.js';
 import {characterAssetUrl,characterAssetSrc} from './characterAssetDelivery.js';
 
 const canonical=id=>id?.replace(/^championship:creature:/,'');
@@ -31,9 +30,12 @@ export async function loadPublicCharacterHudArt({baseUrl,fetchImpl=globalThis.fe
  await ensureSpecies(speciesIds??[]);
  const get=id=>{const config=publicCharacterConfig(canonical(id));if(!config)return null;const record=records.get(config.entityId);if(!record)void ensureSpecies([id]).catch(()=>{});return record;};
  return Object.freeze({ensureSpecies,subscribe(listener){listeners.add(listener);return()=>listeners.delete(listener);},
-  // The record (HUD manifest) still gates readiness and sizing; the picture is the current design.
-  getPortrait:id=>newArtPortraitLike(canonical(id),get(id)?.portrait??null),
+  // Owner 2026-11-12: the Database illustration is shown in the Database only. Screens that show a
+  // partner draw its action animation (presentation/juicy/actionPortrait.js); this HUD record keeps its own cell.
+  getPortrait:id=>get(id)?.portrait??null,
   getMedal:id=>originalMedalArt(id,baseUrl),getCageThumbnail(id){const src=originalCageLocationArt(id,baseUrl);return src?{src}:null;},
   getBattleCells(id,sequenceId){const bank=get(id)?.battle,sequence=bank?.sequences.find(s=>s.id===sequenceId);return sequence?[...new Set(sequence.frames.map(f=>f.cell))].map(cell=>bank.cells.get(cell)):[];},
-  getBattleFrame(id,sequenceId,elapsed){const bank=get(id)?.battle,art=bank?newArtPortrait(canonical(id)):null;if(art)return art;const sequence=bank?.sequences.find(s=>s.id===sequenceId);return bank?.cells.get(nativeAnimationCellAt(sequence,elapsed))??null;}});
+  getBattleFrame(id,sequenceId,elapsed){const bank=get(id)?.battle,sequence=bank?.sequences.find(s=>s.id===sequenceId);return bank?.cells.get(nativeAnimationCellAt(sequence,elapsed))??null;},
+  // The animation cell itself (foot origin, logical size), never the illustration: for a body drawn on a stage.
+  getBattleCell(id,sequenceId,elapsed){const bank=get(id)?.battle,sequence=bank?.sequences.find(s=>s.id===sequenceId);return bank?.cells.get(nativeAnimationCellAt(sequence,elapsed))??null;}});
 }

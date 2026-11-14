@@ -1,9 +1,9 @@
 // TEST ONLY: exact reviewed Friends runner, bounded first adjacent desktop gesture.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
-const BASE='b21fed713454e90e65136d3f3cd2b604a166be97c64dd03fc2ae49d44de55ea4';
+const BASE='257b123ae8a8cdf7c7d0980540b1e3343d0aed777c7e105ad54d2d6559dee7cb';
 // Royal maps build (2026-11-03): the cage 3D manifest gains the two royal maps; the GLB resources below remain pinned.
-const BUILD='8fca61a1810cf80260d3d7103a50c0c4e8ba0042a66d9358a74d02c825aec154';
-const RESOURCES=Object.freeze([{"path":"assets/production/cage/three-20261021/manifest.json","bytes":9008,"sha256":"92340fb78f42098535cf6cc38eb13efc59aa518467aa7ec9d078ab0dd96a2ba1"},{"fieldId":"field_cm02_01","path":"assets/production/cage/three-20261021/field_cm02_01.glb","bytes":900856,"sha256":"80efcd18ff4d9e2ee94fa64843b7e14ba5abd2705e64339be531762356684307"},{"fieldId":"field_cm18_01","path":"assets/production/cage/three-20261021/field_cm18_01.glb","bytes":1853276,"sha256":"6657497289f9f10ac376f5d31d2ff50b0cb1629da65f64c49bade3788cbc6e41"},{"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":281140,"sha256":"075d4d932b1fd5b7f5c6e4467fe636a3e4905eb08d715b717892a2003718b6f2"}]);
+const BUILD='87a87842c57697d9b9894dc10d4bd65f1a38e44e0c6ae2f3050ba5b622c34203';
+const RESOURCES=Object.freeze([{"path":"assets/production/cage/three-20261021/manifest.json","bytes":9008,"sha256":"50a6aa76de0d9e3d050ab284dc34cec40542be5de6d6e020575542fd9d076db9"},{"fieldId":"field_cm02_01","path":"assets/production/cage/three-20261021/field_cm02_01.glb","bytes":900856,"sha256":"80efcd18ff4d9e2ee94fa64843b7e14ba5abd2705e64339be531762356684307"},{"fieldId":"field_cm18_01","path":"assets/production/cage/three-20261021/field_cm18_01.glb","bytes":1853276,"sha256":"6657497289f9f10ac376f5d31d2ff50b0cb1629da65f64c49bade3788cbc6e41"},{"fieldId":"field_cm39_01","path":"assets/production/cage/three-20261021/field_cm39_01.glb","bytes":281140,"sha256":"075d4d932b1fd5b7f5c6e4467fe636a3e4905eb08d715b717892a2003718b6f2"}]);
 function verifyThreeResponses(row){
  assert.equal(row.sourceThreeReadbacksComplete?.responses,row.sourceThreeResponses?.length,'All owned response reads completed');
  assert.equal(row.sourceThreeReadbacksComplete?.reads,row.sourceThreeResponses?.length);

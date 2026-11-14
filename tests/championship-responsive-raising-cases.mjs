@@ -79,7 +79,7 @@ test('same toolbar owner retains measured rail budget and tears down observer/li
 });
 test('wide CSS floats card/tutorial and active hint over the full field; source contract only',()=>{
  const css=fs.readFileSync(new URL('../src/championship/app/intRh2Styles.css',import.meta.url),'utf8');
- assert.match(css,/--cm-raising-card: clamp\(256px, 28vw, 340px\)/);
+ assert.match(css,/--cm-raising-card: clamp\(256px, calc\(28 \* var\(--cm-vw, 1vw\)\), 340px\)/);
  assert.match(css,/left: var\(--safe-left\); right: var\(--safe-right\); min-height: 0/);
  assert.match(css,/width: 100%; max-width: none/);
  assert.match(css,/max-height: calc\(var\(--cm-screen-height\) - 16px\)/);

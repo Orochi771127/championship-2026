@@ -97,14 +97,15 @@ export function createRaisingHomeRuntime(options = {}) {
       try {
         const envelope = clonePlainData(input);
         const keys = Object.keys(envelope).sort();
-        const expected = ["units", "expectedClockRevision", ...["subunits", "divisor", "clearElapsed"].filter((key) => Object.hasOwn(envelope, key))].sort();
+        const expected = ["units", "expectedClockRevision", ...["subunits", "divisor", "clearElapsed", "calendar"].filter((key) => Object.hasOwn(envelope, key))].sort();
         if (keys.length !== expected.length || keys.some((key, i) => key !== expected[i])) throw new TypeError("Clock transition fields are not exact");
         if (!Number.isSafeInteger(envelope.expectedClockRevision) || envelope.expectedClockRevision < 0 || Object.is(envelope.expectedClockRevision, -0)) throw new TypeError("Clock expectedClockRevision is invalid");
         if (envelope.expectedClockRevision !== snapshot.clockRevision) return rejection(snapshot, "RAISING_HOME_STALE_CLOCK_REVISION");
         const next = advanceRaisingHomeClock(snapshot, envelope.units,
           Object.hasOwn(envelope, "subunits") ? envelope.subunits : 0,
           Object.hasOwn(envelope, "divisor") ? envelope.divisor : 400,
-          Object.hasOwn(envelope, "clearElapsed") ? envelope.clearElapsed : false);
+          Object.hasOwn(envelope, "clearElapsed") ? envelope.clearElapsed : false,
+          Object.hasOwn(envelope, "calendar") ? envelope.calendar : null);
         if (next === snapshot) return rejection(snapshot, snapshot.paused ? "RAISING_HOME_PAUSED" : "RAISING_HOME_CLOCK_NO_CHANGE");
         return publish(next, "clock");
       } catch (error) {

@@ -3,7 +3,8 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {auditPagesModuleClosure} from './pages-module-closure.mjs';
 import {assertPublicRanchStreaming} from './public-ranch-streaming-boundary.mjs';
-import {assertPagesPayloadSize} from './pages-payload-size.mjs';
+import {assertPagesPayloadSize,deployedPagesRows} from './pages-payload-size.mjs';
+import {CHARACTER_ASSET_PREFIX} from '../../src/championship/presentation/characterAssetDelivery.js';
 import {assertPublicCharacterSelection} from './public-character-boundary.mjs';
 import {projectPublicRenderSources,PUBLIC_RENDER_FIELDS} from './public-render-projection.mjs';
 import {selectedMapProjections,PUBLIC_MAP_FIELDS} from './public-map-projection.mjs';
@@ -24,7 +25,7 @@ const selectedMedia=(file,hash,selection)=>/\.(?:png|webp|jpe?g|wav|mp3|mp4)$/i.
  &&selection?.get(file)===hash;
 const privateKey=/^(?:localOnly|reviewOnly|qaOnly|runtimeEligible|shippingReady|humanApproved|assistantReviewed|runtimeQaPassed|productionStatus|shippingStatus|artifactMaturity|rightsStatus|rightsEvidenceIds|ownerReply(?:Id)?|ownerInstruction|ownerDirection|scopeQuestionId|commitPushPublishInstructionId|approval.*|library(?:File)?Id|library_file_id|source(?:Reference.*|Review.*|Master.*|Archive.*|BankSha256|BindingEvidence)|prompt.*|artDirection|designRevision|selectedGenerationVersion|review|provenance|localPackagingProvenance|privateVaultReference|evidence_record)$/i;
 const privateValue=/(?:libfile_[a-z0-9]+|Sentinel_[a-f0-9]{32}\b|\bSentinel_[a-z0-9]+|\b[A-Za-z]:[\\/]+(?:Users|Projects|Workspace|Private|Temp)|YDIJ_PRIVATE_ROM_ART_PACK|ROM_COPYRIGHTED_REFERENCE|LOOPBACK_RESEARCH_ONLY|file:\/\/(?=[^\s\'"<>]*[a-z0-9]))/i;
-const manifestFields=['schemaVersion','target','buildId','commit','inputSha256','entry','publicReleasePermitted','loopbackOnly','sourcePayloadIncluded','faithfulInternalVfxIncluded','romDerivedBattleCatalogsIncluded','ownerSelectedReferenceArtIncluded','staticModuleClosure','checked','moduleCount','moduleEntries','importMap','browserBundle','version','tool','toolVersion','startupModules','generatedFiles','release','approved','publicPlaytest','ownerApproved','policyId','rightsDocumentVerified','commercialReleaseAccepted','fullOriginalParityAccepted','fileCount','fileTable','gzipBase64','columns','directories','rows','files','path','sha256','bytes','saveStorage','externalCharacterAssets','assetPrefix','assetBaseUrl','sourceCommit','manifestUrl','manifestSha256','totalBytes'];
+const manifestFields=['schemaVersion','target','buildId','commit','inputSha256','entry','publicReleasePermitted','loopbackOnly','sourcePayloadIncluded','faithfulInternalVfxIncluded','romDerivedBattleCatalogsIncluded','ownerSelectedReferenceArtIncluded','staticModuleClosure','checked','moduleCount','moduleEntries','importMap','browserBundle','version','tool','toolVersion','startupModules','generatedFiles','release','approved','publicPlaytest','ownerApproved','policyId','rightsDocumentVerified','commercialReleaseAccepted','fullOriginalParityAccepted','fileCount','fileTable','gzipBase64','columns','directories','rows','files','path','sha256','bytes','saveStorage','externalCharacterAssets','localPaths','assetPrefix','assetBaseUrl','sourceCommit','manifestUrl','manifestSha256','totalBytes'];
 
 export function forbiddenPublicPath(file){
   return !safePath(file)||file===INTERNAL_INDEX||privateExtension.test(file)
@@ -170,6 +171,6 @@ export function assertPublicArtifact({root,files,plan,manifestName='pages-build.
   if(files.some(file=>file===INTERNAL_INDEX))throw Error('PUBLIC_AUTHORITY_INDEX_INCLUDED');
   if(!files.includes(PUBLIC_RUNTIME_INDEX_PATH))throw Error('PUBLIC_RUNTIME_INDEX_MISSING');
   if(!fs.readFileSync(path.join(root,PUBLIC_RUNTIME_INDEX_PATH)).equals(plan.indexBytes))throw Error('PUBLIC_RUNTIME_INDEX_CHANGED');
-  assertPagesPayloadSize(actualSizes);
+  assertPagesPayloadSize(deployedPagesRows(actualSizes,{external:Boolean(plan.externalCharacterAssets),characterPrefix:CHARACTER_ASSET_PREFIX}));
   return {checkedFiles:files.length,authorityIndexIncluded:false,allowlist:true};
 }

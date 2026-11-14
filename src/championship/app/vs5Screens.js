@@ -135,7 +135,65 @@ function shell(root, screen, label) {
  * Mode identity is now traced through OVL10 0210F88C's help-bank dispatch.
  * The application supplies each mode's entries; this view holds only selection.
  */
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null }) {
+/** The pre-match sponsor contract picker: three contract keys and the stake stepper. */
+export function createSponsorContractStrip(source, busy = () => false) {
+  const strip = element("div", "cm-vs5-sponsors");
+  strip.setAttribute("role", "group");
+  strip.setAttribute("aria-label", uiText("SPONSOR_TITLE"));
+  let stake = null;
+  const paint = () => {
+    const view = source.read();
+    strip.hidden = !view;
+    if (!view) return;
+    const { contracts, stakes, armed, bits, today = null } = view;
+    stake = armed?.stake ?? stake ?? stakes.defaultStake;
+    strip.dataset.armed = String(Boolean(armed));
+    const head = element("div", "cm-vs5-sponsors__head");
+    head.append(element("span", "cm-vs5-sponsors__label", uiText(armed ? "SPONSOR_ARMED" : "SPONSOR_TITLE"), false));
+    if (today) head.append(element("span", "cm-vs5-sponsors__today", uiText("SPONSOR_TODAY", { left: today.left, limit: today.limit }), false));
+    const stepper = element("div", "cm-vs5-sponsors__stake");
+    const minus = element("button", "cm-vs5-sponsors__step", "−", false), plus = element("button", "cm-vs5-sponsors__step", "+", false);
+    minus.type = plus.type = "button";
+    minus.setAttribute("aria-label", uiText("SPONSOR_STAKE_DOWN")); plus.setAttribute("aria-label", uiText("SPONSOR_STAKE_UP"));
+    minus.disabled = stake <= stakes.minimum; plus.disabled = stake + stakes.step > Math.min(stakes.maximum, bits);
+    const shift = (delta) => {
+      if (busy()) return;
+      stake = Math.max(stakes.minimum, Math.min(stakes.maximum, stake + delta));
+      if (armed) source.arm(armed.contractId, stake);
+      paint();
+    };
+    minus.addEventListener("click", () => shift(-stakes.step)); plus.addEventListener("click", () => shift(stakes.step));
+    stepper.append(minus, element("span", "cm-vs5-sponsors__amount", uiText("SPONSOR_STAKE", { bits: stake }), false), plus);
+    head.append(stepper);
+    const keys = element("div", "cm-vs5-sponsors__keys");
+    for (const contract of contracts) {
+      const key = element("button", "cm-vs5-sponsor");
+      key.type = "button";
+      key.dataset.contract = contract.id; key.dataset.faction = contract.faction;
+      const on = armed?.contractId === contract.id;
+      key.setAttribute("aria-pressed", String(on));
+      key.disabled = !on && bits < stake;
+      // The game's own faction glyph (the caller draws it), the same one the partner badges use.
+      const title = element("span", "cm-vs5-sponsor__name");
+      const glyph = source.icon?.(contract.faction);
+      if (glyph) title.append(glyph);
+      title.append(element("span", "", uiText(`SPONSOR_${contract.id}_NAME`), false));
+      key.append(title,
+        element("span", "cm-vs5-sponsor__rule", uiText(`SPONSOR_${contract.id}_RULE`), false),
+        element("span", "cm-vs5-sponsor__pay", uiText(`SPONSOR_${contract.id}_PAY`, { payout: contract.payout, bits: Math.floor(stake * contract.payout) }), false));
+      key.addEventListener("click", () => { if (busy()) return; source.arm(on ? null : contract.id, stake); paint(); });
+      keys.append(key);
+    }
+    const caps = view.caps ?? {};
+    const note = element("p", "cm-vs5-sponsors__note", uiText(bits < stakes.minimum ? "SPONSOR_NEED_BITS" : "SPONSOR_NOTE", { bits: stakes.minimum,
+      free: caps.FREE ?? 0, title: caps.TITLE ?? 0, cup: caps.CHAMPIONSHIP ?? 0 }), false);
+    strip.replaceChildren(head, keys, note);
+  };
+  paint();
+  return strip;
+}
+
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, onOpenJourney=null, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null, speciesBody=null, sponsorContracts=null }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -260,9 +318,13 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     paintBeacons();
     header.append(strip);
   }
+  // Sponsor stake contracts (AWAKENING_OVERDRIVE_20261109): at most one rides the next AI title match, free battle or
+  // tournament round. `read()` gives {contracts, stakes, armed, bits}; `arm(id, stake)` (null id disarms).
+  if (sponsorContracts) header.append(createSponsorContractStrip(sponsorContracts, () => entering));
   async function selectMode(id){
     if(cubeDisposed||entering)return;
     if(id==='CHAMPIONSHIP'){onOpenChampionship?.();return;}
+    if(id==='JOURNEY'){onOpenJourney?.();return;}
     if(id==='PRACTICE_BATTLE'&&getPracticeSelection){modeRequest++;await choosePractice();return;}
     if(id==='PASSWORD_BATTLE'&&getPasswordSelection){modeRequest++;await choosePassword();return;}
     if(id==='LINK_BATTLE'&&getLinkSelection){modeRequest++;await chooseLink();return;}
@@ -284,7 +346,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     section.append(stage);
     const mounted = mountCube({
       host: stage,
-      available: new Set(['TITLE_MATCH',...(onOpenChampionship?['CHAMPIONSHIP']:[]),...(getModeMatches?['FREE_BATTLE']:[]),...(getLinkSelection?['LINK_BATTLE']:[]),...(getPasswordSelection?['PASSWORD_BATTLE']:[]),...(getPracticeSelection?['PRACTICE_BATTLE']:[])]),
+      available: new Set([...(onOpenJourney?['JOURNEY']:[]),'TITLE_MATCH',...(onOpenChampionship?['CHAMPIONSHIP']:[]),...(getModeMatches?['FREE_BATTLE']:[]),...(getLinkSelection?['LINK_BATTLE']:[]),...(getPasswordSelection?['PASSWORD_BATTLE']:[]),...(getPracticeSelection?['PRACTICE_BATTLE']:[])]),
       onSelect:id=>{void selectMode(id);}
     });
     if (mounted && typeof mounted.then === "function") {
@@ -355,8 +417,9 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     const look=typeof describeMember==='function'?describeMember(entry):null;
     const face=element('span','cm-vs5-member');
     const frame=element('span','cm-vs5-member__portrait');
-    if(look?.portrait?.src){const image=document.createElement('img');image.alt='';image.decoding='async';image.loading='lazy';image.src=look.portrait.src;
-      image.addEventListener('error',()=>image.remove(),{once:true});frame.append(image);}
+    // The partner itself on its first idle cell (Owner 2026-11-12: the Database illustration is for the Database).
+    const species=entry?.speciesId??look?.speciesId??null,body=species&&typeof speciesBody==='function'?speciesBody({species,still:true}):null;
+    if(body)frame.append(body);
     else frame.dataset.empty='true';
     const text=element('span','cm-vs5-member__text');
     text.append(element('span','cm-vs5-member__name',name,false));
@@ -400,15 +463,17 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     const arena=mode==='FREE_BATTLE'?arenaSelector():null;if(arena)partyPanel.append(arena.node);
     const controls=[];
     const confirm=actionButton('決定',{primary:true});confirm.disabled=true;
-    // One plan per chosen partner, below the roster.
-    const tacticsBox=element('div','cm-vs5-tactics');tacticsBox.hidden=true;
+    // Owner 2026-11-09: the plan lives in the partner's own card. Choosing a partner
+    // opens its three plan capsules under its row; dropping it folds them away.
     // Only Free Battle and Practice read the plan; a title match would not.
     const renderTactics=()=>{
-      if(mode!=='FREE_BATTLE')return;
-      const rows=selectedIds.map(id=>candidates.find(c=>c.instanceId===id)).filter(Boolean)
-        .map(entry=>{const row=element('div','cm-vs5-tactics__row'),name=memberName(entry);const picker=tacticPicker(entry,name);
-          if(!picker)return null;const label=element('span','cm-vs5-tactics__name');label.append(memberFace(entry,name));row.append(label,picker);return row;}).filter(Boolean);
-      tacticsBox.replaceChildren(...(rows.length?[element('h3','cm-vs5-tactics__title','作戰方針'),...rows]:[]));tacticsBox.hidden=rows.length===0;
+      for(const [entry,,card,plan] of controls){
+        const picked=selectedIds.includes(entry.instanceId);
+        card.dataset.picked=String(picked);
+        if(picked&&mode==='FREE_BATTLE'&&!plan.firstChild){const picker=tacticPicker(entry,memberName(entry));if(picker)plan.append(picker);}
+        if(!picked)plan.replaceChildren();
+        plan.hidden=!plan.firstChild;
+      }
     };
     for(const entry of candidates){
       // The name stays the button's own text (its accessible name); the face,
@@ -430,9 +495,11 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
         for(const [c,b] of controls){const picked=selectedIds.includes(c.instanceId);b.setAttribute('aria-pressed',String(picked));b.disabled=!c.admission.ok||(!picked&&selectedIds.length>=limit);}
         confirm.disabled=selectedIds.length===0;renderTactics();
       });
-      controls.push([entry,button]);partyPanel.append(button);
+      const card=element('div','cm-vs5-party-card');card.dataset.picked='false';
+      const plan=element('div','cm-vs5-party-card__plan');plan.hidden=true;
+      card.append(button,plan);
+      controls.push([entry,button,card,plan]);partyPanel.append(card);
     }
-    partyPanel.append(tacticsBox);
     if(!candidates.some(c=>c.admission.ok))partyPanel.append(element('p','cm-vs5-entry-notice','目前沒有符合這場比賽條件的拍檔。'));
     confirm.addEventListener('click',async()=>{if(confirm.disabled||entering)return;confirm.disabled=true;entering=true;back.disabled=true;
       try{showRefusal(await onEnter(match.recordIndex,[...selectedIds],mode,...(arena?[arena.value()]:[])),match);}
@@ -739,7 +806,11 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       // knows it, otherwise the VS mark alone. Decoration only.
       const crest = element("span", "cm-vs5-match__crest");
       crest.setAttribute("aria-hidden", "true");
-      if (typeof match.crest === "string" && match.crest) {
+      const crestBody = Number.isSafeInteger(match.crestSpecies) && typeof speciesBody === "function"
+        ? speciesBody({ species: match.crestSpecies, still: true, className: "cm-vs5-match__crest-art cm-vs5-match__crest-body" }) : null;
+      if (crestBody) {
+        crest.append(crestBody);
+      } else if (typeof match.crest === "string" && match.crest) {
         const art = element("img", "cm-vs5-match__crest-art");
         art.alt = ""; art.decoding = "async"; art.src = match.crest;
         crest.append(art);
@@ -938,10 +1009,10 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
   card.append(portrait);
   // Floating HUD (Owner 2026-11-03): a round mini portrait on the plate's
   // corner and the element glyph beside it; neither changes the plate's size.
-  let mini=null,miniImage=null;
+  let mini=null,miniImage=null,miniSpecies=null;
   if(floatingHud){
     mini=element('span','cm-vs5-fighter__mini');mini.hidden=true;mini.setAttribute('aria-hidden','true');
-    miniImage=element('img','');miniImage.alt='';mini.append(miniImage);card.append(mini);
+    miniImage=element('span','cm-vs5-fighter__mini-body');mini.append(miniImage);card.append(mini);
     if(badge){const holder=element('span','cm-vs5-fighter__badge');holder.setAttribute('aria-hidden','true');holder.append(badge);card.append(holder);}
   }
   card.append(name, hp.wrap);
@@ -996,7 +1067,8 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
       const image=hudArt?.getBattleFrame(next.speciesId,sequenceId,Math.max(0,frame-sequenceStart));
       portrait.hidden=floatingHud||!image;
       if(image){if(portrait.getAttribute('src')!==image.src)portrait.src=image.src;}
-      if(mini){mini.hidden=!image;if(image&&miniImage.getAttribute('src')!==image.src)miniImage.src=image.src;}
+      // The plate's round mini portrait: the fighter's own body (Owner 2026-11-12), not an illustration.
+      if(mini){if(miniSpecies!==next.speciesId){miniSpecies=next.speciesId;mini.hidden=!hudArt?.setActionPortrait?.(miniImage,next.speciesId,{still:true,lazy:false,floor:0});}}
       hp.fill.style.width = `${Math.round(next.hp.ratio * 100)}%`;
       // The arcade rebuild's hit feel: the bar drops at once and a white ghost
       // (the meter's ::before, CSS-delayed) follows after a beat.
@@ -1028,7 +1100,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit,onLoadErrorExit=null,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null, onBurst=null, fighterBadge=null }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,onLoadErrorExit=null,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null, onBurst=null, fighterBadge=null, bindBurstPress=null }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
   if(![0,1].includes(localTeamIndex))throw new TypeError('The Battle field view requires a local team');
@@ -1079,9 +1151,21 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
   burstButton.type = "button";
   burstButton.hidden = true;
   burstButton.append(element("span", "cm-vs5-burst-button__label", uiText("BATTLE_BURST_BUTTON")));
+  const burstHint = element("span", "cm-vs5-burst-hint", uiText("BATTLE_OVER_LIMIT_HINT"), false);
+  burstHint.hidden = true;
+  burstHint.setAttribute("aria-hidden", "true");
   let burstReadySlot = null;
-  burstButton.addEventListener("click", () => { if (burstReadySlot !== null) onBurst?.(burstReadySlot); });
-  if (onBurst) host.append(burstButton);
+  // Over-limit burst (AWAKENING_OVERDRIVE_20261109): a long press or a double tap goes over the limit. The caller
+  // hands over the press binding; without one the key keeps its single tap.
+  const call = (overLimit) => { if (burstReadySlot !== null) onBurst?.(burstReadySlot, { overLimit }); };
+  if (bindBurstPress) bindBurstPress(burstButton, { ready: () => burstReadySlot !== null, onStandard: () => call(false), onOverLimit: () => call(true) });
+  else burstButton.addEventListener("click", () => call(false));
+  if (onBurst) host.append(burstButton, burstHint);
+  // The over-limit countdown and the exhaustion that may follow it, over the field.
+  const overLimitBadge = element("p", "cm-vs5-over-limit");
+  overLimitBadge.hidden = true;
+  overLimitBadge.setAttribute("role", "status");
+  host.append(overLimitBadge);
   host.setAttribute('aria-busy','true');
   // 2026-10-12: real progress while the arena loads -- steps finish with their
   // loads, bytes are what the network delivered, nothing moves on a timer.
@@ -1264,8 +1348,17 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
         cards.get(combatant.slot)?.update(combatant,view.animationFrame??0,view.outcome,actingSlot);
       }
       const ready = view.combatants.find((c) => c.present && c.team === localTeamIndex && c.burst?.phase === "READY") ?? null;
+      const over = view.combatants.find((c) => c.present && c.team === localTeamIndex && ((c.burst?.phase === "BURST" && c.burst.overLimit) || c.burst?.phase === "EXHAUSTED")) ?? null;
+      overLimitBadge.hidden = !over || view.outcome.ended;
+      if (over) {
+        const exhausted = over.burst.phase === "EXHAUSTED";
+        const left = Math.max(0, Math.ceil(((exhausted ? over.burst.exhaustFrames : over.burst.burstFrames) - (over.burst.phaseFrame ?? 0)) / 60));
+        overLimitBadge.dataset.state = exhausted ? "exhausted" : "over";
+        overLimitBadge.textContent = uiText(exhausted ? "BATTLE_EXHAUSTED" : "BATTLE_OVER_LIMIT_LEFT", { name: over.displayName ?? "", seconds: left });
+      }
       burstReadySlot = ready?.slot ?? null;
       burstButton.hidden = !ready || view.outcome.ended;
+      burstHint.hidden = burstButton.hidden;
       if (ready) {
         // Owner 2026-11-08: READY waits for the player's press, so the ring stays full instead of counting down.
         burstButton.style.setProperty("--burst-left", "1");
@@ -1356,7 +1449,7 @@ function resultSummary(summary, winningTeam) {
   return box;
 }
 
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, syncPanel=null, followUp=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null, sponsor=null }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
   let disposed=false;
 
@@ -1458,6 +1551,29 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     }
   });
 
+  // Sync EXP (OWNER_APPROVED_ADAPTATION 2026-11-09): the app builds the panel from its settled gains.
+  if(syncPanel?.node){
+    panels.push({id:'SYNC',scene:'product_sync_exp',build(){
+      const frag=document.createDocumentFragment();
+      const head=element('header','cm-vs5-header');
+      head.append(element('span','cm-vs5-kicker',syncPanel.kicker,false),element('h1','cm-vs5-title',syncPanel.title,false));
+      frag.append(head,syncPanel.node);
+      queueMicrotask(()=>{if(!disposed)syncPanel.play();});
+      return frag;
+    }});
+  }
+  // The sponsor contract this match carried (AWAKENING_OVERDRIVE_20261109): paid out, or the stake kept.
+  if (sponsor) {
+    panels.push({ id: "SPONSOR", scene: "result_sub_prize_scene", build() {
+      const frag = document.createDocumentFragment(), head = element("header", "cm-vs5-header cm-vs5-result__sponsor");
+      head.dataset.met = String(sponsor.met);
+      head.append(element("span", "cm-vs5-kicker", uiText(`SPONSOR_${sponsor.contractId}_NAME`), false),
+        element("h1", "cm-vs5-title", sponsor.met ? uiText("SPONSOR_WON", { bits: sponsor.payout }) : uiText("SPONSOR_LOST", { bits: sponsor.stake }), false));
+      frag.append(head);
+      for (const line of sponsor.lines ?? []) frag.append(element("p", "cm-vs5-result__detail", line, false));
+      return frag;
+    } });
+  }
   if(credited&&receipt.won&&Number.isInteger(progression?.rankBefore)&&Number.isInteger(progression?.rankAfter)&&progression.rankAfter>progression.rankBefore){
     panels.push({id:'RANK',scene:'result_sub_rankup_scene',build(){
       const frag=document.createDocumentFragment();frag.append(element('span','cm-vs5-kicker','馴獸師升階'),
@@ -1488,13 +1604,25 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
   }});}
   const advance = actionButton("下一頁", { primary: true });
   const exit = actionButton(exitLabel, { primary: true });
+  // Owner 2026-11-10: a Journey tower result offers the next floor (or a retry) beside the way out.
+  const follow = followUp ? actionButton(followUp.label, { primary: true }) : null;
+  if (follow) {
+    follow.classList.add("cm-vs5-result__follow");
+    exit.classList.remove("cm-vs5-action--primary");
+    follow.addEventListener("click", () => { if (!disposed) followUp.onClick(); });
+  }
   exit.classList.add("cm-vs5-exit");
   if (typeof onExit === "function") exit.addEventListener("click", () => onExit());
 
   const body = element("div", "cm-vs5-result__body");
   const characterHost=element('div','cm-vs5-result__characters');
   characterHost.setAttribute('aria-label',uiText('參賽拍檔'));
-  const resultStage=element('div','cm-vs5-result__stage');resultStage.append(characterHost,body);
+  // Owner 2026-11-09: a spotlight from above -- cone, light shafts and drifting dust -- drawn
+  // behind the characters in CSS (screenLayout.css); decoration only.
+  const spot=element('div','cm-vs5-result__spot');spot.setAttribute('aria-hidden','true');
+  const dust=element('i','cm-vs5-result__dust');dust.append(element('i','cm-vs5-result__motes'));
+  const cone=element('i','cm-vs5-result__cone');cone.append(element('i','cm-vs5-result__shafts'),dust);spot.append(cone);
+  const resultStage=element('div','cm-vs5-result__stage');resultStage.append(spot,characterHost,body);
   let index = 0;
   // Ceremony (2026-10-15): the first time the title page (result_sub_titleget)
   // is reached, the medal is presented before the page settles under it. The
@@ -1520,6 +1648,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     const last = index === panels.length - 1;
     advance.hidden = last;
     exit.hidden = !last;
+    if (follow) follow.hidden = !last;
   }
 
   let entrance = null;
@@ -1533,12 +1662,14 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     if (index < panels.length - 1) { index += 1; paint(); }
   });
 
-  section.append(resultStage, advance, exit);
+  section.append(resultStage, advance, exit, ...(follow ? [follow] : []));
   // Owner 2026-10-29: a won battle can be shared as a brag card (product-authored; not a result scene).
   if (!tutorial && outcome.winningTeam === 0 && typeof brag?.onOpen === "function") {
     const share = document.createElement("button");
     share.type = "button"; share.className = "cm-brag-cta cm-brag-cta--result cm-arcade-key"; share.dataset.onlineAction = "brag-card";
-    share.textContent = brag.label ?? "";
+    // Owner 2026-11-09: a short key in the result's action row; the full sentence is its accessible name.
+    share.textContent = brag.shortLabel ?? brag.label ?? "";
+    if (brag.shortLabel && brag.label) share.setAttribute("aria-label", brag.label);
     share.addEventListener("click", () => { brag.onOpen(share); });
     section.insertBefore(share, advance);
   }
@@ -1585,6 +1716,6 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         outOfScope: Object.freeze(["result_sub_net_scene"])
       });
     },
-    dispose() { if(disposed)return;disposed=true;entrance?.dispose?.(); entrance = null;medalCeremony?.dispose();medalCeremony=null;hudArt=null; }
+    dispose() { if(disposed)return;disposed=true;entrance?.dispose?.(); entrance = null;medalCeremony?.dispose();medalCeremony=null;hudArt=null;syncPanel?.dispose?.(); }
   });
 }

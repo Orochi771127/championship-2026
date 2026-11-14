@@ -24,9 +24,19 @@ export function productHuntSpecies(index){
 }
 export function productLifecycleSpecies(index){return PRODUCT_RAISING_LIFECYCLE_RULES.species[index]??nativeLifecycle.species[productBaseSpeciesIndex(index)];}
 // Owner 2026-11-04: at launch a partner may evolve to 成熟期 from rank 1 (藍階); the original opens it at
-// rank 2 (紅階). Capacity per rank is unchanged.
-export const PRODUCT_RANK_GROWTH=Object.freeze(nativeLifecycle.ranks.map((rank,index)=>index===1?Object.freeze({...rank,generation:nativeLifecycle.ranks[2].generation}):rank));
-export const PRODUCT_RAISING_LIFECYCLE_RULES=Object.freeze(withReadyProductOriginals({...nativeLifecycle,ranks:PRODUCT_RANK_GROWTH,species:Object.freeze(Object.assign({},nativeLifecycle.species,Object.fromEntries(listProductExtensions().map(e=>[e.speciesIndex,nativeLifecycle.species[e.baseSpeciesIndex]]))))}));
+// rank 2 (紅階).
+// GACHA_FULL_EFFECTS_20261109 (Owner 2026-11-09 「連牧場一起調」): every partner weighs partnerBonusG more (18-24 G up
+// to 成熟期), and each rank's ranch capacity grows by rankScale with it, so a rank holds about as many partners as
+// before (about 4 at the first rank, 12 at the top; land expansion adds memory-card G on top in the app).
+export const PRODUCT_CAPACITY=Object.freeze({partnerBonusG:6,rankScale:1.375});
+const productRankCapacity=capacity=>Math.round(capacity*PRODUCT_CAPACITY.rankScale/2)*2;
+export const PRODUCT_RANK_GROWTH=Object.freeze(nativeLifecycle.ranks.map((rank,index)=>Object.freeze({...rank,capacity:productRankCapacity(rank.capacity),
+  ...(index===1?{generation:nativeLifecycle.ranks[2].generation}:{})})));
+const PRODUCT_LIFECYCLE_BEFORE_WEIGHT=Object.freeze(withReadyProductOriginals({...nativeLifecycle,ranks:PRODUCT_RANK_GROWTH,species:Object.freeze(Object.assign({},nativeLifecycle.species,Object.fromEntries(listProductExtensions().map(e=>[e.speciesIndex,nativeLifecycle.species[e.baseSpeciesIndex]]))))}));
+export const PRODUCT_RAISING_LIFECYCLE_RULES=Object.freeze({...PRODUCT_LIFECYCLE_BEFORE_WEIGHT,species:Object.freeze(Object.fromEntries(
+  Object.entries(PRODUCT_LIFECYCLE_BEFORE_WEIGHT.species).map(([index,row])=>[index,Object.freeze({...row,capacity:row.capacity+PRODUCT_CAPACITY.partnerBonusG})])))});
+/** A partner's weight in G: what it takes on a hunt memory card and of the ranch's rank capacity. */
+export function productPartnerG(index){return productLifecycleSpecies(index).capacity;}
 export function productEvolutionOptions(target){const extra=listProductExtensions().filter(e=>e.baseSpeciesIndex===target&&e.runtimeReady&&e.evolutionReady);return Object.freeze([target,...extra.map(e=>e.speciesIndex)]);}
 export function requiresProductSaveVersion(value){
  if(!value||typeof value!=='object')return false;

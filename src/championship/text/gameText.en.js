@@ -12,7 +12,7 @@ import { AWAKENED_FORM_NAMES, AWAKENED_SECOND_TIER_NAMES } from "./growthStageTe
 
 export const GENERATIONS_EN = Object.freeze(["Creature Egg", "Baby I", "Baby II", "Child", "Adult", AWAKENED_FORM_NAMES.en, AWAKENED_SECOND_TIER_NAMES.en]);
 export const PERSONALITIES_EN = Object.freeze(["Honest", "Selfish", "Impatient", "Easygoing", "Passionate", "Calm", "Bold", "Timid", "???"]);
-export const ROSTER_FAMILIES_EN = Object.freeze(["None", "Beast", "Machine", "Insect & Plant", "Bird", "Dragon", "Aquatic", "Holy", "Dark"]);
+export const ROSTER_FAMILIES_EN = Object.freeze(["None", "Beast", "Mechanoid", "Sylvan", "Avian", "Dragon", "Aquatic", "Astral", "Nether"]);
 export const TAMER_RANK_NAMES_EN = Object.freeze(["Green", "Blue", "Red", "White", "Bronze", "Silver", "Gold", "Platinum", "Champion", "Master"]);
 export const SPECIAL_SKILLS_EN = Object.freeze(["None", "Taunt", "Heal α", "Heal β", "Heal γ", "Heal All α", "Heal All β", "Heal All γ",
   "Cleanse", "Cleanse All", "Power Up", "Power Up All", "Guard", "Guard All", "Speed Up", "Speed Up All", "Sense", "Sense All",
@@ -23,8 +23,8 @@ export const MODE_LABELS_EN = Object.freeze({ RAISING: "Raising", BATTLE: "Battl
 export const STAT_LABELS_EN = Object.freeze({ HP: "HP", TP: "TP", ATTACK: "Attack", DEFENSE: "Defense", WISDOM: "Wisdom", SPEED: "Speed" });
 export const RESIST_LABELS_EN = Object.freeze({ ねつ: "Heat resistance", さむさ: "Cold resistance", かみなり: "Thunder resistance", ひかり: "Light resistance", やみ: "Dark resistance" });
 export const FAMILY_LABELS_EN = Object.freeze({
-  ワクチン: "Vaccine", データ: "Data", リュウ: "Dragon", ケモノ: "Beast", ミズ: "Aquatic", トリ: "Bird",
-  キカイ: "Machine", セイ: "Holy", ムシクサ: "Insect & Plant", アンコク: "Dark", ウイルス: "Virus"
+  ワクチン: "Lumen", データ: "Black Iron", リュウ: "Dragon", ケモノ: "Beast", ミズ: "Aquatic", トリ: "Avian",
+  キカイ: "Mechanoid", セイ: "Astral", ムシクサ: "Sylvan", アンコク: "Nether", ウイルス: "Rift"
 });
 
 export const CAGE_NAMES_EN = Object.freeze({
@@ -64,6 +64,7 @@ export const GATE_NAMES_EN = Object.freeze({
 });
 
 export const BATTLE_FACE_LABELS_EN = Object.freeze({
+  JOURNEY: "Journey",
   CHAMPIONSHIP: "Championship",
   TITLE_MATCH: "Title Match",
   FREE_BATTLE: "Free Battle",
@@ -74,9 +75,27 @@ export const BATTLE_FACE_LABELS_EN = Object.freeze({
 
 export const BATTLE_MENU_LABELS_EN = Object.freeze({
   menu: "Battle menu", kicker: "Battle", chooseMatch: "Choose a match",
-  faceNotice: "Drag the cube or use the left and right arrow keys to pick a mode, then choose a match to enter.",
+  faceNotice: "Swipe to turn the prism, then tap any face to enter that mode.",
   availableMatches: "Available matches", noMatch: "No matches are open right now.",
   match: "Match", noPayout: "No prize", returnHome: "Back to ranch", conference: "Multi-round events"
+});
+
+export const BATTLE_FACE_TAGLINES_EN = Object.freeze({
+  JOURNEY: "Tower, patrol and zones",
+  CHAMPIONSHIP: "Multi-round cups for medals",
+  TITLE_MATCH: "Calendar fixtures for titles",
+  FREE_BATTLE: "Pick any rival and fight",
+  LINK_BATTLE: "Swap link codes with a friend",
+  PASSWORD_BATTLE: "Challenge a team password",
+  PRACTICE_BATTLE: "Spar between your own partners"
+});
+
+export const BATTLE_PRISM_LABELS_EN = Object.freeze({
+  canvas: "Battle mode prism: swipe to turn it, tap a face to enter that mode",
+  enter: "Tap to enter",
+  current: "Selected",
+  previous: "Previous mode",
+  next: "Next mode"
 });
 
 export const UNKNOWN_DIGIMON_EN = "Unknown partner";

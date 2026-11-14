@@ -33,8 +33,15 @@ function clamp(value, minimum, maximum) {
   return Math.max(minimum, Math.min(maximum, value));
 }
 
+// The desktop interface zoom (portraitFrame, <html data-ui-zoom>) enlarges every CSS pixel,
+// so the backing store follows it: the field stays as sharp as at 100%.
+function pagePixelRatio() {
+  const zoom = Number(globalThis.document?.documentElement?.dataset?.uiZoom);
+  return (Number(globalThis.devicePixelRatio) || 1) * (Number.isFinite(zoom) && zoom > 0 ? zoom : 1);
+}
+
 /** Renderer resolution: the device pixel ratio, held between 1 and the cap (and <= 1.75 on mobile/standalone). */
-export function resolutionFor(cap = MAX_DEVICE_RESOLUTION, devicePixelRatio = globalThis.devicePixelRatio) {
+export function resolutionFor(cap = MAX_DEVICE_RESOLUTION, devicePixelRatio = pagePixelRatio()) {
   const baseLimit = Number.isFinite(cap) && cap >= 1 ? cap : MAX_DEVICE_RESOLUTION;
   const limit = isMobileOrStandaloneHost() ? Math.min(baseLimit, MOBILE_STANDALONE_VRAM_RESOLUTION_CAP) : baseLimit;
   return clamp(Number(devicePixelRatio) || 1, 1, limit);

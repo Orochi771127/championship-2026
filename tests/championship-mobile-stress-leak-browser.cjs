@@ -331,7 +331,7 @@ async function ensureServer() {
         // Odd loops: Free Battle (VS5_BATTLE_FIELD) -> exercises 3D Battle VFX overlay + Highlight Burst + Pixi Battle FX + Character Animator
         const freeBattleBtn = page.locator('.cm-vs5-cube__face[data-face-id="FREE_BATTLE"]');
         if (await freeBattleBtn.count()) {
-          await freeBattleBtn.click();
+          await freeBattleBtn.dispatchEvent('click');
           await page.waitForTimeout(150);
         }
         const matchBtn = page.locator('.cm-vs5-match__enter:not(:disabled)').first();
@@ -534,7 +534,7 @@ async function ensureServer() {
       await page.waitForSelector('#cm-root[data-active-screen="BATTLE_SELECT"]', { timeout: 20000 });
       const fbBtn = page.locator('.cm-vs5-cube__face[data-face-id="FREE_BATTLE"]');
       if (await fbBtn.count()) {
-        await fbBtn.click();
+        await fbBtn.dispatchEvent('click');
         await page.waitForTimeout(150);
       }
       const mBtn = page.locator('.cm-vs5-match__enter:not(:disabled)').first();

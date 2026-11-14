@@ -70,7 +70,16 @@ function winPercent(f) {
  * Rows: {id, operator, value, current, met}.
  */
 export function evaluateBurstConditions(profile, form) {
-  return deepFreeze(conditionRows(profile, form?.thresholds));
+  return deepFreeze(conditionRows(profile, scaledThresholds(form)));
+}
+// GACHA_FULL_EFFECTS_20261109: point and battle thresholds of a form, scaled by its tier (thresholdScale).
+const SCALED = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 22];
+function scaledThresholds(form) {
+  const t = form?.thresholds, scale = BURST_RULES.awakening.thresholdScale?.[form?.tier] ?? 1;
+  if (!Array.isArray(t) || scale === 1) return t;
+  const out = [...t];
+  for (const i of SCALED) if (out[i]) out[i] = Math.ceil(out[i] * scale);
+  return out;
 }
 function conditionRows(profile, t) {
   const f = profile?.fields, n = profile?.narrowFields;
@@ -91,8 +100,15 @@ function conditionRows(profile, t) {
 // optional: energy {id: {form: 0..100}} item energy (100 = filled by a UR metal), waived {id: [forms]} whose
 // rebirth gate a UR metal lifted, stars {id: n} transcendence stars, target {id: form} the form items push,
 // appearance {id: form} the learned form shown on the ranch, shown {id: {form, until}} the ceremony's
-// ten-minute display (epoch ms) and memory [forms] the account has ever learned.
-const OPTIONAL_KEYS = ['preferred', 'energy', 'waived', 'stars', 'target', 'appearance', 'shown', 'memory'];
+// ten-minute display (epoch ms) and memory [forms] the account has ever learned. Awakening overdrive
+// (AWAKENING_OVERDRIVE_20261109, productAwakeningOverdrive.js) adds: overdrive {id: {on, heat, at, fatigueUntil?}}
+// the overdrive training switch and core heat (written at `at`, epoch ms), seed {id: percent} an ancestral wild
+// partner's head start on its tier-1 awakening, contract {contractId, stake} the sponsor contract armed for the next
+// match and escrow {contractId, stake, attemptId, foeBoostPercent} the stake held by the match being fought.
+const OPTIONAL_KEYS = ['preferred', 'energy', 'waived', 'stars', 'target', 'appearance', 'shown', 'memory', 'overdrive', 'seed', 'contract', 'escrow', 'contractDay'];
+const ACCOUNT_KEYS = ['memory', 'contract', 'escrow', 'contractDay'];
+const CONTRACT_IDS = ['HEART_GUARD', 'IRON_RUSH', 'RIFT_GAMBIT'];
+const stakeOf = value => { if (!Number.isSafeInteger(value) || value < 1 || value > 1_000_000) invalid(); return value; };
 const invalid = () => { throw new TypeError('INVALID_BURST_EVOLUTION'); };
 const objectOf = value => {
   if (value === undefined) return {};
@@ -141,8 +157,36 @@ export function normalizeBurstEvolution(value) {
   }
   if (value.memory !== undefined && !Array.isArray(value.memory)) invalid();
   const memory = [...new Set((value.memory ?? []).map(formKey))].sort((a, b) => a - b);
-  for (const [key, map] of Object.entries({preferred, energy, waived, stars, target, appearance, shown})) if (Object.keys(map).length) out[key] = map;
+  const overdrive = {}, seed = {};
+  for (const [instanceId, entry] of Object.entries(objectOf(value.overdrive))) {
+    const {on, heat, at, fatigueUntil} = objectOf(entry);
+    if (typeof on !== 'boolean' || !Number.isFinite(heat) || heat < 0 || heat > 100 || !Number.isFinite(at)
+      || (fatigueUntil !== undefined && !Number.isFinite(fatigueUntil))) invalid();
+    if (on || heat > 0 || fatigueUntil !== undefined) overdrive[instanceId] = {on, heat, at, ...(fatigueUntil !== undefined ? {fatigueUntil} : {})};
+  }
+  for (const [instanceId, percent] of Object.entries(objectOf(value.seed))) {
+    if (!Number.isSafeInteger(percent) || percent < 0 || percent > 100) invalid();
+    if (percent) seed[instanceId] = percent;
+  }
+  for (const [key, map] of Object.entries({preferred, energy, waived, stars, target, appearance, shown, overdrive, seed})) if (Object.keys(map).length) out[key] = map;
   if (memory.length) out.memory = memory;
+  if (value.contract !== undefined) {
+    const {contractId, stake} = objectOf(value.contract);
+    if (!CONTRACT_IDS.includes(contractId)) invalid();
+    out.contract = {contractId, stake: stakeOf(stake)};
+  }
+  if (value.escrow !== undefined) {
+    const {contractId, stake, attemptId, foeBoostPercent, oddsBonus} = objectOf(value.escrow);
+    if (!CONTRACT_IDS.includes(contractId) || typeof attemptId !== 'string' || !attemptId || !Number.isSafeInteger(foeBoostPercent)
+      || (oddsBonus !== undefined && typeof oddsBonus !== 'boolean')) invalid();
+    out.escrow = {contractId, stake: stakeOf(stake), attemptId, foeBoostPercent, ...(oddsBonus ? {oddsBonus: true} : {})};
+  }
+  // Contracts signed on one local day (the daily limit).
+  if (value.contractDay !== undefined) {
+    const {day, count} = objectOf(value.contractDay);
+    if (!Number.isSafeInteger(day) || !Number.isSafeInteger(count) || count < 0 || count > 100) invalid();
+    out.contractDay = {day, count};
+  }
   return deepFreeze(out);
 }
 const withMap = (state, key, instanceId, value) => {
@@ -161,7 +205,7 @@ export function withBurstMigrated(state) { return normalizeBurstEvolution({...no
 /** Forget everything recorded for a partner that left the player (null when nothing is recorded). */
 export function forgetBurstUnlocks(state, instanceId) {
   const current = normalizeBurstEvolution(state);
-  const perPartner = OPTIONAL_KEYS.filter(key => key !== 'memory');
+  const perPartner = OPTIONAL_KEYS.filter(key => !ACCOUNT_KEYS.includes(key));
   if (!current.unlocks[instanceId] && !perPartner.some(key => current[key]?.[instanceId] !== undefined)) return null;
   let next = {...current, unlocks: {...current.unlocks}};
   delete next.unlocks[instanceId];
@@ -197,11 +241,40 @@ export function transcendStarsOf(state, instanceId) { return state?.stars?.[inst
 export function awakeningTargetOf(state, instanceId) { return state?.target?.[instanceId] ?? null; }
 export function awakeningAppearanceOf(state, instanceId) { return state?.appearance?.[instanceId] ?? null; }
 export function awakeningShownOf(state, instanceId) { return state?.shown?.[instanceId] ?? null; }
+export function awakeningSeedOf(state, instanceId) { return state?.seed?.[instanceId] ?? 0; }
+export function overdriveOf(state, instanceId) { return state?.overdrive?.[instanceId] ?? null; }
+export function sponsorContractOf(state) { return state?.contract ?? null; }
+export function sponsorEscrowOf(state) { return state?.escrow ?? null; }
+/** The overdrive record of a partner replaced (null removes it). */
+export function withOverdrive(state, instanceId, record) {
+  return normalizeBurstEvolution(withMap(normalizeBurstEvolution(state), 'overdrive', instanceId, record === null ? undefined : record));
+}
+/** An ancestral wild partner's head start on its tier-1 awakening (percent, at most 100). */
+export function withAwakeningSeed(state, instanceId, percent) {
+  return normalizeBurstEvolution(withMap(normalizeBurstEvolution(state), 'seed', instanceId, percent > 0 ? Math.min(100, percent | 0) : undefined));
+}
+/** The sponsor contract armed for the next match (null disarms it). */
+export function withSponsorContract(state, contract) {
+  const {contract: dropped, ...rest} = normalizeBurstEvolution(state);
+  return normalizeBurstEvolution(contract ? {...rest, contract} : rest);
+}
+/** Contracts signed on local day `day` (0 on any other day). */
+export function sponsorContractsSignedOn(state, day) { return state?.contractDay?.day === day ? state.contractDay.count : 0; }
+/** One more contract signed on local day `day`. */
+export function withSponsorSigned(state, day) {
+  const current = normalizeBurstEvolution(state);
+  return normalizeBurstEvolution({...current, contractDay: {day, count: sponsorContractsSignedOn(current, day) + 1}});
+}
+/** The stake held by the match being fought (null releases it). */
+export function withSponsorEscrow(state, escrow) {
+  const {escrow: dropped, ...rest} = normalizeBurstEvolution(state);
+  return normalizeBurstEvolution(escrow ? {...rest, escrow} : rest);
+}
 
 /** A form's thresholds for one partner: a form the account remembers halves its point and battle thresholds. */
 function thresholdsFor(form, remembered) {
-  if (!remembered) return form.thresholds;
-  const t = [...form.thresholds], keep = AWAKENING_RULES.memoryThresholdPercent / 100;
+  if (!remembered) return scaledThresholds(form);
+  const t = [...scaledThresholds(form)], keep = AWAKENING_RULES.memoryThresholdPercent / 100;
   for (const i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 22]) if (t[i]) t[i] = Math.max(1, Math.ceil(t[i] * keep));
   return t;
 }
@@ -229,13 +302,17 @@ export function awakeningProgress(profile, form, {learned = [], energy = 0, reme
     rows: progress, gates, viaMet, raised, energy: item, full, percent, learned: isLearned,
     ready: !isLearned && percent >= 100 && viaMet && gates.every(row => row.met), glow: !isLearned && percent >= AWAKENING_RULES.glowPercent});
 }
+// A UR fill (100) stays a fill; otherwise the seed shares the item cap with shards and metals.
+const energyWithSeed = (energy, seed) => energy >= 100 ? 100 : Math.min(AWAKENING_RULES.itemCap, energy + seed);
 /** Every form of a partner's 成熟期 with its awakening, tier 1 first. */
 export function partnerAwakenings(profile, state, instanceId) {
   // The account remembers every form it learned, those of saves written before the memory existed included.
   const learned = burstUnlocksOf(state, instanceId);
   const memory = new Set([...rememberedAwakenings(state), ...Object.values(state?.unlocks ?? {}).flat()]);
+  // An ancestral wild partner's head start (seed) counts as energy on its tier-1 forms until one is learned.
+  const seed = learned.some(form => burstFormTier(form) === 1) ? 0 : awakeningSeedOf(state, instanceId);
   return Object.freeze(burstFormsFor(profile?.fields?.['000']).map(form => awakeningProgress(profile, form, {learned,
-    energy: awakeningEnergyOf(state, instanceId, form.form), remembered: memory.has(form.form),
+    energy: energyWithSeed(awakeningEnergyOf(state, instanceId, form.form), form.tier === 1 ? seed : 0), remembered: memory.has(form.form),
     stars: transcendStarsOf(state, instanceId), waived: awakeningWaived(state, instanceId, form.form)})));
 }
 /**

@@ -29,22 +29,22 @@ import { deepFreeze } from "../contracts/championshipContracts.js";
 import { SPECIES_NAMES_ZH, SPECIAL_SPECIES_NAMES_ZH, HELP_ZH, TITLE_EVENTS_ZH, SHOP_NAMES_ZH, SHOP_DESCRIPTIONS_ZH } from "./catalogs.zhHant.js";
 import { getLocale, isEnglish } from "./locale.js";
 import {
-  BATTLE_FACE_LABELS_EN, BATTLE_MENU_LABELS_EN, CAGE_EFFECT_LABELS_EN, CAGE_NAMES_EN, DIGI_EGG_EN,
+  BATTLE_FACE_LABELS_EN, BATTLE_FACE_TAGLINES_EN, BATTLE_MENU_LABELS_EN, BATTLE_PRISM_LABELS_EN, CAGE_EFFECT_LABELS_EN, CAGE_NAMES_EN, DIGI_EGG_EN,
   FAMILY_LABELS_EN, GATE_NAMES_EN, GENERATIONS_EN, PERSONALITIES_EN, RESIST_LABELS_EN, ROSTER_FAMILIES_EN,
   SPECIAL_SKILLS_EN, TAMER_RANK_NAMES_EN, UNKNOWN_DIGIMON_EN
 } from "./gameText.en.js";
 import {
-  BATTLE_FACE_LABELS_JA, BATTLE_MENU_LABELS_JA, CAGE_EFFECT_LABELS_JA, CAGE_NAMES_JA, DIGI_EGG_JA,
+  BATTLE_FACE_LABELS_JA, BATTLE_FACE_TAGLINES_JA, BATTLE_MENU_LABELS_JA, BATTLE_PRISM_LABELS_JA, CAGE_EFFECT_LABELS_JA, CAGE_NAMES_JA, DIGI_EGG_JA,
   FAMILY_LABELS_JA, GATE_NAMES_JA, GENERATIONS_JA, PERSONALITIES_JA, RESIST_LABELS_JA, ROSTER_FAMILIES_JA,
   SPECIAL_SKILLS_JA, TAMER_RANK_NAMES_JA, UNKNOWN_DIGIMON_JA
 } from "./gameText.ja.js";
 import {
-  BATTLE_FACE_LABELS_TH, BATTLE_MENU_LABELS_TH, CAGE_EFFECT_LABELS_TH, CAGE_NAMES_TH, DIGI_EGG_TH,
+  BATTLE_FACE_LABELS_TH, BATTLE_FACE_TAGLINES_TH, BATTLE_MENU_LABELS_TH, BATTLE_PRISM_LABELS_TH, CAGE_EFFECT_LABELS_TH, CAGE_NAMES_TH, DIGI_EGG_TH,
   FAMILY_LABELS_TH, GATE_NAMES_TH, GENERATIONS_TH, PERSONALITIES_TH, RESIST_LABELS_TH, ROSTER_FAMILIES_TH,
   SPECIAL_SKILLS_TH, TAMER_RANK_NAMES_TH, UNKNOWN_DIGIMON_TH
 } from "./gameText.th.js";
 import {
-  BATTLE_FACE_LABELS_VI, BATTLE_MENU_LABELS_VI, CAGE_EFFECT_LABELS_VI, CAGE_NAMES_VI, DIGI_EGG_VI,
+  BATTLE_FACE_LABELS_VI, BATTLE_FACE_TAGLINES_VI, BATTLE_MENU_LABELS_VI, BATTLE_PRISM_LABELS_VI, CAGE_EFFECT_LABELS_VI, CAGE_NAMES_VI, DIGI_EGG_VI,
   FAMILY_LABELS_VI, GATE_NAMES_VI, GENERATIONS_VI, PERSONALITIES_VI, RESIST_LABELS_VI, ROSTER_FAMILIES_VI,
   SPECIAL_SKILLS_VI, TAMER_RANK_NAMES_VI, UNKNOWN_DIGIMON_VI
 } from "./gameText.vi.js";
@@ -61,7 +61,7 @@ export const TEXT_SOURCE_LANGUAGE = "ja";
 // ARM9 02088480 and OVL4 0210BB9C (2026-09-13). Unknown indices stay absent.
 const GENERATIONS = Object.freeze(['培育蛋','幼年期Ⅰ','幼年期Ⅱ','成長期','成熟期',AWAKENED_FORM_NAMES['zh-Hant'],AWAKENED_SECOND_TIER_NAMES['zh-Hant']]);
 const PERSONALITIES = Object.freeze(['坦率','任性','急躁','悠閒','熱血','冷靜','大膽','膽小','？？？']);
-const ROSTER_FAMILIES = Object.freeze(['無','獸','機械','昆蟲植物','鳥','龍','水','聖','暗黑']);
+const ROSTER_FAMILIES = Object.freeze(['無','獸族','機巧族','森羅族','羽翼族','龍族','海淵族','星靈族','幽冥族']);
 const TAMER_RANK_NAMES = Object.freeze(['綠階','藍階','紅階','白階','青銅','白銀','黃金','白金','冠軍','大師']);
 const SPECIAL_SKILLS = Object.freeze(['無','挑釁','治癒 α','治癒 β','治癒 γ','全體治癒 α','全體治癒 β','全體治癒 γ',
   '淨化','全體淨化','強化攻擊','全體強化攻擊','防護','全體防護','加速','全體加速','感知','全體感知',
@@ -123,17 +123,17 @@ export const RESIST_LABELS = deepFreeze({
 
 /** The ten families (text bank entries 20..29). */
 export const FAMILY_LABELS = deepFreeze({
-  ワクチン: "疫苗",
-  データ: "資料",
-  リュウ: "龍",
-  ケモノ: "獸",
-  ミズ: "水",
-  トリ: "鳥",
-  キカイ: "機械",
-  セイ: "聖",
-  ムシクサ: "蟲草",
-  アンコク: "暗黑",
-  ウイルス: "病毒"
+  ワクチン: "心輝",
+  データ: "黑鐵",
+  リュウ: "龍族",
+  ケモノ: "獸族",
+  ミズ: "海淵族",
+  トリ: "羽翼族",
+  キカイ: "機巧族",
+  セイ: "星靈族",
+  ムシクサ: "森羅族",
+  アンコク: "幽冥族",
+  ウイルス: "裂隙"
 });
 
 /** Cage names, keyed by CageDefinition index 0..35. */
@@ -174,6 +174,7 @@ export const GATE_NAMES = deepFreeze({
 
 /** Original battle mode identities; native dispatch is traced separately. */
 export const BATTLE_FACE_LABELS = deepFreeze({
+  JOURNEY: "征途",
   CHAMPIONSHIP: "冠軍賽",
   TITLE_MATCH: "頭銜賽",
   FREE_BATTLE: "自由對戰",
@@ -182,10 +183,30 @@ export const BATTLE_FACE_LABELS = deepFreeze({
   PRACTICE_BATTLE: "練習對戰"
 });
 
+/** One line under each battle-menu prism face (Owner 2026-11-09). */
+export const BATTLE_FACE_TAGLINES = deepFreeze({
+  JOURNEY: "同步之塔・巡航・戰區",
+  CHAMPIONSHIP: "多輪盃賽・奪取獎牌",
+  TITLE_MATCH: "依行事曆開賽・贏得頭銜",
+  FREE_BATTLE: "挑選對手・自由開戰",
+  LINK_BATTLE: "交換通訊碼・與好友對戰",
+  PASSWORD_BATTLE: "輸入隊伍密碼・挑戰隊伍",
+  PRACTICE_BATTLE: "自家拍檔互相對練"
+});
+
+/** The battle-menu prism's own copy. */
+export const BATTLE_PRISM_LABELS = deepFreeze({
+  canvas: "對戰模式稜柱：左右滑動旋轉，點選任一面進入該模式",
+  enter: "點擊進入",
+  current: "目前選擇",
+  previous: "上一個模式",
+  next: "下一個模式"
+});
+
 /** Copy for the bounded battle-menu panel; match titles keep their source text. */
 export const BATTLE_MENU_LABELS = deepFreeze({
   menu: "對戰選單", kicker: "對戰", chooseMatch: "選擇對戰",
-  faceNotice: "拖曳立方體或使用左右方向鍵選擇模式，再選擇參加的對戰。",
+  faceNotice: "左右滑動旋轉稜柱，點選任一面直接進入該模式。",
   availableMatches: "目前可用的對戰", noMatch: "目前沒有開放的對戰。",
   match: "對戰", noPayout: "無獎金", returnHome: "返回牧場", conference: "多輪賽事"
 });
@@ -197,6 +218,12 @@ function lookup(table, key, fallback) {
 
 const BATTLE_MENU_LABELS_BY_LOCALE = {
   "zh-Hant": BATTLE_MENU_LABELS, "en": BATTLE_MENU_LABELS_EN, "ja": BATTLE_MENU_LABELS_JA, "th": BATTLE_MENU_LABELS_TH, "vi": BATTLE_MENU_LABELS_VI
+};
+const BATTLE_FACE_TAGLINES_BY_LOCALE = {
+  "zh-Hant": BATTLE_FACE_TAGLINES, "en": BATTLE_FACE_TAGLINES_EN, "ja": BATTLE_FACE_TAGLINES_JA, "th": BATTLE_FACE_TAGLINES_TH, "vi": BATTLE_FACE_TAGLINES_VI
+};
+const BATTLE_PRISM_LABELS_BY_LOCALE = {
+  "zh-Hant": BATTLE_PRISM_LABELS, "en": BATTLE_PRISM_LABELS_EN, "ja": BATTLE_PRISM_LABELS_JA, "th": BATTLE_PRISM_LABELS_TH, "vi": BATTLE_PRISM_LABELS_VI
 };
 const BATTLE_FACE_LABELS_BY_LOCALE = {
   "zh-Hant": BATTLE_FACE_LABELS, "en": BATTLE_FACE_LABELS_EN, "ja": BATTLE_FACE_LABELS_JA, "th": BATTLE_FACE_LABELS_TH, "vi": BATTLE_FACE_LABELS_VI
@@ -247,6 +274,18 @@ export function battleFaceLabel(id) {
   const loc = getLocale();
   const table = BATTLE_FACE_LABELS_BY_LOCALE[loc] ?? BATTLE_FACE_LABELS;
   return table[id] ?? BATTLE_FACE_LABELS[id] ?? id;
+}
+
+/** A battle mode's one-line description in the display language. */
+export function battleFaceTagline(id) {
+  const table = BATTLE_FACE_TAGLINES_BY_LOCALE[getLocale()] ?? BATTLE_FACE_TAGLINES;
+  return table[id] ?? BATTLE_FACE_TAGLINES[id] ?? "";
+}
+
+/** The battle-menu prism's own copy in the display language. */
+export function battlePrismLabel(key) {
+  const table = BATTLE_PRISM_LABELS_BY_LOCALE[getLocale()] ?? BATTLE_PRISM_LABELS;
+  return table[key] ?? BATTLE_PRISM_LABELS[key] ?? "";
 }
 
 /** Name for a cage, falling back to the cartridge's Japanese. */
@@ -368,12 +407,15 @@ export function cageEffectLabel(kind, target) {
   const direct = CAGE_EFFECT_LABELS_BY_LOCALE[loc]?.[key] ?? CAGE_EFFECT_LABELS[key];
   if (direct) return direct;
   if (kind === "FAMILY_UP") {
+    // Owner 2026-11-10: the three ROM attributes are factions (陣營聲望); the eight families are races (點數).
     const fam = FAMILY_LABELS_BY_LOCALE[loc]?.[target] ?? FAMILY_LABELS[target];
-    if (loc === "en") return `${fam} up`;
-    if (loc === "ja") return `${fam}上昇`;
-    if (loc === "th") return `เพิ่มพลังเผ่า${fam}`;
-    if (loc === "vi") return `Tăng tộc ${fam}`;
-    return fam ? `${fam}屬性上升` : null;
+    const faction = ["ワクチン", "データ", "ウイルス"].includes(target);
+    if (!fam) return null;
+    if (loc === "en") return faction ? `${fam} reputation up` : `${fam} points up`;
+    if (loc === "ja") return faction ? `${fam}陣営の名声上昇` : `${fam}ポイント上昇`;
+    if (loc === "th") return faction ? `เพิ่มชื่อเสียงฝ่าย${fam}` : `เพิ่มแต้ม${fam}`;
+    if (loc === "vi") return faction ? `Tăng danh vọng phe ${fam}` : `Tăng điểm ${fam}`;
+    return faction ? `${fam}陣營聲望上升` : `${fam}點數上升`;
   }
   if (kind === "RESIST_UP") {
     return RESIST_LABELS_BY_LOCALE[loc]?.[target] ?? RESIST_LABELS[target] ?? null;

@@ -3,7 +3,7 @@ import { AWAKENED_FORM_NAMES, AWAKENED_SECOND_TIER_NAMES } from "./growthStageTe
 
 export const GENERATIONS_VI = Object.freeze(["Trứng", "Sơ sinh I", "Sơ sinh II", "Trưởng thành non", "Trưởng thành", AWAKENED_FORM_NAMES.vi, AWAKENED_SECOND_TIER_NAMES.vi]);
 export const PERSONALITIES_VI = Object.freeze(["Thẳng thắn", "Ích kỷ", "Nóng vội", "Thảnh thơi", "Nhiệt huyết", "Điềm tĩnh", "Táo bạo", "Nhút nhát", "???"]);
-export const ROSTER_FAMILIES_VI = Object.freeze(["Không", "Dã thú", "Máy móc", "Côn trùng & Thực vật", "Chim chóc", "Rồng", "Thủy sinh", "Thánh thần", "Hắc ám"]);
+export const ROSTER_FAMILIES_VI = Object.freeze(["Không", "Thú tộc", "Cơ Xảo tộc", "Sâm La tộc", "Vũ Dực tộc", "Long tộc", "Hải Uyên tộc", "Tinh Linh tộc", "U Minh tộc"]);
 export const TAMER_RANK_NAMES_VI = Object.freeze(["Lục", "Lam", "Đỏ", "Trắng", "Đồng", "Bạc", "Vàng", "Bạch kim", "Quán quân", "Bậc thầy"]);
 export const SPECIAL_SKILLS_VI = Object.freeze(["Không", "Khiêu khích", "Hồi phục α", "Hồi phục β", "Hồi phục γ", "Hồi phục toàn đội α", "Hồi phục toàn đội β", "Hồi phục toàn đội γ",
   "Thanh tẩy", "Thanh tẩy toàn đội", "Tăng sức mạnh", "Tăng sức mạnh toàn đội", "Phòng thủ", "Phòng thủ toàn đội", "Tăng tốc", "Tăng tốc toàn đội", "Cảm nhận", "Cảm nhận toàn đội",
@@ -13,8 +13,8 @@ export const MODE_LABELS_VI = Object.freeze({ RAISING: "Nuôi dưỡng", BATTLE:
 export const STAT_LABELS_VI = Object.freeze({ HP: "HP", TP: "TP", ATTACK: "Tấn công", DEFENSE: "Phòng thủ", WISDOM: "Trí tuệ", SPEED: "Tốc độ" });
 export const RESIST_LABELS_VI = Object.freeze({ ねつ: "Kháng nhiệt", さむさ: "Kháng lạnh", かみなり: "Kháng sét", ひかり: "Kháng quang", やみ: "Kháng ám" });
 export const FAMILY_LABELS_VI = Object.freeze({
-  ワクチン: "Vaccine", データ: "Dữ liệu", リュウ: "Rồng", ケモノ: "Dã thú", ミズ: "Thủy sinh", トリ: "Chim",
-  キカイ: "Máy móc", セイ: "Thánh thần", ムシクサ: "Côn trùng & Cây cỏ", アンコク: "Hắc ám", ウイルス: "Virus"
+  ワクチン: "Tâm Huy", データ: "Hắc Thiết", リュウ: "Long tộc", ケモノ: "Thú tộc", ミズ: "Hải Uyên tộc", トリ: "Vũ Dực tộc",
+  キカイ: "Cơ Xảo tộc", セイ: "Tinh Linh tộc", ムシクサ: "Sâm La tộc", アンコク: "U Minh tộc", ウイルス: "Khe Nứt"
 });
 
 export const CAGE_NAMES_VI = Object.freeze({
@@ -51,6 +51,7 @@ export const GATE_NAMES_VI = Object.freeze({
 });
 
 export const BATTLE_FACE_LABELS_VI = Object.freeze({
+  JOURNEY: "Hành trình",
   CHAMPIONSHIP: "Giải vô địch",
   TITLE_MATCH: "Trận đấu danh hiệu",
   FREE_BATTLE: "Đấu tự do",
@@ -61,9 +62,27 @@ export const BATTLE_FACE_LABELS_VI = Object.freeze({
 
 export const BATTLE_MENU_LABELS_VI = Object.freeze({
   menu: "Menu chiến đấu", kicker: "Chiến đấu", chooseMatch: "Chọn trận đấu",
-  faceNotice: "Kéo khối lập phương hoặc dùng phím mũi tên trái/phải để chọn chế độ, sau đó chọn trận đấu tham gia.",
+  faceNotice: "Vuốt trái phải để xoay lăng trụ, rồi chạm vào một mặt để vào chế độ đó.",
   availableMatches: "Các trận đấu khả dụng", noMatch: "Hiện không có trận đấu nào mở.",
   match: "Trận đấu", noPayout: "Không có tiền thưởng", returnHome: "Về trang trại", conference: "Giải đấu nhiều vòng"
+});
+
+export const BATTLE_FACE_TAGLINES_VI = Object.freeze({
+  JOURNEY: "Tháp, tuần tra, chiến khu",
+  CHAMPIONSHIP: "Cúp nhiều vòng, giành huy chương",
+  TITLE_MATCH: "Giải theo lịch, giành danh hiệu",
+  FREE_BATTLE: "Tự chọn đối thủ để đấu",
+  LINK_BATTLE: "Đổi mã liên kết, đấu với bạn",
+  PASSWORD_BATTLE: "Thách đấu bằng mật mã đội",
+  PRACTICE_BATTLE: "Luyện tập giữa các cộng sự"
+});
+
+export const BATTLE_PRISM_LABELS_VI = Object.freeze({
+  canvas: "Lăng trụ chế độ chiến đấu: vuốt để xoay, chạm một mặt để vào chế độ đó",
+  enter: "Chạm để vào",
+  current: "Đang chọn",
+  previous: "Chế độ trước",
+  next: "Chế độ sau"
 });
 
 export const UNKNOWN_DIGIMON_VI = "Sinh vật chưa biết";

@@ -25,8 +25,28 @@
 // read from view.arenaHazards (the simulation's state); nothing here decides
 // gameplay. Decorative randomness uses its own seeded stream.
 
+import {createMoveVfxSetPieces, bakedPieceLook} from './vfx/moveVfxSetPieces.js';
+
 const TAU = Math.PI * 2;
 const RASTER_PER_NATIVE = 4;
+/**
+ * Refinement pass 11 (BESPOKE_MOVE_VFX_PROGRAM_20261111, Owner: 「把目前遊戲中還是用舊的那種廉價感的方式的特效都升級」):
+ * the field's hazard events -- a shock charge, a shock, a fall into water, a recovery, steam, a lava burn and the
+ * resisted ones -- were circles and ellipses drawn per frame. Once the baked pieces are in, each plays a pixelfx
+ * piece instead (raster px per body width below); the drawn shapes stay as the fallback. The terrain overlays
+ * that tell the player where a hazard is (charged tiles, ice and crust states) stay as they are.
+ */
+export const AMBIENT_EVENT_PIECES = Object.freeze({
+  SHOCK_CHARGE: {piece: 'bolt', size: 120, palette: {core: 0xffffff, main: 0xfff27a, edge: 0x8a7a1a}},
+  SHOCKED: {piece: 'ring-pop', size: 70, palette: {core: 0xffffff, main: 0x9fe9ff, edge: 0x2a6a8a}},
+  SHOCK_RESISTED: {piece: 'buff-def', size: 70, palette: {core: 0xffffff, main: 0x9fd8ff, edge: 0x3a5a8a}},
+  FELL_IN_WATER: {piece: 'flurry-bubble', size: 120, palette: {core: 0xffffff, main: 0x8fdcff, edge: 0x1f6a9a}},
+  RECOVERED: {piece: 'prop-dust', size: 80, palette: {core: 0xffffff, main: 0xdfe8f0, edge: 0x6a7a8a}},
+  ICE_HEATED: {piece: 'mist', size: 110, palette: {core: 0xffffff, main: 0xe8f2f8, edge: 0x8a9aa8}},
+  LAVA_COOLED: {piece: 'mist', size: 110, palette: {core: 0xffffff, main: 0xe0e0e0, edge: 0x6a6a6a}},
+  LAVA_BURN: {piece: 'core', size: 80, palette: {core: 0xfff0b0, main: 0xff7a1a, edge: 0x8a2a08}},
+  LAVA_RESISTED: {piece: 'buff-tol', size: 70, palette: {core: 0xffffff, main: 0xffb04a, edge: 0x8a4a12}}
+});
 const KINDS = new Set(["BM04_LAGOON_R2", "BM05_POLAR_R2", "BM03_VOLCANO_R3", "R1_POLISH_R2"]);
 const PARTICLES = Object.freeze({
   dust: { count: 26, color: [0xf3dcb0, 0xe8c99a], size: [1.2, 2.6], vx: [6, 16], vy: [-4, 4], alpha: 0.45 },
@@ -464,6 +484,14 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   root.addChild(smokeLayer);
   const puffs = new PIXI.Graphics({ label: "splash and puff" });
   foreground.addChild(puffs);
+  const pieceLayer = new PIXI.Container({ label: "hazard event pieces" });
+  foreground.addChild(pieceLayer);
+  const pieces = typeof createMoveVfxSetPieces === "function" ? createMoveVfxSetPieces({ PIXI, layer: pieceLayer, reducedMotion }) : null;
+  const eventPiece = (type, x, y) => {
+    const spec = AMBIENT_EVENT_PIECES[type];
+    if (!spec || !pieces || typeof bakedPieceLook !== "function" || !bakedPieceLook(spec.piece)) return false;
+    return pieces.play(spec.piece, { x, y, groundY: y, palette: spec.palette, size: spec.size });
+  };
 
   // Glints sparkle on open water only (the lagoon has no mask to clip them).
   const glintSpots = [];
@@ -513,6 +541,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       if (e.seq <= lastSeq) continue;
       lastSeq = e.seq;
       const x = e.x * RASTER_PER_NATIVE, y = e.y * RASTER_PER_NATIVE;
+      if (eventPiece(e.type, x, y)) continue;
       if (e.type === "SHOCK_CHARGE") { bursts.push({ x, y, age: 0, life: 600, kind: "charge" }); ring(x, y, 90, 650, 4, 0xfff6a8, 0.9); }
       else if (e.type === "SHOCKED") bursts.push({ x, y, age: 0, life: 380, kind: "spark" });
       else if (e.type === "SHOCK_RESISTED") bursts.push({ x, y, age: 0, life: 380, kind: "resist" });
@@ -606,7 +635,15 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       charge.stroke({ color: 0xfff2a0, alpha: 0.85 * fade, width: 3 });
     }
     arcTimer -= dt;
-    if (arcTimer <= 0 && centres.length > 1) {
+    // Refinement pass 11: baked electric pops on charged tiles instead of the drawn zigzag arcs.
+    if (pieces && typeof bakedPieceLook === "function" && bakedPieceLook("ring-pop") && centres.length) {
+      if (arcTimer <= 0) {
+        arcTimer = reducedMotion ? 700 : low ? 320 : 170;
+        const at = centres[Math.floor(rand() * centres.length)];
+        pieces.play("ring-pop", { x: at.x, y: at.y, palette: AMBIENT_EVENT_PIECES.SHOCKED.palette, size: cell * 1.6 });
+      }
+      arcs = [];
+    } else if (arcTimer <= 0 && centres.length > 1) {
       arcTimer = reducedMotion ? 400 : 70;
       arcs = [];
       const count = Math.min(Math.ceil(centres.length / 6), low ? 6 : 16);
@@ -791,6 +828,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     drawCrust();
     drawCharge(dt);
     drawBursts(dt);
+    pieces?.update(dt);
   }
 
   return Object.freeze({
@@ -817,6 +855,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       if (disposed) return;
       disposed = true;
       root.removeChild(art.displayObject);
+      pieces?.dispose();
       foreground.destroy({ children: true });
       root.destroy({ children: true });
       for (const layer of [flowLayer, waveLayer, gust, scan, ...causticLayers.map(c => c.t)]) layer?.destroy();

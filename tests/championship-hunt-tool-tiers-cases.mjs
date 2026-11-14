@@ -195,11 +195,11 @@ test("the save keeps tiers and rope wear and refuses anything else under them", 
 
 const FRAME = 1000 * 560190 / 33513982;
 const ROPE = n => `championship:2026:hunt-item:rope-${["i", "ii", "iii"][n] ?? String(n).padStart(2, "0")}`;
-async function huntWith(ropes) {
+async function huntWith(ropes, options = {}) {
   const saved = new Map(), storage = { getItem: k => saved.get(k) ?? null, setItem: (k, v) => saved.set(k, v), removeItem: k => saved.delete(k) };
   const app = createChampionshipStandaloneApp({ storage, locks: null, catalog: JSON.parse(fs.readFileSync("src/data/championship/catalogs/creature-species.r1.json", "utf8")),
     cages: JSON.parse(fs.readFileSync("docs/contracts/championship/raising-home-presentation.v1.json", "utf8")).cages, rngClock: () => ({ hour: 13, minute: 20, second: 50 }),
-    huntStartingInventory: [...ropes.map(n => ({ itemId: ROPE(n), quantity: 1 })), { itemId: "championship:2026:hunt-memory:card-32", quantity: 1 }] });
+    huntStartingInventory: [...ropes.map(n => ({ itemId: ROPE(n), quantity: 1 })), { itemId: "championship:2026:hunt-memory:card-32", quantity: 1 }], ...options });
   await app.newGame(); app.openGate(); app.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId); app.confirmGate();
   return { app };
 }
@@ -257,7 +257,9 @@ test("a live hunt: wear carries from pull to pull; a snap spends one rope and th
 });
 
 test("the last rope of a colour snaps into the next colour; with none left the rope key sells five", async () => {
-  const { app } = await huntWith([0, 3]);
+  // Fifteen lassos on one scripted partner need it to stay within rope reach of the opening camera, so this
+  // case keeps the native entry positions (HUNT_SPAWN_SPREAD_20261110 moves the partner it was scripted on).
+  const { app } = await huntWith([0, 3], { huntSpawnSpread: false });
   await app.beginHunt();
   const runtime = app.getHuntRuntime();
   const tool = () => runtime.getToolState().tools.find(t => t.id === "ROPE");

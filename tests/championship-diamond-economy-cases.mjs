@@ -50,7 +50,7 @@ test('the Bits shop zoo and ranch no longer feed or clean: the product shows and
     assert.deepEqual(PRODUCT_CAGE_CHANNEL_OVERRIDES[definition].map(c => c.id), ['FAMILY_BEAST']);
     const summary = cageUiSummary(moduleOf(definition));
     assert.doesNotMatch(summary, /自動餵食|清潔/, summary);
-    assert.match(summary, /獸屬性上升/);
+    assert.match(summary, /獸族點數上升/); // WEEKLY_SEASON_FACTIONS_20261110 race wording
     assert.ok(PRODUCT_CAGE_PROGRAMS[definition].every(p => p.commands.some(([kind]) => kind === 4)) || PRODUCT_CAGE_PROGRAMS[definition].some(p => p.commands[0][0] === 4));
     assert.equal(REALTIME_TRAINING_POLICY.cagePrograms[definition], PRODUCT_CAGE_PROGRAMS[definition]);
   }
@@ -84,8 +84,9 @@ test('the native overnight writer keeps its traced zoo/ranch behaviour for parit
 
 // ---------------------------------------------------------------- automation items, pity forging, mounting
 
-test('automation items: SR cores, an SSR royal dual core and royal ranch, a UR stellar zoo, each with its own art and effect lines', () => {
-  assert.deepEqual(AUTOMATION_ITEMS.map(i => [i.id, i.rarity]), [['auto:clean-core', 'SR'], ['auto:feed-core', 'SR'], ['auto:royal-core', 'SSR'], ['auto:royal-ranch', 'SSR'], ['auto:stellar-zoo', 'UR']]);
+test('automation items: SR cores, an SSR royal dual core, a UR royal ranch and stellar zoo, each with its own art and effect lines', () => {
+  // Owner 2026-11-09: the royal ranch is UR, the same grade as the stellar zoo.
+  assert.deepEqual(AUTOMATION_ITEMS.map(i => [i.id, i.rarity]), [['auto:clean-core', 'SR'], ['auto:feed-core', 'SR'], ['auto:royal-core', 'SSR'], ['auto:royal-ranch', 'UR'], ['auto:stellar-zoo', 'UR']]);
   for (const item of AUTOMATION_ITEMS) {
     assert.ok(readFileSync(new URL('../' + item.art, import.meta.url)).length > 1000, item.art);
     assert.ok(automationEffectLines(item).length >= 2, item.id);
@@ -105,22 +106,23 @@ test('the premium machine pays automation at the top of each SR+ roll; R tiers a
   assert.equal(sr.state.automation['auto:clean-core'], 1);
   const ssr = pullCyberGacha(state, {machine: 'PREMIUM', count: 1, random: seq([0.9, 0.95, 0])});
   assert.deepEqual(ssr.prizes.map(p => p.id), ['auto:royal-core']);
-  assert.deepEqual(pullCyberGacha(state, {machine: 'PREMIUM', count: 1, random: seq([0.9, 0.95, 0.99])}).prizes.map(p => p.id), ['auto:royal-ranch']);
-  const ur = pullCyberGacha(state, {machine: 'PREMIUM', count: 1, random: seq([0.99, 0.9, 0])});
+  assert.deepEqual(pullCyberGacha(state, {machine: 'PREMIUM', count: 1, random: seq([0.9, 0.95, 0.99])}).prizes.map(p => p.id), ['auto:royal-core']);
+  assert.deepEqual(pullCyberGacha(state, {machine: 'PREMIUM', count: 1, random: seq([0.99, 0.9, 0])}).prizes.map(p => p.id), ['auto:royal-ranch']);
+  const ur = pullCyberGacha(state, {machine: 'PREMIUM', count: 1, random: seq([0.99, 0.9, 0.99])});
   assert.deepEqual(ur.prizes.map(p => p.id), ['auto:stellar-zoo']);
   // A low category roll still gives a metal in every tier.
   assert.equal(pullCyberGacha(state, {machine: 'PREMIUM', count: 1, random: seq([0.7, 0.01, 0])}).prizes[0].kind, 'METAL');
   assert.equal(pullCyberGacha(state, {machine: 'PREMIUM', count: 1, random: seq([0.1, 0.99, 0])}).prizes[0].kind, 'CHIP', 'R has no automation');
-  // Overall rates: cores 2.1% each, royal dual core and royal ranch 0.75% each (AUTO_CARE_3D_20261103), stellar zoo 0.3%.
+  // Overall rates: cores 2.1% each, the royal dual core 1.5%, royal ranch and stellar zoo 0.15% each (both UR since 2026-11-09).
   assert.equal(GACHA_AUTOMATION_SHARE, 0.15);
   assert.equal(Math.round(0.28 * GACHA_AUTOMATION_SHARE / 2 * 1000) / 10, 2.1);
-  assert.equal(Math.round(0.1 * GACHA_AUTOMATION_SHARE / 2 * 10000) / 100, 0.75);
-  assert.equal(Math.round(0.02 * GACHA_AUTOMATION_SHARE * 1000) / 10, 0.3);
+  assert.equal(Math.round(0.1 * GACHA_AUTOMATION_SHARE * 1000) / 10, 1.5);
+  assert.equal(Math.round(0.02 * GACHA_AUTOMATION_SHARE / 2 * 10000) / 100, 0.15);
 });
 
 test('directed forging is the pity path: fixed chips and shards in, that exact item out; locked chips and star-core shards never go in', () => {
   assert.deepEqual(AUTOMATION_RECIPES.map(r => [r.id, r.chips, r.shards]),
-    [['auto:clean-core', 5, 2], ['auto:feed-core', 5, 2], ['auto:royal-core', 8, 4], ['auto:royal-ranch', 5, 6], ['auto:stellar-zoo', 5, 10]]);
+    [['auto:clean-core', 5, 2], ['auto:feed-core', 5, 2], ['auto:royal-core', 8, 4], ['auto:royal-ranch', 5, 10], ['auto:stellar-zoo', 5, 10]]);
   assert.ok(forgeShardPool().every(m => m.family !== 'supernova'));
   let state = normalizeCyberGacha({version: 1, chips: {'chip:hp': 3, 'chip:attack': 1, 'chip:core-omega': 9, 'chip:personality': 9},
     metals: {'metal:emma-shard': 1, 'metal:beta-shard': 1, 'metal:supernova-shard': 9}});
@@ -192,14 +194,14 @@ test('auto-feed is +2.4 affection carried in tenths; royal sleep recovers 30% fa
 
 // ---------------------------------------------------------------- diamonds: rewards, land, founder box
 
-test('diamond rewards: rank 1-9 and encyclopedia 10/25/50/100 pay 200-500 once; story chapters pay 300', () => {
+test('diamond rewards: rank 1-9 and encyclopedia 10/25/50/100 pay 200-500 once; story chapters pay 10', () => {
   assert.deepEqual(dueDiamondMilestones({rank: 0, registeredCount: 9}), []);
   const due = dueDiamondMilestones({rank: 3, registeredCount: 26});
   assert.deepEqual(due.map(d => [d.key, d.amount]), [['dia:rank:1', 300], ['dia:rank:2', 300], ['dia:rank:3', 300], ['dia:dex:10', 200], ['dia:dex:25', 300]]);
   assert.deepEqual(dueDiamondMilestones({rank: 3, registeredCount: 26, claimed: due.map(d => d.key)}), []);
   assert.ok(Object.values(DIAMOND_REWARDS.rank).every(n => n === 0 || (n >= 200 && n <= 500)));
   assert.ok(DIAMOND_REWARDS.dex.every(([, n]) => n >= 200 && n <= 500));
-  assert.equal(DIAMOND_REWARDS.storyChapter, 300);
+  assert.equal(DIAMOND_REWARDS.storyChapter, 10);
   const claims = recordGachaClaims(normalizeCyberGacha({version: 1}), ['dia:rank:1', 'dia:rank:1']);
   assert.deepEqual(claims.recorded, ['dia:rank:1']);
   // The wallet holds earned diamonds past the playtest grant.
@@ -428,9 +430,9 @@ test('app: story chapters, rank and the encyclopedia pay diamonds once; the foun
     const before = app.getCageEditFrame().testDiamonds;
     const story = app.claimGachaReward('story:test-chapter', 3);
     assert.equal(story.ok, true);
-    assert.equal(story.diamonds, 300);
+    assert.equal(story.diamonds, 10);
     assert.equal(app.claimGachaReward('story:test-chapter', 3).granted, 0, 'once');
-    assert.equal(app.getCageEditFrame().testDiamonds, before + 300);
+    assert.equal(app.getCageEditFrame().testDiamonds, before + 10);
     app.setTamerRank(2);
     const pending = app.getDiamondRewards().pending;
     assert.deepEqual(pending.filter(p => p.kind === 'RANK').map(p => p.key), ['dia:rank:1', 'dia:rank:2']);
@@ -439,7 +441,7 @@ test('app: story chapters, rank and the encyclopedia pay diamonds once; the foun
     assert.equal(paid.granted, pending.reduce((s, p) => s + p.amount, 0));
     assert.deepEqual(app.getDiamondRewards().pending, []);
     assert.equal(app.claimDiamondRewards().granted, 0);
-    assert.equal(h.saved().flags.friendsPlaytest.diamonds, before + 300 + paid.granted, 'saved at once');
+    assert.equal(h.saved().flags.friendsPlaytest.diamonds, before + 10 + paid.granted, 'saved at once');
     // Founder box: locked until a tournament medal, then once.
     assert.equal(app.getFounderPack().unlocked, false);
     assert.equal(app.claimFounderPack().reason, 'FOUNDER_PACK_LOCKED');

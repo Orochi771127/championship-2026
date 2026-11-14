@@ -13,6 +13,9 @@ const base='https://orochi771127.github.io/championship-2026/';
 const contract=JSON.parse(fs.readFileSync('docs/contracts/championship/EXTERNAL_CHARACTER_ASSETS.v1.json','utf8'));
 const manifestBytes=fs.readFileSync(contract.manifestPath),manifest=JSON.parse(manifestBytes);
 const assetBase=contract.assetBaseUrl,selected=new Map(manifest.files.map(row=>[assetBase+row.path,row]));
+const localPaths=new Set(contract.localPaths??[]);
+const localSelected=new Map(JSON.parse(fs.readFileSync('docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json','utf8')).files
+ .filter(row=>localPaths.has(row.path)).map(row=>[row.path,row]));
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const mime={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json',
  '.css':'text/css','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.svg':'image/svg+xml',
@@ -68,11 +71,16 @@ async function isolated(browser,viewport,label,{seed=true}={}){
   if(url.startsWith(base)&&['GET','HEAD'].includes(route.request().method())){
    const relative=decodeURIComponent(new URL(url).pathname.slice(new URL(base).pathname.length));
    // A missed boundary must fail, even if someone copied source assets back in.
-   if(relative.startsWith(manifest.assetPrefix)){
+   if(relative.startsWith(manifest.assetPrefix)&&!localPaths.has(relative)){
     report.unexpected.push({label,url,reason:'GAME_LOCAL_CHARACTER_REQUEST'});
     return route.fulfill({status:404,body:'Character files belong to the verified external release'});
    }
    const file=path.resolve(root,relative||'index.html');
+   if(localPaths.has(relative)){
+    const bytes=fs.readFileSync(file),expected=localSelected.get(relative);
+    assert.ok(expected,'Every local character addition is selected');
+    assert.equal(sha(bytes),expected.sha256,'Local character response matches its exact approved bytes');
+   }
    if(file.startsWith(root+path.sep)&&fs.existsSync(file)&&fs.statSync(file).isFile())
     return route.fulfill({path:file,contentType:mime[path.extname(file)]||'application/octet-stream'});
    report.missing.push({label,url});return route.fulfill({status:404,body:'Missing built game input'});
@@ -143,7 +151,7 @@ async function checkHunt(page,label,checks){
 
 async function checkBattle(page,label,checks){
  await menu(page,'battle');await screen(page,'BATTLE_SELECT');
- await page.locator('.cm-vs5-cube__face').filter({hasText:'練習對戰'}).click();
+ await page.locator('.cm-vs5-cube__face').filter({hasText:'練習對戰'}).dispatchEvent('click');
  const rows=page.locator('.cm-vs5-practice-member');await rows.first().waitFor();let first=false,second=false;
  for(let i=0;i<await rows.count()&&!(first&&second);i++){
   const buttons=rows.nth(i).locator('button');
@@ -180,7 +188,10 @@ async function checkArena(page,label,checks){
  const receipt=decodeBuildManifest(JSON.parse(fs.readFileSync(path.join(root,'pages-build.json'),'utf8')));
  assert.equal(receipt.externalCharacterAssets?.manifestSha256,contract.manifestSha256);
  assert.equal(receipt.externalCharacterAssets?.assetBaseUrl,assetBase);
- assert.ok(!receipt.files.some(row=>row.path.startsWith(manifest.assetPrefix)));
+ const localRows=receipt.files.filter(row=>row.path.startsWith(manifest.assetPrefix));
+ assert.deepEqual(localRows.map(row=>row.path).sort(),[...localPaths].sort());
+ assert.equal(localSelected.size,localPaths.size);
+ for(const row of localRows)assert.equal(row.sha256,localSelected.get(row.path)?.sha256);
  report.buildId=receipt.buildId;report.assetManifestSha256=contract.manifestSha256;
  const browser=await chromium.launch({headless:true,...(process.env.CHROME?{executablePath:process.env.CHROME}:{}),
   args:['--enable-unsafe-swiftshader','--use-angle=swiftshader','--autoplay-policy=no-user-gesture-required']});

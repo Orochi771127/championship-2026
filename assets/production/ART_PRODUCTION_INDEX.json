@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 47,
+    "registeredRuntimeBundles": 53,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -591,6 +591,88 @@
       "publicationAuthorized": true,
       "scope": "General53 and Arena32 core; all natural states and dedicatedKO/victory not claimed",
       "runtimeQaEvidence": "docs/reports/aw-ul-release-20261102/UL14_SPECIES196_RELEASE_VALIDATION.json"
+    },
+    {
+      "assetId": "art:gacha:prize-icons:r1",
+      "manifestPath": "assets/production/items/gacha-prizes-r1/manifest.json",
+      "manifestSha256": "638ac439bbd2c96c8a0e0b763909738b1b4583696b960a9b6c161302a2c27097",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "assistantReviewed": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "scope": "Two gachapon prize icons (hunt supply crate, lucky ticket pack), GACHA_FULL_EFFECTS_20261109; no gameplay or commercial-rights claim",
+      "count": 2
+    },
+    {
+      "assetId": "art:characters:aw12-two-set-r7-20261110",
+      "manifestPath": "assets/production/characters/aw12-two-set-r6-20261110/animation.public-v1.json",
+      "manifestSha256": "847f4e448bc12c35e4fa8e1dcac962e10de3fd58a7b3e93d18f2963ee19f0c6b",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "OWNER_ART_APPROVED_RUNTIME_CHECKED",
+      "shippingStatus": "OWNER_PUBLIC_PLAYTEST",
+      "humanApproved": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "publicationAuthorized": true,
+      "scope": "General R5 53 callers / 83 events, Arena R3 65 source sequences / 506 events; authored presentation alignment to existing CAST_RELEASE. No commercial-rights or source hit-marker parity claim.",
+      "runtimeQaEvidence": "docs/reports/aw12-release-20261110/VALIDATION.json"
+    },
+    {
+      "assetId": "art:characters:aw32-two-set-r12-20261110",
+      "manifestPath": "assets/production/characters/aw32-web-r11-directed-20261110/animation.public-v1.json",
+      "manifestSha256": "23876e5d0b11dce9c5a05aadcdfd87463b9236da11d9a9a78699c8d0119d3349",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "OWNER_ART_APPROVED_RUNTIME_CHECKED",
+      "shippingStatus": "OWNER_PUBLIC_PLAYTEST",
+      "humanApproved": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "publicationAuthorized": true,
+      "scope": "Owner-approved General R1 / Arena final86; 53 General callers, 65 Arena source sequences. R12 support roots, fixed whole-canvas half-size Arena derivative. No commercial-rights claim.",
+      "runtimeQaEvidence": "docs/reports/aw32-release-20261110/VALIDATION.json"
+    },
+    {
+      "assetId": "art:characters:aw14-two-set-r1-20261110",
+      "manifestPath": "assets/production/characters/aw14-two-set-r1-20261110/animation.public-v1.json",
+      "manifestSha256": "b71d0f764a54d03c76da922542040439ccfce7c8c0d9a0626a7f6ef7d2342279",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "OWNER_ART_APPROVED_RUNTIME_CHECKED",
+      "shippingStatus": "OWNER_PUBLIC_PLAYTEST",
+      "humanApproved": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "publicationAuthorized": true,
+      "scope": "Owner-approved General R8 / Arena R6. Original illustration pixels, native event metadata preserved. Public playtest authorization for AW01-AW53; no new commercial-rights claim.",
+      "runtimeQaEvidence": "docs/reports/aw14-release-20261110/VALIDATION.json"
+    },
+    {
+      "assetId": "art:story:vn-backgrounds:original:v3",
+      "manifestPath": "assets/production/story/vn-backgrounds-v3/manifest.json",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "assistantReviewed": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "maturity": "STORY_LIVING_SCENE_PLATES_HANDPAINTED_ORIGINAL_WEBP_STILLS_H264_PARALLAX_LOOPS",
+      "scope": "Story mode scene plates (half-body story theater) only: stills plus 2.5D parallax loops; no title, WorldCanvas, gameplay or commercial-rights change"
+    },
+    {
+      "assetId": "art:story:vn-expressions:original:v1",
+      "manifestPath": "assets/production/story/vn-expressions-v1/manifest.json",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "assistantReviewed": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "maturity": "STORY_BUST_EXPRESSIONS_ORIGINAL_LOSSY_WEBP",
+      "scope": "Story mode bust expressions of recurring partners only, drawn from the product's own Database art; no Dex, battle, gameplay or commercial-rights change"
     }
   ]
 }

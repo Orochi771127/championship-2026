@@ -150,7 +150,7 @@ dialog.cm-dialog[data-variant="tutorial-guide"] .cm-dialog__action:active:not(:d
   animation: ob-rise calc(5.5s + var(--s) * 0.37s) calc(var(--s) * -0.9s) linear infinite;
 }
 #cm-opening .cm-cutscene__spark:nth-child(3n) { background: var(--ob-gold); box-shadow: 0 0 10px var(--ob-gold); }
-@keyframes ob-rise { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.85; } 100% { transform: translateY(-104vh); opacity: 0; } }
+@keyframes ob-rise { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.85; } 100% { transform: translateY(calc(-104 * var(--cm-vh, 1vh))); opacity: 0; } }
 
 #cm-opening .cm-cutscene__top { position: relative; z-index: 2; display: flex; align-items: center; gap: 10px; min-height: 44px; }
 #cm-opening .cm-cutscene__chapter {
@@ -883,7 +883,7 @@ body[data-landscape-entry] #cm-opening .cm-opening__egg-grid { grid-template-col
 .cm-tutorial-guidance button[data-tutorial-action="exit"] { --key-face: rgba(23, 34, 62, 0.95); --key-shade: #050811; border-color: rgba(168, 189, 216, 0.45); color: var(--ob-text-2); }
 
 dialog.cm-dialog[data-variant="tutorial-guide"] {
-  width: min(420px, calc(100vw - 24px));
+  width: min(420px, calc(calc(100 * var(--cm-vw, 1vw)) - 24px));
   padding: 0;
   border: 0;
   border-radius: 0;
@@ -1120,7 +1120,7 @@ dialog.cm-dialog[data-variant="tutorial-guide"][open] { animation: ob-holo-in 42
   z-index: 1;
   left: max(3%, env(safe-area-inset-left, 0px));
   bottom: 0;
-  width: min(38vw, calc(60vh / 0.815));
+  width: min(calc(38 * var(--cm-vw, 1vw)), calc(calc(60 * var(--cm-vh, 1vh)) / 0.815));
   pointer-events: none;
   opacity: 0;
   transform: translateY(14px);
@@ -1130,7 +1130,7 @@ dialog.cm-dialog[data-variant="tutorial-guide"][open] { animation: ob-holo-in 42
 #cm-opening .cm-opening-story[data-guide="visible"] .cm-opening-story__guide { opacity: 1; transform: none; }
 #cm-opening .cm-opening-story[data-guide="visible"] .cm-cutscene__dialogue {
   justify-self: end;
-  width: min(calc(100% - min(38vw, calc(60vh / 0.815)) - 12px), 760px);
+  width: min(calc(100% - min(calc(38 * var(--cm-vw, 1vw)), calc(calc(60 * var(--cm-vh, 1vh)) / 0.815)) - 12px), 760px);
 }
 /* Owner 2026-11-03: after her introduction Ai-chan tells the rest docked small in the lower-left corner,
    above the text box, so the partner's scenes stay clear and the box keeps its full width. */
@@ -1138,7 +1138,7 @@ dialog.cm-dialog[data-variant="tutorial-guide"][open] { animation: ob-holo-in 42
 #cm-opening .cm-opening-story[data-guide-dock="true"] .cm-opening-story__guide {
   left: max(12px, env(safe-area-inset-left, 0px));
   bottom: calc(var(--story-dialogue-h, 190px) + 18px + env(safe-area-inset-bottom, 0px));
-  width: clamp(84px, 22vw, 132px);
+  width: clamp(84px, calc(22 * var(--cm-vw, 1vw)), 132px);
   transform: none;
 }
 #cm-opening .cm-opening-story[data-guide-dock="true"] .cm-cutscene__dialogue { justify-self: stretch; width: auto; }
@@ -1151,7 +1151,7 @@ dialog.cm-dialog[data-variant="tutorial-guide"][open] { animation: ob-holo-in 42
     left: 50%;
     /* The stage keeps 14px under the text box (plus the home indicator); she stands 8px above the box. */
     bottom: calc(var(--story-dialogue-h, 190px) + 22px + env(safe-area-inset-bottom, 0px));
-    width: min(82vw, 360px, calc((100vh - var(--story-dialogue-h, 190px) - 150px) / 0.815));
+    width: min(calc(82 * var(--cm-vw, 1vw)), 360px, calc((calc(100 * var(--cm-vh, 1vh)) - var(--story-dialogue-h, 190px) - 150px) / 0.815));
     transform: translate(-50%, 14px);
   }
   #cm-opening .cm-opening-story[data-guide="visible"] .cm-opening-story__guide { transform: translate(-50%, 0); }
@@ -1159,7 +1159,7 @@ dialog.cm-dialog[data-variant="tutorial-guide"][open] { animation: ob-holo-in 42
 }
 
 @media (orientation: portrait) {
-  #cm-opening .cm-opening-story[data-guide-dock="true"] .cm-opening-story__guide { left: max(12px, env(safe-area-inset-left, 0px)); transform: none; width: clamp(84px, 24vw, 120px); }
+  #cm-opening .cm-opening-story[data-guide-dock="true"] .cm-opening-story__guide { left: max(12px, env(safe-area-inset-left, 0px)); transform: none; width: clamp(84px, calc(24 * var(--cm-vw, 1vw)), 120px); }
   #cm-opening .cm-opening-story[data-guide-dock="true"] .cm-cutscene__dialogue { justify-self: stretch; width: auto; }
 }
 

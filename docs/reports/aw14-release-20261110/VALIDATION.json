@@ -1,0 +1,203 @@
+{
+  "status": "LOCAL_ACCEPTANCE_PASS_LATEST_MAIN_INTEGRATION_PENDING",
+  "sourceReadback": {
+    "role": "AW14",
+    "source": "R:\\Projects\\Championship2026\\character-animation-art-archive-20261025\\aw01-aw32-intake-20261109\\originals\\AW14_GeneralR8_ArenaR6_圖面通過_技術未過_禁止接入.zip",
+    "sha256": "eebca3bca331c7c730e08f750b066203efb101945c4589a49ea51c9b9852c7f9",
+    "bytes": 20181286,
+    "crc": "PASS",
+    "members": 113,
+    "destination": "C:\\Users\\User\\Documents\\Codex\\2026-11-03\\task-2\\aw-release-batch3-20261110\\AW14-private"
+  },
+  "focused": {
+    "role": "AW14",
+    "generalEvents": 83,
+    "arenaEvents": 482,
+    "boundaryAssertions": 1134,
+    "hashedAtlases": 4,
+    "sourceAlignedAttackCases": 16,
+    "pass": true,
+    "visualAcceptance": false
+  },
+  "sourceEvents": {
+    "role": "AW14",
+    "events": 482,
+    "canvasAndCropHashesVerified": 964,
+    "errors": [],
+    "hashConvention": "SHA256(str(image.size).encode()+RGBA bytes)",
+    "referencePixels": "PRIVATE_RESEARCH_ONLY"
+  },
+  "normal": [
+    "Main2 two drawings and world movement",
+    "Main3 fast movement",
+    "Arena move / source-aligned ranged attack and recovery",
+    "All 102 original own poses inspected on renderer overlays",
+    "Desktop / portrait / landscape screenshots"
+  ],
+  "physicalDeviceTested": false,
+  "rareNaturalStatesExhaustivelyTested": false,
+  "fullCI": {
+    "base": "dd2fa5138b4f510f708108e8aeaf0ab41e3f243b",
+    "passed": 3577,
+    "failed": 0,
+    "durationMs": 257814.4148
+  },
+  "production": "NOT_DEPLOYED",
+  "runtimeAtlasBytes": 8377494,
+  "runtimeAtlases": 4,
+  "format": "lossless WebP, unchanged original 400x400 RGBA, separate General/Arena pages",
+  "calibration": "Fixed density 7; lower-body support origins only, no per-frame scale fitting. Renderer stage display scale is existing stageBodyScale.",
+  "AW15": "HOLD: General Main2 P04/P05 observed both flipX states: paddle changes hand under native mirror. First normal Arena probe did not reach transformed appearance. No AW15 publication.",
+  "normalGame": {
+    "normalMain2Samples": 108,
+    "naturalMain3Samples": 12,
+    "completedAttackDirections": [
+      "D",
+      "DR",
+      "R",
+      "UR",
+      "U",
+      "UL",
+      "L",
+      "DL"
+    ],
+    "releasePointResiduals": [
+      {
+        "actionId": 34,
+        "direction": "D",
+        "expected": [
+          1109.7677490029325,
+          730.4726548119703
+        ],
+        "actual": [
+          1109.7677490029325,
+          730.4726548119703
+        ],
+        "errorWorldPx": 0.0
+      },
+      {
+        "actionId": 37,
+        "direction": "DR",
+        "expected": [
+          1135.6495671847506,
+          723.7362911756067
+        ],
+        "actual": [
+          1135.6495671847506,
+          723.7362911756067
+        ],
+        "errorWorldPx": 0.0
+      },
+      {
+        "actionId": 39,
+        "direction": "R",
+        "expected": [
+          1156.2132035483871,
+          719.4817457210612
+        ],
+        "actual": [
+          1156.2132035483871,
+          719.4817457210612
+        ],
+        "errorWorldPx": 0.0
+      },
+      {
+        "actionId": 40,
+        "direction": "UR",
+        "expected": [
+          1157.6313853665688,
+          707.7817457210612
+        ],
+        "actual": [
+          1157.6313853665688,
+          707.7817457210612
+        ],
+        "errorWorldPx": 0.0
+      },
+      {
+        "actionId": 41,
+        "direction": "U",
+        "expected": [
+          1109.0586580938416,
+          697.8544729937885
+        ],
+        "actual": [
+          1109.0586580938416,
+          697.8544729937885
+        ],
+        "errorWorldPx": 0.0
+      },
+      {
+        "actionId": 44,
+        "direction": "UL",
+        "expected": [
+          1134.3756909117174,
+          715.9499616260262
+        ],
+        "actual": [
+          1134.3756909117174,
+          715.9499616260262
+        ],
+        "errorWorldPx": 0.0
+      },
+      {
+        "actionId": 47,
+        "direction": "L",
+        "expected": [
+          1134.9295414036606,
+          718.9982037880058
+        ],
+        "actual": [
+          1134.9295414036606,
+          718.9982037880058
+        ],
+        "errorWorldPx": 0.0
+      },
+      {
+        "actionId": 49,
+        "direction": "DL",
+        "expected": [
+          1149.8204504945697,
+          725.7345674243694
+        ],
+        "actual": [
+          1149.8204504945697,
+          725.7345674243694
+        ],
+        "errorWorldPx": 0.0
+      }
+    ],
+    "maxWorldPixelResidual": 0.0,
+    "errors": [],
+    "missing": [],
+    "physicalDevice": false,
+    "transformationBoundaryObservation": {
+      "actionId": 33,
+      "direction": "UL",
+      "expected": [
+        1054.603866427175,
+        686.1220234988393
+      ],
+      "actual": [
+        1084.6579119790526,
+        699.0987865775049
+      ],
+      "errorWorldPx": 32.73594406816692,
+      "explanation": "Action33 CAST occurred as species104, RELEASE during async appearance transition to species146; no AW14 animation trace for this action. Old renderer attachment remained during load. Preserved separately; excluded from AW14-renderer residual assertion."
+    }
+  },
+  "facingGate": "5/5 PASS, no new facing exceptions",
+  "focusedRelease": "8/8 PASS",
+  "knownTransitionLimit": "A cast started by base species104 can complete while the appearance asset loads; action33 retained old renderer attachment. This was not scored as AW14 socket accuracy; eight subsequent AW14-rendered directions had 0 world-pixel mathematical socket residual.",
+  "derivativeProof": {
+    "role": "AW14",
+    "sourceFrames": 102,
+    "atlasCount": 4,
+    "ownSourceRGBAReconstruction": "PASS",
+    "mismatches": [],
+    "resampled": false,
+    "originalFilesModified": false,
+    "sourceArchiveSha": "eebca3bca331c7c730e08f750b066203efb101945c4589a49ea51c9b9852c7f9"
+  },
+  "buildOnPriorBase": "PASS external-character build 5e745535886fb86b688af12f312f06d7415c884b9897abfec590129b65e1bc8f; rebuilding after incorporating main 055ce52a"
+}

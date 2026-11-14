@@ -108,7 +108,7 @@ test("Shop uses the existing equipment identities for all 118 rows, including lo
   assert.match(shopItemDescription(frame.shop.listings[2]), /受傷.*傷藥/);
   assert.match(shopItemDescription(frame.shop.listings[3]), /生病.*藥品/);
   const fullAnalyzer = frame.shop.listings.find(row => row.category === "PLUGINS" && row.subcategory === "ANALYZER" && row.itemIndex === 8);
-  assert.match(shopItemDescription(fullAnalyzer), /世代、種族、屬性、生命值、性格、所需容量/);
+  assert.match(shopItemDescription(fullAnalyzer), /世代、種族、陣營、生命值、性格、所需容量/);
   const bought = [];
   const view = createShopView({ root, source: { getFrame: () => frame, intents: { buyShopItem: (...args) => bought.push(args) } } });
   assert.deepEqual(view.inspect(), { layout: "ARCADE_GRID_R1", sheetOpen: false, activeCategory: "TRAINING_GOODS", selectedShopRecordIndex: 0, listingCount: 118 });
@@ -203,7 +203,8 @@ test("Tamer Info translates unknown field labels without filling unknown values"
   const values = root.querySelectorAll(".cm-tamer-field__value");
   assert.equal(values.find(row => row.dataset.fieldId === "money").textContent, "0001024");
   assert.equal(values.find(row => row.dataset.fieldId === "guid").textContent, "---");
-  assert.equal(values.find(row => row.dataset.fieldId === "have").textContent, "096 G",'ROM 020E1E14 + 2*36 is capacity, not three residents');
+  // ROM 020E1E14 + 2*36 is capacity, not three residents; GACHA_FULL_EFFECTS_20261109 scales it ×1.375 (96 → 132).
+  assert.equal(values.find(row => row.dataset.fieldId === "have").textContent, "132 G",'the rank capacity, not three residents');
   assert.equal(values.find(row => row.dataset.fieldId === "cage").textContent, "16");
   noForeignCopy(root);
 });
@@ -214,7 +215,7 @@ test('Tamer Info uses separate completion and win-percentage rounding and preser
   const values=root.querySelectorAll('.cm-tamer-field__value');
   const value=id=>values.find(row=>row.dataset.fieldId===id).textContent;
   assert.equal(value('name'),'HUNT');assert.equal(value('title'),'006 %');assert.equal(value('guid'),'003 %');
-  assert.equal(value('battle'),'0003');assert.equal(value('win'),'067 %');assert.equal(value('have'),'064 G');
+  assert.equal(value('battle'),'0003');assert.equal(value('win'),'067 %');assert.equal(value('have'),'088 G');
 });
 
 test("Hunt Result translates failure/release UI without committing a displayed default name", t => {

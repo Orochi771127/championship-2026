@@ -200,9 +200,9 @@
 .cm-cer-gate__beam {
   position: absolute;
   left: 50%;
-  top: -40vh;
+  top: calc(-40 * var(--cm-vh, 1vh));
   width: 3px;
-  height: 80vh;
+  height: calc(80 * var(--cm-vh, 1vh));
   margin-left: -1.5px;
   background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--c-accent-hi) 70%, transparent) 45%, transparent);
   transform-origin: 50% 50%;
@@ -364,7 +364,7 @@
   background: linear-gradient(180deg, var(--c-gold-strong), color-mix(in srgb, var(--c-gold) 60%, #000000));
   box-shadow: 0 0 0 3px var(--c-surface-1), var(--shadow-float);
   color: #ffffff;
-  font-size: 20px;
+  font-size: calc(20px * var(--text-scale, 1));
   font-weight: var(--fw-heavy);
   font-style: italic;
   letter-spacing: 0.02em;

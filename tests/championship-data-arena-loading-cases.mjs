@@ -59,7 +59,9 @@ function fixture({loads = {}, hangingDisposals = []} = {}) {
     audio: null, sim: null, result: null, paused: false, qualityReloading: false, accumulator: 0, cutIn: null,
     partnerId: 'relay-species-047', partnerPower: {}, relayReserveId: null, relayThirdId: null, relayArenaId: 1, relayLoadouts: {},
     relayTeamIds: id => [id], relayBurstMembers: () => [], burstFormsFor: () => [], relayBurstPlanOf: () => undefined,
-    gameMode: 'RELAY', quality: 'low', resolutionCap: 2, href: 'http://localhost/championship.html',
+    // Journey zone stage (2026-11-10): none here, so the arena's own rivals load.
+    campaign: null, campaignCast: null,
+    gameMode: 'RELAY', quality: 'low', resolutionCap: 2, href: 'http://localhost/championship.html', sponsor: null, staked: null,
     matchId: 0, seed: 1, audioBus: null, bannerTimer: null, vignetteTimer: null, LOAD_MAX_MS, clearTimeout,
     createLoadAttempt(options) {
       return createLoadAttempt({...options,

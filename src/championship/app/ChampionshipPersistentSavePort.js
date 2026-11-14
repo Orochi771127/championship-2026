@@ -105,6 +105,19 @@ export function createChampionshipPreferencePort({ storage } = {}) {
   });
 }
 
+// Owner 2026-11-10: the hidden friends-playtest switch remembered on this device ('1' or '0'); see
+// resolveFriendsPlaytestPolicy. Never progress, never inside the save.
+export const CHAMPIONSHIP_FRIENDS_SWITCH_KEY = "championshipModernSave:friendsPlaytest:v1";
+export function createChampionshipFriendsSwitchPort({ storage } = {}) {
+  const key = assertAllowedChampionshipStorageKey(CHAMPIONSHIP_FRIENDS_SWITCH_KEY);
+  const guarded = storage && typeof storage.getItem === "function" && typeof storage.setItem === "function" ? guardChampionshipStorage(storage) : null;
+  return Object.freeze({
+    storageKey: key,
+    read() { try { return guarded?.getItem(key) ?? null; } catch { return null; } },
+    write(choice) { try { guarded?.setItem(key, choice); return true; } catch { return false; } }
+  });
+}
+
 // Data Arena (OWNER_APPROVED_ADAPTATION 2026-10-15): the mode's own records
 // (schema dataArena.v1), beside the save and never inside it. Arena results
 // are records only and feed nothing in the Championship economy.
@@ -331,6 +344,8 @@ export function createChampionshipPersistentSavePort({
         ...(request.battleTactics!==undefined?{battleTactics:request.battleTactics}:{}),
         ...(request.cyberGacha!=null?{cyberGacha:request.cyberGacha}:{}),
         ...(request.burstEvolution!=null?{burstEvolution:request.burstEvolution}:{}),
+        ...(request.syncLevels!=null?{syncLevels:request.syncLevels}:{}),
+        ...(request.journey!=null?{journey:request.journey}:{}),
         ...(request.nativeTitles!==undefined?{nativeTitles:request.nativeTitles}:{}),
         ...(request.championshipRun!==undefined?{championshipRun:request.championshipRun}:{}),
         ...(request.nativeMessages!==undefined?{nativeMessages:request.nativeMessages}:{}),

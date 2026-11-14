@@ -458,7 +458,7 @@ test("quartet: wind-up squash, 35 % dim and a closing ring for a special; a caps
   layer.dispose();
 });
 
-test("quartet: a heavy hit holds both fighters 60 ms, pushes 12 px, tints the flash and arcs a pooled number", () => {
+test("quartet: a critical hit holds both fighters 95 ms, pushes 12 px, tints the flash and arcs a pooled number", () => {
   const layer = quartetLayer(true);
   layer.update(view, ctx, 16, [{ type: "HIT", slot: 1, attackerSlot: 0, moveId: 9, damage: 161, ratio: 0.3, critical: true }]);
   assert.equal(layer.holdFor(1), true);
@@ -472,8 +472,12 @@ test("quartet: a heavy hit holds both fighters 60 ms, pushes 12 px, tints the fl
   assert.equal(d.quartet.numbers, 1);
   assert.equal(d.quartet.criticals, 1);
   assert.equal(d.quartet.hitStops, 1);
+  // MOVE_VFX_QUALITY_20261110: the hold follows the blow; a critical hit holds 95 ms.
+  assert.deepEqual({...BATTLE_FX_JUICY.hitStopByTier}, {light: 0, medium: 45, heavy: 65, ultimate: 95});
   layer.update(view, ctx, 70, []);
-  assert.equal(layer.hitStopActive(), false, "the hold ends after 60 ms");
+  assert.equal(layer.hitStopActive(), true, "a critical hold outlasts a heavy one");
+  layer.update(view, ctx, 30, []);
+  assert.equal(layer.hitStopActive(), false, "the hold ends after 95 ms");
   for (let i = 0; i < 6; i++) layer.update(view, ctx, 16, [{ type: "HIT", slot: 1, attackerSlot: 0, moveId: 3, damage: 5 + i, ratio: 0.01 }]);
   layer.updateScreen({ viewport: { width: 300, height: 200 }, view, ctx, dtMs: 16 });
   d = layer.getDiagnostics();
@@ -588,9 +592,15 @@ test("the cut-in frames the caster's measured head, the same in the Dex and in b
   assert.match(css, /\.cm-cutin__face \{[^}]*container-type: size/);
   assert.match(css, /--cutin-k: min\(calc\(62cqw \/ var\(--cutin-head\)\), calc\(90cqh \/ var\(--cutin-head\)\)\)/, "the head square fits the clear middle");
   assert.doesNotMatch(css, /scale\(1\.7\)/, "no blind 1.7x zoom");
+  // Owner 2026-11-12: in battle and in the Data Arena the strip carries the caster's own body (its attack,
+  // close up); the measured illustration framing above stays for the Database's own showcase.
   for (const file of ["src/championship/app/dataArenaScreen.js", "src/championship/app/main.js"]) {
-    assert.match(fs.readFileSync(file, "utf8"), /portrait: ?juicyPortrait\(/, `${file} hands the measured portrait to the same strip`);
+    assert.doesNotMatch(fs.readFileSync(file, "utf8"), /cutIn\??\.play\(\{[^}]*portrait: ?juicyPortrait\(/, `${file} no longer hands an illustration to the strip`);
+    assert.match(fs.readFileSync(file, "utf8"), /cutIn\??\.play\(\{ ?team:[^}]*species: ?(cue\.)?speciesId/, `${file} hands the caster's species to the strip`);
   }
+  const body = createSkillCutInLayer({ host: doc.createElement("div"), doc });
+  body.play({ team: "ally", species: "species-034", moveName: "烈鎧焰砲" });
+  body.dispose();
 });
 
 test("every published Dex illustration has a measured head inside the picture", () => {

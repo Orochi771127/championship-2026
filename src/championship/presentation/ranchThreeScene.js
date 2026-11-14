@@ -65,7 +65,15 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   const softwareRenderer=(()=>{try{const gl=renderer.getContext(),info=gl.getExtension('WEBGL_debug_renderer_info');
     return /swiftshader|llvmpipe|softpipe|software/i.test(String(gl.getParameter(info?info.UNMASKED_RENDERER_WEBGL:gl.RENDERER)));}catch{return false;}})();
   renderer.domElement.dataset.softwareRenderer=String(softwareRenderer);
-  renderer.setPixelRatio(cappedPixelRatio(currentQualityTier()==='saver'?1:2));
+  const targetPixelRatio=()=>cappedPixelRatio(currentQualityTier()==='saver'?1:2);
+  renderer.setPixelRatio(targetPixelRatio());
+  // The ranch is on screen while Settings changes the quality tier, and a desktop window can
+  // cross an interface-zoom step: both re-rate the backing store on the next frame.
+  let pixelRatioStale=false;
+  const markPixelRatioStale=()=>{pixelRatioStale=true;};
+  globalThis.addEventListener?.('cm-ui-zoom',markPixelRatioStale);
+  const qualityObserver=globalThis.MutationObserver&&globalThis.document?.documentElement?new globalThis.MutationObserver(markPixelRatioStale):null;
+  qualityObserver?.observe(globalThis.document.documentElement,{attributes:true,attributeFilter:['data-quality']});
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.NeutralToneMapping;
   renderer.shadowMap.enabled=currentQualityTier()!=='saver';
@@ -917,6 +925,12 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     wasHidden=false;
     canvas.style.visibility='';
     const start=performance.now(),screen=stage.app.screen;
+    if(pixelRatioStale){
+      pixelRatioStale=false;
+      const ratio=targetPixelRatio(),shadows=currentQualityTier()!=='saver';
+      if(ratio!==renderer.getPixelRatio()){renderer.setPixelRatio(ratio);renderer.setSize(width,height);}
+      if(sun.castShadow!==shadows){sun.castShadow=shadows;renderer.shadowMap.enabled=shadows;renderer.shadowMap.needsUpdate=true;}
+    }
     if(width!==screen.width||height!==screen.height){width=screen.width;height=screen.height;renderer.setSize(width,height);}
     const pixelScale=bounds.scale*field.nativePixelWorldScale;
     const center=ranchNativeToWorld((width/2-bounds.x)/pixelScale,(height/2-bounds.y)/(pixelScale*groundY));
@@ -991,7 +1005,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     return true;
   }
   function dispose(){
-    if(disposed)return;disposed=true;groundShadows.dispose();selectionRing.dispose();bloodlineRings.dispose();autoCareProps.dispose();plinth?.dispose();plinth=null;supportOwnerResolver?.dispose();supportOwnerResolver=null;
+    if(disposed)return;qualityObserver?.disconnect();globalThis.removeEventListener?.('cm-ui-zoom',markPixelRatioStale);disposed=true;groundShadows.dispose();selectionRing.dispose();bloodlineRings.dispose();autoCareProps.dispose();plinth?.dispose();plinth=null;supportOwnerResolver?.dispose();supportOwnerResolver=null;
     cm07Ambient?.dispose();cm07Ambient=null;
     lavaMaterials.clear();dynamicShaders.clear();smokeNodes.length=0;
     for(const material of authoredDepthMaterials)material.dispose();authoredDepthMaterials.clear();

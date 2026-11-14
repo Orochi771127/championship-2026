@@ -29,7 +29,9 @@ const path = require('node:path');
 const { chromium } = require('playwright');
 const { VIEWPORTS, evaluateState, summarize } = require('./viewport-health-rules.cjs');
 const { healthProbe, intervalCounterInit } = require('./viewport-health-probe.cjs');
-const { SLICES, Unreachable } = require('./viewport-health-slices.cjs');
+const { SLICES: BASE_SLICES, Unreachable } = require('./viewport-health-slices.cjs');
+const { EXTRA_SLICES } = require('./viewport-health-slices-extra.cjs');
+const SLICES = Object.freeze({ ...BASE_SLICES, ...EXTRA_SLICES });
 
 const repo = path.resolve(__dirname, '..', '..');
 
@@ -205,7 +207,7 @@ async function main() {
   const wanted = args.viewports ? String(args.viewports).split(',') : null;
   const viewports = VIEWPORTS.filter(v => !wanted || wanted.includes(v.id) || wanted.includes(`${v.width}x${v.height}`))
     .map(v => ({ ...v, evidence: ['desktop-laptop', 'portrait-pro', 'landscape-pro'].includes(v.id) }));
-  const sliceIds = args.slices ? String(args.slices).split(',').map(Number) : [1, 2, 3, 4, 5];
+  const sliceIds = args.slices ? String(args.slices).split(',').map(Number) : [1, 2, 3, 4, 5, 6];
   const evidenceStates = new Set(String(args['evidence-states'] ?? '').split(',').filter(Boolean));
   for (const slice of sliceIds) for (const state of SLICES[slice]?.evidence ?? []) evidenceStates.add(`${slice}:${state}`);
   fs.mkdirSync(out, { recursive: true });

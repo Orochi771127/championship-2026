@@ -24,9 +24,49 @@ import {CRITICAL_VFX_SYSTEM, supportVfxSystem} from '../vfx/unifiedMoveVfxResolv
 import {createMoveVfxKit, moveVfxArchetypeIsMelee, moveVfxArchetypeIsPlanted} from '../vfx/moveVfxKit.js';
 import {moveVfxSignature} from '../vfx/moveVfxSignatures.js';
 import {battleEffectCellIsOriginal} from '../battleEffectSprites.js';
+import {createPixelHitBursts} from '../vfx/pixelHitBursts.js';
+import {createPixelMotes} from '../vfx/pixelMotes.js';
+import {moveVfxChoreography, moveVfxSupportChoreography} from '../vfx/moveVfxChoreography.js';
+import {createMoveVfxSetPieces, bakedPieceLook, paintBakedPieceFrames} from '../vfx/moveVfxSetPieces.js';
+/** Palette key -> the element its motes wear (as unifiedMoveVfxResolver reads a bank's family colour). */
+const PALETTE_ELEMENT = Object.freeze({fire: 'FIRE', water: 'WATER', ice: 'ICE', thunder: 'THUNDER', metal: 'METAL', nature: 'WOOD',
+  earth: 'EARTH', wind: 'WIND', light: 'SUN', dark: 'MOON'});
 
 const TAU = Math.PI * 2;
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+
+// Time-stop dressing (Owner 2026-11-12: 「全場凍結，那應該有凍結特效啊。這樣看起來才不會是站著不動」).
+//
+// The original stops the battle in two ways: its pause counter (world +0x1F134)
+// holds everyone for 48..60 frames at a knockout, and a signature move runs
+// alone while every fighter it has not engaged waits. Both are kept. What was
+// missing is the picture: a held fighter looked like one that had stopped
+// working. While time is stopped for a fighter it now takes a cold tint, a
+// broken ring turns slowly backwards at its feet, pixel motes hang around it
+// instead of falling, and the edges of the screen cool in steps. Display only:
+// it reads the published view and writes nothing.
+/** Comfort limits for whole-screen light: one signature backdrop per 2.4 s, one white knockout flash per 1.6 s. */
+export const BATTLE_FX_COMFORT = Object.freeze({stormGapMs: 2400, flashGapMs: 1600});
+export const BATTLE_FX_STASIS = Object.freeze({pauseFrames: 12, inMs: 80, outMs: 170, tint: 0x8ab4ff, ring: 0x9fe8ff, edge: 0x0b2147, motes: 5});
+/** The fighters time has stopped for in this published view and why, or null while the battle runs. */
+export function battleFxStasisOf(view) {
+  const pause = Number(view?.nativeLifecycle?.timing?.pause) || 0, signature = view?.specialPrelude ?? null;
+  const kind = signature ? 'signature' : pause > BATTLE_FX_STASIS.pauseFrames ? 'knockout' : null;
+  if (!kind) return null;
+  const slots = [];
+  for (const c of view.combatants ?? []) {
+    if (!c?.present || c.down || !((c.hp?.current ?? 1) > 0)) continue;
+    // The caster and whoever its move has engaged keep moving; everyone else is held.
+    if (kind === 'signature' && (c.slot === signature.slot || c.engaged)) continue;
+    slots.push(c.slot);
+  }
+  return {kind, slots};
+}
+/** The tint a held body is multiplied by at stasis level k (0 = none, 1 = full). */
+export function battleFxStasisTint(k) {
+  const t = clamp(k, 0, 1), c = BATTLE_FX_STASIS.tint, mix = shift => Math.round(255 + ((c >> shift & 255) - 255) * t);
+  return (mix(16) << 16) | (mix(8) << 8) | mix(0);
+}
 const lerp = (a, b, t) => a + (b - a) * t;
 const easeOut = t => 1 - (1 - t) * (1 - t);
 
@@ -85,7 +125,8 @@ function makeCanvas(width, height) {
   if (typeof doc?.createElement !== 'function') return null;
   const canvas = doc.createElement('canvas');
   canvas.width = width; canvas.height = height;
-  return canvas.getContext?.('2d') ? canvas : null;
+  // Read back once by pixelateCanvas: kept in memory so that read does not stall a frame (2026-11-11).
+  return canvas.getContext?.('2d', {willReadFrequently: true}) ? canvas : null;
 }
 
 /** Generated textures; null when no 2D canvas exists (Node tests). */
@@ -150,7 +191,10 @@ const FOLLOW_FORMS = new Set(['projectile', 'stream', 'beam']);
  * the DOM cut-in strip, dim the field 35 % for about half a second and close
  * a charge ring on the caster; ordinary skills get a slanted name capsule.
  */
-export const BATTLE_FX_JUICY = Object.freeze({windupMs: 120, hitStopMs: 65, capsuleMs: 550, dimStrength: 0.35, dimMs: 520,
+export const BATTLE_FX_JUICY = Object.freeze({windupMs: 120, hitStopMs: 65,
+  // MOVE_VFX_QUALITY_20261110: the hold scales with the blow -- a heavy hit keeps 65 ms, a medium one a lighter 45 ms,
+  // a critical or a signature hit 95 ms; a light hit never holds. Drawing only: the battle keeps stepping.
+  hitStopByTier: Object.freeze({light: 0, medium: 45, heavy: 65, ultimate: 95}), capsuleMs: 550, dimStrength: 0.35, dimMs: 520,
   knockPx: Object.freeze({light: 14, medium: 22, heavy: 30}), knockMs: 200, slowMoMs: 180, numberMs: 820, criticalScale: 1.4, numberPool: 6});
 
 /**
@@ -181,19 +225,70 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   const groundGfx = new PIXI.Graphics(); groundGfx.label = 'battle fx ground shock rings';
   const ghostLayer = new PIXI.Container({label: 'battle fx dash afterimages'});
   const hyperBack = new PIXI.Graphics(); hyperBack.label = 'battle fx hyper ring (behind)'; hyperBack.blendMode = 'add';
-  worldBack.addChild(scorchLayer, groundGfx, hyperBack, ghostLayer);
+  const stasisBack = new PIXI.Graphics(); stasisBack.label = 'battle fx stasis rings';
+  // Refinement pass 8: the hyper aura as a baked pixelfx rune circle (colour + light), behind the caster.
+  const hyperBaked = new PIXI.Container(); hyperBaked.label = 'battle fx hyper aura (baked)';
+  worldBack.addChild(scorchLayer, groundGfx, hyperBack, hyperBaked, ghostLayer);
+  // The stasis rings lie on the ground, under the hyper aura.
+  if (typeof worldBack.addChildAt === 'function' && typeof worldBack.getChildIndex === 'function') worldBack.addChildAt(stasisBack, worldBack.getChildIndex(hyperBack));
+  else worldBack.addChild(stasisBack);
   const trailGfx = new PIXI.Graphics(); trailGfx.blendMode = 'add'; trailGfx.label = 'battle fx motion streaks';
   const particleLayer = new PIXI.Container({label: 'battle fx particles'});
   const flashLayer = new PIXI.Container({label: 'battle fx contact flashes'});
   const hyperFront = new PIXI.Graphics(); hyperFront.label = 'battle fx hyper ring (in front)'; hyperFront.blendMode = 'add';
-  worldFront.addChild(hyperFront, trailGfx, particleLayer, flashLayer);
+  const stasisFront = new PIXI.Graphics(); stasisFront.label = 'battle fx stasis motes'; stasisFront.blendMode = 'add';
+  worldFront.addChild(hyperFront, trailGfx, particleLayer, flashLayer, stasisFront);
+  const stasisEdge = new PIXI.Graphics(); stasisEdge.label = 'battle fx stasis screen edge';
+  // Time stopped: how far in (0..1), why, for whom, and the clock its ring and motes turn on.
+  const stasis = {level: 0, kind: null, slots: new Set(), age: 0};
+  const stasisNoise = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+  function updateStasis(view, ctx, dtMs) {
+    const now = battleFxStasisOf(view);
+    if (now) { stasis.kind = now.kind; stasis.slots = new Set(now.slots); }
+    stasis.level += ((now ? 1 : 0) - stasis.level) * (1 - Math.exp(-Math.max(0, dtMs) / (now ? BATTLE_FX_STASIS.inMs : BATTLE_FX_STASIS.outMs)));
+    if (!now && stasis.level < 0.02) { stasis.level = 0; stasis.slots.clear(); stasis.kind = null; }
+    stasis.age += dtMs;
+    stasisBack.clear(); stasisFront.clear();
+    if (!(stasis.level > 0)) return;
+    const k = stasis.level, unit = Math.max(0.5, ctx.nativeScale ?? 1), dot = Math.max(2, Math.round(unit * 1.5));
+    let ringed = false;
+    for (const slot of stasis.slots) {
+      const info = ctx.slotInfo?.(slot);
+      if (!info) continue;
+      // At the feet: a broken ellipse that turns slowly backwards.
+      const rx = Math.max(10, info.width * 0.62), ry = rx * 0.34, segments = 14, turn = reducedMotion ? 0 : stasis.age * 0.0007;
+      for (let i = 0; i < segments; i += 2) {
+        const a0 = i / segments * TAU - turn, a1 = a0 + TAU / segments * 0.82;
+        stasisBack.moveTo(info.x + Math.cos(a0) * rx, info.groundY + Math.sin(a0) * ry).lineTo(info.x + Math.cos(a1) * rx, info.groundY + Math.sin(a1) * ry);
+        ringed = true;
+      }
+      // Around the body: motes that hang where they are and twinkle; nothing falls while time is stopped.
+      for (let m = 0; m < BATTLE_FX_STASIS.motes; m++) {
+        const x = info.x + (stasisNoise(slot * 13 + m) - 0.5) * info.width * 1.5, y = info.top + stasisNoise(slot * 29 + m * 7 + 3) * info.height * 0.95;
+        const twinkle = reducedMotion ? 0.7 : 0.4 + 0.6 * Math.abs(Math.sin(stasis.age * 0.004 + m * 1.9 + slot));
+        stasisFront.rect(Math.round(x - dot / 2), Math.round(y - dot / 2), dot, dot).fill({color: m % 2 ? 0xffffff : BATTLE_FX_STASIS.ring, alpha: 0.85 * k * twinkle});
+      }
+    }
+    if (ringed) stasisBack.stroke({width: Math.max(1.5, unit * 0.9), color: BATTLE_FX_STASIS.ring, alpha: 0.7 * k});
+  }
+  /** The edges of the screen cool in three steps (a pixel vignette), under the bars and words. */
+  function drawStasisEdge(viewport) {
+    stasisEdge.clear();
+    if (!(stasis.level > 0)) return;
+    const {width: w, height: h} = viewport, k = stasis.level;
+    for (const [share, alpha] of [[0.03, 0.2], [0.07, 0.14], [0.12, 0.09]]) {
+      const tx = Math.round(w * share * 1.3), ty = Math.round(h * share);
+      stasisEdge.rect(0, 0, w, ty).rect(0, h - ty, w, ty).rect(0, ty, tx, h - ty * 2).rect(w - tx, ty, tx, h - ty * 2)
+        .fill({color: BATTLE_FX_STASIS.edge, alpha: alpha * k});
+    }
+  }
   const speedGfx = new PIXI.Graphics(); speedGfx.label = 'battle fx speed lines';
   const barGfx = new PIXI.Graphics(); barGfx.label = 'battle fx overhead bars';
   const wordLayer = new PIXI.Container({label: 'battle fx words'});
   const calloutLayer = new PIXI.Container({label: 'battle fx callout'});
   const numberLayer = new PIXI.Container({label: 'battle fx damage numbers'});
   const flashGfx = new PIXI.Graphics(); flashGfx.label = 'battle fx screen flash';
-  screen.addChild(speedGfx, barGfx, wordLayer, numberLayer, calloutLayer, flashGfx);
+  screen.addChild(stasisEdge, speedGfx, barGfx, wordLayer, numberLayer, calloutLayer, flashGfx);
   // Five-layer element dressing (VFX_FIVE_LAYER_20261101): charge orbs, muzzle
   // rings, signature storms, four-second ground marks, struck-body overlays and
   // the fallback cells of records that name no effect bank. resolveMove(slot,
@@ -206,6 +301,13 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   // has (battleEffectSprites retires those) -- the move's whole kit effect on
   // that actor, so its native timing and path stay.
   const kit = createMoveVfxKit({PIXI, front: worldFront, ground: worldBack, quality: rich ? 'balanced' : 'saver', reducedMotion, seed: seed ^ 0x5163});
+  // Pixel hit bursts (STATUS_AILMENT_VFX_20261110): the element's pixel burst at every landed move, over the move's own cells.
+  const pixelHits = typeof createPixelHitBursts === 'function' ? createPixelHitBursts({PIXI, layer: worldFront, quality: rich ? 'balanced' : 'saver', reducedMotion}) : null;
+  // Pixel motes (MOVE_VFX_QUALITY_20261110): element particles trailing every live move effect and scattering from every hit.
+  const burstAt = new Map(); // slot -> elapsed ms of its last pixel hit burst
+  // Each move's own moment (BESPOKE_MOVE_VFX_PROGRAM_20261111): bespoke pixel set pieces from its choreography.
+  const setPieces = typeof createMoveVfxSetPieces === 'function' ? createMoveVfxSetPieces({PIXI, layer: worldFront, reducedMotion}) : null;
+  const motes = typeof createPixelMotes === 'function' ? createPixelMotes({PIXI, layer: worldFront, quality: rich ? 'balanced' : 'saver', reducedMotion, seed: seed ^ 0x6d07}) : null;
   const standIns = new Map(); // live effect actor id -> {at, alive, standIn, trail, ...}
   const kitStats = {standIns: 0, trails: 0, sigils: 0, bursts: 0, size: 0};
   const signatureOf = moveId => Number.isSafeInteger(moveId) ? moveVfxSignature(moveId) : null;
@@ -228,6 +330,9 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   const seenImpacts = new Set();
   let freshImpacts = [], endings = [];
   let callout = null, dim = null, speed = 0, screenFlash = 0, banner = null;
+  // Comfort limits (Owner 2026-11-11 recordings): signature backdrops and white knockout flashes that
+  // follow each other closely are held back, so a run of specials never strobes the whole screen.
+  let lastStormAt = -Infinity, lastStrongFlashAt = -Infinity;
   let elapsed = 0, created = 0, peak = 0, eventsHandled = 0;
   // Arcade quartet state (juicy only).
   const numbers = [], numberPool = [];
@@ -259,7 +364,14 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     flashes.push({sprite, size, life, age: 0});
   }
   /** A ground shock ring: an ellipse on the arena's floor plane. */
+  /**
+   * Refinement pass 9: once the baked pieces are in, the layer's drawn rings and light pillar stand down --
+   * each moment already plays a baked piece (the move's contact, the support cast, the hyper aura) -- and a
+   * fall bursts as pixelfx's dirt explosion. Before the pieces load the rings still draw.
+   */
+  const piecesBaked = () => Boolean(setPieces && typeof bakedPieceLook === 'function' && bakedPieceLook('heal'));
   function spawnRing({x, groundY, radius, tint, life = 340, width = 2.5, alpha = 0.95, delay = 0, implode = false}) {
+    if (piecesBaked()) return;
     rings.push({x, y: groundY, radius, tint, life, age: -delay, width, alpha, implode});
   }
   /** A short-lived scorch on the ground. */
@@ -352,6 +464,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   }
   /** Support/heal: a vertical light pillar and rising geometric motes (juicy). */
   function pillar({x, groundY, height, palette}) {
+    if (piecesBaked()) return;
     const sprite = flashPool.pop() ?? new PIXI.Sprite(textures.flash);
     sprite.texture = textures.flash; sprite.anchor.set(0.5, 1); sprite.blendMode = 'add'; sprite.tint = palette.main; sprite.visible = true;
     sprite.position.set(x, groundY);
@@ -365,7 +478,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   }
 
   function makeText(content, {size, fill = 0xffffff, stroke = 0x101418, weight = '900', letterSpacing = 1}) {
-    return new PIXI.Text({text: content, style: {fontFamily: '"Noto Sans TC","Arial Black",system-ui,sans-serif', fontSize: size,
+    return new PIXI.Text({text: content, style: {fontFamily: '"Cyber Partner Rounded","Noto Sans TC","Arial Black",system-ui,sans-serif', fontSize: size,
       fontWeight: weight, fill, letterSpacing, stroke: {color: stroke, width: Math.max(3, size * 0.16), join: 'round'},
       dropShadow: {color: 0x000000, alpha: 0.45, distance: Math.max(1, size * 0.06), blur: 0, angle: Math.PI / 2}}});
   }
@@ -424,18 +537,23 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const look = owner ? describeMove(owner.ownerSlot, owner.moveId) : null;
         const vfx = owner ? vfxOf(owner.ownerSlot, owner.moveId) : null;
         const palette = vfx?.palette ?? BATTLE_FX_PALETTES[look?.palette ?? battleFxFamilyPalette(family) ?? 'neutral'] ?? BATTLE_FX_PALETTES.neutral;
-        entry = {form, palette, owner: owner?.ownerSlot ?? null, tier: look?.tier ?? 'skill', points: [], ageMs: 0, origin: {x: at.x, y: at.y}};
+        entry = {form, palette, owner: owner?.ownerSlot ?? null, tier: look?.tier ?? 'skill', points: [], ageMs: 0, origin: {x: at.x, y: at.y},
+          element: vfx?.element ?? PALETTE_ELEMENT[look?.palette ?? battleFxFamilyPalette(family)] ?? 'NEUTRAL'};
         tracked.set(actor.id, entry);
         // The real launch point: where the move's own effect first appears.
         if (MOVING_FORMS.has(form)) {
           const ownerInfo = owner ? ctx.slotInfo?.(owner.ownerSlot) : null;
           element?.muzzle({x: at.x, y: at.y, angle: ownerInfo && ownerInfo.facing < 0 ? Math.PI : 0, palette, size: form === 'area' ? 34 : 22});
           spawnFlash({x: at.x, y: at.y, tint: palette.core, size: 26, life: 120});
-          sparks({x: at.x, y: at.y, count: rich ? 5 : 3, palette, speed: 90, life: 260, scale: 0.8});
+          // The launch throws the move's own motes (or, without them, the old generic sparks).
+          if (motes) motes.burst({element: entry.element, x: at.x, y: at.y, groundY: at.groundY, unit: ctx.nativeScale, weight: 'light'});
+          else sparks({x: at.x, y: at.y, count: rich ? 5 : 3, palette, speed: 90, life: 260, scale: 0.8});
           if (at.heightNative < 10) dust({x: at.x, groundY: at.groundY, count: rich ? 3 : 2, spread: 6, life: 520, scale: 0.8});
         }
       }
       entry.ageMs += dtMs;
+      // Only what flies trails motes: projectiles and streams. A beam or an area is already a full shape.
+      if (FOLLOW_FORMS.has(form) && form !== 'beam') motes?.trail(actor.id, {element: entry.element, x: at.x, y: at.y, groundY: at.groundY, unit: ctx.nativeScale});
       entry.points.push({x: at.x, y: at.y});
       if (entry.points.length > 6) entry.points.shift();
       entry.last = at;
@@ -443,7 +561,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     endings = [];
     for (const [id, entry] of tracked) {
       if (live.has(id)) continue;
-      if (entry.last && MOVING_FORMS.has(entry.form)) endings.push({...entry.last, palette: entry.palette, form: entry.form, tier: entry.tier, used: false});
+      if (entry.last && MOVING_FORMS.has(entry.form)) endings.push({...entry.last, palette: entry.palette, element: entry.element, form: entry.form, tier: entry.tier, used: false});
       tracked.delete(id);
     }
     // Native impact sparks that appeared since the last view: real contact points.
@@ -474,7 +592,9 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const owner = launches.find(l => describeMove(l.ownerSlot, l.moveId)?.bankIds.includes(actor.bankId));
         const vfx = owner ? vfxOf(owner.ownerSlot, owner.moveId) : null;
         const signature = owner ? signatureOf(owner.moveId) : null;
-        entry = {form: battleFxFamilyForm(family), signature, alive: true, standIn: false, trail: false, cells: vfx?.cells ?? [], stages: new Set(),
+        // moveId: the owning move, kept on the entry. The hit stage below read a block-scoped `owner` that no longer
+        // existed there, so that frame's redraw stopped half way and the move's contact piece never played (2026-11-11).
+        entry = {form: battleFxFamilyForm(family), signature, moveId: owner?.moveId ?? null, alive: true, standIn: false, trail: false, cells: vfx?.cells ?? [], stages: new Set(),
           paletteKey: signature?.paletteKey ?? vfx?.paletteKey ?? battleFxFamilyPalette(family) ?? 'neutral'};
         standIns.set(actor.id, entry);
       }
@@ -494,7 +614,9 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const during = () => entry.alive && entry.stage === stage ? entry.at : null;
         if (stage === 'hit' || stage === 'extra') {
           const heavy = form === 'area' || form === 'character' || signature.tier === 'ultimate';
-          kit.impact({x: at.x, y: at.y, groundY: at.groundY, paletteKey, archetype, heavy, size: heavy ? size * 1.1 : size, planted: moveVfxArchetypeIsPlanted(archetype)});
+          // the HIT plays this move's own contact piece; the stand-in keeps only its flare and motif (pass 6)
+          kit.impact({x: at.x, y: at.y, groundY: at.groundY, paletteKey, archetype, heavy, size: heavy ? size * 1.1 : size, planted: moveVfxArchetypeIsPlanted(archetype),
+            piece: Boolean(entry.moveId !== null && moveVfxChoreography(entry.moveId)?.contact)});
         } else if (stage === 'body' || form === 'projectile' || form === 'stream' || form === 'beam') {
           // A body that lands and stands (a mushroom, a bomb) is drawn planted where the battle put it.
           kit.projectile({follow: during, paletteKey, archetype: shot, size, signature, planted: stage === 'body' && moveVfxArchetypeIsPlanted(archetype)});
@@ -528,7 +650,10 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       if (end.used) continue;
       const near = end.heightNative < 18;
       spawnFlash({x: end.x, y: end.y, tint: end.palette.core, size: 30, life: 140});
-      sparks({x: end.x, y: end.y, count: rich ? 8 : 4, palette: end.palette, speed: 120, life: 300, groundY: end.groundY});
+      // A shot that ends without a hit throws a few of its element's motes (SPECIAL_HEX_DECLUTTER_20261111): a volley
+      // of five used to throw forty generic sparks at once, the cyan cluster over every special.
+      if (motes) motes.burst({element: end.element ?? 'NEUTRAL', x: end.x, y: end.y, groundY: end.groundY, unit: lastCtx?.nativeScale ?? 1, weight: 'light'});
+      else sparks({x: end.x, y: end.y, count: rich ? 8 : 4, palette: end.palette, speed: 120, life: 300, groundY: end.groundY});
       if (near) {
         spawnRing({x: end.x, groundY: end.groundY, radius: 16, tint: end.palette.main, life: 300});
         dust({x: end.x, groundY: end.groundY, count: rich ? 4 : 2, spread: 8});
@@ -554,6 +679,12 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (info && vfx?.fallback && !vfx.melee) {
           const launchCell = vfx.cells.find(c => c.role === 'launch' || c.role === 'prepare');
           if (launchCell) element?.cell({...launchCell, ...muzzleOf(info), scale: ctx.nativeScale, flip: info.facing < 0, hue: vfx.cellHue});
+        }
+        const choreo = moveVfxChoreography(event.moveId);
+        if (info && choreo?.release && setPieces) {
+          const releasePalette = vfx?.palette ?? BATTLE_FX_PALETTES[look?.palette] ?? BATTLE_FX_PALETTES.neutral;
+          setPieces.play(choreo.release.piece, {...muzzleOf(info), angle: info.facing < 0 ? Math.PI : 0, palette: releasePalette,
+            size: info.width, unit: ctx.nativeScale, groundY: info.groundY, scale: choreo.release.scale ?? 1, sprite: choreo.release.sprite});
         }
         if (!info || !look || look.tier === 'basic' || look.tier === 'support') continue;
         const palette = vfx?.palette ?? BATTLE_FX_PALETTES[look.palette] ?? BATTLE_FX_PALETTES.neutral;
@@ -590,7 +721,10 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (look.tier === 'ultimate') {
           // The signature backdrop: a ~0.53 s element storm behind the fighters.
           const foe = ctx.opponentsOf(event.slot).map(s => slot(s)).find(Boolean);
-          element?.storm({kind: vfx?.storm ?? 'burst', palette, paletteKey: vfx?.paletteKey ?? look.palette, rect: ctx.artRect,
+          // The backdrop paints the whole field: at most one every BATTLE_FX_COMFORT.stormGapMs.
+          const stormFree = elapsed - lastStormAt >= BATTLE_FX_COMFORT.stormGapMs;
+          if (stormFree) lastStormAt = elapsed;
+          if (stormFree) element?.storm({kind: vfx?.storm ?? 'burst', palette, paletteKey: vfx?.paletteKey ?? look.palette, rect: ctx.artRect,
             center: foe ? {x: (info.x + foe.x) / 2, y: (info.groundY + foe.groundY) / 2 - info.height * 0.4} : {x: info.x, y: info.groundY}});
           if (vfx?.weather) cue({type: 'WEATHER', system: vfx.weather, slot: event.slot, x: info.x, y: info.groundY, element: vfx.element});
           spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 1.3, tint: palette.core, life: 560, delay: 140});
@@ -599,13 +733,14 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           dim = juicy ? {focus: new Set([event.slot]), age: 0, life: BATTLE_FX_JUICY.dimMs, strength: BATTLE_FX_JUICY.dimStrength}
             : {focus: new Set([event.slot]), age: 0, life: 1150, strength: 0.45};
           speed = reducedMotion ? 0 : 1;
-          // Push in on the attacker, then pull out to show the whole path.
-          director?.sequence([{slots: [event.slot], durationMs: 650, boost: 0.38}, {slots: [event.slot, ...ctx.opponentsOf(event.slot)], durationMs: 1100, boost: -0.05}]);
+          // Push in on the attacker, then pull out to show the whole path. The original prelude zoom
+          // already closes on the caster, so this push stays gentle (calm shot, Owner 2026-11-11).
+          director?.sequence([{slots: [event.slot], durationMs: 650, boost: 0.26}, {slots: [event.slot, ...ctx.opponentsOf(event.slot)], durationMs: 1100, boost: -0.05}]);
           { const s = toScreen(ctx, info.x, info.top + info.height * 0.5); hitFeel?.rush(s.x, s.y); }
           director?.shake(0.18);
-        } else {
-          director?.sequence([{slots: [event.slot, ...ctx.opponentsOf(event.slot)], durationMs: 900, boost: 0.14}]);
         }
+        // An ordinary attack does not re-aim the shot (calm shot, Owner 2026-11-11): six fighters
+        // launching in turn re-aimed it several times a second. The standing framing shows it.
         continue;
       }
       if (event.type === 'HIT') {
@@ -617,6 +752,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const palette = vfx?.palette ?? BATTLE_FX_PALETTES[look?.palette] ?? BATTLE_FX_PALETTES.neutral;
         // A native screen flash has no target/critical attribution. Only an
         // explicitly attributed HIT may label itself critical.
+        const choreo = moveVfxChoreography(event.moveId);
         const critical = event.critical === true;
         const tier = battleFxHitTier({ratio: event.ratio, ultimate: look?.tier === 'ultimate', critical});
         const hit = battleFxHitPoint({target, impacts: freshImpacts, endings: endings.filter(e => !e.used), attacker});
@@ -627,12 +763,13 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         fx.knock = tier === 'heavy' ? 1 : 0.6; fx.knockDir = attacker ? Math.sign(target.x - attacker.x) || -target.facing : -target.facing;
         if (juicy) {
           // White first, then the move's element on the rim; the knock follows the hit.
-          fx.flashTint = palette.main; fx.knock = 1; fx.knockPx = BATTLE_FX_JUICY.knockPx[tier];
+          fx.flashTint = palette.main; fx.knock = 1; fx.knockPx = choreo?.knockPx ?? BATTLE_FX_JUICY.knockPx[tier];
           // Contact: a saturated halo under a white-hot core (additive), readable on dark and pale floors.
           spawnFlash({x: hit.x, y: hit.y, tint: palette.main, size: (tier === 'heavy' ? 46 : 30) * 1.9, life: tier === 'heavy' ? 210 : 150});
-          if (tier !== 'light' && !reducedMotion) {
-            hitStop = {ms: BATTLE_FX_JUICY.hitStopMs, slots: new Set([event.slot, event.attackerSlot].filter(s => s !== null && s !== undefined))};
-            element?.hold(BATTLE_FX_JUICY.hitStopMs);
+          const holdMs = choreo?.hitStopMs ?? BATTLE_FX_JUICY.hitStopByTier[critical || look?.tier === 'ultimate' ? (tier === 'light' ? 'medium' : 'ultimate') : tier] ?? 0;
+          if (holdMs > 0 && !reducedMotion) {
+            hitStop = {ms: holdMs, slots: new Set([event.slot, event.attackerSlot].filter(s => s !== null && s !== undefined))};
+            element?.hold(holdMs);
             quartet.hitStops++;
           }
           const p = toScreen(ctx, hit.x, target.top);
@@ -659,11 +796,28 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
             paletteKey: signature.paletteKey, signature, size: target.width * (tier === 'light' ? 0.18 : 0.24), heavy: tier === 'heavy'});
           kitStats.bursts++;
         }
+        // One kind of particle at the contact (MOVE_VFX_QUALITY_20261110, Owner: 「很雜亂」): the element's motes,
+        // sized by the blow, replace the old generic sparks; a run of light hits on one target shows its burst once.
+        const weight = critical || look?.tier === 'ultimate' ? (tier === 'light' ? 'medium' : 'ultimate') : tier;
+        motes?.burst({element: vfx?.element ?? 'NEUTRAL', x: hit.x, y: hit.y, groundY: hit.groundY, unit: ctx.nativeScale, weight, dir: fx.knockDir || 0});
+        // An ultimate opens its contact with an impact frame: the blow's star in white, held by the hit-stop.
+        if ((choreo?.impactFrame || critical) && setPieces) setPieces.play('impact-frame', {x: hit.x, y: hit.y,
+          angle: attacker ? Math.atan2(target.groundY - attacker.groundY, target.x - attacker.x) : 0,
+          palette: {core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true}, size: target.width, unit: ctx.nativeScale, groundY: hit.groundY, scale: (choreo?.contact?.scale ?? 1) * 0.7});
+        if (choreo?.contact && setPieces) setPieces.play(choreo.contact.piece, {x: hit.x, y: hit.y,
+          angle: attacker ? Math.atan2(target.groundY - attacker.groundY, target.x - attacker.x) : 0, palette, size: target.width,
+          unit: ctx.nativeScale, groundY: hit.groundY, scale: choreo.contact.scale ?? 1, fast: choreo.contact.fast, sprite: choreo.contact.sprite, at: 'contact'});
+        const lastBurst = burstAt.get(event.slot) ?? -Infinity;
+        if (tier !== 'light' || elapsed - lastBurst > 220) {
+          pixelHits?.spawn({element: vfx?.element ?? 'NEUTRAL', x: hit.x, y: hit.y, groundY: hit.groundY, size: target.width * (tier === 'light' ? 0.8 : 1),
+            unit: ctx.nativeScale, heavy: tier === 'heavy', flip: (fx.knockDir || 1) < 0});
+          burstAt.set(event.slot, elapsed);
+        }
         if (critical) cue({type: 'CRIT', system: CRITICAL_VFX_SYSTEM, slot: event.slot, x: target.x, y: target.groundY});
         if (critical) hitFeel?.split();
         // At the contact point: a flash and sparks that fall to the target's ground.
         spawnFlash({x: hit.x, y: hit.y, tint: palette.core, size: tier === 'heavy' ? 46 : 30, life: tier === 'heavy' ? 170 : 120});
-        sparks({x: hit.x, y: hit.y, count: tier === 'heavy' ? (rich ? 22 : 10) : tier === 'medium' ? (rich ? 12 : 6) : 6, palette,
+        if (!motes) sparks({x: hit.x, y: hit.y, count: tier === 'heavy' ? (rich ? 22 : 10) : tier === 'medium' ? (rich ? 12 : 6) : 6, palette,
           speed: tier === 'heavy' ? 210 : 150, groundY: hit.groundY, scale: tier === 'heavy' ? 1.2 : 1});
         // On the ground beneath it: the shock ring, dust and, for heavy hits, debris and scorch.
         if (tier !== 'light') {
@@ -675,12 +829,13 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           spawnRing({x: hit.x, groundY: hit.groundY, radius: target.width * 0.8, tint: palette.core, life: 280, delay: 60});
           debris({x: hit.x, y: hit.groundY, groundY: hit.groundY, count: rich ? 10 : 5, palette});
           if (!vfx) spawnScorch({x: hit.x, groundY: hit.groundY, size: target.width * 1.1});
-          director?.impact('heavy', fx.knockDir);
+          director?.impact(choreo?.shake ?? 'heavy', fx.knockDir);
           { const s = toScreen(ctx, hit.x, hit.y); hitFeel?.shock(s.x, s.y, {reach: target.width * (ctx.camera?.zoom ?? 1) * 1.8}); }
-          // A signature hit pushes the lens toward the contact (1.22x, 260 ms).
-          if (look?.tier === 'ultimate') { director?.lens?.({x: hit.x, y: hit.y, amount: 0.22, ms: 260}); director?.slowMo?.(BATTLE_FX_JUICY.slowMoMs); }
+          // A signature hit pushes the lens toward the contact (1.12x, 300 ms).
+          if (look?.tier === 'ultimate') { director?.lens?.({x: hit.x, y: hit.y, amount: 0.12, ms: 300}); director?.slowMo?.(BATTLE_FX_JUICY.slowMoMs); }
           screenFlash = Math.max(screenFlash, 0.18);
-        } else if (tier === 'medium') { director?.impact('medium', fx.knockDir); }
+        } else if (tier === 'medium') { director?.impact(choreo?.shake ?? 'medium', fx.knockDir); }
+        else if (choreo?.shake && choreo.shake !== 'light') director?.impact(choreo.shake, fx.knockDir);
         // Light hits keep local sparks/squash, leaving the camera readable.
         const p = toScreen(ctx, hit.x, hit.y);
         if (critical) word({screenX: p.x, screenY: p.y - 14, content: text('會心一擊！'), size: 20, fill: 0xffe36a});
@@ -694,6 +849,13 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const info = slot(event.slot);
         if (!info) continue;
         if (event.type === 'SUPPORT') cue({type: 'BUFF', system: supportVfxSystem(event.statusCode), slot: event.slot, x: info.x, y: info.groundY});
+        // A heal that no support move cast (a regen, an item) shows the baked heal on the body.
+        if (event.type === 'HEAL' && piecesBaked()) setPieces.play('heal', {x: info.x, y: info.top + info.height * 0.5, groundY: info.groundY,
+          palette: BATTLE_FX_PALETTES.nature, size: info.width, unit: lastCtx?.nativeScale ?? 1, scale: 0.9});
+        // Batch 7: the support move's own cast on the body that receives it.
+        const support = event.type === 'SUPPORT' && typeof moveVfxSupportChoreography === 'function' ? moveVfxSupportChoreography(event.statusCode) : null;
+        if (support && setPieces) setPieces.play(support.piece, {x: info.x, y: info.top + info.height * 0.5, angle: info.facing < 0 ? Math.PI : 0,
+          palette: BATTLE_FX_PALETTES[support.palette] ?? BATTLE_FX_PALETTES.light, size: info.width, unit: ctx.nativeScale, groundY: info.groundY, scale: support.scale});
         const palette = event.type === 'HEAL' ? BATTLE_FX_PALETTES.nature : BATTLE_FX_PALETTES.light;
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.9, tint: palette.main, life: 560});
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.6, tint: palette.core, life: 480, delay: 120});
@@ -717,14 +879,18 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (!info) continue;
         // The fall: a dust burst, two rings, debris and scorch where it lands.
         dust({x: info.x, groundY: info.groundY, count: rich ? 10 : 5, spread: info.width * 0.7, scale: 1.3, life: 900});
+        if (piecesBaked()) setPieces.play('prop-dust', {x: info.x, y: info.groundY, groundY: info.groundY, palette: BATTLE_FX_PALETTES.earth,
+          size: info.width, unit: lastCtx?.nativeScale ?? 1, scale: 1.3});
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 1.8, tint: 0xffffff, life: 520});
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 1.1, tint: BATTLE_FX_PALETTES.light.edge, life: 420, delay: 90});
         debris({x: info.x, y: info.groundY, groundY: info.groundY, count: rich ? 12 : 6, palette: BATTLE_FX_PALETTES.earth, power: 1.1});
         spawnScorch({x: info.x, groundY: info.groundY, size: info.width * 1.4, life: 3200});
         // Hold on the knockout, then pull back out to the remaining fighters.
-        ctx.camera?.director?.sequence([{slots: [event.slot], durationMs: 1200, boost: 0.3, includeDown: true}, {slots: null, durationMs: 900, boost: -0.08}]);
-        ctx.camera?.director?.shake(0.6);
-        screenFlash = Math.max(screenFlash, 0.45);
+        ctx.camera?.director?.sequence([{slots: [event.slot], durationMs: 900, boost: 0.26, includeDown: true}, {slots: null, durationMs: 700, boost: -0.08}]);
+        ctx.camera?.director?.shake(0.45);
+        // A knockout flashes white once; another inside the comfort gap only flickers.
+        screenFlash = Math.max(screenFlash, elapsed - lastStrongFlashAt >= BATTLE_FX_COMFORT.flashGapMs ? 0.45 : 0.12);
+        if (screenFlash >= 0.45) lastStrongFlashAt = elapsed;
         if (event.teamDown) { showBanner('K.O.!', {size: 44, fill: 0xffe36a, life: 1500}); ctx.camera?.director?.slowMo?.(BATTLE_FX_JUICY.slowMoMs); }
         else { const p = toScreen(ctx, info.x, info.top); word({screenX: p.x, screenY: p.y - 8, content: text('倒下！'), size: 20, fill: 0xffb4a0}); }
       }
@@ -764,15 +930,45 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     }
   }
 
+  /** The hyper aura's baked frames (gold), painted once; null until the pieces are in. */
+  let hyperSheet = null;
+  function hyperAura() {
+    if (hyperSheet) return hyperSheet;
+    if (typeof bakedPieceLook !== 'function' || !bakedPieceLook('hyper-ring')) return null;
+    const palette = {core: 0xfff6c8, main: 0xffd23f, edge: 0xb8741a}, look = bakedPieceLook('hyper-ring');
+    const paint = glow => { const sheet = paintBakedPieceFrames('hyper-ring', palette, {glow}); if (!sheet) return null;
+      return {...sheet, textures: sheet.frames.map(c => { const t = PIXI.Texture.from(c); t.source.scaleMode = glow ? 'linear' : 'nearest'; return t; })}; };
+    const body = paint(false);
+    if (!body) return null;
+    const make = (sheet, add) => { const sp = new PIXI.Sprite(sheet.textures[0]); sp.anchor.set(sheet.ox / sheet.w, sheet.oy / sheet.h); if (add) sp.blendMode = 'add'; sp.visible = false; hyperBaked.addChild(sp); return sp; };
+    const light = paint(true);
+    hyperSheet = {look, body, light, bodySprite: make(body, false), lightSprite: light ? make(light, true) : null};
+    return hyperSheet;
+  }
   /** The special prelude's ring, split in depth round the caster. */
   function drawHyperWrap(view, ctx, dtMs) {
     hyperBack.clear(); hyperFront.clear();
     const focus = view.specialPrelude;
+    const aura = hyperAura();
+    if (aura) { aura.bodySprite.visible = false; if (aura.lightSprite) aura.lightSprite.visible = false; }
     if (!focus?.hyperVisible) { hyper = null; return; }
     const info = ctx.slotInfo?.(focus.slot);
     if (!info) return;
     if (!hyper || hyper.slot !== focus.slot) hyper = {slot: focus.slot, age: 0};
     hyper.age += dtMs;
+    if (aura) {
+      // The caster stands in a gold rune circle with its rising light (pixelfx), in place of the vector ring.
+      const grow = reducedMotion ? 1 : easeOut(clamp(hyper.age / 220, 0, 1));
+      const n = aura.body.textures.length, index = Math.floor(hyper.age / 1000 * aura.look.fps) % n;
+      const k = Math.max(40, info.width * 1.5) / aura.body.w * (0.6 + 0.4 * grow);
+      aura.bodySprite.texture = aura.body.textures[index]; aura.bodySprite.scale.set(k);
+      aura.bodySprite.position.set(Math.round(info.x), Math.round(info.groundY)); aura.bodySprite.visible = true;
+      if (aura.lightSprite) {
+        aura.lightSprite.texture = aura.light.textures[Math.min(index, aura.light.textures.length - 1)]; aura.lightSprite.scale.set(k * 2);
+        aura.lightSprite.position.set(Math.round(info.x), Math.round(info.groundY)); aura.lightSprite.visible = true; aura.lightSprite.alpha = 0.85;
+      }
+      return;
+    }
     const grow = reducedMotion ? 1 : easeOut(clamp(hyper.age / 220, 0, 1));
     const rx = Math.max(20, info.width * 0.68) * (0.6 + 0.4 * grow), ry = rx * 0.34;
     const height = (info.height * 0.9 + 12) * grow, x = info.x, y = info.groundY;
@@ -804,6 +1000,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     lastCtx = ctx;
     elapsed += dtMs;
     observe(view, ctx, dtMs);
+    updateStasis(view, ctx, dtMs);
     handle(events, ctx);
     settleEndings();
     drawStreaks();
@@ -812,6 +1009,9 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     const realMs = dtMs;
     element?.update(dtMs);
     kit?.update(hitStop ? 0 : dtMs);
+    pixelHits?.update(hitStop ? 0 : dtMs);
+    motes?.update(hitStop ? 0 : dtMs);
+    setPieces?.update(hitStop ? 0 : dtMs);
     if (hitStop) dtMs = 0;
     const dt = dtMs / 1000;
     for (let i = particles.length - 1; i >= 0; i--) {
@@ -865,22 +1065,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       groundGfx.ellipse(r.x, r.y, radius, radius * 0.34).stroke({width: r.width * 3 * (1 - k * 0.5), color: r.tint, alpha: 0.35 * fade});
       groundGfx.ellipse(r.x, r.y, radius, radius * 0.34).stroke({width: Math.max(1, r.width * 0.8 * (1 - k * 0.6)), color: mixColor(r.tint, 0xffffff, 0.65), alpha: fade});
     }
-    // Team rings at each fighter's feet (Owner 2026-10-28): green / cyan for the
-    // local side, red / orange for the other, so a clinch still reads as two
-    // teams. Drawn on the existing ground layer; a fallen fighter's ring fades.
-    // Owner 2026-11-03: a soft lit disc with one bright rim, not stroked target
-    // rings; a fallen fighter's ring goes out instead of lingering as a grey disc.
-    for (const combatant of view.combatants ?? []) {
-      if (!combatant.present || combatant.down) continue;
-      const info = ctx.slotInfo?.(combatant.slot);
-      if (!info) continue;
-      const mine = combatant.team === ctx.localTeam;
-      const rx = Math.max(14, info.width * 0.6), ry = rx * 0.32;
-      const core = mine ? 0x3ddc84 : 0xff3b5c, edge = mine ? 0x8ff7ff : 0xffc27a;
-      for (const [k, alpha] of [[1.18, 0.07], [1, 0.1], [0.72, 0.12]]) groundGfx.ellipse(info.x, info.groundY, rx * k, ry * k).fill({color: core, alpha});
-      groundGfx.ellipse(info.x, info.groundY, rx, ry).stroke({width: 3.5, color: core, alpha: 0.35});
-      groundGfx.ellipse(info.x, info.groundY, rx, ry).stroke({width: 1.5, color: edge, alpha: 0.9});
-    }
+    // Team rings at each fighter's feet were removed (Owner 2026-11-09: 「就不能給他們個影子就好了嗎？」): each fighter
+    // stands on its own ground shadow only (battleGroundShadows), and the cards above and below say which side it is.
     drawHyperWrap(view, ctx, realMs);
     for (let i = scorches.length - 1; i >= 0; i--) {
       const s = scorches[i];
@@ -913,7 +1099,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (n.age >= n.life) { n.node.visible = false; numberPool.push(n.node); numbers.splice(i, 1); continue; }
         n.vy += 640 * dt; n.x += n.vx * dt; n.y += n.vy * dt;
         const k = n.age / n.life, pop = reducedMotion ? 1 : n.age < 110 ? lerp(1.7, 1, n.age / 110) : 1;
-        n.node.position.set(clamp(n.x, 18, viewport.width - 18), clamp(reducedMotion ? n.y - n.age * 0.03 : n.y, 18, viewport.height - 12));
+        // The whole number stays on screen and off the HUD card rows (it used to be clipped at an edge or sit on a card's HP).
+        const halfW = Math.max(18, (n.node.width || 0) / 2 + 4), halfH = Math.max(12, (n.node.height || 0) / 2 + 2);
+        const topLimit = Math.max(halfH, (ctx.insets?.top ?? 0) + halfH), bottomLimit = Math.min(viewport.height - halfH, viewport.height - (ctx.insets?.bottom ?? 0) - halfH);
+        n.node.position.set(clamp(n.x, halfW, Math.max(halfW, viewport.width - halfW)),
+          clamp(reducedMotion ? n.y - n.age * 0.03 : n.y, topLimit, Math.max(topLimit, bottomLimit)));
         n.node.scale.set(n.base * pop);
         n.node.alpha = k > 0.7 ? (1 - k) / 0.3 : 1;
         if (n.node.star.visible) n.node.star.rotation += dt * 2.4;
@@ -1034,6 +1224,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     }
     flashGfx.clear();
     if (screenFlash > 0 && !reducedMotion) flashGfx.rect(0, 0, viewport.width, viewport.height).fill({color: 0xffffff, alpha: screenFlash * flashScale});
+    drawStasisEdge(viewport);
   }
 
   /** A fading copy of a fast-moving body: the dash afterimage. */
@@ -1085,8 +1276,12 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     /** True while this layer draws the hyper ring round its caster. */
     hyperWrapActive: () => Boolean(hyper),
     hitStopActive: () => Boolean(hitStop),
+    /** True when a pixel hit burst marks every contact, so the 3D overlay leaves its hit sparks out (SPECIAL_HEX_DECLUTTER_20261111). */
+    ownsHitSparks: () => Boolean(pixelHits),
     /** Afterimage colour while a melee move's dash is live (juicy), else null. */
     ghostTint(slot) { const fx = actorFx.get(slot); return juicy && fx?.dashMs > 0 ? fx.dashTint : null; },
+    /** How far time is stopped for this slot, 0..1 (0: it is moving, or nothing is stopped). */
+    stasisFor: slot => stasis.level > 0 && stasis.slots.has(slot) ? stasis.level : 0,
     /** Brightness 0..1 the scene multiplies into a slot (null: background). */
     brightnessFor(slot) {
       if (!dim) return 1;
@@ -1095,14 +1290,15 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     },
     getDiagnostics: () => Object.freeze({particles: particles.length, peakParticles: peak, created, cap, flashes: flashes.length,
       rings: rings.length, scorches: scorches.length, words: words.length, ghosts: ghosts.length, tracked: tracked.size, eventsHandled,
+      stasis: {level: Math.round(stasis.level * 100) / 100, kind: stasis.kind, slots: [...stasis.slots]},
       hitAnchors: {...anchors}, callout: callout ? {tier: callout.tier, age: callout.age} : null, banner: banner ? banner.node.text : null, dim: Boolean(dim),
       dimStrength: dim?.strength ?? null, juicy, hyperWrap: hyper ? {slot: hyper.slot, age: Math.round(hyper.age)} : null, quartet: {...quartet, numbersLive: numbers.length, capsulesLive: capsules.length, hitStop: Boolean(hitStop)},
       element: element?.getDiagnostics() ?? null, cuesPending: cues.length,
-      moveVfx: kit ? {...kitStats, kit: kit.getDiagnostics()} : null, hitFeel: hitFeel?.getDiagnostics() ?? null}),
+      moveVfx: kit ? {...kitStats, kit: kit.getDiagnostics()} : null, pixelHits: pixelHits?.getDiagnostics() ?? null, motes: motes?.getDiagnostics() ?? null, setPieces: setPieces?.getDiagnostics() ?? null, hitFeel: hitFeel?.getDiagnostics() ?? null}),
     /** Bounded 3D cues since the last call (buff, critical, signature weather), oldest first. */
     consumeCues: () => cues.splice(0),
     dispose() {
-      for (const node of [scorchLayer, groundGfx, hyperBack, ghostLayer, hyperFront, trailGfx, particleLayer, flashLayer, speedGfx, barGfx, wordLayer, numberLayer, calloutLayer, flashGfx]) {
+      for (const node of [stasisBack, stasisFront, stasisEdge, scorchLayer, groundGfx, hyperBack, ghostLayer, hyperFront, trailGfx, particleLayer, flashLayer, speedGfx, barGfx, wordLayer, numberLayer, calloutLayer, flashGfx]) {
         node.parent?.removeChild(node);
         node.destroy({children: true});
       }
@@ -1110,6 +1306,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       hitStop = null;
       element?.dispose();
       kit?.dispose(); standIns.clear();
+      pixelHits?.dispose(); motes?.dispose(); burstAt.clear(); setPieces?.dispose();
       cues.length = 0;
       for (const sprite of [...particlePool, ...flashPool, ...ghostPool]) if (!sprite.destroyed) sprite.destroy();
       for (const texture of [textures.flash, textures.dust, textures.spark, textures.dot, textures.scorch, ...textures.debris]) texture.destroy(true);

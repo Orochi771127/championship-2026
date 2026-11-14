@@ -27,7 +27,8 @@ export const AUTOMATION_ITEMS = deepFreeze([
   { id: "auto:clean-core", kind: "CORE", rarity: "SR", name: "奈米掃地機器人", module: "AUTO_CLEAN", modules: ["AUTO_CLEAN"], art: `${ART}auto_clean_core_160.webp` },
   { id: "auto:feed-core", kind: "CORE", rarity: "SR", name: "智慧自動餵食機", module: "AUTO_FEED", modules: ["AUTO_FEED"], art: `${ART}auto_feed_core_160.webp` },
   { id: "auto:royal-core", kind: "CORE", rarity: "SSR", name: "皇家雙效核心", modules: ["AUTO_CLEAN", "AUTO_FEED"], art: `${ART}auto_royal_core_160.webp` },
-  { id: "auto:royal-ranch", kind: "ROYAL_CAGE", rarity: "SSR", name: "全自動皇家牧場", edition: "ROYAL_RANCH", baseDefinition: 25, cageDefinition: 36, art: `${ART}royal_ranch_160.webp` },
+  // Owner 2026-11-09: the royal ranch is UR, the same grade as the stellar zoo (and the same forging recipe).
+  { id: "auto:royal-ranch", kind: "ROYAL_CAGE", rarity: "UR", name: "全自動皇家牧場", edition: "ROYAL_RANCH", baseDefinition: 25, cageDefinition: 36, art: `${ART}royal_ranch_160.webp` },
   { id: "auto:stellar-zoo", kind: "ROYAL_CAGE", rarity: "UR", name: "全自動星際動物園", edition: "STELLAR_ZOO", baseDefinition: 24, cageDefinition: 37, art: `${ART}stellar_zoo_160.webp` }
 ]);
 
@@ -49,7 +50,7 @@ export const AUTOMATION_RECIPES = deepFreeze([
   { id: "auto:clean-core", chips: 5, shards: 2 },
   { id: "auto:feed-core", chips: 5, shards: 2 },
   { id: "auto:royal-core", chips: 8, shards: 4 },
-  { id: "auto:royal-ranch", chips: 5, shards: 6 },
+  { id: "auto:royal-ranch", chips: 5, shards: 10 },
   { id: "auto:stellar-zoo", chips: 5, shards: 10 }
 ]);
 

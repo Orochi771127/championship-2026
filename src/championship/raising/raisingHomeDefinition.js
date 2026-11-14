@@ -289,12 +289,19 @@ export function reduceRaisingHome(state, command) {
 }
 
 /** Pure elapsed transition. It deliberately has no resident or interaction effects. */
-export function advanceRaisingHomeClock(state, units, subunits = 0, divisor = 400, clearElapsed = false) {
+export function advanceRaisingHomeClock(state, units, subunits = 0, divisor = 400, clearElapsed = false, calendar = null) {
   if (!state || state.modeId !== "raising-home") throw new TypeError("A raising-home state is required");
   if (typeof clearElapsed !== "boolean") throw new TypeError("Clock clearElapsed must be boolean");
   let advanced = advanceWorldClockUnits(state, units, { subunits, divisor });
+  // WEEKLY_SEASON_20261110 (Owner 2026-11-10, real-time clock only): the calendar slots follow the device date
+  // (time/monthlyCalendar.js) instead of the eight-day cascade. Validated by createWorldClock.
+  const aligned = calendar === null ? null : createWorldClock({ ...advanced, year: calendar.year, season: calendar.season, dayOfSeason: calendar.dayOfSeason });
+  const realigns = aligned !== null && (aligned.year !== state.year || aligned.season !== state.season || aligned.dayOfSeason !== state.dayOfSeason);
+  if (aligned !== null) advanced = aligned;
   const hasDelta = units !== 0 || subunits !== 0;
-  if (!hasDelta) {
+  if (!hasDelta && realigns) {
+    if (state.paused) return state;
+  } else if (!hasDelta) {
     if (!clearElapsed || (state.clockUnits === 0 && state.clockSubunits === 0)) return state;
     // Stop clears the accumulator without first dividing a remainder inherited
     // from another divisor. It cannot advance a minute on its own.

@@ -3,7 +3,7 @@ import { AWAKENED_FORM_NAMES, AWAKENED_SECOND_TIER_NAMES } from "./growthStageTe
 
 export const GENERATIONS_TH = Object.freeze(["ไข่", "ทารก I", "ทารก II", "วัยเจริญเติบโต", "วัยเจริญเต็มที่", AWAKENED_FORM_NAMES.th, AWAKENED_SECOND_TIER_NAMES.th]);
 export const PERSONALITIES_TH = Object.freeze(["ซื่อตรง", "เอาแต่ใจ", "ใจร้อน", "สบายๆ", "กระตือรือร้น", "สุขุม", "กล้าหาญ", "ขี้ขลาด", "???"]);
-export const ROSTER_FAMILIES_TH = Object.freeze(["ไม่มี", "สัตว์ป่า", "เครื่องจักร", "แมลงและพืช", "สัตว์ปีก", "มังกร", "สัตว์น้ำ", "ศักดิ์สิทธิ์", "ความมืด"]);
+export const ROSTER_FAMILIES_TH = Object.freeze(["ไม่มี", "เผ่าสัตว์ป่า", "เผ่าจักรกล", "เผ่าพงไพร", "เผ่าปีก", "เผ่ามังกร", "เผ่าห้วงน้ำ", "เผ่าดวงดาว", "เผ่ายมโลก"]);
 export const TAMER_RANK_NAMES_TH = Object.freeze(["เขียว", "น้ำเงิน", "แดง", "ขาว", "บรอนซ์", "ซิลเวอร์", "โกลด์", "แพลตทินัม", "แชมเปียน", "มาสเตอร์"]);
 export const SPECIAL_SKILLS_TH = Object.freeze(["ไม่มี", "ยั่วยุ", "ฟื้นฟู α", "ฟื้นฟู β", "ฟื้นฟู γ", "ฟื้นฟูทั้งหมด α", "ฟื้นฟูทั้งหมด β", "ฟื้นฟูทั้งหมด γ",
   "ชำระล้าง", "ชำระล้างทั้งหมด", "เพิ่มพลังโจมตี", "เพิ่มพลังโจมตีทั้งหมด", "ป้องกัน", "ป้องกันทั้งหมด", "เร่งความเร็ว", "เร่งความเร็วทั้งหมด", "รับรู้", "รับรู้ทั้งหมด",
@@ -13,8 +13,8 @@ export const MODE_LABELS_TH = Object.freeze({ RAISING: "การดูแล", 
 export const STAT_LABELS_TH = Object.freeze({ HP: "HP", TP: "TP", ATTACK: "พลังโจมตี", DEFENSE: "พลังป้องกัน", WISDOM: "สติปัญญา", SPEED: "ความเร็ว" });
 export const RESIST_LABELS_TH = Object.freeze({ ねつ: "ต้านทานความร้อน", さむさ: "ต้านทานความเย็น", かみなり: "ต้านทานสายฟ้า", ひかり: "ต้านทานแสง", やみ: "ต้านทานความมืด" });
 export const FAMILY_LABELS_TH = Object.freeze({
-  ワクチン: "วัคซีน", データ: "ข้อมูล", リュウ: "มังกร", ケモノ: "สัตว์ป่า", ミズ: "สัตว์น้ำ", トリ: "สัตว์ปีก",
-  キカイ: "เครื่องจักร", セイ: "ศักดิ์สิทธิ์", ムシクサ: "แมลงและพืช", アンコク: "ความมืด", ウイルス: "ไวรัส"
+  ワクチン: "ลูเมน", データ: "เหล็กดำ", リュウ: "เผ่ามังกร", ケモノ: "เผ่าสัตว์ป่า", ミズ: "เผ่าห้วงน้ำ", トリ: "เผ่าปีก",
+  キカイ: "เผ่าจักรกล", セイ: "เผ่าดวงดาว", ムシクサ: "เผ่าพงไพร", アンコク: "เผ่ายมโลก", ウイルス: "รอยแยก"
 });
 
 export const CAGE_NAMES_TH = Object.freeze({
@@ -51,6 +51,7 @@ export const GATE_NAMES_TH = Object.freeze({
 });
 
 export const BATTLE_FACE_LABELS_TH = Object.freeze({
+  JOURNEY: "การเดินทาง",
   CHAMPIONSHIP: "แชมเปียนชิป",
   TITLE_MATCH: "การแข่งชิงตำแหน่ง",
   FREE_BATTLE: "การต่อสู้อิสระ",
@@ -61,9 +62,27 @@ export const BATTLE_FACE_LABELS_TH = Object.freeze({
 
 export const BATTLE_MENU_LABELS_TH = Object.freeze({
   menu: "เมนูการต่อสู้", kicker: "การต่อสู้", chooseMatch: "เลือกการแข่งขัน",
-  faceNotice: "ลากลูกบาศก์หรือใช้ปุ่มลูกศรซ้ายขวาเพื่อเลือกโหมด จากนั้นเลือกการแข่งขันที่ต้องการเข้าร่วม",
+  faceNotice: "ปัดซ้ายขวาเพื่อหมุนปริซึม แล้วแตะหน้าใดก็ได้เพื่อเข้าสู่โหมดนั้น",
   availableMatches: "การแข่งขันที่เข้าร่วมได้", noMatch: "ไม่มีการแข่งขันที่เปิดอยู่ในขณะนี้",
   match: "การแข่งขัน", noPayout: "ไม่มีเงินรางวัล", returnHome: "กลับสู่ฟาร์ม", conference: "ทัวร์นาเมนต์หลายรอบ"
+});
+
+export const BATTLE_FACE_TAGLINES_TH = Object.freeze({
+  JOURNEY: "หอคอย ลาดตระเวน เขตสงคราม",
+  CHAMPIONSHIP: "ถ้วยหลายรอบ ชิงเหรียญรางวัล",
+  TITLE_MATCH: "แข่งตามปฏิทิน ชิงตำแหน่ง",
+  FREE_BATTLE: "เลือกคู่ต่อสู้ได้อย่างอิสระ",
+  LINK_BATTLE: "แลกโค้ดลิงก์ สู้กับเพื่อน",
+  PASSWORD_BATTLE: "ท้าสู้ด้วยรหัสทีม",
+  PRACTICE_BATTLE: "ซ้อมระหว่างคู่หูของคุณเอง"
+});
+
+export const BATTLE_PRISM_LABELS_TH = Object.freeze({
+  canvas: "ปริซึมโหมดการต่อสู้: ปัดเพื่อหมุน แตะหน้าเพื่อเข้าโหมดนั้น",
+  enter: "แตะเพื่อเข้า",
+  current: "เลือกอยู่",
+  previous: "โหมดก่อนหน้า",
+  next: "โหมดถัดไป"
 });
 
 export const UNKNOWN_DIGIMON_TH = "สิ่งมีชีวิตที่ไม่รู้จัก";

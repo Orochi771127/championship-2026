@@ -139,7 +139,8 @@ test('locked identity remains redacted; explicit viewable uses the same existing
     assert.equal(f.detail.textContent.includes('SECRET-8'),viewable);
     assert.equal(f.detail.textContent.includes('story-8'),viewable);
     // Owner 2026-10-30: route cards draw the Dex illustration, so no HUD portrait is requested.
-    assert.equal(f.calls.hero.includes(8),viewable);assert.equal(f.calls.art.includes(8),false);
+    // Owner 2026-11-04: a locked partner still asks for its Dex picture, drawn only as a black silhouette.
+    assert.equal(f.calls.hero.includes(8),true);assert.equal(f.calls.art.includes(8),false);
     assert.equal(f.calls.story.includes(8),viewable);f.checkUnchanged();f.dispose();
   }
 });

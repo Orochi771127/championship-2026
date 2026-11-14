@@ -37,8 +37,64 @@ export function isCageLandscapeLayout({width,height,activeScreen,hidden=false}) 
 }
 // Entry owns a dedicated art-and-controls composition, not a stretched scene.
 export function isLandscapeEntryLayout({width,height,hidden=false}) {
-  return Number.isFinite(width)&&Number.isFinite(height)&&width>=720&&height>=320
+  // 640 (was 720 until 2026-11-11): a 667x375 phone held sideways fell back to the upright
+  // poster scaled into the middle of the screen, with its key hanging off the bottom.
+  return Number.isFinite(width)&&Number.isFinite(height)&&width>=640&&height>=320
     &&width>=height+160&&!hidden;
+}
+// Three layout sets (Owner 2026-11-11): phone upright, phone sideways, desktop. The desktop
+// set is drawn for a 1366x768 window; a larger desktop window shows that same layout larger
+// (one CSS zoom on <html>) instead of the same controls ever smaller in an ever larger void.
+// Steps of 0.05 keep hairlines crisp; under 1.1 the gain is not worth resampling the art.
+// Phones and tablets (coarse pointer, mobile UA) never zoom: their sets are already sized by
+// the device. The title and opening keep their own full-bleed composition.
+export const DESKTOP_UI_REFERENCE = Object.freeze({width:1366,height:768});
+export const DESKTOP_UI_ZOOM_MAX = 2;
+export function desktopUiZoom({width,height,touch=false,gameVisible=true}={}) {
+  if(!gameVisible||touch||!Number.isFinite(width)||!Number.isFinite(height))return 1;
+  const raw=Math.min(width/DESKTOP_UI_REFERENCE.width,height/DESKTOP_UI_REFERENCE.height);
+  const stepped=Math.floor(Math.min(DESKTOP_UI_ZOOM_MAX,raw)*20+1e-6)/20;
+  return stepped>=1.1?stepped:1;
+}
+// The set a window belongs to, by its size in page pixels: "desktop" from 1024x600,
+// "sideways" for a window wider than tall and at most 520px high (a phone held sideways),
+// "upright" for everything else (phones upright, tablets, narrow desktop windows). Published
+// as <html data-layout-set> so a sheet or a test can name the set it is written for.
+export const LAYOUT_SETS = Object.freeze(['upright','sideways','desktop']);
+export function layoutSetFor({width,height}={}) {
+  if(!(width>0&&height>0))return 'upright';
+  if(width>height&&height<=520)return 'sideways';
+  return width>=1024&&height>=600?'desktop':'upright';
+}
+// One rule for every screen (Owner 2026-11-11: 「以後有不同大小的螢幕寬比…讓他自適應」). Each set is
+// drawn for one reference window, and the two ends of the range show their set scaled as a
+// whole:
+//   desktop   1366x768   a larger desktop window shows it larger (desktopUiZoom)
+//   upright   390x667    a phone narrower or shorter than about 350x600 shows it smaller
+//   sideways  667x390    a phone shorter than about 350px held sideways shows it smaller
+// Between the ends the sheets' own breakpoints do the adapting (two columns from 700px,
+// compact rows under 520px high, and so on). Phones and tablets are never scaled up: CSS
+// media queries read the real window, so a tablet zoomed to a 512px layout would still get
+// the rules written for 768px (measured: the tool rail's captions turned on their side).
+// Scaling down is safe in that respect: the narrow-window rules it also triggers only
+// compact further. The phones the sets were drawn on (360px and wider) are exactly as before.
+export const UPRIGHT_UI_REFERENCE = Object.freeze({width:390,height:667});
+export const SIDEWAYS_UI_REFERENCE = Object.freeze({width:667,height:390});
+export const UI_ZOOM_MIN = 0.8;
+export function interfaceZoom({width,height,touch=false,gameVisible=true}={}) {
+  if(!gameVisible||!Number.isFinite(width)||!Number.isFinite(height)||!(width>0&&height>0))return 1;
+  const set=layoutSetFor({width,height});
+  if(set==='desktop')return desktopUiZoom({width,height,touch,gameVisible});
+  const reference=set==='sideways'?SIDEWAYS_UI_REFERENCE:UPRIGHT_UI_REFERENCE;
+  const raw=Math.min(width/reference.width,height/reference.height);
+  if(raw>0.9)return 1;
+  return Math.floor(Math.max(UI_ZOOM_MIN,raw)*20+1e-6)/20;
+}
+function touchDevice(win) {
+  try{
+    if(win.matchMedia?.('(pointer: coarse)')?.matches===true&&win.matchMedia?.('(any-pointer: fine)')?.matches!==true)return true;
+    return /iPhone|iPad|iPod|Android|Mobile/i.test(String(win.navigator?.userAgent??''));
+  }catch{return false;}
 }
 // The standalone viewport can be taller than CSS dvh on iOS. Paint the title
 // to the measured viewport, while the existing controls retain safe-area insets.
@@ -97,11 +153,36 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
   const titleProperties=['--cm-title-viewport-height','--cm-title-viewport-top'];
   const appProperties=['--cm-app-viewport-height'];
   const properties=['--cm-frame-scale','--cm-viewport-height','--cm-frame-center-x','--cm-frame-center-y'];
-  let sideways=null,inputBaseline=null,disposed=false;
-  const layoutHeight=()=>inputBaseline&&Math.abs(win.innerWidth-inputBaseline.width)<=1&&win.innerHeight<inputBaseline.height
-    ? inputBaseline.height : win.innerHeight;
-  const browseWide=(activeScreen=root?.dataset.activeScreen)=>isDesktopBrowseLayout({width:win.innerWidth,height:layoutHeight(),activeScreen,hidden:root?.hidden})
-    ||(responsiveMenus&&['SHOP','DATABASE'].includes(activeScreen)&&isCompactLandscapeMenuLayout({width:win.innerWidth,height:layoutHeight(),activeScreen,hidden:root?.hidden}));
+  let sideways=null,inputBaseline=null,disposed=false,uiZoom=1,titleScale=1;
+  // Layout sizes are the window's size in the page's own (zoomed) CSS pixels.
+  const layoutWidth=()=>win.innerWidth/uiZoom;
+  const layoutHeight=()=>(inputBaseline&&Math.abs(win.innerWidth/uiZoom-inputBaseline.width)<=1&&win.innerHeight/uiZoom<inputBaseline.height
+    ? inputBaseline.height : win.innerHeight/uiZoom);
+  const titleRoot=doc.getElementById?.('cm-title');
+  function applyUiZoom(){
+    const next=interfaceZoom({width:win.innerWidth,height:win.innerHeight,touch:touchDevice(win),
+      gameVisible:!!root&&!root.hidden&&(!titleRoot||titleRoot.hidden)});
+    const html=doc.documentElement;
+    // The title keeps its own full-bleed picture (no page zoom), but on a large desktop
+    // window its logo, keys and strolling partners take the scale the game will have, so
+    // entering the game does not jump from a small menu to a large one (Owner 2026-11-11).
+    const titleShown=!!titleRoot&&!titleRoot.hidden;
+    const nextTitle=titleShown?desktopUiZoom({width:win.innerWidth,height:win.innerHeight,touch:touchDevice(win),gameVisible:true}):1;
+    if(html&&nextTitle!==titleScale){
+      titleScale=nextTitle;
+      if(nextTitle!==1)html.style.setProperty('--cm-title-scale',String(nextTitle));
+      else html.style.removeProperty?.('--cm-title-scale');
+    }
+    if(next===uiZoom)return;
+    uiZoom=next;
+    if(!html)return;
+    if(next!==1){html.style.zoom=String(next);html.style.setProperty('--cm-ui-zoom',String(next));html.dataset.uiZoom=String(next);}
+    else{html.style.removeProperty?.('zoom');html.style.removeProperty?.('--cm-ui-zoom');delete html.dataset.uiZoom;}
+    // Canvases size their backing store from the device pixel ratio times this zoom.
+    win.dispatchEvent?.(new (win.Event??Event)('cm-ui-zoom'));
+  }
+  const browseWide=(activeScreen=root?.dataset.activeScreen)=>isDesktopBrowseLayout({width:layoutWidth(),height:layoutHeight(),activeScreen,hidden:root?.hidden})
+    ||(responsiveMenus&&['SHOP','DATABASE'].includes(activeScreen)&&isCompactLandscapeMenuLayout({width:layoutWidth(),height:layoutHeight(),activeScreen,hidden:root?.hidden}));
   const editing=()=>{
     const e=doc.activeElement;
     return !!e&&(e.isContentEditable||e.tagName==='TEXTAREA'||(e.tagName==='INPUT'&&
@@ -123,8 +204,10 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
   }
   function update(event){
     if(disposed)return;
-    const width=win.innerWidth,height=win.innerHeight;
-    if(!(width>0&&height>0))return;
+    if(!(win.innerWidth>0&&win.innerHeight>0))return;
+    applyUiZoom();
+    const width=win.innerWidth/uiZoom,height=win.innerHeight/uiZoom;
+    if(doc.documentElement?.dataset)doc.documentElement.dataset.layoutSet=layoutSetFor({width,height});
     // Opening cards are device-size DOM even inside the scaled title frame.
     // A software keyboard can shrink only the visual viewport; expose that
     // budget independently of frame orientation, without counteracting zoom.
@@ -139,7 +222,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     // the legacy sideways frame still owns its separate logical 390px space.
     const standalone=installedTitle(win);
     body.toggleAttribute('data-web-app',standalone);
-    if(standalone)body.style.setProperty('--cm-app-viewport-height',`${titleViewportMetrics(win,doc,hasInput).height}px`);
+    if(standalone)body.style.setProperty('--cm-app-viewport-height',`${titleViewportMetrics(win,doc,hasInput).height/uiZoom}px`);
     else for(const name of appProperties)body.style.removeProperty(name);
     if(title){
       body.toggleAttribute('data-title-standalone',installedTitle(win));
@@ -246,6 +329,8 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     visual?.removeEventListener('scroll',update);
     screenOrientation?.removeEventListener?.('change',orientationChanged);
     doc.removeEventListener('focusin',update);doc.removeEventListener('focusout',update);
+    if(doc.documentElement?.dataset)delete doc.documentElement.dataset.layoutSet;
+    if(uiZoom!==1){doc.documentElement?.style.removeProperty?.('zoom');doc.documentElement?.style.removeProperty?.('--cm-ui-zoom');delete doc.documentElement?.dataset.uiZoom;uiZoom=1;}
     body.removeAttribute('data-portrait-frame');
     body.removeAttribute('data-landscape-entry');
     body.removeAttribute('data-title-standalone');

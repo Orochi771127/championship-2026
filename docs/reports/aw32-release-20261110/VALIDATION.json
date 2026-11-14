@@ -1,0 +1,43 @@
+{
+  "status": "LOCAL_BROWSER_AND_BUILD_PASS_FULL_CI_RECHECK_PENDING",
+  "role": "AW32",
+  "sources": "Owner approved General R1 52 own poses / Arena final86. Source four-part SHA previously read back in private archive.",
+  "General": {
+    "callers": 53,
+    "events": 83
+  },
+  "Arena": {
+    "sourceSequences": 65,
+    "events": 538,
+    "victoryReuse": "General Main33"
+  },
+  "frameRecords": 306,
+  "runtimePages": 15,
+  "runtimeBytes": 19894571,
+  "calibration": "R12 32 annotated support poses; fixed density5; no per-frame bbox scaling; source repeated pivot/event order/ticks unchanged",
+  "normalGameplay": {
+    "movingSamples": 118,
+    "worldPositions": 82,
+    "attackObserved": true,
+    "headingChecks": 8,
+    "errors": [],
+    "missing": [],
+    "atomicSamples": 1621,
+    "nativeVisualMismatches": 0,
+    "Main3FastSamples": 12
+  },
+  "tests": {
+    "focusedPassed": 10,
+    "fullCI": "First run 3569 passed / 3 stale data pins; exact AW32 selection and index pins updated, full rerun pending",
+    "compiledBrowser": "PASS: unmodified external-character build, 16 AW32 files, ranch/Arena at three viewports",
+    "repairedBoundaryTests": 15
+  },
+  "limits": [
+    "Physical phone not measured; prior R11 mobile CPU4x measurement is not a current physical device pass.",
+    "Controlled all-pose overlay and native event checks supplement normal gameplay; not every rare state naturally triggered.",
+    "General original pixels retained; Arena uniform half-canvas derivative retained from visually verified R11, with original master preserved.",
+    "Presentation release remains aligned to existing CAST_RELEASE; gameplay timing and damage unchanged."
+  ],
+  "deployed": false,
+  "buildId": "6f6e10bb6dd510bd463a5eea103ad2e97c26e4f77de6ab302c310095407f1a1a"
+}

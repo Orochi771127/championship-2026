@@ -165,6 +165,19 @@ function cageSpec(extra = {}) {
   };
 }
 
+// The partner list (管理 → 夥伴名單, and the ranch card's body).
+function rosterSpec(extra = {}) {
+  return {
+    groups: { status: STATUS, title: '.cm-digimon-title', list: '.cm-digimon-list', detail: '.cm-digimon-detail', controls: '.cm-digimon-controls', footer: '.cm-screen-footer', ...(extra.groups ?? {}) },
+    // The page scrolls under its pinned footer by design; what must clear the footer is checked at the list's end (lists).
+    allowOverlap: [['list', 'footer'], ['detail', 'footer'], ['controls', 'footer']],
+    primary: ['.cm-digimon-item__button', '.cm-digimon-control', '.cm-digimon-back', '.cm-element-chart-button'],
+    mustSee: [{ selector: '.cm-digimon-back', role: 'exit' }, { selector: '.cm-digimon-item__button' }],
+    lists: [{ container: '.cm-digimon-shell', item: '.cm-digimon-stat, .cm-digimon-control', covers: ['.cm-screen-footer'] }],
+    ...extra.more
+  };
+}
+
 async function slice1(run, { repo }) {
   const { page } = run;
   // A. The New Game opening: tamer name, gift letters, egg choice, egg name.
@@ -178,9 +191,27 @@ async function slice1(run, { repo }) {
     if (await replace.isVisible().catch(() => false)) await replace.click();
     await page.locator('.cm-opening-story').waitFor({ state: 'visible', timeout: 20000 }).catch(() => {});
     await run.check('opening-story', { primary: [] });
-    for (let i = 0; i < 40 && !(await page.locator('.cm-opening__envelope').count()); i += 1) {
-      await page.locator('.cm-opening-story').click({ force: true }).catch(() => {});
-      await page.waitForTimeout(250);
+    // Since 2026-11-03 the story stops at Ai-chan's cat / catgirl choice: read page by page,
+    // measure the choice, answer it with its own key.
+    let choiceChecked = false;
+    for (let i = 0; i < 160 && !(await page.locator('.cm-opening__envelope').count()); i += 1) {
+      const beat = await page.evaluate(() => {
+        const root = document.querySelector('.cm-opening-story');
+        return root ? { kind: root.dataset.beatKind, typing: root.dataset.typing, busy: root.getAttribute('aria-busy') } : null;
+      });
+      if (beat?.kind === 'choice' && beat.typing === 'false') {
+        if (!choiceChecked) {
+          choiceChecked = true;
+          await run.check('opening-story-choice', { mustSee: [{ selector: '[data-story-choice="cat"]' }, { selector: '[data-story-choice="catgirl"]' }, { selector: '.cm-cutscene__skip' }],
+            primary: ['[data-story-choice]'] });
+        }
+        await page.click('[data-story-choice="cat"]').catch(() => {});
+      } else if (beat?.busy === 'true') await page.locator('[data-story-action="text"]').click().catch(() => {});
+      else {
+        const size = page.viewportSize();
+        await page.locator('.cm-opening-story').click({ position: { x: size.width / 2, y: size.height * 0.42 }, force: true }).catch(() => {});
+      }
+      await page.waitForTimeout(180);
     }
     await run.check('opening-envelope', { mustSee: [{ selector: '.cm-opening__envelope' }] });
     await run.tap('.cm-opening__envelope', { state: 'opening-envelope', what: '信封' });
@@ -243,12 +274,13 @@ async function slice1(run, { repo }) {
   });
   await run.step('ranch-detail', async () => {
     if (!(await page.locator('.int-rh2-companion[data-open="true"]').isVisible().catch(() => false))) await selectResident(run, 1);
+    // Since the roster hookup the card's body opens the partner list on that partner.
     await run.tap('.int-rh2-companion__copy', { state: 'ranch-detail', what: '夥伴詳細' });
-    await page.locator('.int-rh2-detail[open]').waitFor({ state: 'visible', timeout: 8000 });
-    await markExit(run, '.int-rh2-detail[open]');
-    await run.check('ranch-detail', { scope: ['.int-rh2-detail[open]'], mustSee: [{ selector: '[data-vh-exit]', role: 'exit' }], primary: ['[data-vh-exit]'] });
-    await run.tap('[data-vh-exit]', { state: 'ranch-detail', what: '關閉夥伴詳細' });
-    await page.locator('.int-rh2-detail[open]').waitFor({ state: 'hidden', timeout: 5000 });
+    await run.waitScreen('DIGIMON_LIST');
+    await page.locator('.cm-digimon-detail').waitFor({ state: 'visible', timeout: 8000 });
+    await run.check('ranch-detail', rosterSpec());
+    await run.tap('.cm-digimon-back', { state: 'ranch-detail', what: '返回牧場' });
+    await run.waitHome(30000);
     await page.locator('.int-rh2-companion__close').click().catch(() => {});
     await run.check('ranch-detail-closed', { residue: { baseLayers: ['#cm-root', '.cm-status-bar', '.cm-toolbar'] }, expectScreen: 'RAISING_HOME', intervalBaseline: run.intervalBaseline });
   });
@@ -653,24 +685,34 @@ async function slice4(run, { repo }) {
       await run.tap('.cm-toolbar__quick-entry[data-quick-id="battle"]', { state: 'battle-menu', what: '對戰' });
       await run.waitScreen('BATTLE_SELECT');
     }
-    await page.locator('.cm-vs5-cube__face').first().waitFor({ state: 'visible', timeout: 15000 });
+    await page.locator('.cm-vs5-cube__canvas').first().waitFor({ state: 'visible', timeout: 15000 });
+  };
+  // The mode prism (2026-11-09) has no key row: turn it with its arrow keys until the
+  // mode faces the player, then tap the prism, as a player does.
+  const battleFace = async (face, state, what) => {
+    for (let turn = 0; turn < 8; turn++) {
+      if (await page.locator('.cm-vs5-prism__caption').getAttribute('data-face-id') === face) break;
+      await run.tap('.cm-vs5-prism__turn--next', { state, what: '下一個模式' });
+      await run.settle(450);
+    }
+    await run.tap('.cm-vs5-cube__canvas', { state, what });
   };
   const battleSpec = (extra = {}) => ({
     groups: { status: STATUS, title: '.cm-vs5-header, .cm-vs2-header', footer: '.cm-vs5-footer, .cm-screen-footer', ...(extra.groups ?? {}) },
-    primary: ['.cm-vs5-cube__face', '.cm-vs5-exit', '.cm-vs5-action--primary', ...(extra.primary ?? [])],
+    primary: ['.cm-vs5-prism__turn', '.cm-vs5-exit', '.cm-vs5-action--primary', ...(extra.primary ?? [])],
     mustSee: extra.mustSee ?? [{ selector: '.cm-vs5-exit', role: 'exit' }],
     lists: extra.lists ?? [], exclude: extra.exclude ?? [] });
   await run.step('battle-menu', async () => {
     await battleMenu();
     await run.check('battle-menu', battleSpec({ mustSee: [{ selector: '.cm-vs5-exit', role: 'exit' }, { selector: '#cm-data-arena' }, { selector: '.cm-vs5-match__enter' }] }));
-    await run.tap('.cm-vs5-cube__face[data-face-id="FREE_BATTLE"]', { state: 'battle-free', what: '自由對戰' });
+    await battleFace('FREE_BATTLE', 'battle-free', '自由對戰');
     await run.check('battle-free', battleSpec({ lists: [{ container: '.cm-vs5-root, .cm-vs5-shell', item: '.cm-vs5-match__enter', covers: ['.cm-vs5-footer', '.cm-screen-footer'] }] }));
   });
   for (const face of ['LINK_BATTLE', 'PASSWORD_BATTLE']) {
     const state = face === 'LINK_BATTLE' ? 'battle-link-lobby' : 'battle-password-lobby';
     await run.step(state, async () => {
       await battleMenu();
-      await run.tap(`.cm-vs5-cube__face[data-face-id="${face}"]`, { state, what: face === 'LINK_BATTLE' ? '通訊對戰' : '密碼對戰' });
+      await battleFace(face, state, face === 'LINK_BATTLE' ? '通訊對戰' : '密碼對戰');
       await run.settle(800);
       const enter = page.locator('.cm-vs5-match__enter').first();
       if (await enter.isVisible().catch(() => false)) { await enter.click(); await run.settle(1200); }
@@ -682,7 +724,7 @@ async function slice4(run, { repo }) {
   }
   await run.step('battle-team', async () => {
     await battleMenu();
-    await run.tap('.cm-vs5-cube__face[data-face-id="FREE_BATTLE"]', { state: 'battle-team', what: '自由對戰' });
+    await battleFace('FREE_BATTLE', 'battle-team', '自由對戰');
     await run.tap('.cm-vs5-match__enter', { state: 'battle-team', what: '第一場賽事' });
     await page.locator('.cm-vs5-action--primary').first().waitFor({ state: 'visible', timeout: 10000 });
     const member = page.locator('.cm-vs5-action:not(.cm-vs5-action--primary)').filter({ hasText: 'HP' }).first();
@@ -976,4 +1018,4 @@ const SLICES = Object.freeze({
   5: { title: '故事模式、馴獸師執照、炫耀名片、雲端通行證與社群連結塢', run: slice5, evidence: ['story-map', 'story-dialogue', 'story-log', 'echoes-dialogue', 'tamer', 'friends', 'passport-bind', 'social-dock'] }
 });
 
-module.exports = { SLICES, Unreachable, ranchSpec, cageSpec, qaSave, continueWith, selectResident, markExit, home, STATUS, RANCH_GROUPS };
+module.exports = { SLICES, Unreachable, ranchSpec, rosterSpec, cageSpec, qaSave, continueWith, selectResident, markExit, home, reveal, systemEntry, STATUS, RANCH_GROUPS, SAVE_KEY };

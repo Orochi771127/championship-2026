@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {assertPagesPayloadSize,PAGES_SITE_BYTE_LIMIT} from '../scripts/lib/pages-payload-size.mjs';
+import {assertPagesPayloadSize,PAGES_SITE_BYTE_LIMIT,deployedPagesRows} from '../scripts/lib/pages-payload-size.mjs';
 test('publication counts all actual output bytes, rather than transfer compression or only new assets',()=>{
  assert.equal(assertPagesPayloadSize([{path:'one',bytes:12},{path:'two',bytes:8}],20),20);
  assert.throws(()=>assertPagesPayloadSize([{path:'one',bytes:12},{path:'two',bytes:9}],20),/PUBLIC_PAGES_SITE_SIZE/);
@@ -9,4 +9,10 @@ test('publication counts all actual output bytes, rather than transfer compressi
 });
 test('invalid output sizes cannot turn a quota failure into a passing receipt',()=>{
  for(const bytes of [-1,NaN,Infinity,'10'])assert.throws(()=>assertPagesPayloadSize([{path:'invalid',bytes}]),/PUBLIC_PAGES_FILE_SIZE_INVALID/);
+});
+test('a plain build leaves the externally hosted character art out of the deployed-site count',()=>{
+ const rows=[{path:'assets/production/characters/a.webp',bytes:600},{path:'src/app.js',bytes:300}];
+ assert.deepEqual(deployedPagesRows(rows,{characterPrefix:'assets/production/characters/'}).map(r=>r.path),['src/app.js']);
+ assert.equal(deployedPagesRows(rows,{external:true,characterPrefix:'assets/production/characters/'}).length,2,'an external build counts every file it ships');
+ assert.throws(()=>assertPagesPayloadSize(deployedPagesRows([{path:'src/big.js',bytes:30}],{characterPrefix:'assets/production/characters/'}),20),/PUBLIC_PAGES_SITE_SIZE/);
 });

@@ -63,6 +63,8 @@ function ownerFixture(target,{hudLoad=async()=>hud([cell('result')]),stageLoad=n
     mountBattleResultCharacters,classifyBattleResultFeedback:()=>highlight?'highlight':null,nativeBattleWinPercent:()=>null,
     // Owner 2026-10-29: the won battle's brag card key; navigation never waits on it.
     battleResultBrag:()=>null,
+    // Owner 2026-11-12: the battle warms its fighters' action portraits; the plates' mini portraits draw them.
+    warmActionPortraits(){},setActionPortrait:()=>null,
     playResultHighlight(_request,getStage){highlightStages.push(getStage);},
     resultHeroAnchor(){},resultStageLight(){},uiText:text=>text,showChoiceDialog(){},createLoadProgressView(){},
     observeLoadActivity(){},onPixiAssetSettled(){},mountRaisingHome:async()=>{raisingMounts++;return newView();},

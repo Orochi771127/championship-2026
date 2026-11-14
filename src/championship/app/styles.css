@@ -49,13 +49,13 @@ body {
    Paint the shared game backdrop behind the Home indicator, rather than the
    html c-void fallback. Foreground controls keep their existing safe padding. */
 html:has(body[data-web-app]):not(:has(#cm-title:not([hidden]))) {
-  min-height:100lvh;
+  min-height:calc(100 * var(--cm-lvh, 1lvh));
   background-color:var(--c-backdrop-bottom);
   background-image:var(--bg-pattern),
     radial-gradient(90% 60% at 50% 48%,var(--c-stage-glow) 0%,transparent 70%),
     linear-gradient(180deg,var(--c-backdrop-top) 0%,var(--c-ground) 45%,var(--c-backdrop-bottom) 100%);
 }
-body[data-web-app]:not([data-portrait-frame]) { min-height:var(--cm-app-viewport-height,100dvh); }
+body[data-web-app]:not([data-portrait-frame]) { min-height:var(--cm-app-viewport-height,calc(100 * var(--cm-dvh, 1dvh))); }
 html.da-open:has(body[data-web-app]):not(:has(#cm-title:not([hidden]))) { background:#070b14; }
 
 button, input, select, textarea { font: inherit; color: inherit; letter-spacing: inherit; }
@@ -122,16 +122,16 @@ body[data-portrait-frame] .cm-toolbar { left: 0; right: 0; width: auto; transfor
 :root {
   --cm-screen-top: 0px;
   --cm-screen-bottom: 0px;
-  --cm-screen-height: calc(var(--cm-viewport-height, var(--cm-app-viewport-height, 100dvh)) - var(--cm-screen-top) - var(--cm-screen-bottom));
+  --cm-screen-height: calc(var(--cm-viewport-height, var(--cm-app-viewport-height, calc(100 * var(--cm-dvh, 1dvh)))) - var(--cm-screen-top) - var(--cm-screen-bottom));
 }
 body[data-status-bar="on"] {
   --cm-screen-top: var(--cm-status-bar-height, var(--hud-height));
-  --cm-screen-height: calc(var(--cm-viewport-height, var(--cm-app-viewport-height, 100dvh)) - var(--cm-screen-top) - var(--cm-screen-bottom));
+  --cm-screen-height: calc(var(--cm-viewport-height, var(--cm-app-viewport-height, calc(100 * var(--cm-dvh, 1dvh)))) - var(--cm-screen-top) - var(--cm-screen-bottom));
 }
 body[data-status-bar="on"] #cm-root { top: var(--cm-screen-top); }
 body[data-toolbar="on"] {
   --cm-screen-bottom: var(--cm-toolbar-height, var(--dock-height));
-  --cm-screen-height: calc(var(--cm-viewport-height, var(--cm-app-viewport-height, 100dvh)) - var(--cm-screen-top) - var(--cm-screen-bottom));
+  --cm-screen-height: calc(var(--cm-viewport-height, var(--cm-app-viewport-height, calc(100 * var(--cm-dvh, 1dvh)))) - var(--cm-screen-top) - var(--cm-screen-bottom));
 }
 body[data-toolbar="on"] #cm-root { bottom: var(--cm-screen-bottom); }
 /* Native-size installed screens must use the same measured height as their
@@ -399,11 +399,11 @@ body[data-web-app] .da-root { bottom:auto; height:var(--cm-app-viewport-height);
    and English letters sit a little tighter. */
 .cm-toolbar__cell-label { font-size: min(var(--fs-caption), 11px); }
 :root:lang(en) .cm-toolbar__cell { padding-inline: 0; }
-:root:lang(en) .cm-toolbar__cell-label { font-size: 10px; line-height: 1.2; letter-spacing: -0.02em; }
+:root:lang(en) .cm-toolbar__cell-label { font-size: calc(10px * var(--text-scale, 1)); line-height: 1.2; letter-spacing: -0.02em; }
 :root:lang(vi) .cm-toolbar__cell,
 :root:lang(th) .cm-toolbar__cell { padding-inline: 1px; }
-:root:lang(vi) .cm-toolbar__cell-label { font-size: 10px; line-height: 1.25; }
-:root:lang(th) .cm-toolbar__cell-label { font-size: 10.5px; line-height: 1.25; letter-spacing: -0.01em; }
+:root:lang(vi) .cm-toolbar__cell-label { font-size: calc(10px * var(--text-scale, 1)); line-height: 1.25; }
+:root:lang(th) .cm-toolbar__cell-label { font-size: calc(10.5px * var(--text-scale, 1)); line-height: 1.25; letter-spacing: -0.01em; }
 
 /* The two menus sit apart from the six tools. */
 .cm-toolbar__cell[data-menu-id="MANAGEMENT"] { margin-left: 4px; }
@@ -445,7 +445,7 @@ body[data-web-app] .da-root { bottom:auto; height:var(--cm-app-viewport-height);
   border-radius: var(--r-tag);
   background: var(--c-surface-3);
   color: var(--c-text-1);
-  font-size: 10px;
+  font-size: calc(10px * var(--text-scale, 1));
   line-height: 17px;
   font-variant-numeric: tabular-nums;
   text-align: center;
@@ -629,9 +629,9 @@ body[data-web-app] .da-root { bottom:auto; height:var(--cm-app-viewport-height);
 
 /* ---- Confirmation dialog (uiDialog.js) ---------------------------------- */
 dialog.cm-dialog {
-  width: min(380px, calc(100vw - 32px));
+  width: min(380px, calc(calc(100 * var(--cm-vw, 1vw)) - 32px));
   max-width: none;
-  max-height: calc(100dvh - 32px);
+  max-height: calc(calc(100 * var(--cm-dvh, 1dvh)) - 32px);
   padding: 0;
   border: 0;
   background: transparent;
@@ -681,7 +681,7 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
   display: grid;
   gap: var(--sp-3);
   width: min(100%, 560px);
-  max-height: min(78vh, calc(var(--cm-screen-height, 100vh) + var(--cm-screen-bottom) - 24px));
+  max-height: min(calc(78 * var(--cm-vh, 1vh)), calc(var(--cm-screen-height, calc(100 * var(--cm-vh, 1vh))) + var(--cm-screen-bottom) - 24px));
   margin: 0 auto;
   padding: var(--sp-5) var(--sp-5) calc(var(--sp-5) + var(--safe-bottom));
   overflow-y: auto;
@@ -957,12 +957,19 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
   text-align: left;
 }
 .cm-schedule-fixture__name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* WEEKLY_SEASON_20261110: the title's time slot (早場 / 午場 / 晚場 / 日場 / 全天). */
+.cm-schedule-fixture__slot { flex: none; margin-left: auto; padding: 0 4px; border-radius: 4px; background: var(--c-surface-2); color: var(--c-text-2); font-size: calc(10px * var(--text-scale, 1)); line-height: 16px; }
+.cm-schedule-fixture__slot + * { margin-left: 4px; }
+.cm-schedule-fixture[data-slot="EVENING"] .cm-schedule-fixture__slot { color: var(--c-accent-strong); }
+/* Open right now: the 「可參加」 badge says it, so the slot tag steps aside and the name keeps its room. */
+.cm-schedule-fixture[data-eligible-today="true"] .cm-schedule-fixture__slot { display: none; }
+.cm-schedule-fixture:has(.cm-schedule-fixture__slot)[data-eligible-today="true"]::after { white-space: nowrap; }
 /* Status is carried by a mark as well as a colour. */
-.cm-schedule-fixture[data-won="true"]::before { content: "✓"; color: var(--c-success); font-size: 12px; }
+.cm-schedule-fixture[data-won="true"]::before { content: "✓"; color: var(--c-success); font-size: calc(12px * var(--text-scale, 1)); }
 .cm-schedule-fixture[data-locked="true"] { color: var(--c-text-disabled); background: transparent; }
-.cm-schedule-fixture[data-locked="true"]::before { content: "🔒"; font-size: 10px; filter: grayscale(1); opacity: 0.7; }
+.cm-schedule-fixture[data-locked="true"]::before { content: "🔒"; font-size: calc(10px * var(--text-scale, 1)); filter: grayscale(1); opacity: 0.7; }
 .cm-schedule-fixture[data-eligible-today="true"] { border-color: var(--c-accent-line); }
-.cm-schedule-fixture[data-eligible-today="true"]::after { content: var(--label-eligible); margin-left: auto; padding: 1px 5px; border-radius: 4px; background: var(--c-accent-soft); color: var(--c-accent-strong); font-size: 10px; }
+.cm-schedule-fixture[data-eligible-today="true"]::after { content: var(--label-eligible); margin-left: auto; padding: 1px 5px; border-radius: 4px; background: var(--c-accent-soft); color: var(--c-accent-strong); font-size: calc(10px * var(--text-scale, 1)); }
 .cm-schedule-fixture[aria-pressed="true"] { border-color: var(--c-accent); background: var(--c-accent-soft); box-shadow: var(--glow-accent); }
 .cm-schedule-empty { margin: 0; color: var(--c-text-2); }
 .cm-schedule-footer { margin: 0; color: var(--c-text-3); font-size: var(--fs-label); line-height: var(--lh-label); text-align: center; }
@@ -1048,9 +1055,9 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
 .cm-rank-unlocks__row[data-state="next"] { box-shadow: inset 0 0 0 2px #ffd23f; background: #fff8dc; }
 .cm-rank-unlocks__head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 4px; }
 .cm-rank-unlocks__name { font-weight: 900; }
-.cm-rank-unlocks__tag { padding: 0 8px; border-radius: 999px; background: #3ddc84; color: #04130a; font-size: 11px; font-weight: 900; }
+.cm-rank-unlocks__tag { padding: 0 8px; border-radius: 999px; background: #3ddc84; color: #04130a; font-size: calc(11px * var(--text-scale, 1)); font-weight: 900; }
 .cm-rank-unlocks__tag--next { background: #ffd23f; color: #2a1600; }
-.cm-rank-unlocks__diamonds { margin-left: auto; font-size: 12px; font-weight: 800; color: #1f5fd6; }
+.cm-rank-unlocks__diamonds { margin-left: auto; font-size: calc(12px * var(--text-scale, 1)); font-weight: 800; color: #1f5fd6; }
 .cm-rank-unlocks__lines { display: grid; gap: 2px; margin: 0; padding: 0 0 0 16px; font-size: var(--fs-label, 12px); overflow-wrap: anywhere; }
 
 /* ---- Championship run ---------------------------------------------------- */
@@ -1077,7 +1084,7 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
   flex: 0 0 auto;
   border-radius: var(--r-control);
   background: var(--c-gold-soft);
-  font-size: 22px;
+  font-size: calc(22px * var(--text-scale, 1));
 }
 .cm-championship-entry[data-unlocked="false"] .cm-championship-cup { filter: grayscale(1); opacity: 0.5; }
 .cm-championship-entry__copy { display: grid; gap: 2px; min-width: 0; }
@@ -1169,7 +1176,7 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
 /* DOM owns transient resident loading/error feedback, never a substitute animal. */
 .int-rh2-resident-assets { position:absolute; inset:12px 12px auto; z-index:12; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px; padding:10px 12px; border:1px solid var(--c-line-2); border-radius:var(--r-control); background:var(--c-surface-1); color:var(--c-text-1); pointer-events:none; }
 .int-rh2-resident-assets[hidden] { display:none; }
-.int-rh2-resident-assets p { flex:1 1 180px; margin:0; font-size:13px; line-height:1.4; }
+.int-rh2-resident-assets p { flex:1 1 180px; margin:0; font-size:calc(13px * var(--text-scale, 1)); line-height:1.4; }
 .int-rh2-resident-assets button { min-height:44px; padding:8px 12px; border:1px solid var(--c-line-2); border-radius:var(--r-control); background:var(--c-accent); color:var(--c-text-on-accent); font:inherit; pointer-events:auto; }
 
 /* ---- Currency HUD candidate r1: append-only; Bits economy is unchanged. ---- */
@@ -1339,8 +1346,8 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
 :root { --cm-padlock: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 7V5a3.5 3.5 0 0 1 7 0v2h.5A1.5 1.5 0 0 1 13.5 8.5v5A1.5 1.5 0 0 1 12 15H4a1.5 1.5 0 0 1-1.5-1.5v-5A1.5 1.5 0 0 1 4 7h.5Zm2 0h3V5a1.5 1.5 0 0 0-3 0v2Zm1.5 2.5a1 1 0 0 0-.6 1.8V12.5h1.2v-1.2A1 1 0 0 0 8 9.5Z'/%3E%3C/svg%3E"); }
 
 /* The ranch expansion sheet: a map of the honeycomb, three points, status. */
-dialog.cm-dialog[data-variant="expansion"] { width: min(420px, calc(100vw - 32px)); }
-dialog.cm-dialog[data-variant="expansion"] .cm-dialog__panel { max-height: calc(100dvh - 48px); overflow-y: auto; overscroll-behavior: contain; }
+dialog.cm-dialog[data-variant="expansion"] { width: min(420px, calc(calc(100 * var(--cm-vw, 1vw)) - 32px)); }
+dialog.cm-dialog[data-variant="expansion"] .cm-dialog__panel { max-height: calc(calc(100 * var(--cm-dvh, 1dvh)) - 48px); overflow-y: auto; overscroll-behavior: contain; }
 .cm-expansion-sheet { display: grid; gap: var(--sp-3); }
 .cm-expansion-sheet__map { display: grid; justify-items: center; gap: var(--sp-2); margin: 0; padding: var(--sp-3);
   border: 1px solid var(--c-line-1); border-radius: var(--r-card); background: var(--c-ground-raised); }
@@ -1390,20 +1397,55 @@ body[data-day-period="NIGHT"] .int-rh2-field-host::after { background-color: rgb
 
 /* Awakening raising (OWNER_APPROVED_ADAPTATION 2026-11-02): the card after a partner's first awakening. */
 .cm-awakening-card {
-  position: fixed; left: 50%; bottom: max(28%, calc(env(safe-area-inset-bottom) + 180px)); z-index: 60; width: min(320px, calc(100vw - 32px)); padding: 14px 16px 12px;
+  position: fixed; left: 50%; bottom: max(28%, calc(env(safe-area-inset-bottom) + 180px)); z-index: 60; width: min(320px, calc(calc(100 * var(--cm-vw, 1vw)) - 32px)); padding: 14px 16px 12px;
   transform: translateX(-50%); text-align: center; color: #fff; border-radius: 14px; cursor: pointer;
   background: linear-gradient(160deg, rgba(30, 41, 59, .96), rgba(15, 23, 42, .96));
   border: 2px solid var(--bloodline, #ffd34d); box-shadow: 0 0 0 4px rgba(0, 0, 0, .25), 0 0 26px var(--bloodline, #ffb52e);
   animation: cm-awakening-card .5s cubic-bezier(.2, .9, .3, 1.3) both;
 }
-.cm-awakening-card__title { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: .12em; color: var(--bloodline, #ffd34d); }
-.cm-awakening-card__name { margin: 6px 0 4px; font-size: 24px; font-weight: 900; line-height: 1.2; text-shadow: 0 0 10px rgba(255, 211, 77, .55); }
-.cm-awakening-card__tier { display: inline-block; margin-right: 8px; padding: 1px 7px; border-radius: 6px; font-size: 12px; vertical-align: 4px;
+.cm-awakening-card__title { margin: 0; font-size: calc(13px * var(--text-scale, 1)); font-weight: 800; letter-spacing: .12em; color: var(--bloodline, #ffd34d); }
+.cm-awakening-card__name { margin: 6px 0 4px; font-size: calc(24px * var(--text-scale, 1)); font-weight: 900; line-height: 1.2; text-shadow: 0 0 10px rgba(255, 211, 77, .55); }
+.cm-awakening-card__tier { display: inline-block; margin-right: 8px; padding: 1px 7px; border-radius: 6px; font-size: calc(12px * var(--text-scale, 1)); vertical-align: 4px;
   color: #1e293b; background: var(--bloodline, #ffd34d); }
-.cm-awakening-card__note, .cm-awakening-card__perk { margin: 4px 0 0; font-size: 13px; line-height: 1.45; color: #e2e8f0; }
+.cm-awakening-card__note, .cm-awakening-card__perk { margin: 4px 0 0; font-size: calc(13px * var(--text-scale, 1)); line-height: 1.45; color: #e2e8f0; }
 .cm-awakening-card__perk { color: var(--bloodline, #ffd34d); font-weight: 700; }
 @keyframes cm-awakening-card { from { opacity: 0; transform: translateX(-50%) scale(1.25); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
 @media (prefers-reduced-motion: reduce) { .cm-awakening-card { animation: none; } }
+
+/* Tactile cocoon (AWAKENING_OVERDRIVE_20261109): the armoured resonance key, its three crack pips, the shatter flash
+   and the learned card as a stamped metal nameplate. */
+.cm-cocoon-key { position: fixed; left: 50%; bottom: max(14%, calc(env(safe-area-inset-bottom) + 96px)); z-index: 61; transform: translateX(-50%);
+  display: grid; justify-items: center; gap: 2px; min-width: min(300px, calc(calc(100 * var(--cm-vw, 1vw)) - 32px)); min-height: 76px; padding: 10px 18px 12px;
+  border: 3px solid var(--bloodline, #ffd34d); border-radius: 18px; color: #fff; font: inherit; cursor: pointer; touch-action: manipulation;
+  background: linear-gradient(180deg, #3b4254 0%, #1b2030 46%, #0d111b 100%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .28), inset 0 -4px 0 rgba(0, 0, 0, .45), 0 6px 0 #05070c, 0 0 24px var(--bloodline, #ffb52e);
+  animation: cm-cocoon-key-pulse .9s ease-in-out infinite alternate; }
+.cm-cocoon-key:active, .cm-cocoon-key.is-hit { transform: translateX(-50%) translateY(4px) scale(.97); box-shadow: inset 0 2px 0 rgba(255, 255, 255, .2), 0 2px 0 #05070c, 0 0 34px var(--bloodline, #ffb52e); }
+.cm-cocoon-key__label { font-size: calc(20px * var(--text-scale, 1)); font-weight: 900; letter-spacing: .06em; text-shadow: 0 0 10px var(--bloodline, #ffd34d); }
+.cm-cocoon-key__hint { font-size: calc(13px * var(--text-scale, 1)); font-weight: 700; color: var(--bloodline, #ffd34d); }
+.cm-cocoon-key__pips { display: flex; gap: 8px; margin-top: 4px; }
+.cm-cocoon-key__pips i { width: 22px; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, .16); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3); }
+.cm-cocoon-key[data-crack="1"] .cm-cocoon-key__pips i:nth-child(-n+1), .cm-cocoon-key[data-crack="2"] .cm-cocoon-key__pips i:nth-child(-n+2),
+.cm-cocoon-key[data-crack="3"] .cm-cocoon-key__pips i { background: var(--bloodline, #ffd34d); box-shadow: 0 0 10px var(--bloodline, #ffd34d); }
+@keyframes cm-cocoon-key-pulse { from { filter: brightness(1); } to { filter: brightness(1.28); } }
+.cm-cocoon-flash { position: fixed; inset: 0; z-index: 62; pointer-events: none; animation: cm-cocoon-flash .72s linear both; }
+@keyframes cm-cocoon-flash { 0% { background: #fff; opacity: 1; } 17% { background: #fff; opacity: 1; } 18% { background: #000; opacity: .92; }
+  36% { background: #000; opacity: .92; } 37% { background: #fff; opacity: .95; } 54% { background: #fff; opacity: .8; } 100% { background: #fff; opacity: 0; } }
+.cm-awakening-card { background: linear-gradient(170deg, #59606e 0%, #2a2f3a 22%, #4b5260 48%, #1d212a 74%, #3a404c 100%);
+  border-width: 3px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), inset 0 -2px 0 rgba(0, 0, 0, .5), 0 0 0 4px rgba(0, 0, 0, .25), 0 0 26px var(--bloodline, #ffb52e); }
+.cm-awakening-card__title { text-shadow: 0 1px 0 rgba(0, 0, 0, .6), 0 0 8px var(--bloodline, #ffd34d); }
+@media (prefers-reduced-motion: reduce) { .cm-cocoon-key { animation: none; } }
+
+/* Overdrive training on the awakening path (AWAKENING_OVERDRIVE_20261109): the switch and the core heat meter. */
+.cm-awakening__overdrive { display: grid; gap: 5px; padding: 8px 10px; border-radius: var(--r-control); border: 1px dashed rgba(255, 140, 60, .55); background: rgba(255, 120, 40, .06); }
+.cm-awakening__overdrive[data-on="true"] { border-style: solid; border-color: #ff8a3d; box-shadow: 0 0 10px rgba(255, 138, 61, .35); }
+.cm-awakening__overdrive-toggle { justify-self: start; font-weight: var(--fw-strong); }
+.cm-awakening__overdrive-toggle[aria-pressed="true"] { border-color: #ff8a3d; color: #2a1200; background: linear-gradient(#ffd08a, #ff9a3d); }
+.cm-awakening__heat { position: relative; height: 14px; border-radius: 7px; background: rgba(120, 120, 140, .22); overflow: hidden; }
+.cm-awakening__heat::after { content: ""; position: absolute; top: 0; bottom: 0; left: var(--limit, 80%); width: 2px; background: #ff4d4d; }
+.cm-awakening__heat-fill { position: absolute; inset: 0 auto 0 0; width: var(--heat, 0%); border-radius: inherit; background: linear-gradient(90deg, #ffd34d, #ff8a3d 60%, #ff3d3d); }
+.cm-awakening__heat-text { position: relative; display: block; text-align: center; font-size: calc(11px * var(--text-scale, 1)); line-height: 14px; font-weight: 800; }
+.cm-awakening__overdrive[data-danger="true"] .cm-awakening__overdrive-note { color: #ff6b6b; font-weight: var(--fw-strong); }
 
 /* Awakening path on a 成熟期's roster card (OWNER_APPROVED_ADAPTATION 2026-11-02): one bar and plain hints per form. */
 .cm-awakening__head { display: flex; align-items: center; gap: 8px; }
@@ -1421,7 +1463,7 @@ body[data-day-period="NIGHT"] .int-rh2-field-host::after { background-color: rgb
 .cm-awakening__form[data-state="learned"] .cm-awakening__state { color: var(--c-accent); }
 .cm-awakening__bar { position: relative; height: 14px; border-radius: 7px; background: rgba(120, 120, 140, .22); overflow: hidden; }
 .cm-awakening__fill { position: absolute; inset: 0 auto 0 0; width: var(--percent, 0%); border-radius: inherit; background: linear-gradient(90deg, #3b82f6, #ffd34d); }
-.cm-awakening__percent { position: relative; display: block; text-align: center; font-size: 11px; line-height: 14px; font-weight: 800; }
+.cm-awakening__percent { position: relative; display: block; text-align: center; font-size: calc(11px * var(--text-scale, 1)); line-height: 14px; font-weight: 800; }
 .cm-awakening__hint { margin: 0; font-size: var(--fs-label); color: var(--c-text-2); }
 .cm-awakening__actions, .cm-awakening__looks { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .cm-awakening__btn { min-height: 32px; padding: 2px 10px; border: 1px solid var(--c-line-2); border-radius: var(--r-control); background: var(--c-surface-1, transparent);
@@ -1432,3 +1474,8 @@ body[data-day-period="NIGHT"] .int-rh2-field-host::after { background-color: rgb
 .cm-awakening__note, .cm-awakening__label { font-size: var(--fs-label); color: var(--c-text-3); }
 .cm-awakening__planned { color: var(--c-accent); font-weight: var(--fw-strong); }
 
+/* Short landscape phones: the open partner card sits at the upper left, so the floating title-match notice moves to
+   the right, under the wallet, while the card is open (it covered the card at 568x320). */
+@media (orientation: landscape) and (max-height: 500px) and (max-width: 600px) {
+  body:has(.int-rh2-companion[data-open="true"]) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__matches { left: auto; right: max(10px, var(--safe-right)); }
+}

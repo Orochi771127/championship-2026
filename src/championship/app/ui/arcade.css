@@ -390,8 +390,8 @@
 @media (hover: hover) and (pointer: fine) { :root[data-theme="arcade"] .cm-vs2-database__chip:hover { transform: translateY(-2px) rotate(-1deg); } }
 :root[data-theme="arcade"] .cm-vs2-database__sheet-scrim { background: rgba(20, 20, 31, 0.5) var(--ax-dots); }
 :root[data-theme="arcade"] .cm-vs2-database__sheet-panel { border: var(--ax-border); background: var(--ax-paper); box-shadow: var(--ax-hl), 0 8px 0 var(--ax-ink); animation: ax-pop 380ms var(--ax-spring) both; }
-:root[data-theme="arcade"] .cm-vs2-database__row .cm-dex-list-thumb,
-:root[data-theme="arcade"] .cm-vs2-database__row:not(.cm-vs2-database__row--thumb)::before { border: 2px solid var(--ax-ink); background: #e9f6ff; }
+:root[data-theme="arcade"] .cm-vs2-database__row :is(.cm-dex-list-thumb, .cm-dex-list-shadow),
+:root[data-theme="arcade"] .cm-vs2-database__row:not(.cm-vs2-database__row--thumb, .cm-vs2-database__row--shadow)::before { border: 2px solid var(--ax-ink); background: #e9f6ff; }
 
 /* Shop tabs wear the rebuild's category faces. */
 :root[data-theme="arcade"] .cm-vs2-shop__tab[data-category="TRAINING_GOODS"] { --key-face: var(--ax-orange); --key-shade: var(--ax-orange-sh); }
@@ -481,12 +481,12 @@
   :root[data-theme="arcade"] .cm-toolbar__rail { width: auto; flex: 0 1 560px; margin: 0 0 calc(6px + var(--safe-bottom)); padding: 5px 6px 8px; gap: 4px; }
   :root[data-theme="arcade"] .cm-toolbar__cell { min-height: 46px; padding: 2px; }
   :root[data-theme="arcade"] .cm-toolbar__cell::before { width: 24px; height: 24px; }
-  :root[data-theme="arcade"] .cm-toolbar__cell-label { font-size: 10px; }
+  :root[data-theme="arcade"] .cm-toolbar__cell-label { font-size: calc(10px * var(--text-scale, 1)); }
   /* Notch insets narrow the keys: the icon sits above a one-line caption, which then has the
      key's whole width and stays clear of the stock badge (outranks intRh2Styles.css). */
   :root[data-theme="arcade"] body .cm-toolbar[data-mode] .cm-toolbar__cell { flex-direction: column; gap: 1px; padding-inline: 1px; }
   :root[data-theme="arcade"] body .cm-toolbar[data-mode] .cm-toolbar__cell::before { width: 22px; height: 22px; }
-  :root[data-theme="arcade"]:lang(zh) body .cm-toolbar[data-mode] .cm-toolbar__cell-label { white-space: nowrap; letter-spacing: -0.04em; font-size: 10px; }
+  :root[data-theme="arcade"]:lang(zh) body .cm-toolbar[data-mode] .cm-toolbar__cell-label { white-space: nowrap; letter-spacing: -0.04em; font-size: calc(10px * var(--text-scale, 1)); }
   :root[data-theme="arcade"] .cm-toolbar__quick:not([hidden]) { order: -1; flex: 0 0 auto; width: auto; grid-template-columns: repeat(2, 80px); gap: 6px; margin: 0 0 calc(6px + var(--safe-bottom)); }
   :root[data-theme="arcade"] .cm-toolbar__quick-entry { min-height: 40px; padding: 2px 4px 4px; grid-auto-flow: column; gap: 4px; }
     :root[data-theme="arcade"] .cm-toolbar__quick-entry .cm-toolbar__entry-label { font-size: var(--fs-label); }
@@ -517,15 +517,19 @@
 /* -- Title: big white with an amber slab under it. -- */
 :root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-title {
   position: relative;
-  font-size: clamp(30px, 8.4vw, 42px);
+  font-size: clamp(30px, calc(8.4 * var(--cm-vw, 1vw)), 42px);
   line-height: 1.1;
 }
 :root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-title::after {
   content: "";
   display: block;
+  /* Painted above the title's stroke and drop shadow, and spaced clear of them,
+   * so iOS fonts that sit lower no longer cover the slab's top edge. */
+  position: relative;
+  z-index: 1;
   width: 64px;
   height: 7px;
-  margin-top: 6px;
+  margin-top: 11px;
   border: 2px solid var(--ax-ink);
   border-radius: 2px 8px 2px 8px;
   background: linear-gradient(90deg, var(--ax-yellow), var(--ax-orange));
@@ -558,7 +562,7 @@
   grid-column: 1;
   grid-row: 1;
   color: #fff;
-  font-size: clamp(19px, 5.2vw, 24px);
+  font-size: clamp(19px, calc(5.2 * var(--cm-vw, 1vw)), 24px);
   letter-spacing: 0.06em;
   text-shadow: 0 2px 0 #05070f, 0 0 10px rgba(42, 216, 255, 0.55);
 }
@@ -579,7 +583,7 @@
   border-radius: 4px 12px 4px 12px;
   background: linear-gradient(180deg, #ffe066, #ffb21e);
   color: #241400;
-  font-size: 12px;
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: 900;
   letter-spacing: 0.06em;
   white-space: nowrap;
@@ -612,6 +616,19 @@
     radial-gradient(ellipse 40% 8% at 50% 96%, rgba(14, 16, 26, 0.55), rgba(14, 16, 26, 0) 72%);
   pointer-events: none;
 }
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-prism__name {
+  color: #fff;
+  text-shadow: 0 2px 0 var(--ax-ink), 0 0 14px color-mix(in srgb, var(--prism-accent) 70%, transparent);
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-prism__tagline { color: #ddd6ff; }
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-prism__turn {
+  border: 3px solid var(--ax-ink);
+  background: color-mix(in srgb, var(--prism-accent) 85%, #fff);
+  color: var(--ax-ink);
+  box-shadow: var(--ax-hl), 0 4px 0 var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-prism__turn:active { translate: 0 calc(-50% + 3px); box-shadow: var(--ax-hl), 0 1px 0 var(--ax-ink); }
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-prism__hint { border: 2px solid var(--ax-ink); --prism-hint-drop: 0 3px 0 var(--ax-ink); }
 :root[data-theme="arcade"] .cm-vs5-root .cm-vs5-cube__face {
   box-shadow: var(--ax-hl), 0 5px 0 var(--key-shade);
 }
@@ -692,7 +709,7 @@
   border-radius: 6px 0 10px 0;
   background: var(--ax-red);
   color: #fff;
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale, 1));
   font-weight: 900;
   font-style: italic;
   line-height: 1.2;
@@ -701,7 +718,7 @@
   position: static;
   padding: 2px 5px;
   border-radius: 6px;
-  font-size: 17px;
+  font-size: calc(17px * var(--text-scale, 1));
   transform: rotate(-8deg);
 }
 :root[data-theme="arcade"] .cm-vs5-root .cm-vs5-match__crest-art {
@@ -795,7 +812,7 @@
   grid-template-columns: 104px minmax(0, 1fr);
   align-items: center;
   gap: 14px;
-  min-height: clamp(168px, 26vh, 236px);
+  min-height: clamp(168px, calc(26 * var(--cm-vh, 1vh)), 236px);
   padding: 18px 16px 18px 14px;
   border: 3px solid var(--ax-ink);
   border-radius: 10px 28px 10px 28px;
@@ -833,7 +850,7 @@
     radial-gradient(circle at 35% 28%, #fffbe0 0 12%, rgba(255, 251, 224, 0) 30%),
     conic-gradient(from 200deg, #fff2b0, #d9a11e, #fff6c8, #b98012, #ffe27a, #fff2b0);
   box-shadow: inset 0 -6px 0 rgba(120, 70, 0, 0.35), 0 5px 0 var(--ax-ink);
-  font-size: 50px;
+  font-size: calc(50px * var(--text-scale, 1));
   line-height: 1;
 }
 :root[data-theme="arcade"] body .cm-championship-cup::after {
@@ -850,7 +867,7 @@
 :root[data-theme="arcade"] body .cm-championship-entry[data-category="1"] .cm-championship-cup::after { background: linear-gradient(180deg, #ffd23f, #a36a00); }
 :root[data-theme="arcade"] body .cm-championship-entry__copy { gap: 8px; }
 :root[data-theme="arcade"] body .cm-championship-entry__name {
-  font-size: clamp(24px, 6.6vw, 32px);
+  font-size: clamp(24px, calc(6.6 * var(--cm-vw, 1vw)), 32px);
   font-weight: 900;
   letter-spacing: 0.04em;
   line-height: 1.1;
@@ -875,7 +892,7 @@
   background: linear-gradient(180deg, #fff0a0 0 30%, var(--ax-yellow) 30% 72%, #f0a51a 72%);
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.7), 0 4px 0 var(--ax-ink);
 }
-:root[data-theme="arcade"] body .cm-championship-prize__digits { color: #3a2400; font-size: clamp(22px, 6vw, 28px); font-weight: 900; }
+:root[data-theme="arcade"] body .cm-championship-prize__digits { color: #3a2400; font-size: clamp(22px, calc(6 * var(--cm-vw, 1vw)), 28px); font-weight: 900; }
 :root[data-theme="arcade"] body .cm-championship-prize__bit { color: #5a3a00; font-weight: 900; }
 /* A closed cup: dimmed cartridge, a locked energy bar carries the reason. */
 :root[data-theme="arcade"] body .cm-championship-entry:disabled { filter: saturate(0.4) brightness(0.82); }
@@ -892,7 +909,7 @@
   font-size: var(--fs-label);
   font-weight: 800;
 }
-:root[data-theme="arcade"] body .cm-championship-entry__reason:not(:empty)::before { content: "\1F512"; font-size: 13px; }
+:root[data-theme="arcade"] body .cm-championship-entry__reason:not(:empty)::before { content: "\1F512"; font-size: calc(13px * var(--text-scale, 1)); }
 
 /* -- Reduced motion: no scan sweep, no deal-in travel. -- */
 :root[data-theme="arcade"][data-motion="reduced"] .cm-vs5-root .cm-vs5-data-arena::after,
@@ -925,4 +942,4 @@
 :root[data-theme="arcade"] .cm-land-key[data-land-max], :root[data-theme="arcade"] .cm-land-key[data-land-expand="max"] {
   --key-face: linear-gradient(180deg, #fff1a6 0%, #ffd23f 50%, #ff9f1c 100%); --key-shade: #a86400; --key-ink: #3a2600; text-shadow: none; }
 :root[data-theme="arcade"] .cm-land-key:disabled { filter: none; }
-:root[data-theme="arcade"] .cm-hexworld__count { font-size: 18px; }
+:root[data-theme="arcade"] .cm-hexworld__count { font-size: calc(18px * var(--text-scale, 1)); }

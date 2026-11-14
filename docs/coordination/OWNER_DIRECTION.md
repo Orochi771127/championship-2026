@@ -17,6 +17,460 @@ The Owner asked for an inventory of character evolution routes and rules, shared
   - Seeds visual-lineage Tier-1 (`覺醒體`) and Tier-2 (`究極體`) pairings before greedy fan-in fill so all 64 native `成熟期` and 5 playable original `成熟期` awaken into visually coherent forms, every `覺醒體` (51) and `究極體` (37) remains reachable within the fan-in cap, and zero `成熟期` lack a Tier-2 `究極體` (`basesWithoutTier2: []`).
 - **Publication:** authorizes committing the scoped files, updating their hashes in `WEB_BUILD_INPUTS.v1.json` and `PUBLIC_RUNTIME_ALLOWLIST.v1.json`, merging and pushing to `main` after `npm run test:ci`, `npm run build:playtest` and `npm run validate:playtest` pass.
 
+<!-- record-id: IOS_HUNT_ENTRY_RELOAD_20261112 -->
+## 2026-11-12 — iPhone home-screen app reloads on entering 戴納草原: decoded map frames freed after upload, Hunt entry steps in the diagnostics
+
+Owner report (2026-11-12, iPhone 15 Pro Max, home-screen app, with the downloaded diagnostics file): 「我剛剛要從遊戲進入狩獵地圖，結果馬上跳回首頁出錯」; then 「他就直接閃白，然後跳回主頁以後又跳回到狩獵地圖，出發前在選道具那邊」 on 戴納草原. Delegation: 「我可以交給你去做判斷跟修嗎？」. Publication: 「好啊，合併都發佈做完自我審查沒問題就發」 (PR #241 only).
+
+Engineering repair and diagnostics only. No gameplay value, save field, reward, clock, RNG, art or map picture change.
+
+- Reading of the export: the old document ends with no `PAGE_HIDE` and the next one boots as `back_forward` with no `wasDiscarded` field (WebKit), so iOS ended the page; no script error was recorded for the Hunt. The three `ERROR / OTHER` rows before it are on the battle selection and their messages are not kept.
+- Measured on the published build (390x844, DPR 3): the hm01 day field kept three decoded 2880 x 2880 bitmaps (102 MB) beside their uploaded textures for the whole hunt; other maps keep 8-21 MB. `externalMapAssets.mjs` now closes each bitmap once `createHuntThreeMap.mjs` proves its texture is uploaded (102 MB -> 8 MB; WebGL bytes and the picture unchanged).
+- Battles were checked and left alone: two Free Battles leave about 4 MB of small cached canvases each, no large leak.
+- Diagnostics: a Hunt entry records `engine / partners / arena / scene / ready`; each document's last `SCREEN` survives the next `BOOT`; the home-screen auto-resume writes `AUTO_RESUME` with its target screen.
+- Open: no iPhone was available to the agent. On an 8 GB device total memory alone is a weak explanation, so the Owner's retest decides; if it recurs, the new Hunt rows show the step reached. A single-channel coverage mask (16-25 MB less GPU memory) was not done because it cannot be checked on WebKit here.
+
+<!-- record-id: UI_THREE_LAYOUT_SETS_20261111 -->
+## 2026-11-11 — Three layout sets (phone upright, phone sideways, desktop): full-game page audit, desktop interface zoom, reading size and quality settings audit
+
+Owner brief (2026-11-11): 「請你盤點這個遊戲的所有頁面，還有盤點在電腦版，手機直立，手機橫式的所有UI配置看有沒有互相擋住或者是擺放不OK，幫我全遊戲、全系統檢查，然後做UI的配置優化H U D的配置優化調整成適當的位置跟大小，因為目前是網頁遊戲，但是可以用網頁遊戲App化，在手機跟電腦遊玩，所以要有三套的UI跟Hud 的配置。請調整成符合商業遊戲的水準跟品質。我不介入，就讓你自己去做，都請你自行去判定跟規劃還有調整」. Added the same day: 「可以的話也可以幫我研究一下字體字型幫我找個比較適合的字體字型，然後設定中的配置是否都有正確實裝，字型的大小會不會造成頁面跑掉啊？高畫質低畫質省電那些設定的內容是不是也都可以使用是否有差別啊就是幫我全系統全遊戲都檢查」.
+
+OWNER_APPROVED_ADAPTATION, layout, sizing and display-preference wiring only. No gameplay value, save field, reward, clock, RNG or art change. Report: `docs/reports/ui-three-layouts-2026-11-11/REPORT_ZH_TW.md`.
+
+- Three named sets (`layoutSetFor` in `app/portraitFrame.js`, published as `<html data-layout-set>`): `upright`, `sideways` (wider than tall and at most 520px high) and `desktop` (from 1024x600).
+- Desktop interface zoom: the desktop set is drawn for 1366x768; a larger desktop window shows that layout zoomed in steps of 0.05 up to 2 (`desktopUiZoom`, CSS `zoom` on `<html>`, `data-ui-zoom`). Touch devices never zoom. Canvases back each page pixel with the device ratio times the zoom, viewport units in the game's sheets go through `--cm-vw` / `--cm-dvh` (`scripts/qa/apply-viewport-units.mjs`), and pointer math in the facility editor, the Data Arena and the story hall divides by the on-screen scale.
+- Title: the first pass left the title, logo, main menu and opening as main shipped them (Owner 2026-10-27) and reported three observations. Shown them, the Owner said 「第二個問題要一起調整」, so the title's landscape entry takes exactly these three fixes: on a large desktop window the logo, keys and strolling partners grow by the scale the game will have (`--cm-title-scale`; the picture itself is not zoomed); held sideways 繼續遊戲 and 開始新遊戲 stand side by side (the second ended on the last pixel row); the landscape entry starts at 640px wide (was 720), so a 667x375 phone no longer falls back to the upright poster. The logo art, the picture and the opening are untouched.
+- Page fixes live in `app/ui/layoutSets.css`, loaded last: battle selection in all three sets (the sponsor contract no longer displaces the mode prism), Cyber Gachapon and furnace sideways, the facility editor's selection panel, the partner list's element row, Data Arena lobby and relay keys, badge detail, backpack, schedule, help contrast, battle result on 375px phones, page footers sideways.
+- Shown the before / after sheets, the Owner pointed at the sideways back row: 「像你看我圈起來，那兩塊就又大又厚，然後佔了很多空間」. Sideways the row now has no height and no band: the page's keys float together in the lower right corner, and the page runs to the bottom edge.
+- Reading size (設定 → 文字大小): 672 literal pixel font sizes in 23 sheets now follow `--text-scale`; live HUD sheets follow `--text-scale-hud` (half the step). At 100% every computed value is unchanged.
+- Quality: the 3D ranch re-rates its pixel ratio and shadows on the next frame after the tier changes (it needed a re-entry). Antialiasing still applies at the next launch, as the settings page says.
+- Font: asked which face, the Owner chose the recommended one: 「好啊，換成你說的那個字體，字體我當然是希望用比較特別有設計感的字」. The interface font is 源泉圓體 GenSenRounded2 TW v2.100 (SIL OFL 1.1, licence shipped beside the files), cut down to the 3,344 characters the game's own text uses, in two weights (Bold for text, Heavy for keys and titles; 1.4 MB together), family name "Cyber Partner Rounded", `font-display: swap`. Characters outside the subset (typed names, Thai, Vietnamese accents) fall back to the system faces. `scripts/build-ui-font-subset.py` rebuilds it; the 60 MB source is not in the repository.
+- Themes: 「我現在這麼多主題可不可以幫我縮減？留下街機，跟一套適合電子生命比較深色的，還有一套比較清新爽朗的你可以在自動幫我做另一種主題也可以」. Seven choices become three: 街機拍檔 (default), 電子生命 (`cyber`, a dark net space with mint LCD panels and neon keys) and 晴空清新 (`breeze`, sky to sea behind white panels, navy ink). The two new ones are palettes of the arcade interface (`<html data-theme="arcade" data-theme-tone>`), so every layout rule applies to all three. A choice saved earlier moves to the nearest: 深色夜景 / 復古藍金 → 電子生命; 晴空競技 / 藍白清爽 / 經典暖黃 → 晴空清新; 跟隨系統 → 街機拍檔. The older palettes stay in the sheets only for the pieces that name them (the title panel).
+- Second review round, three layout points the Owner circled: the partner list's element block upright (the chart key now ends the heading line instead of taking a line of its own), the shop's category row sideways (four equal keys, no sideways scrolling, so nothing is clipped), the facility editor's title underline (hidden under the title's own drop shadow).
+- The audit runner gained a sixth slice (title menu, partner list, schedule, help, badges, settings, backpack, Journey, championship, end of day) and `scripts/qa/settings-audit.cjs`.
+
+Merge and publication: authorized by the Owner on 2026-11-11 after the review rounds, 「要合併發佈，並且要到正式站」. Story parts four and five are not part of this (HELD entry below).
+
+<!-- record-id: STORY_VN_PARTS_FOUR_FIVE_HELD_20261111 -->
+## 2026-11-11 — Story parts four and five are held back until both are done
+
+The Owner: 「第四部跟第五部做完以後先不要上線」. Part four had already gone live through #231 (dd170550) before this was said. Asked whether to take it down, the Owner chose to take it down. #231 is reverted on main. Part four stays complete on `feat/story-vn-part4-20261111`. Part five is built on top of it and neither ships until the Owner says so; re-releasing means reverting this revert together with part five. Parts one to three stay live.
+
+<!-- record-id: STORY_VN_PART_THREE_20261111 -->
+## 2026-11-11 — Story part three 「愛醬的報名表」: a walkable reception hall, exploration, requests that open chapters, and story sounds
+
+After part two and the Ai-chan hosting shipped, the Owner asked for the next step and handed all of it over, plot included: 「都交給你我不介入，請你依照故事劇情還有數碼寶貝月光來幫我做」. The proposed next steps were all taken on: part three, walking on a map to trigger scenes (the Owner's own idea from the part-two round), a bond that counts, and sound.
+
+OWNER_APPROVED_ADAPTATION, presentation, story content and story structure. No new save field. No battle rule, RNG, clock or reward-amount change.
+
+- Moonlight (the research-only design briefs of 2026-10-29) informed structure only. Each place is one composed picture, with the walkable area as data and the people, clues and exits as a list. Story chapters open after a number of side jobs. A hub counter hands out the work. No text, names, art, maps or layouts were taken from it.
+- Plot (original): the reception moves into the new Tamer Union hall. A request with no sender, signed "AI-00", leads through an abandoned channel street, the old records and the Echo Forest to Ai-chan's origin. She was put together from the "welcome back" of a partner whose tamer never came back. The Recycler, a spiral remnant, gathers unheard echoes for scrap. Ai-chan goes alone to the forgotten ranch she came from, and the partner and friends follow her there. She signs an entry form with her own name.
+- Exploration (`presentation/story/storyVnField.js`): the partner walks a painted plate where the player taps (DOM and Web Animations, no frame loop), and the camera pans on phones. Tapping a person, a glinting clue or an exit walks there and plays that spot's beats. Goals show in the prompt bar with counts. New beats: `explore` (spots with requires / after / end) and `board`.
+- Part three (`data/storyVnPartThree.js`): six chapters (14–19), six requests, and the hub `vn3-hub`. On the chart it is one node in place of the reserved "beyond" coordinate. Ai-chan's counter opens the request board; a picked chapter plays, then the player is back in the hall. Chapters 15–19 need 1, 2, 3, 4 and 5 cleared requests. Ledger keys are `story:vn3:c*` and `story:vn3:s*`, and every chapter and request pays one ticket.
+- Four new hand-painted scenes (reception hall, old channel street, Echo Forest, origin ranch), with the opening art as the style reference, in `vn-backgrounds-v3` with living loops.
+- Bond: the clear card shows the running bond total, which is the number of main chapters cleared, because every main chapter ends with a bond moment. Nothing new is saved.
+- Story sounds (`presentation/story/storyVnAudio.js`) are synthesized by the ceremony synth through the sfx bus: talk, clue, step, choice, bond, warning, clear.
+- Fix: `claimGachaReward` now saves a key recorded for the first time even when it pays no ticket. At the ticket cap, a story chapter's clear was not saved before this fix.
+
+<!-- record-id: STORY_VN_HOSTED_HANDPAINTED_20261111 -->
+## 2026-11-11 — Ai-chan hosts the story, a bond moment every chapter, and the scenes redrawn in a Japanese hand-painted style
+
+After playing part two the Owner wrote: 「我也沒有感覺到有什麼吸引人的，我都是點過點過點過我都沒有認真在看故事」, 「我之前還有做了一個導覽員叫做愛醬，愛醬也都沒有出現在故事中，牠才是接待員，你可以找一下訓練任務那邊」, 「我的風格想要那種日系手繪風格」 and 「接下來就交給你去處理了，我不介入」.
+
+OWNER_APPROVED_ADAPTATION, presentation and story content. No new save field, no reward, battle, RNG or clock change.
+
+- Ai-chan replaces NAVI as the story's guide and speaks in the form the player chose for her (preference `guideAppearance`, cat or catgirl). Ten drawn expressions (happy, shock, sad, serious, talk, per form) are made from her own approved portraits.
+- Every main chapter (2–13) is hosted: Ai-chan opens with a "last time" recap once the first scene is up and closes with a "next time" teaser. Side stories stay unhosted. The copy is in five locales.
+- A bond moment before each teaser: the player answers the partner (pat its head / high five / cheer together), the partner reacts by name, a "Bond ♥ +1" toast shows, and the clear card records it. Nothing is saved; it is a scene beat.
+- The chart's cast chips show Ai-chan's face. The speaker's bust breathes between lines (reduced motion off).
+- All fifteen scenes are redrawn in a Japanese hand-painted anime style, with the approved opening art as the style reference and each v2 plate as the layout reference (`assets/production/story/vn-backgrounds-v3`). They are re-rendered as living loops (same DepthFlow / Depth Anything V2 Small pipeline). v2 is retired. Two tap targets moved to the new art: the vault's lock rings and the throne room's right-hand stands.
+- Size gate: the test build that keeps the character art (ci.yml and the browser jobs, never uploaded) reached 1,001.9 MB and failed `PUBLIC_PAGES_SITE_SIZE`; the deploy build is ~385 MB. Main fixed the same gate in #224 (`deployedPagesRows`), which this batch takes as is.
+
+<!-- record-id: STORY_VN_PART_TWO_20261111 -->
+## 2026-11-11 — Story part two 「螺旋之冠」 (chapters 8–13), a phone layout that stands the bust on the dialogue box, and one ticket per chapter
+
+After part one shipped (#219), the Owner asked to make the next part: 「我是指把故事模式，接下來的做好」, and chose the direction 錦標賽晉級篇 (regional cup, a new rival Subaru, Rin back as a rival, the sponsor Victor harvesting cheers so the Spiral Void Lord can crown a "perfect champion"). From an iPhone the Owner then reported: 「這種直立式的除了角色都擋在一起，然後地圖整個都擋在一起，角色也沒有因為半身而出現在對話框上整個配置都亂掉了」 and 「每一關的獎勵都太多可能一關就給個10鑽石吧，如果是轉蛋卷就一張」, and is considering a map you walk on that triggers scenes later (not built now).
+
+OWNER_APPROVED_ADAPTATION, presentation, story content and story rewards.
+
+- Part two (`data/storyVnPartTwo.js`): six chapters and two side stories (the lost little star on the train; Rin's night practice) on the chart as chapters 8–13. They open after chapter 7. Progress uses `story:vn2:*`. New cast: Subaru (153, preset 530), Victor (200, 568), the puppet troupe (201, 563), Axle (157, 551), the announcer Charlotte (205), Twinkle (99), the Spiral Crown (211, 574). Every story battle is a native free-battle preset whose partner the story shows. Five-locale copy now holds 390 keys.
+- Six new living scenes: train, sky arena city, players' lounge, undercroft, regional arena at night, spiral throne. 19 new drawn expressions for the new cast, made from their own Database art.
+- Phones upright: the scene is a cinema window in the top half. The speaker's bust stands on the dialogue box below it, over a blurred copy of the scene, and never covers the actors. The box is shorter. A bust always reaches down behind the box, so a cropped expression shows no cut. Only the speaker's bust shows; an entrance animation no longer holds an idle bust visible.
+- Chart: it scrolls with a fixed band per coordinate, so labels no longer pile up. Contour rings are hidden on the tall canvas, and a cast list longer than four shows "+N".
+- Rewards: every story chapter's first clear pays one gacha ticket (the rift chapters too, which paid 3–5). The story diamond reward is 10 (`DIAMOND_REWARDS.storyChapter`, was 300).
+
+<!-- record-id: STORY_VN_PART_ONE_20261111 -->
+## 2026-11-11 — The story mode becomes a half-body story theater; part one 「未被聽見的回聲」 plays as chapters 2–7
+
+The Owner asked for an inventory of the story mode and handed it over: 「交給你自己處理，幫我把故事模式給做好，可以用附圖的這種半身的講故事的模式，然後有很多角色資料夾的動作或表情高清圖可以選用，但是還是要用網頁遊戲適合的圖檔跟格式」, then 「故事模式就交給你去製作我不介入，除非你有需要可能故事走向啊，那些可以問我」 and 「可能要找一下之前做故事模式的那個任務」. The reference screenshot (another game) was used for layout only: a painted side-view scene, small characters on its ground, one large bust, a name-plate tab over a framed dialogue box, Skip/Esc in the corner.
+
+OWNER_APPROVED_ADAPTATION, presentation and story content. No new save field, no battle rule, RNG or clock change.
+
+- Content: the original six-chapter script first written 2026-10-29 (feat/story-unheard-echoes-20261029, never merged) and its two chapter-two side stories (uncommitted in that worktree's archive) are restaged in `data/storyVnCampaign.js`, with a few new lines (NAVI as the guide, the "tamers appear through their partners" rule). The Digimon Story Moonlight ROM (`moonlight-japan.zip`, the same archive unpacked research-only on 2026-10-29) informed structure and pacing only; no text, names, art or layout from it.
+- Entry: the existing rift observation chart. Its reserved chapters 2–4 become chapters 2–7 of part one plus two side stories hanging off chapter 3; they open in order once the rift chapter 1 was watched. Progress is the once-only reward ledger (`story:vn1:c1…c6`, `s1`, `s2`); first clears pay 6/6/7/7/8/12 and 3/3 gacha tickets.
+- Theater (`presentation/story/storyVnStage.js`, `storyVnTheater.js`, `storyVnDirector.js`, `app/ui/storyVn.css`): DOM only, no canvas or second ticker. Busts are each partner's Database hero art (232 species, ~864 px WebP), head-framed by the cut-in calibration and mirrored toward the screen; only the speaker's bust shows; moods move and light the bust. Partners on the ground play their own motion cells (idle, walk, attack, hit, cheer). Tamers speak through their partners' figures with a "partner · species" caption.
+- Battles: chapters 2, 6 and 7 fight the game's own auto battle (free battle against native presets 491, 515, 542; no fee, no purse) and resume on the win or loss branch; a battle that cannot start carries on.
+- Art: nine original scene plates, text-only image generation. ART_PRODUCTION_INDEX record `art:story:vn-backgrounds:original:v2`; not shipping-ready until Owner review.
+- Owner follow-up the same day: the story mode must be commercial quality and appeal broadly; the busts lacked 「很多表情的變化或者是動作」 (「要叫Codex幫你生成嗎？」); the backgrounds should be 「會稍微有一點動作的那種動態的漫畫的感覺而不是一張不會動的圖」. The Moonlight ROM is the story reference; Blender and Codex are available for art. Answer built:
+  - Living scenes (`assets/production/story/vn-backgrounds-v2/`): each plate is a seamless 8 s 2.5D parallax loop (DepthFlow with Depth Anything V2 Small, the commercial-safe size; focus plane on the ground band so footing never slides; 960 × 640, 15 fps H.264) over a still taken from its own first frame. Per-scene ambient motes (leaves, confetti, dust, fireflies, data squares, petals, sparks, shards). The still alone under reduced motion and the saver tier. The nine scenes come to 2.1 MB.
+  - Drawn expressions (`assets/production/story/vn-expressions-v1/`, `data/storyVnExpressions.js`): the recurring partners get happy / angry / sad / shock / serious variants, generated by Codex from each partner's own Database hero art as the only image input. The head square is carried over by silhouette matching. A line's mood swaps the face with a cross-fade. The player's partner (any of 232 species) keeps its Database art with procedural mood motion and stage actions. Variants are cropped to the visible upper body at 600 px (about 52 KB each).
+  - Motion-comic accents: speed lines on shock, an impact burst on anger, and a short camera push-in on both.
+  - Size: the story media adds about 4.3 MB. The deployed main site (built with `--external-characters`, as the Pages workflow does) is about 383 MB of GitHub Pages' 1,000 MB, because character art is served from the separate asset host.
+
+Verified by `tests/championship-story-vn-cases.mjs`, the updated chart cases, the locale gate, and a QA save on an isolated port (8943) at 1366 × 768, 390 × 844 and 844 × 390, including a real lost battle that resumed on the losing branch and paid the first-clear reward.
+
+Publication: the Owner said 「講完這句，其他的就交給你去處理了，我就不介入了」 (2026-11-11), handing the rest of this batch over, merge and publication included. This authorizes this batch only.
+
+<!-- record-id: HUNT_ROPE_TIERS_20261111 -->
+## 2026-11-11 — The rope and wire you equipped are the ones you see: family colour, tier detail
+
+Asked whether ropes and wires should look different by family and tier, the agent recommended family by colour and tier by a quiet detail (a higher tier looks sturdier, not flashier); the Owner answered 「都做好一起發佈」.
+
+OWNER_APPROVED_ADAPTATION, presentation only (`huntRopeVfx.js`, `huntWireVfx.js`); hunt rules unchanged. The controls publish the equipped rope's `ropeItemIndex`.
+- Ropes (native items 0–11): the braid takes the shop icon's colour per family — 基礎 blue, 強化 green, 高階 gold, 頂級 red — with the drawing glow, cinch and bind burst in that colour. α is a plain braid; β adds a silver tracer strand and a silver knot; γ has a gold knot, a slow light running along the rope and a glint round the coil. Pull tension stays on the outer glow (cyan slack, amber pull, red strong).
+- Wires (native items 0–5): the kind colours stay (cyan 阻擋, violet 磁力, yellow 電擊). β runs as a twin cable with a second lamp on each post and a stronger effect (six field rings instead of four, a third bolt, twice the hit sparks).
+
+<!-- record-id: HUNT_WIRE_VFX_20261111 -->
+## 2026-11-11 — Hunt wires look like gear: pixel steel cable, one look per wire kind, hit feedback
+
+After the rope, the Owner said the hunt-tool wires were the same cheap line: 「包含狩獵道具這些鋼索，拉出來的線也就是一個很便宜的線的感覺一點都沒有那種特效感」.
+
+OWNER_APPROVED_ADAPTATION, presentation only (`presentation/vs2/huntWireVfx.js`), in the rope's HD-pixel language: an 8×8 twisted steel texture bent with Pixi `MeshRope` (nearest filtering), an additive glow under it, square pixel posts and sparks.
+- 標準鋼索 (BLOCK, items 0–1): cool cyan steel; a partner that meets it makes it hum and throw sparks.
+- 磁力鋼索 (BIND, items 2–3): violet field rings run along the cable with orbiting motes; a held partner sends out pulse rings.
+- 電擊鋼索 (DAMAGE, items 4–5): crackling pixel lightning along the cable; a partner that meets it is struck by a bolt.
+- Dragging: a holographic dashed line in the kind's colour, red while too short. Placing: the cable shoots out from its first post. Last 2 s: it flickers. Removed: it fades.
+- The wire rules (`nativeHuntWire.js`) are unchanged; it only publishes `slot`, `remaining` and a 14-tick `hit`/`hitPoint` for display. Reduced motion keeps the kinds readable without bolts, hum or sparks. The old bare line is removed.
+
+<!-- record-id: HUNT_ROPE_VFX_20261111 -->
+## 2026-11-11 — The hunt rope looks like a rope: braided pixel cord, cinch, coil, tension and snap
+
+The Owner asked for commercial-quality lasso and pull effects: 「現在就好像一個很便宜的線」.
+
+OWNER_APPROVED_ADAPTATION, presentation only (`presentation/vs2/huntRopeVfx.js`); it reads the published tool state and never writes the hunt. One HD-pixel look: an 8×8 two-strand braid bent along the path with Pixi `MeshRope` (nearest filtering), an additive glow rope under it, square pixel sparks.
+- Drawing: the rope follows the finger with a bright head and shed sparks; the start point pulses once the head comes back round. The drawn path is published for display only (`lassoPath` from the finger trail, `closure.trail`); binding is unchanged (HUNT_ROPE_ORIGINAL_20261111).
+- Release: the drawn loop pulls tight toward its centre in gold; a hit bursts (shock ring, flash, shards) on every partner it bound, a miss lets the loop drop grey and puff.
+- Bound: a glowing rope coil with a knot at the partner's feet.
+- Pull: the tether sags and glows cyan when slack, nearly straight in amber under pull, taut red and humming under a strong pull; below 30 % durability it flickers and frays.
+- Snap: the rope breaks at the middle, both halves whip back, sparks burst (`snap` event from the controls).
+- Reduced motion keeps every state readable without hum, jitter or sparks. The old line-and-star drawing is removed.
+
+<!-- record-id: HUNT_ROPE_ORIGINAL_20261111 -->
+## 2026-11-11 — Hunt rope back to the original: loop read on release, a touch on the partner to pull, no rope role bonuses
+
+The Owner felt the lasso-and-pull play had drifted (「這個好像有點跑掉了」) and first asked for one partner per loop. The evidence was checked before changing anything:
+
+- OVL0 `0x021148CC` (research-only `DISASM_capture_handlers.txt` lines 194–301): after the shape test it queries a ±48 px box round the loop's centre (`0x02066538`) and loops over **every** hit (`0x021149A0..0x02114A04`), sending each the bind event `0x23`. The query keeps native slot order and appends only a partner lower on screen than the last, so one loop can bind more than one partner but not necessarily all of them.
+- The shape is read when the finger lifts (`02114718`, predicate `02114388`: at least 6 samples, four extremes in order, width over 25 px, width about equal to or twice the height within 15 px).
+- The pull (`02114F54`, CPU-replayed over 198 updates, unchanged): under 40 px slack (no damage, +10 durability), 40–80 px ×1, 80 px or more ×2 with the partner dragged toward the finger, over 160 px the rope breaks; damage is max HP over the rope coefficient, no capture roll. In the original the pull starts by touching the bound partner.
+
+Told that one-per-loop is not original, the Owner chose 照原作 and asked to restore the loop reading, the touch-to-pull and the rope roles: 「圈的判定方式, 要按在怪身上才能拉, 四種繩子的特殊加成」.
+
+OWNER_APPROVED_ADAPTATION reversal (back toward ROM behaviour):
+- The 2026-10-27 mid-stroke polygon lasso no longer binds; the native shape test on release and the ±48 px centre query bind, after the native 18-tick cinch, for every rope.
+- The 2026-11-03 press-anywhere pull is gone: a pull starts only on a bound partner under the finger (native hit test, front-most first); a press elsewhere draws a new loop. The 3-second slip watchdog stays.
+- The 2026-10-28 rope role bonuses are off: no 捕捉繩 +30 % damage, faster cinch or wider catch; no 強力繩 half wear or two-partner hold; no 克隆繩 awake tolerance cut or doubled imprint; no 究極繩 repel or rage guard; no extra wear for a rope line crossing rocks.
+- Kept: each role's extra reach rows (so every rope can still bind the stages it is sold for), counted ropes and wear (HUNT_TOOL_TIERS_20261103), the lure → disable → rope chain bonus.
+- Web input: the DS sampled the stylus once per 60 Hz frame. When a slow browser frame brings several pointer moves between two ticks, the position each newer move replaces is sampled first, so a loop is not lost to frame rate; one move per tick samples exactly as the native tick did. Measured in Chromium: a quick loop (about 0.4–0.5 s) binds; a touch on the bound partner dragged about 52 native px wears it down to the hand; a press 300 px away does nothing.
+
+<!-- record-id: BESPOKE_MOVE_VFX_PROGRAM_20261111 -->
+## 2026-11-11 — Every move gets its own animated effect; the Owner hands the programme over
+
+The Owner asked (2026-11-11): 「我可以交給你，讓你自己幫我去把每一個特效都做好嗎？幫我依照我的招式，然後幫我把每個特效都做出專屬那個招式的特效的動畫，有打擊感，然後要商業遊戲的水準」. After a tiered, batched plan was offered, the Owner answered: 「就是都交給你自己去處理自己去分批我不介入」.
+
+OWNER_APPROVED_ADAPTATION, presentation only, standing for this programme:
+
+- Every move gets its own choreography: wind-up, release, travel, contact (with hit-stop, shake and knock scaled by its weight) and aftermath. It is drawn in the one pixel style and plays the same in the AI battle, the Data Arena and the Dex preview.
+- Tiers: signature (ultimate) moves are designed one by one; skills get their own shot and contact over shared parts; basic moves are distinct parameter sets over the shared library, and no two look alike.
+- The original structure stays the skeleton: the native effect pool's timing, positions and counts (UNIQUE_PIXEL_MOVE_VFX_20261108). Battle rules, RNG and the battle clock never change.
+- The agent picks the batches, the order and the review itself. Each batch is checked with tests, the full `test:ci`, the Pages build and real battles on an isolated port, then committed, merged and published without waiting for the Owner. A batch that fails its checks is fixed or held, never published.
+- Rights: only the project's own drawings and code-made effects, plus MIT-licensed code with its notice kept. No ROM pixels and no third-party characters.
+
+Batch 1 (2026-11-11): the Owner's main team, 角暴龍 (193 裂顎咬, 194 熔核彈, 195 裂顎貫角), 熔岩龍 (213 暴牙咬, 214 地炎熔岩彈, 215 焚天炎砲, 216 地炎角刺) and 黑暴龍 (226 夜獄掠爪, 227 夜獄焚焰砲). It adds the per-move table `presentation/vfx/moveVfxChoreography.js` and the animator `presentation/vfx/moveVfxSetPieces.js`, with seven pieces: jaws, jaws-horn, horn, claws, core, muzzle, muzzle-spiral. The pieces are new pxl drawings in `drawn-vfx.px.js`: an arched flame jaw with inward fangs, a claw mark, a horn tip, a molten core and a muzzle ring. Each move sets its own hit-stop, shake and knock. The AI battle plays the pieces on LAUNCH and HIT; the Data Arena plays them on release and hit.
+
+Batch 2 (2026-11-11): all 46 strike and slash signatures, plus 咬衣豆 (43, 44) and 跳跳蕾 (45, 46). There are ten new pieces: fist, rush, quake, spin, roar, cross, slash, scissor, iai and knives. They use new pxl drawings: a fist with grooved knuckles, an eight-point impact star, a ground crack, a blade crescent, speed streaks and a knife. Each move's piece follows what its name does: 拳/掌 fist, 衝/俯/天墜/翔 rush, 錘/鎚/重擊/踏/墜擊 quake, 迴旋/旋衝 spin, 吼/嘯 roar, 十字 cross; 斬/刃/裁 slash, 剪/鋏 scissor, 一閃 iai, 飛刀 knives. The hold, shake and knock follow the move's power.
+
+Batch 3 (2026-11-11): the remaining 75 fire, orb, lance, pierce, missile and claw signatures. There are eight new pieces: stream, wisps, orb, splat, eye, lance, rain and clock. They use new pxl drawings (a flame tongue, a lance of light, a toxic blob) and reuse the earlier eye, missile and clock drawings. The name decides the piece: 嘯/吼 roar, 飛牙 jaws, 鬼火/神火/妖火 wisps, 邪瞳 eye, 時鋼 clock, 毒/泥/孢 splat, 彈雨/全彈/釘雨 rain, 轟爆/核焰/天爆 quake, 焰流/焰息/奔流/射線 stream, 爪 claws, 槍/矛/光/砲 lance, 刺/喙/突 horn, 珠/彈 orb, 火球 core. Strength scales with power: 1x, 1.15x or 1.25x, with a hold of 80, 88 or 95 ms.
+
+Batch 4 (2026-11-11): every remaining signature, so all 204 signatures now have their own choreography. There are seven new pieces: flurry and drop, which take a drawing named by the move, plus bolt, vortex, vines, mist and wave. New pxl drawings: a note, a leaf, a feather, a bubble, an ice shard, a vortex and a vine. The earlier bomb, mushroom, gear, bone, fish, heart, lightning, cloud and splash drawings are reused. The piece follows the move's archetype: notes, bubbles, leaves, petals, feathers, shards and fish flurry; bombs, mushrooms, gears and bones drop; thunder bolts; black holes, tornadoes and wind become vortices; vines, trees and spikes become vines; water waves; mist rolls.
+
+Batches 5 and 6 (2026-11-11): every skill move (154) and every basic move (199) without a signature also gets its own row, for 565 rows in all. The name picks the piece first, as in batches 2–4, with more verbs: 翻滾 spin, 抱擊 jaws, 穿/舌彈 horn, 拂/尾擊 slash, 踢/頭槌/敲/杖 quake, 撞/撲 rush; otherwise the move's archetype decides. Skills are a medium blow (scale 0.85–1.05, hold 55–70 ms, medium shake) and basics a light one (scale 0.70–0.82, hold 35–50 ms, light shake), stepped by power. Shot-type skills also play a muzzle flash on release.
+
+Batch 7 (2026-11-11): the support moves. Each one plays its own cast on every body that receives it, keyed by the effect it applies. There are seven new pieces: heal (pluses well up from a ground ring, bigger for 300/900/2100 HP, a little smaller per body for a team heal), cleanse (rings sweep out, shards of the cleared status rise), attack up (three arrows climb, a flash over the head), speed up (streaks shoot up), defence up (a shield slams up, overshoots and settles), accuracy up (a reticle spins in and locks) and resist up (a shield with four circling shards, in the resisted element's colour). New pxl drawings: a plus, an up-arrow, a shield and a reticle. Records 1 and 28-30 apply no effect and keep the shared cue. The Data Arena has no support moves.
+
+Refinement pass 1 (2026-11-11). The Owner said the drawn pieces looked「很像卡通」「很廉價」「像小朋友畫的」 and pointed to the original, Pokemon Arena 2D and pixelfx:「特效的質感要像這樣」. The original's own hit effects (research only) are energy -- a white-hot core, a hue rim, sharp rays and sparks -- with no outline and no drawn object. So every set piece is now a pixelfx effect (MIT, notice kept), baked by `scripts/vfx/bake-move-piece-vfx.mjs` into `presentation/vfx/moveVfxPieceSprites.js`. Each piece keeps two layers, as pixelfx composites them: a crisp colour layer (stepped, no outline) and its light layer (the soft bloom, half resolution, added over the colour). Both are recoloured per move by brightness. The sheets load on demand when a battle starts (about 2.8 MB of text). Examples: claws = claw swipe, horn = thrust, fist = blunt hit, rush = critical flare, quake = ground slam, slash/cross/scissor = sword and double slashes, stream = flamethrower, bolt = lightning strike, vortex = black hole, wave = wave crash, heal = area heal, defence up = divine shield. An ultimate plays its contact 1.55x (release 1.3x) and opens it with an impact frame, a white star flare held under the hit-stop; a critical hit does the same. A contact piece starts on its connecting frame, so the hit-stop holds the blow landing, not its approach. `move-vfx-kit-review.html` now shows each move's own pieces with the AI battle's hit layers, and the loopback `?moveFxQa=<records>` replays chosen moves in a real battle. The size gate counts the deployed site: a plain build leaves out the character art the deploy serves from its own host. Next: the kit's flying shots, ground sigils and the Data Arena's pool and environment effects (ground and obstacle breaks), to the same level.
+
+Refinement pass 2 (2026-11-11), Owner:「那個地板的六芒星那些也可以重做嗎」 and 「Data Arena的招式特效還有環境互動的特效像場地破壞啊，場地上的障礙物的破壞啊，希望也都可以有同樣等級」. Three changes:
+- The kit's drawn hexagram sigils, under a caster and under an ultimate's contact, are now pixelfx casting and rune circles, baked the same way. They are already drawn flat on the ground, and their light layer plays as an added part.
+- In the Data Arena a heavy hit now marks the floor with its element's ground mark (crater, scorch, frost, puddle...), as the AI battle does. The kit path used to return before it.
+- Struck cover throws a baked chip burst in its own material's colours. Broken cover bursts into debris and dust, leaves a crater under its rubble and holds the layer for 45 ms. These run on top of the scene's existing rock particles and camera trauma.
+Next: the kit's flying shots and drawn heads (water blobs, missiles, bombs...).
+
+Refinement pass 3 (2026-11-11): the flying shots and the Data Arena's floor hexagram.
+- Shots: once the baked pieces are in, the kit's fire, water, bubble, orb, pillar, black-hole, thunder, lance, arrow, bullet, gatling, shard, snowflake, missile, crescent and shuriken shots fly a looping pixelfx head (a fireball, a water orb, an arcane or void orb, a plasma or laser bolt, an ice lance, a rocket, an energy disc). The head is recoloured to the move and points along its flight; the kit's trails and escorts stay.
+- Zones: the Data Arena's delayed ground zones drew a hexagram of two crossed triangles. That is now a baked pixelfx sigil, seen from above, that draws itself in as the zone charges. It takes the zone's colour, with crisp lines and an added glow. The zone's circle and fill stay as the gameplay warning.
+Next: the kit's impact shapes (water drops and crests and other drawn bursts).
+
+Refinement pass 4 (2026-11-11): the kit's impact shapes. Once the baked pieces are in, the kit's impact for each mapped archetype lands a baked pixelfx hit instead of its drawn shape.
+- Mapped archetypes: fire, water, bubble, shard, snowflake, quake, orb, thunder, leaf, petal, wind, claw, slash, crescent, pierce, lance, bullet, gatling, vine, missile, cannon, meteor, arrows, black hole, shuriken, strike, feather, note, heart, mist, bite.
+- Shapes replaced: the water drops and crest, the stems, the crescents and similar drawings. The kit's flare and the move's signature motif stay.
+- The same impact plays in the AI battle (kit stand-ins) and the Data Arena.
+- A shot that flies a baked head no longer drops the kit's drawn trail, because the head carries its own.
+- The 292 original-style frames, such as the tsunami, stay as they are.
+
+Refinement pass 5 (2026-11-11). Owner: 「請繼續下一步，這邊交給你處理」.
+- More baked heads replace the kit's drawn ones. Leaves, petals, roots and trees fly a leaf swirl; a tornado flies a pixelfx tornado (upright); a feather flies an arrow; a note a glowing orb; a heart a glowing heart; a star a power star; a fish a fish school; a spore a wisp; a meteor a fireball.
+- The Dex "Preview special" now lands each move's own baked contact piece at its impact. It plays on a DOM canvas (`presentation/juicy/showcaseBakedPiece.js`) with the colour and light layers in the move's palette, the same piece as in battle. The Dex keeps its own impact flash.
+- Objects with no pixelfx counterpart (bombs, gears, bones, bananas, eggs, syringes, drills) keep their drawings.
+
+Refinement pass 6 (2026-11-12). A real Data Arena round, played by the QA autopilot on an isolated port, confirmed the cover chips and breaks (10 hits, 2 breaks), the craters left under broken cover and after heavy hits, and the zone sigils. It also showed a fire hit stacking three red-ball explosions -- the move's contact piece, the kit's baked impact and the element hit burst -- into one blob a third of the screen wide. Fixes:
+- When a move's own contact piece plays, the kit's impact keeps only its flare and the move's signature motif. This applies in the Data Arena and to the AI battle's stand-ins.
+- Fire cores and bomb drops now burst as pixelfx's plasma explosion (a white-hot core and energy rings) instead of red balls.
+- A fist lands pixelfx's firework burst, radial rays from a white core, as the original's knuckle hit does.
+
+Refinement pass 7 (2026-11-12). All 204 ultimates were recaptured on the review page, which mirrors the AI battle's hit layers. Every contact opened with the same large white flare and its ring of tick marks, so for the first beat every ultimate looked alike. The impact frame is now only the first two frames of the flash, before the ring forms, at 0.7 of the move's contact scale. Each move's own shape reads from the contact frame: a pillar of light and notes, a black hole, an energy ring, fire tongues, an ice lance.
+
+Refinement pass 8 (2026-11-12). The Owner sent a phone recording of 阿花仔's 花藤纏縛 and then said:「我想要你把目前遊戲中還是用舊的那種廉價感的方式的特效都升級」. The recording showed two vector drawings:
+- The special prelude's hyper ring: a gold ellipse with white light streaks, drawn as strokes round the caster. Once the baked pieces are in, it is a gold pixelfx rune circle with its rising light, colour plus glow, looping for the whole prelude. The strokes stay as the fallback.
+- The hit ground marks other than the crater and scorch: a spiral of roots, frost spokes, ripple rings, sun rays, shade blots, all canvas strokes. They are now still frames of baked pixelfx ground effects (ripples, a frost ring of ice spikes, root snares, a low cloud, a light ring, a hex sigil), each its fullest frame. A thunder mark scorches the floor as a fire crater does.
+- The caster's dark red tint in the prelude is the original's own tint (nativeMotion.tintRgb) and stays.
+The full audit of the effects still drawn as strokes, circles and gradients follows in later passes: the shared element and battle layers, then the Data Arena's event effects, then ambient, hunt and ranch.
+
+Refinement pass 9 (2026-11-12). Owner:「全部階段都要做好以後推上去正式服，其他我不介入」. The kit's shared parts and the AI battle layer's drawn rings now play baked pieces once those are loaded; before that, they draw as before.
+- Wind-up: pixelfx's spell charge at the hand replaces the orb, the thin ring and the drawn streaks.
+- Release: pixelfx's muzzle flash along the shot replaces the flare, the shock ellipse and the sparks.
+- Contact: no signature-motif rings or crosses over a move's own piece; only a small flare stays.
+- The Data Arena 80 TP close: pixelfx's ground slam replaces three drawn rings and sparks.
+- Battle layer: its drawn ground rings (launch, hit, ending, ultimate implode, heal, status, KO) and the heal light pillar stand down, since each of those moments already plays a baked piece. A heal that no support move cast shows the baked heal. A fall bursts as pixelfx's dirt explosion.
+
+Refinement pass 10 (2026-11-12): the Data Arena's events.
+- Every event ring the scene draws (about 45 call sites: shockwaves, recoveries, splashes, zone bursts, barrier, relay switches and so on) goes through one `ring()`. Once the baked pieces are in, that is an energy ring in the event's tint, seen from above: pixelfx's mana burst, or its parry pop for a small ring. Rings fired together at one spot play once. Before the pieces load the drawn ring stays.
+- The fire element's pixel hit burst was a heap of red balls (pixelfx's small explosion). It is now pixelfx's ring of fire bursting out at the feet, starting on its burst frame.
+- The arena's own floor markings (the centre ring and start marks) and the gameplay telegraphs stay as they are.
+
+Refinement pass 11 (2026-11-12): the battle field's hazard events. Once the baked pieces are in, each plays a pixelfx piece instead of the circles and ellipses drawn per frame:
+- a shock charge: a lightning strike
+- a shock: an electric pop
+- a fall into water: a splash
+- a recovery: a dust burst
+- ice heated or lava cooled: steam
+- a lava burn: a plasma burst
+- a resisted shock or burn: a guard shield
+Charged water shows electric pops on its tiles instead of drawn zigzag arcs. The terrain overlays that tell the player where a hazard is stay: charged-tile frames, ice and crust states. These events show in the AI battle and in the Data Arena's relay maps, both of which use this module.
+
+Audit close: what still draws as vector shapes after passes 8-11 is interface or a gameplay sign, not a move effect -- telegraphs and danger zones, HP and TP bars, the ranch's selection rings, crests, mood and emote icons, the arena floor markings, the Data Arena's relay projectile heads and Tide Surge wave (only when the kit cannot draw a shot), and the hunt's tools (redone from the original at the Owner's request).
+
+<!-- record-id: SPECIAL_HEX_DECLUTTER_20261111 -->
+## 2026-11-11 — The cyan hex sprays at hits give way to the pixel hit bursts
+
+The Owner asked: 「必殺技的青色六角形也幫我整理一下，看看可以整理什麼」. A frozen-frame probe showed the cyan hexagons are not drawn by Pixi. They are the original game's two hit-spark families (`battle-hitspark_small`, `battle-hitspark_big`), which the Three.js battle overlay draws at every native impact in a fixed cyan, whatever the move's element. They overlap the pixel hit bursts (STATUS_AILMENT_VFX_20261110) and motes (MOVE_VFX_QUALITY_20261110). Three plans were offered: shrink and fade, hand the contact to the pixel bursts, or recolour (rejected: tinting cyan models gives a muddy colour). The Owner chose 「用B」.
+
+OWNER_APPROVED_ADAPTATION, presentation only. The native impact pools, their timing and positions, and the `s_impact` and `earth_hit` families are unchanged.
+
+- `createBattleVfxThreeOverlay.js` leaves the two hit-spark families out while `pixelHitsOwnSparks()` is true. That holds when the dynamic layer draws a pixel hit burst at every contact (`battleFxLayer.ownsHitSparks`, exposed by the battle scene and passed in by `app/main.js`). The classic presentation still draws them. The overlay reports `handedToPixelHits` in its `data-impacts` record.
+- Burst evolution scatter (`battleBurstShell.js`): every other plate crumbles in place in the first third. The rest fly 0.8–1.8 radii instead of 1.4–3.2, shrink to a third, darken toward the edge colour and fade in steps. The timing is unchanged.
+- A shot that ends without a hit throws a few of its element's motes instead of eight generic sparks.
+
+Measured on the same QA Free Battle: cyan battlefield pixels at the peak fell from about 3,800 to under 50.
+
+Publication: covered by BESPOKE_MOVE_VFX_PROGRAM_20261111 below (the Owner hands the whole move-effect work over, publication included).
+
+<!-- record-id: HUNT_SPAWN_SPREAD_20261110 -->
+## 2026-11-10 — Hunt partners spread out: loose same-species groups, a third of a screen apart
+
+The 2026-11-10 hunt audit measured that 24–39 % of partners entered within 32 native px of another on every gate (an even spread gives 5–7 %): the native entry groups same-species pairs 30 % of the time within 31 px and pushes blocked spawns to the first open tile on the right. Asked again, the Owner chose 保留成鬆散小群 and 約 1/3 個畫面寬. A guarantee of one or two partners in the opening view was built and then withdrawn by the Owner: 「拖動地圖才找得到怪這個是沒關係吧因為本來就是讓玩家去找怪」.
+
+OWNER_APPROVED_ADAPTATION, positions only (`hunt/capture/productHuntSpawnSpread.js`). It runs after the native entry, never reads or advances the native RNG, and changes no other actor field; its own stream is seeded from the partners' native values, so a retried entry spreads the same.
+
+- Partners stand only on open tiles with open ground on four sides, two tiles from the edge and above the dock band (bottom 10 tiles).
+- Same species form loose groups of 1–3 (members 48–80 px from their leader, at least 36 px apart); groups keep about 96 native px (a third of the 256 px view) between them.
+- Nothing is placed in the opening view on purpose: about 1.9 partners stand in it on average and about 15 % of entries open on an empty screen, left for the player to search.
+- Measured over 150 entries on each of the 16 gates: partners within 32 px of another 24–39 % → 0 %; partners of different species at least 72 px apart; spawns on blocked ground or in the dock band → 0.
+- `huntSpawnSpread: false` (app option) keeps the native positions for a test that scripts one partner's path.
+
+<!-- record-id: MOVE_VFX_QUALITY_20261110 -->
+## 2026-11-10 — Move effects gain pixel motes and a hold that follows the blow
+
+After STATUS_AILMENT_VFX_20261110 shipped, the Owner chose the plan 「骨架照原作，品質手法學 pixelfx」 for move effects. Under that plan every move keeps its original structure and gains the small things that sell it. The Owner then said 「想做」 (2026-11-10).
+
+OWNER_APPROVED_ADAPTATION, presentation only. The native effect pool keeps each move's cells, count, place and timing (UNIQUE_PIXEL_MOVE_VFX_20261108). Battle rules, RNG and the battle clock are unchanged.
+
+- `presentation/vfx/pixelMotes.js`: element particles drawn here as tiny outlined pixel sprites in the element's own palette (no image file, no reference pixel). Fire throws embers, water drops, ice glints, thunder sparks, wood leaves, earth pebbles, wind streaks, sun motes, moon wisps, metal sparks, and neutral chips. They trail live projectiles and streams and scatter from every landed hit, thrown along the blow (amounts in the decluttering note below). The simulation is seeded and stepped by the owner's frame delta. It has no ticker of its own and holds during a hit-stop. Reduced motion drops trails and throws a third of a burst. It plays in the AI battle (`battleFxLayer.js`) and the Data Arena (`dataArenaElementFx.js` projectiles, hits and areas).
+- Decluttered before shipping: the first cut looked 「很雜亂」 to the Owner, who then said 「要交給你去判斷」. The motes now replace the battle's old generic hit and launch sparks instead of adding to them. A hit throws motes by weight: light 3, medium 6, heavy the recipe, signature 1.3x. Only projectiles and streams trail, at 1.6x the cadence, and trails stop once the field is half full. A crowded field takes fewer new motes. Caps are saver 30, balanced 80. A run of light hits on one target shows its pixel hit burst once per 220 ms. In the same QA Free Battle, peak particles fell from about 214 on production to about 137 plus at most 33 motes. Particles spawned fell from about 470 to about 373, roughly 20% fewer.
+- Hit-stop by weight (`BATTLE_FX_JUICY.hitStopByTier`): a light hit never holds, a medium hit 45 ms, a heavy hit 65 ms (as before), a critical or signature hit 95 ms. It is drawing only; the battle keeps stepping.
+
+Verified by `tests/championship-move-vfx-quality-cases.mjs`, the updated juicy quartet case, an offline per-element mote sheet, and real Free Battles on an isolated port (8926).
+
+Publication: the Owner said 「好啊，提交發佈到合併到正式站」 (2026-11-10).
+
+<!-- record-id: HUNT_INSTINCT_VFX_RARITY_20261110 -->
+## 2026-11-10 — Hunt: rare veteran elites with premium radars, an instinct glow underfoot, partners that stand on the ground, and 捕獲移動
+
+After a hunt audit the Owner found the 歷戰體 effect ugly, shadows drifting, and friends not knowing what the 手 tool did: 「那些特別的立戰體或者是其他的那些比較不一樣的生物體的特效請重做，以及工具列那個手請改成補獲移動的文字」. On the result: 「他看起來就不像貼地感，就是沒有踩在那個地板上的感覺」. Then: 「這種強大的歷戰體，應該不能常常出現……要用那個道具才可以比較容易出現」, choosing 非常稀有 and the premium machine only, and asking to reuse existing items rather than draw new ones.
+
+OWNER_APPROVED_ADAPTATION, presentation and product rules only; the native hunt generation, RNG and positions are unchanged.
+
+- Instinct mark: after seeing a pixel outline, ground sigil and sparks, the Owner chose the plain look (「你像這樣子就很好啊，就是不要太花俏」): a special partner's feathered footprint shadow glows in its tier's colour instead of black — veteran elite red-orange (0xff2a10), ancestral violet (0x9a5cff), 0.9 opacity, no other layer (HUNT_INSTINCT_GLOW in huntThree/actorShadows.mjs). The 2D fallback draws the same coloured ellipse. The old random zigzags are gone.
+- Grounding (huntThree/actorFootprint.mjs): measured in the browser the drawn feet already sit on the foot point. The contact shadow and sigil now lie on the ranch footprint table at the map's pitch, 60 % ahead of the nearest foot; a small dark core hugs the feet (the soft ellipse stays at ≤ 0.45); the idle 2D cyan ring is hidden over the 3D scene (the tethered gold ring stays).
+- The hand tool reads 捕獲移動 (en Grab & Move, ja 捕獲移動, th จับ/ย้าย, vi Bắt & dời); its slot is 60 px and a long name wraps.
+- Rarity: ELITE 1.5 %, ANCESTOR 0.3 % per partner, at most one of each per hunt (≈ 1 elite hunt in 6, 1 ancestral in 30). Two HUNT cartridges reuse the idle 龍族雷達 (row 74) and 星靈族雷達 (row 78) plugin rows and art: 歷戰菁英雷達 (SR: elite ×10, at least 1, at most 2) and 祖靈血脈雷達 (SSR: ancestral ×10, exactly 1). SR/SSR, so only the premium machine pays them.
+- Loopback review only: `?huntInstinctQa=ELITE|ANCESTOR|mix`.
+
+<!-- record-id: JOURNEY_RIVAL_ART_GROUND_CRATER_SHADOWS_20261110 -->
+## 2026-11-10 — Journey rivals show their art, ground marks become craters, and every battle body stands on a shadow
+
+The Owner reports, with an iPhone screenshot of a Journey zone stage, that the rival is not shown, asks for an inventory of every mode's characters, shadows and depth, and, with a circled screenshot, that the floor-break effect under a move is ugly and should look like a commercial game.
+
+Presentation only; no gameplay, save or ROM table changes.
+
+- Journey zone rivals are not in the Data Arena's own rival list, so they were drawn as the placeholder; they are now drawn as the roster partner of their species.
+- Ground marks of kind scorch and crack (UNIQUE_PIXEL_MOVE_VFX_20261108 HD-pixel style) are drawn as pixel craters: a bowl lit from above, a raised lip casting a shadow forward, jagged cracks with a light bevel and two-tone rock chips; a fire hit adds an additive ember layer (molten pit floor, hot seams) that cools within about 1.7 s; the crater lands with a short pop. Other marks are unchanged.
+- The battle result screen gives each body a contact shadow; the Data Arena contact shadow gets a defined core so it shows on bright floors.
+- Data Arena cover blocks: the shadow sits at the block's base instead of 14 px below it, so blocks no longer look as if they float.
+- Hunt: wilds render with their contact and cast shadows (night casts are dimmer by design). On entry the camera can start away from the herd; the Owner keeps it that way (「不用啊，因為我們就是要讓玩家自己去找角色」): finding the wilds is part of the hunt.
+
+Publication: the Owner asked 「要不要都修完再一起上線？」 and, once the remaining items were done, kept the Hunt camera as it is. This authorizes pushing this batch, merging it to main and publishing it through the existing Pages playtest workflow, with the new module listed and the changed source hashes restated. It does not widen to any other batch.
+
+<!-- record-id: STATUS_AILMENT_VFX_20261110 -->
+## 2026-11-10 — Battle status ailments get their own pixel loops
+
+The Owner shared the MIT-licensed pixelfx library (github.com/patch-gg/pixelfx) and asked whether it could help the move effects. After the read-only review (style clash with the 292 cells; the battle keeps a negative-status slot but draws nothing for it) the Owner said: 「好好啊，交給你去處理幫我補完，然後或者是轉成我們適用的，請多用Skill處理」.
+
+OWNER_APPROVED_ADAPTATION, presentation only. Status mechanics, durations, RNG, damage and AI are unchanged (`battle/battleStatus.js`, VERIFIED_BINARY).
+
+- `presentation/battleFx/battleStatusAilmentFx.js` gives each runtime status code 1..14 a look. A loop of pixels sits round the fighter, and the fighter's own frame gets a multiply tint plus, for hot or charged looks, a pulsing additive copy of the same frame. The ROM proves each code's mechanics but not its name, so every row of `STATUS_AILMENT_BY_RUNTIME_CODE` records what it rests on: the mechanic, plus what the approved names of the moves that apply it describe. The nine codes that moves apply wear nine different looks. Petrify (12) is the body only (stone tint, no overlay).
+- `presentation/vfx/statusAilmentSprites.js` is generated by `scripts/vfx/bake-status-ailment-vfx.mjs` from pixelfx effect code. The bake plays each effect round a 40 x 34 stand-in creature at 12 fps and drops everything painted on the stand-in's body (the game paints the real body itself). It steps light and alpha (no soft halos), adds a one-texel dark outline to bright shapes, and writes palette-keyed run-length rows. It ships no image files. The module carries the MIT notice in a `/*!` legal comment. pixelfx is a local authoring tool (`PIXELFX_HOME`), never a game dependency.
+- Runtime: one canvas per look (plus one Scale2x canvas when a big body needs it), nearest sampling, no ticker of its own. The grain follows the arena (0.35 native px per texel, at most 1.25x). Flames stand in front; curse smoke and the slow clock sit behind the fighter. Reduced motion holds one frame and a steady glow; saver quality drops the glow. `?statusFxQa=7,9,14` on a loopback host forces looks per slot for review.
+- Data Arena (relay): the Owner then asked (2026-11-10) 「我希望這個特殊效果，也可以用在Data Arena」. Its fighters carry three real conditions (`dataArenaSimulation.js`): root (fire clears it, and the scene already drew it icy), burn and slow. `dataArenaStatusLook` maps them to frozen, burning and slowed, strongest first. The same layer draws them in `dataArenaPixiScene.js` and replaces the earlier ember, ring and mist dressing. `?statusFxQa=frozen,burning` (loopback) forces looks on the player, then on each rival.
+- Move hits: the Owner added 「幫我把招式的特效也做得漂亮一點，像這次特殊效果的特效，我就覺得很不錯」. `presentation/vfx/pixelHitBursts.js` plays one pixel burst per effect element at every landed move, in the AI battle (`battleFxLayer.js` HIT) and in the Data Arena (`dataArenaElementFx.js` hit and area). The bursts come from the same bake (`pixelHitBurstSprites.js`): fire explosion, water splash, ice nova, thunder zap, wood thorns, earth burst, wind ring (recoloured), sun star, moon dark burst, metal sparks (recoloured) and a neutral blunt hit. Each keeps only its burst (wind-up and smoke tail dropped), plays at 15 fps and stands on the ground or at the contact. This is a quality layer on top of each move's own cells, kit burst and flash. Those keep the original structure, timing and place (UNIQUE_PIXEL_MOVE_VFX_20261108). Caps: 4 on saver, 10 on balanced. Reduced motion shows one strong frame for 160 ms.
+
+Verified by `tests/championship-status-ailment-vfx-cases.mjs`, by real Free Battles on an isolated port (8925) in portrait 390 x 844, landscape 844 x 390, desktop 1366 x 768 and reduced motion, and by Data Arena relay matches on the same port (forced looks, then live hits).
+
+Publication: the Owner said 「那就提交、開 PR、合併並發佈到正式站」 (2026-11-10), after deciding the effects stay in this repository rather than a separate one.
+
+<!-- record-id: LOCKED_SHOP_DEX_SHADOW_20261110 -->
+## 2026-11-10 — Locked shop goods stay on the shelf, and unrecorded Dex partners are silhouettes
+
+With the friends mode off on the public site, the Owner saw the Dex as plain 「?」 boxes and the shop's hunt tools and cages hidden until their rank (2026-11-10), and asked: 「圖鑑要不要改成用影子的方式顯示有誰」 and 「商店裡的道具要不要也都開放然後只是先鎖起來……要什麼樣的條件才會開啟才可以購買」, then 「把這個階段做好再一起推送」.
+
+OWNER_APPROVED_ADAPTATION; it carries out the launch rule of 2026-11-04 (a partner the player has not raised or caught is a black silhouette with 「?」).
+
+- Dex: every unrecorded partner with Dex art shows its thumbnail filled black with a white 「?」 and the name 「????」; its detail shows the same silhouette, still without name, profile, data or moves. The silhouette uses its own classes (`cm-dex-list-shadow`, `cm-dex-shadow`), so the registered portrait stage stays absent as the masking contracts expect. Eggs keep their own card.
+- Shop: the frame adds `lockedListings` (each hidden row with its `unlock` — tamer rank or title badge) and an `unlock` on hidden hunt tool families and locked next tiers. The view lists them after the open goods, greyed, with a lock line 「{rank}開放」 or 「贏得「{title}」開放」; the sheet says 「尚未開放：馴獸師階級達到「{rank}」後即可購買。」 or the badge sentence and the buy key reads 尚未開放. A family's locked next tier shows the rank on its key and the full sentence in the sheet. Buying a locked row is still refused (`UNAVAILABLE`). The gacha tab is unchanged.
+
+Verified by `tests/championship-locked-shop-dex-shadow-cases.mjs`, the full `test:ci`, and a phone-portrait New Game with `?friends=0` on an isolated port (226 silhouettes; locked cages and tools with their rank or badge).
+
+Publication: shipped together with WEEKLY_SEASON_FACTIONS_20261110 under the Owner's 「請你自我審查一次沒有問題就提交、開 PR、合併並發佈」 and 「把這個階段做好再一起推送」 (2026-11-10).
+
+<!-- record-id: WEEKLY_SEASON_FACTIONS_20261110 -->
+## 2026-11-10 — One real week per season, title matches by time slot, and faction / race words everywhere
+
+The Owner asked (2026-11-10) to inventory the title schedule, medals and copy that still said 疫苗／資料／病毒, and: 「文案中如果有寫疫苗資料病毒的……就可以改成增加心輝的陣營聲望，依此類推」; 「現實一個月有四個禮拜，每個禮拜就是一季……每個月就會輪迴一次所有的徽章比賽」; 「一個禮拜是七天要分配完這八天的賽程……把一天的賽程改成時段開放，所以交給你去盤點跟分配」. Choices made the same day: 全改「陣營聲望」 (Dex labels too), race names change with it, the calendar 對齊每月 1 號, and the world championship 每 4 個月一次.
+
+OWNER_APPROVED_ADAPTATION; the NATIVE clock policy (parity fixtures, 4 × 8 days, all-day titles) is unchanged.
+
+- Calendar (real-time clock only, `time/monthlyCalendar.js`): days 1–7 spring, 8–14 summer, 15–21 autumn, 22–28 winter; 29–31 are winter overtime and replay winter's last day. Each calendar month is one championship year (months since 2026-01, wrapping at 96), so the world championship (`year % 4 === 3`) comes every fourth month. The stored season/day/year follow the device date on every sync (`advanceRaisingHomeClock` `calendar` option), also for a save from the eight-day clock.
+- Title schedule (`time/weeklyTitleSchedule.js`): days 1–7 keep their native day; the ten native day-8 titles move to the lightest day of the same season. Slots: one title a day is 全天 07–22; two split into 日場 07–17 (lower rank tier) and 晚場 17–22 (higher); three take 早場 07–12 / 午場 12–17 / 晚場 17–22; on a four-title day the two lowest share 早場. The championship stays on autumn day 5 (the 19th), all day. The rank-tier gate and the five-title cap are native. The schedule board, the medal date and the day-change calendar show the weekly day and slot.
+- Copy: the three ROM attributes read as factions with 陣營聲望 (心輝／黑鐵／裂隙; Dex 心輝聲望), the eight families as the taxonomy races with 點數 (龍族、獸族、羽翼族、森羅族、海淵族、機巧族、星靈族、幽冥族) across zh-Hant, en, ja, th and vi: habitat descriptions and effect labels, hunt radars and analyzers, title restrictions (病毒獵殺者 → 裂隙獵殺者, 資料殺手 → 黑鐵殺手), the glossary entry 屬性 → 陣營, medal conditions, the brag card, Dex stories and the training float labels. The three alignment radars now find factions from the taxonomy, so the former free partners show up under the faction they were given.
+- Self-review additions: the mentor letter on seasons and the glossary entry 時間 describe the weekly calendar instead of 「八天為一季」 / ten-minute days; the seasonal letters use the race names; on the real-time clock the sixteen season letters come round every four months (`year % 4`), because a month-year would otherwise skip them for good.
+
+Verified by `tests/championship-weekly-season-cases.mjs`, the full `test:ci` against a main baseline, `build:playtest` / `validate:playtest`, and a phone-portrait New Game on an isolated port (status bar 夏季 第3日 on 2026-11-10; at 08:33 only the morning title 水域百夫長 is open).
+
+Publication: the Owner said 「請你自我審查一次沒有問題就提交、開 PR、合併並發佈」 (2026-11-10). This authorizes this batch only.
+
+<!-- record-id: BATTLE_MODE_PRISM_AND_JOURNEY_20261109 -->
+## 2026-11-09 — The battle menu becomes a mode prism; levels, tower and campaign go into one Journey face
+
+The Owner sent a phone screenshot of 選擇對戰 and asked for a commercial-grade redesign of the cube: a polygon that turns like the cube, whose faces replace the six mode buttons under it (「點方塊就等於點下面的按鍵」), shaped by the number of modes so a later mode only adds a face (「現在就是只有六個也可以做成六面」). After seeing the result the Owner accepted it (「多邊形柱是可以啦」).
+
+The same day the Owner pasted a four-phase brief (Sync Level 1–50 with a post-battle level-up panel, a 100-floor tower with idle patrol, a 6×6 star campaign in the Data Arena with three-choice buffs) and then said 「不希望開太多模式，而是把這些模式都整合在一起」. A read-only inventory found 18 conflicts with current rules; the Owner delegated the open decisions (「我就相信你的決定好嗎？你幫我」). The session decided:
+
+- Prism (presentation only): one face per battle mode, procedural original panels, turn keys and caption; tap a face to press it, swipe to turn, settle on the app's one Pixi ticker. Face buttons stay in the page undrawn for keyboards and screen readers. The four-face texture pack stays for the no-WebGL fallback.
+- D1: Sync Level bonuses apply in title matches and championships under a level cap by tamer rank (Lv.10 at rank 0, +5 per rank, at most 50). OWNER_APPROVED_ADAPTATION over the ROM_VERIFIED match tables, which are unchanged.
+- D2: the Data Arena grants Sync EXP and reads Sync bonuses in Journey and practice play. This amends the 2026-10-15 isolation rule for that one purpose.
+- D3: password, link and online battles ignore Sync bonuses and grant no Sync EXP.
+- D4: Sync Level stays through evolution; rebirth keeps 30 %.
+- D5: no new menu modes. A seventh prism face, 征途 (Journey), holds the campaign, the tower, story chapters and the patrol pod. The tower is not named 「裂隙」, which is a faction name.
+- Sync Level is a modifier applied when a battle is built; it never rewrites the ROM individual fields, save words or battle codes.
+
+Batch plan and conflicts: workspace report `對戰模式整合盤點_20261109/REPORT_ZH_TW.md`.
+
+Merged with main after the awakening overdrive batch: a Journey zone stage never takes a sponsor contract (its stake, foe boost or payout); the stage pays only its own stars and prizes, and the contract waits for the next cup or relay.
+
+Publication: on 2026-11-10 the Owner directed 「好啊，整批一起推送，然後確認沒問題就公開發佈」. This authorizes pushing the whole batch, merging it to main once its checks pass, and publishing it through the existing Pages playtest workflow, with the new modules listed and the changed source hashes restated. It does not widen to any other batch.
+
+<!-- record-id: CHRONO_ARENA_FRIENDS_SWITCH_20261110 -->
+## 2026-11-10 — One-minute hunt with chrono cartridges in the field, Data Arena beacons, friends mode off on the public site
+
+After GACHA_FULL_EFFECTS_20261109 went live the Owner decided (2026-11-10): old test saves simply restart (no migration buffer for the ranch-capacity rule); use the chrono cartridge inside a running hunt and let Data Arena wins use the bounty beacon (「就把三跟四也都做好」); 「狩獵本身的時間現在也改成1分鐘就好，其他都要用加時間的那個」; and for the friends playtest mode chose 「公開版關閉，保留隱藏開關」.
+
+OWNER_APPROVED_ADAPTATION on top of GACHA_FULL_EFFECTS_20261109.
+
+- Hunt: a real-time hunt lasts one real minute (`REALTIME_HUNT_BASE_MINUTES` 144 hunt minutes). The HUD shows a 「時鐘 +120 秒」 key while a chrono cartridge sits in the bag; each use takes one from the bag and adds its 288 hunt minutes to the live countdown at once; several may be used. An armed chrono still adds its time at entry. The native (non-real-time) clock keeps its traced 480-minute deadline. The real-time hunt HUD and its loading card show the remaining time in real minutes and seconds (「限時 01:00」), amber under 30 s and red at 10 s.
+- Data Arena: a win settles like an AI win without a purse — one ticket 60% of the time, a cup 2–4 more — and spends an armed beacon (its tickets, the Ω shard, and battles/wins or race/faction points on the relay party). An AI tournament title now also pays 2–4 tickets (was 3–10), matching the 2026-11-09 balance.
+- Friends playtest: the public site defaults to the real economy (no 8,000,000 bits or 20,000 diamonds, rank-gated shop and hunt, Dex by records). `?friends=1` turns the friends mode on for that device and `?friends=0` off, remembered through the save port (`championshipModernSave:friendsPlaytest:v1`); without a choice, loopback hosts (local play and every browser gate) keep it on. The grant only reaches a save started while it is on.
+
+Verified by `tests/championship-gacha-full-effects-cases.mjs` and a phone-portrait run of the in-hunt chrono key on an isolated port.
+
+Publication: asked whether to commit, open a PR, merge to main and publish, the Owner chose 「是，合併並公開發佈」 (2026-11-10). This authorizes this batch only.
+
+<!-- record-id: GACHA_FULL_EFFECTS_20261109 -->
+## 2026-11-09 — Gachapon items act on the partner's own words, and both machines pay a fuller pool
+
+With the five-phase sheet pasted again, the Owner asks (2026-11-09) 「請你先盤點目前遊戲專案中的轉蛋機系統，然後確認這些項目都有新增到轉單及系統中，並且這些道具的作用都有實裝了，轉到以後也都有跟背包連動會加入到背包中」, and mid-batch 「皇家牧場從SsR品項改成UR，跟星際動物園是同樣等級的」. This decides the four items GACHA_ITEM_EFFECTS_20261102 left for the Owner: they are now in, including their effect on awakening conditions (race/faction counters and battle counts are what `evaluateBurstConditions` reads).
+
+OWNER_APPROVED_ADAPTATION on top of CYBER_GACHA_20261029 and GACHA_ITEM_EFFECTS_20261102. No save field, ROM table or native writer changes; items adjust a partner's persistent words, a hunt's inputs or a won match's settlement.
+
+- Growth chips follow the sheet: HP +120 and training fatigue (0x40) cleared; attack +18 and the partner's race counter +15; defense +18 and its faction counter +15; speed +18, wisdom +12 and growth age (0x18C) +15% of its life threshold (never past it; 成熟期 has none); cores α +12/HP +80/affection +10, β +25/HP +180/+25/care mistakes −1, Ω +50/HP +350/affection full/care mistakes 0/all eleven counters +20. Counters come from the three-axis taxonomy (faction = ROM attribute, race = ROM family), so they are the ones evolution reads. After any use the ranch checks evolution again on the partner's next idle step.
+- Kept against the sheet: the capacity chip still raises 0x10 by 2 G, because that word is a tournament entry minimum (`battleParty.js`), so lowering it would hurt; individual capacity does not decide ranch room.
+- Hunt: the sure wire is one charge — the first partner it ropes this hunt drops at once (a sure capture) and keeps +15% on its four stats. The chrono cartridge gives 288 hunt-clock minutes, which is +120 real seconds of the 200-second real-time hunt.
+- Beacons: α also gives every fighter +8 race and faction points; β/γ/Ω also give every fighter +2/+3/+5 battles and wins. Their ticket drops stay at +1/+2/+3/+5, above the sheet's minimum.
+- Metals: 艾瑪/貝塔 shards give every stat +10 and +25 on the counter the next evolution lacks most. A catalyst takes the route the player picks; a shard waives at most two unmet conditions (product routes ask for one or two), a whole metal any number; a 時之 catalyst inscribes its family. Tier smelting: any three R shards make a 時之合金碎片, any three SR shards a 時之合金. 成熟期 metals keep feeding awakening as STAGE_REDESIGN_BURST_20261102 decided.
+- Bits machine: supply boxes 45% (feed ×10, protein ×3, wound ×5, medicine ×3, a hunt box of bomb, meat bait or mine ×3) into the shop stacks the ranch toolbar and the hunt loadout read; coin pouch 30,000, coin purse 60,000, a basic chip, a hunt cartridge and the α beacon 35%; coin chest 150,000, reshape chip, capacity chip and the two basic shards 16%; one ticket, a 時之礦石 shard and the β core 4%. Stacks stay capped at the shop's 99, the rest paid back at shop price.
+- Premium machine: below automation, 10% of each SR/SSR/UR roll is the jackpot slot — coin chest (SR), coin vault 500,000 with protein ×5 or a ticket pack ×2–3 (SSR), a ticket pack ×4–5 (UR). Supplies never enter its main slot; an R chip still brings feed ×5 or protein ×1.
+- The royal ranch is UR, like the stellar zoo, with the same forging recipe (5 chips + 10 shards).
+- The bag: every tile shows two effect lines and a use/load key; the partner list shows HP/attack/defense/wisdom/speed and how far evolution is; uses pop the stat changes; loaded cartridges and beacons show 「已裝填（下一場自動生效）」 with take-out and go-to-hunt / go-to-battle keys.
+
+Balance, same day. The Owner found awakening too easy and asked for partners to weigh 18–24 G so memory-card upgrades matter, with the ranch adjusted too (「連牧場一起調」), mindful that many partners make phones lag and that the ranch holds 16. After a pace model (one AI match ≈ 3 min: +1 battle, one training of +10 points, 70% wins) showed tier 1 at 8 matches and both tiers at 16 without items (half that with items), the Owner chose 「照提案全部實作」:
+
+- Awakening thresholds are scaled per tier (`awakening.thresholdScale` {1: 2.5, 2: 3}; points and battle counts only, remembered forms still halve): natural pace about 20 matches for tier 1 and 48 in all for tier 2.
+- Item energy: shards R 5 / SR 10 / SSR 15, SSR metals 30 (tier 1) / 20 (tier 2), cap 40%; a UR metal still fills. A won AI match drops one ticket 60% of the time (was 1–3), a title 2–4 more (was 3–10); beacons' tickets come on top. With items the model gives tier 1 in about 12 matches and both tiers in about 27.
+- Partner weight (`PRODUCT_CAPACITY.partnerBonusG` 6): 18–24 G up to 成熟期, used on the hunt memory card and in the ranch. Rank capacity ×1.375 (88…276 G, about 4 to 12 成熟期), plus 8 G per land expansion tier (up to +64 G), never past the 16 native slots. A hunt's catches come home only within that capacity (`RANCH_CAPACITY_FULL`, release or grow first); the scripted tutorial catches keep their native weight.
+
+Verified by `tests/championship-gacha-full-effects-cases.mjs`, `tests/championship-cyber-gacha-cases.mjs`, `tests/championship-diamond-economy-cases.mjs`, `tests/championship-awakening-raising-cases.mjs` and `tests/championship-hunt-capture-closure-cases.mjs`. Not published: the Owner asked for no push or deploy in this batch.
+
+<!-- record-id: HUNT_BATTLE_TITLE_UNDERLINE_20261110 -->
+## 2026-11-10 — The hunt and battle titles show their underline in full
+
+The Owner reports, with iPhone screenshots, that the underline under 選擇狩獵場 is covered, and that the one under 選擇對戰 seems covered too.
+
+Presentation fix only (arcade theme), no gameplay or save change:
+
+- 選擇狩獵場 (GATE_SELECT, HOLO_NAV_R1): the title's tight 1.15 line box let its stroke and drop shadow cover the teal link line, so only the lit node showed. The title gains bottom padding so the whole line sits below the shadow.
+- 選擇對戰 (BATTLE_SELECT): the amber slab sits 11 px under the title instead of 6 px and paints above the title's text, so the lower-sitting iOS glyph shadow no longer covers its top edge.
+
+Publication: the Owner directed 「合併並發佈到正式站」 for PR #202. This authorizes merging #202 to main and publishing it through the existing Pages playtest workflow, with the approval hashes of the two changed stylesheets restated. It does not widen the asset set, and it is not a physical-device acceptance.
+
+<!-- record-id: AWAKENING_OVERDRIVE_20261109 -->
+## 2026-11-09 — Awakening overdrive: starter egg, tactile cocoon, overdrive training, over-limit burst, sponsor contracts, wild instinct
+
+The Owner asks that the new game's egg hatch in 30 seconds and every later (reborn) egg in three minutes, and to add four upgrades to the awakening raising plan: a three-tap cocoon for the first awakening, overdrive cage training with core heat, a long-press over-limit burst with pre-match sponsor stake contracts, and a hidden wild instinct in the hunt. Same day follow-ups: no automatic burst (「我不要自動爆裂」), real jagged cracks with depth and no eyes in the cocoon, battle team rings replaced by ground shadows only (「就不能給他們個影子就好了嗎？」), the ranch card's › opens the roster on that partner instead of a second sheet, the backpack partner picker is a list with localized names and a lit selection, and the ranch look switch must actually redraw.
+
+OWNER_APPROVED_ADAPTATION over AWAKENING_RAISING (STAGE_REDESIGN_BURST_20261102) and BURST_TRUE_FORM_20261108. Rules and numbers: `docs/contracts/championship/AWAKENING_OVERDRIVE_20261109_ZH_TW.md`.
+
+Publication: the Owner directed 「改好後，如果你自審沒有問題，就commit 跟push並合併到main公開」 (2026-11-10). This authorizes committing, pushing and merging this batch to main and publishing it through the existing Pages playtest workflow, with its two new modules listed and changed source hashes restated. It is not a physical-device acceptance.
+
+<!-- record-id: CM27_ARENA_RING_AND_DROP_HOP_20261109 -->
+## 2026-11-09 — The arena keeps its full-size ring, walkable on top with stairs down, and a dropped partner always hops to open ground
+
+The Owner reports that a partner dropped onto the arena (擂台) ring bounces in place and cannot be put there, and that on many cage maps a partner dropped where it does not fit bounces in place instead of hopping to the nearest open spot. The Owner asks for a ring partners can be dropped on and walk down from by its stairs, the original placement (a full-size ring, not a small ring in an empty hall), a large area for partners to stroll, a better floor, and the shop and facility-editor pictures to match.
+
+OWNER_APPROVED_ADAPTATION over OWNER_APPROVED_3D_CAGE_MODEL_CONTACTS_20261021 (definition 26 only) and the product-grid landing hop; the native ring layout and `raising-ground.r1.json` are unchanged.
+
+- Landing hop (product grid only): a partner hopping toward open ground no longer stops on a 3D prop hull (an owned but blocked cell); it continues to the open cell it was sent to. Native owned cells are always open, so native layouts behave as before.
+- Arena walk grid (`ranch-three-ground.r1.json`, definition 26): the ring top is open, the rope line around it is blocked, the two stairs are the only way between the ring and the floor, and the floor in front of the ring is open except the ringside table and chairs; 160 open cells (was 66).
+- Arena art: the original-size ring stays; the floor is maple parquet with a crimson ring carpet and gold border; a ringside table with bell and belt and two judges' chairs stand on blocked cells. Walk surfaces give the ring top 0.32 and the stairs a ramp, so partners stand on the canvas. The shop and facility-editor pictures are re-rendered from the new model.
+
 <!-- record-id: BURST_TRUE_FORM_20261108 -->
 ## 2026-11-08 — Burst evolution goes only on the player's press and the burst form fights as itself
 

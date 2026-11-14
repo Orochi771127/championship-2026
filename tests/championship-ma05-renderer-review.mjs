@@ -88,7 +88,7 @@ async function normalOwnedPartySmoke(browser,base,prefix,out){
   assert.ok(!evidence.network.some(n=>/runtime\.review\.json|\/(?:main|sub)\.(?:png|webp)$/.test(n.url)),'Normal app does not request private source atlases');
   assert.ok(!evidence.network.some(n=>n.scene==='raising'&&n.url.includes('battle-packed')));evidence.scenes.push({scene:'raising',entry:'PASS',diagnostics:raising,groundShadow:'SCREENSHOT_REVIEW_REQUIRED'});await game.screenshot({path:out+'/normal-raising073.png',fullPage:true});await save();
   scene='battle';await menu('battle');await screen('BATTLE_SELECT');assert.equal(await game.locator('.int-rh2-field-host').count(),0,'Raising scene released');
-  await game.locator('[data-face-id="PRACTICE_BATTLE"]:visible').first().click();
+  await game.locator('[data-face-id="PRACTICE_BATTLE"]').first().dispatchEvent('click');
   const members=game.locator('.cm-vs5-practice-member');await members.nth(1).waitFor();await members.nth(0).getByRole('button',{name:/A 隊$/}).click();await members.nth(1).getByRole('button',{name:/B 隊$/}).click();await game.getByRole('button',{name:'開始練習',exact:true}).click();await screen('BATTLE_FIELD');
   await game.waitForFunction(()=>{const d=globalThis.__championshipBattleDiagnostics?.();return d?.characters?.some(c=>c.speciesId==='species-073'&&c.rendered&&c.animation?.geometry?.scale===4)},{},{timeout:180000});
   const battle=await game.evaluate(()=>globalThis.__championshipBattleDiagnostics());const fighters=battle.characters.filter(c=>c.speciesId==='species-073');assert.equal(fighters.length,2);

@@ -68,7 +68,7 @@ const mime = new Map([
   [".html", "text/html; charset=utf-8"], [".js", "text/javascript; charset=utf-8"],
   [".mjs", "text/javascript; charset=utf-8"], [".json", "application/json; charset=utf-8"],
   [".css", "text/css; charset=utf-8"], [".png", "image/png"], [".webp", "image/webp"],
-  [".glb", "model/gltf-binary"], [".wav", "audio/wav"], [".svg", "image/svg+xml"],
+  [".glb", "model/gltf-binary"], [".wav", "audio/wav"], [".svg", "image/svg+xml"], [".woff2", "font/woff2"],
   // Media: GitHub Pages serves these types and answers byte ranges; so does this
   // server (2026-11-03), so a local story video can seek like the published one.
   [".mp4", "video/mp4"], [".mp3", "audio/mpeg"], [".ogg", "audio/ogg"], [".m4a", "audio/mp4"]

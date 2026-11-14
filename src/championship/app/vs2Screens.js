@@ -238,7 +238,8 @@ export async function createGateSelectView({ root, source, mountWorld }) {
   });
   list.addEventListener?.("pointermove", (event) => {
     if (!carouselDrag) return;
-    const dx = event.clientX - carouselDrag.x;
+    const rect = list.getBoundingClientRect(), k = rect.width / (list.offsetWidth || rect.width || 1) || 1;
+    const dx = (event.clientX - carouselDrag.x) / k;
     if (!carouselDrag.moved && Math.abs(dx) < 6) return;
     carouselDrag.moved = true;
     list.dataset.dragging = "true";
@@ -727,12 +728,20 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     gachaIcons.hidden = gachaIcons.childElementCount === 0;
     gachaLure.textContent = gacha?.rareLure ? uiText("誘餌引來：{name}", { name: uiText(gacha.rareLure.name ?? "") }) : "";
     gachaLure.hidden = !gacha?.rareLure;
+    // Owner 2026-11-10: the chrono key, while one sits in the bag.
+    const chrono = gacha?.chrono;
+    chronoKey.hidden = !chrono || chrono.owned < 1;
+    chronoKey.textContent = chrono ? uiText("時鐘 +{n} 秒（{owned}）", { n: chrono.seconds, owned: chrono.owned }) : "";
   }
+  const chronoKey = element("button", "cm-vs2-hud__chrono");
+  chronoKey.type = "button";
+  chronoKey.hidden = true;
+  chronoKey.addEventListener("click", (event) => { event.stopPropagation(); source.intents.useHuntChrono?.(); });
   paintGachaLine(block.hud.gacha);
   const gateRow = element("span", "cm-vs2-hud__row");
   const clockRow = element("span", "cm-vs2-hud__row");
   gateRow.append(gateName, gachaIcons);
-  clockRow.append(companion, gachaLure);
+  clockRow.append(companion, gachaLure, chronoKey);
   hudCopy.append(gateRow, clockRow);
   const exit = actionButton("返回牧場");
   exit.classList.add("cm-vs2-hud__exit");
@@ -783,15 +792,17 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
   const entryEnv = ceremonyEnvironment();
   const entryStarted = performance.now();
   let entryTimer = null;
+  // mm:ss of real seconds in a real-time hunt, hh:mm of the hunt clock otherwise (Owner 2026-11-10).
+  const clockText = (n) => `${String(Math.floor(n / 60)).padStart(2, '0')}:${String(n % 60).padStart(2, '0')}`;
   const remainingText = (minutes) => minutes == null ? '' : uiText('限時 {time}', {
     time: `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}` });
   const entryGate = uiText(block.hud.gateName ?? '');
   loadingGate.textContent = entryGate;
-  loadingLimit.textContent = remainingText(block.hud.time?.remainingMinutes);
+  loadingLimit.textContent = remainingText(block.hud.time?.remainingSeconds ?? block.hud.time?.remainingMinutes);
   let entry = frame.tutorial ? null : playCeremony({ host: viewport, kind: 'gate-entry', cue: 'gate', autoDismiss: false,
     label: uiText('傳送門連線：{gate}', { gate: entryGate }),
     build: (stage, env) => buildGateEntry(stage, env, { kicker: uiText('傳送門連線'), gateName: entryGate,
-      meta: remainingText(block.hud.time?.remainingMinutes), hint: uiText('輕觸略過') }) });
+      meta: remainingText(block.hud.time?.remainingSeconds ?? block.hud.time?.remainingMinutes), hint: uiText('輕觸略過') }) });
   const closeEntry = () => { clearTimeout(entryTimer); entryTimer = null; entry?.dispose(); entry = null; walker?.dispose(); };
   const replay = (node, key) => { node.dataset[key] = 'false'; void node.offsetWidth; node.dataset[key] = 'true'; };
   // The orb is the portal: the download charges it (its rings speed up and draw
@@ -1101,7 +1112,7 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     ROPE_TOO_HEAVY:"繩索出力過大，請換用輕型捕捉繩！",ROPE_TOO_WEAK:"這條繩索拉不動這個階段，請換用更高階的繩索",
     ROPE_FRAGILE:"克隆繩：清醒的夥伴容易掙斷，先用陷阱、睡眠彈或肉餌",RAGE_GUARD:"狂暴警戒中：先用連發槍、肉餌或陷阱破防",
     GUARD_BROKEN:"狂暴警戒已解除！",ROPE_OVERHEATED:"繩索纏繞冷卻中 · 切換備用繩索或稍候",PERFECT_COMBO:"完美連攜捕獲！",
-    GOOD_COMBO:"連攜捕獲！",DATA_IMPRINT:"數據拓印成功！",ROPE_SWITCHED:"已切換繩索",
+    GOOD_COMBO:"連攜捕獲！",DATA_IMPRINT:"數據拓印成功！",ROPE_SWITCHED:"已切換繩索",SURE_CAPTURE:"量子必中鋼索：一擊捕獲！",
     // Counted ropes (HUNT_TOOL_TIERS_20261103).
     ROPE_REPLACED:"啪嚓！繩索拉斷了 · 已換上新繩索（剩 {n} 根）",ROPE_EXHAUSTED:"繩索耗盡 · 點繩索鍵緊急補充 5 根（{bits} 位元幣）"};
   const INSTRUCTIONS={ROPE:"快速畫圈綑綁：{item} · 按住目標拉動繩索",SHOT:"按住目標射擊：{item}",WIRE:"拖曳拉出鋼索：{item} · 放手完成",
@@ -1135,11 +1146,12 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     exit.disabled = !next.hud.exitAvailable;
     gateName.textContent = uiText(next.hud.gateName ?? "");
     paintGachaLine(next.hud.gacha);
-    const remaining=next.hud.time?.remainingMinutes;
+    const remaining=next.hud.time?.remainingMinutes, seconds=next.hud.time?.remainingSeconds;
     companion.textContent = uiText(remaining == null ? next.hud.companionName ?? "" :
-      uiText('剩餘 {time}', { time: `${String(Math.floor(remaining/60)).padStart(2,'0')}:${String(remaining%60).padStart(2,'0')}` }));
-    // The last hour of the field's clock beats amber, then red.
-    hud.dataset.urgent = remaining == null ? 'false' : remaining <= 15 ? 'critical' : remaining < 60 ? 'warning' : 'false';
+      uiText('剩餘 {time}', { time: clockText(seconds ?? remaining) }));
+    // The last hour of the field's clock (the last 30 s of a real-time hunt) beats amber, then red.
+    hud.dataset.urgent = remaining == null ? 'false' : seconds != null ? (seconds <= 10 ? 'critical' : seconds < 30 ? 'warning' : 'false')
+      : remaining <= 15 ? 'critical' : remaining < 60 ? 'warning' : 'false';
     const onCard = next.hud.onCard ?? [];
     for (const caught of onCard) {
       if (seenCaptures.has(caught.wildId)) continue;

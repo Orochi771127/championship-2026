@@ -52,7 +52,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: min(100%, calc(var(--cm-screen-height, 100dvh) * 9 / 16));
+  max-width: min(100%, calc(var(--cm-screen-height, calc(100 * var(--cm-dvh, 1dvh))) * 9 / 16));
   aspect-ratio: 9 / 16;
   max-height: 100%;
   height: auto;
@@ -169,7 +169,7 @@
 .cm-vs5-footer > [hidden] { display: none; }
 
 /* ---------------- Battle menu ---------------- */
-.cm-vs5-cube { width: 100%; max-width: 320px; margin: 0 auto; padding: 0 var(--sp-4); }
+.cm-vs5-cube { width: 100%; max-width: 360px; margin: 0 auto; padding: 0 var(--sp-4); }
 .cm-vs5-cube__canvas { display: block; width: 100%; height: auto; cursor: grab; touch-action: pan-y; }
 .cm-vs5-cube__canvas:active { cursor: grabbing; }
 .cm-vs5-cube__faces { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: var(--sp-2); }
@@ -190,6 +190,51 @@
 .cm-vs5-cube__fallback { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .cm-vs5-cube__fallback img { display: block; width: 100%; height: auto; margin-bottom: 6px; border-radius: var(--r-control); }
 .cm-vs5-cube__fallback .cm-vs5-cube__face { padding: 6px 6px 10px; }
+/* The mode prism (Owner 2026-11-09): its faces are the mode keys. The face
+   buttons stay in the page for keyboards and screen readers, undrawn. */
+.cm-vs5-cube[data-prism-sides] .cm-vs5-cube__faces { position: absolute; display: block; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.cm-vs5-cube[data-prism-focus="true"] .cm-vs5-cube__canvas,
+.cm-vs5-cube[data-prism-sides] .cm-vs5-cube__canvas:focus-visible { outline: 2px solid var(--prism-accent, var(--c-accent)); outline-offset: 2px; border-radius: 16px; }
+.cm-vs5-prism { position: relative; }
+.cm-vs5-prism__turn {
+  position: absolute; top: 44%; z-index: 1;
+  display: grid; place-items: center;
+  width: 40px; height: 40px; padding: 0;
+  border: 2px solid color-mix(in srgb, var(--prism-accent, var(--c-accent)) 55%, transparent);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c-surface-1) 70%, transparent);
+  color: var(--c-text-1);
+  cursor: pointer; touch-action: manipulation;
+  translate: 0 -50%;
+  transition: border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+}
+.cm-vs5-prism__turn::before { content: ""; width: 10px; height: 10px; border: solid currentColor; border-width: 0 3px 3px 0; }
+.cm-vs5-prism__turn--previous { left: -6px; }
+.cm-vs5-prism__turn--previous::before { rotate: 135deg; margin-left: 4px; }
+.cm-vs5-prism__turn--next { right: -6px; }
+.cm-vs5-prism__turn--next::before { rotate: -45deg; margin-right: 4px; }
+.cm-vs5-prism__turn:active { translate: 0 calc(-50% + 2px); }
+.cm-vs5-prism__turn:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+.cm-vs5-prism__caption { display: grid; justify-items: center; gap: 2px; margin-top: -4px; text-align: center; }
+.cm-vs5-prism__dots { display: flex; gap: 6px; margin-bottom: 6px; }
+.cm-vs5-prism__dots > i { width: 6px; height: 6px; border-radius: 3px; background: var(--c-line-2, rgba(255, 255, 255, 0.25)); transition: width var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out); }
+.cm-vs5-prism__dots > i[data-active="true"] { width: 18px; background: var(--prism-accent, var(--c-accent)); }
+.cm-vs5-prism__name { color: var(--c-text-1); font: 800 var(--fs-title-1)/1.15 var(--font-ui); letter-spacing: 0.04em; }
+.cm-vs5-prism__tagline { color: var(--c-text-2); font-size: var(--fs-body-sm); line-height: 1.3; }
+.cm-vs5-prism__hint {
+  margin-top: 8px; padding: 5px 14px; border-radius: 999px;
+  background: var(--prism-accent, var(--c-accent)); color: #14141f;
+  font: 800 var(--fs-label)/1.2 var(--font-ui); letter-spacing: 0.06em;
+  box-shadow: var(--prism-hint-drop, 0 3px 0 rgba(20, 20, 31, 0.5)), 0 0 0 0 color-mix(in srgb, var(--prism-accent, var(--c-accent)) 60%, transparent);
+  animation: cm-vs5-prism-call 1.8s ease-out infinite;
+}
+.cm-vs5-prism__hint[hidden] { display: none; }
+@keyframes cm-vs5-prism-call {
+  0%, 35% { box-shadow: var(--prism-hint-drop, 0 3px 0 rgba(20, 20, 31, 0.5)), 0 0 0 0 color-mix(in srgb, var(--prism-accent, var(--c-accent)) 60%, transparent); }
+  100% { box-shadow: var(--prism-hint-drop, 0 3px 0 rgba(20, 20, 31, 0.5)), 0 0 0 10px color-mix(in srgb, var(--prism-accent, var(--c-accent)) 0%, transparent); }
+}
+:root[data-motion="reduced"] .cm-vs5-prism__hint { animation: none; }
+@media (prefers-reduced-motion: reduce) { :root:not([data-motion]) .cm-vs5-prism__hint { animation: none; } }
 .cm-vs5-cube__note { margin: var(--sp-2) auto 0; padding: 0 var(--sp-4); max-width: 420px; color: var(--c-text-3); font-size: var(--fs-label); line-height: var(--lh-label); text-align: center; }
 .cm-vs5-party[hidden], .cm-vs5-matches[hidden], .cm-vs5-cube[hidden], .cm-vs5-cube__note[hidden], .cm-vs5-entry-notice[hidden] { display: none; }
 
@@ -267,7 +312,7 @@
   background: var(--c-ground);
   color: var(--c-text-1);
   /* 16px: iPhone Safari zooms the whole page into any focused field below 16px. */
-  font: var(--fw-strong) 16px/1.35 var(--font-ui);
+  font: var(--fw-strong) calc(16px * var(--text-scale, 1))/1.35 var(--font-ui);
 }
 .cm-vs5-practice-member {
   display: grid;
@@ -290,7 +335,7 @@
 .cm-vs5-link { display: flex; flex-direction: column; gap: var(--sp-2); }
 .cm-vs5-password-maker { margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid var(--c-line-1); }
 .cm-vs5-link__heading { margin: var(--sp-2) 0 0; color: var(--c-text-1); font-size: var(--fs-body); font-weight: var(--fw-heavy); }
-.cm-vs5-link-code { min-height: 92px; resize: vertical; font: 16px/1.35 ui-monospace, "Cascadia Mono", Consolas, monospace; overflow-wrap: anywhere; }
+.cm-vs5-link-code { min-height: 92px; resize: vertical; font: calc(16px * var(--text-scale, 1))/1.35 ui-monospace, "Cascadia Mono", Consolas, monospace; overflow-wrap: anywhere; }
 
 /* ---------------- The match ---------------- */
 /* Team colours: the player's side is the accent, the opponent's is ember.
@@ -655,7 +700,7 @@
 .cm-vs5-shell[data-fx="dynamic"] > .cm-vs5-clock { flex: 0 0 auto; min-height: 32px; padding-block: 4px; }
 .cm-vs5-shell[data-fx="dynamic"] > .cm-vs5-roster--opponent,
 .cm-vs5-shell[data-fx="dynamic"] > .cm-vs5-roster--player { flex: 0 0 auto; flex-direction: row; min-height: 0; padding: 5px var(--sp-3); }
-.cm-vs5-shell[data-fx="dynamic"] > .cm-vs5-field { flex: 1 1 0; min-height: 42%; max-height: min(122vw, 560px); aspect-ratio: auto; }
+.cm-vs5-shell[data-fx="dynamic"] > .cm-vs5-field { flex: 1 1 0; min-height: 42%; max-height: min(calc(122 * var(--cm-vw, 1vw)), 560px); aspect-ratio: auto; }
 .cm-vs5-shell[data-fx="dynamic"] > .cm-vs5-log { flex: 0.001 0 auto; min-height: 58px; align-content: start; padding-top: var(--sp-3); }
 .cm-vs5-shell[data-fx="dynamic"] .cm-vs5-fighter[data-present="false"] { display: none; }
 .cm-vs5-shell[data-fx="dynamic"] .cm-vs5-roster .cm-vs5-fighter { flex: 1 1 0; min-width: 0; padding: 4px 6px; }
@@ -694,7 +739,7 @@
 }
 .cm-vs5-shell[data-responsive-battle="candidate"][data-fx="dynamic"] > .cm-vs5-field {
   width: 100%; min-height: 160px; max-height: none; aspect-ratio: auto; align-self: center;
-  height: min(122vw, 560px, max(160px, calc(var(--cm-screen-height, 100dvh) - 212px)));
+  height: min(calc(122 * var(--cm-vw, 1vw)), 560px, max(160px, calc(var(--cm-screen-height, calc(100 * var(--cm-dvh, 1dvh))) - 212px)));
 }
 .cm-vs5-shell[data-responsive-battle="candidate"] > .cm-vs5-log {
   overflow: auto; min-width: 0; min-height: 64px; align-content: start;
@@ -707,7 +752,7 @@
 }
 @media (min-width: 480px) and (orientation: landscape) {
   .cm-vs5-shell[data-responsive-battle="candidate"][data-fx="dynamic"] {
-    grid-template-columns: minmax(0, 1fr) clamp(168px, 24vw, 280px);
+    grid-template-columns: minmax(0, 1fr) clamp(168px, calc(24 * var(--cm-vw, 1vw)), 280px);
     grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr) minmax(64px, .8fr);
     grid-template-areas: "field clock" "field opponents" "field players" "field log";
     overflow: hidden;
@@ -749,6 +794,9 @@
     overflow-y: auto; overflow-wrap: anywhere;
   }
 }
+/* The spotlight (screenLayout.css, arcade theme) is decoration over the stage: hidden by default and never a
+   grid cell, so a page without the arcade sheet keeps the party and the card in their own columns. */
+.cm-vs5-result__spot { display: none; position: absolute; pointer-events: none; }
 /* Beat the existing desktop result 720px selector as well as its phone cap. */
 body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell[data-responsive-battle="candidate"] { width: 100%; max-width: none; }
 
@@ -804,10 +852,13 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 }
 .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter::before { display: none; }
 .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter[data-down="true"] { opacity: 1; filter: none; }
+/* Owner 2026-11-11: the fallen label sits over the fallen card's own TP row. As a fourth grid row it
+   made the whole card row taller the moment someone fell, which pushed the camera's safe window. */
 .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter[data-down="true"]::after {
-  position: static; grid-column: 1; justify-self: start; background: transparent;
-  color: var(--battle-hud-ink); padding: 0; line-height: 1.2;
+  position: static; grid-area: tp; justify-self: center; align-self: center; z-index: 2; background: transparent;
+  color: var(--battle-hud-ink); padding: 0; line-height: 1.2; pointer-events: none;
 }
+.cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter[data-down="true"] .cm-vs5-meter--resource .cm-vs5-meter__value { visibility: hidden; }
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter {
   display: grid; position: relative; grid-column: 1; height: auto; min-height: calc(16px * var(--text-scale, 1)); border-radius: 5px;
   background: rgb(12 42 48 / 34%); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 12%);
@@ -857,7 +908,7 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 .cm-vs5-burst-call {
   position: absolute; left: 50%; top: 20%; z-index: 6; margin: 0; padding: 6px 22px;
   transform: translate(-50%, 0); white-space: nowrap; pointer-events: none;
-  font-weight: 800; font-size: clamp(18px, 4.4vw, 34px); letter-spacing: .06em; color: #fff;
+  font-weight: 800; font-size: clamp(18px, calc(4.4 * var(--cm-vw, 1vw)), 34px); letter-spacing: .06em; color: #fff;
   background: linear-gradient(90deg, rgba(30, 58, 138, 0), rgba(30, 58, 138, .86) 18%, rgba(30, 58, 138, .86) 82%, rgba(30, 58, 138, 0));
   text-shadow: 0 2px 0 #1e3a8a, 0 0 12px #7dd3fc;
 }
@@ -883,12 +934,27 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
   content: ""; position: absolute; inset: 4px; clip-path: inherit;
   background: radial-gradient(circle at 50% 35%, #ff9a3c, #c2410c 70%, #7c2d12);
 }
-.cm-vs5-burst-button__label { position: relative; font-weight: 900; font-size: 11px; line-height: 1.05; text-align: center; letter-spacing: .02em;
+.cm-vs5-burst-button__label { position: relative; font-weight: 900; font-size: calc(11px * var(--text-scale, 1)); line-height: 1.05; text-align: center; letter-spacing: .02em;
   text-shadow: 0 1px 0 #7c2d12, 0 0 6px #fde68a; max-width: 44px; overflow-wrap: anywhere; }
-:is(:lang(zh), :lang(ja)) .cm-vs5-burst-button__label { max-width: 2.3em; font-size: 12px; }
+:is(:lang(zh), :lang(ja)) .cm-vs5-burst-button__label { max-width: 2.3em; font-size: calc(12px * var(--text-scale, 1)); }
 .cm-vs5-burst-button[hidden] { display: none; }
 .cm-vs5-fighter[data-burst-warn="true"] .cm-vs5-burst-gauge__fill { background: linear-gradient(90deg, #f43f5e, #fb923c); animation: cm-vs5-burst-ready .35s ease-in-out infinite alternate; }
 @keyframes cm-vs5-burst-button { from { filter: brightness(.9); transform: scale(1); } to { filter: brightness(1.15); transform: scale(1.06); } }
+/* Over-limit burst (AWAKENING_OVERDRIVE_20261109): holding the key heats it red over the hold time; a small plate
+   under it names the long press; a badge counts the over-limit seconds down, then the exhaustion. */
+.cm-vs5-burst-button.is-charging { animation: none; transform: scale(1.1); }
+.cm-vs5-burst-button.is-charging::before { animation: cm-vs5-burst-charge var(--hold-ms, 600ms) linear forwards; }
+@keyframes cm-vs5-burst-charge { from { background: radial-gradient(circle at 50% 35%, #ff9a3c, #c2410c 70%, #7c2d12); }
+  to { background: radial-gradient(circle at 50% 35%, #fff4f0, #ff2d2d 55%, #7f1d1d); } }
+.cm-vs5-burst-hint { position: absolute; left: calc(max(12px, env(safe-area-inset-left)) + 62px); bottom: calc(18% + 18px); z-index: 7; padding: 2px 8px;
+  border-radius: 999px; font-size: calc(11px * var(--text-scale, 1)); font-weight: 900; line-height: 1.2; white-space: nowrap; color: #fff; pointer-events: none;
+  background: linear-gradient(90deg, rgba(127, 29, 29, .92), rgba(220, 38, 38, .85)); box-shadow: 0 0 8px rgba(239, 68, 68, .6); }
+.cm-vs5-field > .cm-vs5-burst-hint { bottom: calc(var(--battle-safe-bottom, 18%) + 30px); }
+.cm-vs5-burst-hint[hidden], .cm-vs5-over-limit[hidden] { display: none; }
+.cm-vs5-over-limit { position: absolute; left: 50%; top: 36%; z-index: 9; margin: 0; padding: 4px 14px; transform: translateX(-50%); border-radius: 999px;
+  font-weight: 900; font-size: calc(15px * var(--text-scale, 1)); letter-spacing: .04em; color: #fff; white-space: nowrap; pointer-events: none;
+  background: linear-gradient(90deg, #7f1d1d, #dc2626, #7f1d1d); box-shadow: 0 0 14px rgba(239, 68, 68, .8); }
+.cm-vs5-over-limit[data-state="exhausted"] { background: linear-gradient(90deg, #334155, #64748b, #334155); box-shadow: none; }
 @keyframes cm-vs5-burst-ready { from { opacity: .55; } to { opacity: 1; } }
 @keyframes cm-vs5-burst-call-fade { 0%, 100% { opacity: 0; } 10%, 85% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
@@ -896,3 +962,84 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
   .cm-vs5-fighter[data-burst-ready="true"] .cm-vs5-burst-gauge__fill { animation: none; }
   .cm-vs5-burst-button, .cm-vs5-fighter[data-burst-warn="true"] .cm-vs5-burst-gauge__fill { animation: none; }
 }
+
+/* ---------------- Sync EXP panel (Owner 2026-11-09) ----------------
+   Rows of partner, level pill and a gold-to-cyan EXP bar; a level-up adds the
+   LEVEL UP badge, the real HP/TP percentage and any breakthrough cards. The
+   bar animates transform only. */
+.cm-sync-panel { display: grid; gap: 10px; width: min(100%, 440px); margin: 6px auto 0; }
+.cm-sync-row {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: start;
+  padding: 10px 12px; border: 1px solid var(--c-line-2); border-radius: 14px;
+  background: color-mix(in srgb, var(--c-surface-1) 88%, transparent);
+}
+.cm-sync-row:not(:has(.cm-sync-row__face)) { grid-template-columns: minmax(0, 1fr); }
+.cm-sync-row__face { width: 52px; height: 52px; border-radius: 12px; object-fit: cover; background: var(--c-surface-2); }
+.cm-sync-row__main { display: grid; gap: 5px; min-width: 0; }
+.cm-sync-row__head { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.cm-sync-row__name { min-width: 0; overflow: hidden; color: var(--c-text-1); font: 800 var(--fs-body)/1.2 var(--font-ui); text-overflow: ellipsis; white-space: nowrap; }
+.cm-sync-lv { flex: 0 0 auto; padding: 1px 8px; border-radius: 999px; background: #2a1d5e; color: #ffe27a; font: 800 var(--fs-label)/1.4 var(--font-ui); letter-spacing: 0.04em; }
+.cm-sync-gain { margin-left: auto; flex: 0 0 auto; color: #0b86a8; font: 800 var(--fs-label)/1.4 var(--font-ui); }
+.cm-sync-bar { position: relative; height: 10px; overflow: hidden; border-radius: 5px; background: rgba(20, 14, 48, 0.55); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4); }
+.cm-sync-bar__fill {
+  position: absolute; inset: 0; transform-origin: left center;
+  background: linear-gradient(90deg, #ffd23f 0%, #ffe9a8 40%, #6ff7ff 100%);
+  box-shadow: 0 0 10px rgba(111, 247, 255, 0.6);
+}
+.cm-sync-row__numbers { color: var(--c-text-3); font-size: var(--fs-label); text-align: right; font-variant-numeric: tabular-nums; }
+.cm-sync-levelup { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.cm-sync-levelup[hidden], .cm-sync-breakthrough[hidden] { display: none; }
+.cm-sync-levelup__badge {
+  padding: 2px 10px; border-radius: 6px; background: linear-gradient(180deg, #fff4b8, #ffd23f 55%, #f0a500);
+  color: #3a2500; font: 900 var(--fs-body-sm)/1.3 var(--font-ui); letter-spacing: 0.08em;
+  box-shadow: 0 2px 0 #a86f00, 0 0 14px rgba(255, 210, 63, 0.55);
+}
+.cm-sync-levelup__range { color: var(--c-text-1); font: 800 var(--fs-body-sm)/1.3 var(--font-ui); }
+.cm-sync-levelup__stat { color: #3ddc84; font: 800 var(--fs-label)/1.3 var(--font-ui); }
+.cm-sync-levelup__stat::after { content: " ▲"; }
+.cm-sync-breakthroughs { display: grid; gap: 6px; }
+.cm-sync-breakthrough {
+  display: grid; gap: 1px; padding: 7px 10px; border-left: 4px solid #a259ff; border-radius: 8px;
+  background: linear-gradient(90deg, rgba(162, 89, 255, 0.28), rgba(162, 89, 255, 0.06));
+}
+.cm-sync-breakthrough__kicker { color: #7a3fd1; font-weight: 800; font-size: var(--fs-label); letter-spacing: 0.08em; }
+.cm-sync-breakthrough__title { color: var(--c-text-1); font: 800 var(--fs-body-sm)/1.3 var(--font-ui); }
+.cm-sync-breakthrough__effect { color: var(--c-text-2); font-size: var(--fs-label); line-height: 1.35; }
+.cm-sync-row__overflow, .cm-sync-panel__cap { margin: 0; color: var(--c-text-3); font-size: var(--fs-label); }
+.cm-sync-panel__cap { text-align: center; }
+/* Sync Level on a roster row (stage slot). */
+.cm-vs5-member__stage { padding: 0 7px; border-radius: 999px; background: #2a1d5e; color: #ffe27a; font: 800 var(--fs-label)/1.5 var(--font-ui); letter-spacing: 0.04em; }
+/* The Data Arena result lists Sync EXP the same frameless way (Owner 2026-11-09). */
+.da-panel .cm-sync-panel { gap: 0; }
+.da-panel .cm-sync-row { padding: 8px 2px; border: 0; border-radius: 0; background: none; }
+.da-panel .cm-sync-row + .cm-sync-row { border-top: 1px dashed rgba(20, 20, 31, 0.22); }
+/* Sponsor stake contracts (AWAKENING_OVERDRIVE_20261109): three faction keys and the stake stepper over the menu. */
+.cm-vs5-sponsors { display: grid; gap: 6px; margin-top: 8px; padding: 8px; border-radius: 12px; border: 1px solid rgba(255, 211, 77, .35);
+  background: linear-gradient(160deg, rgba(30, 27, 18, .82), rgba(15, 23, 42, .82)); }
+.cm-vs5-sponsors[hidden] { display: none; }
+.cm-vs5-sponsors[data-armed="true"] { border-color: #ffd34d; box-shadow: 0 0 12px rgba(255, 211, 77, .35); }
+.cm-vs5-sponsors__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; }
+.cm-vs5-sponsors__label { font-size: calc(12px * var(--text-scale, 1)); font-weight: 800; letter-spacing: .06em; color: #ffd34d; }
+.cm-vs5-sponsors__stake { display: flex; align-items: center; gap: 6px; }
+.cm-vs5-sponsors__step { min-width: 32px; min-height: 32px; border-radius: 8px; border: 1px solid rgba(255, 211, 77, .55); background: rgba(255, 211, 77, .12);
+  color: #ffd34d; font: inherit; font-weight: 900; }
+.cm-vs5-sponsors__step:disabled { opacity: .4; }
+.cm-vs5-sponsors__amount { min-width: 8.5em; text-align: center; font-weight: 900; color: #fff; font-variant-numeric: tabular-nums; }
+.cm-vs5-sponsors__keys { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); gap: 6px; }
+.cm-vs5-sponsor { display: grid; align-content: start; gap: 2px; min-height: 76px; padding: 6px; border-radius: 10px; text-align: left; font: inherit; color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, .2); background: rgba(15, 23, 42, .7); }
+.cm-vs5-sponsor[data-faction="LUMEN"] { --sponsor: #4ade80; } .cm-vs5-sponsor[data-faction="IRON"] { --sponsor: #94a3b8; } .cm-vs5-sponsor[data-faction="RIFT"] { --sponsor: #c084fc; }
+.cm-vs5-sponsor__name { font-size: calc(12px * var(--text-scale, 1)); font-weight: 900; color: var(--sponsor, #ffd34d); }
+.cm-vs5-sponsor__rule, .cm-vs5-sponsor__pay { font-size: calc(11px * var(--text-scale, 1)); line-height: 1.3; }
+.cm-vs5-sponsor__pay { color: #ffd34d; font-weight: 700; }
+.cm-vs5-sponsor[aria-pressed="true"] { border-color: var(--sponsor, #ffd34d); box-shadow: inset 0 0 0 1px var(--sponsor, #ffd34d), 0 0 12px var(--sponsor, #ffd34d);
+  background: linear-gradient(160deg, rgba(15, 23, 42, .9), rgba(60, 45, 10, .9)); }
+.cm-vs5-sponsor:disabled { opacity: .45; }
+.cm-vs5-sponsors__note { margin: 0; font-size: calc(11px * var(--text-scale, 1)); color: #cbd5e1; }
+.cm-vs5-result__sponsor[data-met="true"] .cm-vs5-title { color: #ffd34d; }
+.cm-vs5-result__sponsor[data-met="false"] .cm-vs5-title { color: #fca5a5; }
+@media (max-width: 380px) { .cm-vs5-sponsors__keys { grid-template-columns: 1fr; } .cm-vs5-sponsor { min-height: 0; } }
+/* Contract keys carry the game's faction glyph; the day's remaining signatures sit beside the title (Owner 2026-11-10). */
+.cm-vs5-sponsor__name { display: flex; align-items: center; gap: 5px; }
+.cm-vs5-sponsor__name .cm-tax-glyph { flex: none; }
+.cm-vs5-sponsors__today { font-size: calc(11px * var(--text-scale, 1)); font-weight: 800; color: #cbd5e1; }

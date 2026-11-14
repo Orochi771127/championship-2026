@@ -2,7 +2,11 @@ import {createResidentAssetNotice,collectRaisingInitialSequences} from './reside
 import { resonanceStrip, taxonomyBadgeRow, taxonomyGlyph } from '../presentation/taxonomyBadgeArt.js';
 import { speciesTaxonomyForId } from '../contracts/speciesTaxonomy.js';
 import {huntThreeProductionRequest} from '../presentation/vs2/huntThree/manifestBindings.mjs';
-import { FRIENDS_PLAYTEST_POLICY } from './friendsPlaytestPolicy.js';
+import { resolveFriendsPlaytestPolicy } from './friendsPlaytestPolicy.js';
+// Owner 2026-11-10: the friends mode is off on the public site and a hidden switch elsewhere (friendsPlaytestPolicy.js).
+const FRIENDS_PLAYTEST_POLICY = resolveFriendsPlaytestPolicy({ hostname: globalThis.location?.hostname ?? '',
+  search: globalThis.location?.search ?? '', forced: globalThis.__CHAMPIONSHIP_FRIENDS_PLAYTEST__ === true,
+  remembered: createChampionshipFriendsSwitchPort({ storage: (() => { try { return globalThis.localStorage ?? null; } catch { return null; } })() }) });
 import {PRODUCT_BATTLE_CODE_MAX_LENGTH} from '../contracts/productBattleTransport.js';
 import {isOriginalRuntimeLocation,isApprovedOriginalPublicLocation,isOriginalLoopbackLocation} from '../presentation/originalRuntimeLocation.js';
 import { finalHuntArtManifestUrl } from '../presentation/finalHuntArt20261008.js';
@@ -55,7 +59,6 @@ import { mountBattleAudioPresentation } from '../presentation/battleAudioPresent
 // The battle menu box. Its four faces are ROM_VERIFIED from launcher13.nsbmd;
 // the geometry is original-created, exactly as the Gate world sphere is.
 import { battleMenuLabels, speciesName, raisingDisplayName, starterName, titleEventText, tamerRankName } from "../text/zhHant.js";
-import { databaseHeroPortrait } from "../presentation/databaseHeroPortraits.js";
 import { loadPixiCharacterRuntimeBundle, createPixiAssetScope, onPixiAssetSettled } from "../presentation/pixiCharacterRuntimeBundle.js";
 import { applyQaUnlock, qaUnlockRequested } from "./qaUnlock.js";
 import { listChampionshipGates } from "../gate/gateCatalog.js";
@@ -98,15 +101,26 @@ import { createStoryStagePuppeteer } from '../presentation/story/storyStagePuppe
 import { createPortraitVnOverlay } from '../presentation/story/portraitVnOverlay.js';
 import { createStoryChapterMap } from './storyChapterMap.js';
 import { storyRiftMapText } from '../data/storyRiftMap.js';
+// Story mode part one (Owner 2026-11-11): the half-body story theater.
+import { createStoryVnDirector } from '../presentation/story/storyVnDirector.js';
+import { playStoryVnCue } from '../presentation/story/storyVnAudio.js';
+import { storyVnText } from '../text/storyVnText.js';
+import { STORY_VN_CHAPTERS, storyVnChapterStates, storyVnRewardKey } from '../data/storyVnCampaign.js';
 import { mountAmbience } from './ui/ambienceLayer.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, createAssetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
 import { createLoadWatchdog, createLoadAttempt, LOAD_MAX_MS } from './loadWatchdog.js';
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
-import { configureCeremonyAudio, playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
+import { configureCeremonyAudio, playCeremony, playCeremonySound } from '../presentation/ceremony/ceremonyRunner.js';
+import { bindOverLimitPress } from './ui/overLimitPress.js';
+import { OVER_LIMIT_RULES } from '../contracts/productAwakeningOverdrive.js';
 import { createSkillCutInLayer } from '../presentation/juicy/skillCutIn.js';
-import { juicyPortrait, juicyPresentationEnabled, juicySpeciesIndex } from '../presentation/juicy/juicyArt.js';
+import { juicyPresentationEnabled, juicySpeciesIndex } from '../presentation/juicy/juicyArt.js';
+import { createActionPortrait, setActionPortrait, clearActionPortrait, warmActionPortraits } from '../presentation/juicy/actionPortrait.js';
+// Owner 2026-11-12: partners outside the Database are drawn as their own animated bodies.
+const ACTION_PORTRAITS = Object.freeze({ set: setActionPortrait, clear: clearActionPortrait });
+const speciesBody = options => createActionPortrait(options).element;
 import { installArcadeFx, requestArcadeFx } from './ui/arcadeFx.js';
 import { installTitleParade } from './titleParade.js';
 import { buildMedal, buildVersus } from '../presentation/ceremony/ceremonyScenes.js';
@@ -121,6 +135,7 @@ import {
   CHAMPIONSHIP_PREFERENCES_KEY,
   CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS,
   createChampionshipPreferencePort,
+  createChampionshipFriendsSwitchPort,
   createChampionshipSessionCheckpointPort,
   createChampionshipGuestIdentityPort,
   createChampionshipOnlineSessionPort
@@ -153,21 +168,27 @@ import { createAudioBus } from '../presentation/audioBus.js';
 import { createMusicPresentation } from '../presentation/musicPresentation.js';
 import { resolveSceneMusic } from '../presentation/sceneMusicCatalog.js';
 import { ORIGINAL_MUSIC_CUES, selectOriginalMusic } from '../presentation/originalMusicCatalog.js';
-import { setGuideAppearance } from '../presentation/aiChanGuide.js';
+import { resolveGuideAppearance, setGuideAppearance } from '../presentation/aiChanGuide.js';
 import { cappedPixelRatio, currentQuality, currentQualityTier, highlightMode, prefersReducedMotion } from '../presentation/presentationPreferences.js';
 import { resultHeroAnchor, resultStageLight } from '../presentation/battleResultCharacters.js';
 import { formatDateTime, formatList, onLocaleChange, getLocale } from '../text/locale.js';
 import { retranslate, setLabel, setText, uiText } from '../text/uiText.js';
 import { paintGachaTicketBadge } from './cyberGachaIcons.js';
 import { gachaChipEffectLines, getGachaMetal } from '../gacha/cyberGacha.js';
+import { buildSyncGainPanel } from './ui/syncGainPanel.js';
+import { loadStylesheet } from './loadStylesheet.js';
+import { journeyText } from '../text/journeyText.js';
+import { syncText } from '../text/syncLevelText.js';
 
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
 // fetched the first time that view asks for one. The wrappers keep the same
 // signature and return the same value the views already await.
 const mountBattleVfxThreeOverlay = async (options) =>
   (await import("../presentation/vs5/createBattleVfxThreeOverlay.js")).mountBattleVfxThreeOverlay(options);
+// The mode prism settles on the app's one Pixi ticker, never a loop of its own.
 const mountBattleSelectThreePresentation = async (options) =>
-  (await import("../presentation/vs5/createBattleSelectThreePresentation.js")).mountBattleSelectThreePresentation(options);
+  (await import("../presentation/vs5/createBattleSelectThreePresentation.js")).mountBattleSelectThreePresentation({
+    ...options, ticker: pixiStage?.app?.ticker ?? null });
 const mountGateSelectThreePresentation = async (options) =>
   (await import("../presentation/vs2/createGateSelectThreePresentation.js")).mountGateSelectThreePresentation(options);
 const mountHighlightBurstThree = async (options) =>
@@ -284,6 +305,14 @@ const importLocalReviewModule = (relative, options) => import(new URL(relative, 
 const loadHuntExpansionReview = HUNT_EXPANSION_REVIEW
   ? async () => (await import("../../data/championship/catalogs/hunt-art-expansions-20261023.json", { with: { type: "json" } })).default
   : null;
+// Loopback review only (?huntInstinctQa=ELITE|ANCESTOR|mix, HUNT_INSTINCT_VFX_20261110): every wild partner
+// takes that instinct (mix: elite, ancestral, normal in turn) so the auras can be reviewed. Public hosts never bind it.
+const HUNT_INSTINCT_QA = (() => {
+  if (!["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname)) return null;
+  const value = new URLSearchParams(globalThis.location?.search ?? "").get("huntInstinctQa");
+  if (value === "mix") return (i) => ["ELITE", "ANCESTOR", "NORMAL"][i % 3];
+  return ["ELITE", "ANCESTOR", "NORMAL"].includes(value) ? () => value : null;
+})();
 const HUNT_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("huntArt");
 const CAGE_ART_PREVIEW_FIELD = new URLSearchParams(globalThis.location?.search ?? "").get("cageArt");
 // Owner 2026-10-27 diorama review: ?ranchPitch=35|40|45 compares camera pitches.
@@ -425,6 +454,9 @@ const openingPresentation=createOpeningPresentation({host:document.getElementByI
 
 let app = null;
 let view = null;
+// Story theater run and its battle (declared early: the screen subscription reads them).
+let vnRun = null;
+let storyBattle = null;
 let raisingSource = null;
 let expeditionSource = null;
 let unsubscribeScreen = null;
@@ -442,6 +474,8 @@ let mounting = null;
 let pixiStage = null;
 let clockDriver = null;
 let dataArenaSession = null;
+// Journey (Owner 2026-11-10): the open 征途 overlay, and the floor to open on after a won/lost tower match.
+let journeyView = null, pendingJourney = null;
 let tutorialPreview = null;
 let unsubscribeTutorialTools = null;
 
@@ -518,6 +552,75 @@ function showBurstUnlockToast() {
   clearTimeout(showStrollToast.timer);
   showStrollToast.timer = setTimeout(() => toast.classList.remove('is-shown'), 3200);
 }
+// Overdrive training (AWAKENING_OVERDRIVE_20261109): each boosted, inspired or backfired training says so once.
+function showOverdriveToast() {
+  const events = app?.takeOverdriveEvents?.() ?? [];
+  if (app?.getScreen?.() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
+  const latest = events.at(-1);
+  if (!latest) return;
+  const entry = app.getRaisingInstances().find((e) => e.instanceId === latest.instanceId);
+  let toast = document.querySelector('.cm-stroll-toast');
+  if (!toast) { toast = document.createElement('div'); toast.className = 'cm-stroll-toast'; toast.setAttribute('role', 'status'); document.body.append(toast); }
+  toast.dataset.overdrive = latest.kind;
+  toast.textContent = uiText(`OVERDRIVE_TOAST_${latest.kind}`, { name: entry ? raisingDisplayName(entry) : '', multiplier: latest.multiplier ?? '' });
+  toast.classList.remove('is-shown'); void toast.offsetWidth; toast.classList.add('is-shown');
+  clearTimeout(showStrollToast.timer);
+  showStrollToast.timer = setTimeout(() => { toast.classList.remove('is-shown'); delete toast.dataset.overdrive; }, 3200);
+}
+// Tactile cocoon (AWAKENING_OVERDRIVE_20261109): the ranch's closed awakening shell waits for the resonance key.
+// Each tap cracks it (shake, sound); the third shatters it with a white/black flash. 4 s without a tap and the
+// field finishes it alone. The key only sends cm-cocoon-tap back to the canvas; the field owns the ceremony.
+const COCOON_CUES = Object.freeze(['cocoonCrack', 'cocoonSpread', 'cocoonShatter']);
+function cocoonReduced() { return document.documentElement.dataset.motion === 'reduced' || matchMedia('(prefers-reduced-motion: reduce)').matches; }
+function shakeCocoonStage(canvas, strength) {
+  if (!canvas?.animate || cocoonReduced()) return;
+  const frames = Array.from({ length: 7 }, (_, i) => { const k = (1 - i / 6) * strength, x = i % 2 ? k : -k, y = i % 3 === 1 ? k * 0.6 : -k * 0.4;
+    return { transform: i === 6 ? 'translate(0, 0)' : `translate(${x}px, ${y}px)` }; });
+  canvas.animate(frames, { duration: 260 + strength * 12, easing: 'ease-out' });
+}
+function flashCocoonShatter() {
+  if (cocoonReduced()) return;
+  const flash = document.createElement('div');
+  flash.className = 'cm-cocoon-flash'; flash.setAttribute('aria-hidden', 'true');
+  document.body.append(flash);
+  flash.addEventListener('animationend', () => flash.remove(), { once: true });
+  setTimeout(() => flash.remove(), 1200);
+}
+function handleCocoonEvent(event) {
+  const detail = event.detail ?? {}, canvas = event.target;
+  let key = document.querySelector('.cm-cocoon-key');
+  if (detail.state === 'OPEN') {
+    key?.remove();
+    // The "ready to awaken" toast has done its job once the cocoon closes.
+    document.querySelector('.cm-stroll-toast')?.classList.remove('is-shown');
+    const taps = detail.taps ?? 3;
+    key = document.createElement('button');
+    key.type = 'button'; key.className = 'cm-cocoon-key'; key.dataset.crack = '0';
+    if (detail.color) key.style.setProperty('--bloodline', detail.color);
+    const label = document.createElement('span'); label.className = 'cm-cocoon-key__label'; label.textContent = uiText('COCOON_KEY');
+    const hint = document.createElement('span'); hint.className = 'cm-cocoon-key__hint'; hint.textContent = uiText('COCOON_KEY_HINT', { taps });
+    const pips = document.createElement('span'); pips.className = 'cm-cocoon-key__pips'; pips.setAttribute('aria-hidden', 'true');
+    for (let i = 0; i < taps; i++) pips.append(document.createElement('i'));
+    key.append(label, hint, pips);
+    key.setAttribute('aria-label', `${uiText('COCOON_KEY')} ${uiText('COCOON_KEY_HINT', { taps })}`);
+    const tap = () => canvas?.dispatchEvent(new CustomEvent('cm-cocoon-tap'));
+    key.addEventListener('pointerdown', (down) => { down.preventDefault(); tap(); });
+    key.addEventListener('keydown', (press) => { if (press.key === 'Enter' || press.key === ' ') { press.preventDefault(); tap(); } });
+    document.body.append(key);
+    key.focus({ preventScroll: true });
+    shakeCocoonStage(canvas, 2);
+    return;
+  }
+  if (detail.state === 'CRACK' || detail.state === 'SHATTER') {
+    const crack = Math.max(1, Math.min(3, detail.crack | 0));
+    if (key) { key.dataset.crack = String(crack); key.classList.remove('is-hit'); void key.offsetWidth; key.classList.add('is-hit'); }
+    playCeremonySound(COCOON_CUES[crack - 1]);
+    shakeCocoonStage(canvas, [4, 7, 12][crack - 1]);
+    if (detail.state === 'SHATTER') { flashCocoonShatter(); setTimeout(() => key?.remove(), 180); }
+    return;
+  }
+  if (detail.state === 'CLOSED') key?.remove();
+}
 // The ranch's first awakening ends with this card: the form, its stage, what it does now and its bloodline's perk.
 function showAwakeningCard(detail) {
   if (!detail?.form) return;
@@ -539,8 +642,10 @@ function listenPartnerFinds() {
   if (partnerFindListening) return;
   partnerFindListening = true;
   setInterval(showBurstUnlockToast, 2000);
+  setInterval(showOverdriveToast, 1000);
   // The card follows a moment after the form stands, so the player sees the form first.
   document.addEventListener('cm-awakening', (event) => setTimeout(() => showAwakeningCard(event.detail), 650));
+  document.addEventListener('cm-cocoon', handleCocoonEvent);
   app.subscribePartnerLife?.((event) => {
     // Night disturbance (2026-11-02): say who was woken and that it counts as 育成妨礙.
     if (event.kind === 'disturbed' && app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) {
@@ -631,6 +736,8 @@ function bootSettings() {
     if (changed.some((id) => id === "muted" || id === "masterVolume" || id === "sfxVolume" || id === "musicVolume")) audio.setLevels(levels());
   });
   quality.subscribe((described) => { pixiStage?.setResolutionCap(described.parameters.pixiResolutionCap); });
+  // The desktop interface zoom changed (portraitFrame): the field's backing store follows it.
+  window.addEventListener("cm-ui-zoom", () => { pixiStage?.setResolutionCap(quality.describe().parameters.pixiResolutionCap); });
   // Another tab changed the settings: follow it, without writing back.
   window.addEventListener("storage", (event) => { if (event.key === CHAMPIONSHIP_PREFERENCES_KEY) store.reload(); });
   const flush = () => { try { store.flush(); } catch { /* reported by the store */ } };
@@ -1019,14 +1126,14 @@ async function loadOptionalBattleFieldArt(stage, source) {
  * retains the explicit independent asset preview. Unknown hit/weather bindings
  * are not inferred from HP changes.
  */
-async function loadOptionalBattleVfxOverlay(host, stage, source, getFocusPlacement, getFieldPlacement, isActive = () => true, getCues = () => []) {
+async function loadOptionalBattleVfxOverlay(host, stage, source, getFocusPlacement, getFieldPlacement, isActive = () => true, getCues = () => [], pixelHitsOwnSparks = () => false) {
   try {
     return await mountBattleVfxThreeOverlay({
       host,
       stage,
       systemId: VFX_ART_PREVIEW_SYSTEM,
       source: VFX_ART_PREVIEW_SYSTEM ? null : source,
-      getFocusPlacement,getFieldPlacement,getCues,
+      getFocusPlacement,getFieldPlacement,getCues,pixelHitsOwnSparks,
       recordDiagnostic: recoveryDiagnostics.record,isActive
     });
   } catch (error) {
@@ -1105,12 +1212,13 @@ async function mountRaisingHome() {
   const p1r = await createRaisingHomeP1RView({
     root, hudArt: null, source,
     // Owner 2026-11-03: the partner card's portrait is the encyclopedia's own thumbnail (every published species has one).
-    portraitFallback: speciesIndex => { const hero = databaseHeroPortrait(speciesIndex); return hero?.thumbnail ?? hero ?? null; },
+    // Owner 2026-11-12: the partner card shows the partner's own idle animation (raisingHomeP1RView).
+    actionPortraits: ACTION_PORTRAITS,
     // Arcade evolution (Owner 2026-10-28); null keeps the original sequence.
     evolutionCinematic: await loadRaisingEvolutionCinematic(),
     getRosterEntry: creatureId => projectRoster().find(entry => entry.instanceId === creatureId) ?? null,
     renderCreatureDetail: appendCreatureDetail,
-    openRoster: () => runToolbarMenuEntry({ id: "digimon", screen: CHAMPIONSHIP_SCREENS.DIGIMON_LIST }),
+    openRoster: (instanceId = null) => { rosterOpenOn = instanceId; runToolbarMenuEntry({ id: "digimon", screen: CHAMPIONSHIP_SCREENS.DIGIMON_LIST }); },
     firstRunHint: true, // UI entry guidance; its first-use preference is not calendar/save state.
     nextHintDuration: () => consumeRaisingHintDuration(settings.store),
     storySeen: () => settings.store.get().storyRiftChapter1Seen === true,
@@ -1367,6 +1475,10 @@ async function mountHuntField() {
         return art;
       });
       signal.addEventListener('abort', releaseArt, { once: true });
+      // Owner 2026-11-12: a Hunt entry leaves its own steps in the diagnostics, so a page that is
+      // killed part-way shows which step it reached (the battle entry already does).
+      const huntLoad = (stage, phase, extra) => recoveryDiagnostics.record('LOAD', { area: 'hunt', stage, ...(phase ? { phase } : {}), ...extra });
+      huntLoad('engine', 'start');
       try {
         const stage = await ensurePixiStage(host, signal);
         huntLayoutLease.setStage(() => ({ width: stage.app.screen.width, height: stage.app.screen.height }));
@@ -1384,6 +1496,7 @@ async function mountHuntField() {
         ]);
         [characterBundle, fieldArt, feedbackArt] = loaded.map((result) =>
           result.status === 'fulfilled' ? result.value : null);
+        huntLoad('partners', loaded.some(result => result.status === 'rejected') ? 'error' : 'done');
         let feedbackFallbackNotice = null;
         let activeScene = null;
 
@@ -1451,6 +1564,7 @@ async function mountHuntField() {
         }
         let threePilot = null;
         if (huntThreeProductionRequest(location, fieldArt?.getDiagnostics?.().fieldId)) {
+          huntLoad('arena', 'start');
           try {
             const {loadHuntThreeMap} = await import('../presentation/vs2/huntThree/loadHuntThreeMap.mjs');
             signal.throwIfAborted();
@@ -1459,8 +1573,10 @@ async function mountHuntField() {
           } catch(error) {
             if (!signal.aborted) console.warn('HUNT_THREE_ENTRY_FALLBACK',error);
           }
+          huntLoad('arena', threePilot ? 'done' : 'error', { map: threePilot ? 'THREE' : 'FLAT' });
         }
         signal.throwIfAborted();
+        huntLoad('scene', 'start');
         const scene = await mountHuntFieldPixiPresentation({
           threePilot,
           onActorFrame,
@@ -1475,6 +1591,7 @@ async function mountHuntField() {
           }
         });
         activeScene = scene;
+        huntLoad('ready');
         // The mounted scene now owns these bundles and releases them on exit.
         owned.clear();
         return {
@@ -1535,6 +1652,20 @@ let battleProgressBefore = null;
 // Entry publishes BATTLE_FIELD synchronously, before an async enterMatch
 // resolves. Its subscriber must already see the prepared simulation and ID.
 // Keep the previous runtime alive until entry accepts; a refusal restores it.
+// The partner the ranch card asked the roster to open on (consumed when the roster mounts).
+let rosterOpenOn = null;
+/** One line as a match starts: the contract rode it (and at better odds), or why the sponsor refused it. */
+function showSponsorNotice(escrow, refusal) {
+  const text = escrow ? (escrow.oddsBonus ? uiText('SPONSOR_STARTED_BONUS', { bits: escrow.stake }) : uiText('SPONSOR_STARTED', { bits: escrow.stake }))
+    : refusal ? uiText(`SPONSOR_REFUSED_${refusal.reason}`, { cap: refusal.cap ?? 0, limit: 3 }) : null;
+  if (!text) return;
+  let toast = document.querySelector('.cm-stroll-toast');
+  if (!toast) { toast = document.createElement('div'); toast.className = 'cm-stroll-toast'; toast.setAttribute('role', 'status'); document.body.append(toast); }
+  toast.textContent = text;
+  toast.classList.remove('is-shown'); void toast.offsetWidth; toast.classList.add('is-shown');
+  clearTimeout(showStrollToast.timer);
+  showStrollToast.timer = setTimeout(() => toast.classList.remove('is-shown'), 3600);
+}
 async function enterPreparedBattle(prepared, attemptId, enter) {
   const previous = { runtime: battleRuntime, attemptId: battleAttemptId, progress: battleProgressBefore };
   battleRuntime = prepared;
@@ -1543,9 +1674,19 @@ async function enterPreparedBattle(prepared, attemptId, enter) {
     shopIds: app.getShopFrame().listings.map(item => item.shopRecordIndex) };
   let accepted = false;
   try {
+    // The sponsor reads the odds from both teams' total maximum HP before the stake is taken (Owner 2026-11-10).
+    try {
+      const local = prepared.localTeamIndex?.() ?? 0, combatants = prepared.startMatch().getFrame?.()?.combatants ?? [];
+      const power = (mine) => combatants.filter((c) => c.present !== false && (c.team === local) === mine).reduce((sum, c) => sum + (c.hp?.maximum ?? 0), 0);
+      app.setSponsorMatchOdds?.(power(true), power(false));
+    } catch { app.setSponsorMatchOdds?.(0, 0); }
     const result = await enter();
     accepted = result.ok && !result.duplicate;
     if (accepted) previous.runtime?.dispose();
+    // A sponsor contract that took its stake with this match may strengthen the foe (AWAKENING_OVERDRIVE_20261109).
+    const escrow = accepted ? app.getSponsorEscrow?.() : null;
+    if (escrow?.attemptId === attemptId && escrow.foeBoostPercent > 0) prepared.setFoeBoostPercent?.(escrow.foeBoostPercent);
+    if (accepted) showSponsorNotice(escrow?.attemptId === attemptId ? escrow : null, app.takeSponsorRefusal?.() ?? null);
     return result;
   } finally {
     if (!accepted) {
@@ -1591,7 +1732,7 @@ async function mountBattleSelect() {
   if(tutorial){
     if(battleRuntime!==tutorial.runtime)battleRuntime?.dispose();
     battleRuntime=tutorial.runtime;battleAttemptId=null;battleProgressBefore=null;
-    return createBattleSelectView({root,matches:battleRuntime.listMatches(),menuCopy:battleMenuLabels(),onEnter:()=>false,
+    return createBattleSelectView({speciesBody,root,matches:battleRuntime.listMatches(),menuCopy:battleMenuLabels(),onEnter:()=>false,
       tutorial:{read:()=>app.getInteractiveTutorialBattle(),checkpoint:()=>app.getInteractiveTutorial().checkpoint,
         blocked:()=>{const t=app.getInteractiveTutorial();return t.pendingSave||t.restoring;},
         subscribe:listener=>app.subscribeRaising(listener),input:(action,value,cp)=>app.interactiveBattleInput(action,value,cp)}});
@@ -1601,9 +1742,11 @@ async function mountBattleSelect() {
   battleAttemptId = null;
   battleProgressBefore = null;
   const { shopGoodsPresentation } = await import('../presentation/shopGoodsUiArt.js');
-  return createBattleSelectView({
+  const view = createBattleSelectView({speciesBody,
     root,
     // Cyber Gachapon bounty beacons, display-ready (Owner 2026-11-02).
+    sponsorContracts:{read:()=>app.getSponsorContracts?.()??null,arm:(id,stake)=>app.armSponsorContract?.(id,stake),
+      icon:faction=>taxonomyGlyph(`faction.${faction}`,18)},
     gachaBeacons:{
       read:()=>(app.getGachaTacticalSlots?.('BOUNTY')??[]).map(slot=>({...slot,art:shopGoodsPresentation(slot.shopRecordIndex)?.src??null,
         effectText:gachaChipEffectLines(slot).map(line=>uiText(line.text,line.params)).join('・')})),
@@ -1613,8 +1756,12 @@ async function mountBattleSelect() {
     matches: battleRuntime.listMatches(),
     arenaChoices:battleRuntime.listSelectableArenas(),
     // Owner 2026-11-03: each roster row shows the partner's Database thumbnail and its three-axis badges.
-    describeMember:entry=>{const index=juicySpeciesIndex(entry?.speciesId);const hero=index===null?null:databaseHeroPortrait(index);
-      return {portrait:hero?.thumbnail??null,badges:entry?.speciesId?taxonomyBadgeRow(speciesTaxonomyForId(entry.speciesId)):null};},
+    // Owner 2026-11-12: the row's portrait is the partner's own body (vs5Screens memberFace), not the Database art.
+    describeMember:entry=>{
+      // Owner 2026-11-09: the Sync Level rides in the stage slot.
+      const sync=entry?.instanceId?app.getSyncLevel?.(entry.instanceId):null;
+      return {speciesId:entry?.speciesId??null,stage:sync?(sync.next>0?syncText('level',{level:sync.level}):syncText('level.max')):null,
+        badges:entry?.speciesId?taxonomyBadgeRow(speciesTaxonomyForId(entry.speciesId)):null};},
     getPracticeSelection:async()=>({candidates:await app.getBattlePartyCandidates(null)}),
     setBattleTactic:(instanceId,tactic)=>app.setBattleTactic(instanceId,tactic),
     getPasswordSelection:async()=>({maxLength:PRODUCT_BATTLE_CODE_MAX_LENGTH,candidates:await app.getPasswordTeamCandidates(),
@@ -1630,13 +1777,14 @@ async function mountBattleSelect() {
       ?{candidates:await app.getBattlePartyCandidates(null),limit:app.getFreeBattleMatches().find(m=>m.id===recordIndex)?.slots??3}
       :{candidates:await app.getBattlePartyCandidates(recordIndex),limit:await app.getBattlePartyLimit(recordIndex)},
     getModeMatches:async mode=>mode==='TITLE_MATCH'?battleRuntime.listMatches():app.openFreeBattle().map(match=>({
-      ...match,recordIndex:match.id,crest:databaseHeroPortrait(match.speciesIndices[0])?.thumbnail?.src??null,
+      ...match,recordIndex:match.id,crestSpecies:Number.isSafeInteger(match.speciesIndices?.[0])?match.speciesIndices[0]:null,
       title:uiText('{kind} — {species}',{kind:uiText(match.kind==='SINGLE'?'單隻對戰':'三隻對戰'),species:formatList(match.speciesIndices.map(index=>speciesName(index)))})})),
     menuCopy: battleMenuLabels(),
     onlineLobby: onlineLobbies(),
     prefill: (() => { const spar = pendingSpar; pendingSpar = null; return spar; })(),
     onOpenChampionship() { app.openChampionship(); },
     onOpenDataArena: enterDataArena,
+    onOpenJourney: () => void openJourney(),
     async onEnter(recordIndex,playerInstanceIds,mode,selectedArena=null) {
       // Battle simulation uses this existing Application's ticker. Do not
       // charge for a session that cannot start advancing on the shared stage.
@@ -1682,7 +1830,8 @@ async function mountBattleSelect() {
           return await enterPreparedBattle(prepared,attemptId,()=>app.enterLinkBattle({attemptId,linkKey:party.linkKey,rngPreparation:party.rngPreparation}));
         }catch(error){prepared.dispose();console.warn(`LINK_BATTLE_PREPARE: ${error.message}`);return {ok:false,reason:'BATTLE_NOT_READY'};}
       }
-      const party=await app.prepareBattleParty(recordIndex,playerInstanceIds);
+      // Title matches read Sync Level under the tamer-rank cap (Owner 2026-11-09).
+      const party=await app.prepareBattleParty(recordIndex,playerInstanceIds,{sync:{capped:true}});
       if(!party.ok)return party;
       const rngPreparation=app.prepareBattleRng();
       const prepared = (await loadBattleRuntime())({ schedule: app.getBattleSchedule(), mode:1, battleType:0,playerIndividuals:party.individuals,rng:rngPreparation.rng });
@@ -1708,6 +1857,95 @@ async function mountBattleSelect() {
     onExit() { app.leaveScreen(); },
     mountCube: mountBattleSelectThreePresentation
   });
+  // "Press on" from a tower result comes back here and opens the next floor at once.
+  if (pendingJourney) { const prefill = pendingJourney; pendingJourney = null; queueMicrotask(() => void openJourney(prefill)); }
+  return view;
+}
+
+/** The Journey overlay over the battle menu (Owner 2026-11-10). */
+async function openJourney(prefill = null) {
+  if (journeyView || app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) return;
+  journeyView = 'OPENING';
+  try {
+    await loadStylesheet(new URL('./ui/journey.css', import.meta.url).href);
+    const { createJourneyScreen } = await import('./journeyScreen.js');
+    if (app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) { journeyView = null; return; }
+    const describe = (entry) => {
+      const index = juicySpeciesIndex(entry?.speciesId);
+      return { name: entry?.displayName || (index === null ? '' : speciesName(index)), portrait: index === null ? null : { species: index } };
+    };
+    root.inert = true;
+    journeyView = createJourneyScreen({
+      parent: document.body, prefill,
+      frame: () => app.getJourneyFrame(), floor: (n) => app.getTowerFloor(n),
+      candidates: () => app.getBattlePartyCandidates(null), describe,
+      speciesPortrait: (index) => Number.isSafeInteger(index) ? { species: index } : null,
+      syncOf: (id) => app.getSyncLevel(id),
+      claimPatrol: () => app.claimPatrol(), quickPatrol: () => app.quickPatrol(),
+      feed: (id, amount) => app.feedSyncCrystals(id, amount),
+      challenge: (floor, ids) => startTowerFloor(floor, ids),
+      campaign: () => app.getCampaignFrame(),
+      sweep: (zone, stage) => app.sweepCampaignStage(zone, stage),
+      challengeZone: (zone, stage) => void startZoneStage(zone, stage),
+      openStory: () => openStoryFromJourney(),
+      onClose: closeJourney
+    });
+  } catch (error) { console.warn('Journey unavailable', error); closeJourney(); }
+}
+function closeJourney() {
+  if (journeyView && journeyView !== 'OPENING') journeyView.dispose();
+  journeyView = null; root.inert = false;
+}
+/** The story map plays on the ranch: leave the battle menu, then open it once the ranch stage is up. */
+function openStoryFromJourney() {
+  closeJourney();
+  app.leaveScreen();
+  let tries = 0;
+  const attempt = () => {
+    if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME && view?.storyStage) {
+      document.dispatchEvent(new CustomEvent(STORY_CHAPTER_OPEN_EVENT, { detail: { source: 'journey' } }));
+      return;
+    }
+    if (++tries < 40) setTimeout(attempt, 150);
+  };
+  setTimeout(attempt, 150);
+}
+/** A Journey zone stage, fought in the Data Arena relay; leaving the arena reopens the zone. */
+async function startZoneStage(zone, stage) {
+  const begun = app.beginCampaignStage(zone, stage);
+  if (!begun.ok) return begun;
+  const arenaButton = document.getElementById('cm-data-arena');
+  if (!arenaButton) return { ok: false, reason: 'DATA_ARENA_UNAVAILABLE' };
+  closeJourney();
+  const title = journeyText('stage.title', { zone, stage, name: journeyText(`zone.${zone}`) });
+  return enterDataArena(arenaButton, {
+    campaign: Object.freeze({ field: begun.field, rivals: begun.rivals, title }),
+    onCampaignResult: (result) => {
+      const settled = app.settleCampaignStage(result);
+      if (!settled) return null;
+      const lines = [journeyText('campaign.best', { stars: settled.best })];
+      if (settled.firstClear) lines.push(journeyText('campaign.first', { crystals: settled.crystals.toLocaleString() }));
+      if (settled.tickets) lines.push(journeyText('campaign.tickets', { n: settled.tickets }));
+      if (settled.diamonds) lines.push(journeyText('campaign.chest', { diamonds: settled.diamonds }));
+      return { stars: settled.stars, lines };
+    },
+    reopen: { tab: 'ZONES', zone }
+  });
+}
+/** A tower floor, fought like a Free Battle against that floor's original presets. */
+async function startTowerFloor(floor, ids) {
+  if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started)
+    return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回牧場後重試。" };
+  const party = await app.prepareTowerBattle(floor, ids);
+  if (!party.ok) return party;
+  const prepared = (await loadBattleRuntime())({ mode: 2, battleType: 0, playerIndividuals: party.individuals, rng: party.rngPreparation.rng,
+    personalityPolicy: FREE_PRACTICE_PERSONALITY_POLICY, arenaHazards: await loadArenaHazards() });
+  try {
+    prepared.chooseFreeBattle({ presetIndices: party.presetIndices, arenaIndex: party.arenaIndex }); prepared.startMatch(); exposeArenaHazardsQa(prepared);
+    const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
+    closeJourney();
+    return await enterPreparedBattle(prepared, attemptId, () => app.enterTowerBattle({ attemptId, playerInstanceIds: ids, rngPreparation: party.rngPreparation }));
+  } catch (error) { prepared.dispose(); console.warn(`TOWER_BATTLE_PREPARE: ${error.message}`); return { ok: false, reason: 'BATTLE_NOT_READY' }; }
 }
 
 async function mountBattleField() {
@@ -1721,7 +1959,11 @@ async function mountBattleField() {
   let hudArt=null,viewDisposed=false;
   // Optional portraits must not hold the screen/navigation owner hostage.
   // Cards already read their art on render, so this proxy can fill in later.
-  const hudProxy={getBattleFrame:(...args)=>hudArt?.getBattleFrame?.(...args)??null};
+  const hudProxy={getBattleFrame:(...args)=>hudArt?.getBattleFrame?.(...args)??null,
+    // The plate's mini portrait is the fighter's own body (Owner 2026-11-12).
+    setActionPortrait};
+  // The cut-in draws its caster from these motion records; load them with the battle (Owner 2026-11-12).
+  warmActionPortraits(source.getFrame()?.combatants?.filter(c=>c?.present!==false).map(c=>c.speciesId)??[]);
   const {createBattleFieldView} = await import('./vs5Screens.js');
   const view = createBattleFieldView({
     ceremonies: tutorial ? null : battleCeremonies,
@@ -1729,7 +1971,8 @@ async function mountBattleField() {
     frame: { ...source.getFrame(), rosterEvidence: activeRuntime.rosterEvidence() },
     localTeamIndex:activeRuntime.localTeamIndex(),
     hudArt:hudProxy,
-    onBurst: slot => activeRuntime.requestBurst?.(slot) ?? false,
+    onBurst: (slot, options) => activeRuntime.requestBurst?.(slot, options) ?? false,
+    bindBurstPress: (button, calls) => bindOverLimitPress(button, { holdMs: OVER_LIMIT_RULES.holdMs, doubleTapMs: OVER_LIMIT_RULES.doubleTapMs, ...calls }),
     resonance: (()=>{const t=activeRuntime.taxonomy?.(),local=activeRuntime.localTeamIndex();return t?{player:t.resonance[local],opponent:t.resonance[1-local],render:keys=>resonanceStrip(keys,{hint:false})}:null;})(),
     dynamicFx: BATTLE_DYNAMIC_FX,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
@@ -1805,8 +2048,8 @@ async function mountBattleField() {
           // Resolved with the art, so the scene still mounts in the same task as
           // the overlay: no frame may render between the two.
           const fxLookups = fxLookupsModule
-            ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),onFeed:(line,cue)=>view.feed?.(line,cue),onTally:tallyBattleEvent,
-              onCutIn:juicy?cue=>cutIn?.play({team:cue.team===activeRuntime.localTeamIndex()?'ally':'enemy',portrait:juicyPortrait(cue.speciesId),
+            ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),localTeam:()=>activeRuntime.localTeamIndex(),onFeed:(line,cue)=>view.feed?.(line,cue),onTally:tallyBattleEvent,
+              onCutIn:juicy?cue=>cutIn?.play({team:cue.team===activeRuntime.localTeamIndex()?'ally':'enemy',species:cue.speciesId,
                 moveName:cue.moveName,casterName:cue.casterName,palette:cue.palette}):null,
               // Local acceptance shows stable skill IDs; players see approved names only.
               showIds:String(location.search??'').includes('battleFxDebug')&&['localhost','127.0.0.1','[::1]'].includes(location.hostname)}) : null;
@@ -1816,7 +2059,7 @@ async function mountBattleField() {
           // The existing overlay owns Hyper, five impact families and hit flash.
           // Keep its readiness gate: no safe replacement for these cues is proven.
           vfxOverlay = await loadOptionalBattleVfxOverlay(host, stage, source, () => scene?.getFocusPlacement(), () => scene?.getFieldPlacement(), () => !disposed,
-            () => scene?.consumeVfxCues?.() ?? []);
+            () => scene?.consumeVfxCues?.() ?? [], () => Boolean(scene?.pixelHitsOwnSparks?.()));
           if (disposed) {
             await Promise.all([release(vfxOverlay),release(effectArt),release(fieldArt),release(characterRoster)]);return;
           }
@@ -1994,6 +2237,16 @@ function playResultHighlight(request, getStage, getAnchor = null) {
 }
 
 async function mountBattleResult() {
+  /** The result screen's sponsor panel: what the contract paid, or that it kept the stake (AWAKENING_OVERDRIVE_20261109). */
+  function sponsorResultLines(settled, receipt) {
+    if (!settled || !receipt || settled.attemptId !== (receipt.attemptId ?? null)) return null;
+    const name = (id) => { const entry = app.getRaisingInstances().find((e) => e.instanceId === id); return entry ? raisingDisplayName(entry) : ''; };
+    const lines = settled.gains.map((gain) => gain.metal ? uiText('SPONSOR_GAIN_METAL', { item: uiText(getGachaMetal(gain.metal)?.name ?? gain.metal) })
+      : gain.points ? uiText('SPONSOR_GAIN_POINTS', { name: name(gain.instanceId), points: gain.points })
+      : uiText('SPONSOR_GAIN_PERCENT', { name: name(gain.instanceId), percent: gain.percent, form: speciesName(gain.form) }));
+    if (!settled.met) lines.push(uiText(`SPONSOR_${settled.contractId}_RULE`));
+    return { ...settled, lines };
+  }
   const tutorial=app.getInteractiveTutorialBattle();
   if(tutorial)battleRuntime=tutorial.runtime;
   // The result consumes the app's actual receipt, including loss and clamping.
@@ -2026,7 +2279,20 @@ async function mountBattleResult() {
     return box && heroSlots.length ? resultHeroAnchor({ width: box.width, height: box.height, slots: heroSlots, layout: resultLayout }) : null;
   };
   const {createBattleResultView} = await import('./vs5Screens.js');
-  const matchTitle = chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
+  // Sync EXP from this attempt's own settlement (Owner 2026-11-09).
+  const syncGains=tutorial?null:(gains=>gains&&receipt&&gains.attemptId===(receipt.attemptId??null)?gains:null)(app.getLastSyncGains?.());
+  const syncPanel=syncGains?syncGainPanelFor(syncGains):null;
+  // Journey tower (Owner 2026-11-10): this attempt's floor, and a key to the next one (or a retry).
+  const tower=tutorial?null:(entry=>entry&&receipt&&entry.attemptId===(receipt.attemptId??null)?entry:null)(app.getLastTowerResult?.());
+  const leaveToJourney=(prefill)=>{
+    pendingJourney=Object.freeze(prefill);
+    battleRuntime?.dispose();battleRuntime=null;battleAttemptId=null;
+    app.leaveScreen();
+    if(app.getScreen()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT){if(app.getScreen()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)app.leaveScreen();app.openBattle();}
+  };
+  const followUp=!tower?null:tower.won&&tower.next?{label:journeyText('result.next',{floor:tower.next}),onClick:()=>leaveToJourney({floor:tower.next,team:tower.team,autoStart:true})}
+    :!tower.won?{label:journeyText('result.retry',{floor:tower.floor}),onClick:()=>leaveToJourney({floor:tower.floor,team:tower.team,autoStart:true})}:null;
+  const matchTitle = tower?journeyText(tower.won?'result.clear':'result.fail',{floor:tower.floor}):chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
     :chosen?.championship?uiText('{event} 第 {round} 戰',{event:uiText(chosen.recordIndex===0?'冠軍大會':'世界大會'),round:chosen.cursor+1})
     :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null;
   const resultView=createBattleResultView({
@@ -2052,8 +2318,11 @@ async function mountBattleResult() {
     progression,
     // Owner 2026-10-29: 📸 brag card for a won battle, starring the winning partner.
     brag: battleResultBrag({ participants, matchTitle }),
+    syncPanel,
+    followUp,
     gachaDrop:tutorial?null:(drop=>drop&&receipt&&drop.attemptId===(receipt.attemptId??null)
       ?{...drop,metalNames:(drop.metals??[]).map(id=>getGachaMetal(id)?.name??id)}:null)(app.getLastBattleGachaDrop?.()),
+    sponsor:tutorial?null:sponsorResultLines(app.getLastSponsorSettlement?.(),receipt),
     onExit() {
       if(tutorial){app.endInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
       battleRuntime?.dispose();
@@ -2064,15 +2333,25 @@ async function mountBattleResult() {
   });
   characterHostNode = resultView.getCharacterHost();
   // The stage light fills in with optional art without rebuilding result panels.
+  // The light is placed on the stage, so the characters' fractions (of their own
+  // host, which a landscape screen narrows to the left column) are mapped onto it.
   const updateStageLight=()=>{
     const box = characterHostNode.getBoundingClientRect?.();
     const light = box && heroSlots.length ? resultStageLight({ width: box.width, height: box.height, slots: heroSlots, layout: resultLayout }) : null;
-    const stageNode = characterHostNode.parentElement;
-    if (light && stageNode?.style) {
-      stageNode.style.setProperty("--result-light-x", `${(light.x * 100).toFixed(2)}%`);
-      stageNode.style.setProperty("--result-light-w", `${(light.width * 100).toFixed(2)}%`);
+    const stageNode = characterHostNode.parentElement, stageBox = stageNode?.getBoundingClientRect?.();
+    if (light && stageNode?.style && stageBox?.width > 0) {
+      const x = (box.left - stageBox.left + light.x * box.width) / stageBox.width, w = light.width * box.width / stageBox.width;
+      stageNode.style.setProperty("--result-light-x", `${(x * 100).toFixed(2)}%`);
+      stageNode.style.setProperty("--result-light-w", `${(w * 100).toFixed(2)}%`);
     }
   };
+  // Owner 2026-11-09 (spotlight): the light follows the party when the screen turns.
+  // The light is moved on the next frame: setting it inside the observer callback would resize the
+  // stage again in the same pass ("ResizeObserver loop completed with undelivered notifications").
+  let lightFrame=0;
+  const lightResize=typeof ResizeObserver==='function'?new ResizeObserver(()=>{if(disposed||lightFrame)return;
+    lightFrame=requestAnimationFrame(()=>{lightFrame=0;if(!disposed)updateStageLight();});}):null;
+  lightResize?.observe(characterHostNode);
   const artLoading=new AbortController(),hudLoad=createLoadAttempt({timeoutMs:20000});
   stageReady=ensurePixiStage(characterHostNode,artLoading.signal);
   hudReady=hudLoad.wait(loadRegisteredCharacterHudArt({baseUrl:location.href,
@@ -2090,7 +2369,7 @@ async function mountBattleResult() {
     if(disposed)void characters.dispose();else resultCharacters=characters;
   }).catch(error=>{if(!disposed)console.warn('Battle result character reference unavailable',error);});
   return {...resultView,dispose(){
-    if(disposed)return;disposed=true;hudLoad.cancel();artLoading.abort();
+    if(disposed)return;disposed=true;hudLoad.cancel();artLoading.abort();lightResize?.disconnect();if(lightFrame)cancelAnimationFrame(lightFrame);
     resultCharacters?.dispose();resultCharacters=null;hudArt=null;resultView.dispose();
   }};
 }
@@ -2136,11 +2415,12 @@ async function mountCurrentScreen() {
     if (target === CHAMPIONSHIP_SCREENS.RAISING_HOME) view = await mountRaisingHome();
     else if (target === CHAMPIONSHIP_SCREENS.SHOP) view = await createShopView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.DATABASE) view = await createDatabaseView({ root, source: expeditionSource, isWideLayout: () => portraitFrame.isBrowseWide('DATABASE') });
-    else if (target === CHAMPIONSHIP_SCREENS.MEDALS) view = createMedalCollectionView({root, playtestPolicy: FRIENDS_PLAYTEST_POLICY, battleBadges:app.getBattleBadges(), unlockText:badgeUnlockText, onExit(){app.leaveScreen();}});
+    else if (target === CHAMPIONSHIP_SCREENS.MEDALS) view = createMedalCollectionView({root, playtestPolicy: FRIENDS_PLAYTEST_POLICY, battleBadges:app.getBattleBadges(), unlockText:badgeUnlockText, calendarKind: app.getTitleCalendarKind?.() ?? 'NATIVE', onExit(){app.leaveScreen();}});
     else if (target === CHAMPIONSHIP_SCREENS.CAGE_EDIT) view = await createCageEditView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) view = createDigimonListView({
       root,
       entries: projectRoster(),
+      initialInstanceId: (() => { const id = rosterOpenOn; rosterOpenOn = null; return id; })(),
       onRename(instanceId, name) {
         const result = app.renameRosterInstance(instanceId, name);
         if (result.ok) autosave?.request('rename');
@@ -2162,7 +2442,8 @@ async function mountCurrentScreen() {
           : action === 'feed' ? app.feedAwakening(instanceId, value)
           : action === 'transcend' ? app.transcendPartner(instanceId, value)
           : action === 'battle' ? app.setPartnerBurstForm(instanceId, value)
-          : action === 'look' ? app.setPartnerAppearance(instanceId, value) : { ok: false, reason: 'UNKNOWN_ACTION' };
+          : action === 'look' ? app.setPartnerAppearance(instanceId, value)
+          : action === 'overdrive' ? app.setPartnerOverdrive(instanceId, value) : { ok: false, reason: 'UNKNOWN_ACTION' };
         if (result?.ok) autosave?.request(`awakening-${action}`);
         return { ...result, entries: projectRoster() };
       },
@@ -2190,6 +2471,7 @@ async function mountCurrentScreen() {
         bits: app.getShopFrame()?.bits ?? null,
         calendar: app.getCalendar(),
         eligibleRecordIndices: app.getAvailableBattleRecordIndices(),
+        calendarKind: app.getTitleCalendarKind?.() ?? "NATIVE",
         progress:app.getTitleProgress(),
         onToggleRegistration(recordIndex){app.toggleTitleRegistration(recordIndex);autosave?.request('registration');return app.getTitleProgress();},
         onToggleChampionship(){app.toggleChampionshipRegistration();autosave?.request('registration');return app.getTitleProgress();},
@@ -2320,7 +2602,9 @@ async function openGameplay() {
     }
   }
   unsubscribeScreen = app.subscribeScreen(() => {
-    if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) closeStoryMap();
+    // A story-theater chapter keeps its chart while its battle runs on the battle screens.
+    if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME && !vnRun) closeStoryMap();
+    followStoryBattle();
     syncMusic(); refreshStatusBar(); refreshToolbarMode(); void refreshCalendarViews(); void mountCurrentScreen();
   });
   let calendarSession=null,stopCalendarSession=null;
@@ -2381,6 +2665,9 @@ async function openGameplay() {
   // stage and the synthesizer can be checked on an isolated QA save. Public hosts never bind it.
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("gachaQa"))
     globalThis.__championshipGachaQa = { grantTickets: (amount) => app.grantGachaTickets(amount, 'QA'), frame: () => app.getCyberGachaFrame() };
+  // Loopback review only (?syncQa): crystal points and feeding, so the level-up panel can be checked.
+  if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("syncQa"))
+    globalThis.__championshipSyncQa = { grant: (n) => app.grantSyncCrystals(n), feed: (id, n) => app.feedSyncCrystals(id, n), level: (id) => app.getSyncLevel(id), partners: () => app.getBattlePartyCandidates(null) };
   // Loopback review only (?diamondQa): automation items into the bag, and the land / badge readouts.
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("diamondQa"))
     globalThis.__championshipDiamondQa = { grant: (id, n = 1) => app.grantAutomationItem(id, n, 'QA'), cage: () => app.getCageEditFrame(),
@@ -2776,7 +3063,7 @@ function storyPartner(frame) {
     ?? frame?.residents.find(r => (speciesIndexOf(r.speciesId) ?? 0) >= 8) ?? frame?.residents[0] ?? null;
   if (!resident) return null;
   const speciesIndex = speciesIndexOf(resident.speciesId);
-  return { resident, name: resident.displayName ?? (speciesIndex !== null ? speciesName(speciesIndex) : ''), portrait: speciesIndex !== null ? databaseHeroPortrait(speciesIndex) : null };
+  return { resident, name: resident.displayName ?? (speciesIndex !== null ? speciesName(speciesIndex) : ''), portrait: speciesIndex !== null ? { species: speciesIndex } : null };
 }
 async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = 'menu' } = {}) {
   if (storyRun) return storyRun;
@@ -2814,10 +3101,10 @@ async function playStoryChapter(chapterId = STORY_FIRST_CHAPTER_ID, { source = '
     if (result.outcome === 'completed' || result.outcome === 'skipped') {
       if (chapterId === STORY_FIRST_CHAPTER_ID) { try { settings.store.set('storyRiftChapter1Seen', true); } catch { /* read-only store */ } }
       document.querySelector('.int-rh2-story')?.setAttribute('data-new', 'false');
-      // Cyber Gachapon: a chapter sealed for the first time pays 3-5 tickets into the save.
+      // Cyber Gachapon: a chapter sealed for the first time pays one ticket into the save.
       if (result.outcome === 'completed') {
         try {
-          const reward = app.claimGachaReward?.(`story:${chapterId}`, 3 + Math.floor(Math.random() * 3));
+          const reward = app.claimGachaReward?.(`story:${chapterId}`, 1); // Owner 2026-11-11: one ticket per chapter
           if (reward?.granted) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: uiText('轉蛋券 +{n}', { n: reward.granted }) } }));
           // DIAMOND_ECONOMY_20261102: a chapter's first clear also pays diamonds.
           if (reward?.diamonds) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: uiText('鑽石 +{n}', { n: reward.diamonds }) } }));
@@ -2849,13 +3136,163 @@ async function openStoryMap({ chapterId = null, source = 'menu' } = {}) {
   const partner = storyPartner(view.storyStage.getFrame());
   storyMap?.dispose();
   storyMap = createStoryChapterMap({ locale: getLocale(), reducedMotion: prefersReducedMotion(), isSeen: storyNodeSeen,
+    vnStateOf: node => storyVnStates().find(state => state.id === node.vnChapterId)?.state ?? 'locked',
+    castPortrait: species => Number.isSafeInteger(species) ? { species } : null,
     partner: { name: partner?.name ?? '', portrait: partner?.portrait ?? null },
-    onPlay: next => playStoryChapter(next, { source: 'map' }),
+    guideForm: resolveGuideAppearance(settings.store.get().guideAppearance),
+    onPlay: (next, node) => node?.vnChapterId === 'vn3-hub' ? openUnionHub({ source: 'map' }) : node?.vnChapterId ? playVnChapter(node.vnChapterId, { source: 'map' }) : playStoryChapter(next, { source: 'map' }),
     onClose: () => { recoveryDiagnostics.record('STORY', { source, stage: 'map-closed' }); } });
   recoveryDiagnostics.record('STORY', { source, stage: 'map' });
   return storyMap.open({ chapterId });
 }
 function closeStoryMap() { storyMap?.dispose(); storyMap = null; }
+
+// Story mode part one (OWNER_APPROVED_ADAPTATION 2026-11-11): the half-body story theater.
+// Chapters open in order once the rift chapter one was watched; progress is the
+// once-only reward ledger (story:vn1:cN / sN), so no new save field. The clock
+// pauses for the chapter; a battle runs as the game's own free battle and the
+// chapter resumes on its win or loss branch.
+function storyVnStates() {
+  let claimed = [];
+  try { claimed = app?.getGachaClaimedRewards?.() ?? []; } catch { claimed = []; }
+  const entryOpen = settings.store.get().storyRiftChapter1Seen === true || claimed.some(key => key.startsWith('story:vn1:'));
+  return storyVnChapterStates(claimed, { entryOpen });
+}
+async function playVnChapter(chapterId, { source = 'map', from = null } = {}) {
+  if (vnRun || storyRun) return Object.freeze({ outcome: 'busy', chapterId });
+  const chapter = STORY_VN_CHAPTERS[chapterId];
+  if (!chapter) return Object.freeze({ outcome: 'refused', reason: 'UNKNOWN_CHAPTER', chapterId });
+  if (storyVnStates().find(state => state.id === chapterId)?.state === 'locked') return Object.freeze({ outcome: 'refused', reason: 'CHAPTER_LOCKED', chapterId });
+  const partner = storyPartner(view?.storyStage?.getFrame?.() ?? null);
+  if (!partner) return Object.freeze({ outcome: 'refused', reason: 'NO_PARTNER', chapterId });
+  const partnerSpecies = speciesIndexOf(partner.resident.speciesId);
+  const director = createStoryVnDirector({
+    locale: getLocale(), reducedMotion: prefersReducedMotion(), speciesName,
+    // Living scene clips everywhere but the saver tier, which keeps the stills.
+    motionPlates: currentQualityTier() !== 'saver',
+    // Ai-chan speaks in the form the player chose for her (preference guideAppearance).
+    guideForm: resolveGuideAppearance(settings.store.get().guideAppearance),
+    runBattle: request => runStoryBattle({ ...request, partnerInstanceId: partner.resident.creatureId }),
+    cue: name => playStoryVnCue(name, settings.audio.output('sfx')),
+    boardItems: unionBoardItems,
+    // Every main chapter ends with a bond moment, so the bond total is the main chapters cleared (no new save key).
+    recordBond: () => storyVnStates().filter(state => !state.side && !state.hub && state.state === 'cleared').length,
+    claim: id => {
+      const key = storyVnRewardKey(id);
+      const claimedBefore = (app.getGachaClaimedRewards?.() ?? []).includes(key);
+      try {
+        const reward = app.claimGachaReward?.(key, STORY_VN_CHAPTERS[id]?.reward?.tickets ?? 0);
+        const lines = reward?.diamonds ? [uiText('鑽石 +{n}', { n: reward.diamonds })] : [];
+        return { granted: reward?.granted ?? 0, claimedBefore, lines };
+      } catch { return { granted: 0, claimedBefore, lines: [] }; }
+    }
+  });
+  recoveryDiagnostics.record('STORY', { chapterId, source, stage: 'vn-start' });
+  clockDriver?.setActive(false);
+  document.body.dataset.storyStage = 'playing';
+  root.dataset.storyPlaying = chapterId;
+  vnRun = director;
+  try {
+    const result = await director.play(chapterId, { tamer: app.getOpeningState()?.trainerName ?? '', partner: partner.name, partnerSpecies, from });
+    recoveryDiagnostics.record('STORY', { chapterId, source, stage: `vn-${result.outcome}` });
+    if (result.reward?.granted) document.dispatchEvent(new CustomEvent('cm-fx', { detail: { kind: 'purchase', text: uiText('轉蛋券 +{n}', { n: result.reward.granted }) } }));
+    return result;
+  } finally {
+    vnRun = null;
+    delete root.dataset.storyPlaying;
+    delete document.body.dataset.storyStage;
+    clockDriver?.setActive(!root.hidden);
+    refreshStatusBar();
+  }
+}
+// Part three: the Tamer Union hall (a walkable hub). Ai-chan's counter hands out chapters 14-19 and the
+// requests that open them; after each one the player is back in the hall until they walk out.
+function unionBoardItems() {
+  const t = (key, params) => storyVnText(key, getLocale(), params) ?? key;
+  return storyVnStates().filter(state => state.id.startsWith('vn3-') && !state.hub).map(state => {
+    const chapter = STORY_VN_CHAPTERS[state.id], main = !chapter.side;
+    return {
+      id: state.id, kind: main ? 'main' : 'request', state: state.state,
+      tag: main ? `${t('BOARD_TAG_MAIN')} ${chapter.mapNumber}` : t('BOARD_TAG_REQ'),
+      title: t(chapter.titleKey), sub: state.state === 'cleared' ? t('BOARD_CLEARED') : t(chapter.summaryKey),
+      note: state.lock === 'requests' ? t('BOARD_NEED', { n: state.need - state.have, have: state.have, need: state.need }) : t('BOARD_LOCKED')
+    };
+  });
+}
+async function openUnionHub({ source = 'map' } = {}) {
+  let result = null;
+  for (let round = 0; round < 64; round += 1) {
+    result = await playVnChapter('vn3-hub', { source });
+    if (result?.outcome !== 'picked') return result;
+    await playVnChapter(result.pick, { source: 'hub' });
+  }
+  return result;
+}
+async function waitForScreen(target, timeoutMs = 15000) {
+  const started = Date.now();
+  while (Date.now() - started < timeoutMs) {
+    if (app.getScreen() === target && mountedScreen === target) return true;
+    await new Promise(resolve => setTimeout(resolve, 120));
+  }
+  return false;
+}
+/** A story battle: the free battle against the chapter's presets; resolves {ok, won} once the result screen is left. */
+async function runStoryBattle({ presetIndices, partnerInstanceId = null, signal = null }) {
+  if (storyBattle) return { ok: false, reason: 'BATTLE_BUSY' };
+  if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started) return { ok: false, reason: 'BATTLE_NOT_READY' };
+  const previousStage = document.body.dataset.storyStage;
+  delete document.body.dataset.storyStage;
+  try {
+    if (app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) { if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen(); app.openBattle(); }
+    if (!(await waitForScreen(CHAMPIONSHIP_SCREENS.BATTLE_SELECT))) return { ok: false, reason: 'BATTLE_SELECT_NOT_READY' };
+    const candidates = (await app.getBattlePartyCandidates(null)).filter(c => !c.admission || c.admission.ok);
+    const lead = candidates.find(c => c.instanceId === partnerInstanceId) ?? candidates[0];
+    if (!lead) return { ok: false, reason: 'TEAM_REQUIRED' };
+    const party = await app.prepareStoryBattle(presetIndices, [lead.instanceId]);
+    if (!party.ok) return party;
+    const prepared = (await loadBattleRuntime())({ mode: 2, battleType: 0, playerIndividuals: party.individuals, rng: party.rngPreparation.rng,
+      personalityPolicy: FREE_PRACTICE_PERSONALITY_POLICY, arenaHazards: await loadArenaHazards() });
+    const finished = new Promise(resolve => { storyBattle = { resolve, outcome: null, seenResult: false }; });
+    try { prepared.chooseFreeBattle({ presetIndices: party.presetIndices, arenaIndex: party.arenaIndex }); prepared.startMatch(); }
+    catch (error) { prepared.dispose(); storyBattle = null; return { ok: false, reason: error?.message ?? 'BATTLE_NOT_READY' }; }
+    const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
+    const entered = await enterPreparedBattle(prepared, attemptId, () => app.enterFreeBattle({ attemptId, playerInstanceIds: [lead.instanceId], rngPreparation: party.rngPreparation }));
+    if (!entered?.ok) { storyBattle = null; return { ok: false, reason: entered?.reason ?? 'BATTLE_NOT_READY' }; }
+    signal?.addEventListener?.('abort', () => storyBattle?.resolve({ ok: false, reason: 'STORY_ABORTED' }), { once: true });
+    return await finished;
+  } finally {
+    storyBattle = null;
+    if (app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_SELECT) app.leaveScreen();
+    await waitForScreen(CHAMPIONSHIP_SCREENS.RAISING_HOME, 8000);
+    if (previousStage) document.body.dataset.storyStage = previousStage;
+  }
+}
+// Follows the battle screens for a running story battle: the result screen records the
+// outcome; leaving it (back to the battle menu or home) settles the battle.
+function followStoryBattle() {
+  if (!storyBattle) return;
+  const screen = app.getScreen();
+  if (screen === CHAMPIONSHIP_SCREENS.BATTLE_RESULT && !storyBattle.seenResult) {
+    storyBattle.seenResult = true;
+    try { storyBattle.outcome = battleRuntime?.outcome?.() ?? null; } catch { storyBattle.outcome = null; }
+  } else if (storyBattle.seenResult && screen !== CHAMPIONSHIP_SCREENS.BATTLE_RESULT && screen !== CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
+    const outcome = storyBattle.outcome;
+    storyBattle.resolve({ ok: true, won: outcome?.winningTeam === 0, outcome });
+  }
+}
+// Loopback review only (?storyVnQa): play a chapter (optionally from a beat label), read its
+// state, stop it, mark chapters cleared. Public hosts never bind it.
+if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("storyVnQa"))
+  globalThis.__championshipStoryVnQa = {
+    play: (chapterId, options = {}) => playVnChapter(chapterId, { source: 'qa', ...options }),
+    hub: () => openUnionHub({ source: 'qa' }),
+    spot: id => vnRun?.spot(id) ?? null,
+    state: () => vnRun?.state() ?? null,
+    stop: () => vnRun?.stop(),
+    states: () => storyVnStates(),
+    map: (chapterId = null) => openStoryMap({ chapterId, source: 'qa' }),
+    claim: ids => ids.map(id => app.claimGachaReward(storyVnRewardKey(id), 0))
+  };
 document.addEventListener(STORY_CHAPTER_OPEN_EVENT, event => { openStoryMap({ chapterId: event.detail?.chapterId ?? STORY_FIRST_CHAPTER_ID, source: event.detail?.source ?? 'badge' }); });
 
 // Online service (Owner 2026-10-28). One facade for the account panel, the
@@ -2992,12 +3429,21 @@ function startProviderBind(provider) {
 // 📸 Brag card (Owner 2026-10-29): the tamer licence as a shareable poster.
 let bragRunning = false;
 function speciesIdentityOf(speciesId) { try { return lookupSpeciesIdentity(productEntities, speciesId); } catch { return null; } }
+// Owner 2026-11-10: the card names the partner's faction; a former free partner (attribute 4) shows the faction the
+// taxonomy gave it (attr1 心輝 / attr2 裂隙 / attr3 黑鐵).
+const CARD_FACTION_ATTRIBUTE = Object.freeze({ LUMEN: 1, RIFT: 2, IRON: 3 });
+function cardAttributeIndex(identity, speciesId) {
+  const index = identity?.attributeIndex ?? 0;
+  if (index !== 4) return index;
+  const id = speciesId ?? (Number.isInteger(identity?.recordIndex) ? `species-${identity.recordIndex}` : '');
+  return CARD_FACTION_ATTRIBUTE[speciesTaxonomyForId(id)?.faction] ?? index;
+}
 function acePartnerForCard() {
-  // The most evolved partner that has Database art; the first partner otherwise.
-  const roster = projectRoster().map(entry => ({ entry, portrait: juicyPortrait(entry.identity?.recordIndex ?? null) }));
-  const ranked = [...roster].sort((a, b) => (Number(Boolean(b.portrait)) - Number(Boolean(a.portrait))) || ((b.entry.identity?.generationIndex ?? 0) - (a.entry.identity?.generationIndex ?? 0)));
+  // The most evolved hatched partner, drawn as its own body (Owner 2026-11-12); the first partner otherwise.
+  const speciesOf = entry => Number.isSafeInteger(entry.identity?.recordIndex) && entry.identity.recordIndex >= 8 ? `species-${String(entry.identity.recordIndex).padStart(3, '0')}` : null;
+  const ranked = [...projectRoster()].sort((a, b) => (Number(Boolean(speciesOf(b))) - Number(Boolean(speciesOf(a)))) || ((b.identity?.generationIndex ?? 0) - (a.identity?.generationIndex ?? 0)));
   const pick = ranked[0];
-  return pick ? { name: pick.entry.displayName ?? null, attributeIndex: pick.entry.identity?.attributeIndex ?? 0, portraitSrc: pick.portrait?.src ?? null, role: 'ace' } : null;
+  return pick ? { name: pick.displayName ?? null, attributeIndex: cardAttributeIndex(pick.identity, null), portraitSpecies: speciesOf(pick), role: 'ace' } : null;
 }
 async function bragCardInput({ winner = null, victory = null } = {}) {
   const record = app.getTitleProgress?.().record ?? null;
@@ -3031,15 +3477,30 @@ function bragWinnerFrom(participants) {
   for (const participant of participants ?? []) {
     if (!participant?.speciesId) continue;
     const identity = speciesIdentityOf(participant.speciesId);
-    const portrait = juicyPortrait(participant.speciesId);
+    const species = /species-\d{3}$/.exec(participant.speciesId)?.[0] ?? null;
     const member = roster.find(entry => entry.instanceId === participant.instanceId);
-    if (portrait || identity) return { name: member?.displayName ?? identity?.speciesName ?? null, attributeIndex: identity?.attributeIndex ?? 0, portraitSrc: portrait?.src ?? null, role: 'winner' };
+    if (species || identity) return { name: member?.displayName ?? identity?.speciesName ?? null, attributeIndex: cardAttributeIndex(identity, participant.speciesId), portraitSpecies: species, role: 'winner' };
   }
   return null;
 }
 /** The victory screen's 📸 key: the winning partner on the card, the match as its ribbon. */
+/** The post-battle Sync EXP panel for a settled gain record (auto battle and Data Arena). */
+function syncGainPanelFor(record) {
+  const nameOf = (id) => {
+    const entry = app.resolveRaisingInstance(id), index = juicySpeciesIndex(entry?.speciesId);
+    return entry?.displayName || (index === null ? id : speciesName(index));
+  };
+  const portraitOf = (id) => {
+    const index = juicySpeciesIndex(app.resolveRaisingInstance(id)?.speciesId);
+    return index === null ? null : { species: index };
+  };
+  const panel = buildSyncGainPanel({ gains: record.gains, nameOf, portraitOf, reducedMotion: prefersReducedMotion(),
+    cap: ['TITLE', 'CHAMPIONSHIP'].includes(record.kind) ? app.getSyncCap() : null });
+  return { ...panel, kicker: syncText('panel.kicker'), title: syncText('panel.title') };
+}
+
 function battleResultBrag({ participants, matchTitle }) {
-  return { label: socialText('bragButton'), onOpen: button => openTamerBragCard({ trigger: button, winner: bragWinnerFrom(participants), victory: { matchTitle } }) };
+  return { label: socialText('bragButton'), shortLabel: socialText('bragShort'), onOpen: button => openTamerBragCard({ trigger: button, winner: bragWinnerFrom(participants), victory: { matchTitle } }) };
 }
 const bragButton = (onClick) => {
   const button = document.createElement('button'); button.type = 'button';
@@ -3246,7 +3707,7 @@ function relabelChrome() {
 // ---- Data Arena entry (OWNER_APPROVED_ADAPTATION 2026-10-15) ----------------
 // Battle owns the entry; the existing arena temporarily borrows the shared
 // stage. Its close callback restores the same menu and its keyboard focus.
-async function enterDataArena(dataArenaButton) {
+async function enterDataArena(dataArenaButton, { campaign = null, onCampaignResult = null, reopen = null } = {}) {
   stopRanchTitlePreload();
   if (dataArenaSession || app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT || !dataArenaButton?.isConnected) return;
   dataArenaButton.disabled = true;
@@ -3262,6 +3723,8 @@ async function enterDataArena(dataArenaButton) {
     if (app) recordSessionScreenMounted(app.getScreen());
     syncMusic();
     dataArenaButton.focus({ preventScroll: true });
+    // A Journey zone stage returns to its zone.
+    if (reopen) queueMicrotask(() => void openJourney(reopen));
   };
   let storage = null;
   try { storage = window.localStorage; } catch { storage = null; }
@@ -3280,9 +3743,18 @@ async function enterDataArena(dataArenaButton) {
       progress: app.getDataArenaProgress?.() ?? null,
       // Awakening raising (2026-11-02): a relay entry from the ranch bursts into the form its partner learned.
       burstPlanOf: (instanceId) => app.getBattleBurstPlan?.(instanceId) ?? null,
+      // Sync Level (Owner 2026-11-09): ranch partners fight at their level and earn Sync EXP.
+      syncPowerOf: (instanceId) => app.getSyncArenaPower?.(instanceId) ?? 1,
+      onSyncResult: (match) => app.grantArenaSync?.(match) ?? null,
+      syncPanelFor: (record) => syncGainPanelFor(record),
+      campaign, onCampaignResult,
+      // Sponsor stake contracts (AWAKENING_OVERDRIVE_20261109): the one armed in the battle menu rides the next cup or relay.
+      sponsor: { begin: (power) => { const result = app.beginArenaSponsorContract?.(power) ?? null;
+          showSponsorNotice(result?.ok ? result : null, result?.ok ? null : app.takeSponsorRefusal?.() ?? null); return result; },
+        settle: (stats) => app.settleArenaSponsorContract?.(stats) ?? null },
       onExit: restoreBattle,
-      // Cyber Gachapon: a manual-battle win pays 1-3 tickets, a cup 3-10, into the one save.
-      onVictory: ({ tournament }) => app?.grantGachaTickets?.(tournament ? 3 + Math.floor(Math.random() * 8) : 1 + Math.floor(Math.random() * 3), 'DATA_ARENA')
+      // Cyber Gachapon: a manual-battle win settles like an AI win (tickets, and an armed beacon), into the one save.
+      onVictory: ({ tournament, partyIds }) => app?.settleDataArenaWin?.({ tournament, partyIds })
     });
     dataArenaSession = session;
     root.hidden = true;
@@ -3380,6 +3852,7 @@ function boot() {
       // before this script runs; players never see that switch.
       partnerLife: globalThis.__CHAMPIONSHIP_PARTNER_LIFE__ !== false,
       huntExpansionLoader: loadHuntExpansionReview,
+      huntInstinctOverride: HUNT_INSTINCT_QA,
       catalog: productEntities,
       cages: RAISING_CAGES,
       // Owner 2026-11-02: the ranch runs on the device's local time (no fast-forward, a night nap 22:00-07:00,
@@ -3459,7 +3932,7 @@ function boot() {
   if (activeCheckpoint && Number.isFinite(activeCheckpoint.updatedAtMs)
     && Date.now() - activeCheckpoint.updatedAtMs <= CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS
     && app.canContinue().loadable) {
-    recoveryDiagnostics.record("LOAD", { area: "standalone-auto-resume", stage: activeCheckpoint.screen });
+    recoveryDiagnostics.record("AUTO_RESUME", { target: activeCheckpoint.screen });
     void (async () => {
       try {
         openingFilm?.stop?.();

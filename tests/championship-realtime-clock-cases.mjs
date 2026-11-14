@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import species from '../src/data/championship/catalogs/creature-species.r1.json' with {type: 'json'};
 import lifecycle from '../src/data/championship/catalogs/raising-lifecycle.r1.json' with {type: 'json'};
-import {REALTIME_AGE_UNITS_PER_SECOND,REALTIME_OFFLINE_CAP_SECONDS,isNightNap,localMinuteOfDay,offlineGrowthSeconds,
+import {REALTIME_AGE_UNITS_PER_SECOND,REALTIME_OFFLINE_CAP_SECONDS,realtimeAgeRate,isNightNap,localMinuteOfDay,offlineGrowthSeconds,
   realtimeClockAdvance,realtimeDayPeriod,realtimeRecoveryEffect,takeAgeUnits} from '../src/championship/time/realtimeClock.js';
 import {nativeCageConditionEffects} from '../src/championship/raising/nativeRaisingOvernight.js';
 import {SHOP_DESCRIPTIONS_ZH} from '../src/championship/text/catalogs.zhHant.js';
@@ -36,6 +36,16 @@ test('the night nap is 22:00-07:00; four parts of the day; offline growth counts
   assert.equal(offlineGrowthSeconds(at(8), at(10)), 7200);
   assert.equal(offlineGrowthSeconds(at(8), at(8, 0, 2)), REALTIME_OFFLINE_CAP_SECONDS);
   assert.equal(offlineGrowthSeconds(at(10), at(8)), 0);
+});
+
+test('egg hatch times (Owner 2026-11-09): the new game egg in 30 s, a reborn egg in 3 min', () => {
+  assert.equal(61 / realtimeAgeRate(0, {starterEgg: true}), 30, 'the crack starts once the age passes 60');
+  assert.equal(61 / realtimeAgeRate(0), 180);
+  assert.equal(realtimeAgeRate(1, {starterEgg: true}), REALTIME_AGE_UNITS_PER_SECOND[1], 'only an egg takes the starter pace');
+  const acc = new Map();
+  let units = 0;
+  for (let frame = 0; frame < 30 * 60; frame++) units += takeAgeUnits(acc, 'starter', realtimeAgeRate(0, {starterEgg: true}) / 60);
+  assert.equal(units, 61, 'thirty seconds of frames pass the egg lifespan of 60 units');
 });
 
 test('growth pace: an egg reaches 成熟期 in about a day and a half of real time', () => {
@@ -270,7 +280,7 @@ test('REALTIME_V1: a partner at HP 57 in the mini infirmary heals fully and calm
 test('cage shop descriptions name the cage effect in every locale (no stray 防御力 copy)', () => {
   const defense = {ja: /防御力/, th: /พลังป้องกัน/, vi: /phòng thủ/};
   const tables = {ja: SHOP_DESCRIPTIONS_JA, th: SHOP_DESCRIPTIONS_TH, vi: SHOP_DESCRIPTIONS_VI};
-  const beast = {zh: /獸種族上升/, en: /Raises the Beast family/, ja: /獣族適性/, th: /เผ่าสัตว์ป่า/, vi: /chủng tộc dã thú/};
+  const beast = {zh: /獸族點數上升/, en: /Raises Beast points/, ja: /獣族ポイント/, th: /แต้มเผ่าสัตว์ป่า/, vi: /điểm Thú tộc/}; // WEEKLY_SEASON_FACTIONS_20261110
   const recover = {zh: /回復生命值/, en: /Recovers HP/, ja: /HPが回復/, th: /ฟื้นฟู HP/, vi: /Hồi HP/};
   for (const cage of cageDefinitions.records.filter(c => c.playerFacing && Number.isInteger(c.shopRecordIndex))) {
     const isDefense = cage.effect.kind === 'STAT_UP' && cage.effect.target === 'DEFENSE';
@@ -304,4 +314,18 @@ test('night: a partner fresh out of its egg stays up for the wake window, then n
     for (let i = 0; i < 600 && app.getRaisingActorFrame(id).state !== 4; i++) app.advanceNaturalClock({frames: 1});
     assert.equal(app.getRaisingActorFrame(id).state, 4, 'naps once the wake window has passed');
   } finally { await app.dispose(); }
+});
+
+test('REALTIME_V1: a hunt starts at 00:41 and 01:59, before the original 02:00 day (CI found Start doing nothing then)', async () => {
+  for (const [hour, minute] of [[0, 41], [1, 59], [13, 0]]) {
+    const clock = {ms: at(hour, minute)};
+    const {make} = harness(clock);
+    const app = make('REALTIME_V1');
+    await app.newGame();
+    try {
+      app.openGate(); app.selectGate(app.getGates().find(g => g.biomeId === 'Grass').gateId); app.confirmGate();
+      assert.equal(await app.beginHunt(), 'HUNT_FIELD', `${hour}:${minute}`);
+      assert.equal(app.getHuntEntryError(), null);
+    } finally { await app.dispose(); }
+  }
 });

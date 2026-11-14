@@ -1,6 +1,7 @@
 // The compositions of each ceremony (2026-10-15). Builders only lay out nodes
 // for ui/ceremony.css; the words arrive already translated from the caller,
 // and every image is an existing registered asset handed in by the caller.
+import { createActionPortrait, ACTION_PORTRAIT_SEQUENCES } from "../juicy/actionPortrait.js";
 import { appendCeremonySparks, ceremonyNode } from "./ceremonyRunner.js";
 
 const sparkCount = (env, full) => (env.motion === "full" ? full : 0);
@@ -70,14 +71,18 @@ export function buildMedal(stage, env, { kicker, title, meta, medal, hint }) {
 }
 
 /** 進化: the new form swells out of light; the plate says who became what. */
-export function buildEvolve(stage, env, { kicker, title, meta, portrait, hint }) {
+export function buildEvolve(stage, env, { kicker, title, meta, portrait = null, species = null, hint }) {
   const doc = stage.ownerDocument;
   const root = ceremonyNode(doc, "div", "cm-cer-evolve");
   const art = ceremonyNode(doc, "div", "cm-cer-evolve__stage");
   art.append(ceremonyNode(doc, "span", "cm-cer-rays"));
   rings(doc, art, 2);
   appendCeremonySparks(doc, art, sparkCount(env, 14));
-  if (portrait?.src) {
+  // The new form stands on the stage as itself, cheering (Owner 2026-11-12: illustrations stay in the Database).
+  const body = species ? createActionPortrait({ doc, species, width: 168, height: 152, sequence: ACTION_PORTRAIT_SEQUENCES.cheer,
+    reducedMotion: Boolean(env?.reducedMotion), className: "cm-cer-evolve__art cm-cer-evolve__body", lazy: false }) : null;
+  if (body) art.append(body.element);
+  else if (portrait?.src) {
     const image = doc.createElement("img");
     image.className = "cm-cer-evolve__art";
     image.src = portrait.src;

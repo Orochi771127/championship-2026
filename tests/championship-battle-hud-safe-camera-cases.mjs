@@ -84,13 +84,17 @@ test('the director keeps every standing fighter in the window through a focus, a
   assert.ok(worst >= -1, `a standing fighter left the safe window by ${-worst}px`);
 });
 
-test('a hit pushes the shot in about 8 % with a kick along the blow, then settles', () => {
+// Owner 2026-11-11 (calm shot): a medium hit only shakes lightly; a heavy hit pushes in about 5 %.
+test('a heavy hit pushes the shot in about 5 % with a kick along the blow, then settles; a medium hit only shakes', () => {
   const director = createBattleFxCamera({boundedMap: true, wideCover: false});
   const subjects = [body(0, 400, 330), body(3, 480, 330)];
   for (let i = 0; i < 40; i++) director.update({dtMs: 16, viewport, art, subjects, insets});
   assert.equal(director.impact('medium', 1), true);
+  assert.equal(director.getState().punch, 0, 'a medium hit does not zoom');
+  assert.ok(director.getState().trauma > 0 && director.getState().trauma <= 0.1, 'a medium hit shakes lightly');
+  assert.equal(director.impact('heavy', 1), true, 'a heavy hit overrides a medium one');
   const state = director.getState();
-  assert.ok(state.punch >= 0.079 && state.punch <= 0.14, `punch ${state.punch}`);
+  assert.ok(state.punch >= 0.049 && state.punch <= 0.14, `punch ${state.punch}`);
   for (let i = 0; i < 20; i++) director.update({dtMs: 16, viewport, art, subjects, insets});
   assert.ok(director.getState().punch < 0.02, 'the push settles within about 300 ms');
 });
@@ -112,7 +116,8 @@ test('the hyper ring splits its streaks behind and in front of the caster', () =
   assert.ok(back.length >= 8 && front.length >= 8, 'both halves carry streaks');
   for (const s of back) assert.ok(Math.sin(s.angle) < 0, 'far half (up the screen) draws behind the body');
   const layer = fs.readFileSync(new URL('../src/championship/presentation/battleFx/battleFxLayer.js', import.meta.url), 'utf8');
-  assert.match(layer, /worldBack\.addChild\(scorchLayer, groundGfx, hyperBack, ghostLayer\)/, 'the far half lives under the actors');
+  // the far half (and, refinement pass 8, the baked aura that replaces it once loaded) lives under the actors
+  assert.match(layer, /worldBack\.addChild\(scorchLayer, groundGfx, hyperBack, hyperBaked, ghostLayer\)/, 'the far half lives under the actors');
   assert.match(layer, /worldFront\.addChild\(hyperFront,/, 'the near half lives over the actors');
   const overlay = fs.readFileSync(new URL('../src/championship/presentation/vs5/createBattleVfxThreeOverlay.js', import.meta.url), 'utf8');
   assert.match(overlay, /!placement\.hyperWrap/, 'the flat 3D copy stays off while the ring is wrapped');

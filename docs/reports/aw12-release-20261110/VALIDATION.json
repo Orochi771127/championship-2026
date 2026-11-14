@@ -1,0 +1,91 @@
+{
+  "status": "LOCAL_RELEASE_VALIDATED",
+  "displayCode": "AW12",
+  "sourceVersions": [
+    "General R5",
+    "Arena R3"
+  ],
+  "originalPixelsPreserved": true,
+  "generalCallers": 53,
+  "generalEvents": 83,
+  "arenaSourceSequences": 65,
+  "arenaSourceEvents": 506,
+  "frameRecords": 109,
+  "runtimeAtlasBytes": 10094812,
+  "releaseAttachment": "Authored contact points; simulation CAST_RELEASE remains gameplay authority",
+  "referenceHitMarkerVerified": false,
+  "calibration": "Uniform 7.6 source pixels per unit; Arena reference root-to-crown 200 source pixels, manual uncertainty 8 pixels. No per-frame fit.",
+  "limits": [
+    "Physical mobile device not tested",
+    "All natural state transitions not exhaustively triggered",
+    "A27 small detached source fragment preserved",
+    "P35 original tiny effect and intentional Main27 blank preserved"
+  ],
+  "ci": {
+    "tests": 3567,
+    "passed": 3567,
+    "failed": 0
+  },
+  "production": "AWAITING_PR_MERGE_AND_PAGES_VERIFICATION",
+  "sourcePackageSha256": "02993e8e718b9de498470217c46fa9feebfab44f974bd16fcd1e0068dfaf3eb5",
+  "publicManifestSha256": "847f4e448bc12c35e4fa8e1dcac962e10de3fd58a7b3e93d18f2963ee19f0c6b",
+  "naturalBrowser": {
+    "normalMoveSamples": 121,
+    "worldPositions": 87,
+    "atomicSamples": 1540,
+    "nativeVisualIndexMismatches": 0,
+    "generalOverlayFrames": 51,
+    "arenaOverlayFrames": 60,
+    "directions": 8,
+    "attack": "Existing own-344 NOVA, WINDUP 0-3 then CAST_RELEASE frame4 followed through frame11",
+    "rendererReferenceHeight": 26.315789473684212,
+    "viewports": [
+      [
+        1366,
+        768
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "pageErrors": [],
+    "missingResponses": [],
+    "physicalPhone": false
+  },
+  "fastMove": {
+    "samples": 12,
+    "atomicSamples": 501,
+    "nativeVisualIndexMismatches": 0,
+    "scope": "Earlier unchanged Main3 P04/P05 roots and timings"
+  },
+  "pixelPreservation": "110 decoded crop comparisons exact including the two shared victory frames; source PNGs untouched",
+  "knownVisualScope": "All 108 source body/effect poses reviewed in renderer overlays. Fixed anatomical landmarks, not independent numeric measurements for every joint. Manual landmark uncertainty ±8 source pixels.",
+  "compiledArtifact": {
+    "buildId": "f5d8930826e5675ee79da9b4f128918bbb6da2eaf623def105ebd6b76053668e",
+    "files": 2296,
+    "unmodifiedBundle": true,
+    "aw12FilesRequested": 6,
+    "missing": 0,
+    "pageErrors": 0,
+    "normalRanchAndArena": true,
+    "threeViewports": true,
+    "externalLibraryUnchanged": true
+  },
+  "facingGate": {
+    "updatedRole": "AW12 only",
+    "oldMasksPreserved": true,
+    "newExceptions": 0,
+    "targetedTestsPassed": 13
+  },
+  "publicationChecks": {
+    "externalBuild": "PASS",
+    "validatePlaytest": "PASS",
+    "publicPayload": "PASS",
+    "privateAuthorityIncluded": false
+  }
+}

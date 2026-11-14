@@ -42,16 +42,22 @@ export function parseCharacterAssetManifest(bytes){
 /** Read only when the caller explicitly requests the external-character build. */
 export function readExternalCharacterRelease(root,sourcePlan){
  const contract=JSON.parse(fs.readFileSync(checkedFile(root,EXTERNAL_CHARACTER_CONTRACT),'utf8'));
- if(!exactKeys(contract,['schemaVersion','status','assetBaseUrl','manifestPath','manifestSha256'])
+ if(!exactKeys(contract,['schemaVersion','status','assetBaseUrl','manifestPath','manifestSha256','localPaths'])
   ||contract.schemaVersion!==1||contract.status!=='VERIFIED'||contract.manifestPath!==EXTERNAL_CHARACTER_FILES
   ||!/^[a-f0-9]{64}$/.test(contract.manifestSha256??''))throw Error('EXTERNAL_CHARACTER_RELEASE_NOT_VERIFIED');
- const runtime=validateCharacterAssetDelivery({schemaVersion:1,assetPrefix:CHARACTER_ASSET_PREFIX,assetBaseUrl:contract.assetBaseUrl});
+ const runtime=validateCharacterAssetDelivery({schemaVersion:1,assetPrefix:CHARACTER_ASSET_PREFIX,assetBaseUrl:contract.assetBaseUrl,
+  ...(contract.localPaths!==undefined?{localPaths:contract.localPaths}:{})});
  const manifestBytes=fs.readFileSync(checkedFile(root,contract.manifestPath));
  if(sha(manifestBytes)!==contract.manifestSha256)throw Error('EXTERNAL_CHARACTER_MANIFEST_HASH');
  const manifest=parseCharacterAssetManifest(manifestBytes);
  if(!runtime.assetBaseUrl.endsWith('/'+manifest.sourceCommit+'/'))throw Error('EXTERNAL_CHARACTER_VERSION_MISMATCH');
  const selected=new Map(sourcePlan.allowlist.files.map(row=>[row.path,row]));
- const expected=sourcePlan.files.filter(file=>file.startsWith(CHARACTER_ASSET_PREFIX));
+ const local=new Set(runtime.localPaths??[]),hosted=new Set(manifest.files.map(row=>row.path));
+ for(const file of local){
+  if(!sourcePlan.files.includes(file)||!selected.has(file)||hosted.has(file))throw Error('EXTERNAL_CHARACTER_LOCAL_CLOSURE:'+file);
+  if(sha(fs.readFileSync(checkedFile(root,file)))!==selected.get(file).sha256)throw Error('EXTERNAL_CHARACTER_LOCAL_HASH:'+file);
+ }
+ const expected=sourcePlan.files.filter(file=>file.startsWith(CHARACTER_ASSET_PREFIX)&&!local.has(file));
  if(!sameSet(expected,manifest.files.map(row=>row.path)))throw Error('EXTERNAL_CHARACTER_SELECTION_CLOSURE');
  for(const row of manifest.files){
   if(selected.get(row.path)?.sha256!==row.sha256)throw Error('EXTERNAL_CHARACTER_SELECTION_HASH:'+row.path);
@@ -60,7 +66,8 @@ export function readExternalCharacterRelease(root,sourcePlan){
  }
  const receipt={schemaVersion:1,assetPrefix:CHARACTER_ASSET_PREFIX,assetBaseUrl:runtime.assetBaseUrl,
   sourceCommit:manifest.sourceCommit,manifestUrl:new URL('runtime-manifest.json',runtime.assetBaseUrl).href,
-  manifestSha256:contract.manifestSha256,fileCount:manifest.fileCount,totalBytes:manifest.totalBytes};
+  manifestSha256:contract.manifestSha256,fileCount:manifest.fileCount,totalBytes:manifest.totalBytes,
+  ...(runtime.localPaths?{localPaths:runtime.localPaths}:{})};
  return {runtime,receipt,files:manifest.files,manifestBytes};
 }
 
@@ -68,7 +75,9 @@ export function readExternalCharacterRelease(root,sourcePlan){
 export function externalCharacterPublicationPlan(plan,release){
  if(!release)return plan;
  const external=new Map(release.files.map(row=>[row.path,row])),selected=new Map(plan.allowlist.files.map(row=>[row.path,row]));
- const expected=plan.files.filter(file=>file.startsWith(CHARACTER_ASSET_PREFIX));
+ const local=new Set(release.receipt.localPaths??[]);
+ for(const file of local)if(!plan.files.includes(file)||!selected.has(file)||external.has(file))throw Error('EXTERNAL_CHARACTER_LOCAL_CLOSURE:'+file);
+ const expected=plan.files.filter(file=>file.startsWith(CHARACTER_ASSET_PREFIX)&&!local.has(file));
  if(external.size!==release.files.length||!sameSet(expected,[...external.keys()]))throw Error('EXTERNAL_CHARACTER_PARTITION_CLOSURE');
  for(const row of external.values())if(selected.get(row.path)?.sha256!==row.sha256)throw Error('EXTERNAL_CHARACTER_PARTITION_HASH:'+row.path);
  const files=plan.files.filter(file=>!external.has(file));
@@ -81,12 +90,16 @@ export function assertExternalCharacterPartition(plan,actualFiles){
   return;
  }
  const rows=plan.externalCharacterFiles??[],external=new Map(rows.map(row=>[row.path,row]));
- const approved=plan.allowlist.files.filter(row=>row.path.startsWith(CHARACTER_ASSET_PREFIX));
+ const localPaths=plan.externalCharacterAssets.localPaths??[];
+ validateCharacterAssetDelivery({schemaVersion:1,assetPrefix:CHARACTER_ASSET_PREFIX,assetBaseUrl:plan.externalCharacterAssets.assetBaseUrl,localPaths});
+ const local=new Set(localPaths);
+ for(const file of local)if(!plan.allowlist.files.some(row=>row.path===file)||external.has(file)||!actualFiles.includes(file))throw Error('EXTERNAL_CHARACTER_LOCAL_CLOSURE:'+file);
+ const approved=plan.allowlist.files.filter(row=>row.path.startsWith(CHARACTER_ASSET_PREFIX)&&!local.has(row.path));
  if(external.size!==rows.length||!sameSet(approved.map(row=>row.path),[...external.keys()])
   ||rows.length!==plan.externalCharacterAssets.fileCount||rows.reduce((n,row)=>n+row.bytes,0)!==plan.externalCharacterAssets.totalBytes)
   throw Error('EXTERNAL_CHARACTER_PARTITION_CLOSURE');
  for(const row of approved)if(external.get(row.path)?.sha256!==row.sha256)throw Error('EXTERNAL_CHARACTER_PARTITION_HASH:'+row.path);
- if(actualFiles.some(file=>file.startsWith(CHARACTER_ASSET_PREFIX)))throw Error('EXTERNAL_CHARACTER_STILL_IN_GAME_ARTIFACT');
+ if(actualFiles.some(file=>file.startsWith(CHARACTER_ASSET_PREFIX)&&!local.has(file)))throw Error('EXTERNAL_CHARACTER_STILL_IN_GAME_ARTIFACT');
 }
 
 /** Validate a version directory before upload: exact file set, bytes and receipt. */

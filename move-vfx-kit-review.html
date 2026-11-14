@@ -34,6 +34,11 @@
     import {moveVfxSignature} from "./src/championship/presentation/vfx/moveVfxSignatures.js";
     import {BATTLE_MOVE_NAMES} from "./src/championship/text/battleMoveNames.js";
     import table from "./src/data/championship/move-vfx-signatures.r1.json" with {type: "json"};
+    import {moveVfxChoreography} from "./src/championship/presentation/vfx/moveVfxChoreography.js";
+    import {createMoveVfxSetPieces} from "./src/championship/presentation/vfx/moveVfxSetPieces.js";
+    import {BATTLE_FX_PALETTES} from "./src/championship/presentation/battleFx/battleFxPalettes.js";
+    import {createPixelHitBursts} from "./src/championship/presentation/vfx/pixelHitBursts.js";
+    import {createPixelMotes} from "./src/championship/presentation/vfx/pixelMotes.js";
 
     // Each style with the element colour a typical move of it carries.
     const STYLES = [["fireball", "fire", "火球"], ["flame", "fire", "火焰"], ["missile", "metal", "飛彈"], ["gatling", "metal", "機槍"],
@@ -77,8 +82,16 @@
     const groundLayer = new PIXI.Container(), actorLayer = new PIXI.Container(), front = new PIXI.Container();
     app.stage.addChild(field, groundLayer, actorLayer, front);
     const kit = createMoveVfxKit({PIXI, front, ground: groundLayer, quality: params.get("quality") ?? "balanced", pixel: params.get("pixel") !== "0"});
+    // The move's own release and contact pieces, hit-stop, shake and knock (BESPOKE_MOVE_VFX_PROGRAM_20261111).
+    const pieceLayer = new PIXI.Container(); app.stage.addChild(pieceLayer);
+    const pieces = createMoveVfxSetPieces({PIXI, layer: pieceLayer});
+    // ?body=72: the struck body's width in px; the AI battle passes the same width to every contact layer.
+    const BODY = Number(params.get("body") ?? 72), UNIT = BODY / 64, SHAKE = {light: 3, medium: 6, heavy: 10};
+    const pixelHits = createPixelHitBursts({PIXI, layer: pieceLayer}), motes = createPixelMotes({PIXI, layer: pieceLayer});
+    const ELEMENT = {fire: "FIRE", water: "WATER", ice: "ICE", thunder: "THUNDER", metal: "METAL", nature: "WOOD", earth: "EARTH", wind: "WIND", light: "SUN", dark: "MOON"};
+    const feel = {holdMs: 0, shakeMs: 0, shakePx: 0, knock: 0, knockDir: 1, log: []};
     // Two stand-ins: a shadow and a body, so the shots have somewhere to go.
-    const actor = tint => { const g = new PIXI.Graphics(); g.ellipse(0, 0, 26, 9).fill({color: 0x000000, alpha: 0.3}); g.roundRect(-16, -48, 32, 44, 12).fill(tint); actorLayer.addChild(g); return g; };
+    const actor = tint => { const g = new PIXI.Graphics(), w = Number(params.get("body") ?? 72); g.ellipse(0, 0, w * 0.8, w * 0.28).fill({color: 0x000000, alpha: 0.3}); g.roundRect(-w / 2, -w * 1.35, w, w * 1.3, w * 0.35).fill(tint); actorLayer.addChild(g); return g; };
     const caster = actor(0x6fd0ff), target = actor(0xff8a7a);
 
     const shots = [];
@@ -93,7 +106,8 @@
     const ultimateNow = () => look().signature ? look().signature.tier === "ultimate" : state.ultimate;
     function place() {
       // Each round fires a new direction, so a shot's turn is visible.
-      const w = app.screen.width, h = app.screen.height, a = round * 2.39996;
+      // ?fixed=1: always left to right, as the arena's opening face-off.
+      const w = app.screen.width, h = app.screen.height, a = params.get("fixed") === "1" ? Math.PI : round * 2.39996;
       const cx = w / 2, cy = h * 0.55, r = Math.min(w, h) * 0.32;
       caster.position.set(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.8);
       target.position.set(cx - Math.cos(a) * r * 0.9, cy - Math.sin(a) * r * 0.7);
@@ -101,10 +115,13 @@
     function fire() {
       const {archetype, paletteKey, signature} = look(), ultimate = ultimateNow();
       place(); round++;
-      const hand = {x: caster.x, y: caster.y - 30}, hit = {x: target.x, y: target.y - 26};
+      const hand = {x: caster.x + BODY * 0.3, y: caster.y - BODY * 0.85}, hit = {x: target.x, y: target.y - BODY * 0.65};
       const angle = Math.atan2(hit.y - hand.y, hit.x - hand.x);
       kit.charge({x: hand.x, y: hand.y, paletteKey, size: ultimate ? 44 : 32, ms: ultimate ? 520 : 320, signature});
       const after = ultimate ? 520 : 320;
+      const choreo = signature ? moveVfxChoreography(signature.key) : null, palette = BATTLE_FX_PALETTES[paletteKey] ?? BATTLE_FX_PALETTES.neutral;
+      feel.log.push({event: "fire", at: performance.now()});
+      if (choreo?.release) setTimeout(() => { pieces.play(choreo.release.piece, {x: hand.x, y: hand.y, angle, palette, size: BODY, unit: UNIT, groundY: caster.y, scale: choreo.release.scale ?? 1, sprite: choreo.release.sprite ?? null}); feel.log.push({event: "release", at: performance.now()}); }, after);
       setTimeout(() => {
         if (moveVfxArchetypeIsMelee(archetype)) {
           kit.melee({x: hand.x, y: hand.y, angle, paletteKey, archetype, signature});
@@ -124,10 +141,35 @@
     }
     function land(archetype, paletteKey, hit, angle, signature = null, ultimate = state.ultimate) {
       const args = {x: hit.x, y: hit.y, groundY: target.y, angle, paletteKey, archetype, signature};
-      if (ultimate) kit.signature(args); else kit.impact({...args, heavy: round % 3 === 0});
+      // As the AI battle plays a hit: a heavy impact for an ultimate (the field-wide signature close
+      // belongs to the Data Arena's 80 TP finisher only; ?close=1 shows it here).
+      if (ultimate && params.get("close") === "1") kit.signature(args);
+      else if (signature) {
+        // The AI battle's HIT: the move's closing burst, the element's motes and pixel hit burst, sized by the body.
+        const heavy = ultimate || signature.tier === "skill";
+        kit.burst({...args, size: BODY * (heavy ? 0.24 : 0.18), heavy: ultimate});
+        const element = ELEMENT[paletteKey] ?? "NEUTRAL";
+        motes?.burst({element, x: hit.x, y: hit.y, groundY: target.y, unit: UNIT, weight: ultimate ? "ultimate" : heavy ? "medium" : "light", dir: Math.cos(angle) < 0 ? -1 : 1});
+        pixelHits?.spawn({element, x: hit.x, y: hit.y, groundY: target.y, size: BODY, unit: UNIT, heavy: ultimate, flip: Math.cos(angle) < 0});
+      } else kit.impact({...args, heavy: round % 3 === 0});
+      const choreo = signature ? moveVfxChoreography(signature.key) : null;
+      if (choreo?.contact) {
+        const pal = BATTLE_FX_PALETTES[paletteKey] ?? BATTLE_FX_PALETTES.neutral;
+        if (choreo.impactFrame) pieces.play("impact-frame", {x: hit.x, y: hit.y, angle, palette: {core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true}, size: BODY, unit: UNIT, groundY: target.y, scale: (choreo.contact.scale ?? 1) * 0.7});
+        pieces.play(choreo.contact.piece, {x: hit.x, y: hit.y, angle, palette: BATTLE_FX_PALETTES[paletteKey] ?? BATTLE_FX_PALETTES.neutral, size: BODY, unit: UNIT, groundY: target.y,
+          scale: choreo.contact.scale ?? 1, fast: choreo.contact.fast, sprite: choreo.contact.sprite ?? null, at: "contact"});
+        feel.holdMs = choreo.hitStopMs ?? 0; feel.shakeMs = 220; feel.shakePx = SHAKE[choreo.shake] ?? 0;
+        feel.knock = choreo.knockPx ?? 0; feel.knockDir = Math.cos(angle) < 0 ? -1 : 1;
+      }
+      feel.log.push({event: "contact", at: performance.now()});
     }
     app.ticker.add(ticker => {
-      const dt = ticker.deltaMS; time += dt;
+      const real = ticker.deltaMS;
+      // A hit-stop holds the shots and the effects; the screen shake and the knock run on real time.
+      const dt = feel.holdMs > 0 ? 0 : real; feel.holdMs = Math.max(0, feel.holdMs - real); time += real;
+      if (feel.shakeMs > 0) { feel.shakeMs = Math.max(0, feel.shakeMs - real); const k = feel.shakeMs / 220 * feel.shakePx; app.stage.position.set(Math.round((Math.random() * 2 - 1) * k), Math.round((Math.random() * 2 - 1) * k)); } else app.stage.position.set(0, 0);
+      if (feel.knock > 0.5) { const step = feel.knock * Math.min(1, real / 60); target.x += feel.knockDir * step; feel.knock -= step; }
+      pieces.update(dt); pixelHits?.update(dt); motes?.update(dt);
       for (const shot of shots) {
         if (!shot.alive) continue;
         shot.x += shot.vx * dt / 1000; shot.y += shot.vy * dt / 1000;
@@ -145,7 +187,7 @@
     $("ultimate").onclick = () => { state.ultimate = !state.ultimate; $("ultimate").setAttribute("aria-pressed", String(state.ultimate)); };
     app.canvas.addEventListener("pointerdown", () => fire());
     for (const id of ["move", "style", "palette"]) $(id).onchange = () => { next = time + 200; };
-    window.__moveVfxKit = {kit, fire, state, look, app};
+    window.__moveVfxKit = {kit, fire, state, look, app, pieces, feel, select: key => { $("move").value = String(key); }};
   </script>
 </body>
 </html>

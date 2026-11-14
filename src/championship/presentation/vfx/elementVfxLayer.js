@@ -16,6 +16,19 @@
 // textures are drawn to canvases on first use and destroyed on dispose.
 import profiles from '../../../data/championship/battleEffectProfiles.json' with {type: 'json'};
 import {pixelateCanvas} from './pixelateCanvas.js';
+import {paintCraterBase, paintCraterEmbers, CRATER_KINDS, emberWeight, craterPop} from './groundCrater.js';
+import {bakedPieceLook, paintBakedPieceFrames} from './moveVfxSetPieces.js';
+
+/**
+ * Refinement pass 8 (BESPOKE_MOVE_VFX_PROGRAM_20261111): the ground marks drawn as vector strokes --
+ * a spiral of roots, frost spokes, sun rays -- read as cheap next to the craters. Once the baked
+ * pieces are in, each kind leaves a still frame of a pixelfx ground effect instead (its fullest
+ * frame); a thunder mark scorches the floor as a fire crater does. The canvas drawings stay as the
+ * fallback before the bake loads.
+ */
+export const ELEMENT_DECAL_BAKED = Object.freeze({puddle: 'mark-ripple', frost: 'mark-frost', roots: 'mark-roots', swirl: 'mist',
+  sunburst: 'heal', shade: 'eye'});
+export const ELEMENT_DECAL_AS_CRATER = Object.freeze({static: 'scorch'});
 
 const TAU = Math.PI * 2;
 const TICK_MS = 1000 / 60;
@@ -29,7 +42,10 @@ function makeCanvas(width, height) {
   const element = globalThis.document?.createElement?.('canvas');
   if (!element) return null;
   element.width = width; element.height = height;
-  return element.getContext?.('2d') ? element : null;
+  // These canvases are read back once (pixelateCanvas) and then become a texture. As a GPU canvas
+  // that read stalled the battle for 0.1-0.2 s the first time a move's storm or mark was needed
+  // (profiled 2026-11-11); kept in memory, the read is a plain copy.
+  return element.getContext?.('2d', {willReadFrequently: true}) ? element : null;
 }
 function seeded(seed) {
   let s = seed >>> 0;
@@ -267,7 +283,7 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
   const filters = new Map();
   let hold = 0, created = {decals: 0, storms: 0, charges: 0, muzzles: 0, cells: 0, overlays: 0};
 
-  function texture(key, width, height, draw) {
+  function texture(key, width, height, draw, {raw = false} = {}) {
     let t = textures.get(key);
     if (!t) {
       // No 2D canvas at this moment (a headless check): draw nothing.
@@ -276,7 +292,7 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
       const c = canvas.getContext('2d');
       try { draw(c); } catch { /* a partial 2D context draws what it can */ }
       // Stepped bands, not blocks: a texture's own pixels are scaled per sprite, so blocks would not match the cells' grid.
-      if (pixel) pixelateCanvas(canvas, {block: 1, levels: 4});
+      if (pixel && !raw) pixelateCanvas(canvas, {block: 1, levels: 4});
       t = PIXI.Texture.from(canvas);
       if (pixel && t.source) t.source.scaleMode = 'nearest';
       textures.set(key, t);
@@ -292,6 +308,15 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
   const sparkTexture = () => texture('spark', 8, 2, c => { c.fillStyle = '#fff'; c.fillRect(0, 0, 8, 2); });
   const decalTexture = (kind, paletteKey, palette, variant) => texture(`decal:${kind}:${paletteKey}:${variant}`, 128, 64,
     c => { groundGlow(c, palette); (DECALS[kind] ?? DECALS.crack)(c, palette, seeded(variant * 977 + kind.length)); });
+  // Craters are pixel art already: no glow pool, no alpha stepping, always sampled nearest.
+  const craterTexture = (layer, kind, paletteKey, palette, variant) => {
+    const t = texture(`crater:${layer}:${kind}:${paletteKey}:${variant}`, 128, 64, c => {
+      const r = seeded(variant * 977 + kind.length);
+      if (layer === 'ember') paintCraterEmbers(c, palette, r); else paintCraterBase(c, palette, r, {scorched: kind === 'scorch'});
+    }, {raw: true});
+    if (t?.source) t.source.scaleMode = 'nearest';
+    return t;
+  };
   const stormTexture = (kind, paletteKey, palette, variant) => texture(`storm:${pixel ? 'wash' : kind}:${paletteKey}:${variant}`, 256, 256,
     c => (STORMS[pixel ? 'wash' : kind] ?? STORMS.burst)(c, palette, seeded(variant * 131 + kind.length * 7), variant));
   function hueFilter(hue) {
@@ -303,9 +328,13 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
 
   /** A four-second ground mark at a ground point, with the element's own ground cells. */
   function decal({x, y, kind, palette, paletteKey = 'neutral', size = 40, scale = 0}) {
+    if (ELEMENT_DECAL_AS_CRATER[kind] && bakedPieceLook('mark-ripple')) kind = ELEMENT_DECAL_AS_CRATER[kind];
+    if (CRATER_KINDS.has(kind)) return crater({x, y, kind, palette, paletteKey, size, scale});
+    const baked = bakedMark(kind, palette);
+    if (baked) return bakedDecal({x, y, kind, baked, size, scale});
     const look = decalTexture(kind, paletteKey, palette, 1 + (created.decals % 3));
     if (!look) return;
-    if (decals.length >= (rich ? 16 : 6)) { const old = decals.shift(); old.sprite.destroy(); }
+    if (decals.length >= (rich ? 16 : 6)) { const old = decals.shift(); old.sprite.destroy(); old.ember?.destroy(); }
     const sprite = new PIXI.Sprite(look);
     sprite.anchor.set(0.5); sprite.position.set(x, y); sprite.scale.set(Math.max(18, size) / 128 * 2.1, Math.max(18, size) / 128 * 1.9);
     sprite.rotation = (random() - 0.5) * 0.12; sprite.alpha = 0;
@@ -314,6 +343,65 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
     created.decals++;
     if (scale > 0) for (const [bankId, sequence] of (rich ? ELEMENT_GROUND_CELLS[kind] ?? [] : (ELEMENT_GROUND_CELLS[kind] ?? []).slice(0, 1)))
       cell({bankId, sequence, x, y, scale: scale * 0.9, ground: true});
+  }
+  /** The fullest frame of a baked ground look in a palette, cached per kind and palette. */
+  const bakedMarks = new Map();
+  function bakedMark(kind, palette) {
+    const name = ELEMENT_DECAL_BAKED[kind];
+    if (!name || !palette || typeof bakedPieceLook !== 'function' || !bakedPieceLook(name)) return null;
+    const key = `${name}:${palette.main}:${palette.core}:${palette.edge}`;
+    if (bakedMarks.has(key)) return bakedMarks.get(key);
+    const painted = paintBakedPieceFrames(name, palette, {doc: globalThis.document});
+    let best = null, most = -1;
+    for (const canvas of painted?.frames ?? []) {
+      const data = canvas.getContext?.('2d')?.getImageData?.(0, 0, canvas.width, canvas.height)?.data;
+      if (!data) continue;
+      let n = 0; for (let i = 3; i < data.length; i += 4) if (data[i]) n++;
+      if (n > most) { most = n; best = canvas; }
+    }
+    const value = best ? {texture: PIXI.Texture.from(best), w: painted.w, h: painted.h, ox: painted.ox, oy: painted.oy} : null;
+    if (value) value.texture.source.scaleMode = 'nearest';
+    bakedMarks.set(key, value);
+    return value;
+  }
+  function bakedDecal({x, y, kind, baked, size, scale}) {
+    if (decals.length >= (rich ? 16 : 6)) { const old = decals.shift(); old.sprite.destroy(); old.ember?.destroy(); }
+    const sprite = new PIXI.Sprite(baked.texture), k = Math.max(18, size) * 1.5 / baked.w;
+    sprite.anchor.set(baked.ox / baked.w, baked.oy / baked.h); sprite.position.set(Math.round(x), Math.round(y));
+    sprite.scale.set(k * (random() < 0.5 ? -1 : 1), k); sprite.alpha = 0;
+    decalLayer.addChild(sprite);
+    decals.push({sprite, age: 0, life: ELEMENT_DECAL_MS});
+    created.decals++;
+    if (scale > 0) for (const [bankId, sequence] of (rich ? ELEMENT_GROUND_CELLS[kind] ?? [] : (ELEMENT_GROUND_CELLS[kind] ?? []).slice(0, 1)))
+      cell({bankId, sequence, x, y, scale: scale * 0.9, ground: true});
+  }
+  /** A broken-floor crater (Owner 2026-11-10): pixel pit, cracks and chips; a burning one glows and cools. */
+  function crater({x, y, kind, palette, paletteKey, size, scale}) {
+    const variant = 1 + (created.decals % 3), base = craterTexture('base', kind, paletteKey, palette, variant);
+    if (!base) return;
+    if (decals.length >= (rich ? 16 : 6)) { const old = decals.shift(); old.sprite.destroy(); old.ember?.destroy(); }
+    const unit = Math.max(18, size) / 128 * 2, flip = random() < 0.5 ? -1 : 1;
+    const sprite = new PIXI.Sprite(base);
+    sprite.anchor.set(0.5); sprite.position.set(x, y); sprite.alpha = 0;
+    decalLayer.addChild(sprite);
+    let ember = null;
+    if (kind === 'scorch') {
+      const glowLook = craterTexture('ember', kind, paletteKey, palette, variant);
+      if (glowLook) {
+        ember = new PIXI.Sprite(glowLook); ember.anchor.set(0.5); ember.position.set(x, y); ember.blendMode = 'add'; ember.alpha = 0;
+        decalLayer.addChild(ember);
+      }
+    }
+    decals.push({sprite, ember, unit, flip, crater: true, age: 0, life: ELEMENT_DECAL_MS});
+    created.decals++;
+    applyCrater(decals[decals.length - 1]);
+    if (scale > 0) for (const [bankId, sequence] of (rich ? ELEMENT_GROUND_CELLS[kind] ?? [] : (ELEMENT_GROUND_CELLS[kind] ?? []).slice(0, 1)))
+      cell({bankId, sequence, x, y, scale: scale * 0.9, ground: true});
+  }
+  function applyCrater(d) {
+    const pop = reducedMotion ? 1 : craterPop(d.age), fade = d.age < 60 ? d.age / 60 : d.age > d.life - 1200 ? (d.life - d.age) / 1200 : 1;
+    d.sprite.scale.set(d.unit * pop * d.flip, d.unit * pop); d.sprite.alpha = fade;
+    if (d.ember) { d.ember.scale.set(d.unit * pop * d.flip, d.unit * pop); d.ember.alpha = fade * emberWeight(d.age); d.ember.visible = d.ember.alpha > 0.01; }
   }
   /** The signature backdrop over the field rectangle (world space). */
   function storm({kind, palette, paletteKey = 'neutral', rect, center = null}) {
@@ -405,7 +493,8 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
     if (hold > 0) { hold = Math.max(0, hold - realMs); dtMs = 0; }
     for (let i = decals.length - 1; i >= 0; i--) {
       const d = decals[i]; d.age += realMs;
-      if (d.age >= d.life) { d.sprite.destroy(); decals.splice(i, 1); continue; }
+      if (d.age >= d.life) { d.sprite.destroy(); d.ember?.destroy(); decals.splice(i, 1); continue; }
+      if (d.crater) { applyCrater(d); continue; }
       d.sprite.alpha = d.age < 80 ? d.age / 80 : d.age > d.life - 1200 ? (d.life - d.age) / 1200 : 1;
     }
     for (let i = storms.length - 1; i >= 0; i--) {

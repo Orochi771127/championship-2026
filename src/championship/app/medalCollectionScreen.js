@@ -1,3 +1,4 @@
+import {weeklyTitleWhenText} from '../text/weeklyScheduleText.js';
 import {medalCollection} from './medalCollection.js';
 import {titleEventText,tamerRankName} from '../text/zhHant.js';
 import {uiText} from '../text/uiText.js';
@@ -24,7 +25,7 @@ function statusIcon(acquired) {
   icon.setAttribute('aria-hidden','true');return icon;
 }
 // unlockText(titleId): Owner 2026-11-04, what winning that title opens (badgeUnlockText.js), passed in by main.js.
-export function createMedalCollectionView({root,battleBadges=[],onExit,playtestPolicy=null,unlockText=null}={}) {
+export function createMedalCollectionView({root,battleBadges=[],onExit,playtestPolicy=null,unlockText=null,calendarKind='NATIVE'}={}) {
   const entries=medalCollection(battleBadges,playtestPolicy),count=entries.filter(m=>m.acquired).length;
   root.replaceChildren();root.className='cm-vs2-root';root.dataset.screen='MEDALS';
   root.dataset.uiAuthority='CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R';
@@ -73,7 +74,10 @@ export function createMedalCollectionView({root,battleBadges=[],onExit,playtestP
       if(localized){term.textContent=label;definition.textContent=value;}details.append(term,definition);
     }
     fact('取得方式',entry.conditionEvidence==='ROM_VERIFIED_TITLE_WIN'?'贏得這場頭銜賽。':'取得條件尚待查證。');
-    fact('賽事日期',event?uiText('{season} 第 {day} 日',{season:uiText(['春季','夏季','秋季','冬季'][event.season]),day:event.dayOfSeason+1}):'尚待查證');
+    // WEEKLY_SEASON_20261110: on the real-time clock the date is the weekly day and its time slot.
+    const weeklyWhen=calendarKind==='WEEKLY'?weeklyTitleWhenText(entry.titleId):null;
+    if(weeklyWhen)fact('賽事日期',weeklyWhen);
+    else fact('賽事日期',event?uiText('{season} 第 {day} 日',{season:uiText(['春季','夏季','秋季','冬季'][event.season]),day:event.dayOfSeason+1}):'尚待查證');
     fact('參賽階級',Number.isInteger(entry.requiredRank)?tamerRankName(entry.requiredRank):'尚待查證');
     const opened=unlockText?.(entry.titleId)??null;
     if(opened){fact(uiText(entry.earned?'已解鎖':'獲得後解鎖'),opened,true);details.lastElementChild.classList.add('cm-medal-dialog__unlock');}

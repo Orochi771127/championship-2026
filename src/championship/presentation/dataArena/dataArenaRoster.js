@@ -19,7 +19,6 @@ import {attachReviewedCharacterAnimation,reviewedReplacesOriginal} from '../revi
 import { DATA_ARENA_BOSS, DATA_ARENA_MATE, DATA_ARENA_PARTNERS, DATA_ARENA_RIVALS } from "../../modes/dataArena/dataArenaConfig.js";
 import { speciesNameForId } from "../../text/zhHant.js";
 import { isOriginalRuntimeLocation } from "../originalRuntimeLocation.js";
-import {newArtPortrait} from '../newArtPortrait.js';
 import {animationHandoffEnabled} from '../animationHandoff.js';
 import {characterAssetUrl} from '../characterAssetDelivery.js';
 
@@ -33,8 +32,9 @@ export function dataArenaArtRecord(speciesId, href = globalThis.location?.href) 
   return Object.freeze({
     speciesId, entityId: entry.entityId, runtimeSha256:entry.runtimeSha256, baseUrl:href,
     runtimeUrl: characterAssetUrl(entry.runtimePath, href),
-    // Owner 2026-10-30: the select card shows the current design (Dex illustration) when published.
-    portraitUrl: characterAssetUrl(newArtPortrait(speciesId)?.src ?? entry.hudPath.replace('hud.render.json','main-cell_000.webp'), href)
+    // Owner 2026-11-12: cards draw the partner's own body from speciesId (actionPortrait.js); the
+    // Database illustration is for the Database only, so this fallback image is the HUD cell.
+    portraitUrl: characterAssetUrl(entry.hudPath.replace('hud.render.json','main-cell_000.webp'), href)
   });
 }
 

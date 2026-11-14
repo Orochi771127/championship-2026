@@ -1,5 +1,9 @@
 import {nativeAttractionPercent,nativeToolAnimation,nativeHuntToolSpecies} from './nativeHuntToolRules.js';
 import {nativeNormalizeQ12} from './nativeCapturePhases.js';
+import {productPartnerG} from '../../contracts/productSpeciesData.js';
+// GACHA_FULL_EFFECTS_20261109: a partner's card weight is its product weight; the scripted tutorial catches keep the
+// native weight, so the starting 32 G card still takes both of them.
+const partnerCardG = a => (a.tutorialScripted ? nativeHuntToolSpecies(a.speciesIndex).capacityG : productPartnerG(a.speciesIndex));
 const Q12=4096;
 // Original ARM 02002A6C zero-input result is [0,0,0] in controls-cpu.json.
 const normalize=v=>v.some(Boolean)?nativeNormalizeQ12(v):[0,0,0];
@@ -76,7 +80,7 @@ export function createNativeHuntLures(host,{consume,request}) {
           a.positionQ12=a.positionQ12.map((n,i)=>n+direction[i]);
           if(distanceSq(a.positionQ12,a.destinationQ12)<4)a.trapReady=true;
         } else if(events.some(e=>e.code===0x16)) {
-          if(host.usedG()+nativeHuntToolSpecies(a.speciesIndex).capacityG>host.maxCardG)host.emit('OVER_CAPACITY');
+          if(host.usedG()+partnerCardG(a)>host.maxCardG)host.emit('OVER_CAPACITY');
           else {trap=null;return 12;}
         }
         return -1;

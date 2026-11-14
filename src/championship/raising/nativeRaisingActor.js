@@ -529,7 +529,7 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
       if(actor.training.phase===2){actor.training=null;react(actor,0,30);}
       else{
         update()['020']=Math.min(100,next.fields['020']+1);
-        const selection=evaluateProductEvolution(next,{rank:context.rank,roster:context.roster,lifetime:false,lifeThreshold:a['428']},rng);
+        const selection=evaluateProductEvolution(next,{rank:context.rank,roster:context.roster,lifetime:false,lifeThreshold:a['428'],capacityBonusG:context.capacityBonusG},rng);
         next=selection.profile;a['428']=selection.actor['428'];actor.training=null;
         // Owner 2026-11-04: a cage too full for the next form is shown on the partner card, never silent.
         actor.capacityBlocked=Boolean(selection.capacityBlocked);
@@ -572,7 +572,7 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
     if(actor.state===1&&context.minute<1290){
       const lifetime=next.fields['18c']>a['428'];
       if(lifetime||!actor.evolutionChecked){if(!lifetime)actor.evolutionChecked=true;
-        let selection=evaluateProductEvolution(next,{rank:context.rank,roster:context.roster,lifetime,lifeThreshold:a['428']},rng);
+        let selection=evaluateProductEvolution(next,{rank:context.rank,roster:context.roster,lifetime,lifeThreshold:a['428'],capacityBonusG:context.capacityBonusG},rng);
         next=selection.profile;a['428']=selection.actor['428'];result.changed=true;actor.capacityBlocked=Boolean(selection.capacityBlocked);
         if(lifetime&&selection.code!==1&&selection.code!==2){const rebirth=evaluateNativeRebirth(next,selection.code!==0);next=rebirth.profile;
           selection={target:rebirth.target,code:1};}
@@ -596,9 +596,14 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
     actor.trainingPending=false;actor.state=11;
     if(policy)beginRealtimeTraining(actor,policy);
     const growthPercent=habitatMatch(next.fields['000'],actor.cageDefinitionIndex)?TAXONOMY_HABITAT_BONUS.growthPercent:100;
+    const untrained=next;
     const trained=enterNativeRaisingTraining(next,{definition:actor.cageDefinitionIndex,season:context.season,level:context.cageLevel??0,stressed:a['404']===1,growthPercent,
       pointScale:policy?.pointScale??null,programs:policy?.cagePrograms?.[actor.cageDefinitionIndex]??null},rng);
     next=trained.profile;
+    // Overdrive training (AWAKENING_OVERDRIVE_20261109): the app may multiply the points, add an epiphany or, on a
+    // core backlash, keep the profile from before the training. It returns {profile, commands} or null.
+    const boosted=policy&&trained.commands?.length&&typeof context.overdrive==='function'?context.overdrive({before:untrained,after:next,commands:trained.commands}):null;
+    if(boosted){next=boosted.profile;trained.commands=boosted.commands;}
     // A royal cage (DIAMOND_ECONOMY_20261102) adds its points on top, shown as one more rising label.
     const bonus=policy?context.trainingBonus:null;
     if(bonus?.points>0&&trained.commands?.length){
