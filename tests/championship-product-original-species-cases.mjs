@@ -75,7 +75,7 @@ test('the eight with motion art are known, registrable and playable; the six wit
     assert.equal(targets.includes(x.target),PLAYABLE.includes(x.target));
   }
   for(const id of PLAYABLE)assert.ok(PRODUCT_RAISING_LIFECYCLE_RULES.rules[id-8].every(r=>!ART_ONLY.includes(r.target)));
-  assert.deepEqual(PRODUCT_RAISING_LIFECYCLE_RULES.rules[232-8].map(r=>r.target),[165],'MA65 waits for AW52 art');
+  assert.deepEqual(PRODUCT_RAISING_LIFECYCLE_RULES.rules[232-8].map(r=>r.target),[152,165],'MA65 waits for AW52 art');
 });
 
 test('readiness merges an original and its inserted branches at their exact positions, nothing else',()=>{

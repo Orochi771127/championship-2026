@@ -1,5 +1,22 @@
 # Championship Owner Direction
 
+<!-- record-id: VISUAL_LINEAGE_EVOLUTION_ROUTES_20261114 -->
+## 2026-11-14 — Visual lineage audit across all character evolution and awakening routes
+
+The Owner asked for an inventory of character evolution routes and rules, shared a screenshot of `AW52 星爆豬王` (which showed only `MA65 隕甲豬 → AW52 星爆豬王 · 一段覺醒`), and requested a visual inspection of every character so that visually similar characters share coherent, Digimon-like evolution and awakening routes (「用視覺檢查每一隻角色，然後在那種長得相似的，讓他們有類似像數碼寶貝的進化的那種關係就是請確保他們的進化路線都有正確可以進化的樣子」). The Owner then delegated the decisions, implementation, self-review and publication: 「我可以交給你去處理嗎？讓你來決斷。做好後跟我回報，自我審查沒有問題後，就請你幫我推送發佈到正式站。」
+
+`OWNER_APPROVED_ADAPTATION` over `STAGE_REDESIGN_BURST_20261102` and `OWNER_APPROVED_PROVISIONAL_ORIGINAL_DATA_20261029`:
+
+- **Original characters (`product-species-originals.r1.json`, `PROPOSAL.v1.json`, `databaseIllustrations.js`):**
+  - `AW52 星爆豬王 (#233)` gains two Tier-2 Ultimate (`究極體`) branches (`UL20 番長獅 (#199)` and `UL33 蹦迪猿 (#211)`).
+  - `MA65 隕甲豬 (#232)` gains armored beast `AW21 三角犀 (#152)` before its fallback `AW37 長毛象 (#165)`.
+  - `databaseIllustrationLinks` walks the connected original-species lineage so an art-only original displays its complete multi-stage planned chain in the encyclopedia (`B205 摔跤絨 → GR39 星塵豬 → MA65 隕甲豬 → AW52 星爆豬王 → UL20 番長獅 / UL33 蹦迪猿`, and `B112 毛草球 → B215 閃電崽 → GR41 迅雷貓狼 → MA69 雷霆戰狼 → AW53 雷刃狼王 → UL40 天雷霸狼`).
+- **Ranch natural growth (`product-growth-adaptations.r1.json`):**
+  - Appends 16 visual-lineage branches across `幼年期 I → 幼年期 II → 成長期 → 成熟期`, including `B207 呼嚕喵 (#25) → GR41 迅雷貓狼 (#239)` so `GR41 迅雷貓狼 → MA69 雷霆戰狼` is reachable from an egg while `B215 閃電崽 (#238)` awaits motion art, plus matching branches for aquatic buds/pups (`B106 → B210 → GR05`), fire dino pups (`B212 → GR01 / GR12`), wolves (`GR06 / GR19 → MA15 / MA16 / MA20`), horned/crested dinos (`GR23 → MA21`, `GR24 → MA08`), ice/beast/plant/rabbit/lion families (`GR29 → MA01`, `GR35 → MA46`, `GR36 → MA05`, `GR18 → MA50`, `GR37 → MA14`). Native branch slots and saved branch history remain untouched.
+- **Burst / Awakening evolution (`scripts/build-product-burst-evolution.mjs`, `product-burst-evolution.r1.json`, `product-hunt-overlay.r1.json`):**
+  - Seeds visual-lineage Tier-1 (`覺醒體`) and Tier-2 (`究極體`) pairings before greedy fan-in fill so all 64 native `成熟期` and 5 playable original `成熟期` awaken into visually coherent forms, every `覺醒體` (51) and `究極體` (37) remains reachable within the fan-in cap, and zero `成熟期` lack a Tier-2 `究極體` (`basesWithoutTier2: []`).
+- **Publication:** authorizes committing the scoped files, updating their hashes in `WEB_BUILD_INPUTS.v1.json` and `PUBLIC_RUNTIME_ALLOWLIST.v1.json`, merging and pushing to `main` after `npm run test:ci`, `npm run build:playtest` and `npm run validate:playtest` pass.
+
 <!-- record-id: BURST_TRUE_FORM_20261108 -->
 ## 2026-11-08 — Burst evolution goes only on the player's press and the burst form fights as itself
 
