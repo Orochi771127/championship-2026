@@ -202,7 +202,7 @@ export function createChampionshipOnlineSessionPort({ storage } = {}) {
 }
 
 export const CHAMPIONSHIP_SESSION_CHECKPOINT_KEY = CHAMPIONSHIP_SESSION_CHECKPOINT_STORAGE_KEY;
-export const CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS = 180_000;
+export const CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS = 1_800_000;
 export function createChampionshipSessionCheckpointPort({ storage, sessionStorage = null } = {}) {
   if (!storage || typeof storage.getItem !== "function" || typeof storage.setItem !== "function") {
     throw new TypeError("Championship session checkpoint port requires a Storage-like object");

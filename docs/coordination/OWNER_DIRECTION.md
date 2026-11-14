@@ -1,5 +1,22 @@
 # Championship Owner Direction
 
+<!-- record-id: IPHONE_WEB_APP_BATTLE_CRASH_AND_AUTORESUME_20261114 -->
+## 2026-11-14 — Whole-game iPhone Web App audit: Battle / Data Arena memory leaks, pooled 3D VFX texture deduplication, and silent reload auto-resume
+
+The Owner requested a whole-game audit and iPhone Web App optimization for frequent mid-battle reloads that jump back to the game's home screen: 「你有辦法盤查整個遊戲嗎？然後針對遊戲做出iPhone的Web app的優化，因為我現在常常玩啊，在對戰啊，會閃退跳回到遊戲首頁」.
+
+Engineering repair only; no gameplay value, save schema, RNG, clock or artwork change:
+
+- **Pooled 3D VFX `THREE.Source` / `ImageBitmap` deduplication and disposal (`licensedVfxRuntimeBundle.js`):**
+  - `createBattleVfxThreeOverlay` loads 16 pooled instances across 5 impact families (`80` `.glb` loads per battle). Previously, each slot decoded its own `ImageBitmap` and uploaded a separate WebGL texture, and `disposeObject` called `texture.dispose()` without closing the underlying `ImageBitmap`. `createLicensedVfxRuntime` now shares the canonical `THREE.Texture.source` across pooled instances of the same `.glb` model, immediately `.close()`s redundant `ImageBitmap`s before GPU warmup, and reference-counts shared `THREE.Source`s so the underlying `ImageBitmap` is closed when the last channel unloads.
+- **Scoped `ImageBitmap` release across Battle and Data Arena (`main.js`, `battleEffectArt.js`, `dataArenaScreen.js`, `pixiCharacterRuntimeBundle.js`):**
+  - `loadOptionalBattleFieldArt`, `loadOptionalOriginalVfxReview`, `loadRegisteredBattleEffectArt`, `loadDataArenaEnvironment` and `loadDataArenaInteractionArt` now load through `createPixiAssetScope` so arena backgrounds, water/cloud/canopy ambient layers, shared 2048×2048 VFX atlases and Data Arena maps close their decoded `ImageBitmap`s on disposal. `pixiCharacterRuntimeBundle.js` records `pageSource` in `decodedSources` for non-streamed character sprite sheets as well.
+- **2D `<canvas>` and GPU texture cleanup (`elementVfxLayer.js`, `battleFxLayer.js`, `moveVfxSetPieces.js`, `createBattleSelectThreePresentation.js`, `actionPortrait.js`, `vs5Screens.js`):**
+  - Disposes `bakedMarks` and `hyperSheet` textures and zeroes temporary/retired `<canvas>` backing stores (`width = height = 0`) on exit; automatically sweeps and disposes disconnected DOM `actionPortrait` instances.
+- **Preventing reloads from jumping back to `#cm-title` (`ChampionshipPersistentSavePort.js`, `webAppInstall.js`, `main.js`):**
+  - Extends `CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS` from 3 minutes (`180_000`) to 30 minutes (`1_800_000`) and adds a 30-second active-session checkpoint heartbeat while `titleScreen.hidden` is true so multi-round cups, Data Arena campaigns and long battles never outlive the checkpoint TTL.
+  - Extends silent reload `AUTO_RESUME` via `isMobileOrInstalledWebApp` to cover both installed Home Screen Web Apps and iPhone / iPad Safari (`iPhone|iPad|iPod` or `MacIntel` with `maxTouchPoints > 1`), hiding `#cm-title` and skipping title-screen hero-art/film startup when auto-resuming.
+
 <!-- record-id: VISUAL_LINEAGE_EVOLUTION_ROUTES_20261114 -->
 ## 2026-11-14 — Visual lineage audit across all character evolution and awakening routes
 

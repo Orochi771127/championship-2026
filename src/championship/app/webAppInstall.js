@@ -13,6 +13,14 @@ export function isInstalledWebApp(view = globalThis.window) {
     || Boolean(view?.matchMedia?.('(display-mode: fullscreen)').matches);
 }
 
+export function isMobileOrInstalledWebApp(view = globalThis.window) {
+  if (isInstalledWebApp(view)) return true;
+  const nav = view?.navigator;
+  if (!nav) return false;
+  const ua = String(nav.userAgent ?? '');
+  return /iPhone|iPad|iPod|Android|Mobile/i.test(ua) || (nav.platform === 'MacIntel' && Number(nav.maxTouchPoints ?? 0) > 1);
+}
+
 // A title-only help control, not a second install/save or navigation authority.
 export function mountWebAppInstall(title, view = globalThis.window) {
   if (!title || isInstalledWebApp(view)) return () => {};

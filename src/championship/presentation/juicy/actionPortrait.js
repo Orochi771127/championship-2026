@@ -19,6 +19,17 @@ import { createSpriteMotion, loadShowcaseMotionShared, showcaseMotionAvailable, 
 /** Native idle; the ids are the Data Arena's audited showcase sequences. */
 export const ACTION_PORTRAIT_SEQUENCES = Object.freeze({ idle: 0, walk: 2, attack: 7, cheer: 33 });
 
+const livePortraits = new Set();
+function sweepDisconnectedActionPortraits() {
+  for (const record of [...livePortraits]) {
+    if (record.element?.isConnected === true) {
+      record.wasConnected = true;
+    } else if (record.wasConnected && record.element?.isConnected === false) {
+      record.dispose();
+    }
+  }
+}
+
 /**
  * The box a body is fitted into: the full width, the height above the feet,
  * with a small floor under the feet. `crop` > 1 enlarges past the box (a
@@ -52,6 +63,7 @@ export function actionPortraitFit(motion, { width, height, floor = 0.06, crop = 
  */
 export function createActionPortrait({ doc = globalThis.document, species, width = null, height = null, sequence = ACTION_PORTRAIT_SEQUENCES.idle,
   still = false, crop = 1, floor = 0.06, facing = -1, reducedMotion = false, baseUrl = globalThis.location?.href, className = "", lazy = true } = {}) {
+  sweepDisconnectedActionPortraits();
   const element = doc.createElement("div");
   element.className = `cm-action-portrait${className ? ` ${className}` : ""}`;
   element.setAttribute("aria-hidden", "true");
@@ -73,11 +85,15 @@ export function createActionPortrait({ doc = globalThis.document, species, width
   }
   async function start() {
     if (started || disposed || !available) return;
+    if (element.isConnected === true) record.wasConnected = true;
     started = true;
     element.dataset.state = "loading";
     try {
       const motion = await loadShowcaseMotionShared(speciesId, { baseUrl });
-      if (disposed) return;
+      if (disposed || (record.wasConnected && element.isConnected === false)) {
+        if (!disposed) record.dispose();
+        return;
+      }
       const box = measure(), fit = actionPortraitFit(motion, { ...box, floor, crop });
       sprite = createSpriteMotion({ doc, motion, scale: fit.scale, reducedMotion: reducedMotion || still, grounded: true });
       sprite.element.style.setProperty("--foot-y", `${Math.round(fit.footY * 100) / 100}px`);
@@ -94,7 +110,22 @@ export function createActionPortrait({ doc = globalThis.document, species, width
       resolveReady(false);
     }
   }
+  const record = {
+    element,
+    wasConnected: element.isConnected === true,
+    dispose() {
+      if (disposed) return;
+      disposed = true;
+      livePortraits.delete(record);
+      observer?.disconnect(); observer = null;
+      sprite?.dispose(); sprite = null;
+      element.remove();
+      resolveReady(false);
+    }
+  };
   if (available) {
+    livePortraits.add(record);
+    queueMicrotask(() => { if (!disposed && element.isConnected === true) record.wasConnected = true; });
     const IO = globalThis.IntersectionObserver;
     if (lazy && typeof IO === "function") {
       observer = new IO(entries => { if (entries.some(entry => entry.isIntersecting)) { observer?.disconnect(); observer = null; void start(); } }, { rootMargin: "120px" });
@@ -110,14 +141,7 @@ export function createActionPortrait({ doc = globalThis.document, species, width
     setFacing: value => sprite?.setFacing(value),
     pause: () => sprite?.pause(),
     resume: () => sprite?.resume(),
-    dispose() {
-      if (disposed) return;
-      disposed = true;
-      observer?.disconnect(); observer = null;
-      sprite?.dispose(); sprite = null;
-      element.remove();
-      resolveReady(false);
-    }
+    dispose: () => record.dispose()
   });
 }
 
@@ -147,6 +171,7 @@ export function setActionPortrait(slot, species, options = {}) {
  * a cut-in or a card that appears later draws its body in the same frame.
  */
 export function warmActionPortraits(species, { baseUrl = globalThis.location?.href } = {}) {
+  sweepDisconnectedActionPortraits();
   for (const ref of species ?? []) {
     const speciesId = showcaseSpeciesId(typeof ref === "string" ? (/species-\d+$/.exec(ref)?.[0] ?? ref) : ref);
     if (speciesId && showcaseMotionAvailable(speciesId, baseUrl)) void loadShowcaseMotionShared(speciesId, { baseUrl }).catch(() => {});
@@ -155,6 +180,7 @@ export function warmActionPortraits(species, { baseUrl = globalThis.location?.hr
 
 /** Release the portrait setActionPortrait put in `slot`. */
 export function clearActionPortrait(slot) {
+  sweepDisconnectedActionPortraits();
   const previous = slot ? slotPortraits.get(slot) : null;
   previous?.dispose();
   if (slot) slotPortraits.delete(slot);

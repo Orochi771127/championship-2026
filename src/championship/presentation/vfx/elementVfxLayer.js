@@ -359,7 +359,10 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
       let n = 0; for (let i = 3; i < data.length; i += 4) if (data[i]) n++;
       if (n > most) { most = n; best = canvas; }
     }
-    const value = best ? {texture: PIXI.Texture.from(best), w: painted.w, h: painted.h, ox: painted.ox, oy: painted.oy} : null;
+    for (const canvas of painted?.frames ?? []) {
+      if (canvas !== best) { canvas.width = 0; canvas.height = 0; }
+    }
+    const value = best ? {texture: PIXI.Texture.from(best), canvas: best, w: painted.w, h: painted.h, ox: painted.ox, oy: painted.oy} : null;
     if (value) value.texture.source.scaleMode = 'nearest';
     bakedMarks.set(key, value);
     return value;
@@ -551,7 +554,11 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
     dispose() {
       for (const node of [stormLayer, decalLayer, frontLayer]) { node.parent?.removeChild(node); node.destroy({children: true}); }
       for (const t of textures.values()) t.destroy(true);
-      textures.clear(); filters.clear();
+      for (const mark of bakedMarks.values()) {
+        mark?.texture?.destroy?.(true);
+        if (mark?.canvas) { mark.canvas.width = 0; mark.canvas.height = 0; }
+      }
+      textures.clear(); bakedMarks.clear(); filters.clear();
       decals.length = storms.length = charges.length = rings.length = sparks.length = cells.length = 0;
     }
   });

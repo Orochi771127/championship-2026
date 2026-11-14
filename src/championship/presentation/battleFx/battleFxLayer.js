@@ -1307,6 +1307,14 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       element?.dispose();
       kit?.dispose(); standIns.clear();
       pixelHits?.dispose(); motes?.dispose(); burstAt.clear(); setPieces?.dispose();
+      if (hyperSheet) {
+        for (const sheet of [hyperSheet.body, hyperSheet.light]) {
+          if (!sheet) continue;
+          for (const t of sheet.textures ?? []) t.destroy(true);
+          for (const c of sheet.frames ?? []) { c.width = 0; c.height = 0; }
+        }
+        hyperSheet = null;
+      }
       cues.length = 0;
       for (const sprite of [...particlePool, ...flashPool, ...ghostPool]) if (!sprite.destroyed) sprite.destroy();
       for (const texture of [textures.flash, textures.dust, textures.spark, textures.dot, textures.scorch, ...textures.debris]) texture.destroy(true);

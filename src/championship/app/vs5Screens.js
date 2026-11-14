@@ -1092,6 +1092,9 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
         if (resource.updateNumerals) resource.updateNumerals(next.resource);
         resource.wrap.setAttribute("aria-label", `${uiText("Action resource")} ${next.resource.current} / ${next.resource.maximum}`);
       }
+    },
+    dispose() {
+      if (miniImage) hudArt?.clearActionPortrait?.(miniImage);
     }
   };
 }
@@ -1383,6 +1386,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
     },
     dispose() {
       viewDisposed = true;
+      for (const card of cards.values()) card.dispose?.();
       safeObserver?.disconnect();
       versus?.dispose();
       stopLoadingTrack();
