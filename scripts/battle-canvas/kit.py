@@ -152,6 +152,7 @@ class Kit:
         corners = [(C.X0 - pad, C.Y0 - pad), (C.X1 + pad, C.Y0 - pad), (C.X1 + pad, C.Y1 + pad), (C.X0 - pad, C.Y1 + pad)]
         catcher = self.mesh('ground-shadow-catcher', [P(x, y) for x, y in corners], [(0, 1, 2, 3)], self.matte('ground-plain', (200, 200, 200)))
         catcher.is_shadow_catcher = True
+        self.catcher = catcher            # an arena over a void hides it: nothing there to catch a shadow
         mat = bpy.data.materials.new('ground-picture')
         mat.use_nodes = True
         nodes, links = mat.node_tree.nodes, mat.node_tree.links

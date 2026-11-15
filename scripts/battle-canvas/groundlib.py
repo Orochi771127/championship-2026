@@ -165,13 +165,19 @@ class Ground:
         out = total / np.maximum(weight, 1e-6)
         return out[overlap:overlap + h, overlap:overlap + w]
 
-    def grid(self, x0, y0, x1, y1, source='base'):
+    def grid(self, x0, y0, x1, y1, source='base', level=None):
         """Continue a regular floor: the rectangle repeats on its own grid, in step with the picture.
 
         The rectangle must be a whole number of the floor's periods, so inside the play area the
         result equals the picture there and the joints run on unbroken across every seam.
         """
         tile = getattr(self, source)[y0:y1, x0:x1]
+        if level == 'x':       # even out light that changes along the tile, or its repeats show as bands
+            columns = tile.mean(axis=0, dtype=np.float64)
+            tile = (tile - columns[None] + columns.mean(axis=0)[None, None]).astype(np.float32)
+        elif level == 'y':
+            rows = tile.mean(axis=1, dtype=np.float64)
+            tile = (tile - rows[:, None] + rows.mean(axis=0)[None, None]).astype(np.float32)
         th, tw = tile.shape[:2]
         ys = (np.arange(self.h) + C.Y0 - y0) % th
         xs = (np.arange(self.w) + C.X0 - x0) % tw
