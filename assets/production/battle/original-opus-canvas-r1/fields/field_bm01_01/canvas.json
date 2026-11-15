@@ -1,0 +1,65 @@
+{
+  "fieldId": "field_bm01_01",
+  "canvasNativePx": [
+    864,
+    560
+  ],
+  "playOffsetNativePx": [
+    224,
+    144
+  ],
+  "worldScale": 4,
+  "canvasWorldPx": [
+    3456,
+    2240
+  ],
+  "playOffsetWorldPx": [
+    896,
+    576
+  ],
+  "frame": {
+    "src": "frame-00.webp",
+    "sha256": "1093917059dc1afff8d2be7bfd3c03da48e548ee2001db4bd2cd5a396943dbec",
+    "bytes": 476138,
+    "encoding": "WEBP lossy quality 88"
+  },
+  "centreSource": "bm01-polish-r2/base.webp",
+  "centreSourceSha256": "5e4a3b7b25c1fbb8f8d9d88d1bbd6cef9287583bdd3464790cc796a458785b9e",
+  "centreDiff": 0,
+  "centreDiffNote": "The lossless master (canvas.png, not committed) carries the live picture's pixels unchanged. frame-00.webp is lossy, so re-encoding moves centre pixels slightly (centreDiffEncoded); drawing the live picture over the centre at playOffsetWorldPx restores them exactly.",
+  "centreDiffEncoded": {
+    "mean": 0.8674,
+    "max": 27
+  },
+  "camera": {
+    "elevationDegrees": 52,
+    "nativePixelsPerUnit": 16,
+    "renderScale": 4,
+    "orthoScale": 54.0,
+    "centreNative": [
+      208,
+      136
+    ]
+  },
+  "waterMask": null,
+  "sourceBlend": "assets/production/battle/original-opus-canvas-r1/fields/field_bm01_01/master-canvas.blend",
+  "sourceBlendSha256": "da23d92139f0faa726ac4f50c0aede25758801a9e8bc449409c138a8e4af3d89",
+  "producersLfSha256": {
+    "scripts/battle-canvas/canvaslib.py": "f7bd3b7c44289277c8c3bb86be8c56fcb746ec2b93844c08b1b7635a5dc63d8f",
+    "scripts/battle-canvas/groundlib.py": "7a9c7fa4880fb665a7754b79d346485bfe5f7664840251b4a0209380ed51b193",
+    "scripts/battle-canvas/kit.py": "c754abb2d5a37f72e6933a74f8670613761cfb098aadbf9b20ac00ce894f80ce",
+    "scripts/battle-canvas/joinlib.py": "a7348fe4f59c7d99b5eefd1967b93917d43e89981332af40cfbb0c7346040bea",
+    "scripts/battle-canvas/props_blender.py": "e4bf47b01a28d3694549c6b1f6ad0842f230cb1e812952393efe06e1a6f36d6e",
+    "scripts/battle-canvas/make.py": "4e14310dca5107d77803e7137297c8c0928012457689cb1991170ad8cad7f298",
+    "scripts/battle-canvas/arenas/field_bm01_01.py": "9a1d3e8b5d170eaefba6dd4cc9c4d79bea582fd7aaa61a5ce1e6912c0077bba9"
+  },
+  "groundTextures": "Quilted or grid-continued from clean patches of the arena's own live picture and layers (project original).",
+  "join": {
+    "toneReachWorldPx": 176.0,
+    "weldWorldPx": 20.0
+  },
+  "rightsStatus": "PROJECT_ORIGINAL",
+  "romDerivedPixels": false,
+  "generativeAi": null,
+  "status": "LOCAL_NOT_WIRED_NOT_PUBLISHED"
+}
