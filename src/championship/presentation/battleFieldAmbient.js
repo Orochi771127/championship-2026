@@ -264,12 +264,26 @@ export function waterLookup(texture, scale = 1) {
 // On an upright phone the old picture let the shot see 49 % of the arena's width at most.
 // Offsets are world pixels from the canvas's corner to the play area's corner. 3456 wide (2026-11-15):
 // a phone held sideways sees a band five times wider than tall, and the shot pulls back that far.
+const CANVAS_ROOT = "assets/production/battle/original-opus-canvas-r1/fields";
+/** One 3456x2240 canvas (native 864x560 at 4x) round a play area at world (896, 576). */
+const wideCanvas = (fieldId, masks = {}) => Object.freeze({
+  src: `${CANVAS_ROOT}/${fieldId}/frame-00.webp`,
+  // The ring's own sea / water / lava (half size, alpha, centre empty): the field's moving surface continues on it.
+  ...Object.fromEntries(Object.entries(masks).map(([kind, file]) => [kind, `${CANVAS_ROOT}/${fieldId}/${file}`])),
+  widthPx: 3456, heightPx: 2240, offsetX: 896, offsetY: 576, rightsStatus: "PROJECT_ORIGINAL"
+});
 export const BATTLE_FIELD_CANVASES = Object.freeze({
-  field_bm05_01: Object.freeze({
-    src: "assets/production/battle/original-opus-canvas-r1/fields/field_bm05_01/frame-00.webp",
-    seaMask: "assets/production/battle/original-opus-canvas-r1/fields/field_bm05_01/sea-mask-canvas.webp",
-    widthPx: 3456, heightPx: 2240, offsetX: 896, offsetY: 576, rightsStatus: "PROJECT_ORIGINAL"
-  })
+  field_bm01_01: wideCanvas("field_bm01_01"),
+  field_bm02_01: wideCanvas("field_bm02_01"),
+  field_bm03_01: wideCanvas("field_bm03_01", { lavaMask: "lava-mask-canvas.webp" }),
+  field_bm04_01: wideCanvas("field_bm04_01", { waterMask: "water-mask-canvas.webp" }),
+  field_bm05_01: wideCanvas("field_bm05_01", { seaMask: "sea-mask-canvas.webp" }),
+  field_bm06_01: wideCanvas("field_bm06_01"),
+  field_bm07_01: wideCanvas("field_bm07_01"),
+  field_bm08_01: wideCanvas("field_bm08_01"),
+  field_bm09_01: wideCanvas("field_bm09_01"),
+  field_bm10_01: wideCanvas("field_bm10_01"),
+  field_bm11_01: wideCanvas("field_bm11_01")
 });
 /** The canvas picture's rectangle in the play area's own coordinates, or null. */
 export function battleFieldCanvasRect(fieldId) {
@@ -308,7 +322,8 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   // The canvas lies under the play area's own picture, which stays exactly as it was. A canvas that
   // fails to load leaves the arena as it always looked.
   const canvasRecord = BATTLE_FIELD_CANVASES[art.field.fieldId] ?? null;
-  let canvasRect = null, canvasSources = [], canvasSeaMask = null;
+  let canvasRect = null, canvasSources = [], canvasSeaMask = null, canvasWaterMask = null, canvasLavaMask = null;
+  const canvasTwins = [];
   if (canvasRecord) {
     try {
       const picture = linear(await PIXI.Assets.load(canvasRecord.src));
@@ -319,15 +334,20 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       sprite.width = canvasRecord.widthPx; sprite.height = canvasRecord.heightPx;
       root.addChild(sprite);
       canvasRect = battleFieldCanvasRect(art.field.fieldId);
-      if (canvasRecord.seaMask && ambient.sea && ambient.waves) {
-        try { canvasSeaMask = linear(await PIXI.Assets.load(canvasRecord.seaMask)); canvasSources.push(canvasRecord.seaMask); } catch { canvasSeaMask = null; }
-      }
+      const loadMask = async src => { try { const t = linear(await PIXI.Assets.load(src)); canvasSources.push(src); return t; } catch { return null; } };
+      if (canvasRecord.seaMask && ambient.sea && ambient.waves) canvasSeaMask = await loadMask(canvasRecord.seaMask);
+      if (canvasRecord.waterMask && ambient.waterMask && ambient.caustics) canvasWaterMask = await loadMask(canvasRecord.waterMask);
+      if (canvasRecord.lavaMask && ambient.lava && ambient.flow) canvasLavaMask = await loadMask(canvasRecord.lavaMask);
     } catch (error) {
       console.warn(`CHAMPIONSHIP_BATTLE_CANVAS_FALLBACK: ${error.message}`);
       canvasRect = null;
     }
   }
   root.addChild(art.displayObject);
+  // Weather that drifts over the whole scene (cloud shadows, snow, motes) covers the canvas too: sized to
+  // the play area alone it left a darker rectangle, or a rectangle of snow, in a pulled-back shot.
+  const sky = canvasRect ?? { x: 0, y: 0, width: W, height: H };
+  const skyShare = Math.min(2.5, (sky.width * sky.height) / (W * H));
 
   // --- BM04 lagoon: caustics, glints, ripples stay inside the water mask.
   // Owner 2026-11-04: a sprite mask here rendered the whole lagoon into an
@@ -346,7 +366,11 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       const t = maskedTiling(PIXI, renderer, { tile: tex(ambient.caustics.src), mask: maskTexture, rect, tileScale: scale,
         tint: 0xe9fff8, alpha, label: "caustics" });
       waterFx.addChild(t.displayObject);
-      return { t, vx, vy, base: alpha };
+      // The same shimmer over the canvas's own water, in one pattern with the lagoon's.
+      const twin = canvasWaterMask ? maskedTiling(PIXI, renderer, { tile: tex(ambient.caustics.src), mask: canvasWaterMask, rect: canvasRect,
+        tileScale: scale, tint: 0xe9fff8, alpha, label: "caustics (canvas)" }) : null;
+      if (twin) { waterFx.addChild(twin.displayObject); canvasTwins.push(twin); }
+      return { t, twin, vx, vy, base: alpha };
     });
     glints = new PIXI.Graphics({ label: "sun glints" });
     glints.blendMode = "add";
@@ -377,6 +401,14 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       tileScale: 1.6, tint: 0xffb347, alpha: 0.5, label: "molten lava fx" });
     lavaFx = flowLayer.displayObject;
     root.addChild(lavaFx);
+  }
+  // The flowing glow over the canvas's own lava, in one pattern with the field's.
+  let canvasFlowLayer = null;
+  if (flowLayer && canvasLavaMask) {
+    canvasFlowLayer = maskedTiling(PIXI, renderer, { tile: tex(ambient.flow.src), mask: canvasLavaMask, rect: canvasRect,
+      tileScale: 1.6, tint: 0xffb347, alpha: 0.5, label: "molten lava fx (canvas)" });
+    canvasTwins.push(canvasFlowLayer);
+    root.addChild(canvasFlowLayer.displayObject);
   }
   // --- BM03 lava states: crust and reheating crust revealed per cell.
   let crust = null;
@@ -488,7 +520,8 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   root.addChild(halos);
   let clouds = null;
   if (ambient.cloudTile) {
-    clouds = new PIXI.TilingSprite({ texture: tex(ambient.cloudTile.src), width: W, height: H });
+    clouds = new PIXI.TilingSprite({ texture: tex(ambient.cloudTile.src), width: sky.width, height: sky.height });
+    clouds.position.set(sky.x, sky.y);
     clouds.tileScale.set(3.2); clouds.tint = 0x0a0d18; clouds.alpha = ambient.clouds ?? 0.15;
     root.addChild(clouds);
   }
@@ -509,8 +542,8 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     (groundCanopies ?? foreground).addChild(s);
     return { s, phase: i * 1.7, speed: 0.75 + i * 0.09 };
   });
-  const snow = polar && !reducedMotion ? Array.from({ length: low ? 24 : 60 }, () => ({
-    x: rand() * W, y: rand() * H, r: 1.2 + rand() * 2.2, vx: 14 + rand() * 22, vy: 8 + rand() * 12, phase: rand() * TAU })) : [];
+  const snow = polar && !reducedMotion ? Array.from({ length: Math.round((low ? 24 : 60) * skyShare) }, () => ({
+    x: sky.x + rand() * sky.width, y: sky.y + rand() * sky.height, r: 1.2 + rand() * 2.2, vx: 14 + rand() * 22, vy: 8 + rand() * 12, phase: rand() * TAU })) : [];
   const snowLayer = new PIXI.Graphics({ label: "drifting snow" });
   foreground.addChild(snowLayer);
   const emberSources = ambient.embers ?? [];
@@ -519,8 +552,8 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   emberLayer.blendMode = "add";
   foreground.addChild(emberLayer);
   const preset = PARTICLES[ambient.particles] ?? null;
-  const motes = preset && !reducedMotion ? Array.from({ length: Math.round(preset.count * (low ? 0.4 : 1)) }, () => ({
-    x: rand() * W, y: rand() * H, r: preset.size[0] + rand() * (preset.size[1] - preset.size[0]),
+  const motes = preset && !reducedMotion ? Array.from({ length: Math.round(preset.count * (low ? 0.4 : 1) * skyShare) }, () => ({
+    x: sky.x + rand() * sky.width, y: sky.y + rand() * sky.height, r: preset.size[0] + rand() * (preset.size[1] - preset.size[0]),
     vx: preset.vx[0] + rand() * (preset.vx[1] - preset.vx[0]), vy: preset.vy[0] + rand() * (preset.vy[1] - preset.vy[0]),
     color: preset.color[Math.floor(rand() * preset.color.length)], phase: rand() * TAU })) : [];
   const moteLayer = new PIXI.Graphics({ label: "ambient particles" });
@@ -769,10 +802,11 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     if (!reducedMotion) for (const c of causticLayers) {
       c.t.tilePosition.set(c.vx * s, c.vy * s);
       c.t.alpha = c.base * (0.85 + 0.15 * Math.sin(s * 0.7 + c.vx));
+      if (c.twin) { c.twin.tilePosition.set(c.vx * s - canvasRect.x, c.vy * s - canvasRect.y); c.twin.alpha = c.t.alpha; }
     }
     if (!reducedMotion) {
       for (const r of rotors) r.sp.rotation += r.speed * dt / 1000;
-      if (clouds) clouds.tilePosition.set(-9 * s, -4 * s);
+      if (clouds) clouds.tilePosition.set(-9 * s - sky.x, -4 * s - sky.y);
       if (gust) { gust.tilePosition.set(-(ambient.gust === "sand" ? 90 : 40) * s, 6 * Math.sin(s * 0.5)); gust.alpha = (ambient.gust === "sand" ? 0.16 : 0.12) * (0.6 + 0.4 * Math.max(0, Math.sin(s * 0.35))); }
     }
     if (emissive) {
@@ -794,8 +828,8 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     }
     moteLayer.clear();
     for (const m of motes) {
-      m.x = (m.x + m.vx * dt / 1000 + W) % W;
-      m.y = (m.y + m.vy * dt / 1000 + H) % H;
+      m.x = sky.x + (m.x - sky.x + m.vx * dt / 1000 + sky.width) % sky.width;
+      m.y = sky.y + (m.y - sky.y + m.vy * dt / 1000 + sky.height) % sky.height;
       const fl = preset.flicker ? 0.5 + 0.5 * Math.sin(s * 5 + m.phase) : 1;
       const dx = preset.flutter ? Math.sin(s * 2.3 + m.phase) * 5 : 0;
       if (preset.streak) moteLayer.rect(m.x, m.y, m.r * 7, m.r * 0.7).fill({ color: m.color, alpha: preset.alpha });
@@ -811,6 +845,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       smokeLayer.circle(p.px + Math.sin(k * 5 + p.life) * 10, p.py - 70 * k, 8 + 22 * k).fill({ color: 0x3a3550, alpha: 0.28 * Math.sin(k * Math.PI) });
     }
     if (flowLayer && !reducedMotion) { flowLayer.tilePosition.set(-6 * s, 4 * s); flowLayer.alpha = 0.42 + 0.14 * Math.sin(s * 1.1); }
+    if (canvasFlowLayer && !reducedMotion) { canvasFlowLayer.tilePosition.set(-6 * s - canvasRect.x, 4 * s - canvasRect.y); canvasFlowLayer.alpha = flowLayer.alpha; }
     emberLayer.clear();
     for (const e of embers) {
       e.age += dt;
@@ -861,8 +896,8 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     }
     snowLayer.clear();
     for (const f of snow) {
-      f.x = (f.x + f.vx * dt / 1000 + W) % W;
-      f.y = (f.y + f.vy * dt / 1000 + H) % H;
+      f.x = sky.x + (f.x - sky.x + f.vx * dt / 1000 + sky.width) % sky.width;
+      f.y = sky.y + (f.y - sky.y + f.vy * dt / 1000 + sky.height) % sky.height;
       snowLayer.circle(f.x + Math.sin(s * 1.3 + f.phase) * 6, f.y, f.r).fill({ color: 0xffffff, alpha: 0.7 });
     }
     for (const f of fighters.values()) f.since += dt;
@@ -911,6 +946,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       foreground.destroy({ children: true });
       root.destroy({ children: true });
       for (const layer of [flowLayer, waveLayer, canvasWaveLayer, gust, scan, ...causticLayers.map(c => c.t)]) layer?.destroy();
+      for (const layer of canvasTwins) layer.destroy();
       await art.dispose();
       await Promise.allSettled(canvasSources.map(src => PIXI.Assets.unload(src)));
       for (const t of textures.values()) t?.source?.removeAllListeners?.("change");
