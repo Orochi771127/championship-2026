@@ -3979,6 +3979,54 @@
       }
     },
     {
+      "code": "UL01",
+      "speciesId": "species-220",
+      "entity": "m538_apollomon",
+      "frames": 117,
+      "clips": 111,
+      "atlasBytes": 2604810,
+      "generalHeightRatio": {
+        "median": 1.0,
+        "min": 0.72,
+        "max": 1.138
+      },
+      "generalFacingVotes": [
+        26,
+        6
+      ],
+      "generalMirror": false,
+      "generalMissing": 0,
+      "generalStateSubstitutes": 0,
+      "arenaRegistration": "per-picture support/bounds",
+      "arenaHas": {
+        "move": true,
+        "idle": true,
+        "melee": true,
+        "ranged": true,
+        "hurt": true,
+        "faint": false,
+        "sleep": false,
+        "charge": true,
+        "special": true
+      },
+      "arenaAliases": [],
+      "arenaGroundLock": {
+        "D:idle": -3.5,
+        "DL:idle": -2.0,
+        "DR:idle": -2.0,
+        "L:idle": -2.5,
+        "R:idle": -2.5,
+        "U:idle": -1.5,
+        "UL:idle": -4.0,
+        "UR:idle": -4.0
+      },
+      "faintEqualsHurtDropped": 8,
+      "atlasScales": {
+        "general": 1.0,
+        "arena": 0.5077
+      }
+    },
+    {
       "code": "UL08",
       "speciesId": "species-191",
       "entity": "m505_grankuwagamon",

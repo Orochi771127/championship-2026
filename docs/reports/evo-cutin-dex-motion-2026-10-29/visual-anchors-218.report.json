@@ -6,8 +6,8 @@
   "withHead": 226,
   "motionErrors": [],
   "art": {
-   "atlas": 46,
-   "reviewed": 133,
+   "atlas": 45,
+   "reviewed": 134,
    "reviewed-right": 47
   },
   "maxCellAspect": 2.02,
@@ -16495,57 +16495,57 @@
    "speciesId": "species-220",
    "motion": {
     "entityId": "m538_apollomon",
-    "art": "atlas",
-    "density": 4,
+    "art": "reviewed",
+    "density": 13.091819852941175,
     "bounds": {
-     "left": -268,
-     "top": -275,
-     "right": 205,
-     "bottom": 14
+     "left": -323,
+     "top": -850,
+     "right": 323,
+     "bottom": 0
     },
     "actions": {
      "stand": {
       "sequence": 0,
       "frameCount": 2,
-      "frameWidth": 266,
-      "frameHeight": 260,
-      "cellAspect": 1.02,
-      "pageWidth": 1760,
-      "pageHeight": 512,
-      "cellsPerPage": 13,
+      "frameWidth": 217,
+      "frameHeight": 291,
+      "cellAspect": 0.75,
+      "pageWidth": 1992,
+      "pageHeight": 870,
+      "cellsPerPage": 27.4,
       "durationMs": 883
      },
      "walk": {
       "sequence": 2,
       "frameCount": 2,
-      "frameWidth": 382,
-      "frameHeight": 265,
-      "cellAspect": 1.44,
-      "pageWidth": 1760,
-      "pageHeight": 512,
-      "cellsPerPage": 8.9,
+      "frameWidth": 646,
+      "frameHeight": 850,
+      "cellAspect": 0.76,
+      "pageWidth": 1850,
+      "pageHeight": 1824,
+      "cellsPerPage": 6.1,
       "durationMs": 450
      },
      "attack": {
       "sequence": 7,
       "frameCount": 2,
-      "frameWidth": 428,
-      "frameHeight": 283,
-      "cellAspect": 1.51,
-      "pageWidth": 1872,
-      "pageHeight": 288,
-      "cellsPerPage": 4.5,
+      "frameWidth": 276,
+      "frameHeight": 294,
+      "cellAspect": 0.94,
+      "pageWidth": 1992,
+      "pageHeight": 870,
+      "cellsPerPage": 21.4,
       "durationMs": 867
      },
      "cheer": {
       "sequence": 33,
       "frameCount": 2,
-      "frameWidth": 366,
-      "frameHeight": 283,
-      "cellAspect": 1.29,
-      "pageWidth": 1744,
-      "pageHeight": 288,
-      "cellsPerPage": 4.8,
+      "frameWidth": 236,
+      "frameHeight": 292,
+      "cellAspect": 0.81,
+      "pageWidth": 1992,
+      "pageHeight": 870,
+      "cellsPerPage": 25.1,
       "durationMs": 1133
      }
     },
@@ -16553,14 +16553,14 @@
      "x": 0,
      "y": 0,
      "stance": "grounded",
-     "lowestPixel": 8,
-     "lowestPixelX": 42,
-     "visualHeight": 246
+     "lowestPixel": 0,
+     "lowestPixelX": 43,
+     "visualHeight": 291
     },
     "muzzleSocket": {
-     "x": -254,
-     "y": -181,
-     "heightRatio": 0.66,
+     "x": -124,
+     "y": -192,
+     "heightRatio": 0.65,
      "releaseIndex": 1,
      "releaseMs": 250
     }

@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 123,
+    "registeredRuntimeBundles": 124,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -1644,6 +1644,20 @@
       "assetId": "art:characters:ul17-two-set-20261112",
       "manifestPath": "assets/production/characters/ul17-two-set-20261112/animation.public-v1.json",
       "manifestSha256": "810288c07d59876766369f9b9d88186c1a2b64fc3e04bc094d46ef3cd2b981b3",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "OWNER_REQUESTED_TWO_SET_INTAKE_VISUAL_CHECKED",
+      "shippingStatus": "LOCAL_BRANCH_NOT_PUBLISHED",
+      "humanApproved": false,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "publicationAuthorized": false,
+      "scope": "Two-set intake 2026-11-12: General (original-cell routes) + Data Arena 8 headings; derivative web atlas of delivered originals.",
+      "runtimeQaEvidence": "docs/reports/two-set-intake-20261112/README.md"
+    },
+    {
+      "assetId": "art:characters:ul01-two-set-20261112",
+      "manifestPath": "assets/production/characters/ul01-two-set-20261112/animation.public-v1.json",
+      "manifestSha256": "449495a14e17697d0386cb9857bb2e876b6d5fb1aea17c09b1a3ba7d4c329d76",
       "rightsStatus": "ORIGINAL_CREATED",
       "productionStatus": "OWNER_REQUESTED_TWO_SET_INTAKE_VISUAL_CHECKED",
       "shippingStatus": "LOCAL_BRANCH_NOT_PUBLISHED",
