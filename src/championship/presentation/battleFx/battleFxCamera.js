@@ -145,14 +145,29 @@ export function battleFxSafeCover(viewport, art, insets = null) {
 }
 
 /**
+ * The smallest zoom on an arena with a scenery canvas (Owner 2026-11-12): the canvas still fills
+ * the whole screen, and the shot never pulls back further than showing the whole play area needs.
+ * `canvas` is the canvas rectangle in the same local coordinates as `art` (it contains it).
+ */
+export function battleFxCanvasCover(viewport, art, canvas, insets = null) {
+  const safe = battleFxSafeWindow(viewport, insets);
+  // The mirrored side strips (bleedX) count toward the width only: the clamps centre a shot wider than the picture.
+  const fill = Math.max(viewport.width / (canvas.width + 2 * (canvas.bleedX ?? 0)), viewport.height / canvas.height);
+  const whole = Math.min(viewport.width / art.width, safe.height / art.height);
+  return Math.max(fill, whole);
+}
+const NO_OVER = Object.freeze({left: 0, right: 0, top: 0, bottom: 0});
+
+/**
  * The shot for one framing box: zoom and centre, clamped so the visible region
  * never leaves the arena. `art` is the arena rectangle in local coordinates.
+ * With a `canvas` the visible region may leave the play area but never the canvas.
  */
-export function battleFxFrameShot({viewport, art, box, maxZoomFactor = 1.75, boost = 0, responsiveLayout = false, boundedMap = false, insets = null}) {
+export function battleFxFrameShot({viewport, art, box, maxZoomFactor = 1.75, boost = 0, responsiveLayout = false, boundedMap = false, insets = null, canvas = null}) {
   const safe = battleFxSafeWindow(viewport, insets);
   const fullCover = Math.max(viewport.width / art.width, viewport.height / art.height);
   // A bounded map with HUD insets may pull back until the art covers only the safe window.
-  const cover = boundedMap && insets ? battleFxSafeCover(viewport, art, insets) : fullCover;
+  const cover = canvas ? battleFxCanvasCover(viewport, art, canvas, insets) : boundedMap && insets ? battleFxSafeCover(viewport, art, insets) : fullCover;
   const maxZoom = fullCover * maxZoomFactor;
   let minimumZoom = cover;
   let zoom = cover, cx = art.x + art.width / 2, cy = art.y + art.height / 2, want = null;
@@ -177,6 +192,8 @@ export function battleFxFrameShot({viewport, art, box, maxZoomFactor = 1.75, boo
     // legacy shot may follow them there. Ordinary battles use boundedMap
     // and constrain the visible viewport to the real map, except the strips
     // under the HUD rows, which may run past the picture's top and bottom.
+    // A canvas is the whole of what may be seen: the centre is kept inside it, with no allowance.
+    if (canvas) return {...battleFxClampCentre({cx, cy: cy - shift, halfW, halfH, art: canvas, over: NO_OVER}), halfW, halfH, over: NO_OVER};
     const over = {
       left: !boundedMap && want ? Math.min(Math.max(0, art.x - want.left), halfW) : 0,
       right: !boundedMap && want ? Math.min(Math.max(0, want.right - art.x - art.width), halfW) : 0,
@@ -207,25 +224,30 @@ export function battleFxClampCentre({cx, cy, halfW, halfH, art, over = {left: 0,
 }
 
 /** Constrain the composed camera on every frame, including shake and native zoom. */
-export function clampBattleCameraToMap({viewport, art, transform, anchor = null, box = null, insets = null}) {
+export function clampBattleCameraToMap({viewport, art, transform, anchor = null, box = null, insets = null, canvas = null}) {
   // With HUD insets the art need only cover the safe window; the strips under
   // the HUD rows may show the backdrop, and the framed box keeps clear of them.
+  // With a canvas the screen is always filled by it, HUD strips included.
   const safe=battleFxSafeWindow(viewport,insets);
-  const cover=insets ? battleFxSafeCover(viewport,art,insets) : Math.max(viewport.width/art.width,viewport.height/art.height);
+  const cover=canvas ? battleFxCanvasCover(viewport,art,canvas,insets) : insets ? battleFxSafeCover(viewport,art,insets) : Math.max(viewport.width/art.width,viewport.height/art.height);
   const fit=box ? Math.min(Math.max(1,viewport.width-16)/Math.max(1,box.right-box.left),
     Math.max(1,safe.height-32)/Math.max(1,box.bottom-box.top)) : Infinity;
   const zoom=Math.max(cover,Math.min(transform.zoom,fit));
   const cx=(viewport.width/2-transform.x)/transform.zoom,cy=(viewport.height/2-transform.y)/transform.zoom;
-  const minX=viewport.width-(art.x+art.width)*zoom,maxX=-art.x*zoom;
-  const minY=viewport.height-safe.bottom-(art.y+art.height)*zoom,maxY=safe.top-art.y*zoom;
-  let x=clamp(viewport.width/2-cx*zoom,minX,maxX),y=clamp(viewport.height/2-cy*zoom,minY,maxY);
+  const edge=canvas ?? art;
+  const minX=viewport.width-(edge.x+edge.width)*zoom,maxX=-edge.x*zoom;
+  const minY=canvas ? viewport.height-(edge.y+edge.height)*zoom : viewport.height-safe.bottom-(art.y+art.height)*zoom;
+  const maxY=canvas ? -edge.y*zoom : safe.top-art.y*zoom;
+  // A view wider than the canvas picture (its side strips showing) is centred on it, never pushed to one side.
+  const wide=canvas && minX>maxX;
+  let x=wide ? (minX+maxX)/2 : clamp(viewport.width/2-cx*zoom,minX,maxX),y=clamp(viewport.height/2-cy*zoom,minY,maxY);
   if(box){
     let lowX=Math.max(minX,8-box.left*zoom),highX=Math.min(maxX,viewport.width-8-box.right*zoom);
     let lowY=Math.max(minY,safe.top+24-box.top*zoom),highY=Math.min(maxY,viewport.height-safe.bottom-8-box.bottom*zoom);
     // Near cover capacity, give up padding before clipping a body that can fit.
     if(lowX>highX){lowX=Math.max(minX,-box.left*zoom);highX=Math.min(maxX,viewport.width-box.right*zoom);}
     if(lowY>highY){lowY=Math.max(minY,safe.top-box.top*zoom);highY=Math.min(maxY,viewport.height-safe.bottom-box.bottom*zoom);}
-    if(lowX<=highX)x=clamp(x,lowX,highX);
+    if(lowX<=highX&&!wide)x=clamp(x,lowX,highX);
     if(lowY<=highY)y=clamp(y,lowY,highY);
   }
   return Object.freeze({...transform,zoom,x,y,
@@ -345,7 +367,7 @@ export function createBattleFxCamera({reducedMotion = false, responsiveLayout = 
     slowMo(ms = 180) { if (!fullArena && !reducedMotion) slowMs = Math.max(slowMs, Math.min(400, ms)); },
     timeScale: () => slowMs > 0 ? 0.35 : 1,
     /** points are live projectiles: the shot follows a move to its target. */
-    update({dtMs = 16.7, viewport, art, subjects, points = [], insets = null, prelude = false}) {
+    update({dtMs = 16.7, viewport, art, subjects, points = [], insets = null, prelude = false, canvas = null}) {
       time += Math.max(0, dtMs);
       slowMs = Math.max(0, slowMs - Math.max(0, dtMs));
       if (fullArena) {
@@ -366,7 +388,8 @@ export function createBattleFxCamera({reducedMotion = false, responsiveLayout = 
       const stage = current();
       // A bounded shot fits its group into the safe window between the HUD rows.
       const safe = battleFxSafeWindow(viewport, boundedMap ? insets : null);
-      const roomCover = boundedMap && insets ? battleFxSafeCover(viewport, art, insets) : Math.max(viewport.width/art.width, viewport.height/art.height);
+      const roomCover = canvas ? battleFxCanvasCover(viewport, art, canvas, boundedMap ? insets : null)
+        : boundedMap && insets ? battleFxSafeCover(viewport, art, insets) : Math.max(viewport.width/art.width, viewport.height/art.height);
       const cameraSubjects=boundedMap ? subjects.map(s=>s?.framingBounds?{...s,...s.framingBounds}:s) : subjects;
       const standing = cameraSubjects.filter(s => s && !s.down);
       let framing = stage?.slots ? cameraSubjects.filter(s => s && stage.slots.has(s.slot) && (stage.includeDown || !s.down)) : [];
@@ -424,7 +447,7 @@ export function createBattleFxCamera({reducedMotion = false, responsiveLayout = 
       const frameBox = easeBox(battleFxUnionBox(framing), dtMs, zoom === null || resizing || reducedMotion || !(dtMs > 0));
       const shot = battleFxFrameShot({viewport, art, box: battleFxUnionBox([frameBox, ...follow]),
         // An ordinary shot stays within 1.7x cover; a staged push-in may reach 2.3x.
-        boost: focused.length ? stage.boost : 0, responsiveLayout, boundedMap, insets: boundedMap ? insets : null,
+        boost: focused.length ? stage.boost : 0, responsiveLayout, boundedMap, insets: boundedMap ? insets : null, canvas,
         // The wide cover shot gains room for a staged push-in (a move, a knockout).
         maxZoomFactor: wideCover ? (focused.length && stage.boost > 0 ? 1.05 + stage.boost : 1.05) : reducedMotion ? 1.3 : focused.length ? 2.3 : 1.7});
       const resized = resizing;
@@ -489,7 +512,7 @@ export function createBattleFxCamera({reducedMotion = false, responsiveLayout = 
       const halfW = viewport.width / (2 * total), halfH = viewport.height / (2 * total);
       const limit = {left: Math.min(over.left, halfW), right: Math.min(over.right, halfW),
         top: Math.min(over.top, halfH), bottom: Math.min(over.bottom, halfH)};
-      const {x: px, y: py} = battleFxClampCentre({cx: lx, cy: ly, halfW, halfH, art, over: limit});
+      const {x: px, y: py} = battleFxClampCentre({cx: lx, cy: ly, halfW, halfH, art: canvas ?? art, over: canvas ? NO_OVER : limit});
       const amplitude = Math.min(viewport.width, viewport.height) * 0.022 * trauma * trauma;
       const sx = amplitude * shakeNoise(time, 1.7) + kickX, sy = amplitude * shakeNoise(time, 5.3) + kickY;
       const result = {zoom: total, x: viewport.width / 2 - total * px + sx, y: viewport.height / 2 - total * py + sy,
@@ -499,7 +522,7 @@ export function createBattleFxCamera({reducedMotion = false, responsiveLayout = 
         framingBox:withLens(frameBox), clampBox:withLens(clampBox), lens: lensK,
         // The focused subjects alone (null without a focus), for a caller's own close shot.
         focusBox: focusSet.length ? battleFxUnionBox(focusSet) : null};
-      return boundedMap ? clampBattleCameraToMap({viewport,art,transform:result,box:result.framingBox,insets}) : Object.freeze(result);
+      return boundedMap ? clampBattleCameraToMap({viewport,art,transform:result,box:result.framingBox,insets,canvas}) : Object.freeze(result);
     },
     getState: () => Object.freeze({zoom, cx, cy, punch, trauma, framing: {slots: [...held.slots], wide: held.wide, heldMs: Math.max(0, time - held.at), moving: boxMoving, resting: !chasing}, lens: lens ? {amount: lens.amount, age: lens.age, life: lens.life} : null,
       stages: stages.map(s => ({slots: s.slots ? [...s.slots] : null, boost: s.boost, endMs: s.endMs}))})

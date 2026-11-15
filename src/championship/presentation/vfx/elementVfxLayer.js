@@ -404,11 +404,15 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
     if (d.ember) { d.ember.scale.set(d.unit * pop * d.flip, d.unit * pop); d.ember.alpha = fade * emberWeight(d.age); d.ember.visible = d.ember.alpha > 0.01; }
   }
   /** The signature backdrop over the field rectangle (world space). */
-  function storm({kind, palette, paletteKey = 'neutral', rect, center = null}) {
+  function storm({kind, palette, paletteKey = 'neutral', rect, center = null, bounds = null}) {
     if (!rect || !stormTexture(kind, paletteKey, palette, 1)) return;
     for (const old of storms.splice(0)) old.sprites.forEach(s => s.destroy());
     const cx = center?.x ?? rect.x + rect.width / 2, cy = center?.y ?? rect.y + rect.height / 2;
-    const cover = Math.hypot(rect.width, rect.height) * 1.15 / 256;
+    // On an arena with a scenery canvas (`bounds`) the square reaches every edge of it from its centre:
+    // sized for the play area alone, its own edges showed inside a pulled-back shot.
+    const side = bounds?.bleedX ?? 0;
+    const reach = bounds ? Math.max(cx - bounds.x + side, bounds.x + bounds.width + side - cx, cy - bounds.y, bounds.y + bounds.height - cy) : 0;
+    const cover = Math.max(Math.hypot(rect.width, rect.height) * 1.15, reach * 2.06) / 256;
     const variants = reducedMotion ? [1] : [1, 2];
     const sprites = variants.map(v => {
       const sprite = new PIXI.Sprite(stormTexture(kind, paletteKey, palette, v));

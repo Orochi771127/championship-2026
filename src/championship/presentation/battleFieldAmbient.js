@@ -258,6 +258,30 @@ export function waterLookup(texture, scale = 1) {
  * @param {boolean} [options.reducedMotion]
  * @param {object} [options.renderer]  the stage renderer; WebGL enables single-pass masked layers
  */
+// Arena canvas (Owner 2026-11-12, BATTLE_CANVAS_BM05_PILOT). The play area keeps its picture, its
+// data and its size; a ring of scenery that nobody can walk on continues it on every side, so the
+// camera may pull back and centre a fight without showing a mirrored copy or the bare backdrop.
+// On an upright phone the old picture let the shot see 49 % of the arena's width at most.
+// Offsets are world pixels from the canvas's corner to the play area's corner. `bleedX` is a mirrored
+// strip of the canvas's own scenery on its left and right: a phone held sideways sees a band five times
+// wider than tall, and without the strips the shot could not pull back past the canvas's width.
+export const BATTLE_FIELD_CANVASES = Object.freeze({
+  field_bm05_01: Object.freeze({
+    src: "assets/production/battle/original-opus-canvas-r1/fields/field_bm05_01/frame-00.webp",
+    seaMask: "assets/production/battle/original-opus-canvas-r1/fields/field_bm05_01/sea-mask-canvas.webp",
+    widthPx: 2304, heightPx: 2240, offsetX: 320, offsetY: 576, bleedX: 576, rightsStatus: "PROJECT_ORIGINAL"
+  })
+});
+/**
+ * The canvas picture's rectangle in the play area's own coordinates, or null. `bleedX` is the width of
+ * each mirrored side strip: it only lets the shot pull back wider than the picture, which then stays
+ * centred, so the strips show as equal slivers at the two sides and never as a whole mirrored scene.
+ */
+export function battleFieldCanvasRect(fieldId, { bleed = true } = {}) {
+  const c = BATTLE_FIELD_CANVASES[fieldId];
+  return c ? Object.freeze({ x: -c.offsetX, y: -c.offsetY, width: c.widthPx, height: c.heightPx, bleedX: bleed ? (c.bleedX ?? 0) : 0 }) : null;
+}
+
 export async function withBattleFieldAmbient({ PIXI, art, quality = "high", reducedMotion = false, renderer = null }) {
   const ambient = art?.field?.ambient;
   if (!ambient || !KINDS.has(ambient.kind)) return art;
@@ -286,6 +310,53 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   const rand = mulberry32(polar ? 0xb05 : ambient.lava ? 0xb03 : 0xb04);
 
   const root = new PIXI.Container({ label: "battle field with ambient layers" });
+  // The canvas lies under the play area's own picture, which stays exactly as it was. A canvas that
+  // fails to load leaves the arena as it always looked.
+  const canvasRecord = BATTLE_FIELD_CANVASES[art.field.fieldId] ?? null;
+  let canvasRect = null, canvasPictureRect = null, canvasSources = [], canvasSeaMask = null, canvasFrames = [];
+  if (canvasRecord) {
+    try {
+      const picture = linear(await PIXI.Assets.load(canvasRecord.src));
+      canvasSources.push(canvasRecord.src);
+      const sprite = new PIXI.Sprite(picture);
+      sprite.label = "battle arena canvas"; sprite.eventMode = "none";
+      sprite.position.set(-canvasRecord.offsetX, -canvasRecord.offsetY);
+      sprite.width = canvasRecord.widthPx; sprite.height = canvasRecord.heightPx;
+      // The mirrored side strips: each repeats the canvas's own edge, flipped, so the seam matches.
+      const bleed = canvasRecord.bleedX ?? 0;
+      if (bleed > 0 && PIXI.Texture && PIXI.Rectangle) {
+        const k = picture.width / canvasRecord.widthPx, strip = Math.min(bleed, canvasRecord.widthPx) * k;
+        for (const side of [0, 1]) {
+          const frame = new PIXI.Rectangle(side ? picture.width - strip : 0, 0, strip, picture.height);
+          const frameTexture = new PIXI.Texture({ source: picture.source, frame }); canvasFrames.push(frameTexture);
+          const mirror = new PIXI.Sprite(frameTexture);
+          mirror.label = `battle arena canvas bleed ${side ? "right" : "left"}`; mirror.eventMode = "none";
+          mirror.width = bleed; mirror.height = canvasRecord.heightPx; mirror.scale.x = -Math.abs(mirror.scale.x);
+          mirror.position.set(side ? -canvasRecord.offsetX + canvasRecord.widthPx + bleed : -canvasRecord.offsetX, -canvasRecord.offsetY);
+          root.addChild(mirror);
+          // Haze thickening away from the seam: the strip reads as distance, not as a reflected copy.
+          if (PIXI.Graphics) {
+            const haze = new PIXI.Graphics(); haze.label = "battle arena canvas bleed haze"; haze.eventMode = "none";
+            const seamX = side ? -canvasRecord.offsetX + canvasRecord.widthPx : -canvasRecord.offsetX;
+            for (let k = 0; k < 12; k++) {
+              const from = bleed * k / 12, w = bleed - from;
+              haze.rect(side ? seamX + from : seamX - bleed, -canvasRecord.offsetY, w, canvasRecord.heightPx).fill({ color: 0xdde8f2, alpha: 0.075 });
+            }
+            root.addChild(haze);
+          }
+        }
+      }
+      root.addChild(sprite);
+      canvasRect = battleFieldCanvasRect(art.field.fieldId, { bleed: bleed > 0 && Boolean(PIXI.Texture && PIXI.Rectangle) });
+      canvasPictureRect = canvasRect;
+      if (canvasRecord.seaMask && ambient.sea && ambient.waves) {
+        try { canvasSeaMask = linear(await PIXI.Assets.load(canvasRecord.seaMask)); canvasSources.push(canvasRecord.seaMask); } catch { canvasSeaMask = null; }
+      }
+    } catch (error) {
+      console.warn(`CHAMPIONSHIP_BATTLE_CANVAS_FALLBACK: ${error.message}`);
+      canvasRect = null; canvasPictureRect = null;
+    }
+  }
   root.addChild(art.displayObject);
 
   // --- BM04 lagoon: caustics, glints, ripples stay inside the water mask.
@@ -320,6 +391,13 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       tileScale: 1.3, alpha: 0.45, label: "polar sea fx" });
     seaFx = waveLayer.displayObject;
     root.addChild(seaFx);
+  }
+  // The same wave glints over the canvas's own sea, in step with the play area's.
+  let canvasWaveLayer = null;
+  if (canvasPictureRect && canvasSeaMask && waveLayer) {
+    canvasWaveLayer = maskedTiling(PIXI, renderer, { tile: tex(ambient.waves.src), mask: canvasSeaMask, rect: canvasPictureRect,
+      tileScale: 1.3, alpha: 0.45, label: "polar sea fx (canvas)" });
+    root.addChild(canvasWaveLayer.displayObject);
   }
 
   // --- BM03 lava: a slow flowing glow inside the lava mask.
@@ -775,6 +853,8 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
         .fill({ color: k < 0.4 ? 0xffd27a : 0xff6a1a, alpha: 0.9 * (1 - k) });
     }
     if (waveLayer && !reducedMotion) { waveLayer.tilePosition.set(10 * s, 3 * Math.sin(s * 0.4) * 6); waveLayer.alpha = 0.38 + 0.1 * Math.sin(s * 0.9); }
+    // The canvas layer's tiles start at the canvas corner: shift by the offset so both seas show one pattern.
+    if (canvasWaveLayer && !reducedMotion) { canvasWaveLayer.tilePosition.set(10 * s - canvasPictureRect.x, 3 * Math.sin(s * 0.4) * 6 - canvasPictureRect.y); canvasWaveLayer.alpha = 0.38 + 0.1 * Math.sin(s * 0.9); }
     if (glints) {
       glints.clear();
       if (!reducedMotion) for (const g of glintSpots) {
@@ -836,10 +916,12 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     field: art.field,
     displayObject: root,
     foregroundObject: foreground,
+    /** The scenery canvas round the play area ({x, y, width, height, bleedX} in the play area's world pixels), or null. */
+    canvas: canvasRect,
     update,
     observe,
     getDiagnostics() {
-      return Object.freeze({ ...art.getDiagnostics(), ambient: ambient.kind, quality, reducedMotion,
+      return Object.freeze({ ...art.getDiagnostics(), ambient: ambient.kind, quality, reducedMotion, canvas: canvasRect,
         layers: { caustics: causticLayers.length, sea: Boolean(seaFx), foamRegions: foam.length, canopies: canopies.length,
           boundary: Boolean(boundary), iceStates: Boolean(ice), snow: snow.length, lava: Boolean(lavaFx), crust: Boolean(crust), embers: embers.length,
           emissive: Boolean(emissive), clouds: Boolean(clouds), gust: Boolean(gust), scan: Boolean(scan), rotors: rotors.length,
@@ -858,8 +940,10 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       pieces?.dispose();
       foreground.destroy({ children: true });
       root.destroy({ children: true });
-      for (const layer of [flowLayer, waveLayer, gust, scan, ...causticLayers.map(c => c.t)]) layer?.destroy();
+      for (const layer of [flowLayer, waveLayer, canvasWaveLayer, gust, scan, ...causticLayers.map(c => c.t)]) layer?.destroy();
+      for (const t of canvasFrames) t.destroy(false);
       await art.dispose();
+      await Promise.allSettled(canvasSources.map(src => PIXI.Assets.unload(src)));
       for (const t of textures.values()) t?.source?.removeAllListeners?.("change");
       await Promise.allSettled(sources.map(src => PIXI.Assets.unload(src)));
     }

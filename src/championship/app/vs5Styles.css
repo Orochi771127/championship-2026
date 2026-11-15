@@ -895,6 +895,31 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--resource .cm-vs5-meter__value { font-size: calc(11px * var(--text-scale, 1)); }
 
+/* Phone held sideways (Owner 2026-11-12): five stacked rows left the opponent cards and the party cards
+   meeting in the middle of a 340 px field, so no clear band was left for the fighters. Two rows on the
+   edges instead: clock beside the opponents along the top, party beside the record along the bottom.
+   The camera reads the same edges, so the whole middle of the field stays the fighters'. */
+@media (orientation: landscape) and (max-height: 560px) {
+  .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    column-gap: 12px;
+  }
+  .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-clock { grid-row: 1; grid-column: 1; align-self: start; }
+  .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-roster--opponent { grid-row: 1; grid-column: 2; align-self: start; }
+  .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-roster--player { grid-row: 3; grid-column: 1; align-self: end; }
+  .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-log { grid-row: 3; grid-column: 2; align-self: end; }
+  /* Two lines per card, not three: the card's own portrait chip and element badge say whose it is
+     (and the name stays its accessible label), so the bars alone take the lines. */
+  :root .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-roster .cm-vs5-fighter {
+    grid-template-areas: "hpbar" "tp"; grid-template-rows: auto auto; padding-block: 6px 5px;
+  }
+  :root .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-roster .cm-vs5-fighter__name {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; padding: 0;
+  }
+  :root .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-roster .cm-vs5-fighter::before { display: none; }
+}
+
 /* ---------------- Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02) ----------------
    The gauge rides the card's bottom edge out of the grid flow, so no card layout gains a row. */
 .cm-vs5-fighter > .cm-vs5-burst-gauge {

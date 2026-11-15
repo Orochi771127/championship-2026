@@ -271,15 +271,18 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     }
     if (ringed) stasisBack.stroke({width: Math.max(1.5, unit * 0.9), color: BATTLE_FX_STASIS.ring, alpha: 0.7 * k});
   }
-  /** The edges of the screen cool in three steps (a pixel vignette), under the bars and words. */
+  /** The edges of the screen cool toward the rim (a soft vignette), under the bars and words. */
   function drawStasisEdge(viewport) {
     stasisEdge.clear();
     if (!(stasis.level > 0)) return;
     const {width: w, height: h} = viewport, k = stasis.level;
-    for (const [share, alpha] of [[0.03, 0.2], [0.07, 0.14], [0.12, 0.09]]) {
-      const tx = Math.round(w * share * 1.3), ty = Math.round(h * share);
+    // Thirty-two hair-thin frames, each a little further in: on a bright arena (snow) wide steps read as a
+    // picture frame, and twelve still showed as bands on a desktop; at this pitch each step is a few pixels.
+    const STEPS = 32;
+    for (let i = 1; i <= STEPS; i++) {
+      const share = 0.0045 * i, tx = Math.round(w * share * 1.3), ty = Math.round(h * share);
       stasisEdge.rect(0, 0, w, ty).rect(0, h - ty, w, ty).rect(0, ty, tx, h - ty * 2).rect(w - tx, ty, tx, h - ty * 2)
-        .fill({color: BATTLE_FX_STASIS.edge, alpha: alpha * k});
+        .fill({color: BATTLE_FX_STASIS.edge, alpha: 0.0128 * k});
     }
   }
   const speedGfx = new PIXI.Graphics(); speedGfx.label = 'battle fx speed lines';
@@ -724,7 +727,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           // The backdrop paints the whole field: at most one every BATTLE_FX_COMFORT.stormGapMs.
           const stormFree = elapsed - lastStormAt >= BATTLE_FX_COMFORT.stormGapMs;
           if (stormFree) lastStormAt = elapsed;
-          if (stormFree) element?.storm({kind: vfx?.storm ?? 'burst', palette, paletteKey: vfx?.paletteKey ?? look.palette, rect: ctx.artRect,
+          if (stormFree) element?.storm({kind: vfx?.storm ?? 'burst', palette, paletteKey: vfx?.paletteKey ?? look.palette, rect: ctx.artRect, bounds: ctx.canvasRect ?? null,
             center: foe ? {x: (info.x + foe.x) / 2, y: (info.groundY + foe.groundY) / 2 - info.height * 0.4} : {x: info.x, y: info.groundY}});
           if (vfx?.weather) cue({type: 'WEATHER', system: vfx.weather, slot: event.slot, x: info.x, y: info.groundY, element: vfx.element});
           spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 1.3, tint: palette.core, life: 560, delay: 140});
