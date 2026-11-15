@@ -4071,6 +4071,54 @@
       }
     },
     {
+      "code": "UL03",
+      "speciesId": "species-230",
+      "entity": "m540_imperialdramon_fm",
+      "frames": 167,
+      "clips": 111,
+      "atlasBytes": 4637334,
+      "generalHeightRatio": {
+        "median": 1.005,
+        "min": 0.583,
+        "max": 1.135
+      },
+      "generalFacingVotes": [
+        41,
+        10
+      ],
+      "generalMirror": false,
+      "generalMissing": 0,
+      "generalStateSubstitutes": 0,
+      "arenaRegistration": "per-picture support/bounds",
+      "arenaHas": {
+        "move": true,
+        "idle": true,
+        "melee": true,
+        "ranged": true,
+        "hurt": true,
+        "faint": false,
+        "sleep": false,
+        "charge": true,
+        "special": true
+      },
+      "arenaAliases": [],
+      "arenaGroundLock": {
+        "R:idle": -5.0,
+        "U:idle": -4.5,
+        "UR:idle": -4.0,
+        "UL:idle": -4.0,
+        "D:idle": -5.0,
+        "DR:idle": -6.0,
+        "DL:idle": -6.0,
+        "L:idle": -5.0
+      },
+      "faintEqualsHurtDropped": 8,
+      "atlasScales": {
+        "general": 0.9183,
+        "arena": 0.5044
+      }
+    },
+    {
       "code": "UL04",
       "speciesId": "species-187",
       "entity": "m501_vikemon",
@@ -5052,6 +5100,41 @@
       "atlasScales": {
         "general": 1.0,
         "arena": 0.53
+      }
+    },
+    {
+      "code": "UL34",
+      "speciesId": "species-229",
+      "entity": "m528_metaletemon",
+      "frames": 131,
+      "clips": 86,
+      "atlasBytes": 3064032,
+      "generalHeightRatio": null,
+      "generalFacingVotes": [
+        49,
+        4
+      ],
+      "generalMirror": false,
+      "generalMissing": 0,
+      "generalStateSubstitutes": 0,
+      "arenaRegistration": "per-picture support/bounds",
+      "arenaHas": {
+        "move": true,
+        "idle": false,
+        "melee": true,
+        "ranged": true,
+        "hurt": true,
+        "faint": false,
+        "sleep": false,
+        "charge": false,
+        "special": false
+      },
+      "arenaAliases": [],
+      "arenaGroundLock": {},
+      "faintEqualsHurtDropped": 0,
+      "atlasScales": {
+        "general": 0.9,
+        "arena": 0.5215
       }
     },
     {

@@ -14,7 +14,7 @@
 //   muzzle  [x, y, heightRatio, releaseIndex, releaseMs]
 //   head    [headFocusX, headFocusY, headSafeScale, opaqueInHead]
 export const MONSTER_VISUAL_ANCHORS_SCHEMA = 1;
-export const MONSTER_VISUAL_ANCHORS_SUMMARY = Object.freeze({"species":226,"withMotion":226,"withHead":226,"motionErrors":[],"art":{"atlas":42,"reviewed":137,"reviewed-right":47},"maxCellAspect":2.02,"multiCellPages":226,"muzzleInUpperBody":226,"stances":{"grounded":205,"hovering":3,"tail-below":18},"headsOnBody":223,"headsMostlyDrawn":226});
+export const MONSTER_VISUAL_ANCHORS_SUMMARY = Object.freeze({"species":226,"withMotion":226,"withHead":226,"motionErrors":[],"art":{"atlas":40,"reviewed":139,"reviewed-right":47},"maxCellAspect":2.02,"multiCellPages":226,"muzzleInUpperBody":226,"stances":{"grounded":206,"hovering":3,"tail-below":17},"headsOnBody":223,"headsMostlyDrawn":226});
 const ACTION_IDS = Object.freeze(["stand","walk","attack","cheer"]);
 const ROWS = {
   "species-008": [["m001_zurumon",4,[-22,-56,27,1],[[2,41,37,10.1],[2,41,36,10.4],[2,33,35,7.3],[2,42,32,7.4]],["grounded",0,37],[-20,-25,0.71,1,250],"atlas"],[0.4942,0.6412,0.5718,0.743]],
@@ -233,8 +233,8 @@ const ROWS = {
   "species-213": [["m530_metalgarurumon_vi",14.311270125223611,[-209.51,-343.65,209.49,0.4099999999999966],[[2,258,216,72.8],[2,419,344,28.1],[2,167,131,33],[2,234,224,13.8]],["grounded",0.09000000000000341,215.91],[-71.27,-112,0.85,1,250],"reviewed"],[0.2318,0.4707,0.3932,0.597]],
   "species-214": [["m531_metalseadramon",11.053274760383387,[-441.5,-1168,441.5,0],[[2,384,429,23.2],[2,883,1168,3.7],[2,411,405,21.4],[2,431,407,21.8]],["grounded",0,429],[-137.5,-343,0.85,0,0],"reviewed"],[0.1602,0.2778,0.2956,0.467]],
   "species-215": [["m532_rosemon",4,[-270,-275,198,11],[[2,272,278,7.4],[2,302,278,6.6],[2,468,286,6.1],[2,302,275,5.2]],["grounded",5,270],[-258,-185,0.88,1,250],"atlas"],[0.5586,0.2904,0.3398,0.921]],
-  "species-229": [["oc_crownbrass_mandrill",4,[-274,-356,336,138],[[1,397,427,21],[1,409,458,19],[2,557,454,14.1],null],["tail-below",12,354],[-151,-266,0.88,0,0],"atlas"],[0.4826,0.2836,0.5093,0.757]],
-  "species-230": [["oc_celestyrant_battle_r10",4,[-154,-282,180,8],[[2,272,257,43.7],[2,279,257,42.6],[2,334,267,34.2],[2,293,290,35.9]],["grounded",8,249],[-131,-180,0.77,0,0],"atlas"],[0.5347,0.2755,0.3021,0.66]],
+  "species-229": [["oc_crownbrass_mandrill",14.2602495543672,[-161.75,-391.2,161.25,0.8000000000000114],[[2,322,392,28.1],[4,240,255,36.1],[2,230,155,61.9],[2,323,381,28.8]],["grounded",0.8000000000000114,391.2],[-89.94999999999999,-83,0.6,1,250],"reviewed"],[0.4826,0.2836,0.5093,0.757]],
+  "species-230": [["oc_celestyrant_battle_r10",11.444921316165953,[-260.3,-472.79,259.7,0.3100000000000023],[[2,438,436,17],[2,441,426,16.3],[2,520,472,7.3],[2,439,426,16.4]],["grounded",0.07999999999998408,435.92],[-249.3,-288,0.7,0,0],"reviewed"],[0.5347,0.2755,0.3021,0.66]],
   "species-231": [["oc_star_boar_growth",7.112122612993848,[-106,-133,70,13],[[4,158,142,50.2],[4,167,135,50],[4,172,136,48.1],[3,164,143,48]],["grounded",7,133],[-74,-105,0.83,2,267],"reviewed"],[0.6367,0.4938,0.5026,0.869]],
   "species-232": [["oc_star_boar_mature",3.0864197530864197,[-82,-127,100,3],[[4,166,130,71.4],[4,166,128,72.5],[4,171,130,69.3],[2,170,130,69.7]],["grounded",1,127],[83,-83,0.74,1,167],"reviewed-right"],[0.8216,0.5271,0.3815,0.859]],
   "species-234": [["oc_astral_jelly",3.5746201966041107,[-70,-149,99,5],[[4,155,152,54.3],[4,154,149,55.8],[4,160,141,56.7],[2,148,141,61.3]],["grounded",2,149],[-52,-99,0.71,3,500],"reviewed"],[0.5039,0.388,0.3047,0.866]],
