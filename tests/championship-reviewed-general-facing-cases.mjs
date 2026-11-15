@@ -39,7 +39,7 @@ test('generalMirrorFrames: single frames drawn facing opposite to their set are 
  // Clip-by-clip re-check the same day: GR38 blink/exhale (MA_02/03) added; BD_06/07 and MB_10 already
  // faced like their clips; MA50/MA63 sleep cells were right as stored; MA53 pleased cells 12-13 added.
  assert.deepEqual(Object.fromEntries(selection.characters.filter(c=>c.generalMirrorFrames).map(c=>[c.displayCode,c.generalMirrorFrames.length])),
-  {GR05:2,GR38:8,MA03:1,MA20:2,MA43:1,MA53:2,MA54:1,MA64:4,AW28:1,AW27:2,UL14:3});
+  {GR05:2,GR38:8,MA03:1,MA20:2,MA43:1,MA53:2,MA54:1,MA64:4});
  for(const entry of selection.characters.filter(c=>c.generalMirrorFrames)){const d=read(entry.displayCode);
   const frames=Array.isArray(d.frames)?Object.fromEntries(d.frames.map(f=>[f.id,f])):d.frames;
   for(const id of entry.generalMirrorFrames)assert.ok(frames[id],entry.displayCode+' '+id);}
@@ -69,4 +69,12 @@ test('generalMirrorFrames: single frames drawn facing opposite to their set are 
   assert.equal(frame.place[0],(mirror?f.origin[0]-t[0]-f.frame[2]:t[0]-f.origin[0])+(step.offset??[0,0])[0],step.assetId);
  }
  assert.ok(dom.sequences.get(7).some(f=>f.mirror)&&dom.sequences.get(2).every(f=>!f.mirror));
+});
+
+test('every General set walks forward: sets drawn facing right carry generalMirror (2026-11-12 moonwalk fix)',()=>{
+ // Their walk drawings face right (face on the right of the head, hair/flower/pompom on the left), so without
+ // generalMirror the ranch drew them backwards: moving right while the face pointed left.
+ for(const code of ['GR26','GR28','GR29','MA57','MA64','AW16','AW18','AW43'])assert.equal(selection.characters.find(c=>c.displayCode===code)?.generalMirror,true,code);
+ // AW19's walk is drawn facing left, so it must not be mirrored.
+ assert.equal(selection.characters.find(c=>c.displayCode==='AW19')?.generalMirror,false,'AW19');
 });
