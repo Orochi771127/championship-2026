@@ -179,7 +179,10 @@ async function alternateAwaitReady(api){
   const saved=await page.evaluate(key=>JSON.parse(sessionStorage.getItem(key)),qaKey);
   assert.equal(saved.schemaVersion,7);
   assert.equal(saved.cageEdit?.layoutVersion,'PRODUCT_HEX_WORLD_V1');
-  assert.deepEqual(saved.shop?.cageQuantities,Object.fromEntries(fixture.shop.cageOwned.map(index=>[index,1])));
+  // Cage stock as the game reads it (championshipStandaloneSave.js): the per-cage table is written only with
+  // repeated cages (friends playtest); otherwise each owned cage counts one.
+  const cageStock=saved.shop?.cageQuantities??Object.fromEntries((saved.shop?.cageOwned??[]).map(index=>[index,1]));
+  assert.deepEqual(cageStock,Object.fromEntries(fixture.shop.cageOwned.map(index=>[index,1])));
   for(const [suffix,form]of [['0001',211],['0002',222],['0003',229],['0004',230]]){
    const id=`championship:2026:instance:${suffix}`;
    assert.equal(saved.raising.collection.find(i=>i.instanceId===id).speciesId,`species-${String(burstBase(form)).padStart(3,'0')}`,`${suffix} returns to its 成熟期`);

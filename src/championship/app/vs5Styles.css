@@ -883,7 +883,9 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
   letter-spacing: normal; overflow-wrap: anywhere;
 }
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-exit {
-  grid-column: 2; grid-row: 1 / span 2; width: auto; min-width: 44px; min-height: 44px;
+  /* 44 px on the glass: a small phone zooms the whole page down (--cm-ui-zoom, portraitFrame.js), and the
+     key shrank with it to 35 px. Dividing by the zoom keeps the touch target whole. */
+  grid-column: 2; grid-row: 1 / span 2; width: auto; min-width: calc(44px / var(--cm-ui-zoom, 1)); min-height: calc(44px / var(--cm-ui-zoom, 1));
   max-width: 140px; padding: 6px 10px; white-space: normal; overflow-wrap: anywhere;
   background: rgb(4 12 18 / 30%); border: 1px solid rgb(255 255 255 / 80%);
   color: var(--battle-hud-ink); text-shadow: var(--battle-hud-shadow);
@@ -894,6 +896,31 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-fighter[data-present="false"] { display: none; }
 
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-meter--resource .cm-vs5-meter__value { font-size: calc(11px * var(--text-scale, 1)); }
+
+/* Phone held sideways (Owner 2026-11-12): five stacked rows left the opponent cards and the party cards
+   meeting in the middle of a 340 px field, so no clear band was left for the fighters. Two rows on the
+   edges instead: clock beside the opponents along the top, party beside the record along the bottom.
+   The camera reads the same edges, so the whole middle of the field stays the fighters'. */
+@media (orientation: landscape) and (max-height: 560px) {
+  .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    column-gap: 12px;
+  }
+  .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-clock { grid-row: 1; grid-column: 1; align-self: start; }
+  .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-roster--opponent { grid-row: 1; grid-column: 2; align-self: start; }
+  .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-roster--player { grid-row: 3; grid-column: 1; align-self: end; }
+  .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] > .cm-vs5-log { grid-row: 3; grid-column: 2; align-self: end; }
+  /* Two lines per card, not three: the card's own portrait chip and element badge say whose it is
+     (and the name stays its accessible label), so the bars alone take the lines. */
+  :root .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-roster .cm-vs5-fighter {
+    grid-template-areas: "hpbar" "tp"; grid-template-rows: auto auto; padding-block: 6px 5px;
+  }
+  :root .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-roster .cm-vs5-fighter__name {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; padding: 0;
+  }
+  :root .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-roster .cm-vs5-fighter::before { display: none; }
+}
 
 /* ---------------- Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02) ----------------
    The gauge rides the card's bottom edge out of the grid flow, so no card layout gains a row. */

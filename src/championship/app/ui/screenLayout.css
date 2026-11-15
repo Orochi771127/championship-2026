@@ -49,6 +49,9 @@
 }
 :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__row {
   display: grid;
+  /* One column no wider than the card: a long unbroken word (the series pill in Vietnamese) widened
+     the implicit auto column past the card on a 375 px phone (ui audit, 2026-11-15). */
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto auto;
   align-content: start;
   gap: 8px;
@@ -71,7 +74,7 @@
 }
 :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__card-art :is(img, .cm-facility-thumb) { width: 100%; height: 100%; object-fit: cover; }
 :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__card-art .cm-shop-goods-icon { width: 58%; height: 78%; background-size: contain; box-shadow: none; background-color: transparent; }
-:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__name { display: grid; gap: 2px; min-width: 0; }
+:root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__name { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; min-width: 0; }
 :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__name strong { font-size: var(--fs-body); font-weight: var(--fw-heavy); line-height: 1.2; }
 :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__meta { color: var(--c-gold-strong); font-size: var(--fs-label); font-weight: var(--fw-strong); white-space: normal; }
 :root body .cm-vs2-root[data-screen][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop .cm-vs2-footer { grid-template-columns: auto; }
@@ -93,6 +96,7 @@
 .cm-vs2-shop__series {
   justify-self: start; margin-top: 2px; padding: 1px 8px; border-radius: 999px;
   background: #5b3fd1; color: #fff; font-size: calc(12px * var(--text-scale, 1)); font-weight: 900; line-height: 1.5; white-space: nowrap;
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis;
 }
 .cm-vs2-shop__effect {
   justify-self: stretch; min-width: 0; margin-top: 2px; padding: 3px 8px; border-radius: 10px;

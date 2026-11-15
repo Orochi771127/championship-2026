@@ -120,7 +120,7 @@ try{
   });
   if(phase!=='before'){const hud=s.floatingHud;assert.equal(hud.mode,'floating');assert.equal(hud.namedAreas,'none');
   for(const edge of ['left','top','right','bottom'])assert.ok(Math.abs(hud.shell[edge]-hud.field[edge])<=1,'field fills shell '+edge);
-  assert.ok(hud.exit.width>=44&&hud.exit.height>=44);assert.ok(hud.exit.right<=width+1&&hud.exit.bottom<=height+1);
+  assert.ok(hud.exit.width>=44&&hud.exit.height>=44,`exit key ${JSON.stringify(hud.exit)} at ${width}x${height}`);assert.ok(hud.exit.right<=width+1&&hud.exit.bottom<=height+1);
   assert.ok(hud.overlays.every(e=>e.pointerEvents==='none'&&e.background==='rgba(0, 0, 0, 0)'));
   assert.equal(hud.cards.length,6,'real battle has three actors per team');
   for(const team of ['0','1']){const members=hud.cards.filter(c=>c.team===team);assert.equal(members.length,3);assert.equal(new Set(members.map(c=>Math.round(c.rect.top))).size,1,'real team stays on one row');}

@@ -22,7 +22,8 @@ test('the lagoon never renders through a sprite mask: caustics use the single-pa
   assert.match(ambient, /if \(onWater && !onWater\(x, y\)\) continue;/);
   assert.match(ambient, /const wet = waterFx \? \(onWater\?\.\(x, y\) \?\? true\) :/);
   // The caustic meshes and the scan sweep are released with the other masked layers.
-  assert.match(ambient, /\[flowLayer, waveLayer, gust, scan, \.\.\.causticLayers\.map\(c => c\.t\)\]\) layer\?\.destroy\(\);/);
+  // (BM05 canvas 2026-11-15: the canvas's own sea glints are one of them.)
+  assert.match(ambient, /\[flowLayer, waveLayer, canvasWaveLayer, gust, scan, \.\.\.causticLayers\.map\(c => c\.t\)\]\) layer\?\.destroy\(\);/);
 });
 
 test('the cyberspace floor scan sweep is one masked mesh, not a sprite-masked strip (126 MB measured)', () => {

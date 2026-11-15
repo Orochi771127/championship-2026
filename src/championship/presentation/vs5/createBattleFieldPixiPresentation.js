@@ -260,7 +260,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   // bottom edges showed the bare letterbox as black bars. Mirrored, dimmed
   // copies of the arena art continue both edges there (the same texture, so
   // no new GPU memory).
-  if (fieldArt) {
+  // An arena with its own scenery canvas (fieldArt.canvas) needs no mirrored copies: the canvas is there.
+  if (fieldArt && !fieldArt.canvas) {
     const base = fieldArt.displayObject.texture ? fieldArt.displayObject : fieldArt.displayObject.children?.find(child => child.texture);
     const { worldWidthPx, worldHeightPx } = fieldArt.field;
     if (base?.texture?.width > 0) for (const y of [0, worldHeightPx * 2]) {
@@ -673,6 +674,10 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       fieldArt.foregroundObject.scale.copyFrom(productionArtLayer.scale);
     }
     const nativeScale = artRect.width / (fieldArt?.field.nativeWidthPx ?? 416);
+    // The scenery canvas round the play area, in the same local coordinates as artRect (null: none).
+    const canvasScale = fieldArt?.canvas ? artRect.width / fieldArt.field.worldWidthPx : 0;
+    const canvasRect = fieldArt?.canvas ? {x: artRect.x + fieldArt.canvas.x * canvasScale, y: artRect.y + fieldArt.canvas.y * canvasScale,
+      width: fieldArt.canvas.width * canvasScale, height: fieldArt.canvas.height * canvasScale} : null;
     // Dynamic presentation: events from this view, then the camera for it.
     let camera = {zoom:1, x:0, y:0};
     let fxContext = null;
@@ -682,8 +687,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     if (fxLayer && fieldArt) {
       const events = [...tracker.consume(view), ...motionEvents, ...moveQaEvents(view, dtMs)];
       camera = director.update({dtMs, viewport:{width:rect.width, height:rect.height}, art:artRect,
-        subjects:[...slotInfos.values()], points:fxLayer.projectilePoints(), insets, prelude:Boolean(view.specialPrelude)});
-      fxContext = {artRect, nativeScale, localTeam, opening:view.opening, viewport:{width:rect.width, height:rect.height}, insets,
+        subjects:[...slotInfos.values()], points:fxLayer.projectilePoints(), insets, prelude:Boolean(view.specialPrelude), canvas:canvasRect});
+      fxContext = {artRect, canvasRect, nativeScale, localTeam, opening:view.opening, viewport:{width:rect.width, height:rect.height}, insets,
         slotInfo:slot => slotInfos.get(slot) ?? null,
         opponentsOf:slot => view.combatants.filter(c => c.present && !c.down && c.team !== view.combatants[slot]?.team).map(c => c.slot),
         camera:{...camera, director}};
@@ -715,7 +720,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     const transform=fieldArt ? clampBattleCameraToMap({viewport:rect,art:artRect,transform:composed,
       // The original special prelude keeps framing its own focus, as before the HUD-aware shot; the
       // director hands that box over already eased (clampBox), so the clamp never leaps.
-      anchor:{x:anchorLocalX,y:anchorLocalY},box:camera.clampBox??(focus ? camera.focusBox ?? camera.framingBox : camera.framingBox)??null,insets}) : composed;
+      anchor:{x:anchorLocalX,y:anchorLocalY},box:camera.clampBox??(focus ? camera.focusBox ?? camera.framingBox : camera.framingBox)??null,insets,canvas:canvasRect}) : composed;
     world.scale.set(transform.zoom);
     world.position.set(transform.x,transform.y);
     // The hit-feel filter covers the screen through this frame's camera.
@@ -733,7 +738,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     // depth (back half behind, front half in front), so the flat 3D copy stays off.
     focusPlacement=focus ? {...transform,nativeScale,
       width:rect.width,height:rect.height,reducedMotion,hyperWrap:Boolean(fxLayer?.hyperWrapActive?.())}:null;
-    fieldPlacement={...transform,artRect:{...artRect},width:rect.width,height:rect.height,
+    fieldPlacement={...transform,artRect:{...artRect},canvasRect:canvasRect ? {...canvasRect} : null,width:rect.width,height:rect.height,
       nativeScale,reducedMotion,insets:lastInsets ? {top:lastInsets.top, bottom:lastInsets.bottom} : null};
   }
 
