@@ -14,7 +14,7 @@
 //   muzzle  [x, y, heightRatio, releaseIndex, releaseMs]
 //   head    [headFocusX, headFocusY, headSafeScale, opaqueInHead]
 export const MONSTER_VISUAL_ANCHORS_SCHEMA = 1;
-export const MONSTER_VISUAL_ANCHORS_SUMMARY = Object.freeze({"species":226,"withMotion":226,"withHead":226,"motionErrors":[],"art":{"atlas":48,"reviewed":132,"reviewed-right":46},"maxCellAspect":2.02,"multiCellPages":226,"muzzleInUpperBody":226,"stances":{"grounded":202,"hovering":3,"tail-below":21},"headsOnBody":223,"headsMostlyDrawn":226});
+export const MONSTER_VISUAL_ANCHORS_SUMMARY = Object.freeze({"species":226,"withMotion":226,"withHead":226,"motionErrors":[],"art":{"atlas":48,"reviewed":131,"reviewed-right":47},"maxCellAspect":2.02,"multiCellPages":226,"muzzleInUpperBody":226,"stances":{"grounded":202,"hovering":3,"tail-below":21},"headsOnBody":223,"headsMostlyDrawn":226});
 const ACTION_IDS = Object.freeze(["stand","walk","attack","cheer"]);
 const ROWS = {
   "species-008": [["m001_zurumon",4,[-22,-56,27,1],[[2,41,37,10.1],[2,41,36,10.4],[2,33,35,7.3],[2,42,32,7.4]],["grounded",0,37],[-20,-25,0.71,1,250],"atlas"],[0.4942,0.6412,0.5718,0.743]],
@@ -162,7 +162,7 @@ const ROWS = {
   "species-147": [["m414_zudomon",6.107687908496732,[-165.5,-297,165.5,0],[[2,209,249,55.1],[2,236,248,49],[2,331,297,29.2],[2,227,240,52.6]],["grounded",0,249],[-35.5,-124,0.64,1,250],"reviewed"],[0.5825,0.1944,0.3079,0.739]],
   "species-184": [["m457_superstarmon",6.365612582781457,[-119,-258,119,0],[[2,213,227,46.3],[2,195,221,51.9],[2,238,233,40.3],[2,195,258,44.5]],["grounded",0,227],[109,-154,0.86,0,0],"reviewed-right"],[0.4329,0.3368,0.3576,0.792]],
   "species-148": [["m415_dagomon",3.8402457757296466,[-129.5,-226,129.5,0],[[2,173,226,49.8],[2,246,200,39.6],[2,259,215,35],[2,202,216,44.7]],["grounded",0,226],[-108.5,-80,0.5,1,250],"reviewed"],[0.4127,0.2824,0.6123,0.672]],
-  "species-149": [["m416_deathmeramon",6.6913599999999995,[-138,-298,138,0],[[2,175,283,63.2],[2,206,298,51],[2,276,284,39.9],[2,158,279,71]],["grounded",0,283],[-115,-167,0.87,1,250],"reviewed"],[0.5645,0.2161,0.4453,0.53]],
+  "species-149": [["m416_deathmeramon",6.6913599999999995,[-138,-298,138,0],[[2,175,283,63.2],[2,206,298,51],[2,276,284,39.9],[2,158,279,71]],["grounded",0,283],[96,-161,0.84,1,250],"reviewed-right"],[0.5645,0.2161,0.4453,0.53]],
   "species-150": [["m417_delumon",5.33436933223413,[-132,-265,132,0],[[2,197,232,57.1],[2,264,265,37.3],[2,230,247,45.9],[2,248,216,48.7]],["grounded",0,232],[-82,-203,0.87,0,0],"reviewed"],[0.5805,0.349,0.2956,0.797]],
   "species-151": [["m418_tonosamagekomon",4.517449228269699,[-144,-251,144,0],[[2,224,251,50.4],[2,221,239,53.6],[2,288,248,39.7],[2,233,230,52.9]],["grounded",-1,251],[124,-173,0.7,1,250],"reviewed-right"],[0.4801,0.2214,0.3776,0.703]],
   "species-152": [["m419_toriceramon",4,[-81,-133,64,5],[[2,140,129,7.8],[2,138,128,8],[2,145,98,7.6],[2,113,137,6.4]],["grounded",5,124],[-80,-59,0.63,1,250],"atlas"],[0.2474,0.2852,0.4023,0.671]],
