@@ -4027,6 +4027,98 @@
       }
     },
     {
+      "code": "UL02",
+      "speciesId": "species-222",
+      "entity": "m506_griffomon",
+      "frames": 139,
+      "clips": 111,
+      "atlasBytes": 3321250,
+      "generalHeightRatio": {
+        "median": 0.991,
+        "min": 0.763,
+        "max": 1.312
+      },
+      "generalFacingVotes": [
+        28,
+        6
+      ],
+      "generalMirror": false,
+      "generalMissing": 0,
+      "generalStateSubstitutes": 0,
+      "arenaRegistration": "per-picture support/bounds",
+      "arenaHas": {
+        "move": true,
+        "idle": true,
+        "melee": true,
+        "ranged": true,
+        "hurt": true,
+        "faint": false,
+        "sleep": false,
+        "charge": true,
+        "special": true
+      },
+      "arenaAliases": [],
+      "arenaGroundLock": {
+        "D:idle": -2.0,
+        "L:idle": -0.5,
+        "R:idle": -0.5,
+        "U:idle": -2.0
+      },
+      "faintEqualsHurtDropped": 8,
+      "atlasScales": {
+        "general": 0.6729,
+        "arena": 0.5145
+      }
+    },
+    {
+      "code": "UL04",
+      "speciesId": "species-187",
+      "entity": "m501_vikemon",
+      "frames": 121,
+      "clips": 111,
+      "atlasBytes": 1945054,
+      "generalHeightRatio": {
+        "median": 1.0,
+        "min": 0.737,
+        "max": 1.124
+      },
+      "generalFacingVotes": [
+        29,
+        1
+      ],
+      "generalMirror": false,
+      "generalMissing": 0,
+      "generalStateSubstitutes": 0,
+      "arenaRegistration": "per-picture support/bounds",
+      "arenaHas": {
+        "move": true,
+        "idle": true,
+        "melee": true,
+        "ranged": true,
+        "hurt": true,
+        "faint": false,
+        "sleep": false,
+        "charge": true,
+        "special": true
+      },
+      "arenaAliases": [],
+      "arenaGroundLock": {
+        "D:idle": -1.5,
+        "DL:idle": -1.5,
+        "DR:idle": -2.5,
+        "L:idle": -3.0,
+        "R:idle": -3.0,
+        "U:idle": -2.0,
+        "UL:idle": -2.5,
+        "UR:idle": -2.5
+      },
+      "faintEqualsHurtDropped": 8,
+      "atlasScales": {
+        "general": 0.559,
+        "arena": 1.0
+      }
+    },
+    {
       "code": "UL08",
       "speciesId": "species-191",
       "entity": "m505_grankuwagamon",
@@ -4297,6 +4389,45 @@
       "atlasScales": {
         "general": 1.0,
         "arena": 0.6676
+      }
+    },
+    {
+      "code": "UL16",
+      "speciesId": "species-197",
+      "entity": "m511_saintgargomon",
+      "frames": 146,
+      "clips": 86,
+      "atlasBytes": 3362006,
+      "generalHeightRatio": {
+        "median": 0.998,
+        "min": 0.863,
+        "max": 1.198
+      },
+      "generalFacingVotes": [
+        52,
+        0
+      ],
+      "generalMirror": false,
+      "generalMissing": 0,
+      "generalStateSubstitutes": 0,
+      "arenaRegistration": "per-picture support/bounds",
+      "arenaHas": {
+        "move": true,
+        "idle": false,
+        "melee": true,
+        "ranged": true,
+        "hurt": true,
+        "faint": false,
+        "sleep": false,
+        "charge": false,
+        "special": false
+      },
+      "arenaAliases": [],
+      "arenaGroundLock": {},
+      "faintEqualsHurtDropped": 0,
+      "atlasScales": {
+        "general": 0.3496,
+        "arena": 0.7877
       }
     },
     {
