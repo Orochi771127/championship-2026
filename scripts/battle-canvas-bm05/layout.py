@@ -3,7 +3,9 @@
 Everything is authored in **base pixels**: the pixel grid of the live play-area
 picture (bm05-southpole-polish-r2/base.webp, 1664x1088 = native 416x272 at 4x),
 so (0, 0) is the play area's top-left corner and the canvas spans
-X -320..1984, Y -576..1664 (native 576x560, play area at native offset 80,144).
+X -896..2560, Y -576..1664 (native 864x560, play area at native offset 224,144).
+The first canvas was native 576x560 (X -320..1984); a phone held sideways needs the
+extra width, so the same scene now runs on a further 576 pixels at each side.
 
 Screen and ground share one coordinate system: a point on a level surface is
 written by where it shows on screen.  Height lifts a point up the screen by
@@ -19,11 +21,11 @@ import math
 import random
 
 SCALE = 4
-NATIVE_CANVAS = (576, 560)
-NATIVE_OFFSET = (80, 144)
+NATIVE_CANVAS = (864, 560)
+NATIVE_OFFSET = (224, 144)
 BASE_W, BASE_H = 1664, 1088
-OX, OY = NATIVE_OFFSET[0] * SCALE, NATIVE_OFFSET[1] * SCALE          # 320, 576
-CANVAS_W, CANVAS_H = NATIVE_CANVAS[0] * SCALE, NATIVE_CANVAS[1] * SCALE  # 2304, 2240
+OX, OY = NATIVE_OFFSET[0] * SCALE, NATIVE_OFFSET[1] * SCALE          # 896, 576
+CANVAS_W, CANVAS_H = NATIVE_CANVAS[0] * SCALE, NATIVE_CANVAS[1] * SCALE  # 3456, 2240
 X0, Y0, X1, Y1 = -OX, -OY, CANVAS_W - OX, CANVAS_H - OY                # -320, -576, 1984, 1664
 
 ELEVATION = math.radians(52)
@@ -39,17 +41,23 @@ SUN_AT = (175.0, 70.0)
 # --------------------------------------------------------------------------- land
 
 # Top edge of the snow shelf, clockwise on screen.  Inside the play area the outline is hidden.
-LAND = [
-    (-360, 150), (-250, 174), (-160, 160), (-70, 168), (0, 148),            # north shore, left margin
-    (300, 200), (1300, 200), (1664, 60),                                      # hidden behind the play area
-    (1740, 42), (1830, 78), (1920, 52), (2030, 70),                          # north shore, right margin
-    (2030, 1500),
-    (1880, 1474), (1760, 1502), (1640, 1540), (1500, 1522), (1360, 1492),     # south shelf edge
+NORTH_WEST = [                                                               # north shore with an inlet, left of the play area
+    (-960, 128), (-880, 150), (-820, 290), (-770, 410), (-690, 446), (-610, 404), (-566, 268), (-500, 176),
+    (-420, 152), (-360, 150), (-250, 174), (-160, 160), (-70, 168), (0, 148),
+]
+HIDDEN = [(300, 200), (1300, 200), (1664, 60)]                                # behind the play area
+NORTH_EAST = [                                                               # north shore, right of the play area
+    (1740, 42), (1830, 78), (1920, 52), (2030, 70), (2150, 96), (2280, 70), (2400, 104), (2520, 82), (2620, 98),
+]
+SOUTH = [                                                                    # the shelf edge that faces the camera, east to west
+    (2620, 1492), (2480, 1522), (2340, 1496), (2200, 1530), (2060, 1506),
+    (1880, 1474), (1760, 1502), (1640, 1540), (1500, 1522), (1360, 1492),
     (1220, 1506), (1080, 1540), (940, 1526), (800, 1492), (660, 1482),
     (520, 1500), (380, 1534), (240, 1520), (100, 1482), (-40, 1472),
-    (-180, 1500), (-360, 1530),
+    (-180, 1500), (-360, 1530), (-500, 1502), (-640, 1528), (-780, 1496), (-960, 1516),
 ]
-SOUTH_EDGE = (12, 30)                # LAND[12..29] is the shelf edge that faces the camera
+LAND = NORTH_WEST + HIDDEN + NORTH_EAST + SOUTH
+SOUTH_EDGE = (len(LAND) - len(SOUTH), len(LAND))
 
 # --------------------------------------------------------------------------- ice (bergs and crags)
 
@@ -132,6 +140,27 @@ FREE_ICE = [
     # snow shelf, south
     ('crag-s1', 'crag', H_LAND, 520, 1370, 90, 1.0, 2.2, 61),
     ('crag-s2', 'crag', H_LAND, 1480, 1380, 100, 1.1, 2.4, 62),
+    # --- the wider canvas: further west
+    ('berg-n7', 'berg', 0.0, -620, -330, 140, 1.0, 1.32, 71),
+    ('berg-n8', 'berg', 0.0, -820, -80, 95, 0.75, 1.07, 72),
+    ('berg-n9', 'berg', 0.0, -470, -120, 78, 0.6, 0.92, 73),
+    ('berg-n13', 'berg', 0.0, -690, 310, 52, 0.45, 0.7, 74),      # in the inlet
+    ('berg-s4', 'berg', 0.0, -620, 1652, 80, 0.6, 0.92, 75),
+    ('crag-w4', 'crag', H_LAND, -490, 580, 108, 1.3, 2.8, 76),
+    ('crag-w5', 'crag', H_LAND, -810, 650, 76, 1.0, 2.0, 77),
+    ('crag-w6', 'crag', H_LAND, -560, 1000, 136, 1.5, 3.3, 78),
+    ('crag-w7', 'crag', H_LAND, -840, 1180, 95, 1.1, 2.3, 79),
+    # --- the wider canvas: further east
+    ('berg-n10', 'berg', 0.0, 2250, -260, 150, 1.1, 1.42, 81),
+    ('berg-n11', 'berg', 0.0, 2460, -480, 100, 0.8, 1.12, 82),
+    ('berg-n12', 'berg', 0.0, 2090, -100, 82, 0.65, 0.97, 83),
+    ('berg-s5', 'berg', 0.0, 2330, 1655, 90, 0.65, 0.97, 84),
+    ('crag-e4', 'crag', H_LAND, 2190, 300, 105, 1.2, 2.6, 85),
+    ('crag-e5', 'crag', H_LAND, 2440, 440, 132, 1.5, 3.2, 86),
+    ('crag-e6', 'crag', H_LAND, 2230, 760, 100, 1.2, 2.5, 87),
+    ('crag-e7', 'crag', H_LAND, 2470, 900, 72, 0.95, 1.9, 88),
+    ('crag-e8', 'crag', H_LAND, 2200, 1180, 110, 1.3, 2.8, 89),
+    ('crag-e9', 'crag', H_LAND, 2450, 1290, 70, 0.9, 1.8, 90),
 ]
 
 # Small flat floes on the sea: (x, y, radius, seed).
@@ -139,6 +168,8 @@ FLOES = [
     (-60, -480, 34, 1), (700, -230, 30, 2), (840, -500, 40, 3), (1560, -250, 36, 5),
     (1900, -520, 38, 6), (1250, -180, 22, 8), (700, 1630, 34, 9), (1500, 1650, 30, 10),
     (60, 1640, 28, 11), (-280, -200, 30, 13),
+    (-520, -500, 36, 21), (-860, -420, 30, 22), (-380, -30, 24, 23), (2080, -420, 34, 24), (2480, -180, 30, 25),
+    (2330, -60, 22, 26), (-420, 1640, 26, 27), (2100, 1640, 30, 28), (2520, 1620, 24, 29), (-840, 1630, 28, 30),
 ]
 
 # --------------------------------------------------------------------------- snow mounds
@@ -155,6 +186,13 @@ MOUNDS = [
     dict(name='mound-s3', z0=H_LAND, lobes=[(820, 1360, 120, 60, 1.9)]),
     dict(name='mound-s4', z0=H_LAND, lobes=[(1740, 1330, 120, 65, 2.1), (1860, 1370, 80, 45, 1.4)]),
     dict(name='mound-s5', z0=H_LAND, lobes=[(-160, 1380, 120, 60, 1.9)]),
+    dict(name='mound-w2', z0=H_LAND, lobes=[(-680, 800, 130, 70, 2.2), (-770, 850, 90, 50, 1.5)]),
+    dict(name='mound-w3', z0=H_LAND, lobes=[(-650, 1320, 140, 70, 2.3)]),
+    dict(name='mound-w4', z0=H_LAND, lobes=[(-890, 470, 68, 40, 1.3)]),
+    dict(name='mound-e2', z0=H_LAND, lobes=[(2330, 560, 120, 65, 2.0), (2420, 610, 80, 45, 1.4)]),
+    dict(name='mound-e3', z0=H_LAND, lobes=[(2100, 950, 110, 60, 1.9)]),
+    dict(name='mound-e4', z0=H_LAND, lobes=[(2420, 1100, 100, 55, 1.7)]),
+    dict(name='mound-e5', z0=H_LAND, lobes=[(2300, 1380, 130, 65, 2.1)]),
 ]
 
 # --------------------------------------------------------------------------- rocks
@@ -165,6 +203,9 @@ ROCKS = [
     (-120, 500, 30, 0.6, 2), (-150, 1090, 34, 0.7, 3), (-60, 1150, 26, 0.5, 4), (1790, 560, 30, 0.6, 5),
     (1940, 1010, 32, 0.65, 6), (1760, 1180, 26, 0.5, 7), (420, 1190, 30, 0.6, 8), (700, 1230, 24, 0.5, 9),
     (1040, 1400, 34, 0.7, 10), (1600, 1230, 28, 0.55, 11), (-300, 1300, 30, 0.6, 12), (1960, 1420, 28, 0.55, 13),
+    (-380, 760, 28, 0.55, 21), (-700, 1090, 32, 0.65, 22), (-900, 980, 26, 0.5, 23), (-520, 1360, 28, 0.55, 24),
+    (-760, 520, 24, 0.45, 25), (2080, 660, 30, 0.6, 26), (2350, 1000, 28, 0.55, 27), (2500, 700, 26, 0.5, 28),
+    (2060, 1320, 30, 0.6, 29), (2540, 1180, 24, 0.45, 30),
 ]
 
 # The dark flat slab the bottom edge cuts (screen outline, level with the snow).
