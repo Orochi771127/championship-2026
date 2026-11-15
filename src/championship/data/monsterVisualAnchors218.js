@@ -14,7 +14,7 @@
 //   muzzle  [x, y, heightRatio, releaseIndex, releaseMs]
 //   head    [headFocusX, headFocusY, headSafeScale, opaqueInHead]
 export const MONSTER_VISUAL_ANCHORS_SCHEMA = 1;
-export const MONSTER_VISUAL_ANCHORS_SUMMARY = Object.freeze({"species":226,"withMotion":226,"withHead":226,"motionErrors":[],"art":{"atlas":45,"reviewed":134,"reviewed-right":47},"maxCellAspect":2.02,"multiCellPages":226,"muzzleInUpperBody":226,"stances":{"grounded":203,"hovering":3,"tail-below":20},"headsOnBody":223,"headsMostlyDrawn":226});
+export const MONSTER_VISUAL_ANCHORS_SUMMARY = Object.freeze({"species":226,"withMotion":226,"withHead":226,"motionErrors":[],"art":{"atlas":44,"reviewed":135,"reviewed-right":47},"maxCellAspect":2.02,"multiCellPages":226,"muzzleInUpperBody":226,"stances":{"grounded":204,"hovering":3,"tail-below":19},"headsOnBody":223,"headsMostlyDrawn":226});
 const ACTION_IDS = Object.freeze(["stand","walk","attack","cheer"]);
 const ROWS = {
   "species-008": [["m001_zurumon",4,[-22,-56,27,1],[[2,41,37,10.1],[2,41,36,10.4],[2,33,35,7.3],[2,42,32,7.4]],["grounded",0,37],[-20,-25,0.71,1,250],"atlas"],[0.4942,0.6412,0.5718,0.743]],
@@ -197,7 +197,7 @@ const ROWS = {
   "species-179": [["m452_weregarurumon_vi",7.362633107454018,[-133,-256,133,0],[[2,221,256,57.3],[2,242,244,54.9],[2,266,227,53.7],[2,261,241,51.5]],["grounded",0,256],[-104,-175,0.81,1,250],"reviewed"],[0.713,0.2848,0.294,0.851]],
   "species-177": [["m450_warumonzaemon",4,[-63,-115,75,9],[[2,95,123,8.1],[2,98,123,7.8],[2,128,112,6.4],[2,138,115,5.8]],["grounded",8,115],[-30,-89,0.87,1,250],"atlas"],[0.4286,0.3472,0.2905,0.942]],
   "species-220": [["m538_apollomon",13.091819852941175,[-323,-850,323,0],[[2,217,291,27.4],[2,646,850,6.1],[2,276,294,21.4],[2,236,292,25.1]],["grounded",0,291],[-124,-192,0.65,1,250],"reviewed"],[0.5761,0.1497,0.276,0.684]],
-  "species-222": [["m540_imperialdramon_fm",4,[-227,-325,261,22],[null,null,null,[2,488,347,22]],["tail-below",19,325],[-138,-253,0.88,0,0],"atlas"],[0.3681,0.4907,0.5602,0.714]],
+  "species-222": [["m540_imperialdramon_fm",14.37648,[-356.68,-472.79,356.32,1.1499999999999773],[[2,641,473,12.3],[2,713,434,12],[2,434,279,20.4],[2,326,307,37.2]],["grounded",0.20999999999997954,472.79],[-182.52999999999997,-141,0.57,1,250],"reviewed"],[0.3681,0.4907,0.5602,0.714]],
   "species-187": [["m501_vikemon",4,[-214,-168,88,9],[[2,125,136,8],[2,150,134,6.8],[2,259,176,3.6],[2,150,138,5.1]],["grounded",8,128],[-198,-83,0.8,1,250],"atlas"],[0.4722,0.2292,0.2963,0.801]],
   "species-188": [["m502_valkyrimon",4,[-212,-196,150,15],[[2,193,211,8.1],[2,220,193,7.8],[2,344,198,5.5],[2,256,184,13.7]],["tail-below",12,196],[-192,-105,0.6,1,250],"atlas"],[0.4907,0.1785,0.2697,0.612]],
   "species-189": [["m503_warglaymon",4,[-308,-278,186,9],[[2,263,214,8.3],[2,239,223,8.7],[2,385,282,4.3],[2,255,218,8]],["tail-below",9,205],[-229,-199,0.83,1,267],"atlas"],[0.3218,0.1948,0.3681,0.703]],
