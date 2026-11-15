@@ -38,7 +38,9 @@ test('the BM05 canvas sits round the unchanged play area', () => {
 
 test('every wired canvas matches its own record and stays small enough for a phone', () => {
   const ids = Object.keys(BATTLE_FIELD_CANVASES);
-  assert.ok(ids.length >= 4, 'BM01, BM02, BM05 and BM06 at least');
+  // Every live arena (battle-original.v1.json) has its canvas (Owner 2026-11-15: 「把所有地圖都畫得更寬」).
+  const live = JSON.parse(fs.readFileSync(new URL('../assets/production/public-runtime/metadata/battle-original.v1.json', import.meta.url), 'utf8')).fields.map(f => f.fieldId);
+  assert.deepEqual([...ids].sort(), [...live].sort());
   for (const id of ids) {
     const record = BATTLE_FIELD_CANVASES[id], folder = new URL(`../assets/production/battle/original-opus-canvas-r1/fields/${id}/`, import.meta.url);
     const meta = JSON.parse(fs.readFileSync(new URL('canvas.json', folder), 'utf8'));

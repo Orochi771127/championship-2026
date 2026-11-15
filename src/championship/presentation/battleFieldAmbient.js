@@ -279,7 +279,11 @@ export const BATTLE_FIELD_CANVASES = Object.freeze({
   field_bm04_01: wideCanvas("field_bm04_01", { waterMask: "water-mask-canvas.webp" }),
   field_bm05_01: wideCanvas("field_bm05_01", { seaMask: "sea-mask-canvas.webp" }),
   field_bm06_01: wideCanvas("field_bm06_01"),
-  field_bm08_01: wideCanvas("field_bm08_01")
+  field_bm07_01: wideCanvas("field_bm07_01"),
+  field_bm08_01: wideCanvas("field_bm08_01"),
+  field_bm09_01: wideCanvas("field_bm09_01"),
+  field_bm10_01: wideCanvas("field_bm10_01"),
+  field_bm11_01: wideCanvas("field_bm11_01")
 });
 /** The canvas picture's rectangle in the play area's own coordinates, or null. */
 export function battleFieldCanvasRect(fieldId) {
