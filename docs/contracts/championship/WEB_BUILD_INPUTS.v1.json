@@ -765,9 +765,14 @@
     "assets/production/battle/menu-cube-v1/title-match.png",
     "assets/production/battle/original-opus-canvas-r1/fields/field_bm01_01/frame-00.webp",
     "assets/production/battle/original-opus-canvas-r1/fields/field_bm02_01/frame-00.webp",
+    "assets/production/battle/original-opus-canvas-r1/fields/field_bm03_01/frame-00.webp",
+    "assets/production/battle/original-opus-canvas-r1/fields/field_bm03_01/lava-mask-canvas.webp",
+    "assets/production/battle/original-opus-canvas-r1/fields/field_bm04_01/frame-00.webp",
+    "assets/production/battle/original-opus-canvas-r1/fields/field_bm04_01/water-mask-canvas.webp",
     "assets/production/battle/original-opus-canvas-r1/fields/field_bm05_01/frame-00.webp",
     "assets/production/battle/original-opus-canvas-r1/fields/field_bm05_01/sea-mask-canvas.webp",
     "assets/production/battle/original-opus-canvas-r1/fields/field_bm06_01/frame-00.webp",
+    "assets/production/battle/original-opus-canvas-r1/fields/field_bm08_01/frame-00.webp",
     "assets/production/battle/shared-ambient-r2/cloud-shadow-tile.webp",
     "assets/production/battle/shared-ambient-r2/gust-streak-tile.webp",
     "assets/production/cage/licensed-runtime-v1/fields/field_cm01_01/frame-00.png",
@@ -9891,6 +9896,22 @@
         "sha256": "1082097d31773e14c9679ed98b333468e87eb59a25da02b2df52453095f87be4"
       },
       {
+        "path": "assets/production/battle/original-opus-canvas-r1/fields/field_bm03_01/frame-00.webp",
+        "sha256": "795d390d6d0f77449819f8d5097c16aa956774475f193c5256371c35fc092978"
+      },
+      {
+        "path": "assets/production/battle/original-opus-canvas-r1/fields/field_bm03_01/lava-mask-canvas.webp",
+        "sha256": "e7d4bafe70f4b52147502cd60141e5311a76385db9eba6b985a8e3b035c02f84"
+      },
+      {
+        "path": "assets/production/battle/original-opus-canvas-r1/fields/field_bm04_01/frame-00.webp",
+        "sha256": "6581ff938c9833ea2920bac5f6aea8af2b4a79c0a9013156605dddc341692d0e"
+      },
+      {
+        "path": "assets/production/battle/original-opus-canvas-r1/fields/field_bm04_01/water-mask-canvas.webp",
+        "sha256": "c5f9348f70d43e40861f20239d19389f2ec4e2d27a7dcd6b6d866405b2167613"
+      },
+      {
         "path": "assets/production/battle/original-opus-canvas-r1/fields/field_bm05_01/frame-00.webp",
         "sha256": "9f39a981af51c272bbd8452b403f39542a3848e84eea9327703bf91d5950ec96"
       },
@@ -9901,6 +9922,10 @@
       {
         "path": "assets/production/battle/original-opus-canvas-r1/fields/field_bm06_01/frame-00.webp",
         "sha256": "3e34d137823184d3bff1617a72efba9b30169e6a8c51870dfbefc2cb899261f4"
+      },
+      {
+        "path": "assets/production/battle/original-opus-canvas-r1/fields/field_bm08_01/frame-00.webp",
+        "sha256": "0c896b3a49672db03e160840cb7f14345ec5323ab10080f30df8814bc8d74459"
       },
       {
         "path": "assets/production/battle/shared-ambient-r2/cloud-shadow-tile.webp",
@@ -41388,7 +41413,7 @@
       },
       {
         "path": "src/championship/presentation/battleFieldAmbient.js",
-        "sha256": "3907ba2d5bd2172ba14bd1e16a9126e543c22caa8c2c2d8084afec5e2adb8784"
+        "sha256": "363810a9347518fa60fbcfabcc15c5309b5aab9991f553e897618e051df49f8f"
       },
       {
         "path": "src/championship/presentation/battleFocusViewport.js",

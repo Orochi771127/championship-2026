@@ -266,15 +266,20 @@ export function waterLookup(texture, scale = 1) {
 // a phone held sideways sees a band five times wider than tall, and the shot pulls back that far.
 const CANVAS_ROOT = "assets/production/battle/original-opus-canvas-r1/fields";
 /** One 3456x2240 canvas (native 864x560 at 4x) round a play area at world (896, 576). */
-const wideCanvas = (fieldId, { seaMask = null } = {}) => Object.freeze({
-  src: `${CANVAS_ROOT}/${fieldId}/frame-00.webp`, ...(seaMask ? { seaMask: `${CANVAS_ROOT}/${fieldId}/${seaMask}` } : {}),
+const wideCanvas = (fieldId, masks = {}) => Object.freeze({
+  src: `${CANVAS_ROOT}/${fieldId}/frame-00.webp`,
+  // The ring's own sea / water / lava (half size, alpha, centre empty): the field's moving surface continues on it.
+  ...Object.fromEntries(Object.entries(masks).map(([kind, file]) => [kind, `${CANVAS_ROOT}/${fieldId}/${file}`])),
   widthPx: 3456, heightPx: 2240, offsetX: 896, offsetY: 576, rightsStatus: "PROJECT_ORIGINAL"
 });
 export const BATTLE_FIELD_CANVASES = Object.freeze({
   field_bm01_01: wideCanvas("field_bm01_01"),
   field_bm02_01: wideCanvas("field_bm02_01"),
+  field_bm03_01: wideCanvas("field_bm03_01", { lavaMask: "lava-mask-canvas.webp" }),
+  field_bm04_01: wideCanvas("field_bm04_01", { waterMask: "water-mask-canvas.webp" }),
   field_bm05_01: wideCanvas("field_bm05_01", { seaMask: "sea-mask-canvas.webp" }),
-  field_bm06_01: wideCanvas("field_bm06_01")
+  field_bm06_01: wideCanvas("field_bm06_01"),
+  field_bm08_01: wideCanvas("field_bm08_01")
 });
 /** The canvas picture's rectangle in the play area's own coordinates, or null. */
 export function battleFieldCanvasRect(fieldId) {
@@ -313,7 +318,8 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   // The canvas lies under the play area's own picture, which stays exactly as it was. A canvas that
   // fails to load leaves the arena as it always looked.
   const canvasRecord = BATTLE_FIELD_CANVASES[art.field.fieldId] ?? null;
-  let canvasRect = null, canvasSources = [], canvasSeaMask = null;
+  let canvasRect = null, canvasSources = [], canvasSeaMask = null, canvasWaterMask = null, canvasLavaMask = null;
+  const canvasTwins = [];
   if (canvasRecord) {
     try {
       const picture = linear(await PIXI.Assets.load(canvasRecord.src));
@@ -324,9 +330,10 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       sprite.width = canvasRecord.widthPx; sprite.height = canvasRecord.heightPx;
       root.addChild(sprite);
       canvasRect = battleFieldCanvasRect(art.field.fieldId);
-      if (canvasRecord.seaMask && ambient.sea && ambient.waves) {
-        try { canvasSeaMask = linear(await PIXI.Assets.load(canvasRecord.seaMask)); canvasSources.push(canvasRecord.seaMask); } catch { canvasSeaMask = null; }
-      }
+      const loadMask = async src => { try { const t = linear(await PIXI.Assets.load(src)); canvasSources.push(src); return t; } catch { return null; } };
+      if (canvasRecord.seaMask && ambient.sea && ambient.waves) canvasSeaMask = await loadMask(canvasRecord.seaMask);
+      if (canvasRecord.waterMask && ambient.waterMask && ambient.caustics) canvasWaterMask = await loadMask(canvasRecord.waterMask);
+      if (canvasRecord.lavaMask && ambient.lava && ambient.flow) canvasLavaMask = await loadMask(canvasRecord.lavaMask);
     } catch (error) {
       console.warn(`CHAMPIONSHIP_BATTLE_CANVAS_FALLBACK: ${error.message}`);
       canvasRect = null;
@@ -355,7 +362,11 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       const t = maskedTiling(PIXI, renderer, { tile: tex(ambient.caustics.src), mask: maskTexture, rect, tileScale: scale,
         tint: 0xe9fff8, alpha, label: "caustics" });
       waterFx.addChild(t.displayObject);
-      return { t, vx, vy, base: alpha };
+      // The same shimmer over the canvas's own water, in one pattern with the lagoon's.
+      const twin = canvasWaterMask ? maskedTiling(PIXI, renderer, { tile: tex(ambient.caustics.src), mask: canvasWaterMask, rect: canvasRect,
+        tileScale: scale, tint: 0xe9fff8, alpha, label: "caustics (canvas)" }) : null;
+      if (twin) { waterFx.addChild(twin.displayObject); canvasTwins.push(twin); }
+      return { t, twin, vx, vy, base: alpha };
     });
     glints = new PIXI.Graphics({ label: "sun glints" });
     glints.blendMode = "add";
@@ -386,6 +397,14 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       tileScale: 1.6, tint: 0xffb347, alpha: 0.5, label: "molten lava fx" });
     lavaFx = flowLayer.displayObject;
     root.addChild(lavaFx);
+  }
+  // The flowing glow over the canvas's own lava, in one pattern with the field's.
+  let canvasFlowLayer = null;
+  if (flowLayer && canvasLavaMask) {
+    canvasFlowLayer = maskedTiling(PIXI, renderer, { tile: tex(ambient.flow.src), mask: canvasLavaMask, rect: canvasRect,
+      tileScale: 1.6, tint: 0xffb347, alpha: 0.5, label: "molten lava fx (canvas)" });
+    canvasTwins.push(canvasFlowLayer);
+    root.addChild(canvasFlowLayer.displayObject);
   }
   // --- BM03 lava states: crust and reheating crust revealed per cell.
   let crust = null;
@@ -779,6 +798,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     if (!reducedMotion) for (const c of causticLayers) {
       c.t.tilePosition.set(c.vx * s, c.vy * s);
       c.t.alpha = c.base * (0.85 + 0.15 * Math.sin(s * 0.7 + c.vx));
+      if (c.twin) { c.twin.tilePosition.set(c.vx * s - canvasRect.x, c.vy * s - canvasRect.y); c.twin.alpha = c.t.alpha; }
     }
     if (!reducedMotion) {
       for (const r of rotors) r.sp.rotation += r.speed * dt / 1000;
@@ -821,6 +841,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       smokeLayer.circle(p.px + Math.sin(k * 5 + p.life) * 10, p.py - 70 * k, 8 + 22 * k).fill({ color: 0x3a3550, alpha: 0.28 * Math.sin(k * Math.PI) });
     }
     if (flowLayer && !reducedMotion) { flowLayer.tilePosition.set(-6 * s, 4 * s); flowLayer.alpha = 0.42 + 0.14 * Math.sin(s * 1.1); }
+    if (canvasFlowLayer && !reducedMotion) { canvasFlowLayer.tilePosition.set(-6 * s - canvasRect.x, 4 * s - canvasRect.y); canvasFlowLayer.alpha = flowLayer.alpha; }
     emberLayer.clear();
     for (const e of embers) {
       e.age += dt;
@@ -921,6 +942,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       foreground.destroy({ children: true });
       root.destroy({ children: true });
       for (const layer of [flowLayer, waveLayer, canvasWaveLayer, gust, scan, ...causticLayers.map(c => c.t)]) layer?.destroy();
+      for (const layer of canvasTwins) layer.destroy();
       await art.dispose();
       await Promise.allSettled(canvasSources.map(src => PIXI.Assets.unload(src)));
       for (const t of textures.values()) t?.source?.removeAllListeners?.("change");

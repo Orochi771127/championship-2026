@@ -49,7 +49,7 @@ test('every wired canvas matches its own record and stays small enough for a pho
     assert.equal(record.rightsStatus, 'PROJECT_ORIGINAL', id);
     const bytes = fs.statSync(new URL('frame-00.webp', folder)).size;
     assert.ok(bytes <= 520_000, `${id} picture ${bytes} bytes`);
-    if (record.seaMask) assert.ok(fs.existsSync(new URL(`../${record.seaMask}`, import.meta.url)), `${id} sea mask`);
+    for (const kind of ['seaMask', 'waterMask', 'lavaMask']) if (record[kind]) assert.ok(fs.existsSync(new URL(`../${record[kind]}`, import.meta.url)), `${id} ${kind}`);
   }
 });
 
