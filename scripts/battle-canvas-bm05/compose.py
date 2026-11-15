@@ -44,6 +44,19 @@ SLOPE_WINDOW = 5    # half width of the block matched along the edge
 GRAIN_SEED = 20261112
 
 
+def keep_wiring(path, record):
+    """Carry over what whoever wires a canvas wrote into its record: the status, and any field this script does not write."""
+    try:
+        old = json.loads(Path(path).read_text(encoding='utf8'))
+    except (OSError, ValueError):
+        return record
+    if old.get('status'):
+        record['status'] = old['status']
+    for key, value in old.items():
+        record.setdefault(key, value)
+    return record
+
+
 def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -294,7 +307,8 @@ def main():
         'generativeAi': None,
         'status': 'LOCAL_PILOT_NOT_WIRED_NOT_PUBLISHED',
     }
-    (out / 'canvas.json').write_text(json.dumps(record, indent=2) + '\n', encoding='utf8')
+    record = keep_wiring(out / 'canvas.json', record)
+    (out / 'canvas.json').write_bytes((json.dumps(record, indent=2) + '\n').encode('utf8'))      # LF on every platform
     print('CANVAS_COMPOSED', json.dumps({'bytes': record['frame']['bytes'], 'centreDiff': master_delta,
                                          'centreDiffEncoded': record['centreDiffEncoded'], 'grainStd': strength}))
 

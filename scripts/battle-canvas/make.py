@@ -30,6 +30,19 @@ SIZE_BUDGET = 500_000      # bytes wanted for frame-00.webp
 HERE = 'scripts/battle-canvas'
 
 
+def keep_wiring(path, record):
+    """Carry over what whoever wires a canvas wrote into its record: the status, and any field this script does not write."""
+    try:
+        old = json.loads(Path(path).read_text(encoding='utf8'))
+    except (OSError, ValueError):
+        return record
+    if old.get('status'):
+        record['status'] = old['status']
+    for key, value in old.items():
+        record.setdefault(key, value)
+    return record
+
+
 def save_rgb(array, path):
     Image.fromarray(np.clip(array + .5, 0, 255).astype(np.uint8)).save(path)
 
@@ -145,7 +158,8 @@ def step_join(arena, work, out, blend_rel, evidence, quality):
         'generativeAi': None,
         'status': 'LOCAL_NOT_WIRED_NOT_PUBLISHED',
     }
-    (out / 'canvas.json').write_text(json.dumps(info, indent=2) + '\n', encoding='utf8')
+    info = keep_wiring(out / 'canvas.json', info)
+    (out / 'canvas.json').write_bytes((json.dumps(info, indent=2) + '\n').encode('utf8'))      # LF on every platform
     print('CANVAS_JOINED', json.dumps({'field': arena.FIELD_ID, 'bytes': info['frame']['bytes'], 'centreDiff': info['centreDiff'],
                                        'centreDiffEncoded': info['centreDiffEncoded']}))
     if evidence:
