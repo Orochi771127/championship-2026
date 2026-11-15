@@ -29,7 +29,9 @@ test('a moving body never holds one drawing where the original alternates drawin
   const native=new Map(json(runtimePath).sides.main.animations.map(a=>[a.id,a])),doc=manifest(entry);
   for(const id of LOCOMOTION){
    const cells=new Set((native.get(id)?.frames??[]).map(f=>f.cell)),binding=reviewedNumericClip(doc,'main',id);
-   if(binding&&cells.size>1&&new Set(binding.clip.frames.map(f=>f.assetId)).size===1)found.push(`${entry.displayCode}:${id}`);
+   // A route whose original cells are transparent stays transparent (two-set intake 2026-11-12, e.g. UL20/UL30 bound walks).
+   const blank=binding?.clip.frames.every(f=>String(doc.frames[f.assetId]?.sourceSize)==='1,1');
+   if(binding&&cells.size>1&&!blank&&new Set(binding.clip.frames.map(f=>f.assetId)).size===1)found.push(`${entry.displayCode}:${id}`);
   }
  }
  assert.deepEqual(found,KNOWN_SINGLE_DRAWING_MAIN12.map(code=>`${code}:12`));
