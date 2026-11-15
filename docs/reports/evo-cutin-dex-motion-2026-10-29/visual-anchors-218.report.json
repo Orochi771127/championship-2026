@@ -6,17 +6,17 @@
   "withHead": 226,
   "motionErrors": [],
   "art": {
-   "atlas": 44,
-   "reviewed": 135,
+   "atlas": 42,
+   "reviewed": 137,
    "reviewed-right": 47
   },
   "maxCellAspect": 2.02,
   "multiCellPages": 226,
   "muzzleInUpperBody": 226,
   "stances": {
-   "grounded": 204,
+   "grounded": 205,
    "hovering": 3,
-   "tail-below": 19
+   "tail-below": 18
   },
   "headsOnBody": 223,
   "headsMostlyDrawn": 226
@@ -16679,57 +16679,57 @@
    "speciesId": "species-187",
    "motion": {
     "entityId": "m501_vikemon",
-    "art": "atlas",
-    "density": 4,
+    "art": "reviewed",
+    "density": 5.333333333333333,
     "bounds": {
-     "left": -214,
-     "top": -168,
-     "right": 88,
-     "bottom": 9
+     "left": -169.06,
+     "top": -303.22,
+     "right": 168.94,
+     "bottom": 0.39999999999997726
     },
     "actions": {
      "stand": {
       "sequence": 0,
       "frameCount": 2,
-      "frameWidth": 125,
-      "frameHeight": 136,
-      "cellAspect": 0.92,
-      "pageWidth": 944,
-      "pageHeight": 144,
-      "cellsPerPage": 8,
+      "frameWidth": 255,
+      "frameHeight": 291,
+      "cellAspect": 0.88,
+      "pageWidth": 2046,
+      "pageHeight": 1767,
+      "cellsPerPage": 48.7,
       "durationMs": 883
      },
      "walk": {
       "sequence": 2,
       "frameCount": 2,
-      "frameWidth": 150,
-      "frameHeight": 134,
-      "cellAspect": 1.12,
-      "pageWidth": 944,
-      "pageHeight": 144,
-      "cellsPerPage": 6.8,
+      "frameWidth": 263,
+      "frameHeight": 285,
+      "cellAspect": 0.92,
+      "pageWidth": 2046,
+      "pageHeight": 1767,
+      "cellsPerPage": 48.2,
       "durationMs": 450
      },
      "attack": {
       "sequence": 7,
       "frameCount": 2,
-      "frameWidth": 259,
-      "frameHeight": 176,
-      "cellAspect": 1.47,
-      "pageWidth": 864,
-      "pageHeight": 192,
-      "cellsPerPage": 3.6,
+      "frameWidth": 338,
+      "frameHeight": 275,
+      "cellAspect": 1.23,
+      "pageWidth": 2046,
+      "pageHeight": 1767,
+      "cellsPerPage": 38.9,
       "durationMs": 867
      },
      "cheer": {
       "sequence": 33,
       "frameCount": 2,
-      "frameWidth": 150,
-      "frameHeight": 138,
-      "cellAspect": 1.09,
-      "pageWidth": 736,
-      "pageHeight": 144,
-      "cellsPerPage": 5.1,
+      "frameWidth": 260,
+      "frameHeight": 303,
+      "cellAspect": 0.86,
+      "pageWidth": 2046,
+      "pageHeight": 1767,
+      "cellsPerPage": 45.9,
       "durationMs": 1133
      }
     },
@@ -16737,14 +16737,14 @@
      "x": 0,
      "y": 0,
      "stance": "grounded",
-     "lowestPixel": 8,
-     "lowestPixelX": 42,
-     "visualHeight": 128
+     "lowestPixel": -0.009999999999990905,
+     "lowestPixelX": 87.7,
+     "visualHeight": 291.01
     },
     "muzzleSocket": {
-     "x": -198,
-     "y": -83,
-     "heightRatio": 0.8,
+     "x": -157.06,
+     "y": -189,
+     "heightRatio": 0.86,
      "releaseIndex": 1,
      "releaseMs": 250
     }
@@ -17783,74 +17783,74 @@
    "speciesId": "species-197",
    "motion": {
     "entityId": "m511_saintgargomon",
-    "art": "atlas",
-    "density": 4,
+    "art": "reviewed",
+    "density": 22.744940476190475,
     "bounds": {
-     "left": -266,
-     "top": -375,
-     "right": 292,
-     "bottom": 66
+     "left": -146.11,
+     "top": -463.32,
+     "right": 146.06,
+     "bottom": 0.5600000000000023
     },
     "actions": {
      "stand": {
       "sequence": 0,
       "frameCount": 2,
-      "frameWidth": 403,
-      "frameHeight": 405,
-      "cellAspect": 1,
-      "pageWidth": 1808,
-      "pageHeight": 768,
-      "cellsPerPage": 8.5,
+      "frameWidth": 292,
+      "frameHeight": 447,
+      "cellAspect": 0.65,
+      "pageWidth": 2031,
+      "pageHeight": 1924,
+      "cellsPerPage": 29.9,
       "durationMs": 883
      },
      "walk": {
       "sequence": 2,
-      "frameCount": 2,
-      "frameWidth": 470,
-      "frameHeight": 360,
-      "cellAspect": 1.31,
-      "pageWidth": 1808,
-      "pageHeight": 768,
-      "cellsPerPage": 8.2,
+      "frameCount": 8,
+      "frameWidth": 221,
+      "frameHeight": 286,
+      "cellAspect": 0.77,
+      "pageWidth": 2031,
+      "pageHeight": 1924,
+      "cellsPerPage": 61.8,
       "durationMs": 450
      },
      "attack": {
       "sequence": 7,
       "frameCount": 2,
-      "frameWidth": 558,
-      "frameHeight": 374,
-      "cellAspect": 1.49,
-      "pageWidth": 1552,
-      "pageHeight": 720,
-      "cellsPerPage": 5.4,
+      "frameWidth": 91,
+      "frameHeight": 198,
+      "cellAspect": 0.46,
+      "pageWidth": 2031,
+      "pageHeight": 1924,
+      "cellsPerPage": 216.9,
       "durationMs": 867
      },
      "cheer": {
       "sequence": 33,
       "frameCount": 2,
-      "frameWidth": 458,
-      "frameHeight": 414,
-      "cellAspect": 1.11,
-      "pageWidth": 2000,
-      "pageHeight": 784,
-      "cellsPerPage": 8.3,
+      "frameWidth": 276,
+      "frameHeight": 463,
+      "cellAspect": 0.6,
+      "pageWidth": 2031,
+      "pageHeight": 1924,
+      "cellsPerPage": 30.6,
       "durationMs": 1133
      }
     },
     "footAnchor": {
      "x": 0,
      "y": 0,
-     "stance": "tail-below",
-     "lowestPixel": 17,
-     "lowestPixelX": -129.5,
-     "visualHeight": 339
+     "stance": "grounded",
+     "lowestPixel": -0.5400000000000205,
+     "lowestPixelX": 62.2,
+     "visualHeight": 446.54
     },
     "muzzleSocket": {
-     "x": -179,
-     "y": -194,
-     "heightRatio": 0.59,
-     "releaseIndex": 0,
-     "releaseMs": 0
+     "x": -44.43000000000001,
+     "y": -106,
+     "heightRatio": 0.54,
+     "releaseIndex": 1,
+     "releaseMs": 250
     }
    },
    "cutinHeadFrame": {
