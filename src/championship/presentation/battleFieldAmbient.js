@@ -264,12 +264,17 @@ export function waterLookup(texture, scale = 1) {
 // On an upright phone the old picture let the shot see 49 % of the arena's width at most.
 // Offsets are world pixels from the canvas's corner to the play area's corner. 3456 wide (2026-11-15):
 // a phone held sideways sees a band five times wider than tall, and the shot pulls back that far.
+const CANVAS_ROOT = "assets/production/battle/original-opus-canvas-r1/fields";
+/** One 3456x2240 canvas (native 864x560 at 4x) round a play area at world (896, 576). */
+const wideCanvas = (fieldId, { seaMask = null } = {}) => Object.freeze({
+  src: `${CANVAS_ROOT}/${fieldId}/frame-00.webp`, ...(seaMask ? { seaMask: `${CANVAS_ROOT}/${fieldId}/${seaMask}` } : {}),
+  widthPx: 3456, heightPx: 2240, offsetX: 896, offsetY: 576, rightsStatus: "PROJECT_ORIGINAL"
+});
 export const BATTLE_FIELD_CANVASES = Object.freeze({
-  field_bm05_01: Object.freeze({
-    src: "assets/production/battle/original-opus-canvas-r1/fields/field_bm05_01/frame-00.webp",
-    seaMask: "assets/production/battle/original-opus-canvas-r1/fields/field_bm05_01/sea-mask-canvas.webp",
-    widthPx: 3456, heightPx: 2240, offsetX: 896, offsetY: 576, rightsStatus: "PROJECT_ORIGINAL"
-  })
+  field_bm01_01: wideCanvas("field_bm01_01"),
+  field_bm02_01: wideCanvas("field_bm02_01"),
+  field_bm05_01: wideCanvas("field_bm05_01", { seaMask: "sea-mask-canvas.webp" }),
+  field_bm06_01: wideCanvas("field_bm06_01")
 });
 /** The canvas picture's rectangle in the play area's own coordinates, or null. */
 export function battleFieldCanvasRect(fieldId) {
@@ -328,6 +333,10 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     }
   }
   root.addChild(art.displayObject);
+  // Weather that drifts over the whole scene (cloud shadows, snow, motes) covers the canvas too: sized to
+  // the play area alone it left a darker rectangle, or a rectangle of snow, in a pulled-back shot.
+  const sky = canvasRect ?? { x: 0, y: 0, width: W, height: H };
+  const skyShare = Math.min(2.5, (sky.width * sky.height) / (W * H));
 
   // --- BM04 lagoon: caustics, glints, ripples stay inside the water mask.
   // Owner 2026-11-04: a sprite mask here rendered the whole lagoon into an
@@ -488,7 +497,8 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   root.addChild(halos);
   let clouds = null;
   if (ambient.cloudTile) {
-    clouds = new PIXI.TilingSprite({ texture: tex(ambient.cloudTile.src), width: W, height: H });
+    clouds = new PIXI.TilingSprite({ texture: tex(ambient.cloudTile.src), width: sky.width, height: sky.height });
+    clouds.position.set(sky.x, sky.y);
     clouds.tileScale.set(3.2); clouds.tint = 0x0a0d18; clouds.alpha = ambient.clouds ?? 0.15;
     root.addChild(clouds);
   }
@@ -509,8 +519,8 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     (groundCanopies ?? foreground).addChild(s);
     return { s, phase: i * 1.7, speed: 0.75 + i * 0.09 };
   });
-  const snow = polar && !reducedMotion ? Array.from({ length: low ? 24 : 60 }, () => ({
-    x: rand() * W, y: rand() * H, r: 1.2 + rand() * 2.2, vx: 14 + rand() * 22, vy: 8 + rand() * 12, phase: rand() * TAU })) : [];
+  const snow = polar && !reducedMotion ? Array.from({ length: Math.round((low ? 24 : 60) * skyShare) }, () => ({
+    x: sky.x + rand() * sky.width, y: sky.y + rand() * sky.height, r: 1.2 + rand() * 2.2, vx: 14 + rand() * 22, vy: 8 + rand() * 12, phase: rand() * TAU })) : [];
   const snowLayer = new PIXI.Graphics({ label: "drifting snow" });
   foreground.addChild(snowLayer);
   const emberSources = ambient.embers ?? [];
@@ -519,8 +529,8 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   emberLayer.blendMode = "add";
   foreground.addChild(emberLayer);
   const preset = PARTICLES[ambient.particles] ?? null;
-  const motes = preset && !reducedMotion ? Array.from({ length: Math.round(preset.count * (low ? 0.4 : 1)) }, () => ({
-    x: rand() * W, y: rand() * H, r: preset.size[0] + rand() * (preset.size[1] - preset.size[0]),
+  const motes = preset && !reducedMotion ? Array.from({ length: Math.round(preset.count * (low ? 0.4 : 1) * skyShare) }, () => ({
+    x: sky.x + rand() * sky.width, y: sky.y + rand() * sky.height, r: preset.size[0] + rand() * (preset.size[1] - preset.size[0]),
     vx: preset.vx[0] + rand() * (preset.vx[1] - preset.vx[0]), vy: preset.vy[0] + rand() * (preset.vy[1] - preset.vy[0]),
     color: preset.color[Math.floor(rand() * preset.color.length)], phase: rand() * TAU })) : [];
   const moteLayer = new PIXI.Graphics({ label: "ambient particles" });
@@ -772,7 +782,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     }
     if (!reducedMotion) {
       for (const r of rotors) r.sp.rotation += r.speed * dt / 1000;
-      if (clouds) clouds.tilePosition.set(-9 * s, -4 * s);
+      if (clouds) clouds.tilePosition.set(-9 * s - sky.x, -4 * s - sky.y);
       if (gust) { gust.tilePosition.set(-(ambient.gust === "sand" ? 90 : 40) * s, 6 * Math.sin(s * 0.5)); gust.alpha = (ambient.gust === "sand" ? 0.16 : 0.12) * (0.6 + 0.4 * Math.max(0, Math.sin(s * 0.35))); }
     }
     if (emissive) {
@@ -794,8 +804,8 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     }
     moteLayer.clear();
     for (const m of motes) {
-      m.x = (m.x + m.vx * dt / 1000 + W) % W;
-      m.y = (m.y + m.vy * dt / 1000 + H) % H;
+      m.x = sky.x + (m.x - sky.x + m.vx * dt / 1000 + sky.width) % sky.width;
+      m.y = sky.y + (m.y - sky.y + m.vy * dt / 1000 + sky.height) % sky.height;
       const fl = preset.flicker ? 0.5 + 0.5 * Math.sin(s * 5 + m.phase) : 1;
       const dx = preset.flutter ? Math.sin(s * 2.3 + m.phase) * 5 : 0;
       if (preset.streak) moteLayer.rect(m.x, m.y, m.r * 7, m.r * 0.7).fill({ color: m.color, alpha: preset.alpha });
@@ -861,8 +871,8 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
     }
     snowLayer.clear();
     for (const f of snow) {
-      f.x = (f.x + f.vx * dt / 1000 + W) % W;
-      f.y = (f.y + f.vy * dt / 1000 + H) % H;
+      f.x = sky.x + (f.x - sky.x + f.vx * dt / 1000 + sky.width) % sky.width;
+      f.y = sky.y + (f.y - sky.y + f.vy * dt / 1000 + sky.height) % sky.height;
       snowLayer.circle(f.x + Math.sin(s * 1.3 + f.phase) * 6, f.y, f.r).fill({ color: 0xffffff, alpha: 0.7 });
     }
     for (const f of fighters.values()) f.since += dt;

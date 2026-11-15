@@ -33,7 +33,24 @@ test('the BM05 canvas sits round the unchanged play area', () => {
   assert.ok(canvas.width >= 3456 && canvas.width <= 4096 && canvas.height <= 4096, 'within the iOS texture limit');
   // The play area lies wholly inside the picture.
   assert.ok(canvas.x <= art.x && canvas.y <= art.y && canvas.x + canvas.width >= art.width && canvas.y + canvas.height >= art.height);
-  assert.equal(battleFieldCanvasRect('field_bm01_01'), null);
+  assert.equal(battleFieldCanvasRect('field_unknown_01'), null);
+});
+
+test('every wired canvas matches its own record and stays small enough for a phone', () => {
+  const ids = Object.keys(BATTLE_FIELD_CANVASES);
+  assert.ok(ids.length >= 4, 'BM01, BM02, BM05 and BM06 at least');
+  for (const id of ids) {
+    const record = BATTLE_FIELD_CANVASES[id], folder = new URL(`../assets/production/battle/original-opus-canvas-r1/fields/${id}/`, import.meta.url);
+    const meta = JSON.parse(fs.readFileSync(new URL('canvas.json', folder), 'utf8'));
+    assert.equal(record.src, `assets/production/battle/original-opus-canvas-r1/fields/${id}/frame-00.webp`, id);
+    assert.deepEqual(meta.canvasWorldPx, [record.widthPx, record.heightPx], `${id} size`);
+    assert.deepEqual(meta.playOffsetWorldPx, [record.offsetX, record.offsetY], `${id} play offset`);
+    assert.equal(meta.rightsStatus, 'PROJECT_ORIGINAL', id); assert.equal(meta.romDerivedPixels, false, id);
+    assert.equal(record.rightsStatus, 'PROJECT_ORIGINAL', id);
+    const bytes = fs.statSync(new URL('frame-00.webp', folder)).size;
+    assert.ok(bytes <= 520_000, `${id} picture ${bytes} bytes`);
+    if (record.seaMask) assert.ok(fs.existsSync(new URL(`../${record.seaMask}`, import.meta.url)), `${id} sea mask`);
+  }
 });
 
 test('the canvas cover fills the screen and stops at the whole play area', () => {
