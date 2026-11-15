@@ -122646,7 +122646,7 @@
     },
     {
       "path": "src/championship/data/monsterVisualAnchors218.js",
-      "sha256": "2e31f617f4ff73c3e25aac71a29124b718a04e299737a08ebad691c208075051"
+      "sha256": "c9df38a9728a9b63eae42991a50877dcf9d1a0d96c95d3401b91b496877dde08"
     },
     {
       "path": "src/championship/data/storyRiftChapters.js",
@@ -126101,7 +126101,7 @@
     },
     {
       "path": "src/data/championship/reviewed-animation-selection.v1.json",
-      "sha256": "67f4038dab45a5e4bdfb3684525374bc76d1a03a504d0e09525c16cefb228530",
+      "sha256": "a2cc07178d3b851ab1c5b8ea71f0a67d8a5fed842f63291beab8133366cd779e",
       "jsonFields": [
         "arenaGroundFromWalk",
         "authoringPath",
@@ -129869,6 +129869,116 @@
     {
       "path": "assets/production/characters/ul15-two-set-20261112/web-atlas-v2/d29dc7378ec6b6ae17192b9cc7f6df8c3ac01edd88f3a715a0e279933bc10896.webp",
       "sha256": "d29dc7378ec6b6ae17192b9cc7f6df8c3ac01edd88f3a715a0e279933bc10896"
+    },
+    {
+      "path": "assets/production/characters/ul08-two-set-20261112/animation.public-v1.json",
+      "sha256": "45372eeb7505ec99fbd03785c2c3460b86f67c4a41c1cfb140b40d8fc1c30e77",
+      "jsonFields": [
+        "action",
+        "alignSourceEvent",
+        "arena",
+        "arenaSourcePlayback",
+        "assetId",
+        "blank",
+        "clips",
+        "density",
+        "direction",
+        "displayCode",
+        "durationMs",
+        "faint",
+        "frame",
+        "frameIndex",
+        "frames",
+        "id",
+        "idle",
+        "image",
+        "kind",
+        "loop",
+        "mode",
+        "offset",
+        "origin",
+        "point",
+        "preserveAuthoredPose",
+        "release",
+        "sampling",
+        "schemaVersion",
+        "sha256",
+        "sourceSize",
+        "speciesId",
+        "trim",
+        "version",
+        "referenceHeight",
+        "releasePoint"
+      ]
+    },
+    {
+      "path": "assets/production/characters/ul08-two-set-20261112/web-atlas-v2/66cce7f6791487f8067b51d00d178119fadd602b54870c674f5de34db28fad4c.webp",
+      "sha256": "66cce7f6791487f8067b51d00d178119fadd602b54870c674f5de34db28fad4c"
+    },
+    {
+      "path": "assets/production/characters/ul08-two-set-20261112/web-atlas-v2/90389cceac946ae80b25b20a9747749dbcf66020551a7d549e8fef1478fdf91a.webp",
+      "sha256": "90389cceac946ae80b25b20a9747749dbcf66020551a7d549e8fef1478fdf91a"
+    },
+    {
+      "path": "assets/production/characters/ul08-two-set-20261112/web-atlas-v2/9f815f0b3eb34b3396a9f0061a6c2bb2ebe612d223919595035ab7b5312526d9.webp",
+      "sha256": "9f815f0b3eb34b3396a9f0061a6c2bb2ebe612d223919595035ab7b5312526d9"
+    },
+    {
+      "path": "assets/production/characters/ul17-two-set-20261112/animation.public-v1.json",
+      "sha256": "810288c07d59876766369f9b9d88186c1a2b64fc3e04bc094d46ef3cd2b981b3",
+      "jsonFields": [
+        "action",
+        "alignSourceEvent",
+        "arena",
+        "arenaSourcePlayback",
+        "assetId",
+        "blank",
+        "clips",
+        "density",
+        "direction",
+        "displayCode",
+        "durationMs",
+        "faint",
+        "frame",
+        "frameIndex",
+        "frames",
+        "id",
+        "idle",
+        "image",
+        "kind",
+        "loop",
+        "mode",
+        "offset",
+        "origin",
+        "point",
+        "preserveAuthoredPose",
+        "release",
+        "sampling",
+        "schemaVersion",
+        "sha256",
+        "sourceSize",
+        "speciesId",
+        "trim",
+        "version",
+        "referenceHeight",
+        "releasePoint"
+      ]
+    },
+    {
+      "path": "assets/production/characters/ul17-two-set-20261112/web-atlas-v2/0b478b14be1fd8aff1a8456d370b6e006b7261f8471f29dba44d432d2aa5baf6.webp",
+      "sha256": "0b478b14be1fd8aff1a8456d370b6e006b7261f8471f29dba44d432d2aa5baf6"
+    },
+    {
+      "path": "assets/production/characters/ul17-two-set-20261112/web-atlas-v2/3c14502f55496030c51477aae5b4d79b2ec8e4f8c3313a5cbe7dc013db28a15a.webp",
+      "sha256": "3c14502f55496030c51477aae5b4d79b2ec8e4f8c3313a5cbe7dc013db28a15a"
+    },
+    {
+      "path": "assets/production/characters/ul17-two-set-20261112/web-atlas-v2/9a6d96ccb2ac850011900938376b74d7cb63c360607257029069fef6bd6598c6.webp",
+      "sha256": "9a6d96ccb2ac850011900938376b74d7cb63c360607257029069fef6bd6598c6"
+    },
+    {
+      "path": "assets/production/characters/ul17-two-set-20261112/web-atlas-v2/9ed79033e69f6147485aec53b7d47d2a46bde9ac3017747b3ca8f0bd12b8786e.webp",
+      "sha256": "9ed79033e69f6147485aec53b7d47d2a46bde9ac3017747b3ca8f0bd12b8786e"
     }
   ],
   "assets": [

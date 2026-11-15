@@ -3979,6 +3979,45 @@
       }
     },
     {
+      "code": "UL08",
+      "speciesId": "species-191",
+      "entity": "m505_grankuwagamon",
+      "frames": 113,
+      "clips": 86,
+      "atlasBytes": 3406468,
+      "generalHeightRatio": {
+        "median": 0.998,
+        "min": 0.729,
+        "max": 1.673
+      },
+      "generalFacingVotes": [
+        22,
+        18
+      ],
+      "generalMirror": false,
+      "generalMissing": 0,
+      "generalStateSubstitutes": 0,
+      "arenaRegistration": "per-picture support/bounds",
+      "arenaHas": {
+        "move": true,
+        "idle": false,
+        "melee": true,
+        "ranged": true,
+        "hurt": true,
+        "faint": false,
+        "sleep": false,
+        "charge": false,
+        "special": false
+      },
+      "arenaAliases": [],
+      "arenaGroundLock": {},
+      "faintEqualsHurtDropped": 0,
+      "atlasScales": {
+        "general": 0.858,
+        "arena": 0.5134
+      }
+    },
+    {
       "code": "UL10",
       "speciesId": "species-193",
       "entity": "m507_crossmon",
@@ -4210,6 +4249,45 @@
       "atlasScales": {
         "general": 1.0,
         "arena": 0.6676
+      }
+    },
+    {
+      "code": "UL17",
+      "speciesId": "species-221",
+      "entity": "m539_dianamon",
+      "frames": 160,
+      "clips": 86,
+      "atlasBytes": 4100176,
+      "generalHeightRatio": {
+        "median": 0.995,
+        "min": 0.673,
+        "max": 1.532
+      },
+      "generalFacingVotes": [
+        30,
+        18
+      ],
+      "generalMirror": false,
+      "generalMissing": 0,
+      "generalStateSubstitutes": 0,
+      "arenaRegistration": "per-picture support/bounds",
+      "arenaHas": {
+        "move": true,
+        "idle": false,
+        "melee": true,
+        "ranged": true,
+        "hurt": true,
+        "faint": false,
+        "sleep": false,
+        "charge": false,
+        "special": false
+      },
+      "arenaAliases": [],
+      "arenaGroundLock": {},
+      "faintEqualsHurtDropped": 0,
+      "atlasScales": {
+        "general": 0.9399,
+        "arena": 0.9127
       }
     },
     {
