@@ -37,6 +37,8 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
   const images=new Map(),textures=new Map(),geometry=new Map();
   const needed=new Set(usage==='all'?Object.keys(document.frames):document.clips.filter(c=>usage==='arena'?c.mode==='arena':c.mode!=='arena')
     .flatMap(c=>[...c.frames.map(f=>f.assetId),...(c.neutralReturn?[c.neutralReturn.assetId]:[])]));
+  // A partial delivery (only one of the two sets) keeps the native body for the mode it lacks.
+  if(!needed.size)return bundle;
   // web-v2 packs each mode on its own pages; a frame shared with Arena carries
   // an Arena page placement so one mode never downloads the other's pages.
   const frameEntries=Object.entries(document.frames).filter(([key])=>needed.has(key))

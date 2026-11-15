@@ -6,17 +6,17 @@
   "withHead": 226,
   "motionErrors": [],
   "art": {
-   "atlas": 42,
-   "reviewed": 137,
+   "atlas": 39,
+   "reviewed": 140,
    "reviewed-right": 47
   },
   "maxCellAspect": 2.02,
   "multiCellPages": 226,
   "muzzleInUpperBody": 226,
   "stances": {
-   "grounded": 205,
+   "grounded": 207,
    "hovering": 3,
-   "tail-below": 18
+   "tail-below": 16
   },
   "headsOnBody": 223,
   "headsMostlyDrawn": 226
@@ -16863,72 +16863,72 @@
    "speciesId": "species-189",
    "motion": {
     "entityId": "m503_warglaymon",
-    "art": "atlas",
-    "density": 4,
+    "art": "reviewed",
+    "density": 25.672719999999998,
     "bounds": {
-     "left": -308,
-     "top": -278,
-     "right": 186,
-     "bottom": 9
+     "left": -486,
+     "top": -787,
+     "right": 486,
+     "bottom": 0
     },
     "actions": {
      "stand": {
       "sequence": 0,
       "frameCount": 2,
-      "frameWidth": 263,
-      "frameHeight": 214,
-      "cellAspect": 1.23,
-      "pageWidth": 1936,
-      "pageHeight": 240,
-      "cellsPerPage": 8.3,
+      "frameWidth": 829,
+      "frameHeight": 787,
+      "cellAspect": 1.05,
+      "pageWidth": 2025,
+      "pageHeight": 1905,
+      "cellsPerPage": 5.9,
       "durationMs": 883
      },
      "walk": {
       "sequence": 2,
       "frameCount": 2,
-      "frameWidth": 239,
-      "frameHeight": 223,
-      "cellAspect": 1.07,
-      "pageWidth": 1936,
-      "pageHeight": 240,
-      "cellsPerPage": 8.7,
+      "frameWidth": 972,
+      "frameHeight": 774,
+      "cellAspect": 1.26,
+      "pageWidth": 1601,
+      "pageHeight": 1557,
+      "cellsPerPage": 3.3,
       "durationMs": 450
      },
      "attack": {
       "sequence": 7,
       "frameCount": 2,
-      "frameWidth": 385,
-      "frameHeight": 282,
-      "cellAspect": 1.37,
-      "pageWidth": 1632,
-      "pageHeight": 288,
-      "cellsPerPage": 4.3,
+      "frameWidth": 461,
+      "frameHeight": 397,
+      "cellAspect": 1.16,
+      "pageWidth": 2017,
+      "pageHeight": 2023,
+      "cellsPerPage": 22.3,
       "durationMs": 883
      },
      "cheer": {
       "sequence": 33,
       "frameCount": 2,
-      "frameWidth": 255,
-      "frameHeight": 218,
-      "cellAspect": 1.17,
-      "pageWidth": 1472,
-      "pageHeight": 304,
-      "cellsPerPage": 8,
+      "frameWidth": 429,
+      "frameHeight": 442,
+      "cellAspect": 0.97,
+      "pageWidth": 2017,
+      "pageHeight": 2023,
+      "cellsPerPage": 21.5,
       "durationMs": 1133
      }
     },
     "footAnchor": {
      "x": 0,
      "y": 0,
-     "stance": "tail-below",
-     "lowestPixel": 9,
-     "lowestPixelX": 40.8,
-     "visualHeight": 205
+     "stance": "grounded",
+     "lowestPixel": 0,
+     "lowestPixelX": 61,
+     "visualHeight": 787
     },
     "muzzleSocket": {
-     "x": -229,
-     "y": -199,
-     "heightRatio": 0.83,
+     "x": -138.5,
+     "y": -223,
+     "heightRatio": 0.78,
      "releaseIndex": 1,
      "releaseMs": 267
     }
@@ -19899,64 +19899,74 @@
    "speciesId": "species-229",
    "motion": {
     "entityId": "oc_crownbrass_mandrill",
-    "art": "atlas",
-    "density": 4,
+    "art": "reviewed",
+    "density": 14.2602495543672,
     "bounds": {
-     "left": -274,
-     "top": -356,
-     "right": 336,
-     "bottom": 138
+     "left": -161.75,
+     "top": -391.2,
+     "right": 161.25,
+     "bottom": 0.8000000000000114
     },
     "actions": {
      "stand": {
       "sequence": 0,
-      "frameCount": 1,
-      "frameWidth": 397,
-      "frameHeight": 427,
-      "cellAspect": 0.93,
-      "pageWidth": 2026,
-      "pageHeight": 1754,
-      "cellsPerPage": 21,
-      "durationMs": 367
+      "frameCount": 2,
+      "frameWidth": 322,
+      "frameHeight": 392,
+      "cellAspect": 0.82,
+      "pageWidth": 1906,
+      "pageHeight": 1858,
+      "cellsPerPage": 28.1,
+      "durationMs": 883
      },
      "walk": {
       "sequence": 2,
-      "frameCount": 1,
-      "frameWidth": 409,
-      "frameHeight": 458,
-      "cellAspect": 0.89,
-      "pageWidth": 2026,
-      "pageHeight": 1754,
-      "cellsPerPage": 19,
-      "durationMs": 200
+      "frameCount": 4,
+      "frameWidth": 240,
+      "frameHeight": 255,
+      "cellAspect": 0.94,
+      "pageWidth": 2038,
+      "pageHeight": 1083,
+      "cellsPerPage": 36.1,
+      "durationMs": 450
      },
      "attack": {
       "sequence": 7,
       "frameCount": 2,
-      "frameWidth": 557,
-      "frameHeight": 454,
-      "cellAspect": 1.23,
-      "pageWidth": 2026,
-      "pageHeight": 1754,
-      "cellsPerPage": 14.1,
+      "frameWidth": 230,
+      "frameHeight": 155,
+      "cellAspect": 1.48,
+      "pageWidth": 2038,
+      "pageHeight": 1083,
+      "cellsPerPage": 61.9,
       "durationMs": 867
      },
-     "cheer": null
+     "cheer": {
+      "sequence": 33,
+      "frameCount": 2,
+      "frameWidth": 323,
+      "frameHeight": 381,
+      "cellAspect": 0.85,
+      "pageWidth": 1906,
+      "pageHeight": 1858,
+      "cellsPerPage": 28.8,
+      "durationMs": 1133
+     }
     },
     "footAnchor": {
      "x": 0,
      "y": 0,
-     "stance": "tail-below",
-     "lowestPixel": 12,
-     "lowestPixelX": 88,
-     "visualHeight": 354
+     "stance": "grounded",
+     "lowestPixel": 0.8000000000000114,
+     "lowestPixelX": 54.6,
+     "visualHeight": 391.2
     },
     "muzzleSocket": {
-     "x": -151,
-     "y": -266,
-     "heightRatio": 0.88,
-     "releaseIndex": 0,
-     "releaseMs": 0
+     "x": -89.94999999999999,
+     "y": -83,
+     "heightRatio": 0.6,
+     "releaseIndex": 1,
+     "releaseMs": 250
     }
    },
    "cutinHeadFrame": {
@@ -19981,57 +19991,57 @@
    "speciesId": "species-230",
    "motion": {
     "entityId": "oc_celestyrant_battle_r10",
-    "art": "atlas",
-    "density": 4,
+    "art": "reviewed",
+    "density": 11.444921316165953,
     "bounds": {
-     "left": -154,
-     "top": -282,
-     "right": 180,
-     "bottom": 8
+     "left": -260.3,
+     "top": -472.79,
+     "right": 259.7,
+     "bottom": 0.3100000000000023
     },
     "actions": {
      "stand": {
       "sequence": 0,
       "frameCount": 2,
-      "frameWidth": 272,
-      "frameHeight": 257,
-      "cellAspect": 1.06,
-      "pageWidth": 2044,
-      "pageHeight": 1493,
-      "cellsPerPage": 43.7,
+      "frameWidth": 438,
+      "frameHeight": 436,
+      "cellAspect": 1,
+      "pageWidth": 1807,
+      "pageHeight": 1799,
+      "cellsPerPage": 17,
       "durationMs": 883
      },
      "walk": {
       "sequence": 2,
       "frameCount": 2,
-      "frameWidth": 279,
-      "frameHeight": 257,
-      "cellAspect": 1.09,
-      "pageWidth": 2044,
-      "pageHeight": 1493,
-      "cellsPerPage": 42.6,
+      "frameWidth": 441,
+      "frameHeight": 426,
+      "cellAspect": 1.04,
+      "pageWidth": 1808,
+      "pageHeight": 1698,
+      "cellsPerPage": 16.3,
       "durationMs": 450
      },
      "attack": {
       "sequence": 7,
       "frameCount": 2,
-      "frameWidth": 334,
-      "frameHeight": 267,
-      "cellAspect": 1.25,
-      "pageWidth": 2044,
-      "pageHeight": 1493,
-      "cellsPerPage": 34.2,
+      "frameWidth": 520,
+      "frameHeight": 472,
+      "cellAspect": 1.1,
+      "pageWidth": 1807,
+      "pageHeight": 996,
+      "cellsPerPage": 7.3,
       "durationMs": 867
      },
      "cheer": {
       "sequence": 33,
       "frameCount": 2,
-      "frameWidth": 293,
-      "frameHeight": 290,
-      "cellAspect": 1.01,
-      "pageWidth": 2044,
-      "pageHeight": 1493,
-      "cellsPerPage": 35.9,
+      "frameWidth": 439,
+      "frameHeight": 426,
+      "cellAspect": 1.03,
+      "pageWidth": 1808,
+      "pageHeight": 1698,
+      "cellsPerPage": 16.4,
       "durationMs": 1133
      }
     },
@@ -20039,14 +20049,14 @@
      "x": 0,
      "y": 0,
      "stance": "grounded",
-     "lowestPixel": 8,
-     "lowestPixelX": 28.8,
-     "visualHeight": 249
+     "lowestPixel": 0.07999999999998408,
+     "lowestPixelX": 53.2,
+     "visualHeight": 435.92
     },
     "muzzleSocket": {
-     "x": -131,
-     "y": -180,
-     "heightRatio": 0.77,
+     "x": -249.3,
+     "y": -288,
+     "heightRatio": 0.7,
      "releaseIndex": 0,
      "releaseMs": 0
     }
