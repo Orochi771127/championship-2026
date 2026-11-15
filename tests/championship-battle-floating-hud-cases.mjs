@@ -59,7 +59,7 @@ test('floating CSS moves actual field behind HUD, keeps pointer input on field/e
  assert.match(css,/cm-vs5-fighter\[data-present="false"\] \{ display: none/);
  assert.match(css,/pointer-events: none/);assert.match(css,/pointer-events: auto/);
  assert.match(css,/grid-template-areas: none/);
- assert.match(css,/min-height: 44px/);assert.match(css,/safe-area-inset-bottom/);
+ assert.match(css,/min-height: calc\(44px \/ var\(--cm-ui-zoom, 1\)\)/,'44 px on the glass under the small-phone page zoom');assert.match(css,/safe-area-inset-bottom/);
  assert.match(css,/display: flex; flex-direction: row; flex-wrap: nowrap/);
 });
 test('failed-FX fallback contain-art coordinates still cover through unconditional final map clamp',()=>{

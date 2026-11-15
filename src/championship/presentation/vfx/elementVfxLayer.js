@@ -413,8 +413,7 @@ export function createElementVfxLayer({PIXI, ground, front, art = null, quality 
     const cx = center?.x ?? rect.x + rect.width / 2, cy = center?.y ?? rect.y + rect.height / 2;
     // On an arena with a scenery canvas (`bounds`) the square reaches every edge of it from its centre:
     // sized for the play area alone, its own edges showed inside a pulled-back shot.
-    const side = bounds?.bleedX ?? 0;
-    const reach = bounds ? Math.max(cx - bounds.x + side, bounds.x + bounds.width + side - cx, cy - bounds.y, bounds.y + bounds.height - cy) : 0;
+    const reach = bounds ? Math.max(cx - bounds.x, bounds.x + bounds.width - cx, cy - bounds.y, bounds.y + bounds.height - cy) : 0;
     const cover = Math.max(Math.hypot(rect.width, rect.height) * 1.15, reach * 2.06) / 256;
     const variants = reducedMotion ? [1] : [1, 2];
     const sprites = variants.map(v => {

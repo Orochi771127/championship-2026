@@ -883,7 +883,9 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
   letter-spacing: normal; overflow-wrap: anywhere;
 }
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-hud="floating"] .cm-vs5-exit {
-  grid-column: 2; grid-row: 1 / span 2; width: auto; min-width: 44px; min-height: 44px;
+  /* 44 px on the glass: a small phone zooms the whole page down (--cm-ui-zoom, portraitFrame.js), and the
+     key shrank with it to 35 px. Dividing by the zoom keeps the touch target whole. */
+  grid-column: 2; grid-row: 1 / span 2; width: auto; min-width: calc(44px / var(--cm-ui-zoom, 1)); min-height: calc(44px / var(--cm-ui-zoom, 1));
   max-width: 140px; padding: 6px 10px; white-space: normal; overflow-wrap: anywhere;
   background: rgb(4 12 18 / 30%); border: 1px solid rgb(255 255 255 / 80%);
   color: var(--battle-hud-ink); text-shadow: var(--battle-hud-shadow);

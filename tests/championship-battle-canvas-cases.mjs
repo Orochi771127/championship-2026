@@ -3,11 +3,11 @@
 // fighter between the HUD rows, upright, sideways and on a desktop.
 //
 // What these cases pin:
-//   1. the canvas record and its rectangle in the play area's coordinates (side strips apart);
-//   2. the canvas cover: the canvas (with its side strips) fills the screen, and the shot never
-//      pulls back further than the whole play area needs;
+//   1. the canvas record and its rectangle in the play area's coordinates (3456x2240 since 2026-11-15);
+//   2. the canvas cover: the canvas fills the screen, and the shot never pulls back further than
+//      the whole play area needs;
 //   3. a framed shot keeps its visible region inside the canvas picture, and a view wider than
-//      the picture is centred on it (the mirrored strips show as equal slivers, never one side);
+//      the picture is centred on it;
 //   4. the per-frame clamp follows the same rules;
 //   5. a storm backdrop on a canvas arena reaches every canvas edge;
 //   6. a short landscape screen puts the HUD on two edge rows with two-line cards.
@@ -28,8 +28,9 @@ test('the BM05 canvas sits round the unchanged play area', () => {
   assert.match(record.src, /^assets\/production\/battle\/original-opus-canvas-r1\/fields\/field_bm05_01\/frame-00\.webp$/);
   assert.ok(fs.existsSync(new URL(`../${record.src}`, import.meta.url)), 'the canvas picture is in the repository');
   assert.ok(fs.existsSync(new URL(`../${record.seaMask}`, import.meta.url)), 'the canvas sea mask is in the repository');
-  assert.deepEqual(canvas, {x: -320, y: -576, width: 2304, height: 2240, bleedX: 576});
-  assert.equal(battleFieldCanvasRect('field_bm05_01', {bleed: false}).bleedX, 0);
+  assert.deepEqual(canvas, {x: -896, y: -576, width: 3456, height: 2240});
+  // Wide enough that a phone held sideways (844 px over a 176 px window) never reaches an edge.
+  assert.ok(canvas.width >= 3456 && canvas.width <= 4096 && canvas.height <= 4096, 'within the iOS texture limit');
   // The play area lies wholly inside the picture.
   assert.ok(canvas.x <= art.x && canvas.y <= art.y && canvas.x + canvas.width >= art.width && canvas.y + canvas.height >= art.height);
   assert.equal(battleFieldCanvasRect('field_bm01_01'), null);
@@ -38,14 +39,10 @@ test('the BM05 canvas sits round the unchanged play area', () => {
 test('the canvas cover fills the screen and stops at the whole play area', () => {
   // Upright phone: the canvas height decides.
   const portrait = {width: 430, height: 800};
-  close(battleFxCanvasCover(portrait, art, canvas), Math.max(430 / 2304 / 1, 800 / 2240, Math.min(430 / 1664, 800 / 1088)));
-  // Held sideways: the side strips count toward the width, so the shot may pull back past the picture.
+  close(battleFxCanvasCover(portrait, art, canvas), Math.max(430 / 3456, 800 / 2240, Math.min(430 / 1664, 800 / 1088)));
+  // Held sideways: the canvas width decides, so the shot may pull back to a third of the play area's scale.
   const sideways = {width: 844, height: 342};
-  const withStrips = battleFxCanvasCover(sideways, art, canvas);
-  const without = battleFxCanvasCover(sideways, art, {...canvas, bleedX: 0});
-  close(without, 844 / 2304);
-  close(withStrips, Math.max(844 / 3456, 342 / 2240, Math.min(844 / 1664, 342 / 1088)));
-  assert.ok(withStrips < without);
+  close(battleFxCanvasCover(sideways, art, canvas), Math.max(844 / 3456, 342 / 2240, Math.min(844 / 1664, 342 / 1088)));
   // A huge screen never zooms out past showing the whole play area.
   const big = {width: 4000, height: 2600};
   close(battleFxCanvasCover(big, art, canvas), Math.max(4000 / 3456, 2600 / 2240, Math.min(4000 / 1664, 2600 / 1088)));

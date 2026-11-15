@@ -677,7 +677,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     // The scenery canvas round the play area, in the same local coordinates as artRect (null: none).
     const canvasScale = fieldArt?.canvas ? artRect.width / fieldArt.field.worldWidthPx : 0;
     const canvasRect = fieldArt?.canvas ? {x: artRect.x + fieldArt.canvas.x * canvasScale, y: artRect.y + fieldArt.canvas.y * canvasScale,
-      width: fieldArt.canvas.width * canvasScale, height: fieldArt.canvas.height * canvasScale, bleedX: (fieldArt.canvas.bleedX ?? 0) * canvasScale} : null;
+      width: fieldArt.canvas.width * canvasScale, height: fieldArt.canvas.height * canvasScale} : null;
     // Dynamic presentation: events from this view, then the camera for it.
     let camera = {zoom:1, x:0, y:0};
     let fxContext = null;

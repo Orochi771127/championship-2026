@@ -151,8 +151,7 @@ export function battleFxSafeCover(viewport, art, insets = null) {
  */
 export function battleFxCanvasCover(viewport, art, canvas, insets = null) {
   const safe = battleFxSafeWindow(viewport, insets);
-  // The mirrored side strips (bleedX) count toward the width only: the clamps centre a shot wider than the picture.
-  const fill = Math.max(viewport.width / (canvas.width + 2 * (canvas.bleedX ?? 0)), viewport.height / canvas.height);
+  const fill = Math.max(viewport.width / canvas.width, viewport.height / canvas.height);
   const whole = Math.min(viewport.width / art.width, safe.height / art.height);
   return Math.max(fill, whole);
 }
