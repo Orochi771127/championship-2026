@@ -211,7 +211,7 @@ export async function loadPixiCharacterRuntimeBundle({
         }
         sheets.push({ sheet, owned });
         atlasPages.push({side:sideName,page,dataUrl,imageUrl,source:pageSource});
-        if(sheet.textureSource)decodedSources.add(sheet.textureSource);
+        if(pageSource)decodedSources.add(pageSource);
         for (const [key, value] of Object.entries(sheet.textures)) {
           if (textures.has(key)) throw new Error(`Duplicate character texture key: ${key}`);
           if (value.source && runtime.artProfile?.filter === "nearest") value.source.scaleMode = "nearest";
@@ -343,7 +343,8 @@ function announceAssetSettled(url, ok) {
   }
 }
 export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href, { signal } = {}) {
-  const assets = PIXI.Assets;
+  const assets = PIXI?.Assets;
+  if (!assets || typeof assets !== 'object') return PIXI;
   let shared = assetOwners.get(assets);
   if (!shared) assetOwners.set(assets, shared = new Map());
   const held = new Map();

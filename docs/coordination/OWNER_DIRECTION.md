@@ -1,5 +1,39 @@
 # Championship Owner Direction
 
+<!-- record-id: IPHONE_WEB_APP_BATTLE_CRASH_AND_AUTORESUME_20261114 -->
+## 2026-11-14 — Whole-game iPhone Web App audit: Battle / Data Arena memory leaks, pooled 3D VFX texture deduplication, and silent reload auto-resume
+
+The Owner requested a whole-game audit and iPhone Web App optimization for frequent mid-battle reloads that jump back to the game's home screen: 「你有辦法盤查整個遊戲嗎？然後針對遊戲做出iPhone的Web app的優化，因為我現在常常玩啊，在對戰啊，會閃退跳回到遊戲首頁」.
+
+Engineering repair only; no gameplay value, save schema, RNG, clock or artwork change:
+
+- **Pooled 3D VFX `THREE.Source` / `ImageBitmap` deduplication and disposal (`licensedVfxRuntimeBundle.js`):**
+  - `createBattleVfxThreeOverlay` loads 16 pooled instances across 5 impact families (`80` `.glb` loads per battle). Previously, each slot decoded its own `ImageBitmap` and uploaded a separate WebGL texture, and `disposeObject` called `texture.dispose()` without closing the underlying `ImageBitmap`. `createLicensedVfxRuntime` now shares the canonical `THREE.Texture.source` across pooled instances of the same `.glb` model, immediately `.close()`s redundant `ImageBitmap`s before GPU warmup, and reference-counts shared `THREE.Source`s so the underlying `ImageBitmap` is closed when the last channel unloads.
+- **Scoped `ImageBitmap` release across Battle and Data Arena (`main.js`, `battleEffectArt.js`, `dataArenaScreen.js`, `pixiCharacterRuntimeBundle.js`):**
+  - `loadOptionalBattleFieldArt`, `loadOptionalOriginalVfxReview`, `loadRegisteredBattleEffectArt`, `loadDataArenaEnvironment` and `loadDataArenaInteractionArt` now load through `createPixiAssetScope` so arena backgrounds, water/cloud/canopy ambient layers, shared 2048×2048 VFX atlases and Data Arena maps close their decoded `ImageBitmap`s on disposal. `pixiCharacterRuntimeBundle.js` records `pageSource` in `decodedSources` for non-streamed character sprite sheets as well.
+- **2D `<canvas>` and GPU texture cleanup (`elementVfxLayer.js`, `battleFxLayer.js`, `moveVfxSetPieces.js`, `createBattleSelectThreePresentation.js`, `actionPortrait.js`, `vs5Screens.js`):**
+  - Disposes `bakedMarks` and `hyperSheet` textures and zeroes temporary/retired `<canvas>` backing stores (`width = height = 0`) on exit; automatically sweeps and disposes disconnected DOM `actionPortrait` instances.
+- **Preventing reloads from jumping back to `#cm-title` (`ChampionshipPersistentSavePort.js`, `webAppInstall.js`, `main.js`):**
+  - Extends `CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS` from 3 minutes (`180_000`) to 30 minutes (`1_800_000`) and adds a 30-second active-session checkpoint heartbeat while `titleScreen.hidden` is true so multi-round cups, Data Arena campaigns and long battles never outlive the checkpoint TTL.
+  - Extends silent reload `AUTO_RESUME` via `isMobileOrInstalledWebApp` to cover both installed Home Screen Web Apps and iPhone / iPad Safari (`iPhone|iPad|iPod` or `MacIntel` with `maxTouchPoints > 1`), hiding `#cm-title` and skipping title-screen hero-art/film startup when auto-resuming.
+
+<!-- record-id: VISUAL_LINEAGE_EVOLUTION_ROUTES_20261114 -->
+## 2026-11-14 — Visual lineage audit across all character evolution and awakening routes
+
+The Owner asked for an inventory of character evolution routes and rules, shared a screenshot of `AW52 星爆豬王` (which showed only `MA65 隕甲豬 → AW52 星爆豬王 · 一段覺醒`), and requested a visual inspection of every character so that visually similar characters share coherent, Digimon-like evolution and awakening routes (「用視覺檢查每一隻角色，然後在那種長得相似的，讓他們有類似像數碼寶貝的進化的那種關係就是請確保他們的進化路線都有正確可以進化的樣子」). The Owner then delegated the decisions, implementation, self-review and publication: 「我可以交給你去處理嗎？讓你來決斷。做好後跟我回報，自我審查沒有問題後，就請你幫我推送發佈到正式站。」
+
+`OWNER_APPROVED_ADAPTATION` over `STAGE_REDESIGN_BURST_20261102` and `OWNER_APPROVED_PROVISIONAL_ORIGINAL_DATA_20261029`:
+
+- **Original characters (`product-species-originals.r1.json`, `PROPOSAL.v1.json`, `databaseIllustrations.js`):**
+  - `AW52 星爆豬王 (#233)` gains two Tier-2 Ultimate (`究極體`) branches (`UL20 番長獅 (#199)` and `UL33 蹦迪猿 (#211)`).
+  - `MA65 隕甲豬 (#232)` gains armored beast `AW21 三角犀 (#152)` before its fallback `AW37 長毛象 (#165)`.
+  - `databaseIllustrationLinks` walks the connected original-species lineage so an art-only original displays its complete multi-stage planned chain in the encyclopedia (`B205 摔跤絨 → GR39 星塵豬 → MA65 隕甲豬 → AW52 星爆豬王 → UL20 番長獅 / UL33 蹦迪猿`, and `B112 毛草球 → B215 閃電崽 → GR41 迅雷貓狼 → MA69 雷霆戰狼 → AW53 雷刃狼王 → UL40 天雷霸狼`).
+- **Ranch natural growth (`product-growth-adaptations.r1.json`):**
+  - Appends 16 visual-lineage branches across `幼年期 I → 幼年期 II → 成長期 → 成熟期`, including `B207 呼嚕喵 (#25) → GR41 迅雷貓狼 (#239)` so `GR41 迅雷貓狼 → MA69 雷霆戰狼` is reachable from an egg while `B215 閃電崽 (#238)` awaits motion art, plus matching branches for aquatic buds/pups (`B106 → B210 → GR05`), fire dino pups (`B212 → GR01 / GR12`), wolves (`GR06 / GR19 → MA15 / MA16 / MA20`), horned/crested dinos (`GR23 → MA21`, `GR24 → MA08`), ice/beast/plant/rabbit/lion families (`GR29 → MA01`, `GR35 → MA46`, `GR36 → MA05`, `GR18 → MA50`, `GR37 → MA14`). Native branch slots and saved branch history remain untouched.
+- **Burst / Awakening evolution (`scripts/build-product-burst-evolution.mjs`, `product-burst-evolution.r1.json`, `product-hunt-overlay.r1.json`):**
+  - Seeds visual-lineage Tier-1 (`覺醒體`) and Tier-2 (`究極體`) pairings before greedy fan-in fill so all 64 native `成熟期` and 5 playable original `成熟期` awaken into visually coherent forms, every `覺醒體` (51) and `究極體` (37) remains reachable within the fan-in cap, and zero `成熟期` lack a Tier-2 `究極體` (`basesWithoutTier2: []`).
+- **Publication:** authorizes committing the scoped files, updating their hashes in `WEB_BUILD_INPUTS.v1.json` and `PUBLIC_RUNTIME_ALLOWLIST.v1.json`, merging and pushing to `main` after `npm run test:ci`, `npm run build:playtest` and `npm run validate:playtest` pass.
+
 <!-- record-id: IOS_HUNT_ENTRY_RELOAD_20261112 -->
 ## 2026-11-12 — iPhone home-screen app reloads on entering 戴納草原: decoded map frames freed after upload, Hunt entry steps in the diagnostics
 

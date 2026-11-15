@@ -1226,11 +1226,12 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     }
     // Harbor art is loaded on entry only; a failed pack keeps the playable
     // geometry and existing presentation available. No character texture changes.
+    const scopedMatchPIXI = typeof createPixiAssetScope === "function" ? createPixiAssetScope(stage.PIXI, href, { signal: owner.signal }) : stage.PIXI;
     if (gameMode === 'HARBOR' || gameMode === 'TOURNAMENT' || gameMode === 'RELAY') {
-      const next = await optionalMatchArt(owner, loadDataArenaEnvironment({ PIXI: stage.PIXI, renderer:stage.app.renderer, map: sim.grid.map, quality, href, signal:owner.signal }), "DATA_ARENA_ENVIRONMENT_FALLBACK");
+      const next = await optionalMatchArt(owner, loadDataArenaEnvironment({ PIXI: scopedMatchPIXI, renderer:stage.app.renderer, map: sim.grid.map, quality, href, signal:owner.signal }), "DATA_ARENA_ENVIRONMENT_FALLBACK");
       owner.signal.throwIfAborted(); environment = next; owner.transfer(next);
     }
-    const nextInteraction = await optionalMatchArt(owner, loadDataArenaInteractionArt({PIXI:stage.PIXI,map:sim.grid.map,quality,href,signal:owner.signal}), "DATA_ARENA_INTERACTION_ART_FALLBACK");
+    const nextInteraction = await optionalMatchArt(owner, loadDataArenaInteractionArt({PIXI:scopedMatchPIXI,map:sim.grid.map,quality,href,signal:owner.signal}), "DATA_ARENA_INTERACTION_ART_FALLBACK");
     owner.signal.throwIfAborted(); interactionArt = nextInteraction; owner.transfer(nextInteraction);
     // Controlled harnesses load this screen without its imports: no original cells there.
     if (!effectArt && typeof loadOriginalVfxCellArt === "function") {
@@ -1771,16 +1772,17 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       quality = quality === "high" ? "low" : "high"; records.setSettings({ quality });
       scene?.dispose();scene=null;
       await interactionArt?.dispose();interactionArt=null;
+      const scopedQualityPIXI = typeof createPixiAssetScope === "function" ? createPixiAssetScope(stage.PIXI, href, { signal }) : stage.PIXI;
       if (environment) {
         // A quality change swaps environment pixels as well as renderer scale.
         // The paused scene releases its objects before its textures are unloaded.
         scene?.dispose(); scene = null;
         await environment.dispose(); environment = null;
-        try { environment = await loadDataArenaEnvironment({ PIXI: stage.PIXI, renderer:stage.app.renderer, map: sim.grid.map, quality, href, signal }); }
+        try { environment = await loadDataArenaEnvironment({ PIXI: scopedQualityPIXI, renderer:stage.app.renderer, map: sim.grid.map, quality, href, signal }); }
         catch (error) { if (!signal.aborted) console.warn("DATA_ARENA_ENVIRONMENT_FALLBACK", error?.message); }
         if (signal.aborted) { await environment?.dispose(); environment = null; return; }
       }
-      try{interactionArt=await loadDataArenaInteractionArt({PIXI:stage.PIXI,map:sim.grid.map,quality,href,signal});}
+      try{interactionArt=await loadDataArenaInteractionArt({PIXI:scopedQualityPIXI,map:sim.grid.map,quality,href,signal});}
       catch(error){if(!signal.aborted)console.warn("DATA_ARENA_INTERACTION_ART_FALLBACK",error?.message);}
       if(signal.aborted){await interactionArt?.dispose();interactionArt=null;return;}
       mountScene();

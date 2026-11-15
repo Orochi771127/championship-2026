@@ -51,7 +51,7 @@ import {loadRegisteredBattleEffectArt,isLocalBattleEffectPreview} from '../prese
 import {loadRegisteredRaisingFeedbackArt} from '../presentation/raisingFeedbackArt.js';
 import {loadPublicCharacterHudArt as loadRegisteredCharacterHudArt} from '../presentation/publicCharacterHudArt.js';
 import {createTitleImageLifecycle} from '../presentation/titleImageLifecycle.js';
-import {mountWebAppInstall, isInstalledWebApp} from './webAppInstall.js';
+import {mountWebAppInstall, isInstalledWebApp, isMobileOrInstalledWebApp} from './webAppInstall.js';
 import {loadRegisteredHuntFeedbackArt} from '../presentation/huntFeedbackArt.js';
 import {mountBattleResultCharacters} from '../presentation/battleResultCharacters.js';
 import {nativeBattleWinPercent} from '../battle/nativeTitleProgression.js';
@@ -929,15 +929,16 @@ async function ensurePixiStage(canvasHost, signal) {
 // loopback host and on the approved public playtest URL (the loader checks the
 // playtest policy selection) they load by default; ?vfxOriginal=off keeps the
 // base art.
-async function loadOptionalOriginalVfxReview(stage, effectArt) {
+async function loadOptionalOriginalVfxReview(stage, effectArt, { signal } = {}) {
   const requested=new URLSearchParams(location.search).get('vfxOriginal');
   const byDefault=requested===null&&BATTLE_DYNAMIC_FX&&(['localhost','127.0.0.1','[::1]'].includes(location.hostname)
     ||isApprovedOriginalPublicLocation(location.href));
   if(!effectArt||(requested!=='shared-v1'&&!byDefault))return effectArt;
   const href=new URL(location.href);href.searchParams.set('vfxOriginal','shared-v1');
+  const PIXI=createPixiAssetScope(stage.PIXI,location.href,{signal});
   try {
     const {loadOriginalSharedVfxReview}=await import('../presentation/originalSharedVfxReview.js');
-    return await loadOriginalSharedVfxReview({PIXI:stage.PIXI,baseArt:effectArt,href:href.href,
+    return await loadOriginalSharedVfxReview({PIXI,baseArt:effectArt,href:href.href,
       onFirstUse:(key,seen)=>{document.documentElement.dataset.vfxReviewSeen=seen.join(' ');}});
   } catch (error) {
     console.warn('Original VFX review unavailable',error);
@@ -1091,9 +1092,10 @@ async function loadOptionalCageFieldArt(stage, { signal } = {}) {
  * BATTLE_NORMAL / field_bm01_01). Match-to-arena mapping is untraced.
  * `?battleArt=field_bm07_01` overlays any stored field for visual QA.
  */
-async function loadOptionalBattleFieldArt(stage, source) {
+async function loadOptionalBattleFieldArt(stage, source, { signal } = {}) {
   const wanted = BATTLE_ART_PREVIEW_FIELD || source?.getFrame()?.arena?.field || null;
   if (!wanted) return null;
+  const PIXI = createPixiAssetScope(stage.PIXI, globalThis.location.href, { signal });
   try {
     const fetchManifest = async url => {
       const response = await fetchPublicMetadataResponse(url, globalThis.location.href);
@@ -1106,11 +1108,11 @@ async function loadOptionalBattleFieldArt(stage, source) {
     if (!manifest.fields.some((field) => field.fieldId === wanted) && /bm0[345]-[a-z]+-polish-r[23]/.test(LICENSED_BATTLE_ART_MANIFEST_URL))
       manifest = await fetchManifest(publicMetadataPath('battle-original'));
     if (!manifest.fields.some((field) => field.fieldId === wanted)) return null;
-    const art = await createRuntimeMapArtFieldLoader({ PIXI: stage.PIXI }).load({ manifest, fieldId: wanted });
+    const art = await createRuntimeMapArtFieldLoader({ PIXI }).load({ manifest, fieldId: wanted });
     if (!art?.field?.ambient || !isOriginalRuntimeLocation()) return art;
     try {
       const { withBattleFieldAmbient } = await import('../presentation/battleFieldAmbient.js');
-      return await withBattleFieldAmbient({ PIXI: stage.PIXI, art, quality: currentQualityTier() === 'saver' ? 'low' : 'high', reducedMotion: prefersReducedMotion(), renderer: stage.app?.renderer ?? null });
+      return await withBattleFieldAmbient({ PIXI, art, quality: currentQualityTier() === 'saver' ? 'low' : 'high', reducedMotion: prefersReducedMotion(), renderer: stage.app?.renderer ?? null });
     } catch (error) {
       console.warn(`CHAMPIONSHIP_BATTLE_AMBIENT_FALLBACK: ${error.message}`);
       return art;
@@ -3901,12 +3903,27 @@ function boot() {
     login:loginButton,menu:titleActions,opening:document.getElementById('cm-opening'),
     getPreferences:()=>settings.store.get(),onActiveChange:()=>{syncMusic();syncTitleArt();},onBufferChange:syncTitleArt});
   settings.store.subscribe(()=>openingFilm.sync());
-  openingFilm.start();
-  syncTitleArt();
+  const activeCheckpoint = isMobileOrInstalledWebApp(window) ? sessionCheckpoint?.read() : null;
+  const shouldAutoResume = Boolean(activeCheckpoint && Number.isFinite(activeCheckpoint.updatedAtMs)
+    && Date.now() - activeCheckpoint.updatedAtMs <= CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS
+    && app.canContinue().loadable);
+  if (!shouldAutoResume) {
+    openingFilm.start();
+    syncTitleArt();
+  }
   window.dispatchEvent(new Event("championship:ready"));
-  scheduleRanchTitlePreload();
-  syncMusic();
+  if (!shouldAutoResume) {
+    scheduleRanchTitlePreload();
+    syncMusic();
+  }
   window.addEventListener("popstate", handleSessionPopState);
+  // Refresh the active session checkpoint periodically so long battles, cups,
+  // or menu sessions on iPhone never outlive the checkpoint TTL before a reload.
+  setInterval(() => {
+    if (app && titleScreen?.hidden && document.visibilityState !== "hidden") {
+      recordSessionScreenMounted(app.getScreen());
+    }
+  }, 30000);
   // Background/unload resets elapsed measurement, and now also writes the
   // session: the Raising Home SAVE button was removed on 2026-09-16, so leaving
   // the page is what commits it. Save & Quit still commits explicitly.
@@ -3924,18 +3941,16 @@ function boot() {
     }
   });
 
-  // iOS Standalone Web App Silent Reload Auto-Resume:
-  // If the OS jetsam-reloaded the Web App while the player was in an active session
-  // (without Save & Quit), automatically restore the saved session and active screen
-  // (or safe fallback landing screen for mid-Hunt / mid-Battle / Data Arena).
-  const activeCheckpoint = isInstalledWebApp(window) ? sessionCheckpoint?.read() : null;
-  if (activeCheckpoint && Number.isFinite(activeCheckpoint.updatedAtMs)
-    && Date.now() - activeCheckpoint.updatedAtMs <= CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS
-    && app.canContinue().loadable) {
+  // iOS / Mobile & Standalone Web App Silent Reload Auto-Resume:
+  // If the OS jetsam-reloaded the Web App or mobile browser tab while the player
+  // was in an active session (without Save & Quit), automatically restore the saved
+  // session and active screen (or safe fallback landing screen for mid-Hunt / mid-Battle / Data Arena).
+  if (shouldAutoResume) {
     recoveryDiagnostics.record("AUTO_RESUME", { target: activeCheckpoint.screen });
     void (async () => {
       try {
         openingFilm?.stop?.();
+        titleScreen.hidden = true;
         await continueGame();
         const resumeScreen = activeCheckpoint.screen;
         if (resumeScreen === CHAMPIONSHIP_SCREENS.GATE_SELECT
@@ -3976,6 +3991,9 @@ function boot() {
         // on RAISING_HOME (opened by continueGame() above), never dropping to Title.
       } catch (err) {
         console.warn("CHAMPIONSHIP_STANDALONE_AUTO_RESUME_FALLBACK", err);
+        titleScreen.hidden = false;
+        openingFilm?.start?.();
+        syncTitleArt();
       }
     })();
   }

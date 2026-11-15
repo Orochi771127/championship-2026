@@ -49,6 +49,12 @@ test('every art-only detail shows its selected full illustration and authored st
       f.assertUnchanged();
     }finally{f.dispose();}
   }}finally{setLocale('zh-Hant');}
+  assert.deepEqual(databaseIllustrationLinks(233).map(l=>[l.from,l.to,l.kind]),[
+    [23,231,'EVOLVE'],[231,232,'EVOLVE'],[232,233,'AWAKEN'],[233,199,'AWAKEN_2'],[233,211,'AWAKEN_2']
+  ]);
+  assert.deepEqual(databaseIllustrationLinks(241).map(l=>[l.from,l.to,l.kind]),[
+    [18,238,'EVOLVE'],[238,239,'EVOLVE'],[239,240,'EVOLVE'],[240,241,'AWAKEN'],[241,242,'AWAKEN_2']
+  ]);
 });
 
 test('all 134 prior published hero selections remain exact',()=>{

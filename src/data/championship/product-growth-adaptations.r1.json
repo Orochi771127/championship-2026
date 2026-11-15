@@ -7,7 +7,23 @@
   "hatchPool": { "first": 8, "count": 12 },
   "appendedBranches": [
     { "source": 19, "target": 31, "kind": 0, "thresholds": [0,0,0,20,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "B106 had only a lifetime branch" },
+    { "source": 19, "target": 28, "kind": 0, "thresholds": [0,0,0,0,0,20,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "B106 aquatic bud to B210 bubble pup" },
+    { "source": 25, "target": 239, "kind": 0, "thresholds": [20,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "B207 cat cub to GR41 thunder cat-wolf while B215 waits for art" },
+    { "source": 28, "target": 37, "kind": 0, "thresholds": [0,20,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "B210 bubble pup to GR05 tadpole" },
     { "source": 31, "target": 63, "kind": 0, "thresholds": [0,0,0,20,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "B212 had only lifetime branches" },
-    { "source": 56, "target": 93, "kind": 0, "thresholds": [0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 10,50,0,0], "reason": "MA30 had no evolution source" }
+    { "source": 31, "target": 34, "kind": 0, "thresholds": [20,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "B212 fire dino pup to GR01 fire-armor dino" },
+    { "source": 31, "target": 71, "kind": 0, "thresholds": [0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 4,0,0,0], "reason": "B212 fire dino pup to GR12 big-jaw dino" },
+    { "source": 38, "target": 128, "kind": 0, "thresholds": [0,0,20,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "GR06 boxing wolf to MA20 scar wolf" },
+    { "source": 38, "target": 82, "kind": 0, "thresholds": [0,0,0,0,0,20,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "GR06 boxing wolf to MA15 snow-stripe wolf" },
+    { "source": 50, "target": 87, "kind": 0, "thresholds": [0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 6,0,0,0], "reason": "GR23 clockwork rex to MA21 horned rex" },
+    { "source": 55, "target": 127, "kind": 0, "thresholds": [0,0,0,0,0,20,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "GR29 imp bat to MA01 ice devil" },
+    { "source": 56, "target": 93, "kind": 0, "thresholds": [0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 10,50,0,0], "reason": "MA30 had no evolution source" },
+    { "source": 60, "target": 106, "kind": 0, "thresholds": [0,0,0,0,20,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "GR35 boxing-glove mushroom to MA46 boxing cactus" },
+    { "source": 61, "target": 73, "kind": 0, "thresholds": [0,0,0,0,20,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "GR36 snow dino to MA05 ice-breaker beast" },
+    { "source": 63, "target": 76, "kind": 0, "thresholds": [0,0,0,20,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "GR24 crested dino to MA08 cloud-piercer dragon" },
+    { "source": 64, "target": 121, "kind": 0, "thresholds": [0,0,0,0,20,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "GR18 flame-mane lion cub to MA50 steel lion" },
+    { "source": 65, "target": 81, "kind": 0, "thresholds": [0,0,0,0,20,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "GR37 moon rabbit to MA14 ear-cannon rabbit" },
+    { "source": 67, "target": 82, "kind": 0, "thresholds": [0,0,0,0,0,20,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "GR19 striped hound to MA15 snow-stripe wolf" },
+    { "source": 67, "target": 83, "kind": 0, "thresholds": [0,0,0,0,0,0,0,0,0,20,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0], "reason": "GR19 striped hound to MA16 dark-fang wolf" }
   ]
 }

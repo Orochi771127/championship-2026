@@ -24,7 +24,6 @@ const RACE_COUNTER = {DRAGON: 3, BEAST: 4, AQUATIC: 5, AVIAN: 6, SYLVAN: 7, ASTR
 const generation = i => species[i]?.generationIndex;
 const ids = g => species.map((s, i) => [s, i]).filter(([s, i]) => s.generationIndex === g && i >= 8 && i < 224).map(([, i]) => i);
 const MA = ids(4), AW = ids(5), UL = ids(6);
-const branches = i => (lifecycle.rules[i - 8] ?? []);
 const standard = (form, tier) => {
   const t = Array(26).fill(0), counter = RACE_COUNTER[taxonomy.get(form)?.race];
   if (counter !== undefined) t[counter] = tier === 1 ? 30 : 60;
@@ -32,6 +31,78 @@ const standard = (form, tier) => {
   if (tier === 2) t[23] = 50;
   return t;
 };
+// Visual lineage adaptations for 成熟期 -> 覺醒體 where native fallback or greedy fan-in broke visual continuity:
+const EXTRA_CAND1 = new Map([
+  [117, [{target: 162, kind: 0, thresholds: standard(162, 1)}]],
+  [118, [{target: 183, kind: 0, thresholds: standard(183, 1)}]],
+  [121, [{target: 182, kind: 0, thresholds: standard(182, 1)}]],
+  [122, [{target: 175, kind: 0, thresholds: standard(175, 1)}]],
+  [128, [{target: 178, kind: 0, thresholds: standard(178, 1)}, {target: 163, kind: 0, thresholds: standard(163, 1)}]]
+]);
+const SKIP_CAND1 = new Map([[95, new Set([152])]]);
+const PREFERRED_TIER1 = [
+  [72, 152], [72, 146],
+  [73, 147], [73, 161],
+  [79, 163], [79, 178],
+  [82, 178], [82, 174],
+  [83, 179], [83, 185],
+  [84, 138], [84, 157],
+  [85, 142], [85, 154],
+  [86, 171],
+  [89, 141],
+  [93, 154], [93, 158],
+  [95, 137], [95, 151],
+  [97, 167], [97, 166],
+  [110, 172], [110, 142],
+  [111, 145], [111, 136],
+  [112, 172],
+  [114, 156], [114, 165],
+  [116, 156], [116, 186],
+  [117, 162], [117, 165],
+  [118, 183], [118, 185],
+  [119, 182], [119, 171],
+  [121, 182], [121, 171],
+  [122, 145], [122, 175],
+  [125, 182], [125, 171],
+  [127, 183], [127, 186],
+  [128, 178], [128, 163],
+  [130, 140], [130, 158],
+  [131, 142], [131, 150],
+  [132, 172], [132, 144],
+  [133, 155], [133, 157],
+  [134, 144], [134, 169]
+];
+const PREFERRED_TIER2 = [
+  [72, 196, 146],
+  [73, 187, 147], [73, 206, 161],
+  [76, 193, 154], [76, 222, 144],
+  [79, 209, 163], [79, 212, 178],
+  [82, 212, 178], [82, 216, 178],
+  [83, 213, 179], [83, 216, 179],
+  [87, 189, 169], [87, 204, 168],
+  [93, 193, 154],
+  [95, 203, 137],
+  [96, 195, 173], [96, 217, 173],
+  [97, 223, 167], [97, 214, 166],
+  [102, 217, 169], [102, 189, 169],
+  [116, 196, 156],
+  [117, 208, 162],
+  [118, 221, 183], [118, 197, 185],
+  [119, 194, 171], [119, 220, 182],
+  [120, 211, 143],
+  [121, 199, 171], [121, 220, 182],
+  [122, 215, 175], [122, 201, 145],
+  [125, 220, 182], [125, 199, 171],
+  [127, 221, 183],
+  [128, 209, 163], [128, 216, 178],
+  [129, 202, 159],
+  [130, 188, 140], [130, 215, 158],
+  [131, 208, 142],
+  [132, 192, 172], [132, 222, 144],
+  [133, 203, 155], [133, 205, 157],
+  [134, 222, 144], [134, 189, 169]
+];
+const branches = i => [...(EXTRA_CAND1.get(i) ?? []), ...(lifecycle.rules[i - 8] ?? [])].filter(r => !SKIP_CAND1.get(i)?.has(r.target));
 const conditionOf = (rule, tier) => rule.kind === 1
   ? {thresholds: standard(rule.target, tier), source: 'STANDARD_FOR_LIFETIME_ROUTE'}
   : {thresholds: [...rule.thresholds], source: 'NATIVE_ROUTE'};
@@ -39,9 +110,19 @@ const conditionOf = (rule, tier) => rule.kind === 1
 // ---- tier 1 ----
 const tier1 = new Map(MA.map(m => [m, []])), sources1 = new Map(AW.map(a => [a, []]));
 const cand1 = m => branches(m).filter(r => generation(r.target) === 5);
-const add1 = (m, rule) => { tier1.get(m).push({form: rule.target, tier: 1, via: null, ...conditionOf(rule, 1)}); sources1.get(rule.target).push(m); };
+const add1 = (m, rule) => {
+  if (tier1.get(m).length >= TIER1_PER_BASE || tier1.get(m).some(f => f.form === rule.target) || sources1.get(rule.target).length >= FORM_CAP) return false;
+  tier1.get(m).push({form: rule.target, tier: 1, via: null, ...conditionOf(rule, 1)});
+  sources1.get(rule.target).push(m);
+  return true;
+};
+for (const [m, a] of PREFERRED_TIER1) {
+  const rule = cand1(m).find(r => r.target === a);
+  if (rule) add1(m, rule);
+}
 const fanIn = a => MA.filter(m => cand1(m).some(r => r.target === a)).length;
 for (const a of [...AW].sort((x, y) => fanIn(x) - fanIn(y) || x - y)) {
+  if (sources1.get(a).length) continue;
   const options = MA.map(m => ({m, rule: cand1(m).find(r => r.target === a)})).filter(o => o.rule && tier1.get(o.m).length < TIER1_PER_BASE);
   options.sort((x, y) => tier1.get(x.m).length - tier1.get(y.m).length || x.rule.kind - y.rule.kind || x.m - y.m);
   if (options[0]) add1(options[0].m, options[0].rule);
@@ -53,16 +134,25 @@ for (const m of MA) {
   }
   for (const rule of cand1(m)) {
     if (tier1.get(m).length >= TIER1_PER_BASE) break;
-    if (tier1.get(m).some(f => f.form === rule.target) || sources1.get(rule.target).length >= FORM_CAP) continue;
     add1(m, rule);
   }
 }
 // ---- tier 2 ----
 const tier2 = new Map(MA.map(m => [m, []])), sources2 = new Map(UL.map(u => [u, []]));
 const cand2 = m => tier1.get(m).flatMap(f => branches(f.form).filter(r => generation(r.target) === 6).map(rule => ({rule, via: f.form})));
-const add2 = (m, {rule, via}) => { tier2.get(m).push({form: rule.target, tier: 2, via, ...conditionOf(rule, 2)}); sources2.get(rule.target).push(m); };
+const add2 = (m, {rule, via}) => {
+  if (tier2.get(m).length >= TIER2_PER_BASE || tier2.get(m).some(f => f.form === rule.target) || sources2.get(rule.target).length >= FORM_CAP) return false;
+  tier2.get(m).push({form: rule.target, tier: 2, via, ...conditionOf(rule, 2)});
+  sources2.get(rule.target).push(m);
+  return true;
+};
+for (const [m, u, via] of PREFERRED_TIER2) {
+  const c = cand2(m).find(c => c.rule.target === u && (!via || c.via === via));
+  if (c) add2(m, c);
+}
 const fanIn2 = u => MA.filter(m => cand2(m).some(c => c.rule.target === u)).length;
 for (const u of [...UL].sort((x, y) => fanIn2(x) - fanIn2(y) || x - y)) {
+  if (sources2.get(u).length) continue;
   const options = MA.map(m => ({m, c: cand2(m).find(c => c.rule.target === u)})).filter(o => o.c && tier2.get(o.m).length < TIER2_PER_BASE);
   options.sort((x, y) => tier2.get(x.m).length - tier2.get(y.m).length || x.m - y.m);
   if (options[0]) add2(options[0].m, options[0].c);

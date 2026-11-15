@@ -15,7 +15,7 @@ import {PRODUCT_GROWTH_RULES,growthBranchHistoryIndex} from '../src/championship
 // branches their native slot), so saved completion flags never move.
 const PLAYABLE=[231,232,234,235,236,237,239,240];
 const lifecycle=JSON.parse(JSON.stringify(PRODUCT_GROWTH_RULES)),registeredSpecies=[...Array.from({length:216},(_,i)=>i+8),...PLAYABLE];
-const GROWTH_BRANCHES=244;
+const GROWTH_BRANCHES=260;
 const slot=(source,branch)=>(source-8)*5+growthBranchHistoryIndex(source,branch);
 
 test('all 244 growth candidate identities retain exact source/branch history offsets and live display identities',()=>{

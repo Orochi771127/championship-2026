@@ -1,5 +1,5 @@
 import {APPROVED10,assertApproved20Registry as assert224} from './approved20-20261022-contract.cjs';
-import {PRODUCT_FINAL_NATURAL_GENERATION,productGeneration} from '../src/championship/contracts/productGrowthRules.js';
+import {PRODUCT_FINAL_NATURAL_GENERATION,PRODUCT_GROWTH_RULES,productGeneration} from '../src/championship/contracts/productGrowthRules.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -53,7 +53,7 @@ test('upstream and downstream routes keep their original ordered targets, offset
       if(productGeneration(source)>=PRODUCT_FINAL_NATURAL_GENERATION){
         assert.deepEqual(selected.evolutionRoutes,[]);assert.ok(selected.burst,`${source} shows its burst forms`);continue;
       }
-      const targets=lifecycle.rules[source-8].map(rule=>rule.target);
+      const targets=PRODUCT_GROWTH_RULES.rules[source-8].map(rule=>rule.target);
       assert.deepEqual(selected.evolutionRoutes.map(r=>r.targetSpeciesIndex),targets);
       const route=selected.evolutionRoutes.find(r=>r.targetSpeciesIndex===target);
       assert.ok(route?.revealed);assert.equal(route.legacyBranchOffset,(source-8)*5+targets.indexOf(target));

@@ -54,8 +54,8 @@ test('all 244 growth branches (235 native-era plus nine to and from the playable
     assert.deepEqual(project(source,branch,context),result);
     assert.equal(JSON.stringify(context),snapshot);
   }));
-  assert.equal(count,244);assert.equal(rows,194);assert.equal(active.size,15);
-  assert.deepEqual(kinds,{ORDINARY:165,LIFETIME_ONLY:79});
+  assert.equal(count,260);assert.equal(rows,210);assert.equal(active.size,15);
+  assert.deepEqual(kinds,{ORDINARY:181,LIFETIME_ONLY:79});
   assert.equal(JSON.stringify(lifecycle),before);
 });
 
@@ -159,7 +159,7 @@ test('output contains no species/profile/name/raw rule fields and never reports 
 });
 
 test('pure import and all 244 projections do not invoke resolver/normalizer/constructor, RNG, timers, storage or network',()=>{
-  assert.deepEqual(isolated('purity'),{count:244,importAndProjectionSideEffects:0,forbiddenProjectionCalls:0,functionTrapsVerified:5,globalTrapsVerified:8});
+  assert.deepEqual(isolated('purity'),{count:260,importAndProjectionSideEffects:0,forbiddenProjectionCalls:0,functionTrapsVerified:5,globalTrapsVerified:8});
   const text=readFileSync(new URL('../src/championship/database/databaseEvolutionConditions.js',import.meta.url),'utf8');
   for(const forbidden of [/evaluateNativeEvolution\s*\(/,/evaluateNativeRebirth\s*\(/,/Math\.random\s*\(/,/localStorage/,/setTimeout\s*\(/,/\.next\s*\(/])assert.doesNotMatch(text,forbidden);
 });

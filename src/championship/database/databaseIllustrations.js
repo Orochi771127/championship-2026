@@ -65,9 +65,20 @@ const generationOf=index=>nativeSpecies.records[index]?.generationIndex??listPro
 const linkKind=to=>generationOf(to)===6?'AWAKEN_2':generationOf(to)===5?'AWAKEN':'EVOLVE';
 export function databaseIllustrationLinks(speciesIndex){
   if(!databaseIllustrationRow(speciesIndex))return Object.freeze([]);
+  const originals=listProductOriginals(),origIds=new Set(originals.map(e=>e.speciesIndex)),chain=new Set([speciesIndex]);
+  let changed=true;
+  while(changed){
+    changed=false;
+    for(const e of originals)for(const r of e.evolution)if(origIds.has(r.target)){
+      if(chain.has(e.speciesIndex)&&!chain.has(r.target)){chain.add(r.target);changed=true;}
+      if(chain.has(r.target)&&!chain.has(e.speciesIndex)){chain.add(e.speciesIndex);changed=true;}
+    }
+  }
   const links=[];
-  for(const e of listProductOriginals())for(const r of e.evolution)
-    if(e.speciesIndex===speciesIndex||r.target===speciesIndex)links.push({from:e.speciesIndex,to:r.target});
-  for(const x of PRODUCT_ORIGINAL_SPECIES.nativeInserts)if(x.target===speciesIndex)links.push({from:x.source,to:x.target});
+  for(const x of PRODUCT_ORIGINAL_SPECIES.nativeInserts)if(chain.has(x.target))links.push({from:x.source,to:x.target});
+  for(const e of originals)for(const r of e.evolution)
+    if((chain.has(e.speciesIndex)&&chain.has(r.target))||e.speciesIndex===speciesIndex||r.target===speciesIndex)
+      links.push({from:e.speciesIndex,to:r.target});
+  links.sort((a,b)=>(generationOf(a.from)??0)-(generationOf(b.from)??0)||a.from-b.from||a.to-b.to);
   return deepFreeze(links.map(l=>({...l,kind:linkKind(l.to)})));
 }

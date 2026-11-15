@@ -51,7 +51,12 @@ export async function loadBattleEffectArt({PIXI, manifest, productionIndex, base
       if (disposal) return disposal;
       for (const cell of cells.values()) cell.texture.destroy(false);
       cells.clear();
-      disposal = Promise.resolve(PIXI.Assets.unload(checked.image.src));
+      const source = texture?.source, bitmap = source?.resource;
+      disposal = Promise.resolve(PIXI.Assets.unload(checked.image.src)).then(() => {
+        if ((source?.destroyed || source?.resource === null) && typeof bitmap?.close === 'function') {
+          try { bitmap.close(); } catch {}
+        }
+      });
       return disposal;
     }
   };

@@ -185,6 +185,7 @@ export function paintPrismFace(c, face, { fontFamily, open }) {
     c.shadowColor = accent; c.shadowBlur = 18;
     c.drawImage(mark, w / 2 - 110, 238 - 110);
     c.restore();
+    mark.width = mark.height = 0;
   }
   // Divider.
   c.fillStyle = `${accent}aa`; c.fillRect(w / 2 - 120, 392, 240, 4);
@@ -625,6 +626,8 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
       canvas.removeEventListener("pointerleave", onLeave);
       canvas.removeEventListener("webglcontextrestored", restored);
       for (const thing of disposables) thing.dispose();
+      for (const panel of panels) if (panel.art) { panel.art.width = 0; panel.art.height = 0; }
+      if (poolTexture?.image && "width" in poolTexture.image) { poolTexture.image.width = 0; poolTexture.image.height = 0; }
       renderer.dispose();
       // This private canvas is retired permanently; dispose alone releases
       // Three resources but leaves its browser WebGL context alive until GC.

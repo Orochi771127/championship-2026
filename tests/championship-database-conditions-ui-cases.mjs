@@ -62,7 +62,7 @@ test('real projectDatabase joins all 244 growth branches; original route and boo
       frozen(conditions);count++;
     });
   }
-  assert.equal(count,244);assert.equal(JSON.stringify(lifecycle),snapshot);
+  assert.equal(count,260);assert.equal(JSON.stringify(lifecycle),snapshot);
 });
 
 test('exact source8/history0/registered target20 is required; unknown, target-only and contradictory histories emit no condition DOM or aria',()=>{

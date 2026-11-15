@@ -115,22 +115,64 @@ function samplePropertyAnimator(animator, elapsedSeconds) {
   material.map.updateMatrix?.();
 }
 
-function disposeObject(root) {
+function collectSceneTextures(root) {
+  const textures = [];
+  const seen = new Set();
+  root.traverse((object) => {
+    const list = Array.isArray(object.material) ? object.material : [object.material];
+    for (const material of list) {
+      if (!material) continue;
+      for (const value of Object.values(material)) {
+        if (value?.isTexture && !seen.has(value)) {
+          seen.add(value);
+          textures.push(value);
+        }
+      }
+    }
+  });
+  return textures;
+}
+
+function closeTextureData(data) {
+  if (typeof data?.close === "function") {
+    try { data.close(); } catch {}
+  }
+}
+
+function disposeObject(root, { sourceRefCounts = null, onSourceReleased = null } = {}) {
   const geometries = new Set();
   const materials = new Set();
   const textures = new Set();
+  const sources = new Set();
   root.traverse((object) => {
     if (object.geometry) geometries.add(object.geometry);
     const list = Array.isArray(object.material) ? object.material : [object.material];
     for (const material of list) {
       if (!material) continue;
       materials.add(material);
-      for (const value of Object.values(material)) if (value?.isTexture) textures.add(value);
+      for (const value of Object.values(material)) {
+        if (value?.isTexture) {
+          textures.add(value);
+          if (value.source) sources.add(value.source);
+        }
+      }
     }
   });
   for (const geometry of geometries) geometry.dispose?.();
   for (const material of materials) material.dispose?.();
   for (const texture of textures) texture.dispose?.();
+  for (const source of sources) {
+    if (sourceRefCounts) {
+      const nextCount = (sourceRefCounts.get(source) ?? 1) - 1;
+      if (nextCount > 0) {
+        sourceRefCounts.set(source, nextCount);
+        continue;
+      }
+      sourceRefCounts.delete(source);
+    }
+    onSourceReleased?.(source);
+    closeTextureData(source?.data);
+  }
 }
 
 export async function loadLicensedVfxRuntimeManifest({ url = LICENSED_VFX_MANIFEST_URL, fetchImpl = globalThis.fetch } = {}) {
@@ -151,6 +193,35 @@ export function createLicensedVfxRuntime({ manifest, loader = new GLTFLoader(), 
   const activeByChannel = new Map();
   const generationByChannel = new Map();
   const sidecarCache = new Map();
+  const canonicalSourcesByModel = new Map();
+  const sourceRefCounts = new Map();
+  function bindSharedModelSources(modelKey, root) {
+    const textures = collectSceneTextures(root);
+    let canonical = canonicalSourcesByModel.get(modelKey);
+    if (!canonical || canonical.length !== textures.length || canonical.some((src) => !src || !sourceRefCounts.has(src))) {
+      canonical = textures.map((tex) => tex.source);
+      if (canonical.length > 0) canonicalSourcesByModel.set(modelKey, canonical);
+    } else {
+      for (let i = 0; i < textures.length; i += 1) {
+        const tex = textures[i];
+        const sharedSource = canonical[i];
+        if (sharedSource && tex.source && tex.source !== sharedSource) {
+          const duplicateData = tex.source.data;
+          tex.source = sharedSource;
+          closeTextureData(duplicateData);
+        }
+      }
+    }
+    const uniqueSources = new Set(textures.map((tex) => tex.source).filter(Boolean));
+    for (const source of uniqueSources) {
+      sourceRefCounts.set(source, (sourceRefCounts.get(source) ?? 0) + 1);
+    }
+  }
+  function handleSourceReleased(source) {
+    for (const [modelKey, list] of canonicalSourcesByModel.entries()) {
+      if (list.includes(source)) canonicalSourcesByModel.delete(modelKey);
+    }
+  }
   const cachedLoadJson = (url) => {
     if (!sidecarCache.has(url)) {
       sidecarCache.set(url, Promise.resolve().then(() => loadJson(url)).catch((err) => {
@@ -184,6 +255,7 @@ export function createLicensedVfxRuntime({ manifest, loader = new GLTFLoader(), 
       return null;
     }
     await activeByChannel.get(runtimeChannel)?.dispose();
+    bindSharedModelSources(record.model, gltf.scene);
     const mixer = new THREE.AnimationMixer(gltf.scene);
     const actions = gltf.animations.filter((clip) => clip.tracks.length > 0).map((clip) => mixer.clipAction(clip).play());
     const periodSeconds = animationPeriodSeconds(gltf) || Math.max(...sidecars.map((sidecar) => sidecar.frameCount / 60), 1 / 60);
@@ -248,7 +320,7 @@ export function createLicensedVfxRuntime({ manifest, loader = new GLTFLoader(), 
         disposed = true;
         mixer.stopAllAction();
         mixer.uncacheRoot(gltf.scene);
-        disposeObject(gltf.scene);
+        disposeObject(gltf.scene, { sourceRefCounts, onSourceReleased: handleSourceReleased });
         if (activeByChannel.get(runtimeChannel) === instance) activeByChannel.delete(runtimeChannel);
       }
     });

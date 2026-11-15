@@ -179,7 +179,7 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
     const base = PIXI.Texture.from(canvas);
     base.source.scaleMode = 'nearest';
     const textures = Array.from({length: n}, (_, i) => new PIXI.Texture({source: base.source, frame: new PIXI.Rectangle(i * look.w, 0, look.w, look.h)}));
-    const value = {base, textures, look};
+    const value = {base, textures, look, canvas};
     sheets.set(key, value);
     return value;
   }
@@ -212,7 +212,7 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
     const base = PIXI.Texture.from(canvas);
     base.source.scaleMode = 'linear';
     const textures = Array.from({length: n}, (_, i) => new PIXI.Texture({source: base.source, frame: new PIXI.Rectangle(i * w, 0, w, h)}));
-    const value = {base, textures, look};
+    const value = {base, textures, look, canvas};
     sheets.set(key, value);
     return value;
   }
@@ -295,7 +295,11 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
     dispose() {
       for (const p of live.splice(0)) p.parts.forEach(q => { release(q.sprite); release(q.glow); });
       for (const s of pool.splice(0)) { s.parent?.removeChild(s); s.destroy(); }
-      for (const art of sheets.values()) if (art) { for (const t of art.textures) t.destroy(false); art.base.destroy(true); }
+      for (const art of sheets.values()) if (art) {
+        for (const t of art.textures) t.destroy(false);
+        art.base.destroy(true);
+        if (art.canvas) { art.canvas.width = 0; art.canvas.height = 0; }
+      }
       sheets.clear();
     }
   });

@@ -38,7 +38,11 @@ test('a fresh egg hatches a 幼年期 I species for every channel value; ancestr
 test('growth tables: native branches up to 成長期, none from 成熟期 on, three appended branches at the end', () => {
   // Natives and the playable originals' own lists (231..240, Owner 2026-11-03).
   assert.equal(PRODUCT_GROWTH_RULES.rules.length, 240 - 8 + 1);
-  const appended = [[19, 31], [31, 63], [56, 93]];
+  const appended = [
+    [19, 31], [19, 28], [25, 239], [28, 37], [31, 63], [31, 34], [31, 71],
+    [38, 128], [38, 82], [50, 87], [55, 127], [56, 93], [60, 106], [61, 73],
+    [63, 76], [64, 121], [65, 81], [67, 82], [67, 83]
+  ];
   // Playable originals are checked first where the 10-29 proposal placed them; history keeps native slots.
   const inserted = new Map([[23, 231], [30, 237], [37, 234], [42, 235], [49, 236]]);
   PRODUCT_GROWTH_RULES.rules.forEach((list, i) => {
