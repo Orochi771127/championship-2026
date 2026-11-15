@@ -7,8 +7,8 @@
   "motionErrors": [],
   "art": {
    "atlas": 48,
-   "reviewed": 135,
-   "reviewed-right": 43
+   "reviewed": 132,
+   "reviewed-right": 46
   },
   "maxCellAspect": 2.02,
   "multiCellPages": 226,
@@ -4719,7 +4719,7 @@
    "speciesId": "species-052",
    "motion": {
     "entityId": "m226_hagurumon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 3.369839932603201,
     "bounds": {
      "left": -49,
@@ -4782,11 +4782,11 @@
      "visualHeight": 86
     },
     "muzzleSocket": {
-     "x": -45,
-     "y": -82,
-     "heightRatio": 0.87,
-     "releaseIndex": 2,
-     "releaseMs": 250
+     "x": 22,
+     "y": -53,
+     "heightRatio": 0.67,
+     "releaseIndex": 1,
+     "releaseMs": 117
     }
    },
    "cutinHeadFrame": {
@@ -11711,7 +11711,7 @@
    "speciesId": "species-122",
    "motion": {
     "entityId": "m364_redvagimon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 4.1710114702815435,
     "bounds": {
      "left": -83,
@@ -11774,11 +11774,11 @@
      "visualHeight": 177
     },
     "muzzleSocket": {
-     "x": -52,
-     "y": -82,
-     "heightRatio": 0.55,
-     "releaseIndex": 0,
-     "releaseMs": 0
+     "x": 103,
+     "y": -88,
+     "heightRatio": 0.59,
+     "releaseIndex": 1,
+     "releaseMs": 167
     }
    },
    "cutinHeadFrame": {
@@ -13183,7 +13183,7 @@
    "speciesId": "species-184",
    "motion": {
     "entityId": "m457_superstarmon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 6.365612582781457,
     "bounds": {
      "left": -119,
@@ -13246,9 +13246,9 @@
      "visualHeight": 227
     },
     "muzzleSocket": {
-     "x": -113,
-     "y": -97,
-     "heightRatio": 0.54,
+     "x": 109,
+     "y": -154,
+     "heightRatio": 0.86,
      "releaseIndex": 0,
      "releaseMs": 0
     }
@@ -13459,7 +13459,7 @@
    "speciesId": "species-150",
    "motion": {
     "entityId": "m417_delumon",
-    "art": "reviewed-right",
+    "art": "reviewed",
     "density": 5.33436933223413,
     "bounds": {
      "left": -132,
@@ -13522,9 +13522,9 @@
      "visualHeight": 232
     },
     "muzzleSocket": {
-     "x": 72,
-     "y": -163,
-     "heightRatio": 0.7,
+     "x": -82,
+     "y": -203,
+     "heightRatio": 0.87,
      "releaseIndex": 0,
      "releaseMs": 0
     }
@@ -15667,7 +15667,7 @@
    "speciesId": "species-171",
    "motion": {
     "entityId": "m444_monzaemon",
-    "art": "reviewed",
+    "art": "reviewed-right",
     "density": 5.379959650302623,
     "bounds": {
      "left": -116.03999999999999,
@@ -15730,9 +15730,9 @@
      "visualHeight": 258.04
     },
     "muzzleSocket": {
-     "x": -97.03999999999999,
-     "y": -195,
-     "heightRatio": 0.84,
+     "x": 79.96000000000001,
+     "y": -174,
+     "heightRatio": 0.75,
      "releaseIndex": 5,
      "releaseMs": 250
     }
