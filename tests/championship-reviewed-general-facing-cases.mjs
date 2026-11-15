@@ -78,3 +78,15 @@ test('every General set walks forward: sets drawn facing right carry generalMirr
  // AW19's walk is drawn facing left, so it must not be mirrored.
  assert.equal(selection.characters.find(c=>c.displayCode==='AW19')?.generalMirror,false,'AW19');
 });
+
+test('partial two-set deliveries keep the native body for the mode they lack (UL05 Arena only, UL06 General only)',async()=>{
+ for(const [code,usage] of [['UL05','general'],['UL06','arena']]){
+  const entry=selection.characters.find(c=>c.displayCode===code);assert.ok(entry,code);
+  const d=JSON.parse(fs.readFileSync(path.join(root,entry.path),'utf8'));
+  assert.equal(d.clips.some(c=>usage==='arena'?c.mode==='arena':c.mode!=='arena'),false,code+' has no '+usage+' clips');
+  const base=baseline();
+  const got=await attachReviewedCharacterAnimation({bundle:base,PIXI:mockPixi().PIXI,speciesId:entry.speciesId,usage,
+   baseUrl:'http://127.0.0.1:8768/championship.html',fetchImpl:fileFetch});
+  assert.equal(got,base,code+' '+usage+' falls back to the native bundle');
+ }
+});

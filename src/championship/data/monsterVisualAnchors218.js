@@ -14,7 +14,7 @@
 //   muzzle  [x, y, heightRatio, releaseIndex, releaseMs]
 //   head    [headFocusX, headFocusY, headSafeScale, opaqueInHead]
 export const MONSTER_VISUAL_ANCHORS_SCHEMA = 1;
-export const MONSTER_VISUAL_ANCHORS_SUMMARY = Object.freeze({"species":226,"withMotion":226,"withHead":226,"motionErrors":[],"art":{"atlas":40,"reviewed":139,"reviewed-right":47},"maxCellAspect":2.02,"multiCellPages":226,"muzzleInUpperBody":226,"stances":{"grounded":206,"hovering":3,"tail-below":17},"headsOnBody":223,"headsMostlyDrawn":226});
+export const MONSTER_VISUAL_ANCHORS_SUMMARY = Object.freeze({"species":226,"withMotion":226,"withHead":226,"motionErrors":[],"art":{"atlas":39,"reviewed":140,"reviewed-right":47},"maxCellAspect":2.02,"multiCellPages":226,"muzzleInUpperBody":226,"stances":{"grounded":207,"hovering":3,"tail-below":16},"headsOnBody":223,"headsMostlyDrawn":226});
 const ACTION_IDS = Object.freeze(["stand","walk","attack","cheer"]);
 const ROWS = {
   "species-008": [["m001_zurumon",4,[-22,-56,27,1],[[2,41,37,10.1],[2,41,36,10.4],[2,33,35,7.3],[2,42,32,7.4]],["grounded",0,37],[-20,-25,0.71,1,250],"atlas"],[0.4942,0.6412,0.5718,0.743]],
@@ -200,7 +200,7 @@ const ROWS = {
   "species-222": [["m540_imperialdramon_fm",14.37648,[-356.68,-472.79,356.32,1.1499999999999773],[[2,641,473,12.3],[2,713,434,12],[2,434,279,20.4],[2,326,307,37.2]],["grounded",0.20999999999997954,472.79],[-182.52999999999997,-141,0.57,1,250],"reviewed"],[0.3681,0.4907,0.5602,0.714]],
   "species-187": [["m501_vikemon",5.333333333333333,[-169.06,-303.22,168.94,0.39999999999997726],[[2,255,291,48.7],[2,263,285,48.2],[2,338,275,38.9],[2,260,303,45.9]],["grounded",-0.009999999999990905,291.01],[-157.06,-189,0.86,1,250],"reviewed"],[0.4722,0.2292,0.2963,0.801]],
   "species-188": [["m502_valkyrimon",4,[-212,-196,150,15],[[2,193,211,8.1],[2,220,193,7.8],[2,344,198,5.5],[2,256,184,13.7]],["tail-below",12,196],[-192,-105,0.6,1,250],"atlas"],[0.4907,0.1785,0.2697,0.612]],
-  "species-189": [["m503_warglaymon",4,[-308,-278,186,9],[[2,263,214,8.3],[2,239,223,8.7],[2,385,282,4.3],[2,255,218,8]],["tail-below",9,205],[-229,-199,0.83,1,267],"atlas"],[0.3218,0.1948,0.3681,0.703]],
+  "species-189": [["m503_warglaymon",25.672719999999998,[-486,-787,486,0],[[2,829,787,5.9],[2,972,774,3.3],[2,461,397,22.3],[2,429,442,21.5]],["grounded",0,787],[-138.5,-223,0.78,1,267],"reviewed"],[0.3218,0.1948,0.3681,0.703]],
   "species-190": [["m504_gigaseadramon",4,[-274,-305,172,32],[[2,263,259,9.6],[2,446,314,4.7],[2,412,301,7.9],[2,284,303,3.3]],["tail-below",15,244],[-211,-167,0.55,1,250],"atlas"],[0.862,0.2778,0.2891,0.555]],
   "species-191": [["m505_grankuwagamon",10.596026490066226,[-491.83000000000004,-697.74,493.16999999999996,0.9800000000000182],[[2,985,698,3.7],[2,381,274,24.7],[2,390,328,29.7],[2,421,337,26.8]],["grounded",-0.3199999999999932,697.74],[-117.77000000000001,-163,0.67,1,350],"reviewed"],[0.5352,0.3785,0.4492,0.752]],
   "species-192": [["m506_griffomon",4,[-88,-189,242,5],[[2,294,193,7.4],[2,285,186,8],[2,305,184,5.9],[2,303,192,5.7]],["grounded",4,189],[-64,-131,0.8,1,250],"atlas"],[0.4609,0.2535,0.4427,0.765]],
