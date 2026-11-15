@@ -6,17 +6,17 @@
   "withHead": 226,
   "motionErrors": [],
   "art": {
-   "atlas": 48,
-   "reviewed": 131,
+   "atlas": 45,
+   "reviewed": 134,
    "reviewed-right": 47
   },
   "maxCellAspect": 2.02,
   "multiCellPages": 226,
   "muzzleInUpperBody": 226,
   "stances": {
-   "grounded": 202,
+   "grounded": 203,
    "hovering": 3,
-   "tail-below": 21
+   "tail-below": 20
   },
   "headsOnBody": 223,
   "headsMostlyDrawn": 226
@@ -16495,57 +16495,57 @@
    "speciesId": "species-220",
    "motion": {
     "entityId": "m538_apollomon",
-    "art": "atlas",
-    "density": 4,
+    "art": "reviewed",
+    "density": 13.091819852941175,
     "bounds": {
-     "left": -268,
-     "top": -275,
-     "right": 205,
-     "bottom": 14
+     "left": -323,
+     "top": -850,
+     "right": 323,
+     "bottom": 0
     },
     "actions": {
      "stand": {
       "sequence": 0,
       "frameCount": 2,
-      "frameWidth": 266,
-      "frameHeight": 260,
-      "cellAspect": 1.02,
-      "pageWidth": 1760,
-      "pageHeight": 512,
-      "cellsPerPage": 13,
+      "frameWidth": 217,
+      "frameHeight": 291,
+      "cellAspect": 0.75,
+      "pageWidth": 1992,
+      "pageHeight": 870,
+      "cellsPerPage": 27.4,
       "durationMs": 883
      },
      "walk": {
       "sequence": 2,
       "frameCount": 2,
-      "frameWidth": 382,
-      "frameHeight": 265,
-      "cellAspect": 1.44,
-      "pageWidth": 1760,
-      "pageHeight": 512,
-      "cellsPerPage": 8.9,
+      "frameWidth": 646,
+      "frameHeight": 850,
+      "cellAspect": 0.76,
+      "pageWidth": 1850,
+      "pageHeight": 1824,
+      "cellsPerPage": 6.1,
       "durationMs": 450
      },
      "attack": {
       "sequence": 7,
       "frameCount": 2,
-      "frameWidth": 428,
-      "frameHeight": 283,
-      "cellAspect": 1.51,
-      "pageWidth": 1872,
-      "pageHeight": 288,
-      "cellsPerPage": 4.5,
+      "frameWidth": 276,
+      "frameHeight": 294,
+      "cellAspect": 0.94,
+      "pageWidth": 1992,
+      "pageHeight": 870,
+      "cellsPerPage": 21.4,
       "durationMs": 867
      },
      "cheer": {
       "sequence": 33,
       "frameCount": 2,
-      "frameWidth": 366,
-      "frameHeight": 283,
-      "cellAspect": 1.29,
-      "pageWidth": 1744,
-      "pageHeight": 288,
-      "cellsPerPage": 4.8,
+      "frameWidth": 236,
+      "frameHeight": 292,
+      "cellAspect": 0.81,
+      "pageWidth": 1992,
+      "pageHeight": 870,
+      "cellsPerPage": 25.1,
       "durationMs": 1133
      }
     },
@@ -16553,14 +16553,14 @@
      "x": 0,
      "y": 0,
      "stance": "grounded",
-     "lowestPixel": 8,
-     "lowestPixelX": 42,
-     "visualHeight": 246
+     "lowestPixel": 0,
+     "lowestPixelX": 43,
+     "visualHeight": 291
     },
     "muzzleSocket": {
-     "x": -254,
-     "y": -181,
-     "heightRatio": 0.66,
+     "x": -124,
+     "y": -192,
+     "heightRatio": 0.65,
      "releaseIndex": 1,
      "releaseMs": 250
     }
@@ -17017,74 +17017,74 @@
    "speciesId": "species-191",
    "motion": {
     "entityId": "m505_grankuwagamon",
-    "art": "atlas",
-    "density": 4,
+    "art": "reviewed",
+    "density": 10.596026490066226,
     "bounds": {
-     "left": -188,
-     "top": -266,
-     "right": 170,
-     "bottom": 14
+     "left": -491.83000000000004,
+     "top": -697.74,
+     "right": 493.16999999999996,
+     "bottom": 0.9800000000000182
     },
     "actions": {
      "stand": {
       "sequence": 0,
       "frameCount": 2,
-      "frameWidth": 338,
-      "frameHeight": 275,
-      "cellAspect": 1.23,
-      "pageWidth": 1760,
-      "pageHeight": 544,
-      "cellsPerPage": 10.3,
+      "frameWidth": 985,
+      "frameHeight": 698,
+      "cellAspect": 1.41,
+      "pageWidth": 1992,
+      "pageHeight": 1294,
+      "cellsPerPage": 3.7,
       "durationMs": 983
      },
      "walk": {
       "sequence": 2,
       "frameCount": 2,
-      "frameWidth": 350,
-      "frameHeight": 268,
-      "cellAspect": 1.31,
-      "pageWidth": 1760,
-      "pageHeight": 544,
-      "cellsPerPage": 10.2,
+      "frameWidth": 381,
+      "frameHeight": 274,
+      "cellAspect": 1.39,
+      "pageWidth": 1992,
+      "pageHeight": 1294,
+      "cellsPerPage": 24.7,
       "durationMs": 417
      },
      "attack": {
       "sequence": 7,
       "frameCount": 2,
-      "frameWidth": 351,
-      "frameHeight": 278,
-      "cellAspect": 1.26,
-      "pageWidth": 1744,
-      "pageHeight": 512,
-      "cellsPerPage": 9.2,
+      "frameWidth": 390,
+      "frameHeight": 328,
+      "cellAspect": 1.19,
+      "pageWidth": 1922,
+      "pageHeight": 1975,
+      "cellsPerPage": 29.7,
       "durationMs": 867
      },
      "cheer": {
       "sequence": 33,
       "frameCount": 2,
-      "frameWidth": 356,
-      "frameHeight": 244,
-      "cellAspect": 1.46,
-      "pageWidth": 1776,
-      "pageHeight": 256,
-      "cellsPerPage": 5.2,
+      "frameWidth": 421,
+      "frameHeight": 337,
+      "cellAspect": 1.25,
+      "pageWidth": 1922,
+      "pageHeight": 1975,
+      "cellsPerPage": 26.8,
       "durationMs": 1133
      }
     },
     "footAnchor": {
      "x": 0,
      "y": 0,
-     "stance": "tail-below",
-     "lowestPixel": 12,
-     "lowestPixelX": 71.8,
-     "visualHeight": 263
+     "stance": "grounded",
+     "lowestPixel": -0.3199999999999932,
+     "lowestPixelX": -72,
+     "visualHeight": 697.74
     },
     "muzzleSocket": {
-     "x": -184,
-     "y": -233,
-     "heightRatio": 0.88,
-     "releaseIndex": 0,
-     "releaseMs": 0
+     "x": -117.77000000000001,
+     "y": -163,
+     "heightRatio": 0.67,
+     "releaseIndex": 1,
+     "releaseMs": 350
     }
    },
    "cutinHeadFrame": {
@@ -17845,57 +17845,57 @@
    "speciesId": "species-221",
    "motion": {
     "entityId": "m539_dianamon",
-    "art": "atlas",
-    "density": 4,
+    "art": "reviewed",
+    "density": 23.10756972111554,
     "bounds": {
-     "left": -164,
-     "top": -295,
-     "right": 251,
-     "bottom": 10
+     "left": -322.55,
+     "top": -602.5,
+     "right": 322.45,
+     "bottom": 0.2599999999999909
     },
     "actions": {
      "stand": {
       "sequence": 0,
       "frameCount": 2,
-      "frameWidth": 286,
-      "frameHeight": 291,
-      "cellAspect": 0.98,
-      "pageWidth": 1952,
-      "pageHeight": 576,
-      "cellsPerPage": 13.5,
+      "frameWidth": 378,
+      "frameHeight": 451,
+      "cellAspect": 0.84,
+      "pageWidth": 1979,
+      "pageHeight": 2010,
+      "cellsPerPage": 23.3,
       "durationMs": 883
      },
      "walk": {
       "sequence": 2,
       "frameCount": 2,
-      "frameWidth": 271,
-      "frameHeight": 284,
-      "cellAspect": 0.95,
-      "pageWidth": 1952,
-      "pageHeight": 576,
-      "cellsPerPage": 14.6,
+      "frameWidth": 473,
+      "frameHeight": 602,
+      "cellAspect": 0.79,
+      "pageWidth": 1902,
+      "pageHeight": 1788,
+      "cellsPerPage": 11.9,
       "durationMs": 450
      },
      "attack": {
       "sequence": 7,
       "frameCount": 2,
-      "frameWidth": 296,
-      "frameHeight": 303,
-      "cellAspect": 0.98,
-      "pageWidth": 1520,
-      "pageHeight": 320,
-      "cellsPerPage": 5.4,
+      "frameWidth": 645,
+      "frameHeight": 593,
+      "cellAspect": 1.09,
+      "pageWidth": 1902,
+      "pageHeight": 1788,
+      "cellsPerPage": 8.9,
       "durationMs": 867
      },
      "cheer": {
       "sequence": 33,
       "frameCount": 2,
-      "frameWidth": 294,
-      "frameHeight": 246,
+      "frameWidth": 329,
+      "frameHeight": 275,
       "cellAspect": 1.2,
-      "pageWidth": 1328,
-      "pageHeight": 320,
-      "cellsPerPage": 5.9,
+      "pageWidth": 1979,
+      "pageHeight": 2010,
+      "cellsPerPage": 44,
       "durationMs": 1133
      }
     },
@@ -17903,16 +17903,16 @@
      "x": 0,
      "y": 0,
      "stance": "grounded",
-     "lowestPixel": 5,
-     "lowestPixelX": 8.5,
-     "visualHeight": 284
+     "lowestPixel": -0.7400000000000091,
+     "lowestPixelX": 4,
+     "visualHeight": 450.74
     },
     "muzzleSocket": {
-     "x": -56,
-     "y": -225,
-     "heightRatio": 0.77,
-     "releaseIndex": 0,
-     "releaseMs": 0
+     "x": -316.55,
+     "y": -409,
+     "heightRatio": 0.69,
+     "releaseIndex": 1,
+     "releaseMs": 250
     }
    },
    "cutinHeadFrame": {
