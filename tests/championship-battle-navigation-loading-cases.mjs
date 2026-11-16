@@ -53,6 +53,8 @@ function ownerFixture(target,{hudLoad=async()=>hud([cell('result')]),stageLoad=n
     view:newView(),raisingSource:{},root:{dataset:{}},RESPONSIVE_BATTLE_CANDIDATE:false,BATTLE_DYNAMIC_FX:false,battleCeremonies:null,
     // Battle polish (2026-11-03): the result summary tally lives beside the owners in main.js.
     battleSummaryTally:null,startBattleSummaryTally(){},battleSummaryFor:()=>null,
+    // Battle-plan record (TACTIC_PRACTICE_LOOP_20261116): the result's optional record panel, owned beside them.
+    tacticRecordPanelFor:()=>null,tacticRecordText:key=>key,tacticPracticeFoeKey:()=>'',
     createLoadAttempt(options){
       const attempt=createLoadAttempt({...options,setTimer(fn,ms){const timer={fn,ms};timers.add(timer);return timer;},clearTimer:timer=>timers.delete(timer)});
       attempts.push(attempt);return attempt;

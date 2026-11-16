@@ -73,6 +73,7 @@ import { projectBattleCharacterRequest } from '../presentation/battleCharacterAc
 import { battleSpecialPreludeInputs, sampleBattleSpecialPrelude } from "../battle/battleSpecialPrelude.js";
 import { BATTLE_SPECIES_MOVEMENT } from "../../data/championship/battleCharacterProfiles.js";
 import { createBattlePresentationSource, BATTLE_PRESENTATION_ARENAS } from "./battlePresentationSource.js";
+import { createBattleRecordTap, summariseBattleRecord } from "./battleTacticRecord.js";
 import {
   BATTLE_ROSTER_PROFILES,
   buildBattleRoster,
@@ -485,6 +486,7 @@ export function createBattleRuntime(options = {}) {
   let roster = null;
   const observers = new Set();
   let unsubscribe = null;
+  let tacticTap = null;
 
   let session = null;
   let hitRuntime = null;
@@ -880,8 +882,12 @@ export function createBattleRuntime(options = {}) {
           // No impact has flashed before the first frame (-1 === 0-1 is not a flash).
           flash:{active:!session.ended&&impactFlashFrame>=0&&impactFlashFrame===session.frame-1,frame:impactFlashFrame,source:'0210FC68'},
           effectPool:effectActors.diagnostics(),effectActors:effectActors.snapshot(),contacts:{...contacts,history:[...contacts.history]},poseWaitAdaptations:poseWaitAdaptations.map(a=>({...a})),reactions:hitRuntime.snapshot(),normalFlow:session.normalFlow.snapshot()}) });
+      // Battle-plan record (TACTIC_PRACTICE_LOOP_20261116): a read-only tap on every published view.
+      tacticTap = createBattleRecordTap({ localTeamIndex });
+      tacticTap.observe(source.getView());
       unsubscribe = source.subscribe(() => {
         const view = source.getView();
+        try { tacticTap?.observe(view); } catch { /* the record never stops a battle */ }
         for (const observer of [...observers]) {
           try { observer(view); } catch { /* a failing observer must not stop a battle */ }
         }
@@ -926,6 +932,13 @@ export function createBattleRuntime(options = {}) {
       return localPresentationOutcome(source.getView().outcome);
     },
     localTeamIndex(){return localTeamIndex;},
+    /** What each local partner actually did this match, from its launched moves and SP (presentation record only). */
+    getTacticRecord(){
+      if(!session||!source||!tacticTap)return null;
+      return summariseBattleRecord({tap:tacticTap,view:source.getView(),localTeamIndex,
+        diagnostics:{slots:roster.map((creature,slot)=>creature?{instanceId:creature.instanceId??null,tactic:creature.tactic??null,profile:session.slots[slot].profileIndex,
+          policy:personalityPolicy,...session.decisionTally[slot]}:null)}});
+    },
     getResultParticipants(){
       if(!session?.ended)throw runtimeError('MATCH_NOT_ENDED');
       return deepFreeze(roster.slice(localTeamIndex*3,localTeamIndex*3+3).map(creature=>creature?{speciesId:`species-${String(creature.speciesId).padStart(3,'0')}`,instanceId:creature.instanceId??null}:null));

@@ -1453,7 +1453,7 @@ function resultSummary(summary, winningTeam) {
   return box;
 }
 
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, syncPanel=null, followUp=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null, sponsor=null }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, syncPanel=null, followUp=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null, sponsor=null, tacticRecord=null }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
   let disposed=false;
 
@@ -1555,6 +1555,17 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     }
   });
 
+  // Battle-plan record (TACTIC_PRACTICE_LOOP_20261116): counted facts from this match, built by the app.
+  if (tacticRecord?.lines?.length) {
+    panels.push({ id: "TACTIC", scene: "result_sub_status_scene", build() {
+      const frag = document.createDocumentFragment(), head = element("header", "cm-vs5-header cm-vs5-result__tactic");
+      head.append(element("span", "cm-vs5-kicker", tacticRecord.kicker, false), element("h1", "cm-vs5-title", tacticRecord.title, false));
+      const list = element("ul", "cm-vs5-result__tactic-lines");
+      for (const line of tacticRecord.lines) list.append(element("li", "cm-vs5-result__detail", line, false));
+      frag.append(head, list);
+      return frag;
+    } });
+  }
   // Sync EXP (OWNER_APPROVED_ADAPTATION 2026-11-09): the app builds the panel from its settled gains.
   if(syncPanel?.node){
     panels.push({id:'SYNC',scene:'product_sync_exp',build(){

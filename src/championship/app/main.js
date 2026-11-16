@@ -178,6 +178,8 @@ import { gachaChipEffectLines, getGachaMetal } from '../gacha/cyberGacha.js';
 import { buildSyncGainPanel } from './ui/syncGainPanel.js';
 import { loadStylesheet } from './loadStylesheet.js';
 import { journeyText } from '../text/journeyText.js';
+import { tacticRecordLines, tacticRecordText, tacticPracticeFoeKey } from '../text/tacticRecordText.js';
+import { battleMoveName } from '../text/battleMoveNames.js';
 import { syncText } from '../text/syncLevelText.js';
 
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
@@ -1620,6 +1622,37 @@ async function mountHuntField() {
 // --- VS5 Auto Battle -------------------------------------------------------
 // The runtime holds the chosen match and the live session between the three
 // screens; the views below are handed only what they draw.
+// Battle-plan record (TACTIC_PRACTICE_LOOP_20261116). The result screen states what each partner
+// actually did (launched moves, SP, repositioning) when its plan was read. ?tacticRecord=off is the
+// A side of the playtest comparison: same battle, no record panel. Session memory only -- the
+// last record per partner and plan feeds one comparison line; nothing is written to the save.
+const TACTIC_RECORD_VARIANT = new URLSearchParams(globalThis.location?.search ?? '').get('tacticRecord') === 'off' ? 'A' : 'B';
+const tacticRecordHistory = new Map();
+const tacticPlaytestLog = [];
+globalThis.__championshipTacticLog = () => structuredClone(tacticPlaytestLog);
+let tacticPanelCache = null;
+function tacticRecordPanelFor(runtime, { attemptId, matchTitle, context = null } = {}) {
+  // A result view mounted again for the same attempt reuses its panel: the log and the comparison count it once.
+  if (attemptId && tacticPanelCache?.attemptId === attemptId) return tacticPanelCache.value;
+  const value = buildTacticRecordPanel(runtime, { attemptId, matchTitle, context });
+  tacticPanelCache = { attemptId, value };
+  return value;
+}
+function buildTacticRecordPanel(runtime, { attemptId, matchTitle, context = null } = {}) {
+  let record = null;
+  try { record = runtime?.getTacticRecord?.() ?? null; } catch { record = null; }
+  if (!record || !record.local.some(entry => Number.isInteger(entry.tactic))) return null;
+  const previous = entry => entry.instanceId ? tacticRecordHistory.get(entry.instanceId) ?? null : null;
+  const lines = tacticRecordLines(record, { nameOf: (slot, speciesId) => record.local.find(e => e.slot === slot)?.displayName ?? '',
+    moveName: id => battleMoveName(id) ?? `#${id}`, previous });
+  for (const entry of record.local) if (entry.instanceId && Number.isInteger(entry.tactic))
+    tacticRecordHistory.set(entry.instanceId, { tactic: entry.tactic, total: entry.total, counts: { ...entry.counts }, seconds: record.seconds });
+  tacticPlaytestLog.push({ at: new Date().toISOString(), attemptId, matchTitle, variant: TACTIC_RECORD_VARIANT, context,
+    outcome: record.outcome, seconds: record.seconds, local: record.local, shownLines: TACTIC_RECORD_VARIANT === 'B' ? lines : [] });
+  if (tacticPlaytestLog.length > 200) tacticPlaytestLog.shift();
+  return { record, panel: TACTIC_RECORD_VARIANT === 'B' && lines.length ? { kicker: tacticRecordText('kicker'), title: tacticRecordText('title'), lines } : null };
+}
+
 let battleRuntime = null;
 let battleAttemptId = null;
 // Owner 2026-11-03: what each partner did in the presented match (damage dealt,
@@ -1890,6 +1923,18 @@ async function openJourney(prefill = null) {
       sweep: (zone, stage) => app.sweepCampaignStage(zone, stage),
       challengeZone: (zone, stage) => void startZoneStage(zone, stage),
       openStory: () => openStoryFromJourney(),
+      practice: {
+        frame: () => app.getTacticPractice(),
+        start: (id) => app.startTacticPractice(id),
+        end: () => app.endTacticPractice(),
+        tacticOf: (id) => app.getBattleTactic(id),
+        setTactic: (id, value) => app.setBattleTactic(id, value),
+        challenge: () => startSparBout(),
+        text: tacticRecordText,
+        foeKey: tacticPracticeFoeKey,
+        variant: TACTIC_RECORD_VARIANT,
+        downloadLog: new URLSearchParams(location.search).get('playtest') === '1' ? downloadTacticPlaytestLog : null
+      },
       onClose: closeJourney
     });
   } catch (error) { console.warn('Journey unavailable', error); closeJourney(); }
@@ -1937,6 +1982,29 @@ async function startZoneStage(zone, stage) {
     },
     reopen: { tab: 'ZONES', zone }
   });
+}
+/** The practice series' next bout (TACTIC_PRACTICE_LOOP_20261116), fought like a Free Battle against fixed presets. */
+async function startSparBout() {
+  if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started)
+    return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回牧場後重試。" };
+  const party = await app.prepareSparBattle();
+  if (!party.ok) return party;
+  const prepared = (await loadBattleRuntime())({ mode: 2, battleType: 0, playerIndividuals: party.individuals, rng: party.rngPreparation.rng,
+    personalityPolicy: FREE_PRACTICE_PERSONALITY_POLICY, arenaHazards: await loadArenaHazards() });
+  try {
+    prepared.chooseFreeBattle({ presetIndices: party.presetIndices, arenaIndex: party.arenaIndex }); prepared.startMatch(); exposeArenaHazardsQa(prepared);
+    const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
+    const ids = party.individuals.map((p) => p.instanceId);
+    closeJourney();
+    return await enterPreparedBattle(prepared, attemptId, () => app.enterSparBattle({ attemptId, playerInstanceIds: ids, rngPreparation: party.rngPreparation }));
+  } catch (error) { prepared.dispose(); console.warn(`SPAR_BATTLE_PREPARE: ${error.message}`); return { ok: false, reason: 'BATTLE_NOT_READY' }; }
+}
+/** Playtest log download (?playtest=1 only): an in-memory Blob, nothing stored. */
+function downloadTacticPlaytestLog() {
+  const blob = new Blob([JSON.stringify({ exported: new Date().toISOString(), variant: TACTIC_RECORD_VARIANT, entries: tacticPlaytestLog }, null, 1)], { type: 'application/json' });
+  const link = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `tactic-playtest-${Date.now()}.json` });
+  document.body.append(link); link.click(); link.remove();
+  setTimeout(() => URL.revokeObjectURL(link.href), 1000);
 }
 /** A tower floor, fought like a Free Battle against that floor's original presets. */
 async function startTowerFloor(floor, ids) {
@@ -2290,19 +2358,32 @@ async function mountBattleResult() {
   const syncPanel=syncGains?syncGainPanelFor(syncGains):null;
   // Journey tower (Owner 2026-11-10): this attempt's floor, and a key to the next one (or a retry).
   const tower=tutorial?null:(entry=>entry&&receipt&&entry.attemptId===(receipt.attemptId??null)?entry:null)(app.getLastTowerResult?.());
+  // Journey practice series (TACTIC_PRACTICE_LOOP_20261116): this attempt's bout, recorded with what the partner did.
+  const sparSettled=tutorial?null:(entry=>entry&&receipt&&entry.attemptId===(receipt.attemptId??null)?entry:null)(app.getLastSparResult?.());
+  let sparRecord=null;
+  if(sparSettled){
+    let record=null;try{record=battleRuntime?.getTacticRecord?.()??null;}catch{record=null;}
+    sparRecord=app.recordTacticPracticeBout({attemptId:sparSettled.attemptId,seconds:record?.seconds??0,
+      entry:record?.local?.find(e=>e.instanceId===sparSettled.instanceId)??record?.local?.[0]??null})??app.getLastSparResult();
+  }
   const leaveToJourney=(prefill)=>{
     pendingJourney=Object.freeze(prefill);
     battleRuntime?.dispose();battleRuntime=null;battleAttemptId=null;
     app.leaveScreen();
     if(app.getScreen()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT){if(app.getScreen()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)app.leaveScreen();app.openBattle();}
   };
-  const followUp=!tower?null:tower.won&&tower.next?{label:journeyText('result.next',{floor:tower.next}),onClick:()=>leaveToJourney({floor:tower.next,team:tower.team,autoStart:true})}
+  const followUp=sparSettled?{label:sparRecord?.next?tacticRecordText('practice.next',{n:sparRecord.next}):tacticRecordText('practice.done'),
+      onClick:()=>leaveToJourney({tab:'PRACTICE'})}
+    :!tower?null:tower.won&&tower.next?{label:journeyText('result.next',{floor:tower.next}),onClick:()=>leaveToJourney({floor:tower.next,team:tower.team,autoStart:true})}
     :!tower.won?{label:journeyText('result.retry',{floor:tower.floor}),onClick:()=>leaveToJourney({floor:tower.floor,team:tower.team,autoStart:true})}:null;
-  const matchTitle = tower?journeyText(tower.won?'result.clear':'result.fail',{floor:tower.floor}):chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
+  const matchTitle = sparSettled?`${tacticRecordText('practice.title')}・${tacticRecordText('practice.round',{n:sparSettled.bout,foe:tacticRecordText(tacticPracticeFoeKey(app.getTacticPractice?.()?.series?.bouts?.[sparSettled.bout-1]?.kind))})}`
+    :tower?journeyText(tower.won?'result.clear':'result.fail',{floor:tower.floor}):chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
     :chosen?.championship?uiText('{event} 第 {round} 戰',{event:uiText(chosen.recordIndex===0?'冠軍大會':'世界大會'),round:chosen.cursor+1})
     :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null;
+  const tactic=tutorial?null:tacticRecordPanelFor(battleRuntime,{attemptId:battleAttemptId,matchTitle,context:sparSettled?{series:'PRACTICE',bout:sparSettled.bout,tactic:sparSettled.tactic,won:sparSettled.won}:null});
   const resultView=createBattleResultView({
     ceremonies: battleCeremonies,
+    tacticRecord: tactic?.panel ?? null,
     summary,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
     root,

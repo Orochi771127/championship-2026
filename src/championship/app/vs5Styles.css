@@ -1065,6 +1065,9 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 .cm-vs5-sponsors__note { margin: 0; font-size: calc(11px * var(--text-scale, 1)); color: #cbd5e1; }
 .cm-vs5-result__sponsor[data-met="true"] .cm-vs5-title { color: #ffd34d; }
 .cm-vs5-result__sponsor[data-met="false"] .cm-vs5-title { color: #fca5a5; }
+/* Battle-plan record (TACTIC_PRACTICE_LOOP_20261116): counted facts, one per line. */
+.cm-vs5-result__tactic-lines { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; text-align: left; }
+.cm-vs5-result__tactic-lines > li { font-variant-numeric: tabular-nums; }
 @media (max-width: 380px) { .cm-vs5-sponsors__keys { grid-template-columns: 1fr; } .cm-vs5-sponsor { min-height: 0; } }
 /* Contract keys carry the game's faction glyph; the day's remaining signatures sit beside the title (Owner 2026-11-10). */
 .cm-vs5-sponsor__name { display: flex; align-items: center; gap: 5px; }
