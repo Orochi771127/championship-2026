@@ -3320,9 +3320,9 @@
       ],
       "origin": [
         208.8,
-        360.76
+        360.2
       ],
-      "density": 9.54607,
+      "density": 10.65797,
       "sampling": "smooth"
     },
     {
@@ -3346,10 +3346,10 @@
         325
       ],
       "origin": [
-        209.01,
-        349.54
+        209.44,
+        348.68
       ],
-      "density": 9.54607,
+      "density": 10.40877,
       "sampling": "smooth"
     },
     {
@@ -3373,10 +3373,10 @@
         325
       ],
       "origin": [
-        179.6,
-        349.54
+        179.17,
+        348.68
       ],
-      "density": 9.54607,
+      "density": 10.40877,
       "sampling": "smooth"
     },
     {
@@ -3400,10 +3400,10 @@
         299
       ],
       "origin": [
-        180.14,
+        179.66,
         338.69
       ],
-      "density": 9.54607,
+      "density": 10.51333,
       "sampling": "smooth"
     },
     {
@@ -3427,10 +3427,10 @@
         299
       ],
       "origin": [
-        208.47,
+        208.96,
         338.69
       ],
-      "density": 9.54607,
+      "density": 10.51333,
       "sampling": "smooth"
     },
     {
@@ -3538,7 +3538,7 @@
         84.81,
         142.78
       ],
-      "density": 3.88633,
+      "density": 3.89244,
       "sampling": "smooth"
     },
     {
@@ -3565,7 +3565,7 @@
         106.01,
         200.75
       ],
-      "density": 5.8295,
+      "density": 5.83866,
       "sampling": "smooth"
     }
   ],
@@ -7311,13 +7311,17 @@
           "preserveAuthoredPose": true,
           "offset": [
             0.0,
-            7.875
+            11.813
           ]
         },
         {
           "assetId": "ul37-ts-A-S01",
           "durationMs": 166.66666666666666,
-          "preserveAuthoredPose": true
+          "preserveAuthoredPose": true,
+          "offset": [
+            0.0,
+            -3.938
+          ]
         },
         {
           "assetId": "ul37-ts-A-S00",
@@ -7325,13 +7329,17 @@
           "preserveAuthoredPose": true,
           "offset": [
             0.0,
-            7.875
+            11.813
           ]
         },
         {
           "assetId": "ul37-ts-A-S02",
           "durationMs": 166.66666666666666,
-          "preserveAuthoredPose": true
+          "preserveAuthoredPose": true,
+          "offset": [
+            0.0,
+            -5.329
+          ]
         }
       ],
       "source": {
@@ -7368,7 +7376,7 @@
           "preserveAuthoredPose": true,
           "offset": [
             -7.875,
-            7.875
+            15.751
           ]
         },
         {
@@ -7383,7 +7391,11 @@
         {
           "assetId": "ul37-ts-A-SW02",
           "durationMs": 166.66666666666666,
-          "preserveAuthoredPose": true
+          "preserveAuthoredPose": true,
+          "offset": [
+            0.0,
+            -10.409
+          ]
         }
       ],
       "source": {
@@ -7420,7 +7432,7 @@
           "preserveAuthoredPose": true,
           "offset": [
             7.875,
-            7.875
+            15.751
           ]
         },
         {
@@ -7435,7 +7447,11 @@
         {
           "assetId": "ul37-ts-A-SE02",
           "durationMs": 166.66666666666666,
-          "preserveAuthoredPose": true
+          "preserveAuthoredPose": true,
+          "offset": [
+            0.0,
+            -10.409
+          ]
         }
       ],
       "source": {
@@ -7567,7 +7583,7 @@
           "preserveAuthoredPose": true,
           "offset": [
             0.0,
-            -7.875
+            -3.938
           ]
         },
         {
@@ -7576,7 +7592,7 @@
           "preserveAuthoredPose": true,
           "offset": [
             0.0,
-            -7.875
+            -11.813
           ]
         },
         {
@@ -7585,13 +7601,17 @@
           "preserveAuthoredPose": true,
           "offset": [
             0.0,
-            -7.875
+            -3.938
           ]
         },
         {
           "assetId": "ul37-ts-A-N02",
           "durationMs": 166.66666666666666,
-          "preserveAuthoredPose": true
+          "preserveAuthoredPose": true,
+          "offset": [
+            0.0,
+            -3.938
+          ]
         }
       ],
       "source": {
@@ -7643,7 +7663,11 @@
         {
           "assetId": "ul37-ts-A-NW02",
           "durationMs": 166.66666666666666,
-          "preserveAuthoredPose": true
+          "preserveAuthoredPose": true,
+          "offset": [
+            0.0,
+            -39.378
+          ]
         }
       ],
       "source": {
@@ -7695,7 +7719,11 @@
         {
           "assetId": "ul37-ts-A-NE02",
           "durationMs": 166.66666666666666,
-          "preserveAuthoredPose": true
+          "preserveAuthoredPose": true,
+          "offset": [
+            0.0,
+            -39.378
+          ]
         }
       ],
       "source": {
@@ -7730,7 +7758,7 @@
       ],
       "source": {
         "derivedFromGeneral": "main:33",
-        "heightRatio": 0.817
+        "heightRatio": 0.818
       }
     }
   ],
@@ -7738,6 +7766,6 @@
     "version": 1,
     "idle": false,
     "faint": false,
-    "referenceHeight": 33.26768679107766
+    "referenceHeight": 33.12075376455366
   }
 }

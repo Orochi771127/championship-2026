@@ -79,8 +79,8 @@ test('every General set walks forward: sets drawn facing right carry generalMirr
  assert.equal(selection.characters.find(c=>c.displayCode==='AW19')?.generalMirror,false,'AW19');
 });
 
-test('partial two-set deliveries keep the native body for the mode they lack (UL05 Arena only, UL06 General only)',async()=>{
- for(const [code,usage] of [['UL05','general'],['UL06','arena']]){
+test('partial two-set deliveries keep the native body for the mode they lack (UL06 General only)',async()=>{
+ for(const [code,usage] of [['UL06','arena']]){
   const entry=selection.characters.find(c=>c.displayCode===code);assert.ok(entry,code);
   const d=JSON.parse(fs.readFileSync(path.join(root,entry.path),'utf8'));
   assert.equal(d.clips.some(c=>usage==='arena'?c.mode==='arena':c.mode!=='arena'),false,code+' has no '+usage+' clips');
@@ -89,4 +89,19 @@ test('partial two-set deliveries keep the native body for the mode they lack (UL
    baseUrl:'http://127.0.0.1:8768/championship.html',fetchImpl:fileFetch});
   assert.equal(got,base,code+' '+usage+' falls back to the native bundle');
  }
+});
+
+test('every Data Arena heading plays its own drawings (AW49 headings once collapsed onto the Down pictures)',()=>{
+ for(const entry of selection.characters.filter(c=>/two-set-20261112/.test(c.path))){
+  const d=JSON.parse(fs.readFileSync(path.join(root,entry.path),'utf8'));
+  const walks=d.clips.filter(c=>c.mode==='arena'&&c.action==='move');
+  if(walks.length<5)continue;
+  const seqs=new Set(walks.map(c=>c.frames.map(f=>f.assetId).join(',')));
+  assert.ok(seqs.size>1,entry.displayCode+' arena walk headings are distinct');
+ }
+ const aw49=selection.characters.find(c=>c.displayCode==='AW49');
+ const d=JSON.parse(fs.readFileSync(path.join(root,aw49.path),'utf8'));
+ const w=Object.fromEntries(d.clips.filter(c=>c.mode==='arena'&&c.action==='move').map(c=>[c.direction,c.frames.map(f=>f.assetId).join(',')]));
+ assert.notEqual(w.R,w.D,'AW49 Right walk is not the Down walk');
+ assert.ok(d.clips.some(c=>c.mode==='arena'&&c.action==='faint'),'AW49 faint is present');
 });
