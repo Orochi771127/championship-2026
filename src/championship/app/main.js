@@ -190,9 +190,11 @@ import { syncText } from '../text/syncLevelText.js';
 const mountBattleVfxThreeOverlay = async (options) =>
   (await import("../presentation/vs5/createBattleVfxThreeOverlay.js")).mountBattleVfxThreeOverlay(options);
 // The mode prism settles on the app's one Pixi ticker, never a loop of its own.
-const mountBattleSelectThreePresentation = async (options) =>
-  (await import("../presentation/vs5/createBattleSelectThreePresentation.js")).mountBattleSelectThreePresentation({
-    ...options, ticker: pixiStage?.app?.ticker ?? null });
+// Owner 2026-11-16 (P3): the prism shows three pillars — 征途, 錦標賽, 連線 — that hold the original modes.
+const mountBattleSelectThreePresentation = async (options) => {
+  const prism = await import("../presentation/vs5/createBattleSelectThreePresentation.js");
+  return prism.mountBattleSelectThreePresentation({ ...options, faces: prism.BATTLE_HUB_FACES, ticker: pixiStage?.app?.ticker ?? null });
+};
 const mountGateSelectThreePresentation = async (options) =>
   (await import("../presentation/vs2/createGateSelectThreePresentation.js")).mountGateSelectThreePresentation(options);
 const mountHighlightBurstThree = async (options) =>

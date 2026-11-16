@@ -1085,3 +1085,16 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
   font: 800 var(--fs-label, 11px)/1.4 var(--font-ui, sans-serif); white-space: nowrap; pointer-events: none; }
 .cm-vs5-fighter__status[hidden] { display: none; }
 .cm-vs5-fighter__status > .cm-glyph { width: 1.4em; height: 1.4em; }
+/* P3 (Owner 2026-11-16): a pillar's modes, listed under the prism caption while the pillar is open. */
+.cm-vs5-hub { display: grid; gap: 6px; margin-top: var(--sp-2, 8px); }
+.cm-vs5-hub[hidden] { display: none; }
+.cm-vs5-hub__option { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; min-height: 48px; padding: 8px 14px; border: 2px solid var(--prism-accent, #6ff7ff);
+  border-radius: 14px; background: rgba(20, 14, 48, 0.88); color: #fff; font: inherit; text-align: left; cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35); }
+.cm-vs5-hub__option:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35); }
+.cm-vs5-hub__option > strong { font-size: calc(16px * var(--text-scale, 1)); font-weight: 900; }
+.cm-vs5-hub__option > span { min-width: 0; overflow: hidden; font-size: calc(11px * var(--text-scale, 1)); font-weight: 700; opacity: 0.8; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-height: 520px) {
+  .cm-vs5-hub__option { min-height: 40px; padding: 6px 12px; }
+  .cm-vs5-hub__option > span { display: none; }
+}
