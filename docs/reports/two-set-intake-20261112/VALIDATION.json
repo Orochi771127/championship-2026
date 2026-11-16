@@ -4209,9 +4209,9 @@
       "code": "UL06",
       "speciesId": "species-189",
       "entity": "m503_warglaymon",
-      "frames": 81,
-      "clips": 53,
-      "atlasBytes": 3090844,
+      "frames": 170,
+      "clips": 86,
+      "atlasBytes": 5282652,
       "generalHeightRatio": {
         "median": 1.0,
         "min": 0.793,
@@ -4224,13 +4224,85 @@
       "generalMirror": false,
       "generalMissing": 0,
       "generalStateSubstitutes": 0,
+      "arenaRegistration": "shared canvas, constant pivot",
+      "arenaHas": {
+        "move": true,
+        "idle": false,
+        "melee": true,
+        "ranged": true,
+        "hurt": true,
+        "faint": false,
+        "sleep": false,
+        "charge": false,
+        "special": false
+      },
+      "arenaAliases": [],
+      "arenaGroundLock": {
+        "D:melee": 0.418,
+        "D:hurt": 0.418,
+        "D:ranged": 0.418,
+        "D:move": 0.418,
+        "DL:melee": 0.532,
+        "DL:hurt": 0.532,
+        "DL:ranged": 0.532,
+        "DL:move": 0.532,
+        "DR:melee": 0.532,
+        "DR:hurt": 0.532,
+        "DR:ranged": 0.532,
+        "DR:move": 0.532,
+        "L:melee": -0.152,
+        "L:hurt": -0.152,
+        "L:ranged": -0.152,
+        "L:move": -0.152,
+        "R:melee": -0.152,
+        "R:hurt": -0.152,
+        "R:ranged": -0.152,
+        "R:move": -0.152,
+        "U:melee": 0.684,
+        "U:hurt": 0.684,
+        "U:ranged": 0.684,
+        "U:move": 0.684,
+        "UL:melee": -0.684,
+        "UL:hurt": -0.684,
+        "UL:ranged": -0.684,
+        "UL:move": -0.684,
+        "UR:melee": -0.684,
+        "UR:hurt": -0.684,
+        "UR:ranged": -0.684,
+        "UR:move": -0.684
+      },
+      "faintEqualsHurtDropped": 0,
+      "atlasScales": {
+        "general": 1.0,
+        "arena": 0.5306
+      }
+    },
+    {
+      "code": "UL07",
+      "speciesId": "species-190",
+      "entity": "m504_gigaseadramon",
+      "frames": 131,
+      "clips": 86,
+      "atlasBytes": 3432102,
+      "generalHeightRatio": {
+        "median": 1.012,
+        "min": 0.615,
+        "max": 1.5
+      },
+      "generalFacingVotes": [
+        82,
+        0
+      ],
+      "generalMirror": false,
+      "generalMissing": 0,
+      "generalStateSubstitutes": 0,
       "arenaRegistration": "per-picture support/bounds",
       "arenaHas": {
-        "move": false,
+        "move": true,
         "idle": false,
-        "melee": false,
-        "ranged": false,
-        "hurt": false,
+        "melee": true,
+        "ranged": true,
+        "hurt": true,
         "faint": false,
         "sleep": false,
         "charge": false,
@@ -4241,7 +4313,7 @@
       "faintEqualsHurtDropped": 0,
       "atlasScales": {
         "general": 1.0,
-        "arena": 1.0
+        "arena": 0.3555
       }
     },
     {
