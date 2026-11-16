@@ -12,6 +12,14 @@ import profiles from '../../data/championship/battleEffectProfiles.json' with {t
 import {publicRuntimeAsset} from './publicRuntimeAssets.js';
 import {isApprovedOriginalPublicLocation} from './originalRuntimeLocation.js';
 import {getLocale as settingLocale, onLocaleChange as onSettingLocaleChange} from '../text/locale.js';
+// Close the decoded ImageBitmap once Pixi destroyed its source: WebKit keeps it until GC (iOS 2026-11-16).
+async function unloadClosingBitmap(Assets, src) {
+  let source = null;
+  try { if (Assets?.cache?.has?.(src)) { const t = Assets.cache.get(src); source = t?.source ?? t?.textureSource ?? null; } } catch { source = null; }
+  const bitmap = source?.resource;
+  await Assets.unload(src);
+  if (source?.destroyed && typeof bitmap?.close === 'function') { try { bitmap.close(); } catch { /* already closed */ } }
+}
 export const ORIGINAL_SHARED_VFX_ID = 'art:vfx:original-shared:review:v1';
 export const ORIGINAL_SHARED_VFX_MANIFEST = 'assets/production/vfx/original-shared-review-v1/manifest.json';
 export const ORIGINAL_SHARED_VFX_QUERY = ['vfxOriginal', 'shared-v1'];
@@ -226,7 +234,7 @@ export async function loadOriginalSharedVfxReview({PIXI, baseArt, href = globalT
   }
   function releaseTextSet(entry) {
     for (const cell of entry.cells.values()) cell.texture.destroy(false);
-    return PIXI.Assets.unload(entry.src);
+    return unloadClosingBitmap(PIXI.Assets, entry.src);
   }
   function retire(entry) {
     textRetiring.set(entry.name, {entry, cancel:deferRelease(() => {
@@ -288,7 +296,7 @@ export async function loadOriginalSharedVfxReview({PIXI, baseArt, href = globalT
       unsubscribe?.();
       for (const cell of cells.values()) cell.texture.destroy(false);
       cells.clear();
-      const releases = [PIXI.Assets.unload(atlasSrc)];
+      const releases = [unloadClosingBitmap(PIXI.Assets, atlasSrc)];
       for (const {entry, cancel} of textRetiring.values()) { cancel(); releases.push(releaseTextSet(entry)); }
       textRetiring.clear();
       if (textActive) { releases.push(releaseTextSet(textActive)); textActive = null; }

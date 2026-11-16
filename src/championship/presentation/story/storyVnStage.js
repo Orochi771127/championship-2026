@@ -483,7 +483,8 @@ export function createStoryVnStage({
       resizer?.disconnect();
       for (const t of timers) clearTimer(t); timers.clear();
       clearActors();
-      for (const plate of plates) { try { plate.video.pause(); } catch { /* gone */ } plate.video.removeAttribute("src"); }
+      // load() after dropping src is what makes WebKit free the decoder buffers now.
+      for (const plate of plates) { try { plate.video.pause(); } catch { /* gone */ } plate.video.removeAttribute("src"); try { plate.video.load(); } catch { /* gone */ } }
       scene.remove(); busts.left.remove(); busts.right.remove();
     }
   });

@@ -15,14 +15,16 @@ function canvas(width, height) {
 }
 
 export function createDataArenaTextures(PIXI) {
-  if (!canvas(1, 1)) return null;
+  const probe = canvas(1, 1);
+  if (!probe) return null;
+  probe.width = probe.height = 0;
   const owned = [];
   const make = (width, height, draw, { nearest = false } = {}) => {
     const element = canvas(width, height), ctx = element.getContext("2d");
     draw(ctx, width, height);
     const texture = PIXI.Texture.from(element);
     if (nearest) texture.source.scaleMode = "nearest";
-    owned.push(texture);
+    owned.push({ texture, element });
     return texture;
   };
   const radial = (size, stops) => make(size, size, (ctx) => {
@@ -198,6 +200,7 @@ export function createDataArenaTextures(PIXI) {
   };
   return Object.freeze({
     ...textures,
-    destroy() { for (const texture of owned.splice(0)) texture.destroy(true); }
+    // Zero each canvas too: WebKit counts canvas memory until the element is collected.
+    destroy() { for (const { texture, element } of owned.splice(0)) { texture.destroy(true); element.width = element.height = 0; } }
   });
 }

@@ -12,7 +12,7 @@ export function createDataArenaRelayEffects(PIXI) {
   const make=(name,draw,height=64)=>{
     const canvas=document.createElement('canvas');canvas.width=128;canvas.height=height;
     const c=canvas.getContext('2d');draw(c);
-    const texture=PIXI.Texture.from(canvas);owned.push(texture);return [name,texture];
+    const texture=PIXI.Texture.from(canvas);owned.push({texture,canvas});return [name,texture];
   };
   const line=(c,points,width,color)=>{c.beginPath();c.moveTo(...points[0]);for(const p of points.slice(1))c.lineTo(...p);c.lineWidth=width;c.strokeStyle=color;c.lineCap='round';c.lineJoin='round';c.stroke();};
   const textures=Object.fromEntries([
@@ -101,5 +101,5 @@ export function createDataArenaRelayEffects(PIXI) {
       c.fillStyle='#fff';c.beginPath();c.arc(64,32,4,0,Math.PI*2);c.fill();
     })
   ]);
-  return {...textures,destroy(){for(const t of owned.splice(0))t.destroy(true);}};
+  return {...textures,destroy(){for(const {texture,canvas} of owned.splice(0)){texture.destroy(true);canvas.width=canvas.height=0;}}};
 }

@@ -328,6 +328,9 @@ function characterTextureMemory(pages){
 // scene must not destroy a texture that the new scene is using. This scope is
 // for our explicit single-URL loaders (not aliases or arbitrary Pixi bundles).
 const assetOwners = new WeakMap();
+// Non-enumerable, so a wrapper that spreads a scoped Assets (withPrefetchedTextures)
+// keeps its own load/unload instead of being bypassed by a nested scope.
+const SCOPE_ROOT = Symbol('pixiAssetScopeRoot');
 
 // Every scoped asset load that settles, for a loading screen that needs to
 // know the load is alive. Pixi decodes textures in a worker, where the page's
@@ -342,9 +345,31 @@ function announceAssetSettled(url, ok) {
     try { listener({ url, ok }); } catch { /* a loading screen never breaks a load */ }
   }
 }
+/**
+ * Unload one URL from the plain Pixi Assets cache and close its decoded
+ * ImageBitmap once Pixi has destroyed the source: WebKit keeps that memory
+ * until GC otherwise (iOS 2026-11-16). A scoped Assets (no cache) closes its
+ * own bitmaps, so this only adds the close for unscoped loaders.
+ */
+export async function unloadPixiAssetClosingBitmap(Assets, src) {
+  let source = null, bitmap = null;
+  try {
+    if (Assets?.cache?.has?.(src)) {
+      const cached = Assets.cache.get(src);
+      source = cached?.source ?? cached?.textureSource ?? null;
+      bitmap = source?.resource ?? null;
+    }
+  } catch { source = bitmap = null; }
+  await Assets.unload(src);
+  closeDestroyedBitmap(bitmap, source);
+}
 export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href, { signal } = {}) {
-  const assets = PIXI?.Assets;
-  if (!assets || typeof assets !== 'object') return PIXI;
+  const rawAssets = PIXI?.Assets;
+  if (!rawAssets || typeof rawAssets !== 'object') return PIXI;
+  // A scope built over another scope shares the root Assets ledger. Nested, the
+  // outer scope's one-entry-per-URL `held` map let the first of two inner
+  // owners of a URL release it while the second still drew it.
+  const assets = rawAssets[SCOPE_ROOT] ?? rawAssets;
   let shared = assetOwners.get(assets);
   if (!shared) assetOwners.set(assets, shared = new Map());
   const held = new Map();
@@ -406,5 +431,6 @@ export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href, 
   signal?.addEventListener('abort', () => {
     for (const key of [...held.keys()]) void scoped.unload(key).catch(() => {});
   }, { once: true });
+  Object.defineProperty(scoped, SCOPE_ROOT, { value: assets });
   return { ...PIXI, Assets: scoped };
 }
