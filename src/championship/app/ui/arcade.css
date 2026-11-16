@@ -570,7 +570,7 @@
   box-shadow: 0 3px 0 var(--ax-ink), 0 8px 18px rgb(10 10 20 / 0.22);
 }
 :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] .cm-toolbar__cell {
-  --key-size: clamp(36px, calc((100vw - 64px) / 8), 44px);
+  --key-size: clamp(36px, calc((100 * var(--cm-vw, 1vw) - 64px) / 8), 44px);
   flex: 0 0 auto;
   width: var(--key-size);
   min-width: var(--key-size);

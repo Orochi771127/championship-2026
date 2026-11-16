@@ -65,7 +65,9 @@ function emojiHits([selectors, source]) {
     // Toolbar: the ticket badge rides inside the Shop key without covering 商店.
     await page.waitForFunction(() => document.querySelector('[data-quick-id="shop"] .cm-gacha-dock-badge:not([hidden])'));
     // The dock folds behind the Go key (Owner 2026-11-16): unfold it, as a player would.
+    await page.waitForSelector(".int-rh2-field-host[data-load-state='ready']", { timeout: 90000 }).catch(() => {});
     { const fold = page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]'); if (await fold.isVisible().catch(() => false)) await fold.click(); }
+    await page.locator('[data-quick-id="shop"]').waitFor({ state: "visible" });
     await page.waitForTimeout(400);
     const dock = await page.evaluate(() => {
       const key = document.querySelector('[data-quick-id="shop"]');
@@ -77,6 +79,7 @@ function emojiHits([selectors, source]) {
     assert.doesNotMatch(dock.text, new RegExp(EMOJI, "u"), "the dock badge is the ticket picture and a number");
     await shot("00-ranch-dock.png");
 
+    { const fold = page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]'); if (await fold.isVisible().catch(() => false)) await fold.click(); }
     await page.locator('[data-quick-id="shop"]').click();
     await page.locator('.cm-vs2-shop__tab[data-category="PLUGINS"]').click();
     await page.locator(".cm-gacha").waitFor();
