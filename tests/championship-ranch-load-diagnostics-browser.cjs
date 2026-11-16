@@ -168,6 +168,7 @@ const results={schemaVersion:1,label:LABEL,profile:PROFILE,scenario:SCENARIO,art
     return summarize(name,start,end,await diag(),{tap});
   }
   async function roundTrip(name){
+    { const fold = page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]'); if (await fold.isVisible().catch(() => false)) await fold.click(); }
     await page.locator('.cm-toolbar__quick-entry[data-entry-id="database"]').click();
     await page.waitForFunction(()=>!document.querySelector('.int-rh2-field-host'));
     await page.waitForTimeout(800);
@@ -195,6 +196,7 @@ const results={schemaVersion:1,label:LABEL,profile:PROFILE,scenario:SCENARIO,art
     // Leave as soon as the target is loading, then return to the ranch.
     await page.waitForFunction(()=>JSON.parse(document.querySelector('.int-rh2-field-host')?.dataset.residentAssets||'[]')
       .some(r=>r.creatureId==='resident:species-000'&&r.loadKind==='evolution'&&r.state==='loading'),null,{timeout:5000}).catch(()=>{});
+    { const fold = page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]'); if (await fold.isVisible().catch(() => false)) await fold.click(); }
     await page.locator('.cm-toolbar__quick-entry[data-entry-id="database"]').click();
     await page.waitForFunction(()=>!document.querySelector('.int-rh2-field-host'));
     reentryMs=Date.now()-start;await page.locator('.cm-vs2-footer .cm-vs2-action').first().click();

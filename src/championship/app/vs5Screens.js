@@ -425,6 +425,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     text.append(element('span','cm-vs5-member__name',name,false));
     const meta=element('span','cm-vs5-member__meta');
     if(look?.stage)meta.append(element('span','cm-vs5-member__stage',look.stage,false));
+    if(look?.mood){const mood=element('span','cm-vs5-member__mood',`${look.mood.emoji} ${look.mood.label}`,false);mood.dataset.tier=look.mood.tier;meta.append(mood);}
     if(look?.badges)meta.append(look.badges);
     if(meta.children.length)text.append(meta);
     face.append(frame,text);

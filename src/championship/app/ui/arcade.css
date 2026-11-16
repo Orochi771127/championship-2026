@@ -508,101 +508,206 @@
     :root[data-theme="arcade"] .cm-toolbar__quick-entry .cm-toolbar__entry-label { font-size: var(--fs-label); }
 }
 
-/* ---- Owner 2026-11-16: landscape ranch -- fold-away destinations, hint over its key ---- */
-/* Hunt, Battle, Shop and Dex fold into one Go key at the rail's end and spring up
-   above it on a press; picking one, pressing a rail key, Escape or a press
-   outside folds them away. The care-tool hint sits over the chosen key, not
-   over the middle of the field. Portrait and desktop keep the open dock. */
+/* ---- Owner 2026-11-16: a quiet ranch HUD -------------------------------------------------
+   Fewer, smaller controls so the ranch itself fills the screen.
+   - Season, day and clock read as one flat strip.
+   - The eight rail keys are round icon keys on one slim pill; their names stay for screen
+     readers and the care-tool hint names the chosen tool. Slot order is unchanged.
+   - Hunt, Battle, Shop and Dex fold behind one Go key and spring up above it on a press;
+     picking one, a rail key, Escape or a press outside folds them away. Unspent gachapon
+     tickets show as a dot on the folded key.
+   Portrait and desktop float the Go key over the right end of the rail; short landscape
+   sets it beside the rail. Tap targets stay 44 px. */
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] { column-gap: 0; }
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__season, .cm-status-bar__day, .cm-status-bar__time) {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  margin: 0;
+  padding: 0 6px;
+  border: 2px solid var(--ax-ink);
+  border-inline-width: 0;
+  border-radius: 0;
+  background: var(--ax-paper);
+  box-shadow: none;
+  color: var(--ax-ink);
+  font-size: calc(13px * var(--text-scale, 1));
+  line-height: 1;
+  white-space: nowrap;
+}
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__season { padding-left: 10px; border-left-width: 2px; border-radius: 999px 0 0 999px; }
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__time { padding-right: 11px; border-right-width: 2px; border-radius: 0 999px 999px 0; font-variant-numeric: tabular-nums; font-weight: var(--fw-heavy); }
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__day, .cm-status-bar__time)::before {
+  content: "";
+  width: 3px;
+  height: 3px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.45;
+}
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__day :is(.cm-status-bar__day-word, .cm-status-bar__day-number) { font-size: inherit; color: inherit; }
+
+/* The wallet keeps its 44 px keys but drops the heavy outline. */
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__currencies { border-width: 2px; box-shadow: var(--ax-hl), 0 3px 0 var(--ax-ink); }
+
+/* The rail: one slim pill of round icon keys. */
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] { align-items: center; }
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__rail {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 4px 5px 6px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ax-paper) 92%, transparent);
+  background-image: none;
+  box-shadow: 0 3px 0 var(--ax-ink), 0 8px 18px rgb(10 10 20 / 0.22);
+}
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] .cm-toolbar__cell {
+  --key-size: clamp(36px, calc((100 * var(--cm-vw, 1vw) - 64px) / 8), 44px);
+  flex: 0 0 auto;
+  width: var(--key-size);
+  min-width: var(--key-size);
+  height: var(--key-size);
+  min-height: var(--key-size);
+  padding: 0;
+  gap: 0;
+  border-width: 2px;
+  border-radius: 50%;
+  box-shadow: var(--ax-hl), 0 3px 0 var(--tile-sh);
+}
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] .cm-toolbar__cell::before { width: calc(var(--key-size) * 0.6); height: calc(var(--key-size) * 0.6); margin: 0; }
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] .cm-toolbar__cell-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] .cm-toolbar__cell[data-menu-id="MANAGEMENT"] { margin-left: 5px; }
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] .cm-toolbar__stock {
+  top: -7px;
+  right: -7px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-width: 1.5px;
+  font-size: calc(10px * var(--text-scale, 1));
+  line-height: 15px;
+}
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] .cm-toolbar__cell:is([aria-pressed="true"], [aria-expanded="true"]) { transform: translateY(3px); }
+
+/* The Go key and the destinations it unfolds. */
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle:not([hidden]) {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 10px);
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 1px;
+  width: 54px;
+  height: 54px;
+  margin: 0;
+  padding: 0;
+  border: var(--ax-border);
+  border-radius: 50%;
+  background: var(--ax-yellow);
+  color: var(--ax-ink);
+  font-size: calc(11px * var(--text-scale, 1));
+  font-weight: var(--fw-heavy);
+  box-shadow: var(--ax-hl), 0 4px 0 var(--ax-yellow-sh), 0 8px 16px rgb(10 10 20 / 0.25);
+  transition: transform 120ms var(--ax-spring), box-shadow 120ms var(--ax-spring), filter 120ms ease-out;
+}
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle:not([hidden])::before {
+  content: "";
+  width: 12px;
+  height: 8px;
+  background: currentColor;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  transition: rotate 200ms ease-out;
+}
+/* An open menu owns the space above the rail; the Go key steps back until it closes. */
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"]:has(> .cm-toolbar__menu:not([hidden])) > .cm-toolbar__quick-toggle:not([hidden]) { visibility: hidden; }
+/* Open, it stays pushed in like the chosen care tool. */
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle:is([aria-expanded="true"], :active):not([hidden]) {
+  transform: translateY(4px);
+  box-shadow: inset 0 3px 0 rgb(0 0 0 / 0.18), 0 1px 0 var(--ax-yellow-sh);
+  filter: brightness(0.92);
+}
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle[aria-expanded="true"]:not([hidden])::before { rotate: 180deg; }
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="false"]:has(.cm-toolbar__quick-entry[data-gacha-tickets]:not([data-gacha-tickets="0"])) > .cm-toolbar__quick-toggle:not([hidden])::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--ax-ink);
+  border-radius: 50%;
+  background: var(--ax-red);
+}
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick:not([hidden]) {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 74px);
+  order: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 116px;
+  margin: 0;
+  pointer-events: none;
+}
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry {
+  min-height: 44px;
+  animation: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(18px) scale(0.8);
+  transform-origin: right bottom;
+  transition: transform 160ms ease-in, opacity 120ms ease-in, visibility 0s linear 160ms;
+}
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  transition: transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 140ms ease-out, visibility 0s;
+}
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry:nth-child(3) { transition-delay: 40ms, 40ms, 0s; }
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry:nth-child(2) { transition-delay: 80ms, 80ms, 0s; }
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry:nth-child(1) { transition-delay: 120ms, 120ms, 0s; }
+:root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry:active:not(:disabled) { transform: translateY(3px); transition-duration: 45ms; transition-delay: 0s; }
+
+/* Portrait keeps the zoom key and mail on the right edge above the dock: they step up
+   past the Go key (10..64 px above the rail) so the three never touch. */
+:root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])):not([data-desktop-raising]):has(.cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle:not([hidden])) .cm-ranch-zoom {
+  bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 76px);
+}
+:root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])):not([data-desktop-raising]):has(.cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle:not([hidden])) .int-rh2-mail-icon {
+  right: 12px;
+  bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 132px);
+}
+:root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])):not([data-desktop-raising]):has(.cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle:not([hidden])) .int-rh2-root:has(.int-rh2-mail-icon:not([hidden])) .int-rh2-notice {
+  bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 192px);
+}
+
+/* While the destinations are up they own that column; mail and zoom come back when they fold. */
+:root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])):not([data-desktop-raising]):has(.cm-toolbar[data-mode="1"][data-quick-open="true"]) :is(.cm-ranch-zoom, .int-rh2-mail-icon) { visibility: hidden; }
+
+/* Short landscape: the Go key sits beside the rail, the keys rise from it, and the
+   care-tool hint rides over its own key. */
 @media (max-height: 500px) and (orientation: landscape) {
   :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"]:has(> .cm-toolbar__quick-toggle:not([hidden])) {
     flex-direction: row;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
   }
-  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"]:has(> .cm-toolbar__quick-toggle:not([hidden])) > .cm-toolbar__rail { flex: 1 1 auto; width: auto; min-width: 0; }
-  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle:not([hidden]) {
-    position: relative;
-    display: grid;
-    place-items: center;
-    align-content: center;
-    gap: 3px;
-    flex: 0 0 auto;
-    align-self: stretch;
-    width: 64px;
-    min-height: 48px;
-    margin: 0;
-    padding: 0 4px;
-    border: var(--ax-border);
-    border-radius: 16px;
-    background: var(--ax-yellow);
-    color: var(--ax-ink);
-    font-size: var(--fs-label);
-    font-weight: var(--fw-heavy);
-    box-shadow: var(--ax-hl), 0 5px 0 var(--ax-yellow-sh);
-    transition: transform 120ms var(--ax-spring), box-shadow 120ms var(--ax-spring), filter 120ms ease-out;
-  }
-  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle:not([hidden])::before {
-    content: "";
-    width: 12px;
-    height: 8px;
-    background: currentColor;
-    clip-path: polygon(50% 0, 100% 100%, 0 100%);
-    transition: rotate 200ms ease-out;
-  }
-  /* Open, it stays pushed in like the chosen care tool. */
-  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle:is([aria-expanded="true"], :active):not([hidden]) {
-    transform: translateY(4px);
-    box-shadow: inset 0 3px 0 rgb(0 0 0 / 0.18), 0 1px 0 var(--ax-yellow-sh);
-    filter: brightness(0.92);
-  }
-  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle[aria-expanded="true"]:not([hidden])::before { rotate: 180deg; }
-  /* Unspent gachapon tickets: the Shop key's badge becomes a dot on the folded key. */
-  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="false"]:has(.cm-toolbar__quick-entry[data-gacha-tickets]:not([data-gacha-tickets="0"])) > .cm-toolbar__quick-toggle:not([hidden])::after {
-    content: "";
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    width: 14px;
-    height: 14px;
-    border: 2px solid var(--ax-ink);
-    border-radius: 50%;
-    background: var(--ax-red);
-  }
-  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick:not([hidden]) {
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + 10px);
-    order: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    width: 116px;
-    margin: 0;
-    pointer-events: none;
-  }
-  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry {
-    min-height: 42px;
-    animation: none;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: translateY(18px) scale(0.8);
-    transform-origin: right bottom;
-    transition: transform 160ms ease-in, opacity 120ms ease-in, visibility 0s linear 160ms;
-  }
-  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: none;
-    transition: transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 140ms ease-out, visibility 0s;
-  }
-  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry:nth-child(3) { transition-delay: 40ms, 40ms, 0s; }
-  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry:nth-child(2) { transition-delay: 80ms, 80ms, 0s; }
-  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry:nth-child(1) { transition-delay: 120ms, 120ms, 0s; }
-  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry:active:not(:disabled) { transform: translateY(3px); transition-duration: 45ms; transition-delay: 0s; }
-  /* The care-tool hint rides just above its own key. */
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle:not([hidden]) { position: relative; right: auto; bottom: auto; flex: 0 0 auto; }
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick:not([hidden]) { right: 0; bottom: calc(100% + 10px); }
   :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] .cm-toolbar__tool-hint {
     left: var(--cm-tool-hint-left, 8px);
     bottom: calc(100% + 10px);

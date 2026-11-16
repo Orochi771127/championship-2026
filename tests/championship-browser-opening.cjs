@@ -190,6 +190,8 @@ const RAISING_HOME = "[data-screen='RAISING_HOME']";
  */
 // Short landscape folds Hunt, Battle, Shop and Dex behind the Go key (Owner 2026-11-16).
 async function revealQuickEntries(page) {
+  // An open menu owns the space above the rail and the Go key steps back: close it first.
+  if (await page.locator('.cm-toolbar__menu:not([hidden])').count()) await page.keyboard.press('Escape');
   const fold = page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]');
   if (await fold.isVisible().catch(() => false)) await fold.click();
 }

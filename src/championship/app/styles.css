@@ -80,7 +80,7 @@ img { max-width: 100%; }
 .cm-toolbar [hidden] { display: none; }
 /* The arcade theme's quick dock (ui/arcade.css); other themes keep the eight-slot rail only. */
 .cm-toolbar__quick { display: none; }
-/* Its fold-away Go key exists only on the arcade sheet's short landscape screens. */
+/* Its fold-away Go key is drawn by the arcade sheet on the ranch (ui/arcade.css). */
 .cm-toolbar__quick-toggle { display: none; }
 
 .cm-visually-hidden {
