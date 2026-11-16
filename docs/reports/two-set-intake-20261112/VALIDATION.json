@@ -1796,9 +1796,9 @@
       "code": "AW26",
       "speciesId": "species-157",
       "entity": "m426_bigmamemon",
-      "frames": 135,
-      "clips": 111,
-      "atlasBytes": 2485548,
+      "frames": 159,
+      "clips": 119,
+      "atlasBytes": 2943570,
       "generalHeightRatio": {
         "median": 0.997,
         "min": 0.816,
@@ -1818,7 +1818,7 @@
         "melee": true,
         "ranged": true,
         "hurt": true,
-        "faint": false,
+        "faint": true,
         "sleep": false,
         "charge": true,
         "special": true
@@ -1877,7 +1877,7 @@
         "UR:special": -2.091,
         "UR:move": -2.091
       },
-      "faintEqualsHurtDropped": 8,
+      "faintEqualsHurtDropped": 0,
       "atlasScales": {
         "general": 1.0,
         "arena": 0.7044
@@ -4641,9 +4641,9 @@
       "code": "UL10",
       "speciesId": "species-193",
       "entity": "m507_crossmon",
-      "frames": 123,
-      "clips": 86,
-      "atlasBytes": 6391872,
+      "frames": 381,
+      "clips": 119,
+      "atlasBytes": 11656406,
       "generalHeightRatio": {
         "median": 0.999,
         "min": 0.708,
@@ -4659,17 +4659,20 @@
       "arenaRegistration": "per-picture support/bounds",
       "arenaHas": {
         "move": true,
-        "idle": false,
+        "idle": true,
         "melee": true,
         "ranged": true,
         "hurt": true,
-        "faint": false,
+        "faint": true,
         "sleep": false,
-        "charge": false,
-        "special": false
+        "charge": true,
+        "special": true
       },
       "arenaAliases": [],
-      "arenaGroundLock": {},
+      "arenaGroundLock": {
+        "L:idle": 0.69,
+        "R:idle": 0.69
+      },
       "faintEqualsHurtDropped": 0,
       "atlasScales": {
         "general": 1.0,
