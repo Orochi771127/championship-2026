@@ -6,7 +6,11 @@
 // and each result says what the partner actually did. To keep the comparison
 // clean the series pays a FIXED crystal amount per bout -- the same for a win,
 // a loss and every plan -- and none of the battle's own Bits, Sync EXP or
-// gacha drops.
+// gacha drops. P2b (2026-11-16): winning bout 3 (the trio) clears the series
+// and pays TACTIC_PRACTICE_CLEAR_CRYSTALS once more. The sequence measurement
+// showed the TP trade-off is real (normal attacks in bouts 1-2 then the
+// skill plan wins the trio 91% vs 59% for the skill plan throughout) but
+// nothing rewarded it; the clear is the only outcome-based pay.
 //
 // Pure: preset indices and numbers in, frozen data out. The series lives in
 // application memory for the session only; nothing here touches the save.
@@ -19,6 +23,7 @@ import { listMoveRecordsForSpecies } from "../battle/battleCatalogs.js";
 
 export const TACTIC_PRACTICE_BOUTS = 3;
 export const TACTIC_PRACTICE_CRYSTALS = 150;
+export const TACTIC_PRACTICE_CLEAR_CRYSTALS = 150;
 export const TACTIC_PRACTICE_PLANS = deepFreeze([0, 1, 2]);
 
 const presetOf = (index) => catalog.presets[index - catalog.presetStart];
@@ -92,6 +97,12 @@ export function createTacticPracticeSeries({ instanceId, partnerSpecies = null, 
     bouts: tacticPracticeBouts({ partnerSpecies, towerNext, round }), results: [] });
 }
 
+/** Crystals for one finished bout: the fixed amount, plus the clear bonus for winning the last bout. */
+export const tacticPracticeBoutCrystals = ({ bout, won }) =>
+  TACTIC_PRACTICE_CRYSTALS + (bout === TACTIC_PRACTICE_BOUTS && won === true ? TACTIC_PRACTICE_CLEAR_CRYSTALS : 0);
+/** Whether the series is cleared: its last bout (the trio) was won. */
+export const tacticPracticeCleared = (series) => series?.results?.[TACTIC_PRACTICE_BOUTS - 1]?.won === true;
+
 export const tacticPracticeNextBout = (series) => (series && series.results.length < TACTIC_PRACTICE_BOUTS ? series.results.length + 1 : null);
 
 /**
@@ -110,7 +121,8 @@ export function recordTacticPracticeBout(series, { bout, tactic, won, seconds, e
   }
   const result = {
     bout, kind: series.bouts[bout - 1].kind, tactic, won: won === true, seconds,
-    counts: entry ? { ...entry.counts } : null, total: entry?.total ?? null, crystals: TACTIC_PRACTICE_CRYSTALS, memory
+    counts: entry ? { ...entry.counts } : null, total: entry?.total ?? null, crystals: tacticPracticeBoutCrystals({ bout, won }),
+    clear: bout === TACTIC_PRACTICE_BOUTS && won === true, memory
   };
   return { series: deepFreeze({ ...series, results: [...series.results, result] }), result: deepFreeze(result) };
 }

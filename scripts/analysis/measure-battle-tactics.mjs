@@ -85,6 +85,9 @@ if (process.argv.includes('--sequences')) {
   if (!process.argv.includes('--heal-hp')) process.argv.push('--heal-hp');
   const orders = [];
   for (const a of TACTICS) for (const b of TACTICS) for (const c of TACTICS) orders.push([a, b, c]);
+  // --orders 000,110: only these plan orders (a quicker follow-up run); --name: the output file stem.
+  const only = arg('--orders', null)?.split(',');
+  if (only) orders.splice(0, orders.length, ...orders.filter(plans => only.includes(plans.join(''))));
   const rows = [];
   for (const plans of orders) for (const player of PLAYERS) for (let seed = 1; seed <= SEEDS; seed++) rows.push(runSeries({player, tactic: plans[0], seed, plans}));
   const score = orders.map(plans => { const key = plans.join(''); const mine = rows.filter(r => r.plans === key);
@@ -94,12 +97,14 @@ if (process.argv.includes('--sequences')) {
   for (const s of score) console.log(`${s.key}: wins/3 ${s.wins.toFixed(2)}  bout3 ${Math.round(s.bout3 * 100)}%  TP before bout 3 ${Math.round(s.tpBefore3 * 100)}%`);
   // Per partner: the best fixed order against the best order overall.
   for (const player of PLAYERS) {
-    const per = orders.map(plans => ({key: plans.join(''), wins: mean(rows.filter(r => r.player === player && r.plans === plans.join('')).map(r => r.wins))}))
+    const per = orders.map(plans => { const mine = rows.filter(r => r.player === player && r.plans === plans.join(''));
+      return {key: plans.join(''), wins: mean(mine.map(r => r.wins)), bout3: mean(mine.map(r => r.bouts[2].outcome === 'WIN' ? 1 : 0))}; })
       .sort((x, y) => y.wins - x.wins);
     const fixed = per.filter(p => new Set(p.key).size === 1)[0];
-    console.log(`partner ${player}: best ${per[0].key} ${per[0].wins.toFixed(2)}  best fixed ${fixed.key} ${fixed.wins.toFixed(2)}`);
+    const trio = [...per].sort((x, y) => y.bout3 - x.bout3 || y.wins - x.wins)[0];
+    console.log(`partner ${player}: best ${per[0].key} ${per[0].wins.toFixed(2)}  best fixed ${fixed ? `${fixed.key} ${fixed.wins.toFixed(2)}` : '-'}  best bout3 ${trio.key} ${Math.round(trio.bout3 * 100)}%  (${per.map(p => `${p.key}:${Math.round(p.bout3 * 100)}%`).join(' ')})`);
   }
-  if (OUT) { mkdirSync(OUT, {recursive: true}); writeFileSync(join(OUT, 'sequences.json'), JSON.stringify({score, rows: rows.map(r => ({player: r.player, plans: r.plans, seed: r.seed, wins: r.wins}))})); }
+  if (OUT) { mkdirSync(OUT, {recursive: true}); writeFileSync(join(OUT, `${arg('--name', 'sequences')}.json`), JSON.stringify({score, rows: rows.map(r => ({player: r.player, plans: r.plans, seed: r.seed, wins: r.wins, bouts: r.bouts.map(x => x.outcome).join(',')}))})); }
   process.exit(0);
 }
 if (process.argv.includes('--series')) {

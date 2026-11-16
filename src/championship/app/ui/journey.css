@@ -64,6 +64,8 @@
 .cm-journey__mark { padding: 2px 6px; border-radius: 6px; background: rgba(255, 210, 63, 0.2); color: #ffe27a; font-size: calc(10px * var(--text-scale, 1)); font-weight: 900; white-space: nowrap; }
 .cm-journey__mark--guardian { background: rgba(255, 111, 181, 0.25); color: #ffc2e0; }
 .cm-journey__mark--done { background: rgba(61, 220, 132, 0.22); color: #a6f5c6; }
+/* P2b: the trio is the series clear; its bonus sits on the row until it is fought. */
+.cm-journey__bout-clear { padding: 2px 6px; border-radius: 6px; background: rgba(255, 210, 63, 0.2); color: #ffe27a; font-size: calc(10px * var(--text-scale, 1)); font-weight: 900; white-space: nowrap; }
 .cm-journey__foe, .cm-journey__face { position: relative; display: inline-block; flex: 0 0 auto; overflow: hidden; border-radius: 8px; background: radial-gradient(circle at 50% 35%, #fff, #c9d4f0); }
 .cm-journey__foe { width: 30px; height: 30px; }
 .cm-journey__face { width: 40px; height: 40px; }

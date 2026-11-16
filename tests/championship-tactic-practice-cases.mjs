@@ -11,7 +11,7 @@ import {nativeIndividualProfile} from '../src/championship/raising/nativeIndivid
 import {classifyLaunch} from '../src/championship/app/battleTacticRecord.js';
 import {tacticRecordLines, tacticRecordText, TACTIC_RECORD_COPY} from '../src/championship/text/tacticRecordText.js';
 import {LOCALES} from '../src/championship/text/locale.js';
-import {TACTIC_PRACTICE_CRYSTALS, createTacticPracticeSeries, tacticPracticeBouts, tacticPracticeNextBout, tacticPracticeTier,
+import {TACTIC_PRACTICE_CRYSTALS, TACTIC_PRACTICE_CLEAR_CRYSTALS, tacticPracticeBoutCrystals, tacticPracticeCleared, createTacticPracticeSeries, tacticPracticeBouts, tacticPracticeNextBout, tacticPracticeTier,
   recordTacticPracticeBout, presetSkillCount} from '../src/championship/contracts/productTacticPractice.js';
 
 const read = p => JSON.parse(readFileSync(new URL('../' + p, import.meta.url), 'utf8'));
@@ -144,9 +144,29 @@ test('a bout pays the same crystals win or lose, and a memory needs an event tha
   const won = recordTacticPracticeBout(series, {bout: 2, tactic: 2, won: true, seconds: 40, entry});
   assert.equal(won.result.crystals, TACTIC_PRACTICE_CRYSTALS);
   assert.deepEqual(won.result.memory, {kind: 'skillWin', skill: 3});
+  assert.equal(won.result.clear, false, 'only the last bout clears');
   const plain = recordTacticPracticeBout(won.series, {bout: 3, tactic: 2, won: true, seconds: 40, entry: {...entry, counts: {normal: 9, skill: 0, support: 0}}});
   assert.equal(plain.result.memory, null, 'a long win with nothing notable leaves no line');
   assert.equal(tacticPracticeNextBout(plain.series), null);
+  // P2b: winning the trio clears the series for a bonus; losing it pays the fixed amount only.
+  assert.equal(plain.result.clear, true);
+  assert.equal(plain.result.crystals, TACTIC_PRACTICE_CRYSTALS + TACTIC_PRACTICE_CLEAR_CRYSTALS);
+  assert.equal(tacticPracticeCleared(plain.series), true);
+  const fell = recordTacticPracticeBout(won.series, {bout: 3, tactic: 0, won: false, seconds: 30, entry});
+  assert.equal(fell.result.clear, false);
+  assert.equal(fell.result.crystals, TACTIC_PRACTICE_CRYSTALS);
+  assert.equal(tacticPracticeCleared(fell.series), false);
+  assert.equal(tacticPracticeCleared(won.series), false, 'not cleared before the trio');
+});
+
+test('P2b: one helper prices every bout — fixed, plus the clear bonus for winning bout 3', () => {
+  assert.ok(TACTIC_PRACTICE_CLEAR_CRYSTALS > 0);
+  for (const bout of [1, 2]) for (const won of [true, false]) assert.equal(tacticPracticeBoutCrystals({bout, won}), TACTIC_PRACTICE_CRYSTALS);
+  assert.equal(tacticPracticeBoutCrystals({bout: 3, won: false}), TACTIC_PRACTICE_CRYSTALS);
+  assert.equal(tacticPracticeBoutCrystals({bout: 3, won: true}), TACTIC_PRACTICE_CRYSTALS + TACTIC_PRACTICE_CLEAR_CRYSTALS);
+  const app = source('src/championship/app/championshipStandaloneApp.js');
+  assert.match(app, /addSyncCrystals\(tacticPracticeBoutCrystals\(\{bout:spar\.bout,won\}\)\)/, 'the app pays through the same helper');
+  assert.match(source('src/championship/app/journeyScreen.js'), /pt\(current\?\.cleared \? "practice\.cleared" : "practice\.done"\)/);
 });
 
 test('app: a practice series fights the same partner, reads its plan, pays only fixed crystals', async () => {

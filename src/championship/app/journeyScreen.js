@@ -343,6 +343,8 @@ export function createJourneyScreen(host) {
       const foes = el("span", "cm-journey__floor-foes");
       for (const species of info?.species ?? []) foes.append(portrait(host.speciesPortrait(species), "cm-journey__foe"));
       row.append(foes);
+      // The trio is the series' last bout: winning it clears the series for a bonus.
+      if (n === 3 && !result) row.append(el("span", "cm-journey__bout-clear", pt("practice.clearTag", { clear: current?.clearCrystals ?? 150 })));
       if (result) {
         row.append(el("b", `cm-journey__mark${result.won ? " cm-journey__mark--done" : ""}`, pt(result.won ? "practice.won" : "practice.lost")));
         // The A side of the playtest sees outcomes only: the counts would hand it the B side's causal record.
@@ -358,11 +360,11 @@ export function createJourneyScreen(host) {
       const foe = pt(p.foeKey(r.kind)), planName = pt(`plan.${r.tactic}`);
       panel.append(el("p", "cm-journey__memory", pt("practice.memory", { line: pt(`practice.memory.${r.memory.kind}`, { ...r.memory, plan: planName, foe }) })));
     }
-    panel.append(el("p", "cm-journey__hint", pt("practice.reward", { crystals: current?.crystals ?? 150 })));
+    panel.append(el("p", "cm-journey__hint", pt("practice.reward", { crystals: current?.crystals ?? 150, clear: current?.clearCrystals ?? 150 })));
     const actions = el("div", "cm-journey__pod-actions");
     const next = current?.nextBout ?? null;
     if (series && next === null) {
-      panel.append(el("p", "cm-journey__best", pt("practice.done")));
+      panel.append(el("p", "cm-journey__best", pt(current?.cleared ? "practice.cleared" : "practice.done")));
       const again = button("cm-journey__go cm-arcade-key", pt("practice.again"), () => { p.start(partnerId); paint(); });
       again.dataset.journeyAction = "practice-again";
       actions.append(again);

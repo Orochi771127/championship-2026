@@ -2390,7 +2390,7 @@ async function mountBattleResult() {
     app.leaveScreen();
     if(app.getScreen()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT){if(app.getScreen()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)app.leaveScreen();app.openBattle();}
   };
-  const followUp=sparSettled?{label:sparRecord?.next?tacticRecordText('practice.next',{n:sparRecord.next}):tacticRecordText('practice.done'),
+  const followUp=sparSettled?{label:sparRecord?.next?tacticRecordText('practice.next',{n:sparRecord.next}):tacticRecordText(sparRecord?.result?.clear?'practice.cleared':'practice.done'),
       onClick:()=>leaveToJourney({tab:'PRACTICE'})}
     :!tower?null:tower.won&&tower.next?{label:journeyText('result.next',{floor:tower.next}),onClick:()=>leaveToJourney({floor:tower.next,team:tower.team,autoStart:true})}
     :!tower.won?{label:journeyText('result.retry',{floor:tower.floor}),onClick:()=>leaveToJourney({floor:tower.floor,team:tower.team,autoStart:true})}:null;

@@ -38,7 +38,7 @@ import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattl
   boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX} from '../contracts/productSyncLevel.js';
 import {normalizeJourney,createJourneyState,TOWER_FLOORS,towerBand,towerOpponents,towerOpponentSpecies,towerRewards,towerNextFloor,
   clearTowerFloor,patrolStatus,claimPatrol,quickPatrol} from '../contracts/productJourney.js';
-import {TACTIC_PRACTICE_CRYSTALS,createTacticPracticeSeries,tacticPracticeNextBout,recordTacticPracticeBout} from '../contracts/productTacticPractice.js';
+import {TACTIC_PRACTICE_CRYSTALS,TACTIC_PRACTICE_CLEAR_CRYSTALS,tacticPracticeBoutCrystals,tacticPracticeCleared,createTacticPracticeSeries,tacticPracticeNextBout,recordTacticPracticeBout} from '../contracts/productTacticPractice.js';
 import {battleStyleOfProfile} from '../contracts/productBattleStyle.js';
 import {CAMPAIGN_ZONES,CAMPAIGN_STAGES,CAMPAIGN_ZONE_CHEST,campaignRivals,campaignStars,campaignRewards,recordCampaignStage,sweepCampaignStage,
   sweepsLeft,stageOpen,starsOf,zoneStars,totalStars} from '../contracts/productCampaign.js';
@@ -1328,12 +1328,12 @@ export function createChampionshipStandaloneApp({
   function sparFreshHp(profile){
     const next=structuredClone(profile);next.fields['050']=next.fields['058'];return next;
   }
-  /** A finished practice-series bout: its fixed crystals, win or loss, whatever the plan. */
+  /** A finished practice-series bout: its fixed crystals, win or loss, whatever the plan; winning the last bout adds the clear bonus. */
   function settleSparBout(attemptId,won){
     const spar=pendingSpar;
     if(!spar||spar.attemptId!==attemptId)return null;
     pendingSpar=null;
-    addSyncCrystals(TACTIC_PRACTICE_CRYSTALS);savePort.markDirty();
+    addSyncCrystals(tacticPracticeBoutCrystals({bout:spar.bout,won}));savePort.markDirty();
     lastSparResult=Object.freeze({attemptId,bout:spar.bout,tactic:spar.tactic,instanceId:spar.instanceId,won,recorded:false});
     return lastSparResult;
   }
@@ -4505,7 +4505,8 @@ export function createChampionshipStandaloneApp({
     getTacticPractice(){
       requireSession();
       return tacticPractice?Object.freeze({series:tacticPractice,nextBout:tacticPracticeNextBout(tacticPractice),
-        tactic:battleTactics[tacticPractice.instanceId]??BATTLE_TACTIC_DEFAULT,crystals:TACTIC_PRACTICE_CRYSTALS,lastResult:lastSparResult}):null;
+        tactic:battleTactics[tacticPractice.instanceId]??BATTLE_TACTIC_DEFAULT,crystals:TACTIC_PRACTICE_CRYSTALS,
+        clearCrystals:TACTIC_PRACTICE_CLEAR_CRYSTALS,cleared:tacticPracticeCleared(tacticPractice),lastResult:lastSparResult}):null;
     },
     /** Start (or restart) a series for one partner; new rivals each round. */
     startTacticPractice(instanceId){
