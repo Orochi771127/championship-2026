@@ -2042,6 +2042,190 @@
    "frame": "ul16-ts-A-ARENA_NE_00",
    "verdict": "NOT_A_FACING_ERROR",
    "note": "Reviewed 2026-11-15: UL16 UR shoot recovery keys turn toward the viewer as the reference recovery does."
+  },
+  {
+   "displayCode": "AW01",
+   "usage": "arena",
+   "clip": "aw01-ts:arena:L:attack",
+   "frame": "aw01-ts-A-pose_6_6",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW01 L melee wind-up faces screen-left like its walk."
+  },
+  {
+   "displayCode": "AW03",
+   "usage": "arena",
+   "clip": "aw03-ts:arena:R:attack",
+   "frame": "aw03-ts-A-pose_007",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW03 side headings are near-front armoured poses; R frames lead with the right-side blade, UR walk is a back view."
+  },
+  {
+   "displayCode": "AW03",
+   "usage": "arena",
+   "clip": "aw03-ts:arena:L:shoot",
+   "frame": "aw03-ts-A-pose_018",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW03 side headings are near-front armoured poses; R frames lead with the right-side blade, UR walk is a back view."
+  },
+  {
+   "displayCode": "AW03",
+   "usage": "arena",
+   "clip": "aw03-ts:arena:R:shoot",
+   "frame": "aw03-ts-A-pose_006",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW03 side headings are near-front armoured poses; R frames lead with the right-side blade, UR walk is a back view."
+  },
+  {
+   "displayCode": "AW03",
+   "usage": "arena",
+   "clip": "aw03-ts:arena:L:special",
+   "frame": "aw03-ts-A-pose_018",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW03 side headings are near-front armoured poses; R frames lead with the right-side blade, UR walk is a back view."
+  },
+  {
+   "displayCode": "AW03",
+   "usage": "arena",
+   "clip": "aw03-ts:arena:R:special",
+   "frame": "aw03-ts-A-pose_006",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW03 side headings are near-front armoured poses; R frames lead with the right-side blade, UR walk is a back view."
+  },
+  {
+   "displayCode": "AW03",
+   "usage": "arena",
+   "clip": "aw03-ts:arena:UR:walk",
+   "frame": "aw03-ts-A-pose_009",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW03 side headings are near-front armoured poses; R frames lead with the right-side blade, UR walk is a back view."
+  },
+  {
+   "displayCode": "AW03",
+   "usage": "arena",
+   "clip": "aw03-ts:arena:UR:walk",
+   "frame": "aw03-ts-A-pose_010",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW03 side headings are near-front armoured poses; R frames lead with the right-side blade, UR walk is a back view."
+  },
+  {
+   "displayCode": "AW03",
+   "usage": "arena",
+   "clip": "aw03-ts:arena:UR:walk",
+   "frame": "aw03-ts-A-pose_011-d5.0",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW03 side headings are near-front armoured poses; R frames lead with the right-side blade, UR walk is a back view."
+  },
+  {
+   "displayCode": "AW51",
+   "usage": "arena",
+   "clip": "aw51-ts:arena:L:idle",
+   "frame": "aw51-ts-A-master_018",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
+  },
+  {
+   "displayCode": "AW51",
+   "usage": "arena",
+   "clip": "aw51-ts:arena:L:idle",
+   "frame": "aw51-ts-A-master_030",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
+  },
+  {
+   "displayCode": "AW51",
+   "usage": "arena",
+   "clip": "aw51-ts:arena:R:idle",
+   "frame": "aw51-ts-A-master_006",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
+  },
+  {
+   "displayCode": "AW51",
+   "usage": "arena",
+   "clip": "aw51-ts:arena:R:idle",
+   "frame": "aw51-ts-A-master_026",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
+  },
+  {
+   "displayCode": "AW51",
+   "usage": "arena",
+   "clip": "aw51-ts:arena:UR:idle",
+   "frame": "aw51-ts-A-master_009",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
+  },
+  {
+   "displayCode": "AW51",
+   "usage": "arena",
+   "clip": "aw51-ts:arena:UR:idle",
+   "frame": "aw51-ts-A-master_027",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
+  },
+  {
+   "displayCode": "AW51",
+   "usage": "arena",
+   "clip": "aw51-ts:arena:L:shoot",
+   "frame": "aw51-ts-A-master_030",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
+  },
+  {
+   "displayCode": "AW51",
+   "usage": "arena",
+   "clip": "aw51-ts:arena:L:shoot",
+   "frame": "aw51-ts-A-master_018",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
+  },
+  {
+   "displayCode": "AW51",
+   "usage": "arena",
+   "clip": "aw51-ts:arena:R:shoot",
+   "frame": "aw51-ts-A-master_026",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
+  },
+  {
+   "displayCode": "AW51",
+   "usage": "arena",
+   "clip": "aw51-ts:arena:UR:shoot",
+   "frame": "aw51-ts-A-master_027",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
+  },
+  {
+   "displayCode": "AW51",
+   "usage": "arena",
+   "clip": "aw51-ts:arena:L:special",
+   "frame": "aw51-ts-A-master_030",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
+  },
+  {
+   "displayCode": "AW51",
+   "usage": "arena",
+   "clip": "aw51-ts:arena:L:special",
+   "frame": "aw51-ts-A-master_018",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
+  },
+  {
+   "displayCode": "AW51",
+   "usage": "arena",
+   "clip": "aw51-ts:arena:R:special",
+   "frame": "aw51-ts-A-master_026",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
+  },
+  {
+   "displayCode": "AW51",
+   "usage": "arena",
+   "clip": "aw51-ts:arena:UR:special",
+   "frame": "aw51-ts-A-master_027",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
   }
  ]
 }
