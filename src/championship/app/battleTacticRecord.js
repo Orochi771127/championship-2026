@@ -8,7 +8,7 @@
 // the stage-1 measurement both read this one summary, so what the result screen
 // says is exactly what the battle did -- never a line chosen from the plan.
 
-import {listMoveRecordsForSpecies} from '../battle/battleCatalogs.js';
+import {listMoveRecordsForSpecies, listBattleCatalogRecords} from '../battle/battleCatalogs.js';
 
 export const BATTLE_RECORD_FPS = 60;
 const SLOT_COUNT = 6;
@@ -34,11 +34,21 @@ function kitOf(speciesId) {
   return kitCache.get(index);
 }
 
+/** Cartridge move records of kind 2/3: the special skills an individual carries in sp1/sp2. */
+export function isSpecialSkill(moveId) {
+  if (!Number.isInteger(moveId) || moveId < 1) return false;
+  const record = listBattleCatalogRecords('moves')[moveId];
+  return Boolean(record && record.recordIndex === moveId && (record.kind === 2 || record.kind === 3));
+}
+
 /**
  * Which column a launched move counts in: NORMAL (kind 0, no SP), SUPPORT (an
  * SP move aimed at its own team) or SKILL (an SP move aimed at the other team).
  */
 export function classifyLaunch({slot, targetSlot, moveId, speciesId}) {
+  // The individual's two special skills (sp1/sp2, individual +0x12C/+0x130) are the cartridge's
+  // records 1..30, kinds 2 and 3: heals, guards, resistances, revival, taunt. They are support.
+  if (isSpecialSkill(moveId)) return 'support';
   const move = kitOf(speciesId)?.moves.get(moveId) ?? null;
   if (!move || move.cost === 0 || move.kind === 0) return 'normal';
   if (Number.isInteger(targetSlot) && teamOf(targetSlot) === teamOf(slot)) return 'support';
@@ -122,7 +132,7 @@ export function summariseBattleRecord({tap, view, diagnostics = null, localTeamI
   const decisionsOf = slot => {
     const d = diagnostics?.slots?.[slot];
     if (!d || !Number.isFinite(d.decisions)) return null;
-    return {total: d.decisions, attack: (d.action ?? 0) + (d.targeted ?? 0), reposition: d.move ?? 0};
+    return {total: d.decisions, attack: d.action ?? 0, support: d.targeted ?? 0, reposition: d.move ?? 0};
   };
   const local = snap.slots.filter(s => s && s.team === localTeamIndex).map(s => {
     const total = s.counts.normal + s.counts.skill + s.counts.support;

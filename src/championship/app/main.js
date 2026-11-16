@@ -155,7 +155,7 @@ import { openBragCardPreview, publicPlayUrl } from './bragCardPreview.js';
 import { sha256Hex } from '../online/cloudSaveEnvelope.js';
 import { onlineText, onlineReasonText, ONLINE_PROVIDER_NAMES } from '../text/onlineText.js';
 import { socialText } from '../text/socialText.js';
-import { generationName } from '../text/zhHant.js';
+import { generationName, specialSkillName } from '../text/zhHant.js';
 import { NATIVE_RAISING_LIFECYCLE_RULES } from '../raising/nativeRaisingLifecycle.js';
 import { tamerCompletionPercent } from './tamerInfoScreen.js';
 import { createPreferenceStore } from './settings/preferenceStore.js';
@@ -1644,7 +1644,7 @@ function buildTacticRecordPanel(runtime, { attemptId, matchTitle, context = null
   if (!record || !record.local.some(entry => Number.isInteger(entry.tactic))) return null;
   const previous = entry => entry.instanceId ? tacticRecordHistory.get(entry.instanceId) ?? null : null;
   const lines = tacticRecordLines(record, { nameOf: (slot, speciesId) => record.local.find(e => e.slot === slot)?.displayName ?? '',
-    moveName: id => battleMoveName(id) ?? `#${id}`, previous });
+    moveName: id => (id >= 1 && id <= 30 ? specialSkillName(id) : null) ?? battleMoveName(id) ?? `#${id}`, previous });
   for (const entry of record.local) if (entry.instanceId && Number.isInteger(entry.tactic))
     tacticRecordHistory.set(entry.instanceId, { tactic: entry.tactic, total: entry.total, counts: { ...entry.counts }, seconds: record.seconds });
   tacticPlaytestLog.push({ at: new Date().toISOString(), attemptId, matchTitle, variant: TACTIC_RECORD_VARIANT, context,

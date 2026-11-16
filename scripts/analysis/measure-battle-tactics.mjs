@@ -91,7 +91,7 @@ const unended = runs.filter(r => !r.ended).length;
 const summary = {generated: new Date().toISOString(), seeds: SEEDS, players: PLAYERS, opponents: OPPONENTS, unended, byTactic, teamByTactic, cells};
 const pct = x => `${Math.round(x * 100)}%`;
 console.log(`runs ${runs.length}, unended ${unended}`);
-const line = (label, a) => console.log(`${label}: win ${pct(a.winRate)}  ${a.seconds.toFixed(1)} s  launches ${a.launches.toFixed(1)}  reposition ${pct(a.repositionShare)}  normal ${pct(a.normalShare)} skill ${pct(a.skillShare)}  skills ${a.skillsUsed.toFixed(1)} (first ${a.firstSkillAt.toFixed(1)} s)  SP ${a.spSpent.toFixed(1)}  SP-empty ${a.spEmptySeconds.toFixed(1)} s  dealt ${pct(a.damageDealtRatio)}  hp-left ${pct(a.hpLeftRatio)}`);
+const line = (label, a) => console.log(`${label}: win ${pct(a.winRate)}  ${a.seconds.toFixed(1)} s  launches ${a.launches.toFixed(1)}  reposition ${pct(a.repositionShare)}  normal ${pct(a.normalShare)} skill ${pct(a.skillShare)} support ${pct(a.supportShare)}  skills ${a.skillsUsed.toFixed(1)} (first ${a.firstSkillAt.toFixed(1)} s)  SP ${a.spSpent.toFixed(1)}  SP-empty ${a.spEmptySeconds.toFixed(1)} s  dealt ${pct(a.damageDealtRatio)}  hp-left ${pct(a.hpLeftRatio)}`);
 for (const t of TACTICS) line(`single plan ${t}`, byTactic[t]);
 for (const t of TACTICS) line(`team   plan ${t}`, teamByTactic[t]);
 for (const c of cells) console.log(`P${c.player} vs ${c.opponent}: ` + TACTICS.map(t => `${t}=${pct(c[t].winRate)}/${c[t].seconds.toFixed(0)}s/sk${c[t].skillsUsed.toFixed(1)}`).join('  ') + `  best ${c.best}`);

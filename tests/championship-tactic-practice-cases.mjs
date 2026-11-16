@@ -53,7 +53,27 @@ test('the same partner and seed under another plan does something measurably dif
   assert.ok(share(support) > share(special) + 0.2, `reposition ${share(special)} -> ${share(support)}`);
 });
 
+test('a special skill (sp1/sp2, e.g. 治癒 α) counts as support and fires more under 支援優先', () => {
+  const run = (plan) => {
+    const team = [[37, 6], [41, 4], [50, 4]].map(([species, trait], k) => ({instanceId: 'A' + k, tactic: plan,
+      nativeProfile: nativeIndividualProfile(createNativeHuntIndividual({species: nativeHuntSpeciesByIndex(species), rng: {next: () => 11 + k}, traitOverride: trait}))}));
+    assert.ok(team.every(p => p.nativeProfile.fields['12c'] === 2), 'each carries 治癒 α');
+    const runtime = createBattleRuntime({mode: 5, battleType: 0, seed: 1, aiPolicy: 'IMPROVED_V1', personalityPolicy: 'ORIGINAL', burstPolicy: 'OFF',
+      playerIndividuals: team, opponentIndividuals: [34, 38, 61].map((s, k) => individual('B' + k, s, k, 7 + k, 1))});
+    runtime.choosePracticeBattle({arenaIndex: 2});
+    const view = runtime.startMatch();
+    for (let t = 0; t < 90000 && !view.getView().outcome.ended; t++) view.tick();
+    const record = runtime.getTacticRecord();
+    runtime.dispose();
+    return record.local.reduce((sum, e) => ({support: sum.support + e.counts.support, decided: sum.decided + e.decisions.support}), {support: 0, decided: 0});
+  };
+  const normal = run(1), support = run(2);
+  assert.equal(normal.decided, 0, 'the normal plan never takes the targeted path here');
+  assert.ok(support.support > 0 && support.support <= support.decided, JSON.stringify(support));
+});
+
 test('a launched move is classified from its own record, not from the plan', () => {
+  assert.equal(classifyLaunch({slot: 0, targetSlot: 1, moveId: 2, speciesId: 'species-037'}), 'support', 'special skill 治癒 α');
   assert.equal(classifyLaunch({slot: 0, targetSlot: 3, moveId: 108, speciesId: 'species-053'}), 'normal');
   assert.equal(classifyLaunch({slot: 0, targetSlot: 3, moveId: 109, speciesId: 'species-053'}), 'skill');
   assert.equal(classifyLaunch({slot: 0, targetSlot: 1, moveId: 109, speciesId: 'species-053'}), 'support');
