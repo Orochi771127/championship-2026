@@ -56,7 +56,7 @@ test("the quick dock is the observed System entries themselves, appended after t
   assert.deepEqual([...TOOLBAR_QUICK_ENTRIES], ["hunt", "battle", "shop", "database"]);
   const { toolbar, quick, entries } = mount(t);
   assert.deepEqual(toolbar.element.children.map((child) => child.className),
-    ["cm-toolbar__menu", "cm-toolbar__rail", "cm-toolbar__tool-hint", "cm-toolbar__quick"], "menu, rail and hint keep their positions");
+    ["cm-toolbar__menu", "cm-toolbar__rail", "cm-toolbar__tool-hint", "cm-toolbar__quick-toggle", "cm-toolbar__quick"], "menu, rail and hint keep their positions");
   assert.equal(quick.hidden, true, "hidden until a mode is set");
   toolbar.setMode(TOOLBAR_MODES.TRAINING);
   assert.equal(quick.hidden, false);
@@ -80,6 +80,30 @@ test("the quick dock leaves Hunt and every tutorial step to the original rail", 
   assert.equal(quick.hidden, false);
   toolbar.setMode(null);
   assert.equal(quick.hidden, true);
+});
+
+test("short landscape folds the dock behind one Go key that opens and closes it (Owner 2026-11-16)", (t) => {
+  const { toolbar, quick } = mount(t);
+  const bar = toolbar.element;
+  const toggle = bar.children.find((child) => child.className === "cm-toolbar__quick-toggle");
+  assert.equal(toggle.hidden, true, "no Go key before a mode is set");
+  assert.equal(toggle.attributes["aria-controls"], quick.id);
+  toolbar.setMode(TOOLBAR_MODES.TRAINING);
+  assert.equal(toggle.hidden, false, "the Go key follows the dock");
+  assert.equal(bar.dataset.quickOpen, "false");
+  toggle.click();
+  assert.equal(bar.dataset.quickOpen, "true");
+  assert.equal(toggle.attributes["aria-expanded"], "true");
+  toggle.click();
+  assert.equal(bar.dataset.quickOpen, "false", "a second press folds the keys away");
+  toggle.click();
+  quick.events.click({ target: { closest: () => ({}) } });
+  assert.equal(bar.dataset.quickOpen, "false", "picking a destination folds the keys away");
+  toggle.click();
+  toolbar.setTutorialTool("SYSTEM", { select: false, menuEntry: "hunt" });
+  assert.equal(toggle.hidden, true, "a tutorial hides the Go key with the dock");
+  assert.equal(bar.dataset.quickOpen, "false", "and never leaves it open");
+  assert.equal(toggle.attributes["aria-expanded"], "false");
 });
 
 function fakeAudio(state = "running") {

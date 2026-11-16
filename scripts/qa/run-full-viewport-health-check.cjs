@@ -155,6 +155,11 @@ class Run {
   async tap(selector, { state, what, timeout = 12000, force = false } = {}) {
     if (this.remark && selector.includes('[data-vh-exit]')) await this.remark().catch(() => {});
     const target = this.page.locator(selector).first();
+    // Short landscape folds the four destinations behind the Go key: a player presses it first.
+    if (selector.includes('quick-entry') && !(await target.isVisible().catch(() => false))) {
+      const fold = this.page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]');
+      if (await fold.isVisible().catch(() => false)) await fold.click().catch(() => {});
+    }
     try {
       await target.waitFor({ state: 'visible', timeout });
     } catch {

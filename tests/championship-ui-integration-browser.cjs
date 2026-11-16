@@ -27,6 +27,11 @@ async function watch(page) {
 const saved = (page) => page.evaluate((key) => JSON.parse(localStorage.getItem(key) || 'null'), KEY);
 async function menu(page, menuId, entryId) {
   await page.locator(`button[data-menu-id="${menuId}"]`).click();
+  // Short landscape folds the four destinations behind the Go key.
+  if (["hunt", "battle", "shop", "database"].includes(entryId)) {
+    const fold = page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]');
+    if (await fold.isVisible().catch(() => false)) await fold.click();
+  }
   await page.locator(`[data-entry-id="${entryId}"]`).click();
 }
 const home = (page) => page.locator('.cm-raising-pixi-canvas').waitFor({ timeout: 45000 });

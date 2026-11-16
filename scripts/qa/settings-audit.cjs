@@ -33,6 +33,12 @@ const only = args.viewports ? String(args.viewports).split(',') : null;
 
 // Screens visited for the text-size and density measurements: [name, open(page), close(page)].
 const quick = id => `.cm-toolbar__quick-entry[data-quick-id="${id}"]`;
+// Short landscape folds the four destinations behind the Go key (Owner 2026-11-16).
+async function tapQuick(page, id) {
+  const fold = page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]');
+  if (await fold.isVisible().catch(() => false)) await fold.click();
+  await page.click(quick(id));
+}
 const waitScreen = (page, id) => page.waitForFunction(s => document.getElementById('cm-root')?.dataset.activeScreen === s, id, { timeout: 30000 });
 const menuEntry = async (page, menu, entry) => {
   await page.click(`button.cm-toolbar__cell[data-menu-id="${menu}"]`);
@@ -48,10 +54,10 @@ const exitPage = async page => {
 const SCREENS = [
   ['ranch', async () => {}, async () => {}],
   ['menu-system', async page => { await page.click('button.cm-toolbar__cell[data-menu-id="SYSTEM"]'); }, async page => { await page.click('button.cm-toolbar__cell[data-menu-id="SYSTEM"]', { force: true }); }],
-  ['shop', async page => { await page.click(quick('shop')); await waitScreen(page, 'SHOP'); }, exitPage],
-  ['dex', async page => { await page.click(quick('database')); await waitScreen(page, 'DATABASE'); }, exitPage],
-  ['battle-select', async page => { await page.click(quick('battle')); await waitScreen(page, 'BATTLE_SELECT'); }, exitPage],
-  ['hunt-gates', async page => { await page.click(quick('hunt')); await waitScreen(page, 'GATE_SELECT'); }, exitPage],
+  ['shop', async page => { await tapQuick(page, 'shop'); await waitScreen(page, 'SHOP'); }, exitPage],
+  ['dex', async page => { await tapQuick(page, 'database'); await waitScreen(page, 'DATABASE'); }, exitPage],
+  ['battle-select', async page => { await tapQuick(page, 'battle'); await waitScreen(page, 'BATTLE_SELECT'); }, exitPage],
+  ['hunt-gates', async page => { await tapQuick(page, 'hunt'); await waitScreen(page, 'GATE_SELECT'); }, exitPage],
   ['roster', async page => { await menuEntry(page, 'MANAGEMENT', 'digimon'); await waitScreen(page, 'DIGIMON_LIST'); }, exitPage],
   ['tamer', async page => { await menuEntry(page, 'MANAGEMENT', 'tamer'); await waitScreen(page, 'TAMER_INFO'); }, exitPage],
   ['schedule', async page => { await menuEntry(page, 'MANAGEMENT', 'schedule'); await waitScreen(page, 'SCHEDULE'); }, exitPage],
