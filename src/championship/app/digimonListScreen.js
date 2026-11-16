@@ -7,6 +7,9 @@ import {taxonomyBadgeRow} from '../presentation/taxonomyBadgeArt.js';
 import {elementChartButton} from './elementChartModal.js';
 import {isKnownSpeciesIndex,productPartnerG} from '../contracts/productSpeciesData.js';
 import { createActionPortrait } from "../presentation/juicy/actionPortrait.js";
+import {battleStyleOf,isSpecialSkillId,SPECIAL_SKILL_GLYPHS} from '../contracts/productBattleStyle.js';
+import {battleStyleText,specialSkillEffect} from '../text/battleStyleText.js';
+import {battleGlyph,STYLE_GLYPHS} from './battleGlyphs.js';
 // The Digimon roster -- the original's ui/digimon_list_* scenes.
 //
 // STRUCTURE COMES FROM THE ROM SCENES, NOT FROM TASTE
@@ -100,7 +103,7 @@ const ROW_GROUPS = Object.freeze({
   nickname: "identity", species: "identity", gen: "identity", mind: "identity", family: "identity", align_icon: "identity",
   HP: "vital", TP: "vital", size: "vital",
   attack: "combat", def: "combat", wiz: "combat", spd: "combat",
-  sp1: "skill", sp2: "skill",
+  style: "skill", sp1: "skill", sp2: "skill",
   num_battle: "record", win_rate: "record", digitama: "record"
 });
 
@@ -238,10 +241,55 @@ function appendAwakening(detail, entry, onAwakening) {
   detail.append(group);
 }
 
+/**
+ * BATTLE_STYLE_V1 (2026-11-16): the partner's 攻擊／技能／支援 style, read from its species'
+ * moves and its two special skills; null for an egg or a species with no moves.
+ */
+function entryBattleStyle(entry) {
+  const stats = entry?.stats;
+  if (!stats || !Number.isSafeInteger(stats.speciesIndex)) return null;
+  return battleStyleOf({ speciesId: stats.speciesIndex, specialSkills: [stats.source12C, stats.source130].filter(isSpecialSkillId) });
+}
+
+/** One special skill: its glyph, its name and one short effect line. */
+function specialSkillCell(skillId) {
+  const cell = element("dd", "cm-digimon-detail__value cm-skill-cell");
+  const info = SPECIAL_SKILL_GLYPHS[skillId];
+  if (info) cell.append(battleGlyph(info.glyph));
+  cell.append(element("span", "cm-skill-cell__name", specialSkillName(skillId) ?? "", false));
+  const effect = info ? specialSkillEffect(info.glyph, info.group) : "";
+  if (effect) cell.append(element("span", "cm-skill-cell__effect", effect, false));
+  return cell;
+}
+
 export function appendCreatureDetail(detail, entry, { onBurstForm = null, onAwakening = null } = {}) {
+  const style = entryBattleStyle(entry);
   for (const row of TRACED_DETAIL_ROWS) {
+    if (row.id === "sp1" && style) {
+      const group = element("div", "cm-digimon-stat cm-digimon-stat--style");
+      group.dataset.row = "style";
+      group.dataset.group = "skill";
+      group.dataset.style = style;
+      const term = element("dt", "cm-digimon-detail__label", battleStyleText("label"), false);
+      term.setAttribute("data-row", "style");
+      const cell = element("dd", "cm-digimon-detail__value cm-skill-cell");
+      cell.append(battleGlyph(STYLE_GLYPHS[style]), element("span", "cm-skill-cell__name", battleStyleText(`style.${style}`), false));
+      group.append(term, cell);
+      detail.append(group);
+    }
     const value = row.read(entry);
     if (value === null || value === undefined) continue;
+    const skillId = row.id === "sp1" ? entry.stats?.source12C : row.id === "sp2" ? entry.stats?.source130 : null;
+    if (isSpecialSkillId(skillId)) {
+      const term = element("dt", "cm-digimon-detail__label", row.label);
+      term.setAttribute("data-row", row.id);
+      const group = element("div", "cm-digimon-stat");
+      group.dataset.row = row.id;
+      group.dataset.group = "skill";
+      group.append(term, specialSkillCell(skillId));
+      detail.append(group);
+      continue;
+    }
     const term = element("dt", "cm-digimon-detail__label", row.label);
     term.setAttribute("data-row", row.id);
     const cell = element("dd", "cm-digimon-detail__value", String(value), row.id !== "nickname");

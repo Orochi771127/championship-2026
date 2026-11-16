@@ -51,6 +51,49 @@ function runOne({player, opponent, tactic, seed}) {
 }
 
 const mean = xs => xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0;
+
+// --series: the same partner fights its three rivals back to back, and each bout's HP and TP carry
+// into the next exactly as the original writes them after a battle (settleOwnedBattleIndividual,
+// via the runtime's settlement). This is where a plan's TP spend can cost the next bout.
+function runSeries({player, tactic, seed}) {
+  let profile = individual('A0', player, seed % 8, 1000 + seed * 7, tactic).nativeProfile;
+  const bouts = [];
+  for (const [index, opponent] of OPPONENTS.entries()) {
+    const runtime = createBattleRuntime({mode: 5, battleType: 0, seed: seed * 10 + index, aiPolicy: 'IMPROVED_V1', personalityPolicy: 'ORIGINAL',
+      taxonomyPolicy: 'TAXONOMY_V1', burstPolicy: 'OFF',
+      playerIndividuals: [{instanceId: 'A0', nativeProfile: profile, tactic}],
+      opponentIndividuals: [individual('B0', opponent, (seed * 3 + index) % 8, 2000 + seed * 7 + index, 1)]});
+    try {
+      runtime.choosePracticeBattle({arenaIndex: 2});
+      const source = runtime.startMatch();
+      for (let t = 0; t < MAX_TICKS && !source.getView().outcome.ended; t++) source.tick();
+      const record = runtime.getTacticRecord();
+      const settled = runtime.getSettlementResult().individualResults?.find(r => r.instanceId === 'A0');
+      const tpBefore = profile.fields['054'], tpMax = profile.fields['05c'];
+      if (settled) profile = settled.nativeProfile;
+      // --heal-hp isolates the TP cost: HP back to full between bouts, TP carried as the original writes it.
+      if (settled && process.argv.includes('--heal-hp')) profile = {...profile, fields: {...profile.fields, '050': profile.fields['058']}};
+      bouts.push({opponent, outcome: record.outcome, seconds: record.seconds, skill: record.local[0]?.counts.skill ?? 0,
+        tpBefore, tpAfter: profile.fields['054'], tpMax});
+    } finally { runtime.dispose(); }
+  }
+  return {player, tactic, seed, bouts, wins: bouts.filter(b => b.outcome === 'WIN').length};
+}
+if (process.argv.includes('--series')) {
+  const series = [];
+  for (const player of PLAYERS) for (const tactic of TACTICS) for (let seed = 1; seed <= SEEDS; seed++) series.push(runSeries({player, tactic, seed}));
+  const pctS = x => `${Math.round(x * 100)}%`;
+  console.log(`series runs ${series.length} (3 bouts each, HP/TP carried)`);
+  for (const t of TACTICS) {
+    const rows = series.filter(s => s.tactic === t);
+    const byBout = [0, 1, 2].map(i => mean(rows.map(s => s.bouts[i].outcome === 'WIN' ? 1 : 0)));
+    console.log(`plan ${t}: wins/3 ${mean(rows.map(s => s.wins)).toFixed(2)}  bout wins ${byBout.map(pctS).join(' / ')}  ` +
+      `TP before bout 3 ${pctS(mean(rows.map(s => s.bouts[2].tpBefore / Math.max(1, s.bouts[2].tpMax))))}  ` +
+      `TP left at end ${pctS(mean(rows.map(s => s.bouts[2].tpAfter / Math.max(1, s.bouts[2].tpMax))))}  skills ${mean(rows.flatMap(s => s.bouts.map(b => b.skill))).toFixed(1)}`);
+  }
+  if (OUT) { mkdirSync(OUT, {recursive: true}); writeFileSync(join(OUT, 'series.json'), JSON.stringify(series)); }
+  process.exit(0);
+}
 const runs = [];
 for (const player of PLAYERS) for (const opponent of OPPONENTS) for (const tactic of TACTICS)
   for (let seed = 1; seed <= SEEDS; seed++) runs.push({scenario: 'SINGLE', ...runOne({player, opponent, tactic, seed})});

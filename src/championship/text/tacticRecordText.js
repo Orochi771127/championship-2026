@@ -3,6 +3,7 @@
 // figure is counted from the match that just ended, never chosen from the plan.
 import { deepFreeze } from '../contracts/championshipContracts.js';
 import { getLocale } from './locale.js';
+import { battleStyleText } from './battleStyleText.js';
 
 export const TACTIC_RECORD_COPY = deepFreeze({
   'zh-Hant': {
@@ -119,6 +120,12 @@ export function tacticRecordLines(record, { nameOf, moveName, previous = () => n
     if (entry.downAt !== null) lines.push(t('down', { t: Math.round(entry.downAt) }));
     const before = previous(entry);
     if (before && before.tactic !== entry.tactic) lines.push(t('previous', { plan: t(`plan.${before.tactic}`), total: before.total, skill: before.counts.skill }));
+  }
+  // BATTLE_STYLE_V1: the statuses that landed on the other team, e.g. 對手：中毒 ×2　麻痺 ×1.
+  if (lines.length && record.foeStatuses?.length) {
+    const list = record.foeStatuses.slice(0, 3).map(({ key, count }) =>
+      battleStyleText('statusCount', { name: battleStyleText(`status.${key}`, {}, locale), n: count }, locale));
+    lines.push(battleStyleText('foeStatus', { list: list.join('　') }, locale));
   }
   return lines;
 }

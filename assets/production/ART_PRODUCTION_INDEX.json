@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 131,
+    "registeredRuntimeBundles": 132,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -1765,6 +1765,20 @@
       "publicationAuthorized": false,
       "scope": "Two-set intake 2026-11-12: General (original-cell routes) + Data Arena 8 headings; derivative web atlas of delivered originals.",
       "runtimeQaEvidence": "docs/reports/two-set-intake-20261112/README.md"
+    },
+    {
+      "assetId": "art:ui:battle-glyphs:r1",
+      "manifestPath": "assets/production/ui/battle-glyphs-r1/manifest.json",
+      "manifestSha256": "74dc4b27c244152a165641a6ed747df19f79ceeeda821e45c4e7c94f58d03000",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "assistantReviewed": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "scope": "31 battle glyphs (3 battle styles / move classes, 13 statuses, 15 special-skill and empty-slot icons), BATTLE_STYLE_V1 2026-11-16; no gameplay or commercial-rights claim",
+      "count": 31
     }
   ]
 }

@@ -1119,7 +1119,9 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
           const moveCard = element('div', 'cm-dex-move-card');
           const header = element('div', 'cm-dex-move-card__header');
           const nameSpan = element('span', 'cm-dex-move-card__name', m.name);
+          // BATTLE_STYLE_V1 (2026-11-16): the move's class — 攻擊 (no SP) or 技能 (SP) — drawn as a glyph by vs2Styles.css.
           const typeSpan = element('span', 'cm-dex-move-card__type', m.kindName);
+          typeSpan.dataset.class = m.kind === 1 ? 'SKILL' : 'ATTACK';
           header.append(nameSpan, typeSpan);
           const metaSpan = element('span', 'cm-dex-move-card__meta', `${verifiedData.labels.power} ${m.power} · ${verifiedData.labels.cost} ${m.actionCost} TP`);
           moveCard.append(header, metaSpan);

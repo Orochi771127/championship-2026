@@ -172,7 +172,7 @@ export function createJourneyScreen(host) {
       });
       chip.dataset.instanceId = entry.instanceId;
       chip.setAttribute("aria-pressed", String(team.includes(entry.instanceId)));
-      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name),
+      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name), ...(look.styleChip ? [look.styleChip] : []),
         el("span", "cm-journey__member-lv", sync.next > 0 ? syncText("level", { level: sync.level }) : syncText("level.max")));
       roster.append(chip);
     }
@@ -299,7 +299,7 @@ export function createJourneyScreen(host) {
       });
       chip.dataset.instanceId = entry.instanceId;
       chip.setAttribute("aria-pressed", String(entry.instanceId === partnerId));
-      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name));
+      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name), ...(look.styleChip ? [look.styleChip] : []));
       roster.append(chip);
     }
     panel.append(roster);

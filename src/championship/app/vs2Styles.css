@@ -1617,3 +1617,7 @@ body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database_
 .cm-vs2-result__instinct { margin-left: 6px; padding: 1px 7px; border-radius: 999px; font-size: calc(11px * var(--text-scale, 1)); font-weight: 900; white-space: nowrap; }
 .cm-vs2-result__instinct[data-instinct="ELITE"] { color: #0c1a2a; background: linear-gradient(90deg, #fef08a, #7dd3fc); }
 .cm-vs2-result__instinct[data-instinct="ANCESTOR"] { color: #2a1800; background: linear-gradient(90deg, #ffd34d, #c4b5fd); box-shadow: 0 0 8px rgba(255, 211, 77, .7); }
+/* BATTLE_STYLE_V1 (2026-11-16): a Dex move's class glyph — 攻擊 (no SP) or 技能 (SP). */
+.cm-dex-move-card__type[data-class]::before { content: ""; display: inline-block; width: 1.35em; height: 1.35em; margin-right: 3px; vertical-align: -0.32em; background: center / contain no-repeat; }
+.cm-dex-move-card__type[data-class="ATTACK"]::before { background-image: url("../../../assets/production/ui/battle-glyphs-r1/style_attack_64.webp"); }
+.cm-dex-move-card__type[data-class="SKILL"]::before { background-image: url("../../../assets/production/ui/battle-glyphs-r1/style_skill_64.webp"); }

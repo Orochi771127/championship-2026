@@ -39,6 +39,7 @@ import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattl
 import {normalizeJourney,createJourneyState,TOWER_FLOORS,towerBand,towerOpponents,towerOpponentSpecies,towerRewards,towerNextFloor,
   clearTowerFloor,patrolStatus,claimPatrol,quickPatrol} from '../contracts/productJourney.js';
 import {TACTIC_PRACTICE_CRYSTALS,createTacticPracticeSeries,tacticPracticeNextBout,recordTacticPracticeBout} from '../contracts/productTacticPractice.js';
+import {battleStyleOfProfile} from '../contracts/productBattleStyle.js';
 import {CAMPAIGN_ZONES,CAMPAIGN_STAGES,CAMPAIGN_ZONE_CHEST,campaignRivals,campaignStars,campaignRewards,recordCampaignStage,sweepCampaignStage,
   sweepsLeft,stageOpen,starsOf,zoneStars,totalStars} from '../contracts/productCampaign.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
@@ -5006,7 +5007,8 @@ export function createChampionshipStandaloneApp({
       const {battlePartyAdmission}=await loadBattleParty();
       return this.getRaisingInstances().map(entry=>{
         const nativeProfile=entry.instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(entry.instanceId);
-        return Object.freeze({...entry,tactic:this.getBattleTactic(entry.instanceId),
+        // BATTLE_STYLE_V1 (2026-11-16): 攻擊／技能／支援, read from the species' moves and its two special skills.
+        return Object.freeze({...entry,tactic:this.getBattleTactic(entry.instanceId),battleStyle:battleStyleOfProfile(nativeProfile),
           admission:battlePartyAdmission(nativeProfile,recordIndex,{burstForms:partnerBurstForms(entry.instanceId)})});
       });
     },

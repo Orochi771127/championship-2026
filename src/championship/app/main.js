@@ -179,6 +179,8 @@ import { buildSyncGainPanel } from './ui/syncGainPanel.js';
 import { loadStylesheet } from './loadStylesheet.js';
 import { journeyText } from '../text/journeyText.js';
 import { tacticRecordLines, tacticRecordText, tacticPracticeFoeKey } from '../text/tacticRecordText.js';
+import { battleStyleText } from '../text/battleStyleText.js';
+import { battleGlyphChip, STYLE_GLYPHS } from './battleGlyphs.js';
 import { battleMoveName } from '../text/battleMoveNames.js';
 import { syncText } from '../text/syncLevelText.js';
 
@@ -1798,6 +1800,7 @@ async function mountBattleSelect() {
       // Owner 2026-11-16: the partner's mood face and tier, since mood now moves battle a little.
       const mood=entry?.instanceId?app.getPartnerMoodBadge?.(entry.instanceId)??null:null;
       return {speciesId:entry?.speciesId??null,stage:sync?(sync.next>0?syncText('level',{level:sync.level}):syncText('level.max')):null,mood,
+        styleChip:battleStyleChip(entry?.battleStyle),
         badges:entry?.speciesId?taxonomyBadgeRow(speciesTaxonomyForId(entry.speciesId)):null};},
     getPracticeSelection:async()=>({candidates:await app.getBattlePartyCandidates(null)}),
     setBattleTactic:(instanceId,tactic)=>app.setBattleTactic(instanceId,tactic),
@@ -1909,7 +1912,8 @@ async function openJourney(prefill = null) {
     if (app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) { journeyView = null; return; }
     const describe = (entry) => {
       const index = juicySpeciesIndex(entry?.speciesId);
-      return { name: entry?.displayName || (index === null ? '' : speciesName(index)), portrait: index === null ? null : { species: index } };
+      return { name: entry?.displayName || (index === null ? '' : speciesName(index)), portrait: index === null ? null : { species: index },
+        styleChip: battleStyleChip(entry?.battleStyle) };
     };
     root.inert = true;
     journeyView = createJourneyScreen({
@@ -1984,6 +1988,15 @@ async function startZoneStage(zone, stage) {
     },
     reopen: { tab: 'ZONES', zone }
   });
+}
+/** BATTLE_STYLE_V1 (2026-11-16): the 攻／技／支 chip beside a partner's name, or null. */
+function battleStyleChip(style) {
+  if (!STYLE_GLYPHS[style]) return null;
+  const chip = battleGlyphChip(STYLE_GLYPHS[style], battleStyleText(`short.${style}`), 'cm-glyph-chip cm-style-chip');
+  chip.dataset.style = style;
+  chip.title = battleStyleText(`style.${style}`);
+  chip.setAttribute('aria-label', battleStyleText(`style.${style}`));
+  return chip;
 }
 /** The practice series' next bout (TACTIC_PRACTICE_LOOP_20261116), fought like a Free Battle against fixed presets. */
 async function startSparBout() {

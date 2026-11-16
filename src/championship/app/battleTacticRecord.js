@@ -9,6 +9,7 @@
 // says is exactly what the battle did -- never a line chosen from the plan.
 
 import {listMoveRecordsForSpecies, listBattleCatalogRecords} from '../battle/battleCatalogs.js';
+import {STATUS_GLYPHS} from './battleGlyphs.js';
 
 export const BATTLE_RECORD_FPS = 60;
 const SLOT_COUNT = 6;
@@ -64,7 +65,8 @@ export function createBattleRecordTap({localTeamIndex = 0} = {}) {
     slot: c.slot, team: c.team ?? teamOf(c.slot), speciesId: c.speciesId, displayName: c.displayName ?? null,
     counts: {normal: 0, skill: 0, support: 0}, moves: {}, launches: [],
     spLast: null, spSpent: 0, spEmptyFrames: 0, spEmptyAt: null, firstSkillAt: null,
-    hpMax: c.hp?.maximum ?? 0, hpLast: c.hp?.current ?? 0, downAt: null
+    hpMax: c.hp?.maximum ?? 0, hpLast: c.hp?.current ?? 0, downAt: null,
+    statusLast: 0, statusApplied: {}
   };
   return {
     localTeamIndex,
@@ -85,6 +87,12 @@ export function createBattleRecordTap({localTeamIndex = 0} = {}) {
             s.spEmptyFrames += step;
             if (s.spEmptyAt === null && s.spSpent > 0) s.spEmptyAt = frame;
           }
+        }
+        // A negative status landing (the one slot changing to a new code) counts once per landing.
+        const code = c.status?.code ?? 0;
+        if (code !== s.statusLast) {
+          if (code > 0 && STATUS_GLYPHS[code]) s.statusApplied[STATUS_GLYPHS[code]] = (s.statusApplied[STATUS_GLYPHS[code]] ?? 0) + 1;
+          s.statusLast = code;
         }
         if (Number.isFinite(c.hp?.current)) {
           s.hpLast = c.hp.current; s.hpMax = c.hp.maximum ?? s.hpMax;
@@ -149,5 +157,9 @@ export function summariseBattleRecord({tap, view, diagnostics = null, localTeamI
       damageDealtRatio: foeHpMax ? foeHpLost / foeHpMax : 0
     };
   });
-  return {outcome, seconds: seconds(snap.frame) ?? 0, local, foeHpLostRatio: foeHpMax ? foeHpLost / foeHpMax : 0};
+  // Statuses that landed on the other team, most frequent first.
+  const foeStatuses = {};
+  for (const foe of foes) for (const [key, n] of Object.entries(foe.statusApplied ?? {})) foeStatuses[key] = (foeStatuses[key] ?? 0) + n;
+  return {outcome, seconds: seconds(snap.frame) ?? 0, local, foeHpLostRatio: foeHpMax ? foeHpLost / foeHpMax : 0,
+    foeStatuses: Object.entries(foeStatuses).map(([key, count]) => ({key, count})).sort((a, b) => b.count - a.count)};
 }
