@@ -6,17 +6,17 @@
   "withHead": 226,
   "motionErrors": [],
   "art": {
-   "atlas": 39,
-   "reviewed": 140,
+   "atlas": 38,
+   "reviewed": 141,
    "reviewed-right": 47
   },
   "maxCellAspect": 2.02,
   "multiCellPages": 226,
   "muzzleInUpperBody": 226,
   "stances": {
-   "grounded": 207,
+   "grounded": 208,
    "hovering": 3,
-   "tail-below": 16
+   "tail-below": 15
   },
   "headsOnBody": 223,
   "headsMostlyDrawn": 226
@@ -16771,74 +16771,74 @@
    "speciesId": "species-188",
    "motion": {
     "entityId": "m502_valkyrimon",
-    "art": "atlas",
-    "density": 4,
+    "art": "reviewed",
+    "density": 11.3314447592068,
     "bounds": {
-     "left": -212,
-     "top": -196,
-     "right": 150,
-     "bottom": 15
+     "left": -142.29,
+     "top": -257.85,
+     "right": 142.71,
+     "bottom": 0.9300000000000068
     },
     "actions": {
      "stand": {
       "sequence": 0,
       "frameCount": 2,
-      "frameWidth": 193,
-      "frameHeight": 211,
-      "cellAspect": 0.91,
-      "pageWidth": 1472,
-      "pageHeight": 224,
-      "cellsPerPage": 8.1,
+      "frameWidth": 230,
+      "frameHeight": 258,
+      "cellAspect": 0.89,
+      "pageWidth": 2042,
+      "pageHeight": 1383,
+      "cellsPerPage": 47.6,
       "durationMs": 883
      },
      "walk": {
       "sequence": 2,
       "frameCount": 2,
-      "frameWidth": 220,
-      "frameHeight": 193,
-      "cellAspect": 1.14,
-      "pageWidth": 1472,
-      "pageHeight": 224,
-      "cellsPerPage": 7.8,
+      "frameWidth": 266,
+      "frameHeight": 256,
+      "cellAspect": 1.04,
+      "pageWidth": 2042,
+      "pageHeight": 1383,
+      "cellsPerPage": 41.5,
       "durationMs": 450
      },
      "attack": {
       "sequence": 7,
       "frameCount": 2,
-      "frameWidth": 344,
-      "frameHeight": 198,
-      "cellAspect": 1.74,
-      "pageWidth": 1664,
-      "pageHeight": 224,
-      "cellsPerPage": 5.5,
+      "frameWidth": 285,
+      "frameHeight": 255,
+      "cellAspect": 1.12,
+      "pageWidth": 2042,
+      "pageHeight": 1383,
+      "cellsPerPage": 38.9,
       "durationMs": 867
      },
      "cheer": {
       "sequence": 33,
       "frameCount": 2,
-      "frameWidth": 256,
-      "frameHeight": 184,
-      "cellAspect": 1.39,
-      "pageWidth": 1440,
-      "pageHeight": 448,
-      "cellsPerPage": 13.7,
+      "frameWidth": 276,
+      "frameHeight": 258,
+      "cellAspect": 1.07,
+      "pageWidth": 2042,
+      "pageHeight": 1383,
+      "cellsPerPage": 39.7,
       "durationMs": 1133
      }
     },
     "footAnchor": {
      "x": 0,
      "y": 0,
-     "stance": "tail-below",
-     "lowestPixel": 12,
-     "lowestPixelX": 22.8,
-     "visualHeight": 196
+     "stance": "grounded",
+     "lowestPixel": 0.14999999999997726,
+     "lowestPixelX": -0.2,
+     "visualHeight": 257.85
     },
     "muzzleSocket": {
-     "x": -192,
-     "y": -105,
-     "heightRatio": 0.6,
-     "releaseIndex": 1,
-     "releaseMs": 250
+     "x": -139.29,
+     "y": -215,
+     "heightRatio": 0.84,
+     "releaseIndex": 0,
+     "releaseMs": 0
     }
    },
    "cutinHeadFrame": {
