@@ -79,15 +79,22 @@ test('every General set walks forward: sets drawn facing right carry generalMirr
  assert.equal(selection.characters.find(c=>c.displayCode==='AW19')?.generalMirror,false,'AW19');
 });
 
-test('partial two-set deliveries keep the native body for the mode they lack (UL06 General only)',async()=>{
- for(const [code,usage] of [['UL06','arena']]){
+test('partial two-set deliveries keep the native body for the mode they lack; UL05, UL06 and UL07 are now complete',async()=>{
+ for(const code of ['UL05','UL06','UL07']){
   const entry=selection.characters.find(c=>c.displayCode===code);assert.ok(entry,code);
   const d=JSON.parse(fs.readFileSync(path.join(root,entry.path),'utf8'));
-  assert.equal(d.clips.some(c=>usage==='arena'?c.mode==='arena':c.mode!=='arena'),false,code+' has no '+usage+' clips');
-  const base=baseline();
-  const got=await attachReviewedCharacterAnimation({bundle:base,PIXI:mockPixi().PIXI,speciesId:entry.speciesId,usage,
-   baseUrl:'http://127.0.0.1:8768/championship.html',fetchImpl:fileFetch});
-  assert.equal(got,base,code+' '+usage+' falls back to the native bundle');
+  assert.ok(d.clips.some(c=>c.mode==='arena'),code+' has Arena clips');assert.ok(d.clips.some(c=>c.mode!=='arena'),code+' has General clips');
+ }
+ for(const entry of selection.characters.filter(c=>/two-set-20261112/.test(c.path))){
+  const d=JSON.parse(fs.readFileSync(path.join(root,entry.path),'utf8'));
+  const has={arena:d.clips.some(c=>c.mode==='arena'),general:d.clips.some(c=>c.mode!=='arena')};
+  for(const usage of ['general','arena']){
+   if(has[usage])continue;
+   const base=baseline();
+   const got=await attachReviewedCharacterAnimation({bundle:base,PIXI:mockPixi().PIXI,speciesId:entry.speciesId,usage,
+    baseUrl:'http://127.0.0.1:8768/championship.html',fetchImpl:fileFetch});
+   assert.equal(got,base,entry.displayCode+' '+usage+' falls back to the native bundle');
+  }
  }
 });
 

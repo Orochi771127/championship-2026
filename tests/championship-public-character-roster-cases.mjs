@@ -25,7 +25,11 @@ const forbidden=path=>path==='src/data/championship/public-character-catalog.v1.
 test('public character loading renders native frames with no private index, source manifest or synthesized review registration',async()=>{
  // m201 (GR01) uses the published reviewed animation since Owner 2026-10-29; a native-only Baby stands in.
  // m529 (UL36) and m541 (UL18) moved to two-set reviewed art on 2026-11-12; m505 (UL08) moved on 2026-11-15; m504/m506 keep native art.
- const configs=['e000_digitama','m102_koromon','m519_princemamemon','m504_gigaseadramon','m506_griffomon'].map(id=>catalog.characters.find(c=>c.entityId===id));
+ // Late-stage samples are picked from species that still have no reviewed animation (the reviewed set keeps growing).
+ const reviewed=new Set(JSON.parse(fs.readFileSync('src/data/championship/reviewed-animation-selection.v1.json','utf8')).characters.map(c=>c.speciesId));
+ const late=catalog.characters.filter(c=>/^m5\d\d_/.test(c.entityId)&&!reviewed.has(c.speciesId)&&c.runtimePath).slice(0,3);
+ assert.ok(late.length>=2,'two native-only Ultimate samples exist');
+ const configs=['e000_digitama','m102_koromon'].map(id=>catalog.characters.find(c=>c.entityId===id)).concat(late);
  const f=fixture(),roster=await loadPublicCharacterRoster({...f,speciesIds:configs.map(c=>c.speciesId),initialSequences:Object.fromEntries(configs.map(c=>[c.speciesId,[0]]))},base);
  assert.deepEqual(roster.getDiagnostics().failures,[]);
  for(const c of configs){const actor=roster.createActor({speciesId:c.speciesId,presentation:'raising'}),runtime=read(c.runtimePath),seq=runtime.sides.main.animations[0];assert.ok(actor?.nativeFramePresenter);
