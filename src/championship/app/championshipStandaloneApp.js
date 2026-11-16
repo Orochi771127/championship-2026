@@ -46,7 +46,7 @@ import {assertPlayableProductSaveData,PRODUCT_RAISING_LIFECYCLE_RULES,productPar
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
 import {getProductExtension,requirePlayableProductExtension} from '../contracts/productSpeciesExtensions.js';
 import {settleRanchDiscoveries,removeCollectedDiscoveries,RANCH_DISCOVERY_REWARDS} from '../raising/ranchDiscoveries.js';
-import {PARTNER_LIFE_RULES,PARTNER_MOODS,STROLL_REWARDS,partnerHabitatFit,partnerMood,partnerAffectionHearts,partnerTypeBits,partnerPeerRelation,
+import {PARTNER_LIFE_RULES,PARTNER_MOODS,PARTNER_MOOD_TIERS,STROLL_REWARDS,PARTNER_MOOD_MOMENT_MS,partnerMoodScore,partnerMoodForTier,moodBattleProfile,cappedMoodTier,moodArenaPower,partnerHabitatFit,partnerMood,partnerAffectionHearts,partnerTypeBits,partnerPeerRelation,
   strollFindChance,rollStrollFind,strollIntervalFrames,strollDayKey,appendStrollEntry,canStrollFind,canGreet,canTapAffection,recordTap,strollLogName,strollPairKey,renameStrollLogPartners,
   pendingStrollEntries,claimStrollEntries,greetingGapFrames} from '../raising/ranchPartnerLife.js';
 import {localizeSpeciesCodes,speciesNameForId} from '../text/zhHant.js';
@@ -752,8 +752,18 @@ export function createChampionshipStandaloneApp({
     const native=partnerHabitatFit({speciesIndex:actor.speciesIndex,cageDefinitionIndex:actor.cageDefinitionIndex,dirty,
       hpRatio:maxHp>0?(Number(fields['050'])||0)/maxHp:1});
     const habitat=raceHabitat&&!dirty?'cozy':native;
-    const mood=partnerMood({fields,growth:actor.growthFields??{},state:actor.state,statusMusic:actor.statusMusic,habitat});
+    // Owner 2026-11-16: one mood score from the same fields, needs and recent moments.
+    const since=Date.now()-PARTNER_MOOD_MOMENT_MS,moments=[];
+    for(const e of partnerLifeState.events){
+      if(!(e.at>=since))continue;
+      if(e.kind==='greeting'&&(e.a===id||e.b===id))moments.push('greeted');
+      else if(e.kind==='find'&&(e.entry?.partnerId===id||e.entry?.partnerB===id))moments.push('found');
+      else if(e.kind==='disturbed'&&e.partnerId===id)moments.push('disturbed');
+    }
+    const moodScore=partnerMoodScore({fields,growth:actor.growthFields??{},state:actor.state,habitat,dirty,moments});
+    const mood=partnerMoodForTier(partnerMood({fields,growth:actor.growthFields??{},state:actor.state,statusMusic:actor.statusMusic,habitat}),moodScore.tier);
     return Object.freeze({mood,emoji:PARTNER_MOODS[mood].emoji,habitat,raceHabitat,hearts:partnerAffectionHearts(fields),
+      moodScore:moodScore.score,moodTier:moodScore.tier,moodReasons:moodScore.reasons,
       affection:Math.max(0,Math.min(100,Number(fields['020'])||0)),greeting:partnerLifeState.greetings.some(g=>g.a===id||g.b===id),
       // Owner 2026-11-04: its next form would overfill the cage for this tamer rank.
       crowded:Boolean(actor.capacityBlocked)});
@@ -1195,7 +1205,7 @@ export function createChampionshipStandaloneApp({
         ?(passwordMode?JSON.stringify(passwords)!==JSON.stringify(prepared.passwords):linkKey!==prepared.linkKey)
         :JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals.map(p=>p.instanceId)))
       // A Sync-boosted copy is checked against the same boost of the saved individual.
-      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(boostSyncNativeProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1))!==JSON.stringify(p.nativeProfile))))
+      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(boostBattleProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1,p.moodTier))!==JSON.stringify(p.nativeProfile))))
       return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇。'};
     const result=applyBattleTransaction(beginBattleAttempt(battleEconomy,{attemptId,matchIndex:-1,mode,battleType:0,
       entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng,[],
@@ -1248,6 +1258,16 @@ export function createChampionshipStandaloneApp({
     return syncOf(syncLevels,instanceId);
   }
   /** Level a battle reads: capped by tamer rank in title matches and championships. */
+  /** Mood in battle (Owner 2026-11-16): only where Sync applies; capped matches read normal..good. */
+  function battleMoodTier(instanceId,sync){
+    if(!sync||!partnerLife)return 'normal';
+    const tier=partnerReading(instanceId)?.moodTier??'normal';
+    return sync.capped?cappedMoodTier(tier):tier;
+  }
+  /** The battle copy: Sync first, then mood, both taken back by the result restore. */
+  function boostBattleProfile(profile,syncLevel,moodTier){
+    return moodBattleProfile(boostSyncNativeProfile(profile,syncLevel),moodTier??'normal');
+  }
   function syncBattleLevel(instanceId,sync){
     if(!sync)return 1;
     const lv=syncLevelOf(instanceId).level;
@@ -4350,6 +4370,14 @@ export function createChampionshipStandaloneApp({
     getLastSyncGains(){return lastSyncGains;},
     /** Data Arena partner power from Sync Level, by instance. */
     getSyncArenaPower(instanceId){return syncArenaPower(syncLevelOf(instanceId).level);},
+    /** The mood face and tier name for a battle roster row (Owner 2026-11-16); null when partner life is off. */
+    getPartnerMoodBadge(instanceId){
+      const reading=partnerLife?partnerReading(instanceId):null;if(!reading)return null;
+      const tier=PARTNER_MOOD_TIERS.find(t=>t.id===reading.moodTier);
+      return Object.freeze({emoji:reading.emoji,tier:reading.moodTier,label:uiText(tier?.label??'心情普通')});
+    },
+    /** Data Arena partner power from mood (Owner 2026-11-16); 1 when partner life is off. */
+    getMoodArenaPower(instanceId){return moodArenaPower(battleMoodTier(instanceId,{capped:false}));},
     /** A finished Data Arena match pays Sync EXP to the ranch partners that fought it. */
     grantArenaSync({instanceIds=[],won=false,attemptId=null}={}){
       if(tutorialBaseline)return null;
@@ -5068,7 +5096,7 @@ export function createChampionshipStandaloneApp({
         if(!prepared||prepared.session!==session||prepared.base!==JSON.stringify(gameplayRngSnapshot())
           ||prepared.championshipRun!==JSON.stringify(championshipRun)
           ||JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals?.map(p=>p.instanceId))
-          ||prepared.individuals.some(p=>JSON.stringify(boostSyncNativeProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1))!==JSON.stringify(p.nativeProfile)))
+          ||prepared.individuals.some(p=>JSON.stringify(boostBattleProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1,p.moodTier))!==JSON.stringify(p.nativeProfile)))
           return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇參賽隊伍。'};
         opponent=prepared.opponent;
       }
@@ -5184,8 +5212,8 @@ export function createChampionshipStandaloneApp({
         buildOwnedBattleCreature({instanceId,nativeProfile});
         // A 成熟期 admitted to a 覺醒體/究極體 match bursts into the form that admitted it.
         const fitting=nativeBattleQualification(nativeProfile,condition)?null:burstFormFitting(nativeProfile,condition,partnerBurstForms(instanceId));
-        const syncLevel=syncBattleLevel(instanceId,sync);
-        individuals.push({instanceId,nativeProfile:boostSyncNativeProfile(nativeProfile,syncLevel),syncLevel,
+        const syncLevel=syncBattleLevel(instanceId,sync),moodTier=battleMoodTier(instanceId,sync);
+        individuals.push({instanceId,nativeProfile:boostBattleProfile(nativeProfile,syncLevel,moodTier),syncLevel,moodTier,
           ...(fitting!==null?{burst:battleBurstPlanOf(instanceId,Object.freeze({form:fitting,tier:burstFormTier(fitting)}))}:{})});
       }
       return {ok:true,individuals};

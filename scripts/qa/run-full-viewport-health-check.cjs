@@ -157,6 +157,7 @@ class Run {
     const target = this.page.locator(selector).first();
     // Short landscape folds the four destinations behind the Go key: a player presses it first.
     if (selector.includes('quick-entry') && !(await target.isVisible().catch(() => false))) {
+      if (await this.page.locator('.cm-toolbar__menu:not([hidden])').count()) await this.page.keyboard.press('Escape');
       const fold = this.page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]');
       if (await fold.isVisible().catch(() => false)) await fold.click().catch(() => {});
     }

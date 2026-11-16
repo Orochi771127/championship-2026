@@ -361,6 +361,7 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
     const value = String(Boolean(open) && !quick.hidden);
     bar.dataset.quickOpen = value;
     quickToggle.setAttribute("aria-expanded", value);
+    syncDock();
   }
   quickToggle.addEventListener("click", () => {
     closeMenu();
@@ -387,9 +388,13 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
   // A shown dock key is that entry's only button (the menu omits it), so it
   // carries the entry id the menu's button would; a dock that is hidden, or
   // not drawn by the theme (only the arcade sheet shows it), gives it back.
+  // While the Go key holds them folded, the four destinations are not on screen, so the
+  // System menu lists them again; unfolded, the dock keys own them as before.
   function syncDock() {
     const rects = typeof quick.getClientRects === "function" ? quick.getClientRects() : null;
-    const shown = !quick.hidden && (rects === null || rects.length > 0);
+    const toggleRects = typeof quickToggle.getClientRects === "function" ? quickToggle.getClientRects() : null;
+    const folded = !quickToggle.hidden && toggleRects !== null && toggleRects.length > 0 && bar.dataset.quickOpen !== "true";
+    const shown = !quick.hidden && (rects === null || rects.length > 0) && !folded;
     for (const button of quick.children) {
       if (shown) button.dataset.entryId = button.dataset.quickId;
       else delete button.dataset.entryId;

@@ -29,6 +29,7 @@ async function menu(page, menuId, entryId) {
   await page.locator(`button[data-menu-id="${menuId}"]`).click();
   // Short landscape folds the four destinations behind the Go key.
   if (["hunt", "battle", "shop", "database"].includes(entryId)) {
+    if (await page.locator('.cm-toolbar__menu:not([hidden])').count()) await page.keyboard.press('Escape');
     const fold = page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]');
     if (await fold.isVisible().catch(() => false)) await fold.click();
   }

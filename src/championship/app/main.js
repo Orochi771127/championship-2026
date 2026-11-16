@@ -1795,7 +1795,9 @@ async function mountBattleSelect() {
     describeMember:entry=>{
       // Owner 2026-11-09: the Sync Level rides in the stage slot.
       const sync=entry?.instanceId?app.getSyncLevel?.(entry.instanceId):null;
-      return {speciesId:entry?.speciesId??null,stage:sync?(sync.next>0?syncText('level',{level:sync.level}):syncText('level.max')):null,
+      // Owner 2026-11-16: the partner's mood face and tier, since mood now moves battle a little.
+      const mood=entry?.instanceId?app.getPartnerMoodBadge?.(entry.instanceId)??null:null;
+      return {speciesId:entry?.speciesId??null,stage:sync?(sync.next>0?syncText('level',{level:sync.level}):syncText('level.max')):null,mood,
         badges:entry?.speciesId?taxonomyBadgeRow(speciesTaxonomyForId(entry.speciesId)):null};},
     getPracticeSelection:async()=>({candidates:await app.getBattlePartyCandidates(null)}),
     setBattleTactic:(instanceId,tactic)=>app.setBattleTactic(instanceId,tactic),
@@ -3836,7 +3838,8 @@ async function enterDataArena(dataArenaButton, { campaign = null, onCampaignResu
       // Awakening raising (2026-11-02): a relay entry from the ranch bursts into the form its partner learned.
       burstPlanOf: (instanceId) => app.getBattleBurstPlan?.(instanceId) ?? null,
       // Sync Level (Owner 2026-11-09): ranch partners fight at their level and earn Sync EXP.
-      syncPowerOf: (instanceId) => app.getSyncArenaPower?.(instanceId) ?? 1,
+      // Mood (Owner 2026-11-16) rides on the same multiplier: +-4 % at most.
+      syncPowerOf: (instanceId) => (app.getSyncArenaPower?.(instanceId) ?? 1) * (app.getMoodArenaPower?.(instanceId) ?? 1),
       // Arena settlements only mark the save dirty; ask for the write now, so an iOS
       // process kill on the next screen keeps the match (2026-11-16).
       onSyncResult: (match) => { const granted = app.grantArenaSync?.(match) ?? null; autosave?.request('data-arena-sync'); return granted; },

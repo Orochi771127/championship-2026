@@ -35,6 +35,7 @@ const only = args.viewports ? String(args.viewports).split(',') : null;
 const quick = id => `.cm-toolbar__quick-entry[data-quick-id="${id}"]`;
 // Short landscape folds the four destinations behind the Go key (Owner 2026-11-16).
 async function tapQuick(page, id) {
+  if (await page.locator('.cm-toolbar__menu:not([hidden])').count()) await page.keyboard.press('Escape');
   const fold = page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]');
   if (await fold.isVisible().catch(() => false)) await fold.click();
   await page.click(quick(id));
