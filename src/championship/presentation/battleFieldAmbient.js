@@ -26,6 +26,14 @@
 // gameplay. Decorative randomness uses its own seeded stream.
 
 import {createMoveVfxSetPieces, bakedPieceLook} from './vfx/moveVfxSetPieces.js';
+// Close the decoded ImageBitmap once Pixi destroyed its source: WebKit keeps it until GC (iOS 2026-11-16).
+async function unloadClosingBitmap(Assets, src) {
+  let source = null;
+  try { if (Assets?.cache?.has?.(src)) { const t = Assets.cache.get(src); source = t?.source ?? t?.textureSource ?? null; } } catch { source = null; }
+  const bitmap = source?.resource;
+  await Assets.unload(src);
+  if (source?.destroyed && typeof bitmap?.close === 'function') { try { bitmap.close(); } catch { /* already closed */ } }
+}
 
 const TAU = Math.PI * 2;
 const RASTER_PER_NATIVE = 4;
@@ -310,7 +318,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
   try {
     textures = new Map(await Promise.all(sources.map(async src => [src, linear(await PIXI.Assets.load(src))])));
   } catch (error) {
-    await Promise.allSettled(sources.map(src => PIXI.Assets.unload(src)));
+    await Promise.allSettled(sources.map(src => unloadClosingBitmap(PIXI.Assets, src)));
     throw error;
   }
   const tex = src => textures.get(src);
@@ -950,7 +958,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       await art.dispose();
       await Promise.allSettled(canvasSources.map(src => PIXI.Assets.unload(src)));
       for (const t of textures.values()) t?.source?.removeAllListeners?.("change");
-      await Promise.allSettled(sources.map(src => PIXI.Assets.unload(src)));
+      await Promise.allSettled(sources.map(src => unloadClosingBitmap(PIXI.Assets, src)));
     }
   });
 }

@@ -1879,7 +1879,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const actions = el("div", "da-actions");
     const retry = button("da-btn da-btn--primary", t("result.retry"), () => { syncPanel?.dispose(); void startMatch(); }, signal);
     retry.dataset.autofocus = "1";
-    actions.append(retry, button("da-btn", t("result.change"), () => showSelect(), signal), button("da-btn da-btn--quiet", t("result.exit"), () => close(), signal));
+    actions.append(retry, button("da-btn", t("result.change"), () => { void releaseMatch({ keepCast: true, keepEffects: true, keepAudio: true }); showSelect(); }, signal), button("da-btn da-btn--quiet", t("result.exit"), () => close(), signal));
     panel.append(actions, el("p", "da-fineprint", t(saved ? "result.recordNote" : "result.recordOff")));
     // A short beat so the crowd reaction and the last hit read before the panel.
     setTimeout(() => { if (!signal.aborted && root.dataset.state === "RESULT") { showOverlay(panel); syncPanel?.play(); } }, 900);
@@ -1893,8 +1893,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const owner = matchLoad; matchLoad = null; startingMatch = false;
     owner?.cancel();
     lifetime.abort();
-    void releaseArenaResource(cutIn);
-    void releaseMatch();
+    // Let the arena's textures and canvases go before the next screen loads
+    // (iOS 2026-11-16: arena -> story stacked both peaks). Capped, so a stuck
+    // release never keeps the player in the arena.
+    const released = Promise.allSettled([releaseArenaResource(cutIn), releaseMatch()]);
+    const capped = typeof setTimeout === "function"
+      ? new Promise(resolve => { const id = setTimeout(resolve, 1500); void released.then(() => { clearTimeout(id); resolve(); }); })
+      : released;
+    await capped;
     root.remove();
     document.documentElement.classList.remove("da-open");
     if (qa) delete globalThis.__dataArenaQA;

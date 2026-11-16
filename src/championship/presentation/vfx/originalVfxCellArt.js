@@ -10,6 +10,14 @@
 import {isApprovedOriginalPublicLocation} from '../originalRuntimeLocation.js';
 import {loadOriginalSharedVfxDescriptor, loadSharedVfxAtlasTexture} from '../originalSharedVfxReview.js';
 import profiles from '../../../data/championship/battleEffectProfiles.json' with {type: 'json'};
+// Close the decoded ImageBitmap once Pixi destroyed its source: WebKit keeps it until GC (iOS 2026-11-16).
+async function unloadClosingBitmap(Assets, src) {
+  let source = null;
+  try { if (Assets?.cache?.has?.(src)) { const t = Assets.cache.get(src); source = t?.source ?? t?.textureSource ?? null; } } catch { source = null; }
+  const bitmap = source?.resource;
+  await Assets.unload(src);
+  if (source?.destroyed && typeof bitmap?.close === 'function') { try { bitmap.close(); } catch { /* already closed */ } }
+}
 
 const loopback = href => { try { return ['localhost', '127.0.0.1', '[::1]'].includes(new URL(href).hostname); } catch { return false; } };
 
@@ -50,7 +58,7 @@ export async function loadOriginalVfxCellArt({PIXI, href = globalThis.location?.
       if (disposal) return disposal;
       for (const cell of cells.values()) cell.texture.destroy(false);
       cells.clear();
-      disposal = Promise.allSettled([PIXI.Assets.unload(src)]).then(() => undefined);
+      disposal = Promise.allSettled([unloadClosingBitmap(PIXI.Assets, src)]).then(() => undefined);
       return disposal;
     }
   });

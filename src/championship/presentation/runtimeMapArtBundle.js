@@ -1,5 +1,13 @@
 import { PRODUCT_RANCH_COLUMNS, PRODUCT_RANCH_ROWS, PRODUCT_RANCH_WORLD_WIDTH, PRODUCT_RANCH_WORLD_HEIGHT } from '../cage/productRanchGrid.js';
 import { ORIGINAL_CAGE_STRUCTURAL_VISUALS } from "./originalCageVisualBindings.js";
+// Close the decoded ImageBitmap once Pixi destroyed its source: WebKit keeps it until GC (iOS 2026-11-16).
+async function unloadClosingBitmap(Assets, src) {
+  let source = null;
+  try { if (Assets?.cache?.has?.(src)) { const t = Assets.cache.get(src); source = t?.source ?? t?.textureSource ?? null; } } catch { source = null; }
+  const bitmap = source?.resource;
+  await Assets.unload(src);
+  if (source?.destroyed && typeof bitmap?.close === 'function') { try { bitmap.close(); } catch { /* already closed */ } }
+}
 
 // Championship 2026 -- bounded runtime map-art bundles.
 //
@@ -206,7 +214,7 @@ export async function loadRuntimeMapArtField({ PIXI, manifest, fieldId, sourceRe
   try {
     textures = await Promise.all(sources.map((src) => PIXI.Assets.load(src)));
   } catch (error) {
-    await Promise.allSettled(sources.map((src) => PIXI.Assets.unload(src)));
+    await Promise.allSettled(sources.map((src) => unloadClosingBitmap(PIXI.Assets, src)));
     throw error;
   }
   textures.forEach(applyNearestScale);
@@ -236,7 +244,7 @@ export async function loadRuntimeMapArtField({ PIXI, manifest, fieldId, sourceRe
       });
     } catch (error) {
       croppedTextures.forEach(texture=>texture.destroy(false));
-      await Promise.allSettled(sources.map(src=>PIXI.Assets.unload(src)));
+      await Promise.allSettled(sources.map(src=>unloadClosingBitmap(PIXI.Assets, src)));
       throw error;
     }
   }
@@ -289,7 +297,7 @@ export async function loadRuntimeMapArtField({ PIXI, manifest, fieldId, sourceRe
       disposed = true;
       displayObject.destroy({ texture: false, textureSource: false });
       croppedTextures.forEach(texture=>texture.destroy(false));
-      await Promise.allSettled(sources.map((src) => PIXI.Assets.unload(src)));
+      await Promise.allSettled(sources.map((src) => unloadClosingBitmap(PIXI.Assets, src)));
     }
   });
 }
@@ -428,7 +436,7 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   } };
   async function releaseTextures() {
     await Promise.allSettled([...textureLoads.values()]);
-    await Promise.allSettled([...textureLoads.keys()].map((src) => PIXI.Assets.unload(src)));
+    await Promise.allSettled([...textureLoads.keys()].map((src) => unloadClosingBitmap(PIXI.Assets, src)));
     textureLoads.clear();
   }
 

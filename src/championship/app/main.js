@@ -1904,11 +1904,14 @@ function openStoryFromJourney() {
   app.leaveScreen();
   let tries = 0;
   const attempt = () => {
-    if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME && view?.storyStage) {
+    // Wait for the ranch to finish mounting before the chart loads its own art, so
+    // the two loads do not peak together on iOS (2026-11-16); after ~4 s open anyway.
+    const ranchReady = mountedScreen === CHAMPIONSHIP_SCREENS.RAISING_HOME && view?.isPlayable !== false;
+    if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME && view?.storyStage && (ranchReady || tries >= 26)) {
       document.dispatchEvent(new CustomEvent(STORY_CHAPTER_OPEN_EVENT, { detail: { source: 'journey' } }));
       return;
     }
-    if (++tries < 40) setTimeout(attempt, 150);
+    if (++tries < 60) setTimeout(attempt, 150);
   };
   setTimeout(attempt, 150);
 }
@@ -1924,6 +1927,7 @@ async function startZoneStage(zone, stage) {
     campaign: Object.freeze({ field: begun.field, rivals: begun.rivals, title }),
     onCampaignResult: (result) => {
       const settled = app.settleCampaignStage(result);
+      autosave?.request('campaign-stage');
       if (!settled) return null;
       const lines = [journeyText('campaign.best', { stars: settled.best })];
       if (settled.firstClear) lines.push(journeyText('campaign.first', { crystals: settled.crystals.toLocaleString() }));
@@ -2559,7 +2563,7 @@ function resumeTutorialPresentation() {
   }
 }
 
-async function openGameplay() {
+async function openGameplay({ beforeFirstMount = null } = {}) {
   stopRanchTitlePreload();
   tutorialPreview?.dispose();tutorialPreview=null;
   unsubscribeTutorialTools?.();unsubscribeTutorialTools=null;toolbar?.setTutorialTool(null);
@@ -2689,6 +2693,10 @@ async function openGameplay() {
   };
   unsubscribeTutorialTools=app.subscribeRaising(refreshTutorialTools);
   refreshTutorialTools();
+  // Auto-resume moves to its screen here, so the ranch is not built only to be torn down.
+  if (typeof beforeFirstMount === 'function') {
+    try { await beforeFirstMount(); } catch (error) { console.warn('CHAMPIONSHIP_RESUME_ROUTE_FALLBACK', error); }
+  }
   mountedScreen = null;
   await mountCurrentScreen();
   resumeTutorialPresentation();
@@ -3620,7 +3628,7 @@ async function startNewGame(names={}) {
   }
 }
 
-async function continueGame() {
+async function continueGame({ beforeFirstMount = null } = {}) {
   stopRanchTitlePreload();
   newGameButton.disabled = true;
   continueButton.disabled = true;
@@ -3632,7 +3640,7 @@ async function continueGame() {
       newGameButton.disabled = false;
       return;
     }
-    await openGameplay();
+    await openGameplay({ beforeFirstMount });
     // Owner 2026-11-04: a refused ranch layout no longer locks the save; say once what was tidied.
     const repair = app.takeRanchLoadRepair?.();
     if (repair) {
@@ -3723,6 +3731,7 @@ async function enterDataArena(dataArenaButton, { campaign = null, onCampaignResu
     clockDriver?.setActive(true);
     dataArenaButton.disabled = false;
     if (app) recordSessionScreenMounted(app.getScreen());
+    autosave?.request('data-arena');
     syncMusic();
     dataArenaButton.focus({ preventScroll: true });
     // A Journey zone stage returns to its zone.
@@ -3747,16 +3756,18 @@ async function enterDataArena(dataArenaButton, { campaign = null, onCampaignResu
       burstPlanOf: (instanceId) => app.getBattleBurstPlan?.(instanceId) ?? null,
       // Sync Level (Owner 2026-11-09): ranch partners fight at their level and earn Sync EXP.
       syncPowerOf: (instanceId) => app.getSyncArenaPower?.(instanceId) ?? 1,
-      onSyncResult: (match) => app.grantArenaSync?.(match) ?? null,
+      // Arena settlements only mark the save dirty; ask for the write now, so an iOS
+      // process kill on the next screen keeps the match (2026-11-16).
+      onSyncResult: (match) => { const granted = app.grantArenaSync?.(match) ?? null; autosave?.request('data-arena-sync'); return granted; },
       syncPanelFor: (record) => syncGainPanelFor(record),
       campaign, onCampaignResult,
       // Sponsor stake contracts (AWAKENING_OVERDRIVE_20261109): the one armed in the battle menu rides the next cup or relay.
       sponsor: { begin: (power) => { const result = app.beginArenaSponsorContract?.(power) ?? null;
           showSponsorNotice(result?.ok ? result : null, result?.ok ? null : app.takeSponsorRefusal?.() ?? null); return result; },
-        settle: (stats) => app.settleArenaSponsorContract?.(stats) ?? null },
+        settle: (stats) => { const settled = app.settleArenaSponsorContract?.(stats) ?? null; autosave?.request('data-arena-sponsor'); return settled; } },
       onExit: restoreBattle,
       // Cyber Gachapon: a manual-battle win settles like an AI win (tickets, and an armed beacon), into the one save.
-      onVictory: ({ tournament, partyIds }) => app?.settleDataArenaWin?.({ tournament, partyIds })
+      onVictory: ({ tournament, partyIds }) => { const won = app?.settleDataArenaWin?.({ tournament, partyIds }); autosave?.request('data-arena-win'); return won; }
     });
     dataArenaSession = session;
     root.hidden = true;
@@ -3951,41 +3962,45 @@ function boot() {
       try {
         openingFilm?.stop?.();
         titleScreen.hidden = true;
-        await continueGame();
         const resumeScreen = activeCheckpoint.screen;
-        if (resumeScreen === CHAMPIONSHIP_SCREENS.GATE_SELECT
-          || resumeScreen === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT
-          || resumeScreen === CHAMPIONSHIP_SCREENS.HUNT_FIELD) {
-          expeditionSource?.intents?.openGate?.();
-          if ((resumeScreen === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT || resumeScreen === CHAMPIONSHIP_SCREENS.HUNT_FIELD)
-            && activeCheckpoint.substate?.gateId) {
-            expeditionSource?.intents?.selectGate?.(activeCheckpoint.substate.gateId);
-            await expeditionSource?.intents?.confirmGate?.();
+        const huntResume = (resumeScreen === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT || resumeScreen === CHAMPIONSHIP_SCREENS.HUNT_FIELD)
+          && activeCheckpoint.substate?.gateId;
+        // Route before the first mount (2026-11-16): a reload after an iOS memory kill
+        // used to build the whole 3D ranch and tear it down again for the battle menu.
+        await continueGame({ beforeFirstMount: () => {
+          if (resumeScreen === CHAMPIONSHIP_SCREENS.GATE_SELECT
+            || resumeScreen === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT
+            || resumeScreen === CHAMPIONSHIP_SCREENS.HUNT_FIELD) {
+            expeditionSource?.intents?.openGate?.();
+          } else if (resumeScreen === CHAMPIONSHIP_SCREENS.SHOP) {
+            expeditionSource?.intents?.openShop?.();
+          } else if (resumeScreen === CHAMPIONSHIP_SCREENS.DATABASE) {
+            expeditionSource?.intents?.openDatabase?.();
+          } else if (resumeScreen === CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
+            expeditionSource?.intents?.openCageEdit?.();
+          } else if (resumeScreen === CHAMPIONSHIP_SCREENS.BATTLE_SELECT
+            || resumeScreen === CHAMPIONSHIP_SCREENS.BATTLE_FIELD
+            || resumeScreen === CHAMPIONSHIP_SCREENS.BATTLE_RESULT
+            || resumeScreen === "DATA_ARENA") {
+            app.openBattle?.();
+          } else if (resumeScreen === CHAMPIONSHIP_SCREENS.CHAMPIONSHIP) {
+            app.openBattle?.();
+            app.openChampionship?.();
+          } else if (resumeScreen === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) {
+            app.openDigimonList?.();
+          } else if (resumeScreen === CHAMPIONSHIP_SCREENS.SCHEDULE) {
+            app.openSchedule?.();
+          } else if (resumeScreen === CHAMPIONSHIP_SCREENS.MEDALS) {
+            app.openMedals?.();
+          } else if (resumeScreen === CHAMPIONSHIP_SCREENS.TAMER_INFO) {
+            app.openTamerInfo?.();
+          } else if (resumeScreen === CHAMPIONSHIP_SCREENS.HELP) {
+            app.openHelp?.();
           }
-        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.SHOP) {
-          expeditionSource?.intents?.openShop?.();
-        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.DATABASE) {
-          expeditionSource?.intents?.openDatabase?.();
-        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
-          expeditionSource?.intents?.openCageEdit?.();
-        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.BATTLE_SELECT
-          || resumeScreen === CHAMPIONSHIP_SCREENS.BATTLE_FIELD
-          || resumeScreen === CHAMPIONSHIP_SCREENS.BATTLE_RESULT
-          || resumeScreen === "DATA_ARENA") {
-          app.openBattle?.();
-        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.CHAMPIONSHIP) {
-          app.openBattle?.();
-          app.openChampionship?.();
-        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) {
-          app.openDigimonList?.();
-        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.SCHEDULE) {
-          app.openSchedule?.();
-        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.MEDALS) {
-          app.openMedals?.();
-        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.TAMER_INFO) {
-          app.openTamerInfo?.();
-        } else if (resumeScreen === CHAMPIONSHIP_SCREENS.HELP) {
-          app.openHelp?.();
+        } });
+        if (huntResume) {
+          expeditionSource?.intents?.selectGate?.(activeCheckpoint.substate.gateId);
+          await expeditionSource?.intents?.confirmGate?.();
         }
         // Any other screen (including RAISING_HOME and HUNT_RESULT) safely remains
         // on RAISING_HOME (opened by continueGame() above), never dropping to Title.
