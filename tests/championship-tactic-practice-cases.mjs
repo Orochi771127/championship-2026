@@ -87,6 +87,7 @@ test('result lines state counted facts, only where a plan was read, with one com
   assert.ok(lines.some(l => /^M\d+ ×\d+/.test(l)), 'skills by name');
   assert.ok(lines.every(l => l.length <= 24), 'every line is short enough to read at a glance');
   assert.equal(lines.some(l => l.startsWith('上次')), false, 'no comparison without a previous record');
+  assert.ok(lines.some(l => /^TP 剩 \d+\/\d+$/.test(l)), 'what the plan left for the next battle');
   const compared = tacticRecordLines(record, {nameOf: () => '測試', moveName: String,
     previous: () => ({tactic: 2, total: 4, counts: {skill: 1}, seconds: 30.5})});
   assert.ok(compared.includes('上次「支援優先」：出手 4　招式 1'));
@@ -161,6 +162,7 @@ test('app: a practice series fights the same partner, reads its plan, pays only 
   assert.equal(app.startTacticPractice('nobody').ok, false);
   assert.equal(app.startTacticPractice(id).ok, true);
   const plans = [0, 2];
+  let carriedTp = null;
   for (const [index, plan] of plans.entries()) {
     const bout = index + 1;
     assert.equal(app.getTacticPractice().nextBout, bout);
@@ -169,6 +171,11 @@ test('app: a practice series fights the same partner, reads its plan, pays only 
     const party = await app.prepareSparBattle();
     assert.equal(party.ok, true, party.reason);
     assert.equal(party.individuals[0].tactic, plan, 'the bout carries the partner\'s current plan');
+    // P2: every bout starts at full HP; TP is whatever the last bout left (the original's own write-back).
+    const fields = party.individuals[0].nativeProfile.fields;
+    assert.equal(fields['050'], fields['058'], 'full HP for the bout');
+    const savedTp = app.getTacticPracticeTp(id);
+    if (index > 0) assert.equal(savedTp.current, carriedTp, 'TP carried from the previous bout');
     const runtime = createBattleRuntime({mode: 2, battleType: 0, playerIndividuals: party.individuals, rng: party.rngPreparation.rng, personalityPolicy: 'ORIGINAL'});
     try {
       runtime.chooseFreeBattle({presetIndices: party.presetIndices, arenaIndex: party.arenaIndex});
@@ -188,6 +195,8 @@ test('app: a practice series fights the same partner, reads its plan, pays only 
       const recorded = app.recordTacticPracticeBout({attemptId, entry: record.local[0], seconds: record.seconds});
       assert.equal(recorded.result.bout, bout);
       assert.equal(recorded.result.tactic, plan);
+      carriedTp = app.getTacticPracticeTp(id).current;
+      assert.ok(carriedTp <= savedTp.current, 'a bout never adds TP');
       assert.equal(app.recordTacticPracticeBout({attemptId, entry: record.local[0], seconds: record.seconds}), null, 'recorded once');
       app.exitBattle();
       if (app.getScreen() !== 'BATTLE_SELECT') app.openBattle();

@@ -1934,6 +1934,7 @@ async function openJourney(prefill = null) {
         start: (id) => app.startTacticPractice(id),
         end: () => app.endTacticPractice(),
         tacticOf: (id) => app.getBattleTactic(id),
+        tpOf: (id) => app.getTacticPracticeTp(id),
         setTactic: (id, value) => app.setBattleTactic(id, value),
         challenge: () => startSparBout(),
         text: tacticRecordText,

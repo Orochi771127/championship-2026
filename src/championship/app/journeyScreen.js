@@ -285,7 +285,7 @@ export function createJourneyScreen(host) {
   function paintPractice() {
     const p = host.practice, pt = p.text, current = p.frame();
     const panel = el("div", "cm-journey__practice");
-    panel.append(el("p", "cm-journey__hint", pt("practice.hint")));
+    panel.append(el("p", "cm-journey__hint", pt("practice.hint")), el("p", "cm-journey__practice-rule", pt("practice.rule")));
     const series = current?.series ?? null;
     const partnerId = series?.instanceId ?? practicePick;
     panel.append(el("p", "cm-journey__team-title", pt("practice.partner")));
@@ -304,6 +304,17 @@ export function createJourneyScreen(host) {
     }
     panel.append(roster);
     if (!partnerId) { body.replaceChildren(panel); return; }
+    // P2: the TP this partner carries into the next bout (what a skill-heavy plan spends).
+    const tp = p.tpOf?.(partnerId);
+    if (tp) {
+      const meter = el("div", "cm-journey__tp");
+      const bar = el("span", "cm-journey__tp-bar");
+      const fill = el("i");
+      fill.style.transform = `scaleX(${tp.max > 0 ? Math.max(0, Math.min(1, tp.current / tp.max)) : 0})`;
+      bar.append(fill);
+      meter.append(el("span", "cm-journey__tp-label", pt("practice.tp", { n: tp.current, max: tp.max })), bar);
+      panel.append(meter);
+    }
     // The plan the next bout will fight with: the partner's own 作戰方針 (the ROM's three rows).
     const plan = p.tacticOf(partnerId);
     const prev = series?.results?.at(-1)?.tactic;

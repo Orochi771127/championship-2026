@@ -1206,7 +1206,7 @@ export function createChampionshipStandaloneApp({
         ?(passwordMode?JSON.stringify(passwords)!==JSON.stringify(prepared.passwords):linkKey!==prepared.linkKey)
         :JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals.map(p=>p.instanceId)))
       // A Sync-boosted copy is checked against the same boost of the saved individual.
-      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(boostBattleProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1,p.moodTier))!==JSON.stringify(p.nativeProfile))))
+      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify((prepared.freeMatch?.kind==='SPAR'?sparFreshHp:x=>x)(boostBattleProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1,p.moodTier)))!==JSON.stringify(p.nativeProfile))))
       return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇。'};
     const result=applyBattleTransaction(beginBattleAttempt(battleEconomy,{attemptId,matchIndex:-1,mode,battleType:0,
       entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng,[],
@@ -1320,6 +1320,14 @@ export function createChampionshipStandaloneApp({
     return lastTowerResult;
   }
 
+  /**
+   * TACTIC_PRACTICE_LOOP P2 (2026-11-16): a practice bout starts at full HP while TP carries over
+   * exactly as the original writes it after each battle, so a plan's TP spend is felt in the next bout.
+   * Only the battle copy is refreshed; the saved partner keeps whatever HP the bout leaves it.
+   */
+  function sparFreshHp(profile){
+    const next=structuredClone(profile);next.fields['050']=next.fields['058'];return next;
+  }
   /** A finished practice-series bout: its fixed crystals, win or loss, whatever the plan. */
   function settleSparBout(attemptId,won){
     const spar=pendingSpar;
@@ -4512,6 +4520,14 @@ export function createChampionshipStandaloneApp({
       return {ok:true,series:tacticPractice};
     },
     endTacticPractice(){tacticPractice=null;lastSparResult=null;return {ok:true};},
+    /** The partner's saved TP (current / max), which carries from bout to bout. */
+    getTacticPracticeTp(instanceId){
+      requireSession();
+      let profile=null;
+      try{profile=instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(instanceId);}catch{profile=null;}
+      const f=profile?.fields;
+      return f&&Number.isFinite(f['054'])&&Number.isFinite(f['05c'])?Object.freeze({current:f['054'],max:f['05c']}):null;
+    },
     /** Prepare the series' next bout: an ordinary free battle against fixed presets, no fee and no purse. */
     async prepareSparBattle(){
       const series=tacticPractice,bout=tacticPracticeNextBout(series);
@@ -4521,11 +4537,12 @@ export function createChampionshipStandaloneApp({
       if(!party.ok)return party;
       if(!freeBattleMenu)rebuildFreeBattleMenu();
       const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
-      prepared.localMode=2;prepared.freeMenu=freeBattleMenu;prepared.individuals=party.individuals;
+      const individuals=party.individuals.map(p=>({...p,nativeProfile:sparFreshHp(p.nativeProfile)}));
+      prepared.localMode=2;prepared.freeMenu=freeBattleMenu;prepared.individuals=individuals;
       prepared.freeMatch=Object.freeze({id:`spar:${series.round}:${bout}`,kind:'SPAR',presetIndices,slots:3,entryFee:0,payout:0});
       prepared.sparBout=bout;
       const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
-      return {ok:true,bout,presetIndices,arenaIndex,individuals:party.individuals,rngPreparation};
+      return {ok:true,bout,presetIndices,arenaIndex,individuals,rngPreparation};
     },
     enterSparBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
       const prepared=battleRngPreparations.get(rngPreparation),bout=prepared?.sparBout,series=tacticPractice;

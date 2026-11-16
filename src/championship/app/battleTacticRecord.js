@@ -82,6 +82,7 @@ export function createBattleRecordTap({localTeamIndex = 0} = {}) {
         if (Number.isFinite(sp)) {
           if (s.spLast !== null && sp < s.spLast) s.spSpent += s.spLast - sp;
           s.spLast = sp;
+          if (Number.isFinite(c.resource?.maximum)) s.spMax = c.resource.maximum;
           const cheapest = kitOf(s.speciesId)?.cheapest;
           if (cheapest !== null && cheapest !== undefined && sp < cheapest) {
             s.spEmptyFrames += step;
@@ -151,7 +152,7 @@ export function summariseBattleRecord({tap, view, diagnostics = null, localTeamI
       counts: {...s.counts}, total,
       share: {normal: total ? s.counts.normal / total : 0, skill: total ? s.counts.skill / total : 0, support: total ? s.counts.support / total : 0},
       moves: Object.entries(s.moves).map(([id, n]) => ({moveId: Number(id), count: n})).sort((a, b) => b.count - a.count),
-      spSpent: s.spSpent, spEmptySeconds: seconds(s.spEmptyFrames) ?? 0, spEmptyAt: seconds(s.spEmptyAt),
+      spSpent: s.spSpent, tpLeft: s.spLast, tpMax: s.spMax ?? null, spEmptySeconds: seconds(s.spEmptyFrames) ?? 0, spEmptyAt: seconds(s.spEmptyAt),
       firstSkillAt: seconds(s.firstSkillAt), downAt: seconds(s.downAt),
       hpLeftRatio: s.hpMax ? Math.max(0, s.hpLast) / s.hpMax : 0,
       damageDealtRatio: foeHpMax ? foeHpLost / foeHpMax : 0

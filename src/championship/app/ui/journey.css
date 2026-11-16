@@ -159,3 +159,9 @@
 .cm-journey__bout-no { overflow: hidden; font-size: calc(13px * var(--text-scale, 1)); font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
 .cm-journey__bout-line { grid-column: 1 / -1; color: #c9c3ff; font-size: calc(11px * var(--text-scale, 1)); font-weight: 700; font-variant-numeric: tabular-nums; }
 .cm-journey__memory { margin: 0; padding: 6px 10px; border-radius: 10px; background: rgba(255, 226, 122, 0.12); color: #ffe27a; font-size: calc(12px * var(--text-scale, 1)); font-weight: 800; }
+/* P2: the rule line and the TP the partner carries into the next bout. */
+.cm-journey__practice-rule { margin: 0; color: #6ff7ff; font-size: calc(12px * var(--text-scale, 1)); font-weight: 900; text-align: center; }
+.cm-journey__tp { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 8px; }
+.cm-journey__tp-label { color: #b9fbff; font-size: calc(12px * var(--text-scale, 1)); font-weight: 900; font-variant-numeric: tabular-nums; }
+.cm-journey__tp-bar { position: relative; height: 10px; overflow: hidden; border-radius: 999px; background: rgba(0, 0, 0, 0.35); }
+.cm-journey__tp-bar > i { position: absolute; inset: 0; transform-origin: left center; background: linear-gradient(90deg, #2e8bff, #6ff7ff); }

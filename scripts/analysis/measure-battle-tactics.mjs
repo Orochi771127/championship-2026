@@ -55,13 +55,13 @@ const mean = xs => xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0;
 // --series: the same partner fights its three rivals back to back, and each bout's HP and TP carry
 // into the next exactly as the original writes them after a battle (settleOwnedBattleIndividual,
 // via the runtime's settlement). This is where a plan's TP spend can cost the next bout.
-function runSeries({player, tactic, seed}) {
-  let profile = individual('A0', player, seed % 8, 1000 + seed * 7, tactic).nativeProfile;
+function runSeries({player, tactic, seed, plans = [tactic, tactic, tactic]}) {
+  let profile = individual('A0', player, seed % 8, 1000 + seed * 7, plans[0]).nativeProfile;
   const bouts = [];
   for (const [index, opponent] of OPPONENTS.entries()) {
     const runtime = createBattleRuntime({mode: 5, battleType: 0, seed: seed * 10 + index, aiPolicy: 'IMPROVED_V1', personalityPolicy: 'ORIGINAL',
       taxonomyPolicy: 'TAXONOMY_V1', burstPolicy: 'OFF',
-      playerIndividuals: [{instanceId: 'A0', nativeProfile: profile, tactic}],
+      playerIndividuals: [{instanceId: 'A0', nativeProfile: profile, tactic: plans[index]}],
       opponentIndividuals: [individual('B0', opponent, (seed * 3 + index) % 8, 2000 + seed * 7 + index, 1)]});
     try {
       runtime.choosePracticeBattle({arenaIndex: 2});
@@ -77,7 +77,30 @@ function runSeries({player, tactic, seed}) {
         tpBefore, tpAfter: profile.fields['054'], tpMax});
     } finally { runtime.dispose(); }
   }
-  return {player, tactic, seed, bouts, wins: bouts.filter(b => b.outcome === 'WIN').length};
+  return {player, tactic, plans: plans.join(''), seed, bouts, wins: bouts.filter(b => b.outcome === 'WIN').length};
+}
+// --sequences: every plan order over the three bouts (27), HP refreshed per bout (implies --heal-hp):
+// does choosing the plan bout by bout beat keeping one plan?
+if (process.argv.includes('--sequences')) {
+  if (!process.argv.includes('--heal-hp')) process.argv.push('--heal-hp');
+  const orders = [];
+  for (const a of TACTICS) for (const b of TACTICS) for (const c of TACTICS) orders.push([a, b, c]);
+  const rows = [];
+  for (const plans of orders) for (const player of PLAYERS) for (let seed = 1; seed <= SEEDS; seed++) rows.push(runSeries({player, tactic: plans[0], seed, plans}));
+  const score = orders.map(plans => { const key = plans.join(''); const mine = rows.filter(r => r.plans === key);
+    return {key, wins: mean(mine.map(r => r.wins)), bout3: mean(mine.map(r => r.bouts[2].outcome === 'WIN' ? 1 : 0)),
+      tpBefore3: mean(mine.map(r => r.bouts[2].tpBefore / Math.max(1, r.bouts[2].tpMax)))}; }).sort((x, y) => y.wins - x.wins);
+  console.log(`sequences: ${orders.length} orders x ${PLAYERS.length} partners x ${SEEDS} seeds, HP refreshed, TP carried`);
+  for (const s of score) console.log(`${s.key}: wins/3 ${s.wins.toFixed(2)}  bout3 ${Math.round(s.bout3 * 100)}%  TP before bout 3 ${Math.round(s.tpBefore3 * 100)}%`);
+  // Per partner: the best fixed order against the best order overall.
+  for (const player of PLAYERS) {
+    const per = orders.map(plans => ({key: plans.join(''), wins: mean(rows.filter(r => r.player === player && r.plans === plans.join('')).map(r => r.wins))}))
+      .sort((x, y) => y.wins - x.wins);
+    const fixed = per.filter(p => new Set(p.key).size === 1)[0];
+    console.log(`partner ${player}: best ${per[0].key} ${per[0].wins.toFixed(2)}  best fixed ${fixed.key} ${fixed.wins.toFixed(2)}`);
+  }
+  if (OUT) { mkdirSync(OUT, {recursive: true}); writeFileSync(join(OUT, 'sequences.json'), JSON.stringify({score, rows: rows.map(r => ({player: r.player, plans: r.plans, seed: r.seed, wins: r.wins}))})); }
+  process.exit(0);
 }
 if (process.argv.includes('--series')) {
   const series = [];
