@@ -19,7 +19,8 @@ export const PARTNER_MOODS=deepFreeze({
   happy:{emoji:'🎵',label:'心情愉悅'},
   love:{emoji:'❤️',label:'親密撒嬌'},
   energetic:{emoji:'✨',label:'精神百倍'},
-  calm:{emoji:'🙂',label:'心情平穩'}
+  calm:{emoji:'🙂',label:'心情平穩'},
+  gloomy:{emoji:'😞',label:'心情低落'}
 });
 export const PARTNER_HABITATS=deepFreeze({
   cozy:{emoji:'🏡',label:'適居愉悅'},
@@ -100,10 +101,104 @@ export function partnerMood({fields,growth={},state=1,statusMusic=0,habitat='neu
   return max>0&&hp>=max*.9?'energetic':'calm';
 }
 
+/**
+ * Mood score (OWNER_APPROVED_ADAPTATION, Owner 2026-11-16): one number, -100..100, read
+ * again whenever it is shown and never stored. Affection (020) lifts it; the original
+ * illness pressure (01c: 90 is the stress flag 404, 100 makes the partner ill) and injury
+ * pressure (040: over 30 a training may wound) weigh it down, with the same needs,
+ * habitat and recent partner-life moments the emotes already show.
+ */
+export const PARTNER_MOOD_TIERS=deepFreeze([
+  {id:'superb',min:45,label:'心情絕佳',segments:5},
+  {id:'good',min:15,label:'心情好',segments:4},
+  {id:'normal',min:-14,label:'心情普通',segments:3},
+  {id:'low',min:-44,label:'心情差',segments:2},
+  {id:'awful',min:-100,label:'心情很差',segments:1}
+]);
+/** Recent partner-life moments, by kind, and how long one counts. */
+export const PARTNER_MOOD_MOMENTS=deepFreeze({greeted:8,found:5,disturbed:-15});
+export const PARTNER_MOOD_MOMENT_MS=30*60*1000;
+/** What the detail line names, in the order it names them. */
+export const PARTNER_MOOD_REASONS=deepFreeze({
+  hurt:'受傷或生病',hungry:'肚子餓',sleepy:'想睡',stressed:'壓力大',strained:'疲勞',dirty:'籠子髒',poor:'籠舍不適應',
+  disturbed:'剛被吵醒',cozy:'住得舒服',affection:'很親近',greeted:'剛和朋友打招呼',found:'剛撿到東西'
+});
+
+export function partnerMoodTier(score){
+  return PARTNER_MOOD_TIERS.find(t=>score>=t.min)??PARTNER_MOOD_TIERS[PARTNER_MOOD_TIERS.length-1];
+}
+
+export function partnerMoodScore({fields,growth={},state=1,habitat='neutral',dirty=false,moments=[]}={}){
+  const found=new Set();
+  const affection=fieldOf(fields,'020'),illness=fieldOf(fields,'01c'),injury=fieldOf(fields,'040');
+  let score=affection*.4-10;
+  if(affection>=60)found.add('affection');
+  if(illness>30){score-=(illness-30)*.7;if(illness>=60)found.add('stressed');}
+  if(injury>30){score-=(injury-30)*.5;if(injury>=60)found.add('strained');}
+  if(fieldOf(fields,'134')||fieldOf(fields,'138')){score-=40;found.add('hurt');}
+  if(growth['418']){score-=25;found.add('hungry');}
+  const sleepAt=fieldOf(fields,'178');
+  if(state===4||fieldOf(fields,'13c')||(sleepAt>0&&fieldOf(fields,'00c')>=sleepAt*.8)){score-=15;found.add('sleepy');}
+  if(dirty){score-=10;found.add('dirty');}
+  if(habitat==='cozy'){score+=20;found.add('cozy');}
+  else if(habitat==='poor'){score-=20;found.add('poor');}
+  const hp=fieldOf(fields,'050'),max=fieldOf(fields,'058');
+  if(max>0&&hp>=max*.9)score+=5;
+  for(const kind of moments){const delta=PARTNER_MOOD_MOMENTS[kind];if(delta){score+=delta;found.add(kind);}}
+  score=Math.max(-100,Math.min(100,Math.round(score)));
+  const reasons=Object.keys(PARTNER_MOOD_REASONS).filter(key=>found.has(key));
+  return Object.freeze({score,tier:partnerMoodTier(score).id,reasons:Object.freeze(reasons)});
+}
+
+/**
+ * Mood in battle (OWNER_APPROVED_ADAPTATION, Owner 2026-11-16). Like Sync Level it is a
+ * modifier on the battle copy only: opening TP (max and current) and curve steps move a
+ * little, and the result restore puts the saved vitals and steps back. Title matches and
+ * championships read a capped tier (normal..good); password, link and online battles,
+ * which take no Sync, take no mood either.
+ */
+export const PARTNER_MOOD_BATTLE=deepFreeze({
+  superb:{tp:10,steps:{'084':1},arena:.04},
+  good:{tp:5,steps:{},arena:.02},
+  normal:{tp:0,steps:{},arena:0},
+  low:{tp:-5,steps:{},arena:-.02},
+  awful:{tp:-10,steps:{'08c':-1},arena:-.04}
+});
+export function cappedMoodTier(tier){
+  if(tier==='superb')return 'good';
+  if(tier==='low'||tier==='awful')return 'normal';
+  return PARTNER_MOOD_BATTLE[tier]?tier:'normal';
+}
+export function moodBattleProfile(profile,tier){
+  const effect=PARTNER_MOOD_BATTLE[tier];
+  if(!effect||(!effect.tp&&!Object.keys(effect.steps).length))return profile;
+  const next=structuredClone(profile),f=next.fields;
+  if(effect.tp){
+    const factor=1+effect.tp/100;
+    f['05c']=Math.max(1,Math.min(32767,Math.round((f['05c']|0)*factor)));
+    f['054']=Math.max(0,Math.min(f['05c'],Math.round((f['054']|0)*factor)));
+  }
+  for(const [key,delta] of Object.entries(effect.steps))f[key]=Math.max(0,Math.min(26,(f[key]|0)+delta));
+  return next;
+}
+/** Data Arena partner power multiplier for a mood tier. */
+export function moodArenaPower(tier){return 1+(PARTNER_MOOD_BATTLE[tier]?.arena??0);}
+
+/** A need-free mood (calm, energetic, cozy happiness) follows the score's tier. */
+export function partnerMoodForTier(mood,tier){
+  if(!['calm','energetic','happy'].includes(mood))return mood;
+  if(tier==='superb')return 'energetic';
+  if(tier==='low'||tier==='awful')return 'gloomy';
+  if(tier==='good'&&mood==='calm')return 'happy';
+  if(tier==='normal'&&mood==='energetic')return 'calm';
+  return mood;
+}
+
 /** Chance that one stroll interval ends with a find. */
 export function strollFindChance(habitat,mood,{raceHabitat=false}={}){
   let chance=PARTNER_LIFE_RULES.findChance[habitat]??PARTNER_LIFE_RULES.findChance.neutral;
   if(mood==='unwell'||mood==='sleepy')chance*=.5;
+  else if(mood==='gloomy')chance*=.75;
   else if(mood==='happy'||mood==='love')chance=Math.min(.95,chance*1.1);
   // Race habitat (Owner 2026-10-29): finds +25%, under the same 95% ceiling.
   if(raceHabitat)chance=Math.min(.95,chance*TAXONOMY_HABITAT_BONUS.findPercent/100);

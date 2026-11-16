@@ -1036,6 +1036,12 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 .cm-sync-panel__cap { text-align: center; }
 /* Sync Level on a roster row (stage slot). */
 .cm-vs5-member__stage { padding: 0 7px; border-radius: 999px; background: #2a1d5e; color: #ffe27a; font: 800 var(--fs-label)/1.5 var(--font-ui); letter-spacing: 0.04em; }
+/* Owner 2026-11-16: the partner's mood face and tier; mood moves battle a little. */
+.cm-vs5-member__mood { padding: 0 7px; border-radius: 999px; background: #eef2f7; color: #334155; font: 800 var(--fs-label)/1.5 var(--font-ui); white-space: nowrap; }
+.cm-vs5-member__mood[data-tier="superb"] { background: #fff1c2; color: #8a4b00; }
+.cm-vs5-member__mood[data-tier="good"] { background: #dcfce7; color: #166534; }
+.cm-vs5-member__mood[data-tier="low"] { background: #ffedd5; color: #9a3412; }
+.cm-vs5-member__mood[data-tier="awful"] { background: #fee2e2; color: #991b1b; }
 /* The Data Arena result lists Sync EXP the same frameless way (Owner 2026-11-09). */
 .da-panel .cm-sync-panel { gap: 0; }
 .da-panel .cm-sync-row { padding: 8px 2px; border: 0; border-radius: 0; background: none; }

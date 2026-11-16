@@ -2,7 +2,7 @@ import { createTransientHint, consumeRaisingHintDuration } from './transientHint
 import {getLocale} from '../text/locale.js';
 import {mountRanchDiscoveryJournal} from './ranchDiscoveryJournal.js';
 import {mountRanchStoryBadge} from './ranchStoryBadge.js';
-import {PARTNER_MOODS,PARTNER_HABITATS} from '../raising/ranchPartnerLife.js';
+import {PARTNER_MOODS,PARTNER_HABITATS,PARTNER_MOOD_TIERS,PARTNER_MOOD_REASONS} from '../raising/ranchPartnerLife.js';
 import {productFormText} from '../text/productFormText.js';
 const evolutionChoiceTitle=()=>productFormText('choose');
 import { downloadSaveBackup } from './downloadSaveBackup.js';
@@ -183,7 +183,11 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   const moodLabel = node('span', 'int-rh2-companion__mood-label');
   const moodHearts = node('span', 'int-rh2-companion__hearts');
   moodHearts.setAttribute('aria-hidden', 'true');
-  moodChip.append(moodEmoji, moodLabel, moodHearts); moodChip.hidden = true;
+  // Owner 2026-11-16: five segments for the mood score's tier (ranchPartnerLife.js).
+  const moodMeter = node('span', 'int-rh2-companion__mood-meter');
+  moodMeter.setAttribute('aria-hidden', 'true');
+  moodMeter.append(...Array.from({ length: 5 }, () => node('i')));
+  moodChip.append(moodEmoji, moodLabel, moodMeter, moodHearts); moodChip.hidden = true;
   // Owner 2026-10-29: a race habitat lights its chip beside the place label.
   const habitatChip = node('span', 'cm-habitat-chip int-rh2-companion__habitat'); habitatChip.hidden = true;
   // Owner 2026-11-04: a cage too full for the next form says so here instead of evolution silently waiting.
@@ -548,7 +552,15 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     moodEmoji.textContent = partner.habitat === 'cozy' ? habitat.emoji + mood.emoji : mood.emoji;
     moodLabel.textContent = uiText(partner.habitat === 'cozy' ? habitat.label : mood.label);
     moodHearts.replaceChildren(...Array.from({ length: 5 }, (_, i) => node('i', i < partner.hearts ? 'is-full' : '')));
-    const description = uiText('{mood}・{habitat}・親密度 {affection}/100', { mood: uiText(mood.label), habitat: uiText(habitat.label), affection: partner.affection });
+    const tier = PARTNER_MOOD_TIERS.find((t) => t.id === partner.moodTier) ?? null;
+    moodChip.dataset.tier = tier?.id ?? '';
+    moodMeter.hidden = !tier;
+    [...moodMeter.children].forEach((segment, i) => segment.classList.toggle('is-on', Boolean(tier) && i < tier.segments));
+    let description = uiText('{mood}・{habitat}・親密度 {affection}/100', { mood: uiText(mood.label), habitat: uiText(habitat.label), affection: partner.affection });
+    if (tier) {
+      const reasons = (partner.moodReasons ?? []).map((key) => uiText(PARTNER_MOOD_REASONS[key] ?? key));
+      description += '・' + (reasons.length ? uiText('{tier}：{reasons}', { tier: uiText(tier.label), reasons: reasons.join(uiText('、')) }) : uiText(tier.label));
+    }
     moodChip.title = description; moodChip.setAttribute('aria-label', description);
   }
 

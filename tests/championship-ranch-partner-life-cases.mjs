@@ -4,9 +4,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {PARTNER_LIFE_RULES,partnerHabitatFit,partnerMood,partnerAffectionHearts,partnerTypeBits,partnerPeerRelation,
+import {PARTNER_LIFE_RULES,PARTNER_MOOD_TIERS,PARTNER_MOOD_MOMENTS,PARTNER_MOOD_BATTLE,moodBattleProfile,cappedMoodTier,moodArenaPower,partnerMoodScore,partnerMoodTier,partnerMoodForTier,strollFindChance,partnerHabitatFit,partnerMood,partnerAffectionHearts,partnerTypeBits,partnerPeerRelation,
   strollFindWeights,rollStrollFind,strollIntervalFrames,emptyStrollLog,normalizeStrollLog,appendStrollEntry,pendingStrollEntries,claimStrollEntries,greetingGapFrames,strollLogForDay,
   canStrollFind,canGreet,canTapAffection,recordTap,strollLogName} from '../src/championship/raising/ranchPartnerLife.js';
+import {boostSyncNativeProfile,restoreSyncNativeProfile} from '../src/championship/contracts/productSyncLevel.js';
 import {normalizeNativeRaisingHome} from '../src/championship/raising/nativeRaisingHomeState.js';
 import {createNativeRaisingActor,initializeNativeRaisingActor,stepNativeRaisingActor,holdNativeRaisingActorForGreeting} from '../src/championship/raising/nativeRaisingActor.js';
 import {nativeIndividualProfile} from '../src/championship/raising/nativeIndividualProfile.js';
@@ -48,6 +49,49 @@ test('mood follows the original wound, illness, stress, hunger, sleep, stroke an
   assert.equal(mood({},{habitat:'cozy'}),'happy');assert.equal(mood({},{habitat:'poor'}),'unwell');
   assert.equal(mood({'050':95}),'energetic');assert.equal(mood(),'calm');
   assert.deepEqual([0,9,10,50,89,90,100].map(n=>partnerAffectionHearts({'020':n})),[0,0,1,3,4,5,5]);
+});
+
+test('mood score (Owner 2026-11-16): affection lifts it, illness and injury pressure and needs weigh it down',()=>{
+  const base={'134':0,'138':0,'00c':0,'178':100,'13c':0,'020':50,'01c':0,'040':0,'050':50,'058':100};
+  const score=(fields={},extra={})=>partnerMoodScore({fields:{...base,...fields},growth:{},...extra});
+  assert.deepEqual(score(),{score:10,tier:'normal',reasons:[]});
+  assert.equal(score({'020':100,'050':100},{habitat:'cozy'}).tier,'superb');
+  assert.equal(score({'020':0}).score,-10);
+  assert.equal(score({'01c':90}).tier,'low');assert.ok(score({'01c':90}).reasons.includes('stressed'));
+  assert.ok(score({'040':80}).reasons.includes('strained'));
+  assert.equal(score({'134':1}).reasons[0],'hurt');
+  assert.equal(score({},{growth:{'418':1}}).score,-15);
+  assert.equal(score({},{state:4}).reasons.includes('sleepy'),true);
+  assert.equal(score({},{dirty:true,habitat:'poor'}).tier,'low');
+  assert.deepEqual(score({},{moments:['greeted','found','unknown']}).reasons,['greeted','found']);
+  assert.equal(score({},{moments:['disturbed']}).score,10+PARTNER_MOOD_MOMENTS.disturbed);
+  assert.equal(score({'134':1,'138':1,'01c':100,'040':100,'020':0},{growth:{'418':1},state:4,dirty:true,habitat:'poor'}).score,-100);
+  assert.deepEqual([60,45,44,15,14,-14,-15,-44,-45,-100].map(n=>partnerMoodTier(n).id),['superb','superb','good','good','normal','normal','low','low','awful','awful']);
+  assert.deepEqual(PARTNER_MOOD_TIERS.map(t=>t.segments),[5,4,3,2,1]);
+  assert.equal(partnerMoodForTier('calm','superb'),'energetic');assert.equal(partnerMoodForTier('calm','good'),'happy');
+  assert.equal(partnerMoodForTier('energetic','low'),'gloomy');assert.equal(partnerMoodForTier('hungry','awful'),'hungry');
+  assert.equal(partnerMoodForTier('love','awful'),'love');assert.equal(partnerMoodForTier('calm','normal'),'calm');assert.equal(partnerMoodForTier('energetic','normal'),'calm');assert.equal(partnerMoodForTier('happy','normal'),'happy');
+  assert.ok(strollFindChance('neutral','gloomy')<strollFindChance('neutral','calm'));
+});
+
+test('mood in battle (Owner 2026-11-16) moves only the battle copy and the result restore takes it back',()=>{
+  const profile={fields:{'050':300,'054':40,'058':400,'05c':50,'084':10,'088':8,'08c':6,'090':5,'020':70}};
+  assert.equal(moodBattleProfile(profile,'normal'),profile,'normal changes nothing');
+  const superb=moodBattleProfile(profile,'superb');
+  assert.deepEqual([superb.fields['05c'],superb.fields['054'],superb.fields['084']],[55,44,11]);
+  assert.equal(superb.fields['058'],400,'mood never touches HP');
+  assert.equal(profile.fields['05c'],50,'the saved profile is untouched');
+  const awful=moodBattleProfile(profile,'awful');
+  assert.deepEqual([awful.fields['05c'],awful.fields['054'],awful.fields['08c']],[45,36,5]);
+  assert.equal(moodBattleProfile({fields:{...profile.fields,'08c':0}},'awful').fields['08c'],0,'a curve step never drops below 0');
+  const battleCopy=moodBattleProfile(boostSyncNativeProfile(profile,30),'superb');
+  const result={fields:{...battleCopy.fields,'054':20,'050':150,'020':73}};
+  const back=restoreSyncNativeProfile(result,profile);
+  assert.deepEqual([back.fields['058'],back.fields['05c'],back.fields['084'],back.fields['08c']],[400,50,10,6]);
+  assert.equal(back.fields['020'],73,'what the battle wrote (affection) stays');
+  assert.deepEqual(['superb','good','normal','low','awful','x'].map(cappedMoodTier),['good','good','normal','normal','normal','normal']);
+  assert.deepEqual(['superb','good','normal','low','awful'].map(moodArenaPower),[1.04,1.02,1,0.98,0.96]);
+  for(const effect of Object.values(PARTNER_MOOD_BATTLE))assert.ok(Math.abs(effect.tp)<=10&&Math.abs(effect.arena)<=.04,'every effect stays within 10 %');
 });
 
 test('stroll finds weigh the cage ecology; greetings double the find',()=>{

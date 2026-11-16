@@ -3092,6 +3092,20 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
   clip-path: polygon(50% 100%, 0 40%, 0 15%, 20% 0, 50% 20%, 80% 0, 100% 15%, 100% 40%);
 }
 .int-rh2-root .int-rh2-companion__hearts i.is-full { background: #ff4d6d; }
+/* Owner 2026-11-16: the mood score's tier, five small bars that climb like a signal. */
+.int-rh2-root .int-rh2-companion__mood-meter { display: inline-flex; align-items: flex-end; gap: 1px; height: 10px; margin: 0 2px; }
+.int-rh2-root .int-rh2-companion__mood-meter[hidden] { display: none; }
+.int-rh2-root .int-rh2-companion__mood-meter i { width: 3px; border-radius: 1px; background: #d6d0c2; }
+.int-rh2-root .int-rh2-companion__mood-meter i:nth-child(1) { height: 4px; }
+.int-rh2-root .int-rh2-companion__mood-meter i:nth-child(2) { height: 5.5px; }
+.int-rh2-root .int-rh2-companion__mood-meter i:nth-child(3) { height: 7px; }
+.int-rh2-root .int-rh2-companion__mood-meter i:nth-child(4) { height: 8.5px; }
+.int-rh2-root .int-rh2-companion__mood-meter i:nth-child(5) { height: 10px; }
+.int-rh2-root .int-rh2-companion__mood[data-tier="superb"] .int-rh2-companion__mood-meter i.is-on { background: #f59e0b; }
+.int-rh2-root .int-rh2-companion__mood[data-tier="good"] .int-rh2-companion__mood-meter i.is-on { background: #22c55e; }
+.int-rh2-root .int-rh2-companion__mood[data-tier="normal"] .int-rh2-companion__mood-meter i.is-on { background: #38bdf8; }
+.int-rh2-root .int-rh2-companion__mood[data-tier="low"] .int-rh2-companion__mood-meter i.is-on { background: #fb923c; }
+.int-rh2-root .int-rh2-companion__mood[data-tier="awful"] .int-rh2-companion__mood-meter i.is-on { background: #ef4444; }
 
 .cm-stroll-toast {
   position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 236px); z-index: 60;

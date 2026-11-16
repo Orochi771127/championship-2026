@@ -1544,7 +1544,8 @@ export async function mountRaisingFieldPixiPresentation({
     calm:['faceSmile','faceBlush','faceWink'],
     hungry:['faceYum','faceDrool','meat'],
     sleepy:['faceYawn','faceSleepy','zzz'],
-    unwell:['faceSweat','faceTeary','faceTearSmile']
+    unwell:['faceSweat','faceTeary','faceTearSmile'],
+    gloomy:['faceTearSmile','faceSweat','faceTeary']
   };
   const moodFace=(mood,seq=0)=>{const faces=MOOD_FACES[mood]??MOOD_FACES.calm;return faces[Math.abs(seq|0)%faces.length];};
   // Owner 2026-11-03: the 9x9 anger and sleep pixels read as a pink die and a scribble, so these
