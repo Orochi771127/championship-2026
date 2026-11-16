@@ -64,6 +64,9 @@ function emojiHits([selectors, source]) {
 
     // Toolbar: the ticket badge rides inside the Shop key without covering 商店.
     await page.waitForFunction(() => document.querySelector('[data-quick-id="shop"] .cm-gacha-dock-badge:not([hidden])'));
+    // The dock folds behind the Go key (Owner 2026-11-16): unfold it, as a player would.
+    { const fold = page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]'); if (await fold.isVisible().catch(() => false)) await fold.click(); }
+    await page.waitForTimeout(400);
     const dock = await page.evaluate(() => {
       const key = document.querySelector('[data-quick-id="shop"]');
       const label = key.querySelector(".cm-toolbar__entry-label").getBoundingClientRect();

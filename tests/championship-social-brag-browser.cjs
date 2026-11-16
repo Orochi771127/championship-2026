@@ -195,6 +195,7 @@ async function namedQaSave() {
   // ---------------------------------------------------------------- 4. Battle select: 密碼對戰 room lobby and 通訊對戰 quick lobby
   try {
     await toRanch(page);
+    { const fold = page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]'); if (await fold.isVisible().catch(() => false)) await fold.click(); }
     await page.locator('[data-quick-id="battle"]').click();
     await page.waitForSelector('.cm-vs5-cube__face[data-face-id="PASSWORD_BATTLE"]', { timeout: 30000 });
     await sleep(1500);

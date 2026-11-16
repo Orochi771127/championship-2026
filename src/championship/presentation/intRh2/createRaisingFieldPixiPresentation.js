@@ -1513,7 +1513,40 @@ export async function mountRaisingFieldPixiPresentation({
     smile:['..KKKKK..','.KYYYYYK.','KYYKYKYYK','KYYYYYYYK','KYKYYYKYK','KYYKKKYYK','.KYYYYYK.','..KKKKK..'],
     question:['..KKKKK..','.KCCCCCK.','KCCKKKCCK','.KK..KCCK','....KCCK.','...KCCK..','...KKKK..','...KCCK..','...KKKK..']
   };
-  const MOOD_ICON={love:'heart',happy:'note',energetic:'sparkle',hungry:'meat',sleepy:'zzz',unwell:'anger',calm:'smile'};
+  // Owner 2026-11-16: a tapped partner shows one of many faces for its mood. Faces are 11x11
+  // pixel art drawn here (no emoji font); the event's own sequence number picks the face, so
+  // repeated taps vary without any random draw.
+  const FACE=(...rows)=>['...KKKKK...','.KKYYYYYKK.','.KYYYYYYYK.',...rows,'.KKYYYYYKK.','...KKKKK...'];
+  Object.assign(EMOTE_ICONS,{
+    faceSmile:FACE('KYYKYYYKYYK','KYKYKYKYKYK','KPYYYYYYYPK','KYYKYYYKYYK','KYYYKKKYYYK','.KYYYYYYYK.'),
+    faceGrin:FACE('KYYYYYYYYYK','KYYKYYYKYYK','KYYKYYYKYYK','KYKKKKKKKYK','KYKWWWWWKYK','.KYKKKKKYK.'),
+    faceLaugh:FACE('KYYKYYYKYYK','KYKYKYKYKYK','KCYYYYYYYCK','KCKKKKKKKCK','KYKRRRRRKYK','.KYKKKKKYK.'),
+    faceWink:FACE('KYYYYYYKYYK','KYKKKYYKYYK','KPYYYYYYYPK','KYYKYYYKYYK','KYYYKKKYYYK','.KYYYYYYYK.'),
+    faceTongueWink:FACE('KYYYYYYKYYK','KYKKKYYKYYK','KYYYYYYYYYK','KYYKKKKKYYK','KYYYKRRKYYK','.KYYYKKYYK.'),
+    faceTongueSquint:FACE('KYKYYYYYKYK','KYYKYYYKYYK','KYKYYYYYKYK','KYYKKKKKYYK','KYYYKRRKYYK','.KYYYKKYYK.'),
+    faceKiss:FACE('KYYYYYYYYYK','KYYKYYYKYYK','KPYYYYYYYPK','KYYYYKYYYYK','KYYYKYKYYYK','.KYYYKYYYK.'),
+    faceHeartEyes:FACE('KYRYRYRYRYK','KYRRRYRRRYK','KYYRYYYRYYK','KYKYYYYYKYK','KYYKKKKKYYK','.KYYYYYYYK.'),
+    faceStarEyes:FACE('KYYOYYYOYYK','KYOOOYOOOYK','KYYOYYYOYYK','KYKKKKKKKYK','KYKRRRRRKYK','.KYKKKKKYK.'),
+    faceBlush:FACE('KYYKYYYKYYK','KYKYKYKYKYK','KPPYYYYYPPK','KYYYKYKYYYK','KYYYYKYYYYK','.KYYYYYYYK.'),
+    faceYum:FACE('KYYKYYYKYYK','KYKYKYKYKYK','KYYYYYYYYYK','KYKYYYYYKYK','KYYKKKKKKYK','.KYYYYYRRK.'),
+    faceDrool:FACE('KYYYYYYYYYK','KYKKYYYKKYK','KYYYYYYYYYK','KYYYKKKYYYK','KYYYKRKYYYK','.KYYYKCYYK.'),
+    faceYawn:FACE('KYYYYYYYYYK','KYKKYYYKKYK','KYYYYYYYYYK','KYYYKKKYYYK','KYYKRRRKYYK','.KYYKKKYYK.'),
+    faceSleepy:FACE('KYYYYYYYYYK','KYKKYYYKKYK','KYYYYYYWCYK','KYYYYYYCCYK','KYYYKKKYYYK','.KYYYYYYYK.'),
+    faceSweat:FACE('KYKKYYYCCYK','KYYYYYYCCYK','KYYKYYYKYYK','KYYYYYYYYYK','KYYYKKKYYYK','.KYKYYYKYK.'),
+    faceTeary:FACE('KYYYYYYYYYK','KYKKYYYKKYK','KYKWYYYKWYK','KYCYYYYYCYK','KYCYKKKYCYK','.KYYYYYYYK.'),
+    faceTearSmile:FACE('KYYKYYYKYYK','KYKYKYKYKYK','KYYYYYYYCYK','KYKYYYYYKCK','KYYKKKKKYYK','.KYYYYYYYK.'),
+    faceDevil:['KK.KKKKK.KK','KNKNNNNNKNK','.KNNNNNNNK.','KNKKNNNKKNK','KNNKNNNKNNK','KNNNNNNNNNK','KNKNNNNNKNK','KNNKKKKKNNK','.KNNNNNNNK.','.KKNNNNNKK.','...KKKKK...']
+  });
+  const MOOD_FACES={
+    love:['faceHeartEyes','faceKiss','faceBlush','heart'],
+    happy:['faceGrin','faceLaugh','faceWink','faceTongueWink','faceTongueSquint','faceSmile','note'],
+    energetic:['faceStarEyes','faceGrin','faceTongueSquint','faceLaugh','sparkle'],
+    calm:['faceSmile','faceBlush','faceWink'],
+    hungry:['faceYum','faceDrool','meat'],
+    sleepy:['faceYawn','faceSleepy','zzz'],
+    unwell:['faceSweat','faceTeary','faceTearSmile']
+  };
+  const moodFace=(mood,seq=0)=>{const faces=MOOD_FACES[mood]??MOOD_FACES.calm;return faces[Math.abs(seq|0)%faces.length];};
   // Owner 2026-11-03: the 9x9 anger and sleep pixels read as a pink die and a scribble, so these
   // two are vector marks. Anger: four bright-red arcs bowing in to the centre (the anime vein),
   // inked outline, white sheen. Sleep: three outlined ice-blue Zs climbing small to large.
@@ -1582,10 +1615,10 @@ export async function mountRaisingFieldPixiPresentation({
       partnerEventSeq=event.seq;if(covered)continue;
       if(event.kind==='tap'){const entry=actors.get(event.partnerId);if(!entry)continue;
         if(!reducedMotion&&!prefersReducedMotion())entry.hopStart=performance.now();
-        showPartnerEmote(entry,MOOD_ICON[event.mood]??'smile',{label:event.gained?'+'+event.gained:null});}
+        showPartnerEmote(entry,moodFace(event.mood,event.seq),{label:event.gained?'+'+event.gained:null});}
       // Night disturbance (2026-11-02): a partner woken from its sleep is cross.
-      else if(event.kind==='disturbed')showPartnerEmote(actors.get(event.partnerId),'anger',{ms:1900});
-      else if(event.kind==='greeting'){const icon=event.relation==='rival'?'bolt':'note';
+      else if(event.kind==='disturbed')showPartnerEmote(actors.get(event.partnerId),event.seq%2?'faceDevil':'anger',{ms:1900});
+      else if(event.kind==='greeting'){const icon=event.relation==='rival'?(event.seq%2?'faceDevil':'bolt'):(event.seq%2?'faceGrin':'note');
         for(const id of [event.a,event.b])showPartnerEmote(actors.get(id),icon,{ms:1800});}
       else if(event.kind==='find'){
         for(const id of [event.entry?.partnerId,event.entry?.partnerB].filter(Boolean))showPartnerEmote(actors.get(id),'gift',{ms:1500,label:'×'+(event.entry?.quantity??1)});

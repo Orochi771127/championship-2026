@@ -318,7 +318,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
   evidence.activeMenu=null;write();
  }
  // Owner 2026-10-27: while the dock shows Hunt, Battle, Shop and Database, the System menu does not repeat them.
- async function dock(entry){const key=page.locator(`button[data-quick-id="${entry}"]`);if(!await key.isVisible())return menu('SYSTEM',entry);await clearCalendar();await key.click();}
+ async function dock(entry){const key=page.locator(`button[data-quick-id="${entry}"]`);{ const fold = page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]'); if (await fold.isVisible().catch(() => false)) await fold.click(); }if(!await key.isVisible())return menu('SYSTEM',entry);await clearCalendar();await key.click();}
  async function saveQuit(){await menu('SYSTEM','saveQuit');await page.locator('#cm-login').waitFor({state:'visible'});}
  async function continueSaved(){await login();await page.locator('#cm-continue').click();await home();}
  async function noOverflow(){assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Mobile document must not overflow');}
