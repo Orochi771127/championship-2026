@@ -2057,6 +2057,70 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
 @keyframes cm-nameplate-in { from { opacity: 0; transform: translateX(-50%) translateY(14px) scale(0.96); } }
 @media (min-width: 601px) { :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion[data-open="true"] { animation: cm-panel-in 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both; } }
 
+/* -- 1b) Owner 2026-11-16: a slim nameplate, not a slab. --------------------
+   Portrait phones: two short rows on a slightly see-through card. Row one is the
+   picture, name/place and four round keys (chip/metal boost, previous, next,
+   close); row two is thin HP/TP bars and the capacity tag. The boost keeps
+   its label for screen readers; the field stays visible around the card. */
+@media (max-width: 600px) {
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    grid-template-areas: "portrait copy boost actions" "vitals vitals vitals vitals";
+    row-gap: 5px;
+    column-gap: 6px;
+    width: min(calc(100% - 24px), 440px);
+    padding: 6px 6px 7px 7px;
+    border-width: 2px;
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--ax-paper) 92%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 3px 0 var(--ax-ink), 0 10px 22px rgba(10, 10, 20, 0.22);
+  }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__portrait { width: 40px; height: 40px; border-width: 2px; border-radius: 12px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__copy { min-height: 40px; padding: 0 2px 0 0; row-gap: 2px; container-type: inline-size; }
+  /* Too narrow for place and hearts together: the place wins, no clipped sliver. */
+  @container (max-width: 175px) { :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__mood { display: none !important; } }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__head { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: calc(15px * var(--text-scale, 1)); line-height: 1.15; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__species { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 5px; border-radius: 5px; font-size: calc(9.5px * var(--text-scale, 1)); line-height: 1.5; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__place-row { flex-wrap: nowrap; gap: 4px; overflow: hidden; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__place { flex: 0 0 auto; max-width: 100%; min-width: 0; padding: 0 7px; border-width: 1.5px; font-size: calc(11px * var(--text-scale, 1)); line-height: 1.5; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__place::before { margin-right: 3px; font-size: calc(8px * var(--text-scale, 1)); }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__ranch-icon { width: 13px; height: 13px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__mood:not([hidden]) { flex: 0 1 auto; min-width: 0; overflow: hidden; padding: 0 5px; border-width: 1.5px; line-height: 1.5; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__mood-emoji { font-size: calc(11px * var(--text-scale, 1)); }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__hearts { transform: scale(0.85); transform-origin: left center; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__more { min-width: 12px; font-size: 0; gap: 0; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__actions { gap: 4px; }
+  /* Round keys: one size for boost, previous, next and close. */
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close, .int-rh2-companion__boost) {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    min-height: 38px;
+    padding: 0;
+    border: 2px solid var(--ax-ink);
+    border-radius: 999px;
+    font-size: calc(17px * var(--text-scale, 1));
+    line-height: 1;
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.85), 0 3px 0 var(--ax-ink);
+    transition: transform 120ms var(--ax-spring), box-shadow 120ms var(--ax-spring);
+  }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion :is(.int-rh2-companion__nav, .int-rh2-companion__close, .int-rh2-companion__boost):active { transform: translateY(2px); box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.12), 0 1px 0 var(--ax-ink); transition-duration: 45ms; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__boost:not([hidden]) { display: grid; place-items: center; gap: 0; align-self: center; background: var(--ax-yellow); }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__boost-icon { width: 17px; height: 17px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion__boost-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* Thin meters: label, slim trough, number inside; capacity a small tag. */
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion > .int-rh2-vitals { column-gap: 5px; row-gap: 0; padding-inline: 2px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__label { font-size: calc(10px * var(--text-scale, 1)); line-height: 1; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__bar { height: 14px; border-width: 1.5px; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion .int-rh2-vitals__num { font-size: calc(10px * var(--text-scale, 1)); -webkit-text-stroke-width: 2.5px; padding: 0 4px; }
+  /* Open: a short glide instead of a spring pop. */
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion[data-open="true"] { animation: cm-nameplate-glide 240ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  :root[data-theme="arcade"] body .int-rh2-root .int-rh2-companion[data-open="true"][data-placement="top"] { animation-name: cm-nameplate-glide-down; }
+  @keyframes cm-nameplate-glide { from { opacity: 0; transform: translateX(-50%) translateY(10px); } }
+  @keyframes cm-nameplate-glide-down { from { opacity: 0; transform: translateX(-50%) translateY(-10px); } }
+}
+
 /* -- 2) Roster: a cartridge switcher and a bento of stats. -- */
 :root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
 :root[data-theme="arcade"] body .cm-digimon-root .cm-digimon-item__button {

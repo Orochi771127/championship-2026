@@ -188,8 +188,15 @@ const RAISING_HOME = "[data-screen='RAISING_HOME']";
  * The standalone Hunt button on the Home screen is gone: entries live in the
  * shared toolbar's SYSTEM menu now, alongside database, battle and shop.
  */
+// Short landscape folds Hunt, Battle, Shop and Dex behind the Go key (Owner 2026-11-16).
+async function revealQuickEntries(page) {
+  const fold = page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]');
+  if (await fold.isVisible().catch(() => false)) await fold.click();
+}
+
 async function openHunt(page, { timeout = 15000 } = {}) {
   await page.locator('button[data-menu-id="SYSTEM"]').click();
+  await revealQuickEntries(page);
   await page.locator('[data-entry-id="hunt"]').click();
   await page.waitForSelector("[data-screen='GATE_SELECT']", { timeout });
   // The screen attribute lands before the shell is built. Callers measure the
@@ -431,7 +438,7 @@ async function leaveHuntField(page, { attempts = 30 } = {}) {
 }
 
 module.exports = {
-  login, playStory, playOpening, declineTutorial, startGame, openFreshGame, openHunt, selectEnterableGate,
+  login, playStory, playOpening, declineTutorial, startGame, openFreshGame, openHunt, revealQuickEntries, selectEnterableGate,
   liveWilds, selectHuntTool, captureOneWild, leaveHuntField,
   RAISING_HOME, GATE_CONFIRM, WILD_POSITIONS
 };

@@ -210,6 +210,16 @@
   text-shadow: none;
 }
 :root[data-theme="arcade"] .cm-status-bar__diamond { color: var(--ax-ink); }
+/* Owner 2026-11-16: season and day are readouts, not buttons -- they keep their
+   paper colour but sit flat like the clock (no raised shadow), so only real
+   controls look pressable. */
+:root[data-theme="arcade"] :is(.cm-status-bar__season, .cm-status-bar__day) {
+  border: var(--ax-border);
+  background: var(--ax-paper);
+  box-shadow: none;
+  color: var(--ax-ink);
+}
+:root[data-theme="arcade"] .cm-status-bar__day :is(.cm-status-bar__day-word, .cm-status-bar__day-number) { color: inherit; }
 :root[data-theme="arcade"] .cm-status-bar__time {
   padding: 3px 12px;
   border: var(--ax-border);
@@ -273,14 +283,20 @@
   box-shadow: var(--ax-hl), 0 1px 0 var(--tile-sh);
   transition-duration: var(--ax-t-press);
 }
+/* Owner 2026-11-16: the chosen tool stays pushed in, like a held-down key --
+   it sinks onto its shadow and the face darkens a little; no lift, no ring. */
 :root[data-theme="arcade"] .cm-toolbar__cell[aria-pressed="true"],
-:root[data-theme="arcade"] .cm-toolbar__cell[aria-expanded="true"] {
+:root[data-theme="arcade"] .cm-toolbar__cell[aria-expanded="true"],
+:root[data-theme="arcade"] .cm-toolbar__cell[aria-pressed="true"]:is(:hover, :active):not(:disabled),
+:root[data-theme="arcade"] .cm-toolbar__cell[aria-expanded="true"]:is(:hover, :active):not(:disabled) {
   border-color: var(--ax-ink);
   background: var(--tile);
   color: var(--ax-ink);
-  transform: translateY(-4px);
-  box-shadow: var(--ax-hl), 0 9px 0 var(--tile-sh), 0 0 0 4px var(--ax-yellow), 0 0 0 7px var(--ax-ink);
+  transform: translateY(4px);
+  box-shadow: inset 0 3px 0 rgb(0 0 0 / 0.18), inset 0 -2px 0 rgb(255 255 255 / 0.22), 0 1px 0 var(--tile-sh);
+  filter: brightness(0.9) saturate(1.08);
 }
+:root[data-theme="arcade"] .cm-toolbar__cell:is([aria-pressed="true"], [aria-expanded="true"])::before { transform: translateY(1px) scale(0.96); }
 :root[data-theme="arcade"] .cm-toolbar__cell:disabled { opacity: 0.45; filter: grayscale(0.7); }
 :root[data-theme="arcade"] .cm-toolbar__stock {
   top: -8px;
@@ -490,6 +506,115 @@
   :root[data-theme="arcade"] .cm-toolbar__quick:not([hidden]) { order: -1; flex: 0 0 auto; width: auto; grid-template-columns: repeat(2, 80px); gap: 6px; margin: 0 0 calc(6px + var(--safe-bottom)); }
   :root[data-theme="arcade"] .cm-toolbar__quick-entry { min-height: 40px; padding: 2px 4px 4px; grid-auto-flow: column; gap: 4px; }
     :root[data-theme="arcade"] .cm-toolbar__quick-entry .cm-toolbar__entry-label { font-size: var(--fs-label); }
+}
+
+/* ---- Owner 2026-11-16: landscape ranch -- fold-away destinations, hint over its key ---- */
+/* Hunt, Battle, Shop and Dex fold into one Go key at the rail's end and spring up
+   above it on a press; picking one, pressing a rail key, Escape or a press
+   outside folds them away. The care-tool hint sits over the chosen key, not
+   over the middle of the field. Portrait and desktop keep the open dock. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"]:has(> .cm-toolbar__quick-toggle:not([hidden])) {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 8px;
+  }
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"]:has(> .cm-toolbar__quick-toggle:not([hidden])) > .cm-toolbar__rail { flex: 1 1 auto; width: auto; min-width: 0; }
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle:not([hidden]) {
+    position: relative;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 3px;
+    flex: 0 0 auto;
+    align-self: stretch;
+    width: 64px;
+    min-height: 48px;
+    margin: 0;
+    padding: 0 4px;
+    border: var(--ax-border);
+    border-radius: 16px;
+    background: var(--ax-yellow);
+    color: var(--ax-ink);
+    font-size: var(--fs-label);
+    font-weight: var(--fw-heavy);
+    box-shadow: var(--ax-hl), 0 5px 0 var(--ax-yellow-sh);
+    transition: transform 120ms var(--ax-spring), box-shadow 120ms var(--ax-spring), filter 120ms ease-out;
+  }
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle:not([hidden])::before {
+    content: "";
+    width: 12px;
+    height: 8px;
+    background: currentColor;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    transition: rotate 200ms ease-out;
+  }
+  /* Open, it stays pushed in like the chosen care tool. */
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle:is([aria-expanded="true"], :active):not([hidden]) {
+    transform: translateY(4px);
+    box-shadow: inset 0 3px 0 rgb(0 0 0 / 0.18), 0 1px 0 var(--ax-yellow-sh);
+    filter: brightness(0.92);
+  }
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick-toggle[aria-expanded="true"]:not([hidden])::before { rotate: 180deg; }
+  /* Unspent gachapon tickets: the Shop key's badge becomes a dot on the folded key. */
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="false"]:has(.cm-toolbar__quick-entry[data-gacha-tickets]:not([data-gacha-tickets="0"])) > .cm-toolbar__quick-toggle:not([hidden])::after {
+    content: "";
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--ax-ink);
+    border-radius: 50%;
+    background: var(--ax-red);
+  }
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick:not([hidden]) {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 10px);
+    order: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 116px;
+    margin: 0;
+    pointer-events: none;
+  }
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry {
+    min-height: 42px;
+    animation: none;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(18px) scale(0.8);
+    transform-origin: right bottom;
+    transition: transform 160ms ease-in, opacity 120ms ease-in, visibility 0s linear 160ms;
+  }
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+    transition: transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 140ms ease-out, visibility 0s;
+  }
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry:nth-child(3) { transition-delay: 40ms, 40ms, 0s; }
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry:nth-child(2) { transition-delay: 80ms, 80ms, 0s; }
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry:nth-child(1) { transition-delay: 120ms, 120ms, 0s; }
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"][data-quick-open="true"] > .cm-toolbar__quick:not([hidden]) > .cm-toolbar__quick-entry:active:not(:disabled) { transform: translateY(3px); transition-duration: 45ms; transition-delay: 0s; }
+  /* The care-tool hint rides just above its own key. */
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] .cm-toolbar__tool-hint {
+    left: var(--cm-tool-hint-left, 8px);
+    bottom: calc(100% + 10px);
+    transform: none;
+    max-width: min(420px, calc(100% - var(--cm-tool-hint-left, 8px) - 8px));
+    padding: 3px 3px 3px 10px;
+    font-size: var(--fs-label);
+  }
+}
+:root[data-theme="arcade"][data-motion="reduced"] .cm-toolbar[data-mode="1"] :is(.cm-toolbar__quick-toggle, .cm-toolbar__quick-entry) { transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="arcade"]:not([data-motion]) .cm-toolbar[data-mode="1"] :is(.cm-toolbar__quick-toggle, .cm-toolbar__quick-entry) { transition: none !important; }
 }
 
 /* ---- Reduced motion: colour and opacity stay, travel goes ----------------------------- */

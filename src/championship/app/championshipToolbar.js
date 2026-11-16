@@ -343,8 +343,33 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
   // Quick dock: shown with the Training rail only, and never during a tutorial
   // step, which keeps guiding the player through the System menu itself.
   const quick = element("div", "cm-toolbar__quick");
+  quick.id = "cm-toolbar-quick";
   quick.setAttribute("role", "group");
   quick.hidden = true;
+  // Owner 2026-11-16: on a short landscape screen the four destinations fold
+  // into one Go key at the rail's end and spring up when it is pressed. Only
+  // the landscape arcade sheet draws this key; elsewhere the dock stays open.
+  const quickToggle = element("button", "cm-toolbar__quick-toggle");
+  quickToggle.type = "button";
+  quickToggle.hidden = true;
+  quickToggle.setAttribute("aria-controls", quick.id);
+  quickToggle.setAttribute("aria-expanded", "false");
+  const quickToggleLabel = element("span", "cm-toolbar__quick-toggle-label", "出發");
+  quickToggle.append(quickToggleLabel);
+  bar.dataset.quickOpen = "false";
+  function setQuickOpen(open) {
+    const value = String(Boolean(open) && !quick.hidden);
+    bar.dataset.quickOpen = value;
+    quickToggle.setAttribute("aria-expanded", value);
+  }
+  quickToggle.addEventListener("click", () => {
+    closeMenu();
+    setQuickOpen(bar.dataset.quickOpen !== "true");
+  });
+  // Picking a destination folds the keys away again.
+  quick.addEventListener("click", (event) => {
+    if (event?.target?.closest?.("button")) setQuickOpen(false);
+  });
   function paintQuick() {
     if (disposed) return;
     const system = TOOLBAR_MENUS.find((menu) => menu.id === "SYSTEM");
@@ -354,6 +379,9 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
       .filter(Boolean)
       .map((entry) => entryButton(entry, "cm-toolbar__quick-entry")));
     quick.hidden = currentMode !== TOOLBAR_MODES.TRAINING || tutorialTool !== null;
+    quickToggle.hidden = quick.hidden;
+    quickToggleLabel.textContent = uiText("出發");
+    if (quick.hidden) setQuickOpen(false);
     syncDock();
   }
   // A shown dock key is that entry's only button (the menu omits it), so it
@@ -370,7 +398,8 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
   }
 
   // Appended last: the menu, rail and hint keep their order; the arcade sheet draws the dock above the rail.
-  bar.append(menuPanel, rail, toolHint, quick);
+  // The Go key comes just before the keys it unfolds, so Tab moves from it into them.
+  bar.append(menuPanel, rail, toolHint, quickToggle, quick);
   root.append(bar);
   let hintedTool = null;
   function syncToolHintClearance() {
@@ -396,25 +425,39 @@ export function createChampionshipToolbar({ responsiveLayout = false, root, onMe
     }
     toolName.textContent = uiText(tool?.label ?? "");
     toolText.textContent = uiText(tool?.hint ?? "");
+    anchorToolHint();
     syncToolHintClearance();
     const body = root.ownerDocument?.body ?? null;
     if (body?.dataset) {
       if (tool) body.dataset.tool = tool.id; else delete body.dataset.tool;
     }
   }
+  // Where the chosen key sits along the bar, so a short landscape screen can
+  // pin the hint over that key instead of the middle of the field.
+  function anchorToolHint() {
+    const cell = selectedTool ? rail.querySelector?.(`[data-tool-id="${selectedTool}"]`) : null;
+    const barBox = bar.getBoundingClientRect?.();
+    const cellBox = cell?.getBoundingClientRect?.();
+    if (!barBox?.width || !cellBox?.width) { toolHint.style?.removeProperty?.("--cm-tool-hint-left"); return; }
+    toolHint.style?.setProperty?.("--cm-tool-hint-left", `${Math.round(cellBox.left - barBox.left)}px`);
+  }
   toolDone.addEventListener("click", () => { if (selectedTool) selectTool(selectedTool); });
+  // Any rail key folds the destination keys away.
+  rail.addEventListener("click", () => { if (bar.dataset.quickOpen === "true") setQuickOpen(false); });
   // An open menu closes on Escape (focus returns to its button) or on a press
   // anywhere outside the toolbar; the press itself still reaches its target.
   const ownerDocument = root.ownerDocument ?? globalThis.document;
   function onMenuKey(event) {
+    if (event.key === "Escape" && bar.dataset.quickOpen === "true") { setQuickOpen(false); quickToggle.focus?.(); return; }
     if (event.key !== "Escape" || openMenuId === null) return;
     const opener = rail.querySelector?.(`[data-menu-id="${openMenuId}"]`);
     closeMenu();
     opener?.focus?.();
   }
   function onOutsidePress(event) {
-    if (openMenuId === null || bar.contains?.(event.target)) return;
-    closeMenu();
+    if (bar.contains?.(event.target)) return;
+    if (bar.dataset.quickOpen === "true") setQuickOpen(false);
+    if (openMenuId !== null) closeMenu();
   }
   ownerDocument?.addEventListener?.("keydown", onMenuKey);
   ownerDocument?.addEventListener?.("pointerdown", onOutsidePress, true);
