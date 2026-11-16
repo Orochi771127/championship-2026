@@ -60,12 +60,16 @@ const SLOT_KEYS = Object.freeze(["RMB·2", "Q·3", "E·4"]);
 const KIT_KEYS = Object.freeze({ basic: "LMB·1", ult: "R" });
 const kitKey = (touch, slot) => touch ? (slot === "basic" ? t("kit.basic") : slot === "ult" ? t("kit.ult") : t("kit.slot", { n: slot + 1 }))
   : (KIT_KEYS[slot] ?? SLOT_KEYS[slot]);
-const MODES = Object.freeze(["TOURNAMENT", "HARBOR", "RELAY"]);
+const MODES = Object.freeze(["TOURNAMENT", "HARBOR", "RELAY", "SURVIVAL"]);
+// SURVIVAL (P4 prototype) is the harbor match with a storm and rival tamers: it seats, briefs and loads like the harbor.
+const harborLike = (mode) => mode === "HARBOR" || mode === "SURVIVAL";
 // Mode cartridge glyphs (stroked SVG paths in a 24 grid): crossed blades, a wave, a relay bolt.
 const MODE_GLYPHS = Object.freeze({
   TOURNAMENT: "M4 20 15 9M15 9l1-5 4 4-5 1M20 20 9 9M9 9 8 4 4 8l5 1M6 15l3 3M18 15l-3 3",
   HARBOR: "M3 15c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 19c2-2 4-2 6 0s4 2 6 0 4-2 6 0M12 3v8M8 7l4-4 4 4",
-  RELAY: "M13 2 5 13h6l-2 9 9-12h-6l1-8z"
+  RELAY: "M13 2 5 13h6l-2 9 9-12h-6l1-8z",
+  // SURVIVAL: the closing storm ring around a safe circle, with four inward ticks.
+  SURVIVAL: "M12 3a9 9 0 1 0 0 18 9 9 0 1 0 0-18M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 1 0 0-7M12 0v4M12 20v4M0 12h4M20 12h4"
 });
 function glyph(path, className = "da-glyph") {
   const svg = svgElement("svg");
@@ -712,6 +716,13 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         }, `${slotNo}|${pName}|${metaText}|${hpShare}|${down ? 1 : 0}|${counters ? 1 : 0}|${elKey}|${pArt}`);
         put(`tswitchCool_${btnIdx}`, btn, (node, value) => setCool(node, value), coolShare);
       });
+    } else if (objective.id === "SURVIVAL") {
+      // The storm countdown in the timer slot, the field in the objective slot, and a red edge outside the circle.
+      put("timer", hudRefs.timer, text, objective.stormIn === null ? "—" : formatTime(objective.stormIn));
+      put("timerLow", hudRefs.timer, (node, v) => node.classList.toggle("is-low", v), objective.closing || objective.outside);
+      put("lowTimeVignette", hudRefs.vignette, (node, v) => node.classList.toggle("is-final30", v), objective.outside);
+      put("phase", hudRefs.phase, text, objective.outside ? t("survival.outside") : objective.closing ? t("survival.closing") : t("survival.storm", { stage: objective.stage }));
+      put("objective", hudRefs.objective, text, t("objective.SURVIVAL", { count: objective.left + 1 }));
     } else if (objective.id === "DUEL") {
       const final = objective.round === objective.rounds;
       put("timer", hudRefs.timer, text, formatTime(objective.timeLeft));
@@ -959,6 +970,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           break;
         case "BRIDGE_LIFTED": tactical(t("toast.bridge"), { tone: "warn", key: "bridge" }); break;
         case "BOSS_SPAWN": audio?.play("roar"); break;
+        case "SURVIVAL_ENCOUNTER": audio?.play("warn"); tactical(t("survival.encounter", { n: event.tamer + 1 }), { tone: "boss", key: "survival-encounter" }); break;
+        case "SURVIVAL_OUT":
+          if (event.by === "PLAYER") { audio?.play("capture"); banner(t("survival.out.PLAYER", { n: event.tamer + 1 }), "good", 1600); }
+          else tactical(t(`survival.out.${event.by}`, { n: event.tamer + 1, left: event.left + 1 }), { tone: "phase", key: `survival-out-${event.tamer}` });
+          break;
+        case "STORM_CLOSE": if (event.stage > 0) { audio?.play("warn"); tactical(t("survival.closing"), { tone: "warn", key: "storm" }); } break;
+        case "STORM_HIT": tactical(t("survival.outside"), { tone: "warn", key: "storm-hit", ms: 900 }); break;
+        case "SURVIVAL_WIN": audio?.play("burst"); banner(t("survival.win"), "good", 2000); break;
         case "BOSS_ENRAGE": audio?.play("roar"); tactical(t("toast.bossEnrage"), { tone: "boss" }); break;
         case "SLAM": audio?.play("slam"); break;
         case "WALL_SLAM": audio?.play("slam"); toast(t(event.target === "rival" ? "fct.wallSlamRival" : "fct.wallSlam"), { x: event.x, y: event.y - 60, tone: event.target === "rival" ? "crit" : "warn", key: `slam-${event.target}`, gap: 800 }); break;
@@ -1227,7 +1246,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     // Harbor art is loaded on entry only; a failed pack keeps the playable
     // geometry and existing presentation available. No character texture changes.
     const scopedMatchPIXI = typeof createPixiAssetScope === "function" ? createPixiAssetScope(stage.PIXI, href, { signal: owner.signal }) : stage.PIXI;
-    if (gameMode === 'HARBOR' || gameMode === 'TOURNAMENT' || gameMode === 'RELAY') {
+    if (gameMode === 'HARBOR' || gameMode === 'SURVIVAL' || gameMode === 'TOURNAMENT' || gameMode === 'RELAY') {
       const next = await optionalMatchArt(owner, loadDataArenaEnvironment({ PIXI: scopedMatchPIXI, renderer:stage.app.renderer, map: sim.grid.map, quality, href, signal:owner.signal }), "DATA_ARENA_ENVIRONMENT_FALLBACK");
       owner.signal.throwIfAborted(); environment = next; owner.transfer(next);
     }
@@ -1256,6 +1275,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     music?.setScene(selectDataArenaMusic(gameMode), `arena:${matchId}`);
     if (!ok) tactical(t("loading.failed"), { tone: "warn", key: "art" });
     if (gameMode === "HARBOR") banner(t("phase.WARMUP"), "phase", 2200);
+    else if (gameMode === "SURVIVAL") banner(t("survival.start"), "phase", 2200);
     else handleEvents(sim.drainEvents()); // the first ROUND_INTRO was queued at construction
     field.focus?.({ preventScroll: true });
   }
@@ -1382,7 +1402,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       const tags = el("div", "da-taxonomy");
       tags.append(taxonomyBadgeRow(taxonomy), elementChartButton(taxonomy?.element ?? null));
       body.append(label, title);
-      if (gameMode === "HARBOR" && relayPartner(id)?.canSwim) tags.appendChild(el("span", "da-entry da-entry--swim", t("harbor.swim")));
+      if (harborLike(gameMode) && relayPartner(id)?.canSwim) tags.appendChild(el("span", "da-entry da-entry--swim", t("harbor.swim")));
       const seatIdx = seat === "third" ? 2 : seat === "reserve" ? 1 : 0;
       const change = button("da-seat__change", t("seat.change"), () => openDrawer(seatIdx), signal);
       change.setAttribute("aria-label", `${t("seat.change")}：${t(`seat.${seat}`)}`);
@@ -1462,7 +1482,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       card.append(art, head);
       if (!usable) { card.append(el("span", "da-partner__perk", t("entry.lockedHint"))); return card; }
       card.append(taxonomyBadgeRow(taxonomy));
-      if (gameMode === "HARBOR" && partner.canSwim) card.append(el("span", "da-entry da-entry--swim", t("harbor.swim")));
+      if (harborLike(gameMode) && partner.canSwim) card.append(el("span", "da-entry da-entry--swim", t("harbor.swim")));
       if (partner.perk) card.append(el("span", "da-partner__perk", t(`perk.${partner.perk}`)));
       const stats = el("span", "da-partner__stats");
       const meter = (label, value, max) => { const line = el("span", "da-meter"); line.append(el("span", "", label)); const bar = el("span", "da-meter__bar"); bar.style.setProperty("--v", Math.min(1, value / max).toFixed(2)); line.append(bar); return line; };
@@ -1512,7 +1532,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       const rows = entriesFor(gameMode);
       const sheet = el("div", "da-drawer__sheet");
       const top = el("header", "da-drawer__head");
-      const drawerSeatKey = gameMode === "RELAY" ? (drawerSeat === 2 ? "third" : drawerSeat === 1 ? "reserve" : "first") : gameMode === "HARBOR" ? "first" : "ace";
+      const drawerSeatKey = gameMode === "RELAY" ? (drawerSeat === 2 ? "third" : drawerSeat === 1 ? "reserve" : "first") : harborLike(gameMode) ? "first" : "ace";
       const seatName = t(`seat.${drawerSeatKey}`);
       top.append(el("strong", "da-drawer__title", t("drawer.title")), el("span", "da-drawer__seat", t("drawer.forSeat", { seat: seatName })),
         button("da-drawer__close", t("drawer.close"), closeDrawer, signal));
@@ -1590,13 +1610,13 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       // The dock: one ace seat in the tournament, the partner plus the fixed harbor mate, or the relay pair.
       const seats = el("div", "da-dock__seats");
       if (gameMode === "TOURNAMENT") seats.append(seatCard(partnerId, "ace"));
-      else if (gameMode === "HARBOR") {
+      else if (harborLike(gameMode)) {
         const mate = el("article", "da-seat da-seat--mate");
         mate.dataset.seat = "mate";
         const art = el("div", "da-seat__art"); art.appendChild(cast.mate.art?.speciesId ? createActionPortrait({ species: cast.mate.art.speciesId, className: "da-seat__img da-partner__body", lazy: false }).element
           : cast.mate.art ? Object.assign(el("img", "da-seat__img"), { alt: "", src: cast.mate.art.portraitUrl }) : el("span", "da-seat__img da-partner__art--fallback"));
         const body = el("div", "da-seat__body");
-        body.append(el("span", "da-seat__label", t("seat.mate")), el("strong", "da-seat__name", cast.mate.name), el("p", "da-matchup", t("seat.mateNote")));
+        body.append(el("span", "da-seat__label", t("seat.mate")), el("strong", "da-seat__name", cast.mate.name), el("p", "da-matchup", t(gameMode === "SURVIVAL" ? "seat.mateNote.SURVIVAL" : "seat.mateNote")));
         mate.append(art, body);
         seats.append(seatCard(partnerId, "first"), mate);
       } else {
@@ -1668,7 +1688,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   function showBriefing() {
     root.dataset.state = "BRIEF";
     const panel = el("div", "da-panel da-panel--brief");
-    const duel = gameMode !== "HARBOR";
+    const duel = !harborLike(gameMode);
     panel.append(el("h2", "da-title", t("brief.heading")), el("p", "da-goal", t(gameMode === "RELAY" ? "relay.goal" : duel ? "brief.T.goal" : "brief.goal")));
     const listing = el("ul", "da-controls");
     const lines = gameMode === 'RELAY' && touchActive ? ['brief.touch.move', 'relay.touch.attack', 'relay.touch.buttons'] : duel
@@ -1854,6 +1874,12 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       }
       panel.append(rounds, el("p", "da-result__line", t("result.tStats", { moves: result.stats.movesCast, ults: result.stats.ultimates, blocks: result.stats.barrierBlocks, perfect: result.stats.perfectDodges, dodges: result.stats.rivalDodges })));
     } else {
+      // SURVIVAL (P4 prototype): the place first, then the usual lines.
+      if (result.survival) {
+        const place = el("p", "da-result__line da-result__rank", [t("survival.rank", { rank: result.survival.rank, of: result.survival.of }), t("survival.knockouts", { n: result.survival.knockouts })].join("　"));
+        place.dataset.rank = String(result.survival.rank);
+        panel.append(place);
+      }
       panel.append(
         el("p", "da-result__line", [t("result.time", { time: formatTime(result.timeSeconds) }), t("result.kills", { count: result.kills }), t("result.level", { level: result.level })].join("　")),
         el("p", "da-result__line", t("result.breakdown", result.breakdown)),
