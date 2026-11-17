@@ -15,7 +15,9 @@ Done in the first batch:
 
 - U3 (second part): every species ultimate (204) lands a three.js piece no other ultimate plays (42 library effects × 6 variants of size, pace and camera angle, picked to fit each move's palette and archetype; `scripts/vfx/move-piece-3d-ultimates.json` keeps the pick). Each loads as its own small module. The bake now reads the ground anchor after the camera is placed (the first batch's ground anchors were corrected).
 
-Not done yet: the icons (U2, generating), the Data Arena moves in the auto battle (U1-2/3), and a piece of its own for every skill and basic move (U3 continues).
+- U3 (third part): every species skill (157) lands a three.js piece no other skill of its element plays, from six skill variants (smaller and quicker) so none repeats an ultimate's look (`scripts/vfx/move-piece-3d-skills.json`).
+
+Not done yet: the icons (U2, generating), the Data Arena moves in the auto battle (U1-2/3), and the basic moves' own pieces (U3 continues).
 <!-- record-id: TAMER_TALENTS_T5_20261118 -->
 ## 2026-11-18 — Tamer talents T5: 安撫 and the first three keystones
 
