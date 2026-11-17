@@ -28,7 +28,7 @@ const HAND = Object.freeze({
   '3d-charged-beam': beam('charged-beam', {hit: 1.5, from: 1.9, until: 2.8, stop: 2.4, group: 'storm', base: 'lance'}),
   '3d-arcane-matrix': field('arcane-matrix', {group: 'storm', base: 'eye'}),
   // ---- fire
-  '3d-fire-blast': burst('fire-explosion', {cam: {el: 0.3, d: 6.5}, until: 0.75, noSmoke: true, group: 'fire', base: 'core'}),
+  '3d-fire-blast': burst('fire-explosion', {cam: {el: 0.3, d: 8.5}, from: 0.12, until: 0.8, noSmoke: true, fit: 1.4, group: 'fire', base: 'core'}),
   '3d-fireburst': burst('rolling-fireburst', {anchor: 'contact', group: 'fire', base: 'core'}),
   '3d-fireball-hit': shot('fireball', {opaque: true, group: 'fire', base: 'core'}),
   '3d-flame-surge': burst('flame-surge', {until: 1.1, fit: 1.6, group: 'fire', base: 'rush'}),
@@ -46,7 +46,7 @@ const HAND = Object.freeze({
   '3d-tidal-surge': burst('tidal-surge', {cam: {el: 0.35, d: 8, ly: 0.9}, until: 1.6, bloom: 0.92, fit: 2.0, group: 'water', base: 'wave'}),
   '3d-tidal-surge-b': burst('tidal-surge', {o: {size: 1.4}, cam: {el: 0.5, d: 9, ly: 0.9, az: 0.5}, until: 1.7, bloom: 0.92, fit: 2.4, group: 'water', base: 'wave'}),
   '3d-steam-jet': field('steam-jet', {cam: {el: 0.25, d: 7}, fit: 1.4, group: 'water', base: 'mist'}),
-  '3d-wind-vortex': field('wind-vortex', {cam: {el: 0.42, d: 10.5}, until: 1.8, stop: 1.1, fit: 1.8, group: 'water', base: 'vortex'}),
+  '3d-wind-vortex': field('wind-vortex', {cam: {el: 0.42, d: 15}, until: 1.8, stop: 1.1, fit: 1.8, group: 'water', base: 'vortex'}),
   '3d-pool': field('venom-pool', {group: 'water', base: 'splat'}),
   // ---- light
   '3d-astral-convergence': burst('astral-convergence', {until: 1.4, fit: 1.8, anchor: 'contact', group: 'light', base: 'rain'}),
@@ -64,7 +64,7 @@ const HAND = Object.freeze({
   '3d-aegis': field('aegis-weave', {opaque: true, cam: C, fit: 1.5, anchor: 'contact', group: 'light', base: 'buff-def'}),
   '3d-aegis-b': field('aegis-weave', {opaque: true, o: {size: 1.3}, cam: {el: 0.5, d: 7, az: 0.5}, fit: 1.5, anchor: 'contact', group: 'light', base: 'buff-def'}),
   '3d-airburst': burst('billowing-airburst', {until: 0.8, noSmoke: true, fit: 1.4, anchor: 'contact', group: 'light', base: 'fist'}),
-  '3d-energy-vortex': field('energy-vortex', {cam: {el: 0.42, d: 10.5}, until: 1.8, stop: 1.1, fit: 1.8, group: 'light', base: 'vortex'}),
+  '3d-energy-vortex': field('energy-vortex', {cam: {el: 0.42, d: 15}, until: 1.8, stop: 1.1, fit: 1.8, group: 'light', base: 'vortex'}),
   // ---- nature
   '3d-thorn-crown': field('thorn-crown', {group: 'nature', base: 'vines'}),
   '3d-thorn-crown-b': field('thorn-crown', {o: {quantity: 2, size: 0.8}, cam: {el: 0.3, d: 6.5, az: 0.6}, fit: 1.4, group: 'nature', base: 'vines'}),
@@ -74,14 +74,14 @@ const HAND = Object.freeze({
   // ---- shadow
   '3d-darkchain': burst('darkchain-detonation', {cam: {el: 0.35, d: 8}, until: 1.8, fit: 2.2, group: 'shadow', base: 'vortex'}),
   '3d-binding-curse': field('binding-curse', {group: 'shadow', base: 'eye'}),
-  '3d-fire-vortex': field('fire-vortex', {cam: {el: 0.42, d: 10.5}, until: 1.8, stop: 1.1, fit: 1.8, group: 'shadow', base: 'vortex'}),
+  '3d-fire-vortex': field('fire-vortex', {cam: {el: 0.42, d: 15}, until: 1.8, stop: 1.1, fit: 1.8, group: 'shadow', base: 'vortex'}),
   '3d-smoke-column': field('smoke-column', {fit: 1.4, group: 'shadow', base: 'mist'}),
   // ---- earth and body blows
   '3d-shockwave': burst('shockwave', {until: 1.0, group: 'earth', base: 'quake'}),
   '3d-shockwave-b': burst('shockwave', {o: {size: 0.8, speed: 1.3}, cam: {el: 0.5, d: 6, az: 0.5}, until: 0.9, fit: 1.3, group: 'earth', base: 'rush'}),
   '3d-fissure': burst('magma-fissure', {cam: {el: 0.4, d: 8}, until: 1.4, fit: 2.2, group: 'earth', base: 'quake'}),
   '3d-quicksand': field('quicksand-seal', {group: 'earth', base: 'quake'}),
-  '3d-dust-devil': field('dust-devil', {cam: {el: 0.42, d: 10.5}, until: 1.6, stop: 0.9, fit: 1.6, group: 'earth', base: 'spin'}),
+  '3d-dust-devil': field('dust-devil', {cam: {el: 0.42, d: 15}, until: 1.6, stop: 0.9, fit: 1.6, group: 'earth', base: 'spin'}),
   '3d-smoke-puff': burst('smoke-puff', {until: 1.0, fit: 1.3, anchor: 'contact', group: 'earth', base: 'fist'}),
   // ---- second-round variants (replacing pieces that baked faint or boxed)
   '3d-burning-ground-b': field('burning-ground', {o: {size: 0.8, density: 0.8}, cam: {el: 0.3, d: 7, az: 0.6}, fit: 1.5, group: 'fire', base: 'buff-def'}),
@@ -106,11 +106,11 @@ const SHAPES = Object.freeze({
   'arc-ray': beam('arc-ray'), 'sustained-arc': beam('sustained-arc', {opaque: true}),
   'charged-beam': beam('charged-beam', {hit: 1.5, from: 1.9, until: 2.8, stop: 2.4}), 'radiant-beam': beam('radiant-beam'),
   'arcane-matrix': field('arcane-matrix'),
-  'fire-explosion': burst('fire-explosion', {cam: {el: 0.3, d: 6.5}, until: 0.75, noSmoke: true}),
+  'fire-explosion': burst('fire-explosion', {cam: {el: 0.3, d: 8.5}, from: 0.12, until: 0.8, noSmoke: true, fit: 1.4}),
   'rolling-fireburst': burst('rolling-fireburst', {anchor: 'contact'}), fireball: shot('fireball', {opaque: true}),
   'flame-surge': burst('flame-surge', {until: 1.1}), 'burning-ground': field('burning-ground'),
   'magma-fissure': burst('magma-fissure', {cam: {el: 0.4, d: 8}, until: 1.4, fit: 2.2}),
-  'fire-vortex': field('fire-vortex', {cam: {el: 0.42, d: 10.5}, until: 1.8, stop: 1.1}),
+  'fire-vortex': field('fire-vortex', {cam: {el: 0.42, d: 15}, until: 1.8, stop: 1.1}),
   'billowing-airburst': burst('billowing-airburst', {until: 0.8, noSmoke: true, fit: 1.4, anchor: 'contact'}),
   'ice-shatter': burst('ice-shatter', {cam: {el: 0.3, d: 6}}),
   'frost-lance-rain': burst('frost-lance-rain', {cam: {el: 0.35, d: 8}, until: 1.5, fit: 1.8}),
@@ -120,7 +120,7 @@ const SHAPES = Object.freeze({
   'frost-wheel': shot('frost-wheel'),
   'tidal-surge': burst('tidal-surge', {cam: {el: 0.35, d: 8, ly: 0.9}, until: 1.6, bloom: 0.92, fit: 2.0}),
   'steam-jet': field('steam-jet', {cam: {el: 0.25, d: 7}, fit: 1.4}),
-  'wind-vortex': field('wind-vortex', {cam: {el: 0.42, d: 10.5}, until: 1.8, stop: 1.1}),
+  'wind-vortex': field('wind-vortex', {cam: {el: 0.42, d: 15}, until: 1.8, stop: 1.1}),
   'venom-pool': field('venom-pool'),
   'astral-convergence': burst('astral-convergence', {until: 1.4, fit: 1.8, anchor: 'contact'}),
   'sacred-relic-descent': burst('sacred-relic-descent', {cam: {el: 0.32, d: 8, ly: 1}, until: 2.0, fit: 2.0}),
@@ -128,13 +128,13 @@ const SHAPES = Object.freeze({
   'starblade-cataclysm': burst('starblade-cataclysm', {cam: {el: 0.3, d: 7, ly: 0.9}, until: 1.8}),
   'prism-parry': burst('prism-parry', {until: 0.7, fit: 1.3, anchor: 'contact'}),
   'prism-guard': field('prism-guard', {cam: C, fit: 1.4, anchor: 'contact'}),
-  'energy-vortex': field('energy-vortex', {cam: {el: 0.42, d: 10.5}, until: 1.8, stop: 1.1}),
+  'energy-vortex': field('energy-vortex', {cam: {el: 0.42, d: 15}, until: 1.8, stop: 1.1}),
   'thorn-crown': field('thorn-crown'), 'verdant-restoration': field('verdant-restoration', {opaque: true, cam: C, fit: 1.5}),
   'binding-curse': field('binding-curse'), 'plasma-bolt': shot('plasma-bolt'),
   'darkchain-detonation': burst('darkchain-detonation', {cam: {el: 0.35, d: 8}, until: 1.8, fit: 2.2}),
   'smoke-column': field('smoke-column', {fit: 1.4}),
   shockwave: burst('shockwave', {until: 1.0}), 'quicksand-seal': field('quicksand-seal'),
-  'dust-devil': field('dust-devil', {cam: {el: 0.42, d: 10.5}, until: 1.6, stop: 0.9}),
+  'dust-devil': field('dust-devil', {cam: {el: 0.42, d: 15}, until: 1.6, stop: 0.9}),
   'smoke-puff': burst('smoke-puff', {until: 1.0, fit: 1.3, anchor: 'contact'})
 });
 const VARIANTS = Object.freeze([

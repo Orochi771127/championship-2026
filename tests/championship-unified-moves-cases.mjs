@@ -55,3 +55,11 @@ test('group modules load on demand and carry the MIT notices of 00GameDevs and t
   assert.equal(await loadMoveVfx3dPieces([name, 'rush', null]), true);
   assert.ok(bakedPieceLook(name)?.frames?.length > 0);
 });
+
+test('a ground or contact anchor sits inside its piece (the bake reads the origin after the camera is placed)', async () => {
+  for (const [name, group] of Object.entries(MOVE_VFX_3D_PIECE_GROUP)) {
+    const look = (await MOVE_VFX_3D_PIECE_GROUPS[group]()).MOVE_VFX_PIECE_SPRITES[name];
+    assert.ok(look.ox >= -look.w * 0.1 && look.ox <= look.w * 1.1, `${name} ox ${look.ox} of ${look.w}`);
+    assert.ok(look.oy >= -look.h * 0.25 && look.oy <= look.h * 1.25, `${name} oy ${look.oy} of ${look.h}`);
+  }
+});

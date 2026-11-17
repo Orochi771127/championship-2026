@@ -13,7 +13,9 @@ Done in the first batch:
   - They are finished like the pixelfx pieces and loaded per element group only when a move needs one; the shared piece plays until the group arrives.
   - The MIT notices of 00GameDevs and three.js ride in every group module.
 
-Not done yet: the icons (U2, generating), the Data Arena moves in the auto battle (U1-2/3), and a piece of its own for every ultimate and skill (U3 continues).
+- U3 (second part): every species ultimate (204) lands a three.js piece no other ultimate plays (42 library effects × 6 variants of size, pace and camera angle, picked to fit each move's palette and archetype; `scripts/vfx/move-piece-3d-ultimates.json` keeps the pick). Each loads as its own small module. The bake now reads the ground anchor after the camera is placed (the first batch's ground anchors were corrected).
+
+Not done yet: the icons (U2, generating), the Data Arena moves in the auto battle (U1-2/3), and a piece of its own for every skill and basic move (U3 continues).
 <!-- record-id: EXTERNAL_ASSET_RETRY_20261118 -->
 ## 2026-11-18 — A passing asset-host fault is tried again before partner art is called lost
 
