@@ -3,7 +3,7 @@
 // the application and sends two intents (learn, respec). A node whose effect is not wired yet is shown greyed as
 // "not open" and has no key to press, so a point is never spent on something that does nothing.
 
-import { talentText, talentEffectText } from "../text/tamerTalentText.js";
+import { talentText, talentEffectText, talentKeystoneText } from "../text/tamerTalentText.js";
 
 function el(doc, tag, className, text) {
   const node = doc.createElement(tag);
@@ -53,7 +53,7 @@ export function createTamerTalentPanel({ frame, learn, respec, doc = globalThis.
         for (const node of nodes) block.append(row(node, node.open ? talentEffectText(node) : talentText("TALENT_NOT_OPEN")));
       }
       block.append(el(doc, "p", "cm-talents__tier", talentText("keystone", { gate: line.keystoneGate })));
-      for (const key of line.keystones) block.append(row({ ...key, rank: key.taken ? 1 : 0, max: 1 }, key.open ? "" : talentText("TALENT_NOT_OPEN")));
+      for (const key of line.keystones) block.append(row({ ...key, rank: key.taken ? 1 : 0, max: 1 }, key.open ? talentKeystoneText(key.id) : talentText("TALENT_NOT_OPEN")));
       root.append(block);
     }
 
