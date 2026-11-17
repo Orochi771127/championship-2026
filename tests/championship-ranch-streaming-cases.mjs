@@ -15,19 +15,20 @@ const manifestUrl=base+'assets/production/internal-faithful-baseline/characters-
 const publicIndex={entries:[{assetId:LICENSED_CHARACTER_ASSET_ID,manifestPath:LICENSED_CHARACTER_MANIFEST,runtimeEligible:true,publicReleasePermitted:false}]};
 const fromUrl=url=>new URL(url).pathname.slice('/championship-2026/'.length);
 function fixtures({failImage=null,delayImage=null}={}){
- const cache=new Map(),calls=[],sources=[],unloaded=[];let failed=false,active=0,peak=0;
+ const cache=new Map(),calls=[],sources=[],unloaded=[];let failed=0,active=0,peak=0;
  const assets={async load(value){const url=typeof value==='string'?value:value.src;calls.push(url);if(cache.has(url))return cache.get(url);const name=fromUrl(url);
   if(name.endsWith('.json')){const d=read(name);cache.set(url,d);return d;}
   active++;peak=Math.max(peak,active);
   try{
    if(delayImage)await delayImage(name);
-   if(failImage?.(name)&&!failed){failed=true;throw Error('TEST_PAGE_DOWNLOAD_FAILED');}
+   // EXTERNAL_ASSET_RETRY_20261118: the page fails three times, as many as the scope tries, so the failure is reported.
+   if(failImage?.(name)&&failed<3){failed++;throw Error('TEST_PAGE_DOWNLOAD_FAILED');}
    const row=packed.characters.flatMap(c=>read(c.runtimePath).streaming.pages).find(p=>p.image===name.split('/').at(-1));
    const size=row?{w:row.width,h:row.height}:read(name.replace(/\.(webp|png)$/,'.json')).meta.size;
    const source=new PIXI.TextureSource({width:size.w,height:size.h});sources.push(source);const texture=new PIXI.Texture({source});cache.set(url,texture);return texture;
   }finally{active--;}
  },async unload(url){const value=cache.get(url);if(value instanceof PIXI.Texture)value.destroy(true);cache.delete(url);unloaded.push(url);}};
- return {PIXI:createPixiAssetScope({...PIXI,Assets:assets},base),fetchImpl:async url=>({ok:true,text:async()=>fs.readFileSync(fromUrl(url),'utf8')}),calls,sources,unloaded,cache,get peak(){return peak;}};
+ return {PIXI:createPixiAssetScope({...PIXI,Assets:assets},base,{retryWaits:[0,0]}),fetchImpl:async url=>({ok:true,text:async()=>fs.readFileSync(fromUrl(url),'utf8')}),calls,sources,unloaded,cache,get peak(){return peak;}};
 }
 function frame(seq,i=0){return {contract:'HUNT_CHARACTER_PRESENTATION.v1',sequenceId:seq.id,frameIndex:i,flipBits:0};}
 

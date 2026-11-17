@@ -14,6 +14,16 @@ Done in the first batch:
   - The MIT notices of 00GameDevs and three.js ride in every group module.
 
 Not done yet: the icons (U2, generating), the Data Arena moves in the auto battle (U1-2/3), and a piece of its own for every ultimate and skill (U3 continues).
+<!-- record-id: EXTERNAL_ASSET_RETRY_20261118 -->
+## 2026-11-18 — A passing asset-host fault is tried again before partner art is called lost
+
+Under the standing goal (section 5.3: external resource loading and failure handling verified). Not a gameplay change.
+
+- Found by answering 503 once to every character asset in a browser: the ranch loaded, showed 「夥伴外觀載入失敗，遊戲資料仍保留。」 and needed its 重新載入牧場 key pressed six times. The live asset host answered 503 twice during CI on 2026-11-17.
+- Now a load that fails that way (a 5xx, a dropped request) is tried again after 0.4 s and 1.2 s, three attempts in all, before the scene is told. An aborted load is never tried again and a 4xx is final. The ranch's own retry key is unchanged and still recovers a longer outage.
+- Where: `presentation/assetRetry.js`, used by the Pixi asset scope every scene loads through, the streamed atlas metadata, the public character roster and the HUD art manifest.
+- Gate (not in CI, needs an isolated origin): `tests/championship-asset-503-recovery-browser.cjs` with `FAILS=1` and `FAILS=3`.
+
 <!-- record-id: TAMER_TALENTS_T4_20261118 -->
 ## 2026-11-18 — Tamer talents T4: the rest of the trader line and the breeder's stroll luck
 

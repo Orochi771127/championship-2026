@@ -1,3 +1,4 @@
+import { ASSET_RETRY_WAITS_MS, loadWithRetry } from "./assetRetry.js";
 import { createPixiCharacterAnimationController } from "./pixiCharacterAnimationController.js";
 import { createNativeHuntCharacterFramePresenter } from "./nativeHuntCharacterAction.js";
 import { createBattleCharacterAnimator } from "./battleCharacterAction.js";
@@ -101,7 +102,9 @@ export async function loadPixiCharacterRuntimeBundle({
       const atlas=runtime.sides.main.atlases[page],dataUrl=assetUrl(atlas.data,runtimeUrl),imageUrl=assetUrl(atlas.image,runtimeUrl);
       // Pixi's JSON load parser still runs subsequent spritesheet parsers.
       // Read/verify metadata directly, before any image dependency is decoded.
-      const response=await fetchImpl(dataUrl,{signal});
+      // A 5xx (or a dropped request) is tried again like any other asset load; a 4xx is final.
+      const response=await loadWithRetry(async()=>{const answer=await fetchImpl(dataUrl,{signal});
+        if(answer.status>=500)throw Error('CHARACTER_STREAMING_METADATA_HTTP_'+answer.status);return answer;},{signal});
       if(!response.ok)throw Error('CHARACTER_STREAMING_METADATA_HTTP_'+response.status);
       const text=await response.text();
       const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
@@ -363,7 +366,8 @@ export async function unloadPixiAssetClosingBitmap(Assets, src) {
   await Assets.unload(src);
   closeDestroyedBitmap(bitmap, source);
 }
-export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href, { signal } = {}) {
+// EXTERNAL_ASSET_RETRY_20261118: every load of a scope is tried again on a passing fault (assetRetry.js).
+export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href, { signal, retryWaits = ASSET_RETRY_WAITS_MS } = {}) {
   const rawAssets = PIXI?.Assets;
   if (!rawAssets || typeof rawAssets !== 'object') return PIXI;
   // A scope built over another scope shares the root Assets ledger. Nested, the
@@ -386,7 +390,7 @@ export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href, 
       if (entry?.releasing) return entry.releasing.then(() => scoped.load(value));
       if (!entry) {
         entry = { refs: 0, source: typeof value === 'string' ? key : { ...value, src: key } };
-        entry.promise = Promise.resolve().then(() => assets.load(entry.source)).then(value => {
+        entry.promise = Promise.resolve().then(() => loadWithRetry(() => assets.load(entry.source), { signal, waits: retryWaits })).then(value => {
           announceAssetSettled(key, true);
           return value;
         }, error => {
