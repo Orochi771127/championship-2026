@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "owner": "Claude Code",
   "scope": "gameplay reconstruction, runtime architecture, save/state, tests, integration - for Championship 2026 standalone",
-  "lastSync": "2026-11-17",
+  "lastSync": "2026-11-18",
   "syncKind": "Standing goal 2026-11-17: finish this version's decided non-animation work (character action animation stays with Codex)",
   "git": {
     "repository": "CHAMPIONSHIP_2026_PRODUCT_SSOT (this repository)",
@@ -507,14 +507,14 @@
       "ROM-derived art is research only"
     ],
     "git": {
-      "main": "9c44d1ba (Merge PR #266)",
+      "main": "7c386346 (Merge PR #268)",
       "openPullRequests": [
-        "#267 feat/line-fusion-p2-20261117 (fusion P2 + status-bar touch targets)",
-        "#194 claude/inspiring-mayer-gyxhot (crash consistency, open since 2026-11-08, untriaged)"
+        "#269 feat/tamer-talents-t1-20261117 (talents T1)",
+        "#194 claude/inspiring-mayer-gyxhot (superseded by the port branch; close after the port merges)"
       ],
       "branchesInFlight": [
-        "feat/hunt-herds-p3-20261117 (stacked on #267)",
-        "feat/tamer-talents-t1-20261117 (stacked on P3)",
+        "fix/crash-consistency-port-20261117 (stacked on #269)",
+        "feat/tamer-exp-sources-20261118 (stacked on the port)",
         "feat/tactic-practice-loop-20261116 (another Claude session, local only, 8 commits, never pushed)"
       ],
       "worktree": ".claude/worktrees/skill-scroll-20261117 (clean worktree cut from origin/main; the shared checkout holds other agents' uncommitted work and is not touched)"
@@ -528,8 +528,8 @@
         "node tests/championship-external-character-browser.cjs",
         "node tests/championship-dex-portrait-browser.cjs"
       ],
-      "lastFullSuite": "3,808 / 3,808 on feat/tamer-talents-t1-20261117 (local, Windows, Node 24.18)",
-      "ci": "PR #266: all 8 checks green, the first fully green PR since 2026-11-12",
+      "lastFullSuite": "3,826 / 3,826 on feat/tamer-exp-sources-20261118 (local, Windows, Node 24.18)",
+      "ci": "PR #266, #267 and #268 merged with every check green (reruns: one live asset-host 503, one webkit browser closed in a baseline step)",
       "report": "docs/reports/ci-browser-checks-2026-11-17/REPORT_ZH_TW.md"
     },
     "checklist": [
@@ -564,27 +564,27 @@
       {
         "id": "FUSION_P2_FUSION",
         "source": "LINE_FUSION_P2_FUSION_20261117",
-        "state": "IMPLEMENTED_PR_OPEN",
-        "evidence": "PR #267 (with the status-bar touch-target fix); 8 fusion cases incl. a real catch fused on the Hunt Result; ranch fusion checked in a browser",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #267 e1858857; all 10 checks green; live pages-build commit e1858857 and fusion code in the live bundle",
         "acceptance": "CI green, merge, live commit check",
         "owner": "Claude"
       },
       {
         "id": "FUSION_P3_HERDS",
         "source": "HUNT_HERDS_P3_20261117",
-        "state": "IMPLEMENTED_PUSHED",
-        "evidence": "branch feat/hunt-herds-p3-20261117 (stacked on #267); 4 herd cases; full suite; tests/championship-vs3-browser.cjs passes in a real browser (new game -> herded hunt -> rope capture -> result with grade badge -> home)",
+        "state": "VERIFIED_MERGED",
+        "evidence": "PR #268 7c386346; all checks green; real-browser hunt gate (vs3) passed on the branch",
         "acceptance": "full suite, build, real-browser hunt, PR, merge",
         "owner": "Claude"
       },
       {
         "id": "TALENTS_T1",
         "source": "LINE_FUSION_TAMER_TALENTS_DESIGN_20261117; docs/planning/TAMER_TALENT_TREE_AND_SUPPLEMENTS_PLAN_2026-11-17_ZH_TW.md section 9",
-        "state": "IMPLEMENTED_PUSHED",
+        "state": "IMPLEMENTED_PR_OPEN",
         "acceptance": "PR after #267 and P3 merge; CI green; live commit check",
         "dependsOn": [],
         "owner": "Claude",
-        "evidence": "branch feat/tamer-talents-t1-20261117 (stacked on P3); 13 talent cases + panel view case; full suite 3,808 / 3,808; panel checked in a browser (10 open nodes, learn saves at once)"
+        "evidence": "PR #269; 3,808 / 3,808 locally; panel checked in a browser"
       },
       {
         "id": "SUPPLEMENTS_S1",
@@ -636,9 +636,10 @@
       {
         "id": "PR_194_CRASH_CONSISTENCY",
         "source": "open PR since 2026-11-08",
-        "state": "NEEDS_TRIAGE",
-        "acceptance": "rebase or close with reasons; 37 files, +4,694",
-        "owner": "Claude"
+        "state": "IMPLEMENTED_PUSHED",
+        "acceptance": "PR after #269 merges; then close #194 with a pointer",
+        "owner": "Claude",
+        "evidence": "branch fix/crash-consistency-port-20261117 (stacked on T1): S1 catalyst metal held until the form is written, S2 rebirth count with the egg, S3 care image release, S4/S5 online preventive; its tests updated for the entry mail and the route pick; the friends runner pair not ported"
       },
       {
         "id": "NORMAL_ENTRY_PLAYTHROUGH",
@@ -650,19 +651,20 @@
       {
         "id": "CURRENCY_HUD_TOUCH_TARGETS",
         "source": "Currency HUD isolated browser acceptance (red since 2026-11-11)",
-        "state": "IMPLEMENTED_PR_OPEN",
-        "evidence": "in PR #267: --cm-touch keeps status-bar keys 44 px on the glass under the small-window UI zoom; empty save slot takes no taps; violations 1,405 -> 0; CI chromium green",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #267 e1858857; currency HUD chromium + webkit green; --cm-touch in the live stylesheet",
         "owner": "Claude"
       },
       {
         "id": "TALENTS_REMAINING_EXP_SOURCES",
         "source": "talent plan 3.2",
-        "state": "NOT_STARTED",
+        "state": "IMPLEMENTED_PUSHED",
         "acceptance": "journey stars 15, tower first clear 40, daily care 2 (60 a day), first hunt and first battle of the day +100, each in the save of what earned it",
         "dependsOn": [
           "TALENTS_T1"
         ],
-        "owner": "Claude"
+        "owner": "Claude",
+        "evidence": "branch feat/tamer-exp-sources-20261118 (top of the stack); daily record in progression.tamerTalents.daily; 3,826 / 3,826 locally"
       }
     ],
     "decisionsForOwner": [
@@ -704,6 +706,6 @@
       "Hunt Result fusion panel in a real browser (covered by an app test with player gestures and a DOM view test)",
       "frame time of herded hunts on a phone (worst case is the native 22-23 partners, unchanged)"
     ],
-    "nextAction": "Merge #267 when its last check is green and confirm the live commit; open and merge the P3 PR, then the T1 PR; then supplements S1, the remaining tamer EXP sources and nodes (T2/T3), the tactic-practice branch and PR #194."
+    "nextAction": "Merge #269 when green (the webkit evolution gate flaked in its baseline step; rerun in progress); PR and merge the port, then the EXP sources; then supplements S1 (needs its own save lock on top of SAVE_ID_20261108), the remaining talent nodes and keystones, the tactic-practice branch; decision D1 is still open."
   }
 }
