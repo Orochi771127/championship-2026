@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "recordedOn": "2026-11-09",
+  "timezone": "Asia/Taipei",
+  "approvalId": "SYSTEM_SWEEP_MAIN_MERGE_HASH_20261109",
+  "ownerReply": "好，那就核准",
+  "ownerReplyNote": "Answers the request to approve the merged main.js (this branch's approved S5 main.js plus main's one approved comment line in the battle runtime options), listed on PR194 comment 6728225332.",
+  "approvedQuestion": "核准 main.js 合併後的雜湊。",
+  "reviewedCommit": "b96a1ea2",
+  "pullRequest": "https://github.com/Orochi771127/championship-2026/pull/194",
+  "authorizedActions": [
+    "refresh this 1 approved source hash",
+    "commit and push this bounded update"
+  ],
+  "notAuthorizedByThisReply": [
+    "merge PR194 into main",
+    "deploy through the GitHub Pages workflow"
+  ],
+  "selectionPathsOrderAndNonHashFieldsUnchanged": true,
+  "approvedChanges": [
+    {
+      "path": "src/championship/app/main.js",
+      "previousSha256": "1340305d02178cd1875a76ec8b173979ca0557669fb24d74145e3715e01f46e4",
+      "mainSha256": "d84d030d7ae52a7f5b8ddc573d7cd5af2c77c1c9c3087185164af4f6205df05a",
+      "approvedSha256": "ea48643d3fd4e4b97ac2fdfbf2d15d3a176dc945d8f15fe74d43e6b53e0e583f",
+      "differsFromBranchApprovedBy": "one comment line from main (battle runtime options)"
+    }
+  ],
+  "approvalTables": [
+    {
+      "path": "docs/contracts/championship/WEB_BUILD_INPUTS.v1.json",
+      "changedSourceHashes": 1
+    },
+    {
+      "path": "docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json",
+      "changedSourceHashes": 1
+    }
+  ],
+  "buildGates": {
+    "playtest": {
+      "buildId": "d7599e91b1c25682a2c68190e62a2a4385860a369e3fac6577ac940dd184c1f8",
+      "fileCount": 7720,
+      "validate": "PASS"
+    },
+    "playtestExternalCharacters": {
+      "buildId": "a293a4cd3dd7ee7e0c8081a12d74cd86e23097d7cff8971e33857d0c18b33f83",
+      "fileCount": 2287,
+      "validate": "PASS"
+    }
+  },
+  "doesNotAuthorizeNewAssetsOrGameplay": true,
+  "doesNotClaimPhysicalDeviceAcceptance": true,
+  "buildGateCodeUnchanged": true
+}
