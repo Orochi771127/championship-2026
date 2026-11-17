@@ -29,9 +29,10 @@ test('public HUD metadata shares an in-flight read, separates content hashes and
  let attempts=0;const retry=async()=>new Response(++attempts===1?two:one);
  await assert.rejects(readPublicHudManifest(url,sha(one),retry),/PUBLIC_HUD_HASH/);
  assert.deepEqual(await readPublicHudManifest(url,sha(one),retry),{value:1});assert.equal(attempts,2);
- let httpCalls=0;const unavailable=async()=>++httpCalls===1?new Response('',{status:503}):new Response(one);
+ // EXTERNAL_ASSET_RETRY_20261118: a 503 is tried three times before it is reported.
+ let httpCalls=0;const unavailable=async()=>++httpCalls<=3?new Response('',{status:503}):new Response(one);
  await assert.rejects(readPublicHudManifest(url,sha(one),unavailable),/PUBLIC_HUD_HTTP_503/);
- assert.deepEqual(await readPublicHudManifest(url,sha(one),unavailable),{value:1});assert.equal(httpCalls,2);
+ assert.deepEqual(await readPublicHudManifest(url,sha(one),unavailable),{value:1});assert.equal(httpCalls,4);
 });
 
 test('bundled static and lazy modules share state and preserve source-relative asset URLs',async t=>{

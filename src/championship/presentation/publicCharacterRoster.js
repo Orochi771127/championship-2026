@@ -1,3 +1,4 @@
+import {retryingFetch} from './assetRetry.js';
 import {getPublicReviewedRaisingContactArt} from './vs2/huntContactShadow.js';
 import {PUBLIC_CHARACTER_DATA as catalog,PUBLIC_CHARACTER_CATALOG} from './publicCharacterCatalog.js';
 export {publicCharacterConfig,publicCharacterConfigs} from './publicCharacterCatalog.js';
@@ -26,7 +27,7 @@ export async function validatePublicCharacterRender(runtime,config){
 // The existing scene roster still owns the queue, cancellation, decoded
 // sources and actor presentation. No private registration is synthesized.
 export async function loadPublicCharacterRoster({PIXI,speciesIds,sides=['main'],signal=null,initialSequences=null,battleAtlas=false,
- fetchImpl=(...args)=>globalThis.fetch(...args)},baseUrl){
+ fetchImpl=(...args)=>retryingFetch(...args)},baseUrl){
  if(catalog.schemaVersion!==1||catalog.assetId!=='art:public:characters:v1'||(!isOriginalLoopbackLocation(baseUrl)&&(sides.length!==1||sides[0]!=='main')))throw Error('PUBLIC_CHARACTER_CATALOG_SCHEMA');
  const manifestUrl=new URL(PUBLIC_CHARACTER_CATALOG,baseUrl).href;
  const records=catalog.characters.map(c=>({entityId:c.entityId,runtime:'../../../'+c.runtimePath}));

@@ -85,8 +85,8 @@ test('the original interaction kit and its collision-bound state variants retain
  for(const f of manifest.files){const data=fs.readFileSync(new URL('../'+f.src,import.meta.url));assert.equal(createHash('sha256').update(data).digest('hex'),f.sha256);}
 });
 test('interaction art waits for in-flight decoders and unloads the complete partial scope after failure',async()=>{
- const manifest=JSON.parse(fs.readFileSync(new URL('../assets/production/data-arena/interactions-v1/manifest.json',import.meta.url)));const live=new Set();let n=0;
- const PIXI={Assets:{async load(src){src=typeof src==='string'?src:src.src;if(src.endsWith('manifest.json')){live.add(src);return manifest;}if(n++===0)throw Error('decode failed');await new Promise(r=>setTimeout(r,4));live.add(src);return{};},async unload(src){live.delete(src);}}};
+ const manifest=JSON.parse(fs.readFileSync(new URL('../assets/production/data-arena/interactions-v1/manifest.json',import.meta.url)));const live=new Set();let bad=null;
+ const PIXI={Assets:{async load(src){src=typeof src==='string'?src:src.src;if(src.endsWith('manifest.json')){live.add(src);return manifest;}/* one image never decodes: it outlasts the retry rule (EXTERNAL_ASSET_RETRY_20261118) */if((bad??=src)===src)throw Error('decode failed');await new Promise(r=>setTimeout(r,4));live.add(src);return{};},async unload(src){live.delete(src);}}};
  await assert.rejects(loadDataArenaInteractionArt({fetchImpl:publicRuntimeFetchFixture(),PIXI,map:DATA_ARENA_DUEL_MAP,href:'http://localhost/championship.html'}),/decode failed/);assert.equal(live.size,0);
 });
 test('physical damage never selects the burned texture and low debris sorts below traversing actors',()=>{
