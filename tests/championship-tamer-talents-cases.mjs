@@ -7,7 +7,7 @@ import {createFullQaSaveText} from '../scripts/lib/championshipFullQaSave.mjs';
 import {TALENT_NODES, TALENT_KEYSTONES, TALENT_LINES, TALENT_TREE_POINTS, TALENT_WIRED_KEYS, TAMER_LEVEL_MAX, TAMER_EXP,
   tamerExpRequired, tamerTalentPoints, normalizeTamerTalents, createTamerTalentState, talentRefusal, learnTalent, keystoneRefusal,
   chooseKeystone, respecTalents, talentRespecCost, talentSpent, talentSpentInLine, talentValue, grantTamerExp, tamerCaptureExp,
-  tamerBattleExp, commanderCappedTalents, talentOpen} from '../src/championship/contracts/productTamerTalents.js';
+  tamerBattleExp, tamerDailyExp, commanderCappedTalents, talentOpen} from '../src/championship/contracts/productTamerTalents.js';
 import {gradeFromNoise, fusionLineMultiplier, fusionExp} from '../src/championship/contracts/productLineFusion.js';
 import {huntHerdCount} from '../src/championship/hunt/capture/productHuntHerds.js';
 import {syncExpRequired, syncBattleExp} from '../src/championship/contracts/productSyncLevel.js';
@@ -229,4 +229,33 @@ test('fusion talents change the preview and the fusion alike', async () => {
     const done = skilled.app.fusePartners(idOf(1), [idOf(2)]);
     assert.equal(done.gain.amount, fusionExp({required: need, line: 1, bonusPercent: 30}));
   } finally { await plain.app.dispose(); await skilled.app.dispose(); }
+});
+
+test('daily tamer EXP: a care action pays 2 up to 60 a day, the first hunt and battle of a day 100 each', () => {
+  let state = createTamerTalentState(), total = 0;
+  for (let i = 0; i < 40; i++) { const paid = tamerDailyExp(state, '2026-11-18', 'CARE'); state = paid.state; total += paid.amount; }
+  assert.equal(total, 60); assert.equal(state.daily.care, 60);
+  assert.equal(tamerDailyExp(state, '2026-11-18', 'HUNT').amount, 100);
+  state = tamerDailyExp(state, '2026-11-18', 'HUNT').state;
+  assert.equal(tamerDailyExp(state, '2026-11-18', 'HUNT').amount, 0, 'once a day');
+  assert.equal(tamerDailyExp(state, '2026-11-18', 'BATTLE').amount, 100);
+  const next = tamerDailyExp(state, '2026-11-19', 'CARE');
+  assert.equal(next.amount, 2); assert.deepEqual(next.state.daily, {day: '2026-11-19', care: 2, hunt: false, battle: false}, 'a new day starts again');
+  assert.equal(tamerDailyExp(state, 'tomorrow', 'CARE').amount, 0);
+  assert.deepEqual(normalizeTamerTalents({...state, daily: {day: '2026-11-18', care: 999, hunt: 1, battle: true}}).daily, {day: '2026-11-18', care: 60, hunt: false, battle: true});
+  assert.equal(normalizeTamerTalents({...state, daily: {day: 'x'}}).daily, undefined);
+});
+
+test('the day counts are saved with the tamer record, and a treatment on the ranch pays its 2 EXP', async () => {
+  const {app, saved} = await talentApp(null);
+  try {
+    const before = app.getTamerTalentFrame().exp;
+    const partner = app.getRaisingInstances().find(entry => entry.instanceId.startsWith('championship:2026:instance:'));
+    const treated = app.treatRaisingResident(partner.instanceId, 1);
+    if (treated.ok) {
+      assert.equal(app.getTamerTalentFrame().exp, before + TAMER_EXP.CARE);
+      app.save();
+      assert.equal(saved().progression.tamerTalents.daily.care, TAMER_EXP.CARE);
+    } else assert.equal(app.getTamerTalentFrame().exp, before, 'a refused treatment pays nothing');
+  } finally { await app.dispose(); }
 });

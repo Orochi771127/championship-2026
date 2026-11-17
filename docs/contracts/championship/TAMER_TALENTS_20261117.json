@@ -6,13 +6,13 @@
     "sourceLock": "src/championship/app/championshipStandaloneSave.js"
   },
   "saveField": {
-    "path": "progression.tamerTalents = { version: 1, level, exp, nodes: { [nodeId]: rank }, keystones: { [line]: keystoneId }, respecs }",
+    "path": "progression.tamerTalents = { version: 1, level, exp, nodes: { [nodeId]: rank }, keystones: { [line]: keystoneId }, respecs, daily?: { day: YYYY-MM-DD, care: 0..60, hunt, battle } }",
     "migration": "none: a save without it is Lv.1 with nothing spent; an unknown shape starts again; ranks are clamped to the node and a keystone of another line is dropped (productTamerTalents.normalizeTamerTalents)"
   },
   "rules": {
     "points": "points = (level - 1) + 2 x title rank + floor(registered species / 25), never stored; the whole tree costs 124; the friends playtest opens all 124",
     "level": "EXP to the next level = round(40 x level^1.3); Lv.50 is the cap",
-    "exp": "a catch brought Home 20 x grade (S 1.6, A 1.25, B 1.0, C 0.8), a fusion 8 a fodder, a settled owned-party battle TITLE/CHAMPIONSHIP 60, FREE/ARENA 30, PRACTICE 5 (a loss 40 %); paid in the same save as what earned it; password, link and online battles pay none",
+    "exp": "a catch brought Home 20 x grade (S 1.6, A 1.25, B 1.0, C 0.8); a fusion 8 a fodder; a settled owned-party battle TITLE/CHAMPIONSHIP 60, FREE/ARENA 30, PRACTICE 5 (a loss 40 %); a journey star not earned before 15; a tower floor first clear 40; a care action (feed, clean, treat) 2 up to 60 a day; the first hunt and the first battle of the player's local day 100 each. Paid in the save of what earned it, or carried by the next save where the action has none of its own; password, link and online battles pay none; the tutorial pays none",
     "tree": "four lines x three tiers x three nodes (a rank one point; tiers open at 6 and 14 points spent in the line's nodes) and two keystones a line of which one is taken (4 points at 22)",
     "respec": "every point back, keystones included; the first is free, then 500 crystals",
     "titleCap": "title matches and championships count only the first 6 + 3 x rank commander points: tier one, two, three, each node rank by rank across the tier, the keystone last",
@@ -30,7 +30,7 @@
     "syncExpPercent": "commander 同步訓練: battle Sync EXP +5 % a rank",
     "crystalPercent": "trader 結晶: crystals paid by tower, zones and patrol +10 % a rank"
   },
-  "notYetOpen": "26 nodes and all 8 keystones; they follow in later batches together with the remaining tamer EXP sources (journey stars, tower first clears, daily care, the day's first hunt and battle)",
+  "notYetOpen": "26 nodes and all 8 keystones; they follow in later batches",
   "notChanged": [
     "the native individual fields, battle codes and match tables",
     "the gachapon rates, diamond prices and diamond or ticket rewards",

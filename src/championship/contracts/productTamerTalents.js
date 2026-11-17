@@ -119,6 +119,12 @@ export function createTamerTalentState() {
   return { version: 1, level: 1, exp: 0, nodes: {}, keystones: {}, respecs: 0 };
 }
 
+/** The day's once-only and capped tamer EXP: `day` is the player's local date, YYYY-MM-DD. */
+function normalizeDaily(value) {
+  if (!value || typeof value !== "object" || typeof value.day !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value.day)) return null;
+  return { day: value.day, care: Math.min(TAMER_EXP.CARE_DAILY_CAP, count(value.care)), hunt: value.hunt === true, battle: value.battle === true };
+}
+
 /** Accept only the known shape; anything else starts again at Lv.1 with nothing spent. */
 export function normalizeTamerTalents(value) {
   const base = createTamerTalentState();
@@ -134,7 +140,24 @@ export function normalizeTamerTalents(value) {
     const chosen = keystoneById.get(value.keystones?.[line]);
     if (chosen && chosen.line === line) state.keystones[line] = chosen.id;
   }
+  const daily = normalizeDaily(value.daily);
+  if (daily) state.daily = daily;
   return state;
+}
+
+/**
+ * Tamer EXP that is counted by the day (plan 3.2): a care action pays 2 up to 60 a day, the day's first hunt
+ * and first battle 100 each. Returns the state with the day's record and the EXP to grant (0 when used up).
+ */
+export function tamerDailyExp(state, day, kind) {
+  const current = normalizeTamerTalents(state);
+  if (typeof day !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(day)) return { state: current, amount: 0 };
+  const daily = current.daily?.day === day ? { ...current.daily } : { day, care: 0, hunt: false, battle: false };
+  let amount = 0;
+  if (kind === "CARE") { amount = Math.max(0, Math.min(TAMER_EXP.CARE, TAMER_EXP.CARE_DAILY_CAP - daily.care)); daily.care += amount; }
+  else if (kind === "HUNT" && !daily.hunt) { amount = TAMER_EXP.DAILY_FIRST; daily.hunt = true; }
+  else if (kind === "BATTLE" && !daily.battle) { amount = TAMER_EXP.DAILY_FIRST; daily.battle = true; }
+  return amount > 0 ? { state: { ...current, daily }, amount } : { state: current, amount: 0 };
 }
 
 /** Points a tamer has to spend: worked out from the level, the title rank and the Dex, never stored. */
