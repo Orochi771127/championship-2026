@@ -193,6 +193,7 @@ export const UI_COPY_TH = Object.freeze({
   "FUSION_PICK": "วัตถุดิบ {count}/{max}",
   "FUSION_LEFT": "เหลือ {exp} EXP",
   "FUSION_CRYSTALS": "+{count} คริสตัล",
+  "FUSION_INHERIT": "สืบทอด {n} ค่า +1",
   "FUSION_SAVE_FAILED": "บันทึกล้มเหลว ไม่ได้หลอม",
   "補品": "ของบำรุง",
   "supply:vigor": "เครื่องดื่มชูกำลัง",

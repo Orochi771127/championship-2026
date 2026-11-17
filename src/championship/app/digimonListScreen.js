@@ -585,7 +585,8 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     fusionPreview.textContent = !preview ? ""
       : [`Lv.${preview.before.level} → Lv.${preview.after.level}`, `+${number(preview.amount)} EXP`,
         preview.after.next > 0 ? uiText("FUSION_LEFT", { exp: number(preview.after.next - preview.after.exp) }) : null,
-        preview.overflow > 0 ? uiText("FUSION_CRYSTALS", { count: number(preview.overflow) }) : null].filter(Boolean).join(" · ");
+        preview.overflow > 0 ? uiText("FUSION_CRYSTALS", { count: number(preview.overflow) }) : null,
+        preview.inherit?.length ? uiText("FUSION_INHERIT", { n: number(preview.inherit.length) }) : null].filter(Boolean).join(" · ");
   }
   function closeRebirth() { rebirthPanel.hidden = true; }
   function closeEditor() { editor.hidden = true; editorMessage.textContent = ""; closeRebirth(); closeFusion(); }
@@ -621,7 +622,9 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     const result = fusion?.fuse?.(entry.instanceId, [...fusionPicked]);
     closeFusion();
     if (!result?.ok) { fusionMessage.textContent = uiText(result?.reason === "SAVE_FAILED" ? "FUSION_SAVE_FAILED" : result?.reason ?? "FUSION_NO_FODDER"); return; }
-    fusionMessage.textContent = `${entry.displayName ?? ""} Lv.${result.gain.before.level} → Lv.${result.gain.after.level} · +${number(result.gain.amount)} EXP`;
+    // 傳承: the receipt names what the base took, as the preview did.
+    fusionMessage.textContent = `${entry.displayName ?? ""} Lv.${result.gain.before.level} → Lv.${result.gain.after.level} · +${number(result.gain.amount)} EXP`
+      + (result.inherit?.length ? ` · ${uiText("FUSION_INHERIT", { n: number(result.inherit.length) })}` : "");
     if (Array.isArray(result.entries)) {
       entries = result.entries;
       selectedIndex = Math.max(0, entries.findIndex((row) => row.instanceId === entry.instanceId));

@@ -205,6 +205,7 @@ export const UI_COPY_EN = Object.freeze({
   "FUSION_PICK": "Fodder {count}/{max}",
   "FUSION_LEFT": "{exp} EXP to go",
   "FUSION_CRYSTALS": "+{count} crystals",
+  "FUSION_INHERIT": "Inherit: {n} stats +1",
   "FUSION_SAVE_FAILED": "Save failed, not fused",
   "補品": "Tonics",
   "supply:vigor": "Vigor Drink",

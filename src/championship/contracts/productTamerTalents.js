@@ -117,7 +117,8 @@ export const TALENT_WIRED_KEYS = new Set([
   "moodDecayPercent"
 ]);
 // T5 (TAMER_TALENTS_T5_20261118): the first keystones. A line takes one of its two.
-export const TALENT_WIRED_KEYSTONES = new Set(["commander.pureFaction", "commander.triColor", "trader.bountyHunter"]);
+// T6 (TAMER_TALENTS_T6_20261118) adds the breeder's 傳承.
+export const TALENT_WIRED_KEYSTONES = new Set(["commander.pureFaction", "commander.triColor", "trader.bountyHunter", "breeder.inherit"]);
 /** What the wired keystones are worth, in one place for the rules, the copy and the tests. */
 export const KEYSTONE_RULES = deepFreeze({
   pureFactionPercent: 50,             // 純色陣營: three of one faction make that resonance's own bonus half as large again
