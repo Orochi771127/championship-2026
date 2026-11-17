@@ -221,7 +221,7 @@ export function syncTotalExp(state, instanceId) {
  * @param {Array<{instanceId?:string|null, grade?:object|string|null, line:number}>} fodders
  * @returns {{state:object, gains:object[], total:number, overflow:number}|null} null when nothing can be fused
  */
-export function fuseSyncPartners(state, baseId, fodders) {
+export function fuseSyncPartners(state, baseId, fodders, { bonusPercent = 0 } = {}) {
   let current = normalizeSyncLevels(state);
   if (typeof baseId !== "string" || !baseId || !Array.isArray(fodders) || fodders.length < 1 || fodders.length > FUSION_MAX_FODDER) return null;
   if (fodders.some((fodder) => !(fodder?.line > 0) || fodder.instanceId === baseId)) return null;
@@ -229,7 +229,7 @@ export function fuseSyncPartners(state, baseId, fodders) {
   let total = 0, overflow = 0;
   for (const fodder of fodders) {
     const carried = fodder.instanceId ? syncTotalExp(current, fodder.instanceId) : 0;
-    const amount = fusionExp({ required: syncExpRequired(syncOf(current, baseId).level), grade: fodder.grade ?? null, line: fodder.line, carried });
+    const amount = fusionExp({ required: syncExpRequired(syncOf(current, baseId).level), grade: fodder.grade ?? null, line: fodder.line, carried, bonusPercent });
     const granted = grantSyncExp(current, baseId, amount);
     current = granted.state;
     if (fodder.instanceId && current.partners[fodder.instanceId]) {

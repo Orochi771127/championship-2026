@@ -322,3 +322,43 @@ test("Hunt Result offers same-line fusion: a fuse key, the bases with what each 
   bases[0].click();
   assert.deepEqual(calls.at(-1), ["confirm", "home-1"]);
 });
+
+test("the talent tree prints its numbers, greys what is not open and sends learn / respec", async t => {
+  // TAMER_TALENTS_20261117.
+  const root = useDocument(t);
+  const { createTamerTalentPanel } = await import("../src/championship/app/tamerTalentPanel.js");
+  const node = (id, tier, key, per, extra = {}) => ({ id, tier, key, per, max: 3, cost: 1, rank: 0, gate: tier === 1 ? 0 : 6, open: true, refusal: null, ...extra });
+  let frame = { level: 12, exp: 300, next: 1011, points: 15, spent: 2, free: 13, respecCost: 500, crystals: 620, lastGain: null,
+    lines: [{ line: "hunter", spent: 2, keystoneGate: 22,
+      nodes: [node("hunter.memory", 1, "memoryG", 8, { rank: 2 }), node("hunter.herdSense", 2, "herdExtra", 1, { refusal: "TALENT_TIER_LOCKED" }),
+        node("hunter.swift", 3, "tamerSpeedPercent", 5, { open: false, refusal: "TALENT_NOT_OPEN", gate: 14 })],
+      keystones: [{ id: "hunter.keenEye", cost: 4, taken: false, open: false, refusal: "TALENT_NOT_OPEN" }] }] };
+  const calls = [];
+  const panel = createTamerTalentPanel({ frame: () => frame, learn: id => { calls.push(["learn", id]); return { ok: true }; },
+    respec: () => { calls.push(["respec"]); return { ok: false, reason: "TALENT_NO_CRYSTALS" }; } });
+  root.append(panel.element);
+  const text = name => root.querySelectorAll("p").concat(root.querySelectorAll("span")).filter(n => n.className === name).map(n => n.textContent);
+  assert.deepEqual(text("cm-talents__level"), ["馴獸師 Lv.12"]);
+  assert.deepEqual(text("cm-talents__exp"), ["300 / 1,011 EXP"]);
+  assert.deepEqual(text("cm-talents__points"), ["點數 13 / 15"]);
+  assert.deepEqual(text("cm-talents__name"), ["記憶擴充", "群聚嗅覺", "疾步", "慧眼"]);
+  assert.deepEqual(text("cm-talents__effect"), ["+8 G 記憶卡", "+1 隻群體", "未開放", "未開放"]);
+  assert.deepEqual(text("cm-talents__rank"), ["2 / 3", "0 / 3", "0 / 3", "0 / 1"]);
+  const keys = root.querySelectorAll("button").filter(button => button.dataset.learn);
+  assert.deepEqual(keys.map(button => [button.dataset.learn, button.disabled, button.hidden]),
+    [["hunter.memory", false, false], ["hunter.herdSense", true, false], ["hunter.swift", true, true], ["hunter.keenEye", true, true]],
+    "a node that is not open has no key; a locked tier has a disabled one");
+  keys[0].click();
+  assert.deepEqual(calls, [["learn", "hunter.memory"]]);
+  const reset = () => root.querySelectorAll("button").find(button => button.className === "cm-talents__respec");
+  assert.equal(reset().textContent, "重置天賦");
+  assert.deepEqual(text("cm-talents__respec-cost"), ["500 結晶（持有 620）"]);
+  reset().click();
+  assert.equal(reset().textContent, "確認重置", "a respec asks once more");
+  assert.equal(calls.length, 1);
+  reset().click();
+  assert.deepEqual(calls.at(-1), ["respec"]);
+  assert.deepEqual(text("cm-talents__message"), ["結晶不足"]);
+  frame = null; panel.render();
+  assert.equal(panel.element.hidden, true);
+});

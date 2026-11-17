@@ -46,10 +46,19 @@ const hex = (n) => n.toString(16).padStart(3, "0");
 const unitNoise = (n) => (Number.isFinite(n) && n >= 0 && n < 1 ? n : 0);
 const gradeRule = (id) => PARTNER_GRADES.find((entry) => entry.id === id) ?? null;
 
-/** The grade `noise` in [0, 1) lands on (S first). */
-export function gradeFromNoise(noise) {
+/**
+ * The grade `noise` in [0, 1) lands on (S first). `highPercent` (the hunter talent 識貨) raises the S and A
+ * chances by that much of themselves; the share comes out of C first, then B.
+ */
+export function gradeFromNoise(noise, highPercent = 0) {
+  const weights = PARTNER_GRADES.map((entry) => entry.weight);
+  if (highPercent > 0) {
+    let moved = 0;
+    for (const i of [0, 1]) { const add = weights[i] * highPercent / 100; weights[i] += add; moved += add; }
+    for (const i of [3, 2]) { const take = Math.min(weights[i], moved); weights[i] -= take; moved -= take; }
+  }
   let at = unitNoise(noise) * 100;
-  for (const entry of PARTNER_GRADES) { if (at < entry.weight) return entry.id; at -= entry.weight; }
+  for (const [i, entry] of PARTNER_GRADES.entries()) { if (at < weights[i]) return entry.id; at -= weights[i]; }
   return PARTNER_GRADES[PARTNER_GRADES.length - 1].id;
 }
 
@@ -57,9 +66,9 @@ export function gradeFromNoise(noise) {
  * One wild partner's grade. `noise(salt)` returns product noise in [0, 1) for a
  * salt; the caller keys it by the individual's own native values.
  */
-export function rollPartnerGrade(noise, { instinct = "NORMAL" } = {}) {
+export function rollPartnerGrade(noise, { instinct = "NORMAL", highPercent = 0 } = {}) {
   if (typeof noise !== "function") throw new TypeError("GRADE_NOISE_REQUIRED");
-  let grade = gradeFromNoise(noise(GRADE_SALT));
+  let grade = gradeFromNoise(noise(GRADE_SALT), highPercent);
   if (GRADE_FLOOR_A_INSTINCTS.includes(instinct) && (grade === "B" || grade === "C")) grade = "A";
   const [lo, hi] = gradeRule(grade).q;
   const q = GRADE_STATS.map((_, i) => Math.min(hi, lo + Math.floor(unitNoise(noise(GRADE_SALT + 1 + i)) * (hi - lo + 1))));
@@ -116,7 +125,7 @@ export function applyGradeHeadStart(profile, grade) {
 export const FUSION_BASE_SHARE = 0.25;
 export const FUSION_CARRIED_EXP_SHARE = 0.5;
 export const FUSION_MAX_FODDER = 5;
-export const FUSION_LINE = deepFreeze({ SAME_SPECIES: 1, LOWER_STAGE: 0.6 });
+export const FUSION_LINE = deepFreeze({ SAME_SPECIES: 1, LOWER_STAGE: 0.6, LOWER_STAGE_MAX: 0.9 });
 export const FUSION_GRADE_MULTIPLIER = deepFreeze({ S: 1.6, A: 1.25, B: 1, C: 0.8 });
 /** A fodder at or above this Sync Level asks for a second confirmation. */
 export const FUSION_WARN_LEVEL = 10;
@@ -132,14 +141,16 @@ export function fusionGradeMultiplier(grade) {
  * their baby stages, and following them would let almost any two partners fuse.
  * @param {(speciesIndex:number)=>readonly number[]} ancestorsOf direct earlier forms of a species
  */
-export function fusionLineMultiplier(baseSpecies, fodderSpecies, ancestorsOf) {
+export function fusionLineMultiplier(baseSpecies, fodderSpecies, ancestorsOf, lowerBonus = 0) {
   if (!Number.isSafeInteger(baseSpecies) || !Number.isSafeInteger(fodderSpecies)) return 0;
   if (baseSpecies === fodderSpecies) return FUSION_LINE.SAME_SPECIES;
+  // The breeder talent 同線親和 lifts the lower-stage share, 0.6 up to 0.9.
+  const lower = Math.round(Math.min(FUSION_LINE.LOWER_STAGE_MAX, FUSION_LINE.LOWER_STAGE + Math.max(0, lowerBonus)) * 1000) / 1000;
   const seen = new Set([baseSpecies]), queue = [baseSpecies];
   while (queue.length) {
     for (const earlier of ancestorsOf(queue.shift()) ?? []) {
       if (seen.has(earlier)) continue;
-      if (earlier === fodderSpecies) return FUSION_LINE.LOWER_STAGE;
+      if (earlier === fodderSpecies) return lower;
       seen.add(earlier); queue.push(earlier);
     }
   }
@@ -147,8 +158,9 @@ export function fusionLineMultiplier(baseSpecies, fodderSpecies, ancestorsOf) {
 }
 
 /** Sync EXP one fodder pays a base that needs `required` EXP at its current level. */
-export function fusionExp({ required, grade = null, line = 1, carried = 0 } = {}) {
+export function fusionExp({ required, grade = null, line = 1, carried = 0, bonusPercent = 0 } = {}) {
   if (!(required > 0) || !(line > 0)) return 0;
   const own = Number.isSafeInteger(carried) && carried > 0 ? Math.floor(carried * FUSION_CARRIED_EXP_SHARE) : 0;
-  return Math.round(required * FUSION_BASE_SHARE * fusionGradeMultiplier(grade) * line) + own;
+  // The breeder talent 同調融合 raises the base share only; the fodder's own gathered EXP is carried as it is.
+  return Math.round(required * FUSION_BASE_SHARE * fusionGradeMultiplier(grade) * line * (1 + Math.max(0, bonusPercent) / 100)) + own;
 }

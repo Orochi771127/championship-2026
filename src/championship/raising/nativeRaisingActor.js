@@ -595,7 +595,8 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
   if(actor.state===1&&actor.trainingPending&&(!policy||trainingCage)){
     actor.trainingPending=false;actor.state=11;
     if(policy)beginRealtimeTraining(actor,policy);
-    const growthPercent=habitatMatch(next.fields['000'],actor.cageDefinitionIndex)?TAXONOMY_HABITAT_BONUS.growthPercent:100;
+    // The breeder talent 精心照料 (context.growthBonusPercent) raises stat gains on top of the habitat bonus.
+    const growthPercent=Math.round((habitatMatch(next.fields['000'],actor.cageDefinitionIndex)?TAXONOMY_HABITAT_BONUS.growthPercent:100)*(100+(context.growthBonusPercent??0))/100);
     const untrained=next;
     const trained=enterNativeRaisingTraining(next,{definition:actor.cageDefinitionIndex,season:context.season,level:context.cageLevel??0,stressed:a['404']===1,growthPercent,
       pointScale:policy?.pointScale??null,programs:policy?.cagePrograms?.[actor.cageDefinitionIndex]??null},rng);

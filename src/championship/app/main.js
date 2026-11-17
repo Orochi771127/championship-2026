@@ -64,6 +64,8 @@ import { applyQaUnlock, qaUnlockRequested } from "./qaUnlock.js";
 import { listChampionshipGates } from "../gate/gateCatalog.js";
 import { createChampionshipStatusBar } from "./championshipStatusBar.js";
 import { createDigimonListView, appendCreatureDetail } from "./digimonListScreen.js";
+import { createTamerTalentPanel } from "./tamerTalentPanel.js";
+import { talentText } from "../text/tamerTalentText.js";
 import { createScheduleView } from "./scheduleScreen.js";
 import { createChampionshipView } from "./championshipScreen.js";
 import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from "../battle/battleOutcome.js";
@@ -3659,6 +3661,17 @@ function renderTamerOnline(shell, slot = 'top') {
   const account = document.createElement('button'); account.type = 'button'; account.className = 'cm-online__button'; account.dataset.onlineAction = 'open-account';
   setText(account, 'TAMER_OPEN_ACCOUNT'); account.addEventListener('click', () => openSettings(account, 'data'));
   row.append(friends, account); shell.append(row);
+  // TAMER_TALENTS_20261117: the tamer level and talent tree open in place under the profile; the ROM layout is untouched.
+  const talents = document.createElement('button'); talents.type = 'button'; talents.className = 'cm-online__button'; talents.dataset.onlineAction = 'open-talents';
+  talents.textContent = talentText('open'); talents.setAttribute('aria-expanded', 'false');
+  const panel = createTamerTalentPanel({ frame: () => app.getTamerTalentFrame(), learn: id => app.learnTamerTalent(id), respec: () => app.respecTamerTalents() });
+  panel.element.hidden = true;
+  talents.addEventListener('click', () => {
+    const open = panel.element.hidden; panel.render(); panel.element.hidden = !open; talents.setAttribute('aria-expanded', String(open));
+    if (open) panel.element.scrollIntoView?.({ block: 'start' });
+  });
+  row.append(talents); shell.append(panel.element);
+  tamerOnlineDisposers.push(() => panel.dispose());
 }
 
 // Owner 2026-10-28: guest identity, tamer cards and story chapters answer

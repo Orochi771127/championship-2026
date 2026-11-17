@@ -581,11 +581,11 @@
       },
       {
         "id": "FUSION_P3_HERDS",
-        "state": "IMPLEMENTED_LOCAL"
+        "state": "IMPLEMENTED_PUSHED"
       },
       {
         "id": "TALENTS_T1",
-        "state": "NOT_STARTED"
+        "state": "IMPLEMENTED_PUSHED"
       },
       {
         "id": "SUPPLEMENTS_S1",
@@ -613,7 +613,15 @@
       },
       {
         "id": "NORMAL_ENTRY_PLAYTHROUGH",
-        "state": "IN_PROGRESS"
+        "state": "PARTLY_VERIFIED"
+      },
+      {
+        "id": "CURRENCY_HUD_TOUCH_TARGETS",
+        "state": "IMPLEMENTED_PR_OPEN"
+      },
+      {
+        "id": "TALENTS_REMAINING_EXP_SOURCES",
+        "state": "NOT_STARTED"
       }
     ],
     "forCodex": [
