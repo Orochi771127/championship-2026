@@ -82,16 +82,32 @@ export function createHuntResultView({ root, source, hudArt = null }) {
   // A missing or unregistered portrait hides the image rather than leaving a
   // broken one: the screen still has to name and rename the catch.
   // Owner 2026-11-12: the catch stands as itself, in its idle animation, not as a Database illustration.
-  let catchBody = null;
-  function paintPortrait(speciesId) {
-    portrait.hidden = true;
-    const key = String(speciesId ?? "").match(/species-\d+$/)?.[0] ?? null;
-    if (catchBody && key && catchBody.speciesId === key) return;
-    catchBody?.dispose();
-    catchBody = speciesId ? createActionPortrait({ species: speciesId, width: 120, height: 104, className: "cm-vs2-catch__body", lazy: false }) : null;
-    if (catchBody) portrait.parentNode?.insertBefore?.(catchBody.element, portrait.nextSibling ?? null);
+  // 2026-11-17: the body used to be created before the portrait sat in its
+  // card, so it was never inserted and the card stayed empty (the "blank"
+  // result). It now always lands beside the portrait, and a partner without a
+  // motion set falls back to its registered portrait instead of nothing.
+  let catchBody = null, paintedKey = null;
+  function showStillPortrait(speciesId) {
+    const image = hudArt?.getPortrait?.(speciesId) ?? null;
+    if (!image?.src) { portrait.hidden = true; return; }
+    if (portrait.getAttribute("src") !== image.src) portrait.src = image.src;
+    portrait.hidden = false;
   }
-  paintPortrait(block.speciesId);
+  function paintPortrait(speciesId) {
+    const key = String(speciesId ?? "").match(/species-\d+$/)?.[0] ?? (speciesId ? String(speciesId) : null);
+    if (key === paintedKey) return;
+    paintedKey = key;
+    catchBody?.dispose();
+    catchBody = null;
+    portrait.hidden = true;
+    if (!speciesId) return;
+    const body = createActionPortrait({ species: speciesId, width: 120, height: 104, className: "cm-vs2-catch__body", lazy: false });
+    catchBody = body;
+    // No motion set: nothing was started or attached, so there is nothing to release.
+    if (body.element.dataset.state === "none") { catchBody = null; showStillPortrait(speciesId); return; }
+    portrait.after(body.element);
+    void body.ready.then((shown) => { if (!shown && catchBody === body) { body.dispose(); catchBody = null; showStillPortrait(speciesId); } });
+  }
   const nameField = element("label", "cm-vs2-result__name");
   nameField.append(element("span", "cm-vs2-result__name-label", "GIVEN NAME"));
   const nameInput = document.createElement("input");
@@ -113,6 +129,7 @@ export function createHuntResultView({ root, source, hudArt = null }) {
   rays.setAttribute('aria-hidden', 'true');
   sweep.setAttribute('aria-hidden', 'true');
   portraitCard.append(rays, portrait);
+  paintPortrait(block.speciesId);
   const captureFrame = appendOriginalCaptureFrame(portraitCard);
   portraitCard.append(sweep);
   body.append(

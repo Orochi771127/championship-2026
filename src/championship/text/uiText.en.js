@@ -1326,6 +1326,11 @@ export const TEXT_EN = Object.freeze({
   "連攜捕獲！": "COMBO CATCH!",
   "數據拓印成功！": "Data imprint complete!",
   "已切換繩索": "Rope switched",
+  // Hunt end gate and empty-hunt result (2026-11-17).
+  "狩獵結束": "HUNT OVER",
+  "狩獵結算": "Hunt results",
+  "捕獲 {count} 隻": "Caught {count}",
+  "這次沒有夥伴": "No partner this time",
   // Hunt tool families and counted ropes (HUNT_TOOL_TIERS_20261103).
   "狩獵時最多可收納 {g} G 的夥伴。牧場土地每擴充一階，再多 8 G。": "Holds up to {g} G of partners on a hunt. Each ranch land step adds 8 G more.",
   "每根繩索都會磨損，拉斷時用掉 1 根並自動換上新繩。": "Every rope wears out; a snapped rope uses up one and a new one is tied on.",

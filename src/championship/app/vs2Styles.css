@@ -1617,3 +1617,41 @@ body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database_
 .cm-vs2-result__instinct { margin-left: 6px; padding: 1px 7px; border-radius: 999px; font-size: calc(11px * var(--text-scale, 1)); font-weight: 900; white-space: nowrap; }
 .cm-vs2-result__instinct[data-instinct="ELITE"] { color: #0c1a2a; background: linear-gradient(90deg, #fef08a, #7dd3fc); }
 .cm-vs2-result__instinct[data-instinct="ANCESTOR"] { color: #2a1800; background: linear-gradient(90deg, #ffd34d, #c4b5fd); box-shadow: 0 0 8px rgba(255, 211, 77, .7); }
+
+/* ---- Hunt end gate (Owner 2026-11-17) -------------------------------------
+   Two steel leaves slide shut over the field when a hunt ends, then open onto
+   the result. With no catch the shut gate carries the result plate itself.
+   Motion is transform/opacity only; reduced motion swaps the slide for a fade. */
+.cm-hunt-gate { position: fixed; inset: 0; z-index: calc(var(--z-highlight, 90) + 2); display: grid; place-items: center; overflow: hidden; pointer-events: auto; touch-action: none; }
+.cm-hunt-gate__leaf { position: absolute; top: 0; bottom: 0; width: 50.5%;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, .07) 0 3px, transparent 3px 22px),
+    linear-gradient(90deg, #18222c, #2c3b48 46%, #1a2530);
+  box-shadow: inset 0 0 0 3px #0b1117, inset 0 0 28px rgba(0, 0, 0, .55);
+  transition: transform var(--gate-close-ms, 460ms) cubic-bezier(.55, 0, .2, 1); will-change: transform; }
+.cm-hunt-gate__leaf--left { left: 0; transform: translateX(-102%); border-right: 4px solid #f6c945; }
+.cm-hunt-gate__leaf--right { right: 0; transform: translateX(102%); border-left: 4px solid #f6c945; }
+.cm-hunt-gate__leaf::after { content: ""; position: absolute; top: 50%; width: 22px; height: 64px; margin-top: -32px; border-radius: 6px;
+  background: linear-gradient(180deg, #f6c945, #c58a12); box-shadow: 0 0 0 3px #0b1117; }
+.cm-hunt-gate__leaf--left::after { right: 10px; }
+.cm-hunt-gate__leaf--right::after { left: 10px; }
+.cm-hunt-gate:is([data-phase="shut"], [data-phase="result"]) .cm-hunt-gate__leaf { transform: none; }
+.cm-hunt-gate[data-phase="opening"] .cm-hunt-gate__leaf { transition-duration: var(--gate-open-ms, 420ms); transition-timing-function: cubic-bezier(.4, 0, .6, 1); }
+.cm-hunt-gate__plate { position: relative; z-index: 1; display: grid; place-items: center; max-width: min(calc(100% - 32px), 340px);
+  opacity: 0; transform: scale(.86); transition: opacity 180ms ease-out, transform 260ms cubic-bezier(.2, 1.4, .4, 1); }
+.cm-hunt-gate:is([data-phase="shut"], [data-phase="result"]) .cm-hunt-gate__plate { opacity: 1; transform: none; transition-delay: calc(var(--gate-close-ms, 460ms) - 80ms); }
+.cm-hunt-gate[data-phase="result"] .cm-hunt-gate__plate { transition-delay: 0ms; }
+.cm-hunt-gate[data-phase="opening"] .cm-hunt-gate__plate { opacity: 0; transition-duration: 120ms; }
+.cm-hunt-gate__label { margin: 0; padding: 8px 20px; border: 3px solid #0b1117; border-radius: 10px; background: #f6c945; color: #14141f;
+  font-size: calc(22px * var(--text-scale, 1)); font-weight: 900; letter-spacing: .06em; box-shadow: 0 6px 0 #0b1117; }
+.cm-hunt-gate__result { display: grid; justify-items: center; gap: 4px; min-width: 240px; padding: 18px 22px 20px; border: 3px solid #0b1117; border-radius: 16px;
+  background: var(--c-surface-1, #121c17); color: var(--c-text-1, #eaf5f2); box-shadow: 0 8px 0 #0b1117, var(--shadow-lift, 0 18px 48px rgba(0, 0, 0, .55)); text-align: center; }
+.cm-hunt-gate__result p { margin: 0; }
+.cm-hunt-gate__kicker { font-size: calc(13px * var(--text-scale, 1)); font-weight: 900; letter-spacing: .12em; color: var(--c-accent, #56e3c2); }
+.cm-hunt-gate__count { font-size: calc(56px * var(--text-scale, 1)); line-height: 1; font-weight: 900; }
+.cm-hunt-gate__count-label { font-size: calc(16px * var(--text-scale, 1)); font-weight: 800; }
+.cm-hunt-gate__note { color: var(--c-text-2, #9fb3ad); font-size: calc(13px * var(--text-scale, 1)); }
+.cm-hunt-gate__continue { margin-top: 12px; min-width: 160px; min-height: var(--target, 44px); }
+.cm-hunt-gate[data-motion="reduced"] .cm-hunt-gate__leaf { transform: none; opacity: 0; transition: opacity var(--gate-close-ms, 120ms) linear; }
+.cm-hunt-gate[data-motion="reduced"]:is([data-phase="shut"], [data-phase="result"]) .cm-hunt-gate__leaf { opacity: 1; }
+.cm-hunt-gate[data-motion="reduced"] .cm-hunt-gate__plate { transform: none; transition-delay: 0ms; }

@@ -1013,8 +1013,12 @@ body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-hin
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-mail-icon {
   top: auto; bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 12px);
 }
+/* 2026-11-17: the notice rides above the dock, so it lets go of the top too;
+   pinned at both ends it stretched into a blank full-height panel. It
+   clears the Go key and the zoom key (dock + gap + 12px, 44px tall). */
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-notice {
-  bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 12px);
+  top: auto;
+  bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 68px);
 }
 body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-root:has(.int-rh2-mail-icon:not([hidden])) .int-rh2-notice {
   bottom: calc(var(--cm-toolbar-height, var(--dock-height)) + var(--cm-raising-dock-gap) + 70px);

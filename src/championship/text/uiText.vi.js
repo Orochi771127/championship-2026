@@ -1481,6 +1481,11 @@ export const TEXT_VI = Object.freeze({
   "連攜捕獲！": "BẮT COMBO!",
   "數據拓印成功！": "Sao chép dữ liệu thành công!",
   "已切換繩索": "Đã đổi dây",
+  // Hunt end gate and empty-hunt result (2026-11-17).
+  "狩獵結束": "HẾT GIỜ SĂN",
+  "狩獵結算": "Kết quả săn",
+  "捕獲 {count} 隻": "Bắt được {count}",
+  "這次沒有夥伴": "Lần này không có bạn đồng hành",
   // Hunt tool families and counted ropes (HUNT_TOOL_TIERS_20261103).
   "狩獵時最多可收納 {g} G 的夥伴。牧場土地每擴充一階，再多 8 G。": "Chứa tối đa {g} G bạn đồng hành khi săn. Mỗi bậc mở rộng đất trang trại thêm 8 G.",
   "每根繩索都會磨損，拉斷時用掉 1 根並自動換上新繩。": "Mỗi sợi dây đều hao mòn; dây đứt sẽ tốn 1 sợi và tự thay sợi mới.",

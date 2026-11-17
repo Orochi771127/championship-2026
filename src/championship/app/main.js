@@ -122,6 +122,7 @@ import { createActionPortrait, setActionPortrait, clearActionPortrait, warmActio
 const ACTION_PORTRAITS = Object.freeze({ set: setActionPortrait, clear: clearActionPortrait });
 const speciesBody = options => createActionPortrait(options).element;
 import { installArcadeFx, requestArcadeFx } from './ui/arcadeFx.js';
+import { createHuntGateCurtain } from './ui/huntGateCurtain.js';
 import { installTitleParade } from './titleParade.js';
 import { buildMedal, buildVersus } from '../presentation/ceremony/ceremonyScenes.js';
 import { createHighlightAudio } from '../presentation/highlight/highlightAudio.js';
@@ -2412,6 +2413,17 @@ async function mountCurrentScreen() {
     // acquiring it, so a queued HUD update cannot remount the same scene.
     if (target === mountedScreen) return;
     const returningFromBrowse = [CHAMPIONSHIP_SCREENS.SHOP, CHAMPIONSHIP_SCREENS.DATABASE].includes(mountedScreen);
+    // Hunt end gate (Owner 2026-11-17): a hunt that actually ran ends behind a
+    // closing gate, time-up or not, and always on a result. The application
+    // has already decided the next screen; the gate only covers the swap.
+    if (mountedScreen === CHAMPIONSHIP_SCREENS.HUNT_FIELD && view?.isPlayable !== false
+      && app.getInteractiveTutorial?.()?.finished !== false
+      && (target === CHAMPIONSHIP_SCREENS.HUNT_RESULT || target === CHAMPIONSHIP_SCREENS.RAISING_HOME)) {
+      huntGate?.dispose();
+      huntGate = createHuntGateCurtain({ text: uiText, reducedMotion: prefersReducedMotion(), fx: requestArcadeFx });
+      gateOutcome = target === CHAMPIONSHIP_SCREENS.HUNT_RESULT ? 'CATCH' : 'EMPTY';
+      await huntGate.close();
+    }
     systemBackgrounds.leave();
     view?.dispose?.();
     view = null;
@@ -2543,10 +2555,23 @@ async function mountCurrentScreen() {
     }
   } finally {
     release();
+    if (huntGate && gateOutcome) settleHuntGate(huntGate, gateOutcome);
+    gateOutcome = null;
   }
 
   // A screen change that arrived while this mount was in flight.
   if (app.getScreen() !== mountedScreen) await mountCurrentScreen();
+}
+
+// Hunt end gate state; declared beside the mount that drives it.
+let huntGate = null, gateOutcome = null;
+/** Open the hunt end gate onto the mounted result; with no catch, the gate shows "caught 0" first. */
+function settleHuntGate(gate, outcome) {
+  void (async () => {
+    if (outcome === 'EMPTY') await gate.showEmptyResult();
+    await gate.open();
+    if (huntGate === gate) huntGate = null;
+  })().catch(() => { gate.dispose(); if (huntGate === gate) huntGate = null; });
 }
 
 // An explicit acceptance-testing grant, off unless the address asks for it.
