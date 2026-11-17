@@ -20,9 +20,12 @@ export function mountRanchStoryBadge(root, { isSeen = () => false, chapterId = S
   }
   function update(frame) {
     // Owner 2026-11-01: the ranch shows no badge; the story opens from the System menu's story mode.
-    button.hidden = true;
-    button.dataset.new = String(!isSeen());
-    place();
+    // Called on every ranch frame (~17 times a second): write only a change, and never
+    // measure a badge that is hidden (each measure forced a layout).
+    if (!button.hidden) button.hidden = true;
+    const fresh = String(!isSeen());
+    if (button.dataset.new !== fresh) button.dataset.new = fresh;
+    if (!button.hidden) place();
   }
   const view = doc.defaultView;
   view?.addEventListener?.('resize', place, { signal: life.signal });

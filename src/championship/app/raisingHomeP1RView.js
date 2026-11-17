@@ -470,8 +470,11 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   function paintSaveStatus(saveStatus) {
     const phase = saveStatus?.phase ?? "CLEAN";
     const failed = phase === "SAVE_FAILED";
-    recovery.hidden = !failed || typeof presentation.intents.exportRecovery !== 'function';
-    if (!failed) recoveryResult.hidden = true;
+    writeHidden(recovery, !failed || typeof presentation.intents.exportRecovery !== 'function');
+    if (!failed) writeHidden(recoveryResult, true);
+    // The same sticky notice rides on every frame while it holds: show it once.
+    const sticky = saveStatus?.conflict ? uiText(SAVE_COPY.CONFLICT) : failed ? uiText(SAVE_COPY.SAVE_FAILED) : null;
+    if (sticky !== null && stickyNotice === sticky && !notice.hidden) return;
     if (saveStatus?.conflict) showNotice(uiText(SAVE_COPY.CONFLICT), { sticky: true });
     else if (failed) showNotice(uiText(SAVE_COPY.SAVE_FAILED), { sticky: true });
     else clearStickyNotice();
@@ -480,17 +483,25 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   // The resolved motion preference (settings), else the system setting.
   const reducedMotion = () => prefersReducedMotion();
   const percent = (current, max) => `${max > 0 ? Math.max(0, Math.min(100, Math.round(current / max * 100))) : 0}%`;
+  // Write-if-changed (memory audit 2026-11-17): render() runs on every native tick, about
+  // 17 times a second, and almost every value is the same each time. A same-value write
+  // still replaces a text node or queues an attribute mutation and style work, so only a
+  // change is written.
+  const writeText = (el, value) => { const text = String(value ?? ''); if (el.textContent !== text) el.textContent = text; };
+  const writeHidden = (el, value) => { const hidden = Boolean(value); if (el.hidden !== hidden) el.hidden = hidden; };
+  const writeData = (el, key, value) => { const text = String(value); if (el.dataset[key] !== text) el.dataset[key] = text; };
+  const writeVar = (el, name, value) => { if (el.style.getPropertyValue?.(name) !== value) el.style.setProperty(name, value); };
   function paintMeters(set, resident) {
     const stats = resident?.stats ?? null;
     const currentTp = stats ? stats.currentTp ?? stats.maxTp : 0;
-    set.hp.text.textContent = uiText(stats ? `${stats.currentHp} / ${stats.maxHp}` : "--");
-    set.tp.text.textContent = uiText(stats ? `${currentTp} / ${stats.maxTp}` : "--");
-    set.hp.bar.style.setProperty('--fill', stats ? percent(stats.currentHp, stats.maxHp) : '0%');
-    set.tp.bar.style.setProperty('--fill', stats ? percent(currentTp, stats.maxTp) : '0%');
+    writeText(set.hp.text, uiText(stats ? `${stats.currentHp} / ${stats.maxHp}` : "--"));
+    writeText(set.tp.text, uiText(stats ? `${currentTp} / ${stats.maxTp}` : "--"));
+    writeVar(set.hp.bar, '--fill', stats ? percent(stats.currentHp, stats.maxHp) : '0%');
+    writeVar(set.tp.bar, '--fill', stats ? percent(currentTp, stats.maxTp) : '0%');
     // Low HP is the one meter state worth a colour change, and it keeps its number.
-    set.hp.bar.dataset.low = String(Boolean(stats && stats.maxHp > 0 && stats.currentHp / stats.maxHp <= 0.25));
-    set.ap.bar.style.setProperty('--fill', resident ? '100%' : '0%');
-    set.capacity.text.textContent = Number.isInteger(resident?.displayCapacityG) ? `${resident.displayCapacityG} G` : '--';
+    writeData(set.hp.bar, 'low', Boolean(stats && stats.maxHp > 0 && stats.currentHp / stats.maxHp <= 0.25));
+    writeVar(set.ap.bar, '--fill', resident ? '100%' : '0%');
+    writeText(set.capacity.text, Number.isInteger(resident?.displayCapacityG) ? `${resident.displayCapacityG} G` : '--');
   }
 
   // The card sits on the edge where it does not cover the resident it
@@ -543,9 +554,9 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
 
   let lastRosterKey = null;
   function paintPartnerMood(partner) {
-    moodChip.hidden = !partner;
-    habitatChip.hidden = !partner?.raceHabitat;
-    crowdedChip.hidden = !partner?.crowded;
+    writeHidden(moodChip, !partner);
+    writeHidden(habitatChip, !partner?.raceHabitat);
+    writeHidden(crowdedChip, !partner?.crowded);
     if (partner?.raceHabitat && habitatChip.dataset.race !== partner.raceHabitat) {
       habitatChip.dataset.race = partner.raceHabitat;
       const glyph = taxonomyGlyph(`race.${partner.raceHabitat}`, 16); glyph.style.setProperty('--tax-color', TAXONOMY_COLORS[`race.${partner.raceHabitat}`]);
@@ -555,20 +566,22 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     }
     if (!partner) return;
     const mood = PARTNER_MOODS[partner.mood] ?? PARTNER_MOODS.calm, habitat = PARTNER_HABITATS[partner.habitat] ?? PARTNER_HABITATS.neutral;
-    moodChip.dataset.mood = partner.mood; moodChip.dataset.habitat = partner.habitat; moodChip.dataset.hearts = String(partner.hearts);
-    moodEmoji.textContent = partner.habitat === 'cozy' ? habitat.emoji + mood.emoji : mood.emoji;
-    moodLabel.textContent = uiText(partner.habitat === 'cozy' ? habitat.label : mood.label);
-    moodHearts.replaceChildren(...Array.from({ length: 5 }, (_, i) => node('i', i < partner.hearts ? 'is-full' : '')));
+    writeData(moodChip, 'mood', partner.mood); writeData(moodChip, 'habitat', partner.habitat);
+    const heartsChanged = moodChip.dataset.hearts !== String(partner.hearts) || moodHearts.childElementCount !== 5;
+    writeData(moodChip, 'hearts', partner.hearts);
+    writeText(moodEmoji, partner.habitat === 'cozy' ? habitat.emoji + mood.emoji : mood.emoji);
+    writeText(moodLabel, uiText(partner.habitat === 'cozy' ? habitat.label : mood.label));
+    if (heartsChanged) moodHearts.replaceChildren(...Array.from({ length: 5 }, (_, i) => node('i', i < partner.hearts ? 'is-full' : '')));
     const tier = PARTNER_MOOD_TIERS.find((t) => t.id === partner.moodTier) ?? null;
-    moodChip.dataset.tier = tier?.id ?? '';
-    moodMeter.hidden = !tier;
+    writeData(moodChip, 'tier', tier?.id ?? '');
+    writeHidden(moodMeter, !tier);
     [...moodMeter.children].forEach((segment, i) => segment.classList.toggle('is-on', Boolean(tier) && i < tier.segments));
     let description = uiText('{mood}・{habitat}・親密度 {affection}/100', { mood: uiText(mood.label), habitat: uiText(habitat.label), affection: partner.affection });
     if (tier) {
       const reasons = (partner.moodReasons ?? []).map((key) => uiText(PARTNER_MOOD_REASONS[key] ?? key));
       description += '・' + (reasons.length ? uiText('{tier}：{reasons}', { tier: uiText(tier.label), reasons: reasons.join(uiText('、')) }) : uiText(tier.label));
     }
-    moodChip.title = description; moodChip.setAttribute('aria-label', description);
+    if (moodChip.title !== description) { moodChip.title = description; moodChip.setAttribute('aria-label', description); }
   }
 
   function paintDetail(resident) {
@@ -631,6 +644,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   next.addEventListener("click", () => step("next"));
 
   let lastRevision = -1;
+  // What render() last wrote for values it cannot cheaply read back.
+  let lastNameKey = null, lastTransitionBg = null, lastCompanionShown = null, lastCopyLabel;
   let lastEventKey = null;
   let pendingEvolution = null, evolutionCeremony = null, evolutionRun = null, cinematic = null, cinematicDeclined = null;
   // A field load problem (the recovery panel offers retry) belongs to the
@@ -655,54 +670,66 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     if (frame.revision === lastRevision) return;
     lastRevision = frame.revision;
 
-    fieldFrame.dataset.residentCount = String(frame.residents?.length ?? 0);
+    writeData(fieldFrame, 'residentCount', frame.residents?.length ?? 0);
     const nativeRanch = isNativeRanchLayout(frame.ranch?.layoutVersion);
     const resident = selectedResident(frame);
-    root.dataset.selection = resident ? "selected" : "none";
+    writeData(root, 'selection', resident ? "selected" : "none");
     if (resident) { hintStarted = true; hintTimer.hide(); }
     const ranchImage = originalCageLocationArt(resident?.nativeCageMapDefinition ?? resident?.nativeCageDefinition);
-    ranchIcon.hidden = !ranchImage;
+    writeHidden(ranchIcon, !ranchImage);
     if (ranchImage && ranchIcon.getAttribute('src') !== ranchImage) ranchIcon.src = ranchImage;
     // The partner stands in the well as itself: its own idle animation (Owner 2026-11-12: the
     // Database illustration is for the Database only). No motion here, no well.
     const speciesIndex=Number(/species-(\d{3})$/.exec(resident?.speciesId??'')?.[1]??NaN);
     const shown=actionPortraits?.set?.(portraitSlot,resident?.speciesId??null,{lazy:false})??null;
-    portraitSlot.dataset.source=shown?'action':'none';
-    portraitSlot.hidden=!shown;
+    writeData(portraitSlot, 'source', shown?'action':'none');
+    writeHidden(portraitSlot, !shown);
     if (resident && companion.dataset.open !== "true") { openedAt = Date.now(); pressedSinceOpen = false; }
-    companion.dataset.open = resident ? "true" : "false";
-    if (resident) companion.dataset.creatureId = resident.creatureId; else delete companion.dataset.creatureId;
-    boost.hidden = !resident || (frame.tutorial && !frame.tutorial.finished) || !(speciesIndex >= 8);
-    companion.setAttribute("aria-hidden", resident ? "false" : "true");
-    companion.inert = !resident;
+    writeData(companion, 'open', resident ? "true" : "false");
+    if (resident) writeData(companion, 'creatureId', resident.creatureId); else if ('creatureId' in companion.dataset) delete companion.dataset.creatureId;
+    writeHidden(boost, !resident || (frame.tutorial && !frame.tutorial.finished) || !(speciesIndex >= 8));
+    if (lastCompanionShown !== Boolean(resident)) {
+      lastCompanionShown = Boolean(resident);
+      companion.setAttribute("aria-hidden", resident ? "false" : "true");
+      companion.inert = !resident;
+    }
     const several = (frame.residents?.length ?? 0) > 1;
-    previous.hidden = next.hidden = !several;
-    companionName.textContent = resident?.displayName ?? uiText("SELECT A RESIDENT");
-    if (resident) companionCopy.setAttribute("aria-label", uiText("{name}，查看詳細資料", { name: resident.displayName }));
-    else companionCopy.removeAttribute("aria-label");
+    writeHidden(previous, !several); writeHidden(next, !several);
+    const copyLabel = resident ? uiText("{name}，查看詳細資料", { name: resident.displayName }) : null;
+    if (copyLabel !== lastCopyLabel) {
+      lastCopyLabel = copyLabel;
+      if (copyLabel === null) companionCopy.removeAttribute("aria-label"); else companionCopy.setAttribute("aria-label", copyLabel);
+    }
     const entry = resident ? getRosterEntry?.(resident.creatureId) ?? null : null;
-    // Cyber Gachapon metal bloodline: `[時輪] 名字` on the ranch card.
-    if (entry?.bloodline) {
-      const badge = document.createElement("span");
-      badge.className = "cm-gacha-badge";
-      badge.textContent = `[${entry.bloodline.title}]`;
-      badge.style.setProperty("--bloodline", entry.bloodline.color);
-      companionName.prepend(badge, " ");
-      companion.dataset.bloodline = entry.bloodline.family;
-    } else delete companion.dataset.bloodline;
+    // The name, with the Cyber Gachapon metal bloodline `[時輪] 名字`, is rebuilt only when it changes.
+    const nameText = resident?.displayName ?? uiText("SELECT A RESIDENT");
+    const nameKey = `${nameText}\u0000${entry?.bloodline ? `${entry.bloodline.title}\u0000${entry.bloodline.color}` : ''}`;
+    if (nameKey !== lastNameKey) {
+      lastNameKey = nameKey;
+      companionName.textContent = nameText;
+      if (entry?.bloodline) {
+        const badge = document.createElement("span");
+        badge.className = "cm-gacha-badge";
+        badge.textContent = `[${entry.bloodline.title}]`;
+        badge.style.setProperty("--bloodline", entry.bloodline.color);
+        companionName.prepend(badge, " ");
+      }
+    }
+    if (entry?.bloodline) writeData(companion, 'bloodline', entry.bloodline.family); else if ('bloodline' in companion.dataset) delete companion.dataset.bloodline;
     const species = entry?.identity?.speciesName ?? null;
-    companionSpecies.textContent = uiText(species && species !== resident?.displayName ? species : "");
-    companionSpecies.hidden = !companionSpecies.textContent;
+    writeText(companionSpecies, uiText(species && species !== resident?.displayName ? species : ""));
+    writeHidden(companionSpecies, !companionSpecies.textContent);
     paintMeters({ hp, tp, ap, capacity }, resident);
-    vitals.dataset.evidence = resident?.stats?.evidence ?? "NONE";
+    writeData(vitals, 'evidence', resident?.stats?.evidence ?? "NONE");
 
     // The icon and the chip already say "where". The full wording stays as the
     // chip's title for anyone reading it out.
     const livesIn = resident
       ? nativeRanch ? resident.nativeCageName ?? 'Raising Home' : cageName(frame, resident.cageId)
       : null;
-    companionLocation.textContent = uiText(livesIn ?? "Touch a resident in the habitat.");
-    placeChip.title = livesIn ? uiText(`Living in ${livesIn}`) : '';
+    writeText(companionLocation, uiText(livesIn ?? "Touch a resident in the habitat."));
+    const placeTitle = livesIn ? uiText(`Living in ${livesIn}`) : '';
+    if (placeChip.title !== placeTitle) placeChip.title = placeTitle;
     paintPartnerMood(resident?.partner ?? null);
     placeCard(resident);
     if (!resident) closeDetail(); else paintDetail(resident);
@@ -710,16 +737,16 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     paintSaveStatus(frame.save);
     const lifecycle=frame.lifecycle,day=lifecycle?.day;
     const mailbox=lifecycle?.mailbox,activeMail=mailbox?.queue.find(q=>q.id===mailbox.activeId);
-    mailIcon.hidden=!mailbox?.queue.length||!!activeMail||!!day||!!lifecycle?.evolution;
-    letter.hidden=!activeMail||!!day||!!lifecycle?.evolution;
+    writeHidden(mailIcon,!mailbox?.queue.length||!!activeMail||!!day||!!lifecycle?.evolution);
+    writeHidden(letter,!activeMail||!!day||!!lifecycle?.evolution);
     if(activeMail){letter.dataset.system=String(activeMail.system);sender.textContent=raisingMessageSender(activeMail.sender);
       letterText.textContent=raisingMessageText(activeMail.textId,activeMail.subjectName)||uiText('新的通知已送達。');
       letterAck.disabled=!activeMail.system&&mailbox.activeFrames<61;
     }
-    transition.hidden=!day&&!lifecycle?.evolution&&!lifecycle?.confirmation&&!activeMail;
-    dayConfirm.hidden=!lifecycle?.confirmation;
+    writeHidden(transition,!day&&!lifecycle?.evolution&&!lifecycle?.confirmation&&!activeMail);
+    writeHidden(dayConfirm,!lifecycle?.confirmation);
     const choice=lifecycle?.evolution?.choicePending?lifecycle.evolution:null;
-    evolutionChoice.hidden=!choice;
+    writeHidden(evolutionChoice,!choice);
     const choiceKey=choice?`${getLocale()}:${choice.instanceId}:${choice.choices.join(',')}`:'';
     if(evolutionChoice.dataset.choiceKey!==choiceKey){
       const focusedSpecies=document.activeElement?.dataset?.speciesIndex;
@@ -736,11 +763,11 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
         (options.find(button=>button.dataset.speciesIndex===focusedSpecies)??options[0])?.focus();
       }
     }
-    transition.dataset.phase=day?.phase??(lifecycle?.evolution?'evolution':'idle');
-    transition.style.backgroundColor=day?`rgba(0,0,0,${day.phase==='fade-out'?Math.min(1,day.frames/8):day.phase==='fade-in'?Math.max(0,1-day.frames/8):1})`:'transparent';
-    transitionText.textContent=day?.phase==='saving'?(day.savePhase==='SAVE_FAILED'?uiText('Save did not complete. You can try again.'):uiText('Saving...')):'';
-    retry.hidden=day?.savePhase!=='SAVE_FAILED';
-    calendar.hidden=!day?.phase?.startsWith('calendar');calendar.disabled=day?.phase!=='calendar';
+    writeData(transition,'phase',day?.phase??(lifecycle?.evolution?'evolution':'idle'));
+    {const bg=day?`rgba(0,0,0,${day.phase==='fade-out'?Math.min(1,day.frames/8):day.phase==='fade-in'?Math.max(0,1-day.frames/8):1})`:'transparent';if(bg!==lastTransitionBg){lastTransitionBg=bg;transition.style.backgroundColor=bg;}}
+    writeText(transitionText,day?.phase==='saving'?(day.savePhase==='SAVE_FAILED'?uiText('Save did not complete. You can try again.'):uiText('Saving...')):'');
+    writeHidden(retry,day?.savePhase!=='SAVE_FAILED');
+    writeHidden(calendar,!day?.phase?.startsWith('calendar'));if(calendar.disabled!==(day?.phase!=='calendar'))calendar.disabled=day?.phase!=='calendar';
     if(!calendar.hidden){const c=day.calendar;calendar.dataset.season=String(c.season);
       calendar.style.opacity=String(day.phase==='calendar-in'?Math.min(1,day.frames/16):day.phase==='calendar-out'?Math.max(0,1-day.frames/16):1);
       dateTitle.textContent=uiText('{season}　{day} 日',{season:uiText(SEASON_NAMES[c.season]),day:c.dayOfSeason+1});
@@ -749,8 +776,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
         if(row.registered||row.unwon){const counts=node('div','int-rh2-calendar__counts');counts.append(node('span','',`☑ ×${row.registered}`),node('span','',`□ ×${row.unwon}`));cell.append(counts);}return cell;}));
     }
     const lifecycleActive=Boolean(day||lifecycle?.evolution||lifecycle?.confirmation||activeMail);
-    fieldHost.inert=lifecycleActive;
-    root.dataset.lifecycle=lifecycleActive?'active':'idle';
+    if(fieldHost.inert!==lifecycleActive)fieldHost.inert=lifecycleActive;
+    writeData(root,'lifecycle',lifecycleActive?'active':'idle');
     // A day change, an evolution or a letter takes the screen; the sheet yields.
     if(lifecycleActive)closeDetail();
     // The same lifecycle message rides along on later frames, so it is announced

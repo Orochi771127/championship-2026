@@ -169,7 +169,8 @@ export function setActionPortrait(slot, species, options = {}) {
   if (previous && previous.speciesId === speciesId && previous.element.parentNode === slot) return previous;
   previous?.dispose();
   slotPortraits.delete(slot);
-  if (!speciesId) { slot.dataset.portrait = "none"; return null; }
+  // An empty slot is asked again on every ranch frame: mark it only once.
+  if (!speciesId) { if (slot.dataset.portrait !== "none") slot.dataset.portrait = "none"; return null; }
   const portrait = createActionPortrait({ doc: slot.ownerDocument ?? globalThis.document, species: speciesId, ...options });
   slot.replaceChildren(portrait.element);
   slot.dataset.portrait = "action";

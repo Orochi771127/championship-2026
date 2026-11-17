@@ -100,7 +100,8 @@ test('the playtest lifts the rank ceiling; a full cage is named on the partner c
   const actor = source('src/championship/raising/nativeRaisingActor.js');
   assert.equal(actor.split('actor.capacityBlocked=Boolean(selection.capacityBlocked);').length - 1, 2, 'both evolution checks record it');
   const view = source('src/championship/app/raisingHomeP1RView.js');
-  assert.match(view, /crowdedChip\.hidden = !partner\?\.crowded;/);
+  // Written only on a change since 2026-11-17 (the ranch HUD repainted every native tick).
+  assert.match(view, /writeHidden\(crowdedChip, !partner\?\.crowded\);/);
   for (const lang of ['en', 'ja', 'th', 'vi']) assert.match(source(`src/championship/text/uiText.${lang}.js`), /"籠舍太擠，暫時無法進化": "/, lang);
 });
 

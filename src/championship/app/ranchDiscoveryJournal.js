@@ -100,7 +100,7 @@ export function mountRanchDiscoveryJournal(root,source){
   const doc=root.ownerDocument,button=doc.createElement('button'),life=new AbortController();
   button.className='int-rh2-discoveries';button.type='button';button.hidden=true;button.dataset.action='ranch-discoveries';
   root.append(button);
-  let last=null,busy=false;
+  let last=null,busy=false,placedOnce=false;
   // Sit under the status bar's wallet, whatever its wrapping, and below any
   // other status pill that would share its row (a narrow phone wraps them).
   const rectOf=selector=>{const node=doc.querySelector?.(selector);return node?.getClientRects?.().length?node.getBoundingClientRect():null;};
@@ -126,11 +126,15 @@ export function mountRanchDiscoveryJournal(root,source){
   function update(frame){
     last=frame?.exploration??null;
     const waiting=pendingStrollEntries(source.getPartnerLife?.()?.log).length;
-    button.hidden=!(last?.pending?.length||waiting)||!!frame?.tutorial&&!frame.tutorial.finished;
-    button.dataset.waiting=String(waiting);
-    const c=copy();button.textContent=`${c.title} · ${last?.pending.length??0}/12${waiting?` · +${waiting}`:''}`;
-    button.setAttribute('aria-label',button.textContent);
-    place();
+    // Called on every ranch frame (~17 times a second): write and re-measure only on a change
+    // (each rewrite replaced the label's text node; each place() forced a layout).
+    const hidden=!(last?.pending?.length||waiting)||!!frame?.tutorial&&!frame.tutorial.finished;
+    const c=copy(),text=`${c.title} · ${last?.pending.length??0}/12${waiting?` · +${waiting}`:''}`;
+    const changed=button.hidden!==hidden||button.dataset.waiting!==String(waiting)||button.textContent!==text;
+    if(button.hidden!==hidden)button.hidden=hidden;
+    if(button.dataset.waiting!==String(waiting))button.dataset.waiting=String(waiting);
+    if(button.textContent!==text){button.textContent=text;button.setAttribute('aria-label',text);}
+    if(changed||placedOnce!==true){placedOnce=true;place();}
   }
   async function open(){
     if(busy)return;busy=true;
