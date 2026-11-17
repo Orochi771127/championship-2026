@@ -994,13 +994,18 @@ export async function createHuntFieldView({ root, source, mountField, watchLoad 
     // Keep the live scene's textures until the router actually accepts exit.
     source.intents.exitHunt();
     if (source.getFrame().screen === 'HUNT_FIELD') return;
-    if (fieldHost.getAttribute('aria-busy') === 'true') {
-      loadingText.textContent = uiText('正在返回牧場…');
-      loadingBar.hidden = true;
-      loadingBytes.hidden = true;
-      loadingNote.hidden = true;
-      exit.disabled = true;
-    }
+    // Only a field still loading is cancelled here (so Home can open if a request hangs).
+    // A mounted field keeps drawing under the hunt end gate until the router disposes this
+    // view, which aborts and tears the scene down together. Aborting it here released the
+    // wilds' textures (the roster and asset scope follow this signal) while they were still
+    // drawn: Pixi threw on every frame of the gate, which stopped the shared ticker and left
+    // the next screens frozen (memory audit 2026-11-17).
+    if (fieldHost.getAttribute('aria-busy') !== 'true') return;
+    loadingText.textContent = uiText('正在返回牧場…');
+    loadingBar.hidden = true;
+    loadingBytes.hidden = true;
+    loadingNote.hidden = true;
+    exit.disabled = true;
     load.abort();
   });
   // Network time belongs to this view, not to the native Hunt timer. Releasing

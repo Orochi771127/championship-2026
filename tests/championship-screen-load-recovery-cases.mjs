@@ -23,7 +23,7 @@ function fixture({ error = new TypeError('Importing a module script failed.'), s
     returnToTitle: async () => calls.push('title'),
     recoveryDiagnostics: { record: (...args) => records.push(args) },
     console: { warn: (...args) => calls.push(['warning', ...args]) },
-    systemBackgrounds: { leave() {} }, expeditionSource: {},
+    systemBackgrounds: { leave() {} }, expeditionSource: {}, releaseDetachedActionPortraits() {},
     CHAMPIONSHIP_SCREENS: { RAISING_HOME: 'RAISING_HOME', SHOP: 'SHOP', DATABASE: 'DATABASE' },
     mountRaisingHome: async () => { throw error; }
   });

@@ -8,6 +8,7 @@ import { cappedPixelRatio, currentQuality } from "../presentationPreferences.js"
 // every selected visual is repainted from the published source frame.
 
 import * as THREE from "../../../../node_modules/three/build/three.module.js";
+import { disposeThreeRenderer } from "../threeRendererRelease.js";
 import { GATE_WORLD_REGIONS, gateWorldPoint, gateWorldRegion, sampleGateWorld } from './gateWorldLayout.js';
 import { startGateFocusTween } from './gateFocusTween.js';
 
@@ -507,8 +508,7 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
       renderer.domElement.removeEventListener("pointercancel", onPointerCancel);
       disposeObject(scene);
       selectedRingMaterial.dispose();
-      renderer.dispose();
-      renderer.forceContextLoss();
+      disposeThreeRenderer(renderer);
       renderer.domElement.remove();
       overlay.remove();
     }

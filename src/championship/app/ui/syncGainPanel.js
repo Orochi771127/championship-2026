@@ -31,6 +31,7 @@ const fraction = (exp, next) => (next > 0 ? Math.max(0, Math.min(1, exp / next))
 export function buildSyncGainPanel({ gains = [], nameOf = (id) => id, portraitOf = () => null, cap = null, reducedMotion = false } = {}) {
   const node = element("section", "cm-sync-panel");
   node.setAttribute("aria-label", syncText("panel.title"));
+  const bodies = [];
   const rows = gains.map((gain) => {
     const row = element("div", "cm-sync-row");
     row.dataset.instanceId = gain.instanceId;
@@ -38,7 +39,9 @@ export function buildSyncGainPanel({ gains = [], nameOf = (id) => id, portraitOf
     const portrait = portraitOf(gain.instanceId);
     if (portrait && typeof portrait === "object" && portrait.species !== undefined) {
       // The partner itself, idle (Owner 2026-11-12).
-      row.append(createActionPortrait({ species: portrait.species, className: "cm-sync-row__face", lazy: false }).element);
+      const body = createActionPortrait({ species: portrait.species, className: "cm-sync-row__face", lazy: false });
+      bodies.push(body);
+      row.append(body.element);
     } else if (portrait) {
       const face = element("img", "cm-sync-row__face");
       Object.assign(face, { src: portrait, alt: "", decoding: "async" });
@@ -159,6 +162,8 @@ export function buildSyncGainPanel({ gains = [], nameOf = (id) => id, portraitOf
       if (running?.token) running.token.cancelled = true;
       for (const animation of animations) animation.cancel();
       animations.clear();
+      // The partners' idle loops are Web Animations: left running, they keep this panel alive.
+      for (const body of bodies.splice(0)) body.dispose?.();
       node.remove();
     }
   });

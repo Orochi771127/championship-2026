@@ -849,9 +849,8 @@ export async function mountHuntFieldPixiPresentation({
     cancelPointer();
     onFallback("The 2D field context was lost. Screen controls remain available; reload to restore the field.");
   });
-  render();
 
-  return Object.freeze({
+  const presentation = Object.freeze({
     render() {
       // The DOM shell may ask for a repaint after its own update. The ticker is
       // authoritative; this is an idempotent sync.
@@ -939,42 +938,54 @@ export async function mountHuntFieldPixiPresentation({
       return feedbackArt;
     },
 
-    dispose() {
-      if (disposed) return;
-      disposed = true;
-      cancelPointer();
-      globalThis.removeEventListener?.("blur", cancelPointer);
-      globalThis.document?.removeEventListener("visibilitychange", cancelHiddenPointer);
-      unmarkScene();
-      unobserveResize();
-      unobserveContextLost();
-      threePilot?.dispose();
-      ropeVfx.destroy();
-      wireVfx.destroy();
-      app.ticker.remove(advance);
-      app.stage.off("pointerdown", onPointerDown);
-      app.stage.off("globalpointermove", onPointerMove);
-      app.stage.off("pointerup", onPointerUp);
-      app.stage.off("pointerupoutside", onPointerUp);
-      app.stage.off("pointercancel", onPointerCancel);
-      for (const graphic of chunkCache.values()) graphic.destroy();
-      chunkCache.clear();
-      liveChunks.clear();
-      objectNodes.clear();
-      wildNodes.clear();
-      playerNode = null;
-      if (fieldArt?.displayObject.parent === productionArtLayer) {
-        productionArtLayer.removeChild(fieldArt.displayObject);
-      }
-      factoryShutters?.dispose();
-      fieldArt?.occluders?.detach();
-      if (scene.parent) scene.parent.removeChild(scene);
-      scene.destroy({ children: true });
+    dispose() { teardown(true); }
+  });
+  // Construction is transactional (memory audit 2026-11-17): a first frame that throws
+  // (an art/world mismatch) used to leave this scene's per-frame callback on the shared
+  // ticker -- throwing every frame, which stops Pixi's loop -- plus its stage handlers and
+  // window listeners, and the whole field around them. The caller still owns the bundles
+  // and the 3D map until mount succeeds, so a failed mount leaves those to it.
+  try { render(); }
+  catch (error) { teardown(false); throw error; }
+  return presentation;
+
+  function teardown(releaseOwned) {
+    if (disposed) return;
+    disposed = true;
+    cancelPointer();
+    globalThis.removeEventListener?.("blur", cancelPointer);
+    globalThis.document?.removeEventListener("visibilitychange", cancelHiddenPointer);
+    unmarkScene();
+    unobserveResize();
+    unobserveContextLost();
+    if (releaseOwned) threePilot?.dispose();
+    ropeVfx.destroy();
+    wireVfx.destroy();
+    app.ticker.remove(advance);
+    app.stage.off("pointerdown", onPointerDown);
+    app.stage.off("globalpointermove", onPointerMove);
+    app.stage.off("pointerup", onPointerUp);
+    app.stage.off("pointerupoutside", onPointerUp);
+    app.stage.off("pointercancel", onPointerCancel);
+    for (const graphic of chunkCache.values()) graphic.destroy();
+    chunkCache.clear();
+    liveChunks.clear();
+    objectNodes.clear();
+    wildNodes.clear();
+    playerNode = null;
+    if (fieldArt?.displayObject.parent === productionArtLayer) {
+      productionArtLayer.removeChild(fieldArt.displayObject);
+    }
+    factoryShutters?.dispose();
+    fieldArt?.occluders?.detach();
+    if (scene.parent) scene.parent.removeChild(scene);
+    scene.destroy({ children: true });
+    if (releaseOwned) {
       void fieldArt?.dispose();
       void feedbackArt?.dispose();
       void characterBundle?.dispose();
-      characterBundle = null;
-      // The Application belongs to the stage and outlives this scene.
     }
-  });
+    characterBundle = null;
+    // The Application belongs to the stage and outlives this scene.
+  }
 }

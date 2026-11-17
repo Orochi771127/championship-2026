@@ -29,6 +29,13 @@ function sweepDisconnectedActionPortraits() {
     }
   }
 }
+/**
+ * Retire every partner body that was on the page and has left it. The screen
+ * router calls this on each screen change: a looping body that a view dropped
+ * without disposing keeps its Web Animation, and the document timeline then
+ * keeps the body and the whole removed subtree around it alive.
+ */
+export function releaseDetachedActionPortraits() { sweepDisconnectedActionPortraits(); }
 
 /**
  * The box a body is fitted into: the full width, the height above the feet,
@@ -102,6 +109,9 @@ export function createActionPortrait({ doc = globalThis.document, species, width
       sprite.setFacing(facing);
       sprite.play(current);
       element.replaceChildren(sprite.element);
+      // A box inserted after the load began is on the page now: remember it, so leaving
+      // the page later retires it (and its looping animation) instead of keeping it.
+      if (element.isConnected === true) record.wasConnected = true;
       element.dataset.state = "ready";
       resolveReady(true);
     } catch {

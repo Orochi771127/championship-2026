@@ -432,6 +432,7 @@
     "src/championship/presentation/ranchSupportOwner.js",
     "src/championship/presentation/ranchThreeCoordinates.js",
     "src/championship/presentation/ranchThreeScene.js",
+    "src/championship/presentation/threeRendererRelease.js",
     "src/championship/presentation/ranchWaterfalls.js",
     "src/championship/presentation/reviewedCharacterAnimation.js",
     "src/championship/presentation/reviewedCharacterLoader.js",
@@ -8761,6 +8762,7 @@
     "src/championship/presentation/ranchSupportOwner.js",
     "src/championship/presentation/ranchThreeCoordinates.js",
     "src/championship/presentation/ranchThreeScene.js",
+    "src/championship/presentation/threeRendererRelease.js",
     "src/championship/presentation/ranchWaterfalls.js",
     "src/championship/presentation/reviewedCharacterAnimation.js",
     "src/championship/presentation/reviewedCharacterLoader.js",
@@ -40366,7 +40368,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "2a77fda3529e141a3285b3c1718ab716f2c9acea53e9dac303a9be382eac5883"
+        "sha256": "e3a02a71ba344a70e95421221418396ab1ba3363d90cc82d4896626575849d6e"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -40666,7 +40668,7 @@
       },
       {
         "path": "src/championship/app/ui/syncGainPanel.js",
-        "sha256": "4dacfb6e2dbf17e109ea5a59e6fc40f68b6f3d0ac988634217a157fadbe9fb54"
+        "sha256": "7f3aee2705695280846f8c336d767a49236ca36bbcb64d9b2c7a084a3ea52d29"
       },
       {
         "path": "src/championship/app/ui/systemBackgrounds.css",
@@ -40690,7 +40692,7 @@
       },
       {
         "path": "src/championship/app/vs2Screens.js",
-        "sha256": "5d8e127b26bfa02aa1509ef3cb7b976376fa298fa974b95c199502964677ed91"
+        "sha256": "a2339ff33f1fddc494828e45a9188ca2342588bd5fcccbc788c6618098ea2cd7"
       },
       {
         "path": "src/championship/app/vs2Styles.css",
@@ -41574,7 +41576,7 @@
       },
       {
         "path": "src/championship/presentation/championshipPixiStage.js",
-        "sha256": "0af9575d9a47cce0371ca492755410a215b6c7d509937db35eb9a4e7128b45ca"
+        "sha256": "47caaf1d382ccb24c79dc168e338c8979868a9e84a9c33c1997122762cca64a7"
       },
       {
         "path": "src/championship/presentation/characterAnimationTimeline.js",
@@ -41630,7 +41632,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-        "sha256": "cc6705551c23dcd9b43d46ebfdc75e2641b31846c90de58fb54de51b305ef3eb"
+        "sha256": "dec94de11659c2a1bf8532996d486f9be90ecd711798eccc8018cbb0544e8114"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
@@ -41670,7 +41672,7 @@
       },
       {
         "path": "src/championship/presentation/highlight/createHighlightBurstThree.js",
-        "sha256": "5e65eb00916c832b83c7b8a1214186e34aa58a6ceca27548be3cf8e9a63735f0"
+        "sha256": "b74cf8b563c4c471711b98d34f2c701caffbadb51e7404d3104588cd93aa37e9"
       },
       {
         "path": "src/championship/presentation/highlight/createHighlightSequence.js",
@@ -41726,7 +41728,7 @@
       },
       {
         "path": "src/championship/presentation/juicy/actionPortrait.js",
-        "sha256": "d3d5ecc7a57867fbebf13f2f1b3ffd71f34f8a0b0e3675ce5071d090e3c2d332"
+        "sha256": "813f7da33b970c26717551163cb7dd1eca46478fadcf09f29a078915a9c3b19b"
       },
       {
         "path": "src/championship/presentation/juicy/codexShowcaseTheater.js",
@@ -41790,7 +41792,7 @@
       },
       {
         "path": "src/championship/presentation/medals/medalThreePresentation.js",
-        "sha256": "9faadc9fe24061683eb2133b734b35cccf886080b52d782e70a9779fdb10f932"
+        "sha256": "0f5deab48df442c59f9dfbb03dc035ce34ebf14a59ac7284aea7c2896912c326"
       },
       {
         "path": "src/championship/presentation/medals/selectedMedalPresentation.js",
@@ -41942,7 +41944,11 @@
       },
       {
         "path": "src/championship/presentation/ranchThreeScene.js",
-        "sha256": "2364a88dd1c14cb17a098e4356fd4133e35e8a97d9cc634c06e68e17e575786b"
+        "sha256": "2a3b7c7e7292d9b68d4abf33985614b1878714424c18a26a7ec8f363875c63cd"
+      },
+      {
+        "path": "src/championship/presentation/threeRendererRelease.js",
+        "sha256": "99cc4a0a1ab98deefb76abf744b90ee0e6d51f0483bf7b8b2182cdf20ce62d97"
       },
       {
         "path": "src/championship/presentation/ranchWaterfalls.js",
@@ -42054,7 +42060,7 @@
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxKit.js",
-        "sha256": "d8210a1fcdafd26db9bc7514f9bb788c9f135f6ad88351a704229625e438b597"
+        "sha256": "9918ee9f8dc2d15d27a284937141cde175c1adb0e9b2841faba28a0f58345d85"
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxKitTextures.js",
@@ -42122,11 +42128,11 @@
       },
       {
         "path": "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
-        "sha256": "777802da516900a19cff9086e39fe29aeb1647eb52d40b74526bf4f857805583"
+        "sha256": "545f04eba0f9716b5b0bbe2b1a9cfcdae329c4037844a0616280256f8be0aea8"
       },
       {
         "path": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
-        "sha256": "4aa3fa96ee1ebc3234e04d3f21483c32ef4573656e5ffb0334ed44f6ad1d3ca2"
+        "sha256": "e0abeebae7127ee066580fa52dd12bbb02ffa91a54afeed106ffd40832c1aaba"
       },
       {
         "path": "src/championship/presentation/vs2/gateFocusTween.js",
@@ -42262,11 +42268,11 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
-        "sha256": "c7e4591eab19b9e43f2afdfd7fd8a70f2e2f9d1799345a63cac62aaeb923d73d"
+        "sha256": "a113c6d904bd838bc0e375168714d94060fca9440720a01b7bdf05ada5339a08"
       },
       {
         "path": "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
-        "sha256": "03381f0237decc2ddbe6c71b5f8cb1fccd849e8ddaec5015f3d69e9222fda4dc"
+        "sha256": "4bbb83ed84eaecf24df9a3813c5d9fe138f182003679cea60668cb63f7fdeaaa"
       },
       {
         "path": "src/championship/presentation/vs5/prepareBattleVfxGpu.js",

@@ -25,6 +25,7 @@
 // lands on its face at once. Selection always leaves through onSelect.
 
 import * as THREE from "../../../../node_modules/three/build/three.module.js";
+import { disposeThreeRenderer } from "../threeRendererRelease.js";
 import { BATTLE_FACE_LABELS, battleFaceLabel, battleFaceTagline, battlePrismLabel } from "../../text/zhHant.js";
 import { uiText } from "../../text/uiText.js";
 import { cappedPixelRatio, currentQuality, prefersReducedMotion } from "../presentationPreferences.js";
@@ -628,10 +629,10 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
       for (const thing of disposables) thing.dispose();
       for (const panel of panels) if (panel.art) { panel.art.width = 0; panel.art.height = 0; }
       if (poolTexture?.image && "width" in poolTexture.image) { poolTexture.image.width = 0; poolTexture.image.height = 0; }
-      renderer.dispose();
       // This private canvas is retired permanently; dispose alone releases
-      // Three resources but leaves its browser WebGL context alive until GC.
-      renderer.forceContextLoss();
+      // Three resources but leaves its browser WebGL context alive until GC,
+      // and the page-wide DFG table would keep the whole renderer reachable.
+      disposeThreeRenderer(renderer);
       stage.remove();
       caption.remove();
       overlay.remove();
