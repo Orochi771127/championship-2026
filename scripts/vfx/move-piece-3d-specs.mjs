@@ -1,5 +1,6 @@
 // Three.js move pieces to bake (UNIFIED_MOVES_20261118, U3): see bake-3d-move-vfx.mjs.
 import ultimates from './move-piece-3d-ultimates.json' with {type: 'json'};
+import skills from './move-piece-3d-skills.json' with {type: 'json'};
 import {MOVE_VFX_CHOREOGRAPHY} from '../../src/championship/presentation/vfx/moveVfxChoreography.js';
 // Names start with `3d-`; `group` picks the module the game loads on demand; `base`
 // is the shared piece it replaces (played until the group is in).
@@ -140,16 +141,24 @@ const SHAPES = Object.freeze({
 const VARIANTS = Object.freeze([
   {o: {}, cam: {}}, {o: {size: 1.3}, cam: {el: 0.45, az: 0.5}}, {o: {size: 0.85, speed: 1.25}, cam: {el: 0.2, az: -0.5}},
   {o: {density: 0.9, detail: 1.4}, cam: {el: 0.55, az: 0.9}}, {o: {size: 1.15, speed: 0.8}, cam: {el: 0.35, az: -0.9}},
-  {o: {size: 1.5, density: 0.3}, cam: {el: 0.25, az: 0.25}}
+  {o: {size: 1.5, density: 0.3}, cam: {el: 0.25, az: 0.25}},
+  // 6..11: the skills' variants (a little smaller and quicker; never an ultimate's look)
+  {o: {size: 0.9}, cam: {el: 0.3, az: 0.3}}, {o: {size: 0.8, speed: 1.3}, cam: {el: 0.45, az: -0.3}},
+  {o: {size: 1.0, density: 0.7}, cam: {el: 0.2, az: 0.7}}, {o: {size: 0.95, detail: 1.3, speed: 1.1}, cam: {el: 0.5, az: -0.7}},
+  {o: {size: 0.85, density: 0.4}, cam: {el: 0.35, az: 1.1}}, {o: {size: 1.05, speed: 0.9}, cam: {el: 0.25, az: -1.1}}
 ]);
 /** The three.js piece name of a species ultimate. */
 export const ultimatePieceName = record => `3d-u-${record}`;
-const ULTIMATE = Object.fromEntries(Object.entries(ultimates).map(([record, [fx, v]]) => {
+/** The three.js piece name of a species skill (unique within its element). */
+export const skillPieceName = record => `3d-s-${record}`;
+const generated = (table, nameOf, prefix, fitScale) => Object.fromEntries(Object.entries(table).map(([record, [fx, v]]) => {
   const shape = SHAPES[fx], variant = VARIANTS[v];
-  if (!shape || !variant) throw new Error(`ultimate ${record}: no shape for ${fx} #${v}`);
+  if (!shape || !variant) throw new Error(`${prefix} ${record}: no shape for ${fx} #${v}`);
   const base = MOVE_VFX_CHOREOGRAPHY[record]?.contact?.piece ?? 'rush';
-  return [ultimatePieceName(record), {...shape, o: {...(shape.o ?? {}), ...variant.o}, cam: {...(shape.cam ?? C), ...variant.cam},
-    fit: (shape.fit ?? 1.6) * ((variant.o.size ?? 1) > 1.2 ? 1.12 : 1), group: `u${record}`, base, variant: v}];
+  return [nameOf(record), {...shape, o: {...(shape.o ?? {}), ...variant.o}, cam: {...(shape.cam ?? C), ...variant.cam},
+    fit: (shape.fit ?? 1.6) * ((variant.o.size ?? 1) > 1.2 ? 1.12 : 1) * fitScale, group: `${prefix}${record}`, base, variant: v}];
 }));
+const ULTIMATE = generated(ultimates, ultimatePieceName, 'u', 1);
+const SKILL = generated(skills, skillPieceName, 's', 0.9);
 
-export const MOVE_PIECE_3D = Object.freeze({...HAND, ...ULTIMATE});
+export const MOVE_PIECE_3D = Object.freeze({...HAND, ...ULTIMATE, ...SKILL});

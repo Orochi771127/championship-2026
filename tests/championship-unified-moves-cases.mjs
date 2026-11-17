@@ -63,3 +63,18 @@ test('a ground or contact anchor sits inside its piece (the bake reads the origi
     assert.ok(look.oy >= -look.h * 0.25 && look.oy <= look.h * 1.25, `${name} oy ${look.oy} of ${look.h}`);
   }
 });
+
+test('every species skill lands a three.js piece no other skill of its element plays, and never an ultimate\'s look', async () => {
+  const {MOVE_PIECE_3D} = await import('../scripts/vfx/move-piece-3d-specs.mjs');
+  const skills = sig.moves.filter(([key, tier]) => tier === 1 && Number.isSafeInteger(key) && key < 596);
+  assert.ok(skills.length >= 150, `${skills.length} skills`);
+  const seen = new Map();
+  for (const [key, , , palette] of skills) {
+    const piece = moveVfxChoreography(key)?.contact?.piece;
+    assert.equal(piece, `3d-s-${key}`, `${key} plays ${piece}`);
+    const spec = MOVE_PIECE_3D[piece], look = `${palette}|${spec.fx}#${spec.variant}`;
+    assert.ok(spec.variant >= 6, `${piece} uses a skill variant`);
+    assert.ok(!seen.has(look), `${key} and ${seen.get(look)} look alike`);
+    seen.set(look, key);
+  }
+});

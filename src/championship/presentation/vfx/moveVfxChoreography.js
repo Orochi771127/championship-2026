@@ -1321,7 +1321,8 @@ export function moveVfxChoreography(moveId) {
   if (!raw) return null;
   // UNIFIED_MOVES_20261118 U3: every species ultimate lands its own three.js piece (scripts/vfx/move-piece-3d-specs.mjs);
   // the table's shared piece stays as the fallback it plays while that piece loads.
-  const own = `3d-u-${key}`;
+  // (a species skill likewise lands its own, unique within its element)
+  const own = MOVE_VFX_3D_PIECE_GROUP[`3d-u-${key}`] ? `3d-u-${key}` : `3d-s-${key}`;
   if (raw.contact && MOVE_VFX_3D_PIECE_GROUP[own]) raw = Object.freeze({...raw, contact: Object.freeze({...raw.contact, piece: own, sprite: null})});
   if (!presence.has(key)) presence.set(key, withPresence(raw, moveVfxSignature(key)?.tier));
   return presence.get(key);
