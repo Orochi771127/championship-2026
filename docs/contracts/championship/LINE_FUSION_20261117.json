@@ -1,0 +1,21 @@
+{
+  "id": "LINE_FUSION_20261117",
+  "classification": "OWNER_APPROVED_ADAPTATION: partner grades S/A/B/C and a capture head start inside each individual's own native bounds (LINE_FUSION_TAMER_TALENTS_DESIGN_20261117, P1 LINE_FUSION_P1_GRADES_20261117)",
+  "saveField": {
+    "path": "progression.syncLevels.partners[instanceId].grade = { grade: 'S'|'A'|'B'|'C', q: [6 integers inside the grade's band] }",
+    "migration": "none: a partner without it has no grade and shows '—'; an unknown shape is dropped and the Sync level kept (productSyncLevel.normalizeSyncLevels)"
+  },
+  "rules": {
+    "grades": "S 5 % (q 85-100), A 20 % (65-84), B 35 % (35-64), C 40 % (0-34); ELITE and ANCESTOR wild instincts are never below A",
+    "noise": "instinctNoise(salt, actorIndex, speciesIndex, 058, 060, 064, 068, 06c, 018), salt 0x50 for the grade and 0x51-0x56 for the six q values; the native hunt RNG is never read",
+    "headStart": "for 058, 05c, 060, 064, 068, 06c with bounds at 0xa8 + i*8 (upper) and 0xac + i*8 (lower): value = min(upper, max(native value, lower + unit * floor(q/100 * 0.4 * (upper - lower) / unit))), unit 10 for HP and 1 otherwise; 050/054 fill to the new maximum; written once on the Home commit before the elite gain",
+    "reveal": "hidden during the Hunt, shown on the Hunt Result row and the partner list"
+  },
+  "notChanged": [
+    "the native individual roll, the native hunt RNG and the encounter",
+    "each individual's upper and lower bounds",
+    "the save key, schemaVersion and the save lock"
+  ],
+  "source": "src/championship/contracts/productLineFusion.js",
+  "plan": "docs/planning/LINE_FUSION_AND_HUNT_HERDS_PLAN_2026-11-17_ZH_TW.md"
+}

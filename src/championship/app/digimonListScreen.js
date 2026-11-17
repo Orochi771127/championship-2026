@@ -46,6 +46,8 @@ const TRACED_DETAIL_ROWS = Object.freeze([
   { id: "nickname", label: "暱稱", read: (entry) => entry.displayName },
   // The cartridge's own name for the species, as it prints it on screen.
   { id: "species", label: "SPECIES", read: (entry) => entry.identity?.speciesName ?? null },
+  // LINE_FUSION_20261117: the partner grade; "—" for one the app reports without a grade record.
+  { id: "grade", label: "資質", read: (entry) => entry.grade === undefined ? null : entry.grade ?? "—" },
   { id: "HP", label: "HP", read: (entry) => vital(entry.stats?.currentHp,entry.stats?.maxHp) },
   { id: "TP", label: "TP", read: (entry) => vital(entry.stats?.currentTp,entry.stats?.maxTp) },
   // GACHA_FULL_EFFECTS_20261109: the partner's weight, the G it takes on the memory card and in the ranch.

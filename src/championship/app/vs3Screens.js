@@ -207,6 +207,12 @@ export function createHuntResultView({ root, source, hudArt = null }) {
       if (row.speciesId) thumbnail.append(createActionPortrait({ species: row.speciesId, width: 40, height: 40, still: true }).element);
       line.append(thumbnail);
       line.append(element("span", "", label));
+      // Partner grade (LINE_FUSION_20261117): revealed here once caught; a partner with no grade shows "—".
+      const grade = element("span", "cm-vs2-result__grade", "");
+      grade.textContent = row.grade ?? "—";
+      grade.dataset.grade = row.grade ?? "NONE";
+      grade.title = uiText("PARTNER_GRADE");
+      line.append(grade);
       // Wild instinct (AWAKENING_OVERDRIVE_20261109): a veteran elite or ancestral catch says so on its row.
       if (row.kind === "CARD" && (row.instinct === "ELITE" || row.instinct === "ANCESTOR")) {
         const badge = element("span", "cm-vs2-result__instinct", `WILD_INSTINCT_${row.instinct}`);

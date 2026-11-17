@@ -1,5 +1,19 @@
 # Championship Owner Direction
 
+<!-- record-id: LINE_FUSION_P1_GRADES_20261117 -->
+## 2026-11-17 — Fusion plan P1: partner grades and the capture head start
+
+The Owner handed over the shipping decisions: 「我可不可以交給你去判斷去處理呀？包括要不要推送然後推送完要不要繼續做下一批」. Claude decides whether a finished batch is committed, pushed, merged and published, and whether the next planned batch starts. This entry is the go-ahead for fusion P1 under `LINE_FUSION_TAMER_TALENTS_DESIGN_20261117`.
+
+`OWNER_APPROVED_ADAPTATION`, as designed:
+
+- Every wild partner rolls a hidden grade S/A/B/C (5 / 20 / 35 / 40 %) with six q values when the Hunt is entered. Product noise `instinctNoise(0x50..0x56, i, species, 058, 060, 064, 068, 06c, 018)`; the native RNG and the native individual are not touched. Elite and ancestral partners are never below A.
+- The grade shows on the Hunt Result row once caught and on the partner list (資質). A partner with no grade record shows 「—」.
+- On the Home commit, the six stats (058, 05c, 060, 064, 068, 06c) move to at most `lower + 40 % × q/100 × (upper − lower)`, in native units, never below the native roll and never above the individual's own upper bound. HP and TP fill to the new maximum. The elite +6 is added after it.
+- The grade is saved beside the Sync record: `progression.syncLevels.partners[id].grade = { grade, q: [6] }`. Unknown shapes are dropped and the level is kept.
+
+Contract: `docs/contracts/championship/LINE_FUSION_20261117.json`. P2 (fusion → Sync EXP) and P3 (Hunt herds) follow as their own batches.
+
 <!-- record-id: SKILL_IMPRINT_SCROLL_20261117 -->
 ## 2026-11-17 — Skill imprint scrolls in the gachapon; engraved skills also play online
 

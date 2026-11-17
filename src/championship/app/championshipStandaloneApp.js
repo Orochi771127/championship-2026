@@ -37,7 +37,8 @@ import {applyProductTrainingGains} from '../raising/nativeRaisingTraining.js';
 import {inscribeGachaBloodline,grantGachaMetal} from '../gacha/cyberGacha.js';
 import {REALTIME_TRAINING_POLICY,recommendedCages,TRAINING_KIND_OF_CONDITION} from '../raising/productTrainingPolicy.js';
 import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattleExp,grantSyncExp,feedSyncCrystals,reconcileSyncRebirth,
-  boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX} from '../contracts/productSyncLevel.js';
+  boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX,partnerGradeOf,recordPartnerGrade} from '../contracts/productSyncLevel.js';
+import {rollPartnerGrade,applyGradeHeadStart} from '../contracts/productLineFusion.js';
 import {normalizeJourney,createJourneyState,TOWER_FLOORS,towerBand,towerOpponents,towerOpponentSpecies,towerRewards,towerNextFloor,
   clearTowerFloor,patrolStatus,claimPatrol,quickPatrol} from '../contracts/productJourney.js';
 import {CAMPAIGN_ZONES,CAMPAIGN_STAGES,CAMPAIGN_ZONE_CHEST,campaignRivals,campaignStars,campaignRewards,recordCampaignStage,sweepCampaignStage,
@@ -338,7 +339,7 @@ export function createChampionshipStandaloneApp({
   let confirmedGateId = null;
   let huntRuntime = null;
   // Wild instinct of this hunt's wild partners by wildId (AWAKENING_OVERDRIVE_20261109); cleared at the Home commit.
-  let huntInstincts = new Map();
+  let huntInstincts = new Map(), huntGrades = new Map();
   let huntDeadlineMinute = null;
   let huntEntryError = null;
   // The Shop owns the inventory; the loadout only reads it.
@@ -3503,11 +3504,12 @@ export function createChampionshipStandaloneApp({
         ...(huntRuntime?.getOnCardEntries() ?? []).map((entry) => Object.freeze({
           key: `card:${entry.wildId}`, kind: "CARD", id: entry.wildId, speciesId: entry.speciesId,
           displayName: entry.displayName ?? speciesDisplayName(entry.speciesId), canRelease: true,
-          instinct: huntInstincts.get(entry.wildId) ?? 'NORMAL',
+          instinct: huntInstincts.get(entry.wildId) ?? 'NORMAL', grade: huntGrades.get(entry.wildId)?.grade ?? null,
           selected: entry.wildId === huntResult.wildId })),
         ...listRaisingInstances(instanceSources()).filter((entry) => !released.has(entry.instanceId)).map((entry) => Object.freeze({
           key: `home:${entry.instanceId}`, kind: "HOME", id: entry.instanceId, speciesId: entry.speciesId,
           displayName: entry.displayName ?? speciesDisplayName(entry.speciesId),
+          grade: partnerGradeOf(syncLevels, entry.instanceId)?.grade ?? null,
           canRelease: true }))
       ];
       return Object.freeze({ ...huntResult, rows: Object.freeze(rows),
@@ -4353,6 +4355,8 @@ export function createChampionshipStandaloneApp({
     getLastBattleGachaDrop(){return lastBattleGachaDrop;},
     /** Sync Level of one partner: { level, exp, next } (OWNER_APPROVED_ADAPTATION 2026-11-09). */
     getSyncLevel(instanceId){return syncLevelOf(instanceId);},
+    /** LINE_FUSION_20261117: the saved grade and its six q values, or null. */
+    getPartnerGrade(instanceId){return partnerGradeOf(syncLevels,instanceId);},
     /** The cap a title match or championship applies at the current tamer rank. */
     getSyncCap(){return syncCapForRank(tamerRankValue);},
     getSyncCrystals(){return normalizeSyncLevels(syncLevels).crystals;},
@@ -5447,6 +5451,13 @@ export function createChampionshipStandaloneApp({
         const entry = rolled && huntCaptureReplay === null && huntSpawnSpread ? { ...rolled, encounter: { ...rolled.encounter,
           actors: spreadHuntActors(rolled.encounter.actors, rolled.scene.environment) } } : rolled;
         huntInstincts = new Map((entry?.encounter.actors ?? []).map((actor, i) => [`${gate.gateId}:native-wild:${i}`, actor.instinct]));
+        // LINE_FUSION_20261117: every wild partner carries a hidden grade S/A/B/C, revealed on the result screen. Product
+        // noise keyed by the individual's own native values (salt 0x50..0x56); the native RNG is never read.
+        huntGrades = new Map((entry?.encounter.actors ?? []).map((actor, i) => {
+          const f = actor.individual.fields;
+          return [`${gate.gateId}:native-wild:${i}`, rollPartnerGrade((salt) => instinctNoise(salt, i, actor.speciesIndex,
+            f['058'], f['060'], f['064'], f['068'], f['06c'], f['018']), { instinct: actor.instinct })];
+        }));
         lastHuntRareLure = entry?.rareLure ? Object.freeze({ speciesId:`species-${String(entry.rareLure.speciesIndex).padStart(3, "0")}` }) : null;
         const world = createHuntWorld(gate, entry);
         const factory = huntRuntimeFactory
@@ -5626,7 +5637,7 @@ export function createChampionshipStandaloneApp({
           huntResult = Object.freeze({ ...huntResult, commitError: "RANCH_CAPACITY_FULL", ranchG: Object.freeze({ used: ranchUsedG, max: ranchCapacityG() }) });
           publishScreens(); return screens.current();
         }
-        let candidateBurst = burstState(), candidateGacha = cyberGacha;
+        let candidateBurst = burstState(), candidateGacha = cyberGacha, candidateSync = syncLevels;
         for (const entry of entries) {
           const allocation = allocateRaisingInstanceIdentity(candidateIdentity, { ...sources, collection: candidateRaising.collection,
             assignments: candidateRaising.assignments });
@@ -5635,6 +5646,12 @@ export function createChampionshipStandaloneApp({
           // first awakening and a natural bloodline (AWAKENING_OVERDRIVE_20261109).
           const instinct = huntInstincts.get(entry.wildId) ?? 'NORMAL', rule = wildInstinct(instinct);
           let nativeProfile = entry.nativeProfile;
+          // LINE_FUSION_20261117: the grade's head start, inside the individual's own bounds, before the elite gain.
+          const grade = huntGrades.get(entry.wildId) ?? null;
+          if (grade) {
+            nativeProfile = applyGradeHeadStart(nativeProfile, grade).profile;
+            candidateSync = recordPartnerGrade(candidateSync ?? createSyncLevelState(), allocation.instanceId, grade);
+          }
           if (instinct === 'ELITE') {
             const condition = ownPointCondition(speciesTaxonomy(nativeProfile.fields['000']));
             const kind = condition ? TRAINING_KIND_OF_CONDITION[condition] : null;
@@ -5663,7 +5680,7 @@ export function createChampionshipStandaloneApp({
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
-            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha: candidateGacha, burstEvolution: candidateBurst, syncLevels, journey, raising: candidateRaising,
+            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha: candidateGacha, burstEvolution: candidateBurst, syncLevels: candidateSync, journey, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: (bonusShop ?? shop) ? (bonusShop ?? shop).toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),
@@ -5675,7 +5692,7 @@ export function createChampionshipStandaloneApp({
               applyMappedHuntInventoryFromShop(shop, huntInventory); bindShopRuntime();
             }
             raising = candidateRaising; instanceIdentity = candidateIdentity; revision += 1;
-            burstEvolution = candidateBurst; cyberGacha = candidateGacha; huntInstincts = new Map();
+            burstEvolution = candidateBurst; cyberGacha = candidateGacha; syncLevels = candidateSync; huntInstincts = new Map(); huntGrades = new Map();
             registeredSpeciesValue = candidateBook;
             if (releasedHomeIds.includes(selectedCreatureId)) selectedCreatureId = null;
             if (releasedResidents.length) requireSession().commitRaisingResidentRelease(releasedResidents, beforeSnapshot.revision);

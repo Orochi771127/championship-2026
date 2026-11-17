@@ -205,6 +205,7 @@
     "src/championship/contracts/productCampaign.js",
     "src/championship/contracts/productGrowthRules.js",
     "src/championship/contracts/productJourney.js",
+    "src/championship/contracts/productLineFusion.js",
     "src/championship/contracts/productOriginalSpecies.js",
     "src/championship/contracts/productPasswordTransport.js",
     "src/championship/contracts/productSpeciesData.js",
@@ -8540,6 +8541,7 @@
     "src/championship/contracts/productCampaign.js",
     "src/championship/contracts/productGrowthRules.js",
     "src/championship/contracts/productJourney.js",
+    "src/championship/contracts/productLineFusion.js",
     "src/championship/contracts/productOriginalSpecies.js",
     "src/championship/contracts/productPasswordTransport.js",
     "src/championship/contracts/productSpeciesData.js",
@@ -40230,7 +40232,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "2ae999312535602f19726a0765c29f2564c7a465c692de28554e8f44b42325b9"
+        "sha256": "23bfca21ba7ea158ce54141d3fb91f6df078c8f2bf0b29fd6322f4855f1e53d1"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -40286,7 +40288,7 @@
       },
       {
         "path": "src/championship/app/digimonListScreen.js",
-        "sha256": "b1b398b1ae423146439c2e4b55cd2f66629f871248c9c6e602b01c52b2785934"
+        "sha256": "0709d464eed9158e5ace38802c18784de60201335fd1e1483153ae72ea5271e3"
       },
       {
         "path": "src/championship/app/downloadSaveBackup.js",
@@ -40390,7 +40392,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "0b7e468fda111a4298d39c407549269c8296b0dc60e6aa0cd38e36197efed1b2"
+        "sha256": "a0a79351a723a466de89c0a7f5d621ce9fb337947739dcc72156ad067dfceb05"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -40718,11 +40720,11 @@
       },
       {
         "path": "src/championship/app/vs2Styles.css",
-        "sha256": "a5da67a560ddfbc343b6b1b61e5305ae2aa8b45ea71bb865add797f2e5ff22bf"
+        "sha256": "04e6fb0e42b4420e8ca68f951ac20ae53d6da2e7639fab22ba2e0fee1ac06908"
       },
       {
         "path": "src/championship/app/vs3Screens.js",
-        "sha256": "47d5167c3100962d2bc48b4b3ddab182bf7cbcc868da82bc7ec0c80c8c5f5dd5"
+        "sha256": "98523884fb9ab537fa140119f360cb9fb9da156d2b5d5ca459bfcd1d0d8bf71a"
       },
       {
         "path": "src/championship/app/vs4Screens.js",
@@ -41061,6 +41063,10 @@
         "sha256": "2b74ca1f342477ddf6594a7c6d6f0d2fcf181379990dd0ea3151e82dea8ecebb"
       },
       {
+        "path": "src/championship/contracts/productLineFusion.js",
+        "sha256": "7a4f77b4e6f47002b22483809fab1cdb4648434de6de7218f56a8bfd6951db5c"
+      },
+      {
         "path": "src/championship/contracts/productOriginalSpecies.js",
         "sha256": "ae215f63ae1b764941575074e32191d6631500e394ef7753fa687ae3fee716ec"
       },
@@ -41078,7 +41084,7 @@
       },
       {
         "path": "src/championship/contracts/productSyncLevel.js",
-        "sha256": "bab511634fac4a80ecda1e3582a9ce18d524b84bb7a07e239d4060c7b2e3246c"
+        "sha256": "b21ad70e26064087cbf133ee85a24a97b287d34e81c126d14fbd5e2a7d115264"
       },
       {
         "path": "src/championship/contracts/speciesTaxonomy.js",
@@ -42654,23 +42660,23 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "6b5d7f48f023b2785129fc3df1f1c7f7072ae8b64f42ef1a42d377ac3f42d5a2"
+        "sha256": "74648d5054d83c28a793598fdc06e8a9bd2b524ebe7383437412da4fe1d174e6"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "7f93b0adf20a78107215543aad8bdaf544fd94ae662c0a4b51888daceee3d2a8"
+        "sha256": "7349f93f11aee8a88cb07130d11d53905d8fa3596ceb59b5f67ab22bc08aef35"
       },
       {
         "path": "src/championship/text/uiText.js",
-        "sha256": "0486b3afa929e4cd067d219fbd207a9d0ee0ddc684c147f75d398f9d52dd6752"
+        "sha256": "acb5454d4a18d85ffeb7754a356fc2a2787773a66baadf088b7a63d3ec3e5568"
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "d38f0b6123af66253977dbee1617ec8e92ed7c1f342026b056edcc4a6303435c"
+        "sha256": "89f3d2d4cc9753aee951910acafb1e736471b4ac9d2974f86a13335798b3c7a5"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "eed2d2313f75ac08e47b2274fc460e9639cae71897b2e1e05ace8fdea5200db0"
+        "sha256": "e6b17025293250a03208f740cc5b8ca96ad766438ae21c9cae7c6f6503641634"
       },
       {
         "path": "src/championship/text/weeklyScheduleText.js",
