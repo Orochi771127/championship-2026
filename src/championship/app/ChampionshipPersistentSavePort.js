@@ -347,6 +347,7 @@ export function createChampionshipPersistentSavePort({
         ...(request.syncLevels!=null?{syncLevels:request.syncLevels}:{}),
         ...(request.journey!=null?{journey:request.journey}:{}),
         ...(request.tamerTalents!=null?{tamerTalents:request.tamerTalents}:{}),
+        ...(request.tamerSupplies!=null?{tamerSupplies:request.tamerSupplies}:{}),
         ...(request.nativeTitles!==undefined?{nativeTitles:request.nativeTitles}:{}),
         ...(request.championshipRun!==undefined?{championshipRun:request.championshipRun}:{}),
         ...(request.nativeMessages!==undefined?{nativeMessages:request.nativeMessages}:{}),

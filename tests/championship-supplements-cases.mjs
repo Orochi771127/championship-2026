@@ -69,3 +69,75 @@ test('ranch supplements run on real time: growth for two hours (extended from it
   assert.equal(ranchSupplyActive(null, 'supply:growth', now), false);
   assert.equal(SUPPLY_STACK_MAX, 99); assert.equal(SUPPLEMENT_IDS.length, 4);
 });
+
+// ---- The application ----
+import {readFileSync} from 'node:fs';
+import {createChampionshipStandaloneApp} from '../src/championship/app/championshipStandaloneApp.js';
+import {CHAMPIONSHIP_MODERN_SAVE_KEY} from '../src/championship/app/championshipStandaloneSave.js';
+import {createFullQaSaveText} from '../scripts/lib/championshipFullQaSave.mjs';
+
+const read = path => JSON.parse(readFileSync(new URL(`../${path}`, import.meta.url), 'utf8'));
+async function supplyApp(edit = save => save) {
+  const data = new Map(), storage = {failing: false, getItem: key => data.get(key) ?? null, removeItem: key => data.delete(key),
+    setItem(key, value) { if (this.failing) throw new Error('QUOTA'); data.set(key, value); }};
+  const cages = read('docs/contracts/championship/raising-home-presentation.v1.json').cages;
+  const make = () => createChampionshipStandaloneApp({storage, locks: null, cages, catalog: read('src/data/championship/catalogs/creature-species.r1.json'),
+    rngClock: () => ({hour: 13, minute: 20, second: 50}), now: () => '2026-11-18T00:00:00.000Z'});
+  const first = make(); await first.newGame(); first.save();
+  const save = JSON.parse(createFullQaSaveText(JSON.parse(data.get(CHAMPIONSHIP_MODERN_SAVE_KEY)), {cageIds: cages.map(e => e.cageId)}));
+  await first.dispose(); edit(save); data.set(CHAMPIONSHIP_MODERN_SAVE_KEY, JSON.stringify(save));
+  const app = make(); await app.continueGame();
+  return {app, storage, make, saved: () => JSON.parse(data.get(CHAMPIONSHIP_MODERN_SAVE_KEY))};
+}
+const PARTNER = 'championship:2026:instance:0001';
+
+test('buying spends Bits and fills the bag in one save; a failed save changes neither', async () => {
+  const {app, storage, saved} = await supplyApp();
+  try {
+    const before = app.getSuppliesFrame(), bits = before.bits;
+    assert.deepEqual(before.items.map(item => [item.id, item.owned]), SUPPLEMENT_IDS.map(id => [id, 0]));
+    storage.failing = true;
+    assert.deepEqual(app.buySupply('supply:vigor', 2), {ok: false, reason: 'SAVE_FAILED'});
+    storage.failing = false;
+    assert.equal(app.getSuppliesFrame().bits, bits); assert.equal(app.getSuppliesFrame().items[0].owned, 0);
+    const bought = app.buySupply('supply:vigor', 2);
+    assert.deepEqual([bought.ok, bought.cost, bought.owned], [true, 300, 2]);
+    assert.equal(app.getSuppliesFrame().bits, bits - 300);
+    assert.equal(saved().progression.tamerSupplies.owned['supply:vigor'], 2);
+    assert.equal(saved().shop.bits ?? saved().shop.wallet?.bits ?? app.getSuppliesFrame().bits, bits - 300);
+    assert.equal(app.buySupply('supply:nope').reason, 'SUPPLY_UNKNOWN');
+  } finally { await app.dispose(); }
+});
+
+test('a recovery supplement writes the partner and leaves the bag in one save; a full partner keeps it', async () => {
+  const {app, saved, make} = await supplyApp(save => {
+    save.progression.tamerSupplies = {version: 1, owned: {'supply:vigor': 1, 'supply:snack': 1}, armed: {}, ranch: {}};
+    const fields = save.raising.collection.find(entry => entry.instanceId === PARTNER).nativeProfile.fields;
+    fields['050'] = Math.max(10, fields['058'] - 50); fields['020'] = 40;
+  });
+  let reloaded = null;
+  try {
+    const profileOf = source => source.raising.collection.find(entry => entry.instanceId === PARTNER).nativeProfile.fields;
+    assert.deepEqual(app.useSupply('supply:vigor', PARTNER), {ok: true, id: 'supply:vigor', instanceId: PARTNER});
+    assert.equal(profileOf(saved())['050'], profileOf(saved())['058']);
+    assert.equal(saved().progression.tamerSupplies.owned['supply:vigor'], undefined);
+    assert.equal(app.useSupply('supply:vigor', PARTNER).reason, 'SUPPLY_NONE_OWNED');
+    assert.equal(app.useSupply('supply:snack', PARTNER).ok, true);
+    assert.equal(profileOf(saved())['020'], 45);
+    await app.dispose();
+    reloaded = make(); await reloaded.continueGame();
+    assert.deepEqual(reloaded.getSuppliesFrame().items.map(item => item.owned), [0, 0, 0, 0]);
+  } finally { await (reloaded ?? app).dispose(); }
+});
+
+test('a ranch supplement starts its clock in one save and shows until when it runs', async () => {
+  const {app, saved} = await supplyApp(save => { save.progression.tamerSupplies = {version: 1, owned: {'supply:growth': 1}, armed: {}, ranch: {}}; });
+  try {
+    const used = app.useSupply('supply:growth');
+    assert.equal(used.ok, true);
+    const item = app.getSuppliesFrame().items.find(entry => entry.id === 'supply:growth');
+    assert.equal(item.owned, 0); assert.equal(item.activeUntil, used.until);
+    assert.equal(saved().progression.tamerSupplies.ranch['supply:growth'], used.until);
+    assert.equal(app.useSupply('supply:growth').reason, 'SUPPLY_NONE_OWNED');
+  } finally { await app.dispose(); }
+});
