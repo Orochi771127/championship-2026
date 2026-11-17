@@ -225,6 +225,7 @@ export const UI_COPY_TH = Object.freeze({
   "SUPPLY_UNEQUIP": "ถอด",
   "SUPPLY_CARRIED_BATTLES": "ติดกับ {name} · เหลือ {n} ศึก",
   "SUPPLY_PARTLY_USED": "ใช้ไปแล้ว ต้องใช้ให้หมดก่อน",
+  "拾荒：{item} ×1": "เก็บได้: {item} ×1",
   "賞金天賦 +{bits} 位元幣": "พรสวรรค์เงินรางวัล +{bits} เหรียญ",
   "SUPPLY_NOT_BATTLE": "ติดตัวไม่ได้",
   "WILD_INSTINCT_ANCESTOR_NOTE": "เกิดมาพร้อมความคืบหน้าตื่นพลังขั้นแรก +40% และสายเลือดธรรมชาติ",

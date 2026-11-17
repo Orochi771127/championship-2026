@@ -2710,7 +2710,7 @@ let huntGate = null, gateOutcome = null;
 /** Open the hunt end gate onto the mounted result; with no catch, the gate shows "caught 0" first. */
 function settleHuntGate(gate, outcome) {
   void (async () => {
-    if (outcome === 'EMPTY') await gate.showEmptyResult();
+    if (outcome === 'EMPTY') await gate.showEmptyResult({ find: app.getLastHuntScavenge?.() ?? null });
     await gate.open();
     if (huntGate === gate) huntGate = null;
   })().catch(() => { gate.dispose(); if (huntGate === gate) huntGate = null; });

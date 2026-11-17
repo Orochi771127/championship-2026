@@ -73,10 +73,18 @@ export function createShopRuntime({
   }
   if (!Number.isSafeInteger(bits) || bits < 0) throw shopError("INVALID_BITS");
 
+  // TAMER_TALENTS_T4_20261118 (the trader talent 殺價): every Bits price of this shop is charged and shown at this
+  // share of the catalog price. 100 is the catalog itself, which is all a save, a parity test or the tutorial uses;
+  // diamond prices and the gachapon never pass through here.
+  const pricePercentOf = (value, fallback = 100) => (Number.isFinite(value) && value >= 50 && value <= 100 ? value : fallback);
   let progressionState = {
     tamerRank: Number.isSafeInteger(progression?.tamerRank) ? progression.tamerRank : 0,
-    battleBadges: Array.isArray(progression?.battleBadges) ? [...progression.battleBadges] : []
+    battleBadges: Array.isArray(progression?.battleBadges) ? [...progression.battleBadges] : [],
+    bitsPricePercent: pricePercentOf(progression?.bitsPricePercent)
   };
+  /** A catalog Bits price as this shop charges it: rounded up, never free. */
+  const priced = (bits) => (Number.isSafeInteger(bits) && bits > 0 && progressionState.bitsPricePercent !== 100
+    ? Math.max(1, Math.ceil(bits * progressionState.bitsPricePercent / 100)) : bits);
   const records = catalog.records;
   let wallet = Math.min(bits, BITS_WALLET_CAP);
   const visibility = new Array(SHOP_RECORD_COUNT);
@@ -167,12 +175,12 @@ export function createShopRuntime({
     if (next >= huntToolTierCount(family)) return null;
     if (family.kind === "MEMORY") {
       const row = family.records[next];
-      return { tier: next, bits: family.priceBits[next], diamonds: family.priceDiamonds[next],
+      return { tier: next, bits: priced(family.priceBits[next]), diamonds: family.priceDiamonds[next],
         capacityG: family.capacityG[next], unlocked: row === undefined ? tier >= family.records.length - 1 : unlockedRow(row),
         unlock: row === undefined ? null : unlockOf(row), shopRecordIndex: row ?? null };
     }
     const row = family.records[next];
-    return { tier: next, bits: family.kind === "GEAR" && next > 0 ? family.upgradeBits : records[row].unitPriceBits,
+    return { tier: next, bits: priced(family.kind === "GEAR" && next > 0 ? family.upgradeBits : records[row].unitPriceBits),
       diamonds: null, unlocked: unlockedRow(row), unlock: unlockOf(row), shopRecordIndex: row };
   }
 
@@ -186,10 +194,10 @@ export function createShopRuntime({
       visible: tier >= 0 || unlockedRow(family.records[0]), next: nextTierOf(family) };
     view.unlock = view.visible ? null : unlockOf(family.records[0]);
     if (family.kind === "ROPE") {
-      view.refillBits = family.refillBits[Math.max(0, tier)];
+      view.refillBits = priced(family.refillBits[Math.max(0, tier)]);
       view.wear = (ropeWear[family.familyId] ?? ROPE_WEAR_FULL) / ROPE_WEAR_FULL;
-      view.emergencyBits = ropeEmergencyBits(family, tier);
-    } else if (family.kind === "GEAR") view.refillBits = records[row].unitPriceBits;
+      view.emergencyBits = priced(ropeEmergencyBits(family, tier));
+    } else if (family.kind === "GEAR") view.refillBits = priced(records[row].unitPriceBits);
     else view.capacityG = tier >= 0 ? family.capacityG[tier] : 0;
     return view;
   }
@@ -201,7 +209,7 @@ export function createShopRuntime({
       if (!allItemsVisible && vis === SHOP_VISIBILITY.HIDDEN) {
         lockedListings.push({
           shopRecordIndex: record.shopRecordIndex, category: record.category, subcategory: record.subcategory,
-          displayName: record.displayName, unitPriceBits: record.unitPriceBits, maxOwned: maxOwnedOf(record),
+          displayName: record.displayName, unitPriceBits: priced(record.unitPriceBits), listPriceBits: record.unitPriceBits, maxOwned: maxOwnedOf(record),
           owned: 0, purchaseDomain: record.purchaseDomain, productItemId: record.productItemId ?? null,
           unlock: unlockOf(record.shopRecordIndex),
           ...(huntToolFamilyOfRecord(record.shopRecordIndex) ? { familyId: huntToolFamilyOfRecord(record.shopRecordIndex).family.familyId } : {})
@@ -214,7 +222,8 @@ export function createShopRuntime({
         category: record.category,
         subcategory: record.subcategory,
         displayName: record.displayName,
-        unitPriceBits: record.unitPriceBits,
+        unitPriceBits: priced(record.unitPriceBits),
+        listPriceBits: record.unitPriceBits,
         maxOwned: maxOwnedOf(record),
         owned,
         visibility: vis === SHOP_VISIBILITY.NEW ? "NEW" : "SEEN",
@@ -289,8 +298,10 @@ export function createShopRuntime({
     }
     const stock = stockOf(family);
     if (stock + quantity > HUNT_TOOL_STOCK_CAP) return refused("MAX_OWNED", { familyId });
-    const price = unitBits ?? (family.kind === "ROPE" ? family.refillBits[tier] : records[family.records[tier]].unitPriceBits);
-    const cost = Math.ceil(price * quantity);
+    // A caller's own unit price (the emergency refill's marked-up, possibly fractional one) is discounted on its total,
+    // which is the figure the family view shows; the catalog unit price is discounted per unit, as a row shows it.
+    const cost = unitBits !== null ? priced(Math.ceil(unitBits * quantity))
+      : priced(family.kind === "ROPE" ? family.refillBits[tier] : records[family.records[tier]].unitPriceBits) * quantity;
     if (cost > wallet) return refused("INSUFFICIENT_FUNDS", { familyId, cost });
     wallet -= cost;
     if (tierOf(family) !== tier) {
@@ -362,7 +373,7 @@ export function createShopRuntime({
       if (owned + quantity > maxOwnedOf(record)) {
         return deepFreeze({ ok: false, reason: "MAX_OWNED" });
       }
-      const cost = record.unitPriceBits * quantity;
+      const cost = priced(record.unitPriceBits) * quantity;
       if (cost > wallet) {
         return deepFreeze({ ok: false, reason: "INSUFFICIENT_FUNDS" });
       }
@@ -477,7 +488,8 @@ export function createShopRuntime({
     setProgression(next = {}) {
       progressionState = {
         tamerRank: Number.isSafeInteger(next.tamerRank) ? next.tamerRank : progressionState.tamerRank,
-        battleBadges: Array.isArray(next.battleBadges) ? [...next.battleBadges] : progressionState.battleBadges
+        battleBadges: Array.isArray(next.battleBadges) ? [...next.battleBadges] : progressionState.battleBadges,
+        bitsPricePercent: pricePercentOf(next.bitsPricePercent, progressionState.bitsPricePercent)
       };
       revealUnlocked();
       return publish();

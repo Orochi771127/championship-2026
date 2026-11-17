@@ -609,6 +609,11 @@
         "evidence": "PR #275 850db9f7; all eight checks green; live pages-build commit 850db9f7 (build 07d09276) and the commander code in the live bundle"
       },
       {
+        "id": "TACTIC_PRACTICE_LOOP_P1_P4",
+        "state": "VERIFIED_LIVE",
+        "evidence": "branch feat/tactic-practice-integration-20261118 = main 850db9f7 merged with feat/tactic-practice-loop-20261116 @ 83aedccf (P1 styles and glyphs, P2/P2b sparring trio, P3 three pillars, P4 survival prototype). Five conflicts resolved (art index 138 entries and its pinned hash, four hunks in the standalone app, imports, one stylesheet); 7 modules and 32 glyph files registered in the build lists; the save module is unchanged. Full suite 3,891 / 3,891; build and validate pass. Headless Chromium on an isolated origin: owned-battle gate passes; battle menu shows the three pillars (征途, 錦標賽, 連線) over the seven modes; 征途 -> 陪練 -> partner -> plan -> bout 1 -> battle -> result with no page error. PR #276 26f82369, all twelve checks green; live pages-build commit 26f82369 (build 268c8a01), the sparring code in the live bundle, the glyph images served and their provenance manifest not published"
+      },
+      {
         "id": "PR_194_CRASH_CONSISTENCY",
         "state": "VERIFIED_LIVE",
         "evidence": "PR #270 1312d138 (port); #194 closed with a pointer; care-image leak check re-run locally (delta 0, control +120); live bundle checked"
@@ -632,13 +637,14 @@
         "id": "RESULT_HELD_BITS",
         "state": "VERIFIED_LIVE",
         "evidence": "the prize page printed the receipt wallet without the beacon and 賞金 shares (prize 50, wallet +57, page said +50); fixed in 8f9565b3"
+      },
+      {
+        "id": "FLOATING_HUD_GATE_CHROME_158",
+        "state": "VERIFIED_MERGED",
+        "evidence": "tests/championship-battle-full-map-browser.cjs compared a computed keyword (flex-end) that Chrome 158 reports as flow-end; it now measures where the roster cards sit; passes on Chrome 157 locally and 158 in CI (PR #276)"
       }
     ],
     "openForClaude": [
-      {
-        "id": "TACTIC_PRACTICE_LOOP_P1_P4",
-        "state": "IMPLEMENTED_PUSHED"
-      },
       {
         "id": "NORMAL_ENTRY_PLAYTHROUGH",
         "state": "MOSTLY_VERIFIED"

@@ -225,6 +225,7 @@ export const UI_COPY_VI = Object.freeze({
   "SUPPLY_UNEQUIP": "Tháo",
   "SUPPLY_CARRIED_BATTLES": "{name} mang · còn {n} trận",
   "SUPPLY_PARTLY_USED": "Đã dùng: phải dùng hết",
+  "拾荒：{item} ×1": "Nhặt được: {item} ×1",
   "賞金天賦 +{bits} 位元幣": "Thiên phú tiền thưởng +{bits} xu",
   "SUPPLY_NOT_BATTLE": "Không mang theo được",
   "WILD_INSTINCT_ANCESTOR_NOTE": "Sinh ra đã có +40% tiến độ thức tỉnh đầu tiên và một huyết thống tự nhiên.",

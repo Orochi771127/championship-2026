@@ -73,7 +73,7 @@ export function createHuntGateCurtain({ doc = globalThis.document, text = value 
      * The closed gate becomes the result of a hunt with no catch. Resolves when
      * the player taps continue (or after `autoMs`, when given).
      */
-    showEmptyResult({ autoMs = 0 } = {}) {
+    showEmptyResult({ autoMs = 0, find = null } = {}) {
       if (disposed || !node) return Promise.resolve(false);
       const plate = node.querySelector('.cm-hunt-gate__plate');
       const card = el(doc, 'div', 'cm-hunt-gate__result');
@@ -82,6 +82,8 @@ export function createHuntGateCurtain({ doc = globalThis.document, text = value 
         el(doc, 'p', 'cm-hunt-gate__count', '0'),
         el(doc, 'p', 'cm-hunt-gate__count-label', text('捕獲 {count} 隻', { count: 0 })),
         el(doc, 'p', 'cm-hunt-gate__note', text('這次沒有夥伴')));
+      // 拾荒 (TAMER_TALENTS_T4_20261118): what the hunt turned up all the same.
+      if (find?.id) { const line = el(doc, 'p', 'cm-hunt-gate__note cm-hunt-gate__find', text('拾荒：{item} ×1', { item: text(find.id) })); line.dataset.scavenged = find.id; card.append(line); }
       const button = el(doc, 'button', 'cm-hunt-gate__continue cm-screen-primary', text('返回牧場'));
       button.type = 'button';
       card.append(button);
