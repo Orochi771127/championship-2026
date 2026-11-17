@@ -881,6 +881,15 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
 }
 .cm-digimon-control:disabled { border-color: var(--c-line-1); background: transparent; color: var(--c-text-disabled); }
 .cm-digimon-controls-note { margin: -4px 0 0; color: var(--c-text-3); font-size: var(--fs-label); }
+/* Same-line fusion (LINE_FUSION_20261117 P2): tick fodder, read the gain, confirm once. */
+.cm-digimon-fusion__list { display: grid; gap: 6px; max-height: calc(40 * var(--cm-dvh, 1dvh)); overflow-y: auto; }
+.cm-digimon-fusion__row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 4px 10px; min-height: var(--target, 44px); padding: 4px 8px; border: 1px solid var(--c-line-1, rgba(148, 163, 184, .4)); border-radius: 10px; }
+.cm-digimon-fusion__row input { width: 22px; height: 22px; }
+.cm-digimon-fusion__name { font-weight: 800; min-width: 0; overflow-wrap: anywhere; }
+.cm-digimon-fusion__facts { font-variant-numeric: tabular-nums; font-weight: 800; white-space: nowrap; }
+.cm-digimon-fusion__warning { grid-column: 2 / -1; color: #b45309; font-weight: 800; font-size: var(--fs-label); }
+.cm-digimon-fusion__preview { margin: 0; min-height: 1.4em; font-weight: 900; font-variant-numeric: tabular-nums; }
+.cm-digimon-fusion__empty { margin: 0; }
 
 .cm-digimon-rename {
   display: grid;

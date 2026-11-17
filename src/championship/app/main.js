@@ -2480,6 +2480,15 @@ async function mountCurrentScreen() {
         if (result.ok) autosave?.request('rebirth');
         return result.ok ? { ...result, entries: projectRoster() } : result;
       },
+      // LINE_FUSION_20261117 P2: saved partners of the same line feed this partner's Sync EXP, in one save.
+      fusion: {
+        candidates: (instanceId) => app.getFusionCandidates(instanceId),
+        preview: (instanceId, fodderIds) => app.previewPartnerFusion(instanceId, fodderIds),
+        fuse(instanceId, fodderIds) {
+          const result = app.fusePartners(instanceId, fodderIds);
+          return result.ok ? { ...result, entries: projectRoster() } : result;
+        }
+      },
       onBurstForm(instanceId, form) {
         const result = app.setPartnerBurstForm(instanceId, form);
         if (result.ok) autosave?.request('burst-form');

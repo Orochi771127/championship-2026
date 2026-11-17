@@ -37,8 +37,8 @@ import {applyProductTrainingGains} from '../raising/nativeRaisingTraining.js';
 import {inscribeGachaBloodline,grantGachaMetal} from '../gacha/cyberGacha.js';
 import {REALTIME_TRAINING_POLICY,recommendedCages,TRAINING_KIND_OF_CONDITION} from '../raising/productTrainingPolicy.js';
 import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattleExp,grantSyncExp,feedSyncCrystals,reconcileSyncRebirth,
-  boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX,partnerGradeOf,recordPartnerGrade} from '../contracts/productSyncLevel.js';
-import {rollPartnerGrade,applyGradeHeadStart} from '../contracts/productLineFusion.js';
+  boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX,partnerGradeOf,recordPartnerGrade,fuseSyncPartners} from '../contracts/productSyncLevel.js';
+import {rollPartnerGrade,applyGradeHeadStart,fusionLineMultiplier,FUSION_MAX_FODDER,FUSION_WARN_LEVEL} from '../contracts/productLineFusion.js';
 import {normalizeJourney,createJourneyState,TOWER_FLOORS,towerBand,towerOpponents,towerOpponentSpecies,towerRewards,towerNextFloor,
   clearTowerFloor,patrolStatus,claimPatrol,quickPatrol} from '../contracts/productJourney.js';
 import {CAMPAIGN_ZONES,CAMPAIGN_STAGES,CAMPAIGN_ZONE_CHEST,campaignRivals,campaignStars,campaignRewards,recordCampaignStage,sweepCampaignStage,
@@ -1827,6 +1827,55 @@ export function createChampionshipStandaloneApp({
       bond:profile.fields['020']|0});
   }
   /** One partner's burst forms with their conditions, current values and unlock state (roster, battle setup). */
+  // ---- Same-line fusion (LINE_FUSION_20261117 P2): fodder of the base's own line feeds the base's Sync EXP ----
+  const fusionAncestors=index=>{try{return nativeHuntSpeciesByIndex(index).ancestors;}catch{return [];}};
+  const fusionSpeciesOf=instanceId=>{const index=syncProfileOf(instanceId)?.fields?.['000'];return Number.isSafeInteger(index)?index:null;};
+  /** 1 same species, 0.6 a lower stage of the base's line, 0 not its line. */
+  function fusionLineOf(baseId,fodderSpecies){
+    const base=fusionSpeciesOf(baseId);return base===null?0:fusionLineMultiplier(base,fodderSpecies,fusionAncestors);
+  }
+  /** Why a saved partner cannot be fodder (the main partner, which is also the starter egg, never is). */
+  function fusionHomeFodderRefusal(instanceId){
+    if(instanceId===creature?.creatureId)return 'FUSION_ACTIVE_PARTNER';
+    if(!raising?.collection?.some(entry=>entry.instanceId===instanceId))return 'FUSION_UNKNOWN_PARTNER';
+    return null;
+  }
+  /** What a saved fodder takes with it, for the second confirmation. */
+  function fusionFodderWarnings(instanceId){
+    const warnings=[],level=syncOf(syncLevels,instanceId).level;
+    if(level>=FUSION_WARN_LEVEL)warnings.push(Object.freeze({kind:'LEVEL',level}));
+    if(burstUnlocksOf(burstState(),instanceId).length>0)warnings.push(Object.freeze({kind:'BURST'}));
+    if(gachaBloodlineOf(cyberGacha,instanceId))warnings.push(Object.freeze({kind:'BLOODLINE'}));
+    return Object.freeze(warnings);
+  }
+  /** The Sync record after the fusions staged on the hunt result, and each base's summed gain. */
+  function stagedHuntFusionSync(){
+    let state=normalizeSyncLevels(syncState());const gains=new Map();
+    for(const fusion of huntResult?.fusions??[]){
+      const fused=fuseSyncPartners(state,fusion.baseId,[{instanceId:fusion.kind==='HOME'?fusion.id:null,grade:fusion.grade,line:fusion.line}]);
+      if(!fused)continue;
+      const prior=gains.get(fusion.baseId);
+      gains.set(fusion.baseId,Object.freeze({amount:(prior?.amount??0)+fused.total,overflow:(prior?.overflow??0)+fused.overflow,
+        before:prior?.before??fused.summary.before,after:fused.summary.after}));
+      state=fused.state;
+    }
+    return {state,gains};
+  }
+  /** Validate a ranch fusion and work out what it pays. */
+  function partnerFusionPlan(baseId,fodderIds){
+    if(!syncProfileOf(baseId))return {ok:false,reason:'UNKNOWN_INDIVIDUAL'};
+    const ids=Array.isArray(fodderIds)?[...fodderIds]:[];
+    if(ids.length<1||ids.length>FUSION_MAX_FODDER||new Set(ids).size!==ids.length||ids.includes(baseId))return {ok:false,reason:'FUSION_INVALID_SELECTION'};
+    const fodders=[];
+    for(const id of ids){
+      const refusal=fusionHomeFodderRefusal(id);if(refusal)return {ok:false,reason:refusal};
+      const line=fusionLineOf(baseId,fusionSpeciesOf(id));if(!(line>0))return {ok:false,reason:'FUSION_LINE_MISMATCH'};
+      fodders.push({instanceId:id,grade:partnerGradeOf(syncLevels,id),line});
+    }
+    syncLevelOf(baseId);
+    const fused=fuseSyncPartners(syncState(),baseId,fodders);
+    return fused?{ok:true,ids,fused}:{ok:false,reason:'FUSION_INVALID_SELECTION'};
+  }
   function partnerBurstView(instanceId){
     const profile=partnerProfile(instanceId);if(!profile)return null;
     const unlocked=new Set(burstUnlocksOf(burstState(),instanceId)),plan=partnerBurstPlan(instanceId);
@@ -3500,19 +3549,44 @@ export function createChampionshipStandaloneApp({
     getHuntResult() {
       if (!huntResult?.pendingHomeCommit) return huntResult;
       const released = new Set(huntResult.releasedHomeIds ?? []);
+      // LINE_FUSION_20261117 P2: a catch or a saved partner can be fused into a saved partner of its own line.
+      const homes = listRaisingInstances(instanceSources()).filter((entry) => !released.has(entry.instanceId));
+      const staged = stagedHuntFusionSync(), stagedBases = new Set((huntResult.fusions ?? []).map((fusion) => fusion.baseId));
+      const basesFor = (species, selfId = null) => Number.isSafeInteger(species)
+        ? homes.filter((home) => home.instanceId !== selfId && fusionLineOf(home.instanceId, species) > 0) : [];
       const rows = [
         ...(huntRuntime?.getOnCardEntries() ?? []).map((entry) => Object.freeze({
           key: `card:${entry.wildId}`, kind: "CARD", id: entry.wildId, speciesId: entry.speciesId,
           displayName: entry.displayName ?? speciesDisplayName(entry.speciesId), canRelease: true,
+          canFuse: basesFor(entry.nativeProfile?.fields?.['000']).length > 0,
           instinct: huntInstincts.get(entry.wildId) ?? 'NORMAL', grade: huntGrades.get(entry.wildId)?.grade ?? null,
           selected: entry.wildId === huntResult.wildId })),
-        ...listRaisingInstances(instanceSources()).filter((entry) => !released.has(entry.instanceId)).map((entry) => Object.freeze({
+        ...homes.map((entry) => Object.freeze({
           key: `home:${entry.instanceId}`, kind: "HOME", id: entry.instanceId, speciesId: entry.speciesId,
           displayName: entry.displayName ?? speciesDisplayName(entry.speciesId),
           grade: partnerGradeOf(syncLevels, entry.instanceId)?.grade ?? null,
-          canRelease: true }))
+          level: syncOf(staged.state, entry.instanceId).level, fusionGain: staged.gains.get(entry.instanceId) ?? null,
+          // A partner already promised fused EXP stays: it can be neither released nor fused away.
+          canFuse: !stagedBases.has(entry.instanceId) && fusionHomeFodderRefusal(entry.instanceId) === null
+            && basesFor(fusionSpeciesOf(entry.instanceId), entry.instanceId).length > 0,
+          canRelease: !stagedBases.has(entry.instanceId) }))
       ];
-      return Object.freeze({ ...huntResult, rows: Object.freeze(rows),
+      const fusionRow = rows.find((row) => row.key === huntResult.pendingFusionKey) ?? null;
+      let pendingFusion = null;
+      if (fusionRow) {
+        const card = fusionRow.kind === "CARD" ? (huntRuntime?.getOnCardEntries() ?? []).find((entry) => entry.wildId === fusionRow.id) : null;
+        const species = card ? card.nativeProfile?.fields?.['000'] : fusionSpeciesOf(fusionRow.id);
+        const grade = card ? huntGrades.get(fusionRow.id) ?? null : partnerGradeOf(syncLevels, fusionRow.id);
+        pendingFusion = Object.freeze({ row: fusionRow,
+          warnings: fusionRow.kind === "HOME" ? fusionFodderWarnings(fusionRow.id) : Object.freeze([]),
+          bases: Object.freeze(basesFor(species, fusionRow.kind === "HOME" ? fusionRow.id : null).map((home) => {
+            const line = fusionLineOf(home.instanceId, species);
+            const preview = fuseSyncPartners(staged.state, home.instanceId, [{ instanceId: fusionRow.kind === "HOME" ? fusionRow.id : null, grade, line }]);
+            return Object.freeze({ instanceId: home.instanceId, speciesId: home.speciesId, line,
+              displayName: home.displayName ?? speciesDisplayName(home.speciesId), preview: preview?.summary ?? null });
+          })) });
+      }
+      return Object.freeze({ ...huntResult, rows: Object.freeze(rows), pendingFusion,
         pendingRelease: rows.find((row) => row.key === huntResult.pendingReleaseKey) ?? null });
     },
 
@@ -4507,6 +4581,56 @@ export function createChampionshipStandaloneApp({
       const fed=feedSyncCrystals(syncState(),instanceId,amount);
       if(!fed)return {ok:false,reason:'NO_CRYSTALS'};
       syncLevels=fed.state;savePort.markDirty();publishRaising();return {ok:true,gain:fed.gain};
+    },
+    // ---- Same-line fusion from the ranch (LINE_FUSION_20261117 P2) ----
+    /** The saved partners `baseId` can take as fodder, each with its line multiplier, grade, level and what it would lose. */
+    getFusionCandidates(baseId){
+      if(!session||!syncProfileOf(baseId))return null;
+      const fodders=listRaisingInstances(instanceSources()).filter(entry=>entry.instanceId!==baseId).map(entry=>{
+        const line=fusionLineOf(baseId,fusionSpeciesOf(entry.instanceId)),refusal=fusionHomeFodderRefusal(entry.instanceId)??(line>0?null:'FUSION_LINE_MISMATCH');
+        return Object.freeze({instanceId:entry.instanceId,speciesId:entry.speciesId,displayName:entry.displayName??speciesDisplayName(entry.speciesId),
+          line,refusal,grade:partnerGradeOf(syncLevels,entry.instanceId)?.grade??null,level:syncOf(syncLevels,entry.instanceId).level,
+          warnings:refusal?Object.freeze([]):fusionFodderWarnings(entry.instanceId)});
+      }).filter(entry=>entry.line>0);
+      return Object.freeze({base:Object.freeze({instanceId:baseId,...syncLevelOf(baseId)}),max:FUSION_MAX_FODDER,fodders:Object.freeze(fodders)});
+    },
+    /** What fusing `fodderIds` (in order, at most five) into `baseId` would pay; null when the choice is not valid. */
+    previewPartnerFusion(baseId,fodderIds){
+      const plan=partnerFusionPlan(baseId,fodderIds);
+      return plan.ok?plan.fused.summary:null;
+    },
+    /**
+     * Fuse saved partners into `baseId` in one save: the fodder leave the ranch (not through the native release
+     * history), their Sync records go, the base's Sync EXP is paid, and the Dex keeps every registered species.
+     * A failed save changes nothing.
+     */
+    fusePartners(baseId,fodderIds){
+      requireSession();
+      if(![CHAMPIONSHIP_SCREENS.RAISING_HOME,CHAMPIONSHIP_SCREENS.DIGIMON_LIST].includes(screens.current()))return Object.freeze({ok:false,reason:'FUSION_NOT_AVAILABLE'});
+      if(battleTransactionActive||battleEconomy.active||huntCommitActive||tutorialBaseline)return Object.freeze({ok:false,reason:'FUSION_NOT_AVAILABLE'});
+      if([...raisingActors.values()].some(actor=>actor.evolution))return Object.freeze({ok:false,reason:'EVOLUTION_RUNNING'});
+      const plan=partnerFusionPlan(baseId,fodderIds);
+      if(!plan.ok)return Object.freeze({ok:false,reason:plan.reason});
+      storeNativeRaisingPositions();storeNativeRaisingHome();
+      const before=requireSession().getRaisingHomeSnapshot();
+      const residents=plan.ids.filter(id=>before.residents.some(entry=>entry.residentId===id));
+      const candidateSnapshot=residents.length?stageRaisingResidentRelease(before,residents):before;
+      let candidateRaising=raising;
+      for(const id of plan.ids)candidateRaising=releaseRaisingMembership(candidateRaising,id);
+      const candidateBook=retainOwnedBookSpecies(registeredSpeciesValue,creature,candidateRaising.collection);
+      const status=savePort.save({...liveSaveRequest(revision+1),snapshot:candidateSnapshot,raising:candidateRaising,
+        syncLevels:plan.fused.state,registeredSpecies:candidateBook});
+      if(status.phase!=='SAVED'){savePort.discardPendingWrite();return Object.freeze({ok:false,reason:'SAVE_FAILED'});}
+      raising=candidateRaising;syncLevels=plan.fused.state;registeredSpeciesValue=candidateBook;revision+=1;
+      if(residents.length)requireSession().commitRaisingResidentRelease(residents,before.revision);
+      for(const id of plan.ids){
+        const actor=raisingActors.get(id);if(actor)interruptNativeRaisingFeeding(actor,raisingFoods,{next:nextGameplayRandom});
+        delete raisingPoolSlots[id];raisingActors.delete(id);
+        if(selectedCreatureId===id)selectedCreatureId=null;
+      }
+      storeNativeRaisingHome();savePort.markDirty();
+      publishRaising();publishScreens();
+      return Object.freeze({ok:true,gain:plan.fused.summary,fused:Object.freeze([...plan.ids])});
     },
     getGachaTickets(){return session?gachaState().tickets:0;},
     /** Cartridges this hunt started with (the field readout names them). */
@@ -5611,10 +5735,11 @@ export function createChampionshipStandaloneApp({
       if(tutorialBaseline)return screens.current(); // No ordinary Home commit for demo cards.
       if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_RESULT) return screens.current();
       if (huntCommitActive) return screens.current();
-      if (huntResult?.pendingReleaseKey) return screens.current();
+      if (huntResult?.pendingReleaseKey || huntResult?.pendingFusionKey) return screens.current();
       const entries = huntRuntime?.getOnCardEntries() ?? [];
       const releasedHomeIds = huntResult?.releasedHomeIds ?? [];
-      if (entries.length > 0 || releasedHomeIds.length > 0) {
+      const stagedFusions = huntResult?.fusions ?? [];
+      if (entries.length > 0 || releasedHomeIds.length > 0 || stagedFusions.length > 0) {
         let candidateRaising = raising, candidateIdentity = instanceIdentity;
         const beforeSnapshot = requireSession().getRaisingHomeSnapshot();
         const releasedResidents = releasedHomeIds.filter((id) => beforeSnapshot.residents.some((entry) => entry.residentId === id));
@@ -5638,6 +5763,9 @@ export function createChampionshipStandaloneApp({
           publishScreens(); return screens.current();
         }
         let candidateBurst = burstState(), candidateGacha = cyberGacha, candidateSync = syncLevels;
+        // LINE_FUSION_20261117 P2: the staged fusions pay their Sync EXP in this same Home save. A fused saved
+        // partner left through releasedHomeIds above; a fused catch already left the memory card.
+        if (stagedFusions.length > 0) candidateSync = stagedHuntFusionSync().state;
         for (const entry of entries) {
           const allocation = allocateRaisingInstanceIdentity(candidateIdentity, { ...sources, collection: candidateRaising.collection,
             assignments: candidateRaising.assignments });
@@ -5716,7 +5844,7 @@ export function createChampionshipStandaloneApp({
     },
 
     requestHuntResultRelease(key) {
-      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_RESULT || huntCommitActive) return false;
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_RESULT || huntCommitActive || huntResult?.pendingFusionKey) return false;
       const row = this.getHuntResult()?.rows?.find((entry) => entry.key === key);
       if (!row?.canRelease) return false;
       huntResult = Object.freeze({ ...huntResult, pendingReleaseKey: key });
@@ -5740,6 +5868,44 @@ export function createChampionshipStandaloneApp({
         speciesId: selected?.speciesId ?? null, speciesLabel: selected ? speciesDisplayName(selected.speciesId) : null,
         displayName: selected ? selected.displayName ?? speciesDisplayName(selected.speciesId) : null,
         releasedHomeIds: Object.freeze(releasedHomeIds), pendingReleaseKey: null, commitError: null });
+      publishScreens(); return true;
+    },
+
+    /** LINE_FUSION_20261117 P2: ask to fuse a catch or a saved partner; the result then lists the bases of its line. */
+    requestHuntResultFusion(key) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_RESULT || huntCommitActive || huntResult?.pendingReleaseKey) return false;
+      const row = this.getHuntResult()?.rows?.find((entry) => entry.key === key);
+      if (!row?.canFuse) return false;
+      huntResult = Object.freeze({ ...huntResult, pendingFusionKey: key });
+      publishScreens(); return true;
+    },
+    cancelHuntResultFusion() {
+      if (!huntResult?.pendingFusionKey || huntCommitActive) return false;
+      huntResult = Object.freeze({ ...huntResult, pendingFusionKey: null });
+      publishScreens(); return true;
+    },
+    /**
+     * Stage the fusion into `baseId`. Like a release it is final on this screen and written by the Home commit:
+     * a catch leaves the memory card now, a saved partner leaves with the released ones, and the base's Sync
+     * EXP is paid in that same save. A fused partner is not written into the native release history.
+     */
+    confirmHuntResultFusion(baseId) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_RESULT || huntCommitActive) return false;
+      const pending = this.getHuntResult()?.pendingFusion, base = pending?.bases.find((entry) => entry.instanceId === baseId);
+      if (!pending?.row.canFuse || !base?.preview) return false;
+      const row = pending.row;
+      const grade = row.kind === "CARD" ? huntGrades.get(row.id) ?? null : partnerGradeOf(syncLevels, row.id);
+      let releasedHomeIds = huntResult.releasedHomeIds ?? [];
+      if (row.kind === "CARD") {
+        if (!huntRuntime.releaseOnCardEntry(row.id)) return false;
+      } else releasedHomeIds = [...releasedHomeIds, row.id];
+      const selected = huntRuntime.getOnCardEntries()[0] ?? null;
+      huntResult = Object.freeze({ ...huntResult, wildId: selected?.wildId ?? null,
+        speciesId: selected?.speciesId ?? null, speciesLabel: selected ? speciesDisplayName(selected.speciesId) : null,
+        displayName: selected ? selected.displayName ?? speciesDisplayName(selected.speciesId) : null,
+        releasedHomeIds: Object.freeze(releasedHomeIds), pendingFusionKey: null, commitError: null,
+        fusions: Object.freeze([...(huntResult.fusions ?? []), Object.freeze({ kind: row.kind, id: row.id, baseId,
+          line: base.line, grade, displayName: row.displayName })]) });
       publishScreens(); return true;
     },
 

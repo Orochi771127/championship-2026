@@ -103,3 +103,52 @@ export function applyGradeHeadStart(profile, grade) {
   });
   return { profile: next, gains };
 }
+
+// ---- Same-line fusion (plan section 4, P2) ----
+//
+// A caught or raised partner of the base's own line is spent to feed the base's Sync EXP. Fusion only
+// ever writes progression.syncLevels: the base's native individual, the save words and the battle codes
+// are untouched, and a fused partner is not written into the native release history.
+//
+//   one fodder = round(EXP the base needs at its current level x 0.25 x grade x line)
+//              + floor(Sync EXP the fodder had gathered x 0.5)
+
+export const FUSION_BASE_SHARE = 0.25;
+export const FUSION_CARRIED_EXP_SHARE = 0.5;
+export const FUSION_MAX_FODDER = 5;
+export const FUSION_LINE = deepFreeze({ SAME_SPECIES: 1, LOWER_STAGE: 0.6 });
+export const FUSION_GRADE_MULTIPLIER = deepFreeze({ S: 1.6, A: 1.25, B: 1, C: 0.8 });
+/** A fodder at or above this Sync Level asks for a second confirmation. */
+export const FUSION_WARN_LEVEL = 10;
+
+/** The fodder's grade multiplier; a partner with no grade counts as 1.0. */
+export function fusionGradeMultiplier(grade) {
+  return FUSION_GRADE_MULTIPLIER[typeof grade === "string" ? grade : grade?.grade] ?? 1;
+}
+
+/**
+ * 1 for the base's own species, 0.6 for a lower stage of the base's own line (reached by walking the
+ * base's ancestors backwards), 0 for anything else. Side branches are never followed: many lines share
+ * their baby stages, and following them would let almost any two partners fuse.
+ * @param {(speciesIndex:number)=>readonly number[]} ancestorsOf direct earlier forms of a species
+ */
+export function fusionLineMultiplier(baseSpecies, fodderSpecies, ancestorsOf) {
+  if (!Number.isSafeInteger(baseSpecies) || !Number.isSafeInteger(fodderSpecies)) return 0;
+  if (baseSpecies === fodderSpecies) return FUSION_LINE.SAME_SPECIES;
+  const seen = new Set([baseSpecies]), queue = [baseSpecies];
+  while (queue.length) {
+    for (const earlier of ancestorsOf(queue.shift()) ?? []) {
+      if (seen.has(earlier)) continue;
+      if (earlier === fodderSpecies) return FUSION_LINE.LOWER_STAGE;
+      seen.add(earlier); queue.push(earlier);
+    }
+  }
+  return 0;
+}
+
+/** Sync EXP one fodder pays a base that needs `required` EXP at its current level. */
+export function fusionExp({ required, grade = null, line = 1, carried = 0 } = {}) {
+  if (!(required > 0) || !(line > 0)) return 0;
+  const own = Number.isSafeInteger(carried) && carried > 0 ? Math.floor(carried * FUSION_CARRIED_EXP_SHARE) : 0;
+  return Math.round(required * FUSION_BASE_SHARE * fusionGradeMultiplier(grade) * line) + own;
+}

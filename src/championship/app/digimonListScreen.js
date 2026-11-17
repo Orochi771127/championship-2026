@@ -340,7 +340,7 @@ export function appendCreatureDetail(detail, entry, { onBurstForm = null, onAwak
  * @param {(instanceId: string, name: string) => ({ok: boolean, entries?: Array<object>})} [options.onRename]
  * @param {(instanceId: string) => ({ok: boolean, reason?: string, entries?: Array<object>})} [options.onRebirth]
  */
-export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null, onBurstForm = null, onAwakening = null, initialInstanceId = null } = {}) {
+export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null, onBurstForm = null, onAwakening = null, fusion = null, initialInstanceId = null } = {}) {
   if (!root) throw new TypeError("The Digimon list requires a root element");
 
   root.replaceChildren();
@@ -434,6 +434,11 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
   rebirth.type = "button";
   rebirth.dataset.control = "rebirth_button";
   controls.append(rebirth);
+  // Same-line fusion (LINE_FUSION_20261117 P2): saved partners of this partner's own line feed its Sync EXP.
+  const fuse = element("button", "cm-digimon-control", "FUSE");
+  fuse.type = "button";
+  fuse.dataset.control = "fusion_button";
+  controls.append(fuse);
   // Say why two of the three stay grey instead of leaving a silent row.
   const controlsNote = element("p", "cm-digimon-controls-note", "移除與報名尚未開放。");
 
@@ -476,8 +481,66 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     EVOLUTION_RUNNING: "牧場裡正在進化，請稍後再試。",
     NOT_FINAL_STAGE: "只有成熟期的拍檔可以轉生。"
   });
+  // The fusion panel: tick up to five same-line partners, read what the base gains, confirm once.
+  const fusionPanel = element("div", "cm-digimon-rename cm-digimon-fusion");
+  fusionPanel.hidden = true;
+  const fusionTitle = element("p", "cm-digimon-rename__label", "", false);
+  const fusionList = element("div", "cm-digimon-fusion__list");
+  const fusionPreview = element("p", "cm-digimon-fusion__preview", "", false);
+  fusionPreview.setAttribute("role", "status");
+  const fusionActions = element("div", "cm-digimon-rename__actions");
+  const fusionCancel = element("button", "cm-screen-back", "取消");
+  fusionCancel.type = "button";
+  const fusionConfirm = element("button", "cm-screen-primary", "CONFIRM FUSE");
+  fusionConfirm.type = "button";
+  fusionActions.append(fusionCancel, fusionConfirm);
+  fusionPanel.append(fusionTitle, fusionList, fusionPreview, fusionActions);
+  const fusionMessage = element("p", "cm-digimon-rename__message");
+  fusionMessage.setAttribute("role", "status");
+  let fusionPicked = [];
+  const number = (value) => Number(value).toLocaleString("en-US");
+  function closeFusion() { fusionPanel.hidden = true; fusionPicked = []; }
+  function renderFusion() {
+    const entry = entries[selectedIndex], frame = entry ? fusion?.candidates?.(entry.instanceId) : null;
+    fusionList.replaceChildren();
+    const usable = (frame?.fodders ?? []).filter((fodder) => !fodder.refusal);
+    fusionPicked = fusionPicked.filter((id) => usable.some((fodder) => fodder.instanceId === id));
+    fusionTitle.textContent = uiText("FUSION_PICK", { count: fusionPicked.length, max: frame?.max ?? 5 });
+    for (const fodder of frame?.fodders ?? []) {
+      const row = element("label", "cm-digimon-fusion__row");
+      const box = element("input", "cm-digimon-fusion__box");
+      box.type = "checkbox";
+      box.checked = fusionPicked.includes(fodder.instanceId);
+      box.disabled = Boolean(fodder.refusal) || (!box.checked && fusionPicked.length >= (frame?.max ?? 5));
+      box.dataset.fusionFodder = fodder.instanceId;
+      box.addEventListener("change", () => {
+        fusionPicked = box.checked ? [...fusionPicked, fodder.instanceId] : fusionPicked.filter((id) => id !== fodder.instanceId);
+        renderFusion();
+      });
+      const name = element("span", "cm-digimon-fusion__name", "", false);
+      name.textContent = fodder.displayName;
+      const facts = element("span", "cm-digimon-fusion__facts", "", false);
+      facts.textContent = fodder.refusal ? uiText(fodder.refusal)
+        : [fodder.grade ?? "—", `Lv.${fodder.level}`, fodder.line < 1 ? "×0.6" : "×1.0"].join(" · ");
+      row.append(box, name, facts);
+      if (box.checked) for (const warning of fodder.warnings ?? []) {
+        const note = element("span", "cm-digimon-fusion__warning", "", false);
+        note.textContent = warning.kind === "LEVEL" ? uiText("FUSION_LOSE_LEVEL", { level: warning.level })
+          : uiText(warning.kind === "BURST" ? "FUSION_LOSE_BURST" : "FUSION_LOSE_BLOODLINE");
+        row.append(note);
+      }
+      fusionList.append(row);
+    }
+    if (!(frame?.fodders ?? []).length) fusionList.append(element("p", "cm-digimon-fusion__empty", "FUSION_NO_FODDER"));
+    const preview = entry && fusionPicked.length ? fusion?.preview?.(entry.instanceId, fusionPicked) : null;
+    fusionConfirm.disabled = !preview;
+    fusionPreview.textContent = !preview ? ""
+      : [`Lv.${preview.before.level} → Lv.${preview.after.level}`, `+${number(preview.amount)} EXP`,
+        preview.after.next > 0 ? uiText("FUSION_LEFT", { exp: number(preview.after.next - preview.after.exp) }) : null,
+        preview.overflow > 0 ? uiText("FUSION_CRYSTALS", { count: number(preview.overflow) }) : null].filter(Boolean).join(" · ");
+  }
   function closeRebirth() { rebirthPanel.hidden = true; }
-  function closeEditor() { editor.hidden = true; editorMessage.textContent = ""; closeRebirth(); }
+  function closeEditor() { editor.hidden = true; editorMessage.textContent = ""; closeRebirth(); closeFusion(); }
   function refreshControls() {
     const entry = entries[selectedIndex];
     const renameable = Boolean(onRename && entry && entry.renameable !== false);
@@ -489,7 +552,36 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     rebirth.disabled = !(onRebirth && mature);
     rebirth.dataset.state = onRebirth ? "READY" : "NOT_IMPLEMENTED";
     rebirth.title = onRebirth && !mature ? uiText("只有成熟期的拍檔可以轉生。") : "";
+    const fodders = entry && fusion ? fusion.candidates?.(entry.instanceId)?.fodders ?? [] : [];
+    fuse.hidden = !fusion;
+    fuse.disabled = !fodders.some((fodder) => !fodder.refusal);
+    fuse.title = fusion && fuse.disabled ? uiText("FUSION_NO_FODDER") : "";
   }
+  fuse.addEventListener("click", () => {
+    if (!entries[selectedIndex] || fuse.disabled) return;
+    editor.hidden = true; closeRebirth();
+    fusionMessage.textContent = "";
+    fusionPicked = [];
+    renderFusion();
+    fusionPanel.hidden = false;
+    fusionPanel.scrollIntoView?.({ block: "center" });
+  });
+  fusionCancel.addEventListener("click", () => closeFusion());
+  fusionConfirm.addEventListener("click", () => {
+    const entry = entries[selectedIndex];
+    if (!entry || !fusionPicked.length) return;
+    const result = fusion?.fuse?.(entry.instanceId, [...fusionPicked]);
+    closeFusion();
+    if (!result?.ok) { fusionMessage.textContent = uiText(result?.reason === "SAVE_FAILED" ? "FUSION_SAVE_FAILED" : result?.reason ?? "FUSION_NO_FODDER"); return; }
+    fusionMessage.textContent = `${entry.displayName ?? ""} Lv.${result.gain.before.level} → Lv.${result.gain.after.level} · +${number(result.gain.amount)} EXP`;
+    if (Array.isArray(result.entries)) {
+      entries = result.entries;
+      selectedIndex = Math.max(0, entries.findIndex((row) => row.instanceId === entry.instanceId));
+    }
+    renderList();
+    renderDetail();
+    refreshControls();
+  });
   rebirth.addEventListener("click", () => {
     const entry = entries[selectedIndex];
     if (!entry || rebirth.disabled) return;
@@ -550,7 +642,7 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
   back.addEventListener("click", () => { onExit?.(); });
   footer.append(back);
 
-  shell.append(list, detail, controls, controlsNote, editor, rebirthPanel, rebirthMessage, footer);
+  shell.append(list, detail, controls, controlsNote, editor, rebirthPanel, rebirthMessage, fusionPanel, fusionMessage, footer);
   root.append(shell);
   renderList();
   renderDetail();

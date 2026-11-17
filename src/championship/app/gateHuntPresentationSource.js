@@ -630,6 +630,10 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
     requestHuntResultRelease(key) { app.requestHuntResultRelease(key); return commit(); },
     cancelHuntResultRelease() { app.cancelHuntResultRelease(); return commit(); },
     confirmHuntResultRelease() { app.confirmHuntResultRelease(); return commit(); },
+    // LINE_FUSION_20261117 P2: fuse a catch or a saved partner into a saved partner of its own line.
+    requestHuntResultFusion(key) { app.requestHuntResultFusion(key); return commit(); },
+    cancelHuntResultFusion() { app.cancelHuntResultFusion(); return commit(); },
+    confirmHuntResultFusion(baseId) { app.confirmHuntResultFusion(baseId); return commit(); },
     useHuntChrono() {
       app.useHuntChrono?.();
       return commit();

@@ -239,14 +239,61 @@ export function createHuntResultView({ root, source, hudArt = null }) {
       release.type = "button";
       release.dataset.releaseKey = row.key;
       release.setAttribute("aria-label", uiText(`Release ${label}`));
-      release.disabled = !row.canRelease || Boolean(next.pendingRelease);
+      release.disabled = !row.canRelease || Boolean(next.pendingRelease) || Boolean(next.pendingFusion);
       if (!row.canRelease) release.title = uiText("Release is not yet available for this resident.");
       release.addEventListener("click", () => source.intents.requestHuntResultRelease(row.key));
+      // Same-line fusion (LINE_FUSION_20261117 P2): the EXP already staged for this partner, and the fuse key.
+      if (row.fusionGain) {
+        const gain = element("span", "cm-vs2-result__fusion-gain", "");
+        gain.textContent = `+${row.fusionGain.amount.toLocaleString("en-US")} EXP`;
+        gain.title = `Lv.${row.fusionGain.before.level} → Lv.${row.fusionGain.after.level}`;
+        line.append(gain);
+      }
+      if (row.canFuse) {
+        const fuse = element("button", "cm-vs2-action cm-vs2-result__fuse", "FUSE");
+        fuse.type = "button";
+        fuse.dataset.fuseKey = row.key;
+        fuse.setAttribute("aria-label", `${uiText("FUSE")} ${row.displayName}`);
+        fuse.disabled = Boolean(next.pendingRelease) || Boolean(next.pendingFusion);
+        fuse.addEventListener("click", () => source.intents.requestHuntResultFusion(row.key));
+        line.append(fuse);
+      }
       line.append(release); roster.append(line);
     }
     releasePrompt.replaceChildren();
-    releasePrompt.hidden = !next.pendingRelease;
-    home.disabled = Boolean(next.pendingRelease);
+    releasePrompt.hidden = !next.pendingRelease && !next.pendingFusion;
+    home.disabled = Boolean(next.pendingRelease) || Boolean(next.pendingFusion);
+    if (next.pendingFusion) {
+      // Pick the partner that takes the EXP; each choice shows what it gains. Numbers first, no sentences.
+      const fusion = next.pendingFusion;
+      releasePrompt.dataset.kind = "fusion";
+      releasePrompt.append(element("p", "cm-vs2-result__fusion-title", "FUSE"));
+      for (const warning of fusion.warnings) {
+        const note = element("p", "cm-vs2-result__fusion-warning", "");
+        note.textContent = warning.kind === "LEVEL" ? uiText("FUSION_LOSE_LEVEL", { level: warning.level })
+          : uiText(warning.kind === "BURST" ? "FUSION_LOSE_BURST" : "FUSION_LOSE_BLOODLINE");
+        releasePrompt.append(note);
+      }
+      for (const base of fusion.bases) {
+        const pick = element("button", "cm-vs2-action cm-vs2-result__fusion-base", "");
+        pick.type = "button";
+        pick.dataset.fusionBase = base.instanceId;
+        const name = element("span", "cm-vs2-result__fusion-name", ""), gain = element("span", "cm-vs2-result__fusion-preview", "");
+        name.textContent = base.displayName;
+        const preview = base.preview;
+        gain.textContent = preview
+          ? `Lv.${preview.before.level} → Lv.${preview.after.level} · +${preview.amount.toLocaleString("en-US")} EXP${base.line < 1 ? " · ×0.6" : ""}`
+          : "";
+        pick.append(name, gain);
+        pick.disabled = !preview;
+        pick.addEventListener("click", () => source.intents.confirmHuntResultFusion(base.instanceId));
+        releasePrompt.append(pick);
+      }
+      const cancel = element("button", "cm-vs2-action", "CANCEL");
+      cancel.type = "button";
+      cancel.addEventListener("click", () => source.intents.cancelHuntResultFusion());
+      releasePrompt.append(cancel);
+    } else delete releasePrompt.dataset.kind;
     if (next.pendingRelease) {
       releasePrompt.append(element("p", "", `Release ${next.pendingRelease.displayName}?`));
       const cancel = element("button", "cm-vs2-action", "CANCEL");
