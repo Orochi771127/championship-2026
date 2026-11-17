@@ -589,6 +589,11 @@
         "evidence": "PR #269 49451268; all 10 checks green; talent tree code in the live bundle (live commit 1312d138)"
       },
       {
+        "id": "SUPPLEMENTS_S1",
+        "state": "VERIFIED_MERGED",
+        "evidence": "PR #272 a224c4bd; all checks green"
+      },
+      {
         "id": "PR_194_CRASH_CONSISTENCY",
         "state": "VERIFIED_LIVE",
         "evidence": "PR #270 1312d138 (port); #194 closed with a pointer; care-image leak check re-run locally (delta 0, control +120); live bundle checked"
@@ -606,12 +611,8 @@
     ],
     "openForClaude": [
       {
-        "id": "SUPPLEMENTS_S1",
-        "state": "IMPLEMENTED_PUSHED"
-      },
-      {
         "id": "SUPPLEMENTS_S2",
-        "state": "NOT_STARTED"
+        "state": "IMPLEMENTED_PUSHED"
       },
       {
         "id": "TALENTS_T2",

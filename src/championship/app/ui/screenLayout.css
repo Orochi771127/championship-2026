@@ -1042,6 +1042,7 @@
 .cm-backpack__tonic > .cm-backpack__name { font-weight: 900; }
 .cm-backpack__tonic > .cm-backpack__effect, .cm-backpack__tonic > .cm-backpack__active { grid-column: 1 / -1; font-size: var(--fs-label, 12px); font-variant-numeric: tabular-nums; }
 .cm-backpack__tonic > .cm-backpack__active { color: #0369a1; font-weight: 800; }
+.cm-backpack__tonic > .cm-backpack__carried { font-size: var(--fs-label, 12px); font-weight: 800; color: #7c2d12; align-self: center; }
 .cm-backpack__tonic > .cm-backpack__use { grid-area: auto; justify-self: stretch; min-height: var(--cm-touch); font-variant-numeric: tabular-nums; }
 .cm-backpack__tonic > .cm-backpack__partners { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
 .cm-backpack__tonic .cm-backpack__partner { min-height: var(--cm-touch); padding: 0 12px; }

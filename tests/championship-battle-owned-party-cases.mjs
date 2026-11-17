@@ -132,6 +132,8 @@ test('owned championship rounds use arena 10, one committed draw and native roun
     for(const entry of BATTLE_CREATURE_STAT_MAP)if(entry.level!==null){const k=entry.level.toString(16).padStart(3,'0');adult.fields[k]=ultimate.fields[k];}
     save.creature.nativeProfile=adult;save.creature.speciesId=`species-${String(adultSpecies).padStart(3,'0')}`;
     save.progression.nativeTitles.championship={stage:1,entry:1,worldEntry:0};
+    // SUPPLEMENTS_20261118 S2: the partner goes in carrying 同步飲 (it touches no curve word, so the settlement below is unchanged).
+    save.progression.tamerSupplies={version:1,owned:{},armed:{[save.creature.creatureId]:[{id:'supply:sync',battlesLeft:1}]},ranch:{}};
     data.set(key,JSON.stringify(save));assert.equal(app.inspectSave().present,true,JSON.stringify(app.inspectSave()));
     await app.continueGame();app.openBattle();app.openChampionship();
     const opened=app.beginChampionship(0);assert.equal(opened.ok,true,JSON.stringify(opened));
@@ -157,7 +159,10 @@ test('owned championship rounds use arena 10, one committed draw and native roun
       assert.deepEqual(result.individualResults[0].nativeProfile,expected);
       // Sync Level (2026-11-09): the battle fought a boosted copy; the saved partner keeps its own vitals.
       const savedBefore=structuredClone(app.getCreature().nativeProfile),syncBefore=app.getSyncLevel(id);
+      const carrying=()=>app.getSuppliesFrame().items.find(item=>item.id==='supply:sync').carriedBy;
+      assert.deepEqual(carrying(),round===0?[id]:[],'carried into the first round only');
       assert.equal(app.finishMatch({...result,attemptId}).ok,true);assert.equal(app.getChampionshipRun().cursor,round+1);
+      assert.deepEqual(carrying(),[],'a settled battle uses up what the partner carried');
       assert.deepEqual(app.getCreature().nativeProfile,restoreSyncNativeProfile(expected,savedBefore));
       const syncAfter=app.getSyncLevel(id);
       assert.ok(syncAfter.level>syncBefore.level||syncAfter.exp>syncBefore.exp,'a won round pays Sync EXP');

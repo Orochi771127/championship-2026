@@ -1,5 +1,20 @@
 # Championship Owner Direction
 
+<!-- record-id: SUPPLEMENTS_S2_20261118 -->
+## 2026-11-18 — Supplements S2: pre-battle supplements carried into a battle
+
+Under the standing goal and `LINE_FUSION_TAMER_TALENTS_DESIGN_20261117` (talent plan section 6).
+
+`OWNER_APPROVED_ADAPTATION`, as designed:
+
+- Four pre-battle supplements on the 補品 shelf: 力量錠, 鐵壁錠, 疾風錠 (600 Bits each: attack, defense or speed curve +1 step) and 同步飲 (1,000 Bits: Sync EXP +50 %).
+- A partner carries one. Putting it on spends it from the bag; a second one swaps the first back; it can be taken off again. Each is one save.
+- It changes only the battle copy, never past curve step 26, exactly as a Sync breakthrough does, and is taken back when the battle writes its result. It is used up by that settled battle, in the battle's own save.
+- Only battles where Sync applies read it. Password, link and online battles neither read it nor use it up.
+- 覺醒精華 and 共鳴香 are not sold yet: they go on the shelf when their effects are wired, the same rule as the talent tree.
+
+Contract: `docs/contracts/championship/SUPPLEMENTS_20261118.json` (`rules.s2`).
+
 <!-- record-id: SUPPLEMENTS_S1_20261118 -->
 ## 2026-11-18 — Supplements S1: a 補品 shelf in the bag, recovery and ranch supplements
 
