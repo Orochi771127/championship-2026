@@ -146,7 +146,13 @@ async function checkHunt(page,label,checks){
  await page.locator('.cm-vs2-footer .cm-vs2-action--primary').click();await screen(page,'HUNT_FIELD');
  await page.locator('.cm-vs2-field__loading').waitFor({state:'detached'});
  await shot(page,`${label}-hunt`);checks.push('normal Gate → Loadout → Hunt field renders with external character pages');
- await page.locator('.cm-vs2-hud__exit').click();await ranchReady(page);
+ await page.locator('.cm-vs2-hud__exit').click();
+ // Hunt end gate (Owner 2026-11-17): a hunt with no catch ends on the closed gate's own result,
+ // which stays over the ranch until the player taps 返回牧場.
+ await page.locator('.cm-hunt-gate[data-phase="result"] .cm-hunt-gate__continue').click();
+ await page.locator('.cm-hunt-gate').waitFor({state:'detached'});
+ await ranchReady(page);
+ checks.push('hunt with no catch: the end gate shows its result and opens onto the ranch');
 }
 
 async function checkBattle(page,label,checks){
@@ -161,8 +167,11 @@ async function checkBattle(page,label,checks){
  assert.ok(first&&second,'Fixture has two eligible practice members');
  await page.getByRole('button',{name:'開始練習',exact:true}).click();await screen(page,'BATTLE_FIELD');
  await page.locator('#cm-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell[data-loading="false"]').waitFor();
- await page.waitForFunction(()=>[...document.querySelectorAll('.cm-vs5-fighter__mini img')].some(image=>image.complete&&image.naturalWidth>0));
- await shot(page,`${label}-battle`);checks.push('normal practice battle renders characters and decoded HUD portraits');
+ // Owner 2026-11-12: outside the Dex the HUD plate shows the partner's own action cells (an action
+ // portrait built from the external character pages), no longer a Dex illustration <img>.
+ await page.waitForFunction(()=>[...document.querySelectorAll('.cm-vs5-fighter__mini .cm-action-portrait[data-state="ready"] .cm-sprite__body')]
+  .some(body=>getComputedStyle(body).backgroundImage.startsWith('url(')));
+ await shot(page,`${label}-battle`);checks.push('normal practice battle renders characters and loaded HUD action portraits');
  await page.locator('.cm-vs5-exit:visible').click();
  const leave=page.locator('dialog[open] [data-action="leave"]');if(await leave.isVisible())await leave.click();
  await ranchReady(page);
