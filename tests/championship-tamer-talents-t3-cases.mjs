@@ -98,7 +98,7 @@ test('先手, 逆境 and 必殺 act for the commander\'s team with or without a 
   assert.equal(normalizeBattleCommander({team: 2, ultimatePercent: 9}), null);
   assert.equal(normalizeBattleCommander({team: 0, ultimatePercent: -3, lumenPercent: NaN}), null);
   assert.deepEqual(normalizeBattleCommander({team: 1, ultimatePercent: 500, extra: 7}),
-    {team: 1, lumenPercent: 0, ironPercent: 0, riftPercent: 0, openingTpPercent: 0, lowHpDefensePercent: 0, ultimatePercent: 100});
+    {team: 1, lumenPercent: 0, ironPercent: 0, riftPercent: 0, openingTpPercent: 0, lowHpDefensePercent: 0, ultimatePercent: 100, pureFaction: false, triColor: false});
 });
 
 test('野性嗅覺: the elite share is 30 % larger a rank and a hunt still holds at most one elite', () => {
@@ -144,11 +144,13 @@ const PARTNER = 'championship:2026:instance:0001';
 test('app: the commander line for a battle follows its mode, capped in title matches and tournaments, absent for password and link', async () => {
   const {app} = await talentApp(maxed(COMMANDER), save => { save.progression.tamerRank = 0; });
   try {
-    const full = {lumenPercent: 60, ironPercent: 60, riftPercent: 60, openingTpPercent: 15, lowHpDefensePercent: 15, ultimatePercent: 9};
+    // T5 added the keystone flags; no keystone is taken here.
+    const none = {pureFaction: false, triColor: false};
+    const full = {lumenPercent: 60, ironPercent: 60, riftPercent: 60, openingTpPercent: 15, lowHpDefensePercent: 15, ultimatePercent: 9, ...none};
     assert.deepEqual(app.getBattleCommander(2), full, 'Free Battle counts the whole line');
     assert.deepEqual(app.getBattleCommander(5), full);
     // Rank 0: six points, counted rank by rank across tier one (同步訓練, 先手, 好心情): two ranks of 先手 and nothing above.
-    const capped = {lumenPercent: 0, ironPercent: 0, riftPercent: 0, openingTpPercent: 10, lowHpDefensePercent: 0, ultimatePercent: 0};
+    const capped = {lumenPercent: 0, ironPercent: 0, riftPercent: 0, openingTpPercent: 10, lowHpDefensePercent: 0, ultimatePercent: 0, ...none};
     assert.deepEqual(app.getBattleCommander(1), capped);
     assert.deepEqual(app.getBattleCommander(0), capped);
     for (const mode of [3, 4, 6, undefined]) assert.equal(app.getBattleCommander(mode), null, `mode ${mode}`);

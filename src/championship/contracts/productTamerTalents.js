@@ -112,9 +112,18 @@ export const TALENT_WIRED_KEYS = new Set([
   "openingTpPercent", "moodCapPercent", "resonanceLumenPercent", "resonanceIronPercent", "resonanceRiftPercent",
   "lowHpDefensePercent", "ultimatePercent", "elitePercent",
   // T4 (TAMER_TALENTS_T4_20261118): the shop's Bits prices, what a hunt and a stroll bring back.
-  "shopBitsPercent", "scavengePercent", "strollBitsPercent", "strollExtraPercent"
+  "shopBitsPercent", "scavengePercent", "strollBitsPercent", "strollExtraPercent",
+  // T5 (TAMER_TALENTS_T5_20261118)
+  "moodDecayPercent"
 ]);
-export const TALENT_WIRED_KEYSTONES = new Set();
+// T5 (TAMER_TALENTS_T5_20261118): the first keystones. A line takes one of its two.
+export const TALENT_WIRED_KEYSTONES = new Set(["commander.pureFaction", "commander.triColor", "trader.bountyHunter"]);
+/** What the wired keystones are worth, in one place for the rules, the copy and the tests. */
+export const KEYSTONE_RULES = deepFreeze({
+  pureFactionPercent: 50,             // 純色陣營: three of one faction make that resonance's own bonus half as large again
+  triColor: { attackPercent: 114, defensePercent: 114, rewardPercent: 125 }, // 三色指揮: 108 / 108 / 115 become these
+  bountyHunterPercent: 50             // 賞金獵人: the bounty beacon's extra Bits half as large again
+});
 export function talentOpen(id) {
   const entry = nodeById.get(id);
   return entry ? TALENT_WIRED_KEYS.has(entry.key) : TALENT_WIRED_KEYSTONES.has(id);

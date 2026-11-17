@@ -17,7 +17,11 @@
 //   openingTpPercent     opens with that much more TP;
 //   lowHpDefensePercent  below 30 % HP it takes damage / (1 + that share);
 //   ultimatePercent      its signature move deals that much more.
+// TAMER_TALENTS_T5_20261118, the commander's two keystones (a tamer takes one):
+//   pureFaction  with three partners of one faction, that faction's resonance bonus is half as large again;
+//   triColor     the Tri-core resonance gives its team 114 % attack and defence and 125 % rewards.
 import {speciesTaxonomy, factionResonance, elementMultiplierPercent, TAXONOMY_RESONANCE} from '../contracts/speciesTaxonomy.js';
+import {KEYSTONE_RULES} from '../contracts/productTamerTalents.js';
 
 export const BATTLE_TAXONOMY_ORIGINAL = 'ORIGINAL';
 export const BATTLE_TAXONOMY_V1 = 'TAXONOMY_V1';
@@ -31,7 +35,8 @@ export function normalizeBattleCommander(value) {
   if (!value || ![0, 1].includes(value.team)) return null;
   const out = {team: value.team};
   for (const key of COMMANDER_KEYS) out[key] = Number.isFinite(value[key]) && value[key] > 0 ? Math.min(100, value[key]) : 0;
-  return COMMANDER_KEYS.some(key => out[key] > 0) ? Object.freeze(out) : null;
+  out.pureFaction = value.pureFaction === true; out.triColor = value.triColor === true;
+  return COMMANDER_KEYS.some(key => out[key] > 0) || out.pureFaction || out.triColor ? Object.freeze(out) : null;
 }
 /** A resonance percent with its bonus part (the distance from 100) made `more` percent larger: 90 -> 88, 108 -> 109.6 at 20. */
 export function resonanceBoosted(base, more = 0) { return 100 + (base - 100) * (100 + more) / 100; }
@@ -53,7 +58,13 @@ export function createBattleTaxonomyAdaptation({policy = BATTLE_TAXONOMY_ORIGINA
   const has = (slot, key) => resonanceOf.get(teamOf(slot))?.includes(key) ?? false;
   // The commander line: only the slots of its own team read it.
   const lead = typeof teamOf === 'function' ? normalizeBattleCommander(commander) : null;
-  const more = (slot, key) => (lead && teamOf(slot) === lead.team ? lead[key] : 0);
+  // 純色陣營: the commander's team is three partners of one faction.
+  const own = lead ? (teams.get(lead.team) ?? []).map(species => speciesTaxonomy(species)?.faction) : [];
+  const pure = lead?.pureFaction && own.length === 3 && own[0] && own.every(faction => faction === own[0]) ? own[0] : null;
+  const PURE_KEY = {LUMEN: 'lumenPercent', IRON: 'ironPercent', RIFT: 'riftPercent'};
+  const more = (slot, key) => (lead && teamOf(slot) === lead.team ? lead[key] + (pure && PURE_KEY[pure] === key ? KEYSTONE_RULES.pureFactionPercent : 0) : 0);
+  // 三色指揮: the commander's own Tri-core.
+  const tri = (slot, key) => (lead?.triColor && teamOf(slot) === lead.team ? KEYSTONE_RULES.triColor[key] : TAXONOMY_RESONANCE.TRI[key]);
   // A burst form fights with its own element (Owner 2026-11-08); faction resonance stays the team that started.
   const current = [...speciesBySlot];
   const elementOf = slot => speciesTaxonomy(current[slot])?.element ?? null;
@@ -84,13 +95,13 @@ export function createBattleTaxonomyAdaptation({policy = BATTLE_TAXONOMY_ORIGINA
       let num = 1, den = 1;
       const mul = (n, d = 100) => { num *= n; den *= d; };
       if (elementSelector !== 0) mul(elementMultiplierPercent(elementOf(attackerSlot), elementOf(defenderSlot)));
-      if (has(attackerSlot, 'TRI')) mul(TAXONOMY_RESONANCE.TRI.attackPercent);
+      if (has(attackerSlot, 'TRI')) mul(tri(attackerSlot, 'attackPercent'));
       if (signature && has(attackerSlot, 'RIFT')) mul(resonanceBoosted(TAXONOMY_RESONANCE.RIFT.signaturePercent, more(attackerSlot, 'riftPercent')));
       if (signature && more(attackerSlot, 'ultimatePercent')) mul(100 + more(attackerSlot, 'ultimatePercent')); // 必殺
       if (has(defenderSlot, 'LUMEN')) mul(resonanceBoosted(TAXONOMY_RESONANCE.LUMEN.damageTakenPercent, more(defenderSlot, 'lumenPercent')));
       if (has(defenderSlot, 'IRON')) mul(100, resonanceBoosted(TAXONOMY_RESONANCE.IRON.defensePercent, more(defenderSlot, 'ironPercent')));
       if (defenderHpPercent < COMMANDER_LOW_HP_PERCENT && more(defenderSlot, 'lowHpDefensePercent')) mul(100, 100 + more(defenderSlot, 'lowHpDefensePercent')); // 逆境
-      if (has(defenderSlot, 'TRI')) mul(100, TAXONOMY_RESONANCE.TRI.defensePercent);
+      if (has(defenderSlot, 'TRI')) mul(100, tri(defenderSlot, 'defensePercent'));
       return Math.max(1, Math.trunc(damage * num / den));
     },
     /** Lumen teams recover 1% max HP every 5 seconds while standing; returns the slots it healed. */
@@ -104,6 +115,9 @@ export function createBattleTaxonomyAdaptation({policy = BATTLE_TAXONOMY_ORIGINA
       });
       return healed;
     },
-    rewardPercent(team) { return on && resonanceOf.get(team)?.includes('TRI') ? TAXONOMY_RESONANCE.TRI.rewardPercent : 100; }
+    rewardPercent(team) {
+      if (!on || !resonanceOf.get(team)?.includes('TRI')) return 100;
+      return lead?.triColor && team === lead.team ? KEYSTONE_RULES.triColor.rewardPercent : TAXONOMY_RESONANCE.TRI.rewardPercent;
+    }
   });
 }

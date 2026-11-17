@@ -112,7 +112,12 @@ const ROWS = {
   'key.shopBitsPercent': ['{value}% 商店金幣價格', '{value}% shop Bits prices', 'ショップ価格 {value}%', 'ราคาร้าน {value}%', 'Giá cửa hàng {value}%'],
   'key.scavengePercent': ['狩獵後 {amount}% 撿到補品', '{amount}% tonic after a hunt', '狩りの後 {amount}% でサプリ', '{amount}% ได้ของบำรุงหลังล่า', '{amount}% nhặt thuốc bổ sau săn'],
   'key.strollBitsPercent': ['{value}% 散步金幣', '{value}% stroll Bits', '散歩コイン {value}%', 'เหรียญเดินเล่น {value}%', 'Xu đi dạo {value}%'],
-  'key.strollExtraPercent': ['散步 {amount}% 多帶 1 個', '{amount}% one more from a stroll', '散歩で {amount}% もう 1 個', '{amount}% ได้เพิ่ม 1 จากเดินเล่น', '{amount}% thêm 1 khi đi dạo']
+  'key.strollExtraPercent': ['散步 {amount}% 多帶 1 個', '{amount}% one more from a stroll', '散歩で {amount}% もう 1 個', '{amount}% ได้เพิ่ม 1 จากเดินเล่น', '{amount}% thêm 1 khi đi dạo'],
+  // T5 (TAMER_TALENTS_T5_20261118)
+  'key.moodDecayPercent': ['{value}% 心情扣分', '{value}% mood penalties', '気分の減点 {value}%', 'ตัวหักอารมณ์ {value}%', 'Điểm trừ tâm trạng {value}%'],
+  'ks.commander.pureFaction': ['三隻同陣營：該共鳴 +50%', 'Three of one faction: its resonance +50%', '同陣営 3 体：その共鳴 +50%', '3 ตัวฝ่ายเดียว: เรโซแนนซ์ +50%', '3 con cùng phe: cộng hưởng +50%'],
+  'ks.commander.triColor': ['三色共鳴：攻防 114%・獎勵 125%', 'Tri-core: attack and defence 114%, rewards 125%', 'トライ共鳴：攻防 114%・報酬 125%', 'ไตรคอร์: โจมตี/ป้องกัน 114% รางวัล 125%', 'Tam sắc: công thủ 114%, thưởng 125%'],
+  'ks.trader.bountyHunter': ['賞金信標加成 +50%', 'Bounty beacon bonus +50%', '賞金ビーコン効果 +50%', 'โบนัสบีคอนเงินรางวัล +50%', 'Thưởng đèn hiệu +50%']
 };
 
 export const TAMER_TALENT_COPY = deepFreeze(Object.fromEntries(LOCALES.map((locale, i) =>
@@ -125,6 +130,10 @@ export function talentText(key, params = null, locale = getLocale()) {
 }
 
 /** "+8 G 記憶卡" for one rank of a node; an effect with no copy yet prints nothing. */
+/** What a keystone does, in the current language ('' when it has no line of copy yet). */
+export function talentKeystoneText(id, locale = getLocale()) {
+  return `ks.${id}` in TAMER_TALENT_COPY['zh-Hant'] ? talentText(`ks.${id}`, {}, locale) : '';
+}
 export function talentEffectText(node, ranks = 1, locale = getLocale()) {
   if (!(`key.${node.key}` in TAMER_TALENT_COPY['zh-Hant'])) return '';
   const amount = Math.round(node.per * ranks * 1000) / 1000;

@@ -129,23 +129,24 @@ export function partnerMoodTier(score){
   return PARTNER_MOOD_TIERS.find(t=>score>=t.min)??PARTNER_MOOD_TIERS[PARTNER_MOOD_TIERS.length-1];
 }
 
-export function partnerMoodScore({fields,growth={},state=1,habitat='neutral',dirty=false,moments=[]}={}){
-  const found=new Set();
+/** `soothePercent` is the breeder talent 安撫 (TAMER_TALENTS_T5_20261118): everything that pulls the mood down pulls that much less (at most 30 %). */
+export function partnerMoodScore({fields,growth={},state=1,habitat='neutral',dirty=false,moments=[],soothePercent=0}={}){
+  const found=new Set(),ease=1-Math.max(0,Math.min(30,Number.isFinite(soothePercent)?soothePercent:0))/100;
   const affection=fieldOf(fields,'020'),illness=fieldOf(fields,'01c'),injury=fieldOf(fields,'040');
   let score=affection*.4-10;
   if(affection>=60)found.add('affection');
-  if(illness>30){score-=(illness-30)*.7;if(illness>=60)found.add('stressed');}
-  if(injury>30){score-=(injury-30)*.5;if(injury>=60)found.add('strained');}
-  if(fieldOf(fields,'134')||fieldOf(fields,'138')){score-=40;found.add('hurt');}
-  if(growth['418']){score-=25;found.add('hungry');}
+  if(illness>30){score-=(illness-30)*.7*ease;if(illness>=60)found.add('stressed');}
+  if(injury>30){score-=(injury-30)*.5*ease;if(injury>=60)found.add('strained');}
+  if(fieldOf(fields,'134')||fieldOf(fields,'138')){score-=40*ease;found.add('hurt');}
+  if(growth['418']){score-=25*ease;found.add('hungry');}
   const sleepAt=fieldOf(fields,'178');
-  if(state===4||fieldOf(fields,'13c')||(sleepAt>0&&fieldOf(fields,'00c')>=sleepAt*.8)){score-=15;found.add('sleepy');}
-  if(dirty){score-=10;found.add('dirty');}
+  if(state===4||fieldOf(fields,'13c')||(sleepAt>0&&fieldOf(fields,'00c')>=sleepAt*.8)){score-=15*ease;found.add('sleepy');}
+  if(dirty){score-=10*ease;found.add('dirty');}
   if(habitat==='cozy'){score+=20;found.add('cozy');}
-  else if(habitat==='poor'){score-=20;found.add('poor');}
+  else if(habitat==='poor'){score-=20*ease;found.add('poor');}
   const hp=fieldOf(fields,'050'),max=fieldOf(fields,'058');
   if(max>0&&hp>=max*.9)score+=5;
-  for(const kind of moments){const delta=PARTNER_MOOD_MOMENTS[kind];if(delta){score+=delta;found.add(kind);}}
+  for(const kind of moments){const delta=PARTNER_MOOD_MOMENTS[kind];if(delta){score+=delta<0?delta*ease:delta;found.add(kind);}}
   score=Math.max(-100,Math.min(100,Math.round(score)));
   const reasons=Object.keys(PARTNER_MOOD_REASONS).filter(key=>found.has(key));
   return Object.freeze({score,tier:partnerMoodTier(score).id,reasons:Object.freeze(reasons)});
