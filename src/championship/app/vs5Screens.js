@@ -1527,7 +1527,10 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         frag.append(element("p", "cm-vs5-result__detail", "獎金尚未入帳。"));
         return frag;
       }
-      frag.append(element("p", "cm-vs5-result__detail", uiText("持有 {bits} 位元幣", { bits: receipt.walletAfter })));
+      // The receipt's wallet is the original purse only; the beacon's and the 賞金 talent's shares of this match
+      // reached the wallet too (each already inside the wallet cap), so the figure shown is what the player holds.
+      const held = receipt.walletAfter + (gachaDrop?.bonusBits > 0 ? gachaDrop.bonusBits : 0) + (gachaDrop?.talentBits > 0 ? gachaDrop.talentBits : 0);
+      frag.append(element("p", "cm-vs5-result__detail", uiText("持有 {bits} 位元幣", { bits: held })));
       if (receipt.clamped) {
         frag.append(element("p", "cm-vs5-result__detail",
           uiText("獎金 {bits} 位元幣；持有金額已達上限。", { bits: receipt.rewardBits })));

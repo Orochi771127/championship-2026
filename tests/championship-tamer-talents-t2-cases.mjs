@@ -303,6 +303,8 @@ test('the bag\'s supplement tab shows the price this buy costs, the battles left
   assert.match(bag, /uiText\('SUPPLY_CARRIED_BATTLES', \{ name, n: formatNumber\(battlesLeft\) \}\)/);
   assert.match(bag, /off\.disabled = !whole;/);
   assert.match(source('src/championship/app/vs5Screens.js'), /gachaDrop\?\.talentBits > 0/);
+  assert.match(source('src/championship/app/vs5Screens.js'), /const held = receipt\.walletAfter \+ \(gachaDrop\?\.bonusBits > 0 \? gachaDrop\.bonusBits : 0\) \+ \(gachaDrop\?\.talentBits > 0 \? gachaDrop\.talentBits : 0\);/,
+    'the held figure counts the beacon and talent shares that reached the wallet');
   for (const file of ['uiText.js', 'uiText.en.js', 'uiText.ja.js', 'uiText.th.js', 'uiText.vi.js']) {
     const text = source(`src/championship/text/${file}`);
     for (const key of ['SUPPLY_CARRIED_BATTLES', 'SUPPLY_PARTLY_USED']) assert.ok(text.includes(`"${key}":`), `${file} ${key}`);
