@@ -99,7 +99,8 @@ test('bag: gachapon chips, metals and cores all appear in the four tabs, each wi
     assert.equal(app.grantAutomationItem('auto:feed-core',1,'TEST').ok,true);
     assert.equal(app.grantAutomationItem('auto:clean-core',1,'TEST').ok,true);
     const gacha=app.getCyberGachaFrame(),tabs=backpackTabs(app.getShopFrame(),gacha);
-    assert.deepEqual(BACKPACK_TABS.map(t=>t.id),['supplies','chips','metals','automation']);
+    // SUPPLEMENTS_20261118 adds the 補品 tab after the four the gachapon batch set.
+    assert.deepEqual(BACKPACK_TABS.map(t=>t.id),['supplies','chips','metals','automation','tonics']);
     for(const chip of gacha.chips.filter(c=>c.owned>0))assert.ok(tabs.chips.some(i=>i.id===chip.id),chip.id);
     for(const metal of gacha.metals.filter(m=>m.owned>0))assert.ok(tabs.metals.some(i=>i.id===metal.id),metal.id);
     // The pulls may add a royal cage too; every owned automation item is listed.
@@ -211,4 +212,38 @@ test('night Zs: never on an egg, never left behind by a hatch, and a fresh hatch
   assert.match(app,/if\(result\.evolved&&result\.event\.target>=8\)realtimeWake\.set\(id,realNowMs\(\)\+REALTIME_WAKE_SECONDS\*1000\);/);
   // The nap honours that window.
   assert.match(app,/if\(night&&!\(\(realtimeWake\.get\(id\)\?\?0\)>nowMs\)\)\{/);
+});
+
+test('bag: the 補品 tab is a shelf — price, owned count, buy, and use on the partner picked', ()=>{
+  // SUPPLEMENTS_20261118.
+  const doc=fakeDocument(),calls=[];
+  let frame={bits:1000,now:1_800_000_000_000,items:[
+    {id:'supply:vigor',kind:'RECOVERY',bits:150,owned:2,activeUntil:null},
+    {id:'supply:snack',kind:'RECOVERY',bits:400,owned:0,activeUntil:null},
+    {id:'supply:growth',kind:'RANCH',bits:800,owned:1,activeUntil:1_800_000_000_000+90*60000},
+    {id:'supply:sleep',kind:'RANCH',bits:2000,owned:0,activeUntil:null}]};
+  const panel=createBackpackPanel({doc,getShopFrame:()=>({bits:1000,categories:[]}),tab:'tonics',
+    // Named as everywhere else (partnerLabel): the given name when there is one.
+    getGachaFrame:()=>({partners:[{instanceId:'p1',displayName:'角暴龍',speciesId:'species-087'},{instanceId:'p2',displayName:'海蛟龍',speciesId:'species-097'}]}),getSuppliesFrame:()=>frame,
+    intents:{buySupply:(id,n)=>{calls.push(['buy',id,n]);return {ok:true};},useSupply:(id,who)=>{calls.push(['use',id,who]);return who==='p2'?{ok:false,reason:'SUPPLY_NO_EFFECT'}:{ok:true};}}});
+  const all=node=>[node,...node.children.flatMap(all)],find=pred=>all(panel.element).filter(pred);
+  const tab=find(n=>n.dataset?.tab==='tonics'&&n.tagName==='BUTTON')[0];
+  assert.match(tab.textContent,/補品/);assert.match(tab.textContent,/2$/,'two kinds are owned');
+  const rows=find(n=>n.dataset?.supply);
+  assert.deepEqual(rows.map(r=>r.dataset.supply),['supply:vigor','supply:snack','supply:growth','supply:sleep'],'every supplement is on the shelf, owned or not');
+  assert.match(rows[0].textContent,/元氣飲/);assert.match(rows[0].textContent,/HP、TP 補滿/);assert.match(rows[0].textContent,/×2/);
+  assert.match(rows[2].textContent,/剩 90 分/,'a running ranch supplement says how long is left');
+  const buy=id=>find(n=>n.dataset?.buySupply===id)[0],use=id=>find(n=>n.dataset?.useSupply===id)[0];
+  assert.equal(buy('supply:sleep').disabled,true,'2,000 Bits with 1,000 in the wallet');
+  assert.equal(use('supply:snack').disabled,true,'none owned');
+  buy('supply:vigor').click();
+  assert.deepEqual(calls.at(-1),['buy','supply:vigor',1]);
+  use('supply:growth').click();
+  assert.deepEqual(calls.at(-1),['use','supply:growth',null],'a ranch supplement starts at once');
+  use('supply:vigor').click();
+  const picks=find(n=>n.dataset?.supplyPartner);
+  assert.deepEqual(picks.map(p=>[p.dataset.supplyPartner,p.textContent]),[['p1','角暴龍'],['p2','海蛟龍']],'a recovery supplement asks which partner');
+  picks[1].click();
+  assert.deepEqual(calls.at(-1),['use','supply:vigor','p2']);
+  assert.match(find(n=>n.className==='cm-backpack__receipt')[0].textContent,/現在用了沒效果/,'a refusal is said in words');
 });

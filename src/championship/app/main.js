@@ -2798,8 +2798,11 @@ function openBackpack({ tab = 'supplies', partnerId = null } = {}) {
   void openRanchBackpack({
     getShopFrame: () => app.getShopFrame(),
     getGachaFrame: () => { try { return app.getCyberGachaFrame?.() ?? null; } catch { return null; } },
+    getSuppliesFrame: () => app.getSuppliesFrame?.() ?? null,
     tab, partnerId,
     intents: {
+      buySupply: (id, quantity) => app.buySupply(id, quantity),
+      useSupply: (id, instanceId) => app.useSupply(id, instanceId),
       useItem: (itemId, instanceId, options) => app.gachaUseItem(itemId, instanceId, options),
       reshape: (instanceId, personality) => app.gachaReshapePersonality(instanceId, personality),
       imprintScroll: (instanceId, grade, slot) => app.gachaImprintScroll(instanceId, grade, slot),

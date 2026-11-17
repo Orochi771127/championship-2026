@@ -43,6 +43,8 @@ import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentVal
   learnTalent,talentRefusal,chooseKeystone,keystoneRefusal,respecTalents,talentRespecCost,talentSpent,talentSpentInLine,talentOpen,commanderCappedTalents,
   TALENT_NODES,TALENT_KEYSTONES,TALENT_LINES,TALENT_TREE_POINTS,TALENT_TIER_GATE,TALENT_KEYSTONE_GATE,TALENT_KEYSTONE_COST,tamerExpRequired,TAMER_LEVEL_MAX}
   from '../contracts/productTamerTalents.js';
+import {normalizeTamerSupplies,createTamerSupplies,SUPPLEMENTS,getSupplement,supplyOwned,supplyPurchase,spendSupply,applyRecoverySupply,
+  startRanchSupply,ranchSupplyActive,ranchSupplyGrowthPercent,ranchSupplyNightCalm} from '../contracts/productSupplements.js';
 import {normalizeJourney,createJourneyState,TOWER_FLOORS,towerBand,towerOpponents,towerOpponentSpecies,towerRewards,towerNextFloor,
   clearTowerFloor,patrolStatus,claimPatrol,quickPatrol} from '../contracts/productJourney.js';
 import {CAMPAIGN_ZONES,CAMPAIGN_STAGES,CAMPAIGN_ZONE_CHEST,campaignRivals,campaignStars,campaignRewards,recordCampaignStage,sweepCampaignStage,
@@ -452,6 +454,8 @@ export function createChampionshipStandaloneApp({
   let syncLevels=null,lastSyncGains=null;
   // TAMER_TALENTS_20261117: the tamer level, its EXP and where the talent points were spent.
   let tamerTalents=null,lastTamerGain=null;
+  // SUPPLEMENTS_20261118: the supplement bag (progression.tamerSupplies).
+  let tamerSupplies=null;
   // OWNER_APPROVED_ADAPTATION 2026-11-10: Journey (tower and patrol pod).
   let journey=null,pendingTower=null,lastTowerResult=null,pendingCampaign=null;
   let nativeMessages=createNativeRaisingMessages();
@@ -1054,7 +1058,7 @@ export function createChampionshipStandaloneApp({
             overdrive:realtime?training=>overdriveTraining(id,training):null,
             cageEffects:realtime&&REALTIME_RECOVERY_CAGES.includes(actor.cageDefinitionIndex)?[]:undefined,
             // The breeder talent 精心照料: +4 % training growth a rank.
-            growthBonusPercent:talent('growthPercent'),
+            growthBonusPercent:talent('growthPercent')+(realtime?ranchSupplyGrowthPercent(tamerSupplies,realNowMs()):0), // + 成長粉 while it runs
             onJoin:()=>notifyNativeRaisingResidentAdded(actor,[...raisingActors.values()].filter(a=>!a.detached),{next:nextGameplayRandom}),
             getResidents:()=>[...raisingActors].filter(([,a])=>!a.detached&&(a.cageInstanceId??a.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).sort((a,b)=>a[1].poolSlot-b[1].poolSlot).map(([key])=>raisingNativeProfile(key)),
             roster:[actor.speciesIndex,...ids.filter(other=>other!==id).map(other=>raisingNativeProfile(other).fields['000'])],
@@ -1136,7 +1140,8 @@ export function createChampionshipStandaloneApp({
     let woken=wakeNativeRaisingActor(actor,profile,raisingFoods,{next:nextGameplayRandom});
     if(!woken)return false;
     // The breeder talent 守夜: 15 % a rank that a handled sleeper is not disturbed (product roll, never the native RNG).
-    const disturbed=disturb&&actor.speciesIndex>=8&&!(productRoll(0x60)<-talent('nightDisturbPercent')/100);
+    // 安眠香 (SUPPLEMENTS_20261118): no night disturbance at all until the morning.
+    const disturbed=disturb&&actor.speciesIndex>=8&&!ranchSupplyNightCalm(tamerSupplies,realNowMs())&&!(productRoll(0x60)<-talent('nightDisturbPercent')/100);
     if(disturbed){
       const next=structuredClone(woken),rule=REALTIME_DISTURBANCE;
       next.narrowFields['03d']=Math.min(rule.careMistakeMaximum,(next.narrowFields['03d']|0)+rule.careMistakes);
@@ -1298,6 +1303,27 @@ export function createChampionshipStandaloneApp({
     if(!sync)return 1;
     const lv=syncLevelOf(instanceId).level;
     return sync.capped?Math.min(lv,syncCapForRank(tamerRankValue)):lv;
+  }
+  // ---- Supplements (SUPPLEMENTS_20261118): bought with Bits, kept in the bag, never a gachapon prize ----
+  function suppliesState(){return tamerSupplies??(tamerSupplies=createTamerSupplies());}
+  /** One save for a supplement change, with the wallet when Bits were spent; nothing changes when it fails. */
+  function commitSupplies(state,shopCandidate=null){
+    const status=savePort.save({...liveSaveRequest(revision+1),tamerSupplies:state,
+      shop:(shopCandidate??shop)?(shopCandidate??shop).toSave():null});
+    if(status.phase!=='SAVED'){savePort.discardPendingWrite();return false;}
+    tamerSupplies=state;revision+=1;
+    if(shopCandidate){
+      shop=createShopRuntime({snapshot:shopCandidate.toSave(),huntInventory,allowRepeatedCages:playtestPolicy?.enabled===true,
+        allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
+      applyMappedHuntInventoryFromShop(shop,huntInventory);bindShopRuntime();
+    }
+    return true;
+  }
+  /** The next 07:00 on the player's clock: when 安眠香 stops. */
+  function nextMorningMs(nowMs){
+    const morning=new Date(nowMs);morning.setHours(7,0,0,0);
+    if(morning.getTime()<=nowMs)morning.setDate(morning.getDate()+1);
+    return morning.getTime();
   }
   // ---- Tamer level and talents (TAMER_TALENTS_20261117) ----
   function talentState(){return tamerTalents??(tamerTalents=createTamerTalentState());}
@@ -1996,7 +2022,7 @@ export function createChampionshipStandaloneApp({
     return {
       snapshot:requireSession().getRaisingHomeSnapshot(),creature,sessionId,revision:nextRevision,
       interactionCount,friendsPlaytest,onlineBindReward,saveId,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
-      championshipRun,freeBattleMenu,battleTactics,cyberGacha,burstEvolution,syncLevels,tamerTalents,journey,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
+      championshipRun,freeBattleMenu,battleTactics,cyberGacha,burstEvolution,syncLevels,tamerTalents,tamerSupplies,journey,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
       raising,shop:shop?shop.toSave():null,cageEdit:cageEdit?cageEdit.toSave():null,battleEconomy,
       instanceIdentity,gameplayRng:gameplayRngSnapshot(),huntHistory:projectNativeHuntPersistentSave(huntPersistentState)
     };
@@ -2271,6 +2297,7 @@ export function createChampionshipStandaloneApp({
     burstEvolution = normalizeBurstEvolution(saved.progression.burstEvolution ?? null);
     syncLevels = saved.progression.syncLevels===undefined?null:normalizeSyncLevels(saved.progression.syncLevels);lastSyncGains=null;
     tamerTalents = saved.progression.tamerTalents===undefined?null:normalizeTamerTalents(saved.progression.tamerTalents);lastTamerGain=null;
+    tamerSupplies = saved.progression.tamerSupplies===undefined?null:normalizeTamerSupplies(saved.progression.tamerSupplies);
     journey = saved.progression.journey===undefined?null:normalizeJourney(saved.progression.journey);pendingTower=null;lastTowerResult=null;
     migrateLegacyBurstPartners();
     if (realtime) {
@@ -2534,7 +2561,7 @@ export function createChampionshipStandaloneApp({
       nativeOpening=opening;
       cyberGacha=grantGachaWelcome(null).state;
       burstEvolution=withBurstMigrated(createBurstEvolutionState());
-      syncLevels=null;lastSyncGains=null;tamerTalents=null;lastTamerGain=null;journey=null;pendingTower=null;lastTowerResult=null;
+      syncLevels=null;lastSyncGains=null;tamerTalents=null;lastTamerGain=null;tamerSupplies=null;journey=null;pendingTower=null;lastTowerResult=null;
       tutorialBaseline=null;tutorialPendingOpening=null;tutorialOfferEligible=opening!==null;
       registeredSpeciesValue = Object.freeze([]);
       battleEconomy = createBattleEconomyState();
@@ -4690,6 +4717,50 @@ export function createChampionshipStandaloneApp({
       const fed=feedSyncCrystals(syncState(),instanceId,amount);
       if(!fed)return {ok:false,reason:'NO_CRYSTALS'};
       syncLevels=fed.state;savePort.markDirty();publishRaising();return {ok:true,gain:fed.gain};
+    },
+    // ---- Supplements (SUPPLEMENTS_20261118) ----
+    /** The supplement shelf and bag: price, how many are owned and which ranch supplements are running. */
+    getSuppliesFrame(){
+      if(!session)return null;
+      const state=suppliesState(),nowMs=realNowMs();
+      return Object.freeze({bits:shop?shop.getBits():0,now:nowMs,items:Object.freeze(SUPPLEMENTS.map(entry=>Object.freeze({id:entry.id,kind:entry.kind,
+        bits:entry.bits,owned:supplyOwned(state,entry.id),activeUntil:ranchSupplyActive(state,entry.id,nowMs)?state.ranch[entry.id]:null})))});
+    },
+    /** Buy supplements with Bits: the wallet and the bag are written in one save. */
+    buySupply(id,quantity=1){
+      requireSession();
+      if(tutorialBaseline||battleTransactionActive||battleEconomy.active||huntCommitActive)return Object.freeze({ok:false,reason:'SUPPLY_NOT_AVAILABLE'});
+      const candidate=gachaShopCandidate(),bits=candidate.getBits();
+      const purchase=supplyPurchase(suppliesState(),id,quantity,bits);
+      if(!purchase.ok)return Object.freeze({ok:false,reason:purchase.reason,...(purchase.cost?{cost:purchase.cost}:{})});
+      if(!candidate.applyBitsTransaction({expectedBits:bits,bits:bits-purchase.cost}).ok)return Object.freeze({ok:false,reason:'SUPPLY_NO_BITS',cost:purchase.cost});
+      if(!commitSupplies(purchase.state,candidate))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
+      publishRaising();publishScreens();
+      return Object.freeze({ok:true,id,quantity,cost:purchase.cost,owned:supplyOwned(tamerSupplies,id)});
+    },
+    /** Use one supplement: a recovery kind on a partner (its native words, inside their range), a ranch kind on the ranch. */
+    useSupply(id,instanceId=null){
+      requireSession();
+      if(tutorialBaseline||battleTransactionActive||battleEconomy.active||huntCommitActive)return Object.freeze({ok:false,reason:'SUPPLY_NOT_AVAILABLE'});
+      const entry=getSupplement(id),spent=spendSupply(suppliesState(),id);
+      if(!entry)return Object.freeze({ok:false,reason:'SUPPLY_UNKNOWN'});
+      if(!spent)return Object.freeze({ok:false,reason:'SUPPLY_NONE_OWNED'});
+      if(entry.kind==='RANCH'){
+        const nowMs=realNowMs(),started=startRanchSupply(spent,id,nowMs,{morningMs:nextMorningMs(nowMs)});
+        if(!started.ok)return Object.freeze({ok:false,reason:started.reason});
+        if(!commitSupplies(started.state))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
+        publishRaising();publishScreens();
+        return Object.freeze({ok:true,id,until:started.until});
+      }
+      const profile=syncProfileOf(instanceId);
+      if(!profile)return Object.freeze({ok:false,reason:'UNKNOWN_INDIVIDUAL'});
+      const applied=applyRecoverySupply(profile,id);
+      if(!applied.ok)return Object.freeze({ok:false,reason:applied.reason});
+      const before={creature,raising};
+      writeRaisingNativeProfile(instanceId,normalizeNativeIndividualProfile(applied.profile),{markDirty:false});
+      if(!commitSupplies(spent)){creature=before.creature;raising=before.raising;return Object.freeze({ok:false,reason:'SAVE_FAILED'});}
+      publishRaising();publishScreens();
+      return Object.freeze({ok:true,id,instanceId});
     },
     // ---- Tamer level and talent tree (TAMER_TALENTS_20261117) ----
     /** The tamer's level, EXP, points and the whole tree with what each node is and why it cannot be taken. */
