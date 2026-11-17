@@ -39,6 +39,10 @@ import {REALTIME_TRAINING_POLICY,recommendedCages,TRAINING_KIND_OF_CONDITION} fr
 import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattleExp,grantSyncExp,feedSyncCrystals,reconcileSyncRebirth,
   boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX,partnerGradeOf,recordPartnerGrade,fuseSyncPartners} from '../contracts/productSyncLevel.js';
 import {rollPartnerGrade,applyGradeHeadStart,fusionLineMultiplier,FUSION_MAX_FODDER,FUSION_WARN_LEVEL} from '../contracts/productLineFusion.js';
+import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentValue,grantTamerExp,tamerCaptureExp,tamerBattleExp,TAMER_EXP,
+  learnTalent,talentRefusal,chooseKeystone,keystoneRefusal,respecTalents,talentRespecCost,talentSpent,talentSpentInLine,talentOpen,commanderCappedTalents,
+  TALENT_NODES,TALENT_KEYSTONES,TALENT_LINES,TALENT_TREE_POINTS,TALENT_TIER_GATE,TALENT_KEYSTONE_GATE,TALENT_KEYSTONE_COST,tamerExpRequired,TAMER_LEVEL_MAX}
+  from '../contracts/productTamerTalents.js';
 import {normalizeJourney,createJourneyState,TOWER_FLOORS,towerBand,towerOpponents,towerOpponentSpecies,towerRewards,towerNextFloor,
   clearTowerFloor,patrolStatus,claimPatrol,quickPatrol} from '../contracts/productJourney.js';
 import {CAMPAIGN_ZONES,CAMPAIGN_STAGES,CAMPAIGN_ZONE_CHEST,campaignRivals,campaignStars,campaignRewards,recordCampaignStage,sweepCampaignStage,
@@ -429,6 +433,8 @@ export function createChampionshipStandaloneApp({
   let burstEvolution=null;
   // OWNER_APPROVED_ADAPTATION 2026-11-09: Sync Level per partner (BATTLE_MODE_PRISM_AND_JOURNEY_20261109).
   let syncLevels=null,lastSyncGains=null;
+  // TAMER_TALENTS_20261117: the tamer level, its EXP and where the talent points were spent.
+  let tamerTalents=null,lastTamerGain=null;
   // OWNER_APPROVED_ADAPTATION 2026-11-10: Journey (tower and patrol pod).
   let journey=null,pendingTower=null,lastTowerResult=null,pendingCampaign=null;
   let nativeMessages=createNativeRaisingMessages();
@@ -1030,6 +1036,8 @@ export function createChampionshipStandaloneApp({
             training:realtime?REALTIME_TRAINING_POLICY:null,trainingBonus:royalTrainingBonus(actor),capacityBonusG:ranchLandBonusG(),
             overdrive:realtime?training=>overdriveTraining(id,training):null,
             cageEffects:realtime&&REALTIME_RECOVERY_CAGES.includes(actor.cageDefinitionIndex)?[]:undefined,
+            // The breeder talent 精心照料: +4 % training growth a rank.
+            growthBonusPercent:talent('growthPercent'),
             onJoin:()=>notifyNativeRaisingResidentAdded(actor,[...raisingActors.values()].filter(a=>!a.detached),{next:nextGameplayRandom}),
             getResidents:()=>[...raisingActors].filter(([,a])=>!a.detached&&(a.cageInstanceId??a.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).sort((a,b)=>a[1].poolSlot-b[1].poolSlot).map(([key])=>raisingNativeProfile(key)),
             roster:[actor.speciesIndex,...ids.filter(other=>other!==id).map(other=>raisingNativeProfile(other).fields['000'])],
@@ -1110,7 +1118,8 @@ export function createChampionshipStandaloneApp({
     if(!actor||!profile)return false;
     let woken=wakeNativeRaisingActor(actor,profile,raisingFoods,{next:nextGameplayRandom});
     if(!woken)return false;
-    const disturbed=disturb&&actor.speciesIndex>=8;
+    // The breeder talent 守夜: 15 % a rank that a handled sleeper is not disturbed (product roll, never the native RNG).
+    const disturbed=disturb&&actor.speciesIndex>=8&&!(productRoll(0x60)<-talent('nightDisturbPercent')/100);
     if(disturbed){
       const next=structuredClone(woken),rule=REALTIME_DISTURBANCE;
       next.narrowFields['03d']=Math.min(rule.careMistakeMaximum,(next.narrowFields['03d']|0)+rule.careMistakes);
@@ -1273,11 +1282,34 @@ export function createChampionshipStandaloneApp({
     const lv=syncLevelOf(instanceId).level;
     return sync.capped?Math.min(lv,syncCapForRank(tamerRankValue)):lv;
   }
+  // ---- Tamer level and talents (TAMER_TALENTS_20261117) ----
+  function talentState(){return tamerTalents??(tamerTalents=createTamerTalentState());}
+  /** Points to spend: worked out, never stored. The friends playtest opens the whole tree. */
+  function talentPointsNow(){
+    return playtestPolicy?.enabled===true?TALENT_TREE_POINTS
+      :tamerTalentPoints({level:talentState().level,rank:tamerRankValue,registered:registeredSpeciesValue.length});
+  }
+  /** A talent's summed effect, 0 with nothing learned. Password, link and online battles never read it. */
+  function talent(key,state=tamerTalents){return state?talentValue(state,key):0;}
+  /** What a battle of `kind` reads: title matches and championships count only the first 6 + 3 x rank commander points. */
+  function battleTalents(kind){
+    return kind==='TITLE'||kind==='CHAMPIONSHIP'?commanderCappedTalents(talentState(),tamerRankValue):talentState();
+  }
+  /** Tamer EXP on a candidate state; the caller saves it with whatever earned it. */
+  function withTamerExp(state,amount){
+    if(!(amount>0))return {state,gain:null};
+    return grantTamerExp(state??createTamerTalentState(),amount);
+  }
   /** Pay one settled battle's Sync EXP to the partners that fought it. */
   function grantBattleSync(instanceIds,{kind,won,attemptId=null}){
     const gains=[];
+    // One settled owned-party battle also pays the tamer (never password, link or online battles).
+    if(instanceIds.length){const paid=withTamerExp(talentState(),tamerBattleExp(kind,won));tamerTalents=paid.state;lastTamerGain=paid.gain;}
+    const syncBonus=talent('syncExpPercent',battleTalents(kind));
     for(const instanceId of instanceIds){
-      const amount=syncBattleExp(syncLevelOf(instanceId).level,{kind,won});
+      const base=syncBattleExp(syncLevelOf(instanceId).level,{kind,won});
+      // The commander talent 同步訓練: +5 % Sync EXP a rank.
+      const amount=base>0?Math.round(base*(100+syncBonus)/100):0;
       if(amount<=0)continue;
       const granted=grantSyncExp(syncState(),instanceId,amount);
       syncLevels=granted.state;gains.push(granted.gain);
@@ -1293,6 +1325,8 @@ export function createChampionshipStandaloneApp({
   function journeyLocalDay(){const d=new Date(journeyNow());return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
   function addSyncCrystals(amount){
     if(!(amount>0))return;
+    // The trader talent 結晶: +10 % crystals a rank on everything paid through here (tower, zones, patrol).
+    amount=Math.round(amount*(100+talent('crystalPercent'))/100);
     const state=normalizeSyncLevels(syncState());syncLevels={...state,crystals:Math.min(1e9,state.crystals+amount)};
   }
   /** A finished tower floor: the climb, and on a first clear its crystals, tickets and guardian diamonds. */
@@ -1689,7 +1723,8 @@ export function createChampionshipStandaloneApp({
     const card=Math.max(maxGFromInventory(huntInventory),shop?.memoryCardCapacityG?.()??0);
     // The land bonus never blocks a hunt: an unreadable layout falls back to the card alone.
     let land=null;try{land=cageEdit?.getFrame(...cageEditArgs())?.landCapacity??null;}catch{land=null;}
-    return card+(Number.isFinite(land)?landMemoryBonusG(land,card):0);
+    // The hunter talent 記憶擴充: +8 G a rank.
+    return card+(Number.isFinite(land)?landMemoryBonusG(land,card):0)+talent('memoryG');
   }
 
   // ---- Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02, STAGE_REDESIGN_BURST_20261102) ----
@@ -1834,7 +1869,7 @@ export function createChampionshipStandaloneApp({
   const fusionSpeciesOf=instanceId=>{const index=syncProfileOf(instanceId)?.fields?.['000'];return Number.isSafeInteger(index)?index:null;};
   /** 1 same species, 0.6 a lower stage of the base's line, 0 not its line. */
   function fusionLineOf(baseId,fodderSpecies){
-    const base=fusionSpeciesOf(baseId);return base===null?0:fusionLineMultiplier(base,fodderSpecies,fusionAncestors);
+    const base=fusionSpeciesOf(baseId);return base===null?0:fusionLineMultiplier(base,fodderSpecies,fusionAncestors,talent('fusionLowerLine'));
   }
   /** Why a saved partner cannot be fodder (the main partner, which is also the starter egg, never is). */
   function fusionHomeFodderRefusal(instanceId){
@@ -1854,7 +1889,7 @@ export function createChampionshipStandaloneApp({
   function stagedHuntFusionSync(){
     let state=normalizeSyncLevels(syncState());const gains=new Map();
     for(const fusion of huntResult?.fusions??[]){
-      const fused=fuseSyncPartners(state,fusion.baseId,[{instanceId:fusion.kind==='HOME'?fusion.id:null,grade:fusion.grade,line:fusion.line}]);
+      const fused=fuseSyncPartners(state,fusion.baseId,[{instanceId:fusion.kind==='HOME'?fusion.id:null,grade:fusion.grade,line:fusion.line}],{bonusPercent:talent('fusionExpPercent')});
       if(!fused)continue;
       const prior=gains.get(fusion.baseId);
       gains.set(fusion.baseId,Object.freeze({amount:(prior?.amount??0)+fused.total,overflow:(prior?.overflow??0)+fused.overflow,
@@ -1875,7 +1910,7 @@ export function createChampionshipStandaloneApp({
       fodders.push({instanceId:id,grade:partnerGradeOf(syncLevels,id),line});
     }
     syncLevelOf(baseId);
-    const fused=fuseSyncPartners(syncState(),baseId,fodders);
+    const fused=fuseSyncPartners(syncState(),baseId,fodders,{bonusPercent:talent('fusionExpPercent')});
     return fused?{ok:true,ids,fused}:{ok:false,reason:'FUSION_INVALID_SELECTION'};
   }
   function partnerBurstView(instanceId){
@@ -1903,7 +1938,7 @@ export function createChampionshipStandaloneApp({
     return {
       snapshot:requireSession().getRaisingHomeSnapshot(),creature,sessionId,revision:nextRevision,
       interactionCount,friendsPlaytest,onlineBindReward,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
-      championshipRun,freeBattleMenu,battleTactics,cyberGacha,burstEvolution,syncLevels,journey,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
+      championshipRun,freeBattleMenu,battleTactics,cyberGacha,burstEvolution,syncLevels,tamerTalents,journey,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
       raising,shop:shop?shop.toSave():null,cageEdit:cageEdit?cageEdit.toSave():null,battleEconomy,
       instanceIdentity,gameplayRng:gameplayRngSnapshot(),huntHistory:projectNativeHuntPersistentSave(huntPersistentState)
     };
@@ -2177,6 +2212,7 @@ export function createChampionshipStandaloneApp({
     raising = repairStrollLogNames(candidate.production);
     burstEvolution = normalizeBurstEvolution(saved.progression.burstEvolution ?? null);
     syncLevels = saved.progression.syncLevels===undefined?null:normalizeSyncLevels(saved.progression.syncLevels);lastSyncGains=null;
+    tamerTalents = saved.progression.tamerTalents===undefined?null:normalizeTamerTalents(saved.progression.tamerTalents);lastTamerGain=null;
     journey = saved.progression.journey===undefined?null:normalizeJourney(saved.progression.journey);pendingTower=null;lastTowerResult=null;
     migrateLegacyBurstPartners();
     if (realtime) {
@@ -2266,7 +2302,7 @@ export function createChampionshipStandaloneApp({
     const beforeBadges = battleBadgesValue;
     const beforeRank=tamerRankValue,beforeTitles=nativeTitles,beforeMessages=nativeMessages,beforeRun=championshipRun;
     const beforeGacha=cyberGacha,beforeGachaDrop=lastBattleGachaDrop,beforeBurst=burstEvolution,beforeBurstUnlocks=lastBurstUnlocks,beforeSponsor=lastSponsorSettlement;
-    const beforeSync=syncLevels,beforeSyncGains=lastSyncGains;
+    const beforeSync=syncLevels,beforeSyncGains=lastSyncGains,beforeTalents=tamerTalents,beforeTamerGain=lastTamerGain;
     const expectedBits = requireShop().getBits();
     // One rollback for both ways this can fail. The wallet is committed last, so
     // until it succeeds every one of these is still the pre-transaction value.
@@ -2277,7 +2313,7 @@ export function createChampionshipStandaloneApp({
       battleBadgesValue = beforeBadges;
       tamerRankValue=beforeRank;nativeTitles=beforeTitles;nativeMessages=beforeMessages;championshipRun=beforeRun;
       cyberGacha=beforeGacha;lastBattleGachaDrop=beforeGachaDrop;burstEvolution=beforeBurst;lastBurstUnlocks=beforeBurstUnlocks;lastSponsorSettlement=beforeSponsor;
-      syncLevels=beforeSync;lastSyncGains=beforeSyncGains;
+      syncLevels=beforeSync;lastSyncGains=beforeSyncGains;tamerTalents=beforeTalents;lastTamerGain=beforeTamerGain;
     };
     battleTransactionActive = true;
     try {
@@ -2437,7 +2473,7 @@ export function createChampionshipStandaloneApp({
       nativeOpening=opening;
       cyberGacha=grantGachaWelcome(null).state;
       burstEvolution=withBurstMigrated(createBurstEvolutionState());
-      syncLevels=null;lastSyncGains=null;journey=null;pendingTower=null;lastTowerResult=null;
+      syncLevels=null;lastSyncGains=null;tamerTalents=null;lastTamerGain=null;journey=null;pendingTower=null;lastTowerResult=null;
       tutorialBaseline=null;tutorialPendingOpening=null;tutorialOfferEligible=opening!==null;
       registeredSpeciesValue = Object.freeze([]);
       battleEconomy = createBattleEconomyState();
@@ -3583,7 +3619,7 @@ export function createChampionshipStandaloneApp({
           warnings: fusionRow.kind === "HOME" ? fusionFodderWarnings(fusionRow.id) : Object.freeze([]),
           bases: Object.freeze(basesFor(species, fusionRow.kind === "HOME" ? fusionRow.id : null).map((home) => {
             const line = fusionLineOf(home.instanceId, species);
-            const preview = fuseSyncPartners(staged.state, home.instanceId, [{ instanceId: fusionRow.kind === "HOME" ? fusionRow.id : null, grade, line }]);
+            const preview = fuseSyncPartners(staged.state, home.instanceId, [{ instanceId: fusionRow.kind === "HOME" ? fusionRow.id : null, grade, line }], { bonusPercent: talent('fusionExpPercent') });
             return Object.freeze({ instanceId: home.instanceId, speciesId: home.speciesId, line,
               displayName: home.displayName ?? speciesDisplayName(home.speciesId), preview: preview?.summary ?? null });
           })) });
@@ -4584,6 +4620,47 @@ export function createChampionshipStandaloneApp({
       if(!fed)return {ok:false,reason:'NO_CRYSTALS'};
       syncLevels=fed.state;savePort.markDirty();publishRaising();return {ok:true,gain:fed.gain};
     },
+    // ---- Tamer level and talent tree (TAMER_TALENTS_20261117) ----
+    /** The tamer's level, EXP, points and the whole tree with what each node is and why it cannot be taken. */
+    getTamerTalentFrame(){
+      if(!session)return null;
+      const state=talentState(),points=talentPointsNow(),spent=talentSpent(state);
+      return Object.freeze({level:state.level,exp:state.exp,next:state.level>=TAMER_LEVEL_MAX?0:tamerExpRequired(state.level),levelMax:TAMER_LEVEL_MAX,
+        points,spent,free:Math.max(0,points-spent),respecCost:talentRespecCost(state),crystals:normalizeSyncLevels(syncLevels).crystals,
+        lastGain:lastTamerGain,
+        lines:Object.freeze(TALENT_LINES.map(line=>Object.freeze({line,spent:talentSpentInLine(state,line),keystoneGate:TALENT_KEYSTONE_GATE,
+          nodes:Object.freeze(TALENT_NODES.filter(node=>node.line===line).map(node=>Object.freeze({id:node.id,tier:node.tier,key:node.key,per:node.per,
+            max:node.max,cost:node.cost,rank:state.nodes[node.id]??0,gate:TALENT_TIER_GATE[node.tier],open:talentOpen(node.id),
+            refusal:talentRefusal(state,node.id,points)}))),
+          keystones:Object.freeze(TALENT_KEYSTONES.filter(key=>key.line===line).map(key=>Object.freeze({id:key.id,cost:TALENT_KEYSTONE_COST,
+            taken:state.keystones[line]===key.id,open:talentOpen(key.id),refusal:keystoneRefusal(state,key.id,points)})))})))});
+    },
+    /** Spend one point on a node (or a keystone). Saved before it is shown. */
+    learnTamerTalent(id){
+      requireSession();
+      if(tutorialBaseline)return Object.freeze({ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'});
+      const state=talentState(),points=talentPointsNow();
+      const refusal=TALENT_NODES.some(node=>node.id===id)?talentRefusal(state,id,points):keystoneRefusal(state,id,points);
+      if(refusal)return Object.freeze({ok:false,reason:refusal});
+      const next=learnTalent(state,id,points)??chooseKeystone(state,id,points);
+      const status=savePort.save({...liveSaveRequest(revision+1),tamerTalents:next});
+      if(status.phase!=='SAVED'){savePort.discardPendingWrite();return Object.freeze({ok:false,reason:'SAVE_FAILED'});}
+      tamerTalents=next;revision+=1;publishRaising();publishScreens();
+      return Object.freeze({ok:true,id});
+    },
+    /** Every point back, keystones included: the first is free, then 500 crystals. */
+    respecTamerTalents(){
+      requireSession();
+      const state=talentState(),next=respecTalents(state),cost=talentRespecCost(state);
+      if(!next)return Object.freeze({ok:false,reason:'TALENT_NOTHING_SPENT'});
+      const sync=normalizeSyncLevels(syncState());
+      if(sync.crystals<cost)return Object.freeze({ok:false,reason:'TALENT_NO_CRYSTALS',cost});
+      const candidateSync={...sync,crystals:sync.crystals-cost};
+      const status=savePort.save({...liveSaveRequest(revision+1),tamerTalents:next,syncLevels:candidateSync});
+      if(status.phase!=='SAVED'){savePort.discardPendingWrite();return Object.freeze({ok:false,reason:'SAVE_FAILED'});}
+      tamerTalents=next;syncLevels=candidateSync;revision+=1;publishRaising();publishScreens();
+      return Object.freeze({ok:true,cost});
+    },
     // ---- Same-line fusion from the ranch (LINE_FUSION_20261117 P2) ----
     /** The saved partners `baseId` can take as fodder, each with its line multiplier, grade, level and what it would lose. */
     getFusionCandidates(baseId){
@@ -4620,10 +4697,12 @@ export function createChampionshipStandaloneApp({
       let candidateRaising=raising;
       for(const id of plan.ids)candidateRaising=releaseRaisingMembership(candidateRaising,id);
       const candidateBook=retainOwnedBookSpecies(registeredSpeciesValue,creature,candidateRaising.collection);
+      const tamerPaid=withTamerExp(talentState(),plan.ids.length*TAMER_EXP.FUSION);
       const status=savePort.save({...liveSaveRequest(revision+1),snapshot:candidateSnapshot,raising:candidateRaising,
-        syncLevels:plan.fused.state,registeredSpecies:candidateBook});
+        syncLevels:plan.fused.state,tamerTalents:tamerPaid.state,registeredSpecies:candidateBook});
       if(status.phase!=='SAVED'){savePort.discardPendingWrite();return Object.freeze({ok:false,reason:'SAVE_FAILED'});}
       raising=candidateRaising;syncLevels=plan.fused.state;registeredSpeciesValue=candidateBook;revision+=1;
+      tamerTalents=tamerPaid.state;lastTamerGain=tamerPaid.gain;
       if(residents.length)requireSession().commitRaisingResidentRelease(residents,before.revision);
       for(const id of plan.ids){
         const actor=raisingActors.get(id);if(actor)interruptNativeRaisingFeeding(actor,raisingFoods,{next:nextGameplayRandom});
@@ -5567,7 +5646,7 @@ export function createChampionshipStandaloneApp({
         // and lured draw from the same continuing RNG, so the native actors are byte-identical with it on or off.
         // The tutorial hunt and capture replays keep the native head count.
         const herdEntry = luredEntry && huntHerds && huntCaptureReplay === null && !tutorialBaseline
-          ? appendProductHuntHerds(luredEntry) : luredEntry;
+          ? appendProductHuntHerds(luredEntry, { extra: talent('herdExtra') }) : luredEntry;
         const instincts = herdEntry ? (huntInstinctOverride ? herdEntry.encounter.actors.map((_, i) => huntInstinctOverride(i))
           : settleWildInstincts(herdEntry.encounter.actors.map((actor, i) => {
             // Keyed by the individual's own native values, so a retried entry rolls the same instincts.
@@ -5588,7 +5667,7 @@ export function createChampionshipStandaloneApp({
         huntGrades = new Map((entry?.encounter.actors ?? []).map((actor, i) => {
           const f = actor.individual.fields;
           return [`${gate.gateId}:native-wild:${i}`, rollPartnerGrade((salt) => instinctNoise(salt, i, actor.speciesIndex,
-            f['058'], f['060'], f['064'], f['068'], f['06c'], f['018']), { instinct: actor.instinct })];
+            f['058'], f['060'], f['064'], f['068'], f['06c'], f['018']), { instinct: actor.instinct, highPercent: talent('gradeHighPercent') })];
         }));
         lastHuntRareLure = entry?.rareLure ? Object.freeze({ speciesId:`species-${String(entry.rareLure.speciesIndex).padStart(3, "0")}` }) : null;
         const world = createHuntWorld(gate, entry);
@@ -5614,7 +5693,9 @@ export function createChampionshipStandaloneApp({
         huntDeadlineMinute = entry ? Math.min(requireSession().getRaisingHomeSnapshot().clockMinutes + 480 + (boosts.extraSeconds ?? 0), DAY_END_MINUTES) : null;
         // Real time: the hunt's own countdown, no 22:00 cut. Owner 2026-11-10: one real minute (144 hunt minutes at
         // 400 units a minute, 16 a frame); more time only from chrono cartridges (armed, or used during the hunt).
-        huntRealtime = realtime && entry ? { elapsedUnits: 0, limitMinutes: REALTIME_HUNT_BASE_MINUTES + (boosts.extraSeconds ?? 0) } : null;
+        huntRealtime = realtime && entry ? { elapsedUnits: 0, limitMinutes: REALTIME_HUNT_BASE_MINUTES + (boosts.extraSeconds ?? 0)
+          // The hunter talent 長息: +5 real seconds a rank (the base is one real minute).
+          + Math.round(talent('huntSeconds') * REALTIME_HUNT_BASE_MINUTES / 60) } : null;
         if (armed.chips.length) { cyberGacha = armed.state; lastHuntGachaBoosts = Object.freeze([...armed.chips]); }
         // Hunt resume discards the prior scene's raw sub-minute remainder.
         if (entry) requireSession().advanceRaisingClock({ units: 0, divisor: 400, clearElapsed: true,
@@ -5774,6 +5855,9 @@ export function createChampionshipStandaloneApp({
         // LINE_FUSION_20261117 P2: the staged fusions pay their Sync EXP in this same Home save. A fused saved
         // partner left through releasedHomeIds above; a fused catch already left the memory card.
         if (stagedFusions.length > 0) candidateSync = stagedHuntFusionSync().state;
+        // TAMER_TALENTS_20261117: each catch brought Home pays 20 x its grade, each fusion 8, in this same save.
+        const tamerPaid = withTamerExp(talentState(), entries.reduce((sum, entry) => sum + tamerCaptureExp(huntGrades.get(entry.wildId)?.grade), 0)
+          + stagedFusions.length * TAMER_EXP.FUSION);
         for (const entry of entries) {
           const allocation = allocateRaisingInstanceIdentity(candidateIdentity, { ...sources, collection: candidateRaising.collection,
             assignments: candidateRaising.assignments });
@@ -5816,7 +5900,7 @@ export function createChampionshipStandaloneApp({
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
-            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha: candidateGacha, burstEvolution: candidateBurst, syncLevels: candidateSync, journey, raising: candidateRaising,
+            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha: candidateGacha, burstEvolution: candidateBurst, syncLevels: candidateSync, tamerTalents: tamerPaid.state, journey, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: (bonusShop ?? shop) ? (bonusShop ?? shop).toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),
@@ -5829,6 +5913,7 @@ export function createChampionshipStandaloneApp({
             }
             raising = candidateRaising; instanceIdentity = candidateIdentity; revision += 1;
             burstEvolution = candidateBurst; cyberGacha = candidateGacha; syncLevels = candidateSync; huntInstincts = new Map(); huntGrades = new Map();
+            tamerTalents = tamerPaid.state; lastTamerGain = tamerPaid.gain;
             registeredSpeciesValue = candidateBook;
             if (releasedHomeIds.includes(selectedCreatureId)) selectedCreatureId = null;
             if (releasedResidents.length) requireSession().commitRaisingResidentRelease(releasedResidents, beforeSnapshot.revision);

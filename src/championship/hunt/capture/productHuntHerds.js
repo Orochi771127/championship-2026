@@ -22,9 +22,11 @@ import { initializeNativeHuntPosition } from "./nativeHuntSpawn.js";
 export const HUNT_HERD_RULES = Object.freeze({ share: 0.4, min: 2, max: 6, total: 20 });
 
 /** How many partners a herd adds to `nativeCount` native ones when `present` are already out. */
-export function huntHerdCount(nativeCount, present = nativeCount) {
+export function huntHerdCount(nativeCount, present = nativeCount, extra = 0) {
   if (!Number.isSafeInteger(nativeCount) || nativeCount < 1) return 0;
-  const wanted = Math.max(HUNT_HERD_RULES.min, Math.min(HUNT_HERD_RULES.max, Math.round(nativeCount * HUNT_HERD_RULES.share)));
+  // `extra` is the hunter talent 群聚嗅覺: more partners in the herd, still never past twenty in all.
+  const wanted = Math.max(HUNT_HERD_RULES.min, Math.min(HUNT_HERD_RULES.max, Math.round(nativeCount * HUNT_HERD_RULES.share)))
+    + (Number.isSafeInteger(extra) && extra > 0 ? extra : 0);
   return Math.max(0, Math.min(wanted, HUNT_HERD_RULES.total - present));
 }
 
@@ -34,12 +36,12 @@ export function huntHerdCount(nativeCount, present = nativeCount) {
  * @param {{speciesIndex:number, weight:number}[]} candidates the table the encounter drew from
  * @param {number} [present] partners already out (native plus a lured one)
  */
-export function planHuntHerd(nativeSpecies, candidates = [], present = nativeSpecies.length) {
+export function planHuntHerd(nativeSpecies, candidates = [], present = nativeSpecies.length, extra = 0) {
   const count = new Map(), order = new Map();
   nativeSpecies.forEach((species, i) => { count.set(species, (count.get(species) ?? 0) + 1); if (!order.has(species)) order.set(species, i); });
   const weight = new Map((candidates ?? []).map(row => [row.speciesIndex, row.weight]));
   const added = [];
-  for (let n = huntHerdCount(nativeSpecies.length, present); n > 0; n--) {
+  for (let n = huntHerdCount(nativeSpecies.length, present, extra); n > 0; n--) {
     const next = [...count.keys()].sort((a, b) => count.get(a) - count.get(b)
       || (weight.get(b) ?? 0) - (weight.get(a) ?? 0) || order.get(a) - order.get(b))[0];
     if (next === undefined) break;
@@ -49,11 +51,11 @@ export function planHuntHerd(nativeSpecies, candidates = [], present = nativeSpe
 }
 
 /** A prepared hunt entry with its herd added after the native (and lured) actors. */
-export function appendProductHuntHerds(entry, { speciesByIndex = nativeHuntSpeciesByIndex } = {}) {
+export function appendProductHuntHerds(entry, { speciesByIndex = nativeHuntSpeciesByIndex, extra = 0 } = {}) {
   const { scene, encounter, rng, candidates } = entry;
   // The lured partner is the last actor; a species only it brought is not filled.
   const native = entry.rareLure ? encounter.actors.slice(0, -1) : encounter.actors;
-  const plan = planHuntHerd(native.map(actor => actor.speciesIndex), candidates, encounter.actors.length);
+  const plan = planHuntHerd(native.map(actor => actor.speciesIndex), candidates, encounter.actors.length, extra);
   if (plan.length === 0) return entry;
   const env = scene.environment, actors = [...encounter.actors], records = [...(encounter.records ?? [])];
   for (const speciesIndex of plan) {
