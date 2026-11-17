@@ -163,9 +163,9 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
 
   function paint() {
     const shopFrame = getShopFrame?.() ?? null, gacha = getGachaFrame?.() ?? null;
-    const tabs = backpackTabs(shopFrame, gacha);
     const supplies = getSuppliesFrame?.() ?? null;
-    tabs.tonics = (supplies?.items ?? []).filter((item) => item.owned > 0);
+    // The 補品 tab counts what is owned; its shelf lists every supplement (paintTonics).
+    const tabs = { ...backpackTabs(shopFrame, gacha), tonics: (supplies?.items ?? []).filter((item) => item.owned > 0) };
     body.replaceChildren();
     body.dataset.tab = state.tab;
     const wallet = el(doc, 'p', 'cm-backpack__wallet', `${uiText('金幣')} ${formatNumber(shopFrame?.bits ?? 0)}`);
@@ -232,9 +232,9 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
       if (state.tonic === item.id) {
         const picker = el(doc, 'div', 'cm-backpack__partners');
         for (const partner of gacha?.partners ?? []) {
-          const pick = el(doc, 'button', 'cm-backpack__partner', partner.displayName ?? partner.name ?? '');
+          const pick = el(doc, 'button', 'cm-backpack__partner', partnerLabel(partner));
           pick.type = 'button'; pick.dataset.supplyPartner = partner.instanceId;
-          pick.addEventListener('click', () => say(intents.useSupply?.(item.id, partner.instanceId), `${partner.displayName ?? partner.name ?? ''} · ${uiText(item.id)}`));
+          pick.addEventListener('click', () => say(intents.useSupply?.(item.id, partner.instanceId), `${partnerLabel(partner)} · ${uiText(item.id)}`));
           picker.append(pick);
         }
         line.append(picker);

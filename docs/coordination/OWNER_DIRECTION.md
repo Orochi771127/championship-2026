@@ -1,5 +1,20 @@
 # Championship Owner Direction
 
+<!-- record-id: SUPPLEMENTS_S1_20261118 -->
+## 2026-11-18 — Supplements S1: a 補品 shelf in the bag, recovery and ranch supplements
+
+Under the standing goal recorded in `LINE_FUSION_P2_FUSION_20261117` and the design `LINE_FUSION_TAMER_TALENTS_DESIGN_20261117` (talent plan section 6).
+
+`OWNER_APPROVED_ADAPTATION`, as designed:
+
+- Four supplements are bought with Bits on a new 補品 tab of the bag (the original 118-row shop table is untouched): 元氣飲 150 fills HP and TP; 親密零食 400 adds 5 affection (at most 100); 成長粉 800 gives +15 % training growth for two real hours (a second one extends the first); 安眠香 300 stops night disturbance until the next 07:00.
+- A recovery supplement writes only the partner's own current HP, TP and affection, inside their native range. One that would change nothing is refused and stays in the bag.
+- Buying writes the wallet and the bag in one save; using writes the partner (or the ranch clock) and the bag in one save. A failed save changes nothing.
+- Supplements are never a gachapon prize.
+- Saved in `progression.tamerSupplies`; lock `SUPPLEMENTS_20261118.json` supersedes `SAVE_ID_20261108.json`.
+
+Not in S1, to follow: the pre-battle supplements and the battle slot (S2), the higher grade, and the other ways to get supplements (stroll finds, journey rewards, the Breeder and Trader talents).
+
 <!-- record-id: TAMER_TALENTS_T1_20261117 -->
 ## 2026-11-17 — Tamer talents T1: tamer level, points, the tree, and ten wired effects
 

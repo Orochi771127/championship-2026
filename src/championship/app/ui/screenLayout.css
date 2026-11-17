@@ -1037,6 +1037,14 @@
 .cm-backpack__flag { justify-self: start; padding: 0 6px; border-radius: 999px; background: #d1fae5; color: #065f46; font-size: calc(11px * var(--text-scale, 1)); font-weight: 900; }
 .cm-backpack__count { grid-area: count; justify-self: end; font-size: calc(13px * var(--text-scale, 1)); font-weight: 900; font-variant-numeric: tabular-nums; }
 .cm-backpack__use { grid-area: use; justify-self: end; white-space: nowrap; }
+/* 補品 (SUPPLEMENTS_20261118): name and count on the first line, what it does under it, the two keys on their own line. */
+.cm-backpack__tonic { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 8px; align-items: center; }
+.cm-backpack__tonic > .cm-backpack__name { font-weight: 900; }
+.cm-backpack__tonic > .cm-backpack__effect, .cm-backpack__tonic > .cm-backpack__active { grid-column: 1 / -1; font-size: var(--fs-label, 12px); font-variant-numeric: tabular-nums; }
+.cm-backpack__tonic > .cm-backpack__active { color: #0369a1; font-weight: 800; }
+.cm-backpack__tonic > .cm-backpack__use { grid-area: auto; justify-self: stretch; min-height: var(--cm-touch); font-variant-numeric: tabular-nums; }
+.cm-backpack__tonic > .cm-backpack__partners { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
+.cm-backpack__tonic .cm-backpack__partner { min-height: var(--cm-touch); padding: 0 12px; }
 .cm-backpack__key { min-height: 40px; padding: 6px 12px; border-radius: 999px; font-size: calc(13px * var(--text-scale, 1)); font-weight: 900; }
 .cm-backpack__key { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
 .cm-backpack__key-icon { width: 18px; height: 18px; flex: none; }

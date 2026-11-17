@@ -585,10 +585,11 @@
       {
         "id": "SUPPLEMENTS_S1",
         "source": "same plan section 6",
-        "state": "NOT_STARTED",
-        "acceptance": "bag tab, recovery and ranch supplements",
+        "state": "IMPLEMENTED_PUSHED",
+        "acceptance": "full suite, PR, CI green, live commit",
         "dependsOn": [],
-        "owner": "Claude"
+        "owner": "Claude",
+        "evidence": "branch feat/supplements-s1-20261118: rules, save field + lock SUPPLEMENTS_20261118, buy/use intents, 補品 bag tab, five-language copy; 8 rule+app cases and a bag DOM case; browser: buy, start 成長粉, refused 元氣飲 on a full partner, reload keeps the bag"
       },
       {
         "id": "SUPPLEMENTS_S2",
@@ -654,7 +655,7 @@
       {
         "id": "TALENTS_REMAINING_EXP_SOURCES",
         "source": "talent plan 3.2",
-        "state": "VERIFIED_MERGED",
+        "state": "VERIFIED_LIVE",
         "acceptance": "live commit check",
         "dependsOn": [
           "TALENTS_T1"
@@ -719,6 +720,6 @@
       "Hunt Result fusion panel in a real browser (covered by an app test with player gestures and a DOM view test)",
       "frame time of herded hunts on a phone (worst case is the native 22-23 partners, unchanged)"
     ],
-    "nextAction": "Supplements S1 (bag tab, recovery and ranch supplements; new save field progression.tamerSupplies with a lock contract superseding SAVE_ID_20261108), then S2, the remaining talent nodes and keystones, the tactic-practice branch, a browser replay of shop / title match / tournament / Data Arena / gachapon / return to title; decision D1 is still open."
+    "nextAction": "PR and merge supplements S1; then S2 (pre-battle supplements as a modifier on the battle copy, armed record), the remaining talent nodes and keystones, the tactic-practice branch, a browser replay of shop / title match / tournament / Data Arena / gachapon / return to title; decision D1 is still open."
   }
 }
