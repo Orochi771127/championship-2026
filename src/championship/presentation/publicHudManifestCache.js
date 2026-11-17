@@ -1,12 +1,14 @@
 // Page-lifetime descriptor cache. Identity includes the reader, URL and the
 // selected content hash. It stores no textures, player state or persistent data.
 const readers=new WeakMap();
+import {retryingFetch} from './assetRetry.js';
+// A 5xx or a dropped request is tried again (EXTERNAL_ASSET_RETRY_20261118) before the HUD art is called unavailable.
 export function readPublicHudManifest(url,expectedSha256,fetchImpl=globalThis.fetch){
  if(!/^[a-f0-9]{64}$/.test(expectedSha256))throw Error('PUBLIC_HUD_SELECTED_HASH');
  let cache=readers.get(fetchImpl);if(!cache){cache=new Map();readers.set(fetchImpl,cache);}
  const key=String(url)+'|'+expectedSha256;
  if(!cache.has(key)){
-  const pending=Promise.resolve().then(()=>fetchImpl(url)).then(async response=>{
+  const pending=Promise.resolve().then(()=>retryingFetch(url,undefined,{fetchImpl})).then(async response=>{
    if(!response.ok)throw Error('PUBLIC_HUD_HTTP_'+response.status);
    const text=await response.text(),digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));
    const actual=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');

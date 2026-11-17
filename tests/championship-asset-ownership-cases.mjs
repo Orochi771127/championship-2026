@@ -4,11 +4,12 @@ import { createPixiAssetScope } from '../src/championship/presentation/pixiChara
 
 test('an initial failed runtime has no bundle disposer but can retry in the same live scope',async()=>{
   let loads=0,unloads=0;
-  const PIXI={Assets:{async load(){if(++loads===1)throw Error('TEMPORARY_DECODE_FAILURE');return {ok:true};},async unload(){unloads++;}}};
-  const scope=createPixiAssetScope(PIXI,'https://example.test/');
+  // EXTERNAL_ASSET_RETRY_20261118: a load is tried three times before it is reported, so the failure here outlasts the rule.
+  const PIXI={Assets:{async load(){if(++loads<=3)throw Error('TEMPORARY_DECODE_FAILURE');return {ok:true};},async unload(){unloads++;}}};
+  const scope=createPixiAssetScope(PIXI,'https://example.test/',{retryWaits:[0,0]});
   await assert.rejects(scope.Assets.load('hatch/runtime.json'),/TEMPORARY_DECODE_FAILURE/);
   assert.deepEqual(await scope.Assets.load('hatch/runtime.json'),{ok:true});
-  assert.equal(loads,2);await scope.Assets.unload('hatch/runtime.json');assert.equal(unloads,1);
+  assert.equal(loads,4);await scope.Assets.unload('hatch/runtime.json');assert.equal(unloads,1);
 });
 
 const deferred = () => { let resolve; const promise = new Promise(r => resolve = r); return { promise, resolve }; };
@@ -76,9 +77,10 @@ test('reentry during final disposal waits for fresh pixels instead of returning 
 
 test('a failed download releases ownership and a later entry can retry', async () => {
   let attempts = 0, unloads = 0;
-  const PIXI = { Assets: { load: async () => { if (++attempts === 1) throw new Error('offline'); return 'ready'; },
+  // EXTERNAL_ASSET_RETRY_20261118: a load is tried three times before it is reported, so the failure here outlasts the rule.
+  const PIXI = { Assets: { load: async () => { if (++attempts <= 3) throw new Error('offline'); return 'ready'; },
     unload: () => unloads++ } };
-  const old = createPixiAssetScope(PIXI, base);
+  const old = createPixiAssetScope(PIXI, base, { retryWaits: [0, 0] });
   await assert.rejects(old.Assets.load('map.png'), /offline/);
   const next = createPixiAssetScope(PIXI, base);
   assert.equal(await next.Assets.load('map.png'), 'ready');
