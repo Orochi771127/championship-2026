@@ -139,8 +139,10 @@ function observers(save){
         heapMB:performance.memory?Math.round(performance.memory.usedJSHeapSize/1048576*10)/10:null,
         storageWrites:d.storageWrites,storageBytes:d.storageBytes,rejections:d.rejections.length};});
   }
+  // The quick dock folds behind the Go key (Owner 2026-11-16): unfold it first, as a player would.
+  async function unfoldDock(){const fold=page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]');if(await fold.isVisible().catch(()=>false))await fold.click();}
   async function openEntry(entry){
-    if(entry.menu==='quick')await page.locator(`.cm-toolbar__quick-entry[data-quick-id="${entry.id}"]`).click();
+    if(entry.menu==='quick'){await unfoldDock();await page.locator(`.cm-toolbar__quick-entry[data-quick-id="${entry.id}"]`).click();}
     else{await page.locator(`.cm-toolbar__cell[data-icon="${entry.menu==='system'?'system':'manage'}"]`).click();
       await page.locator(`[data-entry-id="${entry.id}"]:not(.cm-toolbar__quick-entry)`).first().click();}
   }
@@ -206,7 +208,7 @@ function observers(save){
       return {opened,returned,screens};
     }
     if(entry.flow==='hunt'){
-      await page.locator('.cm-toolbar__quick-entry[data-quick-id="hunt"]').click();
+      await unfoldDock();await page.locator('.cm-toolbar__quick-entry[data-quick-id="hunt"]').click();
       await page.waitForFunction(()=>document.getElementById('cm-root')?.dataset.activeScreen==='GATE_SELECT');
       const gate=page.locator('.cm-vs2-gate[data-gate-id]:not([disabled])').first();await gate.scrollIntoViewIfNeeded();await gate.click();
       await page.locator('button',{hasText:'前往狩獵設定'}).click();
@@ -215,7 +217,10 @@ function observers(save){
       await page.waitForFunction(()=>document.getElementById('cm-root')?.dataset.activeScreen==='HUNT_FIELD',null,{timeout:60000});
       await page.locator('.cm-vs2-hud__exit').waitFor({state:'visible',timeout:120000});await page.waitForTimeout(4000);
       const opened='HUNT_FIELD';
-      await page.locator('.cm-vs2-hud__exit').click();await page.waitForTimeout(1500);
+      await page.locator('.cm-vs2-hud__exit').click();
+      // Hunt end gate (Owner 2026-11-17): a hunt with no catch ends on the closed gate's own result; its key opens onto the ranch.
+      await page.locator('.cm-hunt-gate[data-phase="result"] .cm-hunt-gate__continue').click({timeout:60000});
+      await page.locator('.cm-hunt-gate').waitFor({state:'detached',timeout:60000});await page.waitForTimeout(1500);
       const returned=await leaveToRanch();if(returned)await ranchReady();
       return {opened,returned};
     }

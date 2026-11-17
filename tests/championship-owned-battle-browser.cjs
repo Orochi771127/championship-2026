@@ -14,8 +14,18 @@ const output=require('./browser-qa-output.cjs')('owned-battle');fs.mkdirSync(out
   await page.locator('#prepare').click();await page.getByText('受控存檔已準備；請登入、繼續遊戲並從工具列參賽。',{exact:true}).waitFor();
   await page.goto(base+'/championship.html');await page.locator('#cm-login').click();await page.locator('#cm-continue').click();
   await page.locator('[data-screen="RAISING_HOME"]').waitFor();
-  await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator('[data-entry-id="battle"]').click();
-  await page.locator('.cm-vs5-match[data-record-index="0"] button').click();
+  // The battle entry sits in the quick dock, which folds behind the Go key (Owner 2026-11-16): unfold it, as a player would.
+  await page.waitForSelector(".int-rh2-field-host[data-load-state='ready']",{timeout:90000}).catch(()=>{});
+  {const fold=page.locator('.cm-toolbar__quick-toggle[aria-expanded="false"]');if(await fold.isVisible().catch(()=>false))await fold.click();}
+  await page.locator('.cm-toolbar__quick-entry[data-quick-id="battle"]').click();
+  // The battle menu is a mode prism (2026-11-09) and title matches follow the weekly time slots (2026-11-10): pick the
+  // title face through its accessible key and take the first match that is open; with none open, a Free Battle.
+  const pickMode=name=>page.evaluate(label=>[...document.querySelectorAll('button.cm-vs5-cube__face')].find(b=>b.textContent.trim()===label)?.click(),name);
+  await page.locator('button.cm-vs5-cube__face').first().waitFor({state:'attached'});
+  await pickMode('頭銜賽');
+  if(!await page.locator('.cm-vs5-match button').first().waitFor({state:'visible',timeout:8000}).then(()=>true,()=>false)){
+    await pickMode('自由對戰');await page.locator('.cm-vs5-match button').first().waitFor({state:'visible'});}
+  await page.locator('.cm-vs5-match button').first().click();
   const party=page.locator('.cm-vs5-party');await party.locator('button[data-instance-id]').first().click();
   let hit,done;const intercepted=new Promise(r=>hit=r),handled=new Promise(r=>done=r);
   // 2026-10-18: the arena loads its projected public metadata, not a pack manifest.
