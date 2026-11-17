@@ -110,7 +110,9 @@ export const TALENT_WIRED_KEYS = new Set([
   "battleBitsPercent", "patrolPercent", "towerRewardPercent", "firstSupplyDiscountPercent", "supplySlots",
   // T3 (TAMER_TALENTS_T3_20261118): the commander line in the auto battle, and the hunter's elite sense.
   "openingTpPercent", "moodCapPercent", "resonanceLumenPercent", "resonanceIronPercent", "resonanceRiftPercent",
-  "lowHpDefensePercent", "ultimatePercent", "elitePercent"
+  "lowHpDefensePercent", "ultimatePercent", "elitePercent",
+  // T4 (TAMER_TALENTS_T4_20261118): the shop's Bits prices, what a hunt and a stroll bring back.
+  "shopBitsPercent", "scavengePercent", "strollBitsPercent", "strollExtraPercent"
 ]);
 export const TALENT_WIRED_KEYSTONES = new Set();
 export function talentOpen(id) {

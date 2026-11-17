@@ -167,6 +167,20 @@ export function settleArmedSupplies(state, instanceIds = []) {
   return { ...current, armed };
 }
 
+/** The basic supplements a hunt may turn up (the trader talent 拾荒): the three that cost 400 Bits or less. */
+export const SUPPLY_SCAVENGE_POOL = Object.freeze(SUPPLEMENTS.filter((entry) => entry.bits <= 400).map((entry) => entry.id));
+/**
+ * One hunt's scavenge: `chanceRoll` under `percent` finds one basic supplement, `pickRoll` says which (both in
+ * [0, 1)). Returns the new bag and the id, or null when nothing is found or the bag already holds 99 of it.
+ */
+export function scavengeSupply(state, { percent = 0, chanceRoll = 1, pickRoll = 0 } = {}) {
+  const share = percentOf(percent);
+  if (!share || !(chanceRoll >= 0) || chanceRoll * 100 >= share) return null;
+  const id = SUPPLY_SCAVENGE_POOL[Math.min(SUPPLY_SCAVENGE_POOL.length - 1, Math.floor(Math.max(0, Math.min(0.999999, pickRoll)) * SUPPLY_SCAVENGE_POOL.length))];
+  const added = addSupply(state, id, 1);
+  return added.added === 1 ? { state: added.state, id } : null;
+}
+
 export function supplyOwned(state, id) { return normalizeTamerSupplies(state).owned[id] ?? 0; }
 
 /** `quantity` more of `id`, up to 99 a kind. Returns the state and how many were really added. */

@@ -153,6 +153,10 @@ export function createHuntResultView({ root, source, hudArt = null }) {
   releasePrompt.setAttribute("role", "group");
   releasePrompt.setAttribute("aria-label", uiText("Confirm release"));
   body.append(roster, releasePrompt);
+  // 拾荒 (TAMER_TALENTS_T4_20261118): the basic supplement this hunt turned up, already in the bag.
+  const scavenged = element("p", "cm-vs2-result__note cm-vs2-result__scavenged");
+  scavenged.hidden = true;
+  body.append(scavenged);
   const error = element("p", "cm-vs2-result__note");
   error.setAttribute("role", "alert");
   footer.append(error);
@@ -181,6 +185,8 @@ export function createHuntResultView({ root, source, hudArt = null }) {
     if (!next) return;
     copy.querySelector(".cm-vs2-title").textContent = uiText(next.title);
     copy.querySelector(".cm-vs2-subtitle").textContent = uiText(next.outcomeLabel);
+    scavenged.hidden = !next.scavenged;
+    if (next.scavenged) { scavenged.textContent = uiText("拾荒：{item} ×1", { item: uiText(next.scavenged) }); scavenged.dataset.scavenged = next.scavenged; }
     species.textContent = speciesNameForId(next.speciesId, next.speciesLabel || next.displayName);
     paintPortrait(next.speciesId);
     nameField.hidden = !next.speciesId;

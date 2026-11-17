@@ -507,10 +507,10 @@
       "ROM-derived art is research only"
     ],
     "git": {
-      "main": "850db9f7 (Merge PR #275)",
+      "main": "26f82369 (Merge PR #276)",
       "openPullRequests": [],
       "branchesInFlight": [
-        "feat/tactic-practice-integration-20261118 (main + the tactic-practice branch of another Claude session, merged here)"
+        "feat/talent-nodes-t4-20261118"
       ],
       "worktree": ".claude/worktrees/skill-scroll-20261117 (clean worktree cut from origin/main; the shared checkout holds other agents' uncommitted work and is not touched)"
     },
@@ -527,8 +527,8 @@
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> node tests/championship-cyber-gacha-browser.cjs",
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> node tests/championship-data-arena-browser.cjs"
       ],
-      "lastFullSuite": "3,891 / 3,891 on feat/tactic-practice-integration-20261118 (local, Windows, Node 24.18)",
-      "ci": "PR #266 to #275: every one merged with all checks green",
+      "lastFullSuite": "3,898 / 3,898 on feat/talent-nodes-t4-20261118 (local, Windows, Node 24.18)",
+      "ci": "PR #266 to #276: every one merged with all checks green",
       "report": "docs/reports/ci-browser-checks-2026-11-17/REPORT_ZH_TW.md"
     },
     "checklist": [
@@ -631,8 +631,8 @@
       {
         "id": "TACTIC_PRACTICE_LOOP_P1_P4",
         "source": "docs/planning/ROLES_AND_SURVIVAL_PLAN_2026-11-16_ZH_TW.md (Owner 2026-11-16: 自己分批製作)",
-        "state": "IMPLEMENTED_PUSHED",
-        "evidence": "branch feat/tactic-practice-integration-20261118 = main 850db9f7 merged with feat/tactic-practice-loop-20261116 @ 83aedccf (P1 styles and glyphs, P2/P2b sparring trio, P3 three pillars, P4 survival prototype). Five conflicts resolved (art index 138 entries and its pinned hash, four hunks in the standalone app, imports, one stylesheet); 7 modules and 32 glyph files registered in the build lists; the save module is unchanged. Full suite 3,891 / 3,891; build and validate pass. Headless Chromium on an isolated origin: owned-battle gate passes; battle menu shows the three pillars (征途, 錦標賽, 連線) over the seven modes; 征途 -> 陪練 -> partner -> plan -> bout 1 -> battle -> result with no page error",
+        "state": "VERIFIED_LIVE",
+        "evidence": "branch feat/tactic-practice-integration-20261118 = main 850db9f7 merged with feat/tactic-practice-loop-20261116 @ 83aedccf (P1 styles and glyphs, P2/P2b sparring trio, P3 three pillars, P4 survival prototype). Five conflicts resolved (art index 138 entries and its pinned hash, four hunks in the standalone app, imports, one stylesheet); 7 modules and 32 glyph files registered in the build lists; the save module is unchanged. Full suite 3,891 / 3,891; build and validate pass. Headless Chromium on an isolated origin: owned-battle gate passes; battle menu shows the three pillars (征途, 錦標賽, 連線) over the seven modes; 征途 -> 陪練 -> partner -> plan -> bout 1 -> battle -> result with no page error. PR #276 26f82369, all twelve checks green; live pages-build commit 26f82369 (build 268c8a01), the sparring code in the live bundle, the glyph images served and their provenance manifest not published",
         "acceptance": "PR, CI green, live commit; the survival prototype (P4) and the P5 big hunt map remain as that plan lists them",
         "owner": "Claude"
       },
@@ -673,11 +673,12 @@
         "id": "TALENT_NODES_REMAINING",
         "source": "talent plan section 4",
         "state": "PARTLY_DONE",
-        "acceptance": "10 nodes and 8 keystones left: hunter 繩索保養, 疾步, 穩手, 省彈 (native hunt rope, movement, status, ammunition); breeder 安撫, 散步好運; commander 蓄能 (the plan does not say which meter it fills: needs the Owner); trader 殺價 (shop price paths), 拾荒, 鑑價; the Data Arena does not read the commander line yet",
+        "acceptance": "6 nodes and 8 keystones left: hunter 繩索保養, 疾步, 穩手, 省彈 (native hunt rope, movement, status, ammunition); breeder 安撫; commander 蓄能 (the plan does not say which meter it fills: needs the Owner); the Data Arena does not read the commander line yet",
         "dependsOn": [
           "TALENTS_T1"
         ],
-        "owner": "Claude"
+        "owner": "Claude",
+        "evidence": "T4 on branch feat/talent-nodes-t4-20261118: 殺價, 拾荒, 鑑價, 散步好運 wired (30 of 36 nodes open); tests/championship-tamer-talents-t4-cases.mjs; full suite 3,898 / 3,898, build and validate exit 0; headless Chromium from the normal entry with 殺價 at three ranks: the shop rows read 273 / 19 / 182 Bits, buying 蛋白質 paid 273 and the count went 90 -> 91, no page error. 拾荒, 鑑價 and 散步好運 have rule and source tests only"
       },
       {
         "id": "EXTERNAL_ASSET_503_CLIENT",
@@ -701,6 +702,13 @@
         "acceptance": "with PR #274",
         "evidence": "the prize page printed the receipt wallet without the beacon and 賞金 shares (prize 50, wallet +57, page said +50); fixed in 8f9565b3",
         "owner": "Claude"
+      },
+      {
+        "id": "FLOATING_HUD_GATE_CHROME_158",
+        "source": "CI 2026-11-17: the runner moved from Chrome 157 to 158",
+        "state": "VERIFIED_MERGED",
+        "owner": "Claude",
+        "evidence": "tests/championship-battle-full-map-browser.cjs compared a computed keyword (flex-end) that Chrome 158 reports as flow-end; it now measures where the roster cards sit; passes on Chrome 157 locally and 158 in CI (PR #276)"
       }
     ],
     "decisionsForOwner": [
@@ -751,8 +759,9 @@
       "Hunt Result fusion panel in a real browser (covered by an app test with player gestures and a DOM view test)",
       "frame time of herded hunts on a phone (worst case is the native 22-23 partners, unchanged)",
       "the commander talents inside a running battle in a browser (rule and app tests only)",
-      "a whole tournament run by hand in a browser"
+      "a whole tournament run by hand in a browser",
+      "拾荒, 鑑價 and 散步好運 seen in a browser (they need a lucky roll or a 15-30 minute stroll)"
     ],
-    "nextAction": "PR and merge the tactic-practice integration; then the Data Arena reading the commander line, 殺價 and 拾荒, the hunter nodes on the native hunt, the keystones (incl. 傳承), the 503 client-recovery check; decisions D1 and D5 are open."
+    "nextAction": "PR and merge talents T4; then the Data Arena reading the commander line, the hunter nodes on the native hunt, 安撫, the keystones (incl. 傳承), the 503 client-recovery check; decisions D1, D5 and what 蓄能 fills are open."
   }
 }
