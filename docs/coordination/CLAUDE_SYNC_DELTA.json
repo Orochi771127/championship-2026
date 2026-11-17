@@ -580,20 +580,31 @@
       },
       {
         "id": "FUSION_P3_HERDS",
-        "state": "VERIFIED_MERGED",
-        "evidence": "PR #268 7c386346; all checks green; real-browser hunt gate (vs3) passed on the branch"
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #268 7c386346; live commit and herd code in the live bundle checked"
+      },
+      {
+        "id": "TALENTS_T1",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #269 49451268; all 10 checks green; talent tree code in the live bundle (live commit 1312d138)"
+      },
+      {
+        "id": "PR_194_CRASH_CONSISTENCY",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #270 1312d138 (port); #194 closed with a pointer; care-image leak check re-run locally (delta 0, control +120); live bundle checked"
       },
       {
         "id": "CURRENCY_HUD_TOUCH_TARGETS",
         "state": "VERIFIED_LIVE",
         "evidence": "PR #267 e1858857; currency HUD chromium + webkit green; --cm-touch in the live stylesheet"
+      },
+      {
+        "id": "TALENTS_REMAINING_EXP_SOURCES",
+        "state": "VERIFIED_MERGED",
+        "evidence": "PR #271 908d5020; all checks green"
       }
     ],
     "openForClaude": [
-      {
-        "id": "TALENTS_T1",
-        "state": "IMPLEMENTED_PR_OPEN"
-      },
       {
         "id": "SUPPLEMENTS_S1",
         "state": "NOT_STARTED"
@@ -615,16 +626,16 @@
         "state": "IMPLEMENTED_LOCAL_OTHER_SESSION"
       },
       {
-        "id": "PR_194_CRASH_CONSISTENCY",
-        "state": "IMPLEMENTED_PUSHED"
-      },
-      {
         "id": "NORMAL_ENTRY_PLAYTHROUGH",
         "state": "PARTLY_VERIFIED"
       },
       {
-        "id": "TALENTS_REMAINING_EXP_SOURCES",
-        "state": "IMPLEMENTED_PUSHED"
+        "id": "TALENT_NODES_REMAINING",
+        "state": "NOT_STARTED"
+      },
+      {
+        "id": "EXTERNAL_ASSET_503_CLIENT",
+        "state": "NOT_VERIFIED"
       }
     ],
     "forCodex": [

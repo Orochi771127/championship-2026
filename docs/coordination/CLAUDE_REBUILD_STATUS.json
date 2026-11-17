@@ -507,14 +507,10 @@
       "ROM-derived art is research only"
     ],
     "git": {
-      "main": "7c386346 (Merge PR #268)",
-      "openPullRequests": [
-        "#269 feat/tamer-talents-t1-20261117 (talents T1)",
-        "#194 claude/inspiring-mayer-gyxhot (superseded by the port branch; close after the port merges)"
-      ],
+      "main": "908d5020 (Merge PR #271)",
+      "openPullRequests": [],
       "branchesInFlight": [
-        "fix/crash-consistency-port-20261117 (stacked on #269)",
-        "feat/tamer-exp-sources-20261118 (stacked on the port)",
+        "feat/supplements-s1-20261118 (started; carries this status update)",
         "feat/tactic-practice-loop-20261116 (another Claude session, local only, 8 commits, never pushed)"
       ],
       "worktree": ".claude/worktrees/skill-scroll-20261117 (clean worktree cut from origin/main; the shared checkout holds other agents' uncommitted work and is not touched)"
@@ -528,8 +524,8 @@
         "node tests/championship-external-character-browser.cjs",
         "node tests/championship-dex-portrait-browser.cjs"
       ],
-      "lastFullSuite": "3,826 / 3,826 on feat/tamer-exp-sources-20261118 (local, Windows, Node 24.18)",
-      "ci": "PR #266, #267 and #268 merged with every check green (reruns: one live asset-host 503, one webkit browser closed in a baseline step)",
+      "lastFullSuite": "3,826 / 3,826 on the EXP-sources branch before its merge (local, Windows, Node 24.18)",
+      "ci": "PR #266 to #271: every one merged with all checks green",
       "report": "docs/reports/ci-browser-checks-2026-11-17/REPORT_ZH_TW.md"
     },
     "checklist": [
@@ -572,19 +568,19 @@
       {
         "id": "FUSION_P3_HERDS",
         "source": "HUNT_HERDS_P3_20261117",
-        "state": "VERIFIED_MERGED",
-        "evidence": "PR #268 7c386346; all checks green; real-browser hunt gate (vs3) passed on the branch",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #268 7c386346; live commit and herd code in the live bundle checked",
         "acceptance": "full suite, build, real-browser hunt, PR, merge",
         "owner": "Claude"
       },
       {
         "id": "TALENTS_T1",
         "source": "LINE_FUSION_TAMER_TALENTS_DESIGN_20261117; docs/planning/TAMER_TALENT_TREE_AND_SUPPLEMENTS_PLAN_2026-11-17_ZH_TW.md section 9",
-        "state": "IMPLEMENTED_PR_OPEN",
+        "state": "VERIFIED_LIVE",
         "acceptance": "PR after #267 and P3 merge; CI green; live commit check",
         "dependsOn": [],
         "owner": "Claude",
-        "evidence": "PR #269; 3,808 / 3,808 locally; panel checked in a browser"
+        "evidence": "PR #269 49451268; all 10 checks green; talent tree code in the live bundle (live commit 1312d138)"
       },
       {
         "id": "SUPPLEMENTS_S1",
@@ -636,10 +632,10 @@
       {
         "id": "PR_194_CRASH_CONSISTENCY",
         "source": "open PR since 2026-11-08",
-        "state": "IMPLEMENTED_PUSHED",
+        "state": "VERIFIED_LIVE",
         "acceptance": "PR after #269 merges; then close #194 with a pointer",
         "owner": "Claude",
-        "evidence": "branch fix/crash-consistency-port-20261117 (stacked on T1): S1 catalyst metal held until the form is written, S2 rebirth count with the egg, S3 care image release, S4/S5 online preventive; its tests updated for the entry mail and the route pick; the friends runner pair not ported"
+        "evidence": "PR #270 1312d138 (port); #194 closed with a pointer; care-image leak check re-run locally (delta 0, control +120); live bundle checked"
       },
       {
         "id": "NORMAL_ENTRY_PLAYTHROUGH",
@@ -658,13 +654,30 @@
       {
         "id": "TALENTS_REMAINING_EXP_SOURCES",
         "source": "talent plan 3.2",
-        "state": "IMPLEMENTED_PUSHED",
-        "acceptance": "journey stars 15, tower first clear 40, daily care 2 (60 a day), first hunt and first battle of the day +100, each in the save of what earned it",
+        "state": "VERIFIED_MERGED",
+        "acceptance": "live commit check",
         "dependsOn": [
           "TALENTS_T1"
         ],
         "owner": "Claude",
-        "evidence": "branch feat/tamer-exp-sources-20261118 (top of the stack); daily record in progression.tamerTalents.daily; 3,826 / 3,826 locally"
+        "evidence": "PR #271 908d5020; all checks green"
+      },
+      {
+        "id": "TALENT_NODES_REMAINING",
+        "source": "talent plan section 4",
+        "state": "NOT_STARTED",
+        "acceptance": "the other 26 nodes and 8 keystones: wire each hook, add its key to TALENT_WIRED_KEYS and its copy row, test",
+        "dependsOn": [
+          "TALENTS_T1"
+        ],
+        "owner": "Claude"
+      },
+      {
+        "id": "EXTERNAL_ASSET_503_CLIENT",
+        "source": "found 2026-11-17: the live asset host answers 503 now and then",
+        "state": "NOT_VERIFIED",
+        "acceptance": "inject a 503 for one character page in a browser and confirm the ranch, hunt and battle recover (existing retry paths: retryResidentAssets, runtime bundle retry)",
+        "owner": "Claude"
       }
     ],
     "decisionsForOwner": [
@@ -706,6 +719,6 @@
       "Hunt Result fusion panel in a real browser (covered by an app test with player gestures and a DOM view test)",
       "frame time of herded hunts on a phone (worst case is the native 22-23 partners, unchanged)"
     ],
-    "nextAction": "Merge #269 when green (the webkit evolution gate flaked in its baseline step; rerun in progress); PR and merge the port, then the EXP sources; then supplements S1 (needs its own save lock on top of SAVE_ID_20261108), the remaining talent nodes and keystones, the tactic-practice branch; decision D1 is still open."
+    "nextAction": "Supplements S1 (bag tab, recovery and ranch supplements; new save field progression.tamerSupplies with a lock contract superseding SAVE_ID_20261108), then S2, the remaining talent nodes and keystones, the tactic-practice branch, a browser replay of shop / title match / tournament / Data Arena / gachapon / return to title; decision D1 is still open."
   }
 }
