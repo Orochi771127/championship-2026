@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {SUPPLEMENTS, SUPPLEMENT_IDS, SUPPLY_STACK_MAX, getSupplement, createTamerSupplies, normalizeTamerSupplies, supplyOwned, addSupply,
+import {armSupply, disarmSupply, armedSupplies, supplyBattleProfile, supplySyncExpPercent, settleArmedSupplies, SUPPLY_BATTLE_SLOTS,
+  SUPPLEMENTS, SUPPLEMENT_IDS, SUPPLY_STACK_MAX, getSupplement, createTamerSupplies, normalizeTamerSupplies, supplyOwned, addSupply,
   supplyPurchase, spendSupply, applyRecoverySupply, ranchSupplyActive, startRanchSupply, ranchSupplyGrowthPercent, ranchSupplyNightCalm}
   from '../src/championship/contracts/productSupplements.js';
 
@@ -9,9 +10,10 @@ import {SUPPLEMENTS, SUPPLEMENT_IDS, SUPPLY_STACK_MAX, getSupplement, createTame
 const HOUR = 3600000;
 const profile = fields => ({fields: {'050': 120, '058': 300, '054': 10, '05c': 40, '020': 97, ...fields}});
 
-test('S1 sells four supplements for Bits: two that recover, two that run on the ranch', () => {
+test('the shelf: two that recover, two that run on the ranch, four carried into a battle', () => {
   assert.deepEqual(SUPPLEMENTS.map(s => [s.id, s.kind, s.bits]),
-    [['supply:vigor', 'RECOVERY', 150], ['supply:snack', 'RECOVERY', 400], ['supply:growth', 'RANCH', 800], ['supply:sleep', 'RANCH', 300]]);
+    [['supply:vigor', 'RECOVERY', 150], ['supply:snack', 'RECOVERY', 400], ['supply:growth', 'RANCH', 800], ['supply:sleep', 'RANCH', 300],
+      ['supply:power', 'BATTLE', 600], ['supply:guard', 'BATTLE', 600], ['supply:gale', 'BATTLE', 600], ['supply:sync', 'BATTLE', 1000]]);
   assert.equal(getSupplement('supply:nope'), null);
 });
 
@@ -67,7 +69,7 @@ test('ranch supplements run on real time: growth for two hours (extended from it
   assert.equal(startRanchSupply(null, 'supply:sleep', now).reason, 'SUPPLY_NO_EFFECT', 'needs the next morning');
   assert.equal(startRanchSupply(null, 'supply:vigor', now).reason, 'SUPPLY_NOT_RANCH');
   assert.equal(ranchSupplyActive(null, 'supply:growth', now), false);
-  assert.equal(SUPPLY_STACK_MAX, 99); assert.equal(SUPPLEMENT_IDS.length, 4);
+  assert.equal(SUPPLY_STACK_MAX, 99); assert.equal(SUPPLEMENT_IDS.length, 8);
 });
 
 // ---- The application ----
@@ -126,7 +128,7 @@ test('a recovery supplement writes the partner and leaves the bag in one save; a
     assert.equal(profileOf(saved())['020'], 45);
     await app.dispose();
     reloaded = make(); await reloaded.continueGame();
-    assert.deepEqual(reloaded.getSuppliesFrame().items.map(item => item.owned), [0, 0, 0, 0]);
+    assert.deepEqual(reloaded.getSuppliesFrame().items.map(item => item.owned), [0, 0, 0, 0, 0, 0, 0, 0]);
   } finally { await (reloaded ?? app).dispose(); }
 });
 
@@ -139,5 +141,57 @@ test('a ranch supplement starts its clock in one save and shows until when it ru
     assert.equal(item.owned, 0); assert.equal(item.activeUntil, used.until);
     assert.equal(saved().progression.tamerSupplies.ranch['supply:growth'], used.until);
     assert.equal(app.useSupply('supply:growth').reason, 'SUPPLY_NONE_OWNED');
+  } finally { await app.dispose(); }
+});
+
+// ---- S2: pre-battle supplements ----
+
+test('a partner carries one pre-battle supplement: arming spends it, a second swaps the first back, disarming returns it', () => {
+  assert.equal(SUPPLY_BATTLE_SLOTS, 1);
+  let state = addSupply(addSupply(null, 'supply:power', 1).state, 'supply:guard', 1).state;
+  assert.equal(armSupply(state, 'p1', 'supply:vigor').reason, 'SUPPLY_NOT_BATTLE');
+  assert.equal(armSupply(state, 'p1', 'supply:gale').reason, 'SUPPLY_NONE_OWNED');
+  let armed = armSupply(state, 'p1', 'supply:power');
+  assert.deepEqual([armedSupplies(armed.state, 'p1'), armed.state.owned], [['supply:power'], {'supply:guard': 1}]);
+  assert.equal(armSupply(addSupply(armed.state, 'supply:power', 1).state, 'p1', 'supply:power').reason, 'SUPPLY_ALREADY_ACTIVE', 'the same one does not stack');
+  armed = armSupply(armed.state, 'p1', 'supply:guard');
+  assert.deepEqual([armedSupplies(armed.state, 'p1'), armed.state.owned], [['supply:guard'], {'supply:power': 1}], 'the first went back to the bag');
+  const off = disarmSupply(armed.state, 'p1', 'supply:guard');
+  assert.deepEqual([off.state.armed, off.state.owned], [{}, {'supply:power': 1, 'supply:guard': 1}]);
+  assert.equal(disarmSupply(off.state, 'p1', 'supply:guard').reason, 'SUPPLY_NONE_OWNED');
+  assert.deepEqual(normalizeTamerSupplies({version: 1, armed: {p1: [{id: 'supply:power'}, {id: 'supply:guard'}], p2: [{id: 'supply:vigor'}], p3: 'x'}}).armed,
+    {p1: [{id: 'supply:power', battlesLeft: 1}]}, 'one slot, battle kinds only');
+});
+
+test('a carried supplement adds one curve step on the battle copy, never past step 26, and is used up by the battle', () => {
+  const source = {fields: {'084': 3, '088': 26, '090': 7}}, frozen = structuredClone(source);
+  assert.deepEqual(supplyBattleProfile(source, ['supply:power']).fields, {'084': 4, '088': 26, '090': 7});
+  assert.deepEqual(supplyBattleProfile(source, ['supply:guard']).fields, {'084': 3, '088': 26, '090': 7}, 'already at the top step');
+  assert.deepEqual(supplyBattleProfile(source, ['supply:gale']).fields['090'], 8);
+  assert.equal(supplyBattleProfile(source, []), source, 'nothing carried: the same profile');
+  assert.deepEqual(source, frozen);
+  assert.equal(supplySyncExpPercent(['supply:sync']), 50); assert.equal(supplySyncExpPercent(['supply:power']), 0);
+  const state = armSupply(addSupply(null, 'supply:sync', 1).state, 'p1', 'supply:sync').state;
+  assert.deepEqual(settleArmedSupplies(state, ['p1', 'p2']).armed, {});
+  // A partner that did not fight keeps what it carries.
+  assert.deepEqual(settleArmedSupplies(state, ['p2']).armed, {p1: [{id: 'supply:sync', battlesLeft: 1}]});
+});
+
+test('the app puts a supplement on a partner in one save, shows who carries it, and a battle party reads it only where Sync applies', async () => {
+  const {app, saved} = await supplyApp(save => { save.progression.tamerSupplies = {version: 1, owned: {'supply:power': 1}, armed: {}, ranch: {}}; });
+  try {
+    assert.deepEqual(app.useSupply('supply:power', PARTNER), {ok: true, id: 'supply:power', instanceId: PARTNER, armed: true});
+    assert.deepEqual(saved().progression.tamerSupplies.armed, {[PARTNER]: [{id: 'supply:power', battlesLeft: 1}]});
+    assert.deepEqual(app.getSuppliesFrame().items.find(item => item.id === 'supply:power').carriedBy, [PARTNER]);
+    const plain = await app.prepareBattleParty(null, [PARTNER], {});
+    const boosted = await app.prepareBattleParty(null, [PARTNER], {sync: {capped: false}});
+    if (plain.ok && boosted.ok) {
+      assert.deepEqual(plain.individuals[0].supplyIds, [], 'no Sync, no supplement (password, link and online battles)');
+      assert.deepEqual(boosted.individuals[0].supplyIds, ['supply:power']);
+      const base = saved().raising.collection.find(entry => entry.instanceId === PARTNER).nativeProfile.fields['084'];
+      assert.equal(boosted.individuals[0].nativeProfile.fields['084'], Math.min(26, base + 1));
+    }
+    assert.deepEqual(app.unequipSupply('supply:power', PARTNER), {ok: true, id: 'supply:power', instanceId: PARTNER});
+    assert.deepEqual(saved().progression.tamerSupplies, {version: 1, owned: {'supply:power': 1}, armed: {}, ranch: {}});
   } finally { await app.dispose(); }
 });

@@ -44,7 +44,8 @@ import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentVal
   TALENT_NODES,TALENT_KEYSTONES,TALENT_LINES,TALENT_TREE_POINTS,TALENT_TIER_GATE,TALENT_KEYSTONE_GATE,TALENT_KEYSTONE_COST,tamerExpRequired,TAMER_LEVEL_MAX}
   from '../contracts/productTamerTalents.js';
 import {normalizeTamerSupplies,createTamerSupplies,SUPPLEMENTS,getSupplement,supplyOwned,supplyPurchase,spendSupply,applyRecoverySupply,
-  startRanchSupply,ranchSupplyActive,ranchSupplyGrowthPercent,ranchSupplyNightCalm} from '../contracts/productSupplements.js';
+  startRanchSupply,ranchSupplyActive,ranchSupplyGrowthPercent,ranchSupplyNightCalm,armSupply,disarmSupply,armedSupplies,supplyBattleProfile,
+  supplySyncExpPercent,settleArmedSupplies} from '../contracts/productSupplements.js';
 import {normalizeJourney,createJourneyState,TOWER_FLOORS,towerBand,towerOpponents,towerOpponentSpecies,towerRewards,towerNextFloor,
   clearTowerFloor,patrolStatus,claimPatrol,quickPatrol} from '../contracts/productJourney.js';
 import {CAMPAIGN_ZONES,CAMPAIGN_STAGES,CAMPAIGN_ZONE_CHEST,campaignRivals,campaignStars,campaignRewards,recordCampaignStage,sweepCampaignStage,
@@ -1238,7 +1239,7 @@ export function createChampionshipStandaloneApp({
         ?(passwordMode?JSON.stringify(passwords)!==JSON.stringify(prepared.passwords):linkKey!==prepared.linkKey)
         :JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals.map(p=>p.instanceId)))
       // A Sync-boosted copy is checked against the same boost of the saved individual.
-      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(boostBattleProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1,p.moodTier))!==JSON.stringify(p.nativeProfile))))
+      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(boostBattleProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1,p.moodTier,p.supplyIds??[]))!==JSON.stringify(p.nativeProfile))))
       return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇。'};
     const result=applyBattleTransaction(beginBattleAttempt(battleEconomy,{attemptId,matchIndex:-1,mode,battleType:0,
       entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng,[],mode===2?{begin:attemptId,kind:'FREE'}:null);
@@ -1296,8 +1297,9 @@ export function createChampionshipStandaloneApp({
     return sync.capped?cappedMoodTier(tier):tier;
   }
   /** The battle copy: Sync first, then mood, both taken back by the result restore. */
-  function boostBattleProfile(profile,syncLevel,moodTier){
-    return moodBattleProfile(boostSyncNativeProfile(profile,syncLevel),moodTier??'normal');
+  function boostBattleProfile(profile,syncLevel,moodTier,supplyIds=[]){
+    // Pre-battle supplements (SUPPLEMENTS_20261118 S2) add their curve steps last; the result restore puts the curve words back.
+    return supplyBattleProfile(moodBattleProfile(boostSyncNativeProfile(profile,syncLevel),moodTier??'normal'),supplyIds);
   }
   function syncBattleLevel(instanceId,sync){
     if(!sync)return 1;
@@ -1362,12 +1364,14 @@ export function createChampionshipStandaloneApp({
     const syncBonus=talent('syncExpPercent',battleTalents(kind));
     for(const instanceId of instanceIds){
       const base=syncBattleExp(syncLevelOf(instanceId).level,{kind,won});
-      // The commander talent 同步訓練: +5 % Sync EXP a rank.
-      const amount=base>0?Math.round(base*(100+syncBonus)/100):0;
+      // The commander talent 同步訓練: +5 % Sync EXP a rank; 同步飲 carried into this battle: +50 %.
+      const amount=base>0?Math.round(base*(100+syncBonus+supplySyncExpPercent(armedSupplies(tamerSupplies,instanceId)))/100):0;
       if(amount<=0)continue;
       const granted=grantSyncExp(syncState(),instanceId,amount);
       syncLevels=granted.state;gains.push(granted.gain);
     }
+    // What these partners carried is used up by this settled battle.
+    if(tamerSupplies)tamerSupplies=settleArmedSupplies(tamerSupplies,instanceIds);
     lastSyncGains=gains.length?Object.freeze({attemptId,kind,won,gains:Object.freeze(gains)}):null;
     return lastSyncGains;
   }
@@ -2390,7 +2394,7 @@ export function createChampionshipStandaloneApp({
     const beforeBadges = battleBadgesValue;
     const beforeRank=tamerRankValue,beforeTitles=nativeTitles,beforeMessages=nativeMessages,beforeRun=championshipRun;
     const beforeGacha=cyberGacha,beforeGachaDrop=lastBattleGachaDrop,beforeBurst=burstEvolution,beforeBurstUnlocks=lastBurstUnlocks,beforeSponsor=lastSponsorSettlement;
-    const beforeSync=syncLevels,beforeSyncGains=lastSyncGains,beforeTalents=tamerTalents,beforeTamerGain=lastTamerGain;
+    const beforeSync=syncLevels,beforeSyncGains=lastSyncGains,beforeTalents=tamerTalents,beforeTamerGain=lastTamerGain,beforeSupplies=tamerSupplies;
     const expectedBits = requireShop().getBits();
     // One rollback for both ways this can fail. The wallet is committed last, so
     // until it succeeds every one of these is still the pre-transaction value.
@@ -2401,7 +2405,7 @@ export function createChampionshipStandaloneApp({
       battleBadgesValue = beforeBadges;
       tamerRankValue=beforeRank;nativeTitles=beforeTitles;nativeMessages=beforeMessages;championshipRun=beforeRun;
       cyberGacha=beforeGacha;lastBattleGachaDrop=beforeGachaDrop;burstEvolution=beforeBurst;lastBurstUnlocks=beforeBurstUnlocks;lastSponsorSettlement=beforeSponsor;
-      syncLevels=beforeSync;lastSyncGains=beforeSyncGains;tamerTalents=beforeTalents;lastTamerGain=beforeTamerGain;
+      syncLevels=beforeSync;lastSyncGains=beforeSyncGains;tamerTalents=beforeTalents;lastTamerGain=beforeTamerGain;tamerSupplies=beforeSupplies;
     };
     battleTransactionActive = true;
     try {
@@ -4724,7 +4728,8 @@ export function createChampionshipStandaloneApp({
       if(!session)return null;
       const state=suppliesState(),nowMs=realNowMs();
       return Object.freeze({bits:shop?shop.getBits():0,now:nowMs,items:Object.freeze(SUPPLEMENTS.map(entry=>Object.freeze({id:entry.id,kind:entry.kind,
-        bits:entry.bits,owned:supplyOwned(state,entry.id),activeUntil:ranchSupplyActive(state,entry.id,nowMs)?state.ranch[entry.id]:null})))});
+        bits:entry.bits,owned:supplyOwned(state,entry.id),activeUntil:ranchSupplyActive(state,entry.id,nowMs)?state.ranch[entry.id]:null,
+        carriedBy:Object.freeze(Object.keys(state.armed).filter(id=>state.armed[id].some(item=>item.id===entry.id)))})))});
     },
     /** Buy supplements with Bits: the wallet and the bag are written in one save. */
     buySupply(id,quantity=1){
@@ -4745,6 +4750,15 @@ export function createChampionshipStandaloneApp({
       const entry=getSupplement(id),spent=spendSupply(suppliesState(),id);
       if(!entry)return Object.freeze({ok:false,reason:'SUPPLY_UNKNOWN'});
       if(!spent)return Object.freeze({ok:false,reason:'SUPPLY_NONE_OWNED'});
+      if(entry.kind==='BATTLE'){
+        // Put on a partner for its next settled owned-party battle; a supplement it already carried returns to the bag.
+        if(!syncProfileOf(instanceId))return Object.freeze({ok:false,reason:'UNKNOWN_INDIVIDUAL'});
+        const armed=armSupply(suppliesState(),instanceId,id);
+        if(!armed.ok)return Object.freeze({ok:false,reason:armed.reason});
+        if(!commitSupplies(armed.state))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
+        publishRaising();publishScreens();
+        return Object.freeze({ok:true,id,instanceId,armed:true});
+      }
       if(entry.kind==='RANCH'){
         const nowMs=realNowMs(),started=startRanchSupply(spent,id,nowMs,{morningMs:nextMorningMs(nowMs)});
         if(!started.ok)return Object.freeze({ok:false,reason:started.reason});
@@ -4759,6 +4773,16 @@ export function createChampionshipStandaloneApp({
       const before={creature,raising};
       writeRaisingNativeProfile(instanceId,normalizeNativeIndividualProfile(applied.profile),{markDirty:false});
       if(!commitSupplies(spent)){creature=before.creature;raising=before.raising;return Object.freeze({ok:false,reason:'SAVE_FAILED'});}
+      publishRaising();publishScreens();
+      return Object.freeze({ok:true,id,instanceId});
+    },
+    /** Take a carried pre-battle supplement off a partner, back into the bag. */
+    unequipSupply(id,instanceId){
+      requireSession();
+      if(tutorialBaseline||battleTransactionActive||battleEconomy.active||huntCommitActive)return Object.freeze({ok:false,reason:'SUPPLY_NOT_AVAILABLE'});
+      const taken=disarmSupply(suppliesState(),instanceId,id);
+      if(!taken.ok)return Object.freeze({ok:false,reason:taken.reason});
+      if(!commitSupplies(taken.state))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
       publishRaising();publishScreens();
       return Object.freeze({ok:true,id,instanceId});
     },
@@ -5417,7 +5441,7 @@ export function createChampionshipStandaloneApp({
         if(!prepared||prepared.session!==session||prepared.base!==JSON.stringify(gameplayRngSnapshot())
           ||prepared.championshipRun!==JSON.stringify(championshipRun)
           ||JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals?.map(p=>p.instanceId))
-          ||prepared.individuals.some(p=>JSON.stringify(boostBattleProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1,p.moodTier))!==JSON.stringify(p.nativeProfile)))
+          ||prepared.individuals.some(p=>JSON.stringify(boostBattleProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1,p.moodTier,p.supplyIds??[]))!==JSON.stringify(p.nativeProfile)))
           return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇參賽隊伍。'};
         opponent=prepared.opponent;
       }
@@ -5534,7 +5558,9 @@ export function createChampionshipStandaloneApp({
         // A 成熟期 admitted to a 覺醒體/究極體 match bursts into the form that admitted it.
         const fitting=nativeBattleQualification(nativeProfile,condition)?null:burstFormFitting(nativeProfile,condition,partnerBurstForms(instanceId));
         const syncLevel=syncBattleLevel(instanceId,sync),moodTier=battleMoodTier(instanceId,sync);
-        individuals.push({instanceId,nativeProfile:boostBattleProfile(nativeProfile,syncLevel,moodTier),syncLevel,moodTier,
+        // Only where Sync applies: password, link and online battles never read a carried supplement.
+        const supplyIds=sync?armedSupplies(tamerSupplies,instanceId):[];
+        individuals.push({instanceId,nativeProfile:boostBattleProfile(nativeProfile,syncLevel,moodTier,supplyIds),syncLevel,moodTier,supplyIds,
           ...(fitting!==null?{burst:battleBurstPlanOf(instanceId,Object.freeze({form:fitting,tier:burstFormTier(fitting)}))}:{})});
       }
       return {ok:true,individuals};
