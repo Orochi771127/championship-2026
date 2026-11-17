@@ -3853,9 +3853,12 @@ try {
 function ensureSessionHistoryGuard() {
   if (!titleScreen || !titleScreen.hidden) return;
   try {
-    if (window.history.state?.championshipSessionGuard !== true && window.history.state?.championshipOverlay !== "settings") {
-      window.history.pushState({ ...(window.history.state ?? {}), championshipSessionGuard: true }, "");
-    }
+    // The settings panel owns the top history entry while it is open ({ cmSettings: true }, settingsPanel.js).
+    // A guard pushed over it (a language change remounts the screen) copied that flag and survived the panel's
+    // own back(), so the entry the panel left behind still read as "settings open".
+    if (document.querySelector("dialog.cm-settings[open]")) return;
+    const { cmSettings: _settingsEntry, ...state } = window.history.state ?? {};
+    if (state.championshipSessionGuard !== true) window.history.pushState({ ...state, championshipSessionGuard: true }, "");
   } catch {}
 }
 
@@ -3878,6 +3881,10 @@ function recordSessionScreenMounted(target) {
 function handleSessionPopState() {
   if (!titleScreen || !titleScreen.hidden || !app) return;
   if (document.querySelector("dialog.cm-settings[open]") || isChoiceDialogOpen()) return;
+  // Only a pop that used up the guard entry is the player's Back. One that lands on the guard removed an
+  // entry above it: the settings panel taking back its own entry as it closes. Treating that as Back threw
+  // the player from the tamer profile to the ranch whenever 帳號與雲端同步 was closed (2026-11-17).
+  if (window.history.state?.championshipSessionGuard === true) return;
   if (dataArenaSession && typeof dataArenaSession.close === "function") {
     void dataArenaSession.close();
     ensureSessionHistoryGuard();

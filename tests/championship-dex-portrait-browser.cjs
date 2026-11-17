@@ -149,7 +149,8 @@ function assertScopedGRGeometry(snapshot,species){
   assert.equal(snapshot.holderSpeciesId,`species-${String(species).padStart(3,'0')}`);
   assert.equal(snapshot.holderStyle,null,'Normal scoped review must not inject holder sizing');
   const visible=visibleHeroRect(snapshot);
-  assert.ok(visible.x>=-1&&visible.right<=snapshot.viewport.width+1&&visible.y>=-1&&visible.bottom<=snapshot.viewport.height+1,'Drawn GR silhouette fully in viewport after normal scrolling');
+  const page=snapshot.pageViewport??snapshot.viewport;
+  assert.ok(visible.x>=-1&&visible.right<=page.width+1&&visible.y>=-1&&visible.bottom<=page.height+1,'Drawn GR silhouette fully in viewport after normal scrolling');
 }
 function assertScopedGRCoverage(rows){
   assert.equal(rows.length,24);
@@ -220,7 +221,11 @@ function mountedSnapshot() {
   const image = holder?.querySelector('.cm-dex-hero__image');
   if (!row || !holder || !image) throw Error('NORMAL_DEX_NOT_VIEWABLE: no mounted normal hero; no unlock fallback is permitted');
   const hs = getComputedStyle(holder), is = getComputedStyle(image);
-  const rect = el => { const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom }; };
+  // Three layout sets (Owner 2026-11-11): a window narrower or shorter than the upright/sideways reference shows its
+  // set scaled as a whole (one CSS zoom on <html>, portraitFrame.js). getBoundingClientRect then answers in window
+  // pixels while padding, borders and --dex-floor stay in the page's own pixels, so rects are read back in page pixels.
+  const uiZoom = Number(document.documentElement.dataset.uiZoom) || 1;
+  const rect = el => { const r = el.getBoundingClientRect(); return { x: r.x / uiZoom, y: r.y / uiZoom, width: r.width / uiZoom, height: r.height / uiZoom, right: r.right / uiZoom, bottom: r.bottom / uiZoom }; };
   return { speciesIndex: Number(row.dataset.speciesIndex), displayCode: row.dataset.displayCode, rowState: row.dataset.state,
     title: detail.querySelector('h2')?.textContent, src: image.currentSrc || image.src, art: holder.dataset.art,
     complete: image.complete, hidden: image.hidden, natural: [image.naturalWidth, image.naturalHeight],
@@ -233,6 +238,7 @@ function mountedSnapshot() {
     boxSizing: hs.boxSizing, objectFit: is.objectFit, imageRendering: is.imageRendering, imageOpacity: is.opacity, imageFilter: is.filter,
     background: hs.backgroundColor, theme: document.documentElement.dataset.theme ?? null,
     viewport: { width: innerWidth, height: innerHeight, dpr: devicePixelRatio },
+    uiZoom, pageViewport: { width: innerWidth / uiZoom, height: innerHeight / uiZoom },
     documentOverflow: document.documentElement.scrollWidth > innerWidth };
 }
 async function checkPolicy(repo) {
