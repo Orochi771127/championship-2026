@@ -39,6 +39,13 @@ const SAVE_COPY = Object.freeze({
   CONFLICT: "另一個分頁已更新存檔。請先匯出這裡的進度，再重新載入並選擇繼續遊戲。"
 });
 const NOTICE_HOLD_MS = 4000;
+// A lifecycle message rides on every later frame until the next one replaces
+// it, and this view is rebuilt each time the player comes back to the ranch.
+// Remember the messages already shown (by identity, across mounts), so an
+// evolution reveal or "partner disappeared" plays once, not on every return.
+const announcedLifecycleMessages = new WeakSet();
+const announced = (message) => Boolean(message) && typeof message === "object" && announcedLifecycleMessages.has(message);
+const markAnnounced = (message) => { if (message && typeof message === "object") announcedLifecycleMessages.add(message); };
 
 // Labels are remembered (setText / setLabel), so a language switch can
 // relabel this screen in place: the habitat is not remounted.
@@ -750,13 +757,16 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     // once rather than restarting its own countdown on every repaint.
     const event=lifecycle?.message;
     const eventKey=event?`${event.kind}:${event.instanceId??''}:${event.target??''}`:null;
-    if(eventKey!==null&&eventKey!==lastEventKey){
-      if(event.kind==='EVOLVED')pendingEvolution={instanceId:event.instanceId,target:event.target};
+    if(eventKey!==null&&eventKey!==lastEventKey&&!announced(event)){
+      // The reveal is marked once it actually plays (below), so a player who
+      // leaves before it can still see it on the way back.
+      if(event.kind==='EVOLVED')pendingEvolution={instanceId:event.instanceId,target:event.target,message:event};
       if(event.kind==='REBORN'){
         const member=frame.residents.find(r=>r.creatureId===event.instanceId);
         if(member)showNotice(uiText('{name} 回到了培育蛋。',{name:member.displayName}));
+        markAnnounced(event);
       }
-      if(event.kind==='DISAPPEARED')showNotice(uiText('夥伴消失了。'));
+      if(event.kind==='DISAPPEARED'){showNotice(uiText('夥伴消失了。'));markAnnounced(event);}
     }
     lastEventKey=eventKey;
     // Arcade evolution (Owner 2026-10-28): the cinematic runner lays over the
@@ -781,6 +791,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       evolutionRun?.setStats(event.stats??null);
       // The runner was this form's reveal; the later ceremony would repeat it.
       if(event.kind==='EVOLVED'&&pendingEvolution?.instanceId===event.instanceId)pendingEvolution=null;
+      markAnnounced(event);
       cinematic=null;
     }
     if(cinematic&&!lifecycle?.evolution&&!evolutionRun)cinematic=null;
@@ -791,6 +802,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     if(pendingEvolution&&!lifecycle?.evolution&&!day&&!lifecycle?.confirmation&&!activeMail){
       const member=frame.residents.find(r=>r.creatureId===pendingEvolution.instanceId);
       const species=speciesName(pendingEvolution.target);
+      markAnnounced(pendingEvolution.message);
       pendingEvolution=null;
       if(member){
         evolutionCeremony?.dispose();
