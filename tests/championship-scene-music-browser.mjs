@@ -213,7 +213,14 @@ async function waitCue(page,id) {
  await page.waitForFunction(expected=>{const s=JSON.parse(document.documentElement.dataset.musicState||'{}');return s.playing===expected&&s.pending===null&&s.voices===1&&!s.error;},id,{timeout:30000});
  await page.waitForTimeout(250);
 }
-async function nativeEvidence(page,id) {await waitCue(page,id);return page.evaluate(()=>({state:JSON.parse(document.documentElement.dataset.musicState),...nativeAudioQA.snapshot()}));}
+async function nativeEvidence(page,id) {
+ await waitCue(page,id);
+ // checkNativeMedia requires the playback clock to have moved. On a busy machine the sample used to be taken the instant
+ // the cue was named, before 0.12 s of audio had played (seen twice locally, right after a full test run). Give the
+ // clock a bounded moment; a clock that never moves still fails the same assertion.
+ await page.waitForFunction(()=>nativeAudioQA.snapshot().media.some(m=>!m.paused&&m.currentTime>0.12),null,{timeout:10000}).catch(()=>{});
+ return page.evaluate(()=>({state:JSON.parse(document.documentElement.dataset.musicState),...nativeAudioQA.snapshot()}));
+}
 async function assertBounded(page) {const s=await page.evaluate(()=>nativeAudioQA.snapshot());assert.ok(s.maxVoices<=2);assert.ok(s.mediaCreated<=2);assert.equal(s.contexts.length,1);return s;}
 async function main() {
  const base=process.argv[2];assert.ok(base,'Usage: node tests/championship-scene-music-browser.mjs LOOPBACK_BASE_URL [OUTPUT_DIR]');

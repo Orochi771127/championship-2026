@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "owner": "Claude Code",
   "syncTarget": "Standing goal 2026-11-17 (non-animation completion)",
-  "date": "2026-11-17",
+  "date": "2026-11-18",
   "note": "Claude-owned delta. Codex remains COORDINATION_MERGE_WRITER; Claude wrote no shared coordination file in this round. Older keys below are the 2026-08-28 round, kept as history.",
   "checkpoint": {
     "repository": "CHAMPIONSHIP_2026_PRODUCT_SSOT (this repository)",
@@ -572,20 +572,27 @@
         "id": "FUSION_P1_GRADES",
         "state": "VERIFIED_LIVE",
         "evidence": "PR #265 6e5301dc, live bundle checked"
+      },
+      {
+        "id": "FUSION_P2_FUSION",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #267 e1858857; all 10 checks green; live pages-build commit e1858857 and fusion code in the live bundle"
+      },
+      {
+        "id": "FUSION_P3_HERDS",
+        "state": "VERIFIED_MERGED",
+        "evidence": "PR #268 7c386346; all checks green; real-browser hunt gate (vs3) passed on the branch"
+      },
+      {
+        "id": "CURRENCY_HUD_TOUCH_TARGETS",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #267 e1858857; currency HUD chromium + webkit green; --cm-touch in the live stylesheet"
       }
     ],
     "openForClaude": [
       {
-        "id": "FUSION_P2_FUSION",
-        "state": "IMPLEMENTED_PR_OPEN"
-      },
-      {
-        "id": "FUSION_P3_HERDS",
-        "state": "IMPLEMENTED_PUSHED"
-      },
-      {
         "id": "TALENTS_T1",
-        "state": "IMPLEMENTED_PUSHED"
+        "state": "IMPLEMENTED_PR_OPEN"
       },
       {
         "id": "SUPPLEMENTS_S1",
@@ -609,19 +616,15 @@
       },
       {
         "id": "PR_194_CRASH_CONSISTENCY",
-        "state": "NEEDS_TRIAGE"
+        "state": "IMPLEMENTED_PUSHED"
       },
       {
         "id": "NORMAL_ENTRY_PLAYTHROUGH",
         "state": "PARTLY_VERIFIED"
       },
       {
-        "id": "CURRENCY_HUD_TOUCH_TARGETS",
-        "state": "IMPLEMENTED_PR_OPEN"
-      },
-      {
         "id": "TALENTS_REMAINING_EXP_SOURCES",
-        "state": "NOT_STARTED"
+        "state": "IMPLEMENTED_PUSHED"
       }
     ],
     "forCodex": [

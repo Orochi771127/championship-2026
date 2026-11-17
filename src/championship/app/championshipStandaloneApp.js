@@ -39,7 +39,7 @@ import {REALTIME_TRAINING_POLICY,recommendedCages,TRAINING_KIND_OF_CONDITION} fr
 import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattleExp,grantSyncExp,feedSyncCrystals,reconcileSyncRebirth,
   boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX,partnerGradeOf,recordPartnerGrade,fuseSyncPartners} from '../contracts/productSyncLevel.js';
 import {rollPartnerGrade,applyGradeHeadStart,fusionLineMultiplier,FUSION_MAX_FODDER,FUSION_WARN_LEVEL} from '../contracts/productLineFusion.js';
-import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentValue,grantTamerExp,tamerCaptureExp,tamerBattleExp,TAMER_EXP,
+import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentValue,grantTamerExp,tamerCaptureExp,tamerBattleExp,tamerDailyExp,TAMER_EXP,
   learnTalent,talentRefusal,chooseKeystone,keystoneRefusal,respecTalents,talentRespecCost,talentSpent,talentSpentInLine,talentOpen,commanderCappedTalents,
   TALENT_NODES,TALENT_KEYSTONES,TALENT_LINES,TALENT_TREE_POINTS,TALENT_TIER_GATE,TALENT_KEYSTONE_GATE,TALENT_KEYSTONE_COST,tamerExpRequired,TAMER_LEVEL_MAX}
   from '../contracts/productTamerTalents.js';
@@ -1317,11 +1317,22 @@ export function createChampionshipStandaloneApp({
     if(!(amount>0))return {state,gain:null};
     return grantTamerExp(state??createTamerTalentState(),amount);
   }
+  /** Tamer EXP outside a save of its own (a journey star, a tower first clear, a care action): the next save carries it. */
+  function payTamerExp(amount,{daily=null}={}){
+    if(tutorialBaseline)return;
+    const day=daily?tamerDailyExp(talentState(),journeyLocalDay(),daily):{state:talentState(),amount:0};
+    const paid=withTamerExp(day.state,amount+day.amount);
+    if(!paid.gain)return;
+    tamerTalents=paid.state;lastTamerGain=paid.gain;savePort.markDirty();
+  }
   /** Pay one settled battle's Sync EXP to the partners that fought it. */
   function grantBattleSync(instanceIds,{kind,won,attemptId=null}){
     const gains=[];
-    // One settled owned-party battle also pays the tamer (never password, link or online battles).
-    if(instanceIds.length){const paid=withTamerExp(talentState(),tamerBattleExp(kind,won));tamerTalents=paid.state;lastTamerGain=paid.gain;}
+    // One settled owned-party battle also pays the tamer (never password, link or online battles); the day's first pays 100 more.
+    if(instanceIds.length){
+      const day=tamerDailyExp(talentState(),journeyLocalDay(),'BATTLE');
+      const paid=withTamerExp(day.state,tamerBattleExp(kind,won)+day.amount);tamerTalents=paid.state;lastTamerGain=paid.gain;
+    }
     const syncBonus=talent('syncExpPercent',battleTalents(kind));
     for(const instanceId of instanceIds){
       const base=syncBattleExp(syncLevelOf(instanceId).level,{kind,won});
@@ -1357,6 +1368,7 @@ export function createChampionshipStandaloneApp({
     const rewards=cleared.rewards;
     let tickets=0,diamonds=0;
     if(rewards){
+      payTamerExp(TAMER_EXP.TOWER_FIRST_CLEAR); // a floor's first clear
       addSyncCrystals(rewards.crystals);
       let gacha=gachaState();
       if(rewards.tickets){const grant=grantGachaTickets(gacha,rewards.tickets);gacha=grant.state;tickets=grant.granted;}
@@ -2842,6 +2854,7 @@ export function createChampionshipStandaloneApp({
       // run, so they cannot save a debited item with the old condition fields.
       if(admission.consume&&!shop.consumeRaisingMedicine(kind).ok)throw new Error('RAISING_MEDICINE_INVENTORY_DRIFT');
       if(result.applied||admission.consume){interactionCount++;savePort.markDirty();publishRaising();}
+      payTamerExp(0,{daily:'CARE'}); // a care action: 2 tamer EXP, at most 60 a day
       return Object.freeze({ok:true,consumed:admission.consume,applied:result.applied,success:result.success});
     },
 
@@ -2865,6 +2878,7 @@ export function createChampionshipStandaloneApp({
       food.present=false;
       if(food.freshness<=0)raisingDirtySignals.set(food.cageInstanceId??food.cageDefinitionIndex,{dirtyRemoved:true});
       for(const actor of raisingActors.values())if(actor.foodSlot===food.slot)removeNativeRaisingFoodTarget(actor,raisingFoods,{next:nextGameplayRandom});
+      payTamerExp(0,{daily:'CARE'});
       storeNativeRaisingHome();interactionCount++;savePort.markDirty();publishRaising();return true;
     },
 
@@ -2896,6 +2910,7 @@ export function createChampionshipStandaloneApp({
       const consumed=shop.consumeRaisingFood(protein);
       if(!consumed.ok)throw new Error("RAISING_FOOD_INVENTORY_DRIFT");
       interactionCount++;savePort.markDirty();publishRaising();
+      payTamerExp(0,{daily:'CARE'});
       return Object.freeze({ok:true,slot,owned:consumed.owned});
     },
 
@@ -4581,8 +4596,11 @@ export function createChampionshipStandaloneApp({
       const pending=pendingCampaign;
       if(!pending)return null;
       const stars=campaignStars({outcome,timeSeconds,fainted});
+      const starsBefore=starsOf(journeyState().campaign,pending.zone,pending.stage);
       const recorded=recordCampaignStage(journeyState().campaign,pending.zone,pending.stage,stars);
       journey={...journeyState(),campaign:recorded.campaign};
+      // TAMER_TALENTS_20261117: 15 tamer EXP for each star this stage had not earned before.
+      payTamerExp(Math.max(0,starsOf(recorded.campaign,pending.zone,pending.stage)-starsBefore)*TAMER_EXP.JOURNEY_STAR);
       let tickets=0,diamonds=0;
       const crystals=recorded.firstClear?.crystals??0;
       addSyncCrystals(crystals);
@@ -5884,6 +5902,8 @@ export function createChampionshipStandaloneApp({
       const entries = huntRuntime?.getOnCardEntries() ?? [];
       const releasedHomeIds = huntResult?.releasedHomeIds ?? [];
       const stagedFusions = huntResult?.fusions ?? [];
+      // The day's first hunt pays the tamer 100 EXP, with a catch or without.
+      const huntDay = tamerDailyExp(talentState(), journeyLocalDay(), 'HUNT');
       if (entries.length > 0 || releasedHomeIds.length > 0 || stagedFusions.length > 0) {
         let candidateRaising = raising, candidateIdentity = instanceIdentity;
         const beforeSnapshot = requireSession().getRaisingHomeSnapshot();
@@ -5912,8 +5932,8 @@ export function createChampionshipStandaloneApp({
         // partner left through releasedHomeIds above; a fused catch already left the memory card.
         if (stagedFusions.length > 0) candidateSync = stagedHuntFusionSync().state;
         // TAMER_TALENTS_20261117: each catch brought Home pays 20 x its grade, each fusion 8, in this same save.
-        const tamerPaid = withTamerExp(talentState(), entries.reduce((sum, entry) => sum + tamerCaptureExp(huntGrades.get(entry.wildId)?.grade), 0)
-          + stagedFusions.length * TAMER_EXP.FUSION);
+        const tamerPaid = withTamerExp(huntDay.state, entries.reduce((sum, entry) => sum + tamerCaptureExp(huntGrades.get(entry.wildId)?.grade), 0)
+          + stagedFusions.length * TAMER_EXP.FUSION + huntDay.amount);
         for (const entry of entries) {
           const allocation = allocateRaisingInstanceIdentity(candidateIdentity, { ...sources, collection: candidateRaising.collection,
             assignments: candidateRaising.assignments });
@@ -5980,6 +6000,9 @@ export function createChampionshipStandaloneApp({
           huntResult = Object.freeze({ ...huntResult, commitError: "SAVE_FAILED" });
           publishScreens(); return screens.current();
         }
+      } else if (huntDay.amount > 0) {
+        const paid = withTamerExp(huntDay.state, huntDay.amount);
+        tamerTalents = paid.state; lastTamerGain = paid.gain; savePort.markDirty();
       }
       huntRuntime?.abortEnclosureStroke();
       huntRuntime = null;
