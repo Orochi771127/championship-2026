@@ -182,6 +182,7 @@ export const UI_COPY = Object.freeze({
   "WILD_INSTINCT_ELITE": "⚡ 歷戰菁英",
   "WILD_INSTINCT_ANCESTOR": "👑 先祖覺醒",
   "WILD_INSTINCT_ELITE_NOTE": "天生帶有 +15 本族覺醒點數與較高四維。",
+  "PARTNER_GRADE": "資質",
   "WILD_INSTINCT_ANCESTOR_NOTE": "天生帶有第一階段覺醒進度 +40% 與一種天然血統。",
   "AWAKENING_LEARNED_NOTE": "對戰時量表集滿，就能爆裂進化成牠",
   "AWAKENING_TITLE": "覺醒之路",

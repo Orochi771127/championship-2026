@@ -2998,6 +2998,8 @@ function projectRoster() {
       instanceId,
       // The starter's name is set by the opening; collected ones can be renamed.
       bloodline: app.getPartnerBloodline?.(instanceId) ?? null,
+      // LINE_FUSION_20261117: S/A/B/C from the hunt; null for a partner caught before grades, hatched or from the gachapon.
+      grade: app.getPartnerGrade?.(instanceId)?.grade ?? null,
       // OWNER_APPROVED_ADAPTATION 2026-11-02: the 成熟期 partner's burst forms and their progress.
       burst: app.getPartnerBurst?.(instanceId) ?? null,
       awakening: app.getPartnerAwakening?.(instanceId) ?? null,

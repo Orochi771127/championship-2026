@@ -16,6 +16,7 @@
 // Pure: numbers in, numbers out. The saved record lives at progression.syncLevels.
 
 import { deepFreeze } from "./championshipContracts.js";
+import { normalizePartnerGrade } from "./productLineFusion.js";
 
 export const SYNC_LEVEL_MAX = 50;
 export const SYNC_REBIRTH_KEEP = 0.3;
@@ -64,7 +65,8 @@ export function normalizeSyncLevels(value) {
     if (typeof id !== "string" || !id || id.length > 120 || !entry || typeof entry !== "object") continue;
     const lv = level(entry.level);
     const exp = lv >= SYNC_LEVEL_MAX ? 0 : Math.min(count(entry.exp), syncExpRequired(lv) - 1);
-    partners[id] = { level: lv, exp, rebirths: count(entry.rebirths) };
+    const grade = normalizePartnerGrade(entry.grade);
+    partners[id] = { level: lv, exp, rebirths: count(entry.rebirths), ...(grade ? { grade } : {}) };
   }
   return { version: 1, partners, crystals: count(value.crystals) };
 }
@@ -72,6 +74,19 @@ export function normalizeSyncLevels(value) {
 export function syncOf(state, instanceId) {
   const entry = normalizeSyncLevels(state).partners[instanceId];
   return Object.freeze({ level: entry?.level ?? 1, exp: entry?.exp ?? 0, next: entry?.level >= SYNC_LEVEL_MAX ? 0 : syncExpRequired(entry?.level ?? 1) });
+}
+
+/** A partner's saved grade (null for a partner caught before grades, hatched or from the gachapon). */
+export function partnerGradeOf(state, instanceId) {
+  return normalizeSyncLevels(state).partners[instanceId]?.grade ?? null;
+}
+
+/** Record a grade once; a partner that already has one keeps it. */
+export function recordPartnerGrade(state, instanceId, grade) {
+  const current = normalizeSyncLevels(state), normalized = normalizePartnerGrade(grade);
+  if (!normalized || typeof instanceId !== "string" || !instanceId || current.partners[instanceId]?.grade) return current;
+  const entry = current.partners[instanceId] ?? { level: 1, exp: 0, rebirths: 0 };
+  return { ...current, partners: { ...current.partners, [instanceId]: { ...entry, grade: normalized } } };
 }
 
 export function syncBreakthroughsAt(lv) {
@@ -114,7 +129,7 @@ export function reconcileSyncRebirth(state, instanceId, rebirthCount) {
   if (!entry) return seen > 0 ? { ...current, partners: { ...current.partners, [instanceId]: { level: 1, exp: 0, rebirths: seen } } } : current;
   if (seen <= entry.rebirths) return current;
   const kept = Math.max(1, Math.floor(entry.level * SYNC_REBIRTH_KEEP));
-  return { ...current, partners: { ...current.partners, [instanceId]: { level: kept, exp: 0, rebirths: seen } } };
+  return { ...current, partners: { ...current.partners, [instanceId]: { ...entry, level: kept, exp: 0, rebirths: seen } } };
 }
 
 /**
@@ -131,7 +146,7 @@ export function grantSyncExp(state, instanceId, amount) {
     if (left < need) { exp += left; left = 0; break; }
     left -= need; lv += 1; exp = 0;
   }
-  const after = { level: lv, exp, rebirths: before.rebirths };
+  const after = { ...before, level: lv, exp, rebirths: before.rebirths };
   const next = { ...current, partners: { ...current.partners, [instanceId]: after }, crystals: count(current.crystals + overflow) };
   return {
     state: next,

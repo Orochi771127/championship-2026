@@ -4,6 +4,7 @@ import test from 'node:test';
 import {createChampionshipStandaloneApp} from '../src/championship/app/championshipStandaloneApp.js';
 import {restoreChannelRng} from '../src/championship/battle/battleRngChannel.js';
 import {nativeHuntSpeciesByIndex,nativeHuntCatalogForBiome} from '../src/championship/hunt/capture/nativeHuntSources.js';
+import {applyGradeHeadStart} from '../src/championship/contracts/productLineFusion.js';
 test('normal gestures capture, commit once and restore through Continue',async()=>{
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 const map=new Map(),storage={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v),removeItem:k=>map.delete(k)};
@@ -69,11 +70,17 @@ assert.equal(target?.bound,true);if(target?.bound){
  assert.deepEqual(app.getGameplayRngState(),{version:1,...rng.snapshot()},'repeated exit cannot rerun the native return writer');
  assert.deepEqual(runtime.getOnCardEntries()[0].nativeProfile,nativeAfter);
  // A veteran elite catch (AWAKENING_OVERDRIVE_20261109) arrives with +6 to its four stats, up to their native bound.
- const instinct=app.getHuntResult().rows.find(row=>row.kind==='CARD').instinct;
+ const instinct=app.getHuntResult().rows.find(row=>row.kind==='CARD').instinct,shownGrade=app.getHuntResult().rows.find(row=>row.kind==='CARD').grade;
  await app.confirmHuntResult();const captured=app.getRaisingInstances().filter(r=>!before.includes(r.instanceId));assert.equal(captured.length,1);
- assert.equal(captured[0].profile.currentHp,nativeAfter.fields['050']);
- assert.equal(captured[0].profile.maxTp,nativeAfter.fields['05c']);
- assert.equal(captured[0].profile.stats.field60,instinct==='ELITE'?Math.min(nativeAfter.fields['0b8']|0,(nativeAfter.fields['060']|0)+6):nativeAfter.fields['060']);
+ // LINE_FUSION_20261117: the grade shown on the result row is saved, and its head start is written inside the bounds.
+ const grade=app.getPartnerGrade(captured[0].instanceId);
+ assert.equal(grade?.grade,shownGrade,'the saved grade is the one the result row showed');
+ assert.ok(['S','A','B','C'].includes(grade.grade));
+ const started=applyGradeHeadStart(nativeAfter,grade).profile.fields;
+ assert.equal(captured[0].profile.currentHp,started['050']);
+ assert.equal(captured[0].profile.maxTp,started['05c']);
+ assert.ok(captured[0].profile.maxHp<=(nativeAfter.fields['0a8']|0)&&captured[0].profile.maxHp>=nativeAfter.fields['058']);
+ assert.equal(captured[0].profile.stats.field60,instinct==='ELITE'?Math.min(nativeAfter.fields['0b8']|0,(started['060']|0)+6):started['060']);
  assert.equal(captured[0].source.successAuthority,'NATIVE_NORMAL_HUNT_CONTROLLER');
  assert.equal(app.getDatabaseFrame().entries.find(row=>row.speciesId===captured[0].speciesId).state,'REGISTERED');
  await app.confirmHuntResult();assert.deepEqual(app.getRaisingInstances().filter(r=>!before.includes(r.instanceId)),captured,'repeated result confirmation cannot duplicate a resident');

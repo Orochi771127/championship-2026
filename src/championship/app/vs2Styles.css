@@ -1614,6 +1614,11 @@ body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database_
 .cm-vs2-cage-edit .cm-vs2-cage-rank:has(.cm-vs2-cage-rank__expand) { flex-wrap: wrap; justify-content: flex-end; white-space: normal; row-gap: 4px;
   padding: 4px 6px 4px 10px; }
 /* Wild instinct on a hunt result row (AWAKENING_OVERDRIVE_20261109). */
+.cm-vs2-result__grade { flex: 0 0 auto; min-width: 22px; margin-left: 6px; padding: 1px 5px; border-radius: 6px; text-align: center; font-size: calc(12px * var(--text-scale, 1)); font-weight: 900; color: #cbd5e1; background: rgba(148, 163, 184, .22); }
+.cm-vs2-result__grade[data-grade="S"] { color: #2a1800; background: linear-gradient(90deg, #ffd34d, #fb7185); box-shadow: 0 0 8px rgba(255, 211, 77, .65); }
+.cm-vs2-result__grade[data-grade="A"] { color: #0c1a2a; background: linear-gradient(90deg, #7dd3fc, #a78bfa); }
+.cm-vs2-result__grade[data-grade="B"] { color: #052e1a; background: #86efac; }
+.cm-vs2-result__grade[data-grade="C"] { color: #e2e8f0; background: #64748b; }
 .cm-vs2-result__instinct { margin-left: 6px; padding: 1px 7px; border-radius: 999px; font-size: calc(11px * var(--text-scale, 1)); font-weight: 900; white-space: nowrap; }
 .cm-vs2-result__instinct[data-instinct="ELITE"] { color: #0c1a2a; background: linear-gradient(90deg, #fef08a, #7dd3fc); }
 .cm-vs2-result__instinct[data-instinct="ANCESTOR"] { color: #2a1800; background: linear-gradient(90deg, #ffd34d, #c4b5fd); box-shadow: 0 0 8px rgba(255, 211, 77, .7); }

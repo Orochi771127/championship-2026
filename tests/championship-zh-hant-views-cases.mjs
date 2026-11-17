@@ -247,8 +247,8 @@ test("Hunt Result lets every catch on the memory card take the name plate", t =>
   // Owner report 2026-10-05: with two or more catches only the first could be named.
   const root = useDocument(t);
   const rows = [
-    { kind: "CARD", id: "wild-1", key: "card:wild-1", speciesId: "species-034", displayName: "亞古獸", canRelease: true, selected: true },
-    { kind: "CARD", id: "wild-2", key: "card:wild-2", speciesId: "species-035", displayName: "加布獸", canRelease: true, selected: false },
+    { kind: "CARD", id: "wild-1", key: "card:wild-1", speciesId: "species-034", displayName: "亞古獸", canRelease: true, selected: true, grade: "S" },
+    { kind: "CARD", id: "wild-2", key: "card:wild-2", speciesId: "species-035", displayName: "加布獸", canRelease: true, selected: false, grade: "C" },
     { kind: "HOME", id: "home-1", key: "home:home-1", speciesId: "species-001", displayName: "滾球獸", canRelease: true }
   ];
   const block = { title: "HUNT RESULT", outcomeLabel: "ON MEMORY CARD", wildId: "wild-1", speciesId: "species-034",
@@ -262,6 +262,10 @@ test("Hunt Result lets every catch on the memory card take the name plate", t =>
   assert.deepEqual(picks.map(button => button.dataset.nameKey), ["card:wild-1", "card:wild-2"], "each catch on the card can be named; a Home resident cannot");
   assert.deepEqual(picks.map(button => button.textContent), ["命名中", "命名"]);
   assert.equal(picks[0].getAttribute("aria-pressed"), "true");
+  // LINE_FUSION_20261117: each row shows its grade; a partner with no grade record shows "—".
+  const grades = root.querySelectorAll("span").filter(span => span.className === "cm-vs2-result__grade");
+  assert.deepEqual(grades.map(span => span.textContent), ["S", "C", "—"]);
+  assert.deepEqual(grades.map(span => span.title), ["資質", "資質", "資質"]);
   const input = root.querySelector("input");
   input.value = "小亞";
   picks[1].click();
