@@ -30,7 +30,18 @@
     "syncExpPercent": "commander 同步訓練: battle Sync EXP +5 % a rank",
     "crystalPercent": "trader 結晶: crystals paid by tower, zones and patrol +10 % a rank"
   },
-  "notYetOpen": "26 nodes and all 8 keystones; they follow in later batches",
+  "wiredT2": {
+    "batch": "TAMER_TALENTS_T2_20261118",
+    "coreTimePercent": "breeder 自動化: a core lasts 10 % longer a rank. The run clock drains that much slower, so the save never holds more than a core's own hour (a removed cage refunds whole stored hours); every clock shown is the stored seconds stretched by the same share",
+    "supplementPercent": "breeder 藥膳: 親密零食, 成長粉 and 同步飲 give 10 % more a rank, rounded to a whole (5 -> 7 affection, 15 -> 20 % growth, 50 -> 65 % Sync EXP at three ranks). A curve step stays one whole step; 元氣飲 and 安眠香 have no number to raise",
+    "supplementBattles": "breeder 長效: a carried pre-battle supplement lasts one more settled battle a rank (at most 4). One that has been through a battle cannot be taken off or swapped out: it stays until it is used up",
+    "battleBitsPercent": "trader 賞金: +5 % a rank on the Bits purse of a won owned-party match (title, free, practice) and on the tournament prize, as a product credit beside the original one, inside the wallet cap. Password and link battles never read it",
+    "patrolPercent": "trader 巡邏: patrol pod and quick patrol crystals +10 % a rank, added to 結晶's share",
+    "towerRewardPercent": "trader 塔: a tower floor's first-clear crystals +10 % a rank, added to 結晶's share. The tower pays no Bits; tickets and diamonds are not changed",
+    "firstSupplyDiscountPercent": "trader 熟客: the first supplement unit bought each local day costs 15 % less a rank (rounded down); the day is recorded in the bag only when the discount is used",
+    "supplySlots": "trader 補給帶 (one rank, three points): a partner carries two different pre-battle supplements"
+  },
+  "notYetOpen": "18 nodes and all 8 keystones; they follow in later batches (殺價 needs the shop's price path, 拾荒 a place on the hunt result)",
   "notChanged": [
     "the native individual fields, battle codes and match tables",
     "the gachapon rates, diamond prices and diamond or ticket rewards",
@@ -74,9 +85,10 @@
   },
   "authorization": "Owner 2026-11-17 standing goal: decided non-animation designs are implemented, integrated, verified and shipped batch by batch without asking per batch.",
   "tests": [
-    "tests/championship-tamer-talents-cases.mjs",
     "tests/championship-zh-hant-views-cases.mjs",
-    "tests/championship-lion-display-correction-cases.mjs"
+    "tests/championship-lion-display-correction-cases.mjs",
+    "tests/championship-tamer-talents-cases.mjs",
+    "tests/championship-tamer-talents-t2-cases.mjs"
   ],
   "physicalDeviceAccepted": false
 }

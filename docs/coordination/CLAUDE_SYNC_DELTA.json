@@ -590,8 +590,13 @@
       },
       {
         "id": "SUPPLEMENTS_S1",
-        "state": "VERIFIED_MERGED",
-        "evidence": "PR #272 a224c4bd; all checks green"
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #272 a224c4bd; all checks green; live commit checked"
+      },
+      {
+        "id": "SUPPLEMENTS_S2",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #273 a277603f; all checks green; live pages-build commit a277603f (build 1e0badbd) and the carried-supplement code in the live bundle"
       },
       {
         "id": "PR_194_CRASH_CONSISTENCY",
@@ -611,12 +616,8 @@
     ],
     "openForClaude": [
       {
-        "id": "SUPPLEMENTS_S2",
-        "state": "IMPLEMENTED_PUSHED"
-      },
-      {
         "id": "TALENTS_T2",
-        "state": "NOT_STARTED"
+        "state": "IMPLEMENTED_LOCAL"
       },
       {
         "id": "TALENTS_T3",
@@ -632,7 +633,7 @@
       },
       {
         "id": "TALENT_NODES_REMAINING",
-        "state": "NOT_STARTED"
+        "state": "PARTLY_DONE"
       },
       {
         "id": "EXTERNAL_ASSET_503_CLIENT",

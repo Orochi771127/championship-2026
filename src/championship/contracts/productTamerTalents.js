@@ -104,7 +104,10 @@ export const TALENT_WIRED_KEYS = new Set([
   // T1 (TAMER_TALENTS_20261117): each of these is read where the game works the value out.
   "memoryG", "huntSeconds", "herdExtra", "gradeHighPercent",
   "growthPercent", "nightDisturbPercent", "fusionExpPercent", "fusionLowerLine",
-  "syncExpPercent", "crystalPercent"
+  "syncExpPercent", "crystalPercent",
+  // T2 (TAMER_TALENTS_T2_20261118): the core clock, the supplement talents and the trader's battle and journey pay.
+  "coreTimePercent", "supplementPercent", "supplementBattles",
+  "battleBitsPercent", "patrolPercent", "towerRewardPercent", "firstSupplyDiscountPercent", "supplySlots"
 ]);
 export const TALENT_WIRED_KEYSTONES = new Set();
 export function talentOpen(id) {

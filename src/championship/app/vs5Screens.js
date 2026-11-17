@@ -1527,7 +1527,10 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         frag.append(element("p", "cm-vs5-result__detail", "獎金尚未入帳。"));
         return frag;
       }
-      frag.append(element("p", "cm-vs5-result__detail", uiText("持有 {bits} 位元幣", { bits: receipt.walletAfter })));
+      // The receipt's wallet is the original purse only; the beacon's and the 賞金 talent's shares of this match
+      // reached the wallet too (each already inside the wallet cap), so the figure shown is what the player holds.
+      const held = receipt.walletAfter + (gachaDrop?.bonusBits > 0 ? gachaDrop.bonusBits : 0) + (gachaDrop?.talentBits > 0 ? gachaDrop.talentBits : 0);
+      frag.append(element("p", "cm-vs5-result__detail", uiText("持有 {bits} 位元幣", { bits: held })));
       if (receipt.clamped) {
         frag.append(element("p", "cm-vs5-result__detail",
           uiText("獎金 {bits} 位元幣；持有金額已達上限。", { bits: receipt.rewardBits })));
@@ -1551,6 +1554,13 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         // The Ω beacon's metal shard (2026-11-02); the caller names it.
         for (const name of gachaDrop.metalNames ?? []) frag.append(element("p", "cm-vs5-result__detail cm-vs5-result__gacha",
           uiText("賞金信標掉落：{item}", { item: uiText(name) }), false));
+      }
+      // The trader talent 賞金 (TAMER_TALENTS_T2_20261118): its share of this match's purse.
+      if (gachaDrop?.talentBits > 0) {
+        const bounty = element("p", "cm-vs5-result__detail cm-vs5-result__gacha",
+          uiText("賞金天賦 +{bits} 位元幣", { bits: gachaDrop.talentBits }));
+        bounty.dataset.talentBits = String(gachaDrop.talentBits);
+        frag.append(bounty);
       }
       return frag;
     }

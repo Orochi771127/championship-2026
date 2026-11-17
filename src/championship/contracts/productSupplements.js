@@ -12,6 +12,11 @@
 //   ranch     runs on real time for the whole ranch:
 //               成長粉 +15 % training growth for two hours; 安眠香 no night disturbance until the morning.
 // S2 adds the pre-battle kind (a modifier on the battle copy, taken back when the battle writes its result).
+// T2 (TAMER_TALENTS_T2_20261118) lets four talents act here, each passed in as a number by the caller:
+//   藥膳 (bonusPercent)   親密零食, 成長粉 and 同步飲 give that much more; a curve step stays one whole step;
+//   長效 (battles)        a carried supplement lasts that many settled battles;
+//   補給帶 (slots)        a partner carries that many different supplements;
+//   熟客 (discountPercent) the first unit bought each day costs that much less.
 //
 // Pure: numbers in, numbers out. The saved record lives at progression.tamerSupplies.
 
@@ -35,8 +40,16 @@ export const SUPPLEMENTS = deepFreeze([
   { id: "supply:gale", kind: "BATTLE", bits: 600, effect: { steps: { "090": 1 } } },
   { id: "supply:sync", kind: "BATTLE", bits: 1000, effect: { syncExpPercent: 50 } }
 ]);
-/** Pre-battle supplements one partner carries into a battle. */
+/** Pre-battle supplements one partner carries into a battle (the talent 補給帶 makes it two). */
 export const SUPPLY_BATTLE_SLOTS = 1;
+export const SUPPLY_BATTLE_SLOTS_MAX = 2;
+/** Settled battles one carried supplement lasts (the talent 長效 adds up to three). */
+export const SUPPLY_BATTLES_MAX = 4;
+const DAY = /^\d{4}-\d{2}-\d{2}$/;
+const whole = (value, low, high) => (Number.isSafeInteger(value) ? Math.max(low, Math.min(high, value)) : low);
+const percentOf = (value) => (Number.isFinite(value) && value > 0 ? Math.min(100, value) : 0);
+/** A supplement's number with the talent 藥膳: `percent` more, rounded to a whole. */
+export function supplyBoosted(value, percent = 0) { return Math.round(value * (100 + percentOf(percent)) / 100); }
 const CURVE_MAX_STEP = 26;
 export const SUPPLEMENT_IDS = Object.freeze(SUPPLEMENTS.map((entry) => entry.id));
 const byId = new Map(SUPPLEMENTS.map((entry) => [entry.id, entry]));
@@ -60,11 +73,16 @@ export function normalizeTamerSupplies(value) {
     if (typeof instanceId !== "string" || !instanceId || instanceId.length > 120 || !Array.isArray(list)) continue;
     const kept = [];
     for (const item of list) {
-      if (kept.length >= SUPPLY_BATTLE_SLOTS) break;
-      if (byId.get(item?.id)?.kind === "BATTLE" && !kept.some((entry) => entry.id === item.id)) kept.push({ id: item.id, battlesLeft: 1 });
+      if (kept.length >= SUPPLY_BATTLE_SLOTS_MAX) break;
+      if (byId.get(item?.id)?.kind !== "BATTLE" || kept.some((entry) => entry.id === item.id)) continue;
+      // `battles` is what it had when it was put on: one that has already been through a battle is not whole.
+      const battlesLeft = whole(item.battlesLeft, 1, SUPPLY_BATTLES_MAX);
+      kept.push({ id: item.id, battlesLeft, battles: whole(item.battles, battlesLeft, SUPPLY_BATTLES_MAX) });
     }
     if (kept.length) state.armed[instanceId] = kept;
   }
+  // 熟客: the day whose first-purchase discount is used.
+  if (typeof value.discountDay === "string" && DAY.test(value.discountDay)) state.discountDay = value.discountDay;
   return state;
 }
 
@@ -73,11 +91,17 @@ export function armedSupplies(state, instanceId) {
   return (normalizeTamerSupplies(state).armed[instanceId] ?? []).map((item) => item.id);
 }
 
+/** The pre-battle supplements a partner carries, with the settled battles each has left. */
+export function armedSupplyItems(state, instanceId) {
+  return (normalizeTamerSupplies(state).armed[instanceId] ?? []).map((item) => ({ ...item, whole: item.battlesLeft === item.battles }));
+}
+
 /**
- * Put one pre-battle supplement from the bag on a partner. With its slot taken, the one it carried goes back to
- * the bag (refused when the bag already holds 99 of it).
+ * Put one pre-battle supplement from the bag on a partner, for `battles` settled battles (長效). With every one
+ * of its `slots` taken (補給帶), a whole one it carried goes back to the bag (refused when the bag already holds
+ * 99 of it). One that has already been through a battle cannot go back: it stays until it is used up.
  */
-export function armSupply(state, instanceId, id) {
+export function armSupply(state, instanceId, id, { slots = SUPPLY_BATTLE_SLOTS, battles = 1 } = {}) {
   const entry = byId.get(id), current = normalizeTamerSupplies(state);
   if (!entry || entry.kind !== "BATTLE") return { ok: false, reason: "SUPPLY_NOT_BATTLE" };
   if (typeof instanceId !== "string" || !instanceId) return { ok: false, reason: "UNKNOWN_INDIVIDUAL" };
@@ -85,19 +109,24 @@ export function armSupply(state, instanceId, id) {
   if (carried.some((item) => item.id === id)) return { ok: false, reason: "SUPPLY_ALREADY_ACTIVE" };
   let next = spendSupply(current, id);
   if (!next) return { ok: false, reason: "SUPPLY_NONE_OWNED" };
+  const room = whole(slots, SUPPLY_BATTLE_SLOTS, SUPPLY_BATTLE_SLOTS_MAX), lasts = whole(battles, 1, SUPPLY_BATTLES_MAX);
   let kept = carried;
-  if (carried.length >= SUPPLY_BATTLE_SLOTS) {
-    const back = carried[0], returned = addSupply(next, back.id, 1);
+  while (kept.length >= room) {
+    const back = kept.find((item) => item.battlesLeft === item.battles);
+    if (!back) return { ok: false, reason: "SUPPLY_PARTLY_USED" };
+    const returned = addSupply(next, back.id, 1);
     if (returned.added !== 1) return { ok: false, reason: "SUPPLY_STACK_FULL" };
-    next = returned.state; kept = carried.slice(1);
+    next = returned.state; kept = kept.filter((item) => item !== back);
   }
-  return { ok: true, state: { ...next, armed: { ...next.armed, [instanceId]: [...kept, { id, battlesLeft: 1 }] } } };
+  return { ok: true, state: { ...next, armed: { ...next.armed, [instanceId]: [...kept, { id, battlesLeft: lasts, battles: lasts }] } } };
 }
 
-/** Take a pre-battle supplement off a partner, back into the bag. */
+/** Take a whole pre-battle supplement off a partner, back into the bag. */
 export function disarmSupply(state, instanceId, id) {
   const current = normalizeTamerSupplies(state), carried = current.armed[instanceId] ?? [];
-  if (!carried.some((item) => item.id === id)) return { ok: false, reason: "SUPPLY_NONE_OWNED" };
+  const item = carried.find((entry) => entry.id === id);
+  if (!item) return { ok: false, reason: "SUPPLY_NONE_OWNED" };
+  if (item.battlesLeft !== item.battles) return { ok: false, reason: "SUPPLY_PARTLY_USED" };
   const returned = addSupply(current, id, 1);
   if (returned.added !== 1) return { ok: false, reason: "SUPPLY_STACK_FULL" };
   const armed = { ...returned.state.armed }, left = carried.filter((item) => item.id !== id);
@@ -115,17 +144,26 @@ export function supplyBattleProfile(profile, ids = []) {
   return next;
 }
 
-/** Sync EXP the carried supplements add, in percent. */
-export function supplySyncExpPercent(ids = []) {
-  return ids.reduce((sum, id) => sum + (byId.get(id)?.effect?.syncExpPercent ?? 0), 0);
+/** The number a supplement's line prints: its affection, growth or Sync EXP share with 藥膳 in it (0 for the rest). */
+export function supplyValue(id, bonusPercent = 0) {
+  const effect = byId.get(id)?.effect ?? {};
+  return supplyBoosted(effect.affection ?? effect.growthPercent ?? effect.syncExpPercent ?? 0, bonusPercent);
 }
 
-/** After a settled battle: what each of these partners carried is used up. */
+/** Sync EXP the carried supplements add, in percent (`bonusPercent` more with the talent 藥膳). */
+export function supplySyncExpPercent(ids = [], bonusPercent = 0) {
+  return ids.reduce((sum, id) => sum + supplyBoosted(byId.get(id)?.effect?.syncExpPercent ?? 0, bonusPercent), 0);
+}
+
+/** After a settled battle: what each of these partners carried has one battle less, and is used up at none. */
 export function settleArmedSupplies(state, instanceIds = []) {
   const current = normalizeTamerSupplies(state);
   if (!instanceIds.some((id) => current.armed[id])) return current;
   const armed = { ...current.armed };
-  for (const id of instanceIds) delete armed[id];
+  for (const id of new Set(instanceIds)) {
+    const left = (armed[id] ?? []).filter((item) => item.battlesLeft > 1).map((item) => ({ ...item, battlesLeft: item.battlesLeft - 1 }));
+    if (left.length) armed[id] = left; else delete armed[id];
+  }
   return { ...current, armed };
 }
 
@@ -139,15 +177,27 @@ export function addSupply(state, id, quantity = 1) {
   return { state: { ...current, owned: { ...current.owned, [id]: after } }, added: after - before };
 }
 
-/** What buying `quantity` of `id` costs in Bits and why it may be refused. */
-export function supplyPurchase(state, id, quantity, bits) {
+/** Bits the day's first unit of `id` costs less (熟客): 0 once `day`'s discount is used or without the talent. */
+export function supplyDiscount(state, id, { day = null, discountPercent = 0 } = {}) {
+  const entry = byId.get(id), percent = percentOf(discountPercent);
+  if (!entry || !percent || typeof day !== "string" || !DAY.test(day)) return 0;
+  if (normalizeTamerSupplies(state).discountDay === day) return 0;
+  return Math.floor(entry.bits * percent / 100);
+}
+
+/**
+ * What buying `quantity` of `id` costs in Bits and why it may be refused. With the talent 熟客 the first unit
+ * bought on `day` costs `discountPercent` less; the day is then marked used.
+ */
+export function supplyPurchase(state, id, quantity, bits, { day = null, discountPercent = 0 } = {}) {
   const entry = byId.get(id);
   if (!entry) return { ok: false, reason: "SUPPLY_UNKNOWN" };
   if (!Number.isSafeInteger(quantity) || quantity < 1) return { ok: false, reason: "SUPPLY_INVALID_QUANTITY" };
   if (supplyOwned(state, id) + quantity > SUPPLY_STACK_MAX) return { ok: false, reason: "SUPPLY_STACK_FULL" };
-  const cost = entry.bits * quantity;
+  const discount = supplyDiscount(state, id, { day, discountPercent }), cost = entry.bits * quantity - discount;
   if (!(bits >= cost)) return { ok: false, reason: "SUPPLY_NO_BITS", cost };
-  return { ok: true, cost, state: addSupply(state, id, quantity).state };
+  const bought = addSupply(state, id, quantity).state;
+  return { ok: true, cost, discount, state: discount > 0 ? { ...bought, discountDay: day } : bought };
 }
 
 /** One `id` leaves the bag; null when none is owned. */
@@ -163,7 +213,7 @@ export function spendSupply(state, id) {
  * A recovery supplement on one partner's native profile. Returns the new profile, or the reason nothing would
  * change (a full partner does not drink; a partner at 100 affection does not take the snack).
  */
-export function applyRecoverySupply(profile, id) {
+export function applyRecoverySupply(profile, id, { bonusPercent = 0 } = {}) {
   const entry = byId.get(id);
   if (!entry || entry.kind !== "RECOVERY" || !profile?.fields) return { ok: false, reason: "SUPPLY_NOT_RECOVERY" };
   const next = structuredClone(profile), f = next.fields;
@@ -172,7 +222,7 @@ export function applyRecoverySupply(profile, id) {
     f["050"] = f["058"]; f["054"] = f["05c"];
   } else if (entry.effect.affection) {
     if ((f["020"] | 0) >= SUPPLY_AFFECTION_MAX) return { ok: false, reason: "SUPPLY_NO_EFFECT" };
-    f["020"] = Math.min(SUPPLY_AFFECTION_MAX, (f["020"] | 0) + entry.effect.affection);
+    f["020"] = Math.min(SUPPLY_AFFECTION_MAX, (f["020"] | 0) + supplyBoosted(entry.effect.affection, bonusPercent)); // 藥膳
   }
   return { ok: true, profile: next };
 }
@@ -201,7 +251,7 @@ export function startRanchSupply(state, id, nowMs, { morningMs = null } = {}) {
 }
 
 /** Training growth the running ranch supplements add, in percent (0 when none runs). */
-export function ranchSupplyGrowthPercent(state, nowMs) {
-  return ranchSupplyActive(state, "supply:growth", nowMs) ? getSupplement("supply:growth").effect.growthPercent : 0;
+export function ranchSupplyGrowthPercent(state, nowMs, bonusPercent = 0) {
+  return ranchSupplyActive(state, "supply:growth", nowMs) ? supplyBoosted(getSupplement("supply:growth").effect.growthPercent, bonusPercent) : 0;
 }
 export function ranchSupplyNightCalm(state, nowMs) { return ranchSupplyActive(state, "supply:sleep", nowMs); }

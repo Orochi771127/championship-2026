@@ -210,16 +210,20 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
     for (const item of supplies?.items ?? []) {
       const line = el(doc, 'li', 'cm-backpack__item cm-backpack__tonic');
       line.dataset.supply = item.id;
+      // `value` is the supplement's own number with the talent 藥膳 in it, so the line says what it really gives.
       line.append(el(doc, 'span', 'cm-backpack__name', uiText(item.id)),
-        el(doc, 'span', 'cm-backpack__effect', uiText(`${item.id}:effect`)),
+        el(doc, 'span', 'cm-backpack__effect', uiText(`${item.id}:effect`, { value: formatNumber(item.value ?? 0) })),
         el(doc, 'span', 'cm-backpack__count', `×${formatNumber(item.owned)}`));
       if (item.activeUntil) {
         const left = Math.max(1, Math.ceil((item.activeUntil - supplies.now) / 60000));
         line.append(el(doc, 'span', 'cm-backpack__active', uiText('SUPPLY_ACTIVE_MINUTES', { minutes: formatNumber(left) })));
       }
-      const buy = el(doc, 'button', 'cm-backpack__use', `${uiText('SUPPLY_BUY')} ${formatNumber(item.bits)}`);
-      buy.type = 'button'; buy.dataset.buySupply = item.id;
-      buy.disabled = (supplies?.bits ?? 0) < item.bits || item.owned >= 99;
+      // 熟客: the day's first unit is cheaper; the key shows the price this buy really costs.
+      const price = item.price ?? item.bits;
+      const buy = el(doc, 'button', 'cm-backpack__use', `${uiText('SUPPLY_BUY')} ${formatNumber(price)}`);
+      buy.type = 'button'; buy.dataset.buySupply = item.id; buy.dataset.price = String(price);
+      if (price < item.bits) buy.dataset.discount = String(item.bits - price);
+      buy.disabled = (supplies?.bits ?? 0) < price || item.owned >= 99;
       buy.addEventListener('click', () => say(intents.buySupply?.(item.id, 1), `${uiText(item.id)} +1`));
       const use = el(doc, 'button', 'cm-backpack__use', uiText('SUPPLY_USE'));
       use.type = 'button'; use.dataset.useSupply = item.id;
@@ -230,11 +234,16 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
       });
       line.append(buy, use);
       // A pre-battle supplement says who carries it, with a key to take it back.
-      for (const instanceId of item.carriedBy ?? []) {
+      // 長效: one that lasts more than a battle says how many are left; once it has been through one it stays on.
+      for (const { instanceId, battlesLeft = 1, whole = true } of item.carried ?? (item.carriedBy ?? []).map((id) => ({ instanceId: id }))) {
         const partner = (gacha?.partners ?? []).find((entry) => entry.instanceId === instanceId);
-        const carried = el(doc, 'span', 'cm-backpack__carried', uiText('SUPPLY_CARRIED', { name: partner ? partnerLabel(partner) : '' }));
+        const name = partner ? partnerLabel(partner) : '';
+        const carried = el(doc, 'span', 'cm-backpack__carried', battlesLeft > 1 || !whole
+          ? uiText('SUPPLY_CARRIED_BATTLES', { name, n: formatNumber(battlesLeft) }) : uiText('SUPPLY_CARRIED', { name }));
+        carried.dataset.battlesLeft = String(battlesLeft);
         const off = el(doc, 'button', 'cm-backpack__use', uiText('SUPPLY_UNEQUIP'));
         off.type = 'button'; off.dataset.unequipSupply = item.id; off.dataset.partner = instanceId;
+        off.disabled = !whole;
         off.addEventListener('click', () => say(intents.unequipSupply?.(item.id, instanceId), `${uiText(item.id)} ${uiText('SUPPLY_UNEQUIP')}`));
         line.append(carried, off);
       }
