@@ -2,7 +2,7 @@
 // The existing creature binding and the canonical save remain authoritative.
 import { DATA_ARENA_PARTNERS, DATA_ARENA_MOVES, DATA_ARENA_KITS } from './dataArenaConfig.js';
 import { RELAY_ROSTER, relayPartner } from './dataArenaRelayRoster.js';
-import { RELAY_POOL_MOVE_ELEMENT, relayOwnMove, relayOwnMoveInfo, relaySpeciesKit } from './dataArenaRelayKits.js';
+import { RELAY_POOL_MOVE_ELEMENT, relayOwnMove, relayOwnMoveInfo, relayOwnUltimateStandIn, relaySpeciesKit } from './dataArenaRelayKits.js';
 import { RELAY_PALETTE_ELEMENT } from './dataArenaRelayElements.js';
 
 export const DATA_ARENA_RELAY = Object.freeze({
@@ -183,7 +183,10 @@ export function relayTeamIds(firstId, reserveId = null, thirdId = null) {
   return team.slice(0, DATA_ARENA_RELAY.teamSize);
 }
 export function relayMove(id, ultimate = false) {
-  const base = basics[id] ?? extraMoves[id] ?? DATA_ARENA_MOVES[id] ?? relayOwnMove(id);
+  // A partner's own ultimate fights with its pool ultimate's numbers (the move stays its own).
+  const standIn = relayOwnUltimateStandIn(id);
+  const base = standIn ? { ...(extraMoves[standIn] ?? DATA_ARENA_MOVES[standIn]), mechanic: `own ultimate (${standIn} numbers)`, ownRecord: relayOwnMoveInfo(id).record }
+    : basics[id] ?? extraMoves[id] ?? DATA_ARENA_MOVES[id] ?? relayOwnMove(id);
   if (!base) return null;
   return { ...base, ...(id==='iceCage'?{freezeWater:true}:{}), windup: Math.max(base.windup ?? 0, 0.14),
     recovery: base.recovery ?? (base.type === 'LUNGE' ? 0.32 : base.type === 'NOVA' ? 0.48 : 0.28),

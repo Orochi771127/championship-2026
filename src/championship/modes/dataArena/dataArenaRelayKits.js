@@ -82,11 +82,20 @@ function withPalette(rule, palette) {
 }
 
 const ownBySpecies = new Map(kitData.species.map(([speciesIndex, basicRecord, own]) => [speciesIndex,
-  Object.freeze({ basicRecord, own: Object.freeze(own.map(([record, style, palette, tier]) => Object.freeze({ id: `own-${record}`, record, style, palette, tier }))) })]));
+  Object.freeze({ basicRecord, own: Object.freeze(own.map(([record, style, palette, tier, ultimate]) => Object.freeze({ id: `own-${record}`, record, style, palette, tier, ultimate: ultimate === 1 }))) })]));
 const ownById = new Map([...ownBySpecies.values()].flatMap(entry => entry.own.map(move => [move.id, move])));
 
 export function relayOwnMoveInfo(id) { return ownById.get(id) ?? null; }
 export function relayBasicRecord(speciesIndex) { return ownBySpecies.get(speciesIndex)?.basicRecord ?? null; }
+
+// A partner's own ultimate in the arena's ultimate slot (UNIFIED_MOVES_20261118,
+// Owner 2026-11-18: one move list for the auto battle and the Data Arena). The
+// move is the partner's own -- its name, look and icon -- and it fights with the
+// numbers of the ultimate its element pool used to lend, so balance stays as it
+// was. Set while the roster kits are built (relaySpeciesKit).
+const ownUltimateStandIn = new Map();
+/** The pool ultimate whose numbers a partner's own ultimate fights with, or null. */
+export function relayOwnUltimateStandIn(id) { return ownUltimateStandIn.get(id) ?? null; }
 
 /** Rule for a partner's own move, or null when `id` is not one. */
 export function relayOwnMove(id) {
@@ -97,14 +106,18 @@ export function relayOwnMove(id) {
 
 /**
  * Five selectable moves for a roster partner: its own moves first, then pool
- * moves of its element, preferring mechanics the kit does not have yet.
+ * moves of its element, preferring mechanics the kit does not have yet. The
+ * ultimate is the partner's own (its pool's ultimate when it has none).
  * `typeOf` resolves a pool move's mechanic without importing the move tables.
  */
 export function relaySpeciesKit(speciesIndex, element, typeOf) {
   const pool = RELAY_ELEMENT_KITS[element] ?? RELAY_ELEMENT_KITS.physical;
-  const options = (ownBySpecies.get(speciesIndex)?.own ?? []).slice(0, 3).map(move => move.id);
+  const own = ownBySpecies.get(speciesIndex)?.own ?? [];
+  const ultimate = own.find(move => move.ultimate) ?? null;
+  if (ultimate && !ownUltimateStandIn.has(ultimate.id)) ownUltimateStandIn.set(ultimate.id, pool.ultimate);
+  const options = own.filter(move => move !== ultimate).slice(0, 3).map(move => move.id);
   const types = new Set(options.map(id => RELAY_STYLE_RULES[ownById.get(id).style].type));
   const fresh = pool.moves.filter(id => !types.has(typeOf(id)));
   for (const id of [...fresh, ...pool.moves]) if (options.length < 5 && !options.includes(id)) options.push(id);
-  return Object.freeze({ moves: Object.freeze(options), ultimate: pool.ultimate });
+  return Object.freeze({ moves: Object.freeze(options), ultimate: ultimate?.id ?? pool.ultimate });
 }
