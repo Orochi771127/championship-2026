@@ -93,7 +93,9 @@ fs.mkdirSync(SCREENSHOTS, { recursive: true });
   page.on('response',r=>{if(r.ok()&&REVIEW_CONFIG&&r.url().includes(`/internal-character-review/${REVIEW_CONFIG.folder}/`))
     reviewAssets.add(new URL(r.url()).pathname);});
   page.on("pageerror", (error) => problems.push(`pageerror: ${error.message}`));
-  page.on("console", (message) => { if (message.type() === "error") problems.push(`console: ${message.text()}`); });
+  // A console 404 names no URL; record the response so a missing asset is identified, not just counted.
+  page.on("response", (response) => { if (response.status() === 404) problems.push(`404: ${response.url()}`); });
+  page.on("console", (message) => { if (message.type() === "error" && !/status of 404/.test(message.text())) problems.push(`console: ${message.text()}`); });
 
   try {
     // Developer Mode publishes the live actor positions this gate has to aim at:
@@ -121,7 +123,11 @@ fs.mkdirSync(SCREENSHOTS, { recursive: true });
     await page.waitForSelector("[data-screen='HUNT_LOADOUT']", { timeout: 15000 });
     // The rope tool is disabled until one is equipped, and the rope is what
     // binds a target: an empty loadout can reach the field but cannot capture.
-    await page.locator('[data-equipment-class="ROPE"] [data-item-id]').first().click();
+    // The loadout now arrives with the best owned rope equipped, and tapping the equipped item clears it;
+    // equip one only when none is.
+    if (await page.locator('[data-equipment-class="ROPE"] [data-item-id][aria-pressed="true"]').count() === 0)
+      await page.locator('[data-equipment-class="ROPE"] [data-item-id]').first().click();
+    assert.equal(await page.locator('[data-equipment-class="ROPE"] [data-item-id][aria-pressed="true"]').count(), 1, 'a rope is equipped');
     await page.locator(".cm-vs2-footer .cm-vs2-action--primary").click();
     await page.waitForSelector("[data-screen='HUNT_FIELD']", { timeout: 20000 });
     const canvas = page.locator(".cm-vs2-field__canvas canvas");

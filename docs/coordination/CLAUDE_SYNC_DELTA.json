@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "owner": "Claude Code",
-  "syncTarget": "VS2-R2 Original Hunt Loadout runtime reconstruction",
-  "date": "2026-08-28",
-  "note": "Claude-owned delta. Codex remains COORDINATION_MERGE_WRITER and merges this by stable record ID. Claude wrote no shared coordination file in this round.",
+  "syncTarget": "Standing goal 2026-11-17 (non-animation completion)",
+  "date": "2026-11-17",
+  "note": "Claude-owned delta. Codex remains COORDINATION_MERGE_WRITER; Claude wrote no shared coordination file in this round. Older keys below are the 2026-08-28 round, kept as history.",
   "checkpoint": {
     "repository": "CHAMPIONSHIP_2026_PRODUCT_SSOT (this repository)",
     "branch": "main",
@@ -550,5 +550,82 @@
     "blocks": "every Gate Select behaviour question: rotation, camera, input, hit-test, selection animation, day/night switch rule, earth consumer",
     "unblockedBy": "OVL12 overlay binary (file id 12, 39,200 bytes, RAM 0x0210b300), the YDIJ ROM image, or a pre-extracted OVL12 disassembly excerpt around 0x0210C6FC",
     "constraint": "Whatever arrives stays read-only and outside this repository under the existing IP policy."
+  },
+  "round20261117": {
+    "closedThisRound": [
+      {
+        "id": "CI_THREE_BROWSER_GATES",
+        "state": "VERIFIED_MERGED",
+        "evidence": "PR #266 9c44d1ba; scene music = product bug in the back-button guard (fixed), external character = stale test steps, Dex portrait = test units under UI zoom"
+      },
+      {
+        "id": "SKILL_IMPRINT_SCROLL",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #264 0667260d, live bundle checked"
+      },
+      {
+        "id": "MEDICINE_RECORDS_FIX",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #264"
+      },
+      {
+        "id": "FUSION_P1_GRADES",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #265 6e5301dc, live bundle checked"
+      }
+    ],
+    "openForClaude": [
+      {
+        "id": "FUSION_P2_FUSION",
+        "state": "IMPLEMENTED_PR_OPEN"
+      },
+      {
+        "id": "FUSION_P3_HERDS",
+        "state": "IMPLEMENTED_LOCAL"
+      },
+      {
+        "id": "TALENTS_T1",
+        "state": "NOT_STARTED"
+      },
+      {
+        "id": "SUPPLEMENTS_S1",
+        "state": "NOT_STARTED"
+      },
+      {
+        "id": "SUPPLEMENTS_S2",
+        "state": "NOT_STARTED"
+      },
+      {
+        "id": "TALENTS_T2",
+        "state": "NOT_STARTED"
+      },
+      {
+        "id": "TALENTS_T3",
+        "state": "NOT_STARTED"
+      },
+      {
+        "id": "TACTIC_PRACTICE_LOOP_P1_P4",
+        "state": "IMPLEMENTED_LOCAL_OTHER_SESSION"
+      },
+      {
+        "id": "PR_194_CRASH_CONSISTENCY",
+        "state": "NEEDS_TRIAGE"
+      },
+      {
+        "id": "NORMAL_ENTRY_PLAYTHROUGH",
+        "state": "IN_PROGRESS"
+      }
+    ],
+    "forCodex": [
+      {
+        "id": "CODEX_ANIMATION_GAPS",
+        "detail": "character action animation intake (six held originals and two partial roles per the 2026-11-12 gap brief); Claude does not touch these"
+      }
+    ],
+    "ownedFilesUpdated": [
+      "CLAUDE_REBUILD_STATUS.json",
+      "CLAUDE_SYNC_DELTA.json"
+    ],
+    "sharedFilesWritten": []
   }
 }

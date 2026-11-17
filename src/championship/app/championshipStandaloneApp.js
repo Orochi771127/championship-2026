@@ -227,6 +227,8 @@ export function createChampionshipStandaloneApp({
   huntInstinctOverride = null,
   // HUNT_SPAWN_SPREAD_20261110: false keeps the native entry positions (a test that scripts one partner's path).
   huntSpawnSpread = true,
+  // HUNT_HERDS_20261117: false keeps the native head count (the tutorial hunt, capture replays and parity tests never herd).
+  huntHerds = true,
   // Null means the built-in one, fetched when a hunt starts. Its subtree is
   // the field controls, the wild actors and their tables, which nothing before
   // the field reads. A caller that supplies its own factory never fetches it.
@@ -5543,6 +5545,7 @@ export function createChampionshipStandaloneApp({
         // touches it, so it is fetched here; main.js warms it once a screen is
         // up, which is several taps before anyone can reach this.
         const { prepareNativeHuntEntry, appendNativeRareLureActor } = await import("../hunt/capture/nativeHuntEntryTransaction.js");
+        const { appendProductHuntHerds } = await import("../hunt/capture/productHuntHerds.js");
         const expansion = huntCaptureReplay === null && typeof huntExpansionLoader === 'function' ? await huntExpansionLoader(gate) : null;
         // Cyber Gachapon cartridges armed for this hunt (OWNER_APPROVED_ADAPTATION 2026-10-29).
         const armed = takeArmedHuntChips(gachaState());
@@ -5560,13 +5563,18 @@ export function createChampionshipStandaloneApp({
         // roll (the native RNG is never read); a veteran elite moves faster, an ancestral one stands larger.
         // HUNT_INSTINCT_RARITY_20261110: rolled for the whole hunt at once, so the per-hunt caps and the
         // premium radars (boosts.eliteCall / boosts.ancestorCall) see every partner.
-        const instincts = luredEntry ? (huntInstinctOverride ? luredEntry.encounter.actors.map((_, i) => huntInstinctOverride(i))
-          : settleWildInstincts(luredEntry.encounter.actors.map((actor, i) => {
+        // HUNT_HERDS_20261117 (fusion plan P3): more partners of the species already out, built after every native
+        // and lured draw from the same continuing RNG, so the native actors are byte-identical with it on or off.
+        // The tutorial hunt and capture replays keep the native head count.
+        const herdEntry = luredEntry && huntHerds && huntCaptureReplay === null && !tutorialBaseline
+          ? appendProductHuntHerds(luredEntry) : luredEntry;
+        const instincts = herdEntry ? (huntInstinctOverride ? herdEntry.encounter.actors.map((_, i) => huntInstinctOverride(i))
+          : settleWildInstincts(herdEntry.encounter.actors.map((actor, i) => {
             // Keyed by the individual's own native values, so a retried entry rolls the same instincts.
             const f = actor.individual.fields;
             return instinctNoise(0x4e, i, actor.speciesIndex, f['058'], f['060'], f['064'], f['068'], f['06c'], f['018']);
           }), boosts)) : [];
-        const rolled = luredEntry ? { ...luredEntry, encounter: { ...luredEntry.encounter, actors: luredEntry.encounter.actors.map((actor, i) => {
+        const rolled = herdEntry ? { ...herdEntry, encounter: { ...herdEntry.encounter, actors: herdEntry.encounter.actors.map((actor, i) => {
           const instinct = instincts[i], rule = wildInstinct(instinct);
           return { ...actor, instinct, ...(rule.speedMultiplier ? { ai: { ...actor.ai, speedQ12: Math.round(actor.ai.speedQ12 * rule.speedMultiplier) } } : {}) };
         }) } } : null;
