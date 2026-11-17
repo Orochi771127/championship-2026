@@ -23,7 +23,7 @@ const mime={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript'
 fs.mkdirSync(output,{recursive:true});
 const report={schemaVersion:1,status:'RUNNING',controlledPublicOrigin:true,liveCharacterHost:assetBase,
  liveCharacterTransport:'LIVE_HTTPS_PASSTHROUGH_EXACT_RESPONSE_BYTES',
- physicalDeviceAccepted:false,viewports:[],errors:[],responseHashes:[],missing:[],unexpected:[]};
+ physicalDeviceAccepted:false,viewports:[],errors:[],responseHashes:[],liveRetries:[],missing:[],unexpected:[]};
 const write=()=>fs.writeFileSync(path.join(output,'browser.json'),JSON.stringify(report,null,2)+'\n');
 const screen=(page,id)=>page.waitForFunction(id=>document.querySelector('#cm-root')?.dataset.activeScreen===id,id,{timeout:120000});
 const menu=async(page,id)=>{await page.locator('button[data-menu-id="SYSTEM"]').click();await page.locator(`[data-entry-id="${id}"]`).click();};
@@ -47,7 +47,15 @@ async function isolated(browser,viewport,label,{seed=true}={}){
      assert.equal(route.request().method(),'GET','Character delivery is read-only');
      // APIResponse owns its body independently of Chromium's decoded-image
      // cache. Nothing is read from local character assets or substituted here.
-     response=await route.fetch({maxRedirects:0,maxRetries:0,timeout:60000});
+     // The asset host (GitHub Pages) now and then answers 503 to one of ~200 requests. That is the host being busy,
+     // not a wrong asset: ask again, at most three times in all. What is accepted is unchanged -- a 200 whose bytes,
+     // size, hash and MIME are exactly the selected release's -- and every retry is written into the report.
+     for(let attempt=1;;attempt++){
+      response=await route.fetch({maxRedirects:0,maxRetries:0,timeout:60000});
+      if(response.status()<500||attempt>=3)break;
+      report.liveRetries.push({path:expected.path,status:response.status(),attempt});
+      await new Promise(resolve=>setTimeout(resolve,1500*attempt));
+     }
      const bytes=await response.body();assert.equal(response.url(),url);assert.equal(response.status(),200);
      assert.equal(bytes.length,expected.bytes);
      const digest=sha(bytes);assert.equal(digest,expected.sha256,'Live character response differs from the selected release: '+expected.path);
