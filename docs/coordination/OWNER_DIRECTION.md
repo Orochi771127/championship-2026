@@ -1,5 +1,38 @@
 # Championship Owner Direction
 
+<!-- record-id: SKILL_IMPRINT_SCROLL_20261117 -->
+## 2026-11-17 — Skill imprint scrolls in the gachapon; engraved skills also play online
+
+The Owner asked for 「技能拓印卷」: copy partner A's skill onto a scroll and give it to partner B, placed in the gachapon, with the art requested from Codex through the CLI. The Owner directed 「規劃好後，如果你自我審查沒有問題，就可以開始實作」. After the first build the Owner added 「拓印技能，未來上線也要有效啊，線上對戰，不然人家要幹嘛轉蛋轉那個」.
+
+`OWNER_APPROVED_ADAPTATION`, implemented locally:
+
+- Only the thirty shared special skills (move records 1–30) are copied. They live in the two special-skill words `12c` and `130`, which the battle appends to the species' moves and files into the AI buckets (VERIFIED_BINARY). Species moves never move. Imprinting never changes partner A.
+- The standard scroll (SR) holds 13 basic skills; the holo scroll (SSR) holds all thirty. Premium machine: 12 % of the SR and SSR main band after automation and the jackpot (about 2.57 % and 0.92 % a pull). Bits machine: one more top-tier slot (1 %). The published rate lines changed with it.
+- Online: link and room battles already carry all 108 individual words. Password codes, which online defence teams also use, carry an engraved slot only. The gachapon state records which slot of which partner a scroll engraved (`engraved`). Only a slot still holding that skill travels, as `skills` in a `CM26-PASSWORD-2.` member. Every other slot is rebuilt from species and personality as in the original, and teams without an engraved slot keep the original short code byte for byte.
+- Art: four `ORIGINAL_GENERATED` icons in `assets/production/items/skill-scrolls-r1/` (Codex `gpt-6.1-sol`, refs = the project's own item icons). `humanApproved: false`.
+
+Plan: `docs/planning/SKILL_IMPRINT_SCROLL_PLAN_2026-11-17_ZH_TW.md`. Commit, push and publication are not authorized by this entry.
+
+<!-- record-id: LINE_FUSION_TAMER_TALENTS_DESIGN_20261117 -->
+## 2026-11-17 — Design decided: same-line fusion, individual grades, Hunt herds, tamer talent tree and partner supplements
+
+The Owner asked whether a same-line fusion could raise a partner's experience and level, with more wild partners in the Hunt to encourage catching for fusion and per-catch stats that differ within a range (「你覺得我能不能在遊戲中加入同一支融合然後可以提升經驗跟等級的機制」), and chose 「先寫規格」. The Owner then asked for a tamer talent tree: how talent points are earned, talents that form builds, and supplements kept in the bag for partners. After reading both plans the Owner directed 「照建議定案」. Two talent questions had no written recommendation (talents in title matches, supplements in the gachapon); they were decided the conservative way below.
+
+Decided as `OWNER_APPROVED_ADAPTATION` design. The ROM tables, the native individual roll, save words and the battle core stay unchanged:
+
+- **Fusion** feeds Sync EXP only (`grantSyncExp`). Fodder of the same species counts ×1.0; a lower stage of the base's own line counts ×0.6; side branches are refused. Each fodder pays 25 % of the base's current level requirement × its grade multiplier (S 1.6, A 1.25, B 1.0, C 0.8). Fusion never writes the native release history.
+- **Grades** S/A/B/C (5 / 20 / 35 / 40 %) come from product noise, never the native RNG, and are revealed at Hunt Result. The capture head start is at most 40 % of each stat's native growth room and stops at the native upper bound. Partners without a grade show 「—」.
+- **Hunt herds** add +40 % (2–6) copies of species already present, at most 20 actors and never a new species. Tutorial, capture replay and parity paths stay native.
+- **Stat inheritance** (fusion plan P4) is unlocked only by the Breeder keystone 「傳承」.
+- **Tamer talents**: points = (tamer level − 1) + 2 × rank + floor(registered species / 25), about 76 in all. Four lines (Hunter, Breeder, Commander, Trader) cost 124 points. The first respec is free; later ones cost 500 crystals.
+- **Battle talents** apply in auto battles and the Data Arena. Title matches and championships count only the first 6 + 3 × rank Commander points. Password, link and online battles ignore talents and supplements.
+- **Supplements** come in recovery, pre-battle and ranch kinds. Pre-battle supplements modify the battle copy the way Sync Level does. Supplements cannot be used during battle and are not added to gachapon prize pools. Talents never change gacha rates, diamond prices or diamond and ticket rewards.
+
+Plans: `docs/planning/LINE_FUSION_AND_HUNT_HERDS_PLAN_2026-11-17_ZH_TW.md` and `docs/planning/TAMER_TALENT_TREE_AND_SUPPLEMENTS_PLAN_2026-11-17_ZH_TW.md`.
+
+Scope: design decisions only. This does not authorize implementation, commit, push or publication. Each batch (fusion P1–P3, talents T1–T3, supplements S1–S2) needs its own go-ahead.
+
 <!-- record-id: IPHONE_WEB_APP_BATTLE_CRASH_AND_AUTORESUME_20261114 -->
 ## 2026-11-14 — Whole-game iPhone Web App audit: Battle / Data Arena memory leaks, pooled 3D VFX texture deduplication, and silent reload auto-resume
 

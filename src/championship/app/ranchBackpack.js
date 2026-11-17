@@ -8,6 +8,7 @@
 // its picker inline (a partner, a cage or a personality). Every use goes through
 // the same app intents as the gachapon centre, which save before they answer.
 import { showChoiceDialog } from './uiDialog.js';
+import { RAISING_TOOL_SHOP_RECORDS } from '../shop/shopCatalog.js';
 import { uiText } from '../text/uiText.js';
 import { formatNumber } from '../text/locale.js';
 import { shopItemName, cageName, personalityName } from '../text/zhHant.js';
@@ -16,7 +17,10 @@ import { GACHA_PERSONALITY_CHOICES, gachaChipEffectLines } from '../gacha/cyberG
 import { automationEffectLines, coreRunSeconds, formatRunClock } from '../gacha/ranchAutomation.js';
 import { gachaIcon } from './cyberGachaIcons.js';
 import { huntFamilyBadge, huntFamilyName } from './huntToolFamilyCards.js';
-import { awakeningEnergySummary, enhanceSummary, gachaItemArt, gachaMetalNote, gachaRefusalText, partnerLabel, partnerSpeciesLine } from './cyberGachaView.js';
+import { awakeningEnergySummary, enhanceSummary, gachaItemArt, gachaMetalNote, gachaRefusalText, partnerLabel, partnerSpeciesLine,
+  skillScrollName, skillScrollNote } from './cyberGachaView.js';
+import { SKILL_SCROLL_SLOTS, scrollCanHold } from '../gacha/skillScrolls.js';
+import { specialSkillName } from '../text/zhHant.js';
 
 export const BACKPACK_SECTIONS = Object.freeze([
   Object.freeze({ category: 'TRAINING_GOODS', title: '養成用品' }),
@@ -31,8 +35,10 @@ export const BACKPACK_TABS = Object.freeze([
   Object.freeze({ id: 'automation', title: '自動模組' })
 ]);
 
-// Shop records behind the four Training tools (main.js getFoodStock): using one picks the tool.
-export const BACKPACK_SUPPLY_TOOLS = Object.freeze({ 0: 'feed', 1: 'protein', 2: 'medicine', 3: 'woundMedicine' });
+// Shop records behind the four Training tools (RAISING_TOOL_SHOP_RECORDS): using one picks the tool.
+// Record 2 is 傷藥 (woundMedicine), record 3 is 藥品 (medicine).
+export const BACKPACK_SUPPLY_TOOLS = Object.freeze(Object.fromEntries(
+  Object.entries(RAISING_TOOL_SHOP_RECORDS).map(([tool, record]) => [record, tool])));
 
 /**
  * Owned, non-cage items grouped as the shop groups them. A hunt tool family
@@ -65,7 +71,9 @@ export function backpackTabs(shopFrame, gachaFrame) {
     category: section.category, tool: BACKPACK_SUPPLY_TOOLS[item.shopRecordIndex] ?? null,
     ...(item.tierBadge ? { tierBadge: item.tierBadge } : {})
   })));
-  const chips = (gachaFrame?.chips ?? []).filter((chip) => chip.owned > 0 || chip.armed).map((chip) => ({ ...chip, chipKind: chip.kind, kind: 'CHIP' }));
+  // Skill imprint scrolls (SKILL_IMPRINT_SCROLL 2026-11-17) sit with the chips: blank and imprinted, each with its count.
+  const scrolls = (gachaFrame?.scrolls ?? []).filter((scroll) => scroll.owned > 0).map((scroll) => ({ ...scroll, kind: 'SCROLL' }));
+  const chips = [...scrolls, ...(gachaFrame?.chips ?? []).filter((chip) => chip.owned > 0 || chip.armed).map((chip) => ({ ...chip, chipKind: chip.kind, kind: 'CHIP' }))];
   const metals = (gachaFrame?.metals ?? []).filter((metal) => metal.owned > 0).map((metal) => ({ ...metal, kind: 'METAL' }));
   const automation = (gachaFrame?.automation ?? []).filter((item) => item.owned > 0 || item.placed > 0)
     .map((item) => ({ ...item, automationKind: item.kind, kind: 'AUTOMATION' }));
@@ -114,6 +122,7 @@ function coreDutyLine(item) {
 }
 
 function effectLine(item) {
+  if (item.kind === 'SCROLL') return skillScrollNote(item);
   if (item.kind === 'CHIP') { const line = gachaChipEffectLines({ ...item, kind: item.chipKind })[0]; return line ? uiText(line.text, line.params) : ''; }
   if (item.kind === 'METAL') return gachaMetalNote(item);
   if (item.kind === 'AUTOMATION') { const line = automationEffectLines(item)[0]; return line ? uiText(line.text, line.params) : ''; }
@@ -130,6 +139,8 @@ export function backpackReceiptText(result) {
   if (result.kind === 'DEPLOY') return uiText('已部署：機器運轉 1 小時，到牧場看看它！');
   if (result.kind === 'EXTEND') return uiText('已延長 +1 小時');
   if (result.kind === 'CATALYST') return uiText('催化完成：回到牧場看拍檔進化！');
+  if (result.kind === 'IMPRINT') return uiText('已拓印 {skill}', { skill: specialSkillName(result.skill) });
+  if (result.kind === 'ENGRAVE') return uiText('學會 {skill}', { skill: specialSkillName(result.skill) });
   return enhanceSummary(result) || awakeningEnergySummary(result) || uiText('已使用');
 }
 
@@ -146,7 +157,7 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
   tab = 'supplies', partnerId = null, onLeave = () => {} } = {}) {
   const body = el(doc, 'div', 'cm-backpack');
   body.dataset.tab = tab;
-  const state = { tab, open: null, partner: partnerId, personality: null, receipt: null };
+  const state = { tab, open: null, partner: partnerId, personality: null, slot: null, receipt: null };
 
   function paint() {
     const shopFrame = getShopFrame?.() ?? null, gacha = getGachaFrame?.() ?? null;
@@ -192,7 +203,7 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
     node.dataset.kind = item.kind;
     if (item.shopRecordIndex !== undefined) node.dataset.shopRecord = String(item.shopRecordIndex);
     const copy = el(doc, 'span', 'cm-backpack__copy');
-    const title = el(doc, 'span', 'cm-backpack__name', uiText(item.name));
+    const title = el(doc, 'span', 'cm-backpack__name', item.kind === 'SCROLL' ? skillScrollName(item) : uiText(item.name));
     if (item.rarity) title.prepend(el(doc, 'span', 'cm-backpack__rarity', item.rarity));
     if (item.tierBadge) title.prepend(el(doc, 'span', 'cm-backpack__tier', item.tierBadge));
     copy.append(title, el(doc, 'span', 'cm-backpack__effect', effectLine(item)));
@@ -238,7 +249,7 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
 
   function finish(result) {
     state.receipt = { ok: Boolean(result?.ok), text: backpackReceiptText(result) };
-    if (result?.ok) { state.open = null; state.personality = null; }
+    if (result?.ok) { state.open = null; state.personality = null; state.slot = null; }
     paint();
     body.querySelector('.cm-backpack__receipt')?.dispatchEvent(new CustomEvent('cm-fx', { bubbles: true, detail: { kind: result?.ok ? 'purchase' : 'denied' } }));
   }
@@ -269,7 +280,7 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
       if (species && species !== name) text.append(el(doc, 'span', 'cm-backpack__partner-species', species));
       pick.append(text, el(doc, 'span', 'cm-backpack__partner-check', chosen ? '✓' : ''));
       if (item.kind === 'METAL' && !partner.inRanch) pick.dataset.away = 'true';
-      pick.addEventListener('click', () => { state.partner = partner.instanceId; state.personality = null; paint(); });
+      pick.addEventListener('click', () => { state.partner = partner.instanceId; state.personality = null; state.slot = null; paint(); });
       grid.append(pick);
     }
     if (!grid.childElementCount) grid.append(el(doc, 'p', 'cm-backpack__empty', uiText('還沒有可以使用的拍檔。')));
@@ -322,6 +333,7 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
       return panel;
     }
     panel.append(el(doc, 'p', 'cm-backpack__note', uiText('選擇要使用的拍檔：')), partnerPicker(gacha, item));
+    if (item.kind === 'SCROLL') { panel.append(...scrollChoices(gacha, item)); return panel; }
     const reshape = item.id === 'chip:personality';
     if (reshape) {
       const current = gacha?.partners?.find((p) => p.instanceId === state.partner)?.stats?.personalityIndex ?? null;
@@ -352,6 +364,46 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
     else go('USE', '使用晶片', true, 'spark');
     panel.append(actions);
     return panel;
+  }
+
+  // Skill imprint scrolls (SKILL_IMPRINT_SCROLL 2026-11-17): the chosen partner's two special-skill slots, then
+  // 「拓印」 (copy a skill off it) or 「刻印」 (write the scroll's skill in; a filled slot says what it loses).
+  function scrollChoices(gacha, item) {
+    const partner = gacha?.partners?.find((p) => p.instanceId === state.partner) ?? null;
+    const skills = [partner?.stats?.source12C | 0, partner?.stats?.source130 | 0];
+    const duplicate = Boolean(item.skill && skills.includes(item.skill));
+    if (partner && item.skill && state.slot === null) {
+      const empty = SKILL_SCROLL_SLOTS.find((_, i) => !skills[i]);
+      if (empty) state.slot = empty;
+    }
+    const grid = el(doc, 'div', 'cm-backpack__choices cm-backpack__choices--skills');
+    grid.setAttribute('role', 'radiogroup');
+    grid.setAttribute('aria-label', uiText('特殊技能'));
+    SKILL_SCROLL_SLOTS.forEach((slot, i) => {
+      const skill = skills[i];
+      const pick = el(doc, 'button', 'cm-backpack__choice', `${uiText(i ? '特殊技能Ⅱ' : '特殊技能Ⅰ')} ${skill ? specialSkillName(skill) : '—'}`);
+      pick.type = 'button';
+      pick.dataset.slot = slot;
+      pick.setAttribute('role', 'radio');
+      pick.setAttribute('aria-checked', String(state.slot === slot));
+      pick.disabled = !partner || duplicate || (!item.skill && (!skill || !scrollCanHold(item.grade, skill)));
+      pick.addEventListener('click', () => { state.slot = slot; paint(); });
+      grid.append(pick);
+    });
+    const out = [grid];
+    if (duplicate) out.push(el(doc, 'p', 'cm-backpack__note', uiText('這隻拍檔已經有這個技能。')));
+    const index = SKILL_SCROLL_SLOTS.indexOf(state.slot);
+    const losing = item.skill && index >= 0 ? skills[index] : 0;
+    const actions = el(doc, 'div', 'cm-backpack__actions');
+    const button = key(doc, '', !item.skill ? uiText('拓印')
+      : losing ? uiText('確認刻印・失去 {skill}', { skill: specialSkillName(losing) }) : uiText('刻印'), { primary: true, icon: 'spark' });
+    button.dataset.useMode = item.skill ? 'ENGRAVE' : 'IMPRINT';
+    button.disabled = !partner || index < 0 || duplicate || item.owned < 1;
+    button.addEventListener('click', () => finish(item.skill ? intents.engraveScroll?.(item.id, state.partner, state.slot)
+      : intents.imprintScroll?.(state.partner, item.grade, state.slot)));
+    actions.append(button);
+    out.push(actions);
+    return out;
   }
 
   paint();

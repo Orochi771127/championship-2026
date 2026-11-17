@@ -171,7 +171,7 @@ test('a stroll find waits in the saved log; 收下發現 pays it into the Shop i
     assert.ok(h.partner,'the QA save has an adult partner on the ranch');
     const events=[];const stop=a.subscribePartnerLife(e=>events.push(e));
     const shopSeen=[];const unsubscribe=a.subscribeShop(frame=>shopSeen.push(frame));
-    for(const [reward,record] of [['feed',0],['protein',1],['medicine',2],['woundMedicine',3]]){
+    for(const [reward,record] of [['feed',0],['protein',1],['medicine',3],['woundMedicine',2]]){
       const before=owned(a,record),result=a.grantStrollDiscoveryReward({partnerId:h.partner,reward});
       assert.equal(result.ok,true,reward);assert.equal(result.pending,true);assert.equal(owned(a,record),before,'nothing is paid before 收下發現');
       assert.equal(result.tool,reward);assert.equal(result.entry.claimed,false);

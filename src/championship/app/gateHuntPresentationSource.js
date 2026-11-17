@@ -492,6 +492,15 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
       if (app.gachaReshapePersonality?.(instanceId, personalityIndex)?.ok) committed("purchase");
       return commit();
     },
+    // Skill imprint scrolls (SKILL_IMPRINT_SCROLL 2026-11-17).
+    gachaImprintScroll(instanceId, grade, slot) {
+      if (app.gachaImprintScroll?.(instanceId, grade, slot)?.ok) committed("purchase");
+      return commit();
+    },
+    gachaEngraveScroll(scrollId, instanceId, slot) {
+      if (app.gachaEngraveScroll?.(scrollId, instanceId, slot)?.ok) committed("purchase");
+      return commit();
+    },
     gachaPull(machine, count = 1) {
       if (app.gachaPull?.(machine, count)?.ok) committed("purchase");
       return commit();

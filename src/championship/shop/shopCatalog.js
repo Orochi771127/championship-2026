@@ -52,3 +52,26 @@ export function getShopRecord(shopRecordIndex) {
   }
   return record;
 }
+
+// The four Raising toolbar tools and the Training Goods item each one spends.
+// The original stores Training Goods at PlayerData +0x1E + 2*itemIndex. OVL18
+// 0210F0B0 (wound, command 7C, individual +134) debits +0x24 = item 3
+// (キズグスリ); 0210F324 (illness, command 7D, individual +138) debits
+// +0x22 = item 2 (クスリ). Shop records 2 and 3 hold items 3 and 2, so a tool
+// resolves its record by item index, never by record number.
+export const RAISING_TOOL_ITEM_INDEX = deepFreeze({ feed: 0, protein: 1, medicine: 2, woundMedicine: 3 });
+
+/** Shop record behind each Raising tool: feed 0, protein 1, woundMedicine 2, medicine 3. */
+export const RAISING_TOOL_SHOP_RECORDS = deepFreeze(Object.fromEntries(
+  Object.entries(RAISING_TOOL_ITEM_INDEX).map(([tool, itemIndex]) => {
+    const record = listShopRecords().find((row) => row.category === "TRAINING_GOODS" && row.itemIndex === itemIndex);
+    if (!record) throw new Error(`MISSING_TRAINING_GOODS_ITEM: ${itemIndex}`);
+    return [tool, record.shopRecordIndex];
+  })
+));
+
+/** Owned count of each Raising tool, read from Shop frame listings. */
+export function raisingToolStock(listings = []) {
+  return Object.fromEntries(Object.entries(RAISING_TOOL_SHOP_RECORDS)
+    .map(([tool, record]) => [tool, listings.find((row) => row.shopRecordIndex === record)?.owned]));
+}
