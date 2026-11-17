@@ -1717,3 +1717,8 @@ body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database_
 .cm-hunt-gate[data-motion="reduced"] { opacity: 0; transition: opacity var(--gate-close-ms, 120ms) linear; }
 .cm-hunt-gate[data-motion="reduced"]:is([data-phase="shut"], [data-phase="result"]) { opacity: 1; }
 .cm-hunt-gate[data-motion="reduced"] .cm-hunt-gate__plate { transform: translateX(-50%); transition-delay: 0ms; }
+
+/* BATTLE_STYLE_V1 (2026-11-16): a Dex move's class glyph — 攻擊 (no SP) or 技能 (SP). */
+.cm-dex-move-card__type[data-class]::before { content: ""; display: inline-block; width: 1.35em; height: 1.35em; margin-right: 3px; vertical-align: -0.32em; background: center / contain no-repeat; }
+.cm-dex-move-card__type[data-class="ATTACK"]::before { background-image: url("../../../assets/production/ui/battle-glyphs-r1/style_attack_64.webp"); }
+.cm-dex-move-card__type[data-class="SKILL"]::before { background-image: url("../../../assets/production/ui/battle-glyphs-r1/style_skill_64.webp"); }

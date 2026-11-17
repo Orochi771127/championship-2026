@@ -51,6 +51,9 @@ export const GATE_NAMES_JA = Object.freeze({
 });
 
 export const BATTLE_FACE_LABELS_JA = Object.freeze({
+  HUB_JOURNEY: "征途",
+  HUB_TOURNAMENT: "トーナメント",
+  HUB_LINK: "通信",
   JOURNEY: "征途",
   CHAMPIONSHIP: "チャンピオンシップ",
   TITLE_MATCH: "タイトルマッチ",
@@ -62,12 +65,15 @@ export const BATTLE_FACE_LABELS_JA = Object.freeze({
 
 export const BATTLE_MENU_LABELS_JA = Object.freeze({
   menu: "バトルメニュー", kicker: "バトル", chooseMatch: "対戦を選択",
-  faceNotice: "左右にスワイプしてプリズムを回し、面をタップするとそのモードに入ります。",
+  faceNotice: "左右にスワイプしてプリズムを回し、面をタップするとモードが並びます。",
   availableMatches: "参加可能な対戦", noMatch: "現在開催中の対戦はありません。",
   match: "対戦", noPayout: "賞金なし", returnHome: "牧場に戻る", conference: "トーナメント大会"
 });
 
 export const BATTLE_FACE_TAGLINES_JA = Object.freeze({
+  HUB_JOURNEY: "塔・戦区・フリー・練習",
+  HUB_TOURNAMENT: "称号戦・大会",
+  HUB_LINK: "通信・パスワード対戦",
   JOURNEY: "塔・巡航・戦区",
   CHAMPIONSHIP: "連戦カップでメダル獲得",
   TITLE_MATCH: "日程の大会で称号を獲得",

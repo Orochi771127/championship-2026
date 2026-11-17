@@ -1,0 +1,353 @@
+{
+  "id": "art:ui:battle-glyphs:r1",
+  "rightsStatus": "ORIGINAL_GENERATED",
+  "provenance": "Generated 2026-11-16 by Codex (codex.exe 0.167 exec, gpt-6.1-sol, built-in image tool) from the written briefs BRIEF_A.md and BRIEF_B.md (copied beside this manifest) for the original game Cyber Partner: Tournament. The only references given to the model were this project's own shipped item icons (assets/production/items/digital-metals-r1, gacha-prizes-r1). No ROM frames, reference-library files or third-party characters.",
+  "scope": "Battle-style, move-class, special-skill and status glyphs for BATTLE_STYLE_V1; no gameplay or commercial-rights claim",
+  "files": [
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/status_bleeding_64.webp",
+      "key": "status_bleeding",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "6544de9ecba7e25d2d591fab01c75ae426a167247b7cd64a089c38a1ca976b40",
+      "masterSha256": "8e8e4800b5a5baf0e6d4fa98a4d8b51f881d822b4d623c34f0d29e8a5c7aba88",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/status_burning_64.webp",
+      "key": "status_burning",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "a837a1074b2624de4e281b82af39fea97bb4b9225b1b1e8e38eec94ff58ba308",
+      "masterSha256": "1a4ba235792b96af2126e7e84bb50369351b4c502fbeed942cdaf16b095722b8",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/status_charmed_64.webp",
+      "key": "status_charmed",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "9a809e4f106334f5f31a0594042c5a834d7356f1015de2e07de8476cf43d6c96",
+      "masterSha256": "f28c26743a375e69f0a2c532ba148380f23bec9e5afebbfa13f732c77a953736",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/status_confused_64.webp",
+      "key": "status_confused",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "ec53e7b6aa8111347e3eba88550f8a2589462151f0417133f1b354bd8e9df895",
+      "masterSha256": "9b7ff44a694650a781067e3bb19a540d03b9231f5c25730ab56f773872902092",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/status_cursed_64.webp",
+      "key": "status_cursed",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "b8b20e14d43eef3a8c875a3414abd6b5ca34c489bb2eb7183a8659d059a47b63",
+      "masterSha256": "0a4ef3834b8589e2498e92990b4e2968b0ec5aa768065bbfcd8ba02cb62010f5",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/status_electrified_64.webp",
+      "key": "status_electrified",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "c3777a223b21dae030f34947d574ae42e2987fcc32c8efebee5eeb579933bd16",
+      "masterSha256": "ad44dabe28edb82b64e7e710b5f87e030fcd1b7cf202d07f0692a14b53f80942",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/status_frozen_64.webp",
+      "key": "status_frozen",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "1e01bade6e843150d30c95f485c04dc4656493bb302b86badc8e86d6da6f31e4",
+      "masterSha256": "b23829d1c4defb6ba4c0039018e88a955117e62ff84cc839156ee7005e66e557",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/status_petrified_64.webp",
+      "key": "status_petrified",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "dfd53f351a265c22854c82e01b0b27501a434a7ebc9684af16ab3bf408e7e657",
+      "masterSha256": "6684c0936e58c3dc8830531bb5794ac111a597cc976ff2caf8d3f4221d4ad6bd",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/status_poisoned_64.webp",
+      "key": "status_poisoned",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "2e38c5828d11ae429d16e28ee3404c947637f3052529d0354f603ea06fe48bfa",
+      "masterSha256": "3b372fe3d62c7d534d6b03cba6f95afeb62e475cecaa128024d9531782322a22",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/status_rage_64.webp",
+      "key": "status_rage",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "18b6b05256156ebb8bf082ac8b258deae5400ccfc00f193e9f05ceffde2ed889",
+      "masterSha256": "7353f4f8d069e553841e50d7c122f1afc52e8d9530dbc9f9885e8ca13beba489",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/status_sleep_64.webp",
+      "key": "status_sleep",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "70fc44b44c6e5d20b610e7935664332900e49b18998c1ce0bef9e453b40cd167",
+      "masterSha256": "d1a971b29f02344135fa9367bc7ea1b3908785ef18435ae36fd0332c7cbec056",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/status_slowed_64.webp",
+      "key": "status_slowed",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "d68597441097ce83d99e3ac13cf21b79f732753beee04ef91c8544efc011d1bb",
+      "masterSha256": "37417e189005832303054d6c659c03bb18909011939b08b4008c29eb2868ed85",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/status_stunned_64.webp",
+      "key": "status_stunned",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "ce100e38bd32ddf045a7fd895427e87a80a4856137676c66c04d585225a19e8f",
+      "masterSha256": "3c13b91f83e1d9efc58cb11bc02a71e861abe9277ab2e9b98b8f247a0177f4a5",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/style_attack_64.webp",
+      "key": "style_attack",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "442a0e1be3eb0e90ab57605f48a456afb7779df004d7b813aab46e94cc18cb8b",
+      "masterSha256": "2dfb1ff8f613b2306cd97d94ec3f202d49149d8a2d082982fd959babd6a41dd6",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/style_skill_64.webp",
+      "key": "style_skill",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "9b55b909f6cc38f34ba4af45e9f8442535e8b6744f7abda7234acbe5d2219c53",
+      "masterSha256": "4c08d048c5464c5313d9831e7405fab22037a7206524e2ae50234fe74ff4e488",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/style_support_64.webp",
+      "key": "style_support",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "aff9dce439b3a6cc4a3c4dce9cb0bec6c41d0e913a17a926af7eee263320800e",
+      "masterSha256": "9f3b5ff45f1713c1f2028ad44f657b7445506c14dbc3309d4a6651966e661003",
+      "brief": "BRIEF_A.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/resist_dark_64.webp",
+      "key": "resist_dark",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "cd1bf4a834c0df1e9064c1be4bab0bfda5be06c374244a93a3ec0dbc34a0e500",
+      "masterSha256": "828e3d1a4716c5e281f22b24777f10ac0838a0d9e1aabc025c863a444de05a04",
+      "brief": "BRIEF_B.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/resist_fire_64.webp",
+      "key": "resist_fire",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "4dcb563ca0788297fe3f0f91cacc4835597f667cdc4229aff2769aabdf9ff5da",
+      "masterSha256": "8d4fe2fce2745c267c899dd3ee5b7d57f87b7ff678ff87fd090d2e24c09e5e2a",
+      "brief": "BRIEF_B.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/resist_light_64.webp",
+      "key": "resist_light",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "4372a0ae009a23bcfbb1ef2b7af421a34f81180e536f6cd8d46ff2572881d307",
+      "masterSha256": "0a8e68f2d4f35d466d27882a6131bab9d066e856420e0fd8e9e7f832666e97fe",
+      "brief": "BRIEF_B.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/resist_thunder_64.webp",
+      "key": "resist_thunder",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "ccdb6f94dbb140f673520ed821977fc5c6533f6eae1338ec9e9b98513276a6bc",
+      "masterSha256": "1e15e7b986a0b3fab7f7cae1ddd142018ae8252a42defd0cd424484ed162e7a7",
+      "brief": "BRIEF_B.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/resist_water_64.webp",
+      "key": "resist_water",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "8d8d48ad2b515bf79240b85613f8d60629f48bafb95935ec6720d5dc81b59b6d",
+      "masterSha256": "79cfef8fe3ff13eeaae445d264645629c2bf292a6c4b011ea6661c83ee6047b6",
+      "brief": "BRIEF_B.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/skill_attack_up_64.webp",
+      "key": "skill_attack_up",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "6a5a6f005fe4c45cd49a7b9300140ad5894b0b9ec2085ec2e2c5c64458c7aa67",
+      "masterSha256": "bf63d85c8f5484c8ddcb998cd4ba21715a188a4c32aca493b0f1fcdf36360f7f",
+      "brief": "BRIEF_B.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/skill_cleanse_64.webp",
+      "key": "skill_cleanse",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "23f05110200f3182148472a96b53d5572985dd4189c54780d71c54ecf1c8c88d",
+      "masterSha256": "aaed63a5a57f913558c74cf263c615f321e38e0ed99e73beead4c8f22bc4701a",
+      "brief": "BRIEF_B.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/skill_courage_64.webp",
+      "key": "skill_courage",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "a8810a45dee91274a900bb116ba0c4dd0bac13a842f1e871f4be2d1da04c3184",
+      "masterSha256": "6968ad04d98b0a5c3622b5676ecef6c17b37e0704868ac53192755e39eaab85a",
+      "brief": "BRIEF_B.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/skill_guard_64.webp",
+      "key": "skill_guard",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "8454d347c609c50424b834c8590867710575b831aad9f083b7601475c0338279",
+      "masterSha256": "e6478c4f11cdaf14ee0b57cf8735e36a190896400001d10f9989f05869b8579c",
+      "brief": "BRIEF_B.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/skill_haste_64.webp",
+      "key": "skill_haste",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "c6bb1f1b5c2757195a59160158884be7996d0703fb0459f59f7201aadb00da8c",
+      "masterSha256": "48ecf4eeab193f7b32a55c5b0bbd3cc36dbaccd4ebd599054409725f3c797dbc",
+      "brief": "BRIEF_B.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/skill_heal_64.webp",
+      "key": "skill_heal",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "6caab86b2860038208a47ad85e3b9a71b35e807a3ddb6bcec2ff0a501087c23c",
+      "masterSha256": "8557c2cbdf74e3b68a2ac1cd47eb9783b154648d59018c4e6d24546bdd3a1f34",
+      "brief": "BRIEF_B.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/skill_none_64.webp",
+      "key": "skill_none",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "9df1dba039bb946295a80eb8eb001a9d3692f5b89742726251d46192b51d7e26",
+      "masterSha256": "99cbf61c7523e417b5819345275fac054d3d87b7f0b4bf5d7776c5a128d47cc2",
+      "brief": "BRIEF_B.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/skill_revive_64.webp",
+      "key": "skill_revive",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "80964a201bdd2f37f8a436de6f1af9f01262b106e4c344a3b21ee96ee5b28f9b",
+      "masterSha256": "f93bafe80ae9e3cf8a59d2d33fa1dedd7f97553a0e91ca7b77fd4fa85ceb9268",
+      "brief": "BRIEF_B.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/skill_sense_64.webp",
+      "key": "skill_sense",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "942e9169ebf1f3f428f7a79df09a57d176a7ebc202356583e976b84e12e03da9",
+      "masterSha256": "205ebbb818c87d025e331d6064bb1f05f5b2b7be69e585273fd3fb9c74485200",
+      "brief": "BRIEF_B.md"
+    },
+    {
+      "path": "assets/production/ui/battle-glyphs-r1/skill_taunt_64.webp",
+      "key": "skill_taunt",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "f89dd9145097402e8f92e44ec489fe0d17867d128d0b8fc472632e0098591f5c",
+      "masterSha256": "ae2330a794e2e60a190d2308ac45a66c7e5065f57a0649adf48b89092ee0cad0",
+      "brief": "BRIEF_B.md"
+    }
+  ],
+  "masters": "~1254x1254 RGBA PNG masters kept outside the repository (R:/Projects/Championship2026/battle-glyphs-art-20261116); runtime files are alpha-trimmed, padded to 92% and resized to 64x64 lossless WebP by build_runtime.py there.",
+  "humanApproved": false,
+  "runtimeEligible": true,
+  "shippingReady": false
+}

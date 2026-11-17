@@ -51,6 +51,9 @@ export const GATE_NAMES_TH = Object.freeze({
 });
 
 export const BATTLE_FACE_LABELS_TH = Object.freeze({
+  HUB_JOURNEY: "การเดินทาง",
+  HUB_TOURNAMENT: "ทัวร์นาเมนต์",
+  HUB_LINK: "เชื่อมต่อ",
   JOURNEY: "การเดินทาง",
   CHAMPIONSHIP: "แชมเปียนชิป",
   TITLE_MATCH: "การแข่งชิงตำแหน่ง",
@@ -62,12 +65,15 @@ export const BATTLE_FACE_LABELS_TH = Object.freeze({
 
 export const BATTLE_MENU_LABELS_TH = Object.freeze({
   menu: "เมนูการต่อสู้", kicker: "การต่อสู้", chooseMatch: "เลือกการแข่งขัน",
-  faceNotice: "ปัดซ้ายขวาเพื่อหมุนปริซึม แล้วแตะหน้าใดก็ได้เพื่อเข้าสู่โหมดนั้น",
+  faceNotice: "ปัดซ้ายขวาเพื่อหมุนปริซึม แตะหน้าเพื่อดูโหมดในนั้น",
   availableMatches: "การแข่งขันที่เข้าร่วมได้", noMatch: "ไม่มีการแข่งขันที่เปิดอยู่ในขณะนี้",
   match: "การแข่งขัน", noPayout: "ไม่มีเงินรางวัล", returnHome: "กลับสู่ฟาร์ม", conference: "ทัวร์นาเมนต์หลายรอบ"
 });
 
 export const BATTLE_FACE_TAGLINES_TH = Object.freeze({
+  HUB_JOURNEY: "หอคอย · โซน · อิสระ · ซ้อม",
+  HUB_TOURNAMENT: "แมตช์ฉายา · ถ้วย",
+  HUB_LINK: "เชื่อมต่อ · รหัสผ่าน",
   JOURNEY: "หอคอย ลาดตระเวน เขตสงคราม",
   CHAMPIONSHIP: "ถ้วยหลายรอบ ชิงเหรียญรางวัล",
   TITLE_MATCH: "แข่งตามปฏิทิน ชิงตำแหน่ง",

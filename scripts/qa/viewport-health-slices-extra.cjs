@@ -225,7 +225,16 @@ async function slice6(run, { repo }) {
     }
     await page.locator('.cm-vs5-cube__canvas').first().waitFor({ state: 'visible', timeout: 15000 });
   };
-  const turnTo = async (face, state) => {
+  // P3 (Owner 2026-11-16): the prism shows three pillars; a mode is reached through its pillar's list.
+  const PILLAR = { JOURNEY: 'HUB_JOURNEY', FREE_BATTLE: 'HUB_JOURNEY', PRACTICE_BATTLE: 'HUB_JOURNEY',
+    CHAMPIONSHIP: 'HUB_TOURNAMENT', TITLE_MATCH: 'HUB_TOURNAMENT', LINK_BATTLE: 'HUB_LINK', PASSWORD_BATTLE: 'HUB_LINK' };
+  const enterMode = async (mode, state, what) => {
+    await run.tap('.cm-vs5-cube__canvas', { state, what });
+    await page.locator(`.cm-vs5-hub__option[data-option="${mode}"]`).first().waitFor({ state: 'visible', timeout: 8000 });
+    await run.tap(`.cm-vs5-hub__option[data-option="${mode}"]`, { state, what });
+  };
+  const turnTo = async (mode, state) => {
+    const face = PILLAR[mode] ?? mode;
     for (let turn = 0; turn < 10; turn += 1) {
       if (await page.locator('.cm-vs5-prism__caption').getAttribute('data-face-id') === face) return true;
       await run.tap('.cm-vs5-prism__turn--next', { state, what: '下一個模式' });
@@ -248,7 +257,7 @@ async function slice6(run, { repo }) {
   await run.step('journey', async () => {
     await battleMenu();
     if (!(await turnTo('JOURNEY', 'journey'))) { run.fail('journey', 4, 'UNREACHABLE', '稜鏡上找不到「征途」'); return; }
-    await run.tap('.cm-vs5-cube__canvas', { state: 'journey', what: '征途' });
+    await enterMode('JOURNEY', 'journey', '征途');
     await page.locator('.cm-journey').first().waitFor({ state: 'visible', timeout: 15000 });
     await run.settle(900);
     const spec = () => ({
@@ -275,7 +284,7 @@ async function slice6(run, { repo }) {
     await forceHome(run);
     await battleMenu();
     if (!(await turnTo('CHAMPIONSHIP', 'championship'))) return;
-    await run.tap('.cm-vs5-cube__canvas', { state: 'championship', what: '錦標賽' });
+    await enterMode('CHAMPIONSHIP', 'championship', '冠軍賽');
     if (!(await shown(page.locator('.cm-championship-root'), 10000))) return;
     await run.settle(900);
     await pageCheck(run, 'championship', {

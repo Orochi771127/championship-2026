@@ -507,11 +507,10 @@
       "ROM-derived art is research only"
     ],
     "git": {
-      "main": "5caae0df (Merge PR #274)",
+      "main": "850db9f7 (Merge PR #275)",
       "openPullRequests": [],
       "branchesInFlight": [
-        "feat/talent-nodes-t3-20261118",
-        "feat/tactic-practice-loop-20261116 (another Claude session, local only, 8 commits, never pushed)"
+        "feat/tactic-practice-integration-20261118 (main + the tactic-practice branch of another Claude session, merged here)"
       ],
       "worktree": ".claude/worktrees/skill-scroll-20261117 (clean worktree cut from origin/main; the shared checkout holds other agents' uncommitted work and is not touched)"
     },
@@ -528,8 +527,8 @@
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> node tests/championship-cyber-gacha-browser.cjs",
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> node tests/championship-data-arena-browser.cjs"
       ],
-      "lastFullSuite": "3,859 / 3,860 (the one failure was a node count pinned in the T2 test; fixed and rerun with the talent tests, 37 pass) on feat/talent-nodes-t3-20261118 (local, Windows, Node 24.18)",
-      "ci": "PR #266 to #274: every one merged with all checks green (#274: one job hung at checkout on the runner and passed on a rerun)",
+      "lastFullSuite": "3,891 / 3,891 on feat/tactic-practice-integration-20261118 (local, Windows, Node 24.18)",
+      "ci": "PR #266 to #275: every one merged with all checks green",
       "report": "docs/reports/ci-browser-checks-2026-11-17/REPORT_ZH_TW.md"
     },
     "checklist": [
@@ -621,20 +620,20 @@
       {
         "id": "TALENTS_T3",
         "source": "talent plan sections 4.1 and 4.3 (TAMER_TALENTS_T3_20261118)",
-        "state": "IMPLEMENTED_LOCAL",
+        "state": "VERIFIED_LIVE",
         "acceptance": "PR, CI green, live commit",
         "dependsOn": [
           "TALENTS_T1"
         ],
         "owner": "Claude",
-        "evidence": "branch feat/talent-nodes-t3-20261118: commander 先手, 好心情, 心輝/黑鐵/裂隙共鳴, 逆境, 必殺 through a `commander` on the battle adaptation (capped by rank in title matches and tournaments, none in password and link battles), hunter 野性嗅覺; 26 of 36 nodes open; full suite 3,859 / 3,860 (the one failure was a node count pinned in the T2 test; fixed and rerun with the talent tests, 37 pass); tests/championship-tamer-talents-t3-cases.mjs"
+        "evidence": "PR #275 850db9f7; all eight checks green; live pages-build commit 850db9f7 (build 07d09276) and the commander code in the live bundle"
       },
       {
         "id": "TACTIC_PRACTICE_LOOP_P1_P4",
         "source": "docs/planning/ROLES_AND_SURVIVAL_PLAN_2026-11-16_ZH_TW.md (Owner 2026-11-16: 自己分批製作)",
-        "state": "IMPLEMENTED_LOCAL_OTHER_SESSION",
-        "evidence": "branch feat/tactic-practice-loop-20261116 @ 83aedccf, in its own worktree beside the product repository (tactic-practice-loop-20261116), never pushed",
-        "acceptance": "merge main, register modules in the build lists, full suite, browser, PR",
+        "state": "IMPLEMENTED_PUSHED",
+        "evidence": "branch feat/tactic-practice-integration-20261118 = main 850db9f7 merged with feat/tactic-practice-loop-20261116 @ 83aedccf (P1 styles and glyphs, P2/P2b sparring trio, P3 three pillars, P4 survival prototype). Five conflicts resolved (art index 138 entries and its pinned hash, four hunks in the standalone app, imports, one stylesheet); 7 modules and 32 glyph files registered in the build lists; the save module is unchanged. Full suite 3,891 / 3,891; build and validate pass. Headless Chromium on an isolated origin: owned-battle gate passes; battle menu shows the three pillars (征途, 錦標賽, 連線) over the seven modes; 征途 -> 陪練 -> partner -> plan -> bout 1 -> battle -> result with no page error",
+        "acceptance": "PR, CI green, live commit; the survival prototype (P4) and the P5 big hunt map remain as that plan lists them",
         "owner": "Claude"
       },
       {
@@ -690,9 +689,9 @@
       {
         "id": "TOURNAMENT_PICKER_NAME",
         "source": "found replaying the tournament entry 2026-11-18",
-        "state": "IMPLEMENTED_LOCAL",
+        "state": "VERIFIED_LIVE",
         "acceptance": "PR with T3",
-        "evidence": "the tournament partner picker printed a starter's native name (デジオ) where every other screen prints 迪吉歐; it now uses the shared display name",
+        "evidence": "the tournament partner picker printed a starter's native name (デジオ) where every other screen prints 迪吉歐; it now uses the shared display name; shipped with PR #275",
         "owner": "Claude"
       },
       {
@@ -754,6 +753,6 @@
       "the commander talents inside a running battle in a browser (rule and app tests only)",
       "a whole tournament run by hand in a browser"
     ],
-    "nextAction": "PR and merge talents T3; then the Data Arena reading the commander line, 殺價 and 拾荒, the hunter nodes on the native hunt, the keystones (incl. 傳承), the tactic-practice branch, the 503 client-recovery check; decisions D1 and D5 are open."
+    "nextAction": "PR and merge the tactic-practice integration; then the Data Arena reading the commander line, 殺價 and 拾荒, the hunter nodes on the native hunt, the keystones (incl. 傳承), the 503 client-recovery check; decisions D1 and D5 are open."
   }
 }

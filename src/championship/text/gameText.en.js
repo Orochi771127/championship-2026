@@ -64,6 +64,9 @@ export const GATE_NAMES_EN = Object.freeze({
 });
 
 export const BATTLE_FACE_LABELS_EN = Object.freeze({
+  HUB_JOURNEY: "Journey",
+  HUB_TOURNAMENT: "Tournament",
+  HUB_LINK: "Link",
   JOURNEY: "Journey",
   CHAMPIONSHIP: "Championship",
   TITLE_MATCH: "Title Match",
@@ -75,12 +78,15 @@ export const BATTLE_FACE_LABELS_EN = Object.freeze({
 
 export const BATTLE_MENU_LABELS_EN = Object.freeze({
   menu: "Battle menu", kicker: "Battle", chooseMatch: "Choose a match",
-  faceNotice: "Swipe to turn the prism, then tap any face to enter that mode.",
+  faceNotice: "Swipe to turn the prism; tap a face to see its modes.",
   availableMatches: "Available matches", noMatch: "No matches are open right now.",
   match: "Match", noPayout: "No prize", returnHome: "Back to ranch", conference: "Multi-round events"
 });
 
 export const BATTLE_FACE_TAGLINES_EN = Object.freeze({
+  HUB_JOURNEY: "Tower, zones, free and practice",
+  HUB_TOURNAMENT: "Title matches and cups",
+  HUB_LINK: "Link and password battles",
   JOURNEY: "Tower, patrol and zones",
   CHAMPIONSHIP: "Multi-round cups for medals",
   TITLE_MATCH: "Calendar fixtures for titles",

@@ -48,6 +48,8 @@ import {normalizeTamerSupplies,createTamerSupplies,SUPPLEMENTS,getSupplement,sup
   supplySyncExpPercent,settleArmedSupplies,armedSupplyItems,supplyDiscount,supplyValue,SUPPLY_BATTLE_SLOTS} from '../contracts/productSupplements.js';
 import {normalizeJourney,createJourneyState,TOWER_FLOORS,towerBand,towerOpponents,towerOpponentSpecies,towerRewards,towerNextFloor,
   clearTowerFloor,patrolStatus,claimPatrol,quickPatrol} from '../contracts/productJourney.js';
+import {TACTIC_PRACTICE_CRYSTALS,TACTIC_PRACTICE_CLEAR_CRYSTALS,tacticPracticeBoutCrystals,tacticPracticeCleared,createTacticPracticeSeries,tacticPracticeNextBout,recordTacticPracticeBout} from '../contracts/productTacticPractice.js';
+import {battleStyleOfProfile} from '../contracts/productBattleStyle.js';
 import {CAMPAIGN_ZONES,CAMPAIGN_STAGES,CAMPAIGN_ZONE_CHEST,campaignRivals,campaignStars,campaignRewards,recordCampaignStage,sweepCampaignStage,
   sweepsLeft,stageOpen,starsOf,zoneStars,totalStars} from '../contracts/productCampaign.js';
 import {ranchPositionAfterLayout} from '../raising/ranchLayoutPositions.js';
@@ -459,6 +461,8 @@ export function createChampionshipStandaloneApp({
   let tamerSupplies=null;
   // OWNER_APPROVED_ADAPTATION 2026-11-10: Journey (tower and patrol pod).
   let journey=null,pendingTower=null,lastTowerResult=null,pendingCampaign=null;
+  // Journey practice series (TACTIC_PRACTICE_LOOP_20261116): session memory only, never saved.
+  let tacticPractice=null,tacticPracticeRound=0,pendingSpar=null,lastSparResult=null;
   let nativeMessages=createNativeRaisingMessages();
   let nativeOpening=null;
   // Immutable rollback data, never another live session/store or storage key.
@@ -1239,10 +1243,12 @@ export function createChampionshipStandaloneApp({
         ?(passwordMode?JSON.stringify(passwords)!==JSON.stringify(prepared.passwords):linkKey!==prepared.linkKey)
         :JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals.map(p=>p.instanceId)))
       // A Sync-boosted copy is checked against the same boost of the saved individual.
-      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(boostBattleProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1,p.moodTier,p.supplyIds??[],p.moodCap??0))!==JSON.stringify(p.nativeProfile))))
+      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify((prepared.freeMatch?.kind==='SPAR'?sparFreshHp:x=>x)(boostBattleProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1,p.moodTier,p.supplyIds??[],p.moodCap??0)))!==JSON.stringify(p.nativeProfile))))
       return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇。'};
     const result=applyBattleTransaction(beginBattleAttempt(battleEconomy,{attemptId,matchIndex:-1,mode,battleType:0,
-      entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng,[],mode===2?{begin:attemptId,kind:'FREE'}:null);
+      entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng,[],
+      // A practice-series bout pays only its fixed crystals: no sponsor stake rides it.
+      mode===2&&prepared.freeMatch.kind!=='SPAR'?{begin:attemptId,kind:'FREE'}:null);
     if(!result.ok||result.duplicate)return result;
     battleRngPreparations.delete(rngPreparation);battlePartyIds=transientMode?null:[...playerInstanceIds];
     screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);publishScreens();return result;
@@ -1420,6 +1426,24 @@ export function createChampionshipStandaloneApp({
     lastTowerResult=Object.freeze({attemptId,floor:tower.floor,won:true,team:tower.team,
       rewards:rewards?Object.freeze({...rewards,crystals:paidCrystals,tickets,diamonds}):null,next:tower.floor<TOWER_FLOORS?tower.floor+1:null});
     return lastTowerResult;
+  }
+
+  /**
+   * TACTIC_PRACTICE_LOOP P2 (2026-11-16): a practice bout starts at full HP while TP carries over
+   * exactly as the original writes it after each battle, so a plan's TP spend is felt in the next bout.
+   * Only the battle copy is refreshed; the saved partner keeps whatever HP the bout leaves it.
+   */
+  function sparFreshHp(profile){
+    const next=structuredClone(profile);next.fields['050']=next.fields['058'];return next;
+  }
+  /** A finished practice-series bout: its fixed crystals, win or loss, whatever the plan; winning the last bout adds the clear bonus. */
+  function settleSparBout(attemptId,won){
+    const spar=pendingSpar;
+    if(!spar||spar.attemptId!==attemptId)return null;
+    pendingSpar=null;
+    addSyncCrystals(tacticPracticeBoutCrystals({bout:spar.bout,won}));savePort.markDirty();
+    lastSparResult=Object.freeze({attemptId,bout:spar.bout,tactic:spar.tactic,instanceId:spar.instanceId,won,recorded:false});
+    return lastSparResult;
   }
 
   // Free Battle and Practice read the plan (they run the original personality
@@ -2315,7 +2339,7 @@ export function createChampionshipStandaloneApp({
     syncLevels = saved.progression.syncLevels===undefined?null:normalizeSyncLevels(saved.progression.syncLevels);lastSyncGains=null;
     tamerTalents = saved.progression.tamerTalents===undefined?null:normalizeTamerTalents(saved.progression.tamerTalents);lastTamerGain=null;
     tamerSupplies = saved.progression.tamerSupplies===undefined?null:normalizeTamerSupplies(saved.progression.tamerSupplies);
-    journey = saved.progression.journey===undefined?null:normalizeJourney(saved.progression.journey);pendingTower=null;lastTowerResult=null;
+    journey = saved.progression.journey===undefined?null:normalizeJourney(saved.progression.journey);pendingTower=null;lastTowerResult=null;tacticPractice=null;pendingSpar=null;lastSparResult=null;
     migrateLegacyBurstPartners();
     if (realtime) {
       // Up to twelve hours of growth while the game was closed, then the clock shows the device's time.
@@ -2429,7 +2453,8 @@ export function createChampionshipStandaloneApp({
       for(const entry of individualResults)writeRaisingNativeProfile(entry.instanceId,entry.nativeProfile,{markDirty:false});
       // Sync EXP for the partners that fought a settled owned-party match (never password or link battles).
       const syncKind=SYNC_KIND_BY_MODE[result.receipt?.mode];
-      if(result.receipt?.status==="SETTLED"&&syncKind&&individualResults.length)
+      const sparBout=pendingSpar?.attemptId!=null&&pendingSpar.attemptId===result.receipt?.attemptId;
+      if(result.receipt?.status==="SETTLED"&&syncKind&&individualResults.length&&!sparBout)
         grantBattleSync(individualResults.map(entry=>entry.instanceId),{kind:syncKind,won:result.receipt.won===true,attemptId:result.receipt.attemptId??null});
       // Battles and wins are awakening conditions; the ranch partners also train once after the match.
       queueRanchTraining();refreshAwakeningSigns(individualResults.map(entry=>entry.instanceId),{publish:false});
@@ -2452,7 +2477,7 @@ export function createChampionshipStandaloneApp({
       // Cyber Gachapon: a won settled match drops tickets, and an armed bounty
       // beacon multiplies this match's purse (OWNER_APPROVED_ADAPTATION 2026-10-29).
       let wallet=result.wallet;
-      if(result.receipt?.status==="SETTLED"&&result.receipt.won){
+      if(result.receipt?.status==="SETTLED"&&result.receipt.won&&!sparBout){
         const purse=Math.max(0,result.wallet-expectedBits);
         const drop=settleGachaBattleWin(gachaState(),{bits:purse,random:gachaRandom});
         cyberGacha=drop.state;wallet=Math.min(BITS_WALLET_CAP,result.wallet+drop.bonusBits);
@@ -2582,7 +2607,7 @@ export function createChampionshipStandaloneApp({
       nativeOpening=opening;
       cyberGacha=grantGachaWelcome(null).state;
       burstEvolution=withBurstMigrated(createBurstEvolutionState());
-      syncLevels=null;lastSyncGains=null;tamerTalents=null;lastTamerGain=null;tamerSupplies=null;journey=null;pendingTower=null;lastTowerResult=null;
+      syncLevels=null;lastSyncGains=null;tamerTalents=null;lastTamerGain=null;tamerSupplies=null;journey=null;pendingTower=null;lastTowerResult=null;tacticPractice=null;pendingSpar=null;lastSparResult=null;
       tutorialBaseline=null;tutorialPendingOpening=null;tutorialOfferEligible=opening!==null;
       registeredSpeciesValue = Object.freeze([]);
       battleEconomy = createBattleEconomyState();
@@ -4727,6 +4752,70 @@ export function createChampionshipStandaloneApp({
       const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
       return {ok:true,presetIndices:[...presetIndices],arenaIndex,individuals:party.individuals,rngPreparation};
     },
+    /** Journey practice series (TACTIC_PRACTICE_LOOP_20261116): the current series, or null. */
+    getTacticPractice(){
+      requireSession();
+      return tacticPractice?Object.freeze({series:tacticPractice,nextBout:tacticPracticeNextBout(tacticPractice),
+        tactic:battleTactics[tacticPractice.instanceId]??BATTLE_TACTIC_DEFAULT,crystals:TACTIC_PRACTICE_CRYSTALS,
+        clearCrystals:TACTIC_PRACTICE_CLEAR_CRYSTALS,cleared:tacticPracticeCleared(tacticPractice),lastResult:lastSparResult}):null;
+    },
+    /** Start (or restart) a series for one partner; new rivals each round. */
+    startTacticPractice(instanceId){
+      requireSession();
+      if(typeof instanceId!=='string'||!instanceId)return {ok:false,reason:'PARTNER_REQUIRED'};
+      let known=null;try{known=this.resolveRaisingInstance(instanceId);}catch{known=null;}
+      if(!known)return {ok:false,reason:'PARTNER_REQUIRED'};
+      const partnerSpecies=Number.parseInt(String(known.speciesId??'').replace(/^species-/,''),10);
+      tacticPractice=createTacticPracticeSeries({instanceId,partnerSpecies:Number.isInteger(partnerSpecies)?partnerSpecies:null,
+        towerNext:towerNextFloor(journeyState()),round:tacticPracticeRound++});
+      lastSparResult=null;
+      return {ok:true,series:tacticPractice};
+    },
+    endTacticPractice(){tacticPractice=null;lastSparResult=null;return {ok:true};},
+    /** The partner's saved TP (current / max), which carries from bout to bout. */
+    getTacticPracticeTp(instanceId){
+      requireSession();
+      let profile=null;
+      try{profile=instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(instanceId);}catch{profile=null;}
+      const f=profile?.fields;
+      return f&&Number.isFinite(f['054'])&&Number.isFinite(f['05c'])?Object.freeze({current:f['054'],max:f['05c']}):null;
+    },
+    /** Prepare the series' next bout: an ordinary free battle against fixed presets, no fee and no purse. */
+    async prepareSparBattle(){
+      const series=tacticPractice,bout=tacticPracticeNextBout(series);
+      if(!series||!bout)return {ok:false,reason:'PRACTICE_SERIES_DONE'};
+      const presetIndices=[...series.bouts[bout-1].presetIndices];
+      const party=withBattleTactics(await this.prepareBattleParty(null,[series.instanceId],{sync:{capped:false}}));
+      if(!party.ok)return party;
+      if(!freeBattleMenu)rebuildFreeBattleMenu();
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      const individuals=party.individuals.map(p=>({...p,nativeProfile:sparFreshHp(p.nativeProfile)}));
+      prepared.localMode=2;prepared.freeMenu=freeBattleMenu;prepared.individuals=individuals;
+      prepared.freeMatch=Object.freeze({id:`spar:${series.round}:${bout}`,kind:'SPAR',presetIndices,slots:3,entryFee:0,payout:0});
+      prepared.sparBout=bout;
+      const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
+      return {ok:true,bout,presetIndices,arenaIndex,individuals,rngPreparation};
+    },
+    enterSparBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
+      const prepared=battleRngPreparations.get(rngPreparation),bout=prepared?.sparBout,series=tacticPractice;
+      const result=enterPreparedLocalBattle({mode:2,attemptId,playerInstanceIds,rngPreparation});
+      if(result.ok&&!result.duplicate&&Number.isInteger(bout)&&series)
+        pendingSpar=Object.freeze({attemptId,bout,instanceId:series.instanceId,tactic:battleTactics[series.instanceId]??BATTLE_TACTIC_DEFAULT});
+      return result;
+    },
+    /**
+     * The result screen hands back what the partner actually did in that bout
+     * (its battle-plan record entry); the series records the bout once.
+     */
+    recordTacticPracticeBout({attemptId,entry=null,seconds=0}={}){
+      const settled=lastSparResult;
+      if(!tacticPractice||!settled||settled.attemptId!==attemptId||settled.recorded)return null;
+      const recorded=recordTacticPracticeBout(tacticPractice,{bout:settled.bout,tactic:settled.tactic,won:settled.won,seconds,entry});
+      tacticPractice=recorded.series;
+      lastSparResult=Object.freeze({...settled,recorded:true,result:recorded.result,next:tacticPracticeNextBout(tacticPractice)});
+      return lastSparResult;
+    },
+    getLastSparResult(){return lastSparResult;},
     /** The once-only reward keys already claimed (read only; story progress reads its own prefix). */
     getGachaClaimedRewards(){requireSession();return Object.freeze([...gachaState().claimed]);},
     enterTowerBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
@@ -5386,7 +5475,8 @@ export function createChampionshipStandaloneApp({
       const {battlePartyAdmission}=await loadBattleParty();
       return this.getRaisingInstances().map(entry=>{
         const nativeProfile=entry.instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(entry.instanceId);
-        return Object.freeze({...entry,tactic:this.getBattleTactic(entry.instanceId),
+        // BATTLE_STYLE_V1 (2026-11-16): 攻擊／技能／支援, read from the species' moves and its two special skills.
+        return Object.freeze({...entry,tactic:this.getBattleTactic(entry.instanceId),battleStyle:battleStyleOfProfile(nativeProfile),
           admission:battlePartyAdmission(nativeProfile,recordIndex,{burstForms:partnerBurstForms(entry.instanceId)})});
       });
     },
@@ -5684,6 +5774,7 @@ export function createChampionshipStandaloneApp({
       for(const entry of updates)raisingActors.delete(entry.instanceId);
       battlePartyIds=null;
       settleTowerFloor(attemptId,result.receipt?.won===true);
+      settleSparBout(attemptId,result.receipt?.won===true);
       // A round fought under a run writes its flag here, from the same verdict
       // the economy just settled on, so nothing judges the round twice.
       if(championshipAttemptId===attemptId){

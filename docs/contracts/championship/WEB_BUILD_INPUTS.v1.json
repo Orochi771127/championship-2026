@@ -23,9 +23,11 @@
     "src/championship/app/autosaveScheduler.js",
     "src/championship/app/badgeUnlockText.js",
     "src/championship/app/battleFxLookups.js",
+    "src/championship/app/battleGlyphs.js",
     "src/championship/app/battlePresentationSource.js",
     "src/championship/app/battleRosterSource.js",
     "src/championship/app/battleRuntime.js",
+    "src/championship/app/battleTacticRecord.js",
     "src/championship/app/bindRewardPopup.js",
     "src/championship/app/bragCardPreview.js",
     "src/championship/app/cageRoster.js",
@@ -201,6 +203,7 @@
     "src/championship/contracts/evidencePolicy.js",
     "src/championship/contracts/evidenceTaxonomy.js",
     "src/championship/contracts/productAwakeningOverdrive.js",
+    "src/championship/contracts/productBattleStyle.js",
     "src/championship/contracts/productBattleTransport.js",
     "src/championship/contracts/productBurstEvolution.js",
     "src/championship/contracts/productCampaign.js",
@@ -213,6 +216,7 @@
     "src/championship/contracts/productSpeciesExtensions.js",
     "src/championship/contracts/productSupplements.js",
     "src/championship/contracts/productSyncLevel.js",
+    "src/championship/contracts/productTacticPractice.js",
     "src/championship/contracts/productTamerTalents.js",
     "src/championship/contracts/speciesTaxonomy.js",
     "src/championship/data/monsterVisualAnchors218.js",
@@ -311,6 +315,7 @@
     "src/championship/modes/dataArena/dataArenaRelayRoster.js",
     "src/championship/modes/dataArena/dataArenaSave.js",
     "src/championship/modes/dataArena/dataArenaSimulation.js",
+    "src/championship/modes/dataArena/dataArenaSurvival.js",
     "src/championship/modes/dataArena/dataArenaUpgrades.js",
     "src/championship/online/championshipCloudService.js",
     "src/championship/online/cloudSaveEnvelope.js",
@@ -567,6 +572,7 @@
     "src/championship/text/aiChanStoryText.js",
     "src/championship/text/battleMoveNames.js",
     "src/championship/text/battleOpeningText.js",
+    "src/championship/text/battleStyleText.js",
     "src/championship/text/battleTransportText.js",
     "src/championship/text/brandTerms.js",
     "src/championship/text/catalogs.en.js",
@@ -602,6 +608,7 @@
     "src/championship/text/socialText.js",
     "src/championship/text/storyVnText.js",
     "src/championship/text/syncLevelText.js",
+    "src/championship/text/tacticRecordText.js",
     "src/championship/text/tamerTalentText.js",
     "src/championship/text/taxonomyText.js",
     "src/championship/text/tutorialMessages.en.js",
@@ -8228,6 +8235,38 @@
     "assets/production/toolbar/licensed-runtime-v1/system-selected.png",
     "assets/production/toolbar/licensed-runtime-v1/woundMedicine-rest.png",
     "assets/production/toolbar/licensed-runtime-v1/woundMedicine-selected.png",
+    "assets/production/ui/battle-glyphs-r1/manifest.json",
+    "assets/production/ui/battle-glyphs-r1/resist_dark_64.webp",
+    "assets/production/ui/battle-glyphs-r1/resist_fire_64.webp",
+    "assets/production/ui/battle-glyphs-r1/resist_light_64.webp",
+    "assets/production/ui/battle-glyphs-r1/resist_thunder_64.webp",
+    "assets/production/ui/battle-glyphs-r1/resist_water_64.webp",
+    "assets/production/ui/battle-glyphs-r1/skill_attack_up_64.webp",
+    "assets/production/ui/battle-glyphs-r1/skill_cleanse_64.webp",
+    "assets/production/ui/battle-glyphs-r1/skill_courage_64.webp",
+    "assets/production/ui/battle-glyphs-r1/skill_guard_64.webp",
+    "assets/production/ui/battle-glyphs-r1/skill_haste_64.webp",
+    "assets/production/ui/battle-glyphs-r1/skill_heal_64.webp",
+    "assets/production/ui/battle-glyphs-r1/skill_none_64.webp",
+    "assets/production/ui/battle-glyphs-r1/skill_revive_64.webp",
+    "assets/production/ui/battle-glyphs-r1/skill_sense_64.webp",
+    "assets/production/ui/battle-glyphs-r1/skill_taunt_64.webp",
+    "assets/production/ui/battle-glyphs-r1/status_bleeding_64.webp",
+    "assets/production/ui/battle-glyphs-r1/status_burning_64.webp",
+    "assets/production/ui/battle-glyphs-r1/status_charmed_64.webp",
+    "assets/production/ui/battle-glyphs-r1/status_confused_64.webp",
+    "assets/production/ui/battle-glyphs-r1/status_cursed_64.webp",
+    "assets/production/ui/battle-glyphs-r1/status_electrified_64.webp",
+    "assets/production/ui/battle-glyphs-r1/status_frozen_64.webp",
+    "assets/production/ui/battle-glyphs-r1/status_petrified_64.webp",
+    "assets/production/ui/battle-glyphs-r1/status_poisoned_64.webp",
+    "assets/production/ui/battle-glyphs-r1/status_rage_64.webp",
+    "assets/production/ui/battle-glyphs-r1/status_sleep_64.webp",
+    "assets/production/ui/battle-glyphs-r1/status_slowed_64.webp",
+    "assets/production/ui/battle-glyphs-r1/status_stunned_64.webp",
+    "assets/production/ui/battle-glyphs-r1/style_attack_64.webp",
+    "assets/production/ui/battle-glyphs-r1/style_skill_64.webp",
+    "assets/production/ui/battle-glyphs-r1/style_support_64.webp",
     "assets/production/ui/capture-frame-a-v1/default.23d67f8d950520a9.svg",
     "assets/production/ui/capture-frame-a-v1/release-confirm.a5e9b94ce74c8825.svg",
     "assets/production/ui/capture-frame-a-v1/selected.2e83f9041d0f0dd4.svg",
@@ -8327,9 +8366,11 @@
     "src/championship/app/autosaveScheduler.js",
     "src/championship/app/badgeUnlockText.js",
     "src/championship/app/battleFxLookups.js",
+    "src/championship/app/battleGlyphs.js",
     "src/championship/app/battlePresentationSource.js",
     "src/championship/app/battleRosterSource.js",
     "src/championship/app/battleRuntime.js",
+    "src/championship/app/battleTacticRecord.js",
     "src/championship/app/bindRewardPopup.js",
     "src/championship/app/bragCardPreview.js",
     "src/championship/app/cageRoster.js",
@@ -8542,6 +8583,7 @@
     "src/championship/contracts/evidencePolicy.js",
     "src/championship/contracts/evidenceTaxonomy.js",
     "src/championship/contracts/productAwakeningOverdrive.js",
+    "src/championship/contracts/productBattleStyle.js",
     "src/championship/contracts/productBattleTransport.js",
     "src/championship/contracts/productBurstEvolution.js",
     "src/championship/contracts/productCampaign.js",
@@ -8554,6 +8596,7 @@
     "src/championship/contracts/productSpeciesExtensions.js",
     "src/championship/contracts/productSupplements.js",
     "src/championship/contracts/productSyncLevel.js",
+    "src/championship/contracts/productTacticPractice.js",
     "src/championship/contracts/productTamerTalents.js",
     "src/championship/contracts/speciesTaxonomy.js",
     "src/championship/data/monsterVisualAnchors218.js",
@@ -8652,6 +8695,7 @@
     "src/championship/modes/dataArena/dataArenaRelayRoster.js",
     "src/championship/modes/dataArena/dataArenaSave.js",
     "src/championship/modes/dataArena/dataArenaSimulation.js",
+    "src/championship/modes/dataArena/dataArenaSurvival.js",
     "src/championship/modes/dataArena/dataArenaUpgrades.js",
     "src/championship/online/championshipCloudService.js",
     "src/championship/online/cloudSaveEnvelope.js",
@@ -8908,6 +8952,7 @@
     "src/championship/text/aiChanStoryText.js",
     "src/championship/text/battleMoveNames.js",
     "src/championship/text/battleOpeningText.js",
+    "src/championship/text/battleStyleText.js",
     "src/championship/text/battleTransportText.js",
     "src/championship/text/brandTerms.js",
     "src/championship/text/catalogs.en.js",
@@ -8943,6 +8988,7 @@
     "src/championship/text/socialText.js",
     "src/championship/text/storyVnText.js",
     "src/championship/text/syncLevelText.js",
+    "src/championship/text/tacticRecordText.js",
     "src/championship/text/tamerTalentText.js",
     "src/championship/text/taxonomyText.js",
     "src/championship/text/tutorialMessages.en.js",
@@ -39801,6 +39847,134 @@
         "sha256": "9ec8c04e64d00f7db52f5f33b768e0e910fee8310d944f9d43cfd4d129c4a59c"
       },
       {
+        "path": "assets/production/ui/battle-glyphs-r1/manifest.json",
+        "sha256": "74dc4b27c244152a165641a6ed747df19f79ceeeda821e45c4e7c94f58d03000"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/resist_dark_64.webp",
+        "sha256": "cd1bf4a834c0df1e9064c1be4bab0bfda5be06c374244a93a3ec0dbc34a0e500"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/resist_fire_64.webp",
+        "sha256": "4dcb563ca0788297fe3f0f91cacc4835597f667cdc4229aff2769aabdf9ff5da"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/resist_light_64.webp",
+        "sha256": "4372a0ae009a23bcfbb1ef2b7af421a34f81180e536f6cd8d46ff2572881d307"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/resist_thunder_64.webp",
+        "sha256": "ccdb6f94dbb140f673520ed821977fc5c6533f6eae1338ec9e9b98513276a6bc"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/resist_water_64.webp",
+        "sha256": "8d8d48ad2b515bf79240b85613f8d60629f48bafb95935ec6720d5dc81b59b6d"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/skill_attack_up_64.webp",
+        "sha256": "6a5a6f005fe4c45cd49a7b9300140ad5894b0b9ec2085ec2e2c5c64458c7aa67"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/skill_cleanse_64.webp",
+        "sha256": "23f05110200f3182148472a96b53d5572985dd4189c54780d71c54ecf1c8c88d"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/skill_courage_64.webp",
+        "sha256": "a8810a45dee91274a900bb116ba0c4dd0bac13a842f1e871f4be2d1da04c3184"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/skill_guard_64.webp",
+        "sha256": "8454d347c609c50424b834c8590867710575b831aad9f083b7601475c0338279"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/skill_haste_64.webp",
+        "sha256": "c6bb1f1b5c2757195a59160158884be7996d0703fb0459f59f7201aadb00da8c"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/skill_heal_64.webp",
+        "sha256": "6caab86b2860038208a47ad85e3b9a71b35e807a3ddb6bcec2ff0a501087c23c"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/skill_none_64.webp",
+        "sha256": "9df1dba039bb946295a80eb8eb001a9d3692f5b89742726251d46192b51d7e26"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/skill_revive_64.webp",
+        "sha256": "80964a201bdd2f37f8a436de6f1af9f01262b106e4c344a3b21ee96ee5b28f9b"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/skill_sense_64.webp",
+        "sha256": "942e9169ebf1f3f428f7a79df09a57d176a7ebc202356583e976b84e12e03da9"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/skill_taunt_64.webp",
+        "sha256": "f89dd9145097402e8f92e44ec489fe0d17867d128d0b8fc472632e0098591f5c"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/status_bleeding_64.webp",
+        "sha256": "6544de9ecba7e25d2d591fab01c75ae426a167247b7cd64a089c38a1ca976b40"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/status_burning_64.webp",
+        "sha256": "a837a1074b2624de4e281b82af39fea97bb4b9225b1b1e8e38eec94ff58ba308"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/status_charmed_64.webp",
+        "sha256": "9a809e4f106334f5f31a0594042c5a834d7356f1015de2e07de8476cf43d6c96"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/status_confused_64.webp",
+        "sha256": "ec53e7b6aa8111347e3eba88550f8a2589462151f0417133f1b354bd8e9df895"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/status_cursed_64.webp",
+        "sha256": "b8b20e14d43eef3a8c875a3414abd6b5ca34c489bb2eb7183a8659d059a47b63"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/status_electrified_64.webp",
+        "sha256": "c3777a223b21dae030f34947d574ae42e2987fcc32c8efebee5eeb579933bd16"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/status_frozen_64.webp",
+        "sha256": "1e01bade6e843150d30c95f485c04dc4656493bb302b86badc8e86d6da6f31e4"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/status_petrified_64.webp",
+        "sha256": "dfd53f351a265c22854c82e01b0b27501a434a7ebc9684af16ab3bf408e7e657"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/status_poisoned_64.webp",
+        "sha256": "2e38c5828d11ae429d16e28ee3404c947637f3052529d0354f603ea06fe48bfa"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/status_rage_64.webp",
+        "sha256": "18b6b05256156ebb8bf082ac8b258deae5400ccfc00f193e9f05ceffde2ed889"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/status_sleep_64.webp",
+        "sha256": "70fc44b44c6e5d20b610e7935664332900e49b18998c1ce0bef9e453b40cd167"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/status_slowed_64.webp",
+        "sha256": "d68597441097ce83d99e3ac13cf21b79f732753beee04ef91c8544efc011d1bb"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/status_stunned_64.webp",
+        "sha256": "ce100e38bd32ddf045a7fd895427e87a80a4856137676c66c04d585225a19e8f"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/style_attack_64.webp",
+        "sha256": "442a0e1be3eb0e90ab57605f48a456afb7779df004d7b813aab46e94cc18cb8b"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/style_skill_64.webp",
+        "sha256": "9b55b909f6cc38f34ba4af45e9f8442535e8b6744f7abda7234acbe5d2219c53"
+      },
+      {
+        "path": "assets/production/ui/battle-glyphs-r1/style_support_64.webp",
+        "sha256": "aff9dce439b3a6cc4a3c4dce9cb0bec6c41d0e913a17a926af7eee263320800e"
+      },
+      {
         "path": "assets/production/ui/capture-frame-a-v1/default.23d67f8d950520a9.svg",
         "sha256": "23d67f8d950520a930f25630030ca4982e1e925f488d7ec296dffb35be153aab"
       },
@@ -40197,6 +40371,10 @@
         "sha256": "6c03786ed19c1c417074796835dcc6232d340df7477fcfa9f6728004b47bff4b"
       },
       {
+        "path": "src/championship/app/battleGlyphs.js",
+        "sha256": "32568edfcaea45bad1233ac0b7673c3e6ee78832f8b6319cfead43944801967d"
+      },
+      {
         "path": "src/championship/app/battlePresentationSource.js",
         "sha256": "563f1db6ab8d24e7cdcfa7f23f10dacb320458d4a222626b2ec767c63656ad18"
       },
@@ -40206,7 +40384,11 @@
       },
       {
         "path": "src/championship/app/battleRuntime.js",
-        "sha256": "1cf3802375e854ac3523a46309b5cefa93ebd472c5a3a705e2c94850055b0d83"
+        "sha256": "f9bcbf4b596d560f448851e38dad483dee687625325d6750e158b81e0b49765f"
+      },
+      {
+        "path": "src/championship/app/battleTacticRecord.js",
+        "sha256": "4f0a71b1d814e0552701f376be6db0409e92105476c6146c1e5ef0e5d1315291"
       },
       {
         "path": "src/championship/app/bindRewardPopup.js",
@@ -40242,7 +40424,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "f8f710adc54c094e026b86c200ea221a0356ac4926b7ac8c382550cb51603eb8"
+        "sha256": "d0ba87f848fb8eb6f90b28f7fd24d8be0a8a83bf8157e3fb01b87516b74c1a1a"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -40286,11 +40468,11 @@
       },
       {
         "path": "src/championship/app/dataArena.css",
-        "sha256": "fc3a7d150fab9826a34dfa83e02efc88822fc9798d7b4c245dbd43d7432d887a"
+        "sha256": "3505dd8032cf2cb605be1dea69369f5e34a382c1ef3af0a0730d496a511444d9"
       },
       {
         "path": "src/championship/app/dataArenaScreen.js",
-        "sha256": "74905b0dae4744fc0106c591e8f98af9f4964e6a4867760246f0c53479e0c3bb"
+        "sha256": "936e21639026b45da8a223e09b929aa96df5f87247bc21a1b0054d594529dc7b"
       },
       {
         "path": "src/championship/app/daylightSkin.css",
@@ -40298,7 +40480,7 @@
       },
       {
         "path": "src/championship/app/digimonListScreen.js",
-        "sha256": "d35ea60724243aba7ce5d0a0b1dae8b1d58c7bf9a831907904c88de60fa74593"
+        "sha256": "dc24a55013a05b42a3f58ed517b8283749b831a855e34bcb2042ad9991948fdb"
       },
       {
         "path": "src/championship/app/downloadSaveBackup.js",
@@ -40386,7 +40568,7 @@
       },
       {
         "path": "src/championship/app/journeyScreen.js",
-        "sha256": "5db8536887ab9d547bf147607e2aadfbdcae7b278f76e653766758c23c840b01"
+        "sha256": "fa6e8e3629279b8f558d561d2521a6f8a1fd968fd09f44adc52fd645000f4642"
       },
       {
         "path": "src/championship/app/loadProgress.js",
@@ -40402,7 +40584,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "d2d7f645a5c193b917f7d6cada451fd326e149659cd0e1ab6ebca027917e05ae"
+        "sha256": "58a4ca22e0426984a7919573f401feeffe651a8fab295f1aad26062550cf72ff"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -40594,7 +40776,7 @@
       },
       {
         "path": "src/championship/app/styles.css",
-        "sha256": "b2503c9c8f79e336a57cf3d9e3249d5b85093ab68992efcf2f27e32085a7dda6"
+        "sha256": "6d58f263f42c02cf7a8273c32ce7c380c1a234fab56421ece4e8cacf7dd7a453"
       },
       {
         "path": "src/championship/app/tamerInfoScreen.js",
@@ -40658,7 +40840,7 @@
       },
       {
         "path": "src/championship/app/ui/journey.css",
-        "sha256": "a2c1935639d099bb1123bbdf1501f845adcce0d7e45a46dd01cf49be49706a28"
+        "sha256": "e843cde3d86ec49a28239c90a2faf1533b60207bb91c7dcecfbc8870de816924"
       },
       {
         "path": "src/championship/app/ui/juicyShowcase.css",
@@ -40734,7 +40916,7 @@
       },
       {
         "path": "src/championship/app/vs2Styles.css",
-        "sha256": "92b10b575d5ef7516e4c202e398491b1c07f1341e0f49c8b29b1c0367ff1e242"
+        "sha256": "bace54deba6b988efbbdc5ded6ac87aea007a12f538eb7b70ad742bddbce7706"
       },
       {
         "path": "src/championship/app/vs3Screens.js",
@@ -40742,15 +40924,15 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "26ce7bfcba54de9eb8056916ae8d48d36fe14fdc7929205b96b527d7e7a5d972"
+        "sha256": "b0463eb2bdf80396bd7bb9f9bc9317db9baede65ded70b633ce278dc206348bc"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
-        "sha256": "477e0b7d36698b1b20809651f1b4d85109048c587f8c478f325090a37fa57a98"
+        "sha256": "5f9b574a846bd664ace1ddc1ee29094ed807dd86a15af8de502c4399ba1da8b1"
       },
       {
         "path": "src/championship/app/vs5Styles.css",
-        "sha256": "d06a2bf89b0030a83c9bea41829729825ce9a31d1c279512597b43cd3a5ace47"
+        "sha256": "29f5d3b4d9f7e64dda0ad1639b3607becd29392622b25f27379c9cabafd067b7"
       },
       {
         "path": "src/championship/app/webAppInstall.js",
@@ -41057,6 +41239,10 @@
         "sha256": "07fbefc473c0f6927897b57c54a7dc1f8f4d76c3742a3c13dbcb2c24ba432a94"
       },
       {
+        "path": "src/championship/contracts/productBattleStyle.js",
+        "sha256": "120b12968962631a6fa8c85200c99d77d1066b4fee071566cb9cf1e668cb5791"
+      },
+      {
         "path": "src/championship/contracts/productBattleTransport.js",
         "sha256": "3310edd2e349f98e0b58cbe3fad8b309e00105573639232cc1785b359a4d0d31"
       },
@@ -41103,6 +41289,10 @@
       {
         "path": "src/championship/contracts/productSyncLevel.js",
         "sha256": "a6d6e5a8078ba8c5e87fc17392350ec1324a8dbe75d2e156db8636858c85d25d"
+      },
+      {
+        "path": "src/championship/contracts/productTacticPractice.js",
+        "sha256": "bb974ea9fc26978c0b3b858badbc68949d19d6c2422395bb74baf6613226bd7f"
       },
       {
         "path": "src/championship/contracts/productTamerTalents.js",
@@ -41446,7 +41636,7 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaConfig.js",
-        "sha256": "9c72ffc83be018ebc62c382b3012585eae725499fb3c6af6cbdf3034d14752ab"
+        "sha256": "f1517eb1560f2b787cb912567374cde4f3f7743e10d3b3396f262195f2130407"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaEligibility.js",
@@ -41490,15 +41680,19 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaSave.js",
-        "sha256": "8cda8ef5292b39de41bf1afb2c5016290140ee4c8a4d6191c3fddaa5142279b2"
+        "sha256": "48f0b837735d8bfc17bb27b02598bc5ea6ba7301c2a0b61358e5099daf346bc3"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaSimulation.js",
-        "sha256": "ee96a943c4b8fac85433dea520e2801188df29ee3f0744173c29b558697b63ab"
+        "sha256": "928a124e49aca2370c49b9a9884cbce915b9dd31a658c9299098f945e075bd24"
+      },
+      {
+        "path": "src/championship/modes/dataArena/dataArenaSurvival.js",
+        "sha256": "b63321ada6303c856b9751a7be5fd3a650973f153b6c598245261c9e10999235"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaUpgrades.js",
-        "sha256": "4ff0bb7f833b373bb44d1c1ed039e2a208dc9133ebed3314ad89f7932dfc849c"
+        "sha256": "79d63fa376ef1048498ab36fc4f261cc49ebf8f908f13aa0cacf6fe6fa396bfc"
       },
       {
         "path": "src/championship/online/championshipCloudService.js",
@@ -41690,7 +41884,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-        "sha256": "dec94de11659c2a1bf8532996d486f9be90ecd711798eccc8018cbb0544e8114"
+        "sha256": "e17813fb80af1a44faef56421c93625cfb0f45b31704a1b4cb8102f239495c8d"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
@@ -41878,7 +42072,7 @@
       },
       {
         "path": "src/championship/presentation/originalMusicCatalog.js",
-        "sha256": "9fd21a5ca1da21d57eead820784479af77b04a207c0ff8edefb34799e8b72dec"
+        "sha256": "1b42b49ca1b56dc6a81a7483630971df5e637e97864f157a78b4742afd24bd04"
       },
       {
         "path": "src/championship/presentation/originalRuntimeLocation.js",
@@ -42326,7 +42520,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
-        "sha256": "a113c6d904bd838bc0e375168714d94060fca9440720a01b7bdf05ada5339a08"
+        "sha256": "974dc197457a4d363e14cefb5344f2585bddd4709c2c78dc11b7b2abc3293097"
       },
       {
         "path": "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
@@ -42521,6 +42715,10 @@
         "sha256": "df10049fbab8e587dbf39531a0122336673824b0de6eec2bbab515b3ecd2bd4a"
       },
       {
+        "path": "src/championship/text/battleStyleText.js",
+        "sha256": "41af95f4fa937f62be7e88110bdf01a1780c7f74a20d1f32dc87115141818105"
+      },
+      {
         "path": "src/championship/text/battleTransportText.js",
         "sha256": "cc59ad0d077d91a3a87cf75c6554493ad8fcb6e33c3a3ff57bf0f90b7ad49d07"
       },
@@ -42550,7 +42748,7 @@
       },
       {
         "path": "src/championship/text/dataArenaText.js",
-        "sha256": "afca9cbdb1033957785723501d20df6818e0ca4afc78557ee89e82c125e087c5"
+        "sha256": "6cb178e43e755df069a26dbd6e8adc9df21103a10c8f55a152fa06854601060d"
       },
       {
         "path": "src/championship/text/evolutionPresentationText.js",
@@ -42558,19 +42756,19 @@
       },
       {
         "path": "src/championship/text/gameText.en.js",
-        "sha256": "16e2f6060a75fdcfcde9784dbc6c88f305a15e7292264cf26afd06501227e805"
+        "sha256": "a10dcda43259c03b94dc06a07e7dc456bb4ec00693c31319154c26b20576f188"
       },
       {
         "path": "src/championship/text/gameText.ja.js",
-        "sha256": "3c0a2a128f81500a90bc1cb6335d817ee0ee3e3eb2990e237568aeadd0ece533"
+        "sha256": "6bbb9a0e2bbc55cf2798a09ca2c733ddfcdee6cf83f7ac1a7af9fa61b6b774b9"
       },
       {
         "path": "src/championship/text/gameText.th.js",
-        "sha256": "7d1adc079458a7b6dee566d9591a0f54dfd7a4a18bd16a6f4e5aaa36ef2d1d16"
+        "sha256": "c938dc5b1cec3e43a0caea02923fbb8f2c39365ea1b98c98b4907af718f9eccc"
       },
       {
         "path": "src/championship/text/gameText.vi.js",
-        "sha256": "9240f403614fb34e37f1111bd84894194ad8a49cd903b5aa5c32115bc5a61a50"
+        "sha256": "355f8f3c1d1d45b4272aa470b1419d7563f9e2dae7b0aa6e1bc1b13c0530ae5a"
       },
       {
         "path": "src/championship/text/growthStageTerms.js",
@@ -42661,6 +42859,10 @@
         "sha256": "44a02e939596349d76596d3f5455ef578d2ac8d1a7de93dd62baaf96ef917d50"
       },
       {
+        "path": "src/championship/text/tacticRecordText.js",
+        "sha256": "4b31b43adbc0fd6490f29f7aa0cc8eefa34f1d33719a06e3291ae4cf8a12246d"
+      },
+      {
         "path": "src/championship/text/tamerTalentText.js",
         "sha256": "bebddb8a4e0b0d025e6676b7700466f071c846cf3dd0e613a3ebaba34a95b861"
       },
@@ -42714,7 +42916,7 @@
       },
       {
         "path": "src/championship/text/zhHant.js",
-        "sha256": "158ec08e645bfa1474bc9909fb665b49707fd93f332861e9e7128e26715f3e97"
+        "sha256": "82612af7f8ff165628b065e1422061e936e8266ad2c729c2e1f2aad92aefdbfb"
       },
       {
         "path": "src/championship/time/championshipWorldClock.js",

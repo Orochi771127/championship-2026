@@ -120,7 +120,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const numberLayer = new PIXI.Container({ label: "arena damage numbers" });
   // Refinement pass 2: the delayed ground zones' baked sigils, drawn just over the telegraph lines.
   const zoneSigils = new PIXI.Container(); zoneSigils.label = "arena zone sigils";
-  world.addChild(groundChunks, tactical, water, cellFx, bridge, marks, zoneSigils, objects, shotGlow, shots, beams, particles, lights, numberLayer);
+  // SURVIVAL (P4 prototype): the storm outside the safe circle, over the field and under the damage numbers.
+  const storm = new PIXI.Graphics(); storm.label = "arena storm";
+  // The way back: an arrow at the player's feet toward the circle's centre, shown near the edge or outside.
+  const stormArrow = new PIXI.Graphics(); stormArrow.label = "arena storm arrow"; stormArrow.visible = false;
+  world.addChild(groundChunks, tactical, water, cellFx, bridge, marks, zoneSigils, objects, shotGlow, shots, beams, particles, lights, storm, stormArrow, numberLayer);
   const burstShell = createBattleBurstShell({ PIXI, layer: objects, reducedMotion });
   rollback.push(() => burstShell.dispose());
   // Status ailments (STATUS_AILMENT_VFX_20261110): the battle's pixel loops on a
@@ -1423,6 +1427,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
 
     drawBeams();
     drawMarks();
+    drawStorm();
     updateParticles(dt);
     updateNumbers(dt);
     for (let i = ghosts.length - 1; i >= 0; i--) {
@@ -1541,6 +1546,33 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (pair.light) { pair.light.texture = sheet.light.textures[Math.min(sheet.light.textures.length - 1, index)]; pair.light.scale.set(k * 2); pair.light.position.set(zone.x, zone.y); pair.light.alpha = 0.8; }
     sigilSeen.add(zone);
     return true;
+  }
+  let stormDrawn = null, stormArrowDrawn = false;
+  /** The storm: a violet veil outside the safe circle and a bright rim on its edge (redrawn only when the circle moves). */
+  function drawStorm() {
+    const circle = state.survival?.circle;
+    const player = state.player;
+    if (circle && player) {
+      // Drawn on first use: modes without a storm never build it.
+      if (!stormArrowDrawn) {
+        stormArrow.poly([0, -15, 31, 0, 0, 15, 7, 0]).fill({ color: 0xe6b3ff, alpha: 0.95 }).stroke({ width: 3, color: 0x4a1677, alpha: 0.9 });
+        stormArrowDrawn = true;
+      }
+      const dx = circle.cx - player.x, dy = circle.cy - player.y, d = Math.hypot(dx, dy);
+      stormArrow.visible = d > circle.radius * 0.75 && d > 1;
+      if (stormArrow.visible) { stormArrow.position.set(player.x + dx / d * 72, player.y + dy / d * 72); stormArrow.rotation = Math.atan2(dy, dx); }
+    } else stormArrow.visible = false;
+    if (!circle) { if (stormDrawn) { storm.clear(); stormDrawn = null; } return; }
+    // Redrawn in 2 px radius steps: the veil is a full-map path, so a closing circle rebuilds it at most every other pixel.
+    const key = `${Math.round(circle.cx)}|${Math.round(circle.cy)}|${Math.round(circle.radius / 2) * 2}`;
+    if (key === stormDrawn) return;
+    stormDrawn = key;
+    const radius = Math.max(1, circle.radius), pad = 400;
+    storm.clear();
+    storm.rect(-pad, -pad, worldWidth + pad * 2, worldHeight + pad * 2).fill({ color: 0x4a1677, alpha: 0.34 });
+    storm.circle(circle.cx, circle.cy, radius).cut();
+    storm.circle(circle.cx, circle.cy, radius).stroke({ width: 6, color: 0xd27bff, alpha: 0.9 });
+    storm.circle(circle.cx, circle.cy, radius + 10).stroke({ width: 14, color: 0x9b3fe0, alpha: 0.25 });
   }
   function drawMarks() {
     const g = marks;
@@ -1708,6 +1740,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       return {
         renderer: "CHAMPIONSHIP_SINGLE_PIXI_STAGE", scene: "DATA_ARENA", quality, reducedMotion, hasCreatureArt: playerView.hasArt,
         environment: environmentView?.diagnostics() ?? null,
+        storm: state.survival ? { drawn: stormDrawn, arrow: stormArrow.visible } : null,
         interactions:interactionView.diagnostics(),elementFx:elementFx?.getDiagnostics() ?? null,hitStop,effectsElapsed:elapsed, playerAnimation: playerView.diagnostics(),
         rivalAnimations: [...rivalViews.values()].map(view => view.diagnostics()),
         particleAgeTotal:live.reduce((n,p)=>n+p.age,0),scorchSprites:[...decalSprites.values()].filter(d=>d.kind!=="wet").length,

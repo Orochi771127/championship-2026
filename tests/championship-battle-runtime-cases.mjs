@@ -131,9 +131,12 @@ test("observers are given the current view and stop on dispose", () => {
 
 test("the screens import display copy and the clipboard UI helper without reaching into the runtime", () => {
   const imports = [...screens.matchAll(/^import .*from\s*["']([^"']+)["'];/gm)].map(match => match[1]);
-  assert.deepEqual(imports.sort(), ["../text/battleOpeningText.js", "../text/battleTransportText.js", "../text/dataArenaText.js", "../text/interactiveTutorialBattleText.js", "../text/uiText.js", "../text/zhHant.js", "./codeClipboard.js"]);
-  const clipboard = fs.readFileSync(path.join(root, "src/championship/app/codeClipboard.js"), "utf8");
-  assert.doesNotMatch(clipboard, /\bimport\s*(?:[({*]|["'])/);
+  // BATTLE_STYLE_V1 (2026-11-16): battleStyleText is display copy; battleGlyphs, like the clipboard helper, imports nothing.
+  assert.deepEqual(imports.sort(), ["../text/battleOpeningText.js", "../text/battleStyleText.js", "../text/battleTransportText.js", "../text/dataArenaText.js", "../text/interactiveTutorialBattleText.js", "../text/uiText.js", "../text/zhHant.js", "./battleGlyphs.js", "./codeClipboard.js"]);
+  for (const helper of ["codeClipboard.js", "battleGlyphs.js"]) {
+    const text = fs.readFileSync(path.join(root, "src/championship/app", helper), "utf8");
+    assert.doesNotMatch(text, /\bimport\s*(?:[({*]|["'])/, helper);
+  }
   assert.doesNotMatch(screens, /import\s*\(/);
   assert.match(screens, /export function createBattleSelectView/);
   assert.match(screens, /export function createBattleFieldView/);

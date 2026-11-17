@@ -51,6 +51,9 @@ export const GATE_NAMES_VI = Object.freeze({
 });
 
 export const BATTLE_FACE_LABELS_VI = Object.freeze({
+  HUB_JOURNEY: "Hành trình",
+  HUB_TOURNAMENT: "Giải đấu",
+  HUB_LINK: "Kết nối",
   JOURNEY: "Hành trình",
   CHAMPIONSHIP: "Giải vô địch",
   TITLE_MATCH: "Trận đấu danh hiệu",
@@ -62,12 +65,15 @@ export const BATTLE_FACE_LABELS_VI = Object.freeze({
 
 export const BATTLE_MENU_LABELS_VI = Object.freeze({
   menu: "Menu chiến đấu", kicker: "Chiến đấu", chooseMatch: "Chọn trận đấu",
-  faceNotice: "Vuốt trái phải để xoay lăng trụ, rồi chạm vào một mặt để vào chế độ đó.",
+  faceNotice: "Vuốt trái phải để xoay lăng trụ, chạm một mặt để xem các chế độ.",
   availableMatches: "Các trận đấu khả dụng", noMatch: "Hiện không có trận đấu nào mở.",
   match: "Trận đấu", noPayout: "Không có tiền thưởng", returnHome: "Về trang trại", conference: "Giải đấu nhiều vòng"
 });
 
 export const BATTLE_FACE_TAGLINES_VI = Object.freeze({
+  HUB_JOURNEY: "Tháp · khu · tự do · luyện tập",
+  HUB_TOURNAMENT: "Trận danh hiệu · cúp",
+  HUB_LINK: "Kết nối · mật mã",
   JOURNEY: "Tháp, tuần tra, chiến khu",
   CHAMPIONSHIP: "Cúp nhiều vòng, giành huy chương",
   TITLE_MATCH: "Giải theo lịch, giành danh hiệu",

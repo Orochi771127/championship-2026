@@ -210,7 +210,7 @@ export const BATTLE_FIELD_MUSIC = Object.freeze({
 // Paired survival -> Unison; successive tournament opponents -> Federation.
 // This is a gameplay/title-informed choice, not a listening acceptance claim.
 export const DATA_ARENA_MUSIC = Object.freeze({HARBOR:'unison_under_fire',TOURNAMENT:'federation_siege'});
-export function selectDataArenaMusic(mode) { return DATA_ARENA_MUSIC[mode] ?? 'battle_normal'; }
+export function selectDataArenaMusic(mode) { return DATA_ARENA_MUSIC[mode === 'SURVIVAL' ? 'HARBOR' : mode] ?? 'battle_normal'; }
 /** The New Game story and every tutorial screen share one cue, so the hand-over never restarts it. */
 export const ONBOARDING_MUSIC = 'hexagon_cradles';
 export function selectOriginalMusic({titleVisible=false,openingVisible=false,screen=null,tutorial=false,

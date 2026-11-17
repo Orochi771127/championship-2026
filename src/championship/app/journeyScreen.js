@@ -52,6 +52,7 @@ const portrait = (src, className = "cm-journey__face") => {
  * @param {() => object} host.campaign                     app.getCampaignFrame()
  * @param {(zone: number, stage: number) => void} host.challengeZone   opens the Data Arena stage
  * @param {(zone: number, stage: number) => object} host.sweep
+ * @param {object} [host.practice]   the practice series (TACTIC_PRACTICE_LOOP_20261116): frame/start/end/tacticOf/setTactic/challenge/text/downloadLog
  * @param {{floor?: number, team?: string[], autoStart?: boolean, tab?: string, zone?: number}} [host.prefill]
  */
 export function createJourneyScreen(host) {
@@ -112,7 +113,9 @@ export function createJourneyScreen(host) {
   }
 
   function paintTabs() {
-    tabs.replaceChildren(...[["TOWER", t("tower")], ["FEED", t("feed")], ["ZONES", t("zones")]].map(([id, label]) => {
+    const entries = [["TOWER", t("tower")], ["FEED", t("feed")], ["ZONES", t("zones")]];
+    if (host.practice) entries.push(["PRACTICE", host.practice.text("practice.tab")]);
+    tabs.replaceChildren(...entries.map(([id, label]) => {
       const key = button("cm-journey__tab", label, () => { tab = id; paint(); });
       key.setAttribute("role", "tab");
       key.setAttribute("aria-selected", String(tab === id));
@@ -169,7 +172,7 @@ export function createJourneyScreen(host) {
       });
       chip.dataset.instanceId = entry.instanceId;
       chip.setAttribute("aria-pressed", String(team.includes(entry.instanceId)));
-      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name),
+      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name), ...(look.styleChip ? [look.styleChip] : []),
         el("span", "cm-journey__member-lv", sync.next > 0 ? syncText("level", { level: sync.level }) : syncText("level.max")));
       roster.append(chip);
     }
@@ -277,6 +280,121 @@ export function createJourneyScreen(host) {
     body.replaceChildren(panel);
   }
 
+  // Practice series: one partner, three rivals, the battle plan chosen (or kept) between bouts.
+  let practicePick = null;
+  function paintPractice() {
+    const p = host.practice, pt = p.text, current = p.frame();
+    const panel = el("div", "cm-journey__practice");
+    panel.append(el("p", "cm-journey__hint", pt("practice.hint")), el("p", "cm-journey__practice-rule", pt("practice.rule")));
+    const series = current?.series ?? null;
+    const partnerId = series?.instanceId ?? practicePick;
+    panel.append(el("p", "cm-journey__team-title", pt("practice.partner")));
+    const roster = el("div", "cm-journey__team");
+    for (const entry of candidates.filter((c) => c.admission?.ok)) {
+      const look = host.describe(entry);
+      const chip = button("cm-journey__member", "", () => {
+        if (busy) return;
+        if (series && series.instanceId !== entry.instanceId) p.end();
+        practicePick = entry.instanceId; paint();
+      });
+      chip.dataset.instanceId = entry.instanceId;
+      chip.setAttribute("aria-pressed", String(entry.instanceId === partnerId));
+      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name), ...(look.styleChip ? [look.styleChip] : []));
+      roster.append(chip);
+    }
+    panel.append(roster);
+    if (!partnerId) { body.replaceChildren(panel); return; }
+    // P2: the TP this partner carries into the next bout (what a skill-heavy plan spends).
+    const tp = p.tpOf?.(partnerId);
+    if (tp) {
+      const meter = el("div", "cm-journey__tp");
+      const bar = el("span", "cm-journey__tp-bar");
+      const fill = el("i");
+      fill.style.transform = `scaleX(${tp.max > 0 ? Math.max(0, Math.min(1, tp.current / tp.max)) : 0})`;
+      bar.append(fill);
+      meter.append(el("span", "cm-journey__tp-label", pt("practice.tp", { n: tp.current, max: tp.max })), bar);
+      panel.append(meter);
+    }
+    // The plan the next bout will fight with: the partner's own 作戰方針 (the ROM's three rows).
+    const plan = p.tacticOf(partnerId);
+    const prev = series?.results?.at(-1)?.tactic;
+    const planRow = el("div", "cm-journey__plan");
+    planRow.setAttribute("role", "radiogroup");
+    planRow.setAttribute("aria-label", pt("practice.plan"));
+    planRow.append(el("span", "cm-journey__team-title", pt("practice.plan")));
+    for (const value of [0, 1, 2]) {
+      const key = button("cm-journey__plan-key cm-arcade-key", pt(`plan.${value}`), () => { if (!busy) { p.setTactic(partnerId, value); paint(); } });
+      key.setAttribute("role", "radio");
+      key.setAttribute("aria-checked", String(value === plan));
+      key.dataset.plan = String(value);
+      planRow.append(key);
+    }
+    if (prev !== undefined && prev === plan) planRow.append(el("span", "cm-journey__plan-keep", pt("practice.keep")));
+    panel.append(planRow);
+    // The three bouts and what happened in each.
+    const bouts = series?.bouts ?? null;
+    const list = el("ol", "cm-journey__bouts");
+    for (let n = 1; n <= 3; n++) {
+      const info = bouts?.[n - 1], result = series?.results?.[n - 1];
+      const row = el("li", "cm-journey__bout");
+      row.dataset.bout = String(n);
+      row.dataset.state = result ? (result.won ? "won" : "lost") : current?.nextBout === n ? "next" : "waiting";
+      row.append(el("span", "cm-journey__bout-no", pt("practice.round", { n, foe: pt(p.foeKey(info?.kind ?? (n === 3 ? "TEAM" : n === 1 ? "NORMAL_RIVAL" : "SECOND_RIVAL"))) })));
+      const foes = el("span", "cm-journey__floor-foes");
+      for (const species of info?.species ?? []) foes.append(portrait(host.speciesPortrait(species), "cm-journey__foe"));
+      row.append(foes);
+      // The trio is the series' last bout: winning it clears the series for a bonus.
+      if (n === 3 && !result) row.append(el("span", "cm-journey__bout-clear", pt("practice.clearTag", { clear: current?.clearCrystals ?? 150 })));
+      if (result) {
+        row.append(el("b", `cm-journey__mark${result.won ? " cm-journey__mark--done" : ""}`, pt(result.won ? "practice.won" : "practice.lost")));
+        // The A side of the playtest sees outcomes only: the counts would hand it the B side's causal record.
+        if (result.counts && p.variant !== "A") row.append(el("span", "cm-journey__bout-line", pt("practice.boutLine", { plan: pt(`plan.${result.tactic}`), total: result.total, skill: result.counts.skill, seconds: Math.round(result.seconds) })));
+      }
+      list.append(row);
+    }
+    panel.append(list);
+    // What it remembers: one line per bout where something worth remembering actually happened.
+    // Memories are kept either way; the A side sees them only after its comparison (not in this prototype).
+    const memories = p.variant === "A" ? [] : (series?.results ?? []).filter((r) => r.memory);
+    for (const r of memories) {
+      const foe = pt(p.foeKey(r.kind)), planName = pt(`plan.${r.tactic}`);
+      panel.append(el("p", "cm-journey__memory", pt("practice.memory", { line: pt(`practice.memory.${r.memory.kind}`, { ...r.memory, plan: planName, foe }) })));
+    }
+    panel.append(el("p", "cm-journey__hint", pt("practice.reward", { crystals: current?.crystals ?? 150, clear: current?.clearCrystals ?? 150 })));
+    const actions = el("div", "cm-journey__pod-actions");
+    const next = current?.nextBout ?? null;
+    if (series && next === null) {
+      panel.append(el("p", "cm-journey__best", pt(current?.cleared ? "practice.cleared" : "practice.done")));
+      const again = button("cm-journey__go cm-arcade-key", pt("practice.again"), () => { p.start(partnerId); paint(); });
+      again.dataset.journeyAction = "practice-again";
+      actions.append(again);
+    } else {
+      const n = next ?? 1;
+      const go = button("cm-journey__go cm-arcade-key", pt("practice.start", { n }), () => void startPractice(partnerId));
+      go.dataset.journeyAction = "practice";
+      go.disabled = busy;
+      actions.append(go);
+    }
+    if (typeof p.downloadLog === "function") {
+      const log = button("cm-journey__key cm-arcade-key", pt("practice.log"), () => p.downloadLog());
+      log.dataset.journeyAction = "practice-log";
+      actions.append(log);
+    }
+    panel.append(actions);
+    body.replaceChildren(panel);
+  }
+
+  async function startPractice(partnerId) {
+    if (busy) return;
+    const p = host.practice;
+    if (!p.frame()?.series) { const begun = p.start(partnerId); if (!begun?.ok) { say(p.text("practice.pick")); return; } }
+    busy = true; paint();
+    try {
+      const result = await p.challenge();
+      if (result?.ok === false) say(result.message ?? result.reason ?? "");
+    } finally { busy = false; if (!disposed) paint(); }
+  }
+
   function paint() {
     if (disposed) return;
     root.dataset.tab = tab;
@@ -284,6 +402,7 @@ export function createJourneyScreen(host) {
     paintTabs();
     if (tab === "TOWER") paintTower();
     else if (tab === "FEED") paintFeed();
+    else if (tab === "PRACTICE" && host.practice) paintPractice();
     else paintZones();
   }
 

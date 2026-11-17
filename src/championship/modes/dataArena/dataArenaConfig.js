@@ -212,7 +212,9 @@ export const DATA_ARENA_SPAWN = deepFreeze({
     EMBERS: { interval: 2.8, group: 2, mix: { noise: 0.65, ember: 0.35 } },
     TIDE: { interval: 3.0, group: 2, mix: { noise: 0.6, ember: 0.4 } },
     SCAN: { interval: 3.2, group: 2, mix: { noise: 0.55, ember: 0.25, sentinel: 0.2 } },
-    GUARDIAN: { interval: 6.5, group: 2, mix: { noise: 0.8, sentinel: 0.2 } }
+    GUARDIAN: { interval: 6.5, group: 2, mix: { noise: 0.8, sentinel: 0.2 } },
+    // SURVIVAL (P4 prototype): a steady trickle of wild data to level on between tamers.
+    SURVIVAL: { interval: 3.4, group: 2, mix: { noise: 0.82, ember: 0.13, sentinel: 0.05 } }
   },
   // Kill target for the WARMUP objective.
   warmupKills: 15

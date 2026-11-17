@@ -37,7 +37,7 @@
 .cm-journey__key:disabled { opacity: 0.55; }
 
 /* Tabs */
-.cm-journey__tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 999px; background: rgba(0, 0, 0, 0.3); }
+.cm-journey__tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 4px; padding: 4px; border-radius: 999px; background: rgba(0, 0, 0, 0.3); }
 .cm-journey__tab { min-height: 36px; border: 0; border-radius: 999px; background: none; color: #c9c3ff; font: 800 calc(13px * var(--text-scale, 1))/1 var(--font-ui); cursor: pointer; }
 .cm-journey__tab[aria-selected="true"] { background: linear-gradient(180deg, #fff, #dfe7fb); color: #14141f; box-shadow: 0 2px 0 #14141f; }
 
@@ -64,6 +64,8 @@
 .cm-journey__mark { padding: 2px 6px; border-radius: 6px; background: rgba(255, 210, 63, 0.2); color: #ffe27a; font-size: calc(10px * var(--text-scale, 1)); font-weight: 900; white-space: nowrap; }
 .cm-journey__mark--guardian { background: rgba(255, 111, 181, 0.25); color: #ffc2e0; }
 .cm-journey__mark--done { background: rgba(61, 220, 132, 0.22); color: #a6f5c6; }
+/* P2b: the trio is the series clear; its bonus sits on the row until it is fought. */
+.cm-journey__bout-clear { padding: 2px 6px; border-radius: 6px; background: rgba(255, 210, 63, 0.2); color: #ffe27a; font-size: calc(10px * var(--text-scale, 1)); font-weight: 900; white-space: nowrap; }
 .cm-journey__foe, .cm-journey__face { position: relative; display: inline-block; flex: 0 0 auto; overflow: hidden; border-radius: 8px; background: radial-gradient(circle at 50% 35%, #fff, #c9d4f0); }
 .cm-journey__foe { width: 30px; height: 30px; }
 .cm-journey__face { width: 40px; height: 40px; }
@@ -142,3 +144,26 @@
 
 /* Desktop and wide tablets: the Journey reads as one centred column, not a page-wide strip. */
 .cm-journey > * { width: min(100%, 880px); justify-self: center; }
+
+/* Practice series (TACTIC_PRACTICE_LOOP_20261116) */
+.cm-journey__practice { display: grid; gap: 8px; }
+.cm-journey__plan { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.cm-journey__plan > .cm-journey__team-title { flex: 1 0 100%; }
+.cm-journey__plan-key { flex: 1 1 0; min-width: 0; min-height: 44px; border-radius: 999px; font-size: calc(13px * var(--text-scale, 1)); font-weight: 900;
+  --key-face: #2a1d5e; --key-shade: #150d33; --key-ink: #e9e4ff; }
+.cm-journey__plan-key[aria-checked="true"] { --key-face: #6ff7ff; --key-shade: #1f8a92; --key-ink: #0b1630; }
+.cm-journey__plan-keep { flex: 1 0 100%; color: #a6f5c6; font-size: calc(11px * var(--text-scale, 1)); font-weight: 800; text-align: center; }
+.cm-journey__bouts { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.cm-journey__bout { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 6px; min-height: 44px; padding: 4px 10px;
+  border-radius: 10px; background: rgba(20, 14, 48, 0.75); color: #e9e4ff; box-shadow: inset 0 0 0 1px rgba(162, 89, 255, 0.25); }
+.cm-journey__bout[data-state="next"] { background: linear-gradient(90deg, rgba(111, 247, 255, 0.28), rgba(162, 89, 255, 0.3)); box-shadow: inset 0 0 0 2px #6ff7ff; }
+.cm-journey__bout[data-state="won"] { box-shadow: inset 0 0 0 1px rgba(61, 220, 132, 0.45); }
+.cm-journey__bout-no { overflow: hidden; font-size: calc(13px * var(--text-scale, 1)); font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
+.cm-journey__bout-line { grid-column: 1 / -1; color: #c9c3ff; font-size: calc(11px * var(--text-scale, 1)); font-weight: 700; font-variant-numeric: tabular-nums; }
+.cm-journey__memory { margin: 0; padding: 6px 10px; border-radius: 10px; background: rgba(255, 226, 122, 0.12); color: #ffe27a; font-size: calc(12px * var(--text-scale, 1)); font-weight: 800; }
+/* P2: the rule line and the TP the partner carries into the next bout. */
+.cm-journey__practice-rule { margin: 0; color: #6ff7ff; font-size: calc(12px * var(--text-scale, 1)); font-weight: 900; text-align: center; }
+.cm-journey__tp { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 8px; }
+.cm-journey__tp-label { color: #b9fbff; font-size: calc(12px * var(--text-scale, 1)); font-weight: 900; font-variant-numeric: tabular-nums; }
+.cm-journey__tp-bar { position: relative; height: 10px; overflow: hidden; border-radius: 999px; background: rgba(0, 0, 0, 0.35); }
+.cm-journey__tp-bar > i { position: absolute; inset: 0; transform-origin: left center; background: linear-gradient(90deg, #2e8bff, #6ff7ff); }
