@@ -39,7 +39,7 @@ test('T2 opens eight nodes, each with its own line of copy in five languages', (
     assert.ok(talentOpen(nodeOf(key).id), key);
     for (const locale of Object.keys(TAMER_TALENT_COPY)) assert.ok(talentEffectText(nodeOf(key), 1, locale).length > 0, `${key} ${locale}`);
   }
-  assert.equal(TALENT_WIRED_KEYS.size, 18);
+  assert.ok(TALENT_WIRED_KEYS.size >= 18, 'ten from T1 and these eight; later batches only add');
   assert.equal(talentEffectText(nodeOf('firstSupplyDiscountPercent'), 2, 'zh-Hant'), '每天第 1 個補品 −30%');
   assert.equal(talentEffectText(nodeOf('supplySlots'), 1, 'zh-Hant'), '+1 格戰前補品');
 });

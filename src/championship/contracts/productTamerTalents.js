@@ -107,7 +107,10 @@ export const TALENT_WIRED_KEYS = new Set([
   "syncExpPercent", "crystalPercent",
   // T2 (TAMER_TALENTS_T2_20261118): the core clock, the supplement talents and the trader's battle and journey pay.
   "coreTimePercent", "supplementPercent", "supplementBattles",
-  "battleBitsPercent", "patrolPercent", "towerRewardPercent", "firstSupplyDiscountPercent", "supplySlots"
+  "battleBitsPercent", "patrolPercent", "towerRewardPercent", "firstSupplyDiscountPercent", "supplySlots",
+  // T3 (TAMER_TALENTS_T3_20261118): the commander line in the auto battle, and the hunter's elite sense.
+  "openingTpPercent", "moodCapPercent", "resonanceLumenPercent", "resonanceIronPercent", "resonanceRiftPercent",
+  "lowHpDefensePercent", "ultimatePercent", "elitePercent"
 ]);
 export const TALENT_WIRED_KEYSTONES = new Set();
 export function talentOpen(id) {

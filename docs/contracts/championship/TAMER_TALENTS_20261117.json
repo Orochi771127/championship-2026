@@ -41,7 +41,20 @@
     "firstSupplyDiscountPercent": "trader 熟客: the first supplement unit bought each local day costs 15 % less a rank (rounded down); the day is recorded in the bag only when the discount is used",
     "supplySlots": "trader 補給帶 (one rank, three points): a partner carries two different pre-battle supplements"
   },
-  "notYetOpen": "18 nodes and all 8 keystones; they follow in later batches (殺價 needs the shop's price path, 拾荒 a place on the hunt result)",
+  "wiredT3": {
+    "batch": "TAMER_TALENTS_T3_20261118",
+    "where": "battle/battleTaxonomyAdaptation.js takes a `commander` for the local team (application: getBattleCommander(mode)). Tournaments and title matches count the first 6 + 3 x rank commander points, Free Battle and Practice all of them; password and link battles get none. It acts under either taxonomy policy; the three resonance talents need their resonance lit.",
+    "openingTpPercent": "commander 先手: opening TP +5 % a rank, added to Black Iron's own opening share",
+    "moodCapPercent": "commander 好心情: the best mood's TP share +1 point a rank (10 % up to 13 %); other moods unchanged. It is part of the battle copy, so the stale-preparation checks rebuild it with the same number (individual.moodCap)",
+    "resonanceLumenPercent": "commander 心輝共鳴: Lumen's bonus part +20 % a rank (damage taken 90 % -> 84 %, regen 1 % -> 1.6 % at three ranks)",
+    "resonanceIronPercent": "commander 黑鐵共鳴: Black Iron's bonus part +20 % a rank (opening TP 120 % -> 132 %, defence 108 % -> 112.8 %)",
+    "resonanceRiftPercent": "commander 裂隙共鳴: Rift's bonus part +20 % a rank (crit +10 -> +16, signature 115 % -> 124 %)",
+    "lowHpDefensePercent": "commander 逆境: under 30 % HP, damage taken / (1 + 5 % a rank)",
+    "ultimatePercent": "commander 必殺: the signature move (its costliest) +3 % a rank",
+    "elitePercent": "hunter 野性嗅覺: the elite share of a hunt's instinct roll +30 % of itself a rank; the hunt's limit of one elite is not raised",
+    "notYet": "the Data Arena does not read the commander line yet; 蓄能 (opening awakening energy) is not wired"
+  },
+  "notYetOpen": "10 nodes and all 8 keystones: hunter 繩索保養, 疾步, 穩手, 省彈 (they touch the native hunt's rope, movement, status and ammunition), breeder 安撫 and 散步好運, commander 蓄能, trader 殺價 (the shop's price paths), 拾荒 and 鑑價",
   "notChanged": [
     "the native individual fields, battle codes and match tables",
     "the gachapon rates, diamond prices and diamond or ticket rewards",
@@ -88,7 +101,8 @@
     "tests/championship-zh-hant-views-cases.mjs",
     "tests/championship-lion-display-correction-cases.mjs",
     "tests/championship-tamer-talents-cases.mjs",
-    "tests/championship-tamer-talents-t2-cases.mjs"
+    "tests/championship-tamer-talents-t2-cases.mjs",
+    "tests/championship-tamer-talents-t3-cases.mjs"
   ],
   "physicalDeviceAccepted": false
 }

@@ -1,5 +1,20 @@
 # Championship Owner Direction
 
+<!-- record-id: TAMER_TALENTS_T3_20261118 -->
+## 2026-11-18 — Tamer talents T3: the commander line in the auto battle, and the hunter's elite sense
+
+Under the standing goal and `LINE_FUSION_TAMER_TALENTS_DESIGN_20261117` (talent plan sections 4.1 and 4.3).
+
+`OWNER_APPROVED_ADAPTATION`, as designed:
+
+- Commander: 先手 (opening TP +5 % a rank), 好心情 (the best mood's share 10 % up to 13 %), 心輝共鳴, 黑鐵共鳴 and 裂隙共鳴 (that resonance's own bonus +20 % a rank), 逆境 (defence +5 % a rank under 30 % HP), 必殺 (signature move +3 % a rank).
+- Hunter: 野性嗅覺 (the elite share +30 % of itself a rank; a hunt still holds at most one elite).
+- The commander line acts for the local player's team only. Tournaments and title matches count the first `6 + 3 × rank` commander points in the tree's own order; Free Battle and Practice count all of them; password and link battles count none.
+- 26 of the 36 nodes are open. Not wired yet: the Data Arena does not read the commander line; 蓄能; the ten nodes listed in the contract's `notYetOpen`; the 8 keystones.
+- Found replaying the main loop in a browser and fixed in the same batch: the tournament's partner picker printed a starter's native name instead of the name the rest of the game shows.
+
+Contract: `docs/contracts/championship/TAMER_TALENTS_20261117.json` (`wiredT3`).
+
 <!-- record-id: TAMER_TALENTS_T2_20261118 -->
 ## 2026-11-18 — Tamer talents T2: eight more nodes read by the game
 

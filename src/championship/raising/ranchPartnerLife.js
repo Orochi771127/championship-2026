@@ -170,12 +170,13 @@ export function cappedMoodTier(tier){
   if(tier==='low'||tier==='awful')return 'normal';
   return PARTNER_MOOD_BATTLE[tier]?tier:'normal';
 }
-export function moodBattleProfile(profile,tier){
+/** `capBonus` is the commander talent 好心情: the best mood's TP share is that many points larger (10 % up to 13 %). */
+export function moodBattleProfile(profile,tier,capBonus=0){
   const effect=PARTNER_MOOD_BATTLE[tier];
   if(!effect||(!effect.tp&&!Object.keys(effect.steps).length))return profile;
   const next=structuredClone(profile),f=next.fields;
   if(effect.tp){
-    const factor=1+effect.tp/100;
+    const factor=1+(effect.tp+(tier==='superb'&&capBonus>0?Math.min(3,capBonus):0))/100;
     f['05c']=Math.max(1,Math.min(32767,Math.round((f['05c']|0)*factor)));
     f['054']=Math.max(0,Math.min(f['05c'],Math.round((f['054']|0)*factor)));
   }

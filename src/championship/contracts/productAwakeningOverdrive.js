@@ -128,6 +128,8 @@ export function settleWildInstincts(noises, boosts = {}) {
     if (!boosts?.[key]) continue;
     weight[call.id] *= call.multiplier; limit[call.id] = call.limit; guarantee[call.id] = call.guarantee;
   }
+  // The hunter talent 野性嗅覺: the elite share is that much larger (30 % a rank); a hunt still holds at most its limit.
+  if (Number.isFinite(boosts?.elitePercent) && boosts.elitePercent > 0) weight.ELITE *= (100 + Math.min(300, boosts.elitePercent)) / 100;
   const normal = 100 - weight.ELITE - weight.ANCESTOR, count = {ELITE: 0, ANCESTOR: 0};
   const out = noises.map(noise => {
     const at = noise * 100;
