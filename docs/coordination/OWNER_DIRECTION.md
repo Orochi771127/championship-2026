@@ -1,5 +1,20 @@
 # Championship Owner Direction
 
+<!-- record-id: LINE_FUSION_P2_FUSION_20261117 -->
+## 2026-11-17 — Fusion plan P2: same-line fusion feeds Sync EXP, on the Hunt Result and on the partner list
+
+The Owner set the standing goal for this product version: 「我授權你把本產品版本已定案的非動畫設計，依依賴關係持續分批實作、整合與驗證，不必每批詢問是否開始」, with character action animation left to Codex. This entry is the go-ahead for fusion P2 under `LINE_FUSION_TAMER_TALENTS_DESIGN_20261117`.
+
+`OWNER_APPROVED_ADAPTATION`, as designed (plan section 4):
+
+- A catch on the memory card or a saved partner can be fused into a saved partner of its own line: the same species at ×1.0, a lower stage of the base's own line at ×0.6. Side branches and other lines are refused. The main partner (also the starter egg) is never fodder.
+- One fodder pays `round(EXP the base needs at its level × 0.25 × grade × line) + floor(the fodder's own gathered Sync EXP × 0.5)`; grade S 1.6, A 1.25, B 1.0, C 0.8, no grade 1.0. At most five fodder at a time. Overflow past Lv.50 becomes crystals, as before.
+- Hunt Result: 「融合」 beside 「放生」. The fusion is staged and written by the Home commit in the same save; a fused catch takes no roster slot and no ranch G.
+- Partner list: 「融合」 opens a panel that ticks up to five same-line partners, shows `Lv.12 → Lv.14 · +5,612 EXP` and what a fodder loses, and writes in one save. A failed save changes nothing.
+- Fusion writes `progression.syncLevels` only. The native individuals, the native release history and the Dex registration are untouched.
+
+No dispatch, patrol-member or rental occupancy exists in the current code, so that part of the plan's fodder rule has nothing to check yet. Contract: `docs/contracts/championship/LINE_FUSION_20261117.json` (`fusion`). P3 (Hunt herds) follows.
+
 <!-- record-id: LINE_FUSION_P1_GRADES_20261117 -->
 ## 2026-11-17 — Fusion plan P1: partner grades and the capture head start
 

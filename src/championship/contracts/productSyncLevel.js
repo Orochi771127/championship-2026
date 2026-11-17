@@ -16,7 +16,7 @@
 // Pure: numbers in, numbers out. The saved record lives at progression.syncLevels.
 
 import { deepFreeze } from "./championshipContracts.js";
-import { normalizePartnerGrade } from "./productLineFusion.js";
+import { normalizePartnerGrade, fusionExp, FUSION_MAX_FODDER } from "./productLineFusion.js";
 
 export const SYNC_LEVEL_MAX = 50;
 export const SYNC_REBIRTH_KEEP = 0.3;
@@ -203,4 +203,44 @@ export function restoreSyncNativeProfile(result, original) {
   f["058"] = o["058"]; f["05c"] = o["05c"];
   for (const key of ["084", "088", "08c", "090"]) f[key] = o[key];
   return next;
+}
+
+/** All the Sync EXP a partner has gathered: every level it has cleared plus its current EXP. */
+export function syncTotalExp(state, instanceId) {
+  const entry = normalizeSyncLevels(state).partners[instanceId];
+  if (!entry) return 0;
+  let total = entry.exp;
+  for (let lv = 1; lv < entry.level; lv++) total += syncExpRequired(lv);
+  return total;
+}
+
+/**
+ * Same-line fusion (LINE_FUSION_20261117 P2): each fodder, in order, pays the base Sync EXP worked out
+ * from the base's level at that moment; a fodder that was a saved partner loses its Sync record. A base
+ * at Lv.50 is paid on its last level's requirement and the EXP becomes crystals, as any overflow does.
+ * @param {Array<{instanceId?:string|null, grade?:object|string|null, line:number}>} fodders
+ * @returns {{state:object, gains:object[], total:number, overflow:number}|null} null when nothing can be fused
+ */
+export function fuseSyncPartners(state, baseId, fodders) {
+  let current = normalizeSyncLevels(state);
+  if (typeof baseId !== "string" || !baseId || !Array.isArray(fodders) || fodders.length < 1 || fodders.length > FUSION_MAX_FODDER) return null;
+  if (fodders.some((fodder) => !(fodder?.line > 0) || fodder.instanceId === baseId)) return null;
+  const before = syncOf(current, baseId), gains = [];
+  let total = 0, overflow = 0;
+  for (const fodder of fodders) {
+    const carried = fodder.instanceId ? syncTotalExp(current, fodder.instanceId) : 0;
+    const amount = fusionExp({ required: syncExpRequired(syncOf(current, baseId).level), grade: fodder.grade ?? null, line: fodder.line, carried });
+    const granted = grantSyncExp(current, baseId, amount);
+    current = granted.state;
+    if (fodder.instanceId && current.partners[fodder.instanceId]) {
+      const partners = { ...current.partners }; delete partners[fodder.instanceId];
+      current = { ...current, partners };
+    }
+    gains.push(granted.gain); total += amount; overflow += granted.gain.overflow;
+  }
+  const after = syncOf(current, baseId);
+  return { state: current, gains, total, overflow,
+    summary: deepFreeze({ instanceId: baseId, amount: total, overflow, before, after,
+      breakthroughs: gains.flatMap((gain) => gain.breakthroughs),
+      vitalPercent: { before: syncVitalPercent(before.level), after: syncVitalPercent(after.level) } }) };
 }

@@ -1,6 +1,6 @@
 {
   "id": "LINE_FUSION_20261117",
-  "classification": "OWNER_APPROVED_ADAPTATION: partner grades S/A/B/C and a capture head start inside each individual's own native bounds (LINE_FUSION_TAMER_TALENTS_DESIGN_20261117, P1 LINE_FUSION_P1_GRADES_20261117)",
+  "classification": "OWNER_APPROVED_ADAPTATION: partner grades S/A/B/C with a capture head start inside each individual's own native bounds (P1), and same-line fusion that feeds Sync EXP only (P2) (LINE_FUSION_TAMER_TALENTS_DESIGN_20261117)",
   "saveField": {
     "path": "progression.syncLevels.partners[instanceId].grade = { grade: 'S'|'A'|'B'|'C', q: [6 integers inside the grade's band] }",
     "migration": "none: a partner without it has no grade and shows '—'; an unknown shape is dropped and the Sync level kept (productSyncLevel.normalizeSyncLevels)"
@@ -14,8 +14,19 @@
   "notChanged": [
     "the native individual roll, the native hunt RNG and the encounter",
     "each individual's upper and lower bounds",
+    "the native release history (a fused partner does not return to the wild)",
     "the save key, schemaVersion and the save lock"
   ],
   "source": "src/championship/contracts/productLineFusion.js",
-  "plan": "docs/planning/LINE_FUSION_AND_HUNT_HERDS_PLAN_2026-11-17_ZH_TW.md"
+  "plan": "docs/planning/LINE_FUSION_AND_HUNT_HERDS_PLAN_2026-11-17_ZH_TW.md",
+  "fusion": {
+    "record": "LINE_FUSION_P2_FUSION_20261117",
+    "line": "fodder of the base's own species x1.0; a lower stage reached by walking the base's ancestors backwards x0.6; anything else is refused (FUSION_LINE_MISMATCH); side branches are never followed",
+    "exp": "one fodder = round(EXP the base needs at its current level x 0.25 x grade x line) + floor(Sync EXP the fodder had gathered x 0.5); grade S 1.6, A 1.25, B 1.0, C 0.8, none 1.0; at most 5 fodder a fusion, each paid on the base's level at that moment; past Lv.50 the EXP becomes crystals",
+    "fodder": "a catch on the memory card (Hunt Result) or a saved partner; never the base itself or the main partner (which is also the starter egg). No dispatch/rental occupancy exists in this build.",
+    "warnings": "a saved fodder at Sync Lv.10 or above, with learned burst forms or a gachapon bloodline is listed before the confirmation",
+    "huntResult": "requestHuntResultFusion / confirmHuntResultFusion(baseId) stage the fusion like a release; the catch leaves the memory card at once, a saved fodder leaves with releasedHomeIds, and the Sync EXP is written by the Home commit in the same save; a fused catch takes no roster slot and no ranch G",
+    "ranch": "fusePartners(baseId, fodderIds) on the partner list: one save; a failed save changes nothing",
+    "writes": "progression.syncLevels only (base EXP, fodder records removed); the native release history, the native individuals and the Dex registration are not written"
+  }
 }

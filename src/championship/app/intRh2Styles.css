@@ -1117,7 +1117,7 @@ body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-status-b
 /* Match notices float over the field, not in a new full-width HUD row.
    Move only readout overlays clear of the 44px chip; canvas bounds stay intact. */
 @media (max-width: 600px) {
-  body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])):has(.cm-status-bar__matches:not([hidden])) { --cm-match-notice-offset: 50px; }
+  body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])):has(.cm-status-bar__matches:not([hidden])) { --cm-match-notice-offset: calc(var(--cm-touch) + 6px); }
 }
 
 

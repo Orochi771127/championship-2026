@@ -122,6 +122,10 @@ body[data-portrait-frame] .cm-toolbar { left: 0; right: 0; width: auto; transfor
 
 /* Screens sit between the shared bars; each bar reports its own height. */
 :root {
+  /* A touch target is 44 px on the glass. A small phone shows the whole interface smaller (one CSS zoom on <html>,
+     --cm-ui-zoom, portraitFrame.js), which shrank the status bar's keys to 35 px; dividing by the zoom keeps them whole.
+     A desktop window zoomed up keeps 44 px of its own. */
+  --cm-touch: max(44px, calc(44px / var(--cm-ui-zoom, 1)));
   --cm-screen-top: 0px;
   --cm-screen-bottom: 0px;
   --cm-screen-height: calc(var(--cm-viewport-height, var(--cm-app-viewport-height, calc(100 * var(--cm-dvh, 1dvh)))) - var(--cm-screen-top) - var(--cm-screen-bottom));
@@ -881,6 +885,15 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
 }
 .cm-digimon-control:disabled { border-color: var(--c-line-1); background: transparent; color: var(--c-text-disabled); }
 .cm-digimon-controls-note { margin: -4px 0 0; color: var(--c-text-3); font-size: var(--fs-label); }
+/* Same-line fusion (LINE_FUSION_20261117 P2): tick fodder, read the gain, confirm once. */
+.cm-digimon-fusion__list { display: grid; gap: 6px; max-height: calc(40 * var(--cm-dvh, 1dvh)); overflow-y: auto; }
+.cm-digimon-fusion__row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 4px 10px; min-height: var(--target, 44px); padding: 4px 8px; border: 1px solid var(--c-line-1, rgba(148, 163, 184, .4)); border-radius: 10px; }
+.cm-digimon-fusion__row input { width: 22px; height: 22px; }
+.cm-digimon-fusion__name { font-weight: 800; min-width: 0; overflow-wrap: anywhere; }
+.cm-digimon-fusion__facts { font-variant-numeric: tabular-nums; font-weight: 800; white-space: nowrap; }
+.cm-digimon-fusion__warning { grid-column: 2 / -1; color: #b45309; font-weight: 800; font-size: var(--fs-label); }
+.cm-digimon-fusion__preview { margin: 0; min-height: 1.4em; font-weight: 900; font-variant-numeric: tabular-nums; }
+.cm-digimon-fusion__empty { margin: 0; }
 
 .cm-digimon-rename {
   display: grid;
@@ -1228,8 +1241,12 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
 /* Wallet width must not depend on balance digits or transient save notices.
    Keep the existing calendar / wallet flex arrangement and <=420px row policy. */
 .cm-status-bar__save-slot { display: contents; }
+/* The slot keeps the save key's place even while the key is hidden. An empty slot must not take the taps meant for
+   what it floats over (the title-match notice sits under the wallet on a phone held sideways); the key itself does. */
+.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save-slot { pointer-events: none; }
+.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save-slot > * { pointer-events: auto; }
 /* Raising Save stays a real 44px control in wide phone layouts too. */
-.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save { min-width: 44px; min-height: 44px; }
+.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save { min-width: var(--cm-touch); min-height: var(--cm-touch); }
 .cm-status-bar__compact-value { display: none; }
 .cm-status-bar__currencies .cm-status-bar__bits {
   min-height: 44px; padding: 0; border: 0; border-radius: var(--r-control);
@@ -1246,11 +1263,11 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
   .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__bits-value, .cm-status-bar__diamond-text, .cm-status-bar__save-text) { display: none; }
   .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__compact-value { display: inline; white-space: nowrap; font-size: calc(14px * var(--text-scale)); line-height: 1.25; }
   .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__diamond[data-test-wallet="false"] .cm-status-bar__compact-value::before { content: "—"; }
-  .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save-slot { display: inline-flex; flex: 0 0 44px; width: 44px; min-height: 44px; align-items: center; justify-content: center; }
-  .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save { min-width: 44px; height: 44px; justify-content: center; padding: 0; }
+  .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save-slot { display: inline-flex; flex: 0 0 var(--cm-touch); width: var(--cm-touch); min-height: var(--cm-touch); align-items: center; justify-content: center; }
+  .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save { min-width: var(--cm-touch); height: var(--cm-touch); justify-content: center; padding: 0; }
   .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__save::after { inset: 0; }
   /* A small floating notice never participates in wallet flex sizing. */
-  .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__matches { position: absolute; left: max(10px, var(--safe-left)); right: auto; top: calc(100% + 6px); bottom: auto; max-width: calc(100% - 20px - var(--safe-left) - var(--safe-right)); min-width: 44px; min-height: 44px; height: 44px; font-size: calc(14px * var(--text-scale)); white-space: normal; }
+  .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__matches { position: absolute; left: max(10px, var(--safe-left)); right: auto; top: calc(100% + 6px); bottom: auto; max-width: calc(100% - 20px - var(--safe-left) - var(--safe-right)); min-width: var(--cm-touch); min-height: var(--cm-touch); height: var(--cm-touch); font-size: calc(14px * var(--text-scale)); white-space: normal; }
   .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__matches::after { inset: 0; }
   .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__matches-word { position: static; width: auto; height: auto; overflow: visible; clip-path: none; }
 }

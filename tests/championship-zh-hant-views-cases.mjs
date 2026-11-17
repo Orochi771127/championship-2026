@@ -287,3 +287,38 @@ test("Hunt result projection distinguishes an unnamed card entry from a user nam
   assert.deepEqual(frame.rows.map(row => row.displayName), ["火甲龍", "HUNT"]);
   assert.equal(JSON.stringify({ raw, cards }), before);
 });
+
+test("Hunt Result offers same-line fusion: a fuse key, the bases with what each gains, and what the fodder loses", t => {
+  // LINE_FUSION_20261117 P2.
+  const root = useDocument(t);
+  const rows = [
+    { kind: "CARD", id: "wild-1", key: "card:wild-1", speciesId: "species-034", displayName: "亞古獸", canRelease: true, canFuse: true, selected: true, grade: "A" },
+    { kind: "HOME", id: "home-1", key: "home:home-1", speciesId: "species-087", displayName: "角暴龍", canRelease: false, canFuse: false, grade: null,
+      fusionGain: { amount: 1140, before: { level: 12 }, after: { level: 13 } } },
+    { kind: "HOME", id: "home-2", key: "home:home-2", speciesId: "species-079", displayName: "風刃狼", canRelease: true, canFuse: false, grade: null }
+  ];
+  const block = { title: "HUNT RESULT", outcomeLabel: "ON MEMORY CARD", wildId: "wild-1", speciesId: "species-034",
+    speciesLabel: "SPECIES 034", displayName: "亞古獸", pendingHomeCommit: true, rows, pendingFusion: null };
+  const calls = [];
+  const intents = { setHuntResultName() {}, selectHuntResultEntry() {}, confirmHuntResult() {}, requestHuntResultRelease() {},
+    requestHuntResultFusion: key => calls.push(["request", key]), cancelHuntResultFusion: () => calls.push(["cancel"]),
+    confirmHuntResultFusion: id => calls.push(["confirm", id]) };
+  const view = createHuntResultView({ root, source: { getFrame: () => ({ screen: "HUNT_RESULT", huntResult: block }), intents } });
+  const fuseKeys = () => root.querySelectorAll("button").filter(button => button.dataset.fuseKey);
+  assert.deepEqual(fuseKeys().map(button => [button.dataset.fuseKey, button.textContent]), [["card:wild-1", "融合"]], "only a row that can be fused has the key");
+  assert.deepEqual(root.querySelectorAll("span").filter(span => span.className === "cm-vs2-result__fusion-gain").map(span => span.textContent), ["+1,140 EXP"]);
+  fuseKeys()[0].click();
+  assert.deepEqual(calls, [["request", "card:wild-1"]]);
+  view.render({ screen: "HUNT_RESULT", huntResult: { ...block, pendingFusion: { row: rows[0], warnings: [{ kind: "LEVEL", level: 12 }, { kind: "BLOODLINE" }],
+    bases: [{ instanceId: "home-1", displayName: "角暴龍", line: 0.6,
+      preview: { amount: 684, before: { level: 12 }, after: { level: 12 } } }] } } });
+  const bases = root.querySelectorAll("button").filter(button => button.dataset.fusionBase);
+  assert.deepEqual(bases.map(button => button.dataset.fusionBase), ["home-1"]);
+  const spans = name => root.querySelectorAll("span").filter(span => span.className === name).map(span => span.textContent);
+  assert.deepEqual(spans("cm-vs2-result__fusion-name"), ["角暴龍"]);
+  assert.deepEqual(spans("cm-vs2-result__fusion-preview"), ["Lv.12 → Lv.12 · +684 EXP · ×0.6"]);
+  assert.deepEqual(root.querySelectorAll("p").filter(p => p.className === "cm-vs2-result__fusion-warning").map(p => p.textContent), ["失去 Lv.12 拍檔", "失去血統"]);
+  assert.ok(fuseKeys().every(button => button.disabled), "one choice at a time");
+  bases[0].click();
+  assert.deepEqual(calls.at(-1), ["confirm", "home-1"]);
+});
