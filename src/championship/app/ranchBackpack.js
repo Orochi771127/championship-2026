@@ -32,7 +32,9 @@ export const BACKPACK_TABS = Object.freeze([
   Object.freeze({ id: 'supplies', title: '日常用品' }),
   Object.freeze({ id: 'chips', title: '超頻晶片' }),
   Object.freeze({ id: 'metals', title: '進化金屬' }),
-  Object.freeze({ id: 'automation', title: '自動模組' })
+  Object.freeze({ id: 'automation', title: '自動模組' }),
+  // SUPPLEMENTS_20261118: partner supplements, bought with Bits here and given to a partner or the ranch.
+  Object.freeze({ id: 'tonics', title: '補品' })
 ]);
 
 // Shop records behind the four Training tools (RAISING_TOOL_SHOP_RECORDS): using one picks the tool.
@@ -153,15 +155,17 @@ export function renderBackpack(doc, shopFrame) {
  * useItem(itemId, instanceId, {mode}), reshape(instanceId, personality), deployCore(coreId, cageId),
  * disarm(itemId), selectTool(toolId) and openFacilities().
  */
-export function createBackpackPanel({ doc = globalThis.document, getShopFrame, getGachaFrame = () => null, intents = {},
+export function createBackpackPanel({ doc = globalThis.document, getShopFrame, getGachaFrame = () => null, getSuppliesFrame = () => null, intents = {},
   tab = 'supplies', partnerId = null, onLeave = () => {} } = {}) {
   const body = el(doc, 'div', 'cm-backpack');
   body.dataset.tab = tab;
-  const state = { tab, open: null, partner: partnerId, personality: null, slot: null, receipt: null };
+  const state = { tab, open: null, partner: partnerId, personality: null, slot: null, receipt: null, tonic: null };
 
   function paint() {
     const shopFrame = getShopFrame?.() ?? null, gacha = getGachaFrame?.() ?? null;
     const tabs = backpackTabs(shopFrame, gacha);
+    const supplies = getSuppliesFrame?.() ?? null;
+    tabs.tonics = (supplies?.items ?? []).filter((item) => item.owned > 0);
     body.replaceChildren();
     body.dataset.tab = state.tab;
     const wallet = el(doc, 'p', 'cm-backpack__wallet', `${uiText('金幣')} ${formatNumber(shopFrame?.bits ?? 0)}`);
@@ -185,6 +189,7 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
       receipt.setAttribute('role', 'status');
       body.append(receipt);
     }
+    if (state.tab === 'tonics') { paintTonics(supplies, gacha); return; }
     const items = tabs[state.tab];
     const list = el(doc, 'ul', 'cm-backpack__list');
     list.setAttribute('role', 'tabpanel');
@@ -194,6 +199,48 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
       return;
     }
     for (const item of items) list.append(row(item, gacha));
+    body.append(list);
+  }
+
+  // 補品: every supplement is on the shelf with its price; a recovery one asks which partner, a ranch one starts at once.
+  function paintTonics(supplies, gacha) {
+    const list = el(doc, 'ul', 'cm-backpack__list');
+    list.setAttribute('role', 'tabpanel');
+    const say = (result, okText) => { state.receipt = { ok: Boolean(result?.ok), text: result?.ok ? okText : uiText(result?.reason ?? 'SAVE_FAILED') }; state.tonic = null; paint(); };
+    for (const item of supplies?.items ?? []) {
+      const line = el(doc, 'li', 'cm-backpack__item cm-backpack__tonic');
+      line.dataset.supply = item.id;
+      line.append(el(doc, 'span', 'cm-backpack__name', uiText(item.id)),
+        el(doc, 'span', 'cm-backpack__effect', uiText(`${item.id}:effect`)),
+        el(doc, 'span', 'cm-backpack__count', `×${formatNumber(item.owned)}`));
+      if (item.activeUntil) {
+        const left = Math.max(1, Math.ceil((item.activeUntil - supplies.now) / 60000));
+        line.append(el(doc, 'span', 'cm-backpack__active', uiText('SUPPLY_ACTIVE_MINUTES', { minutes: formatNumber(left) })));
+      }
+      const buy = el(doc, 'button', 'cm-backpack__use', `${uiText('SUPPLY_BUY')} ${formatNumber(item.bits)}`);
+      buy.type = 'button'; buy.dataset.buySupply = item.id;
+      buy.disabled = (supplies?.bits ?? 0) < item.bits || item.owned >= 99;
+      buy.addEventListener('click', () => say(intents.buySupply?.(item.id, 1), `${uiText(item.id)} +1`));
+      const use = el(doc, 'button', 'cm-backpack__use', uiText('SUPPLY_USE'));
+      use.type = 'button'; use.dataset.useSupply = item.id;
+      use.disabled = item.owned < 1;
+      use.addEventListener('click', () => {
+        if (item.kind === 'RANCH') { say(intents.useSupply?.(item.id, null), `${uiText(item.id)} ${uiText('SUPPLY_STARTED')}`); return; }
+        state.tonic = state.tonic === item.id ? null : item.id; state.receipt = null; paint();
+      });
+      line.append(buy, use);
+      if (state.tonic === item.id) {
+        const picker = el(doc, 'div', 'cm-backpack__partners');
+        for (const partner of gacha?.partners ?? []) {
+          const pick = el(doc, 'button', 'cm-backpack__partner', partner.displayName ?? partner.name ?? '');
+          pick.type = 'button'; pick.dataset.supplyPartner = partner.instanceId;
+          pick.addEventListener('click', () => say(intents.useSupply?.(item.id, partner.instanceId), `${partner.displayName ?? partner.name ?? ''} · ${uiText(item.id)}`));
+          picker.append(pick);
+        }
+        line.append(picker);
+      }
+      list.append(line);
+    }
     body.append(list);
   }
 
@@ -415,10 +462,10 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
  * intents it also uses chips and metals and mounts cores. `tab` / `partnerId` preselect, e.g. a
  * partner card's 「使用晶片」 opens the chips with that partner chosen.
  */
-export function openRanchBackpack({ getShopFrame, getGachaFrame, intents, tab = 'supplies', partnerId = null, doc = globalThis.document, signal = null }) {
+export function openRanchBackpack({ getShopFrame, getGachaFrame, getSuppliesFrame = () => null, intents, tab = 'supplies', partnerId = null, doc = globalThis.document, signal = null }) {
   const leave = new AbortController();
   if (signal) signal.addEventListener('abort', () => leave.abort(), { once: true });
-  const panel = createBackpackPanel({ doc, getShopFrame, getGachaFrame, intents, tab, partnerId, onLeave: () => leave.abort() });
+  const panel = createBackpackPanel({ doc, getShopFrame, getGachaFrame, getSuppliesFrame, intents, tab, partnerId, onLeave: () => leave.abort() });
   return showChoiceDialog({
     title: uiText('背包'),
     message: uiText('養成用品、轉蛋晶片、進化金屬與自動化模組。探索手帳收下的發現也會放進這裡。'),
