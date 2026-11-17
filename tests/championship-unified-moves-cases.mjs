@@ -30,11 +30,13 @@ test('every three.js piece a move plays is baked, grouped, and falls back to a s
   for (const name of Object.keys(MOVE_PIECE_3D)) assert.ok(MOVE_VFX_3D_PIECE_GROUP[name], `${name} not baked`);
 });
 
-test('the Data Arena ultimates and the originals\' ultimates each play a three.js piece no other ultimate plays', () => {
-  const ultimates = sig.moves.filter(([key, tier]) => tier === 2 && (typeof key === 'string' || key >= 596)).map(([key]) => key);
+test('every ultimate (species, originals, Data Arena) plays a three.js piece no other ultimate plays', () => {
+  const ultimates = sig.moves.filter(([key, tier]) => tier === 2).map(([key]) => key);
+  assert.ok(ultimates.length >= 220, `${ultimates.length} ultimates`);
   const seen = new Map();
   for (const key of ultimates) {
     const piece = moveVfxChoreography(key).contact.piece;
+    assert.ok(piece.startsWith('3d-'), `${key} plays ${piece}`);
     assert.ok(!seen.has(piece), `${key} and ${seen.get(piece)} share ${piece}`);
     seen.set(piece, key);
   }

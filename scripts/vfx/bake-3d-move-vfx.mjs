@@ -18,7 +18,7 @@
 // anchor/fit/noSmoke/loop as in bake-move-piece-vfx.mjs; group, the module; base, the shared
 // piece it replaces (played until the group is loaded).
 //
-// Usage: node scripts/vfx/bake-3d-move-vfx.mjs [--check] [--only a,b] [--sheet <dir>]
+// Usage: node scripts/vfx/bake-3d-move-vfx.mjs [--check] [--only a,b [--write]] [--sheet <dir>]
 //   GAMEDEVS_HOME  a folder holding the downloaded effects (effects/<id>.js, hash-checked
 //                  against catalog.v2.json), three@0.187.0 (node_modules) and harness.html
 import fs from 'node:fs';
@@ -210,6 +210,25 @@ if (args.includes('--check')) {
     }
   } finally { await browser.close(); server.close(); }
   if (failed.length) { console.error(`failed: ${failed.join(', ')}`); process.exitCode = 1; }
+  // --only with --write: rewrite just the baked looks' groups and merge them into the index
+  if (only && args.includes('--write') && !failed.length) {
+    const index = await import(pathToFileURL(path.join(root, INDEX)).href);
+    const groups = {};
+    for (const [n, g] of Object.entries(index.MOVE_VFX_3D_PIECE_GROUP)) (groups[g] ??= []).push(n);
+    const fresh = new Map(looks.map(l => [l.name, l]));
+    for (const [g, names] of Object.entries(groups)) groups[g] = names.filter(n => !fresh.has(n));
+    for (const look of looks) (groups[look.group] ??= []).push(look.name);
+    const touched = new Set(looks.map(l => l.group));
+    for (const g of touched) {
+      const mod = fs.existsSync(path.join(root, groupFile(g))) ? (await import(pathToFileURL(path.join(root, groupFile(g))).href)).MOVE_VFX_PIECE_SPRITES : {};
+      const list = groups[g].map(n => fresh.get(n) ?? {name: n, ...mod[n], frames: [...mod[n].frames], glow: [...mod[n].glow], palette: mod[n].palette.map(c => [...c])});
+      fs.writeFileSync(path.join(root, groupFile(g)), moduleText(list, {header: NOTICE_3D}));
+    }
+    for (const g of Object.keys(groups)) if (!groups[g].length) { delete groups[g]; if (fs.existsSync(path.join(root, groupFile(g)))) fs.unlinkSync(path.join(root, groupFile(g))); }
+    const asLooks = Object.fromEntries(Object.entries(groups).map(([g, names]) => [g, names.map(n => ({name: n, base: fresh.get(n)?.base ?? index.MOVE_VFX_3D_FALLBACK[n]}))]));
+    fs.writeFileSync(path.join(root, INDEX), indexText(asLooks));
+    console.log(`rewrote ${touched.size} group(s)`);
+  }
   if (!only && !failed.length) {
     const groups = {};
     for (const look of looks) (groups[look.group] ??= []).push(look);
