@@ -1,5 +1,21 @@
 # Championship Owner Direction
 
+<!-- record-id: TAMER_TALENTS_T1_20261117 -->
+## 2026-11-17 — Tamer talents T1: tamer level, points, the tree, and ten wired effects
+
+Under the standing goal recorded in `LINE_FUSION_P2_FUSION_20261117` and the design `LINE_FUSION_TAMER_TALENTS_DESIGN_20261117`.
+
+`OWNER_APPROVED_ADAPTATION`, as designed (talent plan sections 3–4):
+
+- The tamer has a level 1–50 (`round(40 × level^1.3)` EXP a level). T1 pays tamer EXP for a catch brought Home (20 × grade), a fusion (8 a fodder) and a settled owned-party battle (title/championship 60, free/arena 30, practice 5; a loss 40 %), in the same save as what earned it. Password, link and online battles pay none.
+- Points are worked out, never stored: `(level − 1) + 2 × title rank + floor(registered species / 25)`. The save keeps where they were spent (`progression.tamerTalents`). The first respec is free, later ones cost 500 crystals.
+- The tree is the decided one: four lines × three tiers × three nodes and two keystones a line; tiers open at 6 and 14 points in the line, a keystone at 22. Title matches and championships count only the first `6 + 3 × rank` commander points.
+- **A node is offered only once its effect is wired.** T1 opens ten: 記憶擴充, 長息, 群聚嗅覺, 識貨 (hunter); 精心照料, 守夜, 同調融合, 同線親和 (breeder); 同步訓練 (commander); 結晶 (trader). The other 26 nodes and the eight keystones show as 「未開放」 and take no point, so a point is never spent on something that does nothing.
+- 守夜 is read as "15 % a rank that a handled sleeper is not disturbed": the night disturbance itself is not a chance in the game.
+- The tree opens in place on the tamer profile (「天賦」); the ROM layout is untouched.
+
+Not in T1, to follow: the remaining nodes and keystones (T2/T3), the supplement-dependent ones (S1/S2), and the other tamer EXP sources (journey stars, tower first clears, daily care, the day's first hunt and battle). Contract: `docs/contracts/championship/TAMER_TALENTS_20261117.json`.
+
 <!-- record-id: HUNT_HERDS_P3_20261117 -->
 ## 2026-11-17 — Fusion plan P3: Hunt herds, more partners of the species already out
 

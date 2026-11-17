@@ -1,0 +1,82 @@
+{
+  "id": "TAMER_TALENTS_20261117",
+  "classification": "OWNER_APPROVED_ADAPTATION: a tamer level 1..50 with its own EXP and a four-line talent tree whose points are worked out from the level, the title rank and the Dex (LINE_FUSION_TAMER_TALENTS_DESIGN_20261117); a talent is a modifier read where the game works a value out and never writes a native individual, a save word or a battle code",
+  "supersedes": {
+    "contract": "docs/contracts/championship/JOURNEY_20261110.json",
+    "sourceLock": "src/championship/app/championshipStandaloneSave.js"
+  },
+  "saveField": {
+    "path": "progression.tamerTalents = { version: 1, level, exp, nodes: { [nodeId]: rank }, keystones: { [line]: keystoneId }, respecs }",
+    "migration": "none: a save without it is Lv.1 with nothing spent; an unknown shape starts again; ranks are clamped to the node and a keystone of another line is dropped (productTamerTalents.normalizeTamerTalents)"
+  },
+  "rules": {
+    "points": "points = (level - 1) + 2 x title rank + floor(registered species / 25), never stored; the whole tree costs 124; the friends playtest opens all 124",
+    "level": "EXP to the next level = round(40 x level^1.3); Lv.50 is the cap",
+    "exp": "a catch brought Home 20 x grade (S 1.6, A 1.25, B 1.0, C 0.8), a fusion 8 a fodder, a settled owned-party battle TITLE/CHAMPIONSHIP 60, FREE/ARENA 30, PRACTICE 5 (a loss 40 %); paid in the same save as what earned it; password, link and online battles pay none",
+    "tree": "four lines x three tiers x three nodes (a rank one point; tiers open at 6 and 14 points spent in the line's nodes) and two keystones a line of which one is taken (4 points at 22)",
+    "respec": "every point back, keystones included; the first is free, then 500 crystals",
+    "titleCap": "title matches and championships count only the first 6 + 3 x rank commander points: tier one, two, three, each node rank by rank across the tier, the keystone last",
+    "open": "a node is offered only once its effect is wired (TALENT_WIRED_KEYS); the rest show as not open and take no point"
+  },
+  "wiredT1": {
+    "memoryG": "hunter 記憶擴充: memory card +8 G a rank (huntMemoryCapacityG)",
+    "huntSeconds": "hunter 長息: real-time hunt +5 s a rank",
+    "herdExtra": "hunter 群聚嗅覺: herd +1 a rank, still at most 20 partners",
+    "gradeHighPercent": "hunter 識貨: S and A chance +10 % of themselves a rank, taken from C then B",
+    "growthPercent": "breeder 精心照料: training stat gains +4 % a rank on top of the habitat bonus",
+    "nightDisturbPercent": "breeder 守夜: 15 % a rank that a handled sleeper is not disturbed (product roll)",
+    "fusionExpPercent": "breeder 同調融合: fusion base share +10 % a rank (not the EXP the fodder carried)",
+    "fusionLowerLine": "breeder 同線親和: lower-stage line share +0.1 a rank, 0.6 up to 0.9",
+    "syncExpPercent": "commander 同步訓練: battle Sync EXP +5 % a rank",
+    "crystalPercent": "trader 結晶: crystals paid by tower, zones and patrol +10 % a rank"
+  },
+  "notYetOpen": "26 nodes and all 8 keystones; they follow in later batches together with the remaining tamer EXP sources (journey stars, tower first clears, daily care, the day's first hunt and battle)",
+  "notChanged": [
+    "the native individual fields, battle codes and match tables",
+    "the gachapon rates, diamond prices and diamond or ticket rewards",
+    "the tutorial hunt, capture replays and parity tests (no talent applies)",
+    "the save key and schemaVersion"
+  ],
+  "sourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "6f39de1bfe87973d281413d3504946b72bc854604125866290371585b765c1da"
+  },
+  "historicalSourceLocks": {
+    "JOURNEY_20261110": {
+      "src/championship/app/championshipStandaloneSave.js": "9881b49c9f9a322bceb7bded5aa8b03a2a0fb08982ebb5693ac719f17ef426d7"
+    },
+    "SYNC_LEVEL_20261109": {
+      "src/championship/app/championshipStandaloneSave.js": "eaf8df4ab8f0329f2337afe19d7d34f703065e1ec3ce30f54b4b8a09d1d1c1c5"
+    },
+    "ROYAL_NEW_MAPS_20261103": {
+      "src/championship/app/championshipStandaloneSave.js": "16ddc21be1570c51e87fb592635d5a5437ed25b9a8aeb660993f07494598b8c1"
+    },
+    "HUNT_TOOL_TIERS_20261103": {
+      "src/championship/app/championshipStandaloneSave.js": "798b838a72251d800b6feb989946e6a5feed1e6724bd5455a562ad55958b613a"
+    },
+    "DIAMOND_ECONOMY_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "15067ee0d3f47971a91a8189edaaa0c22ba3d43a831408b4f8bcc1e525b64c11"
+    },
+    "STAGE_REDESIGN_BURST_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "44b4ceec862776600a237a9cc54a160952f24305ed431a0b33a5addf4bba968d"
+    },
+    "ONLINE_BIND_REWARD_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c7abccc2403e3428e4754c87981a940db378dc4b1c17995363df6049ceeb680"
+    },
+    "CYBER_GACHA_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c4e7336e17e35099758cea84ff533e81c60c08bacbafef356afdbf55953b135"
+    },
+    "BATTLE_TACTICS_20261028": {
+      "src/championship/app/championshipStandaloneSave.js": "3a72fce7d38151f473f343fb8b9f59349daef1beb7cb09b6a0547c628d07ac8e"
+    },
+    "HEX_CAGE_WORLD_20261026": {
+      "src/championship/app/championshipStandaloneSave.js": "aaa72f6e08b150ac9bebb81fb2e6a8efefd532ab0ed7b7e24a7a0a9ae3d97f74"
+    }
+  },
+  "authorization": "Owner 2026-11-17 standing goal: decided non-animation designs are implemented, integrated, verified and shipped batch by batch without asking per batch.",
+  "tests": [
+    "tests/championship-tamer-talents-cases.mjs",
+    "tests/championship-zh-hant-views-cases.mjs",
+    "tests/championship-lion-display-correction-cases.mjs"
+  ],
+  "physicalDeviceAccepted": false
+}

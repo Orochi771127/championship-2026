@@ -121850,7 +121850,7 @@
     },
     {
       "path": "src/championship/app/ChampionshipPersistentSavePort.js",
-      "sha256": "209474dd585aa0a8f23b80a4eff8f0449ee4322822d68f21999d68eae5454f2f"
+      "sha256": "807db8bde38258b35d7c61aa60f28e99524f76230973f5325c16e0820259bd6c"
     },
     {
       "path": "src/championship/app/championshipRaisingProduction.js",
@@ -121866,7 +121866,7 @@
     },
     {
       "path": "src/championship/app/championshipStandaloneApp.js",
-      "sha256": "9b471eacbf9d85cfda75d58d0a6042e6b2c4ae54b8e499fda6a65ed240c85611"
+      "sha256": "c7844d906c459f0012a0d4dd2b866baa106765d13310041f1d4b31b554b5ed43"
     },
     {
       "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -121874,7 +121874,7 @@
     },
     {
       "path": "src/championship/app/championshipStandaloneSave.js",
-      "sha256": "9881b49c9f9a322bceb7bded5aa8b03a2a0fb08982ebb5693ac719f17ef426d7"
+      "sha256": "6f39de1bfe87973d281413d3504946b72bc854604125866290371585b765c1da"
     },
     {
       "path": "src/championship/app/championshipStatusBar.js",
@@ -122026,7 +122026,7 @@
     },
     {
       "path": "src/championship/app/main.js",
-      "sha256": "3e8ed909b00dba68e6c9c8489b20b8920371e9d70ca5bae4af3d2b6811287c6b"
+      "sha256": "c7fa0f14b49d2a4a9f72fb6e9372507c40f3912f1e65693e2a5b473f69f8fcad"
     },
     {
       "path": "src/championship/app/medalCollection.css",
@@ -122218,11 +122218,15 @@
     },
     {
       "path": "src/championship/app/styles.css",
-      "sha256": "fa75dfba5694a0a0147e2eaeb097b1a711954320a4703e370b3076e51d1fc17a"
+      "sha256": "b2503c9c8f79e336a57cf3d9e3249d5b85093ab68992efcf2f27e32085a7dda6"
     },
     {
       "path": "src/championship/app/tamerInfoScreen.js",
       "sha256": "aed828a0fc0abc459a7258fe75a452288e190a28a9d32c899d54d33ae96ac0b4"
+    },
+    {
+      "path": "src/championship/app/tamerTalentPanel.js",
+      "sha256": "f9627c078f15f518d26c5f014d5450ec0833b0fd2d7a5fabedc31026931af734"
     },
     {
       "path": "src/championship/app/titleParade.js",
@@ -122698,7 +122702,7 @@
     },
     {
       "path": "src/championship/contracts/productLineFusion.js",
-      "sha256": "ee1759e6e7b26d7cc745daf70255ff8fcace3d9b8dc84e5b24372b29fa4256e3"
+      "sha256": "535c2f8673fb420785ae13cb159827adbb8a7368d5449c14ad317eaa6ad56e34"
     },
     {
       "path": "src/championship/contracts/productOriginalSpecies.js",
@@ -122718,7 +122722,11 @@
     },
     {
       "path": "src/championship/contracts/productSyncLevel.js",
-      "sha256": "5bd93d2d221ca48b6a5070acd7744c88950ce3ec80556222d00b81e1e665e018"
+      "sha256": "a6d6e5a8078ba8c5e87fc17392350ec1324a8dbe75d2e156db8636858c85d25d"
+    },
+    {
+      "path": "src/championship/contracts/productTamerTalents.js",
+      "sha256": "94cbc0484e746f4b301e8b110f25752a77b07eb94cb8ddefba19f7df6e98985a"
     },
     {
       "path": "src/championship/contracts/speciesTaxonomy.js",
@@ -122978,7 +122986,7 @@
     },
     {
       "path": "src/championship/hunt/capture/productHuntHerds.js",
-      "sha256": "eb618753a57a5c1b0b283728b1292829e8b1982f6a7c9abfc23489898137a41f"
+      "sha256": "6ae48fb9a2e64c08e119c79116fde7f4a07b3bb62125ef34a4ad5b051aa292b1"
     },
     {
       "path": "src/championship/hunt/capture/productHuntSpawnSpread.js",
@@ -123978,7 +123986,7 @@
     },
     {
       "path": "src/championship/raising/nativeRaisingActor.js",
-      "sha256": "0726e0770be9a536dd7a564c9ecf36792abaab4b361a23dac3a9930b3cdcc5c6"
+      "sha256": "c1bdc59a7ec3db3b1de0c5dfbcef43265539ed0db66a886e3b47d784f6f8e896"
     },
     {
       "path": "src/championship/raising/nativeRaisingCalendar.js",
@@ -124271,6 +124279,10 @@
     {
       "path": "src/championship/text/syncLevelText.js",
       "sha256": "44a02e939596349d76596d3f5455ef578d2ac8d1a7de93dd62baaf96ef917d50"
+    },
+    {
+      "path": "src/championship/text/tamerTalentText.js",
+      "sha256": "293aebaed6dffdd81465e8df1fc7c0303097be557e5de6cf59982676c99efc31"
     },
     {
       "path": "src/championship/text/taxonomyText.js",
