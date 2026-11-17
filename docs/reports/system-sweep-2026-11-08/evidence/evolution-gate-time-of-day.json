@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "recordedOn": "2026-11-08",
+  "gate": "Evolution streaming freeze actual browser gate (.github/workflows/evolution-streaming-review.yml)",
+  "affectedTest": "tests/championship-evolution-streaming-browser.cjs",
+  "assertion": "Recovered world responds to drag",
+  "rule": "src/championship/time/realtimeClock.js: 22:00-07:00 device local time is the night nap; GitHub runners use UTC",
+  "ciRuns": [
+    { "run": 42466934676, "commit": "dd7dfef4", "startedUtc": "2026-11-08T09:22:45Z", "conclusion": "success" },
+    { "run": 42477996295, "commit": "03833168", "startedUtc": "2026-11-08T11:57:28Z", "conclusion": "success" },
+    { "run": 42480377398, "commit": "bd485b99", "startedUtc": "2026-11-08T12:27:53Z", "conclusion": "success" },
+    { "run": 42484767614, "commit": "d273c2ee", "startedUtc": "2026-11-08T13:23:53Z", "conclusion": "success" },
+    { "run": 42485213394, "commit": "471151b2", "startedUtc": "2026-11-08T13:29:41Z", "conclusion": "success" },
+    { "run": 42533848093, "commit": "a640d7b4", "startedUtc": "2026-11-08T23:10:11Z", "conclusion": "failure", "drag": { "cameraBefore": 2760, "cameraAfter": 2760 } },
+    { "run": 42534143619, "commit": "ef0047a7", "startedUtc": "2026-11-08T23:13:36Z", "conclusion": "failure" }
+  ],
+  "ciRunsNotCounted": "Runs 42477066451, 42482280368, 42531783489, 42533609539 and 42533705610 stopped at build:playtest on unapproved source hashes and never reached the browser.",
+  "practiceOtherVisibleNativeBounds": {
+    "ciPass": { "x": -11.9945, "y": -19.817, "width": 24.77125, "height": 19.817 },
+    "ciFail": { "x": -4.43275, "y": -7.8225, "width": 31.8115, "height": 11.21225 }
+  },
+  "localControl": {
+    "commit": "ef0047a7",
+    "engine": "chromium",
+    "server": "python3 -m http.server 8765 at the repository root, as in the workflow",
+    "timezoneInjectedOnlyInAnUntrackedCopy": true,
+    "beforeFix": [
+      { "timezoneId": "Pacific/Honolulu", "localTime": "13:25", "result": "PASS", "drag": { "cameraBefore": 2760, "cameraAfter": 3048 } },
+      { "timezoneId": "UTC", "localTime": "23:25", "result": "FAIL Recovered world responds to drag", "drag": { "cameraBefore": 2760, "cameraAfter": 2760 },
+        "practiceOtherVisibleNativeBounds": { "x": -4.43275, "y": -7.8225, "width": 31.8115, "height": 11.21225 } }
+    ],
+    "afterFix": [
+      { "timezoneId": "UTC", "result": "PASS (delay, reject)", "lane": 0.7, "drag": { "cameraBefore": 2760, "cameraAfter": 3048 },
+        "practiceOtherHitBoxCss": { "x": 211, "y": 421, "width": 72, "height": 44 }, "note": "lanes 0.65 (y 463) and 0.6 (y 427) cross the napping partner" },
+      { "timezoneId": "Pacific/Honolulu", "result": "PASS (delay, reject)", "lane": 0.65, "drag": { "cameraBefore": 2760, "cameraAfter": 3048 } },
+      { "timezoneId": "not set (container UTC, night)", "result": "PASS (delay, reject)", "lane": 0.7 },
+      { "mode": "--baseline", "result": "EXPECTED_BASELINE_REPRODUCED" }
+    ],
+    "webkit": "not available locally; verified by CI"
+  },
+  "productSourceHashesChanged": false,
+  "clockMocked": false
+}

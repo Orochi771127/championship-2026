@@ -200,6 +200,19 @@ test('the app catalyst takes the route the player picks, waives what it lacks an
     const used = app.gachaUseItem('metal:chrono-ore-shard', partner.instanceId, {mode: 'CATALYST', form: route.target});
     assert.equal(used.ok, true, used.reason);
     assert.deepEqual([used.kind, used.target, used.waived], ['CATALYST', route.target, route.unmetCount]);
+    // System sweep S1 (2026-11-08): the metal is held, not spent, while the evolution runs, so a save taken now still
+    // holds both shards and no bloodline; both are written with the new form.
+    app.save();
+    assert.equal(saved().progression.cyberGacha.metals['metal:chrono-ore-shard'], 2);
+    assert.equal(saved().progression.cyberGacha.bloodlines?.[partner.instanceId], undefined);
+    while (app.getRaisingMailbox().activeId !== null) app.acknowledgeRaisingMail();
+    for (let frames = 0; app.getRaisingLifecycleFrame().evolution; frames += 10) {
+      assert.ok(frames < 5000, 'the evolution finishes');
+      const evolution = app.getRaisingLifecycleFrame().evolution;
+      if (evolution.choicePending) app.selectRaisingEvolutionChoice(evolution.instanceId, evolution.target);
+      app.advanceRaisingPresentation({frames: 10});
+    }
+    app.save();
     assert.equal(saved().progression.cyberGacha.bloodlines[partner.instanceId], 'chronoOre');
     assert.equal(saved().progression.cyberGacha.metals['metal:chrono-ore-shard'], 1);
   } finally { await app.dispose(); }

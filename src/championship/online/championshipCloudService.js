@@ -15,6 +15,10 @@ import { loadSupabaseLibrary } from "./supabaseLoader.js";
 import { createSupabaseAdapter, SUPABASE_MODE } from "./supabaseMode.js";
 import { onlineText } from "../text/onlineText.js";
 
+// The online session map entry that holds a first-bind claim this device has not paid yet.
+export const BIND_REWARD_PENDING_ENTRY = "championship-bind-reward-pending";
+const BIND_REWARD_FINAL_REFUSALS = new Set(["BIND_REWARD_ALREADY_CLAIMED", "ACCOUNT_NOT_LINKED", "SAVE_REF_REQUIRED"]);
+
 export const CLOUD_SYNC_STATES = Object.freeze(["LOCAL_ONLY", "SYNCING", "SYNCED", "OFFLINE", "FAILED", "CHOICE"]);
 
 export function createChampionshipCloudService({
@@ -45,6 +49,20 @@ export function createChampionshipCloudService({
       })().catch(error => { supabaseLoading = null; emit({ libraryError: error?.message ?? String(error) }); return local; });
     }
     return supabaseLoading;
+  }
+  // First-bind gift in flight (2026-11-08): written to this device's online session map just before the cloud
+  // claim, removed once the open save is paid or the ledger refuses for good. Only this marker lets a later page
+  // ask again. The ledger's save reference is the same for every save, so without it any unpaid save of the
+  // account would be paid on its own; with it, each claim this device made is paid at most once.
+  function pendingBindReward() {
+    try { const value = JSON.parse(sessionStorage?.getItem?.(BIND_REWARD_PENDING_ENTRY) ?? "null"); return value?.version === 1 ? value : null; }
+    catch { return null; }
+  }
+  function markBindRewardPending(userId) {
+    try { sessionStorage?.setItem?.(BIND_REWARD_PENDING_ENTRY, JSON.stringify({ version: 1, userId: userId ?? null })); } catch { /* blocked storage: no recovery */ }
+  }
+  function clearBindRewardPending() {
+    try { sessionStorage?.removeItem?.(BIND_REWARD_PENDING_ENTRY); } catch { /* nothing stored */ }
   }
   const identityArgs = () => ({ preferredCode: hooks.preferredCode?.() ?? null, tamerName: hooks.tamerName?.() ?? "", rankTitle: hooks.rankTitle?.() ?? "", acePartner: hooks.acePartner?.() ?? null });
   async function ensureIdentity() {
@@ -103,8 +121,33 @@ export function createChampionshipCloudService({
     /** First-bind gift. `saveRef` is the hashed save id the ledger keeps (claim_bind_reward). */
     async claimBindReward({ saveRef = null } = {}) {
       const a = await adapter(); await identityFor();
+      if (a.mode === SUPABASE_MODE) markBindRewardPending(state.identity?.userId);
       const out = await a.claimBindReward(saveRef);
       if (out?.ok && !out.preview && state.identity) emit({ identity: Object.freeze({ ...state.identity, bindRewardClaimed: true }) });
+      if (out?.ok === false && BIND_REWARD_FINAL_REFUSALS.has(out.reason)) clearBindRewardPending();
+      return out ?? Object.freeze({ ok: false, reason: "BIND_REWARD_UNAVAILABLE" });
+    },
+    /** The open save holds the gift (paid now, or already before): nothing is owed for this device's claim. */
+    settleBindReward() { clearBindRewardPending(); },
+    /**
+     * First-bind gift recovery (Owner 2026-11-08): a claim this device sent may be in the ledger while no save
+     * was paid (the page closed mid-claim, or the local write was refused or failed). Only with this device's
+     * pending marker, only for the account that sent it, and never signing anyone in, it asks the ledger
+     * again; the ledger repeats its answer, and the caller pays the open save and settles the marker.
+     */
+    async recoverBindReward({ saveRef = null } = {}) {
+      if (!config.configured || !state.online) return Object.freeze({ ok: false, reason: "CLOUD_NOT_CONFIGURED" });
+      const pending = pendingBindReward();
+      if (!pending) return Object.freeze({ ok: false, reason: "NOTHING_PENDING" });
+      if (!saveRef) return Object.freeze({ ok: false, reason: "SAVE_REF_REQUIRED" });
+      const a = await adapter();
+      if (a.mode !== SUPABASE_MODE) return Object.freeze({ ok: false, reason: "CLOUD_NOT_CONFIGURED" });
+      const current = await a.currentIdentity();
+      if (!current || current.isAnonymous !== false) return Object.freeze({ ok: false, reason: "ACCOUNT_NOT_LINKED" });
+      if (pending.userId && current.userId && pending.userId !== current.userId) { clearBindRewardPending(); return Object.freeze({ ok: false, reason: "ACCOUNT_CHANGED" }); }
+      const out = await a.claimBindReward(saveRef);
+      if (out?.ok && !out.preview && state.identity) emit({ identity: Object.freeze({ ...state.identity, bindRewardClaimed: true }) });
+      if (out?.ok === false && BIND_REWARD_FINAL_REFUSALS.has(out.reason)) clearBindRewardPending();
       return out ?? Object.freeze({ ok: false, reason: "BIND_REWARD_UNAVAILABLE" });
     },
     /** Signs in again after an OAuth return or a provider change, so the identity reflects the linked account. */

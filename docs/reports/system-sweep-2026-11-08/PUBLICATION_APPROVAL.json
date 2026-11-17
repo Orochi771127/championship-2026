@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "recordedOn": "2026-11-08",
+  "timezone": "Asia/Taipei",
+  "approvalId": "SYSTEM_SWEEP_S1_S2_S3_HASHES_20261108",
+  "ownerReply": "1.核准\n2. 補發",
+  "ownerReplyNote": "Item 1 answers the request to approve the two public build hashes listed in REPORT_ZH_TW.md section 8 and on PR194. Item 2 asks for the first-bind reward re-issue proposed in section 5; its source changes produce new hashes that this record does not approve.",
+  "approvedQuestion": "核准 championshipStandaloneApp.js 和 careImageTextureScope.js 的新雜湊。",
+  "reviewedCommit": "889f52504aef3d5b588ad95f71b9b9720fcfdc4a",
+  "pullRequest": "https://github.com/Orochi771127/championship-2026/pull/194",
+  "authorizedActions": [
+    "refresh these 2 approved source hashes",
+    "commit and push this bounded update"
+  ],
+  "notAuthorizedByThisReply": [
+    "merge PR194 into main",
+    "deploy through the GitHub Pages workflow",
+    "approve hashes of files changed later for the bind reward re-issue"
+  ],
+  "selectionPathsOrderAndNonHashFieldsUnchanged": true,
+  "approvedChanges": [
+    {
+      "path": "src/championship/app/championshipStandaloneApp.js",
+      "previousSha256": "6045de73bfe0cca817e31f7eb3519b3a5f33df40c7ab23a06d5cec03947ad971",
+      "approvedSha256": "66ea864ee9df77d14cc7922f787bcc331e1a36c4a8ad12d4587919453b86c3a9"
+    },
+    {
+      "path": "src/championship/presentation/intRh2/careImageTextureScope.js",
+      "previousSha256": "1482b7f01717f979f432921b16abb4e24d1dc440a061b3f2b44dcfaa0c1cf268",
+      "approvedSha256": "2e208776f4bfa4d250a0f6314b2c2ee3ca2d09f94637b392c157245d0c54168a"
+    }
+  ],
+  "approvalTables": [
+    {
+      "path": "docs/contracts/championship/WEB_BUILD_INPUTS.v1.json",
+      "changedSourceHashes": 2
+    },
+    {
+      "path": "docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json",
+      "changedSourceHashes": 2
+    }
+  ],
+  "buildGates": {
+    "playtest": {
+      "buildId": "87191e29ac21418b68b1135f041707e39917c526e393de2aee6321525b050a0f",
+      "fileCount": 7718,
+      "validate": "PASS"
+    },
+    "playtestExternalCharacters": {
+      "buildId": "4d9ecfbdf311a9515c0633f20f84cd1d52cd6fcc7e1466ebc1642a57b8b705e8",
+      "fileCount": 2285,
+      "validate": "PASS",
+      "note": "Identical buildId to the candidate measured for the care image fix (evidence/hunt-heap-curve.json, afterFix)."
+    }
+  },
+  "doesNotAuthorizeNewAssetsOrGameplay": true,
+  "doesNotClaimPhysicalDeviceAcceptance": true,
+  "buildGateCodeUnchanged": true
+}
