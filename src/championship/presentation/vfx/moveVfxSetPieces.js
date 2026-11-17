@@ -49,6 +49,7 @@
 // palette, pooled sprites, nearest sampling, whole-pixel positions. The baked
 // sheets load on first use (a dynamic import); a piece asked for before they
 // arrive is skipped.
+import {MOVE_VFX_3D_PIECE_GROUP, MOVE_VFX_3D_PIECE_GROUPS, MOVE_VFX_3D_FALLBACK} from './moveVfxPieceSprites3dIndex.js';
 import {decodeStatusAilmentFrame} from '../battleFx/battleStatusAilmentFx.js';
 
 const SINGLE = ['horn', 'claws', 'core', 'fist', 'rush', 'quake', 'spin', 'roar', 'slash', 'iai', 'knives', 'stream', 'wisps', 'orb',
@@ -114,6 +115,18 @@ function lookName(layer, drawing, piece) {
 }
 
 let bakedPromise = null, baked = null;
+// Three.js pieces (UNIFIED_MOVES_20261118): small group modules loaded when a move needs one.
+const baked3d = {}, groupLoads = new Map();
+const lookOf = name => baked?.[name] ?? baked3d[name] ?? null;
+const is3d = name => typeof name === 'string' && name.startsWith('3d-');
+/** Load the group modules holding these three.js pieces (other names are ignored). */
+export function loadMoveVfx3dPieces(names) {
+  const groups = new Set([...(names ?? [])].filter(is3d).map(n => MOVE_VFX_3D_PIECE_GROUP[n]).filter(Boolean));
+  return Promise.all([...groups].map(g => {
+    if (!groupLoads.has(g)) groupLoads.set(g, MOVE_VFX_3D_PIECE_GROUPS[g]().then(m => { Object.assign(baked3d, m.MOVE_VFX_PIECE_SPRITES); return true; }).catch(() => false));
+    return groupLoads.get(g);
+  })).then(r => r.every(Boolean));
+}
 /** Load the baked sheets once (the module is large, so not part of the first load). */
 export function loadMoveVfxPieceSprites() {
   bakedPromise ??= import('./moveVfxPieceSprites.js').then(m => { baked = m.MOVE_VFX_PIECE_SPRITES; return baked; }).catch(() => null);
@@ -121,13 +134,13 @@ export function loadMoveVfxPieceSprites() {
 }
 
 /** A baked look once the sheets are in (null before): the kit reads its floor circles from here. */
-export function bakedPieceLook(name) { return baked?.[name] ?? null; }
+export function bakedPieceLook(name) { return lookOf(name); }
 /**
  * One baked look as canvases in a palette: `glow` false gives the colour
  * frames (w x h), true the light layer (gw x gh, to be drawn 2x and added).
  */
 export function paintBakedPieceFrames(name, palette, {doc = globalThis.document, glow = false} = {}) {
-  const look = baked?.[name];
+  const look = lookOf(name);
   if (!look || (glow && !look.glow?.length)) return null;
   const tinted = glow ? null : {...look, palette: recolourPiecePalette(look.palette, palette)};
   const M = rgb(palette.main), C = rgb(palette.core), w = glow ? look.gw : look.w, h = glow ? look.gh : look.h;
@@ -161,7 +174,7 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
   const stats = {played: 0, peak: 0, skipped: 0};
 
   function sheet(name, palette) {
-    const look = baked?.[name];
+    const look = lookOf(name);
     if (!look) return null;
     const key = `${name}:${palette.main}:${palette.core}:${palette.edge}:${palette.flat ? 1 : 0}`;
     if (sheets.has(key)) return sheets.get(key);
@@ -185,7 +198,7 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
   }
   // The light layer (pixelfx's bloom): intensity keys a..h, in the move's main toward its core, added over the colour.
   function glowSheet(name, palette) {
-    const look = baked?.[name];
+    const look = lookOf(name);
     if (!look?.glow?.length || palette.flat) return null;
     const key = `glow:${name}:${palette.main}:${palette.core}`;
     if (sheets.has(key)) return sheets.get(key);
@@ -235,8 +248,14 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
      * frame. Returns false when the piece is unknown or not loaded yet.
      */
     play(piece, {x, y, groundY = null, angle = 0, palette, size = 80, unit = null, scale = 1, fast = false, sprite: drawing = null, at = null}) {
-      const layers = LAYERS[piece];
+      // a three.js piece plays as one layer; until its group is in, the shared piece it replaces plays
+      const layers = LAYERS[piece] ?? (is3d(piece) && MOVE_VFX_3D_PIECE_GROUP[piece] ? [{look: piece}] : null);
       if (!layers || !palette) return false;
+      if (is3d(piece) && !lookOf(piece)) {
+        loadMoveVfx3dPieces([piece]);
+        const base = MOVE_VFX_3D_FALLBACK[piece];
+        return base ? this.play(base, arguments[1]) : false;
+      }
       const facing = Math.cos(angle) < 0 ? -1 : 1, u = unit > 0 ? unit : size / 64;
       const parts = [];
       for (const l of layers) {

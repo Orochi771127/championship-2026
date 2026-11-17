@@ -1,5 +1,20 @@
 # Championship Owner Direction
 
+<!-- record-id: UNIFIED_MOVES_20261118 -->
+## 2026-11-18 — One move list for both battle modes, move icons, and three.js move effects
+
+Owner: 「讓這些招式，不管是自動戰鬥還是 Data Arena 這兩個對戰模式都能使用這六百多招，就是不分 data arena 還是一般模式的招式」, 「跟 Codex CLI 讓 Codex 生成這些招式的小圖示」 and 「照剛剛我給你的那個網址照你所建議的去把這六百多招都做好」 (the 00GameDevs three.js effect library, MIT). Asked which scope, the Owner chose **each partner brings its own moves**: one move list; a partner fights with its own moves in both modes, its own ultimate included; the 49 Data Arena moves also get auto-battle numbers and become learnable. No free move equipping. Plan: `docs/planning/UNIFIED_MOVES_PLAN_2026-11-18_ZH_TW.md`. Continues BESPOKE_MOVE_VFX_PROGRAM_20261111, so the agent picks and ships the batches.
+
+Done in the first batch:
+
+- U1-1: in the Data Arena, the R slot is now the partner's own ultimate (its strongest kind-1 move). It fights with the numbers of the ultimate its element pool used to lend, so balance is unchanged. The kit data marks the own ultimate.
+- U3 (first part): the 71 moves that had no contact piece of their own now play a three.js piece. These are the eight originals' 22 moves (#596–622) and the Data Arena's 49 moves.
+  - The pieces are rendered once by `scripts/vfx/bake-3d-move-vfx.mjs` from the library, offline in a headless browser, so the game has no three.js dependency for them.
+  - They are finished like the pixelfx pieces and loaded per element group only when a move needs one; the shared piece plays until the group arrives.
+  - The MIT notices of 00GameDevs and three.js ride in every group module.
+
+Not done yet: the icons (U2, generating), the Data Arena moves in the auto battle (U1-2/3), and a piece of its own for every ultimate and skill (U3 continues).
+
 <!-- record-id: TAMER_TALENTS_T3_20261118 -->
 ## 2026-11-18 — Tamer talents T3: the commander line in the auto battle, and the hunter's elite sense
 

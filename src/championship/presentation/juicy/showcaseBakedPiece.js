@@ -3,7 +3,8 @@
 // move's palette, on the theater's DOM stage -- one canvas for the colour (crisp pixels)
 // and one for its light (blended as light). Frames step on the page's animation clock;
 // both canvases leave when the piece ends. Presentation only.
-import {bakedPieceLook, paintBakedPieceFrames, loadMoveVfxPieceSprites} from '../vfx/moveVfxSetPieces.js';
+import {bakedPieceLook, paintBakedPieceFrames, loadMoveVfxPieceSprites, loadMoveVfx3dPieces} from '../vfx/moveVfxSetPieces.js';
+import {MOVE_VFX_3D_FALLBACK} from '../vfx/moveVfxPieceSprites3dIndex.js';
 
 /** Load the baked pieces ahead of the first preview. */
 export const preloadShowcaseBakedPieces = () => (typeof loadMoveVfxPieceSprites === 'function' ? loadMoveVfxPieceSprites() : Promise.resolve(null));
@@ -13,6 +14,12 @@ export const preloadShowcaseBakedPieces = () => (typeof loadMoveVfxPieceSprites 
  * ground look -- spanning `width` stage px. Returns false when it is not loaded yet.
  */
 export function playShowcaseBakedPiece({doc = globalThis.document, layer, name, palette, x, y, groundY = null, width = 120, facing = 1, flipY = false, scale = 1}) {
+  // a three.js piece (UNIFIED_MOVES_20261118) loads its group on first use; the shared piece it replaces plays meanwhile
+  if (typeof bakedPieceLook === 'function' && !bakedPieceLook(name) && MOVE_VFX_3D_FALLBACK?.[name] !== undefined) {
+    if (typeof loadMoveVfx3dPieces === 'function') loadMoveVfx3dPieces([name]);
+    const base = MOVE_VFX_3D_FALLBACK[name];
+    return base ? playShowcaseBakedPiece({doc, layer, name: base, palette, x, y, groundY, width, facing, flipY, scale}) : false;
+  }
   const look = typeof bakedPieceLook === 'function' ? bakedPieceLook(name) : null;
   if (!look || !layer || !doc?.createElement) return false;
   const body = paintBakedPieceFrames(name, palette, {doc});

@@ -14,7 +14,7 @@ import {createMoveVfxKit} from '../vfx/moveVfxKit.js';
 import {createPixelHitBursts} from '../vfx/pixelHitBursts.js';
 import {createPixelMotes} from '../vfx/pixelMotes.js';
 import {moveVfxChoreography} from '../vfx/moveVfxChoreography.js';
-import {createMoveVfxSetPieces} from '../vfx/moveVfxSetPieces.js';
+import {createMoveVfxSetPieces, loadMoveVfx3dPieces} from '../vfx/moveVfxSetPieces.js';
 import {DATA_ARENA_POOL_ARCHETYPE, moveVfxRecipe} from '../vfx/moveVfxRecipes.js';
 import {moveVfxSignature} from '../vfx/moveVfxSignatures.js';
 import {battleMoveName} from '../../text/battleMoveNames.js';
@@ -82,6 +82,8 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
     METAL: {core: 0xffffff, main: 0x9aa8b6, edge: 0x3f4a56}});
   const pieceAt = (moveId, phase, at) => {
     const choreo = moveVfxChoreography(moveId), c = choreo?.[phase];
+    // the cast starts loading a three.js contact piece's group, ahead of the hit (UNIFIED_MOVES_20261118)
+    if (phase === 'release' && choreo?.contact && typeof loadMoveVfx3dPieces === 'function') loadMoveVfx3dPieces([choreo.contact.piece]);
     if (!c || !setPieces) return false;
     // An ultimate opens its contact with an impact frame, held by the layer's hit-stop.
     if (phase === 'contact' && choreo.impactFrame) setPieces.play('impact-frame', {...at, palette: {core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true}, size: BODY, unit: SCALE * 0.5, groundY: at.y + BODY * 0.5, scale: (c.scale ?? 1) * 0.7});

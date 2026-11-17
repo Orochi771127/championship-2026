@@ -1163,6 +1163,150 @@ export const MOVE_VFX_CHOREOGRAPHY = Object.freeze({
   582: entry({contact: {piece: 'rush', scale: 0.75}, hitStopMs: 42, shake: 'light', knockPx: 14}),
   // 獵姬斬
   586: entry({contact: {piece: 'slash', scale: 0.75}, hitStopMs: 42, shake: 'light', knockPx: 14}),
+  // ---- UNIFIED_MOVES_20261118 U3: the eight originals' moves (#596-622) and the Data Arena's
+  // own moves, each with a three.js piece of its own (scripts/vfx/move-piece-3d-specs.mjs).
+  // 星角突進
+  596: entry({contact: {piece: '3d-energy-burst', scale: 1}, hitStopMs: 42, shake: 'light', knockPx: 14}),
+  // 星塵衝撞
+  597: entry({contact: {piece: '3d-astral-convergence', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 星岩衝撞
+  598: entry({contact: {piece: '3d-shockwave', scale: 1}, hitStopMs: 42, shake: 'light', knockPx: 14}),
+  // 彗星光軌
+  599: entry({contact: {piece: '3d-starblade', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 重力碎牆
+  600: entry({contact: {piece: '3d-fireburst-b', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 觸手輕撫
+  604: entry({contact: {piece: '3d-prism-parry', scale: 1}, hitStopMs: 42, shake: 'light', knockPx: 14}),
+  // 電離光粉
+  605: entry({contact: {piece: '3d-sustained-arc', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 星雲淨化
+  606: entry({contact: {piece: '3d-relic-descent', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 破冰背鰭
+  607: entry({contact: {piece: '3d-ice-lance', scale: 1}, hitStopMs: 42, shake: 'light', knockPx: 14}),
+  // 極光衝刺
+  608: entry({contact: {piece: '3d-astral-gate', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 極光斷訊
+  609: entry({contact: {piece: '3d-radiant-beam-b', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 翡翠鐮
+  610: entry({contact: {piece: '3d-wind-vortex-b', scale: 1}, hitStopMs: 42, shake: 'light', knockPx: 14}),
+  // 電磁鐮刃
+  611: entry({contact: {piece: '3d-arc-ray', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 青光一閃
+  612: entry({contact: {piece: '3d-starblade-b', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 星豆彈跳
+  613: entry({contact: {piece: '3d-airburst', scale: 1}, hitStopMs: 42, shake: 'light', knockPx: 14}),
+  // 星能壓縮彈
+  614: entry({contact: {piece: '3d-energy-vortex', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 電爪撲擊
+  617: entry({contact: {piece: '3d-energy-burst-b', scale: 1}, hitStopMs: 42, shake: 'light', knockPx: 14}),
+  // 金光迅雷
+  618: entry({contact: {piece: '3d-thunder-strike', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 蓄電突進
+  619: entry({contact: {piece: '3d-pulse-beam', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 雷牙咬
+  620: entry({contact: {piece: '3d-shockwave-b', scale: 1}, hitStopMs: 42, shake: 'light', knockPx: 14}),
+  // 雷速突擊
+  621: entry({contact: {piece: '3d-charged-beam', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 狼群雷陣
+  622: entry({contact: {piece: '3d-arcane-matrix', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 電弧針
+  arcBolt: entry({contact: {piece: '3d-arc-ray-b', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 雷芒扇
+  arcFan: entry({contact: {piece: '3d-sustained-arc-b', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 靜電場
+  arcField: entry({contact: {piece: '3d-arcane-matrix-b', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 雷網穿刺
+  arcStorm: entry({contact: {piece: '3d-thunder-storm', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 樹皮盾
+  barkGuard: entry({contact: {piece: '3d-prism-guard', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 雷光突進
+  boltDash: entry({contact: {piece: '3d-energy-burst-c', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 衝鋒
+  brutalCharge: entry({contact: {piece: '3d-smoke-puff', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 燼盾
+  cinderGuard: entry({contact: {piece: '3d-burning-ground-b', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 爪環掃擊
+  clawSweep: entry({contact: {piece: '3d-dust-devil', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 熔核爆發
+  coreNova: entry({contact: {piece: '3d-fire-blast', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 曦冕審判
+  dawnLance: entry({contact: {piece: '3d-radiant-beam', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 暮影盾
+  duskGuard: entry({contact: {piece: '3d-aegis', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 餘燼彈
+  emberBolt: entry({contact: {piece: '3d-fireball-hit', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 焰牙衝
+  fangRush: entry({contact: {piece: '3d-flame-surge', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 火環
+  flameRing: entry({contact: {piece: '3d-burning-ground', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 泡沫區
+  foamZone: entry({contact: {piece: '3d-pool', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 晶霜扇
+  frostFan: entry({contact: {piece: '3d-frost-lance-rain', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 霜步
+  frostStep: entry({contact: {piece: '3d-frost-wheel', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 冰脊盾
+  glacierGuard: entry({contact: {piece: '3d-ice-shield', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 森域震波
+  grovePulse: entry({contact: {piece: '3d-thorn-crown', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 冕環震波
+  haloPulse: entry({contact: {piece: '3d-relic-descent-b', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 冰牢
+  iceCage: entry({contact: {piece: '3d-ice-shatter-b', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 冰錐
+  iceShard: entry({contact: {piece: '3d-ice-shard-hit', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 崩環重擊
+  impactNova: entry({contact: {piece: '3d-fireburst', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 重壓彈
+  impactShot: entry({contact: {piece: '3d-fissure', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 鋼鐵盾
+  ironGuard: entry({contact: {piece: '3d-prism-guard-b', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 葉刃扇
+  leafFan: entry({contact: {piece: '3d-verdant', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 夜幕震波
+  nightPulse: entry({contact: {piece: '3d-darkchain', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 重擊
+  quakeSlam: entry({contact: {piece: '3d-quicksand', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 曦光突進
+  radiantDash: entry({contact: {piece: '3d-prism-parry-c', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 岩壁盾
+  rockGuard: entry({contact: {piece: '3d-aegis-b', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 散光
+  scatterLight: entry({contact: {piece: '3d-golden-chains', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 芽核彈
+  seedBolt: entry({contact: {piece: '3d-plasma-bolt', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 影核彈
+  shadeBolt: entry({contact: {piece: '3d-binding-curse', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 幽影領域
+  shadeField: entry({contact: {piece: '3d-fire-vortex', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 暗影滑步
+  shadeStep: entry({contact: {piece: '3d-smoke-column', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 碎晶風暴
+  shardStorm: entry({contact: {piece: '3d-shard-storm', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 碎晶連射
+  shardVolley: entry({contact: {piece: '3d-ice-shatter', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 電磁盾
+  stormGuard: entry({contact: {piece: '3d-charged-beam-b', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 光盾
+  sunShield: entry({contact: {piece: '3d-prism-parry-b', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 光矛
+  sunSpear: entry({contact: {piece: '3d-radiant-beam-c', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 衝浪
+  surfRush: entry({contact: {piece: '3d-tidal-surge', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 棘刺突進
+  thornRush: entry({contact: {piece: '3d-thorn-crown-b', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 水彈
+  tideBolt: entry({contact: {piece: '3d-steam-jet', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 水幕盾
+  tideGuard: entry({contact: {piece: '3d-prism-guard-c', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 潮浪
+  tideWave: entry({contact: {piece: '3d-tidal-surge-b', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 藤根束縛
+  vineSnare: entry({contact: {piece: '3d-verdant-b', scale: 1}, hitStopMs: 55, shake: 'medium', knockPx: 20}),
+  // 漩渦
+  vortex: entry({contact: {piece: '3d-wind-vortex', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 白霧領域
+  whiteout: entry({contact: {piece: '3d-whiteout', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
 });
 
 /**
