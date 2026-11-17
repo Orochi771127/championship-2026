@@ -1239,7 +1239,7 @@ export function createChampionshipStandaloneApp({
         ?(passwordMode?JSON.stringify(passwords)!==JSON.stringify(prepared.passwords):linkKey!==prepared.linkKey)
         :JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals.map(p=>p.instanceId)))
       // A Sync-boosted copy is checked against the same boost of the saved individual.
-      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(boostBattleProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1,p.moodTier,p.supplyIds??[]))!==JSON.stringify(p.nativeProfile))))
+      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(boostBattleProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1,p.moodTier,p.supplyIds??[],p.moodCap??0))!==JSON.stringify(p.nativeProfile))))
       return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇。'};
     const result=applyBattleTransaction(beginBattleAttempt(battleEconomy,{attemptId,matchIndex:-1,mode,battleType:0,
       entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng,[],mode===2?{begin:attemptId,kind:'FREE'}:null);
@@ -1297,10 +1297,13 @@ export function createChampionshipStandaloneApp({
     return sync.capped?cappedMoodTier(tier):tier;
   }
   /** The battle copy: Sync first, then mood, both taken back by the result restore. */
-  function boostBattleProfile(profile,syncLevel,moodTier,supplyIds=[]){
+  function boostBattleProfile(profile,syncLevel,moodTier,supplyIds=[],moodCap=0){
     // Pre-battle supplements (SUPPLEMENTS_20261118 S2) add their curve steps last; the result restore puts the curve words back.
-    return supplyBattleProfile(moodBattleProfile(boostSyncNativeProfile(profile,syncLevel),moodTier??'normal'),supplyIds);
+    // `moodCap` is the commander talent 好心情 as this battle counts it (TAMER_TALENTS_T3_20261118).
+    return supplyBattleProfile(moodBattleProfile(boostSyncNativeProfile(profile,syncLevel),moodTier??'normal',moodCap),supplyIds);
   }
+  /** The commander line as one battle counts it: all of it in open battles, the first 6 + 3 x rank points in title matches and tournaments. */
+  function commanderTalentsFor(sync){return sync?.capped?commanderCappedTalents(talentState(),tamerRankValue):talentState();}
   function syncBattleLevel(instanceId,sync){
     if(!sync)return 1;
     const lv=syncLevelOf(instanceId).level;
@@ -4578,6 +4581,18 @@ export function createChampionshipStandaloneApp({
 
     /** Tickets (and beacon bonus) the last won match dropped, for the result podium. */
     getLastBattleGachaDrop(){return lastBattleGachaDrop;},
+    /**
+     * The commander talent line for one auto battle (TAMER_TALENTS_T3_20261118), by the battle mode: tournaments (0)
+     * and title matches (1) count the first 6 + 3 x rank points, Free Battle (2) and Practice (5) all of them, and
+     * password, link and anything else none. Null when nothing would act.
+     */
+    getBattleCommander(mode){
+      if(!session||tutorialBaseline||![0,1,2,5].includes(mode))return null;
+      const state=commanderTalentsFor({capped:mode===0||mode===1}),read=key=>talentValue(state,key);
+      const commander={lumenPercent:read('resonanceLumenPercent'),ironPercent:read('resonanceIronPercent'),riftPercent:read('resonanceRiftPercent'),
+        openingTpPercent:read('openingTpPercent'),lowHpDefensePercent:read('lowHpDefensePercent'),ultimatePercent:read('ultimatePercent')};
+      return Object.values(commander).some(value=>value>0)?Object.freeze(commander):null;
+    },
     /** Sync Level of one partner: { level, exp, next } (OWNER_APPROVED_ADAPTATION 2026-11-09). */
     getSyncLevel(instanceId){return syncLevelOf(instanceId);},
     /** LINE_FUSION_20261117: the saved grade and its six q values, or null. */
@@ -5461,7 +5476,7 @@ export function createChampionshipStandaloneApp({
         if(!prepared||prepared.session!==session||prepared.base!==JSON.stringify(gameplayRngSnapshot())
           ||prepared.championshipRun!==JSON.stringify(championshipRun)
           ||JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals?.map(p=>p.instanceId))
-          ||prepared.individuals.some(p=>JSON.stringify(boostBattleProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1,p.moodTier,p.supplyIds??[]))!==JSON.stringify(p.nativeProfile)))
+          ||prepared.individuals.some(p=>JSON.stringify(boostBattleProfile(raisingNativeProfile(p.instanceId),p.syncLevel??1,p.moodTier,p.supplyIds??[],p.moodCap??0))!==JSON.stringify(p.nativeProfile)))
           return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇參賽隊伍。'};
         opponent=prepared.opponent;
       }
@@ -5586,7 +5601,9 @@ export function createChampionshipStandaloneApp({
         const syncLevel=syncBattleLevel(instanceId,sync),moodTier=battleMoodTier(instanceId,sync);
         // Only where Sync applies: password, link and online battles never read a carried supplement.
         const supplyIds=sync?armedSupplies(tamerSupplies,instanceId):[];
-        individuals.push({instanceId,nativeProfile:boostBattleProfile(nativeProfile,syncLevel,moodTier,supplyIds),syncLevel,moodTier,supplyIds,
+        // 好心情 only where Sync applies, and capped with the commander line in title matches and tournaments.
+        const moodCap=sync?talent('moodCapPercent',commanderTalentsFor(sync)):0;
+        individuals.push({instanceId,nativeProfile:boostBattleProfile(nativeProfile,syncLevel,moodTier,supplyIds,moodCap),syncLevel,moodTier,supplyIds,moodCap,
           ...(fitting!==null?{burst:battleBurstPlanOf(instanceId,Object.freeze({form:fitting,tier:burstFormTier(fitting)}))}:{})});
       }
       return {ok:true,individuals};
@@ -5849,7 +5866,7 @@ export function createChampionshipStandaloneApp({
             // Keyed by the individual's own native values, so a retried entry rolls the same instincts.
             const f = actor.individual.fields;
             return instinctNoise(0x4e, i, actor.speciesIndex, f['058'], f['060'], f['064'], f['068'], f['06c'], f['018']);
-          }), boosts)) : [];
+          }), { ...(boosts ?? {}), elitePercent: talent('elitePercent') })) : []; // 野性嗅覺
         const rolled = herdEntry ? { ...herdEntry, encounter: { ...herdEntry.encounter, actors: herdEntry.encounter.actors.map((actor, i) => {
           const instinct = instincts[i], rule = wildInstinct(instinct);
           return { ...actor, instinct, ...(rule.speedMultiplier ? { ai: { ...actor.ai, speedQ12: Math.round(actor.ai.speedQ12 * rule.speedMultiplier) } } : {}) };

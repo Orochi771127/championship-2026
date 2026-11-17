@@ -98,7 +98,16 @@ const ROWS = {
   'key.patrolPercent': ['{value}% 巡邏結晶', '{value}% patrol crystals', '巡回結晶 {value}%', 'คริสตัลลาดตระเวน {value}%', 'Tinh thể tuần tra {value}%'],
   'key.towerRewardPercent': ['{value}% 塔首通結晶', '{value}% tower first-clear crystals', '塔初クリア結晶 {value}%', 'คริสตัลหอคอย {value}%', 'Tinh thể tháp {value}%'],
   'key.firstSupplyDiscountPercent': ['每天第 1 個補品 −{amount}%', 'First tonic a day −{amount}%', '毎日最初のサプリ −{amount}%', 'ของบำรุงชิ้นแรกของวัน −{amount}%', 'Thuốc bổ đầu ngày −{amount}%'],
-  'key.supplySlots': ['{value} 格戰前補品', '{value} tonic slot', '戦前サプリ枠 {value}', 'ช่องของบำรุง {value}', '{value} ô thuốc bổ']
+  'key.supplySlots': ['{value} 格戰前補品', '{value} tonic slot', '戦前サプリ枠 {value}', 'ช่องของบำรุง {value}', '{value} ô thuốc bổ'],
+  // T3 (TAMER_TALENTS_T3_20261118)
+  'key.openingTpPercent': ['{value}% 開場 TP', '{value}% opening TP', '開幕 TP {value}%', 'TP เปิดศึก {value}%', 'TP mở trận {value}%'],
+  'key.moodCapPercent': ['{value}% 心情加成上限', '{value}% mood bonus cap', '気分ボーナス上限 {value}%', 'เพดานโบนัสอารมณ์ {value}%', 'Trần thưởng tâm trạng {value}%'],
+  'key.resonanceLumenPercent': ['{value}% 心輝共鳴', '{value}% Lumen resonance', 'ルーメン共鳴 {value}%', 'เรโซแนนซ์ลูเมน {value}%', 'Cộng hưởng Lumen {value}%'],
+  'key.resonanceIronPercent': ['{value}% 黑鐵共鳴', '{value}% Iron resonance', '黒鉄共鳴 {value}%', 'เรโซแนนซ์เหล็กดำ {value}%', 'Cộng hưởng Hắc Thiết {value}%'],
+  'key.resonanceRiftPercent': ['{value}% 裂隙共鳴', '{value}% Rift resonance', 'リフト共鳴 {value}%', 'เรโซแนนซ์ริฟต์ {value}%', 'Cộng hưởng Khe Nứt {value}%'],
+  'key.lowHpDefensePercent': ['HP 30% 以下防禦 {value}%', '{value}% defence under 30% HP', 'HP 30% 以下で防御 {value}%', 'ป้องกัน {value}% เมื่อ HP ต่ำกว่า 30%', 'Thủ {value}% khi HP dưới 30%'],
+  'key.ultimatePercent': ['{value}% 必殺技傷害', '{value}% signature damage', '必殺技ダメージ {value}%', 'ดาเมจท่าไม้ตาย {value}%', 'Sát thương tuyệt chiêu {value}%'],
+  'key.elitePercent': ['{value}% 菁英出現率', '{value}% elite chance', 'エリート出現率 {value}%', 'โอกาสพบอีลิต {value}%', 'Tỉ lệ tinh anh {value}%']
 };
 
 export const TAMER_TALENT_COPY = deepFreeze(Object.fromEntries(LOCALES.map((locale, i) =>

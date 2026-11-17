@@ -247,7 +247,9 @@ const loadBattleRuntime = async () => {
     burstPolicy: options.mode === 3 ? "OFF" : BATTLE_BURST_POLICY,
     // Awakening raising (2026-11-02): the player calls a partner's burst; Owner 2026-11-08: only on the press.
     burstManual: true,
-    burstPlans: [...team(options.playerIndividuals), ...team(options.opponentIndividuals)], ...options });
+    burstPlans: [...team(options.playerIndividuals), ...team(options.opponentIndividuals)],
+    // The commander talent line for this battle's mode; null for password and link battles.
+    commander: app?.getBattleCommander?.(options.mode) ?? null, ...options });
 };
 
 // Screen modules and art load through their existing foreground owners.

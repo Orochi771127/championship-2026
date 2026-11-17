@@ -419,7 +419,8 @@ export function createBattleRuntime(options = {}) {
       const resolvedNative = resolveBattleDamage({ ...inputs, rng, critBonus: taxonomy.critBonus(slot) });
       const resolved = {...resolvedNative, damage: foeScaled(slot, targetSlot, burst.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
         damage: taxonomy.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
-          elementSelector: move.elementSelect ?? 0, damage: resolvedNative.damage, signature: signatureMoves[slot] === move.recordIndex})}))};
+          elementSelector: move.elementSelect ?? 0, damage: resolvedNative.damage, signature: signatureMoves[slot] === move.recordIndex,
+          defenderHpPercent: defender?.maxHp > 0 ? defender.currentHp * 100 / defender.maxHp : 100})}))};
       const result=hitRuntime.apply(targetSlot,{move,damage:resolved.damage,critical:resolved.critical,nativeKind,
         sourcePoint:parameters?effectActors.position(parameters):nativeActors.position(slot),statusInputs:{attackerIndex:inputs.statusAttackerIndex,
           selectedDefenseIndex:inputs.statusDefenderIndex,
@@ -835,7 +836,9 @@ export function createBattleRuntime(options = {}) {
       builtForm=session.slots.map(c=>c?{speciesId:c.speciesId,maxHp:c.maxHp}:null);
       session.slots.forEach((c,slot)=>{const target=burst.species(slot);if(c&&target!==null)becomeSpecies(slot,target);});
       // Taxonomy adaptation (Owner 2026-10-29): both teams, before the actors copy the opening stats.
-      taxonomy=createBattleTaxonomyAdaptation({policy:taxonomyPolicy,speciesBySlot:session.slots.map(c=>c?.speciesId??null),teamOf:battleTeamOfSlot});
+      // The commander talent line (TAMER_TALENTS_T3_20261118) rides it for the local team; the application passes none for password and link battles.
+      taxonomy=createBattleTaxonomyAdaptation({policy:taxonomyPolicy,speciesBySlot:session.slots.map(c=>c?.speciesId??null),teamOf:battleTeamOfSlot,
+        commander:options.commander?{...options.commander,team:localTeamIndex}:null});
       signatureMoves=session.slots.map(c=>c?signatureMoveOf(c.speciesId):null);
       taxonomy.applyStart(session.slots);
       nativeActors=createBattleNativeActors({slots:session.slots,creatures:roster,stands:normalBattleStands(session.slots)});

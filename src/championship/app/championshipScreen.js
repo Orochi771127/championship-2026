@@ -11,6 +11,7 @@
 // Rules and numbers come from the run module; this screen only shows them and
 // sends the player's intents back.
 import { uiText } from "../text/uiText.js";
+import { raisingDisplayName } from "../text/zhHant.js";
 
 export const CHAMPIONSHIP_SCREEN_SOURCE_SCENES = Object.freeze([
   "ui/conference_list_item.nxr",
@@ -160,7 +161,8 @@ export function createChampionshipView({ root, source }) {
           party.append(element('p','cm-championship-opponent',uiText("最多 {limit} 隻", { limit })));
           const controls=[];
           for(const entry of candidates){
-            const button=element('button','cm-championship-action',uiText(entry.displayName??entry.instanceId));
+            // The name as the rest of the game prints it (a starter's native name is never shown raw).
+            const button=element('button','cm-championship-action',entry.speciesId||entry.source?raisingDisplayName(entry):uiText(entry.displayName??entry.instanceId));
             button.type='button';button.dataset.instanceId=entry.instanceId;button.setAttribute('aria-pressed','false');
             button.disabled=!entry.admission.ok;
             if(!entry.admission.ok)button.append(element('span','cm-vs5-match__fee',uiText(entry.admission.message)));
