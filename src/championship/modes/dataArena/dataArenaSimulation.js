@@ -29,6 +29,7 @@ import {
 import { createDataArenaGrid } from "./dataArenaGrid.js";
 import { createFlowField } from "./dataArenaNav.js";
 import { createArenaRandom, dataArenaUpgrade, drawUpgradeOffer, upgradeValue } from "./dataArenaUpgrades.js";
+import { DATA_ARENA_SURVIVAL, createSurvivalStorm, survivalCircleAt, outsideCircle, createSurvivalField, survivalRank } from "./dataArenaSurvival.js";
 
 import { relayPartner, RELAY_ROSTER } from './dataArenaRelayRoster.js';
 import { relayBattleMap } from './dataArenaRelayMaps.js';
@@ -62,13 +63,15 @@ export function pointSegmentDistance(px, py, ax, ay, bx, by) {
 }
 
 const NEUTRAL_INPUT = Object.freeze({ moveX: 0, moveY: 0, aimX: null, aimY: null, fire: false, dash: false, surge: false, ride: false, cast: null, ult: false, autoAim: false });
-export const DATA_ARENA_MODES = Object.freeze(["TOURNAMENT", "HARBOR", "RELAY"]);
+// SURVIVAL (P4 prototype, 2026-11-16): the harbor match with a closing storm and eleven rival tamers.
+export const DATA_ARENA_MODES = Object.freeze(["TOURNAMENT", "HARBOR", "RELAY", "SURVIVAL"]);
 
 export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PARTNERS[0].id, quality = "high", mode = "HARBOR", relayLoadouts = {}, relayReserveId = null, relayThirdId = null, relayCompanionSpecies = [], relayArenaId = null, portrait = false, partnerPower = {}, relayBurstPlans = {}, relayManualBurst = false, rivalBoostPercent = 0, relayRivals = null, relayBuffPicks = false } = {}) {
   // A sponsor contract's rift gambit (AWAKENING_OVERDRIVE_20261109): every rival has this much more HP and damage.
   const rivalBoost = 1 + (Number.isSafeInteger(rivalBoostPercent) && rivalBoostPercent > 0 && rivalBoostPercent <= 100 ? rivalBoostPercent : 0) / 100;
   if (!DATA_ARENA_MODES.includes(mode)) throw new RangeError(`DATA_ARENA_UNKNOWN_MODE:${mode}`);
   const relayMode = mode === "RELAY";
+  const survivalMode = mode === "SURVIVAL";
   const tournamentMode = mode === "TOURNAMENT" || relayMode;
   const moveFor = (id, ultimate = false) => relayMode ? relayMove(id, ultimate) : DATA_ARENA_MOVES[id];
   const dashCooldown = tournamentMode ? DATA_ARENA_TOURNAMENT.dashCooldown : DATA_ARENA_PLAYER.dash.cooldown;
@@ -124,7 +127,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   };
 
   const state = {
-    seed, partnerId, quality, gameMode: mode, time: 0, mode: "PLAY", phaseIndex: 0, phaseId: tournamentMode ? "DUEL" : "WARMUP", warnedPhase: 0,
+    seed, partnerId, quality, gameMode: mode, time: 0, mode: "PLAY", phaseIndex: 0, phaseId: tournamentMode ? "DUEL" : survivalMode ? "SURVIVAL" : "WARMUP", warnedPhase: 0,
     rivals: [], zones: [], tournament: null, relay: null,
     player, laser, mate, boss: null, enemies: [], projectiles: [], pickups: [], telegraphs: [], scans: [],
     pods: map.pods.map(([c, r]) => ({ id: nextId++, ...at([c, r]), hp: DATA_ARENA_GRID_RULES.podHp, respawn: 0, radius: 20 })),
@@ -143,6 +146,13 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   };
   // Lens freeze bookkeeping and laser ignition use the grid; nothing else does.
   const maxAlive = DATA_ARENA_SPAWN.maxAlive[quality] ?? DATA_ARENA_SPAWN.maxAlive.high;
+  // SURVIVAL: the storm and the field of rival tamers, both seeded at the start (dataArenaSurvival.js).
+  state.survival = null;
+  if (survivalMode) {
+    const storm = createSurvivalStorm({ random, worldWidth, worldHeight });
+    state.survival = { storm, circle: survivalCircleAt(storm, 0), tamers: createSurvivalField({ random, definitions: DATA_ARENA_RIVALS.map((r) => r.id) }),
+      stage: 0, stormTick: 0, knockouts: 0, won: false };
+  }
 
   // ------------------------------------------------------------------ derived stats
   const stat = {
@@ -2147,6 +2157,78 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if (beginCast(rival, pick.id, aimX, aimY, { ultimate: Boolean(pick.ultimate) })) rival.attackDelay = 0.2 + random() * 0.35;
   }
 
+  // ------------------------------------------------------------------ survival (P4 prototype)
+  const survivalOthersLeft = () => state.survival.tamers.filter((tamer) => tamer.state !== "OUT").length;
+  function knockOutTamer(tamer, by) {
+    if (!tamer || tamer.state === "OUT") return;
+    tamer.state = "OUT"; tamer.by = by; tamer.fellAt = state.time;
+    if (by === "PLAYER") state.survival.knockouts++;
+    emit({ type: "SURVIVAL_OUT", tamer: tamer.index, definitionId: tamer.definitionId, by, left: survivalOthersLeft() });
+  }
+  /** A spot within the encounter range of the player, inside the safe circle and on open ground, or null. */
+  function encounterSpot(circle) {
+    const [near, far] = DATA_ARENA_SURVIVAL.encounterRange;
+    for (let attempt = 0; attempt < 24; attempt++) {
+      const angle = random() * TAU, reach = near + random() * (far - near);
+      const x = player.x + Math.cos(angle) * reach, y = player.y + Math.sin(angle) * reach;
+      if (x < 60 || y < 60 || x > worldWidth - 60 || y > worldHeight - 60) continue;
+      if (outsideCircle(circle, x, y) || blocked(x, y, 30, "walker")) continue;
+      return { x, y };
+    }
+    return null;
+  }
+  function startEncounter(tamer, circle) {
+    const spot = encounterSpot(circle) ?? { x: circle.cx, y: circle.cy };
+    const definition = DATA_ARENA_RIVALS.find((r) => r.id === tamer.definitionId) ?? DATA_ARENA_RIVALS[0];
+    const rival = createRival(definition, 0);
+    rival.hp = rival.maxHp = Math.max(1, Math.round(rival.maxHp * DATA_ARENA_SURVIVAL.rivalHpScale));
+    rival.damageScale *= DATA_ARENA_SURVIVAL.rivalDamageScale;
+    rival.x = spot.x; rival.y = spot.y; rival.active = true; rival.invulnerable = 0.8; rival.attackDelay = 1.2;
+    rival.tamerIndex = tamer.index;
+    tamer.state = "FIGHTING";
+    state.rivals.push(rival);
+    emit({ type: "SURVIVAL_ENCOUNTER", tamer: tamer.index, definitionId: tamer.definitionId, speciesId: rival.speciesId, x: rival.x, y: rival.y });
+  }
+  function updateSurvival() {
+    const s = state.survival;
+    const circle = s.circle = survivalCircleAt(s.storm, state.time);
+    if (circle.stage !== s.stage) { s.stage = circle.stage; emit({ type: "STORM_CLOSE", stage: circle.stage, radius: circle.radius }); }
+    // The storm drains whoever stands outside, through dodges and shields alike.
+    const playerIn = !["DOWNED", "DEFEATED", "FALLING"].includes(player.state);
+    if (playerIn && state.mode === "PLAY" && outsideCircle(circle, player.x, player.y)) {
+      const amount = circle.drain * player.maxHp * DT;
+      player.hp -= amount; state.stats.damageTaken += amount;
+      s.stormTick += DT;
+      if (s.stormTick >= 1) { s.stormTick = 0; emit({ type: "STORM_HIT", x: player.x, y: player.y }); }
+      if (player.hp <= 0) { player.hp = 0.5; player.invulnerable = 0; hurtPlayer(1, "STORM", player.x, player.y); }
+    } else s.stormTick = 0;
+    for (const rival of state.rivals) {
+      if (rival.tamerIndex == null || rival.hp <= 0 || !outsideCircle(circle, rival.x, rival.y)) continue;
+      rival.hp -= circle.drain * rival.maxHp * DT;
+      if (rival.hp <= 0) { rival.hp = 0.5; rival.invulnerable = 0; rival.stormKo = true; damageRival(rival, 1, "STORM"); }
+    }
+    // A knocked-out tamer leaves XP crystals and goes after a beat.
+    for (const rival of state.rivals) {
+      if (rival.tamerIndex == null || rival.hp > 0 || rival.survivalCounted) continue;
+      rival.survivalCounted = true; rival.removeAt = state.time + 1.5;
+      knockOutTamer(s.tamers.find((t) => t.index === rival.tamerIndex), rival.stormKo ? "STORM" : "PLAYER");
+      for (let i = 0; i < 3; i++) state.pickups.push({ id: nextId++, x: rival.x + (i - 1) * 22, y: rival.y + (i % 2) * 18, value: DATA_ARENA_SURVIVAL.rivalXp / 3, age: 0 });
+    }
+    state.rivals = state.rivals.filter((rival) => !(rival.removeAt != null && state.time >= rival.removeAt));
+    const fighting = state.rivals.some((rival) => rival.tamerIndex != null && rival.hp > 0);
+    for (const tamer of s.tamers) {
+      if (tamer.state === "WAITING" && tamer.fate === "OFFSCREEN" && state.time >= tamer.at) knockOutTamer(tamer, random() < 0.45 ? "STORM" : "TAMER");
+    }
+    // One tamer at a time comes for the player; once the storm is nearly shut, the rest come in turn.
+    const due = s.tamers.filter((t) => t.state === "WAITING" && t.fate === "ENCOUNTER" && (state.time >= t.at || circle.stage >= 5))
+      .sort((a, b) => a.at - b.at)[0];
+    if (due && !fighting && playerIn && state.mode === "PLAY") startEncounter(due, circle);
+    if (!s.won && state.mode === "PLAY" && survivalOthersLeft() === 0 && playerIn) {
+      s.won = true; state.mode = "VICTORY_POSE"; state.endTimer = 2.2; laser.firing = false;
+      emit({ type: "SURVIVAL_WIN", knockouts: s.knockouts });
+    }
+  }
+
   // ------------------------------------------------------------------ tournament flow
   function resetArenaForRound() {
     grid.resetDynamic();
@@ -2450,6 +2532,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       kills: state.kills, level: state.level, upgrades: Object.freeze({ ...upgrades }), cheers: state.cheers,
       stats: Object.freeze({ ...state.stats }), partnerId, seed, mode,
       relayFainted: relayMode ? state.relay?.fainted ?? 0 : 0,
+      // SURVIVAL: the place the player finished in, of all twelve, and its own knockouts.
+      survival: survivalMode ? Object.freeze({ rank: survivalRank({ won: outcome === "VICTORY", othersLeft: survivalOthersLeft() }),
+        of: DATA_ARENA_SURVIVAL.tamers + 1, knockouts: state.survival.knockouts, stage: state.survival.stage }) : null,
       tournament: state.tournament && !relayMode ? Object.freeze({ roundsWon: state.stats.roundsWon, rounds: DATA_ARENA_TOURNAMENT.rounds,
         reachedRound: state.tournament.round + 1, results: state.tournament.results.map((r) => ({ ...r })) }) : null });
     state.mode = "ENDED";
@@ -2490,7 +2575,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       state.crowd.cheerEnded = state.cheers; state.cheerCooldown = DATA_ARENA_CROWD.cheerCooldown;
       emit({ type: "CHEER_END" });
     } else state.cheerCooldown = Math.max(0, state.cheerCooldown - DT);
-    if (!tournamentMode) updatePhases();
+    if (!tournamentMode && !survivalMode) updatePhases();
     updatePlayer(input);
     if (player.state === "NORMAL") stepKnock(player); else player.kbx = player.kby = 0;
     playerKitInput(input);
@@ -2500,6 +2585,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     updateSurges();
     updateEnemies();
     for (const rival of state.rivals) updateRival(rival);
+    if (survivalMode) updateSurvival();
     if(relayMode)for(const rival of state.rivals)if(rival.active&&rival.hp>0&&player.hp>0){
       const minSep=Math.max(38,(rival.radius+player.radius)*.85);
       const dx=rival.x-player.x,dy=rival.y-player.y,d=Math.hypot(dx,dy),overlap=minSep-d;
@@ -2577,6 +2663,12 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if (relayMode) return { id: 'RELAY', timeLeft: Math.max(0, DATA_ARENA_RELAY.seconds - state.tournament.roundTime),
       status: state.tournament.status, progress: state.relay.rivals ? state.relay.rivals.filter(r => r.hp <= 0).length : state.relay.enemyIndex, goal: DATA_ARENA_RELAY.teamSize ?? 3, done: state.result?.outcome === 'VICTORY' };
     const id = state.phaseId;
+    if (survivalMode) {
+      const s = state.survival, circle = s.circle;
+      return { id: "SURVIVAL", left: survivalOthersLeft(), total: DATA_ARENA_SURVIVAL.tamers, stage: circle.stage, closing: circle.closing,
+        stormIn: circle.nextAt === null ? null : Math.max(0, circle.nextAt - state.time), outside: outsideCircle(circle, player.x, player.y),
+        knockouts: s.knockouts, progress: DATA_ARENA_SURVIVAL.tamers - survivalOthersLeft(), goal: DATA_ARENA_SURVIVAL.tamers, done: s.won };
+    }
     if (tournamentMode) {
       const t = state.tournament, rival = state.rivals[0];
       return { id: "DUEL", round: t.round + 1, rounds: DATA_ARENA_TOURNAMENT.rounds, status: t.status, timeLeft: Math.max(0, DATA_ARENA_TOURNAMENT.roundSeconds - t.roundTime),
@@ -2666,6 +2758,10 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         cores: state.cores.map((c) => ({ x: c.x, y: c.y, out: c.out })),
         pods: state.pods.map((p) => ({ x: p.x, y: p.y, ready: p.respawn <= 0 })),
         gameMode: mode,
+        survival: survivalMode ? { stage: state.survival.circle.stage, closing: state.survival.circle.closing, left: survivalOthersLeft(),
+          knockouts: state.survival.knockouts, won: state.survival.won,
+          circle: { cx: Math.round(state.survival.circle.cx), cy: Math.round(state.survival.circle.cy), radius: Math.round(state.survival.circle.radius) },
+          tamers: state.survival.tamers.map((t) => ({ index: t.index, fate: t.fate, state: t.state, by: t.by })) } : null,
         relay: relayMode ? { active: state.relay.active, switchCooldown: state.relay.switchCooldown, enemyIndex: state.relay.enemyIndex,
           rivalsAlive: state.relay.rivals.filter(r => r.hp > 0).length,
           rivalTeam: state.relay.rivals.map((r, index) => ({ id: r.definitionId, speciesId: r.speciesId, hp: Math.round(r.hp), maxHp: r.maxHp, tp: Math.round(r.energy), active: index === state.relay.enemyIndex && r.hp > 0, defeated: r.hp <= 0 })),

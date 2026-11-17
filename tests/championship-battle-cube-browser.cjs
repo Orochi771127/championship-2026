@@ -184,24 +184,27 @@ async function tapCanvas(page, fx, fy = 0.45) {
     report.homeMenus=await app.locator('[data-menu-id]').evaluateAll(nodes=>nodes.map(n=>n.dataset.menuId));
     await app.locator('button[data-menu-id="SYSTEM"]').click();
     await app.click('[data-entry-id="battle"]');
-    await app.waitForSelector(`[data-screen="BATTLE_SELECT"] [data-cube-textures="${FACE_COUNT}"]`);
+    // P3 (Owner 2026-11-16): the real menu draws three pillars that hold the seven modes.
+    const APP_FACES=3,APP_BUTTONS=3+FACE_COUNT;
+    await app.waitForSelector(`[data-screen="BATTLE_SELECT"] [data-cube-textures="${APP_FACES}"]`);
     for(const viewport of VIEWPORTS){
       await app.setViewportSize(viewport);
       await app.screenshot({path:path.join(OUTPUT,`app-${viewport.width}x${viewport.height}.png`),fullPage:true});
       assert.equal(await app.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
     }
     // Every mode is wired in the real application, so no face stays closed.
-    assert.equal(await app.locator('.cm-vs5-cube__face').count(),FACE_COUNT);
+    assert.equal(await app.locator('.cm-vs5-cube__face').count(),APP_BUTTONS);
     assert.equal(await app.locator('.cm-vs5-cube__face:disabled').count(),0);
-    // Turn to Free Battle with the turn key and tap the prism, as a player does.
-    for(let turn=0;turn<ORDER.indexOf('FREE_BATTLE');turn++){await app.click('.cm-vs5-prism__turn--next');await app.waitForTimeout(450);}
-    assert.equal(await app.getAttribute('.cm-vs5-prism__caption','data-face-id'),'FREE_BATTLE');
+    // The 征途 pillar is in front: tap it, then pick Free Battle from its list, as a player does.
+    assert.equal(await app.getAttribute('.cm-vs5-prism__caption','data-face-id'),'HUB_JOURNEY');
     await app.locator('.cm-vs5-cube__canvas').click();
+    assert.deepEqual(await app.locator('.cm-vs5-hub__option').evaluateAll(n=>n.map(b=>b.dataset.option)),['JOURNEY','FREE_BATTLE','PRACTICE_BATTLE']);
+    await app.click('.cm-vs5-hub__option[data-option="FREE_BATTLE"]');
     await app.waitForSelector('[data-battle-mode="FREE_BATTLE"] .cm-vs5-match__enter');
     await app.click('.cm-vs5-exit');await app.waitForSelector('[data-screen="RAISING_HOME"]');
     assert.equal(await app.locator('canvas[data-renderer="THREE_BOUNDED_BATTLE_SELECT"]').count(),0);
     await app.locator('button[data-menu-id="SYSTEM"]').click();await app.click('[data-entry-id="battle"]');
-    await app.waitForSelector(`[data-cube-textures="${FACE_COUNT}"]`);
+    await app.waitForSelector(`[data-cube-textures="${APP_FACES}"]`);
     assert.equal(await app.locator('canvas[data-renderer="THREE_BOUNDED_BATTLE_SELECT"]').count(),1);
     assert.deepEqual(appErrors,[]);report.realAppFlow=true;await appContext.close();
     report.status='PASS';fs.writeFileSync(path.join(OUTPUT,'browser-qa.json'),JSON.stringify(report,null,2)+'\n');

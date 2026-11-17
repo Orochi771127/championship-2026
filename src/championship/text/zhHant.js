@@ -174,6 +174,9 @@ export const GATE_NAMES = deepFreeze({
 
 /** Original battle mode identities; native dispatch is traced separately. */
 export const BATTLE_FACE_LABELS = deepFreeze({
+  HUB_JOURNEY: "征途",
+  HUB_TOURNAMENT: "錦標賽",
+  HUB_LINK: "連線",
   JOURNEY: "征途",
   CHAMPIONSHIP: "冠軍賽",
   TITLE_MATCH: "頭銜賽",
@@ -185,6 +188,9 @@ export const BATTLE_FACE_LABELS = deepFreeze({
 
 /** One line under each battle-menu prism face (Owner 2026-11-09). */
 export const BATTLE_FACE_TAGLINES = deepFreeze({
+  HUB_JOURNEY: "塔・戰區・自由・練習",
+  HUB_TOURNAMENT: "頭銜賽・冠軍賽",
+  HUB_LINK: "通訊・密碼對戰",
   JOURNEY: "同步之塔・巡航・戰區",
   CHAMPIONSHIP: "多輪盃賽・奪取獎牌",
   TITLE_MATCH: "依行事曆開賽・贏得頭銜",
@@ -206,7 +212,7 @@ export const BATTLE_PRISM_LABELS = deepFreeze({
 /** Copy for the bounded battle-menu panel; match titles keep their source text. */
 export const BATTLE_MENU_LABELS = deepFreeze({
   menu: "對戰選單", kicker: "對戰", chooseMatch: "選擇對戰",
-  faceNotice: "左右滑動旋轉稜柱，點選任一面直接進入該模式。",
+  faceNotice: "左右滑動旋轉稜柱，點一面看裡面的模式。",
   availableMatches: "目前可用的對戰", noMatch: "目前沒有開放的對戰。",
   match: "對戰", noPayout: "無獎金", returnHome: "返回牧場", conference: "多輪賽事"
 });

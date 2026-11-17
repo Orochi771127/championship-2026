@@ -5,10 +5,12 @@ import {readFileSync} from 'node:fs';
 // are substituted; this does not claim pixel/browser rendering acceptance.
 let source=readFileSync(new URL('../src/championship/app/vs5Screens.js',import.meta.url),'utf8');
 source=source.replace('"./codeClipboard.js"',JSON.stringify(new URL('../src/championship/app/codeClipboard.js',import.meta.url).href));
+// BATTLE_STYLE_V1 (2026-11-16): the glyph helper resolves like the clipboard helper (it imports nothing).
+source=source.replace("'./battleGlyphs.js'",JSON.stringify(new URL('../src/championship/app/battleGlyphs.js',import.meta.url).href));
 source=source.replace("'../text/battleTransportText.js'",JSON.stringify(new URL('../src/championship/text/battleTransportText.js',import.meta.url).href));
 source=source.replace(/^import .*from ["']\.\.\/text\/.*;$/gm,'');
 source=`const uiText=(key,params={})=>Object.entries(params).reduce((s,[k,v])=>s.replace('{'+k+'}',v),key);
-const titleEventText=(_a,_b,fallback)=>fallback,raisingDisplayName=e=>e.displayName,speciesName=id=>id,tutorialBattleText=()=>({});\n`+source;
+const titleEventText=(_a,_b,fallback)=>fallback,raisingDisplayName=e=>e.displayName,speciesName=id=>id,tutorialBattleText=()=>({}),battleStyleText=key=>key;\n`+source;
 const {createBattleSelectView,battleTransportErrorMessage}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
 class Element extends EventTarget {
  constructor(tag){super();this.tagName=tag.toUpperCase();this.children=[];this.parent=null;this.dataset={};this.attrs={};this.value='';this.hidden=false;this.disabled=false;this.readOnly=false;this.className='';this.classList={add:name=>this.className+=' '+name};}

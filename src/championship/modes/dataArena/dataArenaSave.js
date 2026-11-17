@@ -15,7 +15,7 @@ import { relayKit } from './dataArenaRelay.js';
 
 export const DATA_ARENA_RECORD_SCHEMA = DATA_ARENA_VERSION;
 const QUALITY = new Set(["auto", "high", "low"]);
-const MODES = ["TOURNAMENT", "HARBOR", "RELAY"];
+const MODES = ["TOURNAMENT", "HARBOR", "RELAY", "SURVIVAL"];
 const PARTNER_IDS = new Set(RELAY_ROSTER.map((partner) => partner.id));
 const count = (value) => (Number.isSafeInteger(value) && value >= 0 ? Math.min(value, 1e9) : 0);
 

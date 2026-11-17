@@ -48,6 +48,22 @@ export const BATTLE_CUBE_FACES = Object.freeze([
   Object.freeze({ id: "PRACTICE_BATTLE", node: "_07_rensyu", label: BATTLE_FACE_LABELS.PRACTICE_BATTLE, accent: "#ff6fb5", glyph: "target" })
 ]);
 
+/**
+ * The battle menu's three pillars (Owner 2026-11-16: 「不要讓遊戲有太多模式」; the 11-09 integration
+ * plan's 錦標賽生涯 / 征途 / 連線). Each face holds the original modes as `options`: tapping a face
+ * opens its short list, or enters at once when only one of its modes is open. The original modes'
+ * own buttons (data-face-id) stay in the hidden overlay, so every mode keeps its identity and its
+ * entry path; only the drawn prism has three faces. BATTLE_CUBE_FACES stays the default.
+ */
+export const BATTLE_HUB_FACES = Object.freeze([
+  Object.freeze({ id: "HUB_JOURNEY", node: "product_hub_journey", label: BATTLE_FACE_LABELS.HUB_JOURNEY, accent: "#6ff7ff", glyph: "tower",
+    options: Object.freeze(["JOURNEY", "FREE_BATTLE", "PRACTICE_BATTLE"]) }),
+  Object.freeze({ id: "HUB_TOURNAMENT", node: "product_hub_tournament", label: BATTLE_FACE_LABELS.HUB_TOURNAMENT, accent: "#ffd23f", glyph: "crown",
+    options: Object.freeze(["CHAMPIONSHIP", "TITLE_MATCH"]) }),
+  Object.freeze({ id: "HUB_LINK", node: "product_hub_link", label: BATTLE_FACE_LABELS.HUB_LINK, accent: "#2ec4f1", glyph: "link",
+    options: Object.freeze(["LINK_BATTLE", "PASSWORD_BATTLE"]) })
+]);
+
 export const BATTLE_CUBE_FACE_EVIDENCE = "ROM_VERIFIED";
 export const BATTLE_CUBE_SOURCE_MODEL = "battle_menu/launcher13.nsbmd";
 /** Which face sits where round the prism is the product's choice. */
@@ -249,7 +265,10 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
   const sides = faces.length;
   const shape = prismShape(sides);
   const radius = FACE_WIDTH / shape.faceWidth;
-  const open = faces.map(face => available === null || available.has(face.id));
+  const isOpen = (id) => available === null || available.has(id);
+  // A pillar face is open when any of its modes is; its open modes are what its list shows.
+  const openOptions = faces.map(face => (face.options ?? []).filter(isOpen));
+  const open = faces.map((face, index) => face.options ? openOptions[index].length > 0 : isOpen(face.id));
 
   // The stage: canvas, two turn keys at its sides and the caption under it.
   const stage = document.createElement("div");
@@ -286,7 +305,13 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
   overlay.setAttribute("role", "group");
   overlay.setAttribute("aria-label", uiText("對戰模式"));
 
-  host.append(stage, caption, overlay);
+  // The pillar's list of modes, drawn under the caption while one is open.
+  const hub = document.createElement("div");
+  hub.className = "cm-vs5-hub";
+  hub.hidden = true;
+  hub.setAttribute("role", "group");
+
+  host.append(stage, caption, hub, overlay);
   host.dataset.prismSides = String(sides);
 
   const scene = new THREE.Scene();
@@ -408,7 +433,59 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
     });
     overlay.append(button);
     buttons.set(face.id, button);
+    // The original modes inside a pillar keep their own hidden buttons and ids.
+    for (const option of face.options ?? []) {
+      const optionButton = document.createElement("button");
+      optionButton.type = "button";
+      optionButton.className = "cm-vs5-cube__face";
+      optionButton.dataset.faceId = option;
+      optionButton.dataset.hub = face.id;
+      optionButton.textContent = battleFaceLabel(option);
+      optionButton.disabled = !isOpen(option);
+      optionButton.addEventListener("click", () => { if (!optionButton.disabled) chooseOption(option); });
+      overlay.append(optionButton);
+    }
   });
+
+  let openHub = null;
+  function closeHub() {
+    openHub = null;
+    hub.hidden = true;
+    hub.replaceChildren();
+    delete host.dataset.hubOpen;
+  }
+  function chooseOption(option) {
+    if (disposed) return;
+    closeHub();
+    selected = option;
+    paint();
+    fx("open");
+    onSelect(option);
+  }
+  /** Show one pillar's open modes as keys; one open mode enters at once. */
+  function showHub(index) {
+    const face = faces[index], options = openOptions[index];
+    if (options.length === 1) { chooseOption(options[0]); return; }
+    openHub = face.id;
+    host.dataset.hubOpen = face.id;
+    hub.setAttribute("aria-label", battleFaceLabel(face.id));
+    hub.replaceChildren(...options.map((option) => {
+      const key = document.createElement("button");
+      key.type = "button";
+      key.className = "cm-vs5-hub__option";
+      key.dataset.option = option;
+      const name = document.createElement("strong");
+      name.textContent = battleFaceLabel(option);
+      const line = document.createElement("span");
+      line.textContent = battleFaceTagline(option);
+      key.append(name, line);
+      key.addEventListener("click", () => chooseOption(option));
+      return key;
+    }));
+    hub.hidden = false;
+    // On a short landscape screen the list sits below the fold: bring it into view.
+    try { hub.scrollIntoView?.({ block: "nearest", behavior: "smooth" }); } catch { /* optional */ }
+  }
 
   const fx = (kind) => {
     try { host.dispatchEvent(new CustomEvent("cm-fx", { bubbles: true, detail: { kind } })); } catch { /* no effects */ }
@@ -418,6 +495,7 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
     if (disposed) return;
     if (!open[index]) { fx("denied"); return; }
     turnTo(index);
+    if (faces[index].options) { fx("toggle"); showHub(index); return; }
     selected = faces[index].id;
     paint();
     fx("open");
@@ -450,6 +528,8 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
     const next = prismFrontIndex(turn, sides);
     if (next !== front) {
       front = next;
+      // Turning to another pillar puts the open list away.
+      if (openHub && openHub !== faces[front].id) closeHub();
       fx("toggle");
       paint();
     }
@@ -611,6 +691,7 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
         settling: animating,
         settleDriver: ticker ? "INJECTED_TICKER" : "IMMEDIATE",
         rotationMode: "PRISM_SPIN",
+        openHub,
         dragging: controls.isDragging(),
         disposed
       });
@@ -635,6 +716,7 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
       disposeThreeRenderer(renderer);
       stage.remove();
       caption.remove();
+      hub.remove();
       overlay.remove();
       delete host.dataset.cubeTextures;
       delete host.dataset.prismSides;

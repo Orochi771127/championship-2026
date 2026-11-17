@@ -27,9 +27,9 @@ export const DATA_ARENA_UPGRADES = deepFreeze([
   { id: "skillAmp", track: "SKILL", max: 2, effect: { skillDamage: 0.2 } },
   { id: "ultCore", track: "SKILL", max: 1, effect: { ultGain: 0.35 } },
   // Teammate / environment track (the mate exists only in the harbor challenge)
-  { id: "surgePlus", track: "TIDE", max: 2, effect: { surgeRadius: 0.3, surgeCooldown: -0.15 }, modes: ["HARBOR"] },
+  { id: "surgePlus", track: "TIDE", max: 2, effect: { surgeRadius: 0.3, surgeCooldown: -0.15 }, modes: ["HARBOR", "SURVIVAL"] },
   { id: "cryoStability", track: "TIDE", max: 2, effect: { iceDuration: 0.5 } },
-  { id: "guardianFin", track: "TIDE", max: 2, effect: { mateHp: 0.4, reviveSpeed: 0.35 }, modes: ["HARBOR"] },
+  { id: "guardianFin", track: "TIDE", max: 2, effect: { mateHp: 0.4, reviveSpeed: 0.35 }, modes: ["HARBOR", "SURVIVAL"] },
   { id: "showmanship", track: "TIDE", max: 1, effect: { hypeGain: 0.25 } },
   // Journey zone buffs (Owner 2026-11-10): relay-only, picked between waves.
   { id: "relayBarrage", track: "SKILL", max: 2, effect: { skillDamage: 0.25 }, modes: ["RELAY"] },

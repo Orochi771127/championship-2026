@@ -5,6 +5,8 @@ import { titleEventText, raisingDisplayName, speciesName } from "../text/zhHant.
 import { uiText, retranslate } from "../text/uiText.js";
 import {tutorialBattleText} from '../text/interactiveTutorialBattleText.js';
 import { arenaText } from '../text/dataArenaText.js';
+import { battleStyleText } from '../text/battleStyleText.js';
+import { battleGlyph, STATUS_GLYPHS } from './battleGlyphs.js';
 // VS5-P — Championship Modern presentation for the Battle menu, the match and
 // the result.
 //
@@ -425,6 +427,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     text.append(element('span','cm-vs5-member__name',name,false));
     const meta=element('span','cm-vs5-member__meta');
     if(look?.stage)meta.append(element('span','cm-vs5-member__stage',look.stage,false));
+    if(look?.styleChip)meta.append(look.styleChip);
     if(look?.mood){const mood=element('span','cm-vs5-member__mood',`${look.mood.emoji} ${look.mood.label}`,false);mood.dataset.tier=look.mood.tier;meta.append(mood);}
     if(look?.badges)meta.append(look.badges);
     if(meta.children.length)text.append(meta);
@@ -1016,7 +1019,11 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
     miniImage=element('span','cm-vs5-fighter__mini-body');mini.append(miniImage);card.append(mini);
     if(badge){const holder=element('span','cm-vs5-fighter__badge');holder.setAttribute('aria-hidden','true');holder.append(badge);card.append(holder);}
   }
-  card.append(name, hp.wrap);
+  // BATTLE_STYLE_V1 (2026-11-16): the fighter's current negative status as a glyph and a two-character name.
+  const statusChip = element("span", "cm-vs5-fighter__status");
+  statusChip.hidden = true;
+  let shownStatus = 0;
+  card.append(name, statusChip, hp.wrap);
   if (floatingHud) hp.wrap.append(hpValue); else card.append(hpValue);
   let resource = null;
   let sequenceId=0,sequenceStart=0,paintedHp=null;
@@ -1070,6 +1077,17 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
       if(image){if(portrait.getAttribute('src')!==image.src)portrait.src=image.src;}
       // The plate's round mini portrait: the fighter's own body (Owner 2026-11-12), not an illustration.
       if(mini){if(miniSpecies!==next.speciesId){miniSpecies=next.speciesId;mini.hidden=!hudArt?.setActionPortrait?.(miniImage,next.speciesId,{still:true,lazy:false,floor:0});}}
+      const statusCode = next.down ? 0 : next.status?.code ?? 0;
+      if (statusCode !== shownStatus) {
+        shownStatus = statusCode;
+        const key = STATUS_GLYPHS[statusCode];
+        statusChip.replaceChildren();
+        statusChip.hidden = !key;
+        if (key) {
+          statusChip.dataset.status = key;
+          statusChip.append(battleGlyph(key), element("span", "cm-vs5-fighter__status-name", battleStyleText(`status.${key}`), false));
+        } else delete statusChip.dataset.status;
+      }
       hp.fill.style.width = `${Math.round(next.hp.ratio * 100)}%`;
       // The arcade rebuild's hit feel: the bar drops at once and a white ghost
       // (the meter's ::before, CSS-delayed) follows after a beat.
@@ -1454,7 +1472,7 @@ function resultSummary(summary, winningTeam) {
   return box;
 }
 
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, syncPanel=null, followUp=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null, sponsor=null }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, syncPanel=null, followUp=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null, sponsor=null, tacticRecord=null }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
   let disposed=false;
 
@@ -1566,6 +1584,17 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     }
   });
 
+  // Battle-plan record (TACTIC_PRACTICE_LOOP_20261116): counted facts from this match, built by the app.
+  if (tacticRecord?.lines?.length) {
+    panels.push({ id: "TACTIC", scene: "result_sub_status_scene", build() {
+      const frag = document.createDocumentFragment(), head = element("header", "cm-vs5-header cm-vs5-result__tactic");
+      head.append(element("span", "cm-vs5-kicker", tacticRecord.kicker, false), element("h1", "cm-vs5-title", tacticRecord.title, false));
+      const list = element("ul", "cm-vs5-result__tactic-lines");
+      for (const line of tacticRecord.lines) list.append(element("li", "cm-vs5-result__detail", line, false));
+      frag.append(head, list);
+      return frag;
+    } });
+  }
   // Sync EXP (OWNER_APPROVED_ADAPTATION 2026-11-09): the app builds the panel from its settled gains.
   if(syncPanel?.node){
     panels.push({id:'SYNC',scene:'product_sync_exp',build(){

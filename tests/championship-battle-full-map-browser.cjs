@@ -116,7 +116,7 @@ try{
     }
    }finally{probeRoot.remove();}
    return {threeMemberGroups,mode:shell.dataset.hud,shell:rect(shell),field:{left:field.left,top:field.top,right:field.right,bottom:field.bottom},
-    rosterStyles:[...shell.querySelectorAll('.cm-vs5-roster')].map(e=>({opponent:e.classList.contains('cm-vs5-roster--opponent'),direction:getComputedStyle(e).flexDirection,justify:getComputedStyle(e).justifyContent})),namedAreas:getComputedStyle(shell).gridTemplateAreas,exit:rect(document.querySelector('.cm-vs5-exit')),
+    rosterStyles:[...shell.querySelectorAll('.cm-vs5-roster')].map(e=>{const cs=getComputedStyle(e),box=e.getBoundingClientRect(),kids=[...e.children].map(c=>c.getBoundingClientRect()).filter(r=>r.width>0);return {opponent:e.classList.contains('cm-vs5-roster--opponent'),direction:cs.flexDirection,justify:cs.justifyContent,members:kids.length,startGap:kids.length?Math.min(...kids.map(r=>r.left))-(box.left+parseFloat(cs.paddingLeft)):null,endGap:kids.length?(box.right-parseFloat(cs.paddingRight))-Math.max(...kids.map(r=>r.right)):null};}),namedAreas:getComputedStyle(shell).gridTemplateAreas,exit:rect(document.querySelector('.cm-vs5-exit')),
     overlays:[...shell.querySelectorAll(':scope > .cm-vs5-clock,:scope > .cm-vs5-roster,:scope > .cm-vs5-log')].map(e=>({pointerEvents:getComputedStyle(e).pointerEvents,background:getComputedStyle(e).backgroundColor})),
     cards:cards.map(c=>({slot:c.dataset.slot,team:c.dataset.team,rect:rect(c),bars:[...c.querySelectorAll('.cm-vs5-meter')].map(bar=>{const value=bar.querySelector('.cm-vs5-fighter__hp,.cm-vs5-meter__value');return {kind:bar.classList.contains('cm-vs5-meter--hp')?'HP':'TP',bar:rect(bar),value:value?rect(value):null,text:value?.textContent,maxNumberProbe:numberProbe(value,bar.classList.contains('cm-vs5-meter--hp')?'HP':'TP'),ariaLabel:bar.getAttribute('aria-label'),now:bar.getAttribute('aria-valuenow'),max:bar.getAttribute('aria-valuemax'),overflow:!!value&&value.scrollWidth>value.clientWidth+1}})}))};
   });
@@ -126,7 +126,11 @@ try{
   assert.ok(hud.overlays.every(e=>e.pointerEvents==='none'&&e.background==='rgba(0, 0, 0, 0)'));
   assert.equal(hud.cards.length,6,'real battle has three actors per team');
   for(const team of ['0','1']){const members=hud.cards.filter(c=>c.team===team);assert.equal(members.length,3);assert.equal(new Set(members.map(c=>Math.round(c.rect.top))).size,1,'real team stays on one row');}
-  for(const row of hud.rosterStyles){assert.equal(row.direction,'row');assert.equal(row.justify,row.opponent?'flex-end':'flex-start');}
+  // Where the cards sit, not how the browser spells it: Chrome 158 reports the opponent row's `justify-content: flex-end`
+  // as another keyword (CI 2026-11-17, Chrome 157 -> 158), so the keyword is recorded and the placement is what is checked.
+  for(const row of hud.rosterStyles){assert.equal(row.direction,'row');assert.ok(row.members>0,'a roster row has its cards');
+   if(row.opponent)assert.ok(Math.abs(row.endGap)<=1.5&&row.startGap>=row.endGap-1.5,`the opponent row packs its cards to the end (${row.justify}, start ${row.startGap}, end ${row.endGap})`);
+   else assert.ok(Math.abs(row.startGap)<=1.5&&row.endGap>=row.startGap-1.5,`the player row packs its cards to the start (${row.justify}, start ${row.startGap}, end ${row.endGap})`);}
   for(const group of hud.threeMemberGroups){
    assert.equal(group.cards.length,group.count);assert.equal(new Set(group.cards.map(c=>Math.round(c.top))).size,1,'one/two/three members stay on one row');
    assert.ok(Math.max(...group.cards.map(c=>c.width))-Math.min(...group.cards.map(c=>c.width))<=1,'equal adaptive columns');

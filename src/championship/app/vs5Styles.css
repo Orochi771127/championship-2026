@@ -1071,8 +1071,30 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 .cm-vs5-sponsors__note { margin: 0; font-size: calc(11px * var(--text-scale, 1)); color: #cbd5e1; }
 .cm-vs5-result__sponsor[data-met="true"] .cm-vs5-title { color: #ffd34d; }
 .cm-vs5-result__sponsor[data-met="false"] .cm-vs5-title { color: #fca5a5; }
+/* Battle-plan record (TACTIC_PRACTICE_LOOP_20261116): counted facts, one per line. */
+.cm-vs5-result__tactic-lines { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; text-align: left; }
+.cm-vs5-result__tactic-lines > li { font-variant-numeric: tabular-nums; }
 @media (max-width: 380px) { .cm-vs5-sponsors__keys { grid-template-columns: 1fr; } .cm-vs5-sponsor { min-height: 0; } }
 /* Contract keys carry the game's faction glyph; the day's remaining signatures sit beside the title (Owner 2026-11-10). */
 .cm-vs5-sponsor__name { display: flex; align-items: center; gap: 5px; }
 .cm-vs5-sponsor__name .cm-tax-glyph { flex: none; }
 .cm-vs5-sponsors__today { font-size: calc(11px * var(--text-scale, 1)); font-weight: 800; color: #cbd5e1; }
+/* BATTLE_STYLE_V1 (2026-11-16): the fighter's negative status, a glyph and two characters on the plate. */
+.cm-vs5-fighter__status { display: inline-flex; align-items: center; gap: 1px; justify-self: start; width: max-content; max-width: 100%;
+  padding: 0 6px 0 2px; border-radius: 999px; background: rgba(20, 24, 36, 0.78); color: #fff;
+  font: 800 var(--fs-label, 11px)/1.4 var(--font-ui, sans-serif); white-space: nowrap; pointer-events: none; }
+.cm-vs5-fighter__status[hidden] { display: none; }
+.cm-vs5-fighter__status > .cm-glyph { width: 1.4em; height: 1.4em; }
+/* P3 (Owner 2026-11-16): a pillar's modes, listed under the prism caption while the pillar is open. */
+.cm-vs5-hub { display: grid; gap: 6px; margin-top: var(--sp-2, 8px); }
+.cm-vs5-hub[hidden] { display: none; }
+.cm-vs5-hub__option { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; min-height: 48px; padding: 8px 14px; border: 2px solid var(--prism-accent, #6ff7ff);
+  border-radius: 14px; background: rgba(20, 14, 48, 0.88); color: #fff; font: inherit; text-align: left; cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35); }
+.cm-vs5-hub__option:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35); }
+.cm-vs5-hub__option > strong { font-size: calc(16px * var(--text-scale, 1)); font-weight: 900; }
+.cm-vs5-hub__option > span { min-width: 0; overflow: hidden; font-size: calc(11px * var(--text-scale, 1)); font-weight: 700; opacity: 0.8; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-height: 520px) {
+  .cm-vs5-hub__option { min-height: 40px; padding: 6px 12px; }
+  .cm-vs5-hub__option > span { display: none; }
+}

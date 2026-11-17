@@ -604,6 +604,11 @@
         "evidence": "PR #274 5caae0df; all six checks green (one job hung at checkout on the runner and passed on a rerun); live pages-build commit 5caae0df (build 0572cfb1) and the T2 code in the live bundle"
       },
       {
+        "id": "TALENTS_T3",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #275 850db9f7; all eight checks green; live pages-build commit 850db9f7 (build 07d09276) and the commander code in the live bundle"
+      },
+      {
         "id": "PR_194_CRASH_CONSISTENCY",
         "state": "VERIFIED_LIVE",
         "evidence": "PR #270 1312d138 (port); #194 closed with a pointer; care-image leak check re-run locally (delta 0, control +120); live bundle checked"
@@ -619,6 +624,11 @@
         "evidence": "PR #271 908d5020; all checks green"
       },
       {
+        "id": "TOURNAMENT_PICKER_NAME",
+        "state": "VERIFIED_LIVE",
+        "evidence": "the tournament partner picker printed a starter's native name (デジオ) where every other screen prints 迪吉歐; it now uses the shared display name; shipped with PR #275"
+      },
+      {
         "id": "RESULT_HELD_BITS",
         "state": "VERIFIED_LIVE",
         "evidence": "the prize page printed the receipt wallet without the beacon and 賞金 shares (prize 50, wallet +57, page said +50); fixed in 8f9565b3"
@@ -626,12 +636,8 @@
     ],
     "openForClaude": [
       {
-        "id": "TALENTS_T3",
-        "state": "IMPLEMENTED_LOCAL"
-      },
-      {
         "id": "TACTIC_PRACTICE_LOOP_P1_P4",
-        "state": "IMPLEMENTED_LOCAL_OTHER_SESSION"
+        "state": "IMPLEMENTED_PUSHED"
       },
       {
         "id": "NORMAL_ENTRY_PLAYTHROUGH",
@@ -644,10 +650,6 @@
       {
         "id": "EXTERNAL_ASSET_503_CLIENT",
         "state": "NOT_VERIFIED"
-      },
-      {
-        "id": "TOURNAMENT_PICKER_NAME",
-        "state": "IMPLEMENTED_LOCAL"
       }
     ],
     "forCodex": [
