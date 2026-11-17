@@ -18,7 +18,9 @@ function storage() {
   return { fail: false, getItem: (k) => map.get(k) ?? null, removeItem: (k) => map.delete(k),
     setItem(k,v) { if (this.fail) throw Error("FULL"); map.set(k,v); }, keys: () => [...map.keys()] };
 }
-const appFor = (s, rngClock = () => clock) => createChampionshipStandaloneApp({ storage: s, catalog, cages, rngClock });
+// These cases compare the app's generator with the native sequence draw for draw, so the hunt keeps the native head count:
+// a herd (HUNT_HERDS_20261117) continues the same generator after the native draws.
+const appFor = (s, rngClock = () => clock) => createChampionshipStandaloneApp({ storage: s, catalog, cages, rngClock, huntHerds: false });
 const channels = [0, 178, 179, 180, 181, 182, 183, 197, 196, 216];
 
 test("RTC input matches original BCD decoding and all 217 seeded channels, including midnight", () => {

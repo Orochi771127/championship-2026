@@ -1,6 +1,6 @@
 {
   "id": "LINE_FUSION_20261117",
-  "classification": "OWNER_APPROVED_ADAPTATION: partner grades S/A/B/C with a capture head start inside each individual's own native bounds (P1), and same-line fusion that feeds Sync EXP only (P2) (LINE_FUSION_TAMER_TALENTS_DESIGN_20261117)",
+  "classification": "OWNER_APPROVED_ADAPTATION: partner grades S/A/B/C with a capture head start inside each individual's own native bounds (P1), same-line fusion that feeds Sync EXP only (P2), and Hunt herds of species already out (P3) (LINE_FUSION_TAMER_TALENTS_DESIGN_20261117)",
   "saveField": {
     "path": "progression.syncLevels.partners[instanceId].grade = { grade: 'S'|'A'|'B'|'C', q: [6 integers inside the grade's band] }",
     "migration": "none: a partner without it has no grade and shows '—'; an unknown shape is dropped and the Sync level kept (productSyncLevel.normalizeSyncLevels)"
@@ -12,9 +12,10 @@
     "reveal": "hidden during the Hunt, shown on the Hunt Result row and the partner list"
   },
   "notChanged": [
-    "the native individual roll, the native hunt RNG and the encounter",
+    "the native individual roll, the native hunt RNG draws of the native encounter, and the encounter's own actors",
     "each individual's upper and lower bounds",
     "the native release history (a fused partner does not return to the wild)",
+    "the per-hunt instinct caps (ELITE 1, ANCESTOR 1) and the radars",
     "the save key, schemaVersion and the save lock"
   ],
   "source": "src/championship/contracts/productLineFusion.js",
@@ -28,5 +29,15 @@
     "huntResult": "requestHuntResultFusion / confirmHuntResultFusion(baseId) stage the fusion like a release; the catch leaves the memory card at once, a saved fodder leaves with releasedHomeIds, and the Sync EXP is written by the Home commit in the same save; a fused catch takes no roster slot and no ranch G",
     "ranch": "fusePartners(baseId, fodderIds) on the partner list: one save; a failed save changes nothing",
     "writes": "progression.syncLevels only (base EXP, fodder records removed); the native release history, the native individuals and the Dex registration are not written"
+  },
+  "herds": {
+    "record": "HUNT_HERDS_P3_20261117",
+    "count": "added = clamp(round(native count x 0.4), 2, 6), never past 20 partners in all (a lured partner counts toward the 20, not toward the share)",
+    "species": "only species already out natively; the species with the fewest partners first, a tie to the higher table weight, then to the earlier actor; a species only the rare lure called is not filled",
+    "order": "native generation -> rare lure -> herd -> wild instincts -> spawn spread",
+    "individuals": "createNativeHuntIndividual + updateNativeHuntIndividual + AI and position initialisation from the same continuing hunt RNG, after every native and lured draw; the native and lured actors are byte-identical with the herd on or off",
+    "off": "the tutorial hunt, capture replays and the app option huntHerds: false keep the native head count",
+    "performance": "no species is added, so no extra atlas is decoded; the worst case stays the native one (the native generation already reaches 22-23 partners, where the herd adds none)",
+    "source": "src/championship/hunt/capture/productHuntHerds.js"
   }
 }

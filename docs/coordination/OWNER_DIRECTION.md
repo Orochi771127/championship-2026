@@ -1,5 +1,19 @@
 # Championship Owner Direction
 
+<!-- record-id: HUNT_HERDS_P3_20261117 -->
+## 2026-11-17 — Fusion plan P3: Hunt herds, more partners of the species already out
+
+Under the standing goal recorded in `LINE_FUSION_P2_FUSION_20261117` and the design `LINE_FUSION_TAMER_TALENTS_DESIGN_20261117`.
+
+`OWNER_APPROVED_ADAPTATION`, as designed (plan section 5):
+
+- After the native encounter and the rare lure, the product adds `clamp(round(native count × 0.4), 2, 6)` partners, never past 20 in all. Only species already out natively are added: the one with the fewest partners first, a tie to the more common species of the table. A species only the lure called is not filled.
+- Each added partner is a native individual built and placed the way the encounter builds its own, from the same continuing hunt RNG after every native draw. The native and lured actors are byte-identical with the herd on or off (tested).
+- No species is added, so no extra atlas is decoded; the native generation already reaches 22–23 partners, where the herd adds none, so the worst case is unchanged. The instinct caps and radars are unchanged.
+- The tutorial hunt, capture replays and `huntHerds: false` keep the native head count.
+
+Contract: `docs/contracts/championship/LINE_FUSION_20261117.json` (`herds`). This closes fusion P1–P3; P4 (stat inheritance) belongs to the Breeder keystone in the talent plan.
+
 <!-- record-id: LINE_FUSION_P2_FUSION_20261117 -->
 ## 2026-11-17 — Fusion plan P2: same-line fusion feeds Sync EXP, on the Hunt Result and on the partner list
 

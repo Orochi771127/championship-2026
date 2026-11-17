@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "owner": "Claude Code",
   "scope": "gameplay reconstruction, runtime architecture, save/state, tests, integration - for Championship 2026 standalone",
-  "lastSync": "2026-08-28",
-  "syncKind": "VS2-R2: Original Hunt Loadout runtime reconstruction complete; companion selection demoted to developer-only",
+  "lastSync": "2026-11-17",
+  "syncKind": "Standing goal 2026-11-17: finish this version's decided non-animation work (character action animation stays with Codex)",
   "git": {
     "repository": "CHAMPIONSHIP_2026_PRODUCT_SSOT (this repository)",
     "branch": "main",
@@ -493,5 +493,198 @@
       "name": "Production Art / Animation / VFX / Audio / Packaging",
       "state": "NOT_STARTED"
     }
+  },
+  "autonomousGoal20261117": {
+    "note": "Current record. Every key above it except lastSync/syncKind is the 2026-08-28 VS2-R2 round, kept as history; it does not describe today's product.",
+    "goal": "Deliver an executable, verifiable, resumable version with every decided non-animation design of this product version implemented, integrated and verified. Inventory, a plan or partly passing tests do not count as done.",
+    "ownerAuthorization": "Owner 2026-11-17: Claude decides commit/push/merge/deploy and starts each decided batch without asking; undecided or contradictory items are listed as decisions and unaffected work continues.",
+    "division": "Codex: character action animation (generation, redraw, cutting, atlases, production acceptance). Claude: everything else - engineering, integration, UX, performance, save, verification.",
+    "rules": [
+      "never use the Owner save on port 8732; QA on an isolated port",
+      "tests/championship-friends-playtest-browser.cjs is sha-pinned and never edited",
+      "merge only when every check is green or a red one is proven external (rerun first)",
+      "story parts four and five stay unpublished until the Owner says",
+      "ROM-derived art is research only"
+    ],
+    "git": {
+      "main": "9c44d1ba (Merge PR #266)",
+      "openPullRequests": [
+        "#267 feat/line-fusion-p2-20261117 (fusion P2)",
+        "#194 claude/inspiring-mayer-gyxhot (crash consistency, open since 2026-11-08, untriaged)"
+      ],
+      "branchesInFlight": [
+        "feat/hunt-herds-p3-20261117 (stacked on #267)",
+        "feat/tactic-practice-loop-20261116 (another Claude session, local only, 8 commits, never pushed)"
+      ],
+      "worktree": ".claude/worktrees/skill-scroll-20261117 (clean worktree cut from origin/main; the shared checkout holds other agents' uncommitted work and is not touched)"
+    },
+    "verification": {
+      "commands": [
+        "node scripts/test-ci.mjs (run with NODE_OPTIONS=--import=<file that sets navigator.locks undefined> to match CI Node 22)",
+        "npm run build:playtest",
+        "npm run validate:playtest",
+        "node tests/championship-scene-music-browser.mjs",
+        "node tests/championship-external-character-browser.cjs",
+        "node tests/championship-dex-portrait-browser.cjs"
+      ],
+      "lastFullSuite": "3,790 / 3,790 on feat/line-fusion-p2-20261117 (local, Windows, Node 24.18)",
+      "ci": "PR #266: all 8 checks green, the first fully green PR since 2026-11-12",
+      "report": "docs/reports/ci-browser-checks-2026-11-17/REPORT_ZH_TW.md"
+    },
+    "checklist": [
+      {
+        "id": "CI_THREE_BROWSER_GATES",
+        "source": "Owner 2026-11-17",
+        "state": "VERIFIED_MERGED",
+        "evidence": "PR #266 9c44d1ba; scene music = product bug in the back-button guard (fixed), external character = stale test steps, Dex portrait = test units under UI zoom",
+        "owner": "Claude"
+      },
+      {
+        "id": "SKILL_IMPRINT_SCROLL",
+        "source": "SKILL_IMPRINT_SCROLL_20261117",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #264 0667260d, live bundle checked",
+        "owner": "Claude"
+      },
+      {
+        "id": "MEDICINE_RECORDS_FIX",
+        "source": "Owner 2026-11-17",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #264",
+        "owner": "Claude"
+      },
+      {
+        "id": "FUSION_P1_GRADES",
+        "source": "LINE_FUSION_P1_GRADES_20261117",
+        "state": "VERIFIED_LIVE",
+        "evidence": "PR #265 6e5301dc, live bundle checked",
+        "owner": "Claude"
+      },
+      {
+        "id": "FUSION_P2_FUSION",
+        "source": "LINE_FUSION_P2_FUSION_20261117",
+        "state": "IMPLEMENTED_PR_OPEN",
+        "evidence": "PR #267; 8 fusion cases incl. a real catch fused on the Hunt Result; ranch fusion checked in a browser",
+        "acceptance": "CI green, merge, live commit check",
+        "owner": "Claude"
+      },
+      {
+        "id": "FUSION_P3_HERDS",
+        "source": "HUNT_HERDS_P3_20261117",
+        "state": "IMPLEMENTED_LOCAL",
+        "evidence": "branch feat/hunt-herds-p3-20261117; 4 herd cases (count, order, native actors byte-identical, app on/off)",
+        "acceptance": "full suite, build, real-browser hunt, PR, merge",
+        "owner": "Claude"
+      },
+      {
+        "id": "TALENTS_T1",
+        "source": "LINE_FUSION_TAMER_TALENTS_DESIGN_20261117; docs/planning/TAMER_TALENT_TREE_AND_SUPPLEMENTS_PLAN_2026-11-17_ZH_TW.md section 9",
+        "state": "NOT_STARTED",
+        "acceptance": "tamer level/EXP/points, talent tab, nodes that do not depend on fusion; pure rules + app save tests; browser",
+        "dependsOn": [],
+        "owner": "Claude"
+      },
+      {
+        "id": "SUPPLEMENTS_S1",
+        "source": "same plan section 6",
+        "state": "NOT_STARTED",
+        "acceptance": "bag tab, recovery and ranch supplements",
+        "dependsOn": [],
+        "owner": "Claude"
+      },
+      {
+        "id": "SUPPLEMENTS_S2",
+        "source": "same plan section 6",
+        "state": "NOT_STARTED",
+        "acceptance": "pre-battle supplements as a modifier on the battle copy",
+        "dependsOn": [
+          "SUPPLEMENTS_S1"
+        ],
+        "owner": "Claude"
+      },
+      {
+        "id": "TALENTS_T2",
+        "source": "same plan",
+        "state": "NOT_STARTED",
+        "acceptance": "fusion-dependent nodes incl. the Breeder keystone 傳承 (fusion plan P4)",
+        "dependsOn": [
+          "TALENTS_T1",
+          "FUSION_P3_HERDS"
+        ],
+        "owner": "Claude"
+      },
+      {
+        "id": "TALENTS_T3",
+        "source": "same plan",
+        "state": "NOT_STARTED",
+        "acceptance": "remaining keystones and respec",
+        "dependsOn": [
+          "TALENTS_T1"
+        ],
+        "owner": "Claude"
+      },
+      {
+        "id": "TACTIC_PRACTICE_LOOP_P1_P4",
+        "source": "docs/planning/ROLES_AND_SURVIVAL_PLAN_2026-11-16_ZH_TW.md (Owner 2026-11-16: 自己分批製作)",
+        "state": "IMPLEMENTED_LOCAL_OTHER_SESSION",
+        "evidence": "branch feat/tactic-practice-loop-20261116 @ 83aedccf, in its own worktree beside the product repository (tactic-practice-loop-20261116), never pushed",
+        "acceptance": "merge main, register modules in the build lists, full suite, browser, PR",
+        "owner": "Claude"
+      },
+      {
+        "id": "PR_194_CRASH_CONSISTENCY",
+        "source": "open PR since 2026-11-08",
+        "state": "NEEDS_TRIAGE",
+        "acceptance": "rebase or close with reasons; 37 files, +4,694",
+        "owner": "Claude"
+      },
+      {
+        "id": "NORMAL_ENTRY_PLAYTHROUGH",
+        "source": "goal section 5.2",
+        "state": "IN_PROGRESS",
+        "evidence": "tests/championship-vs3-browser.cjs (new game -> hunt -> rope capture -> result -> home) revived: reaches the catch; remaining 404s being identified",
+        "owner": "Claude"
+      }
+    ],
+    "decisionsForOwner": [
+      {
+        "id": "D1_TAMER_RANK_PACE",
+        "question": "The 11 lowest-tier title matches open only 07:00-12:00 or 07:00-17:00, so an evening-only player never leaves rank 0; even perfect attendance takes 2-11 days to rank 1 and 29-42 to rank 7; 103 of 118 shop records are locked at the start.",
+        "options": [
+          "A: a title stays open from its slot to the end of that week (recommended)",
+          "B: drop the slots, all day",
+          "C: A plus opening rank-locked shop goods one rank earlier"
+        ],
+        "state": "ASKED_2026-11-17"
+      },
+      {
+        "id": "D2_SERVER_AUTHORITY",
+        "question": "Gachapon pulls, inventory, engraved skills and online teams are client-trusted; the Owner plans a rented server. No design exists.",
+        "state": "NOT_DESIGNED"
+      },
+      {
+        "id": "D3_STORY_PARTS_4_5",
+        "question": "Held by the Owner until both are done and the Owner says.",
+        "state": "HELD_BY_OWNER"
+      },
+      {
+        "id": "D4_SUPABASE",
+        "question": "Real backend deferred by the Owner (2026-11-17) until the game is finished; online features run in local simulation and must not be reported as live.",
+        "state": "DEFERRED_BY_OWNER"
+      }
+    ],
+    "waitingOnOthers": [
+      {
+        "id": "CODEX_ANIMATION_GAPS",
+        "detail": "character action animation intake (six held originals and two partial roles per the 2026-11-12 gap brief); Claude does not touch these"
+      }
+    ],
+    "notVerified": [
+      "physical iPhone/Android for anything in this round",
+      "Safari/WebKit for the three repaired gates",
+      "Hunt Result fusion panel in a real browser (covered by an app test with player gestures and a DOM view test)",
+      "frame time of herded hunts on a phone (worst case is the native 22-23 partners, unchanged)"
+    ],
+    "nextAction": "Merge #267 when green and check the live commit; finish the real-browser hunt gate, then PR/merge P3; start TALENTS_T1 (pure rules + save + tab), then S1."
   }
 }
