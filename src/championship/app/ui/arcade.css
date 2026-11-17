@@ -510,7 +510,7 @@
 
 /* ---- Owner 2026-11-16: a quiet ranch HUD -------------------------------------------------
    Fewer, smaller controls so the ranch itself fills the screen.
-   - Season, day and clock read as one flat strip.
+   - Season, day and clock read as one flat strip, on every screen (Owner 2026-11-17).
    - The eight rail keys are round icon keys on one slim pill; their names stay for screen
      readers and the care-tool hint names the chosen tool. Slot order is unchanged.
    - Hunt, Battle, Shop and Dex fold behind one Go key and spring up above it on a press;
@@ -518,8 +518,8 @@
      tickets show as a dot on the folded key.
    Portrait and desktop float the Go key over the right end of the rail; short landscape
    sets it beside the rail. Tap targets stay 44 px. */
-:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] { column-gap: 0; }
-:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__season, .cm-status-bar__day, .cm-status-bar__time) {
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen] { column-gap: 0; }
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen] :is(.cm-status-bar__season, .cm-status-bar__day, .cm-status-bar__time) {
   display: inline-flex;
   align-items: center;
   height: 28px;
@@ -535,9 +535,9 @@
   line-height: 1;
   white-space: nowrap;
 }
-:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__season { padding-left: 10px; border-left-width: 2px; border-radius: 999px 0 0 999px; }
-:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__time { padding-right: 11px; border-right-width: 2px; border-radius: 0 999px 999px 0; font-variant-numeric: tabular-nums; font-weight: var(--fw-heavy); }
-:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] :is(.cm-status-bar__day, .cm-status-bar__time)::before {
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen] .cm-status-bar__season { padding-left: 10px; border-left-width: 2px; border-radius: 999px 0 0 999px; }
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen] .cm-status-bar__time { padding-right: 11px; border-right-width: 2px; border-radius: 0 999px 999px 0; font-variant-numeric: tabular-nums; font-weight: var(--fw-heavy); }
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen] :is(.cm-status-bar__day, .cm-status-bar__time)::before {
   content: "";
   width: 3px;
   height: 3px;
@@ -546,10 +546,10 @@
   background: currentColor;
   opacity: 0.45;
 }
-:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__day :is(.cm-status-bar__day-word, .cm-status-bar__day-number) { font-size: inherit; color: inherit; }
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen] .cm-status-bar__day :is(.cm-status-bar__day-word, .cm-status-bar__day-number) { font-size: inherit; color: inherit; }
 
 /* The wallet keeps its 44 px keys but drops the heavy outline. */
-:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__currencies { border-width: 2px; box-shadow: var(--ax-hl), 0 3px 0 var(--ax-ink); }
+:root[data-theme="arcade"] body:has(#cm-root) .cm-status-bar[data-screen] .cm-status-bar__currencies { border-width: 2px; box-shadow: var(--ax-hl), 0 3px 0 var(--ax-ink); }
 
 /* The rail: one slim pill of round icon keys. */
 :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] { align-items: center; }
