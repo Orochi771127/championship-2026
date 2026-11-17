@@ -1,0 +1,42 @@
+{
+  "id": "art:gacha:skill-scrolls:r1",
+  "rightsStatus": "ORIGINAL_GENERATED",
+  "provenance": "Generated 2026-11-17 by Codex (codex.exe exec 0.167.0-alpha.3.2, gpt-6.1-sol, reasoning high, built-in image tool) from the written brief below, for the original game Cyber Partner: Tournament. References given to the model were this project's own shipped item icons only (digital-metals-r1 emma/beta 512 masters, the cyber-gacha-r1 ticket, the gacha-prizes-r1 supply crate master, training meat). The brief forbade text, letters, rune-like writing and any existing brand, game, anime or franchise item.",
+  "briefs": [
+    "BRIEF.md"
+  ],
+  "files": [
+    {
+      "path": "assets/production/items/skill-scrolls-r1/imprint_scroll_blank_160.webp",
+      "use": "scroll:blank:SR (拓印卷)",
+      "size": [160, 160],
+      "sha256": "3b6d03d7e4448d60ac0861fdfedc1a04c451d7a8382386aaa0a03e8a5e3bef1c",
+      "masterSha256": "0096cdc50e63abd13cf1d5e075c92a8038ba255366d3a547822b3dba589b3739"
+    },
+    {
+      "path": "assets/production/items/skill-scrolls-r1/imprint_scroll_imprinted_160.webp",
+      "use": "scroll:SR:<skill> (拓印卷，已拓印)",
+      "size": [160, 160],
+      "sha256": "8941a1e254cabab9a09bc8d22962da22feb72ac247312b94c164ec22a09bd4a8",
+      "masterSha256": "3ff82c0bf7a319618255215e29dedd794a73103330a89ab72dd0a8586a255b43"
+    },
+    {
+      "path": "assets/production/items/skill-scrolls-r1/holo_imprint_scroll_blank_160.webp",
+      "use": "scroll:blank:SSR (全息拓印卷)",
+      "size": [160, 160],
+      "sha256": "5cb62a97657563d44ad03aeb9d6da6b5c32c85a3f2d280f276fa8b60ff8bcdbf",
+      "masterSha256": "f4ed3c88c4c5e53e4497dfa34a0c398d5be6fd593a2168b32e89b0ba9fdd41c0"
+    },
+    {
+      "path": "assets/production/items/skill-scrolls-r1/holo_imprint_scroll_imprinted_160.webp",
+      "use": "scroll:SSR:<skill> (全息拓印卷，已拓印)",
+      "size": [160, 160],
+      "sha256": "dcf25e57eab187c8b55392198e3f9dc02f024ca0706facef884cc28724c75659",
+      "masterSha256": "9e4208782a9a08ef3ba095f9a9bbc14d6abcc6e6afb61e366bcd4ec6174c2f22"
+    }
+  ],
+  "masters": "1254x1254 RGBA PNG masters kept outside the repository (local art workpack skill-imprint-scroll-art-20261117); runtime files are alpha-trimmed, padded to 92% and resized to 160x160 WebP q88.",
+  "humanApproved": false,
+  "runtimeEligible": true,
+  "shippingReady": false
+}

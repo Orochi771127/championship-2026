@@ -13,6 +13,7 @@ import {
   SHOP_UNLOCK_KINDS,
   SHOP_VISIBILITY,
   getShopCatalog,
+  RAISING_TOOL_SHOP_RECORDS,
   getShopRecord,
   listShopRecords
 } from "./shopCatalog.js";
@@ -407,7 +408,8 @@ export function createShopRuntime({
 
     consumeRaisingMedicine(kind) {
       if(kind!==0&&kind!==1)return deepFreeze({ok:false,reason:'INVALID_MEDICINE_KIND'});
-      const shopRecordIndex=kind===0?3:2,before=quantities[shopRecordIndex];
+      // kind 0 wound spends 傷藥 (record 2, item 3); kind 1 illness spends 藥品 (record 3, item 2).
+      const shopRecordIndex=RAISING_TOOL_SHOP_RECORDS[kind===0?'woundMedicine':'medicine'],before=quantities[shopRecordIndex];
       if(before<1)return deepFreeze({ok:false,reason:'EMPTY'});
       quantities[shopRecordIndex]=before-1;publish();
       return deepFreeze({ok:true,shopRecordIndex,owned:before-1});

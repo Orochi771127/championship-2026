@@ -385,6 +385,21 @@
 .cm-gacha__personality[aria-checked="true"] { background: var(--g-yellow); color: var(--g-ink); }
 .cm-gacha__personality[data-current="true"] { box-shadow: inset 0 0 0 2px var(--g-cyan), 0 3px 0 var(--g-ink); }
 .cm-gacha__personality:disabled { opacity: .5; cursor: default; }
+/* Skill imprint scrolls (SKILL_IMPRINT_SCROLL 2026-11-17): the two slots, each partner's skills and the skill dot. */
+.cm-gacha__skill-slots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.cm-gacha__skill-slot { min-height: 40px; padding: 4px 8px; border: 2.5px solid var(--g-ink); border-radius: 10px; background: var(--g-slate-2);
+  color: #fff; font: inherit; font-size: calc(13px * var(--text-scale, 1)); font-weight: 800; cursor: pointer; box-shadow: 0 3px 0 var(--g-ink);
+  overflow-wrap: anywhere; touch-action: manipulation; }
+.cm-gacha__skill-slot[data-selected="true"] { background: var(--g-yellow); color: var(--g-ink); }
+.cm-gacha__skill-slot:disabled { opacity: .5; cursor: default; }
+.cm-gacha__partner-skills { display: flex; flex-wrap: wrap; gap: 4px 8px; font-size: calc(10.5px * var(--text-scale, 1)); font-weight: 800; color: #cfe2f5; }
+.cm-gacha__partner[data-selected="true"] .cm-gacha__partner-skills { color: var(--g-ink); }
+.cm-gacha-icon__skill { position: absolute; left: -2px; bottom: -2px; width: 12px; height: 12px; border: 2px solid var(--g-ink); border-radius: 50%; background: #9aa7b8; }
+.cm-gacha-icon__skill[data-category="HEAL"] { background: #3ddc84; }
+.cm-gacha-icon__skill[data-category="CLEANSE"] { background: #7fe7ff; }
+.cm-gacha-icon__skill[data-category="BUFF"] { background: #ff8a3d; }
+.cm-gacha-icon__skill[data-category="RESIST"] { background: #4f8bff; }
+.cm-gacha-icon__skill[data-category="REVIVE"] { background: #ffd23f; }
 .cm-gacha__card-bonus { position: absolute; right: 3px; bottom: 3px; z-index: 2; display: inline-flex; align-items: center; gap: 1px;
   padding: 1px 4px 1px 2px; border: 2px solid var(--g-ink); border-radius: 999px; background: #3ddc84; color: var(--g-ink);
   font-size: calc(10px * var(--text-scale, 1)); font-weight: 900; line-height: 1; box-shadow: 0 2px 0 var(--g-ink); }

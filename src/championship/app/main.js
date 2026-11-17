@@ -157,6 +157,7 @@ import { sha256Hex } from '../online/cloudSaveEnvelope.js';
 import { onlineText, onlineReasonText, ONLINE_PROVIDER_NAMES } from '../text/onlineText.js';
 import { socialText } from '../text/socialText.js';
 import { generationName } from '../text/zhHant.js';
+import { raisingToolStock } from "../shop/shopCatalog.js";
 import { NATIVE_RAISING_LIFECYCLE_RULES } from '../raising/nativeRaisingLifecycle.js';
 import { tamerCompletionPercent } from './tamerInfoScreen.js';
 import { createPreferenceStore } from './settings/preferenceStore.js';
@@ -2711,9 +2712,7 @@ async function openGameplay({ beforeFirstMount = null } = {}) {
         ? { ...entry, label: "讓拍檔休息", hint: "讓牧場的拍檔躺下休息" } : null,
       getTutorialCheckpoint:()=>app.getInteractiveTutorial()?.checkpoint??null,
       onToolChange:(tool,context)=>{if(context?.userInitiated)app.selectInteractiveTutorialTool(tool,context.checkpoint);},
-      getFoodStock:()=>{const rows=app.getShopFrame()?.listings??[];return {
-        feed:rows.find(r=>r.shopRecordIndex===0)?.owned,protein:rows.find(r=>r.shopRecordIndex===1)?.owned,
-        medicine:rows.find(r=>r.shopRecordIndex===2)?.owned,woundMedicine:rows.find(r=>r.shopRecordIndex===3)?.owned};},
+      getFoodStock:()=>raisingToolStock(app.getShopFrame()?.listings??[]),
       subscribeInventory:listener=>app.subscribeShop(listener),
       // Owner 2026-10-29: the System menu ends with the passport strip and the community dock.
       menuExtras: systemMenuExtras
@@ -2792,6 +2791,8 @@ function openBackpack({ tab = 'supplies', partnerId = null } = {}) {
     intents: {
       useItem: (itemId, instanceId, options) => app.gachaUseItem(itemId, instanceId, options),
       reshape: (instanceId, personality) => app.gachaReshapePersonality(instanceId, personality),
+      imprintScroll: (instanceId, grade, slot) => app.gachaImprintScroll(instanceId, grade, slot),
+      engraveScroll: (scrollId, instanceId, slot) => app.gachaEngraveScroll(scrollId, instanceId, slot),
       deployCore: (coreId, cageId) => app.gachaDeployCore(coreId, cageId),
       disarm: (itemId) => app.gachaDisarmItem(itemId),
       selectTool: (toolId) => { if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) document.querySelector(`.cm-toolbar [data-tool-id="${toolId}"]`)?.click(); },

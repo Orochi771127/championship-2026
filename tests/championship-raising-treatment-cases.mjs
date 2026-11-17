@@ -45,8 +45,10 @@ test('normal treatment changes the same individual and inventory and survives Sa
   for(let i=0;i<4;i++)app.advanceNaturalClock({frames:120});
   app.save();await app.dispose();const [key,json]=[...data][0],save=JSON.parse(json);
   assert.ok(save.creature.nativeProfile.fields['000']>=8);
+  // Wound treatment spends 傷藥: shop record 2, original Training Goods item 3
+  // (OVL18 0210F0B0 debits PlayerData +0x24). 藥品 (record 3) stays untouched.
   save.creature.nativeProfile.fields['134']=1;save.creature.nativeProfile.fields['138']=0;
-  save.shop.quantities[3]=2;data.set(key,JSON.stringify(save));app=create();await app.continueGame();
+  save.shop.quantities[2]=2;save.shop.quantities[3]=7;data.set(key,JSON.stringify(save));app=create();await app.continueGame();
   const actorFrame=app.getRaisingActorFrame(id);
   assert.equal(actorFrame.state,1);
   assert.equal(actorFrame.currentHp,save.creature.nativeProfile.fields['050']);
@@ -54,8 +56,28 @@ test('normal treatment changes the same individual and inventory and survives Sa
   const result=app.treatRaisingResident(id,0);assert.deepEqual(result,{ok:true,consumed:true,applied:true,success:true});
   assert.equal(app.getRaisingActorFrame(id).state,20);
   assert.equal(app.treatRaisingResident(id,0).consumed,false);
-  app.save();const after=JSON.parse(data.get(key));assert.equal(after.shop.quantities[3],1);assert.equal(after.creature.nativeProfile.fields['134'],0);
+  app.save();const after=JSON.parse(data.get(key));assert.equal(after.shop.quantities[2],1);assert.equal(after.shop.quantities[3],7);
+  assert.equal(after.creature.nativeProfile.fields['134'],0);
   await app.dispose();app=create();await app.continueGame();app.save();
   const resumed=JSON.parse(data.get(key));assert.equal(resumed.creature.nativeProfile.fields['134'],0);
-  assert.equal(resumed.shop.quantities[3],1);await app.dispose();
+  assert.equal(resumed.shop.quantities[2],1);assert.equal(resumed.shop.quantities[3],7);await app.dispose();
+});
+
+test('illness treatment spends 藥品 (record 3, item 2) and leaves 傷藥 alone; an empty 藥品 refuses',async()=>{
+  const data=new Map(),storage={getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v),removeItem:k=>data.delete(k)};
+  const create=()=>createChampionshipStandaloneApp({storage,catalog:read('src/data/championship/catalogs/creature-species.r1.json'),
+    cages:read('docs/contracts/championship/raising-home-presentation.v1.json').cages,rngClock:()=>({hour:12,minute:34,second:56})});
+  let app=create();await app.newGame();const id=app.getRaisingInstances()[0].instanceId;
+  for(let i=0;i<4;i++){app.touchRaisingEgg(id);app.advanceNaturalClock({frames:1});}
+  for(let i=0;i<4;i++)app.advanceNaturalClock({frames:120});
+  app.save();await app.dispose();const [key,json]=[...data][0],save=JSON.parse(json);
+  assert.ok(save.creature.nativeProfile.fields['000']>=8);
+  // OVL18 0210F324 checks individual +138 and debits PlayerData +0x22.
+  save.creature.nativeProfile.fields['134']=0;save.creature.nativeProfile.fields['138']=1;
+  save.shop.quantities[2]=5;save.shop.quantities[3]=0;data.set(key,JSON.stringify(save));app=create();await app.continueGame();
+  assert.deepEqual(app.treatRaisingResident(id,1),{ok:false,reason:'EMPTY'},'傷藥 in the bag does not cure illness');
+  await app.dispose();save.shop.quantities[3]=2;data.set(key,JSON.stringify(save));app=create();await app.continueGame();
+  const result=app.treatRaisingResident(id,1);assert.equal(result.ok,true);assert.equal(result.consumed,true);assert.equal(result.applied,true);
+  app.save();const after=JSON.parse(data.get(key));
+  assert.equal(after.shop.quantities[3],1);assert.equal(after.shop.quantities[2],5);await app.dispose();
 });

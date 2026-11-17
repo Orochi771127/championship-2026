@@ -13,6 +13,8 @@ import {LAND_EXPANSION,DIAMOND_REWARDS,FOUNDER_PACK,diamondRewardKey,dueDiamondM
   founderPackUnlocked} from '../gacha/diamondRewards.js';
 import { planOnlineBindReward } from './onlineBindRewardPolicy.js';
 import {GACHA_PERSONALITY_CHOICES,GACHA_TICKET_PRIZE,getGachaBitsBag,disarmGachaItem,useGachaChipNow,huntMinutesToSeconds} from '../gacha/cyberGacha.js';
+import {imprintGachaScroll,engraveGachaScroll,engravedSkillsOf} from '../gacha/cyberGacha.js';
+import {SKILL_SCROLLS,getSkillScroll} from '../gacha/skillScrolls.js';
 import {getGachaSupplyPack,getGachaTicketPrize,gachaChipEffectLines,gachaMetalEffectLines,shardTierSmeltPlan,smeltGachaShardTier,
   GACHA_TIER_SMELT,GACHA_TIER_SMELT_COST} from '../gacha/cyberGacha.js';
 import {resolveGachaEffect,evolutionRouteGaps,beaconBattleWords,SHARD_CATALYST_WAIVER} from '../gacha/gachaItemExecutor.js';
@@ -144,7 +146,7 @@ import { projectDatabase } from "../database/databaseRuntime.js";
 import { getDatabaseSlot } from "../database/databaseCatalog.js";
 import {getDatabaseIllustration} from '../database/databaseIllustrations.js';
 import { registerNativeBookSpecies, retainOwnedBookSpecies } from "../database/nativeBookRegistration.js";
-import {getShopRecord,BITS_WALLET_CAP} from '../shop/shopCatalog.js';
+import {getShopRecord,BITS_WALLET_CAP,RAISING_TOOL_SHOP_RECORDS} from '../shop/shopCatalog.js';
 import { createCageEditRuntime } from "../cage/cageEditRuntime.js";
 import { normalizeTamerRank, slotCountForTamerRank, listCageDefinitions } from "../cage/cageCatalog.js";
 import { getCageDefinitionByModuleId, getGachaCageDefinitionByEdition } from "../cage/productCageCatalog.js";
@@ -1346,7 +1348,8 @@ export function createChampionshipStandaloneApp({
   function gachaPrizeView(prize){
     const entry=prize.kind==='CHIP'?getGachaChip(prize.id):prize.kind==='METAL'?getGachaMetal(prize.id)
       :prize.kind==='BITS'?getGachaBitsBag(prize.id):prize.kind==='TICKETS'?(getGachaTicketPrize(prize.id)??GACHA_TICKET_PRIZE)
-      :prize.kind==='AUTOMATION'?getAutomationItem(prize.id):getGachaSupplyPack(prize.id)??getGachaGoods(prize.id);
+      :prize.kind==='AUTOMATION'?getAutomationItem(prize.id):prize.kind==='SCROLL'?getSkillScroll(prize.id)
+      :getGachaSupplyPack(prize.id)??getGachaGoods(prize.id);
     return Object.freeze({...prize,name:entry?.name??prize.id,art:entry?.art??null,
       shopRecordIndex:prize.shopRecordIndex??entry?.shopRecordIndex??null,family:entry?.family??null,
       ...(prize.kind==='GOODS'&&getGachaSupplyPack(prize.id)?{itemName:getShopRecord(prize.shopRecordIndex)?.name??null}:{}),
@@ -2690,7 +2693,7 @@ export function createChampionshipStandaloneApp({
         ||(kind!==0&&kind!==1))return Object.freeze({ok:false,reason:'HOME_REQUIRED'});
       const actor=raisingActors.get(instanceId),profile=raisingNativeProfile(instanceId);
       if(!actor||!profile)return Object.freeze({ok:false,reason:'UNKNOWN_RESIDENT'});
-      const stock=requireShop().toSave().quantities[kind===0?3:2];
+      const stock=requireShop().toSave().quantities[RAISING_TOOL_SHOP_RECORDS[kind===0?'woundMedicine':'medicine']];
       const admission=nativeTreatmentAdmission({species:actor.speciesIndex,state:actor.state,condition:profile.fields[kind===0?'134':'138'],stock});
       if(!admission.dispatch)return Object.freeze({ok:false,reason:stock<1?'EMPTY':'EGG'});
       const result=treatNativeRaisingActor(actor,profile,kind,{foods:raisingFoods,ground:raisingGround,rng:{next:nextGameplayRandom}});
@@ -4077,6 +4080,8 @@ export function createChampionshipStandaloneApp({
           return {...metal,owned:state.metals[metal.id]??0,awaken:{fill:tier1.fill,tier1:tier1.amount,tier2:tier2.amount,cap:AWAKENING_RULES.itemCap},
             ...(into?{fusesInto:{id:into.id,name:into.name,rarity:into.rarity},fusionCost:GACHA_SHARD_FUSION_COST}:{})};}),
         goods:GACHA_GOODS,bloodlines:GACHA_BLOODLINES,autoFill:autoFillSynthesizer(state),
+        // SKILL_IMPRINT_SCROLL 2026-11-17: every scroll the save holds (blank or imprinted), with its count.
+        scrolls:SKILL_SCROLLS.map(scroll=>({...scroll,owned:state.scrolls?.[scroll.id]??0})).filter(scroll=>scroll.owned>0),
         tierSmelt:Object.keys(GACHA_TIER_SMELT).map(rarity=>{const plan=shardTierSmeltPlan(state,rarity),target=getGachaMetal(GACHA_TIER_SMELT[rarity]);
           return {rarity,cost:GACHA_TIER_SMELT_COST,target:{id:target.id,name:target.name,rarity:target.rarity,art:target.art},ready:plan.ok,shards:plan.ok?plan.shards:[]};}),
         armed:state.armed,partners,lastResult:lastGachaResult,
@@ -4757,6 +4762,36 @@ export function createChampionshipStandaloneApp({
         before:projectNativeIndividualStats(profile),after:projectNativeIndividualStats(nextProfile)});
     },
 
+    /**
+     * Skill imprint scrolls (SKILL_IMPRINT_SCROLL 2026-11-17). Imprint: a blank scroll of `grade` copies one of
+     * the partner's two special skills; the partner is not changed, so only the gachapon state is saved.
+     */
+    gachaImprintScroll(instanceId,grade,slot=null){
+      requireSession();
+      const profile=instanceId?gachaProfile(instanceId):null;
+      if(!profile)return gachaRefusal('UNKNOWN_INDIVIDUAL');
+      const done=imprintGachaScroll(gachaState(),{grade,profile,slot});
+      if(!done.ok)return gachaRefusal(done.reason);
+      if(!commitGacha({state:done.state}))return gachaRefusal('SAVE_FAILED');
+      return gachaReceipt({ok:true,kind:'IMPRINT',itemId:`scroll:blank:${grade}`,scrollId:done.scrollId,instanceId,skill:done.skill,slot:done.slot});
+    },
+    /** Engrave: an imprinted scroll writes its skill into one of the partner's two slots, in the same save as the scroll it spends. */
+    gachaEngraveScroll(scrollId,instanceId,slot=null){
+      requireSession();
+      const profile=instanceId?gachaProfile(instanceId):null;
+      if(!profile)return gachaRefusal('UNKNOWN_INDIVIDUAL');
+      const done=engraveGachaScroll(gachaState(),{scrollId,profile,slot,instanceId});
+      if(!done.ok)return gachaRefusal(done.reason);
+      const nextProfile=normalizeNativeIndividualProfile(done.profile,this.resolveRaisingInstance(instanceId).speciesId);
+      const before={creature,raising,registered:registeredSpeciesValue};
+      writeRaisingNativeProfile(instanceId,nextProfile,{markDirty:false});
+      if(!commitGacha({state:done.state})){
+        creature=before.creature;raising=before.raising;registeredSpeciesValue=before.registered;return gachaRefusal('SAVE_FAILED');
+      }
+      publishRaising();
+      return gachaReceipt({ok:true,kind:'ENGRAVE',itemId:scrollId,scrollId,instanceId,skill:done.skill,slot:done.slot,replaced:done.replaced});
+    },
+
     /** The partner the rare-lure cartridge called into this hunt, or null. */
     getHuntRareLure(){return screens.current()===CHAMPIONSHIP_SCREENS.HUNT_FIELD?lastHuntRareLure:null;},
 
@@ -4880,7 +4915,9 @@ export function createChampionshipStandaloneApp({
         if(!admission.ok)return admission;
         profiles.push(nativeProfile);
       }
-      return {ok:true,password:encodeChampionshipPasswordTeamFromProfiles(profiles),members:profiles.length};
+      // SKILL_IMPRINT_SCROLL 2026-11-17: engraved skills travel in the code, so they also play online.
+      const engraved=instanceIds.map(instanceId=>engravedSkillsOf(gachaState(),instanceId));
+      return {ok:true,password:encodeChampionshipPasswordTeamFromProfiles(profiles,{engraved}),members:profiles.length};
     },
 
     async preparePasswordBattle(passwords){

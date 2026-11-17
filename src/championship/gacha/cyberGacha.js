@@ -16,6 +16,9 @@ import {
   AUTOMATION_ITEMS, AUTOMATION_RULES, AUTOMATION_STACK_CAP, getAutomationItem, getAutomationRecipe, coreForModule, coreModules,
   normalizeAutomationStacks, normalizeAutomationMounts, normalizeAutomationRuns, normalizeRoyalEditions, normalizeBondCarry
 } from "./ranchAutomation.js";
+import {
+  SKILL_SCROLL_IDS, SKILL_SCROLL_PREMIUM_SHARE, SKILL_SCROLL_SLOTS, blankScrollId, getSkillScroll, resolveImprint, resolveEngrave, engraveProfile
+} from "./skillScrolls.js";
 
 export const CYBER_GACHA_VERSION = 1;
 export const GACHA_RARITIES = Object.freeze(["R", "SR", "SSR", "UR"]);
@@ -244,7 +247,7 @@ export function normalizeCyberGacha(value) {
     throw gachaError("INVALID_CYBER_GACHA_STATE");
   }
   const allowed = new Set(["version", "tickets", "pity", "pulls", "welcome", "chips", "metals", "bloodlines", "armed", "claimed",
-    "automation", "mounts", "runs", "editions", "bondCarry"]);
+    "automation", "mounts", "runs", "editions", "bondCarry", "scrolls", "engraved"]);
   for (const key of Object.keys(value)) if (!allowed.has(key)) throw gachaError(`UNKNOWN_CYBER_GACHA_KEY: ${key}`);
   const bloodlines = {};
   const entries = Object.entries(value.bloodlines ?? {});
@@ -275,6 +278,10 @@ export function normalizeCyberGacha(value) {
   const runs = normalizeAutomationRuns(value.runs);
   const editions = normalizeRoyalEditions(value.editions);
   const bondCarry = normalizeBondCarry(value.bondCarry);
+  // Skill imprint scrolls (2026-11-17): written only once one is owned, so older saves keep their shape.
+  const scrolls = normalizeStacks(value.scrolls, SKILL_SCROLL_IDS);
+  // Which slot of which partner a scroll engraved, so password codes carry only engraved skills online.
+  const engraved = normalizeEngravedSkills(value.engraved);
   return deepFreeze({
     version: CYBER_GACHA_VERSION,
     tickets: count(value.tickets, GACHA_TICKET_CAP),
@@ -289,15 +296,41 @@ export function normalizeCyberGacha(value) {
     ...(Object.keys(automation).length ? { automation } : {}),
     ...(Object.keys(runs).length ? { runs } : {}),
     ...(Object.keys(editions).length ? { editions } : {}),
-    ...(Object.keys(bondCarry).length ? { bondCarry } : {})
+    ...(Object.keys(bondCarry).length ? { bondCarry } : {}),
+    ...(Object.keys(scrolls).length ? { scrolls } : {}),
+    ...(Object.keys(engraved).length ? { engraved } : {})
   });
+}
+
+function normalizeEngravedSkills(value) {
+  const out = {};
+  if (value == null) return out;
+  if (typeof value !== "object" || Array.isArray(value)) throw gachaError("INVALID_ENGRAVED_SKILLS");
+  const entries = Object.entries(value);
+  if (entries.length > GACHA_BLOODLINE_LIMIT) throw gachaError("TOO_MANY_ENGRAVED_SKILLS");
+  for (const [instanceId, slots] of entries) {
+    if (!/^[\w:.-]{1,80}$/.test(instanceId) || !slots || typeof slots !== "object" || Array.isArray(slots)) throw gachaError("INVALID_ENGRAVED_SKILLS");
+    const record = {};
+    for (const [slot, skill] of Object.entries(slots)) {
+      if (!SKILL_SCROLL_SLOTS.includes(slot) || !Number.isInteger(skill) || skill < 1 || skill > 30) throw gachaError("INVALID_ENGRAVED_SKILLS");
+      record[slot] = skill;
+    }
+    if (Object.keys(record).length) out[instanceId] = record;
+  }
+  return out;
+}
+
+/** The slots a skill imprint scroll engraved on one partner ({'12c': skill, '130': skill}), or null. */
+export function engravedSkillsOf(state, instanceId) {
+  return normalizeCyberGacha(state).engraved?.[instanceId] ?? null;
 }
 
 function plain(state) {
   return {
     ...state, chips: { ...state.chips }, metals: { ...state.metals }, bloodlines: { ...state.bloodlines }, claimed: [...state.claimed],
     armed: { ...(state.armed.hunt ? { hunt: [...state.armed.hunt] } : {}), ...(state.armed.bounty ? { bounty: state.armed.bounty } : {}) },
-    automation: { ...state.automation }, editions: { ...state.editions }, bondCarry: { ...state.bondCarry },
+    automation: { ...state.automation }, editions: { ...state.editions }, bondCarry: { ...state.bondCarry }, scrolls: { ...state.scrolls },
+    engraved: Object.fromEntries(Object.entries(state.engraved ?? {}).map(([id, slots]) => [id, { ...slots }])),
     runs: Object.fromEntries(Object.entries(state.runs ?? {}).map(([id, run]) => [id, { ...run }]))
   };
 }
@@ -379,6 +412,10 @@ function premiumPrize(rarity, random) {
   if (automation.length) roll /= 1 - GACHA_AUTOMATION_SHARE;
   if (rarity !== "R" && roll >= 1 - GACHA_PREMIUM_JACKPOT_SHARE) return premiumJackpot(rarity, random);
   if (rarity !== "R") roll /= 1 - GACHA_PREMIUM_JACKPOT_SHARE;
+  // SKILL_IMPRINT_SCROLL 2026-11-17: the next band of the SR and SSR tiers is that grade's blank scroll.
+  const scroll = getSkillScroll(blankScrollId(rarity));
+  if (scroll && roll >= 1 - SKILL_SCROLL_PREMIUM_SHARE) return { kind: "SCROLL", id: scroll.id, rarity, quantity: 1 };
+  if (scroll) roll /= 1 - SKILL_SCROLL_PREMIUM_SHARE;
   // Metals are the point of the premium machine: they take half of every tier.
   const metal = metals.length && (!chips.length || roll < 0.5);
   const entry = metal ? pick(metals, random) : pick(chips, random);
@@ -392,7 +429,8 @@ export const GACHA_BITS_MACHINE_TIERS = deepFreeze([
   [0.45, ["pack:feed", "pack:protein", "pack:wound", "pack:medicine", "pack:hunt"]],
   [0.35, ["bits:pouch", "bits:purse", "CHIP_BASIC", "CHIP_HUNT", "chip:bounty-alpha"]],
   [0.16, ["bits:chest", "chip:personality", "chip:memory", "metal:beta-shard", "metal:emma-shard"]],
-  [0.04, ["TICKETS", "metal:chrono-ore-shard", "chip:core-beta"]]
+  // SKILL_IMPRINT_SCROLL 2026-11-17: the standard blank scroll joins the top tier (1% a pull).
+  [0.04, ["TICKETS", "metal:chrono-ore-shard", "chip:core-beta", "scroll:blank:SR"]]
 ]);
 export const GACHA_BITS_MACHINE_RATES = Object.freeze(GACHA_BITS_MACHINE_TIERS.flatMap(([weight, slots]) => slots.map((slot) => Object.freeze([slot, weight / slots.length]))));
 
@@ -408,6 +446,8 @@ function bitsPrize(random) {
     return { kind: "CHIP", id: pick(GACHA_CHIPS.filter((c) => c.rarity === "R" && c.kind === kind), random).id, rarity: "R", quantity: 1 };
   }
   if (slot === "TICKETS") return { kind: "TICKETS", id: GACHA_TICKET_PRIZE.id, rarity: GACHA_TICKET_PRIZE.rarity, quantity: 1 };
+  const scroll = getSkillScroll(slot);
+  if (scroll) return { kind: "SCROLL", id: scroll.id, rarity: scroll.rarity, quantity: 1 };
   const chip = getGachaChip(slot), metal = getGachaMetal(slot);
   if (chip || metal) return { kind: chip ? "CHIP" : "METAL", id: slot, rarity: (chip ?? metal).rarity, quantity: 1 };
   return bitsBagPrize(getGachaBitsBag(slot));
@@ -437,6 +477,37 @@ function addPrize(next, prize) {
   else if (prize.kind === "METAL") next.metals[prize.id] = Math.min(GACHA_STACK_CAP, (next.metals[prize.id] ?? 0) + prize.quantity);
   else if (prize.kind === "TICKETS") next.tickets = Math.min(GACHA_TICKET_CAP, next.tickets + prize.quantity);
   else if (prize.kind === "AUTOMATION") next.automation[prize.id] = Math.min(AUTOMATION_STACK_CAP, (next.automation[prize.id] ?? 0) + prize.quantity);
+  else if (prize.kind === "SCROLL") next.scrolls[prize.id] = Math.min(GACHA_STACK_CAP, (next.scrolls[prize.id] ?? 0) + prize.quantity);
+}
+
+/**
+ * Skill imprint scrolls (SKILL_IMPRINT_SCROLL 2026-11-17). A blank scroll of `grade` copies one special skill
+ * off `profile` (which is never changed) and becomes that skill's imprinted scroll.
+ */
+export function imprintGachaScroll(state, { grade, profile, slot = null }) {
+  const current = normalizeCyberGacha(state);
+  const blank = blankScrollId(grade);
+  if ((current.scrolls?.[blank] ?? 0) < 1) return deepFreeze({ ok: false, reason: "NOT_OWNED" });
+  const plan = resolveImprint(profile, { grade, slot });
+  if (!plan.ok) return plan;
+  const next = plain(current);
+  next.scrolls[blank] -= 1;
+  next.scrolls[plan.scrollId] = Math.min(GACHA_STACK_CAP, (next.scrolls[plan.scrollId] ?? 0) + 1);
+  return deepFreeze({ ok: true, scrollId: plan.scrollId, skill: plan.skill, slot: plan.slot, state: normalizeCyberGacha(next) });
+}
+
+/** An imprinted scroll writes its skill into one of `profile`'s two special-skill words and is spent. */
+export function engraveGachaScroll(state, { scrollId, profile, slot = null, instanceId = null }) {
+  const current = normalizeCyberGacha(state);
+  if ((current.scrolls?.[scrollId] ?? 0) < 1) return deepFreeze({ ok: false, reason: "NOT_OWNED" });
+  const plan = resolveEngrave(profile, { scrollId, slot });
+  if (!plan.ok) return plan;
+  const next = plain(current);
+  next.scrolls[scrollId] -= 1;
+  // The ledger the password codec reads: this slot now holds an engraved skill.
+  if (typeof instanceId === "string") next.engraved[instanceId] = { ...(next.engraved[instanceId] ?? {}), [plan.slot]: plan.skill };
+  return deepFreeze({ ok: true, scrollId, skill: plan.skill, slot: plan.slot, replaced: plan.replaced,
+    profile: engraveProfile(profile, plan), state: normalizeCyberGacha(next) });
 }
 
 /**

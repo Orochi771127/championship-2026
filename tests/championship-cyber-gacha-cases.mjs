@@ -318,7 +318,9 @@ test('every chip spells out its effect from its own numbers, in every locale', a
     '轉蛋卡匣', '誘餌引來：{name}', '賞金信標', '下一場勝利生效', '賞金信標掉落：{item}',
     ...GACHA_SUPPLY_PACKS.map(pack => pack.name), GACHA_TICKET_PACK.name,
     ...GACHA_METALS.flatMap(metal => gachaMetalEffectLines(metal).map(line => line.text)),
-    '補給箱 45%・位元幣袋／基礎晶片／卡匣／信標 α 35%・暴富金箱／性格／記憶體晶片／基礎碎片 16%・轉蛋券／時之礦石碎片／核心 β 4%',
+    '補給箱 45%・位元幣袋／基礎晶片／卡匣／信標 α 35%・暴富金箱／性格／記憶體晶片／基礎碎片 16%・轉蛋券／時之礦石碎片／核心 β／拓印卷 4%（各 1%）',
+    '機率 R 60%・SR 28%・SSR 10%・UR 2%｜十連必出 SR 以上進化金屬或 Ω 晶片｜拓印卷 2.57%・全息拓印卷 0.92%',
+    '拓印卷', '全息拓印卷', '{scroll}：{skill}', '拓印', '刻印', '確認刻印・失去 {skill}', '學會 {skill}', '已拓印 {skill}',
     '前往狩獵場', '前往對戰大廳', '已裝填（下一場自動生效）', '進化候選路線', '投入金屬催化', '碎片升階熔煉', '量子必中鋼索：一擊捕獲！']);
   for (const locale of ['en', 'ja', 'th', 'vi']) {
     const TEXT = (await import(`../src/championship/text/uiText.${locale}.js`))[`TEXT_${locale.toUpperCase()}`];
@@ -357,7 +359,9 @@ test('the Bits machine follows the Owner sheet: supplies 45%, coins/basic chips 
   assert.equal(ticket.prizes[0].kind, 'TICKETS');
   assert.equal(ticket.state.tickets, 1, 'the ticket prize lands in the save');
   assert.equal(pull(0.975).prizes[0].id, 'metal:chrono-ore-shard');
-  assert.equal(pull(0.995).prizes[0].id, 'chip:core-beta');
+  assert.equal(pull(0.985).prizes[0].id, 'chip:core-beta');
+  // SKILL_IMPRINT_SCROLL 2026-11-17: the standard blank scroll is the top tier's fourth slot (1%).
+  assert.deepEqual(pull(0.995).prizes[0], {kind: 'SCROLL', id: 'scroll:blank:SR', rarity: 'SR', quantity: 1});
 });
 
 test('the premium jackpot: coin chest at SR, vault (with protein x5) or a ticket pack at SSR, a ticket pack at UR', () => {
@@ -438,14 +442,14 @@ test('the rare lure calls the field rarest candidate into a prepared entry, afte
   } finally { await app.dispose(); }
 });
 
-async function qaApp(chips, random = Math.random) {
+async function qaApp(chips, random = Math.random, extra = {}) {
   const {data, cages, make} = harness(random);
   const first = make();
   await first.newGame();
   first.save();
   const save = JSON.parse(createFullQaSaveText(JSON.parse(data.get(CHAMPIONSHIP_MODERN_SAVE_KEY)), {cageIds: cages.map(e => e.cageId)}));
   await first.dispose();
-  save.progression.cyberGacha = {version: 1, welcome: true, chips};
+  save.progression.cyberGacha = {version: 1, welcome: true, chips, ...extra};
   data.set(CHAMPIONSHIP_MODERN_SAVE_KEY, JSON.stringify(save));
   const app = make();
   await app.continueGame();
@@ -487,6 +491,43 @@ test('the app loads and takes back cartridges, reshapes a personality and pays c
     assert.ok(pull.prizes.every(prize => prize.kind === 'BITS' && prize.bits === 30_000 && prize.name === '位元幣小錢袋'));
     assert.equal(app.getCyberGachaFrame().bits, bits - 450_000 + 300_000);
     assert.equal(saved().shop.bits, bits - 150_000, 'the charge and the coins are one saved transaction');
+  } finally { await app.dispose(); }
+});
+
+test('skill imprint scrolls: engrave writes one skill word and saves; imprint copies it back without touching the partner', async () => {
+  const {app, saved} = await qaApp({}, Math.random, {scrolls: {'scroll:SSR:28': 1, 'scroll:blank:SSR': 1}});
+  try {
+    const frame = app.getCyberGachaFrame();
+    assert.deepEqual(frame.scrolls.map(scroll => [scroll.id, scroll.owned]), [['scroll:blank:SSR', 1], ['scroll:SSR:28', 1]]);
+    // A partner that may enter password battles (an egg-stage one may not), so the code can be checked below.
+    let partner = null;
+    for (const candidate of frame.partners) if (!partner && (await app.createTeamPassword([candidate.instanceId])).ok) partner = candidate;
+    assert.ok(partner, 'the QA save has a password-eligible partner');
+    const at = () => app.getCyberGachaFrame().partners.find(entry => entry.instanceId === partner.instanceId).stats;
+    const before = [partner.stats.source12C, partner.stats.source130];
+    const slot = before[0] === 0 ? '12c' : before[1] === 0 ? '130' : '12c';
+    const engraved = app.gachaEngraveScroll('scroll:SSR:28', partner.instanceId, slot);
+    assert.equal(engraved.ok, true, engraved.reason);
+    assert.equal(engraved.kind, 'ENGRAVE');
+    const after = at();
+    assert.equal(slot === '12c' ? after.source12C : after.source130, 28, '復活 α sits in the chosen slot');
+    assert.equal(slot === '12c' ? after.source130 : after.source12C, slot === '12c' ? before[1] : before[0], 'the other slot is untouched');
+    assert.deepEqual(saved().progression.cyberGacha.scrolls, {'scroll:blank:SSR': 1}, 'the spent scroll is gone from the save');
+    assert.deepEqual(saved().progression.cyberGacha.engraved, {[partner.instanceId]: {[slot]: 28}}, 'the engraved slot is on record');
+    // Online and password battles: the team code carries the engraved skill to the opponent.
+    const code = await app.createTeamPassword([partner.instanceId]);
+    assert.equal(code.ok, true, code.reason);
+    const {decodeChampionshipPasswordTeam} = await import('../src/championship/battle/nativePasswordBattle.js');
+    const opponent = decodeChampionshipPasswordTeam(code.password).members.find(Boolean).nativeProfile;
+    assert.equal(opponent.fields[slot], 28, '復活 α reaches the other side');
+    assert.equal(app.gachaEngraveScroll('scroll:SSR:28', partner.instanceId, slot).reason, 'NOT_OWNED');
+
+    const copy = app.gachaImprintScroll(partner.instanceId, 'SSR', slot);
+    assert.equal(copy.ok, true, copy.reason);
+    assert.deepEqual([copy.kind, copy.scrollId, copy.skill], ['IMPRINT', 'scroll:SSR:28', 28]);
+    assert.deepEqual(at(), after, 'imprinting leaves the partner exactly as it was');
+    assert.deepEqual(saved().progression.cyberGacha.scrolls, {'scroll:SSR:28': 1});
+    assert.equal(app.gachaImprintScroll(partner.instanceId, 'SSR', slot).reason, 'NOT_OWNED');
   } finally { await app.dispose(); }
 });
 

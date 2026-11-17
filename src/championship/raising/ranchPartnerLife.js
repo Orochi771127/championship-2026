@@ -8,6 +8,7 @@ import {TAXONOMY_HABITAT_BONUS} from '../contracts/speciesTaxonomy.js';
 import data from '../../data/championship/catalogs/raising-activity.r1.json' with {type:'json'};
 import {productBaseSpeciesIndex} from '../contracts/productSpeciesData.js';
 import {ranchEcologyType} from '../cage/ranchEcology.js';
+import {RAISING_TOOL_SHOP_RECORDS} from '../shop/shopCatalog.js';
 
 const deepFreeze=o=>{for(const v of Object.values(o))if(v&&typeof v==='object')deepFreeze(v);return Object.freeze(o);};
 
@@ -28,12 +29,12 @@ export const PARTNER_HABITATS=deepFreeze({
   poor:{emoji:'🥀',label:'不太適應'}
 });
 
-/** Shop records behind the four Training tools (see main.js getFoodStock). */
+/** Shop records behind the four Training tools (RAISING_TOOL_SHOP_RECORDS: 傷藥 is record 2, 藥品 record 3). */
 export const STROLL_REWARDS=deepFreeze({
-  feed:{record:0,tool:'feed',label:'食物'},
-  protein:{record:1,tool:'protein',label:'蛋白質'},
-  medicine:{record:2,tool:'medicine',label:'藥品'},
-  woundMedicine:{record:3,tool:'woundMedicine',label:'傷藥'},
+  feed:{record:RAISING_TOOL_SHOP_RECORDS.feed,tool:'feed',label:'食物'},
+  protein:{record:RAISING_TOOL_SHOP_RECORDS.protein,tool:'protein',label:'蛋白質'},
+  medicine:{record:RAISING_TOOL_SHOP_RECORDS.medicine,tool:'medicine',label:'藥品'},
+  woundMedicine:{record:RAISING_TOOL_SHOP_RECORDS.woundMedicine,tool:'woundMedicine',label:'傷藥'},
   bits:{bits:30,tool:null,label:'位元幣'}
 });
 export const STROLL_KINDS=Object.freeze(Object.keys(STROLL_REWARDS));

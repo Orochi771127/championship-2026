@@ -238,6 +238,7 @@
     "src/championship/gacha/diamondRewards.js",
     "src/championship/gacha/gachaItemExecutor.js",
     "src/championship/gacha/ranchAutomation.js",
+    "src/championship/gacha/skillScrolls.js",
     "src/championship/gate/gateAdmission.js",
     "src/championship/gate/gateCatalog.js",
     "src/championship/gate/originalHuntFieldBindings.js",
@@ -7728,6 +7729,10 @@
     "assets/production/items/ranch-automation-r1/founder_pack_160.webp",
     "assets/production/items/ranch-automation-r1/royal_ranch_160.webp",
     "assets/production/items/ranch-automation-r1/stellar_zoo_160.webp",
+    "assets/production/items/skill-scrolls-r1/holo_imprint_scroll_blank_160.webp",
+    "assets/production/items/skill-scrolls-r1/holo_imprint_scroll_imprinted_160.webp",
+    "assets/production/items/skill-scrolls-r1/imprint_scroll_blank_160.webp",
+    "assets/production/items/skill-scrolls-r1/imprint_scroll_imprinted_160.webp",
     "assets/production/medal-name-corrections-20261014/medals/title-03-vector-partition-grid.png",
     "assets/production/medal-name-corrections-20261014/medals/title-03-vector-partition.png",
     "assets/production/medal-name-corrections-20261014/medals/title-07-silver-freeze-grid.png",
@@ -8568,6 +8573,7 @@
     "src/championship/gacha/diamondRewards.js",
     "src/championship/gacha/gachaItemExecutor.js",
     "src/championship/gacha/ranchAutomation.js",
+    "src/championship/gacha/skillScrolls.js",
     "src/championship/gate/gateAdmission.js",
     "src/championship/gate/gateCatalog.js",
     "src/championship/gate/originalHuntFieldBindings.js",
@@ -37811,6 +37817,22 @@
         "sha256": "626c016a0a0b6c6f466006730cfea4d7e03e320c76adba44024aeb7d085a09a1"
       },
       {
+        "path": "assets/production/items/skill-scrolls-r1/holo_imprint_scroll_blank_160.webp",
+        "sha256": "5cb62a97657563d44ad03aeb9d6da6b5c32c85a3f2d280f276fa8b60ff8bcdbf"
+      },
+      {
+        "path": "assets/production/items/skill-scrolls-r1/holo_imprint_scroll_imprinted_160.webp",
+        "sha256": "dcf25e57eab187c8b55392198e3f9dc02f024ca0706facef884cc28724c75659"
+      },
+      {
+        "path": "assets/production/items/skill-scrolls-r1/imprint_scroll_blank_160.webp",
+        "sha256": "3b6d03d7e4448d60ac0861fdfedc1a04c451d7a8382386aaa0a03e8a5e3bef1c"
+      },
+      {
+        "path": "assets/production/items/skill-scrolls-r1/imprint_scroll_imprinted_160.webp",
+        "sha256": "8941a1e254cabab9a09bc8d22962da22feb72ac247312b94c164ec22a09bd4a8"
+      },
+      {
         "path": "assets/production/medal-name-corrections-20261014/medals/title-03-vector-partition-grid.png",
         "sha256": "9d401cc5cdd6e5440bea8b5344b2095687443027130ccb17c485cfb9bcc7f3cc"
       },
@@ -40208,7 +40230,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "d5146a1bbafca1a9d07bd840024c789d992eaaf404f7506b3dbfcc9f855dce28"
+        "sha256": "2ae999312535602f19726a0765c29f2564c7a465c692de28554e8f44b42325b9"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -40236,7 +40258,7 @@
       },
       {
         "path": "src/championship/app/cyberGacha.css",
-        "sha256": "9ba20352d6d0bd5c670a71a6b71ae0573f07ee8947e0826e8702d9ecbd482d06"
+        "sha256": "6571d6e4274462a3dcd24646de8059d0ec8d35ff11187c30efdd1d7a4d973b0c"
       },
       {
         "path": "src/championship/app/cyberGachaIcons.js",
@@ -40248,7 +40270,7 @@
       },
       {
         "path": "src/championship/app/cyberGachaView.js",
-        "sha256": "6e90e74e36f426f2abda8d1fc62153f1fdf3039c03cf8042af09a50fcfe6c362"
+        "sha256": "89c5ba35c0d3711ae763e64f32819925ea00cb29f7c955db9602f772741e28e6"
       },
       {
         "path": "src/championship/app/dataArena.css",
@@ -40292,7 +40314,7 @@
       },
       {
         "path": "src/championship/app/gateHuntPresentationSource.js",
-        "sha256": "7a16acf2048bb016f4d4b9892a32760602014b346b080db618b3d81f0773e202"
+        "sha256": "f4aee91bac264eda8e837c8c0d0bf28a3a407fabff525ffd56efbd96e24575c2"
       },
       {
         "path": "src/championship/app/helpScreen.js",
@@ -40368,7 +40390,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "e3a02a71ba344a70e95421221418396ab1ba3363d90cc82d4896626575849d6e"
+        "sha256": "0b7e468fda111a4298d39c407549269c8296b0dc60e6aa0cd38e36197efed1b2"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -40476,7 +40498,7 @@
       },
       {
         "path": "src/championship/app/ranchBackpack.js",
-        "sha256": "e477e37ab0a55aa6cc36f0fa777034af8efa1ec01a15271130135f730804dfee"
+        "sha256": "ea3092e53c4914c25d54df965bcd429041e931f0c8aa9163b76c3376cfe7596e"
       },
       {
         "path": "src/championship/app/ranchDiscoveryJournal.js",
@@ -40928,7 +40950,7 @@
       },
       {
         "path": "src/championship/battle/nativePasswordBattle.js",
-        "sha256": "5f3c7fcba1ed5454d799124dec40942eda253b3a8e0b8b1cb981483189dd2697"
+        "sha256": "49e9ce11dbc93a4f8e5e47356fc14f1819f3129597c9f5dc08702693768a9628"
       },
       {
         "path": "src/championship/battle/nativeTitleProgression.js",
@@ -41044,7 +41066,7 @@
       },
       {
         "path": "src/championship/contracts/productPasswordTransport.js",
-        "sha256": "4e9c5a542f4337b2fbf9c837bb77b93803440dd859316e1e29af27d49bc8fd96"
+        "sha256": "1af8cbae1c3402cff749c4f41ff02075f8c88f125ed2a2775f1a6abe624e62e2"
       },
       {
         "path": "src/championship/contracts/productSpeciesData.js",
@@ -41156,7 +41178,7 @@
       },
       {
         "path": "src/championship/gacha/cyberGacha.js",
-        "sha256": "b05398e0c9428d326c2030772dcdcba9bb6b8f2000c498679d779c8139b0b54d"
+        "sha256": "f794d5908813b4f2aa5ecd3be73e138f134259204e5e734ea4a50a91e0ec7a42"
       },
       {
         "path": "src/championship/gacha/diamondRewards.js",
@@ -41169,6 +41191,10 @@
       {
         "path": "src/championship/gacha/ranchAutomation.js",
         "sha256": "3df655a44705f9cfda2093024202c72ec2a90f7b58a584583e61f72cc7155484"
+      },
+      {
+        "path": "src/championship/gacha/skillScrolls.js",
+        "sha256": "7b5907e312f271ab1a794e7df6c4c55e55578633a51b84a9016a4d04ef8b59e6"
       },
       {
         "path": "src/championship/gate/gateAdmission.js",
@@ -42436,7 +42462,7 @@
       },
       {
         "path": "src/championship/raising/ranchPartnerLife.js",
-        "sha256": "21dc323f55acbcf2c82f8c40bfa81dc69e5c2ece378a87666451c09759985c3f"
+        "sha256": "f902ab1ffb20ea03de62755249911d22473d667ef5fe1f0a32c4071e20382655"
       },
       {
         "path": "src/championship/shop/huntToolTiers.js",
@@ -42444,11 +42470,11 @@
       },
       {
         "path": "src/championship/shop/shopCatalog.js",
-        "sha256": "b814998d3e5f2cfb5e44759a893ad2adaa0b80e48da8fa185606744f6476e2e6"
+        "sha256": "4c2d6fe629a4f189cf0e093dfce36d51a9c908255a8b6e137b79e274f49b10f6"
       },
       {
         "path": "src/championship/shop/shopRuntime.js",
-        "sha256": "26e1751d558f2f133f41287f6623496765a18ddd587afa5ade4b9453863a2e11"
+        "sha256": "12a47200f943ddd96378e9f6ddaf9131c66f4595cb66e73c85e772571ecc9f1e"
       },
       {
         "path": "src/championship/text/aiChanStoryText.js",
@@ -42628,11 +42654,11 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "1f3c07372e516566e531c6e81afe2e3f4d7aa29ecb78c24d7c1daea7a9afc635"
+        "sha256": "6b5d7f48f023b2785129fc3df1f1c7f7072ae8b64f42ef1a42d377ac3f42d5a2"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "2b9d7f19adb970a820ab03b3e7b162d36606385c6f18e6ec58697eabacaef348"
+        "sha256": "7f93b0adf20a78107215543aad8bdaf544fd94ae662c0a4b51888daceee3d2a8"
       },
       {
         "path": "src/championship/text/uiText.js",
@@ -42640,11 +42666,11 @@
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "60e881086cc92c84ca6bdeaf8fb2e23de4563209e32980f5e45dfbc015e423c5"
+        "sha256": "d38f0b6123af66253977dbee1617ec8e92ed7c1f342026b056edcc4a6303435c"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "6928126751dbedd49c16f4f41e6acf3056b23aeff7bead444f30bfb4862fc2fd"
+        "sha256": "eed2d2313f75ac08e47b2274fc460e9639cae71897b2e1e05ace8fdea5200db0"
       },
       {
         "path": "src/championship/text/weeklyScheduleText.js",

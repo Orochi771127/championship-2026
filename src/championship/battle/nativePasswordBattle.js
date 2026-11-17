@@ -65,6 +65,27 @@ function pop(state,base){
   const radix=BigInt(base),value=Number(state.value%radix);state.value/=radix;return value;
 }
 
+/** The two special skills the original password gives a species with this personality. */
+function passwordSkillPair(personalityIndex,base){
+  return personalityIndex===base['48']?[base['50'],base['54']]
+    :personalityIndex===base['4c']?[base['58'],base['5c']]:[base['60'],base['64']];
+}
+const SKILL_MAX=30,SKILL_SLOTS=Object.freeze(['12c','130']);
+/**
+ * The pair a product code carries for one partner, or null. `engraved` names the slots a skill imprint scroll
+ * wrote ({'12c': skill, '130': skill}); only a slot that still holds its engraved skill travels, and every other
+ * slot keeps the skill the original password rebuilds -- an evolved partner's natural skills stay as original.
+ */
+function passwordSkillOverride(profile,base,engraved){
+  if(!engraved||typeof engraved!=='object')return null;
+  const rebuilt=passwordSkillPair(profile.fields['018'],base.fields);
+  const pair=SKILL_SLOTS.map((slot,i)=>{
+    const skill=engraved[slot];
+    return Number.isInteger(skill)&&skill>=1&&skill<=SKILL_MAX&&(profile.fields[slot]|0)===skill?skill:rebuilt[i];
+  });
+  return pair[0]===rebuilt[0]&&pair[1]===rebuilt[1]?null:pair;
+}
+
 function nativeProfileFromCompact(compact,placeholder=null,baseSpeciesIndex=compact.speciesIndex){
   const species=passwordSpecies.records[baseSpeciesIndex];
   if(!species)throw new Error('PASSWORD_BATTLE_UNKNOWN_SPECIES');
@@ -93,8 +114,9 @@ function nativeProfileFromCompact(compact,placeholder=null,baseSpeciesIndex=comp
   ];
   for(const [offset,source,key] of directLevels)fields[hex(offset)]=base[source.toString(16)]+compact[key];
   for(const [offset,source,key] of centeredLevels)fields[hex(offset)]=base[source.toString(16)]+compact[key]-3;
-  const sourcePair=compact.personalityIndex===base['48']?[base['50'],base['54']]
-    :compact.personalityIndex===base['4c']?[base['58'],base['5c']]:[base['60'],base['64']];
+  // The original password rebuilds both special skills from species and personality. A product code may carry
+  // the partner's own pair instead (SKILL_IMPRINT_SCROLL 2026-11-17: an engraved skill plays online too).
+  const sourcePair=Array.isArray(compact.skills)?compact.skills:passwordSkillPair(compact.personalityIndex,base);
   fields['12c']=sourcePair[0];fields['130']=sourcePair[1];
   seed.narrowFields['044']=compact.levelTens*10;
   for(const [key,value] of Object.entries(fields))if(!Number.isInteger(value)||value<0||value>0xffffffff)
@@ -275,14 +297,20 @@ export function championshipPasswordTeamAdmission(team){
 
 export function encodeChampionshipPasswordTeam(team){
   if(!team||!Array.isArray(team.members)||team.members.length!==3)throw new Error('PASSWORD_BATTLE_TEAM_REQUIRED');
-  if(!team.members.some(member=>getProductExtension(member?.compact?.speciesIndex)))return encodeNativePasswordTeam(team);
+  if(!team.members.some(member=>getProductExtension(member?.compact?.speciesIndex)||Array.isArray(member?.compact?.skills)))return encodeNativePasswordTeam(team);
   for(const member of team.members)if(member)requireReadyTransportSpecies(member.compact?.speciesIndex);
   return encodeProductPasswordData({teamField:team.teamField,members:Array.from(team.members,member=>member?{extra:member.extra,compact:member.compact}:null)});
 }
 
 export function encodeChampionshipPasswordTeamFromProfiles(profiles,options={}){
   if(!Array.isArray(profiles)||profiles.length<1||profiles.length>3||!profiles.some(Boolean))throw new Error('PASSWORD_BATTLE_TEAM_SIZE');
-  if(!profiles.some(profile=>getProductExtension(profile?.fields?.['000'])))return encodeNativePasswordTeamFromProfiles(profiles,options);
+  // A team of original species whose special skills are the ones the password rebuilds keeps the original code.
+  // An engraved skill (SKILL_IMPRINT_SCROLL 2026-11-17) needs the product code, which carries the pair.
+  // `options.engraved[slot]` is that partner's engraved-slot record from the gachapon state.
+  const engravedOf=slot=>options.engraved?.[slot]??null;
+  const baseOf=profile=>passwordSpecies.records[getProductExtension(profile?.fields?.['000'])?.baseSpeciesIndex??profile?.fields?.['000']];
+  const carries=(profile,slot)=>{const base=profile&&baseOf(profile);return Boolean(base&&passwordSkillOverride(profile,base,engravedOf(slot)));};
+  if(!profiles.some((profile,slot)=>getProductExtension(profile?.fields?.['000'])||carries(profile,slot)))return encodeNativePasswordTeamFromProfiles(profiles,options);
   const {extras=[],teamField=NATIVE_PASSWORD_TEAM_DEFAULTS.teamField}=options;
   const members=[0,1,2].map(slot=>{
     if(!profiles[slot])return null;
@@ -292,7 +320,9 @@ export function encodeChampionshipPasswordTeamFromProfiles(profiles,options={}){
     // reconstructed profile retain the original product identity.
     const base=passwordSpecies.records[extension?.baseSpeciesIndex??index];
     if(!base)throw new Error('PASSWORD_BATTLE_UNKNOWN_SPECIES');
-    return {extra:extras[slot]??NATIVE_PASSWORD_TEAM_DEFAULTS.extra,compact:compactFromProfileAndBase(profile,base)};
+    const skills=passwordSkillOverride(profile,base,engravedOf(slot));
+    return {extra:extras[slot]??NATIVE_PASSWORD_TEAM_DEFAULTS.extra,
+      compact:{...compactFromProfileAndBase(profile,base),...(skills?{skills}:{})}};
   });
   return encodeProductPasswordData({teamField,members});
 }

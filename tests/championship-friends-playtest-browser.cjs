@@ -220,7 +220,7 @@ function friendsMakeFieldObservation(){return new Function('selector',`return {o
  const historicalWalletSeed={...fixtures.seed,flags:{...fixtures.seed.flags,friendsPlaytest:{version:1,grants:[],diamonds:10000,purchases:[]}}};
  // Partner life (Owner 2026-10-28): partners may find items while the ranch is
  // open. Only finds the later save's stroll log records may change the bag.
- const STROLL_RECORDS={feed:0,protein:1,medicine:2,woundMedicine:3};
+ const STROLL_RECORDS={feed:0,protein:1,medicine:3,woundMedicine:2};
  const expectedShop=(shop,later=null,baseline=null)=>{
   const plain={...shop,cageQuantities:shop.cageQuantities??Object.fromEntries(shop.cageOwned.map(id=>[id,1]))};
   const folded=later?.shop?.toolTiers&&!shop.toolTiers?[...plain.quantities]:null;

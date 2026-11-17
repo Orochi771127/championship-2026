@@ -18,7 +18,8 @@ import { GACHA_TICKET_ART, gachaCurrencyImage, gachaIcon, gachaKindIconName, gac
 import { GACHA_CAPSULE_RADIUS, crankTurn, settleCapsules, simulateTumble } from "./cyberGachaPhysics.js";
 import { GACHA_PERSONALITY_CHOICES, GACHA_AUTOMATION_SHARE, gachaChipEffectLines, gachaChipTiming, gachaMetalEffectLines } from "../gacha/cyberGacha.js";
 import { automationEffectLines, automationTiming, coreRunSeconds, formatRunClock } from "../gacha/ranchAutomation.js";
-import { cageName, personalityName, raisingDisplayName, speciesName, speciesNameForId } from "../text/zhHant.js";
+import { cageName, personalityName, raisingDisplayName, speciesName, speciesNameForId, specialSkillName } from "../text/zhHant.js";
+import { SKILL_SCROLL_SLOTS, scrollCanHold, skillScrollCategory } from "../gacha/skillScrolls.js";
 
 const UI_ART = "assets/production/ui/cyber-gacha-r1/";
 export const CYBER_GACHA_ART = Object.freeze({
@@ -70,8 +71,28 @@ const REFUSALS = Object.freeze({
   NOT_A_CORE: "這個道具不能部署到籠舍。",
   FOUNDER_PACK_LOCKED: "贏得第一枚錦標賽獎牌後才能領取。",
   ALREADY_CLAIMED: "已經領取過了。",
-  NO_DIAMOND_WALLET: "這個版本沒有鑽石錢包。"
+  NO_DIAMOND_WALLET: "這個版本沒有鑽石錢包。",
+  // SKILL_IMPRINT_SCROLL 2026-11-17.
+  NO_SPECIAL_SKILL: "這隻拍檔沒有特殊技能。",
+  CHOOSE_SLOT: "請先選一格特殊技能。",
+  INVALID_SLOT: "請先選一格特殊技能。",
+  SLOT_EMPTY: "這一格沒有技能。",
+  NEEDS_HOLO: "這個技能要用全息拓印卷。",
+  SKILL_DUPLICATE: "這隻拍檔已經有這個技能。",
+  UNKNOWN_SCROLL: "這張卷軸不能這樣用。"
 });
+
+/** A scroll's name: the blank grade, or the grade with the skill it carries. */
+export function skillScrollName(item) {
+  if (!item) return "";
+  return item.skill ? uiText("{scroll}：{skill}", { scroll: uiText(item.name), skill: specialSkillName(item.skill) }) : uiText(item.name);
+}
+
+/** One line on what a scroll does. */
+export function skillScrollNote(item) {
+  if (item?.skill) return uiText("刻印給另一隻拍檔");
+  return uiText(item?.grade === "SSR" ? "可拓印 30 種特殊技能" : "可拓印 13 種一般特殊技能");
+}
 /** The player-facing line for a refused gacha intent (shared with the ranch bag). */
 export function gachaRefusalText(reason) { return uiText(REFUSALS[reason] ?? "無法完成。"); }
 // Premium-machine rates of the automation items (their tier's rate x the automation share, split evenly).
@@ -222,6 +243,12 @@ function itemIcon(item, className = "cm-gacha-icon") {
   if (family) host.dataset.family = family;
   if (art) host.append(image(art.src, "cm-gacha-icon__img"));
   if (family) host.append(gachaIcon(gachaKindIconName(family), art ? "cm-gacha-icon__kind" : "cm-gacha-icon__glyph"));
+  // An imprinted scroll wears a dot in its skill's colour (heal, buff, resist, revive, other).
+  if (item.kind === "SCROLL" && item.skill) {
+    const dot = element("span", "cm-gacha-icon__skill");
+    dot.dataset.category = skillScrollCategory(item.skill) ?? "OTHER";
+    host.append(dot);
+  }
   return host;
 }
 
@@ -398,6 +425,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   let partnerSelection = null;
   let personalitySelection = null;
   let routeSelection = null;
+  let slotSelection = null;
   let lastUse = null;
   let popAfter = null;
 
@@ -686,6 +714,8 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
           if (!life.signal.aborted) await reveal(result, { fromChute: Boolean(action.pull) });
         } else fx(root, "gacha-use", result.kind === "ARMED" ? uiText("已裝填") : result.kind === "DISARMED" ? uiText("已取回")
           : result.kind === "MOUNT" ? uiText("已掛載") : result.kind === "UNMOUNT" ? uiText("已卸下")
+          : result.kind === "ENGRAVE" ? uiText("學會 {skill}", { skill: specialSkillName(result.skill) })
+          : result.kind === "IMPRINT" ? uiText("已拓印 {skill}", { skill: specialSkillName(result.skill) })
           : enhanceSummary(result) || awakeningEnergySummary(result) || uiText("已使用"));
       }
       root.dataset.machine = machineId;
@@ -750,6 +780,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   }
 
   const useLabel = (item) => (item.kind === "HUNT" || item.kind === "BOUNTY" ? "裝填"
+    : item.kind === "SCROLL" ? (item.skill ? "刻印" : "拓印")
     : item.kind === "AUTOMATION" ? (item.automationKind === "CORE" ? "部署" : "放置") : "使用");
   function chipTile(item, { count = item.owned, onClick, selected = false, locked = false, useFace = false } = {}) {
     const tile = button("cm-gacha__tile");
@@ -759,8 +790,9 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     if (locked) tile.dataset.locked = "true";
     tile.disabled = count < 1;
     tile.append(element("span", "cm-gacha__tile-rarity", item.rarity), itemIcon(item),
-      element("span", "cm-gacha__tile-name", uiText(item.name)),
+      element("span", "cm-gacha__tile-name", item.kind === "SCROLL" ? skillScrollName(item) : uiText(item.name)),
       element("span", "cm-gacha__tile-count", uiText("持有 {n} 個", { n: count })));
+    if (item.kind === "SCROLL") tile.append(element("span", "cm-gacha__tile-effect", skillScrollNote(item)));
     // The effect in brief (a chip's or metal's first two lines), so the grid reads without opening each tile.
     const lines = CHIP_FAMILIES.has(item.kind) ? gachaChipEffectLines(item).slice(0, 2)
       : item.kind === "METAL" ? gachaMetalEffectLines(item).slice(0, 2)
@@ -1038,7 +1070,8 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   function paintBag(frame) {
     bagGrid.replaceChildren();
     const automation = (frame.automation ?? []).map((item) => ({ ...item, kind: "AUTOMATION", automationKind: item.kind }));
-    const items = [...automation, ...frame.metals.map((m) => ({ ...m, kind: "METAL" })), ...frame.chips];
+    const scrolls = (frame.scrolls ?? []).map((scroll) => ({ ...scroll, kind: "SCROLL" }));
+    const items = [...automation, ...scrolls, ...frame.metals.map((m) => ({ ...m, kind: "METAL" })), ...frame.chips];
     for (const item of items) {
       const installed = item.kind === "AUTOMATION" && item.placed > 0;
       if (item.owned < 1 && !item.armed && !installed) continue;
@@ -1054,6 +1087,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     if (!item) return;
     usePanel.append(element("strong", "cm-gacha__use-title", uiText(item.name)));
     if (item.kind === "AUTOMATION") { paintAutomationUse(frame, item); return; }
+    if (item.kind === "SCROLL") { paintScrollUse(frame, item); return; }
     const metal = item.kind === "METAL";
     const describe = metal ? gachaMetalNote(item)
       : uiText("{kind}・原「{origin}」", { kind: uiText(KIND_LABEL[item.kind] ?? ""), origin: uiText(item.origin) });
@@ -1139,6 +1173,84 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     }
   }
 
+  /**
+   * Skill imprint scrolls (SKILL_IMPRINT_SCROLL 2026-11-17). A blank scroll copies one special skill off the
+   * picked partner, who keeps it; an imprinted scroll writes its skill into one of the picked partner's two
+   * special-skill slots. A filled slot shows what it would lose on the key itself.
+   */
+  function paintScrollUse(frame, item) {
+    usePanel.querySelector(".cm-gacha__use-title").textContent = skillScrollName(item);
+    usePanel.append(element("p", "cm-gacha__use-note", skillScrollNote(item)));
+    const skillsOf = (partner) => [partner?.stats?.source12C | 0, partner?.stats?.source130 | 0];
+    const roster = element("div", "cm-gacha__partners");
+    for (const partner of frame.partners) {
+      const pick = button("cm-gacha__partner");
+      pick.dataset.instanceId = partner.instanceId;
+      if (partnerSelection === partner.instanceId) pick.dataset.selected = "true";
+      const skills = element("span", "cm-gacha__partner-skills");
+      skillsOf(partner).forEach((skill, i) => skills.append(element("span", "cm-gacha__partner-skill",
+        `${i ? "Ⅱ" : "Ⅰ"} ${skill ? specialSkillName(skill) : "—"}`)));
+      pick.append(partnerNameplate(partner), skills);
+      pick.addEventListener("click", () => {
+        partnerSelection = partner.instanceId;
+        // An imprinted scroll goes to the first empty slot unless the player picks one.
+        const empty = SKILL_SCROLL_SLOTS.find((_, i) => !skillsOf(partner)[i]);
+        slotSelection = item.skill && empty ? empty : null;
+        fx(pick, "toggle"); paint(lastFrame);
+      });
+      roster.append(pick);
+    }
+    usePanel.append(roster);
+    const partner = frame.partners.find((entry) => entry.instanceId === partnerSelection) ?? null;
+    const skills = skillsOf(partner);
+    const duplicate = Boolean(item.skill && skills.includes(item.skill));
+    if (partner) {
+      const slots = element("div", "cm-gacha__skill-slots");
+      SKILL_SCROLL_SLOTS.forEach((slot, i) => {
+        const skill = skills[i];
+        const pickSlot = button("cm-gacha__skill-slot", `${uiText(i ? "特殊技能Ⅱ" : "特殊技能Ⅰ")} ${skill ? specialSkillName(skill) : "—"}`);
+        pickSlot.dataset.slot = slot;
+        if (slotSelection === slot) pickSlot.dataset.selected = "true";
+        pickSlot.disabled = duplicate || (!item.skill && (!skill || !scrollCanHold(item.grade, skill)));
+        if (!item.skill && skill && !scrollCanHold(item.grade, skill)) pickSlot.title = uiText("這個技能要用全息拓印卷。");
+        pickSlot.addEventListener("click", () => { slotSelection = slot; fx(pickSlot, "toggle"); paint(lastFrame); });
+        slots.append(pickSlot);
+      });
+      usePanel.append(slots);
+      if (duplicate) usePanel.append(element("p", "cm-gacha__plate cm-gacha__note", uiText("這隻拍檔已經有這個技能。")));
+    }
+    if (lastUse?.itemId === item.id && lastUse.instanceId === partnerSelection && lastUse.text) {
+      usePanel.append(element("p", "cm-gacha__plate cm-gacha__use-result", lastUse.text));
+    }
+    const slotIndex = SKILL_SCROLL_SLOTS.indexOf(slotSelection);
+    const losing = item.skill && slotIndex >= 0 ? skills[slotIndex] : 0;
+    const actions = element("div", "cm-gacha__actions");
+    const label = !item.skill ? uiText("拓印")
+      : losing ? uiText("確認刻印・失去 {skill}", { skill: specialSkillName(losing) }) : uiText("刻印");
+    const action = key("cm-gacha__action cm-gacha__action--primary", label, gachaIcon("spark", "cm-gacha-key__icon"));
+    action.dataset.useMode = item.skill ? "ENGRAVE" : "IMPRINT";
+    action.disabled = !partner || slotIndex < 0 || duplicate || item.owned < 1;
+    action.addEventListener("click", () => {
+      returnFocus = action; again = null;
+      const target = partnerSelection, slot = slotSelection;
+      void run({ call: () => (item.skill ? intents.gachaEngraveScroll(item.id, target, slot)
+        : intents.gachaImprintScroll(target, item.grade, slot)) })
+        .then((result) => {
+          if (result?.ok) {
+            lastUse = { itemId: item.skill ? item.id : result.scrollId, instanceId: target,
+              text: item.skill ? uiText("學會 {skill}", { skill: specialSkillName(result.skill) })
+                : uiText("已拓印 {skill}", { skill: specialSkillName(result.skill) }) };
+            // A blank scroll's result is the new imprinted scroll: select it so it can be engraved next.
+            if (!item.skill) { bagSelection = result.scrollId; partnerSelection = null; }
+          }
+          slotSelection = null;
+          paint(lastFrame);
+        });
+    });
+    actions.append(action);
+    usePanel.append(actions);
+  }
+
   /** A core deploys on a placed cage for one hour, or adds an hour to its running machine; a royal cage is placed in the facility editor. */
   function paintAutomationUse(frame, item) {
     usePanel.append(automationEffectList(item));
@@ -1194,8 +1306,8 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
     ten.disabled = !affordable(frame, machineId, 10);
     crank.dataset.ready = String(!single.disabled);
     rates.textContent = uiText(premium
-      ? "機率 R 60%・SR 28%・SSR 10%・UR 2%｜十連必出 SR 以上進化金屬或 Ω 晶片"
-      : "補給箱 45%・位元幣袋／基礎晶片／卡匣／信標 α 35%・暴富金箱／性格／記憶體晶片／基礎碎片 16%・轉蛋券／時之礦石碎片／核心 β 4%");
+      ? "機率 R 60%・SR 28%・SSR 10%・UR 2%｜十連必出 SR 以上進化金屬或 Ω 晶片｜拓印卷 2.57%・全息拓印卷 0.92%"
+      : "補給箱 45%・位元幣袋／基礎晶片／卡匣／信標 α 35%・暴富金箱／性格／記憶體晶片／基礎碎片 16%・轉蛋券／時之礦石碎片／核心 β／拓印卷 4%（各 1%）");
     paintPool(frame, premium);
     pityLabel.textContent = `${fmt(frame.pity)} / ${fmt(frame.pityMax)}`;
     pity.setAttribute("aria-label", uiText("核心熔煉值：{n} / {max}", { n: frame.pity, max: frame.pityMax }));
