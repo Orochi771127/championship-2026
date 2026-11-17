@@ -1619,29 +1619,74 @@ body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database_
 .cm-vs2-result__instinct[data-instinct="ANCESTOR"] { color: #2a1800; background: linear-gradient(90deg, #ffd34d, #c4b5fd); box-shadow: 0 0 8px rgba(255, 211, 77, .7); }
 
 /* ---- Hunt end gate (Owner 2026-11-17) -------------------------------------
-   Two steel leaves slide shut over the field when a hunt ends, then open onto
-   the result. With no catch the shut gate carries the result plate itself.
-   Motion is transform/opacity only; reduced motion swaps the slide for a fade. */
-.cm-hunt-gate { position: fixed; inset: 0; z-index: calc(var(--z-highlight, 90) + 2); display: grid; place-items: center; overflow: hidden; pointer-events: auto; touch-action: none; }
-.cm-hunt-gate__leaf { position: absolute; top: 0; bottom: 0; width: 50.5%;
+   The entry portal (傳送門連線, ui/ceremony.css + screenLayout.css) run
+   backwards, in the same sky, orb and orbits: the sky closes in on the centre
+   like an iris, the orb's two halves seal over it, and the plate lands under
+   the orb. Leaving splits the orb and opens the iris onto the next screen, as
+   the entry does. Motion is transform/opacity/mask only; reduced motion fades. */
+@property --cm-hunt-iris { syntax: "<length>"; inherits: false; initial-value: 0px; }
+.cm-hunt-gate { --gate-y: 40%; --gate-orb: 168px; position: fixed; inset: 0; z-index: calc(var(--z-highlight, 90) + 2); overflow: hidden; pointer-events: auto; touch-action: none; }
+.cm-hunt-gate__sky { position: absolute; inset: 0;
   background:
-    repeating-linear-gradient(180deg, rgba(255, 255, 255, .07) 0 3px, transparent 3px 22px),
-    linear-gradient(90deg, #18222c, #2c3b48 46%, #1a2530);
-  box-shadow: inset 0 0 0 3px #0b1117, inset 0 0 28px rgba(0, 0, 0, .55);
-  transition: transform var(--gate-close-ms, 460ms) cubic-bezier(.55, 0, .2, 1); will-change: transform; }
-.cm-hunt-gate__leaf--left { left: 0; transform: translateX(-102%); border-right: 4px solid #f6c945; }
-.cm-hunt-gate__leaf--right { right: 0; transform: translateX(102%); border-left: 4px solid #f6c945; }
-.cm-hunt-gate__leaf::after { content: ""; position: absolute; top: 50%; width: 22px; height: 64px; margin-top: -32px; border-radius: 6px;
-  background: linear-gradient(180deg, #f6c945, #c58a12); box-shadow: 0 0 0 3px #0b1117; }
-.cm-hunt-gate__leaf--left::after { right: 10px; }
-.cm-hunt-gate__leaf--right::after { left: 10px; }
-.cm-hunt-gate:is([data-phase="shut"], [data-phase="result"]) .cm-hunt-gate__leaf { transform: none; }
-.cm-hunt-gate[data-phase="opening"] .cm-hunt-gate__leaf { transition-duration: var(--gate-open-ms, 420ms); transition-timing-function: cubic-bezier(.4, 0, .6, 1); }
-.cm-hunt-gate__plate { position: relative; z-index: 1; display: grid; place-items: center; max-width: min(calc(100% - 32px), 340px);
-  opacity: 0; transform: scale(.86); transition: opacity 180ms ease-out, transform 260ms cubic-bezier(.2, 1.4, .4, 1); }
-.cm-hunt-gate:is([data-phase="shut"], [data-phase="result"]) .cm-hunt-gate__plate { opacity: 1; transform: none; transition-delay: calc(var(--gate-close-ms, 460ms) - 80ms); }
+    var(--bg-pattern, none),
+    radial-gradient(70% 55% at 50% 46%, color-mix(in srgb, var(--c-accent-hi) 26%, transparent) 0%, transparent 70%),
+    linear-gradient(180deg, var(--c-backdrop-top) 0%, var(--c-ground) 55%, var(--c-backdrop-bottom) 100%);
+  --cm-hunt-iris: calc(150 * var(--cm-vmax, 1vmax));
+  -webkit-mask: radial-gradient(circle at 50% var(--gate-y), transparent var(--cm-hunt-iris), #000 calc(var(--cm-hunt-iris) + 2px));
+  mask: radial-gradient(circle at 50% var(--gate-y), transparent var(--cm-hunt-iris), #000 calc(var(--cm-hunt-iris) + 2px)); }
+.cm-hunt-gate:is([data-phase="shut"], [data-phase="result"]) .cm-hunt-gate__sky { animation: cm-hunt-iris-close var(--gate-close-ms, 560ms) cubic-bezier(.6, 0, .3, 1) both; }
+.cm-hunt-gate[data-phase="opening"] .cm-hunt-gate__sky { animation: cm-hunt-iris-open var(--gate-open-ms, 600ms) cubic-bezier(.7, 0, .3, 1) both; }
+@keyframes cm-hunt-iris-close { from { --cm-hunt-iris: calc(150 * var(--cm-vmax, 1vmax)); } 78%, to { --cm-hunt-iris: 0px; } }
+@keyframes cm-hunt-iris-open { 0%, 22% { --cm-hunt-iris: 0px; opacity: 1; } 84% { --cm-hunt-iris: calc(110 * var(--cm-vmax, 1vmax)); opacity: 1; } 100% { --cm-hunt-iris: calc(150 * var(--cm-vmax, 1vmax)); opacity: 0; } }
+
+/* The orb: the entry's white-gold-violet core and its two dashed orbits. */
+.cm-hunt-gate__portal { position: absolute; left: 50%; top: var(--gate-y); width: var(--gate-orb); height: var(--gate-orb); margin: calc(var(--gate-orb) / -2) 0 0 calc(var(--gate-orb) / -2); }
+.cm-hunt-gate__portal::before { content: ""; position: absolute; inset: 20%; border-radius: 50%; opacity: 0;
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--c-accent-hi) 22%, transparent), 0 0 42px rgba(255, 243, 191, .7); }
+.cm-hunt-gate__half { position: absolute; inset: 20%; border-radius: 50%; opacity: 0;
+  background: radial-gradient(circle at 50% 42%, #ffffff 0%, #fff3bf 38%, #b98cff 100%); }
+.cm-hunt-gate__half--top { clip-path: inset(0 0 50% 0); }
+.cm-hunt-gate__half--bottom { clip-path: inset(50% 0 0 0); }
+.cm-hunt-gate__seam { position: absolute; left: 8%; right: 8%; top: calc(50% - 1.5px); height: 3px; border-radius: 2px; opacity: 0;
+  background: #fffbe6; box-shadow: 0 0 12px #fff3bf, 0 0 24px #ffd23f; }
+.cm-hunt-gate__orbit { position: absolute; inset: 5%; border: 2px dashed rgba(185, 140, 255, .75); border-radius: 50%; opacity: 0; }
+.cm-hunt-gate__orbit--outer { inset: -5%; border-color: rgba(255, 210, 63, .6); }
+.cm-hunt-gate:is([data-phase="shut"], [data-phase="result"]) .cm-hunt-gate__half--top { animation: cm-hunt-half-in-top var(--gate-close-ms, 560ms) cubic-bezier(.5, 0, .3, 1.25) both; }
+.cm-hunt-gate:is([data-phase="shut"], [data-phase="result"]) .cm-hunt-gate__half--bottom { animation: cm-hunt-half-in-bottom var(--gate-close-ms, 560ms) cubic-bezier(.5, 0, .3, 1.25) both; }
+.cm-hunt-gate:is([data-phase="shut"], [data-phase="result"]) .cm-hunt-gate__seam { animation: cm-hunt-seam var(--gate-close-ms, 560ms) ease-out both; }
+.cm-hunt-gate:is([data-phase="shut"], [data-phase="result"]) .cm-hunt-gate__portal::before { animation: cm-hunt-glow var(--gate-close-ms, 560ms) ease-out both; }
+.cm-hunt-gate:is([data-phase="shut"], [data-phase="result"]) .cm-hunt-gate__orbit { animation: cm-hunt-orbit-in var(--gate-close-ms, 560ms) ease-out both, cm-hunt-orbit-spin 3.2s linear infinite; }
+.cm-hunt-gate:is([data-phase="shut"], [data-phase="result"]) .cm-hunt-gate__orbit--outer { animation: cm-hunt-orbit-in var(--gate-close-ms, 560ms) ease-out both, cm-hunt-orbit-spin 4.2s linear infinite reverse; }
+@keyframes cm-hunt-half-in-top { 0%, 28% { opacity: 0; transform: translateY(-240%); } 40% { opacity: 1; } 76% { transform: translateY(4%); } 100% { opacity: 1; transform: none; } }
+@keyframes cm-hunt-half-in-bottom { 0%, 28% { opacity: 0; transform: translateY(240%); } 40% { opacity: 1; } 76% { transform: translateY(-4%); } 100% { opacity: 1; transform: none; } }
+@keyframes cm-hunt-seam { 0%, 70% { opacity: 0; transform: scaleX(.2); } 82% { opacity: 1; transform: scaleX(1.25); } 100% { opacity: 0; transform: scaleX(1); } }
+@keyframes cm-hunt-glow { 0%, 70% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes cm-hunt-orbit-in { from { opacity: 0; scale: 1.7; } to { opacity: 1; scale: 1; } }
+@keyframes cm-hunt-orbit-spin { to { rotate: 360deg; } }
+/* Leaving: the entry's breach. Crack, split, swell away. */
+.cm-hunt-gate[data-phase="opening"] .cm-hunt-gate__portal { animation: cm-hunt-breach var(--gate-open-ms, 600ms) cubic-bezier(.6, 0, .3, 1) both; }
+.cm-hunt-gate[data-phase="opening"] .cm-hunt-gate__half--top { opacity: 1; animation: cm-hunt-half-out-top var(--gate-open-ms, 600ms) cubic-bezier(.6, 0, .3, 1) both; }
+.cm-hunt-gate[data-phase="opening"] .cm-hunt-gate__half--bottom { opacity: 1; animation: cm-hunt-half-out-bottom var(--gate-open-ms, 600ms) cubic-bezier(.6, 0, .3, 1) both; }
+.cm-hunt-gate[data-phase="opening"] .cm-hunt-gate__seam { animation: cm-hunt-crack var(--gate-open-ms, 600ms) ease-out both; }
+.cm-hunt-gate[data-phase="opening"] .cm-hunt-gate__orbit { opacity: 1; }
+@keyframes cm-hunt-breach { 0% { transform: scale(1); filter: brightness(1); } 20% { transform: scale(.82); filter: brightness(2); } 30% { transform: scale(1.15); filter: brightness(2.4); } 84% { transform: scale(5); opacity: .9; } 100% { transform: scale(6); opacity: 0; } }
+@keyframes cm-hunt-half-out-top { 0%, 26% { transform: none; } 100% { opacity: 0; transform: translateY(-60%); } }
+@keyframes cm-hunt-half-out-bottom { 0%, 26% { transform: none; } 100% { opacity: 0; transform: translateY(60%); } }
+@keyframes cm-hunt-crack { 0%, 8% { opacity: 0; transform: scaleX(.2); } 24% { opacity: 1; transform: scaleX(1.25); } 100% { opacity: 0; } }
+
+/* The plate lands under the orb once it is sealed. */
+.cm-hunt-gate__plate { position: absolute; z-index: 1; left: 50%; top: calc(var(--gate-y) + var(--gate-orb) / 2 + 16px); width: max-content; max-width: calc(100% - 32px);
+  display: grid; place-items: center; opacity: 0; transform: translateX(-50%) scale(.86);
+  transition: opacity 180ms ease-out, transform 260ms cubic-bezier(.2, 1.4, .4, 1); }
+.cm-hunt-gate:is([data-phase="shut"], [data-phase="result"]) .cm-hunt-gate__plate { opacity: 1; transform: translateX(-50%); transition-delay: calc(var(--gate-close-ms, 560ms) - 80ms); }
 .cm-hunt-gate[data-phase="result"] .cm-hunt-gate__plate { transition-delay: 0ms; }
 .cm-hunt-gate[data-phase="opening"] .cm-hunt-gate__plate { opacity: 0; transition-duration: 120ms; }
+@media (max-height: 640px) { .cm-hunt-gate { --gate-y: 28%; --gate-orb: 112px; } }
+/* A short landscape screen keeps the result readable: the orb steps aside. */
+@media (max-height: 460px) {
+  .cm-hunt-gate[data-phase="result"] .cm-hunt-gate__portal { opacity: 0; transition: opacity 160ms linear; }
+  .cm-hunt-gate[data-phase="result"] .cm-hunt-gate__plate { top: 50%; transform: translate(-50%, -50%); }
+}
 .cm-hunt-gate__label { margin: 0; padding: 8px 20px; border: 3px solid #0b1117; border-radius: 10px; background: #f6c945; color: #14141f;
   font-size: calc(22px * var(--text-scale, 1)); font-weight: 900; letter-spacing: .06em; box-shadow: 0 6px 0 #0b1117; }
 .cm-hunt-gate__result { display: grid; justify-items: center; gap: 4px; min-width: 240px; padding: 18px 22px 20px; border: 3px solid #0b1117; border-radius: 16px;
@@ -1652,6 +1697,10 @@ body[data-desktop-browse] .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database_
 .cm-hunt-gate__count-label { font-size: calc(16px * var(--text-scale, 1)); font-weight: 800; }
 .cm-hunt-gate__note { color: var(--c-text-2, #9fb3ad); font-size: calc(13px * var(--text-scale, 1)); }
 .cm-hunt-gate__continue { margin-top: 12px; min-width: 160px; min-height: var(--target, 44px); }
-.cm-hunt-gate[data-motion="reduced"] .cm-hunt-gate__leaf { transform: none; opacity: 0; transition: opacity var(--gate-close-ms, 120ms) linear; }
-.cm-hunt-gate[data-motion="reduced"]:is([data-phase="shut"], [data-phase="result"]) .cm-hunt-gate__leaf { opacity: 1; }
-.cm-hunt-gate[data-motion="reduced"] .cm-hunt-gate__plate { transform: none; transition-delay: 0ms; }
+.cm-hunt-gate[data-motion="reduced"] :is(.cm-hunt-gate__sky, .cm-hunt-gate__portal, .cm-hunt-gate__half, .cm-hunt-gate__seam, .cm-hunt-gate__orbit) { animation: none !important; }
+.cm-hunt-gate[data-motion="reduced"] .cm-hunt-gate__portal::before { animation: none !important; opacity: 1; }
+.cm-hunt-gate[data-motion="reduced"] .cm-hunt-gate__sky { --cm-hunt-iris: 0px; }
+.cm-hunt-gate[data-motion="reduced"] :is(.cm-hunt-gate__half, .cm-hunt-gate__orbit) { opacity: 1; }
+.cm-hunt-gate[data-motion="reduced"] { opacity: 0; transition: opacity var(--gate-close-ms, 120ms) linear; }
+.cm-hunt-gate[data-motion="reduced"]:is([data-phase="shut"], [data-phase="result"]) { opacity: 1; }
+.cm-hunt-gate[data-motion="reduced"] .cm-hunt-gate__plate { transform: translateX(-50%); transition-delay: 0ms; }

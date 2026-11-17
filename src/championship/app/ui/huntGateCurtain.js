@@ -1,15 +1,18 @@
 // Hunt end gate (Owner 2026-11-17): leaving the hunting ground always closes
 // the gate first, whether the time ran out or the player left, and always
-// ends on a result. With a catch the gate opens onto the existing Hunt Result
-// screen; with none, the closed gate itself carries the result ("caught 0")
-// and opens onto the ranch once the player taps it.
+// ends on a result. It is the entry portal (傳送門連線) run backwards, in the
+// same sky and orb: the sky closes in on the centre, the orb's two halves seal
+// over it, and leaving splits the orb and opens the iris again. With a catch
+// the gate opens onto the existing Hunt Result screen; with none, the closed
+// gate itself carries the result ("caught 0") and opens onto the ranch once
+// the player taps it.
 //
 // Presentation only. The application has already left the field when this
 // runs; the gate covers the screen swap, never decides it, and never touches
 // simulation, input authority, the save or the Pixi ticker. A gate that cannot
 // animate (reduced motion, no DOM) simply shows and clears its plate.
 
-const CLOSE_MS = 460, HOLD_MS = 360, OPEN_MS = 420, REDUCED_MS = 120;
+const CLOSE_MS = 560, HOLD_MS = 320, OPEN_MS = 600, REDUCED_MS = 120;
 
 function el(doc, tag, className, text) {
   const node = doc.createElement(tag);
@@ -38,25 +41,27 @@ export function createHuntGateCurtain({ doc = globalThis.document, text = value 
     root.dataset.motion = reducedMotion ? 'reduced' : 'full';
     root.setAttribute('role', 'status');
     root.setAttribute('aria-live', 'polite');
-    const left = el(doc, 'div', 'cm-hunt-gate__leaf cm-hunt-gate__leaf--left');
-    const right = el(doc, 'div', 'cm-hunt-gate__leaf cm-hunt-gate__leaf--right');
-    left.setAttribute('aria-hidden', 'true'); right.setAttribute('aria-hidden', 'true');
+    const sky = el(doc, 'div', 'cm-hunt-gate__sky');
+    const portal = el(doc, 'div', 'cm-hunt-gate__portal');
+    for (const part of ['orbit', 'orbit cm-hunt-gate__orbit--outer', 'half cm-hunt-gate__half--top', 'half cm-hunt-gate__half--bottom', 'seam'])
+      portal.append(el(doc, 'span', `cm-hunt-gate__${part}`));
+    sky.setAttribute('aria-hidden', 'true'); portal.setAttribute('aria-hidden', 'true');
     const plate = el(doc, 'div', 'cm-hunt-gate__plate');
     plate.append(el(doc, 'p', 'cm-hunt-gate__label', label));
-    root.append(left, right, plate);
+    root.append(sky, portal, plate);
     root.style.setProperty('--gate-close-ms', `${closeMs}ms`);
     root.style.setProperty('--gate-open-ms', `${openMs}ms`);
     return root;
   }
 
   return Object.freeze({
-    /** Slide the two leaves shut over whatever is on screen. Resolves once shut. */
+    /** Close the sky in on the orb over whatever is on screen. Resolves once sealed. */
     async close({ label = text('狩獵結束') } = {}) {
       if (disposed || !doc?.body) return false;
       node?.remove();
       node = build(label);
       doc.body.append(node);
-      // One frame at the open pose, so the slide has somewhere to come from.
+      // One frame at the open pose, so the iris has somewhere to close from.
       await new Promise(resolve => (view.requestAnimationFrame ?? (cb => view.setTimeout(cb, 16)))(() => resolve()));
       if (disposed || !node) return false;
       node.dataset.phase = 'shut';
@@ -93,7 +98,7 @@ export function createHuntGateCurtain({ doc = globalThis.document, text = value 
         button.focus?.({ preventScroll: true });
       });
     },
-    /** Slide the leaves apart onto the next screen and remove the gate. */
+    /** Split the orb and open the iris onto the next screen, then remove the gate. */
     async open() {
       if (!node) return;
       const current = node;
