@@ -40,7 +40,7 @@ import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattl
   boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX,partnerGradeOf,recordPartnerGrade,fuseSyncPartners} from '../contracts/productSyncLevel.js';
 import {rollPartnerGrade,applyGradeHeadStart,fusionLineMultiplier,FUSION_MAX_FODDER,FUSION_WARN_LEVEL} from '../contracts/productLineFusion.js';
 import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentValue,grantTamerExp,tamerCaptureExp,tamerBattleExp,tamerDailyExp,TAMER_EXP,
-  learnTalent,talentRefusal,chooseKeystone,keystoneRefusal,respecTalents,talentRespecCost,talentSpent,talentSpentInLine,talentOpen,commanderCappedTalents,
+  learnTalent,talentRefusal,chooseKeystone,keystoneRefusal,hasKeystone,KEYSTONE_RULES,respecTalents,talentRespecCost,talentSpent,talentSpentInLine,talentOpen,commanderCappedTalents,
   TALENT_NODES,TALENT_KEYSTONES,TALENT_LINES,TALENT_TREE_POINTS,TALENT_TIER_GATE,TALENT_KEYSTONE_GATE,TALENT_KEYSTONE_COST,tamerExpRequired,TAMER_LEVEL_MAX}
   from '../contracts/productTamerTalents.js';
 import {normalizeTamerSupplies,createTamerSupplies,SUPPLEMENTS,getSupplement,supplyOwned,supplyPurchase,spendSupply,applyRecoverySupply,
@@ -798,7 +798,7 @@ export function createChampionshipStandaloneApp({
       else if(e.kind==='find'&&(e.entry?.partnerId===id||e.entry?.partnerB===id))moments.push('found');
       else if(e.kind==='disturbed'&&e.partnerId===id)moments.push('disturbed');
     }
-    const moodScore=partnerMoodScore({fields,growth:actor.growthFields??{},state:actor.state,habitat,dirty,moments});
+    const moodScore=partnerMoodScore({fields,growth:actor.growthFields??{},state:actor.state,habitat,dirty,moments,soothePercent:-talent('moodDecayPercent')}); // 安撫
     const mood=partnerMoodForTier(partnerMood({fields,growth:actor.growthFields??{},state:actor.state,statusMusic:actor.statusMusic,habitat}),moodScore.tier);
     return Object.freeze({mood,emoji:PARTNER_MOODS[mood].emoji,habitat,raceHabitat,hearts:partnerAffectionHearts(fields),
       moodScore:moodScore.score,moodTier:moodScore.tier,moodReasons:moodScore.reasons,
@@ -2486,7 +2486,9 @@ export function createChampionshipStandaloneApp({
       if(result.receipt?.status==="SETTLED"&&result.receipt.won&&!sparBout){
         const purse=Math.max(0,result.wallet-expectedBits);
         const drop=settleGachaBattleWin(gachaState(),{bits:purse,random:gachaRandom});
-        cyberGacha=drop.state;wallet=Math.min(BITS_WALLET_CAP,result.wallet+drop.bonusBits);
+        // 賞金獵人 (the trader's keystone, TAMER_TALENTS_T5_20261118): the beacon's extra Bits are half as large again.
+        const hunterBits=drop.bonusBits>0&&hasKeystone(talentState(),'trader.bountyHunter')?Math.floor(drop.bonusBits*KEYSTONE_RULES.bountyHunterPercent/100):0;
+        cyberGacha=drop.state;wallet=Math.min(BITS_WALLET_CAP,result.wallet+drop.bonusBits+hunterBits);
         // The trader talent 賞金: +5 % a rank on a won owned-party match's purse (never password or link battles).
         const beaconWallet=wallet,talentBits=syncKind?Math.floor(purse*talent('battleBitsPercent')/100):0;
         wallet=Math.min(BITS_WALLET_CAP,wallet+talentBits);
@@ -4624,7 +4626,9 @@ export function createChampionshipStandaloneApp({
       const state=commanderTalentsFor({capped:mode===0||mode===1}),read=key=>talentValue(state,key);
       const commander={lumenPercent:read('resonanceLumenPercent'),ironPercent:read('resonanceIronPercent'),riftPercent:read('resonanceRiftPercent'),
         openingTpPercent:read('openingTpPercent'),lowHpDefensePercent:read('lowHpDefensePercent'),ultimatePercent:read('ultimatePercent')};
-      return Object.values(commander).some(value=>value>0)?Object.freeze(commander):null;
+      // The commander's keystone (TAMER_TALENTS_T5_20261118); the rank cap drops it with the rest of the line.
+      const pureFaction=hasKeystone(state,'commander.pureFaction'),triColor=hasKeystone(state,'commander.triColor');
+      return Object.values(commander).some(value=>value>0)||pureFaction||triColor?Object.freeze({...commander,pureFaction,triColor}):null;
     },
     /** Sync Level of one partner: { level, exp, next } (OWNER_APPROVED_ADAPTATION 2026-11-09). */
     getSyncLevel(instanceId){return syncLevelOf(instanceId);},

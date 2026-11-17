@@ -163,7 +163,9 @@ test('the tree frame shows the level, the points worked out and why each node ca
     assert.deepEqual([memory.rank, memory.max, memory.open, memory.refusal], [0, 3, true, null]);
     assert.equal(frame.lines[0].nodes.find(node => node.id === 'hunter.herdSense').refusal, 'TALENT_TIER_LOCKED');
     assert.equal(frame.lines[0].nodes.find(node => node.id === 'hunter.swift').refusal, 'TALENT_NOT_OPEN');
-    assert.ok(frame.lines.every(line => line.keystones.every(key => key.refusal === 'TALENT_NOT_OPEN')));
+    // T5 opened the first keystones: one that is not wired yet says so, an open one is still behind its 22 points.
+    assert.ok(frame.lines.every(line => line.keystones.every(key => key.refusal === (key.open ? 'TALENT_TIER_LOCKED' : 'TALENT_NOT_OPEN'))));
+    assert.ok(frame.lines.some(line => line.keystones.some(key => !key.open)));
   } finally { await app.dispose(); }
 });
 

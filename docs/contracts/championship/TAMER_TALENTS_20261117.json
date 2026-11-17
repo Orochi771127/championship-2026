@@ -61,7 +61,17 @@
     "strollBitsPercent": "trader 鑑價: Bits a stroll find pays +10 % a rank, when the find is collected",
     "strollExtraPercent": "breeder 散步好運: 10 % a rank that a solo stroll find brings one more (a find is at most two; no extra draw without the talent)"
   },
-  "notYetOpen": "6 nodes and all 8 keystones: hunter 繩索保養, 疾步, 穩手, 省彈 (they touch the native hunt's rope, movement, status and ammunition), breeder 安撫, commander 蓄能 (the plan does not say which meter it fills)",
+  "wiredT5": {
+    "batch": "TAMER_TALENTS_T5_20261118",
+    "moodDecayPercent": "breeder 安撫: the mood is a score, not a clock, so 'falls 10 % slower' is read as: everything that pulls the score down (illness, injury, hurt, hunger, sleepiness, dirt, a poor habitat, a disturbed night) pulls 10 % less a rank, at most 30 %; what lifts it is unchanged",
+    "keystones": {
+      "commander.pureFaction": "純色陣營: with three partners of one faction, that faction's resonance bonus is half as large again (added to its resonance talent's share); the commander's team only",
+      "commander.triColor": "三色指揮: the commander's Tri-core gives 114 % attack and defence and 125 % rewards (108 / 108 / 115 without it)",
+      "trader.bountyHunter": "賞金獵人: the bounty beacon's extra Bits on a won match are half as large again"
+    },
+    "rule": "a keystone costs 4 points at 22 points in its line's nodes and a line takes one of its two; the commander's keystone is dropped with the rest of the line by the 6 + 3 x rank cap in title matches and tournaments"
+  },
+  "notYetOpen": "5 nodes and 5 keystones: hunter 繩索保養, 疾步, 穩手, 省彈 and the keystones 慧眼, 連獵 (they touch the native hunt); commander 蓄能 (the plan does not say which meter it fills); breeder 傳承 and 萃取; trader 行商 (it needs the higher supplement grade, which is not built)",
   "notChanged": [
     "the native individual fields, battle codes and match tables",
     "the gachapon rates, diamond prices and diamond or ticket rewards",
@@ -110,7 +120,8 @@
     "tests/championship-tamer-talents-cases.mjs",
     "tests/championship-tamer-talents-t2-cases.mjs",
     "tests/championship-tamer-talents-t3-cases.mjs",
-    "tests/championship-tamer-talents-t4-cases.mjs"
+    "tests/championship-tamer-talents-t4-cases.mjs",
+    "tests/championship-tamer-talents-t5-cases.mjs"
   ],
   "physicalDeviceAccepted": false
 }

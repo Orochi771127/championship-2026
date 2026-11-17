@@ -629,6 +629,11 @@
         "evidence": "PR #271 908d5020; all checks green"
       },
       {
+        "id": "EXTERNAL_ASSET_503_CLIENT",
+        "state": "VERIFIED_LIVE",
+        "evidence": "before: every character asset answering 503 once left the ranch on the art failure notice until 重新載入牧場 was pressed six times (headless Chromium, isolated origin, full QA save). Now presentation/assetRetry.js tries a failed load again after 0.4 s and 1.2 s: the same run loads by itself with no notice (42 requests answered 503); with three 503s a file the notice shows and the ranch key recovers it. tests/championship-asset-retry-cases.mjs, tests/championship-asset-503-recovery-browser.cjs. Hunt and battle scenes load through the same Pixi asset scope but were not put through the 503 run. PR #278 2982c597, all six checks green (the alternate-form QA sidecar pins the public roster source: its pin follows the change); live pages-build commit 2982c597 (build 52d1e3b3) and the retry rule in the live bundle"
+      },
+      {
         "id": "TOURNAMENT_PICKER_NAME",
         "state": "VERIFIED_LIVE",
         "evidence": "the tournament partner picker printed a starter's native name (デジオ) where every other screen prints 迪吉歐; it now uses the shared display name; shipped with PR #275"
@@ -652,10 +657,6 @@
       {
         "id": "TALENT_NODES_REMAINING",
         "state": "PARTLY_DONE"
-      },
-      {
-        "id": "EXTERNAL_ASSET_503_CLIENT",
-        "state": "IMPLEMENTED_LOCAL"
       }
     ],
     "forCodex": [

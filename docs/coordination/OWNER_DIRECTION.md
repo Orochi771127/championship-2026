@@ -16,6 +16,19 @@ Done in the first batch:
 - U3 (second part): every species ultimate (204) lands a three.js piece no other ultimate plays (42 library effects × 6 variants of size, pace and camera angle, picked to fit each move's palette and archetype; `scripts/vfx/move-piece-3d-ultimates.json` keeps the pick). Each loads as its own small module. The bake now reads the ground anchor after the camera is placed (the first batch's ground anchors were corrected).
 
 Not done yet: the icons (U2, generating), the Data Arena moves in the auto battle (U1-2/3), and a piece of its own for every skill and basic move (U3 continues).
+<!-- record-id: TAMER_TALENTS_T5_20261118 -->
+## 2026-11-18 — Tamer talents T5: 安撫 and the first three keystones
+
+Under the standing goal and `LINE_FUSION_TAMER_TALENTS_DESIGN_20261117` (talent plan sections 4.2 to 4.4).
+
+`OWNER_APPROVED_ADAPTATION`, as designed:
+
+- Breeder 安撫. The mood is a score worked out from the partner's state, not a value that runs down, so 「心情下降速度 −10%」 is read as: everything that pulls the score down pulls 10 % less a rank. What lifts it is unchanged.
+- Keystones (4 points at 22 points in the line; a line takes one of its two): commander 純色陣營 and 三色指揮, trader 賞金獵人, with the numbers the plan gives.
+- 31 of the 36 nodes and 3 of the 8 keystones are open. Not open: the four hunter nodes and two hunter keystones that touch the native hunt, 蓄能, 傳承, 萃取 and 行商.
+
+Contract: `docs/contracts/championship/TAMER_TALENTS_20261117.json` (`wiredT5`).
+
 <!-- record-id: EXTERNAL_ASSET_RETRY_20261118 -->
 ## 2026-11-18 — A passing asset-host fault is tried again before partner art is called lost
 
