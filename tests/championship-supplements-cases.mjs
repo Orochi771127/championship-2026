@@ -159,8 +159,9 @@ test('a partner carries one pre-battle supplement: arming spends it, a second sw
   const off = disarmSupply(armed.state, 'p1', 'supply:guard');
   assert.deepEqual([off.state.armed, off.state.owned], [{}, {'supply:power': 1, 'supply:guard': 1}]);
   assert.equal(disarmSupply(off.state, 'p1', 'supply:guard').reason, 'SUPPLY_NONE_OWNED');
-  assert.deepEqual(normalizeTamerSupplies({version: 1, armed: {p1: [{id: 'supply:power'}, {id: 'supply:guard'}], p2: [{id: 'supply:vigor'}], p3: 'x'}}).armed,
-    {p1: [{id: 'supply:power', battlesLeft: 1}]}, 'one slot, battle kinds only');
+  // TAMER_TALENTS_T2_20261118: the save keeps up to two (the talent 補給帶) and how many battles each started with (長效).
+  assert.deepEqual(normalizeTamerSupplies({version: 1, armed: {p1: [{id: 'supply:power'}, {id: 'supply:guard'}, {id: 'supply:power'}], p2: [{id: 'supply:vigor'}], p3: 'x'}}).armed,
+    {p1: [{id: 'supply:power', battlesLeft: 1, battles: 1}, {id: 'supply:guard', battlesLeft: 1, battles: 1}]}, 'battle kinds only, each once');
 });
 
 test('a carried supplement adds one curve step on the battle copy, never past step 26, and is used up by the battle', () => {
@@ -174,14 +175,14 @@ test('a carried supplement adds one curve step on the battle copy, never past st
   const state = armSupply(addSupply(null, 'supply:sync', 1).state, 'p1', 'supply:sync').state;
   assert.deepEqual(settleArmedSupplies(state, ['p1', 'p2']).armed, {});
   // A partner that did not fight keeps what it carries.
-  assert.deepEqual(settleArmedSupplies(state, ['p2']).armed, {p1: [{id: 'supply:sync', battlesLeft: 1}]});
+  assert.deepEqual(settleArmedSupplies(state, ['p2']).armed, {p1: [{id: 'supply:sync', battlesLeft: 1, battles: 1}]});
 });
 
 test('the app puts a supplement on a partner in one save, shows who carries it, and a battle party reads it only where Sync applies', async () => {
   const {app, saved} = await supplyApp(save => { save.progression.tamerSupplies = {version: 1, owned: {'supply:power': 1}, armed: {}, ranch: {}}; });
   try {
     assert.deepEqual(app.useSupply('supply:power', PARTNER), {ok: true, id: 'supply:power', instanceId: PARTNER, armed: true});
-    assert.deepEqual(saved().progression.tamerSupplies.armed, {[PARTNER]: [{id: 'supply:power', battlesLeft: 1}]});
+    assert.deepEqual(saved().progression.tamerSupplies.armed, {[PARTNER]: [{id: 'supply:power', battlesLeft: 1, battles: 1}]});
     assert.deepEqual(app.getSuppliesFrame().items.find(item => item.id === 'supply:power').carriedBy, [PARTNER]);
     const plain = await app.prepareBattleParty(null, [PARTNER], {});
     const boosted = await app.prepareBattleParty(null, [PARTNER], {sync: {capped: false}});

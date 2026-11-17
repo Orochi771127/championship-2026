@@ -1,5 +1,24 @@
 # Championship Owner Direction
 
+<!-- record-id: TAMER_TALENTS_T2_20261118 -->
+## 2026-11-18 — Tamer talents T2: eight more nodes read by the game
+
+Under the standing goal and `LINE_FUSION_TAMER_TALENTS_DESIGN_20261117` (talent plan sections 4.2, 4.4 and 6).
+
+`OWNER_APPROVED_ADAPTATION`, as designed:
+
+- Breeder: 自動化 (a core lasts 10 % longer a rank), 藥膳 (親密零食, 成長粉 and 同步飲 give 10 % more a rank), 長效 (a carried supplement lasts one more settled battle a rank).
+- Trader: 賞金 (+5 % Bits a rank on a won owned-party match and on the tournament prize), 巡邏 and 塔 (+10 % crystals a rank on the patrol pod and on a tower floor's first clear), 熟客 (the day's first supplement costs 15 % less a rank), 補給帶 (a partner carries two supplements).
+- With these the breeder and the trader lines reach their third tier. 18 of the 36 nodes are open; the rest and the 8 keystones stay shown as not open yet.
+- Decided while wiring, inside the plan's own limits:
+  - 自動化 slows the core clock instead of storing more seconds, so removing a cage never refunds more cores than were put in.
+  - A supplement that has been through a battle stays on the partner until it is used up; only a whole one goes back to the bag.
+  - 熟客 is one unit a day, whatever the quantity bought.
+  - The tower pays no Bits, so 塔 raises its first-clear crystals only. Tickets and diamonds are not changed.
+- Password, link and online battles read none of it. No native individual field, battle code or gachapon rate is changed.
+
+Contracts: `docs/contracts/championship/TAMER_TALENTS_20261117.json` (`wiredT2`), `docs/contracts/championship/SUPPLEMENTS_20261118.json` (`rules.talentsT2`).
+
 <!-- record-id: SUPPLEMENTS_S2_20261118 -->
 ## 2026-11-18 — Supplements S2: pre-battle supplements carried into a battle
 

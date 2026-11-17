@@ -1552,6 +1552,13 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         for (const name of gachaDrop.metalNames ?? []) frag.append(element("p", "cm-vs5-result__detail cm-vs5-result__gacha",
           uiText("賞金信標掉落：{item}", { item: uiText(name) }), false));
       }
+      // The trader talent 賞金 (TAMER_TALENTS_T2_20261118): its share of this match's purse.
+      if (gachaDrop?.talentBits > 0) {
+        const bounty = element("p", "cm-vs5-result__detail cm-vs5-result__gacha",
+          uiText("賞金天賦 +{bits} 位元幣", { bits: gachaDrop.talentBits }));
+        bounty.dataset.talentBits = String(gachaDrop.talentBits);
+        frag.append(bounty);
+      }
       return frag;
     }
   });

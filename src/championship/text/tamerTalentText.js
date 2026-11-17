@@ -89,7 +89,16 @@ const ROWS = {
   'key.fusionExpPercent': ['{value}% 融合 EXP', '{value}% fusion EXP', '融合 EXP {value}%', 'EXP หลอม {value}%', 'EXP dung hợp {value}%'],
   'key.fusionLowerLine': ['{value} 低階同線倍率', '{value} lower-stage share', '下位系統 {value}', 'สายต่ำ {value}', 'Dòng thấp {value}'],
   'key.syncExpPercent': ['{value}% 同步 EXP', '{value}% Sync EXP', 'シンクロ EXP {value}%', 'EXP ซิงก์ {value}%', 'EXP đồng bộ {value}%'],
-  'key.crystalPercent': ['{value}% 結晶', '{value}% crystals', '結晶 {value}%', 'คริสตัล {value}%', 'Tinh thể {value}%']
+  'key.crystalPercent': ['{value}% 結晶', '{value}% crystals', '結晶 {value}%', 'คริสตัล {value}%', 'Tinh thể {value}%'],
+  // T2 (TAMER_TALENTS_T2_20261118)
+  'key.coreTimePercent': ['{value}% 核心時間', '{value}% core time', 'コア時間 {value}%', 'เวลาคอร์ {value}%', 'Thời gian lõi {value}%'],
+  'key.supplementPercent': ['{value}% 補品效果', '{value}% tonic effect', 'サプリ効果 {value}%', 'ผลของบำรุง {value}%', 'Hiệu quả thuốc bổ {value}%'],
+  'key.supplementBattles': ['{value} 場戰前補品', '{value} battle per tonic', '戦前サプリ {value} 戦', 'ของบำรุง {value} ศึก', 'Thuốc bổ {value} trận'],
+  'key.battleBitsPercent': ['{value}% 對戰金幣', '{value}% battle Bits', 'バトルコイン {value}%', 'เหรียญศึก {value}%', 'Xu trận {value}%'],
+  'key.patrolPercent': ['{value}% 巡邏結晶', '{value}% patrol crystals', '巡回結晶 {value}%', 'คริสตัลลาดตระเวน {value}%', 'Tinh thể tuần tra {value}%'],
+  'key.towerRewardPercent': ['{value}% 塔首通結晶', '{value}% tower first-clear crystals', '塔初クリア結晶 {value}%', 'คริสตัลหอคอย {value}%', 'Tinh thể tháp {value}%'],
+  'key.firstSupplyDiscountPercent': ['每天第 1 個補品 −{amount}%', 'First tonic a day −{amount}%', '毎日最初のサプリ −{amount}%', 'ของบำรุงชิ้นแรกของวัน −{amount}%', 'Thuốc bổ đầu ngày −{amount}%'],
+  'key.supplySlots': ['{value} 格戰前補品', '{value} tonic slot', '戦前サプリ枠 {value}', 'ช่องของบำรุง {value}', '{value} ô thuốc bổ']
 };
 
 export const TAMER_TALENT_COPY = deepFreeze(Object.fromEntries(LOCALES.map((locale, i) =>
@@ -105,5 +114,5 @@ export function talentText(key, params = null, locale = getLocale()) {
 export function talentEffectText(node, ranks = 1, locale = getLocale()) {
   if (!(`key.${node.key}` in TAMER_TALENT_COPY['zh-Hant'])) return '';
   const amount = Math.round(node.per * ranks * 1000) / 1000;
-  return talentText(`key.${node.key}`, { value: `${amount > 0 ? '+' : '−'}${Math.abs(amount)}` }, locale);
+  return talentText(`key.${node.key}`, { value: `${amount > 0 ? '+' : '−'}${Math.abs(amount)}`, amount: Math.abs(amount) }, locale);
 }

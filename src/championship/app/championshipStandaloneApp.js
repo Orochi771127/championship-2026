@@ -45,7 +45,7 @@ import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentVal
   from '../contracts/productTamerTalents.js';
 import {normalizeTamerSupplies,createTamerSupplies,SUPPLEMENTS,getSupplement,supplyOwned,supplyPurchase,spendSupply,applyRecoverySupply,
   startRanchSupply,ranchSupplyActive,ranchSupplyGrowthPercent,ranchSupplyNightCalm,armSupply,disarmSupply,armedSupplies,supplyBattleProfile,
-  supplySyncExpPercent,settleArmedSupplies} from '../contracts/productSupplements.js';
+  supplySyncExpPercent,settleArmedSupplies,armedSupplyItems,supplyDiscount,supplyValue,SUPPLY_BATTLE_SLOTS} from '../contracts/productSupplements.js';
 import {normalizeJourney,createJourneyState,TOWER_FLOORS,towerBand,towerOpponents,towerOpponentSpecies,towerRewards,towerNextFloor,
   clearTowerFloor,patrolStatus,claimPatrol,quickPatrol} from '../contracts/productJourney.js';
 import {CAMPAIGN_ZONES,CAMPAIGN_STAGES,CAMPAIGN_ZONE_CHEST,campaignRivals,campaignStars,campaignRewards,recordCampaignStage,sweepCampaignStage,
@@ -1059,7 +1059,7 @@ export function createChampionshipStandaloneApp({
             overdrive:realtime?training=>overdriveTraining(id,training):null,
             cageEffects:realtime&&REALTIME_RECOVERY_CAGES.includes(actor.cageDefinitionIndex)?[]:undefined,
             // The breeder talent 精心照料: +4 % training growth a rank.
-            growthBonusPercent:talent('growthPercent')+(realtime?ranchSupplyGrowthPercent(tamerSupplies,realNowMs()):0), // + 成長粉 while it runs
+            growthBonusPercent:talent('growthPercent')+(realtime?ranchSupplyGrowthPercent(tamerSupplies,realNowMs(),talent('supplementPercent')):0), // + 成長粉 while it runs (藥膳 makes it stronger)
             onJoin:()=>notifyNativeRaisingResidentAdded(actor,[...raisingActors.values()].filter(a=>!a.detached),{next:nextGameplayRandom}),
             getResidents:()=>[...raisingActors].filter(([,a])=>!a.detached&&(a.cageInstanceId??a.cageDefinitionIndex)===(actor.cageInstanceId??actor.cageDefinitionIndex)).sort((a,b)=>a[1].poolSlot-b[1].poolSlot).map(([key])=>raisingNativeProfile(key)),
             roster:[actor.speciesIndex,...ids.filter(other=>other!==id).map(other=>raisingNativeProfile(other).fields['000'])],
@@ -1321,6 +1321,10 @@ export function createChampionshipStandaloneApp({
     }
     return true;
   }
+  /** 補給帶 and 長效: how many supplements a partner carries and how many settled battles a new one lasts. */
+  function supplyCarry(){return {slots:SUPPLY_BATTLE_SLOTS+talent('supplySlots'),battles:1+talent('supplementBattles')};}
+  /** 熟客: the day and the share the day's first supplement costs less. */
+  function supplyDeal(){return {day:journeyLocalDay(),discountPercent:talent('firstSupplyDiscountPercent')};}
   /** The next 07:00 on the player's clock: when 安眠香 stops. */
   function nextMorningMs(nowMs){
     const morning=new Date(nowMs);morning.setHours(7,0,0,0);
@@ -1365,12 +1369,12 @@ export function createChampionshipStandaloneApp({
     for(const instanceId of instanceIds){
       const base=syncBattleExp(syncLevelOf(instanceId).level,{kind,won});
       // The commander talent 同步訓練: +5 % Sync EXP a rank; 同步飲 carried into this battle: +50 %.
-      const amount=base>0?Math.round(base*(100+syncBonus+supplySyncExpPercent(armedSupplies(tamerSupplies,instanceId)))/100):0;
+      const amount=base>0?Math.round(base*(100+syncBonus+supplySyncExpPercent(armedSupplies(tamerSupplies,instanceId),talent('supplementPercent')))/100):0;
       if(amount<=0)continue;
       const granted=grantSyncExp(syncState(),instanceId,amount);
       syncLevels=granted.state;gains.push(granted.gain);
     }
-    // What these partners carried is used up by this settled battle.
+    // What these partners carried has one settled battle less (長效 gives it more than one) and is used up at none.
     if(tamerSupplies)tamerSupplies=settleArmedSupplies(tamerSupplies,instanceIds);
     lastSyncGains=gains.length?Object.freeze({attemptId,kind,won,gains:Object.freeze(gains)}):null;
     return lastSyncGains;
@@ -1381,11 +1385,14 @@ export function createChampionshipStandaloneApp({
   function journeyState(){return journey??(journey=createJourneyState());}
   function journeyNow(){return Date.now();}
   function journeyLocalDay(){const d=new Date(journeyNow());return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-  function addSyncCrystals(amount){
-    if(!(amount>0))return;
-    // The trader talent 結晶: +10 % crystals a rank on everything paid through here (tower, zones, patrol).
-    amount=Math.round(amount*(100+talent('crystalPercent'))/100);
+  /** Add crystal points; returns what was added, so a receipt shows the talents' share too. */
+  function addSyncCrystals(amount,{bonusPercent=0}={}){
+    if(!(amount>0))return 0;
+    // The trader talent 結晶: +10 % crystals a rank on everything paid through here (tower, zones, patrol);
+    // 巡邏 and 塔 add their own share on the patrol pod and on a tower floor's first clear.
+    amount=Math.round(amount*(100+talent('crystalPercent')+bonusPercent)/100);
     const state=normalizeSyncLevels(syncState());syncLevels={...state,crystals:Math.min(1e9,state.crystals+amount)};
+    return amount;
   }
   /** A finished tower floor: the climb, and on a first clear its crystals, tickets and guardian diamonds. */
   function settleTowerFloor(attemptId,won){
@@ -1396,10 +1403,10 @@ export function createChampionshipStandaloneApp({
     const cleared=clearTowerFloor(journeyState(),tower.floor,tower.team);
     journey=cleared.state;
     const rewards=cleared.rewards;
-    let tickets=0,diamonds=0;
+    let tickets=0,diamonds=0,paidCrystals=0;
     if(rewards){
       payTamerExp(TAMER_EXP.TOWER_FIRST_CLEAR); // a floor's first clear
-      addSyncCrystals(rewards.crystals);
+      paidCrystals=addSyncCrystals(rewards.crystals,{bonusPercent:talent('towerRewardPercent')}); // 塔: +10 % a rank
       let gacha=gachaState();
       if(rewards.tickets){const grant=grantGachaTickets(gacha,rewards.tickets);gacha=grant.state;tickets=grant.granted;}
       const paid=rewards.diamonds?payDiamondRewards([Object.freeze({key:`dia:tower:${rewards.floor}`,kind:'TOWER',value:rewards.floor,amount:rewards.diamonds})],{state:gacha}):null;
@@ -1408,7 +1415,7 @@ export function createChampionshipStandaloneApp({
     }
     savePort.markDirty();
     lastTowerResult=Object.freeze({attemptId,floor:tower.floor,won:true,team:tower.team,
-      rewards:rewards?Object.freeze({...rewards,tickets,diamonds}):null,next:tower.floor<TOWER_FLOORS?tower.floor+1:null});
+      rewards:rewards?Object.freeze({...rewards,crystals:paidCrystals,tickets,diamonds}):null,next:tower.floor<TOWER_FLOORS?tower.floor+1:null});
     return lastTowerResult;
   }
 
@@ -1515,7 +1522,7 @@ export function createChampionshipStandaloneApp({
       if(!p.instanceId)continue;
       const auto=cageAutomation(state,p.instanceId);
       if(auto.clean||auto.feed)out[p.instanceId]=Object.freeze({edition:auto.edition,royal:auto.royal,clean:auto.clean,feed:auto.feed,mounted:auto.mounted,
-        cleanSeconds:auto.cleanSeconds,feedSeconds:auto.feedSeconds});
+        cleanSeconds:coreClock(auto.cleanSeconds),feedSeconds:coreClock(auto.feedSeconds)});
     }
     return Object.freeze(out);
   }
@@ -1680,8 +1687,9 @@ export function createChampionshipStandaloneApp({
         }
       }
     }
-    // The run clock: whole seconds of play, a tower out of meat holding its own.
-    autoCare.runCarry+=dt;
+    // The run clock: whole seconds of play, a tower out of meat holding its own. The breeder talent 自動化 makes a
+    // core last 10 % longer a rank: the clock runs that much slower, so nothing more than a core's hour is ever stored.
+    autoCare.runCarry+=dt*100/(100+talent('coreTimePercent'));
     if(autoCare.runCarry>=1){
       const seconds=Math.floor(autoCare.runCarry);autoCare.runCarry-=seconds;
       const paused={};for(const tower of autoCare.feeders.values())if(tower.noMeat)paused[tower.instanceId]=['AUTO_FEED'];
@@ -1696,7 +1704,7 @@ export function createChampionshipStandaloneApp({
   /** The machines for the ranch field, in native px (the field turns them into 3D props and tags). */
   function autoCareFrame(){
     if(!raisingGround||!cyberGacha||autoCare.ground!==raisingGround)return Object.freeze({cleaners:Object.freeze([]),feeders:Object.freeze([])});
-    const seconds=(machine)=>{const auto=cageAutomation(cyberGacha,machine.instanceId);return machine.kind==='CLEANER'?auto.cleanSeconds:auto.feedSeconds;};
+    const seconds=(machine)=>{const auto=cageAutomation(cyberGacha,machine.instanceId);return coreClock(machine.kind==='CLEANER'?auto.cleanSeconds:auto.feedSeconds);};
     const cleaner=(bot,retire=null)=>Object.freeze({key:bot.id,instanceId:bot.instanceId,x:bot.x,y:bot.y,heading:bot.heading,mode:bot.mode,
       brush:bot.brush,alert:bot.alert,sweep:bot.sweep,rider:bot.rider?.id??null,retire,seconds:retire===null?seconds(bot):0});
     const feeder=(tower,retire=null)=>Object.freeze({key:tower.id,instanceId:tower.instanceId,x:tower.x,y:tower.y,yaw:tower.yaw,phase:tower.phase,
@@ -1747,7 +1755,7 @@ export function createChampionshipStandaloneApp({
       if(m.retire!==null)continue;
       const module=kind==='FEED'?'AUTO_FEED':'AUTO_CLEAN',coreId=kind==='FEED'?'auto:feed-core':'auto:clean-core';
       tags.push(Object.freeze({id:m.key,kind,instanceId:m.instanceId,seconds:m.seconds,noMeat:kind==='FEED'&&m.noMeat,alert:kind==='CLEAN'&&m.alert>0,
-        coreId,owned:owned(coreId),extendable:m.seconds+AUTOMATION_RULES.runSeconds<=AUTOMATION_RULES.runCapSeconds,module,
+        coreId,owned:owned(coreId),extendable:m.seconds+coreClock(AUTOMATION_RULES.runSeconds)<=coreClock(AUTOMATION_RULES.runCapSeconds),module,
         positionQ12:Object.freeze([Math.round(m.x*4096),Math.round(m.y*4096),0]),lift:kind==='FEED'?30:12}));
     }
     return Object.freeze(tags);
@@ -1762,6 +1770,8 @@ export function createChampionshipStandaloneApp({
       .filter(entry=>entry.key.length<=60&&!claimed.includes(entry.key));
     return Object.freeze([...story,...dueDiamondMilestones({claimed,rank:tamerRankValue,registeredCount:registeredSpeciesValue.length})]);
   }
+  /** Real seconds a core clock of `seconds` lasts: the talent 自動化 stretches it (every clock shown goes through here). */
+  function coreClock(seconds){return Math.round((seconds??0)*(100+talent('coreTimePercent'))/100);}
   /** Every confirmed cage that can take a core, with what it runs (for the bag's mount list). */
   function automationCageList(state){
     return Object.freeze((cageEdit?.toSave().placements??[]).filter(p=>p.instanceId).map(p=>{
@@ -1769,7 +1779,7 @@ export function createChampionshipStandaloneApp({
       return Object.freeze({instanceId:p.instanceId,moduleId:p.moduleId,
         definitionIndex:getCageDefinitionByModuleId(p.moduleId)?.cageDefinitionIndex??null,
         royal:auto.royal,edition:auto.edition,mounted:auto.mounted,clean:auto.clean,feed:auto.feed,
-        cleanSeconds:auto.cleanSeconds,feedSeconds:auto.feedSeconds});
+        cleanSeconds:coreClock(auto.cleanSeconds),feedSeconds:coreClock(auto.feedSeconds)});
     }));
   }
   /** Pay `due` rewards (and record their keys) in one durable save; nothing is paid unless it is saved. */
@@ -2440,15 +2450,19 @@ export function createChampionshipStandaloneApp({
       // beacon multiplies this match's purse (OWNER_APPROVED_ADAPTATION 2026-10-29).
       let wallet=result.wallet;
       if(result.receipt?.status==="SETTLED"&&result.receipt.won){
-        const drop=settleGachaBattleWin(gachaState(),{bits:Math.max(0,result.wallet-expectedBits),random:gachaRandom});
+        const purse=Math.max(0,result.wallet-expectedBits);
+        const drop=settleGachaBattleWin(gachaState(),{bits:purse,random:gachaRandom});
         cyberGacha=drop.state;wallet=Math.min(BITS_WALLET_CAP,result.wallet+drop.bonusBits);
+        // The trader talent 賞金: +5 % a rank on a won owned-party match's purse (never password or link battles).
+        const beaconWallet=wallet,talentBits=syncKind?Math.floor(purse*talent('battleBitsPercent')/100):0;
+        wallet=Math.min(BITS_WALLET_CAP,wallet+talentBits);
         // GACHA_FULL_EFFECTS_20261109: the beacon's extra battles/wins and race/faction points land on every
         // partner who fought, in this same transaction (the rollback restores them with the rest).
         if(drop.battles||drop.exp)for(const entry of individualResults){
           const current=gachaProfile(entry.instanceId)??entry.nativeProfile;
           writeRaisingNativeProfile(entry.instanceId,normalizeNativeIndividualProfile(beaconBattleWords(current,drop)),{markDirty:false});
         }
-        lastBattleGachaDrop=Object.freeze({attemptId:result.receipt.attemptId??null,tickets:drop.tickets,bonusBits:wallet-result.wallet,beacon:drop.beacon,metals:drop.metals,
+        lastBattleGachaDrop=Object.freeze({attemptId:result.receipt.attemptId??null,tickets:drop.tickets,bonusBits:beaconWallet-result.wallet,talentBits:wallet-beaconWallet,beacon:drop.beacon,metals:drop.metals,
           battles:drop.battles,exp:drop.exp});
       }
       const armed=sponsorContractOf(burstState());
@@ -4304,7 +4318,7 @@ export function createChampionshipStandaloneApp({
           return Object.freeze({...item,owned:state.automation?.[item.id]??0,
             placed:item.edition?Object.values(state.editions??{}).filter(e=>e===item.edition).length
               :Object.values(state.runs??{}).filter(run=>coreModules(item).some(m=>run[m]>0)).length,
-            runSeconds:AUTOMATION_RULES.runSeconds,runCapSeconds:AUTOMATION_RULES.runCapSeconds,
+            runSeconds:coreClock(AUTOMATION_RULES.runSeconds),runCapSeconds:coreClock(AUTOMATION_RULES.runCapSeconds),
             recipe:recipe?Object.freeze({chips:recipe.chips,shards:recipe.shards,ready:plan.ok,reason:plan.ok?null:plan.reason}):null});
         }),
         cages:automationCageList(state),
@@ -4333,7 +4347,7 @@ export function createChampionshipStandaloneApp({
       publishRaising();
       const auto=cageAutomation(cyberGacha,instanceId);
       return gachaReceipt({ok:true,kind:result.extended?'EXTEND':'DEPLOY',itemId:coreId,instanceId,
-        cleanSeconds:auto.cleanSeconds,feedSeconds:auto.feedSeconds});
+        cleanSeconds:coreClock(auto.cleanSeconds),feedSeconds:coreClock(auto.feedSeconds)});
     },
     /** Claim every rank and encyclopedia diamond reward reached so far, in one save. */
     claimDiamondRewards(){
@@ -4633,8 +4647,7 @@ export function createChampionshipStandaloneApp({
       // TAMER_TALENTS_20261117: 15 tamer EXP for each star this stage had not earned before.
       payTamerExp(Math.max(0,starsOf(recorded.campaign,pending.zone,pending.stage)-starsBefore)*TAMER_EXP.JOURNEY_STAR);
       let tickets=0,diamonds=0;
-      const crystals=recorded.firstClear?.crystals??0;
-      addSyncCrystals(crystals);
+      const crystals=addSyncCrystals(recorded.firstClear?.crystals??0);
       let gacha=gachaState();
       const ticketCount=(recorded.firstClear?.tickets??0)+(recorded.chest?.tickets??0);
       if(ticketCount){const grant=grantGachaTickets(gacha,ticketCount);gacha=grant.state;tickets=grant.granted;}
@@ -4650,22 +4663,22 @@ export function createChampionshipStandaloneApp({
       if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
       const swept=sweepCampaignStage(journeyState().campaign,zone,stage,journeyLocalDay());
       if(!swept)return {ok:false,reason:'SWEEP_UNAVAILABLE'};
-      journey={...journeyState(),campaign:swept.campaign};addSyncCrystals(swept.crystals);savePort.markDirty();
-      return {ok:true,crystals:swept.crystals};
+      journey={...journeyState(),campaign:swept.campaign};const crystals=addSyncCrystals(swept.crystals);savePort.markDirty();
+      return {ok:true,crystals};
     },
     /** Collect the patrol pod (the first collect starts it). */
     claimPatrol(){
       if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
       const claimed=claimPatrol(journeyState(),journeyNow());
-      journey=claimed.state;addSyncCrystals(claimed.crystals);savePort.markDirty();
-      return {ok:true,crystals:claimed.crystals};
+      journey=claimed.state;const crystals=addSyncCrystals(claimed.crystals,{bonusPercent:talent('patrolPercent')});savePort.markDirty(); // 巡邏: +10 % a rank
+      return {ok:true,crystals};
     },
     quickPatrol(){
       if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
       const quick=quickPatrol(journeyState(),journeyLocalDay());
       if(!quick)return {ok:false,reason:'QUICK_PATROL_USED'};
-      journey=quick.state;addSyncCrystals(quick.crystals);savePort.markDirty();
-      return {ok:true,crystals:quick.crystals};
+      journey=quick.state;const crystals=addSyncCrystals(quick.crystals,{bonusPercent:talent('patrolPercent')});savePort.markDirty();
+      return {ok:true,crystals};
     },
     /** Prepare a tower floor like a Free Battle against that floor's presets, Sync uncapped. */
     async prepareTowerBattle(floor,instanceIds){
@@ -4726,22 +4739,29 @@ export function createChampionshipStandaloneApp({
     /** The supplement shelf and bag: price, how many are owned and which ranch supplements are running. */
     getSuppliesFrame(){
       if(!session)return null;
-      const state=suppliesState(),nowMs=realNowMs();
-      return Object.freeze({bits:shop?shop.getBits():0,now:nowMs,items:Object.freeze(SUPPLEMENTS.map(entry=>Object.freeze({id:entry.id,kind:entry.kind,
-        bits:entry.bits,owned:supplyOwned(state,entry.id),activeUntil:ranchSupplyActive(state,entry.id,nowMs)?state.ranch[entry.id]:null,
-        carriedBy:Object.freeze(Object.keys(state.armed).filter(id=>state.armed[id].some(item=>item.id===entry.id)))})))});
+      const state=suppliesState(),nowMs=realNowMs(),deal=supplyDeal();
+      // `price` is what the next unit costs (熟客 takes its share off the day's first); `carried` says how many settled
+      // battles each carried one has left and whether it is still whole (only a whole one comes off again).
+      return Object.freeze({bits:shop?shop.getBits():0,now:nowMs,slots:supplyCarry().slots,battles:supplyCarry().battles,
+        items:Object.freeze(SUPPLEMENTS.map(entry=>{
+          const carried=Object.keys(state.armed).map(id=>({id,item:armedSupplyItems(state,id).find(item=>item.id===entry.id)})).filter(row=>row.item);
+          return Object.freeze({id:entry.id,kind:entry.kind,bits:entry.bits,price:entry.bits-supplyDiscount(state,entry.id,deal),value:supplyValue(entry.id,talent('supplementPercent')),
+            owned:supplyOwned(state,entry.id),activeUntil:ranchSupplyActive(state,entry.id,nowMs)?state.ranch[entry.id]:null,
+            carriedBy:Object.freeze(carried.map(row=>row.id)),
+            carried:Object.freeze(carried.map(row=>Object.freeze({instanceId:row.id,battlesLeft:row.item.battlesLeft,whole:row.item.whole})))});
+        }))});
     },
     /** Buy supplements with Bits: the wallet and the bag are written in one save. */
     buySupply(id,quantity=1){
       requireSession();
       if(tutorialBaseline||battleTransactionActive||battleEconomy.active||huntCommitActive)return Object.freeze({ok:false,reason:'SUPPLY_NOT_AVAILABLE'});
       const candidate=gachaShopCandidate(),bits=candidate.getBits();
-      const purchase=supplyPurchase(suppliesState(),id,quantity,bits);
+      const purchase=supplyPurchase(suppliesState(),id,quantity,bits,supplyDeal());
       if(!purchase.ok)return Object.freeze({ok:false,reason:purchase.reason,...(purchase.cost?{cost:purchase.cost}:{})});
       if(!candidate.applyBitsTransaction({expectedBits:bits,bits:bits-purchase.cost}).ok)return Object.freeze({ok:false,reason:'SUPPLY_NO_BITS',cost:purchase.cost});
       if(!commitSupplies(purchase.state,candidate))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
       publishRaising();publishScreens();
-      return Object.freeze({ok:true,id,quantity,cost:purchase.cost,owned:supplyOwned(tamerSupplies,id)});
+      return Object.freeze({ok:true,id,quantity,cost:purchase.cost,discount:purchase.discount,owned:supplyOwned(tamerSupplies,id)});
     },
     /** Use one supplement: a recovery kind on a partner (its native words, inside their range), a ranch kind on the ranch. */
     useSupply(id,instanceId=null){
@@ -4753,7 +4773,7 @@ export function createChampionshipStandaloneApp({
       if(entry.kind==='BATTLE'){
         // Put on a partner for its next settled owned-party battle; a supplement it already carried returns to the bag.
         if(!syncProfileOf(instanceId))return Object.freeze({ok:false,reason:'UNKNOWN_INDIVIDUAL'});
-        const armed=armSupply(suppliesState(),instanceId,id);
+        const armed=armSupply(suppliesState(),instanceId,id,supplyCarry());
         if(!armed.ok)return Object.freeze({ok:false,reason:armed.reason});
         if(!commitSupplies(armed.state))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
         publishRaising();publishScreens();
@@ -4768,7 +4788,7 @@ export function createChampionshipStandaloneApp({
       }
       const profile=syncProfileOf(instanceId);
       if(!profile)return Object.freeze({ok:false,reason:'UNKNOWN_INDIVIDUAL'});
-      const applied=applyRecoverySupply(profile,id);
+      const applied=applyRecoverySupply(profile,id,{bonusPercent:talent('supplementPercent')});
       if(!applied.ok)return Object.freeze({ok:false,reason:applied.reason});
       const before={creature,raising};
       writeRaisingNativeProfile(instanceId,normalizeNativeIndividualProfile(applied.profile),{markDirty:false});
@@ -5501,9 +5521,15 @@ export function createChampionshipStandaloneApp({
       // creditBits throws on an invalid amount and otherwise reports the wallet;
       // the descriptor prize is always a valid amount, so a throw here is a bug
       // rather than a refusal, and the title result is rolled back with it.
-      let wallet=null;
+      let wallet=null,talentBits=0;
       if(payable){
-        try{wallet=requireShop().creditBits(run.prize,{evidence:'ROM_VERIFIED'}).bits;}
+        try{
+          wallet=requireShop().creditBits(run.prize,{evidence:'ROM_VERIFIED'}).bits;
+          // The trader talent 賞金: +5 % a rank on the tournament prize, as a product credit beside the original one.
+          // Its own guard: the title and the original prize stand whether or not this product credit lands.
+          const extra=Math.min(Math.floor(run.prize*talent('battleBitsPercent')/100),BITS_WALLET_CAP-wallet);
+          if(extra>0)try{wallet=requireShop().creditBits(extra,{evidence:'OWNER_APPROVED_ADAPTATION'}).bits;talentBits=extra;}catch{talentBits=0;}
+        }
         catch(error){
           nativeTitles=before;tamerRankValue=beforeRank;battleBadgesValue=beforeBadges;nativeMessages=beforeMessages;
           return Object.freeze({ok:false,reason:'PRIZE_CREDIT_FAILED',message:error.message});
@@ -5515,7 +5541,7 @@ export function createChampionshipStandaloneApp({
       let championTickets=0;
       if(payable){const grant=grantGachaTickets(gachaState(),2+Math.floor(gachaRandom()*3));cyberGacha=grant.state;championTickets=grant.granted;}
       savePort.markDirty();
-      return Object.freeze({ok:true,payable,prize:payable?run.prize:0,bits:wallet,gachaTickets:championTickets,
+      return Object.freeze({ok:true,payable,prize:payable?run.prize:0,talentBits,bits:wallet,gachaTickets:championTickets,
         flags:Object.freeze([...run.flags]),rank:tamerRankValue,
         championship:nativeTitles.championship});
     },

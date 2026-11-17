@@ -193,7 +193,7 @@ export function createChampionshipView({ root, source }) {
       settle.addEventListener("click", () => {
         const settled = intents.settle?.();
         say(settled?.ok
-          ? settled.payable ? uiText("獲得 {bits} 位元幣。", { bits: settled.prize }) : uiText("本次沒有獎金。")
+          ? settled.payable ? uiText("獲得 {bits} 位元幣。", { bits: settled.prize + (settled.talentBits ?? 0) }) : uiText("本次沒有獎金。")
           : uiText("無法結算這場賽事。"));
         render();
       });

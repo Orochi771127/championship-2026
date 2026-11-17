@@ -507,10 +507,10 @@
       "ROM-derived art is research only"
     ],
     "git": {
-      "main": "a224c4bd (Merge PR #272)",
+      "main": "a277603f (Merge PR #273)",
       "openPullRequests": [],
       "branchesInFlight": [
-        "feat/supplements-s2-20261118",
+        "feat/talent-nodes-t2-20261118",
         "feat/tactic-practice-loop-20261116 (another Claude session, local only, 8 commits, never pushed)"
       ],
       "worktree": ".claude/worktrees/skill-scroll-20261117 (clean worktree cut from origin/main; the shared checkout holds other agents' uncommitted work and is not touched)"
@@ -524,8 +524,8 @@
         "node tests/championship-external-character-browser.cjs",
         "node tests/championship-dex-portrait-browser.cjs"
       ],
-      "lastFullSuite": "3,838 / 3,838 on feat/supplements-s2-20261118 (local, Windows, Node 24.18)",
-      "ci": "PR #266 to #272: every one merged with all checks green",
+      "lastFullSuite": "3,852 / 3,852 (then two small edits: rebuilt, validated, 83 gate and affected tests) on feat/talent-nodes-t2-20261118 (local, Windows, Node 24.18)",
+      "ci": "PR #266 to #273: every one merged with all checks green",
       "report": "docs/reports/ci-browser-checks-2026-11-17/REPORT_ZH_TW.md"
     },
     "checklist": [
@@ -585,39 +585,40 @@
       {
         "id": "SUPPLEMENTS_S1",
         "source": "same plan section 6",
-        "state": "VERIFIED_MERGED",
+        "state": "VERIFIED_LIVE",
         "acceptance": "live commit check",
         "dependsOn": [],
         "owner": "Claude",
-        "evidence": "PR #272 a224c4bd; all checks green"
+        "evidence": "PR #272 a224c4bd; all checks green; live commit checked"
       },
       {
         "id": "SUPPLEMENTS_S2",
         "source": "same plan section 6",
-        "state": "IMPLEMENTED_PUSHED",
-        "acceptance": "PR, CI green, live commit; still to wire before selling: 覺醒精華, 共鳴香; the battle-screen slot",
+        "state": "VERIFIED_LIVE",
+        "acceptance": "still to wire before selling: 覺醒精華, 共鳴香; the battle-screen slot",
         "dependsOn": [
           "SUPPLEMENTS_S1"
         ],
         "owner": "Claude",
-        "evidence": "branch feat/supplements-s2-20261118: four pre-battle supplements, one carried per partner, battle-copy steps, Sync drink, used up by a settled battle (proved in the three-round championship test); 3,838 / 3,838; browser: put on, shown, taken off"
+        "evidence": "PR #273 a277603f; all checks green; live pages-build commit a277603f (build 1e0badbd) and the carried-supplement code in the live bundle"
       },
       {
         "id": "TALENTS_T2",
-        "source": "same plan",
-        "state": "NOT_STARTED",
-        "acceptance": "fusion-dependent nodes incl. the Breeder keystone 傳承 (fusion plan P4)",
+        "source": "talent plan sections 4.2, 4.4 and 6 (TAMER_TALENTS_T2_20261118)",
+        "state": "IMPLEMENTED_LOCAL",
+        "acceptance": "PR, CI green, live commit",
         "dependsOn": [
           "TALENTS_T1",
           "FUSION_P3_HERDS"
         ],
-        "owner": "Claude"
+        "owner": "Claude",
+        "evidence": "branch feat/talent-nodes-t2-20261118: eight nodes wired (自動化, 藥膳, 長效, 賞金, 巡邏, 塔, 熟客, 補給帶); breeder and trader lines reach tier three; 18 of 36 nodes open; full suite 3,852 / 3,852 (then two small edits: rebuilt, validated, 83 gate and affected tests); browser: Chromium preview on 127.0.0.1:8764 with the QA save at tamer Lv.50: learned the 14 breeder and trader nodes through all three tiers in the tree (first rank by a real click), the 補品 tab showed the day's first prices (力量錠 330) and 藥膳 numbers (+7, +20 %, +65 %), a real click bought 力量錠 for 330 and prices went back to full, two supplements went on one partner with 4 battles each; no console errors. Not replayed in a browser: the battle result's 賞金 line, the core clock, the patrol receipt (app tests only)"
       },
       {
         "id": "TALENTS_T3",
         "source": "same plan",
         "state": "NOT_STARTED",
-        "acceptance": "remaining keystones and respec",
+        "acceptance": "the Breeder keystone 傳承 (fusion plan P4), the other keystones",
         "dependsOn": [
           "TALENTS_T1"
         ],
@@ -667,8 +668,8 @@
       {
         "id": "TALENT_NODES_REMAINING",
         "source": "talent plan section 4",
-        "state": "NOT_STARTED",
-        "acceptance": "the other 26 nodes and 8 keystones: wire each hook, add its key to TALENT_WIRED_KEYS and its copy row, test",
+        "state": "PARTLY_DONE",
+        "acceptance": "18 nodes and 8 keystones left: wire each hook, add its key to TALENT_WIRED_KEYS and its copy row, test. 殺價 needs the shop price path (every Bits price and its display); 拾荒 needs a place on the hunt result; the commander line (先手, 好心情, three resonances, 蓄能, 逆境, 必殺) and the hunter line (繩索保養, 野性嗅覺, 疾步, 穩手, 省彈) are untouched",
         "dependsOn": [
           "TALENTS_T1"
         ],
@@ -707,6 +708,15 @@
         "id": "D4_SUPABASE",
         "question": "Real backend deferred by the Owner (2026-11-17) until the game is finished; online features run in local simulation and must not be reported as live.",
         "state": "DEFERRED_BY_OWNER"
+      },
+      {
+        "id": "D5_TAMER_SKILL_CARDS",
+        "question": "Owner 2026-11-18: a tamer has 20 skills and an auto battle draws three of them at random as skill cards to cast; card art may be asked of Codex; the skills may join the talent tree. No record of this proposal exists in the repository, the coordination files, Claude's memory or Claude's session transcripts, and nothing like it is built (the nearest: per-partner battle tactics, Data Arena three-pick upgrades, RELAY kits).",
+        "options": [
+          "build it as a product battle layer for owned-party auto battles, unlocked through the talent tree (recommended)",
+          "leave it until the commander line is wired"
+        ],
+        "state": "DESIGN_PROPOSED_2026-11-18, waiting for the Owner's answer on who casts the cards (the player taps, or they cast by themselves)"
       }
     ],
     "waitingOnOthers": [
@@ -721,6 +731,6 @@
       "Hunt Result fusion panel in a real browser (covered by an app test with player gestures and a DOM view test)",
       "frame time of herded hunts on a phone (worst case is the native 22-23 partners, unchanged)"
     ],
-    "nextAction": "PR and merge supplements S2; then the remaining talent nodes and keystones (incl. the supplement talents and 傳承), the tactic-practice branch, a browser replay of shop / title match / tournament / Data Arena / gachapon / return to title; decision D1 is still open."
+    "nextAction": "PR and merge talents T2; then the commander and hunter nodes, 殺價 and 拾荒, the keystones (incl. 傳承), the tactic-practice branch, a browser replay of shop / title match / tournament / Data Arena / gachapon / return to title; decision D1 is still open."
   }
 }

@@ -6,7 +6,7 @@
     "sourceLock": "src/championship/app/championshipStandaloneSave.js"
   },
   "saveField": {
-    "path": "progression.tamerSupplies = { version: 1, owned: { [supplyId]: 1..99 }, armed: { [instanceId]: [{ id, battlesLeft: 1 }] }, ranch: { [supplyId]: end time in ms } }",
+    "path": "progression.tamerSupplies = { version: 1, owned: { [supplyId]: 1..99 }, armed: { [instanceId]: [{ id, battlesLeft: 1..4, battles: battlesLeft..4 }] (at most two) }, ranch: { [supplyId]: end time in ms }, discountDay?: 'YYYY-MM-DD' }",
     "migration": "none: a save without it has an empty bag; an unknown shape is an empty bag (productSupplements.normalizeTamerSupplies)"
   },
   "rules": {
@@ -14,7 +14,8 @@
     "refusals": "a recovery supplement that would change nothing is refused and kept; a ranch supplement already running until the morning is refused",
     "saves": "buying writes the wallet and the bag in one save; using writes the partner (or the ranch clock) and the bag in one save; a failed save changes nothing",
     "s2": "pre-battle supplements, one carried per partner: supply:power 600 (curve word 084 attack +1 step), supply:guard 600 (088 defense +1), supply:gale 600 (090 speed +1), supply:sync 1000 (Sync EXP +50 %). Putting one on spends it from the bag; a second swaps the first back; it can be taken off again. It acts only on the battle copy of a battle where Sync applies (never password, link or online), never past curve step 26, is taken back when the battle writes its result (restoreSyncNativeProfile restores the curve words) and is used up by that settled battle, in the battle's own save.",
-    "notYet": "覺醒精華 and 共鳴香 are not sold until their effects are wired; the higher grade and the battle-screen slot follow."
+    "notYet": "覺醒精華 and 共鳴香 are not sold until their effects are wired; the higher grade and the battle-screen slot follow.",
+    "talentsT2": "TAMER_TALENTS_T2_20261118: four talents act on the bag as numbers passed in by the app. 藥膳 raises the snack, growth powder and Sync drink numbers; 長效 sets battlesLeft and battles when a supplement is put on (battles is what it started with: only a whole one, battlesLeft == battles, goes back to the bag); 補給帶 lets a partner carry two; 熟客 takes its share off the first unit bought each local day and records that day in discountDay. A save from before T2 reads each carried supplement as { battlesLeft: 1, battles: 1 }"
   },
   "notChanged": [
     "the original 118-row shop table and the four original care items",
@@ -66,7 +67,8 @@
   "authorization": "Owner 2026-11-17 standing goal: decided non-animation designs are implemented, integrated, verified and shipped batch by batch.",
   "tests": [
     "tests/championship-supplements-cases.mjs",
-    "tests/championship-lion-display-correction-cases.mjs"
+    "tests/championship-lion-display-correction-cases.mjs",
+    "tests/championship-tamer-talents-t2-cases.mjs"
   ],
   "physicalDeviceAccepted": false
 }
