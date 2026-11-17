@@ -75,7 +75,8 @@ test('CM07 integrates once into existing render/dispose, excludes legacy lava an
   assert.ok(source.includes('visible:!covered,reducedMotion:prefersReducedMotion()'));
   assert.ok(source.indexOf('if(document.hidden)return true')<source.indexOf('cm07Ambient?.update'));
   assert.ok(source.indexOf('object.visible=x+')<source.indexOf('cm07Ambient?.update'));
-  assert.ok(source.indexOf('cm07Ambient?.dispose()')<source.indexOf('renderer.dispose()'));
+  // The renderer is released through disposeThreeRenderer (memory audit 2026-11-17), after the ambient.
+  assert.ok(source.indexOf('cm07Ambient?.dispose()')>=0&&source.indexOf('cm07Ambient?.dispose()')<source.indexOf('disposeThreeRenderer(renderer)'));
   const controller=fs.readFileSync(new URL('../src/championship/presentation/cm07Ambient.js',import.meta.url),'utf8');
   assert.doesNotMatch(controller,/requestAnimationFrame|setInterval|setTimeout|new THREE|onBeforeCompile/);
 });

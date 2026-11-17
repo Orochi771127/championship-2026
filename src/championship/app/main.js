@@ -117,7 +117,7 @@ import { bindOverLimitPress } from './ui/overLimitPress.js';
 import { OVER_LIMIT_RULES } from '../contracts/productAwakeningOverdrive.js';
 import { createSkillCutInLayer } from '../presentation/juicy/skillCutIn.js';
 import { juicyPresentationEnabled, juicySpeciesIndex } from '../presentation/juicy/juicyArt.js';
-import { createActionPortrait, setActionPortrait, clearActionPortrait, warmActionPortraits } from '../presentation/juicy/actionPortrait.js';
+import { createActionPortrait, setActionPortrait, clearActionPortrait, warmActionPortraits, releaseDetachedActionPortraits } from '../presentation/juicy/actionPortrait.js';
 // Owner 2026-11-12: partners outside the Database are drawn as their own animated bodies.
 const ACTION_PORTRAITS = Object.freeze({ set: setActionPortrait, clear: clearActionPortrait });
 const speciesBody = options => createActionPortrait(options).element;
@@ -899,6 +899,33 @@ async function ensureSharedPixiStage(canvasHost, signal) {
   }
   return pixiStage;
 }
+// A lost GPU context the browser never hands back (a GPU process that keeps
+// failing, or WebKit under memory pressure) left the stage hidden and the game
+// frozen with no way out. Give the browser a few seconds to restore it; if it
+// does not while the page is in view, save and reload -- the session checkpoint
+// brings the player back to the same screen. A page younger than a minute never
+// reloads itself, so a context that is lost again right after a reload cannot loop.
+const CONTEXT_RESTORE_GRACE_MS = 6000;
+const CONTEXT_LOSS_MIN_UPTIME_MS = 60000;
+let contextLossReloadTimer = null;
+function disarmContextLossReload() {
+  if (contextLossReloadTimer !== null) clearTimeout(contextLossReloadTimer);
+  contextLossReloadTimer = null;
+  document.removeEventListener('visibilitychange', armContextLossReload);
+}
+function armContextLossReload() {
+  disarmContextLossReload();
+  contextLossReloadTimer = setTimeout(() => {
+    contextLossReloadTimer = null;
+    if (!pixiStage?.contextLost) return;
+    // Hidden: wait until the player looks again, then give the browser its grace once more.
+    if (document.visibilityState !== 'visible') { document.addEventListener('visibilitychange', armContextLossReload, { once: true }); return; }
+    if (performance.now() < CONTEXT_LOSS_MIN_UPTIME_MS) return;
+    if (app && titleScreen?.hidden) recordSessionScreenMounted(app.getScreen());
+    autosaveOnHide();
+    location.reload();
+  }, CONTEXT_RESTORE_GRACE_MS);
+}
 async function ensurePixiStage(canvasHost, signal) {
   await ensureSharedPixiStage(canvasHost, signal);
   if (!clockDriver) {
@@ -912,8 +939,9 @@ async function ensurePixiStage(canvasHost, signal) {
       // can precede its awaited mount; discard that interval without catch-up.
       isSceneReady: () => mountedScreen === app.getScreen() && view?.isPlayable !== false
     });
-    pixiStage.onContextLost(() => {recoveryDiagnostics.record('CONTEXT_LOST',{renderer:'PIXI'});clockDriver.reset();});
+    pixiStage.onContextLost(() => {recoveryDiagnostics.record('CONTEXT_LOST',{renderer:'PIXI'});clockDriver.reset();armContextLossReload();});
     pixiStage.onContextRestored(() => {
+      disarmContextLossReload();
       recoveryDiagnostics.record('CONTEXT_RESTORED',{renderer:'PIXI'});
       clockDriver.reset();
       delete root.dataset.fieldFallback;
@@ -2531,6 +2559,9 @@ async function mountCurrentScreen() {
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) view = await mountBattleField();
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_RESULT) view = await mountBattleResult();
     mountedScreen = target;
+    // The screen that just left may have dropped partner bodies without disposing them; a
+    // looping body still holds its Web Animation, which keeps the whole old subtree alive.
+    releaseDetachedActionPortraits();
     syncMusic();
     screenChangedAt = performance.now();
     // One attribute every screen carries, whichever view family drew it. The

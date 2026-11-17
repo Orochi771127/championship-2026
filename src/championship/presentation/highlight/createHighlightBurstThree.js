@@ -7,6 +7,7 @@
 // landed. No pointer input, no textures, no original assets.
 
 import * as THREE from "../../../../node_modules/three/build/three.module.js";
+import { disposeThreeRenderer } from "../threeRendererRelease.js";
 
 const SHARD_CAP = 160;
 // No pure white: under strong light a white cube reads as a blank square (Owner 2026-10-28).
@@ -165,8 +166,7 @@ export function mountHighlightBurstThree({ host, count = 96, focus = () => ({ x:
       geometry.dispose();
       material.dispose();
       mesh.dispose?.();
-      renderer.dispose();
-      renderer.forceContextLoss?.();
+      disposeThreeRenderer(renderer);
       canvas.remove();
     }
   });

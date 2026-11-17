@@ -6,6 +6,7 @@
 
 import * as THREE from "../../../../node_modules/three/build/three.module.js";
 import { GLTFLoader } from "../../../../node_modules/three/examples/jsm/loaders/GLTFLoader.js";
+import { disposeThreeRenderer } from "../threeRendererRelease.js";
 import {
   createLicensedVfxRuntime,
   loadLicensedVfxRuntimeManifest
@@ -72,8 +73,7 @@ export async function mountBattleVfxThreeOverlay({
   renderer.domElement.setAttribute("aria-hidden", "true");
   host.appendChild(renderer.domElement);
   function destroyRenderer() {
-    renderer.dispose();
-    renderer.forceContextLoss?.();
+    disposeThreeRenderer(renderer);
     renderer.domElement.remove();
   }
 

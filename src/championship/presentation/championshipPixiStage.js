@@ -55,6 +55,74 @@ function assertHost(canvasHost) {
 }
 
 /**
+ * Keep one failing per-frame callback from freezing the whole game.
+ *
+ * Pixi's ticker asks for the next animation frame only after every listener
+ * of this frame returned; one listener that throws stops the loop for good
+ * (until the page is hidden and shown again), so every screen stood still.
+ * Each listener now fails alone: the frame goes on with the next listener,
+ * the error is reported once per listener, and the listener's own `once`
+ * bookkeeping still runs. Nothing else about the ticker changes.
+ */
+const ISOLATED_EMIT = Symbol.for("championship.isolatedTickerEmit");
+// reportError() raises the page's error event, so the recovery diagnostics still record it.
+const reportOnce = (error) => { if (typeof globalThis.reportError === "function") globalThis.reportError(error); else console.error(error); };
+export function isolateTickerListenerFailures(PIXI, { report = reportOnce } = {}) {
+  const proto = PIXI?.TickerListener?.prototype;
+  if (!proto || typeof proto.emit !== "function" || proto.emit[ISOLATED_EMIT]) return false;
+  const emit = proto.emit;
+  const reported = new WeakSet();
+  const isolated = function emitIsolated(ticker) {
+    try {
+      return emit.call(this, ticker);
+    } catch (error) {
+      const redirect = this.next;
+      if (this._once) this.destroy(true);
+      if (this._destroyed) this.next = null;
+      if (!reported.has(this)) {
+        reported.add(this);
+        try { report(error); } catch { /* reporting never stops the frame */ }
+      }
+      return redirect;
+    }
+  };
+  isolated[ISOLATED_EMIT] = true;
+  proto.emit = isolated;
+  return true;
+}
+
+/**
+ * Keep a shared bind group alive when one texture it last drew is destroyed.
+ *
+ * Pixi 8.19's BindGroup.onResourceChange destroys the WHOLE group when any of
+ * its resources is destroyed. The mesh renderer keeps one shared default
+ * shader whose group remembers the last mesh texture it drew; when a hunt
+ * ended and its rope VFX destroyed its braid texture, that shared group died,
+ * and every later rope, wire or other plain mesh threw "Cannot read
+ * properties of null (reading '0')" on every frame until the page reloaded:
+ * the next Hunt froze as soon as a loop was drawn (memory audit 2026-11-17).
+ * A destroyed texture source or sampler is now swapped for Pixi's empty
+ * texture in that slot; the mesh renderer sets its real texture again before
+ * each draw. Any other destroyed resource keeps Pixi's own behaviour.
+ */
+const KEPT_BIND_GROUPS = Symbol.for("championship.keptBindGroups");
+export function keepBindGroupsWhenTexturesGo(PIXI) {
+  const proto = PIXI?.BindGroup?.prototype, empty = PIXI?.Texture?.EMPTY?.source;
+  if (!proto || typeof proto.onResourceChange !== "function" || proto.onResourceChange[KEPT_BIND_GROUPS] || !empty) return false;
+  const original = proto.onResourceChange;
+  const kept = function onResourceChange(resource) {
+    const type = resource?._resourceType;
+    if (!resource?.destroyed || !this.resources || (type !== "textureSource" && type !== "textureSampler")) return original.call(this, resource);
+    const placeholder = type === "textureSource" ? empty : empty.style;
+    for (const index in this.resources) if (this.resources[index] === resource) this.setResource(placeholder, index);
+    this._dirty = true;
+  };
+  kept[KEPT_BIND_GROUPS] = true;
+  proto.onResourceChange = kept;
+  return true;
+}
+
+/**
  * Create the one Championship PixiJS Application.
  *
  * Call this once per page. `main.js` holds the single instance and hands it to
@@ -66,6 +134,8 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost, resolution
     throw new TypeError("The Championship Pixi stage requires the PixiJS v8 presentation API");
   }
   let host = assertHost(canvasHost);
+  isolateTickerListenerFailures(PIXI);
+  keepBindGroupsWhenTexturesGo(PIXI);
   // Layout dimensions exclude the portrait frame's outer display scale.
   // Pixi maps pointer coordinates through the canvas's actual screen rect.
   const size = () => ({width: host.clientWidth || host.getBoundingClientRect().width,

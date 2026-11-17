@@ -1,4 +1,5 @@
 import * as THREE from '../../../../node_modules/three/build/three.module.js';
+import {disposeThreeRenderer} from '../threeRendererRelease.js';
 import {currentQuality,currentQualityTier,cappedPixelRatio,prefersReducedMotion} from '../presentationPreferences.js';
 import {createMedalGeometry,createMedalStudioTexture,isMedalPresentationProfile} from './medalGeometry.js';
 import {createMedalFrameRuntime} from './medalFrameRuntime.js';
@@ -31,7 +32,7 @@ export function mountMedalThreePresentation({host,src,presentationProfile,onStat
     runtime.dispose();releasePointer();resizeObserver?.disconnect();preferenceObserver?.disconnect();
     for(const remove of removers.splice(0))remove();
     face?.dispose();face=null;medal?.dispose();medal=null;environment?.dispose();environment=null;
-    if(renderer){renderer.dispose();renderer.forceContextLoss();renderer.domElement.remove();renderer=null;}
+    if(renderer){disposeThreeRenderer(renderer);renderer.domElement.remove();renderer=null;}
     scene=null;camera=null;
   }
   function fallback(reason='renderer_or_texture_failure'){if(disposed||failed)return;fallbackReason=typeof reason==='string'?reason:'renderer_or_texture_failure';failed=true;ready=false;releaseResources();onState('fallback');}

@@ -9,6 +9,7 @@ import {createRanchSupportOwnerResolver} from './ranchSupportOwner.js';
 import {createRanchPlinth} from './ranchPlinth.js';
 import {ranchCageFalls,createRanchWaterSeam} from './ranchWaterfalls.js';
 import * as THREE from '../../../node_modules/three/build/three.module.js';
+import {disposeThreeRenderer} from './threeRendererRelease.js';
 import { GLTFLoader } from '../../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from '../../../node_modules/three/examples/jsm/loaders/DRACOLoader.js';
 import { ranchNativeToWorld, ranchSurfaceHeight, ranchPickWalkSurface, ranchSpriteScreenQuad, ranchSpriteUvs, RANCH_LAYOUT_VIEW } from './ranchThreeCoordinates.js';
@@ -993,15 +994,20 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     bloodlineRings.prune();bloodlineRings.animate(effectiveDeltaMS,{still:covered||prefersReducedMotion()});
     selectionRing.prune();selectionRing.animate(effectiveDeltaMS,{still:covered||prefersReducedMotion()});groundShadows.prune();
     renderer.render(scene,camera);frames++;lastRenderMs=performance.now()-start;
-    canvas.dataset.frames=String(frames);canvas.dataset.drawCalls=String(renderer.info.render.calls);
-    canvas.dataset.triangles=String(renderer.info.render.triangles);canvas.dataset.bloodlineRings=String(bloodlineRings.count());canvas.dataset.actors=String([...sprites.values()].filter(i=>i.mesh.visible||i.upperMesh.visible).length);
-    canvas.dataset.depthEnvelopeMaxNative=String(Math.max(0,...[...sprites.values()].filter(i=>i.mesh.visible||i.upperMesh.visible).map(i=>i.envelopeNativeExtent??0)));
-    canvas.dataset.depthEnvelopeUnverifiedSurfaces=String([...sprites.values()].filter(i=>(i.mesh.visible||i.upperMesh.visible)&&i.surfaceStatus!=='EXPLICIT_VERIFIED_HEIGHT').length);
-    canvas.dataset.actorProjectionError=String(Math.max(0,...[...sprites.values()].filter(i=>i.mesh.visible||i.upperMesh.visible).map(i=>i.projectionError??0)));
-    canvas.dataset.animatedInstances=String(instances.filter(i=>i.mixer&&i.object.visible).length);
-    canvas.dataset.textureCount=String(renderer.info.memory.textures);
-    canvas.dataset.viewPitch=String(view.pitch);canvas.dataset.plinthEdges=String(plinth?.edges??0);
-    canvas.dataset.passageAppearance='invisible';canvas.dataset.navigationConnections=String(connections?.length??0);canvas.dataset.passageThresholds=String(plinth?.thresholds??0);canvas.dataset.waterfalls=String(plinth?.waterfalls??0);
+    // Diagnostics ride on the canvas. Each write is a DOM mutation (style invalidation and a
+    // MutationObserver record), so only a value that changed is written, and the visible
+    // actors are listed once per frame instead of four times.
+    const shown=[];for(const item of sprites.values())if(item.mesh.visible||item.upperMesh.visible)shown.push(item);
+    const mark=(key,value)=>{const text=String(value);if(canvas.dataset[key]!==text)canvas.dataset[key]=text;};
+    mark('frames',frames);mark('drawCalls',renderer.info.render.calls);
+    mark('triangles',renderer.info.render.triangles);mark('bloodlineRings',bloodlineRings.count());mark('actors',shown.length);
+    mark('depthEnvelopeMaxNative',shown.reduce((max,i)=>Math.max(max,i.envelopeNativeExtent??0),0));
+    mark('depthEnvelopeUnverifiedSurfaces',shown.filter(i=>i.surfaceStatus!=='EXPLICIT_VERIFIED_HEIGHT').length);
+    mark('actorProjectionError',shown.reduce((max,i)=>Math.max(max,i.projectionError??0),0));
+    mark('animatedInstances',instances.filter(i=>i.mixer&&i.object.visible).length);
+    mark('textureCount',renderer.info.memory.textures);
+    mark('viewPitch',view.pitch);mark('plinthEdges',plinth?.edges??0);
+    mark('passageAppearance','invisible');mark('navigationConnections',connections?.length??0);mark('passageThresholds',plinth?.thresholds??0);mark('waterfalls',plinth?.waterfalls??0);
     return true;
   }
   function dispose(){
@@ -1024,7 +1030,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     sun.shadow.map?.dispose();
     for(const bitmap of modelBitmaps)bitmap.close();modelBitmaps.clear();
     draco.dispose();
-    renderer.dispose();renderer.forceContextLoss();canvas.remove();Object.assign(pixi.style,previousStyle);
+    disposeThreeRenderer(renderer);canvas.remove();Object.assign(pixi.style,previousStyle);
     canvas.removeEventListener('webglcontextlost',contextLost);canvas.removeEventListener('webglcontextrestored',contextRestored);
   }
   // Shadows and rings follow a thin floor sheet (grass, track, sand) over the walk

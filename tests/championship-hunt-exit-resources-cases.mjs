@@ -18,7 +18,7 @@ class Element {
 }
 const descendants=root=>[root,...root.children.flatMap(descendants)];
 
-test('a return refused during capture keeps the live asset scope; accepted return cancels it',async t=>{
+test('a return refused during capture keeps the live asset scope; an accepted return keeps it until the view goes',async t=>{
   const previous=globalThis.document;
   globalThis.document={createElement:tag=>new Element(tag)};
   t.after(()=>{if(previous===undefined)delete globalThis.document;else globalThis.document=previous;});
@@ -35,8 +35,11 @@ test('a return refused during capture keeps the live asset scope; accepted retur
   assert.equal(screen,'HUNT_FIELD');
   assert.equal(signal.aborted,false,'refused exit must not dispose textures used by capture animation');
   canExit=true;exit.listeners.click();
-  assert.equal(screen,'HUNT_RESULT');assert.equal(signal.aborted,true);
-  view.dispose();assert.equal(disposals,1);
+  // The mounted field still draws under the hunt end gate (2026-11-17): releasing its textures
+  // here made Pixi throw on every gate frame and stopped the shared ticker. The router's
+  // dispose of this view aborts and tears the scene down together.
+  assert.equal(screen,'HUNT_RESULT');assert.equal(signal.aborted,false,'the live scene keeps its textures under the end gate');
+  view.dispose();assert.equal(signal.aborted,true);assert.equal(disposals,1);
 });
 
 test('accepted return during loading releases the mount queue and disposes a late scene once',async t=>{

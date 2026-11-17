@@ -132,8 +132,12 @@ export function createMoveVfxKit({PIXI, front, ground = front, quality = 'balanc
         return entry;
       }
       if (glow) return null;
+      // Kept in the sheet cache like every other book, so dispose() releases it: an uncached
+      // Texture.from(canvas) stays in Pixi's global cache with its canvas and GPU texture.
       const canvas = paintMoveVfxSigil(n, palettes(paletteKey), {doc});
-      return {textures: [texture(canvas)], loop: false, width: canvas.width, height: canvas.height, smoke: false};
+      entry = {textures: [texture(canvas)], loop: false, width: canvas.width, height: canvas.height, smoke: false};
+      sheets.set(id, entry);
+      return entry;
     }
     // A hand-drawn sprite (drawnVfxSprites.js) in the move's palette; "drawn:bigblast" plays bigblast_0, _1, ... as frames.
     if (name.startsWith('drawn:')) {

@@ -1519,7 +1519,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const palette = { core, main: color, edge: dark };
     const paint = glow => { const sheet = paintBakedPieceFrames('zone-sigil', palette, { glow }); if (!sheet) return null;
       return { ...sheet, textures: sheet.frames.map(c => { const t = PIXI.Texture.from(c); t.source.scaleMode = glow ? 'linear' : 'nearest'; return t; }) }; };
-    const value = paint(false) ? { body: paint(false), light: paint(true) } : null;
+    // Paint the body once: a second paint(false) made a full extra set of frames nothing used or released.
+    const body = paint(false);
+    const value = body ? { body, light: paint(true) } : null;
     sigilSheets.set(color, value);
     return value;
   }
@@ -1727,10 +1729,18 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       // Character sprites come from their bundles; destroy display objects only,
       // the bundles' textures are released by their owner (the screen).
       environment?.detach?.();
+      // The effect owners bake their own textures (Texture.from(canvas) keeps each canvas and
+      // its GPU texture in Pixi's global cache until destroyed): release them on every leave,
+      // not only when construction rolls back, or each match leaves hundreds behind.
+      for (const release of [() => elementFx?.dispose(), () => statusFx?.dispose(), () => burstShell.dispose()]) {
+        try { release(); } catch (error) { console.error("DATA_ARENA_SCENE_CLEANUP_FAILED", error); }
+      }
       root.destroy({ children: true, texture: false, textureSource: false });
       for (const sprite of [...pool, ...cellPool]) if (!sprite.destroyed) sprite.destroy();
       for (const entry of [...shotPool, ...enemyPool]) for (const part of Object.values(entry)) if (part?.destroy && !part.destroyed) part.destroy();
       for (const chunk of chunks) chunk.texture.destroy(true);
+      for (const value of sigilSheets.values()) for (const sheet of [value?.body, value?.light]) for (const texture of sheet?.textures ?? []) texture.destroy(true);
+      sigilSheets.clear(); sigilSprites.clear();
       ground.destroy();
       textures.destroy();
       live.length = 0; pool.length = 0; cellPool.length = 0; fans.length = 0;
